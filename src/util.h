@@ -400,8 +400,8 @@ extern void msg_print_wizard(int cheat_type, concptr msg);
 extern void msg_format(concptr fmt, ...);
 extern void msg_format_wizard(int cheat_type, concptr fmt, ...);
 #endif /* SWIG */
-extern void screen_save(void);
-extern void screen_load(void);
+extern void screen_save();
+extern void screen_load();
 extern void c_put_str(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col);
 extern void put_str(concptr str, TERM_LEN row, TERM_LEN col);
 extern void c_prt(TERM_COLOR attr, concptr str, TERM_LEN row, TERM_LEN col);

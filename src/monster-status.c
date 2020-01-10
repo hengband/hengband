@@ -830,7 +830,7 @@ bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, boo
 		if (!monster_is_valid(m_ptr)) break;
 		process_monster(target_ptr, current_world_ptr->timewalk_m_idx);
 		reset_target(m_ptr);
-		handle_stuff();
+		handle_stuff(target_ptr);
 
 		if (vs_player) Term_xtra(TERM_XTRA_DELAY, 500);
 	}
@@ -846,8 +846,8 @@ bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, boo
 		msg_print(NULL);
 	}
 
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(target_ptr);
+	return TRUE;
 }
 
 /*!

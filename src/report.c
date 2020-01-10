@@ -363,7 +363,7 @@ concptr make_screen_dump(player_type *creature_ptr)
 		reset_visuals();
 
 		creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
-		handle_stuff();
+		handle_stuff(creature_ptr);
 	}
 
 	for (int i = 0; html_head[i]; i++)
@@ -438,15 +438,13 @@ concptr make_screen_dump(player_type *creature_ptr)
 	/* Free buffer */
 	buf_delete(screen_buf);
 
-	if (old_use_graphics)
-	{
-		use_graphics = TRUE;
-		reset_visuals();
+	if (!old_use_graphics) return ret;
 
-		creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
-		handle_stuff();
-	}
+	use_graphics = TRUE;
+	reset_visuals();
 
+	creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+	handle_stuff(creature_ptr);
 	return ret;
 }
 

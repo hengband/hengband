@@ -5495,7 +5495,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 	}
 
 	creature_ptr->update |= PU_BONUS;
-	handle_stuff();
+	handle_stuff(creature_ptr);
 }
 
 /*!
@@ -5529,7 +5529,7 @@ void check_experience(player_type *creature_ptr)
 
 	/* Redraw experience */
 	creature_ptr->redraw |= (PR_EXP);
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 
 	/* Lose levels while possible */
@@ -5541,7 +5541,7 @@ void check_experience(player_type *creature_ptr)
 		creature_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 		creature_ptr->redraw |= (PR_LEV | PR_TITLE);
 		creature_ptr->window |= (PW_PLAYER);
-		handle_stuff();
+		handle_stuff(creature_ptr);
 	}
 
 
@@ -5581,7 +5581,7 @@ void check_experience(player_type *creature_ptr)
 
 		/* HPとMPの上昇量を表示 */
 		creature_ptr->level_up_message = TRUE;
-		handle_stuff();
+		handle_stuff(creature_ptr);
 
 		creature_ptr->level_up_message = FALSE;
 
@@ -5649,7 +5649,7 @@ void check_experience(player_type *creature_ptr)
 		creature_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 		creature_ptr->redraw |= (PR_LEV | PR_TITLE);
 		creature_ptr->window |= (PW_PLAYER | PW_SPELL);
-		handle_stuff();
+		handle_stuff(creature_ptr);
 	}
 
 	/* Load an autopick preference file */

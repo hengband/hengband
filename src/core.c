@@ -603,8 +603,10 @@ static void sense_inventory2(player_type *creature_ptr)
 	}
 }
 
+
 /*!
  * @brief パターン終点到達時のテレポート処理を行う
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void pattern_teleport(player_type *creature_ptr)
@@ -699,7 +701,8 @@ static bool pattern_effect(player_type *creature_ptr)
 		wreck_the_pattern(creature_ptr);
 	}
 
-	pattern_type = f_info[p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat].subtype;
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	pattern_type = f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat].subtype;
 
 	switch (pattern_type)
 	{
@@ -709,7 +712,7 @@ static bool pattern_effect(player_type *creature_ptr)
 		(void)restore_level(creature_ptr);
 		(void)cure_critical_wounds(creature_ptr, 1000);
 
-		cave_set_feat(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, feat_pattern_old);
+		cave_set_feat(floor_ptr, creature_ptr->y, creature_ptr->x, feat_pattern_old);
 		msg_print(_("「パターン」のこの部分は他の部分より強力でないようだ。", "This section of the Pattern looks less powerful."));
 
 		/*
@@ -1261,6 +1264,7 @@ static object_type *choose_cursed_obj_name(BIT_FLAGS flag)
 	/* Choice one of them */
 	return (&p_ptr->inventory_list[choices[randint0(number)]]);
 }
+
 
 static void process_world_aux_digestion(player_type *creature_ptr)
 {
@@ -2248,7 +2252,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 
 		flush();
 		msg_print(NULL);
-		(void)get_hack_dir(&dire);
+		(void)get_hack_dir(creature_ptr, &dire);
 		fire_ball(creature_ptr, GF_MANA, dire, creature_ptr->lev * 2, 3);
 	}
 
@@ -2903,9 +2907,9 @@ static void process_world_aux_recharge(player_type *creature_ptr)
 	}
 
 	/* Process objects on floor */
-	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
+	for (i = 1; i < creature_ptr->current_floor_ptr->o_max; i++)
 	{
-		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[i];
+		object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[i];
 
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
 
@@ -3512,6 +3516,7 @@ static void process_command(player_type *creature_ptr)
 		creature_ptr->reset_concent = TRUE;
 
 	/* Parse the command */
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	switch (command_cmd)
 	{
 		/* Ignore */
@@ -3742,7 +3747,7 @@ static void process_command(player_type *creature_ptr)
 		/* Go up staircase */
 		case '<':
 		{
-			if (!creature_ptr->wild_mode && !p_ptr->current_floor_ptr->dun_level && !creature_ptr->current_floor_ptr->inside_arena && !creature_ptr->current_floor_ptr->inside_quest)
+			if (!creature_ptr->wild_mode && !floor_ptr->dun_level && !floor_ptr->inside_arena && !floor_ptr->inside_quest)
 			{
 				if (vanilla_town) break;
 
@@ -3855,7 +3860,7 @@ static void process_command(player_type *creature_ptr)
 				{
 					msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
 				}
-				else if (p_ptr->current_floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH))
+				else if (floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH))
 				{
 					msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
 					msg_print(NULL);
@@ -4066,7 +4071,7 @@ static void process_command(player_type *creature_ptr)
 		/* Identify symbol */
 		case '/':
 		{
-			do_cmd_query_symbol();
+			do_cmd_query_symbol(creature_ptr);
 			break;
 		}
 
@@ -4328,7 +4333,7 @@ static void pack_overflow(player_type *owner_ptr)
 	(void)drop_near(owner_ptr, o_ptr, 0, owner_ptr->y, owner_ptr->x);
 
 	vary_item(owner_ptr, INVEN_PACK, -255);
-	handle_stuff();
+	handle_stuff(owner_ptr);
 }
 
 /*!
@@ -4553,7 +4558,7 @@ static void process_player(player_type *creature_ptr)
 			}
 		}
 
-		handle_stuff();
+		handle_stuff(creature_ptr);
 	}
 	
 	load = FALSE;
@@ -4618,7 +4623,7 @@ static void process_player(player_type *creature_ptr)
 		creature_ptr->counter = FALSE;
 		creature_ptr->now_damaged = FALSE;
 
-		handle_stuff();
+		handle_stuff(creature_ptr);
 
 		/* Place the cursor on the player */
 		move_cursor_relative(creature_ptr->y, creature_ptr->x);
@@ -4697,7 +4702,7 @@ static void process_player(player_type *creature_ptr)
 			command_rep--;
 
 			creature_ptr->redraw |= (PR_STATE);
-			handle_stuff();
+			handle_stuff(creature_ptr);
 
 			/* Hack -- Assume messages were seen */
 			msg_flag = FALSE;
@@ -4856,7 +4861,7 @@ static void process_player(player_type *creature_ptr)
 				creature_ptr->timewalk = FALSE;
 				creature_ptr->energy_need = ENERGY_NEED();
 
-				handle_stuff();
+				handle_stuff(creature_ptr);
 			}
 		}
 
@@ -4974,14 +4979,14 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	player_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_EQUIPPY | PR_MAP);
 	player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS | PU_VIEW | PU_LITE | PU_MON_LITE | PU_TORCH | PU_MONSTERS | PU_DISTANCE | PU_FLOW);
 
-	handle_stuff();
+	handle_stuff(player_ptr);
 
 	/* Leave "xtra" mode */
 	current_world_ptr->character_xtra = FALSE;
 
 	player_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 	player_ptr->update |= (PU_COMBINE | PU_REORDER);
-	handle_stuff();
+	handle_stuff(player_ptr);
 	Term_fresh();
 
 	if (quest_num && (is_fixed_quest_idx(quest_num) &&
@@ -5070,7 +5075,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 		process_player(player_ptr);
 		process_upkeep_with_speed(player_ptr);
 
-		handle_stuff();
+		handle_stuff(player_ptr);
 
 		/* Hack -- Hilite the player */
 		move_cursor_relative(player_ptr->y, player_ptr->x);
@@ -5084,7 +5089,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 		/* Process all of the monsters */
 		process_monsters(player_ptr);
 
-		handle_stuff();
+		handle_stuff(player_ptr);
 
 		/* Hack -- Hilite the player */
 		move_cursor_relative(player_ptr->y, player_ptr->x);
@@ -5098,7 +5103,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 		/* Process the world */
 		process_world(player_ptr);
 
-		handle_stuff();
+		handle_stuff(player_ptr);
 
 		/* Hack -- Hilite the player */
 		move_cursor_relative(player_ptr->y, player_ptr->x);
@@ -5214,6 +5219,7 @@ static void load_all_pref_files(void)
 	/* Load an autopick preference file */
 	autopick_load_pref(FALSE);
 }
+
 
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
@@ -5563,7 +5569,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
 	player_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 	player_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
-	handle_stuff();
+	handle_stuff(player_ptr);
 
 	/* Set or clear "rogue_like_commands" if requested */
 	if (arg_force_original) rogue_like_commands = FALSE;
@@ -5604,7 +5610,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		/* Hack -- prevent "icky" message */
 		current_world_ptr->character_xtra = TRUE;
 
-		handle_stuff();
+		handle_stuff(player_ptr);
 
 		current_world_ptr->character_xtra = FALSE;
 
@@ -5695,6 +5701,7 @@ s32b turn_real(s32b hoge)
 	}
 }
 
+
 /*!
  * @brief ターンのオーバーフローに対する対処
  * @details ターン及びターンを記録する変数をターンの限界の1日前まで巻き戻す.
@@ -5740,6 +5747,7 @@ void prevent_turn_overflow(void)
 	}
 }
 
+
 /*!
  * @brief ゲーム終了処理 /
  * Close up the current game (player may or may not be dead)
@@ -5756,7 +5764,7 @@ void close_game(player_type *player_ptr)
 	bool do_send = TRUE;
 
 	/*	concptr p = "[i:キャラクタの情報, f:ファイル書き出し, t:スコア, x:*鑑定*, ESC:ゲーム終了]"; */
-	handle_stuff();
+	handle_stuff(player_ptr);
 
 	/* Flush the messages */
 	msg_print(NULL);
@@ -5864,16 +5872,16 @@ void close_game(player_type *player_ptr)
  * Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window"
  * @return なし
  */
-void handle_stuff(void)
+void handle_stuff(player_type *player_ptr)
 {
-	if (p_ptr->update) update_creature(p_ptr);
-	if (p_ptr->redraw) redraw_stuff(p_ptr);
-	if (p_ptr->window) window_stuff();
+	if (player_ptr->update) update_creature(player_ptr);
+	if (player_ptr->redraw) redraw_stuff(player_ptr);
+	if (player_ptr->window) window_stuff(player_ptr);
 }
 
-void update_output(void)
-{
-	if (p_ptr->redraw) redraw_stuff(p_ptr);
-	if (p_ptr->window) window_stuff();
-}
 
+void update_output(player_type *player_ptr)
+{
+	if (player_ptr->redraw) redraw_stuff(player_ptr);
+	if (player_ptr->window) window_stuff(player_ptr);
+}

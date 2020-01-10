@@ -17,10 +17,10 @@ extern bool target_okay(void);
 #define TARGET_LOOK     0x02 /*!< "L"ookコマンド向けの既存情報確認向け(全ての有為な情報をクエリ対象) / Describe grid fully */
 #define TARGET_XTRA     0x04 /*!< 現在未使用 / Currently unused flag */
 #define TARGET_GRID     0x08 /*!< 全てのマス対象にする(現在未使用) / Select from all grids */
-extern bool target_set(BIT_FLAGS mode);
+extern bool target_set(player_type *creature_ptr, BIT_FLAGS mode);
 extern void target_set_prepare_look(void);
 extern bool get_aim_dir(DIRECTION *dp);
-extern bool get_hack_dir(DIRECTION *dp);
+extern bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp);
 extern bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, bool with_steed);
 extern bool get_rep_dir(DIRECTION *dp, bool under);
 extern bool tgt_pt(player_type *creature_ptr, POSITION *x, POSITION *y);

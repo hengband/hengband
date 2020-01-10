@@ -507,7 +507,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		}
 		case CLASS_IMITATOR:
 		{
-			handle_stuff();
+			handle_stuff(creature_ptr);
 			if (!do_cmd_mane(creature_ptr, TRUE)) return FALSE;
 			break;
 		}
@@ -551,9 +551,9 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		case CLASS_RED_MAGE:
 		{
 			if (cmd_limit_cast(creature_ptr)) return FALSE;
-			handle_stuff();
+			handle_stuff(creature_ptr);
 			do_cmd_cast(creature_ptr);
-			handle_stuff();
+			handle_stuff(creature_ptr);
 			if (!creature_ptr->paralyzed && !cmd_limit_cast(creature_ptr))
 				do_cmd_cast(creature_ptr);
 			break;

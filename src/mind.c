@@ -1004,7 +1004,7 @@ static bool_hack get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool onl
 	if (redraw && !only_browse) screen_load();
 
 	caster_ptr->window |= (PW_SPELL);
-	handle_stuff();
+	handle_stuff(caster_ptr);
 
 	/* Abort if needed */
 	if (!flag) return (FALSE);
@@ -1242,7 +1242,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 	{
 		MONSTER_IDX m_idx;
 
-		if (!target_set(TARGET_KILL)) return FALSE;
+		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
@@ -1645,7 +1645,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		u16b path_g[512];
 		POSITION ty, tx;
 
-		if (!target_set(TARGET_KILL)) return FALSE;
+		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (m_idx == caster_ptr->riding) break;

@@ -194,7 +194,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 				if (cast)
 				{
-					if (!target_set(TARGET_KILL)) return NULL;
+					if (!target_set(caster_ptr, TARGET_KILL)) return NULL;
 					x = target_col;
 					y = target_row;
 				}

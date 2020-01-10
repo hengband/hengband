@@ -5140,7 +5140,7 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 
 				/* HACK - Redraw all windows */
 				p_ptr->window = 0xFFFFFFFF;
-				handle_stuff();
+				handle_stuff(p_ptr);
 			}
 
 			td->size_hack = FALSE;

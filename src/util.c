@@ -3028,7 +3028,7 @@ void msg_print(concptr msg)
 	/* if (current_world_ptr->character_generated) message_add(t); */
 
 	p_ptr->window |= (PW_MESSAGE);
-	update_output();
+	update_output(p_ptr);
 
 	/* Remember the message */
 	msg_flag = TRUE;
@@ -3043,6 +3043,7 @@ void msg_print(concptr msg)
 	/* Optional refresh */
 	if (fresh_message) Term_fresh();
 }
+
 
 void msg_print_wizard(int cheat_type, concptr msg)
 {
@@ -3063,6 +3064,7 @@ void msg_print_wizard(int cheat_type, concptr msg)
 
 }
 
+
 /*
  * Hack -- prevent "accidents" in "screen_save()" or "screen_load()"
  */
@@ -3074,7 +3076,7 @@ static int screen_depth = 0;
  *
  * This function must match exactly one call to "screen_load()".
  */
-void screen_save(void)
+void screen_save()
 {
 	/* Hack -- Flush messages */
 	msg_print(NULL);
@@ -3092,7 +3094,7 @@ void screen_save(void)
  *
  * This function must match exactly one call to "screen_save()".
  */
-void screen_load(void)
+void screen_load()
 {
 	/* Hack -- Flush messages */
 	msg_print(NULL);
@@ -3152,7 +3154,6 @@ void msg_format_wizard(int cheat_type, concptr fmt, ...)
 	/* Display */
 	msg_print_wizard(cheat_type, buf);
 }
-
 
 
 /*
@@ -3731,14 +3732,14 @@ bool get_check_strict(concptr prompt, BIT_FLAGS mode)
 	if (auto_more)
 	{
 		p_ptr->window |= PW_MESSAGE;
-		handle_stuff();
+		handle_stuff(p_ptr);
 		num_more = 0;
 	}
+
 	msg_print(NULL);
 
 	if (!rogue_like_commands)
 		mode &= ~CHECK_OKAY_CANCEL;
-
 
 	/* Hack -- Build a "useful" prompt */
 	if (mode & CHECK_OKAY_CANCEL)
@@ -3765,7 +3766,7 @@ bool get_check_strict(concptr prompt, BIT_FLAGS mode)
 		/* HACK : Add the line to message buffer */
 		message_add(buf);
 		p_ptr->window |= (PW_MESSAGE);
-		handle_stuff();
+		handle_stuff(p_ptr);
 	}
 
 	/* Get an acceptable answer */

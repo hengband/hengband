@@ -124,7 +124,7 @@ static bool snipe_concentrate(player_type *creature_ptr)
 
 	creature_ptr->update |= (PU_BONUS | PU_MONSTERS);
 	creature_ptr->redraw |= (PR_STATUS);
-	return (TRUE);
+	return TRUE;
 }
 
 /*! 
@@ -238,7 +238,7 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
 		if ((snipe_powers[*sn].min_lev <= plev) && (snipe_powers[*sn].mana_cost <= (int)sniper_ptr->concent))
 		{
 			/* Success */
-			return (TRUE);
+			return TRUE;
 		}
 	}
 
@@ -362,10 +362,10 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
 	if (redraw && !only_browse) screen_load();
 
 	sniper_ptr->window |= (PW_SPELL);
-	handle_stuff();
+	handle_stuff(sniper_ptr);
 
 	/* Abort if needed */
-	if (!flag) return (FALSE);
+	if (!flag) return FALSE;
 
 	/* Save the choice */
 	(*sn) = i;
@@ -373,8 +373,9 @@ static int get_snipe_power(player_type *sniper_ptr, COMMAND_CODE *sn, bool only_
 	repeat_push(*sn);
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
+
 
 /*!
  * @brief スナイバー技能のスレイ倍率計算を行う /
@@ -489,16 +490,16 @@ static bool cast_sniper_spell(player_type *sniper_ptr, int spell)
 	if (o_ptr->tval != TV_BOW)
 	{
 		msg_print(_("弓を装備していない！", "You wield no bow!"));
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* spell code */
 	switch (spell)
 	{
 	case 0: /* Concentration */
-		if (!snipe_concentrate(sniper_ptr)) return (FALSE);
+		if (!snipe_concentrate(sniper_ptr)) return FALSE;
 		take_turn(sniper_ptr, 100);
-		return (TRUE);
+		return TRUE;
 	case 1: snipe_type = SP_LITE; break;
 	case 2: snipe_type = SP_AWAY; break;
 	case 3: snipe_type = SP_KILL_TRAP; break;

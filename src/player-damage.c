@@ -493,7 +493,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 		chg_virtue(creature_ptr, V_SACRIFICE, 10);
 
-		handle_stuff();
+		handle_stuff(creature_ptr);
 		creature_ptr->leaving = TRUE;
 
 		/* Note death */
@@ -683,7 +683,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 		return damage;
 	}
 
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 	/* Hitpoint warning */
 	if (creature_ptr->chp < warning)

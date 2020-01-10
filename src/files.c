@@ -5983,7 +5983,7 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
 
 	/* Clear messages */
 	msg_print(NULL);
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 	prt(_("ゲームをセーブしています...", "Saving game..."), 0, 0);
 
@@ -6388,7 +6388,7 @@ void show_info(player_type *creature_ptr)
 
 	/* Hack -- Recalculate bonuses */
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 	/* Flush all input keys */
 	flush();

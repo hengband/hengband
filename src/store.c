@@ -4765,7 +4765,8 @@ static void store_purchase(player_type *player_ptr)
 				{
 					o_ptr->pval -= j_ptr->pval;
 				}
-				handle_stuff();
+
+				handle_stuff(player_ptr);
 
 				/* Note how many slots the store used to have */
 				i = st_ptr->stock_num;
@@ -4852,7 +4853,7 @@ static void store_purchase(player_type *player_ptr)
 		object_desc(o_name, &player_ptr->inventory_list[item_new], 0);
 
 		msg_format(_("%s(%c)を取った。", "You have %s (%c)."), o_name, index_to_label(item_new));
-		handle_stuff();
+		handle_stuff(player_ptr);
 
 		/* Take note if we take the last one */
 		i = st_ptr->stock_num;
@@ -5095,7 +5096,7 @@ static void store_sell(player_type *owner_ptr)
 				autopick_alter_item(item, FALSE);
 
 			inven_item_optimize(item);
-			handle_stuff();
+			handle_stuff(owner_ptr);
 
 			/* The store gets that (known) item */
 			item_pos = store_carry(q_ptr);
@@ -5135,7 +5136,7 @@ static void store_sell(player_type *owner_ptr)
 		choice = 0;
 
 		vary_item(owner_ptr, item, -amt);
-		handle_stuff();
+		handle_stuff(owner_ptr);
 
 		/* Let the home carry it */
 		item_pos = home_carry(q_ptr);
@@ -5157,7 +5158,7 @@ static void store_sell(player_type *owner_ptr)
 		choice = 0;
 
 		vary_item(owner_ptr, item, -amt);
-		handle_stuff();
+		handle_stuff(owner_ptr);
 
 		/* Let the home carry it */
 		item_pos = home_carry(q_ptr);
@@ -5514,8 +5515,6 @@ static void store_process_command(player_type *client_ptr)
 			break;
 		}
 
-
-
 		/*** Help and Such ***/
 
 		/* Help */
@@ -5528,7 +5527,7 @@ static void store_process_command(player_type *client_ptr)
 		/* Identify symbol */
 		case '/':
 		{
-			do_cmd_query_symbol();
+			do_cmd_query_symbol(client_ptr);
 			break;
 		}
 
@@ -5541,7 +5540,6 @@ static void store_process_command(player_type *client_ptr)
 			display_store();
 			break;
 		}
-
 
 		/*** System Commands ***/
 
@@ -5857,7 +5855,7 @@ void do_cmd_store(player_type *player_ptr)
 		/* Hack -- Character is still in "icky" mode */
 		current_world_ptr->character_icky = TRUE;
 
-		handle_stuff();
+		handle_stuff(player_ptr);
 
 		/* Pack Overflow */
 		if (player_ptr->inventory_list[INVEN_PACK].k_idx)
@@ -5907,7 +5905,7 @@ void do_cmd_store(player_type *player_ptr)
 				msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
 
 				vary_item(player_ptr, item, -255);
-				handle_stuff();
+				handle_stuff(player_ptr);
 
 				/* Let the home carry it */
 				item_pos = home_carry(q_ptr);

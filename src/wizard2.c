@@ -353,7 +353,7 @@ static void do_cmd_wiz_reset_class(player_type *creature_ptr)
 	/* {.} and {$} effect creature_ptr->warning and TRC_TELEPORT_SELF */
 	creature_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 
-	handle_stuff();
+	handle_stuff(creature_ptr);
 }
 
 
@@ -1121,6 +1121,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
 /*!
  * @brief 検査対象のアイテムの数を変更する /
  * Change the quantity of a the item
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 変更するアイテム情報構造体の参照ポインタ
  * @return なし
  */
@@ -1207,7 +1208,7 @@ static void do_cmd_wiz_play(player_type *creature_ptr)
 
 	if (!o_ptr) return;
 
-	screen_save();
+	screen_save(creature_ptr);
 
 	object_type	forge;
 	object_type *q_ptr;
@@ -1256,8 +1257,7 @@ static void do_cmd_wiz_play(player_type *creature_ptr)
 		}
 	}
 
-	screen_load();
-
+	screen_load(creature_ptr);
 
 	/* Accept change */
 	if (changed)
@@ -1302,12 +1302,12 @@ static void do_cmd_wiz_play(player_type *creature_ptr)
  */
 static void wiz_create_item(player_type *caster_ptr)
 {
-	screen_save();
+	screen_save(caster_ptr);
 
 	/* Get object base type */
 	OBJECT_IDX k_idx = wiz_create_itemtype();
 
-	screen_load();
+	screen_load(caster_ptr);
 
 	/* Return if failed */
 	if (!k_idx) return;
@@ -1636,10 +1636,11 @@ static void do_cmd_wiz_create_feature(player_type *creature_ptr)
 
 /*!
  * @brief 現在のオプション設定をダンプ出力する /
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * Hack -- Dump option bits usage
  * @return なし
  */
-static void do_cmd_dump_options(void)
+static void do_cmd_dump_options()
 {
 	char buf[1024];
 	path_build(buf, sizeof buf, ANGBAND_DIR_USER, "opt_info.txt");

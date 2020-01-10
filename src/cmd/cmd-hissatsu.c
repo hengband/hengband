@@ -292,7 +292,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
 	if (redraw) screen_load();
 
 	creature_ptr->window |= (PW_SPELL);
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 	/* Abort if needed */
 	if (!flag) return (FALSE);

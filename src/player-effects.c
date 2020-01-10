@@ -405,8 +405,8 @@ bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, MIMIC_RACE_IDX p, bool 
 	creature_ptr->redraw |= (PR_BASIC | PR_STATUS);
 	creature_ptr->update |= (PU_BONUS | PU_HP);
 
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -473,8 +473,8 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
 	creature_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 	creature_ptr->redraw |= (PR_MAP);
 	creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 
@@ -552,8 +552,8 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 
@@ -595,8 +595,8 @@ bool set_poisoned(player_type *creature_ptr, TIME_EFFECT v)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 
@@ -652,8 +652,8 @@ bool set_afraid(player_type *creature_ptr, TIME_EFFECT v)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -699,8 +699,8 @@ bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->redraw |= (PR_STATE);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -753,8 +753,8 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
 	creature_ptr->redraw |= (PR_MAP | PR_HEALTH | PR_UHEALTH);
 	creature_ptr->update |= (PU_MONSTERS);
 	creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -802,8 +802,8 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -853,8 +853,8 @@ bool set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -900,8 +900,8 @@ bool set_slow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 
@@ -949,8 +949,8 @@ bool set_shield(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 
@@ -998,8 +998,8 @@ bool set_tsubureru(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 
@@ -1047,8 +1047,8 @@ bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -1095,8 +1095,8 @@ bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 
@@ -1147,8 +1147,8 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate hitpoints */
 	creature_ptr->update |= (PU_HP);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -1199,8 +1199,8 @@ bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate hitpoints */
 	creature_ptr->update |= (PU_HP);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -1246,8 +1246,8 @@ bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -1308,8 +1308,8 @@ bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 
 }
 
@@ -1374,8 +1374,8 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -1423,8 +1423,8 @@ bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	creature_ptr->update |= (PU_MONSTERS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -1474,8 +1474,8 @@ bool set_tim_invis(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	/* Update the monsters */
 	creature_ptr->update |= (PU_MONSTERS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -1525,8 +1525,8 @@ bool set_tim_infra(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	/* Update the monsters */
 	creature_ptr->update |= (PU_MONSTERS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -1573,8 +1573,8 @@ bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -1621,8 +1621,8 @@ bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -1675,7 +1675,7 @@ bool set_superstealth(player_type *creature_ptr, bool set)
 	creature_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
-	return (TRUE);
+	return TRUE;
 }
 
 /*!
@@ -1722,8 +1722,8 @@ bool set_tim_levitation(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -1769,8 +1769,8 @@ bool set_tim_sh_touki(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	if (!notice) return (FALSE);
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -1817,8 +1817,8 @@ bool set_tim_sh_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -1865,8 +1865,8 @@ bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -1913,8 +1913,8 @@ bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 
@@ -1962,8 +1962,8 @@ bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -2010,8 +2010,8 @@ bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 
@@ -2056,8 +2056,8 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -2104,8 +2104,8 @@ bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -2152,8 +2152,8 @@ bool set_kabenuke(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -2209,8 +2209,8 @@ bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	/* Recalculate hitpoints */
 	creature_ptr->update |= (PU_HP);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -2281,9 +2281,9 @@ bool set_ele_attack(player_type *creature_ptr, u32b attack_type, TIME_EFFECT v)
 	creature_ptr->redraw |= (PR_STATUS);
 
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
-	return (TRUE);
+	return TRUE;
 }
 
 /*!
@@ -2343,9 +2343,9 @@ bool set_ele_immune(player_type *creature_ptr, u32b immune_type, TIME_EFFECT v)
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->redraw |= (PR_STATUS);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
-	return (TRUE);
+	return TRUE;
 }
 
 /*!
@@ -2391,8 +2391,8 @@ bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	creature_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -2438,8 +2438,8 @@ bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	creature_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -2486,8 +2486,8 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	creature_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -2533,8 +2533,8 @@ bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	creature_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -2581,8 +2581,8 @@ bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	creature_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -2729,8 +2729,8 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
 
 	/* Redraw the "stun" */
 	creature_ptr->redraw |= (PR_STUN);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 
@@ -2920,8 +2920,8 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
 
 	/* Redraw the "cut" */
 	creature_ptr->redraw |= (PR_CUT);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -3112,8 +3112,8 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
 
 	/* Redraw hunger */
 	creature_ptr->redraw |= (PR_HUNGER);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 /*!
@@ -3172,7 +3172,7 @@ bool inc_stat(player_type *creature_ptr, int stat)
 		creature_ptr->update |= (PU_BONUS);
 
 		/* Success */
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Nothing to gain */
@@ -3319,7 +3319,7 @@ bool res_stat(player_type *creature_ptr, int stat)
 		creature_ptr->redraw |= (PR_STATS);
 
 		/* Success */
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Nothing to restore */
@@ -3384,7 +3384,7 @@ bool hp_player(player_type *creature_ptr, int num)
 			msg_print(_("ひじょうに気分が良くなった。", "You feel very good."));
 		}
 
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Ignore */
@@ -3445,7 +3445,7 @@ bool do_dec_stat(player_type *creature_ptr, int stat)
 					desc_stat_neg[stat]);
 
 		/* Notice effect */
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Attempt to reduce the stat */
@@ -3454,7 +3454,7 @@ bool do_dec_stat(player_type *creature_ptr, int stat)
 		msg_format(_("ひどく%sなった気がする。", "You feel very %s."), desc_stat_neg[stat]);
 
 		/* Notice effect */
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Nothing obvious */
@@ -3471,7 +3471,7 @@ bool do_res_stat(player_type *creature_ptr, int stat)
 	if (res_stat(creature_ptr, stat))
 	{
 		msg_format(_("元通りに%sなった気がする。", "You feel more %s."), desc_stat_pos[stat]);
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Nothing obvious */
@@ -3507,7 +3507,7 @@ bool do_inc_stat(player_type *creature_ptr, int stat)
 
 		msg_format(_("ワーオ！とても%sなった！", "Wow!  You feel very %s!"), desc_stat_pos[stat]);
 
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Restoration worked */
@@ -3515,7 +3515,7 @@ bool do_inc_stat(player_type *creature_ptr, int stat)
 	{
 		msg_format(_("元通りに%sなった気がする。", "You feel more %s."), desc_stat_pos[stat]);
 
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Nothing obvious */
@@ -3540,7 +3540,7 @@ bool restore_level(player_type *creature_ptr)
 		check_experience(creature_ptr);
 
 		/* Did something */
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* No effect */
@@ -3587,7 +3587,7 @@ bool lose_all_info(player_type *creature_ptr)
 	wiz_dark(creature_ptr);
 
 	/* It worked */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -3671,7 +3671,7 @@ void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effe
 
 	creature_ptr->update |= (PU_BONUS);
 
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 	/* Load an autopick preference file */
 	if (old_race != creature_ptr->prace) autopick_load_pref(FALSE);
@@ -4024,8 +4024,8 @@ bool set_ultimate_res(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 bool set_tim_res_nether(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
@@ -4066,8 +4066,8 @@ bool set_tim_res_nether(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 bool set_tim_res_time(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
@@ -4108,8 +4108,8 @@ bool set_tim_res_time(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff();
-	return (TRUE);
+	handle_stuff(creature_ptr);
+	return TRUE;
 }
 
 

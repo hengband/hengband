@@ -2201,7 +2201,7 @@ char out_val[80];
 	update_creature(creature_ptr);
 
 	creature_ptr->redraw |= (PR_STATE);
-	update_output();
+	update_output(creature_ptr);
 
 	Term_fresh();
 }
@@ -2490,7 +2490,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	y = creature_ptr->y;
 	x = creature_ptr->x;
 
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 	if ((creature_ptr->pclass == CLASS_NINJA) && ((q_ptr->tval == TV_SPIKE) || ((have_flag(flgs, TR_THROW)) && (q_ptr->tval == TV_SWORD)))) shuriken = TRUE;
 	else shuriken = FALSE;

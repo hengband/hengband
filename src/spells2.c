@@ -1132,7 +1132,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 	caster_ptr->redraw |= (PR_HP);
 	caster_ptr->window |= (PW_PLAYER);
 
-	handle_stuff();
+	handle_stuff(caster_ptr);
 	Term_fresh();
 
 	int msec = delay_factor * delay_factor * delay_factor;
@@ -1355,7 +1355,7 @@ bool probing(player_type *caster_ptr)
 		message_add(buf);
 
 		caster_ptr->window |= (PW_MESSAGE);
-		handle_stuff();
+		handle_stuff(caster_ptr);
 		move_cursor_relative(m_ptr->fy, m_ptr->fx);
 
 		inkey();
@@ -4481,7 +4481,7 @@ bool double_attack(player_type *creature_ptr)
 	py_attack(creature_ptr, y, x, 0);
 	if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 	{
-		handle_stuff();
+		handle_stuff(creature_ptr);
 		py_attack(creature_ptr, y, x, 0);
 	}
 
@@ -4500,7 +4500,6 @@ bool comvert_hp_to_mp(player_type *creature_ptr)
 		return TRUE;
 	}
 	
-
 	creature_ptr->csp += gain_sp;
 	if (creature_ptr->csp > creature_ptr->msp)
 	{

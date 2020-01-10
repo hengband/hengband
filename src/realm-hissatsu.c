@@ -779,7 +779,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				command_dir = 0;
 
 				caster_ptr->redraw |= PR_MANA;
-				handle_stuff();
+				handle_stuff(caster_ptr);
 			} while (caster_ptr->csp > mana_cost_per_monster);
 
 			if (is_new) return NULL;
@@ -835,7 +835,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				py_attack(caster_ptr, y, x, 0);
 				if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 				{
-					handle_stuff();
+					handle_stuff(caster_ptr);
 					py_attack(caster_ptr, y, x, 0);
 				}
 			}

@@ -383,7 +383,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
 	redraw = FALSE;
 
 	caster_ptr->window |= (PW_SPELL);
-	handle_stuff();
+	handle_stuff(caster_ptr);
 
 	/* Build a prompt (accept all spells) */
 #ifdef JP
@@ -555,7 +555,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
 	if (redraw) screen_load();
 
 	caster_ptr->window |= (PW_SPELL);
-	handle_stuff();
+	handle_stuff(caster_ptr);
 
 	/* Abort if needed */
 	if (!flag) return FALSE;
@@ -686,7 +686,7 @@ void do_cmd_browse(player_type *caster_ptr)
 
 	/* Track the object kind */
 	object_kind_track(o_ptr->k_idx);
-	handle_stuff();
+	handle_stuff(caster_ptr);
 
 	/* Extract spells */
 	for (spell = 0; spell < 32; spell++)
@@ -776,7 +776,7 @@ static void change_realm2(player_type *caster_ptr, CHARACTER_IDX next_realm)
 
 	caster_ptr->update |= (PU_REORDER);
 	caster_ptr->update |= (PU_SPELLS);
-	handle_stuff();
+	handle_stuff(caster_ptr);
 
 	/* Load an autopick preference file */
 	autopick_load_pref(FALSE);
@@ -860,7 +860,7 @@ void do_cmd_study(player_type *caster_ptr)
 
 	/* Track the object kind */
 	object_kind_track(o_ptr->k_idx);
-	handle_stuff();
+	handle_stuff(caster_ptr);
 
 	/* Mage -- Learn a selected spell */
 	if (mp_ptr->spell_book != TV_LIFE_BOOK)
@@ -1113,7 +1113,7 @@ void do_cmd_cast(player_type *caster_ptr)
 
 	/* Track the object kind */
 	object_kind_track(o_ptr->k_idx);
-	handle_stuff();
+	handle_stuff(caster_ptr);
 
 	if ((caster_ptr->pclass == CLASS_SORCERER) || (caster_ptr->pclass == CLASS_RED_MAGE))
 		realm = o_ptr->tval - TV_LIFE_BOOK + 1;

@@ -1118,7 +1118,7 @@ static void touch_zap_player_aux(monster_type *m_ptr, player_type *touched_ptr, 
 		atoffset(BIT_FLAGS, r_ptr, r_flags_offset) |= aura_flag;
 	}
 
-	handle_stuff();
+	handle_stuff(touched_ptr);
 }
 
 /*!
@@ -2126,7 +2126,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 				if (k < 0) k = 0;
 
 				take_hit(attacker_ptr, DAMAGE_FORCE, k, _("死の大鎌", "Death scythe"), -1);
-				handle_stuff();
+				handle_stuff(attacker_ptr);
 			}
 			else
 			{
@@ -2134,6 +2134,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 				msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name);
 			}
 		}
+
 		backstab = FALSE;
 		fuiuchi = FALSE;
 	}

@@ -372,7 +372,7 @@ void carry(player_type *creature_ptr, bool pickup)
 	creature_ptr->update |= (PU_MONSTERS);
 	creature_ptr->redraw |= (PR_MAP);
 	creature_ptr->window |= (PW_OVERHEAD);
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 	/* Automatically pickup/destroy/inscribe items */
 	autopick_pickup_items(g_ptr);
@@ -668,7 +668,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 
 		/* For get everything when requested hehe I'm *NASTY* */
 		if (p_ptr->current_floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_FORGET)) wiz_dark(creature_ptr);
-		if (mpe_mode & MPE_HANDLE_STUFF) handle_stuff();
+		if (mpe_mode & MPE_HANDLE_STUFF) handle_stuff(creature_ptr);
 
 		if (creature_ptr->pclass == CLASS_NINJA)
 		{

@@ -505,7 +505,7 @@ extern INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, I
 extern void drop_from_inventory(player_type *owner_type, INVENTORY_IDX item, ITEM_NUMBER amt);
 extern void combine_pack(player_type *owner_ptr);
 extern void reorder_pack(player_type *owner_ptr);
-extern void display_koff(KIND_OBJECT_IDX k_idx);
+extern void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx);
 extern void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs);
 extern void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds);
 extern void torch_lost_fuel(object_type *o_ptr);

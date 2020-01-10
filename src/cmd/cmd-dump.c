@@ -93,7 +93,7 @@ static concptr auto_dump_mark;
 static int auto_dump_line_num;
 
 static void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_r_idx);
-static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX direct_k_idx);
+static void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_k_idx);
 static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level);
 
 // Clipboard variables for copy&paste in visual mode
@@ -1016,7 +1016,7 @@ void do_cmd_redraw(player_type *creature_ptr)
 	creature_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
 
 	update_playtime();
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 	if (creature_ptr->prace == RACE_ANDROID) calc_android_exp(creature_ptr);
 
@@ -1104,7 +1104,7 @@ void do_cmd_player_status(player_type *creature_ptr)
 	screen_load();
 	creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 
-	handle_stuff();
+	handle_stuff(creature_ptr);
 }
 
 
@@ -2437,7 +2437,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 					need_redraw = TRUE;
 					break;
 				case 'v':
-					do_cmd_knowledge_objects(&need_redraw, TRUE, k);
+					do_cmd_knowledge_objects(creature_ptr, &need_redraw, TRUE, k);
 					Term_clear();
 					print_visuals_menu(choice_msg);
 					break;
@@ -2563,7 +2563,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 
 		/* Modify object attr/chars (visual mode) */
 		case '8':
-			do_cmd_knowledge_objects(&need_redraw, TRUE, -1);
+			do_cmd_knowledge_objects(creature_ptr, &need_redraw, TRUE, -1);
 			break;
 
 		/* Modify feature attr/chars (visual mode) */
@@ -4020,7 +4020,7 @@ void do_cmd_save_screen(player_type *creature_ptr)
 		use_graphics = FALSE;
 		reset_visuals();
 		creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
-		handle_stuff();
+		handle_stuff(creature_ptr);
 	}
 
 	if (html_dump)
@@ -4112,14 +4112,14 @@ void do_cmd_save_screen(player_type *creature_ptr)
 		screen_load();
 	}
 
-	if (old_use_graphics)
-	{
-		use_graphics = TRUE;
-		reset_visuals();
-		creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
-		handle_stuff();
-	}
+	if (!old_use_graphics) return;
+
+	use_graphics = TRUE;
+	reset_visuals();
+	creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+	handle_stuff(creature_ptr);
 }
+
 
 /*
  * todo okay = 既知のアーティファクト？ と思われるが確証がない
@@ -5332,7 +5332,7 @@ static void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redr
 		{
 			/* Mega Hack -- track this monster race */
 			if (mon_cnt) monster_race_track(mon_idx[mon_cur]);
-			handle_stuff();
+			handle_stuff(creature_ptr);
 		}
 
 		if (visual_list)
@@ -5488,7 +5488,7 @@ static void display_object_list(int col, int row, int per_page, IDX object_idx[]
 /*
  * Describe fake object
  */
-static void desc_obj_fake(KIND_OBJECT_IDX k_idx)
+static void desc_obj_fake(player_type *creature_ptr, KIND_OBJECT_IDX k_idx)
 {
 	object_type *o_ptr;
 	object_type object_type_body;
@@ -5498,7 +5498,7 @@ static void desc_obj_fake(KIND_OBJECT_IDX k_idx)
 
 	/* It's fully know */
 	o_ptr->ident |= IDENT_KNOWN;
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 	if (screen_object(o_ptr, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL)) return;
 
@@ -5510,7 +5510,7 @@ static void desc_obj_fake(KIND_OBJECT_IDX k_idx)
 /*
  * Display known objects
  */
-static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX direct_k_idx)
+static void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_k_idx)
 {
 	IDX object_old, object_top;
 	IDX grp_idx[100];
@@ -5710,7 +5710,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 			/* The "current" object changed */
 			if (object_old != object_idx[object_cur])
 			{
-				handle_stuff();
+				handle_stuff(creature_ptr);
 
 				/* Remember the "current" object */
 				object_old = object_idx[object_cur];
@@ -5763,7 +5763,7 @@ static void do_cmd_knowledge_objects(bool *need_redraw, bool visual_only, IDX di
 				/* Recall on screen */
 				if (!visual_list && !visual_only && (grp_cnt > 0))
 				{
-					desc_obj_fake(object_idx[object_cur]);
+					desc_obj_fake(creature_ptr, object_idx[object_cur]);
 					redraw = TRUE;
 				}
 				break;
@@ -6911,7 +6911,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
 			do_cmd_knowledge_artifacts(creature_ptr);
 			break;
 		case '2': /* Objects */
-			do_cmd_knowledge_objects(&need_redraw, FALSE, -1);
+			do_cmd_knowledge_objects(creature_ptr, &need_redraw, FALSE, -1);
 			break;
 		case '3': /* Uniques */
 			do_cmd_knowledge_uniques();

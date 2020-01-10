@@ -499,7 +499,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 		vary_item(shooter_ptr, item, -1);
 
 		sound(SOUND_SHOOT);
-		handle_stuff();
+		handle_stuff(shooter_ptr);
 
 		prev_y = y;
 		prev_x = x;

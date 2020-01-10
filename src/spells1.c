@@ -3909,7 +3909,7 @@ static bool project_m(player_type *caster_ptr, floor_type *floor_ptr, MONSTER_ID
 	{
 		caster_ptr->health_who = g_ptr->m_idx;
 		caster_ptr->redraw |= (PR_HEALTH);
-		handle_stuff();
+		handle_stuff(caster_ptr);
 	}
 
 	/* Verify this code */
@@ -5709,7 +5709,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	/* Calculate the projection path */
 
 	path_n = project_path(caster_ptr->current_floor_ptr, path_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, flg);
-	handle_stuff();
+	handle_stuff(caster_ptr);
 
 	/* Giga-Hack SEEKER & SUPER_RAY */
 

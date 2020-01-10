@@ -1115,7 +1115,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 		}
 
 		owner_ptr->window |= (PW_INVEN | PW_EQUIP);
-		handle_stuff();
+		handle_stuff(owner_ptr);
 
 		/* Inventory screen */
 		if (!command_wrk)
@@ -1591,7 +1591,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 	if (toggle) toggle_inven_equip(owner_ptr);
 
 	owner_ptr->window |= (PW_INVEN | PW_EQUIP);
-	handle_stuff();
+	handle_stuff(owner_ptr);
 
 	/* Clear the prompt line */
 	prt("", 0, 0);
@@ -2093,7 +2093,7 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 		}
 
 		creature_ptr->window |= (PW_INVEN | PW_EQUIP);
-		handle_stuff();
+		handle_stuff(creature_ptr);
 
 		/* Inventory screen */
 		if (command_wrk == (USE_INVEN))
@@ -2916,7 +2916,7 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 	if (toggle) toggle_inven_equip(creature_ptr);
 
 	creature_ptr->window |= (PW_INVEN | PW_EQUIP);
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 	/* Clear the prompt line */
 	prt("", 0, 0);

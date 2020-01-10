@@ -21,7 +21,7 @@ extern void resize_map(void);
 extern void redraw_window(void);
 extern bool change_panel(POSITION dy, POSITION dx);
 
-extern void window_stuff(void);
+extern void window_stuff(player_type *player_ptr);
 extern void update_playtime(void);
 
 #define ROW_MAP                 0

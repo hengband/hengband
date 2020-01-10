@@ -80,7 +80,7 @@ static bool change_panel_xy(POSITION y, POSITION x)
 	if (x < panel_col_min) dx = -1;
 	if (x > panel_col_max) dx = 1;
 
-	if (!dy && !dx) return (FALSE);
+	if (!dy && !dx) return FALSE;
 
 	return change_panel(dy, dx);
 }
@@ -213,24 +213,24 @@ bool target_able(MONSTER_IDX m_idx)
 	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 
 	/* Monster must be alive */
-	if (!monster_is_valid(m_ptr)) return (FALSE);
+	if (!monster_is_valid(m_ptr)) return FALSE;
 
 	/* Hack -- no targeting hallucinations */
-	if (p_ptr->image) return (FALSE);
+	if (p_ptr->image) return FALSE;
 
 	/* Monster must be visible */
-	if (!m_ptr->ml) return (FALSE);
+	if (!m_ptr->ml) return FALSE;
 
-	if (p_ptr->riding && (p_ptr->riding == m_idx)) return (TRUE);
+	if (p_ptr->riding && (p_ptr->riding == m_idx)) return TRUE;
 
 	/* Monster must be projectable */
-	if (!projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) return (FALSE);
+	if (!projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) return FALSE;
 
 	/* Hack -- Never target trappers */
-	/* if (CLEAR_ATTR && (CLEAR_CHAR)) return (FALSE); */
+	/* if (CLEAR_ATTR && (CLEAR_CHAR)) return FALSE; */
 
 	/* Assume okay */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -249,7 +249,7 @@ POSITION target_row;
 bool target_okay(void)
 {
 	/* Accept stationary targets */
-	if (target_who < 0) return (TRUE);
+	if (target_who < 0) return TRUE;
 
 	/* Check moving targets */
 	if (target_who > 0)
@@ -264,12 +264,12 @@ bool target_okay(void)
 			target_col = m_ptr->fx;
 
 			/* Good target */
-			return (TRUE);
+			return TRUE;
 		}
 	}
 
 	/* Assume no target */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -324,12 +324,12 @@ static bool target_set_accept(POSITION y, POSITION x)
 	grid_type *g_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
-	if (!(in_bounds(p_ptr->current_floor_ptr, y, x))) return (FALSE);
+	if (!(in_bounds(p_ptr->current_floor_ptr, y, x))) return FALSE;
 
 	/* Player grid is always interesting */
-	if (player_bold(p_ptr, y, x)) return (TRUE);
+	if (player_bold(p_ptr, y, x)) return TRUE;
 
-	if (p_ptr->image) return (FALSE);
+	if (p_ptr->image) return FALSE;
 
 	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
@@ -339,7 +339,7 @@ static bool target_set_accept(POSITION y, POSITION x)
 		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 		/* Visible monsters */
-		if (m_ptr->ml) return (TRUE);
+		if (m_ptr->ml) return TRUE;
 	}
 
 	/* Scan all objects in the grid */
@@ -350,20 +350,20 @@ static bool target_set_accept(POSITION y, POSITION x)
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Memorized object */
-		if (o_ptr->marked & OM_FOUND) return (TRUE);
+		if (o_ptr->marked & OM_FOUND) return TRUE;
 	}
 
 	/* Interesting memorized features */
 	if (g_ptr->info & (CAVE_MARK))
 	{
 		/* Notice object features */
-		if (g_ptr->info & CAVE_OBJECT) return (TRUE);
+		if (g_ptr->info & CAVE_OBJECT) return TRUE;
 
 		/* Feature code (applying "mimic" field) */
 		if (have_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_NOTICE)) return TRUE;
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -606,7 +606,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 		monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 		monster_race_track(m_ptr->ap_r_idx);
 		health_track(g_ptr->m_idx);
-		handle_stuff();
+		handle_stuff(subject_ptr);
 
 		/* Interact */
 		while (1)
@@ -1050,11 +1050,11 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
  * This command will cancel any old target, even if used from
  * inside the "look" command.
  */
-bool target_set(BIT_FLAGS mode)
+bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 {
 	int i, d, m, t, bd;
-	POSITION y = p_ptr->y;
-	POSITION x = p_ptr->x;
+	POSITION y = creature_ptr->y;
+	POSITION x = creature_ptr->x;
 
 	bool done = FALSE;
 	bool flag = TRUE;
@@ -1085,6 +1085,7 @@ bool target_set(BIT_FLAGS mode)
 	m = 0;
 
 	/* Interact */
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	while (!done)
 	{
 		/* Interesting grids */
@@ -1096,10 +1097,10 @@ bool target_set(BIT_FLAGS mode)
 			/* Set forcus */
 			change_panel_xy(y, x);
 
-			if (!(mode & TARGET_LOOK)) prt_path(p_ptr->current_floor_ptr, y, x);
+			if (!(mode & TARGET_LOOK)) prt_path(floor_ptr, y, x);
 
 			/* Access */
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Allow target */
 			if (target_able(g_ptr->m_idx))
@@ -1117,13 +1118,14 @@ bool target_set(BIT_FLAGS mode)
 			{
 				char cheatinfo[30];
 				sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d",
-					los(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x), projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x));
+					los(floor_ptr, creature_ptr->y, creature_ptr->x, y, x), projectable(floor_ptr, creature_ptr->y, creature_ptr->x, y, x));
 				strcat(info, cheatinfo);
 			}
 			
 			/* Describe and Prompt */
-			while (TRUE){
-				query = target_set_aux(p_ptr, y, x, mode, info);
+			while (TRUE)
+			{
+				query = target_set_aux(creature_ptr, y, x, mode, info);
 				if(query)break;
 			}
 
@@ -1191,16 +1193,16 @@ bool target_set(BIT_FLAGS mode)
 				{
 					/* Recenter the map around the player */
 					verify_panel();
-					p_ptr->update |= (PU_MONSTERS);
-					p_ptr->redraw |= (PR_MAP);
-					p_ptr->window |= (PW_OVERHEAD);
-					handle_stuff();
+					creature_ptr->update |= (PU_MONSTERS);
+					creature_ptr->redraw |= (PR_MAP);
+					creature_ptr->window |= (PW_OVERHEAD);
+					handle_stuff(creature_ptr);
 
 					/* Recalculate interesting grids */
 					target_set_prepare(mode);
 
-					y = p_ptr->y;
-					x = p_ptr->x;
+					y = creature_ptr->y;
+					x = creature_ptr->x;
 				}
 
 				case 'o':
@@ -1277,10 +1279,10 @@ bool target_set(BIT_FLAGS mode)
 						panel_col_min = x2;
 						panel_bounds_center();
 
-						p_ptr->update |= (PU_MONSTERS);
-						p_ptr->redraw |= (PR_MAP);
-						p_ptr->window |= (PW_OVERHEAD);
-						handle_stuff();
+						creature_ptr->update |= (PU_MONSTERS);
+						creature_ptr->redraw |= (PR_MAP);
+						creature_ptr->window |= (PW_OVERHEAD);
+						handle_stuff(creature_ptr);
 
 						/* Recalculate interesting grids */
 						target_set_prepare(mode);
@@ -1314,11 +1316,11 @@ bool target_set(BIT_FLAGS mode)
 						}
 
 						/* Slide into legality */
-						if (x >= p_ptr->current_floor_ptr->width-1) x = p_ptr->current_floor_ptr->width - 2;
+						if (x >= floor_ptr->width-1) x = floor_ptr->width - 2;
 						else if (x <= 0) x = 1;
 
 						/* Slide into legality */
-						if (y >= p_ptr->current_floor_ptr->height-1) y = p_ptr->current_floor_ptr->height- 2;
+						if (y >= floor_ptr->height-1) y = floor_ptr->height- 2;
 						else if (y <= 0) y = 1;
 					}
 				}
@@ -1333,10 +1335,10 @@ bool target_set(BIT_FLAGS mode)
 		{
 			bool move_fast = FALSE;
 
-			if (!(mode & TARGET_LOOK)) prt_path(p_ptr->current_floor_ptr, y, x);
+			if (!(mode & TARGET_LOOK)) prt_path(floor_ptr, y, x);
 
 			/* Access */
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Default prompt */
 			strcpy(info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
@@ -1345,13 +1347,13 @@ bool target_set(BIT_FLAGS mode)
 			{
 				char cheatinfo[100];
 				sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d, SPECIAL:%d",
-					los(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x),
-					projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x), g_ptr->special);
+					los(floor_ptr, creature_ptr->y, creature_ptr->x, y, x),
+					projectable(floor_ptr, creature_ptr->y, creature_ptr->x, y, x), g_ptr->special);
 				strcat(info, cheatinfo);
 			}
 
 			/* Describe and Prompt (enable "TARGET_LOOK") */
-			while ((query = target_set_aux(p_ptr, y, x, mode | TARGET_LOOK, info)) == 0);
+			while ((query = target_set_aux(creature_ptr, y, x, mode | TARGET_LOOK, info)) == 0);
 
 			/* Assume no direction */
 			d = 0;
@@ -1387,16 +1389,16 @@ bool target_set(BIT_FLAGS mode)
 				{
 					/* Recenter the map around the player */
 					verify_panel();
-					p_ptr->update |= (PU_MONSTERS);
-					p_ptr->redraw |= (PR_MAP);
-					p_ptr->window |= (PW_OVERHEAD);
-					handle_stuff();
+					creature_ptr->update |= (PU_MONSTERS);
+					creature_ptr->redraw |= (PR_MAP);
+					creature_ptr->window |= (PW_OVERHEAD);
+					handle_stuff(creature_ptr);
 
 					/* Recalculate interesting grids */
 					target_set_prepare(mode);
 
-					y = p_ptr->y;
-					x = p_ptr->x;
+					y = creature_ptr->y;
+					x = creature_ptr->x;
 				}
 
 				case 'o':
@@ -1488,11 +1490,11 @@ bool target_set(BIT_FLAGS mode)
 				}
 
 				/* Slide into legality */
-				if (x >= p_ptr->current_floor_ptr->width-1) x = p_ptr->current_floor_ptr->width - 2;
+				if (x >= floor_ptr->width-1) x = floor_ptr->width - 2;
 				else if (x <= 0) x = 1;
 
 				/* Slide into legality */
-				if (y >= p_ptr->current_floor_ptr->height-1) y = p_ptr->current_floor_ptr->height- 2;
+				if (y >= floor_ptr->height-1) y = floor_ptr->height- 2;
 				else if (y <= 0) y = 1;
 			}
 		}
@@ -1506,16 +1508,14 @@ bool target_set(BIT_FLAGS mode)
 
 	/* Recenter the map around the player */
 	verify_panel();
-	p_ptr->update |= (PU_MONSTERS);
-	p_ptr->redraw |= (PR_MAP);
-	p_ptr->window |= (PW_OVERHEAD);
-	handle_stuff();
+	creature_ptr->update |= (PU_MONSTERS);
+	creature_ptr->redraw |= (PR_MAP);
+	creature_ptr->window |= (PW_OVERHEAD);
+	handle_stuff(creature_ptr);
 
-	/* Failure to set target */
-	if (!target_who) return (FALSE);
+	if (!target_who) return FALSE;
 
-	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -1552,7 +1552,7 @@ bool get_aim_dir(DIRECTION *dp)
 		/* Verify */
 		if (!(code == 5 && !target_okay()))
 		{
-/*			return (TRUE); */
+/*			return TRUE; */
 			dir = (DIRECTION)code;
 		}
 	}
@@ -1598,7 +1598,7 @@ bool get_aim_dir(DIRECTION *dp)
 			case ' ':
 			case '\r':
 			{
-				if (target_set(TARGET_KILL)) dir = 5;
+				if (target_set(p_ptr, TARGET_KILL)) dir = 5;
 				break;
 			}
 
@@ -1622,7 +1622,7 @@ bool get_aim_dir(DIRECTION *dp)
 	if (!dir)
 	{
 		project_length = 0; /* reset to default */
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Save the direction */
@@ -1649,7 +1649,7 @@ bool get_aim_dir(DIRECTION *dp)
 	repeat_push((COMMAND_CODE)command_dir);
 
 	/* A "valid" direction was entered */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -1667,7 +1667,7 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
 	if (repeat_pull(&code))
 	{
 		dir = (DIRECTION)code;
-		/*		return (TRUE); */
+		/*		return TRUE; */
 	}
 	*dp = (DIRECTION)code;
 
@@ -1706,7 +1706,7 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
 	if ((dir == 5) && (!allow_under)) dir = 0;
 
 	/* Aborted */
-	if (!dir) return (FALSE);
+	if (!dir) return FALSE;
 
 	/* Save desired direction */
 	command_dir = dir;
@@ -1779,7 +1779,7 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
 	repeat_push((COMMAND_CODE)command_dir);
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 /*
@@ -1812,7 +1812,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 	if (repeat_pull(&code))
 	{
 		dir = (DIRECTION)code;
-/*		return (TRUE); */
+/*		return TRUE; */
 	}
 	*dp = (DIRECTION)code;
 
@@ -1851,7 +1851,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 	if ((dir == 5) && (!under)) dir = 0;
 
 	/* Aborted */
-	if (!dir) return (FALSE);
+	if (!dir) return FALSE;
 
 	/* Save desired direction */
 	command_dir = dir;
@@ -1924,7 +1924,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 	repeat_push((COMMAND_CODE)command_dir);
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -1936,12 +1936,12 @@ static bool tgt_pt_accept(POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
 
-	if (!(in_bounds(p_ptr->current_floor_ptr, y, x))) return (FALSE);
+	if (!(in_bounds(p_ptr->current_floor_ptr, y, x))) return FALSE;
 
 	/* Player grid is always interesting */
-	if ((y == p_ptr->y) && (x == p_ptr->x)) return (TRUE);
+	if ((y == p_ptr->y) && (x == p_ptr->x)) return TRUE;
 
-	if (p_ptr->image) return (FALSE);
+	if (p_ptr->image) return FALSE;
 
 	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
@@ -1949,15 +1949,15 @@ static bool tgt_pt_accept(POSITION y, POSITION x)
 	if (g_ptr->info & (CAVE_MARK))
 	{
 		/* Notice stairs */
-		if (cave_have_flag_grid(g_ptr, FF_LESS)) return (TRUE);
-		if (cave_have_flag_grid(g_ptr, FF_MORE)) return (TRUE);
+		if (cave_have_flag_grid(g_ptr, FF_LESS)) return TRUE;
+		if (cave_have_flag_grid(g_ptr, FF_MORE)) return TRUE;
 
 		/* Notice quest features */
-		if (cave_have_flag_grid(g_ptr, FF_QUEST_ENTER)) return (TRUE);
-		if (cave_have_flag_grid(g_ptr, FF_QUEST_EXIT)) return (TRUE);
+		if (cave_have_flag_grid(g_ptr, FF_QUEST_ENTER)) return TRUE;
+		if (cave_have_flag_grid(g_ptr, FF_QUEST_EXIT)) return TRUE;
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -2077,7 +2077,7 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
 					creature_ptr->redraw |= (PR_MAP);
 
 					creature_ptr->window |= (PW_OVERHEAD);
-					handle_stuff();
+					handle_stuff(creature_ptr);
 				}
 				else	/* move cursor to next stair and change panel */
 				{
@@ -2163,7 +2163,7 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
 	creature_ptr->redraw |= (PR_MAP);
 
 	creature_ptr->window |= (PW_OVERHEAD);
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 	*x_ptr = x;
 	*y_ptr = y;
@@ -2171,7 +2171,7 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
 }
 
 
-bool get_hack_dir(DIRECTION *dp)
+bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
 {
 	DIRECTION dir;
 	concptr    p;
@@ -2224,7 +2224,7 @@ bool get_hack_dir(DIRECTION *dp)
 			case ' ':
 			case '\r':
 			{
-				if (target_set(TARGET_KILL)) dir = 5;
+				if (target_set(creature_ptr, TARGET_KILL)) dir = 5;
 				break;
 			}
 
@@ -2245,7 +2245,7 @@ bool get_hack_dir(DIRECTION *dp)
 	}
 
 	/* No direction */
-	if (!dir) return (FALSE);
+	if (!dir) return FALSE;
 
 	/* Save the direction */
 	command_dir = dir;
@@ -2268,5 +2268,5 @@ bool get_hack_dir(DIRECTION *dp)
 	(*dp) = dir;
 
 	/* A "valid" direction was entered */
-	return (TRUE);
+	return TRUE;
 }

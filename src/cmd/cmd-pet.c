@@ -51,7 +51,7 @@ bool player_can_ride_aux(player_type *creature_ptr, grid_type *g_ptr, bool now_r
 	}
 
 	creature_ptr->update |= PU_BONUS;
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 	p_can_enter = player_can_enter(creature_ptr, g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
 
@@ -62,7 +62,7 @@ bool player_can_ride_aux(player_type *creature_ptr, grid_type *g_ptr, bool now_r
 	creature_ptr->old_riding_ryoute = old_old_riding_ryoute;
 
 	creature_ptr->update |= PU_BONUS;
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 	current_world_ptr->character_xtra = old_character_xtra;
 
@@ -179,7 +179,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 		{
 			/* Hack -- health bar for this monster */
 			health_track(pet_ctr);
-			handle_stuff();
+			handle_stuff(creature_ptr);
 
 			msg_format(_("%sを放しますか？ [Yes/No/Unnamed (%d体)]", "Dismiss %s? [Yes/No/Unnamed (%d remain)]"), friend_name, max_pet - i);
 
@@ -262,7 +262,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 	if (Dismissed == 0 && all_pets)
 		msg_print(_("'U'nnamed は、乗馬以外の名前のないペットだけを全て解放します。", "'U'nnamed means all your pets except named pets and your mount."));
 
-	handle_stuff();
+	handle_stuff(creature_ptr);
 }
 
 
@@ -402,11 +402,12 @@ static void do_name_pet(player_type *creature_ptr)
 	bool old_target_pet = target_pet;
 
 	target_pet = TRUE;
-	if (!target_set(TARGET_KILL))
+	if (!target_set(creature_ptr, TARGET_KILL))
 	{
 		target_pet = old_target_pet;
 		return;
 	}
+
 	target_pet = old_target_pet;
 
 	if (creature_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx)
@@ -833,7 +834,7 @@ void do_cmd_pet(player_type *creature_ptr)
 	case PET_TARGET:
 	{
 		project_length = -1;
-		if (!target_set(TARGET_KILL)) creature_ptr->pet_t_m_idx = 0;
+		if (!target_set(creature_ptr, TARGET_KILL)) creature_ptr->pet_t_m_idx = 0;
 		else
 		{
 			grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[target_row][target_col];
@@ -953,7 +954,7 @@ void do_cmd_pet(player_type *creature_ptr)
 		if (creature_ptr->pet_extra_flags & PF_RYOUTE) creature_ptr->pet_extra_flags &= ~(PF_RYOUTE);
 		else creature_ptr->pet_extra_flags |= (PF_RYOUTE);
 		creature_ptr->update |= (PU_BONUS);
-		handle_stuff();
+		handle_stuff(creature_ptr);
 		break;
 	}
 	}
@@ -1072,7 +1073,7 @@ bool rakuba(player_type *creature_ptr, HIT_POINT dam, bool force)
 	creature_ptr->riding_ryoute = creature_ptr->old_riding_ryoute = FALSE;
 
 	creature_ptr->update |= (PU_BONUS | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 
 	creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -1097,4 +1098,3 @@ bool rakuba(player_type *creature_ptr, HIT_POINT dam, bool force)
 
 	return fall_dam;
 }
-

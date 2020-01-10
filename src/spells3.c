@@ -562,7 +562,7 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
 
 bool teleport_level_other(player_type *caster_ptr)
 {
-if (!target_set(TARGET_KILL)) return FALSE;
+	if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 	MONSTER_IDX target_m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 	if (!target_m_idx) return TRUE;
 	if (!player_has_los_bold(caster_ptr, target_row, target_col)) return TRUE;
@@ -1826,7 +1826,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 
 	/* Mark the item as fully known */
 	o_ptr->ident |= (IDENT_MENTAL);
-	handle_stuff();
+	handle_stuff(caster_ptr);
 
 	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(o_name, o_ptr, 0);

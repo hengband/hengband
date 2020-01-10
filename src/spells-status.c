@@ -221,7 +221,7 @@ bool time_walk(player_type *creature_ptr)
 	creature_ptr->redraw |= (PR_MAP);
 	creature_ptr->update |= (PU_MONSTERS);
 	creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-	handle_stuff();
+	handle_stuff(creature_ptr);
 	return TRUE;
 }
 
@@ -267,7 +267,7 @@ void roll_hitdice(player_type *creature_ptr, SPOP_FLAGS options)
 	creature_ptr->redraw |= (PR_HP);
 	creature_ptr->window |= (PW_PLAYER);
 
-	if (!(options & SPOP_NO_UPDATE)) handle_stuff();
+	if (!(options & SPOP_NO_UPDATE)) handle_stuff(creature_ptr);
 
 	if (!(options & SPOP_DISPLAY_MES)) return;
 
@@ -305,7 +305,7 @@ bool_hack life_stream(player_type *creature_ptr, bool_hack message, bool_hack vi
 	(void)set_cut(creature_ptr,0);
 	(void)restore_all_status(creature_ptr);
 	(void)set_shero(creature_ptr, 0, TRUE);
-	handle_stuff();
+	handle_stuff(creature_ptr);
 	hp_player(creature_ptr, 5000);
 
 	return TRUE;

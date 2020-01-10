@@ -651,7 +651,7 @@ void do_cmd_destroy(player_type *creature_ptr)
 		/* HACK : Add the line to message buffer */
 		message_add(out_val);
 		creature_ptr->window |= (PW_MESSAGE);
-		handle_stuff();
+		handle_stuff(creature_ptr);
 
 		/* Get an acceptable answer */
 		while (TRUE)
@@ -1068,7 +1068,7 @@ void do_cmd_target(player_type *creature_ptr)
 	if (creature_ptr->wild_mode) return;
 
 	/* Target set */
-	if (target_set(TARGET_KILL))
+	if (target_set(creature_ptr, TARGET_KILL))
 	{
 		msg_print(_("ターゲット決定。", "Target Selected."));
 	}
@@ -1081,7 +1081,6 @@ void do_cmd_target(player_type *creature_ptr)
 }
 
 
-
 /*!
  * @brief 周囲を見渡すコマンドのメインルーチン
  * Look command
@@ -1090,10 +1089,10 @@ void do_cmd_target(player_type *creature_ptr)
 void do_cmd_look(player_type *creature_ptr)
 {
 	creature_ptr->window |= PW_MONSTER_LIST;
-	handle_stuff();
+	handle_stuff(creature_ptr);
 
 	/* Look around */
-	if (target_set(TARGET_LOOK))
+	if (target_set(creature_ptr, TARGET_LOOK))
 	{
 		msg_print(_("ターゲット決定。", "Target Selected."));
 	}
@@ -1176,13 +1175,14 @@ void do_cmd_locate(player_type *creature_ptr)
 	creature_ptr->update |= (PU_MONSTERS);
 	creature_ptr->redraw |= (PR_MAP);
 	creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-	handle_stuff();
+	handle_stuff(creature_ptr);
 }
 
 
 /*!
  * @brief モンスターの思い出を見るコマンドのメインルーチン
  * Identify a character, allow recall of monsters
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * <pre>
@@ -1196,7 +1196,7 @@ void do_cmd_locate(player_type *creature_ptr)
  * Note that the player ghosts are ignored. 
  * </pre>
  */
-void do_cmd_query_symbol(void)
+void do_cmd_query_symbol(player_type *creature_ptr)
 {
 	IDX i;
 	int n;
@@ -1360,7 +1360,6 @@ void do_cmd_query_symbol(void)
 		ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
 	}
 
-
 	/* Start at the end */
 	i = n - 1;
 
@@ -1371,7 +1370,7 @@ void do_cmd_query_symbol(void)
 
 		/* Hack -- Auto-recall */
 		monster_race_track(r_idx);
-		handle_stuff();
+		handle_stuff(creature_ptr);
 
 		/* Interact */
 		while (1)

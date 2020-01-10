@@ -460,7 +460,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 	TERM_LEN y = 1;
 	TERM_LEN x = 18;
 	PERCENTAGE minfail = 0;
-	PLAYER_LEVEL plev = p_ptr->lev;
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	PERCENTAGE chance = 0;
 	int             ask = TRUE, mode = 0;
 	int             spellnum[MAX_MONSPELLS];
@@ -486,7 +486,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 	if (repeat_pull(&code))
 	{
 		*sn = (SPELL_IDX)code;
-		return (TRUE);
+		return TRUE;
 	}
 
 	if (use_menu)
@@ -583,7 +583,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 	}
 	for (i = 0; i < num; i++)
 	{
-		if (p_ptr->magic_num2[spellnum[i]])
+		if (caster_ptr->magic_num2[spellnum[i]])
 		{
 			if (use_menu) menu_line = i+1;
 			break;
@@ -625,7 +625,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 					{
 						menu_line += (num-1);
 						if (menu_line > num) menu_line -= num;
-					} while(!p_ptr->magic_num2[spellnum[menu_line-1]]);
+					} while(!caster_ptr->magic_num2[spellnum[menu_line-1]]);
 					break;
 				}
 
@@ -637,7 +637,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 					{
 						menu_line++;
 						if (menu_line > num) menu_line -= num;
-					} while(!p_ptr->magic_num2[spellnum[menu_line-1]]);
+					} while(!caster_ptr->magic_num2[spellnum[menu_line-1]]);
 					break;
 				}
 
@@ -646,7 +646,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 				case 'L':
 				{
 					menu_line=num;
-					while(!p_ptr->magic_num2[spellnum[menu_line-1]]) menu_line--;
+					while(!caster_ptr->magic_num2[spellnum[menu_line-1]]) menu_line--;
 					break;
 				}
 
@@ -655,7 +655,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 				case 'H':
 				{
 					menu_line=1;
-					while(!p_ptr->magic_num2[spellnum[menu_line-1]]) menu_line++;
+					while(!caster_ptr->magic_num2[spellnum[menu_line-1]]) menu_line++;
 					break;
 				}
 
@@ -691,7 +691,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 					int need_mana;
 
 					prt("", y + i + 1, x);
-					if (!p_ptr->magic_num2[spellnum[i]]) continue;
+					if (!caster_ptr->magic_num2[spellnum[i]]) continue;
 
 					/* Access the spell */
 					spell = monster_powers[spellnum[i]];
@@ -703,32 +703,32 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 					else chance += (spell.level - plev);
 
 					/* Reduce failure rate by INT/WIS adjustment */
-					chance -= 3 * (adj_mag_stat[p_ptr->stat_ind[A_INT]] - 1);
+					chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[A_INT]] - 1);
 
-					chance = mod_spell_chance_1(p_ptr, chance);
+					chance = mod_spell_chance_1(caster_ptr, chance);
 
 					need_mana = mod_need_mana(caster_ptr, monster_powers[spellnum[i]].smana, 0, REALM_NONE);
 
 					/* Not enough mana to cast */
-					if (need_mana > p_ptr->csp)
+					if (need_mana > caster_ptr->csp)
 					{
-						chance += 5 * (need_mana - p_ptr->csp);
+						chance += 5 * (need_mana - caster_ptr->csp);
 					}
 
 					/* Extract the minimum failure rate */
-					minfail = adj_mag_fail[p_ptr->stat_ind[A_INT]];
+					minfail = adj_mag_fail[caster_ptr->stat_ind[A_INT]];
 
 					/* Minimum failure rate */
 					if (chance < minfail) chance = minfail;
 
 					/* Stunning makes spells harder */
-					if (p_ptr->stun > 50) chance += 25;
-					else if (p_ptr->stun) chance += 15;
+					if (caster_ptr->stun > 50) chance += 25;
+					else if (caster_ptr->stun) chance += 15;
 
 					/* Always a 5 percent chance of working */
 					if (chance > 95) chance = 95;
 
-					chance = mod_spell_chance_2(p_ptr, chance);
+					chance = mod_spell_chance_2(caster_ptr, chance);
 
 					/* Get info */
 					learned_info(comment, spellnum[i]);
@@ -776,7 +776,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 		}
 
 		/* Totally Illegal */
-		if ((i < 0) || (i >= num) || !p_ptr->magic_num2[spellnum[i]])
+		if ((i < 0) || (i >= num) || !caster_ptr->magic_num2[spellnum[i]])
 		{
 			bell();
 			continue;
@@ -802,8 +802,8 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 	}
 	if (redraw) screen_load();
 
-	p_ptr->window |= (PW_SPELL);
-	handle_stuff();
+	caster_ptr->window |= (PW_SPELL);
+	handle_stuff(caster_ptr);
 
 	/* Abort if needed */
 	if (!flag) return (FALSE);
@@ -814,7 +814,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 	repeat_push((COMMAND_CODE)spellnum[i]);
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -862,7 +862,7 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 	{
 		MONSTER_IDX m_idx;
 
-		if (!target_set(TARGET_KILL)) return FALSE;
+		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		m_idx = floor_ptr->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
@@ -1304,7 +1304,7 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 		monster_race *r_ptr;
 		GAME_TEXT m_name[MAX_NLEN];
 
-		if (!target_set(TARGET_KILL)) return FALSE;
+		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		if (!floor_ptr->grid_array[target_row][target_col].m_idx) break;
 		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
 		if (!projectable(floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
@@ -1354,7 +1354,7 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 		(void)unlite_area(caster_ptr, 10, 3);
 		break;
 	case MS_MAKE_TRAP:
-		if (!target_set(TARGET_KILL)) return FALSE;
+		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 
         msg_print(_("呪文を唱えて邪悪に微笑んだ。", "You cast a spell and cackle evilly."));
 		trap_creation(caster_ptr, target_row, target_col);

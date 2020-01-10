@@ -2027,9 +2027,10 @@ static void fix_monster(void)
 /*!
  * @brief ベースアイテム情報をサブウィンドウに表示する / 
  * Hack -- display object recall in sub-windows
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void fix_object(void)
+static void fix_object(player_type *player_ptr)
 {
 	int j;
 
@@ -2048,7 +2049,7 @@ static void fix_object(void)
 		Term_activate(angband_term[j]);
 
 		/* Display monster race info */
-		if (p_ptr->object_kind_idx) display_koff(p_ptr->object_kind_idx);
+		if (player_ptr->object_kind_idx) display_koff(player_ptr, player_ptr->object_kind_idx);
 		Term_fresh();
 		Term_activate(old);
 	}
@@ -2255,17 +2256,18 @@ void redraw_stuff(player_type *creature_ptr)
 }
 
 /*! 
- * @brief p_ptr->window のフラグに応じた更新をまとめて行う / Handle "p_ptr->window"
+ * @brief player_ptr->window のフラグに応じた更新をまとめて行う / Handle "player_ptr->window"
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details 更新処理の対象はサブウィンドウ全般
  */
-void window_stuff(void)
+void window_stuff(player_type *player_ptr)
 {
 	int j;
 	BIT_FLAGS mask = 0L;
 
 	/* Nothing to do */
-	if (!p_ptr->window) return;
+	if (!player_ptr->window) return;
 
 	/* Scan windows */
 	for (j = 0; j < 8; j++)
@@ -2275,80 +2277,81 @@ void window_stuff(void)
 	}
 
 	/* Apply usable flags */
-	p_ptr->window &= mask;
+	player_ptr->window &= mask;
 
 	/* Nothing to do */
-	if (!p_ptr->window) return;
+	if (!player_ptr->window) return;
 
-	if (p_ptr->window & (PW_INVEN))
+	if (player_ptr->window & (PW_INVEN))
 	{
-		p_ptr->window &= ~(PW_INVEN);
+		player_ptr->window &= ~(PW_INVEN);
 		fix_inven();
 	}
 
 	/* Display equipment */
-	if (p_ptr->window & (PW_EQUIP))
+	if (player_ptr->window & (PW_EQUIP))
 	{
-		p_ptr->window &= ~(PW_EQUIP);
+		player_ptr->window &= ~(PW_EQUIP);
 		fix_equip();
 	}
 
 	/* Display spell list */
-	if (p_ptr->window & (PW_SPELL))
+	if (player_ptr->window & (PW_SPELL))
 	{
-		p_ptr->window &= ~(PW_SPELL);
+		player_ptr->window &= ~(PW_SPELL);
 		fix_spell();
 	}
 
 	/* Display player */
-	if (p_ptr->window & (PW_PLAYER))
+	if (player_ptr->window & (PW_PLAYER))
 	{
-		p_ptr->window &= ~(PW_PLAYER);
+		player_ptr->window &= ~(PW_PLAYER);
 		fix_player();
 	}
 	
 	/* Display monster list */
-	if (p_ptr->window & (PW_MONSTER_LIST))
+	if (player_ptr->window & (PW_MONSTER_LIST))
 	{
-		p_ptr->window &= ~(PW_MONSTER_LIST);
+		player_ptr->window &= ~(PW_MONSTER_LIST);
 		fix_monster_list();
 	}
 	
 	/* Display overhead view */
-	if (p_ptr->window & (PW_MESSAGE))
+	if (player_ptr->window & (PW_MESSAGE))
 	{
-		p_ptr->window &= ~(PW_MESSAGE);
+		player_ptr->window &= ~(PW_MESSAGE);
 		fix_message();
 	}
 
 	/* Display overhead view */
-	if (p_ptr->window & (PW_OVERHEAD))
+	if (player_ptr->window & (PW_OVERHEAD))
 	{
-		p_ptr->window &= ~(PW_OVERHEAD);
+		player_ptr->window &= ~(PW_OVERHEAD);
 		fix_overhead();
 	}
 
 	/* Display overhead view */
-	if (p_ptr->window & (PW_DUNGEON))
+	if (player_ptr->window & (PW_DUNGEON))
 	{
-		p_ptr->window &= ~(PW_DUNGEON);
+		player_ptr->window &= ~(PW_DUNGEON);
 		fix_dungeon();
 	}
 
 	/* Display monster recall */
-	if (p_ptr->window & (PW_MONSTER))
+	if (player_ptr->window & (PW_MONSTER))
 	{
-		p_ptr->window &= ~(PW_MONSTER);
+		player_ptr->window &= ~(PW_MONSTER);
 		fix_monster();
 	}
 
 	/* Display object recall */
-	if (p_ptr->window & (PW_OBJECT))
+	if (player_ptr->window & (PW_OBJECT))
 	{
-		p_ptr->window &= ~(PW_OBJECT);
-		fix_object();
+		player_ptr->window &= ~(PW_OBJECT);
+		fix_object(player_ptr);
 	}
 }
+
 
 /*!
  * @brief コンソールのリサイズに合わせてマップを再描画する /
@@ -2376,7 +2379,7 @@ void resize_map(void)
 	p_ptr->update |= (PU_MONSTERS);
 	p_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 
-	handle_stuff();
+	handle_stuff(p_ptr);
 	Term_redraw();
 
 	/*
@@ -2401,7 +2404,7 @@ void redraw_window(void)
 	p_ptr->window |= (PW_INVEN | PW_EQUIP | PW_SPELL | PW_PLAYER);
 	p_ptr->window |= (PW_MESSAGE | PW_OVERHEAD | PW_DUNGEON | PW_MONSTER | PW_OBJECT);
 
-	handle_stuff();
+	handle_stuff(p_ptr);
 	Term_redraw();
 }
 
@@ -2445,7 +2448,7 @@ bool change_panel(POSITION dy, POSITION dx)
 
 		p_ptr->update |= (PU_MONSTERS);
 		p_ptr->redraw |= (PR_MAP);
-		handle_stuff();
+		handle_stuff(p_ptr);
 
 		/* Success */
 		return (TRUE);
@@ -3790,7 +3793,7 @@ void prt_path(floor_type *floor_ptr, POSITION y, POSITION x)
 	path_n = project_path(floor_ptr, path_g, (project_length ? project_length : MAX_RANGE), p_ptr->y, p_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
 
 	p_ptr->redraw |= (PR_MAP);
-	handle_stuff();
+	handle_stuff(p_ptr);
 
 	/* Draw path */
 	for (i = 0; i < path_n; i++)

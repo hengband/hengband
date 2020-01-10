@@ -407,7 +407,7 @@ static void arena_comm(player_type *player_ptr, int cmd)
 
 				player_ptr->monster_race_idx = arena_info[player_ptr->arena_number].r_idx;
 				player_ptr->window |= (PW_MONSTER);
-				handle_stuff();
+				handle_stuff(player_ptr);
 
 			}
 			break;
@@ -1966,22 +1966,20 @@ static bool kankin(player_type *player_ptr)
 
 				/* Auto-inscription */
 				autopick_alter_item(item_new, FALSE);
-				handle_stuff();
+				handle_stuff(player_ptr);
 
 				change = TRUE;
 			}
 		}
 	}
 
-	if (!change)
-	{
-		msg_print(_("賞金を得られそうなものは持っていなかった。", "You have nothing."));
-		msg_print(NULL);
-		return FALSE;
-	}
+	if (change) return TRUE;
 
-	return TRUE;
+	msg_print(_("賞金を得られそうなものは持っていなかった。", "You have nothing."));
+	msg_print(NULL);
+	return FALSE;
 }
+
 
 /*!
  * @brief 宿屋の利用サブルーチン
@@ -2682,7 +2680,7 @@ static PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 			if (o_ptr[i] != i_ptr) object_copy(i_ptr, o_ptr[i]);
 
 			customer_ptr->update |= PU_BONUS;
-			handle_stuff();
+			handle_stuff(customer_ptr);
 
 			/* List the new values */
 			list_weapon(o_ptr[i], row, col);
@@ -2694,7 +2692,7 @@ static PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 
 		/* Reset the values for the old weapon */
 		customer_ptr->update |= PU_BONUS;
-		handle_stuff();
+		handle_stuff(customer_ptr);
 
 		current_world_ptr->character_xtra = old_character_xtra;
 
@@ -3128,11 +3126,12 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
 	/* Copyback */
 	p_ptr->update |= PU_BONUS;
-	handle_stuff();
+	handle_stuff(player_ptr);
 
 	/* Something happened */
 	return (cost);
 }
+
 
 /*!
  * @brief アイテム修復処理の過渡ルーチン / Repair broken weapon
@@ -3603,12 +3602,14 @@ static void building_recharge_all(void)
 	return;
 }
 
+
 /*!
  * @brief 施設でモンスターの情報を知るメインルーチン / research_mon -KMW-
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 常にTRUEを返す。
  * @todo 返り値が意味不明なので直した方が良いかもしれない。
  */
-static bool research_mon(void)
+static bool research_mon(player_type *player_ptr)
 {
 	IDX i;
 	int n;
@@ -3793,7 +3794,7 @@ static bool research_mon(void)
 
 				/* Save this monster ID */
 				monster_race_track(r_idx);
-				handle_stuff();
+				handle_stuff(player_ptr);
 
 				/* know every thing mode */
 				screen_roff(r_idx, 0x01);
@@ -3835,7 +3836,6 @@ static bool research_mon(void)
 			}
 		}
 	}
-
 
 	/* Re-display the identity */
 	/* prt(buf, 5, 5);*/
@@ -3927,7 +3927,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		paid = inn_comm(player_ptr, bact);
 		break;
 	case BACT_RESEARCH_MONSTER:
-		paid = research_mon();
+		paid = research_mon(player_ptr);
 		break;
 	case BACT_COMPARE_WEAPONS:
 		paid = TRUE;
@@ -4184,7 +4184,7 @@ void do_cmd_bldg(player_type *player_ptr)
 
 		if(validcmd) bldg_process_command(player_ptr, bldg, i);
 
-		handle_stuff();
+		handle_stuff(player_ptr);
 	}
 
 	select_floor_music(player_ptr);

@@ -5386,7 +5386,7 @@ void reorder_pack(player_type *owner_ptr)
  * @details
  * Include list of usable spells for readible books
  */
-void display_koff(KIND_OBJECT_IDX k_idx)
+void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx)
 {
 	int y;
 
@@ -5421,37 +5421,35 @@ void display_koff(KIND_OBJECT_IDX k_idx)
 	use_realm = tval2realm(q_ptr->tval);
 
 	/* Warriors are illiterate */
-	if (p_ptr->realm1 || p_ptr->realm2)
+	if (owner_ptr->realm1 || owner_ptr->realm2)
 	{
-		if ((use_realm != p_ptr->realm1) && (use_realm != p_ptr->realm2)) return;
+		if ((use_realm != owner_ptr->realm1) && (use_realm != owner_ptr->realm2)) return;
 	}
 	else
 	{
-		if ((p_ptr->pclass != CLASS_SORCERER) && (p_ptr->pclass != CLASS_RED_MAGE)) return;
+		if ((owner_ptr->pclass != CLASS_SORCERER) && (owner_ptr->pclass != CLASS_RED_MAGE)) return;
 		if (!is_magic(use_realm)) return;
-		if ((p_ptr->pclass == CLASS_RED_MAGE) && (use_realm != REALM_ARCANE) && (sval > 1)) return;
+		if ((owner_ptr->pclass == CLASS_RED_MAGE) && (use_realm != REALM_ARCANE) && (sval > 1)) return;
 	}
 
 	/* Display spells in readible books */
+	int     spell = -1;
+	int     num = 0;
+	SPELL_IDX    spells[64];
+
+	/* Extract spells */
+	for (spell = 0; spell < 32; spell++)
 	{
-		int     spell = -1;
-		int     num = 0;
-		SPELL_IDX    spells[64];
-
-		/* Extract spells */
-		for (spell = 0; spell < 32; spell++)
+		/* Check for this spell */
+		if (fake_spell_flags[sval] & (1L << spell))
 		{
-			/* Check for this spell */
-			if (fake_spell_flags[sval] & (1L << spell))
-			{
-				/* Collect this spell */
-				spells[num++] = spell;
-			}
+			/* Collect this spell */
+			spells[num++] = spell;
 		}
-
-		/* Print spells */
-		print_spells(p_ptr, 0, spells, num, 2, 0, use_realm);
 	}
+
+	/* Print spells */
+	print_spells(owner_ptr, 0, spells, num, 2, 0, use_realm);
 }
 
 
