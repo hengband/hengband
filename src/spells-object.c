@@ -156,9 +156,9 @@ bool create_ammo(player_type *creature_ptr)
 			/* Hack -- Give the player some small firestones */
 			object_prep(q_ptr, lookup_kind(TV_SHOT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
 			q_ptr->number = (byte)rand_range(15, 30);
-			object_aware(q_ptr);
+			object_aware(creature_ptr, q_ptr);
 			object_known(q_ptr);
-			apply_magic(q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
+			apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
 			q_ptr->discount = 99;
 
 			slot = inven_carry(creature_ptr, q_ptr);
@@ -194,9 +194,9 @@ bool create_ammo(player_type *creature_ptr)
 		/* Hack -- Give the player some small firestones */
 		object_prep(q_ptr, lookup_kind(TV_ARROW, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
 		q_ptr->number = (byte)rand_range(5, 10);
-		object_aware(q_ptr);
+		object_aware(creature_ptr, q_ptr);
 		object_known(q_ptr);
-		apply_magic(q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
+		apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
 
 		q_ptr->discount = 99;
 
@@ -229,9 +229,9 @@ bool create_ammo(player_type *creature_ptr)
 		/* Hack -- Give the player some small firestones */
 		object_prep(q_ptr, lookup_kind(TV_BOLT, (OBJECT_SUBTYPE_VALUE)m_bonus(1, creature_ptr->lev) + 1));
 		q_ptr->number = (byte)rand_range(4, 8);
-		object_aware(q_ptr);
+		object_aware(creature_ptr, q_ptr);
 		object_known(q_ptr);
-		apply_magic(q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
+		apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
 
 		q_ptr->discount = 99;
 
@@ -245,6 +245,7 @@ bool create_ammo(player_type *creature_ptr)
 		/* Auto-inscription */
 		if (slot >= 0) autopick_alter_item(slot, FALSE);
 	}
+
 	return TRUE;
 }
 
@@ -390,7 +391,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
 		/* Make an object (if possible) */
 		object_prep(i_ptr, k_idx);
 		if (a_idx) i_ptr->name1 = a_idx;
-		apply_magic(i_ptr, 1, AM_NO_FIXED_ART);
+		apply_magic(creature_ptr, i_ptr, 1, AM_NO_FIXED_ART);
 
 		if (amuse_info[i].flag & AMS_NO_UNIQUE)
 		{
@@ -402,7 +403,7 @@ void amusement(player_type *creature_ptr, POSITION y1, POSITION x1, int num, boo
 
 		if (known)
 		{
-			object_aware(i_ptr);
+			object_aware(creature_ptr, i_ptr);
 			object_known(i_ptr);
 		}
 
@@ -445,7 +446,7 @@ void acquirement(player_type *caster_ptr, POSITION y1, POSITION x1, int num, boo
 
 		if (known)
 		{
-			object_aware(i_ptr);
+			object_aware(caster_ptr, i_ptr);
 			object_known(i_ptr);
 		}
 

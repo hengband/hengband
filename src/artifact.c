@@ -1545,11 +1545,12 @@ static void get_random_name(object_type *o_ptr, char *return_name, bool armour, 
 /*!
  * @brief ランダムアーティファクト生成のメインルーチン
  * @details 既に生成が済んでいるオブジェクトの構造体を、アーティファクトとして強化する。
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @param a_scroll アーティファクト生成の巻物上の処理。呪いのアーティファクトが生成対象外となる。
  * @return 常にTRUE(1)を返す
  */
-bool become_random_artifact(object_type *o_ptr, bool a_scroll)
+bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_scroll)
 {
 	GAME_TEXT new_name[1024];
 	PARAMETER_VALUE has_pval = 0;
@@ -1576,7 +1577,7 @@ bool become_random_artifact(object_type *o_ptr, bool a_scroll)
 
 	if (a_scroll && one_in_(4))
 	{
-		switch (p_ptr->pclass)
+		switch (player_ptr->pclass)
 		{
 			case CLASS_WARRIOR:
 			case CLASS_BERSERKER:
@@ -1826,7 +1827,7 @@ bool become_random_artifact(object_type *o_ptr, bool a_scroll)
 		GAME_TEXT dummy_name[MAX_NLEN] = "";
 		concptr ask_msg = _("このアーティファクトを何と名付けますか？", "What do you want to call the artifact? ");
 
-		object_aware(o_ptr);
+		object_aware(player_ptr, o_ptr);
 		object_known(o_ptr);
 
 		/* Mark the item as fully known */
@@ -1851,8 +1852,8 @@ bool become_random_artifact(object_type *o_ptr, bool a_scroll)
 			}
 		}
 		sprintf(new_name, _("《%s》", "'%s'"), dummy_name);
-		chg_virtue(p_ptr, V_INDIVIDUALISM, 2);
-		chg_virtue(p_ptr, V_ENCHANT, 5);
+		chg_virtue(player_ptr, V_INDIVIDUALISM, 2);
+		chg_virtue(player_ptr, V_ENCHANT, 5);
 	}
 	else
 	{
@@ -1865,7 +1866,7 @@ bool become_random_artifact(object_type *o_ptr, bool a_scroll)
 	msg_format_wizard(CHEAT_OBJECT, _("パワー %d で 価値%ld のランダムアーティファクト生成 バイアスは「%s」",
 		"Random artifact generated - Power:%d Value:%d Bias:%s."), max_powers, total_flags, artifact_bias_name[o_ptr->artifact_bias]);
 
-	p_ptr->window |= (PW_INVEN | PW_EQUIP);
+	player_ptr->window |= (PW_INVEN | PW_EQUIP);
 
 	return TRUE;
 }

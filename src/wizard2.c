@@ -903,45 +903,45 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
 		case 'w': case 'W':
 		{
 			object_prep(q_ptr, o_ptr->k_idx);
-			apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
+			apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT | AM_CURSED);
 			break;
 		}
 		/* Apply bad magic, but first clear object */
 		case 'c': case 'C':
 		{
 			object_prep(q_ptr, o_ptr->k_idx);
-			apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
+			apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_CURSED);
 			break;
 		}
 		/* Apply normal magic, but first clear object */
 		case 'n': case 'N':
 		{
 			object_prep(q_ptr, o_ptr->k_idx);
-			apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+			apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
 			break;
 		}
 		/* Apply good magic, but first clear object */
 		case 'g': case 'G':
 		{
 			object_prep(q_ptr, o_ptr->k_idx);
-			apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
+			apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD);
 			break;
 		}
 		/* Apply great magic, but first clear object */
 		case 'e': case 'E':
 		{
 			object_prep(q_ptr, o_ptr->k_idx);
-			apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
+			apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART | AM_GOOD | AM_GREAT);
 			break;
 		}
 		/* Apply special magic, but first clear object */
 		case 's': case 'S':
 		{
 			object_prep(q_ptr, o_ptr->k_idx);
-			apply_magic(q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
+			apply_magic(owner_ptr, q_ptr, owner_ptr->current_floor_ptr->dun_level, AM_GOOD | AM_GREAT | AM_SPECIAL);
 
 			/* Failed to create artifact; make a random one */
-			if (!object_is_artifact(q_ptr)) become_random_artifact(q_ptr, FALSE);
+			if (!object_is_artifact(q_ptr)) become_random_artifact(owner_ptr, q_ptr, FALSE);
 			break;
 		}
 		}
@@ -1340,7 +1340,7 @@ static void wiz_create_item(player_type *caster_ptr)
 	q_ptr = &forge;
 	object_prep(q_ptr, k_idx);
 
-	apply_magic(q_ptr, caster_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
+	apply_magic(caster_ptr, q_ptr, caster_ptr->current_floor_ptr->dun_level, AM_NO_FIXED_ART);
 
 	/* Drop the object from heaven */
 	(void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
@@ -1444,9 +1444,10 @@ static void do_cmd_wiz_jump(player_type *creature_ptr)
 /*!
  * @brief 全ベースアイテムを鑑定済みにする /
  * Become aware of a lot of objects
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void do_cmd_wiz_learn(void)
+static void do_cmd_wiz_learn(player_type *caster_ptr)
 {
 	/* Scan every object */
 	object_type forge;
@@ -1460,7 +1461,7 @@ static void do_cmd_wiz_learn(void)
 		{
 			q_ptr = &forge;
 			object_prep(q_ptr, i);
-			object_aware(q_ptr);
+			object_aware(caster_ptr, q_ptr);
 		}
 	}
 }
@@ -1469,6 +1470,7 @@ static void do_cmd_wiz_learn(void)
 /*!
  * @brief 現在のフロアに合ったモンスターをランダムに召喚する /
  * Summon some creatures
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param num 生成処理回数
  * @return なし
  */
@@ -1828,7 +1830,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 		/* Learn about objects */
 	case 'l':
-		do_cmd_wiz_learn();
+		do_cmd_wiz_learn(creature_ptr);
 		break;
 
 		/* Magic Mapping */

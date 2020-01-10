@@ -2220,7 +2220,7 @@ static void add_outfit(player_type *creature_ptr, object_type *o_ptr)
 {
 	s16b slot;
 
-	object_aware(o_ptr);
+	object_aware(creature_ptr, o_ptr);
 	object_known(o_ptr);
 	slot = inven_carry(creature_ptr, o_ptr);
 
@@ -2296,7 +2296,7 @@ void player_outfit(player_type *creature_ptr)
 		object_prep(q_ptr, lookup_kind(TV_FLASK, SV_ANY));
 
 		/* Fuel with oil (move pval to xtra4) */
-		apply_magic(q_ptr, 1, AM_NO_FIXED_ART);
+		apply_magic(creature_ptr, q_ptr, 1, AM_NO_FIXED_ART);
 
 		q_ptr->number = (ITEM_NUMBER)rand_range(7, 12);
 		add_outfit(creature_ptr, q_ptr);

@@ -6366,7 +6366,7 @@ void show_info(player_type *creature_ptr)
 		if (!o_ptr->k_idx) continue;
 
 		/* Aware and Known */
-		object_aware(o_ptr);
+		object_aware(creature_ptr, o_ptr);
 		object_known(o_ptr);
 	}
 
@@ -6381,7 +6381,7 @@ void show_info(player_type *creature_ptr)
 			if (!o_ptr->k_idx) continue;
 
 			/* Aware and Known */
-			object_aware(o_ptr);
+			object_aware(creature_ptr, o_ptr);
 			object_known(o_ptr);
 		}
 	}

@@ -1608,7 +1608,8 @@ bool artifact_scroll(player_type *caster_ptr)
 				floor_item_increase(0 - item, 1 - (o_ptr->number));
 			}
 		}
-		okay = become_random_artifact(o_ptr, TRUE);
+		
+		okay = become_random_artifact(caster_ptr, o_ptr, TRUE);
 	}
 
 	if (!okay)
@@ -1654,7 +1655,7 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 			chg_virtue(owner_ptr, V_KNOWLEDGE, 1);
 	}
 
-	object_aware(o_ptr);
+	object_aware(owner_ptr, o_ptr);
 	object_known(o_ptr);
 	o_ptr->marked |= OM_TOUCHED;
 

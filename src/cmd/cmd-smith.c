@@ -608,7 +608,7 @@ static void drain_essence(player_type *creature_ptr)
 	if (o_ptr->tval == TV_DRAG_ARMOR) o_ptr->timeout = old_timeout;
 	if (item >= 0) creature_ptr->total_weight += (o_ptr->weight*o_ptr->number - weight * number);
 	o_ptr->ident |= (IDENT_MENTAL);
-	object_aware(o_ptr);
+	object_aware(creature_ptr, o_ptr);
 	object_known(o_ptr);
 
 	object_flags(o_ptr, new_flgs);

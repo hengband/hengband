@@ -1756,7 +1756,6 @@ static void show_bounty(void)
 }
 
 
-
 /*!
  * 賞金首の報酬テーブル / List of prize object
  */
@@ -1790,11 +1789,12 @@ static struct {
 	{TV_SCROLL, SV_SCROLL_ARTIFACT},
 };
 
+
 /*!
  * @brief 賞金首の引き換え処理 / Get prize
  * @return 各種賞金首のいずれかでも換金が行われたか否か。
  */
-static bool kankin(void)
+static bool kankin(player_type *player_ptr)
 {
 	INVENTORY_IDX i;
 	int j;
@@ -1805,7 +1805,7 @@ static bool kankin(void)
 	/* Loop for inventory and right/left arm */
 	for (i = 0; i <= INVEN_LARM; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &player_ptr->inventory_list[i];
 
 		/* Living Tsuchinoko worthes $1000000 */
 		if ((o_ptr->tval == TV_CAPTURE) && (o_ptr->pval == MON_TSUCHINOKO))
@@ -1816,8 +1816,8 @@ static bool kankin(void)
 			if (get_check(buf))
 			{
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(1000000L * o_ptr->number));
-				p_ptr->au += 1000000L * o_ptr->number;
-				p_ptr->redraw |= (PR_GOLD);
+				player_ptr->au += 1000000L * o_ptr->number;
+				player_ptr->redraw |= (PR_GOLD);
 				vary_item(i, -o_ptr->number);
 			}
 			change = TRUE;
@@ -1826,7 +1826,7 @@ static bool kankin(void)
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &player_ptr->inventory_list[i];
 
 		/* Corpse of Tsuchinoko worthes $200000 */
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (o_ptr->pval == MON_TSUCHINOKO))
@@ -1837,8 +1837,8 @@ static bool kankin(void)
 			if (get_check(buf))
 			{
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(200000L * o_ptr->number));
-				p_ptr->au += 200000L * o_ptr->number;
-				p_ptr->redraw |= (PR_GOLD);
+				player_ptr->au += 200000L * o_ptr->number;
+				player_ptr->redraw |= (PR_GOLD);
 				vary_item(i, -o_ptr->number);
 			}
 			change = TRUE;
@@ -1847,7 +1847,7 @@ static bool kankin(void)
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &player_ptr->inventory_list[i];
 
 		/* Bones of Tsuchinoko worthes $100000 */
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (o_ptr->pval == MON_TSUCHINOKO))
@@ -1858,8 +1858,8 @@ static bool kankin(void)
 			if (get_check(buf))
 			{
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(100000L * o_ptr->number));
-				p_ptr->au += 100000L * o_ptr->number;
-				p_ptr->redraw |= (PR_GOLD);
+				player_ptr->au += 100000L * o_ptr->number;
+				player_ptr->redraw |= (PR_GOLD);
 				vary_item(i, -o_ptr->number);
 			}
 			change = TRUE;
@@ -1868,7 +1868,7 @@ static bool kankin(void)
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &player_ptr->inventory_list[i];
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
 		{
 			char buf[MAX_NLEN+20];
@@ -1877,8 +1877,8 @@ static bool kankin(void)
 			if (get_check(buf))
 			{
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((r_info[today_mon].level * 50 + 100) * o_ptr->number));
-				p_ptr->au += (r_info[today_mon].level * 50 + 100) * o_ptr->number;
-				p_ptr->redraw |= (PR_GOLD);
+				player_ptr->au += (r_info[today_mon].level * 50 + 100) * o_ptr->number;
+				player_ptr->redraw |= (PR_GOLD);
 				vary_item(i, -o_ptr->number);
 			}
 			change = TRUE;
@@ -1887,7 +1887,7 @@ static bool kankin(void)
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &player_ptr->inventory_list[i];
 
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
 		{
@@ -1897,8 +1897,8 @@ static bool kankin(void)
 			if (get_check(buf))
 			{
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((r_info[today_mon].level * 30 + 60) * o_ptr->number));
-				p_ptr->au += (r_info[today_mon].level * 30 + 60) * o_ptr->number;
-				p_ptr->redraw |= (PR_GOLD);
+				player_ptr->au += (r_info[today_mon].level * 30 + 60) * o_ptr->number;
+				player_ptr->redraw |= (PR_GOLD);
 				vary_item(i, -o_ptr->number);
 			}
 			change = TRUE;
@@ -1910,7 +1910,7 @@ static bool kankin(void)
 		/* Need reverse order --- Positions will be changed in the loop */
 		for (i = INVEN_PACK-1; i >= 0; i--)
 		{
-			o_ptr = &p_ptr->inventory_list[i];
+			o_ptr = &player_ptr->inventory_list[i];
 			if ((o_ptr->tval == TV_CORPSE) && (o_ptr->pval == current_world_ptr->bounty_r_idx[j]))
 			{
 				char buf[MAX_NLEN+20];
@@ -1924,10 +1924,10 @@ static bool kankin(void)
 
 #if 0 /* Obsoleted */
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (r_info[current_world_ptr->bounty_r_idx[j]].level + 1) * 300 * o_ptr->number);
-				p_ptr->au += (r_info[current_world_ptr->bounty_r_idx[j]].level+1) * 300 * o_ptr->number;
-				p_ptr->redraw |= (PR_GOLD);
+				player_ptr->au += (r_info[current_world_ptr->bounty_r_idx[j]].level+1) * 300 * o_ptr->number;
+				player_ptr->redraw |= (PR_GOLD);
 				vary_item(i, -o_ptr->number);
-				chg_virtue(p_ptr, V_JUSTICE, 5);
+				chg_virtue(player_ptr, V_JUSTICE, 5);
 				current_world_ptr->bounty_r_idx[j] += 10000;
 
 				change = TRUE;
@@ -1936,7 +1936,7 @@ static bool kankin(void)
 				/* Hand it first */
 				vary_item(i, -o_ptr->number);
 
-				chg_virtue(p_ptr, V_JUSTICE, 5);
+				chg_virtue(player_ptr, V_JUSTICE, 5);
 				current_world_ptr->bounty_r_idx[j] += 10000;
 
 				/* Count number of unique corpses already handed */
@@ -1948,9 +1948,9 @@ static bool kankin(void)
 
 				/* Prepare to make a prize */
 				object_prep(&forge, lookup_kind(prize_list[num-1].tval, prize_list[num-1].sval));
-				apply_magic(&forge, p_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
+				apply_magic(player_ptr, &forge, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
 
-				object_aware(&forge);
+				object_aware(player_ptr, &forge);
 				object_known(&forge);
 
 				/*
@@ -1958,7 +1958,7 @@ static bool kankin(void)
 				 * Since a corpse is handed at first,
 				 * there is at least one empty slot.
 				 */
-				item_new = inven_carry(p_ptr, &forge);
+				item_new = inven_carry(player_ptr, &forge);
 
 				object_desc(o_name, &forge, 0);
 				msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), o_name, index_to_label(item_new));
@@ -1978,6 +1978,7 @@ static bool kankin(void)
 		msg_print(NULL);
 		return FALSE;
 	}
+
 	return TRUE;
 }
 
@@ -4014,7 +4015,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		break;
 
 	case BACT_KANKIN:
-		kankin();
+		kankin(player_ptr);
 		break;
 
 	case BACT_HEIKOUKA:

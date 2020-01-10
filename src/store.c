@@ -3428,7 +3428,7 @@ static void store_create(player_type *player_ptr)
 		object_prep(q_ptr, i);
 
 		/* Apply some "low-level" magic (no artifacts) */
-		apply_magic(q_ptr, level, AM_NO_FIXED_ART);
+		apply_magic(player_ptr, q_ptr, level, AM_NO_FIXED_ART);
 
 		/* Require valid object */
 		if (!store_will_buy(q_ptr)) continue;
@@ -4726,7 +4726,7 @@ static void store_purchase(player_type *player_ptr)
 				store_prt_gold();
 
 				/* Hack -- buying an item makes you aware of it */
-				object_aware(j_ptr);
+				object_aware(player_ptr, j_ptr);
 
 				/* Hack -- clear the "fixed" flag from the item */
 				j_ptr->ident &= ~(IDENT_FIXED);

@@ -440,7 +440,7 @@ extern void delete_object(floor_type *floor_ptr, POSITION y, POSITION x);
 extern OBJECT_IDX o_pop(floor_type *floor_ptr);
 extern OBJECT_IDX get_obj_num(player_type *o_ptr, DEPTH level, BIT_FLAGS mode);
 extern void object_known(object_type *o_ptr);
-extern void object_aware(object_type *o_ptr);
+extern void object_aware(player_type *owner_ptr, object_type *o_ptr);
 extern void object_tried(object_type *o_ptr);
 
 /*
@@ -482,7 +482,7 @@ extern void object_copy(object_type *o_ptr, object_type *j_ptr);
 #define AM_SPECIAL      0x00000008 /*!< Generate artifacts (for debug mode only) */
 #define AM_CURSED       0x00000010 /*!< Generate cursed/worthless items */
 #define AM_FORBID_CHEST 0x00000020 /*!< 箱からさらに箱が出現することを抑止する */
-extern void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
+extern void apply_magic(player_type *owner_type, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
 
 extern OBJECT_SUBTYPE_VALUE coin_type;
 

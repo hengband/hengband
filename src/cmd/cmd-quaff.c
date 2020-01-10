@@ -509,7 +509,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 	/* An identification was made */
 	if (ident && !object_is_aware(q_ptr))
 	{
-		object_aware(q_ptr);
+		object_aware(creature_ptr, q_ptr);
 		gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
 	}
 

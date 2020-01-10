@@ -426,7 +426,6 @@ OBJECT_IDX get_obj_num(player_type *owner_ptr, DEPTH level, BIT_FLAGS mode)
 		value = value - table[i].prob3;
 	}
 
-
 	/* Power boost */
 	p = randint0(100);
 
@@ -521,7 +520,7 @@ void object_known(object_type *o_ptr)
  * @param o_ptr ＊鑑定＊済にするオブジェクトの構造体参照ポインタ
  * @return なし
  */
-void object_aware(object_type *o_ptr)
+void object_aware(player_type *owner_ptr, object_type *o_ptr)
 {
 	bool mihanmei = !object_is_aware(o_ptr);
 
@@ -529,7 +528,7 @@ void object_aware(object_type *o_ptr)
 	k_info[o_ptr->k_idx].aware = TRUE;
 
 	if (mihanmei && !(k_info[o_ptr->k_idx].gen_flags & TRG_INSTA_ART) && record_ident &&
-		!p_ptr->is_dead && ((o_ptr->tval >= TV_AMULET && o_ptr->tval <= TV_POTION) || (o_ptr->tval == TV_FOOD)))
+		!owner_ptr->is_dead && ((o_ptr->tval >= TV_AMULET && o_ptr->tval <= TV_POTION) || (o_ptr->tval == TV_FOOD)))
 	{
 		object_type forge;
 		object_type *q_ptr;
@@ -541,7 +540,7 @@ void object_aware(object_type *o_ptr)
 		q_ptr->number = 1;
 		object_desc(o_name, q_ptr, OD_NAME_ONLY);
 
-		exe_write_diary(p_ptr, NIKKI_HANMEI, 0, o_name);
+		exe_write_diary(owner_ptr, NIKKI_HANMEI, 0, o_name);
 	}
 }
 
@@ -1708,14 +1707,15 @@ void object_prep(object_type *o_ptr, KIND_OBJECT_IDX k_idx)
 
 /*!
  * @brief デバッグ時にアイテム生成情報をメッセージに出力する / Cheat -- describe a created object for the user
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param o_ptr デバッグ出力するオブジェクトの構造体参照ポインタ
  * @return なし
  */
-static void object_mention(object_type *o_ptr)
+static void object_mention(player_type *owner_ptr, object_type *o_ptr)
 {
 	GAME_TEXT o_name[MAX_NLEN];
 
-	object_aware(o_ptr);
+	object_aware(owner_ptr, o_ptr);
 	object_known(o_ptr);
 
 	/* Mark the item as fully known */
@@ -1772,6 +1772,7 @@ static byte get_random_ego(byte slot, bool good)
 /*!
  * @brief 武器系オブジェクトに生成ランクごとの強化を与えるサブルーチン
  * Apply magic to an item known to be a "weapon"
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク
@@ -1780,7 +1781,7 @@ static byte get_random_ego(byte slot, bool good)
  * Hack -- note special base damage dice boosting\n
  * Hack -- note special processing for weapon/digger\n
  */
-void apply_magic_weapon(object_type *o_ptr, DEPTH level, int power)
+void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
 {
 	HIT_PROB tohit1 = randint1(5) + (HIT_PROB)m_bonus(5, level);
 	HIT_POINT todam1 = randint1(5) + (HIT_POINT)m_bonus(5, level);
@@ -1839,7 +1840,7 @@ void apply_magic_weapon(object_type *o_ptr, DEPTH level, int power)
 		if (power > 1)
 		{
 			if (one_in_(30) || (power > 2)) /* power > 2 is debug only */
-				become_random_artifact(o_ptr, FALSE);
+				become_random_artifact(owner_ptr, o_ptr, FALSE);
 			else
 				/* Special Ego-item */
 				o_ptr->name2 = EGO_DIGGING;
@@ -1871,7 +1872,7 @@ void apply_magic_weapon(object_type *o_ptr, DEPTH level, int power)
 		{
 			if (one_in_(40) || (power > 2)) /* power > 2 is debug only */
 			{
-				become_random_artifact(o_ptr, FALSE);
+				become_random_artifact(owner_ptr, o_ptr, FALSE);
 				break;
 			}
 			while (1)
@@ -2030,7 +2031,7 @@ void apply_magic_weapon(object_type *o_ptr, DEPTH level, int power)
 		{
 			if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 			{
-				become_random_artifact(o_ptr, FALSE);
+				become_random_artifact(owner_ptr, o_ptr, FALSE);
 				break;
 			}
 			o_ptr->name2 = get_random_ego(INVEN_BOW, TRUE);
@@ -2049,7 +2050,7 @@ void apply_magic_weapon(object_type *o_ptr, DEPTH level, int power)
 		{
 			if (power > 2) /* power > 2 is debug only */
 			{
-				become_random_artifact(o_ptr, FALSE);
+				become_random_artifact(owner_ptr, o_ptr, FALSE);
 				break;
 			}
 
@@ -2088,6 +2089,7 @@ void apply_magic_weapon(object_type *o_ptr, DEPTH level, int power)
 /*!
  * @brief 防具系オブジェクトに生成ランクごとの強化を与えるサブルーチン
  * Apply magic to an item known to be "armor"
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク
@@ -2096,7 +2098,7 @@ void apply_magic_weapon(object_type *o_ptr, DEPTH level, int power)
  * Hack -- note special processing for crown/helm\n
  * Hack -- note special processing for robe of permanence\n
  */
-static void a_m_aux_2(object_type *o_ptr, DEPTH level, int power)
+static void a_m_aux_2(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
 {
 	ARMOUR_CLASS toac1 = (ARMOUR_CLASS)randint1(5) + m_bonus(5, level);
 	ARMOUR_CLASS toac2 = (ARMOUR_CLASS)m_bonus(10, level);
@@ -2137,7 +2139,7 @@ static void a_m_aux_2(object_type *o_ptr, DEPTH level, int power)
 	case TV_DRAG_ARMOR:
 	{
 		if (one_in_(50) || (power > 2)) /* power > 2 is debug only */
-			become_random_artifact(o_ptr, FALSE);
+			become_random_artifact(owner_ptr, o_ptr, FALSE);
 		break;
 	}
 
@@ -2169,7 +2171,7 @@ static void a_m_aux_2(object_type *o_ptr, DEPTH level, int power)
 
 			if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 			{
-				become_random_artifact(o_ptr, FALSE);
+				become_random_artifact(owner_ptr, o_ptr, FALSE);
 				break;
 			}
 
@@ -2257,7 +2259,7 @@ static void a_m_aux_2(object_type *o_ptr, DEPTH level, int power)
 		{
 			if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 			{
-				become_random_artifact(o_ptr, FALSE);
+				become_random_artifact(owner_ptr, o_ptr, FALSE);
 				break;
 			}
 
@@ -2303,7 +2305,7 @@ static void a_m_aux_2(object_type *o_ptr, DEPTH level, int power)
 		{
 			if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 			{
-				become_random_artifact(o_ptr, FALSE);
+				become_random_artifact(owner_ptr, o_ptr, FALSE);
 				break;
 			}
 			o_ptr->name2 = get_random_ego(INVEN_HANDS, TRUE);
@@ -2330,7 +2332,7 @@ static void a_m_aux_2(object_type *o_ptr, DEPTH level, int power)
 		{
 			if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 			{
-				become_random_artifact(o_ptr, FALSE);
+				become_random_artifact(owner_ptr, o_ptr, FALSE);
 				break;
 			}
 			o_ptr->name2 = get_random_ego(INVEN_FEET, TRUE);
@@ -2361,7 +2363,7 @@ static void a_m_aux_2(object_type *o_ptr, DEPTH level, int power)
 		{
 			if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 			{
-				become_random_artifact(o_ptr, FALSE);
+				become_random_artifact(owner_ptr, o_ptr, FALSE);
 				break;
 			}
 			while (1)
@@ -2437,7 +2439,7 @@ static void a_m_aux_2(object_type *o_ptr, DEPTH level, int power)
 		{
 			if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 			{
-				become_random_artifact(o_ptr, FALSE);
+				become_random_artifact(owner_ptr, o_ptr, FALSE);
 				break;
 			}
 			while (1)
@@ -2515,7 +2517,7 @@ static void a_m_aux_2(object_type *o_ptr, DEPTH level, int power)
 		{
 			if (one_in_(20) || (power > 2)) /* power > 2 is debug only */
 			{
-				become_random_artifact(o_ptr, FALSE);
+				become_random_artifact(owner_ptr, o_ptr, FALSE);
 				break;
 			}
 			o_ptr->name2 = get_random_ego(INVEN_OUTER, TRUE);
@@ -2547,13 +2549,13 @@ static void a_m_aux_2(object_type *o_ptr, DEPTH level, int power)
 		break;
 	}
 	}
-
 }
 
 
 /*!
  * @brief 装飾品系オブジェクトに生成ランクごとの強化を与えるサブルーチン
  * Apply magic to an item known to be a "ring" or "amulet"
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク
@@ -2562,7 +2564,7 @@ static void a_m_aux_2(object_type *o_ptr, DEPTH level, int power)
  * Hack -- note special "pval boost" code for ring of speed\n
  * Hack -- note that some items must be cursed (or blessed)\n
  */
-static void a_m_aux_3(object_type *o_ptr, DEPTH level, int power)
+static void a_m_aux_3(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
 {
 	/* Apply magic (good or bad) according to type */
 	switch (o_ptr->tval)
@@ -2863,7 +2865,7 @@ static void a_m_aux_3(object_type *o_ptr, DEPTH level, int power)
 		{
 			o_ptr->pval = MIN(o_ptr->pval, 4);
 			/* Randart amulet */
-			become_random_artifact(o_ptr, FALSE);
+			become_random_artifact(owner_ptr, o_ptr, FALSE);
 		}
 		else if ((power == 2) && one_in_(2))
 		{
@@ -3196,7 +3198,7 @@ static void a_m_aux_3(object_type *o_ptr, DEPTH level, int power)
 		{
 			o_ptr->pval = MIN(o_ptr->pval, 4);
 			/* Randart amulet */
-			become_random_artifact(o_ptr, FALSE);
+			become_random_artifact(owner_ptr, o_ptr, FALSE);
 		}
 		else if ((power == 2) && one_in_(2))
 		{
@@ -3343,7 +3345,7 @@ static void a_m_aux_3(object_type *o_ptr, DEPTH level, int power)
 /*!
  * @brief その他雑多のオブジェクトに生成ランクごとの強化を与えるサブルーチン
  * Apply magic to an item known to be "boring"
- * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @param level 生成基準階
  * @param power 生成ランク
@@ -3351,7 +3353,7 @@ static void a_m_aux_3(object_type *o_ptr, DEPTH level, int power)
  * @details
  * Hack -- note the special code for various items
  */
-static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
+static void a_m_aux_4(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
 {
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
@@ -3359,6 +3361,7 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 	(void)level;
 
 	/* Apply magic (good or bad) according to type */
+	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
 	switch (o_ptr->tval)
 	{
 	case TV_WHISTLE:
@@ -3400,7 +3403,7 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 
 		if (power > 2) /* power > 2 is debug only */
 		{
-			become_random_artifact(o_ptr, FALSE);
+			become_random_artifact(owner_ptr, o_ptr, FALSE);
 		}
 		else if ((power == 2) || ((power == 1) && one_in_(3)))
 		{
@@ -3471,7 +3474,7 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 	case TV_CAPTURE:
 	{
 		o_ptr->pval = 0;
-		object_aware(o_ptr);
+		object_aware(owner_ptr, o_ptr);
 		object_known(o_ptr);
 		break;
 	}
@@ -3493,7 +3496,7 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 
 			r_ptr = &r_info[i];
 
-			check = (p_ptr->current_floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - p_ptr->current_floor_ptr->dun_level) : 0;
+			check = (floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - floor_ptr->dun_level) : 0;
 
 			/* Ignore dead monsters */
 			if (!r_ptr->rarity) continue;
@@ -3539,11 +3542,11 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 		/* Pick a random non-unique monster race */
 		while (1)
 		{
-			i = get_mon_num(p_ptr->current_floor_ptr->dun_level);
+			i = get_mon_num(floor_ptr->dun_level);
 
 			r_ptr = &r_info[i];
 
-			check = (p_ptr->current_floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - p_ptr->current_floor_ptr->dun_level) : 0;
+			check = (floor_ptr->dun_level < r_ptr->level) ? (r_ptr->level - floor_ptr->dun_level) : 0;
 
 			/* Ignore dead monsters */
 			if (!r_ptr->rarity) continue;
@@ -3559,8 +3562,7 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 
 		o_ptr->pval = i;
 
-
-		object_aware(o_ptr);
+		object_aware(owner_ptr, o_ptr);
 		object_known(o_ptr);
 		break;
 	}
@@ -3590,7 +3592,8 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 		{
 			msg_format(_("%sの像", "Statue of %s"), r_name + r_ptr->name);
 		}
-		object_aware(o_ptr);
+
+		object_aware(owner_ptr, o_ptr);
 		object_known(o_ptr);
 
 		break;
@@ -3607,7 +3610,7 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
 		o_ptr->pval = randint1(obj_level);
 		if (o_ptr->sval == SV_CHEST_KANDUME) o_ptr->pval = 6;
 
-		o_ptr->xtra3 = p_ptr->current_floor_ptr->dun_level + 5;
+		o_ptr->xtra3 = floor_ptr->dun_level + 5;
 
 		/* Never exceed "difficulty" of 55 to 59 */
 		if (o_ptr->pval > 55) o_ptr->pval = 55 + (byte)randint0(5);
@@ -3655,11 +3658,11 @@ static void a_m_aux_4(object_type *o_ptr, DEPTH level, int power)
  * "good" and "great" arguments are false.  As a total hack, if "great" is\n
  * true, then the item gets 3 extra "attempts" to become an artifact.\n
  */
-void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
+void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 {
 	int i, rolls, f1, f2, power;
 
-	if (p_ptr->pseikaku == SEIKAKU_MUNCHKIN) lev += randint0(p_ptr->lev / 2 + 10);
+	if (owner_ptr->pseikaku == SEIKAKU_MUNCHKIN) lev += randint0(owner_ptr->lev / 2 + 10);
 
 	/* Maximum "level" for various things */
 	if (lev > MAX_DEPTH - 1) lev = MAX_DEPTH - 1;
@@ -3668,21 +3671,21 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 	f1 = lev + 10;
 
 	/* Maximal chance of being "good" */
-	if (f1 > d_info[p_ptr->dungeon_idx].obj_good) f1 = d_info[p_ptr->dungeon_idx].obj_good;
+	if (f1 > d_info[owner_ptr->dungeon_idx].obj_good) f1 = d_info[owner_ptr->dungeon_idx].obj_good;
 
 	/* Base chance of being "great" */
 	f2 = f1 * 2 / 3;
 
 	/* Maximal chance of being "great" */
-	if ((p_ptr->pseikaku != SEIKAKU_MUNCHKIN) && (f2 > d_info[p_ptr->dungeon_idx].obj_great))
-		f2 = d_info[p_ptr->dungeon_idx].obj_great;
+	if ((owner_ptr->pseikaku != SEIKAKU_MUNCHKIN) && (f2 > d_info[owner_ptr->dungeon_idx].obj_great))
+		f2 = d_info[owner_ptr->dungeon_idx].obj_great;
 
-	if (p_ptr->muta3 & MUT3_GOOD_LUCK)
+	if (owner_ptr->muta3 & MUT3_GOOD_LUCK)
 	{
 		f1 += 5;
 		f2 += 2;
 	}
-	else if (p_ptr->muta3 & MUT3_BAD_LUCK)
+	else if (owner_ptr->muta3 & MUT3_BAD_LUCK)
 	{
 		f1 -= 5;
 		f2 -= 2;
@@ -3749,12 +3752,11 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 	{
 		/* Roll for an artifact */
 		if (make_artifact(o_ptr)) break;
-		if ((p_ptr->muta3 & MUT3_GOOD_LUCK) && one_in_(77))
+		if ((owner_ptr->muta3 & MUT3_GOOD_LUCK) && one_in_(77))
 		{
 			if (make_artifact(o_ptr)) break;
 		}
 	}
-
 
 	/* Hack -- analyze artifacts */
 	if (object_is_fixed_artifact(o_ptr))
@@ -3766,7 +3768,7 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 
 		/* Hack -- Memorize location of artifact in saved floors */
 		if (current_world_ptr->character_dungeon)
-			a_ptr->floor_id = p_ptr->floor_id;
+			a_ptr->floor_id = owner_ptr->floor_id;
 
 		/* Extract the other fields */
 		o_ptr->pval = a_ptr->pval;
@@ -3781,7 +3783,7 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 
 		if (o_ptr->name1 == ART_MILIM)
 		{
-			if (p_ptr->pseikaku == SEIKAKU_SEXY)
+			if (owner_ptr->pseikaku == SEIKAKU_SEXY)
 			{
 				o_ptr->pval = 3;
 			}
@@ -3810,19 +3812,19 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 	case TV_ARROW:
 	case TV_BOLT:
 	{
-		if (power) apply_magic_weapon(o_ptr, lev, power);
+		if (power) apply_magic_weapon(owner_ptr, o_ptr, lev, power);
 		break;
 	}
 
 	case TV_POLEARM:
 	{
-		if (power && !(o_ptr->sval == SV_DEATH_SCYTHE)) apply_magic_weapon(o_ptr, lev, power);
+		if (power && !(o_ptr->sval == SV_DEATH_SCYTHE)) apply_magic_weapon(owner_ptr, o_ptr, lev, power);
 		break;
 	}
 
 	case TV_SWORD:
 	{
-		if (power && !(o_ptr->sval == SV_DOKUBARI)) apply_magic_weapon(o_ptr, lev, power);
+		if (power && !(o_ptr->sval == SV_DOKUBARI)) apply_magic_weapon(owner_ptr, o_ptr, lev, power);
 		break;
 	}
 
@@ -3847,7 +3849,7 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 			((o_ptr->tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD)) ||
 			((o_ptr->tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)) ||
 			((o_ptr->tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)))
-			a_m_aux_2(o_ptr, lev, power);
+			a_m_aux_2(owner_ptr, o_ptr, lev, power);
 #else
 		if (power) a_m_aux_2(o_ptr, lev, power);
 #endif
@@ -3858,20 +3860,20 @@ void apply_magic(object_type *o_ptr, DEPTH lev, BIT_FLAGS mode)
 	case TV_AMULET:
 	{
 		if (!power && (randint0(100) < 50)) power = -1;
-		a_m_aux_3(o_ptr, lev, power);
+		a_m_aux_3(owner_ptr, o_ptr, lev, power);
 		break;
 	}
 
 	default:
 	{
-		a_m_aux_4(o_ptr, lev, power);
+		a_m_aux_4(owner_ptr, o_ptr, lev, power);
 		break;
 	}
 	}
 
 	if ((o_ptr->tval == TV_SOFT_ARMOR) &&
 		(o_ptr->sval == SV_ABUNAI_MIZUGI) &&
-		(p_ptr->pseikaku == SEIKAKU_SEXY))
+		(owner_ptr->pseikaku == SEIKAKU_SEXY))
 	{
 		o_ptr->pval = 3;
 		add_flag(o_ptr->art_flags, TR_STR);
@@ -4112,7 +4114,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
 	}
 
 	/* Apply magic (allow artifacts) */
-	apply_magic(j_ptr, floor_ptr->object_level, mode);
+	apply_magic(owner_ptr, j_ptr, floor_ptr->object_level, mode);
 
 	/* Hack -- generate multiple spikes/missiles */
 	switch (j_ptr->tval)
@@ -4127,7 +4129,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
 	}
 	}
 
-	if (cheat_peek) object_mention(j_ptr);
+	if (cheat_peek) object_mention(owner_ptr, j_ptr);
 
 	return TRUE;
 }

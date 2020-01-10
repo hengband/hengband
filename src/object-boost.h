@@ -12,7 +12,4 @@ extern void one_low_esp(object_type *o_ptr);
 extern void one_ability(object_type *o_ptr);
 extern void one_activation(object_type *o_ptr);
 extern void one_lordly_high_resistance(object_type *o_ptr);
-
-
-extern void apply_magic_weapon(object_type *o_ptr, DEPTH level, int power);
-
+extern void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power);

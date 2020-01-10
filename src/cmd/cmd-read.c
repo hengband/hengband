@@ -569,7 +569,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 	/* An identification was made */
 	if (ident && !object_is_aware(o_ptr))
 	{
-		object_aware(o_ptr);
+		object_aware(creature_ptr, o_ptr);
 		gain_exp(creature_ptr, (lev + (creature_ptr->lev >> 1)) / creature_ptr->lev);
 	}
 
