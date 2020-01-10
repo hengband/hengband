@@ -81,6 +81,7 @@ bool(*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 */
 OBJECT_SUBTYPE_VALUE coin_type;	/* Hack -- force coin type */
 
+void floor_item_describe(floor_type *floor_ptr, INVENTORY_IDX item);
 
 /*!
  * @brief 床上、モンスター所持でスタックされたアイテムを削除しスタックを補完する / Excise a dungeon object from any stacks
@@ -4592,7 +4593,7 @@ void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 	else
 	{
 		floor_item_increase(0 - item, num);
-		floor_item_describe(0 - item);
+		floor_item_describe(owner_ptr->current_floor_ptr, 0 - item);
 		floor_item_optimize(0 - item);
 	}
 }
@@ -4750,9 +4751,9 @@ void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
  * @param item メッセージの対象にしたいアイテム所持スロット
  * @return なし
  */
-void floor_item_describe(INVENTORY_IDX item)
+void floor_item_describe(floor_type *floor_ptr, INVENTORY_IDX item)
 {
-	object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[item];
+	object_type *o_ptr = &floor_ptr->o_list[item];
 	GAME_TEXT o_name[MAX_NLEN];
 
 	object_desc(o_name, o_ptr, 0);
