@@ -151,20 +151,22 @@ static int cards[5];
  * @param bldg 施設構造体の参照ポインタ
  * @return 種族、職業、魔法領域のいずれかが一致しているかの是非。
  */
-static bool is_owner(building_type *bldg)
+static bool is_owner(player_type *player_ptr, building_type *bldg)
 {
-	if (bldg->member_class[p_ptr->pclass] == BUILDING_OWNER)
+	if (bldg->member_class[player_ptr->pclass] == BUILDING_OWNER)
 	{
 		return TRUE;
 	}
 
-	if (bldg->member_race[p_ptr->prace] == BUILDING_OWNER)
+	if (bldg->member_race[player_ptr->prace] == BUILDING_OWNER)
 	{
 		return TRUE;
 	}
 
-	if ((is_magic(p_ptr->realm1) && (bldg->member_realm[p_ptr->realm1] == BUILDING_OWNER)) ||
-		(is_magic(p_ptr->realm2) && (bldg->member_realm[p_ptr->realm2] == BUILDING_OWNER)))
+	REALM_IDX realm1 = player_ptr->realm1;
+	REALM_IDX realm2 = player_ptr->realm2;
+	if ((is_magic(realm1) && (bldg->member_realm[realm1] == BUILDING_OWNER)) ||
+		(is_magic(realm2) && (bldg->member_realm[realm2] == BUILDING_OWNER)))
 	{
 		return TRUE;
 	}
@@ -248,10 +250,11 @@ static void building_prt_gold(void)
 
 /*!
  * @brief 施設のサービス一覧を表示する / Display a building.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param bldg 施設構造体の参照ポインタ
  * @return なし
  */
-static void show_building(building_type* bldg)
+static void show_building(player_type *player_ptr, building_type* bldg)
 {
 	char buff[20];
 	int i;
@@ -269,13 +272,13 @@ static void show_building(building_type* bldg)
 		{
 			if (bldg->action_restr[i] == 0)
 			{
-				if ((is_owner(bldg) && (bldg->member_costs[i] == 0)) ||
-					(!is_owner(bldg) && (bldg->other_costs[i] == 0)))
+				if ((is_owner(player_ptr, bldg) && (bldg->member_costs[i] == 0)) ||
+					(!is_owner(player_ptr, bldg) && (bldg->other_costs[i] == 0)))
 				{
 					action_color = TERM_WHITE;
 					buff[0] = '\0';
 				}
-				else if (is_owner(bldg))
+				else if (is_owner(player_ptr, bldg))
 				{
 					action_color = TERM_YELLOW;
 					sprintf(buff, _("($%ld)", "(%ldgp)"), (long int)bldg->member_costs[i]);
@@ -293,13 +296,13 @@ static void show_building(building_type* bldg)
 					action_color = TERM_L_DARK;
 					strcpy(buff, _("(閉店)", "(closed)"));
 				}
-				else if ((is_owner(bldg) && (bldg->member_costs[i] == 0)) ||
+				else if ((is_owner(player_ptr, bldg) && (bldg->member_costs[i] == 0)) ||
 					(is_member(bldg) && (bldg->other_costs[i] == 0)))
 				{
 					action_color = TERM_WHITE;
 					buff[0] = '\0';
 				}
-				else if (is_owner(bldg))
+				else if (is_owner(player_ptr, bldg))
 				{
 					action_color = TERM_YELLOW;
 					sprintf(buff, _("($%ld)", "(%ldgp)"), (long int)bldg->member_costs[i]);
@@ -312,7 +315,7 @@ static void show_building(building_type* bldg)
 			}
 			else
 			{
-				if (!is_owner(bldg))
+				if (!is_owner(player_ptr, bldg))
 				{
 					action_color = TERM_L_DARK;
 					strcpy(buff, _("(閉店)", "(closed)"));
@@ -3909,14 +3912,14 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 	msg_flag = FALSE;
 	msg_erase();
 
-	if (is_owner(bldg))
+	if (is_owner(player_ptr, bldg))
 		bcost = bldg->member_costs[i];
 	else
 		bcost = bldg->other_costs[i];
 
 	/* action restrictions */
 	if (((bldg->action_restr[i] == 1) && !is_member(bldg)) ||
-		((bldg->action_restr[i] == 2) && !is_owner(bldg)))
+		((bldg->action_restr[i] == 2) && !is_owner(player_ptr, bldg)))
 	{
 		msg_print(_("それを選択する権利はありません！", "You have no right to choose that!"));
 		return;
@@ -3924,8 +3927,8 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 
 	/* check gold (HACK - Recharge uses variable costs) */
 	if ((bact != BACT_RECHARGE) &&
-		(((bldg->member_costs[i] > player_ptr->au) && is_owner(bldg)) ||
-		((bldg->other_costs[i] > player_ptr->au) && !is_owner(bldg))))
+		(((bldg->member_costs[i] > player_ptr->au) && is_owner(player_ptr, bldg)) ||
+		((bldg->other_costs[i] > player_ptr->au) && !is_owner(player_ptr, bldg))))
 	{
 		msg_print(_("お金が足りません！", "You do not have the gold!"));
 		return;
@@ -4193,7 +4196,7 @@ void do_cmd_bldg(player_type *player_ptr)
 	command_rep = 0;
 	command_new = 0;
 
-	show_building(bldg);
+	show_building(player_ptr, bldg);
 	player_ptr->leave_bldg = FALSE;
 
 	play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
