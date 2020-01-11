@@ -110,10 +110,11 @@ const concptr artifact_bias_name[MAX_BIAS] =
  * 祝福を無効。確率に応じて、永遠の呪い、太古の怨念、経験値吸収、弱い呪いの継続的付加、強い呪いの継続的付加、HP吸収の呪い、
  * MP吸収の呪い、乱テレポート、反テレポート、反魔法をつける。
  * @attention プレイヤーの職業依存処理あり。
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return なし
  */
-static void curse_artifact(object_type *o_ptr)
+static void curse_artifact(player_type *player_ptr, object_type *o_ptr)
 {
 	if (o_ptr->pval > 0) o_ptr->pval = 0 - (o_ptr->pval + randint1(4));
 	if (o_ptr->to_a > 0) o_ptr->to_a = 0 - (o_ptr->to_a + randint1(4));
@@ -134,7 +135,7 @@ static void curse_artifact(object_type *o_ptr)
 	if (one_in_(2)) add_flag(o_ptr->art_flags, TR_TELEPORT);
 	else if (one_in_(3)) add_flag(o_ptr->art_flags, TR_NO_TELE);
 
-	if ((p_ptr->pclass != CLASS_WARRIOR) && (p_ptr->pclass != CLASS_ARCHER) && (p_ptr->pclass != CLASS_CAVALRY) && (p_ptr->pclass != CLASS_BERSERKER) && (p_ptr->pclass != CLASS_SMITH) && one_in_(3))
+	if ((player_ptr->pclass != CLASS_WARRIOR) && (player_ptr->pclass != CLASS_ARCHER) && (player_ptr->pclass != CLASS_CAVALRY) && (player_ptr->pclass != CLASS_BERSERKER) && (player_ptr->pclass != CLASS_SMITH) && one_in_(3))
 		add_flag(o_ptr->art_flags, TR_NO_MAGIC);
 }
 
@@ -1747,7 +1748,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 
 	total_flags = flag_cost(o_ptr, o_ptr->pval);
 
-	if (a_cursed) curse_artifact(o_ptr);
+	if (a_cursed) curse_artifact(player_ptr, o_ptr);
 
 	if (!a_cursed &&
 	    one_in_(object_is_armour(o_ptr) ? ACTIVATION_CHANCE * 2 : ACTIVATION_CHANCE))
