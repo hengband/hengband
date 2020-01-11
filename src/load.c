@@ -1934,7 +1934,7 @@ static void rd_extra(player_type *creature_ptr)
 
 	if (z_older_than(10, 0, 3))
 	{
-		update_gambling_monsters();
+		update_gambling_monsters(creature_ptr);
 	}
 	else
 	{

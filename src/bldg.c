@@ -1487,14 +1487,14 @@ static bool gamble_comm(player_type *player_ptr, int cmd)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void update_gambling_monsters(void)
+void update_gambling_monsters(player_type *player_ptr)
 {
 	int total, i;
 	int max_dl = 0;
 	int mon_level;
 	int power[4];
 	bool tekitou;
-	bool old_inside_battle = p_ptr->phase_out;
+	bool old_inside_battle = player_ptr->phase_out;
 
 	for (i = 0; i < current_world_ptr->max_d_idx; i++)
 		if (max_dl < max_dlv[i]) max_dl = max_dlv[i];
@@ -1522,9 +1522,9 @@ void update_gambling_monsters(void)
 			while (1)
 			{
 				get_mon_num_prep(monster_can_entry_arena, NULL);
-				p_ptr->phase_out = TRUE;
+				player_ptr->phase_out = TRUE;
 				r_idx = get_mon_num(mon_level);
-				p_ptr->phase_out = old_inside_battle;
+				player_ptr->phase_out = old_inside_battle;
 				if (!r_idx) continue;
 
 				if ((r_info[r_idx].flags1 & RF1_UNIQUE) || (r_info[r_idx].flags7 & RF7_UNIQUE2))
@@ -1600,7 +1600,7 @@ static bool kakutoujou(player_type *player_ptr)
 
 	if ((current_world_ptr->game_turn - current_world_ptr->arena_start_turn) > TURNS_PER_TICK * 250)
 	{
-		update_gambling_monsters();
+		update_gambling_monsters(player_ptr);
 		current_world_ptr->arena_start_turn = current_world_ptr->game_turn;
 	}
 

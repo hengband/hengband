@@ -3147,7 +3147,7 @@ static void process_world(player_type *player_ptr)
 			msg_print(_("相打ちに終わりました。", "They have kill each other at the same time."));
 			msg_print(NULL);
 			player_ptr->energy_need = 0;
-			update_gambling_monsters();
+			update_gambling_monsters(player_ptr);
 		}
 		else if ((number_mon-1) == 0)
 		{
@@ -3172,7 +3172,7 @@ static void process_world(player_type *player_ptr)
 			}
 			msg_print(NULL);
 			player_ptr->energy_need = 0;
-			update_gambling_monsters();
+			update_gambling_monsters(player_ptr);
 		}
 		else if (current_world_ptr->game_turn - player_ptr->current_floor_ptr->generated_turn == 150 * TURNS_PER_TICK)
 		{
@@ -3180,7 +3180,7 @@ static void process_world(player_type *player_ptr)
 			player_ptr->au += kakekin;
 			msg_print(NULL);
 			player_ptr->energy_need = 0;
-			update_gambling_monsters();
+			update_gambling_monsters(player_ptr);
 		}
 	}
 
@@ -4999,7 +4999,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 		if (load_game)
 		{
 			player_ptr->energy_need = 0;
-			update_gambling_monsters();
+			update_gambling_monsters(player_ptr);
 		}
 		else
 		{

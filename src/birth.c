@@ -1840,6 +1840,7 @@ static void player_wipe_without_name(player_type *creature_ptr)
 		creature_ptr->mane_spell[i] = -1;
 		creature_ptr->mane_dam[i] = 0;
 	}
+
 	creature_ptr->mane_num = 0;
 	creature_ptr->exit_bldg = TRUE; /* only used for arena now -KMW- */
 
@@ -1847,7 +1848,7 @@ static void player_wipe_without_name(player_type *creature_ptr)
 	creature_ptr->today_mon = 0;
 
 	/* Reset monster arena */
-	update_gambling_monsters();
+	update_gambling_monsters(creature_ptr);
 
 	/* Reset mutations */
 	creature_ptr->muta1 = 0;

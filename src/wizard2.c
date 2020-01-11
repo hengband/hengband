@@ -1753,7 +1753,7 @@ void do_cmd_debug(player_type *creature_ptr)
 		break;
 
 	case 'B':
-		update_gambling_monsters();
+		update_gambling_monsters(creature_ptr);
 		break;
 
 		/* Create any object */
