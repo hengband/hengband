@@ -599,7 +599,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (((f4 & RF4_SUMMON_MASK) ||
 		     (f5 & RF5_SUMMON_MASK) ||
 		     (f6 & RF6_SUMMON_MASK)) &&
-		    !(summon_possible(t_ptr->fy, t_ptr->fx)))
+		    !(summon_possible(floor_ptr, t_ptr->fy, t_ptr->fx)))
 		{
 			/* Remove summoning spells */
 			f4 &= ~(RF4_SUMMON_MASK);
@@ -615,7 +615,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 
 		/* Check for a possible raise dead */
-		if ((f6 & RF6_RAISE_DEAD) && !raise_possible(m_ptr))
+		if ((f6 & RF6_RAISE_DEAD) && !raise_possible(floor_ptr, m_ptr))
 		{
 			/* Remove raise dead spell */
 			f6 &= ~(RF6_RAISE_DEAD);
@@ -624,7 +624,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 		/* Special moves restriction */
 		if (f6 & RF6_SPECIAL)
 		{
-			if ((m_ptr->r_idx == MON_ROLENTO) && !summon_possible(t_ptr->fy, t_ptr->fx))
+			if ((m_ptr->r_idx == MON_ROLENTO) && !summon_possible(floor_ptr, t_ptr->fy, t_ptr->fx))
 			{
 				f6 &= ~(RF6_SPECIAL);
 			}

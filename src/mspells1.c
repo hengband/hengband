@@ -378,12 +378,12 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 /*!
  * @brief モンスターにとって所定の地点が召還に相応しい地点かどうかを返す。 /
  * Determine if there is a space near the player in which a summoned creature can appear
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param floor_ptr 現在フロアへの参照ポインタ
  * @param y1 判定を行いたいマスのY座標
  * @param x1 判定を行いたいマスのX座標
  * @return 召還に相応しいならばTRUEを返す
  */
-bool summon_possible(POSITION y1, POSITION x1)
+bool summon_possible(floor_type *floor_ptr, POSITION y1, POSITION x1)
 {
 	POSITION y, x;
 
@@ -393,7 +393,7 @@ bool summon_possible(POSITION y1, POSITION x1)
 		for (x = x1 - 2; x <= x1 + 2; x++)
 		{
 			/* Ignore illegal locations */
-			if (!in_bounds(p_ptr->current_floor_ptr, y, x)) continue;
+			if (!in_bounds(floor_ptr, y, x)) continue;
 
 			/* Only check a circular area */
 			if (distance(y1, x1, y, x)>2) continue;
@@ -402,7 +402,7 @@ bool summon_possible(POSITION y1, POSITION x1)
 			if (pattern_tile(y, x)) continue;
 
 			/* Require empty floor grid in line of projection */
-			if (cave_empty_bold(p_ptr->current_floor_ptr, y, x) && projectable(p_ptr->current_floor_ptr, y1, x1, y, x) && projectable(p_ptr->current_floor_ptr, y, x, y1, x1)) return TRUE;
+			if (cave_empty_bold(floor_ptr, y, x) && projectable(floor_ptr, y1, x1, y, x) && projectable(floor_ptr, y, x, y1, x1)) return TRUE;
 		}
 	}
 
@@ -413,11 +413,11 @@ bool summon_possible(POSITION y1, POSITION x1)
 /*!
  * @brief モンスターにとって死者復活を行うべき状態かどうかを返す /
  * Determine if there is a space near the player in which a summoned creature can appear
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param floor_type 現在フロアへの参照ポインタ
  * @param m_ptr 判定を行いたいモンスターの構造体参照ポインタ
  * @return 死者復活が有効な状態ならばTRUEを返す。
  */
-bool raise_possible(monster_type *m_ptr)
+bool raise_possible(floor_type *floor_ptr, monster_type *m_ptr)
 {
 	POSITION xx, yy;
 	POSITION y = m_ptr->fy;
@@ -430,14 +430,14 @@ bool raise_possible(monster_type *m_ptr)
 		for (yy = y - 5; yy <= y + 5; yy++)
 		{
 			if (distance(y, x, yy, xx) > 5) continue;
-			if (!los(p_ptr->current_floor_ptr, y, x, yy, xx)) continue;
-			if (!projectable(p_ptr->current_floor_ptr, y, x, yy, xx)) continue;
+			if (!los(floor_ptr, y, x, yy, xx)) continue;
+			if (!projectable(floor_ptr, y, x, yy, xx)) continue;
 
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[yy][xx];
+			g_ptr = &floor_ptr->grid_array[yy][xx];
 			/* Scan the pile of objects */
 			for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 			{
-				object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+				object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
 				next_o_idx = o_ptr->next_o_idx;
 
 				/* Known to be worthless? */
@@ -448,6 +448,7 @@ bool raise_possible(monster_type *m_ptr)
 			}
 		}
 	}
+
 	return FALSE;
 }
 
@@ -1603,6 +1604,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	/* No spells left */
 	if (!f4 && !f5 && !f6) return FALSE;
 
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	if (!(r_ptr->flags2 & RF2_STUPID))
 	{
 		if (!target_ptr->csp) f5 &= ~(RF5_DRAIN_MANA);
@@ -1623,7 +1625,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		if (((f4 & RF4_SUMMON_MASK) ||
 		     (f5 & RF5_SUMMON_MASK) ||
 		     (f6 & RF6_SUMMON_MASK)) &&
-		    !(summon_possible(y, x)))
+		    !(summon_possible(floor_ptr, y, x)))
 		{
 			/* Remove summoning spells */
 			f4 &= ~(RF4_SUMMON_MASK);
@@ -1632,7 +1634,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		}
 
 		/* Check for a possible raise dead */
-		if ((f6 & RF6_RAISE_DEAD) && !raise_possible(m_ptr))
+		if ((f6 & RF6_RAISE_DEAD) && !raise_possible(floor_ptr, m_ptr))
 		{
 			/* Remove raise dead spell */
 			f6 &= ~(RF6_RAISE_DEAD);
@@ -1641,7 +1643,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		/* Special moves restriction */
 		if (f6 & RF6_SPECIAL)
 		{
-			if ((m_ptr->r_idx == MON_ROLENTO) && !summon_possible(y, x))
+			if ((m_ptr->r_idx == MON_ROLENTO) && !summon_possible(floor_ptr, y, x))
 			{
 				f6 &= ~(RF6_SPECIAL);
 			}
@@ -1735,7 +1737,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	}
 
 	/* Hex: Anti Magic Barrier */
-	if (!spell_is_inate(thrown_spell) && magic_barrier(p_ptr, m_idx))
+	if (!spell_is_inate(thrown_spell) && magic_barrier(target_ptr, m_idx))
 	{
 		msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), m_name);
 		return TRUE;

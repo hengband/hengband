@@ -1934,11 +1934,13 @@ HIT_POINT spell_RF6_WORLD(player_type *target_ptr, MONSTER_IDX m_idx)
 
 /*!
 * @brief バーノール・ルパートのRF6_SPECIALの処理。分裂・合体。 /
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param m_idx 呪文を唱えるモンスターID
 */
-HIT_POINT spell_RF6_SPECIAL_BANORLUPART(MONSTER_IDX m_idx)
+HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	HIT_POINT dummy_hp, dummy_maxhp;
 	MONSTER_IDX k;
 	POSITION dummy_y = m_ptr->fy;
@@ -1951,16 +1953,16 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(MONSTER_IDX m_idx)
 			dummy_hp = (m_ptr->hp + 1) / 2;
 			dummy_maxhp = m_ptr->maxhp / 2;
 			
-			if (p_ptr->current_floor_ptr->inside_arena || p_ptr->phase_out || !summon_possible(m_ptr->fy, m_ptr->fx)) 
+			if (floor_ptr->inside_arena || target_ptr->phase_out || !summon_possible(floor_ptr, m_ptr->fy, m_ptr->fx)) 
 				return -1;
 
-			delete_monster_idx(p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
+			delete_monster_idx(floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
 			summon_named_creature(0, dummy_y, dummy_x, MON_BANOR, mode);
-			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
-			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
+			floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
+			floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 			summon_named_creature(0, dummy_y, dummy_x, MON_LUPART, mode);
-			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
-			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
+			floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
+			floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
 			msg_print(_("『バーノール・ルパート』が分裂した！","Banor=Rupart splits in two person!"));
 			break;
@@ -1973,27 +1975,28 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(MONSTER_IDX m_idx)
 			if (!r_info[MON_BANOR].cur_num || !r_info[MON_LUPART].cur_num) 
 				return -1;
 
-			for (k = 1; k < p_ptr->current_floor_ptr->m_max; k++)
+			for (k = 1; k < floor_ptr->m_max; k++)
 			{
-				if (p_ptr->current_floor_ptr->m_list[k].r_idx == MON_BANOR || p_ptr->current_floor_ptr->m_list[k].r_idx == MON_LUPART)
+				if (floor_ptr->m_list[k].r_idx == MON_BANOR || floor_ptr->m_list[k].r_idx == MON_LUPART)
 				{
-					dummy_hp += p_ptr->current_floor_ptr->m_list[k].hp;
-					dummy_maxhp += p_ptr->current_floor_ptr->m_list[k].maxhp;
-					if (p_ptr->current_floor_ptr->m_list[k].r_idx != m_ptr->r_idx)
+					dummy_hp += floor_ptr->m_list[k].hp;
+					dummy_maxhp += floor_ptr->m_list[k].maxhp;
+					if (floor_ptr->m_list[k].r_idx != m_ptr->r_idx)
 					{
-						dummy_y = p_ptr->current_floor_ptr->m_list[k].fy;
-						dummy_x = p_ptr->current_floor_ptr->m_list[k].fx;
+						dummy_y = floor_ptr->m_list[k].fy;
+						dummy_x = floor_ptr->m_list[k].fx;
 					}
 					delete_monster_idx(k);
 				}
 			}
 			summon_named_creature(0, dummy_y, dummy_x, MON_BANORLUPART, mode);
-			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
-			p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
+			floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
+			floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
 			msg_print(_("『バーノール』と『ルパート』が合体した！", "Banor and Rupart combine into one!"));
 			break;
 	}
+
 	return 0;
 }
 
@@ -2139,10 +2142,11 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
 */
 HIT_POINT spell_RF6_SPECIAL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type	*m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
 
-	disturb(p_ptr, TRUE, TRUE);
+	disturb(target_ptr, TRUE, TRUE);
 	switch (m_ptr->r_idx)
 	{
 		case MON_OHMU:
@@ -2152,7 +2156,7 @@ HIT_POINT spell_RF6_SPECIAL(player_type *target_ptr, POSITION y, POSITION x, MON
 		case MON_BANORLUPART:
 		case MON_BANOR:
 		case MON_LUPART:
-			return spell_RF6_SPECIAL_BANORLUPART(m_idx);
+			return spell_RF6_SPECIAL_BANORLUPART(target_ptr, m_idx);
 
 		case MON_ROLENTO:
 			return spell_RF6_SPECIAL_ROLENTO(y, x, m_idx, t_idx, TARGET_TYPE);
@@ -3165,12 +3169,13 @@ void spell_RF6_S_DRAGON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 
 /*!
 * @brief ナズグル戦隊召喚の処理。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
 * @return 召喚したモンスターの数を返す。
 */
-MONSTER_NUMBER summon_NAZGUL(POSITION y, POSITION x, MONSTER_IDX m_idx)
+MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
 	BIT_FLAGS mode = 0L;
 	int count = 0, k;
@@ -3179,26 +3184,27 @@ MONSTER_NUMBER summon_NAZGUL(POSITION y, POSITION x, MONSTER_IDX m_idx)
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
-	if (p_ptr->blind)
+	if (target_ptr->blind)
 		msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
 	else
 		msg_format(_("%^sが魔法で幽鬼戦隊を召喚した！", "%^s magically summons rangers of Nazgul!"), m_name);
 
 	msg_print(NULL);
 
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	for (k = 0; k < 30; k++)
 	{
-		if (!summon_possible(cy, cx) || !cave_empty_bold(p_ptr->current_floor_ptr, cy, cx))
+		if (!summon_possible(floor_ptr, cy, cx) || !cave_empty_bold(floor_ptr, cy, cx))
 		{
 			int j;
 			for (j = 100; j > 0; j--)
 			{
-				scatter(p_ptr->current_floor_ptr, &cy, &cx, y, x, 2, 0);
-				if (cave_empty_bold(p_ptr->current_floor_ptr, cy, cx)) break;
+				scatter(floor_ptr, &cy, &cx, y, x, 2, 0);
+				if (cave_empty_bold(floor_ptr, cy, cx)) break;
 			}
 			if (!j) break;
 		}
-		if (!cave_empty_bold(p_ptr->current_floor_ptr, cy, cx)) continue;
+		if (!cave_empty_bold(floor_ptr, cy, cx)) continue;
 
 		if (summon_named_creature(m_idx, cy, cx, MON_NAZGUL, mode))
 		{
@@ -3223,6 +3229,7 @@ MONSTER_NUMBER summon_NAZGUL(POSITION y, POSITION x, MONSTER_IDX m_idx)
 
 /*!
 * @brief RF6_S_HI_UNDEADの処理。強力なアンデッド召喚。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -3230,23 +3237,24 @@ MONSTER_NUMBER summon_NAZGUL(POSITION y, POSITION x, MONSTER_IDX m_idx)
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return 召喚したモンスターの数を返す。
 */
-void spell_RF6_S_HI_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+void spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type	*m_ptr = &floor_ptr->m_list[m_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
 	int k, count = 0;
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
-	disturb(p_ptr, TRUE, TRUE);
+	disturb(target_ptr, TRUE, TRUE);
 
 	if (((m_ptr->r_idx == MON_MORGOTH) || (m_ptr->r_idx == MON_SAURON) || (m_ptr->r_idx == MON_ANGMAR)) &&
 		((r_info[MON_NAZGUL].cur_num + 2) < r_info[MON_NAZGUL].max_num) &&
 		mon_to_player)
 	{
-		count +=  summon_NAZGUL(y, x, m_idx);
+		count +=  summon_NAZGUL(target_ptr, y, x, m_idx);
 	}
 	else
 	{	
@@ -3265,13 +3273,13 @@ void spell_RF6_S_HI_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_ID
 				count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | monster_u_mode(m_idx)));
 		}
 	}
-	if (p_ptr->blind && count && mon_to_player)
+	if (target_ptr->blind && count && mon_to_player)
 	{
 		msg_print(_("間近で何か多くのものが這い回る音が聞こえる。", "You hear many creepy things appear nearby."));
 	}
 	
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
-		p_ptr->current_floor_ptr->monster_noise = TRUE;
+		floor_ptr->monster_noise = TRUE;
 }
 
 /*!
@@ -3508,7 +3516,7 @@ HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y,
 	case RF6_SPELL_START + 25: spell_RF6_S_DEMON(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_DEMON */
 	case RF6_SPELL_START + 26: spell_RF6_S_UNDEAD(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_S_UNDEAD */
 	case RF6_SPELL_START + 27: spell_RF6_S_DRAGON(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_S_DRAGON */
-	case RF6_SPELL_START + 28: spell_RF6_S_HI_UNDEAD(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_HI_UNDEAD */
+	case RF6_SPELL_START + 28: spell_RF6_S_HI_UNDEAD(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_HI_UNDEAD */
 	case RF6_SPELL_START + 29: spell_RF6_S_HI_DRAGON(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_HI_DRAGON */
 	case RF6_SPELL_START + 30: spell_RF6_S_AMBERITES(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_AMBERITES */
 	case RF6_SPELL_START + 31: spell_RF6_S_UNIQUE(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_S_UNIQUE */
@@ -3623,7 +3631,7 @@ HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y
 	case RF6_SPELL_START + 25: spell_RF6_S_DEMON(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_DEMON */
 	case RF6_SPELL_START + 26: spell_RF6_S_UNDEAD(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_S_UNDEAD */
 	case RF6_SPELL_START + 27: spell_RF6_S_DRAGON(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_S_DRAGON */
-	case RF6_SPELL_START + 28: spell_RF6_S_HI_UNDEAD(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_HI_UNDEAD */
+	case RF6_SPELL_START + 28: spell_RF6_S_HI_UNDEAD(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_HI_UNDEAD */
 	case RF6_SPELL_START + 29: spell_RF6_S_HI_DRAGON(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_HI_DRAGON */
 	case RF6_SPELL_START + 30: spell_RF6_S_AMBERITES(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_S_AMBERITES */
 	case RF6_SPELL_START + 31: spell_RF6_S_UNIQUE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); break;  /* RF6_S_UNIQUE */
