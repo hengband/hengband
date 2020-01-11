@@ -149,7 +149,7 @@ FEAT_IDX choose_random_trap(floor_type *floor_ptr)
 	FEAT_IDX feat;
 
 	/* Pick a trap */
-	while (1)
+	while (TRUE)
 	{
 		/* Hack -- pick a trap */
 		feat = normal_traps[randint0(MAX_NORMAL_TRAPS)];

@@ -1430,7 +1430,7 @@ static void spoiler_outlist(concptr header, concptr *list, char separator)
 	line_len = strlen(line);
 
 	/* Now begin the tedious task */
-	while (1)
+	while (TRUE)
 	{
 		/* Copy the current item to a buffer */
 		strcpy(buf, *list);
@@ -2337,7 +2337,7 @@ void do_cmd_spoilers(void)
 	screen_save();
 
 	/* Interact */
-	while (1)
+	while (TRUE)
 	{
 		Term_clear();
 

@@ -5872,7 +5872,7 @@ void process_player_name(player_type *creature_ptr, bool sf)
 	{
 		concptr s;
 		s = savefile;
-		while (1)
+		while (TRUE)
 		{
 			concptr t;
 			t = my_strstr(s, PATH_SEP);
@@ -6738,7 +6738,7 @@ static errr counts_seek(int fd, u32b where, bool flag)
 		temp1[i] ^= (i+1) * 63;
 
 	seekpoint = 0;
-	while (1)
+	while (TRUE)
 	{
 		if (fd_seek(fd, seekpoint + 3 * sizeof(u32b)))
 			return 1;

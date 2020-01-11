@@ -589,7 +589,7 @@ static void confirm_use_force(player_type *caster_ptr, bool browse_only)
 	/* Show the prompt */
 	prt(_("('w'練気術, ESC) 'w'かESCを押してください。 ", "(w for the Force, ESC) Hit 'w' or ESC. "), 0, 0);
 
-	while (1)
+	while (TRUE)
 	{
 		/* Get a key */
 		which = inkey();

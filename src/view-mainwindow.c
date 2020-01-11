@@ -3693,7 +3693,7 @@ void do_cmd_view_map(void)
 	{
 		display_autopick = ITEM_DISPLAY;
 
-		while (1)
+		while (TRUE)
 		{
 			int i;
 			byte flag;

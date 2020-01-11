@@ -49,7 +49,7 @@ void determine_random_questor(quest_type *q_ptr)
 
 	get_mon_num_prep(mon_hook_quest, NULL);
 
-	while (1)
+	while (TRUE)
 	{
 		/*
 		 * Random monster 5 - 10 levels out of depth

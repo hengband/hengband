@@ -609,7 +609,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 		handle_stuff(subject_ptr);
 
 		/* Interact */
-		while (1)
+		while (TRUE)
 		{
 			char acount[10];
 
@@ -726,7 +726,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 	{
 		int min_width = 0;
 
-		while (1)
+		while (TRUE)
 		{
 			if (floor_num == 1)
 			{
@@ -775,7 +775,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 			/** Display list of items **/
 
 			/* Continue scrolling list if requested */
-			while (1)
+			while (TRUE)
 			{
 				int i;
 				OBJECT_IDX o_idx;

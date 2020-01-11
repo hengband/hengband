@@ -1358,7 +1358,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 		}
 
 		/* Create the projection path */
-		while (1)
+		while (TRUE)
 		{
 			/* Save grid */
 			gp[n++] = GRID(y, x);
@@ -1447,7 +1447,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 		}
 
 		/* Create the projection path */
-		while (1)
+		while (TRUE)
 		{
 			/* Save grid */
 			gp[n++] = GRID(y, x);
@@ -1518,7 +1518,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 		x = x1 + sx;
 
 		/* Create the projection path */
-		while (1)
+		while (TRUE)
 		{
 			/* Save grid */
 			gp[n++] = GRID(y, x);

@@ -2277,7 +2277,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
 			/* Hack -- query until done */
-			while (1)
+			while (TRUE)
 			{
 				monster_race *r_ptr = &r_info[r];
 				int c;
@@ -2366,7 +2366,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
 			/* Hack -- query until done */
-			while (1)
+			while (TRUE)
 			{
 				object_kind *k_ptr = &k_info[k];
 				int c;
@@ -2457,7 +2457,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
 			/* Hack -- query until done */
-			while (1)
+			while (TRUE)
 			{
 				feature_type *f_ptr = &f_info[f];
 				int c;
@@ -2729,7 +2729,7 @@ void do_cmd_colors(player_type *creature_ptr)
 			prt(_("コマンド: カラーの設定を変更します", "Command: Modify colors"), 8, 0);
 
 			/* Hack -- query until done */
-			while (1)
+			while (TRUE)
 			{
 				concptr name;
 				byte j;

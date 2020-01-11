@@ -1121,7 +1121,7 @@ void do_cmd_locate(player_type *creature_ptr)
 	x2 = x1 = panel_col_min;
 
 	/* Show panels until done */
-	while (1)
+	while (TRUE)
 	{
 		/* Describe the location */
 		if ((y2 == y1) && (x2 == x1))
@@ -1366,7 +1366,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
 	i = n - 1;
 
 	/* Scan the monster memory */
-	while (1)
+	while (TRUE)
 	{
 		r_idx = who[i];
 
@@ -1375,7 +1375,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
 		handle_stuff(creature_ptr);
 
 		/* Interact */
-		while (1)
+		while (TRUE)
 		{
 			if (recall)
 			{

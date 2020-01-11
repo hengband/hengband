@@ -1173,7 +1173,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
 	str++;
 
 	/* Examine modifier keys */
-	while (1)
+	while (TRUE)
 	{
 		for (i=0; macro_modifier_chr[i]; i++)
 		{
@@ -2842,7 +2842,7 @@ static void msg_flush(int x)
 		Term_putstr(x, 0, -1, a, _("-続く-", "-more-"));
 
 		/* Get an acceptable keypress */
-		while (1)
+		while (TRUE)
 		{
 			int cmd = inkey();
 			if (cmd == ESCAPE) {
@@ -4491,7 +4491,7 @@ void request_command(int shopping)
 
 
 	/* Get command */
-	while (1)
+	while (TRUE)
 	{
 		/* Hack -- auto-commands */
 		if (command_new)
@@ -4538,7 +4538,7 @@ void request_command(int shopping)
 			prt(_("回数: ", "Count: "), 0, 0);
 
 			/* Get a command count */
-			while (1)
+			while (TRUE)
 			{
 				/* Get a new keypress */
 				cmd = inkey();

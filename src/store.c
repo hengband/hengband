@@ -4428,7 +4428,7 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 	/* Haggle */
 	for (flag = FALSE; !flag; )
 	{
-		while (1)
+		while (TRUE)
 		{
 			loop_flag = TRUE;
 

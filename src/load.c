@@ -2429,7 +2429,7 @@ static errr rd_inventory(void)
 	C_MAKE(p_ptr->inventory_list, INVEN_TOTAL, object_type);
 
 	/* Read until done */
-	while (1)
+	while (TRUE)
 	{
 		u16b n;
 

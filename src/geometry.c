@@ -77,7 +77,7 @@ POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 	/* Simple case */
 	if (!dy || !dx) return d;
 
-	while (1)
+	while (TRUE)
 	{
 		/* Approximate error */
 		err = (target - d * d) / (2 * d);

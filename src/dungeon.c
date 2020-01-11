@@ -70,7 +70,7 @@ DUNGEON_IDX choose_dungeon(concptr note, POSITION y, POSITION x)
 	}
 
 	prt(format(_("どのダンジョン%sしますか:", "Which dungeon do you %s?: "), note), 0, 0);
-	while (1)
+	while (TRUE)
 	{
 		i = inkey();
 		if ((i == ESCAPE) || !num)
