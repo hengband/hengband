@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include "floor.h"
 
-
 #define NO_TOWN 6
 #define SECRET_TOWN 5
 
@@ -23,7 +22,6 @@
 
 #define MAX_WILDERNESS          12 /* Maximum wilderness index */
 
-
 /* wild.c */
 extern void set_floor_and_wall(DUNGEON_IDX type);
 extern void wilderness_gen(player_type *creature_ptr);
@@ -31,7 +29,7 @@ extern void wilderness_gen_small(player_type *creature_ptr);
 extern errr init_wilderness(void);
 extern void init_wilderness_terrains(void);
 extern void seed_wilderness(void);
-extern errr parse_line_wilderness(player_type *creature_ptr, char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x);
+extern errr parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int xmax, int *y, int *x);
 extern bool change_wild_mode(player_type *creature_ptr, bool encount);
 
 /* Border */
@@ -63,4 +61,3 @@ typedef struct
 } wilderness_type;
 
 extern wilderness_type **wilderness;
-

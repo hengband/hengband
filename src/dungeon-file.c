@@ -3783,6 +3783,7 @@ static void drop_here(floor_type *floor_ptr, object_type *j_ptr, POSITION y, POS
 
 
 /*!
+ * todo yminとymaxは本当に使われているのか？
  * @brief クエスト用固定ダンジョンをフロアに生成する
  * Parse a sub-file of the "extra info"
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -3817,7 +3818,7 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 	if (buf[0] == '%')
 	{
 		/* Attempt to Process the given file */
-		return (process_dungeon_file(player_ptr, buf + 2, ymin, xmin, ymax, xmax));
+		return process_dungeon_file(player_ptr, buf + 2, ymin, xmin, ymax, xmax);
 	}
 
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -4114,7 +4115,7 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 	/* Process "W:<command>: ..." -- info for the wilderness */
 	else if (buf[0] == 'W')
 	{
-		return parse_line_wilderness(player_ptr, buf, ymin, xmin, ymax, xmax, y, x);
+		return parse_line_wilderness(player_ptr, buf, xmin, xmax, y, x);
 	}
 
 	/* Process "P:<y>:<x>" -- player position */
