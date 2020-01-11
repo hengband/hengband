@@ -39,9 +39,9 @@
 
 #define MAX_LINELEN 1024
 
-/*
- * Macros for Keywords
- */
+ /*
+  * Macros for Keywords
+  */
 #define FLG_ALL				0
 #define FLG_UNAWARE			1
 #define FLG_UNIDENTIFIED	2
@@ -111,10 +111,10 @@ static GAME_TEXT KEY_WORTHLESS[] = "無価値の";
 static GAME_TEXT KEY_RARE[] = "レアな";
 static GAME_TEXT KEY_COMMON[] = "ありふれた";
 static GAME_TEXT KEY_BOOSTED[] = "ダイス目の違う";
-static GAME_TEXT KEY_MORE_THAN[] =  "ダイス目";
-static GAME_TEXT KEY_DICE[] =  "以上の";
-static GAME_TEXT KEY_MORE_BONUS[] =  "修正値";
-static GAME_TEXT KEY_MORE_BONUS2[] =  "以上の";
+static GAME_TEXT KEY_MORE_THAN[] = "ダイス目";
+static GAME_TEXT KEY_DICE[] = "以上の";
+static GAME_TEXT KEY_MORE_BONUS[] = "修正値";
+static GAME_TEXT KEY_MORE_BONUS2[] = "以上の";
 static GAME_TEXT KEY_WANTED[] = "賞金首の";
 static GAME_TEXT KEY_UNIQUE[] = "ユニーク・モンスターの";
 static GAME_TEXT KEY_HUMAN[] = "人間の";
@@ -163,10 +163,10 @@ static GAME_TEXT KEY_WORTHLESS[] = "worthless";
 static GAME_TEXT KEY_RARE[] = "rare";
 static GAME_TEXT KEY_COMMON[] = "common";
 static GAME_TEXT KEY_BOOSTED[] = "dice boosted";
-static GAME_TEXT KEY_MORE_THAN[] =  "more than";
-static GAME_TEXT KEY_DICE[] =  " dice";
-static GAME_TEXT KEY_MORE_BONUS[] =  "more bonus than";
-static GAME_TEXT KEY_MORE_BONUS2[] =  "";
+static GAME_TEXT KEY_MORE_THAN[] = "more than";
+static GAME_TEXT KEY_DICE[] = " dice";
+static GAME_TEXT KEY_MORE_BONUS[] = "more bonus than";
+static GAME_TEXT KEY_MORE_BONUS2[] = "";
 static GAME_TEXT KEY_WANTED[] = "wanted";
 static GAME_TEXT KEY_UNIQUE[] = "unique monster's";
 static GAME_TEXT KEY_HUMAN[] = "human";
@@ -250,7 +250,7 @@ static GAME_TEXT KEY_BOOTS[] = "boots";
 #define IS_FLG(FLG) (entry->flag[FLG / 32] & (1L << (FLG % 32)))
 
 #ifdef JP
-	static char kanji_colon[] = "：";
+static char kanji_colon[] = "：";
 #endif
 
 /*
@@ -679,7 +679,7 @@ static bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_def
 			str++;
 			continue;
 		}
-		
+
 		if ((act & DO_AUTOPICK) && *str == '~')
 		{
 			act &= ~DO_AUTOPICK;
@@ -687,7 +687,7 @@ static bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_def
 			str++;
 			continue;
 		}
-		
+
 		if ((act & DO_AUTOPICK) && *str == ';')
 		{
 			act &= ~DO_AUTOPICK;
@@ -695,14 +695,14 @@ static bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_def
 			str++;
 			continue;
 		}
-		
+
 		if ((act & DO_DISPLAY) && *str == '(')
 		{
 			act &= ~DO_DISPLAY;
 			str++;
 			continue;
 		}
-		
+
 		break;
 	}
 
@@ -872,8 +872,8 @@ static bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_def
 		/* There was no noun */
 		if (prev_flg == -1)
 
-		/* Add extra word "items" */
-		ADD_FLG_NOUN(FLG_ITEMS);
+			/* Add extra word "items" */
+			ADD_FLG_NOUN(FLG_ITEMS);
 	}
 	else
 	{
@@ -881,7 +881,7 @@ static bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_def
 		if (prev_flg != -1)
 		{
 			/* A noun type keyword didn't end correctly */
-			entry->flag[prev_flg/32] &= ~(1L<< (prev_flg%32));
+			entry->flag[prev_flg / 32] &= ~(1L << (prev_flg % 32));
 			ptr = prev_ptr;
 		}
 	}
@@ -1040,7 +1040,7 @@ static void autopick_entry_from_object(player_type *player_ptr, autopick_type *e
 	}
 
 	if ((o_ptr->tval == TV_CORPSE || o_ptr->tval == TV_STATUE)
-	    && (r_info[o_ptr->pval].flags1 & RF1_UNIQUE))
+		&& (r_info[o_ptr->pval].flags1 & RF1_UNIQUE))
 	{
 		ADD_FLG(FLG_UNIQUE);
 	}
@@ -1051,23 +1051,23 @@ static void autopick_entry_from_object(player_type *player_ptr, autopick_type *e
 	}
 
 	if (o_ptr->tval >= TV_LIFE_BOOK &&
-	    !check_book_realm(o_ptr->tval, o_ptr->sval))
+		!check_book_realm(o_ptr->tval, o_ptr->sval))
 	{
 		ADD_FLG(FLG_UNREADABLE);
 		if (o_ptr->tval != TV_ARCANE_BOOK) name = FALSE;
 	}
 
 	if (REALM1_BOOK == o_ptr->tval &&
-	    player_ptr->pclass != CLASS_SORCERER &&
-	    player_ptr->pclass != CLASS_RED_MAGE)
+		player_ptr->pclass != CLASS_SORCERER &&
+		player_ptr->pclass != CLASS_RED_MAGE)
 	{
 		ADD_FLG(FLG_REALM1);
 		name = FALSE;
 	}
 
 	if (REALM2_BOOK == o_ptr->tval &&
-	    player_ptr->pclass != CLASS_SORCERER &&
-	    player_ptr->pclass != CLASS_RED_MAGE)
+		player_ptr->pclass != CLASS_SORCERER &&
+		player_ptr->pclass != CLASS_RED_MAGE)
 	{
 		ADD_FLG(FLG_REALM2);
 		name = FALSE;
@@ -1085,19 +1085,19 @@ static void autopick_entry_from_object(player_type *player_ptr, autopick_type *e
 	if (object_is_ammo(o_ptr))
 		ADD_FLG(FLG_MISSILES);
 	else if (o_ptr->tval == TV_SCROLL || o_ptr->tval == TV_STAFF
-		 || o_ptr->tval == TV_WAND || o_ptr->tval == TV_ROD)
+		|| o_ptr->tval == TV_WAND || o_ptr->tval == TV_ROD)
 		ADD_FLG(FLG_DEVICES);
 	else if (o_ptr->tval == TV_LITE)
 		ADD_FLG(FLG_LIGHTS);
 	else if (o_ptr->tval == TV_SKELETON || o_ptr->tval == TV_BOTTLE
-		 || o_ptr->tval == TV_JUNK || o_ptr->tval == TV_STATUE)
+		|| o_ptr->tval == TV_JUNK || o_ptr->tval == TV_STATUE)
 		ADD_FLG(FLG_JUNKS);
 	else if (o_ptr->tval == TV_CORPSE)
 		ADD_FLG(FLG_CORPSES);
 	else if (o_ptr->tval >= TV_LIFE_BOOK)
 		ADD_FLG(FLG_SPELLBOOKS);
 	else if (o_ptr->tval == TV_POLEARM || o_ptr->tval == TV_SWORD
-		 || o_ptr->tval == TV_DIGGING || o_ptr->tval == TV_HAFTED)
+		|| o_ptr->tval == TV_DIGGING || o_ptr->tval == TV_HAFTED)
 		ADD_FLG(FLG_WEAPONS);
 	else if (o_ptr->tval == TV_SHIELD)
 		ADD_FLG(FLG_SHIELDS);
@@ -1108,7 +1108,7 @@ static void autopick_entry_from_object(player_type *player_ptr, autopick_type *e
 	else if (o_ptr->tval == TV_AMULET)
 		ADD_FLG(FLG_AMULETS);
 	else if (o_ptr->tval == TV_DRAG_ARMOR || o_ptr->tval == TV_HARD_ARMOR ||
-		 o_ptr->tval == TV_SOFT_ARMOR)
+		o_ptr->tval == TV_SOFT_ARMOR)
 		ADD_FLG(FLG_SUITS);
 	else if (o_ptr->tval == TV_CLOAK)
 		ADD_FLG(FLG_CLOAKS);
@@ -1169,7 +1169,7 @@ static void init_autopick(void)
 	}
 
 	/* Clear old entries */
-	for( i = 0; i < max_autopick; i++)
+	for (i = 0; i < max_autopick; i++)
 		autopick_free_entry(&autopick_list[i]);
 
 	max_autopick = 0;
@@ -1286,7 +1286,7 @@ errr process_autopick_file_command(char *buf)
 	int i;
 
 	/* Nuke illegal char */
-	for(i = 0; buf[i]; i++)
+	for (i = 0; buf[i]; i++)
 	{
 #ifdef JP
 		if (iskanji(buf[i]))
@@ -1300,11 +1300,11 @@ errr process_autopick_file_command(char *buf)
 	}
 
 	buf[i] = 0;
-	
+
 	if (!autopick_new_entry(entry, buf, FALSE)) return 0;
 
-	/* Already has the same entry? */ 
-	for(i = 0; i < max_autopick; i++)
+	/* Already has the same entry? */
+	for (i = 0; i < max_autopick; i++)
 	{
 		if (!strcmp(entry->name, autopick_list[i].name)
 			&& entry->flag[0] == autopick_list[i].flag[0]
@@ -1468,7 +1468,7 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
 
 	/*** Unidentified ***/
 	if (IS_FLG(FLG_UNIDENTIFIED)
-	    && (object_is_known(o_ptr) || (o_ptr->ident & IDENT_SENSE)))
+		&& (object_is_known(o_ptr) || (o_ptr->ident & IDENT_SENSE)))
 		return FALSE;
 
 	/*** Identified ***/
@@ -1477,7 +1477,7 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
 
 	/*** *Identified* ***/
 	if (IS_FLG(FLG_STAR_IDENTIFIED) &&
-	    (!object_is_known(o_ptr) || !(o_ptr->ident & IDENT_MENTAL)))
+		(!object_is_known(o_ptr) || !(o_ptr->ident & IDENT_MENTAL)))
 		return FALSE;
 
 	/*** Dice boosted (weapon of slaying) ***/
@@ -1492,9 +1492,9 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
 		/* Require boosted dice */
 		if ((o_ptr->dd == k_ptr->dd) && (o_ptr->ds == k_ptr->ds))
 			return FALSE;
-		
+
 		/* In Vault Quest, Dice must be hide.*/
-		if(!object_is_known(o_ptr) && object_is_quest_target(o_ptr))
+		if (!object_is_known(o_ptr) && object_is_quest_target(o_ptr))
 		{
 			return FALSE;
 		}
@@ -1506,7 +1506,7 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
 		if (o_ptr->dd * o_ptr->ds < entry->dice)
 			return FALSE;
 	}
-				
+
 	/*** Weapons whic dd*ds is more than nn ***/
 	if (IS_FLG(FLG_MORE_BONUS))
 	{
@@ -1519,13 +1519,13 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
 		else
 		{
 			if (o_ptr->to_h < entry->bonus &&
-			    o_ptr->to_d < entry->bonus &&
-			    o_ptr->to_a < entry->bonus &&
-			    o_ptr->pval < entry->bonus)
+				o_ptr->to_d < entry->bonus &&
+				o_ptr->to_a < entry->bonus &&
+				o_ptr->pval < entry->bonus)
 				return FALSE;
 		}
 	}
-				
+
 	/*** Worthless items ***/
 	if (IS_FLG(FLG_WORTHLESS) && object_value(o_ptr) > 0)
 		return FALSE;
@@ -1545,7 +1545,7 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
 
 		/* Need to be known to be an ego */
 		if (!object_is_known(o_ptr) &&
-		    !((o_ptr->ident & IDENT_SENSE) && o_ptr->feeling == FEEL_EXCELLENT))
+			!((o_ptr->ident & IDENT_SENSE) && o_ptr->feeling == FEEL_EXCELLENT))
 			return FALSE;
 	}
 
@@ -1686,54 +1686,54 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
 
 	/*** Unique monster's corpse/skeletons/statues ***/
 	if (IS_FLG(FLG_UNIQUE) &&
-	    ((o_ptr->tval != TV_CORPSE && o_ptr->tval != TV_STATUE) ||
-	     !(r_info[o_ptr->pval].flags1 & RF1_UNIQUE)))
+		((o_ptr->tval != TV_CORPSE && o_ptr->tval != TV_STATUE) ||
+			!(r_info[o_ptr->pval].flags1 & RF1_UNIQUE)))
 		return FALSE;
 
 	/*** Human corpse/skeletons (for Daemon magic) ***/
 	if (IS_FLG(FLG_HUMAN) &&
-	    (o_ptr->tval != TV_CORPSE ||
-	     !my_strchr("pht", r_info[o_ptr->pval].d_char)))
+		(o_ptr->tval != TV_CORPSE ||
+			!my_strchr("pht", r_info[o_ptr->pval].d_char)))
 		return FALSE;
 
 	/*** Unreadable spellbooks ***/
 	if (IS_FLG(FLG_UNREADABLE) &&
-	    (o_ptr->tval < TV_LIFE_BOOK ||
-	     check_book_realm(o_ptr->tval, o_ptr->sval)))
+		(o_ptr->tval < TV_LIFE_BOOK ||
+			check_book_realm(o_ptr->tval, o_ptr->sval)))
 		return FALSE;
 
 	/*** First realm spellbooks ***/
-	if (IS_FLG(FLG_REALM1) && 
-	    (REALM1_BOOK != o_ptr->tval ||
-	     player_ptr->pclass == CLASS_SORCERER ||
-	     player_ptr->pclass == CLASS_RED_MAGE))
+	if (IS_FLG(FLG_REALM1) &&
+		(REALM1_BOOK != o_ptr->tval ||
+			player_ptr->pclass == CLASS_SORCERER ||
+			player_ptr->pclass == CLASS_RED_MAGE))
 		return FALSE;
 
 	/*** Second realm spellbooks ***/
 	if (IS_FLG(FLG_REALM2) &&
-	    (REALM2_BOOK != o_ptr->tval ||
-	     player_ptr->pclass == CLASS_SORCERER ||
-	     player_ptr->pclass == CLASS_RED_MAGE))
+		(REALM2_BOOK != o_ptr->tval ||
+			player_ptr->pclass == CLASS_SORCERER ||
+			player_ptr->pclass == CLASS_RED_MAGE))
 		return FALSE;
 
 	/*** First rank spellbooks ***/
 	if (IS_FLG(FLG_FIRST) &&
-	    (o_ptr->tval < TV_LIFE_BOOK || 0 != o_ptr->sval))
+		(o_ptr->tval < TV_LIFE_BOOK || 0 != o_ptr->sval))
 		return FALSE;
 
 	/*** Second rank spellbooks ***/
 	if (IS_FLG(FLG_SECOND) &&
-	    (o_ptr->tval < TV_LIFE_BOOK || 1 != o_ptr->sval))
+		(o_ptr->tval < TV_LIFE_BOOK || 1 != o_ptr->sval))
 		return FALSE;
 
 	/*** Third rank spellbooks ***/
-	if (IS_FLG(FLG_THIRD) && 
-	    (o_ptr->tval < TV_LIFE_BOOK || 2 != o_ptr->sval))
+	if (IS_FLG(FLG_THIRD) &&
+		(o_ptr->tval < TV_LIFE_BOOK || 2 != o_ptr->sval))
 		return FALSE;
 
 	/*** Fourth rank spellbooks ***/
 	if (IS_FLG(FLG_FOURTH) &&
-	    (o_ptr->tval < TV_LIFE_BOOK || 3 != o_ptr->sval))
+		(o_ptr->tval < TV_LIFE_BOOK || 3 != o_ptr->sval))
 		return FALSE;
 
 	/*** Items ***/
@@ -1758,7 +1758,7 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
 	}
 	else if (IS_FLG(FLG_DEVICES))
 	{
-		switch(o_ptr->tval)
+		switch (o_ptr->tval)
 		{
 		case TV_SCROLL: case TV_STAFF: case TV_WAND: case TV_ROD:
 			break;
@@ -1772,7 +1772,7 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
 	}
 	else if (IS_FLG(FLG_JUNKS))
 	{
-		switch(o_ptr->tval)
+		switch (o_ptr->tval)
 		{
 		case TV_SKELETON: case TV_BOTTLE:
 		case TV_JUNK: case TV_STATUE:
@@ -1818,8 +1818,8 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
 	else if (IS_FLG(FLG_SUITS))
 	{
 		if (!(o_ptr->tval == TV_DRAG_ARMOR ||
-		      o_ptr->tval == TV_HARD_ARMOR ||
-		      o_ptr->tval == TV_SOFT_ARMOR))
+			o_ptr->tval == TV_HARD_ARMOR ||
+			o_ptr->tval == TV_SOFT_ARMOR))
 			return FALSE;
 	}
 	else if (IS_FLG(FLG_CLOAKS))
@@ -1861,12 +1861,12 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
 	for (int j = 0; j < INVEN_PACK; j++)
 	{
 		/*
-		 * 'Collecting' means the item must be absorbed 
+		 * 'Collecting' means the item must be absorbed
 		 * into an inventory slot.
 		 * But an item can not be absorbed into itself!
 		 */
 		if ((&player_ptr->inventory_list[j] != o_ptr) &&
-		    object_similar(&player_ptr->inventory_list[j], o_ptr))
+			object_similar(&player_ptr->inventory_list[j], o_ptr))
 			return TRUE;
 	}
 
@@ -1890,7 +1890,7 @@ int is_autopick(player_type *player_ptr, object_type *o_ptr)
 	/* Convert the string to lower case */
 	str_tolower(o_name);
 
-	/* Look for a matching entry in the list */	
+	/* Look for a matching entry in the list */
 	for (int i = 0; i < max_autopick; i++)
 	{
 		autopick_type *entry = &autopick_list[i];
@@ -1954,28 +1954,28 @@ static bool is_opt_confirm_destroy(player_type *player_ptr, object_type *o_ptr)
 		if (player_ptr->prace == RACE_DEMON)
 		{
 			if (o_ptr->tval == TV_CORPSE &&
-			    o_ptr->sval == SV_CORPSE &&
-			    my_strchr("pht", r_info[o_ptr->pval].d_char))
+				o_ptr->sval == SV_CORPSE &&
+				my_strchr("pht", r_info[o_ptr->pval].d_char))
 				return FALSE;
 		}
 
 		if (player_ptr->pclass == CLASS_ARCHER)
 		{
 			if (o_ptr->tval == TV_SKELETON ||
-			    (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
+				(o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
 				return FALSE;
 		}
 		else if (player_ptr->pclass == CLASS_NINJA)
 		{
 			if (o_ptr->tval == TV_LITE &&
-			    o_ptr->name2 == EGO_LITE_DARKNESS && object_is_known(o_ptr))
+				o_ptr->name2 == EGO_LITE_DARKNESS && object_is_known(o_ptr))
 				return FALSE;
 		}
 		else if (player_ptr->pclass == CLASS_BEASTMASTER ||
-			 player_ptr->pclass == CLASS_CAVALRY)
+			player_ptr->pclass == CLASS_CAVALRY)
 		{
 			if (o_ptr->tval == TV_WAND &&
-			    o_ptr->sval == SV_WAND_HEAL_MONSTER && object_is_aware(o_ptr))
+				o_ptr->sval == SV_WAND_HEAL_MONSTER && object_is_aware(o_ptr))
 				return FALSE;
 		}
 	}
@@ -1995,7 +1995,7 @@ static void auto_destroy_item(player_type *player_ptr, object_type *o_ptr, int a
 
 	/* Protected by auto-picker (2nd priotity) */
 	if (autopick_idx >= 0 &&
-	    !(autopick_list[autopick_idx].action & DO_AUTODESTROY))
+		!(autopick_list[autopick_idx].action & DO_AUTODESTROY))
 		destroy = FALSE;
 
 	/* Auto-destroyer works only when !always_pickup */
@@ -2003,7 +2003,7 @@ static void auto_destroy_item(player_type *player_ptr, object_type *o_ptr, int a
 	{
 		/* Auto-picker/destroyer (1st priority) */
 		if (autopick_idx >= 0 &&
-		    (autopick_list[autopick_idx].action & DO_AUTODESTROY))
+			(autopick_list[autopick_idx].action & DO_AUTODESTROY))
 			destroy = TRUE;
 	}
 
@@ -2075,11 +2075,11 @@ void autopick_delayed_alter(player_type *owner_ptr)
 {
 	INVENTORY_IDX item;
 
-	/* 
+	/*
 	 * Scan inventry in reverse order to prevent
 	 * skipping after inven_item_optimize()
 	 */
-	for (item = INVEN_TOTAL - 1; item >= 0 ; item--)
+	for (item = INVEN_TOTAL - 1; item >= 0; item--)
 		autopick_delayed_alter_aux(owner_ptr, item);
 
 	/* Scan the pile of objects */
@@ -2125,13 +2125,13 @@ void autopick_alter_item(player_type *player_ptr, INVENTORY_IDX item, bool destr
 void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
-	
+
 	/* Scan the pile of objects */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		int idx;
-			object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
-				next_o_idx = o_ptr->next_o_idx;
+		object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
+		next_o_idx = o_ptr->next_o_idx;
 
 		idx = is_autopick(player_ptr, o_ptr);
 
@@ -2145,7 +2145,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 			auto_destroy_item(player_ptr, o_ptr, idx);
 			continue;
 		}
-		
+
 		disturb(player_ptr, FALSE, FALSE);
 
 		if (!inven_carry_okay(o_ptr))
@@ -2159,7 +2159,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 			o_ptr->marked |= OM_NOMSG;
 			continue;
 		}
-		
+
 		if (!(autopick_list[idx].action & DO_QUERY_AUTOPICK))
 		{
 			py_pickup_aux(player_ptr, this_o_idx);
@@ -2260,7 +2260,7 @@ static bool clear_auto_register(player_type *player_ptr)
 	if (num)
 	{
 		msg_format(_("以前のキャラクター用の自動設定(%d行)が残っています。",
-					 "Auto registered lines (%d lines) for previous character are remaining."), num);
+			"Auto registered lines (%d lines) for previous character are remaining."), num);
 		strcpy(buf, _("古い設定行は削除します。よろしいですか？", "These lines will be deleted.  Are you sure? "));
 
 		/* You can cancel it */
@@ -2270,7 +2270,7 @@ static bool clear_auto_register(player_type *player_ptr)
 			autoregister = FALSE;
 
 			msg_print(_("エディタのカット&ペースト等を使って必要な行を避難してください。",
-						"Use cut & paste of auto picker editor (_) to keep old prefs."));
+				"Use cut & paste of auto picker editor (_) to keep old prefs."));
 		}
 	}
 
@@ -2320,8 +2320,8 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 
 	/* Known to be an artifact? */
 	if ((object_is_known(o_ptr) && object_is_artifact(o_ptr)) ||
-	    ((o_ptr->ident & IDENT_SENSE) &&
-	     (o_ptr->feeling == FEEL_TERRIBLE || o_ptr->feeling == FEEL_SPECIAL)))
+		((o_ptr->ident & IDENT_SENSE) &&
+		(o_ptr->feeling == FEEL_TERRIBLE || o_ptr->feeling == FEEL_SPECIAL)))
 	{
 		GAME_TEXT o_name[MAX_NLEN];
 
@@ -2392,9 +2392,9 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 		fprintf(pref_fff, "%s\n", autoregister_header);
 
 		fprintf(pref_fff, "%s\n", _("# *警告!!* 以降の行は自動登録されたものです。",
-						            "# *Waring!* The lines below will be deleated later."));
-		fprintf(pref_fff, "%s\n", _("# 後で自動的に削除されますので、必要な行は上の方へ移動しておいてください。", 
-						            "# Keep it by cut & paste if you need these lines for future characters."));
+			"# *Waring!* The lines below will be deleated later."));
+		fprintf(pref_fff, "%s\n", _("# 後で自動的に削除されますので、必要な行は上の方へ移動しておいてください。",
+			"# Keep it by cut & paste if you need these lines for future characters."));
 
 		/* Now auto register is in-use */
 		player_ptr->autopick_autoregister = TRUE;
@@ -2440,7 +2440,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	/*** Which can be absorbed into a slot as a bundle ***/
 	if (IS_FLG(FLG_COLLECTING))
 		before_str[before_n++] = "収集中で既に持っているスロットにまとめられる";
-	
+
 	/*** Unaware items ***/
 	if (IS_FLG(FLG_UNAWARE))
 		before_str[before_n++] = "未鑑定でその効果も判明していない";
@@ -2470,8 +2470,8 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		static char more_than_desc_str[] = "___";
 		before_str[before_n++] = "ダメージダイスの最大値が";
 		body_str = "武器";
-			
-		sprintf(more_than_desc_str,"%d", entry->dice);
+
+		sprintf(more_than_desc_str, "%d", entry->dice);
 		before_str[before_n++] = more_than_desc_str;
 		before_str[before_n++] = "以上の";
 	}
@@ -2481,8 +2481,8 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	{
 		static char more_bonus_desc_str[] = "___";
 		before_str[before_n++] = "修正値が(+";
-			
-		sprintf(more_bonus_desc_str,"%d", entry->bonus);
+
+		sprintf(more_bonus_desc_str, "%d", entry->bonus);
 		before_str[before_n++] = more_bonus_desc_str;
 		before_str[before_n++] = ")以上の";
 	}
@@ -2653,7 +2653,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		body_str = "ブーツ";
 
 	*buff = '\0';
-	if (!before_n) 
+	if (!before_n)
 		strcat(buff, "全ての");
 	else for (i = 0; i < before_n && before_str[i]; i++)
 		strcat(buff, before_str[i]);
@@ -2726,7 +2726,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	/*** Which can be absorbed into a slot as a bundle ***/
 	if (IS_FLG(FLG_COLLECTING))
 		which_str[which_n++] = "can be absorbed into an existing inventory list slot";
-	
+
 	/*** Unaware items ***/
 	if (IS_FLG(FLG_UNAWARE))
 	{
@@ -2815,7 +2815,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 		static char more_than_desc_str[] =
 			"maximum damage from dice is bigger than __";
 		body_str = "weapons";
-			
+
 		sprintf(more_than_desc_str + sizeof(more_than_desc_str) - 3,
 			"%d", entry->dice);
 		whose_str[whose_n++] = more_than_desc_str;
@@ -2826,7 +2826,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	{
 		static char more_bonus_desc_str[] =
 			"magical bonus is bigger than (+__)";
-			
+
 		sprintf(more_bonus_desc_str + sizeof(more_bonus_desc_str) - 4,
 			"%d)", entry->bonus);
 		whose_str[whose_n++] = more_bonus_desc_str;
@@ -2983,7 +2983,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	}
 
 	/* Adjective */
-	if (!before_n) 
+	if (!before_n)
 		strcat(buff, "all ");
 	else for (i = 0; i < before_n && before_str[i]; i++)
 	{
@@ -3200,7 +3200,7 @@ static bool write_text_lines(concptr filename, concptr *lines_list)
 	FILE *fff;
 	fff = my_fopen(buf, "w");
 	if (!fff) return FALSE;
-	
+
 	for (int lines = 0; lines_list[lines]; lines++)
 	{
 		my_fputs(fff, lines_list[lines], 1024);
@@ -3275,7 +3275,7 @@ static void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
 			for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++)
 				REM_FLG(i);
 		}
-		
+
 		/* You can use only one identify state flag */
 		else if (FLG_UNAWARE <= flg && flg <= FLG_STAR_IDENTIFIED)
 		{
@@ -3283,7 +3283,7 @@ static void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
 			for (i = FLG_UNAWARE; i <= FLG_STAR_IDENTIFIED; i++)
 				REM_FLG(i);
 		}
-		
+
 		/* You can use only one flag in artifact/ego/nameless */
 		else if (FLG_ARTIFACT <= flg && flg <= FLG_AVERAGE)
 		{
@@ -3291,7 +3291,7 @@ static void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
 			for (i = FLG_ARTIFACT; i <= FLG_AVERAGE; i++)
 				REM_FLG(i);
 		}
-		
+
 		/* You can use only one flag in rare/common */
 		else if (FLG_RARE <= flg && flg <= FLG_COMMON)
 		{
@@ -3299,12 +3299,12 @@ static void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
 			for (i = FLG_RARE; i <= FLG_COMMON; i++)
 				REM_FLG(i);
 		}
-		
+
 		if (add) ADD_FLG(flg);
 		else REM_FLG(flg);
-		
+
 		tb->lines_list[y] = autopick_line_from_entry_kill(entry);
-		
+
 		/* Now dirty */
 		tb->dirty_flags |= DIRTY_ALL;
 
@@ -3387,9 +3387,9 @@ static void toggle_command_letter(text_body_type *tb, byte flg)
 			if (wid > 0) tb->cx++;
 			if (wid < 0 && tb->cx > 0) tb->cx--;
 		}
-			
+
 		tb->lines_list[y] = autopick_line_from_entry_kill(entry);
-			
+
 		/* Now dirty */
 		tb->dirty_flags |= DIRTY_ALL;
 
@@ -3430,9 +3430,9 @@ static void add_keyword(text_body_type *tb, BIT_FLAGS flg)
 			autopick_free_entry(entry);
 			continue;
 		}
-		
+
 		string_free(tb->lines_list[y]);
-		
+
 		/* Remove all noun flag */
 		if (FLG_NOUN_BEGIN <= flg && flg <= FLG_NOUN_END)
 		{
@@ -3440,9 +3440,9 @@ static void add_keyword(text_body_type *tb, BIT_FLAGS flg)
 			for (i = FLG_NOUN_BEGIN; i <= FLG_NOUN_END; i++)
 				REM_FLG(i);
 		}
-		
+
 		ADD_FLG(flg);
-		
+
 		tb->lines_list[y] = autopick_line_from_entry_kill(entry);
 
 		/* Now dirty */
@@ -3463,7 +3463,7 @@ static void check_expression_line(text_body_type *tb, int y)
 	concptr s = tb->lines_list[y];
 
 	if ((s[0] == '?' && s[1] == ':') ||
-	    (tb->states[y] & LSTAT_BYPASS))
+		(tb->states[y] & LSTAT_BYPASS))
 	{
 		/* Expressions need re-evaluation */
 		tb->dirty_flags |= DIRTY_EXPRESSION;
@@ -3479,13 +3479,13 @@ static bool add_empty_line(text_body_type *tb)
 	int k;
 
 	for (k = 0; tb->lines_list[k]; k++)
-		/* count number of lines */ ;
+		/* count number of lines */;
 
 	/* Too many lines! */
 	if (k >= MAX_LINES - 2) return FALSE;
 
 	/* The last line is already empty */
-	if (!tb->lines_list[k-1][0]) return FALSE;
+	if (!tb->lines_list[k - 1][0]) return FALSE;
 
 	/* Create new empty line */
 	tb->lines_list[k] = string_make("");
@@ -3510,7 +3510,7 @@ static bool insert_return_code(text_body_type *tb)
 	int i, j, k;
 
 	for (k = 0; tb->lines_list[k]; k++)
-		/* count number of lines */ ;
+		/* count number of lines */;
 
 	if (k >= MAX_LINES - 2) return FALSE;
 	k--;
@@ -3518,8 +3518,8 @@ static bool insert_return_code(text_body_type *tb)
 	/* Move down lines */
 	for (; tb->cy < k; k--)
 	{
-		tb->lines_list[k+1] = tb->lines_list[k];
-		tb->states[k+1] = tb->states[k];
+		tb->lines_list[k + 1] = tb->lines_list[k];
+		tb->states[k + 1] = tb->states[k];
 	}
 
 	/* Split current line */
@@ -3533,7 +3533,7 @@ static bool insert_return_code(text_body_type *tb)
 	}
 
 	buf[j] = '\0';
-	tb->lines_list[tb->cy+1] = string_make(&tb->lines_list[tb->cy][i]);
+	tb->lines_list[tb->cy + 1] = string_make(&tb->lines_list[tb->cy][i]);
 	string_free(tb->lines_list[tb->cy]);
 	tb->lines_list[tb->cy] = string_make(buf);
 
@@ -3611,7 +3611,7 @@ static byte get_string_for_search(player_type *player_ptr, object_type **o_handl
 	 * TERM_WHITE : Insert mode
 	 */
 	byte color = TERM_YELLOW;
-	char buf[MAX_NLEN+20];
+	char buf[MAX_NLEN + 20];
 	const int len = 80;
 
 	char prompt[] = _("検索(^I:持ち物 ^L:破壊された物): ", "Search key(^I:inven ^L:destroyed): ");
@@ -3666,7 +3666,7 @@ static byte get_string_for_search(player_type *player_ptr, object_type **o_handl
 				if (iskanji(buf[i])) next_pos++;
 #endif
 
-				/* Is there the cursor at next position? */ 
+				/* Is there the cursor at next position? */
 				if (next_pos >= pos) break;
 
 				/* Move to next */
@@ -3742,7 +3742,7 @@ static byte get_string_for_search(player_type *player_ptr, object_type **o_handl
 				if (iskanji(buf[i])) next_pos++;
 #endif
 
-				/* Is there the cursor at next position? */ 
+				/* Is there the cursor at next position? */
 				if (next_pos >= pos) break;
 
 				/* Move to next */
@@ -3984,7 +3984,7 @@ static void search_for_string(text_body_type *tb, concptr search_str, bool forwa
 
 		/* Found a line but it's inactive */
 		if ((tb->states[i] & LSTAT_BYPASS) &&
-		    !(tb->states[i] & LSTAT_EXPRESSION))
+			!(tb->states[i] & LSTAT_EXPRESSION))
 		{
 			/* If it is first found, remember it */
 			if (bypassed_cy == -1)
@@ -4038,14 +4038,14 @@ static int get_com_id(char key)
 
 
 /*
- * Display the menu, and get a command 
+ * Display the menu, and get a command
  */
 static int do_command_menu(int level, int start)
 {
 	int max_len = 0;
 	int max_menu_wid;
-	int col0 = 5 + level*7;
-	int row0 = 1 + level*3;
+	int col0 = 5 + level * 7;
+	int row0 = 1 + level * 3;
 	byte menu_key = 0;
 	int menu_id_list[26];
 	bool redraw = TRUE;
@@ -4334,11 +4334,11 @@ static void draw_text_editor(text_body_type *tb)
 
 	/* Scroll if necessary */
 	if (tb->cy < tb->upper || tb->upper + tb->hgt <= tb->cy)
-		tb->upper = tb->cy - (tb->hgt)/2;
+		tb->upper = tb->cy - (tb->hgt) / 2;
 	if (tb->upper < 0)
 		tb->upper = 0;
 	if ((tb->cx < tb->left + 10 && tb->left > 0) || tb->left + tb->wid - 5 <= tb->cx)
-		tb->left = tb->cx - (tb->wid)*2/3;
+		tb->left = tb->cx - (tb->wid) * 2 / 3;
 	if (tb->left < 0)
 		tb->left = 0;
 
@@ -4431,7 +4431,7 @@ static void draw_text_editor(text_body_type *tb)
 		int leftcol = 0;
 		concptr msg;
 		byte color;
-		int y = tb->upper+i;
+		int y = tb->upper + i;
 
 		/* clean or dirty? */
 		if (!(tb->dirty_flags & DIRTY_ALL) && (tb->dirty_line != y))
@@ -4642,14 +4642,14 @@ static void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool wh
 {
 	/* Kill whole line? */
 	concptr s = tb->lines_list[y];
-	if (whole && x0 == 0 && s[x1] == '\0' && tb->lines_list[y+1])
+	if (whole && x0 == 0 && s[x1] == '\0' && tb->lines_list[y + 1])
 	{
 		string_free(tb->lines_list[y]);
 
 		/* Shift lines up */
 		int i;
-		for (i = y; tb->lines_list[i+1]; i++)
-			tb->lines_list[i] = tb->lines_list[i+1];
+		for (i = y; tb->lines_list[i + 1]; i++)
+			tb->lines_list[i] = tb->lines_list[i + 1];
 		tb->lines_list[i] = NULL;
 
 		/* Expressions need re-evaluation */
@@ -4722,7 +4722,7 @@ static bool insert_macro_line(text_body_type *tb)
 	ascii_to_text(tmp, buf);
 
 	/* Null */
-	if(!tmp[0]) return FALSE;
+	if (!tmp[0]) return FALSE;
 
 	tb->cx = 0;
 
@@ -4785,7 +4785,7 @@ static bool insert_keymap_line(text_body_type *tb)
 	ascii_to_text(tmp, buf);
 
 	/* Null */
-	if(!tmp[0]) return FALSE;
+	if (!tmp[0]) return FALSE;
 
 	tb->cx = 0;
 
@@ -4816,13 +4816,13 @@ static bool insert_keymap_line(text_body_type *tb)
  */
 static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 {
-	switch(com_id)
+	switch (com_id)
 	{
 	case EC_QUIT:
 		if (tb->changed)
 		{
 			if (!get_check(_("全ての変更を破棄してから終了します。よろしいですか？ ",
-							 "Discard all changes and quit. Are you sure? "))) break;
+				"Discard all changes and quit. Are you sure? "))) break;
 		}
 
 		return QUIT_WITHOUT_SAVE;
@@ -4833,7 +4833,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 	case EC_REVERT:
 		/* Revert to original */
 		if (!get_check(_("全ての変更を破棄して元の状態に戻します。よろしいですか？ ",
-						 "Discard all changes and revert to original file. Are you sure? "))) break;
+			"Discard all changes and revert to original file. Are you sure? "))) break;
 
 		free_text_lines(tb->lines_list);
 		tb->lines_list = read_pickpref_text_lines(player_ptr, &tb->filename_mode);
@@ -5016,7 +5016,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		break;
 
 	case EC_CUT:
-	{	
+	{
 		/* Copy the text first */
 		copy_text_to_yank(tb);
 
@@ -5048,7 +5048,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 			for (y = by2; y >= by1; y--)
 			{
 				int len = strlen(tb->lines_list[y]);
-				
+
 				kill_line_segment(tb, y, 0, len, TRUE);
 			}
 
@@ -5135,13 +5135,13 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 			char rest[MAX_LINELEN], *rest_ptr = rest;
 
 			/* Save preceding string */
-			for(i = 0; i < tb->cx; i++)
+			for (i = 0; i < tb->cx; i++)
 				buf[i] = tb->lines_list[tb->cy][i];
 
 			strcpy(rest, &(tb->lines_list[tb->cy][i]));
 
 			/* Paste yank buffer */
-			while (*yank_str && i < MAX_LINELEN-1)
+			while (*yank_str && i < MAX_LINELEN - 1)
 			{
 				buf[i++] = *yank_str++;
 			}
@@ -5173,7 +5173,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 			tb->cx = strlen(buf);
 
 			/* Rest of original line */
-			while (*rest_ptr && i < MAX_LINELEN-1)
+			while (*rest_ptr && i < MAX_LINELEN - 1)
 			{
 				buf[i++] = *rest_ptr++;
 			}
@@ -5339,15 +5339,15 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		{
 			/* delete a return code and union two lines */
 			if (tb->cy == 0) break;
-			tb->cx = strlen(tb->lines_list[tb->cy-1]);
-			strcpy(buf, tb->lines_list[tb->cy-1]);
+			tb->cx = strlen(tb->lines_list[tb->cy - 1]);
+			strcpy(buf, tb->lines_list[tb->cy - 1]);
 			strcat(buf, tb->lines_list[tb->cy]);
-			string_free(tb->lines_list[tb->cy-1]);
+			string_free(tb->lines_list[tb->cy - 1]);
 			string_free(tb->lines_list[tb->cy]);
-			tb->lines_list[tb->cy-1] = string_make(buf);
+			tb->lines_list[tb->cy - 1] = string_make(buf);
 
-			for (i = tb->cy; tb->lines_list[i+1]; i++)
-				tb->lines_list[i] = tb->lines_list[i+1];
+			for (i = tb->cy; tb->lines_list[i + 1]; i++)
+				tb->lines_list[i] = tb->lines_list[i + 1];
 
 			tb->lines_list[i] = NULL;
 			tb->cy--;
@@ -5416,13 +5416,13 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 			search_for_object(player_ptr, tb, tb->search_o_ptr, TRUE);
 			break;
 		}
-		
+
 		if (tb->search_str && tb->search_str[0])
 		{
 			search_for_string(tb, tb->search_str, TRUE);
 			break;
 		}
-		
+
 		tb->dirty_flags |= DIRTY_NO_SEARCH;
 		break;
 
@@ -5432,7 +5432,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 			search_for_object(player_ptr, tb, tb->search_o_ptr, FALSE);
 			break;
 		}
-		
+
 		if (tb->search_str && tb->search_str[0])
 		{
 			search_for_string(tb, tb->search_str, FALSE);
@@ -5508,7 +5508,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		char expression[80];
 
 		/* Conditional Expression for Class and Race */
-		sprintf(expression, "?:[AND [EQU $RACE %s] [EQU $CLASS %s] [GEQ $LEVEL %02d]]", 
+		sprintf(expression, "?:[AND [EQU $RACE %s] [EQU $CLASS %s] [GEQ $LEVEL %02d]]",
 #ifdef JP
 			rp_ptr->E_title, cp_ptr->E_title,
 #else
@@ -5559,8 +5559,8 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		Term_erase(0, tb->cy - tb->upper + 1, tb->wid);
 
 		/* Prompt */
-		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, 
-					format(_("C:%d:<コマンドキー>: ", "C:%d:<Keypress>: "), (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
+		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW,
+			format(_("C:%d:<コマンドキー>: ", "C:%d:<Keypress>: "), (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
 
 		if (!insert_keymap_line(tb)) break;
 
@@ -5669,7 +5669,7 @@ static void insert_single_letter(text_body_type *tb, int key)
 
 		inkey_base = TRUE;
 		next = inkey();
-		if (j+2 < MAX_LINELEN)
+		if (j + 2 < MAX_LINELEN)
 		{
 			buf[j++] = (char)key;
 			buf[j++] = (char)next;
@@ -5681,7 +5681,7 @@ static void insert_single_letter(text_body_type *tb, int key)
 	else
 #endif
 	{
-		if (j+1 < MAX_LINELEN)
+		if (j + 1 < MAX_LINELEN)
 			buf[j++] = (char)key;
 		tb->cx++;
 	}
@@ -5721,7 +5721,7 @@ static int analyze_move_key(text_body_type *tb, int skey)
 	if (!(skey & SKEY_MASK)) return 0;
 
 	/* Convert from a special key code to an editor command */
-	switch(skey & ~SKEY_MOD_MASK)
+	switch (skey & ~SKEY_MOD_MASK)
 	{
 	case SKEY_DOWN:   com_id = EC_DOWN;   break;
 	case SKEY_LEFT:   com_id = EC_LEFT;   break;
@@ -5866,17 +5866,17 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 		draw_text_editor(tb);
 
 		/* Display header line */
-		prt(_("(^Q:終了 ^W:セーブして終了, ESC:メニュー, その他:入力)", 
-		      "(^Q:Quit, ^W:Save&Quit, ESC:Menu, Other:Input text)"), 0, 0);
+		prt(_("(^Q:終了 ^W:セーブして終了, ESC:メニュー, その他:入力)",
+			"(^Q:Quit, ^W:Save&Quit, ESC:Menu, Other:Input text)"), 0, 0);
 		if (!tb->mark)
 		{
 			/* Display current position */
-			prt (format("(%d,%d)", tb->cx, tb->cy), 0, 60);
+			prt(format("(%d,%d)", tb->cx, tb->cy), 0, 60);
 		}
 		else
 		{
 			/* Display current position and mark position */
-			prt (format("(%d,%d)-(%d,%d)", tb->mx, tb->my, tb->cx, tb->cy), 0, 60);
+			prt(format("(%d,%d)-(%d,%d)", tb->mx, tb->my, tb->cx, tb->cy), 0, 60);
 		}
 
 		/* Place cursor */
