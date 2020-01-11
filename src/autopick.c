@@ -200,6 +200,38 @@ static GAME_TEXT KEY_BOOTS[] = "boots";
 
 #endif /* JP */
 
+#define MAX_AUTOPICK_DEFAULT 200
+
+#define PT_DEFAULT 0
+#define PT_WITH_PNAME 1
+
+#define MAX_YANK MAX_LINELEN
+#define MAX_LINES 3000
+
+#define MARK_MARK     0x01
+#define MARK_BY_SHIFT 0x02
+
+#define LSTAT_BYPASS        0x01
+#define LSTAT_EXPRESSION    0x02
+#define LSTAT_AUTOREGISTER  0x04
+
+#define QUIT_WITHOUT_SAVE 1
+#define QUIT_AND_SAVE     2
+
+/*
+ * Dirty flag for text editor
+ */
+#define DIRTY_ALL           0x0001
+#define DIRTY_MODE          0x0004
+#define DIRTY_SCREEN        0x0008
+#define DIRTY_NOT_FOUND     0x0010
+#define DIRTY_NO_SEARCH     0x0020
+#define DIRTY_EXPRESSION    0x0040
+#define DIRTY_SKIP_INACTIVE 0x0080
+#define DIRTY_INACTIVE      0x0100
+
+#define DESCRIPT_HGT 3
+
 #define MATCH_KEY(KEY) (!strncmp(ptr, KEY, sizeof(KEY)-1)\
      ? (ptr += sizeof(KEY)-1, (' '==*ptr) ? ptr++ : 0, TRUE) : FALSE)
 #define MATCH_KEY2(KEY) (!strncmp(ptr, KEY, sizeof(KEY)-1)\
@@ -236,19 +268,396 @@ autopick_type *autopick_list = NULL; /*!< 自動拾い/破壊設定構造体の�
  */
 static object_type autopick_last_destroyed_object;
 
+/*
+ * Struct for yank buffer
+ */
+typedef struct chain_str {
+	struct chain_str *next;
+	char s[1];
+} chain_str_type;
+
+/*
+ * Data struct for text editor
+ */
+typedef struct {
+	int wid, hgt;
+	int cx, cy;
+	int upper, left;
+	int old_wid, old_hgt;
+	int old_cy;
+	int old_upper, old_left;
+	int mx, my;
+	byte mark;
+
+	object_type *search_o_ptr;
+	concptr search_str;
+	concptr last_destroyed;
+
+	chain_str_type *yank;
+	bool yank_eol;
+
+	concptr *lines_list;
+	byte states[MAX_LINES];
+
+	u16b dirty_flags;
+	int dirty_line;
+	int filename_mode;
+	int old_com_id;
+
+	bool changed;
+} text_body_type;
+
+/*
+ * Editor command id's
+ */
+#define EC_QUIT            1
+#define EC_SAVEQUIT        2
+#define EC_REVERT	       3
+#define EC_HELP            4
+#define EC_RETURN	       5
+#define EC_LEFT		       6 
+#define EC_DOWN		       7 
+#define EC_UP		       8 
+#define EC_RIGHT	       9 
+#define EC_BOL		       10
+#define EC_EOL		       11
+#define EC_PGUP		       12
+#define EC_PGDOWN	       13
+#define EC_TOP		       14
+#define EC_BOTTOM	       15
+#define EC_CUT		       16
+#define EC_COPY		       17
+#define EC_PASTE	       18
+#define EC_BLOCK	       19
+#define EC_KILL_LINE	       20
+#define EC_DELETE_CHAR	       21
+#define EC_BACKSPACE	       22
+#define EC_SEARCH_STR	       23
+#define EC_SEARCH_FORW         24
+#define EC_SEARCH_BACK         25
+#define EC_SEARCH_OBJ	       26
+#define EC_SEARCH_DESTROYED    27
+#define EC_INSERT_OBJECT       28
+#define EC_INSERT_DESTROYED    29
+#define EC_INSERT_BLOCK	       30
+#define EC_INSERT_MACRO	       31
+#define EC_INSERT_KEYMAP       32
+#define EC_CL_AUTOPICK	       33
+#define EC_CL_DESTROY	       34
+#define EC_CL_LEAVE	       35
+#define EC_CL_QUERY	       36
+#define EC_CL_NO_DISP	       37
+#define EC_OK_COLLECTING       38
+#define EC_IK_UNAWARE	       39
+#define EC_IK_UNIDENTIFIED     40
+#define EC_IK_IDENTIFIED       41
+#define EC_IK_STAR_IDENTIFIED  42
+#define EC_OK_BOOSTED	       43
+#define EC_OK_MORE_DICE	       44
+#define EC_OK_MORE_BONUS       45
+#define EC_OK_WORTHLESS	       46
+#define EC_OK_ARTIFACT	       47
+#define EC_OK_EGO	       48
+#define EC_OK_GOOD	       49
+#define EC_OK_NAMELESS	       50
+#define EC_OK_AVERAGE	       51
+#define EC_OK_RARE	       52       
+#define EC_OK_COMMON	       53
+#define EC_OK_WANTED	       54
+#define EC_OK_UNIQUE	       55
+#define EC_OK_HUMAN	       56
+#define EC_OK_UNREADABLE       57
+#define EC_OK_REALM1	       58
+#define EC_OK_REALM2	       59
+#define EC_OK_FIRST	       60
+#define EC_OK_SECOND	       61
+#define EC_OK_THIRD	       62
+#define EC_OK_FOURTH	       63
+#define EC_KK_WEAPONS	       64
+#define EC_KK_FAVORITE_WEAPONS 65
+#define EC_KK_ARMORS	       66
+#define EC_KK_MISSILES	       67
+#define EC_KK_DEVICES	       68
+#define EC_KK_LIGHTS	       69
+#define EC_KK_JUNKS	       70
+#define EC_KK_CORPSES	       71
+#define EC_KK_SPELLBOOKS       72
+#define EC_KK_SHIELDS	       73
+#define EC_KK_BOWS	       74
+#define EC_KK_RINGS	       75
+#define EC_KK_AMULETS	       76
+#define EC_KK_SUITS	       77
+#define EC_KK_CLOAKS	       78
+#define EC_KK_HELMS	       79
+#define EC_KK_GLOVES	       80
+#define EC_KK_BOOTS	       81
+
+
+ /* Manu names */
+#ifdef JP
+
+static GAME_TEXT MN_QUIT[] = "セーブ無しで終了";
+static GAME_TEXT MN_SAVEQUIT[] = "セーブして終了";
+static GAME_TEXT MN_REVERT[] = "全ての変更を破棄";
+static GAME_TEXT MN_HELP[] = "ヘルプ";
+
+static GAME_TEXT MN_MOVE[] = "カーソル移動";
+static GAME_TEXT MN_LEFT[] = "左          (←矢印キー)";
+static GAME_TEXT MN_DOWN[] = "下          (↓矢印キー)";
+static GAME_TEXT MN_UP[] = "上          (↑矢印キー)";
+static GAME_TEXT MN_RIGHT[] = "右          (→矢印キー)";
+static GAME_TEXT MN_BOL[] = "行の先頭";
+static GAME_TEXT MN_EOL[] = "行の終端";
+static GAME_TEXT MN_PGUP[] = "上のページ  (PageUpキー)";
+static GAME_TEXT MN_PGDOWN[] = "下のページ  (PageDownキー)";
+static GAME_TEXT MN_TOP[] = "1行目へ移動 (Homeキー)";
+static GAME_TEXT MN_BOTTOM[] = "最下行へ移動(Endキー)";
+
+static GAME_TEXT MN_EDIT[] = "編集";
+static GAME_TEXT MN_CUT[] = "カット";
+static GAME_TEXT MN_COPY[] = "コピー";
+static GAME_TEXT MN_PASTE[] = "ペースト";
+static GAME_TEXT MN_BLOCK[] = "選択範囲の指定";
+static GAME_TEXT MN_KILL_LINE[] = "行の残りを削除";
+static GAME_TEXT MN_DELETE_CHAR[] = "1文字削除";
+static GAME_TEXT MN_BACKSPACE[] = "バックスペース";
+static GAME_TEXT MN_RETURN[] = "改行";
+
+static GAME_TEXT MN_SEARCH[] = "検索";
+static GAME_TEXT MN_SEARCH_STR[] = "文字列で検索";
+static GAME_TEXT MN_SEARCH_FORW[] = "前方へ再検索";
+static GAME_TEXT MN_SEARCH_BACK[] = "後方へ再検索";
+static GAME_TEXT MN_SEARCH_OBJ[] = "アイテムを選択して検索";
+static GAME_TEXT MN_SEARCH_DESTROYED[] = "自動破壊されたアイテムで検索";
+
+static GAME_TEXT MN_INSERT[] = "色々挿入";
+static GAME_TEXT MN_INSERT_OBJECT[] = "選択したアイテムの名前を挿入";
+static GAME_TEXT MN_INSERT_DESTROYED[] = "自動破壊されたアイテムの名前を挿入";
+static GAME_TEXT MN_INSERT_BLOCK[] = "条件分岐ブロックの例を挿入";
+static GAME_TEXT MN_INSERT_MACRO[] = "マクロ定義を挿入";
+static GAME_TEXT MN_INSERT_KEYMAP[] = "キーマップ定義を挿入";
+
+static GAME_TEXT MN_COMMAND_LETTER[] = "拾い/破壊/放置の選択";
+static GAME_TEXT MN_CL_AUTOPICK[] = "「 」 (自動拾い)";
+static GAME_TEXT MN_CL_DESTROY[] = "「!」 (自動破壊)";
+static GAME_TEXT MN_CL_LEAVE[] = "「~」 (放置)";
+static GAME_TEXT MN_CL_QUERY[] = "「;」 (確認して拾う)";
+static GAME_TEXT MN_CL_NO_DISP[] = "「(」 (マップコマンドで表示しない)";
+
+static GAME_TEXT MN_ADJECTIVE_GEN[] = "形容詞(一般)の選択";
+static GAME_TEXT MN_RARE[] = "レアな (装備)";
+static GAME_TEXT MN_COMMON[] = "ありふれた (装備)";
+
+static GAME_TEXT MN_ADJECTIVE_SPECIAL[] = "形容詞(特殊)の選択";
+static GAME_TEXT MN_BOOSTED[] = "ダイス目の違う (武器)";
+static GAME_TEXT MN_MORE_DICE[] = "ダイス目 # 以上の (武器)";
+static GAME_TEXT MN_MORE_BONUS[] = "修正値 # 以上の (指輪等)";
+static GAME_TEXT MN_WANTED[] = "賞金首の (死体)";
+static GAME_TEXT MN_UNIQUE[] = "ユニーク・モンスターの (死体)";
+static GAME_TEXT MN_HUMAN[] = "人間の (死体)";
+static GAME_TEXT MN_UNREADABLE[] = "読めない (魔法書)";
+static GAME_TEXT MN_REALM1[] = "第一領域の (魔法書)";
+static GAME_TEXT MN_REALM2[] = "第二領域の (魔法書)";
+static GAME_TEXT MN_FIRST[] = "1冊目の (魔法書)";
+static GAME_TEXT MN_SECOND[] = "2冊目の (魔法書)";
+static GAME_TEXT MN_THIRD[] = "3冊目の (魔法書)";
+static GAME_TEXT MN_FOURTH[] = "4冊目の (魔法書)";
+
+static GAME_TEXT MN_NOUN[] = "名詞の選択";
+
+#else
+
+static GAME_TEXT MN_QUIT[] = "Quit without save";
+static GAME_TEXT MN_SAVEQUIT[] = "Save & Quit";
+static GAME_TEXT MN_REVERT[] = "Revert all changes";
+static GAME_TEXT MN_HELP[] = "Help";
+
+static GAME_TEXT MN_MOVE[] = "Move cursor";
+static GAME_TEXT MN_LEFT[] = "Left     (Left Arrow key)";
+static GAME_TEXT MN_DOWN[] = "Down     (Down Arrow key)";
+static GAME_TEXT MN_UP[] = "Up       (Up Arrow key)";
+static GAME_TEXT MN_RIGHT[] = "Right    (Right Arrow key)";
+static GAME_TEXT MN_BOL[] = "Beggining of line";
+static GAME_TEXT MN_EOL[] = "End of line";
+static GAME_TEXT MN_PGUP[] = "Page up  (PageUp key)";
+static GAME_TEXT MN_PGDOWN[] = "Page down(PageDown key)";
+static GAME_TEXT MN_TOP[] = "Top      (Home key)";
+static GAME_TEXT MN_BOTTOM[] = "Bottom   (End key)";
+
+static GAME_TEXT MN_EDIT[] = "Edit";
+static GAME_TEXT MN_CUT[] = "Cut";
+static GAME_TEXT MN_COPY[] = "Copy";
+static GAME_TEXT MN_PASTE[] = "Paste";
+static GAME_TEXT MN_BLOCK[] = "Select block";
+static GAME_TEXT MN_KILL_LINE[] = "Kill rest of line";
+static GAME_TEXT MN_DELETE_CHAR[] = "Delete character";
+static GAME_TEXT MN_BACKSPACE[] = "Backspace";
+static GAME_TEXT MN_RETURN[] = "Return";
+
+static GAME_TEXT MN_SEARCH[] = "Search";
+static GAME_TEXT MN_SEARCH_STR[] = "Search by string";
+static GAME_TEXT MN_SEARCH_FORW[] = "Search forward";
+static GAME_TEXT MN_SEARCH_BACK[] = "Search backward";
+static GAME_TEXT MN_SEARCH_OBJ[] = "Search by inventory list object";
+static GAME_TEXT MN_SEARCH_DESTROYED[] = "Search by destroyed object";
+
+static GAME_TEXT MN_INSERT[] = "Insert...";
+static GAME_TEXT MN_INSERT_OBJECT[] = "Insert name of choosen object";
+static GAME_TEXT MN_INSERT_DESTROYED[] = "Insert name of destroyed object";
+static GAME_TEXT MN_INSERT_BLOCK[] = "Insert conditional block";
+static GAME_TEXT MN_INSERT_MACRO[] = "Insert a macro definition";
+static GAME_TEXT MN_INSERT_KEYMAP[] = "Insert a keymap definition";
+
+static GAME_TEXT MN_COMMAND_LETTER[] = "Command letter";
+static GAME_TEXT MN_CL_AUTOPICK[] = "' ' (Auto pick)";
+static GAME_TEXT MN_CL_DESTROY[] = "'!' (Auto destroy)";
+static GAME_TEXT MN_CL_LEAVE[] = "'~' (Leave it on the floor)";
+static GAME_TEXT MN_CL_QUERY[] = "';' (Query to pick up)";
+static GAME_TEXT MN_CL_NO_DISP[] = "'(' (No display on the large map)";
+
+static GAME_TEXT MN_ADJECTIVE_GEN[] = "Adjective (general)";
+static GAME_TEXT MN_RARE[] = "rare (equipments)";
+static GAME_TEXT MN_COMMON[] = "common (equipments)";
+
+static GAME_TEXT MN_ADJECTIVE_SPECIAL[] = "Adjective (special)";
+static GAME_TEXT MN_BOOSTED[] = "dice boosted (weapons)";
+static GAME_TEXT MN_MORE_DICE[] = "more than # dice (weapons)";
+static GAME_TEXT MN_MORE_BONUS[] = "more bonus than # (rings etc.)";
+static GAME_TEXT MN_WANTED[] = "wanted (corpse)";
+static GAME_TEXT MN_UNIQUE[] = "unique (corpse)";
+static GAME_TEXT MN_HUMAN[] = "human (corpse)";
+static GAME_TEXT MN_UNREADABLE[] = "unreadable (spellbooks)";
+static GAME_TEXT MN_REALM1[] = "realm1 (spellbooks)";
+static GAME_TEXT MN_REALM2[] = "realm2 (spellbooks)";
+static GAME_TEXT MN_FIRST[] = "first (spellbooks)";
+static GAME_TEXT MN_SECOND[] = "second (spellbooks)";
+static GAME_TEXT MN_THIRD[] = "third (spellbooks)";
+static GAME_TEXT MN_FOURTH[] = "fourth (spellbooks)";
+
+static GAME_TEXT MN_NOUN[] = "Keywords (noun)";
+
+#endif
+
+
+typedef struct {
+	concptr name;
+	int level;
+	int key;
+	int com_id;
+} command_menu_type;
+
+
+command_menu_type menu_data[] =
+{
+	{MN_HELP, 0, -1, EC_HELP},
+	{MN_QUIT, 0, KTRL('q'), EC_QUIT},
+	{MN_SAVEQUIT, 0, KTRL('w'), EC_SAVEQUIT},
+	{MN_REVERT, 0, KTRL('z'), EC_REVERT},
+
+	{MN_EDIT, 0, -1, -1},
+	{MN_CUT, 1, KTRL('x'), EC_CUT},
+	{MN_COPY, 1, KTRL('c'), EC_COPY},
+	{MN_PASTE, 1, KTRL('v'), EC_PASTE},
+	{MN_BLOCK, 1, KTRL('g'), EC_BLOCK},
+	{MN_KILL_LINE, 1, KTRL('k'), EC_KILL_LINE},
+	{MN_DELETE_CHAR, 1, KTRL('d'), EC_DELETE_CHAR},
+	{MN_BACKSPACE, 1, KTRL('h'), EC_BACKSPACE},
+	{MN_RETURN, 1, KTRL('j'), EC_RETURN},
+	{MN_RETURN, 1, KTRL('m'), EC_RETURN},
+
+	{MN_SEARCH, 0, -1, -1},
+	{MN_SEARCH_STR, 1, KTRL('s'), EC_SEARCH_STR},
+	{MN_SEARCH_FORW, 1, -1, EC_SEARCH_FORW},
+	{MN_SEARCH_BACK, 1, KTRL('r'), EC_SEARCH_BACK},
+	{MN_SEARCH_OBJ, 1, KTRL('y'), EC_SEARCH_OBJ},
+	{MN_SEARCH_DESTROYED, 1, -1, EC_SEARCH_DESTROYED},
+
+	{MN_MOVE, 0, -1, -1},
+	{MN_LEFT, 1, KTRL('b'), EC_LEFT},
+	{MN_DOWN, 1, KTRL('n'), EC_DOWN},
+	{MN_UP, 1, KTRL('p'), EC_UP},
+	{MN_RIGHT, 1, KTRL('f'), EC_RIGHT},
+	{MN_BOL, 1, KTRL('a'), EC_BOL},
+	{MN_EOL, 1, KTRL('e'), EC_EOL},
+	{MN_PGUP, 1, KTRL('o'), EC_PGUP},
+	{MN_PGDOWN, 1, KTRL('l'), EC_PGDOWN},
+	{MN_TOP, 1, KTRL('t'), EC_TOP},
+	{MN_BOTTOM, 1, KTRL('u'), EC_BOTTOM},
+
+	{MN_INSERT, 0, -1, -1},
+	{MN_INSERT_OBJECT, 1, KTRL('i'), EC_INSERT_OBJECT},
+	{MN_INSERT_DESTROYED, 1, -1, EC_INSERT_DESTROYED},
+	{MN_INSERT_BLOCK, 1, -1, EC_INSERT_BLOCK},
+	{MN_INSERT_MACRO, 1, -1, EC_INSERT_MACRO},
+	{MN_INSERT_KEYMAP, 1, -1, EC_INSERT_KEYMAP},
+
+	{MN_ADJECTIVE_GEN, 0, -1, -1},
+	{KEY_UNAWARE, 1, -1, EC_IK_UNAWARE},
+	{KEY_UNIDENTIFIED, 1, -1, EC_IK_UNIDENTIFIED},
+	{KEY_IDENTIFIED, 1, -1, EC_IK_IDENTIFIED},
+	{KEY_STAR_IDENTIFIED, 1, -1, EC_IK_STAR_IDENTIFIED},
+	{KEY_COLLECTING, 1, -1, EC_OK_COLLECTING},
+	{KEY_ARTIFACT, 1, -1, EC_OK_ARTIFACT},
+	{KEY_EGO, 1, -1, EC_OK_EGO},
+	{KEY_GOOD, 1, -1, EC_OK_GOOD},
+	{KEY_NAMELESS, 1, -1, EC_OK_NAMELESS},
+	{KEY_AVERAGE, 1, -1, EC_OK_AVERAGE},
+	{KEY_WORTHLESS, 1, -1, EC_OK_WORTHLESS},
+	{MN_RARE, 1, -1, EC_OK_RARE},
+	{MN_COMMON, 1, -1, EC_OK_COMMON},
+
+	{MN_ADJECTIVE_SPECIAL, 0, -1, -1},
+	{MN_BOOSTED, 1, -1, EC_OK_BOOSTED},
+	{MN_MORE_DICE, 1, -1, EC_OK_MORE_DICE},
+	{MN_MORE_BONUS, 1, -1, EC_OK_MORE_BONUS},
+	{MN_WANTED, 1, -1, EC_OK_WANTED},
+	{MN_UNIQUE, 1, -1, EC_OK_UNIQUE},
+	{MN_HUMAN, 1, -1, EC_OK_HUMAN},
+	{MN_UNREADABLE, 1, -1, EC_OK_UNREADABLE},
+	{MN_REALM1, 1, -1, EC_OK_REALM1},
+	{MN_REALM2, 1, -1, EC_OK_REALM2},
+	{MN_FIRST, 1, -1, EC_OK_FIRST},
+	{MN_SECOND, 1, -1, EC_OK_SECOND},
+	{MN_THIRD, 1, -1, EC_OK_THIRD},
+	{MN_FOURTH, 1, -1, EC_OK_FOURTH},
+
+	{MN_NOUN, 0, -1, -1},
+	{KEY_WEAPONS, 1, -1, EC_KK_WEAPONS},
+	{KEY_FAVORITE_WEAPONS, 1, -1, EC_KK_FAVORITE_WEAPONS},
+	{KEY_ARMORS, 1, -1, EC_KK_ARMORS},
+	{KEY_MISSILES, 1, -1, EC_KK_MISSILES},
+	{KEY_DEVICES, 1, -1, EC_KK_DEVICES},
+	{KEY_LIGHTS, 1, -1, EC_KK_LIGHTS},
+	{KEY_JUNKS, 1, -1, EC_KK_JUNKS},
+	{KEY_CORPSES, 1, -1, EC_KK_CORPSES},
+	{KEY_SPELLBOOKS, 1, -1, EC_KK_SPELLBOOKS},
+	{KEY_SHIELDS, 1, -1, EC_KK_SHIELDS},
+	{KEY_BOWS, 1, -1, EC_KK_BOWS},
+	{KEY_RINGS, 1, -1, EC_KK_RINGS},
+	{KEY_AMULETS, 1, -1, EC_KK_AMULETS},
+	{KEY_SUITS, 1, -1, EC_KK_SUITS},
+	{KEY_CLOAKS, 1, -1, EC_KK_CLOAKS},
+	{KEY_HELMS, 1, -1, EC_KK_HELMS},
+	{KEY_GLOVES, 1, -1, EC_KK_GLOVES},
+	{KEY_BOOTS, 1, -1, EC_KK_BOOTS},
+
+	{MN_COMMAND_LETTER, 0, -1, -1},
+	{MN_CL_AUTOPICK, 1, -1, EC_CL_AUTOPICK},
+	{MN_CL_DESTROY, 1, -1, EC_CL_DESTROY},
+	{MN_CL_LEAVE, 1, -1, EC_CL_LEAVE},
+	{MN_CL_QUERY, 1, -1, EC_CL_QUERY},
+	{MN_CL_NO_DISP, 1, -1, EC_CL_NO_DISP},
+
+	{MN_DELETE_CHAR, -1, 0x7F, EC_DELETE_CHAR},
+
+	{NULL, -1, -1, 0}
+};
 
 /*
  * A function to create new entry
  */
 static bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_default)
 {
-	concptr insc;
-	int i;
-	byte act = 0;
-	char buf[MAX_LINELEN];
-	concptr prev_ptr, ptr, old_ptr;
-	int prev_flg;
-
 	if (str[0] && str[1] == ':') switch (str[0])
 	{
 	case '?': case '%':
@@ -260,7 +669,7 @@ static bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_def
 	entry->dice = 0;
 	entry->bonus = 0;
 
-	act = DO_AUTOPICK | DO_DISPLAY;
+	byte act = DO_AUTOPICK | DO_DISPLAY;
 	while (TRUE)
 	{
 		if ((act & DO_AUTOPICK) && *str == '!')
@@ -268,30 +677,39 @@ static bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_def
 			act &= ~DO_AUTOPICK;
 			act |= DO_AUTODESTROY;
 			str++;
+			continue;
 		}
-		else if ((act & DO_AUTOPICK) && *str == '~')
+		
+		if ((act & DO_AUTOPICK) && *str == '~')
 		{
 			act &= ~DO_AUTOPICK;
 			act |= DONT_AUTOPICK;
 			str++;
+			continue;
 		}
-		else if ((act & DO_AUTOPICK) && *str == ';')
+		
+		if ((act & DO_AUTOPICK) && *str == ';')
 		{
 			act &= ~DO_AUTOPICK;
 			act |= DO_QUERY_AUTOPICK;
 			str++;
+			continue;
 		}
-		else if ((act & DO_DISPLAY) && *str == '(')
+		
+		if ((act & DO_DISPLAY) && *str == '(')
 		{
 			act &= ~DO_DISPLAY;
 			str++;
+			continue;
 		}
-		else
-			break;
+		
+		break;
 	}
 
 	/* don't mind upper or lower case */
-	insc = NULL;
+	concptr insc = NULL;
+	char buf[MAX_LINELEN];
+	int i;
 	for (i = 0; *str; i++)
 	{
 		char c = *str++;
@@ -315,6 +733,7 @@ static bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_def
 
 		buf[i] = c;
 	}
+
 	buf[i] = '\0';
 
 	/* Skip empty line unless allow_default */
@@ -323,8 +742,9 @@ static bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_def
 	/* Skip comment line */
 	if (*buf == 0 && insc) return FALSE;
 
+	concptr prev_ptr, ptr;
 	ptr = prev_ptr = buf;
-	old_ptr = NULL;
+	concptr old_ptr = NULL;
 
 	while (old_ptr != ptr)
 	{
@@ -415,7 +835,7 @@ static bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_def
 	}
 
 	/* Not yet found any noun */
-	prev_flg = -1;
+	int prev_flg = -1;
 
 	if (MATCH_KEY2(KEY_ARTIFACT)) ADD_FLG_NOUN(FLG_ARTIFACT);
 
@@ -700,24 +1120,23 @@ static void autopick_entry_from_object(player_type *player_ptr, autopick_type *e
 		ADD_FLG(FLG_BOOTS);
 
 	/* Prepare the object description */
-	if (name)
+	if (!name)
 	{
-		GAME_TEXT o_name[MAX_NLEN];
-
-		object_desc(o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL | OD_NAME_ONLY));
-
-		/*
-		 * If necessary, add a '^' which indicates the
-		 * beginning of line.
-		 */
-		sprintf(name_str, "%s%s", bol_mark ? "^" : "", o_name);
+		str_tolower(name_str);
+		entry->name = string_make(name_str);
+		return;
 	}
 
-	/* Register the name in lowercase */
+	GAME_TEXT o_name[MAX_NLEN];
+	object_desc(o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL | OD_NAME_ONLY));
+
+	/*
+	 * If necessary, add a '^' which indicates the
+	 * beginning of line.
+	 */
+	sprintf(name_str, "%s%s", bol_mark ? "^" : "", o_name);
 	str_tolower(name_str);
 	entry->name = string_make(name_str);
-
-	return;
 }
 
 
@@ -732,8 +1151,6 @@ static void autopick_free_entry(autopick_type *entry)
 	entry->insc = NULL;
 }
 
-
-#define MAX_AUTOPICK_DEFAULT 200
 
 /*
  * Initialize the autopick
@@ -763,9 +1180,6 @@ static void init_autopick(void)
 }
 
 
-#define PT_DEFAULT 0
-#define PT_WITH_PNAME 1
-
 /*
  *  Get file name for autopick preference
  */
@@ -793,7 +1207,6 @@ static concptr pickpref_filename(player_type *player_ptr, int filename_mode)
 void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 {
 	GAME_TEXT buf[80];
-	errr err;
 
 	/* Free old entries */
 	init_autopick();
@@ -802,16 +1215,15 @@ void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 	my_strcpy(buf, pickpref_filename(player_ptr, PT_WITH_PNAME), sizeof(buf));
 
 	/* Load the file */
-	err = process_autopick_file(buf);
+	errr err = process_autopick_file(buf);
 
 	if (err == 0 && disp_mes)
 	{
-		/* Success */
 		msg_format(_("%sを読み込みました。", "Loaded '%s'."), buf);
 	}
 
 	/* No file found */
-	if (0 > err)
+	if (err < 0)
 	{
 		/* Use default name */
 		my_strcpy(buf, pickpref_filename(player_ptr, PT_DEFAULT), sizeof(buf));
@@ -886,21 +1298,24 @@ errr process_autopick_file_command(char *buf)
 		if (iswspace(buf[i]) && buf[i] != ' ')
 			break;
 	}
+
 	buf[i] = 0;
 	
 	if (!autopick_new_entry(entry, buf, FALSE)) return 0;
 
 	/* Already has the same entry? */ 
 	for(i = 0; i < max_autopick; i++)
-		if(!strcmp(entry->name, autopick_list[i].name)
-		   && entry->flag[0] == autopick_list[i].flag[0]
-		   && entry->flag[1] == autopick_list[i].flag[1]
-		   && entry->dice == autopick_list[i].dice
-		   && entry->bonus == autopick_list[i].bonus)
+	{
+		if (!strcmp(entry->name, autopick_list[i].name)
+			&& entry->flag[0] == autopick_list[i].flag[0]
+			&& entry->flag[1] == autopick_list[i].flag[1]
+			&& entry->dice == autopick_list[i].dice
+			&& entry->bonus == autopick_list[i].bonus)
 		{
 			autopick_free_entry(entry);
 			return 0;
 		}
+	}
 
 	add_autopick_list(entry);
 	return 0;
@@ -913,15 +1328,13 @@ errr process_autopick_file_command(char *buf)
 concptr autopick_line_from_entry(autopick_type *entry)
 {
 	char buf[MAX_LINELEN];
-	char *ptr;
-	bool sepa_flag = TRUE;
-
 	*buf = '\0';
 	if (!(entry->action & DO_DISPLAY)) strcat(buf, "(");
 	if (entry->action & DO_QUERY_AUTOPICK) strcat(buf, ";");
 	if (entry->action & DO_AUTODESTROY) strcat(buf, "!");
 	if (entry->action & DONT_AUTOPICK) strcat(buf, "~");
 
+	char *ptr;
 	ptr = buf;
 
 	if (IS_FLG(FLG_ALL)) ADD_KEY(KEY_ALL);
@@ -966,6 +1379,7 @@ concptr autopick_line_from_entry(autopick_type *entry)
 
 	if (IS_FLG(FLG_ARTIFACT)) ADD_KEY(KEY_ARTIFACT);
 
+	bool sepa_flag = TRUE;
 	if (IS_FLG(FLG_ITEMS)) ADD_KEY2(KEY_ITEMS);
 	else if (IS_FLG(FLG_WEAPONS)) ADD_KEY2(KEY_WEAPONS);
 	else if (IS_FLG(FLG_FAVORITE_WEAPONS)) ADD_KEY2(KEY_FAVORITE_WEAPONS);
@@ -994,11 +1408,10 @@ concptr autopick_line_from_entry(autopick_type *entry)
 
 	if (entry->name && entry->name[0])
 	{
-		int i, j = 0;
-
 		if (sepa_flag) strcat(buf, ":");
 
-		i = strlen(buf);
+		int i = strlen(buf);
+		int j = 0;
 		while (entry->name[j] && i < MAX_LINELEN - 2 - 1)
 		{
 #ifdef JP
@@ -1010,23 +1423,22 @@ concptr autopick_line_from_entry(autopick_type *entry)
 		buf[i] = '\0';
 	}
 
-	if (entry->insc)
-	{
-		int i, j = 0;
-		strcat(buf, "#");
-		i = strlen(buf);
+	if (!entry->insc) return string_make(buf);
 
-		while (entry->insc[j] && i < MAX_LINELEN - 2)
-		{
+	int i, j = 0;
+	strcat(buf, "#");
+	i = strlen(buf);
+
+	while (entry->insc[j] && i < MAX_LINELEN - 2)
+	{
 #ifdef JP
-			if (iskanji(entry->insc[j]))
-				buf[i++] = entry->insc[j++];
-#endif
+		if (iskanji(entry->insc[j]))
 			buf[i++] = entry->insc[j++];
-		}
-		buf[i] = '\0';
+#endif
+		buf[i++] = entry->insc[j++];
 	}
 
+	buf[i] = '\0';
 	return string_make(buf);
 }
 
@@ -1037,10 +1449,7 @@ concptr autopick_line_from_entry(autopick_type *entry)
 static concptr autopick_line_from_entry_kill(autopick_type *entry)
 {
 	concptr ptr = autopick_line_from_entry(entry);
-
-	/* Free memory for original entry */
 	autopick_free_entry(entry);
-
 	return ptr;
 }
 
@@ -1051,7 +1460,6 @@ static concptr autopick_line_from_entry_kill(autopick_type *entry)
  */
 static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopick_type *entry, concptr o_name)
 {
-	int j;
 	concptr ptr = entry->name;
 
 	/*** Unaware items ***/
@@ -1450,7 +1858,7 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
 	if (!IS_FLG(FLG_COLLECTING)) return TRUE;
 
 	/* Check if there is a same item */
-	for (j = 0; j < INVEN_PACK; j++)
+	for (int j = 0; j < INVEN_PACK; j++)
 	{
 		/*
 		 * 'Collecting' means the item must be absorbed 
@@ -1462,7 +1870,6 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
 			return TRUE;
 	}
 
-	/* Not collecting */
 	return FALSE;
 }
 
@@ -1473,7 +1880,6 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
  */
 int is_autopick(player_type *player_ptr, object_type *o_ptr)
 {
-	int i;
 	GAME_TEXT o_name[MAX_NLEN];
 
 	if (o_ptr->tval == TV_GOLD) return -1;
@@ -1485,14 +1891,13 @@ int is_autopick(player_type *player_ptr, object_type *o_ptr)
 	str_tolower(o_name);
 
 	/* Look for a matching entry in the list */	
-	for (i=0; i < max_autopick; i++)
+	for (int i = 0; i < max_autopick; i++)
 	{
 		autopick_type *entry = &autopick_list[i];
 
 		if (is_autopick_aux(player_ptr, o_ptr, entry, o_name)) return i;
 	}
 
-	/* No matching entry */
 	return -1;
 }
 
@@ -1733,60 +2138,56 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 		/* Item index for floor -1,-2,-3,...  */
 		auto_inscribe_item(player_ptr, o_ptr, idx);
 
-		if (idx >= 0 &&
-			(autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)))
-		{
-			disturb(player_ptr, FALSE, FALSE);
-
-			if (!inven_carry_okay(o_ptr))
-			{
-				GAME_TEXT o_name[MAX_NLEN];
-
-				object_desc(o_name, o_ptr, 0);
-
-				msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
-				/* Hack - remember that the item has given a message here. */
-				o_ptr->marked |= OM_NOMSG;
-
-				continue;
-			}
-			else if (autopick_list[idx].action & DO_QUERY_AUTOPICK)
-			{
-				char out_val[MAX_NLEN+20];
-				GAME_TEXT o_name[MAX_NLEN];
-
-				if (o_ptr->marked & OM_NO_QUERY)
-				{
-					/* Already answered as 'No' */
-					continue;
-				}
-
-				object_desc(o_name, o_ptr, 0);
-
-				sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
-
-				if (!get_check(out_val))
-				{
-					/* Hack - remember that the item has given a message here. */
-					o_ptr->marked |= (OM_NOMSG | OM_NO_QUERY);
-					continue;
-				}
-
-			}
-			py_pickup_aux(player_ptr, this_o_idx);
-		}
-		
-		/*
-		 * Do auto-destroy;
-		 * When always_pickup is 'yes', we disable
-		 * auto-destroyer from autopick function, and do only
-		 * easy-auto-destroyer.
-		 */
-		else
+		bool is_auto_pickup = idx >= 0;
+		is_auto_pickup &= autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK);
+		if (!is_autopick)
 		{
 			auto_destroy_item(player_ptr, o_ptr, idx);
+			continue;
 		}
-	} /* for () */
+		
+		disturb(player_ptr, FALSE, FALSE);
+
+		if (!inven_carry_okay(o_ptr))
+		{
+			GAME_TEXT o_name[MAX_NLEN];
+
+			object_desc(o_name, o_ptr, 0);
+
+			msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
+			/* Hack - remember that the item has given a message here. */
+			o_ptr->marked |= OM_NOMSG;
+			continue;
+		}
+		
+		if (!(autopick_list[idx].action & DO_QUERY_AUTOPICK))
+		{
+			py_pickup_aux(player_ptr, this_o_idx);
+			continue;
+		}
+
+		char out_val[MAX_NLEN + 20];
+		GAME_TEXT o_name[MAX_NLEN];
+
+		if (o_ptr->marked & OM_NO_QUERY)
+		{
+			/* Already answered as 'No' */
+			continue;
+		}
+
+		object_desc(o_name, o_ptr, 0);
+
+		sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
+
+		if (!get_check(out_val))
+		{
+			/* Hack - remember that the item has given a message here. */
+			o_ptr->marked |= OM_NOMSG | OM_NO_QUERY;
+			continue;
+		}
+
+		py_pickup_aux(player_ptr, this_o_idx);
+	}
 }
 
 
@@ -1833,38 +2234,26 @@ static bool clear_auto_register(player_type *player_ptr)
 		return FALSE;
 	}
 
-	
-	/* Loop for every line */
 	while (TRUE)
 	{
-		/* Read a line */
 		if (my_fgets(pref_fff, buf, sizeof(buf))) break;
 
 		if (autoregister)
 		{
-			/* Delete auto-registered line */
-
-			/* Count auto-destroy preference lines */
 			if (buf[0] != '#' && buf[0] != '?') num++;
+			continue;
 		}
 
-		/* We are looking for auto-registered line */
+		if (streq(buf, autoregister_header))
+		{
+			autoregister = TRUE;
+		}
 		else
 		{
-			if (streq(buf, autoregister_header))
-			{
-				/* Delete all further lines */
-				autoregister = TRUE;
-			}
-			else
-			{
-				/* Copy orginally lines */
-				fprintf(tmp_fff, "%s\n", buf);
-			}
+			fprintf(tmp_fff, "%s\n", buf);
 		}
 	}
 
-	/* Close files */
 	my_fclose(pref_fff);
 	my_fclose(tmp_fff);
 
@@ -1885,12 +2274,8 @@ static bool clear_auto_register(player_type *player_ptr)
 		}
 	}
 
-
-	/* If there are some changes, overwrite the original file with new one */
 	if (autoregister)
 	{
-		/* Copy contents of temporary file */
-
 		tmp_fff = my_fopen(tmp_file, "r");
 		pref_fff = my_fopen(pref_file, "w");
 
@@ -1901,9 +2286,7 @@ static bool clear_auto_register(player_type *player_ptr)
 		my_fclose(tmp_fff);
 	}
 
-	/* Kill the temporary file */
 	fd_kill(tmp_file);
-
 	return okay;
 }
 
@@ -1949,7 +2332,6 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 
 		return FALSE;
 	}
-
 
 	if (!player_ptr->autopick_autoregister)
 	{
@@ -2035,74 +2417,6 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 	return TRUE;
 }
 
-
-/********  Auto-picker/destroyer editor  **********/
-
-#define MAX_YANK MAX_LINELEN
-#define MAX_LINES 3000
-
-#define MARK_MARK     0x01
-#define MARK_BY_SHIFT 0x02
-
-#define LSTAT_BYPASS        0x01
-#define LSTAT_EXPRESSION    0x02
-#define LSTAT_AUTOREGISTER  0x04
-
-#define QUIT_WITHOUT_SAVE 1
-#define QUIT_AND_SAVE     2
-
-/* 
- * Struct for yank buffer
- */
-typedef struct chain_str {
-	struct chain_str *next;
-	char s[1];
-} chain_str_type;
-
-
-/*
- * Data struct for text editor
- */
-typedef struct {
-	int wid, hgt;
-	int cx, cy;
-	int upper, left;
-	int old_wid, old_hgt;
-	int old_cy;
-	int old_upper, old_left;
-	int mx, my;
-	byte mark;
-
-	object_type *search_o_ptr;
-	concptr search_str;
-	concptr last_destroyed;
-
-	chain_str_type *yank;
-	bool yank_eol;
-
-	concptr *lines_list;
-	byte states[MAX_LINES];
-
-	u16b dirty_flags;
-	int dirty_line;
-	int filename_mode;
-	int old_com_id;
-
-	bool changed;
-} text_body_type;
-
-
-/*
- * Dirty flag for text editor
- */
-#define DIRTY_ALL           0x0001
-#define DIRTY_MODE          0x0004
-#define DIRTY_SCREEN        0x0008
-#define DIRTY_NOT_FOUND     0x0010
-#define DIRTY_NO_SEARCH     0x0020
-#define DIRTY_EXPRESSION    0x0040
-#define DIRTY_SKIP_INACTIVE 0x0080
-#define DIRTY_INACTIVE      0x0100
 
 /*
  * Describe which kind of object is Auto-picked/destroyed
@@ -2757,26 +3071,23 @@ static concptr *read_text_lines(concptr filename)
 	char buf[1024];
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-		fff = my_fopen(buf, "r");
+	fff = my_fopen(buf, "r");
+	if (!fff) return NULL;
 
-	if (fff)
+	/* Allocate list of pointers */
+	C_MAKE(lines_list, MAX_LINES, concptr);
+
+	/* Parse it */
+	while (my_fgets(fff, buf, sizeof(buf)) == 0)
 	{
-		/* Allocate list of pointers */
-		C_MAKE(lines_list, MAX_LINES, concptr);
-
-		/* Parse it */
-		while (0 == my_fgets(fff, buf, sizeof(buf)))
-		{
-			lines_list[lines++] = string_make(buf);
-			if (lines >= MAX_LINES - 1) break;
-		}
-		if (lines == 0)
-			lines_list[0] = string_make("");
-
-		my_fclose(fff);
+		lines_list[lines++] = string_make(buf);
+		if (lines >= MAX_LINES - 1) break;
 	}
 
-	if (!fff) return NULL;
+	if (lines == 0)
+		lines_list[0] = string_make("");
+
+	my_fclose(fff);
 	return lines_list;
 }
 
@@ -2793,19 +3104,20 @@ static void prepare_default_pickpref(player_type *player_ptr)
 		NULL
 	};
 
-	char buf[1024];
-	FILE *pref_fp;
-	FILE *user_fp;
-	int i;
 	concptr filename = pickpref_filename(player_ptr, PT_DEFAULT);
 
 	/* Display messages */
-	for (i = 0; messages[i]; i++) msg_print(messages[i]);
+	for (int i = 0; messages[i]; i++)
+	{
+		msg_print(messages[i]);
+	}
+
 	msg_print(NULL);
 
-
 	/* Open new file */
+	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
+	FILE *user_fp;
 	user_fp = my_fopen(buf, "w");
 
 	/* Failed */
@@ -2813,15 +3125,16 @@ static void prepare_default_pickpref(player_type *player_ptr)
 
 	/* Write header messages for a notification */
 	fprintf(user_fp, "#***\n");
-	for (i = 0; messages[i]; i++)
+	for (int i = 0; messages[i]; i++)
 	{
 		fprintf(user_fp, "#***  %s\n", messages[i]);
 	}
-	fprintf(user_fp, "#***\n\n\n");
 
+	fprintf(user_fp, "#***\n\n\n");
 
 	/* Open the default file */
 	path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, filename);
+	FILE *pref_fp;
 	pref_fp = my_fopen(buf, "r");
 
 	/* Failed */
@@ -2833,7 +3146,9 @@ static void prepare_default_pickpref(player_type *player_ptr)
 
 	/* Copy the contents of default file */
 	while (!my_fgets(pref_fp, buf, sizeof(buf)))
+	{
 		fprintf(user_fp, "%s\n", buf);
+	}
 
 	my_fclose(user_fp);
 	my_fclose(pref_fp);
@@ -2845,17 +3160,15 @@ static void prepare_default_pickpref(player_type *player_ptr)
  */
 static concptr *read_pickpref_text_lines(player_type *player_ptr, int *filename_mode_p)
 {
-	char buf[1024];
-	concptr *lines_list;
-
 	/* Try a filename with player name */
 	*filename_mode_p = PT_WITH_PNAME;
+	char buf[1024];
 	strcpy(buf, pickpref_filename(player_ptr, *filename_mode_p));
+	concptr *lines_list;
 	lines_list = read_text_lines(buf);
 
 	if (!lines_list)
 	{
-		/* Use default name */
 		*filename_mode_p = PT_DEFAULT;
 		strcpy(buf, pickpref_filename(player_ptr, *filename_mode_p));
 		lines_list = read_text_lines(buf);
@@ -2863,21 +3176,16 @@ static concptr *read_pickpref_text_lines(player_type *player_ptr, int *filename_
 
 	if (!lines_list)
 	{
-		/* There is no preference file in the user directory */
-
-		/* Copy the default autopick file to the user directory */
 		prepare_default_pickpref(player_ptr);
-
-		/* Use default name again */
 		lines_list = read_text_lines(buf);
 	}
 
 	if (!lines_list)
 	{
-		/* Allocate list of pointers */
 		C_MAKE(lines_list, MAX_LINES, concptr);
 		lines_list[0] = string_make("");
 	}
+
 	return lines_list;
 }
 
@@ -2887,21 +3195,18 @@ static concptr *read_pickpref_text_lines(player_type *player_ptr, int *filename_
  */
 static bool write_text_lines(concptr filename, concptr *lines_list)
 {
-	FILE *fff;
-
-	int lines = 0;
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, filename);
-		fff = my_fopen(buf, "w");
-	if (fff)
+	FILE *fff;
+	fff = my_fopen(buf, "w");
+	if (!fff) return FALSE;
+	
+	for (int lines = 0; lines_list[lines]; lines++)
 	{
-		for (lines = 0; lines_list[lines]; lines++)
-			my_fputs(fff, lines_list[lines], 1024);
-
-		my_fclose(fff);
+		my_fputs(fff, lines_list[lines], 1024);
 	}
 
-	if (!fff) return FALSE;
+	my_fclose(fff);
 	return TRUE;
 }
 
@@ -2911,10 +3216,10 @@ static bool write_text_lines(concptr filename, concptr *lines_list)
  */
 static void free_text_lines(concptr *lines_list)
 {
-	int lines;
-
-	for (lines = 0; lines_list[lines]; lines++)
+	for (int lines = 0; lines_list[lines]; lines++)
+	{
 		string_free(lines_list[lines]);
+	}
 
 	/* free list of pointers */
 	C_KILL(lines_list, MAX_LINES, concptr);
@@ -2926,7 +3231,7 @@ static void free_text_lines(concptr *lines_list)
  */
 static void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
 {
-	int by1, by2, y;
+	int by1, by2;
 	bool add = TRUE;
 	bool fixed = FALSE;
 
@@ -2945,7 +3250,7 @@ static void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
 
 
 	/* Set/Reset flag of each line */
-	for (y = by1; y <= by2; y++)
+	for (int y = by1; y <= by2; y++)
 	{
 		autopick_type an_entry, *entry = &an_entry;
 
@@ -3098,7 +3403,7 @@ static void toggle_command_letter(text_body_type *tb, byte flg)
  */
 static void add_keyword(text_body_type *tb, BIT_FLAGS flg)
 {
-	int by1, by2, y;
+	int by1, by2;
 
 	/* Some lines are selected */
 	if (tb->mark)
@@ -3113,20 +3418,16 @@ static void add_keyword(text_body_type *tb, BIT_FLAGS flg)
 		by1 = by2 = tb->cy;
 	}
 
-
 	/* Set/Reset flag of each line */
-	for (y = by1; y <= by2; y++)
+	for (int y = by1; y <= by2; y++)
 	{
 		autopick_type an_entry, *entry = &an_entry;
 
 		if (!autopick_new_entry(entry, tb->lines_list[y], FALSE)) continue;
 
-		/* There is the flag already */
 		if (IS_FLG(flg))
 		{
-			/* Free memory for the entry */
 			autopick_free_entry(entry);
-			
 			continue;
 		}
 		
@@ -3230,6 +3531,7 @@ static bool insert_return_code(text_body_type *tb)
 #endif
 		buf[j++] = tb->lines_list[tb->cy][i];
 	}
+
 	buf[j] = '\0';
 	tb->lines_list[tb->cy+1] = string_make(&tb->lines_list[tb->cy][i]);
 	string_free(tb->lines_list[tb->cy]);
@@ -3240,7 +3542,6 @@ static bool insert_return_code(text_body_type *tb)
 
 	/* Text is changed */
 	tb->changed = TRUE;
-
 	return TRUE;
 }
 
@@ -3250,11 +3551,9 @@ static bool insert_return_code(text_body_type *tb)
  */
 static bool entry_from_choosed_object(player_type *player_ptr, autopick_type *entry)
 {
+	concptr q = _("どのアイテムを登録しますか? ", "Enter which item? ");
+	concptr s = _("アイテムを持っていない。", "You have nothing to enter.");
 	object_type *o_ptr;
-	concptr q, s;
-
-	q = _("どのアイテムを登録しますか? ", "Enter which item? ");
-	s = _("アイテムを持っていない。", "You have nothing to enter.");
 	o_ptr = choose_object(player_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
 	if (!o_ptr) return FALSE;
 
@@ -3266,41 +3565,38 @@ static bool entry_from_choosed_object(player_type *player_ptr, autopick_type *en
 /*
  * Choose an item for search
  */
-static byte get_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp)
+static bool get_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp)
 {
-	char buf[MAX_NLEN+20];
+	concptr q = _("どのアイテムを検索しますか? ", "Enter which item? ");
+	concptr s = _("アイテムを持っていない。", "You have nothing to enter.");
 	object_type *o_ptr;
-	concptr q, s;
-
-	q = _("どのアイテムを検索しますか? ", "Enter which item? ");
-	s = _("アイテムを持っていない。", "You have nothing to enter.");
 	o_ptr = choose_object(player_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
-	if (!o_ptr) return 0;
+	if (!o_ptr) return FALSE;
 
 	*o_handle = o_ptr;
 
 	string_free(*search_strp);
+	char buf[MAX_NLEN + 20];
 	object_desc(buf, *o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
 	*search_strp = string_make(format("<%s>", buf));
-	return 1;
+	return TRUE;
 }
 
 
 /*
  * Prepare for search by destroyed object
  */
-static byte get_destroyed_object_for_search(object_type **o_handle, concptr *search_strp)
+static bool get_destroyed_object_for_search(object_type **o_handle, concptr *search_strp)
 {
-	char buf[MAX_NLEN+20];
-
-	if (!autopick_last_destroyed_object.k_idx) return 0;
+	if (!autopick_last_destroyed_object.k_idx) return FALSE;
 
 	*o_handle = &autopick_last_destroyed_object;
 
 	string_free(*search_strp);
+	char buf[MAX_NLEN + 20];
 	object_desc(buf, *o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
 	*search_strp = string_make(format("<%s>", buf));
-	return 1;
+	return TRUE;
 }
 
 
@@ -3309,8 +3605,6 @@ static byte get_destroyed_object_for_search(object_type **o_handle, concptr *sea
  */
 static byte get_string_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp)
 {
-	int pos = 0;
-
 	/*
 	 * Text color
 	 * TERM_YELLOW : Overwrite mode
@@ -3328,16 +3622,13 @@ static byte get_string_for_search(player_type *player_ptr, object_type **o_handl
 	else buf[0] = '\0';
 
 	/* Object searching mode */
-	if (*o_handle)
-	{
-		color = TERM_L_GREEN;
-	}
+	if (*o_handle) color = TERM_L_GREEN;
 
 	/* Display prompt */
 	prt(prompt, 0, 0);
 
-
 	/* Process input */
+	int pos = 0;
 	while (TRUE)
 	{
 		bool back = FALSE;
@@ -3577,20 +3868,13 @@ static byte get_string_for_search(player_type *player_ptr, object_type **o_handl
 		}
 
 		/* Object searching mode was cancelled? */
-		if (*o_handle && color != TERM_L_GREEN)
-		{
-			/* Cancel the mode */
-			*o_handle = NULL;
+		if (*o_handle == NULL || color == TERM_L_GREEN) continue;
 
-			/* Remove indicating string */
-			buf[0] = '\0';
-			string_free(*search_strp);
-			*search_strp = NULL;
-
-		}
-
-
-	} /* while (TRUE) */
+		*o_handle = NULL;
+		buf[0] = '\0';
+		string_free(*search_strp);
+		*search_strp = NULL;
+	}
 }
 
 
@@ -3639,43 +3923,31 @@ static void search_for_object(player_type *player_ptr, text_body_type *tb, objec
 		{
 			/* If it is first found, remember it */
 			if (bypassed_cy == -1) bypassed_cy = i;
+			continue;
 		}
 
-		/* Found an active line! */
-		else
-		{
-			/* Move to this line */
-			tb->cx = 0;
-			tb->cy = i;
-
-			if (bypassed_cy != -1)
-			{
-				/* Mark as some lines are skipped */
-				tb->dirty_flags |= DIRTY_SKIP_INACTIVE;
-			}
-
-			/* Found it! */
-			return;
-		}
-	}
-
-	if (bypassed_cy != -1)
-	{
-		/* Move to the remembered line */
+		/* Move to this line */
 		tb->cx = 0;
-		tb->cy = bypassed_cy;
+		tb->cy = i;
 
-		/* Mark as this line is inactive */
-		tb->dirty_flags |= DIRTY_INACTIVE;
+		if (bypassed_cy != -1)
+		{
+			/* Mark as some lines are skipped */
+			tb->dirty_flags |= DIRTY_SKIP_INACTIVE;
+		}
+
+		return;
 	}
 
-	else
+	if (bypassed_cy == -1)
 	{
-		/* Mark as NOT FOUND */
 		tb->dirty_flags |= DIRTY_NOT_FOUND;
+		return;
 	}
 
-	return;
+	tb->cx = 0;
+	tb->cy = bypassed_cy;
+	tb->dirty_flags |= DIRTY_INACTIVE;
 }
 
 
@@ -3720,393 +3992,32 @@ static void search_for_string(text_body_type *tb, concptr search_str, bool forwa
 				bypassed_cy = i;
 				bypassed_cx = (int)(pos - tb->lines_list[i]);
 			}
+
+			continue;
 		}
 
-		/* Found an active line! */
-		else
+		tb->cx = (int)(pos - tb->lines_list[i]);
+		tb->cy = i;
+
+		if (bypassed_cy != -1)
 		{
-			/* Move to this location */
-			tb->cx = (int)(pos - tb->lines_list[i]);
-			tb->cy = i;
-
-			if (bypassed_cy != -1)
-			{
-				/* Mark as some lines are skipped */
-				tb->dirty_flags |= DIRTY_SKIP_INACTIVE;
-			}
-
-			/* Found it! */
-			return;
+			/* Mark as some lines are skipped */
+			tb->dirty_flags |= DIRTY_SKIP_INACTIVE;
 		}
+
+		return;
 	}
 
-	if (bypassed_cy != -1)
+	if (bypassed_cy == -1)
 	{
-		/* Move to the remembered line */
-		tb->cx = bypassed_cx;
-		tb->cy = bypassed_cy;
-
-		/* Mark as this line is inactive */
-		tb->dirty_flags |= DIRTY_INACTIVE;
-	}
-
-	else
-	{
-		/* Mark as NOT FOUND */
 		tb->dirty_flags |= DIRTY_NOT_FOUND;
+		return;
 	}
 
-	return;
+	tb->cx = bypassed_cx;
+	tb->cy = bypassed_cy;
+	tb->dirty_flags |= DIRTY_INACTIVE;
 }
-
-
-
-
-/*
- * Editor command id's
- */
-#define EC_QUIT            1
-#define EC_SAVEQUIT        2
-#define EC_REVERT	       3
-#define EC_HELP            4
-#define EC_RETURN	       5
-#define EC_LEFT		       6 
-#define EC_DOWN		       7 
-#define EC_UP		       8 
-#define EC_RIGHT	       9 
-#define EC_BOL		       10
-#define EC_EOL		       11
-#define EC_PGUP		       12
-#define EC_PGDOWN	       13
-#define EC_TOP		       14
-#define EC_BOTTOM	       15
-#define EC_CUT		       16
-#define EC_COPY		       17
-#define EC_PASTE	       18
-#define EC_BLOCK	       19
-#define EC_KILL_LINE	       20
-#define EC_DELETE_CHAR	       21
-#define EC_BACKSPACE	       22
-#define EC_SEARCH_STR	       23
-#define EC_SEARCH_FORW         24
-#define EC_SEARCH_BACK         25
-#define EC_SEARCH_OBJ	       26
-#define EC_SEARCH_DESTROYED    27
-#define EC_INSERT_OBJECT       28
-#define EC_INSERT_DESTROYED    29
-#define EC_INSERT_BLOCK	       30
-#define EC_INSERT_MACRO	       31
-#define EC_INSERT_KEYMAP       32
-#define EC_CL_AUTOPICK	       33
-#define EC_CL_DESTROY	       34
-#define EC_CL_LEAVE	       35
-#define EC_CL_QUERY	       36
-#define EC_CL_NO_DISP	       37
-#define EC_OK_COLLECTING       38
-#define EC_IK_UNAWARE	       39
-#define EC_IK_UNIDENTIFIED     40
-#define EC_IK_IDENTIFIED       41
-#define EC_IK_STAR_IDENTIFIED  42
-#define EC_OK_BOOSTED	       43
-#define EC_OK_MORE_DICE	       44
-#define EC_OK_MORE_BONUS       45
-#define EC_OK_WORTHLESS	       46
-#define EC_OK_ARTIFACT	       47
-#define EC_OK_EGO	       48
-#define EC_OK_GOOD	       49
-#define EC_OK_NAMELESS	       50
-#define EC_OK_AVERAGE	       51
-#define EC_OK_RARE	       52       
-#define EC_OK_COMMON	       53
-#define EC_OK_WANTED	       54
-#define EC_OK_UNIQUE	       55
-#define EC_OK_HUMAN	       56
-#define EC_OK_UNREADABLE       57
-#define EC_OK_REALM1	       58
-#define EC_OK_REALM2	       59
-#define EC_OK_FIRST	       60
-#define EC_OK_SECOND	       61
-#define EC_OK_THIRD	       62
-#define EC_OK_FOURTH	       63
-#define EC_KK_WEAPONS	       64
-#define EC_KK_FAVORITE_WEAPONS 65
-#define EC_KK_ARMORS	       66
-#define EC_KK_MISSILES	       67
-#define EC_KK_DEVICES	       68
-#define EC_KK_LIGHTS	       69
-#define EC_KK_JUNKS	       70
-#define EC_KK_CORPSES	       71
-#define EC_KK_SPELLBOOKS       72
-#define EC_KK_SHIELDS	       73
-#define EC_KK_BOWS	       74
-#define EC_KK_RINGS	       75
-#define EC_KK_AMULETS	       76
-#define EC_KK_SUITS	       77
-#define EC_KK_CLOAKS	       78
-#define EC_KK_HELMS	       79
-#define EC_KK_GLOVES	       80
-#define EC_KK_BOOTS	       81
-
-
-/* Manu names */
-#ifdef JP
-
-static GAME_TEXT MN_QUIT[] = "セーブ無しで終了";
-static GAME_TEXT MN_SAVEQUIT[] = "セーブして終了";
-static GAME_TEXT MN_REVERT[] = "全ての変更を破棄";
-static GAME_TEXT MN_HELP[] = "ヘルプ";
-
-static GAME_TEXT MN_MOVE[] = "カーソル移動";
-static GAME_TEXT MN_LEFT[] =   "左          (←矢印キー)";
-static GAME_TEXT MN_DOWN[] =   "下          (↓矢印キー)";
-static GAME_TEXT MN_UP[] =     "上          (↑矢印キー)";
-static GAME_TEXT MN_RIGHT[] =  "右          (→矢印キー)";
-static GAME_TEXT MN_BOL[] =    "行の先頭";
-static GAME_TEXT MN_EOL[] =    "行の終端";
-static GAME_TEXT MN_PGUP[] =   "上のページ  (PageUpキー)";
-static GAME_TEXT MN_PGDOWN[] = "下のページ  (PageDownキー)";
-static GAME_TEXT MN_TOP[] =    "1行目へ移動 (Homeキー)";
-static GAME_TEXT MN_BOTTOM[] = "最下行へ移動(Endキー)";
-
-static GAME_TEXT MN_EDIT[] = "編集";
-static GAME_TEXT MN_CUT[] = "カット";
-static GAME_TEXT MN_COPY[] = "コピー";
-static GAME_TEXT MN_PASTE[] = "ペースト";
-static GAME_TEXT MN_BLOCK[] = "選択範囲の指定";
-static GAME_TEXT MN_KILL_LINE[] = "行の残りを削除";
-static GAME_TEXT MN_DELETE_CHAR[] = "1文字削除";
-static GAME_TEXT MN_BACKSPACE[] = "バックスペース";
-static GAME_TEXT MN_RETURN[] = "改行";
-
-static GAME_TEXT MN_SEARCH[] = "検索";
-static GAME_TEXT MN_SEARCH_STR[] = "文字列で検索";
-static GAME_TEXT MN_SEARCH_FORW[] = "前方へ再検索";
-static GAME_TEXT MN_SEARCH_BACK[] = "後方へ再検索";
-static GAME_TEXT MN_SEARCH_OBJ[] = "アイテムを選択して検索";
-static GAME_TEXT MN_SEARCH_DESTROYED[] = "自動破壊されたアイテムで検索";
-
-static GAME_TEXT MN_INSERT[] = "色々挿入";
-static GAME_TEXT MN_INSERT_OBJECT[] = "選択したアイテムの名前を挿入";
-static GAME_TEXT MN_INSERT_DESTROYED[] = "自動破壊されたアイテムの名前を挿入";
-static GAME_TEXT MN_INSERT_BLOCK[] = "条件分岐ブロックの例を挿入";
-static GAME_TEXT MN_INSERT_MACRO[] = "マクロ定義を挿入";
-static GAME_TEXT MN_INSERT_KEYMAP[] = "キーマップ定義を挿入";
-
-static GAME_TEXT MN_COMMAND_LETTER[] = "拾い/破壊/放置の選択";
-static GAME_TEXT MN_CL_AUTOPICK[] = "「 」 (自動拾い)";
-static GAME_TEXT MN_CL_DESTROY[] = "「!」 (自動破壊)";
-static GAME_TEXT MN_CL_LEAVE[] = "「~」 (放置)";
-static GAME_TEXT MN_CL_QUERY[] = "「;」 (確認して拾う)";
-static GAME_TEXT MN_CL_NO_DISP[] = "「(」 (マップコマンドで表示しない)";
-
-static GAME_TEXT MN_ADJECTIVE_GEN[] = "形容詞(一般)の選択";
-static GAME_TEXT MN_RARE[] = "レアな (装備)";
-static GAME_TEXT MN_COMMON[] = "ありふれた (装備)";
-
-static GAME_TEXT MN_ADJECTIVE_SPECIAL[] = "形容詞(特殊)の選択";
-static GAME_TEXT MN_BOOSTED[] = "ダイス目の違う (武器)";
-static GAME_TEXT MN_MORE_DICE[] = "ダイス目 # 以上の (武器)";
-static GAME_TEXT MN_MORE_BONUS[] = "修正値 # 以上の (指輪等)";
-static GAME_TEXT MN_WANTED[] = "賞金首の (死体)";
-static GAME_TEXT MN_UNIQUE[] = "ユニーク・モンスターの (死体)";
-static GAME_TEXT MN_HUMAN[] = "人間の (死体)";
-static GAME_TEXT MN_UNREADABLE[] = "読めない (魔法書)";
-static GAME_TEXT MN_REALM1[] = "第一領域の (魔法書)";
-static GAME_TEXT MN_REALM2[] = "第二領域の (魔法書)";
-static GAME_TEXT MN_FIRST[] = "1冊目の (魔法書)";
-static GAME_TEXT MN_SECOND[] = "2冊目の (魔法書)";
-static GAME_TEXT MN_THIRD[] = "3冊目の (魔法書)";
-static GAME_TEXT MN_FOURTH[] = "4冊目の (魔法書)";
-
-static GAME_TEXT MN_NOUN[] = "名詞の選択";
-
-#else
-
-static GAME_TEXT MN_QUIT[] = "Quit without save";
-static GAME_TEXT MN_SAVEQUIT[] = "Save & Quit";
-static GAME_TEXT MN_REVERT[] = "Revert all changes";
-static GAME_TEXT MN_HELP[] = "Help";
-
-static GAME_TEXT MN_MOVE[] =   "Move cursor";
-static GAME_TEXT MN_LEFT[] =   "Left     (Left Arrow key)";
-static GAME_TEXT MN_DOWN[] =   "Down     (Down Arrow key)";
-static GAME_TEXT MN_UP[] =     "Up       (Up Arrow key)";
-static GAME_TEXT MN_RIGHT[] =  "Right    (Right Arrow key)";
-static GAME_TEXT MN_BOL[] =    "Beggining of line";
-static GAME_TEXT MN_EOL[] =    "End of line";
-static GAME_TEXT MN_PGUP[] =   "Page up  (PageUp key)";
-static GAME_TEXT MN_PGDOWN[] = "Page down(PageDown key)";
-static GAME_TEXT MN_TOP[] =    "Top      (Home key)";
-static GAME_TEXT MN_BOTTOM[] = "Bottom   (End key)";
-
-static GAME_TEXT MN_EDIT[] = "Edit";
-static GAME_TEXT MN_CUT[] = "Cut";
-static GAME_TEXT MN_COPY[] = "Copy";
-static GAME_TEXT MN_PASTE[] = "Paste";
-static GAME_TEXT MN_BLOCK[] = "Select block";
-static GAME_TEXT MN_KILL_LINE[] = "Kill rest of line";
-static GAME_TEXT MN_DELETE_CHAR[] = "Delete character";
-static GAME_TEXT MN_BACKSPACE[] = "Backspace";
-static GAME_TEXT MN_RETURN[] = "Return";
-
-static GAME_TEXT MN_SEARCH[] = "Search";
-static GAME_TEXT MN_SEARCH_STR[] = "Search by string";
-static GAME_TEXT MN_SEARCH_FORW[] = "Search forward";
-static GAME_TEXT MN_SEARCH_BACK[] = "Search backward";
-static GAME_TEXT MN_SEARCH_OBJ[] = "Search by inventory list object";
-static GAME_TEXT MN_SEARCH_DESTROYED[] = "Search by destroyed object";
-
-static GAME_TEXT MN_INSERT[] = "Insert...";
-static GAME_TEXT MN_INSERT_OBJECT[] = "Insert name of choosen object";
-static GAME_TEXT MN_INSERT_DESTROYED[] = "Insert name of destroyed object";
-static GAME_TEXT MN_INSERT_BLOCK[] = "Insert conditional block";
-static GAME_TEXT MN_INSERT_MACRO[] = "Insert a macro definition";
-static GAME_TEXT MN_INSERT_KEYMAP[] = "Insert a keymap definition";
-
-static GAME_TEXT MN_COMMAND_LETTER[] = "Command letter";
-static GAME_TEXT MN_CL_AUTOPICK[] = "' ' (Auto pick)";
-static GAME_TEXT MN_CL_DESTROY[] = "'!' (Auto destroy)";
-static GAME_TEXT MN_CL_LEAVE[] = "'~' (Leave it on the floor)";
-static GAME_TEXT MN_CL_QUERY[] = "';' (Query to pick up)";
-static GAME_TEXT MN_CL_NO_DISP[] = "'(' (No display on the large map)";
-
-static GAME_TEXT MN_ADJECTIVE_GEN[] = "Adjective (general)";
-static GAME_TEXT MN_RARE[] = "rare (equipments)";
-static GAME_TEXT MN_COMMON[] = "common (equipments)";
-
-static GAME_TEXT MN_ADJECTIVE_SPECIAL[] = "Adjective (special)";
-static GAME_TEXT MN_BOOSTED[] = "dice boosted (weapons)";
-static GAME_TEXT MN_MORE_DICE[] = "more than # dice (weapons)";
-static GAME_TEXT MN_MORE_BONUS[] = "more bonus than # (rings etc.)";
-static GAME_TEXT MN_WANTED[] = "wanted (corpse)";
-static GAME_TEXT MN_UNIQUE[] = "unique (corpse)";
-static GAME_TEXT MN_HUMAN[] = "human (corpse)";
-static GAME_TEXT MN_UNREADABLE[] = "unreadable (spellbooks)";
-static GAME_TEXT MN_REALM1[] = "realm1 (spellbooks)";
-static GAME_TEXT MN_REALM2[] = "realm2 (spellbooks)";
-static GAME_TEXT MN_FIRST[] = "first (spellbooks)";
-static GAME_TEXT MN_SECOND[] = "second (spellbooks)";
-static GAME_TEXT MN_THIRD[] = "third (spellbooks)";
-static GAME_TEXT MN_FOURTH[] = "fourth (spellbooks)";
-
-static GAME_TEXT MN_NOUN[] = "Keywords (noun)";
-
-#endif
-
-
-typedef struct {
-	concptr name;
-	int level;
-	int key;
-	int com_id;
-} command_menu_type;
-
-
-command_menu_type menu_data[] =
-{
-	{MN_HELP, 0, -1, EC_HELP},
-	{MN_QUIT, 0, KTRL('q'), EC_QUIT}, 
-	{MN_SAVEQUIT, 0, KTRL('w'), EC_SAVEQUIT}, 
-	{MN_REVERT, 0, KTRL('z'), EC_REVERT},
-
-	{MN_EDIT, 0, -1, -1},
-	{MN_CUT, 1, KTRL('x'), EC_CUT},
-	{MN_COPY, 1, KTRL('c'), EC_COPY},
-	{MN_PASTE, 1, KTRL('v'), EC_PASTE},
-	{MN_BLOCK, 1, KTRL('g'), EC_BLOCK},
-	{MN_KILL_LINE, 1, KTRL('k'), EC_KILL_LINE},
-	{MN_DELETE_CHAR, 1, KTRL('d'), EC_DELETE_CHAR},
-	{MN_BACKSPACE, 1, KTRL('h'), EC_BACKSPACE},
-	{MN_RETURN, 1, KTRL('j'), EC_RETURN},
-	{MN_RETURN, 1, KTRL('m'), EC_RETURN},
-
-	{MN_SEARCH, 0, -1, -1},
-	{MN_SEARCH_STR, 1, KTRL('s'), EC_SEARCH_STR},
-	{MN_SEARCH_FORW, 1, -1, EC_SEARCH_FORW},
-	{MN_SEARCH_BACK, 1, KTRL('r'), EC_SEARCH_BACK},
-	{MN_SEARCH_OBJ, 1, KTRL('y'), EC_SEARCH_OBJ},
-	{MN_SEARCH_DESTROYED, 1, -1, EC_SEARCH_DESTROYED},
-
-	{MN_MOVE, 0, -1, -1},
-	{MN_LEFT, 1, KTRL('b'), EC_LEFT},
-	{MN_DOWN, 1, KTRL('n'), EC_DOWN},
-	{MN_UP, 1, KTRL('p'), EC_UP},
-	{MN_RIGHT, 1, KTRL('f'), EC_RIGHT},
-	{MN_BOL, 1, KTRL('a'), EC_BOL},
-	{MN_EOL, 1, KTRL('e'), EC_EOL},
-	{MN_PGUP, 1, KTRL('o'), EC_PGUP},
-	{MN_PGDOWN, 1, KTRL('l'), EC_PGDOWN},
-	{MN_TOP, 1, KTRL('t'), EC_TOP},
-	{MN_BOTTOM, 1, KTRL('u'), EC_BOTTOM},
-
-	{MN_INSERT, 0, -1, -1},
-	{MN_INSERT_OBJECT, 1, KTRL('i'), EC_INSERT_OBJECT},
-	{MN_INSERT_DESTROYED, 1, -1, EC_INSERT_DESTROYED},
-	{MN_INSERT_BLOCK, 1, -1, EC_INSERT_BLOCK},
-	{MN_INSERT_MACRO, 1, -1, EC_INSERT_MACRO},
-	{MN_INSERT_KEYMAP, 1, -1, EC_INSERT_KEYMAP},
-
- 	{MN_ADJECTIVE_GEN, 0, -1, -1},
-	{KEY_UNAWARE, 1, -1, EC_IK_UNAWARE},
-	{KEY_UNIDENTIFIED, 1, -1, EC_IK_UNIDENTIFIED},
-	{KEY_IDENTIFIED, 1, -1, EC_IK_IDENTIFIED},
-	{KEY_STAR_IDENTIFIED, 1, -1, EC_IK_STAR_IDENTIFIED},
-	{KEY_COLLECTING, 1, -1, EC_OK_COLLECTING},
-	{KEY_ARTIFACT, 1, -1, EC_OK_ARTIFACT},
-	{KEY_EGO, 1, -1, EC_OK_EGO},
-	{KEY_GOOD, 1, -1, EC_OK_GOOD},
-	{KEY_NAMELESS, 1, -1, EC_OK_NAMELESS},
-	{KEY_AVERAGE, 1, -1, EC_OK_AVERAGE},
-	{KEY_WORTHLESS, 1, -1, EC_OK_WORTHLESS},
-	{MN_RARE, 1, -1, EC_OK_RARE},
-	{MN_COMMON, 1, -1, EC_OK_COMMON},
-
- 	{MN_ADJECTIVE_SPECIAL, 0, -1, -1},
-	{MN_BOOSTED, 1, -1, EC_OK_BOOSTED},
-	{MN_MORE_DICE, 1, -1, EC_OK_MORE_DICE},
-	{MN_MORE_BONUS, 1, -1, EC_OK_MORE_BONUS},
-	{MN_WANTED, 1, -1, EC_OK_WANTED},
-	{MN_UNIQUE, 1, -1, EC_OK_UNIQUE},
-	{MN_HUMAN, 1, -1, EC_OK_HUMAN},
-	{MN_UNREADABLE, 1, -1, EC_OK_UNREADABLE},
-	{MN_REALM1, 1, -1, EC_OK_REALM1},
-	{MN_REALM2, 1, -1, EC_OK_REALM2},
-	{MN_FIRST, 1, -1, EC_OK_FIRST},
-	{MN_SECOND, 1, -1, EC_OK_SECOND},
-	{MN_THIRD, 1, -1, EC_OK_THIRD},
-	{MN_FOURTH, 1, -1, EC_OK_FOURTH},
-
- 	{MN_NOUN, 0, -1, -1},
-	{KEY_WEAPONS, 1, -1, EC_KK_WEAPONS},
-	{KEY_FAVORITE_WEAPONS, 1, -1, EC_KK_FAVORITE_WEAPONS},
-	{KEY_ARMORS, 1, -1, EC_KK_ARMORS},
-	{KEY_MISSILES, 1, -1, EC_KK_MISSILES},
-	{KEY_DEVICES, 1, -1, EC_KK_DEVICES},
-	{KEY_LIGHTS, 1, -1, EC_KK_LIGHTS},
-	{KEY_JUNKS, 1, -1, EC_KK_JUNKS},
-	{KEY_CORPSES, 1, -1, EC_KK_CORPSES},
-	{KEY_SPELLBOOKS, 1, -1, EC_KK_SPELLBOOKS},
-	{KEY_SHIELDS, 1, -1, EC_KK_SHIELDS},
-	{KEY_BOWS, 1, -1, EC_KK_BOWS},
-	{KEY_RINGS, 1, -1, EC_KK_RINGS},
-	{KEY_AMULETS, 1, -1, EC_KK_AMULETS},
-	{KEY_SUITS, 1, -1, EC_KK_SUITS},
-	{KEY_CLOAKS, 1, -1, EC_KK_CLOAKS},
-	{KEY_HELMS, 1, -1, EC_KK_HELMS},
-	{KEY_GLOVES, 1, -1, EC_KK_GLOVES},
-	{KEY_BOOTS, 1, -1, EC_KK_BOOTS},
-
- 	{MN_COMMAND_LETTER, 0, -1, -1},
-	{MN_CL_AUTOPICK, 1, -1, EC_CL_AUTOPICK},
-	{MN_CL_DESTROY, 1, -1, EC_CL_DESTROY},
-	{MN_CL_LEAVE, 1, -1, EC_CL_LEAVE},
-	{MN_CL_QUERY, 1, -1, EC_CL_QUERY},
-	{MN_CL_NO_DISP, 1, -1, EC_CL_NO_DISP},
-
-	{MN_DELETE_CHAR, -1, 0x7F, EC_DELETE_CHAR},
-
-	{NULL, -1, -1, 0}
-};
 
 
 /*
@@ -4114,9 +4025,7 @@ command_menu_type menu_data[] =
  */
 static int get_com_id(char key)
 {
-	int i;
-
-	for (i = 0; menu_data[i].name; i++)
+	for (int i = 0; menu_data[i].name; i++)
 	{
 		if (menu_data[i].key == key)
 		{
@@ -4133,7 +4042,6 @@ static int get_com_id(char key)
  */
 static int do_command_menu(int level, int start)
 {
-	int i;
 	int max_len = 0;
 	int max_menu_wid;
 	int col0 = 5 + level*7;
@@ -4145,7 +4053,7 @@ static int do_command_menu(int level, int start)
 
 	/* Get max length */
 	menu_key = 0;
-	for (i = start; menu_data[i].level >= level; i++)
+	for (int i = start; menu_data[i].level >= level; i++)
 	{
 		int len;
 
@@ -4171,10 +4079,11 @@ static int do_command_menu(int level, int start)
 	/* Prepare box line */
 	linestr[0] = '\0';
 	strcat(linestr, "+");
-	for (i = 0; i < max_menu_wid + 2; i++)
+	for (int i = 0; i < max_menu_wid + 2; i++)
 	{
 		strcat(linestr, "-");
 	}
+
 	strcat(linestr, "+");
 
 	while (TRUE)
@@ -4192,7 +4101,7 @@ static int do_command_menu(int level, int start)
 
 			/* Draw menu items */
 			menu_key = 0;
-			for (i = start; menu_data[i].level >= level; i++)
+			for (int i = start; menu_data[i].level >= level; i++)
 			{
 				char com_key_str[3];
 				concptr str;
@@ -4228,38 +4137,40 @@ static int do_command_menu(int level, int start)
 			/* The menu was shown */
 			redraw = FALSE;
 		}
+
 		prt(format(_("(a-%c) コマンド:", "(a-%c) Command:"), menu_key + 'a' - 1), 0, 0);
 		key = inkey();
 
 		if (key == ESCAPE) return 0;
 
-		if ('a' <= key && key <= 'z')
-		{
-			menu_id = menu_id_list[key - 'a'];
-
-			if (menu_id >= 0)
-			{
-				com_id = menu_data[menu_id].com_id;
-
-				if (com_id == -1)
-				{
-					com_id = do_command_menu(level + 1, menu_id + 1);
-
-					if (com_id) return com_id;
-					else redraw = TRUE;
-				}
-				else if (com_id)
-				{
-					return com_id;
-				}
-			}
-		}
-
-		else
+		bool is_alphabet = key >= 'a' && key <= 'z';
+		if (!is_alphabet)
 		{
 			com_id = get_com_id(key);
+			if (com_id)
+			{
+				return com_id;
+			}
+
+			continue;
+		}
+
+		menu_id = menu_id_list[key - 'a'];
+
+		if (menu_id < 0) continue;
+
+		com_id = menu_data[menu_id].com_id;
+
+		if (com_id == -1)
+		{
+			com_id = do_command_menu(level + 1, menu_id + 1);
+
 			if (com_id) return com_id;
-			else continue;
+			else redraw = TRUE;
+		}
+		else if (com_id)
+		{
+			return com_id;
 		}
 	}
 }
@@ -4268,14 +4179,10 @@ static int do_command_menu(int level, int start)
 static chain_str_type *new_chain_str(concptr str)
 {
 	chain_str_type *chain;
-
 	size_t len = strlen(str);
-
 	chain = (chain_str_type *)ralloc(sizeof(chain_str_type) + len * sizeof(char));
-
 	strcpy(chain->s, str);
 	chain->next = NULL;
-
 	return chain;
 }
 
@@ -4300,16 +4207,14 @@ static void kill_yank_chain(text_body_type *tb)
 
 static void add_str_to_yank(text_body_type *tb, concptr str)
 {
-	chain_str_type *chain;
-
 	tb->yank_eol = FALSE;
-
 	if (NULL == tb->yank)
 	{
 		tb->yank = new_chain_str(str);
 		return;
 	}
 
+	chain_str_type *chain;
 	chain = tb->yank;
 
 	while (TRUE)
@@ -4345,73 +4250,52 @@ static void copy_text_to_yank(text_body_type *tb)
 		tb->mx = len;
 	}
 
-	/* Kill old yank buffer */
 	kill_yank_chain(tb);
 
-
-	/* Single line case */
-	if (tb->my == tb->cy)
+	if (tb->my != tb->cy)
 	{
-		int i;
-		char buf[MAX_LINELEN];
-		int bx1 = MIN(tb->mx, tb->cx);
-		int bx2 = MAX(tb->mx, tb->cx);
-
-		/* Correct fake cursor position */
-		if (bx2 > len) bx2 = len;
-
-		/* Whole part of this line is selected */
-		if (bx1 == 0 && bx2 == len)
-		{
-			/* Copy this line */
-			add_str_to_yank(tb, tb->lines_list[tb->cy]);
-
-			/* Add end of line to the buffer */
-			add_str_to_yank(tb, "");
-		}
-
-		/* Segment of this line is selected */
-		else
-		{
-			for (i = 0; i < bx2 - bx1; i++)
-			{
-				buf[i] = tb->lines_list[tb->cy][bx1 + i];
-			}
-			buf[i] = '\0';
-
-			/* Copy this segment of line */
-			add_str_to_yank(tb, buf);
-		}
-	}
-
-	/* Multiple lines case */
-	else /* if (tb->my != tb->cy) */
-	{
-		int y;
-
 		int by1 = MIN(tb->my, tb->cy);
 		int by2 = MAX(tb->my, tb->cy);
 
-		/* Copy lines */
-		for (y = by1; y <= by2; y++)
+		for (int y = by1; y <= by2; y++)
 		{
-			/* Copy this line */
 			add_str_to_yank(tb, tb->lines_list[y]);
 		}
 
-		/* Add final end of line to the buffer */
 		add_str_to_yank(tb, "");
+		tb->mark = 0;
+		tb->dirty_flags |= DIRTY_ALL;
+		return;
 	}
 
-	/* Disable selection */
-	tb->mark = 0;
+	char buf[MAX_LINELEN];
+	int bx1 = MIN(tb->mx, tb->cx);
+	int bx2 = MAX(tb->mx, tb->cx);
 
-	/* Now dirty */
+	/* Correct fake cursor position */
+	if (bx2 > len) bx2 = len;
+
+	if (bx1 == 0 && bx2 == len)
+	{
+		add_str_to_yank(tb, tb->lines_list[tb->cy]);
+		add_str_to_yank(tb, "");
+	}
+	else
+	{
+		int end = bx2 - bx1;
+		for (int i = 0; i < bx2 - bx1; i++)
+		{
+			buf[i] = tb->lines_list[tb->cy][bx1 + i];
+		}
+
+		buf[end] = '\0';
+		add_str_to_yank(tb, buf);
+	}
+
+	tb->mark = 0;
 	tb->dirty_flags |= DIRTY_ALL;
 }
 
-
-#define DESCRIPT_HGT 3
 
 /*
  * Draw text
@@ -4627,128 +4511,127 @@ static void draw_text_editor(text_body_type *tb)
 		Term_erase(0, i + 1, tb->wid);
 	}
 
-	/* Display information when updated */
-	if (tb->old_cy != tb->cy || (tb->dirty_flags & (DIRTY_ALL | DIRTY_NOT_FOUND | DIRTY_NO_SEARCH)) || tb->dirty_line == tb->cy)
+	bool is_updated = tb->old_cy != tb->cy || (tb->dirty_flags & (DIRTY_ALL | DIRTY_NOT_FOUND | DIRTY_NO_SEARCH)) || tb->dirty_line == tb->cy;
+	if (is_updated) return;
+
+	autopick_type an_entry, *entry = &an_entry;
+	concptr str1 = NULL, str2 = NULL;
+
+
+	/* Clear information line */
+	for (i = 0; i < DESCRIPT_HGT; i++)
 	{
-		autopick_type an_entry, *entry = &an_entry;
-		concptr str1 = NULL, str2 = NULL;
+		/* Erase line */
+		Term_erase(0, tb->hgt + 2 + i, tb->wid);
+	}
 
-
-		/* Clear information line */
-		for (i = 0; i < DESCRIPT_HGT; i++)
+	/* Display information */
+	if (tb->dirty_flags & DIRTY_NOT_FOUND)
+	{
+		str1 = format(_("パターンが見つかりません: %s", "Pattern not found: %s"), tb->search_str);
+	}
+	else if (tb->dirty_flags & DIRTY_SKIP_INACTIVE)
+	{
+		str1 = format(_("無効状態の行をスキップしました。(%sを検索中)",
+			"Some inactive lines are skipped. (Searching %s)"), tb->search_str);
+	}
+	else if (tb->dirty_flags & DIRTY_INACTIVE)
+	{
+		str1 = format(_("無効状態の行だけが見付かりました。(%sを検索中)",
+			"Found only an inactive line. (Searching %s)"), tb->search_str);
+	}
+	else if (tb->dirty_flags & DIRTY_NO_SEARCH)
+	{
+		str1 = _("検索するパターンがありません(^S で検索)。", "No pattern to search. (Press ^S to search.)");
+	}
+	else if (tb->lines_list[tb->cy][0] == '#')
+	{
+		str1 = _("この行はコメントです。", "This line is a comment.");
+	}
+	else if (tb->lines_list[tb->cy][0] && tb->lines_list[tb->cy][1] == ':')
+	{
+		switch (tb->lines_list[tb->cy][0])
 		{
-			/* Erase line */
-			Term_erase(0, tb->hgt + 2 + i, tb->wid);
+		case '?':
+			str1 = _("この行は条件分岐式です。", "This line is a Conditional Expression.");
+			break;
+		case 'A':
+			str1 = _("この行はマクロの実行内容を定義します。", "This line defines a Macro action.");
+			break;
+		case 'P':
+			str1 = _("この行はマクロのトリガー・キーを定義します。", "This line defines a Macro trigger key.");
+			break;
+		case 'C':
+			str1 = _("この行はキー配置を定義します。", "This line defines a Keymap.");
+			break;
 		}
 
-		/* Display information */
-		if (tb->dirty_flags & DIRTY_NOT_FOUND)
+		switch (tb->lines_list[tb->cy][0])
 		{
-			str1 = format(_("パターンが見つかりません: %s", "Pattern not found: %s"), tb->search_str);
-		}
-		else if (tb->dirty_flags & DIRTY_SKIP_INACTIVE)
-		{
-			str1 = format(_("無効状態の行をスキップしました。(%sを検索中)", 
-							"Some inactive lines are skipped. (Searching %s)"), tb->search_str);
-		}
-		else if (tb->dirty_flags & DIRTY_INACTIVE)
-		{
-			str1 = format(_("無効状態の行だけが見付かりました。(%sを検索中)",
-							"Found only an inactive line. (Searching %s)"), tb->search_str);
-		}
-		else if (tb->dirty_flags & DIRTY_NO_SEARCH)
-		{
-			str1 = _("検索するパターンがありません(^S で検索)。", "No pattern to search. (Press ^S to search.)");
-		}
-		else if (tb->lines_list[tb->cy][0] == '#')
-		{
-			str1 = _("この行はコメントです。", "This line is a comment.");
-		}
-		else if (tb->lines_list[tb->cy][0] && tb->lines_list[tb->cy][1] == ':')
-		{
-			switch(tb->lines_list[tb->cy][0])
-			{
-			case '?':
-				str1 = _("この行は条件分岐式です。", "This line is a Conditional Expression.");
-				break;
-			case 'A':
-				str1 = _("この行はマクロの実行内容を定義します。", "This line defines a Macro action.");
-				break;
-			case 'P':
-				str1 = _("この行はマクロのトリガー・キーを定義します。", "This line defines a Macro trigger key.");
-				break;
-			case 'C':
-				str1 = _("この行はキー配置を定義します。", "This line defines a Keymap.");
-				break;
-			}
-
-			switch(tb->lines_list[tb->cy][0])
-			{
-			case '?':
-				if (tb->states[tb->cy] & LSTAT_BYPASS)
-				{
-					str2 = _("現在の式の値は「偽(=0)」です。", "The expression is 'False'(=0) currently.");
-				}
-				else
-				{
-					str2 = _("現在の式の値は「真(=1)」です。", "The expression is 'True'(=1) currently.");
-				}
-				break;
-
-			default:
-				if (tb->states[tb->cy] & LSTAT_AUTOREGISTER)
-				{
-					str2 = _("この行は後で削除されます。", "This line will be delete later.");
-				}
-
-				else if (tb->states[tb->cy] & LSTAT_BYPASS)
-				{
-					str2 = _("この行は現在は無効な状態です。", "This line is bypassed currently.");
-				}
-				break;
-			}
-		}
-
-		/* Get description of an autopicker preference line */
-		else if (autopick_new_entry(entry, tb->lines_list[tb->cy], FALSE))
-		{
-			char buf[MAX_LINELEN];
-			char temp[MAX_LINELEN];
-			concptr t;
-
-			describe_autopick(buf, entry);
-
-			if (tb->states[tb->cy] & LSTAT_AUTOREGISTER)
-			{
-				strcat(buf, _("この行は後で削除されます。", "  This line will be delete later."));
-			}
-
+		case '?':
 			if (tb->states[tb->cy] & LSTAT_BYPASS)
 			{
-				strcat(buf, _("この行は現在は無効な状態です。", "  This line is bypassed currently."));
+				str2 = _("現在の式の値は「偽(=0)」です。", "The expression is 'False'(=0) currently.");
+			}
+			else
+			{
+				str2 = _("現在の式の値は「真(=1)」です。", "The expression is 'True'(=1) currently.");
+			}
+			break;
+
+		default:
+			if (tb->states[tb->cy] & LSTAT_AUTOREGISTER)
+			{
+				str2 = _("この行は後で削除されます。", "This line will be delete later.");
 			}
 
-			roff_to_buf(buf, 81, temp, sizeof(temp));
-			t = temp;
-			for (i = 0; i < 3; i++)
+			else if (tb->states[tb->cy] & LSTAT_BYPASS)
 			{
-				if(t[0] == 0)
-					break; 
-				else
-				{
-					prt(t, tb->hgt +1 + 1 + i, 0);
-					t += strlen(t) + 1;
-				}
+				str2 = _("この行は現在は無効な状態です。", "This line is bypassed currently.");
 			}
-			autopick_free_entry(entry);
+			break;
+		}
+	}
+
+	/* Get description of an autopicker preference line */
+	else if (autopick_new_entry(entry, tb->lines_list[tb->cy], FALSE))
+	{
+		char buf[MAX_LINELEN];
+		char temp[MAX_LINELEN];
+		concptr t;
+
+		describe_autopick(buf, entry);
+
+		if (tb->states[tb->cy] & LSTAT_AUTOREGISTER)
+		{
+			strcat(buf, _("この行は後で削除されます。", "  This line will be delete later."));
 		}
 
-		/* Draw the first line */
-		if (str1) prt(str1, tb->hgt +1 + 1, 0);
+		if (tb->states[tb->cy] & LSTAT_BYPASS)
+		{
+			strcat(buf, _("この行は現在は無効な状態です。", "  This line is bypassed currently."));
+		}
 
-		/* Draw the second line */
-		if (str2) prt(str2, tb->hgt +1 + 2, 0);
+		roff_to_buf(buf, 81, temp, sizeof(temp));
+		t = temp;
+		for (i = 0; i < 3; i++)
+		{
+			if (t[0] == 0)
+				break;
+			else
+			{
+				prt(t, tb->hgt + 1 + 1 + i, 0);
+				t += strlen(t) + 1;
+			}
+		}
+		autopick_free_entry(entry);
 	}
+
+	/* Draw the first line */
+	if (str1) prt(str1, tb->hgt + 1 + 1, 0);
+
+	/* Draw the second line */
+	if (str2) prt(str2, tb->hgt + 1 + 2, 0);
 }
 
 
@@ -4757,19 +4640,14 @@ static void draw_text_editor(text_body_type *tb)
  */
 static void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
 {
-	char buf[MAX_LINELEN];
-	concptr s = tb->lines_list[y];
-	char *d = buf;
-	int x;
-
 	/* Kill whole line? */
+	concptr s = tb->lines_list[y];
 	if (whole && x0 == 0 && s[x1] == '\0' && tb->lines_list[y+1])
 	{
-		int i;
-
 		string_free(tb->lines_list[y]);
 
 		/* Shift lines up */
+		int i;
 		for (i = y; tb->lines_list[i+1]; i++)
 			tb->lines_list[i] = tb->lines_list[i+1];
 		tb->lines_list[i] = NULL;
@@ -4780,27 +4658,23 @@ static void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool wh
 		return;
 	}
 
-	/* No segment? */
 	if (x0 == x1) return;
 
-	/* Before the segment */
-	for (x = 0; x < x0; x++)
+	char buf[MAX_LINELEN];
+	char *d = buf;
+	for (int x = 0; x < x0; x++)
 		*(d++) = s[x];
 
-	/* After the segment */
-	for (x = x1; s[x]; x++)
+	for (int x = x1; s[x]; x++)
 		*(d++) = s[x];
 
 	*d = '\0';
 
-	/* Replace */
 	string_free(tb->lines_list[y]);
 	tb->lines_list[y] = string_make(buf);
 
-	/* Expressions may need re-evaluation */
 	check_expression_line(tb, y);
 
-	/* Text is changed */
 	tb->changed = TRUE;
 }
 
@@ -4810,8 +4684,6 @@ static void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool wh
  */
 static bool insert_macro_line(text_body_type *tb)
 {
-	char tmp[1024];
-	char buf[1024];
 	int i, n = 0;
 
 	/* Flush */
@@ -4824,6 +4696,7 @@ static bool insert_macro_line(text_body_type *tb)
 	i = inkey();
 
 	/* Read the pattern */
+	char buf[1024];
 	while (i)
 	{
 		/* Save the key */
@@ -4845,6 +4718,7 @@ static bool insert_macro_line(text_body_type *tb)
 	flush();
 
 	/* Convert the trigger */
+	char tmp[1024];
 	ascii_to_text(tmp, buf);
 
 	/* Null */
@@ -4885,12 +4759,8 @@ static bool insert_macro_line(text_body_type *tb)
  */
 static bool insert_keymap_line(text_body_type *tb)
 {
-	char tmp[1024];
-	char buf[2];
-	BIT_FLAGS mode;
-	concptr act;
-
 	/* Roguelike */
+	BIT_FLAGS mode;
 	if (rogue_like_commands)
 	{
 		mode = KEYMAP_MODE_ROGUE;
@@ -4904,13 +4774,14 @@ static bool insert_keymap_line(text_body_type *tb)
 
 	flush();
 
-	/* Get a key */
+	char buf[2];
 	buf[0] = inkey();
 	buf[1] = '\0';
 
 	flush();
 
 	/* Convert the trigger */
+	char tmp[1024];
 	ascii_to_text(tmp, buf);
 
 	/* Null */
@@ -4924,18 +4795,11 @@ static bool insert_keymap_line(text_body_type *tb)
 	tb->lines_list[tb->cy] = string_make(format("C:%d:%s", mode, tmp));
 
 	/* Look up the keymap */
-	act = keymap_act[mode][(byte)(buf[0])];
-
+	concptr act = keymap_act[mode][(byte)(buf[0])];
 	if (act)
 	{
 		/* Analyze the current action */
 		ascii_to_text(tmp, act);
-	}
-	else
-	{
-		/* No keymap defined -- Use trigger key itself as a default */
-
-		/* Nothing to do (use tmp) */
 	}
 
 	/* Insert blank action preference line */
@@ -4960,6 +4824,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 			if (!get_check(_("全ての変更を破棄してから終了します。よろしいですか？ ",
 							 "Discard all changes and quit. Are you sure? "))) break;
 		}
+
 		return QUIT_WITHOUT_SAVE;
 
 	case EC_SAVEQUIT:
@@ -5043,6 +4908,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 			tb->cy--;
 			tb->cx = strlen(tb->lines_list[tb->cy]);
 		}
+
 		break;
 
 	case EC_DOWN:
@@ -5067,14 +4933,11 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 
 	case EC_RIGHT:
 	{
-		/* Forward */
-
-		int len;
 #ifdef JP
 		if (iskanji(tb->lines_list[tb->cy][tb->cx])) tb->cx++;
 #endif
 		tb->cx++;
-		len = strlen(tb->lines_list[tb->cy]);
+		int len = strlen(tb->lines_list[tb->cy]);
 		if (len < tb->cx)
 		{
 			/* Correct the cursor position */
@@ -5091,6 +4954,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 			tb->cy++;
 			tb->cx = 0;
 		}
+
 		break;
 	}
 
@@ -5147,7 +5011,6 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 
 		/* Always at the biginning of the last line */
 		tb->cx = 0;
-
 		break;
 
 	case EC_CUT:
@@ -5192,7 +5055,6 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 			tb->cx = 0;
 		}
 
-
 		/* Disable selection */
 		tb->mark = 0;
 
@@ -5213,41 +5075,28 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		 *
 		 * Pressing ^C ^V correctly duplicates the selection.
 		 */
-		if (tb->my == tb->cy)
-		{
-			tb->cx = MAX(tb->cx, tb->mx);
-
-			/*
-			 * When whole line is selected, the end of
-			 * line code is also copyed.
-			 */
-			if (!tb->lines_list[tb->cy][tb->cx])
-			{
-				/* Is this the last line? */
-				if (!tb->lines_list[tb->cy + 1])
-				{
-					/* Add one more empty line if possible */
-					if (!add_empty_line(tb)) break;
-				}
-
-				/* Go to the beginning of next line */
-				tb->cy++;
-				tb->cx = 0;
-			}
-		}
-		else
+		if (tb->my != tb->cy)
 		{
 			tb->cy = MAX(tb->cy, tb->my);
-
-			/* Is this the last line? */
 			if (!tb->lines_list[tb->cy + 1])
 			{
-				/* Add one more empty line if possible */
 				if (!add_empty_line(tb)) break;
 			}
 
-			/* Go down */
 			tb->cy++;
+			break;
+		}
+
+		tb->cx = MAX(tb->cx, tb->mx);
+		if (!tb->lines_list[tb->cy][tb->cx])
+		{
+			if (!tb->lines_list[tb->cy + 1])
+			{
+				if (!add_empty_line(tb)) break;
+			}
+
+			tb->cy++;
+			tb->cx = 0;
 		}
 
 		break;
@@ -5338,58 +5187,40 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 			break;
 		}
 
-		/* Now dirty */
 		tb->dirty_flags |= DIRTY_ALL;
-
-		/* Expressions need re-evaluation */
 		tb->dirty_flags |= DIRTY_EXPRESSION;
-
-		/* Text is changed */
 		tb->changed = TRUE;
-
 		break;
 	}
 
 	case EC_BLOCK:
 		if (tb->mark)
 		{
-			/* Disable the selection */
 			tb->mark = 0;
-
-			/* Redraw text */
 			tb->dirty_flags |= DIRTY_ALL;
+			break;
 		}
-		else
+		
+		tb->mark = MARK_MARK;
+
+		/* Repeating this command swaps cursor position */
+		if (com_id == tb->old_com_id)
 		{
-			tb->mark = MARK_MARK;
-
-			/* Repeating this command swaps cursor position */
-			if (com_id == tb->old_com_id)
-			{
-				int tmp;
-
-				tmp = tb->cy;
-				tb->cy = tb->my;
-				tb->my = tmp;
-				tmp = tb->cx;
-				tb->cx = tb->mx;
-				tb->mx = tmp;
-
-				/* Redraw text */
-				tb->dirty_flags |= DIRTY_ALL;
-			}
-			else
-			{
-				int len = strlen(tb->lines_list[tb->cy]);
-
-				/* Mark the point 1 */
-				tb->my = tb->cy;
-				tb->mx = tb->cx;
-
-				/* Correct cursor location */
-				if (tb->cx > len) tb->mx = len;
-			}
+			int tmp = tb->cy;
+			tb->cy = tb->my;
+			tb->my = tmp;
+			tmp = tb->cx;
+			tb->cx = tb->mx;
+			tb->mx = tmp;
+			tb->dirty_flags |= DIRTY_ALL;
+			break;
 		}
+
+		int len = strlen(tb->lines_list[tb->cy]);
+
+		tb->my = tb->cy;
+		tb->mx = tb->cx;
+		if (tb->cx > len) tb->mx = len;
 		break;
 
 	case EC_KILL_LINE:
@@ -5444,11 +5275,6 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 
 	case EC_DELETE_CHAR:
 	{
-		/* DELETE == go forward + BACK SPACE */
-
-		int len;
-
-		/* Ignore selection */
 		if (tb->mark)
 		{
 			tb->mark = 0;
@@ -5463,7 +5289,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		tb->cx++;
 
 		/* Pass through the end of line to next line */
-		len = strlen(tb->lines_list[tb->cy]);
+		int len = strlen(tb->lines_list[tb->cy]);
 		if (len < tb->cx)
 		{
 			if (tb->lines_list[tb->cy + 1])
@@ -5540,26 +5366,24 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 #endif
 			buf[j++] = tb->lines_list[tb->cy][i];
 		}
+
 		while (j > k)
 		{
 			tb->cx--;
 			j--;
 		}
+
 		for (; tb->lines_list[tb->cy][i]; i++)
+		{
 			buf[j++] = tb->lines_list[tb->cy][i];
+		}
+
 		buf[j] = '\0';
 		string_free(tb->lines_list[tb->cy]);
 		tb->lines_list[tb->cy] = string_make(buf);
-
-		/* Now dirty */
 		tb->dirty_line = tb->cy;
-
-		/* Expressions may need re-evaluation */
 		check_expression_line(tb, tb->cy);
-
-		/* Text is changed */
 		tb->changed = TRUE;
-
 		break;
 	}
 
@@ -5583,30 +5407,32 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		if (tb->search_o_ptr)
 		{
 			search_for_object(player_ptr, tb, tb->search_o_ptr, TRUE);
+			break;
 		}
-		else if (tb->search_str && tb->search_str[0])
+		
+		if (tb->search_str && tb->search_str[0])
 		{
 			search_for_string(tb, tb->search_str, TRUE);
+			break;
 		}
-		else
-		{
-			tb->dirty_flags |= DIRTY_NO_SEARCH;
-		}
+		
+		tb->dirty_flags |= DIRTY_NO_SEARCH;
 		break;
 
 	case EC_SEARCH_BACK:
 		if (tb->search_o_ptr)
 		{
 			search_for_object(player_ptr, tb, tb->search_o_ptr, FALSE);
+			break;
 		}
-		else if (tb->search_str && tb->search_str[0])
+		
+		if (tb->search_str && tb->search_str[0])
 		{
 			search_for_string(tb, tb->search_str, FALSE);
+			break;
 		}
-		else
-		{
-			tb->dirty_flags |= DIRTY_NO_SEARCH;
-		}
+
+		tb->dirty_flags |= DIRTY_NO_SEARCH;
 		break;
 
 	case EC_SEARCH_OBJ:
@@ -5655,20 +5481,18 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 	}
 
 	case EC_INSERT_DESTROYED:
-		/* Insert a name of last destroyed item */
-		if (tb->last_destroyed)
-		{
-			tb->cx = 0;
-			insert_return_code(tb);
-			string_free(tb->lines_list[tb->cy]);
-			tb->lines_list[tb->cy] = string_make(tb->last_destroyed);
+		if (!tb->last_destroyed) break;
 
-			/* Now dirty */
-			tb->dirty_flags |= DIRTY_ALL;
+		tb->cx = 0;
+		insert_return_code(tb);
+		string_free(tb->lines_list[tb->cy]);
+		tb->lines_list[tb->cy] = string_make(tb->last_destroyed);
 
-			/* Text is changed */
-			tb->changed = TRUE;
-		}
+		/* Now dirty */
+		tb->dirty_flags |= DIRTY_ALL;
+
+		/* Text is changed */
+		tb->changed = TRUE;
 		break;
 
 	case EC_INSERT_BLOCK:
@@ -5712,18 +5536,12 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 
 		/* Prompt */
 		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, _("P:<トリガーキー>: ", "P:<Trigger key>: "));
-		if (insert_macro_line(tb))
-		{
-			/* Prepare to input action */
-			tb->cx = 2;
+		if (!insert_macro_line(tb)) break;
 
-			/* Now dirty */
-			tb->dirty_flags |= DIRTY_ALL;
-
-			/* Text is changed */
-			tb->changed = TRUE;
-		}
-
+		/* Prepare to input action */
+		tb->cx = 2;
+		tb->dirty_flags |= DIRTY_ALL;
+		tb->changed = TRUE;
 		break;
 
 	case EC_INSERT_KEYMAP:
@@ -5737,17 +5555,12 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, 
 					format(_("C:%d:<コマンドキー>: ", "C:%d:<Keypress>: "), (rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG)));
 
-		if (insert_keymap_line(tb))
-		{
-			/* Prepare to input action */
-			tb->cx = 2;
+		if (!insert_keymap_line(tb)) break;
 
-			/* Now dirty */
-			tb->dirty_flags |= DIRTY_ALL;
-
-			/* Text is changed */
-			tb->changed = TRUE;
-		}				
+		/* Prepare to input action */
+		tb->cx = 2;
+		tb->dirty_flags |= DIRTY_ALL;
+		tb->changed = TRUE;
 		break;
 
 	case EC_CL_AUTOPICK: toggle_command_letter(tb, DO_AUTOPICK); break;
@@ -5823,9 +5636,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		break;
 	}
 
-	/* Save old command */
 	tb->old_com_id = com_id;
-
 	return FALSE;
 }
 
@@ -5840,9 +5651,10 @@ static void insert_single_letter(text_body_type *tb, int key)
 
 	/* Save preceding string */
 	for (i = j = 0; tb->lines_list[tb->cy][i] && i < tb->cx; i++)
+	{
 		buf[j++] = tb->lines_list[tb->cy][i];
+	}
 
-	/* Add a character */
 #ifdef JP
 	if (iskanji(key))
 	{
@@ -5918,7 +5730,6 @@ static int analyze_move_key(text_body_type *tb, int skey)
 		return 0;
 	}
 
-	/* Without shift modifier */
 	if (!(skey & SKEY_MOD_SHIFT))
 	{
 		/*
@@ -5932,34 +5743,30 @@ static int analyze_move_key(text_body_type *tb, int skey)
 			/* Now dirty */
 			tb->dirty_flags |= DIRTY_ALL;
 		}
+
+		return com_id;
 	}
 
-	/* With shift modifier */
+	if (tb->mark) return com_id;
+
+	int len = strlen(tb->lines_list[tb->cy]);
+
+	tb->mark = MARK_MARK | MARK_BY_SHIFT;
+	tb->my = tb->cy;
+	tb->mx = tb->cx;
+
+	/* Correct cursor location */
+	if (tb->cx > len) tb->mx = len;
+
+	/* Need to redraw text */
+	if (com_id == EC_UP || com_id == EC_DOWN)
+	{
+		/* Redraw all text */
+		tb->dirty_flags |= DIRTY_ALL;
+	}
 	else
 	{
-		/* Start selection by shift + cursor keys */
-		if (!tb->mark)
-		{
-			int len = strlen(tb->lines_list[tb->cy]);
-
-			tb->mark = MARK_MARK | MARK_BY_SHIFT;
-			tb->my = tb->cy;
-			tb->mx = tb->cx;
-
-			/* Correct cursor location */
-			if (tb->cx > len) tb->mx = len;
-						
-			/* Need to redraw text */
-			if (com_id == EC_UP || com_id == EC_DOWN)
-			{
-				/* Redraw all text */
-				tb->dirty_flags |= DIRTY_ALL;
-			}
-			else
-			{
-				tb->dirty_line = tb->cy;
-			}
-		}
+		tb->dirty_line = tb->cy;
 	}
 
 	return com_id;
@@ -6040,6 +5847,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 			break;
 		}
 	}
+
 	screen_save();
 
 	/* Process requests until done */
@@ -6121,10 +5929,9 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 		}
 
 		if (com_id) quit = do_editor_command(player_ptr, tb, com_id);
-	} /* while (TRUE) */
-	screen_load();
+	}
 
-	/* Get the filename of preference */
+	screen_load();
 	strcpy(buf, pickpref_filename(player_ptr, tb->filename_mode));
 
 	if (quit == QUIT_AND_SAVE)
