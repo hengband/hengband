@@ -531,7 +531,7 @@ void bolt(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
 
 	/* Target the player with a bolt attack */
 	if (typ != GF_ARROW) flg |= PROJECT_REFLECTABLE;
-	bool learnable = spell_learnable(m_idx);
+	bool learnable = spell_learnable(target_ptr, m_idx);
 	(void)project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
@@ -562,7 +562,7 @@ void beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
     }
 
 	/* Target the player with a bolt attack */
-	bool learnable = spell_learnable(m_idx);
+	bool learnable = spell_learnable(target_ptr, m_idx);
 	(void)project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
@@ -621,7 +621,7 @@ void breath(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, 
 	}
 
 	/* Target the player with a ball attack */
-	bool learnable = spell_learnable(m_idx);
+	bool learnable = spell_learnable(target_ptr, m_idx);
 	(void)project(target_ptr, m_idx, rad, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 

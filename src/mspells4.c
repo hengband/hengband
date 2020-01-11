@@ -61,13 +61,13 @@ bool see_monster(floor_type *floor_ptr, MONSTER_IDX m_idx)
 * @param m_idx モンスターID
 * @return プレイヤーが青魔法で学習できるならTRUE、そうでなければFALSEを返す。
 */
-bool spell_learnable(MONSTER_IDX m_idx)
+bool spell_learnable(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	/* Extract the "see-able-ness" */
-	bool seen = (!p_ptr->blind && m_ptr->ml);
+	bool seen = (!target_ptr->blind && m_ptr->ml);
 
-	bool maneable = player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx);
+	bool maneable = player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx);
 	return (seen && maneable && !current_world_ptr->timewalk_m_idx);
 }
 

@@ -326,7 +326,7 @@ extern void learn_spell(player_type *learner_ptr, int monspell);
 extern void set_rf_masks(BIT_FLAGS *f4, BIT_FLAGS *f5, BIT_FLAGS *f6, BIT_FLAGS mode);
 
 /* mspells4.c */
-extern bool spell_learnable(MONSTER_IDX m_idx);
+extern bool spell_learnable(player_type *target_ptr, MONSTER_IDX m_idx);
 extern HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx);
 extern HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx);
 extern HIT_POINT monspell_damage(int SPELL_NUM, MONSTER_IDX m_idx, int TYPE);
