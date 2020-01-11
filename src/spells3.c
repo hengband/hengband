@@ -1694,7 +1694,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 		item_tester_hook = item_tester_hook_identify;
 
 	concptr q;
-	if (can_get_item(item_tester_tval))
+	if (can_get_item(caster_ptr, item_tester_tval))
 	{
 		q = _("どのアイテムを鑑定しますか? ", "Identify which item? ");
 	}
@@ -1801,7 +1801,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 		item_tester_hook = item_tester_hook_identify_fully;
 
 	concptr q;
-	if (can_get_item(item_tester_tval))
+	if (can_get_item(caster_ptr, item_tester_tval))
 	{
 		q = _("どのアイテムを*鑑定*しますか? ", "*Identify* which item? ");
 	}

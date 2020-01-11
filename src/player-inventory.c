@@ -249,23 +249,25 @@ bool get_item_okay(player_type *owner_ptr, OBJECT_IDX i)
 	return TRUE;
 }
 
+
 /*!
+ * todo この関数のプロトタイプ宣言がobject.hにいる。player_inventory.hであるべき
  * @brief 規定の処理にできるアイテムがプレイヤーの利用可能範囲内にあるかどうかを返す /
  * Determine whether get_item() can get some item or not
  * @return アイテムを拾えるならばTRUEを返す。
  * @details assuming mode = (USE_EQUIP | USE_INVEN | USE_FLOOR).
  */
-bool can_get_item(OBJECT_TYPE_VALUE tval)
+bool can_get_item(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
 {
 	int j;
 	OBJECT_IDX floor_list[23];
 	ITEM_NUMBER floor_num = 0;
 
 	for (j = 0; j < INVEN_TOTAL; j++)
-		if (item_tester_okay(&p_ptr->inventory_list[j], tval))
+		if (item_tester_okay(&owner_ptr->inventory_list[j], tval))
 			return TRUE;
 
-	floor_num = scan_floor(floor_list, p_ptr->y, p_ptr->x, 0x03);
+	floor_num = scan_floor(floor_list, owner_ptr->y, owner_ptr->x, 0x03);
 	if (floor_num)
 		return TRUE;
 
@@ -485,6 +487,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALU
 	/* No such tag */
 	return FALSE;
 }
+
 
 /*!
  * @brief タグIDにあわせてタグアルファベットのリストを返す /
@@ -805,8 +808,10 @@ static bool get_item_allow(INVENTORY_IDX item)
 
 
 /*!
+ * todo この関数のプロトタイプ宣言がobject.hにいる。player_inventory.hであるべき
  * @brief オブジェクト選択の汎用関数 /
  * Let the user select an item, save its "index"
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param cp 選択したオブジェクトのIDを返す。
  * @param pmt 選択目的のメッセージ
  * @param str 選択できるオブジェクトがない場合のキャンセルメッセージ
