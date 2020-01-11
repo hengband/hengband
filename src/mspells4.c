@@ -58,6 +58,7 @@ bool see_monster(floor_type *floor_ptr, MONSTER_IDX m_idx)
 
 /*!
 * @brief モンスターの唱えた呪文を青魔法で学習できるか判定する /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param m_idx モンスターID
 * @return プレイヤーが青魔法で学習できるならTRUE、そうでなければFALSEを返す。
 */
@@ -74,13 +75,14 @@ bool spell_learnable(player_type *target_ptr, MONSTER_IDX m_idx)
 
 /*!
 * @brief 特定条件のモンスター召喚のみPM_ALLOW_UNIQUEを許可する /
+* @param floor_ptr 現在フロアへの参照ポインタ
 * @param m_idx モンスターID
 * @return 召喚可能であればPM_ALLOW_UNIQUEを返す。
 */
-BIT_FLAGS monster_u_mode(MONSTER_IDX m_idx)
+BIT_FLAGS monster_u_mode(floor_type *floor_ptr, MONSTER_IDX m_idx)
 {
 	BIT_FLAGS u_mode = 0L;
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	bool pet = is_pet(m_ptr);
 	if (!pet) u_mode |= PM_ALLOW_UNIQUE;
 	return u_mode;
@@ -89,7 +91,7 @@ BIT_FLAGS monster_u_mode(MONSTER_IDX m_idx)
 
 /*!
  * @brief モンスターが呪文行使する際のメッセージを処理する汎用関数 /
- * @param floor_ptr 現在フロアへの参照ポインタ
+* @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx 呪文を唱えるモンスターID
  * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
  * @param msg1 msg_flagがTRUEで、プレイヤーを対象とする場合のメッセージ
@@ -2978,20 +2980,21 @@ void spell_RF6_S_MONSTER(player_type *target_ptr, POSITION y, POSITION x, MONSTE
 		_("%^sが魔法で仲間を召喚した！", "%^s magically summons help!"),
 		TARGET_TYPE);
 
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	for (k = 0; k < 1; k++)
 	{
 		if(mon_to_player)
 			count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 
 		if(mon_to_mon)
-			count += summon_specific(m_idx, y, x, rlev, 0, (monster_u_mode(m_idx)));
+			count += summon_specific(m_idx, y, x, rlev, 0, (monster_u_mode(floor_ptr, m_idx)));
 	}
 
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
-		target_ptr->current_floor_ptr->monster_noise = TRUE;
+	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+		floor_ptr->monster_noise = TRUE;
 }
 
 
@@ -3018,20 +3021,21 @@ void spell_RF6_S_MONSTERS(player_type *target_ptr, POSITION y, POSITION x, MONST
 		_("%^sが魔法でモンスターを召喚した！", "%^s magically summons monsters!"),
 		TARGET_TYPE);
 	
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	for (k = 0; k < S_NUM_6; k++)
 	{
 		if(mon_to_player)
 			count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 
 		if(mon_to_mon)
-			count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | monster_u_mode(m_idx)));
+			count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
 	}
 
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
-		target_ptr->current_floor_ptr->monster_noise = TRUE;
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+		floor_ptr->monster_noise = TRUE;
 }
 
 
@@ -3440,15 +3444,16 @@ void spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONS
 				count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 
 			if(mon_to_mon)
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | monster_u_mode(m_idx)));
+				count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
 		}
 	}
+
 	if (target_ptr->blind && count && mon_to_player)
 	{
 		msg_print(_("間近で何か多くのものが這い回る音が聞こえる。", "You hear many creepy things appear nearby."));
 	}
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
+	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
 }
 
@@ -3475,13 +3480,14 @@ void spell_RF6_S_HI_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONS
 		_("%^sが魔法で古代ドラゴンを召喚した！", "%^s magically summons ancient dragons!"),
 		TARGET_TYPE);
 	
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	for (k = 0; k < S_NUM_4; k++)
 	{	
 		if(mon_to_player)
 			count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 
 		if(mon_to_mon)
-			count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | monster_u_mode(m_idx)));
+			count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
 	}
 	
 	if (target_ptr->blind && count && mon_to_player)
@@ -3489,8 +3495,8 @@ void spell_RF6_S_HI_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONS
 		msg_print(_("多くの力強いものが間近に現れた音が聞こえる。", "You hear many powerful things appear nearby."));
 	}
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
-		target_ptr->current_floor_ptr->monster_noise = TRUE;
+	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+		floor_ptr->monster_noise = TRUE;
 }
 
 
