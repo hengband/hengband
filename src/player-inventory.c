@@ -28,11 +28,11 @@ bool is_ring_slot(int i)
 
 /*!
  * @brief 選択アルファベットラベルからプレイヤーの装備オブジェクトIDを返す /
- * @param player_ptr プレーヤーへの参照ポインタ
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * Convert a label into the index of a item in the "equip"
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  */
-static INVENTORY_IDX label_to_equip(int c)
+static INVENTORY_IDX label_to_equip(player_type* owner_ptr, int c)
 {
 	INVENTORY_IDX i;
 
@@ -45,10 +45,10 @@ static INVENTORY_IDX label_to_equip(int c)
 	if (select_ring_slot) return is_ring_slot(i) ? i : -1;
 
 	/* Empty slots can never be chosen */
-	if (!p_ptr->inventory_list[i].k_idx) return (-1);
+	if (!owner_ptr->inventory_list[i].k_idx) return (-1);
 
 	/* Return the index */
-	return (i);
+	return i;
 }
 
 /*!
@@ -57,7 +57,7 @@ static INVENTORY_IDX label_to_equip(int c)
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  * @details Note that the label does NOT distinguish inven/equip.
  */
-static INVENTORY_IDX label_to_inven(int c)
+static INVENTORY_IDX label_to_inven(player_type* owner_ptr, int c)
 {
 	INVENTORY_IDX i;
 
@@ -68,10 +68,10 @@ static INVENTORY_IDX label_to_inven(int c)
 	if ((i < 0) || (i > INVEN_PACK)) return (-1);
 
 	/* Empty slots can never be chosen */
-	if (!p_ptr->inventory_list[i].k_idx) return (-1);
+	if (!owner_ptr->inventory_list[i].k_idx) return (-1);
 
 	/* Return the index */
-	return (i);
+	return i;
 }
 
 
@@ -81,7 +81,7 @@ static INVENTORY_IDX label_to_inven(int c)
  * @param i 部位表現を求めるプレイヤーの所持/装備オブジェクトID
  * @return 部位表現の文字列ポインタ
  */
-static concptr mention_use(player_type *creature_ptr, int i)
+static concptr mention_use(player_type *owner_ptr, int i)
 {
 	concptr p;
 
@@ -89,18 +89,18 @@ static concptr mention_use(player_type *creature_ptr, int i)
 	switch (i)
 	{
 #ifdef JP
-	case INVEN_RARM:  p = creature_ptr->heavy_wield[0] ? "運搬中" : ((creature_ptr->ryoute && creature_ptr->migite) ? " 両手" : (left_hander ? " 左手" : " 右手")); break;
+	case INVEN_RARM:  p = owner_ptr->heavy_wield[0] ? "運搬中" : ((owner_ptr->ryoute && owner_ptr->migite) ? " 両手" : (left_hander ? " 左手" : " 右手")); break;
 #else
-	case INVEN_RARM:  p = creature_ptr->heavy_wield[0] ? "Just lifting" : (creature_ptr->migite ? "Wielding" : "On arm"); break;
+	case INVEN_RARM:  p = owner_ptr->heavy_wield[0] ? "Just lifting" : (owner_ptr->migite ? "Wielding" : "On arm"); break;
 #endif
 
 #ifdef JP
-	case INVEN_LARM:  p = creature_ptr->heavy_wield[1] ? "運搬中" : ((creature_ptr->ryoute && creature_ptr->hidarite) ? " 両手" : (left_hander ? " 右手" : " 左手")); break;
+	case INVEN_LARM:  p = owner_ptr->heavy_wield[1] ? "運搬中" : ((owner_ptr->ryoute && owner_ptr->hidarite) ? " 両手" : (left_hander ? " 右手" : " 左手")); break;
 #else
-	case INVEN_LARM:  p = creature_ptr->heavy_wield[1] ? "Just lifting" : (creature_ptr->hidarite ? "Wielding" : "On arm"); break;
+	case INVEN_LARM:  p = owner_ptr->heavy_wield[1] ? "Just lifting" : (owner_ptr->hidarite ? "Wielding" : "On arm"); break;
 #endif
 
-	case INVEN_BOW:   p = (adj_str_hold[creature_ptr->stat_ind[A_STR]] < creature_ptr->inventory_list[i].weight / 10) ? _("運搬中", "Just holding") : _("射撃用", "Shooting"); break;
+	case INVEN_BOW:   p = (adj_str_hold[owner_ptr->stat_ind[A_STR]] < owner_ptr->inventory_list[i].weight / 10) ? _("運搬中", "Just holding") : _("射撃用", "Shooting"); break;
 	case INVEN_RIGHT: p = (left_hander ? _("左手指", "On left hand") : _("右手指", "On right hand")); break;
 	case INVEN_LEFT:  p = (left_hander ? _("右手指", "On right hand") : _("左手指", "On left hand")); break;
 	case INVEN_NECK:  p = _("  首", "Around neck"); break;
@@ -122,7 +122,7 @@ static concptr mention_use(player_type *creature_ptr, int i)
  * Choice window "shadow" of the "show_equip()" function
  * @return なし
  */
-void display_equip(player_type *creature_ptr, OBJECT_TYPE_VALUE tval)
+void display_equip(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
 {
 	register int i, n;
 	object_type *o_ptr;
@@ -131,13 +131,13 @@ void display_equip(player_type *creature_ptr, OBJECT_TYPE_VALUE tval)
 	GAME_TEXT o_name[MAX_NLEN];
 	TERM_LEN wid, hgt;
 
-	if (!creature_ptr || !creature_ptr->inventory_list) return;
+	if (!owner_ptr || !owner_ptr->inventory_list) return;
 
 	Term_get_size(&wid, &hgt);
 
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		o_ptr = &creature_ptr->inventory_list[i];
+		o_ptr = &owner_ptr->inventory_list[i];
 		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
 		if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr, tval))
 		{
@@ -146,7 +146,7 @@ void display_equip(player_type *creature_ptr, OBJECT_TYPE_VALUE tval)
 		}
 
 		Term_putstr(0, i - INVEN_RARM, 3, TERM_WHITE, tmp_val);
-		if ((((i == INVEN_RARM) && creature_ptr->hidarite) || ((i == INVEN_LARM) && creature_ptr->migite)) && creature_ptr->ryoute)
+		if ((((i == INVEN_RARM) && owner_ptr->hidarite) || ((i == INVEN_LARM) && owner_ptr->migite)) && owner_ptr->ryoute)
 		{
 			strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
 			attr = TERM_WHITE;
@@ -181,7 +181,7 @@ void display_equip(player_type *creature_ptr, OBJECT_TYPE_VALUE tval)
 		if (show_labels)
 		{
 			Term_putstr(wid - 20, i - INVEN_RARM, -1, TERM_WHITE, " <-- ");
-			prt(mention_use(creature_ptr, i), i - INVEN_RARM, wid - 15);
+			prt(mention_use(owner_ptr, i), i - INVEN_RARM, wid - 15);
 		}
 	}
 
@@ -196,7 +196,7 @@ void display_equip(player_type *creature_ptr, OBJECT_TYPE_VALUE tval)
  * Flip "inven" and "equip" in any sub-windows
  * @return なし
  */
-void toggle_inven_equip(player_type *creature_ptr)
+void toggle_inven_equip(player_type *owner_ptr)
 {
 	int j;
 
@@ -213,7 +213,7 @@ void toggle_inven_equip(player_type *creature_ptr)
 			window_flag[j] &= ~(PW_INVEN);
 			window_flag[j] |= (PW_EQUIP);
 
-			creature_ptr->window |= (PW_EQUIP);
+			owner_ptr->window |= (PW_EQUIP);
 		}
 
 		/* Flip inven to equip */
@@ -223,7 +223,7 @@ void toggle_inven_equip(player_type *creature_ptr)
 			window_flag[j] &= ~(PW_EQUIP);
 			window_flag[j] |= (PW_INVEN);
 
-			creature_ptr->window |= (PW_INVEN);
+			owner_ptr->window |= (PW_INVEN);
 		}
 	}
 }
@@ -1527,7 +1527,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				{
 					if (which == '(') k = i1;
 					else if (which == ')') k = i2;
-					else k = label_to_inven(which);
+					else k = label_to_inven(owner_ptr, which);
 				}
 
 				/* Convert letter to equipment index */
@@ -1535,7 +1535,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				{
 					if (which == '(') k = e1;
 					else if (which == ')') k = e2;
-					else k = label_to_equip(which);
+					else k = label_to_equip(owner_ptr, which);
 				}
 
 				/* Validate the item */
@@ -1608,16 +1608,17 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 	return (item);
 }
 
+
 /*
  * Choose an item and get auto-picker entry from it.
  */
-object_type *choose_object(player_type *creature_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, OBJECT_TYPE_VALUE tval)
+object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, OBJECT_TYPE_VALUE tval)
 {
 	OBJECT_IDX item;
-	if (!get_item(creature_ptr, &item, q, s, option, tval)) return NULL;
+	if (!get_item(owner_ptr, &item, q, s, option, tval)) return NULL;
 	if (idx) *idx = item;
 	if (item == INVEN_FORCE) return NULL;
-	return REF_ITEM(creature_ptr, creature_ptr->current_floor_ptr, item);
+	return REF_ITEM(owner_ptr, owner_ptr->current_floor_ptr, item);
 }
 
 
@@ -1811,7 +1812,7 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
  * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
-bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	char n1 = ' ', n2 = ' ', which = ' ';
 
@@ -1869,7 +1870,7 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 			if (prev_tag && command_cmd)
 			{
 				/* Scan all objects in the grid */
-				floor_num = scan_floor(floor_list, creature_ptr->y, creature_ptr->x, 0x03);
+				floor_num = scan_floor(floor_list, owner_ptr->y, owner_ptr->x, 0x03);
 
 				/* Look up the tag */
 				if (get_tag_floor(&k, prev_tag, floor_list, floor_num))
@@ -1890,7 +1891,7 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 			}
 
 			/* Validate the item */
-			else if (item_tester_okay(&creature_ptr->current_floor_ptr->o_list[0 - (*cp)], tval) || (mode & USE_FULL))
+			else if (item_tester_okay(&owner_ptr->current_floor_ptr->o_list[0 - (*cp)], tval) || (mode & USE_FULL))
 			{
 				/* Forget restrictions */
 				tval = 0;
@@ -1958,7 +1959,7 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 	else if (use_menu)
 	{
 		for (j = 0; j < INVEN_PACK; j++)
-			if (item_tester_okay(&creature_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_inven++;
+			if (item_tester_okay(&owner_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_inven++;
 	}
 
 	while ((i1 <= i2) && (!get_item_okay(i1))) i1++;
@@ -1974,21 +1975,21 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 	else if (use_menu)
 	{
 		for (j = INVEN_RARM; j < INVEN_TOTAL; j++)
-			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&creature_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_equip++;
-		if (creature_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
+			if (select_ring_slot ? is_ring_slot(j) : item_tester_okay(&owner_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_equip++;
+		if (owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT)) max_equip++;
 	}
 
 	/* Restrict equipment indexes */
 	while ((e1 <= e2) && (!get_item_okay(e1))) e1++;
 	while ((e1 <= e2) && (!get_item_okay(e2))) e2--;
 
-	if (equip && creature_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
+	if (equip && owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
 	{
-		if (creature_ptr->migite)
+		if (owner_ptr->migite)
 		{
 			if (e2 < INVEN_LARM) e2 = INVEN_LARM;
 		}
-		else if (creature_ptr->hidarite) e1 = INVEN_RARM;
+		else if (owner_ptr->hidarite) e1 = INVEN_RARM;
 	}
 
 
@@ -1999,7 +2000,7 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 	if (floor)
 	{
 		/* Scan all objects in the grid */
-		floor_num = scan_floor(floor_list, creature_ptr->y, creature_ptr->x, 0x03);
+		floor_num = scan_floor(floor_list, owner_ptr->y, owner_ptr->x, 0x03);
 	}
 
 	if (i1 <= i2) allow_inven = TRUE;
@@ -2088,12 +2089,12 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 		if ((command_wrk == (USE_EQUIP) && ni && !ne) ||
 			(command_wrk == (USE_INVEN) && !ni && ne))
 		{
-			toggle_inven_equip(creature_ptr);
+			toggle_inven_equip(owner_ptr);
 			toggle = !toggle;
 		}
 
-		creature_ptr->window |= (PW_INVEN | PW_EQUIP);
-		handle_stuff(creature_ptr);
+		owner_ptr->window |= (PW_INVEN | PW_EQUIP);
+		handle_stuff(owner_ptr);
 
 		/* Inventory screen */
 		if (command_wrk == (USE_INVEN))
@@ -2103,7 +2104,7 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 			n2 = I2A(i2);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_inven(creature_ptr, menu_line, mode, tval);
+			if (command_see) get_item_label = show_inven(owner_ptr, menu_line, mode, tval);
 		}
 
 		/* Equipment screen */
@@ -2114,7 +2115,7 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 			n2 = I2A(e2 - INVEN_RARM);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_equip(creature_ptr, menu_line, mode, tval);
+			if (command_see) get_item_label = show_equip(owner_ptr, menu_line, mode, tval);
 		}
 
 		/* Floor screen */
@@ -2128,7 +2129,7 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 			n2 = I2A(k - floor_top);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_floor(menu_line, creature_ptr->y, creature_ptr->x, &min_width);
+			if (command_see) get_item_label = show_floor(menu_line, owner_ptr->y, owner_ptr->x, &min_width);
 		}
 
 		if (command_wrk == (USE_INVEN))
@@ -2514,7 +2515,7 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 			{
 				int i;
 				OBJECT_IDX o_idx;
-				grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
+				grid_type *g_ptr = &owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x];
 
 				if (command_wrk != (USE_FLOOR)) break;
 
@@ -2522,21 +2523,21 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 				o_idx = g_ptr->o_idx;
 
 				/* Only rotate a pile of two or more objects. */
-				if (!(o_idx && creature_ptr->current_floor_ptr->o_list[o_idx].next_o_idx)) break;
+				if (!(o_idx && owner_ptr->current_floor_ptr->o_list[o_idx].next_o_idx)) break;
 
 				/* Remove the first object from the list. */
-				excise_object_idx(creature_ptr->current_floor_ptr, o_idx);
+				excise_object_idx(owner_ptr->current_floor_ptr, o_idx);
 
 				/* Find end of the list. */
 				i = g_ptr->o_idx;
-				while (creature_ptr->current_floor_ptr->o_list[i].next_o_idx)
-					i = creature_ptr->current_floor_ptr->o_list[i].next_o_idx;
+				while (owner_ptr->current_floor_ptr->o_list[i].next_o_idx)
+					i = owner_ptr->current_floor_ptr->o_list[i].next_o_idx;
 
 				/* Add after the last object. */
-				creature_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
+				owner_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
 
 				/* Re-scan floor list */
-				floor_num = scan_floor(floor_list, creature_ptr->y, creature_ptr->x, 0x03);
+				floor_num = scan_floor(floor_list, owner_ptr->y, owner_ptr->x, 0x03);
 
 				/* Hack -- Fix screen */
 				if (command_see)
@@ -2837,7 +2838,7 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 				{
 					if (which == '(') k = i1;
 					else if (which == ')') k = i2;
-					else k = label_to_inven(which);
+					else k = label_to_inven(owner_ptr, which);
 				}
 
 				/* Convert letter to equipment index */
@@ -2845,7 +2846,7 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 				{
 					if (which == '(') k = e1;
 					else if (which == ')') k = e2;
-					else k = label_to_equip(which);
+					else k = label_to_equip(owner_ptr, which);
 				}
 
 				/* Convert letter to floor index */
@@ -2913,10 +2914,10 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 
 
 	/* Clean up  'show choices' */
-	if (toggle) toggle_inven_equip(creature_ptr);
+	if (toggle) toggle_inven_equip(owner_ptr);
 
-	creature_ptr->window |= (PW_INVEN | PW_EQUIP);
-	handle_stuff(creature_ptr);
+	owner_ptr->window |= (PW_INVEN | PW_EQUIP);
+	handle_stuff(owner_ptr);
 
 	/* Clear the prompt line */
 	prt("", 0, 0);
@@ -2972,7 +2973,7 @@ static bool py_pickup_floor_aux(void)
  * @details
  * This is called by py_pickup() when easy_floor is TRUE.
  */
-void py_pickup_floor(player_type *creature_ptr, bool pickup)
+void py_pickup_floor(player_type *owner_ptr, bool pickup)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -2985,17 +2986,17 @@ void py_pickup_floor(player_type *creature_ptr, bool pickup)
 	int can_pickup = 0;
 
 	/* Scan the pile of objects */
-	for (this_o_idx = creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		/* Access the object */
-		o_ptr = &creature_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &owner_ptr->current_floor_ptr->o_list[this_o_idx];
 
 		object_desc(o_name, o_ptr, 0);
 
 		/* Access the next object */
 		next_o_idx = o_ptr->next_o_idx;
 
-		disturb(creature_ptr, FALSE, FALSE);
+		disturb(owner_ptr, FALSE, FALSE);
 
 		/* Pick up gold */
 		if (o_ptr->tval == TV_GOLD)
@@ -3009,15 +3010,15 @@ void py_pickup_floor(player_type *creature_ptr, bool pickup)
 #endif
 
 			/* Collect the gold */
-			creature_ptr->au += o_ptr->pval;
+			owner_ptr->au += o_ptr->pval;
 
 			/* Redraw gold */
-			creature_ptr->redraw |= (PR_GOLD);
+			owner_ptr->redraw |= (PR_GOLD);
 
-			creature_ptr->window |= (PW_PLAYER);
+			owner_ptr->window |= (PW_PLAYER);
 
 			/* Delete the gold */
-			delete_object_idx(creature_ptr->current_floor_ptr, this_o_idx);
+			delete_object_idx(owner_ptr->current_floor_ptr, this_o_idx);
 
 			/* Check the next object */
 			continue;
@@ -3054,7 +3055,7 @@ void py_pickup_floor(player_type *creature_ptr, bool pickup)
 		if (floor_num == 1)
 		{
 			/* Access the object */
-			o_ptr = &creature_ptr->current_floor_ptr->o_list[floor_o_idx];
+			o_ptr = &owner_ptr->current_floor_ptr->o_list[floor_o_idx];
 
 #ifdef ALLOW_EASY_SENSE
 
@@ -3088,7 +3089,7 @@ void py_pickup_floor(player_type *creature_ptr, bool pickup)
 		if (floor_num == 1)
 		{
 			/* Access the object */
-			o_ptr = &creature_ptr->current_floor_ptr->o_list[floor_o_idx];
+			o_ptr = &owner_ptr->current_floor_ptr->o_list[floor_o_idx];
 
 #ifdef ALLOW_EASY_SENSE
 
@@ -3125,7 +3126,7 @@ void py_pickup_floor(player_type *creature_ptr, bool pickup)
 			char out_val[MAX_NLEN + 20];
 
 			/* Access the object */
-			o_ptr = &creature_ptr->current_floor_ptr->o_list[floor_o_idx];
+			o_ptr = &owner_ptr->current_floor_ptr->o_list[floor_o_idx];
 
 #ifdef ALLOW_EASY_SENSE
 
@@ -3150,7 +3151,7 @@ void py_pickup_floor(player_type *creature_ptr, bool pickup)
 		}
 
 		/* Access the object */
-		o_ptr = &creature_ptr->current_floor_ptr->o_list[floor_o_idx];
+		o_ptr = &owner_ptr->current_floor_ptr->o_list[floor_o_idx];
 
 #ifdef ALLOW_EASY_SENSE
 
@@ -3164,7 +3165,7 @@ void py_pickup_floor(player_type *creature_ptr, bool pickup)
 #endif /* ALLOW_EASY_SENSE */
 
 		/* Pick up the object */
-		py_pickup_aux(creature_ptr, floor_o_idx);
+		py_pickup_aux(owner_ptr, floor_o_idx);
 	}
 
 	/* Allow the user to choose an object */
@@ -3184,7 +3185,7 @@ void py_pickup_floor(player_type *creature_ptr, bool pickup)
  * Choice window "shadow" of the "show_inven()" function
  * @return なし
  */
-void display_inven(player_type *creature_ptr, OBJECT_TYPE_VALUE tval)
+void display_inven(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
 {
 	register int i, n, z = 0;
 	object_type *o_ptr;
@@ -3193,20 +3194,20 @@ void display_inven(player_type *creature_ptr, OBJECT_TYPE_VALUE tval)
 	GAME_TEXT o_name[MAX_NLEN];
 	TERM_LEN wid, hgt;
 
-	if (!creature_ptr || !creature_ptr->inventory_list) return;
+	if (!owner_ptr || !owner_ptr->inventory_list) return;
 
 	Term_get_size(&wid, &hgt);
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &creature_ptr->inventory_list[i];
+		o_ptr = &owner_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 		z = i + 1;
 	}
 
 	for (i = 0; i < z; i++)
 	{
-		o_ptr = &creature_ptr->inventory_list[i];
+		o_ptr = &owner_ptr->inventory_list[i];
 		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
 		if (item_tester_okay(o_ptr, tval))
 		{
