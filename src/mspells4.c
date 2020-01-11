@@ -2711,7 +2711,7 @@ MONSTER_NUMBER summon_IE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 
 
 /*!
- * @brief ダンジョン・ガーディアン召喚の処理。 /
+ * @brief ダンジョンの主召喚の処理。 /
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
@@ -2721,7 +2721,7 @@ MONSTER_NUMBER summon_IE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
  * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
  * @return 召喚したモンスターの数を返す。
  */
-MONSTER_NUMBER summon_Guardian(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+MONSTER_NUMBER summon_guardian(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	int k, count = 0;	
 	int num = 2 + randint1(3);
@@ -2887,7 +2887,7 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 
 		case MON_SERPENT:
 		case MON_ZOMBI_SERPENT:
-			count += summon_Guardian(target_ptr, y, x, rlev, m_idx, t_idx, TARGET_TYPE);
+			count += summon_guardian(target_ptr, y, x, rlev, m_idx, t_idx, TARGET_TYPE);
 			break;
 			
 		case MON_CALDARM:
