@@ -221,13 +221,21 @@ static GAME_TEXT KEY_BOOTS[] = "boots";
 	static char kanji_colon[] = "：";
 #endif
 
-
 /*
  * 自動拾い/破壊設定のリストに関する変数 / List for auto-picker/destroyer entries
  */
 int max_autopick = 0; /*!< 現在登録している自動拾い/破壊設定の数 */
 int max_max_autopick = 0; /*!< 自動拾い/破壊設定の限界数 */
 autopick_type *autopick_list = NULL; /*!< 自動拾い/破壊設定構造体のポインタ配列 */
+
+/*
+ * Automatically destroy an item if it is to be destroyed
+ *
+ * When always_pickup is 'yes', we disable auto-destroyer function of
+ * auto-picker/destroyer, and do only easy-auto-destroyer.
+ */
+static object_type autopick_last_destroyed_object;
+
 
 /*
  * A function to create new entry
@@ -1503,7 +1511,7 @@ static void auto_inscribe_item(player_type *player_ptr, object_type *o_ptr, int 
 	/* Redraw inscription */
 	player_ptr->window |= (PW_EQUIP | PW_INVEN);
 
-	/* {.} and {$} effect p_ptr->warning and TRC_TELEPORT_SELF */
+	/* {.} and {$} effect player_ptr->warning and TRC_TELEPORT_SELF */
 	player_ptr->update |= (PU_BONUS);
 }
 
@@ -1511,7 +1519,7 @@ static void auto_inscribe_item(player_type *player_ptr, object_type *o_ptr, int 
 /*
  * Automatically destroy items in this grid.
  */
-static bool is_opt_confirm_destroy(object_type *o_ptr)
+static bool is_opt_confirm_destroy(player_type *player_ptr, object_type *o_ptr)
 {
 	if (!destroy_items) return FALSE;
 
@@ -1538,7 +1546,7 @@ static bool is_opt_confirm_destroy(object_type *o_ptr)
 
 	if (leave_special)
 	{
-		if (p_ptr->prace == RACE_DEMON)
+		if (player_ptr->prace == RACE_DEMON)
 		{
 			if (o_ptr->tval == TV_CORPSE &&
 			    o_ptr->sval == SV_CORPSE &&
@@ -1546,20 +1554,20 @@ static bool is_opt_confirm_destroy(object_type *o_ptr)
 				return FALSE;
 		}
 
-		if (p_ptr->pclass == CLASS_ARCHER)
+		if (player_ptr->pclass == CLASS_ARCHER)
 		{
 			if (o_ptr->tval == TV_SKELETON ||
 			    (o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
 				return FALSE;
 		}
-		else if (p_ptr->pclass == CLASS_NINJA)
+		else if (player_ptr->pclass == CLASS_NINJA)
 		{
 			if (o_ptr->tval == TV_LITE &&
 			    o_ptr->name2 == EGO_LITE_DARKNESS && object_is_known(o_ptr))
 				return FALSE;
 		}
-		else if (p_ptr->pclass == CLASS_BEASTMASTER ||
-			 p_ptr->pclass == CLASS_CAVALRY)
+		else if (player_ptr->pclass == CLASS_BEASTMASTER ||
+			 player_ptr->pclass == CLASS_CAVALRY)
 		{
 			if (o_ptr->tval == TV_WAND &&
 			    o_ptr->sval == SV_WAND_HEAL_MONSTER && object_is_aware(o_ptr))
@@ -1573,20 +1581,12 @@ static bool is_opt_confirm_destroy(object_type *o_ptr)
 }
 
 
-/*
- * Automatically destroy an item if it is to be destroyed
- *
- * When always_pickup is 'yes', we disable auto-destroyer function of
- * auto-picker/destroyer, and do only easy-auto-destroyer.
- */
-static object_type autopick_last_destroyed_object;
-
-static void auto_destroy_item(object_type *o_ptr, int autopick_idx)
+static void auto_destroy_item(player_type *player_ptr, object_type *o_ptr, int autopick_idx)
 {
 	bool destroy = FALSE;
 
 	/* Easy-Auto-Destroyer (3rd priority) */
-	if (is_opt_confirm_destroy(o_ptr)) destroy = TRUE;
+	if (is_opt_confirm_destroy(player_ptr, o_ptr)) destroy = TRUE;
 
 	/* Protected by auto-picker (2nd priotity) */
 	if (autopick_idx >= 0 &&
@@ -1709,7 +1709,7 @@ void autopick_alter_item(player_type *player_ptr, INVENTORY_IDX item, bool destr
 
 	/* Do auto-destroy if needed */
 	if (destroy && item <= INVEN_PACK)
-		auto_destroy_item(o_ptr, idx);
+		auto_destroy_item(player_ptr, o_ptr, idx);
 }
 
 
@@ -1783,7 +1783,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 		 */
 		else
 		{
-			auto_destroy_item(o_ptr, idx);
+			auto_destroy_item(player_ptr, o_ptr, idx);
 		}
 	} /* for () */
 }
