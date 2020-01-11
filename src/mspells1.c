@@ -568,7 +568,7 @@ void bolt(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void beam(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int monspell, int target_type)
+void beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int monspell, int target_type)
 {
     BIT_FLAGS flg = 0;
     bool learnable = spell_learnable(m_idx);
@@ -584,7 +584,7 @@ void beam(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, 
     }
 
 	/* Target the player with a bolt attack */
-	(void)project(p_ptr, m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
+	(void)project(target_ptr, m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
 
