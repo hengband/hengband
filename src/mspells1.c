@@ -603,9 +603,9 @@ void beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
-void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int monspell, int target_type)
+void breath(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int monspell, int target_type)
 {
-    monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     bool learnable = spell_learnable(m_idx);
 	BIT_FLAGS flg = 0x00;
@@ -644,7 +644,7 @@ void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp
 	}
 
 	/* Target the player with a ball attack */
-	(void)project(p_ptr, m_idx, rad, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
+	(void)project(target_ptr, m_idx, rad, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
 

@@ -224,6 +224,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 
 /*!
 * @brief RF4_ROCKETの処理。ロケット。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -231,7 +232,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF4_ROCKET(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF4_ROCKET(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -242,7 +243,7 @@ HIT_POINT spell_RF4_ROCKET(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_ID
 		TARGET_TYPE);
 
 	dam = monspell_damage((MS_ROCKET), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_ROCKET, dam, 2, FALSE, MS_ROCKET, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_ROCKET, dam, 2, FALSE, MS_ROCKET, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_SHARD);
 	return dam;
@@ -277,6 +278,7 @@ HIT_POINT spell_RF4_SHOOT(player_type *target_ptr, POSITION y, POSITION x, MONST
 
 /*!
 * @brief RF4_BR_*の処理。各種ブレス。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param GF_TYPE ブレスの属性
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
@@ -285,7 +287,7 @@ HIT_POINT spell_RF4_SHOOT(player_type *target_ptr, POSITION y, POSITION x, MONST
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF4_BREATH(int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam, ms_type, drs_type = 0;
 	concptr type_s;
@@ -475,7 +477,7 @@ HIT_POINT spell_RF4_BREATH(int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_id
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 
 	sound(SOUND_BREATH);
-	breath(y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type, TARGET_TYPE);
 	if (smart_learn_aux && mon_to_player)
 		update_smart_learn(m_idx, drs_type);
 
@@ -484,6 +486,7 @@ HIT_POINT spell_RF4_BREATH(int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_id
 
 /*!
 * @brief RF4_BA_NUKEの処理。放射能球。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -491,7 +494,7 @@ HIT_POINT spell_RF4_BREATH(int GF_TYPE, POSITION y, POSITION x, MONSTER_IDX m_id
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF4_BA_NUKE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF4_BA_NUKE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -502,7 +505,7 @@ HIT_POINT spell_RF4_BA_NUKE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 		TARGET_TYPE);
 
 	dam = monspell_damage((MS_BALL_NUKE), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_POIS);
 
@@ -511,6 +514,7 @@ HIT_POINT spell_RF4_BA_NUKE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 
 /*!
 * @brief RF4_BA_CHAOの処理。純ログルス。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -518,7 +522,7 @@ HIT_POINT spell_RF4_BA_NUKE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF4_BA_CHAO(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF4_BA_CHAO(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -529,7 +533,7 @@ HIT_POINT spell_RF4_BA_CHAO(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 		TARGET_TYPE);
 
 	dam = monspell_damage((MS_BALL_CHAOS), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_CHAOS);
 
@@ -538,6 +542,7 @@ HIT_POINT spell_RF4_BA_CHAO(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 
 /*!
 * @brief RF5_BA_ACIDの処理。アシッド・ボール。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -545,7 +550,7 @@ HIT_POINT spell_RF4_BA_CHAO(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_ACID(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_ACID(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam, rad;
 
@@ -558,7 +563,7 @@ HIT_POINT spell_RF5_BA_ACID(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 
 	rad = monster_is_powerful(m_idx) ? 4 : 2;
 	dam = monspell_damage((MS_BALL_ACID), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_ACID);
 
@@ -567,6 +572,7 @@ HIT_POINT spell_RF5_BA_ACID(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 
 /*!
 * @brief RF5_BA_ELECの処理。サンダー・ボール。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -574,7 +580,7 @@ HIT_POINT spell_RF5_BA_ACID(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_ELEC(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_ELEC(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam, rad;
 
@@ -587,7 +593,7 @@ HIT_POINT spell_RF5_BA_ELEC(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 
 	rad = monster_is_powerful(m_idx) ? 4 : 2;
 	dam = monspell_damage((MS_BALL_ELEC), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_ELEC);
 
@@ -596,6 +602,7 @@ HIT_POINT spell_RF5_BA_ELEC(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 
 /*!
 * @brief RF5_BA_FIREの処理。ファイア・ボール。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -603,7 +610,7 @@ HIT_POINT spell_RF5_BA_ELEC(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_FIRE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_FIRE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam, rad;
 	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
@@ -627,7 +634,7 @@ HIT_POINT spell_RF5_BA_FIRE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 	}
 	rad = monster_is_powerful(m_idx) ? 4 : 2;
 	dam = monspell_damage((MS_BALL_FIRE), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_FIRE);
 
@@ -636,6 +643,7 @@ HIT_POINT spell_RF5_BA_FIRE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 
 /*!
 * @brief RF5_BA_COLDの処理。アイス・ボール。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -643,7 +651,7 @@ HIT_POINT spell_RF5_BA_FIRE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_COLD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_COLD(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam, rad;
 
@@ -656,7 +664,7 @@ HIT_POINT spell_RF5_BA_COLD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 
 	rad = monster_is_powerful(m_idx) ? 4 : 2;
 	dam = monspell_damage((MS_BALL_COLD), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_COLD);
 
@@ -665,6 +673,7 @@ HIT_POINT spell_RF5_BA_COLD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 
 /*!
 * @brief RF5_BA_POISの処理。悪臭雲。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -672,7 +681,7 @@ HIT_POINT spell_RF5_BA_COLD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_POIS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_POIS(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -683,7 +692,7 @@ HIT_POINT spell_RF5_BA_POIS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 		TARGET_TYPE);
 
 	dam = monspell_damage((MS_BALL_POIS), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_POIS);
 
@@ -692,6 +701,7 @@ HIT_POINT spell_RF5_BA_POIS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 
 /*!
 * @brief RF5_BA_NETHの処理。地獄球。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -699,7 +709,7 @@ HIT_POINT spell_RF5_BA_POIS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_NETH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_NETH(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -710,7 +720,7 @@ HIT_POINT spell_RF5_BA_NETH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 		TARGET_TYPE);
 
 	dam = monspell_damage((MS_BALL_NETHER), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_NETH);
 
@@ -719,6 +729,7 @@ HIT_POINT spell_RF5_BA_NETH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 
 /*!
 * @brief RF5_BA_WATEの処理。ウォーター・ボール。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -726,7 +737,7 @@ HIT_POINT spell_RF5_BA_NETH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_WATE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_WATE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 	bool known = monster_near_player(m_idx, t_idx);
@@ -753,12 +764,13 @@ HIT_POINT spell_RF5_BA_WATE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 	}
 
 	dam = monspell_damage((MS_BALL_WATER), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_WATER, dam, 4, FALSE, MS_BALL_WATER, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_WATER, dam, 4, FALSE, MS_BALL_WATER, TARGET_TYPE);
 	return dam;
 }
 
 /*!
 * @brief RF5_BA_MANAの処理。魔力の嵐。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -766,7 +778,7 @@ HIT_POINT spell_RF5_BA_WATE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_MANA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -777,12 +789,13 @@ HIT_POINT spell_RF5_BA_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 		TARGET_TYPE);
 
 	dam = monspell_damage((MS_BALL_MANA), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_MANA, dam, 4, FALSE, MS_BALL_MANA, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_MANA, dam, 4, FALSE, MS_BALL_MANA, TARGET_TYPE);
 	return dam;
 }
 
 /*!
 * @brief RF5_BA_DARKの処理。暗黒の嵐。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -790,7 +803,7 @@ HIT_POINT spell_RF5_BA_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_DARK(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_DARK(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -801,7 +814,7 @@ HIT_POINT spell_RF5_BA_DARK(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 		TARGET_TYPE);
 
 	dam = monspell_damage((MS_BALL_DARK), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_DARK, dam, 4, FALSE, MS_BALL_DARK, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_DARK, dam, 4, FALSE, MS_BALL_DARK, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_DARK);
 
@@ -810,6 +823,7 @@ HIT_POINT spell_RF5_BA_DARK(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 
 /*!
 * @brief RF5_DRAIN_MANAの処理。魔力吸収。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -817,7 +831,7 @@ HIT_POINT spell_RF5_BA_DARK(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_DRAIN_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
@@ -836,7 +850,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTE
 	}
 
 	dam = monspell_damage((MS_DRAIN_MANA), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_MANA);
 	
@@ -845,6 +859,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTE
 
 /*!
 * @brief RF5_MIND_BLASTの処理。精神攻撃。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -852,7 +867,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTE
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_MIND_BLAST(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	bool seen = (!p_ptr->blind && m_ptr->ml);
@@ -876,12 +891,13 @@ HIT_POINT spell_RF5_MIND_BLAST(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTE
 	}
 
 	dam = monspell_damage((MS_MIND_BLAST), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, TARGET_TYPE);
 	return dam;
 }
 
 /*!
 * @brief RF5_BRAIN_SMASHの処理。脳攻撃。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -889,7 +905,7 @@ HIT_POINT spell_RF5_MIND_BLAST(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTE
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BRAIN_SMASH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	bool seen = (!p_ptr->blind && m_ptr->ml);
@@ -913,12 +929,13 @@ HIT_POINT spell_RF5_BRAIN_SMASH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONST
 	}
 
 	dam = monspell_damage((MS_BRAIN_SMASH), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, TARGET_TYPE);
 	return dam;
 }
 
 /*!
 * @brief RF5_CAUSE_*のメッセージ処理関数 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param GF_TYPE 攻撃に使用する属性
 * @param dam 攻撃に使用するダメージ量
 * @param y 対象の地点のy座標
@@ -932,7 +949,7 @@ HIT_POINT spell_RF5_BRAIN_SMASH(POSITION y, POSITION x, MONSTER_IDX m_idx, MONST
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-void spell_RF5_CAUSE(int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, int MS_TYPE, int TARGET_TYPE)
+void spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, int MS_TYPE, int TARGET_TYPE)
 {
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
@@ -957,11 +974,13 @@ void spell_RF5_CAUSE(int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER
 			p_ptr->current_floor_ptr->monster_noise = TRUE;
 		}
 	}
-	breath(y, x, m_idx, GF_TYPE, dam, 0, FALSE, MS_TYPE, TARGET_TYPE);
+
+	breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, FALSE, MS_TYPE, TARGET_TYPE);
 }
 
 /*!
 * @brief RF5_CAUSE_1の処理。軽傷の呪い。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -969,7 +988,7 @@ void spell_RF5_CAUSE(int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_CAUSE_1(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_CAUSE_1(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	concptr msg1, msg2, msg3;
 	HIT_POINT dam;
@@ -979,12 +998,13 @@ HIT_POINT spell_RF5_CAUSE_1(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 	msg2 = _("%^sがあなたを指さして呪った。", "%^s points at you and curses.");
 	msg3 = _("%^sは%sを指さして呪いをかけた。", "%^s points at %s and curses.");
 	
-	spell_RF5_CAUSE(GF_CAUSE_1, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_1, TARGET_TYPE);
+	spell_RF5_CAUSE(target_ptr, GF_CAUSE_1, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_1, TARGET_TYPE);
 	return dam;
 }
 
 /*!
 * @brief RF5_CAUSE_2の処理。重傷の呪い。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -992,7 +1012,7 @@ HIT_POINT spell_RF5_CAUSE_1(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_CAUSE_2(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_CAUSE_2(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	concptr msg1, msg2, msg3;
 	HIT_POINT dam;
@@ -1002,12 +1022,13 @@ HIT_POINT spell_RF5_CAUSE_2(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 	msg2 = _("%^sがあなたを指さして恐ろしげに呪った。", "%^s points at you and curses horribly.");
 	msg3 = _("%^sは%sを指さして恐ろしげに呪いをかけた。", "%^s points at %s and curses horribly.");
 
-	spell_RF5_CAUSE(GF_CAUSE_2, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_2, TARGET_TYPE);
+	spell_RF5_CAUSE(target_ptr, GF_CAUSE_2, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_2, TARGET_TYPE);
 	return dam;
 }
 
 /*!
 * @brief RF5_CAUSE_3の処理。致命傷の呪い。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -1015,7 +1036,7 @@ HIT_POINT spell_RF5_CAUSE_2(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_CAUSE_3(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_CAUSE_3(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	concptr msg1, msg2, msg3;
 	HIT_POINT dam;
@@ -1025,12 +1046,13 @@ HIT_POINT spell_RF5_CAUSE_3(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 	msg2 = _("%^sがあなたを指さして恐ろしげに呪文を唱えた！", "%^s points at you, incanting terribly!");
 	msg3 = _("%^sは%sを指さし、恐ろしげに呪文を唱えた！", "%^s points at %s, incanting terribly!");
 
-	spell_RF5_CAUSE(GF_CAUSE_3, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_3, TARGET_TYPE);
+	spell_RF5_CAUSE(target_ptr, GF_CAUSE_3, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_3, TARGET_TYPE);
 	return dam;
 }
 
 /*!
 * @brief RF5_CAUSE_4の処理。秘孔を突く。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -1038,7 +1060,7 @@ HIT_POINT spell_RF5_CAUSE_3(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_CAUSE_4(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_CAUSE_4(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	concptr msg1, msg2, msg3;
 	HIT_POINT dam;
@@ -1048,7 +1070,7 @@ HIT_POINT spell_RF5_CAUSE_4(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 	msg2 = _("%^sがあなたの秘孔を突いて「お前は既に死んでいる」と叫んだ。", "%^s points at you, screaming the word DIE!");
 	msg3 = _("%^sが%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。", "%^s points at %s, screaming the word, 'DIE!'");
 
-	spell_RF5_CAUSE(GF_CAUSE_4, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_4, TARGET_TYPE);
+	spell_RF5_CAUSE(target_ptr, GF_CAUSE_4, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_4, TARGET_TYPE);
 	return dam;
 }
 
@@ -1186,7 +1208,7 @@ HIT_POINT spell_RF5_BO_COLD(player_type *target_ptr, POSITION y, POSITION x, MON
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF5_BA_LITE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF5_BA_LITE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam;
 
@@ -1197,7 +1219,7 @@ HIT_POINT spell_RF5_BA_LITE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_I
 		TARGET_TYPE);
 
 	dam = monspell_damage((MS_STARBURST), m_idx, DAM_ROLL);
-	breath(y, x, m_idx, GF_LITE, dam, 4, FALSE, MS_STARBURST, TARGET_TYPE);
+	breath(target_ptr, y, x, m_idx, GF_LITE, dam, 4, FALSE, MS_STARBURST, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_LITE);
 
@@ -1761,6 +1783,7 @@ void spell_RF6_HASTE(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 
 /*!
 * @brief RF6_HAND_DOOMの処理。破滅の手。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
@@ -1768,7 +1791,7 @@ void spell_RF6_HASTE(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 * @return ダメージ量を返す。
 */
-HIT_POINT spell_RF6_HAND_DOOM(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
+HIT_POINT spell_RF6_HAND_DOOM(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam = 0;
 
@@ -1780,12 +1803,12 @@ HIT_POINT spell_RF6_HAND_DOOM(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
 		dam = monspell_damage((MS_HAND_DOOM), m_idx, DAM_ROLL);
-		breath(y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, MONSTER_TO_PLAYER);
+		breath(target_ptr, y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, MONSTER_TO_PLAYER);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
 		dam = 20; /* Dummy power */
-		breath(y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, MONSTER_TO_MONSTER);
+		breath(target_ptr, y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, MONSTER_TO_MONSTER);
 	}
 	return dam;
 }
@@ -3449,56 +3472,56 @@ HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y,
 	case RF4_SPELL_START + 0:   spell_RF4_SHRIEK(m_idx, target_ptr, 0, MONSTER_TO_PLAYER); break;	/* RF4_SHRIEK */
 	case RF4_SPELL_START + 1:   break;   /* RF4_XXX1 */
 	case RF4_SPELL_START + 2:   spell_RF4_DISPEL(m_idx, target_ptr, 0, MONSTER_TO_PLAYER); break;	/* RF4_DISPEL */
-	case RF4_SPELL_START + 3:   return spell_RF4_ROCKET(y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_ROCKET */
+	case RF4_SPELL_START + 3:   return spell_RF4_ROCKET(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_ROCKET */
 	case RF4_SPELL_START + 4:   return spell_RF4_SHOOT(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_SHOOT */
 	case RF4_SPELL_START + 5:   break;   /* RF4_XXX2 */
 	case RF4_SPELL_START + 6:   break;   /* RF4_XXX3 */
 	case RF4_SPELL_START + 7:   break;   /* RF4_XXX4 */
-	case RF4_SPELL_START + 8:   return spell_RF4_BREATH(GF_ACID, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ACID */
-	case RF4_SPELL_START + 9:   return spell_RF4_BREATH(GF_ELEC, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ELEC */
-	case RF4_SPELL_START + 10:  return spell_RF4_BREATH(GF_FIRE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_FIRE */
-	case RF4_SPELL_START + 11:  return spell_RF4_BREATH(GF_COLD, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_COLD */
-	case RF4_SPELL_START + 12:  return spell_RF4_BREATH(GF_POIS, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_POIS */
-	case RF4_SPELL_START + 13:  return spell_RF4_BREATH(GF_NETHER, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_NETH */
-	case RF4_SPELL_START + 14:  return spell_RF4_BREATH(GF_LITE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_LITE */
-	case RF4_SPELL_START + 15:  return spell_RF4_BREATH(GF_DARK, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_DARK */
-	case RF4_SPELL_START + 16:  return spell_RF4_BREATH(GF_CONFUSION, y, x, m_idx, 0, MONSTER_TO_PLAYER);	/* RF4_BR_CONF */
-	case RF4_SPELL_START + 17:  return spell_RF4_BREATH(GF_SOUND, y, x, m_idx, 0, MONSTER_TO_PLAYER);	/* RF4_BR_SOUN */
-	case RF4_SPELL_START + 18:  return spell_RF4_BREATH(GF_CHAOS, y, x, m_idx, 0, MONSTER_TO_PLAYER);	/* RF4_BR_CHAO */
-	case RF4_SPELL_START + 19:  return spell_RF4_BREATH(GF_DISENCHANT, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_DISE */
-	case RF4_SPELL_START + 20:  return spell_RF4_BREATH(GF_NEXUS, y, x, m_idx, 0, MONSTER_TO_PLAYER);	/* RF4_BR_NEXU */
-	case RF4_SPELL_START + 21:  return spell_RF4_BREATH(GF_TIME, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_TIME */
-	case RF4_SPELL_START + 22:  return spell_RF4_BREATH(GF_INERTIAL, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_INER */
-	case RF4_SPELL_START + 23:  return spell_RF4_BREATH(GF_GRAVITY, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_GRAV */
-	case RF4_SPELL_START + 24:  return spell_RF4_BREATH(GF_SHARDS, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_SHAR */
-	case RF4_SPELL_START + 25:  return spell_RF4_BREATH(GF_PLASMA, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_PLAS */
-	case RF4_SPELL_START + 26:  return spell_RF4_BREATH(GF_FORCE, y, x, m_idx, 0, MONSTER_TO_PLAYER);	/* RF4_BR_WALL */
-	case RF4_SPELL_START + 27:  return spell_RF4_BREATH(GF_MANA, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_MANA */
-	case RF4_SPELL_START + 28:  return spell_RF4_BA_NUKE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BA_NUKE */
-	case RF4_SPELL_START + 29:  return spell_RF4_BREATH(GF_NUKE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_NUKE */
-	case RF4_SPELL_START + 30:  return spell_RF4_BA_CHAO(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BA_CHAO */
-	case RF4_SPELL_START + 31:  return spell_RF4_BREATH(GF_DISINTEGRATE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_DISI */
-	case RF5_SPELL_START + 0:  return spell_RF5_BA_ACID(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_ACID */
-	case RF5_SPELL_START + 1:  return spell_RF5_BA_ELEC(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_ELEC */
-	case RF5_SPELL_START + 2:  return spell_RF5_BA_FIRE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_FIRE */
-	case RF5_SPELL_START + 3:  return spell_RF5_BA_COLD(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_COLD */
-	case RF5_SPELL_START + 4:  return spell_RF5_BA_POIS(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_POIS */
-	case RF5_SPELL_START + 5:  return spell_RF5_BA_NETH(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_NETH */
-	case RF5_SPELL_START + 6:  return spell_RF5_BA_WATE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_WATE */
-	case RF5_SPELL_START + 7:  return spell_RF5_BA_MANA(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_MANA */
-	case RF5_SPELL_START + 8:  return spell_RF5_BA_DARK(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_DARK */
-	case RF5_SPELL_START + 9:  return spell_RF5_DRAIN_MANA(y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF5_DRAIN_MANA */
-	case RF5_SPELL_START + 10: return spell_RF5_MIND_BLAST(y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF5_MIND_BLAST */
-	case RF5_SPELL_START + 11: return spell_RF5_BRAIN_SMASH(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_MIND_BLAST */
-	case RF5_SPELL_START + 12: return spell_RF5_CAUSE_1(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_1 */
-	case RF5_SPELL_START + 13: return spell_RF5_CAUSE_2(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_2 */
-	case RF5_SPELL_START + 14: return spell_RF5_CAUSE_3(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_3 */
-	case RF5_SPELL_START + 15: return spell_RF5_CAUSE_4(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_4 */
+	case RF4_SPELL_START + 8:   return spell_RF4_BREATH(target_ptr, GF_ACID, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ACID */
+	case RF4_SPELL_START + 9:   return spell_RF4_BREATH(target_ptr, GF_ELEC, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_ELEC */
+	case RF4_SPELL_START + 10:  return spell_RF4_BREATH(target_ptr, GF_FIRE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_FIRE */
+	case RF4_SPELL_START + 11:  return spell_RF4_BREATH(target_ptr, GF_COLD, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_COLD */
+	case RF4_SPELL_START + 12:  return spell_RF4_BREATH(target_ptr, GF_POIS, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_POIS */
+	case RF4_SPELL_START + 13:  return spell_RF4_BREATH(target_ptr, GF_NETHER, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_NETH */
+	case RF4_SPELL_START + 14:  return spell_RF4_BREATH(target_ptr, GF_LITE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_LITE */
+	case RF4_SPELL_START + 15:  return spell_RF4_BREATH(target_ptr, GF_DARK, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_DARK */
+	case RF4_SPELL_START + 16:  return spell_RF4_BREATH(target_ptr, GF_CONFUSION, y, x, m_idx, 0, MONSTER_TO_PLAYER);	/* RF4_BR_CONF */
+	case RF4_SPELL_START + 17:  return spell_RF4_BREATH(target_ptr, GF_SOUND, y, x, m_idx, 0, MONSTER_TO_PLAYER);	/* RF4_BR_SOUN */
+	case RF4_SPELL_START + 18:  return spell_RF4_BREATH(target_ptr, GF_CHAOS, y, x, m_idx, 0, MONSTER_TO_PLAYER);	/* RF4_BR_CHAO */
+	case RF4_SPELL_START + 19:  return spell_RF4_BREATH(target_ptr, GF_DISENCHANT, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_DISE */
+	case RF4_SPELL_START + 20:  return spell_RF4_BREATH(target_ptr, GF_NEXUS, y, x, m_idx, 0, MONSTER_TO_PLAYER);	/* RF4_BR_NEXU */
+	case RF4_SPELL_START + 21:  return spell_RF4_BREATH(target_ptr, GF_TIME, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_TIME */
+	case RF4_SPELL_START + 22:  return spell_RF4_BREATH(target_ptr, GF_INERTIAL, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_INER */
+	case RF4_SPELL_START + 23:  return spell_RF4_BREATH(target_ptr, GF_GRAVITY, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF4_BR_GRAV */
+	case RF4_SPELL_START + 24:  return spell_RF4_BREATH(target_ptr, GF_SHARDS, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_SHAR */
+	case RF4_SPELL_START + 25:  return spell_RF4_BREATH(target_ptr, GF_PLASMA, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF4_BR_PLAS */
+	case RF4_SPELL_START + 26:  return spell_RF4_BREATH(target_ptr, GF_FORCE, y, x, m_idx, 0, MONSTER_TO_PLAYER);	/* RF4_BR_WALL */
+	case RF4_SPELL_START + 27:  return spell_RF4_BREATH(target_ptr, GF_MANA, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_MANA */
+	case RF4_SPELL_START + 28:  return spell_RF4_BA_NUKE(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BA_NUKE */
+	case RF4_SPELL_START + 29:  return spell_RF4_BREATH(target_ptr, GF_NUKE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_NUKE */
+	case RF4_SPELL_START + 30:  return spell_RF4_BA_CHAO(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BA_CHAO */
+	case RF4_SPELL_START + 31:  return spell_RF4_BREATH(target_ptr, GF_DISINTEGRATE, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF4_BR_DISI */
+	case RF5_SPELL_START + 0:  return spell_RF5_BA_ACID(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_ACID */
+	case RF5_SPELL_START + 1:  return spell_RF5_BA_ELEC(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_ELEC */
+	case RF5_SPELL_START + 2:  return spell_RF5_BA_FIRE(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_FIRE */
+	case RF5_SPELL_START + 3:  return spell_RF5_BA_COLD(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_COLD */
+	case RF5_SPELL_START + 4:  return spell_RF5_BA_POIS(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_POIS */
+	case RF5_SPELL_START + 5:  return spell_RF5_BA_NETH(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_NETH */
+	case RF5_SPELL_START + 6:  return spell_RF5_BA_WATE(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_WATE */
+	case RF5_SPELL_START + 7:  return spell_RF5_BA_MANA(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_MANA */
+	case RF5_SPELL_START + 8:  return spell_RF5_BA_DARK(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_DARK */
+	case RF5_SPELL_START + 9:  return spell_RF5_DRAIN_MANA(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF5_DRAIN_MANA */
+	case RF5_SPELL_START + 10: return spell_RF5_MIND_BLAST(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);  /* RF5_MIND_BLAST */
+	case RF5_SPELL_START + 11: return spell_RF5_BRAIN_SMASH(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_MIND_BLAST */
+	case RF5_SPELL_START + 12: return spell_RF5_CAUSE_1(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_1 */
+	case RF5_SPELL_START + 13: return spell_RF5_CAUSE_2(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_2 */
+	case RF5_SPELL_START + 14: return spell_RF5_CAUSE_3(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_3 */
+	case RF5_SPELL_START + 15: return spell_RF5_CAUSE_4(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_CAUSE_4 */
 	case RF5_SPELL_START + 16: return spell_RF5_BO_ACID(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_ACID */
 	case RF5_SPELL_START + 17: return spell_RF5_BO_ELEC(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_ELEC */
 	case RF5_SPELL_START + 18: return spell_RF5_BO_FIRE(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_FIRE */
 	case RF5_SPELL_START + 19: return spell_RF5_BO_COLD(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_COLD */
-	case RF5_SPELL_START + 20: return spell_RF5_BA_LITE(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_LITE */
+	case RF5_SPELL_START + 20: return spell_RF5_BA_LITE(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BA_LITE */
 	case RF5_SPELL_START + 21: return spell_RF5_BO_NETH(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_NETH */
 	case RF5_SPELL_START + 22: return spell_RF5_BO_WATE(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_WATE */
 	case RF5_SPELL_START + 23: return spell_RF5_BO_MANA(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF5_BO_MANA */
@@ -3511,7 +3534,7 @@ HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y,
 	case RF5_SPELL_START + 30: spell_RF5_SLOW(m_idx, target_ptr, 0, MONSTER_TO_PLAYER); break;  /* RF5_SLOW */
 	case RF5_SPELL_START + 31: spell_RF5_HOLD(m_idx, target_ptr, 0, MONSTER_TO_PLAYER); break;  /* RF5_HOLD */
 	case RF6_SPELL_START + 0:  spell_RF6_HASTE(m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_HASTE */
-	case RF6_SPELL_START + 1:  return spell_RF6_HAND_DOOM(y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF6_HAND_DOOM */
+	case RF6_SPELL_START + 1:  return spell_RF6_HAND_DOOM(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF6_HAND_DOOM */
 	case RF6_SPELL_START + 2:  spell_RF6_HEAL(m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF6_HEAL */
 	case RF6_SPELL_START + 3:  spell_RF6_INVULNER(m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF6_INVULNER */
 	case RF6_SPELL_START + 4:  spell_RF6_BLINK(m_idx, MONSTER_TO_PLAYER); break;   /* RF6_BLINK */
@@ -3564,56 +3587,56 @@ HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y
 	case RF4_SPELL_START + 0:   spell_RF4_SHRIEK(m_idx, p_ptr, t_idx, MONSTER_TO_MONSTER); break;   /* RF4_SHRIEK */
 	case RF4_SPELL_START + 1:   return -1;   /* RF4_XXX1 */
 	case RF4_SPELL_START + 2:   spell_RF4_DISPEL(m_idx, p_ptr, t_idx, MONSTER_TO_MONSTER); break;   /* RF4_DISPEL */
-	case RF4_SPELL_START + 3:   return spell_RF4_ROCKET(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_ROCKET */
+	case RF4_SPELL_START + 3:   return spell_RF4_ROCKET(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_ROCKET */
 	case RF4_SPELL_START + 4:   return spell_RF4_SHOOT(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_SHOOT */
 	case RF4_SPELL_START + 5:   return -1;   /* RF4_XXX2 */
 	case RF4_SPELL_START + 6:   return -1;   /* RF4_XXX3 */
 	case RF4_SPELL_START + 7:   return -1;   /* RF4_XXX4 */
-	case RF4_SPELL_START + 8:   return spell_RF4_BREATH(GF_ACID, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_ACID */
-	case RF4_SPELL_START + 9:   return spell_RF4_BREATH(GF_ELEC, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_ELEC */
-	case RF4_SPELL_START + 10:  return spell_RF4_BREATH(GF_FIRE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_FIRE */
-	case RF4_SPELL_START + 11:  return spell_RF4_BREATH(GF_COLD, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_COLD */
-	case RF4_SPELL_START + 12:  return spell_RF4_BREATH(GF_POIS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_POIS */
-	case RF4_SPELL_START + 13:  return spell_RF4_BREATH(GF_NETHER, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_NETH */
-	case RF4_SPELL_START + 14:  return spell_RF4_BREATH(GF_LITE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_LITE */
-	case RF4_SPELL_START + 15:  return spell_RF4_BREATH(GF_DARK, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_DARK */
-	case RF4_SPELL_START + 16:  return spell_RF4_BREATH(GF_CONFUSION, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_CONF */
-	case RF4_SPELL_START + 17:  return spell_RF4_BREATH(GF_SOUND, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_SOUN */
-	case RF4_SPELL_START + 18:  return spell_RF4_BREATH(GF_CHAOS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_CHAO */
-	case RF4_SPELL_START + 19:  return spell_RF4_BREATH(GF_DISENCHANT, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_DISE */
-	case RF4_SPELL_START + 20:  return spell_RF4_BREATH(GF_NEXUS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_NEXU */
-	case RF4_SPELL_START + 21:  return spell_RF4_BREATH(GF_TIME, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_TIME */
-	case RF4_SPELL_START + 22:  return spell_RF4_BREATH(GF_INERTIAL, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_INER */
-	case RF4_SPELL_START + 23:  return spell_RF4_BREATH(GF_GRAVITY, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_GRAV */
-	case RF4_SPELL_START + 24:  return spell_RF4_BREATH(GF_SHARDS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_SHAR */
-	case RF4_SPELL_START + 25:  return spell_RF4_BREATH(GF_PLASMA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_PLAS */
-	case RF4_SPELL_START + 26:  return spell_RF4_BREATH(GF_FORCE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_WALL */
-	case RF4_SPELL_START + 27:  return spell_RF4_BREATH(GF_MANA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_MANA */
-	case RF4_SPELL_START + 28:  return spell_RF4_BA_NUKE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BA_NUKE */
-	case RF4_SPELL_START + 29:  return spell_RF4_BREATH(GF_NUKE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_NUKE */
-	case RF4_SPELL_START + 30:  return spell_RF4_BA_CHAO(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BA_CHAO */
-	case RF4_SPELL_START + 31:  return spell_RF4_BREATH(GF_DISINTEGRATE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_DISI */
-	case RF5_SPELL_START + 0:  return spell_RF5_BA_ACID(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_ACID */
-	case RF5_SPELL_START + 1:  return spell_RF5_BA_ELEC(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_ELEC */
-	case RF5_SPELL_START + 2:  return spell_RF5_BA_FIRE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_FIRE */
-	case RF5_SPELL_START + 3:  return spell_RF5_BA_COLD(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_COLD */
-	case RF5_SPELL_START + 4:  return spell_RF5_BA_POIS(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_POIS */
-	case RF5_SPELL_START + 5:  return spell_RF5_BA_NETH(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_NETH */
-	case RF5_SPELL_START + 6:  return spell_RF5_BA_WATE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_WATE */
-	case RF5_SPELL_START + 7:  return spell_RF5_BA_MANA(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_MANA */
-	case RF5_SPELL_START + 8:  return spell_RF5_BA_DARK(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_DARK */
-	case RF5_SPELL_START + 9:  return spell_RF5_DRAIN_MANA(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_DRAIN_MANA */
-	case RF5_SPELL_START + 10: return spell_RF5_MIND_BLAST(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_MIND_BLAST */
-	case RF5_SPELL_START + 11: return spell_RF5_BRAIN_SMASH(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BRAIN_SMASH */
-	case RF5_SPELL_START + 12: return spell_RF5_CAUSE_1(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_CAUSE_1 */
-	case RF5_SPELL_START + 13: return spell_RF5_CAUSE_2(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_CAUSE_2 */
-	case RF5_SPELL_START + 14: return spell_RF5_CAUSE_3(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_CAUSE_3 */
-	case RF5_SPELL_START + 15: return spell_RF5_CAUSE_4(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_CAUSE_4 */
+	case RF4_SPELL_START + 8:   return spell_RF4_BREATH(target_ptr, GF_ACID, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_ACID */
+	case RF4_SPELL_START + 9:   return spell_RF4_BREATH(target_ptr, GF_ELEC, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_ELEC */
+	case RF4_SPELL_START + 10:  return spell_RF4_BREATH(target_ptr, GF_FIRE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_FIRE */
+	case RF4_SPELL_START + 11:  return spell_RF4_BREATH(target_ptr, GF_COLD, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_COLD */
+	case RF4_SPELL_START + 12:  return spell_RF4_BREATH(target_ptr, GF_POIS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_POIS */
+	case RF4_SPELL_START + 13:  return spell_RF4_BREATH(target_ptr, GF_NETHER, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_NETH */
+	case RF4_SPELL_START + 14:  return spell_RF4_BREATH(target_ptr, GF_LITE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_LITE */
+	case RF4_SPELL_START + 15:  return spell_RF4_BREATH(target_ptr, GF_DARK, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_DARK */
+	case RF4_SPELL_START + 16:  return spell_RF4_BREATH(target_ptr, GF_CONFUSION, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_CONF */
+	case RF4_SPELL_START + 17:  return spell_RF4_BREATH(target_ptr, GF_SOUND, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_SOUN */
+	case RF4_SPELL_START + 18:  return spell_RF4_BREATH(target_ptr, GF_CHAOS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_CHAO */
+	case RF4_SPELL_START + 19:  return spell_RF4_BREATH(target_ptr, GF_DISENCHANT, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_DISE */
+	case RF4_SPELL_START + 20:  return spell_RF4_BREATH(target_ptr, GF_NEXUS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_NEXU */
+	case RF4_SPELL_START + 21:  return spell_RF4_BREATH(target_ptr, GF_TIME, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_TIME */
+	case RF4_SPELL_START + 22:  return spell_RF4_BREATH(target_ptr, GF_INERTIAL, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_INER */
+	case RF4_SPELL_START + 23:  return spell_RF4_BREATH(target_ptr, GF_GRAVITY, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF4_BR_GRAV */
+	case RF4_SPELL_START + 24:  return spell_RF4_BREATH(target_ptr, GF_SHARDS, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_SHAR */
+	case RF4_SPELL_START + 25:  return spell_RF4_BREATH(target_ptr, GF_PLASMA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);  /* RF4_BR_PLAS */
+	case RF4_SPELL_START + 26:  return spell_RF4_BREATH(target_ptr, GF_FORCE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF4_BR_WALL */
+	case RF4_SPELL_START + 27:  return spell_RF4_BREATH(target_ptr, GF_MANA, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_MANA */
+	case RF4_SPELL_START + 28:  return spell_RF4_BA_NUKE(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BA_NUKE */
+	case RF4_SPELL_START + 29:  return spell_RF4_BREATH(target_ptr, GF_NUKE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_NUKE */
+	case RF4_SPELL_START + 30:  return spell_RF4_BA_CHAO(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BA_CHAO */
+	case RF4_SPELL_START + 31:  return spell_RF4_BREATH(target_ptr, GF_DISINTEGRATE, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF4_BR_DISI */
+	case RF5_SPELL_START + 0:  return spell_RF5_BA_ACID(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_ACID */
+	case RF5_SPELL_START + 1:  return spell_RF5_BA_ELEC(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_ELEC */
+	case RF5_SPELL_START + 2:  return spell_RF5_BA_FIRE(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_FIRE */
+	case RF5_SPELL_START + 3:  return spell_RF5_BA_COLD(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_COLD */
+	case RF5_SPELL_START + 4:  return spell_RF5_BA_POIS(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_POIS */
+	case RF5_SPELL_START + 5:  return spell_RF5_BA_NETH(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_NETH */
+	case RF5_SPELL_START + 6:  return spell_RF5_BA_WATE(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_WATE */
+	case RF5_SPELL_START + 7:  return spell_RF5_BA_MANA(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_MANA */
+	case RF5_SPELL_START + 8:  return spell_RF5_BA_DARK(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_DARK */
+	case RF5_SPELL_START + 9:  return spell_RF5_DRAIN_MANA(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_DRAIN_MANA */
+	case RF5_SPELL_START + 10: return spell_RF5_MIND_BLAST(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF5_MIND_BLAST */
+	case RF5_SPELL_START + 11: return spell_RF5_BRAIN_SMASH(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BRAIN_SMASH */
+	case RF5_SPELL_START + 12: return spell_RF5_CAUSE_1(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_CAUSE_1 */
+	case RF5_SPELL_START + 13: return spell_RF5_CAUSE_2(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_CAUSE_2 */
+	case RF5_SPELL_START + 14: return spell_RF5_CAUSE_3(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_CAUSE_3 */
+	case RF5_SPELL_START + 15: return spell_RF5_CAUSE_4(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_CAUSE_4 */
 	case RF5_SPELL_START + 16: return spell_RF5_BO_ACID(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BO_ACID */
 	case RF5_SPELL_START + 17: return spell_RF5_BO_ELEC(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BO_ELEC */
 	case RF5_SPELL_START + 18: return spell_RF5_BO_FIRE(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BO_FIRE */
 	case RF5_SPELL_START + 19: return spell_RF5_BO_COLD(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BO_COLD */
-	case RF5_SPELL_START + 20: return spell_RF5_BA_LITE(y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_LITE */
+	case RF5_SPELL_START + 20: return spell_RF5_BA_LITE(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BA_LITE */
 	case RF5_SPELL_START + 21: return spell_RF5_BO_NETH(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BO_NETH */
 	case RF5_SPELL_START + 22: return spell_RF5_BO_WATE(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BO_WATE */
 	case RF5_SPELL_START + 23: return spell_RF5_BO_MANA(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);	/* RF5_BO_MANA */
@@ -3626,7 +3649,7 @@ HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y
 	case RF5_SPELL_START + 30: spell_RF5_SLOW(m_idx, p_ptr, t_idx, MONSTER_TO_MONSTER); break;   /* RF5_SLOW */
 	case RF5_SPELL_START + 31: spell_RF5_HOLD(m_idx, p_ptr, t_idx, MONSTER_TO_MONSTER); break;  /* RF5_HOLD */
 	case RF6_SPELL_START + 0:  spell_RF6_HASTE(m_idx, t_idx, MONSTER_TO_MONSTER); break;   /* RF6_HASTE */
-	case RF6_SPELL_START + 1:  return spell_RF6_HAND_DOOM(y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF6_HAND_DOOM */
+	case RF6_SPELL_START + 1:  return spell_RF6_HAND_DOOM(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF6_HAND_DOOM */
 	case RF6_SPELL_START + 2:  spell_RF6_HEAL(m_idx, t_idx, MONSTER_TO_MONSTER); break;	/* RF6_HEAL */
 	case RF6_SPELL_START + 3:  spell_RF6_INVULNER(m_idx, t_idx, MONSTER_TO_MONSTER); break;	/* RF6_INVULNER */
 	case RF6_SPELL_START + 4:  spell_RF6_BLINK(m_idx, MONSTER_TO_MONSTER); break;   /* RF6_BLINK */
