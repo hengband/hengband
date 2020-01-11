@@ -5017,8 +5017,8 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	/* Print quest message if appropriate */
 	if (!player_ptr->current_floor_ptr->inside_quest && (player_ptr->dungeon_idx == DUNGEON_ANGBAND))
 	{
-		quest_discovery(random_quest_number(player_ptr->current_floor_ptr->dun_level));
-		player_ptr->current_floor_ptr->inside_quest = random_quest_number(player_ptr->current_floor_ptr->dun_level);
+		quest_discovery(random_quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level));
+		player_ptr->current_floor_ptr->inside_quest = random_quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
 	}
 	if ((player_ptr->current_floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && d_info[player_ptr->dungeon_idx].final_guardian)
 	{

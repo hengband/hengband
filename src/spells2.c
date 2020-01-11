@@ -1072,7 +1072,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 	if (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) resist = TRUE;
 	else if (r_ptr->flags7 & RF7_UNIQUE2) resist = TRUE;
 	else if (m_idx == caster_ptr->riding) resist = TRUE;
-	else if ((caster_ptr->current_floor_ptr->inside_quest && !random_quest_number(caster_ptr->current_floor_ptr->dun_level)) || caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out) resist = TRUE;
+	else if ((caster_ptr->current_floor_ptr->inside_quest && !random_quest_number(caster_ptr, caster_ptr->current_floor_ptr->dun_level)) || caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out) resist = TRUE;
 	else if (player_cast && (r_ptr->level > randint0(power))) resist = TRUE;
 	else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) resist = TRUE;
 	else
@@ -1151,7 +1151,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 bool symbol_genocide(player_type *caster_ptr, int power, bool player_cast)
 {
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-	bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(floor_ptr->dun_level);
+	bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(caster_ptr, floor_ptr->dun_level);
 	is_special_floor |= caster_ptr->current_floor_ptr->inside_arena;
 	is_special_floor |= caster_ptr->phase_out;
 	if (is_special_floor)
@@ -1197,7 +1197,7 @@ bool symbol_genocide(player_type *caster_ptr, int power, bool player_cast)
 bool mass_genocide(player_type *caster_ptr, int power, bool player_cast)
 {
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-	bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(floor_ptr->dun_level);
+	bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(caster_ptr, floor_ptr->dun_level);
 	is_special_floor |= caster_ptr->current_floor_ptr->inside_arena;
 	is_special_floor |= caster_ptr->phase_out;
 	if (is_special_floor)
@@ -1238,7 +1238,7 @@ bool mass_genocide(player_type *caster_ptr, int power, bool player_cast)
 bool mass_genocide_undead(player_type *caster_ptr, int power, bool player_cast)
 {
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-	bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(floor_ptr->dun_level);
+	bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(caster_ptr, floor_ptr->dun_level);
 	is_special_floor |= caster_ptr->current_floor_ptr->inside_arena;
 	is_special_floor |= caster_ptr->phase_out;
 	if (is_special_floor)

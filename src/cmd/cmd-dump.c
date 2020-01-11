@@ -2898,7 +2898,7 @@ void do_cmd_feeling(player_type *creature_ptr)
 	if (creature_ptr->wild_mode) return;
 
 	/* No useful feeling in quests */
-	if (creature_ptr->current_floor_ptr->inside_quest && !random_quest_number(creature_ptr->current_floor_ptr->dun_level))
+	if (creature_ptr->current_floor_ptr->inside_quest && !random_quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level))
 	{
 		msg_print(_("典型的なクエストのダンジョンのようだ。", "Looks like a typical quest level."));
 		return;

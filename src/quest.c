@@ -394,6 +394,7 @@ void quest_discovery(QUEST_IDX q_idx)
 /*!
  * @brief 新しく入ったダンジョンの階層に固定されている一般のクエストを探し出しIDを返す。
  * / Hack -- Check if a level is a "quest" level
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
@@ -417,19 +418,20 @@ QUEST_IDX quest_number(player_type *player_ptr, DEPTH level)
 	}
 
 	/* Check for random quest */
-	return (random_quest_number(level));
+	return random_quest_number(player_ptr, level);
 }
 
 /*!
  * @brief 新しく入ったダンジョンの階層に固定されているランダムクエストを探し出しIDを返す。
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-QUEST_IDX random_quest_number(DEPTH level)
+QUEST_IDX random_quest_number(player_type *player_ptr, DEPTH level)
 {
 	QUEST_IDX i;
 
-	if (p_ptr->dungeon_idx != DUNGEON_ANGBAND) return 0;
+	if (player_ptr->dungeon_idx != DUNGEON_ANGBAND) return 0;
 
 	for (i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
 	{
