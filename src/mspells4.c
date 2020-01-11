@@ -45,12 +45,13 @@ bool monster_near_player(floor_type *floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 
 /*!
 * @brief プレイヤーがモンスターを見ることができるかの判定 /
+* @param floor_ptr 現在フロアへの参照ポインタ
 * @param m_idx モンスターID
 * @return プレイヤーがモンスターを見ることができるならTRUE、そうでなければFALSEを返す。
 */
-bool see_monster(MONSTER_IDX m_idx)
+bool see_monster(floor_type *floor_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	return is_seen(m_ptr);
 }
 
@@ -102,7 +103,7 @@ static void monspell_message_base(player_type *target_ptr, MONSTER_IDX m_idx, MO
 {
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	bool known = monster_near_player(floor_ptr, m_idx, t_idx);
-	bool see_either = see_monster(m_idx) || see_monster(t_idx);
+	bool see_either = see_monster(target_ptr->current_floor_ptr, m_idx) || see_monster(target_ptr->current_floor_ptr, t_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
@@ -312,7 +313,7 @@ HIT_POINT spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITION y, POS
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	monster_type	*m_ptr = &floor_ptr->m_list[m_idx];
 	bool known = monster_near_player(floor_ptr, m_idx, t_idx);
-	bool see_either = see_monster(m_idx) || see_monster(t_idx);
+	bool see_either = see_monster(target_ptr->current_floor_ptr, m_idx) || see_monster(target_ptr->current_floor_ptr, t_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
@@ -768,7 +769,7 @@ HIT_POINT spell_RF5_BA_WATE(player_type *target_ptr, POSITION y, POSITION x, MON
 {
 	HIT_POINT dam;
 	bool known = monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx);
-	bool see_either = see_monster(m_idx) || see_monster(t_idx);
+	bool see_either = see_monster(target_ptr->current_floor_ptr, m_idx) || see_monster(target_ptr->current_floor_ptr, t_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	GAME_TEXT t_name[MAX_NLEN];
@@ -873,7 +874,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, 
 	{
 		disturb(p_ptr, TRUE, TRUE);
 	}
-	else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(m_idx))
+	else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(target_ptr->current_floor_ptr, m_idx))
 	{ 
 		/* Basic message */
 		msg_format(_("%^sは精神エネルギーを%sから吸いとった。", "%^s draws psychic energy from %s."), m_name, t_name);
@@ -916,7 +917,7 @@ HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, 
 		else
 			msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
 	}
-	else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(m_idx))
+	else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(target_ptr->current_floor_ptr, m_idx))
 	{
 		msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
 	}
@@ -955,7 +956,7 @@ HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x,
 		else
 			msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
 	}
-	else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(m_idx))
+	else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(target_ptr->current_floor_ptr, m_idx))
 	{
 		msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
 	}
@@ -998,7 +999,7 @@ void spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, HIT_POINT dam, POSITI
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
-		if (see_monster(m_idx))
+		if (see_monster(target_ptr->current_floor_ptr, m_idx))
 		{
 			msg_format(msg3, m_name, t_name);
 		}
@@ -1472,8 +1473,8 @@ HIT_POINT spell_RF5_MISSILE(player_type *target_ptr, POSITION y, POSITION x, MON
 */
 void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, concptr msg4, bool resist, bool saving_throw, int TARGET_TYPE)
 {
-	bool see_either = see_monster(m_idx) || see_monster(t_idx);
-	bool see_t = see_monster(t_idx);
+	bool see_either = see_monster(target_ptr->current_floor_ptr, m_idx) || see_monster(target_ptr->current_floor_ptr, t_idx);
+	bool see_t = see_monster(target_ptr->current_floor_ptr, t_idx);
 	bool known = monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx);
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
@@ -1817,7 +1818,7 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 */
 void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	bool see_m = see_monster(m_idx);
+	bool see_m = see_monster(target_ptr->current_floor_ptr, m_idx);
 	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
@@ -1934,7 +1935,7 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 		/* Cancel fear */
 		(void)set_monster_monfear(m_idx, 0);
 
-		if (see_monster(m_idx))
+		if (see_monster(target_ptr->current_floor_ptr, m_idx))
 			msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
 	}
 }
@@ -1965,10 +1966,11 @@ void spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX 
 
 /*!
 * @brief RF6_BLINKの処理。ショート・テレポート。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param m_idx 呪文を唱えるモンスターID
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void spell_RF6_BLINK(MONSTER_IDX m_idx, int TARGET_TYPE)
+void spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE)
 {
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
@@ -1978,13 +1980,13 @@ void spell_RF6_BLINK(MONSTER_IDX m_idx, int TARGET_TYPE)
 
 	if (teleport_barrier(p_ptr, m_idx))
 	{
-		if(see_monster(m_idx))
+		if(see_monster(target_ptr->current_floor_ptr, m_idx))
 			msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。",
 						 "Magic barrier obstructs teleporting of %^s."), m_name);
 	}
 	else
 	{
-		if(see_monster(m_idx))
+		if(see_monster(target_ptr->current_floor_ptr, m_idx))
 			msg_format(_("%^sが瞬時に消えた。", "%^s blinks away."), m_name);
 
 		teleport_away(p_ptr, m_idx, 10, 0L);
@@ -1997,10 +1999,11 @@ void spell_RF6_BLINK(MONSTER_IDX m_idx, int TARGET_TYPE)
 
 /*!
 * @brief RF6_TPORTの処理。テレポート。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param m_idx 呪文を唱えるモンスターID
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void spell_RF6_TPORT(MONSTER_IDX m_idx, int TARGET_TYPE)
+void spell_RF6_TPORT(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE)
 {	
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
@@ -2009,13 +2012,13 @@ void spell_RF6_TPORT(MONSTER_IDX m_idx, int TARGET_TYPE)
 		disturb(p_ptr, TRUE, TRUE);
 	if (teleport_barrier(p_ptr, m_idx))
 	{
-		if(see_monster(m_idx))
+		if(see_monster(target_ptr->current_floor_ptr, m_idx))
 			msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。",
 						 "Magic barrier obstructs teleporting of %^s."), m_name);
 	}
 	else
 	{
-		if(see_monster(m_idx))
+		if(see_monster(target_ptr->current_floor_ptr, m_idx))
 			msg_format(_("%^sがテレポートした。", "%^s teleports away."), m_name);
 
 		teleport_away_followable(p_ptr, m_idx);
@@ -2328,7 +2331,7 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 			if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 			{
 				if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
-				if (see_monster(t_idx))
+				if (see_monster(target_ptr->current_floor_ptr, t_idx))
 				{
 					msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
 				}
@@ -2337,7 +2340,7 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 			else if (tr_ptr->level > randint1(100))
 			{
 				if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
-				if (see_monster(t_idx))
+				if (see_monster(target_ptr->current_floor_ptr, t_idx))
 				{
 					msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
 				}
@@ -2400,7 +2403,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 			if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 			{
 				if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
-				if (see_monster(t_idx))
+				if (see_monster(target_ptr->current_floor_ptr, t_idx))
 				{
 					msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
 				}
@@ -2409,7 +2412,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 			else if (tr_ptr->level > randint1(100))
 			{
 				if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
-				if (see_monster(t_idx))
+				if (see_monster(target_ptr->current_floor_ptr, t_idx))
 				{
 					msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
 				}
@@ -2546,7 +2549,7 @@ void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 			_("%^sが辺りを明るく照らした。", "%^s cast a spell to light up."),
 			TARGET_TYPE);
 
-		if (see_monster(t_idx) && monster_to_monster)
+		if (see_monster(target_ptr->current_floor_ptr, t_idx) && monster_to_monster)
 		{
 			msg_format(_("%^sは白い光に包まれた。", "%^s is surrounded by a white light."), t_name);
 		}
@@ -2559,7 +2562,7 @@ void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 			_("%^sが暗闇の中で手を振った。", "%^s gestures in shadow."),
 			TARGET_TYPE);
 
-		if (see_monster(t_idx) && monster_to_monster)
+		if (see_monster(target_ptr->current_floor_ptr, t_idx) && monster_to_monster)
 		{
 			msg_format(_("%^sは暗闇に包まれた。", "%^s is surrounded by darkness."), t_name);
 		}
@@ -2828,7 +2831,7 @@ MONSTER_NUMBER summon_Kin(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	bool known = monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx);
-	bool see_either = see_monster(m_idx) || see_monster(t_idx);
+	bool see_either = see_monster(target_ptr->current_floor_ptr, m_idx) || see_monster(target_ptr->current_floor_ptr, t_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
@@ -2906,7 +2909,7 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
-	if (known && !see_monster(t_idx) && count && mon_to_mon)
+	if (known && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
 }
 
@@ -2948,7 +2951,7 @@ void spell_RF6_S_CYBER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("重厚な足音が近くで聞こえる。", "You hear heavy steps nearby."));
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
 }
 
@@ -2987,7 +2990,7 @@ void spell_RF6_S_MONSTER(player_type *target_ptr, POSITION y, POSITION x, MONSTE
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		target_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
@@ -3027,7 +3030,7 @@ void spell_RF6_S_MONSTERS(player_type *target_ptr, POSITION y, POSITION x, MONST
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		target_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
@@ -3063,7 +3066,7 @@ void spell_RF6_S_ANT(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		target_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
@@ -3099,7 +3102,7 @@ void spell_RF6_S_SPIDER(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		target_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
@@ -3135,7 +3138,7 @@ void spell_RF6_S_HOUND(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		target_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
@@ -3171,7 +3174,7 @@ void spell_RF6_S_HYDRA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		target_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
@@ -3223,7 +3226,7 @@ void spell_RF6_S_ANGEL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 			msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 	}
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
 }
 
@@ -3258,7 +3261,7 @@ void spell_RF6_S_DEMON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	if (target_ptr->blind && count)
 		msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		target_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
@@ -3293,7 +3296,7 @@ void spell_RF6_S_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 	if (target_ptr->blind && count)
 		msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		target_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
@@ -3328,7 +3331,7 @@ void spell_RF6_S_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 	if (target_ptr->blind && count)
 		msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		target_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
@@ -3445,7 +3448,7 @@ void spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONS
 		msg_print(_("間近で何か多くのものが這い回る音が聞こえる。", "You hear many creepy things appear nearby."));
 	}
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
 }
 
@@ -3486,7 +3489,7 @@ void spell_RF6_S_HI_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONS
 		msg_print(_("多くの力強いものが間近に現れた音が聞こえる。", "You hear many powerful things appear nearby."));
 	}
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		target_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
@@ -3524,7 +3527,7 @@ void spell_RF6_S_AMBERITES(player_type *target_ptr, POSITION y, POSITION x, MONS
 		msg_print(_("不死の者が近くに現れるのが聞こえた。", "You hear immortal beings appear nearby."));
 	}
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		target_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
@@ -3579,7 +3582,7 @@ void spell_RF6_S_UNIQUE(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 			uniques_are_summoned ? _("力強いもの", "powerful things") : _("もの", "things"));
 	}
 	
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
+	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
 }
 
@@ -3664,8 +3667,8 @@ HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y,
 	case RF6_SPELL_START + 1:  return spell_RF6_HAND_DOOM(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF6_HAND_DOOM */
 	case RF6_SPELL_START + 2:  spell_RF6_HEAL(target_ptr, m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF6_HEAL */
 	case RF6_SPELL_START + 3:  spell_RF6_INVULNER(target_ptr, m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF6_INVULNER */
-	case RF6_SPELL_START + 4:  spell_RF6_BLINK(m_idx, MONSTER_TO_PLAYER); break;   /* RF6_BLINK */
-	case RF6_SPELL_START + 5:  spell_RF6_TPORT(m_idx, MONSTER_TO_PLAYER); break;   /* RF6_TPORT */
+	case RF6_SPELL_START + 4:  spell_RF6_BLINK(target_ptr, m_idx, MONSTER_TO_PLAYER); break;   /* RF6_BLINK */
+	case RF6_SPELL_START + 5:  spell_RF6_TPORT(target_ptr, m_idx, MONSTER_TO_PLAYER); break;   /* RF6_TPORT */
 	case RF6_SPELL_START + 6:  return spell_RF6_WORLD(target_ptr, m_idx); break;	/* RF6_WORLD */
 	case RF6_SPELL_START + 7:  return spell_RF6_SPECIAL(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF6_SPECIAL */
 	case RF6_SPELL_START + 8:  spell_RF6_TELE_TO(target_ptr, m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_TELE_TO */
@@ -3781,8 +3784,8 @@ HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y
 	case RF6_SPELL_START + 1:  return spell_RF6_HAND_DOOM(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF6_HAND_DOOM */
 	case RF6_SPELL_START + 2:  spell_RF6_HEAL(target_ptr, m_idx, t_idx, MONSTER_TO_MONSTER); break;	/* RF6_HEAL */
 	case RF6_SPELL_START + 3:  spell_RF6_INVULNER(target_ptr, m_idx, t_idx, MONSTER_TO_MONSTER); break;	/* RF6_INVULNER */
-	case RF6_SPELL_START + 4:  spell_RF6_BLINK(m_idx, MONSTER_TO_MONSTER); break;   /* RF6_BLINK */
-	case RF6_SPELL_START + 5:  spell_RF6_TPORT(m_idx, MONSTER_TO_MONSTER); break;   /* RF6_TPORT */
+	case RF6_SPELL_START + 4:  spell_RF6_BLINK(target_ptr, m_idx, MONSTER_TO_MONSTER); break;   /* RF6_BLINK */
+	case RF6_SPELL_START + 5:  spell_RF6_TPORT(target_ptr, m_idx, MONSTER_TO_MONSTER); break;   /* RF6_TPORT */
 	case RF6_SPELL_START + 6:  return -1; break;	/* RF6_WORLD */
 	case RF6_SPELL_START + 7:  return spell_RF6_SPECIAL(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF6_SPECIAL */
 	case RF6_SPELL_START + 8:  spell_RF6_TELE_TO(target_ptr, m_idx, t_idx, MONSTER_TO_MONSTER); break; /* RF6_TELE_TO */
