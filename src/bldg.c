@@ -241,11 +241,11 @@ void clear_bldg(int min_row, int max_row)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void building_prt_gold(void)
+static void building_prt_gold(player_type *player_ptr)
 {
 	char tmp_str[80];
 	prt(_("手持ちのお金: ", "Gold Remaining: "), 23, 53);
-	sprintf(tmp_str, "%9ld", (long)p_ptr->au);
+	sprintf(tmp_str, "%9ld", (long)player_ptr->au);
 	prt(tmp_str, 23, 68);
 }
 
@@ -3366,7 +3366,7 @@ static void building_recharge(player_type *player_ptr)
 			autopick_alter_item(player_ptr, item, FALSE);
 
 			/* Update the gold display */
-			building_prt_gold();
+			building_prt_gold(player_ptr);
 		}
 		else
 		{
@@ -4208,7 +4208,7 @@ void do_cmd_bldg(player_type *player_ptr)
 		validcmd = FALSE;
 		prt("", 1, 0);
 
-		building_prt_gold();
+		building_prt_gold(player_ptr);
 
 		command = inkey();
 
