@@ -4263,7 +4263,7 @@ void do_cmd_bldg(player_type *player_ptr)
  * @return なし
  * @note conv_old is used if loaded 0.0.3 or older save file
  */
-void determine_today_mon(player_type *player_ptr, bool conv_old)
+void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 {
 	int max_dl = 3, i;
 	bool old_inside_battle = player_ptr->phase_out;

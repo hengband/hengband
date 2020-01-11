@@ -2324,7 +2324,7 @@ static void rd_extra(player_type *creature_ptr)
 
 	if (z_older_than(10,0,3))
 	{
-		determine_today_mon(creature_ptr, TRUE);
+		determine_daily_bounty(creature_ptr, TRUE);
 	}
 	else
 	{

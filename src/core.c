@@ -3298,7 +3298,7 @@ static void process_world(player_type *player_ptr)
 		if (min != prev_min)
 		{
 			exe_write_diary(player_ptr, NIKKI_HIGAWARI, 0, NULL);
-			determine_today_mon(player_ptr, FALSE);
+			determine_daily_bounty(player_ptr, FALSE);
 		}
 	}
 
@@ -5414,7 +5414,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		load = FALSE;
 
 		determine_bounty_uniques();
-		determine_today_mon(player_ptr, FALSE);
+		determine_daily_bounty(player_ptr, FALSE);
 
 		/* Initialize object array */
 		wipe_o_list(player_ptr->current_floor_ptr);
