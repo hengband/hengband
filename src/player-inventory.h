@@ -3,7 +3,6 @@
 extern bool select_ring_slot;
 
 extern bool is_ring_slot(int i);
-extern bool get_item_okay(OBJECT_IDX i);
 extern concptr describe_use(int i);
 
 extern void display_inven(player_type *creature_ptr, OBJECT_TYPE_VALUE tval);

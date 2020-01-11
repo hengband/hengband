@@ -235,7 +235,7 @@ void toggle_inven_equip(player_type *owner_ptr)
  * @param i 選択アイテムID
  * @return 正規のIDならばTRUEを返す。
  */
-bool get_item_okay(OBJECT_IDX i)
+bool get_item_okay(player_type *owner_ptr, OBJECT_IDX i)
 {
 	/* Illegal items */
 	if ((i < 0) || (i >= INVEN_TOTAL)) return FALSE;
@@ -243,7 +243,7 @@ bool get_item_okay(OBJECT_IDX i)
 	if (select_ring_slot) return is_ring_slot(i);
 
 	/* Verify the item */
-	if (!item_tester_okay(&p_ptr->inventory_list[i], item_tester_tval)) return FALSE;
+	if (!item_tester_okay(&owner_ptr->inventory_list[i], item_tester_tval)) return FALSE;
 
 	/* Assume okay */
 	return TRUE;
@@ -941,7 +941,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				/* Look up the tag and validate the item */
 				if (!get_tag(&k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */;
 				else if ((k < INVEN_RARM) ? !inven : !equip) /* Reject */;
-				else if (!get_item_okay(k)) /* Reject */;
+				else if (!get_item_okay(owner_ptr, k)) /* Reject */;
 				else
 				{
 					/* Accept that choice */
@@ -960,7 +960,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			}
 
 			/* Verify the item */
-			else if (get_item_okay(*cp))
+			else if (get_item_okay(owner_ptr, *cp))
 			{
 				/* Forget restrictions */
 				tval = 0;
@@ -990,8 +990,8 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			if (item_tester_okay(&owner_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_inven++;
 	}
 
-	while ((i1 <= i2) && (!get_item_okay(i1))) i1++;
-	while ((i1 <= i2) && (!get_item_okay(i2))) i2--;
+	while ((i1 <= i2) && (!get_item_okay(owner_ptr, i1))) i1++;
+	while ((i1 <= i2) && (!get_item_okay(owner_ptr, i2))) i2--;
 
 
 	/* Full equipment */
@@ -1008,8 +1008,8 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 	}
 
 	/* Restrict equipment indexes */
-	while ((e1 <= e2) && (!get_item_okay(e1))) e1++;
-	while ((e1 <= e2) && (!get_item_okay(e2))) e2--;
+	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e1))) e1++;
+	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e2))) e2--;
 
 	if (equip && owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
 	{
@@ -1267,7 +1267,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				else
 				{
 					/* Validate the item */
-					if (!get_item_okay(get_item_label))
+					if (!get_item_okay(owner_ptr, get_item_label))
 					{
 						bell();
 						break;
@@ -1416,7 +1416,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				}
 
 				/* Validate the item */
-				if (!get_item_okay(k))
+				if (!get_item_okay(owner_ptr, k))
 				{
 					bell();
 					break;
@@ -1453,7 +1453,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				}
 
 				/* Validate the item */
-				if (!get_item_okay(k))
+				if (!get_item_okay(owner_ptr, k))
 				{
 					bell();
 					break;
@@ -1504,7 +1504,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				}
 
 				/* Validate the item */
-				else if (!get_item_okay(k))
+				else if (!get_item_okay(owner_ptr, k))
 				{
 					not_found = TRUE;
 				}
@@ -1539,7 +1539,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				}
 
 				/* Validate the item */
-				if (!get_item_okay(k))
+				if (!get_item_okay(owner_ptr, k))
 				{
 					bell();
 					break;
@@ -1911,7 +1911,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				/* Look up the tag and validate the item */
 				if (!get_tag(&k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */;
 				else if ((k < INVEN_RARM) ? !inven : !equip) /* Reject */;
-				else if (!get_item_okay(k)) /* Reject */;
+				else if (!get_item_okay(owner_ptr, k)) /* Reject */;
 				else
 				{
 					/* Accept that choice */
@@ -1930,7 +1930,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			}
 
 			/* Verify the item */
-			else if (get_item_okay(*cp))
+			else if (get_item_okay(owner_ptr, *cp))
 			{
 				/* Forget restrictions */
 				tval = 0;
@@ -1962,8 +1962,8 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			if (item_tester_okay(&owner_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_inven++;
 	}
 
-	while ((i1 <= i2) && (!get_item_okay(i1))) i1++;
-	while ((i1 <= i2) && (!get_item_okay(i2))) i2--;
+	while ((i1 <= i2) && (!get_item_okay(owner_ptr, i1))) i1++;
+	while ((i1 <= i2) && (!get_item_okay(owner_ptr, i2))) i2--;
 
 
 	/* Full equipment */
@@ -1980,8 +1980,8 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 	}
 
 	/* Restrict equipment indexes */
-	while ((e1 <= e2) && (!get_item_okay(e1))) e1++;
-	while ((e1 <= e2) && (!get_item_okay(e2))) e2--;
+	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e1))) e1++;
+	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e2))) e2--;
 
 	if (equip && owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
 	{
@@ -2442,7 +2442,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				else
 				{
 					/* Validate the item */
-					if (!get_item_okay(get_item_label))
+					if (!get_item_okay(owner_ptr, get_item_label))
 					{
 						bell();
 						break;
@@ -2669,7 +2669,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 					}
 
 					/* Validate the item */
-					if (!get_item_okay(k))
+					if (!get_item_okay(owner_ptr, k))
 					{
 						bell();
 						break;
@@ -2744,7 +2744,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				}
 
 				/* Validate the item */
-				if (!get_item_okay(k))
+				if (!get_item_okay(owner_ptr, k))
 				{
 					bell();
 					break;
@@ -2798,7 +2798,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 					}
 
 					/* Validate the item */
-					else if (!get_item_okay(k))
+					else if (!get_item_okay(owner_ptr, k))
 					{
 						not_found = TRUE;
 					}
@@ -2866,7 +2866,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				}
 
 				/* Validate the item */
-				if ((command_wrk != USE_FLOOR) && !get_item_okay(k))
+				if ((command_wrk != USE_FLOOR) && !get_item_okay(owner_ptr, k))
 				{
 					bell();
 					break;
