@@ -87,19 +87,16 @@ dungeon_grid letter[255];
 #include "view-mainwindow.h"
 #include "player-class.h"
 
-
-
 #ifdef ALLOW_TEMPLATES
 
 #include "init.h"
 
-
  /*** Helper arrays for parsing ascii template files ***/
 
- /*!
-  * モンスターの打撃手段トークンの定義 /
-  * Monster Blow Methods
-  */
+  /*!
+   * モンスターの打撃手段トークンの定義 /
+   * Monster Blow Methods
+   */
 static concptr r_info_blow_method[] =
 {
 	"",
@@ -130,7 +127,6 @@ static concptr r_info_blow_method[] =
 	"SHOOT",
 	NULL
 };
-
 
 /*!
  * モンスターの打撃属性トークンの定義 /
@@ -300,7 +296,6 @@ static concptr f_info_flags[] =
 	"CONVERT",
 	"GLASS",
 };
-
 
 /*!
  * モンスター特性トークンの定義1 /
@@ -707,7 +702,6 @@ static concptr r_info_flags8[] =
 	"WILD_ALL",
 };
 
-
 /*!
  * モンスター特性トークンの定義9 /
  * Monster race flags
@@ -749,7 +743,6 @@ static concptr r_info_flags9[] =
 	"EAT_DRAIN_MANA",
 };
 
-
 /*!
  * モンスター特性トークンの定義R(耐性) /
  * Monster race flags
@@ -789,7 +782,6 @@ static concptr r_info_flagsr[] =
 	"XXX",
 	"XXX",
 };
-
 
 /*!
  * オブジェクト基本特性トークンの定義 /
@@ -1021,7 +1013,6 @@ static concptr d_info_flags1[] =
 	"ACID_RIVER",
 	"POISONOUS_RIVER"
 };
-
 
 /*!
  * @brief データの可変文字列情報をテキストとして保管する /
@@ -2021,6 +2012,7 @@ static errr grab_one_kind_flag(object_kind *k_ptr, concptr what)
 	return (1);
 }
 
+
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(発動能力用) /
  * Grab one activation index flag
@@ -2325,6 +2317,7 @@ errr parse_k_info(char *buf, header *head)
 	/* Success */
 	return (0);
 }
+
 
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(アーティファクト用) /
@@ -3171,6 +3164,7 @@ static errr grab_one_dungeon_flag(dungeon_type *d_ptr, concptr what)
 	return (1);
 }
 
+
 /*!
  * @brief テキストトークンを走査してフラグを一つ得る(モンスターのダンジョン出現条件用1) /
  * Grab one (basic) flag in a monster_race from a textual string
@@ -3230,6 +3224,7 @@ static errr grab_one_spell_monster_flag(dungeon_type *d_ptr, concptr what)
 	/* Failure */
 	return (1);
 }
+
 
 /*!
  * @brief ダンジョン情報(d_info)のパース関数 /
@@ -3560,10 +3555,11 @@ static int i = 0;
 /*!
  * @brief 地形情報の「F:」情報をパースする
  * Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid
+ * @param floor_ptr 現在フロアへの参照ポインタ
  * @param buf 解析文字列
  * @return エラーコード
  */
-static errr parse_line_feature(char *buf)
+static errr parse_line_feature(floor_type *floor_ptr, char *buf)
 {
 	int num;
 	char *zz[9];
@@ -3614,9 +3610,9 @@ static errr parse_line_feature(char *buf)
 			}
 			else if (zz[6][0] == '!')
 			{
-				if (p_ptr->current_floor_ptr->inside_quest)
+				if (floor_ptr->inside_quest)
 				{
-					letter[index].artifact = quest[p_ptr->current_floor_ptr->inside_quest].k_idx;
+					letter[index].artifact = quest[floor_ptr->inside_quest].k_idx;
 				}
 			}
 			else
@@ -3645,9 +3641,9 @@ static errr parse_line_feature(char *buf)
 			}
 			else if (zz[4][0] == '!')
 			{
-				if (p_ptr->current_floor_ptr->inside_quest)
+				if (floor_ptr->inside_quest)
 				{
-					ARTIFACT_IDX a_idx = quest[p_ptr->current_floor_ptr->inside_quest].k_idx;
+					ARTIFACT_IDX a_idx = quest[floor_ptr->inside_quest].k_idx;
 					if (a_idx)
 					{
 						artifact_type *a_ptr = &a_info[a_idx];
@@ -3852,6 +3848,7 @@ static errr parse_line_building(char *buf)
 /*!
  * @brief フロアの所定のマスにオブジェクトを配置する
  * Place the object j_ptr to a grid
+ * @param floor_ptr 現在フロアへの参照ポインタ
  * @param j_ptr オブジェクト構造体の参照ポインタ
  * @param y 配置先Y座標
  * @param x 配置先X座標
@@ -3859,13 +3856,13 @@ static errr parse_line_building(char *buf)
  */
 static void drop_here(floor_type *floor_ptr, object_type *j_ptr, POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 	object_type *o_ptr;
 
 	OBJECT_IDX o_idx = o_pop(floor_ptr);
 
 	/* Access new object */
-	o_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
+	o_ptr = &floor_ptr->o_list[o_idx];
 
 	/* Structure copy */
 	object_copy(o_ptr, j_ptr);
@@ -3882,6 +3879,7 @@ static void drop_here(floor_type *floor_ptr, object_type *j_ptr, POSITION y, POS
 
 	g_ptr->o_idx = o_idx;
 }
+
 
 /*!
  * @brief クエスト用固定ダンジョンをフロアに生成する
@@ -3925,7 +3923,7 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 	/* Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid */
 	if (buf[0] == 'F')
 	{
-		return parse_line_feature(buf);
+		return parse_line_feature(player_ptr->current_floor_ptr, buf);
 	}
 
 	/* Process "D:<dungeon>" -- info for the floor grids */
@@ -4246,24 +4244,24 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 					POSITION py, px;
 
 					/* Delete the monster (if any) */
-					delete_monster(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x);
+					delete_monster(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x);
 
 					py = atoi(zz[0]);
 					px = atoi(zz[1]);
 
-					p_ptr->y = py;
-					p_ptr->x = px;
+					player_ptr->y = py;
+					player_ptr->x = px;
 				}
 				/* Place player in the town */
-				else if (!p_ptr->oldpx && !p_ptr->oldpy)
+				else if (!player_ptr->oldpx && !player_ptr->oldpy)
 				{
-					p_ptr->oldpy = atoi(zz[0]);
-					p_ptr->oldpx = atoi(zz[1]);
+					player_ptr->oldpy = atoi(zz[0]);
+					player_ptr->oldpx = atoi(zz[1]);
 				}
 			}
 		}
 
-		return (0);
+		return 0;
 	}
 
 	/* Process "B:<Index>:<Command>:..." -- Building definition */
@@ -4363,10 +4361,11 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 	return (1);
 }
 
-
+/*
+* todo ここから先頭に移すとコンパイル警告が出る……
+*/
 static char tmp[8];
 static concptr variant = "ZANGBAND";
-
 
 /*!
  * @brief クエスト用固定ダンジョン生成時の分岐処理
@@ -4674,7 +4673,7 @@ static concptr process_dungeon_file_expr(char **sp, char *fp)
 		{
 			v = b;
 		}
-	}
+		}
 
 	/* Save */
 	(*fp) = f;
@@ -4895,7 +4894,7 @@ void write_r_info_txt(void)
 	}
 
 	fclose(fff);
-}
+	}
 
 #endif
 
@@ -4986,7 +4985,5 @@ errr process_dungeon_file(player_type *player_ptr, concptr name, int ymin, int x
 	}
 
 	my_fclose(fp);
-	return (err);
+	return err;
 }
-
-
