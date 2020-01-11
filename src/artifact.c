@@ -1947,17 +1947,18 @@ const activation_type* find_activation_info(object_type *o_ptr)
  * その他追加耐性、特性追加処理。
  * @attention プレイヤーの各種ステータスに依存した処理がある。
  * @todo 折を見て関数名を変更すること。
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @param a_ptr 生成する固定アーティファクト構造体ポインタ
  * @return なし
  */
-void random_artifact_resistance(object_type *o_ptr, artifact_type *a_ptr)
+void random_artifact_resistance(player_type *player_ptr, object_type *o_ptr, artifact_type *a_ptr)
 {
 	bool give_resistance = FALSE, give_power = FALSE;
 
 	if (o_ptr->name1 == ART_TERROR) /* Terror Mask is for warriors... */
 	{
-		if (p_ptr->pclass == CLASS_WARRIOR || p_ptr->pclass == CLASS_ARCHER || p_ptr->pclass == CLASS_CAVALRY || p_ptr->pclass == CLASS_BERSERKER)
+		if (player_ptr->pclass == CLASS_WARRIOR || player_ptr->pclass == CLASS_ARCHER || player_ptr->pclass == CLASS_CAVALRY || player_ptr->pclass == CLASS_BERSERKER)
 		{
 			give_power = TRUE;
 			give_resistance = TRUE;
@@ -1975,7 +1976,7 @@ void random_artifact_resistance(object_type *o_ptr, artifact_type *a_ptr)
 
 	if (o_ptr->name1 == ART_MURAMASA)
 	{
-		if (p_ptr->pclass != CLASS_SAMURAI)
+		if (player_ptr->pclass != CLASS_SAMURAI)
 		{
 			add_flag(o_ptr->art_flags, TR_NO_MAGIC);
 			o_ptr->curse_flags |= (TRC_HEAVY_CURSE);
@@ -1984,7 +1985,7 @@ void random_artifact_resistance(object_type *o_ptr, artifact_type *a_ptr)
 
 	if (o_ptr->name1 == ART_ROBINTON)
 	{
-		if (p_ptr->pclass == CLASS_BARD)
+		if (player_ptr->pclass == CLASS_BARD)
 		{
 			add_flag(o_ptr->art_flags, TR_DEC_MANA);
 		}
@@ -1992,7 +1993,7 @@ void random_artifact_resistance(object_type *o_ptr, artifact_type *a_ptr)
 
 	if (o_ptr->name1 == ART_XIAOLONG)
 	{
-		if (p_ptr->pclass == CLASS_MONK)
+		if (player_ptr->pclass == CLASS_MONK)
 			add_flag(o_ptr->art_flags, TR_BLOWS);
 	}
 
@@ -2003,7 +2004,7 @@ void random_artifact_resistance(object_type *o_ptr, artifact_type *a_ptr)
 
 	if (o_ptr->name1 == ART_HEAVENLY_MAIDEN)
 	{
-		if (p_ptr->psex != SEX_FEMALE)
+		if (player_ptr->psex != SEX_FEMALE)
 		{
 			add_flag(o_ptr->art_flags, TR_AGGRAVATE);
 		}
@@ -2011,7 +2012,7 @@ void random_artifact_resistance(object_type *o_ptr, artifact_type *a_ptr)
 
 	if (o_ptr->name1 == ART_MILIM)
 	{
-		if (p_ptr->pseikaku == SEIKAKU_SEXY)
+		if (player_ptr->pseikaku == SEIKAKU_SEXY)
 		{
 			o_ptr->pval = 3;
 			add_flag(o_ptr->art_flags, TR_STR);
@@ -2096,11 +2097,12 @@ bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, P
 	if (a_ptr->gen_flags & (TRG_RANDOM_CURSE1)) q_ptr->curse_flags |= get_curse(1, q_ptr);
 	if (a_ptr->gen_flags & (TRG_RANDOM_CURSE2)) q_ptr->curse_flags |= get_curse(2, q_ptr);
 
-	random_artifact_resistance(q_ptr, a_ptr);
+	random_artifact_resistance(player_ptr, q_ptr, a_ptr);
 
 	/* Drop the artifact from heaven */
 	return drop_near(player_ptr, q_ptr, -1, y, x) ? TRUE : FALSE;
 }
+
 
 /*対邪平均ダメージの計算処理*/
 HIT_POINT calc_arm_avgdamage(object_type *o_ptr)
@@ -2225,6 +2227,7 @@ static bool weakening_artifact(object_type *o_ptr)
 /*!
  * @brief 非INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する。
  * Mega-Hack -- Attempt to create one of the "Special Objects"
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 生成に成功したらTRUEを返す。
  * @details
@@ -2232,7 +2235,7 @@ static bool weakening_artifact(object_type *o_ptr)
  * This routine should only be called by "apply_magic()"\n
  * Note -- see "make_artifact_special()" and "apply_magic()"\n
  */
-bool make_artifact(object_type *o_ptr)
+bool make_artifact(player_type *player_ptr, object_type *o_ptr)
 {
 	ARTIFACT_IDX i;
 
@@ -2278,7 +2281,7 @@ bool make_artifact(object_type *o_ptr)
 		o_ptr->name1 = i;
 
 		/* Hack: Some artifacts get random extra powers */
-		random_artifact_resistance(o_ptr, a_ptr);
+		random_artifact_resistance(player_ptr, o_ptr, a_ptr);
 
 		/* Success */
 		return TRUE;
@@ -2291,6 +2294,7 @@ bool make_artifact(object_type *o_ptr)
 /*!
  * @brief INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する。
  * Mega-Hack -- Attempt to create one of the "Special Objects"
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 生成に割り当てたいオブジェクトの構造体参照ポインタ
  * @return 生成に成功したらTRUEを返す。
  * @details
@@ -2299,7 +2303,7 @@ bool make_artifact(object_type *o_ptr)
  *\n
  * Note -- see "make_artifact()" and "apply_magic()"\n
  */
-bool make_artifact_special(object_type *o_ptr)
+bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
 {
 	ARTIFACT_IDX i;
 	KIND_OBJECT_IDX k_idx = 0;
@@ -2349,7 +2353,7 @@ bool make_artifact_special(object_type *o_ptr)
 		object_prep(o_ptr, k_idx);
 
 		o_ptr->name1 = i;
-		random_artifact_resistance(o_ptr, a_ptr);
+		random_artifact_resistance(player_ptr, o_ptr, a_ptr);
 		return TRUE;
 	}
 

@@ -3746,10 +3746,10 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
 	for (i = 0; i < rolls; i++)
 	{
 		/* Roll for an artifact */
-		if (make_artifact(o_ptr)) break;
+		if (make_artifact(owner_ptr, o_ptr)) break;
 		if ((owner_ptr->muta3 & MUT3_GOOD_LUCK) && one_in_(77))
 		{
-			if (make_artifact(o_ptr)) break;
+			if (make_artifact(owner_ptr, o_ptr)) break;
 		}
 	}
 
@@ -4074,7 +4074,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
 
 
 	/* Generate a special object, or a normal object */
-	if (!one_in_(prob) || !make_artifact_special(j_ptr))
+	if (!one_in_(prob) || !make_artifact_special(owner_ptr, j_ptr))
 	{
 		KIND_OBJECT_IDX k_idx;
 
