@@ -1073,7 +1073,7 @@ void do_cmd_player_status(player_type *creature_ptr)
 			get_name(creature_ptr);
 
 			/* Process the player name */
-			process_player_name(FALSE);
+			process_player_name(creature_ptr, FALSE);
 		}
 
 		/* File dump */
@@ -1369,13 +1369,14 @@ void do_cmd_pref(void)
 
 /*!
  * @brief 自動拾い設定ファイルをロードするコマンドのメインルーチン /
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void do_cmd_reload_autopick(void)
+void do_cmd_reload_autopick(player_type *creature_ptr)
 {
 	if (!get_check(_("自動拾い設定ファイルをロードしますか? ", "Reload auto-pick preference file? "))) return;
 	/* Load the file with messages */
-	autopick_load_pref(TRUE);
+	autopick_load_pref(creature_ptr, TRUE);
 }
 
 #ifdef ALLOW_MACROS

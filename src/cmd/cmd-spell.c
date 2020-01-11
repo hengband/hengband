@@ -745,6 +745,7 @@ void do_cmd_browse(player_type *caster_ptr)
 
 /*!
  * @brief プレイヤーの第二魔法領域を変更する /
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param next_realm 変更先の魔法領域ID
  * @return なし
  */
@@ -779,7 +780,7 @@ static void change_realm2(player_type *caster_ptr, CHARACTER_IDX next_realm)
 	handle_stuff(caster_ptr);
 
 	/* Load an autopick preference file */
-	autopick_load_pref(FALSE);
+	autopick_load_pref(caster_ptr, FALSE);
 }
 
 

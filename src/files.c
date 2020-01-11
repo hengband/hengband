@@ -5757,13 +5757,14 @@ void do_cmd_help(void)
 /*!
  * @brief プレイヤーの名前をチェックして修正する
  * Process the player name.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param sf セーブファイル名に合わせた修正を行うならばTRUE
  * @return なし
  * @details
  * Extract a clean "base name".
  * Build the savefile name if needed.
  */
-void process_player_name(bool sf)
+void process_player_name(player_type *creature_ptr, bool sf)
 {
 	int i, k = 0;
 	char old_player_base[32] = "";
@@ -5905,7 +5906,7 @@ void process_player_name(bool sf)
 	/* Load an autopick preference file */
 	if (current_world_ptr->character_generated)
 	{
-		if (!streq(old_player_base, p_ptr->base_name)) autopick_load_pref(FALSE);
+		if (!streq(old_player_base, p_ptr->base_name)) autopick_load_pref(creature_ptr, FALSE);
 	}
 }
 

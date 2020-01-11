@@ -41,7 +41,7 @@ extern errr check_time(void);
 extern errr check_load(void);
 extern bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode);
 extern void do_cmd_help(void);
-extern void process_player_name(bool sf);
+extern void process_player_name(player_type *creature_ptr, bool sf);
 extern void get_name(player_type *creature_ptr);
 extern void do_cmd_save_game(player_type *creature_ptr, int is_autosave);
 extern void do_cmd_save_and_exit(void);

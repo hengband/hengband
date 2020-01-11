@@ -761,7 +761,7 @@ static void init_autopick(void)
 /*
  *  Get file name for autopick preference
  */
-static concptr pickpref_filename(int filename_mode)
+static concptr pickpref_filename(player_type *player_ptr, int filename_mode)
 {
 	static const char namebase[] = _("picktype", "pickpref");
 
@@ -771,7 +771,7 @@ static concptr pickpref_filename(int filename_mode)
 		return format("%s.prf", namebase);
 
 	case PT_WITH_PNAME:
-		return format("%s-%s.prf", namebase, p_ptr->base_name);
+		return format("%s-%s.prf", namebase, player_ptr->base_name);
 
 	default:
 		return NULL;
@@ -782,7 +782,7 @@ static concptr pickpref_filename(int filename_mode)
 /*
  * Load an autopick preference file
  */
-void autopick_load_pref(bool disp_mes)
+void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 {
 	GAME_TEXT buf[80];
 	errr err;
@@ -791,7 +791,7 @@ void autopick_load_pref(bool disp_mes)
 	init_autopick();
 
 	/* Try a filename with player name */
-	my_strcpy(buf, pickpref_filename(PT_WITH_PNAME), sizeof(buf));
+	my_strcpy(buf, pickpref_filename(player_ptr, PT_WITH_PNAME), sizeof(buf));
 
 	/* Load the file */
 	err = process_autopick_file(buf);
@@ -806,7 +806,7 @@ void autopick_load_pref(bool disp_mes)
 	if (0 > err)
 	{
 		/* Use default name */
-		my_strcpy(buf, pickpref_filename(PT_DEFAULT), sizeof(buf));
+		my_strcpy(buf, pickpref_filename(player_ptr, PT_DEFAULT), sizeof(buf));
 
 		/* Load the file */
 		err = process_autopick_file(buf);
@@ -1794,7 +1794,7 @@ static const char autoregister_header[] = "?:$AUTOREGISTER";
 /*
  *  Clear auto registered lines in the picktype.prf .
  */
-static bool clear_auto_register(void)
+static bool clear_auto_register(player_type *player_ptr)
 {
 	char tmp_file[1024];
 	char pref_file[1024];
@@ -1805,12 +1805,12 @@ static bool clear_auto_register(void)
 	bool autoregister = FALSE;
 	bool okay = TRUE;
 
-	path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_WITH_PNAME));
+	path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME));
 	pref_fff = my_fopen(pref_file, "r");
 
 	if (!pref_fff)
 	{
-		path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_DEFAULT));
+		path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT));
 		pref_fff = my_fopen(pref_file, "r");
 	}
 
@@ -1953,17 +1953,17 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 	if (!player_ptr->autopick_autoregister)
 	{
 		/* Clear old auto registered lines */
-		if (!clear_auto_register()) return FALSE;
+		if (!clear_auto_register(player_ptr)) return FALSE;
 	}
 
 	/* Try a filename with player name */
-	path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_WITH_PNAME));
+	path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME));
 	pref_fff = my_fopen(pref_file, "r");
 
 	if (!pref_fff)
 	{
 		/* Use default name */
-		path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(PT_DEFAULT));
+		path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_DEFAULT));
 		pref_fff = my_fopen(pref_file, "r");
 	}
 
@@ -2783,7 +2783,7 @@ static concptr *read_text_lines(concptr filename)
 /*
  * Copy the default autopick file to the user directory
  */
-static void prepare_default_pickpref(void)
+static void prepare_default_pickpref(player_type *player_ptr)
 {
 	const concptr messages[] = {
 		_("あなたは「自動拾いエディタ」を初めて起動しました。", "You have activated the Auto-Picker Editor for the first time."),
@@ -2796,7 +2796,7 @@ static void prepare_default_pickpref(void)
 	FILE *pref_fp;
 	FILE *user_fp;
 	int i;
-	concptr filename = pickpref_filename(PT_DEFAULT);
+	concptr filename = pickpref_filename(player_ptr, PT_DEFAULT);
 
 	/* Display messages */
 	for (i = 0; messages[i]; i++) msg_print(messages[i]);
@@ -2842,21 +2842,21 @@ static void prepare_default_pickpref(void)
  * Read an autopick prefence file to memory
  * Prepare default if no user file is found
  */
-static concptr *read_pickpref_text_lines(int *filename_mode_p)
+static concptr *read_pickpref_text_lines(player_type *player_ptr, int *filename_mode_p)
 {
 	char buf[1024];
 	concptr *lines_list;
 
 	/* Try a filename with player name */
 	*filename_mode_p = PT_WITH_PNAME;
-	strcpy(buf, pickpref_filename(*filename_mode_p));
+	strcpy(buf, pickpref_filename(player_ptr, *filename_mode_p));
 	lines_list = read_text_lines(buf);
 
 	if (!lines_list)
 	{
 		/* Use default name */
 		*filename_mode_p = PT_DEFAULT;
-		strcpy(buf, pickpref_filename(*filename_mode_p));
+		strcpy(buf, pickpref_filename(player_ptr, *filename_mode_p));
 		lines_list = read_text_lines(buf);
 	}
 
@@ -2865,7 +2865,7 @@ static concptr *read_pickpref_text_lines(int *filename_mode_p)
 		/* There is no preference file in the user directory */
 
 		/* Copy the default autopick file to the user directory */
-		prepare_default_pickpref();
+		prepare_default_pickpref(player_ptr);
 
 		/* Use default name again */
 		lines_list = read_text_lines(buf);
@@ -4970,7 +4970,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 						 "Discard all changes and revert to original file. Are you sure? "))) break;
 
 		free_text_lines(tb->lines_list);
-		tb->lines_list = read_pickpref_text_lines(&tb->filename_mode);
+		tb->lines_list = read_pickpref_text_lines(player_ptr, &tb->filename_mode);
 		tb->dirty_flags |= DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
 		tb->cx = tb->cy = 0;
 		tb->mark = 0;
@@ -6028,7 +6028,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	}
 
 	/* Read or initialize whole text */
-	tb->lines_list = read_pickpref_text_lines(&tb->filename_mode);
+	tb->lines_list = read_pickpref_text_lines(player_ptr, &tb->filename_mode);
 
 	/* Reset cursor position if needed */
 	for (i = 0; i < tb->cy; i++)
@@ -6124,7 +6124,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	screen_load();
 
 	/* Get the filename of preference */
-	strcpy(buf, pickpref_filename(tb->filename_mode));
+	strcpy(buf, pickpref_filename(player_ptr, tb->filename_mode));
 
 	if (quit == QUIT_AND_SAVE)
 		write_text_lines(buf, tb->lines_list);

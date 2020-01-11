@@ -4445,7 +4445,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 	get_name(creature_ptr);
 
 	/* Process the player name */
-	process_player_name(current_world_ptr->creating_savefile);
+	process_player_name(creature_ptr, current_world_ptr->creating_savefile);
 
 	/*** Edit character background ***/
 	edit_history(creature_ptr);
@@ -4548,7 +4548,7 @@ static bool ask_quick_start(player_type *creature_ptr)
 	creature_ptr->csp = creature_ptr->msp;
 
 	/* Process the player name */
-	process_player_name(FALSE);
+	process_player_name(creature_ptr, FALSE);
 
 	return TRUE;
 }

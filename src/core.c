@@ -4101,7 +4101,7 @@ static void process_command(player_type *creature_ptr)
 
 		case '$':
 		{
-			do_cmd_reload_autopick();
+			do_cmd_reload_autopick(creature_ptr);
 			break;
 		}
 
@@ -5158,12 +5158,13 @@ static void dungeon(player_type *player_ptr, bool load_game)
 
 /*!
  * @brief 全ユーザプロファイルをロードする / Load some "user pref files"
+ * @paaram player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @note
  * Modified by Arcum Dagsson to support
  * separate macro files for different realms.
  */
-static void load_all_pref_files(void)
+static void load_all_pref_files(player_type *player_ptr)
 {
 	char buf[1024];
 
@@ -5217,7 +5218,7 @@ static void load_all_pref_files(void)
 
 
 	/* Load an autopick preference file */
-	autopick_load_pref(FALSE);
+	autopick_load_pref(player_ptr, FALSE);
 }
 
 
@@ -5374,7 +5375,7 @@ void play_game(player_type *player_ptr, bool new_game)
 	if (!new_game)
 	{
 		/* Process the player name */
-		process_player_name(FALSE);
+		process_player_name(player_ptr, FALSE);
 	}
 
 	/* Init the RNG */
@@ -5556,7 +5557,7 @@ void play_game(player_type *player_ptr, bool new_game)
 	reset_visuals();
 
 	/* Load the "pref" files */
-	load_all_pref_files();
+	load_all_pref_files(player_ptr);
 
 	/* Give startup outfit (after loading pref files) */
 	if (new_game)

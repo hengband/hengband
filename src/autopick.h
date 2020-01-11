@@ -27,8 +27,7 @@ extern int max_autopick;
 extern int max_max_autopick;
 extern autopick_type *autopick_list;
 
-/* autopick.c */
-extern void autopick_load_pref(bool disp_mes);
+extern void autopick_load_pref(player_type *player_ptr, bool disp_mes);
 extern errr process_autopick_file_command(char *buf);
 extern concptr autopick_line_from_entry(autopick_type *entry);
 extern int is_autopick(object_type *o_ptr);

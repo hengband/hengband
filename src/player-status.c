@@ -5653,7 +5653,7 @@ void check_experience(player_type *creature_ptr)
 	}
 
 	/* Load an autopick preference file */
-	if (old_lev != creature_ptr->lev) autopick_load_pref(FALSE);
+	if (old_lev != creature_ptr->lev) autopick_load_pref(creature_ptr, FALSE);
 }
 
 /*!
