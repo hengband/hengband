@@ -31,7 +31,7 @@ extern void wilderness_gen_small(player_type *creature_ptr);
 extern errr init_wilderness(void);
 extern void init_wilderness_terrains(void);
 extern void seed_wilderness(void);
-extern errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x);
+extern errr parse_line_wilderness(player_type *creature_ptr, char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x);
 extern bool change_wild_mode(player_type *creature_ptr, bool encount);
 
 /* Border */

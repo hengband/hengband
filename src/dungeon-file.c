@@ -4114,7 +4114,7 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 	/* Process "W:<command>: ..." -- info for the wilderness */
 	else if (buf[0] == 'W')
 	{
-		return parse_line_wilderness(buf, ymin, xmin, ymax, xmax, y, x);
+		return parse_line_wilderness(player_ptr, buf, ymin, xmin, ymax, xmax, y, x);
 	}
 
 	/* Process "P:<y>:<x>" -- player position */

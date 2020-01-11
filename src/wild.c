@@ -33,13 +33,14 @@
 
 #include "view-mainwindow.h"
 
+#define MAX_FEAT_IN_TERRAIN 18
+
  /*
   * Wilderness
   */
 wilderness_type **wilderness;
 
 bool generate_encounter;
-
 
 /*!
  * @brief 地形生成確率を決める要素100の配列を確率テーブルから作成する
@@ -61,6 +62,7 @@ static void set_floor_and_wall_aux(s16b feat_type[100], feat_prob prob[DUNGEON_F
 		feat_type[i] = prob[cur].feat;
 	}
 }
+
 
 /*!
  * @brief ダンジョンの地形を指定確率に応じて各マスへランダムに敷き詰める
@@ -212,8 +214,6 @@ static void plasma_recursive(floor_type *floor_ptr, POSITION x1, POSITION y1, PO
 }
 
 
-#define MAX_FEAT_IN_TERRAIN 18
-
 /*
  * The default table in terrain level generation.
  */
@@ -318,7 +318,6 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, u32b se
 	/* Hack -- Restore the RNG state */
 	Rand_state_restore(state_backup);
 }
-
 
 
 /*!
@@ -464,7 +463,6 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
  * Border of the wilderness area
  */
 static border_type border;
-
 
 /*!
  * @brief 広域マップの生成 /
@@ -776,7 +774,6 @@ struct wilderness_grid
 
 static wilderness_grid w_letter[255];
 
-
 /*!
  * @brief w_info.txtのデータ解析 /
  * Parse a sub-file of the "extra info"
@@ -789,7 +786,7 @@ static wilderness_grid w_letter[255];
  * @param x 広域マップの幅を返す参照ポインタ
  * @return なし
  */
-errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
+errr parse_line_wilderness(player_type *creature_ptr, char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
 	int i, num;
 	char *zz[33];
@@ -880,18 +877,18 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 	/* Process "W:P:<x>:<y> - starting position in the wilderness */
 	case 'P':
 	{
-		if ((p_ptr->wilderness_x == 0) &&
-		    (p_ptr->wilderness_y == 0))
+		if ((creature_ptr->wilderness_x == 0) &&
+		    (creature_ptr->wilderness_y == 0))
 		{
 			if (tokenize(buf+4, 2, zz, 0) == 2)
 			{
-				p_ptr->wilderness_y = atoi(zz[0]);
-				p_ptr->wilderness_x = atoi(zz[1]);
+				creature_ptr->wilderness_y = atoi(zz[0]);
+				creature_ptr->wilderness_x = atoi(zz[1]);
 				
-				if ((p_ptr->wilderness_x < 1) ||
-				    (p_ptr->wilderness_x > current_world_ptr->max_wild_x) ||
-				    (p_ptr->wilderness_y < 1) ||
-				    (p_ptr->wilderness_y > current_world_ptr->max_wild_y))
+				if ((creature_ptr->wilderness_x < 1) ||
+				    (creature_ptr->wilderness_x > current_world_ptr->max_wild_x) ||
+				    (creature_ptr->wilderness_y < 1) ||
+				    (creature_ptr->wilderness_y > current_world_ptr->max_wild_y))
 				{
 					return (PARSE_ERROR_OUT_OF_BOUNDS);
 				}
@@ -923,7 +920,6 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 }
 
 
-
 /*!
  * @brief ゲーム開始時に各荒野フロアの乱数シードを指定する /
  * Generate the random seeds for the wilderness
@@ -950,7 +946,6 @@ void seed_wilderness(void)
  */
 typedef wilderness_type *wilderness_type_ptr;
 
-
 /*!
  * @brief ゲーム開始時の荒野初期化メインルーチン /
  * Initialize wilderness array
@@ -972,6 +967,7 @@ errr init_wilderness(void)
 
 	return 0;
 }
+
 
 /*!
  * @brief 荒野の地勢設定を初期化する /
@@ -1107,6 +1103,7 @@ void init_wilderness_terrains(void)
 		feat_tree, 2,
 		feat_mountain, MAX_FEAT_IN_TERRAIN - 8);
 }
+
 
 /*!
  * @brief 荒野から広域マップへの切り替え処理 /
