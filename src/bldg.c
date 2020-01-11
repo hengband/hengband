@@ -1174,7 +1174,7 @@ static int do_poker(void)
  * @param cmd プレイするゲームID
  * @return なし
  */
-static bool gamble_comm(int cmd)
+static bool gamble_comm(player_type *player_ptr, int cmd)
 {
 	int i;
 	int roll1, roll2, roll3, choice, odds, win;
@@ -1195,7 +1195,7 @@ static bool gamble_comm(int cmd)
 	else
 	{
 		/* No money */
-		if (p_ptr->au < 1)
+		if (player_ptr->au < 1)
 		{
 			msg_print(_("おい！おまえ一文なしじゃないか！こっから出ていけ！",
 				"Hey! You don't have gold - get out of here!"));
@@ -1206,10 +1206,10 @@ static bool gamble_comm(int cmd)
 
 		clear_bldg(5, 23);
 
-		maxbet = p_ptr->lev * 200;
+		maxbet = player_ptr->lev * 200;
 
 		/* We can't bet more than we have */
-		maxbet = MIN(maxbet, p_ptr->au);
+		maxbet = MIN(maxbet, player_ptr->au);
 
 		/* Get the wager */
 		strcpy(out_val, "");
@@ -1228,7 +1228,7 @@ static bool gamble_comm(int cmd)
 			/* Get the wager */
 			wager = atol(p);
 
-			if (wager > p_ptr->au)
+			if (wager > player_ptr->au)
 			{
 				msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
 				msg_print(NULL);
@@ -1249,7 +1249,7 @@ static bool gamble_comm(int cmd)
 			msg_print(NULL);
 			win = FALSE;
 			odds = 0;
-			oldgold = p_ptr->au;
+			oldgold = player_ptr->au;
 
 			sprintf(tmp_str, _("ゲーム前の所持金: %9ld", "Gold before game: %9ld"), (long int)oldgold);
 			prt(tmp_str, 20, 2);
@@ -1258,7 +1258,7 @@ static bool gamble_comm(int cmd)
 
 			do
 			{
-				p_ptr->au -= wager;
+				player_ptr->au -= wager;
 				switch (cmd)
 				{
 				case BACT_IN_BETWEEN: /* Game of In-Between */
@@ -1429,7 +1429,7 @@ static bool gamble_comm(int cmd)
 				{
 					prt(_("あなたの勝ち", "YOU WON"), 16, 37);
 
-					p_ptr->au += odds * wager;
+					player_ptr->au += odds * wager;
 					sprintf(tmp_str, _("倍率: %d", "Payoff: %d"), odds);
 
 					prt(tmp_str, 17, 37);
@@ -1440,7 +1440,7 @@ static bool gamble_comm(int cmd)
 					prt("", 17, 37);
 				}
 
-				sprintf(tmp_str, _("現在の所持金:     %9ld", "Current Gold:     %9ld"), (long int)p_ptr->au);
+				sprintf(tmp_str, _("現在の所持金:     %9ld", "Current Gold:     %9ld"), (long int)player_ptr->au);
 
 				prt(tmp_str, 22, 2);
 				prt(_("もう一度(Y/N)？", "Again(Y/N)?"), 18, 37);
@@ -1450,7 +1450,7 @@ static bool gamble_comm(int cmd)
 				prt("", 16, 37);
 				prt("", 17, 37);
 				prt("", 18, 37);
-				if (wager > p_ptr->au)
+				if (wager > player_ptr->au)
 				{
 					msg_print(_("おい！金が足りないじゃないか！ここから出て行け！",
 						"Hey! You don't have the gold - get out of here!"));
@@ -1462,16 +1462,16 @@ static bool gamble_comm(int cmd)
 			} while ((again == 'y') || (again == 'Y'));
 
 			prt("", 18, 37);
-			if (p_ptr->au >= oldgold)
+			if (player_ptr->au >= oldgold)
 			{
 				msg_print(_("「今回は儲けたな！でも次はこっちが勝ってやるからな、絶対に！」",
 					"You came out a winner! We'll win next time, I'm sure."));
-				chg_virtue(p_ptr, V_CHANCE, 3);
+				chg_virtue(player_ptr, V_CHANCE, 3);
 			}
 			else
 			{
 				msg_print(_("「金をスッてしまったな、わはは！うちに帰った方がいいぜ。」", "You lost gold! Haha, better head home."));
-				chg_virtue(p_ptr, V_CHANCE, -3);
+				chg_virtue(player_ptr, V_CHANCE, -3);
 			}
 		}
 
@@ -3969,7 +3969,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 	case BACT_DICE_SLOTS:
 	case BACT_GAMBLE_RULES:
 	case BACT_POKER:
-		gamble_comm(bact);
+		gamble_comm(player_ptr, bact);
 		break;
 	case BACT_REST:
 	case BACT_RUMORS:
