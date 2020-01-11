@@ -2140,7 +2140,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 
 		bool is_auto_pickup = idx >= 0;
 		is_auto_pickup &= autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK);
-		if (!is_autopick)
+		if (!is_auto_pickup)
 		{
 			auto_destroy_item(player_ptr, o_ptr, idx);
 			continue;
