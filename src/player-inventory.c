@@ -15,6 +15,8 @@
 
 bool select_ring_slot;
 
+void prepare_label_string(player_type *creature_ptr, char *label, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
+
 /*!
  * @brief プレイヤーの所持/装備オブジェクトIDが指輪枠かを返す /
  * @param i プレイヤーの所持/装備オブジェクトID
@@ -340,7 +342,7 @@ static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLO
 	/* Check every object in the grid */
 	for (i = 0; i < floor_num && i < 23; i++)
 	{
-		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[floor_list[i]];
+		object_type *o_ptr = &floor_ptr->o_list[floor_list[i]];
 
 		/* Skip empty inscriptions */
 		if (!o_ptr->inscription) continue;
@@ -374,6 +376,7 @@ static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLO
 /*!
  * @brief 所持/装備オブジェクトに選択タグを与える/タグに該当するオブジェクトがあるかを返す /
  * Find the "first" inventory object with the given "tag".
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param cp 対応するタグIDを与える参照ポインタ
  * @param tag 該当するオブジェクトがあるかを調べたいタグ
  * @param mode 所持、装備の切り替え
@@ -386,7 +389,7 @@ static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLO
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+static bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	COMMAND_CODE i;
 	COMMAND_CODE start, end;
@@ -413,7 +416,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALU
 
 	for (i = start; i <= end; i++)
 	{
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &owner_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Skip empty inscriptions */
@@ -455,7 +458,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALU
 	/* Check every object */
 	for (i = start; i <= end; i++)
 	{
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &owner_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* Skip empty inscriptions */
@@ -492,11 +495,12 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALU
 /*!
  * @brief タグIDにあわせてタグアルファベットのリストを返す /
  * Move around label characters with correspond tags
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param label ラベルリストを取得する文字列参照ポインタ
  * @param mode 所持品リストか装備品リストかの切り替え
  * @return なし
  */
-void prepare_label_string(char *label, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+void prepare_label_string(player_type *owner_ptr, char *label, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int  offset = (mode == USE_EQUIP) ? INVEN_RARM : 0;
@@ -512,7 +516,7 @@ void prepare_label_string(char *label, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 		SYMBOL_CODE c = alphabet_chars[i];
 
 		/* Find a tag with this label */
-		if (get_tag(&index, c, mode, tval))
+		if (get_tag(owner_ptr, &index, c, mode, tval))
 		{
 			/* Delete the overwritten label */
 			if (label[i] == c) label[i] = ' ';
@@ -602,7 +606,7 @@ COMMAND_CODE show_inven(player_type *owner_ptr, int target_item, BIT_FLAGS mode,
 		z = i + 1;
 	}
 
-	prepare_label_string(inven_label, USE_INVEN, tval);
+	prepare_label_string(owner_ptr, inven_label, USE_INVEN, tval);
 
 	for (k = 0, i = 0; i < z; i++)
 	{
@@ -944,7 +948,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			if (prev_tag && command_cmd)
 			{
 				/* Look up the tag and validate the item */
-				if (!get_tag(&k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */;
+				if (!get_tag(owner_ptr, &k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */;
 				else if ((k < INVEN_RARM) ? !inven : !equip) /* Reject */;
 				else if (!get_item_okay(owner_ptr, k)) /* Reject */;
 				else
@@ -1407,7 +1411,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			case '7': case '8': case '9':
 			{
 				/* Look up the tag */
-				if (!get_tag(&k, which, command_wrk ? USE_EQUIP : USE_INVEN, tval))
+				if (!get_tag(owner_ptr, &k, which, command_wrk ? USE_EQUIP : USE_INVEN, tval))
 				{
 					bell();
 					break;
@@ -1497,7 +1501,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				bool not_found = FALSE;
 
 				/* Look up the alphabetical tag */
-				if (!get_tag(&k, which, command_wrk ? USE_EQUIP : USE_INVEN, tval))
+				if (!get_tag(owner_ptr, &k, which, command_wrk ? USE_EQUIP : USE_INVEN, tval))
 				{
 					not_found = TRUE;
 				}
@@ -1917,7 +1921,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			if (prev_tag && command_cmd)
 			{
 				/* Look up the tag and validate the item */
-				if (!get_tag(&k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */;
+				if (!get_tag(owner_ptr, &k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */;
 				else if ((k < INVEN_RARM) ? !inven : !equip) /* Reject */;
 				else if (!get_item_okay(owner_ptr, k)) /* Reject */;
 				else
@@ -2663,7 +2667,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				if (command_wrk != USE_FLOOR)
 				{
 					/* Look up the tag */
-					if (!get_tag(&k, which, command_wrk, tval))
+					if (!get_tag(owner_ptr, &k, which, command_wrk, tval))
 					{
 						bell();
 						break;
@@ -2794,7 +2798,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 					bool not_found = FALSE;
 
 					/* Look up the alphabetical tag */
-					if (!get_tag(&k, which, command_wrk, tval))
+					if (!get_tag(owner_ptr, &k, which, command_wrk, tval))
 					{
 						not_found = TRUE;
 					}
@@ -3349,7 +3353,7 @@ COMMAND_CODE show_equip(player_type *owner_ptr, int target_item, BIT_FLAGS mode,
 	col = (len > wid - 4) ? 0 : (wid - len - 1);
 #endif
 
-	prepare_label_string(equip_label, USE_EQUIP, tval);
+	prepare_label_string(owner_ptr, equip_label, USE_EQUIP, tval);
 
 	/* Output each entry */
 	for (j = 0; j < k; j++)
