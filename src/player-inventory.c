@@ -2952,7 +2952,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
  * @brief 床上のアイテムを拾う選択用サブルーチン
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。
  */
-static bool py_pickup_floor_aux(void)
+static bool py_pickup_floor_aux(player_type *owner_ptr)
 {
 	OBJECT_IDX this_o_idx;
 	concptr q, s;
@@ -2965,7 +2965,7 @@ static bool py_pickup_floor_aux(void)
 	q = _("どれを拾いますか？", "Get which item? ");
 	s = _("もうザックには床にあるどのアイテムも入らない。", "You no longer have any room for the objects on the floor.");
 
-	if (choose_object(p_ptr, &item, q, s, (USE_FLOOR), 0))
+	if (choose_object(owner_ptr, &item, q, s, (USE_FLOOR), 0))
 	{
 		this_o_idx = 0 - item;
 	}
@@ -2975,7 +2975,7 @@ static bool py_pickup_floor_aux(void)
 	}
 
 	/* Pick up the object */
-	py_pickup_aux(p_ptr, this_o_idx);
+	py_pickup_aux(owner_ptr, this_o_idx);
 
 	return TRUE;
 }
@@ -3187,7 +3187,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 	{
 		while (can_pickup--)
 		{
-			if (!py_pickup_floor_aux()) break;
+			if (!py_pickup_floor_aux(owner_ptr)) break;
 		}
 	}
 }
