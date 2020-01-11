@@ -267,7 +267,7 @@ bool can_get_item(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
 		if (item_tester_okay(&owner_ptr->inventory_list[j], tval))
 			return TRUE;
 
-	floor_num = scan_floor(floor_list, owner_ptr->y, owner_ptr->x, 0x03);
+	floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03);
 	if (floor_num)
 		return TRUE;
 
@@ -291,7 +291,7 @@ bool can_get_item(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
+static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
 	COMMAND_CODE i;
 	concptr s;
@@ -301,7 +301,7 @@ static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], IT
 	/* Check every object in the grid */
 	for (i = 0; i < floor_num && i < 23; i++)
 	{
-		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[floor_list[i]];
+		object_type *o_ptr = &floor_ptr->o_list[floor_list[i]];
 
 		/* Skip empty inscriptions */
 		if (!o_ptr->inscription) continue;
@@ -534,7 +534,7 @@ void prepare_label_string(char *label, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
  */
  /*
   */
-static void prepare_label_string_floor(char *label, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
+static void prepare_label_string_floor(floor_type *floor_ptr, char *label, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
 	concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int  i;
@@ -549,7 +549,7 @@ static void prepare_label_string_floor(char *label, FLOOR_IDX floor_list[], ITEM
 		SYMBOL_CODE c = alphabet_chars[i];
 
 		/* Find a tag with this label */
-		if (get_tag_floor(&index, c, floor_list, floor_num))
+		if (get_tag_floor(floor_ptr, &index, c, floor_list, floor_num))
 		{
 			/* Delete the overwritten label */
 			if (label[i] == c) label[i] = ' ';
@@ -1628,6 +1628,7 @@ object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, c
 
 
 /*!
+ * todo ここの引数をfloor_typeにするとコンパイルが通らない、要確認
  * @brief 床下に落ちているオブジェクトの数を返す / scan_floor
  * @param items オブジェクトのIDリストを返すための配列参照ポインタ
  * @param y 走査するフロアのY座標
@@ -1642,20 +1643,21 @@ object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, c
  *		mode & 0x02 -- Marked items only
  *		mode & 0x04 -- Stop after first
  */
-ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode)
+ITEM_NUMBER scan_floor(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	OBJECT_IDX this_o_idx, next_o_idx;
 
 	ITEM_NUMBER num = 0;
 
 	/* Sanity */
-	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return 0;
+	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+	if (!in_bounds(floor_ptr, y, x)) return 0;
 
 	/* Scan all objects in the grid */
-	for (this_o_idx = p_ptr->current_floor_ptr->grid_array[y][x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = floor_ptr->grid_array[y][x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Item tester */
@@ -1687,7 +1689,7 @@ ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode
  * @return 選択したアイテムの添え字
  * @details
  */
-COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_width)
+COMMAND_CODE show_floor(player_type *owner_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width)
 {
 	COMMAND_CODE i, m;
 	int j, k, l;
@@ -1716,12 +1718,13 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
 	len = MAX((*min_width), 20);
 
 	/* Scan for objects in the grid, using item_tester_okay() */
-	floor_num = scan_floor(floor_list, y, x, 0x03);
+	floor_num = scan_floor(owner_ptr, floor_list, y, x, 0x03);
 
 	/* Display the floor objects */
+	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
 	for (k = 0, i = 0; i < floor_num && i < 23; i++)
 	{
-		o_ptr = &p_ptr->current_floor_ptr->o_list[floor_list[i]];
+		o_ptr = &floor_ptr->o_list[floor_list[i]];
 
 		object_desc(o_name, o_ptr, 0);
 
@@ -1756,13 +1759,13 @@ COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_w
 	/* Find the column to start in */
 	col = (len > wid - 4) ? 0 : (wid - len - 1);
 
-	prepare_label_string_floor(floor_label, floor_list, floor_num);
+	prepare_label_string_floor(floor_ptr, floor_label, floor_list, floor_num);
 
 	/* Output each entry */
 	for (j = 0; j < k; j++)
 	{
 		m = floor_list[out_index[j]];
-		o_ptr = &p_ptr->current_floor_ptr->o_list[m];
+		o_ptr = &floor_ptr->o_list[m];
 
 		/* Clear the line */
 		prt("", j + 1, col ? col - 2 : col);
@@ -1875,10 +1878,10 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			if (prev_tag && command_cmd)
 			{
 				/* Scan all objects in the grid */
-				floor_num = scan_floor(floor_list, owner_ptr->y, owner_ptr->x, 0x03);
+				floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03);
 
 				/* Look up the tag */
-				if (get_tag_floor(&k, prev_tag, floor_list, floor_num))
+				if (get_tag_floor(owner_ptr->current_floor_ptr, &k, prev_tag, floor_list, floor_num))
 				{
 					/* Accept that choice */
 					(*cp) = 0 - floor_list[k];
@@ -2005,7 +2008,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 	if (floor)
 	{
 		/* Scan all objects in the grid */
-		floor_num = scan_floor(floor_list, owner_ptr->y, owner_ptr->x, 0x03);
+		floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03);
 	}
 
 	if (i1 <= i2) allow_inven = TRUE;
@@ -2134,7 +2137,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			n2 = I2A(k - floor_top);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_floor(menu_line, owner_ptr->y, owner_ptr->x, &min_width);
+			if (command_see) get_item_label = show_floor(owner_ptr, menu_line, owner_ptr->y, owner_ptr->x, &min_width);
 		}
 
 		if (command_wrk == (USE_INVEN))
@@ -2542,7 +2545,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				owner_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
 
 				/* Re-scan floor list */
-				floor_num = scan_floor(floor_list, owner_ptr->y, owner_ptr->x, 0x03);
+				floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03);
 
 				/* Hack -- Fix screen */
 				if (command_see)
@@ -2683,7 +2686,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				else
 				{
 					/* Look up the alphabetical tag */
-					if (get_tag_floor(&k, which, floor_list, floor_num))
+					if (get_tag_floor(owner_ptr->current_floor_ptr, &k, which, floor_list, floor_num))
 					{
 						/* Special index */
 						k = 0 - floor_list[k];
@@ -2821,7 +2824,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				else
 				{
 					/* Look up the alphabetical tag */
-					if (get_tag_floor(&k, which, floor_list, floor_num))
+					if (get_tag_floor(owner_ptr->current_floor_ptr, &k, which, floor_list, floor_num))
 					{
 						/* Special index */
 						k = 0 - floor_list[k];
