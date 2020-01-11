@@ -3072,7 +3072,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 			disturb(creature_ptr, FALSE, TRUE);
 
 			/* Determine the level */
-			if (!quest_number(floor_ptr->dun_level) && floor_ptr->dun_level)
+			if (!quest_number(creature_ptr, floor_ptr->dun_level) && floor_ptr->dun_level)
 			{
 				msg_print(_("世界が変わった！", "The world changes!"));
 
@@ -4939,7 +4939,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	disturb(player_ptr, TRUE, TRUE);
 
 	/* Get index of current quest (if any) */
-	quest_num = quest_number(player_ptr->current_floor_ptr->dun_level);
+	quest_num = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
 
 	/* Inside a quest? */
 	if (quest_num)

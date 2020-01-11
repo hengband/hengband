@@ -397,13 +397,13 @@ void quest_discovery(QUEST_IDX q_idx)
  * @param level 検索対象になる階
  * @return クエストIDを返す。該当がない場合0を返す。
  */
-QUEST_IDX quest_number(DEPTH level)
+QUEST_IDX quest_number(player_type *player_ptr, DEPTH level)
 {
 	QUEST_IDX i;
 
-	/* Check quests */
-	if (p_ptr->current_floor_ptr->inside_quest)
-		return (p_ptr->current_floor_ptr->inside_quest);
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	if (floor_ptr->inside_quest)
+		return (floor_ptr->inside_quest);
 
 	for (i = 0; i < max_q_idx; i++)
 	{
@@ -412,7 +412,7 @@ QUEST_IDX quest_number(DEPTH level)
 		if ((quest[i].type == QUEST_TYPE_KILL_LEVEL) &&
 			!(quest[i].flags & QUEST_FLAG_PRESET) &&
 			(quest[i].level == level) &&
-			(quest[i].dungeon == p_ptr->dungeon_idx))
+			(quest[i].dungeon == player_ptr->dungeon_idx))
 			return (i);
 	}
 

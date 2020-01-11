@@ -380,7 +380,7 @@ extern void add_door(floor_type *floor_ptr, POSITION x, POSITION y);
 extern void place_secret_door(floor_type *floor_ptr, POSITION y, POSITION x, int type);
 extern void place_locked_door(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void forget_flow(floor_type *floor_ptr);
-extern void place_random_stairs(floor_type *floor_ptr, POSITION y, POSITION x);
+extern void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x);
 
 extern bool los(floor_type* floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern bool projectable(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
@@ -393,7 +393,7 @@ extern void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, boo
 extern void place_closed_door(floor_type *floor_ptr, POSITION y, POSITION x, int type);
 
 extern void wipe_o_list(floor_type *floor_ptr);
-extern void vault_trap_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd);
+extern void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd);
 
 extern bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y);
 extern void try_door(floor_type *floor_ptr, POSITION y, POSITION x);
@@ -427,5 +427,5 @@ extern void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLA
 extern void place_gold(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void delete_monster(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void compact_objects(floor_type *floor_ptr, int size);
-extern void vault_traps(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num);
+extern void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num);
 extern void scatter(floor_type *floor_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);

@@ -1338,7 +1338,7 @@ void change_floor(player_type *creature_ptr)
 				/*** Create connected stairs ***/
 
 				/* No stairs down from Quest */
-				if ((creature_ptr->change_floor_mode & CFM_UP) && !quest_number(creature_ptr->current_floor_ptr->dun_level))
+				if ((creature_ptr->change_floor_mode & CFM_UP) && !quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level))
 				{
 					g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair;
 				}

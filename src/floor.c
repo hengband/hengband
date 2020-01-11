@@ -257,18 +257,19 @@ void add_door(floor_type* floor_ptr, POSITION x, POSITION y)
  * @param x 配置を試みたいマスのX座標
  * @return なし
  */
-void place_random_stairs(floor_type *floor_ptr, POSITION y, POSITION x)
+void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 {
 	bool up_stairs = TRUE;
 	bool down_stairs = TRUE;
 	grid_type *g_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	g_ptr = &floor_ptr->grid_array[y][x];
 	if (!is_floor_grid(g_ptr) || g_ptr->o_idx) return;
 
 	if (!floor_ptr->dun_level) up_stairs = FALSE;
 	if (ironman_downward) up_stairs = FALSE;
 	if (floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) down_stairs = FALSE;
-	if (quest_number(floor_ptr->dun_level) && (floor_ptr->dun_level > 1)) down_stairs = FALSE;
+	if (quest_number(player_ptr, floor_ptr->dun_level) && (floor_ptr->dun_level > 1)) down_stairs = FALSE;
 
 	/* We can't place both */
 	if (down_stairs && up_stairs)
@@ -979,7 +980,7 @@ void place_closed_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
  * @details
  * Only really called by some of the "vault" routines.
  */
-void vault_trap_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
+void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
 {
 	int count = 0, y1 = y, x1 = x;
 	int dummy = 0;
@@ -987,6 +988,7 @@ void vault_trap_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, 
 	grid_type *g_ptr;
 
 	/* Place traps */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (count = 0; count <= 5; count++)
 	{
 		/* Get a location */
@@ -1009,7 +1011,7 @@ void vault_trap_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, 
 		if (!is_floor_grid(g_ptr) || g_ptr->o_idx || g_ptr->m_idx) continue;
 
 		/* Place the trap */
-		place_trap(floor_ptr, y1, x1);
+		place_trap(player_ptr, y1, x1);
 
 		break;
 	}
@@ -1928,6 +1930,7 @@ void compact_objects(floor_type *floor_ptr, int size)
 
 /*!
  * @brief 特殊な部屋向けに各種アイテムを配置する(メインルーチン) / Place some traps with a given displacement of given location
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y トラップを配置したいマスの中心Y座標
  * @param x トラップを配置したいマスの中心X座標
  * @param yd Y方向の配置分散マス数
@@ -1937,13 +1940,13 @@ void compact_objects(floor_type *floor_ptr, int size)
  * @details
  * Only really called by some of the "vault" routines.
  */
-void vault_traps(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
+void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
 {
 	int i;
 
 	for (i = 0; i < num; i++)
 	{
-		vault_trap_aux(floor_ptr, y, x, yd, xd);
+		vault_trap_aux(player_ptr, y, x, yd, xd);
 	}
 }
 

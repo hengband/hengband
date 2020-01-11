@@ -184,18 +184,20 @@ static bool alloc_stairs_aux(floor_type *floor_ptr, POSITION y, POSITION x, int 
 
 /*!
  * @brief 外壁に隣接させて階段を生成する / Places some staircases near walls
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param feat 配置したい地形ID
  * @param num 配置したい階段の数
  * @param walls 最低減隣接させたい外壁の数
  * @return 規定数通りに生成に成功したらTRUEを返す。
  */
-static bool alloc_stairs(floor_type *floor_ptr, FEAT_IDX feat, int num, int walls)
+static bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int walls)
 {
 	int i;
 	int shaft_num = 0;
 
 	feature_type *f_ptr = &f_info[feat];
 
+	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
 	if (have_flag(f_ptr->flags, FF_LESS))
 	{
 		/* No up stairs in town or in ironman mode */
@@ -206,7 +208,7 @@ static bool alloc_stairs(floor_type *floor_ptr, FEAT_IDX feat, int num, int wall
 	}
 	else if (have_flag(f_ptr->flags, FF_MORE))
 	{
-		QUEST_IDX q_idx = quest_number(floor_ptr->dun_level);
+		QUEST_IDX q_idx = quest_number(owner_ptr, floor_ptr->dun_level);
 
 		/* No downstairs on quest levels */
 		if (floor_ptr->dun_level > 1 && q_idx)
@@ -221,7 +223,7 @@ static bool alloc_stairs(floor_type *floor_ptr, FEAT_IDX feat, int num, int wall
 		/* No downstairs at the bottom */
 		if (floor_ptr->dun_level >= d_info[floor_ptr->dungeon_idx].maxdepth) return TRUE;
 
-		if ((floor_ptr->dun_level < d_info[floor_ptr->dungeon_idx].maxdepth-1) && !quest_number(floor_ptr->dun_level+1))
+		if ((floor_ptr->dun_level < d_info[floor_ptr->dungeon_idx].maxdepth-1) && !quest_number(owner_ptr, floor_ptr->dun_level+1))
 			shaft_num = (randint1(num)+1)/2;
 	}
 	else return FALSE;
@@ -368,7 +370,7 @@ static void alloc_object(player_type *owner_ptr, int set, EFFECT_ID typ, int num
 
 			case ALLOC_TYP_TRAP:
 			{
-				place_trap(floor_ptr, y, x);
+				place_trap(owner_ptr, y, x);
 				floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
 				break;
 			}
@@ -487,8 +489,9 @@ bool place_quest_monsters(floor_type *floor_ptr, player_type *creature_ptr)
  * @details There were moved from cave_gen().
  * @return なし
  */
-static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, floor_type *floor_ptr)
+static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, player_type *owner_ptr)
 {
+	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
 #ifdef ALLOW_CAVERNS_AND_LAKES
 	/* Possible "destroyed" level */
 	if ((floor_ptr->dun_level > 30) && one_in_(DUN_DEST*2) && (small_levels) && (dungeon_ptr->flags1 & DF1_DESTROY))
@@ -566,7 +569,7 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, floor_type *floor_p
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 
 	/* Hack -- No destroyed "quest" levels */
-	if (quest_number(floor_ptr->dun_level)) dun->destroyed = FALSE;
+	if (quest_number(owner_ptr, floor_ptr->dun_level)) dun->destroyed = FALSE;
 }
 
 
@@ -670,7 +673,7 @@ static bool cave_gen(player_type *player_ptr)
 	}
 
 	/* Generate various caverns and lakes */
-	gen_caverns_and_lakes(dungeon_ptr, floor_ptr);
+	gen_caverns_and_lakes(dungeon_ptr, player_ptr);
 
 	/* Build maze */
 	if (dungeon_ptr->flags1 & DF1_MAZE)
@@ -678,10 +681,10 @@ static bool cave_gen(player_type *player_ptr)
 		build_maze_vault(player_ptr, floor_ptr->width/2-1, floor_ptr->height/2-1, floor_ptr->width-4, floor_ptr->height-4, FALSE);
 
 		/* Place 3 or 4 down stairs near some walls */
-		if (!alloc_stairs(floor_ptr, feat_down_stair, rand_range(2, 3), 3)) return FALSE;
+		if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(2, 3), 3)) return FALSE;
 
 		/* Place 1 or 2 up stairs near some walls */
-		if (!alloc_stairs(floor_ptr, feat_up_stair, 1, 3)) return FALSE;
+		if (!alloc_stairs(player_ptr, feat_up_stair, 1, 3)) return FALSE;
 	}
 
 	/* Build some rooms */
@@ -876,10 +879,10 @@ static bool cave_gen(player_type *player_ptr)
 		}
 
 		/* Place 3 or 4 down stairs near some walls */
-		if (!alloc_stairs(floor_ptr, feat_down_stair, rand_range(3, 4), 3)) return FALSE;
+		if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(3, 4), 3)) return FALSE;
 
 		/* Place 1 or 2 up stairs near some walls */
-		if (!alloc_stairs(floor_ptr, feat_up_stair, rand_range(1, 2), 3)) return FALSE;
+		if (!alloc_stairs(player_ptr, feat_up_stair, rand_range(1, 2), 3)) return FALSE;
 	}
 
 	if (!dun->laketype)

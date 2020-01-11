@@ -505,7 +505,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 
 		case GF_MAKE_TRAP:
 		{
-			place_trap(floor_ptr, y, x);
+			place_trap(caster_ptr, y, x);
 			break;
 		}
 

@@ -675,7 +675,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 	}
 
 	/* Up only */
-	else if (quest_number(creature_ptr->current_floor_ptr->dun_level) || (creature_ptr->current_floor_ptr->dun_level >= d_info[creature_ptr->dungeon_idx].maxdepth))
+	else if (quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level) || (creature_ptr->current_floor_ptr->dun_level >= d_info[creature_ptr->dungeon_idx].maxdepth))
 	{
 #ifdef JP
 		if (see_m) msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name);
@@ -3514,7 +3514,7 @@ bool is_teleport_level_ineffective(player_type *caster_ptr, MONSTER_IDX idx)
 	bool is_special_floor = floor_ptr->inside_arena || caster_ptr->phase_out ||
 		(floor_ptr->inside_quest && !random_quest_number(floor_ptr->dun_level));
 	bool is_invalid_floor = idx <= 0;
-	is_invalid_floor &= quest_number(floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[caster_ptr->dungeon_idx].maxdepth);
+	is_invalid_floor &= quest_number(caster_ptr, floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[caster_ptr->dungeon_idx].maxdepth);
 	is_invalid_floor &= caster_ptr->current_floor_ptr->dun_level >= 1;
 	is_invalid_floor &= ironman_downward;
 	return is_special_floor || is_invalid_floor;

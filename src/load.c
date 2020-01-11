@@ -2560,12 +2560,13 @@ static void rd_messages(void)
 
 /*!
  * @brief メッセージログを読み込む / Read the dungeon (old method)
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * The monsters/objects must be loaded in the same order
  * that they were stored, since the actual indexes matter.
  */
-static errr rd_dungeon_old(floor_type *floor_ptr)
+static errr rd_dungeon_old(player_type *creature_ptr)
 {
 	int i, y, x;
 	int ymax, xmax;
@@ -2580,6 +2581,7 @@ static errr rd_dungeon_old(floor_type *floor_ptr)
 
 	/* Header info */
 	rd_s16b(&tmp16s);
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	floor_ptr->dun_level = (DEPTH)tmp16s;
 	if (z_older_than(10, 3, 8)) p_ptr->dungeon_idx = DUNGEON_ANGBAND;
 	else
@@ -2804,7 +2806,7 @@ static errr rd_dungeon_old(floor_type *floor_ptr)
 			{
 				g_ptr->info &= ~CAVE_TRAP;
 				g_ptr->mimic = g_ptr->feat;
-				g_ptr->feat = choose_random_trap(floor_ptr);
+				g_ptr->feat = choose_random_trap(creature_ptr);
 			}
 
 			/* Another hidden trap */
@@ -3277,7 +3279,7 @@ static errr rd_dungeon(player_type *player_ptr)
 	/* Older method */
 	if (h_older_than(1, 5, 0, 0))
 	{
-		err = rd_dungeon_old(player_ptr->current_floor_ptr);
+		err = rd_dungeon_old(player_ptr);
 
 		/* Prepare floor_id of current floor */
 		if (player_ptr->dungeon_idx)

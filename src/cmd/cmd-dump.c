@@ -455,7 +455,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		return (-1);
 	}
 
-	q_idx = quest_number(creature_ptr->current_floor_ptr->dun_level);
+	q_idx = quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level);
 
 	if (write_level)
 	{

@@ -90,7 +90,7 @@ extern void complete_quest(player_type *player_ptr, QUEST_IDX quest_num);
 extern void check_quest_completion(player_type *player_ptr, monster_type *m_ptr);
 extern void check_find_art_quest_completion(player_type *player_ptr, object_type *o_ptr);
 extern void quest_discovery(QUEST_IDX q_idx);
-extern QUEST_IDX quest_number(DEPTH level);
+extern QUEST_IDX quest_number(player_type *player_ptr, DEPTH level);
 extern QUEST_IDX random_quest_number(DEPTH level);
 extern void leave_quest_check(player_type *player_ptr);
 extern void leave_tower_check(void);

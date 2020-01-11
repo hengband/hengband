@@ -2547,9 +2547,9 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		}
 	}
 
-	if (quest_number(p_ptr->current_floor_ptr->dun_level))
+	if (quest_number(p_ptr, p_ptr->current_floor_ptr->dun_level))
 	{
-		int hoge = quest_number(p_ptr->current_floor_ptr->dun_level);
+		int hoge = quest_number(p_ptr, p_ptr->current_floor_ptr->dun_level);
 		if ((quest[hoge].type == QUEST_TYPE_KILL_LEVEL) || (quest[hoge].type == QUEST_TYPE_RANDOM))
 		{
 			if(r_idx == quest[hoge].r_idx)

@@ -292,7 +292,7 @@ void update_dungeon_feeling(player_type *subject_ptr, floor_type *floor_ptr)
 	if (current_world_ptr->game_turn < subject_ptr->feeling_turn + delay && !cheat_xtra) return;
 
 	/* Extract quest number (if any) */
-	quest_num = quest_number(floor_ptr->dun_level);
+	quest_num = quest_number(subject_ptr, floor_ptr->dun_level);
 
 	/* No feeling in a quest */
 	if (quest_num &&
