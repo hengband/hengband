@@ -456,7 +456,7 @@ bool raise_possible(floor_type *floor_ptr, monster_type *m_ptr)
 /*!
  * @brief モンスターにとってボルト型魔法が有効な状態かを返す /
  * Determine if a bolt spell will hit the player.
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param y1 ボルト魔法発射地点のY座標
  * @param x1 ボルト魔法発射地点のX座標
  * @param y2 ボルト魔法目標地点のY座標
@@ -473,7 +473,7 @@ bool raise_possible(floor_type *floor_ptr, monster_type *m_ptr)
  * no equally friendly monster is\n
  * between the attacker and target.\n
  */
-bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
+bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend)
 {
 	/* Must be the same as projectable() */
 
@@ -484,7 +484,8 @@ bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_frie
 	u16b grid_g[512];
 
 	/* Check the projection path */
-	grid_n = project_path(p_ptr->current_floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, 0);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	grid_n = project_path(floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, 0);
 
 	/* No grid is ever projectable from itself */
 	if (!grid_n) return FALSE;
@@ -501,16 +502,17 @@ bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_frie
 		y = GRID_Y(grid_g[i]);
 		x = GRID_X(grid_g[i]);
 
-		if ((p_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) && !((y == y2) && (x == x2)))
+		if ((floor_ptr->grid_array[y][x].m_idx > 0) && !((y == y2) && (x == x2)))
 		{
-			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[y][x].m_idx];
+			monster_type *m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx];
 			if (is_friend == is_pet(m_ptr))
 			{
 				return FALSE;
 			}
 		}
+
 		/* Pets may not shoot through the character - TNB */
-		if (player_bold(p_ptr, y, x))
+		if (player_bold(target_ptr, y, x))
 		{
 			if (is_friend) return FALSE;
 		}
@@ -523,7 +525,7 @@ bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_frie
 /*!
  * @brief モンスターのボルト型魔法処理 /
  * Cast a bolt at the player Stop if we hit a monster Affect monsters and the player
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターのID
  * @param y 目標のY座標
  * @param x 目標のX座標
@@ -556,7 +558,7 @@ void bolt(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, 
 
 /*!
  * @brief モンスターのビーム型魔法処理 /
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターのID
  * @param y 目標のY座標
  * @param x 目標のX座標
@@ -589,7 +591,7 @@ void beam(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, 
 /*!
  * @brief モンスターのボール型＆ブレス型魔法処理 /
  * Cast a breath (or ball) attack at the player Pass over any monsters that may be in the way Affect grids, objects, monsters, and the player
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param y 目標地点のY座標
  * @param x 目標地点のX座標
  * @param m_idx モンスターのID
@@ -820,7 +822,7 @@ static bool spell_world(byte spell)
 /*!
  * @brief ID値が特別効果のモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell special.
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param spell 判定対象のID
  * @return 特別効果魔法のIDならばTRUEを返す。
  */
@@ -986,7 +988,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
 /*!
  * @brief モンスターの魔法選択ルーチン
  * Have a monster choose a spell from a list of "useful" spells.
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターの構造体配列ID
  * @param spells 候補魔法IDをまとめた配列
  * @param num spellsの長さ
@@ -1254,7 +1256,7 @@ bool spell_is_inate(SPELL_IDX spell)
 
 /*!
  * @brief モンスターがプレイヤーにダメージを与えるための最適な座標を算出する /
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_ptr 技能を使用するモンスター構造体の参照ポインタ
  * @param yp 最適な目標地点のY座標を返す参照ポインタ
  * @param xp 最適な目標地点のX座標を返す参照ポインタ
@@ -1309,7 +1311,7 @@ static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
  * todo メインルーチンの割に長過ぎる。要分割
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
- * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスター構造体配列のID
  * @return 実際に特殊技能を利用したらTRUEを返す
  * @details
@@ -1613,7 +1615,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		if (((f4 & RF4_BOLT_MASK) ||
 		     (f5 & RF5_BOLT_MASK) ||
 		     (f6 & RF6_BOLT_MASK)) &&
-		    !clean_shot(m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x, FALSE))
+		    !clean_shot(target_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x, FALSE))
 		{
 			/* Remove spells that will only hurt friends */
 			f4 &= ~(RF4_BOLT_MASK);

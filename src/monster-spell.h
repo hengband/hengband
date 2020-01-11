@@ -306,7 +306,7 @@ extern const monster_power monster_powers[MAX_MONSPELLS];
 extern const concptr monster_powers_short[MAX_MONSPELLS];
 
 /* mspells1.c */
-extern bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend);
+extern bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend);
 extern bool summon_possible(floor_type *floor_ptr, POSITION y1, POSITION x1);
 extern bool raise_possible(floor_type *floor_ptr, monster_type *m_ptr);
 extern bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx);

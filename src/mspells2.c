@@ -588,7 +588,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (((f4 & RF4_BOLT_MASK) ||
 		     (f5 & RF5_BOLT_MASK) ||
 		     (f6 & RF6_BOLT_MASK)) &&
-		    !clean_shot(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, pet))
+		    !clean_shot(target_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, pet))
 		{
 			f4 &= ~(RF4_BOLT_MASK);
 			f5 &= ~(RF5_BOLT_MASK);
