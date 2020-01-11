@@ -2225,7 +2225,7 @@ static void add_outfit(player_type *creature_ptr, object_type *o_ptr)
 	slot = inven_carry(creature_ptr, o_ptr);
 
 	/* Auto-inscription */
-	autopick_alter_item(slot, FALSE);
+	autopick_alter_item(creature_ptr, slot, FALSE);
 
 	/* Now try wielding everything */ 
 	wield_all(creature_ptr); 

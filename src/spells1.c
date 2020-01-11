@@ -952,7 +952,7 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				identify_item(caster_ptr, o_ptr);
 
 				/* Auto-inscription */
-				autopick_alter_item((-this_o_idx), FALSE);
+				autopick_alter_item(caster_ptr, (-this_o_idx), FALSE);
 				break;
 			}
 

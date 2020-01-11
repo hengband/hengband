@@ -130,10 +130,11 @@ int init_flags;
 /*!
  * @brief 擬似鑑定を実際に行い判定を反映する
  * @param slot 擬似鑑定を行うプレイヤーの所持リストID
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param heavy 重度の擬似鑑定を行うならばTRUE
  * @return なし
  */
-static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
+static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, bool heavy)
 {
 	byte feel;
 	object_type *o_ptr = &p_ptr->inventory_list[slot];
@@ -240,7 +241,7 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 	o_ptr->feeling = feel;
 
 	/* Auto-inscription/destroy */
-	autopick_alter_item(slot, destroy_feeling);
+	autopick_alter_item(creature_ptr, slot, destroy_feeling);
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
@@ -477,7 +478,7 @@ static void sense_inventory1(player_type *creature_ptr)
 			heavy = TRUE;
 		}
 
-		sense_inventory_aux(i, heavy);
+		sense_inventory_aux(creature_ptr, i, heavy);
 	}
 }
 
@@ -599,7 +600,7 @@ static void sense_inventory2(player_type *creature_ptr)
 		/* Occasional failure on creature_ptr->inventory_list items */
 		if ((i < INVEN_RARM) && (0 != randint0(5))) continue;
 
-		sense_inventory_aux(i, TRUE);
+		sense_inventory_aux(creature_ptr, i, TRUE);
 	}
 }
 

@@ -4758,7 +4758,7 @@ static void store_purchase(player_type *player_ptr)
 				msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), o_name, index_to_label(item_new));
 
 				/* Auto-inscription */
-				autopick_alter_item(item_new, FALSE);
+				autopick_alter_item(player_ptr, item_new, FALSE);
 
 				/* Now, reduce the original stack's pval. */
 				if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND))
@@ -5093,7 +5093,7 @@ static void store_sell(player_type *owner_ptr)
 
 			/* If items remain, auto-inscribe before optimizing */
 			if (o_ptr->number > 0)
-				autopick_alter_item(item, FALSE);
+				autopick_alter_item(owner_ptr, item, FALSE);
 
 			inven_item_optimize(owner_ptr, item);
 			handle_stuff(owner_ptr);

@@ -134,6 +134,7 @@ bool select_ring_slot = FALSE;
 
 /*!
  * @brief 装備するコマンドのメインルーチン / Wield or wear a single item from the pack or floor
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし 
  */
 void do_cmd_wield(player_type *creature_ptr)
@@ -324,7 +325,7 @@ void do_cmd_wield(player_type *creature_ptr)
 		identify_item(creature_ptr, o_ptr);
 
 		/* Auto-inscription */
-		autopick_alter_item(item, FALSE);
+		autopick_alter_item(creature_ptr, item, FALSE);
 	}
 
 	take_turn(creature_ptr, 100);
@@ -606,6 +607,7 @@ void do_cmd_drop(player_type *creature_ptr)
 
 /*!
  * @brief アイテムを破壊するコマンドのメインルーチン / Destroy an item
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void do_cmd_destroy(player_type *creature_ptr)
@@ -682,7 +684,7 @@ void do_cmd_destroy(player_type *creature_ptr)
 				if (autopick_autoregister(creature_ptr, o_ptr))
 				{
 					/* Auto-destroy it */
-					autopick_alter_item(item, TRUE);
+					autopick_alter_item(creature_ptr, item, TRUE);
 				}
 
 				/* The object is already destroyed. */

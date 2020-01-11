@@ -306,7 +306,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 		bool old_known = identify_item(owner_ptr, o_ptr);
 
 		/* Auto-inscription/destroy */
-		autopick_alter_item(slot, (bool)(destroy_identify && !old_known));
+		autopick_alter_item(owner_ptr, slot, (bool)(destroy_identify && !old_known));
 
 		/* If it is destroyed, don't pick it up */
 		if (o_ptr->marked & OM_AUTODESTROY) return;
@@ -375,7 +375,7 @@ void carry(player_type *creature_ptr, bool pickup)
 	handle_stuff(creature_ptr);
 
 	/* Automatically pickup/destroy/inscribe items */
-	autopick_pickup_items(g_ptr);
+	autopick_pickup_items(creature_ptr, g_ptr);
 
 	if (easy_floor)
 	{

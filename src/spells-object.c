@@ -169,7 +169,7 @@ bool create_ammo(player_type *creature_ptr)
 		msg_format(_("%sを作った。", "You make some ammo."), o_name);
 
 		/* Auto-inscription */
-		if (slot >= 0) autopick_alter_item(slot, FALSE);
+		if (slot >= 0) autopick_alter_item(creature_ptr, slot, FALSE);
 
 		/* Destroy the wall */
 		cave_alter_feat(creature_ptr, y, x, FF_HURT_ROCK);
@@ -210,7 +210,7 @@ bool create_ammo(player_type *creature_ptr)
 		slot = inven_carry(creature_ptr, q_ptr);
 
 		/* Auto-inscription */
-		if (slot >= 0) autopick_alter_item(slot, FALSE);
+		if (slot >= 0) autopick_alter_item(creature_ptr, slot, FALSE);
 		return TRUE;
 	}
 
@@ -248,7 +248,7 @@ bool create_ammo(player_type *creature_ptr)
 		slot = inven_carry(creature_ptr, q_ptr);
 
 		/* Auto-inscription */
-		if (slot >= 0) autopick_alter_item(slot, FALSE);
+		if (slot >= 0) autopick_alter_item(creature_ptr, slot, FALSE);
 	}
 
 	return TRUE;

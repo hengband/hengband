@@ -4224,7 +4224,7 @@ bool psychometry(player_type *caster_ptr)
 	}
 
 	/* Auto-inscription/destroy */
-	autopick_alter_item(item, (bool)(okay && destroy_feeling));
+	autopick_alter_item(caster_ptr, item, (bool)(okay && destroy_feeling));
 
 	return TRUE;
 }

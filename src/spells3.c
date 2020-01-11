@@ -1369,7 +1369,7 @@ void identify_pack(player_type *target_ptr)
 		identify_item(target_ptr, o_ptr);
 
 		/* Auto-inscription */
-		autopick_alter_item(i, FALSE);
+		autopick_alter_item(target_ptr, i, FALSE);
 	}
 }
 
@@ -1732,7 +1732,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 		msg_format(_("床上: %s。", "On the ground: %s."), o_name);
 	}
 
-	autopick_alter_item(item, (bool)(destroy_identify && !old_known));
+	autopick_alter_item(caster_ptr, item, (bool)(destroy_identify && !old_known));
 	return TRUE;
 }
 
@@ -1844,7 +1844,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 	}
 
 	(void)screen_object(o_ptr, 0L);
-	autopick_alter_item(item, (bool)(destroy_identify && !old_known));
+	autopick_alter_item(caster_ptr, item, (bool)(destroy_identify && !old_known));
 	return TRUE;
 }
 

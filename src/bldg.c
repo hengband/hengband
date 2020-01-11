@@ -1965,7 +1965,7 @@ static bool kankin(player_type *player_ptr)
 				msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), o_name, index_to_label(item_new));
 
 				/* Auto-inscription */
-				autopick_alter_item(item_new, FALSE);
+				autopick_alter_item(player_ptr, item_new, FALSE);
 				handle_stuff(player_ptr);
 
 				change = TRUE;
@@ -3261,9 +3261,10 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
  * The cost for rods depends on the level of the rod. The prices\n
  * for recharging wands and staves are dependent on the cost of\n
  * the base-item.\n
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void building_recharge(void)
+static void building_recharge(player_type *player_ptr)
 {
 	OBJECT_IDX  item;
 	DEPTH       lev;
@@ -3313,7 +3314,7 @@ static void building_recharge(void)
 			msg_format(_("%s です。", "You have: %s."), tmp_str);
 
 			/* Auto-inscription */
-			autopick_alter_item(item, FALSE);
+			autopick_alter_item(player_ptr, item, FALSE);
 
 			/* Update the gold display */
 			building_prt_gold();
@@ -3470,9 +3471,10 @@ static void building_recharge(void)
  * The cost for rods depends on the level of the rod. The prices\n
  * for recharging wands and staves are dependent on the cost of\n
  * the base-item.\n
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void building_recharge_all(void)
+static void building_recharge_all(player_type *player_ptr)
 {
 	INVENTORY_IDX i;
 	DEPTH lev;
@@ -3480,7 +3482,6 @@ static void building_recharge_all(void)
 	object_kind *k_ptr;
 	PRICE price = 0;
 	PRICE total_cost = 0;
-
 
 	/* Display some info */
 	msg_flag = FALSE;
@@ -3565,7 +3566,7 @@ static void building_recharge_all(void)
 			identify_item(p_ptr, o_ptr);
 
 			/* Auto-inscription */
-			autopick_alter_item(i, FALSE);
+			autopick_alter_item(player_ptr, i, FALSE);
 		}
 
 		/* Recharge */
@@ -3942,10 +3943,10 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		enchant_item(player_ptr, bcost, 0, 0, 1);
 		break;
 	case BACT_RECHARGE:
-		building_recharge();
+		building_recharge(player_ptr);
 		break;
 	case BACT_RECHARGE_ALL:
-		building_recharge_all();
+		building_recharge_all(player_ptr);
 		break;
 	case BACT_IDENTS: /* needs work */
 		if (!get_check(_("持ち物を全て鑑定してよろしいですか？", "Do you pay for identify all your possession? "))) break;

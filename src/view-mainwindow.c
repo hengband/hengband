@@ -3130,7 +3130,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 			{
 				byte act;
 
-				match_autopick = is_autopick(o_ptr);
+				match_autopick = is_autopick(p_ptr, o_ptr);
 				if (match_autopick == -1)
 					continue;
 

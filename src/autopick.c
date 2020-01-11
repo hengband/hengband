@@ -1041,7 +1041,7 @@ static concptr autopick_line_from_entry_kill(autopick_type *entry)
  * A function for Auto-picker/destroyer
  * Examine whether the object matches to the entry
  */
-static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, concptr o_name)
+static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopick_type *entry, concptr o_name)
 {
 	int j;
 	concptr ptr = entry->name;
@@ -1289,15 +1289,15 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, concptr o_
 	/*** First realm spellbooks ***/
 	if (IS_FLG(FLG_REALM1) && 
 	    (REALM1_BOOK != o_ptr->tval ||
-	     p_ptr->pclass == CLASS_SORCERER ||
-	     p_ptr->pclass == CLASS_RED_MAGE))
+	     player_ptr->pclass == CLASS_SORCERER ||
+	     player_ptr->pclass == CLASS_RED_MAGE))
 		return FALSE;
 
 	/*** Second realm spellbooks ***/
 	if (IS_FLG(FLG_REALM2) &&
 	    (REALM2_BOOK != o_ptr->tval ||
-	     p_ptr->pclass == CLASS_SORCERER ||
-	     p_ptr->pclass == CLASS_RED_MAGE))
+	     player_ptr->pclass == CLASS_SORCERER ||
+	     player_ptr->pclass == CLASS_RED_MAGE))
 		return FALSE;
 
 	/*** First rank spellbooks ***/
@@ -1449,8 +1449,8 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, concptr o_
 		 * into an inventory slot.
 		 * But an item can not be absorbed into itself!
 		 */
-		if ((&p_ptr->inventory_list[j] != o_ptr) &&
-		    object_similar(&p_ptr->inventory_list[j], o_ptr))
+		if ((&player_ptr->inventory_list[j] != o_ptr) &&
+		    object_similar(&player_ptr->inventory_list[j], o_ptr))
 			return TRUE;
 	}
 
@@ -1463,7 +1463,7 @@ static bool is_autopick_aux(object_type *o_ptr, autopick_type *entry, concptr o_
  * A function for Auto-picker/destroyer
  * Examine whether the object matches to the list of keywords or not.
  */
-int is_autopick(object_type *o_ptr)
+int is_autopick(player_type *player_ptr, object_type *o_ptr)
 {
 	int i;
 	GAME_TEXT o_name[MAX_NLEN];
@@ -1481,7 +1481,7 @@ int is_autopick(object_type *o_ptr)
 	{
 		autopick_type *entry = &autopick_list[i];
 
-		if (is_autopick_aux(o_ptr, entry, o_name)) return i;
+		if (is_autopick_aux(player_ptr, o_ptr, entry, o_name)) return i;
 	}
 
 	/* No matching entry */
@@ -1694,15 +1694,15 @@ void autopick_delayed_alter(player_type *owner_ptr)
  * Auto-destroyer works only on inventory or on floor stack only when
  * requested.
  */
-void autopick_alter_item(INVENTORY_IDX item, bool destroy)
+void autopick_alter_item(player_type *player_ptr, INVENTORY_IDX item, bool destroy)
 {
 	object_type *o_ptr;
 	int idx;
 
-	o_ptr = REF_ITEM(p_ptr, p_ptr->current_floor_ptr, item);
+	o_ptr = REF_ITEM(player_ptr, player_ptr->current_floor_ptr, item);
 
 	/* Get the index in the auto-pick/destroy list */
-	idx = is_autopick(o_ptr);
+	idx = is_autopick(player_ptr, o_ptr);
 
 	/* Do auto-inscription */
 	auto_inscribe_item(o_ptr, idx);
@@ -1716,7 +1716,7 @@ void autopick_alter_item(INVENTORY_IDX item, bool destroy)
 /*
  * Automatically pickup/destroy items in this grid.
  */
-void autopick_pickup_items(grid_type *g_ptr)
+void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	
@@ -1727,7 +1727,7 @@ void autopick_pickup_items(grid_type *g_ptr)
 			object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
 				next_o_idx = o_ptr->next_o_idx;
 
-		idx = is_autopick(o_ptr);
+		idx = is_autopick(player_ptr, o_ptr);
 
 		/* Item index for floor -1,-2,-3,...  */
 		auto_inscribe_item(o_ptr, idx);
@@ -1917,7 +1917,7 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 	FILE *pref_fff;
 	autopick_type an_entry, *entry = &an_entry;
 
-	int match_autopick = is_autopick(o_ptr);
+	int match_autopick = is_autopick(player_ptr, o_ptr);
 
 	/* Already registered */
 	if (match_autopick != -1)
@@ -3596,7 +3596,7 @@ static byte get_string_for_search(object_type **o_handle, concptr *search_strp)
 /*
  * Search next line matches for o_ptr
  */
-static void search_for_object(text_body_type *tb, object_type *o_ptr, bool forward)
+static void search_for_object(player_type *player_ptr, text_body_type *tb, object_type *o_ptr, bool forward)
 {
 	autopick_type an_entry, *entry = &an_entry;
 	GAME_TEXT o_name[MAX_NLEN];
@@ -3629,7 +3629,7 @@ static void search_for_object(text_body_type *tb, object_type *o_ptr, bool forwa
 		if (!autopick_new_entry(entry, tb->lines_list[i], FALSE)) continue;
 
 		/* Does this line match to the object? */
-		match = is_autopick_aux(o_ptr, entry, o_name);
+		match = is_autopick_aux(player_ptr, o_ptr, entry, o_name);
 		autopick_free_entry(entry);
 		if (!match)	continue;
 
@@ -5581,7 +5581,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 	case EC_SEARCH_FORW:
 		if (tb->search_o_ptr)
 		{
-			search_for_object(tb, tb->search_o_ptr, TRUE);
+			search_for_object(player_ptr, tb, tb->search_o_ptr, TRUE);
 		}
 		else if (tb->search_str && tb->search_str[0])
 		{
@@ -5596,7 +5596,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 	case EC_SEARCH_BACK:
 		if (tb->search_o_ptr)
 		{
-			search_for_object(tb, tb->search_o_ptr, FALSE);
+			search_for_object(player_ptr, tb, tb->search_o_ptr, FALSE);
 		}
 		else if (tb->search_str && tb->search_str[0])
 		{
