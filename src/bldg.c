@@ -623,7 +623,7 @@ static bool find_card_num(int num)
  * @brief ポーカーの手札がフラッシュ役を得ているかを帰す。
  * @return 役の判定結果
  */
-static bool yaku_check_flush(void)
+static bool poker_hand_check_flush(void)
 {
 	bool joker_is_used = FALSE;
 
@@ -645,7 +645,7 @@ static bool yaku_check_flush(void)
  * @brief ポーカーの手札がストレートを含んだ高位の役を得ているかを帰す。
  * @return 役の判定結果 0…ストレート、フラッシュいずれもなし/1…ストレートのみ/2…ストレートフラッシュ/3…ロイヤルストレートフラッシュ
  */
-static int yaku_check_straight(void)
+static int poker_hand_check_straight(void)
 {
 	int lowest = 99;
 	bool joker_is_used = FALSE;
@@ -659,7 +659,7 @@ static int yaku_check_straight(void)
 	}
 
 	/* Check Royal Straight Flush */
-	if (yaku_check_flush())
+	if (poker_hand_check_flush())
 	{
 		int i;
 		if (lowest == 0)
@@ -725,7 +725,7 @@ static int yaku_check_straight(void)
 
 	if (i == 5) straight = TRUE;
 
-	if (straight && yaku_check_flush()) return 2; /* Straight Flush */
+	if (straight && poker_hand_check_flush()) return 2; /* Straight Flush */
 	else if (straight) return 1; /* Only Straight */
 	else return 0;
 }
@@ -735,7 +735,7 @@ static int yaku_check_straight(void)
  * @brief ポーカーのペア役の状態を返す。
  * @return 0:nopair 1:1 pair 2:2 pair 3:3 cards 4:full house 6:4cards
  */
-static int yaku_check_pair(void)
+static int poker_hand_check_pair(void)
 {
 	int matching = 0;
 	for (int i = 0; i < 5; i++)
@@ -780,11 +780,11 @@ static int yaku_check_pair(void)
  * @brief ポーカーの役をチェックし、その結果を画面に表示しつつ結果を返す。
  * @return 役のID
  */
-static int yaku_check(void)
+static int poker_hand_check(void)
 {
 	prt("                            ", 4, 3);
 
-	switch (yaku_check_straight())
+	switch (poker_hand_check_straight())
 	{
 	case 3: /* RF! */
 		c_put_str(TERM_YELLOW, _("ロイヤルストレートフラッシュ", "Royal Flush"), 4, 3);
@@ -800,13 +800,13 @@ static int yaku_check(void)
 		break;
 	}
 
-	if (yaku_check_flush())
+	if (poker_hand_check_flush())
 	{
 		c_put_str(TERM_YELLOW, _("フラッシュ", "Flush"), 4, 3);
 		return ODDS_FL;
 	}
 
-	switch (yaku_check_pair())
+	switch (poker_hand_check_pair())
 	{
 	case 1:
 		c_put_str(TERM_YELLOW, _("ワンペア", "One pair"), 4, 3);
@@ -1134,7 +1134,7 @@ static int do_poker(void)
 	prt(_("残すカードを決めて下さい(方向で移動, スペースで選択)。", "Stay witch? "), 0, 0);
 
 	display_cards();
-	yaku_check();
+	poker_hand_check();
 
 	int k = 2;
 	char cmd;
@@ -1214,7 +1214,7 @@ static int do_poker(void)
 
 	display_cards();
 
-	return yaku_check();
+	return poker_hand_check();
 }
 
 // todo このundefは必要か？
