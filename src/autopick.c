@@ -1492,7 +1492,7 @@ int is_autopick(player_type *player_ptr, object_type *o_ptr)
 /*
  *  Auto inscription
  */
-static void auto_inscribe_item(object_type *o_ptr, int idx)
+static void auto_inscribe_item(player_type *player_ptr, object_type *o_ptr, int idx)
 {
 	/* Are there auto-inscription? */
 	if (idx < 0 || !autopick_list[idx].insc) return;
@@ -1501,10 +1501,10 @@ static void auto_inscribe_item(object_type *o_ptr, int idx)
 		o_ptr->inscription = quark_add(autopick_list[idx].insc);
 
 	/* Redraw inscription */
-	p_ptr->window |= (PW_EQUIP | PW_INVEN);
+	player_ptr->window |= (PW_EQUIP | PW_INVEN);
 
 	/* {.} and {$} effect p_ptr->warning and TRC_TELEPORT_SELF */
-	p_ptr->update |= (PU_BONUS);
+	player_ptr->update |= (PU_BONUS);
 }
 
 
@@ -1705,7 +1705,7 @@ void autopick_alter_item(player_type *player_ptr, INVENTORY_IDX item, bool destr
 	idx = is_autopick(player_ptr, o_ptr);
 
 	/* Do auto-inscription */
-	auto_inscribe_item(o_ptr, idx);
+	auto_inscribe_item(player_ptr, o_ptr, idx);
 
 	/* Do auto-destroy if needed */
 	if (destroy && item <= INVEN_PACK)
@@ -1730,7 +1730,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 		idx = is_autopick(player_ptr, o_ptr);
 
 		/* Item index for floor -1,-2,-3,...  */
-		auto_inscribe_item(o_ptr, idx);
+		auto_inscribe_item(player_ptr, o_ptr, idx);
 
 		if (idx >= 0 &&
 			(autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)))
