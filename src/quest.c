@@ -37,6 +37,7 @@ static concptr find_quest[] =
 	_("巻物を見つけた。メッセージが書いてある:", "You find a scroll with the following message"),
 };
 
+
 /*!
  * @brief ランダムクエストの討伐ユニークを決める / Determine the random quest uniques
  * @param q_ptr クエスト構造体の参照ポインタ
@@ -44,11 +45,9 @@ static concptr find_quest[] =
  */
 void determine_random_questor(quest_type *q_ptr)
 {
-	MONRACE_IDX r_idx;
-	monster_race *r_ptr;
-
 	get_mon_num_prep(mon_hook_quest, NULL);
 
+	MONRACE_IDX r_idx;
 	while (TRUE)
 	{
 		/*
@@ -56,6 +55,7 @@ void determine_random_questor(quest_type *q_ptr)
 		 * (depending on level)
 		 */
 		r_idx = get_mon_num(q_ptr->level + 5 + randint1(q_ptr->level / 10));
+		monster_race *r_ptr;
 		r_ptr = &r_info[r_idx];
 
 		if (!(r_ptr->flags1 & RF1_UNIQUE)) continue;
@@ -75,6 +75,7 @@ void determine_random_questor(quest_type *q_ptr)
 
 	q_ptr->r_idx = r_idx;
 }
+
 
 /*!
  * @brief クエストを達成状態にする /
@@ -101,14 +102,12 @@ void complete_quest(player_type *player_ptr, QUEST_IDX quest_num)
 	update_playtime();
 	q_ptr->comptime = current_world_ptr->play_time;
 
-	if (!(q_ptr->flags & QUEST_FLAG_SILENT))
-	{
-		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST_CLEAR);
-		msg_print(_("クエストを達成した！", "You just completed your quest!"));
-		msg_print(NULL);
-	}
-}
+	if (q_ptr->flags & QUEST_FLAG_SILENT) return;
 
+	play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST_CLEAR);
+	msg_print(_("クエストを達成した！", "You just completed your quest!"));
+	msg_print(NULL);
+}
 
 
 /*!
@@ -120,16 +119,8 @@ void complete_quest(player_type *player_ptr, QUEST_IDX quest_num)
  */
 void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 {
-	POSITION y, x;
-
-	bool create_stairs = FALSE;
-	bool reward = FALSE;
-
-	object_type forge;
-	object_type *o_ptr;
-
-	y = m_ptr->fy;
-	x = m_ptr->fx;
+	POSITION y = m_ptr->fy;
+	POSITION x = m_ptr->fx;
 
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	QUEST_IDX quest_num = floor_ptr->inside_quest;
@@ -138,7 +129,6 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 	if (!quest_num)
 	{
 		QUEST_IDX i;
-
 		for (i = max_q_idx - 1; i > 0; i--)
 		{
 			quest_type* const q_ptr = &quest[i];
@@ -179,6 +169,8 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 	}
 
 	/* Handle the current quest */
+	bool create_stairs = FALSE;
+	bool reward = FALSE;
 	if (quest_num && (quest[quest_num].status == QUEST_STATUS_TAKEN))
 	{
 		/* Current quest */
@@ -193,26 +185,26 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 			if (q_ptr->cur_num >= q_ptr->num_mon)
 			{
 				complete_quest(player_ptr, quest_num);
-
 				q_ptr->cur_num = 0;
 			}
+
 			break;
 		}
 		case QUEST_TYPE_KILL_ALL:
 		{
 			if (!is_hostile(m_ptr)) break;
 
-			if (count_all_hostile_monsters(floor_ptr) == 1)
+			if (count_all_hostile_monsters(floor_ptr) != 1) break;
+
+			if (q_ptr->flags & QUEST_FLAG_SILENT)
 			{
-				if (q_ptr->flags & QUEST_FLAG_SILENT)
-				{
-					q_ptr->status = QUEST_STATUS_FINISHED;
-				}
-				else
-				{
-					complete_quest(player_ptr, quest_num);
-				}
+				q_ptr->status = QUEST_STATUS_FINISHED;
 			}
+			else
+			{
+				complete_quest(player_ptr, quest_num);
+			}
+
 			break;
 		}
 		case QUEST_TYPE_KILL_LEVEL:
@@ -224,28 +216,28 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 
 			q_ptr->cur_num++;
 
-			if (q_ptr->cur_num >= q_ptr->max_num)
+			if (q_ptr->cur_num < q_ptr->max_num) break;
+
+			complete_quest(player_ptr, quest_num);
+
+			if (!(q_ptr->flags & QUEST_FLAG_PRESET))
 			{
-				complete_quest(player_ptr, quest_num);
-
-				if (!(q_ptr->flags & QUEST_FLAG_PRESET))
-				{
-					create_stairs = TRUE;
-					floor_ptr->inside_quest = 0;
-				}
-
-				/* Finish the two main quests without rewarding */
-				if ((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT))
-				{
-					q_ptr->status = QUEST_STATUS_FINISHED;
-				}
-
-				if (q_ptr->type == QUEST_TYPE_RANDOM)
-				{
-					reward = TRUE;
-					q_ptr->status = QUEST_STATUS_FINISHED;
-				}
+				create_stairs = TRUE;
+				floor_ptr->inside_quest = 0;
 			}
+
+			/* Finish the two main quests without rewarding */
+			if ((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT))
+			{
+				q_ptr->status = QUEST_STATUS_FINISHED;
+			}
+
+			if (q_ptr->type == QUEST_TYPE_RANDOM)
+			{
+				reward = TRUE;
+				q_ptr->status = QUEST_STATUS_FINISHED;
+			}
+
 			break;
 		}
 		case QUEST_TYPE_KILL_ANY_LEVEL:
@@ -256,6 +248,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 				complete_quest(player_ptr, quest_num);
 				q_ptr->cur_num = 0;
 			}
+
 			break;
 		}
 		case QUEST_TYPE_TOWER:
@@ -274,6 +267,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 					complete_quest(player_ptr, QUEST_TOWER1);
 				}
 			}
+
 			break;
 		}
 		}
@@ -304,24 +298,21 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 		player_ptr->update |= (PU_FLOW);
 	}
 
-	/*
-	 * Drop quest reward
-	 */
-	if (reward)
+	if (!reward) return;
+
+	object_type forge;
+	object_type *o_ptr;
+	for (int i = 0; i < (floor_ptr->dun_level / 15) + 1; i++)
 	{
-		int i;
+		o_ptr = &forge;
+		object_wipe(o_ptr);
 
-		for (i = 0; i < (floor_ptr->dun_level / 15) + 1; i++)
-		{
-			o_ptr = &forge;
-			object_wipe(o_ptr);
-
-			/* Make a great object */
-			make_object(player_ptr, o_ptr, AM_GOOD | AM_GREAT);
-			(void)drop_near(player_ptr, o_ptr, -1, y, x);
-		}
+		/* Make a great object */
+		make_object(player_ptr, o_ptr, AM_GOOD | AM_GREAT);
+		(void)drop_near(player_ptr, o_ptr, -1, y, x);
 	}
 }
+
 
 /*!
  * @brief 特定のアーティファクトを入手した際のクエスト達成処理 /
@@ -332,9 +323,8 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
  */
 void check_find_art_quest_completion(player_type *player_ptr, object_type *o_ptr)
 {
-	QUEST_IDX i;
 	/* Check if completed a quest */
-	for (i = 0; i < max_q_idx; i++)
+	for (QUEST_IDX i = 0; i < max_q_idx; i++)
 	{
 		if ((quest[i].type == QUEST_TYPE_FIND_ARTIFACT) &&
 			(quest[i].status == QUEST_STATUS_TAKEN) &&
@@ -355,39 +345,37 @@ void quest_discovery(QUEST_IDX q_idx)
 	quest_type *q_ptr = &quest[q_idx];
 	monster_race *r_ptr = &r_info[q_ptr->r_idx];
 	MONSTER_NUMBER q_num = q_ptr->max_num;
-	GAME_TEXT name[MAX_NLEN];
 
 	if (!q_idx) return;
 
+	GAME_TEXT name[MAX_NLEN];
 	strcpy(name, (r_name + r_ptr->name));
 
 	msg_print(find_quest[rand_range(0, 4)]);
 	msg_print(NULL);
 
-	if (q_num == 1)
-	{
-		if ((r_ptr->flags1 & RF1_UNIQUE) && (0 == r_ptr->max_num))
-		{
-			msg_print(_("この階は以前は誰かによって守られていたようだ…。", "It seems that this level was protected by someone before..."));
-			/* The unique is already dead */
-			quest[q_idx].status = QUEST_STATUS_FINISHED;
-			q_ptr->complev = 0;
-			update_playtime();
-			q_ptr->comptime = current_world_ptr->play_time;
-		}
-		else
-		{
-			msg_format(_("注意せよ！この階は%sによって守られている！", "Beware, this level is protected by %s!"), name);
-		}
-	}
-	else
+	if (q_num != 1)
 	{
 #ifndef JP
 		plural_aux(name);
 #endif
 		msg_format(_("注意しろ！この階は%d体の%sによって守られている！", "Be warned, this level is guarded by %d %s!"), q_num, name);
-
+		return;
 	}
+
+	bool is_random_quest_skipped = (r_ptr->flags1 & RF1_UNIQUE);
+	is_random_quest_skipped &= 0 == r_ptr->max_num;
+	if (!is_random_quest_skipped)
+	{
+		msg_format(_("注意せよ！この階は%sによって守られている！", "Beware, this level is protected by %s!"), name);
+		return;
+	}
+
+	msg_print(_("この階は以前は誰かによって守られていたようだ…。", "It seems that this level was protected by someone before..."));
+	quest[q_idx].status = QUEST_STATUS_FINISHED;
+	q_ptr->complev = 0;
+	update_playtime();
+	q_ptr->comptime = current_world_ptr->play_time;
 }
 
 
@@ -400,13 +388,11 @@ void quest_discovery(QUEST_IDX q_idx)
  */
 QUEST_IDX quest_number(player_type *player_ptr, DEPTH level)
 {
-	QUEST_IDX i;
-
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (floor_ptr->inside_quest)
 		return (floor_ptr->inside_quest);
 
-	for (i = 0; i < max_q_idx; i++)
+	for (QUEST_IDX i = 0; i < max_q_idx; i++)
 	{
 		if (quest[i].status != QUEST_STATUS_TAKEN) continue;
 
@@ -414,12 +400,12 @@ QUEST_IDX quest_number(player_type *player_ptr, DEPTH level)
 			!(quest[i].flags & QUEST_FLAG_PRESET) &&
 			(quest[i].level == level) &&
 			(quest[i].dungeon == player_ptr->dungeon_idx))
-			return (i);
+			return i;
 	}
 
-	/* Check for random quest */
 	return random_quest_number(player_ptr, level);
 }
+
 
 /*!
  * @brief 新しく入ったダンジョンの階層に固定されているランダムクエストを探し出しIDを返す。
@@ -429,11 +415,9 @@ QUEST_IDX quest_number(player_type *player_ptr, DEPTH level)
  */
 QUEST_IDX random_quest_number(player_type *player_ptr, DEPTH level)
 {
-	QUEST_IDX i;
-
 	if (player_ptr->dungeon_idx != DUNGEON_ANGBAND) return 0;
 
-	for (i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
+	for (QUEST_IDX i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
 	{
 		if ((quest[i].type == QUEST_TYPE_RANDOM) &&
 			(quest[i].status == QUEST_STATUS_TAKEN) &&
@@ -446,6 +430,7 @@ QUEST_IDX random_quest_number(player_type *player_ptr, DEPTH level)
 
 	return 0;
 }
+
 
 /*!
  * @brief クエスト階層から離脱する際の処理
@@ -488,12 +473,13 @@ void leave_quest_check(player_type *player_ptr)
 	/* Record finishing a quest */
 	if (q_ptr->type == QUEST_TYPE_RANDOM)
 	{
-		if (record_rand_quest) exe_write_diary(player_ptr, NIKKI_RAND_QUEST_F, leaving_quest, NULL);
+		if (record_rand_quest)
+			exe_write_diary(player_ptr, NIKKI_RAND_QUEST_F, leaving_quest, NULL);
+		return;
 	}
-	else
-	{
-		if (record_fix_quest) exe_write_diary(player_ptr, NIKKI_FIX_QUEST_F, leaving_quest, NULL);
-	}
+
+	if (record_fix_quest)
+		exe_write_diary(player_ptr, NIKKI_FIX_QUEST_F, leaving_quest, NULL);
 }
 
 
@@ -504,19 +490,16 @@ void leave_quest_check(player_type *player_ptr)
 void leave_tower_check(player_type *player_ptr)
 {
 	leaving_quest = player_ptr->current_floor_ptr->inside_quest;
-	/* Check for Tower Quest */
-	if (leaving_quest &&
-		(quest[leaving_quest].type == QUEST_TYPE_TOWER) &&
-		(quest[QUEST_TOWER1].status != QUEST_STATUS_COMPLETED))
-	{
-		if (quest[leaving_quest].type == QUEST_TYPE_TOWER)
-		{
-			quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
-			quest[QUEST_TOWER1].complev = player_ptr->lev;
-			update_playtime();
-			quest[QUEST_TOWER1].comptime = current_world_ptr->play_time;
-		}
-	}
+	bool is_leaving_from_tower = leaving_quest != 0;
+	is_leaving_from_tower &= quest[leaving_quest].type == QUEST_TYPE_TOWER;
+	is_leaving_from_tower &= quest[QUEST_TOWER1].status != QUEST_STATUS_COMPLETED;
+	if (!is_leaving_from_tower) return;
+	if (quest[leaving_quest].type != QUEST_TYPE_TOWER) return;
+
+	quest[QUEST_TOWER1].status = QUEST_STATUS_FAILED;
+	quest[QUEST_TOWER1].complev = player_ptr->lev;
+	update_playtime();
+	quest[QUEST_TOWER1].comptime = current_world_ptr->play_time;
 }
 
 
@@ -536,24 +519,21 @@ void do_cmd_quest(player_type *player_ptr)
 		msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
 		return;
 	}
-	else
-	{
-		msg_print(_("ここにはクエストへの入口があります。", "There is an entry of a quest."));
-		if (!get_check(_("クエストに入りますか？", "Do you enter? "))) return;
-		if ((player_ptr->pseikaku == SEIKAKU_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
-			msg_print(_("『とにかく入ってみようぜぇ。』", ""));
-		else if (player_ptr->pseikaku == SEIKAKU_CHARGEMAN) msg_print("『全滅してやるぞ！』");
+	
+	msg_print(_("ここにはクエストへの入口があります。", "There is an entry of a quest."));
+	if (!get_check(_("クエストに入りますか？", "Do you enter? "))) return;
+	if ((player_ptr->pseikaku == SEIKAKU_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+		msg_print(_("『とにかく入ってみようぜぇ。』", ""));
+	else if (player_ptr->pseikaku == SEIKAKU_CHARGEMAN) msg_print("『全滅してやるぞ！』");
 
-		/* Player enters a new quest */
-		player_ptr->oldpy = 0;
-		player_ptr->oldpx = 0;
+	/* Player enters a new quest */
+	player_ptr->oldpy = 0;
+	player_ptr->oldpx = 0;
 
-		leave_quest_check(player_ptr);
+	leave_quest_check(player_ptr);
 
-		if (quest[player_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM) player_ptr->current_floor_ptr->dun_level = 1;
-		player_ptr->current_floor_ptr->inside_quest = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].special;
+	if (quest[player_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM) player_ptr->current_floor_ptr->dun_level = 1;
+	player_ptr->current_floor_ptr->inside_quest = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].special;
 
-		player_ptr->leaving = TRUE;
-	}
+	player_ptr->leaving = TRUE;
 }
-
