@@ -826,9 +826,9 @@ static bool spell_world(byte spell)
  * @param spell 判定対象のID
  * @return 特別効果魔法のIDならばTRUEを返す。
  */
-static bool spell_special(byte spell)
+static bool spell_special(player_type *target_ptr, byte spell)
 {
-	if (p_ptr->phase_out) return FALSE;
+	if (target_ptr->phase_out) return FALSE;
 	if (spell == 160 + 7) return TRUE;
 	return FALSE;
 }
@@ -1005,7 +1005,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
  *\n
  * This function may well be an efficiency bottleneck.\n
  */
-static int choose_attack_spell(MONSTER_IDX m_idx, byte spells[], byte num)
+static int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte spells[], byte num)
 {
 	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -1061,7 +1061,7 @@ static int choose_attack_spell(MONSTER_IDX m_idx, byte spells[], byte num)
 		if (spell_world(spells[i])) world[world_num++] = spells[i];
 
 		/* Special spell? */
-		if (spell_special(spells[i])) special[special_num++] = spells[i];
+		if (spell_special(target_ptr, spells[i])) special[special_num++] = spells[i];
 
 		/* Psycho-spear spell? */
 		if (spell_psy_spe(spells[i])) psy_spe[psy_spe_num++] = spells[i];
@@ -1697,7 +1697,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 			int attempt = 10;
 			while (attempt--)
 			{
-				thrown_spell = choose_attack_spell(m_idx, spell, num);
+				thrown_spell = choose_attack_spell(target_ptr, m_idx, spell, num);
 				if (thrown_spell) break;
 			}
 		}
