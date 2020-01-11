@@ -4292,7 +4292,7 @@ HIT_POINT monspell_damage_base(player_type *target_ptr, int SPELL_NUM, int hp, i
 */
 HIT_POINT monspell_damage(player_type *target_ptr, int SPELL_NUM, MONSTER_IDX m_idx, int TYPE)
 {
-	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
 	int hp;
 	DEPTH rlev = monster_level_idx(m_idx);
@@ -4343,12 +4343,12 @@ HIT_POINT monspell_race_damage(player_type *target_ptr, int SPELL_NUM, MONRACE_I
 */
 HIT_POINT monspell_bluemage_damage(player_type *target_ptr, int SPELL_NUM, PLAYER_LEVEL plev, int TYPE)
 {
-	int hp = p_ptr->chp;
+	int hp = target_ptr->chp;
 	int shoot_dd = 1, shoot_ds = 1, shoot_base = 0;
 	object_type *o_ptr = NULL;
 
-	if (has_melee_weapon(p_ptr, INVEN_RARM)) o_ptr = &p_ptr->inventory_list[INVEN_RARM];
-	else if (has_melee_weapon(p_ptr, INVEN_LARM)) o_ptr = &p_ptr->inventory_list[INVEN_LARM];
+	if (has_melee_weapon(target_ptr, INVEN_RARM)) o_ptr = &target_ptr->inventory_list[INVEN_RARM];
+	else if (has_melee_weapon(target_ptr, INVEN_LARM)) o_ptr = &target_ptr->inventory_list[INVEN_LARM];
 
 	if (o_ptr)
 	{
