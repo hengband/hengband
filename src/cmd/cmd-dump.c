@@ -449,7 +449,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	/* Failure */
 	if (!fff)
 	{
-		msg_format(_("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporally."), buf);
+		msg_format(_("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporarily."), buf);
 		msg_format(NULL);
 		disable_diary=TRUE;
 		return (-1);

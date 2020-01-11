@@ -441,7 +441,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Gives stone skin and some resistance to elements for a while. The level increased, the more number of resistances given.",
 	"Gives feeling of an item. Or identify an item at level 25.",
 	"Generate a ball centered on you which inflict monster with PSI damage. Or inflict all monsters with PSI damage at level 25.",
-	"Removes fear and stun. Gives heroism and speed. Heals HP a little unless you already have heroism and temporal speed boost.",
+	"Removes fear and stun. Gives heroism and speed. Heals HP a little unless you already have heroism and a temporary speed boost.",
 	"Pulls a distant item close to you.",
 	"Fires a ball which damages, co. Absorbing is takes more turns which from 0 to 1.5.",
 	"Fires a beam of pure energy which penetrate the invulnerability barrier.",

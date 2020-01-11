@@ -3271,7 +3271,7 @@ static errr rd_dungeon(player_type *player_ptr)
 	byte num;
 	int i;
 
-	/* Initialize saved_floors array and temporal files */
+	/* Initialize saved_floors array and temporary files */
 	init_saved_floors(player_ptr, FALSE);
 
 	/* Older method */
@@ -3332,7 +3332,7 @@ static errr rd_dungeon(player_type *player_ptr)
 		}
 
 
-		/* Move saved floors data to temporal files */
+		/* Move saved floors data to temporary files */
 		for (i = 0; i < num; i++)
 		{
 			saved_floor_type *sf_ptr = &saved_floors[i];
@@ -3350,14 +3350,14 @@ static errr rd_dungeon(player_type *player_ptr)
 			/* Error? */
 			if (err) break;
 
-			/* Re-save as temporal saved floor file */
+			/* Re-save as temporary saved floor file */
 			if (!save_floor(sf_ptr, SLF_SECOND)) err = 182;
 
 			/* Error? */
 			if (err) break;
 		}
 
-		/* Finally load current floor data from temporal file */
+		/* Finally load current floor data from temporary file */
 		if (!err)
 		{
 			if (!load_floor(player_ptr, get_sf_ptr(player_ptr->floor_id), SLF_SECOND)) err = 183;
@@ -3389,7 +3389,7 @@ static errr rd_dungeon(player_type *player_ptr)
 		break;
 
 	case 182:
-		note(_("テンポラリ・ファイルを作成できません！", "Failed to make temporal files!"));
+		note(_("テンポラリ・ファイルを作成できません！", "Failed to make temporary files!"));
 		break;
 
 	case 183:
@@ -4050,7 +4050,7 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 	x_check = 0L;
 
 	/* Set the version number to current version */
-	/* Never load old temporal files */
+	/* Never load old temporary files */
 	current_world_ptr->h_ver_extra = H_VER_EXTRA;
 	current_world_ptr->h_ver_patch = H_VER_PATCH;
 	current_world_ptr->h_ver_minor = H_VER_MINOR;
@@ -4090,7 +4090,7 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 
 
 /*!
- * @brief 一時保存フロア情報を読み込む / Attempt to load the temporally saved-floor data
+ * @brief 一時保存フロア情報を読み込む / Attempt to load the temporarily saved-floor data
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param sf_ptr 保存フロア読み込み先
  * @param mode オプション
@@ -4113,7 +4113,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	byte old_kanji_code = kanji_code;
 
 	/*
-	 * Temporal files are always written in system depended kanji
+	 * Temporary files are always written in system depended kanji
 	 * code.
 	 */
 #ifdef JP

@@ -1170,10 +1170,10 @@ static bool wr_dungeon(player_type *player_ptr)
 	/* Extract pointer to current floor */
 	cur_sf_ptr = get_sf_ptr(p_ptr->floor_id);
 
-	/* Save current floor to temporal file */
+	/* Save current floor to temporary file */
 	if (!save_floor(cur_sf_ptr, (SLF_SECOND))) return FALSE;
 
-	/* Move data in temporal files to the savefile */
+	/* Move data in temporary files to the savefile */
 	for (i = 0; i < MAX_SAVED_FLOORS; i++)
 	{
 		saved_floor_type *sf_ptr = &saved_floors[i];
@@ -1181,7 +1181,7 @@ static bool wr_dungeon(player_type *player_ptr)
 		/* Unused element */
 		if (!sf_ptr->floor_id) continue;
 
-		/* Load temporal saved floor file */
+		/* Load temporary saved floor file */
 		if (load_floor(player_ptr, sf_ptr, (SLF_SECOND | SLF_NO_KILL)))
 		{
 			/* Mark success */
@@ -1996,7 +1996,7 @@ void remove_loc(void)
 
 
 /*!
- * @brief ゲームプレイ中のフロア一時保存出力処理サブルーチン / Actually write a temporal saved floor file
+ * @brief ゲームプレイ中のフロア一時保存出力処理サブルーチン / Actually write a temporary saved floor file
  * @param sf_ptr 保存フロア参照ポインタ
  * @return なし
  */
@@ -2045,7 +2045,7 @@ static bool save_floor_aux(saved_floor_type *sf_ptr)
 
 
 /*!
- * @brief ゲームプレイ中のフロア一時保存出力処理メインルーチン / Attempt to save the temporally saved-floor data
+ * @brief ゲームプレイ中のフロア一時保存出力処理メインルーチン / Attempt to save the temporarily saved-floor data
  * @param sf_ptr 保存フロア参照ポインタ
  * @param mode 保存オプション
  * @return なし

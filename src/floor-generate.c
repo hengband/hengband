@@ -1492,7 +1492,7 @@ void generate_floor(player_type *player_ptr)
 		wipe_m_list();
 	}
 
-	/* Glow deep lava and building entrances */
+	/* Glow deep lava and building entrances tempor
 	glow_deep_lava_and_bldg(floor_ptr);
 
 	/* Reset flag */
