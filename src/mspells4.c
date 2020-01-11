@@ -639,7 +639,7 @@ HIT_POINT spell_RF5_BA_ELEC(player_type *target_ptr, POSITION y, POSITION x, MON
 HIT_POINT spell_RF5_BA_FIRE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam, rad;
-	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 
 	if (m_ptr->r_idx == MON_ROLENTO)
 	{
@@ -788,7 +788,7 @@ HIT_POINT spell_RF5_BA_WATE(player_type *target_ptr, POSITION y, POSITION x, MON
 	{
 		msg_format(_("あなたは渦巻きに飲み込まれた。", "You are engulfed in a whirlpool."));
 	}
-	else if (mon_to_mon && known && see_either && !p_ptr->blind)
+	else if (mon_to_mon && known && see_either && !target_ptr->blind)
 	{
 		msg_format(_("%^sは渦巻に飲み込まれた。", "%^s is engulfed in a whirlpool."), t_name);
 	}
@@ -874,7 +874,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, 
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		disturb(p_ptr, TRUE, TRUE);
+		disturb(target_ptr, TRUE, TRUE);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(target_ptr->current_floor_ptr, m_idx))
 	{ 
@@ -903,8 +903,9 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, 
 */
 HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
-	bool seen = (!p_ptr->blind && m_ptr->ml);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type	*m_ptr = &floor_ptr->m_list[m_idx];
+	bool seen = (!target_ptr->blind && m_ptr->ml);
 	HIT_POINT dam;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
@@ -913,13 +914,13 @@ HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, 
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		disturb(p_ptr, TRUE, TRUE);
+		disturb(target_ptr, TRUE, TRUE);
 		if (!seen)
 			msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
 		else
 			msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
 	}
-	else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(target_ptr->current_floor_ptr, m_idx))
+	else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(floor_ptr, m_idx))
 	{
 		msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
 	}
@@ -942,8 +943,9 @@ HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, 
 */
 HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
-	bool seen = (!p_ptr->blind && m_ptr->ml);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+	bool seen = (!target_ptr->blind && m_ptr->ml);
 	HIT_POINT dam;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
@@ -952,13 +954,13 @@ HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x,
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		disturb(p_ptr, TRUE, TRUE);
+		disturb(target_ptr, TRUE, TRUE);
 		if (!seen)
 			msg_print(_("何かがあなたの精神に念を放っているようだ。", "You feel something focusing on your mind."));
 		else
 			msg_format(_("%^sがあなたの瞳をじっとにらんでいる。", "%^s gazes deep into your eyes."), m_name);
 	}
-	else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(target_ptr->current_floor_ptr, m_idx))
+	else if (TARGET_TYPE == MONSTER_TO_MONSTER && see_monster(floor_ptr, m_idx))
 	{
 		msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
 	}
@@ -993,8 +995,8 @@ void spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, HIT_POINT dam, POSITI
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		disturb(p_ptr, TRUE, TRUE);
-		if (p_ptr->blind)
+		disturb(target_ptr, TRUE, TRUE);
+		if (target_ptr->blind)
 			msg_format(msg1, m_name);
 		else
 			msg_format(msg2, m_name);
@@ -1007,7 +1009,7 @@ void spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, HIT_POINT dam, POSITI
 		}
 		else
 		{
-			p_ptr->current_floor_ptr->monster_noise = TRUE;
+			target_ptr->current_floor_ptr->monster_noise = TRUE;
 		}
 	}
 
@@ -1484,8 +1486,8 @@ void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		disturb(p_ptr, TRUE, TRUE);
-		if (p_ptr->blind)
+		disturb(target_ptr, TRUE, TRUE);
+		if (target_ptr->blind)
 			msg_format(msg1, m_name);
 		else
 			msg_format(msg2, m_name);
@@ -1509,7 +1511,7 @@ void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
 			}
 			else
 			{
-				p_ptr->current_floor_ptr->monster_noise = TRUE;
+				target_ptr->current_floor_ptr->monster_noise = TRUE;
 			}
 		}
 
@@ -1820,8 +1822,9 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 */
 void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	bool see_m = see_monster(target_ptr->current_floor_ptr, m_idx);
-	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	bool see_m = see_monster(floor_ptr, m_idx);
+	monster_type	*m_ptr = &floor_ptr->m_list[m_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
@@ -1830,7 +1833,7 @@ void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_i
 		_("%^sが自分の体に念を送った。", "%^s concentrates on %s body."),
 		_("%^sが自分の体に念を送った。", "%^s concentrates on %s body."),
 		_("%^sが自分の体に念を送った。", "%^s concentrates on %s body."),
-		p_ptr->blind > 0, TARGET_TYPE);
+		target_ptr->blind > 0, TARGET_TYPE);
 
 	/* Allow quick speed increases to base+10 */
 	if (set_monster_fast(m_idx, MON_FAST(m_ptr) + 100))
@@ -1884,20 +1887,20 @@ HIT_POINT spell_RF6_HAND_DOOM(player_type *target_ptr, POSITION y, POSITION x, M
 */
 void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type	*m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	DEPTH rlev = monster_level_idx(m_idx);
-	bool seen = (!p_ptr->blind && m_ptr->ml);
+	bool seen = (!target_ptr->blind && m_ptr->ml);
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
-	disturb(p_ptr, TRUE, TRUE);
+	disturb(target_ptr, TRUE, TRUE);
 
 	monspell_message_base(target_ptr, m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
 		_("%^sは自分の傷に念を集中した。", "%^s concentrates on %s wounds."),
 		_("%^sが自分の傷に集中した。", "%^s concentrates on %s wounds."),
 		_("%^sは自分の傷に念を集中した。", "%^s concentrates on %s wounds."),
-		p_ptr->blind > 0, TARGET_TYPE);
+		target_ptr->blind > 0, TARGET_TYPE);
 
 	/* Heal some */
 	m_ptr->hp += (rlev * 6);
@@ -1928,8 +1931,8 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 	}
 
 	/* Redraw (later) if needed */
-	if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-	if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+	if (target_ptr->health_who == m_idx) target_ptr->redraw |= (PR_HEALTH);
+	if (target_ptr->riding == m_idx) target_ptr->redraw |= (PR_UHEALTH);
 
 	/* Cancel fear */
 	if (MON_MONFEAR(m_ptr))
@@ -1978,9 +1981,9 @@ void spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE
 	monster_name(m_idx, m_name);
 	
 	if (TARGET_TYPE==MONSTER_TO_PLAYER)
-		disturb(p_ptr, TRUE, TRUE);
+		disturb(target_ptr, TRUE, TRUE);
 
-	if (teleport_barrier(p_ptr, m_idx))
+	if (teleport_barrier(target_ptr, m_idx))
 	{
 		if(see_monster(target_ptr->current_floor_ptr, m_idx))
 			msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。",
@@ -1991,10 +1994,10 @@ void spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE
 		if(see_monster(target_ptr->current_floor_ptr, m_idx))
 			msg_format(_("%^sが瞬時に消えた。", "%^s blinks away."), m_name);
 
-		teleport_away(p_ptr, m_idx, 10, 0L);
+		teleport_away(target_ptr, m_idx, 10, 0L);
 
 		if (TARGET_TYPE==MONSTER_TO_PLAYER)
-			p_ptr->update |= (PU_MONSTERS);
+			target_ptr->update |= (PU_MONSTERS);
 	}
 }
 
@@ -2011,8 +2014,8 @@ void spell_RF6_TPORT(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE
 	monster_name(m_idx, m_name);
 	
 	if (TARGET_TYPE==MONSTER_TO_PLAYER)
-		disturb(p_ptr, TRUE, TRUE);
-	if (teleport_barrier(p_ptr, m_idx))
+		disturb(target_ptr, TRUE, TRUE);
+	if (teleport_barrier(target_ptr, m_idx))
 	{
 		if(see_monster(target_ptr->current_floor_ptr, m_idx))
 			msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。",
@@ -2023,7 +2026,7 @@ void spell_RF6_TPORT(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE
 		if(see_monster(target_ptr->current_floor_ptr, m_idx))
 			msg_format(_("%^sがテレポートした。", "%^s teleports away."), m_name);
 
-		teleport_away_followable(p_ptr, m_idx);
+		teleport_away_followable(target_ptr, m_idx);
 	}
 }
 
