@@ -185,25 +185,27 @@ static bool is_owner(player_type *player_ptr, building_type *bldg)
  * @return 種族、職業、魔法領域のいずれかが一致しているかの是非。
  * @todo is_owner()との実質的な多重実装なので、リファクタリングを行うべきである。
  */
-static bool is_member(building_type *bldg)
+static bool is_member(player_type *player_ptr, building_type *bldg)
 {
-	if (bldg->member_class[p_ptr->pclass])
+	if (bldg->member_class[player_ptr->pclass])
 	{
 		return TRUE;
 	}
 
-	if (bldg->member_race[p_ptr->prace])
+	if (bldg->member_race[player_ptr->prace])
 	{
 		return TRUE;
 	}
 
-	if ((is_magic(p_ptr->realm1) && bldg->member_realm[p_ptr->realm1]) ||
-		(is_magic(p_ptr->realm2) && bldg->member_realm[p_ptr->realm2]))
+	REALM_IDX realm1 = player_ptr->realm1;
+	REALM_IDX realm2 = player_ptr->realm2;
+	if ((is_magic(realm1) && bldg->member_realm[realm1]) ||
+		(is_magic(realm2) && bldg->member_realm[realm2]))
 	{
 		return TRUE;
 	}
 
-	if (p_ptr->pclass == CLASS_SORCERER)
+	if (player_ptr->pclass == CLASS_SORCERER)
 	{
 		int i;
 		bool OK = FALSE;
@@ -291,13 +293,13 @@ static void show_building(player_type *player_ptr, building_type* bldg)
 			}
 			else if (bldg->action_restr[i] == 1)
 			{
-				if (!is_member(bldg))
+				if (!is_member(player_ptr, bldg))
 				{
 					action_color = TERM_L_DARK;
 					strcpy(buff, _("(閉店)", "(closed)"));
 				}
 				else if ((is_owner(player_ptr, bldg) && (bldg->member_costs[i] == 0)) ||
-					(is_member(bldg) && (bldg->other_costs[i] == 0)))
+					(is_member(player_ptr, bldg) && (bldg->other_costs[i] == 0)))
 				{
 					action_color = TERM_WHITE;
 					buff[0] = '\0';
@@ -3918,7 +3920,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		bcost = bldg->other_costs[i];
 
 	/* action restrictions */
-	if (((bldg->action_restr[i] == 1) && !is_member(bldg)) ||
+	if (((bldg->action_restr[i] == 1) && !is_member(player_ptr, bldg)) ||
 		((bldg->action_restr[i] == 2) && !is_owner(player_ptr, bldg)))
 	{
 		msg_print(_("それを選択する権利はありません！", "You have no right to choose that!"));
