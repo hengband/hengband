@@ -139,6 +139,7 @@ static void curse_artifact(player_type *player_ptr, object_type *o_ptr)
 		add_flag(o_ptr->art_flags, TR_NO_MAGIC);
 }
 
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにpval能力を付加する。/ Add one pval on generation of randam artifact.
  * @details 優先的に付加されるpvalがランダムアーティファクトバイアスに依存して存在する。
@@ -171,6 +172,7 @@ static void random_plus(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_DEX);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_MAGE:
@@ -184,6 +186,7 @@ static void random_plus(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_MAGIC_MASTERY);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_PRIESTLY:
@@ -192,6 +195,7 @@ static void random_plus(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_WIS);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_RANGER:
@@ -212,6 +216,7 @@ static void random_plus(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_STR);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_ROGUE:
@@ -225,6 +230,7 @@ static void random_plus(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_SEARCH);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_STR:
@@ -233,6 +239,7 @@ static void random_plus(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_STR);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_WIS:
@@ -241,6 +248,7 @@ static void random_plus(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_WIS);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_INT:
@@ -249,6 +257,7 @@ static void random_plus(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_INT);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_DEX:
@@ -257,6 +266,7 @@ static void random_plus(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_DEX);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_CON:
@@ -265,6 +275,7 @@ static void random_plus(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_CON);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_CHR:
@@ -273,6 +284,7 @@ static void random_plus(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_CHR);
 			if (one_in_(2)) return;
 		}
+
 		break;
 	}
 
@@ -356,9 +368,11 @@ static void random_plus(object_type *o_ptr)
 			if (!o_ptr->artifact_bias && one_in_(11))
 				o_ptr->artifact_bias = BIAS_WARRIOR;
 		}
+
 		break;
 	}
 }
+
 
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトに耐性を付加する。/ Add one resistance on generation of randam artifact.
@@ -380,6 +394,7 @@ static void random_resistance(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_RES_ACID);
 			if (one_in_(2)) return;
 		}
+
 		if (one_in_(BIAS_LUCK) && !(have_flag(o_ptr->art_flags, TR_IM_ACID)))
 		{
 			add_flag(o_ptr->art_flags, TR_IM_ACID);
@@ -391,6 +406,7 @@ static void random_resistance(object_type *o_ptr)
 			}
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_ELEC:
@@ -399,12 +415,14 @@ static void random_resistance(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_RES_ELEC);
 			if (one_in_(2)) return;
 		}
+
 		if ((o_ptr->tval >= TV_CLOAK) && (o_ptr->tval <= TV_HARD_ARMOR) &&
 		    !(have_flag(o_ptr->art_flags, TR_SH_ELEC)))
 		{
 			add_flag(o_ptr->art_flags, TR_SH_ELEC);
 			if (one_in_(2)) return;
 		}
+
 		if (one_in_(BIAS_LUCK) && !(have_flag(o_ptr->art_flags, TR_IM_ELEC)))
 		{
 			add_flag(o_ptr->art_flags, TR_IM_ELEC);
@@ -417,6 +435,7 @@ static void random_resistance(object_type *o_ptr)
 
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_FIRE:
@@ -425,6 +444,7 @@ static void random_resistance(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_RES_FIRE);
 			if (one_in_(2)) return;
 		}
+
 		if ((o_ptr->tval >= TV_CLOAK) &&
 		    (o_ptr->tval <= TV_HARD_ARMOR) &&
 		    !(have_flag(o_ptr->art_flags, TR_SH_FIRE)))
@@ -432,6 +452,7 @@ static void random_resistance(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_SH_FIRE);
 			if (one_in_(2)) return;
 		}
+
 		if (one_in_(BIAS_LUCK) &&
 		    !(have_flag(o_ptr->art_flags, TR_IM_FIRE)))
 		{
@@ -444,6 +465,7 @@ static void random_resistance(object_type *o_ptr)
 			}
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_COLD:
@@ -452,6 +474,7 @@ static void random_resistance(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_RES_COLD);
 			if (one_in_(2)) return;
 		}
+
 		if ((o_ptr->tval >= TV_CLOAK) &&
 		    (o_ptr->tval <= TV_HARD_ARMOR) &&
 		    !(have_flag(o_ptr->art_flags, TR_SH_COLD)))
@@ -459,6 +482,7 @@ static void random_resistance(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_SH_COLD);
 			if (one_in_(2)) return;
 		}
+
 		if (one_in_(BIAS_LUCK) && !(have_flag(o_ptr->art_flags, TR_IM_COLD)))
 		{
 			add_flag(o_ptr->art_flags, TR_IM_COLD);
@@ -470,6 +494,7 @@ static void random_resistance(object_type *o_ptr)
 			}
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_POIS:
@@ -478,6 +503,7 @@ static void random_resistance(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_RES_POIS);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_WARRIOR:
@@ -486,11 +512,13 @@ static void random_resistance(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_RES_FEAR);
 			if (one_in_(2)) return;
 		}
+
 		if (one_in_(3) && (!(have_flag(o_ptr->art_flags, TR_NO_MAGIC))))
 		{
 			add_flag(o_ptr->art_flags, TR_NO_MAGIC);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_NECROMANTIC:
@@ -499,16 +527,19 @@ static void random_resistance(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_RES_NETHER);
 			if (one_in_(2)) return;
 		}
+
 		if (!(have_flag(o_ptr->art_flags, TR_RES_POIS)))
 		{
 			add_flag(o_ptr->art_flags, TR_RES_POIS);
 			if (one_in_(2)) return;
 		}
+
 		if (!(have_flag(o_ptr->art_flags, TR_RES_DARK)))
 		{
 			add_flag(o_ptr->art_flags, TR_RES_DARK);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_CHAOS:
@@ -517,16 +548,19 @@ static void random_resistance(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_RES_CHAOS);
 			if (one_in_(2)) return;
 		}
+
 		if (!(have_flag(o_ptr->art_flags, TR_RES_CONF)))
 		{
 			add_flag(o_ptr->art_flags, TR_RES_CONF);
 			if (one_in_(2)) return;
 		}
+
 		if (!(have_flag(o_ptr->art_flags, TR_RES_DISEN)))
 		{
 			add_flag(o_ptr->art_flags, TR_RES_DISEN);
 			if (one_in_(2)) return;
 		}
+
 		break;
 	}
 
@@ -541,6 +575,7 @@ static void random_resistance(object_type *o_ptr)
 				if (!o_ptr->artifact_bias)
 					o_ptr->artifact_bias = BIAS_ACID;
 			}
+
 			break;
 		case 2:
 			if (!one_in_(WEIRD_LUCK))
@@ -551,6 +586,7 @@ static void random_resistance(object_type *o_ptr)
 				if (!o_ptr->artifact_bias)
 					o_ptr->artifact_bias = BIAS_ELEC;
 			}
+
 			break;
 		case 3:
 			if (!one_in_(WEIRD_LUCK))
@@ -561,6 +597,7 @@ static void random_resistance(object_type *o_ptr)
 				if (!o_ptr->artifact_bias)
 					o_ptr->artifact_bias = BIAS_COLD;
 			}
+
 			break;
 		case 4:
 			if (!one_in_(WEIRD_LUCK))
@@ -571,6 +608,7 @@ static void random_resistance(object_type *o_ptr)
 				if (!o_ptr->artifact_bias)
 					o_ptr->artifact_bias = BIAS_FIRE;
 			}
+
 			break;
 		case 5:
 		case 6:
@@ -714,6 +752,7 @@ static void random_misc(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_SUST_CON);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_STR:
@@ -722,6 +761,7 @@ static void random_misc(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_SUST_STR);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_WIS:
@@ -730,6 +770,7 @@ static void random_misc(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_SUST_WIS);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_INT:
@@ -738,6 +779,7 @@ static void random_misc(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_SUST_INT);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_DEX:
@@ -746,6 +788,7 @@ static void random_misc(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_SUST_DEX);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_CON:
@@ -754,6 +797,7 @@ static void random_misc(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_SUST_CON);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_CHR:
@@ -762,6 +806,7 @@ static void random_misc(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_SUST_CHR);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_CHAOS:
@@ -770,6 +815,7 @@ static void random_misc(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_TELEPORT);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_FIRE:
@@ -777,6 +823,7 @@ static void random_misc(object_type *o_ptr)
 		{
 			add_flag(o_ptr->art_flags, TR_LITE_1); /* Freebie */
 		}
+
 		break;
 	}
 
@@ -857,6 +904,7 @@ static void random_misc(object_type *o_ptr)
 			{
 				o_ptr->to_a = 4 + randint1(11);
 			}
+
 			break;
 		case 27:
 		case 28:
@@ -905,6 +953,7 @@ static void random_misc(object_type *o_ptr)
 					o_ptr->artifact_bias = BIAS_MAGE;
 				break;
 			}
+
 			break;
 
 		case 33:
@@ -921,55 +970,60 @@ static void random_misc(object_type *o_ptr)
 			if (idx[2] >= idx[0]) idx[2]++;
 			if (idx[2] >= idx[1]) idx[2]++;
 
-			while (n--) switch (idx[n])
+			while (n--)
 			{
-			case 1:
-				add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);
-				if (!o_ptr->artifact_bias && one_in_(4))
-					o_ptr->artifact_bias = BIAS_RANGER;
-				break;
-			case 2:
-				add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);
-				if (!o_ptr->artifact_bias && one_in_(3))
-					o_ptr->artifact_bias = BIAS_PRIESTLY;
-				else if (!o_ptr->artifact_bias && one_in_(6))
-					o_ptr->artifact_bias = BIAS_NECROMANTIC;
-				break;
-			case 3:
-				add_flag(o_ptr->art_flags, TR_ESP_DEMON);
-				break;
-			case 4:
-				add_flag(o_ptr->art_flags, TR_ESP_ORC);
-				break;
-			case 5:
-				add_flag(o_ptr->art_flags, TR_ESP_TROLL);
-				break;
-			case 6:
-				add_flag(o_ptr->art_flags, TR_ESP_GIANT);
-				break;
-			case 7:
-				add_flag(o_ptr->art_flags, TR_ESP_DRAGON);
-				break;
-			case 8:
-				add_flag(o_ptr->art_flags, TR_ESP_HUMAN);
-				if (!o_ptr->artifact_bias && one_in_(6))
-					o_ptr->artifact_bias = BIAS_ROGUE;
-				break;
-			case 9:
-				add_flag(o_ptr->art_flags, TR_ESP_GOOD);
-				if (!o_ptr->artifact_bias && one_in_(3))
-					o_ptr->artifact_bias = BIAS_LAW;
-				break;
-			case 10:
-				add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);
-				if (!o_ptr->artifact_bias && one_in_(3))
-					o_ptr->artifact_bias = BIAS_LAW;
+				switch (idx[n])
+				{
+				case 1:
+					add_flag(o_ptr->art_flags, TR_ESP_ANIMAL);
+					if (!o_ptr->artifact_bias && one_in_(4))
+						o_ptr->artifact_bias = BIAS_RANGER;
+					break;
+				case 2:
+					add_flag(o_ptr->art_flags, TR_ESP_UNDEAD);
+					if (!o_ptr->artifact_bias && one_in_(3))
+						o_ptr->artifact_bias = BIAS_PRIESTLY;
+					else if (!o_ptr->artifact_bias && one_in_(6))
+						o_ptr->artifact_bias = BIAS_NECROMANTIC;
+					break;
+				case 3:
+					add_flag(o_ptr->art_flags, TR_ESP_DEMON);
+					break;
+				case 4:
+					add_flag(o_ptr->art_flags, TR_ESP_ORC);
+					break;
+				case 5:
+					add_flag(o_ptr->art_flags, TR_ESP_TROLL);
+					break;
+				case 6:
+					add_flag(o_ptr->art_flags, TR_ESP_GIANT);
+					break;
+				case 7:
+					add_flag(o_ptr->art_flags, TR_ESP_DRAGON);
+					break;
+				case 8:
+					add_flag(o_ptr->art_flags, TR_ESP_HUMAN);
+					if (!o_ptr->artifact_bias && one_in_(6))
+						o_ptr->artifact_bias = BIAS_ROGUE;
+					break;
+				case 9:
+					add_flag(o_ptr->art_flags, TR_ESP_GOOD);
+					if (!o_ptr->artifact_bias && one_in_(3))
+						o_ptr->artifact_bias = BIAS_LAW;
+					break;
+				case 10:
+					add_flag(o_ptr->art_flags, TR_ESP_UNIQUE);
+					if (!o_ptr->artifact_bias && one_in_(3))
+						o_ptr->artifact_bias = BIAS_LAW;
+					break;
+				}
+
 				break;
 			}
-			break;
 		}
 	}
 }
+
 
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにスレイ効果を付加する。/ Add one slaying on generation of randam artifact.
@@ -1014,6 +1068,7 @@ static void random_slay(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_CHAOTIC);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_PRIESTLY:
@@ -1023,6 +1078,7 @@ static void random_slay(object_type *o_ptr)
 			/* A free power for "priestly" random artifacts */
 			add_flag(o_ptr->art_flags, TR_BLESSED);
 		}
+
 		break;
 
 	case BIAS_NECROMANTIC:
@@ -1031,11 +1087,13 @@ static void random_slay(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_VAMPIRIC);
 			if (one_in_(2)) return;
 		}
+
 		if (!(have_flag(o_ptr->art_flags, TR_BRAND_POIS)) && one_in_(2))
 		{
 			add_flag(o_ptr->art_flags, TR_BRAND_POIS);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_RANGER:
@@ -1044,6 +1102,7 @@ static void random_slay(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_SLAY_ANIMAL);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_ROGUE:
@@ -1054,11 +1113,13 @@ static void random_slay(object_type *o_ptr)
 			/* Free power for rogues... */
 			add_flag(o_ptr->art_flags, TR_THROW);
 		}
+
 		if (!(have_flag(o_ptr->art_flags, TR_BRAND_POIS)))
 		{
 			add_flag(o_ptr->art_flags, TR_BRAND_POIS);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_POIS:
@@ -1067,6 +1128,7 @@ static void random_slay(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_BRAND_POIS);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_FIRE:
@@ -1075,6 +1137,7 @@ static void random_slay(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_BRAND_FIRE);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_COLD:
@@ -1083,6 +1146,7 @@ static void random_slay(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_BRAND_COLD);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_ELEC:
@@ -1091,6 +1155,7 @@ static void random_slay(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_BRAND_ELEC);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_ACID:
@@ -1099,6 +1164,7 @@ static void random_slay(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_BRAND_ACID);
 			if (one_in_(2)) return;
 		}
+
 		break;
 
 	case BIAS_LAW:
@@ -1107,16 +1173,19 @@ static void random_slay(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
 			if (one_in_(2)) return;
 		}
+
 		if (!(have_flag(o_ptr->art_flags, TR_SLAY_UNDEAD)))
 		{
 			add_flag(o_ptr->art_flags, TR_SLAY_UNDEAD);
 			if (one_in_(2)) return;
 		}
+
 		if (!(have_flag(o_ptr->art_flags, TR_SLAY_DEMON)))
 		{
 			add_flag(o_ptr->art_flags, TR_SLAY_DEMON);
 			if (one_in_(2)) return;
 		}
+
 		break;
 	}
 
@@ -1206,6 +1275,7 @@ static void random_slay(object_type *o_ptr)
 			{
 				add_flag(o_ptr->art_flags, TR_SLAY_GIANT);
 			}
+
 			break;
 		case 15:
 		case 16:
@@ -1282,6 +1352,7 @@ static void random_slay(object_type *o_ptr)
 			{
 				add_flag(o_ptr->art_flags, TR_SLAY_HUMAN);
 			}
+
 			break;
 		default:
 			add_flag(o_ptr->art_flags, TR_CHAOTIC);
@@ -1290,6 +1361,7 @@ static void random_slay(object_type *o_ptr)
 			break;
 	}
 }
+
 
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトにバイアスに依存した発動を与える。/ Add one activaton of randam artifact depend on bias.
@@ -1316,6 +1388,7 @@ static void give_activation_power(object_type *o_ptr)
 			{
 				type = ACT_BA_ELEC_3;
 			}
+
 			chance = 101;
 			break;
 
@@ -1337,6 +1410,7 @@ static void give_activation_power(object_type *o_ptr)
 			{
 				type = ACT_BA_FIRE_2;
 			}
+
 			chance = 101;
 			break;
 
@@ -1476,6 +1550,7 @@ static void give_activation_power(object_type *o_ptr)
 	o_ptr->timeout = 0;
 }
 
+
 /*!
  * @brief ランダムアーティファクト生成中、対象のオブジェクトに名前を与える。/ Set name of randomartifact.
  * @details 確率によって、シンダリン銘、漢字銘、固定名のいずれか一つが与えられる。
@@ -1542,6 +1617,7 @@ static void get_random_name(object_type *o_ptr, char *return_name, bool armour, 
 #endif
 	}
 }
+
 
 /*!
  * @brief ランダムアーティファクト生成のメインルーチン
@@ -1648,6 +1724,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 				{
 				    o_ptr->artifact_bias = BIAS_ROGUE;
 				}
+
 				break;
 		}
 	}
@@ -1852,6 +1929,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 				get_table_name_aux(dummy_name);
 			}
 		}
+
 		sprintf(new_name, _("《%s》", "'%s'"), dummy_name);
 		chg_virtue(player_ptr, V_INDIVIDUALISM, 2);
 		chg_virtue(player_ptr, V_ENCHANT, 5);
@@ -1871,6 +1949,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 
 	return TRUE;
 }
+
 
 /*!
  * @brief オブジェクトから能力発動IDを取得する。
@@ -1901,6 +1980,7 @@ int activation_index(object_type *o_ptr)
 			return a_info[o_ptr->name1].act_idx;
 		}
 	}
+
 	if (object_is_ego(o_ptr))
 	{
 		if (have_flag(e_info[o_ptr->name2].flags, TR_ACTIVATE))
@@ -1908,6 +1988,7 @@ int activation_index(object_type *o_ptr)
 			return e_info[o_ptr->name2].act_idx;
 		}
 	}
+
 	if (!object_is_random_artifact(o_ptr))
 	{
 		if (have_flag(k_info[o_ptr->k_idx].flags, TR_ACTIVATE))
@@ -1918,6 +1999,7 @@ int activation_index(object_type *o_ptr)
 
 	return o_ptr->xtra2;
 }
+
 
 /*!
  * @brief オブジェクトから発動効果構造体のポインタを取得する。
@@ -1939,6 +2021,7 @@ const activation_type* find_activation_info(object_type *o_ptr)
 
 	return NULL;
 }
+
 
 /*!
  * @brief 固定アーティファクト生成時の特別なハードコーディング処理を行う。.
@@ -2143,6 +2226,7 @@ HIT_POINT calc_arm_avgdamage(object_type *o_ptr)
 	return dam;
 }
 
+
 static bool has_extreme_damage_rate(object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -2189,6 +2273,7 @@ static bool has_extreme_damage_rate(object_type *o_ptr)
 	return FALSE;
 }
 
+
 static bool weakening_artifact(object_type *o_ptr)
 {
 	KIND_OBJECT_IDX k_idx = lookup_kind(o_ptr->tval, o_ptr->sval);
@@ -2224,6 +2309,7 @@ static bool weakening_artifact(object_type *o_ptr)
 	return FALSE;
 }
 
+
 /*!
  * @brief 非INSTA_ART型の固定アーティファクトの生成を確率に応じて試行する。
  * Mega-Hack -- Attempt to create one of the "Special Objects"
@@ -2239,8 +2325,8 @@ bool make_artifact(player_type *player_ptr, object_type *o_ptr)
 {
 	ARTIFACT_IDX i;
 
-	/* No artifacts in the town */
-	if (!p_ptr->current_floor_ptr->dun_level) return FALSE;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	if (floor_ptr->dun_level == 0) return FALSE;
 
 	/* Paranoia -- no "plural" artifacts */
 	if (o_ptr->number != 1) return FALSE;
@@ -2265,10 +2351,10 @@ bool make_artifact(player_type *player_ptr, object_type *o_ptr)
 		if (a_ptr->sval != o_ptr->sval) continue;
 
 		/* XXX XXX Enforce minimum "depth" (loosely) */
-		if (a_ptr->level > p_ptr->current_floor_ptr->dun_level)
+		if (a_ptr->level > floor_ptr->dun_level)
 		{
 			/* Acquire the "out-of-depth factor" */
-			int d = (a_ptr->level - p_ptr->current_floor_ptr->dun_level) * 2;
+			int d = (a_ptr->level - floor_ptr->dun_level) * 2;
 
 			/* Roll for out-of-depth creation */
 			if (!one_in_(d)) continue;
@@ -2309,7 +2395,8 @@ bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
 	KIND_OBJECT_IDX k_idx = 0;
 
 	/*! @note 地上ではキャンセルする / No artifacts in the town */
-	if (!p_ptr->current_floor_ptr->dun_level) return FALSE;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	if (floor_ptr->dun_level == 0) return FALSE;
 
 	/*! @note get_obj_num_hookによる指定がある場合は生成をキャンセルする / Themed object */
 	if (get_obj_num_hook) return FALSE;
@@ -2329,10 +2416,10 @@ bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
 
 		/*! @note アーティファクト生成階が現在に対して足りない場合は高確率で1/(不足階層*2)を満たさないと生成リストに加えられない /
 		 *  XXX XXX Enforce minimum "depth" (loosely) */
-		if (a_ptr->level > p_ptr->current_floor_ptr->object_level)
+		if (a_ptr->level > floor_ptr->object_level)
 		{
 			/* @note  / Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
-			int d = (a_ptr->level - p_ptr->current_floor_ptr->object_level) * 2;
+			int d = (a_ptr->level - floor_ptr->object_level) * 2;
 			if (!one_in_(d)) continue;
 		}
 
@@ -2342,9 +2429,9 @@ bool make_artifact_special(player_type *player_ptr, object_type *o_ptr)
 		/*! @note INSTA_ART型固定アーティファクトのベースアイテムもチェック対象とする。ベースアイテムの生成階層が足りない場合1/(不足階層*5) を満たさないと除外される。 /
 		 *  Find the base object. XXX XXX Enforce minimum "object" level (loosely). Acquire the "out-of-depth factor". Roll for out-of-depth creation. */
 		k_idx = lookup_kind(a_ptr->tval, a_ptr->sval);
-		if (k_info[k_idx].level > p_ptr->current_floor_ptr->object_level)
+		if (k_info[k_idx].level > floor_ptr->object_level)
 		{
-			int d = (k_info[k_idx].level - p_ptr->current_floor_ptr->object_level) * 5;
+			int d = (k_info[k_idx].level - floor_ptr->object_level) * 5;
 			if (!one_in_(d)) continue;
 		}
 
