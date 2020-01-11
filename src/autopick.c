@@ -1607,7 +1607,7 @@ static void auto_destroy_item(player_type *player_ptr, object_type *o_ptr, int a
 
 	/* Now decided to destroy */
 
-	disturb(p_ptr, FALSE, FALSE);
+	disturb(player_ptr, FALSE, FALSE);
 
 	/* Artifact? */
 	if (!can_player_destroy_object(o_ptr))
@@ -1627,7 +1627,7 @@ static void auto_destroy_item(player_type *player_ptr, object_type *o_ptr, int a
 
 	/* Destroy Later */
 	o_ptr->marked |= OM_AUTODESTROY;
-	p_ptr->update |= PU_AUTODESTROY;
+	player_ptr->update |= PU_AUTODESTROY;
 }
 
 
@@ -1637,7 +1637,7 @@ static void auto_destroy_item(player_type *player_ptr, object_type *o_ptr, int a
 static void autopick_delayed_alter_aux(player_type *player_ptr, INVENTORY_IDX item)
 {
 	object_type *o_ptr;
-	o_ptr = REF_ITEM(p_ptr, p_ptr->current_floor_ptr, item);
+	o_ptr = REF_ITEM(player_ptr, player_ptr->current_floor_ptr, item);
 
 	if (o_ptr->k_idx == 0 || !(o_ptr->marked & OM_AUTODESTROY)) return;
 
@@ -1678,10 +1678,11 @@ void autopick_delayed_alter(player_type *owner_ptr)
 		autopick_delayed_alter_aux(owner_ptr, item);
 
 	/* Scan the pile of objects */
-	item = p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].o_idx;
+	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+	item = floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx;
 	while (item)
 	{
-		OBJECT_IDX next = p_ptr->current_floor_ptr->o_list[item].next_o_idx;
+		OBJECT_IDX next = floor_ptr->o_list[item].next_o_idx;
 		autopick_delayed_alter_aux(owner_ptr, -item);
 		item = next;
 	}
@@ -1724,7 +1725,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		int idx;
-			object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+			object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 				next_o_idx = o_ptr->next_o_idx;
 
 		idx = is_autopick(player_ptr, o_ptr);
@@ -1735,7 +1736,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 		if (idx >= 0 &&
 			(autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)))
 		{
-			disturb(p_ptr, FALSE, FALSE);
+			disturb(player_ptr, FALSE, FALSE);
 
 			if (!inven_carry_okay(o_ptr))
 			{
@@ -1772,7 +1773,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 				}
 
 			}
-			py_pickup_aux(p_ptr, this_o_idx);
+			py_pickup_aux(player_ptr, this_o_idx);
 		}
 		
 		/*
@@ -3265,7 +3266,7 @@ static bool entry_from_choosed_object(player_type *player_ptr, autopick_type *en
 /*
  * Choose an item for search
  */
-static byte get_object_for_search(object_type **o_handle, concptr *search_strp)
+static byte get_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp)
 {
 	char buf[MAX_NLEN+20];
 	object_type *o_ptr;
@@ -3273,7 +3274,7 @@ static byte get_object_for_search(object_type **o_handle, concptr *search_strp)
 
 	q = _("どのアイテムを検索しますか? ", "Enter which item? ");
 	s = _("アイテムを持っていない。", "You have nothing to enter.");
-	o_ptr = choose_object(p_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
+	o_ptr = choose_object(player_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
 	if (!o_ptr) return 0;
 
 	*o_handle = o_ptr;
@@ -3306,7 +3307,7 @@ static byte get_destroyed_object_for_search(object_type **o_handle, concptr *sea
 /*
  * Choose an item or string for search
  */
-static byte get_string_for_search(object_type **o_handle, concptr *search_strp)
+static byte get_string_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp)
 {
 	int pos = 0;
 
@@ -3422,7 +3423,7 @@ static byte get_string_for_search(object_type **o_handle, concptr *search_strp)
 			return (back ? -1 : 1);
 
 		case KTRL('i'):
-			return get_object_for_search(o_handle, search_strp);
+			return get_object_for_search(player_ptr, o_handle, search_strp);
 
 		case KTRL('l'):
 			/* Prepare string for destroyed object if there is one. */
@@ -3952,7 +3953,7 @@ static GAME_TEXT MN_SEARCH[] = "Search";
 static GAME_TEXT MN_SEARCH_STR[] = "Search by string";
 static GAME_TEXT MN_SEARCH_FORW[] = "Search forward";
 static GAME_TEXT MN_SEARCH_BACK[] = "Search backward";
-static GAME_TEXT MN_SEARCH_OBJ[] = "Search by p_ptr->inventory_list object";
+static GAME_TEXT MN_SEARCH_OBJ[] = "Search by inventory list object";
 static GAME_TEXT MN_SEARCH_DESTROYED[] = "Search by destroyed object";
 
 static GAME_TEXT MN_INSERT[] = "Insert...";
@@ -5569,7 +5570,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		/* Become dirty because of item/equip menu */
 		tb->dirty_flags |= DIRTY_SCREEN;
 
-		search_dir = get_string_for_search(&tb->search_o_ptr, &tb->search_str);
+		search_dir = get_string_for_search(player_ptr, &tb->search_o_ptr, &tb->search_str);
 
 		if (!search_dir) break;
 
@@ -5612,7 +5613,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		/* Become dirty because of item/equip menu */
 		tb->dirty_flags |= DIRTY_SCREEN;
 
-		if (!get_object_for_search(&tb->search_o_ptr, &tb->search_str)) break;
+		if (!get_object_for_search(player_ptr, &tb->search_o_ptr, &tb->search_str)) break;
 
 		do_editor_command(player_ptr, tb, EC_SEARCH_FORW);
 		break;
