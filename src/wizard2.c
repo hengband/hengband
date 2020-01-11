@@ -1908,7 +1908,7 @@ void do_cmd_debug(player_type *creature_ptr)
 		{
 			if (quest[creature_ptr->current_floor_ptr->inside_quest].status == QUEST_STATUS_TAKEN)
 			{
-				complete_quest(creature_ptr->current_floor_ptr->inside_quest);
+				complete_quest(creature_ptr, creature_ptr->current_floor_ptr->inside_quest);
 				break;
 			}
 		}

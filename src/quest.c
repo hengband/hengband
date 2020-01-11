@@ -78,25 +78,26 @@ void determine_random_questor(quest_type *q_ptr)
 
 /*!
  * @brief クエストを達成状態にする /
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param quest_num 達成状態にしたいクエストのID
  * @return なし
  */
-void complete_quest(QUEST_IDX quest_num)
+void complete_quest(player_type *player_ptr, QUEST_IDX quest_num)
 {
 	quest_type* const q_ptr = &quest[quest_num];
 
 	switch (q_ptr->type)
 	{
 	case QUEST_TYPE_RANDOM:
-		if (record_rand_quest) exe_write_diary(p_ptr, NIKKI_RAND_QUEST_C, quest_num, NULL);
+		if (record_rand_quest) exe_write_diary(player_ptr, NIKKI_RAND_QUEST_C, quest_num, NULL);
 		break;
 	default:
-		if (record_fix_quest) exe_write_diary(p_ptr, NIKKI_FIX_QUEST_C, quest_num, NULL);
+		if (record_fix_quest) exe_write_diary(player_ptr, NIKKI_FIX_QUEST_C, quest_num, NULL);
 		break;
 	}
 
 	q_ptr->status = QUEST_STATUS_COMPLETED;
-	q_ptr->complev = p_ptr->lev;
+	q_ptr->complev = player_ptr->lev;
 	update_playtime();
 	q_ptr->comptime = current_world_ptr->play_time;
 
@@ -191,7 +192,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 
 			if (q_ptr->cur_num >= q_ptr->num_mon)
 			{
-				complete_quest(quest_num);
+				complete_quest(player_ptr, quest_num);
 
 				q_ptr->cur_num = 0;
 			}
@@ -209,7 +210,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 				}
 				else
 				{
-					complete_quest(quest_num);
+					complete_quest(player_ptr, quest_num);
 				}
 			}
 			break;
@@ -225,7 +226,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 
 			if (q_ptr->cur_num >= q_ptr->max_num)
 			{
-				complete_quest(quest_num);
+				complete_quest(player_ptr, quest_num);
 
 				if (!(q_ptr->flags & QUEST_FLAG_PRESET))
 				{
@@ -252,7 +253,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 			q_ptr->cur_num++;
 			if (q_ptr->cur_num >= q_ptr->max_num)
 			{
-				complete_quest(quest_num);
+				complete_quest(player_ptr, quest_num);
 				q_ptr->cur_num = 0;
 			}
 			break;
@@ -270,7 +271,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 					(quest[QUEST_TOWER3].status == QUEST_STATUS_STAGE_COMPLETED))
 				{
 
-					complete_quest(QUEST_TOWER1);
+					complete_quest(player_ptr, QUEST_TOWER1);
 				}
 			}
 			break;
@@ -325,10 +326,11 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 /*!
  * @brief 特定のアーティファクトを入手した際のクエスト達成処理 /
  * Check for "Quest" completion when a quest monster is killed or charmed.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 入手したオブジェクトの構造体参照ポインタ
  * @return なし
  */
-void check_find_art_quest_completion(object_type *o_ptr)
+void check_find_art_quest_completion(player_type *player_ptr, object_type *o_ptr)
 {
 	QUEST_IDX i;
 	/* Check if completed a quest */
@@ -338,7 +340,7 @@ void check_find_art_quest_completion(object_type *o_ptr)
 			(quest[i].status == QUEST_STATUS_TAKEN) &&
 			(quest[i].k_idx == o_ptr->name1))
 		{
-			complete_quest(i);
+			complete_quest(player_ptr, i);
 		}
 	}
 }

@@ -345,7 +345,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 	record_turn = current_world_ptr->game_turn;
 
 
-	check_find_art_quest_completion(o_ptr);
+	check_find_art_quest_completion(owner_ptr, o_ptr);
 }
 
 
@@ -756,7 +756,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 	{
 		if (quest[creature_ptr->current_floor_ptr->inside_quest].type == QUEST_TYPE_FIND_EXIT)
 		{
-			complete_quest(creature_ptr->current_floor_ptr->inside_quest);
+			complete_quest(creature_ptr, creature_ptr->current_floor_ptr->inside_quest);
 		}
 
 		leave_quest_check(creature_ptr);

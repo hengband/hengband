@@ -318,7 +318,7 @@ void do_cmd_wield(player_type *creature_ptr)
 		slot = need_switch_wielding;
 	}
 
-	check_find_art_quest_completion(o_ptr);
+	check_find_art_quest_completion(creature_ptr, o_ptr);
 
 	if (creature_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 	{
