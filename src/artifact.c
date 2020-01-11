@@ -2004,7 +2004,8 @@ int activation_index(object_type *o_ptr)
 const activation_type* find_activation_info(object_type *o_ptr)
 {
 	const int index = activation_index(o_ptr);
-	for (activation_type* p = activation_info; p->flag != NULL; ++p)
+	const activation_type* p;
+	for (p = activation_info; p->flag != NULL; ++p)
 	{
 		if (p->index == index)
 		{

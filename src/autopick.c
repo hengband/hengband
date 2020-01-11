@@ -470,7 +470,7 @@ static bool autopick_new_entry(autopick_type *entry, concptr str, bool allow_def
 /*
  * Get auto-picker entry from o_ptr.
  */
-static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
+static void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, object_type *o_ptr)
 {
 	/* Assume that object name is to be added */
 	bool name = TRUE;
@@ -630,16 +630,16 @@ static void autopick_entry_from_object(autopick_type *entry, object_type *o_ptr)
 	}
 
 	if (REALM1_BOOK == o_ptr->tval &&
-	    p_ptr->pclass != CLASS_SORCERER &&
-	    p_ptr->pclass != CLASS_RED_MAGE)
+	    player_ptr->pclass != CLASS_SORCERER &&
+	    player_ptr->pclass != CLASS_RED_MAGE)
 	{
 		ADD_FLG(FLG_REALM1);
 		name = FALSE;
 	}
 
 	if (REALM2_BOOK == o_ptr->tval &&
-	    p_ptr->pclass != CLASS_SORCERER &&
-	    p_ptr->pclass != CLASS_RED_MAGE)
+	    player_ptr->pclass != CLASS_SORCERER &&
+	    player_ptr->pclass != CLASS_RED_MAGE)
 	{
 		ADD_FLG(FLG_REALM2);
 		name = FALSE;
@@ -1910,7 +1910,7 @@ static bool clear_auto_register(void)
 /*
  *  Automatically register an auto-destroy preference line
  */
-bool autopick_autoregister(object_type *o_ptr)
+bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 {
 	char buf[1024];
 	char pref_file[1024];
@@ -1950,7 +1950,7 @@ bool autopick_autoregister(object_type *o_ptr)
 	}
 
 
-	if (!p_ptr->autopick_autoregister)
+	if (!player_ptr->autopick_autoregister)
 	{
 		/* Clear old auto registered lines */
 		if (!clear_auto_register()) return FALSE;
@@ -1974,7 +1974,7 @@ bool autopick_autoregister(object_type *o_ptr)
 		if (my_fgets(pref_fff, buf, sizeof(buf)))
 		{
 			/* No header found */
-			p_ptr->autopick_autoregister = FALSE;
+			player_ptr->autopick_autoregister = FALSE;
 
 			break;
 		}
@@ -1982,7 +1982,7 @@ bool autopick_autoregister(object_type *o_ptr)
 		if (streq(buf, autoregister_header))
 		{
 			/* Found the header */
-			p_ptr->autopick_autoregister = TRUE;
+			player_ptr->autopick_autoregister = TRUE;
 
 			break;
 		}
@@ -2003,7 +2003,7 @@ bool autopick_autoregister(object_type *o_ptr)
 		return FALSE;
 	}
 
-	if (!p_ptr->autopick_autoregister)
+	if (!player_ptr->autopick_autoregister)
 	{
 		/* Add the header */
 		fprintf(pref_fff, "%s\n", autoregister_header);
@@ -2014,11 +2014,11 @@ bool autopick_autoregister(object_type *o_ptr)
 						            "# Keep it by cut & paste if you need these lines for future characters."));
 
 		/* Now auto register is in-use */
-		p_ptr->autopick_autoregister = TRUE;
+		player_ptr->autopick_autoregister = TRUE;
 	}
 
 	/* Get a preference entry */
-	autopick_entry_from_object(entry, o_ptr);
+	autopick_entry_from_object(player_ptr, entry, o_ptr);
 
 	/* Set to auto-destroy (with no-display) */
 	entry->action = DO_AUTODESTROY;
@@ -2410,7 +2410,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	/*** Collecting items ***/
 	/*** Which can be absorbed into a slot as a bundle ***/
 	if (IS_FLG(FLG_COLLECTING))
-		which_str[which_n++] = "can be absorbed into an existing p_ptr->inventory_list slot";
+		which_str[which_n++] = "can be absorbed into an existing inventory list slot";
 	
 	/*** Unaware items ***/
 	if (IS_FLG(FLG_UNAWARE))
@@ -3247,17 +3247,17 @@ static bool insert_return_code(text_body_type *tb)
 /*
  * Choose an item and get auto-picker entry from it.
  */
-static bool entry_from_choosed_object(autopick_type *entry)
+static bool entry_from_choosed_object(player_type *player_ptr, autopick_type *entry)
 {
 	object_type *o_ptr;
 	concptr q, s;
 
 	q = _("どのアイテムを登録しますか? ", "Enter which item? ");
 	s = _("アイテムを持っていない。", "You have nothing to enter.");
-	o_ptr = choose_object(p_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
+	o_ptr = choose_object(player_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
 	if (!o_ptr) return FALSE;
 
-	autopick_entry_from_object(entry, o_ptr);
+	autopick_entry_from_object(player_ptr, entry, o_ptr);
 	return TRUE;
 }
 
@@ -4949,7 +4949,7 @@ static bool insert_keymap_line(text_body_type *tb)
 /*
  * Execute a single editor command
  */
-static bool do_editor_command(text_body_type *tb, int com_id)
+static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 {
 	switch(com_id)
 	{
@@ -5437,7 +5437,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 		/* Cut end of line */
 		tb->yank_eol = TRUE;
 
-		do_editor_command(tb, EC_DELETE_CHAR);
+		do_editor_command(player_ptr, tb, EC_DELETE_CHAR);
 		break;
 	}
 
@@ -5477,7 +5477,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 			}
 		}
 
-		do_editor_command(tb, EC_BACKSPACE);
+		do_editor_command(player_ptr, tb, EC_BACKSPACE);
 		break;
 	}
 
@@ -5573,8 +5573,8 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 		if (!search_dir) break;
 
-		if (search_dir == 1) do_editor_command(tb, EC_SEARCH_FORW);
-		else do_editor_command(tb, EC_SEARCH_BACK);
+		if (search_dir == 1) do_editor_command(player_ptr, tb, EC_SEARCH_FORW);
+		else do_editor_command(player_ptr, tb, EC_SEARCH_BACK);
 		break;
 	}
 
@@ -5614,7 +5614,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 		if (!get_object_for_search(&tb->search_o_ptr, &tb->search_str)) break;
 
-		do_editor_command(tb, EC_SEARCH_FORW);
+		do_editor_command(player_ptr, tb, EC_SEARCH_FORW);
 		break;
 
 	case EC_SEARCH_DESTROYED:
@@ -5626,7 +5626,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 			break;
 		}
 
-		do_editor_command(tb, EC_SEARCH_FORW);
+		do_editor_command(player_ptr, tb, EC_SEARCH_FORW);
 		break;
 
 	case EC_INSERT_OBJECT:
@@ -5635,7 +5635,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 
 		autopick_type an_entry, *entry = &an_entry;
 
-		if (!entry_from_choosed_object(entry))
+		if (!entry_from_choosed_object(player_ptr, entry))
 		{
 			/* Now dirty because of item/equip menu */
 			tb->dirty_flags |= DIRTY_SCREEN;
@@ -5682,8 +5682,7 @@ static bool do_editor_command(text_body_type *tb, int com_id)
 #else
 			rp_ptr->title, cp_ptr->title,
 #endif
-			p_ptr->lev
-			);
+			player_ptr->lev);
 
 		tb->cx = 0;
 		insert_return_code(tb);
@@ -6024,7 +6023,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	/* Command Description of the 'Last Destroyed Item' */
 	if (autopick_last_destroyed_object.k_idx)
 	{
-		autopick_entry_from_object(entry, &autopick_last_destroyed_object);
+		autopick_entry_from_object(player_ptr, entry, &autopick_last_destroyed_object);
 		tb->last_destroyed = autopick_line_from_entry_kill(entry);
 	}
 
@@ -6120,7 +6119,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 			com_id = get_com_id((char)key);
 		}
 
-		if (com_id) quit = do_editor_command(tb, com_id);
+		if (com_id) quit = do_editor_command(player_ptr, tb, com_id);
 	} /* while (TRUE) */
 	screen_load();
 

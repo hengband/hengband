@@ -679,7 +679,7 @@ void do_cmd_destroy(player_type *creature_ptr)
 			if (i == 'A')
 			{
 				/* Add an auto-destroy preference line */
-				if (autopick_autoregister(o_ptr))
+				if (autopick_autoregister(creature_ptr, o_ptr))
 				{
 					/* Auto-destroy it */
 					autopick_alter_item(item, TRUE);
