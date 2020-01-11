@@ -4370,11 +4370,12 @@ static concptr variant = "ZANGBAND";
 /*!
  * @brief クエスト用固定ダンジョン生成時の分岐処理
  * Helper function for "process_dungeon_file()"
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param sp
  * @param fp
  * @return エラーコード
  */
-static concptr process_dungeon_file_expr(char **sp, char *fp)
+static concptr process_dungeon_file_expr(player_type *player_ptr, char **sp, char *fp)
 {
 	concptr v;
 
@@ -4408,7 +4409,7 @@ static concptr process_dungeon_file_expr(char **sp, char *fp)
 		s++;
 
 		/* First */
-		t = process_dungeon_file_expr(&s, &f);
+		t = process_dungeon_file_expr(player_ptr, &s, &f);
 
 		if (!*t)
 		{
@@ -4421,7 +4422,7 @@ static concptr process_dungeon_file_expr(char **sp, char *fp)
 			v = "0";
 			while (*s && (f != b2))
 			{
-				t = process_dungeon_file_expr(&s, &f);
+				t = process_dungeon_file_expr(player_ptr, &s, &f);
 				if (*t && !streq(t, "0")) v = "1";
 			}
 		}
@@ -4432,7 +4433,7 @@ static concptr process_dungeon_file_expr(char **sp, char *fp)
 			v = "1";
 			while (*s && (f != b2))
 			{
-				t = process_dungeon_file_expr(&s, &f);
+				t = process_dungeon_file_expr(player_ptr, &s, &f);
 				if (*t && streq(t, "0")) v = "0";
 			}
 		}
@@ -4443,7 +4444,7 @@ static concptr process_dungeon_file_expr(char **sp, char *fp)
 			v = "1";
 			while (*s && (f != b2))
 			{
-				t = process_dungeon_file_expr(&s, &f);
+				t = process_dungeon_file_expr(player_ptr, &s, &f);
 				if (*t && streq(t, "1")) v = "0";
 			}
 		}
@@ -4454,11 +4455,11 @@ static concptr process_dungeon_file_expr(char **sp, char *fp)
 			v = "0";
 			if (*s && (f != b2))
 			{
-				t = process_dungeon_file_expr(&s, &f);
+				t = process_dungeon_file_expr(player_ptr, &s, &f);
 			}
 			while (*s && (f != b2))
 			{
-				p = process_dungeon_file_expr(&s, &f);
+				p = process_dungeon_file_expr(player_ptr, &s, &f);
 				if (streq(t, p)) v = "1";
 			}
 		}
@@ -4469,12 +4470,12 @@ static concptr process_dungeon_file_expr(char **sp, char *fp)
 			v = "1";
 			if (*s && (f != b2))
 			{
-				t = process_dungeon_file_expr(&s, &f);
+				t = process_dungeon_file_expr(player_ptr, &s, &f);
 			}
 			while (*s && (f != b2))
 			{
 				p = t;
-				t = process_dungeon_file_expr(&s, &f);
+				t = process_dungeon_file_expr(player_ptr, &s, &f);
 				if (*t && atoi(p) > atoi(t)) v = "0";
 			}
 		}
@@ -4485,12 +4486,12 @@ static concptr process_dungeon_file_expr(char **sp, char *fp)
 			v = "1";
 			if (*s && (f != b2))
 			{
-				t = process_dungeon_file_expr(&s, &f);
+				t = process_dungeon_file_expr(player_ptr, &s, &f);
 			}
 			while (*s && (f != b2))
 			{
 				p = t;
-				t = process_dungeon_file_expr(&s, &f);
+				t = process_dungeon_file_expr(player_ptr, &s, &f);
 
 				/* Compare two numbers instead of string */
 				if (*t && atoi(p) < atoi(t)) v = "0";
@@ -4501,7 +4502,7 @@ static concptr process_dungeon_file_expr(char **sp, char *fp)
 		{
 			while (*s && (f != b2))
 			{
-				t = process_dungeon_file_expr(&s, &f);
+				t = process_dungeon_file_expr(player_ptr, &s, &f);
 			}
 		}
 
@@ -4567,13 +4568,13 @@ static concptr process_dungeon_file_expr(char **sp, char *fp)
 			/* First realm */
 			else if (streq(b + 1, "REALM1"))
 			{
-				v = _(E_realm_names[p_ptr->realm1], realm_names[p_ptr->realm1]);
+				v = _(E_realm_names[player_ptr->realm1], realm_names[player_ptr->realm1]);
 			}
 
 			/* Second realm */
 			else if (streq(b + 1, "REALM2"))
 			{
-				v = _(E_realm_names[p_ptr->realm2], realm_names[p_ptr->realm2]);
+				v = _(E_realm_names[player_ptr->realm2], realm_names[player_ptr->realm2]);
 			}
 
 			/* Player name */
@@ -4581,7 +4582,7 @@ static concptr process_dungeon_file_expr(char **sp, char *fp)
 			{
 				static char tmp_player_name[32];
 				char *pn, *tpn;
-				for (pn = p_ptr->name, tpn = tmp_player_name; *pn; pn++, tpn++)
+				for (pn = player_ptr->name, tpn = tmp_player_name; *pn; pn++, tpn++)
 				{
 #ifdef JP
 					if (iskanji(*pn))
@@ -4600,21 +4601,21 @@ static concptr process_dungeon_file_expr(char **sp, char *fp)
 			/* Town */
 			else if (streq(b + 1, "TOWN"))
 			{
-				sprintf(tmp, "%d", p_ptr->town_num);
+				sprintf(tmp, "%d", player_ptr->town_num);
 				v = tmp;
 			}
 
 			/* Level */
 			else if (streq(b + 1, "LEVEL"))
 			{
-				sprintf(tmp, "%d", p_ptr->lev);
+				sprintf(tmp, "%d", player_ptr->lev);
 				v = tmp;
 			}
 
 			/* Current quest number */
 			else if (streq(b + 1, "QUEST_NUMBER"))
 			{
-				sprintf(tmp, "%d", p_ptr->current_floor_ptr->inside_quest);
+				sprintf(tmp, "%d", player_ptr->current_floor_ptr->inside_quest);
 				v = tmp;
 			}
 
@@ -4954,7 +4955,7 @@ errr process_dungeon_file(player_type *player_ptr, concptr name, int ymin, int x
 			s = buf + 2;
 
 			/* Parse the expr */
-			v = process_dungeon_file_expr(&s, &f);
+			v = process_dungeon_file_expr(player_ptr, &s, &f);
 
 			/* Set flag */
 			bypass = (streq(v, "0") ? TRUE : FALSE);

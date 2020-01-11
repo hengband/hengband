@@ -45,4 +45,3 @@ extern errr init_v_info(void);
 extern errr init_buildings(void);
 
 extern dungeon_grid letter[255];
-
