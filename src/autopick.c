@@ -4874,6 +4874,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		break;
 
 	case EC_LEFT:
+	{
 		/* Back */
 		if (0 < tb->cx)
 		{
@@ -4910,6 +4911,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		}
 
 		break;
+	}
 
 	case EC_DOWN:
 		/* Next line */
@@ -5194,13 +5196,14 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 	}
 
 	case EC_BLOCK:
+	{
 		if (tb->mark)
 		{
 			tb->mark = 0;
 			tb->dirty_flags |= DIRTY_ALL;
 			break;
 		}
-		
+
 		tb->mark = MARK_MARK;
 
 		/* Repeating this command swaps cursor position */
@@ -5222,6 +5225,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		tb->mx = tb->cx;
 		if (tb->cx > len) tb->mx = len;
 		break;
+	}
 
 	case EC_KILL_LINE:
 	{
@@ -5290,18 +5294,21 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 
 		/* Pass through the end of line to next line */
 		int len = strlen(tb->lines_list[tb->cy]);
-		if (len < tb->cx)
+		if (len >= tb->cx)
 		{
-			if (tb->lines_list[tb->cy + 1])
-			{
-				tb->cy++;
-				tb->cx = 0;
-			}
-			else
-			{
-				tb->cx = len;
-				break;
-			}
+			do_editor_command(player_ptr, tb, EC_BACKSPACE);
+			break;
+		}
+
+		if (tb->lines_list[tb->cy + 1])
+		{
+			tb->cy++;
+			tb->cx = 0;
+		}
+		else
+		{
+			tb->cx = len;
+			break;
 		}
 
 		do_editor_command(player_ptr, tb, EC_BACKSPACE);
