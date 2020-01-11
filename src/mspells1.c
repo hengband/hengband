@@ -58,6 +58,10 @@
 #include "player-race.h"
 #include "player-class.h"
 
+#define DO_SPELL_NONE    0
+#define DO_SPELL_BR_LITE 1
+#define DO_SPELL_BR_DISI 2
+#define DO_SPELL_BA_LITE 3
 
 /*!
  * @brief モンスターがプレイヤーの弱点をついた選択を取るかどうかの判定 /
@@ -95,7 +99,6 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 	u32b f6 = (*f6p);
 
 	u32b smart = 0L;
-
 
 	/* Too stupid to know anything */
 	if (r_ptr->flags2 & RF2_STUPID) return;
@@ -375,6 +378,7 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 /*!
  * @brief モンスターにとって所定の地点が召還に相応しい地点かどうかを返す。 /
  * Determine if there is a space near the player in which a summoned creature can appear
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param y1 判定を行いたいマスのY座標
  * @param x1 判定を行いたいマスのX座標
  * @return 召還に相応しいならばTRUEを返す
@@ -409,6 +413,7 @@ bool summon_possible(POSITION y1, POSITION x1)
 /*!
  * @brief モンスターにとって死者復活を行うべき状態かどうかを返す /
  * Determine if there is a space near the player in which a summoned creature can appear
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param m_ptr 判定を行いたいモンスターの構造体参照ポインタ
  * @return 死者復活が有効な状態ならばTRUEを返す。
  */
@@ -447,10 +452,10 @@ bool raise_possible(monster_type *m_ptr)
 }
 
 
-
 /*!
  * @brief モンスターにとってボルト型魔法が有効な状態かを返す /
  * Determine if a bolt spell will hit the player.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param y1 ボルト魔法発射地点のY座標
  * @param x1 ボルト魔法発射地点のX座標
  * @param y2 ボルト魔法目標地点のY座標
@@ -513,9 +518,11 @@ bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_frie
 	return TRUE;
 }
 
+
 /*!
  * @brief モンスターのボルト型魔法処理 /
  * Cast a bolt at the player Stop if we hit a monster Affect monsters and the player
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターのID
  * @param y 目標のY座標
  * @param x 目標のX座標
@@ -545,8 +552,10 @@ void bolt(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, 
 	(void)project(p_ptr, m_idx, 0, y, x, dam_hp, typ, flg, (learnable ? monspell : -1));
 }
 
+
 /*!
  * @brief モンスターのビーム型魔法処理 /
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターのID
  * @param y 目標のY座標
  * @param x 目標のX座標
@@ -579,6 +588,7 @@ void beam(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, 
 /*!
  * @brief モンスターのボール型＆ブレス型魔法処理 /
  * Cast a breath (or ball) attack at the player Pass over any monsters that may be in the way Affect grids, objects, monsters, and the player
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param y 目標地点のY座標
  * @param x 目標地点のX座標
  * @param m_idx モンスターのID
@@ -635,8 +645,6 @@ void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp
 }
 
 
-
-
 /*!
  * @brief ID値が正しいモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell is good for hurting the player (directly).
@@ -683,6 +691,7 @@ static bool spell_escape(byte spell)
 	return FALSE;
 }
 
+
 /*!
  * @brief ID値が妨害目的に適したモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell is good for annoying the player.
@@ -712,6 +721,7 @@ static bool spell_annoy(byte spell)
 	/* Doesn't annoy */
 	return FALSE;
 }
+
 
 /*!
  * @brief ID値が召喚型のモンスター魔法IDかどうかを返す /
@@ -744,6 +754,7 @@ static bool spell_raise(byte spell)
 	return FALSE;
 }
 
+
 /*!
  * @brief ID値が戦術的なモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell is good in a tactical situation.
@@ -759,6 +770,7 @@ static bool spell_tactic(byte spell)
 	return FALSE;
 }
 
+
 /*!
  * @brief ID値が無敵化するモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell makes invulnerable.
@@ -773,6 +785,7 @@ static bool spell_invulner(byte spell)
 	/* No invulnerability */
 	return FALSE;
 }
+
 
 /*!
  * @brief ID値が加速するモンスター魔法IDかどうかを返す /
@@ -806,6 +819,7 @@ static bool spell_world(byte spell)
 /*!
  * @brief ID値が特別効果のモンスター魔法IDかどうかを返す /
  * Return TRUE if a spell special.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param spell 判定対象のID
  * @return 特別効果魔法のIDならばTRUEを返す。
  */
@@ -971,6 +985,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
 /*!
  * @brief モンスターの魔法選択ルーチン
  * Have a monster choose a spell from a list of "useful" spells.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターの構造体配列ID
  * @param spells 候補魔法IDをまとめた配列
  * @param num spellsの長さ
@@ -1206,7 +1221,7 @@ static int choose_attack_spell(MONSTER_IDX m_idx, byte spells[], byte num)
 	}
 
 	/* Choose no spell */
-	return (0);
+	return 0;
 }
 
 
@@ -1238,6 +1253,7 @@ bool spell_is_inate(SPELL_IDX spell)
 
 /*!
  * @brief モンスターがプレイヤーにダメージを与えるための最適な座標を算出する /
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param m_ptr 技能を使用するモンスター構造体の参照ポインタ
  * @param yp 最適な目標地点のY座標を返す参照ポインタ
  * @param xp 最適な目標地点のX座標を返す参照ポインタ
@@ -1287,14 +1303,12 @@ static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
 	return FALSE;
 }
 
-#define DO_SPELL_NONE    0
-#define DO_SPELL_BR_LITE 1
-#define DO_SPELL_BR_DISI 2
-#define DO_SPELL_BA_LITE 3
 
 /*!
+ * todo メインルーチンの割に長過ぎる。要分割
  * @brief モンスターの特殊技能メインルーチン /
  * Creatures can cast spells, shoot missiles, and breathe.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスター構造体配列のID
  * @return 実際に特殊技能を利用したらTRUEを返す
  * @details
@@ -1827,7 +1841,6 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 			if (r_ptr->r_cast_spell < MAX_UCHAR) r_ptr->r_cast_spell++;
 		}
 	}
-
 
 	/* Always take note of monsters that kill you */
 	if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
