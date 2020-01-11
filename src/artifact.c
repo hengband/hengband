@@ -1569,13 +1569,13 @@ static void get_random_name(object_type *o_ptr, char *return_name, bool armour, 
 		get_table_sindarin(return_name);
 		return;
 	}
-	
+
 	if (prob <= TABLE_NAME)
 	{
 		get_table_name(return_name);
 		return;
 	}
-	
+
 	concptr filename;
 	switch (armour)
 	{
@@ -2233,17 +2233,17 @@ static bool has_extreme_damage_rate(object_type *o_ptr)
 		{
 			return TRUE;
 		}
-		
+
 		if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(o_ptr) > 43))
 		{
 			return TRUE;
 		}
-		
+
 		if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(o_ptr) > 33))
 		{
 			return TRUE;
 		}
-		
+
 		if (calc_arm_avgdamage(o_ptr) > 63)
 		{
 			return TRUE;
@@ -2256,17 +2256,17 @@ static bool has_extreme_damage_rate(object_type *o_ptr)
 	{
 		return TRUE;
 	}
-	
+
 	if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 2) && (calc_arm_avgdamage(o_ptr) > 52))
 	{
 		return TRUE;
 	}
-	
+
 	if (have_flag(flgs, TR_BLOWS) && (o_ptr->pval == 3) && (calc_arm_avgdamage(o_ptr) > 40))
 	{
 		return TRUE;
 	}
-	
+
 	if (calc_arm_avgdamage(o_ptr) > 75)
 	{
 		return TRUE;
@@ -2289,19 +2289,19 @@ static bool weakening_artifact(object_type *o_ptr)
 		add_flag(o_ptr->art_flags, TR_SLAY_EVIL);
 		return TRUE;
 	}
-	
+
 	if (k_ptr->dd < o_ptr->dd)
 	{
 		o_ptr->dd--;
 		return TRUE;
 	}
-	
+
 	if (k_ptr->ds < o_ptr->ds)
 	{
 		o_ptr->ds--;
 		return TRUE;
 	}
-	
+
 	if (o_ptr->to_d > 10)
 	{
 		o_ptr->to_d = o_ptr->to_d - damroll(1, 6);
