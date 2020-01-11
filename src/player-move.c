@@ -355,7 +355,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
  * @details
  * Player "wants" to pick up an object or gold.
  * Note that we ONLY handle things that can be picked up.
- * See "move_player(p_ptr, )" for handling of other things.
+ * See "move_player(creature_ptr, )" for handling of other things.
  */
 void carry(player_type *creature_ptr, bool pickup)
 {
