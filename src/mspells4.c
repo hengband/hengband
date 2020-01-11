@@ -2609,6 +2609,7 @@ void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
+* @param なし
 */
 void spell_RF6_TRAPS(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
@@ -2630,28 +2631,30 @@ void spell_RF6_TRAPS(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 
 /*!
 * @brief RF6_FORGETの処理。記憶消去。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param m_idx 呪文を唱えるモンスターID
+* @param なし
 */
-void spell_RF6_FORGET(MONSTER_IDX m_idx)
+void spell_RF6_FORGET(player_type *target_ptr, MONSTER_IDX m_idx)
 {
 	DEPTH rlev = monster_level_idx(m_idx);
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
-	disturb(p_ptr, TRUE, TRUE);
+	disturb(target_ptr, TRUE, TRUE);
 
 	msg_format(_("%^sがあなたの記憶を消去しようとしている。",
 		"%^s tries to blank your mind."), m_name);
 
-	if (randint0(100 + rlev / 2) < p_ptr->skill_sav)
+	if (randint0(100 + rlev / 2) < target_ptr->skill_sav)
 	{
 		msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 	}
-	else if (lose_all_info(p_ptr))
+	else if (lose_all_info(target_ptr))
 	{
 		msg_print(_("記憶が薄れてしまった。", "Your memories fade away."));
 	}
-	learn_spell(p_ptr, MS_FORGET);
+	learn_spell(target_ptr, MS_FORGET);
 }
 
 
@@ -3687,7 +3690,7 @@ HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y,
 	case RF6_SPELL_START + 11: spell_RF6_PSY_SPEAR(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_PSY_SPEAR */
 	case RF6_SPELL_START + 12: spell_RF6_DARKNESS(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF6_DARKNESS */
 	case RF6_SPELL_START + 13: spell_RF6_TRAPS(target_ptr, y, x, m_idx); break; /* RF6_TRAPS */
-	case RF6_SPELL_START + 14: spell_RF6_FORGET(m_idx); break;  /* RF6_FORGET */
+	case RF6_SPELL_START + 14: spell_RF6_FORGET(target_ptr, m_idx); break;  /* RF6_FORGET */
 	case RF6_SPELL_START + 15: spell_RF6_RAISE_DEAD(target_ptr, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_RAISE_DEAD */
 	case RF6_SPELL_START + 16: spell_RF6_S_KIN(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_S_KIN */
 	case RF6_SPELL_START + 17: spell_RF6_S_CYBER(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_CYBER */
