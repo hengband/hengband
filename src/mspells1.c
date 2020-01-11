@@ -1007,7 +1007,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
  */
 static int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte spells[], byte num)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	byte escape[96], escape_num = 0;
@@ -1138,7 +1138,7 @@ static int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte 
 	}
 
 	/* Player is close and we have attack spells, blink away */
-	if ((distance(p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (attack_num || (r_ptr->a_ability_flags2 & RF6_TRAPS)) && (randint0(100) < 75) && !current_world_ptr->timewalk_m_idx)
+	if ((distance(target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx) < 4) && (attack_num || (r_ptr->a_ability_flags2 & RF6_TRAPS)) && (randint0(100) < 75) && !current_world_ptr->timewalk_m_idx)
 	{
 		/* Choose tactical spell */
 		if (tactic_num) return (tactic[randint0(tactic_num)]);
@@ -1155,7 +1155,7 @@ static int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte 
 	if (dispel_num && one_in_(2))
 	{
 		/* Choose dispel spell if possible */
-		if (dispel_check(p_ptr, m_idx))
+		if (dispel_check(target_ptr, m_idx))
 		{
 			return (dispel[randint0(dispel_num)]);
 		}
@@ -1169,7 +1169,7 @@ static int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte 
 	}
 
 	/* Attack spell (most of the time) */
-	if (IS_INVULN(p_ptr))
+	if (IS_INVULN(target_ptr))
 	{
 		if (psy_spe_num && (randint0(100) < 50))
 		{
@@ -1264,7 +1264,7 @@ bool spell_is_inate(SPELL_IDX spell)
  * @param path_check 射線を判定するための関数ポインタ
  * @return 有効な座標があった場合TRUEを返す
  */
-static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
+static bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, POSITION *yp, POSITION *xp,
 	int f_flag, bool (*path_check)(floor_type *, POSITION, POSITION, POSITION, POSITION))
 {
 	int i;
@@ -1278,11 +1278,12 @@ static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
 			                     {-1,  0,  1, -1,  1, -1,  0,  1},
 			                     { 1,  0, -1,  1, -1,  1,  0, -1}};
 
-	if (m_ptr->fy < p_ptr->y && m_ptr->fx < p_ptr->x) tonari = 0;
-	else if (m_ptr->fy < p_ptr->y) tonari = 1;
-	else if (m_ptr->fx < p_ptr->x) tonari = 2;
+	if (m_ptr->fy < target_ptr->y && m_ptr->fx < target_ptr->x) tonari = 0;
+	else if (m_ptr->fy < target_ptr->y) tonari = 1;
+	else if (m_ptr->fx < target_ptr->x) tonari = 2;
 	else tonari = 3;
 
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	for (i = 0; i < 8; i++)
 	{
 		int next_x = *xp + tonari_x[tonari][i];
@@ -1290,12 +1291,12 @@ static bool adjacent_grid_check(monster_type *m_ptr, POSITION *yp, POSITION *xp,
 		grid_type *g_ptr;
 
 		/* Access the next grid */
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[next_y][next_x];
+		g_ptr = &floor_ptr->grid_array[next_y][next_x];
 
 		/* Skip this feature */
 		if (!cave_have_flag_grid(g_ptr, f_flag)) continue;
 
-		if (path_check(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x))
+		if (path_check(floor_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x))
 		{
 			*yp = next_y;
 			*xp = next_x;
@@ -1451,7 +1452,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		}
 
 		/* Check path to next grid */
-		else if (!adjacent_grid_check(m_ptr, &y_br_lite, &x_br_lite, FF_LOS, los)) f4 &= ~(RF4_BR_LITE);
+		else if (!adjacent_grid_check(target_ptr, m_ptr, &y_br_lite, &x_br_lite, FF_LOS, los)) f4 &= ~(RF4_BR_LITE);
 
 		/* Don't breath lite to the wall if impossible */
 		if (!(f4 & RF4_BR_LITE))
@@ -1505,7 +1506,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 			}
 		}
 
-		if (!success) success = adjacent_grid_check(m_ptr, &y, &x, FF_PROJECT, projectable);
+		if (!success) success = adjacent_grid_check(target_ptr, m_ptr, &y, &x, FF_PROJECT, projectable);
 
 		if (!success)
 		{
