@@ -113,7 +113,7 @@ const concptr artifact_bias_name[MAX_BIAS] =
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return なし
  */
-static void curse_artifact(object_type * o_ptr)
+static void curse_artifact(object_type *o_ptr)
 {
 	if (o_ptr->pval > 0) o_ptr->pval = 0 - (o_ptr->pval + randint1(4));
 	if (o_ptr->to_a > 0) o_ptr->to_a = 0 - (o_ptr->to_a + randint1(4));
@@ -146,7 +146,7 @@ static void curse_artifact(object_type * o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return なし
  */
-static void random_plus(object_type * o_ptr)
+static void random_plus(object_type *o_ptr)
 {
 	int this_type = (object_is_weapon_ammo(o_ptr) ? 23 : 19);
 
@@ -369,7 +369,7 @@ static void random_plus(object_type * o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return なし
  */
-static void random_resistance(object_type * o_ptr)
+static void random_resistance(object_type *o_ptr)
 {
 	switch (o_ptr->artifact_bias)
 	{
@@ -703,7 +703,7 @@ static void random_resistance(object_type * o_ptr)
  * @param o_ptr 対象のオブジェクト構造体ポインタ
  * @return なし
  */
-static void random_misc(object_type * o_ptr)
+static void random_misc(object_type *o_ptr)
 {
 	switch (o_ptr->artifact_bias)
 	{
@@ -1950,7 +1950,7 @@ const activation_type* find_activation_info(object_type *o_ptr)
  * @param a_ptr 生成する固定アーティファクト構造体ポインタ
  * @return なし
  */
-void random_artifact_resistance(object_type * o_ptr, artifact_type *a_ptr)
+void random_artifact_resistance(object_type *o_ptr, artifact_type *a_ptr)
 {
 	bool give_resistance = FALSE, give_power = FALSE;
 

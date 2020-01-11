@@ -1415,7 +1415,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		if (creature_ptr->inventory_list[INVEN_LITE].tval && (creature_ptr->inventory_list[INVEN_LITE].name2 != EGO_LITE_DARKNESS) &&
 		    !creature_ptr->resist_lite)
 		{
-			object_type * o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
+			object_type *o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
 			GAME_TEXT o_name [MAX_NLEN];
 			char ouch [MAX_NLEN+40];
 

@@ -2,7 +2,7 @@
 
 extern void do_cmd_activate(player_type *user_ptr);
 extern void exe_activate(player_type *user_ptr, INVENTORY_IDX item);
-extern bool activate_artifact(player_type *user_ptr, object_type * o_ptr);
+extern bool activate_artifact(player_type *user_ptr, object_type *o_ptr);
 
 typedef struct {
 	concptr flag;
