@@ -32,6 +32,7 @@
 /*!
  * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /
  * Determine if a beam spell will hit the target.
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param y1 始点のY座標
  * @param x1 始点のX座標
  * @param y2 目標のY座標
@@ -39,7 +40,7 @@
  * @param m_ptr 使用するモンスターの構造体参照ポインタ
  * @return ビームが到達可能ならばTRUEを返す
  */
-static bool direct_beam(POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
+static bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
 {
 	bool hit2 = FALSE;
 	int i;
@@ -51,7 +52,8 @@ static bool direct_beam(POSITION y1, POSITION x1, POSITION y2, POSITION x2, mons
 	bool is_friend = is_pet(m_ptr);
 
 	/* Check the projection path */
-	grid_n = project_path(p_ptr->current_floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, PROJECT_THRU);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	grid_n = project_path(floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, PROJECT_THRU);
 
 	/* No grid is ever projectable from itself */
 	if (!grid_n) return FALSE;
@@ -63,14 +65,14 @@ static bool direct_beam(POSITION y1, POSITION x1, POSITION y2, POSITION x2, mons
 
 		if (y == y2 && x == x2)
 			hit2 = TRUE;
-		else if (is_friend && p_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0 &&
-			 !are_enemies(m_ptr, &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[y][x].m_idx]))
+		else if (is_friend && floor_ptr->grid_array[y][x].m_idx > 0 &&
+			 !are_enemies(m_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx]))
 		{
 			/* Friends don't shoot friends */
 			return FALSE;
 		}
 
-		if (is_friend && player_bold(p_ptr, y, x))
+		if (is_friend && player_bold(target_ptr, y, x))
 			return FALSE;
 	}
 	if (!hit2)
@@ -236,13 +238,14 @@ void get_project_point(floor_type *floor_ptr, POSITION sy, POSITION sx, POSITION
 /*!
  * @brief モンスターが敵モンスターに魔力消去を使うかどうかを返す /
  * Check should monster cast dispel spell at other monster.
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx 術者のモンスターID
  * @param t_idx 目標のモンスターID
  * @return 魔力消去を使うべきならばTRUEを変えす。
  */
-static bool dispel_check_monster(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
+static bool dispel_check_monster(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
-	monster_type *t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
+	monster_type *t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
 
 	if (MON_INVULNER(t_ptr)) return TRUE;
 
@@ -252,9 +255,9 @@ static bool dispel_check_monster(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 	}
 
 	/* Riding monster */
-	if (t_idx == p_ptr->riding)
+	if (t_idx == target_ptr->riding)
 	{
-		if (dispel_check(p_ptr, m_idx)) return TRUE;
+		if (dispel_check(target_ptr, m_idx)) return TRUE;
 	}
 
 	/* No need to cast dispel spell */
@@ -532,7 +535,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 			}
 
 			if (((f4 & RF4_BEAM_MASK) || (f5 & RF5_BEAM_MASK) || (f6 & RF6_BEAM_MASK)) &&
-			    !direct_beam(m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, m_ptr))
+			    !direct_beam(target_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx, m_ptr))
 			{
 				f4 &= ~(RF4_BEAM_MASK);
 				f5 &= ~(RF5_BEAM_MASK);
@@ -608,7 +611,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 
 		/* Dispel magic */
-		if ((f4 & RF4_DISPEL) && !dispel_check_monster(m_idx, target_idx))
+		if ((f4 & RF4_DISPEL) && !dispel_check_monster(target_ptr, m_idx, target_idx))
 		{
 			/* Remove dispel spell */
 			f4 &= ~(RF4_DISPEL);
