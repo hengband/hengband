@@ -1724,7 +1724,7 @@ static bool kakutoujou(player_type *player_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void today_target(void)
+static void today_target(player_type *player_ptr)
 {
 	char buf[160];
 	monster_race *r_ptr = &r_info[today_mon];
@@ -1737,7 +1737,7 @@ static void today_target(void)
 	prt(buf, 8, 10);
 	sprintf(buf, _("骨   ---- $%d", "skeleton ---- $%d"), (int)r_ptr->level * 30 + 60);
 	prt(buf, 9, 10);
-	p_ptr->today_mon = today_mon;
+	player_ptr->today_mon = today_mon;
 }
 
 
@@ -4060,7 +4060,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		break;
 
 	case BACT_TARGET:
-		today_target();
+		today_target(player_ptr);
 		break;
 
 	case BACT_KANKIN:
