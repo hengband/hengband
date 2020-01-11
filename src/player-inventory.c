@@ -728,12 +728,13 @@ COMMAND_CODE show_inven(player_type *owner_ptr, int target_item, BIT_FLAGS mode,
 /*!
  * @brief 選択したアイテムの確認処理の補助 /
  * Verify the choice of an item.
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param prompt メッセージ表示の一部
  * @param item 選択アイテムID
  * @return 確認がYesならTRUEを返す。
  * @details The item can be negative to mean "item on floor".
  */
-static bool verify(concptr prompt, INVENTORY_IDX item)
+static bool verify(player_type *owner_ptr, concptr prompt, INVENTORY_IDX item)
 {
 	GAME_TEXT o_name[MAX_NLEN];
 	char        out_val[MAX_NLEN + 20];
@@ -743,13 +744,13 @@ static bool verify(concptr prompt, INVENTORY_IDX item)
 	/* Inventory */
 	if (item >= 0)
 	{
-		o_ptr = &p_ptr->inventory_list[item];
+		o_ptr = &owner_ptr->inventory_list[item];
 	}
 
 	/* Floor */
 	else
 	{
-		o_ptr = &p_ptr->current_floor_ptr->o_list[0 - item];
+		o_ptr = &owner_ptr->current_floor_ptr->o_list[0 - item];
 	}
 	object_desc(o_name, o_ptr, 0);
 
@@ -763,12 +764,13 @@ static bool verify(concptr prompt, INVENTORY_IDX item)
 
 /*!
  * @brief 選択したアイテムの確認処理のメインルーチン /
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param item 選択アイテムID
  * @return 確認がYesならTRUEを返す。
  * @details The item can be negative to mean "item on floor".
  * Hack -- allow user to "prevent" certain choices
  */
-static bool get_item_allow(INVENTORY_IDX item)
+static bool get_item_allow(player_type *owner_ptr, INVENTORY_IDX item)
 {
 	concptr s;
 	object_type *o_ptr;
@@ -777,13 +779,13 @@ static bool get_item_allow(INVENTORY_IDX item)
 	/* Inventory */
 	if (item >= 0)
 	{
-		o_ptr = &p_ptr->inventory_list[item];
+		o_ptr = &owner_ptr->inventory_list[item];
 	}
 
 	/* Floor */
 	else
 	{
-		o_ptr = &p_ptr->current_floor_ptr->o_list[0 - item];
+		o_ptr = &owner_ptr->current_floor_ptr->o_list[0 - item];
 	}
 
 	/* No inscription */
@@ -799,7 +801,7 @@ static bool get_item_allow(INVENTORY_IDX item)
 		if ((s[1] == command_cmd) || (s[1] == '*'))
 		{
 			/* Verify the choice */
-			if (!verify(_("本当に", "Really try"), item)) return FALSE;
+			if (!verify(owner_ptr, _("本当に", "Really try"), item)) return FALSE;
 		}
 
 		/* Find another '!' */
@@ -1283,7 +1285,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 					}
 
 					/* Allow player to "refuse" certain actions */
-					if (!get_item_allow(get_item_label))
+					if (!get_item_allow(owner_ptr, get_item_label))
 					{
 						done = TRUE;
 						break;
@@ -1385,10 +1387,10 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 						k = 0 - this_o_idx;
 
 						/* Verify the item (if required) */
-						if (other_query_flag && !verify(_("本当に", "Try"), k)) continue;
+						if (other_query_flag && !verify(owner_ptr, _("本当に", "Try"), k)) continue;
 
 						/* Allow player to "refuse" certain actions */
-						if (!get_item_allow(k)) continue;
+						if (!get_item_allow(owner_ptr, k)) continue;
 
 						/* Accept that choice */
 						(*cp) = k;
@@ -1432,7 +1434,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				}
 
 				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(k))
+				if (!get_item_allow(owner_ptr, k))
 				{
 					done = TRUE;
 					break;
@@ -1555,14 +1557,14 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				}
 
 				/* Verify the item */
-				if (ver && !verify(_("本当に", "Try"), k))
+				if (ver && !verify(owner_ptr, _("本当に", "Try"), k))
 				{
 					done = TRUE;
 					break;
 				}
 
 				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(k))
+				if (!get_item_allow(owner_ptr, k))
 				{
 					done = TRUE;
 					break;
@@ -2461,7 +2463,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 					}
 
 					/* Allow player to "refuse" certain actions */
-					if (!get_item_allow(get_item_label))
+					if (!get_item_allow(owner_ptr, get_item_label))
 					{
 						done = TRUE;
 						break;
@@ -2632,7 +2634,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 						k = 0 - floor_list[0];
 
 						/* Allow player to "refuse" certain actions */
-						if (!get_item_allow(k))
+						if (!get_item_allow(owner_ptr, k))
 						{
 							done = TRUE;
 							break;
@@ -2703,7 +2705,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				}
 
 				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(k))
+				if (!get_item_allow(owner_ptr, k))
 				{
 					done = TRUE;
 					break;
@@ -2741,7 +2743,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 						k = 0 - floor_list[0];
 
 						/* Allow player to "refuse" certain actions */
-						if (!get_item_allow(k))
+						if (!get_item_allow(owner_ptr, k))
 						{
 							done = TRUE;
 							break;
@@ -2763,7 +2765,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				}
 
 				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(k))
+				if (!get_item_allow(owner_ptr, k))
 				{
 					done = TRUE;
 					break;
@@ -2885,14 +2887,14 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				}
 
 				/* Verify the item */
-				if (ver && !verify(_("本当に", "Try"), k))
+				if (ver && !verify(owner_ptr, _("本当に", "Try"), k))
 				{
 					done = TRUE;
 					break;
 				}
 
 				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(k))
+				if (!get_item_allow(owner_ptr, k))
 				{
 					done = TRUE;
 					break;
