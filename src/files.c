@@ -2166,7 +2166,7 @@ static void display_player_various(player_type *creature_ptr)
 				basedam = ((o_ptr->dd + creature_ptr->to_dd[i]) * (o_ptr->ds + creature_ptr->to_ds[i] + 1)) * 50;
 				object_flags_known(o_ptr, flgs);
 								
-				basedam = calc_expect_crit(o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], dokubari);
+				basedam = calc_expect_crit(creature_ptr, o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], dokubari);
 				if ((o_ptr->ident & IDENT_MENTAL) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
 				{
 					/* vorpal blade */

@@ -1193,6 +1193,7 @@ HIT_POINT calc_expect_crit_shot(player_type *shooter_ptr, WEIGHT weight, int plu
 
 /*!
  * @brief 攻撃時クリティカルによるダメージ期待値修正計算（重量と毒針処理） / critical happens at i / 10000
+ * @param shooter_ptr プレーヤーへの参照ポインタ
  * @param weight 武器の重量
  * @param plus 武器のダメージ修正
  * @param dam 基本ダメージ
@@ -1200,14 +1201,12 @@ HIT_POINT calc_expect_crit_shot(player_type *shooter_ptr, WEIGHT weight, int plu
  * @param dokubari 毒針処理か否か
  * @return ダメージ期待値
  */
-HIT_POINT calc_expect_crit(WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, bool dokubari)
+HIT_POINT calc_expect_crit(player_type *shooter_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, bool dokubari)
 {
 	u32b k, num;
-	int i;
-
 	if (dokubari) return dam;
 
-	i = (weight + (meichuu * 3 + plus * 5) + p_ptr->skill_thn);
+	int i = (weight + (meichuu * 3 + plus * 5) + shooter_ptr->skill_thn);
 	if (i < 0) i = 0;
 
 	k = weight;
@@ -1220,7 +1219,7 @@ HIT_POINT calc_expect_crit(WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu,
 	if (k > (1300 - 650))					num += (7 * dam / 2 + 25) * MIN(650, k - (1300 - 650));
 
 	num /= 650;
-	if (p_ptr->pclass == CLASS_NINJA)
+	if (shooter_ptr->pclass == CLASS_NINJA)
 	{
 		num *= i;
 		num += (4444 - i) * dam;
