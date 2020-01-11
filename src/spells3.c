@@ -1721,7 +1721,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 	object_desc(o_name, o_ptr, 0);
 	if (item >= INVEN_RARM)
 	{
-		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(item), o_name, index_to_label(item));
+		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(caster_ptr, item), o_name, index_to_label(item));
 	}
 	else if (item >= 0)
 	{
@@ -1832,7 +1832,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 	object_desc(o_name, o_ptr, 0);
 	if (item >= INVEN_RARM)
 	{
-		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(item), o_name, index_to_label(item));
+		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(caster_ptr, item), o_name, index_to_label(item));
 	}
 	else if (item >= 0)
 	{

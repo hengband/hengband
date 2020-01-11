@@ -3,7 +3,7 @@
 extern bool select_ring_slot;
 
 extern bool is_ring_slot(int i);
-extern concptr describe_use(int i);
+extern concptr describe_use(player_type *owner_ptr, int i);
 
 extern void display_inven(player_type *creature_ptr, OBJECT_TYPE_VALUE tval);
 extern void display_equip(player_type *creature_ptr, OBJECT_TYPE_VALUE tval);
