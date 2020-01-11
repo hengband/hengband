@@ -306,11 +306,11 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 * @param max 算出した最大ダメージを返すポインタ
 * @return なし
 */
-void spell_damcalc_by_spellnum(int spell_num, EFFECT_ID typ, MONSTER_IDX m_idx, int *max)
+void spell_damcalc_by_spellnum(player_type *creature_ptr, int spell_num, EFFECT_ID typ, MONSTER_IDX m_idx, int *max)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
-	HIT_POINT dam = monspell_damage((spell_num), m_idx, DAM_MAX);
-	spell_damcalc(p_ptr, m_ptr, typ, dam, max);
+	monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
+	HIT_POINT dam = monspell_damage(creature_ptr, spell_num, m_idx, DAM_MAX);
+	spell_damcalc(creature_ptr, m_ptr, typ, dam, max);
 }
 
 /*!
@@ -437,36 +437,36 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
 
 				if (!(d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC))
 				{
-					if (f4 & RF4_BA_CHAO) spell_damcalc_by_spellnum(MS_BALL_CHAOS, GF_CHAOS, g_ptr->m_idx, &dam_max0);
-					if (f5 & RF5_BA_MANA) spell_damcalc_by_spellnum(MS_BALL_MANA, GF_MANA, g_ptr->m_idx, &dam_max0);
-					if (f5 & RF5_BA_DARK) spell_damcalc_by_spellnum(MS_BALL_DARK, GF_DARK, g_ptr->m_idx, &dam_max0);
-					if (f5 & RF5_BA_LITE) spell_damcalc_by_spellnum(MS_STARBURST, GF_LITE, g_ptr->m_idx, &dam_max0);
-					if (f6 & RF6_HAND_DOOM) spell_damcalc_by_spellnum(MS_HAND_DOOM, GF_HAND_DOOM, g_ptr->m_idx, &dam_max0);
-					if (f6 & RF6_PSY_SPEAR) spell_damcalc_by_spellnum(MS_PSY_SPEAR, GF_PSY_SPEAR, g_ptr->m_idx, &dam_max0);
+					if (f4 & RF4_BA_CHAO) spell_damcalc_by_spellnum(creature_ptr, MS_BALL_CHAOS, GF_CHAOS, g_ptr->m_idx, &dam_max0);
+					if (f5 & RF5_BA_MANA) spell_damcalc_by_spellnum(creature_ptr, MS_BALL_MANA, GF_MANA, g_ptr->m_idx, &dam_max0);
+					if (f5 & RF5_BA_DARK) spell_damcalc_by_spellnum(creature_ptr, MS_BALL_DARK, GF_DARK, g_ptr->m_idx, &dam_max0);
+					if (f5 & RF5_BA_LITE) spell_damcalc_by_spellnum(creature_ptr, MS_STARBURST, GF_LITE, g_ptr->m_idx, &dam_max0);
+					if (f6 & RF6_HAND_DOOM) spell_damcalc_by_spellnum(creature_ptr, MS_HAND_DOOM, GF_HAND_DOOM, g_ptr->m_idx, &dam_max0);
+					if (f6 & RF6_PSY_SPEAR) spell_damcalc_by_spellnum(creature_ptr, MS_PSY_SPEAR, GF_PSY_SPEAR, g_ptr->m_idx, &dam_max0);
 				}
-				if (f4 & RF4_ROCKET) spell_damcalc_by_spellnum(MS_ROCKET, GF_ROCKET, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_ACID) spell_damcalc_by_spellnum(MS_BR_ACID, GF_ACID, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_ELEC) spell_damcalc_by_spellnum(MS_BR_ELEC, GF_ELEC, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_FIRE) spell_damcalc_by_spellnum(MS_BR_FIRE, GF_FIRE, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_COLD) spell_damcalc_by_spellnum(MS_BR_COLD, GF_COLD, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_POIS) spell_damcalc_by_spellnum(MS_BR_POIS, GF_POIS, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_NETH) spell_damcalc_by_spellnum(MS_BR_NETHER, GF_NETHER, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_LITE) spell_damcalc_by_spellnum(MS_BR_LITE, GF_LITE, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_DARK) spell_damcalc_by_spellnum(MS_BR_DARK, GF_DARK, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_CONF) spell_damcalc_by_spellnum(MS_BR_CONF, GF_CONFUSION, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_SOUN) spell_damcalc_by_spellnum(MS_BR_SOUND, GF_SOUND, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_CHAO) spell_damcalc_by_spellnum(MS_BR_CHAOS, GF_CHAOS, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_DISE) spell_damcalc_by_spellnum(MS_BR_DISEN, GF_DISENCHANT, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_NEXU) spell_damcalc_by_spellnum(MS_BR_NEXUS, GF_NEXUS, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_TIME) spell_damcalc_by_spellnum(MS_BR_TIME, GF_TIME, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_INER) spell_damcalc_by_spellnum(MS_BR_INERTIA, GF_INERTIAL, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_GRAV) spell_damcalc_by_spellnum(MS_BR_GRAVITY, GF_GRAVITY, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_SHAR) spell_damcalc_by_spellnum(MS_BR_SHARDS, GF_SHARDS, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_PLAS) spell_damcalc_by_spellnum(MS_BR_PLASMA, GF_PLASMA, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_WALL) spell_damcalc_by_spellnum(MS_BR_FORCE, GF_FORCE, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_MANA) spell_damcalc_by_spellnum(MS_BR_MANA, GF_MANA, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_NUKE) spell_damcalc_by_spellnum(MS_BR_NUKE, GF_NUKE, g_ptr->m_idx, &dam_max0);
-				if (f4 & RF4_BR_DISI) spell_damcalc_by_spellnum(MS_BR_DISI, GF_DISINTEGRATE, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_ROCKET) spell_damcalc_by_spellnum(creature_ptr, MS_ROCKET, GF_ROCKET, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_ACID) spell_damcalc_by_spellnum(creature_ptr, MS_BR_ACID, GF_ACID, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_ELEC) spell_damcalc_by_spellnum(creature_ptr, MS_BR_ELEC, GF_ELEC, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_FIRE) spell_damcalc_by_spellnum(creature_ptr, MS_BR_FIRE, GF_FIRE, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_COLD) spell_damcalc_by_spellnum(creature_ptr, MS_BR_COLD, GF_COLD, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_POIS) spell_damcalc_by_spellnum(creature_ptr, MS_BR_POIS, GF_POIS, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_NETH) spell_damcalc_by_spellnum(creature_ptr, MS_BR_NETHER, GF_NETHER, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_LITE) spell_damcalc_by_spellnum(creature_ptr, MS_BR_LITE, GF_LITE, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_DARK) spell_damcalc_by_spellnum(creature_ptr, MS_BR_DARK, GF_DARK, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_CONF) spell_damcalc_by_spellnum(creature_ptr, MS_BR_CONF, GF_CONFUSION, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_SOUN) spell_damcalc_by_spellnum(creature_ptr, MS_BR_SOUND, GF_SOUND, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_CHAO) spell_damcalc_by_spellnum(creature_ptr, MS_BR_CHAOS, GF_CHAOS, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_DISE) spell_damcalc_by_spellnum(creature_ptr, MS_BR_DISEN, GF_DISENCHANT, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_NEXU) spell_damcalc_by_spellnum(creature_ptr, MS_BR_NEXUS, GF_NEXUS, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_TIME) spell_damcalc_by_spellnum(creature_ptr, MS_BR_TIME, GF_TIME, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_INER) spell_damcalc_by_spellnum(creature_ptr, MS_BR_INERTIA, GF_INERTIAL, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_GRAV) spell_damcalc_by_spellnum(creature_ptr, MS_BR_GRAVITY, GF_GRAVITY, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_SHAR) spell_damcalc_by_spellnum(creature_ptr, MS_BR_SHARDS, GF_SHARDS, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_PLAS) spell_damcalc_by_spellnum(creature_ptr, MS_BR_PLASMA, GF_PLASMA, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_WALL) spell_damcalc_by_spellnum(creature_ptr, MS_BR_FORCE, GF_FORCE, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_MANA) spell_damcalc_by_spellnum(creature_ptr, MS_BR_MANA, GF_MANA, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_NUKE) spell_damcalc_by_spellnum(creature_ptr, MS_BR_NUKE, GF_NUKE, g_ptr->m_idx, &dam_max0);
+				if (f4 & RF4_BR_DISI) spell_damcalc_by_spellnum(creature_ptr, MS_BR_DISI, GF_DISINTEGRATE, g_ptr->m_idx, &dam_max0);
 			}
 
 			/* Monster melee attacks */
