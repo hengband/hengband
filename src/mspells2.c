@@ -42,23 +42,18 @@
  */
 static bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, monster_type *m_ptr)
 {
-	bool hit2 = FALSE;
-	int i;
-	POSITION y, x;
-
-	int grid_n = 0;
-	u16b grid_g[512];
-
-	bool is_friend = is_pet(m_ptr);
-
 	/* Check the projection path */
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
-	grid_n = project_path(floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, PROJECT_THRU);
+	u16b grid_g[512];
+	int grid_n = project_path(floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, PROJECT_THRU);
 
 	/* No grid is ever projectable from itself */
 	if (!grid_n) return FALSE;
 
-	for (i = 0; i < grid_n; i++)
+	bool hit2 = FALSE;
+	POSITION y, x;
+	bool is_friend = is_pet(m_ptr);
+	for (int i = 0; i < grid_n; i++)
 	{
 		y = GRID_Y(grid_g[i]);
 		x = GRID_X(grid_g[i]);
@@ -75,8 +70,8 @@ static bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSIT
 		if (is_friend && player_bold(target_ptr, y, x))
 			return FALSE;
 	}
-	if (!hit2)
-		return FALSE;
+
+	if (!hit2) return FALSE;
 	return TRUE;
 }
 
@@ -95,27 +90,7 @@ static bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSIT
  */
 static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, POSITION rad, EFFECT_ID typ, bool is_friend)
 {
-	/* Must be the same as projectable() */
-
-	int i;
-
-	/* Initial grid */
-	POSITION y = y1;
-	POSITION x = x1;
-
-	int grid_n = 0;
-	u16b grid_g[512];
-
-	int grids = 0;
-	POSITION gx[1024], gy[1024];
-	POSITION gm[32];
-	POSITION gm_rad = rad;
-
-	bool hit2 = FALSE;
-	bool hityou = FALSE;
-
 	BIT_FLAGS flg;
-
 	switch (typ)
 	{
 	case GF_LITE:
@@ -131,9 +106,13 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 	}
 
 	/* Check the projection path */
-	grid_n = project_path(master_ptr->current_floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, flg);
+	u16b grid_g[512];
+	int grid_n = project_path(master_ptr->current_floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, flg);
 
 	/* Project along the path */
+	int i;
+	POSITION y = y1;
+	POSITION x = x1;
 	for (i = 0; i < grid_n; ++i)
 	{
 		int ny = GRID_Y(grid_g[i]);
@@ -162,6 +141,8 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 
 	grid_n = i;
 
+	bool hit2 = FALSE;
+	bool hityou = FALSE;
 	if (!grid_n)
 	{
 		if (flg & PROJECT_DISI)
@@ -182,6 +163,10 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 	}
 	else
 	{
+		int grids = 0;
+		POSITION gx[1024], gy[1024];
+		POSITION gm[32];
+		POSITION gm_rad = rad;
 		breath_shape(master_ptr->current_floor_ptr, grid_g, grid_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
 
 		for (i = 0; i < grids; i++)
@@ -213,15 +198,13 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 void get_project_point(floor_type *floor_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
 {
 	u16b path_g[128];
-	int  path_n, i;
-
-	path_n = project_path(floor_ptr, path_g, MAX_RANGE, sy, sx, *ty, *tx, flg);
+	int path_n = project_path(floor_ptr, path_g, MAX_RANGE, sy, sx, *ty, *tx, flg);
 
 	*ty = sy;
 	*tx = sx;
 
 	/* Project along the path */
-	for (i = 0; i < path_n; i++)
+	for (int i = 0; i < path_n; i++)
 	{
 		sy = GRID_Y(path_g[i]);
 		sx = GRID_X(path_g[i]);
@@ -246,19 +229,12 @@ void get_project_point(floor_type *floor_ptr, POSITION sy, POSITION sx, POSITION
 static bool dispel_check_monster(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
 	monster_type *t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
-
 	if (MON_INVULNER(t_ptr)) return TRUE;
 
-	if (t_ptr->mspeed < 135)
-	{
-		if (MON_FAST(t_ptr)) return TRUE;
-	}
-
+	if ((t_ptr->mspeed < 135) && MON_FAST(t_ptr)) return TRUE;
+	
 	/* Riding monster */
-	if (t_idx == target_ptr->riding)
-	{
-		if (dispel_check(target_ptr, m_idx)) return TRUE;
-	}
+	if ((t_idx == target_ptr->riding) && dispel_check(target_ptr, m_idx)) return TRUE;
 
 	/* No need to cast dispel spell */
 	return FALSE;
@@ -278,7 +254,7 @@ static bool dispel_check_monster(player_type *target_ptr, MONSTER_IDX m_idx, MON
 bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 {
 	POSITION y = 0, x = 0;
-	int i, k;
+	int k;
 	MONSTER_IDX target_idx = 0;
 	int thrown_spell;
 	HIT_POINT dam = 0;
@@ -300,8 +276,6 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	u32b f4, f5, f6;
-
 	bool see_m = is_seen(m_ptr);
 	bool maneable = player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx);
 	bool pet = is_pet(m_ptr);
@@ -316,9 +290,9 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (MON_CONFUSED(m_ptr)) return FALSE;
 
 	/* Extract the racial spell flags */
-	f4 = r_ptr->flags4;
-	f5 = r_ptr->a_ability_flags1;
-	f6 = r_ptr->a_ability_flags2;
+	BIT_FLAGS f4 = r_ptr->flags4;
+	BIT_FLAGS f5 = r_ptr->a_ability_flags1;
+	BIT_FLAGS f6 = r_ptr->a_ability_flags2;
 
 	/* Target is given for pet? */
 	if (target_ptr->pet_t_m_idx && pet)
@@ -372,7 +346,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 		else start = floor_ptr->m_max + 1;
 
 		/* Scan thru all monsters */
-		for (i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i += plus)
+		for (int i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i += plus)
 		{
 			MONSTER_IDX dummy = (i % floor_ptr->m_max);
 			if (!dummy) continue;
@@ -722,27 +696,30 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 	dam = monspell_to_monster(target_ptr, thrown_spell, y, x, m_idx, target_idx);
 	if (dam < 0) return FALSE;
 
-	if (m_ptr->ml && maneable && !current_world_ptr->timewalk_m_idx && !target_ptr->blind && (target_ptr->pclass == CLASS_IMITATOR))
+	bool is_special_magic = m_ptr->ml;
+	is_special_magic &= maneable;
+	is_special_magic &= current_world_ptr->timewalk_m_idx == 0;
+	is_special_magic &= !target_ptr->blind;
+	is_special_magic &= target_ptr->pclass == CLASS_IMITATOR;
+	is_special_magic &= thrown_spell != 167; /* Not RF6_SPECIAL */
+	if (is_special_magic)
 	{
-		if (thrown_spell != 167) /* Not RF6_SPECIAL */
+		if (target_ptr->mane_num == MAX_MANE)
 		{
-			if (target_ptr->mane_num == MAX_MANE)
+			target_ptr->mane_num--;
+			for (int i = 0; i < target_ptr->mane_num - 1; i++)
 			{
-				target_ptr->mane_num--;
-				for (i = 0; i < target_ptr->mane_num - 1; i++)
-				{
-					target_ptr->mane_spell[i] = target_ptr->mane_spell[i+1];
-					target_ptr->mane_dam[i] = target_ptr->mane_dam[i+1];
-				}
+				target_ptr->mane_spell[i] = target_ptr->mane_spell[i + 1];
+				target_ptr->mane_dam[i] = target_ptr->mane_dam[i + 1];
 			}
-
-			target_ptr->mane_spell[target_ptr->mane_num] = thrown_spell - RF4_SPELL_START;
-			target_ptr->mane_dam[target_ptr->mane_num] = dam;
-			target_ptr->mane_num++;
-			target_ptr->new_mane = TRUE;
-
-			target_ptr->redraw |= (PR_IMITATION);
 		}
+
+		target_ptr->mane_spell[target_ptr->mane_num] = thrown_spell - RF4_SPELL_START;
+		target_ptr->mane_dam[target_ptr->mane_num] = dam;
+		target_ptr->mane_num++;
+		target_ptr->new_mane = TRUE;
+
+		target_ptr->redraw |= PR_IMITATION;
 	}
 
 	/* Remember what the monster did, if we saw it */
