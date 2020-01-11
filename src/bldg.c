@@ -2608,6 +2608,7 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
 
 /*!
  * @brief 武器匠における武器一つ毎の完全情報を表示する。
+ * @param player_type プレーヤーへの参照ポインタ
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @param row 表示する列の左端
  * @param col 表示する行の上端
@@ -2618,21 +2619,21 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
  * various info about the player's +to_dam and number of blows.
  * @return なし
  */
-static void list_weapon(object_type *o_ptr, TERM_LEN row, TERM_LEN col)
+static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN row, TERM_LEN col)
 {
 	GAME_TEXT o_name[MAX_NLEN];
 	GAME_TEXT tmp_str[80];
 
-	DICE_NUMBER eff_dd = o_ptr->dd + p_ptr->to_dd[0];
-	DICE_SID eff_ds = o_ptr->ds + p_ptr->to_ds[0];
-	HIT_RELIABILITY reli = p_ptr->skill_thn + (p_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
+	DICE_NUMBER eff_dd = o_ptr->dd + player_ptr->to_dd[0];
+	DICE_SID eff_ds = o_ptr->ds + player_ptr->to_ds[0];
+	HIT_RELIABILITY reli = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
 
 	/* Print the weapon name */
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 	c_put_str(TERM_YELLOW, o_name, row, col);
 
 	/* Print the player's number of blows */
-	sprintf(tmp_str, _("攻撃回数: %d", "Number of Blows: %d"), p_ptr->num_blow[0]);
+	sprintf(tmp_str, _("攻撃回数: %d", "Number of Blows: %d"), player_ptr->num_blow[0]);
 	put_str(tmp_str, row + 1, col);
 
 	/* Print to_hit and to_dam of the weapon */
@@ -2651,14 +2652,14 @@ static void list_weapon(object_type *o_ptr, TERM_LEN row, TERM_LEN col)
 
 	/* Damage for one blow (if it hits) */
 	sprintf(tmp_str, _("攻撃一回につき %d-%d", "One Strike: %d-%d damage"),
-		(int)(eff_dd + o_ptr->to_d + p_ptr->to_d[0]),
-		(int)(eff_ds * eff_dd + o_ptr->to_d + p_ptr->to_d[0]));
+		(int)(eff_dd + o_ptr->to_d + player_ptr->to_d[0]),
+		(int)(eff_ds * eff_dd + o_ptr->to_d + player_ptr->to_d[0]));
 	put_str(tmp_str, row + 6, col + 1);
 
 	/* Damage for the complete attack (if all blows hit) */
 	sprintf(tmp_str, _("１ターンにつき %d-%d", "One Attack: %d-%d damage"),
-		(int)(p_ptr->num_blow[0] * (eff_dd + o_ptr->to_d + p_ptr->to_d[0])),
-		(int)(p_ptr->num_blow[0] * (eff_ds * eff_dd + o_ptr->to_d + p_ptr->to_d[0])));
+		(int)(player_ptr->num_blow[0] * (eff_dd + o_ptr->to_d + player_ptr->to_d[0])),
+		(int)(player_ptr->num_blow[0] * (eff_ds * eff_dd + o_ptr->to_d + player_ptr->to_d[0])));
 	put_str(tmp_str, row + 7, col + 1);
 }
 
@@ -2732,7 +2733,7 @@ static PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 			handle_stuff(customer_ptr);
 
 			/* List the new values */
-			list_weapon(o_ptr[i], row, col);
+			list_weapon(customer_ptr, o_ptr[i], row, col);
 			compare_weapon_aux(customer_ptr, o_ptr[i], col, row + 8);
 
 			/* Copy back the original weapon into the weapon slot */
