@@ -2605,25 +2605,26 @@ void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 
 /*!
 * @brief RF6_TRAPSの処理。トラップ。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
 */
-void spell_RF6_TRAPS(POSITION y, POSITION x, MONSTER_IDX m_idx)
+void spell_RF6_TRAPS(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
-	disturb(p_ptr, TRUE, TRUE);
+	disturb(target_ptr, TRUE, TRUE);
 
-	if (p_ptr->blind)
+	if (target_ptr->blind)
 		msg_format(_("%^sが何かをつぶやいて邪悪に微笑んだ。",
 		"%^s mumbles, and then cackles evilly."), m_name);
 	else
 		msg_format(_("%^sが呪文を唱えて邪悪に微笑んだ。",
 		"%^s casts a spell and cackles evilly."), m_name);
 
-	learn_spell(p_ptr, MS_MAKE_TRAP);
-	(void)trap_creation(p_ptr, y, x);
+	learn_spell(target_ptr, MS_MAKE_TRAP);
+	(void)trap_creation(target_ptr, y, x);
 }
 
 
@@ -3685,7 +3686,7 @@ HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y,
 	case RF6_SPELL_START + 10: spell_RF6_TELE_LEVEL(target_ptr, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_TELE_LEVEL */
 	case RF6_SPELL_START + 11: spell_RF6_PSY_SPEAR(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_PSY_SPEAR */
 	case RF6_SPELL_START + 12: spell_RF6_DARKNESS(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF6_DARKNESS */
-	case RF6_SPELL_START + 13: spell_RF6_TRAPS(y, x, m_idx); break; /* RF6_TRAPS */
+	case RF6_SPELL_START + 13: spell_RF6_TRAPS(target_ptr, y, x, m_idx); break; /* RF6_TRAPS */
 	case RF6_SPELL_START + 14: spell_RF6_FORGET(m_idx); break;  /* RF6_FORGET */
 	case RF6_SPELL_START + 15: spell_RF6_RAISE_DEAD(target_ptr, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_RAISE_DEAD */
 	case RF6_SPELL_START + 16: spell_RF6_S_KIN(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); break; /* RF6_S_KIN */
