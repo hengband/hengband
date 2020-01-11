@@ -29,7 +29,16 @@
 #include "targeting.h"
 #include "view-mainwindow.h"
 
-#define pseudo_plev() (((p_ptr->lev + 40) * (p_ptr->lev + 40) - 1550) / 130) /*!< モンスター魔法をプレイヤーが使用する場合の換算レベル */
+ /*!
+  * @brief モンスター魔法をプレイヤーが使用する場合の換算レベル
+  * @param caster_ptr プレーヤーへの参照ポインタ
+  * @param 換算レベル
+  */
+PLAYER_LEVEL get_pseudo_monstetr_level(player_type *caster_ptr)
+{
+	PLAYER_LEVEL monster_level = caster_ptr->lev + 40;
+	return (monster_level * monster_level - 1550) / 130;
+}
 
 
  /*!
@@ -237,6 +246,7 @@ const monster_power monster_powers[MAX_MONSPELLS] =
 
 };
 
+
 /*!
  * @brief モンスター魔法名テーブル
  */
@@ -279,7 +289,6 @@ const concptr monster_powers_short[MAX_MONSPELLS] = {
 };
 
 
-
 /*!
 * @brief 文字列に青魔導師の呪文の攻撃力を加える
 * @param SPELL_NUM 呪文番号
@@ -300,15 +309,17 @@ void set_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, concptr msg, char* tm
     sprintf(tmp, " %s %s", msg, dmg_str);
 }
 
+
 /*!
  * @brief 受け取ったモンスター魔法のIDに応じて青魔法の効果情報をまとめたフォーマットを返す
+ * @param learner_ptr プレーヤーへの参照ポインタ
  * @param p 情報を返す文字列参照ポインタ
  * @param power モンスター魔法のID
  * @return なし
  */
-static void learned_info(char *p, int power)
+static void learned_info(player_type *learner_ptr, char *p, int power)
 {
-	PLAYER_LEVEL plev = pseudo_plev();
+	PLAYER_LEVEL plev = get_pseudo_monstetr_level(learner_ptr);
 
 	strcpy(p, "");
 
@@ -731,7 +742,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 					chance = mod_spell_chance_2(caster_ptr, chance);
 
 					/* Get info */
-					learned_info(comment, spellnum[i]);
+					learned_info(caster_ptr, comment, spellnum[i]);
 
 					if (use_menu)
 					{
@@ -800,6 +811,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 		/* Stop the loop */
 		flag = TRUE;
 	}
+
 	if (redraw) screen_load();
 
 	caster_ptr->window |= (PW_SPELL);
@@ -828,7 +840,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 {
 	DIRECTION dir;
-	PLAYER_LEVEL plev = pseudo_plev();
+	PLAYER_LEVEL plev = get_pseudo_monstetr_level(caster_ptr);
 	PLAYER_LEVEL summon_lev = caster_ptr->lev * 2 / 3 + randint1(caster_ptr->lev/2);
 	HIT_POINT damage = 0;
 	bool pet = success;
@@ -1642,6 +1654,7 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 	return TRUE;
 }
 
+
 /*!
  * @brief 青魔法コマンドのメインルーチン /
  * do_cmd_cast calls this function if the player's class is 'Blue-Mage'.
@@ -1769,6 +1782,7 @@ bool do_cmd_cast_learned(player_type *caster_ptr)
 	return TRUE;
 }
 
+
 /*!
  * @brief 青魔法のラーニング判定と成功した場合のラーニング処理
  * @param monspell ラーニングを試みるモンスター攻撃のID
@@ -1839,6 +1853,4 @@ void set_rf_masks(BIT_FLAGS *f4, BIT_FLAGS *f5, BIT_FLAGS *f6, BIT_FLAGS mode)
 			*f6 = RF6_ATTACK_MASK & ~(RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK | RF6_INDIRECT_MASK);
 			break;
 	}
-
-	return;
 }

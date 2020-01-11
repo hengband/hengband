@@ -28,7 +28,6 @@
 #include "view-mainwindow.h"
 
 
-
 /*!
 * @brief モンスター2体がプレイヤーの近くに居るかの判定 /
 * @param m_idx モンスターID一体目
@@ -42,6 +41,7 @@ bool monster_near_player(MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 	return (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
 }
 
+
 /*!
 * @brief プレイヤーがモンスターを見ることができるかの判定 /
 * @param m_idx モンスターID
@@ -52,6 +52,7 @@ bool see_monster(MONSTER_IDX m_idx)
 	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	return is_seen(m_ptr);
 }
+
 
 /*!
 * @brief モンスターの唱えた呪文を青魔法で学習できるか判定する /
@@ -68,6 +69,7 @@ bool spell_learnable(MONSTER_IDX m_idx)
 	return (seen && maneable && !current_world_ptr->timewalk_m_idx);
 }
 
+
 /*!
 * @brief 特定条件のモンスター召喚のみPM_ALLOW_UNIQUEを許可する /
 * @param m_idx モンスターID
@@ -81,6 +83,7 @@ BIT_FLAGS monster_u_mode(MONSTER_IDX m_idx)
 	if (!pet) u_mode |= PM_ALLOW_UNIQUE;
 	return u_mode;
 }
+
 
 /*!
  * @brief モンスターが呪文行使する際のメッセージを処理する汎用関数 /
@@ -129,6 +132,7 @@ static void monspell_message_base(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr 
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
+
 /*!
 * @brief モンスターが呪文行使する際のメッセージを処理する汎用関数。盲目時と通常時のメッセージを切り替える。 /
 * @param m_idx 呪文を唱えるモンスターID
@@ -143,6 +147,7 @@ void monspell_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concpt
 	monspell_message_base(m_idx, t_idx, msg1, msg1, msg2, msg3, p_ptr->blind > 0, TARGET_TYPE);
 }
 
+
 /*!
 * @brief モンスターが呪文行使する際のメッセージを処理する汎用関数。対モンスターと対プレイヤーのメッセージを切り替える。 /
 * @param m_idx 呪文を唱えるモンスターID
@@ -155,6 +160,7 @@ void simple_monspell_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1,
 {
 	monspell_message_base(m_idx, t_idx, msg1, msg2, msg1, msg2, p_ptr->blind > 0, TARGET_TYPE);
 }
+
 
 /*!
  * @brief RF4_SHRIEKの処理。叫び。 /
@@ -181,6 +187,7 @@ void spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 		set_monster_csleep(t_idx, 0);
 	}
 }
+
 
 /*!
  * @brief RF4_DISPELの処理。魔力消去。 /
@@ -222,6 +229,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 	}
 }
 
+
 /*!
 * @brief RF4_ROCKETの処理。ロケット。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -249,6 +257,7 @@ HIT_POINT spell_RF4_ROCKET(player_type *target_ptr, POSITION y, POSITION x, MONS
 	return dam;
 }
 
+
 /*!
 * @brief RF4_SHOOTの処理。射撃。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -275,6 +284,7 @@ HIT_POINT spell_RF4_SHOOT(player_type *target_ptr, POSITION y, POSITION x, MONST
 
 	return dam;
 }
+
 
 /*!
 * @brief RF4_BR_*の処理。各種ブレス。 /
@@ -484,6 +494,7 @@ HIT_POINT spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITION y, POS
 	return dam;
 }
 
+
 /*!
 * @brief RF4_BA_NUKEの処理。放射能球。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -512,6 +523,7 @@ HIT_POINT spell_RF4_BA_NUKE(player_type *target_ptr, POSITION y, POSITION x, MON
 	return dam;
 }
 
+
 /*!
 * @brief RF4_BA_CHAOの処理。純ログルス。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -539,6 +551,7 @@ HIT_POINT spell_RF4_BA_CHAO(player_type *target_ptr, POSITION y, POSITION x, MON
 
 	return dam;
 }
+
 
 /*!
 * @brief RF5_BA_ACIDの処理。アシッド・ボール。 /
@@ -570,6 +583,7 @@ HIT_POINT spell_RF5_BA_ACID(player_type *target_ptr, POSITION y, POSITION x, MON
 	return dam;
 }
 
+
 /*!
 * @brief RF5_BA_ELECの処理。サンダー・ボール。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -599,6 +613,7 @@ HIT_POINT spell_RF5_BA_ELEC(player_type *target_ptr, POSITION y, POSITION x, MON
 
 	return dam;
 }
+
 
 /*!
 * @brief RF5_BA_FIREの処理。ファイア・ボール。 /
@@ -641,6 +656,7 @@ HIT_POINT spell_RF5_BA_FIRE(player_type *target_ptr, POSITION y, POSITION x, MON
 	return dam;
 }
 
+
 /*!
 * @brief RF5_BA_COLDの処理。アイス・ボール。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -671,6 +687,7 @@ HIT_POINT spell_RF5_BA_COLD(player_type *target_ptr, POSITION y, POSITION x, MON
 	return dam;
 }
 
+
 /*!
 * @brief RF5_BA_POISの処理。悪臭雲。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -699,6 +716,7 @@ HIT_POINT spell_RF5_BA_POIS(player_type *target_ptr, POSITION y, POSITION x, MON
 	return dam;
 }
 
+
 /*!
 * @brief RF5_BA_NETHの処理。地獄球。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -726,6 +744,7 @@ HIT_POINT spell_RF5_BA_NETH(player_type *target_ptr, POSITION y, POSITION x, MON
 
 	return dam;
 }
+
 
 /*!
 * @brief RF5_BA_WATEの処理。ウォーター・ボール。 /
@@ -768,6 +787,7 @@ HIT_POINT spell_RF5_BA_WATE(player_type *target_ptr, POSITION y, POSITION x, MON
 	return dam;
 }
 
+
 /*!
 * @brief RF5_BA_MANAの処理。魔力の嵐。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -792,6 +812,7 @@ HIT_POINT spell_RF5_BA_MANA(player_type *target_ptr, POSITION y, POSITION x, MON
 	breath(target_ptr, y, x, m_idx, GF_MANA, dam, 4, FALSE, MS_BALL_MANA, TARGET_TYPE);
 	return dam;
 }
+
 
 /*!
 * @brief RF5_BA_DARKの処理。暗黒の嵐。 /
@@ -820,6 +841,7 @@ HIT_POINT spell_RF5_BA_DARK(player_type *target_ptr, POSITION y, POSITION x, MON
 
 	return dam;
 }
+
 
 /*!
 * @brief RF5_DRAIN_MANAの処理。魔力吸収。 /
@@ -856,6 +878,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, 
 	
 	return dam;
 }
+
 
 /*!
 * @brief RF5_MIND_BLASTの処理。精神攻撃。 /
@@ -895,6 +918,7 @@ HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, 
 	return dam;
 }
 
+
 /*!
 * @brief RF5_BRAIN_SMASHの処理。脳攻撃。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -932,6 +956,7 @@ HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x,
 	breath(target_ptr, y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, TARGET_TYPE);
 	return dam;
 }
+
 
 /*!
 * @brief RF5_CAUSE_*のメッセージ処理関数 /
@@ -978,6 +1003,7 @@ void spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, HIT_POINT dam, POSITI
 	breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, FALSE, MS_TYPE, TARGET_TYPE);
 }
 
+
 /*!
 * @brief RF5_CAUSE_1の処理。軽傷の呪い。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -1001,6 +1027,7 @@ HIT_POINT spell_RF5_CAUSE_1(player_type *target_ptr, POSITION y, POSITION x, MON
 	spell_RF5_CAUSE(target_ptr, GF_CAUSE_1, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_1, TARGET_TYPE);
 	return dam;
 }
+
 
 /*!
 * @brief RF5_CAUSE_2の処理。重傷の呪い。 /
@@ -1026,6 +1053,7 @@ HIT_POINT spell_RF5_CAUSE_2(player_type *target_ptr, POSITION y, POSITION x, MON
 	return dam;
 }
 
+
 /*!
 * @brief RF5_CAUSE_3の処理。致命傷の呪い。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -1050,6 +1078,7 @@ HIT_POINT spell_RF5_CAUSE_3(player_type *target_ptr, POSITION y, POSITION x, MON
 	return dam;
 }
 
+
 /*!
 * @brief RF5_CAUSE_4の処理。秘孔を突く。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -1073,6 +1102,7 @@ HIT_POINT spell_RF5_CAUSE_4(player_type *target_ptr, POSITION y, POSITION x, MON
 	spell_RF5_CAUSE(target_ptr, GF_CAUSE_4, dam, y, x, m_idx, t_idx, msg1, msg2, msg3, MS_CAUSE_4, TARGET_TYPE);
 	return dam;
 }
+
 
 /*!
 * @brief RF5_BO_ACIDの処理。アシッド・ボルト。 /
@@ -1105,6 +1135,7 @@ HIT_POINT spell_RF5_BO_ACID(player_type *target_ptr, POSITION y, POSITION x, MON
 	return dam;
 }
 
+
 /*!
 * @brief RF5_BO_ELECの処理。サンダー・ボルト。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -1135,6 +1166,7 @@ HIT_POINT spell_RF5_BO_ELEC(player_type *target_ptr, POSITION y, POSITION x, MON
 
 	return dam;
 }
+
 
 /*!
 * @brief RF5_BO_FIREの処理。ファイア・ボルト。 /
@@ -1167,6 +1199,7 @@ HIT_POINT spell_RF5_BO_FIRE(player_type *target_ptr, POSITION y, POSITION x, MON
 	return dam;
 }
 
+
 /*!
 * @brief RF5_BO_COLDの処理。アイス・ボルト。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -1198,6 +1231,7 @@ HIT_POINT spell_RF5_BO_COLD(player_type *target_ptr, POSITION y, POSITION x, MON
 	return dam;
 }
 
+
 /*!
 * @brief RF5_BA_LITEの処理。スターバースト。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -1225,6 +1259,7 @@ HIT_POINT spell_RF5_BA_LITE(player_type *target_ptr, POSITION y, POSITION x, MON
 
 	return dam;
 }
+
 
 /*!
 * @brief RF5_BO_NETHの処理。地獄の矢。 /
@@ -1257,6 +1292,7 @@ HIT_POINT spell_RF5_BO_NETH(player_type *target_ptr, POSITION y, POSITION x, MON
 	return dam;
 }
 
+
 /*!
 * @brief RF5_BO_WATEの処理。ウォーター・ボルト。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -1286,6 +1322,7 @@ HIT_POINT spell_RF5_BO_WATE(player_type *target_ptr, POSITION y, POSITION x, MON
 
 	return dam;
 }
+
 
 /*!
 * @brief RF5_BO_MANAの処理。魔力の矢。 /
@@ -1317,6 +1354,7 @@ HIT_POINT spell_RF5_BO_MANA(player_type *target_ptr, POSITION y, POSITION x, MON
 	return dam;
 }
 
+
 /*!
 * @brief RF5_BO_PLASの処理。プラズマ・ボルト。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -1346,6 +1384,7 @@ HIT_POINT spell_RF5_BO_PLAS(player_type *target_ptr, POSITION y, POSITION x, MON
 
 	return dam;
 }
+
 
 /*!
 * @brief RF5_BO_ICEEの処理。極寒の矢。 /
@@ -1378,6 +1417,7 @@ HIT_POINT spell_RF5_BO_ICEE(player_type *target_ptr, POSITION y, POSITION x, MON
 	return dam;
 }
 
+
 /*!
 * @brief RF5_MISSILEの処理。マジック・ミサイル。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -1407,6 +1447,7 @@ HIT_POINT spell_RF5_MISSILE(player_type *target_ptr, POSITION y, POSITION x, MON
 
 	return dam;
 }
+
 
 /*!
 * @brief 状態異常呪文のメッセージ処理関数。 /
@@ -1476,6 +1517,7 @@ void spell_badstatus_message(MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1,
 	}
 }
 
+
 /*!
  * @brief RF5_SCAREの処理。恐怖。 /
  * @param m_idx 呪文を唱えるモンスターID
@@ -1525,6 +1567,7 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
 		}
 	}
 }
+
 
 /*!
  * @brief RF5_BLINDの処理。盲目。 /
@@ -1589,6 +1632,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
 	}
 }
 
+
 /*!
  * @brief RF5_CONFの処理。混乱。/
  * @param m_idx 呪文を唱えるモンスターID
@@ -1638,6 +1682,7 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 		}
 	}
 }
+
 
 /*!
  * @brief RF5_SLOWの処理。減速。 /
@@ -1702,6 +1747,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 	}
 }
 
+
 /*!
  * @brief RF5_HOLDの処理。麻痺。 /
  * @param m_idx 呪文を唱えるモンスターID
@@ -1752,6 +1798,7 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 	}
 }
 
+
 /*!
 * @brief RF6_HASTEの処理。加速。 /
 * @param m_idx 呪文を唱えるモンスターID
@@ -1780,6 +1827,7 @@ void spell_RF6_HASTE(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 			msg_format(_("%^sの動きが速くなった。", "%^s starts moving faster."), m_name);
 	}
 }
+
 
 /*!
 * @brief RF6_HAND_DOOMの処理。破滅の手。 /
@@ -1812,6 +1860,7 @@ HIT_POINT spell_RF6_HAND_DOOM(player_type *target_ptr, POSITION y, POSITION x, M
 	}
 	return dam;
 }
+
 
 /*!
 * @brief RF6_HEALの処理。治癒。 /
@@ -1879,6 +1928,7 @@ void spell_RF6_HEAL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	}
 }
 
+
 /*!
 * @brief RF6_INVULNERの処理。無敵。 /
 * @param m_idx 呪文を唱えるモンスターID
@@ -1899,6 +1949,7 @@ void spell_RF6_INVULNER(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 
 	if (!MON_INVULNER(m_ptr)) (void)set_monster_invulner(m_idx, randint1(4) + 4, FALSE);
 }
+
 
 /*!
 * @brief RF6_BLINKの処理。ショート・テレポート。 /
@@ -1931,6 +1982,7 @@ void spell_RF6_BLINK(MONSTER_IDX m_idx, int TARGET_TYPE)
 	}
 }
 
+
 /*!
 * @brief RF6_TPORTの処理。テレポート。 /
 * @param m_idx 呪文を唱えるモンスターID
@@ -1958,6 +2010,7 @@ void spell_RF6_TPORT(MONSTER_IDX m_idx, int TARGET_TYPE)
 	}
 }
 
+
 /*!
 * @brief RF6_WORLDの処理。時を止める。 /
 * @param target_ptr プレーヤーへの参照ポインタ
@@ -1976,6 +2029,7 @@ HIT_POINT spell_RF6_WORLD(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (!set_monster_timewalk(target_ptr, randint1(2) + 2, who, TRUE)) return FALSE;
 	return who;
 }
+
 
 /*!
 * @brief バーノール・ルパートのRF6_SPECIALの処理。分裂・合体。 /
@@ -2045,6 +2099,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_i
 	return 0;
 }
 
+
 /*!
 * @brief ロレントのRF6_SPECIALの処理。手榴弾の召喚。 /
 * @param y 対象の地点のy座標
@@ -2076,6 +2131,7 @@ HIT_POINT spell_RF6_SPECIAL_ROLENTO(POSITION y, POSITION x, MONSTER_IDX m_idx, M
 	
 	return 0;
 }
+
 
 /*!
 * @brief BシンボルのRF6_SPECIALの処理。投げ落とす攻撃。 /
@@ -2172,8 +2228,10 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
 		if(monster_to_monster)
 			mon_take_hit_mon(t_idx, dam, &dead, &fear, extract_note_dies(real_r_idx(t_ptr)), m_idx);
 	}
+
 	return dam;
 }
+
 
 /*!
 * @brief RF6_SPECIALの処理。モンスターの種類によって実処理に振り分ける。 /
@@ -2218,6 +2276,7 @@ HIT_POINT spell_RF6_SPECIAL(player_type *target_ptr, POSITION y, POSITION x, MON
 		else return -1;
 	}
 }
+
 
 /*!
 * @brief RF6_TELE_TOの処理。テレポート・バック。 /
@@ -2282,6 +2341,7 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 		set_monster_csleep(t_idx, 0);
 	}
 }
+
 
 /*!
 * @brief RF6_TELE_AWAYの処理。テレポート・アウェイ。 /
@@ -2353,6 +2413,7 @@ void spell_RF6_TELE_AWAY(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	}
 }
 
+
 /*!
 * @brief RF6_TELE_LEVELの処理。テレポート・レベル。 /
 * @param m_idx 呪文を唱えるモンスターID
@@ -2405,6 +2466,7 @@ void spell_RF6_TELE_LEVEL(MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 	}
 }
 
+
 /*!
 * @brief RF6_PSY_SPEARの処理。光の剣。 /
 * @param y 対象の地点のy座標
@@ -2428,6 +2490,7 @@ HIT_POINT spell_RF6_PSY_SPEAR(player_type *target_ptr, POSITION y, POSITION x, M
 	beam(target_ptr, m_idx, y, x, GF_PSY_SPEAR, dam, MS_PSY_SPEAR, MONSTER_TO_PLAYER);
 	return dam;
 }
+
 
 /*!
 * @brief RF6_DARKNESSの処理。暗闇or閃光。 /
@@ -2514,6 +2577,7 @@ void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 	}
 }
 
+
 /*!
 * @brief RF6_TRAPSの処理。トラップ。 /
 * @param y 対象の地点のy座標
@@ -2536,6 +2600,7 @@ void spell_RF6_TRAPS(POSITION y, POSITION x, MONSTER_IDX m_idx)
 	learn_spell(p_ptr, MS_MAKE_TRAP);
 	(void)trap_creation(p_ptr, y, x);
 }
+
 
 /*!
 * @brief RF6_FORGETの処理。記憶消去。 /
@@ -2601,8 +2666,10 @@ MONSTER_NUMBER summon_EAGLE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 	{
 		count += summon_specific(m_idx, y, x, rlev, SUMMON_EAGLES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 	}
+
 	return count;
 }
+
 
 /*!
  * @brief インターネット・エクスプローダー召喚の処理。 /
@@ -2621,8 +2688,10 @@ MONSTER_NUMBER summon_IE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 	{
 		count += summon_named_creature(m_idx, y, x, MON_IE, mode);
 	}
+
 	return count;
 }
+
 
 /*!
  * @brief ダンジョン・ガーディアン召喚の処理。 /
@@ -2658,8 +2727,10 @@ MONSTER_NUMBER summon_Guardian(POSITION y, POSITION x, int rlev, MONSTER_IDX m_i
 	{
 		count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 	}
+
 	return count;
 }
+
 
 /*!
 * @brief ロックのクローン召喚の処理。 /
@@ -2679,8 +2750,10 @@ MONSTER_NUMBER summon_LOCK_CLONE(POSITION y, POSITION x, DEPTH rlev, MONSTER_IDX
 	{
 		count += summon_named_creature(m_idx, y, x, MON_LOCKE_CLONE, mode);
 	}
+
 	return count;
 }
+
 
 /*!
 * @brief シラミ召喚の処理。 /
@@ -2698,8 +2771,10 @@ MONSTER_NUMBER summon_LOUSE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 	{
 		count += summon_specific(m_idx, y, x, rlev, SUMMON_LOUSE, PM_ALLOW_GROUP);
 	}
+
 	return count;
 }
+
 
 /*!
 * @brief 救援召喚の通常処理。同シンボルのモンスターを召喚する。 /
@@ -2717,8 +2792,10 @@ MONSTER_NUMBER summon_Kin(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 	{
 		count += summon_specific(m_idx, y, x, rlev, SUMMON_KIN, PM_ALLOW_GROUP);
 	}
+
 	return count;
 }
+
 
 /*!
 * @brief RF6_S_KINの処理。救援召喚。使用するモンスターの種類により、実処理に分岐させる。 /
@@ -2813,6 +2890,7 @@ void spell_RF6_S_KIN(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_id
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
+
 /*!
 * @brief RF6_S_CYBERの処理。サイバー・デーモン召喚。 /
 * @param y 対象の地点のy座標
@@ -2890,6 +2968,7 @@ void spell_RF6_S_MONSTER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX 
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
+
 /*!
 * @brief RF6_S_MONSTERSの処理。モンスター複数召喚。 /
 * @param y 対象の地点のy座標
@@ -2928,6 +3007,7 @@ void spell_RF6_S_MONSTERS(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
+
 /*!
 * @brief RF6_S_ANTの処理。アリ召喚。 /
 * @param y 対象の地点のy座標
@@ -2961,6 +3041,7 @@ void spell_RF6_S_ANT(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_id
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
+
 
 /*!
 * @brief RF6_S_SPIDERの処理。クモ召喚。 /
@@ -2996,6 +3077,7 @@ void spell_RF6_S_SPIDER(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
+
 /*!
 * @brief RF6_S_HOUNDの処理。ハウンド召喚。 /
 * @param y 対象の地点のy座標
@@ -3030,6 +3112,7 @@ void spell_RF6_S_HOUND(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
+
 /*!
 * @brief RF6_S_HYDRAの処理。ヒドラ召喚。 /
 * @param y 対象の地点のy座標
@@ -3063,6 +3146,7 @@ void spell_RF6_S_HYDRA(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
+
 
 /*!
 * @brief RF6_S_ANGELの処理。天使一体召喚。 /
@@ -3113,6 +3197,7 @@ void spell_RF6_S_ANGEL(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
+
 /*!
 * @brief RF6_S_DEMONの処理。デーモン一体召喚。 /
 * @param y 対象の地点のy座標
@@ -3145,6 +3230,7 @@ void spell_RF6_S_DEMON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
+
 
 /*!
 * @brief RF6_S_UNDEADの処理。アンデッド一体召喚。 /
@@ -3179,6 +3265,7 @@ void spell_RF6_S_UNDEAD(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
+
 /*!
 * @brief RF6_S_DRAGONの処理。ドラゴン一体召喚。 /
 * @param y 対象の地点のy座標
@@ -3211,6 +3298,7 @@ void spell_RF6_S_DRAGON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
+
 
 /*!
 * @brief ナズグル戦隊召喚の処理。 /
@@ -3271,6 +3359,7 @@ MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MO
 	msg_print(NULL);
 	return count;
 }
+
 
 /*!
 * @brief RF6_S_HI_UNDEADの処理。強力なアンデッド召喚。 /
@@ -3367,6 +3456,7 @@ void spell_RF6_S_HI_DRAGON(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_ID
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
 
+
 /*!
 * @brief RF6_S_AMBERITESの処理。アンバーの王族召喚。 /
 * @param y 対象の地点のy座標
@@ -3402,6 +3492,7 @@ void spell_RF6_S_AMBERITES(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_ID
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
+
 
 /*!
 * @brief RF6_S_UNIQUEの処理。ユニーク・モンスター召喚。 /
@@ -3454,7 +3545,6 @@ void spell_RF6_S_UNIQUE(POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t
 	if (monster_near_player(m_idx, t_idx) && !see_monster(t_idx) && count && mon_to_mon)
 		p_ptr->current_floor_ptr->monster_noise = TRUE;
 }
-
 
 
 /*!
@@ -3566,8 +3656,10 @@ HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y,
 	case RF6_SPELL_START + 30: spell_RF6_S_AMBERITES(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;   /* RF6_S_AMBERITES */
 	case RF6_SPELL_START + 31: spell_RF6_S_UNIQUE(y, x, m_idx, 0, MONSTER_TO_PLAYER); break;  /* RF6_S_UNIQUE */
 	}
+
 	return 0;
 }
+
 
 /*!
 * todo モンスターからモンスターへの呪文なのにplayer_typeが引数になり得るのは間違っている……
@@ -3685,6 +3777,7 @@ HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y
 	return 0;
 }
 
+
 /*!
 * @brief モンスターの使う呪文の威力を決定する /
 * @param dam 定数値
@@ -3711,6 +3804,7 @@ HIT_POINT monspell_damage_roll(HIT_POINT dam, int dice_num, int dice_side, int m
 	if (dam < 1) dam = 1;
 	return dam;
 }
+
 
 /*!
 * @brief モンスターの使う呪文の威力を返す /
@@ -4158,8 +4252,10 @@ HIT_POINT monspell_damage(int SPELL_NUM, MONSTER_IDX m_idx, int TYPE)
 	{
 		hp = m_ptr->max_maxhp;
 	} 
+
 	return monspell_damage_base(SPELL_NUM, hp, rlev, monster_is_powerful(m_idx), shoot_dd, shoot_ds, 0, TYPE);
 }
+
 
 /*!
 * @brief モンスターの使う呪文の威力を返す /
@@ -4179,6 +4275,7 @@ HIT_POINT monspell_race_damage(int SPELL_NUM, MONRACE_IDX r_idx, int TYPE)
 
 	return monspell_damage_base(SPELL_NUM, MIN(30000, hp), rlev, powerful, shoot_dd, shoot_ds, 0, TYPE);
 }
+
 
 /*!
 * @brief 青魔導師の使う呪文の威力を返す /
@@ -4202,5 +4299,6 @@ HIT_POINT monspell_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, int TYPE)
 		shoot_ds = o_ptr->ds;
 		shoot_base = o_ptr->to_d;
 	}
+
 	return monspell_damage_base(SPELL_NUM, hp, plev * 2, FALSE, shoot_dd, shoot_ds, shoot_base, TYPE);
 }
