@@ -4259,13 +4259,14 @@ void do_cmd_bldg(player_type *player_ptr)
 
 /*!
  * @brief 今日の賞金首を確定する / Determine today's bounty monster
+ * @param player_type プレーヤーへの参照ポインタ
  * @return なし
  * @note conv_old is used if loaded 0.0.3 or older save file
  */
-void determine_today_mon(bool conv_old)
+void determine_today_mon(player_type *player_ptr, bool conv_old)
 {
 	int max_dl = 3, i;
-	bool old_inside_battle = p_ptr->phase_out;
+	bool old_inside_battle = player_ptr->phase_out;
 	monster_race *r_ptr;
 
 	if (!conv_old)
@@ -4278,7 +4279,7 @@ void determine_today_mon(bool conv_old)
 	}
 	else max_dl = MAX(max_dlv[DUNGEON_ANGBAND], 3);
 
-	p_ptr->phase_out = TRUE;
+	player_ptr->phase_out = TRUE;
 	get_mon_num_prep(NULL, NULL);
 
 	while (1)
@@ -4295,8 +4296,8 @@ void determine_today_mon(bool conv_old)
 		break;
 	}
 
-	p_ptr->today_mon = 0;
-	p_ptr->phase_out = old_inside_battle;
+	player_ptr->today_mon = 0;
+	player_ptr->phase_out = old_inside_battle;
 }
 
 

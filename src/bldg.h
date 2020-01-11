@@ -121,5 +121,5 @@ extern void update_gambling_monsters(player_type *player_ptr);
 extern void do_cmd_bldg(player_type *player_ptr);
 
 extern void clear_bldg(int min_row, int max_row);
-extern void determine_today_mon(bool conv_old);
+extern void determine_today_mon(player_type *player_ptr, bool conv_old);
 extern void determine_bounty_uniques(void);
