@@ -13,14 +13,14 @@ bool set_gametime(void)
 
 	sprintf(ppp, "Dungeon Turn (0-%ld): ", (long)current_world_ptr->dungeon_turn_limit);
 	sprintf(tmp_val, "%ld", (long)current_world_ptr->dungeon_turn);
-	if (!get_string(ppp, tmp_val, 10)) return (FALSE);
+	if (!get_string(ppp, tmp_val, 10)) return FALSE;
 	tmp_int = atoi(tmp_val);
 
 	/* Verify */
 	if (tmp_int >= current_world_ptr->dungeon_turn_limit) tmp_int = current_world_ptr->dungeon_turn_limit - 1;
 	else if (tmp_int < 0) tmp_int = 0;
 	current_world_ptr->dungeon_turn = current_world_ptr->game_turn = tmp_int;
-	return (TRUE);
+	return TRUE;
 
 }
 

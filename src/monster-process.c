@@ -243,15 +243,15 @@ static bool mon_will_run(MONSTER_IDX m_idx)
 	}
 
 	/* Keep monsters from running too far away */
-	if (m_ptr->cdis > MAX_SIGHT + 5) return (FALSE);
+	if (m_ptr->cdis > MAX_SIGHT + 5) return FALSE;
 
 	/* All "afraid" monsters will run away */
-	if (MON_MONFEAR(m_ptr)) return (TRUE);
+	if (MON_MONFEAR(m_ptr)) return TRUE;
 
 #ifdef ALLOW_TERROR
 
 	/* Nearby monsters will not become terrified */
-	if (m_ptr->cdis <= 5) return (FALSE);
+	if (m_ptr->cdis <= 5) return FALSE;
 
 	/* Examine player power (level) */
 	p_lev = p_ptr->lev;
@@ -260,8 +260,8 @@ static bool mon_will_run(MONSTER_IDX m_idx)
 	m_lev = r_ptr->level + (m_idx & 0x08) + 25;
 
 	/* Optimize extreme cases below */
-	if (m_lev > p_lev + 4) return (FALSE);
-	if (m_lev + 4 <= p_lev) return (TRUE);
+	if (m_lev > p_lev + 4) return FALSE;
+	if (m_lev + 4 <= p_lev) return TRUE;
 
 	/* Examine player health */
 	p_chp = p_ptr->chp;
@@ -276,12 +276,12 @@ static bool mon_will_run(MONSTER_IDX m_idx)
 	m_val = (m_lev * m_mhp) + (m_chp << 2); /* div m_mhp */
 
 	/* Strong players scare strong monsters */
-	if (p_val * m_mhp > m_val * p_mhp) return (TRUE);
+	if (p_val * m_mhp > m_val * p_mhp) return TRUE;
 
 #endif
 
 	/* Assume no terror */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -310,7 +310,7 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	x1 = m_ptr->fx;
 
 	/* Monster can already cast spell to player */
-	if (projectable(p_ptr->current_floor_ptr, y1, x1, p_ptr->y, p_ptr->x)) return (FALSE);
+	if (projectable(p_ptr->current_floor_ptr, y1, x1, p_ptr->y, p_ptr->x)) return FALSE;
 
 	/* Set current grid cost */
 	now_cost = p_ptr->current_floor_ptr->grid_array[y1][x1].cost;
@@ -334,7 +334,7 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 		if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) continue;
 
 		/* Simply move to player */
-		if (player_bold(p_ptr, y, x)) return (FALSE);
+		if (player_bold(p_ptr, y, x)) return FALSE;
 
 		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
 
@@ -363,10 +363,10 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	}
 
 	/* No legal move (?) */
-	if (best == 999) return (FALSE);
+	if (best == 999) return FALSE;
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -415,22 +415,22 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 	    r_ptr->a_ability_flags2 & (RF6_ATTACK_MASK))
 	{
 		/* Can move spell castable grid? */
-		if (get_moves_aux2(m_idx, yp, xp)) return (TRUE);
+		if (get_moves_aux2(m_idx, yp, xp)) return TRUE;
 	}
 
 	/* Monster can't flow */
-	if (no_flow) return (FALSE);
+	if (no_flow) return FALSE;
 
 	/* Monster can go through rocks */
-	if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall)) return (FALSE);
-	if ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != p_ptr->riding)) return (FALSE);
+	if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall)) return FALSE;
+	if ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != p_ptr->riding)) return FALSE;
 
 	/* Monster location */
 	y1 = m_ptr->fy;
 	x1 = m_ptr->fx;
 
 	/* Hack -- Player can see us, run towards him */
-	if (player_has_los_bold(p_ptr, y1, x1) && projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y1, x1)) return (FALSE);
+	if (player_has_los_bold(p_ptr, y1, x1) && projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y1, x1)) return FALSE;
 
 	/* Monster grid */
 	g_ptr = &p_ptr->current_floor_ptr->grid_array[y1][x1];
@@ -445,7 +445,7 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 	else if (g_ptr->when)
 	{
 		/* Too old smell */
-		if (p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].when - g_ptr->when > 127) return (FALSE);
+		if (p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].when - g_ptr->when > 127) return FALSE;
 
 		use_scent = TRUE;
 		best = 0;
@@ -454,7 +454,7 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 	/* Otherwise, advance blindly */
 	else
 	{
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Check nearby grids, diagonals first */
@@ -498,10 +498,10 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 	}
 
 	/* No legal move (?) */
-	if (best == 999 || best == 0) return (FALSE);
+	if (best == 999 || best == 0) return FALSE;
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -565,14 +565,14 @@ static bool get_fear_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	}
 
 	/* No legal move (?) */
-	if (score == -1) return (FALSE);
+	if (score == -1) return FALSE;
 
 	/* Find deltas */
 	(*yp) = fy - gy;
 	(*xp) = fx - gx;
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 /*
@@ -777,12 +777,12 @@ static bool find_safety(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 			(*xp) = fx - gx;
 
 			/* Found safe place */
-			return (TRUE);
+			return TRUE;
 		}
 	}
 
 	/* No safe place */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -857,12 +857,12 @@ static bool find_hiding(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 			(*xp) = fx - gx;
 
 			/* Found good place */
-			return (TRUE);
+			return TRUE;
 		}
 	}
 
 	/* No good place */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -1034,7 +1034,7 @@ static bool get_moves(MONSTER_IDX m_idx, DIRECTION *mm)
 
 
 	/* Check for no move */
-	if (!x && !y) return (FALSE);
+	if (!x && !y) return FALSE;
 
 
 	/* Extract the "absolute distances" */
@@ -1195,7 +1195,7 @@ static bool get_moves(MONSTER_IDX m_idx, DIRECTION *mm)
 	}
 
 	/* Wants to move... */
-	return (TRUE);
+	return TRUE;
 }
 
 

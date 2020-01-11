@@ -1017,8 +1017,8 @@ static int check_hit(player_type *target_ptr, int power, DEPTH level, int stun)
 	ac = target_ptr->ac + target_ptr->to_a;
 	if (target_ptr->special_attack & ATTACK_SUIKEN) ac += (target_ptr->lev * 2);
 
-	if ((i > 0) && (randint1(i) > ((ac * 3) / 4))) return (TRUE);
-	return (FALSE);
+	if ((i > 0) && (randint1(i) > ((ac * 3) / 4))) return TRUE;
+	return FALSE;
 }
 
 /*!
@@ -1038,8 +1038,8 @@ static int check_hit2(int power, DEPTH level, ARMOUR_CLASS ac, int stun)
 	if (k < 10) return (k < 5);
 	i = (power + (level * 3));
 
-	if ((i > 0) && (randint1(i) > ((ac * 3) / 4))) return (TRUE);
-	return (FALSE);
+	if ((i > 0) && (randint1(i) > ((ac * 3) / 4))) return TRUE;
+	return FALSE;
 }
 
 /*! モンスターの侮辱行為メッセージテーブル / Hack -- possible "insult" messages */
@@ -2382,9 +2382,9 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 	int abbreviate = 0;	// ２回目以降の省略表現フラグ
 
 	/* Not allowed to attack */
-	if (r_ptr->flags1 & (RF1_NEVER_BLOW)) return (FALSE);
+	if (r_ptr->flags1 & (RF1_NEVER_BLOW)) return FALSE;
 
-	if (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) return (FALSE);
+	if (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) return FALSE;
 
 	/* ...nor if friendly */
 	if (!is_hostile(m_ptr)) return FALSE;
@@ -4110,7 +4110,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 	}
 
 	/* Assume we attacked */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -4159,7 +4159,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 	/* Not allowed to attack */
 	if (r_ptr->flags1 & RF1_NEVER_BLOW) return FALSE;
 
-	if (d_info[subject_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) return (FALSE);
+	if (d_info[subject_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) return FALSE;
 
 	/* Total armor */
 	ac = tr_ptr->ac;

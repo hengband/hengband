@@ -238,7 +238,7 @@ static bool spell_okay(player_type *caster_ptr, int spell, bool learned, bool st
 	}
 
 	/* Spell is illegal */
-	if (s_ptr->slevel > caster_ptr->lev) return (FALSE);
+	if (s_ptr->slevel > caster_ptr->lev) return FALSE;
 
 	/* Spell is forgotten */
 	if ((use_realm == caster_ptr->realm2) ?
@@ -246,11 +246,11 @@ static bool spell_okay(player_type *caster_ptr, int spell, bool learned, bool st
 		(caster_ptr->spell_forgotten1 & (1L << spell)))
 	{
 		/* Never okay */
-		return (FALSE);
+		return FALSE;
 	}
 
-	if (caster_ptr->pclass == CLASS_SORCERER) return (TRUE);
-	if (caster_ptr->pclass == CLASS_RED_MAGE) return (TRUE);
+	if (caster_ptr->pclass == CLASS_SORCERER) return TRUE;
+	if (caster_ptr->pclass == CLASS_RED_MAGE) return TRUE;
 
 	/* Spell is learned */
 	if ((use_realm == caster_ptr->realm2) ?
@@ -340,7 +340,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
 		if (spell_okay(caster_ptr, *sn, learned, FALSE, use_realm))
 		{
 			/* Success */
-			return (TRUE);
+			return TRUE;
 		}
 	}
 
@@ -371,7 +371,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
 	}
 
 	/* No "okay" spells */
-	if (!okay) return (FALSE);
+	if (!okay) return FALSE;
 	if (((use_realm) != caster_ptr->realm1) && ((use_realm) != caster_ptr->realm2) && (caster_ptr->pclass != CLASS_SORCERER) && (caster_ptr->pclass != CLASS_RED_MAGE)) return FALSE;
 	if (((caster_ptr->pclass == CLASS_SORCERER) || (caster_ptr->pclass == CLASS_RED_MAGE)) && !is_magic(use_realm)) return FALSE;
 	if ((caster_ptr->pclass == CLASS_RED_MAGE) && ((use_realm) != REALM_ARCANE) && (sval > 1)) return FALSE;

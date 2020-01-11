@@ -398,7 +398,7 @@ bool summon_possible(POSITION y1, POSITION x1)
 			if (pattern_tile(y, x)) continue;
 
 			/* Require empty floor grid in line of projection */
-			if (cave_empty_bold(p_ptr->current_floor_ptr, y, x) && projectable(p_ptr->current_floor_ptr, y1, x1, y, x) && projectable(p_ptr->current_floor_ptr, y, x, y1, x1)) return (TRUE);
+			if (cave_empty_bold(p_ptr->current_floor_ptr, y, x) && projectable(p_ptr->current_floor_ptr, y1, x1, y, x) && projectable(p_ptr->current_floor_ptr, y, x, y1, x1)) return TRUE;
 		}
 	}
 
@@ -481,14 +481,14 @@ bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_frie
 	grid_n = project_path(p_ptr->current_floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, 0);
 
 	/* No grid is ever projectable from itself */
-	if (!grid_n) return (FALSE);
+	if (!grid_n) return FALSE;
 
 	/* Final grid */
 	y = GRID_Y(grid_g[grid_n-1]);
 	x = GRID_X(grid_g[grid_n-1]);
 
 	/* May not end in an unrequested grid */
-	if ((y != y2) || (x != x2)) return (FALSE);
+	if ((y != y2) || (x != x2)) return FALSE;
 
 	for (i = 0; i < grid_n; i++)
 	{
@@ -500,17 +500,17 @@ bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_frie
 			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[y][x].m_idx];
 			if (is_friend == is_pet(m_ptr))
 			{
-				return (FALSE);
+				return FALSE;
 			}
 		}
 		/* Pets may not shoot through the character - TNB */
 		if (player_bold(p_ptr, y, x))
 		{
-			if (is_friend) return (FALSE);
+			if (is_friend) return FALSE;
 		}
 	}
 
-	return (TRUE);
+	return TRUE;
 }
 
 /*!
@@ -646,22 +646,22 @@ void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp
 static bool spell_attack(byte spell)
 {
 	/* All RF4 spells hurt (except for shriek and dispel) */
-	if (spell < 128 && spell > 98) return (TRUE);
+	if (spell < 128 && spell > 98) return TRUE;
 
 	/* Various "ball" spells */
-	if (spell >= 128 && spell <= 128 + 8) return (TRUE);
+	if (spell >= 128 && spell <= 128 + 8) return TRUE;
 
 	/* "Cause wounds" and "bolt" spells */
-	if (spell >= 128 + 12 && spell < 128 + 27) return (TRUE);
+	if (spell >= 128 + 12 && spell < 128 + 27) return TRUE;
 
 	/* Hand of Doom */
-	if (spell == 160 + 1) return (TRUE);
+	if (spell == 160 + 1) return TRUE;
 
 	/* Psycho-Spear */
-	if (spell == 160 + 11) return (TRUE);
+	if (spell == 160 + 11) return TRUE;
 
 	/* Doesn't hurt */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -674,13 +674,13 @@ static bool spell_attack(byte spell)
 static bool spell_escape(byte spell)
 {
 	/* Blink or Teleport */
-	if (spell == 160 + 4 || spell == 160 + 5) return (TRUE);
+	if (spell == 160 + 4 || spell == 160 + 5) return TRUE;
 
 	/* Teleport the player away */
-	if (spell == 160 + 9 || spell == 160 + 10) return (TRUE);
+	if (spell == 160 + 9 || spell == 160 + 10) return TRUE;
 
 	/* Isn't good for escaping */
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -692,25 +692,25 @@ static bool spell_escape(byte spell)
 static bool spell_annoy(byte spell)
 {
 	/* Shriek */
-	if (spell == 96 + 0) return (TRUE);
+	if (spell == 96 + 0) return TRUE;
 
 	/* Brain smash, et al (added curses) */
-	if (spell >= 128 + 9 && spell <= 128 + 14) return (TRUE);
+	if (spell >= 128 + 9 && spell <= 128 + 14) return TRUE;
 
 	/* Scare, confuse, blind, slow, paralyze */
-	if (spell >= 128 + 27 && spell <= 128 + 31) return (TRUE);
+	if (spell >= 128 + 27 && spell <= 128 + 31) return TRUE;
 
 	/* Teleport to */
-	if (spell == 160 + 8) return (TRUE);
+	if (spell == 160 + 8) return TRUE;
 
 	/* Teleport level */
-	if (spell == 160 + 10) return (TRUE);
+	if (spell == 160 + 10) return TRUE;
 
 	/* Darkness, make traps, cause amnesia */
-	if (spell >= 160 + 12 && spell <= 160 + 14) return (TRUE);
+	if (spell >= 160 + 12 && spell <= 160 + 14) return TRUE;
 
 	/* Doesn't annoy */
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -722,10 +722,10 @@ static bool spell_annoy(byte spell)
 static bool spell_summon(byte spell)
 {
 	/* All summon spells */
-	if (spell >= 160 + 16) return (TRUE);
+	if (spell >= 160 + 16) return TRUE;
 
 	/* Doesn't summon */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -738,10 +738,10 @@ static bool spell_summon(byte spell)
 static bool spell_raise(byte spell)
 {
 	/* All raise-dead spells */
-	if (spell == 160 + 15) return (TRUE);
+	if (spell == 160 + 15) return TRUE;
 
 	/* Doesn't summon */
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -753,10 +753,10 @@ static bool spell_raise(byte spell)
 static bool spell_tactic(byte spell)
 {
 	/* Blink */
-	if (spell == 160 + 4) return (TRUE);
+	if (spell == 160 + 4) return TRUE;
 
 	/* Not good */
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -768,10 +768,10 @@ static bool spell_tactic(byte spell)
 static bool spell_invulner(byte spell)
 {
 	/* Invulnerability */
-	if (spell == 160 + 3) return (TRUE);
+	if (spell == 160 + 3) return TRUE;
 
 	/* No invulnerability */
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -783,10 +783,10 @@ static bool spell_invulner(byte spell)
 static bool spell_haste(byte spell)
 {
 	/* Haste self */
-	if (spell == 160 + 0) return (TRUE);
+	if (spell == 160 + 0) return TRUE;
 
 	/* Not a haste spell */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -798,8 +798,8 @@ static bool spell_haste(byte spell)
  */
 static bool spell_world(byte spell)
 {
-	if (spell == 160 + 6) return (TRUE);
-	return (FALSE);
+	if (spell == 160 + 6) return TRUE;
+	return FALSE;
 }
 
 
@@ -812,8 +812,8 @@ static bool spell_world(byte spell)
 static bool spell_special(byte spell)
 {
 	if (p_ptr->phase_out) return FALSE;
-	if (spell == 160 + 7) return (TRUE);
-	return (FALSE);
+	if (spell == 160 + 7) return TRUE;
+	return FALSE;
 }
 
 
@@ -826,10 +826,10 @@ static bool spell_special(byte spell)
 static bool spell_psy_spe(byte spell)
 {
 	/* world */
-	if (spell == 160 + 11) return (TRUE);
+	if (spell == 160 + 11) return TRUE;
 
 	/* Not a haste spell */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -842,10 +842,10 @@ static bool spell_psy_spe(byte spell)
 static bool spell_heal(byte spell)
 {
 	/* Heal */
-	if (spell == 160 + 2) return (TRUE);
+	if (spell == 160 + 2) return TRUE;
 
 	/* No healing */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -858,10 +858,10 @@ static bool spell_heal(byte spell)
 static bool spell_dispel(byte spell)
 {
 	/* Dispel */
-	if (spell == 96 + 2) return (TRUE);
+	if (spell == 96 + 2) return TRUE;
 
 	/* No dispel */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -877,94 +877,94 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Invulnabilty (including the song) */
-	if (IS_INVULN(creature_ptr)) return (TRUE);
+	if (IS_INVULN(creature_ptr)) return TRUE;
 
 	/* Wraith form */
-	if (creature_ptr->wraith_form) return (TRUE);
+	if (creature_ptr->wraith_form) return TRUE;
 
 	/* Shield */
-	if (creature_ptr->shield) return (TRUE);
+	if (creature_ptr->shield) return TRUE;
 
 	/* Magic defence */
-	if (creature_ptr->magicdef) return (TRUE);
+	if (creature_ptr->magicdef) return TRUE;
 
 	/* Multi Shadow */
-	if (creature_ptr->multishadow) return (TRUE);
+	if (creature_ptr->multishadow) return TRUE;
 
 	/* Robe of dust */
-	if (creature_ptr->dustrobe) return (TRUE);
+	if (creature_ptr->dustrobe) return TRUE;
 
 	/* Berserk Strength */
-	if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER)) return (TRUE);
+	if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER)) return TRUE;
 
 	/* Demon Lord */
-	if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) return (TRUE);
+	if (creature_ptr->mimic_form == MIMIC_DEMON_LORD) return TRUE;
 
 	/* Elemental resistances */
 	if (r_ptr->flags4 & RF4_BR_ACID)
 	{
-		if (!creature_ptr->immune_acid && (creature_ptr->oppose_acid || music_singing(creature_ptr, MUSIC_RESIST))) return (TRUE);
-		if (creature_ptr->special_defense & DEFENSE_ACID) return (TRUE);
+		if (!creature_ptr->immune_acid && (creature_ptr->oppose_acid || music_singing(creature_ptr, MUSIC_RESIST))) return TRUE;
+		if (creature_ptr->special_defense & DEFENSE_ACID) return TRUE;
 	}
 
 	if (r_ptr->flags4 & RF4_BR_FIRE)
 	{
 		if (!((creature_ptr->prace == RACE_DEMON) && creature_ptr->lev > 44))
 		{
-			if (!creature_ptr->immune_fire && (creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST))) return (TRUE);
-			if (creature_ptr->special_defense & DEFENSE_FIRE) return (TRUE);
+			if (!creature_ptr->immune_fire && (creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST))) return TRUE;
+			if (creature_ptr->special_defense & DEFENSE_FIRE) return TRUE;
 		}
 	}
 
 	if (r_ptr->flags4 & RF4_BR_ELEC)
 	{
-		if (!creature_ptr->immune_elec && (creature_ptr->oppose_elec || music_singing(creature_ptr, MUSIC_RESIST))) return (TRUE);
-		if (creature_ptr->special_defense & DEFENSE_ELEC) return (TRUE);
+		if (!creature_ptr->immune_elec && (creature_ptr->oppose_elec || music_singing(creature_ptr, MUSIC_RESIST))) return TRUE;
+		if (creature_ptr->special_defense & DEFENSE_ELEC) return TRUE;
 	}
 
 	if (r_ptr->flags4 & RF4_BR_COLD)
 	{
-		if (!creature_ptr->immune_cold && (creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST))) return (TRUE);
-		if (creature_ptr->special_defense & DEFENSE_COLD) return (TRUE);
+		if (!creature_ptr->immune_cold && (creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST))) return TRUE;
+		if (creature_ptr->special_defense & DEFENSE_COLD) return TRUE;
 	}
 
 	if (r_ptr->flags4 & (RF4_BR_POIS | RF4_BR_NUKE))
 	{
 		if (!((creature_ptr->pclass == CLASS_NINJA) && creature_ptr->lev > 44))
 		{
-			if (creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST)) return (TRUE);
-			if (creature_ptr->special_defense & DEFENSE_POIS) return (TRUE);
+			if (creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST)) return TRUE;
+			if (creature_ptr->special_defense & DEFENSE_POIS) return TRUE;
 		}
 	}
 
 	/* Ultimate resistance */
-	if (creature_ptr->ult_res) return (TRUE);
+	if (creature_ptr->ult_res) return TRUE;
 
 	/* Potion of Neo Tsuyosi special */
-	if (creature_ptr->tsuyoshi) return (TRUE);
+	if (creature_ptr->tsuyoshi) return TRUE;
 
 	/* Elemental Brands */
-	if ((creature_ptr->special_attack & ATTACK_ACID) && !(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK)) return (TRUE);
-	if ((creature_ptr->special_attack & ATTACK_FIRE) && !(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) return (TRUE);
-	if ((creature_ptr->special_attack & ATTACK_ELEC) && !(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)) return (TRUE);
-	if ((creature_ptr->special_attack & ATTACK_COLD) && !(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)) return (TRUE);
-	if ((creature_ptr->special_attack & ATTACK_POIS) && !(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK)) return (TRUE);
+	if ((creature_ptr->special_attack & ATTACK_ACID) && !(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK)) return TRUE;
+	if ((creature_ptr->special_attack & ATTACK_FIRE) && !(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) return TRUE;
+	if ((creature_ptr->special_attack & ATTACK_ELEC) && !(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)) return TRUE;
+	if ((creature_ptr->special_attack & ATTACK_COLD) && !(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)) return TRUE;
+	if ((creature_ptr->special_attack & ATTACK_POIS) && !(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK)) return TRUE;
 
 	if (creature_ptr->pspeed < 145)
 	{
-		if (IS_FAST(creature_ptr)) return (TRUE);
+		if (IS_FAST(creature_ptr)) return TRUE;
 	}
 
 	/* Light speed */
-	if (creature_ptr->lightspeed && (m_ptr->mspeed < 136)) return (TRUE);
+	if (creature_ptr->lightspeed && (m_ptr->mspeed < 136)) return TRUE;
 
 	if (creature_ptr->riding && (creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].mspeed < 135))
 	{
-		if (MON_FAST(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) return (TRUE);
+		if (MON_FAST(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) return TRUE;
 	}
 
 	/* No need to cast dispel spell */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -1393,12 +1393,12 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	if (MON_CONFUSED(m_ptr))
 	{
 		reset_target(m_ptr);
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Cannot cast spells when nice */
-	if (m_ptr->mflag & MFLAG_NICE) return (FALSE);
-	if (!is_hostile(m_ptr)) return (FALSE);
+	if (m_ptr->mflag & MFLAG_NICE) return FALSE;
+	if (!is_hostile(m_ptr)) return FALSE;
 
 
 	/* Sometimes forbid inate attacks (breaths) */
@@ -1415,7 +1415,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	/*** require projectable player ***/
 
 	/* Check range */
-	if ((m_ptr->cdis > MAX_RANGE) && !m_ptr->target_y) return (FALSE);
+	if ((m_ptr->cdis > MAX_RANGE) && !m_ptr->target_y) return FALSE;
 
 	/* Check path for lite breath */
 	if (f4 & RF4_BR_LITE)
@@ -1572,7 +1572,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	}
 
 	/* No spells left */
-	if (!f4 && !f5 && !f6) return (FALSE);
+	if (!f4 && !f5 && !f6) return FALSE;
 
 	/* Remove the "ineffective" spells */
 	remove_bad_spells(m_idx, target_ptr, &f4, &f5, &f6);
@@ -1587,7 +1587,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	}
 
 	/* No spells left */
-	if (!f4 && !f5 && !f6) return (FALSE);
+	if (!f4 && !f5 && !f6) return FALSE;
 
 	if (!(r_ptr->flags2 & RF2_STUPID))
 	{
@@ -1634,7 +1634,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		}
 
 		/* No spells left */
-		if (!f4 && !f5 && !f6) return (FALSE);
+		if (!f4 && !f5 && !f6) return FALSE;
 	}
 
 	/* Extract the "inate" spells */
@@ -1656,13 +1656,13 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	}
 
 	/* No spells left */
-	if (!num) return (FALSE);
+	if (!num) return FALSE;
 
 	/* Stop if player is dead or gone */
-	if (!target_ptr->playing || target_ptr->is_dead) return (FALSE);
+	if (!target_ptr->playing || target_ptr->is_dead) return FALSE;
 
 	/* Stop if player is leaving */
-	if (target_ptr->leaving) return (FALSE);
+	if (target_ptr->leaving) return FALSE;
 
 	/* Get the monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0x00);
@@ -1702,7 +1702,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	}
 
 	/* Abort if no spell was chosen */
-	if (!thrown_spell) return (FALSE);
+	if (!thrown_spell) return FALSE;
 
 	/* Calculate spell failure rate */
 	failrate = 25 - (rlev + 3) / 4;
@@ -1717,14 +1717,14 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		disturb(target_ptr, TRUE, TRUE);
 		msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), m_name);
 
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Hex: Anti Magic Barrier */
 	if (!spell_is_inate(thrown_spell) && magic_barrier(p_ptr, m_idx))
 	{
 		msg_format(_("反魔法バリアが%^sの呪文をかき消した。", "Anti magic barrier cancels the spell which %^s casts."), m_name);
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Projectable? */
@@ -1767,7 +1767,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
             case 160 + 11:  /* RF6_PSY_SPEAR */
             case 160 + 12:  /* RF6_DARKNESS */
             case 160 + 14:  /* RF6_FORGET */
-                return (FALSE);
+                return FALSE;
         }
     }
 
@@ -1836,5 +1836,5 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	}
 
 	/* A spell was cast */
-	return (TRUE);
+	return TRUE;
 }

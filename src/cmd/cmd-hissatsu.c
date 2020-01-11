@@ -73,7 +73,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
 		if (technic_info[TECHNIC_HISSATSU][*sn].slevel <= plev)
 		{
 			/* Success */
-			return (TRUE);
+			return TRUE;
 		}
 	}
 
@@ -109,7 +109,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
 				case '0':
 				{
 					screen_load();
-					return (FALSE);
+					return FALSE;
 				}
 
 				case '8':
@@ -295,7 +295,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
 	handle_stuff(creature_ptr);
 
 	/* Abort if needed */
-	if (!flag) return (FALSE);
+	if (!flag) return FALSE;
 
 	/* Save the choice */
 	(*sn) = j;
@@ -303,7 +303,7 @@ static int get_hissatsu_power(player_type *creature_ptr, SPELL_IDX *sn)
 	repeat_push((COMMAND_CODE)j);
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 

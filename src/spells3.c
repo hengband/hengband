@@ -1470,7 +1470,7 @@ bool alchemy(player_type *caster_ptr)
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	/* See how many items */
 	int amt = 1;
@@ -1545,7 +1545,7 @@ bool artifact_scroll(player_type *caster_ptr)
 	object_type *o_ptr;
 	OBJECT_IDX item;
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -1713,7 +1713,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	bool old_known = identify_item(caster_ptr, o_ptr);
 
@@ -1760,7 +1760,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
 	concptr s = _("使えるものがありません。", "You have nothing you can use.");
 
 	o_ptr = choose_object(owner_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
 	POSITION iy = o_ptr->iy;
@@ -1820,7 +1820,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	bool old_known = identify_item(caster_ptr, o_ptr);
 

@@ -246,19 +246,19 @@ static int check_hit(player_type *target_ptr, int power)
 	if (k < 10) return (k < 5);
 
 	if (target_ptr->pseikaku == SEIKAKU_NAMAKE)
-		if (one_in_(20)) return (TRUE);
+		if (one_in_(20)) return TRUE;
 
 	/* Paranoia -- No power */
-	if (power <= 0) return (FALSE);
+	if (power <= 0) return FALSE;
 
 	/* Total armor */
 	ac = target_ptr->ac + target_ptr->to_a;
 
 	/* Power competes against Armor */
-	if (randint1(power) > ((ac * 3) / 4)) return (TRUE);
+	if (randint1(power) > ((ac * 3) / 4)) return TRUE;
 
 	/* Assume miss */
-	return (FALSE);
+	return FALSE;
 }
 
 

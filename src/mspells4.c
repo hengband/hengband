@@ -1928,7 +1928,7 @@ HIT_POINT spell_RF6_WORLD(player_type *target_ptr, MONSTER_IDX m_idx)
 	disturb(target_ptr, TRUE, TRUE);
 	if (m_ptr->r_idx == MON_DIO) who = 1;
 	else if (m_ptr->r_idx == MON_WONG) who = 3;
-	if (!set_monster_timewalk(target_ptr, randint1(2) + 2, who, TRUE)) return (FALSE);
+	if (!set_monster_timewalk(target_ptr, randint1(2) + 2, who, TRUE)) return FALSE;
 	return who;
 }
 

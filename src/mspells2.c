@@ -54,7 +54,7 @@ static bool direct_beam(POSITION y1, POSITION x1, POSITION y2, POSITION x2, mons
 	grid_n = project_path(p_ptr->current_floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, PROJECT_THRU);
 
 	/* No grid is ever projectable from itself */
-	if (!grid_n) return (FALSE);
+	if (!grid_n) return FALSE;
 
 	for (i = 0; i < grid_n; i++)
 	{
@@ -310,7 +310,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 	bool can_remember;
 
 	/* Cannot cast spells when confused */
-	if (MON_CONFUSED(m_ptr)) return (FALSE);
+	if (MON_CONFUSED(m_ptr)) return FALSE;
 
 	/* Extract the racial spell flags */
 	f4 = r_ptr->flags4;
@@ -672,13 +672,13 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 	}
 
 	/* No spells left */
-	if (!num) return (FALSE);
+	if (!num) return FALSE;
 
 	/* Stop if player is dead or gone */
-	if (!target_ptr->playing || target_ptr->is_dead) return (FALSE);
+	if (!target_ptr->playing || target_ptr->is_dead) return FALSE;
 
 	/* Handle "leaving" */
-	if (target_ptr->leaving) return (FALSE);
+	if (target_ptr->leaving) return FALSE;
 
 	/* Get the monster name (or "it") */
 	monster_desc(m_name, m_ptr, 0x00);
@@ -703,7 +703,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (see_m) msg_format(_("%^sは呪文を唱えようとしたが失敗した。", 
 			                    "%^s tries to cast a spell, but fails."), m_name);
 
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Hex: Anti Magic Barrier */
@@ -711,7 +711,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 	{
 		if (see_m) msg_format(_("反魔法バリアが%^sの呪文をかき消した。", 
 			                    "Anti magic barrier cancels the spell which %^s casts."), m_name);
-		return (TRUE);
+		return TRUE;
 	}
 
 	can_remember = is_original_ap_and_seen(m_ptr);

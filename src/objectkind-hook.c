@@ -15,11 +15,11 @@ bool kind_is_cloak(KIND_OBJECT_IDX k_idx)
 	/* Analyze the item type */
 	if (k_ptr->tval == TV_CLOAK)
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Assume not good */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -36,11 +36,11 @@ bool kind_is_polearm(KIND_OBJECT_IDX k_idx)
 	/* Analyze the item type */
 	if (k_ptr->tval == TV_POLEARM)
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Assume not good */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -57,11 +57,11 @@ bool kind_is_sword(KIND_OBJECT_IDX k_idx)
 	/* Analyze the item type */
 	if ((k_ptr->tval == TV_SWORD) && (k_ptr->sval > 2))
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Assume not good */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -78,11 +78,11 @@ bool kind_is_book(KIND_OBJECT_IDX k_idx)
 	/* Analyze the item type */
 	if ((k_ptr->tval >= TV_LIFE_BOOK) && (k_ptr->tval <= TV_CRUSADE_BOOK))
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Assume not good */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -99,11 +99,11 @@ bool kind_is_good_book(KIND_OBJECT_IDX k_idx)
 	/* Analyze the item type */
 	if ((k_ptr->tval >= TV_LIFE_BOOK) && (k_ptr->tval <= TV_CRUSADE_BOOK) && (k_ptr->tval != TV_ARCANE_BOOK) && (k_ptr->sval > 1))
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Assume not good */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -120,11 +120,11 @@ bool kind_is_armor(KIND_OBJECT_IDX k_idx)
 	/* Analyze the item type */
 	if (k_ptr->tval == TV_HARD_ARMOR)
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Assume not good */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -141,11 +141,11 @@ bool kind_is_hafted(KIND_OBJECT_IDX k_idx)
 	/* Analyze the item type */
 	if (k_ptr->tval == TV_HAFTED)
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Assume not good */
-	return (FALSE);
+	return FALSE;
 }
 
 /*
@@ -180,8 +180,8 @@ bool kind_is_good(KIND_OBJECT_IDX k_idx)
 	case TV_HELM:
 	case TV_CROWN:
 	{
-		if (k_ptr->to_a < 0) return (FALSE);
-		return (TRUE);
+		if (k_ptr->to_a < 0) return FALSE;
+		return TRUE;
 	}
 
 	/* Weapons -- Good unless damaged */
@@ -191,16 +191,16 @@ bool kind_is_good(KIND_OBJECT_IDX k_idx)
 	case TV_POLEARM:
 	case TV_DIGGING:
 	{
-		if (k_ptr->to_h < 0) return (FALSE);
-		if (k_ptr->to_d < 0) return (FALSE);
-		return (TRUE);
+		if (k_ptr->to_h < 0) return FALSE;
+		if (k_ptr->to_d < 0) return FALSE;
+		return TRUE;
 	}
 
 	/* Ammo -- Arrows/Bolts are good */
 	case TV_BOLT:
 	case TV_ARROW:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Books -- High level books are good (except Arcane books) */
@@ -217,27 +217,27 @@ bool kind_is_good(KIND_OBJECT_IDX k_idx)
 	case TV_HISSATSU_BOOK:
 	case TV_HEX_BOOK:
 	{
-		if (k_ptr->sval >= SV_BOOK_MIN_GOOD) return (TRUE);
-		return (FALSE);
+		if (k_ptr->sval >= SV_BOOK_MIN_GOOD) return TRUE;
+		return FALSE;
 	}
 
 	/* Rings -- Rings of Speed are good */
 	case TV_RING:
 	{
-		if (k_ptr->sval == SV_RING_SPEED) return (TRUE);
-		if (k_ptr->sval == SV_RING_LORDLY) return (TRUE);
-		return (FALSE);
+		if (k_ptr->sval == SV_RING_SPEED) return TRUE;
+		if (k_ptr->sval == SV_RING_LORDLY) return TRUE;
+		return FALSE;
 	}
 
 	/* Amulets -- Amulets of the Magi and Resistance are good */
 	case TV_AMULET:
 	{
-		if (k_ptr->sval == SV_AMULET_THE_MAGI) return (TRUE);
-		if (k_ptr->sval == SV_AMULET_RESISTANCE) return (TRUE);
-		return (FALSE);
+		if (k_ptr->sval == SV_AMULET_THE_MAGI) return TRUE;
+		if (k_ptr->sval == SV_AMULET_RESISTANCE) return TRUE;
+		return FALSE;
 	}
 	}
 
 	/* Assume not good */
-	return (FALSE);
+	return FALSE;
 }

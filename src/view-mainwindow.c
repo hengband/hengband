@@ -2451,11 +2451,11 @@ bool change_panel(POSITION dy, POSITION dx)
 		handle_stuff(p_ptr);
 
 		/* Success */
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* No change */
-	return (FALSE);
+	return FALSE;
 }
 
 /*!

@@ -3394,7 +3394,7 @@ static bool enter_wizard_mode(void)
 		/* Verify request */
 		if (!get_check(_("本当にウィザードモードに入りたいのですか? ", "Are you sure you want to enter wizard mode? ")))
 		{
-			return (FALSE);
+			return FALSE;
 		}
 
 		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("ウィザードモードに突入してスコアを残せなくなった。", "give up recording score to enter wizard mode."));
@@ -3403,7 +3403,7 @@ static bool enter_wizard_mode(void)
 	}
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -3435,7 +3435,7 @@ static bool enter_debug_mode(void)
 		/* Verify request */
 		if (!get_check(_("本当にデバッグ・コマンドを使いますか? ", "Are you sure you want to use debug commands? ")))
 		{
-			return (FALSE);
+			return FALSE;
 		}
 
 		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("デバッグモードに突入してスコアを残せなくなった。", "give up sending score to use debug commands."));
@@ -3444,7 +3444,7 @@ static bool enter_debug_mode(void)
 	}
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 /*
@@ -3476,7 +3476,7 @@ static bool enter_borg_mode(void)
 		/* Verify request */
 		if (!get_check(_("本当にボーグ・コマンドを使いますか? ", "Are you sure you want to use borg commands? ")))
 		{
-			return (FALSE);
+			return FALSE;
 		}
 
 		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("ボーグ・コマンドを使用してスコアを残せなくなった。", "give up recording score to use borg commands."));
@@ -3485,7 +3485,7 @@ static bool enter_borg_mode(void)
 	}
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 /*

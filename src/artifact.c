@@ -2236,10 +2236,10 @@ bool make_artifact(object_type *o_ptr)
 	ARTIFACT_IDX i;
 
 	/* No artifacts in the town */
-	if (!p_ptr->current_floor_ptr->dun_level) return (FALSE);
+	if (!p_ptr->current_floor_ptr->dun_level) return FALSE;
 
 	/* Paranoia -- no "plural" artifacts */
-	if (o_ptr->number != 1) return (FALSE);
+	if (o_ptr->number != 1) return FALSE;
 
 	/* Check the artifact list (skip the "specials") */
 	for (i = 0; i < max_a_idx; i++)
@@ -2280,11 +2280,11 @@ bool make_artifact(object_type *o_ptr)
 		random_artifact_resistance(o_ptr, a_ptr);
 
 		/* Success */
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Failure */
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -2304,10 +2304,10 @@ bool make_artifact_special(object_type *o_ptr)
 	KIND_OBJECT_IDX k_idx = 0;
 
 	/*! @note 地上ではキャンセルする / No artifacts in the town */
-	if (!p_ptr->current_floor_ptr->dun_level) return (FALSE);
+	if (!p_ptr->current_floor_ptr->dun_level) return FALSE;
 
 	/*! @note get_obj_num_hookによる指定がある場合は生成をキャンセルする / Themed object */
-	if (get_obj_num_hook) return (FALSE);
+	if (get_obj_num_hook) return FALSE;
 
 	/*! @note 全固定アーティファクト中からIDの若い順に生成対象とその確率を走査する / Check the artifact list (just the "specials") */
 	for (i = 0; i < max_a_idx; i++)
@@ -2349,9 +2349,9 @@ bool make_artifact_special(object_type *o_ptr)
 
 		o_ptr->name1 = i;
 		random_artifact_resistance(o_ptr, a_ptr);
-		return (TRUE);
+		return TRUE;
 	}
 
 	/*! @note 全INSTA_ART固定アーティファクトを試行しても決まらなかった場合 FALSEを返す / Failure */
-	return (FALSE);
+	return FALSE;
 }

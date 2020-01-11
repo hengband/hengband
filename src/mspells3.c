@@ -592,7 +592,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 	if (i == num)
 	{
 		msg_print(_("その種類の魔法は覚えていない！", "You don't know any spell of this type."));
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Build a prompt (accept all spells) */
@@ -614,7 +614,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 				case '0':
 				{
 					screen_load();
-					return (FALSE);
+					return FALSE;
 				}
 
 				case '8':
@@ -806,7 +806,7 @@ static bool get_learned_power(player_type *caster_ptr, SPELL_IDX *sn)
 	handle_stuff(caster_ptr);
 
 	/* Abort if needed */
-	if (!flag) return (FALSE);
+	if (!flag) return FALSE;
 
 	/* Save the choice */
 	(*sn) = spellnum[i];

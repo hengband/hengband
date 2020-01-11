@@ -1039,7 +1039,7 @@ static bool add_text(u32b *offset, header *head, concptr buf, bool normal_text)
 {
 	/* Hack -- Verify space */
 	if (head->text_size + strlen(buf) + 8 > FAKE_TEXT_SIZE)
-		return (FALSE);
+		return FALSE;
 
 	/* New text? */
 	if (*offset == 0)
@@ -1082,7 +1082,7 @@ static bool add_text(u32b *offset, header *head, concptr buf, bool normal_text)
 	head->text_size += strlen(buf);
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -1101,7 +1101,7 @@ static bool add_name(u32b *offset, header *head, concptr buf)
 {
 	/* Hack -- Verify space */
 	if (head->name_size + strlen(buf) + 8 > FAKE_NAME_SIZE)
-		return (FALSE);
+		return FALSE;
 
 	/* New name? */
 	if (*offset == 0)
@@ -1117,7 +1117,7 @@ static bool add_name(u32b *offset, header *head, concptr buf)
 	head->name_size += strlen(buf);
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 

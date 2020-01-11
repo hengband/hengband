@@ -3851,11 +3851,11 @@ bool get_com(concptr prompt, char *command, bool z_escape)
 	prt("", 0, 0);
 
 	/* Handle "cancel" */
-	if (*command == ESCAPE) return (FALSE);
-	if (z_escape && ((*command == 'z') || (*command == 'Z'))) return (FALSE);
+	if (*command == ESCAPE) return FALSE;
+	if (z_escape && ((*command == 'z') || (*command == 'Z'))) return FALSE;
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -4770,10 +4770,10 @@ bool is_a_vowel(int ch)
 	case 'I':
 	case 'O':
 	case 'U':
-		return (TRUE);
+		return TRUE;
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -4797,7 +4797,7 @@ static bool insert_str(char *buf, concptr target, concptr insert)
 	buf = my_strstr(buf, target);
 
 	/* No target found */
-	if (!buf) return (FALSE);
+	if (!buf) return FALSE;
 
 	/* Be sure we have an insertion string */
 	if (!insert) insert = "";
@@ -4829,7 +4829,7 @@ static bool insert_str(char *buf, concptr target, concptr insert)
 	for (i = 0; i < i_len; ++i) buf[i] = insert[i];
 
 	/* Successful operation */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -4919,13 +4919,13 @@ void repeat_push(COMMAND_CODE what)
 bool repeat_pull(COMMAND_CODE *what)
 {
 	/* All out of keys */
-	if (repeat__idx == repeat__cnt) return (FALSE);
+	if (repeat__idx == repeat__cnt) return FALSE;
 
 	/* Grab the next key, advance */
 	*what = repeat__key[repeat__idx++];
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 void repeat_check(void)

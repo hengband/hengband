@@ -767,7 +767,7 @@ static bool_hack get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool onl
 		if (mind_ptr->info[*sn].min_lev <= plev)
 		{
 			/* Success */
-			return (TRUE);
+			return TRUE;
 		}
 	}
 
@@ -812,7 +812,7 @@ static bool_hack get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool onl
 				case '0':
 				{
 					if (!only_browse) screen_load();
-					return (FALSE);
+					return FALSE;
 				}
 
 				case '8':
@@ -1007,7 +1007,7 @@ static bool_hack get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool onl
 	handle_stuff(caster_ptr);
 
 	/* Abort if needed */
-	if (!flag) return (FALSE);
+	if (!flag) return FALSE;
 
 	/* Save the choice */
 	(*sn) = i;
@@ -1015,7 +1015,7 @@ static bool_hack get_mind_power(player_type *caster_ptr, SPELL_IDX *sn, bool onl
 	repeat_push((COMMAND_CODE)i);
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 /*!

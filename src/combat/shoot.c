@@ -903,14 +903,14 @@ bool test_hit_fire(player_type *shooter_ptr, int chance, monster_type *m_ptr, in
 	k += shooter_ptr->concent;
 
 	/* Hack -- Instant miss or hit */
-	if (k <= 5) return (FALSE);
-	if (k > 95) return (TRUE);
+	if (k <= 5) return FALSE;
+	if (k > 95) return TRUE;
 
 	if (shooter_ptr->pseikaku == SEIKAKU_NAMAKE)
-		if (one_in_(20)) return (FALSE);
+		if (one_in_(20)) return FALSE;
 
 	/* Never hit */
-	if (chance <= 0) return (FALSE);
+	if (chance <= 0) return FALSE;
 
 	ac = r_ptr->ac;
 	if (shooter_ptr->concent)
@@ -933,11 +933,11 @@ bool test_hit_fire(player_type *shooter_ptr, int chance, monster_type *m_ptr, in
 			monster_desc(m_name, m_ptr, 0);
 			msg_format(_("%sは%sを斬り捨てた！", "%s cuts down %s!"), m_name, o_name);
 		}
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Assume hit */
-	return (TRUE);
+	return TRUE;
 }
 
 

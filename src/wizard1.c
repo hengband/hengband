@@ -1564,7 +1564,7 @@ static bool make_fake_artifact(object_type *o_ptr, IDX name1)
 	/* Acquire the "kind" index */
 	i = lookup_kind(a_ptr->tval, a_ptr->sval);
 
-	if (!i) return (FALSE);
+	if (!i) return FALSE;
 
 	object_prep(o_ptr, i);
 
@@ -1582,7 +1582,7 @@ static bool make_fake_artifact(object_type *o_ptr, IDX name1)
 	o_ptr->weight = a_ptr->weight;
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 

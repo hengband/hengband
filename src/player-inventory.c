@@ -238,15 +238,15 @@ void toggle_inven_equip(player_type *creature_ptr)
 bool get_item_okay(OBJECT_IDX i)
 {
 	/* Illegal items */
-	if ((i < 0) || (i >= INVEN_TOTAL)) return (FALSE);
+	if ((i < 0) || (i >= INVEN_TOTAL)) return FALSE;
 
 	if (select_ring_slot) return is_ring_slot(i);
 
 	/* Verify the item */
-	if (!item_tester_okay(&p_ptr->inventory_list[i], item_tester_tval)) return (FALSE);
+	if (!item_tester_okay(&p_ptr->inventory_list[i], item_tester_tval)) return FALSE;
 
 	/* Assume okay */
-	return (TRUE);
+	return TRUE;
 }
 
 /*!
@@ -317,7 +317,7 @@ static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], IT
 				*cp = i;
 
 				/* Success */
-				return (TRUE);
+				return TRUE;
 			}
 
 			/* Find another '@' */
@@ -356,7 +356,7 @@ static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], IT
 				*cp = i;
 
 				/* Success */
-				return (TRUE);
+				return TRUE;
 			}
 
 			/* Find another '@' */
@@ -365,7 +365,7 @@ static bool get_tag_floor(COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], IT
 	}
 
 	/* No such tag */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -432,7 +432,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALU
 				*cp = i;
 
 				/* Success */
-				return (TRUE);
+				return TRUE;
 			}
 
 			/* Find another '@' */
@@ -474,7 +474,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALU
 				*cp = i;
 
 				/* Success */
-				return (TRUE);
+				return TRUE;
 			}
 
 			/* Find another '@' */
@@ -483,7 +483,7 @@ static bool get_tag(COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALU
 	}
 
 	/* No such tag */
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -780,7 +780,7 @@ static bool get_item_allow(INVENTORY_IDX item)
 	}
 
 	/* No inscription */
-	if (!o_ptr->inscription) return (TRUE);
+	if (!o_ptr->inscription) return TRUE;
 
 	/* Find a '!' */
 	s = my_strchr(quark_str(o_ptr->inscription), '!');
@@ -792,7 +792,7 @@ static bool get_item_allow(INVENTORY_IDX item)
 		if ((s[1] == command_cmd) || (s[1] == '*'))
 		{
 			/* Verify the choice */
-			if (!verify(_("本当に", "Really try"), item)) return (FALSE);
+			if (!verify(_("本当に", "Really try"), item)) return FALSE;
 		}
 
 		/* Find another '!' */
@@ -800,7 +800,7 @@ static bool get_item_allow(INVENTORY_IDX item)
 	}
 
 	/* Allow it */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -908,7 +908,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			tval = 0;
 			item_tester_hook = NULL;
 			command_cmd = 0; /* Hack -- command_cmd is no longer effective */
-			return (TRUE);
+			return TRUE;
 		}
 
 		/* Floor item? */
@@ -1860,7 +1860,7 @@ bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, co
 			tval = 0;
 			item_tester_hook = NULL;
 			command_cmd = 0; /* Hack -- command_cmd is no longer effective */
-			return (TRUE);
+			return TRUE;
 		}
 
 		/* Floor item? */
@@ -2956,13 +2956,13 @@ static bool py_pickup_floor_aux(void)
 	}
 	else
 	{
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Pick up the object */
 	py_pickup_aux(p_ptr, this_o_idx);
 
-	return (TRUE);
+	return TRUE;
 }
 
 /*!

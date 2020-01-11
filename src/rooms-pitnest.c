@@ -713,12 +713,12 @@ static bool vault_aux_trapped_pit(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	if (!vault_monster_okay(r_idx)) return (FALSE);
+	if (!vault_monster_okay(r_idx)) return FALSE;
 
 	/* No wall passing monster */
-	if (r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL)) return (FALSE);
+	if (r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL)) return FALSE;
 
-	return (TRUE);
+	return TRUE;
 }
 
 

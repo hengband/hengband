@@ -34,20 +34,20 @@ bool hates_acid(object_type *o_ptr)
 	case TV_HARD_ARMOR:
 	case TV_DRAG_ARMOR:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Staffs/Scrolls are wood/paper */
 	case TV_STAFF:
 	case TV_SCROLL:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Ouch */
 	case TV_CHEST:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Junk is useless */
@@ -55,11 +55,11 @@ bool hates_acid(object_type *o_ptr)
 	case TV_BOTTLE:
 	case TV_JUNK:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -76,11 +76,11 @@ bool hates_elec(object_type *o_ptr)
 	case TV_RING:
 	case TV_WAND:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -109,7 +109,7 @@ bool hates_fire(object_type *o_ptr)
 	case TV_CLOAK:
 	case TV_SOFT_ARMOR:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Books */
@@ -127,24 +127,24 @@ bool hates_fire(object_type *o_ptr)
 	case TV_HISSATSU_BOOK:
 	case TV_HEX_BOOK:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Chests */
 	case TV_CHEST:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Staffs/Scrolls burn */
 	case TV_STAFF:
 	case TV_SCROLL:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -162,11 +162,11 @@ bool hates_cold(object_type *o_ptr)
 	case TV_FLASK:
 	case TV_BOTTLE:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -181,10 +181,10 @@ bool hates_cold(object_type *o_ptr)
 int set_acid_destroy(object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	if (!hates_acid(o_ptr)) return (FALSE);
+	if (!hates_acid(o_ptr)) return FALSE;
 	object_flags(o_ptr, flgs);
-	if (have_flag(flgs, TR_IGNORE_ACID)) return (FALSE);
-	return (TRUE);
+	if (have_flag(flgs, TR_IGNORE_ACID)) return FALSE;
+	return TRUE;
 }
 
 
@@ -198,10 +198,10 @@ int set_acid_destroy(object_type *o_ptr)
 int set_elec_destroy(object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	if (!hates_elec(o_ptr)) return (FALSE);
+	if (!hates_elec(o_ptr)) return FALSE;
 	object_flags(o_ptr, flgs);
-	if (have_flag(flgs, TR_IGNORE_ELEC)) return (FALSE);
-	return (TRUE);
+	if (have_flag(flgs, TR_IGNORE_ELEC)) return FALSE;
+	return TRUE;
 }
 
 
@@ -215,10 +215,10 @@ int set_elec_destroy(object_type *o_ptr)
 int set_fire_destroy(object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	if (!hates_fire(o_ptr)) return (FALSE);
+	if (!hates_fire(o_ptr)) return FALSE;
 	object_flags(o_ptr, flgs);
-	if (have_flag(flgs, TR_IGNORE_FIRE)) return (FALSE);
-	return (TRUE);
+	if (have_flag(flgs, TR_IGNORE_FIRE)) return FALSE;
+	return TRUE;
 }
 
 
@@ -232,10 +232,10 @@ int set_fire_destroy(object_type *o_ptr)
 int set_cold_destroy(object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	if (!hates_cold(o_ptr)) return (FALSE);
+	if (!hates_cold(o_ptr)) return FALSE;
 	object_flags(o_ptr, flgs);
-	if (have_flag(flgs, TR_IGNORE_COLD)) return (FALSE);
-	return (TRUE);
+	if (have_flag(flgs, TR_IGNORE_COLD)) return FALSE;
+	return TRUE;
 }
 
 /*!

@@ -234,14 +234,14 @@ BOOL ReadDIB(HWND hWnd, LPSTR lpFileName, DIBINIT *pInfo)
 	{
 		wsprintf(str, "Can't open file '%s'", (LPSTR)lpFileName);
 		MessageBox(NULL, str, "Error", MB_ICONSTOP | MB_OK);
-		return (FALSE);
+		return FALSE;
 	}
 
 	pInfo->hDIB = GlobalAlloc(GHND, (DWORD)(sizeof(BITMAPINFOHEADER) +
 				  256 * sizeof(RGBQUAD)));
 
 	if (!pInfo->hDIB)
-		return (FALSE);
+		return FALSE;
 
 	lpbi = (LPBITMAPINFOHEADER)GlobalLock(pInfo->hDIB);
 

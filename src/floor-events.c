@@ -708,7 +708,7 @@ static bool update_view_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSIT
 	f2 = (cave_los_grid(g2_c_ptr));
 
 	/* Totally blocked by physical walls */
-	if (!f1 && !f2) return (TRUE);
+	if (!f1 && !f2) return TRUE;
 
 
 	/* Check for visibility */
@@ -716,7 +716,7 @@ static bool update_view_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSIT
 	v2 = (f2 && (g2_c_ptr->info & (CAVE_VIEW)));
 
 	/* Totally blocked by "unviewable neighbors" */
-	if (!v1 && !v2) return (TRUE);
+	if (!v1 && !v2) return TRUE;
 
 	g_ptr = &floor_ptr->grid_array[y][x];
 
@@ -777,7 +777,7 @@ static bool update_view_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSIT
 
 
 	/* Assume no line of sight. */
-	return (TRUE);
+	return TRUE;
 }
 
 

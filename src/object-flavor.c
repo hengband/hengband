@@ -89,7 +89,7 @@ static bool object_easy_know(int i)
 		case TV_HISSATSU_BOOK:
 		case TV_HEX_BOOK:
 		{
-			return (TRUE);
+			return TRUE;
 		}
 
 		/* Simple items */
@@ -100,7 +100,7 @@ static bool object_easy_know(int i)
 		case TV_SPIKE:
 		case TV_WHISTLE:
 		{
-			return (TRUE);
+			return TRUE;
 		}
 
 		/* All Food, Potions, Scrolls, Rods */
@@ -109,11 +109,11 @@ static bool object_easy_know(int i)
 		case TV_SCROLL:
 		case TV_ROD:
 		{
-			return (TRUE);
+			return TRUE;
 		}
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -1039,11 +1039,11 @@ static bool have_flag_of(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 	{
 		if (have_flag(flgs, fi_ptr->flag) &&
 		   (fi_ptr->except_flag == -1 || !have_flag(flgs, fi_ptr->except_flag)))
-			return (TRUE);
+			return TRUE;
 		fi_ptr++;
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!

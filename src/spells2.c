@@ -1157,7 +1157,7 @@ bool symbol_genocide(player_type *caster_ptr, int power, bool player_cast)
 	if (is_special_floor)
 	{
 		msg_print(_("何も起きないようだ……", "It seems nothing happen here..."));
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Mega-Hack -- Get a monster symbol */
@@ -4158,7 +4158,7 @@ bool psychometry(player_type *caster_ptr)
 	object_type *o_ptr;
 	OBJECT_IDX item;
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	if (object_is_known(o_ptr))
 	{

@@ -157,7 +157,7 @@ static bool wiz_dimension_door(player_type *caster_ptr)
 	POSITION x = 0, y = 0;
 	if (!tgt_pt(caster_ptr, &x, &y)) return FALSE;
 	teleport_player_to(caster_ptr, y, x, TELEPORT_NONMAGICAL);
-	return (TRUE);
+	return TRUE;
 }
 
 /*!

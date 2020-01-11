@@ -2490,7 +2490,7 @@ static bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
 	if (o_ptr->discount != j_ptr->discount) return (0);
 
 	/* They match, so they must be similar */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -2630,8 +2630,8 @@ static bool is_blessed(object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
-	if (have_flag(flgs, TR_BLESSED)) return (TRUE);
-	else return (FALSE);
+	if (have_flag(flgs, TR_BLESSED)) return TRUE;
+	else return FALSE;
 }
 
 
@@ -2647,7 +2647,7 @@ static bool is_blessed(object_type *o_ptr)
 static bool store_will_buy(object_type *o_ptr)
 {
 	/* Hack -- The Home is simple */
-	if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM)) return (TRUE);
+	if ((cur_store_num == STORE_HOME) || (cur_store_num == STORE_MUSEUM)) return TRUE;
 
 	/* Switch on the store */
 	switch (cur_store_num)
@@ -2678,7 +2678,7 @@ static bool store_will_buy(object_type *o_ptr)
 				case TV_CARD:
 				break;
 				default:
-				return (FALSE);
+				return FALSE;
 			}
 			break;
 		}
@@ -2700,7 +2700,7 @@ static bool store_will_buy(object_type *o_ptr)
 				case TV_DRAG_ARMOR:
 				break;
 				default:
-				return (FALSE);
+				return FALSE;
 			}
 			break;
 		}
@@ -2722,11 +2722,11 @@ static bool store_will_buy(object_type *o_ptr)
 				break;
 				case TV_HAFTED:
 				{
-					if(o_ptr->sval == SV_WIZSTAFF) return (FALSE);
+					if(o_ptr->sval == SV_WIZSTAFF) return FALSE;
 				}
 				break;
 				default:
-				return (FALSE);
+				return FALSE;
 			}
 			break;
 		}
@@ -2769,7 +2769,7 @@ static bool store_will_buy(object_type *o_ptr)
 					if (is_blessed(o_ptr)) break;
 				}
 				default:
-				return (FALSE);
+				return FALSE;
 			}
 			break;
 		}
@@ -2784,7 +2784,7 @@ static bool store_will_buy(object_type *o_ptr)
 				case TV_POTION:
 				break;
 				default:
-				return (FALSE);
+				return FALSE;
 			}
 			break;
 		}
@@ -2817,10 +2817,10 @@ static bool store_will_buy(object_type *o_ptr)
 				case TV_HAFTED:
 				{
 					if(o_ptr->sval == SV_WIZSTAFF) break;
-					else return (FALSE);
+					else return FALSE;
 				}
 				default:
-				return (FALSE);
+				return FALSE;
 			}
 			break;
 		}
@@ -2844,17 +2844,17 @@ static bool store_will_buy(object_type *o_ptr)
 				case TV_HEX_BOOK:
 					break;
 				default:
-					return (FALSE);
+					return FALSE;
 			}
 			break;
 		}
 	}
 
 	/* Ignore "worthless" items */
-	if (object_value(o_ptr) <= 0) return (FALSE);
+	if (object_value(o_ptr) <= 0) return FALSE;
 
 	/* Assume okay */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -3303,12 +3303,12 @@ static bool black_market_crap(object_type *o_ptr)
 	int i, j;
 
 	/* Ego items are never crap */
-	if (object_is_ego(o_ptr)) return (FALSE);
+	if (object_is_ego(o_ptr)) return FALSE;
 
 	/* Good items are never crap */
-	if (o_ptr->to_a > 0) return (FALSE);
-	if (o_ptr->to_h > 0) return (FALSE);
-	if (o_ptr->to_d > 0) return (FALSE);
+	if (o_ptr->to_a > 0) return FALSE;
+	if (o_ptr->to_h > 0) return FALSE;
+	if (o_ptr->to_d > 0) return FALSE;
 
 	/* Check all stores */
 	for (i = 0; i < MAX_STORES; i++)
@@ -3322,12 +3322,12 @@ static bool black_market_crap(object_type *o_ptr)
 			object_type *j_ptr = &town_info[p_ptr->town_num].store[i].stock[j];
 
 			/* Duplicate item "type", assume crappy */
-			if (o_ptr->k_idx == j_ptr->k_idx) return (TRUE);
+			if (o_ptr->k_idx == j_ptr->k_idx) return TRUE;
 		}
 	}
 
 	/* Assume okay */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -3495,16 +3495,16 @@ static bool noneedtobargain(PRICE minprice)
 	PRICE bad = st_ptr->bad_buy;
 
 	/* Cheap items are "boring" */
-	if (minprice < 10L) return (TRUE);
+	if (minprice < 10L) return TRUE;
 
 	/* Perfect haggling */
-	if (good == MAX_SHORT) return (TRUE);
+	if (good == MAX_SHORT) return TRUE;
 
 	/* Reward good haggles, punish bad haggles, notice price */
-	if (good > ((3 * bad) + (5 + (minprice/50)))) return (TRUE);
+	if (good > ((3 * bad) + (5 + (minprice/50)))) return TRUE;
 
 	/* Return the flag */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -3858,7 +3858,7 @@ static int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j)
 		if ((*com_val >= i) && (*com_val <= j))
 		{
 			/* Success */
-			return (TRUE);
+			return TRUE;
 		}
 	}
 	msg_print(NULL);
@@ -3908,12 +3908,12 @@ static int get_stock(COMMAND_CODE *com_val, concptr pmt, int i, int j)
 	/* Clear the prompt */
 	prt("", 0, 0);
 
-	if (command == ESCAPE) return (FALSE);
+	if (command == ESCAPE) return FALSE;
 
 	repeat_push(*com_val);
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -3942,11 +3942,11 @@ static int increase_insults(void)
 		st_ptr->store_open = current_world_ptr->game_turn + TURNS_PER_TICK*TOWN_DAWN/8 + randint1(TURNS_PER_TICK*TOWN_DAWN/8);
 
 		/* Closed */
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Not closed */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -3970,13 +3970,13 @@ static void decrease_insults(void)
 static int haggle_insults(void)
 {
 	/* Increase insults */
-	if (increase_insults()) return (TRUE);
+	if (increase_insults()) return TRUE;
 
 	/* Display and flush insult */
 	say_comment_5();
 
 	/* Still okay */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -4115,7 +4115,7 @@ static int get_haggle(concptr pmt, s32b *poffer, PRICE price, int final)
 	}
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -4139,20 +4139,20 @@ static bool receive_offer(concptr pmt, s32b *poffer,
 	while (TRUE)
 	{
 		/* Get a haggle (or cancel) */
-		if (!get_haggle(pmt, poffer, price, final)) return (TRUE);
+		if (!get_haggle(pmt, poffer, price, final)) return TRUE;
 
 		/* Acceptable offer */
 		if (((*poffer) * factor) >= (last_offer * factor)) break;
 
 		/* Insult, and check for kicked out */
-		if (haggle_insults()) return (TRUE);
+		if (haggle_insults()) return TRUE;
 
 		/* Reject offer (correctly) */
 		(*poffer) = last_offer;
 	}
 
 	/* Success */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -4320,12 +4320,12 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 		}
 	}
 
-	if (cancel) return (TRUE);
+	if (cancel) return TRUE;
 
 	updatebargain(*price, final_ask, o_ptr->number);
 
 	/* Do not cancel */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -4519,12 +4519,12 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 		}
 	}
 
-	if (cancel) return (TRUE);
+	if (cancel) return TRUE;
 
 	updatebargain(*price, final_ask, o_ptr->number);
 
 	/* Do not cancel */
-	return (FALSE);
+	return FALSE;
 }
 
 

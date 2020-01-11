@@ -912,7 +912,7 @@ static bool get_player_realms(player_type *creature_ptr)
 		}
 	}
 
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -2562,7 +2562,7 @@ static bool get_player_race(player_type *creature_ptr)
 		put_str(buf, 10, 10);
 		c = inkey();
 		if (c == 'Q') birth_quit();
-		if (c == 'S') return (FALSE);
+		if (c == 'S') return FALSE;
 		if (c == ' ' || c == '\r' || c == '\n')
 		{
 			if(cs == MAX_RACES)
@@ -2734,7 +2734,7 @@ static bool get_player_class(player_type *creature_ptr)
 		put_str(buf, 10, 10);
 		c = inkey();
 		if (c == 'Q') birth_quit();
-		if (c == 'S') return (FALSE);
+		if (c == 'S') return FALSE;
 		if (c == ' ' || c == '\r' || c == '\n')
 		{
 			if(cs == MAX_CLASS_CHOICE)
@@ -2893,7 +2893,7 @@ static bool get_player_seikaku(player_type *creature_ptr)
 		put_str(buf, 10, 10);
 		c = inkey();
 		if (c == 'Q') birth_quit();
-		if (c == 'S') return (FALSE);
+		if (c == 'S') return FALSE;
 		if (c == ' ' || c == '\r' || c == '\n')
 		{
 			if(cs == MAX_SEIKAKU)
@@ -3385,7 +3385,7 @@ static bool get_chara_limits(player_type *creature_ptr)
 		case 'Q':
 			birth_quit();
 		case 'S':
-			return (FALSE);
+			return FALSE;
 		case ESCAPE:
 			break; /*後でもう一回breakせんと*/
 		case ' ':
@@ -3963,7 +3963,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 		put_str(buf, 10, 10);
 		c = inkey();
 		if (c == 'Q') birth_quit();
-		if (c == 'S') return (FALSE);
+		if (c == 'S') return FALSE;
 		if (c == ' ' || c == '\r' || c == '\n')
 		{
 			if(cs == MAX_SEXES)
@@ -4384,7 +4384,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 			if (c == 'Q') birth_quit();
 
 			/* Start over */
-			if (c == 'S') return (FALSE);
+			if (c == 'S') return FALSE;
 
 			/* Escape accepts the roll */
 			if (c == '\r' || c == '\n' || c == ESCAPE) break;
@@ -4471,7 +4471,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 	if (c == 'Q') birth_quit();
 
 	/* Start over */
-	if (c == 'S') return (FALSE);
+	if (c == 'S') return FALSE;
 
 
 	/* Initialize random quests */
@@ -4482,7 +4482,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 	previous_char.quick_ok = TRUE;
 
 	/* Accept */
-	return (TRUE);
+	return TRUE;
 }
 
 /*!
@@ -4508,7 +4508,7 @@ static bool ask_quick_start(player_type *creature_ptr)
 		c = inkey();
 
 		if (c == 'Q') quit(NULL);
-		else if (c == 'S') return (FALSE);
+		else if (c == 'S') return FALSE;
 		else if (c == '?')
 		{
 #ifdef JP

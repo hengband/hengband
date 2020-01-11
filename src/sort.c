@@ -222,8 +222,8 @@ bool ang_sort_art_comp(vptr u, vptr v, int a, int b)
 		z2 = a_info[w2].tval;
 
 		/* Compare total kills */
-		if (z1 < z2) return (TRUE);
-		if (z1 > z2) return (FALSE);
+		if (z1 < z2) return TRUE;
+		if (z1 > z2) return FALSE;
 	}
 
 
@@ -235,8 +235,8 @@ bool ang_sort_art_comp(vptr u, vptr v, int a, int b)
 		z2 = a_info[w2].sval;
 
 		/* Compare levels */
-		if (z1 < z2) return (TRUE);
-		if (z1 > z2) return (FALSE);
+		if (z1 < z2) return TRUE;
+		if (z1 > z2) return FALSE;
 	}
 
 
@@ -248,8 +248,8 @@ bool ang_sort_art_comp(vptr u, vptr v, int a, int b)
 		z2 = a_info[w2].level;
 
 		/* Compare experience */
-		if (z1 < z2) return (TRUE);
-		if (z1 > z2) return (FALSE);
+		if (z1 < z2) return TRUE;
+		if (z1 > z2) return FALSE;
 	}
 
 
@@ -375,8 +375,8 @@ bool ang_sort_comp_hook(vptr u, vptr v, int a, int b)
 		z2 = r_info[w2].r_pkills;
 
 		/* Compare player kills */
-		if (z1 < z2) return (TRUE);
-		if (z1 > z2) return (FALSE);
+		if (z1 < z2) return TRUE;
+		if (z1 > z2) return FALSE;
 	}
 
 
@@ -388,8 +388,8 @@ bool ang_sort_comp_hook(vptr u, vptr v, int a, int b)
 		z2 = r_info[w2].r_tkills;
 
 		/* Compare total kills */
-		if (z1 < z2) return (TRUE);
-		if (z1 > z2) return (FALSE);
+		if (z1 < z2) return TRUE;
+		if (z1 > z2) return FALSE;
 	}
 
 
@@ -401,8 +401,8 @@ bool ang_sort_comp_hook(vptr u, vptr v, int a, int b)
 		z2 = r_info[w2].level;
 
 		/* Compare levels */
-		if (z1 < z2) return (TRUE);
-		if (z1 > z2) return (FALSE);
+		if (z1 < z2) return TRUE;
+		if (z1 > z2) return FALSE;
 	}
 
 
@@ -414,8 +414,8 @@ bool ang_sort_comp_hook(vptr u, vptr v, int a, int b)
 		z2 = r_info[w2].mexp;
 
 		/* Compare experience */
-		if (z1 < z2) return (TRUE);
-		if (z1 > z2) return (FALSE);
+		if (z1 < z2) return TRUE;
+		if (z1 > z2) return FALSE;
 	}
 
 

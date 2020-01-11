@@ -81,11 +81,11 @@ static bool know_armour(MONRACE_IDX r_idx)
 
     bool known = (r_ptr->r_cast_spell == MAX_UCHAR)? TRUE: FALSE;
 
-	if (cheat_know || known) return (TRUE);
-	if (kills > 304 / (4 + level)) return (TRUE);
-	if (!(r_ptr->flags1 & RF1_UNIQUE)) return (FALSE);
-	if (kills > 304 / (38 + (5 * level) / 4)) return (TRUE);
-	return (FALSE);
+	if (cheat_know || known) return TRUE;
+	if (kills > 304 / (4 + level)) return TRUE;
+	if (!(r_ptr->flags1 & RF1_UNIQUE)) return FALSE;
+	if (kills > 304 / (38 + (5 * level) / 4)) return TRUE;
+	return FALSE;
 }
 
 
@@ -115,12 +115,12 @@ static bool know_damage(MONRACE_IDX r_idx, int i)
 	s32b d = d1 * d2;
 
 	if (d >= ((4+level)*MAX_UCHAR)/80) d = ((4+level)*MAX_UCHAR-1)/80;
-	if ((4 + level) * a > 80 * d) return (TRUE);
-	if (!(r_ptr->flags1 & RF1_UNIQUE)) return (FALSE);
-	if ((4 + level) * (2 * a) > 80 * d) return (TRUE);
+	if ((4 + level) * a > 80 * d) return TRUE;
+	if (!(r_ptr->flags1 & RF1_UNIQUE)) return FALSE;
+	if ((4 + level) * (2 * a) > 80 * d) return TRUE;
 
 	/* Assume false */
-	return (FALSE);
+	return FALSE;
 }
 
 

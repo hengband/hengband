@@ -1209,16 +1209,16 @@ static bool project_m(player_type *caster_ptr, floor_type *floor_ptr, MONSTER_ID
 	DEPTH caster_lev = (who > 0) ? r_info[m_caster_ptr->r_idx].level : (caster_ptr->lev * 2);
 
 	/* Nobody here */
-	if (!g_ptr->m_idx) return (FALSE);
+	if (!g_ptr->m_idx) return FALSE;
 
 	/* Never affect projector */
-	if (who && (g_ptr->m_idx == who)) return (FALSE);
-	if ((g_ptr->m_idx == caster_ptr->riding) && !who && !(typ == GF_OLD_HEAL) && !(typ == GF_OLD_SPEED) && !(typ == GF_STAR_HEAL)) return (FALSE);
+	if (who && (g_ptr->m_idx == who)) return FALSE;
+	if ((g_ptr->m_idx == caster_ptr->riding) && !who && !(typ == GF_OLD_HEAL) && !(typ == GF_OLD_SPEED) && !(typ == GF_STAR_HEAL)) return FALSE;
 	if (sukekaku && ((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU))) return FALSE;
 
 	/* Don't affect already death monsters */
 	/* Prevents problems with chain reactions of exploding monsters */
-	if (m_ptr->hp < 0) return (FALSE);
+	if (m_ptr->hp < 0) return FALSE;
 
 	/* Reduce damage by distance */
 	dam = (dam + r) / (r + 1);
@@ -3361,7 +3361,7 @@ static bool project_m(player_type *caster_ptr, floor_type *floor_ptr, MONSTER_ID
 
 				delete_monster_idx(g_ptr->m_idx);
 
-				return (TRUE);
+				return TRUE;
 			}
 			else
 			{
@@ -3611,7 +3611,7 @@ static bool project_m(player_type *caster_ptr, floor_type *floor_ptr, MONSTER_ID
 	}
 
 	/* Absolutely no effect */
-	if (skipped) return (FALSE);
+	if (skipped) return FALSE;
 
 	/* "Unique" monsters cannot be polymorphed */
 	if (r_ptr->flags1 & (RF1_UNIQUE)) do_poly = FALSE;
@@ -4026,7 +4026,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 
 	/* Player is not here */
-	if (!player_bold(target_ptr, y, x)) return (FALSE);
+	if (!player_bold(target_ptr, y, x)) return FALSE;
 
 	if ((target_ptr->special_defense & NINJA_KAWARIMI) && dam && (randint0(55) < (target_ptr->lev * 3 / 5 + 20)) && who && (who != target_ptr->riding))
 	{
@@ -4034,8 +4034,8 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 	}
 
 	/* Player cannot hurt himself */
-	if (!who) return (FALSE);
-	if (who == target_ptr->riding) return (FALSE);
+	if (!who) return FALSE;
+	if (who == target_ptr->riding) return FALSE;
 
 	if ((target_ptr->reflect || ((target_ptr->special_defense & KATA_FUUJIN) && !target_ptr->blind)) && (flg & PROJECT_REFLECTABLE) && !one_in_(10))
 	{
@@ -5138,10 +5138,10 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 	ax = ABS(dx);
 
 	/* Handle adjacent (or identical) grids */
-	if ((ax < 2) && (ay < 2)) return (TRUE);
+	if ((ax < 2) && (ay < 2)) return TRUE;
 
 	/* Paranoia -- require "safe" origin */
-	/* if (!in_bounds(floor_ptr, y1, x1)) return (FALSE); */
+	/* if (!in_bounds(floor_ptr, y1, x1)) return FALSE; */
 
 	/* Directly South/North */
 	if (!dx)
@@ -5151,7 +5151,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 		{
 			for (ty = y1 + 1; ty < y2; ty++)
 			{
-				if (cave_stop_disintegration(floor_ptr, ty, x1)) return (FALSE);
+				if (cave_stop_disintegration(floor_ptr, ty, x1)) return FALSE;
 			}
 		}
 
@@ -5160,12 +5160,12 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 		{
 			for (ty = y1 - 1; ty > y2; ty--)
 			{
-				if (cave_stop_disintegration(floor_ptr, ty, x1)) return (FALSE);
+				if (cave_stop_disintegration(floor_ptr, ty, x1)) return FALSE;
 			}
 		}
 
 		/* Assume los */
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Directly East/West */
@@ -5176,7 +5176,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 		{
 			for (tx = x1 + 1; tx < x2; tx++)
 			{
-				if (cave_stop_disintegration(floor_ptr, y1, tx)) return (FALSE);
+				if (cave_stop_disintegration(floor_ptr, y1, tx)) return FALSE;
 			}
 		}
 
@@ -5185,12 +5185,12 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 		{
 			for (tx = x1 - 1; tx > x2; tx--)
 			{
-				if (cave_stop_disintegration(floor_ptr, y1, tx)) return (FALSE);
+				if (cave_stop_disintegration(floor_ptr, y1, tx)) return FALSE;
 			}
 		}
 
 		/* Assume los */
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Extract some signs */
@@ -5202,7 +5202,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 	{
 		if (ay == 2)
 		{
-			if (!cave_stop_disintegration(floor_ptr, y1 + sy, x1)) return (TRUE);
+			if (!cave_stop_disintegration(floor_ptr, y1 + sy, x1)) return TRUE;
 		}
 	}
 
@@ -5211,7 +5211,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 	{
 		if (ax == 2)
 		{
-			if (!cave_stop_disintegration(floor_ptr, y1, x1 + sx)) return (TRUE);
+			if (!cave_stop_disintegration(floor_ptr, y1, x1 + sx)) return TRUE;
 		}
 	}
 
@@ -5246,7 +5246,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 		/* the LOS exactly meets the corner of a tile. */
 		while (x2 - tx)
 		{
-			if (cave_stop_disintegration(floor_ptr, ty, tx)) return (FALSE);
+			if (cave_stop_disintegration(floor_ptr, ty, tx)) return FALSE;
 
 			qy += m;
 
@@ -5257,7 +5257,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 			else if (qy > f2)
 			{
 				ty += sy;
-				if (cave_stop_disintegration(floor_ptr, ty, tx)) return (FALSE);
+				if (cave_stop_disintegration(floor_ptr, ty, tx)) return FALSE;
 				qy -= f1;
 				tx += sx;
 			}
@@ -5292,7 +5292,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 	/* the LOS exactly meets the corner of a tile. */
 	while (y2 - ty)
 	{
-		if (cave_stop_disintegration(floor_ptr, ty, tx)) return (FALSE);
+		if (cave_stop_disintegration(floor_ptr, ty, tx)) return FALSE;
 
 		qx += m;
 
@@ -5303,7 +5303,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 		else if (qx > f2)
 		{
 			tx += sx;
-			if (cave_stop_disintegration(floor_ptr, ty, tx)) return (FALSE);
+			if (cave_stop_disintegration(floor_ptr, ty, tx)) return FALSE;
 			qx -= f1;
 			ty += sy;
 		}
@@ -6171,7 +6171,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	}
 
 	/* Speed -- ignore "non-explosions" */
-	if (!grids) return (FALSE);
+	if (!grids) return FALSE;
 
 
 	/* Display the "blast area" if requested */

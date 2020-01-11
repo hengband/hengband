@@ -130,23 +130,23 @@ static byte kanji_code = 0;
 static bool h_older_than(byte major, byte minor, byte patch, byte extra)
 {
 	/* Much older, or much more recent */
-	if (current_world_ptr->h_ver_major < major) return (TRUE);
-	if (current_world_ptr->h_ver_major > major) return (FALSE);
+	if (current_world_ptr->h_ver_major < major) return TRUE;
+	if (current_world_ptr->h_ver_major > major) return FALSE;
 
 	/* Distinctly older, or distinctly more recent */
-	if (current_world_ptr->h_ver_minor < minor) return (TRUE);
-	if (current_world_ptr->h_ver_minor > minor) return (FALSE);
+	if (current_world_ptr->h_ver_minor < minor) return TRUE;
+	if (current_world_ptr->h_ver_minor > minor) return FALSE;
 
 	/* Barely older, or barely more recent */
-	if (current_world_ptr->h_ver_patch < patch) return (TRUE);
-	if (current_world_ptr->h_ver_patch > patch) return (FALSE);
+	if (current_world_ptr->h_ver_patch < patch) return TRUE;
+	if (current_world_ptr->h_ver_patch > patch) return FALSE;
 
 	/* Barely older, or barely more recent */
-	if (current_world_ptr->h_ver_extra < extra) return (TRUE);
-	if (current_world_ptr->h_ver_extra > extra) return (FALSE);
+	if (current_world_ptr->h_ver_extra < extra) return TRUE;
+	if (current_world_ptr->h_ver_extra > extra) return FALSE;
 
 	/* Identical versions */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -160,19 +160,19 @@ static bool h_older_than(byte major, byte minor, byte patch, byte extra)
 static bool z_older_than(byte x, byte y, byte z)
 {
 	/* Much older, or much more recent */
-	if (current_world_ptr->z_major < x) return (TRUE);
-	if (current_world_ptr->z_major > x) return (FALSE);
+	if (current_world_ptr->z_major < x) return TRUE;
+	if (current_world_ptr->z_major > x) return FALSE;
 
 	/* Distinctly older, or distinctly more recent */
-	if (current_world_ptr->z_minor < y) return (TRUE);
-	if (current_world_ptr->z_minor > y) return (FALSE);
+	if (current_world_ptr->z_minor < y) return TRUE;
+	if (current_world_ptr->z_minor > y) return FALSE;
 
 	/* Barely older, or barely more recent */
-	if (current_world_ptr->z_patch < z) return (TRUE);
-	if (current_world_ptr->z_patch > z) return (FALSE);
+	if (current_world_ptr->z_patch < z) return TRUE;
+	if (current_world_ptr->z_patch > z) return FALSE;
 
 	/* Identical versions */
-	return (FALSE);
+	return FALSE;
 }
 
 

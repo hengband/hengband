@@ -1306,7 +1306,7 @@ static bool see_wall(DIRECTION dir, POSITION y, POSITION x)
 	x += ddx[dir];
 
 	/* Illegal grids are not known walls */
-	if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) return (FALSE);
+	if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) return FALSE;
 
 	/* Access grid */
 	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
@@ -1349,16 +1349,16 @@ static bool see_nothing(DIRECTION dir, POSITION y, POSITION x)
 	x += ddx[dir];
 
 	/* Illegal grids are unknown */
-	if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) return (TRUE);
+	if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) return TRUE;
 
 	/* Memorized grids are always known */
-	if (p_ptr->current_floor_ptr->grid_array[y][x].info & (CAVE_MARK)) return (FALSE);
+	if (p_ptr->current_floor_ptr->grid_array[y][x].info & (CAVE_MARK)) return FALSE;
 
 	/* Viewable door/wall grids are known */
-	if (player_can_see_bold(p_ptr, y, x)) return (FALSE);
+	if (player_can_see_bold(p_ptr, y, x)) return FALSE;
 
 	/* Default */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -1573,7 +1573,7 @@ static bool run_test(void)
 			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Visible monster */
-			if (m_ptr->ml) return (TRUE);
+			if (m_ptr->ml) return TRUE;
 		}
 
 		/* Visible objects abort running */
@@ -1584,7 +1584,7 @@ static bool run_test(void)
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Visible object */
-			if (o_ptr->marked & OM_FOUND) return (TRUE);
+			if (o_ptr->marked & OM_FOUND) return TRUE;
 		}
 
 		/* Assume unknown */
@@ -1628,7 +1628,7 @@ static bool run_test(void)
 			}
 
 			/* Interesting feature */
-			if (notice) return (TRUE);
+			if (notice) return TRUE;
 
 			/* The grid is "visible" */
 			inv = FALSE;
@@ -1652,13 +1652,13 @@ static bool run_test(void)
 			/* Three new directions. Stop running. */
 			else if (option2)
 			{
-				return (TRUE);
+				return TRUE;
 			}
 
 			/* Two non-adjacent new directions.  Stop running. */
 			else if (option != cycle[chome[prev_dir] + i - 1])
 			{
-				return (TRUE);
+				return TRUE;
 			}
 
 			/* Two new (adjacent) directions (case 1) */
@@ -1709,7 +1709,7 @@ static bool run_test(void)
 				/* Looking to break right */
 				if (find_breakright)
 				{
-					return (TRUE);
+					return TRUE;
 				}
 			}
 
@@ -1719,7 +1719,7 @@ static bool run_test(void)
 				/* Looking to break left */
 				if (find_breakleft)
 				{
-					return (TRUE);
+					return TRUE;
 				}
 			}
 		}
@@ -1733,7 +1733,7 @@ static bool run_test(void)
 				/* Looking to break left */
 				if (find_breakleft)
 				{
-					return (TRUE);
+					return TRUE;
 				}
 			}
 
@@ -1743,7 +1743,7 @@ static bool run_test(void)
 				/* Looking to break right */
 				if (find_breakright)
 				{
-					return (TRUE);
+					return TRUE;
 				}
 			}
 		}
@@ -1755,7 +1755,7 @@ static bool run_test(void)
 		/* No options */
 		if (!option)
 		{
-			return (TRUE);
+			return TRUE;
 		}
 
 		/* One option */
@@ -1802,7 +1802,7 @@ static bool run_test(void)
 				/* STOP: we are next to an intersection or a room */
 				else
 				{
-					return (TRUE);
+					return TRUE;
 				}
 			}
 
@@ -1826,11 +1826,11 @@ static bool run_test(void)
 	/* About to hit a known wall, stop */
 	if (see_wall(find_current, p_ptr->y, p_ptr->x))
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* Failure */
-	return (FALSE);
+	return FALSE;
 }
 
 

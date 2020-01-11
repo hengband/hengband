@@ -23,7 +23,7 @@ bool item_tester_hook_convertible(object_type *o_ptr)
 {
 	if ((o_ptr->tval == TV_JUNK) || (o_ptr->tval == TV_SKELETON)) return TRUE;
 	if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON)) return TRUE;
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -39,15 +39,15 @@ bool item_tester_hook_orthodox_melee_weapons(object_type *o_ptr)
 	case TV_POLEARM:
 	case TV_DIGGING:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 	case TV_SWORD:
 	{
-		if (o_ptr->sval != SV_DOKUBARI) return (TRUE);
+		if (o_ptr->sval != SV_DOKUBARI) return TRUE;
 	}
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -58,8 +58,8 @@ bool item_tester_hook_orthodox_melee_weapons(object_type *o_ptr)
 bool item_tester_hook_melee_weapon(object_type *o_ptr)
 {
 	/* Check for a usable slot */
-	if ((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD)) return (TRUE);
-	return (FALSE);
+	if ((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD)) return TRUE;
+	return FALSE;
 }
 
 
@@ -76,11 +76,11 @@ bool item_tester_hook_ammo(object_type *o_ptr)
 	case TV_ARROW:
 	case TV_BOLT:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -109,8 +109,8 @@ bool item_tester_hook_broken_weapon(object_type *o_ptr)
 */
 bool item_tester_hook_boomerang(object_type *o_ptr)
 {
-	if ((o_ptr->tval == TV_DIGGING) || (o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM) || (o_ptr->tval == TV_HAFTED)) return (TRUE);
-	return (FALSE);
+	if ((o_ptr->tval == TV_DIGGING) || (o_ptr->tval == TV_SWORD) || (o_ptr->tval == TV_POLEARM) || (o_ptr->tval == TV_HAFTED)) return TRUE;
+	return FALSE;
 }
 
 /*!
@@ -149,7 +149,7 @@ bool item_tester_hook_eatable(object_type *o_ptr)
 			return TRUE;
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -162,8 +162,8 @@ bool item_tester_hook_mochikae(object_type *o_ptr)
 	/* Check for a usable slot */
 	if (((o_ptr->tval >= TV_DIGGING) && (o_ptr->tval <= TV_SWORD)) ||
 		(o_ptr->tval == TV_SHIELD) || (o_ptr->tval == TV_CAPTURE) ||
-		(o_ptr->tval == TV_CARD)) return (TRUE);
-	return (FALSE);
+		(o_ptr->tval == TV_CARD)) return TRUE;
+	return FALSE;
 }
 
 /*!
@@ -177,13 +177,13 @@ bool item_tester_hook_activate(object_type *o_ptr)
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 
 	/* Not known */
-	if (!object_is_known(o_ptr)) return (FALSE);
+	if (!object_is_known(o_ptr)) return FALSE;
 	object_flags(o_ptr, flgs);
 
 	/* Check activation flag */
-	if (have_flag(flgs, TR_ACTIVATE)) return (TRUE);
+	if (have_flag(flgs, TR_ACTIVATE)) return TRUE;
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -197,9 +197,9 @@ bool item_tester_hook_wear(object_type *o_ptr)
 		if (p_ptr->psex == SEX_MALE) return FALSE;
 
 	/* Check for a usable slot */
-	if (wield_slot(p_ptr, o_ptr) >= INVEN_RARM) return (TRUE);
+	if (wield_slot(p_ptr, o_ptr) >= INVEN_RARM) return TRUE;
 
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -215,7 +215,7 @@ bool item_tester_hook_use(object_type *o_ptr)
 
 	/* Ammo */
 	if (o_ptr->tval == p_ptr->tval_ammo)
-		return (TRUE);
+		return TRUE;
 
 	/* Useable object */
 	switch (o_ptr->tval)
@@ -228,7 +228,7 @@ bool item_tester_hook_use(object_type *o_ptr)
 	case TV_POTION:
 	case TV_FOOD:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	default:
@@ -236,7 +236,7 @@ bool item_tester_hook_use(object_type *o_ptr)
 		int i;
 
 		/* Not known */
-		if (!object_is_known(o_ptr)) return (FALSE);
+		if (!object_is_known(o_ptr)) return FALSE;
 
 		/* HACK - only items from the equipment can be activated */
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
@@ -246,13 +246,13 @@ bool item_tester_hook_use(object_type *o_ptr)
 				object_flags(o_ptr, flgs);
 
 				/* Check activation flag */
-				if (have_flag(flgs, TR_ACTIVATE)) return (TRUE);
+				if (have_flag(flgs, TR_ACTIVATE)) return TRUE;
 			}
 		}
 	}
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -283,8 +283,8 @@ bool item_tester_hook_quaff(object_type *o_ptr)
 */
 bool item_tester_hook_readable(object_type *o_ptr)
 {
-	if ((o_ptr->tval == TV_SCROLL) || (o_ptr->tval == TV_PARCHMENT) || (o_ptr->name1 == ART_GHB) || (o_ptr->name1 == ART_POWER)) return (TRUE);
-	return (FALSE);
+	if ((o_ptr->tval == TV_SCROLL) || (o_ptr->tval == TV_PARCHMENT) || (o_ptr->name1 == ART_GHB) || (o_ptr->name1 == ART_POWER)) return TRUE;
+	return FALSE;
 }
 
 
@@ -304,15 +304,15 @@ bool item_tester_hook_melee_ammo(object_type *o_ptr)
 	case TV_ARROW:
 	case TV_SHOT:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 	case TV_SWORD:
 	{
-		if (o_ptr->sval != SV_DOKUBARI) return (TRUE);
+		if (o_ptr->sval != SV_DOKUBARI) return TRUE;
 	}
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -329,11 +329,11 @@ bool item_tester_hook_weapon_except_bow(object_type *o_ptr)
 	case TV_POLEARM:
 	case TV_DIGGING:
 	{
-		return (TRUE);
+		return TRUE;
 	}
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -420,15 +420,15 @@ bool item_tester_hook_identify_fully_weapon_armour(object_type *o_ptr)
 bool item_tester_hook_recharge(object_type *o_ptr)
 {
 	/* Recharge staffs */
-	if (o_ptr->tval == TV_STAFF) return (TRUE);
+	if (o_ptr->tval == TV_STAFF) return TRUE;
 
 	/* Recharge wands */
-	if (o_ptr->tval == TV_WAND) return (TRUE);
+	if (o_ptr->tval == TV_WAND) return TRUE;
 
 	/* Hack -- Recharge rods */
-	if (o_ptr->tval == TV_ROD) return (TRUE);
+	if (o_ptr->tval == TV_ROD) return TRUE;
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -452,12 +452,12 @@ bool item_tester_learn_spell(object_type *o_ptr)
 		}
 	}
 
-	if ((o_ptr->tval < TV_LIFE_BOOK) || (o_ptr->tval > (TV_LIFE_BOOK + MAX_REALM - 1))) return (FALSE);
-	if ((o_ptr->tval == TV_MUSIC_BOOK) && (p_ptr->pclass == CLASS_BARD)) return (TRUE);
+	if ((o_ptr->tval < TV_LIFE_BOOK) || (o_ptr->tval > (TV_LIFE_BOOK + MAX_REALM - 1))) return FALSE;
+	if ((o_ptr->tval == TV_MUSIC_BOOK) && (p_ptr->pclass == CLASS_BARD)) return TRUE;
 	else if (!is_magic(tval2realm(o_ptr->tval))) return FALSE;
-	if ((REALM1_BOOK == o_ptr->tval) || (REALM2_BOOK == o_ptr->tval)) return (TRUE);
-	if (choices & (0x0001 << (tval2realm(o_ptr->tval) - 1))) return (TRUE);
-	return (FALSE);
+	if ((REALM1_BOOK == o_ptr->tval) || (REALM2_BOOK == o_ptr->tval)) return TRUE;
+	if (choices & (0x0001 << (tval2realm(o_ptr->tval) - 1))) return TRUE;
+	return FALSE;
 }
 
 /*!
@@ -497,14 +497,14 @@ bool item_tester_high_level_book(object_type *o_ptr)
 bool item_tester_refill_lantern(object_type *o_ptr)
 {
 	/* Flasks of oil are okay */
-	if (o_ptr->tval == TV_FLASK) return (TRUE);
+	if (o_ptr->tval == TV_FLASK) return TRUE;
 
 	/* Laterns are okay */
 	if ((o_ptr->tval == TV_LITE) &&
-		(o_ptr->sval == SV_LITE_LANTERN)) return (TRUE);
+		(o_ptr->sval == SV_LITE_LANTERN)) return TRUE;
 
 	/* Assume not okay */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -901,10 +901,10 @@ bool object_can_refill_torch(object_type *o_ptr)
 {
 	/* Torches are okay */
 	if ((o_ptr->tval == TV_LITE) &&
-		(o_ptr->sval == SV_LITE_TORCH)) return (TRUE);
+		(o_ptr->sval == SV_LITE_TORCH)) return TRUE;
 
 	/* Assume not okay */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -988,10 +988,10 @@ OBJECT_TYPE_VALUE item_tester_tval;
 bool item_tester_okay(object_type *o_ptr, OBJECT_TYPE_VALUE tval)
 {
 	/* Hack -- allow listing empty slots */
-	// if (item_tester_full) return (TRUE); // TODO:DELETE
+	// if (item_tester_full) return TRUE; // TODO:DELETE
 
 	/* Require an item */
-	if (!o_ptr->k_idx) return (FALSE);
+	if (!o_ptr->k_idx) return FALSE;
 
 	/* Hack -- ignore "gold" */
 	if (o_ptr->tval == TV_GOLD)
@@ -999,7 +999,7 @@ bool item_tester_okay(object_type *o_ptr, OBJECT_TYPE_VALUE tval)
 		/* See xtra2.c */
 		extern bool show_gold_on_floor;
 
-		if (!show_gold_on_floor) return (FALSE);
+		if (!show_gold_on_floor) return FALSE;
 	}
 
 	/* Check the tval */
@@ -1009,15 +1009,15 @@ bool item_tester_okay(object_type *o_ptr, OBJECT_TYPE_VALUE tval)
 		if ((tval <= TV_DEATH_BOOK) && (tval >= TV_LIFE_BOOK))
 			return check_book_realm(o_ptr->tval, o_ptr->sval);
 		else
-			if (tval != o_ptr->tval) return (FALSE);
+			if (tval != o_ptr->tval) return FALSE;
 	}
 
 	/* Check the hook */
 	if (item_tester_hook)
 	{
-		if (!(*item_tester_hook)(o_ptr)) return (FALSE);
+		if (!(*item_tester_hook)(o_ptr)) return FALSE;
 	}
 
 	/* Assume okay */
-	return (TRUE);
+	return TRUE;
 }

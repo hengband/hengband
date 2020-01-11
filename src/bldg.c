@@ -136,21 +136,21 @@ static bool is_owner(building_type *bldg)
 {
 	if (bldg->member_class[p_ptr->pclass] == BUILDING_OWNER)
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	if (bldg->member_race[p_ptr->prace] == BUILDING_OWNER)
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	if ((is_magic(p_ptr->realm1) && (bldg->member_realm[p_ptr->realm1] == BUILDING_OWNER)) ||
 		(is_magic(p_ptr->realm2) && (bldg->member_realm[p_ptr->realm2] == BUILDING_OWNER)))
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -166,18 +166,18 @@ static bool is_member(building_type *bldg)
 {
 	if (bldg->member_class[p_ptr->pclass])
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	if (bldg->member_race[p_ptr->prace])
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 	if ((is_magic(p_ptr->realm1) && bldg->member_realm[p_ptr->realm1]) ||
 	    (is_magic(p_ptr->realm2) && bldg->member_realm[p_ptr->realm2]))
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
 
@@ -191,7 +191,7 @@ static bool is_member(building_type *bldg)
 		}
 		return OK;
 	}
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -1198,7 +1198,7 @@ static bool gamble_comm(int cmd)
 				msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
 				msg_print(NULL);
 				screen_load();
-				return (FALSE);
+				return FALSE;
 			}
 			else if (wager > maxbet)
 			{
@@ -1441,7 +1441,7 @@ static bool gamble_comm(int cmd)
 		msg_print(NULL);
 	}
 	screen_load();
-	return (TRUE);
+	return TRUE;
 }
 
 /*!
@@ -1642,7 +1642,7 @@ static bool kakutoujou(player_type *player_ptr)
 
 				msg_print(NULL);
 				screen_load();
-				return (FALSE);
+				return FALSE;
 			}
 			else if (wager > maxbet)
 			{
@@ -1670,12 +1670,12 @@ static bool kakutoujou(player_type *player_ptr)
 
 			screen_load();
 
-			return (TRUE);
+			return TRUE;
 		}
 	}
 	screen_load();
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -2092,7 +2092,7 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 			}
 	}
 
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -2824,7 +2824,7 @@ static bool eval_ac(ARMOUR_CLASS iAC)
 	(void)inkey();
 	screen_load();
 
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -3176,14 +3176,14 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 	s = _("改良できるものがありません。", "You have nothing to improve.");
 
 	o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | IGNORE_BOTHHAND_SLOT), item_tester_tval);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	/* Check if the player has enough money */
 	if (player_ptr->au < (cost * o_ptr->number))
 	{
 		object_desc(tmp_str, o_ptr, OD_NAME_ONLY);
 		msg_format(_("%sを改良するだけのゴールドがありません！", "You do not have the gold to improve %s!"), tmp_str);
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Enchant to hit */
@@ -3230,7 +3230,7 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 	{
 		if (flush_failure) flush();
 		msg_print(_("改良に失敗した。", "The improvement failed."));
-		return (FALSE);
+		return FALSE;
 	}
 	else
 	{
@@ -3247,7 +3247,7 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 		if (item >= INVEN_RARM) calc_android_exp(player_ptr);
 
 		/* Something happened */
-		return (TRUE);
+		return TRUE;
 	}
 }
 
@@ -3640,7 +3640,7 @@ static bool research_mon(player_type *player_ptr)
 	{
 		screen_load();
 
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Find that character info, and describe it */
@@ -3750,7 +3750,7 @@ static bool research_mon(player_type *player_ptr)
 		C_KILL(who, max_r_idx, MONRACE_IDX);
 		screen_load();
 
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Sort by level */

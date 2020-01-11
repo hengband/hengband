@@ -271,7 +271,7 @@ bool import_magic_device(player_type *user_ptr)
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	o_ptr = choose_object(user_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	if (o_ptr->tval == TV_STAFF && o_ptr->sval == SV_STAFF_NOTHING)
 	{
@@ -1211,14 +1211,14 @@ bool enchant(player_type *caster_ptr, object_type *o_ptr, int n, int eflag)
 	}
 
 	/* Failure */
-	if (!res) return (FALSE);
+	if (!res) return FALSE;
 	caster_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
 	caster_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
 
 	calc_android_exp(caster_ptr);
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -1248,7 +1248,7 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));

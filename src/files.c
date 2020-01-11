@@ -5343,7 +5343,7 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 		msg_format(_("'%s'をオープンできません。", "Cannot open '%s'."), name);
 		msg_print(NULL);
 
-		return (TRUE);
+		return TRUE;
 	}
 
 
@@ -5418,7 +5418,7 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 			/* Hack -- Re-Open the file */
 			fff = my_fopen(path, "r");
 
-			if (!fff) return (FALSE);
+			if (!fff) return FALSE;
 
 			/* File has been restarted */
 			next = 0;
@@ -5731,10 +5731,10 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 	my_fclose(fff);
 
 	/* Escape */
-	if (skey == 'q') return (FALSE);
+	if (skey == 'q') return FALSE;
 
 	/* Normal return */
-	return (TRUE);
+	return TRUE;
 }
 
 

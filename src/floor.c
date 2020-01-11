@@ -573,10 +573,10 @@ bool projectable(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, P
 	x = GRID_X(grid_g[grid_n - 1]);
 
 	/* May not end in an unrequested grid */
-	if ((y != y2) || (x != x2)) return (FALSE);
+	if ((y != y2) || (x != x2)) return FALSE;
 
 	/* Assume okay */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -633,7 +633,7 @@ bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Forbid perma-grids */
-	if (cave_perma_grid(g_ptr)) return (FALSE);
+	if (cave_perma_grid(g_ptr)) return FALSE;
 
 	/* Check objects */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -643,11 +643,11 @@ bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Forbid artifact grids */
-		if (object_is_artifact(o_ptr)) return (FALSE);
+		if (object_is_artifact(o_ptr)) return FALSE;
 	}
 
 	/* Accept */
-	return (TRUE);
+	return TRUE;
 }
 
 /*
@@ -1026,13 +1026,13 @@ bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 	if (!in_bounds(floor_ptr, y, x))
 	{
 		/* Out of bounds */
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Do the real check */
-	if (is_floor_bold(floor_ptr, y, x)) return (TRUE);
+	if (is_floor_bold(floor_ptr, y, x)) return TRUE;
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -1097,19 +1097,19 @@ static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
 		if (cave_have_flag_bold(floor_ptr, y - 1, x, FF_WALL) &&
 			cave_have_flag_bold(floor_ptr, y + 1, x, FF_WALL))
 		{
-			return (TRUE);
+			return TRUE;
 		}
 
 		/* Check Horizontal */
 		if (cave_have_flag_bold(floor_ptr, y, x - 1, FF_WALL) &&
 			cave_have_flag_bold(floor_ptr, y, x + 1, FF_WALL))
 		{
-			return (TRUE);
+			return TRUE;
 		}
 	}
 
 	/* No doorway */
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
