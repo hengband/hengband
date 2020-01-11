@@ -2970,7 +2970,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 				creature_ptr->dungeon_idx = 0;
 
 				leave_quest_check(creature_ptr);
-				leave_tower_check();
+				leave_tower_check(creature_ptr);
 
 				creature_ptr->current_floor_ptr->inside_quest = 0;
 

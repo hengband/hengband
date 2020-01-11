@@ -365,7 +365,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 			msg_print(_("下の階に降りた。", "You enter the down staircase."));
 
 		leave_quest_check(creature_ptr);
-		leave_tower_check();
+		leave_tower_check(creature_ptr);
 
 		creature_ptr->current_floor_ptr->inside_quest = g_ptr->special;
 

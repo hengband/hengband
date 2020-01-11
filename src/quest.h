@@ -93,5 +93,5 @@ extern void quest_discovery(QUEST_IDX q_idx);
 extern QUEST_IDX quest_number(player_type *player_ptr, DEPTH level);
 extern QUEST_IDX random_quest_number(player_type *player_ptr, DEPTH level);
 extern void leave_quest_check(player_type *player_ptr);
-extern void leave_tower_check(void);
+extern void leave_tower_check(player_type *player_ptr);
 extern void do_cmd_quest(player_type *player_ptr);
