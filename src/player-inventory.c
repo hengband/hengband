@@ -36,10 +36,7 @@ bool is_ring_slot(int i)
  */
 static INVENTORY_IDX label_to_equip(player_type* owner_ptr, int c)
 {
-	INVENTORY_IDX i;
-
-	/* Convert */
-	i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1) + INVEN_RARM;
+	INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1) + INVEN_RARM;
 
 	/* Verify the index */
 	if ((i < INVEN_RARM) || (i >= INVEN_TOTAL)) return (-1);
@@ -49,22 +46,21 @@ static INVENTORY_IDX label_to_equip(player_type* owner_ptr, int c)
 	/* Empty slots can never be chosen */
 	if (!owner_ptr->inventory_list[i].k_idx) return (-1);
 
-	/* Return the index */
 	return i;
 }
+
 
 /*!
  * @brief 選択アルファベットラベルからプレイヤーの所持オブジェクトIDを返す /
  * Convert a label into the index of an item in the "inven"
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param c 選択されたアルファベット
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  * @details Note that the label does NOT distinguish inven/equip.
  */
 static INVENTORY_IDX label_to_inven(player_type* owner_ptr, int c)
 {
-	INVENTORY_IDX i;
-
-	/* Convert */
-	i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1);
+	INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1);
 
 	/* Verify the index */
 	if ((i < 0) || (i > INVEN_PACK)) return (-1);
@@ -72,7 +68,6 @@ static INVENTORY_IDX label_to_inven(player_type* owner_ptr, int c)
 	/* Empty slots can never be chosen */
 	if (!owner_ptr->inventory_list[i].k_idx) return (-1);
 
-	/* Return the index */
 	return i;
 }
 
@@ -80,6 +75,7 @@ static INVENTORY_IDX label_to_inven(player_type* owner_ptr, int c)
 /*!
  * @brief 所持/装備オブジェクトIDの部位表現を返す /
  * Return a string mentioning how a given item is carried
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param i 部位表現を求めるプレイヤーの所持/装備オブジェクトID
  * @return 部位表現の文字列ポインタ
  */
@@ -115,9 +111,9 @@ static concptr mention_use(player_type *owner_ptr, int i)
 	default:          p = _("ザック", "In pack"); break;
 	}
 
-	/* Return the result */
 	return p;
 }
+
 
 /*!
  * @brief 装備アイテム一覧を表示する /
@@ -126,19 +122,17 @@ static concptr mention_use(player_type *owner_ptr, int i)
  */
 void display_equip(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
 {
-	register int i, n;
-	object_type *o_ptr;
+	if (!owner_ptr || !owner_ptr->inventory_list) return;
+
+	TERM_LEN wid, hgt;
+	Term_get_size(&wid, &hgt);
+
 	TERM_COLOR attr = TERM_WHITE;
 	char tmp_val[80];
 	GAME_TEXT o_name[MAX_NLEN];
-	TERM_LEN wid, hgt;
-
-	if (!owner_ptr || !owner_ptr->inventory_list) return;
-
-	Term_get_size(&wid, &hgt);
-
-	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
+	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
+		object_type *o_ptr;
 		o_ptr = &owner_ptr->inventory_list[i];
 		tmp_val[0] = tmp_val[1] = tmp_val[2] = ' ';
 		if (select_ring_slot ? is_ring_slot(i) : item_tester_okay(o_ptr, tval))
@@ -159,7 +153,7 @@ void display_equip(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
 			attr = tval_to_attr[o_ptr->tval % 128];
 		}
 
-		n = strlen(o_name);
+		int n = strlen(o_name);
 		if (o_ptr->timeout)
 		{
 			attr = TERM_L_DARK;
@@ -187,11 +181,12 @@ void display_equip(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
 		}
 	}
 
-	for (i = INVEN_TOTAL - INVEN_RARM; i < hgt; i++)
+	for (int i = INVEN_TOTAL - INVEN_RARM; i < hgt; i++)
 	{
 		Term_erase(0, i, 255);
 	}
 }
+
 
 /*!
  * @brief サブウィンドウに所持品、装備品リストの表示を行う /
@@ -200,12 +195,8 @@ void display_equip(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
  */
 void toggle_inven_equip(player_type *owner_ptr)
 {
-	int j;
-
-	/* Scan windows */
-	for (j = 0; j < 8; j++)
+	for (int j = 0; j < 8; j++)
 	{
-		/* Unused */
 		if (!angband_term[j]) continue;
 
 		/* Flip inven to equip */
@@ -216,16 +207,15 @@ void toggle_inven_equip(player_type *owner_ptr)
 			window_flag[j] |= (PW_EQUIP);
 
 			owner_ptr->window |= (PW_EQUIP);
+			continue;
 		}
 
 		/* Flip inven to equip */
-		else if (window_flag[j] & (PW_EQUIP))
+		if (window_flag[j] & PW_EQUIP)
 		{
-			/* Flip flags */
 			window_flag[j] &= ~(PW_EQUIP);
-			window_flag[j] |= (PW_INVEN);
-
-			owner_ptr->window |= (PW_INVEN);
+			window_flag[j] |= PW_INVEN;
+			owner_ptr->window |= PW_INVEN;
 		}
 	}
 }
@@ -261,19 +251,13 @@ bool get_item_okay(player_type *owner_ptr, OBJECT_IDX i)
  */
 bool can_get_item(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
 {
-	int j;
-	OBJECT_IDX floor_list[23];
-	ITEM_NUMBER floor_num = 0;
-
-	for (j = 0; j < INVEN_TOTAL; j++)
+	for (int j = 0; j < INVEN_TOTAL; j++)
 		if (item_tester_okay(&owner_ptr->inventory_list[j], tval))
 			return TRUE;
 
-	floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03);
-	if (floor_num)
-		return TRUE;
-
-	return FALSE;
+	OBJECT_IDX floor_list[23];
+	ITEM_NUMBER floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03);
+	return floor_num != 0;
 }
 
 
@@ -295,13 +279,10 @@ bool can_get_item(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
  */
 static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
-	COMMAND_CODE i;
-	concptr s;
-
 	/**** Find a tag in the form of {@x#} (allow alphabet tag) ***/
 
 	/* Check every object in the grid */
-	for (i = 0; i < floor_num && i < 23; i++)
+	for (COMMAND_CODE i = 0; i < floor_num && i < 23; i++)
 	{
 		object_type *o_ptr = &floor_ptr->o_list[floor_list[i]];
 
@@ -309,7 +290,7 @@ static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLO
 		if (!o_ptr->inscription) continue;
 
 		/* Find a '@' */
-		s = my_strchr(quark_str(o_ptr->inscription), '@');
+		concptr s = my_strchr(quark_str(o_ptr->inscription), '@');
 
 		/* Process all tags */
 		while (s)
@@ -340,7 +321,7 @@ static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLO
 	}
 
 	/* Check every object in the grid */
-	for (i = 0; i < floor_num && i < 23; i++)
+	for (COMMAND_CODE i = 0; i < floor_num && i < 23; i++)
 	{
 		object_type *o_ptr = &floor_ptr->o_list[floor_list[i]];
 
@@ -348,7 +329,7 @@ static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLO
 		if (!o_ptr->inscription) continue;
 
 		/* Find a '@' */
-		s = my_strchr(quark_str(o_ptr->inscription), '@');
+		concptr s = my_strchr(quark_str(o_ptr->inscription), '@');
 
 		/* Process all tags */
 		while (s)
@@ -368,7 +349,6 @@ static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLO
 		}
 	}
 
-	/* No such tag */
 	return FALSE;
 }
 
@@ -391,11 +371,8 @@ static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLO
  */
 static bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
-	COMMAND_CODE i;
-	COMMAND_CODE start, end;
-	concptr s;
-
 	/* Extract index from mode */
+	COMMAND_CODE start, end;
 	switch (mode)
 	{
 	case USE_EQUIP:
@@ -414,7 +391,7 @@ static bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAG
 
 	/**** Find a tag in the form of {@x#} (allow alphabet tag) ***/
 
-	for (i = start; i <= end; i++)
+	for (COMMAND_CODE i = start; i <= end; i++)
 	{
 		object_type *o_ptr = &owner_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
@@ -426,7 +403,7 @@ static bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAG
 		if (!item_tester_okay(o_ptr, tval) && !(mode & USE_FULL)) continue;
 
 		/* Find a '@' */
-		s = my_strchr(quark_str(o_ptr->inscription), '@');
+		concptr s = my_strchr(quark_str(o_ptr->inscription), '@');
 
 		/* Process all tags */
 		while (s)
@@ -456,7 +433,7 @@ static bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAG
 	}
 
 	/* Check every object */
-	for (i = start; i <= end; i++)
+	for (COMMAND_CODE i = start; i <= end; i++)
 	{
 		object_type *o_ptr = &owner_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
@@ -468,7 +445,7 @@ static bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAG
 		if (!item_tester_okay(o_ptr, tval) && !(mode & USE_FULL)) continue;
 
 		/* Find a '@' */
-		s = my_strchr(quark_str(o_ptr->inscription), '@');
+		concptr s = my_strchr(quark_str(o_ptr->inscription), '@');
 
 		/* Process all tags */
 		while (s)
@@ -487,7 +464,6 @@ static bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAG
 		}
 	}
 
-	/* No such tag */
 	return FALSE;
 }
 
@@ -504,26 +480,24 @@ void prepare_label_string(player_type *owner_ptr, char *label, BIT_FLAGS mode, O
 {
 	concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int  offset = (mode == USE_EQUIP) ? INVEN_RARM : 0;
-	int  i;
 
 	/* Prepare normal labels */
 	strcpy(label, alphabet_chars);
 
 	/* Move each label */
-	for (i = 0; i < 52; i++)
+	for (int i = 0; i < 52; i++)
 	{
 		COMMAND_CODE index;
 		SYMBOL_CODE c = alphabet_chars[i];
 
 		/* Find a tag with this label */
-		if (get_tag(owner_ptr, &index, c, mode, tval))
-		{
-			/* Delete the overwritten label */
-			if (label[i] == c) label[i] = ' ';
+		if (!get_tag(owner_ptr, &index, c, mode, tval)) continue;
 
-			/* Move the label to the place of corresponding tag */
-			label[index - offset] = c;
-		}
+		/* Delete the overwritten label */
+		if (label[i] == c) label[i] = ' ';
+
+		/* Move the label to the place of corresponding tag */
+		label[index - offset] = c;
 	}
 }
 
@@ -541,26 +515,24 @@ void prepare_label_string(player_type *owner_ptr, char *label, BIT_FLAGS mode, O
 static void prepare_label_string_floor(floor_type *floor_ptr, char *label, FLOOR_IDX floor_list[], ITEM_NUMBER floor_num)
 {
 	concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	int  i;
 
 	/* Prepare normal labels */
 	strcpy(label, alphabet_chars);
 
 	/* Move each label */
-	for (i = 0; i < 52; i++)
+	for (int i = 0; i < 52; i++)
 	{
 		COMMAND_CODE index;
 		SYMBOL_CODE c = alphabet_chars[i];
 
 		/* Find a tag with this label */
-		if (get_tag_floor(floor_ptr, &index, c, floor_list, floor_num))
-		{
-			/* Delete the overwritten label */
-			if (label[i] == c) label[i] = ' ';
+		if (!get_tag_floor(floor_ptr, &index, c, floor_list, floor_num)) continue;
 
-			/* Move the label to the place of corresponding tag */
-			label[index] = c;
-		}
+		/* Delete the overwritten label */
+		if (label[i] == c) label[i] = ' ';
+
+		/* Move the label to the place of corresponding tag */
+		label[index] = c;
 	}
 }
 
@@ -575,26 +547,24 @@ static void prepare_label_string_floor(floor_type *floor_ptr, char *label, FLOOR
 COMMAND_CODE show_inven(player_type *owner_ptr, int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	COMMAND_CODE i;
-	int j, k, l, z = 0;
-	int             col, cur_col, len;
+	int k, l, z = 0;
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
-	char            tmp_val[80];
-	COMMAND_CODE    out_index[23];
-	TERM_COLOR      out_color[23];
-	char            out_desc[23][MAX_NLEN];
+	char tmp_val[80];
+	COMMAND_CODE out_index[23];
+	TERM_COLOR out_color[23];
+	char out_desc[23][MAX_NLEN];
 	COMMAND_CODE target_item_label = 0;
-	TERM_LEN wid, hgt;
 	char inven_label[52 + 1];
 
 	/* Starting column */
-	col = command_gap;
+	int col = command_gap;
 
+	TERM_LEN wid, hgt;
 	Term_get_size(&wid, &hgt);
 
 	/* Default "max-length" */
-	len = wid - col - 1;
-
+	int len = wid - col - 1;
 
 	/* Find the "final" slot */
 	for (i = 0; i < INVEN_PACK; i++)
@@ -653,6 +623,8 @@ COMMAND_CODE show_inven(player_type *owner_ptr, int target_item, BIT_FLAGS mode,
 	col = (len > wid - 4) ? 0 : (wid - len - 1);
 
 	/* Output each entry */
+	int cur_col;
+	int j;
 	for (j = 0; j < k; j++)
 	{
 		i = out_index[j];
@@ -772,11 +744,10 @@ static bool verify(player_type *owner_ptr, concptr prompt, INVENTORY_IDX item)
  */
 static bool get_item_allow(player_type *owner_ptr, INVENTORY_IDX item)
 {
-	concptr s;
-	object_type *o_ptr;
 	if (!command_cmd) return TRUE; /* command_cmd is no longer effective */
 
 	/* Inventory */
+	object_type *o_ptr;
 	if (item >= 0)
 	{
 		o_ptr = &owner_ptr->inventory_list[item];
@@ -792,7 +763,7 @@ static bool get_item_allow(player_type *owner_ptr, INVENTORY_IDX item)
 	if (!o_ptr->inscription) return TRUE;
 
 	/* Find a '!' */
-	s = my_strchr(quark_str(o_ptr->inscription), '!');
+	concptr s = my_strchr(quark_str(o_ptr->inscription), '!');
 
 	/* Process preventions */
 	while (s)
@@ -808,7 +779,6 @@ static bool get_item_allow(player_type *owner_ptr, INVENTORY_IDX item)
 		s = my_strchr(s + 1, '!');
 	}
 
-	/* Allow it */
 	return TRUE;
 }
 
@@ -983,6 +953,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			}
 		}
 	}
+
 	msg_print(NULL);
 
 	/* Not done */
@@ -1030,7 +1001,6 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 		}
 		else if (owner_ptr->hidarite) e1 = INVEN_RARM;
 	}
-
 
 	/* Restrict floor usage */
 	if (floor)
@@ -1310,136 +1280,218 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			}
 			}
 			if (menu_line > max_line) menu_line -= max_line;
+			continue;
 		}
-		else
+
+		/* Parse it */
+		switch (which)
 		{
-			/* Parse it */
-			switch (which)
+		case ESCAPE:
+		{
+			done = TRUE;
+			break;
+		}
+
+		case '*':
+		case '?':
+		case ' ':
+		{
+			/* Hide the list */
+			if (command_see)
 			{
-			case ESCAPE:
+				/* Flip flag */
+				command_see = FALSE;
+				screen_load();
+			}
+
+			/* Show the list */
+			else
+			{
+				screen_save();
+
+				/* Flip flag */
+				command_see = TRUE;
+			}
+			break;
+		}
+
+		case '/':
+		{
+			/* Verify legality */
+			if (!inven || !equip)
+			{
+				bell();
+				break;
+			}
+
+			/* Hack -- Fix screen */
+			if (command_see)
+			{
+				screen_load();
+				screen_save();
+			}
+
+			/* Switch inven/equip */
+			command_wrk = !command_wrk;
+
+			/* Need to redraw */
+			break;
+		}
+
+		case '-':
+		{
+			/* Use floor item */
+			if (allow_floor)
+			{
+				/* Scan all objects in the grid */
+				for (this_o_idx = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+				{
+					object_type *o_ptr;
+					o_ptr = &owner_ptr->current_floor_ptr->o_list[this_o_idx];
+					next_o_idx = o_ptr->next_o_idx;
+
+					/* Validate the item */
+					if (!item_tester_okay(o_ptr, tval) && !(mode & USE_FULL)) continue;
+
+					/* Special index */
+					k = 0 - this_o_idx;
+
+					/* Verify the item (if required) */
+					if (other_query_flag && !verify(owner_ptr, _("本当に", "Try"), k)) continue;
+
+					/* Allow player to "refuse" certain actions */
+					if (!get_item_allow(owner_ptr, k)) continue;
+
+					/* Accept that choice */
+					(*cp) = k;
+					item = TRUE;
+					done = TRUE;
+					break;
+				}
+
+				/* Outer break */
+				if (done) break;
+			}
+
+			bell();
+			break;
+		}
+
+		case '0':
+		case '1': case '2': case '3':
+		case '4': case '5': case '6':
+		case '7': case '8': case '9':
+		{
+			/* Look up the tag */
+			if (!get_tag(owner_ptr, &k, which, command_wrk ? USE_EQUIP : USE_INVEN, tval))
+			{
+				bell();
+				break;
+			}
+
+			/* Hack -- Validate the item */
+			if ((k < INVEN_RARM) ? !inven : !equip)
+			{
+				bell();
+				break;
+			}
+
+			/* Validate the item */
+			if (!get_item_okay(owner_ptr, k))
+			{
+				bell();
+				break;
+			}
+
+			/* Allow player to "refuse" certain actions */
+			if (!get_item_allow(owner_ptr, k))
 			{
 				done = TRUE;
 				break;
 			}
 
-			case '*':
-			case '?':
-			case ' ':
+			/* Accept that choice */
+			(*cp) = k;
+			item = TRUE;
+			done = TRUE;
+			cur_tag = which;
+			break;
+		}
+
+#if 0
+		case '\n':
+		case '\r':
+		{
+			if (!command_wrk)
 			{
-				/* Hide the list */
-				if (command_see)
-				{
-					/* Flip flag */
-					command_see = FALSE;
-					screen_load();
-				}
-
-				/* Show the list */
-				else
-				{
-					screen_save();
-
-					/* Flip flag */
-					command_see = TRUE;
-				}
-				break;
+				k = ((i1 == i2) ? i1 : -1);
 			}
 
-			case '/':
+			/* Choose "default" equipment item */
+			else
 			{
-				/* Verify legality */
-				if (!inven || !equip)
-				{
-					bell();
-					break;
-				}
-
-				/* Hack -- Fix screen */
-				if (command_see)
-				{
-					screen_load();
-					screen_save();
-				}
-
-				/* Switch inven/equip */
-				command_wrk = !command_wrk;
-
-				/* Need to redraw */
-				break;
+				k = ((e1 == e2) ? e1 : -1);
 			}
 
-			case '-':
+			/* Validate the item */
+			if (!get_item_okay(owner_ptr, k))
 			{
-				/* Use floor item */
-				if (allow_floor)
-				{
-					/* Scan all objects in the grid */
-					for (this_o_idx = owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
-					{
-						object_type *o_ptr;
-						o_ptr = &owner_ptr->current_floor_ptr->o_list[this_o_idx];
-						next_o_idx = o_ptr->next_o_idx;
-
-						/* Validate the item */
-						if (!item_tester_okay(o_ptr, tval) && !(mode & USE_FULL)) continue;
-
-						/* Special index */
-						k = 0 - this_o_idx;
-
-						/* Verify the item (if required) */
-						if (other_query_flag && !verify(owner_ptr, _("本当に", "Try"), k)) continue;
-
-						/* Allow player to "refuse" certain actions */
-						if (!get_item_allow(owner_ptr, k)) continue;
-
-						/* Accept that choice */
-						(*cp) = k;
-						item = TRUE;
-						done = TRUE;
-						break;
-					}
-
-					/* Outer break */
-					if (done) break;
-				}
-
 				bell();
 				break;
 			}
 
-			case '0':
-			case '1': case '2': case '3':
-			case '4': case '5': case '6':
-			case '7': case '8': case '9':
+			/* Allow player to "refuse" certain actions */
+			if (!get_item_allow(k))
 			{
-				/* Look up the tag */
-				if (!get_tag(owner_ptr, &k, which, command_wrk ? USE_EQUIP : USE_INVEN, tval))
-				{
-					bell();
-					break;
-				}
+				done = TRUE;
+				break;
+			}
 
-				/* Hack -- Validate the item */
-				if ((k < INVEN_RARM) ? !inven : !equip)
-				{
-					bell();
-					break;
-				}
+			/* Accept that choice */
+			(*cp) = k;
+			item = TRUE;
+			done = TRUE;
+			break;
+		}
+#endif
 
-				/* Validate the item */
-				if (!get_item_okay(owner_ptr, k))
-				{
-					bell();
-					break;
-				}
+		case 'w':
+		{
+			if (mode & USE_FORCE) {
+				*cp = INVEN_FORCE;
+				item = TRUE;
+				done = TRUE;
+				break;
+			}
 
-				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(owner_ptr, k))
-				{
-					done = TRUE;
-					break;
-				}
+			/* Fall through */
+		}
 
+		default:
+		{
+			int ver;
+			bool not_found = FALSE;
+
+			/* Look up the alphabetical tag */
+			if (!get_tag(owner_ptr, &k, which, command_wrk ? USE_EQUIP : USE_INVEN, tval))
+			{
+				not_found = TRUE;
+			}
+
+			/* Hack -- Validate the item */
+			else if ((k < INVEN_RARM) ? !inven : !equip)
+			{
+				not_found = TRUE;
+			}
+
+			/* Validate the item */
+			else if (!get_item_okay(owner_ptr, k))
+			{
+				not_found = TRUE;
+			}
+
+			if (!not_found)
+			{
 				/* Accept that choice */
 				(*cp) = k;
 				item = TRUE;
@@ -1448,138 +1500,54 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				break;
 			}
 
-#if 0
-			case '\n':
-			case '\r':
+			/* Extract "query" setting */
+			ver = isupper(which);
+			which = (char)tolower(which);
+
+			if (!command_wrk)
 			{
-				if (!command_wrk)
-				{
-					k = ((i1 == i2) ? i1 : -1);
-				}
+				if (which == '(') k = i1;
+				else if (which == ')') k = i2;
+				else k = label_to_inven(owner_ptr, which);
+			}
 
-				/* Choose "default" equipment item */
-				else
-				{
-					k = ((e1 == e2) ? e1 : -1);
-				}
+			/* Convert letter to equipment index */
+			else
+			{
+				if (which == '(') k = e1;
+				else if (which == ')') k = e2;
+				else k = label_to_equip(owner_ptr, which);
+			}
 
-				/* Validate the item */
-				if (!get_item_okay(owner_ptr, k))
-				{
-					bell();
-					break;
-				}
+			/* Validate the item */
+			if (!get_item_okay(owner_ptr, k))
+			{
+				bell();
+				break;
+			}
 
-				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(k))
-				{
-					done = TRUE;
-					break;
-				}
-
-				/* Accept that choice */
-				(*cp) = k;
-				item = TRUE;
+			/* Verify the item */
+			if (ver && !verify(owner_ptr, _("本当に", "Try"), k))
+			{
 				done = TRUE;
 				break;
 			}
-#endif
 
-			case 'w':
+			/* Allow player to "refuse" certain actions */
+			if (!get_item_allow(owner_ptr, k))
 			{
-				if (mode & USE_FORCE) {
-					*cp = INVEN_FORCE;
-					item = TRUE;
-					done = TRUE;
-					break;
-				}
-
-				/* Fall through */
-			}
-
-			default:
-			{
-				int ver;
-				bool not_found = FALSE;
-
-				/* Look up the alphabetical tag */
-				if (!get_tag(owner_ptr, &k, which, command_wrk ? USE_EQUIP : USE_INVEN, tval))
-				{
-					not_found = TRUE;
-				}
-
-				/* Hack -- Validate the item */
-				else if ((k < INVEN_RARM) ? !inven : !equip)
-				{
-					not_found = TRUE;
-				}
-
-				/* Validate the item */
-				else if (!get_item_okay(owner_ptr, k))
-				{
-					not_found = TRUE;
-				}
-
-				if (!not_found)
-				{
-					/* Accept that choice */
-					(*cp) = k;
-					item = TRUE;
-					done = TRUE;
-					cur_tag = which;
-					break;
-				}
-
-				/* Extract "query" setting */
-				ver = isupper(which);
-				which = (char)tolower(which);
-
-				if (!command_wrk)
-				{
-					if (which == '(') k = i1;
-					else if (which == ')') k = i2;
-					else k = label_to_inven(owner_ptr, which);
-				}
-
-				/* Convert letter to equipment index */
-				else
-				{
-					if (which == '(') k = e1;
-					else if (which == ')') k = e2;
-					else k = label_to_equip(owner_ptr, which);
-				}
-
-				/* Validate the item */
-				if (!get_item_okay(owner_ptr, k))
-				{
-					bell();
-					break;
-				}
-
-				/* Verify the item */
-				if (ver && !verify(owner_ptr, _("本当に", "Try"), k))
-				{
-					done = TRUE;
-					break;
-				}
-
-				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(owner_ptr, k))
-				{
-					done = TRUE;
-					break;
-				}
-
-				/* Accept that choice */
-				(*cp) = k;
-				item = TRUE;
 				done = TRUE;
 				break;
 			}
+
+			/* Accept that choice */
+			(*cp) = k;
+			item = TRUE;
+			done = TRUE;
+			break;
 			}
 		}
 	}
-
 
 	/* Fix the screen if necessary */
 	if (command_see)
@@ -1589,7 +1557,6 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 		/* Hack -- Cancel "display" */
 		command_see = FALSE;
 	}
-
 
 	/* Forget the tval restriction */
 	tval = 0;
@@ -1616,7 +1583,8 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 		if (command_cmd) prev_tag = cur_tag;
 		command_cmd = 0; /* Hack -- command_cmd is no longer effective */
 	}
-	return (item);
+
+	return item;
 }
 
 
@@ -1651,15 +1619,13 @@ object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, c
  */
 ITEM_NUMBER scan_floor(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode)
 {
-	OBJECT_IDX this_o_idx, next_o_idx;
-
-	ITEM_NUMBER num = 0;
-
 	/* Sanity */
 	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
 	if (!in_bounds(floor_ptr, y, x)) return 0;
 
 	/* Scan all objects in the grid */
+	OBJECT_IDX this_o_idx, next_o_idx;
+	ITEM_NUMBER num = 0;
 	for (this_o_idx = floor_ptr->grid_array[y][x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
@@ -1682,6 +1648,7 @@ ITEM_NUMBER scan_floor(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, PO
 		/* Only one */
 		if (mode & 0x04) break;
 	}
+
 	return num;
 }
 
@@ -1699,7 +1666,6 @@ COMMAND_CODE show_floor(player_type *owner_ptr, int target_item, POSITION y, POS
 {
 	COMMAND_CODE i, m;
 	int j, k, l;
-	int col, len;
 
 	object_type *o_ptr;
 
@@ -1721,7 +1687,7 @@ COMMAND_CODE show_floor(player_type *owner_ptr, int target_item, POSITION y, POS
 	Term_get_size(&wid, &hgt);
 
 	/* Default length */
-	len = MAX((*min_width), 20);
+	int len = MAX((*min_width), 20);
 
 	/* Scan for objects in the grid, using item_tester_okay() */
 	floor_num = scan_floor(owner_ptr, floor_list, y, x, 0x03);
@@ -1763,7 +1729,7 @@ COMMAND_CODE show_floor(player_type *owner_ptr, int target_item, POSITION y, POS
 	*min_width = len;
 
 	/* Find the column to start in */
-	col = (len > wid - 4) ? 0 : (wid - len - 1);
+	int col = (len > wid - 4) ? 0 : (wid - len - 1);
 
 	prepare_label_string_floor(floor_ptr, floor_label, floor_list, floor_num);
 
@@ -2005,7 +1971,6 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 		}
 		else if (owner_ptr->hidarite) e1 = INVEN_RARM;
 	}
-
 
 	/* Count "okay" floor items */
 	floor_num = 0;
@@ -2487,273 +2452,199 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				}
 			}
 			}
+
 			if (menu_line > max_line) menu_line -= max_line;
+			continue;
 		}
-		else
+
+		/* Parse it */
+		switch (which)
 		{
-			/* Parse it */
-			switch (which)
+		case ESCAPE:
+		{
+			done = TRUE;
+			break;
+		}
+
+		case '*':
+		case '?':
+		case ' ':
+		{
+			/* Hide the list */
+			if (command_see)
 			{
-			case ESCAPE:
-			{
-				done = TRUE;
-				break;
+				/* Flip flag */
+				command_see = FALSE;
+				screen_load();
 			}
 
-			case '*':
-			case '?':
-			case ' ':
+			/* Show the list */
+			else
 			{
-				/* Hide the list */
-				if (command_see)
-				{
-					/* Flip flag */
-					command_see = FALSE;
-					screen_load();
-				}
+				screen_save();
 
-				/* Show the list */
-				else
-				{
-					screen_save();
+				/* Flip flag */
+				command_see = TRUE;
+			}
+			break;
+		}
 
-					/* Flip flag */
-					command_see = TRUE;
-				}
-				break;
+		case '\n':
+		case '\r':
+		case '+':
+		{
+			int i;
+			OBJECT_IDX o_idx;
+			grid_type *g_ptr = &owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x];
+
+			if (command_wrk != (USE_FLOOR)) break;
+
+			/* Get the object being moved. */
+			o_idx = g_ptr->o_idx;
+
+			/* Only rotate a pile of two or more objects. */
+			if (!(o_idx && owner_ptr->current_floor_ptr->o_list[o_idx].next_o_idx)) break;
+
+			/* Remove the first object from the list. */
+			excise_object_idx(owner_ptr->current_floor_ptr, o_idx);
+
+			/* Find end of the list. */
+			i = g_ptr->o_idx;
+			while (owner_ptr->current_floor_ptr->o_list[i].next_o_idx)
+				i = owner_ptr->current_floor_ptr->o_list[i].next_o_idx;
+
+			/* Add after the last object. */
+			owner_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
+
+			/* Re-scan floor list */
+			floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03);
+
+			/* Hack -- Fix screen */
+			if (command_see)
+			{
+				screen_load();
+				screen_save();
 			}
 
-			case '\n':
-			case '\r':
-			case '+':
+			break;
+		}
+
+		case '/':
+		{
+			if (command_wrk == (USE_INVEN))
 			{
-				int i;
-				OBJECT_IDX o_idx;
-				grid_type *g_ptr = &owner_ptr->current_floor_ptr->grid_array[owner_ptr->y][owner_ptr->x];
-
-				if (command_wrk != (USE_FLOOR)) break;
-
-				/* Get the object being moved. */
-				o_idx = g_ptr->o_idx;
-
-				/* Only rotate a pile of two or more objects. */
-				if (!(o_idx && owner_ptr->current_floor_ptr->o_list[o_idx].next_o_idx)) break;
-
-				/* Remove the first object from the list. */
-				excise_object_idx(owner_ptr->current_floor_ptr, o_idx);
-
-				/* Find end of the list. */
-				i = g_ptr->o_idx;
-				while (owner_ptr->current_floor_ptr->o_list[i].next_o_idx)
-					i = owner_ptr->current_floor_ptr->o_list[i].next_o_idx;
-
-				/* Add after the last object. */
-				owner_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
-
-				/* Re-scan floor list */
-				floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03);
-
-				/* Hack -- Fix screen */
-				if (command_see)
+				if (!allow_equip)
 				{
-					screen_load();
-					screen_save();
+					bell();
+					break;
 				}
-
-				break;
+				command_wrk = (USE_EQUIP);
 			}
-
-			case '/':
+			else if (command_wrk == (USE_EQUIP))
 			{
-				if (command_wrk == (USE_INVEN))
+				if (!allow_inven)
 				{
-					if (!allow_equip)
-					{
-						bell();
-						break;
-					}
-					command_wrk = (USE_EQUIP);
+					bell();
+					break;
 				}
-				else if (command_wrk == (USE_EQUIP))
+				command_wrk = (USE_INVEN);
+			}
+			else if (command_wrk == (USE_FLOOR))
+			{
+				if (allow_inven)
 				{
-					if (!allow_inven)
-					{
-						bell();
-						break;
-					}
 					command_wrk = (USE_INVEN);
 				}
-				else if (command_wrk == (USE_FLOOR))
+				else if (allow_equip)
 				{
-					if (allow_inven)
-					{
-						command_wrk = (USE_INVEN);
-					}
-					else if (allow_equip)
-					{
-						command_wrk = (USE_EQUIP);
-					}
-					else
-					{
-						bell();
-						break;
-					}
+					command_wrk = (USE_EQUIP);
 				}
-
-				/* Hack -- Fix screen */
-				if (command_see)
+				else
 				{
-					screen_load();
-					screen_save();
+					bell();
+					break;
 				}
+			}
 
-				/* Need to redraw */
+			/* Hack -- Fix screen */
+			if (command_see)
+			{
+				screen_load();
+				screen_save();
+			}
+
+			/* Need to redraw */
+			break;
+		}
+
+		case '-':
+		{
+			if (!allow_floor)
+			{
+				bell();
 				break;
 			}
 
-			case '-':
+			/*
+			 * If we are already examining the floor, and there
+			 * is only one item, we will always select it.
+			 * If we aren't examining the floor and there is only
+			 * one item, we will select it if floor_query_flag
+			 * is FALSE.
+			 */
+			if (floor_num == 1)
 			{
-				if (!allow_floor)
+				if ((command_wrk == (USE_FLOOR)) || (!carry_query_flag))
+				{
+					/* Special index */
+					k = 0 - floor_list[0];
+
+					/* Allow player to "refuse" certain actions */
+					if (!get_item_allow(owner_ptr, k))
+					{
+						done = TRUE;
+						break;
+					}
+
+					/* Accept that choice */
+					(*cp) = k;
+					item = TRUE;
+					done = TRUE;
+
+					break;
+				}
+			}
+
+			/* Hack -- Fix screen */
+			if (command_see)
+			{
+				screen_load();
+				screen_save();
+			}
+
+			command_wrk = (USE_FLOOR);
+
+			break;
+		}
+
+		case '0':
+		case '1': case '2': case '3':
+		case '4': case '5': case '6':
+		case '7': case '8': case '9':
+		{
+			if (command_wrk != USE_FLOOR)
+			{
+				/* Look up the tag */
+				if (!get_tag(owner_ptr, &k, which, command_wrk, tval))
 				{
 					bell();
 					break;
 				}
 
-				/*
-				 * If we are already examining the floor, and there
-				 * is only one item, we will always select it.
-				 * If we aren't examining the floor and there is only
-				 * one item, we will select it if floor_query_flag
-				 * is FALSE.
-				 */
-				if (floor_num == 1)
+				/* Hack -- Validate the item */
+				if ((k < INVEN_RARM) ? !inven : !equip)
 				{
-					if ((command_wrk == (USE_FLOOR)) || (!carry_query_flag))
-					{
-						/* Special index */
-						k = 0 - floor_list[0];
-
-						/* Allow player to "refuse" certain actions */
-						if (!get_item_allow(owner_ptr, k))
-						{
-							done = TRUE;
-							break;
-						}
-
-						/* Accept that choice */
-						(*cp) = k;
-						item = TRUE;
-						done = TRUE;
-
-						break;
-					}
-				}
-
-				/* Hack -- Fix screen */
-				if (command_see)
-				{
-					screen_load();
-					screen_save();
-				}
-
-				command_wrk = (USE_FLOOR);
-
-				break;
-			}
-
-			case '0':
-			case '1': case '2': case '3':
-			case '4': case '5': case '6':
-			case '7': case '8': case '9':
-			{
-				if (command_wrk != USE_FLOOR)
-				{
-					/* Look up the tag */
-					if (!get_tag(owner_ptr, &k, which, command_wrk, tval))
-					{
-						bell();
-						break;
-					}
-
-					/* Hack -- Validate the item */
-					if ((k < INVEN_RARM) ? !inven : !equip)
-					{
-						bell();
-						break;
-					}
-
-					/* Validate the item */
-					if (!get_item_okay(owner_ptr, k))
-					{
-						bell();
-						break;
-					}
-				}
-				else
-				{
-					/* Look up the alphabetical tag */
-					if (get_tag_floor(owner_ptr->current_floor_ptr, &k, which, floor_list, floor_num))
-					{
-						/* Special index */
-						k = 0 - floor_list[k];
-					}
-					else
-					{
-						bell();
-						break;
-					}
-				}
-
-				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(owner_ptr, k))
-				{
-					done = TRUE;
-					break;
-				}
-
-				/* Accept that choice */
-				(*cp) = k;
-				item = TRUE;
-				done = TRUE;
-				cur_tag = which;
-				break;
-			}
-
-#if 0
-			case '\n':
-			case '\r':
-			{
-				if (command_wrk == (USE_INVEN))
-				{
-					k = ((i1 == i2) ? i1 : -1);
-				}
-
-				/* Choose "default" equipment item */
-				else if (command_wrk == (USE_EQUIP))
-				{
-					k = ((e1 == e2) ? e1 : -1);
-				}
-
-				/* Choose "default" floor item */
-				else if (command_wrk == (USE_FLOOR))
-				{
-					if (floor_num == 1)
-					{
-						/* Special index */
-						k = 0 - floor_list[0];
-
-						/* Allow player to "refuse" certain actions */
-						if (!get_item_allow(owner_ptr, k))
-						{
-							done = TRUE;
-							break;
-						}
-
-						/* Accept that choice */
-						(*cp) = k;
-						item = TRUE;
-						done = TRUE;
-					}
+					bell();
 					break;
 				}
 
@@ -2763,150 +2654,224 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 					bell();
 					break;
 				}
-
-				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(owner_ptr, k))
+			}
+			else
+			{
+				/* Look up the alphabetical tag */
+				if (get_tag_floor(owner_ptr->current_floor_ptr, &k, which, floor_list, floor_num))
 				{
-					done = TRUE;
+					/* Special index */
+					k = 0 - floor_list[k];
+				}
+				else
+				{
+					bell();
 					break;
 				}
+			}
 
-				/* Accept that choice */
-				(*cp) = k;
+			/* Allow player to "refuse" certain actions */
+			if (!get_item_allow(owner_ptr, k))
+			{
+				done = TRUE;
+				break;
+			}
+
+			/* Accept that choice */
+			(*cp) = k;
+			item = TRUE;
+			done = TRUE;
+			cur_tag = which;
+			break;
+		}
+
+#if 0
+		case '\n':
+		case '\r':
+		{
+			if (command_wrk == (USE_INVEN))
+			{
+				k = ((i1 == i2) ? i1 : -1);
+			}
+
+			/* Choose "default" equipment item */
+			else if (command_wrk == (USE_EQUIP))
+			{
+				k = ((e1 == e2) ? e1 : -1);
+			}
+
+			/* Choose "default" floor item */
+			else if (command_wrk == (USE_FLOOR))
+			{
+				if (floor_num == 1)
+				{
+					/* Special index */
+					k = 0 - floor_list[0];
+
+					/* Allow player to "refuse" certain actions */
+					if (!get_item_allow(owner_ptr, k))
+					{
+						done = TRUE;
+						break;
+					}
+
+					/* Accept that choice */
+					(*cp) = k;
+					item = TRUE;
+					done = TRUE;
+				}
+				break;
+			}
+
+			/* Validate the item */
+			if (!get_item_okay(owner_ptr, k))
+			{
+				bell();
+				break;
+			}
+
+			/* Allow player to "refuse" certain actions */
+			if (!get_item_allow(owner_ptr, k))
+			{
+				done = TRUE;
+				break;
+			}
+
+			/* Accept that choice */
+			(*cp) = k;
+			item = TRUE;
+			done = TRUE;
+			break;
+		}
+#endif
+
+		case 'w':
+		{
+			if (force) {
+				*cp = INVEN_FORCE;
 				item = TRUE;
 				done = TRUE;
 				break;
 			}
-#endif
 
-			case 'w':
+			/* Fall through */
+		}
+
+		default:
+		{
+			int ver;
+
+			if (command_wrk != USE_FLOOR)
 			{
-				if (force) {
-					*cp = INVEN_FORCE;
-					item = TRUE;
-					done = TRUE;
-					break;
+				bool not_found = FALSE;
+
+				/* Look up the alphabetical tag */
+				if (!get_tag(owner_ptr, &k, which, command_wrk, tval))
+				{
+					not_found = TRUE;
 				}
 
-				/* Fall through */
-			}
-
-			default:
-			{
-				int ver;
-
-				if (command_wrk != USE_FLOOR)
+				/* Hack -- Validate the item */
+				else if ((k < INVEN_RARM) ? !inven : !equip)
 				{
-					bool not_found = FALSE;
-
-					/* Look up the alphabetical tag */
-					if (!get_tag(owner_ptr, &k, which, command_wrk, tval))
-					{
-						not_found = TRUE;
-					}
-
-					/* Hack -- Validate the item */
-					else if ((k < INVEN_RARM) ? !inven : !equip)
-					{
-						not_found = TRUE;
-					}
-
-					/* Validate the item */
-					else if (!get_item_okay(owner_ptr, k))
-					{
-						not_found = TRUE;
-					}
-
-					if (!not_found)
-					{
-						/* Accept that choice */
-						(*cp) = k;
-						item = TRUE;
-						done = TRUE;
-						cur_tag = which;
-						break;
-					}
-				}
-				else
-				{
-					/* Look up the alphabetical tag */
-					if (get_tag_floor(owner_ptr->current_floor_ptr, &k, which, floor_list, floor_num))
-					{
-						/* Special index */
-						k = 0 - floor_list[k];
-
-						/* Accept that choice */
-						(*cp) = k;
-						item = TRUE;
-						done = TRUE;
-						cur_tag = which;
-						break;
-					}
-				}
-
-				/* Extract "query" setting */
-				ver = isupper(which);
-				which = (char)tolower(which);
-
-				if (command_wrk == (USE_INVEN))
-				{
-					if (which == '(') k = i1;
-					else if (which == ')') k = i2;
-					else k = label_to_inven(owner_ptr, which);
-				}
-
-				/* Convert letter to equipment index */
-				else if (command_wrk == (USE_EQUIP))
-				{
-					if (which == '(') k = e1;
-					else if (which == ')') k = e2;
-					else k = label_to_equip(owner_ptr, which);
-				}
-
-				/* Convert letter to floor index */
-				else if (command_wrk == USE_FLOOR)
-				{
-					if (which == '(') k = 0;
-					else if (which == ')') k = floor_num - 1;
-					else k = islower(which) ? A2I(which) : -1;
-					if (k < 0 || k >= floor_num || k >= 23)
-					{
-						bell();
-						break;
-					}
-
-					/* Special index */
-					k = 0 - floor_list[k];
+					not_found = TRUE;
 				}
 
 				/* Validate the item */
-				if ((command_wrk != USE_FLOOR) && !get_item_okay(owner_ptr, k))
+				else if (!get_item_okay(owner_ptr, k))
+				{
+					not_found = TRUE;
+				}
+
+				if (!not_found)
+				{
+					/* Accept that choice */
+					(*cp) = k;
+					item = TRUE;
+					done = TRUE;
+					cur_tag = which;
+					break;
+				}
+			}
+			else
+			{
+				/* Look up the alphabetical tag */
+				if (get_tag_floor(owner_ptr->current_floor_ptr, &k, which, floor_list, floor_num))
+				{
+					/* Special index */
+					k = 0 - floor_list[k];
+
+					/* Accept that choice */
+					(*cp) = k;
+					item = TRUE;
+					done = TRUE;
+					cur_tag = which;
+					break;
+				}
+			}
+
+			/* Extract "query" setting */
+			ver = isupper(which);
+			which = (char)tolower(which);
+
+			if (command_wrk == (USE_INVEN))
+			{
+				if (which == '(') k = i1;
+				else if (which == ')') k = i2;
+				else k = label_to_inven(owner_ptr, which);
+			}
+
+			/* Convert letter to equipment index */
+			else if (command_wrk == (USE_EQUIP))
+			{
+				if (which == '(') k = e1;
+				else if (which == ')') k = e2;
+				else k = label_to_equip(owner_ptr, which);
+			}
+
+			/* Convert letter to floor index */
+			else if (command_wrk == USE_FLOOR)
+			{
+				if (which == '(') k = 0;
+				else if (which == ')') k = floor_num - 1;
+				else k = islower(which) ? A2I(which) : -1;
+				if (k < 0 || k >= floor_num || k >= 23)
 				{
 					bell();
 					break;
 				}
 
-				/* Verify the item */
-				if (ver && !verify(owner_ptr, _("本当に", "Try"), k))
-				{
-					done = TRUE;
-					break;
-				}
+				/* Special index */
+				k = 0 - floor_list[k];
+			}
 
-				/* Allow player to "refuse" certain actions */
-				if (!get_item_allow(owner_ptr, k))
-				{
-					done = TRUE;
-					break;
-				}
+			/* Validate the item */
+			if ((command_wrk != USE_FLOOR) && !get_item_okay(owner_ptr, k))
+			{
+				bell();
+				break;
+			}
 
-				/* Accept that choice */
-				(*cp) = k;
-				item = TRUE;
+			/* Verify the item */
+			if (ver && !verify(owner_ptr, _("本当に", "Try"), k))
+			{
 				done = TRUE;
 				break;
 			}
+
+			/* Allow player to "refuse" certain actions */
+			if (!get_item_allow(owner_ptr, k))
+			{
+				done = TRUE;
+				break;
 			}
+
+			/* Accept that choice */
+			(*cp) = k;
+			item = TRUE;
+			done = TRUE;
+			break;
+		}
 		}
 	}
 
@@ -3131,38 +3096,20 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 		return;
 	}
 
-	/* One object */
-	if (floor_num == 1)
+	if (floor_num != 1)
 	{
-		/* Hack -- query every object */
-		if (carry_query_flag)
+		while (can_pickup--)
 		{
-			char out_val[MAX_NLEN + 20];
-
-			/* Access the object */
-			o_ptr = &owner_ptr->current_floor_ptr->o_list[floor_o_idx];
-
-#ifdef ALLOW_EASY_SENSE
-
-			/* Option: Make object sensing easy */
-			if (easy_sense)
-			{
-				/* Sense the object */
-				(void)sense_object(o_ptr);
-			}
-
-#endif /* ALLOW_EASY_SENSE */
-
-			object_desc(o_name, o_ptr, 0);
-
-			(void)sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
-
-			/* Ask the user to confirm */
-			if (!get_check(out_val))
-			{
-				return;
-			}
+			if (!py_pickup_floor_aux(owner_ptr)) break;
 		}
+
+		return;
+	}
+
+	/* Hack -- query every object */
+	if (carry_query_flag)
+	{
+		char out_val[MAX_NLEN + 20];
 
 		/* Access the object */
 		o_ptr = &owner_ptr->current_floor_ptr->o_list[floor_o_idx];
@@ -3178,20 +3125,35 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 
 #endif /* ALLOW_EASY_SENSE */
 
-		/* Pick up the object */
-		py_pickup_aux(owner_ptr, floor_o_idx);
-	}
+		object_desc(o_name, o_ptr, 0);
 
-	/* Allow the user to choose an object */
-	else
-	{
-		while (can_pickup--)
+		(void)sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
+
+		/* Ask the user to confirm */
+		if (!get_check(out_val))
 		{
-			if (!py_pickup_floor_aux(owner_ptr)) break;
+			return;
 		}
 	}
-}
 
+	/* Access the object */
+	o_ptr = &owner_ptr->current_floor_ptr->o_list[floor_o_idx];
+
+#ifdef ALLOW_EASY_SENSE
+
+	/* Option: Make object sensing easy */
+	if (easy_sense)
+	{
+		/* Sense the object */
+		(void)sense_object(o_ptr);
+	}
+
+#endif /* ALLOW_EASY_SENSE */
+
+	/* Pick up the object */
+	py_pickup_aux(owner_ptr, floor_o_idx);
+
+}
 
 
 /*!
@@ -3270,25 +3232,23 @@ COMMAND_CODE show_equip(player_type *owner_ptr, int target_item, BIT_FLAGS mode,
 {
 	COMMAND_CODE i;
 	int j, k, l;
-	int             col, cur_col, len;
 	object_type *o_ptr;
-	char            tmp_val[80];
+	char tmp_val[80];
 	GAME_TEXT o_name[MAX_NLEN];
-	COMMAND_CODE    out_index[23];
-	TERM_COLOR      out_color[23];
-	char            out_desc[23][MAX_NLEN];
+	COMMAND_CODE out_index[23];
+	TERM_COLOR out_color[23];
+	char out_desc[23][MAX_NLEN];
 	COMMAND_CODE target_item_label = 0;
 	TERM_LEN wid, hgt;
-	char            equip_label[52 + 1];
+	char equip_label[52 + 1];
 
 	/* Starting column */
-	col = command_gap;
+	int col = command_gap;
 
 	Term_get_size(&wid, &hgt);
 
 	/* Maximal length */
-	len = wid - col - 1;
-
+	int len = wid - col - 1;
 
 	/* Scan the equipment list */
 	for (k = 0, i = INVEN_RARM; i < INVEN_TOTAL; i++)
@@ -3389,7 +3349,7 @@ COMMAND_CODE show_equip(player_type *owner_ptr, int target_item, BIT_FLAGS mode,
 		/* Clear the line with the (possibly indented) index */
 		put_str(tmp_val, j + 1, col);
 
-		cur_col = col + 3;
+		int cur_col = col + 3;
 
 		/* Display graphics for object, if desired */
 		if (show_item_graph)
@@ -3422,17 +3382,16 @@ COMMAND_CODE show_equip(player_type *owner_ptr, int target_item, BIT_FLAGS mode,
 		}
 
 		/* Display the weight if needed */
-		if (show_weights)
-		{
-			int wgt = o_ptr->weight * o_ptr->number;
+		if (!show_weights) continue;
+
+		int wgt = o_ptr->weight * o_ptr->number;
 #ifdef JP
-			(void)sprintf(tmp_val, "%3d.%1d kg", lbtokg1(wgt), lbtokg2(wgt));
+		(void)sprintf(tmp_val, "%3d.%1d kg", lbtokg1(wgt), lbtokg2(wgt));
 #else
-			(void)sprintf(tmp_val, "%3d.%d lb", wgt / 10, wgt % 10);
+		(void)sprintf(tmp_val, "%3d.%d lb", wgt / 10, wgt % 10);
 #endif
 
-			prt(tmp_val, j + 1, wid - 9);
-		}
+		prt(tmp_val, j + 1, wid - 9);
 	}
 
 	/* Make a "shadow" below the list (only if needed) */
@@ -3456,7 +3415,6 @@ COMMAND_CODE show_equip(player_type *owner_ptr, int target_item, BIT_FLAGS mode,
 concptr describe_use(player_type *owner_ptr, int i)
 {
 	concptr p;
-
 	switch (i)
 	{
 #ifdef JP
@@ -3487,4 +3445,3 @@ concptr describe_use(player_type *owner_ptr, int i)
 	/* Return the result */
 	return p;
 }
-
