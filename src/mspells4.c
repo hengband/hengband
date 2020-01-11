@@ -260,7 +260,7 @@ HIT_POINT spell_RF4_ROCKET(player_type *target_ptr, POSITION y, POSITION x, MONS
 		_("%^sが%sにロケットを発射した。", "%^s fires a rocket at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_ROCKET), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_ROCKET), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_ROCKET, dam, 2, FALSE, MS_ROCKET, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_SHARD);
@@ -288,7 +288,7 @@ HIT_POINT spell_RF4_SHOOT(player_type *target_ptr, POSITION y, POSITION x, MONST
 		_("%^sが%sに矢を放った。", "%^s fires an arrow at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_SHOOT), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_SHOOT), m_idx, DAM_ROLL);
 	bolt(target_ptr, m_idx, y, x, GF_ARROW, dam, MS_SHOOT, TARGET_TYPE);
 	sound(SOUND_SHOOT);
 
@@ -325,133 +325,133 @@ HIT_POINT spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITION y, POS
 	switch (GF_TYPE)
 	{
 	case GF_ACID:
-		dam = monspell_damage((MS_BR_ACID), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_ACID), m_idx, DAM_ROLL);
 		type_s = _("酸", "acid");
 		ms_type = MS_BR_ACID;
 		drs_type = DRS_ACID;
 		break;
 	case GF_ELEC:
-		dam = monspell_damage((MS_BR_ELEC), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_ELEC), m_idx, DAM_ROLL);
 		type_s = _("稲妻", "lightning");
 		ms_type = MS_BR_ELEC;
 		drs_type = DRS_ELEC;
 		break;
 	case GF_FIRE:
-		dam = monspell_damage((MS_BR_FIRE), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_FIRE), m_idx, DAM_ROLL);
 		type_s = _("火炎", "fire");
 		ms_type = MS_BR_FIRE;
 		drs_type = DRS_FIRE;
 		break;
 	case GF_COLD:
-		dam = monspell_damage((MS_BR_COLD), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_COLD), m_idx, DAM_ROLL);
 		type_s = _("冷気", "frost");
 		ms_type = MS_BR_COLD;
 		drs_type = DRS_COLD;
 		break;
 	case GF_POIS:
-		dam = monspell_damage((MS_BR_POIS), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_POIS), m_idx, DAM_ROLL);
 		type_s = _("ガス", "gas");
 		ms_type = MS_BR_POIS;
 		drs_type = DRS_POIS;
 		break;
 	case GF_NETHER:
-		dam = monspell_damage((MS_BR_NETHER), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_NETHER), m_idx, DAM_ROLL);
 		type_s = _("地獄", "nether");
 		ms_type = MS_BR_NETHER;
 		drs_type = DRS_NETH;
 		break;
 	case GF_LITE:
-		dam = monspell_damage((MS_BR_LITE), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_LITE), m_idx, DAM_ROLL);
 		type_s = _("閃光", "light");
 		ms_type = MS_BR_LITE;
 		drs_type = DRS_LITE;
 		break;
 	case GF_DARK:
-		dam = monspell_damage((MS_BR_DARK), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_DARK), m_idx, DAM_ROLL);
 		type_s = _("暗黒", "darkness");
 		ms_type = MS_BR_DARK;
 		drs_type = DRS_DARK;
 		break;
 	case GF_CONFUSION:
-		dam = monspell_damage((MS_BR_CONF), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_CONF), m_idx, DAM_ROLL);
 		type_s = _("混乱", "confusion");
 		ms_type = MS_BR_CONF;
 		drs_type = DRS_CONF;
 		break;
 	case GF_SOUND:
-		dam = monspell_damage((MS_BR_SOUND), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_SOUND), m_idx, DAM_ROLL);
 		type_s = _("轟音", "sound");
 		ms_type = MS_BR_SOUND;
 		drs_type = DRS_SOUND;
 		break;
 	case GF_CHAOS:
-		dam = monspell_damage((MS_BR_CHAOS), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_CHAOS), m_idx, DAM_ROLL);
 		type_s = _("カオス", "chaos");
 		ms_type = MS_BR_CHAOS;
 		drs_type = DRS_CHAOS;
 		break;
 	case GF_DISENCHANT:
-		dam = monspell_damage((MS_BR_DISEN), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_DISEN), m_idx, DAM_ROLL);
 		type_s = _("劣化", "disenchantment");
 		ms_type = MS_BR_DISEN;
 		drs_type = DRS_DISEN;
 		break;
 	case GF_NEXUS:
-		dam = monspell_damage((MS_BR_NEXUS), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_NEXUS), m_idx, DAM_ROLL);
 		type_s = _("因果混乱", "nexus");
 		ms_type = MS_BR_NEXUS;
 		drs_type = DRS_NEXUS;
 		break;
 	case GF_TIME:
-		dam = monspell_damage((MS_BR_TIME), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_TIME), m_idx, DAM_ROLL);
 		type_s = _("時間逆転", "time");
 		ms_type = MS_BR_TIME;
 		smart_learn_aux = FALSE;
 		break;
 	case GF_INERTIAL:
-		dam = monspell_damage((MS_BR_INERTIA), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_INERTIA), m_idx, DAM_ROLL);
 		type_s = _("遅鈍", "inertia");
 		ms_type = MS_BR_INERTIA;
 		smart_learn_aux = FALSE;
 		break;
 	case GF_GRAVITY:
-		dam = monspell_damage((MS_BR_GRAVITY), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_GRAVITY), m_idx, DAM_ROLL);
 		type_s = _("重力", "gravity");
 		ms_type = MS_BR_GRAVITY;
 		smart_learn_aux = FALSE;
 		break;
 	case GF_SHARDS:
-		dam = monspell_damage((MS_BR_SHARDS), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_SHARDS), m_idx, DAM_ROLL);
 		type_s = _("破片", "shards");
 		ms_type = MS_BR_SHARDS;
 		drs_type = DRS_SHARD;
 		break;
 	case GF_PLASMA:
-		dam = monspell_damage((MS_BR_PLASMA), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_PLASMA), m_idx, DAM_ROLL);
 		type_s = _("プラズマ", "plasma");
 		ms_type = MS_BR_PLASMA;
 		smart_learn_aux = FALSE;
 		break;
 	case GF_FORCE:
-		dam = monspell_damage((MS_BR_FORCE), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_FORCE), m_idx, DAM_ROLL);
 		type_s = _("フォース", "force");
 		ms_type = MS_BR_FORCE;
 		smart_learn_aux = FALSE;
 		break;
 	case GF_MANA:
-		dam = monspell_damage((MS_BR_MANA), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_MANA), m_idx, DAM_ROLL);
 		type_s = _("魔力", "mana");
 		ms_type = MS_BR_MANA;
 		smart_learn_aux = FALSE;
 		break;
 	case GF_NUKE:
-		dam = monspell_damage((MS_BR_NUKE), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_NUKE), m_idx, DAM_ROLL);
 		type_s = _("放射性廃棄物", "toxic waste");
 		ms_type = MS_BR_NUKE;
 		drs_type = DRS_POIS;
 		break;
 	case GF_DISINTEGRATE:
-		dam = monspell_damage((MS_BR_DISI), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_BR_DISI), m_idx, DAM_ROLL);
 		type_s = _("分解", "disintegration");
 		ms_type = MS_BR_DISI;
 		smart_learn_aux = FALSE;
@@ -526,7 +526,7 @@ HIT_POINT spell_RF4_BA_NUKE(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに放射能球を放った。", "%^s casts a ball of radiation at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BALL_NUKE), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BALL_NUKE), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_POIS);
@@ -555,7 +555,7 @@ HIT_POINT spell_RF4_BA_CHAO(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに純ログルスを放った。", "%^s invokes raw Logrus upon %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BALL_CHAOS), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BALL_CHAOS), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_CHAOS);
@@ -586,7 +586,7 @@ HIT_POINT spell_RF5_BA_ACID(player_type *target_ptr, POSITION y, POSITION x, MON
 		TARGET_TYPE);
 
 	rad = monster_is_powerful(m_idx) ? 4 : 2;
-	dam = monspell_damage((MS_BALL_ACID), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BALL_ACID), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_ACID);
@@ -617,7 +617,7 @@ HIT_POINT spell_RF5_BA_ELEC(player_type *target_ptr, POSITION y, POSITION x, MON
 		TARGET_TYPE);
 
 	rad = monster_is_powerful(m_idx) ? 4 : 2;
-	dam = monspell_damage((MS_BALL_ELEC), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BALL_ELEC), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_ELEC);
@@ -659,7 +659,7 @@ HIT_POINT spell_RF5_BA_FIRE(player_type *target_ptr, POSITION y, POSITION x, MON
 			TARGET_TYPE);
 	}
 	rad = monster_is_powerful(m_idx) ? 4 : 2;
-	dam = monspell_damage((MS_BALL_FIRE), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BALL_FIRE), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_FIRE);
@@ -690,7 +690,7 @@ HIT_POINT spell_RF5_BA_COLD(player_type *target_ptr, POSITION y, POSITION x, MON
 		TARGET_TYPE);
 
 	rad = monster_is_powerful(m_idx) ? 4 : 2;
-	dam = monspell_damage((MS_BALL_COLD), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BALL_COLD), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_COLD);
@@ -719,7 +719,7 @@ HIT_POINT spell_RF5_BA_POIS(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに向かって悪臭雲の呪文を唱えた。", "%^s casts a stinking cloud at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BALL_POIS), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BALL_POIS), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_POIS);
@@ -748,7 +748,7 @@ HIT_POINT spell_RF5_BA_NETH(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに向かって地獄球の呪文を唱えた。", "%^s casts a nether ball at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BALL_NETHER), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BALL_NETHER), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_NETH);
@@ -793,7 +793,7 @@ HIT_POINT spell_RF5_BA_WATE(player_type *target_ptr, POSITION y, POSITION x, MON
 		msg_format(_("%^sは渦巻に飲み込まれた。", "%^s is engulfed in a whirlpool."), t_name);
 	}
 
-	dam = monspell_damage((MS_BALL_WATER), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BALL_WATER), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_WATER, dam, 4, FALSE, MS_BALL_WATER, TARGET_TYPE);
 	return dam;
 }
@@ -819,7 +819,7 @@ HIT_POINT spell_RF5_BA_MANA(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに対して魔力の嵐の呪文を念じた。", "%^s invokes a mana storm upon %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BALL_MANA), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BALL_MANA), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_MANA, dam, 4, FALSE, MS_BALL_MANA, TARGET_TYPE);
 	return dam;
 }
@@ -845,7 +845,7 @@ HIT_POINT spell_RF5_BA_DARK(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに対して暗黒の嵐の呪文を念じた。", "%^s invokes a darkness storm upon %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BALL_DARK), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BALL_DARK), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_DARK, dam, 4, FALSE, MS_BALL_DARK, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_DARK);
@@ -882,7 +882,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, 
 		msg_format(_("%^sは精神エネルギーを%sから吸いとった。", "%^s draws psychic energy from %s."), m_name, t_name);
 	}
 
-	dam = monspell_damage((MS_DRAIN_MANA), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_DRAIN_MANA), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_MANA);
@@ -925,7 +925,7 @@ HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, 
 		msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
 	}
 
-	dam = monspell_damage((MS_MIND_BLAST), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_MIND_BLAST), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_MIND_BLAST, dam, 0, FALSE, MS_MIND_BLAST, TARGET_TYPE);
 	return dam;
 }
@@ -965,7 +965,7 @@ HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x,
 		msg_format(_("%^sは%sをじっと睨んだ。", "%^s gazes intently at %s."), m_name, t_name);
 	}
 
-	dam = monspell_damage((MS_BRAIN_SMASH), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BRAIN_SMASH), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_BRAIN_SMASH, dam, 0, FALSE, MS_BRAIN_SMASH, TARGET_TYPE);
 	return dam;
 }
@@ -1031,7 +1031,7 @@ HIT_POINT spell_RF5_CAUSE_1(player_type *target_ptr, POSITION y, POSITION x, MON
 {
 	concptr msg1, msg2, msg3;
 	HIT_POINT dam;
-	dam = monspell_damage((MS_CAUSE_1), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_CAUSE_1), m_idx, DAM_ROLL);
 
 	msg1 = _("%^sが何かをつぶやいた。", "%^s mumbles.");
 	msg2 = _("%^sがあなたを指さして呪った。", "%^s points at you and curses.");
@@ -1056,7 +1056,7 @@ HIT_POINT spell_RF5_CAUSE_2(player_type *target_ptr, POSITION y, POSITION x, MON
 {
 	concptr msg1, msg2, msg3;
 	HIT_POINT dam;
-	dam = monspell_damage((MS_CAUSE_2), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_CAUSE_2), m_idx, DAM_ROLL);
 
 	msg1 = _("%^sが何かをつぶやいた。", "%^s mumbles.");
 	msg2 = _("%^sがあなたを指さして恐ろしげに呪った。", "%^s points at you and curses horribly.");
@@ -1081,7 +1081,7 @@ HIT_POINT spell_RF5_CAUSE_3(player_type *target_ptr, POSITION y, POSITION x, MON
 {
 	concptr msg1, msg2, msg3;
 	HIT_POINT dam;
-	dam = monspell_damage((MS_CAUSE_3), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_CAUSE_3), m_idx, DAM_ROLL);
 
 	msg1 = _("%^sが何かを大声で叫んだ。", "%^s mumbles loudly.");
 	msg2 = _("%^sがあなたを指さして恐ろしげに呪文を唱えた！", "%^s points at you, incanting terribly!");
@@ -1106,7 +1106,7 @@ HIT_POINT spell_RF5_CAUSE_4(player_type *target_ptr, POSITION y, POSITION x, MON
 {
 	concptr msg1, msg2, msg3;
 	HIT_POINT dam;
-	dam = monspell_damage((MS_CAUSE_4), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_CAUSE_4), m_idx, DAM_ROLL);
 
 	msg1 = _("%^sが「お前は既に死んでいる」と叫んだ。", "%^s screams the word 'DIE!'");
 	msg2 = _("%^sがあなたの秘孔を突いて「お前は既に死んでいる」と叫んだ。", "%^s points at you, screaming the word DIE!");
@@ -1137,7 +1137,7 @@ HIT_POINT spell_RF5_BO_ACID(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%sが%sに向かってアシッド・ボルトの呪文を唱えた。", "%^s casts an acid bolt at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BOLT_ACID), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BOLT_ACID), m_idx, DAM_ROLL);
 	bolt(target_ptr, m_idx, y, x, GF_ACID, dam, MS_BOLT_ACID, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
@@ -1169,7 +1169,7 @@ HIT_POINT spell_RF5_BO_ELEC(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに向かってサンダー・ボルトの呪文を唱えた。", "%^s casts a lightning bolt at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BOLT_ELEC), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BOLT_ELEC), m_idx, DAM_ROLL);
 	bolt(target_ptr, m_idx, y, x, GF_ELEC, dam, MS_BOLT_ELEC, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
@@ -1201,7 +1201,7 @@ HIT_POINT spell_RF5_BO_FIRE(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに向かってファイア・ボルトの呪文を唱えた。", "%^s casts a fire bolt at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BOLT_FIRE), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BOLT_FIRE), m_idx, DAM_ROLL);
 	bolt(target_ptr, m_idx, y, x, GF_FIRE, dam, MS_BOLT_FIRE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
@@ -1233,7 +1233,7 @@ HIT_POINT spell_RF5_BO_COLD(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに向かってアイス・ボルトの呪文を唱えた。", "%^s casts a frost bolt at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BOLT_COLD), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BOLT_COLD), m_idx, DAM_ROLL);
 	bolt(target_ptr, m_idx, y, x, GF_COLD, dam, MS_BOLT_COLD, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
@@ -1265,7 +1265,7 @@ HIT_POINT spell_RF5_BA_LITE(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに対してスターバーストの呪文を念じた。", "%^s invokes a starburst upon %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_STARBURST), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_STARBURST), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_LITE, dam, 4, FALSE, MS_STARBURST, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		update_smart_learn(m_idx, DRS_LITE);
@@ -1294,7 +1294,7 @@ HIT_POINT spell_RF5_BO_NETH(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに向かって地獄の矢の呪文を唱えた。", "%^s casts a nether bolt at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BOLT_NETHER), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BOLT_NETHER), m_idx, DAM_ROLL);
 	bolt(target_ptr, m_idx, y, x, GF_NETHER, dam, MS_BOLT_NETHER, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
@@ -1326,7 +1326,7 @@ HIT_POINT spell_RF5_BO_WATE(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに向かってウォーター・ボルトの呪文を唱えた。", "%^s casts a water bolt at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BOLT_WATER), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BOLT_WATER), m_idx, DAM_ROLL);
 	bolt(target_ptr, m_idx, y, x, GF_WATER, dam, MS_BOLT_WATER, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
@@ -1357,7 +1357,7 @@ HIT_POINT spell_RF5_BO_MANA(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに向かって魔力の矢の呪文を唱えた。", "%^s casts a mana bolt at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BOLT_MANA), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BOLT_MANA), m_idx, DAM_ROLL);
 	bolt(target_ptr, m_idx, y, x, GF_MANA, dam, MS_BOLT_MANA, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
@@ -1388,7 +1388,7 @@ HIT_POINT spell_RF5_BO_PLAS(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに向かってプラズマ・ボルトの呪文を唱えた。", "%^s casts a plasma bolt at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BOLT_PLASMA), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BOLT_PLASMA), m_idx, DAM_ROLL);
 	bolt(target_ptr, m_idx, y, x, GF_PLASMA, dam, MS_BOLT_PLASMA, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
@@ -1419,7 +1419,7 @@ HIT_POINT spell_RF5_BO_ICEE(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに向かって極寒の矢の呪文を唱えた。", "%^s casts an ice bolt at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_BOLT_ICE), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_BOLT_ICE), m_idx, DAM_ROLL);
 	bolt(target_ptr, m_idx, y, x, GF_ICE, dam, MS_BOLT_ICE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
@@ -1451,7 +1451,7 @@ HIT_POINT spell_RF5_MISSILE(player_type *target_ptr, POSITION y, POSITION x, MON
 		_("%^sが%sに向かってマジック・ミサイルの呪文を唱えた。", "%^s casts a magic missile at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_MAGIC_MISSILE), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_MAGIC_MISSILE), m_idx, DAM_ROLL);
 	bolt(target_ptr, m_idx, y, x, GF_MISSILE, dam, MS_MAGIC_MISSILE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
@@ -1866,7 +1866,7 @@ HIT_POINT spell_RF6_HAND_DOOM(player_type *target_ptr, POSITION y, POSITION x, M
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		dam = monspell_damage((MS_HAND_DOOM), m_idx, DAM_ROLL);
+		dam = monspell_damage(target_ptr, (MS_HAND_DOOM), m_idx, DAM_ROLL);
 		breath(target_ptr, y, x, m_idx, GF_HAND_DOOM, dam, 0, FALSE, MS_HAND_DOOM, MONSTER_TO_PLAYER);
 	}
 	else if (TARGET_TYPE == MONSTER_TO_MONSTER)
@@ -2511,7 +2511,7 @@ HIT_POINT spell_RF6_PSY_SPEAR(player_type *target_ptr, POSITION y, POSITION x, M
 		_("%^sが%sに向かって光の剣を放った。", "%^s throw a Psycho-spear at %s."),
 		TARGET_TYPE);
 
-	dam = monspell_damage((MS_PSY_SPEAR), m_idx, DAM_ROLL);
+	dam = monspell_damage(target_ptr, (MS_PSY_SPEAR), m_idx, DAM_ROLL);
 	beam(target_ptr, m_idx, y, x, GF_PSY_SPEAR, dam, MS_PSY_SPEAR, MONSTER_TO_PLAYER);
 	return dam;
 }
@@ -3861,6 +3861,7 @@ HIT_POINT monspell_damage_roll(HIT_POINT dam, int dice_num, int dice_side, int m
 
 /*!
 * @brief モンスターの使う呪文の威力を返す /
+* @param target_ptr プレーヤーへの参照ポインタ (破滅の手用)
 * @param SPELL_NUM 呪文番号
 * @param hp 呪文を唱えるモンスターの体力
 * @param rlev 呪文を唱えるモンスターのレベル
@@ -3871,7 +3872,7 @@ HIT_POINT monspell_damage_roll(HIT_POINT dam, int dice_num, int dice_side, int m
 * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
 * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
 */
-HIT_POINT monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, int shoot_dd, int shoot_ds, int shoot_base, int TYPE)
+HIT_POINT monspell_damage_base(player_type *target_ptr, int SPELL_NUM, int hp, int rlev, bool powerful, int shoot_dd, int shoot_ds, int shoot_base, int TYPE)
 {
 	HIT_POINT dam = 0, dice_num = 0, dice_side = 0, mult = 1, div = 1;
 
@@ -4231,7 +4232,7 @@ HIT_POINT monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, i
 
 		/* RF6_HAND_DOOM */
 	case MS_HAND_DOOM:
-		mult = p_ptr->chp;
+		mult = target_ptr->chp;
 		div = 100;
 		dam = 40 * (mult / div);
 		dice_num = 1;
@@ -4283,12 +4284,13 @@ HIT_POINT monspell_damage_base(int SPELL_NUM, int hp, int rlev, bool powerful, i
 
 /*!
 * @brief モンスターの使う呪文の威力を返す /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param SPELL_NUM 呪文番号
 * @param m_idx 呪文を唱えるモンスターID
 * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
 * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
 */
-HIT_POINT monspell_damage(int SPELL_NUM, MONSTER_IDX m_idx, int TYPE)
+HIT_POINT monspell_damage(player_type *target_ptr, int SPELL_NUM, MONSTER_IDX m_idx, int TYPE)
 {
 	monster_type	*m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
@@ -4306,18 +4308,19 @@ HIT_POINT monspell_damage(int SPELL_NUM, MONSTER_IDX m_idx, int TYPE)
 		hp = m_ptr->max_maxhp;
 	} 
 
-	return monspell_damage_base(SPELL_NUM, hp, rlev, monster_is_powerful(m_idx), shoot_dd, shoot_ds, 0, TYPE);
+	return monspell_damage_base(target_ptr, SPELL_NUM, hp, rlev, monster_is_powerful(m_idx), shoot_dd, shoot_ds, 0, TYPE);
 }
 
 
 /*!
 * @brief モンスターの使う呪文の威力を返す /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param SPELL_NUM 呪文番号
 * @param r_idx 呪文を唱えるモンスターの種族ID
 * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
 * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
 */
-HIT_POINT monspell_race_damage(int SPELL_NUM, MONRACE_IDX r_idx, int TYPE)
+HIT_POINT monspell_race_damage(player_type *target_ptr, int SPELL_NUM, MONRACE_IDX r_idx, int TYPE)
 {
 	monster_race	*r_ptr = &r_info[r_idx];
 	int rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
@@ -4326,18 +4329,19 @@ HIT_POINT monspell_race_damage(int SPELL_NUM, MONRACE_IDX r_idx, int TYPE)
 	int shoot_dd = r_ptr->blow[0].d_dice;
 	int shoot_ds = r_ptr->blow[0].d_side;
 
-	return monspell_damage_base(SPELL_NUM, MIN(30000, hp), rlev, powerful, shoot_dd, shoot_ds, 0, TYPE);
+	return monspell_damage_base(target_ptr, SPELL_NUM, MIN(30000, hp), rlev, powerful, shoot_dd, shoot_ds, 0, TYPE);
 }
 
 
 /*!
 * @brief 青魔導師の使う呪文の威力を返す /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param SPELL_NUM 呪文番号
 * @param plev 使用するレベル。2倍して扱う。
 * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
 * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
 */
-HIT_POINT monspell_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, int TYPE)
+HIT_POINT monspell_bluemage_damage(player_type *target_ptr, int SPELL_NUM, PLAYER_LEVEL plev, int TYPE)
 {
 	int hp = p_ptr->chp;
 	int shoot_dd = 1, shoot_ds = 1, shoot_base = 0;
@@ -4353,5 +4357,5 @@ HIT_POINT monspell_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, int TYPE)
 		shoot_base = o_ptr->to_d;
 	}
 
-	return monspell_damage_base(SPELL_NUM, hp, plev * 2, FALSE, shoot_dd, shoot_ds, shoot_base, TYPE);
+	return monspell_damage_base(target_ptr, SPELL_NUM, hp, plev * 2, FALSE, shoot_dd, shoot_ds, shoot_base, TYPE);
 }
