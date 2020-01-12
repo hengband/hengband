@@ -275,13 +275,14 @@ byte get_dungeon_feeling(floor_type *floor_ptr)
  * / Update dungeon feeling, and announce it if changed
  * @return なし
  */
-void update_dungeon_feeling(player_type *subject_ptr, floor_type *floor_ptr)
+void update_dungeon_feeling(player_type *subject_ptr)
 {
 	byte new_feeling;
 	int quest_num;
 	int delay;
 
 	/* No feeling on the surface */
+	floor_type *floor_ptr = subject_ptr->current_floor_ptr;
 	if (!floor_ptr->dun_level) return;
 
 	/* No feeling in the arena */
@@ -418,7 +419,7 @@ void forget_lite(floor_type *floor_ptr)
  *                 ***         *****
  *                              ***
  */
-void update_lite(player_type *subject_ptr, floor_type *floor_ptr)
+void update_lite(player_type *subject_ptr)
 {
 	int i;
 	POSITION x, y, min_x, max_x, min_y, max_y;
@@ -442,6 +443,7 @@ void update_lite(player_type *subject_ptr, floor_type *floor_ptr)
 	/*** Save the old "lite" grids for later ***/
 
 	/* Clear them all */
+	floor_type *floor_ptr = subject_ptr->current_floor_ptr;
 	for (i = 0; i < floor_ptr->lite_n; i++)
 	{
 		y = floor_ptr->lite_y[i];
@@ -1494,7 +1496,7 @@ static void mon_dark_hack(player_type *subject_ptr, POSITION y, POSITION x)
  * updating.  Only squares in view of the player, whos state
  * changes are drawn via lite_spot().
  */
-void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
+void update_mon_lite(player_type *subject_ptr)
 {
 	int i, rad;
 	grid_type *g_ptr;
@@ -1510,6 +1512,7 @@ void update_mon_lite(player_type *subject_ptr, floor_type *floor_ptr)
 		(MAX_SIGHT / 2 + 1) : (MAX_SIGHT + 3);
 
 	/* Clear all monster lit squares */
+	floor_type *floor_ptr = subject_ptr->current_floor_ptr;
 	for (i = 0; i < floor_ptr->mon_lite_n; i++)
 	{
 		/* Point to grid */
