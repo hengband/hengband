@@ -61,17 +61,17 @@ POSITION panel_row_min, panel_row_max;
 POSITION panel_col_min, panel_col_max;
 POSITION panel_col_prt, panel_row_prt;
 
- /*
-  * Some screen locations for various display routines
-  * Currently, row 8 and 15 are the only "blank" rows.
-  * That leaves a "border" around the "stat" values.
-  */
+/*
+ * Some screen locations for various display routines
+ * Currently, row 8 and 15 are the only "blank" rows.
+ * That leaves a "border" around the "stat" values.
+ */
 
 #define ROW_RACE                1
 #define COL_RACE                0       /* <race name> */
 
-  /*#define ROW_CLASS               2 */
-  /*#define COL_CLASS               0 */      /* <class name> */
+ /*#define ROW_CLASS               2 */
+ /*#define COL_CLASS               0 */      /* <class name> */
 
 #define ROW_TITLE               2
 #define COL_TITLE               0       /* <title> or <mode> */
@@ -146,6 +146,7 @@ POSITION panel_col_prt, panel_row_prt;
 void print_equippy(player_type *creature_ptr);
 void print_map(player_type *player_ptr);
 void display_map(player_type *player_ptr, int *cy, int *cx);
+void set_term_color(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, TERM_COLOR *cp);
 
 /*!
  * @brief 画面左の能力値表示を行うために指定位置から13キャラ分を空白消去後指定のメッセージを明るい青で描画する /
@@ -163,6 +164,7 @@ static void print_field(concptr info, TERM_LEN row, TERM_LEN col)
 	/* Dump the info itself */
 	c_put_str(TERM_L_BLUE, info, row, col);
 }
+
 
 /*!
  * @brief ゲーム時刻を表示する /
@@ -182,8 +184,9 @@ void print_time(void)
 	if (day < 1000) c_put_str(TERM_WHITE, format(_("%2d日目", "Day%3d"), day), ROW_DAY, COL_DAY);
 	else c_put_str(TERM_WHITE, _("***日目", "Day***"), ROW_DAY, COL_DAY);
 
-	c_put_str(TERM_WHITE, format("%2d:%02d", hour, min), ROW_DAY, COL_DAY+7);
+	c_put_str(TERM_WHITE, format("%2d:%02d", hour, min), ROW_DAY, COL_DAY + 7);
 }
+
 
 /*!
  * @brief 現在のマップ名を返す /
@@ -194,7 +197,7 @@ concptr map_name(player_type *creature_ptr)
 {
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest)
-	    && (quest[floor_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
+		&& (quest[floor_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
 		return _("クエスト", "Quest");
 	else if (creature_ptr->wild_mode)
 		return _("地上", "Surface");
@@ -205,8 +208,9 @@ concptr map_name(player_type *creature_ptr)
 	else if (!floor_ptr->dun_level && creature_ptr->town_num)
 		return town_info[creature_ptr->town_num].name;
 	else
-		return d_name+d_info[creature_ptr->dungeon_idx].name;
+		return d_name + d_info[creature_ptr->dungeon_idx].name;
 }
+
 
 /*!
  * @brief 現在のマップ名を描画する / Print dungeon
@@ -215,20 +219,17 @@ concptr map_name(player_type *creature_ptr)
  */
 static void print_dungeon(player_type *creature_ptr)
 {
-	concptr dungeon_name;
-	TERM_LEN col;
-
 	/* Dump 13 spaces to clear */
 	c_put_str(TERM_WHITE, "             ", ROW_DUNGEON, COL_DUNGEON);
 
-	dungeon_name = map_name(creature_ptr);
+	concptr dungeon_name = map_name(creature_ptr);
 
-	col = COL_DUNGEON + 6 - strlen(dungeon_name)/2;
+	TERM_LEN col = COL_DUNGEON + 6 - strlen(dungeon_name) / 2;
 	if (col < 0) col = 0;
 
 	/* Dump the info itself */
-	c_put_str(TERM_L_UMBER, format("%s",dungeon_name),
-		  ROW_DUNGEON, col);
+	c_put_str(TERM_L_UMBER, format("%s", dungeon_name),
+		ROW_DUNGEON, col);
 }
 
 
@@ -258,16 +259,15 @@ static void print_stat(player_type *creature_ptr, int stat)
 	}
 
 	/* Indicate natural maximum */
-	if (creature_ptr->stat_max[stat] == creature_ptr->stat_max_max[stat])
-	{
-#ifdef JP
-		/* 日本語にかぶらないように表示位置を変更 */
-		put_str("!", ROW_STAT + stat, 5);
-#else
-		put_str("!", ROW_STAT + stat, 3);
-#endif
+	if (creature_ptr->stat_max[stat] != creature_ptr->stat_max_max[stat])
+		return;
 
-	}
+#ifdef JP
+	/* 日本語にかぶらないように表示位置を変更 */
+	put_str("!", ROW_STAT + stat, 5);
+#else
+	put_str("!", ROW_STAT + stat, 3);
+#endif
 }
 
 
@@ -498,32 +498,28 @@ static struct {
  */
 #define ADD_FLG(FLG) (bar_flags[FLG / 32] |= (1L << (FLG % 32)))
 
-/*!
- * @brief 32ビット変数配列の指定位置のビットフラグが1かどうかを返す。
- * @param FLG フラグ位置(ビット)
- * @return 1ならば0以外を返す
- */
+ /*!
+  * @brief 32ビット変数配列の指定位置のビットフラグが1かどうかを返す。
+  * @param FLG フラグ位置(ビット)
+  * @return 1ならば0以外を返す
+  */
 #define IS_FLG(FLG) (bar_flags[FLG / 32] & (1L << (FLG % 32)))
 
 
-/*!
- * @brief 下部に状態表示を行う / Show status bar
- * @return なし
- */
+  /*!
+   * @brief 下部に状態表示を行う / Show status bar
+   * @return なし
+   */
 static void print_status(player_type *creature_ptr)
 {
-	BIT_FLAGS bar_flags[3];
-	TERM_LEN wid, hgt, row_statbar, max_col_statbar;
-	int i;
-	TERM_LEN col = 0, num = 0;
-	int space = 2;
-
+	TERM_LEN wid, hgt;
 	Term_get_size(&wid, &hgt);
-	row_statbar = hgt + ROW_STATBAR;
-	max_col_statbar = wid + MAX_COL_STATBAR;
+	TERM_LEN row_statbar = hgt + ROW_STATBAR;
+	TERM_LEN max_col_statbar = wid + MAX_COL_STATBAR;
 
 	Term_erase(0, row_statbar, max_col_statbar);
 
+	BIT_FLAGS bar_flags[3];
 	bar_flags[0] = bar_flags[1] = bar_flags[2] = 0L;
 
 	/* Tsuyoshi  */
@@ -585,7 +581,7 @@ static void print_status(player_type *creature_ptr)
 	if (creature_ptr->tsubureru) ADD_FLG(BAR_EXPAND);
 
 	if (creature_ptr->shield) ADD_FLG(BAR_STONESKIN);
-	
+
 	if (creature_ptr->special_defense & NINJA_KAWARIMI) ADD_FLG(BAR_KAWARIMI);
 
 	/* Oppose Acid */
@@ -594,7 +590,7 @@ static void print_status(player_type *creature_ptr)
 
 	/* Oppose Lightning */
 	if (creature_ptr->special_defense & DEFENSE_ELEC) ADD_FLG(BAR_IMMELEC);
-	if (is_oppose_elec (creature_ptr)) ADD_FLG(BAR_RESELEC);
+	if (is_oppose_elec(creature_ptr)) ADD_FLG(BAR_RESELEC);
 
 	/* Oppose Fire */
 	if (creature_ptr->special_defense & DEFENSE_FIRE) ADD_FLG(BAR_IMMFIRE);
@@ -687,7 +683,8 @@ static void print_status(player_type *creature_ptr)
 	}
 
 	/* Calcurate length */
-	for (i = 0; bar[i].sstr; i++)
+	TERM_LEN col = 0, num = 0;
+	for (int i = 0; bar[i].sstr; i++)
 	{
 		if (IS_FLG(i))
 		{
@@ -697,12 +694,13 @@ static void print_status(player_type *creature_ptr)
 	}
 
 	/* If there are not excess spaces for long strings, use short one */
+	int space = 2;
 	if (col - 1 > max_col_statbar)
 	{
 		space = 0;
 		col = 0;
 
-		for (i = 0; bar[i].sstr; i++)
+		for (int i = 0; bar[i].sstr; i++)
 		{
 			if (IS_FLG(i))
 			{
@@ -711,31 +709,29 @@ static void print_status(player_type *creature_ptr)
 		}
 
 		/* If there are excess spaces for short string, use more */
-		if (col - 1 <= max_col_statbar - (num-1))
+		if (col - 1 <= max_col_statbar - (num - 1))
 		{
 			space = 1;
 			col += num - 1;
 		}
 	}
 
-
 	/* Centering display column */
 	col = (max_col_statbar - col) / 2;
 
 	/* Display status bar */
-	for (i = 0; bar[i].sstr; i++)
+	for (int i = 0; bar[i].sstr; i++)
 	{
-		if (IS_FLG(i))
-		{
-			concptr str;
-			if (space == 2) str = bar[i].lstr;
-			else str = bar[i].sstr;
+		if (!IS_FLG(i)) continue;
 
-			c_put_str(bar[i].attr, str, row_statbar, col);
-			col += strlen(str);
-			if (space > 0) col++;
-			if (col > max_col_statbar) break;
-		}
+		concptr str;
+		if (space == 2) str = bar[i].lstr;
+		else str = bar[i].sstr;
+
+		c_put_str(bar[i].attr, str, row_statbar, col);
+		col += strlen(str);
+		if (space > 0) col++;
+		if (col > max_col_statbar) break;
 	}
 }
 
@@ -746,9 +742,9 @@ static void print_status(player_type *creature_ptr)
  */
 static void print_title(player_type *creature_ptr)
 {
-	concptr p = "";
 	GAME_TEXT str[14];
 
+	concptr p = "";
 	if (current_world_ptr->wizard)
 	{
 		p = _("[ウィザード]", "[=-WIZARD-=]");
@@ -764,8 +760,6 @@ static void print_title(player_type *creature_ptr)
 			p = _("***勝利者***", "***WINNER***");
 		}
 	}
-
-	/* Normal */
 	else
 	{
 		my_strcpy(str, player_title[creature_ptr->pclass][(creature_ptr->lev - 1) / 5], sizeof(str));
@@ -805,7 +799,7 @@ static void print_exp(player_type *creature_ptr)
 {
 	char out_val[32];
 
-	if ((!exp_need)||(creature_ptr->prace == RACE_ANDROID))
+	if ((!exp_need) || (creature_ptr->prace == RACE_ANDROID))
 	{
 		(void)sprintf(out_val, "%8ld", (long)creature_ptr->exp);
 	}
@@ -817,7 +811,7 @@ static void print_exp(player_type *creature_ptr)
 		}
 		else
 		{
-			(void)sprintf(out_val, "%8ld", (long)(player_exp [creature_ptr->lev - 1] * creature_ptr->expfact / 100L) - creature_ptr->exp);
+			(void)sprintf(out_val, "%8ld", (long)(player_exp[creature_ptr->lev - 1] * creature_ptr->expfact / 100L) - creature_ptr->exp);
 		}
 	}
 
@@ -858,7 +852,7 @@ static void print_ac(player_type *creature_ptr)
 	char tmp[32];
 
 #ifdef JP
-/* AC の表示方式を変更している */
+	/* AC の表示方式を変更している */
 	put_str(" ＡＣ(     )", ROW_AC, COL_AC);
 	sprintf(tmp, "%5d", creature_ptr->dis_ac + creature_ptr->dis_to_a);
 	c_put_str(TERM_L_GREEN, tmp, ROW_AC, COL_AC + 6);
@@ -879,15 +873,14 @@ static void print_hp(player_type *creature_ptr)
 {
 	/* ヒットポイントの表示方法を変更 */
 	char tmp[32];
-  
-	TERM_COLOR color;
-  
+
 	/* タイトル */
 	put_str("HP", ROW_CURHP, COL_CURHP);
 
 	/* 現在のヒットポイント */
 	sprintf(tmp, "%4ld", (long int)creature_ptr->chp);
 
+	TERM_COLOR color;
 	if (creature_ptr->chp >= creature_ptr->mhp)
 	{
 		color = TERM_L_GREEN;
@@ -901,16 +894,16 @@ static void print_hp(player_type *creature_ptr)
 		color = TERM_RED;
 	}
 
-	c_put_str(color, tmp, ROW_CURHP, COL_CURHP+3);
+	c_put_str(color, tmp, ROW_CURHP, COL_CURHP + 3);
 
 	/* 区切り */
-	put_str( "/", ROW_CURHP, COL_CURHP + 7 );
+	put_str("/", ROW_CURHP, COL_CURHP + 7);
 
 	/* 最大ヒットポイント */
 	sprintf(tmp, "%4ld", (long int)creature_ptr->mhp);
 	color = TERM_L_GREEN;
 
-	c_put_str(color, tmp, ROW_CURHP, COL_CURHP + 8 );
+	c_put_str(color, tmp, ROW_CURHP, COL_CURHP + 8);
 }
 
 
@@ -920,10 +913,9 @@ static void print_hp(player_type *creature_ptr)
  */
 static void print_sp(player_type *creature_ptr)
 {
-/* マジックポイントの表示方法を変更している */
+	/* マジックポイントの表示方法を変更している */
 	char tmp[32];
 	byte color;
-
 
 	/* Do not show mana unless it matters */
 	if (!mp_ptr->spell_book) return;
@@ -947,10 +939,10 @@ static void print_sp(player_type *creature_ptr)
 		color = TERM_RED;
 	}
 
-	c_put_str(color, tmp, ROW_CURSP, COL_CURSP+3);
+	c_put_str(color, tmp, ROW_CURSP, COL_CURSP + 3);
 
 	/* 区切り */
-	put_str( "/", ROW_CURSP, COL_CURSP + 7 );
+	put_str("/", ROW_CURSP, COL_CURSP + 7);
 
 	/* 最大マジックポイント */
 	sprintf(tmp, "%4ld", (long int)creature_ptr->msp);
@@ -968,45 +960,47 @@ static void print_sp(player_type *creature_ptr)
 static void print_depth(player_type *creature_ptr)
 {
 	char depths[32];
-	TERM_LEN wid, hgt, row_depth, col_depth;
 	TERM_COLOR attr = TERM_WHITE;
 
+	TERM_LEN wid, hgt;
 	Term_get_size(&wid, &hgt);
-	col_depth = wid + COL_DEPTH;
-	row_depth = hgt + ROW_DEPTH;
+	TERM_LEN col_depth = wid + COL_DEPTH;
+	TERM_LEN row_depth = hgt + ROW_DEPTH;
 
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	if (!floor_ptr->dun_level)
 	{
 		strcpy(depths, _("地上", "Surf."));
+		c_prt(attr, format("%7s", depths), row_depth, col_depth);
+		return;
 	}
-	else if (floor_ptr->inside_quest && !creature_ptr->dungeon_idx)
+
+	if (floor_ptr->inside_quest && !creature_ptr->dungeon_idx)
 	{
 		strcpy(depths, _("地上", "Quest"));
+		c_prt(attr, format("%7s", depths), row_depth, col_depth);
+		return;
 	}
-	else
+
+	if (depth_in_feet) (void)sprintf(depths, _("%d ft", "%d ft"), (int)floor_ptr->dun_level * 50);
+	else (void)sprintf(depths, _("%d 階", "Lev %d"), (int)floor_ptr->dun_level);
+
+	/* Get color of level based on feeling  -JSV- */
+	switch (creature_ptr->feeling)
 	{
-		if (depth_in_feet) (void)sprintf(depths, _("%d ft", "%d ft"), (int)floor_ptr->dun_level * 50);
-		else (void)sprintf(depths, _("%d 階", "Lev %d"), (int)floor_ptr->dun_level);
-
-		/* Get color of level based on feeling  -JSV- */
-		switch (creature_ptr->feeling)
-		{
-		case  0: attr = TERM_SLATE;   break; /* Unknown */
-		case  1: attr = TERM_L_BLUE;  break; /* Special */
-		case  2: attr = TERM_VIOLET;  break; /* Horrible visions */
-		case  3: attr = TERM_RED;     break; /* Very dangerous */
-		case  4: attr = TERM_L_RED;   break; /* Very bad feeling */
-		case  5: attr = TERM_ORANGE;  break; /* Bad feeling */
-		case  6: attr = TERM_YELLOW;  break; /* Nervous */
-		case  7: attr = TERM_L_UMBER; break; /* Luck is turning */
-		case  8: attr = TERM_L_WHITE; break; /* Don't like */
-		case  9: attr = TERM_WHITE;   break; /* Reasonably safe */
-		case 10: attr = TERM_WHITE;   break; /* Boring place */
-		}
+	case  0: attr = TERM_SLATE;   break; /* Unknown */
+	case  1: attr = TERM_L_BLUE;  break; /* Special */
+	case  2: attr = TERM_VIOLET;  break; /* Horrible visions */
+	case  3: attr = TERM_RED;     break; /* Very dangerous */
+	case  4: attr = TERM_L_RED;   break; /* Very bad feeling */
+	case  5: attr = TERM_ORANGE;  break; /* Bad feeling */
+	case  6: attr = TERM_YELLOW;  break; /* Nervous */
+	case  7: attr = TERM_L_UMBER; break; /* Luck is turning */
+	case  8: attr = TERM_L_WHITE; break; /* Don't like */
+	case  9: attr = TERM_WHITE;   break; /* Reasonably safe */
+	case 10: attr = TERM_WHITE;   break; /* Boring place */
 	}
 
-	/* Right-Adjust the "depth", and clear old values */
 	c_prt(attr, format("%7s", depths), row_depth, col_depth);
 }
 
@@ -1018,43 +1012,39 @@ static void print_depth(player_type *creature_ptr)
  */
 static void print_hunger(player_type *player_ptr)
 {
-	if(current_world_ptr->wizard && player_ptr->current_floor_ptr->inside_arena) return;
+	if (current_world_ptr->wizard && player_ptr->current_floor_ptr->inside_arena) return;
 
-	/* Fainting / Starving */
 	if (player_ptr->food < PY_FOOD_FAINT)
 	{
 		c_put_str(TERM_RED, _("衰弱  ", "Weak  "), ROW_HUNGRY, COL_HUNGRY);
+		return;
 	}
 
-	/* Weak */
-	else if (player_ptr->food < PY_FOOD_WEAK)
+	if (player_ptr->food < PY_FOOD_WEAK)
 	{
 		c_put_str(TERM_ORANGE, _("衰弱  ", "Weak  "), ROW_HUNGRY, COL_HUNGRY);
+		return;
 	}
 
-	/* Hungry */
-	else if (player_ptr->food < PY_FOOD_ALERT)
+	if (player_ptr->food < PY_FOOD_ALERT)
 	{
 		c_put_str(TERM_YELLOW, _("空腹  ", "Hungry"), ROW_HUNGRY, COL_HUNGRY);
+		return;
 	}
 
-	/* Normal */
-	else if (player_ptr->food < PY_FOOD_FULL)
+	if (player_ptr->food < PY_FOOD_FULL)
 	{
 		c_put_str(TERM_L_GREEN, "      ", ROW_HUNGRY, COL_HUNGRY);
+		return;
 	}
 
-	/* Full */
-	else if (player_ptr->food < PY_FOOD_MAX)
+	if (player_ptr->food < PY_FOOD_MAX)
 	{
 		c_put_str(TERM_L_GREEN, _("満腹  ", "Full  "), ROW_HUNGRY, COL_HUNGRY);
+		return;
 	}
 
-	/* Gorged */
-	else
-	{
-		c_put_str(TERM_GREEN, _("食過ぎ", "Gorged"), ROW_HUNGRY, COL_HUNGRY);
-	}
+	c_put_str(TERM_GREEN, _("食過ぎ", "Gorged"), ROW_HUNGRY, COL_HUNGRY);
 }
 
 
@@ -1083,95 +1073,94 @@ static void print_state(player_type *player_ptr)
 		{
 			(void)sprintf(text, "  %2d", command_rep);
 		}
+
+		c_put_str(attr, format("%5.5s", text), ROW_STATE, COL_STATE);
+		return;
 	}
 
 	/* Action */
-	else
+	switch (player_ptr->action)
 	{
-		switch(player_ptr->action)
+	case ACTION_SEARCH:
+	{
+		strcpy(text, _("探索", "Sear"));
+		break;
+	}
+	case ACTION_REST:
+		/* Start with "Rest" */
+		strcpy(text, _("    ", "    "));
+
+		if (player_ptr->resting > 0)
 		{
-			case ACTION_SEARCH:
-			{
-				strcpy(text, _("探索", "Sear"));
-				break;
-			}
-			case ACTION_REST:
-				/* Start with "Rest" */
-				strcpy(text, _("    ", "    "));
-
-				if (player_ptr->resting > 0)
-				{
-					sprintf(text, "%4d", player_ptr->resting);
-				}
-				else if (player_ptr->resting == COMMAND_ARG_REST_FULL_HEALING)
-				{
-					text[0] = text[1] = text[2] = text[3] = '*';
-				}
-				else if (player_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE)
-				{
-					text[0] = text[1] = text[2] = text[3] = '&';
-				}
-				break;
-
-			case ACTION_LEARN:
-			{
-				strcpy(text, _("学習", "lear"));
-				if (player_ptr->new_mane) attr = TERM_L_RED;
-				break;
-			}
-			case ACTION_FISH:
-			{
-				strcpy(text, _("釣り", "fish"));
-				break;
-			}
-			case ACTION_KAMAE:
-			{
-				int i;
-				for (i = 0; i < MAX_KAMAE; i++)
-					if (player_ptr->special_defense & (KAMAE_GENBU << i)) break;
-				switch (i)
-				{
-					case 0: attr = TERM_GREEN;break;
-					case 1: attr = TERM_WHITE;break;
-					case 2: attr = TERM_L_BLUE;break;
-					case 3: attr = TERM_L_RED;break;
-				}
-				strcpy(text, kamae_shurui[i].desc);
-				break;
-			}
-			case ACTION_KATA:
-			{
-				int i;
-				for (i = 0; i < MAX_KATA; i++)
-					if (player_ptr->special_defense & (KATA_IAI << i)) break;
-				strcpy(text, kata_shurui[i].desc);
-				break;
-			}
-			case ACTION_SING:
-			{
-				strcpy(text, _("歌  ", "Sing"));
-				break;
-			}
-			case ACTION_HAYAGAKE:
-			{
-				strcpy(text, _("速駆", "Fast"));
-				break;
-			}
-			case ACTION_SPELL:
-			{
-				strcpy(text, _("詠唱", "Spel"));
-				break;
-			}
-			default:
-			{
-				strcpy(text, "    ");
-				break;
-			}
+			sprintf(text, "%4d", player_ptr->resting);
 		}
+		else if (player_ptr->resting == COMMAND_ARG_REST_FULL_HEALING)
+		{
+			text[0] = text[1] = text[2] = text[3] = '*';
+		}
+		else if (player_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE)
+		{
+			text[0] = text[1] = text[2] = text[3] = '&';
+		}
+		break;
+
+	case ACTION_LEARN:
+	{
+		strcpy(text, _("学習", "lear"));
+		if (player_ptr->new_mane) attr = TERM_L_RED;
+		break;
+	}
+	case ACTION_FISH:
+	{
+		strcpy(text, _("釣り", "fish"));
+		break;
+	}
+	case ACTION_KAMAE:
+	{
+		int i;
+		for (i = 0; i < MAX_KAMAE; i++)
+			if (player_ptr->special_defense & (KAMAE_GENBU << i)) break;
+		switch (i)
+		{
+		case 0: attr = TERM_GREEN; break;
+		case 1: attr = TERM_WHITE; break;
+		case 2: attr = TERM_L_BLUE; break;
+		case 3: attr = TERM_L_RED; break;
+		}
+		strcpy(text, kamae_shurui[i].desc);
+		break;
+	}
+	case ACTION_KATA:
+	{
+		int i;
+		for (i = 0; i < MAX_KATA; i++)
+			if (player_ptr->special_defense & (KATA_IAI << i)) break;
+		strcpy(text, kata_shurui[i].desc);
+		break;
+	}
+	case ACTION_SING:
+	{
+		strcpy(text, _("歌  ", "Sing"));
+		break;
+	}
+	case ACTION_HAYAGAKE:
+	{
+		strcpy(text, _("速駆", "Fast"));
+		break;
+	}
+	case ACTION_SPELL:
+	{
+		strcpy(text, _("詠唱", "Spel"));
+		break;
+	}
+	default:
+	{
+		strcpy(text, "    ");
+		break;
+	}
 	}
 
-	/* Display the info (or blanks) */
-	c_put_str(attr, format("%5.5s",text), ROW_STATE, COL_STATE);
+	c_put_str(attr, format("%5.5s", text), ROW_STATE, COL_STATE);
 }
 
 
@@ -1182,22 +1171,20 @@ static void print_state(player_type *player_ptr)
  */
 static void print_speed(player_type *player_ptr)
 {
-	int i = player_ptr->pspeed;
-	bool is_fast = IS_FAST(player_ptr);
-
-	TERM_COLOR attr = TERM_WHITE;
-	char buf[32] = "";
-	TERM_LEN wid, hgt, row_speed, col_speed;
-
+	TERM_LEN wid, hgt;
 	Term_get_size(&wid, &hgt);
-	col_speed = wid + COL_SPEED;
-	row_speed = hgt + ROW_SPEED;
+	TERM_LEN col_speed = wid + COL_SPEED;
+	TERM_LEN row_speed = hgt + ROW_SPEED;
 
 	/* Hack -- Visually "undo" the Search Mode Slowdown */
+	int i = player_ptr->pspeed;
 	if (player_ptr->action == ACTION_SEARCH && !player_ptr->lightspeed) i += 10;
 
-	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	/* Fast */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	bool is_fast = IS_FAST(player_ptr);
+	char buf[32] = "";
+	TERM_COLOR attr = TERM_WHITE;
 	if (i > 110)
 	{
 		if (player_ptr->riding)
@@ -1234,7 +1221,6 @@ static void print_speed(player_type *player_ptr)
 		strcpy(buf, _("乗馬中", "Riding"));
 	}
 
-	/* Display the speed */
 	c_put_str(attr, format("%-9s", buf), row_speed, col_speed);
 }
 
@@ -1246,11 +1232,10 @@ static void print_speed(player_type *player_ptr)
  */
 static void print_study(player_type *player_ptr)
 {
-	TERM_LEN wid, hgt, row_study, col_study;
-
+	TERM_LEN wid, hgt;
 	Term_get_size(&wid, &hgt);
-	col_study = wid + COL_STUDY;
-	row_study = hgt + ROW_STUDY;
+	TERM_LEN col_study = wid + COL_STUDY;
+	TERM_LEN row_study = hgt + ROW_STUDY;
 
 	if (player_ptr->new_spells)
 	{
@@ -1270,26 +1255,23 @@ static void print_study(player_type *player_ptr)
  */
 static void print_imitation(player_type *player_ptr)
 {
-	TERM_LEN wid, hgt, row_study, col_study;
-
+	TERM_LEN wid, hgt;
 	Term_get_size(&wid, &hgt);
-	col_study = wid + COL_STUDY;
-	row_study = hgt + ROW_STUDY;
+	TERM_LEN col_study = wid + COL_STUDY;
+	TERM_LEN row_study = hgt + ROW_STUDY;
 
-	if (player_ptr->pclass == CLASS_IMITATOR)
+	if (player_ptr->pclass != CLASS_IMITATOR) return;
+
+	if (player_ptr->mane_num != 0)
 	{
-		if (player_ptr->mane_num)
-		{
-			TERM_COLOR attr;
-			if (player_ptr->new_mane) attr = TERM_L_RED;
-			else attr = TERM_WHITE;
-			c_put_str(attr, _("まね", "Imit"), row_study, col_study);
-		}
-		else
-		{
-			put_str("    ", row_study, col_study);
-		}
+		put_str("    ", row_study, col_study);
+		return;
 	}
+
+	TERM_COLOR attr;
+	if (player_ptr->new_mane) attr = TERM_L_RED;
+	else attr = TERM_WHITE;
+	c_put_str(attr, _("まね", "Imit"), row_study, col_study);
 }
 
 /*!
@@ -1299,39 +1281,49 @@ static void print_imitation(player_type *player_ptr)
 static void print_cut(player_type *creature_ptr)
 {
 	int c = creature_ptr->cut;
-
 	if (c > 1000)
 	{
 		c_put_str(TERM_L_RED, _("致命傷      ", "Mortal wound"), ROW_CUT, COL_CUT);
+		return;
 	}
-	else if (c > 200)
+
+	if (c > 200)
 	{
 		c_put_str(TERM_RED, _("ひどい深手  ", "Deep gash   "), ROW_CUT, COL_CUT);
+		return;
 	}
-	else if (c > 100)
+
+	if (c > 100)
 	{
 		c_put_str(TERM_RED, _("重傷        ", "Severe cut  "), ROW_CUT, COL_CUT);
+		return;
 	}
-	else if (c > 50)
+
+	if (c > 50)
 	{
 		c_put_str(TERM_ORANGE, _("大変な傷    ", "Nasty cut   "), ROW_CUT, COL_CUT);
+		return;
 	}
-	else if (c > 25)
+
+	if (c > 25)
 	{
 		c_put_str(TERM_ORANGE, _("ひどい傷    ", "Bad cut     "), ROW_CUT, COL_CUT);
+		return;
 	}
-	else if (c > 10)
+
+	if (c > 10)
 	{
 		c_put_str(TERM_YELLOW, _("軽傷        ", "Light cut   "), ROW_CUT, COL_CUT);
+		return;
 	}
-	else if (c)
+
+	if (c)
 	{
 		c_put_str(TERM_YELLOW, _("かすり傷    ", "Graze       "), ROW_CUT, COL_CUT);
+		return;
 	}
-	else
-	{
-		put_str("            ", ROW_CUT, COL_CUT);
-	}
+
+	put_str("            ", ROW_CUT, COL_CUT);
 }
 
 
@@ -1342,23 +1334,25 @@ static void print_cut(player_type *creature_ptr)
 static void print_stun(player_type *creature_ptr)
 {
 	int s = creature_ptr->stun;
-
 	if (s > 100)
 	{
 		c_put_str(TERM_RED, _("意識不明瞭  ", "Knocked out "), ROW_STUN, COL_STUN);
+		return;
 	}
-	else if (s > 50)
+
+	if (s > 50)
 	{
 		c_put_str(TERM_ORANGE, _("ひどく朦朧  ", "Heavy stun  "), ROW_STUN, COL_STUN);
+		return;
 	}
-	else if (s)
+
+	if (s)
 	{
 		c_put_str(TERM_ORANGE, _("朦朧        ", "Stun        "), ROW_STUN, COL_STUN);
+		return;
 	}
-	else
-	{
-		put_str("            ", ROW_STUN, COL_STUN);
-	}
+
+	put_str("            ", ROW_STUN, COL_STUN);
 }
 
 
@@ -1386,7 +1380,6 @@ static void health_redraw(player_type *creature_ptr, bool riding)
 {
 	s16b health_who;
 	int row, col;
-	monster_type *m_ptr;
 
 	if (riding)
 	{
@@ -1401,6 +1394,7 @@ static void health_redraw(player_type *creature_ptr, bool riding)
 		col = COL_INFO;
 	}
 
+	monster_type *m_ptr;
 	m_ptr = &creature_ptr->current_floor_ptr->m_list[health_who];
 
 	if (current_world_ptr->wizard && creature_ptr->phase_out)
@@ -1413,106 +1407,106 @@ static void health_redraw(player_type *creature_ptr, bool riding)
 		Term_putstr(col - 2, row + 2, 12, TERM_WHITE, "      /     ");
 		Term_putstr(col - 2, row + 3, 12, TERM_WHITE, "      /     ");
 
-		if(creature_ptr->current_floor_ptr->m_list[1].r_idx)
+		if (creature_ptr->current_floor_ptr->m_list[1].r_idx)
 		{
 			Term_putstr(col - 2, row, 2, r_info[creature_ptr->current_floor_ptr->m_list[1].r_idx].x_attr, format("%c", r_info[creature_ptr->current_floor_ptr->m_list[1].r_idx].x_char));
 			Term_putstr(col - 1, row, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[1].hp));
 			Term_putstr(col + 5, row, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[1].max_maxhp));
 		}
 
-		if(creature_ptr->current_floor_ptr->m_list[2].r_idx)
+		if (creature_ptr->current_floor_ptr->m_list[2].r_idx)
 		{
 			Term_putstr(col - 2, row + 1, 2, r_info[creature_ptr->current_floor_ptr->m_list[2].r_idx].x_attr, format("%c", r_info[creature_ptr->current_floor_ptr->m_list[2].r_idx].x_char));
 			Term_putstr(col - 1, row + 1, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[2].hp));
 			Term_putstr(col + 5, row + 1, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[2].max_maxhp));
 		}
 
-		if(creature_ptr->current_floor_ptr->m_list[3].r_idx)
+		if (creature_ptr->current_floor_ptr->m_list[3].r_idx)
 		{
 			Term_putstr(col - 2, row + 2, 2, r_info[creature_ptr->current_floor_ptr->m_list[3].r_idx].x_attr, format("%c", r_info[creature_ptr->current_floor_ptr->m_list[3].r_idx].x_char));
 			Term_putstr(col - 1, row + 2, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[3].hp));
 			Term_putstr(col + 5, row + 2, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[3].max_maxhp));
 		}
 
-		if(creature_ptr->current_floor_ptr->m_list[4].r_idx)
+		if (creature_ptr->current_floor_ptr->m_list[4].r_idx)
 		{
 			Term_putstr(col - 2, row + 3, 2, r_info[creature_ptr->current_floor_ptr->m_list[4].r_idx].x_attr, format("%c", r_info[creature_ptr->current_floor_ptr->m_list[4].r_idx].x_char));
 			Term_putstr(col - 1, row + 3, 5, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[4].hp));
 			Term_putstr(col + 5, row + 3, 6, TERM_WHITE, format("%5d", creature_ptr->current_floor_ptr->m_list[4].max_maxhp));
 		}
+
+		return;
 	}
-	else
+
+	/* Not tracking */
+	if (!health_who)
 	{
-
-		/* Not tracking */
-		if (!health_who)
-		{
-			/* Erase the health bar */
-			Term_erase(col, row, 12);
-		}
-
-		/* Tracking an unseen monster */
-		else if (!m_ptr->ml)
-		{
-			/* Indicate that the monster health is "unknown" */
-			Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
-		}
-
-		/* Tracking a hallucinatory monster */
-		else if (creature_ptr->image)
-		{
-			/* Indicate that the monster health is "unknown" */
-			Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
-		}
-
-		/* Tracking a dead monster (???) */
-		else if (m_ptr->hp < 0)
-		{
-			/* Indicate that the monster health is "unknown" */
-			Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
-		}
-
-		/* Tracking a visible monster */
-		else
-		{
-			/* Extract the "percent" of health */
-			int pct = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->maxhp : 0;
-			int pct2 = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->max_maxhp: 0;
-
-			/* Convert percent into "health" */
-			int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1) : 10;
-
-			/* Default to almost dead */
-			TERM_COLOR attr = TERM_RED;
-
-			/* Invulnerable */
-			if (MON_INVULNER(m_ptr)) attr = TERM_WHITE;
-
-			/* Asleep */
-			else if (MON_CSLEEP(m_ptr)) attr = TERM_BLUE;
-
-			/* Afraid */
-			else if (MON_MONFEAR(m_ptr)) attr = TERM_VIOLET;
-
-			/* Healthy */
-			else if (pct >= 100) attr = TERM_L_GREEN;
-
-			/* Somewhat Wounded */
-			else if (pct >= 60) attr = TERM_YELLOW;
-
-			/* Wounded */
-			else if (pct >= 25) attr = TERM_ORANGE;
-
-			/* Badly wounded */
-			else if (pct >= 10) attr = TERM_L_RED;
-
-			/* Default to "unknown" */
-			Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
-
-			/* Dump the current "health" (use '*' symbols) */
-			Term_putstr(col + 1, row, len, attr, "**********");
-		}
+		/* Erase the health bar */
+		Term_erase(col, row, 12);
+		return;
 	}
+
+	/* Tracking an unseen monster */
+	if (!m_ptr->ml)
+	{
+		/* Indicate that the monster health is "unknown" */
+		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+		return;
+	}
+
+	/* Tracking a hallucinatory monster */
+	if (creature_ptr->image)
+	{
+		/* Indicate that the monster health is "unknown" */
+		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+		return;
+	}
+
+	/* Tracking a dead monster (???) */
+	if (m_ptr->hp < 0)
+	{
+		/* Indicate that the monster health is "unknown" */
+		Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+		return;
+	}
+
+	/* Tracking a visible monster */
+	/* Extract the "percent" of health */
+	int pct = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->maxhp : 0;
+	int pct2 = m_ptr->maxhp > 0 ? 100L * m_ptr->hp / m_ptr->max_maxhp : 0;
+
+	/* Convert percent into "health" */
+	int len = (pct2 < 10) ? 1 : (pct2 < 90) ? (pct2 / 10 + 1) : 10;
+
+	/* Default to almost dead */
+	TERM_COLOR attr = TERM_RED;
+
+	/* Invulnerable */
+	if (MON_INVULNER(m_ptr)) attr = TERM_WHITE;
+
+	/* Asleep */
+	else if (MON_CSLEEP(m_ptr)) attr = TERM_BLUE;
+
+	/* Afraid */
+	else if (MON_MONFEAR(m_ptr)) attr = TERM_VIOLET;
+
+	/* Healthy */
+	else if (pct >= 100) attr = TERM_L_GREEN;
+
+	/* Somewhat Wounded */
+	else if (pct >= 60) attr = TERM_YELLOW;
+
+	/* Wounded */
+	else if (pct >= 25) attr = TERM_ORANGE;
+
+	/* Badly wounded */
+	else if (pct >= 10) attr = TERM_L_RED;
+
+	/* Default to "unknown" */
+	Term_putstr(col, row, 12, TERM_WHITE, "[----------]");
+
+	/* Dump the current "health" (use '*' symbols) */
+	Term_putstr(col + 1, row, len, attr, "**********");
 }
 
 
@@ -1524,9 +1518,10 @@ static void health_redraw(player_type *creature_ptr, bool riding)
  */
 static void print_frame_basic(player_type *creature_ptr)
 {
-	int i;
 	if (creature_ptr->mimic_form)
+	{
 		print_field(mimic_info[creature_ptr->mimic_form].title, ROW_RACE, COL_RACE);
+	}
 	else
 	{
 		char str[14];
@@ -1537,7 +1532,8 @@ static void print_frame_basic(player_type *creature_ptr)
 	print_title(creature_ptr);
 	print_level(creature_ptr);
 	print_exp(creature_ptr);
-	for (i = 0; i < A_MAX; i++) print_stat(creature_ptr, i);
+	for (int i = 0; i < A_MAX; i++)
+		print_stat(creature_ptr, i);
 	print_ac(creature_ptr);
 	print_hp(creature_ptr);
 	print_sp(creature_ptr);
@@ -1573,10 +1569,8 @@ static void print_frame_extra(player_type *player_ptr)
  */
 static void fix_inventory(player_type *player_ptr)
 {
-	int j;
-
 	/* Scan windows */
-	for (j = 0; j < 8; j++)
+	for (int j = 0; j < 8; j++)
 	{
 		term *old = Term;
 
@@ -1612,46 +1606,56 @@ static void fix_inventory(player_type *player_ptr)
  * @return なし
  * </pre>
  */
-static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type* m_ptr, int n_same){
+static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type* m_ptr, int n_same) {
 	char buf[256];
-	int i;
 	MONRACE_IDX r_idx = m_ptr->ap_r_idx;
 	monster_race* r_ptr = &r_info[r_idx];
- 
+
 	Term_gotoxy(x, y);
-	if(!r_ptr)return;
+	if (!r_ptr)return;
 	//Number of 'U'nique
-	if(r_ptr->flags1&RF1_UNIQUE){//unique
+	//unique
+	if (r_ptr->flags1 & RF1_UNIQUE)
+	{
 		bool is_bounty = FALSE;
-		for(i=0;i<MAX_BOUNTY;i++){
-			if(current_world_ptr->bounty_r_idx[i] == r_idx){
+		for (int i = 0; i < MAX_BOUNTY; i++)
+		{
+			if (current_world_ptr->bounty_r_idx[i] == r_idx)
+			{
 				is_bounty = TRUE;
 				break;
 			}
 		}
-		Term_addstr(-1, TERM_WHITE, is_bounty?"  W":"  U");
-	}else{
+
+		Term_addstr(-1, TERM_WHITE, is_bounty ? "  W" : "  U");
+	}
+	else
+	{
 		sprintf(buf, "%3d", n_same);
 		Term_addstr(-1, TERM_WHITE, buf);
 	}
+
 	//symbol
 	Term_addstr(-1, TERM_WHITE, " ");
-	//Term_add_bigch(r_ptr->d_attr, r_ptr->d_char);
-	//Term_addstr(-1, TERM_WHITE, "/");
 	Term_add_bigch(r_ptr->x_attr, r_ptr->x_char);
+
 	//LV
-	if (r_ptr->r_tkills && !(m_ptr->mflag2 & MFLAG2_KAGE)){
+	if (r_ptr->r_tkills && !(m_ptr->mflag2 & MFLAG2_KAGE))
+	{
 		sprintf(buf, " %2d", (int)r_ptr->level);
-	}else{
+	}
+	else
+	{
 		strcpy(buf, " ??");
 	}
+
 	Term_addstr(-1, TERM_WHITE, buf);
+
 	//name
-	sprintf(buf, " %s ", r_name+r_ptr->name);
+	sprintf(buf, " %s ", r_name + r_ptr->name);
 	Term_addstr(-1, TERM_WHITE, buf);
- 
-	//Term_addstr(-1, TERM_WHITE, look_mon_desc(m_ptr, 0));
 }
+
 
 /*!
  * @brief モンスターの出現リストを表示する / Print monster info in line
@@ -1659,61 +1663,54 @@ static void print_monster_line(TERM_LEN x, TERM_LEN y, monster_type* m_ptr, int 
  * @param y 表示行
  * @param max_lines 最大何行描画するか
  */
-void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines){
+void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines) {
 	TERM_LEN line = y;
 	monster_type* last_mons = NULL;
 	monster_type* m_ptr = NULL;
 	int n_same = 0;
 	int i;
-
-	for(i=0;i<tmp_pos.n;i++){
+	for (i = 0; i < tmp_pos.n; i++)
+	{
 		grid_type* g_ptr = &floor_ptr->grid_array[tmp_pos.y[i]][tmp_pos.x[i]];
-		if(!g_ptr->m_idx || !floor_ptr->m_list[g_ptr->m_idx].ml)continue;//no mons or cannot look
+		if (!g_ptr->m_idx || !floor_ptr->m_list[g_ptr->m_idx].ml)
+			continue;//no mons or cannot look
 		m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-		if(is_pet(m_ptr))continue;//pet
-		if(!m_ptr->r_idx)continue;//dead?
-		{
-			/*
-			MONRACE_IDX r_idx = m_ptr->ap_r_idx;
-			monster_race* r_ptr = &r_info[r_idx];
-			concptr name = (r_name + r_ptr->name);
-			concptr ename = (r_name + r_ptr->name);
-			//ミミック類や「それ」等は、一覧に出てはいけない
-			if(r_ptr->flags1&RF1_CHAR_CLEAR)continue;
-			if((r_ptr->flags1&RF1_NEVER_MOVE)&&(r_ptr->flags2&RF2_CHAR_MULTI))continue;
-			//『ヌル』は、一覧に出てはいけない
-			if((strcmp(name, "生ける虚無『ヌル』")==0)||
-			   (strcmp(ename, "Null the Living Void")==0))continue;
-			//"金無垢の指輪"は、一覧に出てはいけない
-			if((strcmp(name, "金無垢の指輪")==0)||
-				(strcmp(ename, "Plain Gold Ring")==0))continue;
-			*/
-		}
+		if (is_pet(m_ptr)) continue;//pet
+		if (!m_ptr->r_idx) continue;//dead?
 
 		//ソート済みなので同じモンスターは連続する．これを利用して同じモンスターをカウント，まとめて表示する．
-		if(!last_mons){//先頭モンスター
+
+		//先頭モンスター
+		if (!last_mons)
+		{
 			last_mons = m_ptr;
 			n_same = 1;
 			continue;
 		}
+
 		//same race?
-		if(last_mons->ap_r_idx == m_ptr->ap_r_idx){
+		if (last_mons->ap_r_idx == m_ptr->ap_r_idx)
+		{
 			n_same++;
 			continue;//表示処理を次に回す
 		}
+
 		//print last mons info
 		print_monster_line(x, line++, last_mons, n_same);
 		n_same = 1;
 		last_mons = m_ptr;
-		if(line-y-1==max_lines){//残り1行
-			break;
-		}
+		if (line - y - 1 == max_lines) break;
 	}
-	if(line-y-1==max_lines && i!=tmp_pos.n){
+
+	if (line - y - 1 == max_lines && i != tmp_pos.n)
+	{
 		Term_gotoxy(x, line);
 		Term_addstr(-1, TERM_WHITE, "-- and more --");
-	}else{
-		if(last_mons)print_monster_line(x, line++, last_mons, n_same);
+	}
+	else
+	{
+		if (last_mons)
+			print_monster_line(x, line++, last_mons, n_same);
 	}
 }
 
@@ -1725,11 +1722,8 @@ void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN 
  */
 static void fix_monster_list(player_type *player_ptr)
 {
-	int j;
-	int w, h;
-
 	/* Scan windows */
-	for (j = 0; j < 8; j++)
+	for (int j = 0; j < 8; j++)
 	{
 		term *old = Term;
 
@@ -1741,6 +1735,7 @@ static void fix_monster_list(player_type *player_ptr)
 
 		/* Activate */
 		Term_activate(angband_term[j]);
+		int w, h;
 		Term_get_size(&w, &h);
 
 		Term_clear();
@@ -1754,17 +1749,15 @@ static void fix_monster_list(player_type *player_ptr)
 
 
 /*!
- * @brief 現在の装備品をサブウィンドウに表示する / 
+ * @brief 現在の装備品をサブウィンドウに表示する /
  * Hack -- display equipment in sub-windows
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void fix_equip(player_type *player_ptr)
 {
-	int j;
-
 	/* Scan windows */
-	for (j = 0; j < 8; j++)
+	for (int j = 0; j < 8; j++)
 	{
 		term *old = Term;
 
@@ -1786,17 +1779,15 @@ static void fix_equip(player_type *player_ptr)
 
 
 /*!
- * @brief 現在の習得済魔法をサブウィンドウに表示する / 
+ * @brief 現在の習得済魔法をサブウィンドウに表示する /
  * @param player_ptr プレーヤーへの参照ポインタ
  * Hack -- display spells in sub-windows
  * @return なし
  */
 static void fix_spell(player_type *player_ptr)
 {
-	int j;
-
 	/* Scan windows */
-	for (j = 0; j < 8; j++)
+	for (int j = 0; j < 8; j++)
 	{
 		term *old = Term;
 
@@ -1818,17 +1809,15 @@ static void fix_spell(player_type *player_ptr)
 
 
 /*!
- * @brief 現在のプレイヤーステータスをサブウィンドウに表示する / 
+ * @brief 現在のプレイヤーステータスをサブウィンドウに表示する /
  * @param player_ptr プレーヤーへの参照ポインタ
  * Hack -- display character in sub-windows
  * @return なし
  */
 static void fix_player(player_type *player_ptr)
 {
-	int j;
-
 	/* Scan windows */
-	for (j = 0; j < 8; j++)
+	for (int j = 0; j < 8; j++)
 	{
 		term *old = Term;
 
@@ -1848,20 +1837,17 @@ static void fix_player(player_type *player_ptr)
 	}
 }
 
+
 /*!
- * @brief ゲームメッセージ履歴をサブウィンドウに表示する / 
+ * @brief ゲームメッセージ履歴をサブウィンドウに表示する /
  * Hack -- display recent messages in sub-windows
  * Adjust for width and split messages
  * @return なし
  */
 static void fix_message(void)
 {
-	int j, i;
-	TERM_LEN w, h;
-	TERM_LEN x, y;
-
 	/* Scan windows */
-	for (j = 0; j < 8; j++)
+	for (int j = 0; j < 8; j++)
 	{
 		term *old = Term;
 
@@ -1874,20 +1860,23 @@ static void fix_message(void)
 		/* Activate */
 		Term_activate(angband_term[j]);
 
+		TERM_LEN w, h;
 		Term_get_size(&w, &h);
 
 		/* Dump messages */
-		for (i = 0; i < h; i++)
+		for (int i = 0; i < h; i++)
 		{
 			/* Dump the message on the appropriate line */
 			Term_putstr(0, (h - 1) - i, -1, (byte)((i < now_message) ? TERM_WHITE : TERM_SLATE), message_str((s16b)i));
 
 			/* Cursor */
+			TERM_LEN x, y;
 			Term_locate(&x, &y);
 
 			/* Clear to end of line */
 			Term_erase(x, y, 255);
 		}
+
 		Term_fresh();
 		Term_activate(old);
 	}
@@ -1895,7 +1884,7 @@ static void fix_message(void)
 
 
 /*!
- * @brief 簡易マップをサブウィンドウに表示する / 
+ * @brief 簡易マップをサブウィンドウに表示する /
  * Hack -- display overhead view in sub-windows
  * Adjust for width and split messages
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -1905,11 +1894,8 @@ static void fix_message(void)
  */
 static void fix_overhead(player_type *player_ptr)
 {
-	int j;
-	int cy, cx;
-
 	/* Scan windows */
-	for (j = 0; j < 8; j++)
+	for (int j = 0; j < 8; j++)
 	{
 		term *old = Term;
 		TERM_LEN wid, hgt;
@@ -1927,7 +1913,7 @@ static void fix_overhead(player_type *player_ptr)
 		Term_get_size(&wid, &hgt);
 		if (wid > COL_MAP + 2 && hgt > ROW_MAP + 2)
 		{
-
+			int cy, cx;
 			display_map(player_ptr, &cy, &cx);
 			Term_fresh();
 		}
@@ -1938,64 +1924,48 @@ static void fix_overhead(player_type *player_ptr)
 
 static void display_dungeon(player_type *player_ptr)
 {
-	TERM_LEN x, y;
-	TERM_COLOR a;
-	SYMBOL_CODE c;
-
 	TERM_COLOR ta = 0;
 	SYMBOL_CODE tc = '\0';
 
-	for (x = player_ptr->x - Term->wid / 2 + 1; x <= player_ptr->x + Term->wid / 2; x++)
+	for (TERM_LEN x = player_ptr->x - Term->wid / 2 + 1; x <= player_ptr->x + Term->wid / 2; x++)
 	{
-		for (y = player_ptr->y - Term->hgt / 2 + 1; y <= player_ptr->y + Term->hgt / 2; y++)
+		for (TERM_LEN y = player_ptr->y - Term->hgt / 2 + 1; y <= player_ptr->y + Term->hgt / 2; y++)
 		{
-			if (in_bounds2(player_ptr->current_floor_ptr, y, x))
+			TERM_COLOR a;
+			SYMBOL_CODE c;
+			if (!in_bounds2(player_ptr->current_floor_ptr, y, x))
 			{
-				map_info(y, x, &a, &c, &ta, &tc);
-
-				/* Hack -- fake monochrome */
-				if (!use_graphics)
-				{
-					if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-					else if (IS_INVULN(player_ptr) || player_ptr->timewalk) a = TERM_WHITE;
-					else if (player_ptr->wraith_form) a = TERM_L_DARK;
-				}
-
-				/* Hack -- Queue it */
-				Term_queue_char(x - player_ptr->x + Term->wid / 2 - 1, y - player_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
-			}
-			else
-			{
-				/* Clear out-of-bound tiles */
-
-				/* Access darkness */
 				feature_type *f_ptr = &f_info[feat_none];
-
-				/* Normal attr */
 				a = f_ptr->x_attr[F_LIT_STANDARD];
-
-				/* Normal char */
 				c = f_ptr->x_char[F_LIT_STANDARD];
-
-				/* Hack -- Queue it */
 				Term_queue_char(x - player_ptr->x + Term->wid / 2 - 1, y - player_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
+				continue;
 			}
+
+			map_info(y, x, &a, &c, &ta, &tc);
+
+			if (!use_graphics)
+			{
+				if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
+				else if (IS_INVULN(player_ptr) || player_ptr->timewalk) a = TERM_WHITE;
+				else if (player_ptr->wraith_form) a = TERM_L_DARK;
+			}
+
+			Term_queue_char(x - player_ptr->x + Term->wid / 2 - 1, y - player_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
 		}
 	}
 }
 
 /*!
- * @brief ダンジョンの地形をサブウィンドウに表示する / 
+ * @brief ダンジョンの地形をサブウィンドウに表示する /
  * Hack -- display dungeon view in sub-windows
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void fix_dungeon(player_type *player_ptr)
 {
-	int j;
-
 	/* Scan windows */
-	for (j = 0; j < 8; j++)
+	for (int j = 0; j < 8; j++)
 	{
 		term *old = Term;
 
@@ -2017,17 +1987,15 @@ static void fix_dungeon(player_type *player_ptr)
 
 
 /*!
- * @brief モンスターの思い出をサブウィンドウに表示する / 
+ * @brief モンスターの思い出をサブウィンドウに表示する /
  * Hack -- display dungeon view in sub-windows
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void fix_monster(player_type *player_ptr)
 {
-	int j;
-
 	/* Scan windows */
-	for (j = 0; j < 8; j++)
+	for (int j = 0; j < 8; j++)
 	{
 		term *old = Term;
 
@@ -2049,17 +2017,15 @@ static void fix_monster(player_type *player_ptr)
 
 
 /*!
- * @brief ベースアイテム情報をサブウィンドウに表示する / 
+ * @brief ベースアイテム情報をサブウィンドウに表示する /
  * Hack -- display object recall in sub-windows
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void fix_object(player_type *player_ptr)
 {
-	int j;
-
 	/* Scan windows */
-	for (j = 0; j < 8; j++)
+	for (int j = 0; j < 8; j++)
 	{
 		term *old = Term;
 
@@ -2080,7 +2046,6 @@ static void fix_object(player_type *player_ptr)
 }
 
 
-
 /*!
  * @brief 射撃武器がプレイヤーにとって重すぎるかどうかの判定 /
  * @param o_ptr 判定する射撃武器のアイテム情報参照ポインタ
@@ -2094,7 +2059,7 @@ bool is_heavy_shoot(player_type *creature_ptr, object_type *o_ptr)
 }
 
 
-/*! 
+/*!
  * @brief redraw のフラグに応じた更新をまとめて行う / Handle "redraw"
  * @return なし
  * @details 更新処理の対象はゲーム中の全描画処理
@@ -2270,8 +2235,11 @@ void redraw_stuff(player_type *creature_ptr)
 			creature_ptr->redraw &= ~(PR_IMITATION);
 			print_imitation(creature_ptr);
 		}
+
+		return;
 	}
-	else if (creature_ptr->redraw & (PR_STUDY))
+
+	if (creature_ptr->redraw & (PR_STUDY))
 	{
 		creature_ptr->redraw &= ~(PR_STUDY);
 		print_study(creature_ptr);
@@ -2279,7 +2247,7 @@ void redraw_stuff(player_type *creature_ptr)
 }
 
 
-/*! 
+/*!
  * @brief player_ptr->window のフラグに応じた更新をまとめて行う / Handle "player_ptr->window"
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -2287,14 +2255,11 @@ void redraw_stuff(player_type *creature_ptr)
  */
 void window_stuff(player_type *player_ptr)
 {
-	int j;
-	BIT_FLAGS mask = 0L;
-
-	/* Nothing to do */
 	if (!player_ptr->window) return;
 
 	/* Scan windows */
-	for (j = 0; j < 8; j++)
+	BIT_FLAGS mask = 0L;
+	for (int j = 0; j < 8; j++)
 	{
 		/* Save usable flags */
 		if (angband_term[j]) mask |= window_flag[j];
@@ -2332,14 +2297,14 @@ void window_stuff(player_type *player_ptr)
 		player_ptr->window &= ~(PW_PLAYER);
 		fix_player(player_ptr);
 	}
-	
+
 	/* Display monster list */
 	if (player_ptr->window & (PW_MONSTER_LIST))
 	{
 		player_ptr->window &= ~(PW_MONSTER_LIST);
 		fix_monster_list(player_ptr);
 	}
-	
+
 	/* Display overhead view */
 	if (player_ptr->window & (PW_MESSAGE))
 	{
@@ -2448,14 +2413,12 @@ void redraw_window(void)
  */
 bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx)
 {
-	POSITION y, x;
 	TERM_LEN wid, hgt;
-
 	get_screen_size(&wid, &hgt);
 
 	/* Apply the motion */
-	y = panel_row_min + dy * hgt / 2;
-	x = panel_col_min + dx * wid / 2;
+	POSITION y = panel_row_min + dy * hgt / 2;
+	POSITION x = panel_col_min + dx * wid / 2;
 
 	/* Verify the row */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -2466,26 +2429,19 @@ bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx)
 	if (x > floor_ptr->width - wid) x = floor_ptr->width - wid;
 	if (x < 0) x = 0;
 
-	/* Handle "changes" */
-	if ((y != panel_row_min) || (x != panel_col_min))
-	{
-		/* Save the new panel info */
-		panel_row_min = y;
-		panel_col_min = x;
+	if ((y == panel_row_min) && (x == panel_col_min))
+		return FALSE;
 
-		panel_bounds_center();
+	panel_row_min = y;
+	panel_col_min = x;
+	panel_bounds_center();
 
-		player_ptr->update |= (PU_MONSTERS);
-		player_ptr->redraw |= (PR_MAP);
-		handle_stuff(player_ptr);
-
-		/* Success */
-		return TRUE;
-	}
-
-	/* No change */
-	return FALSE;
+	player_ptr->update |= (PU_MONSTERS);
+	player_ptr->redraw |= (PR_MAP);
+	handle_stuff(player_ptr);
+	return TRUE;
 }
+
 
 /*!
  * @brief プレイヤーの装備一覧シンボルを固定位置に表示する
@@ -2496,6 +2452,7 @@ void print_equippy(player_type *creature_ptr)
 {
 	display_player_equippy(creature_ptr, ROW_EQUIPPY, COL_EQUIPPY, 0);
 }
+
 
 /*!
  * @brief 現在のコンソール表示の縦横を返す。 /
@@ -2512,6 +2469,7 @@ void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p)
 	if (use_bigtile) *wid_p /= 2;
 }
 
+
 /*
  * Calculate panel colum of a location in the map
  */
@@ -2522,6 +2480,7 @@ int panel_col_of(int col)
 	return col + 13;
 }
 
+
 /*
  * Prints the map of the dungeon
  *
@@ -2531,14 +2490,7 @@ int panel_col_of(int col)
  */
 void print_map(player_type *player_ptr)
 {
-	POSITION x, y;
-	int v;
-
-	/* map bounds */
-	POSITION xmin, xmax, ymin, ymax;
-
 	TERM_LEN wid, hgt;
-
 	Term_get_size(&wid, &hgt);
 
 	/* Remove map offset */
@@ -2546,6 +2498,7 @@ void print_map(player_type *player_ptr)
 	hgt -= ROW_MAP + 2;
 
 	/* Access the cursor state */
+	int v;
 	(void)Term_get_cursor(&v);
 
 	/* Hide the cursor */
@@ -2553,30 +2506,30 @@ void print_map(player_type *player_ptr)
 
 	/* Get bounds */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	xmin = (0 < panel_col_min) ? panel_col_min : 0;
-	xmax = (floor_ptr->width - 1 > panel_col_max) ? panel_col_max : floor_ptr->width - 1;
-	ymin = (0 < panel_row_min) ? panel_row_min : 0;
-	ymax = (floor_ptr->height - 1 > panel_row_max) ? panel_row_max : floor_ptr->height - 1;
+	POSITION xmin = (0 < panel_col_min) ? panel_col_min : 0;
+	POSITION xmax = (floor_ptr->width - 1 > panel_col_max) ? panel_col_max : floor_ptr->width - 1;
+	POSITION ymin = (0 < panel_row_min) ? panel_row_min : 0;
+	POSITION ymax = (floor_ptr->height - 1 > panel_row_max) ? panel_row_max : floor_ptr->height - 1;
 
 	/* Bottom section of screen */
-	for (y = 1; y <= ymin - panel_row_prt; y++)
+	for (POSITION y = 1; y <= ymin - panel_row_prt; y++)
 	{
 		/* Erase the section */
 		Term_erase(COL_MAP, y, wid);
 	}
 
 	/* Top section of screen */
-	for (y = ymax - panel_row_prt; y <= hgt; y++)
+	for (POSITION y = ymax - panel_row_prt; y <= hgt; y++)
 	{
 		/* Erase the section */
 		Term_erase(COL_MAP, y, wid);
 	}
 
 	/* Dump the map */
-	for (y = ymin; y <= ymax; y++)
+	for (POSITION y = ymin; y <= ymax; y++)
 	{
 		/* Scan the columns of row "y" */
-		for (x = xmin; x <= xmax; x++)
+		for (POSITION x = xmin; x <= xmax; x++)
 		{
 			TERM_COLOR a;
 			SYMBOL_CODE c;
@@ -2608,17 +2561,18 @@ void print_map(player_type *player_ptr)
 }
 
 
-
 /*!
  * 一般的にモンスターシンボルとして扱われる記号を定義する(幻覚処理向け) / Hack -- Legal monster codes
  */
 static char image_monster_hack[] = \
 "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+
 /*!
  * 一般的にオブジェクトシンボルとして扱われる記号を定義する(幻覚処理向け) /  Hack -- Legal object codes
  */
 static char image_object_hack[] = "?/|\\\"!$()_-=[]{},~";
+
 
 /*!
  * @brief モンスターの表示を幻覚状態に差し替える / Mega-Hack -- Hallucinatory monster
@@ -2628,25 +2582,20 @@ static char image_object_hack[] = "?/|\\\"!$()_-=[]{},~";
  */
 static void image_monster(TERM_COLOR *ap, SYMBOL_CODE *cp)
 {
-	/* Random symbol from set above */
 	if (use_graphics)
 	{
 		monster_race *r_ptr = &r_info[randint1(max_r_idx - 1)];
-
 		*cp = r_ptr->x_char;
 		*ap = r_ptr->x_attr;
+		return;
 	}
-	else
-		/* Text mode */
-	{
-		*cp = (one_in_(25) ?
-			image_object_hack[randint0(sizeof(image_object_hack) - 1)] :
-			image_monster_hack[randint0(sizeof(image_monster_hack) - 1)]);
 
-		/* Random color */
-		*ap = randint1(15);
-	}
+	*cp = (one_in_(25) ?
+		image_object_hack[randint0(sizeof(image_object_hack) - 1)] :
+		image_monster_hack[randint0(sizeof(image_monster_hack) - 1)]);
+	*ap = randint1(15);
 }
+
 
 /*!
  * @brief オブジェクトの表示を幻覚状態に差し替える / Hallucinatory object
@@ -2659,19 +2608,14 @@ static void image_object(TERM_COLOR *ap, SYMBOL_CODE *cp)
 	if (use_graphics)
 	{
 		object_kind *k_ptr = &k_info[randint1(max_k_idx - 1)];
-
 		*cp = k_ptr->x_char;
 		*ap = k_ptr->x_attr;
+		return;
 	}
-	else
-	{
-		int n = sizeof(image_object_hack) - 1;
 
-		*cp = image_object_hack[randint0(n)];
-
-		/* Random color */
-		*ap = randint1(15);
-	}
+	int n = sizeof(image_object_hack) - 1;
+	*cp = image_object_hack[randint0(n)];
+	*ap = randint1(15);
 }
 
 
@@ -2765,17 +2709,16 @@ void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_cha
 {
 	TERM_COLOR s_attr = f_attr[F_LIT_STANDARD];
 	SYMBOL_CODE s_char = f_char[F_LIT_STANDARD];
-	int i;
 
 	if (IS_ASCII_GRAPHICS(s_attr)) /* For ASCII */
 	{
 		f_attr[F_LIT_LITE] = lighting_colours[s_attr & 0x0f][0];
 		f_attr[F_LIT_DARK] = lighting_colours[s_attr & 0x0f][1];
-		for (i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) f_char[i] = s_char;
+		for (int i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) f_char[i] = s_char;
 	}
 	else /* For tile graphics */
 	{
-		for (i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) f_attr[i] = s_attr;
+		for (int i = F_LIT_NS_BEGIN; i < F_LIT_MAX; i++) f_attr[i] = s_attr;
 		f_char[F_LIT_LITE] = s_char + 2;
 		f_char[F_LIT_DARK] = s_char + 1;
 	}
@@ -3140,13 +3083,8 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 	(*cp) = c;
 
 	/* Hack -- rare random hallucination, except on outer dungeon walls */
-	if (p_ptr->image)
-	{
-		if (one_in_(256))
-		{
-			image_random(ap, cp);
-		}
-	}
+	if (p_ptr->image && one_in_(256))
+		image_random(ap, cp);
 
 	/* Objects */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -3156,168 +3094,179 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Memorized objects */
-		if (o_ptr->marked & OM_FOUND)
+		if (!(o_ptr->marked & OM_FOUND)) continue;
+
+		if (display_autopick)
 		{
-			if (display_autopick)
+			byte act;
+
+			match_autopick = is_autopick(p_ptr, o_ptr);
+			if (match_autopick == -1)
+				continue;
+
+			act = autopick_list[match_autopick].action;
+
+			if ((act & DO_DISPLAY) && (act & display_autopick))
 			{
-				byte act;
-
-				match_autopick = is_autopick(p_ptr, o_ptr);
-				if (match_autopick == -1)
-					continue;
-
-				act = autopick_list[match_autopick].action;
-
-				if ((act & DO_DISPLAY) && (act & display_autopick))
-				{
-					autopick_obj = o_ptr;
-				}
-				else
-				{
-					match_autopick = -1;
-					continue;
-				}
-			}
-			/* Normal char */
-			(*cp) = object_char(o_ptr);
-
-			/* Normal attr */
-			(*ap) = object_attr(o_ptr);
-
-			feat_priority = 20;
-
-			/* Hack -- hallucination */
-			if (p_ptr->image) image_object(ap, cp);
-
-			break;
-		}
-	}
-
-
-	/* Handle monsters */
-	if (g_ptr->m_idx && display_autopick == 0)
-	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-
-		/* Visible monster */
-		if (m_ptr->ml)
-		{
-			monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
-
-			feat_priority = 30;
-
-			/* Hallucination */
-			if (p_ptr->image)
-			{
-				/*
-				 * Monsters with both CHAR_CLEAR and ATTR_CLEAR
-				 * flags are always unseen.
-				 */
-				if ((r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) == (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR))
-				{
-					/* Do nothing */
-				}
-				else
-				{
-					image_monster(ap, cp);
-				}
+				autopick_obj = o_ptr;
 			}
 			else
 			{
-				/* Monster attr/char */
-				a = r_ptr->x_attr;
-				c = r_ptr->x_char;
-
-				if (!(r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_SHAPECHANGER | RF1_ATTR_CLEAR
-					| RF1_ATTR_MULTI | RF1_ATTR_SEMIRAND)))
-				{
-					/* Desired monster attr/char */
-					*ap = a;
-					*cp = c;
-				}
-
-				/*
-				 * Monsters with both CHAR_CLEAR and ATTR_CLEAR
-				 * flags are always unseen.
-				 */
-				else if ((r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) == (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR))
-				{
-					/* Do nothing */
-				}
-
-				else
-				{
-					/***  Monster's attr  ***/
-					if ((r_ptr->flags1 & RF1_ATTR_CLEAR) && (*ap != TERM_DARK) && !use_graphics)
-					{
-						/* Clear-attr */
-						/* Do nothing */
-					}
-					else if ((r_ptr->flags1 & RF1_ATTR_MULTI) && !use_graphics)
-					{
-						/* Multi-hued attr */
-						if (r_ptr->flags2 & RF2_ATTR_ANY) *ap = randint1(15);
-						else switch (randint1(7))
-						{
-						case 1: *ap = TERM_RED;     break;
-						case 2: *ap = TERM_L_RED;   break;
-						case 3: *ap = TERM_WHITE;   break;
-						case 4: *ap = TERM_L_GREEN; break;
-						case 5: *ap = TERM_BLUE;    break;
-						case 6: *ap = TERM_L_DARK;  break;
-						case 7: *ap = TERM_GREEN;   break;
-						}
-					}
-					else if ((r_ptr->flags1 & RF1_ATTR_SEMIRAND) && !use_graphics)
-					{
-						/* Use semi-random attr (usually mimics' colors vary) */
-						*ap = g_ptr->m_idx % 15 + 1;
-					}
-					else
-					{
-						/* Normal case */
-						*ap = a;
-					}
-
-					/***  Monster's char  ***/
-					if ((r_ptr->flags1 & RF1_CHAR_CLEAR) && (*cp != ' ') && !use_graphics)
-					{
-						/* Clear-char */
-						/* Do nothing */
-					}
-					else if (r_ptr->flags1 & RF1_SHAPECHANGER)
-					{
-						if (use_graphics)
-						{
-							monster_race *tmp_r_ptr = &r_info[randint1(max_r_idx - 1)];
-							*cp = tmp_r_ptr->x_char;
-							*ap = tmp_r_ptr->x_attr;
-						}
-						else
-						{
-							*cp = (one_in_(25) ?
-								image_object_hack[randint0(sizeof(image_object_hack) - 1)] :
-								image_monster_hack[randint0(sizeof(image_monster_hack) - 1)]);
-						}
-					}
-					else
-					{
-						/* Normal case */
-						*cp = c;
-					}
-				}
+				match_autopick = -1;
+				continue;
 			}
 		}
+
+		/* Normal char */
+		(*cp) = object_char(o_ptr);
+
+		/* Normal attr */
+		(*ap) = object_attr(o_ptr);
+
+		feat_priority = 20;
+
+		/* Hack -- hallucination */
+		if (p_ptr->image) image_object(ap, cp);
+
+		break;
 	}
 
-	/* Handle "player" */
-	if (player_bold(p_ptr, y, x))
+	/* Handle monsters */
+	if (g_ptr->m_idx && display_autopick != 0)
 	{
-		monster_race *r_ptr = &r_info[0];
-		*ap = r_ptr->x_attr;
-		*cp = r_ptr->x_char;
-		feat_priority = 31;
+		set_term_color(p_ptr, y, x, ap, cp);
+		return;
 	}
+
+	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+
+	/* Visible monster */
+	if (!m_ptr->ml)
+	{
+		set_term_color(p_ptr, y, x, ap, cp);
+		return;
+	}
+
+
+	monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+
+	feat_priority = 30;
+
+	/* Hallucination */
+	if (p_ptr->image)
+	{
+		/*
+		 * Monsters with both CHAR_CLEAR and ATTR_CLEAR
+		 * flags are always unseen.
+		 */
+		if ((r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) == (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR))
+		{
+			/* Do nothing */
+		}
+		else
+		{
+			image_monster(ap, cp);
+		}
+
+		set_term_color(p_ptr, y, x, ap, cp);
+		return;
+	}
+
+	/* Monster attr/char */
+	a = r_ptr->x_attr;
+	c = r_ptr->x_char;
+
+	if (!(r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_SHAPECHANGER | RF1_ATTR_CLEAR
+		| RF1_ATTR_MULTI | RF1_ATTR_SEMIRAND)))
+	{
+		/* Desired monster attr/char */
+		*ap = a;
+		*cp = c;
+		set_term_color(p_ptr, y, x, ap, cp);
+		return;
+	}
+
+	/*
+	 * Monsters with both CHAR_CLEAR and ATTR_CLEAR
+	 * flags are always unseen.
+	 */
+	if ((r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) == (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR))
+	{
+		set_term_color(p_ptr, y, x, ap, cp);
+		return;
+	}
+
+	/***  Monster's attr  ***/
+	if ((r_ptr->flags1 & RF1_ATTR_CLEAR) && (*ap != TERM_DARK) && !use_graphics)
+	{
+		/* Clear-attr */
+		/* Do nothing */
+	}
+	else if ((r_ptr->flags1 & RF1_ATTR_MULTI) && !use_graphics)
+	{
+		/* Multi-hued attr */
+		if (r_ptr->flags2 & RF2_ATTR_ANY) *ap = randint1(15);
+		else switch (randint1(7))
+		{
+		case 1: *ap = TERM_RED;     break;
+		case 2: *ap = TERM_L_RED;   break;
+		case 3: *ap = TERM_WHITE;   break;
+		case 4: *ap = TERM_L_GREEN; break;
+		case 5: *ap = TERM_BLUE;    break;
+		case 6: *ap = TERM_L_DARK;  break;
+		case 7: *ap = TERM_GREEN;   break;
+		}
+	}
+	else if ((r_ptr->flags1 & RF1_ATTR_SEMIRAND) && !use_graphics)
+	{
+		/* Use semi-random attr (usually mimics' colors vary) */
+		*ap = g_ptr->m_idx % 15 + 1;
+	}
+	else
+	{
+		/* Normal case */
+		*ap = a;
+	}
+
+	/***  Monster's char  ***/
+	if ((r_ptr->flags1 & RF1_CHAR_CLEAR) && (*cp != ' ') && !use_graphics)
+	{
+		set_term_color(p_ptr, y, x, ap, cp);
+		return;
+	}
+	
+	if (r_ptr->flags1 & RF1_SHAPECHANGER)
+	{
+		if (use_graphics)
+		{
+			monster_race *tmp_r_ptr = &r_info[randint1(max_r_idx - 1)];
+			*cp = tmp_r_ptr->x_char;
+			*ap = tmp_r_ptr->x_attr;
+		}
+		else
+		{
+			*cp = (one_in_(25) ?
+				image_object_hack[randint0(sizeof(image_object_hack) - 1)] :
+				image_monster_hack[randint0(sizeof(image_monster_hack) - 1)]);
+		}
+
+		set_term_color(p_ptr, y, x, ap, cp);
+		return;
+	}
+
+	*cp = c;
+	set_term_color(p_ptr, y, x, ap, cp);
+}
+
+
+void set_term_color(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, TERM_COLOR *cp)
+{
+	if (!player_bold(player_ptr, y, x)) return;
+
+	monster_race *r_ptr = &r_info[0];
+	*ap = r_ptr->x_attr;
+	*cp = r_ptr->x_char;
+	feat_priority = 31;
 }
 
 
@@ -3350,12 +3299,8 @@ static concptr simplify_list[][2] =
 static void display_shortened_item_name(player_type *player_ptr, object_type *o_ptr, int y)
 {
 	char buf[MAX_NLEN];
-	char *c = buf;
-	int len = 0;
-	TERM_COLOR attr;
-
 	object_desc(buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
-	attr = tval_to_attr[o_ptr->tval % 128];
+	TERM_COLOR attr = tval_to_attr[o_ptr->tval % 128];
 
 	if (player_ptr->image)
 	{
@@ -3363,10 +3308,10 @@ static void display_shortened_item_name(player_type *player_ptr, object_type *o_
 		strcpy(buf, _("何か奇妙な物", "something strange"));
 	}
 
+	char *c = buf;
 	for (c = buf; *c; c++)
 	{
-		int i;
-		for (i = 0; simplify_list[i][1]; i++)
+		for (int i = 0; simplify_list[i][1]; i++)
 		{
 			concptr org_w = simplify_list[i][0];
 
@@ -3378,22 +3323,21 @@ static void display_shortened_item_name(player_type *player_ptr, object_type *o_
 					continue;
 			}
 
-			if (!strncmp(c, org_w, strlen(org_w)))
-			{
-				char *s = c;
-				concptr tmp = simplify_list[i][1];
-				while (*tmp)
-					*s++ = *tmp++;
-				tmp = c + strlen(org_w);
-				while (*tmp)
-					*s++ = *tmp++;
-				*s = '\0';
-			}
+			if (strncmp(c, org_w, strlen(org_w))) continue;
+
+			char *s = c;
+			concptr tmp = simplify_list[i][1];
+			while (*tmp)
+				*s++ = *tmp++;
+			tmp = c + strlen(org_w);
+			while (*tmp)
+				*s++ = *tmp++;
+			*s = '\0';
 		}
 	}
 
 	c = buf;
-	len = 0;
+	int len = 0;
 	/* 半角 12 文字分で切る */
 	while (*c)
 	{
@@ -3412,6 +3356,7 @@ static void display_shortened_item_name(player_type *player_ptr, object_type *o_
 			len++;
 		}
 	}
+
 	*c = '\0';
 	Term_putstr(0, y, 12, attr, buf);
 }
@@ -3586,7 +3531,6 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
 		}
 	}
 
-
 	/* Corners */
 	x = wid + 1;
 	y = hgt + 1;
@@ -3599,7 +3543,6 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
 
 	/* Draw the vertical edges */
 	for (y = 1; y <= hgt; y++) mc[y][0] = mc[y][x] = '|';
-
 
 	/* Display each map line in order */
 	for (y = 0; y < hgt + 2; ++y)
@@ -3675,7 +3618,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
 		C_KILL(mp[y], (wid + 2), byte);
 		C_KILL(match_autopick_yx[y], (wid + 2), int);
 		C_KILL(object_autopick_yx[y], (wid + 2), object_type *);
-	}
+}
 
 	/* Free each line map */
 	C_KILL(ma, (hgt + 2), TERM_COLOR *);
@@ -3707,10 +3650,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
  */
 void do_cmd_view_map(player_type *player_ptr)
 {
-	int cy, cx;
-
 	screen_save();
-
 	prt(_("お待ち下さい...", "Please wait..."), 0, 0);
 
 	Term_fresh();
@@ -3719,64 +3659,57 @@ void do_cmd_view_map(player_type *player_ptr)
 	display_autopick = 0;
 
 	/* Display the map */
+	int cy, cx;
 	display_map(player_ptr, &cy, &cx);
 
-	/* Wait for it */
-	if (max_autopick && !player_ptr->wild_mode)
-	{
-		display_autopick = ITEM_DISPLAY;
-
-		while (TRUE)
-		{
-			int i;
-			byte flag;
-
-			int wid, hgt, row_message;
-
-			Term_get_size(&wid, &hgt);
-			row_message = hgt - 1;
-
-			put_str(_("何かキーを押してください('M':拾う 'N':放置 'D':M+N 'K':壊すアイテムを表示)",
-				" Hit M, N(for ~), K(for !), or D(same as M+N) to display auto-picker items."), row_message, 1);
-
-			/* Hilite the player */
-			move_cursor(cy, cx);
-
-			i = inkey();
-
-			if ('M' == i)
-				flag = (DO_AUTOPICK | DO_QUERY_AUTOPICK);
-			else if ('N' == i)
-				flag = DONT_AUTOPICK;
-			else if ('K' == i)
-				flag = DO_AUTODESTROY;
-			else if ('D' == i)
-				flag = (DO_AUTOPICK | DO_QUERY_AUTOPICK | DONT_AUTOPICK);
-			else
-				break;
-
-			Term_fresh();
-
-			if (~display_autopick & flag)
-				display_autopick |= flag;
-			else
-				display_autopick &= ~flag;
-			/* Display the map */
-			display_map(player_ptr, &cy, &cx);
-		}
-
-		display_autopick = 0;
-
-	}
-	else
+	if ((max_autopick == 0) || player_ptr->wild_mode)
 	{
 		put_str(_("何かキーを押すとゲームに戻ります", "Hit any key to continue"), 23, 30);
 		/* Hilite the player */
 		move_cursor(cy, cx);
 		/* Get any key */
 		inkey();
+		screen_load();
+		return;
 	}
 
+	display_autopick = ITEM_DISPLAY;
+
+	while (TRUE)
+	{
+		int wid, hgt;
+		Term_get_size(&wid, &hgt);
+		int row_message = hgt - 1;
+
+		put_str(_("何かキーを押してください('M':拾う 'N':放置 'D':M+N 'K':壊すアイテムを表示)",
+			" Hit M, N(for ~), K(for !), or D(same as M+N) to display auto-picker items."), row_message, 1);
+
+		move_cursor(cy, cx);
+
+		int i = inkey();
+
+		byte flag;
+		if ('M' == i)
+			flag = (DO_AUTOPICK | DO_QUERY_AUTOPICK);
+		else if ('N' == i)
+			flag = DONT_AUTOPICK;
+		else if ('K' == i)
+			flag = DO_AUTODESTROY;
+		else if ('D' == i)
+			flag = (DO_AUTOPICK | DO_QUERY_AUTOPICK | DONT_AUTOPICK);
+		else
+			break;
+
+		Term_fresh();
+
+		if (~display_autopick & flag)
+			display_autopick |= flag;
+		else
+			display_autopick &= ~flag;
+		display_map(player_ptr, &cy, &cx);
+	}
+
+	display_autopick = 0;
 	screen_load();
 }
 
@@ -3818,14 +3751,12 @@ void move_cursor_relative(int row, int col)
  */
 void print_path(player_type *player_ptr, POSITION y, POSITION x)
 {
-	int i;
 	int path_n;
 	u16b path_g[512];
 	byte_hack default_color = TERM_SLATE;
 
 	if (!display_path) return;
-	if (-1 == project_length)
-		return;
+	if (project_length == -1) return;
 
 	/* Get projection path */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -3835,7 +3766,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
 	handle_stuff(player_ptr);
 
 	/* Draw path */
-	for (i = 0; i < path_n; i++)
+	for (int i = 0; i < path_n; i++)
 	{
 		POSITION ny = GRID_Y(path_g[i]);
 		POSITION nx = GRID_X(path_g[i]);
@@ -3918,22 +3849,20 @@ void update_playtime(void)
 	}
 }
 
+
 /*
  * Mega-Hack -- Delayed visual update
  * Only used if update_view(), update_lite() or update_mon_lite() was called
  */
 void delayed_visual_update(player_type *player_ptr)
 {
-	int i;
-	POSITION y, x;
-	grid_type *g_ptr;
-
 	/* Update needed grids */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	for (i = 0; i < floor_ptr->redraw_n; i++)
+	for (int i = 0; i < floor_ptr->redraw_n; i++)
 	{
-		y = floor_ptr->redraw_y[i];
-		x = floor_ptr->redraw_x[i];
+		POSITION y = floor_ptr->redraw_y[i];
+		POSITION x = floor_ptr->redraw_x[i];
+		grid_type *g_ptr;
 		g_ptr = &floor_ptr->grid_array[y][x];
 
 		/* Update only needed grids (prevent multiple updating) */
@@ -3954,4 +3883,3 @@ void delayed_visual_update(player_type *player_ptr)
 	/* None left */
 	floor_ptr->redraw_n = 0;
 }
-
