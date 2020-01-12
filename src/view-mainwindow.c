@@ -1566,9 +1566,10 @@ static void print_frame_extra(player_type *player_ptr)
 
 /*!
  * @brief サブウィンドウに所持品一覧を表示する / Hack -- display inventory in sub-windows
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void fix_inven(void)
+static void fix_inventory(player_type *player_ptr)
 {
 	int j;
 
@@ -1586,7 +1587,7 @@ static void fix_inven(void)
 		/* Activate */
 		Term_activate(angband_term[j]);
 
-		display_inven(p_ptr, item_tester_tval);
+		display_inven(player_ptr, item_tester_tval);
 		Term_fresh();
 		Term_activate(old);
 	}
@@ -2298,7 +2299,7 @@ void window_stuff(player_type *player_ptr)
 	if (player_ptr->window & (PW_INVEN))
 	{
 		player_ptr->window &= ~(PW_INVEN);
-		fix_inven();
+		fix_inventory(player_ptr);
 	}
 
 	/* Display equipment */
