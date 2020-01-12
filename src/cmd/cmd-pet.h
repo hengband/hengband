@@ -49,5 +49,5 @@ extern int total_friends;
 #define PF_ATTACK_SPELL 0x0008 /*!< ペットの行動許可…攻撃魔法を使ってよい */
 #define PF_SUMMON_SPELL 0x0010 /*!< ペットの行動許可…召喚魔法を使ってよい */
 #define PF_BALL_SPELL   0x0020 /*!< ペットの行動許可…ボール魔法でプレイヤーを巻き込んでよい */
-#define PF_RYOUTE       0x0040 /*!< プレイヤーの騎乗フラグ…武器を片手で持つ */
+#define PF_TWO_HANDS       0x0040 /*!< プレイヤーの騎乗フラグ…武器を片手で持つ */
 

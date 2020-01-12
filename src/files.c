@@ -2723,7 +2723,7 @@ static void tim_player_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_S
 		add_flag(flgs, TR_SEE_INVIS);
 	if (creature_ptr->tim_regen)
 		add_flag(flgs, TR_REGEN);
-	if (IS_TIM_ESP())
+	if (is_time_limit_esp(creature_ptr))
 		add_flag(flgs, TR_TELEPATHY);
 	if (IS_FAST(creature_ptr) || creature_ptr->slow)
 		add_flag(flgs, TR_SPEED);

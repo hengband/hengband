@@ -813,6 +813,7 @@ extern bool is_oppose_cold(player_type *creature_ptr);
 extern bool is_oppose_pois(player_type *creature_ptr);
 extern bool is_time_limit_esp(player_type *creature_ptr);
 extern bool is_time_limit_stealth(player_type *creature_ptr);
+extern bool can_two_hands_wielding(player_type *creature_ptr);
 
 /*
  * Player "food" crucial values
@@ -832,7 +833,5 @@ extern bool is_time_limit_stealth(player_type *creature_ptr);
 #define PY_REGEN_FAINT          33      /* Regen factor*2^16 when fainting */
 #define PY_REGEN_HPBASE         1442    /* Min amount hp regen*2^16 */
 #define PY_REGEN_MNBASE         524     /* Min amount mana regen*2^16 */
-
-#define CAN_TWO_HANDS_WIELDING() (!p_ptr->riding || (p_ptr->pet_extra_flags & PF_RYOUTE))
 
 extern void cheat_death(player_type *creature_ptr);

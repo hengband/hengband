@@ -378,14 +378,14 @@ void do_cmd_wield(player_type *creature_ptr)
 	switch (slot)
 	{
 	case INVEN_RARM:
-		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM) && CAN_TWO_HANDS_WIELDING())
+		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM) && can_two_hands_wielding(creature_ptr))
 			act = STR_WIELD_ARMS;
 		else
 			act = (left_hander ? STR_WIELD_LARM : STR_WIELD_RARM);
 		break;
 
 	case INVEN_LARM:
-		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM) && CAN_TWO_HANDS_WIELDING())
+		if (object_allow_two_hands_wielding(o_ptr) && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM) && can_two_hands_wielding(creature_ptr))
 			act = STR_WIELD_ARMS;
 		else
 			act = (left_hander ? STR_WIELD_RARM : STR_WIELD_LARM);
@@ -431,8 +431,10 @@ void do_cmd_wield(player_type *creature_ptr)
 	calc_android_exp(creature_ptr);
 }
 
+
 /*!
  * @brief 持ち替え処理
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param item 持ち替えを行いたい装備部位ID
  * @return なし
  */
@@ -450,7 +452,7 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
 
 		if (object_is_cursed(o_ptr))
 		{
-			if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
+			if (object_allow_two_hands_wielding(o_ptr) && can_two_hands_wielding(owner_ptr))
 				msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
 			return;
 		}
@@ -460,7 +462,7 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
 		owner_ptr->total_weight += o_ptr->weight;
 		inven_item_increase(owner_ptr, INVEN_LARM, -((int)o_ptr->number));
 		inven_item_optimize(owner_ptr, INVEN_LARM);
-		if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
+		if (object_allow_two_hands_wielding(o_ptr) && can_two_hands_wielding(owner_ptr))
 			msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
 		else
 			msg_format(_("%sを%sで構えた。", "You are wielding %s in your %s hand."), o_name,
@@ -475,7 +477,7 @@ void verify_equip_slot(player_type *owner_ptr, INVENTORY_IDX item)
 
 	if (has_melee_weapon(owner_ptr, INVEN_RARM))
 	{
-		if (object_allow_two_hands_wielding(o_ptr) && CAN_TWO_HANDS_WIELDING())
+		if (object_allow_two_hands_wielding(o_ptr) && can_two_hands_wielding(owner_ptr))
 			msg_format(_("%sを両手で構えた。", "You are wielding %s with both hands."), o_name);
 		return;
 	}

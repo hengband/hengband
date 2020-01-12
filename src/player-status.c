@@ -1573,7 +1573,7 @@ void calc_bonuses(player_type *creature_ptr)
 		if (!creature_ptr->migite) default_hand = 1;
 	}
 
-	if (CAN_TWO_HANDS_WIELDING())
+	if (can_two_hands_wielding(creature_ptr))
 	{
 		if (creature_ptr->migite && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_LARM) &&
 			object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_RARM]))
@@ -3457,7 +3457,7 @@ void calc_bonuses(player_type *creature_ptr)
 		creature_ptr->riding_ryoute = FALSE;
 
 		if (creature_ptr->ryoute || (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_NONE)) creature_ptr->riding_ryoute = TRUE;
-		else if (creature_ptr->pet_extra_flags & PF_RYOUTE)
+		else if (creature_ptr->pet_extra_flags & PF_TWO_HANDS)
 		{
 			switch (creature_ptr->pclass)
 			{
@@ -4945,7 +4945,7 @@ BIT_FLAGS16 empty_hands(player_type *creature_ptr, bool riding_control)
 	if (!creature_ptr->inventory_list[INVEN_RARM].k_idx) status |= EMPTY_HAND_RARM;
 	if (!creature_ptr->inventory_list[INVEN_LARM].k_idx) status |= EMPTY_HAND_LARM;
 
-	if (riding_control && (status != EMPTY_HAND_NONE) && creature_ptr->riding && !(creature_ptr->pet_extra_flags & PF_RYOUTE))
+	if (riding_control && (status != EMPTY_HAND_NONE) && creature_ptr->riding && !(creature_ptr->pet_extra_flags & PF_TWO_HANDS))
 	{
 		if (status & EMPTY_HAND_LARM) status &= ~(EMPTY_HAND_LARM);
 		else if (status & EMPTY_HAND_RARM) status &= ~(EMPTY_HAND_RARM);
@@ -5983,4 +5983,10 @@ bool is_time_limit_esp(player_type *creature_ptr)
 bool is_time_limit_stealth(player_type *creature_ptr)
 {
 	return creature_ptr->tim_stealth || music_singing(creature_ptr, MUSIC_STEALTH);
+}
+
+
+bool can_two_hands_wielding(player_type *creature_ptr)
+{
+	return !creature_ptr->riding || (creature_ptr->pet_extra_flags & PF_TWO_HANDS);
 }
