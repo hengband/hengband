@@ -153,7 +153,7 @@ void print_equippy(player_type *creature_ptr);
  * @param col 描画行
  * @return なし
  */
-static void prt_field(concptr info, TERM_LEN row, TERM_LEN col)
+static void print_field(concptr info, TERM_LEN row, TERM_LEN col)
 {
 	/* Dump 13 spaces to clear */
 	c_put_str(TERM_WHITE, "             ", row, col);
@@ -167,7 +167,7 @@ static void prt_field(concptr info, TERM_LEN row, TERM_LEN col)
  * Print time
  * @return なし
  */
-void prt_time(void)
+void print_time(void)
 {
 	int day, hour, min;
 
@@ -235,7 +235,7 @@ static void print_dungeon(player_type *creature_ptr)
  * @param stat 描画するステータスのID
  * @return なし
  */
-static void prt_stat(player_type *creature_ptr, int stat)
+static void print_stat(player_type *creature_ptr, int stat)
 {
 	GAME_TEXT tmp[32];
 
@@ -508,7 +508,7 @@ static struct {
  * @brief 下部に状態表示を行う / Show status bar
  * @return なし
  */
-static void prt_status(player_type *creature_ptr)
+static void print_status(player_type *creature_ptr)
 {
 	BIT_FLAGS bar_flags[3];
 	TERM_LEN wid, hgt, row_statbar, max_col_statbar;
@@ -742,7 +742,7 @@ static void prt_status(player_type *creature_ptr)
  * @brief プレイヤーの称号を表示する / Prints "title", including "wizard" or "winner" as needed.
  * @return なし
  */
-static void prt_title(player_type *creature_ptr)
+static void print_title(player_type *creature_ptr)
 {
 	concptr p = "";
 	GAME_TEXT str[14];
@@ -770,7 +770,7 @@ static void prt_title(player_type *creature_ptr)
 		p = str;
 	}
 
-	prt_field(p, ROW_TITLE, COL_TITLE);
+	print_field(p, ROW_TITLE, COL_TITLE);
 }
 
 
@@ -778,7 +778,7 @@ static void prt_title(player_type *creature_ptr)
  * @brief プレイヤーのレベルを表示する / Prints level
  * @return なし
  */
-static void prt_level(player_type *creature_ptr)
+static void print_level(player_type *creature_ptr)
 {
 	char tmp[32];
 	sprintf(tmp, "%5d", creature_ptr->lev);
@@ -799,7 +799,7 @@ static void prt_level(player_type *creature_ptr)
  * @brief プレイヤーの経験値を表示する / Display the experience
  * @return なし
  */
-static void prt_exp(player_type *creature_ptr)
+static void print_exp(player_type *creature_ptr)
 {
 	char out_val[32];
 
@@ -832,11 +832,12 @@ static void prt_exp(player_type *creature_ptr)
 	}
 }
 
+
 /*!
  * @brief プレイヤーの所持金を表示する / Prints current gold
  * @return なし
  */
-static void prt_gold(void)
+static void print_gold(void)
 {
 	char tmp[32];
 	put_str(_("＄ ", "AU "), ROW_GOLD, COL_GOLD);
@@ -849,7 +850,7 @@ static void prt_gold(void)
  * @brief プレイヤーのACを表示する / Prints current AC
  * @return なし
  */
-static void prt_ac(player_type *creature_ptr)
+static void print_ac(player_type *creature_ptr)
 {
 	char tmp[32];
 
@@ -871,7 +872,7 @@ static void prt_ac(player_type *creature_ptr)
  * @brief プレイヤーのHPを表示する / Prints Cur/Max hit points
  * @return なし
  */
-static void prt_hp(player_type *creature_ptr)
+static void print_hp(player_type *creature_ptr)
 {
 	/* ヒットポイントの表示方法を変更 */
 	char tmp[32];
@@ -914,7 +915,7 @@ static void prt_hp(player_type *creature_ptr)
  * @brief プレイヤーのMPを表示する / Prints players max/cur spell points
  * @return なし
  */
-static void prt_sp(player_type *creature_ptr)
+static void print_sp(player_type *creature_ptr)
 {
 /* マジックポイントの表示方法を変更している */
 	char tmp[32];
@@ -960,7 +961,7 @@ static void prt_sp(player_type *creature_ptr)
  * @brief 現在のフロアの深さを表示する / Prints depth in stat area
  * @return なし
  */
-static void prt_depth(void)
+static void print_depth(void)
 {
 	char depths[32];
 	TERM_LEN wid, hgt, row_depth, col_depth;
@@ -1009,7 +1010,7 @@ static void prt_depth(void)
  * @brief プレイヤーの空腹状態を表示する / Prints status of hunger
  * @return なし
  */
-static void prt_hunger(void)
+static void print_hunger(void)
 {
 	if(current_world_ptr->wizard && p_ptr->current_floor_ptr->inside_arena) return;
 
@@ -1059,7 +1060,7 @@ static void prt_hunger(void)
  * This function was a major bottleneck when resting, so a lot of
  * the text formatting code was optimized in place below.
  */
-static void prt_state(void)
+static void print_state(void)
 {
 	TERM_COLOR attr = TERM_WHITE;
 	GAME_TEXT text[16];
@@ -1171,7 +1172,7 @@ static void prt_state(void)
  * @brief プレイヤーの行動速度を表示する / Prints the speed of a character.			-CJS-
  * @return なし
  */
-static void prt_speed(void)
+static void print_speed(void)
 {
 	int i = p_ptr->pspeed;
 	bool is_fast = IS_FAST(p_ptr);
@@ -1233,7 +1234,7 @@ static void prt_speed(void)
  * @brief プレイヤーの呪文学習可能状態を表示する
  * @return なし
  */
-static void prt_study(void)
+static void print_study(void)
 {
 	TERM_LEN wid, hgt, row_study, col_study;
 
@@ -1256,7 +1257,7 @@ static void prt_study(void)
  * @brief プレイヤーのものまね可能状態を表示する
  * @return なし
  */
-static void prt_imitation(void)
+static void print_imitation(void)
 {
 	TERM_LEN wid, hgt, row_study, col_study;
 
@@ -1284,7 +1285,7 @@ static void prt_imitation(void)
  * @brief プレイヤーの負傷状態を表示する
  * @return なし
  */
-static void prt_cut(player_type *creature_ptr)
+static void print_cut(player_type *creature_ptr)
 {
 	int c = creature_ptr->cut;
 
@@ -1327,7 +1328,7 @@ static void prt_cut(player_type *creature_ptr)
  * @brief プレイヤーの朦朧状態を表示する
  * @return なし
  */
-static void prt_stun(player_type *creature_ptr)
+static void print_stun(player_type *creature_ptr)
 {
 	int s = creature_ptr->stun;
 
@@ -1510,27 +1511,27 @@ static void health_redraw(player_type *creature_ptr, bool riding)
  * @brief プレイヤーのステータスを一括表示する（左側部分） / Display basic info (mostly left of map)
  * @return なし
  */
-static void prt_frame_basic(void)
+static void print_frame_basic(void)
 {
 	int i;
 	if (p_ptr->mimic_form)
-		prt_field(mimic_info[p_ptr->mimic_form].title, ROW_RACE, COL_RACE);
+		print_field(mimic_info[p_ptr->mimic_form].title, ROW_RACE, COL_RACE);
 	else
 	{
 		char str[14];
 		my_strcpy(str, rp_ptr->title, sizeof(str));
-		prt_field(str, ROW_RACE, COL_RACE);
+		print_field(str, ROW_RACE, COL_RACE);
 	}
 
-	prt_title(p_ptr);
-	prt_level(p_ptr);
-	prt_exp(p_ptr);
-	for (i = 0; i < A_MAX; i++) prt_stat(p_ptr, i);
-	prt_ac(p_ptr);
-	prt_hp(p_ptr);
-	prt_sp(p_ptr);
-	prt_gold();
-	prt_depth();
+	print_title(p_ptr);
+	print_level(p_ptr);
+	print_exp(p_ptr);
+	for (i = 0; i < A_MAX; i++) print_stat(p_ptr, i);
+	print_ac(p_ptr);
+	print_hp(p_ptr);
+	print_sp(p_ptr);
+	print_gold();
+	print_depth();
 	health_redraw(p_ptr, FALSE);
 	health_redraw(p_ptr, TRUE);
 }
@@ -1540,16 +1541,16 @@ static void prt_frame_basic(void)
  * @brief プレイヤーのステータスを一括表示する（下部分） / Display extra info (mostly below map)
  * @return なし
  */
-static void prt_frame_extra(void)
+static void print_frame_extra(void)
 {
-	prt_cut(p_ptr);
-	prt_stun(p_ptr);
-	prt_hunger();
-	prt_state();
-	prt_speed();
-	prt_study();
-	prt_imitation();
-	prt_status(p_ptr);
+	print_cut(p_ptr);
+	print_stun(p_ptr);
+	print_hunger();
+	print_state();
+	print_speed();
+	print_study();
+	print_imitation();
+	print_status(p_ptr);
 }
 
 
@@ -2098,7 +2099,7 @@ void redraw_stuff(player_type *creature_ptr)
 	if (creature_ptr->redraw & (PR_MAP))
 	{
 		creature_ptr->redraw &= ~(PR_MAP);
-		prt_map();
+		print_map();
 	}
 
 	if (creature_ptr->redraw & (PR_BASIC))
@@ -2108,8 +2109,8 @@ void redraw_stuff(player_type *creature_ptr)
 		creature_ptr->redraw &= ~(PR_LEV | PR_EXP | PR_GOLD);
 		creature_ptr->redraw &= ~(PR_ARMOR | PR_HP | PR_MANA);
 		creature_ptr->redraw &= ~(PR_DEPTH | PR_HEALTH | PR_UHEALTH);
-		prt_frame_basic();
-		prt_time();
+		print_frame_basic();
+		print_time();
 		print_dungeon(creature_ptr);
 	}
 
@@ -2122,73 +2123,72 @@ void redraw_stuff(player_type *creature_ptr)
 	if (creature_ptr->redraw & (PR_MISC))
 	{
 		creature_ptr->redraw &= ~(PR_MISC);
-		prt_field(rp_ptr->title, ROW_RACE, COL_RACE);
-/*		prt_field(cp_ptr->title, ROW_CLASS, COL_CLASS); */
+		print_field(rp_ptr->title, ROW_RACE, COL_RACE);
 	}
 
 	if (creature_ptr->redraw & (PR_TITLE))
 	{
 		creature_ptr->redraw &= ~(PR_TITLE);
-		prt_title(creature_ptr);
+		print_title(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_LEV))
 	{
 		creature_ptr->redraw &= ~(PR_LEV);
-		prt_level(creature_ptr);
+		print_level(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_EXP))
 	{
 		creature_ptr->redraw &= ~(PR_EXP);
-		prt_exp(creature_ptr);
+		print_exp(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_STATS))
 	{
 		creature_ptr->redraw &= ~(PR_STATS);
-		prt_stat(creature_ptr, A_STR);
-		prt_stat(creature_ptr, A_INT);
-		prt_stat(creature_ptr, A_WIS);
-		prt_stat(creature_ptr, A_DEX);
-		prt_stat(creature_ptr, A_CON);
-		prt_stat(creature_ptr, A_CHR);
+		print_stat(creature_ptr, A_STR);
+		print_stat(creature_ptr, A_INT);
+		print_stat(creature_ptr, A_WIS);
+		print_stat(creature_ptr, A_DEX);
+		print_stat(creature_ptr, A_CON);
+		print_stat(creature_ptr, A_CHR);
 	}
 
 	if (creature_ptr->redraw & (PR_STATUS))
 	{
 		creature_ptr->redraw &= ~(PR_STATUS);
-		prt_status(creature_ptr);
+		print_status(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_ARMOR))
 	{
 		creature_ptr->redraw &= ~(PR_ARMOR);
-		prt_ac(creature_ptr);
+		print_ac(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_HP))
 	{
 		creature_ptr->redraw &= ~(PR_HP);
-		prt_hp(creature_ptr);
+		print_hp(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_MANA))
 	{
 		creature_ptr->redraw &= ~(PR_MANA);
-		prt_sp(creature_ptr);
+		print_sp(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_GOLD))
 	{
 		creature_ptr->redraw &= ~(PR_GOLD);
-		prt_gold();
+		print_gold();
 	}
 
 	if (creature_ptr->redraw & (PR_DEPTH))
 	{
 		creature_ptr->redraw &= ~(PR_DEPTH);
-		prt_depth();
+		print_depth();
 	}
 
 	if (creature_ptr->redraw & (PR_HEALTH))
@@ -2209,37 +2209,37 @@ void redraw_stuff(player_type *creature_ptr)
 		creature_ptr->redraw &= ~(PR_CUT | PR_STUN);
 		creature_ptr->redraw &= ~(PR_HUNGER);
 		creature_ptr->redraw &= ~(PR_STATE | PR_SPEED | PR_STUDY | PR_IMITATION | PR_STATUS);
-		prt_frame_extra();
+		print_frame_extra();
 	}
 
 	if (creature_ptr->redraw & (PR_CUT))
 	{
 		creature_ptr->redraw &= ~(PR_CUT);
-		prt_cut(creature_ptr);
+		print_cut(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_STUN))
 	{
 		creature_ptr->redraw &= ~(PR_STUN);
-		prt_stun(creature_ptr);
+		print_stun(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_HUNGER))
 	{
 		creature_ptr->redraw &= ~(PR_HUNGER);
-		prt_hunger();
+		print_hunger();
 	}
 
 	if (creature_ptr->redraw & (PR_STATE))
 	{
 		creature_ptr->redraw &= ~(PR_STATE);
-		prt_state();
+		print_state();
 	}
 
 	if (creature_ptr->redraw & (PR_SPEED))
 	{
 		creature_ptr->redraw &= ~(PR_SPEED);
-		prt_speed();
+		print_speed();
 	}
 
 	if (creature_ptr->pclass == CLASS_IMITATOR)
@@ -2247,13 +2247,13 @@ void redraw_stuff(player_type *creature_ptr)
 		if (creature_ptr->redraw & (PR_IMITATION))
 		{
 			creature_ptr->redraw &= ~(PR_IMITATION);
-			prt_imitation();
+			print_imitation();
 		}
 	}
 	else if (creature_ptr->redraw & (PR_STUDY))
 	{
 		creature_ptr->redraw &= ~(PR_STUDY);
-		prt_study();
+		print_study();
 	}
 }
 
@@ -2502,7 +2502,7 @@ int panel_col_of(int col)
  * of both "lite_spot()" and "print_rel()", and that we use the
  * "lite_spot()" function to display the player grid, if needed.
  */
-void prt_map(void)
+void print_map(void)
 {
 	POSITION x, y;
 	int v;
@@ -3781,7 +3781,7 @@ void move_cursor_relative(int row, int col)
 /*
  * print project path
  */
-void prt_path(floor_type *floor_ptr, POSITION y, POSITION x)
+void print_path(floor_type *floor_ptr, POSITION y, POSITION x)
 {
 	int i;
 	int path_n;

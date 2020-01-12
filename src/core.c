@@ -4435,7 +4435,8 @@ static void process_player(player_type *creature_ptr)
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(creature_ptr, m_idx, FALSE);
 		}
-		prt_time();
+
+		print_time();
 	}
 
 	/* Give the player some energy */
@@ -4446,7 +4447,7 @@ static void process_player(player_type *creature_ptr)
 
 	/* No turn yet */
 	if (creature_ptr->energy_need > 0) return;
-	if (!command_rep) prt_time();
+	if (!command_rep) print_time();
 
 	/*** Check for interupts ***/
 
