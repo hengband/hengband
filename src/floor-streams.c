@@ -391,12 +391,13 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
  * This happens in real world lava tubes.
  * </pre>
  */
-void place_trees(floor_type *floor_ptr, POSITION x, POSITION y)
+void place_trees(player_type *player_ptr, POSITION x, POSITION y)
 {
 	int i, j;
 	grid_type *g_ptr;
 
 	/* place trees/ rubble in ovalish distribution */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (i = x - 3; i < x + 4; i++)
 	{
 		for (j = y - 3; j < y + 4; j++)
@@ -428,7 +429,7 @@ void place_trees(floor_type *floor_ptr, POSITION x, POSITION y)
 				g_ptr->mimic = 0;
 
 				/* Light area since is open above */
-				if (!(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
+				if (!(d_info[player_ptr->dungeon_idx].flags1 & DF1_DARKNESS)) floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_ROOM);
 			}
 		}
 	}

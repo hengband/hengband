@@ -703,7 +703,7 @@ static bool cave_gen(player_type *player_ptr)
 		{
 			while (one_in_(DUN_MOS_DEN))
 			{
-				place_trees(floor_ptr, randint1(floor_ptr->width - 2), randint1(floor_ptr->height - 2));
+				place_trees(player_ptr, randint1(floor_ptr->width - 2), randint1(floor_ptr->height - 2));
 			}
 		}
 
