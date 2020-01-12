@@ -1411,12 +1411,12 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 	else num_blow = attacker_ptr->num_blow[hand];
 
 	/* Hack -- DOKUBARI always hit once */
-	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) num_blow = 1;
+	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) num_blow = 1;
 
 	/* Attack once for each legal blow */
 	while ((num++ < num_blow) && !attacker_ptr->is_dead)
 	{
-		if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) || (mode == HISSATSU_KYUSHO))
+		if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (mode == HISSATSU_KYUSHO))
 		{
 			int n = 1;
 
@@ -1660,7 +1660,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 					do_quake = TRUE;
 				}
 
-				if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_DOKUBARI)) && !(mode == HISSATSU_KYUSHO))
+				if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(mode == HISSATSU_KYUSHO))
 					k = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, k, attacker_ptr->to_h[hand], mode);
 
 				drain_result = k;
@@ -1779,7 +1779,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 
 			/* Modify the damage */
 			k = mon_damage_mod(m_ptr, k, (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((attacker_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
-			if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) || (mode == HISSATSU_KYUSHO))
+			if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (mode == HISSATSU_KYUSHO))
 			{
 				if ((randint1(randint1(r_ptr->level / 7) + 5) == 1) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))
 				{

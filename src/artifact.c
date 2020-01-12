@@ -1845,7 +1845,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 
 	if (((o_ptr->artifact_bias == BIAS_MAGE) || (o_ptr->artifact_bias == BIAS_INT)) && (o_ptr->tval == TV_GLOVES)) add_flag(o_ptr->art_flags, TR_FREE_ACT);
 
-	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI))
+	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
 	{
 		o_ptr->to_h = 0;
 		o_ptr->to_d = 0;

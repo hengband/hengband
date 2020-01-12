@@ -3819,7 +3819,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
 
 	case TV_SWORD:
 	{
-		if (power && !(o_ptr->sval == SV_DOKUBARI)) apply_magic_weapon(owner_ptr, o_ptr, lev, power);
+		if (power && !(o_ptr->sval == SV_POISON_NEEDLE)) apply_magic_weapon(owner_ptr, o_ptr, lev, power);
 		break;
 	}
 

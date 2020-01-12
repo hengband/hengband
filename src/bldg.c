@@ -2460,7 +2460,7 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
 	/* Get the flags of the weapon */
 	object_flags(o_ptr, flgs);
 
-	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) dokubari = TRUE;
+	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) dokubari = TRUE;
 
 
 	/* Show Critical Damage*/
@@ -3066,7 +3066,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 			if (k_aux_ptr->tval != TV_SWORD) continue;
 			if ((k_aux_ptr->sval == SV_BROKEN_DAGGER) ||
 				(k_aux_ptr->sval == SV_BROKEN_SWORD) ||
-				(k_aux_ptr->sval == SV_DOKUBARI)) continue;
+				(k_aux_ptr->sval == SV_POISON_NEEDLE)) continue;
 			if (k_aux_ptr->weight > 99) continue;
 
 			if (one_in_(n))
@@ -3093,7 +3093,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 				if ((ck_ptr->sval == SV_BROKEN_DAGGER) ||
 					(ck_ptr->sval == SV_BROKEN_SWORD) ||
 					(ck_ptr->sval == SV_DIAMOND_EDGE) ||
-					(ck_ptr->sval == SV_DOKUBARI)) continue;
+					(ck_ptr->sval == SV_POISON_NEEDLE)) continue;
 			}
 			if (tval == TV_POLEARM)
 			{

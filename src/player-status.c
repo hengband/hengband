@@ -3337,7 +3337,7 @@ void calc_bonuses(player_type *creature_ptr)
 
 			if (creature_ptr->special_defense & KATA_FUUJIN) creature_ptr->num_blow[i] -= 1;
 
-			if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) creature_ptr->num_blow[i] = 1;
+			if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) creature_ptr->num_blow[i] = 1;
 
 
 			/* Require at least one blow */

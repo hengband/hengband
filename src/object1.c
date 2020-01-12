@@ -575,7 +575,7 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 		info[i++] = _("それを装備した者は吸血鬼になる。", "It makes you current_world_ptr->game_turn into a vampire permanently.");
 	}
 
-	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI))
+	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
 	{
 		info[i++] = _("それは相手を一撃で倒すことがある。", "It will attempt to kill a monster instantly.");
 	}

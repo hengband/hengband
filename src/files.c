@@ -2087,7 +2087,7 @@ static void display_player_various(player_type *creature_ptr)
 				basedam = monk_ave_damage[level][0];
 
 			damage[i] += basedam;
-			if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) damage[i] = 1;
+			if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) damage[i] = 1;
 			if (damage[i] < 0) damage[i] = 0;
 			continue;
 		}
@@ -2099,7 +2099,7 @@ static void display_player_various(player_type *creature_ptr)
 		{
 			basedam = 0;
 			damage[i] += basedam;
-			if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) damage[i] = 1;
+			if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) damage[i] = 1;
 			if (damage[i] < 0) damage[i] = 0;
 			continue;
 		}
@@ -2107,7 +2107,7 @@ static void display_player_various(player_type *creature_ptr)
 		to_h[i] = 0;
 		poison_needle = FALSE;
 
-		if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) poison_needle = TRUE;
+		if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) poison_needle = TRUE;
 		if (object_is_known(o_ptr))
 		{
 			damage[i] += o_ptr->to_d * 100;
@@ -2133,7 +2133,7 @@ static void display_player_various(player_type *creature_ptr)
 		if ((creature_ptr->pclass != CLASS_SAMURAI) && have_flag(flgs, TR_FORCE_WEAPON) && (creature_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
 			basedam = basedam * 7 / 2;
 		damage[i] += basedam;
-		if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) damage[i] = 1;
+		if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) damage[i] = 1;
 		if (damage[i] < 0) damage[i] = 0;
 	}
 
