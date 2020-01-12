@@ -4538,7 +4538,7 @@ static void dump_aux_arena(player_type *creature_ptr, FILE *fff)
 		fprintf(fff, "\n");
 		return;
 	}
-	
+
 	if (creature_ptr->arena_number > MAX_ARENA_MONS - 1)
 	{
 		fprintf(fff, _("\n 闘技場: チャンピオン\n", "\n Arena: Champion\n"));
@@ -5225,7 +5225,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 
 			continue;
 		}
-		
+
 		/* Notice "tag" requests */
 		if (str[6] != '<') continue;
 
