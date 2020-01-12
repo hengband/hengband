@@ -3824,7 +3824,7 @@ static bool research_mon(player_type *player_ptr)
 				lore_do_probe(r_idx);
 
 				/* Save this monster ID */
-				monster_race_track(r_idx);
+				monster_race_track(player_ptr, r_idx);
 				handle_stuff(player_ptr);
 
 				/* know every thing mode */

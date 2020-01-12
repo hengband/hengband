@@ -605,7 +605,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 		boring = FALSE;
 
 		monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-		monster_race_track(m_ptr->ap_r_idx);
+		monster_race_track(subject_ptr, m_ptr->ap_r_idx);
 		health_track(subject_ptr, g_ptr->m_idx);
 		handle_stuff(subject_ptr);
 

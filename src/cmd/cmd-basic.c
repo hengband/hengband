@@ -2588,7 +2588,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 
 					if (m_ptr->ml)
 					{
-						if (!creature_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+						if (!creature_ptr->image) monster_race_track(creature_ptr, m_ptr->ap_r_idx);
 						health_track(creature_ptr, g_ptr->m_idx);
 					}
 				}
@@ -2635,7 +2635,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 					tdam, m_ptr->hp - tdam, m_ptr->maxhp, m_ptr->max_maxhp);
 
 				/* Hit the monster, check for death */
-				if (mon_take_hit(g_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_idx(m_ptr))))
+				if (mon_take_hit(creature_ptr, g_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_idx(m_ptr))))
 				{
 					/* Dead monster */
 				}

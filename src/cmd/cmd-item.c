@@ -1373,7 +1373,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
 		r_idx = who[i];
 
 		/* Hack -- Auto-recall */
-		monster_race_track(r_idx);
+		monster_race_track(creature_ptr, r_idx);
 		handle_stuff(creature_ptr);
 
 		/* Interact */

@@ -3864,7 +3864,7 @@ static bool project_m(player_type *caster_ptr, floor_type *floor_ptr, MONSTER_ID
 		bool fear = FALSE;
 
 		/* Hurt the monster, check for fear and death */
-		if (mon_take_hit(g_ptr->m_idx, dam, &fear, note_dies))
+		if (mon_take_hit(caster_ptr, g_ptr->m_idx, dam, &fear, note_dies))
 		{
 			/* Dead monster */
 		}
@@ -5812,7 +5812,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 							if (m_ptr->ml)
 							{
-								if (!caster_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+								if (!caster_ptr->image) monster_race_track(caster_ptr, m_ptr->ap_r_idx);
 								health_track(caster_ptr, caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
 							}
 						}
@@ -5839,7 +5839,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 					if (m_ptr->ml)
 					{
-						if (!caster_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+						if (!caster_ptr->image) monster_race_track(caster_ptr, m_ptr->ap_r_idx);
 						health_track(caster_ptr, caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
 					}
 				}
@@ -5973,7 +5973,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 					if (m_ptr->ml)
 					{
-						if (!caster_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+						if (!caster_ptr->image) monster_race_track(caster_ptr, m_ptr->ap_r_idx);
 						health_track(caster_ptr, caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
 					}
 				}
@@ -6493,7 +6493,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 				if (m_ptr->ml)
 				{
-					if (!caster_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+					if (!caster_ptr->image) monster_race_track(caster_ptr, m_ptr->ap_r_idx);
 					health_track(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].m_idx);
 				}
 			}

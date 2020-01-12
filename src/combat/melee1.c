@@ -1139,13 +1139,14 @@ static void touch_zap_player(monster_type *m_ptr, player_type *touched_ptr)
 
 /*!
 * @brief プレイヤーの変異要素による打撃処理
+* @param attacker_ptr プレーヤーへの参照ポインタ
 * @param m_idx 攻撃目標となったモンスターの参照ID
 * @param attack 変異要素による攻撃要素の種類
 * @param fear 攻撃を受けたモンスターが恐慌状態に陥ったかを返す参照ポインタ
 * @param mdeath 攻撃を受けたモンスターが死亡したかを返す参照ポインタ
 * @return なし
 */
-static void natural_attack(MONSTER_IDX m_idx, int attack, bool *fear, bool *mdeath)
+static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int attack, bool *fear, bool *mdeath)
 {
 	HIT_POINT k;
 	int bonus, chance;
@@ -1241,19 +1242,19 @@ static void natural_attack(MONSTER_IDX m_idx, int attack, bool *fear, bool *mdea
 			*mdeath = (m_ptr->r_idx == 0);
 			break;
 		case MUT2_HORNS:
-			*mdeath = mon_take_hit(m_idx, k, fear, NULL);
+			*mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
 			break;
 		case MUT2_BEAK:
-			*mdeath = mon_take_hit(m_idx, k, fear, NULL);
+			*mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
 			break;
 		case MUT2_TRUNK:
-			*mdeath = mon_take_hit(m_idx, k, fear, NULL);
+			*mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
 			break;
 		case MUT2_TENTACLES:
-			*mdeath = mon_take_hit(m_idx, k, fear, NULL);
+			*mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
 			break;
 		default:
-			*mdeath = mon_take_hit(m_idx, k, fear, NULL);
+			*mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
 		}
 
 		touch_zap_player(m_ptr, p_ptr);
@@ -1823,7 +1824,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 				drain_result = m_ptr->hp;
 
 			/* Damage, check for fear and death */
-			if (mon_take_hit(g_ptr->m_idx, k, fear, NULL))
+			if (mon_take_hit(attacker_ptr, g_ptr->m_idx, k, fear, NULL))
 			{
 				*mdeath = TRUE;
 				if ((attacker_ptr->pclass == CLASS_BERSERKER) && attacker_ptr->energy_use)
@@ -2196,7 +2197,7 @@ bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_
 	if (m_ptr->ml)
 	{
 		/* Auto-Recall if possible and visible */
-		if (!attacker_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+		if (!attacker_ptr->image) monster_race_track(attacker_ptr, m_ptr->ap_r_idx);
 
 		health_track(attacker_ptr, g_ptr->m_idx);
 	}
@@ -2323,15 +2324,15 @@ bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_
 	if (!mdeath)
 	{
 		if ((attacker_ptr->muta2 & MUT2_HORNS) && !mdeath)
-			natural_attack(g_ptr->m_idx, MUT2_HORNS, &fear, &mdeath);
+			natural_attack(attacker_ptr, g_ptr->m_idx, MUT2_HORNS, &fear, &mdeath);
 		if ((attacker_ptr->muta2 & MUT2_BEAK) && !mdeath)
-			natural_attack(g_ptr->m_idx, MUT2_BEAK, &fear, &mdeath);
+			natural_attack(attacker_ptr, g_ptr->m_idx, MUT2_BEAK, &fear, &mdeath);
 		if ((attacker_ptr->muta2 & MUT2_SCOR_TAIL) && !mdeath)
-			natural_attack(g_ptr->m_idx, MUT2_SCOR_TAIL, &fear, &mdeath);
+			natural_attack(attacker_ptr, g_ptr->m_idx, MUT2_SCOR_TAIL, &fear, &mdeath);
 		if ((attacker_ptr->muta2 & MUT2_TRUNK) && !mdeath)
-			natural_attack(g_ptr->m_idx, MUT2_TRUNK, &fear, &mdeath);
+			natural_attack(attacker_ptr, g_ptr->m_idx, MUT2_TRUNK, &fear, &mdeath);
 		if ((attacker_ptr->muta2 & MUT2_TENTACLES) && !mdeath)
-			natural_attack(g_ptr->m_idx, MUT2_TENTACLES, &fear, &mdeath);
+			natural_attack(attacker_ptr, g_ptr->m_idx, MUT2_TENTACLES, &fear, &mdeath);
 	}
 
 	/* Hack -- delay fear messages */
@@ -3733,7 +3734,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 			{
 				sound(SOUND_EXPLODE);
 
-				if (mon_take_hit(m_idx, m_ptr->hp + 1, &fear, NULL))
+				if (mon_take_hit(target_ptr, m_idx, m_ptr->hp + 1, &fear, NULL))
 				{
 					blinked = FALSE;
 					alive = FALSE;
@@ -3753,7 +3754,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 						msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), m_name);
 
-						if (mon_take_hit(m_idx, dam, &fear, _("は灰の山になった。", " turns into a pile of ash.")))
+						if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は灰の山になった。", " turns into a pile of ash.")))
 						{
 							blinked = FALSE;
 							alive = FALSE;
@@ -3776,7 +3777,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
 						msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), m_name);
-						if (mon_take_hit(m_idx, dam, &fear, _("は燃え殻の山になった。", " turns into a pile of cinder.")))
+						if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は燃え殻の山になった。", " turns into a pile of cinder.")))
 						{
 							blinked = FALSE;
 							alive = FALSE;
@@ -3799,7 +3800,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
 						msg_format(_("%^sは冷気をくらった！", "%^s is very cold!"), m_name);
-						if (mon_take_hit(m_idx, dam, &fear, _("は凍りついた。", " was frozen.")))
+						if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は凍りついた。", " was frozen.")))
 						{
 							blinked = FALSE;
 							alive = FALSE;
@@ -3823,7 +3824,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
 						msg_format(_("%^sは鏡の破片をくらった！", "%^s gets zapped!"), m_name);
-						if (mon_take_hit(m_idx, dam, &fear, _("はズタズタになった。", " had torn to pieces.")))
+						if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("はズタズタになった。", " had torn to pieces.")))
 						{
 							blinked = FALSE;
 							alive = FALSE;
@@ -3853,7 +3854,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 							dam = mon_damage_mod(m_ptr, dam, FALSE);
 
 							msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), m_name);
-							if (mon_take_hit(m_idx, dam, &fear, _("は倒れた。", " is destroyed.")))
+							if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed.")))
 							{
 								blinked = FALSE;
 								alive = FALSE;
@@ -3879,7 +3880,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
 						msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), m_name);
-						if (mon_take_hit(m_idx, dam, &fear, _("は倒れた。", " is destroyed.")))
+						if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed.")))
 						{
 							blinked = FALSE;
 							alive = FALSE;
@@ -3913,7 +3914,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
 						msg_format(_("影のオーラが%^sに反撃した！", "Enveloping shadows attack %^s."), m_name);
-						if (mon_take_hit(m_idx, dam, &fear, _("は倒れた。", " is destroyed.")))
+						if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed.")))
 						{
 							blinked = FALSE;
 							alive = FALSE;

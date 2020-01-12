@@ -3887,22 +3887,19 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
 /*
  * Hack -- track the given monster race
  */
-void monster_race_track(MONRACE_IDX r_idx)
+void monster_race_track(player_type *player_ptr, MONRACE_IDX r_idx)
 {
-	/* Save this monster ID */
 	p_ptr->monster_race_idx = r_idx;
-
 	p_ptr->window |= (PW_MONSTER);
 }
+
 
 /*
  * Hack -- track the given object kind
  */
-void object_kind_track(KIND_OBJECT_IDX k_idx)
+void object_kind_track(player_type *player_ptr, KIND_OBJECT_IDX k_idx)
 {
-	/* Save this monster ID */
 	p_ptr->object_kind_idx = k_idx;
-
 	p_ptr->window |= (PW_OBJECT);
 }
 

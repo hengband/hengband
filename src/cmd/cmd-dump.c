@@ -5334,7 +5334,7 @@ static void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redr
 		if (!visual_only)
 		{
 			/* Mega Hack -- track this monster race */
-			if (mon_cnt) monster_race_track(mon_idx[mon_cur]);
+			if (mon_cnt) monster_race_track(creature_ptr, mon_idx[mon_cur]);
 			handle_stuff(creature_ptr);
 		}
 
@@ -5708,7 +5708,7 @@ static void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redra
 		if (!visual_only)
 		{
 			/* Mega Hack -- track this object */
-			if (object_cnt) object_kind_track(object_idx[object_cur]);
+			if (object_cnt) object_kind_track(creature_ptr, object_idx[object_cur]);
 
 			/* The "current" object changed */
 			if (object_old != object_idx[object_cur])

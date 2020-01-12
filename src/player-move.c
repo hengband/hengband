@@ -999,7 +999,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			if (m_ptr->ml)
 			{
 				/* Auto-Recall if possible and visible */
-				if (!creature_ptr->image) monster_race_track(m_ptr->ap_r_idx);
+				if (!creature_ptr->image) monster_race_track(creature_ptr, m_ptr->ap_r_idx);
 				health_track(creature_ptr, g_ptr->m_idx);
 			}
 
