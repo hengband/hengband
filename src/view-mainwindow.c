@@ -960,9 +960,10 @@ static void print_sp(player_type *creature_ptr)
 
 /*!
  * @brief 現在のフロアの深さを表示する / Prints depth in stat area
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void print_depth(void)
+static void print_depth(player_type *creature_ptr)
 {
 	char depths[32];
 	TERM_LEN wid, hgt, row_depth, col_depth;
@@ -972,21 +973,22 @@ static void print_depth(void)
 	col_depth = wid + COL_DEPTH;
 	row_depth = hgt + ROW_DEPTH;
 
-	if (!p_ptr->current_floor_ptr->dun_level)
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	if (!floor_ptr->dun_level)
 	{
 		strcpy(depths, _("地上", "Surf."));
 	}
-	else if (p_ptr->current_floor_ptr->inside_quest && !p_ptr->dungeon_idx)
+	else if (floor_ptr->inside_quest && !creature_ptr->dungeon_idx)
 	{
 		strcpy(depths, _("地上", "Quest"));
 	}
 	else
 	{
-		if (depth_in_feet) (void)sprintf(depths, _("%d ft", "%d ft"), (int)p_ptr->current_floor_ptr->dun_level * 50);
-		else (void)sprintf(depths, _("%d 階", "Lev %d"), (int)p_ptr->current_floor_ptr->dun_level);
+		if (depth_in_feet) (void)sprintf(depths, _("%d ft", "%d ft"), (int)floor_ptr->dun_level * 50);
+		else (void)sprintf(depths, _("%d 階", "Lev %d"), (int)floor_ptr->dun_level);
 
 		/* Get color of level based on feeling  -JSV- */
-		switch (p_ptr->feeling)
+		switch (creature_ptr->feeling)
 		{
 		case  0: attr = TERM_SLATE;   break; /* Unknown */
 		case  1: attr = TERM_L_BLUE;  break; /* Special */
@@ -1533,7 +1535,7 @@ static void print_frame_basic(player_type *creature_ptr)
 	print_hp(creature_ptr);
 	print_sp(creature_ptr);
 	print_gold(creature_ptr);
-	print_depth();
+	print_depth(creature_ptr);
 	health_redraw(creature_ptr, FALSE);
 	health_redraw(creature_ptr, TRUE);
 }
@@ -2190,7 +2192,7 @@ void redraw_stuff(player_type *creature_ptr)
 	if (creature_ptr->redraw & (PR_DEPTH))
 	{
 		creature_ptr->redraw &= ~(PR_DEPTH);
-		print_depth();
+		print_depth(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_HEALTH))
