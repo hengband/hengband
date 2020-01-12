@@ -1730,30 +1730,31 @@ static void display_player_one_line(int entry, concptr val, TERM_COLOR attr)
 
 /*!
  * @brief プレイヤーの打撃能力修正を表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param hand 武器の装備部位ID
  * @param hand_entry 項目ID
  * @return なし
  */
-static void display_player_melee_bonus(int hand, int hand_entry)
+static void display_player_melee_bonus(player_type *creature_ptr, int hand, int hand_entry)
 {
 	char buf[160];
-	HIT_PROB show_tohit = p_ptr->dis_to_h[hand];
-	HIT_POINT show_todam = p_ptr->dis_to_d[hand];
-	object_type *o_ptr = &p_ptr->inventory_list[INVEN_RARM + hand];
+	HIT_PROB show_tohit = creature_ptr->dis_to_h[hand];
+	HIT_POINT show_todam = creature_ptr->dis_to_d[hand];
+	object_type *o_ptr = &creature_ptr->inventory_list[INVEN_RARM + hand];
 
 	/* Hack -- add in weapon info if known */
 	if (object_is_known(o_ptr)) show_tohit += o_ptr->to_h;
 	if (object_is_known(o_ptr)) show_todam += o_ptr->to_d;
 	
-	show_tohit += p_ptr->skill_thn / BTH_PLUS_ADJ;
+	show_tohit += creature_ptr->skill_thn / BTH_PLUS_ADJ;
 	
 	/* Melee attacks */
 	sprintf(buf, "(%+d,%+d)", (int)show_tohit, (int)show_todam);
 
 	/* Dump the bonuses to hit/dam */
-	if (!has_melee_weapon(p_ptr, INVEN_RARM) && !has_melee_weapon(p_ptr, INVEN_LARM))
+	if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
 		display_player_one_line(ENTRY_BARE_HAND, buf, TERM_L_BLUE);
-	else if (p_ptr->ryoute)
+	else if (creature_ptr->ryoute)
 		display_player_one_line(ENTRY_TWO_HANDS, buf, TERM_L_BLUE);
 	else
 		display_player_one_line(hand_entry, buf, TERM_L_BLUE);
@@ -1781,12 +1782,12 @@ static void display_player_middle(player_type *creature_ptr)
 
 	if (creature_ptr->migite)
 	{
-		display_player_melee_bonus(0, left_hander ? ENTRY_LEFT_HAND1 : ENTRY_RIGHT_HAND1);
+		display_player_melee_bonus(creature_ptr, 0, left_hander ? ENTRY_LEFT_HAND1 : ENTRY_RIGHT_HAND1);
 	}
 
 	if (creature_ptr->hidarite)
 	{
-		display_player_melee_bonus(1, left_hander ? ENTRY_RIGHT_HAND2: ENTRY_LEFT_HAND2);
+		display_player_melee_bonus(creature_ptr, 1, left_hander ? ENTRY_RIGHT_HAND2: ENTRY_LEFT_HAND2);
 	}
 	else if ((creature_ptr->pclass == CLASS_MONK) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
 	{
@@ -1875,8 +1876,8 @@ static void display_player_middle(player_type *creature_ptr)
 		}
 		else
 		{
-			if (MON_FAST(&p_ptr->current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed += 10;
-			if (MON_SLOW(&p_ptr->current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed -= 10;
+			if (MON_FAST(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed += 10;
+			if (MON_SLOW(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed -= 10;
 		}
 
 		if (tmp_speed)
