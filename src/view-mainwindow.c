@@ -1715,6 +1715,7 @@ void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN 
 	}
 }
 
+
 /*!
  * @brief 出現中モンスターのリストをサブウィンドウに表示する / Hack -- display monster list in sub-windows
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -1750,13 +1751,13 @@ static void fix_monster_list(player_type *player_ptr)
 }
 
 
-
 /*!
  * @brief 現在の装備品をサブウィンドウに表示する / 
  * Hack -- display equipment in sub-windows
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void fix_equip(void)
+static void fix_equip(player_type *player_ptr)
 {
 	int j;
 
@@ -1775,7 +1776,7 @@ static void fix_equip(void)
 		Term_activate(angband_term[j]);
 
 		/* Display equipment */
-		display_equip(p_ptr, item_tester_tval);
+		display_equip(player_ptr, item_tester_tval);
 		Term_fresh();
 		Term_activate(old);
 	}
@@ -1784,10 +1785,11 @@ static void fix_equip(void)
 
 /*!
  * @brief 現在の習得済魔法をサブウィンドウに表示する / 
+ * @param player_ptr プレーヤーへの参照ポインタ
  * Hack -- display spells in sub-windows
  * @return なし
  */
-static void fix_spell(void)
+static void fix_spell(player_type *player_ptr)
 {
 	int j;
 
@@ -1806,7 +1808,7 @@ static void fix_spell(void)
 		Term_activate(angband_term[j]);
 
 		/* Display spell list */
-		display_spell_list(p_ptr);
+		display_spell_list(player_ptr);
 		Term_fresh();
 		Term_activate(old);
 	}
@@ -1815,10 +1817,11 @@ static void fix_spell(void)
 
 /*!
  * @brief 現在のプレイヤーステータスをサブウィンドウに表示する / 
+ * @param player_ptr プレーヤーへの参照ポインタ
  * Hack -- display character in sub-windows
  * @return なし
  */
-static void fix_player(void)
+static void fix_player(player_type *player_ptr)
 {
 	int j;
 
@@ -1837,7 +1840,7 @@ static void fix_player(void)
 		Term_activate(angband_term[j]);
 
 		update_playtime();
-		display_player(p_ptr, 0);
+		display_player(player_ptr, 0);
 		Term_fresh();
 		Term_activate(old);
 	}
@@ -1893,11 +1896,12 @@ static void fix_message(void)
  * @brief 簡易マップをサブウィンドウに表示する / 
  * Hack -- display overhead view in sub-windows
  * Adjust for width and split messages
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * Note that the "player" symbol does NOT appear on the map.
  */
-static void fix_overhead(void)
+static void fix_overhead(player_type *player_ptr)
 {
 	int j;
 	int cy, cx;
@@ -1922,14 +1926,14 @@ static void fix_overhead(void)
 		if (wid > COL_MAP + 2 && hgt > ROW_MAP + 2)
 		{
 
-			display_map(p_ptr->current_floor_ptr, &cy, &cx);
+			display_map(player_ptr->current_floor_ptr, &cy, &cx);
 			Term_fresh();
 		}
 		Term_activate(old);
 	}
 }
 
-static void display_dungeon(void)
+static void display_dungeon(player_type *player_ptr)
 {
 	TERM_LEN x, y;
 	TERM_COLOR a;
@@ -1938,11 +1942,11 @@ static void display_dungeon(void)
 	TERM_COLOR ta = 0;
 	SYMBOL_CODE tc = '\0';
 
-	for (x = p_ptr->x - Term->wid / 2 + 1; x <= p_ptr->x + Term->wid / 2; x++)
+	for (x = player_ptr->x - Term->wid / 2 + 1; x <= player_ptr->x + Term->wid / 2; x++)
 	{
-		for (y = p_ptr->y - Term->hgt / 2 + 1; y <= p_ptr->y + Term->hgt / 2; y++)
+		for (y = player_ptr->y - Term->hgt / 2 + 1; y <= player_ptr->y + Term->hgt / 2; y++)
 		{
-			if (in_bounds2(p_ptr->current_floor_ptr, y, x))
+			if (in_bounds2(player_ptr->current_floor_ptr, y, x))
 			{
 				map_info(y, x, &a, &c, &ta, &tc);
 
@@ -1950,12 +1954,12 @@ static void display_dungeon(void)
 				if (!use_graphics)
 				{
 					if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-					else if (IS_INVULN(p_ptr) || p_ptr->timewalk) a = TERM_WHITE;
-					else if (p_ptr->wraith_form) a = TERM_L_DARK;
+					else if (IS_INVULN(player_ptr) || player_ptr->timewalk) a = TERM_WHITE;
+					else if (player_ptr->wraith_form) a = TERM_L_DARK;
 				}
 
 				/* Hack -- Queue it */
-				Term_queue_char(x - p_ptr->x + Term->wid / 2 - 1, y - p_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
+				Term_queue_char(x - player_ptr->x + Term->wid / 2 - 1, y - player_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
 			}
 			else
 			{
@@ -1971,7 +1975,7 @@ static void display_dungeon(void)
 				c = f_ptr->x_char[F_LIT_STANDARD];
 
 				/* Hack -- Queue it */
-				Term_queue_char(x - p_ptr->x + Term->wid / 2 - 1, y - p_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
+				Term_queue_char(x - player_ptr->x + Term->wid / 2 - 1, y - player_ptr->y + Term->hgt / 2 - 1, a, c, ta, tc);
 			}
 		}
 	}
@@ -1980,9 +1984,10 @@ static void display_dungeon(void)
 /*!
  * @brief ダンジョンの地形をサブウィンドウに表示する / 
  * Hack -- display dungeon view in sub-windows
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void fix_dungeon(void)
+static void fix_dungeon(player_type *player_ptr)
 {
 	int j;
 
@@ -2001,7 +2006,7 @@ static void fix_dungeon(void)
 		Term_activate(angband_term[j]);
 
 		/* Redraw dungeon view */
-		display_dungeon();
+		display_dungeon(player_ptr);
 		Term_fresh();
 		Term_activate(old);
 	}
@@ -2011,9 +2016,10 @@ static void fix_dungeon(void)
 /*!
  * @brief モンスターの思い出をサブウィンドウに表示する / 
  * Hack -- display dungeon view in sub-windows
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void fix_monster(void)
+static void fix_monster(player_type *player_ptr)
 {
 	int j;
 
@@ -2032,7 +2038,7 @@ static void fix_monster(void)
 		Term_activate(angband_term[j]);
 
 		/* Display monster race info */
-		if (p_ptr->monster_race_idx) display_roff(p_ptr->monster_race_idx);
+		if (player_ptr->monster_race_idx) display_roff(player_ptr->monster_race_idx);
 		Term_fresh();
 		Term_activate(old);
 	}
@@ -2307,21 +2313,21 @@ void window_stuff(player_type *player_ptr)
 	if (player_ptr->window & (PW_EQUIP))
 	{
 		player_ptr->window &= ~(PW_EQUIP);
-		fix_equip();
+		fix_equip(player_ptr);
 	}
 
 	/* Display spell list */
 	if (player_ptr->window & (PW_SPELL))
 	{
 		player_ptr->window &= ~(PW_SPELL);
-		fix_spell();
+		fix_spell(player_ptr);
 	}
 
 	/* Display player */
 	if (player_ptr->window & (PW_PLAYER))
 	{
 		player_ptr->window &= ~(PW_PLAYER);
-		fix_player();
+		fix_player(player_ptr);
 	}
 	
 	/* Display monster list */
@@ -2342,21 +2348,21 @@ void window_stuff(player_type *player_ptr)
 	if (player_ptr->window & (PW_OVERHEAD))
 	{
 		player_ptr->window &= ~(PW_OVERHEAD);
-		fix_overhead();
+		fix_overhead(player_ptr);
 	}
 
 	/* Display overhead view */
 	if (player_ptr->window & (PW_DUNGEON))
 	{
 		player_ptr->window &= ~(PW_DUNGEON);
-		fix_dungeon();
+		fix_dungeon(player_ptr);
 	}
 
 	/* Display monster recall */
 	if (player_ptr->window & (PW_MONSTER))
 	{
 		player_ptr->window &= ~(PW_MONSTER);
-		fix_monster();
+		fix_monster(player_ptr);
 	}
 
 	/* Display object recall */
