@@ -20,12 +20,13 @@
 static bool mon_invis;
 static POSITION mon_fy, mon_fx;
 
-void day_break(floor_type *floor_ptr)
+void day_break(player_type *subject_ptr)
 {
 	POSITION y, x;
 	msg_print(_("夜が明けた。", "The sun has risen."));
 
-	if (!p_ptr->wild_mode)
+	floor_type *floor_ptr = subject_ptr->current_floor_ptr;
+	if (!subject_ptr->wild_mode)
 	{
 		/* Hack -- Scan the town */
 		for (y = 0; y < floor_ptr->height; y++)
@@ -45,23 +46,24 @@ void day_break(floor_type *floor_ptr)
 		}
 	}
 
-	p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
-	p_ptr->redraw |= (PR_MAP);
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	subject_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
+	subject_ptr->redraw |= (PR_MAP);
+	subject_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-	if (p_ptr->special_defense & NINJA_S_STEALTH)
+	if (subject_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
+		if (floor_ptr->grid_array[subject_ptr->y][subject_ptr->x].info & CAVE_GLOW) set_superstealth(subject_ptr, FALSE);
 	}
 
 }
 
-void night_falls(floor_type *floor_ptr)
+void night_falls(player_type *subject_ptr)
 {
 	POSITION y, x;
 	msg_print(_("日が沈んだ。", "The sun has fallen."));
 
-	if (!p_ptr->wild_mode)
+	floor_type *floor_ptr = subject_ptr->current_floor_ptr;
+	if (!subject_ptr->wild_mode)
 	{
 		/* Hack -- Scan the town */
 		for (y = 0; y < floor_ptr->height; y++)
@@ -93,13 +95,13 @@ void night_falls(floor_type *floor_ptr)
 		}
 	}
 
-	p_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
-	p_ptr->redraw |= (PR_MAP);
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	subject_ptr->update |= (PU_MONSTERS | PU_MON_LITE);
+	subject_ptr->redraw |= (PR_MAP);
+	subject_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
-	if (p_ptr->special_defense & NINJA_S_STEALTH)
+	if (subject_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
+		if (floor_ptr->grid_array[subject_ptr->y][subject_ptr->x].info & CAVE_GLOW) set_superstealth(subject_ptr, FALSE);
 	}
 
 }
