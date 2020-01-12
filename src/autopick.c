@@ -4300,7 +4300,7 @@ static void copy_text_to_yank(text_body_type *tb)
 /*
  * Draw text
  */
-static void draw_text_editor(text_body_type *tb)
+static void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 {
 	int i;
 	int by1 = 0, by2 = 0;
@@ -4400,7 +4400,7 @@ static void draw_text_editor(text_body_type *tb)
 			s_keep = ss;
 
 			/* Parse the expr */
-			v = process_pref_file_expr(&ss, &f);
+			v = process_pref_file_expr(player_ptr, &ss, &f);
 
 			/* Set flag */
 			if (streq(v, "0")) state |= LSTAT_BYPASS;
@@ -5536,7 +5536,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 
 	case EC_INSERT_MACRO:
 		/* Draw_everythig (delete menu) */
-		draw_text_editor(tb);
+		draw_text_editor(player_ptr, tb);
 
 		/* Erase line */
 		Term_erase(0, tb->cy - tb->upper + 1, tb->wid);
@@ -5553,7 +5553,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 
 	case EC_INSERT_KEYMAP:
 		/* Draw_everythig (delete menu) */
-		draw_text_editor(tb);
+		draw_text_editor(player_ptr, tb);
 
 		/* Erase line */
 		Term_erase(0, tb->cy - tb->upper + 1, tb->wid);
@@ -5863,7 +5863,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 		int com_id = 0;
 
 		/* Draw_everythig */
-		draw_text_editor(tb);
+		draw_text_editor(player_ptr, tb);
 
 		/* Display header line */
 		prt(_("(^Q:終了 ^W:セーブして終了, ESC:メニュー, その他:入力)",

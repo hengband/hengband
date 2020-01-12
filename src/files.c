@@ -817,6 +817,7 @@ errr process_pref_file_command(player_type *creature_ptr, char *buf)
 /*!
  * @brief process_pref_fileのサブルーチンとして条件分岐処理の解釈と結果を返す /
  * Helper function for "process_pref_file()"
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param sp テキスト文字列の参照ポインタ
  * @param fp 再帰中のポインタ参照
  * @return
@@ -829,7 +830,7 @@ errr process_pref_file_command(player_type *creature_ptr, char *buf)
  *   result
  * </pre>
  */
-concptr process_pref_file_expr(char **sp, char *fp)
+concptr process_pref_file_expr(player_type *creature_ptr, char **sp, char *fp)
 {
 	concptr v;
 
@@ -864,7 +865,7 @@ concptr process_pref_file_expr(char **sp, char *fp)
 		s++;
 
 		/* First */
-		t = process_pref_file_expr(&s, &f);
+		t = process_pref_file_expr(creature_ptr, &s, &f);
 
 		if (!*t)
 		{
@@ -877,7 +878,7 @@ concptr process_pref_file_expr(char **sp, char *fp)
 			v = "0";
 			while (*s && (f != b2))
 			{
-				t = process_pref_file_expr(&s, &f);
+				t = process_pref_file_expr(creature_ptr, &s, &f);
 				if (*t && !streq(t, "0")) v = "1";
 			}
 		}
@@ -888,7 +889,7 @@ concptr process_pref_file_expr(char **sp, char *fp)
 			v = "1";
 			while (*s && (f != b2))
 			{
-				t = process_pref_file_expr(&s, &f);
+				t = process_pref_file_expr(creature_ptr, &s, &f);
 				if (*t && streq(t, "0")) v = "0";
 			}
 		}
@@ -899,7 +900,7 @@ concptr process_pref_file_expr(char **sp, char *fp)
 			v = "1";
 			while (*s && (f != b2))
 			{
-				t = process_pref_file_expr(&s, &f);
+				t = process_pref_file_expr(creature_ptr, &s, &f);
 				if (*t && streq(t, "1")) v = "0";
 			}
 		}
@@ -910,11 +911,11 @@ concptr process_pref_file_expr(char **sp, char *fp)
 			v = "0";
 			if (*s && (f != b2))
 			{
-				t = process_pref_file_expr(&s, &f);
+				t = process_pref_file_expr(creature_ptr, &s, &f);
 			}
 			while (*s && (f != b2))
 			{
-				p = process_pref_file_expr(&s, &f);
+				p = process_pref_file_expr(creature_ptr, &s, &f);
 				if (streq(t, p)) v = "1";
 			}
 		}
@@ -925,12 +926,12 @@ concptr process_pref_file_expr(char **sp, char *fp)
 			v = "1";
 			if (*s && (f != b2))
 			{
-				t = process_pref_file_expr(&s, &f);
+				t = process_pref_file_expr(creature_ptr, &s, &f);
 			}
 			while (*s && (f != b2))
 			{
 				p = t;
-				t = process_pref_file_expr(&s, &f);
+				t = process_pref_file_expr(creature_ptr, &s, &f);
 				if (*t && atoi(p) > atoi(t)) v = "0";
 			}
 		}
@@ -941,12 +942,12 @@ concptr process_pref_file_expr(char **sp, char *fp)
 			v = "1";
 			if (*s && (f != b2))
 			{
-				t = process_pref_file_expr(&s, &f);
+				t = process_pref_file_expr(creature_ptr, &s, &f);
 			}
 			while (*s && (f != b2))
 			{
 				p = t;
-				t = process_pref_file_expr(&s, &f);
+				t = process_pref_file_expr(creature_ptr, &s, &f);
 
 				/* Compare two numbers instead of string */
 				if (*t && atoi(p) < atoi(t)) v = "0";
@@ -957,7 +958,7 @@ concptr process_pref_file_expr(char **sp, char *fp)
 		{
 			while (*s && (f != b2))
 			{
-				t = process_pref_file_expr(&s, &f);
+				t = process_pref_file_expr(creature_ptr, &s, &f);
 			}
 		}
 
@@ -1039,7 +1040,7 @@ concptr process_pref_file_expr(char **sp, char *fp)
 			{
 				static char tmp_player_name[32];
 				char *pn, *tpn;
-				for (pn = p_ptr->name, tpn = tmp_player_name; *pn; pn++, tpn++)
+				for (pn = creature_ptr->name, tpn = tmp_player_name; *pn; pn++, tpn++)
 				{
 #ifdef JP
 					if (iskanji(*pn))
@@ -1059,9 +1060,9 @@ concptr process_pref_file_expr(char **sp, char *fp)
 			else if (streq(b+1, "REALM1"))
 			{
 #ifdef JP
-				v = E_realm_names[p_ptr->realm1];
+				v = E_realm_names[creature_ptr->realm1];
 #else
-				v = realm_names[p_ptr->realm1];
+				v = realm_names[creature_ptr->realm1];
 #endif
 			}
 
@@ -1069,23 +1070,23 @@ concptr process_pref_file_expr(char **sp, char *fp)
 			else if (streq(b+1, "REALM2"))
 			{
 #ifdef JP
-				v = E_realm_names[p_ptr->realm2];
+				v = E_realm_names[creature_ptr->realm2];
 #else
-				v = realm_names[p_ptr->realm2];
+				v = realm_names[creature_ptr->realm2];
 #endif
 			}
 
 			/* Level */
 			else if (streq(b+1, "LEVEL"))
 			{
-				sprintf(tmp, "%02d", p_ptr->lev);
+				sprintf(tmp, "%02d", creature_ptr->lev);
 				v = tmp;
 			}
 
 			/* Autopick auto-register is in-use or not? */
 			else if (streq(b+1, "AUTOREGISTER"))
 			{
-				if (p_ptr->autopick_autoregister)
+				if (creature_ptr->autopick_autoregister)
 					v = "1";
 				else
 					v = "0";
@@ -1094,7 +1095,7 @@ concptr process_pref_file_expr(char **sp, char *fp)
 			/* Money */
 			else if (streq(b+1, "MONEY"))
 			{
-				sprintf(tmp, "%09ld", (long int)p_ptr->au);
+				sprintf(tmp, "%09ld", (long int)creature_ptr->au);
 				v = tmp;
 			}
 		}
@@ -1186,7 +1187,7 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 			s = buf + 2;
 
 			/* Parse the expr */
-			v = process_pref_file_expr(&s, &f);
+			v = process_pref_file_expr(creature_ptr, &s, &f);
 
 			/* Set flag */
 			bypass = (streq(v, "0") ? TRUE : FALSE);
