@@ -1058,13 +1058,14 @@ static void print_hunger(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの行動状態を表示する / Prints Searching, Resting, Paralysis, or 'count' status
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * Display is always exactly 10 characters wide (see below)
  * This function was a major bottleneck when resting, so a lot of
  * the text formatting code was optimized in place below.
  */
-static void print_state(void)
+static void print_state(player_type *player_ptr)
 {
 	TERM_COLOR attr = TERM_WHITE;
 	GAME_TEXT text[16];
@@ -1085,7 +1086,7 @@ static void print_state(void)
 	/* Action */
 	else
 	{
-		switch(p_ptr->action)
+		switch(player_ptr->action)
 		{
 			case ACTION_SEARCH:
 			{
@@ -1096,15 +1097,15 @@ static void print_state(void)
 				/* Start with "Rest" */
 				strcpy(text, _("    ", "    "));
 
-				if (p_ptr->resting > 0)
+				if (player_ptr->resting > 0)
 				{
-					sprintf(text, "%4d", p_ptr->resting);
+					sprintf(text, "%4d", player_ptr->resting);
 				}
-				else if (p_ptr->resting == COMMAND_ARG_REST_FULL_HEALING)
+				else if (player_ptr->resting == COMMAND_ARG_REST_FULL_HEALING)
 				{
 					text[0] = text[1] = text[2] = text[3] = '*';
 				}
-				else if (p_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE)
+				else if (player_ptr->resting == COMMAND_ARG_REST_UNTIL_DONE)
 				{
 					text[0] = text[1] = text[2] = text[3] = '&';
 				}
@@ -1113,7 +1114,7 @@ static void print_state(void)
 			case ACTION_LEARN:
 			{
 				strcpy(text, _("学習", "lear"));
-				if (p_ptr->new_mane) attr = TERM_L_RED;
+				if (player_ptr->new_mane) attr = TERM_L_RED;
 				break;
 			}
 			case ACTION_FISH:
@@ -1125,7 +1126,7 @@ static void print_state(void)
 			{
 				int i;
 				for (i = 0; i < MAX_KAMAE; i++)
-					if (p_ptr->special_defense & (KAMAE_GENBU << i)) break;
+					if (player_ptr->special_defense & (KAMAE_GENBU << i)) break;
 				switch (i)
 				{
 					case 0: attr = TERM_GREEN;break;
@@ -1140,7 +1141,7 @@ static void print_state(void)
 			{
 				int i;
 				for (i = 0; i < MAX_KATA; i++)
-					if (p_ptr->special_defense & (KATA_IAI << i)) break;
+					if (player_ptr->special_defense & (KATA_IAI << i)) break;
 				strcpy(text, kata_shurui[i].desc);
 				break;
 			}
@@ -1552,7 +1553,7 @@ static void print_frame_extra(player_type *player_ptr)
 	print_cut(player_ptr);
 	print_stun(player_ptr);
 	print_hunger(player_ptr);
-	print_state();
+	print_state(player_ptr);
 	print_speed();
 	print_study();
 	print_imitation();
@@ -2239,7 +2240,7 @@ void redraw_stuff(player_type *creature_ptr)
 	if (creature_ptr->redraw & (PR_STATE))
 	{
 		creature_ptr->redraw &= ~(PR_STATE);
-		print_state();
+		print_state(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_SPEED))
