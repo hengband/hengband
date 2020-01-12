@@ -4505,12 +4505,13 @@ static void dump_aux_quest(player_type *creature_ptr, FILE *fff)
 
 /*!
  * @brief 死の直前メッセージ並びに遺言をファイルにダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return なし
  */
-static void dump_aux_last_message(FILE *fff)
+static void dump_aux_last_message(player_type *creature_ptr, FILE *fff)
 {
-	if (p_ptr->is_dead)
+	if (creature_ptr->is_dead)
 	{
 		if (!current_world_ptr->total_winner)
 		{
@@ -4525,14 +4526,15 @@ static void dump_aux_last_message(FILE *fff)
 		}
 
 		/* Hack -- *Winning* message */
-		else if (p_ptr->last_message)
+		else if (creature_ptr->last_message)
 		{
 			fprintf(fff, _("\n  [*勝利*メッセージ]\n\n", "\n  [*Winning* Message]\n\n"));
-			fprintf(fff,"  %s\n", p_ptr->last_message);
+			fprintf(fff,"  %s\n", creature_ptr->last_message);
 			fputc('\n', fff);
 		}
 	}
 }
+
 
 /*!
  * @brief 帰還場所情報をファイルにダンプする
@@ -5000,7 +5002,7 @@ errr make_character_dump(player_type *creature_ptr, FILE *fff)
 	update_playtime();
 
 	dump_aux_display_player(creature_ptr, fff);
-	dump_aux_last_message(fff);
+	dump_aux_last_message(creature_ptr, fff);
 	dump_aux_options(fff);
 	dump_aux_recall(fff);
 	dump_aux_quest(creature_ptr, fff);
