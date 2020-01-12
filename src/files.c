@@ -3875,9 +3875,9 @@ void display_player(player_type *creature_ptr, int mode)
 		else if (!floor_ptr->dun_level)
 		{
 #ifdef JP
-			sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(), creature_ptr->died_from);
+			sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(creature_ptr), creature_ptr->died_from);
 #else
-			sprintf(statmsg, "...You were killed by %s in %s.", creature_ptr->died_from, map_name());
+			sprintf(statmsg, "...You were killed by %s in %s.", creature_ptr->died_from, map_name(creature_ptr));
 #endif
 		}
 		else if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest))
@@ -3897,9 +3897,9 @@ void display_player(player_type *creature_ptr, int mode)
 		else
 		{
 #ifdef JP
-			sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), (int)floor_ptr->dun_level, creature_ptr->died_from);
+			sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(creature_ptr), (int)floor_ptr->dun_level, creature_ptr->died_from);
 #else
-			sprintf(statmsg, "...You were killed by %s on level %d of %s.", creature_ptr->died_from, floor_ptr->dun_level, map_name());
+			sprintf(statmsg, "...You were killed by %s on level %d of %s.", creature_ptr->died_from, floor_ptr->dun_level, map_name(creature_ptr));
 #endif
 		}
 	}
@@ -3907,7 +3907,7 @@ void display_player(player_type *creature_ptr, int mode)
 	{
 		if (!floor_ptr->dun_level)
 		{
-			sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name());
+			sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(creature_ptr));
 		}
 		else if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest))
 		{
@@ -3929,9 +3929,9 @@ void display_player(player_type *creature_ptr, int mode)
 		else
 		{
 #ifdef JP
-			sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), (int)floor_ptr->dun_level);
+			sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(creature_ptr), (int)floor_ptr->dun_level);
 #else
-			sprintf(statmsg, "...Now, you are exploring level %d of %s.", floor_ptr->dun_level, map_name());
+			sprintf(statmsg, "...Now, you are exploring level %d of %s.", floor_ptr->dun_level, map_name(creature_ptr));
 #endif
 		}
 	}
@@ -4248,7 +4248,6 @@ static void dump_aux_class_special(player_type *creature_ptr, FILE *fff)
 	// Blue mage
 	int l1 = 0;
 	int l2 = 0;
-	int num = 0;
 	int spellnum[MAX_MONSPELLS];
 	BIT_FLAGS f4 = 0, f5 = 0, f6 = 0;
 	char p[60][80];
@@ -4289,7 +4288,8 @@ static void dump_aux_class_special(player_type *creature_ptr, FILE *fff)
 			break;
 		}
 
-		for (int i = 0, num = 0; i < 32; i++)
+		int num = 0;
+		for (int i = 0; i < 32; i++)
 		{
 			if ((0x00000001 << i) & f4) spellnum[num++] = i;
 		}

@@ -5536,18 +5536,15 @@ void play_game(player_type *player_ptr, bool new_game)
 	/* Character is now "complete" */
 	current_world_ptr->character_generated = TRUE;
 
-
 	/* Hack -- Character is no longer "icky" */
 	current_world_ptr->character_icky = FALSE;
-
 
 	if (new_game)
 	{
 		char buf[80];
-		sprintf(buf, _("%sに降り立った。", "You are standing in the %s."), map_name());
+		sprintf(buf, _("%sに降り立った。", "You are standing in the %s."), map_name(player_ptr));
 		exe_write_diary(player_ptr, NIKKI_BUNSHOU, 0, buf);
 	}
-
 
 	/* Start game */
 	player_ptr->playing = TRUE;

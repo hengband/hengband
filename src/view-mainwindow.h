@@ -11,7 +11,7 @@ extern void do_cmd_view_map(void);
 
 extern void health_track(MONSTER_IDX m_idx);
 extern void prt_time(void);
-extern concptr map_name(void);
+extern concptr map_name(player_type *creature_ptr);
 extern void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);
 extern void move_cursor_relative(int row, int col);
 extern void prt_path(floor_type *floor_ptr, POSITION y, POSITION x);

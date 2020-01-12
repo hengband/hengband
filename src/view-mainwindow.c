@@ -185,30 +185,33 @@ void prt_time(void)
 
 /*!
  * @brief 現在のマップ名を返す /
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return マップ名の文字列参照ポインタ
  */
-concptr map_name(void)
+concptr map_name(player_type *creature_ptr)
 {
-	if (p_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(p_ptr->current_floor_ptr->inside_quest)
-	    && (quest[p_ptr->current_floor_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest)
+	    && (quest[floor_ptr->inside_quest].flags & QUEST_FLAG_PRESET))
 		return _("クエスト", "Quest");
-	else if (p_ptr->wild_mode)
+	else if (creature_ptr->wild_mode)
 		return _("地上", "Surface");
-	else if (p_ptr->current_floor_ptr->inside_arena)
+	else if (creature_ptr->current_floor_ptr->inside_arena)
 		return _("アリーナ", "Arena");
-	else if (p_ptr->phase_out)
+	else if (creature_ptr->phase_out)
 		return _("闘技場", "Monster Arena");
-	else if (!p_ptr->current_floor_ptr->dun_level && p_ptr->town_num)
-		return town_info[p_ptr->town_num].name;
+	else if (!floor_ptr->dun_level && creature_ptr->town_num)
+		return town_info[creature_ptr->town_num].name;
 	else
-		return d_name+d_info[p_ptr->dungeon_idx].name;
+		return d_name+d_info[creature_ptr->dungeon_idx].name;
 }
 
 /*!
  * @brief 現在のマップ名を描画する / Print dungeon
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void prt_dungeon(void)
+static void print_dungeon(player_type *creature_ptr)
 {
 	concptr dungeon_name;
 	TERM_LEN col;
@@ -216,7 +219,7 @@ static void prt_dungeon(void)
 	/* Dump 13 spaces to clear */
 	c_put_str(TERM_WHITE, "             ", ROW_DUNGEON, COL_DUNGEON);
 
-	dungeon_name = map_name();
+	dungeon_name = map_name(creature_ptr);
 
 	col = COL_DUNGEON + 6 - strlen(dungeon_name)/2;
 	if (col < 0) col = 0;
@@ -2107,7 +2110,7 @@ void redraw_stuff(player_type *creature_ptr)
 		creature_ptr->redraw &= ~(PR_DEPTH | PR_HEALTH | PR_UHEALTH);
 		prt_frame_basic();
 		prt_time();
-		prt_dungeon();
+		print_dungeon(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_EQUIPPY))
