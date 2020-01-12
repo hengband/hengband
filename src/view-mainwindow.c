@@ -643,7 +643,7 @@ static void prt_status(player_type *creature_ptr)
 	if (creature_ptr->tim_sh_fire) ADD_FLG(BAR_SHFIRE);
 
 	/* tim stealth */
-	if (IS_TIM_STEALTH()) ADD_FLG(BAR_STEALTH);
+	if (is_time_limit_stealth(creature_ptr)) ADD_FLG(BAR_STEALTH);
 
 	if (creature_ptr->tim_sh_touki) ADD_FLG(BAR_TOUKI);
 

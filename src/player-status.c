@@ -3659,7 +3659,7 @@ void calc_bonuses(player_type *creature_ptr)
 	/* Affect Skill -- stealth (bonus one) */
 	creature_ptr->skill_stl += 1;
 
-	if (IS_TIM_STEALTH()) creature_ptr->skill_stl += 99;
+	if (is_time_limit_stealth(creature_ptr)) creature_ptr->skill_stl += 99;
 
 	/* Affect Skill -- disarming (DEX and INT) */
 	creature_ptr->skill_dis += adj_dex_dis[creature_ptr->stat_ind[A_DEX]];
@@ -5931,42 +5931,56 @@ bool is_blessed(player_type *creature_ptr)
 	return creature_ptr->blessed || music_singing(creature_ptr, MUSIC_BLESS) || hex_spelling(HEX_BLESS);
 }
 
+
 bool is_oppose_acid(player_type *creature_ptr)
 {
 	return creature_ptr->oppose_acid || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU);
 }
+
 
 bool is_oppose_elec(player_type *creature_ptr)
 {
 	return creature_ptr->oppose_elec || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU);
 }
 
+
 bool is_oppose_fire(player_type *creature_ptr)
 {
 	return creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU);
 }
+
 
 bool is_oppose_cold(player_type *creature_ptr)
 {
 	return creature_ptr->oppose_cold || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU);
 }
 
+
 bool is_oppose_pois(player_type *creature_ptr)
 {
 	return creature_ptr->oppose_pois || music_singing(creature_ptr, MUSIC_RESIST) || (creature_ptr->special_defense & KATA_MUSOU);
 }
+
 
 bool is_tim_esp(player_type *creature_ptr)
 {
 	return creature_ptr->tim_esp || music_singing(creature_ptr, MUSIC_MIND) || (creature_ptr->concent >= CONCENT_TELE_THRESHOLD);
 }
 
+
 bool is_tim_stealth(player_type *creature_ptr)
 {
 	return creature_ptr->tim_stealth || music_singing(creature_ptr, MUSIC_STEALTH);
 }
 
+
 bool is_time_limit_esp(player_type *creature_ptr)
 {
 	return creature_ptr->tim_esp || music_singing(creature_ptr, MUSIC_MIND) || (creature_ptr->concent >= CONCENT_TELE_THRESHOLD);
+}
+
+
+bool is_time_limit_stealth(player_type *creature_ptr)
+{
+	return creature_ptr->tim_stealth || music_singing(creature_ptr, MUSIC_STEALTH);
 }
