@@ -1405,13 +1405,13 @@ void calc_bonuses(player_type *creature_ptr)
 	bool old_mighty_throw = creature_ptr->mighty_throw;
 
 	/* Current feature under player. */
-	feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
+	floor_type *floor_ptr = floor_ptr;
+	feature_type *f_ptr = &f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
 
 	/* Save the old armor class */
 	ARMOUR_CLASS old_dis_ac = creature_ptr->dis_ac;
 	ARMOUR_CLASS old_dis_to_a = creature_ptr->dis_to_a;
-
-
+	
 	/* Clear extra blows/shots */
 	extra_blows[0] = extra_blows[1] = 0;
 
@@ -2042,10 +2042,12 @@ void calc_bonuses(player_type *creature_ptr)
 	{
 		creature_ptr->resist_neth = TRUE;
 	}
+
 	if (creature_ptr->tim_sh_fire)
 	{
 		creature_ptr->sh_fire = TRUE;
 	}
+
 	if (creature_ptr->tim_res_time)
 	{
 		creature_ptr->resist_time = TRUE;
@@ -2079,7 +2081,7 @@ void calc_bonuses(player_type *creature_ptr)
 			new_speed += (creature_ptr->lev) / 10 + 5;
 	}
 
-	if (music_singing(p_ptr, MUSIC_WALL))
+	if (music_singing(creature_ptr, MUSIC_WALL))
 	{
 		creature_ptr->kill_wall = TRUE;
 	}
@@ -2091,7 +2093,6 @@ void calc_bonuses(player_type *creature_ptr)
 		/* Modify the stats for "race" */
 		creature_ptr->stat_add[i] += (tmp_rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i]);
 	}
-
 
 	/* I'm adding the mutations here for the lack of a better place... */
 	if (creature_ptr->muta3)
@@ -2670,7 +2671,7 @@ void calc_bonuses(player_type *creature_ptr)
 	/* Hex bonuses */
 	if (creature_ptr->realm1 == REALM_HEX)
 	{
-		if (hex_spelling_any(p_ptr)) creature_ptr->skill_stl -= (1 + CASTING_HEX_NUM(creature_ptr));
+		if (hex_spelling_any(creature_ptr)) creature_ptr->skill_stl -= (1 + CASTING_HEX_NUM(creature_ptr));
 		if (hex_spelling(HEX_DETECT_EVIL)) creature_ptr->esp_evil = TRUE;
 		if (hex_spelling(HEX_XTRA_MIGHT)) creature_ptr->stat_add[A_STR] += 4;
 		if (hex_spelling(HEX_BUILDING))
@@ -2801,7 +2802,6 @@ void calc_bonuses(player_type *creature_ptr)
 			creature_ptr->window |= (PW_PLAYER);
 		}
 	}
-
 
 	/* Apply temporary "stun" */
 	if (creature_ptr->stun > 50)
@@ -2973,8 +2973,7 @@ void calc_bonuses(player_type *creature_ptr)
 	{
 		creature_ptr->resist_fear = TRUE;
 	}
-
-
+	
 	/* Hack -- Telepathy Change */
 	if (creature_ptr->telepathy != old_telepathy)
 	{
@@ -3070,7 +3069,7 @@ void calc_bonuses(player_type *creature_ptr)
 	}
 	else
 	{
-		monster_type *riding_m_ptr = &p_ptr->current_floor_ptr->m_list[creature_ptr->riding];
+		monster_type *riding_m_ptr = &floor_ptr->m_list[creature_ptr->riding];
 		monster_race *riding_r_ptr = &r_info[riding_m_ptr->r_idx];
 		SPEED speed = riding_m_ptr->mspeed;
 
@@ -3116,7 +3115,6 @@ void calc_bonuses(player_type *creature_ptr)
 			new_speed -= 2;
 		}
 	}
-
 
 	/* Actual Modifier Bonuses (Un-inflate stat bonuses) */
 	creature_ptr->to_a += ((int)(adj_dex_ta[creature_ptr->stat_ind[A_DEX]]) - 128);
@@ -3439,7 +3437,7 @@ void calc_bonuses(player_type *creature_ptr)
 				}
 				else
 				{
-					penalty = r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
+					penalty = r_info[floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
 					penalty += 30;
 					if (penalty < 30) penalty = 30;
 				}
@@ -3478,7 +3476,7 @@ void calc_bonuses(player_type *creature_ptr)
 		}
 		else
 		{
-			penalty = r_info[p_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
+			penalty = r_info[floor_ptr->m_list[creature_ptr->riding].r_idx].level - creature_ptr->skill_exp[GINOU_RIDING] / 80;
 			penalty += 30;
 			if (penalty < 30) penalty = 30;
 		}
@@ -3703,7 +3701,6 @@ void calc_bonuses(player_type *creature_ptr)
 	/* Affect Skill -- combat (throwing) (Level, by Class) */
 	creature_ptr->skill_tht += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
 
-
 	if ((PRACE_IS_(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != SEIKAKU_SEXY) && (creature_ptr->cursed & TRC_AGGRAVATE))
 	{
 		creature_ptr->cursed &= ~(TRC_AGGRAVATE);
@@ -3730,8 +3727,7 @@ void calc_bonuses(player_type *creature_ptr)
 	if (creature_ptr->immune_elec) creature_ptr->resist_elec = TRUE;
 	if (creature_ptr->immune_fire) creature_ptr->resist_fire = TRUE;
 	if (creature_ptr->immune_cold) creature_ptr->resist_cold = TRUE;
-
-
+	
 	/* Hack -- handle "xtra" mode */
 	if (current_world_ptr->character_xtra) return;
 
@@ -3875,9 +3871,9 @@ void calc_bonuses(player_type *creature_ptr)
 		if ((creature_ptr->inventory_list[i].tval == TV_CRAFT_BOOK) && (creature_ptr->inventory_list[i].sval == 2)) have_kabe = TRUE;
 	}
 
-	for (this_o_idx = p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (this_o_idx = floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 #if 0
@@ -3922,11 +3918,12 @@ static void calc_alignment(player_type *creature_ptr)
 	creature_ptr->align = 0;
 	int i, j, neutral[2];
 
-	for (m_idx = creature_ptr->current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--)
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	for (m_idx = floor_ptr->m_max - 1; m_idx >= 1; m_idx--)
 	{
 		monster_type *m_ptr;
 		monster_race *r_ptr;
-		m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
+		m_ptr = &floor_ptr->m_list[m_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 		r_ptr = &r_info[m_ptr->r_idx];
 
@@ -4009,6 +4006,7 @@ static void calc_alignment(player_type *creature_ptr)
 	}
 }
 
+
 /*!
  * @brief プレイヤーの最大HPを計算する /
  * Calculate the players (maximal) hit points
@@ -4090,6 +4088,7 @@ static void calc_hitpoints(player_type *creature_ptr)
 	}
 }
 
+
 /*!
  * @brief プレイヤーの光源半径を計算する / Extract and set the current "lite radius"
  * @return なし
@@ -4166,6 +4165,7 @@ static void calc_torch(player_type *creature_ptr)
 			set_superstealth(creature_ptr, FALSE);
 	}
 }
+
 
 /*!
  * @brief プレイヤーの現在学習可能な魔法数を計算し、増減に応じて魔法の忘却、再学習を処置する。 /
@@ -4310,9 +4310,9 @@ static void calc_spells(player_type *creature_ptr)
 			}
 
 #ifdef JP
-			msg_format("%sの%sを忘れてしまった。", exe_spell(p_ptr, which, j % 32, SPELL_NAME), p);
+			msg_format("%sの%sを忘れてしまった。", exe_spell(creature_ptr, which, j % 32, SPELL_NAME), p);
 #else
-			msg_format("You have forgotten the %s of %s.", p, exe_spell(p_ptr, which, j % 32, SPELL_NAME));
+			msg_format("You have forgotten the %s of %s.", p, exe_spell(creature_ptr, which, j % 32, SPELL_NAME));
 #endif
 
 
@@ -4320,7 +4320,6 @@ static void calc_spells(player_type *creature_ptr)
 			creature_ptr->new_spells++;
 		}
 	}
-
 
 	/* Forget spells if we know too many spells */
 	for (i = 63; i >= 0; i--)
@@ -4367,17 +4366,15 @@ static void calc_spells(player_type *creature_ptr)
 			}
 
 #ifdef JP
-			msg_format("%sの%sを忘れてしまった。", exe_spell(p_ptr, which, j % 32, SPELL_NAME), p);
+			msg_format("%sの%sを忘れてしまった。", exe_spell(creature_ptr, which, j % 32, SPELL_NAME), p);
 #else
-			msg_format("You have forgotten the %s of %s.", p, exe_spell(p_ptr, which, j % 32, SPELL_NAME));
+			msg_format("You have forgotten the %s of %s.", p, exe_spell(creature_ptr, which, j % 32, SPELL_NAME));
 #endif
-
 
 			/* One more can be learned */
 			creature_ptr->new_spells++;
 		}
 	}
-
 
 	/* Check for spells to remember */
 	for (i = 0; i < 64; i++)
@@ -4440,11 +4437,10 @@ static void calc_spells(player_type *creature_ptr)
 			}
 
 #ifdef JP
-			msg_format("%sの%sを思い出した。", exe_spell(p_ptr, which, j % 32, SPELL_NAME), p);
+			msg_format("%sの%sを思い出した。", exe_spell(creature_ptr, which, j % 32, SPELL_NAME), p);
 #else
-			msg_format("You have remembered the %s of %s.", p, exe_spell(p_ptr, which, j % 32, SPELL_NAME));
+			msg_format("You have remembered the %s of %s.", p, exe_spell(creature_ptr, which, j % 32, SPELL_NAME));
 #endif
-
 
 			/* One less can be learned */
 			creature_ptr->new_spells--;
@@ -4514,6 +4510,7 @@ static void calc_spells(player_type *creature_ptr)
 		creature_ptr->window |= (PW_OBJECT);
 	}
 }
+
 
 /*!
  * @brief プレイヤーの最大MPを計算する /
@@ -4607,8 +4604,7 @@ static void calc_mana(player_type *creature_ptr)
 			msp = (3 * msp) / 4;
 		}
 	}
-
-
+	
 	/* Assume player not encumbered by armor */
 	creature_ptr->cumber_armor = FALSE;
 
@@ -4827,6 +4823,7 @@ static void calc_mana(player_type *creature_ptr)
 	}
 }
 
+
 /*!
  * @brief 装備中の射撃武器の威力倍率を返す /
  * calcurate the fire rate of target object
@@ -4906,6 +4903,7 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
 	return (s16b)num;
 }
 
+
 /*!
  * @brief プレイヤーの所持重量制限を計算する /
  * Computes current weight limit.
@@ -4923,6 +4921,7 @@ WEIGHT weight_limit(player_type *creature_ptr)
 	return i;
 }
 
+
 /*!
  * @brief プレイヤーが現在右手/左手に武器を持っているか判定する /
  * @param i 判定する手のID(右手:0 左手:1)
@@ -4932,6 +4931,7 @@ bool has_melee_weapon(player_type *creature_ptr, int i)
 {
 	return ((creature_ptr->inventory_list[i].k_idx && object_is_melee_weapon(&creature_ptr->inventory_list[i])) ? TRUE : FALSE);
 }
+
 
 /*!
  * @brief プレイヤーの現在開いている手の状態を返す
@@ -4977,6 +4977,7 @@ bool heavy_armor(player_type *creature_ptr)
 	return (monk_arm_wgt > (100 + (creature_ptr->lev * 4)));
 }
 
+
 /*!
  * @brief update のフラグに応じた更新をまとめて行う / Handle "update"
  * @return なし
@@ -4986,7 +4987,7 @@ void update_creature(player_type *creature_ptr)
 {
 	if (!creature_ptr->update) return;
 
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	floor_type *floor_ptr = floor_ptr;
 	if (creature_ptr->update & (PU_AUTODESTROY))
 	{
 		creature_ptr->update &= ~(PU_AUTODESTROY);
@@ -5122,24 +5123,28 @@ bool player_has_no_spellbooks(player_type *creature_ptr)
 		if (o_ptr->k_idx && check_book_realm(o_ptr->tval, o_ptr->sval)) return FALSE;
 	}
 
-	for (i = p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; i; i = o_ptr->next_o_idx)
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	for (i = floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; i; i = o_ptr->next_o_idx)
 	{
-		o_ptr = &p_ptr->current_floor_ptr->o_list[i];
+		o_ptr = &floor_ptr->o_list[i];
 		if (o_ptr->k_idx && (o_ptr->marked & OM_FOUND) && check_book_realm(o_ptr->tval, o_ptr->sval)) return FALSE;
 	}
 
 	return TRUE;
 }
 
+
 void take_turn(player_type *creature_ptr, PERCENTAGE need_cost)
 {
 	creature_ptr->energy_use = (ENERGY)need_cost;
 }
 
+
 void free_turn(player_type *creature_ptr)
 {
 	creature_ptr->energy_use = 0;
 }
+
 
 /*!
  * @brief プレイヤーを指定座標に配置する / Place the player in the dungeon XXX XXX
@@ -5160,6 +5165,7 @@ bool player_place(player_type *creature_ptr, POSITION y, POSITION x)
 	return TRUE;
 }
 
+
 /*!
  * @brief 種族アンバライトが出血時パターンの上に乗った際のペナルティ処理
  * @return なし
@@ -5168,7 +5174,8 @@ void wreck_the_pattern(player_type *creature_ptr)
 {
 	int to_ruin = 0;
 	POSITION r_y, r_x;
-	int pattern_type = f_info[p_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat].subtype;
+	floor_type *floor_ptr = floor_ptr;
+	int pattern_type = f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat].subtype;
 
 	if (pattern_type == PATTERN_TILE_WRECKED)
 	{
@@ -5184,16 +5191,16 @@ void wreck_the_pattern(player_type *creature_ptr)
 
 	while (to_ruin--)
 	{
-		scatter(p_ptr->current_floor_ptr, &r_y, &r_x, creature_ptr->y, creature_ptr->x, 4, 0);
+		scatter(floor_ptr, &r_y, &r_x, creature_ptr->y, creature_ptr->x, 4, 0);
 
 		if (pattern_tile(r_y, r_x) &&
-			(f_info[p_ptr->current_floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED))
+			(f_info[floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED))
 		{
-			cave_set_feat(p_ptr->current_floor_ptr, r_y, r_x, feat_pattern_corrupted);
+			cave_set_feat(floor_ptr, r_y, r_x, feat_pattern_corrupted);
 		}
 	}
 
-	cave_set_feat(p_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x, feat_pattern_corrupted);
+	cave_set_feat(floor_ptr, creature_ptr->y, creature_ptr->x, feat_pattern_corrupted);
 }
 
 
@@ -5498,6 +5505,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 	handle_stuff(creature_ptr);
 }
 
+
 /*!
  * @brief プレイヤーの経験値について整合性のためのチェックと調整を行う /
  * Advance experience levels and print experience
@@ -5568,7 +5576,7 @@ void check_experience(player_type *creature_ptr)
 			}
 			level_inc_stat = TRUE;
 
-			exe_write_diary(p_ptr, NIKKI_LEVELUP, creature_ptr->lev, NULL);
+			exe_write_diary(creature_ptr, NIKKI_LEVELUP, creature_ptr->lev, NULL);
 		}
 
 		sound(SOUND_LEVEL);
@@ -5656,6 +5664,7 @@ void check_experience(player_type *creature_ptr)
 	if (old_lev != creature_ptr->lev) autopick_load_pref(creature_ptr, FALSE);
 }
 
+
 /*!
  * @brief 現在の修正後能力値を3～17及び18/xxx形式に変換する / Converts stat num into a six-char (right justified) string
  * @param val 能力値
@@ -5689,6 +5698,7 @@ void cnv_stat(int val, char *out_val)
 		sprintf(out_val, "    %2d", val);
 	}
 }
+
 
 /*!
  * @brief 能力値現在値から3～17及び18/xxx様式に基づく加減算を行う。
@@ -5869,11 +5879,12 @@ void cheat_death(player_type *creature_ptr)
 	/* Hack -- Prevent starvation */
 	(void)set_food(creature_ptr, PY_FOOD_MAX - 1);
 
-	p_ptr->current_floor_ptr->dun_level = 0;
-	creature_ptr->current_floor_ptr->inside_arena = FALSE;
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	floor_ptr->dun_level = 0;
+	floor_ptr->inside_arena = FALSE;
 	creature_ptr->phase_out = FALSE;
 	leaving_quest = 0;
-	creature_ptr->current_floor_ptr->inside_quest = 0;
+	floor_ptr->inside_quest = 0;
 	if (creature_ptr->dungeon_idx) creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
 	creature_ptr->dungeon_idx = 0;
 	if (lite_town || vanilla_town)
@@ -5901,12 +5912,11 @@ void cheat_death(player_type *creature_ptr)
 	creature_ptr->wild_mode = FALSE;
 	creature_ptr->leaving = TRUE;
 
-	exe_write_diary(p_ptr, NIKKI_BUNSHOU, 1,
+	exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 1,
 		_("                            しかし、生き返った。",
 			"                            but revived."));
 
 	/* Prepare next floor */
 	leave_floor(creature_ptr);
 	wipe_m_list();
-
 }
