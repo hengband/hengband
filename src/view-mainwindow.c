@@ -1239,9 +1239,10 @@ static void print_speed(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの呪文学習可能状態を表示する
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void print_study(void)
+static void print_study(player_type *player_ptr)
 {
 	TERM_LEN wid, hgt, row_study, col_study;
 
@@ -1249,7 +1250,7 @@ static void print_study(void)
 	col_study = wid + COL_STUDY;
 	row_study = hgt + ROW_STUDY;
 
-	if (p_ptr->new_spells)
+	if (player_ptr->new_spells)
 	{
 		put_str(_("学習", "Stud"), row_study, col_study);
 	}
@@ -1262,9 +1263,10 @@ static void print_study(void)
 
 /*!
  * @brief プレイヤーのものまね可能状態を表示する
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void print_imitation(void)
+static void print_imitation(player_type *player_ptr)
 {
 	TERM_LEN wid, hgt, row_study, col_study;
 
@@ -1272,12 +1274,12 @@ static void print_imitation(void)
 	col_study = wid + COL_STUDY;
 	row_study = hgt + ROW_STUDY;
 
-	if (p_ptr->pclass == CLASS_IMITATOR)
+	if (player_ptr->pclass == CLASS_IMITATOR)
 	{
-		if (p_ptr->mane_num)
+		if (player_ptr->mane_num)
 		{
 			TERM_COLOR attr;
-			if (p_ptr->new_mane) attr = TERM_L_RED;
+			if (player_ptr->new_mane) attr = TERM_L_RED;
 			else attr = TERM_WHITE;
 			c_put_str(attr, _("まね", "Imit"), row_study, col_study);
 		}
@@ -1356,7 +1358,6 @@ static void print_stun(player_type *creature_ptr)
 		put_str("            ", ROW_STUN, COL_STUN);
 	}
 }
-
 
 
 /*!
@@ -1557,8 +1558,8 @@ static void print_frame_extra(player_type *player_ptr)
 	print_hunger(player_ptr);
 	print_state(player_ptr);
 	print_speed(player_ptr);
-	print_study();
-	print_imitation();
+	print_study(player_ptr);
+	print_imitation(player_ptr);
 	print_status(player_ptr);
 }
 
@@ -2256,15 +2257,16 @@ void redraw_stuff(player_type *creature_ptr)
 		if (creature_ptr->redraw & (PR_IMITATION))
 		{
 			creature_ptr->redraw &= ~(PR_IMITATION);
-			print_imitation();
+			print_imitation(creature_ptr);
 		}
 	}
 	else if (creature_ptr->redraw & (PR_STUDY))
 	{
 		creature_ptr->redraw &= ~(PR_STUDY);
-		print_study();
+		print_study(creature_ptr);
 	}
 }
+
 
 /*! 
  * @brief player_ptr->window のフラグに応じた更新をまとめて行う / Handle "player_ptr->window"
