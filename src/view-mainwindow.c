@@ -3816,7 +3816,7 @@ void move_cursor_relative(int row, int col)
 /*
  * print project path
  */
-void print_path(floor_type *floor_ptr, POSITION y, POSITION x)
+void print_path(player_type *player_ptr, POSITION y, POSITION x)
 {
 	int i;
 	int path_n;
@@ -3828,10 +3828,11 @@ void print_path(floor_type *floor_ptr, POSITION y, POSITION x)
 		return;
 
 	/* Get projection path */
-	path_n = project_path(floor_ptr, path_g, (project_length ? project_length : MAX_RANGE), p_ptr->y, p_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	path_n = project_path(floor_ptr, path_g, (project_length ? project_length : MAX_RANGE), player_ptr->y, player_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
 
-	p_ptr->redraw |= (PR_MAP);
-	handle_stuff(p_ptr);
+	player_ptr->redraw |= (PR_MAP);
+	handle_stuff(player_ptr);
 
 	/* Draw path */
 	for (i = 0; i < path_n; i++)
@@ -3864,8 +3865,8 @@ void print_path(floor_type *floor_ptr, POSITION y, POSITION x)
 			if (!use_graphics)
 			{
 				if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-				else if (IS_INVULN(p_ptr) || p_ptr->timewalk) a = TERM_WHITE;
-				else if (p_ptr->wraith_form) a = TERM_L_DARK;
+				else if (IS_INVULN(player_ptr) || player_ptr->timewalk) a = TERM_WHITE;
+				else if (player_ptr->wraith_form) a = TERM_L_DARK;
 			}
 
 			c = '*';

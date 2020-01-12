@@ -1098,7 +1098,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 			/* Set forcus */
 			change_panel_xy(creature_ptr, y, x);
 
-			if (!(mode & TARGET_LOOK)) print_path(floor_ptr, y, x);
+			if (!(mode & TARGET_LOOK)) print_path(creature_ptr, y, x);
 
 			/* Access */
 			g_ptr = &floor_ptr->grid_array[y][x];
@@ -1336,7 +1336,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 		{
 			bool move_fast = FALSE;
 
-			if (!(mode & TARGET_LOOK)) print_path(floor_ptr, y, x);
+			if (!(mode & TARGET_LOOK)) print_path(creature_ptr, y, x);
 
 			/* Access */
 			g_ptr = &floor_ptr->grid_array[y][x];
