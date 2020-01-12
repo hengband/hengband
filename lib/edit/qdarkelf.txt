@@ -25,7 +25,7 @@ Q:32:T:たくさん護衛がいますから注意して下さい。
 
 # Description for quest reward
 ?:[EQU $QUEST32 3]
-Q:$32:T:Thank you!  Your reward is wating outside.
+Q:$32:T:Thank you!  Your reward is waiting outside.
 Q:32:T:ありがとうございます！外にお礼が置いてあります。
 ?:1
 

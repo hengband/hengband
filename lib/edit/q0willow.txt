@@ -25,7 +25,7 @@ Q:31:T:クエストは街の東の平地にあります。
 
 # Description for quest reward
 ?:[EQU $QUEST31 3]
-Q:$31:T:Thank you!  Your reward is wating outside.
+Q:$31:T:Thank you!  Your reward is waiting outside.
 Q:31:T:ありがとうございます！外にお礼が置いてあります。
 ?:1
 
