@@ -4065,7 +4065,7 @@ static void process_command(player_type *creature_ptr)
 		/* Help */
 		case '?':
 		{
-			do_cmd_help();
+			do_cmd_help(creature_ptr);
 			break;
 		}
 

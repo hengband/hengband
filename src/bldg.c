@@ -453,7 +453,7 @@ static void arena_comm(player_type *player_ptr, int cmd)
 		screen_save();
 
 		/* Peruse the arena help file */
-		(void)show_file(TRUE, _("arena_j.txt", "arena.txt"), NULL, 0, 0);
+		(void)show_file(player_ptr, TRUE, _("arena_j.txt", "arena.txt"), NULL, 0, 0);
 		screen_load();
 		break;
 	}
@@ -1246,7 +1246,7 @@ static bool gamble_comm(player_type *player_ptr, int cmd)
 	if (cmd == BACT_GAMBLE_RULES)
 	{
 		/* Peruse the gambling help file */
-		(void)show_file(TRUE, _("jgambling.txt", "gambling.txt"), NULL, 0, 0);
+		(void)show_file(player_ptr, TRUE, _("jgambling.txt", "gambling.txt"), NULL, 0, 0);
 		screen_load();
 		return TRUE;
 	}
@@ -2332,12 +2332,13 @@ static void castle_quest(player_type *player_ptr)
 
 /*!
  * @brief 町に関するヘルプを表示する / Display town history
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void town_history(void)
+static void town_history(player_type *player_ptr)
 {
 	screen_save();
-	(void)show_file(TRUE, _("jbldg.txt", "bldg.txt"), NULL, 0, 0);
+	(void)show_file(player_ptr, TRUE, _("jbldg.txt", "bldg.txt"), NULL, 0, 0);
 	screen_load();
 }
 
@@ -3917,7 +3918,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		paid = identify_fully(player_ptr, FALSE);
 		break;
 	case BACT_TOWN_HISTORY:
-		town_history();
+		town_history(player_ptr);
 		break;
 	case BACT_RACE_LEGENDS:
 		race_legends(player_ptr);

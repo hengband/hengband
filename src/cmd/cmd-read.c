@@ -548,7 +548,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, q);
 
 		/* Peruse the help file */
-		(void)show_file(TRUE, buf, o_name, 0, 0);
+		(void)show_file(creature_ptr, TRUE, buf, o_name, 0, 0);
 		screen_load();
 
 		used_up=FALSE;

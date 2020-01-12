@@ -5520,7 +5520,7 @@ static void store_process_command(player_type *client_ptr)
 		/* Help */
 		case '?':
 		{
-			do_cmd_help();
+			do_cmd_help(client_ptr);
 			break;
 		}
 

@@ -831,7 +831,7 @@ static void do_cmd_options_autosave(concptr info)
 
 		case '?':
 		{
-			(void)show_file(TRUE, _("joption.txt#Autosave", "option.txt#Autosave"), NULL, 0, 0);
+			(void)show_file(p_ptr, TRUE, _("joption.txt#Autosave", "option.txt#Autosave"), NULL, 0, 0);
 			Term_clear();
 			break;
 		}
@@ -977,7 +977,7 @@ static void do_cmd_options_win(void)
 
 		case '?':
 		{
-			(void)show_file(TRUE, _("joption.txt#Window", "option.txt#Window"), NULL, 0, 0);
+			(void)show_file(p_ptr, TRUE, _("joption.txt#Window", "option.txt#Window"), NULL, 0, 0);
 
 			Term_clear();
 			break;
@@ -1125,7 +1125,7 @@ static void do_cmd_options_cheat(concptr info)
 		{
 			strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), cheat_info[k].o_text);
 			/* Peruse the help file */
-			(void)show_file(TRUE, buf, NULL, 0, 0);
+			(void)show_file(p_ptr, TRUE, buf, NULL, 0, 0);
 
 			Term_clear();
 			break;
@@ -1375,7 +1375,7 @@ void do_cmd_options(void)
 				if (k == ESCAPE) break;
 				else if (k == '?')
 				{
-					(void)show_file(TRUE, _("joption.txt#BaseDelay", "option.txt#BaseDelay"), NULL, 0, 0);
+					(void)show_file(p_ptr, TRUE, _("joption.txt#BaseDelay", "option.txt#BaseDelay"), NULL, 0, 0);
 					Term_clear();
 				}
 				else if (isdigit(k)) delay_factor = D2I(k);
@@ -1402,7 +1402,7 @@ void do_cmd_options(void)
 				if (k == ESCAPE) break;
 				else if (k == '?')
 				{
-					(void)show_file(TRUE, _("joption.txt#Hitpoint", "option.txt#Hitpoint"), NULL, 0, 0);
+					(void)show_file(p_ptr, TRUE, _("joption.txt#Hitpoint", "option.txt#Hitpoint"), NULL, 0, 0);
 					Term_clear();
 				}
 				else if (isdigit(k)) hitpoint_warn = D2I(k);
@@ -1429,7 +1429,7 @@ void do_cmd_options(void)
 				if (k == ESCAPE) break;
 				else if (k == '?')
 				{
-					(void)show_file(TRUE, _("joption.txt#Manapoint", "option.txt#Manapoint"), NULL, 0, 0);
+					(void)show_file(p_ptr, TRUE, _("joption.txt#Manapoint", "option.txt#Manapoint"), NULL, 0, 0);
 					Term_clear();
 				}
 				else if (isdigit(k)) mana_warn = D2I(k);
@@ -1440,7 +1440,7 @@ void do_cmd_options(void)
 		}
 
 		case '?':
-			(void)show_file(TRUE, _("joption.txt", "option.txt"), NULL, 0, 0);
+			(void)show_file(p_ptr, TRUE, _("joption.txt", "option.txt"), NULL, 0, 0);
 			Term_clear();
 			break;
 
@@ -1594,7 +1594,7 @@ void do_cmd_options_aux(int page, concptr info)
 		{
 			strnfmt(buf, sizeof(buf), _("joption.txt#%s", "option.txt#%s"), option_info[opt[k]].o_text);
 			/* Peruse the help file */
-			(void)show_file(TRUE, buf, NULL, 0, 0);
+			(void)show_file(p_ptr, TRUE, buf, NULL, 0, 0);
 
 			Term_clear();
 			break;

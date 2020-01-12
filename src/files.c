@@ -5216,6 +5216,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 /*!
  * @brief ファイル内容をコンソールに出力する
  * Recursive file perusal.
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param show_version TRUEならばコンソール上にゲームのバージョンを表示する
  * @param name ファイル名の文字列
  * @param what 内容キャプションの文字列
@@ -5229,7 +5230,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
  * Return FALSE on 'q' to exit from a deep, otherwise TRUE.
  * </pre>
  */
-bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode)
+bool show_file(player_type *creature_ptr, bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode)
 {
 	int i, n, skey;
 
@@ -5544,7 +5545,7 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 		case '?':
 			/* Hack - prevent silly recursion */
 			if (strcmp(name, _("jhelpinfo.txt", "helpinfo.txt")) != 0)
-				show_file(TRUE, _("jhelpinfo.txt", "helpinfo.txt"), NULL, 0, mode);
+				show_file(creature_ptr, TRUE, _("jhelpinfo.txt", "helpinfo.txt"), NULL, 0, mode);
 			break;
 
 		/* Hack -- try showing */
@@ -5625,7 +5626,7 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 
 				if (askfor(tmp, 80))
 				{
-					if (!show_file(TRUE, tmp, NULL, 0, mode)) skey = 'q';
+					if (!show_file(creature_ptr, TRUE, tmp, NULL, 0, mode)) skey = 'q';
 				}
 			}
 			break;
@@ -5684,7 +5685,7 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 			if ((key > -1) && hook[key][0])
 			{
 				/* Recurse on that file */
-				if (!show_file(TRUE, hook[key], NULL, 0, mode))
+				if (!show_file(creature_ptr, TRUE, hook[key], NULL, 0, mode))
 					skey = 'q';
 			}
 		}
@@ -5749,15 +5750,16 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 /*!
  * @brief ヘルプを表示するコマンドのメインルーチン
  * Peruse the On-Line-Help
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  */
-void do_cmd_help(void)
+void do_cmd_help(player_type *creature_ptr)
 {
 	screen_save();
 
 	/* Peruse the main help file */
-	(void)show_file(TRUE, _("jhelp.hlp", "help.hlp"), NULL, 0, 0);
+	(void)show_file(creature_ptr, TRUE, _("jhelp.hlp", "help.hlp"), NULL, 0, 0);
 	screen_load();
 }
 

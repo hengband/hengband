@@ -1734,7 +1734,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 		/* Hack -- Help */
 	case '?':
-		do_cmd_help();
+		do_cmd_help(creature_ptr);
 		break;
 
 		/* Cure all maladies */

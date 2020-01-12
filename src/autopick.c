@@ -4847,7 +4847,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 
 	case EC_HELP:
 		/* Peruse the main help file */
-		(void)show_file(TRUE, _("jeditor.txt", "editor.txt"), NULL, 0, 0);
+		(void)show_file(player_ptr, TRUE, _("jeditor.txt", "editor.txt"), NULL, 0, 0);
 		/* Redraw all */
 		tb->dirty_flags |= DIRTY_SCREEN;
 
