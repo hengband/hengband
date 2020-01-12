@@ -1281,7 +1281,7 @@ void change_floor(player_type *creature_ptr)
 				}
 			}
 
-			(void)place_quest_monsters(creature_ptr->current_floor_ptr, creature_ptr);
+			(void)place_quest_monsters(creature_ptr);
 
 			/* Place some random monsters */
 			alloc_times = absence_ticks / alloc_chance;

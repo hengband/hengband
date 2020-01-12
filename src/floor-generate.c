@@ -336,7 +336,7 @@ static void alloc_object(player_type *owner_ptr, int set, EFFECT_ID typ, int num
 			if (!is_floor_grid(g_ptr) || g_ptr->o_idx || g_ptr->m_idx) continue;
 
 			/* Avoid player location */
-			if (player_bold(p_ptr, y, x)) continue;
+			if (player_bold(owner_ptr, y, x)) continue;
 
 			/* Check for "room" */
 			room = (floor_ptr->grid_array[y][x].info & CAVE_ROOM) ? TRUE : FALSE;
@@ -395,15 +395,15 @@ static void alloc_object(player_type *owner_ptr, int set, EFFECT_ID typ, int num
 
 /*!
  * @brief クエストに関わるモンスターの配置を行う / Place quest monsters
- * @param floor_ptr 配置するフロアの参照ポインタ
- * @param subject_ptr 近隣への即出現を避けるためのプレイヤークリーチャー参照ポインタ
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return 成功したならばTRUEを返す
  */
-bool place_quest_monsters(floor_type *floor_ptr, player_type *creature_ptr)
+bool place_quest_monsters(player_type *creature_ptr)
 {
 	int i;
 
 	/* Handle the quest monster placements */
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	for (i = 0; i < max_q_idx; i++)
 	{
 		monster_race *r_ptr;
@@ -921,9 +921,9 @@ static bool cave_gen(player_type *player_ptr)
 	}
 
 	/* Determine the character location */
-	if (!new_player_spot(p_ptr)) return FALSE;
+	if (!new_player_spot(player_ptr)) return FALSE;
 
-	if (!place_quest_monsters(floor_ptr, p_ptr)) return FALSE;
+	if (!place_quest_monsters(player_ptr)) return FALSE;
 
 	/* Basic "amount" */
 	k = (floor_ptr->dun_level / 3);
@@ -963,7 +963,7 @@ static bool cave_gen(player_type *player_ptr)
 	if (!(dungeon_ptr->flags1 & DF1_NO_CAVE)) alloc_object(player_ptr, ALLOC_SET_CORR, ALLOC_TYP_RUBBLE, randint1(k));
 
 	/* Mega Hack -- No object at first level of deeper dungeon */
-	if (p_ptr->enter_dungeon && floor_ptr->dun_level > 1)
+	if (player_ptr->enter_dungeon && floor_ptr->dun_level > 1)
 	{
 		/* No stair scum! */
 		floor_ptr->object_level = 1;
@@ -1173,7 +1173,7 @@ static void build_battle(floor_type *floor_ptr, POSITION *y, POSITION *x)
  * @brief モンスター闘技場への導入処理 / Town logic flow for generation of arena -KMW-
  * @return なし
  */
-static void generate_gambling_arena(floor_type *floor_ptr, player_type *creature_ptr)
+static void generate_gambling_arena(player_type *creature_ptr)
 {
 	POSITION y, x;
 	MONSTER_IDX i;
@@ -1181,6 +1181,7 @@ static void generate_gambling_arena(floor_type *floor_ptr, player_type *creature
 	POSITION qx = 0;
 
 	/* Start with solid walls */
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	for (y = 0; y < MAX_HGT; y++)
 	{
 		for (x = 0; x < MAX_WID; x++)
@@ -1219,7 +1220,7 @@ static void generate_gambling_arena(floor_type *floor_ptr, player_type *creature
 		if (!monster_is_valid(m_ptr)) continue;
 
 		m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
-		update_monster(p_ptr, i, FALSE);
+		update_monster(creature_ptr, i, FALSE);
 	}
 }
 
@@ -1248,7 +1249,7 @@ static void generate_fixed_floor(player_type *player_ptr)
 	floor_ptr->object_level = floor_ptr->base_level;
 	floor_ptr->monster_level = floor_ptr->base_level;
 
-	if (record_stair) exe_write_diary(p_ptr, NIKKI_TO_QUEST, floor_ptr->inside_quest, NULL);
+	if (record_stair) exe_write_diary(player_ptr, NIKKI_TO_QUEST, floor_ptr->inside_quest, NULL);
 	get_mon_num_prep(get_monster_hook(), NULL);
 
 	init_flags = INIT_CREATE_DUNGEON;
@@ -1450,7 +1451,7 @@ void generate_floor(player_type *player_ptr)
 
 		else if (player_ptr->phase_out)
 		{
-			generate_gambling_arena(floor_ptr, player_ptr);
+			generate_gambling_arena(player_ptr);
 		}
 
 		else if (floor_ptr->inside_quest)
