@@ -835,13 +835,14 @@ static void print_exp(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーの所持金を表示する / Prints current gold
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void print_gold(void)
+static void print_gold(player_type *creature_ptr)
 {
 	char tmp[32];
 	put_str(_("＄ ", "AU "), ROW_GOLD, COL_GOLD);
-	sprintf(tmp, "%9ld", (long)p_ptr->au);
+	sprintf(tmp, "%9ld", (long)creature_ptr->au);
 	c_put_str(TERM_L_GREEN, tmp, ROW_GOLD, COL_GOLD + 3);
 }
 
@@ -1509,13 +1510,14 @@ static void health_redraw(player_type *creature_ptr, bool riding)
 
 /*!
  * @brief プレイヤーのステータスを一括表示する（左側部分） / Display basic info (mostly left of map)
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void print_frame_basic(void)
+static void print_frame_basic(player_type *creature_ptr)
 {
 	int i;
-	if (p_ptr->mimic_form)
-		print_field(mimic_info[p_ptr->mimic_form].title, ROW_RACE, COL_RACE);
+	if (creature_ptr->mimic_form)
+		print_field(mimic_info[creature_ptr->mimic_form].title, ROW_RACE, COL_RACE);
 	else
 	{
 		char str[14];
@@ -1523,17 +1525,17 @@ static void print_frame_basic(void)
 		print_field(str, ROW_RACE, COL_RACE);
 	}
 
-	print_title(p_ptr);
-	print_level(p_ptr);
-	print_exp(p_ptr);
-	for (i = 0; i < A_MAX; i++) print_stat(p_ptr, i);
-	print_ac(p_ptr);
-	print_hp(p_ptr);
-	print_sp(p_ptr);
-	print_gold();
+	print_title(creature_ptr);
+	print_level(creature_ptr);
+	print_exp(creature_ptr);
+	for (i = 0; i < A_MAX; i++) print_stat(creature_ptr, i);
+	print_ac(creature_ptr);
+	print_hp(creature_ptr);
+	print_sp(creature_ptr);
+	print_gold(creature_ptr);
 	print_depth();
-	health_redraw(p_ptr, FALSE);
-	health_redraw(p_ptr, TRUE);
+	health_redraw(creature_ptr, FALSE);
+	health_redraw(creature_ptr, TRUE);
 }
 
 
@@ -2109,7 +2111,7 @@ void redraw_stuff(player_type *creature_ptr)
 		creature_ptr->redraw &= ~(PR_LEV | PR_EXP | PR_GOLD);
 		creature_ptr->redraw &= ~(PR_ARMOR | PR_HP | PR_MANA);
 		creature_ptr->redraw &= ~(PR_DEPTH | PR_HEALTH | PR_UHEALTH);
-		print_frame_basic();
+		print_frame_basic(creature_ptr);
 		print_time();
 		print_dungeon(creature_ptr);
 	}
@@ -2182,7 +2184,7 @@ void redraw_stuff(player_type *creature_ptr)
 	if (creature_ptr->redraw & (PR_GOLD))
 	{
 		creature_ptr->redraw &= ~(PR_GOLD);
-		print_gold();
+		print_gold(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_DEPTH))
