@@ -4266,12 +4266,13 @@ static void dump_aux_pet(player_type *master_ptr, FILE *fff)
 
 /*!
  * @brief プレイヤーの職業能力情報をファイルにダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return なし
  */
-static void dump_aux_class_special(FILE *fff)
+static void dump_aux_class_special(player_type *creature_ptr, FILE *fff)
 {
-	if (p_ptr->pclass == CLASS_BLUE_MAGE)
+	if (creature_ptr->pclass == CLASS_BLUE_MAGE)
 	{
 		int i = 0;
 		int j = 0;
@@ -4334,7 +4335,7 @@ static void dump_aux_class_special(FILE *fff)
 
 			for (i = 0; i < num; i++)
 			{
-				if (p_ptr->magic_num2[spellnum[i]])
+				if (creature_ptr->magic_num2[spellnum[i]])
 				{
 					pcol = TRUE;
 					/* Dump blue magic */
@@ -4375,7 +4376,7 @@ static void dump_aux_class_special(FILE *fff)
 			fputs(p[i], fff);
 		}
 	}
-	else if (p_ptr->pclass == CLASS_MAGIC_EATER)
+	else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
 	{
 		char s[EATER_EXT][MAX_NLEN];
 		OBJECT_TYPE_VALUE tval = 0;
@@ -4412,7 +4413,7 @@ static void dump_aux_class_special(FILE *fff)
 			{
 				int idx = EATER_EXT * ext + i;
 
-				magic_num = p_ptr->magic_num2[idx];
+				magic_num = creature_ptr->magic_num2[idx];
 				if (!magic_num) continue;
 
 				k_idx = lookup_kind(tval, i);
@@ -4439,7 +4440,7 @@ static void dump_aux_class_special(FILE *fff)
 			}
 		}
 	}
-	else if (p_ptr->pclass == CLASS_SMITH)
+	else if (creature_ptr->pclass == CLASS_SMITH)
 	{
 		int i, id[250], n = 0, row;
 
@@ -4458,9 +4459,9 @@ static void dump_aux_class_special(FILE *fff)
 		for (i = 0; i < row; i++)
 		{
 			fprintf(fff, "\n");
-			fprintf(fff, "%-11s %5d     ", essence_name[id[i]], (int)p_ptr->magic_num1[id[i]]);
-			if(i + row < n) fprintf(fff, "%-11s %5d     ", essence_name[id[i + row]], (int)p_ptr->magic_num1[id[i + row]]);
-			if(i + row * 2 < n) fprintf(fff, "%-11s %5d", essence_name[id[i + row * 2]], (int)p_ptr->magic_num1[id[i + row * 2]]);
+			fprintf(fff, "%-11s %5d     ", essence_name[id[i]], (int)creature_ptr->magic_num1[id[i]]);
+			if(i + row < n) fprintf(fff, "%-11s %5d     ", essence_name[id[i + row]], (int)creature_ptr->magic_num1[id[i + row]]);
+			if(i + row * 2 < n) fprintf(fff, "%-11s %5d", essence_name[id[i + row * 2]], (int)creature_ptr->magic_num1[id[i + row * 2]]);
 		}
 
 		fputs("\n", fff);
@@ -4998,19 +4999,19 @@ errr make_character_dump(player_type *creature_ptr, FILE *fff)
 
 	update_playtime();
 
-	dump_aux_display_player(p_ptr, fff);
+	dump_aux_display_player(creature_ptr, fff);
 	dump_aux_last_message(fff);
 	dump_aux_options(fff);
 	dump_aux_recall(fff);
 	dump_aux_quest(creature_ptr, fff);
-	dump_aux_arena(p_ptr, fff);
+	dump_aux_arena(creature_ptr, fff);
 	dump_aux_monsters(fff);
 	dump_aux_virtues(fff);
-	dump_aux_race_history(p_ptr, fff);
+	dump_aux_race_history(creature_ptr, fff);
 	dump_aux_realm_history(fff);
-	dump_aux_class_special(fff);
+	dump_aux_class_special(creature_ptr, fff);
 	dump_aux_mutations(fff);
-	dump_aux_pet(p_ptr, fff);
+	dump_aux_pet(creature_ptr, fff);
 	fputs("\n\n", fff);
 	dump_aux_equipment_inventory(fff);
 	dump_aux_home_museum(fff);
