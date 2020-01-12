@@ -2844,7 +2844,7 @@ static void tim_player_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_S
  * @param mode オプション
  * @return なし
  */
-void display_player_equippy(TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
+void display_player_equippy(player_type *creature_ptr, TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 {
 	int i, max_i;
 
@@ -2861,7 +2861,7 @@ void display_player_equippy(TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 	for (i = INVEN_RARM; i < max_i; i++)
 	{
 		/* Object */
-		o_ptr = &p_ptr->inventory_list[i];
+		o_ptr = &creature_ptr->inventory_list[i];
 
 		a = object_attr(o_ptr);
 		c = object_char(o_ptr);
@@ -3173,7 +3173,7 @@ static void display_player_flag_info(player_type *creature_ptr)
 	row = 12;
 	col = 1;
 
-	display_player_equippy(row-2, col+8, 0);
+	display_player_equippy(creature_ptr, row-2, col+8, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+8);
 
 #ifdef JP
@@ -3214,7 +3214,7 @@ static void display_player_flag_info(player_type *creature_ptr)
 	row = 12;
 	col = 26;
 
-	display_player_equippy(row-2, col+8, 0);
+	display_player_equippy(creature_ptr, row-2, col+8, 0);
 
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+8);
 
@@ -3248,7 +3248,7 @@ static void display_player_flag_info(player_type *creature_ptr)
 	row = 12;
 	col = 51;
 
-	display_player_equippy(row-2, col+12, 0);
+	display_player_equippy(creature_ptr, row-2, col+12, 0);
 
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+12);
 
@@ -3304,7 +3304,7 @@ static void display_player_other_flag_info(player_type *creature_ptr)
 	row = 3;
 	col = 1;
 
-	display_player_equippy(row-2, col+12, DP_WP);
+	display_player_equippy(creature_ptr, row-2, col+12, DP_WP);
 
 	c_put_str(TERM_WHITE, "ab@", row-1, col+12);
 
@@ -3374,7 +3374,7 @@ static void display_player_other_flag_info(player_type *creature_ptr)
 	row = 3;
 	col = col + 12 + 7;
 
-	display_player_equippy(row-2, col+13, 0);
+	display_player_equippy(creature_ptr, row-2, col+13, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+13);
 
 #ifdef JP
@@ -3425,7 +3425,7 @@ static void display_player_other_flag_info(player_type *creature_ptr)
 	row = 3;
 	col = col + 12 + 17;
 
-	display_player_equippy(row-2, col+14, 0);
+	display_player_equippy(creature_ptr, row-2, col+14, 0);
 
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row-1, col+14);
 

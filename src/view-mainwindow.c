@@ -49,7 +49,6 @@
   */
 #define IS_ASCII_GRAPHICS(A) (!((A) & 0x80))
 
-
 static int feat_priority; /*!< マップ縮小表示時に表示すべき地形の優先度を保管する */
 static byte display_autopick; /*!< 自動拾い状態の設定フラグ */
 static int match_autopick;
@@ -144,7 +143,7 @@ POSITION panel_col_prt, panel_row_prt;
 #define COL_STATBAR              0
 #define MAX_COL_STATBAR         (-26)
 
-
+void print_equippy(player_type *creature_ptr);
 
 /*!
  * @brief 画面左の能力値表示を行うために指定位置から13キャラ分を空白消去後指定のメッセージを明るい青で描画する /
@@ -2114,7 +2113,7 @@ void redraw_stuff(player_type *creature_ptr)
 	if (creature_ptr->redraw & (PR_EQUIPPY))
 	{
 		creature_ptr->redraw &= ~(PR_EQUIPPY);
-		print_equippy(); /* To draw / delete equippy chars */
+		print_equippy(creature_ptr); /* To draw / delete equippy chars */
 	}
 
 	if (creature_ptr->redraw & (PR_MISC))
@@ -2460,11 +2459,12 @@ bool change_panel(POSITION dy, POSITION dx)
 
 /*!
  * @brief プレイヤーの装備一覧シンボルを固定位置に表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void print_equippy(void)
+void print_equippy(player_type *creature_ptr)
 {
-	display_player_equippy(ROW_EQUIPPY, COL_EQUIPPY, 0);
+	display_player_equippy(creature_ptr, ROW_EQUIPPY, COL_EQUIPPY, 0);
 }
 
 /*!
