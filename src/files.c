@@ -6067,11 +6067,11 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
  * @return なし
  * @details
  */
-void do_cmd_save_and_exit(void)
+void do_cmd_save_and_exit(player_type *creature_ptr)
 {
-	p_ptr->playing = FALSE;
-	p_ptr->leaving = TRUE;
-	exe_write_diary(p_ptr, NIKKI_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
+	creature_ptr->playing = FALSE;
+	creature_ptr->leaving = TRUE;
+	exe_write_diary(creature_ptr, NIKKI_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
 }
 
 

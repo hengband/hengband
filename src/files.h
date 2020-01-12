@@ -43,7 +43,7 @@ extern void do_cmd_help(player_type *creature_ptr);
 extern void process_player_name(player_type *creature_ptr, bool sf);
 extern void get_name(player_type *creature_ptr);
 extern void do_cmd_save_game(player_type *creature_ptr, int is_autosave);
-extern void do_cmd_save_and_exit(void);
+extern void do_cmd_save_and_exit(player_type *player_ptr);
 extern void exit_game_panic(player_type *creature_ptr);
 extern void signals_ignore_tstp(void);
 extern void signals_handle_tstp(void);

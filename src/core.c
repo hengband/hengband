@@ -137,7 +137,7 @@ int init_flags;
 static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, bool heavy)
 {
 	byte feel;
-	object_type *o_ptr = &p_ptr->inventory_list[slot];
+	object_type *o_ptr = &creature_ptr->inventory_list[slot];
 	GAME_TEXT o_name[MAX_NLEN];
 
 	/* We know about it already, do not tell us again */
@@ -153,7 +153,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
 	if (!feel) return;
 
 	/* Bad luck */
-	if ((p_ptr->muta3 & MUT3_BAD_LUCK) && !randint0(13))
+	if ((creature_ptr->muta3 & MUT3_BAD_LUCK) && !randint0(13))
 	{
 		switch (feel)
 		{
@@ -202,7 +202,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
 	}
 
 	/* Stop everything */
-	if (disturb_minor) disturb(p_ptr, FALSE, FALSE);
+	if (disturb_minor) disturb(creature_ptr, FALSE, FALSE);
 
 	/* Get an object description */
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -242,11 +242,9 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
 
 	/* Auto-inscription/destroy */
 	autopick_alter_item(creature_ptr, slot, destroy_feeling);
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-
-	p_ptr->window |= (PW_INVEN | PW_EQUIP);
+	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
+	creature_ptr->window |= (PW_INVEN | PW_EQUIP);
 }
-
 
 
 /*!
@@ -4217,7 +4215,7 @@ static void process_command(player_type *creature_ptr)
 		case KTRL('X'):
 		case SPECIAL_KEY_QUIT:
 		{
-			do_cmd_save_and_exit();
+			do_cmd_save_and_exit(creature_ptr);
 			break;
 		}
 
