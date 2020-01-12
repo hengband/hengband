@@ -1165,7 +1165,7 @@ void do_cmd_locate(player_type *creature_ptr)
 		if (!dir) break;
 
 		/* Apply the motion */
-		if (change_panel(ddy[dir], ddx[dir]))
+		if (change_panel(creature_ptr, ddy[dir], ddx[dir]))
 		{
 			y2 = panel_row_min;
 			x2 = panel_col_min;

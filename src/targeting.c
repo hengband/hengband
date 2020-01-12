@@ -60,6 +60,7 @@ void panel_bounds_center(void)
 
 /*!
  * @brief フォーカスを当てるべきマップ描画の基準座標を指定する
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param y 変更先のフロアY座標
  * @param x 変更先のフロアX座標
  * @details
@@ -68,7 +69,7 @@ void panel_bounds_center(void)
  * Also used in do_cmd_locate
  * @return 実際に再描画が必要だった場合TRUEを返す
  */
-static bool change_panel_xy(POSITION y, POSITION x)
+static bool change_panel_xy(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	POSITION dy = 0, dx = 0;
 	TERM_LEN wid, hgt;
@@ -82,7 +83,7 @@ static bool change_panel_xy(POSITION y, POSITION x)
 
 	if (!dy && !dx) return FALSE;
 
-	return change_panel(dy, dx);
+	return change_panel(creature_ptr, dy, dx);
 }
 
 
@@ -1095,7 +1096,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 			x = tmp_pos.x[m];
 
 			/* Set forcus */
-			change_panel_xy(y, x);
+			change_panel_xy(creature_ptr, y, x);
 
 			if (!(mode & TARGET_LOOK)) print_path(floor_ptr, y, x);
 
@@ -1250,7 +1251,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 				while (flag && (i < 0))
 				{
 					/* Note the change */
-					if (change_panel(ddy[d], ddx[d]))
+					if (change_panel(creature_ptr, ddy[d], ddx[d]))
 					{
 						int v = tmp_pos.y[m];
 						int u = tmp_pos.x[m];
@@ -1312,7 +1313,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 						if ((y >= panel_row_min+hgt) || (y < panel_row_min) ||
 						    (x >= panel_col_min+wid) || (x < panel_col_min))
 						{
-							if (change_panel(dy, dx)) target_set_prepare(mode);
+							if (change_panel(creature_ptr, dy, dx)) target_set_prepare(mode);
 						}
 
 						/* Slide into legality */
@@ -1486,7 +1487,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 				if ((y >= panel_row_min + hgt) || (y < panel_row_min) ||
 					 (x >= panel_col_min + wid) || (x < panel_col_min))
 				{
-					if (change_panel(dy, dx)) target_set_prepare(mode);
+					if (change_panel(creature_ptr, dy, dx)) target_set_prepare(mode);
 				}
 
 				/* Slide into legality */
@@ -2086,7 +2087,7 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
 
 					dy = 2 * (y - cy) / hgt;
 					dx = 2 * (x - cx) / wid;
-					if (dy || dx) change_panel(dy, dx);
+					if (dy || dx) change_panel(creature_ptr, dy, dx);
 				}
 			}
 			break;
@@ -2135,8 +2136,7 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
 				if ((y >= panel_row_min + hgt) || (y < panel_row_min) ||
 					 (x >= panel_col_min + wid) || (x < panel_col_min))
 				{
-					/* if (change_panel(dy, dx)) target_set_prepare(mode); */
-					change_panel(dy, dx);
+					change_panel(creature_ptr, dy, dx);
 				}
 
 				/* Slide into legality */

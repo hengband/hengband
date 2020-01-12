@@ -2360,6 +2360,7 @@ void window_stuff(player_type *player_ptr)
 
 
 /*!
+ * todo ここにplayer_type を追加するとz-termに影響が行くので保留
  * @brief コンソールのリサイズに合わせてマップを再描画する /
  * Map resizing whenever the main term changes size
  * @return なし
@@ -2397,7 +2398,9 @@ void resize_map(void)
 	Term_fresh();
 }
 
+
 /*!
+ * todo ここにplayer_type を追加するとz-termに影響が行くので保留
  * @brief コンソールを再描画する /
  * Redraw a term when it is resized
  * @return なし
@@ -2417,6 +2420,7 @@ void redraw_window(void)
 
 /*!
  * @brief フォーカスを当てるべきマップ描画の基準座標を指定する（サブルーチン）
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param dy 変更先のフロアY座標
  * @param dx 変更先のフロアX座標
  * Handle a request to change the current panel
@@ -2424,7 +2428,7 @@ void redraw_window(void)
  * Also used in do_cmd_locate
  * @return 実際に再描画が必要だった場合TRUEを返す
  */
-bool change_panel(POSITION dy, POSITION dx)
+bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx)
 {
 	POSITION y, x;
 	TERM_LEN wid, hgt;
@@ -2436,11 +2440,12 @@ bool change_panel(POSITION dy, POSITION dx)
 	x = panel_col_min + dx * wid / 2;
 
 	/* Verify the row */
-	if (y > p_ptr->current_floor_ptr->height - hgt) y = p_ptr->current_floor_ptr->height - hgt;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	if (y > floor_ptr->height - hgt) y = floor_ptr->height - hgt;
 	if (y < 0) y = 0;
 
 	/* Verify the col */
-	if (x > p_ptr->current_floor_ptr->width - wid) x = p_ptr->current_floor_ptr->width - wid;
+	if (x > floor_ptr->width - wid) x = floor_ptr->width - wid;
 	if (x < 0) x = 0;
 
 	/* Handle "changes" */
@@ -2452,9 +2457,9 @@ bool change_panel(POSITION dy, POSITION dx)
 
 		panel_bounds_center();
 
-		p_ptr->update |= (PU_MONSTERS);
-		p_ptr->redraw |= (PR_MAP);
-		handle_stuff(p_ptr);
+		player_ptr->update |= (PU_MONSTERS);
+		player_ptr->redraw |= (PR_MAP);
+		handle_stuff(player_ptr);
 
 		/* Success */
 		return TRUE;

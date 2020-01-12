@@ -19,7 +19,7 @@ extern void monster_race_track(MONRACE_IDX r_idx);
 extern void object_kind_track(KIND_OBJECT_IDX k_idx);
 extern void resize_map(void);
 extern void redraw_window(void);
-extern bool change_panel(POSITION dy, POSITION dx);
+extern bool change_panel(player_type *player_ptr, POSITION dy, POSITION dx);
 
 extern void window_stuff(player_type *player_ptr);
 extern void update_playtime(void);
