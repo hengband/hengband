@@ -3234,7 +3234,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 		set_term_color(p_ptr, y, x, ap, cp);
 		return;
 	}
-	
+
 	if (r_ptr->flags1 & RF1_SHAPECHANGER)
 	{
 		if (use_graphics)
@@ -3618,7 +3618,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
 		C_KILL(mp[y], (wid + 2), byte);
 		C_KILL(match_autopick_yx[y], (wid + 2), int);
 		C_KILL(object_autopick_yx[y], (wid + 2), object_type *);
-}
+	}
 
 	/* Free each line map */
 	C_KILL(ma, (hgt + 2), TERM_COLOR *);
