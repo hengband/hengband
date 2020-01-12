@@ -573,7 +573,7 @@ static void prt_status(player_type *creature_ptr)
 	if (creature_ptr->shero) ADD_FLG(BAR_BERSERK);
 
 	/* Blessed */
-	if (IS_BLESSED()) ADD_FLG(BAR_BLESSED);
+	if (is_blessed(creature_ptr)) ADD_FLG(BAR_BLESSED);
 
 	/* Shield */
 	if (creature_ptr->magicdef) ADD_FLG(BAR_MAGICDEFENSE);

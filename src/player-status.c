@@ -1405,7 +1405,7 @@ void calc_bonuses(player_type *creature_ptr)
 	bool old_mighty_throw = creature_ptr->mighty_throw;
 
 	/* Current feature under player. */
-	floor_type *floor_ptr = floor_ptr;
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	feature_type *f_ptr = &f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
 
 	/* Save the old armor class */
@@ -2848,7 +2848,7 @@ void calc_bonuses(player_type *creature_ptr)
 	}
 
 	/* Temporary blessing */
-	if (IS_BLESSED())
+	if (is_blessed(creature_ptr))
 	{
 		creature_ptr->to_a += 5;
 		creature_ptr->dis_to_a += 5;
@@ -4987,7 +4987,7 @@ void update_creature(player_type *creature_ptr)
 {
 	if (!creature_ptr->update) return;
 
-	floor_type *floor_ptr = floor_ptr;
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	if (creature_ptr->update & (PU_AUTODESTROY))
 	{
 		creature_ptr->update &= ~(PU_AUTODESTROY);
@@ -5174,7 +5174,7 @@ void wreck_the_pattern(player_type *creature_ptr)
 {
 	int to_ruin = 0;
 	POSITION r_y, r_x;
-	floor_type *floor_ptr = floor_ptr;
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	int pattern_type = f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat].subtype;
 
 	if (pattern_type == PATTERN_TILE_WRECKED)
@@ -5919,4 +5919,14 @@ void cheat_death(player_type *creature_ptr)
 	/* Prepare next floor */
 	leave_floor(creature_ptr);
 	wipe_m_list();
+}
+
+
+/*!
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return 祝福状態ならばTRUE
+ */
+bool is_blessed(player_type *creature_ptr)
+{
+	return creature_ptr->blessed || music_singing(creature_ptr, MUSIC_BLESS) || hex_spelling(HEX_BLESS);
 }

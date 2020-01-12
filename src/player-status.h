@@ -32,6 +32,8 @@
 #define MAGIC_GAIN_EXP          0x0004
 
 /*
+ * todo ここからp_ptrを消すと、object-hookにある大量の関数ポインタを全部修正する必要がある
+ * 影響範囲が広すぎるので保留
  * Magic-books for the realms
  */
 #define REALM1_BOOK     (p_ptr->realm1 + TV_LIFE_BOOK - 1)
@@ -800,7 +802,6 @@ extern const s32b player_exp_a[PY_MAX_LEVEL];
 #define IS_FAST(C) (C->fast || music_singing(C, MUSIC_SPEED) || music_singing(C, MUSIC_SHERO))
 #define IS_INVULN(C) (C->invuln || music_singing(C, MUSIC_INVULN))
 #define IS_HERO(C) (C->hero || music_singing(C, MUSIC_HERO) || music_singing(C, MUSIC_SHERO))
-#define IS_BLESSED() (p_ptr->blessed || music_singing(p_ptr, MUSIC_BLESS) || hex_spelling(HEX_BLESS))
 #define IS_OPPOSE_ACID() (p_ptr->oppose_acid || music_singing(p_ptr, MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
 #define IS_OPPOSE_ELEC() (p_ptr->oppose_elec || music_singing(p_ptr, MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
 #define IS_OPPOSE_FIRE() (p_ptr->oppose_fire || music_singing(p_ptr, MUSIC_RESIST) || (p_ptr->special_defense & KATA_MUSOU))
@@ -810,6 +811,8 @@ extern const s32b player_exp_a[PY_MAX_LEVEL];
 #define IS_TIM_STEALTH() (p_ptr->tim_stealth || music_singing(p_ptr, MUSIC_STEALTH))
 
 #define P_PTR_KI (p_ptr->magic_num1[0])
+
+extern bool is_blessed(player_type *player_ptr);
 
 /*
  * Player "food" crucial values

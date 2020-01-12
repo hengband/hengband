@@ -1070,13 +1070,12 @@ bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->blessed > v) return FALSE;
 		}
-		else if (!IS_BLESSED())
+		else if (!is_blessed(creature_ptr))
 		{
 			msg_print(_("高潔な気分になった！", "You feel righteous!"));
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->blessed && !music_singing(creature_ptr, MUSIC_BLESS))

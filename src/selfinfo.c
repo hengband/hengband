@@ -1020,7 +1020,7 @@ void self_knowledge(player_type *creature_ptr)
 	{
 		info[i++] = _("あなたは魔力を吸われている。", "You brain is drained.");
 	}
-	if (IS_BLESSED())
+	if (is_blessed(creature_ptr))
 	{
 		info[i++] = _("あなたは高潔さを感じている。", "You feel rightous.");
 	}
