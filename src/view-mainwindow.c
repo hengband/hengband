@@ -1175,12 +1175,13 @@ static void print_state(player_type *player_ptr)
 
 /*!
  * @brief プレイヤーの行動速度を表示する / Prints the speed of a character.			-CJS-
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void print_speed(void)
+static void print_speed(player_type *player_ptr)
 {
-	int i = p_ptr->pspeed;
-	bool is_fast = IS_FAST(p_ptr);
+	int i = player_ptr->pspeed;
+	bool is_fast = IS_FAST(player_ptr);
 
 	TERM_COLOR attr = TERM_WHITE;
 	char buf[32] = "";
@@ -1191,40 +1192,41 @@ static void print_speed(void)
 	row_speed = hgt + ROW_SPEED;
 
 	/* Hack -- Visually "undo" the Search Mode Slowdown */
-	if (p_ptr->action == ACTION_SEARCH && !p_ptr->lightspeed) i += 10;
+	if (player_ptr->action == ACTION_SEARCH && !player_ptr->lightspeed) i += 10;
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	/* Fast */
 	if (i > 110)
 	{
-		if (p_ptr->riding)
+		if (player_ptr->riding)
 		{
-			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->riding];
+			monster_type *m_ptr = &floor_ptr->m_list[player_ptr->riding];
 			if (MON_FAST(m_ptr) && !MON_SLOW(m_ptr)) attr = TERM_L_BLUE;
 			else if (MON_SLOW(m_ptr) && !MON_FAST(m_ptr)) attr = TERM_VIOLET;
 			else attr = TERM_GREEN;
 		}
-		else if ((is_fast && !p_ptr->slow) || p_ptr->lightspeed) attr = TERM_YELLOW;
-		else if (p_ptr->slow && !is_fast) attr = TERM_VIOLET;
+		else if ((is_fast && !player_ptr->slow) || player_ptr->lightspeed) attr = TERM_YELLOW;
+		else if (player_ptr->slow && !is_fast) attr = TERM_VIOLET;
 		else attr = TERM_L_GREEN;
-		sprintf(buf, "%s(+%d)", (p_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), (i - 110));
+		sprintf(buf, "%s(+%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("加速", "Fast")), (i - 110));
 	}
 
 	/* Slow */
 	else if (i < 110)
 	{
-		if (p_ptr->riding)
+		if (player_ptr->riding)
 		{
-			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->riding];
+			monster_type *m_ptr = &floor_ptr->m_list[player_ptr->riding];
 			if (MON_FAST(m_ptr) && !MON_SLOW(m_ptr)) attr = TERM_L_BLUE;
 			else if (MON_SLOW(m_ptr) && !MON_FAST(m_ptr)) attr = TERM_VIOLET;
 			else attr = TERM_RED;
 		}
-		else if (is_fast && !p_ptr->slow) attr = TERM_YELLOW;
-		else if (p_ptr->slow && !is_fast) attr = TERM_VIOLET;
+		else if (is_fast && !player_ptr->slow) attr = TERM_YELLOW;
+		else if (player_ptr->slow && !is_fast) attr = TERM_VIOLET;
 		else attr = TERM_L_UMBER;
-		sprintf(buf, "%s(-%d)", (p_ptr->riding ? _("乗馬", "Ride") : _("減速", "Slow")), (110 - i));
+		sprintf(buf, "%s(-%d)", (player_ptr->riding ? _("乗馬", "Ride") : _("減速", "Slow")), (110 - i));
 	}
-	else if (p_ptr->riding)
+	else if (player_ptr->riding)
 	{
 		attr = TERM_GREEN;
 		strcpy(buf, _("乗馬中", "Riding"));
@@ -1554,7 +1556,7 @@ static void print_frame_extra(player_type *player_ptr)
 	print_stun(player_ptr);
 	print_hunger(player_ptr);
 	print_state(player_ptr);
-	print_speed();
+	print_speed(player_ptr);
 	print_study();
 	print_imitation();
 	print_status(player_ptr);
@@ -2246,7 +2248,7 @@ void redraw_stuff(player_type *creature_ptr)
 	if (creature_ptr->redraw & (PR_SPEED))
 	{
 		creature_ptr->redraw &= ~(PR_SPEED);
-		print_speed();
+		print_speed(creature_ptr);
 	}
 
 	if (creature_ptr->pclass == CLASS_IMITATOR)
