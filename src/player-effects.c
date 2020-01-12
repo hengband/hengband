@@ -1396,13 +1396,12 @@ bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->tim_esp > v) return FALSE;
 		}
-		else if (!IS_TIM_ESP())
+		else if (!is_time_limit_esp(creature_ptr))
 		{
 			msg_print(_("意識が広がった気がする！", "You feel your consciousness expand!"));
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tim_esp && !music_singing(creature_ptr, MUSIC_MIND))
@@ -4221,4 +4220,3 @@ bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT immune_turn)
 	screen_load();
 	return TRUE;
 }
-

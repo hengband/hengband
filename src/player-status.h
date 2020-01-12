@@ -802,17 +802,17 @@ extern const s32b player_exp_a[PY_MAX_LEVEL];
 #define IS_FAST(C) (C->fast || music_singing(C, MUSIC_SPEED) || music_singing(C, MUSIC_SHERO))
 #define IS_INVULN(C) (C->invuln || music_singing(C, MUSIC_INVULN))
 #define IS_HERO(C) (C->hero || music_singing(C, MUSIC_HERO) || music_singing(C, MUSIC_SHERO))
-#define IS_TIM_ESP() (p_ptr->tim_esp || music_singing(p_ptr, MUSIC_MIND) || (p_ptr->concent >= CONCENT_TELE_THRESHOLD))
 #define IS_TIM_STEALTH() (p_ptr->tim_stealth || music_singing(p_ptr, MUSIC_STEALTH))
 
 #define P_PTR_KI (p_ptr->magic_num1[0])
 
-extern bool is_blessed(player_type *player_ptr);
-extern bool is_oppose_acid(player_type *player_ptr);
-extern bool is_oppose_elec(player_type *player_ptr);
-extern bool is_oppose_fire(player_type *player_ptr);
-extern bool is_oppose_cold(player_type *player_ptr);
-extern bool is_oppose_pois(player_type *player_ptr);
+extern bool is_blessed(player_type *creature_ptr);
+extern bool is_oppose_acid(player_type *creature_ptr);
+extern bool is_oppose_elec(player_type *creature_ptr);
+extern bool is_oppose_fire(player_type *creature_ptr);
+extern bool is_oppose_cold(player_type *creature_ptr);
+extern bool is_oppose_pois(player_type *creature_ptr);
+extern bool is_time_limit_esp(player_type *creature_ptr);
 
 /*
  * Player "food" crucial values

@@ -2921,7 +2921,7 @@ void calc_bonuses(player_type *creature_ptr)
 	}
 
 	/* Temporary "telepathy" */
-	if (IS_TIM_ESP())
+	if (is_time_limit_esp(creature_ptr))
 	{
 		creature_ptr->telepathy = TRUE;
 	}
@@ -5964,4 +5964,9 @@ bool is_tim_esp(player_type *creature_ptr)
 bool is_tim_stealth(player_type *creature_ptr)
 {
 	return creature_ptr->tim_stealth || music_singing(creature_ptr, MUSIC_STEALTH);
+}
+
+bool is_time_limit_esp(player_type *creature_ptr)
+{
+	return creature_ptr->tim_esp || music_singing(creature_ptr, MUSIC_MIND) || (creature_ptr->concent >= CONCENT_TELE_THRESHOLD);
 }

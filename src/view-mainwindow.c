@@ -544,7 +544,7 @@ static void prt_status(player_type *creature_ptr)
 	if (creature_ptr->tim_invis) ADD_FLG(BAR_SENSEUNSEEN);
 
 	/* Timed esp */
-	if (IS_TIM_ESP()) ADD_FLG(BAR_TELEPATHY);
+	if (is_time_limit_esp(creature_ptr)) ADD_FLG(BAR_TELEPATHY);
 
 	/* Timed regenerate */
 	if (creature_ptr->tim_regen) ADD_FLG(BAR_REGENERATION);
