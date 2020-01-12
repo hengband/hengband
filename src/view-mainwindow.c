@@ -3889,8 +3889,8 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
  */
 void monster_race_track(player_type *player_ptr, MONRACE_IDX r_idx)
 {
-	p_ptr->monster_race_idx = r_idx;
-	p_ptr->window |= (PW_MONSTER);
+	player_ptr->monster_race_idx = r_idx;
+	player_ptr->window |= (PW_MONSTER);
 }
 
 
@@ -3899,8 +3899,8 @@ void monster_race_track(player_type *player_ptr, MONRACE_IDX r_idx)
  */
 void object_kind_track(player_type *player_ptr, KIND_OBJECT_IDX k_idx)
 {
-	p_ptr->object_kind_idx = k_idx;
-	p_ptr->window |= (PW_OBJECT);
+	player_ptr->object_kind_idx = k_idx;
+	player_ptr->window |= (PW_OBJECT);
 }
 
 
