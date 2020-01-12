@@ -357,7 +357,7 @@ void update_local_illumination(player_type * creature_ptr, POSITION y, POSITION 
 	int i;
 	POSITION yy, xx;
 
-	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
+	if (!in_bounds(creature_ptr->current_floor_ptr, y, x)) return;
 
 #ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
 

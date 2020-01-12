@@ -1117,13 +1117,13 @@ static bool wr_dungeon(player_type *player_ptr)
 	saved_floor_type *cur_sf_ptr;
 	int i;
 
-	forget_lite(p_ptr->current_floor_ptr);
-	forget_view(p_ptr->current_floor_ptr);
-	clear_mon_lite(p_ptr->current_floor_ptr);
+	forget_lite(player_ptr->current_floor_ptr);
+	forget_view(player_ptr->current_floor_ptr);
+	clear_mon_lite(player_ptr->current_floor_ptr);
 
 	/* Update lite/view */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
-	p_ptr->update |= (PU_MONSTERS | PU_DISTANCE | PU_FLOW);
+	player_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
+	player_ptr->update |= (PU_MONSTERS | PU_DISTANCE | PU_FLOW);
 
 	/*** Meta info ***/
 
@@ -1131,11 +1131,11 @@ static bool wr_dungeon(player_type *player_ptr)
 	wr_s16b(max_floor_id);
 
 	/* Current dungeon type */
-	wr_byte((byte_hack)p_ptr->dungeon_idx);
+	wr_byte((byte_hack)player_ptr->dungeon_idx);
 
 
 	/*** No saved floor (On the surface etc.) ***/
-	if (!p_ptr->floor_id)
+	if (!player_ptr->floor_id)
 	{
 		/* No array elements */
 		wr_byte(0);
@@ -1168,7 +1168,7 @@ static bool wr_dungeon(player_type *player_ptr)
 	}
 
 	/* Extract pointer to current floor */
-	cur_sf_ptr = get_sf_ptr(p_ptr->floor_id);
+	cur_sf_ptr = get_sf_ptr(player_ptr->floor_id);
 
 	/* Save current floor to temporary file */
 	if (!save_floor(cur_sf_ptr, (SLF_SECOND))) return FALSE;
@@ -1735,7 +1735,7 @@ bool load_player(player_type *player_ptr)
 	concptr    what = "generic";
 
 	current_world_ptr->game_turn = 0;
-	p_ptr->is_dead = FALSE;
+	player_ptr->is_dead = FALSE;
 
 
 	/* Allow empty savefile name */
