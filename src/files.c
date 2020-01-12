@@ -1763,6 +1763,7 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
 
 /*!
  * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * Prints the following information on the screen.
  * @return なし
  */
@@ -2069,6 +2070,7 @@ static concptr likert(int x, int y)
 /*!
  * @brief プレイヤーステータスの1ページ目各種詳細をまとめて表示するサブルーチン
  * Prints ratings on certain abilities
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * This code is "imitated" elsewhere to "dump" a character sheet.
@@ -2710,6 +2712,7 @@ static void player_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]
 /*!
  * @brief プレイヤーの一時的魔法効果による耐性を返す
  * Prints ratings on certain abilities
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flgs フラグを保管する配列
  * @return なし
  * @todo
@@ -2839,6 +2842,7 @@ static void tim_player_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_S
 /*!
  * @brief プレイヤーの装備一覧をシンボルで並べる
  * Equippy chars
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param y 表示するコンソールの行
  * @param x 表示するコンソールの列
  * @param mode オプション
@@ -2881,6 +2885,7 @@ void display_player_equippy(player_type *creature_ptr, TERM_LEN y, TERM_LEN x, B
 
 /*!
  * @brief プレイヤーの装備による免疫フラグを返す
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flgs フラグを保管する配列
  * @return なし
  * @todo
@@ -2916,6 +2921,7 @@ static void known_obj_immunity(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG
 
 /*!
  * @brief プレイヤーの種族による免疫フラグを返す
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flgs フラグを保管する配列
  * @return なし
  * @todo
@@ -2939,6 +2945,7 @@ static void player_immunity(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SI
 
 /*!
  * @brief プレイヤーの一時的魔法効果による免疫フラグを返す
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flgs フラグを保管する配列
  * @return なし
  * @todo
@@ -2964,6 +2971,7 @@ static void tim_player_immunity(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLA
 
 /*!
  * @brief プレイヤーの種族による弱点フラグを返す
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flgs フラグを保管する配列
  * @return なし
  * @todo
@@ -3150,6 +3158,7 @@ static void display_flag_aux(player_type *creature_ptr, TERM_LEN row, TERM_LEN c
 
 /*!
  * @brief プレイヤーの特性フラグ一覧表示１ /
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * Special display, part 1
  * @return なし
  */
@@ -3280,7 +3289,8 @@ static void display_player_flag_info(player_type *creature_ptr)
 
 
 /*!
- * @brief プレイヤーの特性フラグ一覧表示２ /
+ * @brief プレイヤーの特性フラグ一覧表示2 /
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * Special display, part 2
  * @return なし
  */
@@ -3473,7 +3483,8 @@ static void display_player_other_flag_info(player_type *creature_ptr)
 
 
 /*!
- * @brief プレイヤーの特性フラグ一覧表示２a /
+ * @brief プレイヤーの特性フラグ一覧表示2a /
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * Special display, part 2a
  * @return なし
  */
@@ -3531,8 +3542,9 @@ put_str("ＭＰ  :", 8, 1);
 
 
 /*!
- * @brief プレイヤーの特性フラグ一覧表示２b /
+ * @brief プレイヤーの特性フラグ一覧表示2b /
  * Special display, part 2b
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * <pre>
@@ -3823,6 +3835,7 @@ static void display_player_stat_info(player_type *creature_ptr)
 /*!
  * @brief プレイヤーのステータス表示メイン処理
  * Display the character on the screen (various modes)
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param mode 表示モードID
  * @return なし
  * @details
@@ -4081,6 +4094,7 @@ void display_player(player_type *creature_ptr, int mode)
 
 /*!
  * @brief プレイヤーのステータス表示をファイルにダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return なし
  */
@@ -4210,6 +4224,7 @@ static void dump_aux_display_player(player_type *creature_ptr, FILE *fff)
 
 /*!
  * @brief プレイヤーのペット情報をファイルにダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return なし
  */
@@ -4626,6 +4641,7 @@ static void dump_aux_options(FILE *fff)
 
 /*!
  * @brief 闘技場の情報をファイルにダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return なし
  */
@@ -4768,6 +4784,7 @@ static void dump_aux_monsters(FILE *fff)
 
 /*!
  * @brief 元種族情報をファイルにダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return なし
  */
@@ -4799,19 +4816,20 @@ static void dump_aux_race_history(player_type *creature_ptr, FILE *fff)
 
 /*!
  * @brief 元魔法領域情報をファイルにダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return なし
  */
-static void dump_aux_realm_history(FILE *fff)
+static void dump_aux_realm_history(player_type *creature_ptr, FILE *fff)
 {
-	if (p_ptr->old_realm)
+	if (creature_ptr->old_realm)
 	{
 		int i;
 
 		fputc('\n', fff);
 		for (i = 0; i < MAX_MAGIC; i++)
 		{
-			if (!(p_ptr->old_realm & 1L << i)) continue;
+			if (!(creature_ptr->old_realm & 1L << i)) continue;
 			fprintf(fff, _("\n あなたはかつて%s魔法を使えた。", "\n You were able to use %s magic before."), realm_names[i+1]);
 		}
 		fputc('\n', fff);
@@ -4821,73 +4839,76 @@ static void dump_aux_realm_history(FILE *fff)
 
 /*!
  * @brief 徳の情報をファイルにダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return なし
  */
-static void dump_aux_virtues(FILE *fff)
+static void dump_aux_virtues(player_type *creature_ptr, FILE *fff)
 {
 	int v_nr, percent;
 
 	fprintf(fff, _("\n\n  [自分に関する情報]\n\n", "\n\n  [HP-rate & Max stat & Virtues]\n\n"));
 
-	percent = (int)(((long)p_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
-		(2 * p_ptr->hitdie +
-		((PY_MAX_LEVEL - 1+3) * (p_ptr->hitdie + 1))));
+	percent = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
+		(2 * creature_ptr->hitdie +
+		((PY_MAX_LEVEL - 1+3) * (creature_ptr->hitdie + 1))));
 
 #ifdef JP
-		if (p_ptr->knowledge & KNOW_HPRATE) fprintf(fff, "現在の体力ランク : %d/100\n\n", percent);
+		if (creature_ptr->knowledge & KNOW_HPRATE) fprintf(fff, "現在の体力ランク : %d/100\n\n", percent);
 		else fprintf(fff, "現在の体力ランク : ???\n\n");
 		fprintf(fff, "能力の最大値\n");
 #else
-		if (p_ptr->knowledge & KNOW_HPRATE) fprintf(fff, "Your current Life Rating is %d/100.\n\n", percent);
+		if (creature_ptr->knowledge & KNOW_HPRATE) fprintf(fff, "Your current Life Rating is %d/100.\n\n", percent);
 		else fprintf(fff, "Your current Life Rating is ???.\n\n");
 		fprintf(fff, "Limits of maximum stats\n");
 #endif
 		for (v_nr = 0; v_nr < A_MAX; v_nr++)
 		{
-			if ((p_ptr->knowledge & KNOW_STAT) || p_ptr->stat_max[v_nr] == p_ptr->stat_max_max[v_nr]) fprintf(fff, "%s 18/%d\n", stat_names[v_nr], p_ptr->stat_max_max[v_nr]-18);
+			if ((creature_ptr->knowledge & KNOW_STAT) || creature_ptr->stat_max[v_nr] == creature_ptr->stat_max_max[v_nr]) fprintf(fff, "%s 18/%d\n", stat_names[v_nr], creature_ptr->stat_max_max[v_nr]-18);
 			else fprintf(fff, "%s ???\n", stat_names[v_nr]);
 		}
 
-	fprintf(fff, _("\n属性 : %s\n", "\nYour alighnment : %s\n"), your_alignment(p_ptr));
+	fprintf(fff, _("\n属性 : %s\n", "\nYour alighnment : %s\n"), your_alignment(creature_ptr));
 	fprintf(fff, "\n");
-	dump_virtues(p_ptr, fff);
+	dump_virtues(creature_ptr, fff);
 }
 
 
 /*!
  * @brief 突然変異の情報をファイルにダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return なし
  */
-static void dump_aux_mutations(FILE *fff)
+static void dump_aux_mutations(player_type *creature_ptr, FILE *fff)
 {
-	if (p_ptr->muta1 || p_ptr->muta2 || p_ptr->muta3)
+	if (creature_ptr->muta1 || creature_ptr->muta2 || creature_ptr->muta3)
 	{
 		fprintf(fff, _("\n\n  [突然変異]\n\n", "\n\n  [Mutations]\n\n"));
-		dump_mutations(p_ptr, fff);
+		dump_mutations(creature_ptr, fff);
 	}
 }
 
 
 /*!
  * @brief 所持品の情報をファイルにダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return なし
  */
-static void dump_aux_equipment_inventory(FILE *fff)
+static void dump_aux_equipment_inventory(player_type *creature_ptr, FILE *fff)
 {
 	int i;
 	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Dump the equipment */
-	if (p_ptr->equip_cnt)
+	if (creature_ptr->equip_cnt)
 	{
 		fprintf(fff, _("  [キャラクタの装備]\n\n", "  [Character Equipment]\n\n"));
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
-			object_desc(o_name, &p_ptr->inventory_list[i], 0);
-			if ((((i == INVEN_RARM) && p_ptr->hidarite) || ((i == INVEN_LARM) && p_ptr->migite)) && p_ptr->ryoute)
+			object_desc(o_name, &creature_ptr->inventory_list[i], 0);
+			if ((((i == INVEN_RARM) && creature_ptr->hidarite) || ((i == INVEN_LARM) && creature_ptr->migite)) && creature_ptr->ryoute)
 				strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
 
 			fprintf(fff, "%c) %s\n",
@@ -4901,9 +4922,9 @@ static void dump_aux_equipment_inventory(FILE *fff)
 	for (i = 0; i < INVEN_PACK; i++)
 	{
 		/* Don't dump the empty slots */
-		if (!p_ptr->inventory_list[i].k_idx) break;
+		if (!creature_ptr->inventory_list[i].k_idx) break;
 
-		object_desc(o_name, &p_ptr->inventory_list[i], 0);
+		object_desc(o_name, &creature_ptr->inventory_list[i], 0);
 		fprintf(fff, "%c) %s\n", index_to_label(i), o_name);
 	}
 
@@ -5008,14 +5029,14 @@ errr make_character_dump(player_type *creature_ptr, FILE *fff)
 	dump_aux_quest(creature_ptr, fff);
 	dump_aux_arena(creature_ptr, fff);
 	dump_aux_monsters(fff);
-	dump_aux_virtues(fff);
+	dump_aux_virtues(creature_ptr, fff);
 	dump_aux_race_history(creature_ptr, fff);
-	dump_aux_realm_history(fff);
+	dump_aux_realm_history(creature_ptr, fff);
 	dump_aux_class_special(creature_ptr, fff);
-	dump_aux_mutations(fff);
+	dump_aux_mutations(creature_ptr, fff);
 	dump_aux_pet(creature_ptr, fff);
 	fputs("\n\n", fff);
-	dump_aux_equipment_inventory(fff);
+	dump_aux_equipment_inventory(creature_ptr, fff);
 	dump_aux_home_museum(fff);
 
 	fprintf(fff, _("  [チェックサム: \"%s\"]\n\n", "  [Check Sum: \"%s\"]\n\n"), get_check_sum());
@@ -5715,7 +5736,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 				break;
 			}
 
-			sprintf(xtmp, "%s: %s", p_ptr->name, what ? what : caption);
+			sprintf(xtmp, "%s: %s", creature_ptr->name, what ? what : caption);
 			my_fputs(ffp, xtmp, 80);
 			my_fputs(ffp, "\n", 80);
 
@@ -5779,31 +5800,31 @@ void process_player_name(player_type *creature_ptr, bool sf)
 	int i, k = 0;
 	char old_player_base[32] = "";
 
-	if (current_world_ptr->character_generated) strcpy(old_player_base, p_ptr->base_name);
+	if (current_world_ptr->character_generated) strcpy(old_player_base, creature_ptr->base_name);
 
 	/* Cannot be too long */
 #if defined(MACINTOSH) || defined(ACORN)
-	if (strlen(p_ptr->name) > 15)
+	if (strlen(creature_ptr->name) > 15)
 	{
 		/* Name too long */
-		quit_fmt(_("'%s'という名前は長すぎます！", "The name '%s' is too long!"), p_ptr->name);
+		quit_fmt(_("'%s'という名前は長すぎます！", "The name '%s' is too long!"), creature_ptr->name);
 	}
 #endif
 
 	/* Cannot contain "icky" characters */
-	for (i = 0; p_ptr->name[i]; i++)
+	for (i = 0; creature_ptr->name[i]; i++)
 	{
 		/* No control characters */
 #ifdef JP
-		if (iskanji(p_ptr->name[i])){i++;continue;}
-		if (iscntrl( (unsigned char)p_ptr->name[i]))
+		if (iskanji(creature_ptr->name[i])){i++;continue;}
+		if (iscntrl( (unsigned char)creature_ptr->name[i]))
 #else
-		if (iscntrl(p_ptr->name[i]))
+		if (iscntrl(creature_ptr->name[i]))
 #endif
 
 		{
 			/* Illegal characters */
-			quit_fmt(_("'%s' という名前は不正なコントロールコードを含んでいます。", "The name '%s' contains control chars!"), p_ptr->name);
+			quit_fmt(_("'%s' という名前は不正なコントロールコードを含んでいます。", "The name '%s' contains control chars!"), creature_ptr->name);
 		}
 	}
 
@@ -5811,12 +5832,12 @@ void process_player_name(player_type *creature_ptr, bool sf)
 #ifdef MACINTOSH
 
 	/* Extract "useful" letters */
-	for (i = 0; p_ptr->name[i]; i++)
+	for (i = 0; creature_ptr->name[i]; i++)
 	{
 #ifdef JP
-		unsigned char c = p_ptr->name[i];
+		unsigned char c = creature_ptr->name[i];
 #else
-		char c = p_ptr->name[i];
+		char c = creature_ptr->name[i];
 #endif
 
 
@@ -5824,52 +5845,52 @@ void process_player_name(player_type *creature_ptr, bool sf)
 		if (c == '.') c = '_';
 
 		/* Accept all the letters */
-		p_ptr->base_name[k++] = c;
+		creature_ptr->base_name[k++] = c;
 	}
 
 #else
 
 	/* Extract "useful" letters */
-	for (i = 0; p_ptr->name[i]; i++)
+	for (i = 0; creature_ptr->name[i]; i++)
 	{
 #ifdef JP
-		unsigned char c = p_ptr->name[i];
+		unsigned char c = creature_ptr->name[i];
 #else
-		char c = p_ptr->name[i];
+		char c = creature_ptr->name[i];
 #endif
 
 		/* Accept some letters */
 #ifdef JP
 		if(iskanji(c)){
-		  if(k + 2 >= sizeof(p_ptr->base_name) || !p_ptr->name[i+1]) break;
-		  p_ptr->base_name[k++] = c;
+		  if(k + 2 >= sizeof(creature_ptr->base_name) || !creature_ptr->name[i+1]) break;
+		  creature_ptr->base_name[k++] = c;
 		  i++;
-		  p_ptr->base_name[k++] = p_ptr->name[i];
+		  creature_ptr->base_name[k++] = creature_ptr->name[i];
 		}
 #ifdef SJIS
-		else if (iskana(c)) p_ptr->base_name[k++] = c;
+		else if (iskana(c)) creature_ptr->base_name[k++] = c;
 #endif
 		else
 #endif
 		/* Convert path separator to underscore */
-		if (!strncmp(PATH_SEP, p_ptr->name+i, strlen(PATH_SEP))){
-			p_ptr->base_name[k++] = '_';
+		if (!strncmp(PATH_SEP, creature_ptr->name+i, strlen(PATH_SEP))){
+			creature_ptr->base_name[k++] = '_';
 			i += strlen(PATH_SEP);
 		}
 		/* Convert some characters to underscore */
 #if defined(WINDOWS)
-		else if (my_strchr("\"*,/:;<>?\\|", c)) p_ptr->base_name[k++] = '_';
+		else if (my_strchr("\"*,/:;<>?\\|", c)) creature_ptr->base_name[k++] = '_';
 #endif
-		else if (isprint(c)) p_ptr->base_name[k++] = c;
+		else if (isprint(c)) creature_ptr->base_name[k++] = c;
 	}
 
 #endif
 
 	/* Terminate */
-	p_ptr->base_name[k] = '\0';
+	creature_ptr->base_name[k] = '\0';
 
 	/* Require a "base" name */
-	if (!p_ptr->base_name[0]) strcpy(p_ptr->base_name, "PLAYER");
+	if (!creature_ptr->base_name[0]) strcpy(creature_ptr->base_name, "PLAYER");
 
 
 #ifdef SAVEFILE_MUTABLE
@@ -5901,14 +5922,14 @@ void process_player_name(player_type *creature_ptr, bool sf)
 	{
 		char temp[128];
 
-		strcpy(savefile_base, p_ptr->base_name);
+		strcpy(savefile_base, creature_ptr->base_name);
 
 #ifdef SAVEFILE_USE_UID
-		/* Rename the savefile, using the p_ptr->player_uid and p_ptr->base_name */
-		(void)sprintf(temp, "%d.%s", p_ptr->player_uid, p_ptr->base_name);
+		/* Rename the savefile, using the creature_ptr->player_uid and creature_ptr->base_name */
+		(void)sprintf(temp, "%d.%s", creature_ptr->player_uid, creature_ptr->base_name);
 #else
-		/* Rename the savefile, using the p_ptr->base_name */
-		(void)sprintf(temp, "%s", p_ptr->base_name);
+		/* Rename the savefile, using the creature_ptr->base_name */
+		(void)sprintf(temp, "%s", creature_ptr->base_name);
 #endif
 		path_build(savefile, sizeof(savefile), ANGBAND_DIR_SAVE, temp);
 	}
@@ -5916,7 +5937,7 @@ void process_player_name(player_type *creature_ptr, bool sf)
 	/* Load an autopick preference file */
 	if (current_world_ptr->character_generated)
 	{
-		if (!streq(old_player_base, p_ptr->base_name)) autopick_load_pref(creature_ptr, FALSE);
+		if (!streq(old_player_base, creature_ptr->base_name)) autopick_load_pref(creature_ptr, FALSE);
 	}
 }
 
@@ -5924,6 +5945,7 @@ void process_player_name(player_type *creature_ptr, bool sf)
 /*!
  * @brief プレイヤーの名前を変更するコマンドのメインルーチン
  * Gets a name for the character, reacting to name changes.
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * <pre>
@@ -5989,7 +6011,7 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
 	}
 	else
 	{
-		disturb(p_ptr, TRUE, TRUE);
+		disturb(creature_ptr, TRUE, TRUE);
 	}
 
 	/* Clear messages */
@@ -6001,7 +6023,7 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
 	Term_fresh();
 
 	/* The player is not dead */
-	(void)strcpy(p_ptr->died_from, _("(セーブ)", "(saved)"));
+	(void)strcpy(creature_ptr->died_from, _("(セーブ)", "(saved)"));
 
 	/* Forbid suspend */
 	signals_ignore_tstp();
@@ -6024,12 +6046,12 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
 	Term_fresh();
 
 	/* Note that the player is not dead */
-	(void)strcpy(p_ptr->died_from, _("(元気に生きている)", "(alive and well)"));
+	(void)strcpy(creature_ptr->died_from, _("(元気に生きている)", "(alive and well)"));
 
 	/* HACK -- don't get sanity blast on updating view */
 	current_world_ptr->is_loading_now = FALSE;
 
-	update_creature(p_ptr);
+	update_creature(creature_ptr);
 
 	/* Initialize monster process */
 	mproc_init();
@@ -6153,6 +6175,7 @@ bool (*tombstone_aux)(void) = NULL;
 /*!
  * @brief 墓石のアスキーアート表示 /
  * Display a "tomb-stone"
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void print_tomb(player_type *dead_ptr)
@@ -6528,19 +6551,19 @@ void exit_game_panic(player_type *creature_ptr)
 	prt("", 0, 0);
 
 	/* Hack -- turn off some things */
-	disturb(p_ptr, TRUE, TRUE);
+	disturb(creature_ptr, TRUE, TRUE);
 
 	/* Mega-Hack -- Delay death */
-	if (p_ptr->chp < 0) p_ptr->is_dead = FALSE;
+	if (creature_ptr->chp < 0) creature_ptr->is_dead = FALSE;
 
 	/* Hardcode panic save */
-	p_ptr->panic_save = 1;
+	creature_ptr->panic_save = 1;
 
 	/* Forbid suspend */
 	signals_ignore_tstp();
 
 	/* Indicate panic save */
-	(void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
+	(void)strcpy(creature_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
 
 	/* Panic save, or get worried */
 	if (!save_player(creature_ptr)) quit(_("緊急セーブ失敗！", "panic save failed!"));
