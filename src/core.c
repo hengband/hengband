@@ -4096,7 +4096,7 @@ static void process_command(player_type *creature_ptr)
 		/* Single line from a pref file */
 		case '"':
 		{
-			do_cmd_pref();
+			do_cmd_pref(creature_ptr);
 			break;
 		}
 
@@ -5173,31 +5173,31 @@ static void load_all_pref_files(player_type *player_ptr)
 	sprintf(buf, "user.prf");
 
 	/* Process that file */
-	process_pref_file(buf);
+	process_pref_file(player_ptr, buf);
 
 	/* Access the "user" system pref file */
 	sprintf(buf, "user-%s.prf", ANGBAND_SYS);
 
 	/* Process that file */
-	process_pref_file(buf);
+	process_pref_file(player_ptr, buf);
 
 	/* Access the "race" pref file */
 	sprintf(buf, "%s.prf", rp_ptr->title);
 
 	/* Process that file */
-	process_pref_file(buf);
+	process_pref_file(player_ptr, buf);
 
 	/* Access the "class" pref file */
 	sprintf(buf, "%s.prf", cp_ptr->title);
 
 	/* Process that file */
-	process_pref_file(buf);
+	process_pref_file(player_ptr, buf);
 
 	/* Access the "character" pref file */
 	sprintf(buf, "%s.prf", p_ptr->base_name);
 
 	/* Process that file */
-	process_pref_file(buf);
+	process_pref_file(player_ptr, buf);
 
 	/* Access the "realm 1" pref file */
 	if (p_ptr->realm1 != REALM_NONE)
@@ -5205,7 +5205,7 @@ static void load_all_pref_files(player_type *player_ptr)
 		sprintf(buf, "%s.prf", realm_names[p_ptr->realm1]);
 
 		/* Process that file */
-		process_pref_file(buf);
+		process_pref_file(player_ptr, buf);
 	}
 
 	/* Access the "realm 2" pref file */
@@ -5214,7 +5214,7 @@ static void load_all_pref_files(player_type *player_ptr)
 		sprintf(buf, "%s.prf", realm_names[p_ptr->realm2]);
 
 		/* Process that file */
-		process_pref_file(buf);
+		process_pref_file(player_ptr, buf);
 	}
 
 

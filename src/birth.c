@@ -3571,7 +3571,7 @@ static bool do_cmd_histpref(player_type *creature_ptr)
 #else
 	sprintf(buf, "histpref-%s.prf", creature_ptr->base_name);
 #endif
-	err = process_histpref_file(buf);
+	err = process_histpref_file(creature_ptr, buf);
 
 	/* Process 'hist????.prf' if 'hist????-<name>.prf' doesn't exist */
 	if (0 > err)
@@ -3581,7 +3581,7 @@ static bool do_cmd_histpref(player_type *creature_ptr)
 #else
 		strcpy(buf, "histpref.prf");
 #endif
-		err = process_histpref_file(buf);
+		err = process_histpref_file(creature_ptr, buf);
 	}
 
 	if (err)

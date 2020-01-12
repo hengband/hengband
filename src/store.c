@@ -5554,7 +5554,7 @@ static void store_process_command(player_type *client_ptr)
 		case '"':
 		{
 			client_ptr->town_num = old_town_num;
-			do_cmd_pref();
+			do_cmd_pref(client_ptr);
 			client_ptr->town_num = inner_town_num;
 			break;
 		}

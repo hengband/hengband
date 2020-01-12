@@ -1215,7 +1215,7 @@ void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 	my_strcpy(buf, pickpref_filename(player_ptr, PT_WITH_PNAME), sizeof(buf));
 
 	/* Load the file */
-	errr err = process_autopick_file(buf);
+	errr err = process_autopick_file(player_ptr, buf);
 
 	if (err == 0 && disp_mes)
 	{
@@ -1229,7 +1229,7 @@ void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 		my_strcpy(buf, pickpref_filename(player_ptr, PT_DEFAULT), sizeof(buf));
 
 		/* Load the file */
-		err = process_autopick_file(buf);
+		err = process_autopick_file(player_ptr, buf);
 
 		if (err == 0 && disp_mes)
 		{
@@ -5953,7 +5953,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	kill_yank_chain(tb);
 
 	/* Reload autopick pref */
-	process_autopick_file(buf);
+	process_autopick_file(player_ptr, buf);
 
 	/* HACK -- reset current_world_ptr->start_time so that current_world_ptr->play_time is not increase while edit */
 	current_world_ptr->start_time = (u32b)time(NULL);

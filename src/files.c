@@ -12,7 +12,6 @@
  * </pre>
  */
 
-
 #include "angband.h"
 #include "util.h"
 #include "files.h"
@@ -379,6 +378,7 @@ static named_num gf_desc[] =
 /*!
  * @brief 設定ファイルの各行から各種テキスト情報を取得する /
  * Parse a sub-file of the "extra info" (format shown below)
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param buf データテキストの参照ポインタ
  * @return エラーコード
  * @details
@@ -429,7 +429,7 @@ static named_num gf_desc[] =
  *   T:\<trigger\>:\<keycode\>:\<shift-keycode\>
  * </pre>
  */
-errr process_pref_file_command(char *buf)
+errr process_pref_file_command(player_type *creature_ptr, char *buf)
 {
 	int i, j;
 	TERM_COLOR n1;
@@ -644,7 +644,7 @@ errr process_pref_file_command(char *buf)
 					int os = option_info[i].o_set;
 					int ob = option_info[i].o_bit;
 
-					if ((p_ptr->playing || current_world_ptr->character_xtra) &&
+					if ((creature_ptr->playing || current_world_ptr->character_xtra) &&
 						(OPT_PAGE_BIRTH == option_info[i].o_page) && !current_world_ptr->wizard)
 					{
 						msg_format(_("初期オプションは変更できません! '%s'", "Birth options can not changed! '%s'"), buf);
@@ -1120,6 +1120,7 @@ concptr process_pref_file_expr(char **sp, char *fp)
 /*!
  * @brief process_pref_fileのサブルーチン /
  * Open the "user pref file" and parse it.
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param name 読み込むファイル名
  * @param preftype prefファイルのタイプ
  * @return エラーコード
@@ -1132,7 +1133,7 @@ concptr process_pref_file_expr(char **sp, char *fp)
  *   result
  * </pre>
  */
-static errr process_pref_file_aux(concptr name, int preftype)
+static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int preftype)
 {
 	FILE *fp;
 
@@ -1211,13 +1212,13 @@ static errr process_pref_file_aux(concptr name, int preftype)
 			switch (preftype)
 			{
 			case PREF_TYPE_AUTOPICK:
-				(void)process_autopick_file(buf + 2);
+				(void)process_autopick_file(creature_ptr, buf + 2);
 				break;
 			case PREF_TYPE_HISTPREF:
-				(void)process_histpref_file(buf + 2);
+				(void)process_histpref_file(creature_ptr, buf + 2);
 				break;
 			default:
-				(void)process_pref_file(buf + 2);
+				(void)process_pref_file(creature_ptr, buf + 2);
 				break;
 			}
 
@@ -1228,7 +1229,7 @@ static errr process_pref_file_aux(concptr name, int preftype)
 
 
 		/* Process the line */
-		err = process_pref_file_command(buf);
+		err = process_pref_file_command(creature_ptr, buf);
 
 		/* This is not original pref line... */
 		if (err)
@@ -1258,6 +1259,7 @@ static errr process_pref_file_aux(concptr name, int preftype)
 /*!
  * @brief pref設定ファイルを読み込み設定を反映させる /
  * Process the "user pref file" with the given name
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param name 読み込むファイル名
  * @return エラーコード
  * @details
@@ -1267,7 +1269,7 @@ static errr process_pref_file_aux(concptr name, int preftype)
  * allow conditional evaluation and filename inclusion.
  * </pre>
  */
-errr process_pref_file(concptr name)
+errr process_pref_file(player_type *creature_ptr, concptr name)
 {
 	char buf[1024];
 
@@ -1275,7 +1277,7 @@ errr process_pref_file(concptr name)
 	path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, name);
 
 	/* Process the system pref file */
-	err1 = process_pref_file_aux(buf, PREF_TYPE_NORMAL);
+	err1 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL);
 
 	/* Stop at parser errors, but not at non-existing file */
 	if (err1 > 0) return err1;
@@ -1283,7 +1285,7 @@ errr process_pref_file(concptr name)
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 	
 	/* Process the user pref file */
-	err2 = process_pref_file_aux(buf, PREF_TYPE_NORMAL);
+	err2 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL);
 
 
 	/* User file does not exist, but read system pref file */
@@ -6676,17 +6678,18 @@ errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count)
 
 /*!
  * @brief 自動拾いファイルを読み込む /
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param name ファイル名
  * @details
  */
-errr process_autopick_file(concptr name)
+errr process_autopick_file(player_type *creature_ptr, concptr name)
 {
 	char buf[1024];
 
 	errr err = 0;
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
 
-	err = process_pref_file_aux(buf, PREF_TYPE_AUTOPICK);
+	err = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_AUTOPICK);
 	return (err);
 }
 
@@ -6694,11 +6697,12 @@ errr process_autopick_file(concptr name)
 /*!
  * @brief プレイヤーの生い立ちファイルを読み込む /
  * Process file for player's history editor.
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param name ファイル名
  * @return エラーコード
  * @details
  */
-errr process_histpref_file(concptr name)
+errr process_histpref_file(player_type *creature_ptr, concptr name)
 {
 	char buf[1024];
 	errr err = 0;
@@ -6708,7 +6712,7 @@ errr process_histpref_file(concptr name)
 	/* Hack -- prevent modification birth options in this file */
 	current_world_ptr->character_xtra = TRUE;
 
-	err = process_pref_file_aux(buf, PREF_TYPE_HISTPREF);
+	err = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_HISTPREF);
 
 	current_world_ptr->character_xtra = old_character_xtra;
 	return (err);

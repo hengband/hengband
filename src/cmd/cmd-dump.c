@@ -1350,11 +1350,12 @@ void do_cmd_messages(int num_now)
 /*!
  * @brief prefファイルを選択して処理する /
  * Ask for a "user pref line" and process it
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * Allow absolute file names?
  */
-void do_cmd_pref(void)
+void do_cmd_pref(player_type *creature_ptr)
 {
 	char buf[80];
 	strcpy(buf, "");
@@ -1363,7 +1364,7 @@ void do_cmd_pref(void)
 	if (!get_string(_("設定変更コマンド: ", "Pref: "), buf, 80)) return;
 
 	/* Process that pref command */
-	(void)process_pref_file_command(buf);
+	(void)process_pref_file_command(creature_ptr, buf);
 }
 
 
@@ -1669,7 +1670,7 @@ void do_cmd_macros(player_type *creature_ptr)
 			if (!askfor(tmp, 80)) continue;
 
 			/* Process the given filename */
-			err = process_pref_file(tmp);
+			err = process_pref_file(creature_ptr, tmp);
 			if (-2 == err)
 			{
 				msg_format(_("標準の設定ファイル'%s'を読み込みました。", "Loaded default '%s'."), tmp);
@@ -2094,7 +2095,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 			if (!askfor(tmp, 70)) continue;
 
 			/* Process the given filename */
-			(void)process_pref_file(tmp);
+			(void)process_pref_file(creature_ptr, tmp);
 
 			need_redraw = TRUE;
 			break;
@@ -2655,7 +2656,7 @@ void do_cmd_colors(player_type *creature_ptr)
 			if (!askfor(tmp, 70)) continue;
 
 			/* Process the given filename */
-			(void)process_pref_file(tmp);
+			(void)process_pref_file(creature_ptr, tmp);
 
 			/* Mega-Hack -- react to changes */
 			Term_xtra(TERM_XTRA_REACT, 0);
