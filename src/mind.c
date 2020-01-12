@@ -1694,7 +1694,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		{
 			/* Auto-Recall if possible and visible */
 			if (!caster_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-			health_track(m_idx);
+			health_track(caster_ptr, m_idx);
 		}
 
 		break;

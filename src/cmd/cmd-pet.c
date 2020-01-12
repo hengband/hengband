@@ -178,7 +178,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 		if (!all_pets)
 		{
 			/* Hack -- health bar for this monster */
-			health_track(pet_ctr);
+			health_track(creature_ptr, pet_ctr);
 			handle_stuff(creature_ptr);
 
 			msg_format(_("%sを放しますか？ [Yes/No/Unnamed (%d体)]", "Dismiss %s? [Yes/No/Unnamed (%d remain)]"), friend_name, max_pet - i);
@@ -373,7 +373,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 		creature_ptr->riding = g_ptr->m_idx;
 
 		/* Hack -- remove tracked monster */
-		if (creature_ptr->riding == creature_ptr->health_who) health_track(0);
+		if (creature_ptr->riding == creature_ptr->health_who) health_track(creature_ptr, 0);
 	}
 
 	take_turn(creature_ptr, 100);

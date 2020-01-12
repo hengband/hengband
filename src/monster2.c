@@ -139,7 +139,7 @@ void delete_monster_idx(MONSTER_IDX i)
 	if (i == target_who) target_who = 0;
 
 	/* Hack -- remove tracked monster */
-	if (i == p_ptr->health_who) health_track(0);
+	if (i == p_ptr->health_who) health_track(p_ptr, 0);
 
 	if (p_ptr->pet_t_m_idx == i ) p_ptr->pet_t_m_idx = 0;
 	if (p_ptr->riding_t_m_idx == i) p_ptr->riding_t_m_idx = 0;
@@ -225,7 +225,7 @@ static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 	if (p_ptr->riding == i1) p_ptr->riding = i2;
 
 	/* Hack -- Update the health bar */
-	if (p_ptr->health_who == i1) health_track(i2);
+	if (p_ptr->health_who == i1) health_track(p_ptr, i2);
 
 	/* Hack -- Update parent index */
 	if (is_pet(m_ptr))
@@ -418,8 +418,7 @@ void wipe_m_list(void)
 	p_ptr->pet_t_m_idx = 0;
 	p_ptr->riding_t_m_idx = 0;
 
-	/* Hack -- no more tracking */
-	health_track(0);
+	health_track(p_ptr, 0);
 }
 
 

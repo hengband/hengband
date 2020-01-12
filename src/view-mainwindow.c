@@ -3780,19 +3780,23 @@ void do_cmd_view_map(player_type *player_ptr)
 	screen_load();
 }
 
+
 /*
  * Track a new monster
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param m_idx トラッキング対象のモンスターID。0の時キャンセル
+ * @param なし
  */
-void health_track(MONSTER_IDX m_idx)
+void health_track(player_type *player_ptr, MONSTER_IDX m_idx)
 {
 	/* Mount monster is already tracked */
-	if (m_idx && m_idx == p_ptr->riding) return;
+	if (m_idx && m_idx == player_ptr->riding) return;
 
 	/* Track a new guy */
-	p_ptr->health_who = m_idx;
+	player_ptr->health_who = m_idx;
 
 	/* Redraw (later) */
-	p_ptr->redraw |= (PR_HEALTH);
+	player_ptr->redraw |= (PR_HEALTH);
 }
 
 

@@ -7,7 +7,7 @@ extern void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_COD
 extern void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp);
 extern void do_cmd_view_map(player_type *player_ptr);
 
-extern void health_track(MONSTER_IDX m_idx);
+extern void health_track(player_type *player_ptr, MONSTER_IDX m_idx);
 extern void print_time(void);
 extern concptr map_name(player_type *creature_ptr);
 extern void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN max_lines);

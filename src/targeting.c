@@ -606,7 +606,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 
 		monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
 		monster_race_track(m_ptr->ap_r_idx);
-		health_track(g_ptr->m_idx);
+		health_track(subject_ptr, g_ptr->m_idx);
 		handle_stuff(subject_ptr);
 
 		/* Interact */
@@ -1155,7 +1155,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 				{
 					if (target_able(g_ptr->m_idx))
 					{
-						health_track(g_ptr->m_idx);
+						health_track(creature_ptr, g_ptr->m_idx);
 						target_who = g_ptr->m_idx;
 						target_row = y;
 						target_col = x;

@@ -4927,8 +4927,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	player_ptr->riding_t_m_idx = 0;
 	player_ptr->ambush_flag = FALSE;
 
-	/* Cancel the health bar */
-	health_track(0);
+	health_track(player_ptr, 0);
 
 	/* Check visual effects */
 	repair_monsters = TRUE;
@@ -5615,8 +5614,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		/* Cancel the target */
 		target_who = 0;
 
-		/* Cancel the health bar */
-		health_track(0);
+		health_track(player_ptr, 0);
 
 		forget_lite(player_ptr->current_floor_ptr);
 		forget_view(player_ptr->current_floor_ptr);

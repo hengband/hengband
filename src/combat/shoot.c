@@ -673,7 +673,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 						if (m_ptr->ml)
 						{
 							if (!shooter_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-							health_track(c_mon_ptr->m_idx);
+							health_track(shooter_ptr, c_mon_ptr->m_idx);
 						}
 					}
 

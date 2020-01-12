@@ -5813,7 +5813,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 							if (m_ptr->ml)
 							{
 								if (!caster_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-								health_track(caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
+								health_track(caster_ptr, caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
 							}
 						}
 					}
@@ -5840,7 +5840,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					if (m_ptr->ml)
 					{
 						if (!caster_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-						health_track(caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
+						health_track(caster_ptr, caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
 					}
 				}
 			}
@@ -5974,7 +5974,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					if (m_ptr->ml)
 					{
 						if (!caster_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-						health_track(caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
+						health_track(caster_ptr, caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx);
 					}
 				}
 			}
@@ -6394,7 +6394,6 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				}
 			}
 
-
 			/* Find the closest point in the blast */
 			if (breath)
 			{
@@ -6404,7 +6403,6 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			{
 				effective_dist = dist;
 			}
-
 
 			/* There is the riding player on this monster */
 			if (caster_ptr->riding && player_bold(caster_ptr, y, x))
@@ -6496,12 +6494,11 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				if (m_ptr->ml)
 				{
 					if (!caster_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-					health_track(caster_ptr->current_floor_ptr->grid_array[y][x].m_idx);
+					health_track(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].m_idx);
 				}
 			}
 		}
 	}
-
 
 	/* Check player */
 	if (flg & (PROJECT_KILL))

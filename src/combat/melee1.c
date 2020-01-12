@@ -2198,7 +2198,7 @@ bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_
 		/* Auto-Recall if possible and visible */
 		if (!attacker_ptr->image) monster_race_track(m_ptr->ap_r_idx);
 
-		health_track(g_ptr->m_idx);
+		health_track(attacker_ptr, g_ptr->m_idx);
 	}
 
 	if ((r_ptr->flags1 & RF1_FEMALE) &&
