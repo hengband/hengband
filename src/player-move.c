@@ -833,13 +833,22 @@ bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat)
 
 
 /*
+ * todo 負論理なので反転させたい
  * Determine if a "boundary" grid is "floor mimic"
+ * @param grid_type *g_ptr
+ * @param feature_type *f_ptr
+ * @param feature_type  *mimic_f_ptr
+ * @return 移動不能であればTRUE
  */
-#define boundary_floor(C, F, MF) \
-	((C)->mimic && permanent_wall(F) && \
-	 (have_flag((MF)->flags, FF_MOVE) || have_flag((MF)->flags, FF_CAN_FLY)) && \
-	 have_flag((MF)->flags, FF_PROJECT) && \
-	 !have_flag((MF)->flags, FF_OPEN))
+bool boundary_floor(grid_type *g_ptr, feature_type *f_ptr, feature_type *mimic_f_ptr)
+{
+	bool is_boundary_floor = g_ptr->mimic > 0;
+	is_boundary_floor &= permanent_wall(f_ptr);
+	is_boundary_floor &= have_flag((mimic_f_ptr)->flags, FF_MOVE) || have_flag((mimic_f_ptr)->flags, FF_CAN_FLY);
+	is_boundary_floor &= have_flag((mimic_f_ptr)->flags, FF_PROJECT);
+	is_boundary_floor &= !have_flag((mimic_f_ptr)->flags, FF_OPEN);
+	return is_boundary_floor;
+}
 
 
 /*!
