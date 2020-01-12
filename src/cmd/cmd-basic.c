@@ -2087,7 +2087,7 @@ void do_cmd_run(player_type *creature_ptr)
 		creature_ptr->running = (command_arg ? command_arg : 1000);
 
 		/* First step */
-		run_step(dir);
+		run_step(creature_ptr, dir);
 	}
 }
 

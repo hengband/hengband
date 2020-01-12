@@ -8,7 +8,7 @@
 
 extern void disturb(player_type *creature_ptr, bool stop_search, bool flush_output);
 extern void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool break_trap);
-extern void run_step(DIRECTION dir);
+extern void run_step(player_type *creature_ptr, DIRECTION dir);
 
 #define MPE_STAYING       0x00000001
 #define MPE_FORGET_FLOW   0x00000002
@@ -41,7 +41,6 @@ extern void travel_step(player_type *creature_ptr);
 #define PATTERN_TILE_OLD      6
 #define PATTERN_TILE_TELEPORT 7
 #define PATTERN_TILE_WRECKED  8
-
 
 #ifdef TRAVEL
  /*

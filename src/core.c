@@ -4684,7 +4684,7 @@ static void process_player(player_type *creature_ptr)
 		else if (creature_ptr->running)
 		{
 			/* Take a step */
-			run_step(0);
+			run_step(creature_ptr, 0);
 		}
 
 #ifdef TRAVEL

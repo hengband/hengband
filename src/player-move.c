@@ -1295,12 +1295,13 @@ static bool ignore_avoid_run;
 /*!
  * @brief ダッシュ移動処理中、移動先のマスが既知の壁かどうかを判定する /
  * Hack -- Check for a "known wall" (see below)
+ * @param creature_ptr	プレーヤーへの参照ポインタ
  * @param dir 想定する移動方向ID
  * @param y 移動元のY座標
  * @param x 移動元のX座標
  * @return 移動先が既知の壁ならばTRUE
  */
-static bool see_wall(DIRECTION dir, POSITION y, POSITION x)
+static bool see_wall(player_type *creature_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
 
@@ -1309,10 +1310,11 @@ static bool see_wall(DIRECTION dir, POSITION y, POSITION x)
 	x += ddx[dir];
 
 	/* Illegal grids are not known walls */
-	if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) return FALSE;
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	if (!in_bounds2(floor_ptr, y, x)) return FALSE;
 
 	/* Access grid */
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Must be known to the player */
 	if (g_ptr->info & (CAVE_MARK))
@@ -1322,7 +1324,7 @@ static bool see_wall(DIRECTION dir, POSITION y, POSITION x)
 		feature_type *f_ptr = &f_info[feat];
 
 		/* Wall grids are known walls */
-		if (!player_can_enter(p_ptr, feat, 0)) return !have_flag(f_ptr->flags, FF_DOOR);
+		if (!player_can_enter(creature_ptr, feat, 0)) return !have_flag(f_ptr->flags, FF_DOOR);
 
 		/* Don't run on a tree unless explicitly requested */
 		if (have_flag(f_ptr->flags, FF_AVOID_RUN) && !ignore_avoid_run)
@@ -1399,6 +1401,7 @@ static bool find_breakleft;
 /*!
  * @brief ダッシュ処理の導入 /
  * Initialize the running algorithm for a new direction.
+ * @param creature_ptr	プレーヤーへの参照ポインタ
  * @param dir 導入の移動先
  * @details
  * Diagonal Corridor -- allow diaginal entry into corridors.\n
@@ -1412,7 +1415,7 @@ static bool find_breakleft;
  *       \#x\#                  \@x\#\n
  *       \@\@p.                  p\n
  */
-static void run_init(DIRECTION dir)
+static void run_init(player_type *creature_ptr, DIRECTION dir)
 {
 	int row, col, deepleft, deepright;
 	int i, shortleft, shortright;
@@ -1433,37 +1436,37 @@ static void run_init(DIRECTION dir)
 	deepleft = deepright = FALSE;
 	shortright = shortleft = FALSE;
 
-	p_ptr->run_py = p_ptr->y;
-	p_ptr->run_px = p_ptr->x;
+	creature_ptr->run_py = creature_ptr->y;
+	creature_ptr->run_px = creature_ptr->x;
 
 	/* Find the destination grid */
-	row = p_ptr->y + ddy[dir];
-	col = p_ptr->x + ddx[dir];
+	row = creature_ptr->y + ddy[dir];
+	col = creature_ptr->x + ddx[dir];
 
-	ignore_avoid_run = cave_have_flag_bold(p_ptr->current_floor_ptr, row, col, FF_AVOID_RUN);
+	ignore_avoid_run = cave_have_flag_bold(creature_ptr->current_floor_ptr, row, col, FF_AVOID_RUN);
 
 	/* Extract cycle index */
 	i = chome[dir];
 
 	/* Check for walls */
-	if (see_wall(cycle[i+1], p_ptr->y, p_ptr->x))
+	if (see_wall(creature_ptr, cycle[i+1], creature_ptr->y, creature_ptr->x))
 	{
 		find_breakleft = TRUE;
 		shortleft = TRUE;
 	}
-	else if (see_wall(cycle[i+1], row, col))
+	else if (see_wall(creature_ptr, cycle[i+1], row, col))
 	{
 		find_breakleft = TRUE;
 		deepleft = TRUE;
 	}
 
 	/* Check for walls */
-	if (see_wall(cycle[i-1], p_ptr->y, p_ptr->x))
+	if (see_wall(creature_ptr, cycle[i-1], creature_ptr->y, creature_ptr->x))
 	{
 		find_breakright = TRUE;
 		shortright = TRUE;
 	}
-	else if (see_wall(cycle[i-1], row, col))
+	else if (see_wall(creature_ptr, cycle[i-1], row, col))
 	{
 		find_breakright = TRUE;
 		deepright = TRUE;
@@ -1489,7 +1492,7 @@ static void run_init(DIRECTION dir)
 		}
 
 		/* Hack -- allow blunt corridor entry */
-		else if (see_wall(cycle[i], row, col))
+		else if (see_wall(creature_ptr, cycle[i], row, col))
 		{
 			if (shortleft && !shortright)
 			{
@@ -1507,11 +1510,12 @@ static void run_init(DIRECTION dir)
 /*!
  * @brief ダッシュ移動が継続できるかどうかの判定 /
  * Update the current "run" path
- * @return
+ * @param creature_ptr	プレーヤーへの参照ポインタ
+ * @return 立ち止まるべき条件が満たされたらTRUE
  * ダッシュ移動が継続できるならばTRUEを返す。
  * Return TRUE if the running should be stopped
  */
-static bool run_test(void)
+static bool run_test(player_type *creature_ptr)
 {
 	DIRECTION prev_dir, new_dir, check_dir = 0;
 	int row, col;
@@ -1529,14 +1533,15 @@ static bool run_test(void)
 	max = (prev_dir & 0x01) + 1;
 
 	/* break run when leaving trap detected region */
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	if ((disturb_trap_detect || alert_trap_detect)
-	    && p_ptr->dtrap && !(p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_IN_DETECT))
+	    && creature_ptr->dtrap && !(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_IN_DETECT))
 	{
 		/* No duplicate warning */
-		p_ptr->dtrap = FALSE;
+		creature_ptr->dtrap = FALSE;
 
 		/* You are just on the edge */
-		if (!(p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_UNSAFE))
+		if (!(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_UNSAFE))
 		{
 			if (alert_trap_detect)
 			{
@@ -1560,11 +1565,11 @@ static bool run_test(void)
 		new_dir = cycle[chome[prev_dir] + i];
 
 		/* New location */
-		row = p_ptr->y + ddy[new_dir];
-		col = p_ptr->x + ddx[new_dir];
+		row = creature_ptr->y + ddy[new_dir];
+		col = creature_ptr->x + ddx[new_dir];
 
 		/* Access grid */
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[row][col];
+		g_ptr = &floor_ptr->grid_array[row][col];
 
 		/* Feature code (applying "mimic" field) */
 		feat = get_feat_mimic(g_ptr);
@@ -1573,7 +1578,7 @@ static bool run_test(void)
 		/* Visible monsters abort running */
 		if (g_ptr->m_idx)
 		{
-			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+			monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Visible monster */
 			if (m_ptr->ml) return TRUE;
@@ -1583,7 +1588,7 @@ static bool run_test(void)
 		for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr;
-			o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+			o_ptr = &floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
 			/* Visible object */
@@ -1615,7 +1620,7 @@ static bool run_test(void)
 				}
 
 				/* Lava */
-				else if (have_flag(f_ptr->flags, FF_LAVA) && (p_ptr->immune_fire || IS_INVULN(p_ptr)))
+				else if (have_flag(f_ptr->flags, FF_LAVA) && (creature_ptr->immune_fire || IS_INVULN(creature_ptr)))
 				{
 					/* Ignore */
 					notice = FALSE;
@@ -1623,7 +1628,7 @@ static bool run_test(void)
 
 				/* Deep water */
 				else if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) &&
-				         (p_ptr->levitation || p_ptr->can_swim || (p_ptr->total_weight <= weight_limit(p_ptr))))
+				         (creature_ptr->levitation || creature_ptr->can_swim || (creature_ptr->total_weight <= weight_limit(creature_ptr))))
 				{
 					/* Ignore */
 					notice = FALSE;
@@ -1638,7 +1643,7 @@ static bool run_test(void)
 		}
 
 		/* Analyze unknown grids and floors considering mimic */
-		if (inv || !see_wall(0, row, col))
+		if (inv || !see_wall(creature_ptr, 0, row, col))
 		{
 			/* Looking for open area */
 			if (find_openarea)
@@ -1707,7 +1712,7 @@ static bool run_test(void)
 		for (i = -max; i < 0; i++)
 		{
 			/* Unknown grid or non-wall */
-			if (!see_wall(cycle[chome[prev_dir] + i], p_ptr->y, p_ptr->x))
+			if (!see_wall(creature_ptr, cycle[chome[prev_dir] + i], creature_ptr->y, creature_ptr->x))
 			{
 				/* Looking to break right */
 				if (find_breakright)
@@ -1731,7 +1736,7 @@ static bool run_test(void)
 		for (i = max; i > 0; i--)
 		{
 			/* Unknown grid or non-wall */
-			if (!see_wall(cycle[chome[prev_dir] + i], p_ptr->y, p_ptr->x))
+			if (!see_wall(creature_ptr, cycle[chome[prev_dir] + i], creature_ptr->y, creature_ptr->x))
 			{
 				/* Looking to break left */
 				if (find_breakleft)
@@ -1785,13 +1790,13 @@ static bool run_test(void)
 		else
 		{
 			/* Get next location */
-			row = p_ptr->y + ddy[option];
-			col = p_ptr->x + ddx[option];
+			row = creature_ptr->y + ddy[option];
+			col = creature_ptr->x + ddx[option];
 
 			/* Don't see that it is closed off. */
 			/* This could be a potential corner or an intersection. */
-			if (!see_wall(option, row, col) ||
-			    !see_wall(check_dir, row, col))
+			if (!see_wall(creature_ptr, option, row, col) ||
+			    !see_wall(creature_ptr, check_dir, row, col))
 			{
 				/* Can not see anything ahead and in the direction we */
 				/* are turning, assume that it is a potential corner. */
@@ -1827,7 +1832,7 @@ static bool run_test(void)
 	}
 
 	/* About to hit a known wall, stop */
-	if (see_wall(find_current, p_ptr->y, p_ptr->x))
+	if (see_wall(creature_ptr, find_current, creature_ptr->y, creature_ptr->x))
 	{
 		return TRUE;
 	}
@@ -1840,10 +1845,11 @@ static bool run_test(void)
 /*!
  * @brief 継続的なダッシュ処理 /
  * Take one step along the current "run" path
+ * @param creature_ptr	プレーヤーへの参照ポインタ
  * @param dir 移動を試みる方向ID
  * @return なし
  */
-void run_step(DIRECTION dir)
+void run_step(player_type *creature_ptr, DIRECTION dir)
 {
 	/* Start running */
 	if (dir)
@@ -1852,46 +1858,46 @@ void run_step(DIRECTION dir)
 		ignore_avoid_run = TRUE;
 
 		/* Hack -- do not start silly run */
-		if (see_wall(dir, p_ptr->y, p_ptr->x))
+		if (see_wall(creature_ptr, dir, creature_ptr->y, creature_ptr->x))
 		{
 			sound(SOUND_HITWALL);
 
 			msg_print(_("その方向には走れません。", "You cannot run in that direction."));
 
-			disturb(p_ptr, FALSE, FALSE);
+			disturb(creature_ptr, FALSE, FALSE);
 
 			return;
 		}
 
-		run_init(dir);
+		run_init(creature_ptr, dir);
 	}
 
 	/* Keep running */
 	else
 	{
 		/* Update run */
-		if (run_test())
+		if (run_test(creature_ptr))
 		{
-			disturb(p_ptr, FALSE, FALSE);
+			disturb(creature_ptr, FALSE, FALSE);
 
 			return;
 		}
 	}
 
 	/* Decrease the run counter */
-	if (--p_ptr->running <= 0) return;
+	if (--creature_ptr->running <= 0) return;
 
 	/* Take time */
-	take_turn(p_ptr, 100);
+	take_turn(creature_ptr, 100);
 
 	/* Move the player, using the "pickup" flag */
-	move_player(p_ptr, find_current, FALSE, FALSE);
+	move_player(creature_ptr, find_current, FALSE, FALSE);
 
-	if (player_bold(p_ptr, p_ptr->run_py, p_ptr->run_px))
+	if (player_bold(creature_ptr, creature_ptr->run_py, creature_ptr->run_px))
 	{
-		p_ptr->run_py = 0;
-		p_ptr->run_px = 0;
-		disturb(p_ptr, FALSE, FALSE);
+		creature_ptr->run_py = 0;
+		creature_ptr->run_px = 0;
+		disturb(creature_ptr, FALSE, FALSE);
 	}
 }
 
