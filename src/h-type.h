@@ -51,7 +51,7 @@ typedef double real;      /*!< doubleをreal型として定義 / Since float's a
 /*!
  * @brief エラーコードの定義 / Error codes for function return values
  * @details
- * 一般に成功時0、失敗時負数、何らかの問題時整数とする。
+ * 一般に成功時0、失敗時負数、何らかの問題時正数とする。
  * Success = 0, Failure = -N, Problem = +N 
  */
 typedef int errr;
@@ -282,7 +282,6 @@ typedef vptr *vptr_ptr;
 typedef concptr *cptr_ptr;
 
 
-
 /*** Pointers to Functions of special types (for various purposes) ***/
 
 /* A generic function takes a user data and a special data */
@@ -301,6 +300,4 @@ typedef uint	(*func_hsh)(vptr, uint);
 typedef vptr	(*func_key)(vptr);
 
 
-
 #endif
-
