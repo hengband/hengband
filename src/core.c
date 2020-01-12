@@ -4031,7 +4031,7 @@ static void process_command(player_type *creature_ptr)
 		/* Full dungeon map */
 		case 'M':
 		{
-			do_cmd_view_map();
+			do_cmd_view_map(creature_ptr);
 			break;
 		}
 

@@ -145,6 +145,7 @@ POSITION panel_col_prt, panel_row_prt;
 
 void print_equippy(player_type *creature_ptr);
 void print_map(player_type *player_ptr);
+void display_map(player_type *player_ptr, int *cy, int *cx);
 
 /*!
  * @brief 画面左の能力値表示を行うために指定位置から13キャラ分を空白消去後指定のメッセージを明るい青で描画する /
@@ -1927,9 +1928,10 @@ static void fix_overhead(player_type *player_ptr)
 		if (wid > COL_MAP + 2 && hgt > ROW_MAP + 2)
 		{
 
-			display_map(player_ptr->current_floor_ptr, &cy, &cx);
+			display_map(player_ptr, &cy, &cx);
 			Term_fresh();
 		}
+
 		Term_activate(old);
 	}
 }
@@ -2781,6 +2783,7 @@ void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_cha
 
 
 /*!
+ * todo main-gnuにも影響があるのでplayer_typeの追加は保留
  * @brief Mコマンドによる縮小マップの表示を行う / Extract the attr/char to display at the given (legal) map location
  * @details
  * Basically, we "paint" the chosen attr/char in several passes, starting\n
@@ -3344,7 +3347,7 @@ static concptr simplify_list[][2] =
 };
 
 
-static void display_shortened_item_name(object_type *o_ptr, int y)
+static void display_shortened_item_name(player_type *player_ptr, object_type *o_ptr, int y)
 {
 	char buf[MAX_NLEN];
 	char *c = buf;
@@ -3354,7 +3357,7 @@ static void display_shortened_item_name(object_type *o_ptr, int y)
 	object_desc(buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
 	attr = tval_to_attr[o_ptr->tval % 128];
 
-	if (p_ptr->image)
+	if (player_ptr->image)
 	{
 		attr = TERM_WHITE;
 		strcpy(buf, _("何か奇妙な物", "something strange"));
@@ -3413,10 +3416,11 @@ static void display_shortened_item_name(object_type *o_ptr, int y)
 	Term_putstr(0, y, 12, attr, buf);
 }
 
+
 /*
  * Display a "small-scale" map of the dungeon in the active Term
  */
-void display_map(floor_type *floor_ptr, int *cy, int *cx)
+void display_map(player_type *player_ptr, int *cy, int *cx)
 {
 	int i, j, x, y;
 
@@ -3447,6 +3451,7 @@ void display_map(floor_type *floor_ptr, int *cy, int *cx)
 	wid -= 14;
 	if (use_bigtile) wid /= 2;
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	yrat = (floor_ptr->height + hgt - 1) / hgt;
 	xrat = (floor_ptr->width + wid - 1) / wid;
 
@@ -3612,15 +3617,14 @@ void display_map(floor_type *floor_ptr, int *cy, int *cx)
 			if (!use_graphics)
 			{
 				if (current_world_ptr->timewalk_m_idx) ta = TERM_DARK;
-				else if (IS_INVULN(p_ptr) || p_ptr->timewalk) ta = TERM_WHITE;
-				else if (p_ptr->wraith_form) ta = TERM_L_DARK;
+				else if (IS_INVULN(player_ptr) || player_ptr->timewalk) ta = TERM_WHITE;
+				else if (player_ptr->wraith_form) ta = TERM_L_DARK;
 			}
 
 			/* Add the character */
 			Term_add_bigch(ta, tc);
 		}
 	}
-
 
 	for (y = 1; y < hgt + 1; ++y)
 	{
@@ -3639,7 +3643,7 @@ void display_map(floor_type *floor_ptr, int *cy, int *cx)
 
 		if (match_autopick != -1)
 #if 1
-			display_shortened_item_name(autopick_obj, y);
+			display_shortened_item_name(player_ptr, autopick_obj, y);
 #else
 		{
 			char buf[13] = "\0";
@@ -3652,11 +3656,11 @@ void display_map(floor_type *floor_ptr, int *cy, int *cx)
 	}
 
 	/* Player location */
-	(*cy) = p_ptr->y / yrat + 1 + ROW_MAP;
+	(*cy) = player_ptr->y / yrat + 1 + ROW_MAP;
 	if (!use_bigtile)
-		(*cx) = p_ptr->x / xrat + 1 + COL_MAP;
+		(*cx) = player_ptr->x / xrat + 1 + COL_MAP;
 	else
-		(*cx) = (p_ptr->x / xrat + 1) * 2 + COL_MAP;
+		(*cx) = (player_ptr->x / xrat + 1) * 2 + COL_MAP;
 
 	/* Restore lighting effects */
 	view_special_lite = old_view_special_lite;
@@ -3701,7 +3705,7 @@ void display_map(floor_type *floor_ptr, int *cy, int *cx)
  *
  * Currently, the "player" is displayed on the map.
  */
-void do_cmd_view_map(void)
+void do_cmd_view_map(player_type *player_ptr)
 {
 	int cy, cx;
 
@@ -3715,10 +3719,10 @@ void do_cmd_view_map(void)
 	display_autopick = 0;
 
 	/* Display the map */
-	display_map(p_ptr->current_floor_ptr, &cy, &cx);
+	display_map(player_ptr, &cy, &cx);
 
 	/* Wait for it */
-	if (max_autopick && !p_ptr->wild_mode)
+	if (max_autopick && !player_ptr->wild_mode)
 	{
 		display_autopick = ITEM_DISPLAY;
 
@@ -3758,7 +3762,7 @@ void do_cmd_view_map(void)
 			else
 				display_autopick &= ~flag;
 			/* Display the map */
-			display_map(p_ptr->current_floor_ptr, &cy, &cx);
+			display_map(player_ptr, &cy, &cx);
 		}
 
 		display_autopick = 0;
@@ -3772,6 +3776,7 @@ void do_cmd_view_map(void)
 		/* Get any key */
 		inkey();
 	}
+
 	screen_load();
 }
 
