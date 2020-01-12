@@ -586,22 +586,22 @@ static void prt_status(player_type *creature_ptr)
 
 	/* Oppose Acid */
 	if (creature_ptr->special_defense & DEFENSE_ACID) ADD_FLG(BAR_IMMACID);
-	if (IS_OPPOSE_ACID()) ADD_FLG(BAR_RESACID);
+	if (is_oppose_acid(creature_ptr)) ADD_FLG(BAR_RESACID);
 
 	/* Oppose Lightning */
 	if (creature_ptr->special_defense & DEFENSE_ELEC) ADD_FLG(BAR_IMMELEC);
-	if (IS_OPPOSE_ELEC()) ADD_FLG(BAR_RESELEC);
+	if (is_oppose_elec (creature_ptr)) ADD_FLG(BAR_RESELEC);
 
 	/* Oppose Fire */
 	if (creature_ptr->special_defense & DEFENSE_FIRE) ADD_FLG(BAR_IMMFIRE);
-	if (IS_OPPOSE_FIRE()) ADD_FLG(BAR_RESFIRE);
+	if (is_oppose_fire(creature_ptr)) ADD_FLG(BAR_RESFIRE);
 
 	/* Oppose Cold */
 	if (creature_ptr->special_defense & DEFENSE_COLD) ADD_FLG(BAR_IMMCOLD);
-	if (IS_OPPOSE_COLD()) ADD_FLG(BAR_RESCOLD);
+	if (is_oppose_cold(creature_ptr)) ADD_FLG(BAR_RESCOLD);
 
 	/* Oppose Poison */
-	if (IS_OPPOSE_POIS()) ADD_FLG(BAR_RESPOIS);
+	if (is_oppose_pois(creature_ptr)) ADD_FLG(BAR_RESPOIS);
 
 	/* Word of Recall */
 	if (creature_ptr->word_recall) ADD_FLG(BAR_RECALL);

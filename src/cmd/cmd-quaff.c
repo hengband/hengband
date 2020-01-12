@@ -128,7 +128,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 			break;
 
 		case SV_POTION_POISON:
-			if (!(creature_ptr->resist_pois || IS_OPPOSE_POIS()))
+			if (!(creature_ptr->resist_pois || is_oppose_pois(creature_ptr)))
 			{
 				if (set_poisoned(creature_ptr, creature_ptr->poisoned + randint0(15) + 10))
 				{

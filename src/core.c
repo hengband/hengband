@@ -1451,7 +1451,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		{
 			if(PRACE_IS_(creature_ptr, RACE_ENT)) damage += damage / 3;
 			if(creature_ptr->resist_fire) damage = damage / 3;
-			if(IS_OPPOSE_FIRE()) damage = damage / 3;
+			if(is_oppose_fire(creature_ptr)) damage = damage / 3;
 			if(creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
@@ -1489,7 +1489,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		if (damage)
 		{
 			if (creature_ptr->resist_cold) damage = damage / 3;
-			if (IS_OPPOSE_COLD()) damage = damage / 3;
+			if (is_oppose_cold(creature_ptr)) damage = damage / 3;
 			if (creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
@@ -1527,7 +1527,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		if (damage)
 		{
 			if (creature_ptr->resist_elec) damage = damage / 3;
-			if (IS_OPPOSE_ELEC()) damage = damage / 3;
+			if (is_oppose_elec(creature_ptr)) damage = damage / 3;
 			if (creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
@@ -1565,7 +1565,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		if (damage)
 		{
 			if (creature_ptr->resist_acid) damage = damage / 3;
-			if (IS_OPPOSE_ACID()) damage = damage / 3;
+			if (is_oppose_acid(creature_ptr)) damage = damage / 3;
 			if (creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
@@ -1603,7 +1603,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		if (damage)
 		{
 			if (creature_ptr->resist_pois) damage = damage / 3;
-			if (IS_OPPOSE_POIS()) damage = damage / 3;
+			if (is_oppose_pois(creature_ptr)) damage = damage / 3;
 			if (creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
@@ -1646,7 +1646,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
 			if (PRACE_IS_(creature_ptr, RACE_ENT)) damage += damage / 3;
 			if (creature_ptr->resist_fire) damage = damage / 3;
-			if (IS_OPPOSE_FIRE()) damage = damage / 3;
+			if (is_oppose_fire(creature_ptr)) damage = damage / 3;
 			msg_print(_("熱い！", "It's hot!"));
 			take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"), -1);
 		}
@@ -1655,7 +1655,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
 			if (PRACE_IS_(creature_ptr, RACE_ANDROID)) damage += damage / 3;
 			if (creature_ptr->resist_elec) damage = damage / 3;
-			if (IS_OPPOSE_ELEC()) damage = damage / 3;
+			if (is_oppose_elec(creature_ptr)) damage = damage / 3;
 			msg_print(_("痛い！", "It hurts!"));
 			take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"), -1);
 		}
@@ -1663,7 +1663,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		{
 			damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
 			if (creature_ptr->resist_cold) damage = damage / 3;
-			if (IS_OPPOSE_COLD()) damage = damage / 3;
+			if (is_oppose_cold(creature_ptr)) damage = damage / 3;
 			msg_print(_("冷たい！", "It's cold!"));
 			take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("冷気のオーラ", "Cold aura"), -1);
 		}

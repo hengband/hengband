@@ -1231,11 +1231,11 @@ void self_knowledge(player_type *creature_ptr)
 	{
 		info[i++] = _("あなたは酸に対する完全なる免疫を持っている。", "You are completely immune to acid.");
 	}
-	else if (creature_ptr->resist_acid && IS_OPPOSE_ACID())
+	else if (creature_ptr->resist_acid && is_oppose_acid(creature_ptr))
 	{
 		info[i++] = _("あなたは酸への強力な耐性を持っている。", "You resist acid exceptionally well.");
 	}
-	else if (creature_ptr->resist_acid || IS_OPPOSE_ACID())
+	else if (creature_ptr->resist_acid || is_oppose_acid(creature_ptr))
 	{
 		info[i++] = _("あなたは酸への耐性を持っている。", "You are resistant to acid.");
 	}
@@ -1244,11 +1244,11 @@ void self_knowledge(player_type *creature_ptr)
 	{
 		info[i++] = _("あなたは電撃に対する完全なる免疫を持っている。", "You are completely immune to lightning.");
 	}
-	else if (creature_ptr->resist_elec && IS_OPPOSE_ELEC())
+	else if (creature_ptr->resist_elec && is_oppose_elec(creature_ptr))
 	{
 		info[i++] = _("あなたは電撃への強力な耐性を持っている。", "You resist lightning exceptionally well.");
 	}
-	else if (creature_ptr->resist_elec || IS_OPPOSE_ELEC())
+	else if (creature_ptr->resist_elec || is_oppose_elec(creature_ptr))
 	{
 		info[i++] = _("あなたは電撃への耐性を持っている。", "You are resistant to lightning.");
 	}
@@ -1262,11 +1262,11 @@ void self_knowledge(player_type *creature_ptr)
 	{
 		info[i++] = _("あなたは火に対する完全なる免疫を持っている。", "You are completely immune to fire.");
 	}
-	else if (creature_ptr->resist_fire && IS_OPPOSE_FIRE())
+	else if (creature_ptr->resist_fire && is_oppose_fire(creature_ptr))
 	{
 		info[i++] = _("あなたは火への強力な耐性を持っている。", "You resist fire exceptionally well.");
 	}
-	else if (creature_ptr->resist_fire || IS_OPPOSE_FIRE())
+	else if (creature_ptr->resist_fire || is_oppose_fire(creature_ptr))
 	{
 		info[i++] = _("あなたは火への耐性を持っている。", "You are resistant to fire.");
 	}
@@ -1280,20 +1280,20 @@ void self_knowledge(player_type *creature_ptr)
 	{
 		info[i++] = _("あなたは冷気に対する完全なる免疫を持っている。", "You are completely immune to cold.");
 	}
-	else if (creature_ptr->resist_cold && IS_OPPOSE_COLD())
+	else if (creature_ptr->resist_cold && is_oppose_cold(creature_ptr))
 	{
 		info[i++] = _("あなたは冷気への強力な耐性を持っている。", "You resist cold exceptionally well.");
 	}
-	else if (creature_ptr->resist_cold || IS_OPPOSE_COLD())
+	else if (creature_ptr->resist_cold || is_oppose_cold(creature_ptr))
 	{
 		info[i++] = _("あなたは冷気への耐性を持っている。", "You are resistant to cold.");
 	}
 
-	if (creature_ptr->resist_pois && IS_OPPOSE_POIS())
+	if (creature_ptr->resist_pois && is_oppose_pois(creature_ptr))
 	{
 		info[i++] = _("あなたは毒への強力な耐性を持っている。", "You resist poison exceptionally well.");
 	}
-	else if (creature_ptr->resist_pois || IS_OPPOSE_POIS())
+	else if (creature_ptr->resist_pois || is_oppose_pois(creature_ptr))
 	{
 		info[i++] = _("あなたは毒への耐性を持っている。", "You are resistant to poison.");
 	}

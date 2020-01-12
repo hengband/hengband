@@ -313,7 +313,7 @@ static void hit_trap_pit(player_type *trapped_ptr, int trap_feat_type)
 		(void)set_cut(trapped_ptr,trapped_ptr->cut + randint1(dam));
 
 		if (trap_feat_type == TRAP_POISON_PIT) {
-			if (trapped_ptr->resist_pois || IS_OPPOSE_POIS())
+			if (trapped_ptr->resist_pois || is_oppose_pois(trapped_ptr))
 			{
 				msg_print(_("しかし毒の影響はなかった！", "The poison does not affect you!"));
 			}
@@ -554,7 +554,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 	{
 		hit_trap_set_abnormal_status_p(
 			_("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"),
-			trapped_ptr->resist_pois || IS_OPPOSE_POIS(),
+			trapped_ptr->resist_pois || is_oppose_pois(trapped_ptr),
 			set_poisoned, trapped_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
 		break;
 	}

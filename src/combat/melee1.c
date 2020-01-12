@@ -2088,15 +2088,15 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 
 					if (attacker_ptr->align < 0 && mult < 20)
 						mult = 20;
-					if (!(attacker_ptr->resist_acid || IS_OPPOSE_ACID() || attacker_ptr->immune_acid) && (mult < 25))
+					if (!(attacker_ptr->resist_acid || is_oppose_acid(attacker_ptr) || attacker_ptr->immune_acid) && (mult < 25))
 						mult = 25;
-					if (!(attacker_ptr->resist_elec || IS_OPPOSE_ELEC() || attacker_ptr->immune_elec) && (mult < 25))
+					if (!(attacker_ptr->resist_elec || is_oppose_elec(attacker_ptr) || attacker_ptr->immune_elec) && (mult < 25))
 						mult = 25;
-					if (!(attacker_ptr->resist_fire || IS_OPPOSE_FIRE() || attacker_ptr->immune_fire) && (mult < 25))
+					if (!(attacker_ptr->resist_fire || is_oppose_fire(attacker_ptr) || attacker_ptr->immune_fire) && (mult < 25))
 						mult = 25;
-					if (!(attacker_ptr->resist_cold || IS_OPPOSE_COLD() || attacker_ptr->immune_cold) && (mult < 25))
+					if (!(attacker_ptr->resist_cold || is_oppose_cold(attacker_ptr) || attacker_ptr->immune_cold) && (mult < 25))
 						mult = 25;
-					if (!(attacker_ptr->resist_pois || IS_OPPOSE_POIS()) && (mult < 25))
+					if (!(attacker_ptr->resist_pois || is_oppose_pois(attacker_ptr)) && (mult < 25))
 						mult = 25;
 
 					if ((attacker_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs_aux, TR_FORCE_WEAPON)) && (attacker_ptr->csp >(attacker_ptr->msp / 30)))
@@ -2816,7 +2816,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (explode) break;
 
 					/* Take "poison" effect */
-					if (!(target_ptr->resist_pois || IS_OPPOSE_POIS()) && !CHECK_MULTISHADOW(target_ptr))
+					if (!(target_ptr->resist_pois || is_oppose_pois(target_ptr)) && !CHECK_MULTISHADOW(target_ptr))
 					{
 						if (set_poisoned(target_ptr, target_ptr->poisoned + randint1(rlev) + 5))
 						{
@@ -3448,7 +3448,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
 
 					/* Take "poison" effect */
-					if (!(target_ptr->resist_pois || IS_OPPOSE_POIS()))
+					if (!(target_ptr->resist_pois || is_oppose_pois(target_ptr)))
 					{
 						if (set_poisoned(target_ptr, target_ptr->poisoned + randint1(rlev) + 5))
 						{

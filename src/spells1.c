@@ -4155,7 +4155,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 	/* Standard damage -- also poisons player */
 	case GF_POIS:
 	{
-		bool double_resist = IS_OPPOSE_POIS();
+		bool double_resist = is_oppose_pois(target_ptr);
 		if (fuzzy) msg_print(_("毒で攻撃された！", "You are hit by poison!"));
 
 		if (target_ptr->resist_pois) dam = (dam + 2) / 3;
@@ -4178,7 +4178,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 	/* Standard damage -- also poisons / mutates player */
 	case GF_NUKE:
 	{
-		bool double_resist = IS_OPPOSE_POIS();
+		bool double_resist = is_oppose_pois(target_ptr);
 		if (fuzzy) msg_print(_("放射能で攻撃された！", "You are hit by radiation!"));
 
 		if (target_ptr->resist_pois) dam = (2 * dam + 2) / 5;
@@ -4262,7 +4262,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 			(void)set_stun(target_ptr, target_ptr->stun + plus_stun);
 		}
 
-		if (!(target_ptr->resist_fire || IS_OPPOSE_FIRE() || target_ptr->immune_fire))
+		if (!(target_ptr->resist_fire || is_oppose_fire(target_ptr) || target_ptr->immune_fire))
 		{
 			inventory_damage(target_ptr, set_acid_destroy, 3);
 		}
@@ -4757,7 +4757,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 				(void)set_stun(target_ptr, target_ptr->stun + randint1(15));
 			}
 
-			if ((!(target_ptr->resist_cold || IS_OPPOSE_COLD())) || one_in_(12))
+			if ((!(target_ptr->resist_cold || is_oppose_cold(target_ptr))) || one_in_(12))
 			{
 				if (!target_ptr->immune_cold) inventory_damage(target_ptr, set_cold_destroy, 3);
 			}

@@ -2728,15 +2728,15 @@ static void tim_player_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_S
 	if (IS_FAST(creature_ptr) || creature_ptr->slow)
 		add_flag(flgs, TR_SPEED);
 
-	if (IS_OPPOSE_ACID() && !(creature_ptr->special_defense & DEFENSE_ACID) && !(PRACE_IS_(creature_ptr, RACE_YEEK) && (creature_ptr->lev > 19)))
+	if (is_oppose_acid(creature_ptr) && !(creature_ptr->special_defense & DEFENSE_ACID) && !(PRACE_IS_(creature_ptr, RACE_YEEK) && (creature_ptr->lev > 19)))
 		add_flag(flgs, TR_RES_ACID);
-	if (IS_OPPOSE_ELEC() && !(creature_ptr->special_defense & DEFENSE_ELEC))
+	if (is_oppose_elec(creature_ptr) && !(creature_ptr->special_defense & DEFENSE_ELEC))
 		add_flag(flgs, TR_RES_ELEC);
-	if (IS_OPPOSE_FIRE() && !(creature_ptr->special_defense & DEFENSE_FIRE))
+	if (is_oppose_fire(creature_ptr) && !(creature_ptr->special_defense & DEFENSE_FIRE))
 		add_flag(flgs, TR_RES_FIRE);
-	if (IS_OPPOSE_COLD() && !(creature_ptr->special_defense & DEFENSE_COLD))
+	if (is_oppose_cold(creature_ptr) && !(creature_ptr->special_defense & DEFENSE_COLD))
 		add_flag(flgs, TR_RES_COLD);
-	if (IS_OPPOSE_POIS())
+	if (is_oppose_pois(creature_ptr))
 		add_flag(flgs, TR_RES_POIS);
 
 	if (creature_ptr->special_attack & ATTACK_ACID)
