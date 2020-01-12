@@ -1717,9 +1717,10 @@ void print_monster_list(floor_type *floor_ptr, TERM_LEN x, TERM_LEN y, TERM_LEN 
 
 /*!
  * @brief 出現中モンスターのリストをサブウィンドウに表示する / Hack -- display monster list in sub-windows
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void fix_monster_list(void)
+static void fix_monster_list(player_type *player_ptr)
 {
 	int j;
 	int w, h;
@@ -1742,7 +1743,7 @@ static void fix_monster_list(void)
 		Term_clear();
 
 		target_set_prepare_look();//モンスター一覧を生成，ソート
-		print_monster_list(p_ptr->current_floor_ptr, 0, 0, h);
+		print_monster_list(player_ptr->current_floor_ptr, 0, 0, h);
 		Term_fresh();
 		Term_activate(old);
 	}
@@ -2327,7 +2328,7 @@ void window_stuff(player_type *player_ptr)
 	if (player_ptr->window & (PW_MONSTER_LIST))
 	{
 		player_ptr->window &= ~(PW_MONSTER_LIST);
-		fix_monster_list();
+		fix_monster_list(player_ptr);
 	}
 	
 	/* Display overhead view */
