@@ -1573,7 +1573,7 @@ static bool save_player_aux(player_type *player_ptr, char *name)
 	/* Failure */
 	if (!ok) return FALSE;
 
-	counts_write(0, current_world_ptr->play_time);
+	counts_write(player_ptr, 0, current_world_ptr->play_time);
 
 	/* Successful save */
 	current_world_ptr->character_saved = TRUE;
@@ -1695,6 +1695,7 @@ bool save_player(player_type *player_ptr)
 /*!
  * @brief セーブデータ読み込みのメインルーチン /
  * Attempt to Load a "savefile"
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return 成功すればtrue
  * @details
  * <pre>
@@ -1719,7 +1720,7 @@ bool save_player(player_type *player_ptr)
  * there is no such file, so we must check for "empty" savefile names.
  * </pre>
  */
-bool load_player(void)
+bool load_player(player_type *player_ptr)
 {
 	int             fd = -1;
 
@@ -1892,7 +1893,7 @@ bool load_player(void)
 		}
 
 		/* Player is dead */
-		if (p_ptr->is_dead)
+		if (player_ptr->is_dead)
 		{
 			/* Cheat death */
 			if (arg_wizard)
@@ -1903,7 +1904,7 @@ bool load_player(void)
 			}
 
 			/* Player is no longer "dead" */
-			p_ptr->is_dead = FALSE;
+			player_ptr->is_dead = FALSE;
 
 			/* Count lives */
 			current_world_ptr->sf_lives++;
@@ -1915,12 +1916,12 @@ bool load_player(void)
 		current_world_ptr->character_loaded = TRUE;
 
 		{
-			u32b tmp = counts_read(2);
-			if (tmp > p_ptr->count)
-				p_ptr->count = tmp;
-			if (counts_read(0) > current_world_ptr->play_time || counts_read(1) == current_world_ptr->play_time)
-				counts_write(2, ++p_ptr->count);
-			counts_write(1, current_world_ptr->play_time);
+			u32b tmp = counts_read(player_ptr, 2);
+			if (tmp > player_ptr->count)
+				player_ptr->count = tmp;
+			if (counts_read(player_ptr, 0) > current_world_ptr->play_time || counts_read(player_ptr, 1) == current_world_ptr->play_time)
+				counts_write(player_ptr, 2, ++player_ptr->count);
+			counts_write(player_ptr, 1, current_world_ptr->play_time);
 		}
 
 		/* Success */

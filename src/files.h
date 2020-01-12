@@ -55,5 +55,5 @@ extern void show_info(player_type *creature_ptr);
 #ifdef JP
 extern errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count);
 #endif
-extern errr counts_write(int where, u32b count);
-extern u32b counts_read(int where);
+extern errr counts_write(player_type *creature_ptr, int where, u32b count);
+extern u32b counts_read(player_type *creature_ptr, int where);

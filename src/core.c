@@ -5282,7 +5282,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
 
 	/* Attempt to load */
-	if (!load_player())
+	if (!load_player(player_ptr))
 	{
 		quit(_("セーブファイルが壊れています", "broken savefile"));
 	}
@@ -5406,7 +5406,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		/* Roll up a new character */
 		player_birth(player_ptr);
 
-		counts_write(2,0);
+		counts_write(player_ptr, 2,0);
 		player_ptr->count = 0;
 
 		load = FALSE;

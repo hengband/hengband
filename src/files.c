@@ -6751,13 +6751,14 @@ errr process_histpref_file(player_type *creature_ptr, concptr name)
 
 /*!
  * @brief ファイル位置をシーク /
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fd ファイルディスクリプタ
  * @param where ファイルバイト位置
  * @param flag FALSEならば現ファイルを超えた位置へシーク時エラー、TRUEなら足りない間を0で埋め尽くす
  * @return エラーコード
  * @details
  */
-static errr counts_seek(int fd, u32b where, bool flag)
+static errr counts_seek(player_type *creature_ptr, int fd, u32b where, bool flag)
 {
 	huge seekpoint;
 	char temp1[128], temp2[128];
@@ -6765,9 +6766,9 @@ static errr counts_seek(int fd, u32b where, bool flag)
 	int i;
 
 #ifdef SAVEFILE_USE_UID
-	(void)sprintf(temp1, "%d.%s.%d%d%d", p_ptr->player_uid, savefile_base, p_ptr->pclass, p_ptr->pseikaku, p_ptr->age);
+	(void)sprintf(temp1, "%d.%s.%d%d%d", creature_ptr->player_uid, savefile_base, creature_ptr->pclass, creature_ptr->pseikaku, creature_ptr->age);
 #else
-	(void)sprintf(temp1, "%s.%d%d%d", savefile_base, p_ptr->pclass, p_ptr->pseikaku, p_ptr->age);
+	(void)sprintf(temp1, "%s.%d%d%d", savefile_base, creature_ptr->pclass, creature_ptr->pseikaku, creature_ptr->age);
 #endif
 	for (i = 0; temp1[i]; i++)
 		temp1[i] ^= (i+1) * 63;
@@ -6799,11 +6800,12 @@ static errr counts_seek(int fd, u32b where, bool flag)
 
 /*!
  * @brief ファイル位置を読み込む
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param where ファイルバイト位置
  * @return エラーコード
  * @details
  */
-u32b counts_read(int where)
+u32b counts_read(player_type *creature_ptr, int where)
 {
 	int fd;
 	u32b count = 0;
@@ -6812,7 +6814,7 @@ u32b counts_read(int where)
 	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
 	fd = fd_open(buf, O_RDONLY);
 
-	if (counts_seek(fd, where, FALSE) ||
+	if (counts_seek(creature_ptr, fd, where, FALSE) ||
 	    fd_read(fd, (char*)(&count), sizeof(u32b)))
 		count = 0;
 
@@ -6823,12 +6825,13 @@ u32b counts_read(int where)
 
 /*!
  * @brief ファイル位置に書き込む /
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param where ファイルバイト位置
  * @param count 書き込む値
  * @return エラーコード
  * @details
  */
-errr counts_write(int where, u32b count)
+errr counts_write(player_type *creature_ptr, int where, u32b count)
 {
 	int fd;
 	char buf[1024];
@@ -6869,7 +6872,7 @@ errr counts_write(int where, u32b count)
 
 	if (err) return 1;
 
-	counts_seek(fd, where, TRUE);
+	counts_seek(creature_ptr, fd, where, TRUE);
 	fd_write(fd, (char*)(&count), sizeof(u32b));
 
 	/* Grab permissions */
