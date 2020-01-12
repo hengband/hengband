@@ -1425,7 +1425,7 @@ void discharge_minion(player_type *caster_ptr)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(m_name, m_ptr, 0x00);
-			msg_format(_("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", "%^s resists to be blasted, and run away."), m_name);
+			msg_format(_("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", "%^s resists being blasted and runs away."), m_name);
 			delete_monster_idx(i);
 			continue;
 		}
@@ -4662,7 +4662,7 @@ bool rodeo(player_type *creature_ptr)
 	}
 	else
 	{
-		msg_format(_("%sに振り落とされた！", "You have thrown off by %s."), m_name);
+		msg_format(_("%sに振り落とされた！", "You have been thrown off by %s."), m_name);
 		rakuba(creature_ptr, 1, TRUE);
 		/* 落馬処理に失敗してもとにかく乗馬解除 */
 		creature_ptr->riding = 0;

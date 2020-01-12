@@ -688,7 +688,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 							monster_desc(m_name, m_ptr, 0);
 
 							tdam = m_ptr->hp + 1;
-							msg_format(_("%sの急所に突き刺さった！", "Your shot sticked on a fatal spot of %s!"), m_name);
+							msg_format(_("%sの急所に突き刺さった！", "Your shot hit a fatal spot of %s!"), m_name);
 						}
 						else tdam = 1;
 					}
@@ -745,7 +745,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 							monster_desc(m_name, m_ptr, 0);
 
 							stick_to = TRUE;
-							msg_format(_("%sは%sに突き刺さった！", "%^s have stuck into %s!"), o_name, m_name);
+							msg_format(_("%sは%sに突き刺さった！", "%^s is stuck in %s!"), o_name, m_name);
 						}
 
 						message_pain(c_mon_ptr->m_idx, tdam);
@@ -835,7 +835,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
 			if (!o_idx)
 			{
-				msg_format(_("%sはどこかへ行った。", "The %s have gone to somewhere."), o_name);
+				msg_format(_("%sはどこかへ行った。", "The %s went somewhere."), o_name);
 				if (object_is_fixed_artifact(q_ptr))
 				{
 					a_info[j_ptr->name1].cur_num = 0;

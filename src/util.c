@@ -4216,7 +4216,7 @@ menu_naiyou menu_info[10][10] =
 		{"Identify symbol(/)", '/', TRUE},
 		{"Show prev messages(^p)", KTRL('P'), TRUE},
 		{"Current time(^t/')", KTRL('T'), TRUE},
-		{"Various informations(~)", '~', TRUE},
+		{"Various information(~)", '~', TRUE},
 		{"Play record menu(|)", '|', TRUE},
 		{"", 0, FALSE}
 	},

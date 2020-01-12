@@ -2399,7 +2399,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	if (target_ptr->special_defense & KATA_IAI)
 	{
-		msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, draw and cut in one motion before %s move."), m_name);
+		msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, draw and cut in one motion before %s moved."), m_name);
 		if (py_attack(target_ptr, m_ptr->fy, m_ptr->fx, HISSATSU_IAI)) return TRUE;
 	}
 
@@ -3912,7 +3912,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						/* Modify the damage */
 						dam = mon_damage_mod(m_ptr, dam, FALSE);
 
-						msg_format(_("影のオーラが%^sに反撃した！", "Enveloped shadows attack %^s."), m_name);
+						msg_format(_("影のオーラが%^sに反撃した！", "Enveloping shadows attack %^s."), m_name);
 						if (mon_take_hit(m_idx, dam, &fear, _("は倒れた。", " is destroyed.")))
 						{
 							blinked = FALSE;
@@ -4071,7 +4071,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 		monster_desc(m_target_name, m_ptr, 0);
 
 		target_ptr->csp -= 7;
-		msg_format(_("%^sに反撃した！", "Your counterattack to %s!"), m_target_name);
+		msg_format(_("%^sに反撃した！", "Your counterattacked to %s!"), m_target_name);
 		py_attack(target_ptr, m_ptr->fy, m_ptr->fx, HISSATSU_COUNTER);
 		fear = FALSE;
 		target_ptr->redraw |= (PR_MANA);
@@ -4921,7 +4921,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 		if (m_ptr->hp > m_ptr->maxhp / 3) dam = (dam + 1) / 2;
 		if (rakuba(p_ptr, (dam > 200) ? 200 : dam, FALSE))
 		{
-			msg_format(_("%^sに振り落とされた！", "You have thrown off from %s!"), m_name);
+			msg_format(_("%^sに振り落とされた！", "You have been thrown off from %s!"), m_name);
 		}
 	}
 

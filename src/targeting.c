@@ -1763,7 +1763,7 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
 			monster_desc(m_name, m_ptr, 0);
 			if (MON_CONFUSED(m_ptr))
 			{
-				msg_format(_("%sは混乱している。", "%^s is confusing."), m_name);
+				msg_format(_("%sは混乱している。", "%^s is confused."), m_name);
 			}
 			else
 			{
@@ -1908,7 +1908,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 			monster_desc(m_name, m_ptr, 0);
 			if (MON_CONFUSED(m_ptr))
 			{
-				msg_format(_("%sは混乱している。", "%^s is confusing."), m_name);
+				msg_format(_("%sは混乱している。", "%^s is confused."), m_name);
 			}
 			else
 			{

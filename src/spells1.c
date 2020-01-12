@@ -659,7 +659,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 		{
 			if (is_mirror_grid(g_ptr))
 			{
-				msg_print(_("鏡が割れた！", "The mirror was crashed!"));
+				msg_print(_("鏡が割れた！", "The mirror was shattered!"));
 				sound(SOUND_GLASS);
 				remove_mirror(caster_ptr, y, x);
 				project(caster_ptr, 0, 2, y, x, caster_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
@@ -669,7 +669,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 			{
 				if (known && (g_ptr->info & CAVE_MARK))
 				{
-					msg_format(_("%sが割れた！", "The %s was crashed!"), f_name + f_info[get_feat_mimic(g_ptr)].name);
+					msg_format(_("%sが割れた！", "The %s crumbled!"), f_name + f_info[get_feat_mimic(g_ptr)].name);
 					sound(SOUND_GLASS);
 				}
 
@@ -685,7 +685,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 		{
 			if (is_mirror_grid(g_ptr) && caster_ptr->lev < 40)
 			{
-				msg_print(_("鏡が割れた！", "The mirror was crashed!"));
+				msg_print(_("鏡が割れた！", "The mirror was shattered!"));
 				sound(SOUND_GLASS);
 				remove_mirror(caster_ptr, y, x);
 				project(caster_ptr, 0, 2, y, x, caster_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
@@ -695,7 +695,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 			{
 				if (known && (g_ptr->info & CAVE_MARK))
 				{
-					msg_format(_("%sが割れた！", "The %s was crashed!"), f_name + f_info[get_feat_mimic(g_ptr)].name);
+					msg_format(_("%sが割れた！", "The %s crumbled!"), f_name + f_info[get_feat_mimic(g_ptr)].name);
 					sound(SOUND_GLASS);
 				}
 
@@ -3484,7 +3484,7 @@ static bool project_m(player_type *caster_ptr, floor_type *floor_ptr, MONSTER_ID
 			if (seen) obvious = TRUE;
 			if (genocide_aux(caster_ptr, g_ptr->m_idx, dam, !who, (r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
 			{
-				if (seen_msg) msg_format(_("%sは消滅した！", "%^s disappered!"), m_name);
+				if (seen_msg) msg_format(_("%sは消滅した！", "%^s disappeared!"), m_name);
 				chg_virtue(caster_ptr, V_VITALITY, -1);
 				return TRUE;
 			}

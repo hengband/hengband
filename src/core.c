@@ -2719,7 +2719,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_ANIMAL), (OD_OMIT_PREFIX | OD_NAME_ONLY));
-				msg_format(_("%sが動物を引き寄せた！", "Your %s have attracted an animal!"), o_name);
+				msg_format(_("%sが動物を引き寄せた！", "Your %s has attracted an animal!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
 		}
@@ -2731,7 +2731,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DEMON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
-				msg_format(_("%sが悪魔を引き寄せた！", "Your %s have attracted a demon!"), o_name);
+				msg_format(_("%sが悪魔を引き寄せた！", "Your %s has attracted a demon!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
 		}
@@ -2744,7 +2744,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DRAGON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
-				msg_format(_("%sがドラゴンを引き寄せた！", "Your %s have attracted an dragon!"), o_name);
+				msg_format(_("%sがドラゴンを引き寄せた！", "Your %s has attracted an dragon!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
 		}
@@ -2757,7 +2757,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 				GAME_TEXT o_name[MAX_NLEN];
 
 				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_UNDEAD), (OD_OMIT_PREFIX | OD_NAME_ONLY));
-				msg_format(_("%sが死霊を引き寄せた！", "Your %s have attracted an undead!"), o_name);
+				msg_format(_("%sが死霊を引き寄せた！", "Your %s has attracted an undead!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
 		}
@@ -4519,7 +4519,7 @@ static void process_player(player_type *creature_ptr)
 			/* Recover fully */
 			(void)set_monster_csleep(creature_ptr->riding, 0);
 			monster_desc(m_name, m_ptr, 0);
-			msg_format(_("%^sを起こした。", "You have waked %s up."), m_name);
+			msg_format(_("%^sを起こした。", "You have woken %s up."), m_name);
 		}
 
 		if (MON_STUNNED(m_ptr))
@@ -4554,7 +4554,7 @@ static void process_player(player_type *creature_ptr)
 			{
 				GAME_TEXT m_name[MAX_NLEN];
 				monster_desc(m_name, m_ptr, 0);
-				msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer fear."), m_name);
+				msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer afraid."), m_name);
 			}
 		}
 

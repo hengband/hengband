@@ -310,7 +310,7 @@ void mitokohmon(player_type *kohmon_ptr)
 	if (count)
 	{
 		msg_format(_("「者ども、ひかえおろう！！！このお方をどなたとこころえる。」",
-			"%^s says 'WHO do you think this person is! Bow your head, down your knees!'"), kakusan);
+			"%^s says 'WHO do you think this person is! Bow your head, down to your knees!'"), kakusan);
 		sukekaku = TRUE;
 		stun_monsters(kohmon_ptr, 120);
 		confuse_monsters(kohmon_ptr, 120);

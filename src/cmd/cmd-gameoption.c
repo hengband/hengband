@@ -165,7 +165,7 @@ bool record_sell;	/* Record sold items */
 bool record_danger;	/* Record hitpoint warning */
 bool record_arena;	/* Record arena victories */
 bool record_ident;	/* Record first identified items */
-bool record_named_pet;	/* Record informations of named pets */
+bool record_named_pet;	/* Record information about named pets */
 char record_o_name[MAX_NLEN];
 GAME_TURN record_turn;
 
@@ -594,7 +594,7 @@ const option_type option_info[] =
 	"record_ident",                 _("未判明のアイテムの識別を記録する", "Record first identified items") },
 
 	{ &record_named_pet,            FALSE, OPT_PAGE_PLAYRECORD, 4, 23,
-	"record_named_pet",             _("名前つきペットの情報を記録する", "Record informations of named pets") },
+	"record_named_pet",             _("名前つきペットの情報を記録する", "Record information about named pets") },
 
 /*** End of Table ***/
 

@@ -169,7 +169,7 @@ extern bool record_sell;	/* Record sold items */
 extern bool record_danger;	/* Record hitpoint warning */
 extern bool record_arena;	/* Record arena victories */
 extern bool record_ident;	/* Record first identified items */
-extern bool record_named_pet;	/* Record informations of named pets */
+extern bool record_named_pet;	/* Record information about named pets */
 
 extern char record_o_name[MAX_NLEN];
 extern GAME_TURN record_turn;

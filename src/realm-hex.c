@@ -987,7 +987,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 #ifdef JP
 			msg_print("武器の渇望が消え去った。");
 #else
-			msg_format("Thirsty of weapon%s disappeared.", (empty_hands(caster_ptr, FALSE)) ? "" : "s");
+			msg_format("Your weapon%s less thirsty now.", (empty_hands(FALSE)) ? " is" : "s are");
 #endif
 		}
 		break;
@@ -1109,7 +1109,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 				}
 				else
 				{
-					msg_print(_("復讐する気が失せた。", "You are not a mood to revenge."));
+					msg_print(_("復讐する気が失せた。", "You are not in the mood for revenge."));
 				}
 				HEX_REVENGE_POWER(caster_ptr) = 0;
 			}
