@@ -146,7 +146,7 @@ POSITION panel_col_prt, panel_row_prt;
 void print_equippy(player_type *creature_ptr);
 void print_map(player_type *player_ptr);
 void display_map(player_type *player_ptr, int *cy, int *cx);
-void set_term_color(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, TERM_COLOR *cp);
+void set_term_color(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp);
 
 /*!
  * @brief 画面左の能力値表示を行うために指定位置から13キャラ分を空白消去後指定のメッセージを明るい青で描画する /
@@ -3259,7 +3259,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 }
 
 
-void set_term_color(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, TERM_COLOR *cp)
+void set_term_color(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp)
 {
 	if (!player_bold(player_ptr, y, x)) return;
 
