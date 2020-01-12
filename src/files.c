@@ -3008,6 +3008,7 @@ typedef struct {
 /*!
  * @brief プレイヤーの特性フラグ一種を表示するサブルーチン /
  * Helper function, see below
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param row コンソール表示位置の左上行
  * @param col コンソール表示位置の左上列
  * @param header コンソール上で表示する特性名
@@ -3941,6 +3942,7 @@ void display_player(player_type *creature_ptr, int mode)
 		}
 
 		/* Display "history" info */
+		floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 		if (mode == 1)
 		{
 			char statmsg[1000];
@@ -3963,7 +3965,7 @@ void display_player(player_type *creature_ptr, int mode)
 					sprintf(statmsg, "...You %s after the winning.", streq(creature_ptr->died_from, "Seppuku") ? "did Seppuku" : "retired from the adventure");
 #endif
 				}
-				else if (!p_ptr->current_floor_ptr->dun_level)
+				else if (!floor_ptr->dun_level)
 				{
 #ifdef JP
 					sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(), creature_ptr->died_from);
@@ -3971,7 +3973,7 @@ void display_player(player_type *creature_ptr, int mode)
 					sprintf(statmsg, "...You were killed by %s in %s.", creature_ptr->died_from, map_name());
 #endif
 				}
-				else if (creature_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(creature_ptr->current_floor_ptr->inside_quest))
+				else if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest))
 				{
 					/* Get the quest text */
 					/* Bewere that INIT_ASSIGN resets the cur_num. */
@@ -3980,27 +3982,27 @@ void display_player(player_type *creature_ptr, int mode)
 					process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
 #ifdef JP
-					sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[creature_ptr->current_floor_ptr->inside_quest].name, creature_ptr->died_from);
+					sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[floor_ptr->inside_quest].name, creature_ptr->died_from);
 #else
-					sprintf(statmsg, "...You were killed by %s in the quest '%s'.", creature_ptr->died_from, quest[creature_ptr->current_floor_ptr->inside_quest].name);
+					sprintf(statmsg, "...You were killed by %s in the quest '%s'.", creature_ptr->died_from, quest[floor_ptr->inside_quest].name);
 #endif
 				}
 				else
 				{
 #ifdef JP
-					sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), (int)p_ptr->current_floor_ptr->dun_level, creature_ptr->died_from);
+					sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(), (int)floor_ptr->dun_level, creature_ptr->died_from);
 #else
-					sprintf(statmsg, "...You were killed by %s on level %d of %s.", creature_ptr->died_from, p_ptr->current_floor_ptr->dun_level, map_name());
+					sprintf(statmsg, "...You were killed by %s on level %d of %s.", creature_ptr->died_from, floor_ptr->dun_level, map_name());
 #endif
 				}
 			}
 			else if (current_world_ptr->character_dungeon)
 			{
-				if (!p_ptr->current_floor_ptr->dun_level)
+				if (!floor_ptr->dun_level)
 				{
 					sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name());
 				}
-				else if (creature_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(creature_ptr->current_floor_ptr->inside_quest))
+				else if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest))
 				{
 					/* Clear the text */
 					/* Must be done before doing INIT_SHOW_TEXT */
@@ -4015,14 +4017,14 @@ void display_player(player_type *creature_ptr, int mode)
 
 					process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
-					sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[creature_ptr->current_floor_ptr->inside_quest].name);
+					sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[floor_ptr->inside_quest].name);
 				}
 				else
 				{
 #ifdef JP
-					sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), (int)p_ptr->current_floor_ptr->dun_level);
+					sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(), (int)floor_ptr->dun_level);
 #else
-					sprintf(statmsg, "...Now, you are exploring level %d of %s.", p_ptr->current_floor_ptr->dun_level, map_name());
+					sprintf(statmsg, "...Now, you are exploring level %d of %s.", floor_ptr->dun_level, map_name());
 #endif
 				}
 			}
