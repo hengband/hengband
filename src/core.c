@@ -934,7 +934,7 @@ static void regenmagic(player_type *creature_ptr, int regen_amount)
  * @return なし
  * @note Should probably be done during monster turns.
  */
-static void regen_monsters(player_type *player_ptr)
+static void regenerate_monsters(player_type *player_ptr)
 {
 	for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++)
 	{
@@ -3271,7 +3271,7 @@ static void process_world(player_type *player_ptr)
 	}
 
 	/* Hack -- Check for creature regeneration */
-	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !player_ptr->phase_out) regen_monsters(player_ptr);
+	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !player_ptr->phase_out) regenerate_monsters(player_ptr);
 	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3))) regen_captured_monsters();
 
 	if (!player_ptr->leaving)
