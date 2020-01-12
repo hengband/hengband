@@ -33,13 +33,14 @@
 
 #include "view-mainwindow.h"
 
+#define MAX_FEAT_IN_TERRAIN 18
+
  /*
   * Wilderness
   */
 wilderness_type **wilderness;
 
 bool generate_encounter;
-
 
 /*!
  * @brief 地形生成確率を決める要素100の配列を確率テーブルから作成する
@@ -61,6 +62,7 @@ static void set_floor_and_wall_aux(s16b feat_type[100], feat_prob prob[DUNGEON_F
 		feat_type[i] = prob[cur].feat;
 	}
 }
+
 
 /*!
  * @brief ダンジョンの地形を指定確率に応じて各マスへランダムに敷き詰める
@@ -212,8 +214,6 @@ static void plasma_recursive(floor_type *floor_ptr, POSITION x1, POSITION y1, PO
 }
 
 
-#define MAX_FEAT_IN_TERRAIN 18
-
 /*
  * The default table in terrain level generation.
  */
@@ -227,45 +227,37 @@ static s16b terrain_table[MAX_WILDERNESS][MAX_FEAT_IN_TERRAIN];
  * @param corner 広域マップの角部分としての生成ならばTRUE
  * @return なし
  */
-static void generate_wilderness_area(floor_type *floor_ptr, int terrain, u32b seed, bool border, bool corner)
+static void generate_wilderness_area(floor_type *floor_ptr, int terrain, u32b seed, bool corner)
 {
-	POSITION x1, y1;
-	int table_size = sizeof(terrain_table[0]) / sizeof(s16b);
-	FEAT_IDX roughness = 1; /* The roughness of the level. */
-	u32b state_backup[4];
-
-	/* Unused */
-	(void)border;
-
 	/* The outer wall is easy */
 	if (terrain == TERRAIN_EDGE)
 	{
 		/* Create level background */
-		for (y1 = 0; y1 < MAX_HGT; y1++)
+		for (POSITION y1 = 0; y1 < MAX_HGT; y1++)
 		{
-			for (x1 = 0; x1 < MAX_WID; x1++)
+			for (POSITION x1 = 0; x1 < MAX_WID; x1++)
 			{
 				floor_ptr->grid_array[y1][x1].feat = feat_permanent;
 			}
 		}
 
-		/* We are done already */
 		return;
 	}
 
-
 	/* Hack -- Backup the RNG state */
+	u32b state_backup[4];
 	Rand_state_backup(state_backup);
 
 	/* Hack -- Induce consistant flavors */
 	Rand_state_set(seed);
 
+	int table_size = sizeof(terrain_table[0]) / sizeof(s16b);
 	if (!corner)
 	{
 		/* Create level background */
-		for (y1 = 0; y1 < MAX_HGT; y1++)
+		for (POSITION y1 = 0; y1 < MAX_HGT; y1++)
 		{
-			for (x1 = 0; x1 < MAX_WID; x1++)
+			for (POSITION x1 = 0; x1 < MAX_WID; x1++)
 			{
 				floor_ptr->grid_array[y1][x1].feat = table_size / 2;
 			}
@@ -282,43 +274,43 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, u32b se
 	floor_ptr->grid_array[1][MAX_WID-2].feat = (s16b)randint0(table_size);
 	floor_ptr->grid_array[MAX_HGT-2][MAX_WID-2].feat = (s16b)randint0(table_size);
 
-	if (!corner)
-	{
-		/* Hack -- preserve four corners */
-		s16b north_west = floor_ptr->grid_array[1][1].feat;
-		s16b south_west = floor_ptr->grid_array[MAX_HGT - 2][1].feat;
-		s16b north_east = floor_ptr->grid_array[1][MAX_WID - 2].feat;
-		s16b south_east = floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
-
-		/* x1, y1, x2, y2, num_depths, roughness */
-		plasma_recursive(floor_ptr, 1, 1, MAX_WID-2, MAX_HGT-2, table_size-1, roughness);
-
-		/* Hack -- copyback four corners */
-		floor_ptr->grid_array[1][1].feat = north_west;
-		floor_ptr->grid_array[MAX_HGT - 2][1].feat = south_west;
-		floor_ptr->grid_array[1][MAX_WID - 2].feat = north_east;
-		floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = south_east;
-
-		for (y1 = 1; y1 < MAX_HGT - 1; y1++)
-		{
-			for (x1 = 1; x1 < MAX_WID - 1; x1++)
-			{
-				floor_ptr->grid_array[y1][x1].feat = terrain_table[terrain][floor_ptr->grid_array[y1][x1].feat];
-			}
-		}
-	}
-	else /* Hack -- only four corners */
+	/* Hack -- only four corners */
+	if (corner)
 	{
 		floor_ptr->grid_array[1][1].feat = terrain_table[terrain][floor_ptr->grid_array[1][1].feat];
 		floor_ptr->grid_array[MAX_HGT - 2][1].feat = terrain_table[terrain][floor_ptr->grid_array[MAX_HGT - 2][1].feat];
 		floor_ptr->grid_array[1][MAX_WID - 2].feat = terrain_table[terrain][floor_ptr->grid_array[1][MAX_WID - 2].feat];
 		floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = terrain_table[terrain][floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat];
+		Rand_state_restore(state_backup);
+		return;
 	}
 
-	/* Hack -- Restore the RNG state */
+	/* Hack -- preserve four corners */
+	s16b north_west = floor_ptr->grid_array[1][1].feat;
+	s16b south_west = floor_ptr->grid_array[MAX_HGT - 2][1].feat;
+	s16b north_east = floor_ptr->grid_array[1][MAX_WID - 2].feat;
+	s16b south_east = floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat;
+
+	/* x1, y1, x2, y2, num_depths, roughness */
+	FEAT_IDX roughness = 1; /* The roughness of the level. */
+	plasma_recursive(floor_ptr, 1, 1, MAX_WID - 2, MAX_HGT - 2, table_size - 1, roughness);
+
+	/* Hack -- copyback four corners */
+	floor_ptr->grid_array[1][1].feat = north_west;
+	floor_ptr->grid_array[MAX_HGT - 2][1].feat = south_west;
+	floor_ptr->grid_array[1][MAX_WID - 2].feat = north_east;
+	floor_ptr->grid_array[MAX_HGT - 2][MAX_WID - 2].feat = south_east;
+
+	for (POSITION y1 = 1; y1 < MAX_HGT - 1; y1++)
+	{
+		for (POSITION x1 = 1; x1 < MAX_WID - 1; x1++)
+		{
+			floor_ptr->grid_array[y1][x1].feat = terrain_table[terrain][floor_ptr->grid_array[y1][x1].feat];
+		}
+	}
+
 	Rand_state_restore(state_backup);
 }
-
 
 
 /*!
@@ -342,8 +334,6 @@ static void generate_wilderness_area(floor_type *floor_ptr, int terrain, u32b se
  */
 static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool border, bool corner)
 {
-	POSITION x1, y1;
-
 	/* Number of the town (if any) */
 	player_ptr->town_num = wilderness[y][x].town;
 
@@ -382,7 +372,7 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
 		int terrain = wilderness[y][x].terrain;
 		u32b seed = wilderness[y][x].seed;
 
-		generate_wilderness_area(floor_ptr, terrain, seed, border, corner);
+		generate_wilderness_area(floor_ptr, terrain, seed, corner);
 	}
 
 	if (!corner && !wilderness[y][x].town)
@@ -395,6 +385,7 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
 		{
 			floor_ptr->grid_array[MAX_HGT/2][MAX_WID/2].feat = feat_floor;
 
+			POSITION x1, y1;
 			if (wilderness[y-1][x].road)
 			{
 				/* North road */
@@ -437,26 +428,26 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
 		}
 	}
 
-	if (wilderness[y][x].entrance && !wilderness[y][x].town && (current_world_ptr->total_winner || !(d_info[wilderness[y][x].entrance].flags1 & DF1_WINNER)))
-	{
-		int dy, dx;
-		u32b state_backup[4];
+	bool is_winner = wilderness[y][x].entrance;
+	is_winner &= !wilderness[y][x].town;
+	is_winner &= (current_world_ptr->total_winner || !(d_info[wilderness[y][x].entrance].flags1 & DF1_WINNER));
+	if (!is_winner) return;
 
-		/* Hack -- Backup the RNG state */
-		Rand_state_backup(state_backup);
+	/* Hack -- Backup the RNG state */
+	u32b state_backup[4];
+	Rand_state_backup(state_backup);
 
-		/* Hack -- Induce consistant flavors */
-		Rand_state_set(wilderness[y][x].seed);
+	/* Hack -- Induce consistant flavors */
+	Rand_state_set(wilderness[y][x].seed);
 
-		dy = rand_range(6, floor_ptr->height - 6);
-		dx = rand_range(6, floor_ptr->width - 6);
+	int dy = rand_range(6, floor_ptr->height - 6);
+	int dx = rand_range(6, floor_ptr->width - 6);
 
-		floor_ptr->grid_array[dy][dx].feat = feat_entrance;
-		floor_ptr->grid_array[dy][dx].special = wilderness[y][x].entrance;
+	floor_ptr->grid_array[dy][dx].feat = feat_entrance;
+	floor_ptr->grid_array[dy][dx].special = wilderness[y][x].entrance;
 
-		/* Hack -- Restore the RNG state */
-		Rand_state_restore(state_backup);
-	}
+	/* Hack -- Restore the RNG state */
+	Rand_state_restore(state_backup);
 }
 
 
@@ -464,7 +455,6 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
  * Border of the wilderness area
  */
 static border_type border;
-
 
 /*!
  * @brief 広域マップの生成 /
@@ -475,11 +465,6 @@ static border_type border;
  */
 void wilderness_gen(player_type *creature_ptr)
 {
-	int i, lim;
-	POSITION y, x;
-	grid_type *g_ptr;
-	feature_type *f_ptr;
-
 	/* Big town */
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	floor_ptr->height = MAX_HGT;
@@ -490,14 +475,14 @@ void wilderness_gen(player_type *creature_ptr)
 	panel_col_min = floor_ptr->width;
 
 	process_dungeon_file(creature_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
-	x = creature_ptr->wilderness_x;
-	y = creature_ptr->wilderness_y;
+	POSITION x = creature_ptr->wilderness_x;
+	POSITION y = creature_ptr->wilderness_y;
 	get_mon_num_prep(get_monster_hook(), NULL);
 
 	/* North border */
 	generate_area(creature_ptr, y - 1, x, TRUE, FALSE);
 
-	for (i = 1; i < MAX_WID - 1; i++)
+	for (int i = 1; i < MAX_WID - 1; i++)
 	{
 		border.north[i] = floor_ptr->grid_array[MAX_HGT - 2][i].feat;
 	}
@@ -505,7 +490,7 @@ void wilderness_gen(player_type *creature_ptr)
 	/* South border */
 	generate_area(creature_ptr, y + 1, x, TRUE, FALSE);
 
-	for (i = 1; i < MAX_WID - 1; i++)
+	for (int i = 1; i < MAX_WID - 1; i++)
 	{
 		border.south[i] = floor_ptr->grid_array[1][i].feat;
 	}
@@ -513,7 +498,7 @@ void wilderness_gen(player_type *creature_ptr)
 	/* West border */
 	generate_area(creature_ptr, y, x - 1, TRUE, FALSE);
 
-	for (i = 1; i < MAX_HGT - 1; i++)
+	for (int i = 1; i < MAX_HGT - 1; i++)
 	{
 		border.west[i] = floor_ptr->grid_array[i][MAX_WID - 2].feat;
 	}
@@ -521,7 +506,7 @@ void wilderness_gen(player_type *creature_ptr)
 	/* East border */
 	generate_area(creature_ptr, y, x + 1, TRUE, FALSE);
 
-	for (i = 1; i < MAX_HGT - 1; i++)
+	for (int i = 1; i < MAX_HGT - 1; i++)
 	{
 		border.east[i] = floor_ptr->grid_array[i][1].feat;
 	}
@@ -542,48 +527,40 @@ void wilderness_gen(player_type *creature_ptr)
 	generate_area(creature_ptr, y + 1, x + 1, FALSE, TRUE);
 	border.south_east = floor_ptr->grid_array[1][1].feat;
 
-
 	/* Create terrain of the current area */
 	generate_area(creature_ptr, y, x, FALSE, FALSE);
 
 	/* Special boundary walls -- North */
-	for (i = 0; i < MAX_WID; i++)
+	for (int i = 0; i < MAX_WID; i++)
 	{
 		floor_ptr->grid_array[0][i].feat = feat_permanent;
 		floor_ptr->grid_array[0][i].mimic = border.north[i];
 	}
 
 	/* Special boundary walls -- South */
-	for (i = 0; i < MAX_WID; i++)
+	for (int i = 0; i < MAX_WID; i++)
 	{
 		floor_ptr->grid_array[MAX_HGT - 1][i].feat = feat_permanent;
 		floor_ptr->grid_array[MAX_HGT - 1][i].mimic = border.south[i];
 	}
 
 	/* Special boundary walls -- West */
-	for (i = 0; i < MAX_HGT; i++)
+	for (int i = 0; i < MAX_HGT; i++)
 	{
 		floor_ptr->grid_array[i][0].feat = feat_permanent;
 		floor_ptr->grid_array[i][0].mimic = border.west[i];
 	}
 
 	/* Special boundary walls -- East */
-	for (i = 0; i < MAX_HGT; i++)
+	for (int i = 0; i < MAX_HGT; i++)
 	{
 		floor_ptr->grid_array[i][MAX_WID - 1].feat = feat_permanent;
 		floor_ptr->grid_array[i][MAX_WID - 1].mimic = border.east[i];
 	}
 
-	/* North west corner */
 	floor_ptr->grid_array[0][0].mimic = border.north_west;
-
-	/* North east corner */
 	floor_ptr->grid_array[0][MAX_WID - 1].mimic = border.north_east;
-
-	/* South west corner */
 	floor_ptr->grid_array[MAX_HGT - 1][0].mimic = border.south_west;
-
-	/* South east corner */
 	floor_ptr->grid_array[MAX_HGT - 1][MAX_WID - 1].mimic = border.south_east;
 
 	/* Light up or darken the area */
@@ -591,43 +568,45 @@ void wilderness_gen(player_type *creature_ptr)
 	{
 		for (x = 0; x < floor_ptr->width; x++)
 		{
+			grid_type *g_ptr;
 			g_ptr = &floor_ptr->grid_array[y][x];
 
 			if (is_daytime())
 			{
 				/* Assume lit */
-				g_ptr->info |= (CAVE_GLOW);
+				g_ptr->info |= CAVE_GLOW;
 
 				/* Hack -- Memorize lit grids if allowed */
-				if (view_perma_grids) g_ptr->info |= (CAVE_MARK);
+				if (view_perma_grids) g_ptr->info |= CAVE_MARK;
+				continue;
 			}
-			else
+
+			/* Feature code (applying "mimic" field) */
+			feature_type *f_ptr;
+			f_ptr = &f_info[get_feat_mimic(g_ptr)];
+
+			if (!is_mirror_grid(g_ptr) && !have_flag(f_ptr->flags, FF_QUEST_ENTER) &&
+				!have_flag(f_ptr->flags, FF_ENTRANCE))
 			{
-				/* Feature code (applying "mimic" field) */
-				f_ptr = &f_info[get_feat_mimic(g_ptr)];
+				/* Assume dark */
+				g_ptr->info &= ~(CAVE_GLOW);
 
-				if (!is_mirror_grid(g_ptr) && !have_flag(f_ptr->flags, FF_QUEST_ENTER) &&
-				    !have_flag(f_ptr->flags, FF_ENTRANCE))
+				/* Darken "boring" features */
+				if (!have_flag(f_ptr->flags, FF_REMEMBER))
 				{
-					/* Assume dark */
-					g_ptr->info &= ~(CAVE_GLOW);
-
-					/* Darken "boring" features */
-					if (!have_flag(f_ptr->flags, FF_REMEMBER))
-					{
-						/* Forget the grid */
-						g_ptr->info &= ~(CAVE_MARK);
-					}
+					/* Forget the grid */
+					g_ptr->info &= ~(CAVE_MARK);
 				}
-				else if (have_flag(f_ptr->flags, FF_ENTRANCE))
-				{
-					/* Assume lit */
-					g_ptr->info |= (CAVE_GLOW);
 
-					/* Hack -- Memorize lit grids if allowed */
-					if (view_perma_grids) g_ptr->info |= (CAVE_MARK);
-				}
+				continue;
 			}
+			
+			if (!have_flag(f_ptr->flags, FF_ENTRANCE)) continue;
+
+			g_ptr->info |= CAVE_GLOW;
+
+			/* Hack -- Memorize lit grids if allowed */
+			if (view_perma_grids) g_ptr->info |= CAVE_MARK;
 		}
 	}
 
@@ -637,50 +616,59 @@ void wilderness_gen(player_type *creature_ptr)
 		{
 			for (x = 0; x < floor_ptr->width; x++)
 			{
+				grid_type *g_ptr;
 				g_ptr = &floor_ptr->grid_array[y][x];
 
 				/* Seeing true feature code (ignore mimic) */
+				feature_type *f_ptr;
 				f_ptr = &f_info[g_ptr->feat];
 
-				if (have_flag(f_ptr->flags, FF_BLDG))
+				if (!have_flag(f_ptr->flags, FF_BLDG)) continue;
+
+				if ((f_ptr->subtype != 4) && !((creature_ptr->town_num == 1) && (f_ptr->subtype == 0)))
+					continue;
+
+				if (g_ptr->m_idx)
 				{
-					if ((f_ptr->subtype == 4) || ((creature_ptr->town_num == 1) && (f_ptr->subtype == 0)))
-					{
-						if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
-						creature_ptr->oldpy = y;
-						creature_ptr->oldpx = x;
-					}
+					delete_monster_idx(g_ptr->m_idx);
 				}
+
+				creature_ptr->oldpy = y;
+				creature_ptr->oldpx = x;
 			}
 		}
+
 		creature_ptr->teleport_town = FALSE;
 	}
-
 	else if (creature_ptr->leaving_dungeon)
 	{
 		for (y = 0; y < floor_ptr->height; y++)
 		{
 			for (x = 0; x < floor_ptr->width; x++)
 			{
+				grid_type *g_ptr;
 				g_ptr = &floor_ptr->grid_array[y][x];
 
-				if (cave_have_flag_grid(g_ptr, FF_ENTRANCE))
+				if (!cave_have_flag_grid(g_ptr, FF_ENTRANCE)) continue;
+
+				if (g_ptr->m_idx)
 				{
-					if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
-					creature_ptr->oldpy = y;
-					creature_ptr->oldpx = x;
+					delete_monster_idx(g_ptr->m_idx);
 				}
+
+				creature_ptr->oldpy = y;
+				creature_ptr->oldpx = x;
 			}
 		}
+
 		creature_ptr->teleport_town = FALSE;
 	}
 
 	player_place(creature_ptr, creature_ptr->oldpy, creature_ptr->oldpx);
-
-	lim = (generate_encounter == TRUE) ? 40 : MIN_M_ALLOC_TN;
+	int lim = (generate_encounter == TRUE) ? 40 : MIN_M_ALLOC_TN;
 
 	/* Make some residents */
-	for (i = 0; i < lim; i++)
+	for (int i = 0; i < lim; i++)
 	{
 		BIT_FLAGS mode = 0;
 
@@ -698,7 +686,7 @@ void wilderness_gen(player_type *creature_ptr)
 	set_floor_and_wall(0);
 
 	/* Set rewarded quests to finished */
-	for (i = 0; i < max_q_idx; i++)
+	for (int i = 0; i < max_q_idx; i++)
 	{
 		if (quest[i].status == QUEST_STATUS_REWARDED)
 			quest[i].status = QUEST_STATUS_FINISHED;
@@ -714,36 +702,49 @@ static s16b conv_terrain2feat[MAX_WILDERNESS];
  */
 void wilderness_gen_small(player_type *creature_ptr)
 {
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-	int i, j;
-
 	/* To prevent stupid things */
-	for (i = 0; i < MAX_WID; i++)
-	for (j = 0; j < MAX_HGT; j++)
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	for (int i = 0; i < MAX_WID; i++)
 	{
-		floor_ptr->grid_array[j][i].feat = feat_permanent;
+		for (int j = 0; j < MAX_HGT; j++)
+		{
+			floor_ptr->grid_array[j][i].feat = feat_permanent;
+		}
 	}
 
 	process_dungeon_file(creature_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 
 	/* Fill the map */
-	for (i = 0; i < current_world_ptr->max_wild_x; i++)
-	for (j = 0; j < current_world_ptr->max_wild_y; j++)
+	for (int i = 0; i < current_world_ptr->max_wild_x; i++)
 	{
-		if (wilderness[j][i].town && (wilderness[j][i].town != NO_TOWN))
+		for (int j = 0; j < current_world_ptr->max_wild_y; j++)
 		{
-			floor_ptr->grid_array[j][i].feat = (s16b)feat_town;
-			floor_ptr->grid_array[j][i].special = (s16b)wilderness[j][i].town;
-		}
-		else if (wilderness[j][i].road) floor_ptr->grid_array[j][i].feat = feat_floor;
-		else if (wilderness[j][i].entrance && (current_world_ptr->total_winner || !(d_info[wilderness[j][i].entrance].flags1 & DF1_WINNER)))
-		{
-			floor_ptr->grid_array[j][i].feat = feat_entrance;
-			floor_ptr->grid_array[j][i].special = (byte)wilderness[j][i].entrance;
-		}
-		else floor_ptr->grid_array[j][i].feat = conv_terrain2feat[wilderness[j][i].terrain];
+			if (wilderness[j][i].town && (wilderness[j][i].town != NO_TOWN))
+			{
+				floor_ptr->grid_array[j][i].feat = (s16b)feat_town;
+				floor_ptr->grid_array[j][i].special = (s16b)wilderness[j][i].town;
+				floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
+				continue;
+			}
+			
+			if (wilderness[j][i].road)
+			{
+				floor_ptr->grid_array[j][i].feat = feat_floor;
+				floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
+				continue;
+			}
+			
+			if (wilderness[j][i].entrance && (current_world_ptr->total_winner || !(d_info[wilderness[j][i].entrance].flags1 & DF1_WINNER)))
+			{
+				floor_ptr->grid_array[j][i].feat = feat_entrance;
+				floor_ptr->grid_array[j][i].special = (byte)wilderness[j][i].entrance;
+				floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
+				continue;
+			}
 
-		floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
+			floor_ptr->grid_array[j][i].feat = conv_terrain2feat[wilderness[j][i].terrain];
+			floor_ptr->grid_array[j][i].info |= (CAVE_GLOW | CAVE_MARK);
+		}
 	}
 
 	floor_ptr->height = (s16b) current_world_ptr->max_wild_y;
@@ -776,7 +777,6 @@ struct wilderness_grid
 
 static wilderness_grid w_letter[255];
 
-
 /*!
  * @brief w_info.txtのデータ解析 /
  * Parse a sub-file of the "extra info"
@@ -789,16 +789,12 @@ static wilderness_grid w_letter[255];
  * @param x 広域マップの幅を返す参照ポインタ
  * @return なし
  */
-errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
+errr parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int xmax, int *y, int *x)
 {
-	int i, num;
-	char *zz[33];
-
-	/* Unused */
-	(void)ymin;
-	(void)ymax;
 	if (!(buf[0] == 'W')) return (PARSE_ERROR_GENERIC);
 
+	int num;
+	char *zz[33];
 	switch (buf[2])
 	{
 		/* Process "W:F:<letter>:<terrain>:<town>:<road>:<name> */
@@ -856,12 +852,9 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 	/* Layout of the wilderness */
 	case 'D':
 	{
-		/* Acquire the text */
 		char *s = buf+4;
-		
-		/* Length of the text */
 		int len = strlen(s);
-		
+		int i;
 		for (*x = xmin, i = 0; ((*x < xmax) && (i < len)); (*x)++, s++, i++)
 		{
 			int id = s[0];
@@ -873,55 +866,51 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
 		}
 		
 		(*y)++;
-		
 		break;
 	}
 	
 	/* Process "W:P:<x>:<y> - starting position in the wilderness */
 	case 'P':
 	{
-		if ((p_ptr->wilderness_x == 0) &&
-		    (p_ptr->wilderness_y == 0))
+		bool is_corner = creature_ptr->wilderness_x == 0;
+		is_corner = creature_ptr->wilderness_y == 0;
+		if (!is_corner) break;
+
+		if (tokenize(buf + 4, 2, zz, 0) != 2)
 		{
-			if (tokenize(buf+4, 2, zz, 0) == 2)
-			{
-				p_ptr->wilderness_y = atoi(zz[0]);
-				p_ptr->wilderness_x = atoi(zz[1]);
-				
-				if ((p_ptr->wilderness_x < 1) ||
-				    (p_ptr->wilderness_x > current_world_ptr->max_wild_x) ||
-				    (p_ptr->wilderness_y < 1) ||
-				    (p_ptr->wilderness_y > current_world_ptr->max_wild_y))
-				{
-					return (PARSE_ERROR_OUT_OF_BOUNDS);
-				}
-			}
-			else
-			{
-				return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
-			}
+			return PARSE_ERROR_TOO_FEW_ARGUMENTS;
 		}
-		
+
+		creature_ptr->wilderness_y = atoi(zz[0]);
+		creature_ptr->wilderness_x = atoi(zz[1]);
+
+		if ((creature_ptr->wilderness_x < 1) ||
+			(creature_ptr->wilderness_x > current_world_ptr->max_wild_x) ||
+			(creature_ptr->wilderness_y < 1) ||
+			(creature_ptr->wilderness_y > current_world_ptr->max_wild_y))
+		{
+			return PARSE_ERROR_OUT_OF_BOUNDS;
+		}
+
 		break;
 	}
 	
 	default:
-		/* Failure */
-		return (PARSE_ERROR_UNDEFINED_DIRECTIVE);
+		return PARSE_ERROR_UNDEFINED_DIRECTIVE;
 	}
 	
-	for (i = 1; i < current_world_ptr->max_d_idx; i++)
+	for (int i = 1; i < current_world_ptr->max_d_idx; i++)
 	{
 		if (!d_info[i].maxdepth) continue;
 		wilderness[d_info[i].dy][d_info[i].dx].entrance = (byte_hack)i;
 		if (!wilderness[d_info[i].dy][d_info[i].dx].town)
+		{
 			wilderness[d_info[i].dy][d_info[i].dx].level = d_info[i].mindepth;
+		}
 	}
 
-	/* Success */
-	return (0);
+	return 0;
 }
-
 
 
 /*!
@@ -931,12 +920,9 @@ errr parse_line_wilderness(char *buf, int ymin, int xmin, int ymax, int xmax, in
  */
 void seed_wilderness(void)
 {
-	POSITION x, y;
-
-	/* Init wilderness seeds */
-	for (x = 0; x < current_world_ptr->max_wild_x; x++)
+	for (POSITION x = 0; x < current_world_ptr->max_wild_x; x++)
 	{
-		for (y = 0; y < current_world_ptr->max_wild_y; y++)
+		for (POSITION y = 0; y < current_world_ptr->max_wild_y; y++)
 		{
 			wilderness[y][x].seed = randint0(0x10000000);
 			wilderness[y][x].entrance = 0;
@@ -950,7 +936,6 @@ void seed_wilderness(void)
  */
 typedef wilderness_type *wilderness_type_ptr;
 
-
 /*!
  * @brief ゲーム開始時の荒野初期化メインルーチン /
  * Initialize wilderness array
@@ -958,20 +943,20 @@ typedef wilderness_type *wilderness_type_ptr;
  */
 errr init_wilderness(void)
 {
-	int i;
-
 	/* Allocate the wilderness (two-dimension array) */
 	C_MAKE(wilderness, current_world_ptr->max_wild_y, wilderness_type_ptr);
 	C_MAKE(wilderness[0], current_world_ptr->max_wild_x * current_world_ptr->max_wild_y, wilderness_type);
 
 	/* Init the other pointers */
-	for (i = 1; i < current_world_ptr->max_wild_y; i++)
+	for (int i = 1; i < current_world_ptr->max_wild_y; i++)
+	{
 		wilderness[i] = wilderness[0] + i * current_world_ptr->max_wild_x;
+	}
 
 	generate_encounter = FALSE;
-
 	return 0;
 }
+
 
 /*!
  * @brief 荒野の地勢設定を初期化する /
@@ -983,47 +968,43 @@ errr init_wilderness(void)
  */
 static void init_terrain_table(int terrain, s16b feat_global, concptr fmt, ...)
 {
-	va_list vp;
-	concptr    p;
-	int     cur = 0;
-	char    check = 'a';
-	FEAT_IDX feat;
-	int     num;
-
 	/* Begin the varargs stuff */
+	va_list vp;
 	va_start(vp, fmt);
 
 	/* Wilderness terrains on global map */
 	conv_terrain2feat[terrain] = feat_global;
 
 	/* Wilderness terrains on local map */
-	for (p = fmt; *p; p++)
+	int cur = 0;
+	char check = 'a';
+	for (concptr p = fmt; *p; p++)
 	{
-		if (*p == check)
-		{
-			int lim;
-
-			feat = (s16b)va_arg(vp, int);
-			num = va_arg(vp, int);
-			lim = cur + num;
-
-			for (; (cur < lim) && (cur < MAX_FEAT_IN_TERRAIN); cur++)
-				terrain_table[terrain][cur] = feat;
-			if (cur >= MAX_FEAT_IN_TERRAIN) break;
-
-			check++;
-		}
-		else
+		if (*p != check)
 		{
 			plog_fmt("Format error");
+			continue;
 		}
+
+		FEAT_IDX feat = (s16b)va_arg(vp, int);
+		int num = va_arg(vp, int);
+		int lim = cur + num;
+
+		for (; (cur < lim) && (cur < MAX_FEAT_IN_TERRAIN); cur++)
+		{
+			terrain_table[terrain][cur] = feat;
+		}
+
+		if (cur >= MAX_FEAT_IN_TERRAIN) break;
+
+		check++;
 	}
+
 	if (cur < MAX_FEAT_IN_TERRAIN)
 	{
 		plog_fmt("Too few parameters");
 	}
 
-	/* End the varargs stuff */
 	va_end(vp);
 }
 
@@ -1108,6 +1089,7 @@ void init_wilderness_terrains(void)
 		feat_mountain, MAX_FEAT_IN_TERRAIN - 8);
 }
 
+
 /*!
  * @brief 荒野から広域マップへの切り替え処理 /
  * Initialize arrays for wilderness terrains
@@ -1116,13 +1098,10 @@ void init_wilderness_terrains(void)
  */
 bool change_wild_mode(player_type *creature_ptr, bool encount)
 {
-	int i;
-	bool have_pet = FALSE;
 	generate_encounter = encount;
 
 	/* It is in the middle of changing map */
 	if (creature_ptr->leaving) return FALSE;
-
 
 	if (lite_town || vanilla_town)
 	{
@@ -1142,12 +1121,11 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
 		/* Go back to the ordinary map */
 		creature_ptr->wild_mode = FALSE;
 		creature_ptr->leaving = TRUE;
-
-		/* Succeed */
 		return TRUE;
 	}
 
-	for (i = 1; i < creature_ptr->current_floor_ptr->m_max; i++)
+	bool have_pet = FALSE;
+	for (int i = 1; i < creature_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[i];
 
@@ -1189,7 +1167,5 @@ bool change_wild_mode(player_type *creature_ptr, bool encount)
 	/* Go into the global map */
 	creature_ptr->wild_mode = TRUE;
 	creature_ptr->leaving = TRUE;
-
-	/* Succeed */
 	return TRUE;
 }

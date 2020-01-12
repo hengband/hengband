@@ -1173,7 +1173,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
 	str++;
 
 	/* Examine modifier keys */
-	while (1)
+	while (TRUE)
 	{
 		for (i=0; macro_modifier_chr[i]; i++)
 		{
@@ -2842,7 +2842,7 @@ static void msg_flush(int x)
 		Term_putstr(x, 0, -1, a, _("-続く-", "-more-"));
 
 		/* Get an acceptable keypress */
-		while (1)
+		while (TRUE)
 		{
 			int cmd = inkey();
 			if (cmd == ESCAPE) {
@@ -3851,11 +3851,11 @@ bool get_com(concptr prompt, char *command, bool z_escape)
 	prt("", 0, 0);
 
 	/* Handle "cancel" */
-	if (*command == ESCAPE) return (FALSE);
-	if (z_escape && ((*command == 'z') || (*command == 'Z'))) return (FALSE);
+	if (*command == ESCAPE) return FALSE;
+	if (z_escape && ((*command == 'z') || (*command == 'Z'))) return FALSE;
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -4491,7 +4491,7 @@ void request_command(int shopping)
 
 
 	/* Get command */
-	while (1)
+	while (TRUE)
 	{
 		/* Hack -- auto-commands */
 		if (command_new)
@@ -4538,7 +4538,7 @@ void request_command(int shopping)
 			prt(_("回数: ", "Count: "), 0, 0);
 
 			/* Get a command count */
-			while (1)
+			while (TRUE)
 			{
 				/* Get a new keypress */
 				cmd = inkey();
@@ -4770,10 +4770,10 @@ bool is_a_vowel(int ch)
 	case 'I':
 	case 'O':
 	case 'U':
-		return (TRUE);
+		return TRUE;
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -4797,7 +4797,7 @@ static bool insert_str(char *buf, concptr target, concptr insert)
 	buf = my_strstr(buf, target);
 
 	/* No target found */
-	if (!buf) return (FALSE);
+	if (!buf) return FALSE;
 
 	/* Be sure we have an insertion string */
 	if (!insert) insert = "";
@@ -4829,7 +4829,7 @@ static bool insert_str(char *buf, concptr target, concptr insert)
 	for (i = 0; i < i_len; ++i) buf[i] = insert[i];
 
 	/* Successful operation */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -4919,13 +4919,13 @@ void repeat_push(COMMAND_CODE what)
 bool repeat_pull(COMMAND_CODE *what)
 {
 	/* All out of keys */
-	if (repeat__idx == repeat__cnt) return (FALSE);
+	if (repeat__idx == repeat__cnt) return FALSE;
 
 	/* Grab the next key, advance */
 	*what = repeat__key[repeat__idx++];
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 void repeat_check(void)

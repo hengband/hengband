@@ -804,7 +804,7 @@ bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, boo
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[hack_m_idx];  /* the world monster */
 
-	if (current_world_ptr->timewalk_m_idx) return (FALSE);
+	if (current_world_ptr->timewalk_m_idx) return FALSE;
 
 	if (vs_player)
 	{
@@ -1359,7 +1359,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 		(*fear) = FALSE;
 
 		/* Monster is dead */
-		return (TRUE);
+		return TRUE;
 	}
 
 
@@ -1401,7 +1401,7 @@ bool mon_take_hit(MONSTER_IDX m_idx, HIT_POINT dam, bool *fear, concptr note)
 #endif
 
 	/* Not dead yet */
-	return (FALSE);
+	return FALSE;
 }
 
 bool monster_is_valid(monster_type *m_ptr)

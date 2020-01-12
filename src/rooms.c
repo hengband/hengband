@@ -1455,7 +1455,7 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
 					}
 					else
 					{
-						place_trap(floor_ptr, y, x);
+						place_trap(player_ptr, y, x);
 					}
 				}
 				else if (value < 30)
@@ -1464,7 +1464,7 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
 					floor_ptr->monster_level = floor_ptr->base_level + 5;
 					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 					floor_ptr->monster_level = floor_ptr->base_level;
-					place_trap(floor_ptr, y, x);
+					place_trap(player_ptr, y, x);
 				}
 				else if (value < 40)
 				{
@@ -1485,7 +1485,7 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
 				else if (value < 50)
 				{
 					/* Trap */
-					place_trap(floor_ptr, y, x);
+					place_trap(player_ptr, y, x);
 				}
 				else
 				{
@@ -1498,7 +1498,7 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
 					}
 					else if (randint0(100) < 50)
 					{
-						place_trap(floor_ptr, y, x);
+						place_trap(player_ptr, y, x);
 					}
 					else if (randint0(100) < 50)
 					{

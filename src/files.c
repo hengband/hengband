@@ -2166,7 +2166,7 @@ static void display_player_various(player_type *creature_ptr)
 				basedam = ((o_ptr->dd + creature_ptr->to_dd[i]) * (o_ptr->ds + creature_ptr->to_ds[i] + 1)) * 50;
 				object_flags_known(o_ptr, flgs);
 								
-				basedam = calc_expect_crit(o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], dokubari);
+				basedam = calc_expect_crit(creature_ptr, o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], dokubari);
 				if ((o_ptr->ident & IDENT_MENTAL) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
 				{
 					/* vorpal blade */
@@ -5343,7 +5343,7 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 		msg_format(_("'%s'をオープンできません。", "Cannot open '%s'."), name);
 		msg_print(NULL);
 
-		return (TRUE);
+		return TRUE;
 	}
 
 
@@ -5418,7 +5418,7 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 			/* Hack -- Re-Open the file */
 			fff = my_fopen(path, "r");
 
-			if (!fff) return (FALSE);
+			if (!fff) return FALSE;
 
 			/* File has been restarted */
 			next = 0;
@@ -5731,10 +5731,10 @@ bool show_file(bool show_version, concptr name, concptr what, int line, BIT_FLAG
 	my_fclose(fff);
 
 	/* Escape */
-	if (skey == 'q') return (FALSE);
+	if (skey == 'q') return FALSE;
 
 	/* Normal return */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -5757,13 +5757,14 @@ void do_cmd_help(void)
 /*!
  * @brief プレイヤーの名前をチェックして修正する
  * Process the player name.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param sf セーブファイル名に合わせた修正を行うならばTRUE
  * @return なし
  * @details
  * Extract a clean "base name".
  * Build the savefile name if needed.
  */
-void process_player_name(bool sf)
+void process_player_name(player_type *creature_ptr, bool sf)
 {
 	int i, k = 0;
 	char old_player_base[32] = "";
@@ -5871,7 +5872,7 @@ void process_player_name(bool sf)
 	{
 		concptr s;
 		s = savefile;
-		while (1)
+		while (TRUE)
 		{
 			concptr t;
 			t = my_strstr(s, PATH_SEP);
@@ -5905,7 +5906,7 @@ void process_player_name(bool sf)
 	/* Load an autopick preference file */
 	if (current_world_ptr->character_generated)
 	{
-		if (!streq(old_player_base, p_ptr->base_name)) autopick_load_pref(FALSE);
+		if (!streq(old_player_base, p_ptr->base_name)) autopick_load_pref(creature_ptr, FALSE);
 	}
 }
 
@@ -6737,7 +6738,7 @@ static errr counts_seek(int fd, u32b where, bool flag)
 		temp1[i] ^= (i+1) * 63;
 
 	seekpoint = 0;
-	while (1)
+	while (TRUE)
 	{
 		if (fd_seek(fd, seekpoint + 3 * sizeof(u32b)))
 			return 1;

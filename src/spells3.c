@@ -675,7 +675,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 	}
 
 	/* Up only */
-	else if (quest_number(creature_ptr->current_floor_ptr->dun_level) || (creature_ptr->current_floor_ptr->dun_level >= d_info[creature_ptr->dungeon_idx].maxdepth))
+	else if (quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level) || (creature_ptr->current_floor_ptr->dun_level >= d_info[creature_ptr->dungeon_idx].maxdepth))
 	{
 #ifdef JP
 		if (see_m) msg_format("%^sは天井を突き破って宙へ浮いていく。", m_name);
@@ -1369,7 +1369,7 @@ void identify_pack(player_type *target_ptr)
 		identify_item(target_ptr, o_ptr);
 
 		/* Auto-inscription */
-		autopick_alter_item(i, FALSE);
+		autopick_alter_item(target_ptr, i, FALSE);
 	}
 }
 
@@ -1470,7 +1470,7 @@ bool alchemy(player_type *caster_ptr)
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	/* See how many items */
 	int amt = 1;
@@ -1545,7 +1545,7 @@ bool artifact_scroll(player_type *caster_ptr)
 	object_type *o_ptr;
 	OBJECT_IDX item;
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -1694,7 +1694,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 		item_tester_hook = item_tester_hook_identify;
 
 	concptr q;
-	if (can_get_item(item_tester_tval))
+	if (can_get_item(caster_ptr, item_tester_tval))
 	{
 		q = _("どのアイテムを鑑定しますか? ", "Identify which item? ");
 	}
@@ -1713,7 +1713,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	bool old_known = identify_item(caster_ptr, o_ptr);
 
@@ -1721,7 +1721,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 	object_desc(o_name, o_ptr, 0);
 	if (item >= INVEN_RARM)
 	{
-		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(item), o_name, index_to_label(item));
+		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(caster_ptr, item), o_name, index_to_label(item));
 	}
 	else if (item >= 0)
 	{
@@ -1732,7 +1732,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 		msg_format(_("床上: %s。", "On the ground: %s."), o_name);
 	}
 
-	autopick_alter_item(item, (bool)(destroy_identify && !old_known));
+	autopick_alter_item(caster_ptr, item, (bool)(destroy_identify && !old_known));
 	return TRUE;
 }
 
@@ -1760,7 +1760,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
 	concptr s = _("使えるものがありません。", "You have nothing you can use.");
 
 	o_ptr = choose_object(owner_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
 	POSITION iy = o_ptr->iy;
@@ -1801,7 +1801,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 		item_tester_hook = item_tester_hook_identify_fully;
 
 	concptr q;
-	if (can_get_item(item_tester_tval))
+	if (can_get_item(caster_ptr, item_tester_tval))
 	{
 		q = _("どのアイテムを*鑑定*しますか? ", "*Identify* which item? ");
 	}
@@ -1820,7 +1820,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	bool old_known = identify_item(caster_ptr, o_ptr);
 
@@ -1832,7 +1832,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 	object_desc(o_name, o_ptr, 0);
 	if (item >= INVEN_RARM)
 	{
-		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(item), o_name, index_to_label(item));
+		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(caster_ptr, item), o_name, index_to_label(item));
 	}
 	else if (item >= 0)
 	{
@@ -1844,7 +1844,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 	}
 
 	(void)screen_object(o_ptr, 0L);
-	autopick_alter_item(item, (bool)(destroy_identify && !old_known));
+	autopick_alter_item(caster_ptr, item, (bool)(destroy_identify && !old_known));
 	return TRUE;
 }
 
@@ -3512,9 +3512,9 @@ bool is_teleport_level_ineffective(player_type *caster_ptr, MONSTER_IDX idx)
 {
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	bool is_special_floor = floor_ptr->inside_arena || caster_ptr->phase_out ||
-		(floor_ptr->inside_quest && !random_quest_number(floor_ptr->dun_level));
+		(floor_ptr->inside_quest && !random_quest_number(caster_ptr, floor_ptr->dun_level));
 	bool is_invalid_floor = idx <= 0;
-	is_invalid_floor &= quest_number(floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[caster_ptr->dungeon_idx].maxdepth);
+	is_invalid_floor &= quest_number(caster_ptr, floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[caster_ptr->dungeon_idx].maxdepth);
 	is_invalid_floor &= caster_ptr->current_floor_ptr->dun_level >= 1;
 	is_invalid_floor &= ironman_downward;
 	return is_special_floor || is_invalid_floor;

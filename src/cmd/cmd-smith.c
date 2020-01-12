@@ -511,6 +511,7 @@ static void display_essence(player_type *creature_ptr)
 
 /*!
  * @brief エッセンスの抽出処理
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 static void drain_essence(player_type *creature_ptr)
@@ -731,7 +732,7 @@ static void drain_essence(player_type *creature_ptr)
 	}
 
 	/* Apply autodestroy/inscription to the drained item */
-	autopick_alter_item(item, TRUE);
+	autopick_alter_item(creature_ptr, item, TRUE);
 	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
 	creature_ptr->window |= (PW_INVEN);
 }

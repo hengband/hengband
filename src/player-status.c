@@ -5591,7 +5591,7 @@ void check_experience(player_type *creature_ptr)
 			{
 				int choice;
 				screen_save();
-				while (1)
+				while (TRUE)
 				{
 					int n;
 					char tmp[32];
@@ -5612,7 +5612,7 @@ void check_experience(player_type *creature_ptr)
 					prt("", 8, 14);
 					prt(_("        どの能力値を上げますか？", "        Which stat do you want to raise?"), 1, 14);
 
-					while (1)
+					while (TRUE)
 					{
 						choice = inkey();
 						if ((choice >= 'a') && (choice <= 'f')) break;
@@ -5653,7 +5653,7 @@ void check_experience(player_type *creature_ptr)
 	}
 
 	/* Load an autopick preference file */
-	if (old_lev != creature_ptr->lev) autopick_load_pref(FALSE);
+	if (old_lev != creature_ptr->lev) autopick_load_pref(creature_ptr, FALSE);
 }
 
 /*!

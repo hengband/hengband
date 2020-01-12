@@ -395,8 +395,8 @@ extern OBJECT_TYPE_VALUE item_tester_tval;
 extern bool(*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
 /* object1.c */
-extern ITEM_NUMBER scan_floor(OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode);
-extern COMMAND_CODE show_floor(int target_item, POSITION y, POSITION x, TERM_LEN *min_width);
+extern ITEM_NUMBER scan_floor(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode);
+extern COMMAND_CODE show_floor(player_type *owner_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width);
 extern void reset_visuals(void);
 extern void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
 extern void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
@@ -420,7 +420,7 @@ extern bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUB
 #define USE_FORCE 0x08 /*!< 特殊: wキーで錬気術への切り替えを許可する */
 #define IGNORE_BOTHHAND_SLOT 0x10 /*!< アイテム表示/選択範囲: 両手持ちスロットを選択に含めない */
 #define USE_FULL  0x20 /*!< アイテム表示/選択範囲: 空欄まですべて表示する*/
-extern bool can_get_item(OBJECT_TYPE_VALUE tval);
+extern bool can_get_item(player_type *owner_ptr, OBJECT_TYPE_VALUE tval);
 extern bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
 
 #define REF_ITEM(P_PTR, FLOOR_PTR, ID) ((ID >= 0 ? &(P_PTR)->inventory_list[ID] : &(FLOOR_PTR)->o_list[0 - item]))
@@ -514,7 +514,6 @@ extern s32b flag_cost(object_type *o_ptr, int plusses);
 
 extern bool get_item_floor(player_type *creature_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
 extern void py_pickup_floor(player_type *creature_ptr, bool pickup);
-extern void prepare_label_string(char *label, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
 
 /*
  * Return the "attr" for a given item.

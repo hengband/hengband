@@ -238,7 +238,7 @@ static bool spell_okay(player_type *caster_ptr, int spell, bool learned, bool st
 	}
 
 	/* Spell is illegal */
-	if (s_ptr->slevel > caster_ptr->lev) return (FALSE);
+	if (s_ptr->slevel > caster_ptr->lev) return FALSE;
 
 	/* Spell is forgotten */
 	if ((use_realm == caster_ptr->realm2) ?
@@ -246,11 +246,11 @@ static bool spell_okay(player_type *caster_ptr, int spell, bool learned, bool st
 		(caster_ptr->spell_forgotten1 & (1L << spell)))
 	{
 		/* Never okay */
-		return (FALSE);
+		return FALSE;
 	}
 
-	if (caster_ptr->pclass == CLASS_SORCERER) return (TRUE);
-	if (caster_ptr->pclass == CLASS_RED_MAGE) return (TRUE);
+	if (caster_ptr->pclass == CLASS_SORCERER) return TRUE;
+	if (caster_ptr->pclass == CLASS_RED_MAGE) return TRUE;
 
 	/* Spell is learned */
 	if ((use_realm == caster_ptr->realm2) ?
@@ -340,7 +340,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
 		if (spell_okay(caster_ptr, *sn, learned, FALSE, use_realm))
 		{
 			/* Success */
-			return (TRUE);
+			return TRUE;
 		}
 	}
 
@@ -371,7 +371,7 @@ static int get_spell(player_type *caster_ptr, SPELL_IDX *sn, concptr prompt, OBJ
 	}
 
 	/* No "okay" spells */
-	if (!okay) return (FALSE);
+	if (!okay) return FALSE;
 	if (((use_realm) != caster_ptr->realm1) && ((use_realm) != caster_ptr->realm2) && (caster_ptr->pclass != CLASS_SORCERER) && (caster_ptr->pclass != CLASS_RED_MAGE)) return FALSE;
 	if (((caster_ptr->pclass == CLASS_SORCERER) || (caster_ptr->pclass == CLASS_RED_MAGE)) && !is_magic(use_realm)) return FALSE;
 	if ((caster_ptr->pclass == CLASS_RED_MAGE) && ((use_realm) != REALM_ARCANE) && (sval > 1)) return FALSE;
@@ -589,7 +589,7 @@ static void confirm_use_force(player_type *caster_ptr, bool browse_only)
 	/* Show the prompt */
 	prt(_("('w'練気術, ESC) 'w'かESCを押してください。 ", "(w for the Force, ESC) Hit 'w' or ESC. "), 0, 0);
 
-	while (1)
+	while (TRUE)
 	{
 		/* Get a key */
 		which = inkey();
@@ -745,6 +745,7 @@ void do_cmd_browse(player_type *caster_ptr)
 
 /*!
  * @brief プレイヤーの第二魔法領域を変更する /
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param next_realm 変更先の魔法領域ID
  * @return なし
  */
@@ -779,7 +780,7 @@ static void change_realm2(player_type *caster_ptr, CHARACTER_IDX next_realm)
 	handle_stuff(caster_ptr);
 
 	/* Load an autopick preference file */
-	autopick_load_pref(FALSE);
+	autopick_load_pref(caster_ptr, FALSE);
 }
 
 

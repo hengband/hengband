@@ -1072,7 +1072,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 	if (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) resist = TRUE;
 	else if (r_ptr->flags7 & RF7_UNIQUE2) resist = TRUE;
 	else if (m_idx == caster_ptr->riding) resist = TRUE;
-	else if ((caster_ptr->current_floor_ptr->inside_quest && !random_quest_number(caster_ptr->current_floor_ptr->dun_level)) || caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out) resist = TRUE;
+	else if ((caster_ptr->current_floor_ptr->inside_quest && !random_quest_number(caster_ptr, caster_ptr->current_floor_ptr->dun_level)) || caster_ptr->current_floor_ptr->inside_arena || caster_ptr->phase_out) resist = TRUE;
 	else if (player_cast && (r_ptr->level > randint0(power))) resist = TRUE;
 	else if (player_cast && (m_ptr->mflag2 & MFLAG2_NOGENO)) resist = TRUE;
 	else
@@ -1151,13 +1151,13 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 bool symbol_genocide(player_type *caster_ptr, int power, bool player_cast)
 {
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-	bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(floor_ptr->dun_level);
+	bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(caster_ptr, floor_ptr->dun_level);
 	is_special_floor |= caster_ptr->current_floor_ptr->inside_arena;
 	is_special_floor |= caster_ptr->phase_out;
 	if (is_special_floor)
 	{
 		msg_print(_("何も起きないようだ……", "It seems nothing happen here..."));
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Mega-Hack -- Get a monster symbol */
@@ -1197,7 +1197,7 @@ bool symbol_genocide(player_type *caster_ptr, int power, bool player_cast)
 bool mass_genocide(player_type *caster_ptr, int power, bool player_cast)
 {
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-	bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(floor_ptr->dun_level);
+	bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(caster_ptr, floor_ptr->dun_level);
 	is_special_floor |= caster_ptr->current_floor_ptr->inside_arena;
 	is_special_floor |= caster_ptr->phase_out;
 	if (is_special_floor)
@@ -1238,7 +1238,7 @@ bool mass_genocide(player_type *caster_ptr, int power, bool player_cast)
 bool mass_genocide_undead(player_type *caster_ptr, int power, bool player_cast)
 {
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-	bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(floor_ptr->dun_level);
+	bool is_special_floor = floor_ptr->inside_quest && !random_quest_number(caster_ptr, floor_ptr->dun_level);
 	is_special_floor |= caster_ptr->current_floor_ptr->inside_arena;
 	is_special_floor |= caster_ptr->phase_out;
 	if (is_special_floor)
@@ -4158,7 +4158,7 @@ bool psychometry(player_type *caster_ptr)
 	object_type *o_ptr;
 	OBJECT_IDX item;
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	if (object_is_known(o_ptr))
 	{
@@ -4224,7 +4224,7 @@ bool psychometry(player_type *caster_ptr)
 	}
 
 	/* Auto-inscription/destroy */
-	autopick_alter_item(item, (bool)(okay && destroy_feeling));
+	autopick_alter_item(caster_ptr, item, (bool)(okay && destroy_feeling));
 
 	return TRUE;
 }

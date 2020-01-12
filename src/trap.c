@@ -144,12 +144,13 @@ void init_normal_traps(void)
 * Actually, it is not this routine, but the "trap instantiation"\n
 * code, which should also check for "trap doors" on quest levels.\n
 */
-FEAT_IDX choose_random_trap(floor_type *floor_ptr)
+FEAT_IDX choose_random_trap(player_type *trapped_ptr)
 {
 	FEAT_IDX feat;
 
 	/* Pick a trap */
-	while (1)
+	floor_type *floor_ptr = trapped_ptr->current_floor_ptr;
+	while (TRUE)
 	{
 		/* Hack -- pick a trap */
 		feat = normal_traps[randint0(MAX_NORMAL_TRAPS)];
@@ -158,7 +159,7 @@ FEAT_IDX choose_random_trap(floor_type *floor_ptr)
 		if (!have_flag(f_info[feat].flags, FF_MORE)) break;
 
 		/* Hack -- no trap doors on special levels */
-		if (floor_ptr->inside_arena || quest_number(floor_ptr->dun_level)) continue;
+		if (floor_ptr->inside_arena || quest_number(trapped_ptr, floor_ptr->dun_level)) continue;
 
 		/* Hack -- no trap doors on the deepest level */
 		if (floor_ptr->dun_level >= d_info[floor_ptr->dungeon_idx].maxdepth) continue;
@@ -208,8 +209,9 @@ void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x)
 * when they are "discovered" (by detecting them or setting them off),\n
 * the trap is "instantiated" as a visible, "typed", trap.\n
 */
-void place_trap(floor_type *floor_ptr, POSITION y, POSITION x)
+void place_trap(player_type *trapped_ptr, POSITION y, POSITION x)
 {
+	floor_type *floor_ptr = trapped_ptr->current_floor_ptr;
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Paranoia -- verify location */
@@ -220,7 +222,7 @@ void place_trap(floor_type *floor_ptr, POSITION y, POSITION x)
 
 	/* Place an invisible trap */
 	g_ptr->mimic = g_ptr->feat;
-	g_ptr->feat = choose_random_trap(floor_ptr);
+	g_ptr->feat = choose_random_trap(trapped_ptr);
 }
 
 
@@ -246,19 +248,19 @@ static int check_hit(player_type *target_ptr, int power)
 	if (k < 10) return (k < 5);
 
 	if (target_ptr->pseikaku == SEIKAKU_NAMAKE)
-		if (one_in_(20)) return (TRUE);
+		if (one_in_(20)) return TRUE;
 
 	/* Paranoia -- No power */
-	if (power <= 0) return (FALSE);
+	if (power <= 0) return FALSE;
 
 	/* Total armor */
 	ac = target_ptr->ac + target_ptr->to_a;
 
 	/* Power competes against Armor */
-	if (randint1(power) > ((ac * 3) / 4)) return (TRUE);
+	if (randint1(power) > ((ac * 3) / 4)) return TRUE;
 
 	/* Assume miss */
-	return (FALSE);
+	return FALSE;
 }
 
 

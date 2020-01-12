@@ -225,7 +225,7 @@ void one_high_resistance(object_type *o_ptr)
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
  * @return なし
  */
-void dragon_resist(object_type * o_ptr)
+void dragon_resist(object_type *o_ptr)
 {
 	do
 	{

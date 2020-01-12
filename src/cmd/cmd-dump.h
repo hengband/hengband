@@ -55,7 +55,7 @@ extern void do_cmd_player_status(player_type *creature_ptr);
 extern void do_cmd_message_one(void);
 extern void do_cmd_messages(int num_now);
 extern void do_cmd_pref(void);
-extern void do_cmd_reload_autopick(void);
+extern void do_cmd_reload_autopick(player_type *creature_ptr);
 extern void do_cmd_macros(player_type *creature_ptr);
 extern void do_cmd_visuals(player_type *creature_ptr);
 extern void do_cmd_colors(player_type *creature_ptr);

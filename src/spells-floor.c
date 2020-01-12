@@ -264,7 +264,7 @@ void stair_creation(player_type *caster_ptr)
 	/* Forbid down staircases on quest level */
 	bool down = TRUE;
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-	if (quest_number(floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[caster_ptr->dungeon_idx].maxdepth)) down = FALSE;
+	if (quest_number(caster_ptr, floor_ptr->dun_level) || (floor_ptr->dun_level >= d_info[caster_ptr->dungeon_idx].maxdepth)) down = FALSE;
 
 	/* No effect out of standard dungeon floor */
 	if (!floor_ptr->dun_level || (!up && !down) ||

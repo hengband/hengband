@@ -1,8 +1,8 @@
 ﻿
 extern void init_normal_traps(void);
-extern FEAT_IDX choose_random_trap(floor_type *floor_ptr);
+extern FEAT_IDX choose_random_trap(player_type *trapped_ptr);
 extern void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x);
-extern void place_trap(floor_type *floor_ptr, POSITION y, POSITION x);
+extern void place_trap(player_type *trapped_ptr, POSITION y, POSITION x);
 extern void hit_trap(player_type *trapped_ptr, bool break_trap);
 
 extern const int chest_traps[64];

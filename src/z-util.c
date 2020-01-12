@@ -37,7 +37,7 @@ bool suffix(concptr s, concptr t)
 	int slen = strlen(s);
 
 	/* Check for incompatible lengths */
-	if (tlen > slen) return (FALSE);
+	if (tlen > slen) return FALSE;
 
 	/* Compare "t" to the end of "s" */
 	return (!strcmp(s + slen - tlen, t));
@@ -53,11 +53,11 @@ bool prefix(concptr s, concptr t)
 	while (*t)
 	{
 		/* Compare content and length */
-		if (*t++ != *s++) return (FALSE);
+		if (*t++ != *s++) return FALSE;
 	}
 
 	/* Matched, we have a prefix */
-	return (TRUE);
+	return TRUE;
 }
 
 

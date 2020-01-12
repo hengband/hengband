@@ -257,18 +257,19 @@ void add_door(floor_type* floor_ptr, POSITION x, POSITION y)
  * @param x 配置を試みたいマスのX座標
  * @return なし
  */
-void place_random_stairs(floor_type *floor_ptr, POSITION y, POSITION x)
+void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 {
 	bool up_stairs = TRUE;
 	bool down_stairs = TRUE;
 	grid_type *g_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	g_ptr = &floor_ptr->grid_array[y][x];
 	if (!is_floor_grid(g_ptr) || g_ptr->o_idx) return;
 
 	if (!floor_ptr->dun_level) up_stairs = FALSE;
 	if (ironman_downward) up_stairs = FALSE;
 	if (floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) down_stairs = FALSE;
-	if (quest_number(floor_ptr->dun_level) && (floor_ptr->dun_level > 1)) down_stairs = FALSE;
+	if (quest_number(player_ptr, floor_ptr->dun_level) && (floor_ptr->dun_level > 1)) down_stairs = FALSE;
 
 	/* We can't place both */
 	if (down_stairs && up_stairs)
@@ -573,10 +574,10 @@ bool projectable(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, P
 	x = GRID_X(grid_g[grid_n - 1]);
 
 	/* May not end in an unrequested grid */
-	if ((y != y2) || (x != x2)) return (FALSE);
+	if ((y != y2) || (x != x2)) return FALSE;
 
 	/* Assume okay */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -633,7 +634,7 @@ bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Forbid perma-grids */
-	if (cave_perma_grid(g_ptr)) return (FALSE);
+	if (cave_perma_grid(g_ptr)) return FALSE;
 
 	/* Check objects */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
@@ -643,11 +644,11 @@ bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Forbid artifact grids */
-		if (object_is_artifact(o_ptr)) return (FALSE);
+		if (object_is_artifact(o_ptr)) return FALSE;
 	}
 
 	/* Accept */
-	return (TRUE);
+	return TRUE;
 }
 
 /*
@@ -979,7 +980,7 @@ void place_closed_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
  * @details
  * Only really called by some of the "vault" routines.
  */
-void vault_trap_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
+void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
 {
 	int count = 0, y1 = y, x1 = x;
 	int dummy = 0;
@@ -987,6 +988,7 @@ void vault_trap_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, 
 	grid_type *g_ptr;
 
 	/* Place traps */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (count = 0; count <= 5; count++)
 	{
 		/* Get a location */
@@ -1009,7 +1011,7 @@ void vault_trap_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, 
 		if (!is_floor_grid(g_ptr) || g_ptr->o_idx || g_ptr->m_idx) continue;
 
 		/* Place the trap */
-		place_trap(floor_ptr, y1, x1);
+		place_trap(player_ptr, y1, x1);
 
 		break;
 	}
@@ -1026,13 +1028,13 @@ bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 	if (!in_bounds(floor_ptr, y, x))
 	{
 		/* Out of bounds */
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Do the real check */
-	if (is_floor_bold(floor_ptr, y, x)) return (TRUE);
+	if (is_floor_bold(floor_ptr, y, x)) return TRUE;
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -1097,19 +1099,19 @@ static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
 		if (cave_have_flag_bold(floor_ptr, y - 1, x, FF_WALL) &&
 			cave_have_flag_bold(floor_ptr, y + 1, x, FF_WALL))
 		{
-			return (TRUE);
+			return TRUE;
 		}
 
 		/* Check Horizontal */
 		if (cave_have_flag_bold(floor_ptr, y, x - 1, FF_WALL) &&
 			cave_have_flag_bold(floor_ptr, y, x + 1, FF_WALL))
 		{
-			return (TRUE);
+			return TRUE;
 		}
 	}
 
 	/* No doorway */
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -1358,7 +1360,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 		}
 
 		/* Create the projection path */
-		while (1)
+		while (TRUE)
 		{
 			/* Save grid */
 			gp[n++] = GRID(y, x);
@@ -1447,7 +1449,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 		}
 
 		/* Create the projection path */
-		while (1)
+		while (TRUE)
 		{
 			/* Save grid */
 			gp[n++] = GRID(y, x);
@@ -1518,7 +1520,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 		x = x1 + sx;
 
 		/* Create the projection path */
-		while (1)
+		while (TRUE)
 		{
 			/* Save grid */
 			gp[n++] = GRID(y, x);
@@ -1928,6 +1930,7 @@ void compact_objects(floor_type *floor_ptr, int size)
 
 /*!
  * @brief 特殊な部屋向けに各種アイテムを配置する(メインルーチン) / Place some traps with a given displacement of given location
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y トラップを配置したいマスの中心Y座標
  * @param x トラップを配置したいマスの中心X座標
  * @param yd Y方向の配置分散マス数
@@ -1937,13 +1940,13 @@ void compact_objects(floor_type *floor_ptr, int size)
  * @details
  * Only really called by some of the "vault" routines.
  */
-void vault_traps(floor_type *floor_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
+void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
 {
 	int i;
 
 	for (i = 0; i < num; i++)
 	{
-		vault_trap_aux(floor_ptr, y, x, yd, xd);
+		vault_trap_aux(player_ptr, y, x, yd, xd);
 	}
 }
 

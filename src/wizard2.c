@@ -157,7 +157,7 @@ static bool wiz_dimension_door(player_type *caster_ptr)
 	POSITION x = 0, y = 0;
 	if (!tgt_pt(caster_ptr, &x, &y)) return FALSE;
 	teleport_player_to(caster_ptr, y, x, TELEPORT_NONMAGICAL);
-	return (TRUE);
+	return TRUE;
 }
 
 /*!
@@ -1753,7 +1753,7 @@ void do_cmd_debug(player_type *creature_ptr)
 		break;
 
 	case 'B':
-		update_gambling_monsters();
+		update_gambling_monsters(creature_ptr);
 		break;
 
 		/* Create any object */
@@ -1908,7 +1908,7 @@ void do_cmd_debug(player_type *creature_ptr)
 		{
 			if (quest[creature_ptr->current_floor_ptr->inside_quest].status == QUEST_STATUS_TAKEN)
 			{
-				complete_quest(creature_ptr->current_floor_ptr->inside_quest);
+				complete_quest(creature_ptr, creature_ptr->current_floor_ptr->inside_quest);
 				break;
 			}
 		}

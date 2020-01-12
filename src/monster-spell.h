@@ -306,15 +306,15 @@ extern const monster_power monster_powers[MAX_MONSPELLS];
 extern const concptr monster_powers_short[MAX_MONSPELLS];
 
 /* mspells1.c */
-extern bool clean_shot(POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend);
-extern bool summon_possible(POSITION y1, POSITION x1);
-extern bool raise_possible(monster_type *m_ptr);
+extern bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, bool is_friend);
+extern bool summon_possible(floor_type *floor_ptr, POSITION y1, POSITION x1);
+extern bool raise_possible(floor_type *floor_ptr, monster_type *m_ptr);
 extern bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx);
 extern bool spell_is_inate(SPELL_IDX spell);
 extern bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr);
-extern void beam(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int monspell, int target_type);
-extern void bolt(MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int monspell, int target_type);
-extern void breath(POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int monspell, int target_type);
+extern void beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int monspell, int target_type);
+extern void bolt(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int monspell, int target_type);
+extern void breath(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int monspell, int target_type);
 
 /* mspells2.c */
 extern void get_project_point(floor_type *floor_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg);
@@ -326,9 +326,9 @@ extern void learn_spell(player_type *learner_ptr, int monspell);
 extern void set_rf_masks(BIT_FLAGS *f4, BIT_FLAGS *f5, BIT_FLAGS *f6, BIT_FLAGS mode);
 
 /* mspells4.c */
-extern bool spell_learnable(MONSTER_IDX m_idx);
+extern bool spell_learnable(player_type *target_ptr, MONSTER_IDX m_idx);
 extern HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx);
 extern HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx);
-extern HIT_POINT monspell_damage(int SPELL_NUM, MONSTER_IDX m_idx, int TYPE);
-extern HIT_POINT monspell_race_damage(int SPELL_NUM, MONRACE_IDX r_idx, int TYPE);
-extern HIT_POINT monspell_bluemage_damage(int SPELL_NUM, PLAYER_LEVEL plev, int TYPE);
+extern HIT_POINT monspell_damage(player_type *target_ptr, int SPELL_NUM, MONSTER_IDX m_idx, int TYPE);
+extern HIT_POINT monspell_race_damage(player_type *target_ptr, int SPELL_NUM, MONRACE_IDX r_idx, int TYPE);
+extern HIT_POINT monspell_bluemage_damage(player_type *target_ptr, int SPELL_NUM, PLAYER_LEVEL plev, int TYPE);

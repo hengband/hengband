@@ -1870,7 +1870,7 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
 				become_random_artifact(owner_ptr, o_ptr, FALSE);
 				break;
 			}
-			while (1)
+			while (TRUE)
 			{
 				/* Roll for an ego-item */
 				o_ptr->name2 = get_random_ego(INVEN_RARM, TRUE);
@@ -1988,7 +1988,7 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
 			/* Roll for ego-item */
 			if (randint0(MAX_DEPTH) < level)
 			{
-				while (1)
+				while (TRUE)
 				{
 					o_ptr->name2 = get_random_ego(INVEN_RARM, FALSE);
 					if (o_ptr->name2 == EGO_WEIRD && o_ptr->tval != TV_SWORD)
@@ -2170,7 +2170,7 @@ static void a_m_aux_2(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 				break;
 			}
 
-			while (1)
+			while (TRUE)
 			{
 				bool okay_flag = TRUE;
 
@@ -2258,7 +2258,7 @@ static void a_m_aux_2(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 				break;
 			}
 
-			while (1)
+			while (TRUE)
 			{
 				o_ptr->name2 = get_random_ego(INVEN_LARM, TRUE);
 				if (o_ptr->sval != SV_SMALL_METAL_SHIELD && o_ptr->sval != SV_LARGE_METAL_SHIELD
@@ -2361,7 +2361,7 @@ static void a_m_aux_2(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 				become_random_artifact(owner_ptr, o_ptr, FALSE);
 				break;
 			}
-			while (1)
+			while (TRUE)
 			{
 				bool ok_flag = TRUE;
 				o_ptr->name2 = get_random_ego(INVEN_HEAD, TRUE);
@@ -2389,7 +2389,7 @@ static void a_m_aux_2(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 					ok_flag = FALSE;
 				}
 				if (ok_flag)
-					break; /* while (1) */
+					break; /* while (TRUE) */
 			}
 			break;
 		}
@@ -2397,7 +2397,7 @@ static void a_m_aux_2(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 		/* Very cursed */
 		else if (power < -1)
 		{
-			while (1)
+			while (TRUE)
 			{
 				bool ok_flag = TRUE;
 				o_ptr->name2 = get_random_ego(INVEN_HEAD, FALSE);
@@ -2414,7 +2414,7 @@ static void a_m_aux_2(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 					break;
 				}
 				if (ok_flag)
-					break; /* while (1) */
+					break; /* while (TRUE) */
 			}
 		}
 
@@ -2437,7 +2437,7 @@ static void a_m_aux_2(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 				become_random_artifact(owner_ptr, o_ptr, FALSE);
 				break;
 			}
-			while (1)
+			while (TRUE)
 			{
 				bool ok_flag = TRUE;
 				o_ptr->name2 = get_random_ego(INVEN_HEAD, TRUE);
@@ -2481,14 +2481,14 @@ static void a_m_aux_2(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 					ok_flag = FALSE;
 				}
 				if (ok_flag)
-					break; /* while (1) */
+					break; /* while (TRUE) */
 			}
 			break;
 		}
 		/* Very cursed */
 		else if (power < -1)
 		{
-			while (1)
+			while (TRUE)
 			{
 				bool ok_flag = TRUE;
 				o_ptr->name2 = get_random_ego(INVEN_HEAD, FALSE);
@@ -2499,7 +2499,7 @@ static void a_m_aux_2(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 					ok_flag = FALSE;
 				}
 				if (ok_flag)
-					break; /* while (1) */
+					break; /* while (TRUE) */
 			}
 		}
 		break;
@@ -3404,7 +3404,7 @@ static void a_m_aux_4(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 		{
 			while (!o_ptr->name2)
 			{
-				while (1)
+				while (TRUE)
 				{
 					bool okay_flag = TRUE;
 
@@ -3482,7 +3482,7 @@ static void a_m_aux_4(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 		monster_race *r_ptr;
 
 		/* Pick a random non-unique monster race */
-		while (1)
+		while (TRUE)
 		{
 			i = randint1(max_r_idx - 1);
 
@@ -3535,7 +3535,7 @@ static void a_m_aux_4(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 		get_mon_num_prep(item_monster_okay, NULL);
 
 		/* Pick a random non-unique monster race */
-		while (1)
+		while (TRUE)
 		{
 			i = get_mon_num(floor_ptr->dun_level);
 
@@ -3569,7 +3569,7 @@ static void a_m_aux_4(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 		monster_race *r_ptr;
 
 		/* Pick a random monster race */
-		while (1)
+		while (TRUE)
 		{
 			i = randint1(max_r_idx - 1);
 
@@ -3746,10 +3746,10 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
 	for (i = 0; i < rolls; i++)
 	{
 		/* Roll for an artifact */
-		if (make_artifact(o_ptr)) break;
+		if (make_artifact(owner_ptr, o_ptr)) break;
 		if ((owner_ptr->muta3 & MUT3_GOOD_LUCK) && one_in_(77))
 		{
-			if (make_artifact(o_ptr)) break;
+			if (make_artifact(owner_ptr, o_ptr)) break;
 		}
 	}
 
@@ -4074,7 +4074,7 @@ bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode)
 
 
 	/* Generate a special object, or a normal object */
-	if (!one_in_(prob) || !make_artifact_special(j_ptr))
+	if (!one_in_(prob) || !make_artifact_special(owner_ptr, j_ptr))
 	{
 		KIND_OBJECT_IDX k_idx;
 

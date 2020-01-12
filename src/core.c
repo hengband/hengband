@@ -130,10 +130,11 @@ int init_flags;
 /*!
  * @brief 擬似鑑定を実際に行い判定を反映する
  * @param slot 擬似鑑定を行うプレイヤーの所持リストID
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param heavy 重度の擬似鑑定を行うならばTRUE
  * @return なし
  */
-static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
+static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, bool heavy)
 {
 	byte feel;
 	object_type *o_ptr = &p_ptr->inventory_list[slot];
@@ -211,7 +212,7 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 	{
 #ifdef JP
 		msg_format("%s%s(%c)は%sという感じがする...",
-			describe_use(slot),o_name, index_to_label(slot),game_inscriptions[feel]);
+			describe_use(creature_ptr, slot),o_name, index_to_label(slot),game_inscriptions[feel]);
 #else
 		msg_format("You feel the %s (%c) you are %s %s %s...",
 			   o_name, index_to_label(slot), describe_use(slot),
@@ -240,7 +241,7 @@ static void sense_inventory_aux(INVENTORY_IDX slot, bool heavy)
 	o_ptr->feeling = feel;
 
 	/* Auto-inscription/destroy */
-	autopick_alter_item(slot, destroy_feeling);
+	autopick_alter_item(creature_ptr, slot, destroy_feeling);
 	p_ptr->update |= (PU_COMBINE | PU_REORDER);
 
 	p_ptr->window |= (PW_INVEN | PW_EQUIP);
@@ -477,7 +478,7 @@ static void sense_inventory1(player_type *creature_ptr)
 			heavy = TRUE;
 		}
 
-		sense_inventory_aux(i, heavy);
+		sense_inventory_aux(creature_ptr, i, heavy);
 	}
 }
 
@@ -599,7 +600,7 @@ static void sense_inventory2(player_type *creature_ptr)
 		/* Occasional failure on creature_ptr->inventory_list items */
 		if ((i < INVEN_RARM) && (0 != randint0(5))) continue;
 
-		sense_inventory_aux(i, TRUE);
+		sense_inventory_aux(creature_ptr, i, TRUE);
 	}
 }
 
@@ -1415,7 +1416,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		if (creature_ptr->inventory_list[INVEN_LITE].tval && (creature_ptr->inventory_list[INVEN_LITE].name2 != EGO_LITE_DARKNESS) &&
 		    !creature_ptr->resist_lite)
 		{
-			object_type * o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
+			object_type *o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
 			GAME_TEXT o_name [MAX_NLEN];
 			char ouch [MAX_NLEN+40];
 
@@ -2969,7 +2970,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 				creature_ptr->dungeon_idx = 0;
 
 				leave_quest_check(creature_ptr);
-				leave_tower_check();
+				leave_tower_check(creature_ptr);
 
 				creature_ptr->current_floor_ptr->inside_quest = 0;
 
@@ -3071,7 +3072,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 			disturb(creature_ptr, FALSE, TRUE);
 
 			/* Determine the level */
-			if (!quest_number(floor_ptr->dun_level) && floor_ptr->dun_level)
+			if (!quest_number(creature_ptr, floor_ptr->dun_level) && floor_ptr->dun_level)
 			{
 				msg_print(_("世界が変わった！", "The world changes!"));
 
@@ -3146,7 +3147,7 @@ static void process_world(player_type *player_ptr)
 			msg_print(_("相打ちに終わりました。", "They have kill each other at the same time."));
 			msg_print(NULL);
 			player_ptr->energy_need = 0;
-			update_gambling_monsters();
+			update_gambling_monsters(player_ptr);
 		}
 		else if ((number_mon-1) == 0)
 		{
@@ -3171,7 +3172,7 @@ static void process_world(player_type *player_ptr)
 			}
 			msg_print(NULL);
 			player_ptr->energy_need = 0;
-			update_gambling_monsters();
+			update_gambling_monsters(player_ptr);
 		}
 		else if (current_world_ptr->game_turn - player_ptr->current_floor_ptr->generated_turn == 150 * TURNS_PER_TICK)
 		{
@@ -3179,7 +3180,7 @@ static void process_world(player_type *player_ptr)
 			player_ptr->au += kakekin;
 			msg_print(NULL);
 			player_ptr->energy_need = 0;
-			update_gambling_monsters();
+			update_gambling_monsters(player_ptr);
 		}
 	}
 
@@ -3297,7 +3298,7 @@ static void process_world(player_type *player_ptr)
 		if (min != prev_min)
 		{
 			exe_write_diary(player_ptr, NIKKI_HIGAWARI, 0, NULL);
-			determine_today_mon(FALSE);
+			determine_daily_bounty(player_ptr, FALSE);
 		}
 	}
 
@@ -3394,7 +3395,7 @@ static bool enter_wizard_mode(void)
 		/* Verify request */
 		if (!get_check(_("本当にウィザードモードに入りたいのですか? ", "Are you sure you want to enter wizard mode? ")))
 		{
-			return (FALSE);
+			return FALSE;
 		}
 
 		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("ウィザードモードに突入してスコアを残せなくなった。", "give up recording score to enter wizard mode."));
@@ -3403,7 +3404,7 @@ static bool enter_wizard_mode(void)
 	}
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -3435,7 +3436,7 @@ static bool enter_debug_mode(void)
 		/* Verify request */
 		if (!get_check(_("本当にデバッグ・コマンドを使いますか? ", "Are you sure you want to use debug commands? ")))
 		{
-			return (FALSE);
+			return FALSE;
 		}
 
 		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("デバッグモードに突入してスコアを残せなくなった。", "give up sending score to use debug commands."));
@@ -3444,7 +3445,7 @@ static bool enter_debug_mode(void)
 	}
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 /*
@@ -3476,7 +3477,7 @@ static bool enter_borg_mode(void)
 		/* Verify request */
 		if (!get_check(_("本当にボーグ・コマンドを使いますか? ", "Are you sure you want to use borg commands? ")))
 		{
-			return (FALSE);
+			return FALSE;
 		}
 
 		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("ボーグ・コマンドを使用してスコアを残せなくなった。", "give up recording score to use borg commands."));
@@ -3485,7 +3486,7 @@ static bool enter_borg_mode(void)
 	}
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 /*
@@ -4101,7 +4102,7 @@ static void process_command(player_type *creature_ptr)
 
 		case '$':
 		{
-			do_cmd_reload_autopick();
+			do_cmd_reload_autopick(creature_ptr);
 			break;
 		}
 
@@ -4938,7 +4939,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	disturb(player_ptr, TRUE, TRUE);
 
 	/* Get index of current quest (if any) */
-	quest_num = quest_number(player_ptr->current_floor_ptr->dun_level);
+	quest_num = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
 
 	/* Inside a quest? */
 	if (quest_num)
@@ -4998,7 +4999,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 		if (load_game)
 		{
 			player_ptr->energy_need = 0;
-			update_gambling_monsters();
+			update_gambling_monsters(player_ptr);
 		}
 		else
 		{
@@ -5016,8 +5017,8 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	/* Print quest message if appropriate */
 	if (!player_ptr->current_floor_ptr->inside_quest && (player_ptr->dungeon_idx == DUNGEON_ANGBAND))
 	{
-		quest_discovery(random_quest_number(player_ptr->current_floor_ptr->dun_level));
-		player_ptr->current_floor_ptr->inside_quest = random_quest_number(player_ptr->current_floor_ptr->dun_level);
+		quest_discovery(random_quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level));
+		player_ptr->current_floor_ptr->inside_quest = random_quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
 	}
 	if ((player_ptr->current_floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && d_info[player_ptr->dungeon_idx].final_guardian)
 	{
@@ -5158,12 +5159,13 @@ static void dungeon(player_type *player_ptr, bool load_game)
 
 /*!
  * @brief 全ユーザプロファイルをロードする / Load some "user pref files"
+ * @paaram player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @note
  * Modified by Arcum Dagsson to support
  * separate macro files for different realms.
  */
-static void load_all_pref_files(void)
+static void load_all_pref_files(player_type *player_ptr)
 {
 	char buf[1024];
 
@@ -5217,7 +5219,7 @@ static void load_all_pref_files(void)
 
 
 	/* Load an autopick preference file */
-	autopick_load_pref(FALSE);
+	autopick_load_pref(player_ptr, FALSE);
 }
 
 
@@ -5374,7 +5376,7 @@ void play_game(player_type *player_ptr, bool new_game)
 	if (!new_game)
 	{
 		/* Process the player name */
-		process_player_name(FALSE);
+		process_player_name(player_ptr, FALSE);
 	}
 
 	/* Init the RNG */
@@ -5412,7 +5414,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		load = FALSE;
 
 		determine_bounty_uniques();
-		determine_today_mon(FALSE);
+		determine_daily_bounty(player_ptr, FALSE);
 
 		/* Initialize object array */
 		wipe_o_list(player_ptr->current_floor_ptr);
@@ -5556,7 +5558,7 @@ void play_game(player_type *player_ptr, bool new_game)
 	reset_visuals();
 
 	/* Load the "pref" files */
-	load_all_pref_files();
+	load_all_pref_files(player_ptr);
 
 	/* Give startup outfit (after loading pref files) */
 	if (new_game)

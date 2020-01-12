@@ -1,15 +1,15 @@
 ﻿/*!
-    @file bldg.c
-    @brief 町の施設処理 / Building commands
-    @date 2013/12/23
-    @author
-    Created by Ken Wigle for Kangband - a variant of Angband 2.8.3\n
-    -KMW-\n
-    \n
-    Rewritten for Kangband 2.8.3i using Kamband's version of\n
-    bldg.c as written by Ivan Tkatchev\n
-    \n
-    Changed for ZAngband by Robert Ruehlmann\n
+	@file bldg.c
+	@brief 町の施設処理 / Building commands
+	@date 2013/12/23
+	@author
+	Created by Ken Wigle for Kangband - a variant of Angband 2.8.3\n
+	-KMW-\n
+	\n
+	Rewritten for Kangband 2.8.3i using Kamband's version of\n
+	bldg.c as written by Ivan Tkatchev\n
+	\n
+	Changed for ZAngband by Robert Ruehlmann\n
 */
 
 #include "angband.h"
@@ -60,8 +60,8 @@
 #include "monsterrace.h"
 #include "autopick.h"
 
-
 /*
+ * todo MAX_BLDGが定義されていない旨のエラーが出る……がコンパイルには成功する
  * Buildings
  */
 building_type building[MAX_BLDG];
@@ -76,6 +76,7 @@ bool reinit_wilderness = FALSE;
 MONSTER_IDX today_mon;
 
 /*!
+ * todo MAX_ARENA_MONSが定義されていない旨のエラーが出る……がコンパイルには成功する
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル
  */
 const arena_type arena_info[MAX_ARENA_MONS + 2] =
@@ -126,73 +127,94 @@ const arena_type arena_info[MAX_ARENA_MONS + 2] =
 };
 
 /*!
+ * todo グローバルである必要があるか？
+ * ポーカーの現在の手札ID
+ */
+static int cards[5];
+
+#define ODDS_5A 3000 /*!< ファイブエースの役倍率 */
+#define ODDS_5C 400 /*!< ファイブカードの役倍率 */
+#define ODDS_RF 200 /*!< ロイヤルストレートフラッシュの役倍率 */
+#define ODDS_SF 80 /*!< ストレートフラッシュの役倍率 */
+#define ODDS_4C 16 /*!< フォアカードの役倍率 */
+#define ODDS_FH 12 /*!< フルハウスの役倍率 */
+#define ODDS_FL 8 /*!< フラッシュの役倍率 */
+#define ODDS_ST 4 /*!< ストレートの役倍率 */
+#define ODDS_3C 1 /*!< スリーカードの役倍率 */
+#define ODDS_2P 1 /*!< ツーペアの役倍率 */
+
+/*!
  * @brief 施設毎に設定された種族、職業、魔法領域フラグがプレイヤーと一致するかを判定する。
  * @details 各種ギルドや寺院など、特定の職業ならば優遇措置を得られる施設、
  * あるいは食堂など特定の種族では利用できない施設の判定処理を行う。
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param bldg 施設構造体の参照ポインタ
  * @return 種族、職業、魔法領域のいずれかが一致しているかの是非。
  */
-static bool is_owner(building_type *bldg)
+static bool is_owner(player_type *player_ptr, building_type *bldg)
 {
-	if (bldg->member_class[p_ptr->pclass] == BUILDING_OWNER)
+	if (bldg->member_class[player_ptr->pclass] == BUILDING_OWNER)
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
-	if (bldg->member_race[p_ptr->prace] == BUILDING_OWNER)
+	if (bldg->member_race[player_ptr->prace] == BUILDING_OWNER)
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
-	if ((is_magic(p_ptr->realm1) && (bldg->member_realm[p_ptr->realm1] == BUILDING_OWNER)) ||
-		(is_magic(p_ptr->realm2) && (bldg->member_realm[p_ptr->realm2] == BUILDING_OWNER)))
+	REALM_IDX realm1 = player_ptr->realm1;
+	REALM_IDX realm2 = player_ptr->realm2;
+	if ((is_magic(realm1) && (bldg->member_realm[realm1] == BUILDING_OWNER)) ||
+		(is_magic(realm2) && (bldg->member_realm[realm2] == BUILDING_OWNER)))
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
-	return (FALSE);
+	return FALSE;
 }
+
 
 /*!
  * @brief 施設毎に設定された種族、職業、魔法領域フラグがプレイヤーと一致するかを判定する。
  （スペルマスターの特別判定つき）
  * @details 各種ギルドや寺院など、特定の職業ならば優遇措置を得られる施設、
  * あるいは食堂など特定の種族では利用できない施設の判定処理を行う。
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param bldg 施設構造体の参照ポインタ
  * @return 種族、職業、魔法領域のいずれかが一致しているかの是非。
  * @todo is_owner()との実質的な多重実装なので、リファクタリングを行うべきである。
  */
-static bool is_member(building_type *bldg)
+static bool is_member(player_type *player_ptr, building_type *bldg)
 {
-	if (bldg->member_class[p_ptr->pclass])
+	if (bldg->member_class[player_ptr->pclass])
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
-	if (bldg->member_race[p_ptr->prace])
+	if (bldg->member_race[player_ptr->prace])
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
-	if ((is_magic(p_ptr->realm1) && bldg->member_realm[p_ptr->realm1]) ||
-	    (is_magic(p_ptr->realm2) && bldg->member_realm[p_ptr->realm2]))
+	REALM_IDX realm1 = player_ptr->realm1;
+	REALM_IDX realm2 = player_ptr->realm2;
+	if ((is_magic(realm1) && bldg->member_realm[realm1]) ||
+		(is_magic(realm2) && bldg->member_realm[realm2]))
 	{
-		return (TRUE);
+		return TRUE;
 	}
 
+	if (player_ptr->pclass != CLASS_SORCERER) return FALSE;
 
-	if (p_ptr->pclass == CLASS_SORCERER)
+	for (int i = 0; i < MAX_MAGIC; i++)
 	{
-		int i;
-		bool OK = FALSE;
-		for (i = 0; i < MAX_MAGIC; i++)
-		{
-			if (bldg->member_realm[i+1]) OK = TRUE;
-		}
-		return OK;
+		if (bldg->member_realm[i + 1]) return TRUE;
 	}
-	return (FALSE);
+
+	return FALSE;
 }
+
 
 /*!
  * @brief コンソールに表示された施設に関する情報を消去する / Clear the building information
@@ -203,33 +225,36 @@ static bool is_member(building_type *bldg)
  */
 void clear_bldg(int min_row, int max_row)
 {
-	int   i;
-
-	for (i = min_row; i <= max_row; i++)
+	for (int i = min_row; i <= max_row; i++)
+	{
 		prt("", i, 0);
+	}
 }
+
 
 /*!
  * @brief 所持金を表示する。
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void building_prt_gold(void)
+static void building_prt_gold(player_type *player_ptr)
 {
 	char tmp_str[80];
-	prt(_("手持ちのお金: ", "Gold Remaining: "), 23,53);
-	sprintf(tmp_str, "%9ld", (long)p_ptr->au);
+	prt(_("手持ちのお金: ", "Gold Remaining: "), 23, 53);
+	sprintf(tmp_str, "%9ld", (long)player_ptr->au);
 	prt(tmp_str, 23, 68);
 }
 
+
 /*!
  * @brief 施設のサービス一覧を表示する / Display a building.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param bldg 施設構造体の参照ポインタ
  * @return なし
  */
-static void show_building(building_type* bldg)
+static void show_building(player_type *player_ptr, building_type* bldg)
 {
 	char buff[20];
-	int i;
 	byte action_color;
 	char tmp_str[80];
 
@@ -237,78 +262,86 @@ static void show_building(building_type* bldg)
 	sprintf(tmp_str, "%s (%s) %35s", bldg->owner_name, bldg->owner_race, bldg->name);
 	prt(tmp_str, 2, 1);
 
-
-	for (i = 0; i < 8; i++)
+	for (int i = 0; i < 8; i++)
 	{
-		if (bldg->letters[i])
+		if (!bldg->letters[i]) continue;
+
+		if (bldg->action_restr[i] == 0)
 		{
-			if (bldg->action_restr[i] == 0)
+			if ((is_owner(player_ptr, bldg) && (bldg->member_costs[i] == 0)) ||
+				(!is_owner(player_ptr, bldg) && (bldg->other_costs[i] == 0)))
 			{
-				if ((is_owner(bldg) && (bldg->member_costs[i] == 0)) ||
-					(!is_owner(bldg) && (bldg->other_costs[i] == 0)))
-				{
-					action_color = TERM_WHITE;
-					buff[0] = '\0';
-				}
-				else if (is_owner(bldg))
-				{
-					action_color = TERM_YELLOW;
-					sprintf(buff, _("($%ld)", "(%ldgp)"), (long int)bldg->member_costs[i]);
-				}
-				else
-				{
-					action_color = TERM_YELLOW;
-					sprintf(buff, _("($%ld)", "(%ldgp)"), (long int)bldg->other_costs[i]);				}
+				action_color = TERM_WHITE;
+				buff[0] = '\0';
 			}
-			else if (bldg->action_restr[i] == 1)
+			else if (is_owner(player_ptr, bldg))
 			{
-				if (!is_member(bldg))
-				{
-					action_color = TERM_L_DARK;
-					strcpy(buff, _("(閉店)", "(closed)"));
-				}
-				else if ((is_owner(bldg) && (bldg->member_costs[i] == 0)) ||
-					(is_member(bldg) && (bldg->other_costs[i] == 0)))
-				{
-					action_color = TERM_WHITE;
-					buff[0] = '\0';
-				}
-				else if (is_owner(bldg))
-				{
-					action_color = TERM_YELLOW;
-					sprintf(buff, _("($%ld)", "(%ldgp)"), (long int)bldg->member_costs[i]);
-				}
-				else
-				{
-					action_color = TERM_YELLOW;
-					sprintf(buff, _("($%ld)", "(%ldgp)"), (long int)bldg->other_costs[i]);
-				}
+				action_color = TERM_YELLOW;
+				sprintf(buff, _("($%ld)", "(%ldgp)"), (long int)bldg->member_costs[i]);
 			}
 			else
 			{
-				if (!is_owner(bldg))
-				{
-					action_color = TERM_L_DARK;
-					strcpy(buff, _("(閉店)", "(closed)"));
-				}
-				else if (bldg->member_costs[i] != 0)
-				{
-					action_color = TERM_YELLOW;
-					sprintf(buff, _("($%ld)", "(%ldgp)"), (long int)bldg->member_costs[i]);
-				}
-				else
-				{
-					action_color = TERM_WHITE;
-					buff[0] = '\0';
-				}
+				action_color = TERM_YELLOW;
+				sprintf(buff, _("($%ld)", "(%ldgp)"), (long int)bldg->other_costs[i]);
 			}
 
-			sprintf(tmp_str," %c) %s %s", bldg->letters[i], bldg->act_names[i], buff);
-			c_put_str(action_color, tmp_str, 19+(i/2), 35*(i%2));
+			sprintf(tmp_str, " %c) %s %s", bldg->letters[i], bldg->act_names[i], buff);
+			c_put_str(action_color, tmp_str, 19 + (i / 2), 35 * (i % 2));
+			continue;
 		}
+		
+		if (bldg->action_restr[i] == 1)
+		{
+			if (!is_member(player_ptr, bldg))
+			{
+				action_color = TERM_L_DARK;
+				strcpy(buff, _("(閉店)", "(closed)"));
+			}
+			else if ((is_owner(player_ptr, bldg) && (bldg->member_costs[i] == 0)) ||
+				(is_member(player_ptr, bldg) && (bldg->other_costs[i] == 0)))
+			{
+				action_color = TERM_WHITE;
+				buff[0] = '\0';
+			}
+			else if (is_owner(player_ptr, bldg))
+			{
+				action_color = TERM_YELLOW;
+				sprintf(buff, _("($%ld)", "(%ldgp)"), (long int)bldg->member_costs[i]);
+			}
+			else
+			{
+				action_color = TERM_YELLOW;
+				sprintf(buff, _("($%ld)", "(%ldgp)"), (long int)bldg->other_costs[i]);
+			}
+
+			sprintf(tmp_str, " %c) %s %s", bldg->letters[i], bldg->act_names[i], buff);
+			c_put_str(action_color, tmp_str, 19 + (i / 2), 35 * (i % 2));
+			continue;
+		}
+		
+		if (!is_owner(player_ptr, bldg))
+		{
+			action_color = TERM_L_DARK;
+			strcpy(buff, _("(閉店)", "(closed)"));
+		}
+		else if (bldg->member_costs[i] != 0)
+		{
+			action_color = TERM_YELLOW;
+			sprintf(buff, _("($%ld)", "(%ldgp)"), (long int)bldg->member_costs[i]);
+		}
+		else
+		{
+			action_color = TERM_WHITE;
+			buff[0] = '\0';
+		}
+
+		sprintf(tmp_str, " %c) %s %s", bldg->letters[i], bldg->act_names[i], buff);
+		c_put_str(action_color, tmp_str, 19 + (i / 2), 35 * (i % 2));
 	}
+
 	prt(_(" ESC) 建物を出る", " ESC) Exit building"), 23, 0);
 }
+
 
 /*!
  * @brief 闘技場に入るコマンドの処理 / arena commands
@@ -320,105 +353,109 @@ static void arena_comm(player_type *player_ptr, int cmd)
 {
 	monster_race    *r_ptr;
 	concptr            name;
-	
+
 	switch (cmd)
 	{
-		case BACT_ARENA:
-			if (player_ptr->arena_number == MAX_ARENA_MONS)
-			{
-				clear_bldg(5, 19);
-				prt(_("アリーナの優勝者！", "               Arena Victor!"), 5, 0);
-				prt(_("おめでとう！あなたは全ての敵を倒しました。", "Congratulations!  You have defeated all before you."), 7, 0);
-				prt(_("賞金として $1,000,000 が与えられます。", "For that, receive the prize: 1,000,000 gold pieces"), 8, 0);
+	case BACT_ARENA:
+		if (player_ptr->arena_number == MAX_ARENA_MONS)
+		{
+			clear_bldg(5, 19);
+			prt(_("アリーナの優勝者！", "               Arena Victor!"), 5, 0);
+			prt(_("おめでとう！あなたは全ての敵を倒しました。", "Congratulations!  You have defeated all before you."), 7, 0);
+			prt(_("賞金として $1,000,000 が与えられます。", "For that, receive the prize: 1,000,000 gold pieces"), 8, 0);
 
-				prt("", 10, 0);
-				prt("", 11, 0);
-				player_ptr->au += 1000000L;
-				msg_print(_("スペースキーで続行", "Press the space bar to continue"));
+			prt("", 10, 0);
+			prt("", 11, 0);
+			player_ptr->au += 1000000L;
+			msg_print(_("スペースキーで続行", "Press the space bar to continue"));
+			msg_print(NULL);
+			player_ptr->arena_number++;
+			break;
+		}
+		
+		if (player_ptr->arena_number > MAX_ARENA_MONS)
+		{
+			if (player_ptr->arena_number < MAX_ARENA_MONS + 2)
+			{
+				msg_print(_("君のために最強の挑戦者を用意しておいた。", "The strongest challenger is waiting for you."));
 				msg_print(NULL);
-				player_ptr->arena_number++;
-			}
-			else if (player_ptr->arena_number > MAX_ARENA_MONS)
-			{
-				if (player_ptr->arena_number < MAX_ARENA_MONS+2)
+				if (get_check(_("挑戦するかね？", "Do you fight? ")))
 				{
-					msg_print(_("君のために最強の挑戦者を用意しておいた。", "The strongest challenger is waiting for you."));
+					msg_print(_("死ぬがよい。", "Die, maggots."));
 					msg_print(NULL);
-					if (get_check(_("挑戦するかね？", "Do you fight? ")))
-					{	
-						msg_print(_("死ぬがよい。", "Die, maggots."));
-						msg_print(NULL);
-					
-						player_ptr->exit_bldg = FALSE;
-						reset_tim_flags(player_ptr);
 
-						/* Save the surface floor as saved floor */
-						prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
+					player_ptr->exit_bldg = FALSE;
+					reset_tim_flags(player_ptr);
 
-						player_ptr->current_floor_ptr->inside_arena = TRUE;
-						player_ptr->leaving = TRUE;
-						player_ptr->leave_bldg = TRUE;
-					}
-					else
-					{
-						msg_print(_("残念だ。", "We are disappointed."));
-					}
+					/* Save the surface floor as saved floor */
+					prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
+
+					player_ptr->current_floor_ptr->inside_arena = TRUE;
+					player_ptr->leaving = TRUE;
+					player_ptr->leave_bldg = TRUE;
 				}
 				else
 				{
-					msg_print(_("あなたはアリーナに入り、しばらくの間栄光にひたった。",
-								"You enter the arena briefly and bask in your glory."));
-					msg_print(NULL);
+					msg_print(_("残念だ。", "We are disappointed."));
 				}
 			}
-			else if (player_ptr->riding && (player_ptr->pclass != CLASS_BEASTMASTER) && (player_ptr->pclass != CLASS_CAVALRY))
+			else
 			{
-				msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。",
-							"You don't have permission to enter with pet."));
+				msg_print(_("あなたはアリーナに入り、しばらくの間栄光にひたった。",
+					"You enter the arena briefly and bask in your glory."));
 				msg_print(NULL);
 			}
-			else
-			{
-				player_ptr->exit_bldg = FALSE;
-				reset_tim_flags(player_ptr);
-
-				/* Save the surface floor as saved floor */
-				prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
-
-				player_ptr->current_floor_ptr->inside_arena = TRUE;
-				player_ptr->leaving = TRUE;
-				player_ptr->leave_bldg = TRUE;
-			}
-			break;
-		case BACT_POSTER:
-			if (player_ptr->arena_number == MAX_ARENA_MONS)
-				msg_print(_("あなたは勝利者だ。 アリーナでのセレモニーに参加しなさい。",
-							"You are victorious. Enter the arena for the ceremony."));
-
-			else if (player_ptr->arena_number > MAX_ARENA_MONS)
-			{
-				msg_print(_("あなたはすべての敵に勝利した。", "You have won against all foes."));
-			}
-			else
-			{
-				r_ptr = &r_info[arena_info[player_ptr->arena_number].r_idx];
-				name = (r_name + r_ptr->name);
-				msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), name);
-
-				player_ptr->monster_race_idx = arena_info[player_ptr->arena_number].r_idx;
-				player_ptr->window |= (PW_MONSTER);
-				handle_stuff(player_ptr);
-
-			}
-			break;
-		case BACT_ARENA_RULES:
-			screen_save();
-
-			/* Peruse the arena help file */
-			(void)show_file(TRUE, _("arena_j.txt", "arena.txt"), NULL, 0, 0);
-			screen_load();
 
 			break;
+		}
+		
+		if (player_ptr->riding && (player_ptr->pclass != CLASS_BEASTMASTER) && (player_ptr->pclass != CLASS_CAVALRY))
+		{
+			msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。",
+				"You don't have permission to enter with pet."));
+			msg_print(NULL);
+			break;
+		}
+		
+		player_ptr->exit_bldg = FALSE;
+		reset_tim_flags(player_ptr);
+
+		/* Save the surface floor as saved floor */
+		prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
+
+		player_ptr->current_floor_ptr->inside_arena = TRUE;
+		player_ptr->leaving = TRUE;
+		player_ptr->leave_bldg = TRUE;
+		break;
+	case BACT_POSTER:
+		if (player_ptr->arena_number == MAX_ARENA_MONS)
+		{
+			msg_print(_("あなたは勝利者だ。 アリーナでのセレモニーに参加しなさい。",
+				"You are victorious. Enter the arena for the ceremony."));
+			break;
+		}
+
+		if (player_ptr->arena_number > MAX_ARENA_MONS)
+		{
+			msg_print(_("あなたはすべての敵に勝利した。", "You have won against all foes."));
+			break;
+		}
+		
+		r_ptr = &r_info[arena_info[player_ptr->arena_number].r_idx];
+		name = (r_name + r_ptr->name);
+		msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), name);
+
+		player_ptr->monster_race_idx = arena_info[player_ptr->arena_number].r_idx;
+		player_ptr->window |= (PW_MONSTER);
+		handle_stuff(player_ptr);
+		break;
+	case BACT_ARENA_RULES:
+		screen_save();
+
+		/* Peruse the arena help file */
+		(void)show_file(TRUE, _("arena_j.txt", "arena.txt"), NULL, 0, 0);
+		screen_load();
+		break;
 	}
 }
 
@@ -434,79 +471,80 @@ static void display_fruit(int row, int col, int fruit)
 {
 	switch (fruit)
 	{
-		case 0: /* lemon */
-			c_put_str(TERM_YELLOW, "   ####.", row, col);
-			c_put_str(TERM_YELLOW, "  #    #", row + 1, col);
-			c_put_str(TERM_YELLOW, " #     #", row + 2, col);
-			c_put_str(TERM_YELLOW, "#      #", row + 3, col);
-			c_put_str(TERM_YELLOW, "#      #", row + 4, col);
-			c_put_str(TERM_YELLOW, "#     # ", row + 5, col);
-			c_put_str(TERM_YELLOW, "#    #  ", row + 6, col);
-			c_put_str(TERM_YELLOW, ".####   ", row + 7, col);
-			prt(                 _(" レモン ",
-						           " Lemon  "), row + 8, col);
-			break;
-		case 1: /* orange */
-			c_put_str(TERM_ORANGE, "   ##   ", row, col);
-			c_put_str(TERM_ORANGE, "  #..#  ", row + 1, col);
-			c_put_str(TERM_ORANGE, " #....# ", row + 2, col);
-			c_put_str(TERM_ORANGE, "#......#", row + 3, col);
-			c_put_str(TERM_ORANGE, "#......#", row + 4, col);
-			c_put_str(TERM_ORANGE, " #....# ", row + 5, col);
-			c_put_str(TERM_ORANGE, "  #..#  ", row + 6, col);
-			c_put_str(TERM_ORANGE, "   ##   ", row + 7, col);
-			prt(                 _("オレンジ",
-								   " Orange "), row + 8, col);
-			break;
-		case 2: /* sword */
-			c_put_str(TERM_SLATE, _("   Λ   ",  "   /\\   ") , row, col);
-			c_put_str(TERM_SLATE, _("   ||   ", "   ##   ") , row + 1, col);
-			c_put_str(TERM_SLATE, _("   ||   ", "   ##   ") , row + 2, col);
-			c_put_str(TERM_SLATE, _("   ||   ", "   ##   ") , row + 3, col);
-			c_put_str(TERM_SLATE, _("   ||   ", "   ##   ") , row + 4, col);
-			c_put_str(TERM_SLATE, _("   ||   ", "   ##   ") , row + 5, col);
-			c_put_str(TERM_UMBER, _(" |=亜=| ", " ###### ") , row + 6, col);
-			c_put_str(TERM_UMBER, _("   目   ", "   ##   ") , row + 7, col);
-			prt(                  _("   剣   ", " Sword  ") , row + 8, col);
-			break;
-		case 3: /* shield */
-			c_put_str(TERM_SLATE, " ###### ", row, col);
-			c_put_str(TERM_SLATE, "#      #", row + 1, col);
-			c_put_str(TERM_SLATE, "# ++++ #", row + 2, col);
-			c_put_str(TERM_SLATE, "# +==+ #", row + 3, col);
-			c_put_str(TERM_SLATE, "#  ++  #", row + 4, col);
-			c_put_str(TERM_SLATE, " #    # ", row + 5, col);
-			c_put_str(TERM_SLATE, "  #  #  ", row + 6, col);
-			c_put_str(TERM_SLATE, "   ##   ", row + 7, col);
-			prt(                _("   盾   ",
-								  " Shield "), row + 8, col);
-			break;
-		case 4: /* plum */
-			c_put_str(TERM_VIOLET, "   ##   ", row, col);
-			c_put_str(TERM_VIOLET, " ###### ", row + 1, col);
-			c_put_str(TERM_VIOLET, "########", row + 2, col);
-			c_put_str(TERM_VIOLET, "########", row + 3, col);
-			c_put_str(TERM_VIOLET, "########", row + 4, col);
-			c_put_str(TERM_VIOLET, " ###### ", row + 5, col);
-			c_put_str(TERM_VIOLET, "  ####  ", row + 6, col);
-			c_put_str(TERM_VIOLET, "   ##   ", row + 7, col);
-			prt(                 _(" プラム ",
-								   "  Plum  "), row + 8, col);
-			break;
-		case 5: /* cherry */
-			c_put_str(TERM_RED, "      ##", row, col);
-			c_put_str(TERM_RED, "   ###  ", row + 1, col);
-			c_put_str(TERM_RED, "  #..#  ", row + 2, col);
-			c_put_str(TERM_RED, "  #..#  ", row + 3, col);
-			c_put_str(TERM_RED, " ###### ", row + 4, col);
-			c_put_str(TERM_RED, "#..##..#", row + 5, col);
-			c_put_str(TERM_RED, "#..##..#", row + 6, col);
-			c_put_str(TERM_RED, " ##  ## ", row + 7, col);
-			prt(              _("チェリー",
-								" Cherry "), row + 8, col);
-			break;
+	case 0: /* lemon */
+		c_put_str(TERM_YELLOW, "   ####.", row, col);
+		c_put_str(TERM_YELLOW, "  #    #", row + 1, col);
+		c_put_str(TERM_YELLOW, " #     #", row + 2, col);
+		c_put_str(TERM_YELLOW, "#      #", row + 3, col);
+		c_put_str(TERM_YELLOW, "#      #", row + 4, col);
+		c_put_str(TERM_YELLOW, "#     # ", row + 5, col);
+		c_put_str(TERM_YELLOW, "#    #  ", row + 6, col);
+		c_put_str(TERM_YELLOW, ".####   ", row + 7, col);
+		prt(_(" レモン ",
+			" Lemon  "), row + 8, col);
+		break;
+	case 1: /* orange */
+		c_put_str(TERM_ORANGE, "   ##   ", row, col);
+		c_put_str(TERM_ORANGE, "  #..#  ", row + 1, col);
+		c_put_str(TERM_ORANGE, " #....# ", row + 2, col);
+		c_put_str(TERM_ORANGE, "#......#", row + 3, col);
+		c_put_str(TERM_ORANGE, "#......#", row + 4, col);
+		c_put_str(TERM_ORANGE, " #....# ", row + 5, col);
+		c_put_str(TERM_ORANGE, "  #..#  ", row + 6, col);
+		c_put_str(TERM_ORANGE, "   ##   ", row + 7, col);
+		prt(_("オレンジ",
+			" Orange "), row + 8, col);
+		break;
+	case 2: /* sword */
+		c_put_str(TERM_SLATE, _("   Λ   ", "   /\\   "), row, col);
+		c_put_str(TERM_SLATE, _("   ||   ", "   ##   "), row + 1, col);
+		c_put_str(TERM_SLATE, _("   ||   ", "   ##   "), row + 2, col);
+		c_put_str(TERM_SLATE, _("   ||   ", "   ##   "), row + 3, col);
+		c_put_str(TERM_SLATE, _("   ||   ", "   ##   "), row + 4, col);
+		c_put_str(TERM_SLATE, _("   ||   ", "   ##   "), row + 5, col);
+		c_put_str(TERM_UMBER, _(" |=亜=| ", " ###### "), row + 6, col);
+		c_put_str(TERM_UMBER, _("   目   ", "   ##   "), row + 7, col);
+		prt(_("   剣   ", " Sword  "), row + 8, col);
+		break;
+	case 3: /* shield */
+		c_put_str(TERM_SLATE, " ###### ", row, col);
+		c_put_str(TERM_SLATE, "#      #", row + 1, col);
+		c_put_str(TERM_SLATE, "# ++++ #", row + 2, col);
+		c_put_str(TERM_SLATE, "# +==+ #", row + 3, col);
+		c_put_str(TERM_SLATE, "#  ++  #", row + 4, col);
+		c_put_str(TERM_SLATE, " #    # ", row + 5, col);
+		c_put_str(TERM_SLATE, "  #  #  ", row + 6, col);
+		c_put_str(TERM_SLATE, "   ##   ", row + 7, col);
+		prt(_("   盾   ",
+			" Shield "), row + 8, col);
+		break;
+	case 4: /* plum */
+		c_put_str(TERM_VIOLET, "   ##   ", row, col);
+		c_put_str(TERM_VIOLET, " ###### ", row + 1, col);
+		c_put_str(TERM_VIOLET, "########", row + 2, col);
+		c_put_str(TERM_VIOLET, "########", row + 3, col);
+		c_put_str(TERM_VIOLET, "########", row + 4, col);
+		c_put_str(TERM_VIOLET, " ###### ", row + 5, col);
+		c_put_str(TERM_VIOLET, "  ####  ", row + 6, col);
+		c_put_str(TERM_VIOLET, "   ##   ", row + 7, col);
+		prt(_(" プラム ",
+			"  Plum  "), row + 8, col);
+		break;
+	case 5: /* cherry */
+		c_put_str(TERM_RED, "      ##", row, col);
+		c_put_str(TERM_RED, "   ###  ", row + 1, col);
+		c_put_str(TERM_RED, "  #..#  ", row + 2, col);
+		c_put_str(TERM_RED, "  #..#  ", row + 3, col);
+		c_put_str(TERM_RED, " ###### ", row + 4, col);
+		c_put_str(TERM_RED, "#..##..#", row + 5, col);
+		c_put_str(TERM_RED, "#..##..#", row + 6, col);
+		c_put_str(TERM_RED, " ##  ## ", row + 7, col);
+		prt(_("チェリー",
+			" Cherry "), row + 8, col);
+		break;
 	}
 }
+
 
 /*! @note
  * kpoker no (tyuto-hannpa na)pakuri desu...
@@ -528,20 +566,20 @@ static void display_fruit(int row, int col, int fruit)
 #define NUM_OF(card)   ((card) % 13) /*!< トランプカードの番号を返す */
 #define IS_JOKER(card) ((card) == 52) /*!< トランプカードがジョーカーかどうかを返す */
 
-static int cards[5]; /*!< ポーカーの現在の手札ID */
-
-/*!
+ /*!
  * @brief ポーカーの山札を切る。
  * @param deck デッキの配列
  * @return なし
  */
 static void reset_deck(int deck[])
 {
-	int i;
-	for (i = 0; i < 53; i++) deck[i] = i;
+	for (int i = 0; i < 53; i++)
+	{
+		deck[i] = i;
+	}
 
 	/* shuffle cards */
-	for (i = 0; i < 53; i++){
+	for (int i = 0; i < 53; i++) {
 		int tmp1 = randint0(53 - i) + i;
 		int tmp2 = deck[i];
 		deck[i] = deck[tmp1];
@@ -549,19 +587,21 @@ static void reset_deck(int deck[])
 	}
 }
 
+
 /*!
  * @brief ポーカープレイ中にジョーカーを持っているかの判定を返す。
  * @return ジョーカーを持っているか。
  */
 static bool have_joker(void)
 {
-	int i;
-
-	for (i = 0; i < 5; i++){
-	  if(IS_JOKER(cards[i])) return TRUE;
+	for (int i = 0; i < 5; i++)
+	{
+		if (IS_JOKER(cards[i])) return TRUE;
 	}
+
 	return FALSE;
 }
+
 
 /*!
  * @brief ポーカーの手札に該当の番号の札があるかを返す。
@@ -570,81 +610,92 @@ static bool have_joker(void)
  */
 static bool find_card_num(int num)
 {
-	int i;
-	for (i = 0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
+	{
 		if (NUM_OF(cards[i]) == num && !IS_JOKER(cards[i])) return TRUE;
+	}
+
 	return FALSE;
 }
+
 
 /*!
  * @brief ポーカーの手札がフラッシュ役を得ているかを帰す。
  * @return 役の判定結果
  */
-static bool yaku_check_flush(void)
+static bool poker_hand_check_flush(void)
 {
-	int i, suit;
 	bool joker_is_used = FALSE;
 
-	suit = IS_JOKER(cards[0]) ? SUIT_OF(cards[1]) : SUIT_OF(cards[0]);
-	for (i = 0; i < 5; i++){
-		if (SUIT_OF(cards[i]) != suit){
-		  if(have_joker() && !joker_is_used)
-		    joker_is_used = TRUE;
-		  else
-		    return FALSE;
-		}
+	int suit = IS_JOKER(cards[0]) ? SUIT_OF(cards[1]) : SUIT_OF(cards[0]);
+	for (int i = 0; i < 5; i++) {
+		if (SUIT_OF(cards[i]) == suit) continue;
+
+		if (have_joker() && !joker_is_used)
+			joker_is_used = TRUE;
+		else
+			return FALSE;
 	}
 
 	return TRUE;
 }
 
+
 /*!
  * @brief ポーカーの手札がストレートを含んだ高位の役を得ているかを帰す。
  * @return 役の判定結果 0…ストレート、フラッシュいずれもなし/1…ストレートのみ/2…ストレートフラッシュ/3…ロイヤルストレートフラッシュ
  */
-static int yaku_check_straight(void)
+static int poker_hand_check_straight(void)
 {
-	int i, lowest = 99;
+	int lowest = 99;
 	bool joker_is_used = FALSE;
 	bool straight = FALSE;
 
 	/* get lowest */
-	for (i = 0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		if (NUM_OF(cards[i]) < lowest && !IS_JOKER(cards[i]))
 			lowest = NUM_OF(cards[i]);
 	}
-	
+
 	/* Check Royal Straight Flush */
-	if (yaku_check_flush())
+	if (poker_hand_check_flush())
 	{
-	  if( lowest == 0 ){
-		for (i = 0; i < 4; i++)
+		int i;
+		if (lowest == 0)
 		{
-			if (!find_card_num(9 + i)){
-				if( have_joker() && !joker_is_used )
-				  joker_is_used = TRUE;
-				else
-				  break;
+			for (i = 0; i < 4; i++)
+			{
+				if (!find_card_num(9 + i)) {
+					if (have_joker() && !joker_is_used)
+						joker_is_used = TRUE;
+					else
+						break;
+				}
 			}
+
+			if (i == 4) return 3; /* Wow! Royal Straight Flush!!! */
 		}
-		if (i == 4) return 3; /* Wow! Royal Straight Flush!!! */
-	  }
-	  if(lowest == 9){
-		for (i = 0; i < 3; i++)
+
+		if (lowest == 9)
 		{
-			if (!find_card_num(10 + i))
-				break;
+			for (i = 0; i < 3; i++)
+			{
+				if (!find_card_num(10 + i))
+					break;
+			}
+
+			if (i == 3 && have_joker()) return 3; /* Wow! Royal Straight Flush!!! */
 		}
-		if (i == 3 && have_joker()) return 3; /* Wow! Royal Straight Flush!!! */
-	  }
 	}
 
 	joker_is_used = FALSE;
 
 	/* Straight Only Check */
-
-	if (lowest == 0) { /* (10 - J - Q - K)[JOKER] - A */
+	/* (10 - J - Q - K)[JOKER] - A */
+	if (lowest == 0)
+	{
+		int i;
 		for (i = 0; i < 4; i++)
 		{
 			if (!find_card_num(9 + i)) {
@@ -654,144 +705,142 @@ static int yaku_check_straight(void)
 					break; /* None */
 			}
 		}
-		if(i == 4) straight = TRUE;
+
+		if (i == 4) straight = TRUE;
 	}
 
 	joker_is_used = FALSE;
 
+	int i;
 	for (i = 0; i < 5; i++)
 	{
-		if(!find_card_num(lowest + i)){
-			if( have_joker() && !joker_is_used )
+		if (!find_card_num(lowest + i))
+		{
+			if (have_joker() && !joker_is_used)
 				joker_is_used = TRUE;
 			else
 				break; /* None */
 		}
 	}
-	if(i == 5) straight = TRUE;
-	
-	if (straight && yaku_check_flush()) return 2; /* Straight Flush */
-	else if(straight) return 1; /* Only Straight */
+
+	if (i == 5) straight = TRUE;
+
+	if (straight && poker_hand_check_flush()) return 2; /* Straight Flush */
+	else if (straight) return 1; /* Only Straight */
 	else return 0;
 }
+
 
 /*!
  * @brief ポーカーのペア役の状態を返す。
  * @return 0:nopair 1:1 pair 2:2 pair 3:3 cards 4:full house 6:4cards
  */
-static int yaku_check_pair(void)
+static int poker_hand_check_pair(void)
 {
-	int i, i2, matching = 0;
-
-	for (i = 0; i < 5; i++)
+	int matching = 0;
+	for (int i = 0; i < 5; i++)
 	{
-		for (i2 = i+1; i2 < 5; i2++)
+		for (int j = i + 1; j < 5; j++)
 		{
-			if (IS_JOKER(cards[i]) || IS_JOKER(cards[i2])) continue;
-			if (NUM_OF(cards[i]) == NUM_OF(cards[i2]))
+			if (IS_JOKER(cards[i]) || IS_JOKER(cards[j])) continue;
+			if (NUM_OF(cards[i]) == NUM_OF(cards[j]))
 				matching++;
 		}
 	}
 
-	if(have_joker()){
-	  switch(matching){
-	  case 0:
-	    matching = 1;
-	    break;
-	  case 1:
-	    matching = 3;
-	    break;
-	  case 2:
-	    matching = 4;
-	    break;
-	  case 3:
-	    matching = 6;
-	    break;
-	  case 6:
-	    matching = 7;
-	    break;
-	  default:
-	    /* don't reach */
-	    break;
-	  }
+	if (have_joker())
+	{
+		switch (matching) {
+		case 0:
+			matching = 1;
+			break;
+		case 1:
+			matching = 3;
+			break;
+		case 2:
+			matching = 4;
+			break;
+		case 3:
+			matching = 6;
+			break;
+		case 6:
+			matching = 7;
+			break;
+		default:
+			/* don't reach */
+			break;
+		}
 	}
 
 	return matching;
 }
 
-#define ODDS_5A 3000 /*!< ファイブエースの役倍率 */
-#define ODDS_5C 400 /*!< ファイブカードの役倍率 */
-#define ODDS_RF 200 /*!< ロイヤルストレートフラッシュの役倍率 */
-#define ODDS_SF 80 /*!< ストレートフラッシュの役倍率 */
-#define ODDS_4C 16 /*!< フォアカードの役倍率 */
-#define ODDS_FH 12 /*!< フルハウスの役倍率 */
-#define ODDS_FL 8 /*!< フラッシュの役倍率 */
-#define ODDS_ST 4 /*!< ストレートの役倍率 */
-#define ODDS_3C 1 /*!< スリーカードの役倍率 */
-#define ODDS_2P 1 /*!< ツーペアの役倍率 */
 
 /*!
  * @brief ポーカーの役をチェックし、その結果を画面に表示しつつ結果を返す。
  * @return 役のID
  */
-static int yaku_check(void)
+static int poker_hand_check(void)
 {
 	prt("                            ", 4, 3);
 
-	switch(yaku_check_straight()){
+	switch (poker_hand_check_straight())
+	{
 	case 3: /* RF! */
-		c_put_str(TERM_YELLOW, _("ロイヤルストレートフラッシュ", "Royal Flush"),  4,  3);
+		c_put_str(TERM_YELLOW, _("ロイヤルストレートフラッシュ", "Royal Flush"), 4, 3);
 		return ODDS_RF;
 	case 2: /* SF! */
-		c_put_str(TERM_YELLOW, _("ストレートフラッシュ", "Straight Flush"),  4,  3);
+		c_put_str(TERM_YELLOW, _("ストレートフラッシュ", "Straight Flush"), 4, 3);
 		return ODDS_SF;
 	case 1:
-		c_put_str(TERM_YELLOW, _("ストレート", "Straight"),  4,  3);
+		c_put_str(TERM_YELLOW, _("ストレート", "Straight"), 4, 3);
 		return ODDS_ST;
 	default:
 		/* Not straight -- fall through */
 		break;
 	}
 
-	if (yaku_check_flush())
+	if (poker_hand_check_flush())
 	{
-		c_put_str(TERM_YELLOW, _("フラッシュ", "Flush"),  4,  3);
+		c_put_str(TERM_YELLOW, _("フラッシュ", "Flush"), 4, 3);
 		return ODDS_FL;
 	}
 
-	switch (yaku_check_pair())
+	switch (poker_hand_check_pair())
 	{
 	case 1:
-		c_put_str(TERM_YELLOW, _("ワンペア", "One pair"),  4,  3);
+		c_put_str(TERM_YELLOW, _("ワンペア", "One pair"), 4, 3);
 		return 0;
 	case 2:
-		c_put_str(TERM_YELLOW, _("ツーペア", "Two pair"),  4,  3);
+		c_put_str(TERM_YELLOW, _("ツーペア", "Two pair"), 4, 3);
 		return ODDS_2P;
 	case 3:
-		c_put_str(TERM_YELLOW, _("スリーカード", "Three of a kind"),  4,  3);
+		c_put_str(TERM_YELLOW, _("スリーカード", "Three of a kind"), 4, 3);
 		return ODDS_3C;
 	case 4:
-		c_put_str(TERM_YELLOW, _("フルハウス", "Full house"),  4,  3);
+		c_put_str(TERM_YELLOW, _("フルハウス", "Full house"), 4, 3);
 		return ODDS_FH;
 	case 6:
-		c_put_str(TERM_YELLOW, _("フォーカード", "Four of a kind"),  4,  3);
+		c_put_str(TERM_YELLOW, _("フォーカード", "Four of a kind"), 4, 3);
 		return ODDS_4C;
 	case 7:
 		if (!NUM_OF(cards[0]) && !NUM_OF(cards[1]))
 		{
-			c_put_str(TERM_YELLOW, _("ファイブエース", "Five ace"),  4,  3);
+			c_put_str(TERM_YELLOW, _("ファイブエース", "Five ace"), 4, 3);
 			return ODDS_5A;
 		}
 		else
 		{
-			c_put_str(TERM_YELLOW, _("ファイブカード", "Five of a kind"),  4,  3);
+			c_put_str(TERM_YELLOW, _("ファイブカード", "Five of a kind"), 4, 3);
 			return ODDS_5C;
 		}
 	default:
 		break;
 	}
+
 	return 0;
 }
+
 
 /*!
  * @brief ポーカーの捨てる/残すインターフェイスの表示を更新する。
@@ -801,27 +850,28 @@ static int yaku_check(void)
  */
 static void display_kaeruka(int hoge, int kaeruka[])
 {
-	int i;
 	char col = TERM_WHITE;
-	for (i = 0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 	{
 		if (i == hoge) col = TERM_YELLOW;
-		else if(kaeruka[i]) col = TERM_WHITE;
+		else if (kaeruka[i]) col = TERM_WHITE;
 		else col = TERM_L_BLUE;
-		
-		if(kaeruka[i])
-			c_put_str(col, _("かえる", "Change"), 14,  5+i*16);
+
+		if (kaeruka[i])
+			c_put_str(col, _("かえる", "Change"), 14, 5 + i * 16);
 		else
-			c_put_str(col, _("のこす", " Stay "), 14,  5+i*16);
+			c_put_str(col, _("のこす", " Stay "), 14, 5 + i * 16);
 	}
+
 	if (hoge > 4) col = TERM_YELLOW;
 	else col = TERM_WHITE;
-	c_put_str(col, _("決定", "Sure"), 16,  38);
+	c_put_str(col, _("決定", "Sure"), 16, 38);
 
 	/* Hilite current option */
-	if (hoge < 5) move_cursor(14, 5+hoge*16);
+	if (hoge < 5) move_cursor(14, 5 + hoge * 16);
 	else move_cursor(16, 38);
 }
+
 
 /*!
  * @brief ポーカーの手札を表示する。
@@ -829,11 +879,10 @@ static void display_kaeruka(int hoge, int kaeruka[])
  */
 static void display_cards(void)
 {
-	int i, j;
-	char suitcolor[4] = {TERM_YELLOW, TERM_L_RED, TERM_L_BLUE, TERM_L_GREEN};
+	char suitcolor[4] = { TERM_YELLOW, TERM_L_RED, TERM_L_BLUE, TERM_L_GREEN };
 #ifdef JP
-	concptr suit[4] = {"★", "●", "¶", "†"};
-	concptr card_grph[13][7] = {{"Ａ   %s     ",
+	concptr suit[4] = { "★", "●", "¶", "†" };
+	concptr card_grph[13][7] = { {"Ａ   %s     ",
 				  "     変     ",
 				  "     愚     ",
 				  "     蛮     ",
@@ -923,19 +972,19 @@ static void display_cards(void)
 				  "  ο ο ι  ",
 				  "   υ    ∂ ",
 				  "    σ ノ %s",
-				  "          Ｋ"}};
-	concptr joker_grph[7] = {    "            ",
+				  "          Ｋ"} };
+	concptr joker_grph[7] = { "            ",
 				  "     Ｊ     ",
 				  "     Ｏ     ",
 				  "     Ｋ     ",
 				  "     Ｅ     ",
 				  "     Ｒ     ",
-				  "            "};
+				  "            " };
 
 #else
 
-	concptr suit[4] = {"[]", "qp", "<>", "db"};
-	concptr card_grph[13][7] = {{"A    %s     ",
+	concptr suit[4] = { "[]", "qp", "<>", "db" };
+	concptr card_grph[13][7] = { {"A    %s     ",
 				  "     He     ",
 				  "     ng     ",
 				  "     ba     ",
@@ -1025,121 +1074,163 @@ static void display_cards(void)
 				  "   q q uu   ",
 				  "   c    &   ",
 				  "    v__/  %s",
-				  "           K"}};
-	concptr joker_grph[7] = {    "            ",
+				  "           K"} };
+	concptr joker_grph[7] = { "            ",
 				  "     J      ",
 				  "     O      ",
 				  "     K      ",
 				  "     E      ",
 				  "     R      ",
-				  "            "};
+				  "            " };
 #endif
 
-	for (i = 0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 	{
-		prt(_("┏━━━━━━┓", " +------------+ "),  5,  i*16);
+		prt(_("┏━━━━━━┓", " +------------+ "), 5, i * 16);
 	}
 
-	for (i = 0; i < 5; i++)
+	for (int i = 0; i < 5; i++)
 	{
-		for (j = 0; j < 7; j++)
+		for (int j = 0; j < 7; j++)
 		{
-			prt(_("┃", " |"),  j+6,  i*16);
-			if(IS_JOKER(cards[i]))
-				c_put_str(TERM_VIOLET, joker_grph[j],  j+6,  2+i*16);
+			prt(_("┃", " |"), j + 6, i * 16);
+			if (IS_JOKER(cards[i]))
+				c_put_str(TERM_VIOLET, joker_grph[j], j + 6, 2 + i * 16);
 			else
-				c_put_str(suitcolor[SUIT_OF(cards[i])], format(card_grph[NUM_OF(cards[i])][j], suit[SUIT_OF(cards[i])], suit[SUIT_OF(cards[i])]),  j+6,  2+i*16);
-			prt(_("┃", "| "),  j+6,  i*16+14);
+				c_put_str(suitcolor[SUIT_OF(cards[i])], format(card_grph[NUM_OF(cards[i])][j], suit[SUIT_OF(cards[i])], suit[SUIT_OF(cards[i])]), j + 6, 2 + i * 16);
+			prt(_("┃", "| "), j + 6, i * 16 + 14);
 		}
 	}
-	for (i = 0; i < 5; i++)
+
+	for (int i = 0; i < 5; i++)
 	{
-		prt(_("┗━━━━━━┛", " +------------+ "), 13,  i*16);
+		prt(_("┗━━━━━━┛", " +------------+ "), 13, i * 16);
 	}
 }
 
+
 /*!
- * @brief ポーカーの１プレイルーチン。
- * @return １プレイの役の結果
+ * @brief ポーカーの1プレイルーチン。
+ * @return 1プレイの役の結果
  */
 static int do_poker(void)
 {
-	int i, k = 2;
-	char cmd;
-	int deck[53]; /* yamafuda : 0...52 */
-	int deck_ptr = 0;
-	int kaeruka[5]; /* 0:kaenai 1:kaeru */
+	int is_put[5]; /* 0:kaenai 1:kaeru */
 
 	bool done = FALSE;
-	bool kettei = TRUE;
-	bool kakikae = TRUE;
+	bool decision = TRUE;
+	bool draw = TRUE;
 
+	int deck[53];
 	reset_deck(deck);
 
-	for (i = 0; i < 5; i++)
+	int deck_ptr = 0;
+	for (int i = 0; i < 5; i++)
 	{
 		cards[i] = deck[deck_ptr++];
-		kaeruka[i] = 0; /* default:nokosu */
+		is_put[i] = 0;
 	}
 
-	/* suteruno wo kimeru */
 	prt(_("残すカードを決めて下さい(方向で移動, スペースで選択)。", "Stay witch? "), 0, 0);
 
 	display_cards();
-	yaku_check();
+	poker_hand_check();
 
+	int k = 2;
+	char cmd;
 	while (!done)
 	{
-		if (kakikae) display_kaeruka(k+kettei*5, kaeruka);
-		kakikae = FALSE;
+		if (draw)
+		{
+			display_kaeruka(k + decision * 5, is_put); 
+		}
+
+		draw = FALSE;
 		cmd = inkey();
 		switch (cmd)
 		{
 		case '6': case 'l': case 'L': case KTRL('F'):
-			if (!kettei) k = (k+1)%5;
-			else {k = 0;kettei = FALSE;}
-			kakikae = TRUE;
+			if (!decision)
+			{
+				k = (k + 1) % 5;
+			}
+			else
+			{
+				k = 0;
+				decision = FALSE;
+			}
+
+			draw = TRUE;
 			break;
 		case '4': case 'h': case 'H': case KTRL('B'):
-			if (!kettei) k = (k+4)%5;
-			else {k = 4;kettei = FALSE;}
-			kakikae = TRUE;
+			if (!decision)
+			{
+				k = (k + 4) % 5;
+			}
+			else
+			{
+				k = 4;
+				decision = FALSE;
+			}
+			
+			draw = TRUE;
 			break;
 		case '2': case 'j': case 'J': case KTRL('N'):
-			if (!kettei) {kettei = TRUE;kakikae = TRUE;}
+			if (!decision)
+			{
+				decision = TRUE; draw = TRUE;
+			}
+
 			break;
 		case '8': case 'k': case 'K': case KTRL('P'):
-			if (kettei) {kettei = FALSE;kakikae = TRUE;}
+			if (decision)
+			{
+				decision = FALSE; draw = TRUE;
+			}
+
 			break;
 		case ' ': case '\r':
-			if (kettei) done = TRUE;
-			else {kaeruka[k] = !kaeruka[k];kakikae = TRUE;}
+			if (decision)
+			{
+				done = TRUE;
+			}
+			else
+			{
+				is_put[k] = !is_put[k]; draw = TRUE;
+			}
+			
 			break;
 		default:
 			break;
 		}
 	}
-	
-	prt("",0,0);
 
-	for (i = 0; i < 5; i++)
-		if (kaeruka[i] == 1) cards[i] = deck[deck_ptr++]; /* soshite toru */
+	prt("", 0, 0);
+
+	for (int i = 0; i < 5; i++)
+	{
+		if (is_put[i] == 1) cards[i] = deck[deck_ptr++];
+	}
 
 	display_cards();
-	
-	return yaku_check();
+
+	return poker_hand_check();
 }
+
+// todo このundefは必要か？
 #undef SUIT_OF
 #undef NUM_OF
 #undef IS_JOKER
 /* end of poker codes --Koka */
 
+
 /*!
- * @brief カジノ１プレイごとのメインルーチン / gamble_comm
+ * @brief カジノ1プレイごとのメインルーチン / gamble_comm
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param cmd プレイするゲームID
  * @return なし
  */
-static bool gamble_comm(int cmd)
+static bool gamble_comm(player_type *player_ptr, int cmd)
 {
 	int i;
 	int roll1, roll2, roll3, choice, odds, win;
@@ -1156,309 +1247,319 @@ static bool gamble_comm(int cmd)
 	{
 		/* Peruse the gambling help file */
 		(void)show_file(TRUE, _("jgambling.txt", "gambling.txt"), NULL, 0, 0);
+		screen_load();
+		return TRUE;
+	}
+
+	/* No money */
+	if (player_ptr->au < 1)
+	{
+		msg_print(_("おい！おまえ一文なしじゃないか！こっから出ていけ！",
+			"Hey! You don't have gold - get out of here!"));
+		msg_print(NULL);
+		screen_load();
+		return FALSE;
+	}
+
+	clear_bldg(5, 23);
+
+	maxbet = player_ptr->lev * 200;
+
+	/* We can't bet more than we have */
+	maxbet = MIN(maxbet, player_ptr->au);
+
+	/* Get the wager */
+	strcpy(out_val, "");
+	sprintf(tmp_str, _("賭け金 (1-%ld)？", "Your wager (1-%ld) ? "), (long int)maxbet);
+
+
+	/*
+	 * Use get_string() because we may need more than
+	 * the s16b value returned by get_quantity().
+	 */
+	if (!get_string(tmp_str, out_val, 32))
+	{
+		msg_print(NULL);
+		screen_load();
+		return TRUE;
+	}
+
+	/* Strip spaces */
+	for (p = out_val; *p == ' '; p++);
+
+	/* Get the wager */
+	wager = atol(p);
+
+	if (wager > player_ptr->au)
+	{
+		msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
+		msg_print(NULL);
+		screen_load();
+		return FALSE;
+	}
+	else if (wager > maxbet)
+	{
+		msg_format(_("%ldゴールドだけ受けよう。残りは取っときな。",
+			"I'll take %ld gold of that. Keep the rest."), (long int)maxbet);
+		wager = maxbet;
+	}
+	else if (wager < 1)
+	{
+		msg_print(_("ＯＫ、１ゴールドからはじめよう。", "Ok, we'll start with 1 gold."));
+		wager = 1;
+	}
+	msg_print(NULL);
+	win = FALSE;
+	odds = 0;
+	oldgold = player_ptr->au;
+
+	sprintf(tmp_str, _("ゲーム前の所持金: %9ld", "Gold before game: %9ld"), (long int)oldgold);
+	prt(tmp_str, 20, 2);
+	sprintf(tmp_str, _("現在の掛け金:     %9ld", "Current Wager:    %9ld"), (long int)wager);
+	prt(tmp_str, 21, 2);
+
+	do
+	{
+		player_ptr->au -= wager;
+		switch (cmd)
+		{
+		case BACT_IN_BETWEEN: /* Game of In-Between */
+			c_put_str(TERM_GREEN, _("イン・ビトイーン", "In Between"), 5, 2);
+
+			odds = 4;
+			win = FALSE;
+			roll1 = randint1(10);
+			roll2 = randint1(10);
+			choice = randint1(10);
+			sprintf(tmp_str, _("黒ダイス: %d        黒ダイス: %d", "Black die: %d       Black Die: %d"), roll1, roll2);
+
+			prt(tmp_str, 8, 3);
+			sprintf(tmp_str, _("赤ダイス: %d", "Red die: %d"), choice);
+
+			prt(tmp_str, 11, 14);
+			if (((choice > roll1) && (choice < roll2)) ||
+				((choice < roll1) && (choice > roll2)))
+				win = TRUE;
+			break;
+		case BACT_CRAPS:  /* Game of Craps */
+			c_put_str(TERM_GREEN, _("クラップス", "Craps"), 5, 2);
+
+			win = 3;
+			odds = 2;
+			roll1 = randint1(6);
+			roll2 = randint1(6);
+			roll3 = roll1 + roll2;
+			choice = roll3;
+			sprintf(tmp_str, _("１振りめ: %d %d      Total: %d",
+				"First roll: %d %d    Total: %d"), roll1, roll2, roll3);
+			prt(tmp_str, 7, 5);
+			if ((roll3 == 7) || (roll3 == 11))
+				win = TRUE;
+			else if ((roll3 == 2) || (roll3 == 3) || (roll3 == 12))
+				win = FALSE;
+			else
+				do
+				{
+					msg_print(_("なにかキーを押すともう一回振ります。", "Hit any key to roll again"));
+
+					msg_print(NULL);
+					roll1 = randint1(6);
+					roll2 = randint1(6);
+					roll3 = roll1 + roll2;
+					sprintf(tmp_str, _("出目: %d %d          合計:      %d",
+						"Roll result: %d %d   Total:     %d"), roll1, roll2, roll3);
+					prt(tmp_str, 8, 5);
+					if (roll3 == choice)
+						win = TRUE;
+					else if (roll3 == 7)
+						win = FALSE;
+				} while ((win != TRUE) && (win != FALSE));
+				break;
+
+		case BACT_SPIN_WHEEL:  /* Spin the Wheel Game */
+			win = FALSE;
+			odds = 9;
+			c_put_str(TERM_GREEN, _("ルーレット", "Wheel"), 5, 2);
+
+			prt("0  1  2  3  4  5  6  7  8  9", 7, 5);
+			prt("--------------------------------", 8, 3);
+			strcpy(out_val, "");
+			get_string(_("何番？ (0-9): ", "Pick a number (0-9): "), out_val, 32);
+
+			for (p = out_val; iswspace(*p); p++);
+			choice = atol(p);
+			if (choice < 0)
+			{
+				msg_print(_("0番にしとくぜ。", "I'll put you down for 0."));
+				choice = 0;
+			}
+			else if (choice > 9)
+			{
+				msg_print(_("ＯＫ、9番にしとくぜ。", "Ok, I'll put you down for 9."));
+				choice = 9;
+			}
+			msg_print(NULL);
+			roll1 = randint0(10);
+			sprintf(tmp_str, _("ルーレットは回り、止まった。勝者は %d番だ。",
+				"The wheel spins to a stop and the winner is %d"), roll1);
+			prt(tmp_str, 13, 3);
+			prt("", 9, 0);
+			prt("*", 9, (3 * roll1 + 5));
+			if (roll1 == choice)
+				win = TRUE;
+			break;
+
+		case BACT_DICE_SLOTS: /* The Dice Slots */
+			c_put_str(TERM_GREEN, _("ダイス・スロット", "Dice Slots"), 5, 2);
+			c_put_str(TERM_YELLOW, _("レモン   レモン            2", ""), 6, 37);
+			c_put_str(TERM_YELLOW, _("レモン   レモン   レモン   5", ""), 7, 37);
+			c_put_str(TERM_ORANGE, _("オレンジ オレンジ オレンジ 10", ""), 8, 37);
+			c_put_str(TERM_UMBER, _("剣       剣       剣       20", ""), 9, 37);
+			c_put_str(TERM_SLATE, _("盾       盾       盾       50", ""), 10, 37);
+			c_put_str(TERM_VIOLET, _("プラム   プラム   プラム   200", ""), 11, 37);
+			c_put_str(TERM_RED, _("チェリー チェリー チェリー 1000", ""), 12, 37);
+
+			win = FALSE;
+			roll1 = randint1(21);
+			for (i = 6; i > 0; i--)
+			{
+				if ((roll1 - i) < 1)
+				{
+					roll1 = 7 - i;
+					break;
+				}
+				roll1 -= i;
+			}
+			roll2 = randint1(21);
+			for (i = 6; i > 0; i--)
+			{
+				if ((roll2 - i) < 1)
+				{
+					roll2 = 7 - i;
+					break;
+				}
+				roll2 -= i;
+			}
+			choice = randint1(21);
+			for (i = 6; i > 0; i--)
+			{
+				if ((choice - i) < 1)
+				{
+					choice = 7 - i;
+					break;
+				}
+				choice -= i;
+			}
+			put_str("/--------------------------\\", 7, 2);
+			prt("\\--------------------------/", 17, 2);
+			display_fruit(8, 3, roll1 - 1);
+			display_fruit(8, 12, roll2 - 1);
+			display_fruit(8, 21, choice - 1);
+			if ((roll1 == roll2) && (roll2 == choice))
+			{
+				win = TRUE;
+				switch (roll1)
+				{
+				case 1:
+					odds = 5; break;
+				case 2:
+					odds = 10; break;
+				case 3:
+					odds = 20; break;
+				case 4:
+					odds = 50; break;
+				case 5:
+					odds = 200; break;
+				case 6:
+					odds = 1000; break;
+				}
+			}
+			else if ((roll1 == 1) && (roll2 == 1))
+			{
+				win = TRUE;
+				odds = 2;
+			}
+			break;
+		case BACT_POKER:
+			win = FALSE;
+			odds = do_poker();
+			if (odds) win = TRUE;
+			break;
+		}
+
+		if (win)
+		{
+			prt(_("あなたの勝ち", "YOU WON"), 16, 37);
+
+			player_ptr->au += odds * wager;
+			sprintf(tmp_str, _("倍率: %d", "Payoff: %d"), odds);
+
+			prt(tmp_str, 17, 37);
+		}
+		else
+		{
+			prt(_("あなたの負け", "You Lost"), 16, 37);
+			prt("", 17, 37);
+		}
+
+		sprintf(tmp_str, _("現在の所持金:     %9ld", "Current Gold:     %9ld"), (long int)player_ptr->au);
+
+		prt(tmp_str, 22, 2);
+		prt(_("もう一度(Y/N)？", "Again(Y/N)?"), 18, 37);
+
+		move_cursor(18, 52);
+		again = inkey();
+		prt("", 16, 37);
+		prt("", 17, 37);
+		prt("", 18, 37);
+		if (wager > player_ptr->au)
+		{
+			msg_print(_("おい！金が足りないじゃないか！ここから出て行け！",
+				"Hey! You don't have the gold - get out of here!"));
+			msg_print(NULL);
+
+			/* Get out here */
+			break;
+		}
+	} while ((again == 'y') || (again == 'Y'));
+
+	prt("", 18, 37);
+	if (player_ptr->au >= oldgold)
+	{
+		msg_print(_("「今回は儲けたな！でも次はこっちが勝ってやるからな、絶対に！」",
+			"You came out a winner! We'll win next time, I'm sure."));
+		chg_virtue(player_ptr, V_CHANCE, 3);
 	}
 	else
 	{
-		/* No money */
-		if (p_ptr->au < 1)
-		{
-			msg_print(_("おい！おまえ一文なしじゃないか！こっから出ていけ！", 
-						"Hey! You don't have gold - get out of here!"));
-			msg_print(NULL);
-			screen_load();
-			return FALSE;
-		}
-
-		clear_bldg(5, 23);
-
-		maxbet = p_ptr->lev * 200;
-
-		/* We can't bet more than we have */
-		maxbet = MIN(maxbet, p_ptr->au);
-
-		/* Get the wager */
-		strcpy(out_val, "");
-		sprintf(tmp_str,_("賭け金 (1-%ld)？", "Your wager (1-%ld) ? "), (long int)maxbet);
-
-
-		/*
-		 * Use get_string() because we may need more than
-		 * the s16b value returned by get_quantity().
-		 */
-		if (get_string(tmp_str, out_val, 32))
-		{
-			/* Strip spaces */
-			for (p = out_val; *p == ' '; p++);
-
-			/* Get the wager */
-			wager = atol(p);
-
-			if (wager > p_ptr->au)
-			{
-				msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
-				msg_print(NULL);
-				screen_load();
-				return (FALSE);
-			}
-			else if (wager > maxbet)
-			{
-				msg_format(_("%ldゴールドだけ受けよう。残りは取っときな。",
-							 "I'll take %ld gold of that. Keep the rest."), (long int)maxbet);
-				wager = maxbet;
-			}
-			else if (wager < 1)
-			{
-				msg_print(_("ＯＫ、１ゴールドからはじめよう。", "Ok, we'll start with 1 gold."));
-				wager = 1;
-			}
-			msg_print(NULL);
-			win = FALSE;
-			odds = 0;
-			oldgold = p_ptr->au;
-
-			sprintf(tmp_str, _("ゲーム前の所持金: %9ld", "Gold before game: %9ld"), (long int)oldgold);
-			prt(tmp_str, 20, 2);
-			sprintf(tmp_str, _("現在の掛け金:     %9ld", "Current Wager:    %9ld"), (long int)wager);
-			prt(tmp_str, 21, 2);
-
-			do
-			{
-				p_ptr->au -= wager;
-				switch (cmd)
-				{
-				 case BACT_IN_BETWEEN: /* Game of In-Between */
-					c_put_str(TERM_GREEN, _("イン・ビトイーン", "In Between"),5,2);
-
-					odds = 4;
-					win = FALSE;
-					roll1 = randint1(10);
-					roll2 = randint1(10);
-					choice = randint1(10);
-					sprintf(tmp_str, _("黒ダイス: %d        黒ダイス: %d", "Black die: %d       Black Die: %d"), roll1, roll2);
-
-					prt(tmp_str, 8, 3);
-					sprintf(tmp_str, _("赤ダイス: %d", "Red die: %d"), choice);
-
-					prt(tmp_str, 11, 14);
-					if (((choice > roll1) && (choice < roll2)) ||
-						((choice < roll1) && (choice > roll2)))
-						win = TRUE;
-					break;
-				case BACT_CRAPS:  /* Game of Craps */
-					c_put_str(TERM_GREEN, _("クラップス", "Craps"), 5, 2);
-
-					win = 3;
-					odds = 2;
-					roll1 = randint1(6);
-					roll2 = randint1(6);
-					roll3 = roll1 +  roll2;
-					choice = roll3;
-					sprintf(tmp_str, _("１振りめ: %d %d      Total: %d", 
-									   "First roll: %d %d    Total: %d"), roll1, roll2, roll3);
-					prt(tmp_str, 7, 5);
-					if ((roll3 == 7) || (roll3 == 11))
-						win = TRUE;
-					else if ((roll3 == 2) || (roll3 == 3) || (roll3 == 12))
-						win = FALSE;
-					else
-						do
-						{
-							msg_print(_("なにかキーを押すともう一回振ります。", "Hit any key to roll again"));
-
-							msg_print(NULL);
-							roll1 = randint1(6);
-							roll2 = randint1(6);
-							roll3 = roll1 +  roll2;
-							sprintf(tmp_str, _("出目: %d %d          合計:      %d", 
-										   "Roll result: %d %d   Total:     %d"), roll1, roll2, roll3);
-							prt(tmp_str, 8, 5);
-							if (roll3 == choice)
-								win = TRUE;
-							else if (roll3 == 7)
-								win = FALSE;
-						} while ((win != TRUE) && (win != FALSE));
-					break;
-
-				case BACT_SPIN_WHEEL:  /* Spin the Wheel Game */
-					win = FALSE;
-					odds = 9;
-					c_put_str(TERM_GREEN, _("ルーレット", "Wheel"), 5, 2);
-
-					prt("0  1  2  3  4  5  6  7  8  9", 7, 5);
-					prt("--------------------------------", 8, 3);
-					strcpy(out_val, "");
-					get_string(_("何番？ (0-9): ", "Pick a number (0-9): "), out_val, 32);
-
-					for (p = out_val; iswspace(*p); p++);
-					choice = atol(p);
-					if (choice < 0)
-					{
-						msg_print(_("0番にしとくぜ。", "I'll put you down for 0."));
-						choice = 0;
-					}
-					else if (choice > 9)
-					{
-						msg_print(_("ＯＫ、9番にしとくぜ。", "Ok, I'll put you down for 9."));
-						choice = 9;
-					}
-					msg_print(NULL);
-					roll1 = randint0(10);
-					sprintf(tmp_str, _("ルーレットは回り、止まった。勝者は %d番だ。", 
-									   "The wheel spins to a stop and the winner is %d"), roll1);
-					prt(tmp_str, 13, 3);
-					prt("", 9, 0);
-					prt("*", 9, (3 * roll1 + 5));
-					if (roll1 == choice)
-						win = TRUE;
-					break;
-
-				case BACT_DICE_SLOTS: /* The Dice Slots */
-					c_put_str(TERM_GREEN,  _("ダイス・スロット", "Dice Slots"), 5, 2);
-					c_put_str(TERM_YELLOW, _("レモン   レモン            2", ""), 6, 37);
-					c_put_str(TERM_YELLOW, _("レモン   レモン   レモン   5", ""), 7, 37);
-					c_put_str(TERM_ORANGE, _("オレンジ オレンジ オレンジ 10", ""), 8, 37);
-					c_put_str(TERM_UMBER, _("剣       剣       剣       20", ""), 9, 37);
-					c_put_str(TERM_SLATE, _("盾       盾       盾       50", ""), 10, 37);
-					c_put_str(TERM_VIOLET, _("プラム   プラム   プラム   200", ""), 11, 37);
-					c_put_str(TERM_RED, _("チェリー チェリー チェリー 1000", ""), 12, 37);
-					
-					win = FALSE;
-					roll1 = randint1(21);
-					for (i=6;i>0;i--)
-					{
-						if ((roll1-i) < 1)
-						{
-							roll1 = 7-i;
-							break;
-						}
-						roll1 -= i;
-					}
-					roll2 = randint1(21);
-					for (i=6;i>0;i--)
-					{
-						if ((roll2-i) < 1)
-						{
-							roll2 = 7-i;
-							break;
-						}
-						roll2 -= i;
-					}
-					choice = randint1(21);
-					for (i=6;i>0;i--)
-					{
-						if ((choice-i) < 1)
-						{
-							choice = 7-i;
-							break;
-						}
-						choice -= i;
-					}
-					put_str("/--------------------------\\", 7, 2);
-					prt("\\--------------------------/", 17, 2);
-					display_fruit(8,  3, roll1 - 1);
-					display_fruit(8, 12, roll2 - 1);
-					display_fruit(8, 21, choice - 1);
-					if ((roll1 == roll2) && (roll2 == choice))
-					{
-						win = TRUE;
-						switch(roll1)
-						{
-						case 1:
-							odds = 5;break;
-						case 2:
-							odds = 10;break;
-						case 3:
-							odds = 20;break;
-						case 4:
-							odds = 50;break;
-						case 5:
-							odds = 200;break;
-						case 6:
-							odds = 1000;break;
-						}
-					}
-					else if ((roll1 == 1) && (roll2 == 1))
-					{
-						win = TRUE;
-						odds = 2;
-					}
-					break;
-				case BACT_POKER:
-					win = FALSE;
-					odds = do_poker();
-					if (odds) win = TRUE;
-					break;
-				}
-
-				if (win)
-				{
-					prt(_("あなたの勝ち", "YOU WON"), 16, 37);
-
-					p_ptr->au += odds * wager;
-					sprintf(tmp_str, _("倍率: %d", "Payoff: %d"), odds);
-
-					prt(tmp_str, 17, 37);
-				}
-				else
-				{
-					prt(_("あなたの負け", "You Lost"), 16, 37);
-					prt("", 17, 37);
-				}
-				sprintf(tmp_str, _("現在の所持金:     %9ld", "Current Gold:     %9ld"), (long int)p_ptr->au);
-
-				prt(tmp_str, 22, 2);
-				prt(_("もう一度(Y/N)？", "Again(Y/N)?"), 18, 37);
-
-				move_cursor(18, 52);
-				again = inkey();
-				prt("", 16, 37);
-				prt("", 17, 37);
-				prt("", 18, 37);
-				if (wager > p_ptr->au)
-				{
-					msg_print(_("おい！金が足りないじゃないか！ここから出て行け！", 
-								"Hey! You don't have the gold - get out of here!"));
-					msg_print(NULL);
-
-					/* Get out here */
-					break;
-				}
-			} while ((again == 'y') || (again == 'Y'));
-
-			prt("", 18, 37);
-			if (p_ptr->au >= oldgold)
-			{
-				msg_print(_("「今回は儲けたな！でも次はこっちが勝ってやるからな、絶対に！」",
-							"You came out a winner! We'll win next time, I'm sure."));
-				chg_virtue(p_ptr, V_CHANCE, 3);
-			}
-			else
-			{
-				msg_print(_("「金をスッてしまったな、わはは！うちに帰った方がいいぜ。」", "You lost gold! Haha, better head home."));
-				chg_virtue(p_ptr, V_CHANCE, -3);
-			}
-		}
-		msg_print(NULL);
+		msg_print(_("「金をスッてしまったな、わはは！うちに帰った方がいいぜ。」", "You lost gold! Haha, better head home."));
+		chg_virtue(player_ptr, V_CHANCE, -3);
 	}
+
+	msg_print(NULL);
 	screen_load();
-	return (TRUE);
+	return TRUE;
 }
+
 
 /*!
  * @brief モンスター闘技場に参加するモンスターを更新する。
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void update_gambling_monsters(void)
+void update_gambling_monsters(player_type *player_ptr)
 {
 	int total, i;
 	int max_dl = 0;
 	int mon_level;
 	int power[4];
 	bool tekitou;
-	bool old_inside_battle = p_ptr->phase_out;
+	bool old_inside_battle = player_ptr->phase_out;
 
 	for (i = 0; i < current_world_ptr->max_d_idx; i++)
+	{
 		if (max_dl < max_dlv[i]) max_dl = max_dlv[i];
+	}
 
 	mon_level = randint1(MIN(max_dl, 122)) + 5;
 	if (randint0(100) < 60)
@@ -1466,13 +1567,14 @@ void update_gambling_monsters(void)
 		i = randint1(MIN(max_dl, 122)) + 5;
 		mon_level = MAX(i, mon_level);
 	}
+
 	if (randint0(100) < 30)
 	{
 		i = randint1(MIN(max_dl, 122)) + 5;
 		mon_level = MAX(i, mon_level);
 	}
 
-	while (1)
+	while (TRUE)
 	{
 		total = 0;
 		tekitou = FALSE;
@@ -1480,12 +1582,12 @@ void update_gambling_monsters(void)
 		{
 			MONRACE_IDX r_idx;
 			int j;
-			while (1)
+			while (TRUE)
 			{
 				get_mon_num_prep(monster_can_entry_arena, NULL);
-				p_ptr->phase_out = TRUE;
+				player_ptr->phase_out = TRUE;
 				r_idx = get_mon_num(mon_level);
-				p_ptr->phase_out = old_inside_battle;
+				player_ptr->phase_out = old_inside_battle;
 				if (!r_idx) continue;
 
 				if ((r_info[r_idx].flags1 & RF1_UNIQUE) || (r_info[r_idx].flags7 & RF7_UNIQUE2))
@@ -1533,6 +1635,7 @@ void update_gambling_monsters(void)
 			if (r_ptr->arena_ratio) power[i] = power[i] * r_ptr->arena_ratio / 100;
 			total += power[i];
 		}
+
 		for (i = 0; i < 4; i++)
 		{
 			if (power[i] <= 0) break;
@@ -1542,9 +1645,11 @@ void update_gambling_monsters(void)
 			if (power[i] < 101) power[i] = 100 + randint1(5);
 			mon_odds[i] = power[i];
 		}
+
 		if (i == 4) break;
 	}
 }
+
 
 /*!
  * @brief モンスター闘技場のメインルーチン
@@ -1560,7 +1665,7 @@ static bool kakutoujou(player_type *player_ptr)
 
 	if ((current_world_ptr->game_turn - current_world_ptr->arena_start_turn) > TURNS_PER_TICK * 250)
 	{
-		update_gambling_monsters();
+		update_gambling_monsters(player_ptr);
 		current_world_ptr->arena_start_turn = current_world_ptr->game_turn;
 	}
 
@@ -1574,129 +1679,134 @@ static bool kakutoujou(player_type *player_ptr)
 		screen_load();
 		return FALSE;
 	}
-	else
+	
+	int i;
+
+	clear_bldg(4, 10);
+
+	prt(_("モンスター                                                     倍率",
+		"Monsters                                                       Odds"), 4, 4);
+	for (i = 0; i < 4; i++)
 	{
-		int i;
+		char buf[80];
+		monster_race *r_ptr = &r_info[battle_mon[i]];
 
-		clear_bldg(4, 10);
-
-		prt(_("モンスター                                                     倍率",
-			  "Monsters                                                       Odds"), 4, 4);
-		for (i=0;i<4;i++)
-		{
-			char buf[80];
-			monster_race *r_ptr = &r_info[battle_mon[i]];
-
-			sprintf(buf, _("%d) %-58s  %4ld.%02ld倍", "%d) %-58s  %4ld.%02ld"), i+1, 
-						 _(format("%s%s",r_name + r_ptr->name, (r_ptr->flags1 & RF1_UNIQUE) ? "もどき" : "      "),
-						   format("%s%s", (r_ptr->flags1 & RF1_UNIQUE) ? "Fake " : "", r_name + r_ptr->name)),
-						(long int)mon_odds[i]/100, (long int)mon_odds[i]%100);
-			prt(buf, 5+i, 1);
-		}
-		prt(_("どれに賭けますか:", "Which monster: "), 0, 0);
-		while(1)
-		{
-			i = inkey();
-
-			if (i == ESCAPE)
-			{
-				screen_load();
-				return FALSE;
-			}
-			if (i >= '1' && i <= '4')
-			{
-				sel_monster = i-'1';
-				battle_odds = mon_odds[sel_monster];
-				break;
-			}
-			else bell();
-		}
-
-		clear_bldg(4, 4);
-		for (i = 0; i < 4; i++)
-			if (i != sel_monster) clear_bldg(i + 5, i + 5);
-
-		maxbet = player_ptr->lev * 200;
-
-		/* We can't bet more than we have */
-		maxbet = MIN(maxbet, player_ptr->au);
-
-		/* Get the wager */
-		strcpy(out_val, "");
-		sprintf(tmp_str,_("賭け金 (1-%ld)？", "Your wager (1-%ld) ? "), (long int)maxbet);
-		/*
-		 * Use get_string() because we may need more than
-		 * the s16b value returned by get_quantity().
-		 */
-		if (get_string(tmp_str, out_val, 32))
-		{
-			/* Strip spaces */
-			for (p = out_val; *p == ' '; p++);
-
-			/* Get the wager */
-			wager = atol(p);
-
-			if (wager > player_ptr->au)
-			{
-				msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
-
-				msg_print(NULL);
-				screen_load();
-				return (FALSE);
-			}
-			else if (wager > maxbet)
-			{
-				msg_format(_("%ldゴールドだけ受けよう。残りは取っときな。", "I'll take %ld gold of that. Keep the rest."), (long int)maxbet);
-
-				wager = maxbet;
-			}
-			else if (wager < 1)
-			{
-				msg_print(_("ＯＫ、１ゴールドでいこう。", "Ok, we'll start with 1 gold."));
-				wager = 1;
-			}
-			msg_print(NULL);
-			battle_odds = MAX(wager+1, wager * battle_odds / 100);
-			kakekin = wager;
-			player_ptr->au -= wager;
-			reset_tim_flags(player_ptr);
-
-			/* Save the surface floor as saved floor */
-			prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
-
-			player_ptr->phase_out = TRUE;
-			player_ptr->leaving = TRUE;
-			player_ptr->leave_bldg = TRUE;
-
-			screen_load();
-
-			return (TRUE);
-		}
+		sprintf(buf, _("%d) %-58s  %4ld.%02ld倍", "%d) %-58s  %4ld.%02ld"), i + 1,
+			_(format("%s%s", r_name + r_ptr->name, (r_ptr->flags1 & RF1_UNIQUE) ? "もどき" : "      "),
+				format("%s%s", (r_ptr->flags1 & RF1_UNIQUE) ? "Fake " : "", r_name + r_ptr->name)),
+				(long int)mon_odds[i] / 100, (long int)mon_odds[i] % 100);
+		prt(buf, 5 + i, 1);
 	}
-	screen_load();
 
-	return (FALSE);
+	prt(_("どれに賭けますか:", "Which monster: "), 0, 0);
+	while (TRUE)
+	{
+		i = inkey();
+
+		if (i == ESCAPE)
+		{
+			screen_load();
+			return FALSE;
+		}
+
+		if (i >= '1' && i <= '4')
+		{
+			sel_monster = i - '1';
+			battle_odds = mon_odds[sel_monster];
+			break;
+		}
+
+		else bell();
+	}
+
+	clear_bldg(4, 4);
+	for (i = 0; i < 4; i++)
+		if (i != sel_monster) clear_bldg(i + 5, i + 5);
+
+	maxbet = player_ptr->lev * 200;
+
+	/* We can't bet more than we have */
+	maxbet = MIN(maxbet, player_ptr->au);
+
+	/* Get the wager */
+	strcpy(out_val, "");
+	sprintf(tmp_str, _("賭け金 (1-%ld)？", "Your wager (1-%ld) ? "), (long int)maxbet);
+
+	/*
+	 * Use get_string() because we may need more than
+	 * the s16b value returned by get_quantity().
+	 */
+	if (!get_string(tmp_str, out_val, 32))
+	{
+		screen_load();
+		return FALSE;
+	}
+	
+	/* Strip spaces */
+	for (p = out_val; *p == ' '; p++);
+
+	/* Get the wager */
+	wager = atol(p);
+
+	if (wager > player_ptr->au)
+	{
+		msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
+
+		msg_print(NULL);
+		screen_load();
+		return FALSE;
+	}
+	else if (wager > maxbet)
+	{
+		msg_format(_("%ldゴールドだけ受けよう。残りは取っときな。", "I'll take %ld gold of that. Keep the rest."), (long int)maxbet);
+
+		wager = maxbet;
+	}
+	else if (wager < 1)
+	{
+		msg_print(_("ＯＫ、１ゴールドでいこう。", "Ok, we'll start with 1 gold."));
+		wager = 1;
+	}
+
+	msg_print(NULL);
+	battle_odds = MAX(wager + 1, wager * battle_odds / 100);
+	kakekin = wager;
+	player_ptr->au -= wager;
+	reset_tim_flags(player_ptr);
+
+	/* Save the surface floor as saved floor */
+	prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
+
+	player_ptr->phase_out = TRUE;
+	player_ptr->leaving = TRUE;
+	player_ptr->leave_bldg = TRUE;
+
+	screen_load();
+	return TRUE;
 }
+
 
 /*!
  * @brief 本日の賞金首情報を表示する。
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void today_target(void)
+static void today_target(player_type *player_ptr)
 {
 	char buf[160];
 	monster_race *r_ptr = &r_info[today_mon];
 
-	clear_bldg(4,18);
+	clear_bldg(4, 18);
 	c_put_str(TERM_YELLOW, _("本日の賞金首", "Wanted monster that changes from day to day"), 5, 10);
-	sprintf(buf,_("ターゲット： %s", "target: %s"),r_name + r_ptr->name);
+	sprintf(buf, _("ターゲット： %s", "target: %s"), r_name + r_ptr->name);
 	c_put_str(TERM_YELLOW, buf, 6, 10);
-	sprintf(buf,_("死体 ---- $%d", "corpse   ---- $%d"), (int)r_ptr->level * 50 + 100);
+	sprintf(buf, _("死体 ---- $%d", "corpse   ---- $%d"), (int)r_ptr->level * 50 + 100);
 	prt(buf, 8, 10);
-	sprintf(buf,_("骨   ---- $%d", "skeleton ---- $%d"), (int)r_ptr->level * 30 + 60);
+	sprintf(buf, _("骨   ---- $%d", "skeleton ---- $%d"), (int)r_ptr->level * 30 + 60);
 	prt(buf, 9, 10);
-	p_ptr->today_mon = today_mon;
+	player_ptr->today_mon = today_mon;
 }
+
 
 /*!
  * @brief ツチノコの賞金首情報を表示する。
@@ -1704,7 +1814,7 @@ static void today_target(void)
  */
 static void tsuchinoko(void)
 {
-	clear_bldg(4,18);
+	clear_bldg(4, 18);
 	c_put_str(TERM_YELLOW, _("一獲千金の大チャンス！！！", "Big chance to quick money!!!"), 5, 10);
 	c_put_str(TERM_YELLOW, _("ターゲット：幻の珍獣「ツチノコ」", "target: the rarest animal 'Tsuchinoko'"), 6, 10);
 	c_put_str(TERM_WHITE, _("生け捕り ---- $1,000,000", "catch alive ---- $1,000,000"), 8, 10);
@@ -1712,20 +1822,20 @@ static void tsuchinoko(void)
 	c_put_str(TERM_WHITE, _("骨       ----   $100,000", "bones       ----   $100,000"), 10, 10);
 }
 
+
 /*!
  * @brief 通常の賞金首情報を表示する。
  * @return なし
  */
 static void show_bounty(void)
 {
-	int i;
 	TERM_LEN y = 0;
 
-	clear_bldg(4,18);
-	prt(_("死体を持ち帰れば報酬を差し上げます。", "Offer a prize when you bring a wanted monster's corpse"),4 ,10);
+	clear_bldg(4, 18);
+	prt(_("死体を持ち帰れば報酬を差し上げます。", "Offer a prize when you bring a wanted monster's corpse"), 4, 10);
 	c_put_str(TERM_YELLOW, _("現在の賞金首", "Wanted monsters"), 6, 10);
 
-	for (i = 0; i < MAX_BOUNTY; i++)
+	for (int i = 0; i < MAX_BOUNTY; i++)
 	{
 		byte color;
 		concptr done_mark;
@@ -1742,15 +1852,15 @@ static void show_bounty(void)
 			done_mark = "";
 		}
 
-		c_prt(color, format("%s %s", r_name + r_ptr->name, done_mark), y+7, 10);
+		c_prt(color, format("%s %s", r_name + r_ptr->name, done_mark), y + 7, 10);
 
-		y = (y+1) % 10;
-		if (!y && (i < MAX_BOUNTY -1))
+		y = (y + 1) % 10;
+		if (!y && (i < MAX_BOUNTY - 1))
 		{
 			prt(_("何かキーを押してください", "Hit any key."), 0, 0);
 			(void)inkey();
 			prt("", 0, 0);
-			clear_bldg(7,18);
+			clear_bldg(7, 18);
 		}
 	}
 }
@@ -1762,7 +1872,7 @@ static void show_bounty(void)
 static struct {
 	OBJECT_TYPE_VALUE tval; /*!< ベースアイテムのメイン種別ID */
 	OBJECT_SUBTYPE_VALUE sval; /*!< ベースアイテムのサブ種別ID */
-} prize_list[MAX_BOUNTY] = 
+} prize_list[MAX_BOUNTY] =
 {
 	{TV_POTION, SV_POTION_CURING},
 	{TV_POTION, SV_POTION_SPEED},
@@ -1797,23 +1907,21 @@ static struct {
  */
 static bool kankin(player_type *player_ptr)
 {
-	INVENTORY_IDX i;
-	int j;
 	bool change = FALSE;
 	GAME_TEXT o_name[MAX_NLEN];
 	object_type *o_ptr;
 
 	/* Loop for inventory and right/left arm */
-	for (i = 0; i <= INVEN_LARM; i++)
+	for (INVENTORY_IDX i = 0; i <= INVEN_LARM; i++)
 	{
 		o_ptr = &player_ptr->inventory_list[i];
 
 		/* Living Tsuchinoko worthes $1000000 */
 		if ((o_ptr->tval == TV_CAPTURE) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
-			char buf[MAX_NLEN+20];
+			char buf[MAX_NLEN + 20];
 			object_desc(o_name, o_ptr, 0);
-			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "),o_name);
+			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(1000000L * o_ptr->number));
@@ -1825,16 +1933,16 @@ static bool kankin(player_type *player_ptr)
 		}
 	}
 
-	for (i = 0; i < INVEN_PACK; i++)
+	for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &player_ptr->inventory_list[i];
 
 		/* Corpse of Tsuchinoko worthes $200000 */
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
-			char buf[MAX_NLEN+20];
+			char buf[MAX_NLEN + 20];
 			object_desc(o_name, o_ptr, 0);
-			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "),o_name);
+			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(200000L * o_ptr->number));
@@ -1846,16 +1954,16 @@ static bool kankin(player_type *player_ptr)
 		}
 	}
 
-	for (i = 0; i < INVEN_PACK; i++)
+	for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &player_ptr->inventory_list[i];
 
 		/* Bones of Tsuchinoko worthes $100000 */
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
-			char buf[MAX_NLEN+20];
+			char buf[MAX_NLEN + 20];
 			object_desc(o_name, o_ptr, 0);
-			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "),o_name);
+			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)(100000L * o_ptr->number));
@@ -1867,14 +1975,14 @@ static bool kankin(player_type *player_ptr)
 		}
 	}
 
-	for (i = 0; i < INVEN_PACK; i++)
+	for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &player_ptr->inventory_list[i];
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
 		{
-			char buf[MAX_NLEN+20];
+			char buf[MAX_NLEN + 20];
 			object_desc(o_name, o_ptr, 0);
-			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "),o_name);
+			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((r_info[today_mon].level * 50 + 100) * o_ptr->number));
@@ -1886,15 +1994,15 @@ static bool kankin(player_type *player_ptr)
 		}
 	}
 
-	for (i = 0; i < INVEN_PACK; i++)
+	for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &player_ptr->inventory_list[i];
 
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
 		{
-			char buf[MAX_NLEN+20];
+			char buf[MAX_NLEN + 20];
 			object_desc(o_name, o_ptr, 0);
-			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "),o_name);
+			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
 				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (long int)((r_info[today_mon].level * 30 + 60) * o_ptr->number));
@@ -1906,70 +2014,69 @@ static bool kankin(player_type *player_ptr)
 		}
 	}
 
-	for (j = 0; j < MAX_BOUNTY; j++)
+	for (int j = 0; j < MAX_BOUNTY; j++)
 	{
-		/* Need reverse order --- Positions will be changed in the loop */
-		for (i = INVEN_PACK-1; i >= 0; i--)
+		for (INVENTORY_IDX i = INVEN_PACK - 1; i >= 0; i--)
 		{
 			o_ptr = &player_ptr->inventory_list[i];
-			if ((o_ptr->tval == TV_CORPSE) && (o_ptr->pval == current_world_ptr->bounty_r_idx[j]))
-			{
-				char buf[MAX_NLEN+20];
-				int num, k;
-				INVENTORY_IDX item_new;
-				object_type forge;
+			if ((o_ptr->tval != TV_CORPSE) || (o_ptr->pval != current_world_ptr->bounty_r_idx[j])) continue;
 
-				object_desc(o_name, o_ptr, 0);
-				sprintf(buf, _("%sを渡しますか？", "Hand %s over? "),o_name);
-				if (!get_check(buf)) continue;
+			char buf[MAX_NLEN + 20];
+			int num, k;
+			INVENTORY_IDX item_new;
+			object_type forge;
+
+			object_desc(o_name, o_ptr, 0);
+			sprintf(buf, _("%sを渡しますか？", "Hand %s over? "), o_name);
+			if (!get_check(buf)) continue;
 
 #if 0 /* Obsoleted */
-				msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (r_info[current_world_ptr->bounty_r_idx[j]].level + 1) * 300 * o_ptr->number);
-				player_ptr->au += (r_info[current_world_ptr->bounty_r_idx[j]].level+1) * 300 * o_ptr->number;
-				player_ptr->redraw |= (PR_GOLD);
-				vary_item(i, -o_ptr->number);
-				chg_virtue(player_ptr, V_JUSTICE, 5);
-				current_world_ptr->bounty_r_idx[j] += 10000;
+			msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (r_info[current_world_ptr->bounty_r_idx[j]].level + 1) * 300 * o_ptr->number);
+			player_ptr->au += (r_info[current_world_ptr->bounty_r_idx[j]].level + 1) * 300 * o_ptr->number;
+			player_ptr->redraw |= (PR_GOLD);
+			vary_item(i, -o_ptr->number);
+			chg_virtue(player_ptr, V_JUSTICE, 5);
+			current_world_ptr->bounty_r_idx[j] += 10000;
 
-				change = TRUE;
+			change = TRUE;
 #endif /* Obsoleted */
 
-				/* Hand it first */
-				vary_item(player_ptr, i, -o_ptr->number);
+			/* Hand it first */
+			vary_item(player_ptr, i, -o_ptr->number);
 
-				chg_virtue(player_ptr, V_JUSTICE, 5);
-				current_world_ptr->bounty_r_idx[j] += 10000;
+			chg_virtue(player_ptr, V_JUSTICE, 5);
+			current_world_ptr->bounty_r_idx[j] += 10000;
 
-				/* Count number of unique corpses already handed */
-				for (num = 0, k = 0; k < MAX_BOUNTY; k++)
-				{
-					if (current_world_ptr->bounty_r_idx[k] >= 10000) num++;
-				}
-				msg_format(_("これで合計 %d ポイント獲得しました。" ,"You earned %d point%s total."), num, (num > 1 ? "s" : ""));
-
-				/* Prepare to make a prize */
-				object_prep(&forge, lookup_kind(prize_list[num-1].tval, prize_list[num-1].sval));
-				apply_magic(player_ptr, &forge, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
-
-				object_aware(player_ptr, &forge);
-				object_known(&forge);
-
-				/*
-				 * Hand it --- Assume there is an empty slot.
-				 * Since a corpse is handed at first,
-				 * there is at least one empty slot.
-				 */
-				item_new = inven_carry(player_ptr, &forge);
-
-				object_desc(o_name, &forge, 0);
-				msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), o_name, index_to_label(item_new));
-
-				/* Auto-inscription */
-				autopick_alter_item(item_new, FALSE);
-				handle_stuff(player_ptr);
-
-				change = TRUE;
+			/* Count number of unique corpses already handed */
+			for (num = 0, k = 0; k < MAX_BOUNTY; k++)
+			{
+				if (current_world_ptr->bounty_r_idx[k] >= 10000) num++;
 			}
+
+			msg_format(_("これで合計 %d ポイント獲得しました。", "You earned %d point%s total."), num, (num > 1 ? "s" : ""));
+
+			/* Prepare to make a prize */
+			object_prep(&forge, lookup_kind(prize_list[num - 1].tval, prize_list[num - 1].sval));
+			apply_magic(player_ptr, &forge, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
+
+			object_aware(player_ptr, &forge);
+			object_known(&forge);
+
+			/*
+			 * Hand it --- Assume there is an empty slot.
+			 * Since a corpse is handed at first,
+			 * there is at least one empty slot.
+			 */
+			item_new = inven_carry(player_ptr, &forge);
+
+			object_desc(o_name, &forge, 0);
+			msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), o_name, index_to_label(item_new));
+
+			/* Auto-inscription */
+			autopick_alter_item(player_ptr, item_new, FALSE);
+			handle_stuff(player_ptr);
+
+			change = TRUE;
 		}
 	}
 
@@ -1997,102 +2104,102 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 {
 	switch (cmd)
 	{
-		case BACT_FOOD: /* Buy food & drink */
-			if (customer_ptr->food >= PY_FOOD_FULL)
-			{
-				msg_print(_("今は満腹だ。", "You are full now."));
-				return FALSE;
-			}
-			msg_print(_("バーテンはいくらかの食べ物とビールをくれた。", "The barkeep gives you some gruel and a beer."));
-			(void)set_food(customer_ptr, PY_FOOD_MAX - 1);
+	case BACT_FOOD: /* Buy food & drink */
+		if (customer_ptr->food >= PY_FOOD_FULL)
+		{
+			msg_print(_("今は満腹だ。", "You are full now."));
+			return FALSE;
+		}
+
+		msg_print(_("バーテンはいくらかの食べ物とビールをくれた。", "The barkeep gives you some gruel and a beer."));
+		(void)set_food(customer_ptr, PY_FOOD_MAX - 1);
+		break;
+
+	case BACT_REST: /* Rest for the night */
+	{
+		if ((customer_ptr->poisoned) || (customer_ptr->cut))
+		{
+			msg_print(_("あなたに必要なのは部屋ではなく、治療者です。", "You need a healer, not a room."));
+			msg_print(NULL);
+			msg_print(_("すみません、でもうちで誰かに死なれちゃ困りますんで。", "Sorry, but don't want anyone dying in here."));
 			break;
+		}
 
-		case BACT_REST: /* Rest for the night */
-			if ((customer_ptr->poisoned) || (customer_ptr->cut))
+		s32b oldturn = current_world_ptr->game_turn;
+		int prev_day, prev_hour, prev_min;
+
+		extract_day_hour_min(&prev_day, &prev_hour, &prev_min);
+		if ((prev_hour >= 6) && (prev_hour <= 17))
+			exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over daytime at the inn."));
+		else
+			exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over night at the inn."));
+
+		current_world_ptr->game_turn = (current_world_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
+		if (current_world_ptr->dungeon_turn < current_world_ptr->dungeon_turn_limit)
+		{
+			current_world_ptr->dungeon_turn += MIN((current_world_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
+			if (current_world_ptr->dungeon_turn > current_world_ptr->dungeon_turn_limit) current_world_ptr->dungeon_turn = current_world_ptr->dungeon_turn_limit;
+		}
+
+		prevent_turn_overflow();
+
+		if ((prev_hour >= 18) && (prev_hour <= 23)) exe_write_diary(customer_ptr, NIKKI_HIGAWARI, 0, NULL);
+		customer_ptr->chp = customer_ptr->mhp;
+
+		if (ironman_nightmare)
+		{
+			msg_print(_("眠りに就くと恐ろしい光景が心をよぎった。", "Horrible visions flit through your mind as you sleep."));
+
+			/* Have some nightmares */
+			while (TRUE)
 			{
-				msg_print(_("あなたに必要なのは部屋ではなく、治療者です。", "You need a healer, not a room."));
-				msg_print(NULL);
-				msg_print(_("すみません、でもうちで誰かに死なれちゃ困りますんで。", "Sorry, but don't want anyone dying in here."));
+				sanity_blast(customer_ptr, NULL, FALSE);
+				if (!one_in_(3)) break;
 			}
-			else
-			{
-				s32b oldturn = current_world_ptr->game_turn;
-				int prev_day, prev_hour, prev_min;
 
-				extract_day_hour_min(&prev_day, &prev_hour, &prev_min);
-				if ((prev_hour >= 6) && (prev_hour <= 17)) 
-					exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over daytime at the inn."));
-				else
-					exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over night at the inn."));
-				
-				current_world_ptr->game_turn = (current_world_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
-				if (current_world_ptr->dungeon_turn < current_world_ptr->dungeon_turn_limit)
-				{
-					current_world_ptr->dungeon_turn += MIN((current_world_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
-					if (current_world_ptr->dungeon_turn > current_world_ptr->dungeon_turn_limit) current_world_ptr->dungeon_turn = current_world_ptr->dungeon_turn_limit;
-				}
-
-				prevent_turn_overflow();
-
-				if ((prev_hour >= 18) && (prev_hour <= 23)) exe_write_diary(customer_ptr, NIKKI_HIGAWARI, 0, NULL);
-				customer_ptr->chp = customer_ptr->mhp;
-
-				if (ironman_nightmare)
-				{
-					msg_print(_("眠りに就くと恐ろしい光景が心をよぎった。", "Horrible visions flit through your mind as you sleep."));
-
-					/* Have some nightmares */
-					while(1)
-					{
-						sanity_blast(customer_ptr, NULL, FALSE);
-						if (!one_in_(3)) break;
-					}
-
-					msg_print(_("あなたは絶叫して目を覚ました。", "You awake screaming."));
-					exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("悪夢にうなされてよく眠れなかった。", "be troubled by a nightmare."));
-				}
-				else
-				{
-					set_blind(customer_ptr, 0);
-					set_confused(customer_ptr, 0);
-					customer_ptr->stun = 0;
-					customer_ptr->chp = customer_ptr->mhp;
-					customer_ptr->csp = customer_ptr->msp;
-					if (customer_ptr->pclass == CLASS_MAGIC_EATER)
-					{
-						int i;
-						for (i = 0; i < 72; i++)
-						{
-							customer_ptr->magic_num1[i] = customer_ptr->magic_num2[i] * EATER_CHARGE;
-						}
-						for (; i < 108; i++)
-						{
-							customer_ptr->magic_num1[i] = 0;
-						}
-					}
-
-					if ((prev_hour >= 6) && (prev_hour <= 17))
-					{
-						msg_print(_("あなたはリフレッシュして目覚め、夕方を迎えた。", "You awake refreshed for the evening."));
-						exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("夕方を迎えた。", "awake refreshed."));
-					}
-					else
-					{
-						msg_print(_("あなたはリフレッシュして目覚め、新たな日を迎えた。", "You awake refreshed for the new day."));
-						exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("すがすがしい朝を迎えた。", "awake refreshed."));
-					}
-				}
-			}
+			msg_print(_("あなたは絶叫して目を覚ました。", "You awake screaming."));
+			exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("悪夢にうなされてよく眠れなかった。", "be troubled by a nightmare."));
 			break;
-
-		case BACT_RUMORS: /* Listen for rumors */
+		}
+		
+		set_blind(customer_ptr, 0);
+		set_confused(customer_ptr, 0);
+		customer_ptr->stun = 0;
+		customer_ptr->chp = customer_ptr->mhp;
+		customer_ptr->csp = customer_ptr->msp;
+		if (customer_ptr->pclass == CLASS_MAGIC_EATER)
+		{
+			int i;
+			for (i = 0; i < 72; i++)
 			{
-				display_rumor(TRUE);
-				break;
+				customer_ptr->magic_num1[i] = customer_ptr->magic_num2[i] * EATER_CHARGE;
 			}
+
+			for (; i < 108; i++)
+			{
+				customer_ptr->magic_num1[i] = 0;
+			}
+		}
+
+		if ((prev_hour >= 6) && (prev_hour <= 17))
+		{
+			msg_print(_("あなたはリフレッシュして目覚め、夕方を迎えた。", "You awake refreshed for the evening."));
+			exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("夕方を迎えた。", "awake refreshed."));
+			break;
+		}
+		
+		msg_print(_("あなたはリフレッシュして目覚め、新たな日を迎えた。", "You awake refreshed for the new day."));
+		exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("すがすがしい朝を迎えた。", "awake refreshed."));
+		break;
+	}
+	case BACT_RUMORS: /* Listen for rumors */
+	{
+		display_rumor(TRUE);
+		break;
+	}
 	}
 
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -2105,12 +2212,7 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
  */
 static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 {
-	int i;
-	QUEST_IDX old_quest;
-	GAME_TEXT tmp_str[80];
-
-	/* Clear the text */
-	for (i = 0; i < 10; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		quest_text[i][0] = '\0';
 	}
@@ -2118,8 +2220,9 @@ static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 	quest_text_line = 0;
 
 	/* Set the quest number temporary */
-	old_quest = p_ptr->current_floor_ptr->inside_quest;
-	p_ptr->current_floor_ptr->inside_quest = questnum;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	QUEST_IDX old_quest = floor_ptr->inside_quest;
+	floor_ptr->inside_quest = questnum;
 
 	/* Get the quest text */
 	init_flags = INIT_SHOW_TEXT;
@@ -2128,16 +2231,17 @@ static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 	process_dungeon_file(player_ptr, "q_info.txt", 0, 0, 0, 0);
 
 	/* Reset the old quest number */
-	p_ptr->current_floor_ptr->inside_quest = old_quest;
+	floor_ptr->inside_quest = old_quest;
 
 	/* Print the quest info */
+	GAME_TEXT tmp_str[80];
 	sprintf(tmp_str, _("クエスト情報 (危険度: %d 階相当)", "Quest Information (Danger level: %d)"), (int)quest[questnum].level);
 
 	prt(tmp_str, 5, 0);
 
 	prt(quest[questnum].name, 7, 0);
 
-	for (i = 0; i < 10; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		c_put_str(TERM_YELLOW, quest_text[i], i + 8, 0);
 	}
@@ -2150,95 +2254,79 @@ static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
  */
 static void castle_quest(player_type *player_ptr)
 {
-	QUEST_IDX q_index = 0;
-	monster_race *r_ptr;
-	quest_type *q_ptr;
-	concptr name;
-
-
 	clear_bldg(4, 18);
+	QUEST_IDX q_index = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].special;
 
-	/* Current quest of the building */
-	q_index = player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].special;
-
-	/* Is there a quest available at the building? */
 	if (!q_index)
 	{
 		put_str(_("今のところクエストはありません。", "I don't have a quest for you at the moment."), 8, 0);
 		return;
 	}
 
+	quest_type *q_ptr;
 	q_ptr = &quest[q_index];
-
-	/* Quest is completed */
 	if (q_ptr->status == QUEST_STATUS_COMPLETED)
 	{
-		/* Rewarded quest */
 		q_ptr->status = QUEST_STATUS_REWARDED;
-
 		get_questinfo(player_ptr, q_index, FALSE);
-
 		reinit_wilderness = TRUE;
+		return;
 	}
-	/* Failed quest */
-	else if (q_ptr->status == QUEST_STATUS_FAILED)
+
+	if (q_ptr->status == QUEST_STATUS_FAILED)
 	{
 		get_questinfo(player_ptr, q_index, FALSE);
-
-		/* Mark quest as done (but failed) */
 		q_ptr->status = QUEST_STATUS_FAILED_DONE;
-
 		reinit_wilderness = TRUE;
+		return;
 	}
-	/* Quest is still unfinished */
-	else if (q_ptr->status == QUEST_STATUS_TAKEN)
+
+	if (q_ptr->status == QUEST_STATUS_TAKEN)
 	{
 		put_str(_("あなたは現在のクエストを終了させていません！", "You have not completed your current quest yet!"), 8, 0);
 		put_str(_("CTRL-Qを使えばクエストの状態がチェックできます。", "Use CTRL-Q to check the status of your quest."), 9, 0);
 		put_str(_("クエストを終わらせたら戻って来て下さい。", "Return when you have completed your quest."), 12, 0);
+		return;
 	}
-	/* No quest yet */
-	else if (q_ptr->status == QUEST_STATUS_UNTAKEN)
+	
+	if (q_ptr->status != QUEST_STATUS_UNTAKEN) return;
+
+	q_ptr->status = QUEST_STATUS_TAKEN;
+	reinit_wilderness = TRUE;
+	if (q_ptr->type != QUEST_TYPE_KILL_ANY_LEVEL)
 	{
-		q_ptr->status = QUEST_STATUS_TAKEN;
-
-		reinit_wilderness = TRUE;
-
-		/* Assign a new quest */
-		if (q_ptr->type == QUEST_TYPE_KILL_ANY_LEVEL)
-		{
-			if (q_ptr->r_idx == 0)
-			{
-				/* Random monster at least 5 - 10 levels out of deep */
-				q_ptr->r_idx = get_mon_num(q_ptr->level + 4 + randint1(6));
-			}
-
-			r_ptr = &r_info[q_ptr->r_idx];
-
-			while ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->rarity != 1))
-			{
-				q_ptr->r_idx = get_mon_num(q_ptr->level) + 4 + randint1(6);
-				r_ptr = &r_info[q_ptr->r_idx];
-			}
-
-			if (q_ptr->max_num == 0)
-			{
-				/* Random monster number */
-				if (randint1(10) > 7)
-					q_ptr->max_num = 1;
-				else
-					q_ptr->max_num = randint1(3) + 1;
-			}
-
-			q_ptr->cur_num = 0;
-			name = (r_name + r_ptr->name);
-			msg_format(_("クエスト: %sを %d体倒す", "Your quest: kill %d %s"), name,q_ptr->max_num);
-		}
-		else
-		{
-			get_questinfo(player_ptr, q_index, TRUE);
-		}
+		get_questinfo(player_ptr, q_index, TRUE);
+		return;
 	}
+
+	if (q_ptr->r_idx == 0)
+	{
+		/* Random monster at least 5 - 10 levels out of deep */
+		q_ptr->r_idx = get_mon_num(q_ptr->level + 4 + randint1(6));
+	}
+
+	monster_race *r_ptr;
+	r_ptr = &r_info[q_ptr->r_idx];
+
+	while ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->rarity != 1))
+	{
+		q_ptr->r_idx = get_mon_num(q_ptr->level) + 4 + randint1(6);
+		r_ptr = &r_info[q_ptr->r_idx];
+	}
+
+	if (q_ptr->max_num == 0)
+	{
+		/* Random monster number */
+		if (randint1(10) > 7)
+			q_ptr->max_num = 1;
+		else
+			q_ptr->max_num = randint1(3) + 1;
+	}
+
+	q_ptr->cur_num = 0;
+	concptr name = (r_name + r_ptr->name);
+	msg_format(_("クエスト: %sを %d体倒す", "Your quest: kill %d %s"), name, q_ptr->max_num);
+	get_questinfo(player_ptr, q_index, TRUE);
 }
 
 
@@ -2249,11 +2337,10 @@ static void castle_quest(player_type *player_ptr)
 static void town_history(void)
 {
 	screen_save();
-
-	/* Peruse the building help file */
 	(void)show_file(TRUE, _("jbldg.txt", "bldg.txt"), NULL, 0, 0);
 	screen_load();
 }
+
 
 /*!
  * @brief 攻撃時スレイによるダメージ期待値修正計算 / critical happens at i / 10000
@@ -2266,26 +2353,27 @@ static void town_history(void)
 static HIT_POINT calc_slaydam(HIT_POINT dam, int mult, int div, bool force)
 {
 	int tmp;
-	if(force)
+	if (force)
 	{
 		tmp = dam * 60;
 		tmp *= mult * 3;
 		tmp /= div * 2;
 		tmp += dam * 60 * 2;
 		tmp /= 60;
+		return tmp;
 	}
-	else
-	{
-		tmp = dam * 60;
-		tmp *= mult; 
-		tmp /= div;
-		tmp /= 60;
-	}
+	
+	tmp = dam * 60;
+	tmp *= mult;
+	tmp /= div;
+	tmp /= 60;
 	return tmp;
 }
 
+
 /*!
  * @brief 攻撃時の期待値計算（スレイ→重量クリティカル→切れ味効果）
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param dam 基本ダメージ
  * @param mult スレイ倍率（掛け算部分）
  * @param div スレイ倍率（割り算部分）
@@ -2298,10 +2386,10 @@ static HIT_POINT calc_slaydam(HIT_POINT dam, int mult, int div, bool force)
  * @param vorpal_div 切れ味倍率（割り算部分）
  * @return ダメージ期待値
  */
-static u32b calc_expect_dice(u32b dam, int mult, int div, bool force, WEIGHT weight, int plus, s16b meichuu, bool dokubari, int vorpal_mult, int vorpal_div)
+static u32b calc_expect_dice(player_type *owner_ptr, u32b dam, int mult, int div, bool force, WEIGHT weight, int plus, s16b meichuu, bool dokubari, int vorpal_mult, int vorpal_div)
 {
 	dam = calc_slaydam(dam, mult, div, force);
-	dam = calc_expect_crit(weight, plus, dam, meichuu, dokubari);
+	dam = calc_expect_crit(owner_ptr, weight, plus, dam, meichuu, dokubari);
 	dam = calc_slaydam(dam, vorpal_mult, vorpal_div, FALSE);
 	return dam;
 }
@@ -2327,19 +2415,11 @@ static u32b calc_expect_dice(u32b dam, int mult, int div, bool force, WEIGHT wei
  */
 static void show_weapon_dmg(int r, int c, int mindice, int maxdice, int blows, int dam_bonus, concptr attr, byte color)
 {
-	GAME_TEXT tmp_str[80];
-	int mindam, maxdam;
-	
-	mindam = blows * (mindice + dam_bonus);
-	maxdam = blows * (maxdice + dam_bonus);
-
-	/* Print the intro text */
 	c_put_str(color, attr, r, c);
-
-	/* Calculate the min and max damage figures */
+	GAME_TEXT tmp_str[80];
+	int mindam = blows * (mindice + dam_bonus);
+	int maxdam = blows * (maxdice + dam_bonus);
 	sprintf(tmp_str, _("１ターン: %d-%d ダメージ", "Attack: %d-%d damage"), mindam, maxdam);
-	
-	/* Print the damage */
 	put_str(tmp_str, r, c + 8);
 }
 
@@ -2362,11 +2442,11 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
 	int blow = owner_ptr->num_blow[0];
 	bool force = FALSE;
 	bool dokubari = FALSE;
-	
+
 	/* Effective dices */
 	int eff_dd = o_ptr->dd + owner_ptr->to_dd[0];
 	int eff_ds = o_ptr->ds + owner_ptr->to_ds[0];
-	
+
 	int mindice = eff_dd;
 	int maxdice = eff_ds * eff_dd;
 	int mindam = 0;
@@ -2374,25 +2454,25 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
 	int vorpal_mult = 1;
 	int vorpal_div = 1;
 	int dmg_bonus = o_ptr->to_d + owner_ptr->to_d[0];
-	
+
 
 	/* Get the flags of the weapon */
 	object_flags(o_ptr, flgs);
-	
-	if((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) dokubari = TRUE;
-	
-	
+
+	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) dokubari = TRUE;
+
+
 	/* Show Critical Damage*/
-	mindam = calc_expect_crit(o_ptr->weight, o_ptr->to_h, mindice, owner_ptr->to_h[0], dokubari);
-	maxdam = calc_expect_crit(o_ptr->weight, o_ptr->to_h, maxdice, owner_ptr->to_h[0], dokubari);
-	
+	mindam = calc_expect_crit(owner_ptr, o_ptr->weight, o_ptr->to_h, mindice, owner_ptr->to_h[0], dokubari);
+	maxdam = calc_expect_crit(owner_ptr, o_ptr->weight, o_ptr->to_h, maxdice, owner_ptr->to_h[0], dokubari);
+
 	show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("会心:", "Critical:"), TERM_L_RED);
 
-	
+
 	/* Vorpal Hit*/
 	if ((have_flag(flgs, TR_VORPAL) || hex_spelling(HEX_RUNESWORD)))
 	{
-		if((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))
+		if ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))
 		{
 			vorpal_mult = 5;
 			vorpal_div = 3;
@@ -2402,164 +2482,179 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
 			vorpal_mult = 11;
 			vorpal_div = 9;
 		}
-		
-		mindam = calc_expect_dice(mindice, 1, 1, FALSE, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 1, 1, FALSE, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);		
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("切れ味:", "Vorpal:") , TERM_L_RED);
-	}	
-	
+
+		mindam = calc_expect_dice(owner_ptr, mindice, 1, 1, FALSE, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 1, 1, FALSE, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("切れ味:", "Vorpal:"), TERM_L_RED);
+	}
+
 	if ((owner_ptr->pclass != CLASS_SAMURAI) && have_flag(flgs, TR_FORCE_WEAPON) && (owner_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
 	{
 		force = TRUE;
-		
-		mindam = calc_expect_dice(mindice, 1, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 1, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+
+		mindam = calc_expect_dice(owner_ptr, mindice, 1, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 1, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
 		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("理力:", "Force  :"), TERM_L_BLUE);
 	}
-		
+
 	/* Print the relevant lines */
 	if (have_flag(flgs, TR_KILL_ANIMAL))
 	{
-		mindam = calc_expect_dice(mindice, 4, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 4, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);		
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("動物:", "Animals:"), TERM_YELLOW);
+		mindam = calc_expect_dice(owner_ptr, mindice, 4, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 4, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("動物:", "Animals:"), TERM_YELLOW);
 	}
-	else if (have_flag(flgs, TR_SLAY_ANIMAL)) 
+	else if (have_flag(flgs, TR_SLAY_ANIMAL))
 	{
-		mindam = calc_expect_dice(mindice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("動物:", "Animals:"), TERM_YELLOW);
+		mindam = calc_expect_dice(owner_ptr, mindice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("動物:", "Animals:"), TERM_YELLOW);
 	}
+
 	if (have_flag(flgs, TR_KILL_EVIL))
-	{	
-		mindam = calc_expect_dice(mindice, 7, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 7, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("邪悪:", "Evil:"), TERM_YELLOW);
+	{
+		mindam = calc_expect_dice(owner_ptr, mindice, 7, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 7, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("邪悪:", "Evil:"), TERM_YELLOW);
 	}
 	else if (have_flag(flgs, TR_SLAY_EVIL))
-	{	
-		mindam = calc_expect_dice(mindice, 2, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 2, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);		
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("邪悪:", "Evil:"), TERM_YELLOW);
+	{
+		mindam = calc_expect_dice(owner_ptr, mindice, 2, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 2, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("邪悪:", "Evil:"), TERM_YELLOW);
 	}
+
 	if (have_flag(flgs, TR_KILL_HUMAN))
-	{	
-		mindam = calc_expect_dice(mindice, 4, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 4, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("人間:", "Human:"), TERM_YELLOW);
+	{
+		mindam = calc_expect_dice(owner_ptr, mindice, 4, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 4, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("人間:", "Human:"), TERM_YELLOW);
 	}
 	else if (have_flag(flgs, TR_SLAY_HUMAN))
-	{	
-		mindam = calc_expect_dice(mindice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("人間:", "Human:"), TERM_YELLOW);
+	{
+		mindam = calc_expect_dice(owner_ptr, mindice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("人間:", "Human:"), TERM_YELLOW);
 	}
+
 	if (have_flag(flgs, TR_KILL_UNDEAD))
 	{
-		mindam = calc_expect_dice(mindice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("不死:", "Undead:"), TERM_YELLOW);
+		mindam = calc_expect_dice(owner_ptr, mindice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("不死:", "Undead:"), TERM_YELLOW);
 	}
-	else if (have_flag(flgs, TR_SLAY_UNDEAD)) 
+	else if (have_flag(flgs, TR_SLAY_UNDEAD))
 	{
-		mindam = calc_expect_dice(mindice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("不死:", "Undead:"), TERM_YELLOW);
+		mindam = calc_expect_dice(owner_ptr, mindice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("不死:", "Undead:"), TERM_YELLOW);
 	}
+
 	if (have_flag(flgs, TR_KILL_DEMON))
-	{	
-		mindam = calc_expect_dice(mindice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("悪魔:", "Demons:") , TERM_YELLOW);
+	{
+		mindam = calc_expect_dice(owner_ptr, mindice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("悪魔:", "Demons:"), TERM_YELLOW);
 	}
 	else if (have_flag(flgs, TR_SLAY_DEMON))
-	{	
-		mindam = calc_expect_dice(mindice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("悪魔:", "Demons:") , TERM_YELLOW);
+	{
+		mindam = calc_expect_dice(owner_ptr, mindice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("悪魔:", "Demons:"), TERM_YELLOW);
 	}
+
 	if (have_flag(flgs, TR_KILL_ORC))
 	{
-		mindam = calc_expect_dice(mindice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("オーク:", "Orcs:"), TERM_YELLOW);
+		mindam = calc_expect_dice(owner_ptr, mindice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("オーク:", "Orcs:"), TERM_YELLOW);
 	}
 	else if (have_flag(flgs, TR_SLAY_ORC))
 	{
-		mindam = calc_expect_dice(mindice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("オーク:", "Orcs:"), TERM_YELLOW);
+		mindam = calc_expect_dice(owner_ptr, mindice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("オーク:", "Orcs:"), TERM_YELLOW);
 	}
+
 	if (have_flag(flgs, TR_KILL_TROLL))
 	{
-		mindam = calc_expect_dice(mindice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("トロル:", "Trolls:") , TERM_YELLOW);
+		mindam = calc_expect_dice(owner_ptr, mindice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("トロル:", "Trolls:"), TERM_YELLOW);
 	}
 	else if (have_flag(flgs, TR_SLAY_TROLL))
 	{
-		mindam = calc_expect_dice(mindice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,   _("トロル:", "Trolls:") , TERM_YELLOW);
+		mindam = calc_expect_dice(owner_ptr, mindice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("トロル:", "Trolls:"), TERM_YELLOW);
 	}
+
 	if (have_flag(flgs, TR_KILL_GIANT))
 	{
-		mindam = calc_expect_dice(mindice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("巨人:", "Giants:"), TERM_YELLOW);
+		mindam = calc_expect_dice(owner_ptr, mindice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("巨人:", "Giants:"), TERM_YELLOW);
 	}
 	else if (have_flag(flgs, TR_SLAY_GIANT))
 	{
-		mindam = calc_expect_dice(mindice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("巨人:", "Giants:"), TERM_YELLOW);
+		mindam = calc_expect_dice(owner_ptr, mindice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("巨人:", "Giants:"), TERM_YELLOW);
 	}
+
 	if (have_flag(flgs, TR_KILL_DRAGON))
 	{
-		mindam = calc_expect_dice(mindice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("竜:", "Dragons:"), TERM_YELLOW);
+		mindam = calc_expect_dice(owner_ptr, mindice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 5, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("竜:", "Dragons:"), TERM_YELLOW);
 	}
 	else if (have_flag(flgs, TR_SLAY_DRAGON))
-	{		
-		mindam = calc_expect_dice(mindice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,   _("竜:", "Dragons:"), TERM_YELLOW);
+	{
+		mindam = calc_expect_dice(owner_ptr, mindice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 3, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("竜:", "Dragons:"), TERM_YELLOW);
 	}
+
 	if (have_flag(flgs, TR_BRAND_ACID))
 	{
-		mindam = calc_expect_dice(mindice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("酸属性:", "Acid:"), TERM_RED);
+		mindam = calc_expect_dice(owner_ptr, mindice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("酸属性:", "Acid:"), TERM_RED);
 	}
+
 	if (have_flag(flgs, TR_BRAND_ELEC))
 	{
-		mindam = calc_expect_dice(mindice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("電属性:", "Elec:"), TERM_RED);
+		mindam = calc_expect_dice(owner_ptr, mindice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("電属性:", "Elec:"), TERM_RED);
 	}
+
 	if (have_flag(flgs, TR_BRAND_FIRE))
 	{
-		mindam = calc_expect_dice(mindice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("炎属性:", "Fire:"), TERM_RED);
+		mindam = calc_expect_dice(owner_ptr, mindice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("炎属性:", "Fire:"), TERM_RED);
 	}
+
 	if (have_flag(flgs, TR_BRAND_COLD))
 	{
-		mindam = calc_expect_dice(mindice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus,  _("冷属性:", "Cold:"), TERM_RED);
+		mindam = calc_expect_dice(owner_ptr, mindice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("冷属性:", "Cold:"), TERM_RED);
 	}
+
 	if (have_flag(flgs, TR_BRAND_POIS))
 	{
-		mindam = calc_expect_dice(mindice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
-		maxdam = calc_expect_dice(maxdice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		mindam = calc_expect_dice(owner_ptr, mindice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
+		maxdam = calc_expect_dice(owner_ptr, maxdice, 5, 2, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
 		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("毒属性:", "Poison:"), TERM_RED);
 	}
 }
 
+
 /*!
  * @brief 武器匠における武器一つ毎の完全情報を表示する。
+ * @param player_type プレーヤーへの参照ポインタ
  * @param o_ptr オブジェクトの構造体の参照ポインタ。
  * @param row 表示する列の左端
  * @param col 表示する行の上端
@@ -2570,26 +2665,26 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
  * various info about the player's +to_dam and number of blows.
  * @return なし
  */
-static void list_weapon(object_type *o_ptr, TERM_LEN row, TERM_LEN col)
+static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN row, TERM_LEN col)
 {
 	GAME_TEXT o_name[MAX_NLEN];
 	GAME_TEXT tmp_str[80];
 
-	DICE_NUMBER eff_dd = o_ptr->dd + p_ptr->to_dd[0];
-	DICE_SID eff_ds = o_ptr->ds + p_ptr->to_ds[0];
-	HIT_RELIABILITY reli = p_ptr->skill_thn + (p_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
+	DICE_NUMBER eff_dd = o_ptr->dd + player_ptr->to_dd[0];
+	DICE_SID eff_ds = o_ptr->ds + player_ptr->to_ds[0];
+	HIT_RELIABILITY reli = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
 
 	/* Print the weapon name */
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 	c_put_str(TERM_YELLOW, o_name, row, col);
 
 	/* Print the player's number of blows */
-	sprintf(tmp_str, _("攻撃回数: %d", "Number of Blows: %d"), p_ptr->num_blow[0]);
-	put_str(tmp_str, row+1, col);
+	sprintf(tmp_str, _("攻撃回数: %d", "Number of Blows: %d"), player_ptr->num_blow[0]);
+	put_str(tmp_str, row + 1, col);
 
 	/* Print to_hit and to_dam of the weapon */
 	sprintf(tmp_str, _("命中率:  0  50 100 150 200 (敵のAC)", "To Hit:  0  50 100 150 200 (AC)"));
-	put_str(tmp_str, row+2, col);
+	put_str(tmp_str, row + 2, col);
 
 	/* Print the weapons base damage dice */
 	sprintf(tmp_str, "        %2d  %2d  %2d  %2d  %2d (%%)",
@@ -2598,39 +2693,37 @@ static void list_weapon(object_type *o_ptr, TERM_LEN row, TERM_LEN col)
 		(int)hit_chance(reli, 100),
 		(int)hit_chance(reli, 150),
 		(int)hit_chance(reli, 200));
-	put_str(tmp_str, row+3, col);
-	c_put_str(TERM_YELLOW, _("可能なダメージ:", "Possible Damage:"), row+5, col);
+	put_str(tmp_str, row + 3, col);
+	c_put_str(TERM_YELLOW, _("可能なダメージ:", "Possible Damage:"), row + 5, col);
 
 	/* Damage for one blow (if it hits) */
 	sprintf(tmp_str, _("攻撃一回につき %d-%d", "One Strike: %d-%d damage"),
-	    (int)(eff_dd + o_ptr->to_d + p_ptr->to_d[0]),
-		(int)(eff_ds * eff_dd + o_ptr->to_d + p_ptr->to_d[0]));
-	put_str(tmp_str, row+6, col+1);
+		(int)(eff_dd + o_ptr->to_d + player_ptr->to_d[0]),
+		(int)(eff_ds * eff_dd + o_ptr->to_d + player_ptr->to_d[0]));
+	put_str(tmp_str, row + 6, col + 1);
 
 	/* Damage for the complete attack (if all blows hit) */
 	sprintf(tmp_str, _("１ターンにつき %d-%d", "One Attack: %d-%d damage"),
-		(int)(p_ptr->num_blow[0] * (eff_dd + o_ptr->to_d + p_ptr->to_d[0])),
-			(int)(p_ptr->num_blow[0] * (eff_ds * eff_dd + o_ptr->to_d + p_ptr->to_d[0])));
-	put_str(tmp_str, row+7, col+1);
+		(int)(player_ptr->num_blow[0] * (eff_dd + o_ptr->to_d + player_ptr->to_d[0])),
+		(int)(player_ptr->num_blow[0] * (eff_ds * eff_dd + o_ptr->to_d + player_ptr->to_d[0])));
+	put_str(tmp_str, row + 7, col + 1);
 }
 
+
 /*!
- * @brief 武器匠鑑定１回分（オブジェクト２種）の処理。/ Compare weapons
- * @details 
+ * @brief 武器匠鑑定1回分（オブジェクト2種）の処理。/ Compare weapons
+ * @details
  * Copies the weapons to compare into the weapon-slot and\n
  * compares the values for both weapons.\n
- * 武器１つだけで比較をしないなら費用は半額になる。
+ * 武器1つだけで比較をしないなら費用は半額になる。
  * @param bcost 基本鑑定費用
  * @return 最終的にかかった費用
  */
 static PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 {
-	int i, n;
-	OBJECT_IDX item, item2;
 	object_type *o_ptr[2];
 	object_type orig_weapon;
 	object_type *i_ptr;
-	concptr q, s;
 	TERM_LEN row = 2;
 	TERM_LEN wid = 38, mgn = 2;
 	bool old_character_xtra = current_world_ptr->character_xtra;
@@ -2648,17 +2741,18 @@ static PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 	item_tester_hook = item_tester_hook_orthodox_melee_weapons;
 
 	/* Get the first weapon */
-	q = _("第一の武器は？", "What is your first weapon? ");
-	s = _("比べるものがありません。", "You have nothing to compare.");
+	concptr q = _("第一の武器は？", "What is your first weapon? ");
+	concptr s = _("比べるものがありません。", "You have nothing to compare.");
 
+	OBJECT_IDX item;
 	o_ptr[0] = choose_object(customer_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), 0);
 	if (!o_ptr[0])
 	{
 		screen_load();
-		return (0);
+		return 0;
 	}
 
-	n = 1;
+	int n = 1;
 	total = bcost;
 
 	while (TRUE)
@@ -2672,7 +2766,7 @@ static PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 		current_world_ptr->character_xtra = TRUE;
 
 		/* Diaplay selected weapon's infomation */
-		for (i = 0; i < n; i++)
+		for (int i = 0; i < n; i++)
 		{
 			int col = (wid * i + mgn);
 
@@ -2683,7 +2777,7 @@ static PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 			handle_stuff(customer_ptr);
 
 			/* List the new values */
-			list_weapon(o_ptr[i], row, col);
+			list_weapon(customer_ptr, o_ptr[i], row, col);
 			compare_weapon_aux(customer_ptr, o_ptr[i], col, row + 8);
 
 			/* Copy back the original weapon into the weapon slot */
@@ -2709,40 +2803,36 @@ static PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 		flush();
 		ch = inkey();
 
-		if (ch == 's')
+		if (ch != 's') break;
+
+		if (total + cost > customer_ptr->au)
 		{
-			if (total + cost > customer_ptr->au)
-			{
-				msg_print(_("お金が足りません！", "You don't have enough money!"));
-				msg_print(NULL);
-				continue;
-			}
-
-			q = _("第二の武器は？", "What is your second weapon? ");
-			s = _("比べるものがありません。", "You have nothing to compare.");
-
-			/* Get the second weapon */
-			o_ptr[1] = choose_object(customer_ptr, &item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), 0);
-			if (!o_ptr[1]) continue;
-
-			total += cost;
-			cost = bcost / 2;
-			n = 2;
+			msg_print(_("お金が足りません！", "You don't have enough money!"));
+			msg_print(NULL);
+			continue;
 		}
-		else
-		{
-			break;
-		}
+
+		q = _("第二の武器は？", "What is your second weapon? ");
+		s = _("比べるものがありません。", "You have nothing to compare.");
+
+		/* Get the second weapon */
+		OBJECT_IDX item2;
+		o_ptr[1] = choose_object(customer_ptr, &item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), 0);
+		if (!o_ptr[1]) continue;
+
+		total += cost;
+		cost = bcost / 2;
+		n = 2;
 	}
 	screen_load();
 
-	return (total);
+	return total;
 }
 
 
 /*!
  * @brief ACから回避率、ダメージ減少率を計算し表示する。 / Evaluate AC
- * @details 
+ * @details
  * Calculate and display the dodge-rate and the protection-rate
  * based on AC
  * @param iAC プレイヤーのAC。
@@ -2777,7 +2867,7 @@ static bool eval_ac(ARMOUR_CLASS iAC)
 	int protection;
 	TERM_LEN col, row = 2;
 	DEPTH lvl;
-	char buf[80*20], *t;
+	char buf[80 * 20], *t;
 
 	/* AC lower than zero has no effect */
 	if (iAC < 0) iAC = 0;
@@ -2795,7 +2885,7 @@ static bool eval_ac(ARMOUR_CLASS iAC)
 	put_str(_("敵のレベル      :", "Level of Monster:"), row + 0, 0);
 	put_str(_("回避率          :", "Dodge Rate      :"), row + 1, 0);
 	put_str(_("ダメージ期待値  :", "Average Damage  :"), row + 2, 0);
-    
+
 	for (col = 17 + 1, lvl = 0; lvl <= 100; lvl += 10, col += 5)
 	{
 		int quality = 60 + lvl * 3; /* attack quality with power 60 */
@@ -2819,14 +2909,13 @@ static bool eval_ac(ARMOUR_CLASS iAC)
 		put_str(t, (row++) + 4, 4);
 
 	prt(_("現在のあなたの装備からすると、あなたの防御力はこれくらいです:", "Defense abilities from your current Armor Class are evaluated below."), 0, 0);
-  
+
 	flush();
 	(void)inkey();
 	screen_load();
 
-	return (TRUE);
+	return TRUE;
 }
-
 
 
 /*!
@@ -2837,15 +2926,14 @@ static bool eval_ac(ARMOUR_CLASS iAC)
  */
 static void give_one_ability_of_object(object_type *to_ptr, object_type *from_ptr)
 {
-	int i, n = 0;
-	int cand[TR_FLAG_MAX];
 	BIT_FLAGS to_flgs[TR_FLAG_SIZE];
 	BIT_FLAGS from_flgs[TR_FLAG_SIZE];
-
 	object_flags(to_ptr, to_flgs);
 	object_flags(from_ptr, from_flgs);
 
-	for (i = 0; i < TR_FLAG_MAX; i++)
+	int n = 0;
+	int cand[TR_FLAG_MAX];
+	for (int i = 0; i < TR_FLAG_MAX; i++)
 	{
 		switch (i)
 		{
@@ -2881,6 +2969,7 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
 	if (tr_idx == TR_SPEED) to_ptr->pval = MIN(to_ptr->pval, 4);
 }
 
+
 /*!
  * @brief アイテム修復処理のメインルーチン / Repair broken weapon
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -2889,27 +2978,20 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
  */
 static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 {
-	PRICE cost;
-	OBJECT_IDX item, mater;
-	object_type *o_ptr, *mo_ptr; /* broken weapon and material weapon */
-	object_kind *k_ptr;
-	int i, dd_bonus, ds_bonus;
-	KIND_OBJECT_IDX k_idx;
-	char basenm[MAX_NLEN];
-	concptr q, s;
-	int row = 7;
 	clear_bldg(0, 22);
-
+	int row = 7;
 	prt(_("修復には材料となるもう1つの武器が必要です。", "Hand one material weapon to repair a broken weapon."), row, 2);
-	prt(_("材料に使用した武器はなくなります！", "The material weapon will disappear after repairing!!"), row+1, 2);
+	prt(_("材料に使用した武器はなくなります！", "The material weapon will disappear after repairing!!"), row + 1, 2);
 
-	q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
-	s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
+	concptr q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
+	concptr s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
 
 	/* Only forge broken weapons */
 	item_tester_hook = item_tester_hook_broken_weapon;
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), 0);
+	OBJECT_IDX item;
+	object_type *o_ptr;
+	o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), 0);
 	if (!o_ptr) return (0);
 
 	/* It is worthless */
@@ -2927,8 +3009,9 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	}
 
 	/* Display item name */
+	char basenm[MAX_NLEN];
 	object_desc(basenm, o_ptr, OD_NAME_ONLY);
-	prt(format(_("修復する武器　： %s", "Repairing: %s"), basenm), row+3, 2);
+	prt(format(_("修復する武器　： %s", "Repairing: %s"), basenm), row + 3, 2);
 
 	q = _("材料となる武器は？", "Which weapon for material? ");
 	s = _("材料となる武器がありません。", "You have no material to repair.");
@@ -2936,7 +3019,9 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	/* Only forge broken weapons */
 	item_tester_hook = item_tester_hook_orthodox_melee_weapons;
 
-	mo_ptr = choose_object(p_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), 0);
+	OBJECT_IDX mater;
+	object_type *mo_ptr;
+	mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), 0);
 	if (!mo_ptr) return (0);
 	if (mater == item)
 	{
@@ -2946,15 +3031,15 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
 	/* Display item name */
 	object_desc(basenm, mo_ptr, OD_NAME_ONLY);
-	prt(format(_("材料とする武器： %s", "Material : %s"), basenm), row+4, 2);
+	prt(format(_("材料とする武器： %s", "Material : %s"), basenm), row + 4, 2);
 
 	/* Get the value of one of the items (except curses) */
-	cost = bcost + object_value_real(o_ptr) * 2;
+	PRICE cost = bcost + object_value_real(o_ptr) * 2;
 
-	if (!get_check(format(_("＄%dかかりますがよろしいですか？ ", "Costs %d gold, okay? "), cost))) return (0);
+	if (!get_check(format(_("＄%dかかりますがよろしいですか？ ", "Costs %d gold, okay? "), cost))) return 0;
 
 	/* Check if the player has enough money */
-	if (p_ptr->au < cost)
+	if (player_ptr->au < cost)
 	{
 		object_desc(basenm, o_ptr, OD_NAME_ONLY);
 		msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), basenm);
@@ -2962,8 +3047,9 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 		return (0);
 	}
 
-	p_ptr->total_weight -= o_ptr->weight;
+	player_ptr->total_weight -= o_ptr->weight;
 
+	KIND_OBJECT_IDX k_idx;
 	if (o_ptr->sval == SV_BROKEN_DAGGER)
 	{
 		KIND_OBJECT_IDX j;
@@ -2982,7 +3068,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 				(k_aux_ptr->sval == SV_DOKUBARI)) continue;
 			if (k_aux_ptr->weight > 99) continue;
 
-			if (one_in_(n)) 
+			if (one_in_(n))
 			{
 				k_idx = j;
 				n++;
@@ -2994,7 +3080,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 		/* Repair to a sword or sometimes material's type weapon */
 		OBJECT_TYPE_VALUE tval = (one_in_(5) ? mo_ptr->tval : TV_SWORD);
 
-		while(1)
+		while (TRUE)
 		{
 			object_kind *ck_ptr;
 
@@ -3025,12 +3111,13 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	}
 
 	/* Calculate dice bonuses */
-	dd_bonus = o_ptr->dd - k_info[o_ptr->k_idx].dd;
-	ds_bonus = o_ptr->ds - k_info[o_ptr->k_idx].ds;
+	int dd_bonus = o_ptr->dd - k_info[o_ptr->k_idx].dd;
+	int ds_bonus = o_ptr->ds - k_info[o_ptr->k_idx].ds;
 	dd_bonus += mo_ptr->dd - k_info[mo_ptr->k_idx].dd;
 	ds_bonus += mo_ptr->ds - k_info[mo_ptr->k_idx].ds;
 
 	/* Change base object */
+	object_kind *k_ptr;
 	k_ptr = &k_info[k_idx];
 	o_ptr->k_idx = k_idx;
 	o_ptr->weight = k_ptr->weight;
@@ -3040,23 +3127,23 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	o_ptr->ds = k_ptr->ds;
 
 	/* Copy base object's ability */
-	for (i = 0; i < TR_FLAG_SIZE; i++) o_ptr->art_flags[i] |= k_ptr->flags[i];
+	for (int i = 0; i < TR_FLAG_SIZE; i++) o_ptr->art_flags[i] |= k_ptr->flags[i];
 	if (k_ptr->pval) o_ptr->pval = MAX(o_ptr->pval, randint1(k_ptr->pval));
 	if (have_flag(k_ptr->flags, TR_ACTIVATE)) o_ptr->xtra2 = (byte_hack)k_ptr->act_idx;
 
-	/* Dice up */
 	if (dd_bonus > 0)
 	{
 		o_ptr->dd++;
-		for (i = 1; i < dd_bonus; i++)
+		for (int i = 1; i < dd_bonus; i++)
 		{
 			if (one_in_(o_ptr->dd + i)) o_ptr->dd++;
 		}
 	}
+
 	if (ds_bonus > 0)
 	{
 		o_ptr->ds++;
-		for (i = 1; i < ds_bonus; i++)
+		for (int i = 1; i < ds_bonus; i++)
 		{
 			if (one_in_(o_ptr->ds + i)) o_ptr->ds++;
 		}
@@ -3117,18 +3204,15 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	/* Add repaired flag */
 	o_ptr->discount = 99;
 
-	p_ptr->total_weight += o_ptr->weight;
-	calc_android_exp(p_ptr);
+	player_ptr->total_weight += o_ptr->weight;
+	calc_android_exp(player_ptr);
 
 	/* Decrease material object */
 	inven_item_increase(player_ptr, mater, -1);
 	inven_item_optimize(player_ptr, mater);
 
-	/* Copyback */
-	p_ptr->update |= PU_BONUS;
+	player_ptr->update |= PU_BONUS;
 	handle_stuff(player_ptr);
-
-	/* Something happened */
 	return (cost);
 }
 
@@ -3160,68 +3244,56 @@ static int repair_broken_weapon(player_type *player_ptr, PRICE bcost)
  */
 static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, HIT_POINT to_dam, ARMOUR_CLASS to_ac)
 {
-	int i;
-	OBJECT_IDX item;
-	bool okay = FALSE;
-	object_type *o_ptr;
-	concptr q, s;
-	int maxenchant = (player_ptr->lev / 5);
-	char tmp_str[MAX_NLEN];
-
 	clear_bldg(4, 18);
+	int maxenchant = (player_ptr->lev / 5);
 	prt(format(_("現在のあなたの技量だと、+%d まで改良できます。", "  Based on your skill, we can improve up to +%d."), maxenchant), 5, 0);
 	prt(format(_(" 改良の料金は一個につき＄%d です。", "  The price for the service is %d gold per item."), cost), 7, 0);
 
-	q = _("どのアイテムを改良しますか？", "Improve which item? ");
-	s = _("改良できるものがありません。", "You have nothing to improve.");
+	concptr q = _("どのアイテムを改良しますか？", "Improve which item? ");
+	concptr s = _("改良できるものがありません。", "You have nothing to improve.");
 
+	OBJECT_IDX item;
+	object_type *o_ptr;
 	o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | IGNORE_BOTHHAND_SLOT), item_tester_tval);
-	if (!o_ptr) return (FALSE);
+	if (!o_ptr) return FALSE;
 
 	/* Check if the player has enough money */
+	char tmp_str[MAX_NLEN];
 	if (player_ptr->au < (cost * o_ptr->number))
 	{
 		object_desc(tmp_str, o_ptr, OD_NAME_ONLY);
 		msg_format(_("%sを改良するだけのゴールドがありません！", "You do not have the gold to improve %s!"), tmp_str);
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Enchant to hit */
-	for (i = 0; i < to_hit; i++)
+	bool okay = FALSE;
+	for (int i = 0; i < to_hit; i++)
 	{
-		if (o_ptr->to_h < maxenchant)
+		if ((o_ptr->to_h < maxenchant) && enchant(player_ptr, o_ptr, 1, (ENCH_TOHIT | ENCH_FORCE)))
 		{
-			if (enchant(player_ptr, o_ptr, 1, (ENCH_TOHIT | ENCH_FORCE)))
-			{
-				okay = TRUE;
-				break;
-			}
+			okay = TRUE;
+			break;
 		}
 	}
 
 	/* Enchant to damage */
-	for (i = 0; i < to_dam; i++)
+	for (int i = 0; i < to_dam; i++)
 	{
-		if (o_ptr->to_d < maxenchant)
+		if ((o_ptr->to_d < maxenchant) && enchant(player_ptr, o_ptr, 1, (ENCH_TODAM | ENCH_FORCE)))
 		{
-			if (enchant(player_ptr, o_ptr, 1, (ENCH_TODAM | ENCH_FORCE)))
-			{
-				okay = TRUE;
-				break;
-			}
+			okay = TRUE;
+			break;
 		}
 	}
 
 	/* Enchant to AC */
-	for (i = 0; i < to_ac; i++)
+	for (int i = 0; i < to_ac; i++)
 	{
-		if (o_ptr->to_a < maxenchant)
+		if ((o_ptr->to_a < maxenchant) && enchant(player_ptr, o_ptr, 1, (ENCH_TOAC | ENCH_FORCE)))
 		{
-			if (enchant(player_ptr, o_ptr, 1, (ENCH_TOAC | ENCH_FORCE)))
-			{
-				okay = TRUE;
-				break;
-			}
+			okay = TRUE;
+			break;
 		}
 	}
 
@@ -3230,25 +3302,19 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 	{
 		if (flush_failure) flush();
 		msg_print(_("改良に失敗した。", "The improvement failed."));
-		return (FALSE);
+		return FALSE;
 	}
-	else
-	{
-		object_desc(tmp_str, o_ptr, OD_NAME_AND_ENCHANT);
+	
+	object_desc(tmp_str, o_ptr, OD_NAME_AND_ENCHANT);
 #ifdef JP
-		msg_format("＄%dで%sに改良しました。", cost * o_ptr->number, tmp_str);
+	msg_format("＄%dで%sに改良しました。", cost * o_ptr->number, tmp_str);
 #else
-		msg_format("Improved into %s for %d gold.", tmp_str, cost * o_ptr->number);
+	msg_format("Improved into %s for %d gold.", tmp_str, cost * o_ptr->number);
 #endif
 
-		/* Charge the money */
-		player_ptr->au -= (cost * o_ptr->number);
-
-		if (item >= INVEN_RARM) calc_android_exp(player_ptr);
-
-		/* Something happened */
-		return (TRUE);
-	}
+	player_ptr->au -= (cost * o_ptr->number);
+	if (item >= INVEN_RARM) calc_android_exp(player_ptr);
+	return TRUE;
 }
 
 
@@ -3261,73 +3327,60 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
  * The cost for rods depends on the level of the rod. The prices\n
  * for recharging wands and staves are dependent on the cost of\n
  * the base-item.\n
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void building_recharge(void)
+static void building_recharge(player_type *player_ptr)
 {
-	OBJECT_IDX  item;
-	DEPTH       lev;
-	object_type *o_ptr;
-	object_kind *k_ptr;
-	concptr        q, s;
-	PRICE       price;
-	PARAMETER_VALUE charges;
-	int         max_charges;
-	char        tmp_str[MAX_NLEN];
-
 	msg_flag = FALSE;
-
-	/* Display some info */
 	clear_bldg(4, 18);
 	prt(_("  再充填の費用はアイテムの種類によります。", "  The prices of recharge depend on the type."), 6, 0);
-
-
-	/* Only accept legal items */
 	item_tester_hook = item_tester_hook_recharge;
 
-	q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
-	s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
+	concptr q = _("どのアイテムに魔力を充填しますか? ", "Recharge which item? ");
+	concptr s = _("魔力を充填すべきアイテムがない。", "You have nothing to recharge.");
 
-	o_ptr = choose_object(p_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
+	OBJECT_IDX item;
+	object_type *o_ptr;
+	o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return;
 
+	object_kind *k_ptr;
 	k_ptr = &k_info[o_ptr->k_idx];
 
 	/*
 	 * We don't want to give the player free info about
 	 * the level of the item or the number of charges.
 	 */
-	/* The item must be "known" */
+	 /* The item must be "known" */
+	char tmp_str[MAX_NLEN];
 	if (!object_is_known(o_ptr))
 	{
 		msg_format(_("充填する前に鑑定されている必要があります！", "The item must be identified first!"));
 		msg_print(NULL);
 
-		if ((p_ptr->au >= 50) &&
+		if ((player_ptr->au >= 50) &&
 			get_check(_("＄50で鑑定しますか？ ", "Identify for 50 gold? ")))
 
 		{
-			p_ptr->au -= 50;
-			identify_item(p_ptr, o_ptr);
+			player_ptr->au -= 50;
+			identify_item(player_ptr, o_ptr);
 			object_desc(tmp_str, o_ptr, 0);
 			msg_format(_("%s です。", "You have: %s."), tmp_str);
 
 			/* Auto-inscription */
-			autopick_alter_item(item, FALSE);
+			autopick_alter_item(player_ptr, item, FALSE);
 
 			/* Update the gold display */
-			building_prt_gold();
+			building_prt_gold(player_ptr);
 		}
-		else
-		{
-			return;
-		}
+		
+		return;
 	}
 
 	/* Extract the object "level" */
-	lev = k_info[o_ptr->k_idx].level;
-
-	/* Price for a rod */
+	DEPTH lev = k_info[o_ptr->k_idx].level;
+	PRICE price;
 	if (o_ptr->tval == TV_ROD)
 	{
 		if (o_ptr->timeout > 0)
@@ -3345,18 +3398,12 @@ static void building_recharge(void)
 	}
 	else if (o_ptr->tval == TV_STAFF)
 	{
-		/* Price per charge ( = double the price paid by shopkeepers for the charge) */
 		price = (k_info[o_ptr->k_idx].cost / 10) * o_ptr->number;
-
-		/* Pay at least 10 gold per charge */
 		price = MAX(10, price);
 	}
 	else
 	{
-		/* Price per charge ( = double the price paid by shopkeepers for the charge) */
 		price = (k_info[o_ptr->k_idx].cost / 10);
-
-		/* Pay at least 10 gold per charge */
 		price = MAX(10, price);
 	}
 
@@ -3372,6 +3419,7 @@ static void building_recharge(void)
 		{
 			msg_print(_("この魔法棒はもう充分に充填されています。", "This wand is already fully charged."));
 		}
+
 		return;
 	}
 	else if (o_ptr->tval == TV_STAFF && o_ptr->pval >= k_ptr->pval)
@@ -3384,22 +3432,23 @@ static void building_recharge(void)
 		{
 			msg_print(_("この杖はもう充分に充填されています。", "This staff is already fully charged."));
 		}
+
 		return;
 	}
 
 	/* Check if the player has enough money */
-	if (p_ptr->au < price)
+	if (player_ptr->au < price)
 	{
 		object_desc(tmp_str, o_ptr, OD_NAME_ONLY);
 #ifdef JP
-		msg_format("%sを再充填するには＄%d 必要です！", tmp_str,price );
+		msg_format("%sを再充填するには＄%d 必要です！", tmp_str, price);
 #else
 		msg_format("You need %d gold to recharge %s!", price, tmp_str);
 #endif
-
 		return;
 	}
 
+	PARAMETER_VALUE charges;
 	if (o_ptr->tval == TV_ROD)
 	{
 #ifdef JP
@@ -3420,44 +3469,33 @@ static void building_recharge(void)
 	}
 	else
 	{
+		int max_charges;
 		if (o_ptr->tval == TV_STAFF)
 			max_charges = k_ptr->pval - o_ptr->pval;
 		else
 			max_charges = o_ptr->number * k_ptr->pval - o_ptr->pval;
 
 		/* Get the quantity for staves and wands */
-		charges = (PARAMETER_VALUE)get_quantity(format(_("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold? "), price), 
-					MIN(p_ptr->au / price, max_charges));
+		charges = (PARAMETER_VALUE)get_quantity(format(_("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold? "), price),
+			MIN(player_ptr->au / price, max_charges));
 
 		/* Do nothing */
 		if (charges < 1) return;
 
-		/* Get the new price */
 		price *= charges;
-
-		/* Recharge */
 		o_ptr->pval += charges;
-
-		/* We no longer think the item is empty */
 		o_ptr->ident &= ~(IDENT_EMPTY);
 	}
 
-	/* Give feedback */
 	object_desc(tmp_str, o_ptr, 0);
 #ifdef JP
 	msg_format("%sを＄%d で再充填しました。", tmp_str, price);
 #else
 	msg_format("%^s %s recharged for %d gold.", tmp_str, ((o_ptr->number > 1) ? "were" : "was"), price);
 #endif
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-
-	p_ptr->window |= (PW_INVEN);
-
-	/* Pay the price */
-	p_ptr->au -= price;
-
-	/* Finished */
-	return;
+	player_ptr->update |= (PU_COMBINE | PU_REORDER);
+	player_ptr->window |= (PW_INVEN);
+	player_ptr->au -= price;
 }
 
 
@@ -3470,28 +3508,22 @@ static void building_recharge(void)
  * The cost for rods depends on the level of the rod. The prices\n
  * for recharging wands and staves are dependent on the cost of\n
  * the base-item.\n
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void building_recharge_all(void)
+static void building_recharge_all(player_type *player_ptr)
 {
-	INVENTORY_IDX i;
-	DEPTH lev;
-	object_type *o_ptr;
-	object_kind *k_ptr;
-	PRICE price = 0;
-	PRICE total_cost = 0;
-
-
-	/* Display some info */
 	msg_flag = FALSE;
 	clear_bldg(4, 18);
 	prt(_("  再充填の費用はアイテムの種類によります。", "  The prices of recharge depend on the type."), 6, 0);
 
-	/* Calculate cost */
-	for ( i = 0; i < INVEN_PACK; i++)
+	PRICE price = 0;
+	PRICE total_cost = 0;
+	for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
-				
+		object_type *o_ptr;
+		o_ptr = &player_ptr->inventory_list[i];
+
 		/* skip non magic device */
 		if (o_ptr->tval < TV_STAFF || o_ptr->tval > TV_ROD) continue;
 
@@ -3499,8 +3531,8 @@ static void building_recharge_all(void)
 		if (!object_is_known(o_ptr)) total_cost += 50;
 
 		/* Extract the object "level" */
-		lev = k_info[o_ptr->k_idx].level;
-
+		DEPTH lev = k_info[o_ptr->k_idx].level;
+		object_kind *k_ptr;
 		k_ptr = &k_info[o_ptr->k_idx];
 
 		switch (o_ptr->tval)
@@ -3544,17 +3576,20 @@ static void building_recharge_all(void)
 	}
 
 	/* Check if the player has enough money */
-	if (p_ptr->au < total_cost)
+	if (player_ptr->au < total_cost)
 	{
-		msg_format(_("すべてのアイテムを再充填するには＄%d 必要です！", "You need %d gold to recharge all items!"), total_cost );
+		msg_format(_("すべてのアイテムを再充填するには＄%d 必要です！", "You need %d gold to recharge all items!"), total_cost);
 		msg_print(NULL);
 		return;
 	}
-	if (!get_check(format(_("すべてのアイテムを ＄%d で再充填しますか？", "Recharge all items for %d gold? "),  total_cost))) return;
-	
-	for (i = 0; i < INVEN_PACK; i++)
+
+	if (!get_check(format(_("すべてのアイテムを ＄%d で再充填しますか？", "Recharge all items for %d gold? "), total_cost))) return;
+
+	for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++)
 	{
-		o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr;
+		o_ptr = &player_ptr->inventory_list[i];
+		object_kind *k_ptr;
 		k_ptr = &k_info[o_ptr->k_idx];
 
 		/* skip non magic device */
@@ -3562,10 +3597,10 @@ static void building_recharge_all(void)
 
 		if (!object_is_known(o_ptr))
 		{
-			identify_item(p_ptr, o_ptr);
+			identify_item(player_ptr, o_ptr);
 
 			/* Auto-inscription */
-			autopick_alter_item(i, FALSE);
+			autopick_alter_item(player_ptr, i, FALSE);
 		}
 
 		/* Recharge */
@@ -3588,18 +3623,11 @@ static void building_recharge_all(void)
 		}
 	}
 
-	/* Give feedback */
 	msg_format(_("＄%d で再充填しました。", "You pay %d gold."), total_cost);
 	msg_print(NULL);
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-
-	p_ptr->window |= (PW_INVEN);
-
-	/* Pay the price */
-	p_ptr->au -= total_cost;
-
-	/* Finished */
-	return;
+	player_ptr->update |= (PU_COMBINE | PU_REORDER);
+	player_ptr->window |= (PW_INVEN);
+	player_ptr->au -= total_cost;
 }
 
 
@@ -3611,10 +3639,6 @@ static void building_recharge_all(void)
  */
 static bool research_mon(player_type *player_ptr)
 {
-	IDX i;
-	int n;
-	MONRACE_IDX r_idx;
-	char sym, query;
 	char buf[128];
 	bool notpicked;
 	bool recall = FALSE;
@@ -3634,22 +3658,23 @@ static bool research_mon(player_type *player_ptr)
 	screen_save();
 
 	/* Get a character, or abort */
+	char sym;
 	if (!get_com(_("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):",
-				   "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "), &sym, FALSE)) 
+		"Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "), &sym, FALSE))
 
 	{
 		screen_load();
-
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Find that character info, and describe it */
+	IDX i;
 	for (i = 0; ident_info[i]; ++i)
 	{
 		if (sym == ident_info[i][0]) break;
 	}
 
-		/* XTRA HACK WHATSEARCH */
+	/* XTRA HACK WHATSEARCH */
 	if (sym == KTRL('A'))
 	{
 		all = TRUE;
@@ -3668,14 +3693,15 @@ static bool research_mon(player_type *player_ptr)
 	else if (sym == KTRL('M'))
 	{
 		all = TRUE;
-		if (!get_string(_("名前(英語の場合小文字で可)", "Enter name:"),temp, 70))
+		if (!get_string(_("名前(英語の場合小文字で可)", "Enter name:"), temp, 70))
 		{
-			temp[0]=0;
+			temp[0] = 0;
 			screen_load();
 
 			return FALSE;
 		}
-		sprintf(buf, _("名前:%sにマッチ", "Monsters with a name \"%s\""),temp);
+
+		sprintf(buf, _("名前:%sにマッチ", "Monsters with a name \"%s\""), temp);
 	}
 	else if (ident_info[i])
 	{
@@ -3693,6 +3719,7 @@ static bool research_mon(player_type *player_ptr)
 	C_MAKE(who, max_r_idx, MONRACE_IDX);
 
 	/* Collect matching monsters */
+	int n;
 	for (n = 0, i = 1; i < max_r_idx; i++)
 	{
 		monster_race *r_ptr = &r_info[i];
@@ -3710,10 +3737,7 @@ static bool research_mon(player_type *player_ptr)
 		/* 名前検索 */
 		if (temp[0])
 		{
-			int xx;
-			char temp2[80];
-
-			for (xx = 0; temp[xx] && xx < 80; xx++)
+			for (int xx = 0; temp[xx] && xx < 80; xx++)
 			{
 #ifdef JP
 				if (iskanji(temp[xx]))
@@ -3724,14 +3748,17 @@ static bool research_mon(player_type *player_ptr)
 #endif
 				if (isupper(temp[xx])) temp[xx] = (char)tolower(temp[xx]);
 			}
-  
+
+			char temp2[80];
 #ifdef JP
 			strcpy(temp2, r_name + r_ptr->E_name);
 #else
 			strcpy(temp2, r_name + r_ptr->name);
 #endif
-			for (xx = 0; temp2[xx] && xx < 80; xx++)
+			for (int xx = 0; temp2[xx] && xx < 80; xx++)
+			{
 				if (isupper(temp2[xx])) temp2[xx] = (char)tolower(temp2[xx]);
+			}
 
 #ifdef JP
 			if (my_strstr(temp2, temp) || my_strstr(r_name + r_ptr->name, temp))
@@ -3740,7 +3767,10 @@ static bool research_mon(player_type *player_ptr)
 #endif
 				who[n++] = i;
 		}
-		else if (all || (r_ptr->d_char == sym)) who[n++] = i;
+		else if (all || (r_ptr->d_char == sym))
+		{
+			who[n++] = i;
+		}
 	}
 
 	/* Nothing to recall */
@@ -3750,19 +3780,18 @@ static bool research_mon(player_type *player_ptr)
 		C_KILL(who, max_r_idx, MONRACE_IDX);
 		screen_load();
 
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Sort by level */
 	why = 2;
-	query = 'y';
+	char query = 'y';
 
 	/* Sort if needed */
 	if (why)
 	{
 		ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
 	}
-
 
 	/* Start at the end */
 	/* XTRA HACK REMEMBER_IDX */
@@ -3772,6 +3801,7 @@ static bool research_mon(player_type *player_ptr)
 	notpicked = TRUE;
 
 	/* Scan the monster memory */
+	MONRACE_IDX r_idx;
 	while (notpicked)
 	{
 		r_idx = who[i];
@@ -3783,7 +3813,7 @@ static bool research_mon(player_type *player_ptr)
 		Term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
 
 		/* Interact */
-		while (1)
+		while (TRUE)
 		{
 			if (recall)
 			{
@@ -3824,27 +3854,20 @@ static bool research_mon(player_type *player_ptr)
 				i = 0;
 				if (!expand_list) break;
 			}
+
+			continue;
 		}
 
-		/* Move to "next" monster */
-		else
+		if (i-- == 0)
 		{
-			if (i-- == 0)
-			{
-				i = n - 1;
-				if (!expand_list) break;
-			}
+			i = n - 1;
+			if (!expand_list) break;
 		}
 	}
 
-	/* Re-display the identity */
-	/* prt(buf, 5, 5);*/
-
-	/* Free the "who" array */
 	C_KILL(who, max_r_idx, MONRACE_IDX);
 	screen_load();
-
-	return (!notpicked);
+	return !notpicked;
 }
 
 
@@ -3857,35 +3880,34 @@ static bool research_mon(player_type *player_ptr)
  */
 static void bldg_process_command(player_type *player_ptr, building_type *bldg, int i)
 {
-	BACT_IDX bact = bldg->actions[i];
-	PRICE bcost;
-	bool paid = FALSE;
-
 	msg_flag = FALSE;
 	msg_erase();
 
-	if (is_owner(bldg))
+	PRICE bcost;
+	if (is_owner(player_ptr, bldg))
 		bcost = bldg->member_costs[i];
 	else
 		bcost = bldg->other_costs[i];
 
 	/* action restrictions */
-	if (((bldg->action_restr[i] == 1) && !is_member(bldg)) ||
-	    ((bldg->action_restr[i] == 2) && !is_owner(bldg)))
+	if (((bldg->action_restr[i] == 1) && !is_member(player_ptr, bldg)) ||
+		((bldg->action_restr[i] == 2) && !is_owner(player_ptr, bldg)))
 	{
 		msg_print(_("それを選択する権利はありません！", "You have no right to choose that!"));
 		return;
 	}
 
 	/* check gold (HACK - Recharge uses variable costs) */
+	BACT_IDX bact = bldg->actions[i];
 	if ((bact != BACT_RECHARGE) &&
-	    (((bldg->member_costs[i] > player_ptr->au) && is_owner(bldg)) ||
-	     ((bldg->other_costs[i] > player_ptr->au) && !is_owner(bldg))))
+		(((bldg->member_costs[i] > player_ptr->au) && is_owner(player_ptr, bldg)) ||
+		((bldg->other_costs[i] > player_ptr->au) && !is_owner(player_ptr, bldg))))
 	{
 		msg_print(_("お金が足りません！", "You do not have the gold!"));
 		return;
 	}
 
+	bool paid = FALSE;
 	switch (bact)
 	{
 	case BACT_NOTHING:
@@ -3898,7 +3920,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		town_history();
 		break;
 	case BACT_RACE_LEGENDS:
-		race_legends(p_ptr);
+		race_legends(player_ptr);
 		break;
 	case BACT_QUEST:
 		castle_quest(player_ptr);
@@ -3919,7 +3941,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 	case BACT_DICE_SLOTS:
 	case BACT_GAMBLE_RULES:
 	case BACT_POKER:
-		gamble_comm(bact);
+		gamble_comm(player_ptr, bact);
 		break;
 	case BACT_REST:
 	case BACT_RUMORS:
@@ -3942,10 +3964,10 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		enchant_item(player_ptr, bcost, 0, 0, 1);
 		break;
 	case BACT_RECHARGE:
-		building_recharge();
+		building_recharge(player_ptr);
 		break;
 	case BACT_RECHARGE_ALL:
-		building_recharge_all();
+		building_recharge_all(player_ptr);
 		break;
 	case BACT_IDENTS: /* needs work */
 		if (!get_check(_("持ち物を全て鑑定してよろしいですか？", "Do you pay for identify all your possession? "))) break;
@@ -3987,14 +4009,13 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		if (player_ptr->muta1 || player_ptr->muta2 || (player_ptr->muta3 & ~MUT3_GOOD_LUCK) ||
 			(player_ptr->pseikaku != SEIKAKU_LUCKY && (player_ptr->muta3 & MUT3_GOOD_LUCK)))
 		{
-			while(!lose_mutation(player_ptr, 0));
+			while (!lose_mutation(player_ptr, 0));
 			paid = TRUE;
+			break;
 		}
-		else
-		{
-			msg_print(_("治すべき突然変異が無い。", "You have no mutations."));
-			msg_print(NULL);
-		}
+
+		msg_print(_("治すべき突然変異が無い。", "You have no mutations."));
+		msg_print(NULL);
 		break;
 
 	case BACT_BATTLE:
@@ -4010,7 +4031,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		break;
 
 	case BACT_TARGET:
-		today_target();
+		today_target(player_ptr);
 		break;
 
 	case BACT_KANKIN:
@@ -4066,12 +4087,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
  */
 void do_cmd_bldg(player_type *player_ptr)
 {
-	int             i, which;
-	char            command;
-	bool            validcmd;
-	building_type   *bldg;
-
-	if(player_ptr->wild_mode) return;
+	if (player_ptr->wild_mode) return;
 
 	take_turn(player_ptr, 100);
 
@@ -4081,8 +4097,9 @@ void do_cmd_bldg(player_type *player_ptr)
 		return;
 	}
 
-	which = f_info[player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
+	int which = f_info[player_ptr->current_floor_ptr->grid_array[player_ptr->y][player_ptr->x].feat].subtype;
 
+	building_type *bldg;
 	bldg = &building[which];
 
 	/* Don't re-init the wilderness */
@@ -4148,19 +4165,20 @@ void do_cmd_bldg(player_type *player_ptr)
 	command_rep = 0;
 	command_new = 0;
 
-	show_building(bldg);
+	show_building(player_ptr, bldg);
 	player_ptr->leave_bldg = FALSE;
 
 	play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
 
+	bool validcmd;
 	while (!player_ptr->leave_bldg)
 	{
 		validcmd = FALSE;
 		prt("", 1, 0);
 
-		building_prt_gold();
+		building_prt_gold(player_ptr);
 
-		command = inkey();
+		char command = inkey();
 
 		if (command == ESCAPE)
 		{
@@ -4170,19 +4188,17 @@ void do_cmd_bldg(player_type *player_ptr)
 			break;
 		}
 
+		int i;
 		for (i = 0; i < 8; i++)
 		{
-			if (bldg->letters[i])
+			if (bldg->letters[i] && (bldg->letters[i] == command))
 			{
-				if (bldg->letters[i] == command)
-				{
-					validcmd = TRUE;
-					break;
-				}
+				validcmd = TRUE;
+				break;
 			}
 		}
 
-		if(validcmd) bldg_process_command(player_ptr, bldg, i);
+		if (validcmd) bldg_process_command(player_ptr, bldg, i);
 
 		handle_stuff(player_ptr);
 	}
@@ -4208,15 +4224,13 @@ void do_cmd_bldg(player_type *player_ptr)
 
 /*!
  * @brief 今日の賞金首を確定する / Determine today's bounty monster
+ * @param player_type プレーヤーへの参照ポインタ
  * @return なし
  * @note conv_old is used if loaded 0.0.3 or older save file
  */
-void determine_today_mon(bool conv_old)
+void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 {
 	int max_dl = 3, i;
-	bool old_inside_battle = p_ptr->phase_out;
-	monster_race *r_ptr;
-
 	if (!conv_old)
 	{
 		for (i = 0; i < current_world_ptr->max_d_idx; i++)
@@ -4225,14 +4239,18 @@ void determine_today_mon(bool conv_old)
 			if (max_dl < max_dlv[i]) max_dl = max_dlv[i];
 		}
 	}
-	else max_dl = MAX(max_dlv[DUNGEON_ANGBAND], 3);
+	else
+	{
+		max_dl = MAX(max_dlv[DUNGEON_ANGBAND], 3);
+	}
 
-	p_ptr->phase_out = TRUE;
+	player_ptr->phase_out = TRUE;
 	get_mon_num_prep(NULL, NULL);
 
-	while (1)
+	while (TRUE)
 	{
 		today_mon = get_mon_num(max_dl);
+		monster_race *r_ptr;
 		r_ptr = &r_info[today_mon];
 
 		if (r_ptr->flags1 & RF1_UNIQUE) continue;
@@ -4244,10 +4262,10 @@ void determine_today_mon(bool conv_old)
 		break;
 	}
 
-	p_ptr->today_mon = 0;
-	p_ptr->phase_out = old_inside_battle;
+	player_ptr->today_mon = 0;
+	bool old_inside_battle = player_ptr->phase_out;
+	player_ptr->phase_out = old_inside_battle;
 }
-
 
 
 /*!
@@ -4256,38 +4274,42 @@ void determine_today_mon(bool conv_old)
  */
 void determine_bounty_uniques(void)
 {
-	int i, j;
-	MONRACE_IDX tmp;
-	monster_race *r_ptr;
-
 	get_mon_num_prep(NULL, NULL);
-	for (i = 0; i < MAX_BOUNTY; i++)
+	for (int i = 0; i < MAX_BOUNTY; i++)
 	{
-		while (1)
+		while (TRUE)
 		{
 			current_world_ptr->bounty_r_idx[i] = get_mon_num(MAX_DEPTH - 1);
+			monster_race *r_ptr;
 			r_ptr = &r_info[current_world_ptr->bounty_r_idx[i]];
 
 			if (!(r_ptr->flags1 & RF1_UNIQUE)) continue;
 
-			if (!(r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON))) continue;
+			if (!(r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)))
+				continue;
 
 			if (r_ptr->rarity > 100) continue;
 
-			if (no_questor_or_bounty_uniques(current_world_ptr->bounty_r_idx[i])) continue;
+			if (no_questor_or_bounty_uniques(current_world_ptr->bounty_r_idx[i]))
+				continue;
 
+			int j;
 			for (j = 0; j < i; j++)
-				if (current_world_ptr->bounty_r_idx[i] == current_world_ptr->bounty_r_idx[j]) break;
+			{
+				if (current_world_ptr->bounty_r_idx[i] == current_world_ptr->bounty_r_idx[j])
+					break;
+			}
 
 			if (j == i) break;
 		}
 	}
 
 	/* Sort them */
-	for (i = 0; i < MAX_BOUNTY - 1; i++)
+	for (int i = 0; i < MAX_BOUNTY - 1; i++)
 	{
-		for (j = i; j < MAX_BOUNTY; j++)
+		for (int j = i; j < MAX_BOUNTY; j++)
 		{
+			MONRACE_IDX tmp;
 			if (r_info[current_world_ptr->bounty_r_idx[i]].level > r_info[current_world_ptr->bounty_r_idx[j]].level)
 			{
 				tmp = current_world_ptr->bounty_r_idx[i];

@@ -117,9 +117,9 @@ extern PRICE kakekin;
 extern int sel_monster;
 
 extern const arena_type arena_info[MAX_ARENA_MONS + 2];
-extern void update_gambling_monsters(void);
+extern void update_gambling_monsters(player_type *player_ptr);
 extern void do_cmd_bldg(player_type *player_ptr);
 
 extern void clear_bldg(int min_row, int max_row);
-extern void determine_today_mon(bool conv_old);
+extern void determine_daily_bounty(player_type *player_ptr, bool conv_old);
 extern void determine_bounty_uniques(void);

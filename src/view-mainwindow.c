@@ -2451,11 +2451,11 @@ bool change_panel(POSITION dy, POSITION dx)
 		handle_stuff(p_ptr);
 
 		/* Success */
-		return (TRUE);
+		return TRUE;
 	}
 
 	/* No change */
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -3130,7 +3130,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 			{
 				byte act;
 
-				match_autopick = is_autopick(o_ptr);
+				match_autopick = is_autopick(p_ptr, o_ptr);
 				if (match_autopick == -1)
 					continue;
 
@@ -3693,7 +3693,7 @@ void do_cmd_view_map(void)
 	{
 		display_autopick = ITEM_DISPLAY;
 
-		while (1)
+		while (TRUE)
 		{
 			int i;
 			byte flag;

@@ -1245,7 +1245,7 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 	if (mode & SCROBJ_FORCE_DETAIL) trivial_info = 0;
 
 	/* No relevant informations */
-	if (i <= trivial_info) return (FALSE);
+	if (i <= trivial_info) return FALSE;
 	screen_save();
 
 	Term_get_size(&wid, &hgt);
@@ -1297,7 +1297,7 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 	screen_load();
 
 	/* Gave knowledge */
-	return (TRUE);
+	return TRUE;
 }
 
 

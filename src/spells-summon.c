@@ -185,13 +185,13 @@ bool cast_summon_octopus(player_type *creature_ptr)
 bool item_tester_offer(object_type *o_ptr)
 {
 	/* Flasks of oil are okay */
-	if (o_ptr->tval != TV_CORPSE) return (FALSE);
-	if (o_ptr->sval != SV_CORPSE) return (FALSE);
+	if (o_ptr->tval != TV_CORPSE) return FALSE;
+	if (o_ptr->sval != SV_CORPSE) return FALSE;
 
-	if (my_strchr("pht", r_info[o_ptr->pval].d_char)) return (TRUE);
+	if (my_strchr("pht", r_info[o_ptr->pval].d_char)) return TRUE;
 
 	/* Assume not okay */
-	return (FALSE);
+	return FALSE;
 }
 
 /*!

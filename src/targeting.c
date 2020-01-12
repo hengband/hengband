@@ -543,7 +543,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 	/* Scan all objects in the grid */
 	if (easy_floor)
 	{
-		floor_num = scan_floor(floor_list, y, x, 0x02);
+		floor_num = scan_floor(subject_ptr, floor_list, y, x, 0x02);
 
 		if (floor_num)
 		{
@@ -609,7 +609,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 		handle_stuff(subject_ptr);
 
 		/* Interact */
-		while (1)
+		while (TRUE)
 		{
 			char acount[10];
 
@@ -726,7 +726,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 	{
 		int min_width = 0;
 
-		while (1)
+		while (TRUE)
 		{
 			if (floor_num == 1)
 			{
@@ -775,7 +775,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 			/** Display list of items **/
 
 			/* Continue scrolling list if requested */
-			while (1)
+			while (TRUE)
 			{
 				int i;
 				OBJECT_IDX o_idx;
@@ -783,7 +783,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 
 				/* Display */
 				show_gold_on_floor = TRUE;
-				(void)show_floor(0, y, x, &min_width);
+				(void)show_floor(subject_ptr, 0, y, x, &min_width);
 				show_gold_on_floor = FALSE;
 
 				/* Prompt */

@@ -1190,7 +1190,7 @@ void do_cmd_options(void)
 	screen_save();
 
 	/* Interact */
-	while (1)
+	while (TRUE)
 	{
 		int n = OPT_NUM;
 
@@ -1201,7 +1201,7 @@ void do_cmd_options(void)
 		/* Why are we here */
 		prt(_("[ オプションの設定 ]", "TinyAngband options"), 1, 0);
 
-		while (1)
+		while (TRUE)
 		{
 			/* Give some choices */
 			for (i = 0; i < n; i++)
@@ -1366,7 +1366,7 @@ void do_cmd_options(void)
 			prt(_("コマンド: 基本ウェイト量", "Command: Base Delay Factor"), 19, 0);
 
 			/* Get a new value */
-			while (1)
+			while (TRUE)
 			{
 				int msec = delay_factor * delay_factor * delay_factor;
 				prt(format(_("現在のウェイト: %d (%dミリ秒)", "Current base delay factor: %d (%d msec)"), delay_factor, msec), 22, 0);
@@ -1394,7 +1394,7 @@ void do_cmd_options(void)
 			prt(_("コマンド: 低ヒットポイント警告", "Command: Hitpoint Warning"), 19, 0);
 
 			/* Get a new value */
-			while (1)
+			while (TRUE)
 			{
 				prt(format(_("現在の低ヒットポイント警告: %d0%%", "Current hitpoint warning: %d0%%"), hitpoint_warn), 22, 0);
 				prt(_("低ヒットポイント警告 (0-9) ESCで決定: ", "Hitpoint Warning (0-9 or ESC to accept): "), 20, 0);
@@ -1421,7 +1421,7 @@ void do_cmd_options(void)
 			prt(_("コマンド: 低魔力色閾値", "Command: Mana Color Threshold"), 19, 0);
 
 			/* Get a new value */
-			while (1)
+			while (TRUE)
 			{
 				prt(format(_("現在の低魔力色閾値: %d0%%", "Current mana color threshold: %d0%%"), mana_warn), 22, 0);
 				prt(_("低魔力閾値 (0-9) ESCで決定: ", "Mana color Threshold (0-9 or ESC to accept): "), 20, 0);

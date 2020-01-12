@@ -365,7 +365,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 			msg_print(_("下の階に降りた。", "You enter the down staircase."));
 
 		leave_quest_check(creature_ptr);
-		leave_tower_check();
+		leave_tower_check(creature_ptr);
 
 		creature_ptr->current_floor_ptr->inside_quest = g_ptr->special;
 
@@ -1031,7 +1031,7 @@ static bool do_cmd_tunnel_test(floor_type *floor_ptr, POSITION y, POSITION x)
 	{
 		msg_print(_("そこには何も見当たらない。", "You see nothing there."));
 
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Must be a wall/door/etc */
@@ -1039,10 +1039,10 @@ static bool do_cmd_tunnel_test(floor_type *floor_ptr, POSITION y, POSITION x)
 	{
 		msg_print(_("そこには掘るものが見当たらない。", "You see nothing there to tunnel."));
 
-		return (FALSE);
+		return FALSE;
 	}
 
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -1066,7 +1066,7 @@ static bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
 	bool more = FALSE;
 
 	/* Verify legality */
-	if (!do_cmd_tunnel_test(creature_ptr->current_floor_ptr, y, x)) return (FALSE);
+	if (!do_cmd_tunnel_test(creature_ptr->current_floor_ptr, y, x)) return FALSE;
 
 	take_turn(creature_ptr, 100);
 
@@ -1278,7 +1278,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
 	/* Must be a closed door */
 	if (!is_closed_door(g_ptr->feat))
 	{
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Jammed door */
@@ -1342,7 +1342,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
 		sound(SOUND_OPENDOOR);
 	}
 
-	return (TRUE);
+	return TRUE;
 }
 
 /*!
@@ -1917,11 +1917,11 @@ static bool get_spike(player_type *creature_ptr, INVENTORY_IDX *ip)
 			(*ip) = i;
 
 			/* Success */
-			return (TRUE);
+			return TRUE;
 		}
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 

@@ -1038,26 +1038,26 @@ static bool check_file(concptr s)
 	attrib = GetFileAttributes(path);
 
 	/* Require valid filename */
-	if (attrib == INVALID_FILE_NAME) return (FALSE);
+	if (attrib == INVALID_FILE_NAME) return FALSE;
 
 	/* Prohibit directory */
-	if (attrib & FILE_ATTRIBUTE_DIRECTORY) return (FALSE);
+	if (attrib & FILE_ATTRIBUTE_DIRECTORY) return FALSE;
 
 #else /* WIN32 */
 
 	/* Examine and verify */
-	if (_dos_getfileattr(path, &attrib)) return (FALSE);
+	if (_dos_getfileattr(path, &attrib)) return FALSE;
 
 	/* Prohibit something */
-	if (attrib & FA_LABEL) return (FALSE);
+	if (attrib & FA_LABEL) return FALSE;
 
 	/* Prohibit directory */
-	if (attrib & FA_DIREC) return (FALSE);
+	if (attrib & FA_DIREC) return FALSE;
 
 #endif /* WIN32 */
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -1095,26 +1095,26 @@ static bool check_dir(concptr s)
 	attrib = GetFileAttributes(path);
 
 	/* Require valid filename */
-	if (attrib == INVALID_FILE_NAME) return (FALSE);
+	if (attrib == INVALID_FILE_NAME) return FALSE;
 
 	/* Require directory */
-	if (!(attrib & FILE_ATTRIBUTE_DIRECTORY)) return (FALSE);
+	if (!(attrib & FILE_ATTRIBUTE_DIRECTORY)) return FALSE;
 
 #else /* WIN32 */
 
 	/* Examine and verify */
-	if (_dos_getfileattr(path, &attrib)) return (FALSE);
+	if (_dos_getfileattr(path, &attrib)) return FALSE;
 
 	/* Prohibit something */
-	if (attrib & FA_LABEL) return (FALSE);
+	if (attrib & FA_LABEL) return FALSE;
 
 	/* Require directory */
-	if (!(attrib & FA_DIREC)) return (FALSE);
+	if (!(attrib & FA_DIREC)) return FALSE;
 
 #endif /* WIN32 */
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -1661,7 +1661,7 @@ static int new_palette(void)
 
 
 	/* This makes no sense */
-	if (!paletted) return (TRUE);
+	if (!paletted) return TRUE;
 
 
 	/* No bitmap */
@@ -1689,7 +1689,7 @@ static int new_palette(void)
 			rnfree(lppe, lppeSize);
 
 			/* Fail */
-			return (FALSE);
+			return FALSE;
 		}
 	}
 
@@ -1768,7 +1768,7 @@ static int new_palette(void)
 	hPal = hNewPal;
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -1841,7 +1841,7 @@ static bool init_graphics(void)
 	if (!ReadDIB(data[0].w, buf, &infGraph))
 	{
 		plog_fmt(_("ビットマップ '%s' を読み込めません。", "Cannot read bitmap file '%s'"), name);
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Save the new sizes */
@@ -1861,7 +1861,7 @@ static bool init_graphics(void)
 		if (!ReadDIB(data[0].w, buf, &infMask))
 		{
 			plog_fmt("Cannot read bitmap file '%s'", buf);
-			return (FALSE);
+			return FALSE;
 		}
 	}
 	if (arg_graphics == GRAPHICS_HENGBAND)
@@ -1873,7 +1873,7 @@ static bool init_graphics(void)
 		if (!ReadDIB(data[0].w, buf, &infMask))
 		{
 			plog_fmt("Cannot read bitmap file '%s'", buf);
-			return (FALSE);
+			return FALSE;
 		}
 	}
 
@@ -1883,7 +1883,7 @@ static bool init_graphics(void)
 		/* Free bitmap */
 
 		plog(_("パレットを実現できません！", "Cannot activate palette!"));
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Graphics available */

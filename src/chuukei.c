@@ -233,7 +233,7 @@ void flush_ringbuf(void)
 	FD_ZERO(&fdset);
 	FD_SET(sd, &fdset);
 
-	while (1)
+	while (TRUE)
 	{
 		fd_set tmp_fdset;
 		int result;
@@ -271,7 +271,7 @@ void flush_ringbuf(void)
 
 	if (ring.inlen == 0) return;
 
-	while (1)
+	while (TRUE)
 	{
 		int result;
 
@@ -520,21 +520,21 @@ static bool string_is_repeat(char *str, int len)
 	char c = str[0];
 	int i;
 
-	if (len < 2) return (FALSE);
+	if (len < 2) return FALSE;
 #ifdef JP
-	if (iskanji(c)) return (FALSE);
+	if (iskanji(c)) return FALSE;
 #endif
 
 	for (i = 1; i < len; i++)
 	{
 #ifdef JP
-		if(c != str[i] || iskanji(str[i])) return (FALSE);
+		if(c != str[i] || iskanji(str[i])) return FALSE;
 #else
-		if(c != str[i]) return (FALSE);
+		if(c != str[i]) return FALSE;
 #endif
 	}
 
-	return (TRUE);
+	return TRUE;
 }
 
 static errr send_text_to_chuukei_server(TERM_LEN x, TERM_LEN y, int len, TERM_COLOR col, concptr str)
@@ -901,7 +901,7 @@ static bool get_nextbuf(char *buf)
 {
 	char *ptr = buf;
 
-	while (1)
+	while (TRUE)
 	{
 		*ptr = ring.buf[ring.rptr ++];
 		ring.inlen --;
@@ -909,9 +909,9 @@ static bool get_nextbuf(char *buf)
 		if (*ptr++ == '\0') break;
 	}
 
-	if (buf[0] == 'd') return (FALSE);
+	if (buf[0] == 'd') return FALSE;
 
-	return (TRUE);
+	return TRUE;
 }
 
 /* プレイホストのマップが大きいときクライアントのマップもリサイズする */
@@ -936,10 +936,10 @@ static bool flush_ringbuf_client(void)
 	char buf[1024];
 
 	/* 書くデータなし */
-	if (fresh_queue.next == fresh_queue.tail) return (FALSE);
+	if (fresh_queue.next == fresh_queue.tail) return FALSE;
 
 	/* まだ書くべき時でない */
-	if (fresh_queue.time[fresh_queue.next] > get_current_time() - epoch_time) return (FALSE);
+	if (fresh_queue.time[fresh_queue.next] > get_current_time() - epoch_time) return FALSE;
 
 	/* 時間情報(区切り)が得られるまで書く */
 	while (get_nextbuf(buf))
@@ -1023,7 +1023,7 @@ static bool flush_ringbuf_client(void)
 
 	fresh_queue.next++;
 	if (fresh_queue.next == FRESH_QUEUE_SIZE) fresh_queue.next = 0;
-	return (TRUE);
+	return TRUE;
 }
 
 #ifdef CHUUKEI
@@ -1043,7 +1043,7 @@ void browse_chuukei()
 	Term_fresh();
 	Term_xtra(TERM_XTRA_REACT, 0);
 
-	while (1)
+	while (TRUE)
 	{
 		fd_set tmp_fdset;
 		struct timeval tmp_tv;
@@ -1074,7 +1074,7 @@ void browse_chuukei()
 	Term_fresh();
 	Term_xtra(TERM_XTRA_REACT, 0);
 
-	while (1)
+	while (TRUE)
 	{
 		UInt32	unreadData = 0;
 		int n;

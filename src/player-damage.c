@@ -141,8 +141,8 @@ static bool acid_minus_ac(player_type *creature_ptr)
 	case 7: o_ptr = &creature_ptr->inventory_list[INVEN_FEET]; break;
 	}
 
-	if (!o_ptr->k_idx) return (FALSE);
-	if (!object_is_armour(o_ptr)) return (FALSE);
+	if (!o_ptr->k_idx) return FALSE;
+	if (!object_is_armour(o_ptr)) return FALSE;
 
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 	object_flags(o_ptr, flgs);
@@ -150,14 +150,14 @@ static bool acid_minus_ac(player_type *creature_ptr)
 	if (o_ptr->ac + o_ptr->to_a <= 0)
 	{
 		msg_format(_("%sは既にボロボロだ！", "is already fully corroded!"), o_name);
-		return (FALSE);
+		return FALSE;
 	}
 
 	/* Object resists */
 	if (have_flag(flgs, TR_IGNORE_ACID))
 	{
 		msg_format(_("しかし%sには効果がなかった！", "Your %s is unaffected!"), o_name);
-		return (TRUE);
+		return TRUE;
 	}
 
 	msg_format(_("%sが酸で腐食した！", "Your %s is corroded!"), o_name);
@@ -172,7 +172,7 @@ static bool acid_minus_ac(player_type *creature_ptr)
 	calc_android_exp(creature_ptr);
 
 	/* Item was damaged */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -508,7 +508,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 		}
 		else
 		{
-			QUEST_IDX q_idx = quest_number(creature_ptr->current_floor_ptr->dun_level);
+			QUEST_IDX q_idx = quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level);
 			bool seppuku = streq(hit_from, "Seppuku");
 			bool winning_seppuku = current_world_ptr->total_winner && seppuku;
 

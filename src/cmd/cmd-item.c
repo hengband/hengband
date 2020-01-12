@@ -134,6 +134,7 @@ bool select_ring_slot = FALSE;
 
 /*!
  * @brief 装備するコマンドのメインルーチン / Wield or wear a single item from the pack or floor
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし 
  */
 void do_cmd_wield(player_type *creature_ptr)
@@ -265,7 +266,7 @@ void do_cmd_wield(player_type *creature_ptr)
 	{
 		object_desc(o_name, &creature_ptr->inventory_list[slot], (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-		msg_format("%s%sは呪われているようだ。", describe_use(slot) , o_name );
+		msg_format("%s%sは呪われているようだ。", describe_use(creature_ptr, slot) , o_name);
 #else
 		msg_format("The %s you are %s appears to be cursed.", o_name, describe_use(slot));
 #endif
@@ -317,14 +318,14 @@ void do_cmd_wield(player_type *creature_ptr)
 		slot = need_switch_wielding;
 	}
 
-	check_find_art_quest_completion(o_ptr);
+	check_find_art_quest_completion(creature_ptr, o_ptr);
 
 	if (creature_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 	{
 		identify_item(creature_ptr, o_ptr);
 
 		/* Auto-inscription */
-		autopick_alter_item(item, FALSE);
+		autopick_alter_item(creature_ptr, item, FALSE);
 	}
 
 	take_turn(creature_ptr, 100);
@@ -606,6 +607,7 @@ void do_cmd_drop(player_type *creature_ptr)
 
 /*!
  * @brief アイテムを破壊するコマンドのメインルーチン / Destroy an item
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void do_cmd_destroy(player_type *creature_ptr)
@@ -679,10 +681,10 @@ void do_cmd_destroy(player_type *creature_ptr)
 			if (i == 'A')
 			{
 				/* Add an auto-destroy preference line */
-				if (autopick_autoregister(o_ptr))
+				if (autopick_autoregister(creature_ptr, o_ptr))
 				{
 					/* Auto-destroy it */
-					autopick_alter_item(item, TRUE);
+					autopick_alter_item(creature_ptr, item, TRUE);
 				}
 
 				/* The object is already destroyed. */
@@ -1119,7 +1121,7 @@ void do_cmd_locate(player_type *creature_ptr)
 	x2 = x1 = panel_col_min;
 
 	/* Show panels until done */
-	while (1)
+	while (TRUE)
 	{
 		/* Describe the location */
 		if ((y2 == y1) && (x2 == x1))
@@ -1364,7 +1366,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
 	i = n - 1;
 
 	/* Scan the monster memory */
-	while (1)
+	while (TRUE)
 	{
 		r_idx = who[i];
 
@@ -1373,7 +1375,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
 		handle_stuff(creature_ptr);
 
 		/* Interact */
-		while (1)
+		while (TRUE)
 		{
 			if (recall)
 			{

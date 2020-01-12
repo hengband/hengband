@@ -72,7 +72,7 @@ void display_rumor(bool ex)
 				object_type *q_ptr = &forge;
 				artifact_type *a_ptr;
 
-				while (1)
+				while (TRUE)
 				{
 					a_idx = rumor_num(zz[1], max_a_idx);
 
@@ -91,7 +91,7 @@ void display_rumor(bool ex)
 				MONRACE_IDX r_idx;
 				monster_race *r_ptr;
 
-				while (1)
+				while (TRUE)
 				{
 					r_idx = rumor_num(zz[1], max_r_idx);
 					r_ptr = &r_info[r_idx];
@@ -111,7 +111,7 @@ void display_rumor(bool ex)
 				DUNGEON_IDX d_idx;
 				dungeon_type *d_ptr;
 
-				while (1)
+				while (TRUE)
 				{
 					d_idx = rumor_num(zz[1], current_world_ptr->max_d_idx);
 					d_ptr = &d_info[d_idx];
@@ -131,7 +131,7 @@ void display_rumor(bool ex)
 				IDX t_idx;
 				s32b visit;
 
-				while (1)
+				while (TRUE)
 				{
 					t_idx = rumor_num(zz[1], NO_TOWN);
 					if (town_info[t_idx].name) break;

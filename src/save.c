@@ -1571,7 +1571,7 @@ static bool save_player_aux(player_type *player_ptr, char *name)
 
 
 	/* Failure */
-	if (!ok) return (FALSE);
+	if (!ok) return FALSE;
 
 	counts_write(0, current_world_ptr->play_time);
 
@@ -1579,7 +1579,7 @@ static bool save_player_aux(player_type *player_ptr, char *name)
 	current_world_ptr->character_saved = TRUE;
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -1738,7 +1738,7 @@ bool load_player(void)
 
 
 	/* Allow empty savefile name */
-	if (!savefile[0]) return (TRUE);
+	if (!savefile[0]) return TRUE;
 
 
 #if !defined(MACINTOSH) && !defined(WINDOWS)
@@ -1754,7 +1754,7 @@ bool load_player(void)
 		msg_print(NULL);
 
 		/* Allow this */
-		return (TRUE);
+		return TRUE;
 	}
 
 #endif
@@ -1784,7 +1784,7 @@ bool load_player(void)
 			msg_print(_("セーブファイルは現在使用中です。", "Savefile is currently in use."));
 			msg_print(NULL);
 
-			return (FALSE);
+			return FALSE;
 		}
 
 		/* Create a lock file */
@@ -1899,7 +1899,7 @@ bool load_player(void)
 			{
 				/* A character was loaded */
 				current_world_ptr->character_loaded = TRUE;
-				return (TRUE);
+				return TRUE;
 			}
 
 			/* Player is no longer "dead" */
@@ -1908,7 +1908,7 @@ bool load_player(void)
 			/* Count lives */
 			current_world_ptr->sf_lives++;
 
-			return (TRUE);
+			return TRUE;
 		}
 
 		/* A character was loaded */
@@ -1924,7 +1924,7 @@ bool load_player(void)
 		}
 
 		/* Success */
-		return (TRUE);
+		return TRUE;
 	}
 
 
@@ -1950,7 +1950,7 @@ bool load_player(void)
 
 	msg_print(NULL);
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!

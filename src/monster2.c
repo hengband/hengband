@@ -2502,9 +2502,9 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	/* DO NOT PLACE A MONSTER IN THE SMALL SCALE WILDERNESS !!! */
 	if (p_ptr->wild_mode) return FALSE;
 
-	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return (FALSE);
-	if (!r_idx) return (FALSE);
-	if (!r_ptr->name) return (FALSE);
+	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return FALSE;
+	if (!r_idx) return FALSE;
+	if (!r_ptr->name) return FALSE;
 
 	if (!(mode & PM_IGNORE_TERRAIN))
 	{
@@ -2523,13 +2523,13 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		    (r_ptr->cur_num >= r_ptr->max_num))
 		{
 			/* Cannot create */
-			return (FALSE);
+			return FALSE;
 		}
 
 		if ((r_ptr->flags7 & (RF7_UNIQUE2)) &&
 		    (r_ptr->cur_num >= 1))
 		{
-			return (FALSE);
+			return FALSE;
 		}
 
 		if (r_idx == MON_BANORLUPART)
@@ -2543,13 +2543,13 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		    (!ironman_nightmare || (r_ptr->flags1 & (RF1_QUESTOR))))
 		{
 			/* Cannot create */
-			return (FALSE);
+			return FALSE;
 		}
 	}
 
-	if (quest_number(p_ptr->current_floor_ptr->dun_level))
+	if (quest_number(p_ptr, p_ptr->current_floor_ptr->dun_level))
 	{
-		int hoge = quest_number(p_ptr->current_floor_ptr->dun_level);
+		int hoge = quest_number(p_ptr, p_ptr->current_floor_ptr->dun_level);
 		if ((quest[hoge].type == QUEST_TYPE_KILL_LEVEL) || (quest[hoge].type == QUEST_TYPE_RANDOM))
 		{
 			if(r_idx == quest[hoge].r_idx)
@@ -2600,7 +2600,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	hack_m_idx_ii = g_ptr->m_idx;
 
 	/* Mega-Hack -- catch "failure" */
-	if (!g_ptr->m_idx) return (FALSE);
+	if (!g_ptr->m_idx) return FALSE;
 
 
 	/* Get a new monster record */
@@ -2853,7 +2853,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	}
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -3027,7 +3027,7 @@ static bool place_monster_group(MONSTER_IDX who, POSITION y, POSITION x, MONRACE
 
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 /*!
@@ -3057,19 +3057,19 @@ static bool place_monster_can_escort(MONRACE_IDX r_idx)
 	monster_race *z_ptr = &r_info[r_idx];
 
 	/* Hack - Escorts have to have the same dungeon flag */
-	if (mon_hook_dungeon(place_monster_idx) != mon_hook_dungeon(r_idx)) return (FALSE);
+	if (mon_hook_dungeon(place_monster_idx) != mon_hook_dungeon(r_idx)) return FALSE;
 
 	/* Require similar "race" */
-	if (z_ptr->d_char != r_ptr->d_char) return (FALSE);
+	if (z_ptr->d_char != r_ptr->d_char) return FALSE;
 
 	/* Skip more advanced monsters */
-	if (z_ptr->level > r_ptr->level) return (FALSE);
+	if (z_ptr->level > r_ptr->level) return FALSE;
 
 	/* Skip unique monsters */
-	if (z_ptr->flags1 & RF1_UNIQUE) return (FALSE);
+	if (z_ptr->flags1 & RF1_UNIQUE) return FALSE;
 
 	/* Paranoia -- Skip identical monsters */
-	if (place_monster_idx == r_idx) return (FALSE);
+	if (place_monster_idx == r_idx) return FALSE;
 
 	/* Skip different alignment */
 	if (monster_has_hostile_align(m_ptr, 0, 0, z_ptr)) return FALSE;
@@ -3082,7 +3082,7 @@ static bool place_monster_can_escort(MONRACE_IDX r_idx)
 	if ((r_ptr->flags7 & RF7_CHAMELEON) && !(z_ptr->flags7 & RF7_CHAMELEON))
 		return FALSE;
 
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -3119,10 +3119,10 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 		mode |= PM_KAGE;
 
 	/* Place one monster, or fail */
-	if (!place_monster_one(who, y, x, r_idx, mode)) return (FALSE);
+	if (!place_monster_one(who, y, x, r_idx, mode)) return FALSE;
 
 	/* Require the "group" flag */
-	if (!(mode & PM_ALLOW_GROUP)) return (TRUE);
+	if (!(mode & PM_ALLOW_GROUP)) return TRUE;
 
 	place_monster_m_idx = hack_m_idx_ii;
 
@@ -3185,7 +3185,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 	}
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 /*!
@@ -3204,12 +3204,12 @@ bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode)
 	r_idx = get_mon_num(p_ptr->current_floor_ptr->monster_level);
 
 	/* Handle failure */
-	if (!r_idx) return (FALSE);
+	if (!r_idx) return FALSE;
 
 	/* Attempt to place the monster */
-	if (place_monster_aux(0, y, x, r_idx, mode)) return (TRUE);
+	if (place_monster_aux(0, y, x, r_idx, mode)) return TRUE;
 
-	return (FALSE);
+	return FALSE;
 }
 
 /*!
@@ -3234,7 +3234,7 @@ bool alloc_horde(POSITION y, POSITION x)
 		r_idx = get_mon_num(p_ptr->current_floor_ptr->monster_level);
 
 		/* Handle failure */
-		if (!r_idx) return (FALSE);
+		if (!r_idx) return FALSE;
 
 		r_ptr = &r_info[r_idx];
 
@@ -3359,7 +3359,7 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 			msg_print(_("警告！新たなモンスターを配置できません。小さい階ですか？", "Warning! Could not allocate a new monster. Small level?"));
 		}
 
-		return (FALSE);
+		return FALSE;
 	}
 
 
@@ -3367,16 +3367,16 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 	{
 		if (alloc_horde(y, x))
 		{
-			return (TRUE);
+			return TRUE;
 		}
 	}
 	else
 	{
 		/* Attempt to place the monster, allow groups */
-		if (place_monster(y, x, (mode | PM_ALLOW_GROUP))) return (TRUE);
+		if (place_monster(y, x, (mode | PM_ALLOW_GROUP))) return TRUE;
 	}
 
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -3391,7 +3391,7 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
 	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[summon_specific_who];
 
 	/* Hack - Only summon dungeon monsters */
-	if (!mon_hook_dungeon(r_idx)) return (FALSE);
+	if (!mon_hook_dungeon(r_idx)) return FALSE;
 
 	/* Hack -- identify the summoning monster */
 	if (summon_specific_who > 0)
@@ -3415,7 +3415,7 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
 	if (!summon_unique_okay && ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL))) return FALSE;
 
 	/* Hack -- no specific type specified */
-	if (!summon_specific_type) return (TRUE);
+	if (!summon_specific_type) return TRUE;
 
 	if ((summon_specific_who < 0) &&
 	    ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) &&
@@ -3464,7 +3464,7 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 	POSITION x, y;
 	MONRACE_IDX r_idx;
 
-	if (p_ptr->current_floor_ptr->inside_arena) return (FALSE);
+	if (p_ptr->current_floor_ptr->inside_arena) return FALSE;
 
 	if (!mon_scatter(0, &y, &x, y1, x1, 2)) return FALSE;
 
@@ -3484,7 +3484,7 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 	if (!r_idx)
 	{
 		summon_specific_type = 0;
-		return (FALSE);
+		return FALSE;
 	}
 
 	if ((type == SUMMON_BLUE_HORROR) || (type == SUMMON_DAWN)) mode |= PM_NO_KAGE;
@@ -3493,13 +3493,13 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 	if (!place_monster_aux(who, y, x, r_idx, mode))
 	{
 		summon_specific_type = 0;
-		return (FALSE);
+		return FALSE;
 	}
 
 	summon_specific_type = 0;
 	/* Success */
 	sound(SOUND_SUMMON);
-	return (TRUE);
+	return TRUE;
 }
 
 

@@ -271,7 +271,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
 			int d = DUN_STR_RNG;
 
 			/* Pick a nearby grid */
-			while (1)
+			while (TRUE)
 			{
 				ty = rand_spread(y, d);
 				tx = rand_spread(x, d);

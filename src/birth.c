@@ -697,7 +697,7 @@ static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 	/* Get a realm */
 	k = -1;
 	os = n;
-	while (1)	{
+	while (TRUE)	{
 		/* Move Cursol */
 		if (cs != os)
 		{
@@ -818,7 +818,7 @@ static bool get_player_realms(player_type *creature_ptr)
 	/* Select the first realm */
 	creature_ptr->realm1 = REALM_NONE;
 	creature_ptr->realm2 = 255;
-	while (1)
+	while (TRUE)
 	{
 		char temp[80*10];
 		concptr t;
@@ -866,7 +866,7 @@ static bool get_player_realms(player_type *creature_ptr)
 		c_put_str(TERM_L_BLUE, realm_names[creature_ptr->realm1], 6, 15);
 
 		/* Select the second realm */
-		while (1)
+		while (TRUE)
 		{
 			char temp[80*8];
 			concptr t;
@@ -912,7 +912,7 @@ static bool get_player_realms(player_type *creature_ptr)
 		}
 	}
 
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -1840,6 +1840,7 @@ static void player_wipe_without_name(player_type *creature_ptr)
 		creature_ptr->mane_spell[i] = -1;
 		creature_ptr->mane_dam[i] = 0;
 	}
+
 	creature_ptr->mane_num = 0;
 	creature_ptr->exit_bldg = TRUE; /* only used for arena now -KMW- */
 
@@ -1847,7 +1848,7 @@ static void player_wipe_without_name(player_type *creature_ptr)
 	creature_ptr->today_mon = 0;
 
 	/* Reset monster arena */
-	update_gambling_monsters();
+	update_gambling_monsters(creature_ptr);
 
 	/* Reset mutations */
 	creature_ptr->muta1 = 0;
@@ -2225,7 +2226,7 @@ static void add_outfit(player_type *creature_ptr, object_type *o_ptr)
 	slot = inven_carry(creature_ptr, o_ptr);
 
 	/* Auto-inscription */
-	autopick_alter_item(slot, FALSE);
+	autopick_alter_item(creature_ptr, slot, FALSE);
 
 	/* Now try wielding everything */ 
 	wield_all(creature_ptr); 
@@ -2524,7 +2525,7 @@ static bool get_player_race(player_type *creature_ptr)
 	k = -1;
 	cs = creature_ptr->prace;
 	os = MAX_RACES;
-	while (1)
+	while (TRUE)
 	{
 		/* Move Cursol */
 		if (cs != os)
@@ -2562,7 +2563,7 @@ static bool get_player_race(player_type *creature_ptr)
 		put_str(buf, 10, 10);
 		c = inkey();
 		if (c == 'Q') birth_quit();
-		if (c == 'S') return (FALSE);
+		if (c == 'S') return FALSE;
 		if (c == ' ' || c == '\r' || c == '\n')
 		{
 			if(cs == MAX_RACES)
@@ -2692,7 +2693,7 @@ static bool get_player_class(player_type *creature_ptr)
 	k = -1;
 	cs = creature_ptr->pclass;
 	os = MAX_CLASS_CHOICE;
-	while (1)
+	while (TRUE)
 	{
 		/* Move Cursol */
 		if (cs != os)
@@ -2734,7 +2735,7 @@ static bool get_player_class(player_type *creature_ptr)
 		put_str(buf, 10, 10);
 		c = inkey();
 		if (c == 'Q') birth_quit();
-		if (c == 'S') return (FALSE);
+		if (c == 'S') return FALSE;
 		if (c == ' ' || c == '\r' || c == '\n')
 		{
 			if(cs == MAX_CLASS_CHOICE)
@@ -2856,7 +2857,7 @@ static bool get_player_seikaku(player_type *creature_ptr)
 	k = -1;
 	cs = creature_ptr->pseikaku;
 	os = MAX_SEIKAKU;
-	while (1)
+	while (TRUE)
 	{
 		/* Move Cursol */
 		if (cs != os)
@@ -2893,7 +2894,7 @@ static bool get_player_seikaku(player_type *creature_ptr)
 		put_str(buf, 10, 10);
 		c = inkey();
 		if (c == 'Q') birth_quit();
-		if (c == 'S') return (FALSE);
+		if (c == 'S') return FALSE;
 		if (c == ' ' || c == '\r' || c == '\n')
 		{
 			if(cs == MAX_SEIKAKU)
@@ -3385,7 +3386,7 @@ static bool get_chara_limits(player_type *creature_ptr)
 		case 'Q':
 			birth_quit();
 		case 'S':
-			return (FALSE);
+			return FALSE;
 		case ESCAPE:
 			break; /*後でもう一回breakせんと*/
 		case ' ':
@@ -3666,7 +3667,8 @@ static void edit_history(player_type *creature_ptr)
 		for (; j < 59; j++) creature_ptr->history[i][j] = ' ';
 		creature_ptr->history[i][59] = '\0';
 	}
-	display_player(p_ptr, 1);
+
+	display_player(creature_ptr, 1);
 #ifdef JP
 	c_put_str(TERM_L_GREEN, "(キャラクターの生い立ち - 編集モード)", 11, 20);
 	put_str("[ カーソルキーで移動、Enterで終了、Ctrl-Aでファイル読み込み ]", 17, 10);
@@ -3927,7 +3929,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 	k = -1;
 	cs = 0;
 	os = MAX_SEXES;
-	while (1)
+	while (TRUE)
 	{
 		if (cs != os)
 		{
@@ -3963,7 +3965,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 		put_str(buf, 10, 10);
 		c = inkey();
 		if (c == 'Q') birth_quit();
-		if (c == 'S') return (FALSE);
+		if (c == 'S') return FALSE;
 		if (c == ' ' || c == '\r' || c == '\n')
 		{
 			if(cs == MAX_SEXES)
@@ -4365,7 +4367,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 			creature_ptr->chp = creature_ptr->mhp;
 			creature_ptr->csp = creature_ptr->msp;
 
-			display_player(p_ptr, mode);
+			display_player(creature_ptr, mode);
 
 			/* Prepare a prompt (must squeeze everything in) */
 			Term_gotoxy(2, 23);
@@ -4384,7 +4386,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 			if (c == 'Q') birth_quit();
 
 			/* Start over */
-			if (c == 'S') return (FALSE);
+			if (c == 'S') return FALSE;
 
 			/* Escape accepts the roll */
 			if (c == '\r' || c == '\n' || c == ESCAPE) break;
@@ -4445,7 +4447,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 	get_name(creature_ptr);
 
 	/* Process the player name */
-	process_player_name(current_world_ptr->creating_savefile);
+	process_player_name(creature_ptr, current_world_ptr->creating_savefile);
 
 	/*** Edit character background ***/
 	edit_history(creature_ptr);
@@ -4471,7 +4473,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 	if (c == 'Q') birth_quit();
 
 	/* Start over */
-	if (c == 'S') return (FALSE);
+	if (c == 'S') return FALSE;
 
 
 	/* Initialize random quests */
@@ -4482,7 +4484,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 	previous_char.quick_ok = TRUE;
 
 	/* Accept */
-	return (TRUE);
+	return TRUE;
 }
 
 /*!
@@ -4500,7 +4502,7 @@ static bool ask_quick_start(player_type *creature_ptr)
 	put_str(_("クイック・スタートを使うと以前と全く同じキャラクターで始められます。", "Do you want to use the quick start function(same character as your last one)."), 11, 2);
 
 	/* Choose */
-	while (1)
+	while (TRUE)
 	{
 		char c;
 
@@ -4508,7 +4510,7 @@ static bool ask_quick_start(player_type *creature_ptr)
 		c = inkey();
 
 		if (c == 'Q') quit(NULL);
-		else if (c == 'S') return (FALSE);
+		else if (c == 'S') return FALSE;
 		else if (c == '?')
 		{
 #ifdef JP
@@ -4548,7 +4550,7 @@ static bool ask_quick_start(player_type *creature_ptr)
 	creature_ptr->csp = creature_ptr->msp;
 
 	/* Process the player name */
-	process_player_name(FALSE);
+	process_player_name(creature_ptr, FALSE);
 
 	return TRUE;
 }
@@ -4585,7 +4587,7 @@ void player_birth(player_type *creature_ptr)
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DEFAULT);
 
 		/* No, normal start */
-		while (1)
+		while (TRUE)
 		{
 			/* Roll up a new character */
 			if (player_birth_aux(creature_ptr)) break;

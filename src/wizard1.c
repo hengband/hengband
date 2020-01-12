@@ -1430,7 +1430,7 @@ static void spoiler_outlist(concptr header, concptr *list, char separator)
 	line_len = strlen(line);
 
 	/* Now begin the tedious task */
-	while (1)
+	while (TRUE)
 	{
 		/* Copy the current item to a buffer */
 		strcpy(buf, *list);
@@ -1564,7 +1564,7 @@ static bool make_fake_artifact(object_type *o_ptr, IDX name1)
 	/* Acquire the "kind" index */
 	i = lookup_kind(a_ptr->tval, a_ptr->sval);
 
-	if (!i) return (FALSE);
+	if (!i) return FALSE;
 
 	object_prep(o_ptr, i);
 
@@ -1582,7 +1582,7 @@ static bool make_fake_artifact(object_type *o_ptr, IDX name1)
 	o_ptr->weight = a_ptr->weight;
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 
@@ -2337,7 +2337,7 @@ void do_cmd_spoilers(void)
 	screen_save();
 
 	/* Interact */
-	while (1)
+	while (TRUE)
 	{
 		Term_clear();
 

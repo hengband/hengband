@@ -81,11 +81,11 @@ static bool know_armour(MONRACE_IDX r_idx)
 
     bool known = (r_ptr->r_cast_spell == MAX_UCHAR)? TRUE: FALSE;
 
-	if (cheat_know || known) return (TRUE);
-	if (kills > 304 / (4 + level)) return (TRUE);
-	if (!(r_ptr->flags1 & RF1_UNIQUE)) return (FALSE);
-	if (kills > 304 / (38 + (5 * level) / 4)) return (TRUE);
-	return (FALSE);
+	if (cheat_know || known) return TRUE;
+	if (kills > 304 / (4 + level)) return TRUE;
+	if (!(r_ptr->flags1 & RF1_UNIQUE)) return FALSE;
+	if (kills > 304 / (38 + (5 * level) / 4)) return TRUE;
+	return FALSE;
 }
 
 
@@ -115,12 +115,12 @@ static bool know_damage(MONRACE_IDX r_idx, int i)
 	s32b d = d1 * d2;
 
 	if (d >= ((4+level)*MAX_UCHAR)/80) d = ((4+level)*MAX_UCHAR-1)/80;
-	if ((4 + level) * a > 80 * d) return (TRUE);
-	if (!(r_ptr->flags1 & RF1_UNIQUE)) return (FALSE);
-	if ((4 + level) * (2 * a) > 80 * d) return (TRUE);
+	if ((4 + level) * a > 80 * d) return TRUE;
+	if (!(r_ptr->flags1 & RF1_UNIQUE)) return FALSE;
+	if ((4 + level) * (2 * a) > 80 * d) return TRUE;
 
 	/* Assume false */
-	return (FALSE);
+	return FALSE;
 }
 
 
@@ -189,11 +189,11 @@ void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult,
 */
 void set_damage(MONRACE_IDX r_idx, int SPELL_NUM, char* msg, char* tmp)
 {
-	int base_damage = monspell_race_damage(SPELL_NUM, r_idx, BASE_DAM);
-	int dice_num = monspell_race_damage(SPELL_NUM, r_idx, DICE_NUM);
-	int dice_side = monspell_race_damage(SPELL_NUM, r_idx, DICE_SIDE);
-	int dice_mult = monspell_race_damage(SPELL_NUM, r_idx, DICE_MULT);
-	int dice_div = monspell_race_damage(SPELL_NUM, r_idx, DICE_DIV);
+	int base_damage = monspell_race_damage(p_ptr, SPELL_NUM, r_idx, BASE_DAM);
+	int dice_num = monspell_race_damage(p_ptr, SPELL_NUM, r_idx, DICE_NUM);
+	int dice_side = monspell_race_damage(p_ptr, SPELL_NUM, r_idx, DICE_SIDE);
+	int dice_mult = monspell_race_damage(p_ptr, SPELL_NUM, r_idx, DICE_MULT);
+	int dice_div = monspell_race_damage(p_ptr, SPELL_NUM, r_idx, DICE_DIV);
 	char dmg_str[80], dice_str[80];
 	dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div, dmg_str);
 	sprintf(dice_str, "(%s)", dmg_str);

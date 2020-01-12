@@ -246,7 +246,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
 	handle_stuff(caster_ptr);
 
 	/* Abort if needed */
-	if (!flag) return (FALSE);
+	if (!flag) return FALSE;
 
 	/* Save the choice */
 	(*sn) = i;
@@ -254,7 +254,7 @@ static int get_mane_power(player_type *caster_ptr, int *sn, bool baigaesi)
 	damage = (baigaesi ? caster_ptr->mane_dam[i]*2 : caster_ptr->mane_dam[i]);
 
 	/* Success */
-	return (TRUE);
+	return TRUE;
 }
 
 

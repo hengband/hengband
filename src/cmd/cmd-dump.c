@@ -455,7 +455,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		return (-1);
 	}
 
-	q_idx = quest_number(creature_ptr->current_floor_ptr->dun_level);
+	q_idx = quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level);
 
 	if (write_level)
 	{
@@ -1073,7 +1073,7 @@ void do_cmd_player_status(player_type *creature_ptr)
 			get_name(creature_ptr);
 
 			/* Process the player name */
-			process_player_name(FALSE);
+			process_player_name(creature_ptr, FALSE);
 		}
 
 		/* File dump */
@@ -1369,13 +1369,14 @@ void do_cmd_pref(void)
 
 /*!
  * @brief 自動拾い設定ファイルをロードするコマンドのメインルーチン /
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void do_cmd_reload_autopick(void)
+void do_cmd_reload_autopick(player_type *creature_ptr)
 {
 	if (!get_check(_("自動拾い設定ファイルをロードしますか? ", "Reload auto-pick preference file? "))) return;
 	/* Load the file with messages */
-	autopick_load_pref(TRUE);
+	autopick_load_pref(creature_ptr, TRUE);
 }
 
 #ifdef ALLOW_MACROS
@@ -2276,7 +2277,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
 			/* Hack -- query until done */
-			while (1)
+			while (TRUE)
 			{
 				monster_race *r_ptr = &r_info[r];
 				int c;
@@ -2365,7 +2366,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
 			/* Hack -- query until done */
-			while (1)
+			while (TRUE)
 			{
 				object_kind *k_ptr = &k_info[k];
 				int c;
@@ -2456,7 +2457,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 			prt(format(_("コマンド: %s", "Command: %s"), choice_msg), 15, 0);
 
 			/* Hack -- query until done */
-			while (1)
+			while (TRUE)
 			{
 				feature_type *f_ptr = &f_info[f];
 				int c;
@@ -2728,7 +2729,7 @@ void do_cmd_colors(player_type *creature_ptr)
 			prt(_("コマンド: カラーの設定を変更します", "Command: Modify colors"), 8, 0);
 
 			/* Hack -- query until done */
-			while (1)
+			while (TRUE)
 			{
 				concptr name;
 				byte j;
@@ -2897,7 +2898,7 @@ void do_cmd_feeling(player_type *creature_ptr)
 	if (creature_ptr->wild_mode) return;
 
 	/* No useful feeling in quests */
-	if (creature_ptr->current_floor_ptr->inside_quest && !random_quest_number(creature_ptr->current_floor_ptr->dun_level))
+	if (creature_ptr->current_floor_ptr->inside_quest && !random_quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level))
 	{
 		msg_print(_("典型的なクエストのダンジョンのようだ。", "Looks like a typical quest level."));
 		return;
