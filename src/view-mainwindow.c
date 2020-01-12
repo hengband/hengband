@@ -144,6 +144,7 @@ POSITION panel_col_prt, panel_row_prt;
 #define MAX_COL_STATBAR         (-26)
 
 void print_equippy(player_type *creature_ptr);
+void print_map(player_type *player_ptr);
 
 /*!
  * @brief 画面左の能力値表示を行うために指定位置から13キャラ分を空白消去後指定のメッセージを明るい青で描画する /
@@ -2117,7 +2118,7 @@ void redraw_stuff(player_type *creature_ptr)
 	if (creature_ptr->redraw & (PR_MAP))
 	{
 		creature_ptr->redraw &= ~(PR_MAP);
-		print_map();
+		print_map(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_BASIC))
@@ -2526,7 +2527,7 @@ int panel_col_of(int col)
  * of both "lite_spot()" and "print_rel()", and that we use the
  * "lite_spot()" function to display the player grid, if needed.
  */
-void print_map(void)
+void print_map(player_type *player_ptr)
 {
 	POSITION x, y;
 	int v;
@@ -2549,10 +2550,11 @@ void print_map(void)
 	(void)Term_set_cursor(0);
 
 	/* Get bounds */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	xmin = (0 < panel_col_min) ? panel_col_min : 0;
-	xmax = (p_ptr->current_floor_ptr->width - 1 > panel_col_max) ? panel_col_max : p_ptr->current_floor_ptr->width - 1;
+	xmax = (floor_ptr->width - 1 > panel_col_max) ? panel_col_max : floor_ptr->width - 1;
 	ymin = (0 < panel_row_min) ? panel_row_min : 0;
-	ymax = (p_ptr->current_floor_ptr->height - 1 > panel_row_max) ? panel_row_max : p_ptr->current_floor_ptr->height - 1;
+	ymax = (floor_ptr->height - 1 > panel_row_max) ? panel_row_max : floor_ptr->height - 1;
 
 	/* Bottom section of screen */
 	for (y = 1; y <= ymin - panel_row_prt; y++)
@@ -2587,8 +2589,8 @@ void print_map(void)
 			if (!use_graphics)
 			{
 				if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-				else if (IS_INVULN(p_ptr) || p_ptr->timewalk) a = TERM_WHITE;
-				else if (p_ptr->wraith_form) a = TERM_L_DARK;
+				else if (IS_INVULN(player_ptr) || player_ptr->timewalk) a = TERM_WHITE;
+				else if (player_ptr->wraith_form) a = TERM_L_DARK;
 			}
 
 			/* Efficiency -- Redraw that grid of the map */
@@ -2597,7 +2599,7 @@ void print_map(void)
 	}
 
 	/* Display player */
-	lite_spot(p_ptr->y, p_ptr->x);
+	lite_spot(player_ptr->y, player_ptr->x);
 
 	/* Restore the cursor */
 	(void)Term_set_cursor(v);
