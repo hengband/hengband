@@ -43,4 +43,4 @@ extern POSITION panel_col_prt, panel_row_prt;
   (((Y) >= panel_row_min) && ((Y) <= panel_row_max) && \
    ((X) >= panel_col_min) && ((X) <= panel_col_max))
 
-extern void delayed_visual_update(floor_type *floor_ptr);
+extern void delayed_visual_update(player_type *player_ptr);

@@ -3922,13 +3922,14 @@ void update_playtime(void)
  * Mega-Hack -- Delayed visual update
  * Only used if update_view(), update_lite() or update_mon_lite() was called
  */
-void delayed_visual_update(floor_type *floor_ptr)
+void delayed_visual_update(player_type *player_ptr)
 {
 	int i;
 	POSITION y, x;
 	grid_type *g_ptr;
 
 	/* Update needed grids */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (i = 0; i < floor_ptr->redraw_n; i++)
 	{
 		y = floor_ptr->redraw_y[i];
@@ -3944,7 +3945,7 @@ void delayed_visual_update(floor_type *floor_ptr)
 		lite_spot(y, x);
 
 		/* Hack -- Visual update of monster on this grid */
-		if (g_ptr->m_idx) update_monster(p_ptr, g_ptr->m_idx, FALSE);
+		if (g_ptr->m_idx) update_monster(player_ptr, g_ptr->m_idx, FALSE);
 
 		/* No longer in the array */
 		g_ptr->info &= ~(CAVE_NOTE | CAVE_REDRAW);
