@@ -1011,38 +1011,39 @@ static void print_depth(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーの空腹状態を表示する / Prints status of hunger
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void print_hunger(void)
+static void print_hunger(player_type *player_ptr)
 {
-	if(current_world_ptr->wizard && p_ptr->current_floor_ptr->inside_arena) return;
+	if(current_world_ptr->wizard && player_ptr->current_floor_ptr->inside_arena) return;
 
 	/* Fainting / Starving */
-	if (p_ptr->food < PY_FOOD_FAINT)
+	if (player_ptr->food < PY_FOOD_FAINT)
 	{
 		c_put_str(TERM_RED, _("衰弱  ", "Weak  "), ROW_HUNGRY, COL_HUNGRY);
 	}
 
 	/* Weak */
-	else if (p_ptr->food < PY_FOOD_WEAK)
+	else if (player_ptr->food < PY_FOOD_WEAK)
 	{
 		c_put_str(TERM_ORANGE, _("衰弱  ", "Weak  "), ROW_HUNGRY, COL_HUNGRY);
 	}
 
 	/* Hungry */
-	else if (p_ptr->food < PY_FOOD_ALERT)
+	else if (player_ptr->food < PY_FOOD_ALERT)
 	{
 		c_put_str(TERM_YELLOW, _("空腹  ", "Hungry"), ROW_HUNGRY, COL_HUNGRY);
 	}
 
 	/* Normal */
-	else if (p_ptr->food < PY_FOOD_FULL)
+	else if (player_ptr->food < PY_FOOD_FULL)
 	{
 		c_put_str(TERM_L_GREEN, "      ", ROW_HUNGRY, COL_HUNGRY);
 	}
 
 	/* Full */
-	else if (p_ptr->food < PY_FOOD_MAX)
+	else if (player_ptr->food < PY_FOOD_MAX)
 	{
 		c_put_str(TERM_L_GREEN, _("満腹  ", "Full  "), ROW_HUNGRY, COL_HUNGRY);
 	}
@@ -1543,18 +1544,19 @@ static void print_frame_basic(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーのステータスを一括表示する（下部分） / Display extra info (mostly below map)
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void print_frame_extra(void)
+static void print_frame_extra(player_type *player_ptr)
 {
-	print_cut(p_ptr);
-	print_stun(p_ptr);
-	print_hunger();
+	print_cut(player_ptr);
+	print_stun(player_ptr);
+	print_hunger(player_ptr);
 	print_state();
 	print_speed();
 	print_study();
 	print_imitation();
-	print_status(p_ptr);
+	print_status(player_ptr);
 }
 
 
@@ -2213,7 +2215,7 @@ void redraw_stuff(player_type *creature_ptr)
 		creature_ptr->redraw &= ~(PR_CUT | PR_STUN);
 		creature_ptr->redraw &= ~(PR_HUNGER);
 		creature_ptr->redraw &= ~(PR_STATE | PR_SPEED | PR_STUDY | PR_IMITATION | PR_STATUS);
-		print_frame_extra();
+		print_frame_extra(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_CUT))
@@ -2231,7 +2233,7 @@ void redraw_stuff(player_type *creature_ptr)
 	if (creature_ptr->redraw & (PR_HUNGER))
 	{
 		creature_ptr->redraw &= ~(PR_HUNGER);
-		print_hunger();
+		print_hunger(creature_ptr);
 	}
 
 	if (creature_ptr->redraw & (PR_STATE))
