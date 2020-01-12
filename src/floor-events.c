@@ -91,7 +91,7 @@ void night_falls(player_type *subject_ptr)
 				}
 			}
 
-			glow_deep_lava_and_bldg(floor_ptr);
+			glow_deep_lava_and_bldg(subject_ptr);
 		}
 	}
 
@@ -330,15 +330,16 @@ void update_dungeon_feeling(player_type *subject_ptr, floor_type *floor_ptr)
 /*
  * Glow deep lava and building entrances in the floor
  */
-void glow_deep_lava_and_bldg(floor_type *floor_ptr)
+void glow_deep_lava_and_bldg(player_type *subject_ptr)
 {
 	POSITION y, x, yy, xx;
 	DIRECTION i;
 	grid_type *g_ptr;
 
 	/* Not in the darkness dungeon */
-	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS) return;
+	if (d_info[subject_ptr->dungeon_idx].flags1 & DF1_DARKNESS) return;
 
+	floor_type *floor_ptr = subject_ptr->current_floor_ptr;
 	for (y = 0; y < floor_ptr->height; y++)
 	{
 		for (x = 0; x < floor_ptr->width; x++)
@@ -360,10 +361,8 @@ void glow_deep_lava_and_bldg(floor_type *floor_ptr)
 		}
 	}
 
-	/* Update the view and lite */
-	p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
-
-	p_ptr->redraw |= (PR_MAP);
+	subject_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE);
+	subject_ptr->redraw |= (PR_MAP);
 }
 
 /*
@@ -673,7 +672,6 @@ void forget_view(floor_type *floor_ptr)
 }
 
 
-
 /*
  * Helper function for "update_view()" below
  *
@@ -681,8 +679,8 @@ void forget_view(floor_type *floor_ptr)
  *
  * This function assumes that (y,x) is legal (i.e. on the map).
  *
- * Grid (y1,x1) is on the "diagonal" between (p_ptr->y,p_ptr->x) and (y,x)
- * Grid (y2,x2) is "adjacent", also between (p_ptr->y,p_ptr->x) and (y,x).
+ * Grid (y1,x1) is on the "diagonal" between (subject_ptr->y,subject_ptr->x) and (y,x)
+ * Grid (y2,x2) is "adjacent", also between (subject_ptr->y,subject_ptr->x) and (y,x).
  *
  * Note that we are using the "CAVE_XTRA" field for marking grids as
  * "easily viewable".  This bit is cleared at the end of "update_view()".
@@ -691,7 +689,7 @@ void forget_view(floor_type *floor_ptr)
  *
  * This function now returns "TRUE" if vision is "blocked" by grid (y,x).
  */
-static bool update_view_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+static bool update_view_aux(player_type *subject_ptr, POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	bool f1, f2, v1, v2, z1, z2, wall;
 
@@ -700,7 +698,7 @@ static bool update_view_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSIT
 	grid_type *g1_c_ptr;
 	grid_type *g2_c_ptr;
 
-	/* Access the grids */
+	floor_type *floor_ptr = subject_ptr->current_floor_ptr;
 	g1_c_ptr = &floor_ptr->grid_array[y1][x1];
 	g2_c_ptr = &floor_ptr->grid_array[y2][x2];
 
@@ -770,7 +768,7 @@ static bool update_view_aux(floor_type *floor_ptr, POSITION y, POSITION x, POSIT
 
 
 	/* Hack -- check line of sight */
-	if (los(floor_ptr, p_ptr->y, p_ptr->x, y, x))
+	if (los(floor_ptr, subject_ptr->y, subject_ptr->x, y, x))
 	{
 		cave_view_hack(floor_ptr, g_ptr, y, x);
 
@@ -1074,7 +1072,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(subject_ptr->current_floor_ptr, ypn + d, xpn, ypn + d - 1, xpn - 1, ypn + d - 1, xpn))
+					if (update_view_aux(subject_ptr, ypn + d, xpn, ypn + d - 1, xpn - 1, ypn + d - 1, xpn))
 					{
 						if (n + d >= se) break;
 					}
@@ -1097,7 +1095,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(subject_ptr->current_floor_ptr, ypn + d, xmn, ypn + d - 1, xmn + 1, ypn + d - 1, xmn))
+					if (update_view_aux(subject_ptr, ypn + d, xmn, ypn + d - 1, xmn + 1, ypn + d - 1, xmn))
 					{
 						if (n + d >= sw) break;
 					}
@@ -1128,7 +1126,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(subject_ptr->current_floor_ptr, ymn - d, xpn, ymn - d + 1, xpn - 1, ymn - d + 1, xpn))
+					if (update_view_aux(subject_ptr, ymn - d, xpn, ymn - d + 1, xpn - 1, ymn - d + 1, xpn))
 					{
 						if (n + d >= ne) break;
 					}
@@ -1151,7 +1149,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(subject_ptr->current_floor_ptr, ymn - d, xmn, ymn - d + 1, xmn + 1, ymn - d + 1, xmn))
+					if (update_view_aux(subject_ptr, ymn - d, xmn, ymn - d + 1, xmn + 1, ymn - d + 1, xmn))
 					{
 						if (n + d >= nw) break;
 					}
@@ -1182,7 +1180,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(subject_ptr->current_floor_ptr, ypn, xpn + d, ypn - 1, xpn + d - 1, ypn, xpn + d - 1))
+					if (update_view_aux(subject_ptr, ypn, xpn + d, ypn - 1, xpn + d - 1, ypn, xpn + d - 1))
 					{
 						if (n + d >= es) break;
 					}
@@ -1205,7 +1203,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(subject_ptr->current_floor_ptr, ymn, xpn + d, ymn + 1, xpn + d - 1, ymn, xpn + d - 1))
+					if (update_view_aux(subject_ptr, ymn, xpn + d, ymn + 1, xpn + d - 1, ymn, xpn + d - 1))
 					{
 						if (n + d >= en) break;
 					}
@@ -1236,7 +1234,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(subject_ptr->current_floor_ptr, ypn, xmn - d, ypn - 1, xmn - d + 1, ypn, xmn - d + 1))
+					if (update_view_aux(subject_ptr, ypn, xmn - d, ypn - 1, xmn - d + 1, ypn, xmn - d + 1))
 					{
 						if (n + d >= ws) break;
 					}
@@ -1259,7 +1257,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 				for (k = n, d = 1; d <= m; d++)
 				{
 					/* Check grid "d" in strip "n", notice "blockage" */
-					if (update_view_aux(subject_ptr->current_floor_ptr, ymn, xmn - d, ymn + 1, xmn - d + 1, ymn, xmn - d + 1))
+					if (update_view_aux(subject_ptr, ymn, xmn - d, ymn + 1, xmn - d + 1, ymn, xmn - d + 1))
 					{
 						if (n + d >= wn) break;
 					}
