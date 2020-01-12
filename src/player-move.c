@@ -1342,25 +1342,27 @@ static bool see_wall(player_type *creature_ptr, DIRECTION dir, POSITION y, POSIT
 /*!
  * @brief ダッシュ移動処理中、移動先のマスか未知の地形かどうかを判定する /
  * Hack -- Check for an "unknown corner" (see below)
+ * @param creature_ptr	プレーヤーへの参照ポインタ
  * @param dir 想定する移動方向ID
  * @param y 移動元のY座標
  * @param x 移動元のX座標
  * @return 移動先が未知の地形ならばTRUE
  */
-static bool see_nothing(DIRECTION dir, POSITION y, POSITION x)
+static bool see_nothing(player_type *creature_ptr, DIRECTION dir, POSITION y, POSITION x)
 {
 	/* Get the new location */
 	y += ddy[dir];
 	x += ddx[dir];
 
 	/* Illegal grids are unknown */
-	if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) return TRUE;
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	if (!in_bounds2(floor_ptr, y, x)) return TRUE;
 
 	/* Memorized grids are always known */
-	if (p_ptr->current_floor_ptr->grid_array[y][x].info & (CAVE_MARK)) return FALSE;
+	if (floor_ptr->grid_array[y][x].info & (CAVE_MARK)) return FALSE;
 
 	/* Viewable door/wall grids are known */
-	if (player_can_see_bold(p_ptr, y, x)) return FALSE;
+	if (player_can_see_bold(creature_ptr, y, x)) return FALSE;
 
 	/* Default */
 	return TRUE;
@@ -1800,8 +1802,8 @@ static bool run_test(player_type *creature_ptr)
 			{
 				/* Can not see anything ahead and in the direction we */
 				/* are turning, assume that it is a potential corner. */
-				if (see_nothing(option, row, col) &&
-				    see_nothing(option2, row, col))
+				if (see_nothing(creature_ptr, option, row, col) &&
+				    see_nothing(creature_ptr, option2, row, col))
 				{
 					find_current = option;
 					find_prevdir = option2;
@@ -1907,10 +1909,11 @@ void run_step(player_type *creature_ptr, DIRECTION dir)
 /*!
  * @brief トラベル機能の判定処理 /
  * Test for traveling
+ * @param creature_ptr	プレーヤーへの参照ポインタ
  * @param prev_dir 前回移動を行った元の方角ID
  * @return 次の方向
  */
-static DIRECTION travel_test(DIRECTION prev_dir)
+static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
 {
 	DIRECTION new_dir = 0;
 	int i, max;
@@ -1918,21 +1921,22 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 	int cost;
 
 	/* Cannot travel when blind */
-	if (p_ptr->blind || no_lite(p_ptr))
+	if (creature_ptr->blind || no_lite(creature_ptr))
 	{
 		msg_print(_("目が見えない！", "You cannot see!"));
 		return (0);
 	}
 
 	/* break run when leaving trap detected region */
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	if ((disturb_trap_detect || alert_trap_detect)
-	    && p_ptr->dtrap && !(p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_IN_DETECT))
+	    && creature_ptr->dtrap && !(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_IN_DETECT))
 	{
 		/* No duplicate warning */
-		p_ptr->dtrap = FALSE;
+		creature_ptr->dtrap = FALSE;
 
 		/* You are just on the edge */
-		if (!(p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_UNSAFE))
+		if (!(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].info & CAVE_UNSAFE))
 		{
 			if (alert_trap_detect)
 			{
@@ -1957,16 +1961,16 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 		DIRECTION dir = cycle[chome[prev_dir] + i];
 
 		/* New location */
-		POSITION row = p_ptr->y + ddy[dir];
-		POSITION col = p_ptr->x + ddx[dir];
+		POSITION row = creature_ptr->y + ddy[dir];
+		POSITION col = creature_ptr->x + ddx[dir];
 
 		/* Access grid */
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[row][col];
+		g_ptr = &floor_ptr->grid_array[row][col];
 
 		/* Visible monsters abort running */
 		if (g_ptr->m_idx)
 		{
-			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+			monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Visible monster */
 			if (m_ptr->ml) return (0);
@@ -1975,11 +1979,11 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 	}
 
 	/* Travel cost of current grid */
-	cost = travel.cost[p_ptr->y][p_ptr->x];
+	cost = travel.cost[creature_ptr->y][creature_ptr->x];
 
 	/* Determine travel direction */
 	for (i = 0; i < 8; ++ i) {
-		int dir_cost = travel.cost[p_ptr->y+ddy_ddd[i]][p_ptr->x+ddx_ddd[i]];
+		int dir_cost = travel.cost[creature_ptr->y+ddy_ddd[i]][creature_ptr->x+ddx_ddd[i]];
 
 		if (dir_cost < cost)
 		{
@@ -1991,13 +1995,13 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 	if (!new_dir) return (0);
 
 	/* Access newly move grid */
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[p_ptr->y+ddy[new_dir]][p_ptr->x+ddx[new_dir]];
+	g_ptr = &floor_ptr->grid_array[creature_ptr->y+ddy[new_dir]][creature_ptr->x+ddx[new_dir]];
 
 	/* Close door abort traveling */
 	if (!easy_open && is_closed_door(g_ptr->feat)) return (0);
 
 	/* Visible and unignorable trap abort tarveling */
-	if (!g_ptr->mimic && !trap_can_be_ignored(p_ptr, g_ptr->feat)) return (0);
+	if (!g_ptr->mimic && !trap_can_be_ignored(creature_ptr, g_ptr->feat)) return (0);
 
 	/* Move new grid */
 	return (new_dir);
@@ -2012,7 +2016,7 @@ static DIRECTION travel_test(DIRECTION prev_dir)
 void travel_step(player_type *creature_ptr)
 {
 	/* Get travel direction */
-	travel.dir = travel_test(travel.dir);
+	travel.dir = travel_test(creature_ptr, travel.dir);
 
 	if (!travel.dir)
 	{
@@ -2119,15 +2123,17 @@ static int travel_flow_cost(player_type *creature_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief トラベル処理の到達地点までの行程を得る処理のサブルーチン
+ * @param creature_ptr	プレーヤーへの参照ポインタ
  * @param y 目標地点のY座標
  * @param x 目標地点のX座標
  * @param n 現在のコスト
  * @param wall プレイヤーが壁の中にいるならばTRUE
  * @return なし
  */
-static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
+static void travel_flow_aux(player_type *creature_ptr, POSITION y, POSITION x, int n, bool wall)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 	int old_head = flow_head;
 	int add_cost = 1;
@@ -2136,23 +2142,23 @@ static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
 	int cost;
 
 	/* Ignore out of bounds */
-	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return;
+	if (!in_bounds(floor_ptr, y, x)) return;
 
 	/* Ignore unknown grid except in wilderness */
-	if (p_ptr->current_floor_ptr->dun_level > 0 && !(g_ptr->info & CAVE_KNOWN)) return;
+	if (floor_ptr->dun_level > 0 && !(g_ptr->info & CAVE_KNOWN)) return;
 
 	/* Ignore "walls" and "rubble" (include "secret doors") */
 	if (have_flag(f_ptr->flags, FF_WALL) ||
 		have_flag(f_ptr->flags, FF_CAN_DIG) ||
-		(have_flag(f_ptr->flags, FF_DOOR) && p_ptr->current_floor_ptr->grid_array[y][x].mimic) ||
-		(!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !p_ptr->levitation))
+		(have_flag(f_ptr->flags, FF_DOOR) && floor_ptr->grid_array[y][x].mimic) ||
+		(!have_flag(f_ptr->flags, FF_MOVE) && have_flag(f_ptr->flags, FF_CAN_FLY) && !creature_ptr->levitation))
 	{
 		if (!wall || !from_wall) return;
 		add_cost += TRAVEL_UNABLE;
 	}
 	else
 	{
-		add_cost = travel_flow_cost(p_ptr, y, x);
+		add_cost = travel_flow_cost(creature_ptr, y, x);
 	}
 
 	cost = base_cost + add_cost;
@@ -2177,16 +2183,17 @@ static void travel_flow_aux(POSITION y, POSITION x, int n, bool wall)
 
 /*!
  * @brief トラベル処理の到達地点までの行程を得る処理のメインルーチン
+ * @param creature_ptr	プレーヤーへの参照ポインタ
  * @param ty 目標地点のY座標
  * @param tx 目標地点のX座標
  * @return なし
  */
-static void travel_flow(POSITION ty, POSITION tx)
+static void travel_flow(player_type *creature_ptr, POSITION ty, POSITION tx)
 {
 	POSITION x, y;
 	DIRECTION d;
 	bool wall = FALSE;
-	feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].feat];
+	feature_type *f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
 
 	/* Reset the "queue" */
 	flow_head = flow_tail = 0;
@@ -2195,7 +2202,7 @@ static void travel_flow(POSITION ty, POSITION tx)
 	if (!have_flag(f_ptr->flags, FF_MOVE)) wall = TRUE;
 
 	/* Start at the target grid */
-	travel_flow_aux(ty, tx, 0, wall);
+	travel_flow_aux(creature_ptr, ty, tx, 0, wall);
 
 	/* Now process the queue */
 	while (flow_head != flow_tail)
@@ -2214,7 +2221,7 @@ static void travel_flow(POSITION ty, POSITION tx)
 		for (d = 0; d < 8; d++)
 		{
 			/* Add that child if "legal" */
-			travel_flow_aux(y + ddy_ddd[d], x + ddx_ddd[d], travel.cost[y][x], wall);
+			travel_flow_aux(creature_ptr, y + ddy_ddd[d], x + ddx_ddd[d], travel.cost[y][x], wall);
 		}
 	}
 
@@ -2248,19 +2255,20 @@ void do_cmd_travel(player_type *creature_ptr)
 		return;
 	}
 
-	f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[y][x].feat];
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	f_ptr = &f_info[floor_ptr->grid_array[y][x].feat];
 
-	if ((p_ptr->current_floor_ptr->grid_array[y][x].info & CAVE_MARK) &&
+	if ((floor_ptr->grid_array[y][x].info & CAVE_MARK) &&
 		(have_flag(f_ptr->flags, FF_WALL) ||
 			have_flag(f_ptr->flags, FF_CAN_DIG) ||
-			(have_flag(f_ptr->flags, FF_DOOR) && p_ptr->current_floor_ptr->grid_array[y][x].mimic)))
+			(have_flag(f_ptr->flags, FF_DOOR) && floor_ptr->grid_array[y][x].mimic)))
 	{
 		msg_print(_("そこには行くことができません！", "You cannot travel there!"));
 		return;
 	}
 
 	forget_travel_flow(creature_ptr->current_floor_ptr);
-	travel_flow(y, x);
+	travel_flow(creature_ptr, y, x);
 
 	travel.x = x;
 	travel.y = y;
