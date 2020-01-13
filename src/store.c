@@ -4793,7 +4793,7 @@ static void store_purchase(player_type *player_ptr)
 						msg_print(_("店主は引退した。", "The shopkeeper retires."));
 
 						/* Shuffle the store */
-						store_shuffle(cur_store_num);
+						store_shuffle(player_ptr, cur_store_num);
 
 						prt("",3,0);
 						sprintf(buf, "%s (%s)",
@@ -5975,7 +5975,7 @@ void do_cmd_store(player_type *player_ptr)
  * @param which 店舗種類のID
  * @return なし
  */
-void store_shuffle(int which)
+void store_shuffle(player_type *player_ptr, int which)
 {
 	int i, j;
 
@@ -5989,7 +5989,7 @@ void store_shuffle(int which)
 	cur_store_num = which;
 
 	/* Activate that store */
-	st_ptr = &town_info[p_ptr->town_num].store[cur_store_num];
+	st_ptr = &town_info[player_ptr->town_num].store[cur_store_num];
 
 	j = st_ptr->owner;
 	/* Pick a new owner */
@@ -5999,7 +5999,7 @@ void store_shuffle(int which)
 		if (j == st_ptr->owner) continue;
 		for (i = 1;i < max_towns; i++)
 		{
-			if (i == p_ptr->town_num) continue;
+			if (i == player_ptr->town_num) continue;
 			if (st_ptr->owner == town_info[i].store[cur_store_num].owner) break;
 		}
 		if (i == max_towns) break;

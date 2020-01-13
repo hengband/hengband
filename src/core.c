@@ -2318,7 +2318,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 			while ((n == STORE_HOME) || (n == STORE_MUSEUM));
 
 			msg_print(_("店の主人が丘に向かって走っている！", "You see one of the shopkeepers running for the hills!"));
-			store_shuffle(n);
+			store_shuffle(creature_ptr, n);
 		}
 		msg_print(NULL);
 	}
@@ -3254,7 +3254,7 @@ static void process_world(player_type *player_ptr)
 						if (cheat_xtra) msg_format(_("%sの店主をシャッフルします。", "Shuffle a Shopkeeper of %s."), f_name + f_ptr->name);
 
 						/* Shuffle it */
-						store_shuffle(n);
+						store_shuffle(player_ptr, n);
 
 						break;
 					}
