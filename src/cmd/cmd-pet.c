@@ -342,12 +342,12 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 #ifdef JP
 			msg_format("そのモンスターは%sの%sにいる。", f_name + f_ptr->name,
 				((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) ||
-					(!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE))) ?
+				(!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE))) ?
 				"中" : "上");
 #else
 			msg_format("This monster is %s the %s.",
 				((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) ||
-					(!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE))) ?
+				(!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE))) ?
 				"in" : "on", f_name + f_ptr->name);
 #endif
 
@@ -493,7 +493,7 @@ void do_cmd_pet(player_type *creature_ptr)
 
 	num = 0;
 
-	if(creature_ptr->wild_mode) return;
+	if (creature_ptr->wild_mode) return;
 
 	power_desc[num] = _("ペットを放す", "dismiss pets");
 	powers[num++] = PET_DISMISS;
@@ -616,7 +616,7 @@ void do_cmd_pet(player_type *creature_ptr)
 				power_desc[num] = _("武器を両手で持つ", "use both hands for a weapon");
 			}
 
-			powers[num++] = PET_RYOUTE;
+			powers[num++] = PET_TWO_HANDS;
 		}
 		else
 		{
@@ -636,7 +636,7 @@ void do_cmd_pet(player_type *creature_ptr)
 						power_desc[num] = _("両手で格闘する", "use both hands for melee");
 					}
 
-					powers[num++] = PET_RYOUTE;
+					powers[num++] = PET_TWO_HANDS;
 				}
 				else if ((empty_hands(creature_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
 				{
@@ -649,7 +649,7 @@ void do_cmd_pet(player_type *creature_ptr)
 						power_desc[num] = _("格闘を行う", "use one hand for melee");
 					}
 
-					powers[num++] = PET_RYOUTE;
+					powers[num++] = PET_TWO_HANDS;
 				}
 				break;
 			}
@@ -949,7 +949,7 @@ void do_cmd_pet(player_type *creature_ptr)
 		break;
 	}
 
-	case PET_RYOUTE:
+	case PET_TWO_HANDS:
 	{
 		if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) creature_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
 		else creature_ptr->pet_extra_flags |= (PF_TWO_HANDS);
