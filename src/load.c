@@ -4006,9 +4006,10 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 
 /*!
  * @brief ロード処理全体のメイン関数 / Actually read the savefile
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return エラーコード
  */
-errr rd_savefile_new(void)
+errr rd_savefile_new(player_type *player_ptr)
 {
 	errr err;
 
@@ -4023,7 +4024,7 @@ errr rd_savefile_new(void)
 	if (!fff) return -1;
 
 	/* Call the sub-function */
-	err = rd_savefile_new_aux(p_ptr);
+	err = rd_savefile_new_aux(player_ptr);
 
 	/* Check for errors */
 	if (ferror(fff)) err = -1;

@@ -1726,7 +1726,7 @@ bool load_player(player_type *player_ptr)
 		Term_clear();
 
 		/* Attempt to load */
-		err = rd_savefile_new();
+		err = rd_savefile_new(player_ptr);
 
 		/* Message (below) */
 		if (err) what = _("セーブファイルを解析出来ません。", "Cannot parse savefile");
