@@ -849,7 +849,7 @@ static void rd_item(object_type *o_ptr)
  * @param m_ptr モンスター保存先ポインタ
  * @return なし
  */
-static void rd_monster_old(monster_type *m_ptr)
+static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 {
 	byte tmp8u;
 	s16b tmp16s;
@@ -880,7 +880,7 @@ static void rd_monster_old(monster_type *m_ptr)
 	m_ptr->fy = (POSITION)tmp8u;
 	rd_byte(&tmp8u);
 	m_ptr->fx = (POSITION)tmp8u;
-	m_ptr->current_floor_ptr = p_ptr->current_floor_ptr;
+	m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
 
 	rd_s16b(&tmp16s);
 	m_ptr->hp = tmp16s;
@@ -1009,7 +1009,7 @@ static void rd_monster_old(monster_type *m_ptr)
  * @param m_ptr モンスター保存先ポインタ
  * @return なし
  */
-static void rd_monster(monster_type *m_ptr)
+static void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 {
 	BIT_FLAGS flags;
 	char buf[128];
@@ -1019,7 +1019,7 @@ static void rd_monster(monster_type *m_ptr)
 
 	if (h_older_than(1, 5, 0, 0))
 	{
-		rd_monster_old(m_ptr);
+		rd_monster_old(player_ptr, m_ptr);
 		return;
 	}
 
@@ -2365,7 +2365,7 @@ static void rd_extra(player_type *creature_ptr)
 		{
 			monster_type dummy_mon;
 
-			rd_monster(&dummy_mon);
+			rd_monster(creature_ptr, &dummy_mon);
 		}
 	}
 
@@ -2938,7 +2938,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		m_ptr = &floor_ptr->m_list[m_idx];
 
 		/* Read the monster */
-		rd_monster(m_ptr);
+		rd_monster(creature_ptr, m_ptr);
 
 
 		/* Access grid */
@@ -3239,7 +3239,7 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 		m_ptr = &floor_ptr->m_list[m_idx];
 
 		/* Read the monster */
-		rd_monster(m_ptr);
+		rd_monster(player_ptr, m_ptr);
 
 
 		/* Access grid */
