@@ -38,17 +38,18 @@ BIT_FLAGS get_curse(int power, object_type *o_ptr)
 
 /*!
  * @brief 装備への呪い付加判定と付加処理
+ * @param owner_ptr プレーヤーへの参照ポインタ
  * @param chance 呪いの基本確率
  * @param heavy_chance さらに重い呪いとなる確率
  * @return なし
  */
-void curse_equipment(PERCENTAGE chance, PERCENTAGE heavy_chance)
+void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy_chance)
 {
 	bool changed = FALSE;
 	int curse_power = 0;
 	BIT_FLAGS new_curse;
 	BIT_FLAGS oflgs[TR_FLAG_SIZE];
-	object_type *o_ptr = &p_ptr->inventory_list[INVEN_RARM + randint0(12)];
+	object_type *o_ptr = &owner_ptr->inventory_list[INVEN_RARM + randint0(12)];
 	GAME_TEXT o_name[MAX_NLEN];
 
 	if (randint1(100) > chance) return;
@@ -97,6 +98,6 @@ void curse_equipment(PERCENTAGE chance, PERCENTAGE heavy_chance)
 		msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding %s..."), o_name);
 		o_ptr->feeling = FEEL_NONE;
 	}
-	p_ptr->update |= (PU_BONUS);
+	owner_ptr->update |= (PU_BONUS);
 }
 

@@ -1169,7 +1169,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 			int count = 0;
 
 			msg_format(_("%^sは恐ろしい血の呪いをあなたにかけた！", "%^s puts a terrible blood curse on you!"), m_name);
-			curse_equipment(100, 50);
+			curse_equipment(target_ptr, 100, 50);
 
 			do
 			{

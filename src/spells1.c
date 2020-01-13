@@ -4965,7 +4965,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		else
 		{
-			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(15, 0);
+			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(target_ptr, 15, 0);
 			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		}
 		break;
@@ -4981,7 +4981,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		else
 		{
-			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(25, MIN(rlev / 2 - 15, 5));
+			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(target_ptr, 25, MIN(rlev / 2 - 15, 5));
 			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		}
 		break;
@@ -4997,7 +4997,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		else
 		{
-			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(33, MIN(rlev / 2 - 15, 15));
+			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(target_ptr, 33, MIN(rlev / 2 - 15, 15));
 			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		}
 		break;
@@ -5032,7 +5032,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 			if (!CHECK_MULTISHADOW(target_ptr))
 			{
 				msg_print(_("あなたは命が薄まっていくように感じた！", "You feel your life fade away!"));
-				curse_equipment(40, 20);
+				curse_equipment(target_ptr, 40, 20);
 			}
 
 			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, m_name, monspell);
