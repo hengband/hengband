@@ -156,7 +156,7 @@ extern HIT_POINT tot_dam_aux(player_type *attacker_ptr, object_type *o_ptr, HIT_
 extern HIT_POINT critical_norm(player_type *attacker_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode);
 extern bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_IDX mode);
 extern bool make_attack_normal(player_type *targer_ptr, MONSTER_IDX m_idx);
-extern void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who);
+extern void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who);
 extern bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx);
 
 extern const mbe_info_type mbe_info[];

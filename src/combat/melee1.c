@@ -4707,7 +4707,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
 		/* Cancel Invulnerability */
 		(void)set_monster_invulner(m_idx, 0, FALSE);
-		mon_take_hit_mon(m_idx, m_ptr->hp + 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
+		mon_take_hit_mon(subject_ptr, m_idx, m_ptr->hp + 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
 		blinked = FALSE;
 	}
 
@@ -4756,9 +4756,10 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
  * @param who 打撃を行ったモンスターの参照ID
  * @return なし
  */
-void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
+void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[160];
 	bool seen = is_seen(m_ptr);
@@ -4771,13 +4772,13 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 	/* Redraw (later) if needed */
 	if (m_ptr->ml)
 	{
-		if (p_ptr->health_who == m_idx) p_ptr->redraw |= (PR_HEALTH);
-		if (p_ptr->riding == m_idx) p_ptr->redraw |= (PR_UHEALTH);
+		if (player_ptr->health_who == m_idx) player_ptr->redraw |= (PR_HEALTH);
+		if (player_ptr->riding == m_idx) player_ptr->redraw |= (PR_UHEALTH);
 	}
 
 	(void)set_monster_csleep(m_idx, 0);
 
-	if (p_ptr->riding && (m_idx == p_ptr->riding)) disturb(p_ptr, TRUE, TRUE);
+	if (player_ptr->riding && (m_idx == player_ptr->riding)) disturb(player_ptr, TRUE, TRUE);
 
 	if (MON_INVULNER(m_ptr) && randint0(PENETRATE_INVULNERABILITY))
 	{
@@ -4813,7 +4814,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 	{
 		if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) ||
 			(r_ptr->flags7 & RF7_NAZGUL)) &&
-			!p_ptr->phase_out)
+			!player_ptr->phase_out)
 		{
 			m_ptr->hp = 1;
 		}
@@ -4837,7 +4838,7 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 				/* Unseen death by normal attack */
 				if (!seen)
 				{
-					p_ptr->current_floor_ptr->monster_noise = TRUE;
+					floor_ptr->monster_noise = TRUE;
 				}
 				/* Death by special attack */
 				else if (note)
@@ -4910,18 +4911,18 @@ void mon_take_hit_mon(MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, 
 
 	if ((dam > 0) && !is_pet(m_ptr) && !is_friendly(m_ptr) && (who != m_idx))
 	{
-		if (is_pet(&p_ptr->current_floor_ptr->m_list[who]) && !player_bold(p_ptr, m_ptr->target_y, m_ptr->target_x))
+		if (is_pet(&floor_ptr->m_list[who]) && !player_bold(player_ptr, m_ptr->target_y, m_ptr->target_x))
 		{
-			set_target(m_ptr, p_ptr->current_floor_ptr->m_list[who].fy, p_ptr->current_floor_ptr->m_list[who].fx);
+			set_target(m_ptr, floor_ptr->m_list[who].fy, floor_ptr->m_list[who].fx);
 		}
 	}
 
-	if (p_ptr->riding && (p_ptr->riding == m_idx) && (dam > 0))
+	if (player_ptr->riding && (player_ptr->riding == m_idx) && (dam > 0))
 	{
 		monster_desc(m_name, m_ptr, 0);
 
 		if (m_ptr->hp > m_ptr->maxhp / 3) dam = (dam + 1) / 2;
-		if (rakuba(p_ptr, (dam > 200) ? 200 : dam, FALSE))
+		if (rakuba(player_ptr, (dam > 200) ? 200 : dam, FALSE))
 		{
 			msg_format(_("%^sに振り落とされた！", "You have been thrown off from %s!"), m_name);
 		}

@@ -1375,7 +1375,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	if (m_ptr->r_idx == MON_SHURYUUDAN)
 	{
-		mon_take_hit_mon(m_idx, 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
+		mon_take_hit_mon(target_ptr, m_idx, 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
 		if(dead) return;
 	}
 
