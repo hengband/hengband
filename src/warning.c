@@ -1,5 +1,4 @@
 ﻿
-
 #include "angband.h"
 #include "util.h"
 
@@ -25,20 +24,20 @@
  * Calculate spell damages
  * @return 警告を行う
  */
-object_type *choose_warning_item(void)
+object_type *choose_warning_item(player_type *creature_ptr)
 {
 	int i;
 	int choices[INVEN_TOTAL - INVEN_RARM];
 	int number = 0;
 
 	/* Paranoia -- Player has no warning ability */
-	if (!p_ptr->warning) return NULL;
+	if (!creature_ptr->warning) return NULL;
 
 	/* Search Inventory */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
 		BIT_FLAGS flgs[TR_FLAG_SIZE];
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &creature_ptr->inventory_list[i];
 
 		object_flags(o_ptr, flgs);
 		if (have_flag(flgs, TR_WARNING))
@@ -49,7 +48,7 @@ object_type *choose_warning_item(void)
 	}
 
 	/* Choice one of them */
-	return number ? &p_ptr->inventory_list[choices[randint0(number)]] : NULL;
+	return number ? &creature_ptr->inventory_list[choices[randint0(number)]] : NULL;
 }
 
 /*!
@@ -501,7 +500,7 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
 
 		if (dam_max > creature_ptr->chp / 2)
 		{
-			object_type *o_ptr = choose_warning_item();
+			object_type *o_ptr = choose_warning_item(creature_ptr);
 
 			if (o_ptr)
 				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -519,7 +518,7 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
 	if (((!easy_disarm && is_trap(g_ptr->feat))
 		|| (g_ptr->mimic && is_trap(g_ptr->feat))) && !one_in_(13))
 	{
-		object_type *o_ptr = choose_warning_item();
+		object_type *o_ptr = choose_warning_item(creature_ptr);
 
 		if (o_ptr)
 			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -532,4 +531,3 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
 
 	return TRUE;
 }
-

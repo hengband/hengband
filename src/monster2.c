@@ -2810,7 +2810,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 			else
 				color = _("白く", "white");
 
-			o_ptr = choose_warning_item();
+			o_ptr = choose_warning_item(p_ptr);
 			if (o_ptr)
 			{
 				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
