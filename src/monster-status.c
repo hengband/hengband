@@ -97,7 +97,6 @@ HIT_POINT mon_damage_mod(player_type *target_ptr, monster_type *m_ptr, HIT_POINT
 }
 
 
-
 /*!
  * @brief モンスターに与えたダメージを元に経験値を加算する /
  * Calculate experience point to be get
@@ -112,7 +111,7 @@ HIT_POINT mon_damage_mod(player_type *target_ptr, monster_type *m_ptr, HIT_POINT
  * experience point of a monster later.
  * </pre>
  */
-static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
+static void get_exp_from_mon(player_type *target_ptr, HIT_POINT dam, monster_type *m_ptr)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -122,7 +121,7 @@ static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
 	u32b div_l;
 
 	if (!monster_is_valid(m_ptr)) return;
-	if (is_pet(m_ptr) || p_ptr->phase_out) return;
+	if (is_pet(m_ptr) || target_ptr->phase_out) return;
 
 	/*
 	 * - Ratio of monster's level to player's level effects
@@ -132,7 +131,7 @@ static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
 	new_exp = r_ptr->level * SPEED_TO_ENERGY(m_ptr->mspeed) * dam;
 	new_exp_frac = 0;
 	div_h = 0L;
-	div_l = (p_ptr->max_plv + 2) * SPEED_TO_ENERGY(r_ptr->speed);
+	div_l = (target_ptr->max_plv + 2) * SPEED_TO_ENERGY(r_ptr->speed);
 
 	/* Use (average maxhp * 2) as a denominator */
 	if (!(r_ptr->flags1 & RF1_FORCE_MAXHP))
@@ -141,7 +140,7 @@ static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
 		s64b_mul(&div_h, &div_l, 0, r_ptr->hdice * (ironman_nightmare ? 2 : 1) * r_ptr->hside * 2);
 
 	/* Special penalty in the wilderness */
-	if (!p_ptr->current_floor_ptr->dun_level && (!(r_ptr->flags8 & RF8_WILD_ONLY) || !(r_ptr->flags1 & RF1_UNIQUE)))
+	if (!target_ptr->current_floor_ptr->dun_level && (!(r_ptr->flags8 & RF8_WILD_ONLY) || !(r_ptr->flags1 & RF1_UNIQUE)))
 		s64b_mul(&div_h, &div_l, 0, 5);
 
 	/* Do division first to prevent overflaw */
@@ -177,7 +176,7 @@ static void get_exp_from_mon(HIT_POINT dam, monster_type *m_ptr)
 	/* Finally multiply base experience point of the monster */
 	s64b_mul(&new_exp, &new_exp_frac, 0, r_ptr->mexp);
 
-	gain_exp_64(p_ptr, new_exp, new_exp_frac);
+	gain_exp_64(target_ptr, new_exp, new_exp_frac);
 }
 
 
@@ -1012,7 +1011,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 
 	expdam = (m_ptr->hp > dam) ? dam : m_ptr->hp;
 
-	get_exp_from_mon(expdam, &exp_mon);
+	get_exp_from_mon(target_ptr, expdam, &exp_mon);
 
 	/* Genocided by chaos patron */
 	if (!monster_is_valid(m_ptr)) m_idx = 0;
@@ -1355,7 +1354,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 			delete_monster_idx(m_idx);
 		}
 
-		get_exp_from_mon((long)exp_mon.max_maxhp * 2, &exp_mon);
+		get_exp_from_mon(target_ptr, (long)exp_mon.max_maxhp * 2, &exp_mon);
 
 		/* Not afraid */
 		(*fear) = FALSE;
