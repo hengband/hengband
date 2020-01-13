@@ -321,7 +321,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 		if (message)
 		{
 			msg_format(_("木は%s。", "A tree %s"), message);
-			cave_set_feat(floor_ptr, y, x, one_in_(3) ? feat_brake : feat_grass);
+			cave_set_feat(caster_ptr, y, x, one_in_(3) ? feat_brake : feat_grass);
 
 			/* Observe */
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
@@ -498,7 +498,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 		{
 			if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
 			if (player_bold(caster_ptr, y, x)) break;
-			cave_set_feat(floor_ptr, y, x, feat_door[DOOR_DOOR].closed);
+			cave_set_feat(caster_ptr, y, x, feat_door[DOOR_DOOR].closed);
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
 			break;
 		}
@@ -513,7 +513,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 		{
 			if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
 			if (player_bold(caster_ptr, y, x)) break;
-			cave_set_feat(floor_ptr, y, x, feat_tree);
+			cave_set_feat(caster_ptr, y, x, feat_tree);
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
 			break;
 		}
@@ -532,7 +532,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 		{
 			if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
 			if (player_bold(caster_ptr, y, x)) break;
-			cave_set_feat(floor_ptr, y, x, feat_granite);
+			cave_set_feat(caster_ptr, y, x, feat_granite);
 			break;
 		}
 
@@ -542,11 +542,11 @@ if (have_flag(f_ptr->flags, FF_TREE))
 			if (dam == 1)
 			{
 				if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
-				cave_set_feat(floor_ptr, y, x, feat_shallow_lava);
+				cave_set_feat(caster_ptr, y, x, feat_shallow_lava);
 			}
 			else if (dam)
 			{
-				cave_set_feat(floor_ptr, y, x, feat_deep_lava);
+				cave_set_feat(caster_ptr, y, x, feat_deep_lava);
 			}
 
 			break;
@@ -558,11 +558,11 @@ if (have_flag(f_ptr->flags, FF_TREE))
 			if (dam == 1)
 			{
 				if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
-				cave_set_feat(floor_ptr, y, x, feat_shallow_water);
+				cave_set_feat(caster_ptr, y, x, feat_shallow_water);
 			}
 			else if (dam)
 			{
-				cave_set_feat(floor_ptr, y, x, feat_deep_water);
+				cave_set_feat(caster_ptr, y, x, feat_deep_water);
 			}
 
 			break;
@@ -1072,6 +1072,7 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系によるモンスターへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
+ * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
  * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
  * @param y 目標Y座標 / Target y location (or location to travel "towards")
@@ -1138,12 +1139,11 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
  * "flg" was added.
  * </pre>
  */
-
-
-static bool project_m(player_type *caster_ptr, floor_type *floor_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, bool see_s_msg)
+static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, bool see_s_msg)
 {
 	int tmp;
 
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 	monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
@@ -1704,7 +1704,7 @@ static bool project_m(player_type *caster_ptr, floor_type *floor_ptr, MONSTER_ID
 			if (seen) obvious = TRUE;
 
 			/* PSI only works if the monster can see you! -- RG */
-			if (!(los(floor_ptr, m_ptr->fy, m_ptr->fx, caster_ptr->y, caster_ptr->x)))
+			if (!(los(caster_ptr, m_ptr->fy, m_ptr->fx, caster_ptr->y, caster_ptr->x)))
 			{
 				if (seen_msg)
 					msg_format(_("%sはあなたが見えないので影響されない！", "%^s can't see you, and isn't affected!"), m_name);
@@ -4058,7 +4058,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 				t_y = target_ptr->current_floor_ptr->m_list[who].fy - 1 + randint1(3);
 				t_x = target_ptr->current_floor_ptr->m_list[who].fx - 1 + randint1(3);
 				max_attempts--;
-			} while (max_attempts && in_bounds2u(target_ptr->current_floor_ptr, t_y, t_x) && !projectable(target_ptr->current_floor_ptr, target_ptr->y, target_ptr->x, t_y, t_x));
+			} while (max_attempts && in_bounds2u(target_ptr->current_floor_ptr, t_y, t_x) && !projectable(target_ptr, target_ptr->y, target_ptr->x, t_y, t_x));
 
 			if (max_attempts < 1)
 			{
@@ -5322,7 +5322,7 @@ bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 /*
  * breath shape
  */
-void breath_shape(floor_type *floor_ptr, u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, EFFECT_ID typ)
+void breath_shape(player_type *caster_ptr, u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, EFFECT_ID typ)
 {
 	POSITION by = y1;
 	POSITION bx = x1;
@@ -5333,6 +5333,7 @@ void breath_shape(floor_type *floor_ptr, u16b *path_g, int dist, int *pgrids, PO
 	int path_n = 0;
 	int mdis = distance(y1, x1, y2, x2) + rad;
 
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	while (bdis <= mdis)
 	{
 		POSITION x, y;
@@ -5374,7 +5375,7 @@ void breath_shape(floor_type *floor_ptr, u16b *path_g, int dist, int *pgrids, PO
 					case GF_LITE:
 					case GF_LITE_WEAK:
 						/* Lights are stopped by opaque terrains */
-						if (!los(floor_ptr, by, bx, y, x)) continue;
+						if (!los(caster_ptr, by, bx, y, x)) continue;
 						break;
 					case GF_DISINTEGRATE:
 						/* Disintegration are stopped only by perma-walls */
@@ -5382,7 +5383,7 @@ void breath_shape(floor_type *floor_ptr, u16b *path_g, int dist, int *pgrids, PO
 						break;
 					default:
 						/* Ball explosions are stopped by walls */
-						if (!projectable(floor_ptr, by, bx, y, x)) continue;
+						if (!projectable(caster_ptr, by, bx, y, x)) continue;
 						break;
 					}
 
@@ -5708,7 +5709,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 	/* Calculate the projection path */
 
-	path_n = project_path(caster_ptr->current_floor_ptr, path_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, flg);
+	path_n = project_path(caster_ptr, path_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, flg);
 	handle_stuff(caster_ptr);
 
 	/* Giga-Hack SEEKER & SUPER_RAY */
@@ -5799,12 +5800,12 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				remove_mirror(caster_ptr, y, x);
 				next_mirror(caster_ptr, &oy, &ox, y, x);
 
-				path_n = i + project_path(caster_ptr->current_floor_ptr, &(path_g[i + 1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flg);
+				path_n = i + project_path(caster_ptr, &(path_g[i + 1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flg);
 				for (j = last_i; j <= i; j++)
 				{
 					y = GRID_Y(path_g[j]);
 					x = GRID_X(path_g[j]);
-					if (project_m(caster_ptr, caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice = TRUE;
+					if (project_m(caster_ptr, 0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice = TRUE;
 					if (!who && (project_m_n == 1) && !jump) {
 						if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)
 						{
@@ -5830,7 +5831,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			POSITION py, px;
 			py = GRID_Y(path_g[i]);
 			px = GRID_X(path_g[i]);
-			if (project_m(caster_ptr, caster_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SEEKER, flg, TRUE))
+			if (project_m(caster_ptr, 0, 0, py, px, dam, GF_SEEKER, flg, TRUE))
 				notice = TRUE;
 			if (!who && (project_m_n == 1) && !jump) {
 				if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)
@@ -5951,14 +5952,14 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 				path_n = i;
 				second_step = i + 1;
-				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x - 1, flg);
-				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x, flg);
-				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x + 1, flg);
-				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x - 1, flg);
-				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x + 1, flg);
-				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x - 1, flg);
-				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x, flg);
-				path_n += project_path(caster_ptr->current_floor_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x + 1, flg);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x - 1, flg);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x, flg);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x + 1, flg);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x - 1, flg);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x + 1, flg);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x - 1, flg);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x, flg);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x + 1, flg);
 			}
 		}
 
@@ -5966,7 +5967,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		{
 			POSITION py = GRID_Y(path_g[i]);
 			POSITION px = GRID_X(path_g[i]);
-			(void)project_m(caster_ptr, caster_ptr->current_floor_ptr, 0, 0, py, px, dam, GF_SUPER_RAY, flg, TRUE);
+			(void)project_m(caster_ptr, 0, 0, py, px, dam, GF_SUPER_RAY, flg, TRUE);
 			if (!who && (project_m_n == 1) && !jump) {
 				if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
 					monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
@@ -6122,7 +6123,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		{
 			flg &= ~(PROJECT_HIDE);
 
-			breath_shape(caster_ptr->current_floor_ptr, path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
+			breath_shape(caster_ptr, path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
 		}
 		else
 		{
@@ -6145,7 +6146,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 						case GF_LITE:
 						case GF_LITE_WEAK:
 							/* Lights are stopped by opaque terrains */
-							if (!los(caster_ptr->current_floor_ptr, by, bx, y, x)) continue;
+							if (!los(caster_ptr, by, bx, y, x)) continue;
 							break;
 						case GF_DISINTEGRATE:
 							/* Disintegration are stopped only by perma-walls */
@@ -6153,7 +6154,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 							break;
 						default:
 							/* Ball explosions are stopped by walls */
-							if (!projectable(caster_ptr->current_floor_ptr, by, bx, y, x)) continue;
+							if (!projectable(caster_ptr, by, bx, y, x)) continue;
 							break;
 						}
 
@@ -6250,7 +6251,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	if (flg & PROJECT_KILL)
 	{
 		see_s_msg = (who > 0) ? is_seen(&caster_ptr->current_floor_ptr->m_list[who]) :
-			(!who ? TRUE : (player_can_see_bold(caster_ptr, y1, x1) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y1, x1)));
+			(!who ? TRUE : (player_can_see_bold(caster_ptr, y1, x1) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y1, x1)));
 	}
 
 	/* Check features */
@@ -6362,7 +6363,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 						t_y = y_saver - 1 + randint1(3);
 						t_x = x_saver - 1 + randint1(3);
 						max_attempts--;
-					} while (max_attempts && in_bounds2u(caster_ptr->current_floor_ptr, t_y, t_x) && !projectable(caster_ptr->current_floor_ptr, y, x, t_y, t_x));
+					} while (max_attempts && in_bounds2u(caster_ptr->current_floor_ptr, t_y, t_x) && !projectable(caster_ptr, y, x, t_y, t_x));
 
 					if (max_attempts < 1)
 					{
@@ -6476,7 +6477,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			}
 
 			/* Affect the monster in the grid */
-			if (project_m(caster_ptr, caster_ptr->current_floor_ptr, who, effective_dist, y, x, dam, typ, flg, see_s_msg)) notice = TRUE;
+			if (project_m(caster_ptr, who, effective_dist, y, x, dam, typ, flg, see_s_msg)) notice = TRUE;
 		}
 
 
@@ -6632,7 +6633,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				distance(caster_ptr->y, caster_ptr->x, y, x) <= MAX_RANGE &&
 				distance(caster_ptr->y, caster_ptr->x, y, x) != 0 &&
 				player_has_los_bold(caster_ptr, y, x) &&
-				projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x))
+				projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
 			{
 				mirror_y[mirror_num] = y;
 				mirror_x[mirror_num] = x;
@@ -6683,7 +6684,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x))
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
 				{
 					/* Visual effects */
 					if (!(caster_ptr->blind)
@@ -6711,7 +6712,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x))
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
 				{
 					(void)project_f(caster_ptr, 0, 0, y, x, dam, GF_MANA);
 				}
@@ -6730,7 +6731,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x))
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
 				{
 					(void)project_o(caster_ptr, 0, 0, y, x, dam, GF_MANA);
 				}
@@ -6749,9 +6750,9 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 				centersign*((point_x[2] - x)*(point_y[0] - y)
 					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
 			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x))
+				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
 				{
-					(void)project_m(caster_ptr, caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_MANA,
+					(void)project_m(caster_ptr, 0, 0, y, x, dam, GF_MANA,
 						(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE);
 				}
 			}
@@ -6781,7 +6782,7 @@ void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam)
 			if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
 				continue;
 			
-			if (!project_m(caster_ptr, caster_ptr->current_floor_ptr, 0, 0, y, x, dam, GF_GENOCIDE,
+			if (!project_m(caster_ptr, 0, 0, y, x, dam, GF_GENOCIDE,
 				(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE))
 				continue;
 			

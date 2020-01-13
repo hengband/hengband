@@ -196,7 +196,7 @@ static void do_cmd_summon_horde(player_type *caster_ptr)
 
 	while (--attempts)
 	{
-		scatter(caster_ptr->current_floor_ptr, &wy, &wx, caster_ptr->y, caster_ptr->x, 3, 0);
+		scatter(caster_ptr, &wy, &wx, caster_ptr->y, caster_ptr->x, 3, 0);
 		if (cave_empty_bold(caster_ptr->current_floor_ptr, wy, wx)) break;
 	}
 
@@ -1613,7 +1613,7 @@ static void do_cmd_wiz_create_feature(player_type *creature_ptr)
 	if (tmp_mimic < 0) tmp_mimic = 0;
 	else if (tmp_mimic >= max_f_idx) tmp_mimic = max_f_idx - 1;
 
-	cave_set_feat(creature_ptr->current_floor_ptr, y, x, tmp_feat);
+	cave_set_feat(creature_ptr, y, x, tmp_feat);
 	g_ptr->mimic = (s16b)tmp_mimic;
 
 	feature_type *f_ptr;

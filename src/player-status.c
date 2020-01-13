@@ -5191,16 +5191,16 @@ void wreck_the_pattern(player_type *creature_ptr)
 
 	while (to_ruin--)
 	{
-		scatter(floor_ptr, &r_y, &r_x, creature_ptr->y, creature_ptr->x, 4, 0);
+		scatter(creature_ptr, &r_y, &r_x, creature_ptr->y, creature_ptr->x, 4, 0);
 
 		if (pattern_tile(r_y, r_x) &&
 			(f_info[floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED))
 		{
-			cave_set_feat(floor_ptr, r_y, r_x, feat_pattern_corrupted);
+			cave_set_feat(creature_ptr, r_y, r_x, feat_pattern_corrupted);
 		}
 	}
 
-	cave_set_feat(floor_ptr, creature_ptr->y, creature_ptr->x, feat_pattern_corrupted);
+	cave_set_feat(creature_ptr, creature_ptr->y, creature_ptr->x, feat_pattern_corrupted);
 }
 
 

@@ -109,7 +109,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				confuse_monster(caster_ptr, dir, power);
 			}
@@ -143,7 +143,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				sleep_monster(caster_ptr, dir, plev);
 			}
@@ -205,7 +205,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				slow_monster(caster_ptr, dir, plev);
 			}
@@ -239,7 +239,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_beam(caster_ptr, GF_AWAY_ALL, dir, power);
 			}
@@ -321,7 +321,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				charm_monster(caster_ptr, dir, plev);
 			}
@@ -461,7 +461,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fetch(caster_ptr, dir, weight, FALSE);
 			}

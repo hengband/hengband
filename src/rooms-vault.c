@@ -161,7 +161,7 @@ static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0
 	{
 		x = randint1(xsize - 3) - xhsize + x0 + 1;
 		y = randint1(ysize - 3) - yhsize + y0 + 1;
-		add_door(floor_ptr, x, y);
+		add_door(player_ptr, x, y);
 	}
 
 	/* Fill with monsters and treasure, low difficulty */
@@ -210,7 +210,7 @@ static void build_room_vault(player_type *player_ptr, POSITION x0, POSITION y0, 
 	{
 		x1 = randint1(xsize - 3) - xhsize + x0 + 1;
 		y1 = randint1(ysize - 3) - yhsize + y0 + 1;
-		add_door(floor_ptr, x1, y1);
+		add_door(player_ptr, x1, y1);
 	}
 
 	/* Fill with monsters and treasure, high difficulty */
@@ -426,18 +426,18 @@ static void build_vault(player_type *player_ptr, POSITION yval, POSITION xval, P
 
 				/* Secret doors */
 			case '+':
-				place_secret_door(floor_ptr, y, x, DOOR_DEFAULT);
+				place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
 				break;
 
 				/* Secret glass doors */
 			case '-':
-				place_secret_door(floor_ptr, y, x, DOOR_GLASS_DOOR);
+				place_secret_door(player_ptr, y, x, DOOR_GLASS_DOOR);
 				if (is_closed_door(g_ptr->feat)) g_ptr->mimic = feat_glass_wall;
 				break;
 
 				/* Curtains */
 			case '\'':
-				place_secret_door(floor_ptr, y, x, DOOR_CURTAIN);
+				place_secret_door(player_ptr, y, x, DOOR_CURTAIN);
 				break;
 
 				/* Trap */
@@ -912,14 +912,14 @@ static void build_target_vault(player_type *player_ptr, POSITION x0, POSITION y0
 	x = (rad - 2) / 4 + 1;
 	y = rad / 2 + x;
 
-	add_door(floor_ptr, x0 + x, y0);
-	add_door(floor_ptr, x0 + y, y0);
-	add_door(floor_ptr, x0 - x, y0);
-	add_door(floor_ptr, x0 - y, y0);
-	add_door(floor_ptr, x0, y0 + x);
-	add_door(floor_ptr, x0, y0 + y);
-	add_door(floor_ptr, x0, y0 - x);
-	add_door(floor_ptr, x0, y0 - y);
+	add_door(player_ptr, x0 + x, y0);
+	add_door(player_ptr, x0 + y, y0);
+	add_door(player_ptr, x0 - x, y0);
+	add_door(player_ptr, x0 - y, y0);
+	add_door(player_ptr, x0, y0 + x);
+	add_door(player_ptr, x0, y0 + y);
+	add_door(player_ptr, x0, y0 - x);
+	add_door(player_ptr, x0, y0 - y);
 
 	/* Fill with stuff - medium difficulty */
 	fill_treasure(player_ptr, x0 - rad, x0 + rad, y0 - rad, y0 + rad, randint1(3) + 3);
@@ -1010,7 +1010,7 @@ static void build_elemental_vault(player_type *player_ptr, POSITION x0, POSITION
 	/* make a few rooms in the vault */
 	for (i = 1; i <= (xsize * ysize) / 50; i++)
 	{
-		build_small_room(floor_ptr, x0 + randint0(xsize - 4) - xsize / 2 + 2,
+		build_small_room(player_ptr, x0 + randint0(xsize - 4) - xsize / 2 + 2,
 			y0 + randint0(ysize - 4) - ysize / 2 + 2);
 	}
 

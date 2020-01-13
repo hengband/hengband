@@ -65,7 +65,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				project_length = range;
 
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_beam(caster_ptr, GF_ELEC, dir, damroll(dice, sides));
 			}
@@ -144,7 +144,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				charm_animal(caster_ptr, dir, plev);
 			}
@@ -202,7 +202,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				wall_to_mud(caster_ptr, dir, 20 + randint1(30));
 			}
@@ -221,7 +221,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_COLD, dir, damroll(dice, sides));
 			}
 		}
@@ -261,7 +261,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_FIRE, dir, damroll(dice, sides));
 			}
 		}
@@ -279,7 +279,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				msg_print(_("太陽光線が現れた。", "A line of sunlight appears."));
 				lite_line(caster_ptr, dir, damroll(6, 8));
 			}
@@ -466,7 +466,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball(caster_ptr, GF_COLD, dir, dam, rad);
 			}
@@ -485,7 +485,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fire_ball(caster_ptr, GF_ELEC, dir, dam, rad);
 				break;
 			}
@@ -504,7 +504,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fire_ball(caster_ptr, GF_WATER, dir, dam, rad);
 			}
 		}

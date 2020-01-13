@@ -2752,7 +2752,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				do
 				{
-					scatter(floor_ptr, &wy, &wx, y, x, 20, 0);
+					scatter(p_ptr, &wy, &wx, y, x, 20, 0);
 				} while (!(in_bounds(floor_ptr, wy, wx) && cave_empty_bold2(floor_ptr, wy, wx)) && --attempts);
 
 				if (attempts > 0)

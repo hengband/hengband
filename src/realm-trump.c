@@ -137,7 +137,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_beam(caster_ptr, GF_AWAY_ALL, dir, power);
 			}
@@ -175,7 +175,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fetch(caster_ptr, dir, weight, FALSE);
 			}
@@ -253,7 +253,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 				bool old_target_pet = target_pet;
 				target_pet = TRUE;
 
-				result = get_aim_dir(&dir);
+				result = get_aim_dir(caster_ptr, &dir);
 
 				/* Restore target_pet option */
 				target_pet = old_target_pet;
@@ -341,7 +341,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 				/* HACK -- No range limit */
 				project_length = -1;
 
-				result = get_aim_dir(&dir);
+				result = get_aim_dir(caster_ptr, &dir);
 
 				/* Restore range to default */
 				project_length = 0;
@@ -520,7 +520,7 @@ concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 				bool old_target_pet = target_pet;
 				target_pet = TRUE;
 
-				result = get_aim_dir(&dir);
+				result = get_aim_dir(caster_ptr, &dir);
 
 				/* Restore target_pet option */
 				target_pet = old_target_pet;

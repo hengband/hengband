@@ -628,7 +628,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 				if (!in_bounds(trapped_ptr->current_floor_ptr, y1, x1)) continue;
 
 				/* Require line of projection */
-				if (!projectable(trapped_ptr->current_floor_ptr, trapped_ptr->y, trapped_ptr->x, y1, x1)) continue;
+				if (!projectable(trapped_ptr, trapped_ptr->y, trapped_ptr->x, y1, x1)) continue;
 
 				if (summon_specific(0, y1, x1, lev, SUMMON_ARMAGE_EVIL, (PM_NO_PET)))
 					evil_idx = hack_m_idx_ii;

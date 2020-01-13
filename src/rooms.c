@@ -153,7 +153,7 @@ static byte room_build_order[ROOM_T_MAX] = {
 
 /*!
  * @brief 1マスだけの部屋を作成し、上下左右いずれか一つに隠しドアを配置する。
- * @param floor_ptr 配置するフロアの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y0 配置したい中心のY座標
  * @param x0 配置したい中心のX座標
  * @details
@@ -163,10 +163,11 @@ static byte room_build_order[ROOM_T_MAX] = {
  * Note - this should be used only on allocated regions
  * within another room.
  */
-void build_small_room(floor_type *floor_ptr, POSITION x0, POSITION y0)
+void build_small_room(player_type *player_ptr, POSITION x0, POSITION y0)
 {
 	POSITION x, y;
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (y = y0 - 1; y <= y0 + 1; y++)
 	{
 		place_inner_bold(floor_ptr, y, x0 - 1);
@@ -182,10 +183,10 @@ void build_small_room(floor_type *floor_ptr, POSITION x0, POSITION y0)
 	/* Place a secret door on one side */
 	switch (randint0(4))
 	{
-		case 0: place_secret_door(floor_ptr, y0, x0 - 1, DOOR_DEFAULT); break;
-		case 1: place_secret_door(floor_ptr, y0, x0 + 1, DOOR_DEFAULT); break;
-		case 2: place_secret_door(floor_ptr, y0 - 1, x0, DOOR_DEFAULT); break;
-		case 3: place_secret_door(floor_ptr, y0 + 1, x0, DOOR_DEFAULT); break;
+		case 0: place_secret_door(player_ptr, y0, x0 - 1, DOOR_DEFAULT); break;
+		case 1: place_secret_door(player_ptr, y0, x0 + 1, DOOR_DEFAULT); break;
+		case 2: place_secret_door(player_ptr, y0 - 1, x0, DOOR_DEFAULT); break;
+		case 3: place_secret_door(player_ptr, y0 + 1, x0, DOOR_DEFAULT); break;
 	}
 
 	/* Clear mimic type */
@@ -2092,8 +2093,8 @@ static bool room_build(player_type *player_ptr, EFFECT_ID typ)
 	case ROOM_T_OVERLAP:       return build_type2(floor_ptr);
 	case ROOM_T_CROSS:         return build_type3(player_ptr);
 	case ROOM_T_INNER_FEAT:    return build_type4(player_ptr);
-	case ROOM_T_NEST:          return build_type5(floor_ptr);
-	case ROOM_T_PIT:           return build_type6(floor_ptr);
+	case ROOM_T_NEST:          return build_type5(player_ptr);
+	case ROOM_T_PIT:           return build_type6(player_ptr);
 	case ROOM_T_LESSER_VAULT:  return build_type7(player_ptr);
 	case ROOM_T_GREATER_VAULT: return build_type8(player_ptr);
 	case ROOM_T_FRACAVE:       return build_type9(floor_ptr);
@@ -2103,7 +2104,7 @@ static bool room_build(player_type *player_ptr, EFFECT_ID typ)
 	case ROOM_T_TRAP_PIT:      return build_type13(floor_ptr);
 	case ROOM_T_TRAP:          return build_type14(floor_ptr);
 	case ROOM_T_GLASS:         return build_type15(player_ptr);
-	case ROOM_T_ARCADE:        return build_type16(floor_ptr);
+	case ROOM_T_ARCADE:        return build_type16(player_ptr);
 	case ROOM_T_FIXED:         return build_type17(player_ptr);
 	}
 	return FALSE;

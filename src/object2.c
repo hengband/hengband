@@ -4196,7 +4196,7 @@ bool make_gold(floor_type *floor_ptr, object_type *j_ptr)
  * the object can combine, stack, or be placed.  Artifacts will try very\n
  * hard to be placed, including "teleporting" to a useful grid if needed.\n
  */
-OBJECT_IDX drop_near(player_type *owner_type, object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION x)
+OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION x)
 {
 	int i, k, d, s;
 
@@ -4248,7 +4248,7 @@ OBJECT_IDX drop_near(player_type *owner_type, object_type *j_ptr, PERCENTAGE cha
 	/* Default */
 	by = y;
 	bx = x;
-	floor_type *floor_ptr = owner_type->current_floor_ptr;
+	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
 	/* Scan local grids */
 	for (dy = -3; dy <= 3; dy++)
 	{
@@ -4269,7 +4269,7 @@ OBJECT_IDX drop_near(player_type *owner_type, object_type *j_ptr, PERCENTAGE cha
 			if (!in_bounds(floor_ptr, ty, tx)) continue;
 
 			/* Require line of projection */
-			if (!projectable(floor_ptr, y, x, ty, tx)) continue;
+			if (!projectable(owner_ptr, y, x, ty, tx)) continue;
 
 			/* Obtain grid */
 			g_ptr = &floor_ptr->grid_array[ty][tx];
@@ -4493,7 +4493,7 @@ OBJECT_IDX drop_near(player_type *owner_type, object_type *j_ptr, PERCENTAGE cha
 
 	/* Mega-Hack -- no message if "dropped" by player */
 	/* Message when an object falls under the player */
-	if (chance && player_bold(owner_type, by, bx))
+	if (chance && player_bold(owner_ptr, by, bx))
 	{
 		msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));
 	}

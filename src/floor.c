@@ -29,71 +29,73 @@ saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 
 /*!
 * @brief 鍵のかかったドアを配置する
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param y 配置したいフロアのY座標
 * @param x 配置したいフロアのX座標
 * @return なし
 */
-void place_locked_door(floor_type *floor_ptr, POSITION y, POSITION x)
+void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 {
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(floor_ptr, y, x);
+		return;
 	}
-	else
-	{
-		set_cave_feat(floor_ptr, y, x, feat_locked_door_random((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
-		floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
-		delete_monster(floor_ptr, y, x);
-	}
+
+	set_cave_feat(floor_ptr, y, x, feat_locked_door_random((d_info[player_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
+	floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
+	delete_monster(floor_ptr, y, x);
 }
 
 
 /*!
 * @brief 隠しドアを配置する
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param y 配置したいフロアのY座標
 * @param x 配置したいフロアのX座標
 * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN のいずれか
 * @return なし
 */
-void place_secret_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
+void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type)
 {
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(floor_ptr, y, x);
+		return;
 	}
-	else
+
+	if (type == DOOR_DEFAULT)
 	{
-		grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-
-		if (type == DOOR_DEFAULT)
-		{
-			type = ((d_info[floor_ptr->dungeon_idx].flags1 & DF1_CURTAIN) &&
-				one_in_((d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
-				((d_info[floor_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
-		}
-
-		/* Create secret door */
-		place_closed_door(floor_ptr, y, x, type);
-
-		if (type != DOOR_CURTAIN)
-		{
-			/* Hide by inner wall because this is used in rooms only */
-			g_ptr->mimic = feat_wall_inner;
-
-			/* Floor type terrain cannot hide a door */
-			if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat))
-			{
-				if (have_flag(f_info[g_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[g_ptr->mimic].flags, FF_CAN_FLY))
-				{
-					g_ptr->feat = one_in_(2) ? g_ptr->mimic : feat_ground_type[randint0(100)];
-				}
-				g_ptr->mimic = 0;
-			}
-		}
-
-		g_ptr->info &= ~(CAVE_FLOOR);
-		delete_monster(floor_ptr, y, x);
+		type = ((d_info[floor_ptr->dungeon_idx].flags1 & DF1_CURTAIN) &&
+			one_in_((d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
+			((d_info[floor_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 	}
+
+	/* Create secret door */
+	place_closed_door(player_ptr, y, x, type);
+
+	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+	if (type != DOOR_CURTAIN)
+	{
+		/* Hide by inner wall because this is used in rooms only */
+		g_ptr->mimic = feat_wall_inner;
+
+		/* Floor type terrain cannot hide a door */
+		if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat))
+		{
+			if (have_flag(f_info[g_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[g_ptr->mimic].flags, FF_CAN_FLY))
+			{
+				g_ptr->feat = one_in_(2) ? g_ptr->mimic : feat_ground_type[randint0(100)];
+			}
+
+			g_ptr->mimic = 0;
+		}
+	}
+
+	g_ptr->info &= ~(CAVE_FLOOR);
+	delete_monster(floor_ptr, y, x);
 }
 
 static int scent_when = 0;
@@ -116,9 +118,6 @@ static int scent_when = 0;
  */
 void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
 {
-	POSITION i, j;
-	POSITION y, x;
-
 	/* Create a table that controls the spread of scent */
 	const int scent_adjust[5][5] =
 	{
@@ -133,9 +132,9 @@ void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
 	if (++scent_when == 254)
 	{
 		/* Scan the entire dungeon */
-		for (y = 0; y < floor_ptr->height; y++)
+		for (POSITION y = 0; y < floor_ptr->height; y++)
 		{
-			for (x = 0; x < floor_ptr->width; x++)
+			for (POSITION x = 0; x < floor_ptr->width; x++)
 			{
 				int w = floor_ptr->grid_array[y][x].when;
 				floor_ptr->grid_array[y][x].when = (w > 128) ? (w - 128) : 0;
@@ -146,17 +145,16 @@ void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
 		scent_when = 126;
 	}
 
-
 	/* Lay down new scent */
-	for (i = 0; i < 5; i++)
+	for (POSITION i = 0; i < 5; i++)
 	{
-		for (j = 0; j < 5; j++)
+		for (POSITION j = 0; j < 5; j++)
 		{
 			grid_type *g_ptr;
 
 			/* Translate table to map grids */
-			y = i + subject_ptr->y - 2;
-			x = j + subject_ptr->x - 2;
+			POSITION y = i + subject_ptr->y - 2;
+			POSITION x = j + subject_ptr->x - 2;
 
 			/* Check Bounds */
 			if (!in_bounds(floor_ptr, y, x)) continue;
@@ -184,12 +182,10 @@ void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
  */
 void forget_flow(floor_type *floor_ptr)
 {
-	POSITION x, y;
-
 	/* Check the entire dungeon */
-	for (y = 0; y < floor_ptr->height; y++)
+	for (POSITION y = 0; y < floor_ptr->height; y++)
 	{
-		for (x = 0; x < floor_ptr->width; x++)
+		for (POSITION x = 0; x < floor_ptr->width; x++)
 		{
 			/* Forget the old data */
 			floor_ptr->grid_array[y][x].dist = 0;
@@ -199,15 +195,17 @@ void forget_flow(floor_type *floor_ptr)
 	}
 }
 
+
 /*
  * Routine used by the random vault creators to add a door to a location
  * Note that range checking has to be done in the calling routine.
  *
  * The doors must be INSIDE the allocated region.
  */
-void add_door(floor_type* floor_ptr, POSITION x, POSITION y)
+void add_door(player_type *player_ptr, POSITION x, POSITION y)
 {
 	/* Need to have a wall in the center square */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!is_outer_bold(floor_ptr, y, x)) return;
 
 	/* look at:
@@ -223,13 +221,12 @@ void add_door(floor_type* floor_ptr, POSITION x, POSITION y)
 		(is_outer_bold(floor_ptr, y, x - 1) && is_outer_bold(floor_ptr, y, x + 1)))
 	{
 		/* secret door */
-		place_secret_door(floor_ptr, y, x, DOOR_DEFAULT);
+		place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
 
 		/* set boundarys so don't get wide doors */
 		place_solid_bold(floor_ptr, y, x - 1);
 		place_solid_bold(floor_ptr, y, x + 1);
 	}
-
 
 	/* look at:
 	*  x#x
@@ -243,7 +240,7 @@ void add_door(floor_type* floor_ptr, POSITION x, POSITION y)
 		is_floor_bold(floor_ptr, y, x - 1) && is_floor_bold(floor_ptr, y, x + 1))
 	{
 		/* secret door */
-		place_secret_door(floor_ptr, y, x, DOOR_DEFAULT);
+		place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
 
 		/* set boundarys so don't get wide doors */
 		place_solid_bold(floor_ptr, y - 1, x);
@@ -251,8 +248,10 @@ void add_door(floor_type* floor_ptr, POSITION x, POSITION y)
 	}
 }
 
+
 /*!
  * @brief 所定の位置に上り階段か下り階段を配置する / Place an up/down staircase at given location
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 配置を試みたいマスのY座標
  * @param x 配置を試みたいマスのX座標
  * @return なし
@@ -268,7 +267,7 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 
 	if (!floor_ptr->dun_level) up_stairs = FALSE;
 	if (ironman_downward) up_stairs = FALSE;
-	if (floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) down_stairs = FALSE;
+	if (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth) down_stairs = FALSE;
 	if (quest_number(player_ptr, floor_ptr->dun_level) && (floor_ptr->dun_level > 1)) down_stairs = FALSE;
 
 	/* We can't place both */
@@ -284,8 +283,10 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 	else if (down_stairs) set_cave_feat(floor_ptr, y, x, feat_down_stair);
 }
 
+
 /*!
  * @brief LOS(Line Of Sight / 視線が通っているか)の判定を行う。
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y1 始点のy座標
  * @param x1 始点のx座標
  * @param y2 終点のy座標
@@ -326,49 +327,22 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
  *\n
  * Use the "update_view()" function to determine player line-of-sight.\n
  */
-bool los(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	/* Delta */
-	POSITION dx, dy;
-
-	/* Absolute */
-	POSITION ax, ay;
-
-	/* Signs */
-	POSITION sx, sy;
-
-	/* Fractions */
-	POSITION qx, qy;
-
-	/* Scanners */
-	POSITION tx, ty;
-
-	/* Scale factors */
-	POSITION f1, f2;
-
-	/* Slope, or 1/Slope, of LOS */
-	POSITION m;
-
-
 	/* Extract the offset */
-	dy = y2 - y1;
-	dx = x2 - x1;
+	POSITION dy = y2 - y1;
+	POSITION dx = x2 - x1;
 
 	/* Extract the absolute offset */
-	ay = ABS(dy);
-	ax = ABS(dx);
-
+	POSITION ay = ABS(dy);
+	POSITION ax = ABS(dx);
 
 	/* Handle adjacent (or identical) grids */
 	if ((ax < 2) && (ay < 2)) return TRUE;
 
-
-	/* Paranoia -- require "safe" origin */
-	/* if (!in_bounds(floor_ptr, y1, x1)) return FALSE; */
-	/* if (!in_bounds(floor_ptr, y2, x2)) return FALSE; */
-
-
 	/* Directly South/North */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	POSITION tx, ty;
 	if (!dx)
 	{
 		/* South -- check for walls */
@@ -418,11 +392,9 @@ bool los(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION 
 		return TRUE;
 	}
 
-
 	/* Extract some signs */
-	sx = (dx < 0) ? -1 : 1;
-	sy = (dy < 0) ? -1 : 1;
-
+	POSITION sx = (dx < 0) ? -1 : 1;
+	POSITION sy = (dy < 0) ? -1 : 1;
 
 	/* Vertical "knights" */
 	if (ax == 1)
@@ -442,15 +414,15 @@ bool los(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION 
 		}
 	}
 
-
 	/* Calculate scale factor div 2 */
-	f2 = (ax * ay);
+	POSITION f2 = (ax * ay);
 
 	/* Calculate scale factor */
-	f1 = f2 << 1;
-
+	POSITION f1 = f2 << 1;
 
 	/* Travel horizontally */
+	POSITION qy;
+	POSITION m;
 	if (ax >= ay)
 	{
 		/* Let m = dy / dx * 2 * (dy * dx) = 2 * dy * dy */
@@ -481,71 +453,71 @@ bool los(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION 
 			if (qy < f2)
 			{
 				tx += sx;
+				continue;
 			}
-			else if (qy > f2)
+			
+			if (qy > f2)
 			{
 				ty += sy;
 				if (!cave_los_bold(floor_ptr, ty, tx)) return FALSE;
 				qy -= f1;
 				tx += sx;
+				continue;
 			}
-			else
-			{
-				ty += sy;
-				qy -= f1;
-				tx += sx;
-			}
+
+			ty += sy;
+			qy -= f1;
+			tx += sx;
 		}
+
+		return TRUE;
 	}
 
 	/* Travel vertically */
+	/* Let m = dx / dy * 2 * (dx * dy) = 2 * dx * dx */
+	POSITION qx = ax * ax;
+	m = qx << 1;
+
+	ty = y1 + sy;
+
+	if (qx == f2)
+	{
+		tx = x1 + sx;
+		qx -= f1;
+	}
 	else
 	{
-		/* Let m = dx / dy * 2 * (dx * dy) = 2 * dx * dx */
-		qx = ax * ax;
-		m = qx << 1;
-
-		ty = y1 + sy;
-
-		if (qx == f2)
-		{
-			tx = x1 + sx;
-			qx -= f1;
-		}
-		else
-		{
-			tx = x1;
-		}
-
-		/* Note (below) the case (qx == f2), where */
-		/* the LOS exactly meets the corner of a tile. */
-		while (y2 - ty)
-		{
-			if (!cave_los_bold(floor_ptr, ty, tx)) return FALSE;
-
-			qx += m;
-
-			if (qx < f2)
-			{
-				ty += sy;
-			}
-			else if (qx > f2)
-			{
-				tx += sx;
-				if (!cave_los_bold(floor_ptr, ty, tx)) return FALSE;
-				qx -= f1;
-				ty += sy;
-			}
-			else
-			{
-				tx += sx;
-				qx -= f1;
-				ty += sy;
-			}
-		}
+		tx = x1;
 	}
 
-	/* Assume los */
+	/* Note (below) the case (qx == f2), where */
+	/* the LOS exactly meets the corner of a tile. */
+	while (y2 - ty)
+	{
+		if (!cave_los_bold(floor_ptr, ty, tx)) return FALSE;
+
+		qx += m;
+
+		if (qx < f2)
+		{
+			ty += sy;
+			continue;
+		}
+
+		if (qx > f2)
+		{
+			tx += sx;
+			if (!cave_los_bold(floor_ptr, ty, tx)) return FALSE;
+			qx -= f1;
+			ty += sy;
+			continue;
+		}
+
+		tx += sx;
+		qx -= f1;
+		ty += sy;
+	}
+
 	return TRUE;
 }
 
@@ -556,33 +528,29 @@ bool los(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION 
  *
  * This is slightly (but significantly) different from "los(y1,x1,y2,x2)".
  */
-bool projectable(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	POSITION y, x;
-
-	int grid_n = 0;
-	u16b grid_g[512];
-
 	/* Check the projection path */
-	grid_n = project_path(floor_ptr, grid_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, 0);
+	u16b grid_g[512];
+	int grid_n = project_path(player_ptr, grid_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, 0);
 
 	/* Identical grid */
 	if (!grid_n) return TRUE;
 
 	/* Final grid */
-	y = GRID_Y(grid_g[grid_n - 1]);
-	x = GRID_X(grid_g[grid_n - 1]);
+	POSITION y = GRID_Y(grid_g[grid_n - 1]);
+	POSITION x = GRID_X(grid_g[grid_n - 1]);
 
 	/* May not end in an unrequested grid */
 	if ((y != y2) || (x != x2)) return FALSE;
 
-	/* Assume okay */
 	return TRUE;
 }
 
 
 /*!
  * @brief 特殊な部屋地形向けにモンスターを配置する / Hack -- Place some sleeping monsters near the given location
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y1 モンスターを配置したいマスの中心Y座標
  * @param x1 モンスターを配置したいマスの中心X座標
  * @param num 配置したいモンスターの数
@@ -590,25 +558,24 @@ bool projectable(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, P
  * @details
  * Only really called by some of the "vault" routines.
  */
-void vault_monsters(floor_type *floor_ptr, POSITION y1, POSITION x1, int num)
+void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num)
 {
-	int k, i;
-	POSITION y, x;
-	grid_type *g_ptr;
-
 	/* Try to summon "num" monsters "near" the given location */
-	for (k = 0; k < num; k++)
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	for (int k = 0; k < num; k++)
 	{
 		/* Try nine locations */
-		for (i = 0; i < 9; i++)
+		for (int i = 0; i < 9; i++)
 		{
 			int d = 1;
 
 			/* Pick a nearby location */
-			scatter(floor_ptr, &y, &x, y1, x1, d, 0);
+			POSITION y, x;
+			scatter(player_ptr, &y, &x, y1, x1, d, 0);
 
 			/* Require "empty" floor grids */
-			g_ptr = &floor_ptr->grid_array[y][x];
+			grid_type *g_ptr;
+			g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 			if (!cave_empty_grid(g_ptr)) continue;
 
 			/* Place the monster (allow groups) */
@@ -622,6 +589,7 @@ void vault_monsters(floor_type *floor_ptr, POSITION y1, POSITION x1, int num)
 
 /*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。 / Determine if a given location may be "destroyed"
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y y座標
  * @param x x座標
  * @return 各種の変更が可能ならTRUEを返す。
@@ -630,14 +598,13 @@ void vault_monsters(floor_type *floor_ptr, POSITION y1, POSITION x1, int num)
  */
 bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-	OBJECT_IDX this_o_idx, next_o_idx = 0;
-
 	/* Forbid perma-grids */
+	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 	if (cave_perma_grid(g_ptr)) return FALSE;
 
 	/* Check objects */
-	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	OBJECT_IDX next_o_idx = 0;
+	for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 		o_ptr = &floor_ptr->o_list[this_o_idx];
@@ -647,19 +614,18 @@ bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 		if (object_is_artifact(o_ptr)) return FALSE;
 	}
 
-	/* Accept */
 	return TRUE;
 }
+
 
 /*
  * Change the "feat" flag for a grid, and notice/redraw the grid
  */
-void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat)
+void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 {
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[feat];
-	bool old_los, old_mirror;
-
 	if (!current_world_ptr->character_dungeon)
 	{
 		/* Clear mimic type */
@@ -686,8 +652,8 @@ void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 		return;
 	}
 
-	old_los = cave_have_flag_bold(floor_ptr, y, x, FF_LOS);
-	old_mirror = is_mirror_grid(g_ptr);
+	bool old_los = cave_have_flag_bold(floor_ptr, y, x, FF_LOS);
+	bool old_mirror = is_mirror_grid(g_ptr);
 
 	/* Clear mimic type */
 	g_ptr->mimic = 0;
@@ -703,12 +669,12 @@ void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 		g_ptr->info &= ~(CAVE_GLOW);
 		if (!view_torch_grids) g_ptr->info &= ~(CAVE_MARK);
 
-		update_local_illumination(p_ptr, y, x);
+		update_local_illumination(player_ptr, y, x);
 	}
 
 	/* Check for change to boring grid */
 	if (!have_flag(f_ptr->flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
-	if (g_ptr->m_idx) update_monster(p_ptr, g_ptr->m_idx, FALSE);
+	if (g_ptr->m_idx) update_monster(player_ptr, g_ptr->m_idx, FALSE);
 
 	note_spot(y, x);
 	lite_spot(y, x);
@@ -719,61 +685,57 @@ void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 
 #ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
 
-		update_local_illumination(p_ptr, y, x);
+		update_local_illumination(player_ptr, y, x);
 
 #endif /* COMPLEX_WALL_ILLUMINATION */
 
 		/* Update the visuals */
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS);
+		player_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS);
 	}
 
 	/* Hack -- glow the GLOW terrain */
-	if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+	if (!have_flag(f_ptr->flags, FF_GLOW) || (d_info[player_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+		return;
+
+	for (DIRECTION i = 0; i < 9; i++)
 	{
-		DIRECTION i;
-		POSITION yy, xx;
+		POSITION yy = y + ddy_ddd[i];
+		POSITION xx = x + ddx_ddd[i];
+		if (!in_bounds2(floor_ptr, yy, xx)) continue;
+
 		grid_type *cc_ptr;
+		cc_ptr = &floor_ptr->grid_array[yy][xx];
+		cc_ptr->info |= CAVE_GLOW;
 
-		for (i = 0; i < 9; i++)
+		if (player_has_los_grid(cc_ptr))
 		{
-			yy = y + ddy_ddd[i];
-			xx = x + ddx_ddd[i];
-			if (!in_bounds2(floor_ptr, yy, xx)) continue;
-			cc_ptr = &floor_ptr->grid_array[yy][xx];
-			cc_ptr->info |= CAVE_GLOW;
-
-			if (player_has_los_grid(cc_ptr))
-			{
-				if (cc_ptr->m_idx) update_monster(p_ptr, cc_ptr->m_idx, FALSE);
-				note_spot(yy, xx);
-				lite_spot(yy, xx);
-			}
-
-			update_local_illumination(p_ptr, yy, xx);
+			if (cc_ptr->m_idx) update_monster(player_ptr, cc_ptr->m_idx, FALSE);
+			note_spot(yy, xx);
+			lite_spot(yy, xx);
 		}
 
-		if (p_ptr->special_defense & NINJA_S_STEALTH)
-		{
-			if (floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
-		}
+		update_local_illumination(player_ptr, yy, xx);
+	}
+
+	if (player_ptr->special_defense & NINJA_S_STEALTH)
+	{
+		if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) set_superstealth(player_ptr, FALSE);
 	}
 }
 
 
 /*!
  * @brief 所定の位置にさまざまな状態や種類のドアを配置する / Place a random type of door at the given location
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y ドアの配置を試みたいマスのY座標
  * @param x ドアの配置を試みたいマスのX座標
  * @param room 部屋に接している場合向けのドア生成か否か
  * @return なし
  */
-void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, bool room)
+void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool room)
 {
-	int tmp, type;
-	FEAT_IDX feat = feat_none;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-
-	/* Initialize mimic info */
 	g_ptr->mimic = 0;
 
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
@@ -782,14 +744,15 @@ void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, bool room)
 		return;
 	}
 
-	type = ((d_info[floor_ptr->dungeon_idx].flags1 & DF1_CURTAIN) &&
+	int type = ((d_info[floor_ptr->dungeon_idx].flags1 & DF1_CURTAIN) &&
 		one_in_((d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
 		((d_info[floor_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
 	/* Choose an object */
-	tmp = randint0(1000);
+	int tmp = randint0(1000);
 
 	/* Open doors (300/1000) */
+	FEAT_IDX feat = feat_none;
 	if (tmp < 300)
 	{
 		/* Create open door */
@@ -807,7 +770,7 @@ void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, bool room)
 	else if (tmp < 600)
 	{
 		/* Create secret door */
-		place_closed_door(floor_ptr, y, x, type);
+		place_closed_door(player_ptr, y, x, type);
 
 		if (type != DOOR_CURTAIN)
 		{
@@ -827,23 +790,25 @@ void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, bool room)
 	}
 
 	/* Closed, locked, or stuck doors (400/1000) */
-	else place_closed_door(floor_ptr, y, x, type);
+	else place_closed_door(player_ptr, y, x, type);
 
-	if (tmp < 400)
+	if (tmp >= 400)
 	{
-		if (feat != feat_none)
-		{
-			set_cave_feat(floor_ptr, y, x, feat);
-		}
-		else
-		{
-			place_floor_bold(floor_ptr, y, x);
-		}
+		delete_monster(floor_ptr, y, x);
+		return;
+	}
+
+	if (feat != feat_none)
+	{
+		set_cave_feat(floor_ptr, y, x, feat);
+	}
+	else
+	{
+		place_floor_bold(floor_ptr, y, x);
 	}
 
 	delete_monster(floor_ptr, y, x);
 }
-
 
 
 /*!
@@ -860,10 +825,8 @@ void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, bool room)
  */
 void wipe_o_list(floor_type *floor_ptr)
 {
-	int i;
-
 	/* Delete the existing objects */
-	for (i = 1; i < floor_ptr->o_max; i++)
+	for (int i = 1; i < floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &floor_ptr->o_list[i];
 
@@ -887,46 +850,41 @@ void wipe_o_list(floor_type *floor_ptr)
 
 			/* Hack -- see above */
 			m_ptr->hold_o_idx = 0;
+			object_wipe(o_ptr);
+			continue;
 		}
 
 		/* Dungeon */
-		else
-		{
-			grid_type *g_ptr;
+		grid_type *g_ptr;
 
-			/* Access location */
-			POSITION y = o_ptr->iy;
-			POSITION x = o_ptr->ix;
+		/* Access location */
+		POSITION y = o_ptr->iy;
+		POSITION x = o_ptr->ix;
 
-			/* Access grid */
-			g_ptr = &floor_ptr->grid_array[y][x];
+		/* Access grid */
+		g_ptr = &floor_ptr->grid_array[y][x];
 
-			/* Hack -- see above */
-			g_ptr->o_idx = 0;
-		}
+		/* Hack -- see above */
+		g_ptr->o_idx = 0;
 		object_wipe(o_ptr);
 	}
 
-	/* Reset "floor_ptr->o_max" */
 	floor_ptr->o_max = 1;
-
-	/* Reset "floor_ptr->o_cnt" */
 	floor_ptr->o_cnt = 0;
 }
 
 
 /*!
  * @brief 所定の位置に各種の閉じたドアを配置する / Place a random type of normal door at the given location.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y ドアの配置を試みたいマスのY座標
  * @param x ドアの配置を試みたいマスのX座標
  * @param type ドアの地形ID
  * @return なし
  */
-void place_closed_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
+void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type)
 {
-	int tmp;
-	FEAT_IDX feat = feat_none;
-
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(floor_ptr, y, x);
@@ -934,9 +892,10 @@ void place_closed_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
 	}
 
 	/* Choose an object */
-	tmp = randint0(400);
+	int tmp = randint0(400);
 
 	/* Closed doors (300/400) */
+	FEAT_IDX feat = feat_none;
 	if (tmp < 300)
 	{
 		/* Create closed door */
@@ -957,18 +916,16 @@ void place_closed_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
 		feat = feat_jammed_door_random(type);
 	}
 
-	if (feat != feat_none)
-	{
-		cave_set_feat(floor_ptr, y, x, feat);
-
-		/* Now it is not floor */
-		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-	}
-	else
+	if (feat == feat_none)
 	{
 		place_floor_bold(floor_ptr, y, x);
+		return;
 	}
+
+	cave_set_feat(player_ptr, y, x, feat);
+	floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 }
+
 
 /*!
  * @brief 特殊な部屋向けに各種アイテムを配置する(vault_trapのサブセット) / Place a trap with a given displacement of point
@@ -982,14 +939,13 @@ void place_closed_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
  */
 void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
 {
-	int count = 0, y1 = y, x1 = x;
-	int dummy = 0;
-
 	grid_type *g_ptr;
 
 	/* Place traps */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	for (count = 0; count <= 5; count++)
+	int y1 = y, x1 = x;
+	int dummy = 0;
+	for (int count = 0; count <= 5; count++)
 	{
 		/* Get a location */
 		while (dummy < SAFE_MAX_ATTEMPTS)
@@ -1017,6 +973,7 @@ void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION yd
 	}
 }
 
+
 /*!
  * @brief 指定のマスが床系地形であるかを返す / Function that sees if a square is a floor.  (Includes range checking.)
  * @param x チェックするマスのX座標
@@ -1037,6 +994,7 @@ bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 	return FALSE;
 }
 
+
 /*!
 * @brief 隣接4マスに存在する通路の数を返す / Count the number of "corridor" grids adjacent to the given grid.
 * @param y1 基準となるマスのY座標
@@ -1050,16 +1008,13 @@ bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 */
 static int next_to_corr(floor_type *floor_ptr, POSITION y1, POSITION x1)
 {
-	int i, k = 0;
-	POSITION y, x;
-
-	grid_type *g_ptr;
-
 	/* Scan adjacent grids */
-	for (i = 0; i < 4; i++)
+	int k = 0;
+	for (int i = 0; i < 4; i++)
 	{
-		y = y1 + ddy_ddd[i];
-		x = x1 + ddx_ddd[i];
+		POSITION y = y1 + ddy_ddd[i];
+		POSITION x = x1 + ddx_ddd[i];
+		grid_type *g_ptr;
 		g_ptr = &floor_ptr->grid_array[y][x];
 
 		/* Skip non floors */
@@ -1077,7 +1032,7 @@ static int next_to_corr(floor_type *floor_ptr, POSITION y1, POSITION x1)
 	}
 
 	/* Return the number of corridors */
-	return (k);
+	return k;
 }
 
 /*!
@@ -1093,35 +1048,36 @@ static int next_to_corr(floor_type *floor_ptr, POSITION y1, POSITION x1)
 static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
 {
 	/* Count the adjacent corridors */
-	if (next_to_corr(floor_ptr, y, x) >= 2)
-	{
-		/* Check Vertical */
-		if (cave_have_flag_bold(floor_ptr, y - 1, x, FF_WALL) &&
-			cave_have_flag_bold(floor_ptr, y + 1, x, FF_WALL))
-		{
-			return TRUE;
-		}
+	if (next_to_corr(floor_ptr, y, x) < 2) return FALSE;
 
-		/* Check Horizontal */
-		if (cave_have_flag_bold(floor_ptr, y, x - 1, FF_WALL) &&
-			cave_have_flag_bold(floor_ptr, y, x + 1, FF_WALL))
-		{
-			return TRUE;
-		}
+	/* Check Vertical */
+	if (cave_have_flag_bold(floor_ptr, y - 1, x, FF_WALL) &&
+		cave_have_flag_bold(floor_ptr, y + 1, x, FF_WALL))
+	{
+		return TRUE;
 	}
 
-	/* No doorway */
+	/* Check Horizontal */
+	if (cave_have_flag_bold(floor_ptr, y, x - 1, FF_WALL) &&
+		cave_have_flag_bold(floor_ptr, y, x + 1, FF_WALL))
+	{
+		return TRUE;
+	}
+
 	return FALSE;
 }
 
+
 /*!
 * @brief ドアの設置を試みる / Places door at y, x position if at least 2 walls found
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param y 設置を行いたいマスのY座標
 * @param x 設置を行いたいマスのX座標
 * @return なし
 */
-void try_door(floor_type *floor_ptr, POSITION y, POSITION x)
+void try_door(player_type *player_ptr, POSITION y, POSITION x)
 {
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!in_bounds(floor_ptr, y, x)) return;
 
 	/* Ignore walls */
@@ -1131,10 +1087,10 @@ void try_door(floor_type *floor_ptr, POSITION y, POSITION x)
 	if (floor_ptr->grid_array[y][x].info & (CAVE_ROOM)) return;
 
 	/* Occasional door (if allowed) */
-	if ((randint0(100) < dun_tun_jct) && possible_doorway(floor_ptr, y, x) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS))
+	if ((randint0(100) < dun_tun_jct) && possible_doorway(floor_ptr, y, x) && !(d_info[player_ptr->dungeon_idx].flags1 & DF1_NO_DOORS))
 	{
 		/* Place a door */
-		place_random_door(floor_ptr, y, x, FALSE);
+		place_random_door(player_ptr, y, x, FALSE);
 	}
 }
 
@@ -1142,7 +1098,6 @@ void try_door(floor_type *floor_ptr, POSITION y, POSITION x)
 FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat)
 {
 	feature_type *f_ptr = &f_info[newfeat];
-
 	if (have_flag(f_ptr->flags, FF_CONVERT))
 	{
 		switch (f_ptr->subtype)
@@ -1181,17 +1136,15 @@ FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat)
  */
 void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
 {
-	int dummy = 0;
-	int i = 0, j = y, k = x;
-
-	grid_type *g_ptr;
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 
 	/* Attempt to place 'num' objects */
 	for (; num > 0; --num)
 	{
 		/* Try up to 11 spots looking for empty space */
-		for (i = 0; i < 11; ++i)
+		int j = y, k = x;
+		int dummy = 0;
+		for (int i = 0; i < 11; ++i)
 		{
 			/* Pick a random location */
 			while (dummy < SAFE_MAX_ATTEMPTS)
@@ -1209,6 +1162,7 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
 			}
 
 			/* Require "clean" floor space */
+			grid_type *g_ptr;
 			g_ptr = &floor_ptr->grid_array[j][k];
 			if (!is_floor_grid(g_ptr) || g_ptr->o_idx) continue;
 
@@ -1227,9 +1181,11 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
 	}
 }
 
+
 /*!
  * @brief 始点から終点への直線経路を返す /
  * Determine the path taken by a projection.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param gp 経路座標リストを返す参照ポインタ
  * @param range 距離
  * @param y1 始点Y座標
@@ -1278,33 +1234,18 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
  * by "update_view_los()", and very different from the one used by "los()".
  * </pre>
  */
-sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg)
+sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg)
 {
-	POSITION y, x;
-
-	int n = 0;
-	int k = 0;
-
-	/* Absolute */
-	POSITION ay, ax;
-
-	/* Offsets */
-	POSITION sy, sx;
-
-	/* Fractions */
-	int frac;
-
-	/* Scale factors */
-	int full, half;
-
-	/* Slope */
-	int m;
-
 	/* No path necessary (or allowed) */
-	if ((x1 == x2) && (y1 == y2)) return (0);
-
+	if ((x1 == x2) && (y1 == y2)) return 0;
 
 	/* Analyze "dy" */
+	POSITION y, x;
+	POSITION ay, ax;
+	POSITION sy, sx;
+	int frac;
+	int m;
+
 	if (y2 < y1)
 	{
 		ay = (y1 - y2);
@@ -1328,14 +1269,16 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 		sx = 1;
 	}
 
-
 	/* Number of "units" in one "half" grid */
-	half = (ay * ax);
+	int half = (ay * ax);
 
 	/* Number of "units" in one "full" grid */
-	full = half << 1;
+	int full = half << 1;
 
 	/* Vertical */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	int n = 0;
+	int k = 0;
 	if (ay > ax)
 	{
 		/* Let m = ((dx/dy) * full) = (dx * dx * 2) */
@@ -1392,7 +1335,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-					(player_bold(p_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
+					(player_bold(player_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
 					break;
 			}
 
@@ -1421,10 +1364,12 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 			/* Advance (Y) */
 			y += sy;
 		}
+
+		return n;
 	}
 
 	/* Horizontal */
-	else if (ax > ay)
+	if (ax > ay)
 	{
 		/* Let m = ((dy/dx) * full) = (dy * dy * 2) */
 		m = ay * ay * 2;
@@ -1481,7 +1426,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-					(player_bold(p_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
+					(player_bold(player_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
 					break;
 			}
 
@@ -1510,64 +1455,58 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 			/* Advance (X) */
 			x += sx;
 		}
+
+		return n;
 	}
 
 	/* Diagonal */
-	else
+	y = y1 + sy;
+	x = x1 + sx;
+
+	/* Create the projection path */
+	while (TRUE)
 	{
-		/* Start */
-		y = y1 + sy;
-		x = x1 + sx;
+		/* Save grid */
+		gp[n++] = GRID(y, x);
 
-		/* Create the projection path */
-		while (TRUE)
+		/* Hack -- Check maximum range */
+		if ((n + (n >> 1)) >= range) break;
+
+		/* Sometimes stop at destination grid */
+		if (!(flg & (PROJECT_THRU)))
 		{
-			/* Save grid */
-			gp[n++] = GRID(y, x);
-
-			/* Hack -- Check maximum range */
-			if ((n + (n >> 1)) >= range) break;
-
-			/* Sometimes stop at destination grid */
-			if (!(flg & (PROJECT_THRU)))
-			{
-				if ((x == x2) && (y == y2)) break;
-			}
-
-			if (flg & (PROJECT_DISI))
-			{
-				if ((n > 0) && cave_stop_disintegration(floor_ptr, y, x)) break;
-			}
-			else if (flg & (PROJECT_LOS))
-			{
-				if ((n > 0) && !cave_los_bold(floor_ptr, y, x)) break;
-			}
-			else if (!(flg & (PROJECT_PATH)))
-			{
-				/* Always stop at non-initial wall grids */
-				if ((n > 0) && !cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT)) break;
-			}
-
-			/* Sometimes stop at non-initial monsters/players */
-			if (flg & (PROJECT_STOP))
-			{
-				if ((n > 0) &&
-					(player_bold(p_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
-					break;
-			}
-
-			if (!in_bounds(floor_ptr, y, x)) break;
-
-			/* Advance (Y) */
-			y += sy;
-
-			/* Advance (X) */
-			x += sx;
+			if ((x == x2) && (y == y2)) break;
 		}
+
+		if (flg & (PROJECT_DISI))
+		{
+			if ((n > 0) && cave_stop_disintegration(floor_ptr, y, x)) break;
+		}
+		else if (flg & (PROJECT_LOS))
+		{
+			if ((n > 0) && !cave_los_bold(floor_ptr, y, x)) break;
+		}
+		else if (!(flg & (PROJECT_PATH)))
+		{
+			/* Always stop at non-initial wall grids */
+			if ((n > 0) && !cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT)) break;
+		}
+
+		/* Sometimes stop at non-initial monsters/players */
+		if (flg & (PROJECT_STOP))
+		{
+			if ((n > 0) &&
+				(player_bold(player_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
+				break;
+		}
+
+		if (!in_bounds(floor_ptr, y, x)) break;
+
+		y += sy;
+		x += sx;
 	}
 
-	/* Length */
-	return (n);
+	return n;
 }
 
 
@@ -1638,34 +1577,33 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
 	OBJECT_IDX o_idx = o_pop(floor_ptr);
 
 	/* Success */
-	if (o_idx)
-	{
-		object_type *o_ptr;
-		o_ptr = &floor_ptr->o_list[o_idx];
-
-		/* Structure Copy */
-		object_copy(o_ptr, q_ptr);
-
-		o_ptr->iy = y;
-		o_ptr->ix = x;
-
-		/* Build a stack */
-		o_ptr->next_o_idx = g_ptr->o_idx;
-
-		g_ptr->o_idx = o_idx;
-		note_spot(y, x);
-		lite_spot(y, x);
-	}
-	else
+	if (o_idx == 0)
 	{
 		/* Hack -- Preserve artifacts */
 		if (object_is_fixed_artifact(q_ptr))
 		{
 			a_info[q_ptr->name1].cur_num = 0;
 		}
-	}
-}
 
+		return;
+	}
+
+	object_type *o_ptr;
+	o_ptr = &floor_ptr->o_list[o_idx];
+
+	/* Structure Copy */
+	object_copy(o_ptr, q_ptr);
+
+	o_ptr->iy = y;
+	o_ptr->ix = x;
+
+	/* Build a stack */
+	o_ptr->next_o_idx = g_ptr->o_idx;
+
+	g_ptr->o_idx = o_idx;
+	note_spot(y, x);
+	lite_spot(y, x);
+}
 
 
 /*!
@@ -1680,14 +1618,8 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
  */
 void place_gold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-	OBJECT_IDX o_idx;
-
 	/* Acquire grid */
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-
-	object_type forge;
-	object_type *q_ptr;
-
 
 	/* Paranoia -- check bounds */
 	if (!in_bounds(floor_ptr, y, x)) return;
@@ -1698,32 +1630,33 @@ void place_gold(floor_type *floor_ptr, POSITION y, POSITION x)
 	/* Avoid stacking on other objects */
 	if (g_ptr->o_idx) return;
 
+	object_type forge;
+	object_type *q_ptr;
 	q_ptr = &forge;
 	object_wipe(q_ptr);
 
 	/* Make some gold */
 	if (!make_gold(floor_ptr, q_ptr)) return;
 
-	o_idx = o_pop(floor_ptr);
+	OBJECT_IDX o_idx = o_pop(floor_ptr);
 
 	/* Success */
-	if (o_idx)
-	{
-		object_type *o_ptr;
-		o_ptr = &floor_ptr->o_list[o_idx];
-		object_copy(o_ptr, q_ptr);
+	if (o_idx == 0) return;
 
-		/* Save location */
-		o_ptr->iy = y;
-		o_ptr->ix = x;
+	object_type *o_ptr;
+	o_ptr = &floor_ptr->o_list[o_idx];
+	object_copy(o_ptr, q_ptr);
 
-		/* Build a stack */
-		o_ptr->next_o_idx = g_ptr->o_idx;
+	/* Save location */
+	o_ptr->iy = y;
+	o_ptr->ix = x;
 
-		g_ptr->o_idx = o_idx;
-		note_spot(y, x);
-		lite_spot(y, x);
-	}
+	/* Build a stack */
+	o_ptr->next_o_idx = g_ptr->o_idx;
+
+	g_ptr->o_idx = o_idx;
+	note_spot(y, x);
+	lite_spot(y, x);
 }
 
 
@@ -1746,7 +1679,6 @@ void delete_monster(floor_type *floor_ptr, POSITION y, POSITION x)
 }
 
 
-
 /*!
  * @brief グローバルオブジェクト配列に対し指定範囲のオブジェクトを整理してIDの若い順に寄せる /
  * Move an object from index i1 to index i2 in the object list
@@ -1756,15 +1688,12 @@ void delete_monster(floor_type *floor_ptr, POSITION y, POSITION x)
  */
 static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX i2)
 {
-	OBJECT_IDX i;
-	grid_type *g_ptr;
-	object_type *o_ptr;
-
 	/* Do nothing */
 	if (i1 == i2) return;
 
 	/* Repair objects */
-	for (i = 1; i < floor_ptr->o_max; i++)
+	object_type *o_ptr;
+	for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++)
 	{
 		o_ptr = &floor_ptr->o_list[i];
 
@@ -1778,6 +1707,7 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
 			o_ptr->next_o_idx = i2;
 		}
 	}
+
 	o_ptr = &floor_ptr->o_list[i1];
 
 	if (OBJECT_IS_HELD_MONSTER(o_ptr))
@@ -1803,6 +1733,7 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
 		x = o_ptr->ix;
 
 		/* Acquire grid */
+		grid_type *g_ptr;
 		g_ptr = &floor_ptr->grid_array[y][x];
 
 		/* Repair grid */
@@ -1813,16 +1744,15 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
 		}
 	}
 
-	/* Structure copy */
 	floor_ptr->o_list[i2] = floor_ptr->o_list[i1];
-
-	/* Wipe the hole */
 	object_wipe(o_ptr);
 }
+
 
 /*!
  * @brief グローバルオブジェクト配列から優先度の低いものを削除し、データを圧縮する。 /
  * Compact and Reorder the object list.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param size 最低でも減らしたいオブジェクト数の水準
  * @return なし
  * @details
@@ -1836,34 +1766,30 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
  * After "compacting" (if needed), we "reorder" the objects into a more\n
  * compact order, and we reset the allocation info, and the "live" array.\n
  */
-void compact_objects(floor_type *floor_ptr, int size)
+void compact_objects(player_type *player_ptr, int size)
 {
-	OBJECT_IDX i;
-	POSITION y, x;
-	int num, cnt;
-	int cur_lev, cur_dis, chance;
 	object_type *o_ptr;
 
 	/* Compact */
 	if (size)
 	{
 		msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
-		p_ptr->redraw |= (PR_MAP);
-		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+		player_ptr->redraw |= (PR_MAP);
+		player_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	}
 
-
 	/* Compact at least 'size' objects */
-	for (num = 0, cnt = 1; num < size; cnt++)
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	for (int num = 0, cnt = 1; num < size; cnt++)
 	{
 		/* Get more vicious each iteration */
-		cur_lev = 5 * cnt;
+		int cur_lev = 5 * cnt;
 
 		/* Get closer each iteration */
-		cur_dis = 5 * (20 - cnt);
+		int cur_dis = 5 * (20 - cnt);
 
 		/* Examine the objects */
-		for (i = 1; i < floor_ptr->o_max; i++)
+		for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++)
 		{
 			o_ptr = &floor_ptr->o_list[i];
 
@@ -1872,6 +1798,7 @@ void compact_objects(floor_type *floor_ptr, int size)
 			/* Hack -- High level objects start out "immune" */
 			if (k_info[o_ptr->k_idx].level > cur_lev) continue;
 
+			POSITION y, x;
 			if (OBJECT_IS_HELD_MONSTER(o_ptr))
 			{
 				monster_type *m_ptr;
@@ -1892,10 +1819,10 @@ void compact_objects(floor_type *floor_ptr, int size)
 			}
 
 			/* Nearby objects start out "immune" */
-			if ((cur_dis > 0) && (distance(p_ptr->y, p_ptr->x, y, x) < cur_dis)) continue;
+			if ((cur_dis > 0) && (distance(player_ptr->y, player_ptr->x, y, x) < cur_dis)) continue;
 
 			/* Saving throw */
-			chance = 90;
+			int chance = 90;
 
 			/* Hack -- only compact artifacts in emergencies */
 			if ((object_is_fixed_artifact(o_ptr) || o_ptr->art_name) &&
@@ -1905,15 +1832,12 @@ void compact_objects(floor_type *floor_ptr, int size)
 			if (randint0(100) < chance) continue;
 
 			delete_object_idx(floor_ptr, i);
-
-			/* Count it */
 			num++;
 		}
 	}
 
-
 	/* Excise dead objects (backwards!) */
-	for (i = floor_ptr->o_max - 1; i >= 1; i--)
+	for (OBJECT_IDX i = floor_ptr->o_max - 1; i >= 1; i--)
 	{
 		o_ptr = &floor_ptr->o_list[i];
 
@@ -1927,6 +1851,7 @@ void compact_objects(floor_type *floor_ptr, int size)
 		floor_ptr->o_max--;
 	}
 }
+
 
 /*!
  * @brief 特殊な部屋向けに各種アイテムを配置する(メインルーチン) / Place some traps with a given displacement of given location
@@ -1942,9 +1867,7 @@ void compact_objects(floor_type *floor_ptr, int size)
  */
 void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num)
 {
-	int i;
-
-	for (i = 0; i < num; i++)
+	for (int i = 0; i < num; i++)
 	{
 		vault_trap_aux(player_ptr, y, x, yd, xd);
 	}
@@ -1962,11 +1885,11 @@ void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, P
  *
  * Currently the "m" parameter is unused.
  */
-void scatter(floor_type *floor_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
+void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
 {
-	POSITION nx, ny;
-
 	/* Pick a location */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	POSITION nx, ny;
 	while (TRUE)
 	{
 		/* Pick a new location */
@@ -1981,16 +1904,13 @@ void scatter(floor_type *floor_ptr, POSITION *yp, POSITION *xp, POSITION y, POSI
 
 		if (mode & PROJECT_LOS)
 		{
-			if (los(floor_ptr, y, x, ny, nx)) break;
-		}
-		else
-		{
-			if (projectable(floor_ptr, y, x, ny, nx)) break;
+			if (los(player_ptr, y, x, ny, nx)) break;
+			continue;
 		}
 
+		if (projectable(player_ptr, y, x, ny, nx)) break;
 	}
 
-	/* Save the location */
-	(*yp) = ny;
-	(*xp) = nx;
+	*yp = ny;
+	*xp = nx;
 }

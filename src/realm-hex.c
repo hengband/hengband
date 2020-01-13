@@ -1098,7 +1098,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 					do
 					{
 						msg_print(_("復讐の時だ！", "Time to revenge!"));
-					} while (!get_aim_dir(&dir));
+					} while (!get_aim_dir(caster_ptr, &dir));
 
 					fire_ball(caster_ptr, GF_HELL_FIRE, dir, power, 1);
 

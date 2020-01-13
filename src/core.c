@@ -711,7 +711,7 @@ static bool pattern_effect(player_type *creature_ptr)
 		(void)restore_level(creature_ptr);
 		(void)cure_critical_wounds(creature_ptr, 1000);
 
-		cave_set_feat(floor_ptr, creature_ptr->y, creature_ptr->x, feat_pattern_old);
+		cave_set_feat(creature_ptr, creature_ptr->y, creature_ptr->x, feat_pattern_old);
 		msg_print(_("「パターン」のこの部分は他の部分より強力でないようだ。", "This section of the Pattern looks less powerful."));
 
 		/*
@@ -930,19 +930,16 @@ static void regenmagic(player_type *creature_ptr, int regen_amount)
 
 /*!
  * @brief 100ゲームターン毎のモンスターのHP自然回復処理 / Regenerate the monsters (once per 100 game turns)
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @note Should probably be done during monster turns.
  */
-static void regen_monsters(void)
+static void regenerate_monsters(player_type *player_ptr)
 {
-	int i, frac;
-
-
-	/* Regenerate everyone */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (int i = 1; i < player_ptr->current_floor_ptr->m_max; i++)
 	{
 		/* Check the i'th monster */
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		if (!monster_is_valid(m_ptr)) continue;
@@ -951,7 +948,7 @@ static void regen_monsters(void)
 		if (m_ptr->hp < m_ptr->maxhp)
 		{
 			/* Hack -- Base regeneration */
-			frac = m_ptr->maxhp / 100;
+			int frac = m_ptr->maxhp / 100;
 
 			/* Hack -- Minimal regeneration rate */
 			if (!frac) if (one_in_(2)) frac = 1;
@@ -966,8 +963,8 @@ static void regen_monsters(void)
 			if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
 
 			/* Redraw (later) if needed */
-			if (p_ptr->health_who == i) p_ptr->redraw |= (PR_HEALTH);
-			if (p_ptr->riding == i) p_ptr->redraw |= (PR_UHEALTH);
+			if (player_ptr->health_who == i) player_ptr->redraw |= (PR_HEALTH);
+			if (player_ptr->riding == i) player_ptr->redraw |= (PR_UHEALTH);
 		}
 	}
 }
@@ -3263,7 +3260,6 @@ static void process_world(player_type *player_ptr)
 		}
 	}
 
-
 	/*** Process the monsters ***/
 
 	/* Check for creature generation. */
@@ -3275,7 +3271,7 @@ static void process_world(player_type *player_ptr)
 	}
 
 	/* Hack -- Check for creature regeneration */
-	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !player_ptr->phase_out) regen_monsters();
+	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !player_ptr->phase_out) regenerate_monsters(player_ptr);
 	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3))) regen_captured_monsters();
 
 	if (!player_ptr->leaving)
@@ -3288,7 +3284,6 @@ static void process_world(player_type *player_ptr)
 			if (player_ptr->current_floor_ptr->mproc_max[i] > 0) process_monsters_mtimed(i);
 		}
 	}
-
 
 	/* Date changes */
 	if (!hour && !min)
@@ -5065,10 +5060,10 @@ static void dungeon(player_type *player_ptr, bool load_game)
 
 
 		/* Hack -- Compact the object list occasionally */
-		if (player_ptr->current_floor_ptr->o_cnt + 32 > current_world_ptr->max_o_idx) compact_objects(player_ptr->current_floor_ptr, 64);
+		if (player_ptr->current_floor_ptr->o_cnt + 32 > current_world_ptr->max_o_idx) compact_objects(player_ptr, 64);
 
 		/* Hack -- Compress the object list occasionally */
-		if (player_ptr->current_floor_ptr->o_cnt + 32 < player_ptr->current_floor_ptr->o_max) compact_objects(player_ptr->current_floor_ptr, 0);
+		if (player_ptr->current_floor_ptr->o_cnt + 32 < player_ptr->current_floor_ptr->o_max) compact_objects(player_ptr, 0);
 
 		/* Process the player */
 		process_player(player_ptr);

@@ -2583,11 +2583,11 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 	rd_s16b(&tmp16s);
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	floor_ptr->dun_level = (DEPTH)tmp16s;
-	if (z_older_than(10, 3, 8)) p_ptr->dungeon_idx = DUNGEON_ANGBAND;
+	if (z_older_than(10, 3, 8)) creature_ptr->dungeon_idx = DUNGEON_ANGBAND;
 	else
 	{ 
 		rd_byte(&tmp8u);
-		p_ptr->dungeon_idx = (IDX)tmp8u;
+		creature_ptr->dungeon_idx = (IDX)tmp8u;
 	}
 
 	/* Set the base level for old versions */
@@ -2599,10 +2599,10 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 	rd_s16b(&tmp16s);
 	floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
 	rd_s16b(&tmp16s);
-	p_ptr->y = (POSITION)tmp16s;
+	creature_ptr->y = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
-	p_ptr->x = (POSITION)tmp16s;
-	if (z_older_than(10, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena) {p_ptr->y = 33;p_ptr->x = 131;}
+	creature_ptr->x = (POSITION)tmp16s;
+	if (z_older_than(10, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena) { creature_ptr->y = 33; creature_ptr->x = 131;}
 	rd_s16b(&tmp16s);
 	floor_ptr->height = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
@@ -3353,7 +3353,7 @@ static errr rd_dungeon(player_type *player_ptr)
 			if (err) break;
 
 			/* Re-save as temporary saved floor file */
-			if (!save_floor(sf_ptr, SLF_SECOND)) err = 182;
+			if (!save_floor(player_ptr, sf_ptr, SLF_SECOND)) err = 182;
 
 			/* Error? */
 			if (err) break;

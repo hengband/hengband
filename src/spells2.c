@@ -802,7 +802,7 @@ bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam)
 		x = m_ptr->fx;
 
 		/* Require line of sight */
-		if (!player_has_los_bold(caster_ptr, y, x) || !projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x)) continue;
+		if (!player_has_los_bold(caster_ptr, y, x) || !projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x)) continue;
 
 		/* Mark the monster */
 		m_ptr->mflag |= (MFLAG_LOS);
@@ -1877,7 +1877,7 @@ bool starlight(player_type *caster_ptr, bool magic)
 
 		while (attempts--)
 		{
-			scatter(caster_ptr->current_floor_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, PROJECT_LOS);
+			scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, PROJECT_LOS);
 			if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)) continue;
 			if (!player_bold(caster_ptr, y, x)) break;
 		}
@@ -1966,7 +1966,7 @@ bool fire_ball(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 	POSITION ty = caster_ptr->y + 99 * ddy[dir];
 
 	/* Hack -- Use an actual "target" */
-	if ((dir == 5) && target_okay())
+	if ((dir == 5) && target_okay(caster_ptr))
 	{
 		flg &= ~(PROJECT_STOP);
 		tx = target_col;
@@ -2020,7 +2020,7 @@ bool fire_rocket(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POIN
 	POSITION ty = caster_ptr->y + 99 * ddy[dir];
 
 	/* Hack -- Use an actual "target" */
-	if ((dir == 5) && target_okay())
+	if ((dir == 5) && target_okay(caster_ptr))
 	{
 		tx = target_col;
 		ty = target_row;
@@ -2053,7 +2053,7 @@ bool fire_ball_hide(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_P
 	POSITION ty = caster_ptr->y + 99 * ddy[dir];
 
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE;
-	if ((dir == 5) && target_okay())
+	if ((dir == 5) && target_okay(caster_ptr))
 	{
 		flg &= ~(PROJECT_STOP);
 		tx = target_col;
@@ -2156,7 +2156,7 @@ bool fire_blast(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMB
 bool teleport_swap(player_type *caster_ptr, DIRECTION dir)
 {
 	POSITION tx, ty;
-	if ((dir == 5) && target_okay())
+	if ((dir == 5) && target_okay(caster_ptr))
 	{
 		tx = target_col;
 		ty = target_row;
@@ -2227,7 +2227,7 @@ bool project_hook(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POI
 
 	POSITION tx = caster_ptr->x + ddx[dir];
 	POSITION ty = caster_ptr->y + ddy[dir];
-	if ((dir == 5) && target_okay())
+	if ((dir == 5) && target_okay(caster_ptr))
 	{
 		tx = target_col;
 		ty = target_row;
@@ -2574,7 +2574,7 @@ void call_chaos(player_type *caster_ptr)
 		return;
 	}
 
-	if (!get_aim_dir(&dir)) return;
+	if (!get_aim_dir(caster_ptr, &dir)) return;
 	if (line_chaos)
 		fire_beam(caster_ptr, chaos_type, dir, 250);
 	else
@@ -2801,7 +2801,7 @@ void wall_breaker(player_type *caster_ptr)
 	{
 		while (attempts--)
 		{
-			scatter(caster_ptr->current_floor_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
+			scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
 
 			if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)) continue;
 
@@ -2824,7 +2824,7 @@ void wall_breaker(player_type *caster_ptr)
 	{
 		while (TRUE)
 		{
-			scatter(caster_ptr->current_floor_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 10, 0);
+			scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 10, 0);
 
 			if (!player_bold(caster_ptr, y, x)) break;
 		}
@@ -3066,13 +3066,13 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 
 	project_length = 5;
 	DIRECTION dir;
-	if (!get_aim_dir(&dir)) return FALSE;
+	if (!get_aim_dir(attacker_ptr, &dir)) return FALSE;
 
 	/* Use the given direction */
 	int tx = attacker_ptr->x + project_length * ddx[dir];
 	int ty = attacker_ptr->y + project_length * ddy[dir];
 
-	if ((dir == 5) && target_okay())
+	if ((dir == 5) && target_okay(attacker_ptr))
 	{
 		tx = target_col;
 		ty = target_row;
@@ -3083,7 +3083,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 	if (in_bounds(floor_ptr, ty, tx)) tm_idx = floor_ptr->grid_array[ty][tx].m_idx;
 
 	u16b path_g[32];
-	int path_n = project_path(floor_ptr, path_g, project_length, attacker_ptr->y, attacker_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
+	int path_n = project_path(attacker_ptr, path_g, project_length, attacker_ptr->y, attacker_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
 	project_length = 0;
 
 	/* No need to move */
@@ -3387,7 +3387,7 @@ void cast_meteor(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 			if (d >= 9) continue;
 
 			floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-			if (!in_bounds(floor_ptr, y, x) || !projectable(floor_ptr, caster_ptr->y, caster_ptr->x, y, x)
+			if (!in_bounds(floor_ptr, y, x) || !projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x)
 				|| !cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT)) continue;
 
 			break;
@@ -3410,14 +3410,14 @@ void cast_meteor(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 {
 	DIRECTION dir;
-	if (!get_aim_dir(&dir)) return FALSE;
+	if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 
 	/* Use the given direction */
 	POSITION tx = caster_ptr->x + 99 * ddx[dir];
 	POSITION ty = caster_ptr->y + 99 * ddy[dir];
 
 	/* Hack -- Use an actual "target" */
-	if ((dir == 5) && target_okay())
+	if ((dir == 5) && target_okay(caster_ptr))
 	{
 		tx = target_col;
 		ty = target_row;
@@ -4005,7 +4005,7 @@ void cast_shuffle(player_type *caster_ptr)
 	{
 		msg_print(_("《恋人》だ。", "It's the Lovers."));
 
-		if (get_aim_dir(&dir))
+		if (get_aim_dir(caster_ptr, &dir))
 		{
 			charm_monster(caster_ptr, dir, MIN(caster_ptr->lev, 20));
 		}
@@ -4236,7 +4236,7 @@ bool draconian_breath(player_type *creature_ptr)
 	concptr Type_desc = ((Type == GF_COLD) ? _("冷気", "cold") : _("炎", "fire"));
 
 	DIRECTION dir;
-	if (!get_aim_dir(&dir)) return FALSE;
+	if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 
 	if (randint1(100) < creature_ptr->lev)
 	{
@@ -4377,7 +4377,7 @@ bool draconian_breath(player_type *creature_ptr)
 bool android_inside_weapon(player_type *creature_ptr)
 {
 	DIRECTION dir;
-	if (!get_aim_dir(&dir)) return FALSE;
+	if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 
 	if (creature_ptr->lev < 10)
 	{
@@ -4533,7 +4533,7 @@ bool demonic_breath(player_type *creature_ptr)
 {
 	DIRECTION dir;
 	int type = (one_in_(2) ? GF_NETHER : GF_FIRE);
-	if (!get_aim_dir(&dir)) return FALSE;
+	if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 	stop_mouth(creature_ptr);
 	msg_format(_("あなたは%sのブレスを吐いた。", "You breathe %s."), ((type == GF_NETHER) ? _("地獄", "nether") : _("火炎", "fire")));
 	fire_breath(creature_ptr, type, dir, creature_ptr->lev * 3, (creature_ptr->lev / 15) + 1);

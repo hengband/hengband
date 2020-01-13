@@ -94,6 +94,7 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n)
 
 /*!
 * @brief タイプ16の部屋…地下都市生成のサブルーチン / Actually create buildings
+* @param player_ptr プレーヤーへの参照ポインタ
 * @return なし
 * @param ltcy 生成基準Y座標
 * @param ltcx 生成基準X座標
@@ -102,13 +103,14 @@ static bool precalc_ugarcade(int town_hgt, int town_wid, int n)
 * @note
 * Note: ltcy and ltcx indicate "left top corner".
 */
-static void build_stores(floor_type *floor_ptr, POSITION ltcy, POSITION ltcx, int stores[], int n)
+static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, int stores[], int n)
 {
 	int i;
 	POSITION y, x;
 	FEAT_IDX j;
 	ugbldg_type *cur_ugbldg;
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (i = 0; i < n; i++)
 	{
 		cur_ugbldg = &ugbldg[i];
@@ -168,7 +170,7 @@ static void build_stores(floor_type *floor_ptr, POSITION ltcy, POSITION ltcx, in
 		/* Clear previous contents, add a store door */
 		if (j < max_f_idx)
 		{
-			cave_set_feat(floor_ptr, ltcy + y, ltcx + x, j);
+			cave_set_feat(player_ptr, ltcy + y, ltcx + x, j);
 
 			/* Init store */
 			store_init(NO_TOWN, stores[i]);
@@ -191,7 +193,7 @@ static void build_stores(floor_type *floor_ptr, POSITION ltcy, POSITION ltcx, in
 * This function does NOT do anything about the owners of the stores,\n
 * nor the contents thereof.  It only handles the physical layout.\n
 */
-bool build_type16(floor_type *floor_ptr)
+bool build_type16(player_type *player_ptr)
 {
 	int stores[] =
 	{
@@ -205,6 +207,7 @@ bool build_type16(floor_type *floor_ptr)
 	bool prevent_bm = FALSE;
 
 	/* Hack -- If already exist black market, prevent building */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (y = 0; (y < floor_ptr->height) && !prevent_bm; y++)
 	{
 		for (x = 0; x < floor_ptr->width; x++)
@@ -251,7 +254,7 @@ bool build_type16(floor_type *floor_ptr)
 		y1 + town_hgt * 2 / 3, x1 + town_wid * 2 / 3, FALSE);
 
 	/* Build stores */
-	build_stores(floor_ptr, y1, x1, stores, n);
+	build_stores(player_ptr, y1, x1, stores, n);
 
 	msg_print_wizard(CHEAT_DUNGEON, _("地下街を生成しました", "Underground arcade was generated."));
 

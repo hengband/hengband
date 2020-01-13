@@ -1740,7 +1740,7 @@ static void fix_monster_list(player_type *player_ptr)
 
 		Term_clear();
 
-		target_set_prepare_look();//モンスター一覧を生成，ソート
+		target_set_prepare_look(player_ptr);//モンスター一覧を生成，ソート
 		print_monster_list(player_ptr->current_floor_ptr, 0, 0, h);
 		Term_fresh();
 		Term_activate(old);
@@ -3760,7 +3760,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
 
 	/* Get projection path */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	path_n = project_path(floor_ptr, path_g, (project_length ? project_length : MAX_RANGE), player_ptr->y, player_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
+	path_n = project_path(player_ptr, path_g, (project_length ? project_length : MAX_RANGE), player_ptr->y, player_ptr->x, y, x, PROJECT_PATH | PROJECT_THRU);
 
 	player_ptr->redraw |= (PR_MAP);
 	handle_stuff(player_ptr);

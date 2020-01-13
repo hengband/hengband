@@ -282,7 +282,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 		while (cave_perma_bold(floor_ptr, y, x) || floor_ptr->grid_array[y][x].o_idx || (floor_ptr->grid_array[y][x].info & CAVE_OBJECT))
 		{
 			/* Pick a location */
-			scatter(floor_ptr, &ny, &nx, y, x, 1, 0);
+			scatter(player_ptr, &ny, &nx, y, x, 1, 0);
 
 			/* Stagger */
 			y = ny; x = nx;
@@ -292,7 +292,7 @@ void check_quest_completion(player_type *player_ptr, monster_type *m_ptr)
 		msg_print(_("魔法の階段が現れた...", "A magical staircase appears..."));
 
 		/* Create stairs down */
-		cave_set_feat(floor_ptr, y, x, feat_down_stair);
+		cave_set_feat(player_ptr, y, x, feat_down_stair);
 
 		/* Remember to update everything */
 		player_ptr->update |= (PU_FLOW);

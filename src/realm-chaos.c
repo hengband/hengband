@@ -44,7 +44,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_MISSILE, dir, damroll(dice, sides));
 			}
@@ -122,7 +122,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball(caster_ptr, GF_MISSILE, dir, damroll(dice, sides) + base, rad);
 
@@ -147,7 +147,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_FIRE, dir, damroll(dice, sides));
 			}
@@ -166,7 +166,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball(caster_ptr, GF_DISINTEGRATE, dir, damroll(dice, sides), 0);
 			}
@@ -199,7 +199,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (cast)
 			{
 
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				cast_wonder(caster_ptr, dir);
 			}
@@ -218,7 +218,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_CHAOS, dir, damroll(dice, sides));
 			}
@@ -255,7 +255,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_beam(caster_ptr, GF_MANA, dir, damroll(dice, sides));
 			}
@@ -274,7 +274,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball(caster_ptr, GF_FIRE, dir, dam, rad);
 			}
@@ -292,7 +292,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_beam(caster_ptr, GF_AWAY_ALL, dir, power);
 			}
@@ -326,7 +326,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball(caster_ptr, GF_CHAOS, dir, dam, rad);
 			}
@@ -344,7 +344,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				poly_monster(caster_ptr, dir, plev);
 			}
@@ -396,7 +396,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball(caster_ptr, GF_DISINTEGRATE, dir, dam, rad);
 			}
@@ -432,7 +432,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				msg_print(_("ロケット発射！", "You launch a rocket!"));
 				fire_rocket(caster_ptr, GF_ROCKET, dir, dam, rad);
@@ -476,7 +476,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fire_beam(caster_ptr, GF_GRAVITY, dir, damroll(dice, sides));
 			}
 		}
@@ -555,7 +555,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fire_ball(caster_ptr, GF_MANA, dir, dam, rad);
 			}
 		}
@@ -573,7 +573,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball(caster_ptr, GF_CHAOS, dir, dam, rad);
 			}

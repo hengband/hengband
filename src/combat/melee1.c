@@ -1151,7 +1151,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
 	HIT_POINT k;
 	int bonus, chance;
 	WEIGHT n_weight = 0;
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &attacker_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 
@@ -1205,8 +1205,8 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
 	monster_desc(m_name, m_ptr, 0);
 
 	/* Calculate the "attack quality" */
-	bonus = p_ptr->to_h_m + (p_ptr->lev * 6 / 5);
-	chance = (p_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
+	bonus = attacker_ptr->to_h_m + (attacker_ptr->lev * 6 / 5);
+	chance = (attacker_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
 
 	/* Test for hit */
 	if ((!(r_ptr->flags2 & RF2_QUANTUM) || !randint0(2)) && test_hit_norm(chance, r_ptr->ac, m_ptr->ml))
@@ -1215,10 +1215,10 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
 		msg_format(_("%sを%sで攻撃した。", "You hit %s with your %s."), m_name, atk_desc);
 
 		k = damroll(dice_num, dice_side);
-		k = critical_norm(p_ptr, n_weight, bonus, k, (s16b)bonus, 0);
+		k = critical_norm(attacker_ptr, n_weight, bonus, k, (s16b)bonus, 0);
 
 		/* Apply the player damage bonuses */
-		k += p_ptr->to_d_m;
+		k += attacker_ptr->to_d_m;
 
 		/* No negative damage */
 		if (k < 0) k = 0;
@@ -1238,7 +1238,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
 		switch (attack)
 		{
 		case MUT2_SCOR_TAIL:
-			project(p_ptr, 0, 0, m_ptr->fy, m_ptr->fx, k, GF_POIS, PROJECT_KILL, -1);
+			project(attacker_ptr, 0, 0, m_ptr->fy, m_ptr->fx, k, GF_POIS, PROJECT_KILL, -1);
 			*mdeath = (m_ptr->r_idx == 0);
 			break;
 		case MUT2_HORNS:
@@ -1257,7 +1257,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
 			*mdeath = mon_take_hit(attacker_ptr, m_idx, k, fear, NULL);
 		}
 
-		touch_zap_player(m_ptr, p_ptr);
+		touch_zap_player(m_ptr, attacker_ptr);
 	}
 	/* Player misses */
 	else
@@ -2358,7 +2358,8 @@ bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_
  */
 bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	int ap_cnt;
@@ -3015,13 +3016,13 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						msg_format("%sour %s (%c) was stolen!", ((o_ptr->number > 1) ? "One of y" : "Y"), o_name, index_to_label(i));
 #endif
 						chg_virtue(target_ptr, V_SACRIFICE, 1);
-						o_idx = o_pop(target_ptr->current_floor_ptr);
+						o_idx = o_pop(floor_ptr);
 
 						/* Success */
 						if (o_idx)
 						{
 							object_type *j_ptr;
-							j_ptr = &p_ptr->current_floor_ptr->o_list[o_idx];
+							j_ptr = &floor_ptr->o_list[o_idx];
 							object_copy(j_ptr, o_ptr);
 
 							/* Modify number */
@@ -3836,7 +3837,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
 					}
 
-					if (is_mirror_grid(&p_ptr->current_floor_ptr->grid_array[target_ptr->y][target_ptr->x]))
+					if (is_mirror_grid(&floor_ptr->grid_array[target_ptr->y][target_ptr->x]))
 					{
 						teleport_player(target_ptr, 10, 0L);
 					}
@@ -4033,7 +4034,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (target_ptr->riding && damage)
 		{
 			char m_steed_name[MAX_NLEN];
-			monster_desc(m_steed_name, &p_ptr->current_floor_ptr->m_list[target_ptr->riding], 0);
+			monster_desc(m_steed_name, &floor_ptr->m_list[target_ptr->riding], 0);
 			if (rakuba(target_ptr, (damage > 200) ? 200 : damage, FALSE))
 			{
 				msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);
@@ -4092,9 +4093,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 	}
 
-
 	/* Always notice cause of death */
-	if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
+	if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !floor_ptr->inside_arena)
 	{
 		r_ptr->r_deaths++;
 	}

@@ -265,6 +265,7 @@ static vault_aux_type pit_types[] =
 
 /*!
 * @brief タイプ5の部屋…nestを生成する / Type 5 -- Monster nests
+* @param player_ptr プレーヤーへの参照ポインタ
 * @return なし
 * @details
 * A monster nest is a "big" room, with an "inner" room, containing\n
@@ -283,7 +284,7 @@ static vault_aux_type pit_types[] =
 *\n
 * Note that "monster nests" will never contain "unique" monsters.\n
 */
-bool build_type5(floor_type *floor_ptr)
+bool build_type5(player_type *player_ptr)
 {
 	POSITION y, x, y1, x1, y2, x2, xval, yval;
 	int i;
@@ -293,6 +294,7 @@ bool build_type5(floor_type *floor_ptr)
 
 	grid_type *g_ptr;
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	int cur_nest_type = pick_vault_type(floor_ptr, nest_types, d_info[floor_ptr->dungeon_idx].nest);
 	vault_aux_type *n_ptr;
 
@@ -408,10 +410,10 @@ bool build_type5(floor_type *floor_ptr)
 	/* Place a secret door */
 	switch (randint1(4))
 	{
-	case 1: place_secret_door(floor_ptr, y1 - 1, xval, DOOR_DEFAULT); break;
-	case 2: place_secret_door(floor_ptr, y2 + 1, xval, DOOR_DEFAULT); break;
-	case 3: place_secret_door(floor_ptr, yval, x1 - 1, DOOR_DEFAULT); break;
-	case 4: place_secret_door(floor_ptr, yval, x2 + 1, DOOR_DEFAULT); break;
+	case 1: place_secret_door(player_ptr, y1 - 1, xval, DOOR_DEFAULT); break;
+	case 2: place_secret_door(player_ptr, y2 + 1, xval, DOOR_DEFAULT); break;
+	case 3: place_secret_door(player_ptr, yval, x1 - 1, DOOR_DEFAULT); break;
+	case 4: place_secret_door(player_ptr, yval, x2 + 1, DOOR_DEFAULT); break;
 	}
 
 	msg_format_wizard(CHEAT_DUNGEON, _("モンスター部屋(nest)(%s%s)を生成します。", "Monster nest (%s%s)"), n_ptr->name, pit_subtype_string(cur_nest_type, TRUE));
@@ -491,7 +493,7 @@ bool build_type5(floor_type *floor_ptr)
 *\n
 * Note that "monster pits" will never contain "unique" monsters.\n
 */
-bool build_type6(floor_type *floor_ptr)
+bool build_type6(player_type *player_ptr)
 {
 	POSITION y, x, y1, x1, y2, x2, xval, yval;
 	int i, j;
@@ -502,6 +504,7 @@ bool build_type6(floor_type *floor_ptr)
 
 	grid_type *g_ptr;
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	int cur_pit_type = pick_vault_type(floor_ptr, pit_types, d_info[floor_ptr->dungeon_idx].pit);
 	vault_aux_type *n_ptr;
 
@@ -614,10 +617,10 @@ bool build_type6(floor_type *floor_ptr)
 	/* Place a secret door */
 	switch (randint1(4))
 	{
-	case 1: place_secret_door(floor_ptr, y1 - 1, xval, DOOR_DEFAULT); break;
-	case 2: place_secret_door(floor_ptr, y2 + 1, xval, DOOR_DEFAULT); break;
-	case 3: place_secret_door(floor_ptr, yval, x1 - 1, DOOR_DEFAULT); break;
-	case 4: place_secret_door(floor_ptr, yval, x2 + 1, DOOR_DEFAULT); break;
+	case 1: place_secret_door(player_ptr, y1 - 1, xval, DOOR_DEFAULT); break;
+	case 2: place_secret_door(player_ptr, y2 + 1, xval, DOOR_DEFAULT); break;
+	case 3: place_secret_door(player_ptr, yval, x1 - 1, DOOR_DEFAULT); break;
+	case 4: place_secret_door(player_ptr, yval, x2 + 1, DOOR_DEFAULT); break;
 	}
 
 	/* Sort the entries */

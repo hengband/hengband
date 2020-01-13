@@ -45,7 +45,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_ELEC, dir, damroll(dice, sides));
 			}
@@ -59,7 +59,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				wizard_lock(caster_ptr, dir);
 			}
@@ -139,7 +139,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				destroy_door(caster_ptr, dir);
 			}
@@ -371,7 +371,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				wall_to_mud(caster_ptr, dir, 20 + randint1(30));
 			}
@@ -390,7 +390,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				msg_print(_("光線が放たれた。", "A line of light appears."));
 				lite_line(caster_ptr, dir, damroll(6, 8));
@@ -464,7 +464,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_beam(caster_ptr, GF_AWAY_ALL, dir, power);
 			}
@@ -485,7 +485,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 			{
 				int type;
 
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				switch (randint1(4))
 				{

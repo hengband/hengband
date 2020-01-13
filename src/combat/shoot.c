@@ -438,7 +438,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 	project_length = tdis + 1;
 
 	/* Get a direction (or cancel) */
-	if (!get_aim_dir(&dir))
+	if (!get_aim_dir(shooter_ptr, &dir))
 	{
 		free_turn(shooter_ptr);
 
@@ -454,14 +454,14 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 	ty = shooter_ptr->y + 99 * ddy[dir];
 
 	/* Check for "target request" */
-	if ((dir == 5) && target_okay())
+	if ((dir == 5) && target_okay(shooter_ptr))
 	{
 		tx = target_col;
 		ty = target_row;
 	}
 
 	/* Get projection path length */
-	tdis = project_path(shooter_ptr->current_floor_ptr, path_g, project_length, shooter_ptr->y, shooter_ptr->x, ty, tx, PROJECT_PATH | PROJECT_THRU) - 1;
+	tdis = project_path(shooter_ptr, path_g, project_length, shooter_ptr->y, shooter_ptr->x, ty, tx, PROJECT_PATH | PROJECT_THRU) - 1;
 
 	project_length = 0; /* reset to default */
 

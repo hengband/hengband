@@ -209,23 +209,24 @@ void verify_panel(void)
  * Future versions may restrict the ability to target "trappers"
  * and "mimics", but the semantics is a little bit weird.
  */
-bool target_able(MONSTER_IDX m_idx)
+bool target_able(player_type *creature_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 
 	/* Monster must be alive */
 	if (!monster_is_valid(m_ptr)) return FALSE;
 
 	/* Hack -- no targeting hallucinations */
-	if (p_ptr->image) return FALSE;
+	if (creature_ptr->image) return FALSE;
 
 	/* Monster must be visible */
 	if (!m_ptr->ml) return FALSE;
 
-	if (p_ptr->riding && (p_ptr->riding == m_idx)) return TRUE;
+	if (creature_ptr->riding && (creature_ptr->riding == m_idx)) return TRUE;
 
 	/* Monster must be projectable */
-	if (!projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, m_ptr->fy, m_ptr->fx)) return FALSE;
+	if (!projectable(creature_ptr, creature_ptr->y, creature_ptr->x, m_ptr->fy, m_ptr->fx)) return FALSE;
 
 	/* Hack -- Never target trappers */
 	/* if (CLEAR_ATTR && (CLEAR_CHAR)) return FALSE; */
@@ -247,7 +248,7 @@ POSITION target_row;
  *
  * We return TRUE if the target is "okay" and FALSE otherwise.
  */
-bool target_okay(void)
+bool target_okay(player_type *creature_ptr)
 {
 	/* Accept stationary targets */
 	if (target_who < 0) return TRUE;
@@ -256,9 +257,9 @@ bool target_okay(void)
 	if (target_who > 0)
 	{
 		/* Accept reasonable targets */
-		if (target_able(target_who))
+		if (target_able(creature_ptr, target_who))
 		{
-			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[target_who];
+			monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[target_who];
 
 			/* Acquire monster location */
 			target_row = m_ptr->fy;
@@ -373,7 +374,7 @@ static bool target_set_accept(POSITION y, POSITION x)
  *
  * Return the number of target_able monsters in the set.
  */
-static void target_set_prepare(BIT_FLAGS mode)
+static void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
 {
 	POSITION y, x;
 	POSITION min_hgt, max_hgt, min_wid, max_wid;
@@ -381,10 +382,10 @@ static void target_set_prepare(BIT_FLAGS mode)
 	if (mode & TARGET_KILL)
 	{
 		/* Inner range */
-		min_hgt = MAX((p_ptr->y - MAX_RANGE), 0);
-		max_hgt = MIN((p_ptr->y + MAX_RANGE), p_ptr->current_floor_ptr->height - 1);
-		min_wid = MAX((p_ptr->x - MAX_RANGE), 0);
-		max_wid = MIN((p_ptr->x + MAX_RANGE), p_ptr->current_floor_ptr->width - 1);
+		min_hgt = MAX((creature_ptr->y - MAX_RANGE), 0);
+		max_hgt = MIN((creature_ptr->y + MAX_RANGE), creature_ptr->current_floor_ptr->height - 1);
+		min_wid = MAX((creature_ptr->x - MAX_RANGE), 0);
+		max_wid = MIN((creature_ptr->x + MAX_RANGE), creature_ptr->current_floor_ptr->width - 1);
 	}
 	else /* not targetting */
 	{
@@ -408,12 +409,12 @@ static void target_set_prepare(BIT_FLAGS mode)
 			/* Require "interesting" contents */
 			if (!target_set_accept(y, x)) continue;
 
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
 			/* Require target_able monsters for "TARGET_KILL" */
-			if ((mode & (TARGET_KILL)) && !target_able(g_ptr->m_idx)) continue;
+			if ((mode & (TARGET_KILL)) && !target_able(creature_ptr, g_ptr->m_idx)) continue;
 
-			if ((mode & (TARGET_KILL)) && !target_pet && is_pet(&p_ptr->current_floor_ptr->m_list[g_ptr->m_idx])) continue;
+			if ((mode & (TARGET_KILL)) && !target_pet && is_pet(&creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx])) continue;
 
 			/* Save the location */
 			tmp_pos.x[tmp_pos.n] = x;
@@ -432,7 +433,7 @@ static void target_set_prepare(BIT_FLAGS mode)
 		ang_sort(tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_importance, ang_sort_swap_distance);
 	}
 
-	if (p_ptr->riding && target_pet && (tmp_pos.n > 1) && (mode & (TARGET_KILL)))
+	if (creature_ptr->riding && target_pet && (tmp_pos.n > 1) && (mode & (TARGET_KILL)))
 	{
 		POSITION tmp;
 
@@ -445,8 +446,9 @@ static void target_set_prepare(BIT_FLAGS mode)
 	}
 }
 
-void target_set_prepare_look(void){
-	target_set_prepare(TARGET_LOOK);
+void target_set_prepare_look(player_type *creature_ptr)
+{
+	target_set_prepare(creature_ptr, TARGET_LOOK);
 }
 
 
@@ -1080,7 +1082,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 	}
 
 	/* Prepare the "temp" array */
-	target_set_prepare(mode);
+	target_set_prepare(creature_ptr, mode);
 
 	/* Start near the player */
 	m = 0;
@@ -1104,7 +1106,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Allow target */
-			if (target_able(g_ptr->m_idx))
+			if (target_able(creature_ptr, g_ptr->m_idx))
 			{
 				strcpy(info, _("q止 t決 p自 o現 +次 -前", "q,t,p,o,+,-,<dir>"));
 			}
@@ -1119,7 +1121,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 			{
 				char cheatinfo[30];
 				sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d",
-					los(floor_ptr, creature_ptr->y, creature_ptr->x, y, x), projectable(floor_ptr, creature_ptr->y, creature_ptr->x, y, x));
+					los(creature_ptr, creature_ptr->y, creature_ptr->x, y, x), projectable(creature_ptr, creature_ptr->y, creature_ptr->x, y, x));
 				strcat(info, cheatinfo);
 			}
 			
@@ -1153,7 +1155,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 				case '5':
 				case '0':
 				{
-					if (target_able(g_ptr->m_idx))
+					if (target_able(creature_ptr, g_ptr->m_idx))
 					{
 						health_track(creature_ptr, g_ptr->m_idx);
 						target_who = g_ptr->m_idx;
@@ -1200,7 +1202,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 					handle_stuff(creature_ptr);
 
 					/* Recalculate interesting grids */
-					target_set_prepare(mode);
+					target_set_prepare(creature_ptr, mode);
 
 					y = creature_ptr->y;
 					x = creature_ptr->x;
@@ -1257,7 +1259,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 						int u = tmp_pos.x[m];
 
 						/* Recalculate interesting grids */
-						target_set_prepare(mode);
+						target_set_prepare(creature_ptr, mode);
 
 						/* Look at interesting grids */
 						flag = TRUE;
@@ -1286,7 +1288,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 						handle_stuff(creature_ptr);
 
 						/* Recalculate interesting grids */
-						target_set_prepare(mode);
+						target_set_prepare(creature_ptr, mode);
 
 						/* Look at boring grids */
 						flag = FALSE;
@@ -1313,7 +1315,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 						if ((y >= panel_row_min+hgt) || (y < panel_row_min) ||
 						    (x >= panel_col_min+wid) || (x < panel_col_min))
 						{
-							if (change_panel(creature_ptr, dy, dx)) target_set_prepare(mode);
+							if (change_panel(creature_ptr, dy, dx)) target_set_prepare(creature_ptr, mode);
 						}
 
 						/* Slide into legality */
@@ -1348,8 +1350,8 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 			{
 				char cheatinfo[100];
 				sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d, SPECIAL:%d",
-					los(floor_ptr, creature_ptr->y, creature_ptr->x, y, x),
-					projectable(floor_ptr, creature_ptr->y, creature_ptr->x, y, x), g_ptr->special);
+					los(creature_ptr, creature_ptr->y, creature_ptr->x, y, x),
+					projectable(creature_ptr, creature_ptr->y, creature_ptr->x, y, x), g_ptr->special);
 				strcat(info, cheatinfo);
 			}
 
@@ -1396,7 +1398,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 					handle_stuff(creature_ptr);
 
 					/* Recalculate interesting grids */
-					target_set_prepare(mode);
+					target_set_prepare(creature_ptr, mode);
 
 					y = creature_ptr->y;
 					x = creature_ptr->x;
@@ -1487,7 +1489,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 				if ((y >= panel_row_min + hgt) || (y < panel_row_min) ||
 					 (x >= panel_col_min + wid) || (x < panel_col_min))
 				{
-					if (change_panel(creature_ptr, dy, dx)) target_set_prepare(mode);
+					if (change_panel(creature_ptr, dy, dx)) target_set_prepare(creature_ptr, mode);
 				}
 
 				/* Slide into legality */
@@ -1531,7 +1533,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
  *
  * Note that confusion over-rides any (explicit?) user choice.
  */
-bool get_aim_dir(DIRECTION *dp)
+bool get_aim_dir(player_type *creature_ptr, DIRECTION *dp)
 {
 	DIRECTION dir;
 	char	command;
@@ -1544,14 +1546,14 @@ bool get_aim_dir(DIRECTION *dp)
 	dir = command_dir;
 
 	/* Hack -- auto-target if requested */
-	if (use_old_target && target_okay()) dir = 5;
+	if (use_old_target && target_okay(creature_ptr)) dir = 5;
 
 	if (repeat_pull(&code))
 	{
 		/* Confusion? */
 
 		/* Verify */
-		if (!(code == 5 && !target_okay()))
+		if (!(code == 5 && !target_okay(creature_ptr)))
 		{
 /*			return TRUE; */
 			dir = (DIRECTION)code;
@@ -1563,7 +1565,7 @@ bool get_aim_dir(DIRECTION *dp)
 	while (!dir)
 	{
 		/* Choose a prompt */
-		if (!target_okay())
+		if (!target_okay(creature_ptr))
 		{
 			p = _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
 		}
@@ -1599,7 +1601,7 @@ bool get_aim_dir(DIRECTION *dp)
 			case ' ':
 			case '\r':
 			{
-				if (target_set(p_ptr, TARGET_KILL)) dir = 5;
+				if (target_set(creature_ptr, TARGET_KILL)) dir = 5;
 				break;
 			}
 
@@ -1613,7 +1615,7 @@ bool get_aim_dir(DIRECTION *dp)
 		}
 
 		/* Verify requested targets */
-		if ((dir == 5) && !target_okay()) dir = 0;
+		if ((dir == 5) && !target_okay(creature_ptr)) dir = 0;
 
 		/* Error */
 		if (!dir) bell();
@@ -1630,7 +1632,7 @@ bool get_aim_dir(DIRECTION *dp)
 	command_dir = dir;
 
 	/* Check for confusion */
-	if (p_ptr->confused)
+	if (creature_ptr->confused)
 	{
 		/* Random direction */
 		dir = ddd[randint0(8)];
@@ -2188,7 +2190,7 @@ bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
 	while (!dir)
 	{
 		/* Choose a prompt */
-		if (!target_okay())
+		if (!target_okay(creature_ptr))
 		{
 			p = _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
 		}
@@ -2238,7 +2240,7 @@ bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
 		}
 
 		/* Verify requested targets */
-		if ((dir == 5) && !target_okay()) dir = 0;
+		if ((dir == 5) && !target_okay(creature_ptr)) dir = 0;
 
 		/* Error */
 		if (!dir) bell();
@@ -2251,7 +2253,7 @@ bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
 	command_dir = dir;
 
 	/* Check for confusion */
-	if (p_ptr->confused)
+	if (creature_ptr->confused)
 	{
 		/* Random direction */
 		dir = ddd[randint0(8)];

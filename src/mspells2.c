@@ -45,7 +45,7 @@ static bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSIT
 	/* Check the projection path */
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	u16b grid_g[512];
-	int grid_n = project_path(floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, PROJECT_THRU);
+	int grid_n = project_path(target_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, PROJECT_THRU);
 
 	/* No grid is ever projectable from itself */
 	if (!grid_n) return FALSE;
@@ -107,7 +107,7 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 
 	/* Check the projection path */
 	u16b grid_g[512];
-	int grid_n = project_path(master_ptr->current_floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, flg);
+	int grid_n = project_path(master_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, flg);
 
 	/* Project along the path */
 	int i;
@@ -152,13 +152,13 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 		}
 		else if (flg & PROJECT_LOS)
 		{
-			if (los(master_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
-			if (los(master_ptr->current_floor_ptr, y1, x1, master_ptr->y, master_ptr->x) && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad)) hityou = TRUE;
+			if (los(master_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
+			if (los(master_ptr, y1, x1, master_ptr->y, master_ptr->x) && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad)) hityou = TRUE;
 		}
 		else
 		{
-			if (projectable(master_ptr->current_floor_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
-			if (projectable(master_ptr->current_floor_ptr, y1, x1, master_ptr->y, master_ptr->x) && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad)) hityou = TRUE;
+			if (projectable(master_ptr, y1, x1, y2, x2) && (distance(y1, x1, y2, x2) <= rad)) hit2 = TRUE;
+			if (projectable(master_ptr, y1, x1, master_ptr->y, master_ptr->x) && (distance(y1, x1, master_ptr->y, master_ptr->x) <= rad)) hityou = TRUE;
 		}
 	}
 	else
@@ -167,7 +167,7 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 		POSITION gx[1024], gy[1024];
 		POSITION gm[32];
 		POSITION gm_rad = rad;
-		breath_shape(master_ptr->current_floor_ptr, grid_g, grid_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
+		breath_shape(master_ptr, grid_g, grid_n, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, y, x, typ);
 
 		for (i = 0; i < grids; i++)
 		{
@@ -188,6 +188,7 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
 /*!
  * @brief モンスターが特殊能力の目標地点を決める処理 /
  * Get the actual center point of ball spells (rad > 1) (originally from TOband)
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param sy 始点のY座標
  * @param sx 始点のX座標
  * @param ty 目標Y座標を返す参照ポインタ
@@ -195,10 +196,10 @@ static bool breath_direct(player_type *master_ptr, POSITION y1, POSITION x1, POS
  * @param flg 判定のフラグ配列
  * @return なし
  */
-void get_project_point(floor_type *floor_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
+void get_project_point(player_type *target_ptr, POSITION sy, POSITION sx, POSITION *ty, POSITION *tx, BIT_FLAGS flg)
 {
 	u16b path_g[128];
-	int path_n = project_path(floor_ptr, path_g, MAX_RANGE, sy, sx, *ty, *tx, flg);
+	int path_n = project_path(target_ptr, path_g, MAX_RANGE, sy, sx, *ty, *tx, flg);
 
 	*ty = sy;
 	*tx = sx;
@@ -210,7 +211,7 @@ void get_project_point(floor_type *floor_ptr, POSITION sy, POSITION sx, POSITION
 		sx = GRID_X(path_g[i]);
 
 		/* Hack -- Balls explode before reaching walls */
-		if (!cave_have_flag_bold(floor_ptr, sy, sx, FF_PROJECT)) break;
+		if (!cave_have_flag_bold(target_ptr->current_floor_ptr, sy, sx, FF_PROJECT)) break;
 
 		*ty = sy;
 		*tx = sx;
@@ -301,7 +302,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 		t_ptr = &floor_ptr->m_list[target_idx];
 
 		/* Cancel if not projectable (for now) */
-		if ((m_idx == target_idx) || !projectable(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+		if ((m_idx == target_idx) || !projectable(target_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
 		{
 			target_idx = 0;
 		}
@@ -324,7 +325,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 			}
 
 			/* Allow only summoning etc.. if not projectable */
-			else if (!projectable(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+			else if (!projectable(target_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
 			{
 				f4 &= (RF4_INDIRECT_MASK);
 				f5 &= (RF5_INDIRECT_MASK);
@@ -360,7 +361,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 			if ((m_idx == target_idx) || !are_enemies(m_ptr, t_ptr)) continue;
 
 			/* Monster must be projectable */
-			if (!projectable(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
+			if (!projectable(target_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
 
 			/* Get it */
 			success = TRUE;
@@ -383,7 +384,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	if (f4 & RF4_BR_LITE)
 	{
-		if (!los(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
+		if (!los(target_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx))
 			f4 &= ~(RF4_BR_LITE);
 	}
 
@@ -472,9 +473,9 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 				POSITION real_y = y;
 				POSITION real_x = x;
 
-				get_project_point(floor_ptr, m_ptr->fy, m_ptr->fx, &real_y, &real_x, 0L);
+				get_project_point(target_ptr, m_ptr->fy, m_ptr->fx, &real_y, &real_x, 0L);
 
-				if (projectable(floor_ptr, real_y, real_x, target_ptr->y, target_ptr->x))
+				if (projectable(target_ptr, real_y, real_x, target_ptr->y, target_ptr->x))
 				{
 					int dist = distance(real_y, real_x, target_ptr->y, target_ptr->x);
 
@@ -493,7 +494,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 				}
 				else if (f5 & RF5_BA_LITE)
 				{
-					if ((distance(real_y, real_x, target_ptr->y, target_ptr->x) <= 4) && los(floor_ptr, real_y, real_x, target_ptr->y, target_ptr->x))
+					if ((distance(real_y, real_x, target_ptr->y, target_ptr->x) <= 4) && los(target_ptr, real_y, real_x, target_ptr->y, target_ptr->x))
 						f5 &= ~(RF5_BA_LITE);
 				}
 			}
@@ -503,8 +504,8 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 				POSITION real_y = y;
 				POSITION real_x = x;
 
-				get_project_point(floor_ptr, m_ptr->fy, m_ptr->fx, &real_y, &real_x, PROJECT_STOP);
-				if (projectable(floor_ptr, real_y, real_x, target_ptr->y, target_ptr->x) && (distance(real_y, real_x, target_ptr->y, target_ptr->x) <= 2))
+				get_project_point(target_ptr, m_ptr->fy, m_ptr->fx, &real_y, &real_x, PROJECT_STOP);
+				if (projectable(target_ptr, real_y, real_x, target_ptr->y, target_ptr->x) && (distance(real_y, real_x, target_ptr->y, target_ptr->x) <= 2))
 					f4 &= ~(RF4_ROCKET);
 			}
 
@@ -576,7 +577,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (((f4 & RF4_SUMMON_MASK) ||
 		     (f5 & RF5_SUMMON_MASK) ||
 		     (f6 & RF6_SUMMON_MASK)) &&
-		    !(summon_possible(floor_ptr, t_ptr->fy, t_ptr->fx)))
+		    !(summon_possible(target_ptr, t_ptr->fy, t_ptr->fx)))
 		{
 			/* Remove summoning spells */
 			f4 &= ~(RF4_SUMMON_MASK);
@@ -592,7 +593,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 
 		/* Check for a possible raise dead */
-		if ((f6 & RF6_RAISE_DEAD) && !raise_possible(floor_ptr, m_ptr))
+		if ((f6 & RF6_RAISE_DEAD) && !raise_possible(target_ptr, m_ptr))
 		{
 			/* Remove raise dead spell */
 			f6 &= ~(RF6_RAISE_DEAD);
@@ -601,7 +602,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 		/* Special moves restriction */
 		if (f6 & RF6_SPECIAL)
 		{
-			if ((m_ptr->r_idx == MON_ROLENTO) && !summon_possible(floor_ptr, t_ptr->fy, t_ptr->fx))
+			if ((m_ptr->r_idx == MON_ROLENTO) && !summon_possible(target_ptr, t_ptr->fy, t_ptr->fx))
 			{
 				f6 &= ~(RF6_SPECIAL);
 			}

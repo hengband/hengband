@@ -61,5 +61,5 @@ struct coord
  */
 #define is_seen(A) \
 	((bool)((A)->ml && (!ignore_unview || p_ptr->phase_out || \
-	 (player_can_see_bold(p_ptr, (A)->fy, (A)->fx) && projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, (A)->fy, (A)->fx)))))
+	 (player_can_see_bold(p_ptr, (A)->fy, (A)->fx) && projectable(p_ptr, p_ptr->y, p_ptr->x, (A)->fy, (A)->fx)))))
 

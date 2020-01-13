@@ -457,8 +457,8 @@ static void preserve_pet(player_type *master_ptr)
 				 * when you or the pet can see the other.
 				 */
 				if (m_ptr->nickname && 
-				    ((player_has_los_bold(master_ptr, m_ptr->fy, m_ptr->fx) && projectable(master_ptr->current_floor_ptr, master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx)) ||
-				     (los(master_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x) && projectable(master_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x))))
+				    ((player_has_los_bold(master_ptr, m_ptr->fy, m_ptr->fx) && projectable(master_ptr, master_ptr->y, master_ptr->x, m_ptr->fy, m_ptr->fx)) ||
+				     (los(master_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x) && projectable(master_ptr, m_ptr->fy, m_ptr->fx, master_ptr->y, master_ptr->x))))
 				{
 					if (dis > 3) continue;
 				}
@@ -579,7 +579,7 @@ static void place_pet(player_type *master_ptr)
 			{
 				for (j = 1000; j > 0; j--)
 				{
-					scatter(master_ptr->current_floor_ptr, &cy, &cx, master_ptr->y, master_ptr->x, d, 0);
+					scatter(master_ptr, &cy, &cx, master_ptr->y, master_ptr->x, d, 0);
 					if (monster_can_enter(cy, cx, &r_info[party_mon[i].r_idx], 0)) break;
 				}
 				if (j) break;
@@ -1084,7 +1084,7 @@ void leave_floor(player_type *creature_ptr)
 		clear_mon_lite(creature_ptr->current_floor_ptr);
 
 		/* Save current floor */
-		if (!save_floor(sf_ptr, 0))
+		if (!save_floor(creature_ptr, sf_ptr, 0))
 		{
 			/* Save failed -- No return */
 			prepare_change_floor_mode(creature_ptr, CFM_NO_RETURN);
@@ -1281,7 +1281,7 @@ void change_floor(player_type *creature_ptr)
 				}
 			}
 
-			(void)place_quest_monsters(creature_ptr->current_floor_ptr, creature_ptr);
+			(void)place_quest_monsters(creature_ptr);
 
 			/* Place some random monsters */
 			alloc_times = absence_ticks / alloc_chance;

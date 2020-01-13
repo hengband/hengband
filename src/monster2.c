@@ -2112,7 +2112,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 			}
 
 			/* Disturb on appearance */
-			if (disturb_near && (projectable(subject_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, subject_ptr->y, subject_ptr->x) && projectable(subject_ptr->current_floor_ptr, subject_ptr->y, subject_ptr->x, m_ptr->fy, m_ptr->fx)))
+			if (disturb_near && (projectable(subject_ptr, m_ptr->fy, m_ptr->fx, subject_ptr->y, subject_ptr->x) && projectable(subject_ptr, subject_ptr->y, subject_ptr->x, m_ptr->fy, m_ptr->fx)))
 			{
 				if (disturb_pets || is_hostile(m_ptr))
 					disturb(subject_ptr, TRUE, TRUE);
@@ -2810,7 +2810,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 			else
 				color = _("白く", "white");
 
-			o_ptr = choose_warning_item();
+			o_ptr = choose_warning_item(p_ptr);
 			if (o_ptr)
 			{
 				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -2892,7 +2892,7 @@ static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION 
 			if (!in_bounds(p_ptr->current_floor_ptr, ny, nx)) continue;
 
 			/* Require "line of projection" */
-			if (!projectable(p_ptr->current_floor_ptr, y, x, ny, nx)) continue;
+			if (!projectable(p_ptr, y, x, ny, nx)) continue;
 
 			if (r_idx > 0)
 			{
@@ -3008,7 +3008,7 @@ static bool place_monster_group(MONSTER_IDX who, POSITION y, POSITION x, MONRACE
 		{
 			POSITION mx, my;
 
-			scatter(p_ptr->current_floor_ptr, &my, &mx, hy, hx, 4, 0);
+			scatter(p_ptr, &my, &mx, hy, hx, 4, 0);
 
 			/* Walls and Monsters block flow */
 			if (!cave_empty_bold2(p_ptr->current_floor_ptr, my, mx)) continue;
@@ -3133,7 +3133,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 		for(j = 0; j < n; j++)
 		{
 			POSITION nx, ny, d = 7;
-			scatter(p_ptr->current_floor_ptr, &ny, &nx, y, x, d, 0);
+			scatter(p_ptr, &ny, &nx, y, x, d, 0);
 			(void)place_monster_one(place_monster_m_idx, ny, nx, r_ptr->reinforce_id[i], mode);
 		}
 	}
@@ -3158,7 +3158,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 			MONRACE_IDX z; 
 
 			/* Pick a location */
-			scatter(p_ptr->current_floor_ptr, &ny, &nx, y, x, d, 0);
+			scatter(p_ptr, &ny, &nx, y, x, d, 0);
 
 			/* Require empty grids */
 			if (!cave_empty_bold2(p_ptr->current_floor_ptr, ny, nx)) continue;
@@ -3260,7 +3260,7 @@ bool alloc_horde(POSITION y, POSITION x)
 
 	for (attempts = randint1(10) + 5; attempts; attempts--)
 	{
-		scatter(p_ptr->current_floor_ptr, &cy, &cx, y, x, 5, 0);
+		scatter(p_ptr, &cy, &cx, y, x, 5, 0);
 
 		(void)summon_specific(m_idx, cy, cx, p_ptr->current_floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
 
