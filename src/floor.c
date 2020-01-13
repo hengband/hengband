@@ -29,6 +29,7 @@ saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 
 /*!
 * @brief 鍵のかかったドアを配置する
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param y 配置したいフロアのY座標
 * @param x 配置したいフロアのX座標
 * @return なし
@@ -253,6 +254,7 @@ void add_door(floor_type* floor_ptr, POSITION x, POSITION y)
 
 /*!
  * @brief 所定の位置に上り階段か下り階段を配置する / Place an up/down staircase at given location
+* @param player_ptr プレーヤーへの参照ポインタ
  * @param y 配置を試みたいマスのY座標
  * @param x 配置を試みたいマスのX座標
  * @return なし
@@ -622,6 +624,7 @@ void vault_monsters(floor_type *floor_ptr, POSITION y1, POSITION x1, int num)
 
 /*!
  * @brief 指定された座標が地震や階段生成の対象となるマスかを返す。 / Determine if a given location may be "destroyed"
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y y座標
  * @param x x座標
  * @return 各種の変更が可能ならTRUEを返す。
@@ -1116,6 +1119,7 @@ static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
 
 /*!
 * @brief ドアの設置を試みる / Places door at y, x position if at least 2 walls found
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param y 設置を行いたいマスのY座標
 * @param x 設置を行いたいマスのX座標
 * @return なし
@@ -1230,6 +1234,7 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
 /*!
  * @brief 始点から終点への直線経路を返す /
  * Determine the path taken by a projection.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param gp 経路座標リストを返す参照ポインタ
  * @param range 距離
  * @param y1 始点Y座標
@@ -1823,6 +1828,7 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
 /*!
  * @brief グローバルオブジェクト配列から優先度の低いものを削除し、データを圧縮する。 /
  * Compact and Reorder the object list.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param size 最低でも減らしたいオブジェクト数の水準
  * @return なし
  * @details
