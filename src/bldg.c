@@ -2030,17 +2030,6 @@ static bool kankin(player_type *player_ptr)
 			sprintf(buf, _("%sを渡しますか？", "Hand %s over? "), o_name);
 			if (!get_check(buf)) continue;
 
-#if 0 /* Obsoleted */
-			msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (r_info[current_world_ptr->bounty_r_idx[j]].level + 1) * 300 * o_ptr->number);
-			player_ptr->au += (r_info[current_world_ptr->bounty_r_idx[j]].level + 1) * 300 * o_ptr->number;
-			player_ptr->redraw |= (PR_GOLD);
-			vary_item(i, -o_ptr->number);
-			chg_virtue(player_ptr, V_JUSTICE, 5);
-			current_world_ptr->bounty_r_idx[j] += 10000;
-
-			change = TRUE;
-#endif /* Obsoleted */
-
 			/* Hand it first */
 			vary_item(player_ptr, i, -o_ptr->number);
 

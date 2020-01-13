@@ -63,11 +63,6 @@ concptr screen_dump = NULL;
 #define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi" /*!< スコア開示URL */
 #endif
 
-/* for debug */
-#if 0
-#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/scoretest/score.cgi" /*!< スコア開示URL */
-#endif
-
 /*
  * simple buffer library
  */
@@ -187,60 +182,6 @@ static int buf_sprintf(BUF *buf, concptr fmt, ...)
 
 	return ret;
 }
-
-#if 0
-static int buf_read(BUF *buf, int fd)
-{
-	int len;
-#ifndef MACINTOSH
-	char tmp[BUFSIZE];
-#else
-	char *tmp;
-	
-	tmp = calloc( BUFSIZE , sizeof(char) );
-#endif
-
-	while ((len = read(fd, tmp, BUFSIZE)) > 0)
-		buf_append(buf, tmp, len);
-
-	return buf->size;
-}
-#endif
-
-#if 0
-static int buf_write(BUF *buf, int fd)
-{
-	write(fd, buf->data, buf->size);
-
-	return buf->size;
-}
-
-static int buf_search(BUF *buf, concptr str)
-{
-	char *ret;
-
-	ret = my_strstr(buf->data, str);
-
-	if (!ret) return -1;
-
-	return ret - buf->data;
-}
-
-static BUF * buf_subbuf(BUF *buf, int pos1, size_t sz)
-{
-	BUF *ret;
-
-	if (pos1 < 0) return NULL;
-
-	ret = buf_new();
-
-	if (sz <= 0) sz = buf->size - pos1;
-
-	buf_append(ret, buf->data + pos1, sz);
-
-	return ret;
-}
-#endif
 
 
 /*!

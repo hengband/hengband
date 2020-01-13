@@ -41,69 +41,6 @@ static InetSvcRef inet_services = nil;
 static EndpointRef ep 		= kOTInvalidEndpointRef;
 #endif
 
-#if 0 /* とりあえず現在は使わない。by Habu*/
-static char	*homeurl;
-
-void
-set_homeurl(char *s)
-{
-	if(homeurl)
-		free(homeurl);
-
-	homeurl = malloc(strlen(s) + 1);
-	strcpy(homeurl, s);
-}
-
-char *
-get_homeurl()
-{
-	if(homeurl)
-		return homeurl;
-	else
-		return "";
-}
-
-
-char *
-get_proxy()
-{
-	static char buf[BUFSIZ];
-
-	if(proxy && proxy[0]){
-#ifndef WINDOWS
-		snprintf(buf, sizeof(buf), "%s:%d", proxy, proxy_port);
-#else
-		_snprintf(buf, sizeof(buf), "%s:%d", proxy, proxy_port);
-#endif
-		buf[sizeof(buf)-1] = '\0';
-		return buf;
-	}
-	else
-		return "";
-}
-
-char *
-get_proxy_host()
-{
-	return proxy;
-}
-
-int
-get_proxy_port()
-{
-	return proxy_port;
-}
-
-int soc_read(int sd, char *buf, size_t sz)
-{
-#ifndef WINDOWS
-	return read(sd, buf, sz);
-#else
-	return recv(sd, buf, sz, 0);
-#endif
-}
-
-#endif /* if 0 */
 
 /* プロキシサーバのアドレスををファイルから読んで設定する */
 void set_proxy(char *default_url, int default_port)
@@ -241,13 +178,6 @@ int soc_read(int sd, char *buf, size_t sz)
 #endif
 	return nread;
 }
-
-#if 0 /* おそらく使わない */
-int soc_write_str(int sd, char *buf)
-{
-	return soc_write(sd, buf, strlen(buf));
-}
-#endif
 
 #if !defined(WINDOWS) && !defined(MACINTOSH)
 static sigjmp_buf	env;

@@ -1418,43 +1418,6 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			break;
 		}
 
-#if 0
-		case '\n':
-		case '\r':
-		{
-			if (!command_wrk)
-			{
-				k = ((i1 == i2) ? i1 : -1);
-			}
-
-			/* Choose "default" equipment item */
-			else
-			{
-				k = ((e1 == e2) ? e1 : -1);
-			}
-
-			/* Validate the item */
-			if (!get_item_okay(owner_ptr, k))
-			{
-				bell();
-				break;
-			}
-
-			/* Allow player to "refuse" certain actions */
-			if (!get_item_allow(k))
-			{
-				done = TRUE;
-				break;
-			}
-
-			/* Accept that choice */
-			(*cp) = k;
-			item = TRUE;
-			done = TRUE;
-			break;
-		}
-#endif
-
 		case 'w':
 		{
 			if (mode & USE_FORCE) {
@@ -2684,66 +2647,6 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			cur_tag = which;
 			break;
 		}
-
-#if 0
-		case '\n':
-		case '\r':
-		{
-			if (command_wrk == (USE_INVEN))
-			{
-				k = ((i1 == i2) ? i1 : -1);
-			}
-
-			/* Choose "default" equipment item */
-			else if (command_wrk == (USE_EQUIP))
-			{
-				k = ((e1 == e2) ? e1 : -1);
-			}
-
-			/* Choose "default" floor item */
-			else if (command_wrk == (USE_FLOOR))
-			{
-				if (floor_num == 1)
-				{
-					/* Special index */
-					k = 0 - floor_list[0];
-
-					/* Allow player to "refuse" certain actions */
-					if (!get_item_allow(owner_ptr, k))
-					{
-						done = TRUE;
-						break;
-					}
-
-					/* Accept that choice */
-					(*cp) = k;
-					item = TRUE;
-					done = TRUE;
-				}
-				break;
-			}
-
-			/* Validate the item */
-			if (!get_item_okay(owner_ptr, k))
-			{
-				bell();
-				break;
-			}
-
-			/* Allow player to "refuse" certain actions */
-			if (!get_item_allow(owner_ptr, k))
-			{
-				done = TRUE;
-				break;
-			}
-
-			/* Accept that choice */
-			(*cp) = k;
-			item = TRUE;
-			done = TRUE;
-			break;
-		}
-#endif
 
 		case 'w':
 		{

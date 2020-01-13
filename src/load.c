@@ -2570,10 +2570,6 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 	rd_s16b(&tmp16s); /* max_panel_rows */
 	rd_s16b(&tmp16s); /* max_panel_cols */
 
-#if 0
-	if (!creature_ptr->y || !creature_ptr->x) {creature_ptr->y = 10;creature_ptr->x = 10;}/* ダンジョン生成に失敗してセグメンテったときの復旧用 */
-#endif
-
 	/* Maximal size */
 	int ymax = floor_ptr->height;
 	int xmax = floor_ptr->width;

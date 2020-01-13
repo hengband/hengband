@@ -2399,11 +2399,6 @@ errr Term_keypress(int k)
 	/* Success (unless overflow) */
 	if (Term->key_head != Term->key_tail) return 0;
 
-#if 0
-	/* Hack -- Forget the oldest key */
-	if (++Term->key_tail == Term->key_size) Term->key_tail = 0;
-#endif
-
 	/* Problem */
 	return 1;
 }

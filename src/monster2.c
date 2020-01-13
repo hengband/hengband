@@ -1689,10 +1689,6 @@ int lore_do_probe(MONRACE_IDX r_idx)
 		    (r_ptr->flagsr & (1L << i))) n++;
 
 		/* r_flags7 is actually unused */
-#if 0
-		if (!(r_ptr->r_flags7 & (1L << i)) &&
-		    (r_ptr->flags7 & (1L << i))) n++;
-#endif
 	}
 
 	/* Know all the flags */

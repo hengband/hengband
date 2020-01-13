@@ -321,9 +321,6 @@ struct object_type
 	#define IDENT_KNOWN     0x08    /* Item abilities are known */
 	#define IDENT_STORE     0x10    /* Item is storebought !!!! */
 	#define IDENT_MENTAL    0x20    /* Item information is known */
-	#if 0
-	#define IDENT_CURSED    0x40    /* Item is temporarily cursed */
-	#endif
 	#define IDENT_BROKEN    0x80    /* Item is permanently worthless */
 	byte ident;			/* Special flags  */
 

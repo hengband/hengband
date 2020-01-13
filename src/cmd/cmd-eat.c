@@ -413,16 +413,6 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 	}
 	else if (PRACE_IS_(creature_ptr, RACE_SKELETON))
 	{
-#if 0
-		if (o_ptr->tval == TV_SKELETON ||
-			(o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
-		{
-			msg_print(_("あなたは骨で自分の体を補った。", "Your body absorbs the bone."));
-			set_food(creature_ptr, creature_ptr->food + 5000);
-		}
-		else
-#endif
-
 			if (!((o_ptr->sval == SV_FOOD_WAYBREAD) ||
 				(o_ptr->sval < SV_FOOD_BISCUIT)))
 			{

@@ -15,30 +15,6 @@
 
 #include "h-basic.h"
 
-
-#if 0
-/*
- * Parse errors
- */
-#define PARSE_ERROR_GENERIC                  1
-#define PARSE_ERROR_OBSOLETE_FILE            2
-#define PARSE_ERROR_MISSING_RECORD_HEADER    3
-#define PARSE_ERROR_NON_SEQUENTIAL_RECORDS   4
-#define PARSE_ERROR_INVALID_FLAG             5
-#define PARSE_ERROR_UNDEFINED_DIRECTIVE      6
-#define PARSE_ERROR_OUT_OF_MEMORY            7
-#define PARSE_ERROR_OUT_OF_BOUNDS            8
-#define PARSE_ERROR_TOO_FEW_ARGUMENTS        9
-#define PARSE_ERROR_TOO_MANY_ARGUMENTS      10
-#define PARSE_ERROR_TOO_MANY_ALLOCATIONS    11
-#define PARSE_ERROR_INVALID_SPELL_FREQ      12
-#define PARSE_ERROR_INVALID_ITEM_NUMBER     13
-#define PARSE_ERROR_TOO_MANY_ENTRIES        14
-
-#define PARSE_ERROR_MAX                     15
-#endif /* 0 */
-
-
 typedef struct header header;
 
 typedef errr (*parse_info_txt_func)(char *buf, header *head);

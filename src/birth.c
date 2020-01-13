@@ -67,13 +67,6 @@ birther previous_char;
  */
 #define AUTOROLLER_STEP 5431L
 
-#if 0
-/*!
- * オートローラを1回まわすごとに1/10秒のウェイトをかけるマクロ定義 / Define this to cut down processor use while autorolling
- */
-#define AUTOROLLER_DELAY
-#endif
-
 /*!
  * ランダムクエストのモンスターを確定するために試行する回数 / Maximum number of tries for selection of a proper quest monster
  */
@@ -3872,10 +3865,6 @@ static bool player_birth_aux(player_type *creature_ptr)
 	concptr str;
 
 	char c;
-
-#if 0
-	char p1 = '(';
-#endif
 
 	char p2 = ')';
 	char b1 = '[';

@@ -1607,11 +1607,6 @@ KIND_OBJECT_IDX lookup_kind(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval)
 		return bk;
 	}
 
-#if 0
-	msg_format(_("アイテムがない (%d,%d)", "No object (%d,%d)"), tval, sval);
-#endif
-
-
 	return 0;
 }
 
@@ -3361,17 +3356,6 @@ static void a_m_aux_4(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 	{
 	case TV_WHISTLE:
 	{
-#if 0
-		/* Cursed */
-		if (power < 0)
-		{
-			/* Broken */
-			o_ptr->ident |= (IDENT_BROKEN);
-
-			/* Cursed */
-			o_ptr->curse_flags |= (TRC_CURSED);
-		}
-#endif
 		break;
 	}
 	case TV_FLASK:
@@ -5261,9 +5245,7 @@ void combine_pack(player_type *owner_ptr)
 				{
 					int old_num = o_ptr->number;
 					int remain = j_ptr->number + o_ptr->number - max_num;
-#if 0
-					o_ptr->number -= remain;
-#endif
+
 					/* Add together the item counts */
 					object_absorb(j_ptr, o_ptr);
 

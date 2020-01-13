@@ -306,12 +306,6 @@ extern concptr keymap_act[KEYMAP_MODES][256];
 extern void user_name(char *buf, int id);
 #endif
 
-#if 0
-#ifndef HAS_STRICMP
-extern int stricmp(concptr a, concptr b);
-#endif
-#endif
-
 #ifndef HAVE_USLEEP
 extern int usleep(huge usecs);
 #endif

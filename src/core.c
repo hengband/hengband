@@ -4910,15 +4910,9 @@ static void dungeon(player_type *player_ptr, bool load_game)
 
 	/* Reset the "command" vars */
 	command_cmd = 0;
-
-#if 0 /* Don't reset here --- It's used for Arena */
-	command_new = 0;
-#endif
-
 	command_rep = 0;
 	command_arg = 0;
 	command_dir = 0;
-
 
 	/* Cancel the target */
 	target_who = 0;
@@ -5828,10 +5822,6 @@ void close_game(player_type *player_ptr)
 		{
 			display_scores_aux(0, 10, -1, NULL);
 		}
-#if 0
-		/* Dump bones file */
-		make_bones();
-#endif
 	}
 
 	/* Still alive */

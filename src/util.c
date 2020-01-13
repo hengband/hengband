@@ -141,33 +141,6 @@ s16b command_new;		/* Command chaining from inven/equip view */
 
 
 
-#if 0
-#ifndef HAS_STRICMP
-
-/*
- * For those systems that don't have "stricmp()"
- *
- * Compare the two strings "a" and "b" ala "strcmp()" ignoring case.
- */
-int stricmp(concptr a, concptr b)
-{
-	concptr s1, s2;
-	char z1, z2;
-
-	/* Scan the strings */
-	for (s1 = a, s2 = b; TRUE; s1++, s2++)
-	{
-		z1 = FORCEUPPER(*s1);
-		z2 = FORCEUPPER(*s2);
-		if (z1 < z2) return -1;
-		if (z1 > z2) return 1;
-		if (!z1) return 0;
-	}
-}
-
-#endif /* HAS_STRICMP */
-#endif /* 0 */
-
 #ifdef SET_UID
 
 # ifndef HAVE_USLEEP
@@ -3311,11 +3284,8 @@ void c_roff(byte a, concptr str)
 			{
 				/* 現在が全角文字のとき */
 				/* 文頭が「。」「、」等になるときは、その１つ前の語で改行 */
-				if (strncmp(s, "。", 2) == 0 || strncmp(s, "、", 2) == 0
-#if 0                   /* 一般的には「ィ」「ー」は禁則の対象外 */
-					|| strncmp(s, "ィ", 2) == 0 || strncmp(s, "ー", 2) == 0
-#endif
-			       ){
+				if (strncmp(s, "。", 2) == 0 || strncmp(s, "、", 2) == 0)
+				{
 					Term_what(x  , y, &av[x  ], &cv[x  ]);
 					Term_what(x-1, y, &av[x-1], &cv[x-1]);
 					Term_what(x-2, y, &av[x-2], &cv[x-2]);
@@ -4776,65 +4746,6 @@ bool is_a_vowel(int ch)
 
 	return FALSE;
 }
-
-
-
-#if 0
-
-/*
- * Replace the first instance of "target" in "buf" with "insert"
- * If "insert" is NULL, just remove the first instance of "target"
- * In either case, return TRUE if "target" is found.
- *
- * XXX Could be made more efficient, especially in the
- * case where "insert" is smaller than "target".
- */
-static bool insert_str(char *buf, concptr target, concptr insert)
-{
-	int   i, len;
-	int		   b_len, t_len, i_len;
-
-	/* Attempt to find the target (modify "buf") */
-	buf = my_strstr(buf, target);
-
-	/* No target found */
-	if (!buf) return FALSE;
-
-	/* Be sure we have an insertion string */
-	if (!insert) insert = "";
-
-	/* Extract some lengths */
-	t_len = strlen(target);
-	i_len = strlen(insert);
-	b_len = strlen(buf);
-
-	/* How much "movement" do we need? */
-	len = i_len - t_len;
-
-	/* We need less space (for insert) */
-	if (len < 0)
-	{
-		for (i = t_len; i < b_len; ++i) buf[i+len] = buf[i];
-	}
-
-	/* We need more space (for insert) */
-	else if (len > 0)
-	{
-		for (i = b_len-1; i >= t_len; --i) buf[i+len] = buf[i];
-	}
-
-	/* If movement occured, we need a new terminator */
-	if (len) buf[b_len+len] = '\0';
-
-	/* Now copy the insertion string */
-	for (i = 0; i < i_len; ++i) buf[i] = insert[i];
-
-	/* Successful operation */
-	return TRUE;
-}
-
-
-#endif
 
 
 /*

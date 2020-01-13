@@ -1665,11 +1665,6 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	{
 		/* Try four "random" directions */
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-
-		/* Look for an enemy */
-#if 0  /* Hack - Too slow.  Mimic pits are horrible with this on. */
-		get_enemy_dir(m_idx, mm);
-#endif /* 0 */
 	}
 
 	/* Pets will follow the player */
@@ -2545,19 +2540,6 @@ void process_monsters(player_type *target_ptr)
 			test = TRUE;
 		}
 
-#if 0 /* (floor_ptr->grid_array[target_ptr->y][target_ptr->x].when == floor_ptr->grid_array[fy][fx].when) is always FALSE... */
-		/* Hack -- Monsters can "smell" the player from far away */
-		/* Note that most monsters have "aaf" of "20" or so */
-		else if (!(m_ptr->mflag2 & MFLAG2_NOFLOW) &&
-			cave_have_flag_bold(target_ptr->y, target_ptr->x, FF_MOVE) &&
-			(floor_ptr->grid_array[target_ptr->y][target_ptr->x].when == floor_ptr->grid_array[fy][fx].when) &&
-			(floor_ptr->grid_array[fy][fx].dist < MONSTER_FLOW_DEPTH) &&
-			(floor_ptr->grid_array[fy][fx].dist < r_ptr->aaf))
-		{
-			/* We can "smell" the player */
-			test = TRUE;
-		}
-#endif
 		else if (m_ptr->target_y) test = TRUE;
 
 		/* Do nothing */

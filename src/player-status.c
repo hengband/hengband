@@ -1378,9 +1378,6 @@ void calc_bonuses(player_type *creature_ptr)
 	bool yoiyami = FALSE;
 	bool down_saving = FALSE;
 
-#if 0
-	bool have_dd_s = FALSE, have_dd_t = FALSE;
-#endif
 	bool have_sw = FALSE, have_kabe = FALSE;
 	bool easy_2weapon = FALSE;
 	bool riding_levitation = FALSE;
@@ -3863,10 +3860,6 @@ void calc_bonuses(player_type *creature_ptr)
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-#if 0
-		if ((creature_ptr->inventory_list[i].tval == TV_SORCERY_BOOK) && (creature_ptr->inventory_list[i].sval == 2)) have_dd_s = TRUE;
-		if ((creature_ptr->inventory_list[i].tval == TV_TRUMP_BOOK) && (creature_ptr->inventory_list[i].sval == 1)) have_dd_t = TRUE;
-#endif
 		if ((creature_ptr->inventory_list[i].tval == TV_NATURE_BOOK) && (creature_ptr->inventory_list[i].sval == 2)) have_sw = TRUE;
 		if ((creature_ptr->inventory_list[i].tval == TV_CRAFT_BOOK) && (creature_ptr->inventory_list[i].sval == 2)) have_kabe = TRUE;
 	}
@@ -3876,28 +3869,12 @@ void calc_bonuses(player_type *creature_ptr)
 		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
-#if 0
-		if ((o_ptr->tval == TV_SORCERY_BOOK) && (o_ptr->sval == 3)) have_dd_s = TRUE;
-		if ((o_ptr->tval == TV_TRUMP_BOOK) && (o_ptr->sval == 1)) have_dd_t = TRUE;
-#endif
 		if ((o_ptr->tval == TV_NATURE_BOOK) && (o_ptr->sval == 2)) have_sw = TRUE;
 		if ((o_ptr->tval == TV_CRAFT_BOOK) && (o_ptr->sval == 2)) have_kabe = TRUE;
 	}
 
 	if (creature_ptr->pass_wall && !creature_ptr->kill_wall) creature_ptr->no_flowed = TRUE;
-#if 0
-	if (have_dd_s && ((creature_ptr->realm1 == REALM_SORCERY) || (creature_ptr->realm2 == REALM_SORCERY) || (creature_ptr->pclass == CLASS_SORCERER)))
-	{
-		const magic_type *s_ptr = &mp_ptr->info[REALM_SORCERY - 1][SPELL_DD_S];
-		if (creature_ptr->lev >= s_ptr->slevel) creature_ptr->no_flowed = TRUE;
-	}
 
-	if (have_dd_t && ((creature_ptr->realm1 == REALM_TRUMP) || (creature_ptr->realm2 == REALM_TRUMP) || (creature_ptr->pclass == CLASS_SORCERER) || (creature_ptr->pclass == CLASS_RED_MAGE)))
-	{
-		const magic_type *s_ptr = &mp_ptr->info[REALM_TRUMP - 1][SPELL_DD_T];
-		if (creature_ptr->lev >= s_ptr->slevel) creature_ptr->no_flowed = TRUE;
-	}
-#endif
 	if (have_sw && ((creature_ptr->realm1 == REALM_NATURE) || (creature_ptr->realm2 == REALM_NATURE) || (creature_ptr->pclass == CLASS_SORCERER)))
 	{
 		const magic_type *s_ptr = &mp_ptr->info[REALM_NATURE - 1][SPELL_SW];

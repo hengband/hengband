@@ -704,9 +704,6 @@ static concptr ANGBAND_DIR_XTRA_GRAF;
 static concptr ANGBAND_DIR_XTRA_SOUND;
 static concptr ANGBAND_DIR_XTRA_MUSIC;
 static concptr ANGBAND_DIR_XTRA_HELP;
-#if 0 /* #ifndef JP */
-static concptr ANGBAND_DIR_XTRA_FONT;
-#endif
 #ifdef USE_MUSIC
 static concptr ANGBAND_DIR_XTRA_MUSIC;
 #endif
@@ -833,24 +830,6 @@ static byte special_key_list[] =
 	VK_INSERT,		/* 0x2D (KP<0>) */
 	VK_DELETE,		/* 0x2E (KP<.>) */
 	VK_HELP,		/* 0x2F (?????) */
-#if 0
-	VK_NUMPAD0,		/* 0x60 (KP<0>) */
-	VK_NUMPAD1,		/* 0x61 (KP<1>) */
-	VK_NUMPAD2,		/* 0x62 (KP<2>) */
-	VK_NUMPAD3,		/* 0x63 (KP<3>) */
-	VK_NUMPAD4,		/* 0x64 (KP<4>) */
-	VK_NUMPAD5,		/* 0x65 (KP<5>) */
-	VK_NUMPAD6,		/* 0x66 (KP<6>) */
-	VK_NUMPAD7,		/* 0x67 (KP<7>) */
-	VK_NUMPAD8,		/* 0x68 (KP<8>) */
-	VK_NUMPAD9,		/* 0x69 (KP<9>) */
-	VK_MULTIPLY,	/* 0x6A (KP<*>) */
-	VK_ADD,			/* 0x6B (KP<+>) */
-	VK_SEPARATOR,	/* 0x6C (?????) */
-	VK_SUBTRACT,	/* 0x6D (KP<->) */
-	VK_DECIMAL,		/* 0x6E (KP<.>) */
-	VK_DIVIDE,		/* 0x6F (KP</>) */
-#endif
 	VK_F1,			/* 0x70 */
 	VK_F2,			/* 0x71 */
 	VK_F3,			/* 0x72 */
@@ -946,70 +925,6 @@ static void DrawBG(HDC hdc, RECT *r)
 	SelectObject(hdcSrc, hOld);
 	DeleteDC(hdcSrc);
 }
-
-#if 0
-/*
- * Hack -- given a pathname, point at the filename
- */
-static concptr extract_file_name(concptr s)
-{
-	concptr p;
-
-	/* Start at the end */
-	p = s + strlen(s) - 1;
-
-	/* Back up to divider */
-	while ((p >= s) && (*p != ':') && (*p != '\\')) p--;
-
-	/* Return file name */
-	return (p+1);
-}
-#endif
-
-
-/*
- * Hack -- given a simple filename, extract the "font size" info
- *
- * Return a pointer to a static buffer holding the capitalized base name.
- */
-#if 0 /* #ifndef JP */
-static char *analyze_font(char *path, int *wp, int *hp)
-{
-	int wid, hgt;
-
-	char *s, *p;
-
-	/* Start at the end */
-	p = path + strlen(path) - 1;
-
-	/* Back up to divider */
-	while ((p >= path) && (*p != ':') && (*p != '\\')) --p;
-
-	/* Advance to file name */
-	++p;
-
-	/* Capitalize */
-	for (s = p; *s; ++s)
-	{
-		/* Capitalize (be paranoid) */
-		if (islower(*s)) *s = toupper(*s);
-	}
-
-	/* Find first 'X' */
-	s = my_strchr(p, 'X');
-
-	/* Extract font width */
-	wid = atoi(p);
-
-	/* Extract height */
-	hgt = s ? atoi(s+1) : 0;
-
-	/* Save results */
-	(*wp) = wid;
-	(*hp) = hgt;
-	return (p);
-}
-#endif
 
 
 /*
@@ -1222,11 +1137,7 @@ static void save_prefs_aux(int i)
 #ifdef JP
 	strcpy(buf, td->lf.lfFaceName[0]!='\0' ? td->lf.lfFaceName : "ＭＳ ゴシック");
 #else
-#if 0
-	strcpy(buf, td->font_file ? td->font_file : "8X13.FON");
-#else
 	strcpy(buf, td->lf.lfFaceName[0]!='\0' ? td->lf.lfFaceName : "Courier");
-#endif
 #endif
 
 	WritePrivateProfileString(sec_name, "Font", buf, ini_file);
@@ -1366,11 +1277,7 @@ static void load_prefs_aux(int i)
 #ifdef JP
 	GetPrivateProfileString(sec_name, "Font", "ＭＳ ゴシック", tmp, 127, ini_file);
 #else
-#if 0
-	GetPrivateProfileString(sec_name, "Font", "8X13.FON", tmp, 127, ini_file);
-#else
 	GetPrivateProfileString(sec_name, "Font", "Courier", tmp, 127, ini_file);
-#endif
 #endif
 
 
@@ -1973,12 +1880,6 @@ static errr term_force_font(term_data *td, concptr path)
 {
 	int wid, hgt;
 
-#if 0 /* #ifndef JP */
-	int i;
-	char *base;
-	char buf[1024];
-#endif
-
 	/* Forget the old font (if needed) */
 	if (td->font_id) DeleteObject(td->font_id);
 
@@ -2221,32 +2122,6 @@ void Term_inversed_area(HWND hWnd, int x, int y, int w, int h)
 	SelectObject(hdc, oldBrush);
 	SelectObject(hdc, oldPen);
 }
-
-
-
-/*** Function hooks needed by "Term" ***/
-
-
-#if 0
-
-/*
- * Initialize a new Term
- */
-static void Term_init_win(term *t)
-{
-	/* XXX Unused */
-}
-
-
-/*
- * Nuke an old Term
- */
-static void Term_nuke_win(term *t)
-{
-	/* XXX Unused */
-}
-
-#endif
 
 
 /*!
@@ -3334,12 +3209,6 @@ static void term_data_link(term_data *td)
 	t->attr_blank = TERM_WHITE;
 	t->char_blank = ' ';
 
-#if 0
-	/* Prepare the init/nuke hooks */
-	t->init_hook = Term_init_win;
-	t->nuke_hook = Term_nuke_win;
-#endif
-
 	/* Prepare the template hooks */
 	t->user_hook = Term_user_win;
 	t->xtra_hook = Term_xtra_win;
@@ -3368,10 +3237,6 @@ static void init_windows(void)
 	int i;
 
 	term_data *td;
-
-#if 0 /* #ifndef JP */
-	char buf[1024];
-#endif
 
 	/* Main window */
 	td = &data[0];
@@ -4612,10 +4477,6 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 	PAINTSTRUCT ps;
 	HDC hdc;
 	term_data *td;
-#if 0
-	MINMAXINFO FAR *lpmmi;
-	RECT rc;
-#endif
 	int i;
 
 
@@ -5046,10 +4907,6 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 #endif /* __MWERKS__ */
 {
 	term_data *td;
-#if 0
-	MINMAXINFO FAR *lpmmi;
-	RECT rc;
-#endif
 	PAINTSTRUCT ps;
 	HDC hdc;
 	int i;
@@ -5250,15 +5107,6 @@ LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
 			SetCursor(NULL);
 			return 0;
 		}
-
-#if 0
-		case WM_ACTIVATE:
-		{
-			if (LOWORD(wParam) == WA_INACTIVE) break;
-
-			/* else fall through */
-		}
-#endif
 
 		case WM_LBUTTONDOWN:
 		case WM_MBUTTONDOWN:
@@ -5524,23 +5372,6 @@ static void init_stuff(void)
 
 	/* Hack -- Validate the "news.txt" file */
 	validate_file(path);
-
-
-#if 0 /* #ifndef JP */
-	/* Build the "font" path */
-	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "font");
-
-	/* Allocate the path */
-	ANGBAND_DIR_XTRA_FONT = string_make(path);
-
-	/* Validate the "font" directory */
-	validate_dir(ANGBAND_DIR_XTRA_FONT, TRUE);
-	path_build(path, sizeof(path), ANGBAND_DIR_XTRA_FONT, "8X13.FON");
-
-	/* Hack -- Validate the basic font */
-	validate_file(path);
-#endif
-
 
 #ifdef USE_GRAPHICS
 
