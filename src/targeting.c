@@ -457,14 +457,14 @@ void target_set_prepare_look(player_type *creature_ptr)
 /*
  * Evaluate number of kill needed to gain level
  */
-static void evaluate_monster_exp(char *buf, monster_type *m_ptr)
+static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_type *m_ptr)
 {
 	monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 	u32b num;
 	s32b exp_mon, exp_adv;
 	u32b exp_mon_frac, exp_adv_frac;
 
-	if ((p_ptr->lev >= PY_MAX_LEVEL) || (p_ptr->prace == RACE_ANDROID))
+	if ((creature_ptr->lev >= PY_MAX_LEVEL) || (creature_ptr->prace == RACE_ANDROID))
 	{
 		sprintf(buf,"**");
 		return;
@@ -482,16 +482,16 @@ static void evaluate_monster_exp(char *buf, monster_type *m_ptr)
 	/* The monster's experience point (assuming average monster speed) */
 	exp_mon = ap_r_ptr->mexp * ap_r_ptr->level;
 	exp_mon_frac = 0;
-	s64b_div(&exp_mon, &exp_mon_frac, 0, (p_ptr->max_plv + 2));
+	s64b_div(&exp_mon, &exp_mon_frac, 0, (creature_ptr->max_plv + 2));
 
 
 	/* Total experience value for next level */
-	exp_adv = player_exp[p_ptr->lev -1] * p_ptr->expfact;
+	exp_adv = player_exp[creature_ptr->lev -1] * creature_ptr->expfact;
 	exp_adv_frac = 0;
 	s64b_div(&exp_adv, &exp_adv_frac, 0, 100);
 
 	/* Experience value need to get */
-	s64b_sub(&exp_adv, &exp_adv_frac, p_ptr->exp, p_ptr->exp_frac);
+	s64b_sub(&exp_adv, &exp_adv_frac, creature_ptr->exp, creature_ptr->exp_frac);
 
 
 	/* You need to kill at least one monster to get any experience */
@@ -644,7 +644,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 			/*** Normal ***/
 
 			/* Describe, and prompt for recall */
-			evaluate_monster_exp(acount, m_ptr);
+			evaluate_monster_exp(subject_ptr, acount, m_ptr);
 
 #ifdef JP
 			sprintf(out_val, "[%s]%s%s(%s)%s%s [r思 %s%s]", acount, s1, m_name, look_mon_desc(m_ptr, 0x01), s2, s3, x_info, info);
