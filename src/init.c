@@ -127,7 +127,6 @@ void init_file_paths(char *path)
 	string_free(ANGBAND_DIR_USER);
 	string_free(ANGBAND_DIR_XTRA);
 
-
 	/*** Prepare the "path" ***/
 
 	/* Hack -- save the main directory */
@@ -239,16 +238,13 @@ void init_file_paths(char *path)
 }
 
 
-
 #ifdef ALLOW_TEMPLATES
-
 
 /*
  * Hack -- help give useful error messages
  */
 int error_idx; /*!< データ読み込み/初期化時に汎用的にエラーコードを保存するグローバル変数 */
 int error_line; /*!< データ読み込み/初期化時に汎用的にエラー行数を保存するグローバル変数 */
-
 
 /*!
  * エラーメッセージの名称定義 / Standard error message text
@@ -282,7 +278,6 @@ concptr err_str[PARSE_ERROR_MAX] =
 
 };
 
-
 #endif /* ALLOW_TEMPLATES */
 
 
@@ -310,40 +305,34 @@ header m_head; /*!< プレイヤー職業魔法情報のヘッダ構造体 */
  */
 static errr check_modification_date(int fd, concptr template_file)
 {
-	char buf[1024];
-
 	struct stat txt_stat, raw_stat;
+	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, template_file);
 
 	/* Access stats on text file */
 	if (stat(buf, &txt_stat))
 	{
-		/* No text file - continue */
+		return 0;
 	}
 
 	/* Access stats on raw file */
-	else if (fstat(fd, &raw_stat))
+	if (fstat(fd, &raw_stat))
 	{
-		/* Error */
-		return (-1);
+		return -1;
 	}
 
 	/* Ensure text file is not newer than raw file */
-	else if (txt_stat.st_mtime > raw_stat.st_mtime)
+	if (txt_stat.st_mtime > raw_stat.st_mtime)
 	{
-		/* Reprocess text file */
-		return (-1);
+		return -1;
 	}
 
-	return (0);
+	return 0;
 }
 
 #endif /* CHECK_MODIFICATION_TIME */
 
-
-
 /*** Initialize from binary image files ***/
-
 
 /*!
  * @brief rawファイルからのデータの読み取り処理
@@ -358,29 +347,26 @@ static errr init_info_raw(int fd, header *head)
 
 	/* Read and Verify the header */
 	if (fd_read(fd, (char*)(&test), sizeof(header)) ||
-	    (test.v_major != head->v_major) ||
-	    (test.v_minor != head->v_minor) ||
-	    (test.v_patch != head->v_patch) ||
-	    (test.info_num != head->info_num) ||
-	    (test.info_len != head->info_len) ||
-	    (test.head_size != head->head_size) ||
-	    (test.info_size != head->info_size))
+		(test.v_major != head->v_major) ||
+		(test.v_minor != head->v_minor) ||
+		(test.v_patch != head->v_patch) ||
+		(test.info_num != head->info_num) ||
+		(test.info_len != head->info_len) ||
+		(test.head_size != head->head_size) ||
+		(test.info_size != head->info_size))
 	{
 		/* Error */
-		return (-1);
+		return -1;
 	}
-
 
 	/* Accept the header */
 	(*head) = test;
-
 
 	/* Allocate the "*_info" array */
 	C_MAKE(head->info_ptr, head->info_size, char);
 
 	/* Read the "*_info" array */
 	fd_read(fd, head->info_ptr, head->info_size);
-
 
 	if (head->name_size)
 	{
@@ -391,7 +377,6 @@ static errr init_info_raw(int fd, header *head)
 		fd_read(fd, head->name_ptr, head->name_size);
 	}
 
-
 	if (head->text_size)
 	{
 		/* Allocate the "*_text" array */
@@ -400,7 +385,6 @@ static errr init_info_raw(int fd, header *head)
 		/* Read the "*_text" array */
 		fd_read(fd, head->text_ptr, head->text_size);
 	}
-
 
 	if (head->tag_size)
 	{
@@ -411,9 +395,7 @@ static errr init_info_raw(int fd, header *head)
 		fd_read(fd, head->tag_ptr, head->tag_size);
 	}
 
-
-	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -445,6 +427,7 @@ static void init_header(header *head, IDX num, int len)
 
 
 /*!
+ * todo プリプロがゴミすぎて整理不可能
  * @brief ヘッダ構造体の更新
  * Initialize the "*_info" array
  * @param filename ファイル名(拡張子txt/raw)
@@ -458,31 +441,23 @@ static void init_header(header *head, IDX num, int len)
  * Note that we let each entry have a unique "name" and "text" string,
  * even if the string happens to be empty (everyone has a unique '\0').
  */
-static errr init_info(concptr filename, header *head,
-		      void **info, char **name, char **text, char **tag)
+static errr init_info(concptr filename, header *head, void **info, char **name, char **text, char **tag)
 {
-	int fd;
-
-	BIT_FLAGS mode = 0644;
-
-	errr err = 1;
-
 	FILE *fp;
 
 	/* General buffer */
 	char buf[1024];
-
 
 #ifdef ALLOW_TEMPLATES
 
 	/*** Load the binary image file ***/
 	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, format(_("%s_j.raw", "%s.raw"), filename));
 
-
 	/* Attempt to open the "raw" file */
-	fd = fd_open(buf, O_RDONLY);
+	int fd = fd_open(buf, O_RDONLY);
 
 	/* Process existing "raw" file */
+	errr err = 1;
 	if (fd >= 0)
 	{
 #ifdef CHECK_MODIFICATION_TIME
@@ -497,8 +472,8 @@ static errr init_info(concptr filename, header *head,
 		(void)fd_close(fd);
 	}
 
-
 	/* Do we have to parse the *.txt file? */
+	BIT_FLAGS file_permission = 0644;
 	if (err)
 	{
 		/*** Make the fake arrays ***/
@@ -514,7 +489,7 @@ static errr init_info(concptr filename, header *head,
 		if (info) (*info) = head->info_ptr;
 		if (name) (*name) = head->name_ptr;
 		if (text) (*text) = head->text_ptr;
-		if (tag)  (*tag)  = head->tag_ptr;
+		if (tag)  (*tag) = head->tag_ptr;
 
 		/*** Load the ascii template file ***/
 
@@ -582,7 +557,7 @@ static errr init_info(concptr filename, header *head,
 		(void)fd_kill(buf);
 
 		/* Attempt to create the raw file */
-		fd = fd_make(buf, mode);
+		fd = fd_make(buf, file_permission);
 
 		/* Drop permissions */
 		safe_setuid_drop();
@@ -608,7 +583,6 @@ static errr init_info(concptr filename, header *head,
 			/* Close */
 			(void)fd_close(fd);
 		}
-
 
 		/*** Kill the fake arrays ***/
 
@@ -643,13 +617,11 @@ static errr init_info(concptr filename, header *head,
 	}
 #endif
 
-	if (info) (*info) = head->info_ptr;
-	if (name) (*name) = head->name_ptr;
-	if (text) (*text) = head->text_ptr;
-	if (tag)  (*tag)  = head->tag_ptr;
-
-	/* Success */
-	return (0);
+	if (info) *info = head->info_ptr;
+	if (name) *name = head->name_ptr;
+	if (text) *text = head->text_ptr;
+	if (tag)  *tag = head->tag_ptr;
+	return 0;
 }
 
 
@@ -674,7 +646,7 @@ static errr init_f_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("f_info", &f_head,
-			 (void*)&f_info, &f_name, NULL, &f_tag);
+		(void*)&f_info, &f_name, NULL, &f_tag);
 }
 
 
@@ -696,9 +668,8 @@ static errr init_k_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("k_info", &k_head,
-			 (void*)&k_info, &k_name, &k_text, NULL);
+		(void*)&k_info, &k_name, &k_text, NULL);
 }
-
 
 
 /*!
@@ -719,9 +690,8 @@ static errr init_a_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("a_info", &a_head,
-			 (void*)&a_info, &a_name, &a_text, NULL);
+		(void*)&a_info, &a_name, &a_text, NULL);
 }
-
 
 
 /*!
@@ -742,9 +712,8 @@ static errr init_e_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("e_info", &e_head,
-			 (void*)&e_info, &e_name, &e_text, NULL);
+		(void*)&e_info, &e_name, &e_text, NULL);
 }
-
 
 
 /*!
@@ -765,9 +734,8 @@ static errr init_r_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("r_info", &r_head,
-			 (void*)&r_info, &r_name, &r_text, NULL);
+		(void*)&r_info, &r_name, &r_text, NULL);
 }
-
 
 
 /*!
@@ -788,7 +756,7 @@ static errr init_d_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("d_info", &d_head,
-			 (void*)&d_info, &d_name, &d_text, NULL);
+		(void*)&d_info, &d_name, &d_text, NULL);
 }
 
 
@@ -813,7 +781,7 @@ errr init_v_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("v_info", &v_head,
-			 (void*)&v_info, &v_name, &v_text, NULL);
+		(void*)&v_info, &v_name, &v_text, NULL);
 }
 
 
@@ -835,7 +803,7 @@ static errr init_s_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("s_info", &s_head,
-			 (void*)&s_info, NULL, NULL, NULL);
+		(void*)&s_info, NULL, NULL, NULL);
 }
 
 
@@ -857,11 +825,8 @@ static errr init_m_info(void)
 #endif /* ALLOW_TEMPLATES */
 
 	return init_info("m_info", &m_head,
-			 (void*)&m_info, NULL, NULL, NULL);
+		(void*)&m_info, NULL, NULL, NULL);
 }
-
-
-
 
 
 /*!
@@ -883,14 +848,10 @@ static errr init_misc(player_type *player_ptr)
  */
 static errr init_towns(void)
 {
-	int i, j, k;
-
-	/*** Prepare the Towns ***/
-
 	/* Allocate the towns */
 	C_MAKE(town_info, max_towns, town_type);
 
-	for (i = 1; i < max_towns; i++)
+	for (int i = 1; i < max_towns; i++)
 	{
 		/*** Prepare the Stores ***/
 
@@ -898,7 +859,7 @@ static errr init_towns(void)
 		C_MAKE(town_info[i].store, MAX_STORES, store_type);
 
 		/* Fill in each store */
-		for (j = 0; j < MAX_STORES; j++)
+		for (int j = 0; j < MAX_STORES; j++)
 		{
 			/* Access the store */
 			store_type *st_ptr = &town_info[i].store[j];
@@ -907,23 +868,23 @@ static errr init_towns(void)
 
 			/* Assume full stock */
 
-		/*
-		 * 我が家が 20 ページまで使える隠し機能のための準備。
-		 * オプションが有効でもそうでなくても一応スペース
-		 * を作っておく。
-		 */
-		if (j == STORE_HOME)
-		{
-			st_ptr->stock_size = (STORE_INVEN_MAX * 10);
-		}
-		else if (j == STORE_MUSEUM)
-		{
-			st_ptr->stock_size = (STORE_INVEN_MAX * 50);
-		}
-		else
-		{
-			st_ptr->stock_size = STORE_INVEN_MAX;
-		}
+			/*
+			 * 我が家が 20 ページまで使える隠し機能のための準備。
+			 * オプションが有効でもそうでなくても一応スペースを作っておく。
+			 */
+			if (j == STORE_HOME)
+			{
+				st_ptr->stock_size = (STORE_INVEN_MAX * 10);
+			}
+			else if (j == STORE_MUSEUM)
+			{
+				st_ptr->stock_size = (STORE_INVEN_MAX * 50);
+			}
+			else
+			{
+				st_ptr->stock_size = STORE_INVEN_MAX;
+			}
+
 			/* Allocate the stock */
 			C_MAKE(st_ptr->stock, st_ptr->stock_size, object_type);
 
@@ -937,7 +898,7 @@ static errr init_towns(void)
 			C_MAKE(st_ptr->table, st_ptr->table_size, s16b);
 
 			/* Scan the choices */
-			for (k = 0; k < STORE_CHOICES; k++)
+			for (int k = 0; k < STORE_CHOICES; k++)
 			{
 				KIND_OBJECT_IDX k_idx;
 
@@ -973,15 +934,13 @@ static errr init_towns(void)
  */
 errr init_buildings(void)
 {
-	int i, j;
-
-	for (i = 0; i < MAX_BLDG; i++)
+	for (int i = 0; i < MAX_BLDG; i++)
 	{
 		building[i].name[0] = '\0';
 		building[i].owner_name[0] = '\0';
 		building[i].owner_race[0] = '\0';
 
-		for (j = 0; j < 8; j++)
+		for (int j = 0; j < 8; j++)
 		{
 			building[i].act_names[j][0] = '\0';
 			building[i].member_costs[j] = 0;
@@ -991,23 +950,23 @@ errr init_buildings(void)
 			building[i].action_restr[j] = 0;
 		}
 
-		for (j = 0; j < MAX_CLASS; j++)
+		for (int j = 0; j < MAX_CLASS; j++)
 		{
 			building[i].member_class[j] = 0;
 		}
 
-		for (j = 0; j < MAX_RACES; j++)
+		for (int j = 0; j < MAX_RACES; j++)
 		{
 			building[i].member_race[j] = 0;
 		}
 
-		for (j = 0; j < MAX_MAGIC+1; j++)
+		for (int j = 0; j < MAX_MAGIC + 1; j++)
 		{
 			building[i].member_realm[j] = 0;
 		}
 	}
 
-	return (0);
+	return 0;
 }
 
 
@@ -1018,15 +977,11 @@ errr init_buildings(void)
  */
 static errr init_quests(void)
 {
-	int i;
-
-	/*** Prepare the quests ***/
-
 	/* Allocate the quests */
 	C_MAKE(quest, max_q_idx, quest_type);
 
 	/* Set all quest to "untaken" */
-	for (i = 0; i < max_q_idx; i++)
+	for (int i = 0; i < max_q_idx; i++)
 	{
 		quest[i].status = QUEST_STATUS_UNTAKEN;
 	}
@@ -1059,31 +1014,26 @@ s16b f_tag_to_index_in_init(concptr str)
  */
 static errr init_feat_variables(void)
 {
-	FEAT_IDX i;
-
-	/* Nothing */
 	feat_none = f_tag_to_index_in_init("NONE");
 
-	/* Floor */
 	feat_floor = f_tag_to_index_in_init("FLOOR");
-
-	/* Objects */
 	feat_glyph = f_tag_to_index_in_init("GLYPH");
 	feat_explosive_rune = f_tag_to_index_in_init("EXPLOSIVE_RUNE");
 	feat_mirror = f_tag_to_index_in_init("MIRROR");
-
-	/* Doors */
+	
 	feat_door[DOOR_DOOR].open = f_tag_to_index_in_init("OPEN_DOOR");
 	feat_door[DOOR_DOOR].broken = f_tag_to_index_in_init("BROKEN_DOOR");
 	feat_door[DOOR_DOOR].closed = f_tag_to_index_in_init("CLOSED_DOOR");
 
 	/* Locked doors */
+	FEAT_IDX i;
 	for (i = 1; i < MAX_LJ_DOORS; i++)
 	{
 		s16b door = f_tag_to_index(format("LOCKED_DOOR_%d", i));
 		if (door < 0) break;
 		feat_door[DOOR_DOOR].locked[i - 1] = door;
 	}
+
 	if (i == 1) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 	feat_door[DOOR_DOOR].num_locked = i - 1;
 
@@ -1094,6 +1044,7 @@ static errr init_feat_variables(void)
 		if (door < 0) break;
 		feat_door[DOOR_DOOR].jammed[i] = door;
 	}
+
 	if (!i) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 	feat_door[DOOR_DOOR].num_jammed = i;
 
@@ -1109,6 +1060,7 @@ static errr init_feat_variables(void)
 		if (door < 0) break;
 		feat_door[DOOR_GLASS_DOOR].locked[i - 1] = door;
 	}
+
 	if (i == 1) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 	feat_door[DOOR_GLASS_DOOR].num_locked = i - 1;
 
@@ -1119,6 +1071,7 @@ static errr init_feat_variables(void)
 		if (door < 0) break;
 		feat_door[DOOR_GLASS_DOOR].jammed[i] = door;
 	}
+
 	if (!i) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 	feat_door[DOOR_GLASS_DOOR].num_jammed = i;
 
@@ -1198,12 +1151,9 @@ static errr init_feat_variables(void)
 	feat_mountain = f_tag_to_index_in_init("MOUNTAIN");
 	feat_swamp = f_tag_to_index_in_init("SWAMP");
 
-	/* Unknown grid (not detected) */
 	feat_undetected = f_tag_to_index_in_init("UNDETECTED");
 
-	/* Wilderness terrains */
 	init_wilderness_terrains();
-
 	return feat_tag_is_not_found ? PARSE_ERROR_UNDEFINED_TERRAIN_TAG : 0;
 }
 
@@ -1215,8 +1165,6 @@ static errr init_feat_variables(void)
  */
 static errr init_other(player_type *player_ptr)
 {
-	int i, n;
-
 	player_ptr->current_floor_ptr = &floor_info; // TODO:本当はこんなところで初期化したくない
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 
@@ -1229,7 +1177,7 @@ static errr init_other(player_type *player_ptr)
 	C_MAKE(floor_ptr->m_list, current_world_ptr->max_m_idx, monster_type);
 
 	/* Allocate and Wipe the monster process list */
-	for (i = 0; i < MAX_MTIMED; i++)
+	for (int i = 0; i < MAX_MTIMED; i++)
 	{
 		C_MAKE(floor_ptr->mproc_list[i], current_world_ptr->max_m_idx, s16b);
 	}
@@ -1237,7 +1185,7 @@ static errr init_other(player_type *player_ptr)
 	/* Allocate and Wipe the max dungeon level */
 	C_MAKE(max_dlv, current_world_ptr->max_d_idx, DEPTH);
 
-	for (i = 0; i < MAX_HGT; i++)
+	for (int i = 0; i < MAX_HGT; i++)
 	{
 		C_MAKE(floor_ptr->grid_array[i], MAX_WID, grid_type);
 	}
@@ -1265,7 +1213,7 @@ static errr init_other(player_type *player_ptr)
 	/*** Prepare the options ***/
 
 	/* Scan the options */
-	for (i = 0; option_info[i].o_desc; i++)
+	for (int i = 0; option_info[i].o_desc; i++)
 	{
 		int os = option_info[i].o_set;
 		int ob = option_info[i].o_bit;
@@ -1290,10 +1238,10 @@ static errr init_other(player_type *player_ptr)
 	}
 
 	/* Analyze the windows */
-	for (n = 0; n < 8; n++)
+	for (int n = 0; n < 8; n++)
 	{
 		/* Analyze the options */
-		for (i = 0; i < 32; i++)
+		for (int i = 0; i < 32; i++)
 		{
 			/* Accept */
 			if (window_flag_desc[i])
@@ -1312,15 +1260,11 @@ static errr init_other(player_type *player_ptr)
 	window_flag[1] = 1L << A_MAX;
 	window_flag[2] = 1L << 0;
 
-
 	/*** Pre-allocate space for the "format()" buffer ***/
 
 	/* Hack -- Just call the "format()" function */
 	(void)format("%s (%s).", "Mr.Hoge", MAINTAINER);
-
-
-	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -1331,19 +1275,10 @@ static errr init_other(player_type *player_ptr)
  */
 static errr init_object_alloc(void)
 {
-	int i, j;
-	object_kind *k_ptr;
-	alloc_entry *table;
-	s16b num[MAX_DEPTH];
 	s16b aux[MAX_DEPTH];
-
-
-	/*** Analyze object allocation info ***/
-
-	/* Clear the "aux" array */
 	(void)C_WIPE(&aux, MAX_DEPTH, s16b);
 
-	/* Clear the "num" array */
+	s16b num[MAX_DEPTH];
 	(void)C_WIPE(&num, MAX_DEPTH, s16b);
 
 	/* Free the old "alloc_kind_table" (if it exists) */
@@ -1356,12 +1291,13 @@ static errr init_object_alloc(void)
 	alloc_kind_size = 0;
 
 	/* Scan the objects */
-	for (i = 1; i < max_k_idx; i++)
+	for (int i = 1; i < max_k_idx; i++)
 	{
+		object_kind *k_ptr;
 		k_ptr = &k_info[i];
 
 		/* Scan allocation pairs */
-		for (j = 0; j < 4; j++)
+		for (int j = 0; j < 4; j++)
 		{
 			/* Count the "legal" entries */
 			if (k_ptr->chance[j])
@@ -1376,11 +1312,12 @@ static errr init_object_alloc(void)
 	}
 
 	/* Collect the level indexes */
-	for (i = 1; i < MAX_DEPTH; i++)
+	for (int i = 1; i < MAX_DEPTH; i++)
 	{
 		/* Group by level */
-		num[i] += num[i-1];
+		num[i] += num[i - 1];
 	}
+
 	if (!num[0]) quit(_("町のアイテムがない！", "No town objects!"));
 
 	/*** Initialize object allocation info ***/
@@ -1389,48 +1326,46 @@ static errr init_object_alloc(void)
 	C_MAKE(alloc_kind_table, alloc_kind_size, alloc_entry);
 
 	/* Access the table entry */
+	alloc_entry *table;
 	table = alloc_kind_table;
 
 	/* Scan the objects */
-	for (i = 1; i < max_k_idx; i++)
+	for (int i = 1; i < max_k_idx; i++)
 	{
+		object_kind *k_ptr;
 		k_ptr = &k_info[i];
 
 		/* Scan allocation pairs */
-		for (j = 0; j < 4; j++)
+		for (int j = 0; j < 4; j++)
 		{
 			/* Count the "legal" entries */
-			if (k_ptr->chance[j])
-			{
-				int p, x, y, z;
+			if (k_ptr->chance[j] == 0) continue;
 
-				/* Extract the base level */
-				x = k_ptr->locale[j];
+			/* Extract the base level */
+			int x = k_ptr->locale[j];
 
-				/* Extract the base probability */
-				p = (100 / k_ptr->chance[j]);
+			/* Extract the base probability */
+			int p = (100 / k_ptr->chance[j]);
 
-				/* Skip entries preceding our locale */
-				y = (x > 0) ? num[x-1] : 0;
+			/* Skip entries preceding our locale */
+			int y = (x > 0) ? num[x - 1] : 0;
 
-				/* Skip previous entries at this locale */
-				z = y + aux[x];
+			/* Skip previous entries at this locale */
+			int z = y + aux[x];
 
-				/* Load the entry */
-				table[z].index = (KIND_OBJECT_IDX)i;
-				table[z].level = (DEPTH)x;
-				table[z].prob1 = (PROB)p;
-				table[z].prob2 = (PROB)p;
-				table[z].prob3 = (PROB)p;
+			/* Load the entry */
+			table[z].index = (KIND_OBJECT_IDX)i;
+			table[z].level = (DEPTH)x;
+			table[z].prob1 = (PROB)p;
+			table[z].prob2 = (PROB)p;
+			table[z].prob3 = (PROB)p;
 
-				/* Another entry complete for this locale */
-				aux[x]++;
-			}
+			/* Another entry complete for this locale */
+			aux[x]++;
 		}
 	}
 
-	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -1441,7 +1376,6 @@ static errr init_object_alloc(void)
  */
 static errr init_alloc(void)
 {
-	int i;
 	monster_race *r_ptr;
 
 #ifdef SORT_R_INFO
@@ -1452,7 +1386,7 @@ static errr init_alloc(void)
 	C_MAKE(elements, max_r_idx, tag_type);
 
 	/* Scan the monsters */
-	for (i = 1; i < max_r_idx; i++)
+	for (int i = 1; i < max_r_idx; i++)
 	{
 		elements[i].tag = r_info[i].level;
 		elements[i].index = i;
@@ -1469,29 +1403,26 @@ static errr init_alloc(void)
 	C_MAKE(alloc_race_table, alloc_race_size, alloc_entry);
 
 	/* Scan the monsters */
-	for (i = 1; i < max_r_idx; i++)
+	for (int i = 1; i < max_r_idx; i++)
 	{
 		/* Get the i'th race */
 		r_ptr = &r_info[elements[i].index];
 
 		/* Count valid pairs */
-		if (r_ptr->rarity)
-		{
-			int p, x;
+		if (r_ptr->rarity == 0) continue;
 
-			/* Extract the base level */
-			x = r_ptr->level;
+		/* Extract the base level */
+		int x = r_ptr->level;
 
-			/* Extract the base probability */
-			p = (100 / r_ptr->rarity);
+		/* Extract the base probability */
+		int p = (100 / r_ptr->rarity);
 
-			/* Load the entry */
-			alloc_race_table[i].index = (KIND_OBJECT_IDX)elements[i].index;
-			alloc_race_table[i].level = (DEPTH)x;
-			alloc_race_table[i].prob1 = (PROB)p;
-			alloc_race_table[i].prob2 = (PROB)p;
-			alloc_race_table[i].prob3 = (PROB)p;
-		}
+		/* Load the entry */
+		alloc_race_table[i].index = (KIND_OBJECT_IDX)elements[i].index;
+		alloc_race_table[i].level = (DEPTH)x;
+		alloc_race_table[i].prob1 = (PROB)p;
+		alloc_race_table[i].prob2 = (PROB)p;
+		alloc_race_table[i].prob3 = (PROB)p;
 	}
 
 	/* Free the "r_info" array */
@@ -1499,7 +1430,6 @@ static errr init_alloc(void)
 
 #else /* SORT_R_INFO */
 
-	int j;
 	alloc_entry *table;
 	s16b num[MAX_DEPTH];
 	s16b aux[MAX_DEPTH];
@@ -1516,7 +1446,7 @@ static errr init_alloc(void)
 	alloc_race_size = 0;
 
 	/* Scan the monsters */
-	for (i = 1; i < max_r_idx; i++)
+	for (int i = 1; i < max_r_idx; i++)
 	{
 		/* Get the i'th race */
 		r_ptr = &r_info[i];
@@ -1533,10 +1463,10 @@ static errr init_alloc(void)
 	}
 
 	/* Collect the level indexes */
-	for (i = 1; i < MAX_DEPTH; i++)
+	for (int i = 1; i < MAX_DEPTH; i++)
 	{
 		/* Group by level */
-		num[i] += num[i-1];
+		num[i] += num[i - 1];
 	}
 	if (!num[0]) quit(_("町のモンスターがない！", "No town monsters!"));
 
@@ -1549,7 +1479,7 @@ static errr init_alloc(void)
 	table = alloc_race_table;
 
 	/* Scan the monsters */
-	for (i = 1; i < max_r_idx; i++)
+	for (int i = 1; i < max_r_idx; i++)
 	{
 		/* Get the i'th race */
 		r_ptr = &r_info[i];
@@ -1566,7 +1496,7 @@ static errr init_alloc(void)
 			p = (100 / r_ptr->rarity);
 
 			/* Skip entries preceding our locale */
-			y = (x > 0) ? num[x-1] : 0;
+			y = (x > 0) ? num[x - 1] : 0;
 
 			/* Skip previous entries at this locale */
 			z = y + aux[x];
@@ -1585,13 +1515,9 @@ static errr init_alloc(void)
 
 #endif /* SORT_R_INFO */
 
-	/* Init the "alloc_kind_table" */
 	(void)init_object_alloc();
-
-	/* Success */
-	return (0);
+	return 0;
 }
-
 
 
 /*!
@@ -1607,7 +1533,6 @@ static void note(concptr str)
 }
 
 
-
 /*!
  * @brief 全ゲームデータ読み込みのサブルーチン /
  * Hack -- Explain a broken "lib" folder and quit (see below).
@@ -1621,7 +1546,6 @@ static void note(concptr str)
  */
 static void init_angband_aux(concptr why)
 {
-	/* Why */
 	plog(why);
 
 #ifdef JP
@@ -1701,20 +1625,12 @@ static void init_angband_aux(concptr why)
  */
 void init_angband(player_type *player_ptr)
 {
-	int fd = -1;
-
-	BIT_FLAGS mode = 0664;
-
-	FILE *fp;
-
-	char buf[1024];
-
-
 	/*** Verify the "news" file ***/
+	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
 
 	/* Attempt to open the file */
-	fd = fd_open(buf, O_RDONLY);
+	int fd = fd_open(buf, O_RDONLY);
 
 	/* Failure */
 	if (fd < 0)
@@ -1726,35 +1642,32 @@ void init_angband(player_type *player_ptr)
 		/* Crash and burn */
 		init_angband_aux(why);
 	}
-	(void)fd_close(fd);
 
+	(void)fd_close(fd);
 
 	/*** Display the "news" file ***/
 	Term_clear();
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("news_j.txt", "news.txt"));
 
 	/* Open the News file */
+	FILE *fp;
 	fp = my_fopen(buf, "r");
 
 	/* Dump */
 	if (fp)
 	{
-		int i = 0;
-
 		/* Dump the file to the screen */
+		int i = 0;
 		while (0 == my_fgets(fp, buf, sizeof(buf)))
 		{
 			/* Display and advance */
 			Term_putstr(0, i++, -1, TERM_WHITE, buf);
 		}
 
-		/* Close */
 		my_fclose(fp);
 	}
 
-	/* Flush it */
 	Term_flush();
-
 
 	/*** Verify (or create) the "high score" file ***/
 	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
@@ -1762,7 +1675,7 @@ void init_angband(player_type *player_ptr)
 	/* Attempt to open the high score file */
 	fd = fd_open(buf, O_RDONLY);
 
-	/* Failure */
+	BIT_FLAGS file_permission = 0664;
 	if (fd < 0)
 	{
 		/* File type is "DATA" */
@@ -1772,7 +1685,7 @@ void init_angband(player_type *player_ptr)
 		safe_setuid_grab();
 
 		/* Create a new high score file */
-		fd = fd_make(buf, mode);
+		fd = fd_make(buf, file_permission);
 
 		/* Drop permissions */
 		safe_setuid_drop();
@@ -1788,6 +1701,7 @@ void init_angband(player_type *player_ptr)
 			init_angband_aux(why);
 		}
 	}
+
 	(void)fd_close(fd);
 
 	put_title();
@@ -1809,11 +1723,9 @@ void init_angband(player_type *player_ptr)
 	if (init_feat_variables()) quit("Cannot initialize features");
 #endif
 
-
 	/* Initialize object info */
 	note(_("[データの初期化中... (アイテム)]", "[Initializing arrays... (objects)]"));
 	if (init_k_info()) quit(_("アイテム初期化不能", "Cannot initialize objects"));
-
 
 	/* Initialize artifact info */
 	note(_("[データの初期化中... (伝説のアイテム)]", "[Initializing arrays... (artifacts)]"));
@@ -1834,8 +1746,7 @@ void init_angband(player_type *player_ptr)
 	note(_("[データの初期化中... (ダンジョン)]", "[Initializing arrays... (dungeon)]"));
 	if (init_d_info()) quit(_("ダンジョン初期化不能", "Cannot initialize dungeon"));
 	{
-		int i;
-		for (i = 1; i < current_world_ptr->max_d_idx; i++)
+		for (int i = 1; i < current_world_ptr->max_d_idx; i++)
 			if (d_info[i].final_guardian)
 				r_info[d_info[i].final_guardian].flags7 |= RF7_GUARDIAN;
 	}
@@ -1860,7 +1771,6 @@ void init_angband(player_type *player_ptr)
 	/* Initialize building array */
 	note(_("[配列を初期化しています... (建物)]", "[Initializing arrays... (buildings)]"));
 	if (init_buildings()) quit(_("建物を初期化できません", "Cannot initialize buildings"));
-
 
 	/* Initialize quest array */
 	note(_("[配列を初期化しています... (クエスト)]", "[Initializing arrays... (quests)]"));
@@ -1905,14 +1815,13 @@ void init_angband(player_type *player_ptr)
 static void put_title(void)
 {
 	char title[120];
-	int col;
 #if H_VER_EXTRA > 0
 	sprintf(title, _("変愚蛮怒 %d.%d.%d.%d(%s)", "Hengband %d.%d.%d.%d(%s)"), H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH, H_VER_EXTRA,
 #else
 	sprintf(title, _("変愚蛮怒 %d.%d.%d(%s)", "Hengband %d.%d.%d(%s)"), H_VER_MAJOR, H_VER_MINOR, H_VER_PATCH,
 #endif
-	IS_STABLE_VERSION ? _("安定版", "Stable") : _("開発版", "Developing"));
-	col = (80 - strlen(title)) / 2;
+		IS_STABLE_VERSION ? _("安定版", "Stable") : _("開発版", "Developing"));
+	int col = (80 - strlen(title)) / 2;
 	col = col < 0 ? 0 : col;
 	prt(title, VER_INFO_ROW, col);
 }
@@ -1924,15 +1833,14 @@ static void put_title(void)
  */
 concptr get_check_sum(void)
 {
-	return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x", 
-		      f_head.v_extra, 
-		      k_head.v_extra, 
-		      a_head.v_extra, 
-		      e_head.v_extra, 
-		      r_head.v_extra, 
-		      d_head.v_extra, 
-		      m_head.v_extra, 
-		      s_head.v_extra, 
-		      v_head.v_extra);
+	return format("%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+		f_head.v_extra,
+		k_head.v_extra,
+		a_head.v_extra,
+		e_head.v_extra,
+		r_head.v_extra,
+		d_head.v_extra,
+		m_head.v_extra,
+		s_head.v_extra,
+		v_head.v_extra);
 }
-
