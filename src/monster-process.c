@@ -2200,7 +2200,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 
 		/* Take or Kill objects on the floor */
-		bool is_takable_or_killable = g_ptr->o_idx;
+		bool is_takable_or_killable = g_ptr->o_idx > 0;
 		is_takable_or_killable &= (r_ptr->flags2 & (RF2_TAKE_ITEM | RF2_KILL_ITEM));
 		is_takable_or_killable &= !is_pet(m_ptr) || ((target_ptr->pet_extra_flags & PF_PICKUP_ITEMS) && (r_ptr->flags2 & RF2_TAKE_ITEM));
 		if (!is_takable_or_killable)
