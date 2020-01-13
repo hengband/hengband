@@ -1879,7 +1879,7 @@ static void display_player_middle(player_type *creature_ptr)
 
 	/* Dump Day */
 	int day, hour, min;
-	extract_day_hour_min(&day, &hour, &min);
+	extract_day_hour_min(creature_ptr, &day, &hour, &min);
 
 	if (day < MAX_DAYS) sprintf(buf, _("%d日目 %2d:%02d", "Day %d %2d:%02d"), day, hour, min);
 	else sprintf(buf, _("*****日目 %2d:%02d", "Day ***** %2d:%02d"), hour, min);

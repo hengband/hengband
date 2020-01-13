@@ -67,5 +67,5 @@ typedef struct {
 } world_type;
 
 extern bool is_daytime(void);
-extern void extract_day_hour_min(int *day, int *hour, int *min);
+extern void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min);
 extern world_type *current_world_ptr;

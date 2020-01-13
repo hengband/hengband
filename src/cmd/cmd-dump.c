@@ -413,7 +413,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 
 	static bool disable_diary = FALSE;
 
-	extract_day_hour_min(&day, &hour, &min);
+	extract_day_hour_min(creature_ptr, &day, &hour, &min);
 
 	if (disable_diary) return(-1);
 
@@ -7008,7 +7008,7 @@ void do_cmd_checkquest(player_type *creature_ptr)
 void do_cmd_time(player_type *creature_ptr)
 {
 	int day, hour, min;
-	extract_day_hour_min(&day, &hour, &min);
+	extract_day_hour_min(creature_ptr, &day, &hour, &min);
 
 	char desc[1024];
 	strcpy(desc, _("変な時刻だ。", "It is a strange time."));

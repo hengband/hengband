@@ -171,14 +171,14 @@ static void print_field(concptr info, TERM_LEN row, TERM_LEN col)
  * Print time
  * @return なし
  */
-void print_time(void)
+void print_time(player_type *player_ptr)
 {
 	int day, hour, min;
 
 	/* Dump 13 spaces to clear */
 	c_put_str(TERM_WHITE, "             ", ROW_DAY, COL_DAY);
 
-	extract_day_hour_min(&day, &hour, &min);
+	extract_day_hour_min(player_ptr, &day, &hour, &min);
 
 	/* Dump the info itself */
 	if (day < 1000) c_put_str(TERM_WHITE, format(_("%2d日目", "Day%3d"), day), ROW_DAY, COL_DAY);
@@ -2096,7 +2096,7 @@ void redraw_stuff(player_type *creature_ptr)
 		creature_ptr->redraw &= ~(PR_ARMOR | PR_HP | PR_MANA);
 		creature_ptr->redraw &= ~(PR_DEPTH | PR_HEALTH | PR_UHEALTH);
 		print_frame_basic(creature_ptr);
-		print_time();
+		print_time(creature_ptr);
 		print_dungeon(creature_ptr);
 	}
 

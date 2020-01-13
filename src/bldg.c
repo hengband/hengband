@@ -2128,7 +2128,7 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 		s32b oldturn = current_world_ptr->game_turn;
 		int prev_day, prev_hour, prev_min;
 
-		extract_day_hour_min(&prev_day, &prev_hour, &prev_min);
+		extract_day_hour_min(customer_ptr, &prev_day, &prev_hour, &prev_min);
 		if ((prev_hour >= 6) && (prev_hour <= 17))
 			exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over daytime at the inn."));
 		else

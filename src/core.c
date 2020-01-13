@@ -3101,7 +3101,7 @@ static void process_world(player_type *player_ptr)
 	s32b prev_turn_in_today = ((current_world_ptr->game_turn - TURNS_PER_TICK) % A_DAY + A_DAY / 4) % A_DAY;
 	int prev_min = (1440 * prev_turn_in_today / A_DAY) % 60;
 	
-	extract_day_hour_min(&day, &hour, &min);
+	extract_day_hour_min(player_ptr, &day, &hour, &min);
 
 	/* Update dungeon feeling, and announce it if changed */
 	update_dungeon_feeling(player_ptr);
@@ -4431,7 +4431,7 @@ static void process_player(player_type *creature_ptr)
 			update_monster(creature_ptr, m_idx, FALSE);
 		}
 
-		print_time();
+		print_time(creature_ptr);
 	}
 
 	/* Give the player some energy */
@@ -4442,7 +4442,7 @@ static void process_player(player_type *creature_ptr)
 
 	/* No turn yet */
 	if (creature_ptr->energy_need > 0) return;
-	if (!command_rep) print_time();
+	if (!command_rep) print_time(creature_ptr);
 
 	/*** Check for interupts ***/
 
