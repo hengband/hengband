@@ -2200,7 +2200,7 @@ static byte rgold_adj[MAX_RACES][MAX_RACES] =
  * "greed" value is always something (?).
  * </pre>
  */
-static PRICE price_item(object_type *o_ptr, int greed, bool flip)
+static PRICE price_item(player_type *player_ptr, object_type *o_ptr, int greed, bool flip)
 {
 	int factor;
 	int adjust;
@@ -2213,10 +2213,10 @@ static PRICE price_item(object_type *o_ptr, int greed, bool flip)
 	if (price <= 0) return (0L);
 
 	/* Compute the racial factor */
-	factor = rgold_adj[ot_ptr->owner_race][p_ptr->prace];
+	factor = rgold_adj[ot_ptr->owner_race][player_ptr->prace];
 
 	/* Add in the charisma factor */
-	factor += adj_chr_gold[p_ptr->stat_ind[A_CHR]];
+	factor += adj_chr_gold[player_ptr->stat_ind[A_CHR]];
 
 
 	/* Shop is buying */
@@ -3028,7 +3028,7 @@ bool combine_and_reorder_home(int store_num)
  * known, the player may have to pick stuff up and drop it again.
  * </pre>
  */
-static int home_carry(object_type *o_ptr)
+static int home_carry(player_type *player_ptr, object_type *o_ptr)
 {
 	int slot;
 	PRICE value;
@@ -3111,7 +3111,7 @@ static int home_carry(object_type *o_ptr)
 	/* Insert the new item */
 	st_ptr->stock[slot] = *o_ptr;
 
-	chg_virtue(p_ptr, V_SACRIFICE, -1);
+	chg_virtue(player_ptr, V_SACRIFICE, -1);
 
 	(void)combine_and_reorder_home(cur_store_num);
 
@@ -3291,6 +3291,7 @@ static void store_item_optimize(INVENTORY_IDX item)
 /*!
  * @brief ブラックマーケット用の無価値品の排除判定 /
  * This function will keep 'crap' out of the black market.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
  * @return ブラックマーケットにとって無価値な品ならばTRUEを返す
  * @details
@@ -3299,7 +3300,7 @@ static void store_item_optimize(INVENTORY_IDX item)
  * Based on a suggestion by "Lee Vogt" <lvogt@cig.mcel.mot.com>
  * </pre>
  */
-static bool black_market_crap(object_type *o_ptr)
+static bool black_market_crap(player_type *player_ptr, object_type *o_ptr)
 {
 	int i, j;
 
@@ -3318,9 +3319,9 @@ static bool black_market_crap(object_type *o_ptr)
 		if (i == STORE_MUSEUM) continue;
 
 		/* Check every item in the store */
-		for (j = 0; j < town_info[p_ptr->town_num].store[i].stock_num; j++)
+		for (j = 0; j < town_info[player_ptr->town_num].store[i].stock_num; j++)
 		{
-			object_type *j_ptr = &town_info[p_ptr->town_num].store[i].stock[j];
+			object_type *j_ptr = &town_info[player_ptr->town_num].store[i].stock[j];
 
 			/* Duplicate item "type", assume crappy */
 			if (o_ptr->k_idx == j_ptr->k_idx) return TRUE;
@@ -3455,7 +3456,7 @@ static void store_create(player_type *player_ptr)
 		if (cur_store_num == STORE_BLACK)
 		{
 			/* Hack -- No "crappy" items */
-			if (black_market_crap(q_ptr)) continue;
+			if (black_market_crap(player_ptr, q_ptr)) continue;
 
 			/* Hack -- No "cheap" items */
 			if (object_value(q_ptr) < 10) continue;
@@ -3550,10 +3551,11 @@ static void updatebargain(PRICE price, PRICE minprice, int num)
 /*!
  * @brief 店の商品リストを再表示する /
  * Re-displays a single store entry
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param pos 表示行
  * @return なし
  */
-static void display_entry(int pos)
+static void display_entry(player_type *player_ptr, int pos)
 {
 	int i, cur_col;
 	object_type *o_ptr;
@@ -3646,7 +3648,7 @@ static void display_entry(int pos)
 		if (o_ptr->ident & (IDENT_FIXED))
 		{
 			/* Extract the "minimum" price */
-			x = price_item(o_ptr, ot_ptr->min_inflate, FALSE);
+			x = price_item(player_ptr, o_ptr, ot_ptr->min_inflate, FALSE);
 
 			/* Actually draw the price (not fixed) */
 #ifdef JP
@@ -3661,7 +3663,7 @@ static void display_entry(int pos)
 		else if (!manual_haggle)
 		{
 			/* Extract the "minimum" price */
-			x = price_item(o_ptr, ot_ptr->min_inflate, FALSE);
+			x = price_item(player_ptr, o_ptr, ot_ptr->min_inflate, FALSE);
 
 			/* Hack -- Apply Sales Tax if needed */
 			if (!noneedtobargain(x)) x += x / 10;
@@ -3675,7 +3677,7 @@ static void display_entry(int pos)
 		else
 		{
 			/* Extrect the "maximum" price */
-			x = price_item(o_ptr, ot_ptr->max_inflate, FALSE);
+			x = price_item(player_ptr, o_ptr, ot_ptr->max_inflate, FALSE);
 
 			/* Actually draw the price (not fixed) */
 			(void)sprintf(out_val, "%9ld  ", (long)x);
@@ -3688,11 +3690,12 @@ static void display_entry(int pos)
 /*!
  * @brief 店の商品リストを表示する /
  * Displays a store's inventory -RAK-
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * All prices are listed as "per individual object".  -BEN-
  */
-static void display_inventory(void)
+static void display_inventory(player_type *player_ptr)
 {
 	int i, k;
 
@@ -3703,7 +3706,7 @@ static void display_inventory(void)
 		if (store_top + k >= st_ptr->stock_num) break;
 
 		/* Display that line */
-		display_entry(store_top + k);
+		display_entry(player_ptr, store_top + k);
 	}
 
 	/* Erase the extra lines and the "more" prompt */
@@ -3745,25 +3748,27 @@ static void display_inventory(void)
 /*!
  * @brief プレイヤーの所持金を表示する /
  * Displays players gold					-RAK-
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  */
-static void store_prt_gold(void)
+static void store_prt_gold(player_type *player_ptr)
 {
 	char out_val[64];
 
 	prt(_("手持ちのお金: ", "Gold Remaining: "), 19 + xtra_stock, 53);
-	sprintf(out_val, "%9ld", (long)p_ptr->au);
+	sprintf(out_val, "%9ld", (long)player_ptr->au);
 	prt(out_val, 19 + xtra_stock, 68);
 }
 
 /*!
  * @brief 店舗情報全体を表示するメインルーチン /
  * Displays store (after clearing screen)		-RAK-
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  */
-static void display_store(void)
+static void display_store(player_type *player_ptr)
 {
 	char buf[80];
 
@@ -3831,8 +3836,8 @@ static void display_store(void)
 	}
 
 	/* Display the current gold */
-	store_prt_gold();
-	display_inventory();
+	store_prt_gold(player_ptr);
+	display_inventory(player_ptr);
 }
 
 
@@ -4160,12 +4165,13 @@ static bool receive_offer(concptr pmt, s32b *poffer,
 /*!
  * @brief プレイヤーが購入する時の値切り処理メインルーチン /
  * Haggling routine 				-RAK-
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr オブジェクトの構造体参照ポインタ
  * @param price 最終価格を返す参照ポインタ
  * @return プレイヤーの価格に対して店主が不服ならばTRUEを返す /
  * Return TRUE if purchase is NOT successful
  */
-static bool purchase_haggle(object_type *o_ptr, s32b *price)
+static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *price)
 {
 	s32b			   cur_ask, final_ask;
 	s32b			   last_offer, offer;
@@ -4180,8 +4186,8 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 	concptr pmt = _("提示価格", "Asking");
 
 	/* Extract the starting offer and the final offer */
-	cur_ask = price_item(o_ptr, ot_ptr->max_inflate, FALSE);
-	final_ask = price_item(o_ptr, ot_ptr->min_inflate, FALSE);
+	cur_ask = price_item(player_ptr, o_ptr, ot_ptr->max_inflate, FALSE);
+	final_ask = price_item(player_ptr, o_ptr, ot_ptr->min_inflate, FALSE);
 
 	/* Determine if haggling is necessary */
 	noneed = noneedtobargain(final_ask);
@@ -4333,12 +4339,13 @@ static bool purchase_haggle(object_type *o_ptr, s32b *price)
 /*!
  * @brief プレイヤーが売却する時の値切り処理メインルーチン /
  * Haggling routine 				-RAK-
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr オブジェクトの構造体参照ポインタ
  * @param price 最終価格を返す参照ポインタ
  * @return プレイヤーの価格に対して店主が不服ならばTRUEを返す /
  * Return TRUE if purchase is NOT successful
  */
-static bool sell_haggle(object_type *o_ptr, s32b *price)
+static bool sell_haggle(player_type *player_ptr, object_type *o_ptr, s32b *price)
 {
 	s32b    purse, cur_ask, final_ask;
 	s32b    last_offer = 0, offer = 0;
@@ -4354,8 +4361,8 @@ static bool sell_haggle(object_type *o_ptr, s32b *price)
 	*price = 0;
 
 	/* Obtain the starting offer and the final offer */
-	cur_ask = price_item(o_ptr, ot_ptr->max_inflate, TRUE);
-	final_ask = price_item(o_ptr, ot_ptr->min_inflate, TRUE);
+	cur_ask = price_item(player_ptr, o_ptr, ot_ptr->max_inflate, TRUE);
+	final_ask = price_item(player_ptr, o_ptr, ot_ptr->min_inflate, TRUE);
 
 	/* Determine if haggling is necessary */
 	noneed = noneedtobargain(final_ask);
@@ -4634,7 +4641,7 @@ static void store_purchase(player_type *player_ptr)
 	}
 
 	/* Determine the "best" price (per item) */
-	best = price_item(j_ptr, ot_ptr->min_inflate, FALSE);
+	best = price_item(player_ptr, j_ptr, ot_ptr->min_inflate, FALSE);
 
 	/* Find out how many the player wants */
 	if (o_ptr->number > 1)
@@ -4691,7 +4698,7 @@ static void store_purchase(player_type *player_ptr)
 			msg_print(NULL);
 
 			/* Haggle for a final price */
-			choice = purchase_haggle(j_ptr, &price);
+			choice = purchase_haggle(player_ptr, j_ptr, &price);
 
 			/* Hack -- Got kicked out */
 			if (st_ptr->store_open >= current_world_ptr->game_turn) return;
@@ -4724,7 +4731,7 @@ static void store_purchase(player_type *player_ptr)
 				player_ptr->au -= price;
 
 				/* Update the display */
-				store_prt_gold();
+				store_prt_gold(player_ptr);
 
 				/* Hack -- buying an item makes you aware of it */
 				object_aware(player_ptr, j_ptr);
@@ -4811,7 +4818,7 @@ static void store_purchase(player_type *player_ptr)
 
 					/* Start over */
 					store_top = 0;
-					display_inventory();
+					display_inventory(player_ptr);
 				}
 
 				/* The item is gone */
@@ -4819,14 +4826,14 @@ static void store_purchase(player_type *player_ptr)
 				{
 					/* Pick the correct screen */
 					if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
-					display_inventory();
+					display_inventory(player_ptr);
 				}
 
 				/* Item is still here */
 				else
 				{
 					/* Redraw the item */
-					display_entry(item);
+					display_entry(player_ptr, item);
 				}
 			}
 
@@ -4868,10 +4875,10 @@ static void store_purchase(player_type *player_ptr)
 		/* Hack -- Item is still here */
 		if (i == st_ptr->stock_num)
 		{
-			if (combined_or_reordered) display_inventory();
+			if (combined_or_reordered) display_inventory(player_ptr);
 
 			/* Redraw the item */
-			else display_entry(item);
+			else display_entry(player_ptr, item);
 		}
 
 		/* The item is gone */
@@ -4882,7 +4889,7 @@ static void store_purchase(player_type *player_ptr)
 
 			/* Nothing left on that screen */
 			else if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
-			display_inventory();
+			display_inventory(player_ptr);
 
 			chg_virtue(player_ptr, V_SACRIFICE, 1);
 		}
@@ -5010,7 +5017,7 @@ static void store_sell(player_type *owner_ptr)
 		msg_print(NULL);
 
 		/* Haggle for it */
-		choice = sell_haggle(q_ptr, &price);
+		choice = sell_haggle(owner_ptr, q_ptr, &price);
 
 		/* Kicked out */
 		if (st_ptr->store_open >= current_world_ptr->game_turn) return;
@@ -5036,7 +5043,7 @@ static void store_sell(player_type *owner_ptr)
 			owner_ptr->au += price;
 
 			/* Update the display */
-			store_prt_gold();
+			store_prt_gold(owner_ptr);
 
 			/* Get the "apparent" value */
 			dummy = object_value(q_ptr) * q_ptr->number;
@@ -5106,7 +5113,7 @@ static void store_sell(player_type *owner_ptr)
 			if (item_pos >= 0)
 			{
 				store_top = (item_pos / store_bottom) * store_bottom;
-				display_inventory();
+				display_inventory(owner_ptr);
 			}
 		}
 	}
@@ -5140,13 +5147,13 @@ static void store_sell(player_type *owner_ptr)
 		handle_stuff(owner_ptr);
 
 		/* Let the home carry it */
-		item_pos = home_carry(q_ptr);
+		item_pos = home_carry(owner_ptr, q_ptr);
 
 		/* Update store display */
 		if (item_pos >= 0)
 		{
 			store_top = (item_pos / store_bottom) * store_bottom;
-			display_inventory();
+			display_inventory(owner_ptr);
 		}
 	}
 	/* Player is at home */
@@ -5162,13 +5169,13 @@ static void store_sell(player_type *owner_ptr)
 		handle_stuff(owner_ptr);
 
 		/* Let the home carry it */
-		item_pos = home_carry(q_ptr);
+		item_pos = home_carry(owner_ptr, q_ptr);
 
 		/* Update store display */
 		if (item_pos >= 0)
 		{
 			store_top = (item_pos / store_bottom) * store_bottom;
-			display_inventory();
+			display_inventory(owner_ptr);
 		}
 	}
 
@@ -5244,9 +5251,10 @@ static void store_examine(void)
 /*!
  * @brief 博物館のアイテムを除去するコマンドのメインルーチン /
  * Remove an item from museum (Originally from TOband)
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void museum_remove_object(void)
+static void museum_remove_object(player_type *player_ptr)
 {
 	int i;
 	COMMAND_CODE item;
@@ -5299,7 +5307,7 @@ static void museum_remove_object(void)
 
 	/* Nothing left on that screen */
 	else if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
-	display_inventory();
+	display_inventory(player_ptr);
 
 	return;
 }
@@ -5357,7 +5365,7 @@ static void store_process_command(player_type *client_ptr)
 					store_top = ((st_ptr->stock_num - 1 )/store_bottom) * store_bottom;
 				if ( (cur_store_num == STORE_HOME) && (powerup_home == FALSE) )
 					if ( store_top >= store_bottom ) store_top = store_bottom;
-				display_inventory();
+				display_inventory(client_ptr);
 			}
 			break;
 		}
@@ -5390,7 +5398,7 @@ static void store_process_command(player_type *client_ptr)
 					if (store_top >= st_ptr->stock_num) store_top = 0;
 				}
 
-				display_inventory();
+				display_inventory(client_ptr);
 			}
 			break;
 		}
@@ -5398,7 +5406,7 @@ static void store_process_command(player_type *client_ptr)
 		case KTRL('R'):
 		{
 			do_cmd_redraw(client_ptr);
-			display_store();
+			display_store(client_ptr);
 			break;
 		}
 
@@ -5538,7 +5546,7 @@ static void store_process_command(player_type *client_ptr)
 			client_ptr->town_num = old_town_num;
 			do_cmd_player_status(client_ptr);
 			client_ptr->town_num = inner_town_num;
-			display_store();
+			display_store(client_ptr);
 			break;
 		}
 
@@ -5593,7 +5601,7 @@ static void store_process_command(player_type *client_ptr)
 			do_cmd_options();
 			(void)combine_and_reorder_home(STORE_HOME);
 			do_cmd_redraw(client_ptr);
-			display_store();
+			display_store(client_ptr);
 			break;
 		}
 
@@ -5666,7 +5674,7 @@ static void store_process_command(player_type *client_ptr)
 		{
 			if ((cur_store_num == STORE_MUSEUM) && (command_cmd == 'r'))
 			{
-				museum_remove_object();
+				museum_remove_object(client_ptr);
 			}
 			else
 			{
@@ -5781,7 +5789,7 @@ void do_cmd_store(player_type *player_ptr)
 
 	play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
 
-	display_store();
+	display_store(player_ptr);
 
 	/* Do not leave */
 	leave_store = FALSE;
@@ -5909,20 +5917,20 @@ void do_cmd_store(player_type *player_ptr)
 				handle_stuff(player_ptr);
 
 				/* Let the home carry it */
-				item_pos = home_carry(q_ptr);
+				item_pos = home_carry(player_ptr, q_ptr);
 
 				/* Redraw the home */
 				if (item_pos >= 0)
 				{
 					store_top = (item_pos / store_bottom) * store_bottom;
-					display_inventory();
+					display_inventory(player_ptr);
 				}
 			}
 		}
 
 		/* Hack -- Redisplay store prices if charisma changes */
 		/* Hack -- Redraw missiles damage if player changes bow */
-		if (need_redraw_store_inv) display_inventory();
+		if (need_redraw_store_inv) display_inventory(player_ptr);
 
 		/* Hack -- get kicked out of the store */
 		if (st_ptr->store_open >= current_world_ptr->game_turn) leave_store = TRUE;
@@ -6066,7 +6074,7 @@ void store_maint(player_type *player_ptr, int town_num, int store_num)
 			object_type *o_ptr = &st_ptr->stock[j];
 
 			/* Destroy crappy items */
-			if (black_market_crap(o_ptr))
+			if (black_market_crap(player_ptr, o_ptr))
 			{
 				/* Destroy the item */
 				store_item_increase(j, 0 - o_ptr->number);
