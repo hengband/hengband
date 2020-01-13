@@ -220,9 +220,9 @@ static bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
  * Note that this function is responsible for about one to five percent\n
  * of the processor use in normal conditions...\n
  */
-static bool mon_will_run(MONSTER_IDX m_idx)
+static bool mon_will_run(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 
 #ifdef ALLOW_TERROR
 
@@ -240,8 +240,8 @@ static bool mon_will_run(MONSTER_IDX m_idx)
 	if (is_pet(m_ptr))
 	{
 		/* Are we trying to avoid the player? */
-		return ((p_ptr->pet_follow_distance < 0) &&
-				  (m_ptr->cdis <= (0 - p_ptr->pet_follow_distance)));
+		return ((target_ptr->pet_follow_distance < 0) &&
+				  (m_ptr->cdis <= (0 - target_ptr->pet_follow_distance)));
 	}
 
 	/* Keep monsters from running too far away */
@@ -256,7 +256,7 @@ static bool mon_will_run(MONSTER_IDX m_idx)
 	if (m_ptr->cdis <= 5) return FALSE;
 
 	/* Examine player power (level) */
-	p_lev = p_ptr->lev;
+	p_lev = target_ptr->lev;
 
 	/* Examine monster power (level plus morale) */
 	m_lev = r_ptr->level + (m_idx & 0x08) + 25;
@@ -266,8 +266,8 @@ static bool mon_will_run(MONSTER_IDX m_idx)
 	if (m_lev + 4 <= p_lev) return TRUE;
 
 	/* Examine player health */
-	p_chp = p_ptr->chp;
-	p_mhp = p_ptr->mhp;
+	p_chp = target_ptr->chp;
+	p_mhp = target_ptr->mhp;
 
 	/* Examine monster health */
 	m_chp = m_ptr->hp;
@@ -888,15 +888,15 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	POSITION     y = 0, ay, x = 0, ax;
-	int          move_val = 0;
-	POSITION     y2 = target_ptr->y;
-	POSITION     x2 = target_ptr->x;
-	bool         done = FALSE;
-	bool         will_run = mon_will_run(m_idx);
-	grid_type    *g_ptr;
-	bool         no_flow = ((m_ptr->mflag2 & MFLAG2_NOFLOW) && (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].cost > 2));
-	bool         can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall));
+	POSITION y = 0, ay, x = 0, ax;
+	int move_val = 0;
+	POSITION y2 = target_ptr->y;
+	POSITION x2 = target_ptr->x;
+	bool done = FALSE;
+	bool will_run = mon_will_run(target_ptr, m_idx);
+	grid_type *g_ptr;
+	bool no_flow = ((m_ptr->mflag2 & MFLAG2_NOFLOW) && (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].cost > 2));
+	bool can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall));
 
 	/* Counter attack to an enemy monster */
 	if (!will_run && m_ptr->target_y)
