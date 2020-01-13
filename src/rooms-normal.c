@@ -706,10 +706,10 @@ bool build_type4(player_type *player_ptr)
 			/* Place a locked door on the inner room */
 			switch (randint1(4))
 			{
-			case 1: place_locked_door(floor_ptr, yval - 1, xval); break;
-			case 2: place_locked_door(floor_ptr, yval + 1, xval); break;
-			case 3: place_locked_door(floor_ptr, yval, xval - 1); break;
-			case 4: place_locked_door(floor_ptr, yval, xval + 1); break;
+			case 1: place_locked_door(player_ptr, yval - 1, xval); break;
+			case 2: place_locked_door(player_ptr, yval + 1, xval); break;
+			case 3: place_locked_door(player_ptr, yval, xval - 1); break;
+			case 4: place_locked_door(player_ptr, yval, xval + 1); break;
 			}
 
 			/* Monsters to guard the "treasure" */

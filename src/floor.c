@@ -34,15 +34,16 @@ saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 * @param x 配置したいフロアのX座標
 * @return なし
 */
-void place_locked_door(floor_type *floor_ptr, POSITION y, POSITION x)
+void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 {
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(floor_ptr, y, x);
 	}
 	else
 	{
-		set_cave_feat(floor_ptr, y, x, feat_locked_door_random((d_info[p_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
+		set_cave_feat(floor_ptr, y, x, feat_locked_door_random((d_info[player_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
 		delete_monster(floor_ptr, y, x);
 	}

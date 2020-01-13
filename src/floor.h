@@ -377,7 +377,7 @@ extern void update_smell(floor_type *floor_ptr, player_type *subject_ptr);
 
 extern void add_door(floor_type *floor_ptr, POSITION x, POSITION y);
 extern void place_secret_door(floor_type *floor_ptr, POSITION y, POSITION x, int type);
-extern void place_locked_door(floor_type *floor_ptr, POSITION y, POSITION x);
+extern void place_locked_door(player_type *player_ptr, POSITION y, POSITION x);
 extern void forget_flow(floor_type *floor_ptr);
 extern void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x);
 
