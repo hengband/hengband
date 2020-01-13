@@ -83,7 +83,9 @@ extern void do_cmd_store(player_type *player_ptr);
 extern void store_shuffle(player_type *player_ptr, int which);
 extern void store_maint(player_type *player_ptr, int town_num, int store_num);
 extern void store_init(int town_num, int store_num);
-extern void move_to_black_market(object_type *o_ptr);
+
+// どこからも呼ばれていない.
+extern void move_to_black_market(player_type *player_ptr, object_type *o_ptr);
 
 extern const owner_type owners[MAX_STORES][MAX_OWNERS];
 
