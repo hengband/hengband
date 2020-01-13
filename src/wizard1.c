@@ -2067,7 +2067,8 @@ static void spoil_mon_info(concptr fname)
 		}
 		else
 		{
-#ifndef JP
+#ifdef JP
+#else
 			spoil_out("The ");
 #endif
 		}

@@ -744,7 +744,9 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 		if (is_seen(m_ptr))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-#ifndef JP
+#ifdef JP
+#else
+
 			char m_poss[80];
 
 			/* Acquire the monster possessive */

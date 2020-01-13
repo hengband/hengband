@@ -1343,7 +1343,9 @@ static bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, PO
  */
 bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 {
-#ifndef JP
+#ifdef JP
+#else
+
 	char m_poss[80];
 #endif
 	/* Extract the "see-able-ness" */
@@ -1637,7 +1639,9 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_desc(m_name, m_ptr, 0x00);
 
-#ifndef JP
+#ifdef JP
+#else
+
 	/* Get the monster possessive ("his"/"her"/"its") */
 	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif

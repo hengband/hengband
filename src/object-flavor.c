@@ -1007,7 +1007,9 @@ static flag_insc_table flag_insc_sust[] =
  */
 static char *inscribe_flags_aux(flag_insc_table *fi_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE], bool kanji, char *ptr)
 {
-#ifndef JP
+#ifdef JP
+#else
+
 	(void)kanji;
 #endif
 
@@ -2102,7 +2104,9 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 			kindname = "";
 		}
 
-#ifndef JP
+#ifdef JP
+#else
+
 		/* Pluralizer */
 		else if (*s == '~')
 		{
@@ -2672,7 +2676,9 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 			else if (have_flag(flgs, TR_BLOWS))
 			{
 				t = object_desc_str(t, _("攻撃", " attack"));
-#ifndef JP
+#ifdef JP
+#else
+
 				if (ABS(o_ptr->pval) != 1) t = object_desc_chr(t, 's');
 #endif
 			}

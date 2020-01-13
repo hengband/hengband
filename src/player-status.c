@@ -5275,7 +5275,9 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 
 		get_mon_num_prep(NULL, NULL);
 
-#ifndef JP
+#ifdef JP
+#else
+
 		if (!(r_ptr->flags1 & RF1_UNIQUE))
 			sprintf(m_name, "%s %s", (is_a_vowel(desc[0]) ? "an" : "a"), desc);
 		else

@@ -943,7 +943,8 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 	{
 		s2 = _("の入口", "");
 	}
-#ifndef JP
+#ifdef JP
+#else
 	else if (have_flag(f_ptr->flags, FF_FLOOR) ||
 		have_flag(f_ptr->flags, FF_TOWN) ||
 		have_flag(f_ptr->flags, FF_SHALLOW) ||

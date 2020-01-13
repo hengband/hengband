@@ -5954,7 +5954,8 @@ void print_tomb(player_type *dead_ptr)
 	center_string(buf, dead_ptr->name);
 	put_str(buf, 6, 11);
 
-#ifndef JP
+#ifdef JP
+#else
 	center_string(buf, "the");
 	put_str(buf, 7, 11);
 #endif

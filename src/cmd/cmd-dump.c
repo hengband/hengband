@@ -367,8 +367,8 @@ static void close_auto_dump(void)
 }
 
 
-#ifndef JP
-
+#ifdef JP
+#else
 /*!
  * @brief Return suffix of ordinal number
  * @param num number

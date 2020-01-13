@@ -523,7 +523,8 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 			hooked_roff(format(_("%^sは", "%^s "), wd_he[msex]));
 			old = TRUE;
 		}
-#ifndef JP
+#ifdef JP
+#else
 		hooked_roff("moves");
 #endif
 
@@ -740,7 +741,8 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 			{
 				hooked_roff(_("少なくとも", " at the least"));
 			}
-#ifndef JP
+#ifdef JP
+#else
 			hooked_roff(" contain ");
 #endif			
 			for(n = 0; n < A_MAX; n++)
@@ -1655,7 +1657,8 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		/* Intro */
 		hooked_roff(format(
 			_("%^sは", "%^s may carry"), wd_he[msex]));
-#ifndef JP
+#ifdef JP
+#else
 		/* No "n" needed */
 		sin = FALSE;
 #endif
@@ -1668,7 +1671,8 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		if (n == 1)
 		{
 			hooked_roff(_("一つの", " a"));
-#ifndef JP
+#ifdef JP
+#else
 			sin = TRUE;
 #endif
 		}
@@ -1698,7 +1702,8 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		else if (flags1 & RF1_DROP_GOOD)
 		{
 			p = _("上質な", " good");
-#ifndef JP
+#ifdef JP
+#else
 			sin = FALSE;
 #endif
 		}
@@ -1713,7 +1718,8 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		if (drop_item)
 		{
 			/* Handle singular "an" */
-#ifndef JP
+#ifdef JP
+#else
 			if (sin) hooked_roff("n");
 			sin = FALSE;
 #endif
@@ -1723,7 +1729,8 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 			hooked_roff(
 				_("アイテム", " object"));
 
-#ifndef JP
+#ifdef JP
+#else
 			if (n != 1) hooked_roff("s");
 #endif
 
@@ -1734,7 +1741,8 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		/* Treasures */
 		if (drop_gold)
 		{
-#ifndef JP
+#ifdef JP
+#else
 			/* Cancel prefix */
 			if (!p) sin = FALSE;
 
@@ -1746,7 +1754,8 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 			/* Dump "treasure(s)" */
 			if (p) hooked_roff(p);
 			hooked_roff(_("財宝", " treasure"));
-#ifndef JP
+#ifdef JP
+#else
 			if (n != 1) hooked_roff("s");
 #endif
 
@@ -2018,7 +2027,9 @@ void roff_top(MONRACE_IDX r_idx)
 	/* Reset the cursor */
 	Term_gotoxy(0, 0);
 
-#ifndef JP
+#ifdef JP
+#else
+
 	/* A title (use "The" for non-uniques) */
 	if (!(r_ptr->flags1 & RF1_UNIQUE))
 	{

@@ -45,7 +45,8 @@
 
 
 /* cmd4.c */
-#ifndef JP
+#ifdef JP
+#else
 extern concptr get_ordinal_number_suffix(int num);
 #endif
 extern errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note);

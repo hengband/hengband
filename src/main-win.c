@@ -3379,7 +3379,9 @@ static void setup_menus(void)
 		MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	EnableMenuItem(hm, IDM_OPTIONS_SOUND,
 		MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-#ifndef JP
+#ifdef JP
+#else
+
 	EnableMenuItem(hm, IDM_OPTIONS_SAVER,
 		MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 #endif
@@ -3408,7 +3410,9 @@ static void setup_menus(void)
 		(arg_sound ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_BG,
 		(use_bg ? MF_CHECKED : MF_UNCHECKED));
-#ifndef JP
+#ifdef JP
+#else
+
 	CheckMenuItem(hm, IDM_OPTIONS_SAVER,
 		(hwndSaver ? MF_CHECKED : MF_UNCHECKED));
 #endif

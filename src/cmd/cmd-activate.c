@@ -549,7 +549,8 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 					{
 						char buf[80];
 						concptr t;
-#ifndef JP
+#ifdef JP
+#else
 						bool quote = FALSE;
 #endif
 

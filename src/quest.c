@@ -356,7 +356,8 @@ void quest_discovery(QUEST_IDX q_idx)
 
 	if (q_num != 1)
 	{
-#ifndef JP
+#ifdef JP
+#else
 		plural_aux(name);
 #endif
 		msg_format(_("注意しろ！この階は%d体の%sによって守られている！", "Be warned, this level is guarded by %d %s!"), q_num, name);

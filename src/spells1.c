@@ -796,7 +796,9 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 		concptr note_kill = NULL;
 
-#ifndef JP
+#ifdef JP
+#else
+
 		/* Get the "plural"-ness */
 		bool plural = (o_ptr->number > 1);
 #endif

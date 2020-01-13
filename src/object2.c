@@ -4195,7 +4195,9 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 	bool flag = FALSE;
 	bool done = FALSE;
 
-#ifndef JP
+#ifdef JP
+#else
+
 	/* Extract plural */
 	bool plural = (j_ptr->number != 1);
 #endif
