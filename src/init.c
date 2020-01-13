@@ -1213,25 +1213,25 @@ static errr init_feat_variables(void)
  * Initialize some other arrays
  * @return エラーコード
  */
-static errr init_other(void)
+static errr init_other(player_type *player_ptr)
 {
 	int i, n;
 
-	p_ptr->current_floor_ptr = &floor_info; // TODO:本当はこんなところで初期化したくない
-
+	player_ptr->current_floor_ptr = &floor_info; // TODO:本当はこんなところで初期化したくない
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 
 	/*** Prepare the "dungeon" information ***/
 
 	/* Allocate and Wipe the object list */
-	C_MAKE(p_ptr->current_floor_ptr->o_list, current_world_ptr->max_o_idx, object_type);
+	C_MAKE(floor_ptr->o_list, current_world_ptr->max_o_idx, object_type);
 
 	/* Allocate and Wipe the monster list */
-	C_MAKE(p_ptr->current_floor_ptr->m_list, current_world_ptr->max_m_idx, monster_type);
+	C_MAKE(floor_ptr->m_list, current_world_ptr->max_m_idx, monster_type);
 
 	/* Allocate and Wipe the monster process list */
 	for (i = 0; i < MAX_MTIMED; i++)
 	{
-		C_MAKE(p_ptr->current_floor_ptr->mproc_list[i], current_world_ptr->max_m_idx, s16b);
+		C_MAKE(floor_ptr->mproc_list[i], current_world_ptr->max_m_idx, s16b);
 	}
 
 	/* Allocate and Wipe the max dungeon level */
@@ -1239,9 +1239,8 @@ static errr init_other(void)
 
 	for (i = 0; i < MAX_HGT; i++)
 	{
-		C_MAKE(p_ptr->current_floor_ptr->grid_array[i], MAX_WID, grid_type);
+		C_MAKE(floor_ptr->grid_array[i], MAX_WID, grid_type);
 	}
-
 
 	/*** Prepare the various "bizarre" arrays ***/
 
@@ -1854,11 +1853,9 @@ void init_angband(player_type *player_ptr)
 
 	if (init_wilderness()) quit(_("荒野を初期化できません", "Cannot initialize wilderness"));
 
-
 	/* Initialize town array */
 	note(_("[配列を初期化しています... (街)]", "[Initializing arrays... (towns)]"));
 	if (init_towns()) quit(_("街を初期化できません", "Cannot initialize towns"));
-
 
 	/* Initialize building array */
 	note(_("[配列を初期化しています... (建物)]", "[Initializing arrays... (buildings)]"));
@@ -1874,14 +1871,11 @@ void init_angband(player_type *player_ptr)
 
 	/* Initialize some other arrays */
 	note(_("[データの初期化中... (その他)]", "[Initializing arrays... (other)]"));
-	if (init_other()) quit(_("その他のデータ初期化不能", "Cannot initialize other stuff"));
-
+	if (init_other(player_ptr)) quit(_("その他のデータ初期化不能", "Cannot initialize other stuff"));
 
 	/* Initialize some other arrays */
 	note(_("[データの初期化中... (アロケーション)]", "[Initializing arrays... (alloc)]"));
 	if (init_alloc()) quit(_("アロケーション・スタッフ初期化不能", "Cannot initialize alloc stuff"));
-
-
 
 	/*** Load default user pref files ***/
 
@@ -1903,6 +1897,7 @@ void init_angband(player_type *player_ptr)
 	note(_("[初期化終了]", "[Initialization complete]"));
 }
 
+
 /*!
  * @brief タイトル記述
  * @return なし
@@ -1921,6 +1916,7 @@ static void put_title(void)
 	col = col < 0 ? 0 : col;
 	prt(title, VER_INFO_ROW, col);
 }
+
 
 /*!
  * @brief サムチェック情報を出力 / Get check sum in string form
