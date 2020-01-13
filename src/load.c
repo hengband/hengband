@@ -90,6 +90,27 @@
  */
 #define MAX_TRIES 100
 
+#define OLD_MAX_MANE 22
+
+ /* Old hidden trap flag */
+#define CAVE_TRAP       0x8000
+
+/*** Terrain Feature Indexes (see "lib/edit/f_info.txt") ***/
+#define OLD_FEAT_INVIS              0x02
+#define OLD_FEAT_GLYPH              0x03
+#define OLD_FEAT_QUEST_ENTER        0x08
+#define OLD_FEAT_QUEST_EXIT         0x09
+#define OLD_FEAT_MINOR_GLYPH        0x40
+#define OLD_FEAT_BLDG_1             0x81
+#define OLD_FEAT_MIRROR             0xc3
+
+/* Old quests */
+#define OLD_QUEST_WATER_CAVE 18
+
+/* Quest constants */
+#define QUEST_OLD_CASTLE  27
+#define QUEST_ROYAL_CRYPT 28
+
 /*
  * Local "savefile" pointer
  */
@@ -207,11 +228,9 @@ static void note(concptr msg)
  */
 static byte sf_get(void)
 {
-	byte c, v;
-
 	/* Get a character, decode the value */
-	c = getc(fff) & 0xFF;
-	v = c ^ xor_byte;
+	byte c = getc(fff) & 0xFF;
+	byte v = c ^ xor_byte;
 	xor_byte = c;
 
 	/* Maintain the checksum info */
@@ -219,8 +238,9 @@ static byte sf_get(void)
 	x_check += xor_byte;
 
 	/* Return the value */
-	return (v);
+	return v;
 }
+
 
 /*!
  * @brief ロードファイルポインタから1バイトを読み込んでポインタに渡す
@@ -231,6 +251,7 @@ static void rd_byte(byte *ip)
 {
 	*ip = sf_get();
 }
+
 
 /*!
  * @brief ロードファイルポインタから符号なし16bit値を読み込んでポインタに渡す
@@ -243,6 +264,7 @@ static void rd_u16b(u16b *ip)
 	(*ip) |= ((u16b)(sf_get()) << 8);
 }
 
+
 /*!
  * @brief ロードファイルポインタから符号つき16bit値を読み込んでポインタに渡す
  * @param ip 読み込みポインタ
@@ -252,6 +274,7 @@ static void rd_s16b(s16b *ip)
 {
 	rd_u16b((u16b*)ip);
 }
+
 
 /*!
  * @brief ロードファイルポインタから符号なし32bit値を読み込んでポインタに渡す
@@ -265,6 +288,7 @@ static void rd_u32b(u32b *ip)
 	(*ip) |= ((u32b)(sf_get()) << 16);
 	(*ip) |= ((u32b)(sf_get()) << 24);
 }
+
 
 /*!
  * @brief ロードファイルポインタから符号つき32bit値を読み込んでポインタに渡す
@@ -285,14 +309,10 @@ static void rd_s32b(s32b *ip)
  */
 static void rd_string(char *str, int max)
 {
-	int i;
-
 	/* Read the string */
-	for (i = 0; TRUE; i++)
+	for (int i = 0; TRUE; i++)
 	{
 		byte tmp8u;
-
-		/* Read a byte */
 		rd_byte(&tmp8u);
 
 		/* Collect string while legal */
@@ -304,7 +324,6 @@ static void rd_string(char *str, int max)
 
 	/* Terminate */
 	str[max-1] = '\0';
-
 
 #ifdef JP
 	/* Convert Kanji code */
@@ -350,12 +369,9 @@ static void rd_string(char *str, int max)
 static void strip_bytes(int n)
 {
 	byte tmp8u;
-
-	/* Strip the bytes */
 	while (n--) rd_byte(&tmp8u);
 }
 
-#define OLD_MAX_MANE 22
 
 /*!
  * @brief アイテムオブジェクト１件を読み込む(変愚ver1.5.0以前) / Read an object (Old method)
@@ -378,14 +394,9 @@ static void strip_bytes(int n)
  */
 static void rd_item_old(object_type *o_ptr)
 {
-	char buf[128];
-	byte_hack tmp8u;
-	s16b tmp16s;
-
-
-	/* Kind */
 	rd_s16b(&o_ptr->k_idx);
 
+	byte_hack tmp8u;
 	rd_byte(&tmp8u);
 	o_ptr->iy = (POSITION)tmp8u;
 	rd_byte(&tmp8u);
@@ -411,6 +422,7 @@ static void rd_item_old(object_type *o_ptr)
 	rd_byte(&tmp8u);
 	o_ptr->number = (ITEM_NUMBER)tmp8u;
 
+	s16b tmp16s;
 	rd_s16b(&tmp16s);
 	o_ptr->weight = tmp16s;
 
@@ -582,7 +594,7 @@ static void rd_item_old(object_type *o_ptr)
 
 	rd_byte(&o_ptr->feeling);
 
-	/* Inscription */
+	char buf[128];
 	rd_string(buf, sizeof(buf));
 
 	/* Save the inscription */
@@ -643,31 +655,27 @@ static void rd_item_old(object_type *o_ptr)
  */
 static void rd_item(object_type *o_ptr)
 {
-	object_kind *k_ptr;
-	BIT_FLAGS flags;
-	char buf[128];
-	byte_hack tmp8u;
-	s16b tmp16s;
-
 	if (h_older_than(1, 5, 0, 0))
 	{
 		rd_item_old(o_ptr);
 		return;
 	}
 
-	/*** Item save flags ***/
+	BIT_FLAGS flags;
 	rd_u32b(&flags);
 
 	/*** Read un-obvious elements ***/
 	/* Kind */
 	rd_s16b(&o_ptr->k_idx);
 
+	byte_hack tmp8u;
 	rd_byte(&tmp8u);
 	o_ptr->iy = (POSITION)tmp8u;
 	rd_byte(&tmp8u);
 	o_ptr->ix = (POSITION)tmp8u;
 
 	/* Type/Subtype */
+	object_kind *k_ptr;
 	k_ptr = &k_info[o_ptr->k_idx];
 	o_ptr->tval = k_ptr->tval;
 	o_ptr->sval = k_ptr->sval;
@@ -684,6 +692,7 @@ static void rd_item(object_type *o_ptr)
 	}	
 	else o_ptr->number = 1;
 
+	s16b tmp16s;
 	rd_s16b(&tmp16s);
 	o_ptr->weight = tmp16s;
 
@@ -693,23 +702,27 @@ static void rd_item(object_type *o_ptr)
 		o_ptr->name1 = tmp8u;
 	}
 	else o_ptr->name1 = 0;
+
 	if (flags & SAVE_ITEM_NAME2)
 	{
 		rd_byte(&tmp8u);
 		o_ptr->name2 = tmp8u;
 	}
 	else o_ptr->name2 = 0;
+
 	if (flags & SAVE_ITEM_TIMEOUT) rd_s16b(&o_ptr->timeout);
 	else o_ptr->timeout = 0;
 
 	if (flags & SAVE_ITEM_TO_H) rd_s16b(&o_ptr->to_h);
 	else o_ptr->to_h = 0;
+
 	if (flags & SAVE_ITEM_TO_D)
 	{
 		rd_s16b(&tmp16s);
 		o_ptr->to_d = tmp16s;
 	}
 	else o_ptr->to_d = 0;
+
 	if (flags & SAVE_ITEM_TO_A) rd_s16b(&o_ptr->to_a);
 	else o_ptr->to_a = 0;
 
@@ -722,6 +735,7 @@ static void rd_item(object_type *o_ptr)
 		 o_ptr->dd = tmp8u;
 	}
 	else o_ptr->dd = 0;
+
 	if (flags & SAVE_ITEM_DS)
 	{
 		rd_byte(&tmp8u);
@@ -738,12 +752,16 @@ static void rd_item(object_type *o_ptr)
 	/* Object flags */
 	if (flags & SAVE_ITEM_ART_FLAGS0) rd_u32b(&o_ptr->art_flags[0]);
 	else o_ptr->art_flags[0] = 0;
+
 	if (flags & SAVE_ITEM_ART_FLAGS1) rd_u32b(&o_ptr->art_flags[1]);
 	else o_ptr->art_flags[1] = 0;
+
 	if (flags & SAVE_ITEM_ART_FLAGS2) rd_u32b(&o_ptr->art_flags[2]);
 	else o_ptr->art_flags[2] = 0;
+
 	if (flags & SAVE_ITEM_ART_FLAGS3) rd_u32b(&o_ptr->art_flags[3]);
 	else o_ptr->art_flags[3] = 0;
+
 	if (flags & SAVE_ITEM_ART_FLAGS4) rd_u32b(&o_ptr->art_flags[4]);
 	else o_ptr->art_flags[4] = 0;
 
@@ -757,6 +775,7 @@ static void rd_item(object_type *o_ptr)
 	/* Special powers */
 	if (flags & SAVE_ITEM_XTRA1) rd_byte(&o_ptr->xtra1);
 	else o_ptr->xtra1 = 0;
+
 	if (flags & SAVE_ITEM_XTRA2) rd_byte(&o_ptr->xtra2);
 	else o_ptr->xtra2 = 0;
 
@@ -765,6 +784,7 @@ static void rd_item(object_type *o_ptr)
 
 	if (flags & SAVE_ITEM_XTRA4) rd_s16b(&o_ptr->xtra4);
 	else o_ptr->xtra4 = 0;
+
 	if (flags & SAVE_ITEM_XTRA5) rd_s16b(&o_ptr->xtra5);
 	else o_ptr->xtra5 = 0;
 
@@ -773,6 +793,7 @@ static void rd_item(object_type *o_ptr)
 
 	if (flags & SAVE_ITEM_INSCRIPTION)
 	{
+		char buf[128];
 		rd_string(buf, sizeof(buf));
 		o_ptr->inscription = quark_add(buf);
 	}
@@ -780,65 +801,79 @@ static void rd_item(object_type *o_ptr)
 
 	if (flags & SAVE_ITEM_ART_NAME)
 	{
+		char buf[128];
 		rd_string(buf, sizeof(buf));
 		o_ptr->art_name = quark_add(buf);
 	}
-	else o_ptr->art_name = 0;
-	
-	if(h_older_than(2,1,2,4))
+	else
 	{
-		BIT_FLAGS flgs[TR_FLAG_SIZE];
-		object_flags(o_ptr, flgs);
-		
-		if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT))
+		o_ptr->art_name = 0;
+	}
+	
+	if (!h_older_than(2, 1, 2, 4)) return;
+
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
+	object_flags(o_ptr, flgs);
+
+	if ((o_ptr->name2 == EGO_DARK) || (o_ptr->name2 == EGO_ANCIENT_CURSE) || (o_ptr->name1 == ART_NIGHT))
+	{
+		add_flag(o_ptr->art_flags, TR_LITE_M1);
+		remove_flag(o_ptr->art_flags, TR_LITE_1);
+		remove_flag(o_ptr->art_flags, TR_LITE_2);
+		remove_flag(o_ptr->art_flags, TR_LITE_3);
+		return;
+	}
+	
+	if (o_ptr->name2 == EGO_LITE_DARKNESS)
+	{
+		if (o_ptr->tval != TV_LITE)
 		{
 			add_flag(o_ptr->art_flags, TR_LITE_M1);
-			remove_flag(o_ptr->art_flags, TR_LITE_1);
-			remove_flag(o_ptr->art_flags, TR_LITE_2);
-			remove_flag(o_ptr->art_flags, TR_LITE_3);
+			return;
 		}
-		else if (o_ptr->name2 == EGO_LITE_DARKNESS)
+
+		if (o_ptr->sval == SV_LITE_TORCH)
 		{
-			if (o_ptr->tval == TV_LITE)
-			{
-				if (o_ptr->sval == SV_LITE_TORCH)
-				{
-					add_flag(o_ptr->art_flags, TR_LITE_M1);
-				}
-				else if (o_ptr->sval == SV_LITE_LANTERN)
-				{
-					add_flag(o_ptr->art_flags, TR_LITE_M2);
-				}
-				else if (o_ptr->sval == SV_LITE_FEANOR)
-				{
-					add_flag(o_ptr->art_flags, TR_LITE_M3);
-				}
-			}
-			else
-			{
-				add_flag(o_ptr->art_flags, TR_LITE_M1);
-			}
+			add_flag(o_ptr->art_flags, TR_LITE_M1);
 		}
-		else if (o_ptr->tval == TV_LITE)
+		else if (o_ptr->sval == SV_LITE_LANTERN)
 		{
-			if (object_is_fixed_artifact(o_ptr))
-			{
-				add_flag(o_ptr->art_flags, TR_LITE_3);
-			}
-			else if (o_ptr->sval == SV_LITE_TORCH)
-			{
-				add_flag(o_ptr->art_flags, TR_LITE_1);
-				add_flag(o_ptr->art_flags, TR_LITE_FUEL);
-			}
-			else if (o_ptr->sval == SV_LITE_LANTERN)
-			{
-				add_flag(o_ptr->art_flags, TR_LITE_2);
-				add_flag(o_ptr->art_flags, TR_LITE_FUEL);	
-			}
-			else if (o_ptr->sval == SV_LITE_FEANOR)
-			{
-				add_flag(o_ptr->art_flags, TR_LITE_2);
-			}
+			add_flag(o_ptr->art_flags, TR_LITE_M2);
+		}
+		else if (o_ptr->sval == SV_LITE_FEANOR)
+		{
+			add_flag(o_ptr->art_flags, TR_LITE_M3);
+		}
+
+		return;
+	}
+
+	if (o_ptr->tval == TV_LITE)
+	{
+		if (object_is_fixed_artifact(o_ptr))
+		{
+			add_flag(o_ptr->art_flags, TR_LITE_3);
+			return;
+		}
+
+		if (o_ptr->sval == SV_LITE_TORCH)
+		{
+			add_flag(o_ptr->art_flags, TR_LITE_1);
+			add_flag(o_ptr->art_flags, TR_LITE_FUEL);
+			return;
+		}
+
+		if (o_ptr->sval == SV_LITE_LANTERN)
+		{
+			add_flag(o_ptr->art_flags, TR_LITE_2);
+			add_flag(o_ptr->art_flags, TR_LITE_FUEL);
+			return;
+		}
+
+		if (o_ptr->sval == SV_LITE_FEANOR)
+		{
+			add_flag(o_ptr->art_flags, TR_LITE_2);
+			return;
 		}
 	}
 }
@@ -852,12 +887,6 @@ static void rd_item(object_type *o_ptr)
  */
 static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 {
-	byte tmp8u;
-	s16b tmp16s;
-	u32b tmp32u;
-	char buf[128];
-
-	/* Read the monster race */
 	rd_s16b(&m_ptr->r_idx);
 
 	if (z_older_than(11, 0, 12))
@@ -877,12 +906,14 @@ static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 		rd_byte(&m_ptr->sub_align);
 
 	/* Read the other information */
+	byte tmp8u;
 	rd_byte(&tmp8u);
 	m_ptr->fy = (POSITION)tmp8u;
 	rd_byte(&tmp8u);
 	m_ptr->fx = (POSITION)tmp8u;
 	m_ptr->current_floor_ptr = player_ptr->current_floor_ptr;
 
+	s16b tmp16s;
 	rd_s16b(&tmp16s);
 	m_ptr->hp = tmp16s;
 	rd_s16b(&tmp16s);
@@ -933,6 +964,7 @@ static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 		rd_byte(&tmp8u);
 		m_ptr->mtimed[MTIMED_SLOW] = (s16b)tmp8u;
 	}
+
 	rd_byte(&tmp8u);
 	m_ptr->mtimed[MTIMED_STUNNED] = (s16b)tmp8u;
 	rd_byte(&tmp8u);
@@ -965,9 +997,12 @@ static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 	else
 		m_ptr->smart = 0;
 
-	if (z_older_than(10, 4, 5)) {
+	u32b tmp32u;
+	if (z_older_than(10, 4, 5))
+	{
 		m_ptr->exp = 0;
-	} else {
+	} else 
+	{
 		rd_u32b(&tmp32u);
 		m_ptr->exp = tmp32u;
 	}
@@ -997,6 +1032,7 @@ static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 	}
 	else
 	{
+		char buf[128];
 		rd_string(buf, sizeof(buf));
 		if (buf[0]) m_ptr->nickname = quark_add(buf);
 	}
@@ -1013,12 +1049,6 @@ static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
  */
 static void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 {
-	BIT_FLAGS flags;
-	char buf[128];
-	byte tmp8u;
-	s16b tmp16s;
-	u32b tmp32u;
-
 	if (h_older_than(1, 5, 0, 0))
 	{
 		rd_monster_old(player_ptr, m_ptr);
@@ -1026,6 +1056,7 @@ static void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 	}
 
 	/*** Monster save flags ***/
+	BIT_FLAGS flags;
 	rd_u32b(&flags);
 
 	/*** Read un-obvious elements ***/
@@ -1034,11 +1065,13 @@ static void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 	rd_s16b(&m_ptr->r_idx);
 
 	/* Read the other information */
+	byte tmp8u;
 	rd_byte(&tmp8u);
 	m_ptr->fy = (POSITION)tmp8u;
 	rd_byte(&tmp8u);
 	m_ptr->fx = (POSITION)tmp8u;
 
+	s16b tmp16s;
 	rd_s16b(&tmp16s);
 	m_ptr->hp = (HIT_POINT)tmp16s;
 	rd_s16b(&tmp16s);
@@ -1076,24 +1109,28 @@ static void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 		m_ptr->mtimed[MTIMED_FAST] = (s16b)tmp8u;
 	}
 	else m_ptr->mtimed[MTIMED_FAST] = 0;
+
 	if (flags & SAVE_MON_SLOW)
 	{
 		rd_byte(&tmp8u);
 		m_ptr->mtimed[MTIMED_SLOW] = (s16b)tmp8u;
 	}
 	else m_ptr->mtimed[MTIMED_SLOW] = 0;
+
 	if (flags & SAVE_MON_STUNNED)
 	{
 		rd_byte(&tmp8u);
 		m_ptr->mtimed[MTIMED_STUNNED] = (s16b)tmp8u;
 	}
 	else m_ptr->mtimed[MTIMED_STUNNED] = 0;
+
 	if (flags & SAVE_MON_CONFUSED)
 	{
 		rd_byte(&tmp8u);
 		m_ptr->mtimed[MTIMED_CONFUSED] = (s16b)tmp8u;
 	}
 	else m_ptr->mtimed[MTIMED_CONFUSED] = 0;
+
 	if (flags & SAVE_MON_MONFEAR)
 	{
 		rd_byte(&tmp8u);
@@ -1107,6 +1144,7 @@ static void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 		m_ptr->target_y = (POSITION)tmp16s;
 	}
 	else m_ptr->target_y = 0;
+
 	if (flags & SAVE_MON_TARGET_X)
 	{
 		rd_s16b(&tmp16s);
@@ -1126,6 +1164,7 @@ static void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 
 	if (flags & SAVE_MON_EXP)
 	{
+		u32b tmp32u;
 		rd_u32b(&tmp32u);
 		m_ptr->exp = (EXP)tmp32u;
 	}
@@ -1138,6 +1177,7 @@ static void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 
 	if (flags & SAVE_MON_NICKNAME) 
 	{
+		char buf[128];
 		rd_string(buf, sizeof(buf));
 		m_ptr->nickname = quark_add(buf);
 	}
@@ -1199,12 +1239,10 @@ static void rd_monster(player_type *player_ptr, monster_type *m_ptr)
  */
 static void rd_lore(MONRACE_IDX r_idx)
 {
-	byte tmp8u;
-	s16b tmp16s;
-
 	monster_race *r_ptr = &r_info[r_idx];
 
 	/* Count sights/deaths/kills */
+	s16b tmp16s;
 	rd_s16b(&tmp16s);
 	r_ptr->r_sights = (MONSTER_NUMBER)tmp16s;
 	rd_s16b(&tmp16s);
@@ -1220,6 +1258,7 @@ static void rd_lore(MONRACE_IDX r_idx)
 		rd_s16b(&tmp16s);
 		r_ptr->r_akills = (MONSTER_NUMBER)tmp16s; 
 	}
+
 	rd_s16b(&tmp16s);
 	r_ptr->r_tkills = (MONSTER_NUMBER)tmp16s;
 
@@ -1232,6 +1271,7 @@ static void rd_lore(MONRACE_IDX r_idx)
 	rd_byte(&r_ptr->r_xtra2);
 
 	/* Count drops */
+	byte tmp8u;
 	rd_byte(&tmp8u);
 	r_ptr->r_drop_gold = (ITEM_NUMBER)tmp8u;
 	rd_byte(&tmp8u);
@@ -1331,45 +1371,35 @@ static void rd_lore(MONRACE_IDX r_idx)
  */
 static void home_carry(player_type *player_ptr, store_type *st_ptr, object_type *o_ptr)
 {
-	int 				slot;
-	s32b			   value;
-	int 	i;
-	object_type *j_ptr;
-
-
 	/* Check each existing item (try to combine) */
-	for (slot = 0; slot < st_ptr->stock_num; slot++)
+	for (int i = 0; i < st_ptr->stock_num; i++)
 	{
 		/* Get the existing item */
-		j_ptr = &st_ptr->stock[slot];
+		object_type *j_ptr;
+		j_ptr = &st_ptr->stock[i];
 
 		/* The home acts just like the player */
-		if (object_similar(j_ptr, o_ptr))
-		{
-			/* Save the new number of items */
-			object_absorb(j_ptr, o_ptr);
+		if (!object_similar(j_ptr, o_ptr)) continue;
 
-			/* All done */
-			return;
-		}
-	}
-
-	/* No space? */
-	if (st_ptr->stock_num >= STORE_INVEN_MAX * 10) {
+		object_absorb(j_ptr, o_ptr);
 		return;
 	}
 
+	/* No space? */
+	if (st_ptr->stock_num >= STORE_INVEN_MAX * 10) return;
+
 	/* Determine the "value" of the item */
-	value = object_value(o_ptr);
+	s32b value = object_value(o_ptr);
 
 	/* Check existing slots to see if we must "slide" */
+	int slot;
 	for (slot = 0; slot < st_ptr->stock_num; slot++)
 	{
 		if (object_sort_comp(o_ptr, value, &st_ptr->stock[slot])) break;
 	}
 
 	/* Slide the others up */
-	for (i = st_ptr->stock_num; i > slot; i--)
+	for (int i = st_ptr->stock_num; i > slot; i--)
 	{
 		st_ptr->stock[i] = st_ptr->stock[i-1];
 	}
@@ -1381,9 +1411,6 @@ static void home_carry(player_type *player_ptr, store_type *st_ptr, object_type 
 	st_ptr->stock[slot] = *o_ptr;
 
 	chg_virtue(player_ptr, V_SACRIFICE, -1);
-
-	/* Return the location */
-	return;
 }
 
 /*!
@@ -1396,15 +1423,7 @@ static void home_carry(player_type *player_ptr, store_type *st_ptr, object_type 
 static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 {
 	store_type *st_ptr;
-
-	int j;
-
-	byte own;
-	byte tmp8u;
-	s16b num;
-
 	bool sort = FALSE;
-
 	if (z_older_than(10, 3, 3) && (store_number == STORE_HOME))
 	{
 		st_ptr = &town_info[1].store[store_number];
@@ -1416,6 +1435,9 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 	}
 
 	/* Read the basic info */
+	byte own;
+	byte tmp8u;
+	s16b num;
 	rd_s32b(&st_ptr->store_open);
 	rd_s16b(&st_ptr->insult_cur);
 	rd_byte(&own);
@@ -1428,6 +1450,7 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 	{
 		rd_s16b(&num);
 	}
+
 	rd_s16b(&st_ptr->good_buy);
 	rd_s16b(&st_ptr->bad_buy);
 
@@ -1438,7 +1461,7 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 	st_ptr->owner = own;
 
 	/* Read the items */
-	for (j = 0; j < num; j++)
+	for (int j = 0; j < num; j++)
 	{
 		object_type forge;
 		object_type *q_ptr;
@@ -1448,25 +1471,20 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 		/* Read the item */
 		rd_item(q_ptr);
 
-		/* Acquire valid items */
-		if (st_ptr->stock_num < (store_number == STORE_HOME ? (STORE_INVEN_MAX) * 10 : (store_number == STORE_MUSEUM ? (STORE_INVEN_MAX) * 50 : STORE_INVEN_MAX)))
-		{
-			int k;
-			if (sort)
-			{
-				home_carry(player_ptr, st_ptr, q_ptr);
-			}
-			else
-			{
-				k = st_ptr->stock_num++;
+		bool is_valid_item = st_ptr->stock_num < (store_number == STORE_HOME ? STORE_INVEN_MAX * 10 : store_number == STORE_MUSEUM ? STORE_INVEN_MAX * 50 : STORE_INVEN_MAX);
+		if (!is_valid_item) continue;
 
-				/* Acquire the item */
-				object_copy(&st_ptr->stock[k], q_ptr);
-			}
+		if (sort)
+		{
+			home_carry(player_ptr, st_ptr, q_ptr);
+		}
+		else
+		{
+			int k = st_ptr->stock_num++;
+			object_copy(&st_ptr->stock[k], q_ptr);
 		}
 	}
 
-	/* Success */
 	return 0;
 }
 
@@ -1477,23 +1495,14 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
  */
 static void rd_randomizer(void)
 {
-	int i;
-
 	u16b tmp16u;
-
-	/* Tmp */
 	rd_u16b(&tmp16u);
-
-	/* Place */
 	rd_u16b(&Rand_place);
-
-	/* State */
-	for (i = 0; i < RAND_DEG; i++)
+	for (int i = 0; i < RAND_DEG; i++)
 	{
 		rd_u32b(&Rand_state[i]);
 	}
 }
-
 
 
 /*!
@@ -1511,19 +1520,13 @@ static void rd_randomizer(void)
  */
 static void rd_options(void)
 {
-	int i, n;
-	byte b;
-	u16b c;
-
-	BIT_FLAGS flag[8];
-	BIT_FLAGS mask[8];
-
 	/* Ignore old options */
 	strip_bytes(16);
 
 	/*** Special info */
 
 	/* Read "delay_factor" */
+	byte b;
 	rd_byte(&b);
 	delay_factor = b;
 
@@ -1543,7 +1546,7 @@ static void rd_options(void)
 	}
 
 	/*** Cheating options ***/
-
+	u16b c;
 	rd_u16b(&c);
 
 	if (c & 0x0002) current_world_ptr->wizard = TRUE;
@@ -1563,38 +1566,36 @@ static void rd_options(void)
 	rd_byte((byte *)&autosave_t);
 	rd_s16b(&autosave_freq);
 
-
 	/*** Normal Options ***/
-
 	/* Read the option flags */
-	for (n = 0; n < 8; n++) rd_u32b(&flag[n]);
+	BIT_FLAGS flag[8];
+	for (int n = 0; n < 8; n++) rd_u32b(&flag[n]);
 
 	/* Read the option masks */
-	for (n = 0; n < 8; n++) rd_u32b(&mask[n]);
+	BIT_FLAGS mask[8];
+	for (int n = 0; n < 8; n++) rd_u32b(&mask[n]);
 
 	/* Analyze the options */
-	for (n = 0; n < 8; n++)
+	for (int n = 0; n < 8; n++)
 	{
 		/* Analyze the options */
-		for (i = 0; i < 32; i++)
+		for (int i = 0; i < 32; i++)
 		{
 			/* Process valid flags */
-			if (mask[n] & (1L << i))
+			if (!(mask[n] & (1L << i))) continue;
+
+			/* Process valid flags */
+			if (!(option_mask[n] & (1L << i))) continue;
+
+			/* Set */
+			if (flag[n] & (1L << i))
 			{
-				/* Process valid flags */
-				if (option_mask[n] & (1L << i))
-				{
-					/* Set */
-					if (flag[n] & (1L << i))
-					{
-						/* Set */
-						option_flag[n] |= (1L << i);
-					}
-					else
-					{
-						option_flag[n] &= ~(1L << i);
-					}
-				}
+				/* Set */
+				option_flag[n] |= (1L << i);
+			}
+			else
+			{
+				option_flag[n] &= ~(1L << i);
 			}
 		}
 	}
@@ -1624,43 +1625,39 @@ static void rd_options(void)
 	/* Extract the options */
 	extract_option_vars();
 
-
 	/*** Window Options ***/
 
 	/* Read the window flags */
-	for (n = 0; n < 8; n++) rd_u32b(&flag[n]);
+	for (int n = 0; n < 8; n++) rd_u32b(&flag[n]);
 
 	/* Read the window masks */
-	for (n = 0; n < 8; n++) rd_u32b(&mask[n]);
+	for (int n = 0; n < 8; n++) rd_u32b(&mask[n]);
 
 	/* Analyze the options */
-	for (n = 0; n < 8; n++)
+	for (int n = 0; n < 8; n++)
 	{
 		/* Analyze the options */
-		for (i = 0; i < 32; i++)
+		for (int i = 0; i < 32; i++)
 		{
 			/* Process valid flags */
-			if (mask[n] & (1L << i))
+			if (!(mask[n] & (1L << i))) continue;
+
+			/* Process valid flags */
+			if (!(window_mask[n] & (1L << i))) continue;
+
+			/* Set */
+			if (flag[n] & (1L << i))
 			{
-				/* Process valid flags */
-				if (window_mask[n] & (1L << i))
-				{
-					/* Set */
-					if (flag[n] & (1L << i))
-					{
-						/* Set */
-						window_flag[n] |= (1L << i);
-					}
-					else
-					{
-						window_flag[n] &= ~(1L << i);
-					}
-				}
+				/* Set */
+				window_flag[n] |= (1L << i);
+			}
+			else
+			{
+				window_flag[n] &= ~(1L << i);
 			}
 		}
 	}
 }
-
 
 
 /*!
@@ -1672,11 +1669,7 @@ static void rd_options(void)
 static void rd_ghost(void)
 {
 	char buf[64];
-
-	/* Strip name */
 	rd_string(buf, sizeof(buf));
-
-	/* Strip old data */
 	strip_bytes(60);
 }
 
@@ -1687,10 +1680,6 @@ static void rd_ghost(void)
  */
 static void load_quick_start(void)
 {
-	byte tmp8u;
-	s16b tmp16s;
-	int i;
-
 	if (z_older_than(11, 0, 13))
 	{
 		previous_char.quick_ok = FALSE;
@@ -1698,6 +1687,7 @@ static void load_quick_start(void)
 	}
 
 	rd_byte(&previous_char.psex);
+	byte tmp8u;
 	rd_byte(&tmp8u);
 	previous_char.prace = (RACE_IDX)tmp8u;
 	rd_byte(&tmp8u);
@@ -1715,20 +1705,21 @@ static void load_quick_start(void)
 	rd_s16b(&previous_char.sc);
 	rd_s32b(&previous_char.au);
 
-	for (i = 0; i < A_MAX; i++) rd_s16b(&previous_char.stat_max[i]);
-	for (i = 0; i < A_MAX; i++) rd_s16b(&previous_char.stat_max_max[i]);
+	for (int i = 0; i < A_MAX; i++) rd_s16b(&previous_char.stat_max[i]);
+	for (int i = 0; i < A_MAX; i++) rd_s16b(&previous_char.stat_max_max[i]);
 
-	for (i = 0; i < PY_MAX_LEVEL; i++)
+	for (int i = 0; i < PY_MAX_LEVEL; i++)
 	{
+		s16b tmp16s;
 		rd_s16b(&tmp16s);
 		previous_char.player_hp[i] = (HIT_POINT)tmp16s;
 	}
 
 	rd_s16b(&previous_char.chaos_patron);
 
-	for (i = 0; i < 8; i++) rd_s16b(&previous_char.vir_types[i]);
+	for (int i = 0; i < 8; i++) rd_s16b(&previous_char.vir_types[i]);
 
-	for (i = 0; i < 4; i++) rd_string(previous_char.history[i], sizeof(previous_char.history[i]));
+	for (int i = 0; i < 4; i++) rd_string(previous_char.history[i], sizeof(previous_char.history[i]));
 
 	/* UNUSED : Was number of random quests */
 	rd_byte(&tmp8u);
@@ -1743,13 +1734,6 @@ static void load_quick_start(void)
  */
 static void rd_extra(player_type *creature_ptr)
 {
-	int i,j;
-
-	byte tmp8u;
-	s16b tmp16s;
-	s32b tmp32s;
-	u16b tmp16u;
-
 	rd_string(creature_ptr->name, sizeof(creature_ptr->name));
 
 	rd_string(creature_ptr->died_from, sizeof(creature_ptr->died_from));
@@ -1765,12 +1749,13 @@ static void rd_extra(player_type *creature_ptr)
 
 	load_quick_start();
 
-	for (i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		rd_string(creature_ptr->history[i], sizeof(creature_ptr->history[i]));
 	}
 
 	/* Class/Race/Seikaku/Gender/Spells */
+	byte tmp8u;
 	rd_byte(&tmp8u);
 	creature_ptr->prace = (RACE_IDX)tmp8u;
 	rd_byte(&tmp8u);
@@ -1803,9 +1788,9 @@ static void rd_extra(player_type *creature_ptr)
 	rd_s16b(&creature_ptr->wt);
 
 	/* Read the stat info */
-	for (i = 0; i < A_MAX; i++) rd_s16b(&creature_ptr->stat_max[i]);
-	for (i = 0; i < A_MAX; i++) rd_s16b(&creature_ptr->stat_max_max[i]);
-	for (i = 0; i < A_MAX; i++) rd_s16b(&creature_ptr->stat_cur[i]);
+	for (int i = 0; i < A_MAX; i++) rd_s16b(&creature_ptr->stat_max[i]);
+	for (int i = 0; i < A_MAX; i++) rd_s16b(&creature_ptr->stat_max_max[i]);
+	for (int i = 0; i < A_MAX; i++) rd_s16b(&creature_ptr->stat_cur[i]);
 
 	strip_bytes(24);
 	rd_s32b(&creature_ptr->au);
@@ -1817,6 +1802,7 @@ static void rd_extra(player_type *creature_ptr)
 
 	if (h_older_than(1, 7, 0, 3))
 	{
+		u16b tmp16u;
 		rd_u16b(&tmp16u);
 		creature_ptr->exp_frac = (u32b)tmp16u;
 	}
@@ -1827,30 +1813,32 @@ static void rd_extra(player_type *creature_ptr)
 
 	rd_s16b(&creature_ptr->lev);
 
-	for (i = 0; i < 64; i++) rd_s16b(&creature_ptr->spell_exp[i]);
+	for (int i = 0; i < 64; i++) rd_s16b(&creature_ptr->spell_exp[i]);
 	if ((creature_ptr->pclass == CLASS_SORCERER) && z_older_than(10, 4, 2))
 	{
-		for (i = 0; i < 64; i++) creature_ptr->spell_exp[i] = SPELL_EXP_MASTER;
+		for (int i = 0; i < 64; i++) creature_ptr->spell_exp[i] = SPELL_EXP_MASTER;
 	}
+
 	if (z_older_than(10, 3, 6))
-		for (i = 0; i < 5; i++) for (j = 0; j < 60; j++) rd_s16b(&creature_ptr->weapon_exp[i][j]);
+		for (int i = 0; i < 5; i++) for (int j = 0; j < 60; j++) rd_s16b(&creature_ptr->weapon_exp[i][j]);
 	else
-		for (i = 0; i < 5; i++) for (j = 0; j < 64; j++) rd_s16b(&creature_ptr->weapon_exp[i][j]);
-	for (i = 0; i < GINOU_MAX; i++) rd_s16b(&creature_ptr->skill_exp[i]);
+		for (int i = 0; i < 5; i++) for (int j = 0; j < 64; j++) rd_s16b(&creature_ptr->weapon_exp[i][j]);
+	for (int i = 0; i < GINOU_MAX; i++) rd_s16b(&creature_ptr->skill_exp[i]);
 	if (z_older_than(10, 4, 1))
 	{
 		if (creature_ptr->pclass != CLASS_BEASTMASTER) creature_ptr->skill_exp[GINOU_RIDING] /= 2;
 		creature_ptr->skill_exp[GINOU_RIDING] = MIN(creature_ptr->skill_exp[GINOU_RIDING], s_info[creature_ptr->pclass].s_max[GINOU_RIDING]);
 	}
+
 	if (z_older_than(10, 3, 14))
 	{
-		for (i = 0; i < 108; i++) creature_ptr->magic_num1[i] = 0;
-		for (i = 0; i < 108; i++) creature_ptr->magic_num2[i] = 0;
+		for (int i = 0; i < 108; i++) creature_ptr->magic_num1[i] = 0;
+		for (int i = 0; i < 108; i++) creature_ptr->magic_num2[i] = 0;
 	}
 	else
 	{
-		for (i = 0; i < 108; i++) rd_s32b(&creature_ptr->magic_num1[i]);
-		for (i = 0; i < 108; i++) rd_byte(&creature_ptr->magic_num2[i]);
+		for (int i = 0; i < 108; i++) rd_s32b(&creature_ptr->magic_num1[i]);
+		for (int i = 0; i < 108; i++) rd_byte(&creature_ptr->magic_num2[i]);
 		if (h_older_than(1, 3, 0, 1))
 		{
 			if (creature_ptr->pclass == CLASS_SMITH)
@@ -1862,6 +1850,7 @@ static void rd_extra(player_type *creature_ptr)
 			}
 		}
 	}
+
 	if (music_singing_any(creature_ptr)) creature_ptr->action = ACTION_SING;
 
 	if (z_older_than(11, 0, 7))
@@ -1875,6 +1864,7 @@ static void rd_extra(player_type *creature_ptr)
 	{
 		rd_byte(&tmp8u);
 		creature_ptr->start_race = (RACE_IDX)tmp8u;
+		s32b tmp32s;
 		rd_s32b(&tmp32s);
 		creature_ptr->old_race1 = (BIT_FLAGS)tmp32s;
 		rd_s32b(&tmp32s);
@@ -1884,7 +1874,7 @@ static void rd_extra(player_type *creature_ptr)
 
 	if (z_older_than(10, 0, 1))
 	{
-		for (i = 0; i < MAX_MANE; i++)
+		for (int i = 0; i < MAX_MANE; i++)
 		{
 			creature_ptr->mane_spell[i] = -1;
 			creature_ptr->mane_dam[i] = 0;
@@ -1893,28 +1883,33 @@ static void rd_extra(player_type *creature_ptr)
 	}
 	else if (z_older_than(10, 2, 3))
 	{
-		for (i = 0; i < OLD_MAX_MANE; i++)
+		s16b tmp16s;
+		for (int i = 0; i < OLD_MAX_MANE; i++)
 		{
 			rd_s16b(&tmp16s);
 			rd_s16b(&tmp16s);
 		}
-		for (i = 0; i < MAX_MANE; i++)
+
+		for (int i = 0; i < MAX_MANE; i++)
 		{
 			creature_ptr->mane_spell[i] = -1;
 			creature_ptr->mane_dam[i] = 0;
 		}
+
 		rd_s16b(&tmp16s);
 		creature_ptr->mane_num = 0;
 	}
 	else
 	{
-		for (i = 0; i < MAX_MANE; i++)
+		for (int i = 0; i < MAX_MANE; i++)
 		{
+			s16b tmp16s;
 			rd_s16b(&tmp16s);
 			creature_ptr->mane_spell[i] = (SPELL_IDX)tmp16s;
 			rd_s16b(&tmp16s);
 			creature_ptr->mane_dam[i] = (SPELL_IDX)tmp16s;
 		}
+
 		rd_s16b(&creature_ptr->mane_num);
 	}
 
@@ -1922,7 +1917,7 @@ static void rd_extra(player_type *creature_ptr)
 	{
 		determine_bounty_uniques();
 
-		for (i = 0; i < MAX_BOUNTY; i++)
+		for (int i = 0; i < MAX_BOUNTY; i++)
 		{
 			/* Is this bounty unique already dead? */
 			if (!r_info[current_world_ptr->bounty_r_idx[i]].max_num) current_world_ptr->bounty_r_idx[i] += 10000;
@@ -1930,7 +1925,7 @@ static void rd_extra(player_type *creature_ptr)
 	}
 	else
 	{
-		for (i = 0; i < MAX_BOUNTY; i++)
+		for (int i = 0; i < MAX_BOUNTY; i++)
 		{
 			rd_s16b(&current_world_ptr->bounty_r_idx[i]);
 		}
@@ -1942,11 +1937,12 @@ static void rd_extra(player_type *creature_ptr)
 	}
 	else
 	{
-		for (i = 0; i < 4; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			rd_s16b(&battle_mon[i]);
 			if (z_older_than(10, 3, 4))
 			{
+				s16b tmp16s;
 				rd_s16b(&tmp16s);
 				mon_odds[i] = tmp16s;
 			}
@@ -1963,6 +1959,8 @@ static void rd_extra(player_type *creature_ptr)
 		/* Arena loser of previous version was marked number 99 */
 		if (creature_ptr->arena_number >= 99) creature_ptr->arena_number = ARENA_DEFEATED_OLD_VER;
 	}
+
+	s16b tmp16s;
 	rd_s16b(&tmp16s);
 	creature_ptr->current_floor_ptr->inside_arena = (bool)tmp16s;
 	rd_s16b(&creature_ptr->current_floor_ptr->inside_quest);
@@ -1984,7 +1982,7 @@ static void rd_extra(player_type *creature_ptr)
 
 	/* Was creature_ptr->rewards[MAX_BACT] */
 	rd_s16b(&tmp16s);
-	for (i = 0; i < tmp16s; i++)
+	for (int i = 0; i < tmp16s; i++)
 	{
 		s16b tmp16s2;
 		rd_s16b(&tmp16s2);
@@ -1998,6 +1996,7 @@ static void rd_extra(player_type *creature_ptr)
 		rd_s16b(&tmp16s);
 		creature_ptr->chp = tmp16s;
 
+		u16b tmp16u;
 		rd_u16b(&tmp16u);
 		creature_ptr->chp_frac = (u32b)tmp16u;
 	}
@@ -2016,6 +2015,7 @@ static void rd_extra(player_type *creature_ptr)
 		rd_s16b(&tmp16s);
 		creature_ptr->csp = tmp16s;
 
+		u16b tmp16u;
 		rd_u16b(&tmp16u);
 		creature_ptr->csp_frac = (u32b)tmp16u;
 	}
@@ -2038,7 +2038,7 @@ static void rd_extra(player_type *creature_ptr)
 
 		rd_byte(&max);
 
-		for(i = 0; i < max; i++)
+		for(int i = 0; i < max; i++)
 		{
 			rd_s16b(&tmp16s);
 			max_dlv[i] = tmp16s;
@@ -2203,9 +2203,9 @@ static void rd_extra(player_type *creature_ptr)
 		rd_u32b(&creature_ptr->muta2);
 		rd_u32b(&creature_ptr->muta3);
 
-		for (i = 0; i < 8; i++)
+		for (int i = 0; i < 8; i++)
 			rd_s16b(&creature_ptr->virtues[i]);
-		for (i = 0; i < 8; i++)
+		for (int i = 0; i < 8; i++)
 			rd_s16b(&creature_ptr->vir_types[i]);
 	}
 
@@ -2223,6 +2223,7 @@ static void rd_extra(player_type *creature_ptr)
 		rd_s16b(&creature_ptr->ele_attack);
 		rd_u32b(&creature_ptr->special_attack);
 	}
+
 	if (creature_ptr->special_attack & KAMAE_MASK) creature_ptr->action = ACTION_KAMAE;
 	else if (creature_ptr->special_attack & KATA_MASK) creature_ptr->action = ACTION_KATA;
 	if (z_older_than(10,0,12))
@@ -2235,6 +2236,7 @@ static void rd_extra(player_type *creature_ptr)
 		rd_s16b(&creature_ptr->ele_immune);
 		rd_u32b(&creature_ptr->special_defense);
 	}
+
 	rd_byte(&creature_ptr->knowledge);
 
 	rd_byte(&tmp8u);
@@ -2248,26 +2250,24 @@ static void rd_extra(player_type *creature_ptr)
 		rd_byte(&tmp8u);
 		if (tmp8u) creature_ptr->action = ACTION_LEARN;
 	}
+
 	rd_byte((byte *)&preserve_mode);
 	rd_byte((byte *)&creature_ptr->wait_report_score);
 
 	/* Future use */
-	for (i = 0; i < 48; i++) rd_byte(&tmp8u);
+	for (int i = 0; i < 48; i++) rd_byte(&tmp8u);
 
 	/* Skip the flags */
 	strip_bytes(12);
-
 
 	/* Hack -- the two "special seeds" */
 	rd_u32b(&current_world_ptr->seed_flavor);
 	rd_u32b(&current_world_ptr->seed_town);
 
-
 	/* Special stuff */
 	rd_u16b(&creature_ptr->panic_save);
 	rd_u16b(&current_world_ptr->total_winner);
 	rd_u16b(&current_world_ptr->noscore);
-
 
 	/* Read "death" */
 	rd_byte(&tmp8u);
@@ -2365,7 +2365,7 @@ static void rd_extra(player_type *creature_ptr)
 		rd_s16b(&tmp16s);
 
 		/* Strip old temporary preserved pets */
-		for (i = 0; i < tmp16s; i++)
+		for (int i = 0; i < tmp16s; i++)
 		{
 			monster_type dummy_mon;
 
@@ -2388,14 +2388,17 @@ static void rd_extra(player_type *creature_ptr)
 	}
 	else if (z_older_than(10, 3, 10))
 	{
+		s32b tmp32s;
 		rd_s32b(&tmp32s);
 		creature_ptr->visit = 1L;
 	}
 	else
 	{
+		s32b tmp32s;
 		rd_s32b(&tmp32s);
 		creature_ptr->visit = (BIT_FLAGS)tmp32s;
 	}
+
 	if (!z_older_than(11, 0, 5))
 	{
 		rd_u32b(&creature_ptr->count);
@@ -2418,12 +2421,6 @@ static void rd_extra(player_type *creature_ptr)
  */
 static errr rd_inventory(player_type *player_ptr)
 {
-	int slot = 0;
-
-	object_type forge;
-	object_type *q_ptr;
-
-	/* No weight */
 	player_ptr->total_weight = 0;
 
 	/* No items */
@@ -2434,15 +2431,17 @@ static errr rd_inventory(player_type *player_ptr)
 	C_MAKE(player_ptr->inventory_list, INVEN_TOTAL, object_type);
 
 	/* Read until done */
+	int slot = 0;
 	while (TRUE)
 	{
-		u16b n;
-
 		/* Get the next item index */
+		u16b n;
 		rd_u16b(&n);
 
 		/* Nope, we reached the end */
 		if (n == 0xFFFF) break;
+		object_type forge;
+		object_type *q_ptr;
 		q_ptr = &forge;
 		object_wipe(q_ptr);
 
@@ -2463,33 +2462,31 @@ static errr rd_inventory(player_type *player_ptr)
 
 			/* One more item */
 			player_ptr->equip_cnt++;
+			continue;
 		}
 
 		/* Warning -- backpack is full */
-		else if (player_ptr->inven_cnt == INVEN_PACK)
+		if (player_ptr->inven_cnt == INVEN_PACK)
 		{
 			note(_("持ち物の中のアイテムが多すぎる！", "Too many items in the inventory"));
 
 			/* Fail */
 			return (54);
 		}
-		else
-		{
-			/* Get a slot */
-			n = slot++;
 
-			q_ptr->marked |= OM_TOUCHED;
-			object_copy(&player_ptr->inventory_list[n], q_ptr);
+		/* Get a slot */
+		n = slot++;
 
-			/* Add the weight */
-			player_ptr->total_weight += (q_ptr->number * q_ptr->weight);
+		q_ptr->marked |= OM_TOUCHED;
+		object_copy(&player_ptr->inventory_list[n], q_ptr);
 
-			/* One more item */
-			player_ptr->inven_cnt++;
-		}
+		/* Add the weight */
+		player_ptr->total_weight += (q_ptr->number * q_ptr->weight);
+
+		/* One more item */
+		player_ptr->inven_cnt++;
 	}
 
-	/* Success */
 	return 0;
 }
 
@@ -2500,68 +2497,34 @@ static errr rd_inventory(player_type *player_ptr)
  */
 static void rd_messages(void)
 {
-	int i;
-	char buf[128];
-	int message_max;
-
-
 	if (h_older_than(2, 2, 0, 75))
 	{
 		u16b num;
-		/* Total */
 		rd_u16b(&num);
+		int message_max;
 		message_max = (int)num;
 
-		/* Read the messages */
-		for (i = 0; i < message_max; i++)
+		for (int i = 0; i < message_max; i++)
 		{
-			/* Read the message */
+			char buf[128];
 			rd_string(buf, sizeof(buf));
-
-			/* Save the message */
 			message_add(buf);
 		}
 	}
-	else
+	
+	u32b num;
+	rd_u32b(&num);
+	int message_max;
+	message_max = (int)num;
+
+	for (int i = 0; i < message_max; i++)
 	{
-		u32b num;
-		/* Total */
-		rd_u32b(&num);
-		message_max = (int)num;
-
-		/* Read the messages */
-		for (i = 0; i < message_max; i++)
-		{
-			/* Read the message */
-			rd_string(buf, sizeof(buf));
-
-			/* Save the message */
-			message_add(buf);
-		}
+		char buf[128];
+		rd_string(buf, sizeof(buf));
+		message_add(buf);
 	}
-
 }
 
-
-
-/* Old hidden trap flag */
-#define CAVE_TRAP       0x8000
-
-/*** Terrain Feature Indexes (see "lib/edit/f_info.txt") ***/
-#define OLD_FEAT_INVIS              0x02
-#define OLD_FEAT_GLYPH              0x03
-#define OLD_FEAT_QUEST_ENTER        0x08
-#define OLD_FEAT_QUEST_EXIT         0x09
-#define OLD_FEAT_MINOR_GLYPH        0x40
-#define OLD_FEAT_BLDG_1             0x81
-#define OLD_FEAT_MIRROR             0xc3
-
-/* Old quests */
-#define OLD_QUEST_WATER_CAVE 18
-
-/* Quest constants */
-#define QUEST_OLD_CASTLE  27
-#define QUEST_ROYAL_CRYPT 28
 
 /*!
  * @brief メッセージログを読み込む / Read the dungeon (old method)
@@ -2573,24 +2536,16 @@ static void rd_messages(void)
  */
 static errr rd_dungeon_old(player_type *creature_ptr)
 {
-	int i, y, x;
-	int ymax, xmax;
-	byte count;
-	byte tmp8u;
-	s16b tmp16s;
-	u16b limit;
-	grid_type *g_ptr;
-
-
 	/*** Basic info ***/
-
 	/* Header info */
+	s16b tmp16s;
 	rd_s16b(&tmp16s);
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	floor_ptr->dun_level = (DEPTH)tmp16s;
 	if (z_older_than(10, 3, 8)) creature_ptr->dungeon_idx = DUNGEON_ANGBAND;
 	else
 	{ 
+		byte tmp8u;
 		rd_byte(&tmp8u);
 		creature_ptr->dungeon_idx = (IDX)tmp8u;
 	}
@@ -2620,21 +2575,20 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 #endif
 
 	/* Maximal size */
-	ymax = floor_ptr->height;
-	xmax = floor_ptr->width;
-
-
-	/*** Run length decoding ***/
+	int ymax = floor_ptr->height;
+	int xmax = floor_ptr->width;
 
 	/* Load the dungeon data */
-	for (x = y = 0; y < ymax; )
+	for (int x = 0, y = 0; y < ymax; )
 	{
 		u16b info;
 
 		/* Grab RLE info */
+		byte count;
 		rd_byte(&count);
 		if (z_older_than(10,3,6))
 		{
+			byte tmp8u;
 			rd_byte(&tmp8u);
 			info = (u16b)tmp8u;
 		}
@@ -2647,8 +2601,9 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		}
 
 		/* Apply the RLE info */
-		for (i = count; i > 0; i--)
+		for (int i = count; i > 0; i--)
 		{
+			grid_type *g_ptr;
 			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Extract "info" */
@@ -2666,19 +2621,19 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		}
 	}
 
-
-	/*** Run length decoding ***/
-
 	/* Load the dungeon data */
-	for (x = y = 0; y < ymax; )
+	for (int x = 0, y = 0; y < ymax; )
 	{
 		/* Grab RLE info */
+		byte count;
 		rd_byte(&count);
+		byte tmp8u;
 		rd_byte(&tmp8u);
 
 		/* Apply the RLE info */
-		for (i = count; i > 0; i--)
+		for (int i = count; i > 0; i--)
 		{
+			grid_type *g_ptr;
 			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Extract "feat" */
@@ -2696,18 +2651,19 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		}
 	}
 
-	/*** Run length decoding ***/
-
 	/* Load the dungeon data */
-	for (x = y = 0; y < ymax; )
+	for (int x = 0, y = 0; y < ymax; )
 	{
 		/* Grab RLE info */
+		byte count;
 		rd_byte(&count);
+		byte tmp8u;
 		rd_byte(&tmp8u);
 
 		/* Apply the RLE info */
-		for (i = count; i > 0; i--)
+		for (int i = count; i > 0; i--)
 		{
+			grid_type *g_ptr;
 			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Extract "mimic" */
@@ -2728,15 +2684,17 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 	/*** Run length decoding ***/
 
 	/* Load the dungeon data */
-	for (x = y = 0; y < ymax; )
+	for (int x = 0, y = 0; y < ymax; )
 	{
 		/* Grab RLE info */
+		byte count;
 		rd_byte(&count);
 		rd_s16b(&tmp16s);
 
 		/* Apply the RLE info */
-		for (i = count; i > 0; i--)
+		for (int i = count; i > 0; i--)
 		{
+			grid_type *g_ptr;
 			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Extract "feat" */
@@ -2756,69 +2714,80 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 
 	if (z_older_than(11, 0, 99))
 	{
-		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+		for (int y = 0; y < ymax; y++)
 		{
-			/* Wipe old unused flags */
-			floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+			for (int x = 0; x < xmax; x++)
+			{
+				/* Wipe old unused flags */
+				floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+			}
 		}
 	}
 
 	if (h_older_than(1, 1, 1, 0))
 	{
-		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+		for (int y = 0; y < ymax; y++)
 		{
-			g_ptr = &floor_ptr->grid_array[y][x];
-
-			/* Very old */
-			if (g_ptr->feat == OLD_FEAT_INVIS)
+			for (int x = 0; x < xmax; x++)
 			{
-				g_ptr->feat = feat_floor;
-				g_ptr->info |= CAVE_TRAP;
-			}
+				grid_type *g_ptr;
+				g_ptr = &floor_ptr->grid_array[y][x];
 
-			/* Older than 1.1.1 */
-			if (g_ptr->feat == OLD_FEAT_MIRROR)
-			{
-				g_ptr->feat = feat_floor;
-				g_ptr->info |= CAVE_OBJECT;
+				/* Very old */
+				if (g_ptr->feat == OLD_FEAT_INVIS)
+				{
+					g_ptr->feat = feat_floor;
+					g_ptr->info |= CAVE_TRAP;
+				}
+
+				/* Older than 1.1.1 */
+				if (g_ptr->feat == OLD_FEAT_MIRROR)
+				{
+					g_ptr->feat = feat_floor;
+					g_ptr->info |= CAVE_OBJECT;
+				}
 			}
 		}
 	}
 
 	if (h_older_than(1, 3, 1, 0))
 	{
-		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+		for (int y = 0; y < ymax; y++)
 		{
-			g_ptr = &floor_ptr->grid_array[y][x];
-
-			/* Old CAVE_IN_MIRROR flag */
-			if (g_ptr->info & CAVE_OBJECT)
+			for (int x = 0; x < xmax; x++)
 			{
-				g_ptr->mimic = feat_mirror;
-			}
+				grid_type *g_ptr;
+				g_ptr = &floor_ptr->grid_array[y][x];
 
-			/* Runes will be mimics and flags */
-			else if ((g_ptr->feat == OLD_FEAT_MINOR_GLYPH) ||
-			         (g_ptr->feat == OLD_FEAT_GLYPH))
-			{
-				g_ptr->info |= CAVE_OBJECT;
-				g_ptr->mimic = g_ptr->feat;
-				g_ptr->feat = feat_floor;
-			}
+				/* Old CAVE_IN_MIRROR flag */
+				if (g_ptr->info & CAVE_OBJECT)
+				{
+					g_ptr->mimic = feat_mirror;
+				}
 
-			/* Hidden traps will be trap terrains mimicing floor */
-			else if (g_ptr->info & CAVE_TRAP)
-			{
-				g_ptr->info &= ~CAVE_TRAP;
-				g_ptr->mimic = g_ptr->feat;
-				g_ptr->feat = choose_random_trap(creature_ptr);
-			}
+				/* Runes will be mimics and flags */
+				else if ((g_ptr->feat == OLD_FEAT_MINOR_GLYPH) ||
+					(g_ptr->feat == OLD_FEAT_GLYPH))
+				{
+					g_ptr->info |= CAVE_OBJECT;
+					g_ptr->mimic = g_ptr->feat;
+					g_ptr->feat = feat_floor;
+				}
 
-			/* Another hidden trap */
-			else if (g_ptr->feat == OLD_FEAT_INVIS)
-			{
-				g_ptr->mimic = feat_floor;
-				g_ptr->feat = feat_trap_open;
+				/* Hidden traps will be trap terrains mimicing floor */
+				else if (g_ptr->info & CAVE_TRAP)
+				{
+					g_ptr->info &= ~CAVE_TRAP;
+					g_ptr->mimic = g_ptr->feat;
+					g_ptr->feat = choose_random_trap(creature_ptr);
+				}
+
+				/* Another hidden trap */
+				else if (g_ptr->feat == OLD_FEAT_INVIS)
+				{
+					g_ptr->mimic = feat_floor;
+					g_ptr->feat = feat_trap_open;
+				}
 			}
 		}
 	}
@@ -2826,27 +2795,31 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 	/* Quest 18 was removed */
 	if (h_older_than(1, 7, 0, 6) && !vanilla_town)
 	{
-		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+		for (int y = 0; y < ymax; y++)
 		{
-			g_ptr = &floor_ptr->grid_array[y][x];
-
-			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !floor_ptr->dun_level)
+			for (int x = 0; x < xmax; x++)
 			{
-				if (g_ptr->feat == OLD_FEAT_QUEST_ENTER)
+				grid_type *g_ptr;
+				g_ptr = &floor_ptr->grid_array[y][x];
+
+				if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !floor_ptr->dun_level)
 				{
-					g_ptr->feat = feat_tree;
+					if (g_ptr->feat == OLD_FEAT_QUEST_ENTER)
+					{
+						g_ptr->feat = feat_tree;
+						g_ptr->special = 0;
+					}
+					else if (g_ptr->feat == OLD_FEAT_BLDG_1)
+					{
+						g_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
+					}
+				}
+				else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
+					(floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
+				{
+					g_ptr->feat = feat_up_stair;
 					g_ptr->special = 0;
 				}
-				else if (g_ptr->feat == OLD_FEAT_BLDG_1)
-				{
-					g_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
-				}
-			}
-			else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
-			         (floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
-			{
-				g_ptr->feat = feat_up_stair;
-				g_ptr->special = 0;
 			}
 		}
 	}
@@ -2854,6 +2827,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 	/*** Objects ***/
 
 	/* Read the item count */
+	u16b limit;
 	rd_u16b(&limit);
 
 	/* Verify maximum */
@@ -2864,15 +2838,9 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 	}
 
 	/* Read the dungeon items */
-	for (i = 1; i < limit; i++)
+	for (int i = 1; i < limit; i++)
 	{
-		OBJECT_IDX o_idx;
-
-		object_type *o_ptr;
-
-
-		/* Get a new record */
-		o_idx = o_pop(floor_ptr);
+		OBJECT_IDX o_idx = o_pop(floor_ptr);
 
 		if (i != o_idx)
 		{
@@ -2880,41 +2848,26 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 			return (152);
 		}
 
-
-		/* Acquire place */
+		object_type *o_ptr;
 		o_ptr = &floor_ptr->o_list[o_idx];
-
-		/* Read the item */
 		rd_item(o_ptr);
-
 
 		if (OBJECT_IS_HELD_MONSTER(o_ptr))
 		{
 			monster_type *m_ptr;
 			m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
-
-			/* Build a stack */
 			o_ptr->next_o_idx = m_ptr->hold_o_idx;
-
 			m_ptr->hold_o_idx = o_idx;
+			continue;
 		}
 
-		/* Dungeon */
-		else
-		{
-			/* Access the item location */
-			g_ptr = &floor_ptr->grid_array[o_ptr->iy][o_ptr->ix];
-
-			/* Build a stack */
-			o_ptr->next_o_idx = g_ptr->o_idx;
-
-			g_ptr->o_idx = o_idx;
-		}
+		grid_type *g_ptr;
+		g_ptr = &floor_ptr->grid_array[o_ptr->iy][o_ptr->ix];
+		o_ptr->next_o_idx = g_ptr->o_idx;
+		g_ptr->o_idx = o_idx;
 	}
 
-
 	/*** Monsters ***/
-
 	/* Read the monster count */
 	rd_u16b(&limit);
 
@@ -2926,7 +2879,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 	}
 
 	/* Read the monsters */
-	for (i = 1; i < limit; i++)
+	for (int i = 1; i < limit; i++)
 	{
 		MONSTER_IDX m_idx;
 		monster_type *m_ptr;
@@ -2941,30 +2894,18 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		}
 
 		m_ptr = &floor_ptr->m_list[m_idx];
-
-		/* Read the monster */
 		rd_monster(creature_ptr, m_ptr);
-
-
-		/* Access grid */
+		grid_type *g_ptr;
 		g_ptr = &floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
-
-		/* Mark the location */
 		g_ptr->m_idx = m_idx;
-
-		/* Count */
 		real_r_ptr(m_ptr)->cur_num++;
 	}
-
-	/*** Success ***/
 
 	/* The dungeon is ready */
 	if (z_older_than(10, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena)
 		current_world_ptr->character_dungeon = FALSE;
 	else
 		current_world_ptr->character_dungeon = TRUE;
-
-	/* Success */
 	return 0;
 }
 
@@ -2986,17 +2927,6 @@ static errr rd_dungeon_old(player_type *creature_ptr)
  */
 static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
-	POSITION ymax, xmax;
-	POSITION y, x;
-	int i;
-	byte count;
-	byte tmp8u;
-	s16b tmp16s;
-	u16b tmp16u;
-	s32b tmp32s;
-	u32b tmp32u;
-	u16b limit;
-
 	grid_template_type *templates;
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	clear_cave(player_ptr);
@@ -3005,13 +2935,12 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 	player_ptr->x = player_ptr->y = 0;
 
 	/*** Basic info ***/
-
 	/* Dungeon floor specific info follows */
 
 	if (!sf_ptr)
 	{
 		/*** Not a saved floor ***/
-
+		s16b tmp16s;
 		rd_s16b(&tmp16s);
 		floor_ptr->dun_level = (DEPTH)tmp16s;
 		floor_ptr->base_level = floor_ptr->dun_level;
@@ -3019,10 +2948,11 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 	else
 	{
 		/*** The saved floor ***/
-
+		s16b tmp16s;
 		rd_s16b(&tmp16s);
 		if (tmp16s != sf_ptr->floor_id) return 171;
 
+		byte tmp8u;
 		rd_byte(&tmp8u);
 		if (tmp8u != sf_ptr->savefile_id) return 171;
 
@@ -3030,9 +2960,11 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 		if (tmp16s != sf_ptr->dun_level) return 171;
 		floor_ptr->dun_level = sf_ptr->dun_level;
 
+		s32b tmp32s;
 		rd_s32b(&tmp32s);
 		if (tmp32s != sf_ptr->last_visit) return 171;
 
+		u32b tmp32u;
 		rd_u32b(&tmp32u);
 		if (tmp32u != sf_ptr->visit_mark) return 171;
 
@@ -3043,11 +2975,13 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 		if (tmp16s != sf_ptr->lower_floor_id) return 171;
 	}
 
+	s16b tmp16s;
 	rd_s16b(&tmp16s);
 	floor_ptr->base_level = (DEPTH)tmp16s;
 	rd_s16b(&tmp16s);
 	floor_ptr->num_repro = (MONSTER_NUMBER)tmp16s;
 
+	u16b tmp16u;
 	rd_u16b(&tmp16u);
 	player_ptr->y = (POSITION)tmp16u;
 
@@ -3061,18 +2995,17 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 
 	rd_byte(&player_ptr->feeling);
 
-
-
 	/*** Read template for grid_type ***/
 
 	/* Read the template count */
+	u16b limit;
 	rd_u16b(&limit);
 
 	/* Allocate the "template" array */
 	C_MAKE(templates, limit, grid_template_type);
 
 	/* Read the templates */
-	for (i = 0; i < limit; i++)
+	for (int i = 0; i < limit; i++)
 	{
 		grid_template_type *ct_ptr = &templates[i];
 
@@ -3081,6 +3014,7 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 		ct_ptr->info = (BIT_FLAGS)tmp16u;
 		if (h_older_than(1, 7, 0, 2))
 		{
+			byte tmp8u;
 			rd_byte(&tmp8u);
 			ct_ptr->feat = (s16b)tmp8u;
 			rd_byte(&tmp8u);
@@ -3095,29 +3029,28 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 	}
 
 	/* Maximal size */
-	ymax = floor_ptr->height;
-	xmax = floor_ptr->width;
-
-
-	/*** Run length decoding ***/
-
+	POSITION ymax = floor_ptr->height;
+	POSITION xmax= floor_ptr->width;
+	
 	/* Load the dungeon data */
-	for (x = y = 0; y < ymax; )
+	for (POSITION x = 0, y = 0; y < ymax; )
 	{
 		u16b id;
 
 		/* Grab RLE info */
+		byte count;
 		rd_byte(&count);
 
 		id = 0;
-		do 
+		byte tmp8u;
+		do
 		{
 			rd_byte(&tmp8u);
 			id += tmp8u;
 		} while (tmp8u == MAX_UCHAR);
 
 		/* Apply the RLE info */
-		for (i = count; i > 0; i--)
+		for (int i = count; i > 0; i--)
 		{
 			grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 			g_ptr->info = templates[id].info;
@@ -3140,27 +3073,30 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 	/* Quest 18 was removed */
 	if (h_older_than(1, 7, 0, 6) && !vanilla_town)
 	{
-		for (y = 0; y < ymax; y++) for (x = 0; x < xmax; x++)
+		for (POSITION y = 0; y < ymax; y++)
 		{
-			grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-
-			if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !floor_ptr->dun_level)
+			for (POSITION x = 0; x < xmax; x++)
 			{
-				if (g_ptr->feat == OLD_FEAT_QUEST_ENTER)
+				grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+
+				if ((g_ptr->special == OLD_QUEST_WATER_CAVE) && !floor_ptr->dun_level)
 				{
-					g_ptr->feat = feat_tree;
+					if (g_ptr->feat == OLD_FEAT_QUEST_ENTER)
+					{
+						g_ptr->feat = feat_tree;
+						g_ptr->special = 0;
+					}
+					else if (g_ptr->feat == OLD_FEAT_BLDG_1)
+					{
+						g_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
+					}
+				}
+				else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
+					(floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
+				{
+					g_ptr->feat = feat_up_stair;
 					g_ptr->special = 0;
 				}
-				else if (g_ptr->feat == OLD_FEAT_BLDG_1)
-				{
-					g_ptr->special = lite_town ? QUEST_OLD_CASTLE : QUEST_ROYAL_CRYPT;
-				}
-			}
-			else if ((g_ptr->feat == OLD_FEAT_QUEST_EXIT) &&
-				(floor_ptr->inside_quest == OLD_QUEST_WATER_CAVE))
-			{
-				g_ptr->feat = feat_up_stair;
-				g_ptr->special = 0;
 			}
 		}
 	}
@@ -3177,9 +3113,8 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 	/* Verify maximum */
 	if (limit > current_world_ptr->max_o_idx) return 151;
 
-
 	/* Read the dungeon items */
-	for (i = 1; i < limit; i++)
+	for (int i = 1; i < limit; i++)
 	{
 		OBJECT_IDX o_idx;
 		object_type *o_ptr;
@@ -3230,7 +3165,7 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 	if (limit > current_world_ptr->max_m_idx) return 161;
 
 	/* Read the monsters */
-	for (i = 1; i < limit; i++)
+	for (int i = 1; i < limit; i++)
 	{
 		grid_type *g_ptr;
 		MONSTER_IDX m_idx;
@@ -3257,7 +3192,6 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 		real_r_ptr(m_ptr)->cur_num++;
 	}
 
-	/* Success */
 	return 0;
 }
 
@@ -3272,16 +3206,11 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
  */
 static errr rd_dungeon(player_type *player_ptr)
 {
-	errr err = 0;
-	s16b tmp16s;
-	byte_hack tmp8u;
-	byte num;
-	int i;
-
 	/* Initialize saved_floors array and temporary files */
 	init_saved_floors(player_ptr, FALSE);
 
 	/* Older method */
+	errr err = 0;
 	if (h_older_than(1, 5, 0, 0))
 	{
 		err = rd_dungeon_old(player_ptr);
@@ -3296,17 +3225,17 @@ static errr rd_dungeon(player_type *player_ptr)
 		return err;
 	}
 
-
 	/*** Meta info ***/
-
-        /* Number of floor_id used from birth */
+    /* Number of floor_id used from birth */
 	rd_s16b(&max_floor_id);
 
 	/* Current dungeon type */
+	byte_hack tmp8u;
 	rd_byte(&tmp8u);
 	player_ptr->dungeon_idx = (DUNGEON_IDX)tmp8u;
 
 	/* Number of the saved_floors array elements */
+	byte num;
 	rd_byte(&num);
 
 	/*** No saved floor (On the surface etc.) ***/
@@ -3321,7 +3250,7 @@ static errr rd_dungeon(player_type *player_ptr)
 	{
 
 		/* Read the saved_floors array */
-		for (i = 0; i < num; i++)
+		for (int i = 0; i < num; i++)
 		{
 			saved_floor_type *sf_ptr = &saved_floors[i];
 
@@ -3329,6 +3258,7 @@ static errr rd_dungeon(player_type *player_ptr)
 			rd_byte(&tmp8u);
 			sf_ptr->savefile_id = (s16b)tmp8u;
 
+			s16b tmp16s;
 			rd_s16b(&tmp16s);
 			sf_ptr->dun_level = (DEPTH)tmp16s;
 
@@ -3340,7 +3270,7 @@ static errr rd_dungeon(player_type *player_ptr)
 
 
 		/* Move saved floors data to temporary files */
-		for (i = 0; i < num; i++)
+		for (int i = 0; i < num; i++)
 		{
 			saved_floor_type *sf_ptr = &saved_floors[i];
 
@@ -3404,10 +3334,7 @@ static errr rd_dungeon(player_type *player_ptr)
 		break;
 	}
 
-	/* The dungeon is ready */
 	current_world_ptr->character_dungeon = TRUE;
-
-	/* Success or Error */
 	return err;
 }
 
@@ -3418,29 +3345,16 @@ static errr rd_dungeon(player_type *player_ptr)
  */
 static errr rd_savefile_new_aux(player_type *creature_ptr)
 {
-	int i, j;
-	int town_count;
-
-	s32b wild_x_size;
-	s32b wild_y_size;
-
-	byte tmp8u;
-	u16b tmp16u;
-	s16b tmp16s;
-	u32b tmp32u;
-
 #ifdef VERIFY_CHECKSUMS
 	u32b n_x_check, n_v_check;
 	u32b o_x_check, o_v_check;
 #endif
-
 
 	/* Strip the version bytes */
 	strip_bytes(4);
 
 	/* Hack -- decrypt */
 	xor_byte = current_world_ptr->sf_extra;
-
 
 	/* Clear the checksums */
 	v_check = 0L;
@@ -3458,7 +3372,6 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		_("バージョン %d.%d.%d.%d のセーブ・ファイルをロード中...", "Loading a %d.%d.%d.%d savefile..."),
 		(current_world_ptr->h_ver_major > 9) ? current_world_ptr->h_ver_major - 10 : current_world_ptr->h_ver_major, current_world_ptr->h_ver_minor, current_world_ptr->h_ver_patch, current_world_ptr->h_ver_extra));
 
-
 	/* Operating system info */
 	rd_u32b(&current_world_ptr->sf_system);
 
@@ -3471,14 +3384,16 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	/* Number of times played */
 	rd_u16b(&current_world_ptr->sf_saves);
 
-
 	/* Later use (always zero) */
+	u32b tmp32u;
 	rd_u32b(&tmp32u);
 
 	/* Later use (always zero) */
+	u16b tmp16u;
 	rd_u16b(&tmp16u);
 
 	/* Later use (always zero) */
+	byte tmp8u;
 	rd_byte(&tmp8u);
 
 	/* Kanji code */
@@ -3496,7 +3411,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	rd_messages();
 	if (arg_fiddle) note(_("メッセージをロードしました", "Loaded Messages"));
 
-	for (i = 0; i < max_r_idx; i++)
+	for (int i = 0; i < max_r_idx; i++)
 	{
 		/* Access that monster */
 		monster_race *r_ptr = &r_info[i];
@@ -3521,7 +3436,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	}
 
 	/* Read the available records */
-	for (i = 0; i < tmp16u; i++)
+	for (int i = 0; i < tmp16u; i++)
 	{
 		/* Read the lore */
 		rd_lore((MONRACE_IDX)i);
@@ -3540,7 +3455,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	}
 
 	/* Read the object memory */
-	for (i = 0; i < tmp16u; i++)
+	for (int i = 0; i < tmp16u; i++)
 	{
 		object_kind *k_ptr = &k_info[i];
 
@@ -3587,102 +3502,92 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 			return (23);
 		}
 
-		for (i = 0; i < max_quests_load; i++)
+		for (int i = 0; i < max_quests_load; i++)
 		{
-			if (i < max_q_idx)
+			if (i >= max_q_idx)
 			{
-				quest_type* const q_ptr = &quest[i];
-				
-				rd_s16b(&q_ptr->status);
-				rd_s16b(&tmp16s);
-				q_ptr->level = tmp16s;
-
-				if (z_older_than(11, 0, 6))
-				{
-					q_ptr->complev = 0;
-				}
-				else
-				{
-					rd_byte(&tmp8u);
-					q_ptr->complev = tmp8u;
-				}
-				if(h_older_than(2, 1, 2, 2))
-				{
-					q_ptr->comptime = 0;
-				}
-				else
-				{
-					rd_u32b(&q_ptr->comptime);
-				}
-
-				/* Load quest status if quest is running */
-				if ((q_ptr->status == QUEST_STATUS_TAKEN) ||
-				    (!z_older_than(10, 3, 14) && (q_ptr->status == QUEST_STATUS_COMPLETED)) ||
-				    (!z_older_than(11, 0, 7) && (i >= MIN_RANDOM_QUEST) && (i <= (MIN_RANDOM_QUEST + max_rquests_load))))
-				{
-					rd_s16b(&tmp16s);
-					q_ptr->cur_num = (MONSTER_NUMBER)tmp16s;
-					rd_s16b(&tmp16s);
-					q_ptr->max_num = (MONSTER_NUMBER)tmp16s;
-					rd_s16b(&q_ptr->type);
-
-					/* Load quest monster index */
-					rd_s16b(&q_ptr->r_idx);
-
-					if ((q_ptr->type == QUEST_TYPE_RANDOM) && (!q_ptr->r_idx))
-					{
-						determine_random_questor(&quest[i]);
-					}
-
-					/* Load quest item index */
-					rd_s16b(&q_ptr->k_idx);
-
-					if (q_ptr->k_idx)
-						a_info[q_ptr->k_idx].gen_flags |= TRG_QUESTITEM;
-
-					rd_byte(&tmp8u);
-					q_ptr->flags = tmp8u;
-
-					if (z_older_than(10, 3, 11))
-					{
-						if (q_ptr->flags & QUEST_FLAG_PRESET)
-						{
-							q_ptr->dungeon = 0;
-						}
-						else
-						{
-							init_flags = INIT_ASSIGN;
-							creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)i;
-
-							process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
-							creature_ptr->current_floor_ptr->inside_quest = old_inside_quest;
-						}
-					}
-					else
-					{
-						rd_byte(&tmp8u);
-						q_ptr->dungeon = tmp8u;
-					}
-					/* Mark uniques */
-					if (q_ptr->status == QUEST_STATUS_TAKEN || q_ptr->status == QUEST_STATUS_UNTAKEN)
-						if (r_info[q_ptr->r_idx].flags1 & RF1_UNIQUE)
-							r_info[q_ptr->r_idx].flags1 |= RF1_QUESTOR;
-				}
+				strip_bytes(2);
+				strip_bytes(2);
+				continue;
 			}
-			/* Ignore the empty quests from old versions */
+
+			quest_type* const q_ptr = &quest[i];
+
+			rd_s16b(&q_ptr->status);
+			s16b tmp16s;
+			rd_s16b(&tmp16s);
+			q_ptr->level = tmp16s;
+
+			if (z_older_than(11, 0, 6))
+			{
+				q_ptr->complev = 0;
+			}
 			else
 			{
-				/* Ignore quest status */
-				strip_bytes(2);
-
-				/* Ignore quest level */
-				strip_bytes(2);
-
-				/*
-				 * We don't have to care about the other info,
-				 * since status should be 0 for these quests anyway
-				 */
+				rd_byte(&tmp8u);
+				q_ptr->complev = tmp8u;
 			}
+			if (h_older_than(2, 1, 2, 2))
+			{
+				q_ptr->comptime = 0;
+			}
+			else
+			{
+				rd_u32b(&q_ptr->comptime);
+			}
+
+			bool is_quest_running = (q_ptr->status == QUEST_STATUS_TAKEN);
+			is_quest_running |= (!z_older_than(10, 3, 14) && (q_ptr->status == QUEST_STATUS_COMPLETED));
+			is_quest_running |= (!z_older_than(11, 0, 7) && (i >= MIN_RANDOM_QUEST) && (i <= (MIN_RANDOM_QUEST + max_rquests_load)));
+			if (!is_quest_running) continue;
+
+			rd_s16b(&tmp16s);
+			q_ptr->cur_num = (MONSTER_NUMBER)tmp16s;
+			rd_s16b(&tmp16s);
+			q_ptr->max_num = (MONSTER_NUMBER)tmp16s;
+			rd_s16b(&q_ptr->type);
+
+			/* Load quest monster index */
+			rd_s16b(&q_ptr->r_idx);
+
+			if ((q_ptr->type == QUEST_TYPE_RANDOM) && (!q_ptr->r_idx))
+			{
+				determine_random_questor(&quest[i]);
+			}
+
+			/* Load quest item index */
+			rd_s16b(&q_ptr->k_idx);
+
+			if (q_ptr->k_idx)
+				a_info[q_ptr->k_idx].gen_flags |= TRG_QUESTITEM;
+
+			rd_byte(&tmp8u);
+			q_ptr->flags = tmp8u;
+
+			if (z_older_than(10, 3, 11))
+			{
+				if (q_ptr->flags & QUEST_FLAG_PRESET)
+				{
+					q_ptr->dungeon = 0;
+				}
+				else
+				{
+					init_flags = INIT_ASSIGN;
+					creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)i;
+
+					process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+					creature_ptr->current_floor_ptr->inside_quest = old_inside_quest;
+				}
+			}
+			else
+			{
+				rd_byte(&tmp8u);
+				q_ptr->dungeon = tmp8u;
+			}
+
+			if (q_ptr->status == QUEST_STATUS_TAKEN || q_ptr->status == QUEST_STATUS_UNTAKEN)
+				if (r_info[q_ptr->r_idx].flags1 & RF1_UNIQUE)
+					r_info[q_ptr->r_idx].flags1 |= RF1_QUESTOR;
 		}
 
 		/* Quest 18 was removed */
@@ -3706,7 +3611,8 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		if (z_older_than(10, 3, 7)) creature_ptr->ambush_flag = FALSE;
 		else rd_byte((byte *)&creature_ptr->ambush_flag);
 
-		/* Size of the wilderness */
+		s32b wild_x_size;
+		s32b wild_y_size;
 		rd_s32b(&wild_x_size);
 		rd_s32b(&wild_y_size);
 
@@ -3718,9 +3624,9 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		}
 
 		/* Load the wilderness seeds */
-		for (i = 0; i < wild_x_size; i++)
+		for (int i = 0; i < wild_x_size; i++)
 		{
-			for (j = 0; j < wild_y_size; j++)
+			for (int j = 0; j < wild_y_size; j++)
 			{
 				rd_u32b(&wilderness[j][i].seed);
 			}
@@ -3740,7 +3646,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	}
 
 	/* Read the artifact flags */
-	for (i = 0; i < tmp16u; i++)
+	for (int i = 0; i < tmp16u; i++)
 	{
 		artifact_type *a_ptr = &a_info[i];
 
@@ -3780,8 +3686,9 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	}
 
 	/* Read the player_hp array */
-	for (i = 0; i < tmp16u; i++)
+	for (int i = 0; i < tmp16u; i++)
 	{
+		s16b tmp16s;
 		rd_s16b(&tmp16s);
 		creature_ptr->player_hp[i] = (HIT_POINT)tmp16s;
 	}
@@ -3818,7 +3725,6 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	/* Important -- Initialize the magic */
 	mp_ptr = &m_info[creature_ptr->pclass];
 
-
 	/* Read spell info */
 	rd_u32b(&creature_ptr->spell_learned1);
 	rd_u32b(&creature_ptr->spell_learned2);
@@ -3830,7 +3736,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	if (z_older_than(10,0,5))
 	{
 		creature_ptr->learned_spells = 0;
-		for (i = 0; i < 64; i++)
+		for (int i = 0; i < 64; i++)
 		{
 			/* Count known spells */
 			if ((i < 32) ?
@@ -3848,9 +3754,10 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		creature_ptr->add_spells = 0;
 	}
 	else rd_s16b(&creature_ptr->add_spells);
+
 	if (creature_ptr->pclass == CLASS_MINDCRAFTER) creature_ptr->add_spells = 0;
 
-	for (i = 0; i < 64; i++)
+	for (int i = 0; i < 64; i++)
 	{
 		rd_byte(&tmp8u);
 		creature_ptr->spell_order[i] = (SPELL_IDX)tmp8u;
@@ -3864,13 +3771,13 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 
 	/* Read number of towns */
 	rd_u16b(&tmp16u);
-	town_count = tmp16u;
+	int town_count = tmp16u;
 
 	/* Read the stores */
 	rd_u16b(&tmp16u);
-	for (i = 1; i < town_count; i++)
+	for (int i = 1; i < town_count; i++)
 	{
-		for (j = 0; j < tmp16u; j++)
+		for (int j = 0; j < tmp16u; j++)
 		{
 			if (rd_store(creature_ptr, i, j)) return (22);
 		}
@@ -3926,14 +3833,12 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 
 	if (creature_ptr->is_dead)
 	{
-		for (i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
+		for (int i = MIN_RANDOM_QUEST; i < MAX_RANDOM_QUEST + 1; i++)
 		{
 			r_info[quest[i].r_idx].flags1 &= ~(RF1_QUESTOR);
 		}
 	}
 
-
-	/* I'm not dead yet... */
 	if (!creature_ptr->is_dead)
 	{
 		/* Dead players have no dungeon */
@@ -3967,9 +3872,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		}
 	}
 
-
 #ifdef VERIFY_CHECKSUMS
-
 	/* Save the checksum */
 	n_v_check = v_check;
 
@@ -3980,9 +3883,8 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	if (o_v_check != n_v_check)
 	{
 		note(_("チェックサムがおかしい", "Invalid checksum"));
-		return (11);
+		return 11;
 	}
-
 
 	/* Save the encoded checksum */
 	n_x_check = x_check;
@@ -3990,19 +3892,17 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	/* Read the checksum */
 	rd_u32b(&o_x_check);
 
-
 	/* Verify */
 	if (o_x_check != n_x_check)
 	{
 		note(_("エンコードされたチェックサムがおかしい", "Invalid encoded checksum"));
-		return (11);
+		return 11;
 	}
 
 #endif
-
-	/* Success */
 	return 0;
 }
+
 
 /*!
  * @brief ロード処理全体のメイン関数 / Actually read the savefile
@@ -4011,8 +3911,6 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
  */
 errr rd_savefile_new(player_type *player_ptr)
 {
-	errr err;
-
 	/* Grab permissions */
 	safe_setuid_grab();
 
@@ -4024,12 +3922,12 @@ errr rd_savefile_new(player_type *player_ptr)
 	if (!fff) return -1;
 
 	/* Call the sub-function */
-	err = rd_savefile_new_aux(player_ptr);
+	errr err = rd_savefile_new_aux(player_ptr);
 
 	/* Check for errors */
 	if (ferror(fff)) err = -1;
 	my_fclose(fff);
-	return (err);
+	return err;
 }
 
 
@@ -4041,9 +3939,6 @@ errr rd_savefile_new(player_type *player_ptr)
  */
 static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
-	byte tmp8u;
-	u32b tmp32u;
-
 #ifdef VERIFY_CHECKSUMS
 	u32b n_x_check, n_v_check;
 	u32b o_x_check, o_v_check;
@@ -4051,6 +3946,7 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 
 	/* Hack -- decrypt (read xor_byte) */
 	xor_byte = 0;
+	byte tmp8u;
 	rd_byte(&tmp8u);
 
 	/* Clear the checksums */
@@ -4065,12 +3961,12 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 	current_world_ptr->h_ver_major = H_VER_MAJOR;
 
 	/* Verify the sign */
+	u32b tmp32u;
 	rd_u32b(&tmp32u);
 	if (saved_floor_file_sign != tmp32u) return FALSE;
 
 	/* Read -- have error? */
 	if (rd_saved_floor(player_ptr, sf_ptr)) return FALSE;
-
 
 #ifdef VERIFY_CHECKSUMS
 	/* Save the checksum */
@@ -4091,8 +3987,6 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 	/* Verify */
 	if (o_x_check != n_x_check) return FALSE;
 #endif
-
-	/* Success */
 	return TRUE;
 }
 
@@ -4106,20 +4000,6 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
  */
 bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode)
 {
-	FILE *old_fff = NULL;
-	byte old_xor_byte = 0;
-	u32b old_v_check = 0;
-	u32b old_x_check = 0;
-	byte old_h_ver_major = 0;
-	byte old_h_ver_minor = 0;
-	byte old_h_ver_patch = 0;
-	byte old_h_ver_extra = 0;
- 
-	bool ok = TRUE;
-	char floor_savefile[1024];
-
-	byte old_kanji_code = kanji_code;
-
 	/*
 	 * Temporary files are always written in system depended kanji
 	 * code.
@@ -4138,8 +4018,15 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	kanji_code = 1;
 #endif
 
-
 	/* We have one file already opened */
+	FILE *old_fff = NULL;
+	byte old_xor_byte = 0;
+	u32b old_v_check = 0;
+	u32b old_x_check = 0;
+	byte old_h_ver_major = 0;
+	byte old_h_ver_minor = 0;
+	byte old_h_ver_patch = 0;
+	byte old_h_ver_extra = 0;
 	if (mode & SLF_SECOND)
 	{
 		/* Backup original values */
@@ -4154,6 +4041,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	}
 
 	/* floor savefile */
+	char floor_savefile[1024];
 	sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
 
 	/* Grab permissions */
@@ -4166,16 +4054,17 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	safe_setuid_drop();
 
 	/* Couldn't read */
-	if (!fff) ok = FALSE;
+	bool is_save_successful = TRUE;
+	if (!fff) is_save_successful = FALSE;
 
 	/* Attempt to load */
-	if (ok)
+	if (is_save_successful)
 	{
 		/* Load saved floor data from file */
-		ok = load_floor_aux(player_ptr, sf_ptr);
+		is_save_successful = load_floor_aux(player_ptr, sf_ptr);
 
 		/* Check for errors */
-		if (ferror(fff)) ok = FALSE;
+		if (ferror(fff)) is_save_successful = FALSE;
 		my_fclose(fff);
 
 		/* Grab permissions */
@@ -4203,6 +4092,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	}
 
 	/* Restore old knowledge */
+	byte old_kanji_code = kanji_code;
 	kanji_code = old_kanji_code;
-	return ok;
+	return is_save_successful;
 }
