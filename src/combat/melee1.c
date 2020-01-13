@@ -500,23 +500,24 @@ const byte blows_table[12][12] =
  * @return 命中と判定された場合TRUEを返す
  * @note Always miss 5%, always hit 5%, otherwise random.
  */
-bool test_hit_norm(HIT_RELIABILITY chance, ARMOUR_CLASS ac, bool visible)
+bool test_hit_norm(player_type *attacker_ptr, HIT_RELIABILITY chance, ARMOUR_CLASS ac, bool visible)
 {
 	if (!visible) chance = (chance + 1) / 2;
-	return hit_chance(chance, ac) >= randint1(100);
+	return hit_chance(attacker_ptr, chance, ac) >= randint1(100);
 }
 
 /*!
  * @brief モンスターへの命中率の計算
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param to_h 命中値
  * @param ac 敵AC
  * @return 命中確率
  */
-PERCENTAGE hit_chance(HIT_RELIABILITY reli, ARMOUR_CLASS ac)
+PERCENTAGE hit_chance(player_type *attacker_ptr, HIT_RELIABILITY reli, ARMOUR_CLASS ac)
 {
 	PERCENTAGE chance = 5, chance_left = 90;
 	if(reli <= 0) return 5;
-	if(p_ptr->pseikaku == SEIKAKU_NAMAKE) chance_left = (chance_left * 19 + 9) / 20;
+	if(attacker_ptr->pseikaku == SEIKAKU_NAMAKE) chance_left = (chance_left * 19 + 9) / 20;
 	chance += (100 - ((ac * 75) / reli)) * chance_left / 100;
 	if (chance < 5) chance = 5;
 	return chance;
@@ -1209,7 +1210,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
 	chance = (attacker_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
 
 	/* Test for hit */
-	if ((!(r_ptr->flags2 & RF2_QUANTUM) || !randint0(2)) && test_hit_norm(chance, r_ptr->ac, m_ptr->ml))
+	if ((!(r_ptr->flags2 & RF2_QUANTUM) || !randint0(2)) && test_hit_norm(attacker_ptr, chance, r_ptr->ac, m_ptr->ml))
 	{
 		sound(SOUND_HIT);
 		msg_format(_("%sを%sで攻撃した。", "You hit %s with your %s."), m_name, atk_desc);
@@ -1433,7 +1434,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 			success_hit = one_in_(n);
 		}
 		else if ((attacker_ptr->pclass == CLASS_NINJA) && ((backstab || fuiuchi) && !(r_ptr->flagsr & RFR_RES_ALL))) success_hit = TRUE;
-		else success_hit = test_hit_norm(chance, r_ptr->ac, m_ptr->ml);
+		else success_hit = test_hit_norm(attacker_ptr, chance, r_ptr->ac, m_ptr->ml);
 
 		if (mode == HISSATSU_MAJIN)
 		{
