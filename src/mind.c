@@ -464,7 +464,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Gives aura which damages all monsters which attacked you for a while.",
 	"Damages an adjacent monster, and blow it away.",
 	"Fires a large energy ball.",
-	"Dispels all magics which is effecting a monster.",
+	"Dispels all magics which is affecting a monster.",
 	"Summons ghosts.",
 	"Generates a huge ball of frame which centered on you.",
 	"Fires a long, powerful energy beam.",

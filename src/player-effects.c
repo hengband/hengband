@@ -3397,26 +3397,25 @@ bool hp_player(player_type *creature_ptr, int num)
  */
 static concptr desc_stat_pos[] =
 {
-	_("強く", "strong"),
-	_("知的に", "smart"),
-	_("賢く", "wise"),
-	_("器用に", "dextrous"),
-	_("健康に", "healthy"),
-	_("美しく", "cute")
+	_("強く", "stronger"),
+	_("知的に", "smarter"),
+	_("賢く", "wiser"),
+	_("器用に", "more dextrous"),
+	_("健康に", "healthier"),
+	_("美しく", "cuter")
 };
-
 
 /*
  * Array of stat "descriptions"
  */
 static concptr desc_stat_neg[] =
 {
-	_("弱く", "weak"),
-	_("無知に", "stupid"),
-	_("愚かに", "naive"),
-	_("不器用に", "clumsy"),
-	_("不健康に", "sickly"),
-	_("醜く", "ugly")
+	_("弱く", "weaker"),
+	_("無知に", "stupider"),
+	_("愚かに", "more naive"),
+	_("不器用に", "clumsier"),
+	_("不健康に", "more sickly"),
+	_("醜く", "uglier")
 };
 
 
@@ -3451,7 +3450,7 @@ bool do_dec_stat(player_type *creature_ptr, int stat)
 	/* Attempt to reduce the stat */
 	if (dec_stat(creature_ptr, stat, 10, (ironman_nightmare && !randint0(13))))
 	{
-		msg_format(_("ひどく%sなった気がする。", "You feel very %s."), desc_stat_neg[stat]);
+		msg_format(_("ひどく%sなった気がする。", "You feel %s."), desc_stat_neg[stat]);
 
 		/* Notice effect */
 		return TRUE;
@@ -3470,7 +3469,7 @@ bool do_res_stat(player_type *creature_ptr, int stat)
 	/* Attempt to increase */
 	if (res_stat(creature_ptr, stat))
 	{
-		msg_format(_("元通りに%sなった気がする。", "You feel more %s."), desc_stat_pos[stat]);
+		msg_format(_("元通りに%sなった気がする。", "You feel %s."), desc_stat_pos[stat]);
 		return TRUE;
 	}
 
@@ -3505,7 +3504,7 @@ bool do_inc_stat(player_type *creature_ptr, int stat)
 		else if (stat == A_CON)
 			chg_virtue(creature_ptr, V_VITALITY, 1);
 
-		msg_format(_("ワーオ！とても%sなった！", "Wow!  You feel very %s!"), desc_stat_pos[stat]);
+		msg_format(_("ワーオ！とても%sなった！", "Wow! You feel %s!"), desc_stat_pos[stat]);
 
 		return TRUE;
 	}
@@ -3513,7 +3512,7 @@ bool do_inc_stat(player_type *creature_ptr, int stat)
 	/* Restoration worked */
 	if (res)
 	{
-		msg_format(_("元通りに%sなった気がする。", "You feel more %s."), desc_stat_pos[stat]);
+		msg_format(_("元通りに%sなった気がする。", "You feel %s."), desc_stat_pos[stat]);
 
 		return TRUE;
 	}
