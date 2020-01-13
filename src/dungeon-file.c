@@ -537,91 +537,6 @@ static concptr r_a_ability_flags2[] =
 	"S_UNIQUE"
 };
 
-#if 0
-/*!
- * モンスター特性トークン(発動型能力3) /
- * Monster race flags
- */
-static concptr r_a_ability_flags3[] =
-{
-	"XXXA3X00",
-	"XXXA3X01",
-	"XXXA3X02",
-	"XXXA3X03",
-	"XXXA3X04",
-	"XXXA3X05",
-	"XXXA3X06",
-	"XXXA3X07",
-	"XXXA3X08",
-	"XXXA3X09",
-	"XXXA3X10",
-	"XXXA3X11",
-	"XXXA3X12",
-	"XXXA3X13",
-	"XXXA3X14",
-	"XXXA3X15",
-	"XXXA3X16",
-	"XXXA3X17",
-	"XXXA3X18",
-	"XXXA3X19",
-	"XXXA3X20",
-	"XXXA3X21",
-	"XXXA3X22",
-	"XXXA3X23",
-	"XXXA3X24",
-	"XXXA3X25",
-	"XXXA3X26",
-	"XXXA3X27",
-	"XXXA3X28",
-	"XXXA3X29",
-	"XXXA3X30",
-	"XXXA3X31",
-};
-#endif
-
-#if 0
-/*!
- * モンスター特性トークン(発動型能力4) /
- * Monster race flags
- */
-static concptr r_a_ability_flags4[] =
-{
-	"XXXA4X00",
-	"XXXA4X01",
-	"XXXA4X02",
-	"XXXA4X03",
-	"XXXA4X04",
-	"XXXA4X05",
-	"XXXA4X06",
-	"XXXA4X07",
-	"XXXA4X08",
-	"XXXA4X09",
-	"XXXA4X10",
-	"XXXA4X11",
-	"XXXA4X12",
-	"XXXA4X13",
-	"XXXA4X14",
-	"XXXA4X15",
-	"XXXA4X16",
-	"XXXA4X17",
-	"XXXA4X18",
-	"XXXA4X19",
-	"XXXA4X20",
-	"XXXA4X21",
-	"XXXA4X22",
-	"XXXA4X23",
-	"XXXA4X24",
-	"XXXA4X25",
-	"XXXA4X26",
-	"XXXA4X27",
-	"XXXA4X28",
-	"XXXA4X29",
-	"XXXA4X30",
-	"XXXA4X31",
-};
-#endif
-
-
 /*!
  * モンスター特性トークンの定義7 /
  * Monster race flags
@@ -1257,10 +1172,10 @@ errr parse_v_info(char *buf, header *head)
 		i = atoi(buf + 2);
 
 		/* Verify information */
-		if (i <= error_idx) return (4);
+		if (i <= error_idx) return 4;
 
 		/* Verify information */
-		if (i >= head->info_num) return (2);
+		if (i >= head->info_num) return 2;
 
 		/* Save the index */
 		error_idx = i;
@@ -1269,11 +1184,11 @@ errr parse_v_info(char *buf, header *head)
 		v_ptr = &v_info[i];
 
 		/* Store the name */
-		if (!add_name(&v_ptr->name, head, s)) return (7);
+		if (!add_name(&v_ptr->name, head, s)) return 7;
 	}
 
 	/* There better be a current v_ptr */
-	else if (!v_ptr) return (3);
+	else if (!v_ptr) return 3;
 
 	/* Process 'D' for "Description" */
 	else if (buf[0] == 'D')
@@ -1282,7 +1197,7 @@ errr parse_v_info(char *buf, header *head)
 		s = buf + 2;
 
 		/* Store the text */
-		if (!add_text(&v_ptr->text, head, s, FALSE)) return (7);
+		if (!add_text(&v_ptr->text, head, s, FALSE)) return 7;
 	}
 
 	/* Process 'X' for "Extra info" (one line only) */
@@ -1301,7 +1216,7 @@ errr parse_v_info(char *buf, header *head)
 		v_ptr->wid = (POSITION)wid;
 	}
 
-	else	return (6);
+	else	return 6;
 
 	/* Success */
 	return 0;
@@ -1330,10 +1245,10 @@ errr parse_s_info(char *buf, header *head)
 		i = atoi(buf + 2);
 
 		/* Verify information */
-		if (i <= error_idx) return (4);
+		if (i <= error_idx) return 4;
 
 		/* Verify information */
-		if (i >= head->info_num) return (2);
+		if (i >= head->info_num) return 2;
 
 		/* Save the index */
 		error_idx = i;
@@ -1343,7 +1258,7 @@ errr parse_s_info(char *buf, header *head)
 	}
 
 	/* There better be a current s_ptr */
-	else if (!s_ptr) return (3);
+	else if (!s_ptr) return 3;
 
 	/* Process 'W' for "Weapon exp" */
 	else if (buf[0] == 'W')
@@ -1360,7 +1275,7 @@ errr parse_s_info(char *buf, header *head)
 			&tval, &sval, &start, &max)) return 1;
 
 		if (start < EXP_LEVEL_UNSKILLED || start > EXP_LEVEL_MASTER
-			|| max < EXP_LEVEL_UNSKILLED || max > EXP_LEVEL_MASTER) return (8);
+			|| max < EXP_LEVEL_UNSKILLED || max > EXP_LEVEL_MASTER) return 8;
 
 		/* Save the values */
 		s_ptr->w_start[tval][sval] = exp_conv_table[start];
@@ -1377,7 +1292,7 @@ errr parse_s_info(char *buf, header *head)
 			&num, &start, &max)) return 1;
 
 		if (start < WEAPON_EXP_UNSKILLED || start > WEAPON_EXP_MASTER
-			|| max < WEAPON_EXP_UNSKILLED || max > WEAPON_EXP_MASTER) return (8);
+			|| max < WEAPON_EXP_UNSKILLED || max > WEAPON_EXP_MASTER) return 8;
 
 		/* Save the values */
 		s_ptr->s_start[num] = (SUB_EXP)start;
@@ -1385,7 +1300,7 @@ errr parse_s_info(char *buf, header *head)
 	}
 
 
-	else return (6);
+	else return 6;
 
 	/* Success */
 	return 0;
@@ -1419,10 +1334,10 @@ errr parse_m_info(char *buf, header *head)
 		i = atoi(buf + 2);
 
 		/* Verify information */
-		if (i <= error_idx) return (4);
+		if (i <= error_idx) return 4;
 
 		/* Verify information */
-		if (i >= head->info_num) return (2);
+		if (i >= head->info_num) return 2;
 
 		/* Save the index */
 		error_idx = i;
@@ -1432,7 +1347,7 @@ errr parse_m_info(char *buf, header *head)
 	}
 
 	/* There better be a current m_ptr */
-	else if (!m_ptr) return (3);
+	else if (!m_ptr) return 3;
 
 	/* Process 'I' for "Info" (one line only) */
 	else if (buf[0] == 'I')
@@ -1456,7 +1371,7 @@ errr parse_m_info(char *buf, header *head)
 		else if (streq(book, "MUSIC")) m_ptr->spell_book = TV_MUSIC_BOOK;
 		else if (streq(book, "HISSATSU")) m_ptr->spell_book = TV_HISSATSU_BOOK;
 		else if (streq(book, "NONE")) m_ptr->spell_book = 0;
-		else return (5);
+		else return 5;
 
 		stat = s;
 
@@ -1475,7 +1390,7 @@ errr parse_m_info(char *buf, header *head)
 		else if (streq(stat, "DEX")) m_ptr->spell_stat = A_DEX;
 		else if (streq(stat, "CON")) m_ptr->spell_stat = A_CON;
 		else if (streq(stat, "CHR")) m_ptr->spell_stat = A_CHR;
-		else return (5);
+		else return 5;
 
 
 		/* Scan for the values */
@@ -1514,7 +1429,7 @@ errr parse_m_info(char *buf, header *head)
 		m_ptr->info[realm][magic_idx].sexp = (EXP)exp;
 		magic_idx++;
 	}
-	else return (6);
+	else return 6;
 
 	return 0;
 }
@@ -1622,10 +1537,10 @@ errr parse_f_info(char *buf, header *head)
 		i = atoi(buf + 2);
 
 		/* Verify information */
-		if (i <= error_idx) return (4);
+		if (i <= error_idx) return 4;
 
 		/* Verify information */
-		if (i >= head->info_num) return (2);
+		if (i >= head->info_num) return 2;
 
 		/* Save the index */
 		error_idx = i;
@@ -1637,7 +1552,7 @@ errr parse_f_info(char *buf, header *head)
 		if (s)
 		{
 			/* Store the tag */
-			if (!add_tag(&f_ptr->tag, head, s)) return (7);
+			if (!add_tag(&f_ptr->tag, head, s)) return 7;
 		}
 
 		/* Default "mimic" */
@@ -1651,13 +1566,13 @@ errr parse_f_info(char *buf, header *head)
 	}
 
 	/* There better be a current f_ptr */
-	else if (!f_ptr) return (3);
+	else if (!f_ptr) return 3;
 
 #ifdef JP
 	else if (buf[0] == 'J')
 	{
 		/* Store the name */
-		if (!add_name(&f_ptr->name, head, buf + 2)) return (7);
+		if (!add_name(&f_ptr->name, head, buf + 2)) return 7;
 	}
 
 	else if (buf[0] == 'E')
@@ -1676,7 +1591,7 @@ errr parse_f_info(char *buf, header *head)
 		s = buf + 2;
 
 		/* Store the name */
-		if (!add_name(&f_ptr->name, head, s)) return (7);
+		if (!add_name(&f_ptr->name, head, s)) return 7;
 	}
 #endif
 
@@ -1861,7 +1776,7 @@ errr parse_f_info(char *buf, header *head)
 			f_ptr->state[i].result_tag = offset;
 		}
 	}
-	else return (6);
+	else return 6;
 
 	return 0;
 }
@@ -2039,10 +1954,10 @@ errr parse_k_info(char *buf, header *head)
 		i = atoi(buf + 2);
 
 		/* Verify information */
-		if (i <= error_idx) return (4);
+		if (i <= error_idx) return 4;
 
 		/* Verify information */
-		if (i >= head->info_num) return (2);
+		if (i >= head->info_num) return 2;
 
 		/* Save the index */
 		error_idx = i;
@@ -2064,16 +1979,16 @@ errr parse_k_info(char *buf, header *head)
 			*flavor++ = '\0';
 
 			/* Store the flavor */
-			if (!add_name(&k_ptr->flavor_name, head, flavor)) return (7);
+			if (!add_name(&k_ptr->flavor_name, head, flavor)) return 7;
 		}
 
 		/* Store the name */
-		if (!add_name(&k_ptr->name, head, s)) return (7);
+		if (!add_name(&k_ptr->name, head, s)) return 7;
 #endif
 	}
 
 	/* There better be a current k_ptr */
-	else if (!k_ptr) return (3);
+	else if (!k_ptr) return 3;
 
 
 #ifdef JP
@@ -2101,11 +2016,11 @@ errr parse_k_info(char *buf, header *head)
 			*flavor++ = '\0';
 
 			/* Store the flavor */
-			if (!add_name(&k_ptr->flavor_name, head, flavor)) return (7);
+			if (!add_name(&k_ptr->flavor_name, head, flavor)) return 7;
 		}
 
 		/* Store the name */
-		if (!add_name(&k_ptr->name, head, s)) return (7);
+		if (!add_name(&k_ptr->name, head, s)) return 7;
 	}
 #endif
 
@@ -2125,7 +2040,7 @@ errr parse_k_info(char *buf, header *head)
 #endif
 
 		/* Store the text */
-		if (!add_text(&k_ptr->text, head, s, TRUE)) return (7);
+		if (!add_text(&k_ptr->text, head, s, TRUE)) return 7;
 	}
 
 	/* Process 'G' for "Graphics" (one line only) */
@@ -2238,7 +2153,7 @@ errr parse_k_info(char *buf, header *head)
 		}
 		else
 		{
-			return (5);
+			return 5;
 		}
 	}
 
@@ -2259,13 +2174,13 @@ errr parse_k_info(char *buf, header *head)
 			}
 
 			/* Parse this entry */
-			if (0 != grab_one_kind_flag(k_ptr, s)) return (5);
+			if (0 != grab_one_kind_flag(k_ptr, s)) return 5;
 
 			/* Start the next entry */
 			s = t;
 		}
 	}
-	else return (6);
+	else return 6;
 
 	return 0;
 }
@@ -2331,10 +2246,10 @@ errr parse_a_info(char *buf, header *head)
 		i = atoi(buf + 2);
 
 		/* Verify information */
-		if (i < error_idx) return (4);
+		if (i < error_idx) return 4;
 
 		/* Verify information */
-		if (i >= head->info_num) return (2);
+		if (i >= head->info_num) return 2;
 
 		/* Save the index */
 		error_idx = i;
@@ -2349,12 +2264,12 @@ errr parse_a_info(char *buf, header *head)
 		add_flag(a_ptr->flags, TR_IGNORE_COLD);
 #ifdef JP
 		/* Store the name */
-		if (!add_name(&a_ptr->name, head, s)) return (7);
+		if (!add_name(&a_ptr->name, head, s)) return 7;
 #endif
 	}
 
 	/* There better be a current a_ptr */
-	else if (!a_ptr) return (3);
+	else if (!a_ptr) return 3;
 
 
 #ifdef JP
@@ -2371,7 +2286,7 @@ errr parse_a_info(char *buf, header *head)
 		s = buf + 2;
 
 		/* Store the name */
-		if (!add_name(&a_ptr->name, head, s)) return (7);
+		if (!add_name(&a_ptr->name, head, s)) return 7;
 	}
 #endif
 
@@ -2391,7 +2306,7 @@ errr parse_a_info(char *buf, header *head)
 #endif
 
 		/* Store the text */
-		if (!add_text(&a_ptr->text, head, s, TRUE)) return (7);
+		if (!add_text(&a_ptr->text, head, s, TRUE)) return 7;
 	}
 
 
@@ -2455,7 +2370,7 @@ errr parse_a_info(char *buf, header *head)
 		}
 		else
 		{
-			return (5);
+			return 5;
 		}
 	}
 
@@ -2476,13 +2391,13 @@ errr parse_a_info(char *buf, header *head)
 			}
 
 			/* Parse this entry */
-			if (0 != grab_one_artifact_flag(a_ptr, s)) return (5);
+			if (0 != grab_one_artifact_flag(a_ptr, s)) return 5;
 
 			/* Start the next entry */
 			s = t;
 		}
 	}
-	else return (6);
+	else return 6;
 
 	return 0;
 }
@@ -2554,10 +2469,10 @@ errr parse_e_info(char *buf, header *head)
 		i = atoi(buf + 2);
 
 		/* Verify information */
-		if (i < error_idx) return (4);
+		if (i < error_idx) return 4;
 
 		/* Verify information */
-		if (i >= head->info_num) return (2);
+		if (i >= head->info_num) return 2;
 
 		/* Save the index */
 		error_idx = i;
@@ -2566,12 +2481,12 @@ errr parse_e_info(char *buf, header *head)
 		e_ptr = &e_info[i];
 #ifdef JP
 		/* Store the name */
-		if (!add_name(&e_ptr->name, head, s)) return (7);
+		if (!add_name(&e_ptr->name, head, s)) return 7;
 #endif
 	}
 
 	/* There better be a current e_ptr */
-	else if (!e_ptr) return (3);
+	else if (!e_ptr) return 3;
 
 
 #ifdef JP
@@ -2588,23 +2503,9 @@ errr parse_e_info(char *buf, header *head)
 		s = buf + 2;
 
 		/* Store the name */
-		if (!add_name(&e_ptr->name, head, s)) return (7);
+		if (!add_name(&e_ptr->name, head, s)) return 7;
 	}
 #endif
-#if 0
-
-	/* Process 'D' for "Description" */
-	else if (buf[0] == 'D')
-	{
-		/* Acquire the text */
-		s = buf + 2;
-
-		/* Store the text */
-		if (!add_text(&e_ptr->text, head, s, TRUE)) return (7);
-	}
-
-#endif
-
 	/* Process 'X' for "Xtra" (one line only) */
 	else if (buf[0] == 'X')
 	{
@@ -2662,7 +2563,7 @@ errr parse_e_info(char *buf, header *head)
 		}
 		else
 		{
-			return (5);
+			return 5;
 		}
 	}
 
@@ -2683,14 +2584,14 @@ errr parse_e_info(char *buf, header *head)
 			}
 
 			/* Parse this entry */
-			if (0 != grab_one_ego_item_flag(e_ptr, s)) return (5);
+			if (0 != grab_one_ego_item_flag(e_ptr, s)) return 5;
 
 			/* Start the next entry */
 			s = t;
 		}
 	}
-	else return (6);
-	
+	else return 6;
+
 	return 0;
 }
 
@@ -2786,10 +2687,10 @@ errr parse_r_info(char *buf, header *head)
 		i = atoi(buf + 2);
 
 		/* Verify information */
-		if (i < error_idx) return (4);
+		if (i < error_idx) return 4;
 
 		/* Verify information */
-		if (i >= head->info_num) return (2);
+		if (i >= head->info_num) return 2;
 
 		/* Save the index */
 		error_idx = i;
@@ -2798,12 +2699,12 @@ errr parse_r_info(char *buf, header *head)
 		r_ptr = &r_info[i];
 #ifdef JP
 		/* Store the name */
-		if (!add_name(&r_ptr->name, head, s)) return (7);
+		if (!add_name(&r_ptr->name, head, s)) return 7;
 #endif
 	}
 
 	/* There better be a current r_ptr */
-	else if (!r_ptr) return (3);
+	else if (!r_ptr) return 3;
 
 
 #ifdef JP
@@ -2815,7 +2716,7 @@ errr parse_r_info(char *buf, header *head)
 		s = buf + 2;
 
 		/* Store the name */
-		if (!add_name(&r_ptr->E_name, head, s)) return (7);
+		if (!add_name(&r_ptr->E_name, head, s)) return 7;
 	}
 #else
 	else if (buf[0] == 'E')
@@ -2824,7 +2725,7 @@ errr parse_r_info(char *buf, header *head)
 		s = buf + 2;
 
 		/* Store the name */
-		if (!add_name(&r_ptr->name, head, s)) return (7);
+		if (!add_name(&r_ptr->name, head, s)) return 7;
 	}
 #endif
 	/* Process 'D' for "Description" */
@@ -2843,7 +2744,7 @@ errr parse_r_info(char *buf, header *head)
 #endif
 
 		/* Store the text */
-		if (!add_text(&r_ptr->text, head, s, TRUE)) return (7);
+		if (!add_text(&r_ptr->text, head, s, TRUE)) return 7;
 	}
 
 	/* Process 'G' for "Graphics" (one line only) */
@@ -2999,7 +2900,7 @@ errr parse_r_info(char *buf, header *head)
 			}
 
 			/* Parse this entry */
-			if (0 != grab_one_basic_flag(r_ptr, s)) return (5);
+			if (0 != grab_one_basic_flag(r_ptr, s)) return 5;
 
 			/* Start the next entry */
 			s = t;
@@ -3034,7 +2935,7 @@ errr parse_r_info(char *buf, header *head)
 			}
 
 			/* Parse this entry */
-			if (0 != grab_one_spell_flag(r_ptr, s)) return (5);
+			if (0 != grab_one_spell_flag(r_ptr, s)) return 5;
 
 			/* Start the next entry */
 			s = t;
@@ -3065,7 +2966,7 @@ errr parse_r_info(char *buf, header *head)
 		if (3 != sscanf(buf + 2, "%d", &val)) return 1;
 		r_ptr->arena_ratio = (PERCENTAGE)val;
 	}
-	else return (6);
+	else return 6;
 
 	return 0;
 }
@@ -3179,10 +3080,10 @@ errr parse_d_info(char *buf, header *head)
 		i = atoi(buf + 2);
 
 		/* Verify information */
-		if (i < error_idx) return (4);
+		if (i < error_idx) return 4;
 
 		/* Verify information */
-		if (i >= head->info_num) return (2);
+		if (i >= head->info_num) return 2;
 
 		/* Save the index */
 		error_idx = i;
@@ -3191,7 +3092,7 @@ errr parse_d_info(char *buf, header *head)
 		d_ptr = &d_info[i];
 #ifdef JP
 		/* Store the name */
-		if (!add_name(&d_ptr->name, head, s)) return (7);
+		if (!add_name(&d_ptr->name, head, s)) return 7;
 #endif
 	}
 
@@ -3204,7 +3105,7 @@ errr parse_d_info(char *buf, header *head)
 		s = buf + 2;
 
 		/* Store the name */
-		if (!add_name(&d_ptr->name, head, s)) return (7);
+		if (!add_name(&d_ptr->name, head, s)) return 7;
 	}
 #endif
 
@@ -3224,7 +3125,7 @@ errr parse_d_info(char *buf, header *head)
 #endif
 
 		/* Store the text */
-		if (!add_text(&d_ptr->text, head, s, TRUE)) return (7);
+		if (!add_text(&d_ptr->text, head, s, TRUE)) return 7;
 	}
 
 	/* Process 'W' for "More Info" (one line only) */
@@ -3378,7 +3279,7 @@ errr parse_d_info(char *buf, header *head)
 			}
 
 			/* Parse this entry */
-			if (0 != grab_one_dungeon_flag(d_ptr, s)) return (5);
+			if (0 != grab_one_dungeon_flag(d_ptr, s)) return 5;
 
 			/* Start the next entry */
 			s = t;
@@ -3416,7 +3317,7 @@ errr parse_d_info(char *buf, header *head)
 			}
 
 			/* Parse this entry */
-			if (0 != grab_one_basic_monster_flag(d_ptr, s)) return (5);
+			if (0 != grab_one_basic_monster_flag(d_ptr, s)) return 5;
 
 			/* Start the next entry */
 			s = t;
@@ -3448,13 +3349,13 @@ errr parse_d_info(char *buf, header *head)
 			}
 
 			/* Parse this entry */
-			if (0 != grab_one_spell_monster_flag(d_ptr, s)) return (5);
+			if (0 != grab_one_spell_monster_flag(d_ptr, s)) return 5;
 
 			/* Start the next entry */
 			s = t;
 		}
 	}
-	else return (6);
+	else return 6;
 
 	return 0;
 }
@@ -4576,223 +4477,6 @@ static concptr process_dungeon_file_expr(player_type *player_ptr, char **sp, cha
 	return v;
 }
 
-#if 0
-void write_r_info_txt(void)
-{
-	int i, j, z, fc, bc;
-	int dlen;
-
-	concptr flags[32 * 10];
-
-	u32b f_ptr[10];
-	concptr *n_ptr[10];
-
-	monster_race *r_ptr;
-
-	monster_blow *b_ptr;
-
-	FILE *fff = fopen("output.txt", "wt");
-
-	concptr desc;
-
-	BIT_FLAGS mode = -1;
-
-	if (!fff) return;
-
-	fprintf(fff, "# File: r_info.txt (autogenerated)\n\n");
-
-	fprintf(fff, "# Version stamp (required)\n\n");
-
-	/* Write Version */
-	fprintf(fff, "V:%d.%d.%d\n\n\n", r_head->v_major, r_head->v_minor, r_head->v_patch);
-
-	/* Write a note */
-	fprintf(fff, "##### The Player #####\n\n");
-
-	for (z = -1; z < alloc_race_size; z++)
-	{
-		/* Output the monsters in order */
-		i = (z >= 0) ? alloc_race_table[z].index : 0;
-
-		/* Acquire the monster */
-		r_ptr = &r_info[i];
-
-		/* Ignore empty monsters */
-		if (!strlen(r_name + r_ptr->name)) continue;
-
-		/* Ignore useless monsters */
-		if (i && !r_ptr->speed) continue;
-
-		/* Write a note if necessary */
-		if (i && (!r_ptr->level != !mode))
-		{
-			/* Note the town */
-			if (!r_ptr->level)
-			{
-				fprintf(fff, "\n##### Town monsters #####\n\n");
-			}
-			/* Note the dungeon */
-			else
-			{
-				fprintf(fff, "\n##### Normal monsters #####\n\n");
-			}
-
-			/* Record the change */
-			mode = r_ptr->level;
-		}
-
-		/* Acquire the flags */
-		f_ptr[0] = r_ptr->flags1; n_ptr[0] = r_info_flags1;
-		f_ptr[1] = r_ptr->flags2; n_ptr[1] = r_info_flags2;
-		f_ptr[2] = r_ptr->flags3; n_ptr[2] = r_info_flags3;
-		f_ptr[3] = r_ptr->flags4; n_ptr[3] = r_info_flags4;
-		f_ptr[4] = r_ptr->a_ability_flags1; n_ptr[4] = r_a_ability_flags1;
-		f_ptr[5] = r_ptr->a_ability_flags2; n_ptr[5] = r_a_ability_flags2;
-		f_ptr[6] = r_ptr->flags7; n_ptr[6] = r_info_flags7;
-		f_ptr[7] = r_ptr->flags8; n_ptr[7] = r_info_flags8;
-		f_ptr[8] = r_ptr->flags9; n_ptr[8] = r_info_flags9;
-		f_ptr[9] = r_ptr->flagsr; n_ptr[9] = r_info_flagsr;
-
-		/* Write New/Number/Name */
-		fprintf(fff, "N:%d:%s\n", z + 1, r_name + r_ptr->name);
-
-		/* Write Graphic */
-		fprintf(fff, "G:%c:%c\n", r_ptr->d_char, color_char[r_ptr->d_attr]);
-
-		/* Write Information */
-		fprintf(fff, "I:%d:%dd%d:%d:%d:%d\n", r_ptr->speed, r_ptr->hdice, r_ptr->hside,
-			r_ptr->aaf, r_ptr->ac, r_ptr->sleep);
-
-		/* Write more information */
-		fprintf(fff, "W:%d:%d:%d:%ld\n", r_ptr->level, r_ptr->rarity, r_ptr->extra, r_ptr->mexp);
-
-		/* Write Blows */
-		for (j = 0; j < 4; j++)
-		{
-			b_ptr = &(r_ptr->blow[j]);
-
-			/* Stop when done */
-			if (!b_ptr->method) break;
-
-			/* Write the blows */
-			fprintf(fff, "B:%s:%s:%dd%d\n", r_info_blow_method[b_ptr->method],
-				r_info_blow_effect[b_ptr->effect],
-				b_ptr->d_dice, b_ptr->d_side);
-		}
-		for (fc = 0, j = 0; j < 32 * 3; j++)
-		{
-			/* Check this flag */
-			if (f_ptr[j / 32] & (1L << (j % 32))) flags[fc++] = n_ptr[j / 32][j % 32];
-		}
-
-		/* Extract the extra flags */
-		for (j = 32 * 6; j < 32 * 10; j++)
-		{
-			/* Check this flag */
-			if (f_ptr[j / 32] & (1L << (j % 32))) flags[fc++] = n_ptr[j / 32][j % 32];
-		}
-
-		/* Write the flags */
-		for (j = 0; j < fc;)
-		{
-			char buf[160];
-
-			/* Start the line */
-			sprintf(buf, "F:");
-
-			for (bc = 0; (bc < 60) && (j < fc); j++)
-			{
-				char t[80];
-
-				/* Format the flag */
-				sprintf(t, "%s%s", flags[j], (j < fc - 1) ? " | " : "");
-
-				/* Add it to the buffer */
-				strcat(buf, t);
-
-				/* Note the length */
-				bc += strlen(t);
-			}
-
-			/* Done with this line; write it */
-			fprintf(fff, "%s\n", buf);
-		}
-
-		/* Write Spells if applicable */
-		if (r_ptr->freq_spell)
-		{
-			/* Write the frequency */
-			fprintf(fff, "S:1_IN_%d | \n", 100 / r_ptr->freq_spell);
-
-			/* Extract the spell flags */
-			for (fc = 0, j = 96; j < 192; j++)
-			{
-				/* Check this flag */
-				if (f_ptr[j / 32] & (1L << (j % 32))) flags[fc++] = n_ptr[j / 32][j % 32];
-			}
-
-			/* Write the flags */
-			for (j = 0; j < fc;)
-			{
-				char buf[160], *t;
-
-				/* Start the line */
-				sprintf(buf, "S:");
-
-				for (bc = 0, t = buf + 2; (bc < 60) && (j < fc); j++)
-				{
-					int tlen;
-
-					/* Format the flag */
-					sprintf(t, "%s%s", flags[j], (j < fc - 1) ? " | " : "");
-
-					tlen = strlen(t);
-
-					/* Note the length */
-					bc += tlen;
-
-					/* Advance */
-					t += tlen;
-				}
-
-				/* Done with this line; write it */
-				fprintf(fff, "%s\n", buf);
-			}
-		}
-
-		/* Acquire the description */
-		desc = r_text + r_ptr->text;
-		dlen = strlen(desc);
-
-		/* Write Description */
-		for (j = 0; j < dlen;)
-		{
-			char buf[160], *t;
-
-			/* Start the line */
-			sprintf(buf, "D:");
-
-			for (bc = 0, t = buf + 2; ((bc < 60) || !iswspace(desc[j])) && (j < dlen); j++, bc++, t++)
-			{
-				*t = desc[j];
-			}
-
-			/* Terminate it */
-			*t = '\0';
-
-			/* Done with this line; write it */
-			fprintf(fff, "%s\n", buf);
-		}
-
-		/* Space between entries */
-		fprintf(fff, "\n");
-	}
-
-	fclose(fff);
-	}
-
-#endif
-
 
 /*!
  * @brief クエスト用固定ダンジョン生成時のメインルーチン
@@ -4813,7 +4497,7 @@ errr process_dungeon_file(player_type *player_ptr, concptr name, int ymin, int x
 	fp = my_fopen(buf, "r");
 
 	/* No such file */
-	if (!fp) return (-1);
+	if (!fp) return -1;
 
 	/* Process the file */
 	int num = -1;

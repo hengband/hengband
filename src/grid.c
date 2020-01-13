@@ -478,6 +478,7 @@ void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y
 
 
 /*
+ * todo ここにplayer_type を追加した時のコンパイルエラーに対処できなかったので保留
  * Memorize interesting viewable object/features in the given grid
  *
  * This function should only be called on "legal" grids.

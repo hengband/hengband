@@ -1029,7 +1029,7 @@ void aggravate_monsters(player_type *caster_ptr, MONSTER_IDX who)
 			/* Wake up */
 			if (MON_CSLEEP(m_ptr))
 			{
-				(void)set_monster_csleep(i, 0);
+				(void)set_monster_csleep(caster_ptr, i, 0);
 				sleep = TRUE;
 			}
 			if (!is_pet(m_ptr)) m_ptr->mflag2 |= MFLAG2_NOPET;
@@ -1040,7 +1040,7 @@ void aggravate_monsters(player_type *caster_ptr, MONSTER_IDX who)
 		{
 			if (!is_pet(m_ptr))
 			{
-				(void)set_monster_fast(i, MON_FAST(m_ptr) + 100);
+				(void)set_monster_fast(caster_ptr, i, MON_FAST(m_ptr) + 100);
 				speed = TRUE;
 			}
 		}
@@ -1101,7 +1101,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 
 		if (MON_CSLEEP(m_ptr))
 		{
-			(void)set_monster_csleep(m_idx, 0);
+			(void)set_monster_csleep(caster_ptr, m_idx, 0);
 			if (m_ptr->ml)
 			{
 				msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
@@ -1502,7 +1502,7 @@ static void cave_temp_room_lite(player_type *caster_ptr)
 			if (MON_CSLEEP(m_ptr) && (randint0(100) < chance))
 			{
 				/* Wake up! */
-				(void)set_monster_csleep(g_ptr->m_idx, 0);
+				(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
 
 				/* Notice the "waking up" */
 				if (m_ptr->ml)
@@ -2192,7 +2192,7 @@ bool teleport_swap(player_type *caster_ptr, DIRECTION dir)
 	m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
 
-	(void)set_monster_csleep(g_ptr->m_idx, 0);
+	(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
 
 	if (r_ptr->flagsr & RFR_RES_TELE)
 	{
@@ -2598,6 +2598,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 {
 	BIT_FLAGS flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
 	bool is_first_curse = TRUE;
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	while (is_first_curse || one_in_(3) && !stop_ty)
 	{
 		is_first_curse = FALSE;
@@ -2644,7 +2645,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 			(*count) += activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, FALSE);
 			if (!one_in_(6)) break;
 		case 7: case 8: case 9: case 18:
-			(*count) += summon_specific(0, target_ptr->y, target_ptr->x, target_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+			(*count) += summon_specific(0, target_ptr->y, target_ptr->x, floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			if (!one_in_(6)) break;
 		case 10: case 11: case 12:
 			msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away..."));
@@ -2674,9 +2675,9 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 			lose_all_info(target_ptr);
 			if (!one_in_(6)) break;
 		case 25:
-			if ((target_ptr->current_floor_ptr->dun_level > 65) && !stop_ty)
+			if ((floor_ptr->dun_level > 65) && !stop_ty)
 			{
-				(*count) += summon_cyber(-1, target_ptr->y, target_ptr->x);
+				(*count) += summon_cyber(floor_ptr, -1, target_ptr->y, target_ptr->x);
 				stop_ty = TRUE;
 				break;
 			}
@@ -3263,6 +3264,7 @@ void wild_magic(player_type *caster_ptr, int spell)
 	if (type < SUMMON_MOLD) type = SUMMON_MOLD;
 	else if (type > SUMMON_MIMIC) type = SUMMON_MIMIC;
 
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	switch (randint1(spell) + randint1(8) + 1)
 	{
 	case 1:
@@ -3334,7 +3336,7 @@ void wild_magic(player_type *caster_ptr, int spell)
 	case 35:
 		for (int counter = 0; counter < 8; counter++)
 		{
-			(void)summon_specific(0, caster_ptr->y, caster_ptr->x, (caster_ptr->current_floor_ptr->dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET));
+			(void)summon_specific(0, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET));
 		}
 
 		break;
@@ -3343,7 +3345,7 @@ void wild_magic(player_type *caster_ptr, int spell)
 		activate_hi_summon(caster_ptr, caster_ptr->y, caster_ptr->x, FALSE);
 		break;
 	case 38:
-		(void)summon_cyber(-1, caster_ptr->y, caster_ptr->x);
+		(void)summon_cyber(floor_ptr, -1, caster_ptr->y, caster_ptr->x);
 		break;
 	default:
 	{
@@ -4458,7 +4460,7 @@ void hayagake(player_type *creature_ptr)
 bool double_attack(player_type *creature_ptr)
 {
 	DIRECTION dir;
-	if (!get_rep_dir(&dir, FALSE)) return FALSE;
+	if (!get_rep_dir(creature_ptr, &dir, FALSE)) return FALSE;
 	POSITION y = creature_ptr->y + ddy[dir];
 	POSITION x = creature_ptr->x + ddx[dir];
 	if (!creature_ptr->current_floor_ptr->grid_array[y][x].m_idx)

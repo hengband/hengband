@@ -171,14 +171,14 @@ static void print_field(concptr info, TERM_LEN row, TERM_LEN col)
  * Print time
  * @return なし
  */
-void print_time(void)
+void print_time(player_type *player_ptr)
 {
 	int day, hour, min;
 
 	/* Dump 13 spaces to clear */
 	c_put_str(TERM_WHITE, "             ", ROW_DAY, COL_DAY);
 
-	extract_day_hour_min(&day, &hour, &min);
+	extract_day_hour_min(player_ptr, &day, &hour, &min);
 
 	/* Dump the info itself */
 	if (day < 1000) c_put_str(TERM_WHITE, format(_("%2d日目", "Day%3d"), day), ROW_DAY, COL_DAY);
@@ -2096,7 +2096,7 @@ void redraw_stuff(player_type *creature_ptr)
 		creature_ptr->redraw &= ~(PR_ARMOR | PR_HP | PR_MANA);
 		creature_ptr->redraw &= ~(PR_DEPTH | PR_HEALTH | PR_UHEALTH);
 		print_frame_basic(creature_ptr);
-		print_time();
+		print_time(creature_ptr);
 		print_dungeon(creature_ptr);
 	}
 
@@ -2348,7 +2348,7 @@ void window_stuff(player_type *player_ptr)
  * Map resizing whenever the main term changes size
  * @return なし
  */
-void resize_map(void)
+void resize_map()
 {
 	/* Only if the dungeon exists */
 	if (!current_world_ptr->character_dungeon) return;
@@ -2361,7 +2361,7 @@ void resize_map(void)
 	panel_row_min = p_ptr->current_floor_ptr->height;
 	panel_col_min = p_ptr->current_floor_ptr->width;
 
-	verify_panel();
+	verify_panel(p_ptr);
 
 	p_ptr->update |= (PU_TORCH | PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
@@ -3585,17 +3585,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
 		Term_putstr(0, y, 12, 0, "            ");
 
 		if (match_autopick != -1)
-#if 1
 			display_shortened_item_name(player_ptr, autopick_obj, y);
-#else
-		{
-			char buf[13] = "\0";
-			strncpy(buf, autopick_list[match_autopick].name, 12);
-			buf[12] = '\0';
-			put_str(buf, y, 0);
-		}
-#endif
-
 	}
 
 	/* Player location */

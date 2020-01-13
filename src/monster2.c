@@ -114,7 +114,8 @@ MONRACE_IDX real_r_idx(monster_type *m_ptr)
 void delete_monster_idx(MONSTER_IDX i)
 {
 	POSITION x, y;
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[i];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -125,15 +126,15 @@ void delete_monster_idx(MONSTER_IDX i)
 	real_r_ptr(m_ptr)->cur_num--;
 
 	/* Hack -- count the number of "reproducers" */
-	if (r_ptr->flags2 & (RF2_MULTIPLY)) p_ptr->current_floor_ptr->num_repro--;
+	if (r_ptr->flags2 & (RF2_MULTIPLY)) floor_ptr->num_repro--;
 
-	if (MON_CSLEEP(m_ptr)) (void)set_monster_csleep(i, 0);
-	if (MON_FAST(m_ptr)) (void)set_monster_fast(i, 0);
-	if (MON_SLOW(m_ptr)) (void)set_monster_slow(i, 0);
-	if (MON_STUNNED(m_ptr)) (void)set_monster_stunned(i, 0);
-	if (MON_CONFUSED(m_ptr)) (void)set_monster_confused(i, 0);
-	if (MON_MONFEAR(m_ptr)) (void)set_monster_monfear(i, 0);
-	if (MON_INVULNER(m_ptr)) (void)set_monster_invulner(i, 0, FALSE);
+	if (MON_CSLEEP(m_ptr)) (void)set_monster_csleep(p_ptr, i, 0);
+	if (MON_FAST(m_ptr)) (void)set_monster_fast(p_ptr, i, 0);
+	if (MON_SLOW(m_ptr)) (void)set_monster_slow(p_ptr, i, 0);
+	if (MON_STUNNED(m_ptr)) (void)set_monster_stunned(p_ptr, i, 0);
+	if (MON_CONFUSED(m_ptr)) (void)set_monster_confused(p_ptr, i, 0);
+	if (MON_MONFEAR(m_ptr)) (void)set_monster_monfear(p_ptr, i, 0);
+	if (MON_INVULNER(m_ptr)) (void)set_monster_invulner(p_ptr, i, 0, FALSE);
 
 	/* Hack -- remove target monster */
 	if (i == target_who) target_who = 0;
@@ -141,17 +142,17 @@ void delete_monster_idx(MONSTER_IDX i)
 	/* Hack -- remove tracked monster */
 	if (i == p_ptr->health_who) health_track(p_ptr, 0);
 
-	if (p_ptr->pet_t_m_idx == i ) p_ptr->pet_t_m_idx = 0;
+	if (p_ptr->pet_t_m_idx == i) p_ptr->pet_t_m_idx = 0;
 	if (p_ptr->riding_t_m_idx == i) p_ptr->riding_t_m_idx = 0;
 	if (p_ptr->riding == i) p_ptr->riding = 0;
 
 	/* Monster is gone */
-	p_ptr->current_floor_ptr->grid_array[y][x].m_idx = 0;
+	floor_ptr->grid_array[y][x].m_idx = 0;
 
 	for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/*
@@ -159,13 +160,13 @@ void delete_monster_idx(MONSTER_IDX i)
 		 * to prevent calling lite_spot()
 		 */
 
-		delete_object_idx(p_ptr->current_floor_ptr, this_o_idx);
+		delete_object_idx(floor_ptr, this_o_idx);
 	}
 
 	(void)WIPE(m_ptr, monster_type);
 
 	/* Count monsters */
-	p_ptr->current_floor_ptr->m_cnt--;
+	floor_ptr->m_cnt--;
 
 	lite_spot(y, x);
 	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
@@ -193,13 +194,14 @@ static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 	if (i1 == i2) return;
 
 	/* Old monster */
-	m_ptr = &p_ptr->current_floor_ptr->m_list[i1];
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	m_ptr = &floor_ptr->m_list[i1];
 
 	y = m_ptr->fy;
 	x = m_ptr->fx;
 
 	/* Cave grid */
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	g_ptr = &floor_ptr->grid_array[y][x];
 
 	g_ptr->m_idx = i2;
 
@@ -207,7 +209,7 @@ static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 	for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Reset monster pointer */
@@ -230,9 +232,9 @@ static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 	/* Hack -- Update parent index */
 	if (is_pet(m_ptr))
 	{
-		for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+		for (i = 1; i < floor_ptr->m_max; i++)
 		{
-			monster_type *m2_ptr = &p_ptr->current_floor_ptr->m_list[i];
+			monster_type *m2_ptr = &floor_ptr->m_list[i];
 
 			if (m2_ptr->parent_m_idx == i1)
 				m2_ptr->parent_m_idx = i2;
@@ -240,15 +242,15 @@ static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 	}
 
 	/* Structure copy */
-	(void)COPY(&p_ptr->current_floor_ptr->m_list[i2], &p_ptr->current_floor_ptr->m_list[i1], monster_type);
+	(void)COPY(&floor_ptr->m_list[i2], &floor_ptr->m_list[i1], monster_type);
 
 	/* Wipe the hole */
-	(void)WIPE(&p_ptr->current_floor_ptr->m_list[i1], monster_type);
+	(void)WIPE(&floor_ptr->m_list[i1], monster_type);
 
 	for (i = 0; i < MAX_MTIMED; i++)
 	{
-		int mproc_idx = get_mproc_idx(i1, i);
-		if (mproc_idx >= 0) p_ptr->current_floor_ptr->mproc_list[i][mproc_idx] = i2;
+		int mproc_idx = get_mproc_idx(floor_ptr, i1, i);
+		if (mproc_idx >= 0) floor_ptr->mproc_list[i][mproc_idx] = i2;
 	}
 }
 
@@ -276,8 +278,8 @@ void compact_monsters(int size)
 	/* Message (only if compacting) */
 	if (size) msg_print(_("モンスター情報を圧縮しています...", "Compacting monsters..."));
 
-
 	/* Compact at least 'size' objects */
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	for (num = 0, cnt = 1; num < size; cnt++)
 	{
 		/* Get more vicious each iteration */
@@ -287,9 +289,9 @@ void compact_monsters(int size)
 		cur_dis = 5 * (20 - cnt);
 
 		/* Check all the monsters */
-		for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+		for (i = 1; i < floor_ptr->m_max; i++)
 		{
-			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+			monster_type *m_ptr = &floor_ptr->m_list[i];
 
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -332,19 +334,19 @@ void compact_monsters(int size)
 
 
 	/* Excise dead monsters (backwards!) */
-	for (i = p_ptr->current_floor_ptr->m_max - 1; i >= 1; i--)
+	for (i = floor_ptr->m_max - 1; i >= 1; i--)
 	{
 		/* Get the i'th monster */
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &floor_ptr->m_list[i];
 
 		/* Skip real monsters */
 		if (m_ptr->r_idx) continue;
 
 		/* Move last monster into open hole */
-		compact_monsters_aux(p_ptr->current_floor_ptr->m_max - 1, i);
+		compact_monsters_aux(floor_ptr->m_max - 1, i);
 
-		/* Compress "p_ptr->current_floor_ptr->m_max" */
-		p_ptr->current_floor_ptr->m_max--;
+		/* Compress "floor_ptr->m_max" */
+		floor_ptr->m_max--;
 	}
 }
 
@@ -380,13 +382,14 @@ void wipe_m_list(void)
 	}
 
 	/* Delete all the monsters */
-	for (i = p_ptr->current_floor_ptr->m_max - 1; i >= 1; i--)
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	for (i = floor_ptr->m_max - 1; i >= 1; i--)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Monster is gone */
-		p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx = 0;
+		floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx = 0;
 
 		(void)WIPE(m_ptr, monster_type);
 
@@ -398,20 +401,20 @@ void wipe_m_list(void)
 	 * generation of unique monster who is the minion of player.
 	 */
 
-	/* Hack -- Wipe the racial counter of all monster races */
+	 /* Hack -- Wipe the racial counter of all monster races */
 	for (i = 1; i < max_r_idx; i++) r_info[i].cur_num = 0;
 
-	/* Reset "p_ptr->current_floor_ptr->m_max" */
-	p_ptr->current_floor_ptr->m_max = 1;
+	/* Reset "floor_ptr->m_max" */
+	floor_ptr->m_max = 1;
 
-	/* Reset "p_ptr->current_floor_ptr->m_cnt" */
-	p_ptr->current_floor_ptr->m_cnt = 0;
+	/* Reset "floor_ptr->m_cnt" */
+	floor_ptr->m_cnt = 0;
 
-	/* Reset "p_ptr->current_floor_ptr->mproc_max[]" */
-	for (i = 0; i < MAX_MTIMED; i++) p_ptr->current_floor_ptr->mproc_max[i] = 0;
+	/* Reset "floor_ptr->mproc_max[]" */
+	for (i = 0; i < MAX_MTIMED; i++) floor_ptr->mproc_max[i] = 0;
 
 	/* Hack -- reset "reproducer" count */
-	p_ptr->current_floor_ptr->num_repro = 0;
+	floor_ptr->num_repro = 0;
 
 	/* Hack -- no more target */
 	target_who = 0;
@@ -433,32 +436,33 @@ MONSTER_IDX m_pop(void)
 	MONSTER_IDX i;
 
 	/* Normal allocation */
-	if (p_ptr->current_floor_ptr->m_max < current_world_ptr->max_m_idx)
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	if (floor_ptr->m_max < current_world_ptr->max_m_idx)
 	{
 		/* Access the next hole */
-		i = p_ptr->current_floor_ptr->m_max;
+		i = floor_ptr->m_max;
 
 		/* Expand the array */
-		p_ptr->current_floor_ptr->m_max++;
+		floor_ptr->m_max++;
 
 		/* Count monsters */
-		p_ptr->current_floor_ptr->m_cnt++;
+		floor_ptr->m_cnt++;
 
 		/* Return the index */
 		return (i);
 	}
 
 	/* Recycle dead monsters */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr;
-		m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		m_ptr = &floor_ptr->m_list[i];
 
 		/* Skip live monsters */
 		if (m_ptr->r_idx) continue;
 
 		/* Count monsters */
-		p_ptr->current_floor_ptr->m_cnt++;
+		floor_ptr->m_cnt++;
 
 		/* Use this monster */
 		return (i);
@@ -468,7 +472,7 @@ MONSTER_IDX m_pop(void)
 	if (current_world_ptr->character_dungeon) msg_print(_("モンスターが多すぎる！", "Too many monsters!"));
 
 	/* Try not to crash */
-	return (0);
+	return 0;
 }
 
 
@@ -509,296 +513,296 @@ static bool summon_specific_aux(MONRACE_IDX summoner_idx, MONRACE_IDX r_idx)
 	/* Check our requirements */
 	switch (summon_specific_type)
 	{
-		case SUMMON_ANT:
+	case SUMMON_ANT:
+	{
+		okay = (r_ptr->d_char == 'a');
+		break;
+	}
+
+	case SUMMON_SPIDER:
+	{
+		okay = (r_ptr->d_char == 'S');
+		break;
+	}
+
+	case SUMMON_HOUND:
+	{
+		okay = ((r_ptr->d_char == 'C') || (r_ptr->d_char == 'Z'));
+		break;
+	}
+
+	case SUMMON_HYDRA:
+	{
+		okay = (r_ptr->d_char == 'M');
+		break;
+	}
+
+	case SUMMON_ANGEL:
+	{
+		okay = (r_ptr->d_char == 'A' && ((r_ptr->flags3 & RF3_EVIL) || (r_ptr->flags3 & RF3_GOOD)));
+		break;
+	}
+
+	case SUMMON_DEMON:
+	{
+		okay = (r_ptr->flags3 & RF3_DEMON);
+		break;
+	}
+
+	case SUMMON_UNDEAD:
+	{
+		okay = (r_ptr->flags3 & RF3_UNDEAD);
+		break;
+	}
+
+	case SUMMON_DRAGON:
+	{
+		okay = (r_ptr->flags3 & RF3_DRAGON);
+		break;
+	}
+
+	case SUMMON_HI_UNDEAD:
+	{
+		okay = ((r_ptr->d_char == 'L') ||
+			(r_ptr->d_char == 'V') ||
+			(r_ptr->d_char == 'W'));
+		break;
+	}
+
+	case SUMMON_HI_DRAGON:
+	{
+		okay = (r_ptr->d_char == 'D');
+		break;
+	}
+
+	case SUMMON_HI_DEMON:
+	{
+		okay = (((r_ptr->d_char == 'U') ||
+			(r_ptr->d_char == 'H') ||
+			(r_ptr->d_char == 'B')) &&
+			(r_ptr->flags3 & RF3_DEMON)) ? TRUE : FALSE;
+		break;
+	}
+
+	case SUMMON_AMBERITES:
+	{
+		okay = (r_ptr->flags3 & (RF3_AMBERITE)) ? TRUE : FALSE;
+		break;
+	}
+
+	case SUMMON_UNIQUE:
+	{
+		okay = (r_ptr->flags1 & (RF1_UNIQUE)) ? TRUE : FALSE;
+		break;
+	}
+
+	case SUMMON_MOLD:
+	{
+		okay = (r_ptr->d_char == 'm');
+		break;
+	}
+	case SUMMON_BAT:
+	{
+		okay = (r_ptr->d_char == 'b');
+		break;
+	}
+	case SUMMON_QUYLTHULG:
+	{
+		okay = (r_ptr->d_char == 'Q');
+		break;
+	}
+
+	case SUMMON_COIN_MIMIC:
+	{
+		okay = (r_ptr->d_char == '$');
+		break;
+	}
+
+	case SUMMON_MIMIC:
+	{
+		okay = ((r_ptr->d_char == '!') ||
+			(r_ptr->d_char == '?') ||
+			(r_ptr->d_char == '=') ||
+			(r_ptr->d_char == '$') ||
+			(r_ptr->d_char == '|'));
+		break;
+	}
+
+	case SUMMON_GOLEM:
+	{
+		okay = (r_ptr->d_char == 'g');
+		break;
+	}
+
+	case SUMMON_CYBER:
+	{
+		okay = ((r_ptr->d_char == 'U') &&
+			(r_ptr->flags4 & RF4_ROCKET));
+		break;
+	}
+
+	case SUMMON_KIN:
+	{
+		SYMBOL_CODE summon_kin_type;
+		if (summoner_idx)
 		{
-			okay = (r_ptr->d_char == 'a');
-			break;
+			summon_kin_type = r_info[summoner_idx].d_char;
+		}
+		else
+		{
+			summon_kin_type = get_summon_symbol_from_player(p_ptr);
 		}
 
-		case SUMMON_SPIDER:
-		{
-			okay = (r_ptr->d_char == 'S');
-			break;
-		}
+		okay = ((r_ptr->d_char == summon_kin_type) && (r_idx != MON_HAGURE));
+		break;
+	}
 
-		case SUMMON_HOUND:
-		{
-			okay = ((r_ptr->d_char == 'C') || (r_ptr->d_char == 'Z'));
-			break;
-		}
+	case SUMMON_DAWN:
+	{
+		okay = (r_idx == MON_DAWN);
+		break;
+	}
 
-		case SUMMON_HYDRA:
-		{
-			okay = (r_ptr->d_char == 'M');
-			break;
-		}
+	case SUMMON_ANIMAL:
+	{
+		okay = (r_ptr->flags3 & (RF3_ANIMAL));
+		break;
+	}
 
-		case SUMMON_ANGEL:
-		{
-			okay = (r_ptr->d_char == 'A' && ((r_ptr->flags3 & RF3_EVIL) || (r_ptr->flags3 & RF3_GOOD)));
-			break;
-		}
+	case SUMMON_ANIMAL_RANGER:
+	{
+		okay = ((r_ptr->flags3 & (RF3_ANIMAL)) &&
+			(my_strchr("abcflqrwBCHIJKMRS", r_ptr->d_char)) &&
+			!(r_ptr->flags3 & (RF3_DRAGON)) &&
+			!(r_ptr->flags3 & (RF3_EVIL)) &&
+			!(r_ptr->flags3 & (RF3_UNDEAD)) &&
+			!(r_ptr->flags3 & (RF3_DEMON)) &&
+			!(r_ptr->flags2 & (RF2_MULTIPLY)) &&
+			!(r_ptr->flags4 || r_ptr->a_ability_flags1 || r_ptr->a_ability_flags2));
+		break;
+	}
 
-		case SUMMON_DEMON:
-		{
-			okay = (r_ptr->flags3 & RF3_DEMON);
-			break;
-		}
+	case SUMMON_HI_DRAGON_LIVING:
+	{
+		okay = ((r_ptr->d_char == 'D') && monster_living(r_idx));
+		break;
+	}
 
-		case SUMMON_UNDEAD:
-		{
-			okay = (r_ptr->flags3 & RF3_UNDEAD);
-			break;
-		}
+	case SUMMON_LIVING:
+	{
+		okay = monster_living(r_idx);
+		break;
+	}
 
-		case SUMMON_DRAGON:
-		{
-			okay = (r_ptr->flags3 & RF3_DRAGON);
-			break;
-		}
+	case SUMMON_PHANTOM:
+	{
+		okay = (r_idx == MON_PHANTOM_B || r_idx == MON_PHANTOM_W);
+		break;
+	}
 
-		case SUMMON_HI_UNDEAD:
-		{
-			okay = ((r_ptr->d_char == 'L') ||
-				(r_ptr->d_char == 'V') ||
-				(r_ptr->d_char == 'W'));
-			break;
-		}
+	case SUMMON_BLUE_HORROR:
+	{
+		okay = (r_idx == MON_BLUE_HORROR);
+		break;
+	}
 
-		case SUMMON_HI_DRAGON:
-		{
-			okay = (r_ptr->d_char == 'D');
-			break;
-		}
+	case SUMMON_ELEMENTAL:
+	{
+		okay = (r_ptr->d_char == 'E');
+		break;
+	}
 
-		case SUMMON_HI_DEMON:
-		{
-			okay = (((r_ptr->d_char == 'U') ||
-				 (r_ptr->d_char == 'H') ||
-				 (r_ptr->d_char == 'B')) &&
-				(r_ptr->flags3 & RF3_DEMON)) ? TRUE : FALSE;
-			break;
-		}
+	case SUMMON_VORTEX:
+	{
+		okay = (r_ptr->d_char == 'v');
+		break;
+	}
 
-		case SUMMON_AMBERITES:
-		{
-			okay = (r_ptr->flags3 & (RF3_AMBERITE)) ? TRUE : FALSE;
-			break;
-		}
+	case SUMMON_HYBRID:
+	{
+		okay = (r_ptr->d_char == 'H');
+		break;
+	}
 
-		case SUMMON_UNIQUE:
-		{
-			okay = (r_ptr->flags1 & (RF1_UNIQUE)) ? TRUE : FALSE;
-			break;
-		}
+	case SUMMON_BIRD:
+	{
+		okay = (r_ptr->d_char == 'B');
+		break;
+	}
 
-		case SUMMON_MOLD:
-		{
-			okay = (r_ptr->d_char == 'm');
-			break;
-		}
-		case SUMMON_BAT:
-		{
-			okay = (r_ptr->d_char == 'b');
-			break;
-		}
-		case SUMMON_QUYLTHULG:
-		{
-			okay = (r_ptr->d_char == 'Q');
-			break;
-		}
+	case SUMMON_KAMIKAZE:
+	{
+		int i;
+		for (i = 0; i < 4; i++)
+			if (r_ptr->blow[i].method == RBM_EXPLODE) okay = TRUE;
+		break;
+	}
 
-		case SUMMON_COIN_MIMIC:
-		{
-			okay = (r_ptr->d_char == '$');
-			break;
-		}
+	case SUMMON_KAMIKAZE_LIVING:
+	{
+		int i;
 
-		case SUMMON_MIMIC:
-		{
-			okay = ((r_ptr->d_char == '!') ||
-				 (r_ptr->d_char == '?') ||
-				 (r_ptr->d_char == '=') ||
-				 (r_ptr->d_char == '$') ||
-				 (r_ptr->d_char == '|'));
-			break;
-		}
+		for (i = 0; i < 4; i++)
+			if (r_ptr->blow[i].method == RBM_EXPLODE) okay = TRUE;
+		okay = (okay && monster_living(r_idx));
+		break;
+	}
 
-		case SUMMON_GOLEM:
-		{
-			okay = (r_ptr->d_char == 'g');
-			break;
-		}
+	case SUMMON_MANES:
+	{
+		okay = (r_idx == MON_MANES);
+		break;
+	}
 
-		case SUMMON_CYBER:
-		{
-			okay = ((r_ptr->d_char == 'U') &&
-				(r_ptr->flags4 & RF4_ROCKET));
-			break;
-		}
+	case SUMMON_LOUSE:
+	{
+		okay = (r_idx == MON_LOUSE);
+		break;
+	}
 
-		case SUMMON_KIN:
-		{
-			SYMBOL_CODE summon_kin_type;
-			if (summoner_idx)
-			{
-				summon_kin_type = r_info[summoner_idx].d_char;
-			}
-			else
-			{
-				summon_kin_type = get_summon_symbol_from_player(p_ptr);
-			}
+	case SUMMON_GUARDIANS:
+	{
+		okay = (r_ptr->flags7 & RF7_GUARDIAN);
+		break;
+	}
 
-			okay = ((r_ptr->d_char == summon_kin_type) && (r_idx != MON_HAGURE));
-			break;
-		}
+	case SUMMON_KNIGHTS:
+	{
+		okay = ((r_idx == MON_NOV_PALADIN) ||
+			(r_idx == MON_NOV_PALADIN_G) ||
+			(r_idx == MON_PALADIN) ||
+			(r_idx == MON_W_KNIGHT) ||
+			(r_idx == MON_ULTRA_PALADIN) ||
+			(r_idx == MON_KNI_TEMPLAR));
+		break;
+	}
 
-		case SUMMON_DAWN:
-		{
-			okay = (r_idx == MON_DAWN);
-			break;
-		}
+	case SUMMON_EAGLES:
+	{
+		okay = (r_ptr->d_char == 'B' &&
+			(r_ptr->flags8 & RF8_WILD_MOUNTAIN) &&
+			(r_ptr->flags8 & RF8_WILD_ONLY));
+		break;
+	}
 
-		case SUMMON_ANIMAL:
-		{
-			okay = (r_ptr->flags3 & (RF3_ANIMAL));
-			break;
-		}
+	case SUMMON_PIRANHAS:
+	{
+		okay = (r_idx == MON_PIRANHA);
+		break;
+	}
 
-		case SUMMON_ANIMAL_RANGER:
-		{
-			okay = ((r_ptr->flags3 & (RF3_ANIMAL)) &&
-			       (my_strchr("abcflqrwBCHIJKMRS", r_ptr->d_char)) &&
-			       !(r_ptr->flags3 & (RF3_DRAGON)) &&
-			       !(r_ptr->flags3 & (RF3_EVIL)) &&
-			       !(r_ptr->flags3 & (RF3_UNDEAD)) &&
-			       !(r_ptr->flags3 & (RF3_DEMON)) &&
-			       !(r_ptr->flags2 & (RF2_MULTIPLY)) &&
-			       !(r_ptr->flags4 || r_ptr->a_ability_flags1 || r_ptr->a_ability_flags2));
-			break;
-		}
+	case SUMMON_ARMAGE_GOOD:
+	{
+		okay = (r_ptr->d_char == 'A' && (r_ptr->flags3 & RF3_GOOD));
+		break;
+	}
 
-		case SUMMON_HI_DRAGON_LIVING:
-		{
-			okay = ((r_ptr->d_char == 'D') && monster_living(r_idx));
-			break;
-		}
-
-		case SUMMON_LIVING:
-		{
-			okay = monster_living(r_idx);
-			break;
-		}
-
-		case SUMMON_PHANTOM:
-		{
-			okay = (r_idx == MON_PHANTOM_B || r_idx == MON_PHANTOM_W);
-			break;
-		}
-
-		case SUMMON_BLUE_HORROR:
-		{
-			okay = (r_idx == MON_BLUE_HORROR);
-			break;
-		}
-
-		case SUMMON_ELEMENTAL:
-		{
-			okay = (r_ptr->d_char == 'E');
-			break;
-		}
-
-		case SUMMON_VORTEX:
-		{
-			okay = (r_ptr->d_char == 'v');
-			break;
-		}
-
-		case SUMMON_HYBRID:
-		{
-			okay = (r_ptr->d_char == 'H');
-			break;
-		}
-
-		case SUMMON_BIRD:
-		{
-			okay = (r_ptr->d_char == 'B');
-			break;
-		}
-
-		case SUMMON_KAMIKAZE:
-		{
-			int i;
-			for (i = 0; i < 4; i++)
-				if (r_ptr->blow[i].method == RBM_EXPLODE) okay = TRUE;
-			break;
-		}
-
-		case SUMMON_KAMIKAZE_LIVING:
-		{
-			int i;
-
-			for (i = 0; i < 4; i++)
-				if (r_ptr->blow[i].method == RBM_EXPLODE) okay = TRUE;
-			okay = (okay && monster_living(r_idx));
-			break;
-		}
-
-		case SUMMON_MANES:
-		{
-			okay = (r_idx == MON_MANES);
-			break;
-		}
-
-		case SUMMON_LOUSE:
-		{
-			okay = (r_idx == MON_LOUSE);
-			break;
-		}
-
-		case SUMMON_GUARDIANS:
-		{
-			okay = (r_ptr->flags7 & RF7_GUARDIAN);
-			break;
-		}
-
-		case SUMMON_KNIGHTS:
-		{
-			okay = ((r_idx == MON_NOV_PALADIN) ||
-				(r_idx == MON_NOV_PALADIN_G) ||
-				(r_idx == MON_PALADIN) ||
-				(r_idx == MON_W_KNIGHT) ||
-				(r_idx == MON_ULTRA_PALADIN) ||
-				(r_idx == MON_KNI_TEMPLAR));
-			break;
-		}
-
-		case SUMMON_EAGLES:
-		{
-			okay = (r_ptr->d_char == 'B' &&
-				(r_ptr->flags8 & RF8_WILD_MOUNTAIN) &&
-				(r_ptr->flags8 & RF8_WILD_ONLY));
-			break;
-		}
-
-		case SUMMON_PIRANHAS:
-		{
-			okay = (r_idx == MON_PIRANHA);
-			break;
-		}
-
-		case SUMMON_ARMAGE_GOOD:
-		{
-			okay = (r_ptr->d_char == 'A' && (r_ptr->flags3 & RF3_GOOD));
-			break;
-		}
-
-		case SUMMON_ARMAGE_EVIL:
-		{
-			okay = ((r_ptr->flags3 & RF3_DEMON) ||
-				(r_ptr->d_char == 'A' && (r_ptr->flags3 & RF3_EVIL)));
-			break;
-		}
+	case SUMMON_ARMAGE_EVIL:
+	{
+		okay = ((r_ptr->flags3 & RF3_DEMON) ||
+			(r_ptr->d_char == 'A' && (r_ptr->flags3 & RF3_EVIL)));
+		break;
+	}
 	}
 	/* Since okay is int, "return (okay);" is not correct. */
 	return (bool)(okay ? TRUE : FALSE);
@@ -827,26 +831,30 @@ static bool restrict_monster_to_dungeon(DUNGEON_IDX d_idx, MONRACE_IDX r_idx)
 	{
 		if (chameleon_change_m_idx) return TRUE;
 	}
+
 	if (d_ptr->flags1 & DF1_NO_MAGIC)
 	{
 		if (r_idx != MON_CHAMELEON &&
-		    r_ptr->freq_spell && 
-		    !(r_ptr->flags4 & RF4_NOMAGIC_MASK) &&
-		    !(r_ptr->a_ability_flags1 & RF5_NOMAGIC_MASK) &&
-		    !(r_ptr->a_ability_flags2 & RF6_NOMAGIC_MASK))
+			r_ptr->freq_spell &&
+			!(r_ptr->flags4 & RF4_NOMAGIC_MASK) &&
+			!(r_ptr->a_ability_flags1 & RF5_NOMAGIC_MASK) &&
+			!(r_ptr->a_ability_flags2 & RF6_NOMAGIC_MASK))
 			return FALSE;
 	}
+
 	if (d_ptr->flags1 & DF1_NO_MELEE)
 	{
 		if (r_idx == MON_CHAMELEON) return TRUE;
 		if (!(r_ptr->flags4 & (RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK)) &&
-		    !(r_ptr->a_ability_flags1 & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_CAUSE_1 | RF5_CAUSE_2 | RF5_CAUSE_3 | RF5_CAUSE_4 | RF5_MIND_BLAST | RF5_BRAIN_SMASH)) &&
-		    !(r_ptr->a_ability_flags2 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK)))
+			!(r_ptr->a_ability_flags1 & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_CAUSE_1 | RF5_CAUSE_2 | RF5_CAUSE_3 | RF5_CAUSE_4 | RF5_MIND_BLAST | RF5_BRAIN_SMASH)) &&
+			!(r_ptr->a_ability_flags2 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK)))
 			return FALSE;
 	}
+
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	if (d_ptr->flags1 & DF1_BEGINNER)
 	{
-		if (r_ptr->level > p_ptr->current_floor_ptr->dun_level)
+		if (r_ptr->level > floor_ptr->dun_level)
 			return FALSE;
 	}
 
@@ -1016,7 +1024,7 @@ monsterrace_hook_type get_mon_num2_hook;
  * @return エラーコード
  */
 errr get_mon_num_prep(monsterrace_hook_type monster_hook,
-					  monsterrace_hook_type monster_hook2)
+	monsterrace_hook_type monster_hook2)
 {
 	int i;
 
@@ -1027,10 +1035,11 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 	get_mon_num2_hook = monster_hook2;
 
 	/* Scan the allocation table */
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	for (i = 0; i < alloc_race_size; i++)
 	{
 		monster_race *r_ptr;
-		
+
 		/* Get the entry */
 		alloc_entry *entry = &alloc_race_table[i];
 
@@ -1039,11 +1048,11 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 
 		/* Skip monsters which don't pass the restriction */
 		if ((get_mon_num_hook && !((*get_mon_num_hook)(entry->index))) ||
-		    (get_mon_num2_hook && !((*get_mon_num2_hook)(entry->index))))
+			(get_mon_num2_hook && !((*get_mon_num2_hook)(entry->index))))
 			continue;
 
 		if (!p_ptr->phase_out && !chameleon_change_m_idx &&
-		    summon_specific_type != SUMMON_GUARDIANS)
+			summon_specific_type != SUMMON_GUARDIANS)
 		{
 			/* Hack -- don't create questors */
 			if (r_ptr->flags1 & RF1_QUESTOR)
@@ -1054,14 +1063,14 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 
 			/* Depth Monsters never appear out of depth */
 			if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) &&
-			    (r_ptr->level > p_ptr->current_floor_ptr->dun_level))
+				(r_ptr->level > floor_ptr->dun_level))
 				continue;
 		}
 
 		/* Accept this monster */
 		entry->prob2 = entry->prob1;
 
-		if (p_ptr->current_floor_ptr->dun_level && (!p_ptr->current_floor_ptr->inside_quest || is_fixed_quest_idx(p_ptr->current_floor_ptr->inside_quest)) &&
+		if (floor_ptr->dun_level && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest)) &&
 			!restrict_monster_to_dungeon(p_ptr->dungeon_idx, entry->index) && !p_ptr->phase_out)
 		{
 			int hoge = entry->prob2 * d_info[p_ptr->dungeon_idx].special_div;
@@ -1071,7 +1080,7 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 	}
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -1113,7 +1122,7 @@ MONRACE_IDX get_mon_num(DEPTH level)
 	int delay = mysqrt(level * 10000L) + 400L;
 
 	pls_kakuritu = MAX(NASTY_MON_MAX, NASTY_MON_BASE - ((current_world_ptr->dungeon_turn / (TURNS_PER_TICK * 5000L) - delay / 10)));
-	pls_level    = MIN(NASTY_MON_PLUS_MAX, 3 + current_world_ptr->dungeon_turn / (TURNS_PER_TICK * 40000L) - delay / 40 + MIN(5, level / 10)) ;
+	pls_level = MIN(NASTY_MON_PLUS_MAX, 3 + current_world_ptr->dungeon_turn / (TURNS_PER_TICK * 40000L) - delay / 40 + MIN(5, level / 10));
 
 	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_MAZE)
 	{
@@ -1168,14 +1177,14 @@ MONRACE_IDX get_mon_num(DEPTH level)
 		{
 			/* Hack -- "unique" monsters must be "unique" */
 			if (((r_ptr->flags1 & (RF1_UNIQUE)) ||
-			     (r_ptr->flags7 & (RF7_NAZGUL))) &&
-			    (r_ptr->cur_num >= r_ptr->max_num))
+				(r_ptr->flags7 & (RF7_NAZGUL))) &&
+				(r_ptr->cur_num >= r_ptr->max_num))
 			{
 				continue;
 			}
 
 			if ((r_ptr->flags7 & (RF7_UNIQUE2)) &&
-			    (r_ptr->cur_num >= 1))
+				(r_ptr->cur_num >= 1))
 			{
 				continue;
 			}
@@ -1195,7 +1204,7 @@ MONRACE_IDX get_mon_num(DEPTH level)
 	}
 
 	/* No legal monsters */
-	if (total <= 0) return (0);
+	if (total <= 0) return 0;
 
 	/* Pick a monster */
 	value = randint0(total);
@@ -1348,8 +1357,7 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 			do
 			{
 				hallu_race = &r_info[randint1(max_r_idx - 1)];
-			}
-			while (!hallu_race->name || (hallu_race->flags1 & RF1_UNIQUE));
+			} while (!hallu_race->name || (hallu_race->flags1 & RF1_UNIQUE));
 
 			strcpy(silly_name, (r_name + hallu_race->name));
 		}
@@ -1366,6 +1374,7 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 
 
 	/* First, try using pronouns, or describing hidden monsters */
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	if (!seen || pron)
 	{
 		/* an encoding of the monster "sex" */
@@ -1387,67 +1396,67 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 		{
 			/* Neuter, or unknown */
 #ifdef JP
-			case 0x00:                                                    res = "何か"; break;
-			case 0x00 + (MD_OBJECTIVE):                                   res = "何か"; break;
-			case 0x00 + (MD_POSSESSIVE):                                  res = "何かの"; break;
-			case 0x00 + (MD_POSSESSIVE | MD_OBJECTIVE):                   res = "何か自身"; break;
-			case 0x00 + (MD_INDEF_HIDDEN):                                res = "何か"; break;
-			case 0x00 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):                 res = "何か"; break;
-			case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):                res = "何か"; break;
-			case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE): res = "それ自身"; break;
+		case 0x00:                                                    res = "何か"; break;
+			case 0x00 + (MD_OBJECTIVE) : res = "何か"; break;
+				case 0x00 + (MD_POSSESSIVE) : res = "何かの"; break;
+					case 0x00 + (MD_POSSESSIVE | MD_OBJECTIVE) : res = "何か自身"; break;
+						case 0x00 + (MD_INDEF_HIDDEN) : res = "何か"; break;
+							case 0x00 + (MD_INDEF_HIDDEN | MD_OBJECTIVE) : res = "何か"; break;
+								case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE) : res = "何か"; break;
+									case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE) : res = "それ自身"; break;
 #else
-			case 0x00:                                                    res = "it"; break;
-			case 0x00 + (MD_OBJECTIVE):                                   res = "it"; break;
-			case 0x00 + (MD_POSSESSIVE):                                  res = "its"; break;
-			case 0x00 + (MD_POSSESSIVE | MD_OBJECTIVE):                   res = "itself"; break;
-			case 0x00 + (MD_INDEF_HIDDEN):                                res = "something"; break;
-			case 0x00 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):                 res = "something"; break;
-			case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):                res = "something's"; break;
-			case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE): res = "itself"; break;
+		case 0x00:                                                    res = "it"; break;
+			case 0x00 + (MD_OBJECTIVE) : res = "it"; break;
+				case 0x00 + (MD_POSSESSIVE) : res = "its"; break;
+					case 0x00 + (MD_POSSESSIVE | MD_OBJECTIVE) : res = "itself"; break;
+						case 0x00 + (MD_INDEF_HIDDEN) : res = "something"; break;
+							case 0x00 + (MD_INDEF_HIDDEN | MD_OBJECTIVE) : res = "something"; break;
+								case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE) : res = "something's"; break;
+									case 0x00 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE) : res = "itself"; break;
 #endif
 
 
-			/* Male (assume human if vague) */
+										/* Male (assume human if vague) */
 #ifdef JP
-			case 0x10:                                                    res = "彼"; break;
-			case 0x10 + (MD_OBJECTIVE):                                   res = "彼"; break;
-			case 0x10 + (MD_POSSESSIVE):                                  res = "彼の"; break;
-			case 0x10 + (MD_POSSESSIVE | MD_OBJECTIVE):                   res = "彼自身"; break;
-			case 0x10 + (MD_INDEF_HIDDEN):                                res = "誰か"; break;
-			case 0x10 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):                 res = "誰か"; break;
-			case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):                res = "誰かの"; break;
-			case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE): res = "彼自身"; break;
+									case 0x10:                                                    res = "彼"; break;
+										case 0x10 + (MD_OBJECTIVE) : res = "彼"; break;
+											case 0x10 + (MD_POSSESSIVE) : res = "彼の"; break;
+												case 0x10 + (MD_POSSESSIVE | MD_OBJECTIVE) : res = "彼自身"; break;
+													case 0x10 + (MD_INDEF_HIDDEN) : res = "誰か"; break;
+														case 0x10 + (MD_INDEF_HIDDEN | MD_OBJECTIVE) : res = "誰か"; break;
+															case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE) : res = "誰かの"; break;
+																case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE) : res = "彼自身"; break;
 #else
-			case 0x10:                                                    res = "he"; break;
-			case 0x10 + (MD_OBJECTIVE):                                   res = "him"; break;
-			case 0x10 + (MD_POSSESSIVE):                                  res = "his"; break;
-			case 0x10 + (MD_POSSESSIVE | MD_OBJECTIVE):                   res = "himself"; break;
-			case 0x10 + (MD_INDEF_HIDDEN):                                res = "someone"; break;
-			case 0x10 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):                 res = "someone"; break;
-			case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):                res = "someone's"; break;
-			case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE): res = "himself"; break;
+									case 0x10:                                                    res = "he"; break;
+										case 0x10 + (MD_OBJECTIVE) : res = "him"; break;
+											case 0x10 + (MD_POSSESSIVE) : res = "his"; break;
+												case 0x10 + (MD_POSSESSIVE | MD_OBJECTIVE) : res = "himself"; break;
+													case 0x10 + (MD_INDEF_HIDDEN) : res = "someone"; break;
+														case 0x10 + (MD_INDEF_HIDDEN | MD_OBJECTIVE) : res = "someone"; break;
+															case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE) : res = "someone's"; break;
+																case 0x10 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE) : res = "himself"; break;
 #endif
 
 
-			/* Female (assume human if vague) */
+																	/* Female (assume human if vague) */
 #ifdef JP
-			case 0x20:                                                    res = "彼女"; break;
-			case 0x20 + (MD_OBJECTIVE):                                   res = "彼女"; break;
-			case 0x20 + (MD_POSSESSIVE):                                  res = "彼女の"; break;
-			case 0x20 + (MD_POSSESSIVE | MD_OBJECTIVE):                   res = "彼女自身"; break;
-			case 0x20 + (MD_INDEF_HIDDEN):                                res = "誰か"; break;
-			case 0x20 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):                 res = "誰か"; break;
-			case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):                res = "誰かの"; break;
-			case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE): res = "彼女自身"; break;
+																case 0x20:                                                    res = "彼女"; break;
+																	case 0x20 + (MD_OBJECTIVE) : res = "彼女"; break;
+																		case 0x20 + (MD_POSSESSIVE) : res = "彼女の"; break;
+																			case 0x20 + (MD_POSSESSIVE | MD_OBJECTIVE) : res = "彼女自身"; break;
+																				case 0x20 + (MD_INDEF_HIDDEN) : res = "誰か"; break;
+																					case 0x20 + (MD_INDEF_HIDDEN | MD_OBJECTIVE) : res = "誰か"; break;
+																						case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE) : res = "誰かの"; break;
+																							case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE) : res = "彼女自身"; break;
 #else
-			case 0x20:                                                    res = "she"; break;
-			case 0x20 + (MD_OBJECTIVE):                                   res = "her"; break;
-			case 0x20 + (MD_POSSESSIVE):                                  res = "her"; break;
-			case 0x20 + (MD_POSSESSIVE | MD_OBJECTIVE):                   res = "herself"; break;
-			case 0x20 + (MD_INDEF_HIDDEN):                                res = "someone"; break;
-			case 0x20 + (MD_INDEF_HIDDEN | MD_OBJECTIVE):                 res = "someone"; break;
-			case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE):                res = "someone's"; break;
-			case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE): res = "herself"; break;
+																case 0x20:                                                    res = "she"; break;
+																	case 0x20 + (MD_OBJECTIVE) : res = "her"; break;
+																		case 0x20 + (MD_POSSESSIVE) : res = "her"; break;
+																			case 0x20 + (MD_POSSESSIVE | MD_OBJECTIVE) : res = "herself"; break;
+																				case 0x20 + (MD_INDEF_HIDDEN) : res = "someone"; break;
+																					case 0x20 + (MD_INDEF_HIDDEN | MD_OBJECTIVE) : res = "someone"; break;
+																						case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE) : res = "someone's"; break;
+																							case 0x20 + (MD_INDEF_HIDDEN | MD_POSSESSIVE | MD_OBJECTIVE) : res = "herself"; break;
 #endif
 		}
 
@@ -1476,7 +1485,7 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 			char *t;
 			strcpy(buf, name);
 			t = buf;
-			while(strncmp(t, "』", 2) && *t) t++;
+			while (strncmp(t, "』", 2) && *t) t++;
 			if (*t)
 			{
 				*t = '\0';
@@ -1490,90 +1499,90 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 		}
 		else
 
-		/* It could be a Unique */
-		if ((r_ptr->flags1 & RF1_UNIQUE) && !(p_ptr->image && !(mode & MD_IGNORE_HALLU)))
-		{
-			/* Start with the name (thus nominative and objective) */
-			if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && !(mode & MD_TRUE_NAME))
+			/* It could be a Unique */
+			if ((r_ptr->flags1 & RF1_UNIQUE) && !(p_ptr->image && !(mode & MD_IGNORE_HALLU)))
 			{
-#ifdef JP
-				char *t;
-				strcpy(buf, name);
-				t = buf;
-				while (strncmp(t, "』", 2) && *t) t++;
-				if (*t)
+				/* Start with the name (thus nominative and objective) */
+				if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && !(mode & MD_TRUE_NAME))
 				{
-					*t = '\0';
-					(void)sprintf(desc, "%s？』", buf);
-				}
-				else
-					(void)sprintf(desc, "%s？", name);
+#ifdef JP
+					char *t;
+					strcpy(buf, name);
+					t = buf;
+					while (strncmp(t, "』", 2) && *t) t++;
+					if (*t)
+					{
+						*t = '\0';
+						(void)sprintf(desc, "%s？』", buf);
+					}
+					else
+						(void)sprintf(desc, "%s？", name);
 #else
-				(void)sprintf(desc, "%s?", name);
+					(void)sprintf(desc, "%s?", name);
 #endif
-			}
+				}
 
-			/* Inside monster arena, and it is not your mount */
-			else if (p_ptr->phase_out &&
-				 !(p_ptr->riding && (&p_ptr->current_floor_ptr->m_list[p_ptr->riding] == m_ptr)))
-			{
-				/* It is a fake unique monster */
-				(void)sprintf(desc, _("%sもどき", "fake %s"), name);
-			}
+				/* Inside monster arena, and it is not your mount */
+				else if (p_ptr->phase_out &&
+					!(p_ptr->riding && (&floor_ptr->m_list[p_ptr->riding] == m_ptr)))
+				{
+					/* It is a fake unique monster */
+					(void)sprintf(desc, _("%sもどき", "fake %s"), name);
+				}
 
-			else
-			{
-				(void)strcpy(desc, name);
+				else
+				{
+					(void)strcpy(desc, name);
+				}
 			}
-		}
 
 		/* It could be an indefinite monster */
-		else if (mode & MD_INDEF_VISIBLE)
-		{
-			/* XXX Check plurality for "some" */
+			else if (mode & MD_INDEF_VISIBLE)
+			{
+				/* XXX Check plurality for "some" */
 
-			/* Indefinite monsters need an indefinite article */
+				/* Indefinite monsters need an indefinite article */
 #ifdef JP
-			(void)strcpy(desc, "");
+				(void)strcpy(desc, "");
 #else
-			(void)strcpy(desc, is_a_vowel(name[0]) ? "an " : "a ");
+				(void)strcpy(desc, is_a_vowel(name[0]) ? "an " : "a ");
 #endif
 
-			(void)strcat(desc, name);
-		}
+				(void)strcat(desc, name);
+			}
 
 		/* It could be a normal, definite, monster */
-		else
-		{
-			/* Definite monsters need a definite article */
-			if (is_pet(m_ptr))
-				(void)strcpy(desc, _("あなたの", "your "));
 			else
-				(void)strcpy(desc, _("", "the "));
+			{
+				/* Definite monsters need a definite article */
+				if (is_pet(m_ptr))
+					(void)strcpy(desc, _("あなたの", "your "));
+				else
+					(void)strcpy(desc, _("", "the "));
 
-			(void)strcat(desc, name);
-		}
+				(void)strcat(desc, name);
+			}
 
 		if (m_ptr->nickname)
 		{
-			sprintf(buf,_("「%s」", " called %s"),quark_str(m_ptr->nickname));
-			strcat(desc,buf);
+			sprintf(buf, _("「%s」", " called %s"), quark_str(m_ptr->nickname));
+			strcat(desc, buf);
 		}
 
-		if (p_ptr->riding && (&p_ptr->current_floor_ptr->m_list[p_ptr->riding] == m_ptr))
+		if (p_ptr->riding && (&floor_ptr->m_list[p_ptr->riding] == m_ptr))
 		{
-			strcat(desc,_("(乗馬中)", "(riding)"));
+			strcat(desc, _("(乗馬中)", "(riding)"));
 		}
 
 		if ((mode & MD_IGNORE_HALLU) && (m_ptr->mflag2 & MFLAG2_CHAMELEON))
 		{
 			if (r_ptr->flags1 & RF1_UNIQUE)
 			{
-				strcat(desc,_("(カメレオンの王)", "(Chameleon Lord)"));
+				strcat(desc, _("(カメレオンの王)", "(Chameleon Lord)"));
 			}
 			else
 			{
-				strcat(desc,_("(カメレオン)", "(Chameleon)"));
+				strcat(desc, _("(カメレオン)", "(Chameleon)"));
 			}
 		}
 
@@ -1586,7 +1595,7 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 		if (mode & MD_POSSESSIVE)
 		{
 			/* XXX Check for trailing "s" */
-			
+
 			/* Simply append "apostrophe" and "s" */
 			(void)strcat(desc, _("の", "'s"));
 		}
@@ -1638,11 +1647,11 @@ int lore_do_probe(MONRACE_IDX r_idx)
 	/* Maximal drops */
 	tmp_byte =
 		(((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) +
-		 ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) +
-		 ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) +
-		 ((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) +
-		 ((r_ptr->flags1 & RF1_DROP_90)  ? 1 : 0) +
-		 ((r_ptr->flags1 & RF1_DROP_60)  ? 1 : 0));
+		((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) +
+			((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) +
+			((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) +
+			((r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) +
+			((r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
 
 	/* Only "valid" drops */
 	if (!(r_ptr->flags1 & RF1_ONLY_GOLD))
@@ -1664,25 +1673,21 @@ int lore_do_probe(MONRACE_IDX r_idx)
 	for (i = 0; i < 32; i++)
 	{
 		if (!(r_ptr->r_flags1 & (1L << i)) &&
-		    (r_ptr->flags1 & (1L << i))) n++;
+			(r_ptr->flags1 & (1L << i))) n++;
 		if (!(r_ptr->r_flags2 & (1L << i)) &&
-		    (r_ptr->flags2 & (1L << i))) n++;
+			(r_ptr->flags2 & (1L << i))) n++;
 		if (!(r_ptr->r_flags3 & (1L << i)) &&
-		    (r_ptr->flags3 & (1L << i))) n++;
+			(r_ptr->flags3 & (1L << i))) n++;
 		if (!(r_ptr->r_flags4 & (1L << i)) &&
-		    (r_ptr->flags4 & (1L << i))) n++;
+			(r_ptr->flags4 & (1L << i))) n++;
 		if (!(r_ptr->r_flags5 & (1L << i)) &&
-		    (r_ptr->a_ability_flags1 & (1L << i))) n++;
+			(r_ptr->a_ability_flags1 & (1L << i))) n++;
 		if (!(r_ptr->r_flags6 & (1L << i)) &&
-		    (r_ptr->a_ability_flags2 & (1L << i))) n++;
+			(r_ptr->a_ability_flags2 & (1L << i))) n++;
 		if (!(r_ptr->r_flagsr & (1L << i)) &&
-		    (r_ptr->flagsr & (1L << i))) n++;
+			(r_ptr->flagsr & (1L << i))) n++;
 
 		/* r_flags7 is actually unused */
-#if 0
-		if (!(r_ptr->r_flags7 & (1L << i)) &&
-		    (r_ptr->flags7 & (1L << i))) n++;
-#endif
 	}
 
 	/* Know all the flags */
@@ -1853,7 +1858,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 		int dx = (subject_ptr->x > fx) ? (subject_ptr->x - fx) : (fx - subject_ptr->x);
 
 		/* Approximate distance */
-		d = (dy > dx) ? (dy + (dx>>1)) : (dx + (dy>>1));
+		d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
 
 		/* Restrict distance */
 		if (d > 255) d = 255;
@@ -2000,7 +2005,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 			}
 
 			if ((subject_ptr->esp_nonliving) &&
-			    ((r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) == RF3_NONLIVING))
+				((r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) == RF3_NONLIVING))
 			{
 				flag = TRUE;
 				if (is_original_ap(m_ptr) && !subject_ptr->image) r_ptr->r_flags3 |= (RF3_NONLIVING);
@@ -2194,9 +2199,10 @@ void update_monsters(bool full)
 	MONSTER_IDX i;
 
 	/* Update each (live) monster */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	for (i = 1; i < floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 		update_monster(p_ptr, i, full);
 	}
@@ -2210,8 +2216,9 @@ void update_monsters(bool full)
  */
 static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
 {
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	monster_race *r_ptr = &r_info[r_idx];
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[chameleon_change_m_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
 	monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
 
 	if (!(r_ptr->flags1 & (RF1_UNIQUE))) return FALSE;
@@ -2222,7 +2229,7 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
 	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
 		return FALSE;
 
-	if (!monster_can_cross_terrain(p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
+	if (!monster_can_cross_terrain(floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
 
 	/* Not born */
 	if (!(old_r_ptr->flags7 & RF7_CHAMELEON))
@@ -2233,7 +2240,7 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
 	/* Born now */
 	else if (summon_specific_who > 0)
 	{
-		if (monster_has_hostile_align(&p_ptr->current_floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr)) return FALSE;
+		if (monster_has_hostile_align(&floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr)) return FALSE;
 	}
 
 	return TRUE;
@@ -2247,18 +2254,19 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
  */
 static bool monster_hook_chameleon(MONRACE_IDX r_idx)
 {
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	monster_race *r_ptr = &r_info[r_idx];
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[chameleon_change_m_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
 	monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
 
 	if (r_ptr->flags1 & (RF1_UNIQUE)) return FALSE;
 	if (r_ptr->flags2 & RF2_MULTIPLY) return FALSE;
 	if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON)) return FALSE;
-	
+
 	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
 		return FALSE;
 
-	if (!monster_can_cross_terrain(p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
+	if (!monster_can_cross_terrain(floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
 
 	/* Not born */
 	if (!(old_r_ptr->flags7 & RF7_CHAMELEON))
@@ -2271,7 +2279,7 @@ static bool monster_hook_chameleon(MONRACE_IDX r_idx)
 	/* Born now */
 	else if (summon_specific_who > 0)
 	{
-		if (monster_has_hostile_align(&p_ptr->current_floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr)) return FALSE;
+		if (monster_has_hostile_align(&floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr)) return FALSE;
 	}
 
 	return (*(get_monster_hook()))(r_idx);
@@ -2287,7 +2295,8 @@ static bool monster_hook_chameleon(MONRACE_IDX r_idx)
 void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 {
 	int oldmaxhp;
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr;
 	char old_m_name[MAX_NLEN];
 	bool old_unique = FALSE;
@@ -2312,12 +2321,12 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 
 		if (old_unique)
 			level = r_info[MON_CHAMELEON_K].level;
-		else if (!p_ptr->current_floor_ptr->dun_level)
+		else if (!floor_ptr->dun_level)
 			level = wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].level;
 		else
-			level = p_ptr->current_floor_ptr->dun_level;
+			level = floor_ptr->dun_level;
 
-		if (d_info[p_ptr->dungeon_idx].flags1 & DF1_CHAMELEON) level+= 2+randint1(3);
+		if (d_info[p_ptr->dungeon_idx].flags1 & DF1_CHAMELEON) level += 2 + randint1(3);
 
 		r_idx = get_mon_num(level);
 		r_ptr = &r_info[r_idx];
@@ -2332,7 +2341,7 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 	lite_spot(m_ptr->fy, m_ptr->fx);
 
 	if ((r_info[old_r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) ||
-	    (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)))
+		(r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)))
 		p_ptr->update |= (PU_MON_LITE);
 
 	if (born)
@@ -2380,7 +2389,7 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 	m_ptr->maxhp = (long)(m_ptr->maxhp * m_ptr->max_maxhp) / oldmaxhp;
 	if (m_ptr->maxhp < 1) m_ptr->maxhp = 1;
 	m_ptr->hp = (long)(m_ptr->hp * m_ptr->max_maxhp) / oldmaxhp;
-	
+
 	/* reset dealt_damage */
 	m_ptr->dealt_damage = 0;
 }
@@ -2400,7 +2409,7 @@ static bool monster_hook_tanuki(MONRACE_IDX r_idx)
 	if (r_ptr->flags2 & RF2_MULTIPLY) return FALSE;
 	if (r_ptr->flags7 & (RF7_FRIENDLY | RF7_CHAMELEON)) return FALSE;
 	if (r_ptr->flags7 & RF7_AQUATIC) return FALSE;
-	
+
 	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
 		return FALSE;
 
@@ -2415,13 +2424,14 @@ static bool monster_hook_tanuki(MONRACE_IDX r_idx)
  */
 static MONRACE_IDX initial_r_appearance(MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
 {
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	int attempts = 1000;
 	MONRACE_IDX ap_r_idx;
-	DEPTH min = MIN(p_ptr->current_floor_ptr->base_level - 5, 50);
+	DEPTH min = MIN(floor_ptr->base_level - 5, 50);
 
 	if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN && !(generate_mode & (PM_MULTIPLY | PM_KAGE)))
 	{
-		if (p_ptr->current_floor_ptr->base_level == 0 ||
+		if (floor_ptr->base_level == 0 ||
 			(one_in_(5) && my_strchr("hkoptuyAHOPTUVY", r_info[r_idx].d_char))) return MON_ALIEN_JURAL;
 	}
 
@@ -2432,7 +2442,7 @@ static MONRACE_IDX initial_r_appearance(MONRACE_IDX r_idx, BIT_FLAGS generate_mo
 
 	while (--attempts)
 	{
-		ap_r_idx = get_mon_num(p_ptr->current_floor_ptr->base_level + 10);
+		ap_r_idx = get_mon_num(floor_ptr->base_level + 10);
 		if (r_info[ap_r_idx].level >= min) return ap_r_idx;
 	}
 
@@ -2472,7 +2482,7 @@ SPEED get_mspeed(monster_race *r_ptr)
  * @param r_idx 生成モンスター種族
  * @param mode 生成オプション
  * @return 成功したらtrue
- * @details 
+ * @details
  * To give the player a sporting chance, any monster that appears in
  * line-of-sight and is extremely dangerous can be marked as
  * "FORCE_SLEEP", which will cause them to be placed with low energy,
@@ -2491,7 +2501,8 @@ SPEED get_mspeed(monster_race *r_ptr)
  */
 static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
-	grid_type		*g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	grid_type		*g_ptr = &floor_ptr->grid_array[y][x];
 	monster_type	*m_ptr;
 	monster_race	*r_ptr = &r_info[r_idx];
 	concptr		name = (r_name + r_ptr->name);
@@ -2501,7 +2512,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	/* DO NOT PLACE A MONSTER IN THE SMALL SCALE WILDERNESS !!! */
 	if (p_ptr->wild_mode) return FALSE;
 
-	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return FALSE;
+	if (!in_bounds(floor_ptr, y, x)) return FALSE;
 	if (!r_idx) return FALSE;
 	if (!r_ptr->name) return FALSE;
 
@@ -2518,15 +2529,15 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	{
 		/* Hack -- "unique" monsters must be "unique" */
 		if (((r_ptr->flags1 & (RF1_UNIQUE)) ||
-		     (r_ptr->flags7 & (RF7_NAZGUL))) &&
-		    (r_ptr->cur_num >= r_ptr->max_num))
+			(r_ptr->flags7 & (RF7_NAZGUL))) &&
+			(r_ptr->cur_num >= r_ptr->max_num))
 		{
 			/* Cannot create */
 			return FALSE;
 		}
 
 		if ((r_ptr->flags7 & (RF7_UNIQUE2)) &&
-		    (r_ptr->cur_num >= 1))
+			(r_ptr->cur_num >= 1))
 		{
 			return FALSE;
 		}
@@ -2538,31 +2549,31 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		}
 
 		/* Depth monsters may NOT be created out of depth, unless in Nightmare mode */
-		if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (p_ptr->current_floor_ptr->dun_level < r_ptr->level) &&
-		    (!ironman_nightmare || (r_ptr->flags1 & (RF1_QUESTOR))))
+		if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (floor_ptr->dun_level < r_ptr->level) &&
+			(!ironman_nightmare || (r_ptr->flags1 & (RF1_QUESTOR))))
 		{
 			/* Cannot create */
 			return FALSE;
 		}
 	}
 
-	if (quest_number(p_ptr, p_ptr->current_floor_ptr->dun_level))
+	if (quest_number(p_ptr, floor_ptr->dun_level))
 	{
-		int hoge = quest_number(p_ptr, p_ptr->current_floor_ptr->dun_level);
+		int hoge = quest_number(p_ptr, floor_ptr->dun_level);
 		if ((quest[hoge].type == QUEST_TYPE_KILL_LEVEL) || (quest[hoge].type == QUEST_TYPE_RANDOM))
 		{
-			if(r_idx == quest[hoge].r_idx)
+			if (r_idx == quest[hoge].r_idx)
 			{
 				int number_mon, i2, j2;
 				number_mon = 0;
 
 				/* Count all quest monsters */
-				for (i2 = 0; i2 < p_ptr->current_floor_ptr->width; ++i2)
-					for (j2 = 0; j2 < p_ptr->current_floor_ptr->height; j2++)
-						if (p_ptr->current_floor_ptr->grid_array[j2][i2].m_idx > 0)
-							if (p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[j2][i2].m_idx].r_idx == quest[hoge].r_idx)
+				for (i2 = 0; i2 < floor_ptr->width; ++i2)
+					for (j2 = 0; j2 < floor_ptr->height; j2++)
+						if (floor_ptr->grid_array[j2][i2].m_idx > 0)
+							if (floor_ptr->m_list[floor_ptr->grid_array[j2][i2].m_idx].r_idx == quest[hoge].r_idx)
 								number_mon++;
-				if(number_mon + quest[hoge].cur_num >= quest[hoge].max_num)
+				if (number_mon + quest[hoge].cur_num >= quest[hoge].max_num)
 					return FALSE;
 			}
 		}
@@ -2570,7 +2581,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 
 	if (is_glyph_grid(g_ptr))
 	{
-		if (randint1(BREAK_GLYPH) < (r_ptr->level+20))
+		if (randint1(BREAK_GLYPH) < (r_ptr->level + 20))
 		{
 			/* Describe observable breakage */
 			if (g_ptr->info & CAVE_MARK)
@@ -2603,7 +2614,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 
 
 	/* Get a new monster record */
-	m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+	m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
 	/* Save the race */
 	m_ptr->r_idx = r_idx;
@@ -2614,17 +2625,17 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	m_ptr->mflag2 = 0;
 
 	/* Hack -- Appearance transfer */
-	if ((mode & PM_MULTIPLY) && (who > 0) && !is_original_ap(&p_ptr->current_floor_ptr->m_list[who]))
+	if ((mode & PM_MULTIPLY) && (who > 0) && !is_original_ap(&floor_ptr->m_list[who]))
 	{
-		m_ptr->ap_r_idx = p_ptr->current_floor_ptr->m_list[who].ap_r_idx;
+		m_ptr->ap_r_idx = floor_ptr->m_list[who].ap_r_idx;
 
 		/* Hack -- Shadower spawns Shadower */
-		if (p_ptr->current_floor_ptr->m_list[who].mflag2 & MFLAG2_KAGE) m_ptr->mflag2 |= MFLAG2_KAGE;
+		if (floor_ptr->m_list[who].mflag2 & MFLAG2_KAGE) m_ptr->mflag2 |= MFLAG2_KAGE;
 	}
 
 	/* Sub-alignment of a monster */
 	if ((who > 0) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
-		m_ptr->sub_align = p_ptr->current_floor_ptr->m_list[who].sub_align;
+		m_ptr->sub_align = floor_ptr->m_list[who].sub_align;
 	else
 	{
 		m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
@@ -2635,7 +2646,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	/* Place the monster at the location */
 	m_ptr->fy = y;
 	m_ptr->fx = x;
-	m_ptr->current_floor_ptr = p_ptr->current_floor_ptr;
+	m_ptr->current_floor_ptr = floor_ptr;
 
 	/* No "timed status" yet */
 	for (cmi = 0; cmi < MAX_MTIMED; cmi++) m_ptr->mtimed[cmi] = 0;
@@ -2651,7 +2662,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 
 
 	/* Your pet summons its pet. */
-	if (who > 0 && is_pet(&p_ptr->current_floor_ptr->m_list[who]))
+	if (who > 0 && is_pet(&floor_ptr->m_list[who]))
 	{
 		mode |= PM_FORCE_PET;
 		m_ptr->parent_m_idx = who;
@@ -2689,7 +2700,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	}
 	/* Friendly? */
 	else if ((r_ptr->flags7 & RF7_FRIENDLY) ||
-		 (mode & PM_FORCE_FRIENDLY) || is_friendly_idx(who))
+		(mode & PM_FORCE_FRIENDLY) || is_friendly_idx(who))
 	{
 		if (!monster_has_hostile_align(NULL, 0, -1, r_ptr)) set_friendly(m_ptr);
 	}
@@ -2701,7 +2712,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	if ((mode & PM_ALLOW_SLEEP) && r_ptr->sleep && !ironman_nightmare)
 	{
 		int val = r_ptr->sleep;
-		(void)set_monster_csleep(g_ptr->m_idx, (val * 2) + randint1(val * 10));
+		(void)set_monster_csleep(p_ptr, g_ptr->m_idx, (val * 2) + randint1(val * 10));
 	}
 
 	/* Assign maximal hitpoints */
@@ -2728,8 +2739,8 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	if (m_ptr->r_idx == MON_WOUNDED_BEAR)
 		m_ptr->hp = m_ptr->maxhp / 2;
 	else m_ptr->hp = m_ptr->maxhp;
-	
-	
+
+
 	/* dealt damage is 0 at initial*/
 	m_ptr->dealt_damage = 0;
 
@@ -2737,7 +2748,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	/* Extract the monster base speed */
 	m_ptr->mspeed = get_mspeed(r_ptr);
 
-	if (mode & PM_HASTE) (void)set_monster_fast(g_ptr->m_idx, 100);
+	if (mode & PM_HASTE) (void)set_monster_fast(p_ptr, g_ptr->m_idx, 100);
 
 	/* Give a random starting energy */
 	if (!ironman_nightmare)
@@ -2783,11 +2794,11 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	 * A unique monster move from old saved floor.
 	 */
 	if (current_world_ptr->character_dungeon &&
-	    ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)))
+		((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)))
 		real_r_ptr(m_ptr)->floor_id = p_ptr->floor_id;
 
 	/* Hack -- Count the number of "reproducers" */
-	if (r_ptr->flags2 & RF2_MULTIPLY) p_ptr->current_floor_ptr->num_repro++;
+	if (r_ptr->flags2 & RF2_MULTIPLY) floor_ptr->num_repro++;
 
 	if (p_ptr->warning && current_world_ptr->character_dungeon)
 	{
@@ -2868,7 +2879,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
  * @param x 中心生成位置x座標
  * @param max_dist 生成位置の最大半径
  * @return 成功したらtrue
- *  
+ *
  */
 static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist)
 {
@@ -2884,12 +2895,13 @@ static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION 
 	for (i = 0; i < MON_SCAT_MAXD; i++)
 		num[i] = 0;
 
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	for (nx = x - max_dist; nx <= x + max_dist; nx++)
 	{
 		for (ny = y - max_dist; ny <= y + max_dist; ny++)
 		{
 			/* Ignore annoying locations */
-			if (!in_bounds(p_ptr->current_floor_ptr, ny, nx)) continue;
+			if (!in_bounds(floor_ptr, ny, nx)) continue;
 
 			/* Require "line of projection" */
 			if (!projectable(p_ptr, y, x, ny, nx)) continue;
@@ -2905,7 +2917,7 @@ static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION 
 			else
 			{
 				/* Walls and Monsters block flow */
-				if (!cave_empty_bold2(p_ptr->current_floor_ptr, ny, nx)) continue;
+				if (!cave_empty_bold2(floor_ptr, ny, nx)) continue;
 
 				/* ... nor on the Pattern */
 				if (pattern_tile(ny, nx)) continue;
@@ -2965,16 +2977,17 @@ static bool place_monster_group(MONSTER_IDX who, POSITION y, POSITION x, MONRACE
 	total = randint1(10);
 
 	/* Hard monsters, small groups */
-	if (r_ptr->level > p_ptr->current_floor_ptr->dun_level)
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	if (r_ptr->level > floor_ptr->dun_level)
 	{
-		extra = r_ptr->level - p_ptr->current_floor_ptr->dun_level;
+		extra = r_ptr->level - floor_ptr->dun_level;
 		extra = 0 - randint1(extra);
 	}
 
 	/* Easy monsters, large groups */
-	else if (r_ptr->level < p_ptr->current_floor_ptr->dun_level)
+	else if (r_ptr->level < floor_ptr->dun_level)
 	{
-		extra = p_ptr->current_floor_ptr->dun_level - r_ptr->level;
+		extra = floor_ptr->dun_level - r_ptr->level;
 		extra = randint1(extra);
 	}
 
@@ -3011,7 +3024,7 @@ static bool place_monster_group(MONSTER_IDX who, POSITION y, POSITION x, MONRACE
 			scatter(p_ptr, &my, &mx, hy, hx, 4, 0);
 
 			/* Walls and Monsters block flow */
-			if (!cave_empty_bold2(p_ptr->current_floor_ptr, my, mx)) continue;
+			if (!cave_empty_bold2(floor_ptr, my, mx)) continue;
 
 			/* Attempt to place another monster */
 			if (place_monster_one(who, my, mx, r_idx, mode))
@@ -3126,11 +3139,11 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 	place_monster_m_idx = hack_m_idx_ii;
 
 	/* Reinforcement */
-	for(i = 0; i < 6; i++)
+	for (i = 0; i < 6; i++)
 	{
-		if(!r_ptr->reinforce_id[i]) break;
+		if (!r_ptr->reinforce_id[i]) break;
 		n = damroll(r_ptr->reinforce_dd[i], r_ptr->reinforce_ds[i]);
-		for(j = 0; j < n; j++)
+		for (j = 0; j < n; j++)
 		{
 			POSITION nx, ny, d = 7;
 			scatter(p_ptr, &ny, &nx, y, x, d, 0);
@@ -3155,7 +3168,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 		for (i = 0; i < 32; i++)
 		{
 			POSITION nx, ny, d = 3;
-			MONRACE_IDX z; 
+			MONRACE_IDX z;
 
 			/* Pick a location */
 			scatter(p_ptr, &ny, &nx, y, x, d, 0);
@@ -3175,7 +3188,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 
 			/* Place a "group" of escorts if needed */
 			if ((r_info[z].flags1 & RF1_FRIENDS) ||
-			    (r_ptr->flags1 & RF1_ESCORTS))
+				(r_ptr->flags1 & RF1_ESCORTS))
 			{
 				/* Place a group of monsters */
 				(void)place_monster_group(place_monster_m_idx, ny, nx, z, mode);
@@ -3227,10 +3240,11 @@ bool alloc_horde(POSITION y, POSITION x)
 	POSITION cx = x;
 	get_mon_num_prep(get_monster_hook(), get_monster_hook2(y, x));
 
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	while (--attempts)
 	{
 		/* Pick a monster */
-		r_idx = get_mon_num(p_ptr->current_floor_ptr->monster_level);
+		r_idx = get_mon_num(floor_ptr->monster_level);
 
 		/* Handle failure */
 		if (!r_idx) return FALSE;
@@ -3254,15 +3268,15 @@ bool alloc_horde(POSITION y, POSITION x)
 
 	if (attempts < 1) return FALSE;
 
-	m_idx = p_ptr->current_floor_ptr->grid_array[y][x].m_idx;
+	m_idx = floor_ptr->grid_array[y][x].m_idx;
 
-	if (p_ptr->current_floor_ptr->m_list[m_idx].mflag2 & MFLAG2_CHAMELEON) r_ptr = &r_info[p_ptr->current_floor_ptr->m_list[m_idx].r_idx];
+	if (floor_ptr->m_list[m_idx].mflag2 & MFLAG2_CHAMELEON) r_ptr = &r_info[floor_ptr->m_list[m_idx].r_idx];
 
 	for (attempts = randint1(10) + 5; attempts; attempts--)
 	{
 		scatter(p_ptr, &cy, &cx, y, x, 5, 0);
 
-		(void)summon_specific(m_idx, cy, cx, p_ptr->current_floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
+		(void)summon_specific(m_idx, cy, cx, floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
 
 		y = cy;
 		x = cx;
@@ -3281,7 +3295,8 @@ bool alloc_guardian(bool def_val)
 {
 	MONRACE_IDX guardian = d_info[p_ptr->dungeon_idx].final_guardian;
 
-	if (guardian && (d_info[p_ptr->dungeon_idx].maxdepth == p_ptr->current_floor_ptr->dun_level) && (r_info[guardian].cur_num < r_info[guardian].max_num))
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	if (guardian && (d_info[p_ptr->dungeon_idx].maxdepth == floor_ptr->dun_level) && (r_info[guardian].cur_num < r_info[guardian].max_num))
 	{
 		POSITION oy;
 		POSITION ox;
@@ -3291,11 +3306,11 @@ bool alloc_guardian(bool def_val)
 		while (try_count)
 		{
 			/* Get a random spot */
-			oy = randint1(p_ptr->current_floor_ptr->height - 4) + 2;
-			ox = randint1(p_ptr->current_floor_ptr->width - 4) + 2;
+			oy = randint1(floor_ptr->height - 4) + 2;
+			ox = randint1(floor_ptr->width - 4) + 2;
 
 			/* Is it a good spot ? */
-			if (cave_empty_bold2(p_ptr->current_floor_ptr, oy, ox) && monster_can_cross_terrain(p_ptr->current_floor_ptr->grid_array[oy][ox].feat, &r_info[guardian], 0))
+			if (cave_empty_bold2(floor_ptr, oy, ox) && monster_can_cross_terrain(floor_ptr->grid_array[oy][ox].feat, &r_info[guardian], 0))
 			{
 				/* Place the guardian */
 				if (place_monster_aux(0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) return TRUE;
@@ -3320,7 +3335,7 @@ bool alloc_guardian(bool def_val)
  * @details
  * Place the monster at least "dis" distance from the player.
  * Use "slp" to choose the initial "sleep" status
- * Use "p_ptr->current_floor_ptr->monster_level" for the monster level
+ * Use "floor_ptr->monster_level" for the monster level
  */
 bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 {
@@ -3331,20 +3346,21 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 	if (alloc_guardian(FALSE)) return TRUE;
 
 	/* Find a legal, distant, unoccupied, space */
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	while (attempts_left--)
 	{
 		/* Pick a location */
-		y = randint0(p_ptr->current_floor_ptr->height);
-		x = randint0(p_ptr->current_floor_ptr->width);
+		y = randint0(floor_ptr->height);
+		x = randint0(floor_ptr->width);
 
 		/* Require empty floor grid (was "naked") */
-		if (p_ptr->current_floor_ptr->dun_level)
+		if (floor_ptr->dun_level)
 		{
-			if (!cave_empty_bold2(p_ptr->current_floor_ptr, y, x)) continue;
+			if (!cave_empty_bold2(floor_ptr, y, x)) continue;
 		}
 		else
 		{
-			if (!cave_empty_bold(p_ptr->current_floor_ptr, y, x)) continue;
+			if (!cave_empty_bold(floor_ptr, y, x)) continue;
 		}
 
 		/* Accept far away grids */
@@ -3362,7 +3378,7 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 	}
 
 
-	if (randint1(5000) <= p_ptr->current_floor_ptr->dun_level)
+	if (randint1(5000) <= floor_ptr->dun_level)
 	{
 		if (alloc_horde(y, x))
 		{
@@ -3417,8 +3433,8 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
 	if (!summon_specific_type) return TRUE;
 
 	if ((summon_specific_who < 0) &&
-	    ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) &&
-	    monster_has_hostile_align(NULL, 10, -10, r_ptr))
+		((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) &&
+		monster_has_hostile_align(NULL, 10, -10, r_ptr))
 		return FALSE;
 
 	if ((r_ptr->flags7 & RF7_CHAMELEON) && (d_info[p_ptr->dungeon_idx].flags1 & DF1_CHAMELEON)) return TRUE;
@@ -3434,7 +3450,7 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
  * @param x1 目標地点x座標
  * @param lev 相当生成階
  * @param type 召喚種別
- * @param mode 生成オプション 
+ * @param mode 生成オプション
  * @return 召喚できたらtrueを返す
  * @details
  *
@@ -3463,7 +3479,8 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 	POSITION x, y;
 	MONRACE_IDX r_idx;
 
-	if (p_ptr->current_floor_ptr->inside_arena) return FALSE;
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	if (floor_ptr->inside_arena) return FALSE;
 
 	if (!mon_scatter(0, &y, &x, y1, x1, 2)) return FALSE;
 
@@ -3477,7 +3494,7 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 	get_mon_num_prep(summon_specific_okay, get_monster_hook2(y, x));
 
 	/* Pick a monster, using the level calculation */
-	r_idx = get_mon_num((p_ptr->current_floor_ptr->dun_level + lev) / 2 + 5);
+	r_idx = get_mon_num((floor_ptr->dun_level + lev) / 2 + 5);
 
 	/* Handle failure */
 	if (!r_idx)
@@ -3508,7 +3525,7 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
  * @param oy 目標地点y座標
  * @param ox 目標地点x座標
  * @param r_idx 生成するモンスター種族ID
- * @param mode 生成オプション 
+ * @param mode 生成オプション
  * @return 召喚できたらtrueを返す
  */
 bool summon_named_creature(MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
@@ -3532,14 +3549,15 @@ bool summon_named_creature(MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_ID
  * @brief モンスターを増殖生成する / Let the given monster attempt to reproduce.
  * @param m_idx 増殖するモンスター情報ID
  * @param clone クローン・モンスター処理ならばtrue
- * @param mode 生成オプション 
+ * @param mode 生成オプション
  * @return 生成できたらtrueを返す
  * @details
  * Note that "reproduction" REQUIRES empty space.
  */
 bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	POSITION y, x;
 
 	if (!mon_scatter(m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1))
@@ -3554,8 +3572,8 @@ bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 	/* Hack -- Transfer "clone" flag */
 	if (clone || (m_ptr->smart & SM_CLONED))
 	{
-		p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].smart |= SM_CLONED;
-		p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].mflag2 |= MFLAG2_NOPET;
+		floor_ptr->m_list[hack_m_idx_ii].smart |= SM_CLONED;
+		floor_ptr->m_list[hack_m_idx_ii].mflag2 |= MFLAG2_NOPET;
 	}
 
 	return TRUE;
@@ -3584,7 +3602,7 @@ void message_pain(MONSTER_IDX m_idx, HIT_POINT dam)
 
 	monster_desc(m_name, m_ptr, 0);
 
-	if(dam == 0) // Notice non-damage
+	if (dam == 0) // Notice non-damage
 	{
 		msg_format(_("%^sはダメージを受けていない。", "%^s is unharmed."), m_name);
 		return;
@@ -3596,275 +3614,275 @@ void message_pain(MONSTER_IDX m_idx, HIT_POINT dam)
 	tmp = (newhp * 100L) / oldhp;
 	percentage = tmp;
 
-	if(my_strchr(",ejmvwQ", r_ptr->d_char)) // Mushrooms, Eyes, Jellies, Molds, Vortices, Worms, Quylthulgs
+	if (my_strchr(",ejmvwQ", r_ptr->d_char)) // Mushrooms, Eyes, Jellies, Molds, Vortices, Worms, Quylthulgs
 	{
 #ifdef JP
-		if(percentage > 95) msg_format("%^sはほとんど気にとめていない。", m_name);
-		else if(percentage > 75) msg_format("%^sはしり込みした。", m_name);
-		else if(percentage > 50) msg_format("%^sは縮こまった。", m_name);
-		else if(percentage > 35) msg_format("%^sは痛みに震えた。", m_name);
-		else if(percentage > 20) msg_format("%^sは身もだえした。", m_name);
-		else if(percentage > 10) msg_format("%^sは苦痛で身もだえした。", m_name);
+		if (percentage > 95) msg_format("%^sはほとんど気にとめていない。", m_name);
+		else if (percentage > 75) msg_format("%^sはしり込みした。", m_name);
+		else if (percentage > 50) msg_format("%^sは縮こまった。", m_name);
+		else if (percentage > 35) msg_format("%^sは痛みに震えた。", m_name);
+		else if (percentage > 20) msg_format("%^sは身もだえした。", m_name);
+		else if (percentage > 10) msg_format("%^sは苦痛で身もだえした。", m_name);
 		else msg_format("%^sはぐにゃぐにゃと痙攣した。", m_name);
 #else
-		if(percentage > 95) msg_format("%^s barely notices.", m_name);
-		else if(percentage > 75) msg_format("%^s flinches.", m_name);
-		else if(percentage > 50) msg_format("%^s squelches.", m_name);
-		else if(percentage > 35) msg_format("%^s quivers in pain.", m_name);
-		else if(percentage > 20) msg_format("%^s writhes about.", m_name);
-		else if(percentage > 10) msg_format("%^s writhes in agony.", m_name);
+		if (percentage > 95) msg_format("%^s barely notices.", m_name);
+		else if (percentage > 75) msg_format("%^s flinches.", m_name);
+		else if (percentage > 50) msg_format("%^s squelches.", m_name);
+		else if (percentage > 35) msg_format("%^s quivers in pain.", m_name);
+		else if (percentage > 20) msg_format("%^s writhes about.", m_name);
+		else if (percentage > 10) msg_format("%^s writhes in agony.", m_name);
 		else msg_format("%^s jerks limply.", m_name);
 #endif
 	}
 
-	else if(my_strchr("l", r_ptr->d_char)) // Fish
+	else if (my_strchr("l", r_ptr->d_char)) // Fish
 	{
 #ifdef JP
-		if(percentage > 95) msg_format("%^sはほとんど気にとめていない。", m_name);
-		else if(percentage > 75) msg_format("%^sはしり込みした。", m_name);
-		else if(percentage > 50) msg_format("%^sは躊躇した。", m_name);
-		else if(percentage > 35) msg_format("%^sは痛みに震えた。", m_name);
-		else if(percentage > 20) msg_format("%^sは身もだえした。", m_name);
-		else if(percentage > 10) msg_format("%^sは苦痛で身もだえした。", m_name);
+		if (percentage > 95) msg_format("%^sはほとんど気にとめていない。", m_name);
+		else if (percentage > 75) msg_format("%^sはしり込みした。", m_name);
+		else if (percentage > 50) msg_format("%^sは躊躇した。", m_name);
+		else if (percentage > 35) msg_format("%^sは痛みに震えた。", m_name);
+		else if (percentage > 20) msg_format("%^sは身もだえした。", m_name);
+		else if (percentage > 10) msg_format("%^sは苦痛で身もだえした。", m_name);
 		else msg_format("%^sはぐにゃぐにゃと痙攣した。", m_name);
 #else
-		if(percentage > 95) msg_format("%^s barely notices.", m_name);
-		else if(percentage > 75) msg_format("%^s flinches.", m_name);
-		else if(percentage > 50) msg_format("%^s hesitates.", m_name);
-		else if(percentage > 35) msg_format("%^s quivers in pain.", m_name);
-		else if(percentage > 20) msg_format("%^s writhes about.", m_name);
-		else if(percentage > 10) msg_format("%^s writhes in agony.", m_name);
+		if (percentage > 95) msg_format("%^s barely notices.", m_name);
+		else if (percentage > 75) msg_format("%^s flinches.", m_name);
+		else if (percentage > 50) msg_format("%^s hesitates.", m_name);
+		else if (percentage > 35) msg_format("%^s quivers in pain.", m_name);
+		else if (percentage > 20) msg_format("%^s writhes about.", m_name);
+		else if (percentage > 10) msg_format("%^s writhes in agony.", m_name);
 		else msg_format("%^s jerks limply.", m_name);
 #endif		
 	}
 
-	else if(my_strchr("g#+<>", r_ptr->d_char)) // Golems, Walls, Doors, Stairs
-	{	
+	else if (my_strchr("g#+<>", r_ptr->d_char)) // Golems, Walls, Doors, Stairs
+	{
 #ifdef JP
-		if(percentage > 95) msg_format("%sは攻撃を気にとめていない。", m_name);
-		else if(percentage > 75) msg_format("%sは攻撃に肩をすくめた。", m_name);
-		else if(percentage > 50) msg_format("%^sは雷鳴のように吠えた。", m_name);
-		else if(percentage > 35) msg_format("%^sは苦しげに吠えた。", m_name);
-		else if(percentage > 20) msg_format("%^sはうめいた。", m_name);
-		else if(percentage > 10) msg_format("%^sは躊躇した。", m_name);
+		if (percentage > 95) msg_format("%sは攻撃を気にとめていない。", m_name);
+		else if (percentage > 75) msg_format("%sは攻撃に肩をすくめた。", m_name);
+		else if (percentage > 50) msg_format("%^sは雷鳴のように吠えた。", m_name);
+		else if (percentage > 35) msg_format("%^sは苦しげに吠えた。", m_name);
+		else if (percentage > 20) msg_format("%^sはうめいた。", m_name);
+		else if (percentage > 10) msg_format("%^sは躊躇した。", m_name);
 		else msg_format("%^sはくしゃくしゃになった。", m_name);
 #else
-		if(percentage > 95) msg_format("%^s ignores the attack.", m_name);
-		else if(percentage > 75) msg_format("%^s shrugs off the attack.", m_name);
-		else if(percentage > 50) msg_format("%^s roars thunderously.", m_name);
-		else if(percentage > 35) msg_format("%^s rumbles.", m_name);
-		else if(percentage > 20) msg_format("%^s grunts.", m_name);
-		else if(percentage > 10) msg_format("%^s hesitates.", m_name);
+		if (percentage > 95) msg_format("%^s ignores the attack.", m_name);
+		else if (percentage > 75) msg_format("%^s shrugs off the attack.", m_name);
+		else if (percentage > 50) msg_format("%^s roars thunderously.", m_name);
+		else if (percentage > 35) msg_format("%^s rumbles.", m_name);
+		else if (percentage > 20) msg_format("%^s grunts.", m_name);
+		else if (percentage > 10) msg_format("%^s hesitates.", m_name);
 		else msg_format("%^s crumples.", m_name);
 #endif
 	}
 
-	else if(my_strchr("JMR", r_ptr->d_char) || !isalpha(r_ptr->d_char)) // Snakes, Hydrae, Reptiles, Mimics
+	else if (my_strchr("JMR", r_ptr->d_char) || !isalpha(r_ptr->d_char)) // Snakes, Hydrae, Reptiles, Mimics
 	{
 #ifdef JP
-		if(percentage > 95) msg_format("%^sはほとんど気にとめていない。", m_name);
-		else if(percentage > 75) msg_format("%^sはシーッと鳴いた。", m_name);
-		else if(percentage > 50) msg_format("%^sは怒って頭を上げた。", m_name);
-		else if(percentage > 35) msg_format("%^sは猛然と威嚇した。", m_name);
-		else if(percentage > 20) msg_format("%^sは身もだえした。", m_name);
-		else if(percentage > 10) msg_format("%^sは苦痛で身もだえした。", m_name);
+		if (percentage > 95) msg_format("%^sはほとんど気にとめていない。", m_name);
+		else if (percentage > 75) msg_format("%^sはシーッと鳴いた。", m_name);
+		else if (percentage > 50) msg_format("%^sは怒って頭を上げた。", m_name);
+		else if (percentage > 35) msg_format("%^sは猛然と威嚇した。", m_name);
+		else if (percentage > 20) msg_format("%^sは身もだえした。", m_name);
+		else if (percentage > 10) msg_format("%^sは苦痛で身もだえした。", m_name);
 		else msg_format("%^sはぐにゃぐにゃと痙攣した。", m_name);
 #else
-		if(percentage > 95) msg_format("%^s barely notices.", m_name);
-		else if(percentage > 75) msg_format("%^s hisses.", m_name);
-		else if(percentage > 50) msg_format("%^s rears up in anger.", m_name);
-		else if(percentage > 35) msg_format("%^s hisses furiously.", m_name);
-		else if(percentage > 20) msg_format("%^s writhes about.", m_name);
-		else if(percentage > 10) msg_format("%^s writhes in agony.", m_name);
+		if (percentage > 95) msg_format("%^s barely notices.", m_name);
+		else if (percentage > 75) msg_format("%^s hisses.", m_name);
+		else if (percentage > 50) msg_format("%^s rears up in anger.", m_name);
+		else if (percentage > 35) msg_format("%^s hisses furiously.", m_name);
+		else if (percentage > 20) msg_format("%^s writhes about.", m_name);
+		else if (percentage > 10) msg_format("%^s writhes in agony.", m_name);
 		else msg_format("%^s jerks limply.", m_name);
 #endif
 	}
 
-	else if(my_strchr("f", r_ptr->d_char))
+	else if (my_strchr("f", r_ptr->d_char))
 	{
 #ifdef JP
-		if(percentage > 95) msg_format("%sは攻撃に肩をすくめた。", m_name);
-		else if(percentage > 75) msg_format("%^sは吠えた。", m_name);
-		else if(percentage > 50) msg_format("%^sは怒って吠えた。", m_name);
-		else if(percentage > 35) msg_format("%^sは痛みでシーッと鳴いた。", m_name);
-		else if(percentage > 20) msg_format("%^sは痛みで弱々しく鳴いた。", m_name);
-		else if(percentage > 10) msg_format("%^sは苦痛にうめいた。", m_name);
+		if (percentage > 95) msg_format("%sは攻撃に肩をすくめた。", m_name);
+		else if (percentage > 75) msg_format("%^sは吠えた。", m_name);
+		else if (percentage > 50) msg_format("%^sは怒って吠えた。", m_name);
+		else if (percentage > 35) msg_format("%^sは痛みでシーッと鳴いた。", m_name);
+		else if (percentage > 20) msg_format("%^sは痛みで弱々しく鳴いた。", m_name);
+		else if (percentage > 10) msg_format("%^sは苦痛にうめいた。", m_name);
 		else msg_format("%sは哀れな鳴き声を出した。", m_name);
 #else
-		if(percentage > 95) msg_format("%^s shrugs off the attack.", m_name);
-		else if(percentage > 75) msg_format("%^s roars.", m_name);
-		else if(percentage > 50) msg_format("%^s growls angrily.", m_name);
-		else if(percentage > 35) msg_format("%^s hisses with pain.", m_name);
-		else if(percentage > 20) msg_format("%^s mewls in pain.", m_name);
-		else if(percentage > 10) msg_format("%^s hisses in agony.", m_name);
+		if (percentage > 95) msg_format("%^s shrugs off the attack.", m_name);
+		else if (percentage > 75) msg_format("%^s roars.", m_name);
+		else if (percentage > 50) msg_format("%^s growls angrily.", m_name);
+		else if (percentage > 35) msg_format("%^s hisses with pain.", m_name);
+		else if (percentage > 20) msg_format("%^s mewls in pain.", m_name);
+		else if (percentage > 10) msg_format("%^s hisses in agony.", m_name);
 		else msg_format("%^s mewls pitifully.", m_name);
 #endif
 	}
 
-	else if(my_strchr("acFIKS", r_ptr->d_char)) // Ants, Centipedes, Flies, Insects, Beetles, Spiders
+	else if (my_strchr("acFIKS", r_ptr->d_char)) // Ants, Centipedes, Flies, Insects, Beetles, Spiders
 	{
 #ifdef JP
-		if(percentage > 95) msg_format("%sは攻撃を気にとめていない。", m_name);
-		else if(percentage > 75) msg_format("%^sはキーキー鳴いた。", m_name);
-		else if(percentage > 50) msg_format("%^sはヨロヨロ逃げ回った。", m_name);
-		else if(percentage > 35) msg_format("%^sはうるさく鳴いた。", m_name);
-		else if(percentage > 20) msg_format("%^sは痛みに痙攣した。", m_name);
-		else if(percentage > 10) msg_format("%^sは苦痛で痙攣した。", m_name);
+		if (percentage > 95) msg_format("%sは攻撃を気にとめていない。", m_name);
+		else if (percentage > 75) msg_format("%^sはキーキー鳴いた。", m_name);
+		else if (percentage > 50) msg_format("%^sはヨロヨロ逃げ回った。", m_name);
+		else if (percentage > 35) msg_format("%^sはうるさく鳴いた。", m_name);
+		else if (percentage > 20) msg_format("%^sは痛みに痙攣した。", m_name);
+		else if (percentage > 10) msg_format("%^sは苦痛で痙攣した。", m_name);
 		else msg_format("%^sはピクピクひきつった。", m_name);
 #else
-		if(percentage > 95)	msg_format("%^s ignores the attack.", m_name);
-		else if(percentage > 75) msg_format("%^s chitters.", m_name);
-		else if(percentage > 50) msg_format("%^s scuttles about.", m_name);
-		else if(percentage > 35) msg_format("%^s twitters.", m_name);
-		else if(percentage > 20) msg_format("%^s jerks in pain.", m_name);
-		else if(percentage > 10) msg_format("%^s jerks in agony.", m_name);
+		if (percentage > 95)	msg_format("%^s ignores the attack.", m_name);
+		else if (percentage > 75) msg_format("%^s chitters.", m_name);
+		else if (percentage > 50) msg_format("%^s scuttles about.", m_name);
+		else if (percentage > 35) msg_format("%^s twitters.", m_name);
+		else if (percentage > 20) msg_format("%^s jerks in pain.", m_name);
+		else if (percentage > 10) msg_format("%^s jerks in agony.", m_name);
 		else msg_format("%^s twitches.", m_name);
 #endif
 	}
 
-	else if(my_strchr("B", r_ptr->d_char)) // Birds
-	{		
+	else if (my_strchr("B", r_ptr->d_char)) // Birds
+	{
 #ifdef JP
-		if(percentage > 95) msg_format("%^sはさえずった。", m_name);
-		else if(percentage > 75) msg_format("%^sはピーピー鳴いた。", m_name);
-		else if(percentage > 50) msg_format("%^sはギャーギャー鳴いた。", m_name);
-		else if(percentage > 35) msg_format("%^sはギャーギャー鳴きわめいた。", m_name);
-		else if(percentage > 20) msg_format("%^sは苦しんだ。", m_name);
-		else if(percentage > 10) msg_format("%^sはのたうち回った。", m_name);
+		if (percentage > 95) msg_format("%^sはさえずった。", m_name);
+		else if (percentage > 75) msg_format("%^sはピーピー鳴いた。", m_name);
+		else if (percentage > 50) msg_format("%^sはギャーギャー鳴いた。", m_name);
+		else if (percentage > 35) msg_format("%^sはギャーギャー鳴きわめいた。", m_name);
+		else if (percentage > 20) msg_format("%^sは苦しんだ。", m_name);
+		else if (percentage > 10) msg_format("%^sはのたうち回った。", m_name);
 		else msg_format("%^sはキーキーと鳴き叫んだ。", m_name);
 #else
-		if(percentage > 95)	msg_format("%^s chirps.", m_name);
-		else if(percentage > 75) msg_format("%^s twitters.", m_name);
-		else if(percentage > 50) msg_format("%^s squawks.", m_name);
-		else if(percentage > 35) msg_format("%^s chatters.", m_name);
-		else if(percentage > 20) msg_format("%^s jeers.", m_name);
-		else if(percentage > 10) msg_format("%^s flutters about.", m_name);
+		if (percentage > 95)	msg_format("%^s chirps.", m_name);
+		else if (percentage > 75) msg_format("%^s twitters.", m_name);
+		else if (percentage > 50) msg_format("%^s squawks.", m_name);
+		else if (percentage > 35) msg_format("%^s chatters.", m_name);
+		else if (percentage > 20) msg_format("%^s jeers.", m_name);
+		else if (percentage > 10) msg_format("%^s flutters about.", m_name);
 		else msg_format("%^s squeaks.", m_name);
 #endif
 	}
 
-	else if(my_strchr("duDLUW", r_ptr->d_char)) // Dragons, Demons, High Undead
-	{	
+	else if (my_strchr("duDLUW", r_ptr->d_char)) // Dragons, Demons, High Undead
+	{
 #ifdef JP
-		if(percentage > 95) msg_format("%sは攻撃を気にとめていない。", m_name);
-		else if(percentage > 75) msg_format("%^sはしり込みした。", m_name);
-		else if(percentage > 50) msg_format("%^sは痛みでシーッと鳴いた。", m_name);
-		else if(percentage > 35) msg_format("%^sは痛みでうなった。", m_name);
-		else if(percentage > 20) msg_format("%^sは痛みに吠えた。", m_name);
-		else if(percentage > 10) msg_format("%^sは苦しげに叫んだ。", m_name);
+		if (percentage > 95) msg_format("%sは攻撃を気にとめていない。", m_name);
+		else if (percentage > 75) msg_format("%^sはしり込みした。", m_name);
+		else if (percentage > 50) msg_format("%^sは痛みでシーッと鳴いた。", m_name);
+		else if (percentage > 35) msg_format("%^sは痛みでうなった。", m_name);
+		else if (percentage > 20) msg_format("%^sは痛みに吠えた。", m_name);
+		else if (percentage > 10) msg_format("%^sは苦しげに叫んだ。", m_name);
 		else msg_format("%^sは弱々しくうなった。", m_name);
 #else
-		if(percentage > 95) msg_format("%^s ignores the attack.", m_name);
-		else if(percentage > 75) msg_format("%^s flinches.", m_name);
-		else if(percentage > 50) msg_format("%^s hisses in pain.", m_name);
-		else if(percentage > 35) msg_format("%^s snarls with pain.", m_name);
-		else if(percentage > 20) msg_format("%^s roars with pain.", m_name);
-		else if(percentage > 10) msg_format("%^s gasps.", m_name);
+		if (percentage > 95) msg_format("%^s ignores the attack.", m_name);
+		else if (percentage > 75) msg_format("%^s flinches.", m_name);
+		else if (percentage > 50) msg_format("%^s hisses in pain.", m_name);
+		else if (percentage > 35) msg_format("%^s snarls with pain.", m_name);
+		else if (percentage > 20) msg_format("%^s roars with pain.", m_name);
+		else if (percentage > 10) msg_format("%^s gasps.", m_name);
 		else msg_format("%^s snarls feebly.", m_name);
 #endif
 	}
 
-	else if(my_strchr("s", r_ptr->d_char)) // Skeletons
+	else if (my_strchr("s", r_ptr->d_char)) // Skeletons
 	{
 #ifdef JP
-		if(percentage > 95) msg_format("%sは攻撃を気にとめていない。", m_name);
-		else if(percentage > 75) msg_format("%sは攻撃に肩をすくめた。", m_name);
-		else if(percentage > 50) msg_format("%^sはカタカタと笑った。", m_name);
-		else if(percentage > 35) msg_format("%^sはよろめいた。", m_name);
-		else if(percentage > 20) msg_format("%^sはカタカタ言った。", m_name);
-		else if(percentage > 10) msg_format("%^sはよろめいた。", m_name);
+		if (percentage > 95) msg_format("%sは攻撃を気にとめていない。", m_name);
+		else if (percentage > 75) msg_format("%sは攻撃に肩をすくめた。", m_name);
+		else if (percentage > 50) msg_format("%^sはカタカタと笑った。", m_name);
+		else if (percentage > 35) msg_format("%^sはよろめいた。", m_name);
+		else if (percentage > 20) msg_format("%^sはカタカタ言った。", m_name);
+		else if (percentage > 10) msg_format("%^sはよろめいた。", m_name);
 		else msg_format("%^sはガタガタ言った。", m_name);
 #else
-		if(percentage > 95) msg_format("%^s ignores the attack.", m_name);
-		else if(percentage > 75) msg_format("%^s shrugs off the attack.", m_name);
-		else if(percentage > 50) msg_format("%^s rattles.", m_name);
-		else if(percentage > 35) msg_format("%^s stumbles.", m_name);
-		else if(percentage > 20) msg_format("%^s rattles.", m_name);
-		else if(percentage > 10) msg_format("%^s staggers.", m_name);
+		if (percentage > 95) msg_format("%^s ignores the attack.", m_name);
+		else if (percentage > 75) msg_format("%^s shrugs off the attack.", m_name);
+		else if (percentage > 50) msg_format("%^s rattles.", m_name);
+		else if (percentage > 35) msg_format("%^s stumbles.", m_name);
+		else if (percentage > 20) msg_format("%^s rattles.", m_name);
+		else if (percentage > 10) msg_format("%^s staggers.", m_name);
 		else msg_format("%^s clatters.", m_name);
 #endif
 	}
 
-	else if(my_strchr("z", r_ptr->d_char)) // Zombies
-	{		
+	else if (my_strchr("z", r_ptr->d_char)) // Zombies
+	{
 #ifdef JP
-		if(percentage > 95) msg_format("%sは攻撃を気にとめていない。", m_name);
-		else if(percentage > 75) msg_format("%sは攻撃に肩をすくめた。", m_name);
-		else if(percentage > 50) msg_format("%^sはうめいた。", m_name);
-		else if(percentage > 35) msg_format("%sは苦しげにうめいた。", m_name);
-		else if(percentage > 20) msg_format("%^sは躊躇した。", m_name);
-		else if(percentage > 10) msg_format("%^sはうなった。", m_name);
+		if (percentage > 95) msg_format("%sは攻撃を気にとめていない。", m_name);
+		else if (percentage > 75) msg_format("%sは攻撃に肩をすくめた。", m_name);
+		else if (percentage > 50) msg_format("%^sはうめいた。", m_name);
+		else if (percentage > 35) msg_format("%sは苦しげにうめいた。", m_name);
+		else if (percentage > 20) msg_format("%^sは躊躇した。", m_name);
+		else if (percentage > 10) msg_format("%^sはうなった。", m_name);
 		else msg_format("%^sはよろめいた。", m_name);
 #else
-		if(percentage > 95) msg_format("%^s ignores the attack.", m_name);
-		else if(percentage > 75) msg_format("%^s shrugs off the attack.", m_name);
-		else if(percentage > 50) msg_format("%^s groans.", m_name);
-		else if(percentage > 35) msg_format("%^s moans.", m_name);
-		else if(percentage > 20) msg_format("%^s hesitates.", m_name);
-		else if(percentage > 10) msg_format("%^s grunts.", m_name);
+		if (percentage > 95) msg_format("%^s ignores the attack.", m_name);
+		else if (percentage > 75) msg_format("%^s shrugs off the attack.", m_name);
+		else if (percentage > 50) msg_format("%^s groans.", m_name);
+		else if (percentage > 35) msg_format("%^s moans.", m_name);
+		else if (percentage > 20) msg_format("%^s hesitates.", m_name);
+		else if (percentage > 10) msg_format("%^s grunts.", m_name);
 		else msg_format("%^s staggers.", m_name);
 #endif
 	}
 
-	else if(my_strchr("G", r_ptr->d_char)) // Ghosts
+	else if (my_strchr("G", r_ptr->d_char)) // Ghosts
 	{
 #ifdef JP
-		if(percentage > 95) msg_format("%sは攻撃を気にとめていない。", m_name);
-		else if(percentage > 75) msg_format("%sは攻撃に肩をすくめた。", m_name);
-		else if(percentage > 50) msg_format("%sはうめいた。", m_name);
-		else if(percentage > 35) msg_format("%^sは泣きわめいた。", m_name);
-		else if(percentage > 20) msg_format("%^sは吠えた。", m_name);
-		else if(percentage > 10) msg_format("%sは弱々しくうめいた。", m_name);
+		if (percentage > 95) msg_format("%sは攻撃を気にとめていない。", m_name);
+		else if (percentage > 75) msg_format("%sは攻撃に肩をすくめた。", m_name);
+		else if (percentage > 50) msg_format("%sはうめいた。", m_name);
+		else if (percentage > 35) msg_format("%^sは泣きわめいた。", m_name);
+		else if (percentage > 20) msg_format("%^sは吠えた。", m_name);
+		else if (percentage > 10) msg_format("%sは弱々しくうめいた。", m_name);
 		else msg_format("%^sはかすかにうめいた。", m_name);
 #else
-		if(percentage > 95) msg_format("%^s ignores the attack.", m_name);
-		else if(percentage > 75) msg_format("%^s shrugs off the attack.", m_name);
-		else if(percentage > 50)  msg_format("%^s moans.", m_name);
-		else if(percentage > 35) msg_format("%^s wails.", m_name);
-		else if(percentage > 20) msg_format("%^s howls.", m_name);
-		else if(percentage > 10) msg_format("%^s moans softly.", m_name);
+		if (percentage > 95) msg_format("%^s ignores the attack.", m_name);
+		else if (percentage > 75) msg_format("%^s shrugs off the attack.", m_name);
+		else if (percentage > 50)  msg_format("%^s moans.", m_name);
+		else if (percentage > 35) msg_format("%^s wails.", m_name);
+		else if (percentage > 20) msg_format("%^s howls.", m_name);
+		else if (percentage > 10) msg_format("%^s moans softly.", m_name);
 		else msg_format("%^s sighs.", m_name);
 #endif
 	}
 
-	else if(my_strchr("CZ", r_ptr->d_char)) // Dogs and Hounds
+	else if (my_strchr("CZ", r_ptr->d_char)) // Dogs and Hounds
 	{
 #ifdef JP
-		if(percentage > 95) msg_format("%^sは攻撃に肩をすくめた。", m_name);
-		else if(percentage > 75) msg_format("%^sは痛みでうなった。", m_name);
-		else if(percentage > 50) msg_format("%^sは痛みでキャンキャン吠えた。", m_name);
-		else if(percentage > 35) msg_format("%^sは痛みで鳴きわめいた。", m_name);
-		else if(percentage > 20) msg_format("%^sは苦痛のあまり鳴きわめいた。", m_name);
-		else if(percentage > 10) msg_format("%^sは苦痛でもだえ苦しんだ。", m_name);
+		if (percentage > 95) msg_format("%^sは攻撃に肩をすくめた。", m_name);
+		else if (percentage > 75) msg_format("%^sは痛みでうなった。", m_name);
+		else if (percentage > 50) msg_format("%^sは痛みでキャンキャン吠えた。", m_name);
+		else if (percentage > 35) msg_format("%^sは痛みで鳴きわめいた。", m_name);
+		else if (percentage > 20) msg_format("%^sは苦痛のあまり鳴きわめいた。", m_name);
+		else if (percentage > 10) msg_format("%^sは苦痛でもだえ苦しんだ。", m_name);
 		else msg_format("%^sは弱々しく吠えた。", m_name);
 #else
-		if(percentage > 95) msg_format("%^s shrugs off the attack.", m_name);
-		else if(percentage > 75) msg_format("%^s snarls with pain.", m_name);
-		else if(percentage > 50) msg_format("%^s yelps in pain.", m_name);
-		else if(percentage > 35) msg_format("%^s howls in pain.", m_name);
-		else if(percentage > 20) msg_format("%^s howls in agony.", m_name);
-		else if(percentage > 10) msg_format("%^s writhes in agony.", m_name);
+		if (percentage > 95) msg_format("%^s shrugs off the attack.", m_name);
+		else if (percentage > 75) msg_format("%^s snarls with pain.", m_name);
+		else if (percentage > 50) msg_format("%^s yelps in pain.", m_name);
+		else if (percentage > 35) msg_format("%^s howls in pain.", m_name);
+		else if (percentage > 20) msg_format("%^s howls in agony.", m_name);
+		else if (percentage > 10) msg_format("%^s writhes in agony.", m_name);
 		else msg_format("%^s yelps feebly.", m_name);
 #endif
 	}
 
-	else if(my_strchr("Xbilqrt", r_ptr->d_char)) // One type of creatures (ignore,squeal,shriek)
+	else if (my_strchr("Xbilqrt", r_ptr->d_char)) // One type of creatures (ignore,squeal,shriek)
 	{
 #ifdef JP
-		if(percentage > 95) msg_format("%^sは攻撃を気にとめていない。", m_name);
-		else if(percentage > 75) msg_format("%^sは痛みでうなった。", m_name);
-		else if(percentage > 50) msg_format("%^sは痛みで叫んだ。", m_name);
-		else if(percentage > 35) msg_format("%^sは痛みで絶叫した。", m_name);
-		else if(percentage > 20) msg_format("%^sは苦痛のあまり絶叫した。", m_name);
-		else if(percentage > 10) msg_format("%^sは苦痛でもだえ苦しんだ。", m_name);
+		if (percentage > 95) msg_format("%^sは攻撃を気にとめていない。", m_name);
+		else if (percentage > 75) msg_format("%^sは痛みでうなった。", m_name);
+		else if (percentage > 50) msg_format("%^sは痛みで叫んだ。", m_name);
+		else if (percentage > 35) msg_format("%^sは痛みで絶叫した。", m_name);
+		else if (percentage > 20) msg_format("%^sは苦痛のあまり絶叫した。", m_name);
+		else if (percentage > 10) msg_format("%^sは苦痛でもだえ苦しんだ。", m_name);
 		else msg_format("%^sは弱々しく叫んだ。", m_name);
 #else
-		if(percentage > 95) msg_format("%^s ignores the attack.", m_name);
-		else if(percentage > 75) msg_format("%^s grunts with pain.", m_name);
-		else if(percentage > 50) msg_format("%^s squeals in pain.", m_name);
-		else if(percentage > 35) msg_format("%^s shrieks in pain.", m_name);
-		else if(percentage > 20) msg_format("%^s shrieks in agony.", m_name);
-		else if(percentage > 10) msg_format("%^s writhes in agony.", m_name);
+		if (percentage > 95) msg_format("%^s ignores the attack.", m_name);
+		else if (percentage > 75) msg_format("%^s grunts with pain.", m_name);
+		else if (percentage > 50) msg_format("%^s squeals in pain.", m_name);
+		else if (percentage > 35) msg_format("%^s shrieks in pain.", m_name);
+		else if (percentage > 20) msg_format("%^s shrieks in agony.", m_name);
+		else if (percentage > 10) msg_format("%^s writhes in agony.", m_name);
 		else msg_format("%^s cries out feebly.", m_name);
 #endif
 	}
@@ -3872,20 +3890,20 @@ void message_pain(MONSTER_IDX m_idx, HIT_POINT dam)
 	else // Another type of creatures (shrug,cry,scream)
 	{
 #ifdef JP
-		if(percentage > 95) msg_format("%^sは攻撃に肩をすくめた。", m_name);
-		else if(percentage > 75) msg_format("%^sは痛みでうなった。", m_name);
-		else if(percentage > 50) msg_format("%^sは痛みで叫んだ。", m_name);
-		else if(percentage > 35) msg_format("%^sは痛みで絶叫した。", m_name);
-		else if(percentage > 20) msg_format("%^sは苦痛のあまり絶叫した。", m_name);
-		else if(percentage > 10) msg_format("%^sは苦痛でもだえ苦しんだ。", m_name);
+		if (percentage > 95) msg_format("%^sは攻撃に肩をすくめた。", m_name);
+		else if (percentage > 75) msg_format("%^sは痛みでうなった。", m_name);
+		else if (percentage > 50) msg_format("%^sは痛みで叫んだ。", m_name);
+		else if (percentage > 35) msg_format("%^sは痛みで絶叫した。", m_name);
+		else if (percentage > 20) msg_format("%^sは苦痛のあまり絶叫した。", m_name);
+		else if (percentage > 10) msg_format("%^sは苦痛でもだえ苦しんだ。", m_name);
 		else msg_format("%^sは弱々しく叫んだ。", m_name);
 #else
-		if(percentage > 95) msg_format("%^s shrugs off the attack.", m_name);
-		else if(percentage > 75) msg_format("%^s grunts with pain.", m_name);
-		else if(percentage > 50) msg_format("%^s cries out in pain.", m_name);
-		else if(percentage > 35) msg_format("%^s screams in pain.", m_name);
-		else if(percentage > 20) msg_format("%^s screams in agony.", m_name);
-		else if(percentage > 10) msg_format("%^s writhes in agony.", m_name);
+		if (percentage > 95) msg_format("%^s shrugs off the attack.", m_name);
+		else if (percentage > 75) msg_format("%^s grunts with pain.", m_name);
+		else if (percentage > 50) msg_format("%^s cries out in pain.", m_name);
+		else if (percentage > 35) msg_format("%^s screams in pain.", m_name);
+		else if (percentage > 20) msg_format("%^s screams in agony.", m_name);
+		else if (percentage > 10) msg_format("%^s writhes in agony.", m_name);
 		else msg_format("%^s cries out feebly.", m_name);
 #endif
 	}
@@ -3999,7 +4017,7 @@ void update_smart_learn(MONSTER_IDX m_idx, int what)
 		break;
 
 	case DRS_REFLECT:
-		if (p_ptr->reflect) m_ptr-> smart |= (SM_IMM_REFLECT);
+		if (p_ptr->reflect) m_ptr->smart |= (SM_IMM_REFLECT);
 		break;
 	}
 }
@@ -4017,11 +4035,11 @@ void monster_drop_carried_objects(monster_type *m_ptr)
 	object_type *o_ptr;
 	object_type *q_ptr;
 
-
 	/* Drop objects being carried */
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 		q_ptr = &forge;
 
@@ -4030,7 +4048,7 @@ void monster_drop_carried_objects(monster_type *m_ptr)
 		/* Forget monster */
 		q_ptr->held_m_idx = 0;
 
-		delete_object_idx(p_ptr->current_floor_ptr, this_o_idx);
+		delete_object_idx(floor_ptr, this_o_idx);
 
 		/* Drop it */
 		(void)drop_near(p_ptr, q_ptr, -1, m_ptr->fy, m_ptr->fx);
@@ -4048,7 +4066,8 @@ void monster_drop_carried_objects(monster_type *m_ptr)
  */
 int get_monster_crowd_number(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	POSITION my = m_ptr->fy;
 	POSITION mx = m_ptr->fx;
 	int i;
@@ -4059,10 +4078,10 @@ int get_monster_crowd_number(MONSTER_IDX m_idx)
 		int ay = my + ddy_ddd[i];
 		int ax = mx + ddx_ddd[i];
 
-		if (!in_bounds(p_ptr->current_floor_ptr, ay, ax)) continue;
+		if (!in_bounds(floor_ptr, ay, ax)) continue;
 
 		/* Count number of monsters */
-		if (p_ptr->current_floor_ptr->grid_array[ay][ax].m_idx > 0) count++;
+		if (floor_ptr->grid_array[ay][ax].m_idx > 0) count++;
 	}
 
 	return count;

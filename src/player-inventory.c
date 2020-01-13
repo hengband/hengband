@@ -39,12 +39,12 @@ static INVENTORY_IDX label_to_equip(player_type* owner_ptr, int c)
 	INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1) + INVEN_RARM;
 
 	/* Verify the index */
-	if ((i < INVEN_RARM) || (i >= INVEN_TOTAL)) return (-1);
+	if ((i < INVEN_RARM) || (i >= INVEN_TOTAL)) return -1;
 
 	if (select_ring_slot) return is_ring_slot(i) ? i : -1;
 
 	/* Empty slots can never be chosen */
-	if (!owner_ptr->inventory_list[i].k_idx) return (-1);
+	if (!owner_ptr->inventory_list[i].k_idx) return -1;
 
 	return i;
 }
@@ -63,10 +63,10 @@ static INVENTORY_IDX label_to_inven(player_type* owner_ptr, int c)
 	INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1);
 
 	/* Verify the index */
-	if ((i < 0) || (i > INVEN_PACK)) return (-1);
+	if ((i < 0) || (i > INVEN_PACK)) return -1;
 
 	/* Empty slots can never be chosen */
-	if (!owner_ptr->inventory_list[i].k_idx) return (-1);
+	if (!owner_ptr->inventory_list[i].k_idx) return -1;
 
 	return i;
 }
@@ -1418,43 +1418,6 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			break;
 		}
 
-#if 0
-		case '\n':
-		case '\r':
-		{
-			if (!command_wrk)
-			{
-				k = ((i1 == i2) ? i1 : -1);
-			}
-
-			/* Choose "default" equipment item */
-			else
-			{
-				k = ((e1 == e2) ? e1 : -1);
-			}
-
-			/* Validate the item */
-			if (!get_item_okay(owner_ptr, k))
-			{
-				bell();
-				break;
-			}
-
-			/* Allow player to "refuse" certain actions */
-			if (!get_item_allow(k))
-			{
-				done = TRUE;
-				break;
-			}
-
-			/* Accept that choice */
-			(*cp) = k;
-			item = TRUE;
-			done = TRUE;
-			break;
-		}
-#endif
-
 		case 'w':
 		{
 			if (mode & USE_FORCE) {
@@ -1545,7 +1508,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			item = TRUE;
 			done = TRUE;
 			break;
-			}
+		}
 		}
 	}
 
@@ -2684,66 +2647,6 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			cur_tag = which;
 			break;
 		}
-
-#if 0
-		case '\n':
-		case '\r':
-		{
-			if (command_wrk == (USE_INVEN))
-			{
-				k = ((i1 == i2) ? i1 : -1);
-			}
-
-			/* Choose "default" equipment item */
-			else if (command_wrk == (USE_EQUIP))
-			{
-				k = ((e1 == e2) ? e1 : -1);
-			}
-
-			/* Choose "default" floor item */
-			else if (command_wrk == (USE_FLOOR))
-			{
-				if (floor_num == 1)
-				{
-					/* Special index */
-					k = 0 - floor_list[0];
-
-					/* Allow player to "refuse" certain actions */
-					if (!get_item_allow(owner_ptr, k))
-					{
-						done = TRUE;
-						break;
-					}
-
-					/* Accept that choice */
-					(*cp) = k;
-					item = TRUE;
-					done = TRUE;
-				}
-				break;
-			}
-
-			/* Validate the item */
-			if (!get_item_okay(owner_ptr, k))
-			{
-				bell();
-				break;
-			}
-
-			/* Allow player to "refuse" certain actions */
-			if (!get_item_allow(owner_ptr, k))
-			{
-				done = TRUE;
-				break;
-			}
-
-			/* Accept that choice */
-			(*cp) = k;
-			item = TRUE;
-			done = TRUE;
-			break;
-		}
-#endif
 
 		case 'w':
 		{

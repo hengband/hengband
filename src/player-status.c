@@ -1378,9 +1378,6 @@ void calc_bonuses(player_type *creature_ptr)
 	bool yoiyami = FALSE;
 	bool down_saving = FALSE;
 
-#if 0
-	bool have_dd_s = FALSE, have_dd_t = FALSE;
-#endif
 	bool have_sw = FALSE, have_kabe = FALSE;
 	bool easy_2weapon = FALSE;
 	bool riding_levitation = FALSE;
@@ -1411,7 +1408,7 @@ void calc_bonuses(player_type *creature_ptr)
 	/* Save the old armor class */
 	ARMOUR_CLASS old_dis_ac = creature_ptr->dis_ac;
 	ARMOUR_CLASS old_dis_to_a = creature_ptr->dis_to_a;
-	
+
 	/* Clear extra blows/shots */
 	extra_blows[0] = extra_blows[1] = 0;
 
@@ -2973,7 +2970,7 @@ void calc_bonuses(player_type *creature_ptr)
 	{
 		creature_ptr->resist_fear = TRUE;
 	}
-	
+
 	/* Hack -- Telepathy Change */
 	if (creature_ptr->telepathy != old_telepathy)
 	{
@@ -3727,7 +3724,7 @@ void calc_bonuses(player_type *creature_ptr)
 	if (creature_ptr->immune_elec) creature_ptr->resist_elec = TRUE;
 	if (creature_ptr->immune_fire) creature_ptr->resist_fire = TRUE;
 	if (creature_ptr->immune_cold) creature_ptr->resist_cold = TRUE;
-	
+
 	/* Hack -- handle "xtra" mode */
 	if (current_world_ptr->character_xtra) return;
 
@@ -3863,10 +3860,6 @@ void calc_bonuses(player_type *creature_ptr)
 
 	for (i = 0; i < INVEN_PACK; i++)
 	{
-#if 0
-		if ((creature_ptr->inventory_list[i].tval == TV_SORCERY_BOOK) && (creature_ptr->inventory_list[i].sval == 2)) have_dd_s = TRUE;
-		if ((creature_ptr->inventory_list[i].tval == TV_TRUMP_BOOK) && (creature_ptr->inventory_list[i].sval == 1)) have_dd_t = TRUE;
-#endif
 		if ((creature_ptr->inventory_list[i].tval == TV_NATURE_BOOK) && (creature_ptr->inventory_list[i].sval == 2)) have_sw = TRUE;
 		if ((creature_ptr->inventory_list[i].tval == TV_CRAFT_BOOK) && (creature_ptr->inventory_list[i].sval == 2)) have_kabe = TRUE;
 	}
@@ -3876,28 +3869,12 @@ void calc_bonuses(player_type *creature_ptr)
 		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
-#if 0
-		if ((o_ptr->tval == TV_SORCERY_BOOK) && (o_ptr->sval == 3)) have_dd_s = TRUE;
-		if ((o_ptr->tval == TV_TRUMP_BOOK) && (o_ptr->sval == 1)) have_dd_t = TRUE;
-#endif
 		if ((o_ptr->tval == TV_NATURE_BOOK) && (o_ptr->sval == 2)) have_sw = TRUE;
 		if ((o_ptr->tval == TV_CRAFT_BOOK) && (o_ptr->sval == 2)) have_kabe = TRUE;
 	}
 
 	if (creature_ptr->pass_wall && !creature_ptr->kill_wall) creature_ptr->no_flowed = TRUE;
-#if 0
-	if (have_dd_s && ((creature_ptr->realm1 == REALM_SORCERY) || (creature_ptr->realm2 == REALM_SORCERY) || (creature_ptr->pclass == CLASS_SORCERER)))
-	{
-		const magic_type *s_ptr = &mp_ptr->info[REALM_SORCERY - 1][SPELL_DD_S];
-		if (creature_ptr->lev >= s_ptr->slevel) creature_ptr->no_flowed = TRUE;
-	}
 
-	if (have_dd_t && ((creature_ptr->realm1 == REALM_TRUMP) || (creature_ptr->realm2 == REALM_TRUMP) || (creature_ptr->pclass == CLASS_SORCERER) || (creature_ptr->pclass == CLASS_RED_MAGE)))
-	{
-		const magic_type *s_ptr = &mp_ptr->info[REALM_TRUMP - 1][SPELL_DD_T];
-		if (creature_ptr->lev >= s_ptr->slevel) creature_ptr->no_flowed = TRUE;
-	}
-#endif
 	if (have_sw && ((creature_ptr->realm1 == REALM_NATURE) || (creature_ptr->realm2 == REALM_NATURE) || (creature_ptr->pclass == CLASS_SORCERER)))
 	{
 		const magic_type *s_ptr = &mp_ptr->info[REALM_NATURE - 1][SPELL_SW];
@@ -4604,7 +4581,7 @@ static void calc_mana(player_type *creature_ptr)
 			msp = (3 * msp) / 4;
 		}
 	}
-	
+
 	/* Assume player not encumbered by armor */
 	creature_ptr->cumber_armor = FALSE;
 
@@ -5298,7 +5275,9 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 
 		get_mon_num_prep(NULL, NULL);
 
-#ifndef JP
+#ifdef JP
+#else
+
 		if (!(r_ptr->flags1 & RF1_UNIQUE))
 			sprintf(m_name, "%s %s", (is_a_vowel(desc[0]) ? "an" : "a"), desc);
 		else

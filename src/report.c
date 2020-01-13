@@ -63,14 +63,9 @@ concptr screen_dump = NULL;
 #define SCORE_PATH "http://moon.kmc.gr.jp/hengband/hengscore-en/score.cgi" /*!< スコア開示URL */
 #endif
 
-/* for debug */
-#if 0
-#define SCORE_PATH "http://moon.kmc.gr.jp/hengband/scoretest/score.cgi" /*!< スコア開示URL */
-#endif
-
-/*
- * simple buffer library
- */
+ /*
+  * simple buffer library
+  */
 typedef struct {
 	size_t max_size;
 	size_t size;
@@ -188,60 +183,6 @@ static int buf_sprintf(BUF *buf, concptr fmt, ...)
 	return ret;
 }
 
-#if 0
-static int buf_read(BUF *buf, int fd)
-{
-	int len;
-#ifndef MACINTOSH
-	char tmp[BUFSIZE];
-#else
-	char *tmp;
-	
-	tmp = calloc( BUFSIZE , sizeof(char) );
-#endif
-
-	while ((len = read(fd, tmp, BUFSIZE)) > 0)
-		buf_append(buf, tmp, len);
-
-	return buf->size;
-}
-#endif
-
-#if 0
-static int buf_write(BUF *buf, int fd)
-{
-	write(fd, buf->data, buf->size);
-
-	return buf->size;
-}
-
-static int buf_search(BUF *buf, concptr str)
-{
-	char *ret;
-
-	ret = my_strstr(buf->data, str);
-
-	if (!ret) return -1;
-
-	return ret - buf->data;
-}
-
-static BUF * buf_subbuf(BUF *buf, int pos1, size_t sz)
-{
-	BUF *ret;
-
-	if (pos1 < 0) return NULL;
-
-	ret = buf_new();
-
-	if (sz <= 0) sz = buf->size - pos1;
-
-	buf_append(ret, buf->data + pos1, sz);
-
-	return ret;
-}
-#endif
-
 
 /*!
  * @brief HTTPによるダンプ内容伝送
@@ -259,7 +200,7 @@ static bool http_post(int sd, concptr url, BUF *buf)
 	output = buf_new();
 	buf_sprintf(output, "POST %s HTTP/1.0\r\n", url);
 	buf_sprintf(output, "User-Agent: Hengband %d.%d.%d\r\n",
-		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
 	buf_sprintf(output, "Content-Length: %d\r\n", buf->size);
 	buf_sprintf(output, "Content-Encoding: binary\r\n");
@@ -324,7 +265,7 @@ static errr make_dump(player_type *creature_ptr, BUF* dumpbuf)
 	fd_kill(file_name);
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -404,8 +345,8 @@ concptr make_screen_dump(player_type *creature_ptr)
 				rv = angband_color_table[a][1];
 				gv = angband_color_table[a][2];
 				bv = angband_color_table[a][3];
-				buf_sprintf(screen_buf, "%s<font color=\"#%02x%02x%02x\">", 
-					    ((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
+				buf_sprintf(screen_buf, "%s<font color=\"#%02x%02x%02x\">",
+					((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
 				old_a = a;
 			}
 
@@ -423,7 +364,7 @@ concptr make_screen_dump(player_type *creature_ptr)
 
 	/* Screen dump size is too big ? */
 	concptr ret;
-	if (screen_buf->size + 1> SCREEN_BUF_MAX_SIZE)
+	if (screen_buf->size + 1 > SCREEN_BUF_MAX_SIZE)
 	{
 		ret = NULL;
 	}
@@ -465,7 +406,7 @@ errr report_score(player_type *creature_ptr)
 
 #ifdef WINDOWS
 	WSADATA wsaData;
-	WORD wVersionRequested =(WORD) (( 1) |  ( 1 << 8));
+	WORD wVersionRequested = (WORD)((1) | (1 << 8));
 #endif
 
 	BUF *score;
@@ -481,10 +422,10 @@ errr report_score(player_type *creature_ptr)
 	buf_sprintf(score, "name: %s\n", creature_ptr->name);
 #ifdef JP
 	buf_sprintf(score, "version: 変愚蛮怒 %d.%d.%d\n",
-		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #else
 	buf_sprintf(score, "version: Hengband %d.%d.%d\n",
-		    FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH);
+		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #endif
 	buf_sprintf(score, "score: %d\n", calc_score(creature_ptr));
 	buf_sprintf(score, "level: %d\n", creature_ptr->lev);
@@ -509,7 +450,7 @@ errr report_score(player_type *creature_ptr)
 		buf_sprintf(score, "-----screen shot-----\n");
 		buf_append(score, screen_dump, strlen(screen_dump));
 	}
-	
+
 #ifdef WINDOWS
 	if (WSAStartup(wVersionRequested, &wsaData))
 	{
@@ -543,7 +484,7 @@ errr report_score(player_type *creature_ptr)
 		prt("connecting...", 0, 0);
 #endif
 		Term_fresh();
-		
+
 		/* プロキシを設定する */
 		set_proxy(HTTP_PROXY, HTTP_PROXY_PORT);
 
@@ -607,7 +548,7 @@ errr report_score(player_type *creature_ptr)
 		break;
 	}
 
- report_end:
+report_end:
 #ifdef WINDOWS
 	WSACleanup();
 #endif

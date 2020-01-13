@@ -33,7 +33,7 @@
 #define INTERUPTING_SONG_EFFECT(P_PTR) ((P_PTR)->magic_num1[1])
 #define SINGING_COUNT(P_PTR) ((P_PTR)->magic_num1[2])
 #define SINGING_SONG_ID(P_PTR) ((P_PTR)->magic_num2[0])
-#define music_singing(p_ptr, X) ((p_ptr->pclass == CLASS_BARD) && (p_ptr->magic_num1[0] == (X)))
 #define music_singing_any(CREATURE_PTR) (((CREATURE_PTR)->pclass == CLASS_BARD) && (CREATURE_PTR)->magic_num1[0])
 
 extern concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode);
+extern bool music_singing(player_type *caster_ptr, int music_songs);

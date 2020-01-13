@@ -66,7 +66,7 @@
 * <p>
 * The "Term_xtra_win_clear()" function should probably do a low-level
 * clear of the current window, and redraw the borders and other things,
-* if only for efficiency.  
+* if only for efficiency.
 * </p>
 *
 * <p>
@@ -78,13 +78,13 @@
 * window, I think, and only a few calls actually check for its existance,
 * this may be okay since "NULL" means "on top of all windows". (?)  The
 * user must never be allowed to "hide" the main window, or the "menubar"
-* will disappear.  
+* will disappear.
 * </p>
 *
 * <p>
 * Special "Windows Help Files" can be placed into "lib/xtra/help/" for
 * use with the "winhelp.exe" program.  These files *may* be available
-* at the ftp site somewhere, but I have not seen them.  
+* at the ftp site somewhere, but I have not seen them.
 * </p>
 *
 * <p>
@@ -131,23 +131,23 @@
 # endif
 #endif
 
-/*
- * Available graphic modes
- */
+ /*
+  * Available graphic modes
+  */
 #define GRAPHICS_NONE       0
 #define GRAPHICS_ORIGINAL   1
 #define GRAPHICS_ADAM_BOLT  2
 #define GRAPHICS_HENGBAND   3
 
-/*
- * Hack -- allow use of "screen saver" mode
- */
+  /*
+   * Hack -- allow use of "screen saver" mode
+   */
 #define USE_SAVER
 
 
-/*
- * Menu constants -- see "ANGBAND.RC"
- */
+   /*
+	* Menu constants -- see "ANGBAND.RC"
+	*/
 
 #define IDM_FILE_NEW			100
 #define IDM_FILE_OPEN			101
@@ -244,9 +244,9 @@
 
 #define IDM_HELP_CONTENTS       901
 
-/*
- * Exclude parts of WINDOWS.H that are not needed
- */
+	/*
+	 * Exclude parts of WINDOWS.H that are not needed
+	 */
 #define NOCOMM            /* Comm driver APIs and definitions */
 #define NOLOGERROR        /* LogError() and related definitions */
 #define NOPROFILER        /* Profiler APIs */
@@ -271,26 +271,26 @@
 #define NOMDI             /* MDI support */
 #define NOHELP            /* Help support */
 
-/* Not defined since it breaks Borland C++ 5.5 */
-/* #define NOCTLMGR */    /* Control management and controls */
+	 /* Not defined since it breaks Borland C++ 5.5 */
+	 /* #define NOCTLMGR */    /* Control management and controls */
 
-/*
- * Exclude parts of WINDOWS.H that are not needed (Win32)
- */
+	 /*
+	  * Exclude parts of WINDOWS.H that are not needed (Win32)
+	  */
 #define WIN32_LEAN_AND_MEAN
 #define NONLS             /* All NLS defines and routines */
 #define NOSERVICE         /* All Service Controller routines, SERVICE_ equates, etc. */
 #define NOKANJI           /* Kanji support stuff. */
 #define NOMCX             /* Modem Configuration Extensions */
 
-/*
- * Include the "windows" support file
- */
+	  /*
+	   * Include the "windows" support file
+	   */
 #include <windows.h>
 
-/*
- * Exclude parts of MMSYSTEM.H that are not needed
- */
+	   /*
+		* Exclude parts of MMSYSTEM.H that are not needed
+		*/
 #define MMNODRV          /* Installable driver support */
 #define MMNOWAVE         /* Waveform support */
 #define MMNOMIDI         /* MIDI support */
@@ -302,9 +302,9 @@
 #define MMNOMMSYSTEM     /* General MMSYSTEM functions */
 
 
- /*
-  * Standard sound names
-  */
+		/*
+		 * Standard sound names
+		 */
 const concptr angband_sound_name[SOUND_MAX] =
 {
 	"dummy",
@@ -412,11 +412,11 @@ const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 #include <mmsystem.h>
 #include <commdlg.h>
 
-/*
- * HTML-Help requires htmlhelp.h and htmlhelp.lib from Microsoft's
- * HTML Workshop < http://msdn.microsoft.com/workshop/author/htmlhelp/ >.
- */
-/* #define HTML_HELP */
+ /*
+  * HTML-Help requires htmlhelp.h and htmlhelp.lib from Microsoft's
+  * HTML Workshop < http://msdn.microsoft.com/workshop/author/htmlhelp/ >.
+  */
+  /* #define HTML_HELP */
 
 #ifdef HTML_HELP
 #include <htmlhelp.h>
@@ -429,15 +429,15 @@ const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 # include "readdib.h"
 #endif
 
-/*
- * Hack -- Fake declarations from "dos.h" 
- */
+ /*
+  * Hack -- Fake declarations from "dos.h"
+  */
 #ifdef WIN32
 #define INVALID_FILE_NAME (DWORD)0xFFFFFFFF
 #else /* WIN32 */
 #define FA_LABEL    0x08        /* Volume label */
 #define FA_DIREC    0x10        /* Directory */
-unsigned _cdecl _dos_getfileattr(concptr , unsigned *);
+unsigned _cdecl _dos_getfileattr(concptr, unsigned *);
 #endif /* WIN32 */
 
 /*
@@ -447,16 +447,16 @@ unsigned _cdecl _dos_getfileattr(concptr , unsigned *);
 # define MoveTo(H,X,Y) MoveToEx(H, X, Y, NULL)
 #endif /* WIN32 */
 
-/*
- * Silliness for Windows 95
- */
+ /*
+  * Silliness for Windows 95
+  */
 #ifndef WS_EX_TOOLWINDOW
 # define WS_EX_TOOLWINDOW 0
 #endif
 
-/*
- * Foreground color bits (hard-coded by DOS)
- */
+  /*
+   * Foreground color bits (hard-coded by DOS)
+   */
 #define VID_BLACK	0x00
 #define VID_BLUE	0x01
 #define VID_GREEN	0x02
@@ -466,14 +466,14 @@ unsigned _cdecl _dos_getfileattr(concptr , unsigned *);
 #define VID_YELLOW	0x06
 #define VID_WHITE	0x07
 
-/*
- * Bright text (hard-coded by DOS)
- */
+   /*
+	* Bright text (hard-coded by DOS)
+	*/
 #define VID_BRIGHT	0x08
 
-/*
- * Background color bits (hard-coded by DOS)
- */
+	/*
+	 * Background color bits (hard-coded by DOS)
+	 */
 #define VUD_BLACK	0x00
 #define VUD_BLUE	0x10
 #define VUD_GREEN	0x20
@@ -483,15 +483,15 @@ unsigned _cdecl _dos_getfileattr(concptr , unsigned *);
 #define VUD_YELLOW	0x60
 #define VUD_WHITE	0x70
 
-/*
- * Blinking text (hard-coded by DOS)
- */
+	 /*
+	  * Blinking text (hard-coded by DOS)
+	  */
 #define VUD_BRIGHT	0x80
 
 
-/*
- * Forward declare
- */
+	  /*
+	   * Forward declare
+	   */
 typedef struct _term_data term_data;
 
 /*!
@@ -552,9 +552,7 @@ struct _term_data
 	uint map_tile_hgt;
 
 	bool map_active;
-#if 1 /* #ifdef JP */
 	LOGFONT lf;
-#endif
 
 	bool posfix;
 
@@ -704,9 +702,6 @@ static concptr ANGBAND_DIR_XTRA_GRAF;
 static concptr ANGBAND_DIR_XTRA_SOUND;
 static concptr ANGBAND_DIR_XTRA_MUSIC;
 static concptr ANGBAND_DIR_XTRA_HELP;
-#if 0 /* #ifndef JP */
-static concptr ANGBAND_DIR_XTRA_FONT;
-#endif
 #ifdef USE_MUSIC
 static concptr ANGBAND_DIR_XTRA_MUSIC;
 #endif
@@ -766,7 +761,6 @@ static BYTE win_pal[256] =
 static bool special_key[256];
 static bool ignore_key[256];
 
-#if 1
 /*
  * Hack -- initialization list for "special_key"
  */
@@ -800,85 +794,6 @@ static byte ignore_key_list[] = {
 	VK_LMENU, VK_RMENU,
 	0	/* End of List */
 };
-#else
-/*
- * Hack -- initialization list for "special_key"
- *
- * We ignore the modifier keys (shift, control, alt, num lock, scroll lock),
- * and the normal keys (escape, tab, return, letters, numbers, etc), but we
- * catch the keypad keys (with and without numlock set, including keypad 5),
- * the function keys (including the "menu" key which maps to F10), and the
- * "pause" key (between scroll lock and numlock).  We also catch a few odd
- * keys which I do not recognize, but which are listed among keys which we
- * do catch, so they should be harmless to catch.
- */
-static byte special_key_list[] =
-{
-	VK_CLEAR,		/* 0x0C (KP<5>) */
-
-	VK_PAUSE,		/* 0x13 (pause) */
-
-	VK_PRIOR,		/* 0x21 (KP<9>) */
-	VK_NEXT,		/* 0x22 (KP<3>) */
-	VK_END,			/* 0x23 (KP<1>) */
-	VK_HOME,		/* 0x24 (KP<7>) */
-	VK_LEFT,		/* 0x25 (KP<4>) */
-	VK_UP,			/* 0x26 (KP<8>) */
-	VK_RIGHT,		/* 0x27 (KP<6>) */
-	VK_DOWN,		/* 0x28 (KP<2>) */
-	VK_SELECT,		/* 0x29 (?????) */
-	VK_PRINT,		/* 0x2A (?????) */
-	VK_EXECUTE,		/* 0x2B (?????) */
-	VK_SNAPSHOT,	/* 0x2C (?????) */
-	VK_INSERT,		/* 0x2D (KP<0>) */
-	VK_DELETE,		/* 0x2E (KP<.>) */
-	VK_HELP,		/* 0x2F (?????) */
-#if 0
-	VK_NUMPAD0,		/* 0x60 (KP<0>) */
-	VK_NUMPAD1,		/* 0x61 (KP<1>) */
-	VK_NUMPAD2,		/* 0x62 (KP<2>) */
-	VK_NUMPAD3,		/* 0x63 (KP<3>) */
-	VK_NUMPAD4,		/* 0x64 (KP<4>) */
-	VK_NUMPAD5,		/* 0x65 (KP<5>) */
-	VK_NUMPAD6,		/* 0x66 (KP<6>) */
-	VK_NUMPAD7,		/* 0x67 (KP<7>) */
-	VK_NUMPAD8,		/* 0x68 (KP<8>) */
-	VK_NUMPAD9,		/* 0x69 (KP<9>) */
-	VK_MULTIPLY,	/* 0x6A (KP<*>) */
-	VK_ADD,			/* 0x6B (KP<+>) */
-	VK_SEPARATOR,	/* 0x6C (?????) */
-	VK_SUBTRACT,	/* 0x6D (KP<->) */
-	VK_DECIMAL,		/* 0x6E (KP<.>) */
-	VK_DIVIDE,		/* 0x6F (KP</>) */
-#endif
-	VK_F1,			/* 0x70 */
-	VK_F2,			/* 0x71 */
-	VK_F3,			/* 0x72 */
-	VK_F4,			/* 0x73 */
-	VK_F5,			/* 0x74 */
-	VK_F6,			/* 0x75 */
-	VK_F7,			/* 0x76 */
-	VK_F8,			/* 0x77 */
-	VK_F9,			/* 0x78 */
-	VK_F10,			/* 0x79 */
-	VK_F11,			/* 0x7A */
-	VK_F12,			/* 0x7B */
-	VK_F13,			/* 0x7C */
-	VK_F14,			/* 0x7D */
-	VK_F15,			/* 0x7E */
-	VK_F16,			/* 0x7F */
-	VK_F17,			/* 0x80 */
-	VK_F18,			/* 0x81 */
-	VK_F19,			/* 0x82 */
-	VK_F20,			/* 0x83 */
-	VK_F21,			/* 0x84 */
-	VK_F22,			/* 0x85 */
-	VK_F23,			/* 0x86 */
-	VK_F24,			/* 0x87 */
-	0
-};
-#endif
-
 
 /* Function prototype */
 
@@ -902,7 +817,7 @@ static int init_bg(void)
 	delete_bg();
 	if (use_bg == 0) return 0;
 
-	hBG = LoadImage(NULL, bmfile,  IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+	hBG = LoadImage(NULL, bmfile, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
 	if (!hBG) {
 		plog_fmt(_("壁紙用ビットマップ '%s' を読み込めません。", "Can't load the bitmap file '%s'."), bmfile);
 		use_bg = 0;
@@ -919,7 +834,7 @@ static void DrawBG(HDC hdc, RECT *r)
 	BITMAP bm;
 	int x = r->left, y = r->top;
 	int nx, ny, sx, sy, swid, shgt, cwid, chgt;
-	
+
 	if (!use_bg || !hBG)
 		return;
 
@@ -936,80 +851,16 @@ static void DrawBG(HDC hdc, RECT *r)
 		do {
 			sy = ny % shgt;
 			chgt = MIN(shgt - sy, r->bottom - ny);
-				BitBlt(hdc, nx, ny, cwid, chgt, hdcSrc, sx, sy, SRCCOPY);
+			BitBlt(hdc, nx, ny, cwid, chgt, hdcSrc, sx, sy, SRCCOPY);
 			ny += chgt;
 		} while (ny < r->bottom);
 		ny = y;
 		nx += cwid;
 	} while (nx < r->right);
-	
+
 	SelectObject(hdcSrc, hOld);
 	DeleteDC(hdcSrc);
 }
-
-#if 0
-/*
- * Hack -- given a pathname, point at the filename
- */
-static concptr extract_file_name(concptr s)
-{
-	concptr p;
-
-	/* Start at the end */
-	p = s + strlen(s) - 1;
-
-	/* Back up to divider */
-	while ((p >= s) && (*p != ':') && (*p != '\\')) p--;
-
-	/* Return file name */
-	return (p+1);
-}
-#endif
-
-
-/*
- * Hack -- given a simple filename, extract the "font size" info
- *
- * Return a pointer to a static buffer holding the capitalized base name.
- */
-#if 0 /* #ifndef JP */
-static char *analyze_font(char *path, int *wp, int *hp)
-{
-	int wid, hgt;
-
-	char *s, *p;
-
-	/* Start at the end */
-	p = path + strlen(path) - 1;
-
-	/* Back up to divider */
-	while ((p >= path) && (*p != ':') && (*p != '\\')) --p;
-
-	/* Advance to file name */
-	++p;
-
-	/* Capitalize */
-	for (s = p; *s; ++s)
-	{
-		/* Capitalize (be paranoid) */
-		if (islower(*s)) *s = toupper(*s);
-	}
-
-	/* Find first 'X' */
-	s = my_strchr(p, 'X');
-
-	/* Extract font width */
-	wid = atoi(p);
-
-	/* Extract height */
-	hgt = s ? atoi(s+1) : 0;
-
-	/* Save results */
-	(*wp) = wid;
-	(*hp) = hgt;
-	return (p);
-}
-#endif
 
 
 /*
@@ -1087,7 +938,7 @@ static bool check_dir(concptr s)
 	i = strlen(path);
 
 	/* Remove trailing backslash */
-	if (i && (path[i-1] == '\\')) path[--i] = '\0';
+	if (i && (path[i - 1] == '\\')) path[--i] = '\0';
 
 #ifdef WIN32
 
@@ -1220,25 +1071,19 @@ static void save_prefs_aux(int i)
 
 	/* Font */
 #ifdef JP
-	strcpy(buf, td->lf.lfFaceName[0]!='\0' ? td->lf.lfFaceName : "ＭＳ ゴシック");
+	strcpy(buf, td->lf.lfFaceName[0] != '\0' ? td->lf.lfFaceName : "ＭＳ ゴシック");
 #else
-#if 0
-	strcpy(buf, td->font_file ? td->font_file : "8X13.FON");
-#else
-	strcpy(buf, td->lf.lfFaceName[0]!='\0' ? td->lf.lfFaceName : "Courier");
-#endif
+	strcpy(buf, td->lf.lfFaceName[0] != '\0' ? td->lf.lfFaceName : "Courier");
 #endif
 
 	WritePrivateProfileString(sec_name, "Font", buf, ini_file);
 
-#if 1 /* #ifdef JP */
 	wsprintf(buf, "%d", td->lf.lfWidth);
 	WritePrivateProfileString(sec_name, "FontWid", buf, ini_file);
 	wsprintf(buf, "%d", td->lf.lfHeight);
 	WritePrivateProfileString(sec_name, "FontHgt", buf, ini_file);
 	wsprintf(buf, "%d", td->lf.lfWeight);
 	WritePrivateProfileString(sec_name, "FontWgt", buf, ini_file);
-#endif
 	/* Bizarre */
 	strcpy(buf, td->bizarre ? "1" : "0");
 	WritePrivateProfileString(sec_name, "Bizarre", buf, ini_file);
@@ -1324,7 +1169,7 @@ static void save_prefs(void)
 	/* bg */
 	strcpy(buf, use_bg ? "1" : "0");
 	WritePrivateProfileString("Angband", "BackGround", buf, ini_file);
-	WritePrivateProfileString("Angband", "BackGroundBitmap", 
+	WritePrivateProfileString("Angband", "BackGroundBitmap",
 		bg_bitmap_file[0] != '\0' ? bg_bitmap_file : "bg.bmp", ini_file);
 
 	/* Save window prefs */
@@ -1345,11 +1190,11 @@ static void load_prefs_aux(int i)
 	char tmp[1024];
 
 	int wid, hgt, posx, posy;
-	int dispx = GetSystemMetrics( SM_CXVIRTUALSCREEN);
-	int dispy = GetSystemMetrics( SM_CYVIRTUALSCREEN);
-	posx=0;
-	posy=0;
-	
+	int dispx = GetSystemMetrics(SM_CXVIRTUALSCREEN);
+	int dispy = GetSystemMetrics(SM_CYVIRTUALSCREEN);
+	posx = 0;
+	posy = 0;
+
 	/* Make section name */
 	sprintf(sec_name, "Term-%d", i);
 
@@ -1366,11 +1211,7 @@ static void load_prefs_aux(int i)
 #ifdef JP
 	GetPrivateProfileString(sec_name, "Font", "ＭＳ ゴシック", tmp, 127, ini_file);
 #else
-#if 0
-	GetPrivateProfileString(sec_name, "Font", "8X13.FON", tmp, 127, ini_file);
-#else
 	GetPrivateProfileString(sec_name, "Font", "Courier", tmp, 127, ini_file);
-#endif
 #endif
 
 
@@ -1378,26 +1219,15 @@ static void load_prefs_aux(int i)
 	td->bizarre = (GetPrivateProfileInt(sec_name, "Bizarre", td->bizarre, ini_file) != 0);
 
 	/* Analyze font, save desired font name */
-#if 1 /* #ifdef JP */
 	td->font_want = string_make(tmp);
 	hgt = 15; wid = 0;
-	td->lf.lfWidth  = GetPrivateProfileInt(sec_name, "FontWid", wid, ini_file);
+	td->lf.lfWidth = GetPrivateProfileInt(sec_name, "FontWid", wid, ini_file);
 	td->lf.lfHeight = GetPrivateProfileInt(sec_name, "FontHgt", hgt, ini_file);
 	td->lf.lfWeight = GetPrivateProfileInt(sec_name, "FontWgt", 0, ini_file);
-#else
-	td->font_want = string_make(analyze_font(tmp, &wid, &hgt));
-#endif
-
 
 	/* Tile size */
-#if 1 /* #ifdef JP */
 	td->tile_wid = GetPrivateProfileInt(sec_name, "TileWid", td->lf.lfWidth, ini_file);
 	td->tile_hgt = GetPrivateProfileInt(sec_name, "TileHgt", td->lf.lfHeight, ini_file);
-#else
-	td->tile_wid = GetPrivateProfileInt(sec_name, "TileWid", wid, ini_file);
-	td->tile_hgt = GetPrivateProfileInt(sec_name, "TileHgt", hgt, ini_file);
-#endif
-
 
 	/* Window size */
 	td->cols = GetPrivateProfileInt(sec_name, "NumCols", td->cols, ini_file);
@@ -1413,8 +1243,8 @@ static void load_prefs_aux(int i)
 	/* Window position */
 	posx = GetPrivateProfileInt(sec_name, "PositionX", posx, ini_file);
 	posy = GetPrivateProfileInt(sec_name, "PositionY", posy, ini_file);
-	td->pos_x = MIN(MAX(0, posx), dispx-128);
-	td->pos_y = MIN(MAX(0, posy), dispy-128);
+	td->pos_x = MIN(MAX(0, posx), dispx - 128);
+	td->pos_y = MIN(MAX(0, posy), dispy - 128);
 
 	/* Window Z position */
 	if (i > 0)
@@ -1483,7 +1313,7 @@ static s16b tokenize_whitespace(char *buf, s16b num, char **tokens)
 		char *t;
 
 		/* Skip leading whitespace */
-		for ( ; *s && iswspace(*s); ++s) /* loop */;
+		for (; *s && iswspace(*s); ++s) /* loop */;
 
 		/* All done */
 		if (!*s) break;
@@ -1719,7 +1549,7 @@ static int new_palette(void)
 		LPPALETTEENTRY p;
 
 		/* Access the entry */
-		p = &(pLogPal->palPalEntry[i+nEntries]);
+		p = &(pLogPal->palPalEntry[i + nEntries]);
 
 		/* Save the colors */
 		p->peRed = GetRValue(win_clr[i]);
@@ -1952,8 +1782,8 @@ static void term_window_resize(term_data *td)
 
 	/* Resize the window */
 	SetWindowPos(td->w, 0, 0, 0,
-		     td->size_wid, td->size_hgt,
-		     SWP_NOMOVE | SWP_NOZORDER);
+		td->size_wid, td->size_hgt,
+		SWP_NOMOVE | SWP_NOZORDER);
 
 	/* Redraw later */
 	InvalidateRect(td->w, NULL, TRUE);
@@ -1973,16 +1803,9 @@ static errr term_force_font(term_data *td, concptr path)
 {
 	int wid, hgt;
 
-#if 0 /* #ifndef JP */
-	int i;
-	char *base;
-	char buf[1024];
-#endif
-
 	/* Forget the old font (if needed) */
 	if (td->font_id) DeleteObject(td->font_id);
 
-#if 1 /* #ifdef JP */
 	/* Unused */
 	(void)path;
 
@@ -1990,68 +1813,7 @@ static errr term_force_font(term_data *td, concptr path)
 	td->font_id = CreateFontIndirect(&(td->lf));
 	wid = td->lf.lfWidth;
 	hgt = td->lf.lfHeight;
-	if (!td->font_id) return (1);
-#else
-	/* Forget old font */
-	if (td->font_file)
-	{
-		bool used = FALSE;
-
-		/* Scan windows */
-		for (i = 0; i < MAX_TERM_DATA; i++)
-		{
-			/* Don't check when closing the application */
-			if (!path) break;
-
-			/* Check "screen" */
-			if ((td != &data[i]) &&
-			    (data[i].font_file) &&
-			    (streq(data[i].font_file, td->font_file)))
-			{
-				used = TRUE;
-			}
-		}
-
-		/* Remove unused font resources */
-		if (!used) RemoveFontResource(td->font_file);
-
-		/* Free the old name */
-		string_free(td->font_file);
-
-		/* Forget it */
-		td->font_file = NULL;
-	}
-
-	/* No path given */
-	if (!path) return (1);
-
-	/* Local copy */
-	strcpy(buf, path);
-
-	/* Analyze font path */
-	base = analyze_font(buf, &wid, &hgt);
-
-	/* Verify suffix */
-	if (!suffix(base, ".FON")) return (1);
-
-	/* Verify file */
-	if (!check_file(buf)) return (1);
-
-	/* Load the new font */
-	if (!AddFontResource(buf)) return (1);
-
-	/* Save new font name */
-	td->font_file = string_make(base);
-
-	/* Remove the "suffix" */
-	base[strlen(base)-4] = '\0';
-
-	/* Create the font (using the 'base' of the font file name!) */
-	td->font_id = CreateFont(hgt, wid, 0, 0, FW_DONTCARE, 0, 0, 0,
-				 ANSI_CHARSET, OUT_DEFAULT_PRECIS,
-				 CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
-				 FIXED_PITCH | FF_DONTCARE, base);
-#endif
+	if (!td->font_id) return 1;
 
 	/* Hack -- Unknown size */
 	if (!wid || !hgt)
@@ -2077,7 +1839,7 @@ static errr term_force_font(term_data *td, concptr path)
 	td->font_hgt = hgt;
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -2087,13 +1849,12 @@ static errr term_force_font(term_data *td, concptr path)
  */
 static void term_change_font(term_data *td)
 {
-#if 1 /* #ifdef JP */
 	CHOOSEFONT cf;
 
 	memset(&cf, 0, sizeof(cf));
 	cf.lStructSize = sizeof(cf);
-    cf.Flags = CF_SCREENFONTS | CF_FIXEDPITCHONLY | CF_NOVERTFONTS | CF_INITTOLOGFONTSTRUCT;
-    cf.lpLogFont = &(td->lf);
+	cf.Flags = CF_SCREENFONTS | CF_FIXEDPITCHONLY | CF_NOVERTFONTS | CF_INITTOLOGFONTSTRUCT;
+	cf.lpLogFont = &(td->lf);
 
 	if (ChooseFont(&cf))
 	{
@@ -2113,56 +1874,8 @@ static void term_change_font(term_data *td)
 		/* Resize the window */
 		term_window_resize(td);
 	}
-
-#else
-	OPENFILENAME ofn;
-
-	char tmp[1024] = "";
-
-	/* Extract a default if possible */
-	if (td->font_file) strcpy(tmp, td->font_file);
-
-	/* Ask for a choice */
-	memset(&ofn, 0, sizeof(ofn));
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = data[0].w;
-	ofn.lpstrFilter = "Angband Font Files (*.fon)\0*.fon\0";
-	ofn.nFilterIndex = 1;
-	ofn.lpstrFile = tmp;
-	ofn.nMaxFile = 128;
-	ofn.lpstrInitialDir = ANGBAND_DIR_XTRA_FONT;
-	ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-	ofn.lpstrDefExt = "fon";
-
-	/* Force choice if legal */
-	if (GetOpenFileName(&ofn))
-	{
-		/* Force the font */
-		if (term_force_font(td, tmp))
-		{
-			/* Access the standard font file */
-			path_build(tmp, sizeof(tmp), ANGBAND_DIR_XTRA_FONT, "8X13.FON");
-
-			/* Force the use of that font */
-			(void)term_force_font(td, tmp);
-		}
-
-		/* Assume not bizarre */
-		td->bizarre = FALSE;
-
-		/* Reset the tile info */
-		td->tile_wid = td->font_wid;
-		td->tile_hgt = td->font_hgt;
-
-		/* Analyze the font */
-		term_getsize(td);
-
-		/* Resize the window */
-		term_window_resize(td);
-	}
-#endif
-
 }
+
 
 /*
  * Allow the user to lock this window.
@@ -2170,7 +1883,7 @@ static void term_change_font(term_data *td)
 static void term_window_pos(term_data *td, HWND hWnd)
 {
 	SetWindowPos(td->w, hWnd, 0, 0, 0, 0,
-			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
+		SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 }
 
 static void windows_map(void);
@@ -2214,39 +1927,13 @@ void Term_inversed_area(HWND hWnd, int x, int y, int w, int h)
 	hdc = GetDC(hWnd);
 	myBrush = CreateSolidBrush(RGB(255, 255, 255));
 	oldBrush = SelectObject(hdc, myBrush);
-	oldPen = SelectObject(hdc, GetStockObject(NULL_PEN) );
+	oldPen = SelectObject(hdc, GetStockObject(NULL_PEN));
 
 	PatBlt(hdc, tx, ty, tw, th, PATINVERT);
 
 	SelectObject(hdc, oldBrush);
 	SelectObject(hdc, oldPen);
 }
-
-
-
-/*** Function hooks needed by "Term" ***/
-
-
-#if 0
-
-/*
- * Initialize a new Term
- */
-static void Term_init_win(term *t)
-{
-	/* XXX Unused */
-}
-
-
-/*
- * Nuke an old Term
- */
-static void Term_nuke_win(term *t)
-{
-	/* XXX Unused */
-}
-
-#endif
 
 
 /*!
@@ -2258,7 +1945,7 @@ static errr Term_user_win(int n)
 	(void)n;
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -2354,7 +2041,7 @@ static errr Term_xtra_win_react(void)
 		/* Change setting */
 		use_music = arg_music;
 
-		if(!arg_music) stop_music();
+		if (!arg_music) stop_music();
 		else select_floor_music(p_ptr);
 
 	}
@@ -2415,7 +2102,7 @@ static errr Term_xtra_win_react(void)
 
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -2468,14 +2155,14 @@ static errr Term_xtra_win_flush(void)
 	}
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
 /*
  * Hack -- clear the screen
  *
- * Make this more efficient 
+ * Make this more efficient
  */
 static errr Term_xtra_win_clear(void)
 {
@@ -2515,7 +2202,7 @@ static errr Term_xtra_win_clear(void)
 static errr Term_xtra_win_noise(void)
 {
 	MessageBeep(MB_ICONASTERISK);
-	return (0);
+	return 0;
 }
 
 
@@ -2530,10 +2217,10 @@ static errr Term_xtra_win_sound(int v)
 #endif /* USE_SOUND */
 
 	/* Sound disabled */
-	if (!use_sound) return (1);
+	if (!use_sound) return 1;
 
 	/* Illegal sound */
-	if ((v < 0) || (v >= SOUND_MAX)) return (1);
+	if ((v < 0) || (v >= SOUND_MAX)) return 1;
 
 #ifdef USE_SOUND
 
@@ -2545,7 +2232,7 @@ static errr Term_xtra_win_sound(int v)
 	}
 
 	/* No sample */
-	if (i == 0) return (1);
+	if (i == 0) return 1;
 
 	/* Build the path */
 	path_build(buf, 1024, ANGBAND_DIR_XTRA_SOUND, sound_file[v][Rand_external(i)]);
@@ -2564,7 +2251,7 @@ static errr Term_xtra_win_sound(int v)
 
 #else /* USE_SOUND */
 
-	return (1);
+	return 1;
 
 #endif /* USE_SOUND */
 }
@@ -2586,37 +2273,37 @@ static errr Term_xtra_win_music(int n, int v)
 		mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
 	}
 
-	if(!use_music) return (1);
+	if (!use_music) return 1;
 
 	/* Illegal sound */
-	if(n == TERM_XTRA_MUSIC_BASIC && ((v < 0) || (v >= MUSIC_BASIC_MAX))) return (1);
-	else if(v < 0 || v >= 1000) return(1); /*!< TODO */
+	if (n == TERM_XTRA_MUSIC_BASIC && ((v < 0) || (v >= MUSIC_BASIC_MAX))) return 1;
+	else if (v < 0 || v >= 1000) return(1); /*!< TODO */
 
 #ifdef USE_MUSIC
 
-	switch(n)
+	switch (n)
 	{
 	case TERM_XTRA_MUSIC_BASIC:
-		for (i = 0; i < SAMPLE_MUSIC_MAX; i++) if(!music_file[v][i]) break;
+		for (i = 0; i < SAMPLE_MUSIC_MAX; i++) if (!music_file[v][i]) break;
 		break;
 	case TERM_XTRA_MUSIC_DUNGEON:
-		for (i = 0; i < SAMPLE_MUSIC_MAX; i++) if(!dungeon_music_file[v][i]) break;
+		for (i = 0; i < SAMPLE_MUSIC_MAX; i++) if (!dungeon_music_file[v][i]) break;
 		break;
 	case TERM_XTRA_MUSIC_QUEST:
-		for (i = 0; i < SAMPLE_MUSIC_MAX; i++) if(!quest_music_file[v][i]) break;
+		for (i = 0; i < SAMPLE_MUSIC_MAX; i++) if (!quest_music_file[v][i]) break;
 		break;
 	case TERM_XTRA_MUSIC_TOWN:
-		for (i = 0; i < SAMPLE_MUSIC_MAX; i++) if(!town_music_file[v][i]) break;
+		for (i = 0; i < SAMPLE_MUSIC_MAX; i++) if (!town_music_file[v][i]) break;
 		break;
 	}
 
 	/* No sample */
 	if (i == 0)
 	{
-		return (1);
+		return 1;
 	}
 
-	switch(n)
+	switch (n)
 	{
 	case TERM_XTRA_MUSIC_BASIC:
 		path_build(buf, 1024, ANGBAND_DIR_XTRA_MUSIC, music_file[v][Rand_external(i)]);
@@ -2632,29 +2319,29 @@ static errr Term_xtra_win_music(int n, int v)
 		break;
 	}
 
-	if(current_music_type == n && current_music_id == v)
+	if (current_music_type == n && current_music_id == v)
 	{
-		return (0);
+		return 0;
 	}
 	current_music_type = n;
 	current_music_id = v;
 
 #ifdef WIN32
 
-	mop.lpstrDeviceType = mci_device_type;	
+	mop.lpstrDeviceType = mci_device_type;
 	mop.lpstrElementName = buf;
 	mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
 	mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
 	mciSendCommand(mop.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
 	mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, 0);
 	mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mop);
-	return (0);
+	return 0;
 
 #endif /* WIN32 */
 
 #else /* USE_MUSIC */
 
-	return (1);
+	return 1;
 
 #endif /* USE_MUSIC */
 
@@ -2694,7 +2381,7 @@ static int Term_xtra_win_delay(int v)
 #endif /* WIN32 */
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -2707,61 +2394,61 @@ static errr Term_xtra_win(int n, int v)
 	switch (n)
 	{
 		/* Make a bell sound */
-		case TERM_XTRA_NOISE:
-		{
-			return (Term_xtra_win_noise());
-		}
+	case TERM_XTRA_NOISE:
+	{
+		return (Term_xtra_win_noise());
+	}
 
-		/* Play a music */
-		case TERM_XTRA_MUSIC_BASIC:
-		case TERM_XTRA_MUSIC_DUNGEON:
-		case TERM_XTRA_MUSIC_QUEST:
-		case TERM_XTRA_MUSIC_TOWN:
-		{
-			return (Term_xtra_win_music(n, v));
-		}
+	/* Play a music */
+	case TERM_XTRA_MUSIC_BASIC:
+	case TERM_XTRA_MUSIC_DUNGEON:
+	case TERM_XTRA_MUSIC_QUEST:
+	case TERM_XTRA_MUSIC_TOWN:
+	{
+		return (Term_xtra_win_music(n, v));
+	}
 
-		/* Make a special sound */
-		case TERM_XTRA_SOUND:
-		{
-			return (Term_xtra_win_sound(v));
-		}
+	/* Make a special sound */
+	case TERM_XTRA_SOUND:
+	{
+		return (Term_xtra_win_sound(v));
+	}
 
-		/* Process random events */
-		case TERM_XTRA_BORED:
-		{
-			return (Term_xtra_win_event(0));
-		}
+	/* Process random events */
+	case TERM_XTRA_BORED:
+	{
+		return (Term_xtra_win_event(0));
+	}
 
-		/* Process an event */
-		case TERM_XTRA_EVENT:
-		{
-			return (Term_xtra_win_event(v));
-		}
+	/* Process an event */
+	case TERM_XTRA_EVENT:
+	{
+		return (Term_xtra_win_event(v));
+	}
 
-		/* Flush all events */
-		case TERM_XTRA_FLUSH:
-		{
-			return (Term_xtra_win_flush());
-		}
+	/* Flush all events */
+	case TERM_XTRA_FLUSH:
+	{
+		return (Term_xtra_win_flush());
+	}
 
-		/* Clear the screen */
-		case TERM_XTRA_CLEAR:
-		{
-			return (Term_xtra_win_clear());
-		}
+	/* Clear the screen */
+	case TERM_XTRA_CLEAR:
+	{
+		return (Term_xtra_win_clear());
+	}
 
-		/* React to global changes */
-		case TERM_XTRA_REACT:
-		{
-			return (Term_xtra_win_react());
-		}
+	/* React to global changes */
+	case TERM_XTRA_REACT:
+	{
+		return (Term_xtra_win_react());
+	}
 
-		/* Delay for some milliseconds */
-		case TERM_XTRA_DELAY:
-		{
-			return (Term_xtra_win_delay(v));
-		}
+	/* Delay for some milliseconds */
+	case TERM_XTRA_DELAY:
+	{
+		return (Term_xtra_win_delay(v));
+	}
 	}
 
 	return 1;
@@ -2894,7 +2581,7 @@ static errr Term_wipe_win(int x, int y, int n)
  *
  * One would think there is a more efficient method for telling a window
  * what color it should be using to draw with, but perhaps simply changing
- * it every time is not too inefficient.  
+ * it every time is not too inefficient.
  */
 static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 {
@@ -2902,18 +2589,16 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 	RECT rc;
 	HDC hdc;
 
-#if 1 /* #ifdef JP */
 	static HBITMAP  WALL;
 	static HBRUSH   myBrush, oldBrush;
 	static HPEN     oldPen;
 	static bool init_done = FALSE;
 
-	if (!init_done){
+	if (!init_done) {
 		WALL = LoadBitmap(hInstance, AppName);
 		myBrush = CreatePatternBrush(WALL);
 		init_done = TRUE;
 	}
-#endif
 
 	/* Total rectangle */
 	rc.left = x * td->tile_wid + td->size_ow1;
@@ -2934,7 +2619,7 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 	}
 	else if (paletted)
 	{
-		SetTextColor(hdc, win_clr[a&0x0F]);
+		SetTextColor(hdc, win_clr[a & 0x0F]);
 	}
 	else
 	{
@@ -2943,20 +2628,20 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 
 	/* Use the font */
 	SelectObject(hdc, td->font_id);
-	
+
 	/* bg */
 	if (use_bg) SetBkMode(hdc, TRANSPARENT);
 
 	/* Bizarre size */
 	if (td->bizarre ||
-	    (td->tile_hgt != td->font_hgt) ||
-	    (td->tile_wid != td->font_wid))
+		(td->tile_hgt != td->font_hgt) ||
+		(td->tile_wid != td->font_wid))
 	{
 		int i;
 
 		/* Erase complete rectangle */
 		ExtTextOut(hdc, 0, 0, ETO_OPAQUE, &rc, NULL, 0, NULL);
-		
+
 		/* bg */
 		if (use_bg) DrawBG(hdc, &rc);
 
@@ -2970,15 +2655,15 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 		for (i = 0; i < n; i++)
 		{
 #ifdef JP
-			if (use_bigtile && *(s+i)=="■"[0] && *(s+i+1)=="■"[1])
+			if (use_bigtile && *(s + i) == "■"[0] && *(s + i + 1) == "■"[1])
 			{
 				rc.right += td->font_wid;
 
 				oldBrush = SelectObject(hdc, myBrush);
-				oldPen = SelectObject(hdc, GetStockObject(NULL_PEN) );
+				oldPen = SelectObject(hdc, GetStockObject(NULL_PEN));
 
 				/* Dump the wall */
-				Rectangle(hdc, rc.left, rc.top, rc.right+1, rc.bottom+1);
+				Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
 
 				SelectObject(hdc, oldBrush);
 				SelectObject(hdc, oldPen);
@@ -2989,24 +2674,25 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 				rc.left += 2 * td->tile_wid;
 				rc.right += 2 * td->tile_wid;
 			}
-			else if ( iskanji(*(s+i)) )  /*  ２バイト文字  */
+			else if (iskanji(*(s + i)))  /*  ２バイト文字  */
 			{
 				rc.right += td->font_wid;
 				/* Dump the text */
 				ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc,
-				       s+i, 2, NULL);
+					s + i, 2, NULL);
 				rc.right -= td->font_wid;
 
 				/* Advance */
 				i++;
 				rc.left += 2 * td->tile_wid;
 				rc.right += 2 * td->tile_wid;
-			} else if (*(s+i)==127){
+			}
+			else if (*(s + i) == 127) {
 				oldBrush = SelectObject(hdc, myBrush);
-				oldPen = SelectObject(hdc, GetStockObject(NULL_PEN) );
+				oldPen = SelectObject(hdc, GetStockObject(NULL_PEN));
 
 				/* Dump the wall */
-				Rectangle(hdc, rc.left, rc.top, rc.right+1, rc.bottom+1);
+				Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
 
 				SelectObject(hdc, oldBrush);
 				SelectObject(hdc, oldPen);
@@ -3014,22 +2700,22 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 				/* Advance */
 				rc.left += td->tile_wid;
 				rc.right += td->tile_wid;
-			} else {
+			}
+			else {
 				/* Dump the text */
-				ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s+i, 1, NULL);
+				ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc, s + i, 1, NULL);
 
 				/* Advance */
 				rc.left += td->tile_wid;
 				rc.right += td->tile_wid;
 			}
 #else
-#if 1
-			if (*(s+i)==127){
+			if (*(s + i) == 127) {
 				oldBrush = SelectObject(hdc, myBrush);
-				oldPen = SelectObject(hdc, GetStockObject(NULL_PEN) );
+				oldPen = SelectObject(hdc, GetStockObject(NULL_PEN));
 
 				/* Dump the wall */
-				Rectangle(hdc, rc.left, rc.top, rc.right+1, rc.bottom+1);
+				Rectangle(hdc, rc.left, rc.top, rc.right + 1, rc.bottom + 1);
 
 				SelectObject(hdc, oldBrush);
 				SelectObject(hdc, oldPen);
@@ -3037,24 +2723,16 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 				/* Advance */
 				rc.left += td->tile_wid;
 				rc.right += td->tile_wid;
-			} else {
+			}
+			else {
 				/* Dump the text */
 				ExtTextOut(hdc, rc.left, rc.top, ETO_CLIPPED, &rc,
-				       s+i, 1, NULL);
+					s + i, 1, NULL);
 
 				/* Advance */
 				rc.left += td->tile_wid;
 				rc.right += td->tile_wid;
 			}
-#else
-			/* Dump the text */
-			ExtTextOut(hdc, rc.left, rc.top, 0, &rc,
-				   s+i, 1, NULL);
-
-			/* Advance */
-			rc.left += td->tile_wid;
-			rc.right += td->tile_wid;
-#endif
 #endif
 
 		}
@@ -3065,7 +2743,7 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 	{
 		/* Dump the text */
 		ExtTextOut(hdc, rc.left, rc.top, ETO_OPAQUE | ETO_CLIPPED, &rc,
-			   s, n, NULL);
+			s, n, NULL);
 	}
 
 	/* Release DC */
@@ -3334,12 +3012,6 @@ static void term_data_link(term_data *td)
 	t->attr_blank = TERM_WHITE;
 	t->char_blank = ' ';
 
-#if 0
-	/* Prepare the init/nuke hooks */
-	t->init_hook = Term_init_win;
-	t->nuke_hook = Term_nuke_win;
-#endif
-
 	/* Prepare the template hooks */
 	t->user_hook = Term_user_win;
 	t->xtra_hook = Term_xtra_win;
@@ -3361,17 +3033,13 @@ static void term_data_link(term_data *td)
  * to over-ride selected values, then create the windows, and fonts.
  *
  * Must use SW_SHOW not SW_SHOWNA, since on 256 color display
- * must make active to realize the palette.  
+ * must make active to realize the palette.
  */
 static void init_windows(void)
 {
 	int i;
 
 	term_data *td;
-
-#if 0 /* #ifndef JP */
-	char buf[1024];
-#endif
 
 	/* Main window */
 	td = &data[0];
@@ -3393,9 +3061,7 @@ static void init_windows(void)
 	td->pos_x = 7 * 30;
 	td->pos_y = 7 * 20;
 	td->posfix = FALSE;
-#if 1 /* #ifdef JP */
 	td->bizarre = TRUE;
-#endif
 	/* Sub windows */
 	for (i = 1; i < MAX_TERM_DATA; i++)
 	{
@@ -3413,21 +3079,17 @@ static void init_windows(void)
 		td->pos_x = (7 - i) * 30;
 		td->pos_y = (7 - i) * 20;
 		td->posfix = FALSE;
-#if 1 /* #ifdef JP */
-			td->bizarre = TRUE;
-#endif
+		td->bizarre = TRUE;
 	}
-
 
 	/* Load prefs */
 	load_prefs();
 
-
 	/* Main window (need these before term_getsize gets called) */
 	td = &data[0];
 	td->dwStyle = (WS_OVERLAPPED | WS_THICKFRAME | WS_SYSMENU |
-		       WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CAPTION |
-		       WS_VISIBLE);
+		WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_CAPTION |
+		WS_VISIBLE);
 	td->dwExStyle = 0;
 	td->visible = TRUE;
 
@@ -3445,35 +3107,13 @@ static void init_windows(void)
 	{
 		td = &data[i];
 
-#if 1 /* #ifdef JP */
 		strncpy(td->lf.lfFaceName, td->font_want, LF_FACESIZE);
 		td->lf.lfCharSet = DEFAULT_CHARSET;
 		td->lf.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
 		/* Activate the chosen font */
 		term_force_font(td, NULL);
-		if(!td->tile_wid) td->tile_wid = td->font_wid;
-		if(!td->tile_hgt) td->tile_hgt = td->font_hgt;
-#else
-		/* Access the standard font file */
-		path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_FONT, td->font_want);
-
-		/* Activate the chosen font */
-		if (term_force_font(td, buf))
-		{
-			/* Access the standard font file */
-			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_FONT, "8X13.FON");
-
-			/* Force the use of that font */
-			(void)term_force_font(td, buf);
-
-			td->tile_wid = 8;
-			td->tile_hgt = 13;
-
-			/* Assume not bizarre */
-			td->bizarre = FALSE;
-		}
-#endif
-
+		if (!td->tile_wid) td->tile_wid = td->font_wid;
+		if (!td->tile_hgt) td->tile_hgt = td->font_hgt;
 
 		/* Analyze the font */
 		term_getsize(td);
@@ -3490,10 +3130,10 @@ static void init_windows(void)
 
 		my_td = td;
 		td->w = CreateWindowEx(td->dwExStyle, AngList,
-				       td->s, td->dwStyle,
-				       td->pos_x, td->pos_y,
-				       td->size_wid, td->size_hgt,
-				       HWND_DESKTOP, NULL, hInstance, NULL);
+			td->s, td->dwStyle,
+			td->pos_x, td->pos_y,
+			td->size_wid, td->size_hgt,
+			HWND_DESKTOP, NULL, hInstance, NULL);
 		my_td = NULL;
 		if (!td->w) quit(_("サブウィンドウに作成に失敗しました", "Failed to create sub-window"));
 
@@ -3530,10 +3170,10 @@ static void init_windows(void)
 	/* Main window */
 	my_td = td;
 	td->w = CreateWindowEx(td->dwExStyle, AppName,
-			       td->s, td->dwStyle,
-			       td->pos_x, td->pos_y,
-			       td->size_wid, td->size_hgt,
-			       HWND_DESKTOP, NULL, hInstance, NULL);
+		td->s, td->dwStyle,
+		td->pos_x, td->pos_y,
+		td->size_wid, td->size_hgt,
+		HWND_DESKTOP, NULL, hInstance, NULL);
 	my_td = NULL;
 	if (!td->w) quit(_("メインウィンドウの作成に失敗しました", "Failed to create Angband window"));
 
@@ -3576,15 +3216,15 @@ static void setup_menus(void)
 
 	/* Menu "File", Disable all */
 	EnableMenuItem(hm, IDM_FILE_NEW,
-		       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+		MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	EnableMenuItem(hm, IDM_FILE_OPEN,
-		       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+		MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	EnableMenuItem(hm, IDM_FILE_SAVE,
-		       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+		MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	EnableMenuItem(hm, IDM_FILE_EXIT,
-		       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+		MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	EnableMenuItem(hm, IDM_FILE_SCORE,
-		       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+		MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
 
 	/* No character available */
@@ -3602,40 +3242,40 @@ static void setup_menus(void)
 	{
 		/* Menu "File", Item "Save" */
 		EnableMenuItem(hm, IDM_FILE_SAVE,
-			   MF_BYCOMMAND | MF_ENABLED);
+			MF_BYCOMMAND | MF_ENABLED);
 	}
 
 	/* Menu "File", Item "Exit" */
 	EnableMenuItem(hm, IDM_FILE_EXIT,
-		       MF_BYCOMMAND | MF_ENABLED);
+		MF_BYCOMMAND | MF_ENABLED);
 
 	EnableMenuItem(hm, IDM_FILE_SCORE,
-		       MF_BYCOMMAND | MF_ENABLED);
+		MF_BYCOMMAND | MF_ENABLED);
 
 
 	/* Menu "Window::Visibility" */
 	for (i = 0; i < MAX_TERM_DATA; i++)
 	{
 		EnableMenuItem(hm, IDM_WINDOW_VIS_0 + i,
-			       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+			MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
 		CheckMenuItem(hm, IDM_WINDOW_VIS_0 + i,
-			      (data[i].visible ? MF_CHECKED : MF_UNCHECKED));
+			(data[i].visible ? MF_CHECKED : MF_UNCHECKED));
 
 		EnableMenuItem(hm, IDM_WINDOW_VIS_0 + i,
-			       MF_BYCOMMAND | MF_ENABLED);
+			MF_BYCOMMAND | MF_ENABLED);
 	}
 
 	/* Menu "Window::Font" */
 	for (i = 0; i < MAX_TERM_DATA; i++)
 	{
 		EnableMenuItem(hm, IDM_WINDOW_FONT_0 + i,
-			       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+			MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
 		if (data[i].visible)
 		{
 			EnableMenuItem(hm, IDM_WINDOW_FONT_0 + i,
-				       MF_BYCOMMAND | MF_ENABLED);
+				MF_BYCOMMAND | MF_ENABLED);
 		}
 	}
 
@@ -3643,15 +3283,15 @@ static void setup_menus(void)
 	for (i = 0; i < MAX_TERM_DATA; i++)
 	{
 		EnableMenuItem(hm, IDM_WINDOW_POS_0 + i,
-			       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+			MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
 		CheckMenuItem(hm, IDM_WINDOW_POS_0 + i,
-			      (data[i].posfix ? MF_CHECKED : MF_UNCHECKED));
+			(data[i].posfix ? MF_CHECKED : MF_UNCHECKED));
 
 		if (data[i].visible)
 		{
 			EnableMenuItem(hm, IDM_WINDOW_POS_0 + i,
-				       MF_BYCOMMAND | MF_ENABLED);
+				MF_BYCOMMAND | MF_ENABLED);
 		}
 	}
 
@@ -3659,15 +3299,15 @@ static void setup_menus(void)
 	for (i = 0; i < MAX_TERM_DATA; i++)
 	{
 		EnableMenuItem(hm, IDM_WINDOW_BIZ_0 + i,
-			       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+			MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
 		CheckMenuItem(hm, IDM_WINDOW_BIZ_0 + i,
-			      (data[i].bizarre ? MF_CHECKED : MF_UNCHECKED));
+			(data[i].bizarre ? MF_CHECKED : MF_UNCHECKED));
 
 		if (data[i].visible)
 		{
 			EnableMenuItem(hm, IDM_WINDOW_BIZ_0 + i,
-				   MF_BYCOMMAND | MF_ENABLED);
+				MF_BYCOMMAND | MF_ENABLED);
 
 		}
 	}
@@ -3676,12 +3316,12 @@ static void setup_menus(void)
 	for (i = 0; i < MAX_TERM_DATA; i++)
 	{
 		EnableMenuItem(hm, IDM_WINDOW_I_WID_0 + i,
-			       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+			MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
 		if (data[i].visible)
 		{
 			EnableMenuItem(hm, IDM_WINDOW_I_WID_0 + i,
-				   MF_BYCOMMAND | MF_ENABLED);
+				MF_BYCOMMAND | MF_ENABLED);
 
 		}
 	}
@@ -3690,12 +3330,12 @@ static void setup_menus(void)
 	for (i = 0; i < MAX_TERM_DATA; i++)
 	{
 		EnableMenuItem(hm, IDM_WINDOW_D_WID_0 + i,
-			       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+			MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
 		if (data[i].visible)
 		{
 			EnableMenuItem(hm, IDM_WINDOW_D_WID_0 + i,
-				   MF_BYCOMMAND | MF_ENABLED);
+				MF_BYCOMMAND | MF_ENABLED);
 
 		}
 	}
@@ -3704,12 +3344,12 @@ static void setup_menus(void)
 	for (i = 0; i < MAX_TERM_DATA; i++)
 	{
 		EnableMenuItem(hm, IDM_WINDOW_I_HGT_0 + i,
-			       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+			MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
 		if (data[i].visible)
 		{
 			EnableMenuItem(hm, IDM_WINDOW_I_HGT_0 + i,
-				   MF_BYCOMMAND | MF_ENABLED);
+				MF_BYCOMMAND | MF_ENABLED);
 
 		}
 	}
@@ -3718,30 +3358,32 @@ static void setup_menus(void)
 	for (i = 0; i < MAX_TERM_DATA; i++)
 	{
 		EnableMenuItem(hm, IDM_WINDOW_D_HGT_0 + i,
-			       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+			MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
 		if (data[i].visible)
 		{
 			EnableMenuItem(hm, IDM_WINDOW_D_HGT_0 + i,
-				   MF_BYCOMMAND | MF_ENABLED);
+				MF_BYCOMMAND | MF_ENABLED);
 
 		}
 	}
 
 	/* Menu "Options", disable all */
 	EnableMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS,
-		       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+		MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	EnableMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS,
-		       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+		MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	EnableMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS,
-		       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+		MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	EnableMenuItem(hm, IDM_OPTIONS_BIGTILE,
-		       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+		MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 	EnableMenuItem(hm, IDM_OPTIONS_SOUND,
-		       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
-#ifndef JP
+		MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+#ifdef JP
+#else
+
 	EnableMenuItem(hm, IDM_OPTIONS_SAVER,
-		       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+		MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 #endif
 
 	/* Menu "Options", Item "Map" */
@@ -3749,28 +3391,30 @@ static void setup_menus(void)
 		EnableMenuItem(GetMenu(data[0].w), IDM_OPTIONS_MAP, MF_BYCOMMAND | MF_ENABLED);
 	else
 		EnableMenuItem(GetMenu(data[0].w), IDM_OPTIONS_MAP,
-			       MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
+			MF_BYCOMMAND | MF_DISABLED | MF_GRAYED);
 
 	/* Menu "Options", update all */
 	CheckMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS,
-		      (arg_graphics == GRAPHICS_NONE ? MF_CHECKED : MF_UNCHECKED));
+		(arg_graphics == GRAPHICS_NONE ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS,
-		      (arg_graphics == GRAPHICS_ORIGINAL ? MF_CHECKED : MF_UNCHECKED));
+		(arg_graphics == GRAPHICS_ORIGINAL ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS,
-		      (arg_graphics == GRAPHICS_ADAM_BOLT ? MF_CHECKED : MF_UNCHECKED));
+		(arg_graphics == GRAPHICS_ADAM_BOLT ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_NEW2_GRAPHICS,
-		      (arg_graphics == GRAPHICS_HENGBAND ? MF_CHECKED : MF_UNCHECKED));
+		(arg_graphics == GRAPHICS_HENGBAND ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_BIGTILE,
-		      (arg_bigtile ? MF_CHECKED : MF_UNCHECKED));
+		(arg_bigtile ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_MUSIC,
-		      (arg_music ? MF_CHECKED : MF_UNCHECKED));
+		(arg_music ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_SOUND,
-		      (arg_sound ? MF_CHECKED : MF_UNCHECKED));
+		(arg_sound ? MF_CHECKED : MF_UNCHECKED));
 	CheckMenuItem(hm, IDM_OPTIONS_BG,
-		      (use_bg ? MF_CHECKED : MF_UNCHECKED));
-#ifndef JP
+		(use_bg ? MF_CHECKED : MF_UNCHECKED));
+#ifdef JP
+#else
+
 	CheckMenuItem(hm, IDM_OPTIONS_SAVER,
-		      (hwndSaver ? MF_CHECKED : MF_UNCHECKED));
+		(hwndSaver ? MF_CHECKED : MF_UNCHECKED));
 #endif
 
 #ifdef USE_GRAPHICS
@@ -3792,7 +3436,7 @@ static void setup_menus(void)
 #ifdef USE_SAVER
 	/* Menu "Options", Item "ScreenSaver" */
 	EnableMenuItem(hm, IDM_OPTIONS_SAVER,
-		       MF_BYCOMMAND | MF_ENABLED);
+		MF_BYCOMMAND | MF_ENABLED);
 #endif /* USE_SAVER */
 }
 
@@ -3843,668 +3487,668 @@ static void process_menus(WORD wCmd)
 	switch (wCmd)
 	{
 		/* New game */
-		case IDM_FILE_NEW:
+	case IDM_FILE_NEW:
+	{
+		if (!initialized)
 		{
-			if (!initialized)
+			plog(_("まだ初期化中です...", "You cannot do that yet..."));
+		}
+		else if (game_in_progress)
+		{
+			plog(_("プレイ中は新しいゲームを始めることができません！", "You can't start a new game while you're still playing!"));
+		}
+		else
+		{
+			game_in_progress = TRUE;
+			Term_flush();
+			play_game(p_ptr, TRUE);
+			quit(NULL);
+		}
+		break;
+	}
+
+	/* Open game */
+	case IDM_FILE_OPEN:
+	{
+		if (!initialized)
+		{
+			plog(_("まだ初期化中です...", "You cannot do that yet..."));
+		}
+		else if (game_in_progress)
+		{
+			plog(_("プレイ中はゲームをロードすることができません！", "You can't open a new game while you're still playing!"));
+		}
+		else
+		{
+			memset(&ofn, 0, sizeof(ofn));
+			ofn.lStructSize = sizeof(ofn);
+			ofn.hwndOwner = data[0].w;
+			ofn.lpstrFilter = "Save Files (*.)\0*\0";
+			ofn.nFilterIndex = 1;
+			ofn.lpstrFile = savefile;
+			ofn.nMaxFile = 1024;
+			ofn.lpstrInitialDir = ANGBAND_DIR_SAVE;
+			ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR | OFN_HIDEREADONLY;
+
+			if (GetOpenFileName(&ofn))
 			{
-				plog(_("まだ初期化中です...", "You cannot do that yet..."));
-			}
-			else if (game_in_progress)
-			{
-				plog(_("プレイ中は新しいゲームを始めることができません！", "You can't start a new game while you're still playing!"));
-			}
-			else
-			{
+				/* Load 'savefile' */
+				validate_file(savefile);
 				game_in_progress = TRUE;
 				Term_flush();
-				play_game(p_ptr, TRUE);
+				play_game(p_ptr, FALSE);
 				quit(NULL);
 			}
-			break;
 		}
+		break;
+	}
 
-		/* Open game */
-		case IDM_FILE_OPEN:
+	/* Save game */
+	case IDM_FILE_SAVE:
+	{
+		if (game_in_progress && current_world_ptr->character_generated)
 		{
-			if (!initialized)
+			if (!can_save)
 			{
-				plog(_("まだ初期化中です...", "You cannot do that yet..."));
+				plog(_("今はセーブすることは出来ません。", "You may not do that right now."));
+				break;
 			}
-			else if (game_in_progress)
-			{
-				plog(_("プレイ中はゲームをロードすることができません！", "You can't open a new game while you're still playing!"));
-			}
-			else
-			{
-				memset(&ofn, 0, sizeof(ofn));
-				ofn.lStructSize = sizeof(ofn);
-				ofn.hwndOwner = data[0].w;
-				ofn.lpstrFilter = "Save Files (*.)\0*\0";
-				ofn.nFilterIndex = 1;
-				ofn.lpstrFile = savefile;
-				ofn.nMaxFile = 1024;
-				ofn.lpstrInitialDir = ANGBAND_DIR_SAVE;
-				ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR | OFN_HIDEREADONLY;
 
-				if (GetOpenFileName(&ofn))
-				{
-					/* Load 'savefile' */
-					validate_file(savefile);
-					game_in_progress = TRUE;
-					Term_flush();
-					play_game(p_ptr, FALSE);
-					quit(NULL);
-				}
-			}
-			break;
-		}
+			/* Hack -- Forget messages */
+			msg_flag = FALSE;
 
-		/* Save game */
-		case IDM_FILE_SAVE:
-		{
-			if (game_in_progress && current_world_ptr->character_generated)
-			{
-				if (!can_save)
-				{
-					plog(_("今はセーブすることは出来ません。", "You may not do that right now."));
-					break;
-				}
-
-				/* Hack -- Forget messages */
-				msg_flag = FALSE;
-
-				/* Save the game */
+			/* Save the game */
 #ifdef ZANGBAND
-				do_cmd_save_game(p_ptr, FALSE);
+			do_cmd_save_game(p_ptr, FALSE);
 #else /* ZANGBAND */
-				do_cmd_save_game();
+			do_cmd_save_game();
 #endif /* ZANGBAND */
-			}
-			else
-			{
-				plog(_("今、セーブすることは出来ません。", "You may not do that right now."));
-			}
-			break;
 		}
-
-		case IDM_FILE_EXIT:
+		else
 		{
-			if (game_in_progress && current_world_ptr->character_generated)
+			plog(_("今、セーブすることは出来ません。", "You may not do that right now."));
+		}
+		break;
+	}
+
+	case IDM_FILE_EXIT:
+	{
+		if (game_in_progress && current_world_ptr->character_generated)
+		{
+			if (!can_save)
 			{
-				if (!can_save)
-				{
-					plog(_("今は終了できません。", "You may not do that right now."));
-					break;
-				}
+				plog(_("今は終了できません。", "You may not do that right now."));
+				break;
+			}
 
-				/* Hack -- Forget messages */
-				msg_flag = FALSE;
+			/* Hack -- Forget messages */
+			msg_flag = FALSE;
 
-				forget_lite(p_ptr->current_floor_ptr);
-				forget_view(p_ptr->current_floor_ptr);
-				clear_mon_lite(p_ptr->current_floor_ptr);
+			forget_lite(p_ptr->current_floor_ptr);
+			forget_view(p_ptr->current_floor_ptr);
+			clear_mon_lite(p_ptr->current_floor_ptr);
 
-				/* Save the game */
+			/* Save the game */
 #ifdef ZANGBAND
 				/* do_cmd_save_game(FALSE); */
 #else /* ZANGBAND */
 				/* do_cmd_save_game(); */
 #endif /* ZANGBAND */
-				Term_key_push(SPECIAL_KEY_QUIT);
-				break;
-			}
-			quit(NULL);
+			Term_key_push(SPECIAL_KEY_QUIT);
 			break;
 		}
+		quit(NULL);
+		break;
+	}
 
-		/* Show scores */
-		case IDM_FILE_SCORE:
+	/* Show scores */
+	case IDM_FILE_SCORE:
+	{
+		char buf[1024];
+		path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
+
+		/* Open the binary high score file, for reading */
+		highscore_fd = fd_open(buf, O_RDONLY);
+
+		/* Paranoia -- No score file */
+		if (highscore_fd < 0)
 		{
-			char buf[1024];
-			path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
+			msg_print("Score file unavailable.");
+		}
+		else
+		{
+			screen_save();
+			Term_clear();
 
-			/* Open the binary high score file, for reading */
-			highscore_fd = fd_open(buf, O_RDONLY);
+			/* Display the scores */
+			display_scores_aux(0, MAX_HISCORES, -1, NULL);
 
-			/* Paranoia -- No score file */
-			if (highscore_fd < 0)
-			{
-				msg_print("Score file unavailable.");
-			}
-			else
-			{
-				screen_save();
-				Term_clear();
+			/* Shut the high score file */
+			(void)fd_close(highscore_fd);
 
-				/* Display the scores */
-				display_scores_aux(0, MAX_HISCORES, -1, NULL);
+			/* Forget the high score fd */
+			highscore_fd = -1;
+			screen_load();
 
-				/* Shut the high score file */
-				(void)fd_close(highscore_fd);
-
-				/* Forget the high score fd */
-				highscore_fd = -1;
-				screen_load();
-
-				/* Hack - Flush it */
-				Term_fresh();
-			}
-
-			break;
+			/* Hack - Flush it */
+			Term_fresh();
 		}
 
-		/* Open game */
-		case IDM_FILE_MOVIE:
-		{
-			if (!initialized)
-			{
-				plog(_("まだ初期化中です...", "You cannot do that yet..."));
-			}
-			else if (game_in_progress)
-			{
-				plog(_("プレイ中はムービーをロードすることができません！", "You can't open a movie while you're playing!"));
-			}
-			else
-			{
-				memset(&ofn, 0, sizeof(ofn));
-				ofn.lStructSize = sizeof(ofn);
-				ofn.hwndOwner = data[0].w;
-				ofn.lpstrFilter = "Angband Movie Files (*.amv)\0*.amv\0";
-				ofn.nFilterIndex = 1;
-				ofn.lpstrFile = savefile;
-				ofn.nMaxFile = 1024;
-				ofn.lpstrInitialDir = ANGBAND_DIR_USER;
-				ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+		break;
+	}
 
-				if (GetOpenFileName(&ofn))
-				{
-					/* Load 'savefile' */
-					prepare_browse_movie_aux(savefile);
-					play_game(p_ptr, FALSE);
-					quit(NULL);
-					return;
-				}
-			}
-			break;
+	/* Open game */
+	case IDM_FILE_MOVIE:
+	{
+		if (!initialized)
+		{
+			plog(_("まだ初期化中です...", "You cannot do that yet..."));
 		}
-
-
-		case IDM_WINDOW_VIS_0:
+		else if (game_in_progress)
 		{
-			plog(_("メインウィンドウは非表示にできません！", "You are not allowed to do that!"));
-			break;
+			plog(_("プレイ中はムービーをロードすることができません！", "You can't open a movie while you're playing!"));
 		}
-
-		/* Window visibility */
-		case IDM_WINDOW_VIS_1:
-		case IDM_WINDOW_VIS_2:
-		case IDM_WINDOW_VIS_3:
-		case IDM_WINDOW_VIS_4:
-		case IDM_WINDOW_VIS_5:
-		case IDM_WINDOW_VIS_6:
-		case IDM_WINDOW_VIS_7:
+		else
 		{
-			i = wCmd - IDM_WINDOW_VIS_0;
-
-			if ((i < 0) || (i >= MAX_TERM_DATA)) break;
-
-			td = &data[i];
-
-			if (!td->visible)
-			{
-				td->visible = TRUE;
-				ShowWindow(td->w, SW_SHOW);
-				term_data_redraw(td);
-			}
-			else
-			{
-				td->visible = FALSE;
-				td->posfix = FALSE;
-				ShowWindow(td->w, SW_HIDE);
-			}
-
-			break;
-		}
-
-		/* Window fonts */
-		case IDM_WINDOW_FONT_0:
-		case IDM_WINDOW_FONT_1:
-		case IDM_WINDOW_FONT_2:
-		case IDM_WINDOW_FONT_3:
-		case IDM_WINDOW_FONT_4:
-		case IDM_WINDOW_FONT_5:
-		case IDM_WINDOW_FONT_6:
-		case IDM_WINDOW_FONT_7:
-		{
-			i = wCmd - IDM_WINDOW_FONT_0;
-
-			if ((i < 0) || (i >= MAX_TERM_DATA)) break;
-
-			td = &data[i];
-
-			term_change_font(td);
-
-			break;
-		}
-
-		/* Window Z Position */
-		case IDM_WINDOW_POS_1:
-		case IDM_WINDOW_POS_2:
-		case IDM_WINDOW_POS_3:
-		case IDM_WINDOW_POS_4:
-		case IDM_WINDOW_POS_5:
-		case IDM_WINDOW_POS_6:
-		case IDM_WINDOW_POS_7:
-		{
-			i = wCmd - IDM_WINDOW_POS_0;
-
-			if ((i < 0) || (i >= MAX_TERM_DATA)) break;
-
-			td = &data[i];
-
-			if (!td->posfix && td->visible)
-			{
-				td->posfix = TRUE;
-				term_window_pos(td, HWND_TOPMOST);
-			}
-			else
-			{
-				td->posfix = FALSE;
-				term_window_pos(td, data[0].w);
-			}
-
-			break;
-		}
-
-		/* Bizarre Display */
-		case IDM_WINDOW_BIZ_0:
-		case IDM_WINDOW_BIZ_1:
-		case IDM_WINDOW_BIZ_2:
-		case IDM_WINDOW_BIZ_3:
-		case IDM_WINDOW_BIZ_4:
-		case IDM_WINDOW_BIZ_5:
-		case IDM_WINDOW_BIZ_6:
-		case IDM_WINDOW_BIZ_7:
-		{
-			i = wCmd - IDM_WINDOW_BIZ_0;
-
-			if ((i < 0) || (i >= MAX_TERM_DATA)) break;
-
-			td = &data[i];
-
-			td->bizarre = !td->bizarre;
-
-			term_getsize(td);
-
-			term_window_resize(td);
-
-			break;
-		}
-
-		/* Increase Tile Width */
-		case IDM_WINDOW_I_WID_0:
-		case IDM_WINDOW_I_WID_1:
-		case IDM_WINDOW_I_WID_2:
-		case IDM_WINDOW_I_WID_3:
-		case IDM_WINDOW_I_WID_4:
-		case IDM_WINDOW_I_WID_5:
-		case IDM_WINDOW_I_WID_6:
-		case IDM_WINDOW_I_WID_7:
-		{
-			i = wCmd - IDM_WINDOW_I_WID_0;
-
-			if ((i < 0) || (i >= MAX_TERM_DATA)) break;
-
-			td = &data[i];
-
-			td->tile_wid += 1;
-
-			term_getsize(td);
-
-			term_window_resize(td);
-
-			break;
-		}
-
-		/* Decrease Tile Height */
-		case IDM_WINDOW_D_WID_0:
-		case IDM_WINDOW_D_WID_1:
-		case IDM_WINDOW_D_WID_2:
-		case IDM_WINDOW_D_WID_3:
-		case IDM_WINDOW_D_WID_4:
-		case IDM_WINDOW_D_WID_5:
-		case IDM_WINDOW_D_WID_6:
-		case IDM_WINDOW_D_WID_7:
-		{
-			i = wCmd - IDM_WINDOW_D_WID_0;
-
-			if ((i < 0) || (i >= MAX_TERM_DATA)) break;
-
-			td = &data[i];
-
-			td->tile_wid -= 1;
-
-			term_getsize(td);
-
-			term_window_resize(td);
-
-			break;
-		}
-
-		/* Increase Tile Height */
-		case IDM_WINDOW_I_HGT_0:
-		case IDM_WINDOW_I_HGT_1:
-		case IDM_WINDOW_I_HGT_2:
-		case IDM_WINDOW_I_HGT_3:
-		case IDM_WINDOW_I_HGT_4:
-		case IDM_WINDOW_I_HGT_5:
-		case IDM_WINDOW_I_HGT_6:
-		case IDM_WINDOW_I_HGT_7:
-		{
-			i = wCmd - IDM_WINDOW_I_HGT_0;
-
-			if ((i < 0) || (i >= MAX_TERM_DATA)) break;
-
-			td = &data[i];
-
-			td->tile_hgt += 1;
-
-			term_getsize(td);
-
-			term_window_resize(td);
-
-			break;
-		}
-
-		/* Decrease Tile Height */
-		case IDM_WINDOW_D_HGT_0:
-		case IDM_WINDOW_D_HGT_1:
-		case IDM_WINDOW_D_HGT_2:
-		case IDM_WINDOW_D_HGT_3:
-		case IDM_WINDOW_D_HGT_4:
-		case IDM_WINDOW_D_HGT_5:
-		case IDM_WINDOW_D_HGT_6:
-		case IDM_WINDOW_D_HGT_7:
-		{
-			i = wCmd - IDM_WINDOW_D_HGT_0;
-
-			if ((i < 0) || (i >= MAX_TERM_DATA)) break;
-
-			td = &data[i];
-
-			td->tile_hgt -= 1;
-
-			term_getsize(td);
-
-			term_window_resize(td);
-
-			break;
-		}
-
-		case IDM_OPTIONS_NO_GRAPHICS:
-		{
-			if (!inkey_flag)
-			{
-				plog("You may not do that right now.");
-				break;
-			}
-
-			if (arg_graphics != GRAPHICS_NONE)
-			{
-				arg_graphics = GRAPHICS_NONE;
-				Term_xtra_win_react();
-				Term_key_push(KTRL('R'));
-			}
-
-			break;
-		}
-
-		case IDM_OPTIONS_OLD_GRAPHICS:
-		{
-			if (!inkey_flag)
-			{
-				plog("You may not do that right now.");
-				break;
-			}
-
-			if (arg_graphics != GRAPHICS_ORIGINAL)
-			{
-				arg_graphics = GRAPHICS_ORIGINAL;
-				Term_xtra_win_react();
-				Term_key_push(KTRL('R'));
-			}
-
-			break;
-		}
-
-		case IDM_OPTIONS_NEW_GRAPHICS:
-		{
-			if (!inkey_flag)
-			{
-				plog("You may not do that right now.");
-				break;
-			}
-
-			if (arg_graphics != GRAPHICS_ADAM_BOLT)
-			{
-				arg_graphics = GRAPHICS_ADAM_BOLT;
-				Term_xtra_win_react();
-				Term_key_push(KTRL('R'));
-			}
-
-			break;
-		}
-
-		case IDM_OPTIONS_NEW2_GRAPHICS:
-		{
-			if (!inkey_flag)
-			{
-				plog("You may not do that right now.");
-				break;
-			}
-
-			if (arg_graphics != GRAPHICS_HENGBAND)
-			{
-				arg_graphics = GRAPHICS_HENGBAND;
-				Term_xtra_win_react();
-				Term_key_push(KTRL('R'));
-			}
-
-			break;
-		}
-
-		case IDM_OPTIONS_BIGTILE:
-		{
-			td = &data[0];
-			if (!inkey_flag)
-			{
-				plog("You may not do that right now.");
-				break;
-			}
-
-			arg_bigtile = !arg_bigtile;
-			Term_activate(&td->t);
-			Term_resize(td->cols, td->rows);
-			InvalidateRect(td->w, NULL, TRUE);
-			break;
-		}
-
-		case IDM_OPTIONS_MUSIC:
-		{
-			if (!inkey_flag)
-			{
-				plog("You may not do that right now.");
-				break;
-			}
-
-			arg_music = !arg_music;
-			Term_xtra_win_react();
-			Term_key_push(KTRL('R'));
-			break;
-		}
-
-		case IDM_OPTIONS_SOUND:
-		{
-			if (!inkey_flag)
-			{
-				plog("You may not do that right now.");
-				break;
-			}
-
-			arg_sound = !arg_sound;
-			Term_xtra_win_react();
-			Term_key_push(KTRL('R'));
-			break;
-		}
-
-		/* bg */
-		case IDM_OPTIONS_BG:
-		{
-			if (!inkey_flag)
-			{
-				plog("You may not do that right now.");
-				break;
-			}
-
-			use_bg = !use_bg;
-			init_bg();
-			Term_xtra_win_react();
-			Term_key_push(KTRL('R'));
-			break;
-		}
-
-		/* bg */
-		case IDM_OPTIONS_OPEN_BG:
-		{
-			if (!inkey_flag)
-			{
-				plog("You may not do that right now.");
-				break;
-			}
-			else
-			{
-				memset(&ofn, 0, sizeof(ofn));
-				ofn.lStructSize = sizeof(ofn);
-				ofn.hwndOwner = data[0].w;
-				ofn.lpstrFilter = "Bitmap Files (*.bmp)\0*.bmp\0";
-				ofn.nFilterIndex = 1;
-				ofn.lpstrFile = bg_bitmap_file;
-				ofn.nMaxFile = 1023;
-				ofn.lpstrInitialDir = NULL;
-				ofn.lpstrTitle = _("壁紙を選んでね。", "Choose wall paper.");
-				ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
-
-				if (GetOpenFileName(&ofn))
-				{
-					/* Load 'savefile' */
-					use_bg = 1;
-					init_bg();
-				}
-
-				/* React to changes */
-				Term_xtra_win_react();
-
-				/* Hack -- Force redraw */
-				Term_key_push(KTRL('R'));
-			}
-			break;
-		}
-
-		case IDM_DUMP_SCREEN_HTML:
-		{
-			static char buf[1024] = "";
 			memset(&ofn, 0, sizeof(ofn));
 			ofn.lStructSize = sizeof(ofn);
 			ofn.hwndOwner = data[0].w;
-			ofn.lpstrFilter = "HTML Files (*.html)\0*.html\0";
+			ofn.lpstrFilter = "Angband Movie Files (*.amv)\0*.amv\0";
 			ofn.nFilterIndex = 1;
-			ofn.lpstrFile = buf;
-			ofn.nMaxFile = 1023;
-			ofn.lpstrDefExt = "html";
-			ofn.lpstrInitialDir = NULL;
-			ofn.lpstrTitle = _("HTMLでスクリーンダンプを保存", "Save screen dump as HTML.");
-			ofn.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
+			ofn.lpstrFile = savefile;
+			ofn.nMaxFile = 1024;
+			ofn.lpstrInitialDir = ANGBAND_DIR_USER;
+			ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
 
-			if (GetSaveFileName(&ofn))
+			if (GetOpenFileName(&ofn))
 			{
-				do_cmd_save_screen_html_aux(buf, 0);
+				/* Load 'savefile' */
+				prepare_browse_movie_aux(savefile);
+				play_game(p_ptr, FALSE);
+				quit(NULL);
+				return;
 			}
+		}
+		break;
+	}
+
+
+	case IDM_WINDOW_VIS_0:
+	{
+		plog(_("メインウィンドウは非表示にできません！", "You are not allowed to do that!"));
+		break;
+	}
+
+	/* Window visibility */
+	case IDM_WINDOW_VIS_1:
+	case IDM_WINDOW_VIS_2:
+	case IDM_WINDOW_VIS_3:
+	case IDM_WINDOW_VIS_4:
+	case IDM_WINDOW_VIS_5:
+	case IDM_WINDOW_VIS_6:
+	case IDM_WINDOW_VIS_7:
+	{
+		i = wCmd - IDM_WINDOW_VIS_0;
+
+		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
+
+		td = &data[i];
+
+		if (!td->visible)
+		{
+			td->visible = TRUE;
+			ShowWindow(td->w, SW_SHOW);
+			term_data_redraw(td);
+		}
+		else
+		{
+			td->visible = FALSE;
+			td->posfix = FALSE;
+			ShowWindow(td->w, SW_HIDE);
+		}
+
+		break;
+	}
+
+	/* Window fonts */
+	case IDM_WINDOW_FONT_0:
+	case IDM_WINDOW_FONT_1:
+	case IDM_WINDOW_FONT_2:
+	case IDM_WINDOW_FONT_3:
+	case IDM_WINDOW_FONT_4:
+	case IDM_WINDOW_FONT_5:
+	case IDM_WINDOW_FONT_6:
+	case IDM_WINDOW_FONT_7:
+	{
+		i = wCmd - IDM_WINDOW_FONT_0;
+
+		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
+
+		td = &data[i];
+
+		term_change_font(td);
+
+		break;
+	}
+
+	/* Window Z Position */
+	case IDM_WINDOW_POS_1:
+	case IDM_WINDOW_POS_2:
+	case IDM_WINDOW_POS_3:
+	case IDM_WINDOW_POS_4:
+	case IDM_WINDOW_POS_5:
+	case IDM_WINDOW_POS_6:
+	case IDM_WINDOW_POS_7:
+	{
+		i = wCmd - IDM_WINDOW_POS_0;
+
+		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
+
+		td = &data[i];
+
+		if (!td->posfix && td->visible)
+		{
+			td->posfix = TRUE;
+			term_window_pos(td, HWND_TOPMOST);
+		}
+		else
+		{
+			td->posfix = FALSE;
+			term_window_pos(td, data[0].w);
+		}
+
+		break;
+	}
+
+	/* Bizarre Display */
+	case IDM_WINDOW_BIZ_0:
+	case IDM_WINDOW_BIZ_1:
+	case IDM_WINDOW_BIZ_2:
+	case IDM_WINDOW_BIZ_3:
+	case IDM_WINDOW_BIZ_4:
+	case IDM_WINDOW_BIZ_5:
+	case IDM_WINDOW_BIZ_6:
+	case IDM_WINDOW_BIZ_7:
+	{
+		i = wCmd - IDM_WINDOW_BIZ_0;
+
+		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
+
+		td = &data[i];
+
+		td->bizarre = !td->bizarre;
+
+		term_getsize(td);
+
+		term_window_resize(td);
+
+		break;
+	}
+
+	/* Increase Tile Width */
+	case IDM_WINDOW_I_WID_0:
+	case IDM_WINDOW_I_WID_1:
+	case IDM_WINDOW_I_WID_2:
+	case IDM_WINDOW_I_WID_3:
+	case IDM_WINDOW_I_WID_4:
+	case IDM_WINDOW_I_WID_5:
+	case IDM_WINDOW_I_WID_6:
+	case IDM_WINDOW_I_WID_7:
+	{
+		i = wCmd - IDM_WINDOW_I_WID_0;
+
+		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
+
+		td = &data[i];
+
+		td->tile_wid += 1;
+
+		term_getsize(td);
+
+		term_window_resize(td);
+
+		break;
+	}
+
+	/* Decrease Tile Height */
+	case IDM_WINDOW_D_WID_0:
+	case IDM_WINDOW_D_WID_1:
+	case IDM_WINDOW_D_WID_2:
+	case IDM_WINDOW_D_WID_3:
+	case IDM_WINDOW_D_WID_4:
+	case IDM_WINDOW_D_WID_5:
+	case IDM_WINDOW_D_WID_6:
+	case IDM_WINDOW_D_WID_7:
+	{
+		i = wCmd - IDM_WINDOW_D_WID_0;
+
+		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
+
+		td = &data[i];
+
+		td->tile_wid -= 1;
+
+		term_getsize(td);
+
+		term_window_resize(td);
+
+		break;
+	}
+
+	/* Increase Tile Height */
+	case IDM_WINDOW_I_HGT_0:
+	case IDM_WINDOW_I_HGT_1:
+	case IDM_WINDOW_I_HGT_2:
+	case IDM_WINDOW_I_HGT_3:
+	case IDM_WINDOW_I_HGT_4:
+	case IDM_WINDOW_I_HGT_5:
+	case IDM_WINDOW_I_HGT_6:
+	case IDM_WINDOW_I_HGT_7:
+	{
+		i = wCmd - IDM_WINDOW_I_HGT_0;
+
+		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
+
+		td = &data[i];
+
+		td->tile_hgt += 1;
+
+		term_getsize(td);
+
+		term_window_resize(td);
+
+		break;
+	}
+
+	/* Decrease Tile Height */
+	case IDM_WINDOW_D_HGT_0:
+	case IDM_WINDOW_D_HGT_1:
+	case IDM_WINDOW_D_HGT_2:
+	case IDM_WINDOW_D_HGT_3:
+	case IDM_WINDOW_D_HGT_4:
+	case IDM_WINDOW_D_HGT_5:
+	case IDM_WINDOW_D_HGT_6:
+	case IDM_WINDOW_D_HGT_7:
+	{
+		i = wCmd - IDM_WINDOW_D_HGT_0;
+
+		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
+
+		td = &data[i];
+
+		td->tile_hgt -= 1;
+
+		term_getsize(td);
+
+		term_window_resize(td);
+
+		break;
+	}
+
+	case IDM_OPTIONS_NO_GRAPHICS:
+	{
+		if (!inkey_flag)
+		{
+			plog("You may not do that right now.");
 			break;
 		}
+
+		if (arg_graphics != GRAPHICS_NONE)
+		{
+			arg_graphics = GRAPHICS_NONE;
+			Term_xtra_win_react();
+			Term_key_push(KTRL('R'));
+		}
+
+		break;
+	}
+
+	case IDM_OPTIONS_OLD_GRAPHICS:
+	{
+		if (!inkey_flag)
+		{
+			plog("You may not do that right now.");
+			break;
+		}
+
+		if (arg_graphics != GRAPHICS_ORIGINAL)
+		{
+			arg_graphics = GRAPHICS_ORIGINAL;
+			Term_xtra_win_react();
+			Term_key_push(KTRL('R'));
+		}
+
+		break;
+	}
+
+	case IDM_OPTIONS_NEW_GRAPHICS:
+	{
+		if (!inkey_flag)
+		{
+			plog("You may not do that right now.");
+			break;
+		}
+
+		if (arg_graphics != GRAPHICS_ADAM_BOLT)
+		{
+			arg_graphics = GRAPHICS_ADAM_BOLT;
+			Term_xtra_win_react();
+			Term_key_push(KTRL('R'));
+		}
+
+		break;
+	}
+
+	case IDM_OPTIONS_NEW2_GRAPHICS:
+	{
+		if (!inkey_flag)
+		{
+			plog("You may not do that right now.");
+			break;
+		}
+
+		if (arg_graphics != GRAPHICS_HENGBAND)
+		{
+			arg_graphics = GRAPHICS_HENGBAND;
+			Term_xtra_win_react();
+			Term_key_push(KTRL('R'));
+		}
+
+		break;
+	}
+
+	case IDM_OPTIONS_BIGTILE:
+	{
+		td = &data[0];
+		if (!inkey_flag)
+		{
+			plog("You may not do that right now.");
+			break;
+		}
+
+		arg_bigtile = !arg_bigtile;
+		Term_activate(&td->t);
+		Term_resize(td->cols, td->rows);
+		InvalidateRect(td->w, NULL, TRUE);
+		break;
+	}
+
+	case IDM_OPTIONS_MUSIC:
+	{
+		if (!inkey_flag)
+		{
+			plog("You may not do that right now.");
+			break;
+		}
+
+		arg_music = !arg_music;
+		Term_xtra_win_react();
+		Term_key_push(KTRL('R'));
+		break;
+	}
+
+	case IDM_OPTIONS_SOUND:
+	{
+		if (!inkey_flag)
+		{
+			plog("You may not do that right now.");
+			break;
+		}
+
+		arg_sound = !arg_sound;
+		Term_xtra_win_react();
+		Term_key_push(KTRL('R'));
+		break;
+	}
+
+	/* bg */
+	case IDM_OPTIONS_BG:
+	{
+		if (!inkey_flag)
+		{
+			plog("You may not do that right now.");
+			break;
+		}
+
+		use_bg = !use_bg;
+		init_bg();
+		Term_xtra_win_react();
+		Term_key_push(KTRL('R'));
+		break;
+	}
+
+	/* bg */
+	case IDM_OPTIONS_OPEN_BG:
+	{
+		if (!inkey_flag)
+		{
+			plog("You may not do that right now.");
+			break;
+		}
+		else
+		{
+			memset(&ofn, 0, sizeof(ofn));
+			ofn.lStructSize = sizeof(ofn);
+			ofn.hwndOwner = data[0].w;
+			ofn.lpstrFilter = "Bitmap Files (*.bmp)\0*.bmp\0";
+			ofn.nFilterIndex = 1;
+			ofn.lpstrFile = bg_bitmap_file;
+			ofn.nMaxFile = 1023;
+			ofn.lpstrInitialDir = NULL;
+			ofn.lpstrTitle = _("壁紙を選んでね。", "Choose wall paper.");
+			ofn.Flags = OFN_FILEMUSTEXIST | OFN_HIDEREADONLY;
+
+			if (GetOpenFileName(&ofn))
+			{
+				/* Load 'savefile' */
+				use_bg = 1;
+				init_bg();
+			}
+
+			/* React to changes */
+			Term_xtra_win_react();
+
+			/* Hack -- Force redraw */
+			Term_key_push(KTRL('R'));
+		}
+		break;
+	}
+
+	case IDM_DUMP_SCREEN_HTML:
+	{
+		static char buf[1024] = "";
+		memset(&ofn, 0, sizeof(ofn));
+		ofn.lStructSize = sizeof(ofn);
+		ofn.hwndOwner = data[0].w;
+		ofn.lpstrFilter = "HTML Files (*.html)\0*.html\0";
+		ofn.nFilterIndex = 1;
+		ofn.lpstrFile = buf;
+		ofn.nMaxFile = 1023;
+		ofn.lpstrDefExt = "html";
+		ofn.lpstrInitialDir = NULL;
+		ofn.lpstrTitle = _("HTMLでスクリーンダンプを保存", "Save screen dump as HTML.");
+		ofn.Flags = OFN_HIDEREADONLY | OFN_OVERWRITEPROMPT;
+
+		if (GetSaveFileName(&ofn))
+		{
+			do_cmd_save_screen_html_aux(buf, 0);
+		}
+		break;
+	}
 
 #ifdef USE_SAVER
 
-		case IDM_OPTIONS_SAVER:
+	case IDM_OPTIONS_SAVER:
+	{
+		if (hwndSaver)
 		{
+			DestroyWindow(hwndSaver);
+			hwndSaver = NULL;
+		}
+		else
+		{
+			/* Create a screen scaver window */
+			hwndSaver = CreateWindowEx(WS_EX_TOPMOST, "WindowsScreenSaverClass",
+				"Angband Screensaver",
+				WS_POPUP | WS_MAXIMIZE | WS_VISIBLE,
+				0, 0, GetSystemMetrics(SM_CXSCREEN),
+				GetSystemMetrics(SM_CYSCREEN),
+				NULL, NULL, hInstance, NULL);
+
 			if (hwndSaver)
 			{
-				DestroyWindow(hwndSaver);
-				hwndSaver = NULL;
+				/* Push the window to the bottom */
+				SetWindowPos(hwndSaver, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 			}
 			else
 			{
-				/* Create a screen scaver window */
-				hwndSaver = CreateWindowEx(WS_EX_TOPMOST, "WindowsScreenSaverClass",
-							   "Angband Screensaver",
-							   WS_POPUP | WS_MAXIMIZE | WS_VISIBLE,
-							   0, 0, GetSystemMetrics(SM_CXSCREEN),
-							   GetSystemMetrics(SM_CYSCREEN),
-							   NULL, NULL, hInstance, NULL);
-
-				if (hwndSaver)
-				{
-					/* Push the window to the bottom */
-					SetWindowPos(hwndSaver, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-				}
-				else
-				{
-					plog(_("ウィンドウを作成出来ません", "Failed to create saver window"));
-				}
+				plog(_("ウィンドウを作成出来ません", "Failed to create saver window"));
 			}
-			break;
 		}
+		break;
+	}
 
 #endif
 
-		case IDM_OPTIONS_MAP:
-		{
-			windows_map();
-			break;
-		}
+	case IDM_OPTIONS_MAP:
+	{
+		windows_map();
+		break;
+	}
 
-		case IDM_HELP_CONTENTS:
-		{
+	case IDM_HELP_CONTENTS:
+	{
 #ifdef HTML_HELP
-			char tmp[1024];
-			path_build(tmp, sizeof(tmp), ANGBAND_DIR_XTRA_HELP, "zangband.chm");
-			if (check_file(tmp))
-			{
-				HtmlHelp(data[0].w, tmp, HH_DISPLAY_TOPIC, 0);
-			}
-			else
-			{
-				plog_fmt(_("ヘルプファイル[%s]が見付かりません。", "Cannot find help file: %s"), tmp);
-				plog(_("代わりにオンラインヘルプを使用してください。", "Use the online help files instead."));
-			}
-			break;
-#else /* HTML_HELP */
-			char buf[1024];
-			char tmp[1024];
-			path_build(tmp, sizeof(tmp), ANGBAND_DIR_XTRA_HELP, "zangband.hlp");
-			if (check_file(tmp))
-			{
-				sprintf(buf, "winhelp.exe %s", tmp);
-				WinExec(buf, SW_NORMAL);
-			}
-			else
-			{
-				plog_fmt(_("ヘルプファイル[%s]が見付かりません。", "Cannot find help file: %s"), tmp);
-				plog(_("代わりにオンラインヘルプを使用してください。", "Use the online help files instead."));
-
-			}
-			break;
-#endif /* HTML_HELP */
+		char tmp[1024];
+		path_build(tmp, sizeof(tmp), ANGBAND_DIR_XTRA_HELP, "zangband.chm");
+		if (check_file(tmp))
+		{
+			HtmlHelp(data[0].w, tmp, HH_DISPLAY_TOPIC, 0);
 		}
+		else
+		{
+			plog_fmt(_("ヘルプファイル[%s]が見付かりません。", "Cannot find help file: %s"), tmp);
+			plog(_("代わりにオンラインヘルプを使用してください。", "Use the online help files instead."));
+		}
+		break;
+#else /* HTML_HELP */
+		char buf[1024];
+		char tmp[1024];
+		path_build(tmp, sizeof(tmp), ANGBAND_DIR_XTRA_HELP, "zangband.hlp");
+		if (check_file(tmp))
+		{
+			sprintf(buf, "winhelp.exe %s", tmp);
+			WinExec(buf, SW_NORMAL);
+		}
+		else
+		{
+			plog_fmt(_("ヘルプファイル[%s]が見付かりません。", "Cannot find help file: %s"), tmp);
+			plog(_("代わりにオンラインヘルプを使用してください。", "Use the online help files instead."));
+
+		}
+		break;
+#endif /* HTML_HELP */
+	}
 	}
 }
 
@@ -4518,13 +4162,13 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
 
 	/* Extract the modifiers */
 	if (GetKeyState(VK_CONTROL) & 0x8000) mc = TRUE;
-	if (GetKeyState(VK_SHIFT)   & 0x8000) ms = TRUE;
-	if (GetKeyState(VK_MENU)    & 0x8000) ma = TRUE;
+	if (GetKeyState(VK_SHIFT) & 0x8000) ms = TRUE;
+	if (GetKeyState(VK_MENU) & 0x8000) ma = TRUE;
 
 	Term_no_press = (ma) ? TRUE : FALSE;
 
 	/* Handle "special" keys */
-	if (special_key[(byte)(wParam)] || (ma && !ignore_key[(byte)(wParam)]) )
+	if (special_key[(byte)(wParam)] || (ma && !ignore_key[(byte)(wParam)]))
 	{
 		bool ext_key = (lParam & 0x1000000L) ? TRUE : FALSE;
 		bool numpad = FALSE;
@@ -4587,8 +4231,8 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
 		if (numpad) Term_keypress('K');
 
 		/* Encode the hexidecimal scan code */
-		Term_keypress(hexsym[i/16]);
-		Term_keypress(hexsym[i%16]);
+		Term_keypress(hexsym[i / 16]);
+		Term_keypress(hexsym[i % 16]);
 
 		/* End the macro trigger */
 		Term_keypress(13);
@@ -4602,9 +4246,9 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
 
 #ifdef __MWERKS__
 LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
-				  WPARAM wParam, LPARAM lParam);
+	WPARAM wParam, LPARAM lParam);
 LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
-				  WPARAM wParam, LPARAM lParam)
+	WPARAM wParam, LPARAM lParam)
 #else /* __MWERKS__ */
 LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 #endif /* __MWERKS__ */
@@ -4612,10 +4256,6 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 	PAINTSTRUCT ps;
 	HDC hdc;
 	term_data *td;
-#if 0
-	MINMAXINFO FAR *lpmmi;
-	RECT rc;
-#endif
 	int i;
 
 
@@ -4625,410 +4265,410 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 	/* Handle message */
 	switch (uMsg)
 	{
-		case WM_NCCREATE:
-		{
-			SetWindowLong(hWnd, 0, (LONG)(my_td));
-			break;
-		}
+	case WM_NCCREATE:
+	{
+		SetWindowLong(hWnd, 0, (LONG)(my_td));
+		break;
+	}
 
-		case WM_CREATE:
-		{
+	case WM_CREATE:
+	{
 #ifdef USE_MUSIC
-			mop.dwCallback=(DWORD)hWnd;
+		mop.dwCallback = (DWORD)hWnd;
 #endif
-			return 0;
-		}
+		return 0;
+	}
 
-		case WM_GETMINMAXINFO:
-		{
-			MINMAXINFO FAR *lpmmi;
-			RECT rc;
+	case WM_GETMINMAXINFO:
+	{
+		MINMAXINFO FAR *lpmmi;
+		RECT rc;
 
-			lpmmi = (MINMAXINFO FAR *)lParam;
+		lpmmi = (MINMAXINFO FAR *)lParam;
 
-			/* this message was sent before WM_NCCREATE */
-			if (!td) return 1;
+		/* this message was sent before WM_NCCREATE */
+		if (!td) return 1;
 
-			/* Minimum window size is 80x24 */
-			rc.left = rc.top = 0;
-			rc.right = rc.left + 80 * td->tile_wid + td->size_ow1 + td->size_ow2;
-			rc.bottom = rc.top + 24 * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
+		/* Minimum window size is 80x24 */
+		rc.left = rc.top = 0;
+		rc.right = rc.left + 80 * td->tile_wid + td->size_ow1 + td->size_ow2;
+		rc.bottom = rc.top + 24 * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
 
-			/* Adjust */
-			AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
+		/* Adjust */
+		AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
 
-			/* Save minimum size */
-			lpmmi->ptMinTrackSize.x = rc.right - rc.left;
-			lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
+		/* Save minimum size */
+		lpmmi->ptMinTrackSize.x = rc.right - rc.left;
+		lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
 
-			return 0;
-		}
+		return 0;
+	}
 
-		case WM_PAINT:
-		{
-			BeginPaint(hWnd, &ps);
-			if (td) term_data_redraw(td);
-			EndPaint(hWnd, &ps);
-			ValidateRect(hWnd, NULL);
-			return 0;
-		}
+	case WM_PAINT:
+	{
+		BeginPaint(hWnd, &ps);
+		if (td) term_data_redraw(td);
+		EndPaint(hWnd, &ps);
+		ValidateRect(hWnd, NULL);
+		return 0;
+	}
 
 #ifdef USE_MUSIC
-		case MM_MCINOTIFY:
+	case MM_MCINOTIFY:
+	{
+		if (wParam == MCI_NOTIFY_SUCCESSFUL)
 		{
-			if(wParam == MCI_NOTIFY_SUCCESSFUL)
-			{
-				mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, 0);
-				mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mop);
-			}
-			return 0;
+			mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, 0);
+			mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mop);
 		}
+		return 0;
+	}
 #endif
 
-		case WM_SYSKEYDOWN:
-		case WM_KEYDOWN:
-		{
-			if (process_keydown(wParam, lParam))
-				return 0;
-			break;
-		}
-
-		case WM_CHAR:
-		{
-			if (Term_no_press) Term_no_press = FALSE;
-			else Term_keypress(wParam);
+	case WM_SYSKEYDOWN:
+	case WM_KEYDOWN:
+	{
+		if (process_keydown(wParam, lParam))
 			return 0;
-		}
+		break;
+	}
 
-		case WM_LBUTTONDOWN:
-		{
-			mousex = MIN(LOWORD(lParam) / td->tile_wid, td->cols - 1);
-			mousey = MIN(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
-			mouse_down = TRUE;
-			oldx = mousex;
-			oldy = mousey;
-			return 0;
-		}
+	case WM_CHAR:
+	{
+		if (Term_no_press) Term_no_press = FALSE;
+		else Term_keypress(wParam);
+		return 0;
+	}
 
-		case WM_LBUTTONUP:
-		{
-			HGLOBAL hGlobal;
-			LPSTR lpStr;
-			int j, sz;
-			TERM_LEN dx = abs(oldx - mousex) + 1;
-			TERM_LEN dy = abs(oldy - mousey) + 1;
-			TERM_LEN ox = (oldx > mousex) ? mousex : oldx;
-			TERM_LEN oy = (oldy > mousey) ? mousey : oldy;
+	case WM_LBUTTONDOWN:
+	{
+		mousex = MIN(LOWORD(lParam) / td->tile_wid, td->cols - 1);
+		mousey = MIN(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
+		mouse_down = TRUE;
+		oldx = mousex;
+		oldy = mousey;
+		return 0;
+	}
 
-			mouse_down = FALSE;
-			paint_rect = FALSE;
+	case WM_LBUTTONUP:
+	{
+		HGLOBAL hGlobal;
+		LPSTR lpStr;
+		int j, sz;
+		TERM_LEN dx = abs(oldx - mousex) + 1;
+		TERM_LEN dy = abs(oldy - mousey) + 1;
+		TERM_LEN ox = (oldx > mousex) ? mousex : oldx;
+		TERM_LEN oy = (oldy > mousey) ? mousey : oldy;
+
+		mouse_down = FALSE;
+		paint_rect = FALSE;
 
 #ifdef JP
-			sz = (dx + 3) * dy;
+		sz = (dx + 3) * dy;
 #else
-			sz = (dx + 2) * dy;
+		sz = (dx + 2) * dy;
 #endif
-			hGlobal = GlobalAlloc(GHND, sz + 1);
-			if (hGlobal == NULL) return 0;
-			lpStr = (LPSTR)GlobalLock(hGlobal);
+		hGlobal = GlobalAlloc(GHND, sz + 1);
+		if (hGlobal == NULL) return 0;
+		lpStr = (LPSTR)GlobalLock(hGlobal);
 
-			for (i = 0; i < dy; i++)
-			{
+		for (i = 0; i < dy; i++)
+		{
 #ifdef JP
-				char *s;
-				char **scr = data[0].t.scr->c;
+			char *s;
+			char **scr = data[0].t.scr->c;
 
-				C_MAKE(s, (dx + 1), char);
-				strncpy(s, &scr[oy + i][ox], dx);
+			C_MAKE(s, (dx + 1), char);
+			strncpy(s, &scr[oy + i][ox], dx);
 
-				if (ox > 0)
-				{
-					if (iskanji(scr[oy + i][ox - 1])) s[0] = ' ';
-				}
-
-				if (ox + dx < data[0].cols)
-				{
-					if (iskanji(scr[oy + i][ox + dx - 1])) s[dx - 1] = ' ';
-				}
-
-				for (j = 0; j < dx; j++)
-				{
-					if (s[j] == 127) s[j] = '#';
-					*lpStr++ = s[j];
-				}
-#else
-				for (j = 0; j < dx; j++)
-				{
-					*lpStr++ = data[0].t.scr->c[oy + i][ox + j];
-				}
-#endif
-				if (dy > 1)
-				{
-					*lpStr++ = '\r';
-					*lpStr++ = '\n';
-				}
-			}
-
-			GlobalUnlock(hGlobal);
-			if (OpenClipboard(hWnd) == 0)
+			if (ox > 0)
 			{
-				GlobalFree(hGlobal);
-				return 0;
+				if (iskanji(scr[oy + i][ox - 1])) s[0] = ' ';
 			}
-			EmptyClipboard();
-			SetClipboardData(CF_TEXT, hGlobal);
-			CloseClipboard();
 
-			Term_redraw();
+			if (ox + dx < data[0].cols)
+			{
+				if (iskanji(scr[oy + i][ox + dx - 1])) s[dx - 1] = ' ';
+			}
 
-			return 0;
+			for (j = 0; j < dx; j++)
+			{
+				if (s[j] == 127) s[j] = '#';
+				*lpStr++ = s[j];
+			}
+#else
+			for (j = 0; j < dx; j++)
+			{
+				*lpStr++ = data[0].t.scr->c[oy + i][ox + j];
+			}
+#endif
+			if (dy > 1)
+			{
+				*lpStr++ = '\r';
+				*lpStr++ = '\n';
+			}
 		}
 
-		case WM_MOUSEMOVE:
+		GlobalUnlock(hGlobal);
+		if (OpenClipboard(hWnd) == 0)
 		{
-			if (mouse_down)
+			GlobalFree(hGlobal);
+			return 0;
+		}
+		EmptyClipboard();
+		SetClipboardData(CF_TEXT, hGlobal);
+		CloseClipboard();
+
+		Term_redraw();
+
+		return 0;
+	}
+
+	case WM_MOUSEMOVE:
+	{
+		if (mouse_down)
+		{
+			int dx, dy;
+			int cx = MIN(LOWORD(lParam) / td->tile_wid, td->cols - 1);
+			int cy = MIN(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
+			int ox, oy;
+
+			if (paint_rect)
 			{
-				int dx, dy;
-				int cx = MIN(LOWORD(lParam) / td->tile_wid, td->cols - 1);
-				int cy = MIN(HIWORD(lParam) / td->tile_hgt, td->rows - 1);
-				int ox, oy;
-
-				if (paint_rect)
-				{
-					dx = abs(oldx - mousex) + 1;
-					dy = abs(oldy - mousey) + 1;
-					ox = (oldx > mousex) ? mousex : oldx;
-					oy = (oldy > mousey) ? mousey : oldy;
-					Term_inversed_area(hWnd, ox, oy, dx, dy);
-				}
-				else
-				{
-					paint_rect = TRUE;
-				}
-
-				dx = abs(cx - mousex) + 1;
-				dy = abs(cy - mousey) + 1;
-				ox = (cx > mousex) ? mousex : cx;
-				oy = (cy > mousey) ? mousey : cy;
+				dx = abs(oldx - mousex) + 1;
+				dy = abs(oldy - mousey) + 1;
+				ox = (oldx > mousex) ? mousex : oldx;
+				oy = (oldy > mousey) ? mousey : oldy;
 				Term_inversed_area(hWnd, ox, oy, dx, dy);
-
-				oldx = cx;
-				oldy = cy;
 			}
-			return 0;
-		}
-
-		case WM_INITMENU:
-		{
-			setup_menus();
-			return 0;
-		}
-
-		case WM_CLOSE:
-		{
-			if (game_in_progress && current_world_ptr->character_generated)
+			else
 			{
-				if (!can_save)
-				{
-					plog(_("今は終了できません。", "You may not do that right now."));
-					return 0;
-				}
+				paint_rect = TRUE;
+			}
 
-				/* Hack -- Forget messages */
-				msg_flag = FALSE;
+			dx = abs(cx - mousex) + 1;
+			dy = abs(cy - mousey) + 1;
+			ox = (cx > mousex) ? mousex : cx;
+			oy = (cy > mousey) ? mousey : cy;
+			Term_inversed_area(hWnd, ox, oy, dx, dy);
 
-				forget_lite(p_ptr->current_floor_ptr);
-				forget_view(p_ptr->current_floor_ptr);
-				clear_mon_lite(p_ptr->current_floor_ptr);
+			oldx = cx;
+			oldy = cy;
+		}
+		return 0;
+	}
 
-				/* Save the game */
+	case WM_INITMENU:
+	{
+		setup_menus();
+		return 0;
+	}
+
+	case WM_CLOSE:
+	{
+		if (game_in_progress && current_world_ptr->character_generated)
+		{
+			if (!can_save)
+			{
+				plog(_("今は終了できません。", "You may not do that right now."));
+				return 0;
+			}
+
+			/* Hack -- Forget messages */
+			msg_flag = FALSE;
+
+			forget_lite(p_ptr->current_floor_ptr);
+			forget_view(p_ptr->current_floor_ptr);
+			clear_mon_lite(p_ptr->current_floor_ptr);
+
+			/* Save the game */
 #ifdef ZANGBAND
 				/* do_cmd_save_game(FALSE); */
 #else /* ZANGBAND */
 				/* do_cmd_save_game(); */
 #endif /* ZANGBAND */
-				Term_key_push(SPECIAL_KEY_QUIT);
-				return 0;
-			}
-			quit(NULL);
+			Term_key_push(SPECIAL_KEY_QUIT);
 			return 0;
 		}
+		quit(NULL);
+		return 0;
+	}
 
-		case WM_QUERYENDSESSION:
+	case WM_QUERYENDSESSION:
+	{
+		if (game_in_progress && current_world_ptr->character_generated)
 		{
-			if (game_in_progress && current_world_ptr->character_generated)
-			{
-				/* Hack -- Forget messages */
-				msg_flag = FALSE;
+			/* Hack -- Forget messages */
+			msg_flag = FALSE;
 
-				/* Mega-Hack -- Delay death */
-				if (p_ptr->chp < 0) p_ptr->is_dead = FALSE;
-				exe_write_diary(p_ptr, NIKKI_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
+			/* Mega-Hack -- Delay death */
+			if (p_ptr->chp < 0) p_ptr->is_dead = FALSE;
+			exe_write_diary(p_ptr, NIKKI_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
 
-				/* Hardcode panic save */
-				p_ptr->panic_save = 1;
+			/* Hardcode panic save */
+			p_ptr->panic_save = 1;
 
-				/* Forbid suspend */
-				signals_ignore_tstp();
+			/* Forbid suspend */
+			signals_ignore_tstp();
 
-				/* Indicate panic save */
-				(void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
+			/* Indicate panic save */
+			(void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
 
-				/* Panic save */
-				(void)save_player(p_ptr);
-			}
-			quit(NULL);
-			return 0;
+			/* Panic save */
+			(void)save_player(p_ptr);
 		}
+		quit(NULL);
+		return 0;
+	}
 
-		case WM_QUIT:
+	case WM_QUIT:
+	{
+		quit(NULL);
+		return 0;
+	}
+
+	case WM_COMMAND:
+	{
+		process_menus(LOWORD(wParam));
+		return 0;
+	}
+
+	case WM_SIZE:
+	{
+		/* this message was sent before WM_NCCREATE */
+		if (!td) return 1;
+
+		/* it was sent from inside CreateWindowEx */
+		if (!td->w) return 1;
+
+		/* was sent from WM_SIZE */
+		if (td->size_hack) return 1;
+
+		switch (wParam)
 		{
-			quit(NULL);
-			return 0;
-		}
-
-		case WM_COMMAND:
+		case SIZE_MINIMIZED:
 		{
-			process_menus(LOWORD(wParam));
-			return 0;
-		}
-
-		case WM_SIZE:
-		{
-			/* this message was sent before WM_NCCREATE */
-			if (!td) return 1;
-
-			/* it was sent from inside CreateWindowEx */
-			if (!td->w) return 1;
-
-			/* was sent from WM_SIZE */
-			if (td->size_hack) return 1;
-
-			switch (wParam)
-			{
-				case SIZE_MINIMIZED:
-				{
-					/* Hide sub-windows */
-					for (i = 1; i < MAX_TERM_DATA; i++)
-					{
-						if (data[i].visible) ShowWindow(data[i].w, SW_HIDE);
-					}
-					return 0;
-				}
-
-				case SIZE_MAXIMIZED:
-				{
-					/* fall through */
-				}
-
-				case SIZE_RESTORED:
-				{
-					TERM_LEN cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
-					TERM_LEN rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
-
-					/* New size */
-					if ((td->cols != cols) || (td->rows != rows))
-					{
-						/* Save the new size */
-						td->cols = cols;
-						td->rows = rows;
-
-						if (!IsZoomed(td->w) && !IsIconic(td->w))
-						{
-							normsize.x = td->cols;
-							normsize.y = td->rows;
-						}
-
-						/* Activate */
-						Term_activate(&td->t);
-
-						/* Resize the term */
-						Term_resize(td->cols, td->rows);
-
-						/* Redraw later */
-						InvalidateRect(td->w, NULL, TRUE);
-					}
-
-					td->size_hack = TRUE;
-
-					/* Show sub-windows */
-					for (i = 1; i < MAX_TERM_DATA; i++)
-					{
-						if (data[i].visible) ShowWindow(data[i].w, SW_SHOW);
-					}
-
-					td->size_hack = FALSE;
-
-					return 0;
-				}
-			}
-			break;
-		}
-
-		case WM_PALETTECHANGED:
-		{
-			/* Ignore if palette change caused by itself */
-			if ((HWND)wParam == hWnd) return 0;
-
-			/* Fall through... */
-		}
-
-		case WM_QUERYNEWPALETTE:
-		{
-			if (!paletted) return 0;
-
-			hdc = GetDC(hWnd);
-
-			SelectPalette(hdc, hPal, FALSE);
-
-			i = RealizePalette(hdc);
-
-			/* if any palette entries changed, repaint the window. */
-			if (i) InvalidateRect(hWnd, NULL, TRUE);
-
-			ReleaseDC(hWnd, hdc);
-
-			return 0;
-		}
-
-		case WM_ACTIVATE:
-		{
-			if (wParam && !HIWORD(lParam))
-			{
-				/* Do something to sub-windows */
-				for (i = 1; i < MAX_TERM_DATA; i++)
-				{
-					if (!data[i].posfix) term_window_pos(&data[i], hWnd);
-				}
-
-				/* Focus on main window */
-				SetFocus(hWnd);
-
-				return 0;
-			}
-
-			break;
-		}
-
-		case WM_ACTIVATEAPP:
-		{
-			if (IsIconic(td->w)) break;
-
+			/* Hide sub-windows */
 			for (i = 1; i < MAX_TERM_DATA; i++)
 			{
-				if(data[i].visible)
+				if (data[i].visible) ShowWindow(data[i].w, SW_HIDE);
+			}
+			return 0;
+		}
+
+		case SIZE_MAXIMIZED:
+		{
+			/* fall through */
+		}
+
+		case SIZE_RESTORED:
+		{
+			TERM_LEN cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
+			TERM_LEN rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
+
+			/* New size */
+			if ((td->cols != cols) || (td->rows != rows))
+			{
+				/* Save the new size */
+				td->cols = cols;
+				td->rows = rows;
+
+				if (!IsZoomed(td->w) && !IsIconic(td->w))
 				{
-					if (wParam == TRUE)
-					{
-						ShowWindow(data[i].w, SW_SHOW);
-					}
-					else
-					{
-						ShowWindow(data[i].w, SW_HIDE);
-					}
+					normsize.x = td->cols;
+					normsize.y = td->rows;
+				}
+
+				/* Activate */
+				Term_activate(&td->t);
+
+				/* Resize the term */
+				Term_resize(td->cols, td->rows);
+
+				/* Redraw later */
+				InvalidateRect(td->w, NULL, TRUE);
+			}
+
+			td->size_hack = TRUE;
+
+			/* Show sub-windows */
+			for (i = 1; i < MAX_TERM_DATA; i++)
+			{
+				if (data[i].visible) ShowWindow(data[i].w, SW_SHOW);
+			}
+
+			td->size_hack = FALSE;
+
+			return 0;
+		}
+		}
+		break;
+	}
+
+	case WM_PALETTECHANGED:
+	{
+		/* Ignore if palette change caused by itself */
+		if ((HWND)wParam == hWnd) return 0;
+
+		/* Fall through... */
+	}
+
+	case WM_QUERYNEWPALETTE:
+	{
+		if (!paletted) return 0;
+
+		hdc = GetDC(hWnd);
+
+		SelectPalette(hdc, hPal, FALSE);
+
+		i = RealizePalette(hdc);
+
+		/* if any palette entries changed, repaint the window. */
+		if (i) InvalidateRect(hWnd, NULL, TRUE);
+
+		ReleaseDC(hWnd, hdc);
+
+		return 0;
+	}
+
+	case WM_ACTIVATE:
+	{
+		if (wParam && !HIWORD(lParam))
+		{
+			/* Do something to sub-windows */
+			for (i = 1; i < MAX_TERM_DATA; i++)
+			{
+				if (!data[i].posfix) term_window_pos(&data[i], hWnd);
+			}
+
+			/* Focus on main window */
+			SetFocus(hWnd);
+
+			return 0;
+		}
+
+		break;
+	}
+
+	case WM_ACTIVATEAPP:
+	{
+		if (IsIconic(td->w)) break;
+
+		for (i = 1; i < MAX_TERM_DATA; i++)
+		{
+			if (data[i].visible)
+			{
+				if (wParam == TRUE)
+				{
+					ShowWindow(data[i].w, SW_SHOW);
+				}
+				else
+				{
+					ShowWindow(data[i].w, SW_HIDE);
 				}
 			}
 		}
+	}
 	}
 
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -5037,19 +4677,15 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 #ifdef __MWERKS__
 LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
-					   WPARAM wParam, LPARAM lParam);
+	WPARAM wParam, LPARAM lParam);
 LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
-					   WPARAM wParam, LPARAM lParam)
+	WPARAM wParam, LPARAM lParam)
 #else /* __MWERKS__ */
 LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
-					   WPARAM wParam, LPARAM lParam)
+	WPARAM wParam, LPARAM lParam)
 #endif /* __MWERKS__ */
 {
 	term_data *td;
-#if 0
-	MINMAXINFO FAR *lpmmi;
-	RECT rc;
-#endif
 	PAINTSTRUCT ps;
 	HDC hdc;
 	int i;
@@ -5061,155 +4697,155 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 	/* Process message */
 	switch (uMsg)
 	{
-		case WM_NCCREATE:
+	case WM_NCCREATE:
+	{
+		SetWindowLong(hWnd, 0, (LONG)(my_td));
+		break;
+	}
+
+	case WM_CREATE:
+	{
+		return 0;
+	}
+
+	case WM_GETMINMAXINFO:
+	{
+		MINMAXINFO FAR *lpmmi;
+		RECT rc;
+
+		lpmmi = (MINMAXINFO FAR *)lParam;
+
+		/* this message was sent before WM_NCCREATE */
+		if (!td) return 1;
+
+		/* Minimum window size is 80x24 */
+		rc.left = rc.top = 0;
+		rc.right = rc.left + 20 * td->tile_wid + td->size_ow1 + td->size_ow2;
+		rc.bottom = rc.top + 3 * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
+
+		/* Adjust */
+		AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
+
+		/* Save minimum size */
+		lpmmi->ptMinTrackSize.x = rc.right - rc.left;
+		lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
+
+		return 0;
+	}
+
+	case WM_SIZE:
+	{
+		TERM_LEN cols;
+		TERM_LEN rows;
+
+		/* this message was sent before WM_NCCREATE */
+		if (!td) return 1;
+
+		/* it was sent from inside CreateWindowEx */
+		if (!td->w) return 1;
+
+		/* was sent from inside WM_SIZE */
+		if (td->size_hack) return 1;
+
+		td->size_hack = TRUE;
+
+		cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
+		rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
+
+		/* New size */
+		if ((td->cols != cols) || (td->rows != rows))
 		{
-			SetWindowLong(hWnd, 0, (LONG)(my_td));
-			break;
+			/* Save old term */
+			term *old_term = Term;
+
+			/* Save the new size */
+			td->cols = cols;
+			td->rows = rows;
+
+			/* Activate */
+			Term_activate(&td->t);
+
+			/* Resize the term */
+			Term_resize(td->cols, td->rows);
+
+			/* Activate */
+			Term_activate(old_term);
+
+			/* Redraw later */
+			InvalidateRect(td->w, NULL, TRUE);
+
+			/* HACK - Redraw all windows */
+			p_ptr->window = 0xFFFFFFFF;
+			handle_stuff(p_ptr);
 		}
 
-		case WM_CREATE:
-		{
+		td->size_hack = FALSE;
+
+		return 0;
+	}
+
+	case WM_PAINT:
+	{
+		BeginPaint(hWnd, &ps);
+		if (td) term_data_redraw(td);
+		EndPaint(hWnd, &ps);
+		return 0;
+	}
+
+	case WM_SYSKEYDOWN:
+	case WM_KEYDOWN:
+	{
+		if (process_keydown(wParam, lParam))
 			return 0;
-		}
+		break;
+	}
 
-		case WM_GETMINMAXINFO:
-		{
-			MINMAXINFO FAR *lpmmi;
-			RECT rc;
+	case WM_CHAR:
+	{
+		if (Term_no_press) Term_no_press = FALSE;
+		else Term_keypress(wParam);
+		return 0;
+	}
 
-			lpmmi = (MINMAXINFO FAR *)lParam;
+	case WM_PALETTECHANGED:
+	{
+		/* ignore if palette change caused by itself */
+		if ((HWND)wParam == hWnd) return FALSE;
+		/* otherwise, fall through!!! */
+	}
 
-			/* this message was sent before WM_NCCREATE */
-			if (!td) return 1;
+	case WM_QUERYNEWPALETTE:
+	{
+		if (!paletted) return 0;
+		hdc = GetDC(hWnd);
+		SelectPalette(hdc, hPal, FALSE);
+		i = RealizePalette(hdc);
+		/* if any palette entries changed, repaint the window. */
+		if (i) InvalidateRect(hWnd, NULL, TRUE);
+		ReleaseDC(hWnd, hdc);
+		return 0;
+	}
 
-			/* Minimum window size is 80x24 */
-			rc.left = rc.top = 0;
-			rc.right = rc.left + 20 * td->tile_wid + td->size_ow1 + td->size_ow2;
-			rc.bottom = rc.top + 3 * td->tile_hgt + td->size_oh1 + td->size_oh2 + 1;
-
-			/* Adjust */
-			AdjustWindowRectEx(&rc, td->dwStyle, TRUE, td->dwExStyle);
-
-			/* Save minimum size */
-			lpmmi->ptMinTrackSize.x = rc.right - rc.left;
-			lpmmi->ptMinTrackSize.y = rc.bottom - rc.top;
-
-			return 0;
-		}
-
-		case WM_SIZE:
-		{
-			TERM_LEN cols;
-			TERM_LEN rows;
-			
-			/* this message was sent before WM_NCCREATE */
-			if (!td) return 1;
-
-			/* it was sent from inside CreateWindowEx */
-			if (!td->w) return 1;
-
-			/* was sent from inside WM_SIZE */
-			if (td->size_hack) return 1;
-
-			td->size_hack = TRUE;
-
-			cols = (LOWORD(lParam) - td->size_ow1) / td->tile_wid;
-			rows = (HIWORD(lParam) - td->size_oh1) / td->tile_hgt;
-
-			/* New size */
-			if ((td->cols != cols) || (td->rows != rows))
-			{
-				/* Save old term */
-				term *old_term = Term;
-
-				/* Save the new size */
-				td->cols = cols;
-				td->rows = rows;
-
-				/* Activate */
-				Term_activate(&td->t);
-
-				/* Resize the term */
-				Term_resize(td->cols, td->rows);
-
-				/* Activate */
-				Term_activate(old_term);
-
-				/* Redraw later */
-				InvalidateRect(td->w, NULL, TRUE);
-
-				/* HACK - Redraw all windows */
-				p_ptr->window = 0xFFFFFFFF;
-				handle_stuff(p_ptr);
-			}
-
-			td->size_hack = FALSE;
-
-			return 0;
-		}
-
-		case WM_PAINT:
-		{
-			BeginPaint(hWnd, &ps);
-			if (td) term_data_redraw(td);
-			EndPaint(hWnd, &ps);
-			return 0;
-		}
-
-		case WM_SYSKEYDOWN:
-		case WM_KEYDOWN:
-		{
-			if (process_keydown(wParam, lParam))
-				return 0;
-			break;
-		}
-
-		case WM_CHAR:
-		{
-			if (Term_no_press) Term_no_press = FALSE;
-			else Term_keypress(wParam);
-			return 0;
-		}
-
-		case WM_PALETTECHANGED:
-		{
-			/* ignore if palette change caused by itself */
-			if ((HWND)wParam == hWnd) return FALSE;
-			/* otherwise, fall through!!! */
-		}
-
-		case WM_QUERYNEWPALETTE:
-		{
-			if (!paletted) return 0;
-			hdc = GetDC(hWnd);
-			SelectPalette(hdc, hPal, FALSE);
-			i = RealizePalette(hdc);
-			/* if any palette entries changed, repaint the window. */
-			if (i) InvalidateRect(hWnd, NULL, TRUE);
-			ReleaseDC(hWnd, hdc);
-			return 0;
-		}
-
-		case WM_NCLBUTTONDOWN:
-		{
+	case WM_NCLBUTTONDOWN:
+	{
 
 #ifdef HTCLOSE
-			if (wParam == HTCLOSE) wParam = HTSYSMENU;
+		if (wParam == HTCLOSE) wParam = HTSYSMENU;
 #endif /* HTCLOSE */
 
-			if (wParam == HTSYSMENU)
+		if (wParam == HTSYSMENU)
+		{
+			if (td->visible)
 			{
-				if (td->visible)
-				{
-					td->visible = FALSE;
-					ShowWindow(td->w, SW_HIDE);
-				}
-
-				return 0;
+				td->visible = FALSE;
+				ShowWindow(td->w, SW_HIDE);
 			}
 
-			break;
+			return 0;
 		}
+
+		break;
+	}
 	}
 
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -5222,12 +4858,12 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 
 #ifdef __MWERKS__
 LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
-				    WPARAM wParam, LPARAM lParam);
+	WPARAM wParam, LPARAM lParam);
 LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
-				    WPARAM wParam, LPARAM lParam)
+	WPARAM wParam, LPARAM lParam)
 #else /* __MWERKS__ */
 LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
-					    WPARAM wParam, LPARAM lParam)
+	WPARAM wParam, LPARAM lParam)
 #endif /* __MWERKS__ */
 {
 	static int iMouse = 0;
@@ -5240,65 +4876,56 @@ LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
 	/* Process */
 	switch (uMsg)
 	{
-		case WM_NCCREATE:
-		{
-			break;
-		}
+	case WM_NCCREATE:
+	{
+		break;
+	}
 
-		case WM_SETCURSOR:
-		{
-			SetCursor(NULL);
-			return 0;
-		}
+	case WM_SETCURSOR:
+	{
+		SetCursor(NULL);
+		return 0;
+	}
 
-#if 0
-		case WM_ACTIVATE:
-		{
-			if (LOWORD(wParam) == WA_INACTIVE) break;
+	case WM_LBUTTONDOWN:
+	case WM_MBUTTONDOWN:
+	case WM_RBUTTONDOWN:
+	case WM_KEYDOWN:
+	{
+		SendMessage(hWnd, WM_CLOSE, 0, 0);
+		return 0;
+	}
 
-			/* else fall through */
-		}
-#endif
-
-		case WM_LBUTTONDOWN:
-		case WM_MBUTTONDOWN:
-		case WM_RBUTTONDOWN:
-		case WM_KEYDOWN:
+	case WM_MOUSEMOVE:
+	{
+		if (iMouse)
 		{
-			SendMessage(hWnd, WM_CLOSE, 0, 0);
-			return 0;
-		}
+			dx = LOWORD(lParam) - xMouse;
+			dy = HIWORD(lParam) - yMouse;
 
-		case WM_MOUSEMOVE:
-		{
-			if (iMouse)
+			if (dx < 0) dx = -dx;
+			if (dy < 0) dy = -dy;
+
+			if ((dx > MOUSE_SENS) || (dy > MOUSE_SENS))
 			{
-				dx = LOWORD(lParam) - xMouse;
-				dy = HIWORD(lParam) - yMouse;
-
-				if (dx < 0) dx = -dx;
-				if (dy < 0) dy = -dy;
-
-				if ((dx > MOUSE_SENS) || (dy > MOUSE_SENS))
-				{
-					SendMessage(hWnd, WM_CLOSE, 0, 0);
-				}
+				SendMessage(hWnd, WM_CLOSE, 0, 0);
 			}
-
-			/* Save last location */
-			iMouse = 1;
-			xMouse = LOWORD(lParam);
-			yMouse = HIWORD(lParam);
-
-			return 0;
 		}
 
-		case WM_CLOSE:
-		{
-			DestroyWindow(hwndSaver);
-			hwndSaver = NULL;
-			return 0;
-		}
+		/* Save last location */
+		iMouse = 1;
+		xMouse = LOWORD(lParam);
+		yMouse = HIWORD(lParam);
+
+		return 0;
+	}
+
+	case WM_CLOSE:
+	{
+		DestroyWindow(hwndSaver);
+		hwndSaver = NULL;
+		return 0;
+	}
 	}
 
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -5323,10 +4950,10 @@ static void hack_plog(concptr str)
 	{
 #ifdef JP
 		MessageBox(NULL, str, "警告！",
-			   MB_ICONEXCLAMATION | MB_OK);
+			MB_ICONEXCLAMATION | MB_OK);
 #else
 		MessageBox(NULL, str, "Warning",
-			   MB_ICONEXCLAMATION | MB_OK);
+			MB_ICONEXCLAMATION | MB_OK);
 #endif
 
 	}
@@ -5343,10 +4970,10 @@ static void hack_quit(concptr str)
 	{
 #ifdef JP
 		MessageBox(NULL, str, "エラー！",
-			   MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+			MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
 #else
 		MessageBox(NULL, str, "Error",
-			   MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+			MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
 #endif
 
 	}
@@ -5375,10 +5002,10 @@ static void hook_plog(concptr str)
 	{
 #ifdef JP
 		MessageBox(data[0].w, str, "警告！",
-			   MB_ICONEXCLAMATION | MB_OK);
+			MB_ICONEXCLAMATION | MB_OK);
 #else
 		MessageBox(data[0].w, str, "Warning",
-			   MB_ICONEXCLAMATION | MB_OK);
+			MB_ICONEXCLAMATION | MB_OK);
 #endif
 
 	}
@@ -5398,10 +5025,10 @@ static void hook_quit(concptr str)
 	{
 #ifdef JP
 		MessageBox(data[0].w, str, "エラー！",
-			   MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+			MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
 #else
 		MessageBox(data[0].w, str, "Error",
-			   MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+			MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
 #endif
 
 	}
@@ -5525,23 +5152,6 @@ static void init_stuff(void)
 	/* Hack -- Validate the "news.txt" file */
 	validate_file(path);
 
-
-#if 0 /* #ifndef JP */
-	/* Build the "font" path */
-	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "font");
-
-	/* Allocate the path */
-	ANGBAND_DIR_XTRA_FONT = string_make(path);
-
-	/* Validate the "font" directory */
-	validate_dir(ANGBAND_DIR_XTRA_FONT, TRUE);
-	path_build(path, sizeof(path), ANGBAND_DIR_XTRA_FONT, "8X13.FON");
-
-	/* Hack -- Validate the basic font */
-	validate_file(path);
-#endif
-
-
 #ifdef USE_GRAPHICS
 
 	/* Build the "graf" path */
@@ -5613,7 +5223,7 @@ static bool is_already_running(void)
  * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
  */
 int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
-		       LPSTR lpCmdLine, int nCmdShow)
+	LPSTR lpCmdLine, int nCmdShow)
 {
 	int i;
 
@@ -5628,46 +5238,46 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 
 	/* Save globally */
 	hInstance = hInst;
-	
-	
+
+
 	/* Prevent multiple run */
 	if (is_already_running())
 	{
 		MessageBox(NULL,
-				_("変愚蛮怒はすでに起動しています。", "Hengband is already running."), 
-				_("エラー！", "Error") ,
-				MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
+			_("変愚蛮怒はすでに起動しています。", "Hengband is already running."),
+			_("エラー！", "Error"),
+			MB_ICONEXCLAMATION | MB_OK | MB_ICONSTOP);
 		return FALSE;
 	}
 
 	if (hPrevInst == NULL)
 	{
-		wc.style         = CS_CLASSDC;
-		wc.lpfnWndProc   = AngbandWndProc;
-		wc.cbClsExtra    = 0;
-		wc.cbWndExtra    = 4; /* one long pointer to term_data */
-		wc.hInstance     = hInst;
-		wc.hIcon         = hIcon = LoadIcon(hInst, AppName);
-		wc.hCursor       = LoadCursor(NULL, IDC_ARROW);
+		wc.style = CS_CLASSDC;
+		wc.lpfnWndProc = AngbandWndProc;
+		wc.cbClsExtra = 0;
+		wc.cbWndExtra = 4; /* one long pointer to term_data */
+		wc.hInstance = hInst;
+		wc.hIcon = hIcon = LoadIcon(hInst, AppName);
+		wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 		wc.hbrBackground = GetStockObject(BLACK_BRUSH);
-		wc.lpszMenuName  = AppName;
+		wc.lpszMenuName = AppName;
 		wc.lpszClassName = AppName;
 
 		if (!RegisterClass(&wc)) exit(1);
 
-		wc.lpfnWndProc   = AngbandListProc;
-		wc.lpszMenuName  = NULL;
+		wc.lpfnWndProc = AngbandListProc;
+		wc.lpszMenuName = NULL;
 		wc.lpszClassName = AngList;
 
 		if (!RegisterClass(&wc)) exit(2);
 
 #ifdef USE_SAVER
 
-		wc.style          = CS_VREDRAW | CS_HREDRAW | CS_SAVEBITS | CS_DBLCLKS;
-		wc.lpfnWndProc    = AngbandSaverProc;
-		wc.hCursor        = NULL;
-		wc.lpszMenuName   = NULL;
-		wc.lpszClassName  = "WindowsScreenSaverClass";
+		wc.style = CS_VREDRAW | CS_HREDRAW | CS_SAVEBITS | CS_DBLCLKS;
+		wc.lpfnWndProc = AngbandSaverProc;
+		wc.hCursor = NULL;
+		wc.lpszMenuName = NULL;
+		wc.lpszClassName = "WindowsScreenSaverClass";
 
 		if (!RegisterClass(&wc)) exit(3);
 
@@ -5760,49 +5370,49 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 	/* We are now initialized */
 	initialized = TRUE;
 #ifdef CHUUKEI
-	if(lpCmdLine[0] == '-'){
-	  switch(lpCmdLine[1])
-	  {
-	  case 'p':
-	  case 'P':
-	    {
-	      if (!lpCmdLine[2]) break;
-	      chuukei_server = TRUE;
-	      if(connect_chuukei_server(&lpCmdLine[2])<0){
-		msg_print("connect fail");
-		return 0;
-	      }
-	      msg_print("connect");
-	      msg_print(NULL);
-	      break;
-	    }
+	if (lpCmdLine[0] == '-') {
+		switch (lpCmdLine[1])
+		{
+		case 'p':
+		case 'P':
+		{
+			if (!lpCmdLine[2]) break;
+			chuukei_server = TRUE;
+			if (connect_chuukei_server(&lpCmdLine[2]) < 0) {
+				msg_print("connect fail");
+				return 0;
+			}
+			msg_print("connect");
+			msg_print(NULL);
+			break;
+		}
 
-	  case 'c':
-	  case 'C':
-	    {
-	      if (!lpCmdLine[2]) break;
-	      chuukei_client = TRUE;
-	      connect_chuukei_server(&lpCmdLine[2]);
-	      play_game(p_ptr, FALSE);
-	      quit(NULL);
-	      return 0;
-	    }
-	  case 'X':
-	  case 'x':
-	    {
-	      if (!lpCmdLine[2]) break;
-	      prepare_browse_movie(&lpCmdLine[2]);
-	      play_game(p_ptr, FALSE);
-	      quit(NULL);
-	      return 0;
-	    }
-	  }
+		case 'c':
+		case 'C':
+		{
+			if (!lpCmdLine[2]) break;
+			chuukei_client = TRUE;
+			connect_chuukei_server(&lpCmdLine[2]);
+			play_game(p_ptr, FALSE);
+			quit(NULL);
+			return 0;
+		}
+		case 'X':
+		case 'x':
+		{
+			if (!lpCmdLine[2]) break;
+			prepare_browse_movie(&lpCmdLine[2]);
+			play_game(p_ptr, FALSE);
+			quit(NULL);
+			return 0;
+		}
+		}
 	}
 #endif
 
 #ifdef CHUUKEI
 	/* Did the user double click on a save file? */
-	if(!chuukei_server) check_for_save_file(lpCmdLine);
+	if (!chuukei_server) check_for_save_file(lpCmdLine);
 #else
 	/* Did the user double click on a save file? */
 	check_for_save_file(lpCmdLine);
@@ -5820,9 +5430,8 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 		DispatchMessage(&msg);
 	}
 	quit(NULL);
-	return (0);
+	return 0;
 }
 
 
 #endif /* WINDOWS */
-

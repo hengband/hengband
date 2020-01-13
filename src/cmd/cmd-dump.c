@@ -25,16 +25,16 @@
  * existing files; these files will become bigger and bigger unless
  * an user deletes some or all of these files by hand at some
  * point.
- *     These three functions automatically delete old dumped lines 
- * before adding new ones.  Since there are various kinds of automatic 
- * dumps in a single file, we add a header and a footer with a type 
- * name for every automatic dump, and kill old lines only when the 
+ *     These three functions automatically delete old dumped lines
+ * before adding new ones.  Since there are various kinds of automatic
+ * dumps in a single file, we add a header and a footer with a type
+ * name for every automatic dump, and kill old lines only when the
  * lines have the correct type of header and footer.
- *     We need to be quite paranoid about correctness; the user might 
+ *     We need to be quite paranoid about correctness; the user might
  * (mistakenly) edit the file by hand, and see all their work come
- * to nothing on the next auto dump otherwise.  The current code only 
- * detects changes by noting inconsistencies between the actual number 
- * of lines and the number written in the footer.  Note that this will 
+ * to nothing on the next auto dump otherwise.  The current code only
+ * detects changes by noting inconsistencies between the actual number
+ * of lines and the number written in the footer.  Note that this will
  * not catch single-line edits.
  * </pre>
  */
@@ -83,7 +83,7 @@
 
 #include "english.h"
 
-// Mark strings for auto dump
+ // Mark strings for auto dump
 static char auto_dump_header[] = "# vvvvvvv== %s ==vvvvvvv";
 static char auto_dump_footer[] = "# ^^^^^^^== %s ==^^^^^^^";
 
@@ -146,9 +146,9 @@ static void remove_auto_dump(concptr orig_file)
 
 	if (!tmp_fff)
 	{
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), tmp_file);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), tmp_file);
+		msg_print(NULL);
+		return;
 	}
 
 	/* Loop for every line */
@@ -338,9 +338,9 @@ static bool open_auto_dump(concptr buf, concptr mark)
 	auto_dump_line_num = 0;
 
 	auto_dump_printf(_("# *警告!!* 以降の行は自動生成されたものです。\n",
-					   "# *Warning!*  The lines below are an automatic dump.\n"));
-	auto_dump_printf(_("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", 
-					   "# Don't edit them; changes will be deleted and replaced automatically.\n"));
+		"# *Warning!*  The lines below are an automatic dump.\n"));
+	auto_dump_printf(_("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
+		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
 	return TRUE;
 }
 
@@ -357,9 +357,9 @@ static void close_auto_dump(void)
 	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
 
 	auto_dump_printf(_("# *警告!!* 以降の行は自動生成されたものです。\n",
-					   "# *Warning!*  The lines below are an automatic dump.\n"));
-	auto_dump_printf(_("# *警告!!* 後で自動的に削除されるので編集しないでください。\n", 
-					   "# Don't edit them; changes will be deleted and replaced automatically.\n"));
+		"# *Warning!*  The lines below are an automatic dump.\n"));
+	auto_dump_printf(_("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
+		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
 	/* End of dump */
 	fprintf(auto_dump_stream, "%s (%d)\n", footer_mark_str, auto_dump_line_num);
 
@@ -367,8 +367,8 @@ static void close_auto_dump(void)
 }
 
 
-#ifndef JP
-
+#ifdef JP
+#else
 /*!
  * @brief Return suffix of ordinal number
  * @param num number
@@ -413,15 +413,15 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 
 	static bool disable_diary = FALSE;
 
-	extract_day_hour_min(&day, &hour, &min);
+	extract_day_hour_min(creature_ptr, &day, &hour, &min);
 
 	if (disable_diary) return(-1);
 
 	if (type == NIKKI_FIX_QUEST_C ||
-	    type == NIKKI_FIX_QUEST_F ||
-	    type == NIKKI_RAND_QUEST_C ||
-	    type == NIKKI_RAND_QUEST_F ||
-	    type == NIKKI_TO_QUEST)
+		type == NIKKI_FIX_QUEST_F ||
+		type == NIKKI_RAND_QUEST_C ||
+		type == NIKKI_RAND_QUEST_F ||
+		type == NIKKI_TO_QUEST)
 	{
 		QUEST_IDX old_quest;
 
@@ -438,7 +438,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	}
 
 	/* different filne name to avoid mixing */
-	sprintf(file_name,_("playrecord-%s.txt", "playrec-%s.txt"),savefile_base);
+	sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 
 	/* File type is "TEXT" */
@@ -451,8 +451,8 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	{
 		msg_format(_("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporarily."), buf);
 		msg_format(NULL);
-		disable_diary=TRUE;
-		return (-1);
+		disable_diary = TRUE;
+		return -1;
 	}
 
 	q_idx = quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level);
@@ -469,282 +469,282 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		else
 		{
 #ifdef JP
-			sprintf(note_level_buf, "%d階(%s):", (int)creature_ptr->current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
+			sprintf(note_level_buf, "%d階(%s):", (int)creature_ptr->current_floor_ptr->dun_level, d_name + d_info[creature_ptr->dungeon_idx].name);
 #else
-			sprintf(note_level_buf, "%s L%d:", d_name+d_info[creature_ptr->dungeon_idx].name, (int)creature_ptr->current_floor_ptr->dun_level);
+			sprintf(note_level_buf, "%s L%d:", d_name + d_info[creature_ptr->dungeon_idx].name, (int)creature_ptr->current_floor_ptr->dun_level);
 #endif
 			note_level = note_level_buf;
 		}
 	}
 
-	switch(type)
+	switch (type)
 	{
-		case NIKKI_HIGAWARI:
+	case NIKKI_HIGAWARI:
+	{
+		if (day < MAX_DAYS) fprintf(fff, _("%d日目\n", "Day %d\n"), day);
+		else fputs(_("*****日目\n", "Day *****\n"), fff);
+		do_level = FALSE;
+		break;
+	}
+	case NIKKI_BUNSHOU:
+	{
+		if (num)
 		{
-			if (day < MAX_DAYS) fprintf(fff, _("%d日目\n", "Day %d\n"), day);
-			else fputs(_("*****日目\n", "Day *****\n"), fff);
-			do_level = FALSE;
-			break;
-		}
-		case NIKKI_BUNSHOU:
-		{
-			if (num)
-			{
-				fprintf(fff, "%s\n",note);
-				do_level = FALSE;
-			}
-			else
-				fprintf(fff, " %2d:%02d %20s %s\n",hour, min, note_level, note);
-			break;
-		}
-		case NIKKI_ART:
-		{
-			fprintf(fff, _(" %2d:%02d %20s %sを発見した。\n", " %2d:%02d %20s discovered %s.\n"), hour, min, note_level, note);
-			break;
-		}
-		case NIKKI_ART_SCROLL:
-		{
-			fprintf(fff, _(" %2d:%02d %20s 巻物によって%sを生成した。\n", " %2d:%02d %20s created %s by scroll.\n"), hour, min, note_level, note);
-			break;
-		}
-		case NIKKI_UNIQUE:
-		{
-			fprintf(fff, _(" %2d:%02d %20s %sを倒した。\n", " %2d:%02d %20s defeated %s.\n"), hour, min, note_level, note);
-			break;
-		}
-		case NIKKI_FIX_QUEST_C:
-		{
-			if (quest[num].flags & QUEST_FLAG_SILENT) break;
-			fprintf(fff, _(" %2d:%02d %20s クエスト「%s」を達成した。\n",
-						   " %2d:%02d %20s completed quest '%s'.\n"), hour, min, note_level, quest[num].name);
-			break;
-		}
-		case NIKKI_FIX_QUEST_F:
-		{
-			if (quest[num].flags & QUEST_FLAG_SILENT) break;
-			fprintf(fff, _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n",
-						   " %2d:%02d %20s run away from quest '%s'.\n"), hour, min, note_level, quest[num].name);
-			break;
-		}
-		case NIKKI_RAND_QUEST_C:
-		{
-			GAME_TEXT name[MAX_NLEN];
-			strcpy(name, r_name+r_info[quest[num].r_idx].name);
-			fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n",
-						   " %2d:%02d %20s completed random quest '%s'\n"), hour, min, note_level, name);
-			break;
-		}
-		case NIKKI_RAND_QUEST_F:
-		{
-			GAME_TEXT name[MAX_NLEN];
-			strcpy(name, r_name+r_info[quest[num].r_idx].name);
-			fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n",
-						   " %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, name);
-			break;
-		}
-		case NIKKI_MAXDEAPTH:
-		{
-			fprintf(fff, _(" %2d:%02d %20s %sの最深階%d階に到達した。\n",
-						   " %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, note_level,
-						   _(d_name+d_info[creature_ptr->dungeon_idx].name, num),
-						   _(num, d_name+d_info[creature_ptr->dungeon_idx].name));
-			break;
-		}
-		case NIKKI_TRUMP:
-		{
-			fprintf(fff, _(" %2d:%02d %20s %s%sの最深階を%d階にセットした。\n",
-						   " %2d:%02d %20s reset recall level of %s to %d %s.\n"), hour, min, note_level, note,
-						   _(d_name + d_info[num].name, (int)max_dlv[num]),
-						   _((int)max_dlv[num], d_name + d_info[num].name));
-			break;
-		}
-		case NIKKI_STAIR:
-		{
-			concptr to;
-			if (q_idx && (is_fixed_quest_idx(q_idx)
-			     && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
-			{
-				to = _("地上", "the surface");
-			}
-			else
-			{
-				if (!(creature_ptr->current_floor_ptr->dun_level+num)) to = _("地上", "the surface");
-				else to = format(_("%d階", "level %d"), creature_ptr->current_floor_ptr->dun_level+num);
-			}
-			fprintf(fff, _(" %2d:%02d %20s %sへ%s。\n", " %2d:%02d %20s %s %s.\n"), hour, min, note_level, _(to, note), _(note, to));
-			break;
-		}
-		case NIKKI_RECALL:
-		{
-			if (!num)
-			fprintf(fff, _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n"), 
-						hour, min, note_level, _(d_name+d_info[creature_ptr->dungeon_idx].name, (int)max_dlv[creature_ptr->dungeon_idx]), 
-											   _((int)max_dlv[creature_ptr->dungeon_idx], d_name+d_info[creature_ptr->dungeon_idx].name));
-			else
-				fprintf(fff, _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n"), hour, min, note_level);
-			break;
-		}
-		case NIKKI_TO_QUEST:
-		{
-			if (quest[num].flags & QUEST_FLAG_SILENT) break;
-			fprintf(fff, _(" %2d:%02d %20s クエスト「%s」へと突入した。\n", " %2d:%02d %20s entered the quest '%s'.\n"),
-						hour, min, note_level, quest[num].name);
-			break;
-		}
-		case NIKKI_TELE_LEV:
-		{
-			fprintf(fff, _(" %2d:%02d %20s レベル・テレポートで脱出した。\n", " %2d:%02d %20s Got out using teleport level.\n"),
-						hour, min, note_level);
-			break;
-		}
-		case NIKKI_BUY:
-		{
-			fprintf(fff, _(" %2d:%02d %20s %sを購入した。\n", " %2d:%02d %20s bought %s.\n"), hour, min, note_level, note);
-			break;
-		}
-		case NIKKI_SELL:
-		{
-			fprintf(fff, _(" %2d:%02d %20s %sを売却した。\n", " %2d:%02d %20s sold %s.\n"), hour, min, note_level, note);
-			break;
-		}
-		case NIKKI_ARENA:
-		{
-			if (num < 0)
-			{
-				int n = -num;
-				fprintf(fff, _(" %2d:%02d %20s 闘技場の%d%s回戦で、%sの前に敗れ去った。\n", " %2d:%02d %20s beaten by %s in the %d%s fight.\n"),
-							hour, min, note_level, _(n, note), _("", n), _(note, get_ordinal_number_suffix(n)));
-				break;
-			}
-			fprintf(fff, _(" %2d:%02d %20s 闘技場の%d%s回戦(%s)に勝利した。\n", " %2d:%02d %20s won the %d%s fight (%s).\n"),
-						hour, min, note_level, num, _("", get_ordinal_number_suffix(num)), note);
-			
-			if (num == MAX_ARENA_MONS)
-			{
-				fprintf(fff, _("                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n",
-							   "                 won all fight to become a Chanpion.\n"));
-				do_level = FALSE;
-			}
-			break;
-		}
-		case NIKKI_HANMEI:
-		{
-			fprintf(fff, _(" %2d:%02d %20s %sを識別した。\n", " %2d:%02d %20s identified %s.\n"), hour, min, note_level, note);
-			break;
-		}
-		case NIKKI_WIZ_TELE:
-		{
-			concptr to;
-			if (!creature_ptr->current_floor_ptr->dun_level)
-				to = _("地上", "the surface");
-			else
-				to = format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
-
-			fprintf(fff, _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n",
-						   " %2d:%02d %20s wizard-teleport to %s.\n"), hour, min, note_level, to);
-			break;
-		}
-		case NIKKI_PAT_TELE:
-		{
-			concptr to;
-			if (!creature_ptr->current_floor_ptr->dun_level)
-				to = _("地上", "the surface");
-			else
-				to = format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_name+d_info[creature_ptr->dungeon_idx].name);
-
-			fprintf(fff, _(" %2d:%02d %20s %sへとパターンの力で移動した。\n",
-						   " %2d:%02d %20s used Pattern to teleport to %s.\n"), hour, min, note_level, to);
-			break;
-		}
-		case NIKKI_LEVELUP:
-		{
-			fprintf(fff, _(" %2d:%02d %20s レベルが%dに上がった。\n", " %2d:%02d %20s reached player level %d.\n"), hour, min, note_level, num);
-			break;
-		}
-		case NIKKI_GAMESTART:
-		{
-			time_t ct = time((time_t*)0);
-			do_level = FALSE;
-			if (num)
-			{
-				fprintf(fff, "%s %s",note, ctime(&ct));
-			}
-			else
-				fprintf(fff, " %2d:%02d %20s %s %s",hour, min, note_level, note, ctime(&ct));
-			break;
-		}
-		case NIKKI_NAMED_PET:
-		{
-			fprintf(fff, " %2d:%02d %20s ", hour, min, note_level);
-			switch (num)
-			{
-				case RECORD_NAMED_PET_NAME:
-					fprintf(fff, _("%sを旅の友にすることに決めた。\n", "decided to travel together with %s.\n"), note);
-					break;
-				case RECORD_NAMED_PET_UNNAME:
-					fprintf(fff, _("%sの名前を消した。\n", "unnamed %s.\n"), note);
-					break;
-				case RECORD_NAMED_PET_DISMISS:
-					fprintf(fff, _("%sを解放した。\n", "dismissed %s.\n"), note);
-					break;
-				case RECORD_NAMED_PET_DEATH:
-					fprintf(fff, _("%sが死んでしまった。\n", "%s died.\n"), note);
-					break;
-				case RECORD_NAMED_PET_MOVED:
-					fprintf(fff, _("%sをおいて別のマップへ移動した。\n", "moved to another map leaving %s behind.\n"), note);
-					break;
-				case RECORD_NAMED_PET_LOST_SIGHT:
-					fprintf(fff, _("%sとはぐれてしまった。\n", "lost sight of %s.\n"), note);
-					break;
-				case RECORD_NAMED_PET_DESTROY:
-					fprintf(fff, _("%sが*破壊*によって消え去った。\n", "%s was made disappeared by *destruction*.\n"), note);
-					break;
-				case RECORD_NAMED_PET_EARTHQUAKE:
-					fprintf(fff, _("%sが岩石に押し潰された。\n", "%s was crushed by falling rocks.\n"), note);
-					break;
-				case RECORD_NAMED_PET_GENOCIDE:
-					fprintf(fff, _("%sが抹殺によって消え去った。\n", "%s was made disappeared by genocide.\n"), note);
-					break;
-				case RECORD_NAMED_PET_WIZ_ZAP:
-					fprintf(fff, _("%sがデバッグコマンドによって消え去った。\n", "%s was removed by debug command.\n"), note);
-					break;
-				case RECORD_NAMED_PET_TELE_LEVEL:
-					fprintf(fff, _("%sがテレポート・レベルによって消え去った。\n", "%s was made disappeared by teleport level.\n"), note);
-					break;
-				case RECORD_NAMED_PET_BLAST:
-					fprintf(fff, _("%sを爆破した。\n", "blasted %s.\n"), note);
-					break;
-				case RECORD_NAMED_PET_HEAL_LEPER:
-					fprintf(fff, _("%sの病気が治り旅から外れた。\n", "%s was healed and left.\n"), note);
-					break;
-				case RECORD_NAMED_PET_COMPACT:
-					fprintf(fff, _("%sがモンスター情報圧縮によって消え去った。\n", "%s was made disappeared by compacting monsters.\n"), note);
-					break;
-				case RECORD_NAMED_PET_LOSE_PARENT:
-					fprintf(fff, _("%sの召喚者が既にいないため消え去った。\n", "%s disappeared because there does not exist summoner.\n"), note);
-					break;
-
-
-				default:
-					fprintf(fff, "\n");
-					break;
-			}
-			break;
-		}
-
-		case NIKKI_WIZARD_LOG:
 			fprintf(fff, "%s\n", note);
+			do_level = FALSE;
+		}
+		else
+			fprintf(fff, " %2d:%02d %20s %s\n", hour, min, note_level, note);
+		break;
+	}
+	case NIKKI_ART:
+	{
+		fprintf(fff, _(" %2d:%02d %20s %sを発見した。\n", " %2d:%02d %20s discovered %s.\n"), hour, min, note_level, note);
+		break;
+	}
+	case NIKKI_ART_SCROLL:
+	{
+		fprintf(fff, _(" %2d:%02d %20s 巻物によって%sを生成した。\n", " %2d:%02d %20s created %s by scroll.\n"), hour, min, note_level, note);
+		break;
+	}
+	case NIKKI_UNIQUE:
+	{
+		fprintf(fff, _(" %2d:%02d %20s %sを倒した。\n", " %2d:%02d %20s defeated %s.\n"), hour, min, note_level, note);
+		break;
+	}
+	case NIKKI_FIX_QUEST_C:
+	{
+		if (quest[num].flags & QUEST_FLAG_SILENT) break;
+		fprintf(fff, _(" %2d:%02d %20s クエスト「%s」を達成した。\n",
+			" %2d:%02d %20s completed quest '%s'.\n"), hour, min, note_level, quest[num].name);
+		break;
+	}
+	case NIKKI_FIX_QUEST_F:
+	{
+		if (quest[num].flags & QUEST_FLAG_SILENT) break;
+		fprintf(fff, _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n",
+			" %2d:%02d %20s run away from quest '%s'.\n"), hour, min, note_level, quest[num].name);
+		break;
+	}
+	case NIKKI_RAND_QUEST_C:
+	{
+		GAME_TEXT name[MAX_NLEN];
+		strcpy(name, r_name + r_info[quest[num].r_idx].name);
+		fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)を達成した。\n",
+			" %2d:%02d %20s completed random quest '%s'\n"), hour, min, note_level, name);
+		break;
+	}
+	case NIKKI_RAND_QUEST_F:
+	{
+		GAME_TEXT name[MAX_NLEN];
+		strcpy(name, r_name + r_info[quest[num].r_idx].name);
+		fprintf(fff, _(" %2d:%02d %20s ランダムクエスト(%s)から逃げ出した。\n",
+			" %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, name);
+		break;
+	}
+	case NIKKI_MAXDEAPTH:
+	{
+		fprintf(fff, _(" %2d:%02d %20s %sの最深階%d階に到達した。\n",
+			" %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, note_level,
+			_(d_name + d_info[creature_ptr->dungeon_idx].name, num),
+			_(num, d_name + d_info[creature_ptr->dungeon_idx].name));
+		break;
+	}
+	case NIKKI_TRUMP:
+	{
+		fprintf(fff, _(" %2d:%02d %20s %s%sの最深階を%d階にセットした。\n",
+			" %2d:%02d %20s reset recall level of %s to %d %s.\n"), hour, min, note_level, note,
+			_(d_name + d_info[num].name, (int)max_dlv[num]),
+			_((int)max_dlv[num], d_name + d_info[num].name));
+		break;
+	}
+	case NIKKI_STAIR:
+	{
+		concptr to;
+		if (q_idx && (is_fixed_quest_idx(q_idx)
+			&& !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
+		{
+			to = _("地上", "the surface");
+		}
+		else
+		{
+			if (!(creature_ptr->current_floor_ptr->dun_level + num)) to = _("地上", "the surface");
+			else to = format(_("%d階", "level %d"), creature_ptr->current_floor_ptr->dun_level + num);
+		}
+		fprintf(fff, _(" %2d:%02d %20s %sへ%s。\n", " %2d:%02d %20s %s %s.\n"), hour, min, note_level, _(to, note), _(note, to));
+		break;
+	}
+	case NIKKI_RECALL:
+	{
+		if (!num)
+			fprintf(fff, _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n"),
+				hour, min, note_level, _(d_name + d_info[creature_ptr->dungeon_idx].name, (int)max_dlv[creature_ptr->dungeon_idx]),
+				_((int)max_dlv[creature_ptr->dungeon_idx], d_name + d_info[creature_ptr->dungeon_idx].name));
+		else
+			fprintf(fff, _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n"), hour, min, note_level);
+		break;
+	}
+	case NIKKI_TO_QUEST:
+	{
+		if (quest[num].flags & QUEST_FLAG_SILENT) break;
+		fprintf(fff, _(" %2d:%02d %20s クエスト「%s」へと突入した。\n", " %2d:%02d %20s entered the quest '%s'.\n"),
+			hour, min, note_level, quest[num].name);
+		break;
+	}
+	case NIKKI_TELE_LEV:
+	{
+		fprintf(fff, _(" %2d:%02d %20s レベル・テレポートで脱出した。\n", " %2d:%02d %20s Got out using teleport level.\n"),
+			hour, min, note_level);
+		break;
+	}
+	case NIKKI_BUY:
+	{
+		fprintf(fff, _(" %2d:%02d %20s %sを購入した。\n", " %2d:%02d %20s bought %s.\n"), hour, min, note_level, note);
+		break;
+	}
+	case NIKKI_SELL:
+	{
+		fprintf(fff, _(" %2d:%02d %20s %sを売却した。\n", " %2d:%02d %20s sold %s.\n"), hour, min, note_level, note);
+		break;
+	}
+	case NIKKI_ARENA:
+	{
+		if (num < 0)
+		{
+			int n = -num;
+			fprintf(fff, _(" %2d:%02d %20s 闘技場の%d%s回戦で、%sの前に敗れ去った。\n", " %2d:%02d %20s beaten by %s in the %d%s fight.\n"),
+				hour, min, note_level, _(n, note), _("", n), _(note, get_ordinal_number_suffix(n)));
 			break;
+		}
+		fprintf(fff, _(" %2d:%02d %20s 闘技場の%d%s回戦(%s)に勝利した。\n", " %2d:%02d %20s won the %d%s fight (%s).\n"),
+			hour, min, note_level, num, _("", get_ordinal_number_suffix(num)), note);
+
+		if (num == MAX_ARENA_MONS)
+		{
+			fprintf(fff, _("                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n",
+				"                 won all fight to become a Chanpion.\n"));
+			do_level = FALSE;
+		}
+		break;
+	}
+	case NIKKI_HANMEI:
+	{
+		fprintf(fff, _(" %2d:%02d %20s %sを識別した。\n", " %2d:%02d %20s identified %s.\n"), hour, min, note_level, note);
+		break;
+	}
+	case NIKKI_WIZ_TELE:
+	{
+		concptr to;
+		if (!creature_ptr->current_floor_ptr->dun_level)
+			to = _("地上", "the surface");
+		else
+			to = format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_name + d_info[creature_ptr->dungeon_idx].name);
+
+		fprintf(fff, _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n",
+			" %2d:%02d %20s wizard-teleport to %s.\n"), hour, min, note_level, to);
+		break;
+	}
+	case NIKKI_PAT_TELE:
+	{
+		concptr to;
+		if (!creature_ptr->current_floor_ptr->dun_level)
+			to = _("地上", "the surface");
+		else
+			to = format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_name + d_info[creature_ptr->dungeon_idx].name);
+
+		fprintf(fff, _(" %2d:%02d %20s %sへとパターンの力で移動した。\n",
+			" %2d:%02d %20s used Pattern to teleport to %s.\n"), hour, min, note_level, to);
+		break;
+	}
+	case NIKKI_LEVELUP:
+	{
+		fprintf(fff, _(" %2d:%02d %20s レベルが%dに上がった。\n", " %2d:%02d %20s reached player level %d.\n"), hour, min, note_level, num);
+		break;
+	}
+	case NIKKI_GAMESTART:
+	{
+		time_t ct = time((time_t*)0);
+		do_level = FALSE;
+		if (num)
+		{
+			fprintf(fff, "%s %s", note, ctime(&ct));
+		}
+		else
+			fprintf(fff, " %2d:%02d %20s %s %s", hour, min, note_level, note, ctime(&ct));
+		break;
+	}
+	case NIKKI_NAMED_PET:
+	{
+		fprintf(fff, " %2d:%02d %20s ", hour, min, note_level);
+		switch (num)
+		{
+		case RECORD_NAMED_PET_NAME:
+			fprintf(fff, _("%sを旅の友にすることに決めた。\n", "decided to travel together with %s.\n"), note);
+			break;
+		case RECORD_NAMED_PET_UNNAME:
+			fprintf(fff, _("%sの名前を消した。\n", "unnamed %s.\n"), note);
+			break;
+		case RECORD_NAMED_PET_DISMISS:
+			fprintf(fff, _("%sを解放した。\n", "dismissed %s.\n"), note);
+			break;
+		case RECORD_NAMED_PET_DEATH:
+			fprintf(fff, _("%sが死んでしまった。\n", "%s died.\n"), note);
+			break;
+		case RECORD_NAMED_PET_MOVED:
+			fprintf(fff, _("%sをおいて別のマップへ移動した。\n", "moved to another map leaving %s behind.\n"), note);
+			break;
+		case RECORD_NAMED_PET_LOST_SIGHT:
+			fprintf(fff, _("%sとはぐれてしまった。\n", "lost sight of %s.\n"), note);
+			break;
+		case RECORD_NAMED_PET_DESTROY:
+			fprintf(fff, _("%sが*破壊*によって消え去った。\n", "%s was made disappeared by *destruction*.\n"), note);
+			break;
+		case RECORD_NAMED_PET_EARTHQUAKE:
+			fprintf(fff, _("%sが岩石に押し潰された。\n", "%s was crushed by falling rocks.\n"), note);
+			break;
+		case RECORD_NAMED_PET_GENOCIDE:
+			fprintf(fff, _("%sが抹殺によって消え去った。\n", "%s was made disappeared by genocide.\n"), note);
+			break;
+		case RECORD_NAMED_PET_WIZ_ZAP:
+			fprintf(fff, _("%sがデバッグコマンドによって消え去った。\n", "%s was removed by debug command.\n"), note);
+			break;
+		case RECORD_NAMED_PET_TELE_LEVEL:
+			fprintf(fff, _("%sがテレポート・レベルによって消え去った。\n", "%s was made disappeared by teleport level.\n"), note);
+			break;
+		case RECORD_NAMED_PET_BLAST:
+			fprintf(fff, _("%sを爆破した。\n", "blasted %s.\n"), note);
+			break;
+		case RECORD_NAMED_PET_HEAL_LEPER:
+			fprintf(fff, _("%sの病気が治り旅から外れた。\n", "%s was healed and left.\n"), note);
+			break;
+		case RECORD_NAMED_PET_COMPACT:
+			fprintf(fff, _("%sがモンスター情報圧縮によって消え去った。\n", "%s was made disappeared by compacting monsters.\n"), note);
+			break;
+		case RECORD_NAMED_PET_LOSE_PARENT:
+			fprintf(fff, _("%sの召喚者が既にいないため消え去った。\n", "%s disappeared because there does not exist summoner.\n"), note);
+			break;
+
 
 		default:
+			fprintf(fff, "\n");
 			break;
+		}
+		break;
+	}
+
+	case NIKKI_WIZARD_LOG:
+		fprintf(fff, "%s\n", note);
+		break;
+
+	default:
+		break;
 	}
 
 	my_fclose(fff);
 
 	if (do_level) write_level = FALSE;
 
-	return (0);
+	return 0;
 }
 
 
@@ -796,7 +796,7 @@ static void display_diary(player_type *creature_ptr)
 		"最高の頭脳を求めて"
 	};
 #else
-	static const char subtitle[][51] ={
+	static const char subtitle[][51] = {
 		"Quest of The World's Toughest Body",
 		"Attack is the best form of defence.",
 		"Might is right.",
@@ -832,14 +832,14 @@ static void display_diary(player_type *creature_ptr)
 		"Quest of The World's Greatest Brain"
 	};
 #endif
-	sprintf(file_name,_("playrecord-%s.txt", "playrec-%s.txt"),savefile_base);
+	sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 
 	if (creature_ptr->pclass == CLASS_WARRIOR || creature_ptr->pclass == CLASS_MONK || creature_ptr->pclass == CLASS_SAMURAI || creature_ptr->pclass == CLASS_BERSERKER)
-		strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-1)]);
+		strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 1)]);
 	else if (IS_WIZARD_CLASS(creature_ptr))
-		strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-1)+1]);
-	else strcpy(tmp,subtitle[randint0(MAX_SUBTITLE-2)+1]);
+		strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 1) + 1]);
+	else strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 2) + 1]);
 
 #ifdef JP
 	sprintf(diary_title, "「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", creature_ptr->name, tmp);
@@ -877,12 +877,12 @@ static void do_cmd_last_get(player_type *creaute_ptr)
 	if (record_o_name[0] == '\0') return;
 
 	char buf[256];
-	sprintf(buf,_("%sの入手を記録します。", "Do you really want to record getting %s? "),record_o_name);
+	sprintf(buf, _("%sの入手を記録します。", "Do you really want to record getting %s? "), record_o_name);
 	if (!get_check(buf)) return;
 
 	GAME_TURN turn_tmp = current_world_ptr->game_turn;
 	current_world_ptr->game_turn = record_turn;
-	sprintf(buf,_("%sを手に入れた。", "descover %s."), record_o_name);
+	sprintf(buf, _("%sを手に入れた。", "descover %s."), record_o_name);
 	exe_write_diary(creaute_ptr, NIKKI_BUNSHOU, 0, buf);
 	current_world_ptr->game_turn = turn_tmp;
 }
@@ -899,16 +899,17 @@ static void do_cmd_erase_diary(void)
 	FILE *fff = NULL;
 
 	if (!get_check(_("本当に記録を消去しますか？", "Do you really want to delete all your record? "))) return;
-		sprintf(file_name,_("playrecord-%s.txt", "playrec-%s.txt"),savefile_base);
+	sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 	fd_kill(buf);
 
 	fff = my_fopen(buf, "w");
-	if(fff)
+	if (fff)
 	{
 		my_fclose(fff);
 		msg_format(_("記録を消去しました。", "deleted record."));
-	}else
+	}
+	else
 	{
 		msg_format(_("%s の消去に失敗しました。", "failed to delete %s."), buf);
 	}
@@ -1061,7 +1062,7 @@ void do_cmd_player_status(player_type *creature_ptr)
 
 		/* Prompt */
 		Term_putstr(2, 23, -1, TERM_WHITE,
-			    _("['c'で名前変更, 'f'でファイルへ書出, 'h'でモード変更, ESCで終了]", "['c' to change name, 'f' to file, 'h' to change mode, or ESC]"));
+			_("['c'で名前変更, 'f'でファイルへ書出, 'h'でモード変更, ESCで終了]", "['c' to change name, 'f' to file, 'h' to change mode, or ESC]"));
 
 		/* Query */
 		c = inkey();
@@ -1178,7 +1179,7 @@ void do_cmd_messages(int num_now)
 		/* Dump up to 20 lines of messages */
 		for (j = 0; (j < num_lines) && (i + j < n); j++)
 		{
-			concptr msg = message_str(i+j);
+			concptr msg = message_str(i + j);
 
 			/* Dump the messages, bottom to top */
 			c_prt((i + j < num_now ? TERM_WHITE : TERM_SLATE), msg, num_lines + 1 - j, 0);
@@ -1207,11 +1208,11 @@ void do_cmd_messages(int num_now)
 		/* Display header */
 		/* translation */
 		prt(format(_("以前のメッセージ %d-%d 全部で(%d)", "Message Recall (%d-%d of %d)"),
-			   i, i + j - 1, n), 0, 0);
+			i, i + j - 1, n), 0, 0);
 
 		/* Display prompt (not very informative) */
 		prt(_("[ 'p' で更に古いもの, 'n' で更に新しいもの, '/' で検索, ESC で中断 ]",
-			  "[Press 'p' for older, 'n' for newer, ..., or ESCAPE]"), hgt - 1, 0);
+			"[Press 'p' for older, 'n' for newer, ..., or ESCAPE]"), hgt - 1, 0);
 
 		skey = inkey_special(TRUE);
 
@@ -1223,7 +1224,7 @@ void do_cmd_messages(int num_now)
 
 		switch (skey)
 		{
-		/* Hack -- handle show */
+			/* Hack -- handle show */
 		case '=':
 			/* Prompt */
 			prt(_("強調: ", "Show: "), hgt - 1, 0);
@@ -1239,47 +1240,47 @@ void do_cmd_messages(int num_now)
 
 			continue;
 
-		/* Hack -- handle find */
+			/* Hack -- handle find */
 		case '/':
 		case KTRL('s'):
+		{
+			int z;
+
+			/* Prompt */
+			prt(_("検索: ", "Find: "), hgt - 1, 0);
+
+			/* Get a "finder" string, or continue */
+			strcpy(back_str, finder_str);
+			if (!askfor(finder_str, 80))
 			{
-				int z;
+				strcpy(finder_str, back_str);
+				continue;
+			}
+			else if (!finder_str[0])
+			{
+				shower = NULL; /* Stop showing */
+				continue;
+			}
 
-				/* Prompt */
-				prt(_("検索: ", "Find: "), hgt - 1, 0);
+			/* Show it */
+			shower = finder_str;
 
-				/* Get a "finder" string, or continue */
-				strcpy(back_str, finder_str);
-				if (!askfor(finder_str, 80))
+			/* Scan messages */
+			for (z = i + 1; z < n; z++)
+			{
+				concptr msg = message_str(z);
+
+				/* Search for it */
+				if (my_strstr(msg, finder_str))
 				{
-					strcpy(finder_str, back_str);
-					continue;
-				}
-				else if (!finder_str[0])
-				{
-					shower = NULL; /* Stop showing */
-					continue;
-				}
+					/* New location */
+					i = z;
 
-				/* Show it */
-				shower = finder_str;
-
-				/* Scan messages */
-				for (z = i + 1; z < n; z++)
-				{
-					concptr msg = message_str(z);
-
-					/* Search for it */
-					if (my_strstr(msg, finder_str))
-					{
-						/* New location */
-						i = z;
-
-						break;
-					}
+					break;
 				}
 			}
-			break;
+		}
+		break;
 
 		/* Recall 1 older message */
 		case SKEY_TOP:
@@ -1287,13 +1288,13 @@ void do_cmd_messages(int num_now)
 			i = n - num_lines;
 			break;
 
-		/* Recall 1 newer message */
+			/* Recall 1 newer message */
 		case SKEY_BOTTOM:
 			/* Go to the newest line */
 			i = 0;
 			break;
 
-		/* Recall 1 older message */
+			/* Recall 1 older message */
 		case '8':
 		case SKEY_UP:
 		case '\n':
@@ -1302,13 +1303,13 @@ void do_cmd_messages(int num_now)
 			i = MIN(i + 1, n - num_lines);
 			break;
 
-		/* Recall 10 older messages */
+			/* Recall 10 older messages */
 		case '+':
 			/* Go older if legal */
 			i = MIN(i + 10, n - num_lines);
 			break;
 
-		/* Recall 20 older messages */
+			/* Recall 20 older messages */
 		case 'p':
 		case KTRL('P'):
 		case ' ':
@@ -1317,7 +1318,7 @@ void do_cmd_messages(int num_now)
 			i = MIN(i + num_lines, n - num_lines);
 			break;
 
-		/* Recall 20 newer messages */
+			/* Recall 20 newer messages */
 		case 'n':
 		case KTRL('N'):
 		case SKEY_PGDOWN:
@@ -1325,13 +1326,13 @@ void do_cmd_messages(int num_now)
 			i = MAX(0, i - num_lines);
 			break;
 
-		/* Recall 10 newer messages */
+			/* Recall 10 newer messages */
 		case '-':
 			/* Go newer (if able) */
 			i = MAX(0, i - 10);
 			break;
 
-		/* Recall 1 newer messages */
+			/* Recall 1 newer messages */
 		case '2':
 		case SKEY_DOWN:
 			/* Go newer (if able) */
@@ -1398,11 +1399,11 @@ static errr macro_dump(concptr fname)
 	FILE_TYPE(FILE_TYPE_TEXT);
 
 	/* Append to the file */
-	if (!open_auto_dump(buf, mark)) return (-1);
+	if (!open_auto_dump(buf, mark)) return -1;
 
 	/* Start dumping */
 	auto_dump_printf(_("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
-	
+
 	/* Dump them */
 	for (int i = 0; i < macro__num; i++)
 	{
@@ -1423,7 +1424,7 @@ static errr macro_dump(concptr fname)
 	}
 
 	close_auto_dump();
-	return (0);
+	return 0;
 }
 
 
@@ -1489,7 +1490,7 @@ static void do_cmd_macro_aux(char *buf)
  * @details
  * <pre>
  * Note that both "flush()" calls are extremely important.  This may
- * no longer be true, since "util.c" is much simpler now.  
+ * no longer be true, since "util.c" is much simpler now.
  * </pre>
  */
 static void do_cmd_macro_aux_keymap(char *buf)
@@ -1549,7 +1550,7 @@ static errr keymap_dump(concptr fname)
 
 	/* Start dumping */
 	auto_dump_printf(_("\n# 自動キー配置セーブ\n\n", "\n# Automatic keymap dump\n\n"));
-	
+
 	/* Dump them */
 	for (int i = 0; i < 256; i++)
 	{
@@ -1575,7 +1576,7 @@ static errr keymap_dump(concptr fname)
 	}
 
 	close_auto_dump();
-	return (0);
+	return 0;
 }
 
 
@@ -1587,7 +1588,7 @@ static errr keymap_dump(concptr fname)
  * <pre>
  * Note that the macro "action" must be defined before the trigger.
  *
- * Could use some helpful instructions on this page.  
+ * Could use some helpful instructions on this page.
  * </pre>
  */
 void do_cmd_macros(player_type *creature_ptr)
@@ -1766,7 +1767,7 @@ void do_cmd_macros(player_type *creature_ptr)
 
 			/* Help message */
 			c_prt(TERM_L_RED, _("カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。",
-								"Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."), 22, 0);
+				"Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."), 22, 0);
 
 			/* Prompt */
 			prt(_("マクロ行動: ", "Action: "), 20, 0);
@@ -1885,7 +1886,7 @@ void do_cmd_macros(player_type *creature_ptr)
 
 			/* Help message */
 			c_prt(TERM_L_RED, _("カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。",
-							    "Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."), 22, 0);
+				"Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."), 22, 0);
 
 			/* Prompt */
 			prt(_("行動: ", "Action: "), 20, 0);
@@ -1941,7 +1942,7 @@ void do_cmd_macros(player_type *creature_ptr)
 
 			/* Help message */
 			c_prt(TERM_L_RED, _("カーソルキーの左右でカーソル位置を移動。BackspaceかDeleteで一文字削除。",
-								"Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."), 22, 0);
+				"Press Left/Right arrow keys to move cursor. Backspace/Delete to delete a char."), 22, 0);
 
 			/* Prompt */
 			prt(_("マクロ行動: ", "Action: "), 20, 0);
@@ -2002,7 +2003,7 @@ static bool cmd_visuals_aux(int i, IDX *num, IDX max)
 
 		sprintf(str, "%d", *num);
 
-		if (!get_string(format("Input new number(0-%d): ", max-1), str, 4))
+		if (!get_string(format("Input new number(0-%d): ", max - 1), str, 4))
 			return FALSE;
 
 		tmp = (IDX)strtol(str, NULL, 0);
@@ -2025,10 +2026,10 @@ static bool cmd_visuals_aux(int i, IDX *num, IDX max)
 static void print_visuals_menu(concptr choice_msg)
 {
 	prt(_("[ 画面表示の設定 ]", "Interact with Visuals"), 1, 0);
-	
+
 	/* Give some choices */
 	prt(_("(0) ユーザー設定ファイルのロード", "(0) Load a user pref file"), 3, 5);
-	
+
 #ifdef ALLOW_VISUALS
 	prt(_("(1) モンスターの 色/文字 をファイルに書き出す", "(1) Dump monster attr/chars"), 4, 5);
 	prt(_("(2) アイテムの   色/文字 をファイルに書き出す", "(2) Dump object attr/chars"), 5, 5);
@@ -2080,7 +2081,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 
 		switch (i)
 		{
-		/* Load a 'pref' file */
+			/* Load a 'pref' file */
 		case '0':
 			/* Prompt */
 			prt(_("コマンド: ユーザー設定ファイルのロード", "Command: Load a user pref file"), 15, 0);
@@ -2102,7 +2103,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 
 #ifdef ALLOW_VISUALS
 
-		/* Dump monster attr/chars */
+			/* Dump monster attr/chars */
 		case '1':
 		{
 			static concptr mark = "Monster attr/chars";
@@ -2291,7 +2292,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 
 				/* Label the object */
 				Term_putstr(5, 17, -1, TERM_WHITE,
-					 format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), r, (r_name + r_ptr->name)));
+					format(_("モンスター = %d, 名前 = %-40.40s", "Monster = %d, Name = %-40.40s"), r, (r_name + r_ptr->name)));
 
 				/* Label the Default values */
 				Term_putstr(10, 19, -1, TERM_WHITE,
@@ -2308,7 +2309,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 				Term_queue_bigchar(43, 20, ca, cc, 0, 0);
 
 				/* Prompt */
-				Term_putstr(0, 22, -1, TERM_WHITE, 
+				Term_putstr(0, 22, -1, TERM_WHITE,
 					_("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
 
 				i = inkey();
@@ -2323,19 +2324,18 @@ void do_cmd_visuals(player_type *creature_ptr)
 				switch (c)
 				{
 				case 'n':
+				{
+					IDX prev_r = r;
+					do
 					{
-						IDX prev_r = r;
-						do
+						if (!cmd_visuals_aux(i, &r, max_r_idx))
 						{
-							if (!cmd_visuals_aux(i, &r, max_r_idx))
-							{
-								r = prev_r;
-								break;
-							}
+							r = prev_r;
+							break;
 						}
-						while (!r_info[r].name);
-					}
-					break;
+					} while (!r_info[r].name);
+				}
+				break;
 				case 'a':
 					t = (int)r_ptr->x_attr;
 					(void)cmd_visuals_aux(i, &t, 256);
@@ -2380,26 +2380,26 @@ void do_cmd_visuals(player_type *creature_ptr)
 
 				/* Label the object */
 				Term_putstr(5, 17, -1, TERM_WHITE,
-					    format(_("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"),
-						   k, k_name + (!k_ptr->flavor ? k_ptr->name : k_ptr->flavor_name)));
+					format(_("アイテム = %d, 名前 = %-40.40s", "Object = %d, Name = %-40.40s"),
+						k, k_name + (!k_ptr->flavor ? k_ptr->name : k_ptr->flavor_name)));
 
 				/* Label the Default values */
 				Term_putstr(10, 19, -1, TERM_WHITE,
-					    format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
+					format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
 
 				Term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
 				Term_queue_bigchar(43, 19, da, dc, 0, 0);
 
 				/* Label the Current values */
 				Term_putstr(10, 20, -1, TERM_WHITE,
-					    format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
+					format(_("現在値  色 / 文字 = %3d / %3d", "Current attr/char = %3d / %3d"), ca, cc));
 
 				Term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
 				Term_queue_bigchar(43, 20, ca, cc, 0, 0);
 
 				/* Prompt */
 				Term_putstr(0, 22, -1, TERM_WHITE,
-					    _("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
+					_("コマンド (n/N/^N/a/A/^A/c/C/^C/v/V/^V): ", "Command (n/N/^N/a/A/^A/c/C/^C/v/V/^V): "));
 
 				i = inkey();
 
@@ -2413,19 +2413,18 @@ void do_cmd_visuals(player_type *creature_ptr)
 				switch (c)
 				{
 				case 'n':
+				{
+					IDX prev_k = k;
+					do
 					{
-						IDX prev_k = k;
-						do
+						if (!cmd_visuals_aux(i, &k, max_k_idx))
 						{
-							if (!cmd_visuals_aux(i, &k, max_k_idx))
-							{
-								k = prev_k;
-								break;
-							}
+							k = prev_k;
+							break;
 						}
-						while (!k_info[k].name);
-					}
-					break;
+					} while (!k_info[k].name);
+				}
+				break;
 				case 'a':
 					t = (int)k_ptr->x_attr;
 					(void)cmd_visuals_aux(i, &t, 256);
@@ -2472,12 +2471,12 @@ void do_cmd_visuals(player_type *creature_ptr)
 				/* Label the object */
 				prt("", 17, 5);
 				Term_putstr(5, 17, -1, TERM_WHITE,
-					    format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"),
-						   f, (f_name + f_ptr->name), lighting_level_str[lighting_level]));
+					format(_("地形 = %d, 名前 = %s, 明度 = %s", "Terrain = %d, Name = %s, Lighting = %s"),
+						f, (f_name + f_ptr->name), lighting_level_str[lighting_level]));
 
 				/* Label the Default values */
 				Term_putstr(10, 19, -1, TERM_WHITE,
-					    format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
+					format(_("初期値  色 / 文字 = %3d / %3d", "Default attr/char = %3d / %3d"), da, dc));
 
 				Term_putstr(40, 19, -1, TERM_WHITE, empty_symbol);
 				Term_queue_bigchar(43, 19, da, dc, 0, 0);
@@ -2485,10 +2484,10 @@ void do_cmd_visuals(player_type *creature_ptr)
 				/* Label the Current values */
 #ifdef JP
 				Term_putstr(10, 20, -1, TERM_WHITE,
-					    format("現在値  色 / 文字 = %3d / %3d", ca, cc));
+					format("現在値  色 / 文字 = %3d / %3d", ca, cc));
 #else
 				Term_putstr(10, 20, -1, TERM_WHITE,
-					    format("Current attr/char = %3d / %3d", ca, cc));
+					format("Current attr/char = %3d / %3d", ca, cc));
 #endif
 
 				Term_putstr(40, 20, -1, TERM_WHITE, empty_symbol);
@@ -2497,10 +2496,10 @@ void do_cmd_visuals(player_type *creature_ptr)
 				/* Prompt */
 #ifdef JP
 				Term_putstr(0, 22, -1, TERM_WHITE,
-					    "コマンド (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): ");
+					"コマンド (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): ");
 #else
 				Term_putstr(0, 22, -1, TERM_WHITE,
-					    "Command (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): ");
+					"Command (n/N/^N/a/A/^A/c/C/^C/l/L/^L/d/D/^D/v/V/^V): ");
 #endif
 
 				i = inkey();
@@ -2515,19 +2514,18 @@ void do_cmd_visuals(player_type *creature_ptr)
 				switch (c)
 				{
 				case 'n':
+				{
+					IDX prev_f = f;
+					do
 					{
-						IDX prev_f = f;
-						do
+						if (!cmd_visuals_aux(i, &f, max_f_idx))
 						{
-							if (!cmd_visuals_aux(i, &f, max_f_idx))
-							{
-								f = prev_f;
-								break;
-							}
+							f = prev_f;
+							break;
 						}
-						while (!f_info[f].name || (f_info[f].mimic != f));
-					}
-					break;
+					} while (!f_info[f].name || (f_info[f].mimic != f));
+				}
+				break;
 				case 'a':
 					t = (int)f_ptr->x_attr[lighting_level];
 					(void)cmd_visuals_aux(i, &t, 256);
@@ -2563,12 +2561,12 @@ void do_cmd_visuals(player_type *creature_ptr)
 			do_cmd_knowledge_monsters(creature_ptr, &need_redraw, TRUE, -1);
 			break;
 
-		/* Modify object attr/chars (visual mode) */
+			/* Modify object attr/chars (visual mode) */
 		case '8':
 			do_cmd_knowledge_objects(creature_ptr, &need_redraw, TRUE, -1);
 			break;
 
-		/* Modify feature attr/chars (visual mode) */
+			/* Modify feature attr/chars (visual mode) */
 		case '9':
 		{
 			IDX lighting_level = F_LIT_STANDARD;
@@ -2588,7 +2586,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 			need_redraw = TRUE;
 			break;
 
-		/* Unknown option */
+			/* Unknown option */
 		default:
 			bell();
 			break;
@@ -2690,7 +2688,7 @@ void do_cmd_colors(player_type *creature_ptr)
 
 			/* Start dumping */
 			auto_dump_printf(_("\n# カラーの設定\n\n", "\n# Color redefinitions\n\n"));
-			
+
 			/* Dump colors */
 			for (i = 0; i < 256; i++)
 			{
@@ -2709,7 +2707,7 @@ void do_cmd_colors(player_type *creature_ptr)
 
 				/* Dump a comment */
 				auto_dump_printf(_("# カラー '%s'\n", "# Color '%s'\n"), name);
-				
+
 				/* Dump the monster attr/char info */
 				auto_dump_printf("V:%d:0x%02X:0x%02X:0x%02X:0x%02X\n\n",
 					i, kv, rv, gv, bv);
@@ -2740,10 +2738,10 @@ void do_cmd_colors(player_type *creature_ptr)
 				for (j = 0; j < 16; j++)
 				{
 					/* Exhibit this color */
-					Term_putstr(j*4, 20, -1, a, "###");
+					Term_putstr(j * 4, 20, -1, a, "###");
 
 					/* Exhibit all colors */
-					Term_putstr(j*4, 22, -1, j, format("%3d", j));
+					Term_putstr(j * 4, 22, -1, j, format("%3d", j));
 				}
 
 				/* Describe the color */
@@ -2751,15 +2749,15 @@ void do_cmd_colors(player_type *creature_ptr)
 
 				/* Describe the color */
 				Term_putstr(5, 10, -1, TERM_WHITE,
-					    format(_("カラー = %d, 名前 = %s", "Color = %d, Name = %s"), a, name));
+					format(_("カラー = %d, 名前 = %s", "Color = %d, Name = %s"), a, name));
 
 				/* Label the Current values */
 				Term_putstr(5, 12, -1, TERM_WHITE,
-					    format("K = 0x%02x / R,G,B = 0x%02x,0x%02x,0x%02x",
-						   angband_color_table[a][0],
-						   angband_color_table[a][1],
-						   angband_color_table[a][2],
-						   angband_color_table[a][3]));
+					format("K = 0x%02x / R,G,B = 0x%02x,0x%02x,0x%02x",
+						angband_color_table[a][0],
+						angband_color_table[a][1],
+						angband_color_table[a][2],
+						angband_color_table[a][3]));
 
 				/* Prompt */
 				Term_putstr(0, 14, -1, TERM_WHITE,
@@ -2833,7 +2831,7 @@ void do_cmd_version(void)
 {
 #if FAKE_VER_EXTRA > 0
 	msg_format(_("変愚蛮怒(Hengband) %d.%d.%d.%d", "You are playing Hengband %d.%d.%d.%d."),
-		FAKE_VER_MAJOR-10, FAKE_VER_MINOR, FAKE_VER_PATCH, FAKE_VER_EXTRA);
+		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH, FAKE_VER_EXTRA);
 #else
 	msg_format(_("変愚蛮怒(Hengband) %d.%d.%d", "You are playing Hengband %d.%d.%d."),
 		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
@@ -2913,7 +2911,7 @@ void do_cmd_feeling(player_type *creature_ptr)
 			msg_print(_("何かありそうな荒野のようだ。", "Looks like a strange wilderness."));
 			return;
 		}
-		
+
 		msg_print(_("典型的な町のようだ。", "Looks like a typical town."));
 		return;
 	}
@@ -2929,7 +2927,7 @@ void do_cmd_feeling(player_type *creature_ptr)
 	if (creature_ptr->muta3 & MUT3_GOOD_LUCK)
 		msg_print(do_cmd_feeling_text_lucky[creature_ptr->feeling]);
 	else if (creature_ptr->pseikaku == SEIKAKU_COMBAT ||
-		 creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON)
+		creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON)
 		msg_print(do_cmd_feeling_text_combat[creature_ptr->feeling]);
 	else
 		msg_print(do_cmd_feeling_text[creature_ptr->feeling]);
@@ -2939,7 +2937,7 @@ void do_cmd_feeling(player_type *creature_ptr)
 /*
  * Description of each monster group.
  */
-static concptr monster_group_text[] = 
+static concptr monster_group_text[] =
 {
 #ifdef JP
 	"ユニーク",	/* "Uniques" */
@@ -3074,10 +3072,10 @@ static concptr monster_group_text[] =
  */
 static concptr monster_group_char[] =
 {
-	(char *) -1L,
-	(char *) -2L,
-	(char *) -3L,
-	(char *) -4L,
+	(char *)-1L,
+	(char *)-2L,
+	(char *)-3L,
+	(char *)-4L,
 	"a",
 	"b",
 	"c",
@@ -3156,10 +3154,10 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
 	/* Get a list of x_char in this group */
 	concptr group_char = monster_group_char[grp_cur];
 
-	bool grp_unique = (monster_group_char[grp_cur] == (char *) -1L);
-	bool grp_riding = (monster_group_char[grp_cur] == (char *) -2L);
-	bool grp_wanted = (monster_group_char[grp_cur] == (char *) -3L);
-	bool grp_amberite = (monster_group_char[grp_cur] == (char *) -4L);
+	bool grp_unique = (monster_group_char[grp_cur] == (char *)-1L);
+	bool grp_riding = (monster_group_char[grp_cur] == (char *)-2L);
+	bool grp_wanted = (monster_group_char[grp_cur] == (char *)-3L);
+	bool grp_amberite = (monster_group_char[grp_cur] == (char *)-4L);
 
 	/* Check every race */
 	IDX mon_cnt = 0;
@@ -3169,7 +3167,7 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
 		monster_race *r_ptr = &r_info[i];
 
 		/* Skip empty race */
-		if (!r_ptr->name) continue ;
+		if (!r_ptr->name) continue;
 
 		/* Require known monsters */
 		if (!(mode & 0x02) && !cheat_know && !r_ptr->r_sights) continue;
@@ -3232,7 +3230,7 @@ static IDX collect_monsters(player_type *creature_ptr, IDX grp_cur, IDX mon_idx[
 /*
  * Description of each monster group.
  */
-static concptr object_group_text[] = 
+static concptr object_group_text[] =
 {
 #ifdef JP
 	"キノコ",	/* "Mushrooms" */
@@ -3248,7 +3246,7 @@ static concptr object_group_text[] =
 	"ロッド",	/* "Rods" */
 	"カード",	/* "Cards" */
 	"キャプチャー・ボール",
-	"羊皮紙",	
+	"羊皮紙",
 	"くさび",
 	"箱",
 	"人形",
@@ -3328,7 +3326,7 @@ static concptr object_group_text[] =
 /*
  * TVALs of items in each group
  */
-static byte object_group_tval[] = 
+static byte object_group_tval[] =
 {
 	TV_FOOD,
 	TV_POTION,
@@ -3449,7 +3447,7 @@ static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[]
 /*
  * Description of each feature group.
  */
-static concptr feature_group_text[] = 
+static concptr feature_group_text[] =
 {
 	"terrains",
 	NULL
@@ -3489,47 +3487,6 @@ static FEAT_IDX collect_features(FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
 	/* Return the number of races */
 	return feat_cnt;
 }
-
-
-#if 0
-/*
- * Build a list of monster indexes in the given group. Return the number
- * of monsters in the group.
- */
-static int collect_artifacts(int grp_cur, int object_idx[])
-{
-	int i, object_cnt = 0;
-
-	/* Get a list of x_char in this group */
-	byte group_tval = object_group_tval[grp_cur];
-
-	/* Check every object */
-	for (i = 0; i < max_a_idx; i++)
-	{
-		/* Access the artifact */
-		artifact_type *a_ptr = &a_info[i];
-
-		/* Skip empty artifacts */
-		if (!a_ptr->name) continue;
-
-		/* Skip "uncreated" artifacts */
-		if (!a_ptr->cur_num) continue;
-
-		/* Check for race in the group */
-		if (a_ptr->tval == group_tval)
-		{
-			/* Add the race */
-			object_idx[object_cnt++] = i;
-		}
-	}
-
-	/* Terminate the list */
-	object_idx[object_cnt] = 0;
-
-	/* Return the number of races */
-	return object_cnt;
-}
-#endif /* 0 */
 
 
 /*
@@ -3629,7 +3586,7 @@ void do_cmd_load_screen(void)
 
 // todo なぜこんな中途半端なところに？ defineも…
 concptr inven_res_label = _("                               酸電火冷毒光闇破轟獄因沌劣 盲怖乱痺透命感消復浮",
-						 "                               AcElFiCoPoLiDkShSoNtNxCaDi BlFeCfFaSeHlEpSdRgLv");
+	"                               AcElFiCoPoLiDkShSoNtNxCaDi BlFeCfFaSeHlEpSdRgLv");
 
 #define IM_FLAG_STR  _("＊", "* ")
 #define HAS_FLAG_STR _("＋", "+ ")
@@ -3764,9 +3721,9 @@ static void do_cmd_knowledge_inven(player_type *creature_ptr)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+		msg_print(NULL);
+		return;
 	}
 
 	fprintf(fff, "%s\n", inven_res_label);
@@ -3841,10 +3798,10 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	{
 		if (message)
 		{
-		    msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename);
-		    msg_print(NULL);
+			msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename);
+			msg_print(NULL);
 		}
-		
+
 		return;
 	}
 
@@ -3909,7 +3866,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 				int rv = angband_color_table[a][1];
 				int gv = angband_color_table[a][2];
 				int bv = angband_color_table[a][3];
-				fprintf(fff, "%s<font color=\"#%02x%02x%02x\">", 
+				fprintf(fff, "%s<font color=\"#%02x%02x%02x\">",
 					((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
 				old_a = a;
 			}
@@ -3984,7 +3941,7 @@ static void do_cmd_save_screen_html(void)
 /*
  * Redefinable "save_screen" action
  */
-void (*screendump_aux)(void) = NULL;
+void(*screendump_aux)(void) = NULL;
 
 
 /*
@@ -3996,7 +3953,7 @@ void do_cmd_save_screen(player_type *creature_ptr)
 {
 	prt(_("記念撮影しますか？ [(y)es/(h)tml/(n)o] ", "Save screen dump? [(y)es/(h)tml/(n)o] "), 0, 0);
 	bool html_dump = FALSE;
-	while(TRUE)
+	while (TRUE)
 	{
 		char c = inkey();
 		if (c == 'Y' || c == 'y')
@@ -4095,7 +4052,7 @@ void do_cmd_save_screen(player_type *creature_ptr)
 				(void)(Term_what(x, y, &a, &c));
 
 				/* Dump it */
-				buf[x] = hack[a&0x0F];
+				buf[x] = hack[a & 0x0F];
 			}
 
 			/* Terminate */
@@ -4138,9 +4095,9 @@ static void do_cmd_knowledge_artifacts(player_type *player_ptr)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+		msg_print(NULL);
+		return;
 	}
 
 	/* Allocate the "who" array */
@@ -4401,9 +4358,9 @@ static void do_cmd_knowledge_weapon_exp(player_type *creature_ptr)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+		msg_print(NULL);
+		return;
 	}
 
 	for (int i = 0; i < 5; i++)
@@ -4453,9 +4410,9 @@ static void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+		msg_print(NULL);
+		return;
 	}
 
 	if (creature_ptr->realm1 != REALM_NONE)
@@ -4537,7 +4494,7 @@ static void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
 	char skill_name[GINOU_TEMPMAX][20] =
 	{
 		_("マーシャルアーツ", "Martial Arts    "),
-		_("二刀流          ", "Dual Wielding   "), 
+		_("二刀流          ", "Dual Wielding   "),
 		_("乗馬            ", "Riding          "),
 		_("盾              ", "Shield          ")
 	};
@@ -4548,9 +4505,9 @@ static void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+		msg_print(NULL);
+		return;
 	}
 
 	for (int i = 0; i < GINOU_TEMPMAX; i++)
@@ -4586,9 +4543,9 @@ static void do_cmd_knowledge_pets(player_type *creature_ptr)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+		msg_print(NULL);
+		return;
 	}
 
 	/* Process the monsters (backwards) */
@@ -4633,7 +4590,7 @@ static void do_cmd_knowledge_pets(player_type *creature_ptr)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * Total kill count
  * @return なし
- * @note the player ghosts are ignored.  
+ * @note the player ghosts are ignored.
  */
 static void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 {
@@ -4641,7 +4598,7 @@ static void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 	FILE *fff;
 	GAME_TEXT file_name[1024];
 	fff = my_fopen_temp(file_name, 1024);
-if (!fff)
+	if (!fff)
 	{
 		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
 		msg_print(NULL);
@@ -4680,12 +4637,12 @@ if (!fff)
 		}
 
 		if (total < 1)
-			fprintf(fff,_("あなたはまだ敵を倒していない。\n\n", "You have defeated no enemies yet.\n\n"));
+			fprintf(fff, _("あなたはまだ敵を倒していない。\n\n", "You have defeated no enemies yet.\n\n"));
 		else
 #ifdef JP
-			fprintf(fff,"あなたは%ld体の敵を倒している。\n\n", (long int)total);
+			fprintf(fff, "あなたは%ld体の敵を倒している。\n\n", (long int)total);
 #else
-			fprintf(fff,"You have defeated %ld %s.\n\n", (long int)total, (total == 1) ? "enemy" : "enemies");
+			fprintf(fff, "You have defeated %ld %s.\n\n", (long int)total, (total == 1) ? "enemy" : "enemies");
 #endif
 	}
 
@@ -4756,11 +4713,11 @@ if (!fff)
 		total += this_monster;
 	}
 
-	fprintf(fff,"----------------------------------------------\n");
+	fprintf(fff, "----------------------------------------------\n");
 #ifdef JP
-	fprintf(fff,"    合計: %lu 体を倒した。\n", (unsigned long int)total);
+	fprintf(fff, "    合計: %lu 体を倒した。\n", (unsigned long int)total);
 #else
-	fprintf(fff,"   Total: %lu creature%s killed.\n", (unsigned long int)total, (total == 1 ? "" : "s"));
+	fprintf(fff, "   Total: %lu creature%s killed.\n", (unsigned long int)total, (total == 1 ? "" : "s"));
 #endif
 
 	/* Free the "who" array */
@@ -4806,11 +4763,11 @@ static void display_group_list(int col, int row, int wid, int per_page, IDX grp_
 }
 
 
-/* 
- * Move the cursor in a browser window 
+/*
+ * Move the cursor in a browser window
  */
-static void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt, 
-						   IDX *list_cur, int list_cnt)
+static void browser_cursor(char ch, int *column, IDX *grp_cur, int grp_cnt,
+	IDX *list_cur, int list_cnt)
 {
 	int d;
 	int col = *column;
@@ -4948,7 +4905,7 @@ static void display_visual_list(int col, int row, int height, int width, TERM_CO
 
 			/* Ignore illegal characters */
 			if (ia > 0x7f || ic > 0xff || ic < ' ' ||
-			    (!use_graphics && ic > 0x7f))
+				(!use_graphics && ic > 0x7f))
 				continue;
 
 			TERM_COLOR a = ia;
@@ -4987,9 +4944,9 @@ static void place_visual_list_cursor(TERM_LEN col, TERM_LEN row, TERM_COLOR a, b
  *  Do visual mode command -- Change symbols
  */
 static bool visual_mode_command(char ch, bool *visual_list_ptr,
-				int height, int width,
-				TERM_COLOR *attr_top_ptr, byte *char_left_ptr,
-				TERM_COLOR *cur_attr_ptr, SYMBOL_CODE *cur_char_ptr, bool *need_redraw)
+	int height, int width,
+	TERM_COLOR *attr_top_ptr, byte *char_left_ptr,
+	TERM_COLOR *cur_attr_ptr, SYMBOL_CODE *cur_char_ptr, bool *need_redraw)
 {
 	static TERM_COLOR attr_old = 0;
 	static SYMBOL_CODE char_old = 0;
@@ -5038,21 +4995,21 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 
 	case 'C':
 	case 'c':
+	{
+		int i;
+
+		/* Set the visual */
+		attr_idx = *cur_attr_ptr;
+		char_idx = *cur_char_ptr;
+
+		/* Hack -- for feature lighting */
+		for (i = 0; i < F_LIT_MAX; i++)
 		{
-			int i;
-
-			/* Set the visual */
-			attr_idx = *cur_attr_ptr;
-			char_idx = *cur_char_ptr;
-
-			/* Hack -- for feature lighting */
-			for (i = 0; i < F_LIT_MAX; i++)
-			{
-				attr_idx_feat[i] = 0;
-				char_idx_feat[i] = 0;
-			}
+			attr_idx_feat[i] = 0;
+			char_idx_feat[i] = 0;
 		}
-		return TRUE;
+	}
+	return TRUE;
 
 	case 'P':
 	case 'p':
@@ -5130,7 +5087,7 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 		TERM_COLOR attr;
 
 		/* Get the race index */
-		MONRACE_IDX r_idx = mon_idx[mon_top + i] ;
+		MONRACE_IDX r_idx = mon_idx[mon_top + i];
 
 		/* Access the race */
 		monster_race *r_ptr = &r_info[r_idx];
@@ -5161,11 +5118,11 @@ static void display_monster_list(int col, int row, int per_page, s16b mon_idx[],
 		if (!visual_only)
 		{
 			/* Display kills */
-			if (!(r_ptr->flags1 & RF1_UNIQUE)) 
+			if (!(r_ptr->flags1 & RF1_UNIQUE))
 				put_str(format("%5d", r_ptr->r_pkills), row + i, 73);
-			else 
-				c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE), 
-						  (r_ptr->max_num == 0 ? _("死亡", " dead") : _("生存", "alive")), row + i, 74);
+			else
+				c_put_str((r_ptr->max_num == 0 ? TERM_L_DARK : TERM_WHITE),
+				(r_ptr->max_num == 0 ? _("死亡", " dead") : _("生存", "alive")), row + i, 74);
 		}
 	}
 
@@ -5219,7 +5176,7 @@ static void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redr
 			if (len > max) max = len;
 
 			/* See if any monsters are known */
-			if ((monster_group_char[i] == ((char *) -1L)) || collect_monsters(creature_ptr, i, mon_idx, mode))
+			if ((monster_group_char[i] == ((char *)-1L)) || collect_monsters(creature_ptr, i, mon_idx, mode))
 			{
 				/* Build a list of groups with known monsters */
 				grp_idx[grp_cnt++] = i;
@@ -5299,9 +5256,9 @@ static void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redr
 
 			/* Scroll monster list */
 			while (mon_cur < mon_top)
-				mon_top = MAX(0, mon_top - browser_rows/2);
+				mon_top = MAX(0, mon_top - browser_rows / 2);
 			while (mon_cur >= mon_top + browser_rows)
-				mon_top = MIN(mon_cnt - browser_rows, mon_top + browser_rows/2);
+				mon_top = MIN(mon_cnt - browser_rows, mon_top + browser_rows / 2);
 		}
 
 		if (!visual_list)
@@ -5317,7 +5274,7 @@ static void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redr
 			display_monster_list(max + 3, 6, 1, mon_idx, mon_cur, mon_top, visual_only);
 
 			/* Display visual list below first monster */
-			display_visual_list(max + 3, 7, browser_rows-1, wid - (max + 3), attr_top, char_left);
+			display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
 		}
 
 		/* Prompt */
@@ -5354,7 +5311,7 @@ static void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redr
 		char ch = inkey();
 
 		/* Do visual mode command if needed */
-		if (visual_mode_command(ch, &visual_list, browser_rows-1, wid - (max + 3), &attr_top, &char_left, &r_ptr->x_attr, &r_ptr->x_char, need_redraw))
+		if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &r_ptr->x_attr, &r_ptr->x_char, need_redraw))
 		{
 			if (direct_r_idx >= 0)
 			{
@@ -5373,35 +5330,35 @@ static void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redr
 
 		switch (ch)
 		{
-			case ESCAPE:
+		case ESCAPE:
+		{
+			flag = TRUE;
+			break;
+		}
+
+		case 'R':
+		case 'r':
+		{
+			/* Recall on screen */
+			if (!visual_list && !visual_only && (mon_idx[mon_cur] > 0))
 			{
-				flag = TRUE;
-				break;
+				screen_roff(mon_idx[mon_cur], 0);
+
+				(void)inkey();
+
+				redraw = TRUE;
 			}
 
-			case 'R':
-			case 'r':
-			{
-				/* Recall on screen */
-				if (!visual_list && !visual_only && (mon_idx[mon_cur] > 0))
-				{
-					screen_roff(mon_idx[mon_cur], 0);
+			break;
+		}
 
-					(void)inkey();
+		default:
+		{
+			/* Move the cursor */
+			browser_cursor(ch, &column, &grp_cur, grp_cnt, &mon_cur, mon_cnt);
 
-					redraw = TRUE;
-				}
-
-				break;
-			}
-
-			default:
-			{
-				/* Move the cursor */
-				browser_cursor(ch, &column, &grp_cur, grp_cnt, &mon_cur, mon_cnt);
-
-				break;
-			}
+			break;
+		}
 		}
 	}
 
@@ -5655,9 +5612,9 @@ static void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redra
 
 			/* Scroll object list */
 			while (object_cur < object_top)
-				object_top = MAX(0, object_top - browser_rows/2);
+				object_top = MAX(0, object_top - browser_rows / 2);
 			while (object_cur >= object_top + browser_rows)
-				object_top = MIN(object_cnt - browser_rows, object_top + browser_rows/2);
+				object_top = MIN(object_cnt - browser_rows, object_top + browser_rows / 2);
 		}
 
 		if (!visual_list)
@@ -5673,7 +5630,7 @@ static void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redra
 			display_object_list(max + 3, 6, 1, object_idx, object_cur, object_top, visual_only);
 
 			/* Display visual list below first object */
-			display_visual_list(max + 3, 7, browser_rows-1, wid - (max + 3), attr_top, char_left);
+			display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
 		}
 
 		/* Get the current object */
@@ -5736,7 +5693,7 @@ static void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redra
 		char ch = inkey();
 
 		/* Do visual mode command if needed */
-		if (visual_mode_command(ch, &visual_list, browser_rows-1, wid - (max + 3), &attr_top, &char_left, &flavor_k_ptr->x_attr, &flavor_k_ptr->x_char, need_redraw))
+		if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, &flavor_k_ptr->x_attr, &flavor_k_ptr->x_char, need_redraw))
 		{
 			if (direct_k_idx >= 0)
 			{
@@ -5754,30 +5711,30 @@ static void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redra
 
 		switch (ch)
 		{
-			case ESCAPE:
-			{
-				flag = TRUE;
-				break;
-			}
+		case ESCAPE:
+		{
+			flag = TRUE;
+			break;
+		}
 
-			case 'R':
-			case 'r':
+		case 'R':
+		case 'r':
+		{
+			/* Recall on screen */
+			if (!visual_list && !visual_only && (grp_cnt > 0))
 			{
-				/* Recall on screen */
-				if (!visual_list && !visual_only && (grp_cnt > 0))
-				{
-					desc_obj_fake(creature_ptr, object_idx[object_cur]);
-					redraw = TRUE;
-				}
-				break;
+				desc_obj_fake(creature_ptr, object_idx[object_cur]);
+				redraw = TRUE;
 			}
+			break;
+		}
 
-			default:
-			{
-				/* Move the cursor */
-				browser_cursor(ch, &column, &grp_cur, grp_cnt, &object_cur, object_cnt);
-				break;
-			}
+		default:
+		{
+			/* Move the cursor */
+			browser_cursor(ch, &column, &grp_cur, grp_cnt, &object_cur, object_cnt);
+			break;
+		}
 		}
 	}
 
@@ -5990,9 +5947,9 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 
 			/* Scroll feature list */
 			while (feat_cur < feat_top)
-				feat_top = MAX(0, feat_top - browser_rows/2);
+				feat_top = MAX(0, feat_top - browser_rows / 2);
 			while (feat_cur >= feat_top + browser_rows)
-				feat_top = MIN(feat_cnt - browser_rows, feat_top + browser_rows/2);
+				feat_top = MIN(feat_cnt - browser_rows, feat_top + browser_rows / 2);
 		}
 
 		if (!visual_list)
@@ -6008,7 +5965,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 			display_feature_list(max + 3, 6, 1, feat_idx, feat_cur, feat_top, visual_only, *lighting_level);
 
 			/* Display visual list below first object */
-			display_visual_list(max + 3, 7, browser_rows-1, wid - (max + 3), attr_top, char_left);
+			display_visual_list(max + 3, 7, browser_rows - 1, wid - (max + 3), attr_top, char_left);
 		}
 
 		/* Prompt */
@@ -6071,7 +6028,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 			if (visual_list)
 			{
 				if (prev_x_attr != f_ptr->x_attr[*lighting_level])
-					 attr_top = MAX(0, (f_ptr->x_attr[*lighting_level] & 0x7f) - 5);
+					attr_top = MAX(0, (f_ptr->x_attr[*lighting_level] & 0x7f) - 5);
 
 				if (prev_x_char != f_ptr->x_char[*lighting_level])
 					char_left = MAX(0, f_ptr->x_char[*lighting_level] - 10);
@@ -6082,11 +6039,11 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 		}
 
 		/* Do visual mode command if needed */
-		else if (visual_mode_command(ch, &visual_list, browser_rows-1, wid - (max + 3), &attr_top, &char_left, cur_attr_ptr, cur_char_ptr, need_redraw))
+		else if (visual_mode_command(ch, &visual_list, browser_rows - 1, wid - (max + 3), &attr_top, &char_left, cur_attr_ptr, cur_char_ptr, need_redraw))
 		{
 			switch (ch)
 			{
-			/* Restore previous visual settings */
+				/* Restore previous visual settings */
 			case ESCAPE:
 				for (FEAT_IDX i = 0; i < F_LIT_MAX; i++)
 				{
@@ -6102,7 +6059,7 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 				else *lighting_level = F_LIT_STANDARD;
 				break;
 
-			/* Preserve current visual settings */
+				/* Preserve current visual settings */
 			case 'V':
 			case 'v':
 				for (FEAT_IDX i = 0; i < F_LIT_MAX; i++)
@@ -6143,18 +6100,18 @@ static void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX d
 
 		switch (ch)
 		{
-			case ESCAPE:
-			{
-				flag = TRUE;
-				break;
-			}
+		case ESCAPE:
+		{
+			flag = TRUE;
+			break;
+		}
 
-			default:
-			{
-				/* Move the cursor */
-				browser_cursor(ch, &column, &grp_cur, grp_cnt, &feat_cur, feat_cnt);
-				break;
-			}
+		default:
+		{
+			/* Move the cursor */
+			browser_cursor(ch, &column, &grp_cur, grp_cnt, &feat_cur, feat_cnt);
+			break;
+		}
 		}
 	}
 
@@ -6176,11 +6133,11 @@ static void do_cmd_knowledge_bounty(player_type *creature_ptr)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+		msg_print(NULL);
+		return;
 	}
-	
+
 	fprintf(fff, _("今日のターゲット : %s\n", "Today target : %s\n"),
 		(creature_ptr->today_mon ? r_name + r_info[creature_ptr->today_mon].name : _("不明", "unknown")));
 	fprintf(fff, "\n");
@@ -6201,9 +6158,9 @@ static void do_cmd_knowledge_bounty(player_type *creature_ptr)
 	{
 		fprintf(fff, "\n%s\n", _("賞金首はもう残っていません。", "There is no more wanted monster."));
 	}
-	
+
 	my_fclose(fff);
-	
+
 	/* Display the file contents */
 	show_file(creature_ptr, TRUE, file_name, _("賞金首の一覧", "Wanted monsters"), 0, 0);
 	fd_kill(file_name);
@@ -6220,15 +6177,15 @@ static void do_cmd_knowledge_virtues(player_type *creature_ptr)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+		msg_print(NULL);
+		return;
 	}
-	
+
 	fprintf(fff, _("現在の属性 : %s\n\n", "Your alighnment : %s\n\n"), your_alignment(creature_ptr));
 	dump_virtues(creature_ptr, fff);
 	my_fclose(fff);
-	
+
 	/* Display the file contents */
 	show_file(creature_ptr, TRUE, file_name, _("八つの徳", "Virtues"), 0, 0);
 	fd_kill(file_name);
@@ -6245,11 +6202,11 @@ static void do_cmd_knowledge_dungeon(player_type *creature_ptr)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+		msg_print(NULL);
+		return;
 	}
-	
+
 	for (int i = 1; i < current_world_ptr->max_d_idx; i++)
 	{
 		bool seiha = FALSE;
@@ -6266,7 +6223,7 @@ static void do_cmd_knowledge_dungeon(player_type *creature_ptr)
 	}
 
 	my_fclose(fff);
-	
+
 	/* Display the file contents */
 	show_file(creature_ptr, TRUE, file_name, _("今までに入ったダンジョン", "Dungeon"), 0, 0);
 	fd_kill(file_name);
@@ -6285,11 +6242,11 @@ static void do_cmd_knowledge_stat(player_type *creature_ptr)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+		msg_print(NULL);
+		return;
 	}
-	
+
 	int percent = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
 		(2 * creature_ptr->hitdie +
 		((PY_MAX_LEVEL - 1 + 3) * (creature_ptr->hitdie + 1))));
@@ -6307,7 +6264,7 @@ static void do_cmd_knowledge_stat(player_type *creature_ptr)
 
 	dump_yourself(creature_ptr, fff);
 	my_fclose(fff);
-	
+
 	/* Display the file contents */
 	show_file(creature_ptr, TRUE, file_name, _("自分に関する情報", "HP-rate & Max stat"), 0, 0);
 	fd_kill(file_name);
@@ -6445,7 +6402,7 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
 
 			continue;
 		}
-		
+
 		/* QUEST_TYPE_RANDOM */
 		if (quest[i].level >= rand_level)
 			continue;
@@ -6513,7 +6470,7 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
 	}
 
 	strnfmt(playtime_str, sizeof(playtime_str), "%02d:%02d:%02d",
-		q_ptr->comptime/(60*60), (q_ptr->comptime/60)%60, q_ptr->comptime%60);
+		q_ptr->comptime / (60 * 60), (q_ptr->comptime / 60) % 60, q_ptr->comptime % 60);
 
 	if (is_fixed_quest_idx(q_idx) && q_ptr->r_idx)
 	{
@@ -6537,7 +6494,7 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
 		fputs(tmp_str, fff);
 		return TRUE;
 	}
-	
+
 	sprintf(tmp_str,
 		_("  %-35s (%3d階)            - レベル%2d - %s\n",
 			"  %-35s (Dungeon level: %3d) - level %2d - %s\n"),
@@ -6593,7 +6550,7 @@ void do_cmd_knowledge_quests_failed(player_type *creature_ptr, FILE *fff, QUEST_
 		quest_type* const q_ptr = &quest[q_idx];
 
 		if (((q_ptr->status == QUEST_STATUS_FAILED_DONE) || (q_ptr->status == QUEST_STATUS_FAILED)) &&
-		    do_cmd_knowledge_quests_aux(creature_ptr, fff, q_idx))
+			do_cmd_knowledge_quests_aux(creature_ptr, fff, q_idx))
 		{
 			++total;
 		}
@@ -6622,7 +6579,7 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
 
 			/* Print the quest info */
 			sprintf(tmp_str, _("  %s (%d階, %s)\n", "  %s (%d, %s)\n"),
-				quest[i].name, (int)quest[i].level, r_name+r_info[quest[i].r_idx].name);
+				quest[i].name, (int)quest[i].level, r_name + r_info[quest[i].r_idx].name);
 			fputs(tmp_str, fff);
 		}
 	}
@@ -6643,9 +6600,9 @@ static void do_cmd_knowledge_quests(player_type *creature_ptr)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+		msg_print(NULL);
+		return;
 	}
 
 	/* Allocate Memory */
@@ -6765,19 +6722,19 @@ static void do_cmd_knowledge_autopick(player_type *creature_ptr)
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
-	    msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-	    msg_print(NULL);
-	    return;
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+		msg_print(NULL);
+		return;
 	}
 
 	if (!max_autopick)
 	{
-	    fprintf(fff, _("自動破壊/拾いには何も登録されていません。", "No preference for auto picker/destroyer."));
+		fprintf(fff, _("自動破壊/拾いには何も登録されていません。", "No preference for auto picker/destroyer."));
 	}
 	else
 	{
 		fprintf(fff, _("   自動拾い/破壊には現在 %d行登録されています。\n\n",
-					   "   There are %d registered lines for auto picker/destroyer.\n\n"), max_autopick);
+			"   There are %d registered lines for auto picker/destroyer.\n\n"), max_autopick);
 	}
 
 	for (int k = 0; k < max_autopick; k++)
@@ -6838,7 +6795,7 @@ void do_cmd_knowledge(player_type *creature_ptr)
 		Term_clear();
 
 		/* Ask for a choice */
-		prt(format(_("%d/2 ページ", "page %d/2"), (p+1)), 2, 65);
+		prt(format(_("%d/2 ページ", "page %d/2"), (p + 1)), 2, 65);
 		prt(_("現在の知識を確認する", "Display current knowledge"), 3, 0);
 
 		/* Give some choices */
@@ -6938,11 +6895,11 @@ void do_cmd_knowledge(player_type *creature_ptr)
 			do_cmd_knowledge_inven(creature_ptr);
 			break;
 		case '0': /* Feature list */
-			{
-				IDX lighting_level = F_LIT_STANDARD;
-				do_cmd_knowledge_features(&need_redraw, FALSE, -1, &lighting_level);
-			}
-			break;
+		{
+			IDX lighting_level = F_LIT_STANDARD;
+			do_cmd_knowledge_features(&need_redraw, FALSE, -1, &lighting_level);
+		}
+		break;
 		/* Next page */
 		case 'a': /* Max stat */
 			do_cmd_knowledge_stat(creature_ptr);
@@ -7008,7 +6965,7 @@ void do_cmd_checkquest(player_type *creature_ptr)
 void do_cmd_time(player_type *creature_ptr)
 {
 	int day, hour, min;
-	extract_day_hour_min(&day, &hour, &min);
+	extract_day_hour_min(creature_ptr, &day, &hour, &min);
 
 	char desc[1024];
 	strcpy(desc, _("変な時刻だ。", "It is a strange time."));
@@ -7018,7 +6975,7 @@ void do_cmd_time(player_type *creature_ptr)
 	else strcpy(day_buf, "*****");
 
 	msg_format(_("%s日目, 時刻は%d:%02d %sです。", "This is day %s. The time is %d:%02d %s."),
-		   day_buf, (hour % 12 == 0) ? 12 : (hour % 12), min, (hour < 12) ? "AM" : "PM");
+		day_buf, (hour % 12 == 0) ? 12 : (hour % 12), min, (hour < 12) ? "AM" : "PM");
 
 	/* Find the path */
 	char buf[1024];

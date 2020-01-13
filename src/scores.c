@@ -69,6 +69,7 @@ static int highscore_write(high_score *score)
 	return (fd_write(highscore_fd, (char*)(score), sizeof(high_score)));
 }
 
+
 /*!
  * @brief スコア情報を全て得るまで繰り返し取得する / Just determine where a new score *would* be placed
  * @param score スコア情報参照ポインタ
@@ -76,31 +77,25 @@ static int highscore_write(high_score *score)
  */
 static int highscore_where(high_score *score)
 {
-	int			i;
-
-	high_score		the_score;
-	int my_score;
-
-	my_score = atoi(score->pts);
-
 	/* Paranoia -- it may not have opened */
-	if (highscore_fd < 0) return (-1);
+	if (highscore_fd < 0) return -1;
 
 	/* Go to the start of the highscore file */
-	if (highscore_seek(0)) return (-1);
+	if (highscore_seek(0)) return -1;
 
 	/* Read until we get to a higher score */
-	for (i = 0; i < MAX_HISCORES; i++)
+	high_score the_score;
+	int my_score = atoi(score->pts);
+	for (int i = 0; i < MAX_HISCORES; i++)
 	{
 		int old_score;
 		if (highscore_read(&the_score)) return (i);
 		old_score = atoi(the_score.pts);
-/*		if (strcmp(the_score.pts, score->pts) < 0) return (i); */
 		if (my_score > old_score) return (i);
 	}
 
 	/* The "last" entry is always usable */
-	return (MAX_HISCORES - 1);
+	return MAX_HISCORES - 1;
 }
 
 
@@ -111,43 +106,38 @@ static int highscore_where(high_score *score)
  */
 static int highscore_add(high_score *score)
 {
-	int			i, slot;
-	bool		done = FALSE;
-
-	high_score		the_score, tmpscore;
-
-
 	/* Paranoia -- it may not have opened */
-	if (highscore_fd < 0) return (-1);
+	if (highscore_fd < 0) return -1;
 
 	/* Determine where the score should go */
-	slot = highscore_where(score);
+	int slot = highscore_where(score);
 
 	/* Hack -- Not on the list */
-	if (slot < 0) return (-1);
+	if (slot < 0) return -1;
 
 	/* Hack -- prepare to dump the new score */
-	the_score = (*score);
+	high_score the_score = (*score);
 
 	/* Slide all the scores down one */
-	for (i = slot; !done && (i < MAX_HISCORES); i++)
+	bool done = FALSE;
+	high_score tmpscore;
+	for (int i = slot; !done && (i < MAX_HISCORES); i++)
 	{
 		/* Read the old guy, note errors */
-		if (highscore_seek(i)) return (-1);
+		if (highscore_seek(i)) return -1;
 		if (highscore_read(&tmpscore)) done = TRUE;
 
 		/* Back up and dump the score we were holding */
-		if (highscore_seek(i)) return (-1);
-		if (highscore_write(&the_score)) return (-1);
+		if (highscore_seek(i)) return -1;
+		if (highscore_write(&the_score)) return -1;
 
 		/* Hack -- Save the old score, for the next pass */
 		the_score = tmpscore;
 	}
 
 	/* Return location used */
-	return (slot);
+	return slot;
 }
-
 
 
 /*!
@@ -431,6 +421,7 @@ void display_scores(int from, int to)
 
 
 /*!
+ * todo プリプロが邪魔していて最初のif文を削除すると到達不能コードが発生する
  * @brief スコアサーバへの転送処理
  * @param current_player_ptr プレーヤーへの参照ポインタ
  * @param do_send 実際に転送ア処置を行うか否か
@@ -439,35 +430,34 @@ void display_scores(int from, int to)
 bool send_world_score(player_type *current_player_ptr, bool do_send)
 {
 #ifdef WORLD_SCORE
-	if(send_score && do_send)
+	if (send_score && do_send)
 	{
-		if(easy_band)
+		if (easy_band)
 		{
 			msg_print(_("初心者モードではワールドスコアに登録できません。",
-			"Since you are in the Easy Mode, you cannot send score to world score server."));
+				"Since you are in the Easy Mode, you cannot send score to world score server."));
+			return TRUE;
 		}
-		else if(get_check_strict(_("スコアをスコア・サーバに登録しますか? ", "Do you send score to the world score server? "), 
-				(CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
-		{
-			errr err;
-			prt("",0,0);
-			prt(_("送信中．．", "Sending..."),0,0);
-			Term_fresh();
-			screen_save();
-			err = report_score(current_player_ptr);
-			screen_load();
-			if (err)
-			{
-				return FALSE;
-			}
-			prt(_("完了。何かキーを押してください。", "Completed.  Hit any key."), 0, 0);
-			(void)inkey();
-		}
-		else return FALSE;
+		
+		bool is_registration = get_check_strict(_("スコアをスコア・サーバに登録しますか? ", "Do you send score to the world score server? "), (CHECK_NO_ESCAPE | CHECK_NO_HISTORY));
+		if (!is_registration) return FALSE;
+
+		errr err;
+		prt("", 0, 0);
+		prt(_("送信中．．", "Sending..."), 0, 0);
+		Term_fresh();
+		screen_save();
+		err = report_score(current_player_ptr);
+		screen_load();
+		if (err) return FALSE;
+
+		prt(_("完了。何かキーを押してください。", "Completed.  Hit any key."), 0, 0);
+		(void)inkey();
 	}
 #endif
 	return TRUE;
 }
+
 
 /*!
  * @brief スコアの過去二十位内ランキングを表示する
@@ -480,15 +470,7 @@ bool send_world_score(player_type *current_player_ptr, bool do_send)
  */
 errr top_twenty(player_type *current_player_ptr)
 {
-	int          j;
-
-	high_score   the_score;
-
-	time_t ct = time((time_t*)0);
-
-	errr err;
-
-	/* Clear the record */
+	high_score the_score;
 	(void)WIPE(&the_score, high_score);
 
 	/* Save the version */
@@ -507,6 +489,7 @@ errr top_twenty(player_type *current_player_ptr)
 	sprintf(the_score.turns, "%9lu", (long)turn_real(current_world_ptr->game_turn));
 	the_score.turns[9] = '\0';
 
+	time_t ct = time((time_t*)0);
 #ifdef HIGHSCORE_DATE_HACK
 	/* Save the date in a hacked up form (9 chars) */
 	(void)sprintf(the_score.day, "%-.6s %-.2s", ctime(&ct) + 4, ctime(&ct) + 22);
@@ -553,15 +536,15 @@ errr top_twenty(player_type *current_player_ptr)
 	safe_setuid_grab();
 
 	/* Lock (for writing) the highscore file, or fail */
-	err = fd_lock(highscore_fd, F_WRLCK);
+	errr err = fd_lock(highscore_fd, F_WRLCK);
 
 	/* Drop permissions */
 	safe_setuid_drop();
 
-	if (err) return (1);
+	if (err) return 1;
 
 	/* Add a new entry to the score list, see where it went */
-	j = highscore_add(&the_score);
+	int j = highscore_add(&the_score);
 
 	/* Grab permissions */
 	safe_setuid_grab();
@@ -572,26 +555,21 @@ errr top_twenty(player_type *current_player_ptr)
 	/* Drop permissions */
 	safe_setuid_drop();
 
-	if (err) return (1);
-
+	if (err) return 1;
 
 	/* Hack -- Display the top fifteen scores */
 	if (j < 10)
 	{
 		display_scores_aux(0, 15, j, NULL);
+		return 0;
 	}
 
 	/* Display the scores surrounding the player */
-	else
-	{
-		display_scores_aux(0, 5, j, NULL);
-		display_scores_aux(j - 2, j + 7, j, NULL);
-	}
-
-
-	/* Success */
-	return (0);
+	display_scores_aux(0, 5, j, NULL);
+	display_scores_aux(j - 2, j + 7, j, NULL);
+	return 0;
 }
+
 
 /*!
  * @brief プレイヤーの現在のスコアをランキングに挟む /
@@ -600,7 +578,6 @@ errr top_twenty(player_type *current_player_ptr)
  */
 errr predict_score(player_type *current_player_ptr)
 {
-	int j;
 	high_score the_score;
 
 	/* No score file */
@@ -608,7 +585,7 @@ errr predict_score(player_type *current_player_ptr)
 	{
 		msg_print(_("スコア・ファイルが使用できません。", "Score file unavailable."));
 		msg_print(NULL);
-		return (0);
+		return 0;
 	}
 
 	/* Save the version */
@@ -648,25 +625,18 @@ errr predict_score(player_type *current_player_ptr)
 	strcpy(the_score.how, _("yet", "nobody (yet!)"));
 
 	/* See where the entry would be placed */
-	j = highscore_where(&the_score);
-
+	int j = highscore_where(&the_score);
 
 	/* Hack -- Display the top fifteen scores */
 	if (j < 10)
 	{
 		display_scores_aux(0, 15, j, &the_score);
+		return 0;
 	}
 
-	/* Display some "useful" scores */
-	else
-	{
-		display_scores_aux(0, 5, -1, NULL);
-		display_scores_aux(j - 2, j + 7, j, &the_score);
-	}
-
-
-	/* Success */
-	return (0);
+	display_scores_aux(0, 5, -1, NULL);
+	display_scores_aux(j - 2, j + 7, j, &the_score);
+	return 0;
 }
 
 
@@ -677,14 +647,8 @@ errr predict_score(player_type *current_player_ptr)
  */
 void show_highclass(player_type *current_player_ptr)
 {
-
-	register int i = 0, j, m = 0;
-	int pr;
-	PLAYER_LEVEL clev/*, al*/;
-	high_score the_score;
-	char buf[1024], out_val[256];
-
 	screen_save();
+	char buf[1024], out_val[256];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
 
 	highscore_fd = fd_open(buf, O_RDONLY);
@@ -698,13 +662,14 @@ void show_highclass(player_type *current_player_ptr)
 
 	if (highscore_seek(0)) return;
 
-	for (i = 0; i < MAX_HISCORES; i++)
+	high_score the_score;
+	for (int i = 0; i < MAX_HISCORES; i++)
 		if (highscore_read(&the_score)) break;
 
-	m = 0;
-	j = 0;
-	clev = 0;
-
+	int m = 0;
+	int j = 0;
+	PLAYER_LEVEL clev = 0;
+	int pr;
 	while ((m < 9) && (j < MAX_HISCORES))
 	{
 		if (highscore_seek(j)) break;
@@ -744,6 +709,7 @@ void show_highclass(player_type *current_player_ptr)
 	for (j = 5; j < 18; j++) prt("", j, 0);
 	screen_load();
 }
+
 
 /*!
  * @brief スコアランキングの簡易表示(種族毎)サブルーチン /
@@ -837,17 +803,16 @@ void race_score(player_type *current_player_ptr, int race_num)
  */
 void race_legends(player_type *current_player_ptr)
 {
-	int i, j;
-
-	for (i = 0; i < MAX_RACES; i++)
+	for (int i = 0; i < MAX_RACES; i++)
 	{
 		race_score(current_player_ptr, i);
 		msg_print(_("何かキーを押すとゲームに戻ります", "Hit any key to continue"));
 		msg_print(NULL);
-		for (j = 5; j < 19; j++)
+		for (int j = 5; j < 19; j++)
 			prt("", j, 0);
 	}
 }
+
 
 /*!
  * @brief 勝利者用の引退演出処理 /
@@ -922,12 +887,13 @@ void kingly(player_type *winner_ptr)
 	pause_line(hgt - 1);
 }
 
+
 /*!
  * @brief スコアファイル出力
  * Display some character info
  * @return なし
  */
-bool check_score(void)
+bool check_score(player_type *current_player_ptr)
 {
 	Term_clear();
 
@@ -970,7 +936,7 @@ bool check_score(void)
 #endif
 
 	/* Interupted */
-	if (!current_world_ptr->total_winner && streq(p_ptr->died_from, _("強制終了", "Interrupting")))
+	if (!current_world_ptr->total_winner && streq(current_player_ptr->died_from, _("強制終了", "Interrupting")))
 	{
 		msg_print(_("強制終了のためスコアが記録されません。", "Score not registered due to interruption."));
 		msg_print(NULL);
@@ -978,7 +944,7 @@ bool check_score(void)
 	}
 
 	/* Quitter */
-	if (!current_world_ptr->total_winner && streq(p_ptr->died_from, _("途中終了", "Quitting")))
+	if (!current_world_ptr->total_winner && streq(current_player_ptr->died_from, _("途中終了", "Quitting")))
 	{
 		msg_print(_("途中終了のためスコアが記録されません。", "Score not registered due to quitting."));
 		msg_print(NULL);
@@ -986,4 +952,3 @@ bool check_score(void)
 	}
 	return TRUE;
 }
-

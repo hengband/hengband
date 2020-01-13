@@ -15,33 +15,9 @@
 
 #include "h-basic.h"
 
-
-#if 0
-/*
- * Parse errors
- */
-#define PARSE_ERROR_GENERIC                  1
-#define PARSE_ERROR_OBSOLETE_FILE            2
-#define PARSE_ERROR_MISSING_RECORD_HEADER    3
-#define PARSE_ERROR_NON_SEQUENTIAL_RECORDS   4
-#define PARSE_ERROR_INVALID_FLAG             5
-#define PARSE_ERROR_UNDEFINED_DIRECTIVE      6
-#define PARSE_ERROR_OUT_OF_MEMORY            7
-#define PARSE_ERROR_OUT_OF_BOUNDS            8
-#define PARSE_ERROR_TOO_FEW_ARGUMENTS        9
-#define PARSE_ERROR_TOO_MANY_ARGUMENTS      10
-#define PARSE_ERROR_TOO_MANY_ALLOCATIONS    11
-#define PARSE_ERROR_INVALID_SPELL_FREQ      12
-#define PARSE_ERROR_INVALID_ITEM_NUMBER     13
-#define PARSE_ERROR_TOO_MANY_ENTRIES        14
-
-#define PARSE_ERROR_MAX                     15
-#endif /* 0 */
-
-
 typedef struct header header;
 
-typedef errr (*parse_info_txt_func)(char *buf, header *head);
+typedef errr(*parse_info_txt_func)(char *buf, header *head);
 
 /*
  * Size of memory reserved for initialization of some arrays
@@ -52,41 +28,41 @@ typedef errr (*parse_info_txt_func)(char *buf, header *head);
 
 #define VER_INFO_ROW 3   //!< タイトル表記(行)
 
-/*!
- * @brief マクロ登録の最大数 / Maximum number of macros (see "io.c")
- * @note Default: assume at most 256 macros are used
- */
+ /*!
+  * @brief マクロ登録の最大数 / Maximum number of macros (see "io.c")
+  * @note Default: assume at most 256 macros are used
+  */
 #define MACRO_MAX       256
 
 
-/*!
- * @struct header
- * @brief 各初期データ用ヘッダ構造体 / Template file header information (see "init.c").  16 bytes.
- * @details
- * Note that the sizes of many of the "arrays" are between 32768 and
- * 65535, and so we must use "unsigned" values to hold the "sizes" of
- * these arrays below.  Normally, I try to avoid using unsigned values,
- * since they can cause all sorts of bizarre problems, but I have no
- * choice here, at least, until the "race" array is split into "normal"
- * and "unique" monsters, which may or may not actually help.
- *
- * Note that, on some machines, for example, the Macintosh, the standard
- * "read()" and "write()" functions cannot handle more than 32767 bytes
- * at one time, so we need replacement functions, see "util.c" for details.
- *
- * Note that, on some machines, for example, the Macintosh, the standard
- * "malloc()" function cannot handle more than 32767 bytes at one time,
- * but we may assume that the "ralloc()" function can handle up to 65535
- * butes at one time.  We should not, however, assume that the "ralloc()"
- * function can handle more than 65536 bytes at a time, since this might
- * result in segmentation problems on certain older machines, and in fact,
- * we should not assume that it can handle exactly 65536 bytes at a time,
- * since the internal functions may use an unsigned short to specify size.
- *
- * In general, these problems occur only on machines (such as most personal
- * computers) which use 2 byte "int" values, and which use "int" for the
- * arguments to the relevent functions.
- */
+  /*!
+   * @struct header
+   * @brief 各初期データ用ヘッダ構造体 / Template file header information (see "init.c").  16 bytes.
+   * @details
+   * Note that the sizes of many of the "arrays" are between 32768 and
+   * 65535, and so we must use "unsigned" values to hold the "sizes" of
+   * these arrays below.  Normally, I try to avoid using unsigned values,
+   * since they can cause all sorts of bizarre problems, but I have no
+   * choice here, at least, until the "race" array is split into "normal"
+   * and "unique" monsters, which may or may not actually help.
+   *
+   * Note that, on some machines, for example, the Macintosh, the standard
+   * "read()" and "write()" functions cannot handle more than 32767 bytes
+   * at one time, so we need replacement functions, see "util.c" for details.
+   *
+   * Note that, on some machines, for example, the Macintosh, the standard
+   * "malloc()" function cannot handle more than 32767 bytes at one time,
+   * but we may assume that the "ralloc()" function can handle up to 65535
+   * butes at one time.  We should not, however, assume that the "ralloc()"
+   * function can handle more than 65536 bytes at a time, since this might
+   * result in segmentation problems on certain older machines, and in fact,
+   * we should not assume that it can handle exactly 65536 bytes at a time,
+   * since the internal functions may use an unsigned short to specify size.
+   *
+   * In general, these problems occur only on machines (such as most personal
+   * computers) which use 2 byte "int" values, and which use "int" for the
+   * arguments to the relevent functions.
+   */
 struct header
 {
 	byte v_major;		/* Version -- major */
@@ -110,11 +86,11 @@ struct header
 
 	parse_info_txt_func parse_info_txt;
 
-	void (*retouch)(header *head);
+	void(*retouch)(header *head);
 };
 
 extern errr init_info_txt(FILE *fp, char *buf, header *head,
-			  parse_info_txt_func parse_info_txt_line);
+	parse_info_txt_func parse_info_txt_line);
 
 #ifdef ALLOW_TEMPLATES
 extern errr parse_v_info(char *buf, header *head);

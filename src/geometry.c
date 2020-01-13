@@ -106,7 +106,7 @@ DIRECTION coords_to_dir(player_type *creature_ptr, POSITION y, POSITION x)
 
 	dy = y - creature_ptr->y;
 	dx = x - creature_ptr->x;
-	if (ABS(dx) > 1 || ABS(dy) > 1) return (0);
+	if (ABS(dx) > 1 || ABS(dy) > 1) return 0;
 
 	return d[dx + 1][dy + 1];
 }

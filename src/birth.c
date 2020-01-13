@@ -58,7 +58,7 @@
 birther previous_char;
 
 /*!
- * オートローラーの内容を描画する間隔 / 
+ * オートローラーの内容を描画する間隔 /
  * How often the autoroller will update the display and pause
  * to check for user interuptions.
  * Bigger values will make the autoroller faster, but slower
@@ -67,19 +67,12 @@ birther previous_char;
  */
 #define AUTOROLLER_STEP 5431L
 
-#if 0
-/*!
- * オートローラを1回まわすごとに1/10秒のウェイトをかけるマクロ定義 / Define this to cut down processor use while autorolling
- */
-#define AUTOROLLER_DELAY
-#endif
-
-/*!
- * ランダムクエストのモンスターを確定するために試行する回数 / Maximum number of tries for selection of a proper quest monster
- */
+ /*!
+  * ランダムクエストのモンスターを確定するために試行する回数 / Maximum number of tries for selection of a proper quest monster
+  */
 #define MAX_TRIES 100
 
-/* 選択可能な職業の最大数 */
+  /* 選択可能な職業の最大数 */
 #define MAX_CLASS_CHOICE     MAX_CLASS
 
 
@@ -89,77 +82,77 @@ static concptr race_jouhou[MAX_RACES] =
 {
 #ifdef JP
 "人間は基本となるキャラクタです。他の全ての種族は人間と比較されます。人間はどんな職業に就くこともでき、どの職業でも平均的にこなせます。人間は寿命が短いため、レベル上昇が他のどんな種族よりも早くなる傾向があります。また、特別な修正や特性は持っていません。",
-  
+
 "ハーフエルフは人間より賢いですが、強くはありません。彼らは探索, 解除, 魔法防御, 隠密行動, 射撃, そして魔法道具使用でわずかに優れています。しかし武器の取り扱いはそう得意ではありません。ハーフエルフはどの職業に就くこともでき、生まれつきの特性はありません。",
-  
+
 "エルフは人間より良い魔法使いになれますが、戦闘は苦手です。彼らは人間やハーフエルフよりも頭が良く、高い賢さを持っています。エルフは探索, 解除, 知覚, 隠密行動, 射撃, そして魔法道具使用で優れていますが、武器の扱いは得意ではありません。彼らは生まれつき光に対する耐性を持っています。",
-  
+
 "ホビット、またはハーフリングは弓や投擲に長け、魔法防御も優れています。また、探索, 解除, 知覚, そして隠密行動でもとても良い能力を示します。そのため、彼らは優れた盗賊となることができます（しかし、「忍びの者」と呼ばれることを好みます）。ホビットは人間より遥かに貧弱で、戦士としてはてんでダメです。彼らはかなり良い赤外線視力を持っており、温血動物を離れた場所から見つけることができます。彼らは経験値を保持する力が強く、経験値吸収攻撃に対して耐性を持っています。",
-  
+
 "ノームはドワーフより小さいですが、ホビットよりは大きい種族です。彼らはホビット同様地表の洞穴のような家に住んでいます。ノームはとても良い魔法防御を持ち、探索, 解除, 知覚, 隠密行動でも優れています。彼らは人間より低い腕力を持ち、武器を持っての戦闘は苦手です。ノームはかなり良い赤外線視力を持っており、温血動物を離れた場所から見つけることができます。ノームは生まれつき麻痺に対する耐性を持っています。",
-  
+
 "ドワーフは頑固な坑夫であり、伝説の戦士です。彼らは人間にくらべ強くタフですが、知能は劣ります。しかし、長命ゆえに彼らは非常に賢いです。彼らは良い魔法防御を持ち、探索, 知覚, 戦闘, 射撃では優れています。彼らは一つ大きな欠点を持っています。ドワーフの隠密行動は絶望的に悪いです。彼らは決して盲目にはなりません。",
-  
+
 "ハーフオークはよい戦士になれますが、魔法は期待できません。彼らはドワーフと同じくらい隠密行動が悪く、また探索や解除, 知覚もひどいです。ハーフオークは醜く、店での買い物ではより高い金額を要求されがちです。彼らは地下に住むことを好むため、ハーフオークは暗闇に対する耐性を備えています。",
-  
+
 "ハーフトロルは信じられないほど強く、他の大部分の種族より大きなＨＰを持ちます。彼らは不運にもとても愚かです。彼らの探索, 解除, 知覚, 隠密行動は悪く、その外見はハーフオークがしかめっ面をするほど醜悪です。ハーフトロルは腕力が下がることがありません。レベルが上がると、彼らは再生能力を手にいれ、戦士ならばさらに遅消化能力も獲得します。",
-  
+
 "アンバライトは多くのアドバンテージを授けられた、うわさによれば不死の種族です。彼らは知覚, 戦闘, 射撃に優れており、他の面でもかなり熟練しています。事実上あらゆるものを見てきており、新鮮なものはほとんどないため、彼らの成長は他のどの種族より遅いものです。彼らはとてもタフで頑強であり、彼らの耐久力が下がることはありません。また、怪我をすぐに治す再生能力があります。",
-  
+
 "ハイエルフは世界の始まりから存在する不死の種族です。彼らは全てのスキルに熟達しており、強く、知的で非常に人気があります - 誰もが彼らのことを好いています。ハイエルフは見えないものを見ることができ、普通のエルフ同様光に対する耐性を持っています。しかし、彼らにとって未知のものはほとんどなく、経験を得ることは大変に困難です。",
-  
+
 "野蛮人は北方から来た頑強な種族です。彼らは激しく戦い、彼らの激怒は世界中で恐れられています。戦闘が彼らの人生です。彼らは恐れを知らず、ハーフトロルよりもすぐに狂暴に戦闘に入ってしまうことを学びます。しかし、野蛮人は魔法を疑っており、そのため魔法の道具を使うことはかなり大変なこととなっています。",
-  
+
 "ハーフオーガはハーフオークに似ていますが、それだけではありません。彼らは大きく、邪悪で愚かです。戦士としては彼らは必要な資質を全て持っており、また魔法使いになることさえできます。結局、彼らはオーガ・メイジに関係があり、レベルが十分に上がったら彼らから罠のルーンをセットするスキルを学ぶのです。ハーフオークのように、彼らは暗闇に対する耐性を持ち、ハーフトロル同様に腕力が下がることはありません。",
-  
+
 "半巨人は大変力強いのですが、呪文を唱えられるほど利口ではありません。彼らはよい戦闘能力を持ちますが、それ以外のことは苦手です。彼らの厚い皮膚は破片に対する耐性を持ちます。また、ハーフオーガやハーフトロル同様腕力を下げられることがありません。",
-  
+
 "巨大なタイタンと人間の子孫であり、この強大な生物は他のほぼ全ての種族よりはるかに勝っています。彼らは多種族にみられるような魅力的な特殊能力は持っていませんが、その大変大きなＨＰはそれを補ってあまりあります。半タイタンはそこそこのスキルを持っていますが、その巨大さゆえに罠の解除やこっそり歩くことは困難です。法と秩序を愛する彼らは、カオスに対する耐性を持っています。",
-  
+
 "一つ目ではありますが、サイクロプスは多くの二つの目を持つ生物以上に見ることができます。サイクロプスは非常に力強いのですが、知的であるとはちょっと言えません。彼らに比べれば、ハーフトロルの方がハンサムに見えるということは言うまでもありません。サイクロプスは戦闘, 射撃に優れていますが、その他の大部分のスキルは苦手です。サイクロプスは音に対する耐性を持っています。",
-  
+
 "イークは最も哀れな生物の一つであり、並のモンスターであっても不注意なイークならば徹底的に打ちのめせるほど肉体的には強くありませんが、彼らはかなり知的でいくらか賢い生物です。イークは戦闘スキルは苦手ですが、他の分野では優れています。彼らの皮膚は、時間とともに酸への耐性を増していき、レベルが十分に上がれば完全に免疫を持つようになります。",
-  
+
 "クラッコンは奇怪な半知的の昆虫型生物です。彼らはすばらしい戦士になれますが、精神的な能力はひどく制限されています。彼らは探索を除けば大部分のスキルをそこそこにこなします。クラッコンは決して混乱させられることがなく、レベルが上がるごとに速くなります。",
-  
+
 "コボルドは弱いゴブリンの種族です。彼らは毒を持った武器を好み、毒矢（無制限に供給されます）を投げる能力を身につけることができます。コボルドはそこそこの戦士になれますが、その他のスキルは軒並み悪いです。彼らは生まれつき毒に対する耐性を持っています。",
-  
+
 "嫌われ、迫害されてきた小人族です。彼らは大抵のスキルをそつなくこなします。洞穴居住者である彼らは、暗闇に悩まされることはありませんし、生まれつき持っている魔法のアイテムに対する嗜好のため、彼らは装備による魔法のボーナスを奪う効果に耐性を持っています。",
-  
+
 "闇の、洞穴に住む種族であるダークエルフは魔法の知識に対する長い伝統を持っています。ダークエルフは魔法の道具をうまく使うことができ、他の多くの種族より簡単に呪文を唱えられるだけの知能を持っています。その鋭い視覚によって、彼らはハイエルフ同様見えないものをみる能力を学びますが、それはある程度レベルが上がったときです。ダークエルフは暗闇に対する耐性を持っています。",
-  
+
 "ドラゴンのような特性を持った人間型種族です。彼らはレベルが上がるにつれ、新しい元素への耐性を手にいれます。ドラコニアンは優れた能力値を持ってゲームを開始でき、大抵のスキルをうまくこなせます。その翼で、彼らは簡単に落とし穴や溶岩、水を無傷で飛び越えることができます。",
-  
+
 "秘密主義の神秘的な古代種族です。彼らの文明はこの惑星上の何よりも古いかもしれません。その肉体的資質は決して誉められたものではありませんが、彼らの知能と賢さはマインドフレアを他のどんな種族よりも強力な魔法使いにします。マインドフレアの知能と賢さは下がることがなく、レベルが上がれば見えないものをみる能力、テレパシー能力を獲得します。",
-  
+
 "地獄からやってきた悪魔的な生物です。彼らは他の種族から毛嫌いされていますが、大抵の職業をかなりうまくこなすことができます。インプは生まれつき火に耐性を持っており、レベルが上がれば見えないものを見る能力を獲得します。",
-  
+
 "ゴーレムは泥のような生命のない材料からつくられ、生命を吹き込まれた人工的な生物です。彼らには思考というものがほとんどなく、そのため魔法に依存する職業では役立たずです。しかし戦士としては大変にタフです。彼らは毒に耐性を持ち、見えないものを見ることができ、さらに麻痺知らずです。レベルが上がれば、彼らは生命力吸収攻撃に耐性を持つようになります。ゴーレムは通常の食物からはほとんど栄養を摂取できませんが、代わりに魔法棒や杖から魔力を吸収して動力源にする事ができます。また、その頑丈な身体のため、ACにボーナスを得ることができ、さらに決して気絶させられることがありません。",
-  
+
 "スケルトンには2つのタイプが存在します。普通の戦士タイプと、リッチと呼ばれる呪文を使うスケルトンです。アンデッドである彼らは、毒や生命力吸収攻撃を心配する必要はありません。彼らは物体を知覚するのに眼を利用していないため、見えない物に騙されません。彼らの骨はとがった破片のようなものに耐性を持ち、レベルが上がれば冷気に対する耐性を獲得します。薬や食物の持つ効果はスケルトンの胃（存在しませんが）を通過することなくその力を発揮しますが、薬や食物自体は彼の顎を通り抜けて落ちてしまい、栄養を吸収することはできません。その代わりに魔法棒や杖から魔力を吸収してエネルギー源にする事ができます。",
-  
+
 "ゾンビはアンデッドであり、生命力吸収攻撃に耐性を持ち、スケルトンのようにレベルが上がれば冷気の耐性を獲得します。また、毒に耐性を持ち見えないものを見ることができます。（スケルトンとは違い）切る攻撃には弱いですが、地獄に対する耐性を持っています。ゴーレムのように、彼らは食物からほとんど栄養を摂取できませんが、代わりに魔法棒や杖から魔力を吸収してエネルギー源にする事ができます。",
-  
+
 "強力なアンデッドの一種である吸血鬼は、畏敬の念を呼び起こす外見をしています。アンデッドの例にもれず、彼らも生命力を吸収されることがなく、地獄に対する耐性を持っています。また、冷気と毒に対する耐性も備えています。しかし、新鮮な血液に常に飢えており、それは近くにいる生物から血液を吸うことによってのみ満たされます。この強力な生物は深刻な弱点を持っています。太陽光線（や光源）は彼らの破滅を意味します。幸運にも、吸血鬼はその身体から「暗黒の光」のオーラを放出しています。一方、暗闇は彼らをより強力にするものです。",
-  
+
 "幽霊は強力なアンデッドの一種です。彼らは不気味な緑色の光に包まれています。半物質的な存在である彼らは、壁を通り抜けることができますが、そのときには壁の密度によって傷つけられてしまいます。他のアンデッド同様、彼らも生命力を吸収されることがなく、見えないものを見ることができ、毒と冷気に対して耐性を備え、さらに地獄に対する耐性も持っています。レベルが十分に上がると彼らはテレパシーを獲得します。幽霊は卓越した魔法使いになることができますが、その身体的特性は非常に貧弱です。彼らは食物からほとんど栄養を摂取できませんが、代わりに魔法棒や杖から魔力を吸収してエネルギー源にする事ができます。",
-  
+
 "妖精は非常に小さいです。彼らは小さな翼を持ち、罠や危険な地形を飛び越えることができます。彼らは日光を大変好み、光に対する耐性を持っています。身体的にはもっとも貧弱な種族の一つですが、妖精は魔法の面で大変な才能を持っており、非常に熟練した魔法使いになることができます。高レベルではより速く飛ぶことができるようになります。",
-  
+
 "この種族はカオスによってつくられた冒涜的で嫌悪される存在です。彼らは独立した種族ではなく、人間型種族、大抵は人間がカオスによって歪められた存在、もしくは人間と獣の悪夢のような交配種です。全ての獣人はカオスに盲従しており、そのため混乱と音に対して耐性を備えていますが、純粋なログルスはまだ彼らに対し効果を持っています。獣人は混沌を好み、それは彼らをさらに歪めます。獣人は突然変異を起こしやすい性質を持っています。彼らがつくられたとき、ランダムな変異を受けます。その後、レベルが上がるごとに違う変異を受ける可能性があります。",
-  
+
 "エントは非常に強く、賢いですが、その巨大さゆえに罠の解除やこっそりと歩くことは苦手です。成長するにつれて腕力や耐久力が上がりますが、器用さは下がっていきます。彼らには大きな欠点があり、炎によって通常よりも大きなダメージを受けてしまいます。彼らは食物からほとんど栄養を摂取できませんが、代わりに薬等から水分を摂取する事で活動できます。",
-  
+
 "天使の上位種であるアルコンは、全てのスキルに熟達しており、強くて賢く、非常に人気があります。彼らは目に見えないものを見ることができ、その翼で罠や危険な地形を飛び越えることができます。しかし、非常に成長が遅いという欠点もあります。",
-  
+
 "悪魔の上位種であるバルログは、強く、知的で、またタフでもあります。しかし、彼らは神を信じようとはせず、プリーストには全く向いていません。炎と地獄、経験値吸収への耐性を持っており、レベルが上がれば見えないものを見る能力を獲得します。また、地獄や火炎のブレスを吐くこともできます。彼等はほとんどの技能で優れていますが、静かに歩くことは苦手です。彼らは食物からほとんど栄養を摂取できませんが、人間タイプを生贄にする事で精力を回復する事ができます。",
-  
+
 "ドゥナダンは西方から来た屈強な種族です。このいにしえの種族は全ての領域において人間の能力を凌駕し、特に耐久力に関してはそれが顕著です。しかしながらこの種族は全てに卓越していることが災いして、この世界には新しい経験といったものがほとんどなく、レベルを上げることが非常に困難です。彼らはとてもタフで頑強であり、彼らの耐久力が下がることはありません。",
-  
+
 "影フェアリーは人間よりやや大きい妖精族で、翼を持ち、罠や危険な地形を飛び越えることができます。しかし、彼らは日光を嫌い、閃光によって通常よりも大きなダメージを受けてしまいます。肉体的には非常に貧弱ですが、魔法の面では優れた能力を持っています。彼らにはすばらしい長所が一つあり、モンスターの反感をかうような強力なアイテムを装備してもモンスターを怒らせることがありません。ただしその場合でも隠密行動能力が下がり、また、自分自身の性格によって反感をかっている場合には効果がありません。",
-  
+
 "クターとしている無表情の謎の生物です。彼らは外見がかわいらしいため、魅力が高いです。彼らは混乱しません。なぜなら、混乱してもクターとしているため変わりないからです。しかも、そのクターとしている外見から敵に見つかりにくいです。しかし、彼らは注意力が少ないため探索や知覚能力は悪いです。彼らはレベルが上がると横に伸びてACを上げる技を覚えますが、伸びている間は魔法防御能力は低くなってしまいます。",
-  
+
 "アンドロイドは機械の身体を持つ人工的な存在です。魔法をうまく使うことはできませんが、戦士としては非常に優れています。彼らは他の種族のように経験値を得て成長するということはありません。身体に身につける装備によって成長します。ただし、指輪、アミュレット、光源は成長に影響しません。彼らは毒の耐性を持ち、麻痺知らずで、生命力を吸収されることがありません。また、身体が頑丈なのでACにボーナスを得ます。しかし身体のいたるところに電子回路が組み込まれているため、電撃によって通常よりも大きなダメージを受けてしまいます。彼らは食物からほとんど動力を得られませんが、油を補給する事で動力源を得る事ができます。",
 
 "マーフォーク実装中",
@@ -250,51 +243,51 @@ static concptr class_jouhou[MAX_CLASS] =
 {
 #ifdef JP
 "戦士は、直面する問題のほとんどを細切れに叩き切ることで解決するキャラクタです。が、時折退却して魔法の道具の世話になることもあります。不運にも、高レベルなアイテムの多くは彼らが扱える範囲を越えています。",
-  
+
 "メイジは魔法使いであり、その機知によって生き延びなければなりません。戦士のように、単純に切りまくることで道を開くことは望めません。呪文書に加えて、メイジは助けになる魔法の道具を持ち運ぶべきです。これは他の何よりも遥かに簡単にマスターできます。魔法に必要な能力値は知能です。",
-  
+
 "プリーストは高貴な力を使うことに専念したキャラクタです。彼らは自身の神のためにダンジョンを探索し、もし宝を手にいれたなら、それは彼が信仰する宗教の栄光となります。プリーストは新しい祈りを神からの贈り物という形で受け取るため、どれを学ぶのか自分で選ぶことはできません。プリーストは魔法の道具の使い方をよく知っていますが、メイジほどうまくは使えません。刃のついた武器より鈍器を好み、祝福されていない刃のついた武器を装備すると不愉快な感覚に襲われ、戦闘能力が落ちてしまいます。魔法に必要な能力値は賢さです。",
-  
+
 "盗賊はその狡猾さで生き抜くことを好むキャラクタですが、肝心なときには戦闘で道を切り開くことができます、盗賊は罠やドアを見つける能力に優れ、罠の解除や鍵開けに熟達しています。盗賊は高い隠密行動を持ち、たくさんのモンスターの群れのそばを起こすことなく通り抜けたり、忍び寄って先制攻撃することができます。魔法に必要な能力値は知能です。",
-  
+
 "レンジャーは戦士とメイジを合わせたような職業で、身の回りの自然と特別な関係を作り上げています。彼はより戦士であり、弓のような遠距離武器を巧く使える職業です。レンジャーはよい隠密行動、よい知覚、よい探索、よい魔法防御を持ち、魔法の道具の使用にも長けています。魔法に必要な能力値は知能です。",
-  
+
 "パラディンは戦士とプリーストを合わせた職業です。パラディンはとてもよい戦士ですが、遠距離武器を扱うのは得意ではありません。パラディンには多くの能力が欠けています。隠密行動, 知覚, 探索, そして魔法道具使用が苦手ですが、その神との提携によって魔法防御はそこそこです。魔法に必要な能力値は賢さです。",
-  
+
 "魔法戦士はその名称が意味する通りの職業であり、戦士とメイジの資質をあわせ持ちます。彼らの同業者であるレンジャーが自然の魔法と生き抜くためのスキルに特化している一方、本当の魔法剣士はどちらの世界でも一番になろうとしています。戦士としては普通のメイジとは比べ物にならないほど優れています。しかし、実際には魔法でも戦闘でも専門の職業には及ばず、戦士とメイジの中間に位置するような職業です。魔法に必要な能力値は知能です。",
-  
+
 "混沌の戦士は恐るべきカオスの魔王の使いとして恐れられる存在です。混沌の戦士はパトロンとなる悪魔を持ち、レベルが上がる度に報酬を得ることがあります。彼は治療してくれたり、こちらを変化させたり、能力値を上げてくれるかもしれませんし、回りに怪物達を出現させたり、能力値や装備を奪うかも知れません。もしくは単にこちらを無視するだけかもしれません。カオスの魔王は無秩序で予測のつかない存在です。報酬の種類はパトロンとなる悪魔と偶然に依存します（違う悪魔は異なる報酬を与えます）。魔法に必要な能力値は知能です。",
-  
+
 "修行僧は他の職業とは著しく異なる職業です。彼らは他の職業同様武器と防具を使えますが、マーシャルアーツの訓練を積んでいるため、武器、防具なしでより強力な存在となります。高レベルでは、必要な耐性を身につけるためある種の防具を装備する必要がありますが、もしあまりに重すぎる防具を装備してしまうと、その体術に深刻な妨げとなります。レベルが上がると、彼らは新しい強力な攻撃法を学び、防御能力も上昇します。魔法に必要な能力値は賢さです。",
-  
+
 "超能力者は魔法のかわりにその精神の力を使う唯一の職業です。この力は超能力者独特のもので、単に超感覚的なものから他人の精神を支配するものまで様々です。彼らの力はある種の訓練によって開発されるものなので、超能力者は力を使うのに呪文書を必要としません。使える力は単純にキャラクタのレベルによって決まります。超能力に必要な能力値は賢さです。",
-  
+
 "ハイメイジは一つの領域に特化し、その領域を通常のメイジよりはるかに深く学んだメイジです。１つの領域に特化したおかげで、彼らは自らが選択した領域の呪文を唱える際の消費ＭＰ、最低レベル、失敗率で相当な恩恵を受けます。しかし、生命の領域ではプリーストほどうまくはなれないことには注意すべきです。魔法に必要な能力値は知能です。",
-  
+
 "観光客は観光のためにこの世界にやってきました。戦闘力が低く、強力な呪文を使うこともできないため、最も生きぬいていくのが厳しい職業と言えます。魔法に必要な能力値は知能です。",
-  
+
 "ものまね師は戦闘力はそこそこありますが、自分から特殊な能力を使うことは全くできません。しかし、自分の目の前にいる相手が特殊能力を使った場合、その能力と全く同じ能力をそっくりそのまま使うことができます。ものまねに必要な能力は基本的に器用さですが、まねる特殊能力に関係ある他の能力も必要です。",
-  
+
 "魔獣使いは変愚蛮怒世界のダンジョンに住む生物と心を通い合わせられます。彼らは最もうまくモンスターを乗りこなすことができ、召喚したり手なづけたりしたモンスターを自分の手足のように使います。魔法に必要な能力は魅力です。",
-  
+
 "スペルマスターは全ての魔法を極める者です。彼らは全分野において非常に優れた魔法使いであり、あらゆる魔法書のすべての呪文を学習の手間なく使いこなすことができます。その反面、彼らは戦士としては最低で、どんな武器も満足に扱えません。魔術師の杖だけは例外ですが、武器としては使い物にならないでしょう。すべての魔法をうまく生かさなければならないため、非常に上級者向けな職業と言えます。魔法に必要な能力は知能です。",
-  
+
 "アーチャーは魔法を使うことはできませんが、どんな職業よりも巧みに弓やスリングを使いこなします。大量の矢や弾を必要とするのは確かですが、岩石からスリング用の弾を作ったり、レベルが上がるとモンスターの骨やがらくたから矢を作ったりする技術を身につけます。また、戦士と比べて隠密行動、知覚、探索、魔法道具の使用などにも優れており、いざというときには魔法の道具に頼ることもできます。",
-  
+
 "魔道具術師は杖、魔法棒、ロッドといった魔法のアイテムから魔力を取り込むことによって魔法を使います。魔法のアイテムを発見することが他の職業よりもはるかに重要になります。戦闘力は高くはないですが、そこそこの強さがあります。魔法に必要な能力は知能です。",
-  
+
 "吟遊詩人は魔力を帯びた歌を歌うことができます。多くの歌は普通の魔法と異なり、歌を歌っている間継続して効果を発揮します。しかし、同時に2つの歌を歌うことができない、という欠点もあります。視界内全体に影響を及ぼす歌が多い、という特徴もあります。肉体的な能力は貧弱で、単純に切りまくることで道を開くことはできません。魔法に必要な能力は魅力です。",
-  
+
 "赤魔道師は下級魔法のほとんどを使うことができ、戦闘力も十分にあります。レベルが上がると強力な能力「連続魔」を身につけることができます。しかし、魔法を覚えるスピードは遅く、上級魔法を使えないので、メイジほどには魔法を頼りにすることができません。魔法道具使用と魔法防御はそこそこですが、それ以外の技能は苦手です。魔法に必要な能力は知能です。",
-  
+
 "剣術家は戦士に次ぐ戦闘力があり、様々な技を使うことができます。彼らのMPはレベルに依存せず、賢さだけで決まり、気合いをためることにより、最大値を越えてMPを増やすことができます。しかし、戦士と同様、高レベルの魔法のアイテムは彼らの扱える範囲を越えており、罠の解除や探索の能力も高いとはいえません。必殺技の使用に必要な能力は賢さです。",
-  
+
 "練気術師は「気」を使う達人です。修行僧と同様、武器や防具を持たずに戦うことを好み、武器・防具なしでより強力な存在となります。修行僧ほどの戦闘能力はありませんが、修行僧と同様の魔法が使え、さらに「気」の力を操ります。武器を持つことや、重すぎる防具を装備することは、「気」の力の使用を妨げます。魔法と練気術に必要な能力は賢さです。",
-  
+
 "青魔道師は優れた魔法使いであり、その機知によって生き延びなければなりません。メイジ等の他の魔法使いとの違いは魔法の覚え方で、青魔道師はモンスターの魔法の効果を受けることでその魔法を覚えます。覚えるためには「ラーニング」の状態になっていないといけません。魔法に必要な能力は知能です。",
-  
+
 "騎兵は馬に乗り戦場を駆け抜けるエリート戦士です。魔法は使えませんが、馬上からの圧倒的な攻撃力を誇る上に、高い機動力を生かした射撃をも得意としています。レベルが上がれば、野生のモンスターにまたがり無理矢理手なずけることができます。彼らは己の肉体と精神に誇りを持ち、魔法道具にはあまり頼ろうとはしません。",
-  
+
 "狂戦士は怒り狂って武器を振るう恐るべき戦士です。全職業中最高の肉体能力を誇り、恐怖と麻痺に対する耐性を持ち、レベルが上がればその強靭な肉体で矢の呪文を跳ね返すことができます。さらに武器なしで戦うことや、呪いのかけられた装備を力づくで剥がすことができ、いくつかの技を(反魔法状態でも)使うことができます。しかし、巻物や魔法道具は全く使うことができず、罠の解除や隠密行動、探索、魔法防御、飛び道具の技能に関しては絶望的です。ひたすら殴って道を開くしかありません。幽霊は非常に勝利しやすいですがスコアがかなり低く修正されます。",
 
 "鍛冶師は武器や防具を自分で強化することができます。特殊効果を持つ武器や防具から特殊効果の元となるエッセンスを取り出し、別の武器や防具にエッセンスを付加することによってその特殊効果を付加できます。ある程度の戦闘能力も持ちますが、魔法は一切使用できず、隠密や魔法防御の技能も低くなります。",
@@ -538,7 +531,7 @@ static s32b stat_match[6];
 /*! オートローラの試行回数 / Autoroll round */
 static s32b auto_round;
 
-/*! 
+/*!
  * @brief プレイヤー作成を中断して変愚蛮怒を終了する
  * @return なし
  */
@@ -570,7 +563,7 @@ static void show_help(player_type *creature_ptr, concptr helpfile)
  */
 static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 {
-	int picks[VALID_REALM] = {0};
+	int picks[VALID_REALM] = { 0 };
 	int k, i, cs, os;
 	byte auto_select = REALM_NONE;
 	int n = 0;
@@ -668,7 +661,7 @@ static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 	}
 
 	/* Extra info */
-	put_str (_("注意：魔法の領域の選択によりあなたが習得する呪文のタイプが決まります。", "Note: The realm of magic will determine which spells you can learn."), 23, 5);
+	put_str(_("注意：魔法の領域の選択によりあなたが習得する呪文のタイプが決まります。", "Note: The realm of magic will determine which spells you can learn."), 23, 5);
 
 	cs = 0;
 	for (i = 0; i < 32; i++)
@@ -676,21 +669,21 @@ static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 		/* Analize realms */
 		if (choices & (1L << i))
 		{
-			if (creature_ptr->realm1 == i+1)
+			if (creature_ptr->realm1 == i + 1)
 			{
 				if (creature_ptr->realm2 == 255)
 					cs = n;
 				else
 					continue;
 			}
-			if (creature_ptr->realm2 == i+1)
+			if (creature_ptr->realm2 == i + 1)
 				cs = n;
 
 			sym[n] = I2A(n);
 
-			sprintf(buf, "%c%c %s", sym[n], p2, realm_names[i+1]);
-			put_str(buf, 12 + (n/5), 2 + 15 * (n%5));
-			picks[n++] = i+1;
+			sprintf(buf, "%c%c %s", sym[n], p2, realm_names[i + 1]);
+			put_str(buf, 12 + (n / 5), 2 + 15 * (n % 5));
+			picks[n++] = i + 1;
 		}
 	}
 	sprintf(cur, "%c%c %s", '*', p2, _("ランダム", "Random"));
@@ -698,15 +691,15 @@ static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 	/* Get a realm */
 	k = -1;
 	os = n;
-	while (TRUE)	{
+	while (TRUE) {
 		/* Move Cursol */
 		if (cs != os)
 		{
-			c_put_str(TERM_WHITE, cur, 12 + (os/5), 2 + 15 * (os%5));
+			c_put_str(TERM_WHITE, cur, 12 + (os / 5), 2 + 15 * (os % 5));
 			put_str("                                   ", 3, 40);
 			put_str("                                   ", 4, 40);
 
-			if(cs == n)
+			if (cs == n)
 			{
 				sprintf(cur, "%c%c %s", '*', p2, _("ランダム", "Random"));
 			}
@@ -716,20 +709,20 @@ static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 				sprintf(buf, "%s", realm_names[picks[cs]]);
 #ifdef JP
 				c_put_str(TERM_L_BLUE, buf, 3, 40);
-				put_str("の特徴", 3, 40+strlen(buf));
+				put_str("の特徴", 3, 40 + strlen(buf));
 #else
 				c_put_str(TERM_L_BLUE, realm_names[picks[cs]], 3, 40);
-				put_str(": Characteristic", 3, 40+strlen(realm_names[picks[cs]]));
+				put_str(": Characteristic", 3, 40 + strlen(realm_names[picks[cs]]));
 #endif
-				put_str(realm_subinfo[technic2magic(picks[cs])-1], 4, 40);
+				put_str(realm_subinfo[technic2magic(picks[cs]) - 1], 4, 40);
 			}
-			c_put_str(TERM_YELLOW, cur, 12 + (cs/5), 2 + 15 * (cs%5));
+			c_put_str(TERM_YELLOW, cur, 12 + (cs / 5), 2 + 15 * (cs % 5));
 			os = cs;
 		}
 
 		if (k >= 0) break;
 
-		sprintf(buf, _("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "), sym[0], sym[n-1]);
+		sprintf(buf, _("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "), sym[0], sym[n - 1]);
 
 		put_str(buf, 10, 10);
 		c = inkey();
@@ -737,7 +730,7 @@ static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 		if (c == 'S') return 255;
 		if (c == ' ' || c == '\r' || c == '\n')
 		{
-			if(cs == n)
+			if (cs == n)
 			{
 				k = randint0(n);
 				break;
@@ -793,7 +786,7 @@ static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 
 			screen_load();
 		}
-		else if (c !='2' && c !='4' && c !='6' && c !='8') bell();
+		else if (c != '2' && c != '4' && c != '6' && c != '8') bell();
 	}
 
 	/* Clean up */
@@ -821,7 +814,7 @@ static bool get_player_realms(player_type *creature_ptr)
 	creature_ptr->realm2 = 255;
 	while (TRUE)
 	{
-		char temp[80*10];
+		char temp[80 * 10];
 		concptr t;
 		count = 0;
 		creature_ptr->realm1 = choose_realm(creature_ptr, realm_choices1[creature_ptr->pclass], &count);
@@ -835,15 +828,15 @@ static bool get_player_realms(player_type *creature_ptr)
 		put_str("                                   ", 4, 40);
 		put_str("                                   ", 5, 40);
 
-		roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm1)-1], 74, temp, sizeof(temp));
+		roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm1) - 1], 74, temp, sizeof(temp));
 		t = temp;
 		for (i = 0; i < 10; i++)
 		{
-			if(t[0] == 0)
-				break; 
+			if (t[0] == 0)
+				break;
 			else
 			{
-				prt(t, 12+i, 3);
+				prt(t, 12 + i, 3);
 				t += strlen(t) + 1;
 			}
 		}
@@ -869,7 +862,7 @@ static bool get_player_realms(player_type *creature_ptr)
 		/* Select the second realm */
 		while (TRUE)
 		{
-			char temp[80*8];
+			char temp[80 * 8];
 			concptr t;
 
 			count = 0;
@@ -884,15 +877,15 @@ static bool get_player_realms(player_type *creature_ptr)
 			put_str("                                   ", 4, 40);
 			put_str("                                   ", 5, 40);
 
-			roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm2)-1], 74, temp, sizeof(temp));
+			roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm2) - 1], 74, temp, sizeof(temp));
 			t = temp;
 			for (i = 0; i < A_MAX; i++)
 			{
-				if(t[0] == 0)
-					break; 
+				if (t[0] == 0)
+					break;
 				else
 				{
-					prt(t, 12+i, 3);
+					prt(t, 12 + i, 3);
 					t += strlen(t) + 1;
 				}
 			}
@@ -1052,7 +1045,7 @@ static int adjust_stat(int value, int amount)
 		/* Apply penalty */
 		for (i = 0; i < (0 - amount); i++)
 		{
-			if (value >= 18+10)
+			if (value >= 18 + 10)
 			{
 				value -= 10;
 			}
@@ -1109,7 +1102,7 @@ static void get_stats(player_type *creature_ptr)
 		/* Roll some dice */
 		for (i = 0; i < 2; i++)
 		{
-			s32b tmp = randint0(60*60*60);
+			s32b tmp = randint0(60 * 60 * 60);
 			BASE_STATUS val;
 
 			/* Extract 5 + 1d3 + 1d4 + 1d5 */
@@ -1120,7 +1113,7 @@ static void get_stats(player_type *creature_ptr)
 
 			/* Save that value */
 			sum += val;
-			creature_ptr->stat_cur[3*i] = creature_ptr->stat_max[3*i] = val;
+			creature_ptr->stat_cur[3 * i] = creature_ptr->stat_max[3 * i] = val;
 
 			/* Extract 5 + 1d3 + 1d4 + 1d5 */
 			val = 5 + 3;
@@ -1130,7 +1123,7 @@ static void get_stats(player_type *creature_ptr)
 
 			/* Save that value */
 			sum += val;
-			creature_ptr->stat_cur[3*i+1] = creature_ptr->stat_max[3*i+1] = val;
+			creature_ptr->stat_cur[3 * i + 1] = creature_ptr->stat_max[3 * i + 1] = val;
 
 			/* Extract 5 + 1d3 + 1d4 + 1d5 */
 			val = 5 + 3;
@@ -1140,11 +1133,11 @@ static void get_stats(player_type *creature_ptr)
 
 			/* Save that value */
 			sum += val;
-			creature_ptr->stat_cur[3*i+2] = creature_ptr->stat_max[3*i+2] = val;
+			creature_ptr->stat_cur[3 * i + 2] = creature_ptr->stat_max[3 * i + 2] = val;
 		}
 
 		/* Verify totals */
-		if ((sum > 42+5*6) && (sum < 57+5*6)) break;
+		if ((sum > 42 + 5 * 6) && (sum < 57 + 5 * 6)) break;
 		/* 57 was 54... I hate 'magic numbers' :< TY */
 	}
 }
@@ -1178,7 +1171,7 @@ void get_max_stats(player_type *creature_ptr)
 	/* Acquire the stats */
 	for (i = 0; i < A_MAX; i++)
 	{
-		BASE_STATUS max_max = 18 + 60 + dice[i]*10;
+		BASE_STATUS max_max = 18 + 60 + dice[i] * 10;
 
 		/* Save that value */
 		creature_ptr->stat_max_max[i] = max_max;
@@ -1223,9 +1216,9 @@ static void get_extra(player_type *creature_ptr, bool roll_hitdie)
 	for (i = 0; i < 5; i++)
 		for (j = 0; j < 64; j++)
 			creature_ptr->weapon_exp[i][j] = s_info[creature_ptr->pclass].w_start[i][j];
-	if ((creature_ptr->pseikaku == SEIKAKU_SEXY) && (creature_ptr->weapon_exp[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] < WEAPON_EXP_BEGINNER))
+	if ((creature_ptr->pseikaku == SEIKAKU_SEXY) && (creature_ptr->weapon_exp[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] < WEAPON_EXP_BEGINNER))
 	{
-		creature_ptr->weapon_exp[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_BEGINNER;
+		creature_ptr->weapon_exp[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_BEGINNER;
 	}
 
 	for (i = 0; i < GINOU_MAX; i++)
@@ -1233,7 +1226,7 @@ static void get_extra(player_type *creature_ptr, bool roll_hitdie)
 
 	/* Hitdice */
 	if (creature_ptr->pclass == CLASS_SORCERER)
-		creature_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
+		creature_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
 	else
 		creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 
@@ -1269,185 +1262,185 @@ static void get_history(player_type *creature_ptr)
 	/* Starting place */
 	switch (creature_ptr->prace)
 	{
-		case RACE_AMBERITE:
-		{
-			chart = 67;
-			break;
-		}
-		case RACE_HUMAN:
-		case RACE_BARBARIAN:
-		case RACE_DUNADAN:
-		case RACE_MERFOLK:
-		{
-			chart = 1;
-			break;
-		}
-		case RACE_HALF_ELF:
-		{
-			chart = 4;
-			break;
-		}
-		case RACE_ELF:
-		case RACE_HIGH_ELF:
-		{
-			chart = 7;
-			break;
-		}
-		case RACE_HOBBIT:
-		{
-			chart = 10;
-			break;
-		}
-		case RACE_GNOME:
-		{
-			chart = 13;
-			break;
-		}
-		case RACE_DWARF:
-		{
-			chart = 16;
-			break;
-		}
-		case RACE_HALF_ORC:
-		{
-			chart = 19;
-			break;
-		}
-		case RACE_HALF_TROLL:
-		{
-			chart = 22;
-			break;
-		}
-		case RACE_DARK_ELF:
-		{
-			chart = 69;
-			break;
-		}
-		case RACE_HALF_OGRE:
-		{
-			chart = 74;
-			break;
-		}
-		case RACE_HALF_GIANT:
-		{
-			chart = 75;
-			break;
-		}
-		case RACE_HALF_TITAN:
-		{
-			chart = 76;
-			break;
-		}
-		case RACE_CYCLOPS:
-		{
-			chart = 77;
-			break;
-		}
-		case RACE_YEEK:
-		{
-			chart = 78;
-			break;
-		}
-		case RACE_KOBOLD:
-		{
-			chart = 82;
-			break;
-		}
-		case RACE_KLACKON:
-		{
-			chart = 84;
-			break;
-		}
-		case RACE_NIBELUNG:
-		{
-			chart = 87;
-			break;
-		}
-		case RACE_DRACONIAN:
-		{
-			chart = 89;
-			break;
-		}
-		case RACE_MIND_FLAYER:
-		{
-			chart = 92;
-			break;
-		}
-		case RACE_IMP:
-		{
-			chart = 94;
-			break;
-		}
-		case RACE_GOLEM:
-		{
-			chart = 98;
-			break;
-		}
-		case RACE_SKELETON:
-		{
-			chart = 102;
-			break;
-		}
-		case RACE_ZOMBIE:
-		{
-			chart = 107;
-			break;
-		}
-		case RACE_VAMPIRE:
-		{
-			chart = 113;
-			break;
-		}
-		case RACE_SPECTRE:
-		{
-			chart = 118;
-			break;
-		}
-		case RACE_SPRITE:
-		{
-			chart = 124;
-			break;
-		}
-		case RACE_BEASTMAN:
-		{
-			chart = 129;
-			break;
-		}
-		case RACE_ENT:
-		{
-			chart = 137;
-			break;
-		}
-		case RACE_ANGEL:
-		{
-			chart = 142;
-			break;
-		}
-		case RACE_DEMON:
-		{
-			chart = 145;
-			break;
-		}
-		case RACE_S_FAIRY:
-		{
-			chart = 148;
-			break;
-		}
-		case RACE_KUTAR:
-		{
-			chart = 154;
-			break;
-		}
-		case RACE_ANDROID:
-		{
-			chart = 155;
-			break;
-		}
-		default:
-		{
-			chart = 0;
-			break;
-		}
+	case RACE_AMBERITE:
+	{
+		chart = 67;
+		break;
+	}
+	case RACE_HUMAN:
+	case RACE_BARBARIAN:
+	case RACE_DUNADAN:
+	case RACE_MERFOLK:
+	{
+		chart = 1;
+		break;
+	}
+	case RACE_HALF_ELF:
+	{
+		chart = 4;
+		break;
+	}
+	case RACE_ELF:
+	case RACE_HIGH_ELF:
+	{
+		chart = 7;
+		break;
+	}
+	case RACE_HOBBIT:
+	{
+		chart = 10;
+		break;
+	}
+	case RACE_GNOME:
+	{
+		chart = 13;
+		break;
+	}
+	case RACE_DWARF:
+	{
+		chart = 16;
+		break;
+	}
+	case RACE_HALF_ORC:
+	{
+		chart = 19;
+		break;
+	}
+	case RACE_HALF_TROLL:
+	{
+		chart = 22;
+		break;
+	}
+	case RACE_DARK_ELF:
+	{
+		chart = 69;
+		break;
+	}
+	case RACE_HALF_OGRE:
+	{
+		chart = 74;
+		break;
+	}
+	case RACE_HALF_GIANT:
+	{
+		chart = 75;
+		break;
+	}
+	case RACE_HALF_TITAN:
+	{
+		chart = 76;
+		break;
+	}
+	case RACE_CYCLOPS:
+	{
+		chart = 77;
+		break;
+	}
+	case RACE_YEEK:
+	{
+		chart = 78;
+		break;
+	}
+	case RACE_KOBOLD:
+	{
+		chart = 82;
+		break;
+	}
+	case RACE_KLACKON:
+	{
+		chart = 84;
+		break;
+	}
+	case RACE_NIBELUNG:
+	{
+		chart = 87;
+		break;
+	}
+	case RACE_DRACONIAN:
+	{
+		chart = 89;
+		break;
+	}
+	case RACE_MIND_FLAYER:
+	{
+		chart = 92;
+		break;
+	}
+	case RACE_IMP:
+	{
+		chart = 94;
+		break;
+	}
+	case RACE_GOLEM:
+	{
+		chart = 98;
+		break;
+	}
+	case RACE_SKELETON:
+	{
+		chart = 102;
+		break;
+	}
+	case RACE_ZOMBIE:
+	{
+		chart = 107;
+		break;
+	}
+	case RACE_VAMPIRE:
+	{
+		chart = 113;
+		break;
+	}
+	case RACE_SPECTRE:
+	{
+		chart = 118;
+		break;
+	}
+	case RACE_SPRITE:
+	{
+		chart = 124;
+		break;
+	}
+	case RACE_BEASTMAN:
+	{
+		chart = 129;
+		break;
+	}
+	case RACE_ENT:
+	{
+		chart = 137;
+		break;
+	}
+	case RACE_ANGEL:
+	{
+		chart = 142;
+		break;
+	}
+	case RACE_DEMON:
+	{
+		chart = 145;
+		break;
+	}
+	case RACE_S_FAIRY:
+	{
+		chart = 148;
+		break;
+	}
+	case RACE_KUTAR:
+	{
+		chart = 154;
+		break;
+	}
+	case RACE_ANDROID:
+	{
+		chart = 155;
+		break;
+	}
+	default:
+	{
+		chart = 0;
+		break;
+	}
 	}
 
 
@@ -1491,17 +1484,17 @@ static void get_history(player_type *creature_ptr)
 
 	/* Kill trailing spaces */
 
-	while ((n > 0) && (s[n-1] == ' ')) s[--n] = '\0';
+	while ((n > 0) && (s[n - 1] == ' ')) s[--n] = '\0';
 
-       {
-	char temp[64*4];
-	roff_to_buf(s, 60, temp, sizeof(temp));
-	t = temp;
-	for(i=0 ; i<4 ; i++){
-	     if(t[0]==0)break; 
-	     else {strcpy(creature_ptr->history[i], t);t += strlen(t)+1;}
-	     }
-       }
+	{
+		char temp[64 * 4];
+		roff_to_buf(s, 60, temp, sizeof(temp));
+		t = temp;
+		for (i = 0; i < 4; i++) {
+			if (t[0] == 0)break;
+			else { strcpy(creature_ptr->history[i], t); t += strlen(t) + 1; }
+		}
+	}
 }
 
 /*!
@@ -1517,17 +1510,17 @@ void get_height_weight(player_type *creature_ptr)
 	{
 		creature_ptr->ht = randnor(rp_ptr->m_b_ht, rp_ptr->m_m_ht);
 		h_percent = (int)(creature_ptr->ht) * 100 / (int)(rp_ptr->m_b_ht);
-		creature_ptr->wt = randnor((int)(rp_ptr->m_b_wt) * h_percent /100
-				    , (int)(rp_ptr->m_m_wt) * h_percent / 300 );
+		creature_ptr->wt = randnor((int)(rp_ptr->m_b_wt) * h_percent / 100
+			, (int)(rp_ptr->m_m_wt) * h_percent / 300);
 	}
-  
+
 	/* Calculate the height/weight for females */
 	else if (creature_ptr->psex == SEX_FEMALE)
 	{
 		creature_ptr->ht = randnor(rp_ptr->f_b_ht, rp_ptr->f_m_ht);
 		h_percent = (int)(creature_ptr->ht) * 100 / (int)(rp_ptr->f_b_ht);
-		creature_ptr->wt = randnor((int)(rp_ptr->f_b_wt) * h_percent /100
-				    , (int)(rp_ptr->f_m_wt) * h_percent / 300 );
+		creature_ptr->wt = randnor((int)(rp_ptr->f_b_wt) * h_percent / 100
+			, (int)(rp_ptr->f_m_wt) * h_percent / 300);
 	}
 }
 
@@ -1557,7 +1550,7 @@ static void get_money(player_type *creature_ptr)
 	/* Social Class determines starting gold */
 	gold = (creature_ptr->sc * 6) + randint1(100) + 300;
 	if (creature_ptr->pclass == CLASS_TOURIST)
-	  gold += 2000;
+		gold += 2000;
 
 	/* Process the stats */
 	for (i = 0; i < A_MAX; i++)
@@ -1611,7 +1604,7 @@ static void birth_put_stats(player_type *creature_ptr)
 
 			/* Put the stat */
 			cnv_stat(m, buf);
-			c_put_str(TERM_L_GREEN, buf, 3+i, col+24);
+			c_put_str(TERM_L_GREEN, buf, 3 + i, col + 24);
 
 			/* Put the percent */
 			if (stat_match[i])
@@ -1625,16 +1618,16 @@ static void birth_put_stats(player_type *creature_ptr)
 				{
 					p = 1000L * stat_match[i] / auto_round;
 				}
-			
+
 				attr = (p < 100) ? TERM_YELLOW : TERM_L_GREEN;
-				sprintf(buf, "%3d.%d%%", p/10, p%10);
-				c_put_str(attr, buf, 3+i, col+13);
+				sprintf(buf, "%3d.%d%%", p / 10, p % 10);
+				c_put_str(attr, buf, 3 + i, col + 13);
 			}
 
 			/* Never happened */
 			else
 			{
-				c_put_str(TERM_RED, _("(なし)", "(NONE)"), 3+i, col+13);
+				c_put_str(TERM_RED, _("(なし)", "(NONE)"), 3 + i, col + 13);
 			}
 		}
 	}
@@ -1698,7 +1691,7 @@ static void player_wipe_without_name(player_type *creature_ptr)
 	for (i = 0; i < max_q_idx; i++)
 	{
 		quest_type* const q_ptr = &quest[i];
-		
+
 		q_ptr->status = QUEST_STATUS_UNTAKEN;
 
 		q_ptr->cur_num = 0;
@@ -1857,7 +1850,7 @@ static void player_wipe_without_name(player_type *creature_ptr)
 	creature_ptr->muta3 = 0;
 
 	/* Reset virtues */
-	for (i = 0; i < 8; i++) creature_ptr->virtues[i]=0;
+	for (i = 0; i < 8; i++) creature_ptr->virtues[i] = 0;
 
 	creature_ptr->dungeon_idx = 0;
 
@@ -1940,7 +1933,7 @@ static void init_turn(player_type *creature_ptr)
 		(creature_ptr->prace == RACE_SPECTRE))
 	{
 		/* Undead start just after midnight */
-		current_world_ptr->game_turn = (TURNS_PER_TICK*3 * TOWN_DAWN) / 4 + 1;
+		current_world_ptr->game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
 		current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 	}
 	else
@@ -1958,57 +1951,57 @@ static void init_turn(player_type *creature_ptr)
  * @brief 所持状態にあるアイテムの中から一部枠の装備可能なものを装備させる。
  * @return なし
  */
-static void wield_all(player_type *creature_ptr) 
-{ 
-	object_type *o_ptr; 
-	object_type *i_ptr; 
-	object_type object_type_body; 
- 
-	int slot; 
-	INVENTORY_IDX item; 
- 
-	/* Scan through the slots backwards */ 
-	for (item = INVEN_PACK - 1; item >= 0; item--) 
-	{ 
-		o_ptr = &creature_ptr->inventory_list[item]; 
- 
-		/* Skip non-objects */ 
-		if (!o_ptr->k_idx) continue; 
- 
-		/* Make sure we can wield it and that there's nothing else in that slot */ 
-		slot = wield_slot(creature_ptr, o_ptr); 
-		if (slot < INVEN_RARM) continue; 
+static void wield_all(player_type *creature_ptr)
+{
+	object_type *o_ptr;
+	object_type *i_ptr;
+	object_type object_type_body;
+
+	int slot;
+	INVENTORY_IDX item;
+
+	/* Scan through the slots backwards */
+	for (item = INVEN_PACK - 1; item >= 0; item--)
+	{
+		o_ptr = &creature_ptr->inventory_list[item];
+
+		/* Skip non-objects */
+		if (!o_ptr->k_idx) continue;
+
+		/* Make sure we can wield it and that there's nothing else in that slot */
+		slot = wield_slot(creature_ptr, o_ptr);
+		if (slot < INVEN_RARM) continue;
 		if (slot == INVEN_LITE) continue; /* Does not wield toaches because buys a lantern soon */
-		if (creature_ptr->inventory_list[slot].k_idx) continue; 
- 
-		i_ptr = &object_type_body; 
-		object_copy(i_ptr, o_ptr); 
-		i_ptr->number = 1; 
- 
-		/* Decrease the item (from the pack) */ 
-		if (item >= 0) 
-		{ 
-			inven_item_increase(creature_ptr, item, -1); 
-			inven_item_optimize(creature_ptr, item); 
-		} 
- 
-		/* Decrease the item (from the floor) */ 
-		else 
-		{ 
-			floor_item_increase(creature_ptr->current_floor_ptr, 0 - item, -1); 
+		if (creature_ptr->inventory_list[slot].k_idx) continue;
+
+		i_ptr = &object_type_body;
+		object_copy(i_ptr, o_ptr);
+		i_ptr->number = 1;
+
+		/* Decrease the item (from the pack) */
+		if (item >= 0)
+		{
+			inven_item_increase(creature_ptr, item, -1);
+			inven_item_optimize(creature_ptr, item);
+		}
+
+		/* Decrease the item (from the floor) */
+		else
+		{
+			floor_item_increase(creature_ptr->current_floor_ptr, 0 - item, -1);
 			floor_item_optimize(creature_ptr->current_floor_ptr, 0 - item);
-		} 
- 
-		o_ptr = &creature_ptr->inventory_list[slot]; 
- 		object_copy(o_ptr, i_ptr); 
- 		creature_ptr->total_weight += i_ptr->weight; 
- 
-		/* Increment the equip counter by hand */ 
+		}
+
+		o_ptr = &creature_ptr->inventory_list[slot];
+		object_copy(o_ptr, i_ptr);
+		creature_ptr->total_weight += i_ptr->weight;
+
+		/* Increment the equip counter by hand */
 		creature_ptr->equip_cnt++;
 
- 	} 
-	return; 
-} 
+	}
+	return;
+}
 
 
 /*!
@@ -2229,8 +2222,8 @@ static void add_outfit(player_type *creature_ptr, object_type *o_ptr)
 	/* Auto-inscription */
 	autopick_alter_item(creature_ptr, slot, FALSE);
 
-	/* Now try wielding everything */ 
-	wield_all(creature_ptr); 
+	/* Now try wielding everything */
+	wield_all(creature_ptr);
 }
 
 
@@ -2262,11 +2255,11 @@ void player_outfit(player_type *creature_ptr)
 		/* Demon can drain vitality from humanoid corpse */
 		get_mon_num_prep(monster_hook_human, NULL);
 
-		for (i = rand_range(3,4); i > 0; i--)
+		for (i = rand_range(3, 4); i > 0; i--)
 		{
 			object_prep(q_ptr, lookup_kind(TV_CORPSE, SV_CORPSE));
 			q_ptr->pval = get_mon_num(2);
-			if(q_ptr->pval)
+			if (q_ptr->pval)
 			{
 				q_ptr->number = 1;
 				add_outfit(creature_ptr, q_ptr);
@@ -2376,7 +2369,7 @@ void player_outfit(player_type *creature_ptr)
 	else if (creature_ptr->pclass == CLASS_SORCERER)
 	{
 		OBJECT_TYPE_VALUE book_tval;
-		for (book_tval = TV_LIFE_BOOK; book_tval <= TV_LIFE_BOOK+MAX_MAGIC-1; book_tval++)
+		for (book_tval = TV_LIFE_BOOK; book_tval <= TV_LIFE_BOOK + MAX_MAGIC - 1; book_tval++)
 		{
 			/* Hack -- Give the player some arrows */
 			object_prep(q_ptr, lookup_kind(book_tval, 0));
@@ -2438,7 +2431,7 @@ void player_outfit(player_type *creature_ptr)
 		add_outfit(creature_ptr, q_ptr);
 	}
 
-	if(creature_ptr->pseikaku == SEIKAKU_SEXY)
+	if (creature_ptr->pseikaku == SEIKAKU_SEXY)
 	{
 		player_init[creature_ptr->pclass][2][0] = TV_HAFTED;
 		player_init[creature_ptr->pclass][2][1] = SV_WHIP;
@@ -2457,7 +2450,7 @@ void player_outfit(player_type *creature_ptr)
 		else if (tv == TV_DEATH_BOOK) tv = TV_LIFE_BOOK + creature_ptr->realm2 - 1;
 
 		else if (tv == TV_RING && sv == SV_RING_RES_FEAR &&
-		    creature_ptr->prace == RACE_BARBARIAN)
+			creature_ptr->prace == RACE_BARBARIAN)
 			/* Barbarians do not need a ring of resist fear */
 			sv = SV_RING_SUSTAIN_STR;
 
@@ -2531,9 +2524,9 @@ static bool get_player_race(player_type *creature_ptr)
 		/* Move Cursol */
 		if (cs != os)
 		{
-			c_put_str(TERM_WHITE, cur, 12 + (os/5), 1 + 16 * (os%5));
+			c_put_str(TERM_WHITE, cur, 12 + (os / 5), 1 + 16 * (os % 5));
 			put_str("                                   ", 3, 40);
-			if(cs == MAX_RACES)
+			if (cs == MAX_RACES)
 			{
 				sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
 				put_str("                                   ", 4, 40);
@@ -2553,13 +2546,13 @@ static bool get_player_race(player_type *creature_ptr)
 					rp_ptr->r_adj[4], rp_ptr->r_adj[5], (rp_ptr->r_exp - 100));
 				c_put_str(TERM_L_BLUE, buf, 5, 40);
 			}
-			c_put_str(TERM_YELLOW, cur, 12 + (cs/5), 1 + 16 * (cs%5));
+			c_put_str(TERM_YELLOW, cur, 12 + (cs / 5), 1 + 16 * (cs % 5));
 			os = cs;
 		}
 
 		if (k >= 0) break;
 
-		sprintf(buf, _("種族を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a race (%c-%c) ('=' for options): "), sym[0], sym[MAX_RACES-1]);
+		sprintf(buf, _("種族を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a race (%c-%c) ('=' for options): "), sym[0], sym[MAX_RACES - 1]);
 
 		put_str(buf, 10, 10);
 		c = inkey();
@@ -2567,7 +2560,7 @@ static bool get_player_race(player_type *creature_ptr)
 		if (c == 'S') return FALSE;
 		if (c == ' ' || c == '\r' || c == '\n')
 		{
-			if(cs == MAX_RACES)
+			if (cs == MAX_RACES)
 			{
 				k = randint0(MAX_RACES);
 				cs = k;
@@ -2628,7 +2621,7 @@ static bool get_player_race(player_type *creature_ptr)
 			do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
 			screen_load();
 		}
-		else if (c !='2' && c !='4' && c !='6' && c !='8') bell();
+		else if (c != '2' && c != '4' && c != '6' && c != '8') bell();
 	}
 
 	/* Set race */
@@ -2663,7 +2656,7 @@ static bool get_player_class(player_type *creature_ptr)
 	put_str(_("注意：《職業》によってキャラクターの先天的な能力やボーナスが変化します。",
 		"Note: Your 'class' determines various intrinsic abilities and bonuses."), 23, 5);
 
-	put_str(_("()で囲まれた選択肢はこの種族には似合わない職業です。", 
+	put_str(_("()で囲まれた選択肢はこの種族には似合わない職業です。",
 		"Any entries in parentheses should only be used by advanced players."), 11, 5);
 
 
@@ -2685,7 +2678,7 @@ static bool get_player_class(player_type *creature_ptr)
 		else
 			sprintf(buf, "%c%c%s", sym[n], p2, str);
 
-		put_str(buf, 13+ (n/4), 2 + 19 * (n%4));
+		put_str(buf, 13 + (n / 4), 2 + 19 * (n % 4));
 	}
 
 	sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
@@ -2699,9 +2692,9 @@ static bool get_player_class(player_type *creature_ptr)
 		/* Move Cursol */
 		if (cs != os)
 		{
-			c_put_str(TERM_WHITE, cur, 13 + (os/4), 2 + 19 * (os%4));
+			c_put_str(TERM_WHITE, cur, 13 + (os / 4), 2 + 19 * (os % 4));
 			put_str("                                   ", 3, 40);
-			if(cs == MAX_CLASS_CHOICE)
+			if (cs == MAX_CLASS_CHOICE)
 			{
 				sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
 				put_str("                                   ", 4, 40);
@@ -2731,7 +2724,7 @@ static bool get_player_class(player_type *creature_ptr)
 
 		if (k >= 0) break;
 
-		sprintf(buf, _("職業を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a class (%c-%c) ('=' for options): "), sym[0], sym[MAX_CLASS_CHOICE-1]);
+		sprintf(buf, _("職業を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a class (%c-%c) ('=' for options): "), sym[0], sym[MAX_CLASS_CHOICE - 1]);
 
 		put_str(buf, 10, 10);
 		c = inkey();
@@ -2739,7 +2732,7 @@ static bool get_player_class(player_type *creature_ptr)
 		if (c == 'S') return FALSE;
 		if (c == ' ' || c == '\r' || c == '\n')
 		{
-			if(cs == MAX_CLASS_CHOICE)
+			if (cs == MAX_CLASS_CHOICE)
 			{
 				k = randint0(MAX_CLASS_CHOICE);
 				cs = k;
@@ -2800,7 +2793,7 @@ static bool get_player_class(player_type *creature_ptr)
 			do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
 			screen_load();
 		}
-		else if (c !='2' && c !='4' && c !='6' && c !='8') bell();
+		else if (c != '2' && c != '4' && c != '6' && c != '8') bell();
 	}
 
 	/* Set class */
@@ -2837,7 +2830,7 @@ static bool get_player_seikaku(player_type *creature_ptr)
 	/* Dump seikakus */
 	for (n = 0; n < MAX_SEIKAKU; n++)
 	{
-		if(seikaku_info[n].sex && (seikaku_info[n].sex != (creature_ptr->psex+1))) continue;
+		if (seikaku_info[n].sex && (seikaku_info[n].sex != (creature_ptr->psex + 1))) continue;
 
 		/* Analyze */
 		ap_ptr = &seikaku_info[n];
@@ -2849,7 +2842,7 @@ static bool get_player_seikaku(player_type *creature_ptr)
 
 		/* Display */
 		sprintf(buf, "%c%c%s", I2A(n), p2, str);
-		put_str(buf, 12 + (n/4), 2 + 18 * (n%4));
+		put_str(buf, 12 + (n / 4), 2 + 18 * (n % 4));
 	}
 
 	sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
@@ -2863,9 +2856,9 @@ static bool get_player_seikaku(player_type *creature_ptr)
 		/* Move Cursol */
 		if (cs != os)
 		{
-			c_put_str(TERM_WHITE, cur, 12 + (os/4), 2 + 18 * (os%4));
+			c_put_str(TERM_WHITE, cur, 12 + (os / 4), 2 + 18 * (os % 4));
 			put_str("                                   ", 3, 40);
-			if(cs == MAX_SEIKAKU)
+			if (cs == MAX_SEIKAKU)
 			{
 				sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
 				put_str("                                   ", 4, 40);
@@ -2877,20 +2870,20 @@ static bool get_player_seikaku(player_type *creature_ptr)
 				str = ap_ptr->title;
 				sprintf(cur, "%c%c%s", sym[cs], p2, str);
 				c_put_str(TERM_L_BLUE, ap_ptr->title, 3, 40);
-				put_str(_("の性格修正", ": Personality modification"), 3, 40+strlen(ap_ptr->title));
+				put_str(_("の性格修正", ": Personality modification"), 3, 40 + strlen(ap_ptr->title));
 				put_str(_("腕力 知能 賢さ 器用 耐久 魅力      ", "Str  Int  Wis  Dex  Con  Chr       "), 4, 40);
 				sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d       ",
 					ap_ptr->a_adj[0], ap_ptr->a_adj[1], ap_ptr->a_adj[2], ap_ptr->a_adj[3],
 					ap_ptr->a_adj[4], ap_ptr->a_adj[5]);
 				c_put_str(TERM_L_BLUE, buf, 5, 40);
 			}
-			c_put_str(TERM_YELLOW, cur, 12 + (cs/4), 2 + 18 * (cs%4));
+			c_put_str(TERM_YELLOW, cur, 12 + (cs / 4), 2 + 18 * (cs % 4));
 			os = cs;
 		}
 
 		if (k >= 0) break;
 
-		sprintf(buf, _("性格を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a personality (%c-%c) ('=' for options): "), sym[0], sym[MAX_SEIKAKU-1]);
+		sprintf(buf, _("性格を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a personality (%c-%c) ('=' for options): "), sym[0], sym[MAX_SEIKAKU - 1]);
 
 		put_str(buf, 10, 10);
 		c = inkey();
@@ -2898,13 +2891,12 @@ static bool get_player_seikaku(player_type *creature_ptr)
 		if (c == 'S') return FALSE;
 		if (c == ' ' || c == '\r' || c == '\n')
 		{
-			if(cs == MAX_SEIKAKU)
+			if (cs == MAX_SEIKAKU)
 			{
 				do
 				{
 					k = randint0(MAX_SEIKAKU);
-				}
-				while(seikaku_info[k].sex && (seikaku_info[k].sex != (creature_ptr->psex+1)));
+				} while (seikaku_info[k].sex && (seikaku_info[k].sex != (creature_ptr->psex + 1)));
 				cs = k;
 				continue;
 			}
@@ -2919,17 +2911,16 @@ static bool get_player_seikaku(player_type *creature_ptr)
 			do
 			{
 				k = randint0(n);
-			}
-			while(seikaku_info[k].sex && (seikaku_info[k].sex != (creature_ptr->psex+1)));
+			} while (seikaku_info[k].sex && (seikaku_info[k].sex != (creature_ptr->psex + 1)));
 			cs = k;
 			continue;
 		}
 		if (c == '8')
 		{
 			if (cs >= 4) cs -= 4;
-			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (creature_ptr->psex+1)))
+			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (creature_ptr->psex + 1)))
 			{
-				if((cs - 4) > 0)
+				if ((cs - 4) > 0)
 					cs -= 4;
 				else
 					cs += 4;
@@ -2938,9 +2929,9 @@ static bool get_player_seikaku(player_type *creature_ptr)
 		if (c == '4')
 		{
 			if (cs > 0) cs--;
-			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (creature_ptr->psex+1)))
+			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (creature_ptr->psex + 1)))
 			{
-				if((cs - 1) > 0)
+				if ((cs - 1) > 0)
 					cs--;
 				else
 					cs++;
@@ -2949,9 +2940,9 @@ static bool get_player_seikaku(player_type *creature_ptr)
 		if (c == '6')
 		{
 			if (cs < MAX_SEIKAKU) cs++;
-			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (creature_ptr->psex+1)))
+			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (creature_ptr->psex + 1)))
 			{
-				if((cs + 1) <= MAX_SEIKAKU)
+				if ((cs + 1) <= MAX_SEIKAKU)
 					cs++;
 				else
 					cs--;
@@ -2960,9 +2951,9 @@ static bool get_player_seikaku(player_type *creature_ptr)
 		if (c == '2')
 		{
 			if ((cs + 4) <= MAX_SEIKAKU) cs += 4;
-			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (creature_ptr->psex+1)))
+			if (cs != MAX_SEIKAKU && seikaku_info[cs].sex && (seikaku_info[cs].sex != (creature_ptr->psex + 1)))
 			{
-				if((cs + 4) <= MAX_SEIKAKU)
+				if ((cs + 4) <= MAX_SEIKAKU)
 					cs += 4;
 				else
 					cs -= 4;
@@ -2971,7 +2962,7 @@ static bool get_player_seikaku(player_type *creature_ptr)
 		k = (islower(c) ? A2I(c) : -1);
 		if ((k >= 0) && (k < MAX_SEIKAKU))
 		{
-			if((seikaku_info[k].sex == 0) || (seikaku_info[k].sex == (creature_ptr->psex+1)))
+			if ((seikaku_info[k].sex == 0) || (seikaku_info[k].sex == (creature_ptr->psex + 1)))
 			{
 				cs = k;
 				continue;
@@ -2980,7 +2971,7 @@ static bool get_player_seikaku(player_type *creature_ptr)
 		k = (isupper(c) ? (26 + c - 'A') : -1);
 		if ((k >= 26) && (k < MAX_SEIKAKU))
 		{
-			if((seikaku_info[k].sex == 0) || (seikaku_info[k].sex == (creature_ptr->psex+1)))
+			if ((seikaku_info[k].sex == 0) || (seikaku_info[k].sex == (creature_ptr->psex + 1)))
 			{
 				cs = k;
 				continue;
@@ -3001,7 +2992,7 @@ static bool get_player_seikaku(player_type *creature_ptr)
 			do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
 			screen_load();
 		}
-		else if (c !='2' && c !='4' && c !='6' && c !='8') bell();
+		else if (c != '2' && c != '4' && c != '6' && c != '8') bell();
 	}
 
 	/* Set seikaku */
@@ -3009,13 +3000,13 @@ static bool get_player_seikaku(player_type *creature_ptr)
 	ap_ptr = &seikaku_info[creature_ptr->pseikaku];
 #ifdef JP
 	strcpy(tmp, ap_ptr->title);
-	if(ap_ptr->no == 1)
-	strcat(tmp,"の");
+	if (ap_ptr->no == 1)
+		strcat(tmp, "の");
 #else
 	strcpy(tmp, ap_ptr->title);
-	strcat(tmp," ");
+	strcat(tmp, " ");
 #endif
-	strcat(tmp,creature_ptr->name);
+	strcat(tmp, creature_ptr->name);
 
 	c_put_str(TERM_L_BLUE, tmp, 1, 34);
 
@@ -3042,7 +3033,7 @@ static bool get_stat_limits(player_type *creature_ptr)
 	/* Extra infomation */
 	put_str(_("最低限得たい能力値を設定して下さい。", "Set minimum stats."), 10, 10);
 	put_str(_("2/8で項目選択、4/6で値の増減、Enterで次へ", "2/8 for Select, 4/6 for Change value, Enter for Goto next"), 11, 10);
-	
+
 	put_str(_("         基本値  種族 職業 性格     合計値  最大値", "           Base   Rac  Cla  Per      Total  Maximum"), 13, 10);
 
 	/* Output the maximum stats */
@@ -3063,7 +3054,7 @@ static bool get_stat_limits(player_type *creature_ptr)
 		{
 			sprintf(cur, "18/%02d", (m - 18));
 		}
-		
+
 		/* From 3 to 18 */
 		else
 		{
@@ -3078,7 +3069,7 @@ static bool get_stat_limits(player_type *creature_ptr)
 		{
 			sprintf(inp, "18/%02d", (m - 18));
 		}
-		
+
 		/* From 3 to 18 */
 		else
 		{
@@ -3089,11 +3080,11 @@ static bool get_stat_limits(player_type *creature_ptr)
 		sprintf(buf, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s  %6s",
 			stat_names[i], cval[i], rp_ptr->r_adj[i], cp_ptr->c_adj[i],
 			ap_ptr->a_adj[i], inp, cur);
-		
+
 		/* Dump the prompt */
 		put_str(buf, 14 + i, 10);
 	}
-	
+
 	/* Get a minimum stat */
 	cs = 0;
 	os = 6;
@@ -3102,15 +3093,15 @@ static bool get_stat_limits(player_type *creature_ptr)
 		/* Move Cursol */
 		if (cs != os)
 		{
-			if(os == 6)
+			if (os == 6)
 			{
 				c_put_str(TERM_WHITE, _("決定する", "Accept"), 21, 35);
 			}
-			else if(os < A_MAX)
+			else if (os < A_MAX)
 			{
 				c_put_str(TERM_WHITE, cur, 14 + os, 10);
 			}
-			if(cs == 6)
+			if (cs == 6)
 			{
 				c_put_str(TERM_YELLOW, _("決定する", "Accept"), 21, 35);
 			}
@@ -3121,19 +3112,19 @@ static bool get_stat_limits(player_type *creature_ptr)
 
 				/* Obtain the current stat */
 				m = adjust_stat(cval[cs], j);
-				
+
 				/* Above 18 */
 				if (m > 18)
 				{
 					sprintf(inp, "18/%02d", (m - 18));
 				}
-				
+
 				/* From 3 to 18 */
 				else
 				{
 					sprintf(inp, "%2d", m);
 				}
-				
+
 				/* Prepare a prompt */
 				sprintf(cur, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s",
 					stat_names[cs], cval[cs], rp_ptr->r_adj[cs],
@@ -3142,10 +3133,10 @@ static bool get_stat_limits(player_type *creature_ptr)
 			}
 			os = cs;
 		}
-		
+
 		/* Prompt for the minimum stats */
 		c = inkey();
-		switch ( c ){
+		switch (c) {
 		case 'Q':
 			birth_quit();
 		case 'S':
@@ -3155,7 +3146,7 @@ static bool get_stat_limits(player_type *creature_ptr)
 		case ' ':
 		case '\r':
 		case '\n':
-			if(cs == 6) break;
+			if (cs == 6) break;
 			cs++;
 			c = '2';
 			break;
@@ -3202,14 +3193,14 @@ static bool get_stat_limits(player_type *creature_ptr)
 			}
 			break;
 		case 'm':
-			if(cs != 6)
+			if (cs != 6)
 			{
 				cval[cs] = 17;
 				os = 7;
 			}
 			break;
 		case 'n':
-			if(cs != 6)
+			if (cs != 6)
 			{
 				cval[cs] = 3;
 				os = 7;
@@ -3236,9 +3227,9 @@ static bool get_stat_limits(player_type *creature_ptr)
 			bell();
 			break;
 		}
-		if(c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == 6))break;
+		if (c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == 6))break;
 	}
-	
+
 	for (i = 0; i < A_MAX; i++)
 	{
 		/* Save the minimum stat */
@@ -3271,24 +3262,24 @@ static bool get_chara_limits(player_type *creature_ptr)
 	};
 
 	clear_from(10);
-	
+
 	/* Prompt for the minimum stats */
 	put_str(_("2/4/6/8で項目選択、+/-で値の増減、Enterで次へ", "2/4/6/8 for Select, +/- for Change value, Enter for Goto next"), 11, 10);
 	put_str(_("注意：身長と体重の最大値/最小値ぎりぎりの値は非常に出現確率が低くなります。", "Caution: Values near minimum or maximum is extremery rare."), 23, 2);
-	
+
 	if (creature_ptr->psex == SEX_MALE)
 	{
-		max_percent = (int)(rp_ptr->m_b_ht+rp_ptr->m_m_ht*4-1) * 100 / (int)(rp_ptr->m_b_ht);
-		min_percent = (int)(rp_ptr->m_b_ht-rp_ptr->m_m_ht*4+1) * 100 / (int)(rp_ptr->m_b_ht);
+		max_percent = (int)(rp_ptr->m_b_ht + rp_ptr->m_m_ht * 4 - 1) * 100 / (int)(rp_ptr->m_b_ht);
+		min_percent = (int)(rp_ptr->m_b_ht - rp_ptr->m_m_ht * 4 + 1) * 100 / (int)(rp_ptr->m_b_ht);
 	}
 	else
 	{
-		max_percent = (int)(rp_ptr->f_b_ht+rp_ptr->f_m_ht*4-1) * 100 / (int)(rp_ptr->f_b_ht);
-		min_percent = (int)(rp_ptr->f_b_ht-rp_ptr->f_m_ht*4+1) * 100 / (int)(rp_ptr->f_b_ht);
+		max_percent = (int)(rp_ptr->f_b_ht + rp_ptr->f_m_ht * 4 - 1) * 100 / (int)(rp_ptr->f_b_ht);
+		min_percent = (int)(rp_ptr->f_b_ht - rp_ptr->f_m_ht * 4 + 1) * 100 / (int)(rp_ptr->f_b_ht);
 	}
-	
+
 	put_str(_("体格/地位の最小値/最大値を設定して下さい。", "Set minimum/maximum attribute."), 10, 10);
-	put_str(_("  項    目                 最小値  最大値", " Parameter                    Min     Max"), 13,20);
+	put_str(_("  項    目                 最小値  最大値", " Parameter                    Min     Max"), 13, 20);
 
 	/* Output the maximum stats */
 	for (i = 0; i < MAXITEMS; i++)
@@ -3304,20 +3295,20 @@ static bool get_chara_limits(player_type *creature_ptr)
 			break;
 
 		case 2:	/* Minimum height */
-			if (creature_ptr->psex == SEX_MALE) m = rp_ptr->m_b_ht-rp_ptr->m_m_ht*4+1;
-			else m = rp_ptr->f_b_ht-rp_ptr->f_m_ht*4+1;
+			if (creature_ptr->psex == SEX_MALE) m = rp_ptr->m_b_ht - rp_ptr->m_m_ht * 4 + 1;
+			else m = rp_ptr->f_b_ht - rp_ptr->f_m_ht * 4 + 1;
 			break;
 		case 3:	/* Maximum height */
-			if (creature_ptr->psex == SEX_MALE) m = rp_ptr->m_b_ht+rp_ptr->m_m_ht*4-1;
-			else m = rp_ptr->f_b_ht+rp_ptr->f_m_ht*4-1;
+			if (creature_ptr->psex == SEX_MALE) m = rp_ptr->m_b_ht + rp_ptr->m_m_ht * 4 - 1;
+			else m = rp_ptr->f_b_ht + rp_ptr->f_m_ht * 4 - 1;
 			break;
 		case 4:	/* Minimum weight */
-			if (creature_ptr->psex == SEX_MALE) m = (rp_ptr->m_b_wt * min_percent / 100) - (rp_ptr->m_m_wt * min_percent / 75) +1;
-			else m = (rp_ptr->f_b_wt * min_percent / 100) - (rp_ptr->f_m_wt * min_percent / 75) +1;
+			if (creature_ptr->psex == SEX_MALE) m = (rp_ptr->m_b_wt * min_percent / 100) - (rp_ptr->m_m_wt * min_percent / 75) + 1;
+			else m = (rp_ptr->f_b_wt * min_percent / 100) - (rp_ptr->f_m_wt * min_percent / 75) + 1;
 			break;
 		case 5:	/* Maximum weight */
-			if (creature_ptr->psex == SEX_MALE) m = (rp_ptr->m_b_wt * max_percent / 100) + (rp_ptr->m_m_wt * max_percent / 75) -1;
-			else m = (rp_ptr->f_b_wt * max_percent / 100) + (rp_ptr->f_m_wt * max_percent / 75) -1;
+			if (creature_ptr->psex == SEX_MALE) m = (rp_ptr->m_b_wt * max_percent / 100) + (rp_ptr->m_m_wt * max_percent / 75) - 1;
+			else m = (rp_ptr->f_b_wt * max_percent / 100) + (rp_ptr->f_m_wt * max_percent / 75) - 1;
 			break;
 		case 6:	/* Minimum social class */
 			m = 1;
@@ -3329,7 +3320,7 @@ static bool get_chara_limits(player_type *creature_ptr)
 			m = 1;
 			break;
 		}
-		
+
 		/* Save the maximum or minimum */
 		mval[i] = m;
 		cval[i] = m;
@@ -3338,18 +3329,18 @@ static bool get_chara_limits(player_type *creature_ptr)
 	for (i = 0; i < 4; i++)
 	{
 		/* Prepare a prompt */
-		sprintf(buf, "%-12s (%3d - %3d)", itemname[i], mval[i*2], mval[i*2+1]);
+		sprintf(buf, "%-12s (%3d - %3d)", itemname[i], mval[i * 2], mval[i * 2 + 1]);
 
 		/* Dump the prompt */
 		put_str(buf, 14 + i, 20);
 
 		for (j = 0; j < 2; j++)
 		{
-			sprintf(buf, "     %3d", cval[i*2+j]);
+			sprintf(buf, "     %3d", cval[i * 2 + j]);
 			put_str(buf, 14 + i, 45 + 8 * j);
 		}
 	}
-	
+
 	/* Get a minimum stat */
 	cs = 0;
 	os = MAXITEMS;
@@ -3360,16 +3351,16 @@ static bool get_chara_limits(player_type *creature_ptr)
 		{
 			const char accept[] = _("決定する", "Accept");
 
-			if(os == MAXITEMS)
+			if (os == MAXITEMS)
 			{
 				c_put_str(TERM_WHITE, accept, 19, 35);
 			}
 			else
 			{
-				c_put_str(TERM_WHITE, cur, 14 + os/2, 45 + 8 * (os%2));
+				c_put_str(TERM_WHITE, cur, 14 + os / 2, 45 + 8 * (os % 2));
 			}
-			
-			if(cs == MAXITEMS)
+
+			if (cs == MAXITEMS)
 			{
 				c_put_str(TERM_YELLOW, accept, 19, 35);
 			}
@@ -3377,14 +3368,14 @@ static bool get_chara_limits(player_type *creature_ptr)
 			{
 				/* Prepare a prompt */
 				sprintf(cur, "     %3d", cval[cs]);
-				c_put_str(TERM_YELLOW, cur, 14 + cs/2, 45 + 8 * (cs%2));
+				c_put_str(TERM_YELLOW, cur, 14 + cs / 2, 45 + 8 * (cs % 2));
 			}
 			os = cs;
 		}
-		
+
 		/* Prompt for the minimum stats */
 		c = inkey();
-		switch (c){
+		switch (c) {
 		case 'Q':
 			birth_quit();
 		case 'S':
@@ -3394,13 +3385,13 @@ static bool get_chara_limits(player_type *creature_ptr)
 		case ' ':
 		case '\r':
 		case '\n':
-			if(cs == MAXITEMS) break;
+			if (cs == MAXITEMS) break;
 			cs++;
 			c = '6';
 			break;
 		case '8':
 		case 'k':
-			if (cs-2 >= 0) cs -= 2;
+			if (cs - 2 >= 0) cs -= 2;
 			break;
 		case '2':
 		case 'j':
@@ -3419,9 +3410,9 @@ static bool get_chara_limits(player_type *creature_ptr)
 		case '<':
 			if (cs != MAXITEMS)
 			{
-				if(cs%2)
+				if (cs % 2)
 				{
-					if(cval[cs] > cval[cs-1])
+					if (cval[cs] > cval[cs - 1])
 					{
 						cval[cs]--;
 						os = 127;
@@ -3429,7 +3420,7 @@ static bool get_chara_limits(player_type *creature_ptr)
 				}
 				else
 				{
-					if(cval[cs] > mval[cs])
+					if (cval[cs] > mval[cs])
 					{
 						cval[cs]--;
 						os = 127;
@@ -3441,9 +3432,9 @@ static bool get_chara_limits(player_type *creature_ptr)
 		case '>':
 			if (cs != MAXITEMS)
 			{
-				if(cs%2)
+				if (cs % 2)
 				{
-					if(cval[cs] < mval[cs])
+					if (cval[cs] < mval[cs])
 					{
 						cval[cs]++;
 						os = 127;
@@ -3451,7 +3442,7 @@ static bool get_chara_limits(player_type *creature_ptr)
 				}
 				else
 				{
-					if(cval[cs] < cval[cs+1])
+					if (cval[cs] < cval[cs + 1])
 					{
 						cval[cs]++;
 						os = 127;
@@ -3460,11 +3451,11 @@ static bool get_chara_limits(player_type *creature_ptr)
 			}
 			break;
 		case 'm':
-			if(cs != MAXITEMS)
+			if (cs != MAXITEMS)
 			{
-				if(cs%2)
+				if (cs % 2)
 				{
-					if(cval[cs] < mval[cs])
+					if (cval[cs] < mval[cs])
 					{
 						cval[cs] = mval[cs];
 						os = 127;
@@ -3472,28 +3463,28 @@ static bool get_chara_limits(player_type *creature_ptr)
 				}
 				else
 				{
-					if(cval[cs] < cval[cs+1])
+					if (cval[cs] < cval[cs + 1])
 					{
-						cval[cs] = cval[cs+1];
+						cval[cs] = cval[cs + 1];
 						os = 127;
 					}
 				}
 			}
 			break;
 		case 'n':
-			if(cs != MAXITEMS)
+			if (cs != MAXITEMS)
 			{
-				if(cs%2)
+				if (cs % 2)
 				{
-					if(cval[cs] > cval[cs-1])
+					if (cval[cs] > cval[cs - 1])
 					{
-						cval[cs] = cval[cs-1];
+						cval[cs] = cval[cs - 1];
 						os = 255;
 					}
 				}
 				else
 				{
-					if(cval[cs] > mval[cs])
+					if (cval[cs] > mval[cs])
 					{
 						cval[cs] = mval[cs];
 						os = 255;
@@ -3517,7 +3508,7 @@ static bool get_chara_limits(player_type *creature_ptr)
 			bell();
 			break;
 		}
-		if(c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == MAXITEMS))break;
+		if (c == ESCAPE || ((c == ' ' || c == '\r' || c == '\n') && cs == MAXITEMS))break;
 	}
 
 	/* Input the minimum stats */
@@ -3690,10 +3681,10 @@ static void edit_history(player_type *creature_ptr)
 		}
 #ifdef JP
 		if (iskanji2(creature_ptr->history[y], x))
-			c_put_str(TERM_L_BLUE, format("%c%c", creature_ptr->history[y][x],creature_ptr->history[y][x+1]), y + 12, x + 10);
+			c_put_str(TERM_L_BLUE, format("%c%c", creature_ptr->history[y][x], creature_ptr->history[y][x + 1]), y + 12, x + 10);
 		else
 #endif
-		c_put_str(TERM_L_BLUE, format("%c", creature_ptr->history[y][x]), y + 12, x + 10);
+			c_put_str(TERM_L_BLUE, format("%c", creature_ptr->history[y][x]), y + 12, x + 10);
 
 		/* Place cursor just after cost of current stat */
 		Term_gotoxy(x + 10, y + 12);
@@ -3710,7 +3701,7 @@ static void edit_history(player_type *creature_ptr)
 			y--;
 			if (y < 0) y = 3;
 #ifdef JP
-			if ((x > 0) && (iskanji2(creature_ptr->history[y], x-1))) x--;
+			if ((x > 0) && (iskanji2(creature_ptr->history[y], x - 1))) x--;
 #endif
 		}
 		else if (skey == SKEY_DOWN || c == KTRL('n'))
@@ -3718,7 +3709,7 @@ static void edit_history(player_type *creature_ptr)
 			y++;
 			if (y > 3) y = 0;
 #ifdef JP
-			if ((x > 0) && (iskanji2(creature_ptr->history[y], x-1))) x--;
+			if ((x > 0) && (iskanji2(creature_ptr->history[y], x - 1))) x--;
 #endif
 		}
 		else if (skey == SKEY_RIGHT || c == KTRL('f'))
@@ -3747,7 +3738,7 @@ static void edit_history(player_type *creature_ptr)
 			}
 
 #ifdef JP
-			if ((x > 0) && (iskanji2(creature_ptr->history[y], x-1))) x--;
+			if ((x > 0) && (iskanji2(creature_ptr->history[y], x - 1))) x--;
 #endif
 		}
 		else if (c == '\r' || c == '\n')
@@ -3817,7 +3808,7 @@ static void edit_history(player_type *creature_ptr)
 #ifdef JP
 			if (iskanji2(creature_ptr->history[y], x))
 			{
-				creature_ptr->history[y][x+1] = ' ';
+				creature_ptr->history[y][x + 1] = ' ';
 			}
 
 			if (iskanji(c))
@@ -3829,9 +3820,9 @@ static void edit_history(player_type *creature_ptr)
 					if (y > 3) y = 0;
 				}
 
-				if (iskanji2(creature_ptr->history[y], x+1))
+				if (iskanji2(creature_ptr->history[y], x + 1))
 				{
-					creature_ptr->history[y][x+2] = ' ';
+					creature_ptr->history[y][x + 2] = ' ';
 				}
 
 				creature_ptr->history[y][x++] = c;
@@ -3873,10 +3864,6 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 	char c;
 
-#if 0
-	char p1 = '(';
-#endif
-
 	char p2 = ')';
 	char b1 = '[';
 	char b2 = ']';
@@ -3888,7 +3875,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 	Term_clear();
 
 	/* Title everything */
-	put_str(_("名前  :", "Name  :"), 1,26);
+	put_str(_("名前  :", "Name  :"), 1, 26);
 	put_str(_("性別        :", "Sex         :"), 3, 1);
 	put_str(_("種族        :", "Race        :"), 4, 1);
 	put_str(_("職業        :", "Class       :"), 5, 1);
@@ -3918,7 +3905,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 #else
 		sprintf(buf, "%c%c %s", I2A(n), p2, sp_ptr->title);
 #endif
-		put_str(buf, 12 + (n/5), 2 + 15 * (n%5));
+		put_str(buf, 12 + (n / 5), 2 + 15 * (n % 5));
 	}
 
 #ifdef JP
@@ -3935,8 +3922,8 @@ static bool player_birth_aux(player_type *creature_ptr)
 	{
 		if (cs != os)
 		{
-			put_str(cur, 12 + (os/5), 2 + 15 * (os%5));
-			if(cs == MAX_SEXES)
+			put_str(cur, 12 + (os / 5), 2 + 15 * (os % 5));
+			if (cs == MAX_SEXES)
 #ifdef JP
 				sprintf(cur, "%c%c%s", '*', p2, "ランダム");
 #else
@@ -3952,16 +3939,16 @@ static bool player_birth_aux(player_type *creature_ptr)
 				sprintf(cur, "%c%c %s", I2A(cs), p2, str);
 #endif
 			}
-			c_put_str(TERM_YELLOW, cur, 12 + (cs/5), 2 + 15 * (cs%5));
+			c_put_str(TERM_YELLOW, cur, 12 + (cs / 5), 2 + 15 * (cs % 5));
 			os = cs;
 		}
 
 		if (k >= 0) break;
 
 #ifdef JP
-		sprintf(buf, "性別を選んで下さい (%c-%c) ('='初期オプション設定): ", I2A(0), I2A(n-1));
+		sprintf(buf, "性別を選んで下さい (%c-%c) ('='初期オプション設定): ", I2A(0), I2A(n - 1));
 #else
-		sprintf(buf, "Choose a sex (%c-%c) ('=' for options): ", I2A(0), I2A(n-1));
+		sprintf(buf, "Choose a sex (%c-%c) ('=' for options): ", I2A(0), I2A(n - 1));
 #endif
 
 		put_str(buf, 10, 10);
@@ -3970,7 +3957,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 		if (c == 'S') return FALSE;
 		if (c == ' ' || c == '\r' || c == '\n')
 		{
-			if(cs == MAX_SEXES)
+			if (cs == MAX_SEXES)
 				k = randint0(MAX_SEXES);
 			else
 				k = cs;
@@ -4008,7 +3995,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 			screen_load();
 		}
-		else if(c != '4' && c != '6')bell();
+		else if (c != '4' && c != '6')bell();
 	}
 
 	/* Set sex */
@@ -4023,9 +4010,9 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 	/* Choose the players race */
 	creature_ptr->prace = 0;
-	while(1)
+	while (TRUE)
 	{
-		char temp[80*10];
+		char temp[80 * 10];
 		concptr t;
 
 		if (!get_player_race(creature_ptr)) return FALSE;
@@ -4035,13 +4022,13 @@ static bool player_birth_aux(player_type *creature_ptr)
 		roff_to_buf(race_jouhou[creature_ptr->prace], 74, temp, sizeof(temp));
 		t = temp;
 
-		for (i = 0; i< 10; i++)
+		for (i = 0; i < 10; i++)
 		{
-			if(t[0] == 0)
-				break; 
+			if (t[0] == 0)
+				break;
 			else
 			{
-				prt(t, 12+i, 3);
+				prt(t, 12 + i, 3);
 				t += strlen(t) + 1;
 			}
 		}
@@ -4059,9 +4046,9 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 	/* Choose the players class */
 	creature_ptr->pclass = 0;
-	while(1)
+	while (TRUE)
 	{
-		char temp[80*9];
+		char temp[80 * 9];
 		concptr t;
 
 		if (!get_player_class(creature_ptr)) return FALSE;
@@ -4070,13 +4057,13 @@ static bool player_birth_aux(player_type *creature_ptr)
 		roff_to_buf(class_jouhou[creature_ptr->pclass], 74, temp, sizeof(temp));
 		t = temp;
 
-		for (i = 0; i< 9; i++)
+		for (i = 0; i < 9; i++)
 		{
-			if(t[0] == 0)
-				break; 
+			if (t[0] == 0)
+				break;
 			else
 			{
-				prt(t, 12+i, 3);
+				prt(t, 12 + i, 3);
 				t += strlen(t) + 1;
 			}
 		}
@@ -4094,9 +4081,9 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 	/* Choose the players seikaku */
 	creature_ptr->pseikaku = 0;
-	while(1)
+	while (TRUE)
 	{
-		char temp[80*8];
+		char temp[80 * 8];
 		concptr t;
 
 		if (!get_player_seikaku(creature_ptr)) return FALSE;
@@ -4105,13 +4092,13 @@ static bool player_birth_aux(player_type *creature_ptr)
 		roff_to_buf(seikaku_jouhou[creature_ptr->pseikaku], 74, temp, sizeof(temp));
 		t = temp;
 
-		for (i = 0; i< A_MAX; i++)
+		for (i = 0; i < A_MAX; i++)
 		{
-			if(t[0] == 0)
-				break; 
+			if (t[0] == 0)
+				break;
 			else
 			{
-				prt(t, 12+i, 3);
+				prt(t, 12 + i, 3);
 				t += strlen(t) + 1;
 			}
 		}
@@ -4121,7 +4108,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 		if (get_check_strict("Are you sure? ", CHECK_DEFAULT_Y)) break;
 #endif
 		c_put_str(TERM_L_BLUE, creature_ptr->name, 1, 34);
-		prt("", 1, 34+strlen(creature_ptr->name));
+		prt("", 1, 34 + strlen(creature_ptr->name));
 	}
 
 	/* Clean up */
@@ -4180,17 +4167,17 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 			/* Label count */
 #ifdef JP
-			put_str("回数 :", 10, col+13);
+			put_str("回数 :", 10, col + 13);
 #else
-			put_str("Round:", 10, col+13);
+			put_str("Round:", 10, col + 13);
 #endif
 
 
 			/* Indicate the state */
 #ifdef JP
-			put_str("(ESCで停止)", 12, col+13);
+			put_str("(ESCで停止)", 12, col + 13);
 #else
-			put_str("(Hit ESC to stop)", 12, col+13);
+			put_str("(Hit ESC to stop)", 12, col + 13);
 #endif
 		}
 
@@ -4207,25 +4194,25 @@ static bool player_birth_aux(player_type *creature_ptr)
 		{
 			/* Label */
 #ifdef JP
-			put_str("最小値", 2, col+5);
+			put_str("最小値", 2, col + 5);
 #else
-			put_str(" Limit", 2, col+5);
+			put_str(" Limit", 2, col + 5);
 #endif
 
 
 			/* Label */
 #ifdef JP
-			put_str("成功率", 2, col+13);
+			put_str("成功率", 2, col + 13);
 #else
-			put_str("  Freq", 2, col+13);
+			put_str("  Freq", 2, col + 13);
 #endif
 
 
 			/* Label */
 #ifdef JP
-			put_str("現在値", 2, col+24);
+			put_str("現在値", 2, col + 24);
 #else
-			put_str("  Roll", 2, col+24);
+			put_str("  Roll", 2, col + 24);
 #endif
 
 
@@ -4235,7 +4222,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 				int j, m;
 
 				/* Label stats */
-				put_str(stat_names[i], 3+i, col);
+				put_str(stat_names[i], 3 + i, col);
 
 				/* Race/Class bonus */
 				j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
@@ -4245,7 +4232,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 				/* Put the stat */
 				cnv_stat(m, buf);
-				c_put_str(TERM_L_BLUE, buf, 3+i, col+5);
+				c_put_str(TERM_L_BLUE, buf, 3 + i, col + 5);
 			}
 		}
 
@@ -4319,7 +4306,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 				birth_put_stats(creature_ptr);
 
 				/* Dump round */
-				put_str(format("%10ld", auto_round), 10, col+20);
+				put_str(format("%10ld", auto_round), 10, col + 20);
 
 #ifdef AUTOROLLER_DELAY
 				/* Delay 1/10 second */
@@ -4572,7 +4559,7 @@ void player_birth(player_type *creature_ptr)
 
 	current_world_ptr->play_time = 0;
 
-	/* 
+	/*
 	 * Wipe monsters in old dungeon
 	 * This wipe destroys value of m_list[].cur_num .
 	 */
@@ -4609,22 +4596,22 @@ void player_birth(player_type *creature_ptr)
 	exe_write_diary(creature_ptr, NIKKI_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "-------- Start New Game --------"));
 	exe_write_diary(creature_ptr, NIKKI_HIGAWARI, 0, NULL);
 
-	sprintf(buf,_("                            性別に%sを選択した。", "                            choose %s personality."), sex_info[creature_ptr->psex].title);
+	sprintf(buf, _("                            性別に%sを選択した。", "                            choose %s personality."), sex_info[creature_ptr->psex].title);
 	exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 1, buf);
 
-	sprintf(buf,_("                            種族に%sを選択した。", "                            choose %s race."), race_info[creature_ptr->prace].title);
+	sprintf(buf, _("                            種族に%sを選択した。", "                            choose %s race."), race_info[creature_ptr->prace].title);
 	exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 1, buf);
 
-	sprintf(buf,_("                            職業に%sを選択した。", "                            choose %s class."), class_info[creature_ptr->pclass].title);
+	sprintf(buf, _("                            職業に%sを選択した。", "                            choose %s class."), class_info[creature_ptr->pclass].title);
 	exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 1, buf);
 
 	if (creature_ptr->realm1)
 	{
-		sprintf(buf,_("                            魔法の領域に%s%sを選択した。", "                            choose %s%s realm."),realm_names[creature_ptr->realm1], creature_ptr->realm2 ? format("と%s",realm_names[creature_ptr->realm2]) : "");
+		sprintf(buf, _("                            魔法の領域に%s%sを選択した。", "                            choose %s%s realm."), realm_names[creature_ptr->realm1], creature_ptr->realm2 ? format("と%s", realm_names[creature_ptr->realm2]) : "");
 		exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 1, buf);
 	}
 
-	sprintf(buf,_("                            性格に%sを選択した。", "                            choose %s."), seikaku_info[creature_ptr->pseikaku].title);
+	sprintf(buf, _("                            性格に%sを選択した。", "                            choose %s."), seikaku_info[creature_ptr->pseikaku].title);
 	exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 1, buf);
 
 	/* Init the shops */
@@ -4659,7 +4646,7 @@ void player_birth(player_type *creature_ptr)
  */
 void dump_yourself(player_type *creature_ptr, FILE *fff)
 {
-	char temp[80*10];
+	char temp[80 * 10];
 	int i;
 	concptr t;
 
@@ -4672,9 +4659,9 @@ void dump_yourself(player_type *creature_ptr, FILE *fff)
 	t = temp;
 	for (i = 0; i < 10; i++)
 	{
-		if(t[0] == 0)
-			break; 
-		fprintf(fff, "%s\n",t);
+		if (t[0] == 0)
+			break;
+		fprintf(fff, "%s\n", t);
 		t += strlen(t) + 1;
 	}
 	roff_to_buf(class_jouhou[creature_ptr->pclass], 78, temp, sizeof(temp));
@@ -4684,9 +4671,9 @@ void dump_yourself(player_type *creature_ptr, FILE *fff)
 	t = temp;
 	for (i = 0; i < 10; i++)
 	{
-		if(t[0] == 0)
-			break; 
-		fprintf(fff, "%s\n",t);
+		if (t[0] == 0)
+			break;
+		fprintf(fff, "%s\n", t);
 		t += strlen(t) + 1;
 	}
 	roff_to_buf(seikaku_jouhou[creature_ptr->pseikaku], 78, temp, sizeof(temp));
@@ -4696,38 +4683,38 @@ void dump_yourself(player_type *creature_ptr, FILE *fff)
 	t = temp;
 	for (i = 0; i < A_MAX; i++)
 	{
-		if(t[0] == 0)
-			break; 
-		fprintf(fff, "%s\n",t);
+		if (t[0] == 0)
+			break;
+		fprintf(fff, "%s\n", t);
 		t += strlen(t) + 1;
 	}
 	fprintf(fff, "\n");
 	if (creature_ptr->realm1)
 	{
-		roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm1)-1], 78, temp, sizeof(temp));
+		roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm1) - 1], 78, temp, sizeof(temp));
 		fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm1]);
 
 		t = temp;
 		for (i = 0; i < A_MAX; i++)
 		{
-			if(t[0] == 0)
-				break; 
-			fprintf(fff, "%s\n",t);
+			if (t[0] == 0)
+				break;
+			fprintf(fff, "%s\n", t);
 			t += strlen(t) + 1;
 		}
 	}
 	fprintf(fff, "\n");
 	if (creature_ptr->realm2)
 	{
-		roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm2)-1], 78, temp, sizeof(temp));
+		roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm2) - 1], 78, temp, sizeof(temp));
 		fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm2]);
 
 		t = temp;
 		for (i = 0; i < A_MAX; i++)
 		{
-			if(t[0] == 0)
-				break; 
-			fprintf(fff, "%s\n",t);
+			if (t[0] == 0)
+				break;
+			fprintf(fff, "%s\n", t);
 			t += strlen(t) + 1;
 		}
 	}

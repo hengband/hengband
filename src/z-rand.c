@@ -193,7 +193,7 @@ static s32b Rand_div_impl(s32b m, u32b* state)
 	u32b ret;
 
 	/* Hack -- simple case */
-	if (m <= 1) return (0);
+	if (m <= 1) return 0;
 
 	scaling = Rand_Xorshift_max / m;
 	past = scaling * m;

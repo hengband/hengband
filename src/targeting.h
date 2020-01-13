@@ -6,7 +6,7 @@ extern POSITION target_row;
 
 /* xtra2.c */
 extern void panel_bounds_center(void);
-extern void verify_panel(void);
+extern void verify_panel(player_type *creature_ptr);
 extern bool target_able(player_type *creature_ptr, MONSTER_IDX m_idx);
 extern bool target_okay(player_type *creature_ptr);
 
@@ -22,5 +22,5 @@ extern void target_set_prepare_look(player_type *creature_ptr);
 extern bool get_aim_dir(player_type *creature_ptr, DIRECTION *dp);
 extern bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp);
 extern bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, bool with_steed);
-extern bool get_rep_dir(DIRECTION *dp, bool under);
+extern bool get_rep_dir(player_type *creature_ptr, DIRECTION *dp, bool under);
 extern bool tgt_pt(player_type *creature_ptr, POSITION *x, POSITION *y);

@@ -354,7 +354,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 void carry(player_type *creature_ptr, bool pickup)
 {
 	/* Recenter the map around the player */
-	verify_panel();
+	verify_panel(creature_ptr);
 
 	creature_ptr->update |= (PU_MONSTERS);
 	creature_ptr->redraw |= (PR_MAP);
@@ -623,7 +623,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 		lite_spot(ny, nx);
 
 		/* Check for new panel (redraw map) */
-		verify_panel();
+		verify_panel(creature_ptr);
 
 		if (mpe_mode & MPE_FORGET_FLOW)
 		{
@@ -992,7 +992,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		    pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x) && (p_can_enter || p_can_kill_walls))
 		{
 			/* Disturb the monster */
-			(void)set_monster_csleep(g_ptr->m_idx, 0);
+			(void)set_monster_csleep(creature_ptr, g_ptr->m_idx, 0);
 
 			monster_desc(m_name, m_ptr, 0);
 
@@ -1849,7 +1849,7 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
 	if (creature_ptr->blind || no_lite(creature_ptr))
 	{
 		msg_print(_("目が見えない！", "You cannot see!"));
-		return (0);
+		return 0;
 	}
 
 	/* break run when leaving trap detected region */
@@ -1871,7 +1871,7 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
 			if (disturb_trap_detect)
 			{
 				/* Break Run */
-				return (0);
+				return 0;
 			}
 		}
 	}
@@ -1898,7 +1898,7 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
 			monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Visible monster */
-			if (m_ptr->ml) return (0);
+			if (m_ptr->ml) return 0;
 		}
 
 	}
@@ -1919,16 +1919,16 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
 		}
 	}
 
-	if (!new_dir) return (0);
+	if (!new_dir) return 0;
 
 	/* Access newly move grid */
 	g_ptr = &floor_ptr->grid_array[creature_ptr->y+ddy[new_dir]][creature_ptr->x+ddx[new_dir]];
 
 	/* Close door abort traveling */
-	if (!easy_open && is_closed_door(g_ptr->feat)) return (0);
+	if (!easy_open && is_closed_door(g_ptr->feat)) return 0;
 
 	/* Visible and unignorable trap abort tarveling */
-	if (!g_ptr->mimic && !trap_can_be_ignored(creature_ptr, g_ptr->feat)) return (0);
+	if (!g_ptr->mimic && !trap_can_be_ignored(creature_ptr, g_ptr->feat)) return 0;
 
 	/* Move new grid */
 	return new_dir;
@@ -2247,7 +2247,7 @@ void disturb(player_type *creature_ptr, bool stop_search, bool stop_travel)
 		creature_ptr->running = 0;
 
 		/* Check for new panel if appropriate */
-		if (center_player && !center_running) verify_panel();
+		if (center_player && !center_running) verify_panel(creature_ptr);
 
 		/* Calculate torch radius */
 		creature_ptr->update |= (PU_TORCH);
@@ -2263,7 +2263,7 @@ void disturb(player_type *creature_ptr, bool stop_search, bool stop_travel)
 		travel.run = 0;
 
 		/* Check for new panel if appropriate */
-		if (center_player && !center_running) verify_panel();
+		if (center_player && !center_running) verify_panel(creature_ptr);
 
 		/* Calculate torch radius */
 		creature_ptr->update |= (PU_TORCH);

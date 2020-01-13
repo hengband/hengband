@@ -195,7 +195,7 @@ const magic_type technic_info[NUM_TECHNIC][32] =
 
 /*!
  * @brief 配置した鏡リストの次を取得する /
- * Get another mirror. for SEEKER 
+ * Get another mirror. for SEEKER
  * @param next_y 次の鏡のy座標を返す参照ポインタ
  * @param next_x 次の鏡のx座標を返す参照ポインタ
  * @param cury 現在の鏡のy座標
@@ -283,7 +283,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	/* Reduce damage by distance */
 	dam = (dam + r) / (r + 1);
 
-if (have_flag(f_ptr->flags, FF_TREE))
+	if (have_flag(f_ptr->flags, FF_TREE))
 	{
 		concptr message;
 		switch (typ)
@@ -332,399 +332,399 @@ if (have_flag(f_ptr->flags, FF_TREE))
 	switch (typ)
 	{
 		/* Ignore most effects */
-		case GF_CAPTURE:
-		case GF_HAND_DOOM:
-		case GF_CAUSE_1:
-		case GF_CAUSE_2:
-		case GF_CAUSE_3:
-		case GF_CAUSE_4:
-		case GF_MIND_BLAST:
-		case GF_BRAIN_SMASH:
-		case GF_DRAIN_MANA:
-		case GF_PSY_SPEAR:
-		case GF_FORCE:
-		case GF_HOLY_FIRE:
-		case GF_HELL_FIRE:
-		case GF_PSI:
-		case GF_PSI_DRAIN:
-		case GF_TELEKINESIS:
-		case GF_DOMINATION:
-		case GF_IDENTIFY:
-		case GF_ATTACK:
-		case GF_ACID:
-		case GF_ELEC:
-		case GF_COLD:
-		case GF_ICE:
-		case GF_FIRE:
-		case GF_PLASMA:
-		case GF_METEOR:
-		case GF_CHAOS:
-		case GF_MANA:
-		case GF_SEEKER:
-		case GF_SUPER_RAY:
+	case GF_CAPTURE:
+	case GF_HAND_DOOM:
+	case GF_CAUSE_1:
+	case GF_CAUSE_2:
+	case GF_CAUSE_3:
+	case GF_CAUSE_4:
+	case GF_MIND_BLAST:
+	case GF_BRAIN_SMASH:
+	case GF_DRAIN_MANA:
+	case GF_PSY_SPEAR:
+	case GF_FORCE:
+	case GF_HOLY_FIRE:
+	case GF_HELL_FIRE:
+	case GF_PSI:
+	case GF_PSI_DRAIN:
+	case GF_TELEKINESIS:
+	case GF_DOMINATION:
+	case GF_IDENTIFY:
+	case GF_ATTACK:
+	case GF_ACID:
+	case GF_ELEC:
+	case GF_COLD:
+	case GF_ICE:
+	case GF_FIRE:
+	case GF_PLASMA:
+	case GF_METEOR:
+	case GF_CHAOS:
+	case GF_MANA:
+	case GF_SEEKER:
+	case GF_SUPER_RAY:
+	{
+		break;
+	}
+
+	/* Destroy Traps (and Locks) */
+	case GF_KILL_TRAP:
+	{
+		/* Reveal secret doors */
+		if (is_hidden_door(g_ptr))
 		{
-			break;
+			/* Pick a door */
+			disclose_grid(caster_ptr, y, x);
+
+			/* Check line of sight */
+			if (known)
+			{
+				obvious = TRUE;
+			}
 		}
 
-		/* Destroy Traps (and Locks) */
-		case GF_KILL_TRAP:
+		/* Destroy traps */
+		if (is_trap(g_ptr->feat))
 		{
-			/* Reveal secret doors */
-			if (is_hidden_door(g_ptr))
+			/* Check line of sight */
+			if (known)
 			{
-				/* Pick a door */
-				disclose_grid(caster_ptr, y, x);
-
-				/* Check line of sight */
-				if (known)
-				{
-					obvious = TRUE;
-				}
-			}
-
-			/* Destroy traps */
-			if (is_trap(g_ptr->feat))
-			{
-				/* Check line of sight */
-				if (known)
-				{
-					msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
-					obvious = TRUE;
-				}
-
-				/* Destroy the trap */
-				cave_alter_feat(caster_ptr, y, x, FF_DISARM);
-			}
-
-			/* Locked doors are unlocked */
-			if (is_closed_door(g_ptr->feat) && f_ptr->power && have_flag(f_ptr->flags, FF_OPEN))
-			{
-				FEAT_IDX old_feat = g_ptr->feat;
-
-				/* Unlock the door */
-				cave_alter_feat(caster_ptr, y, x, FF_DISARM);
-
-				/* Check line of sound */
-				if (known && (old_feat != g_ptr->feat))
-				{
-					msg_print(_("カチッと音がした！", "Click!"));
-					obvious = TRUE;
-				}
-			}
-
-			/* Remove "unsafe" flag if player is not blind */
-			if (!caster_ptr->blind && player_has_los_bold(caster_ptr, y, x))
-			{
-				g_ptr->info &= ~(CAVE_UNSAFE);
-				lite_spot(y, x);
+				msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
 				obvious = TRUE;
 			}
 
-			break;
+			/* Destroy the trap */
+			cave_alter_feat(caster_ptr, y, x, FF_DISARM);
 		}
 
-		/* Destroy Doors (and traps) */
-		case GF_KILL_DOOR:
+		/* Locked doors are unlocked */
+		if (is_closed_door(g_ptr->feat) && f_ptr->power && have_flag(f_ptr->flags, FF_OPEN))
 		{
-			/* Destroy all doors and traps */
-			if (is_trap(g_ptr->feat) || have_flag(f_ptr->flags, FF_DOOR))
-			{
-				/* Check line of sight */
-				if (known)
-				{
-					msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
-					obvious = TRUE;
-				}
+			FEAT_IDX old_feat = g_ptr->feat;
 
-				/* Destroy the feature */
-				cave_alter_feat(caster_ptr, y, x, FF_TUNNEL);
+			/* Unlock the door */
+			cave_alter_feat(caster_ptr, y, x, FF_DISARM);
+
+			/* Check line of sound */
+			if (known && (old_feat != g_ptr->feat))
+			{
+				msg_print(_("カチッと音がした！", "Click!"));
+				obvious = TRUE;
 			}
+		}
 
-			/* Remove "unsafe" flag if player is not blind */
-			if (!caster_ptr->blind && player_has_los_bold(caster_ptr, y, x))
+		/* Remove "unsafe" flag if player is not blind */
+		if (!caster_ptr->blind && player_has_los_bold(caster_ptr, y, x))
+		{
+			g_ptr->info &= ~(CAVE_UNSAFE);
+			lite_spot(y, x);
+			obvious = TRUE;
+		}
+
+		break;
+	}
+
+	/* Destroy Doors (and traps) */
+	case GF_KILL_DOOR:
+	{
+		/* Destroy all doors and traps */
+		if (is_trap(g_ptr->feat) || have_flag(f_ptr->flags, FF_DOOR))
+		{
+			/* Check line of sight */
+			if (known)
 			{
-				g_ptr->info &= ~(CAVE_UNSAFE);
-				lite_spot(y, x);
+				msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
 				obvious = TRUE;
 			}
 
-			break;
+			/* Destroy the feature */
+			cave_alter_feat(caster_ptr, y, x, FF_TUNNEL);
 		}
 
-		case GF_JAM_DOOR: /* Jams a door (as if with a spike) */
+		/* Remove "unsafe" flag if player is not blind */
+		if (!caster_ptr->blind && player_has_los_bold(caster_ptr, y, x))
 		{
-			if (have_flag(f_ptr->flags, FF_SPIKE))
-			{
-				s16b old_mimic = g_ptr->mimic;
-				feature_type *mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
-
-				cave_alter_feat(caster_ptr, y, x, FF_SPIKE);
-				g_ptr->mimic = old_mimic;
-
-				note_spot(y, x);
-				lite_spot(y, x);
-
-				/* Check line of sight */
-				if (known && have_flag(mimic_f_ptr->flags, FF_OPEN))
-				{
-					msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), f_name + mimic_f_ptr->name);
-					obvious = TRUE;
-				}
-			}
-
-			break;
+			g_ptr->info &= ~(CAVE_UNSAFE);
+			lite_spot(y, x);
+			obvious = TRUE;
 		}
 
-		/* Destroy walls (and doors) */
-		case GF_KILL_WALL:
+		break;
+	}
+
+	case GF_JAM_DOOR: /* Jams a door (as if with a spike) */
+	{
+		if (have_flag(f_ptr->flags, FF_SPIKE))
 		{
-			if (have_flag(f_ptr->flags, FF_HURT_ROCK))
-			{
-				if (known && (g_ptr->info & (CAVE_MARK)))
-				{
-					msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), f_name + f_info[get_feat_mimic(g_ptr)].name);
-					obvious = TRUE;
-				}
+			s16b old_mimic = g_ptr->mimic;
+			feature_type *mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
-				/* Destroy the wall */
-				cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
-				caster_ptr->update |= (PU_FLOW);
-			}
+			cave_alter_feat(caster_ptr, y, x, FF_SPIKE);
+			g_ptr->mimic = old_mimic;
 
-			break;
-		}
-
-		case GF_MAKE_DOOR:
-		{
-			if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
-			if (player_bold(caster_ptr, y, x)) break;
-			cave_set_feat(caster_ptr, y, x, feat_door[DOOR_DOOR].closed);
-			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
-			break;
-		}
-
-		case GF_MAKE_TRAP:
-		{
-			place_trap(caster_ptr, y, x);
-			break;
-		}
-
-		case GF_MAKE_TREE:
-		{
-			if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
-			if (player_bold(caster_ptr, y, x)) break;
-			cave_set_feat(caster_ptr, y, x, feat_tree);
-			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
-			break;
-		}
-
-		case GF_MAKE_GLYPH:
-		{
-			if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
-			g_ptr->info |= CAVE_OBJECT;
-			g_ptr->mimic = feat_glyph;
 			note_spot(y, x);
 			lite_spot(y, x);
-			break;
+
+			/* Check line of sight */
+			if (known && have_flag(mimic_f_ptr->flags, FF_OPEN))
+			{
+				msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), f_name + mimic_f_ptr->name);
+				obvious = TRUE;
+			}
 		}
 
-		case GF_STONE_WALL:
+		break;
+	}
+
+	/* Destroy walls (and doors) */
+	case GF_KILL_WALL:
+	{
+		if (have_flag(f_ptr->flags, FF_HURT_ROCK))
 		{
-			if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
-			if (player_bold(caster_ptr, y, x)) break;
-			cave_set_feat(caster_ptr, y, x, feat_granite);
-			break;
+			if (known && (g_ptr->info & (CAVE_MARK)))
+			{
+				msg_format(_("%sが溶けて泥になった！", "The %s turns into mud!"), f_name + f_info[get_feat_mimic(g_ptr)].name);
+				obvious = TRUE;
+			}
+
+			/* Destroy the wall */
+			cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
+			caster_ptr->update |= (PU_FLOW);
 		}
 
-		case GF_LAVA_FLOW:
-		{
-			if (have_flag(f_ptr->flags, FF_PERMANENT)) break;
-			if (dam == 1)
-			{
-				if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
-				cave_set_feat(caster_ptr, y, x, feat_shallow_lava);
-			}
-			else if (dam)
-			{
-				cave_set_feat(caster_ptr, y, x, feat_deep_lava);
-			}
+		break;
+	}
 
-			break;
+	case GF_MAKE_DOOR:
+	{
+		if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
+		if (player_bold(caster_ptr, y, x)) break;
+		cave_set_feat(caster_ptr, y, x, feat_door[DOOR_DOOR].closed);
+		if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
+		break;
+	}
+
+	case GF_MAKE_TRAP:
+	{
+		place_trap(caster_ptr, y, x);
+		break;
+	}
+
+	case GF_MAKE_TREE:
+	{
+		if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
+		if (player_bold(caster_ptr, y, x)) break;
+		cave_set_feat(caster_ptr, y, x, feat_tree);
+		if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
+		break;
+	}
+
+	case GF_MAKE_GLYPH:
+	{
+		if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
+		g_ptr->info |= CAVE_OBJECT;
+		g_ptr->mimic = feat_glyph;
+		note_spot(y, x);
+		lite_spot(y, x);
+		break;
+	}
+
+	case GF_STONE_WALL:
+	{
+		if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
+		if (player_bold(caster_ptr, y, x)) break;
+		cave_set_feat(caster_ptr, y, x, feat_granite);
+		break;
+	}
+
+	case GF_LAVA_FLOW:
+	{
+		if (have_flag(f_ptr->flags, FF_PERMANENT)) break;
+		if (dam == 1)
+		{
+			if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
+			cave_set_feat(caster_ptr, y, x, feat_shallow_lava);
+		}
+		else if (dam)
+		{
+			cave_set_feat(caster_ptr, y, x, feat_deep_lava);
 		}
 
-		case GF_WATER_FLOW:
-		{
-			if (have_flag(f_ptr->flags, FF_PERMANENT)) break;
-			if (dam == 1)
-			{
-				if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
-				cave_set_feat(caster_ptr, y, x, feat_shallow_water);
-			}
-			else if (dam)
-			{
-				cave_set_feat(caster_ptr, y, x, feat_deep_water);
-			}
+		break;
+	}
 
-			break;
+	case GF_WATER_FLOW:
+	{
+		if (have_flag(f_ptr->flags, FF_PERMANENT)) break;
+		if (dam == 1)
+		{
+			if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
+			cave_set_feat(caster_ptr, y, x, feat_shallow_water);
+		}
+		else if (dam)
+		{
+			cave_set_feat(caster_ptr, y, x, feat_deep_water);
 		}
 
-		/* Lite up the grid */
-		case GF_LITE_WEAK:
-		case GF_LITE:
+		break;
+	}
+
+	/* Lite up the grid */
+	case GF_LITE_WEAK:
+	case GF_LITE:
+	{
+		/* Turn on the light */
+		if (!(d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 		{
-			/* Turn on the light */
-			if (!(d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+			g_ptr->info |= (CAVE_GLOW);
+			note_spot(y, x);
+			lite_spot(y, x);
+			update_local_illumination(caster_ptr, y, x);
+
+			/* Observe */
+			if (player_can_see_bold(caster_ptr, y, x)) obvious = TRUE;
+
+			/* Mega-Hack -- Update the monster in the affected grid */
+			/* This allows "spear of light" (etc) to work "correctly" */
+			if (g_ptr->m_idx) update_monster(caster_ptr, g_ptr->m_idx, FALSE);
+
+			if (caster_ptr->special_defense & NINJA_S_STEALTH)
 			{
-				g_ptr->info |= (CAVE_GLOW);
-				note_spot(y, x);
-				lite_spot(y, x);
-				update_local_illumination(caster_ptr, y, x);
+				if (player_bold(caster_ptr, y, x)) set_superstealth(caster_ptr, FALSE);
+			}
+		}
 
-				/* Observe */
-				if (player_can_see_bold(caster_ptr, y, x)) obvious = TRUE;
+		break;
+	}
 
-				/* Mega-Hack -- Update the monster in the affected grid */
-				/* This allows "spear of light" (etc) to work "correctly" */
-				if (g_ptr->m_idx) update_monster(caster_ptr, g_ptr->m_idx, FALSE);
+	/* Darken the grid */
+	case GF_DARK_WEAK:
+	case GF_DARK:
+	{
+		bool do_dark = !caster_ptr->phase_out && !is_mirror_grid(g_ptr);
+		int j;
 
-				if (caster_ptr->special_defense & NINJA_S_STEALTH)
+		/* Turn off the light. */
+		if (do_dark)
+		{
+			if (floor_ptr->dun_level || !is_daytime())
+			{
+				for (j = 0; j < 9; j++)
 				{
-					if (player_bold(caster_ptr, y, x)) set_superstealth(caster_ptr, FALSE);
-				}
-			}
+					int by = y + ddy_ddd[j];
+					int bx = x + ddx_ddd[j];
 
-			break;
-		}
-
-		/* Darken the grid */
-		case GF_DARK_WEAK:
-		case GF_DARK:
-		{
-			bool do_dark = !caster_ptr->phase_out && !is_mirror_grid(g_ptr);
-			int j;
-
-			/* Turn off the light. */
-			if (do_dark)
-			{
-				if (floor_ptr->dun_level || !is_daytime())
-				{
-					for (j = 0; j < 9; j++)
+					if (in_bounds2(floor_ptr, by, bx))
 					{
-						int by = y + ddy_ddd[j];
-						int bx = x + ddx_ddd[j];
+						grid_type *cc_ptr = &floor_ptr->grid_array[by][bx];
 
-						if (in_bounds2(floor_ptr, by, bx))
+						if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
 						{
-							grid_type *cc_ptr = &floor_ptr->grid_array[by][bx];
-
-							if (have_flag(f_info[get_feat_mimic(cc_ptr)].flags, FF_GLOW))
-							{
-								do_dark = FALSE;
-								break;
-							}
+							do_dark = FALSE;
+							break;
 						}
 					}
-
-					if (!do_dark) break;
 				}
 
-				g_ptr->info &= ~(CAVE_GLOW);
-
-				/* Hack -- Forget "boring" grids */
-				if (!have_flag(f_ptr->flags, FF_REMEMBER))
-				{
-					/* Forget */
-					g_ptr->info &= ~(CAVE_MARK);
-
-					note_spot(y, x);
-				}
-
-				lite_spot(y, x);
-
-				update_local_illumination(caster_ptr, y, x);
-
-				if (player_can_see_bold(caster_ptr, y, x)) obvious = TRUE;
-
-				/* Mega-Hack -- Update the monster in the affected grid */
-				/* This allows "spear of light" (etc) to work "correctly" */
-				if (g_ptr->m_idx) update_monster(caster_ptr, g_ptr->m_idx, FALSE);
+				if (!do_dark) break;
 			}
 
-			/* All done */
-			break;
+			g_ptr->info &= ~(CAVE_GLOW);
+
+			/* Hack -- Forget "boring" grids */
+			if (!have_flag(f_ptr->flags, FF_REMEMBER))
+			{
+				/* Forget */
+				g_ptr->info &= ~(CAVE_MARK);
+
+				note_spot(y, x);
+			}
+
+			lite_spot(y, x);
+
+			update_local_illumination(caster_ptr, y, x);
+
+			if (player_can_see_bold(caster_ptr, y, x)) obvious = TRUE;
+
+			/* Mega-Hack -- Update the monster in the affected grid */
+			/* This allows "spear of light" (etc) to work "correctly" */
+			if (g_ptr->m_idx) update_monster(caster_ptr, g_ptr->m_idx, FALSE);
 		}
 
-		case GF_SHARDS:
-		case GF_ROCKET:
+		/* All done */
+		break;
+	}
+
+	case GF_SHARDS:
+	case GF_ROCKET:
+	{
+		if (is_mirror_grid(g_ptr))
 		{
-			if (is_mirror_grid(g_ptr))
+			msg_print(_("鏡が割れた！", "The mirror was shattered!"));
+			sound(SOUND_GLASS);
+			remove_mirror(caster_ptr, y, x);
+			project(caster_ptr, 0, 2, y, x, caster_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+		}
+
+		if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 50))
+		{
+			if (known && (g_ptr->info & CAVE_MARK))
 			{
-				msg_print(_("鏡が割れた！", "The mirror was shattered!"));
+				msg_format(_("%sが割れた！", "The %s crumbled!"), f_name + f_info[get_feat_mimic(g_ptr)].name);
 				sound(SOUND_GLASS);
-				remove_mirror(caster_ptr, y, x);
-				project(caster_ptr, 0, 2, y, x, caster_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
 
-			if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 50))
-			{
-				if (known && (g_ptr->info & CAVE_MARK))
-				{
-					msg_format(_("%sが割れた！", "The %s crumbled!"), f_name + f_info[get_feat_mimic(g_ptr)].name);
-					sound(SOUND_GLASS);
-				}
-
-				/* Destroy the wall */
-				cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
-				caster_ptr->update |= (PU_FLOW);
-			}
-
-			break;
+			/* Destroy the wall */
+			cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
+			caster_ptr->update |= (PU_FLOW);
 		}
 
-		case GF_SOUND:
+		break;
+	}
+
+	case GF_SOUND:
+	{
+		if (is_mirror_grid(g_ptr) && caster_ptr->lev < 40)
 		{
-			if (is_mirror_grid(g_ptr) && caster_ptr->lev < 40)
+			msg_print(_("鏡が割れた！", "The mirror was shattered!"));
+			sound(SOUND_GLASS);
+			remove_mirror(caster_ptr, y, x);
+			project(caster_ptr, 0, 2, y, x, caster_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+		}
+
+		if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 200))
+		{
+			if (known && (g_ptr->info & CAVE_MARK))
 			{
-				msg_print(_("鏡が割れた！", "The mirror was shattered!"));
+				msg_format(_("%sが割れた！", "The %s crumbled!"), f_name + f_info[get_feat_mimic(g_ptr)].name);
 				sound(SOUND_GLASS);
-				remove_mirror(caster_ptr, y, x);
-				project(caster_ptr, 0, 2, y, x, caster_ptr->lev / 2 + 5, GF_SHARDS, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
 
-			if (have_flag(f_ptr->flags, FF_GLASS) && !have_flag(f_ptr->flags, FF_PERMANENT) && (dam >= 200))
-			{
-				if (known && (g_ptr->info & CAVE_MARK))
-				{
-					msg_format(_("%sが割れた！", "The %s crumbled!"), f_name + f_info[get_feat_mimic(g_ptr)].name);
-					sound(SOUND_GLASS);
-				}
-
-				/* Destroy the wall */
-				cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
-				caster_ptr->update |= (PU_FLOW);
-			}
-
-			break;
+			/* Destroy the wall */
+			cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
+			caster_ptr->update |= (PU_FLOW);
 		}
 
-		case GF_DISINTEGRATE:
+		break;
+	}
+
+	case GF_DISINTEGRATE:
+	{
+		/* Destroy mirror/glyph */
+		if (is_mirror_grid(g_ptr) || is_glyph_grid(g_ptr) || is_explosive_rune_grid(g_ptr))
+			remove_mirror(caster_ptr, y, x);
+
+		/* Permanent features don't get effect */
+		/* But not protect monsters and other objects */
+		if (have_flag(f_ptr->flags, FF_HURT_DISI) && !have_flag(f_ptr->flags, FF_PERMANENT))
 		{
-			/* Destroy mirror/glyph */
-			if (is_mirror_grid(g_ptr) || is_glyph_grid(g_ptr) || is_explosive_rune_grid(g_ptr))
-				remove_mirror(caster_ptr, y, x);
+			cave_alter_feat(caster_ptr, y, x, FF_HURT_DISI);
 
-			/* Permanent features don't get effect */
-			/* But not protect monsters and other objects */
-			if (have_flag(f_ptr->flags, FF_HURT_DISI) && !have_flag(f_ptr->flags, FF_PERMANENT))
-			{
-				cave_alter_feat(caster_ptr, y, x, FF_HURT_DISI);
-
-				/* Update some things -- similar to GF_KILL_WALL */
-				caster_ptr->update |= (PU_FLOW);
-			}
-
-			break;
+			/* Update some things -- similar to GF_KILL_WALL */
+			caster_ptr->update |= (PU_FLOW);
 		}
+
+		break;
+	}
 	}
 
 	lite_spot(y, x);
@@ -796,7 +796,9 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 		concptr note_kill = NULL;
 
-#ifndef JP
+#ifdef JP
+#else
+
 		/* Get the "plural"-ness */
 		bool plural = (o_ptr->number > 1);
 #endif
@@ -810,213 +812,213 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		switch (typ)
 		{
 			/* Acid -- Lots of things */
-			case GF_ACID:
+		case GF_ACID:
+		{
+			if (hates_acid(o_ptr))
 			{
-				if (hates_acid(o_ptr))
-				{
-					do_kill = TRUE;
-					note_kill = _("融けてしまった！", (plural ? " melt!" : " melts!"));
-					if (have_flag(flgs, TR_IGNORE_ACID)) ignore = TRUE;
-				}
-				break;
+				do_kill = TRUE;
+				note_kill = _("融けてしまった！", (plural ? " melt!" : " melts!"));
+				if (have_flag(flgs, TR_IGNORE_ACID)) ignore = TRUE;
 			}
+			break;
+		}
 
-			/* Elec -- Rings and Wands */
-			case GF_ELEC:
-			{
-				if (hates_elec(o_ptr))
-				{
-					do_kill = TRUE;
-					note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
-					if (have_flag(flgs, TR_IGNORE_ELEC)) ignore = TRUE;
-				}
-				break;
-			}
-
-			/* Fire -- Flammable objects */
-			case GF_FIRE:
-			{
-				if (hates_fire(o_ptr))
-				{
-					do_kill = TRUE;
-					note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
-					if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
-				}
-				break;
-			}
-
-			/* Cold -- potions and flasks */
-			case GF_COLD:
-			{
-				if (hates_cold(o_ptr))
-				{
-					note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
-					do_kill = TRUE;
-					if (have_flag(flgs, TR_IGNORE_COLD)) ignore = TRUE;
-				}
-				break;
-			}
-
-			/* Fire + Elec */
-			case GF_PLASMA:
-			{
-				if (hates_fire(o_ptr))
-				{
-					do_kill = TRUE;
-					note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
-					if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
-				}
-				if (hates_elec(o_ptr))
-				{
-					ignore = FALSE;
-					do_kill = TRUE;
-					note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
-					if (have_flag(flgs, TR_IGNORE_ELEC)) ignore = TRUE;
-				}
-				break;
-			}
-
-			/* Fire + Cold */
-			case GF_METEOR:
-			{
-				if (hates_fire(o_ptr))
-				{
-					do_kill = TRUE;
-					note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
-					if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
-				}
-				if (hates_cold(o_ptr))
-				{
-					ignore = FALSE;
-					do_kill = TRUE;
-					note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
-					if (have_flag(flgs, TR_IGNORE_COLD)) ignore = TRUE;
-				}
-				break;
-			}
-
-			/* Hack -- break potions and such */
-			case GF_ICE:
-			case GF_SHARDS:
-			case GF_FORCE:
-			case GF_SOUND:
-			{
-				if (hates_cold(o_ptr))
-				{
-					note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
-					do_kill = TRUE;
-				}
-				break;
-			}
-
-			/* Mana and Chaos -- destroy everything */
-			case GF_MANA:
-			case GF_SEEKER:
-			case GF_SUPER_RAY:
+		/* Elec -- Rings and Wands */
+		case GF_ELEC:
+		{
+			if (hates_elec(o_ptr))
 			{
 				do_kill = TRUE;
 				note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
-				break;
+				if (have_flag(flgs, TR_IGNORE_ELEC)) ignore = TRUE;
 			}
+			break;
+		}
 
-			case GF_DISINTEGRATE:
+		/* Fire -- Flammable objects */
+		case GF_FIRE:
+		{
+			if (hates_fire(o_ptr))
 			{
 				do_kill = TRUE;
-				note_kill = _("蒸発してしまった！", (plural ? " evaporate!" : " evaporates!"));
-				break;
+				note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
+				if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
 			}
+			break;
+		}
 
-			case GF_CHAOS:
+		/* Cold -- potions and flasks */
+		case GF_COLD:
+		{
+			if (hates_cold(o_ptr))
+			{
+				note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
+				do_kill = TRUE;
+				if (have_flag(flgs, TR_IGNORE_COLD)) ignore = TRUE;
+			}
+			break;
+		}
+
+		/* Fire + Elec */
+		case GF_PLASMA:
+		{
+			if (hates_fire(o_ptr))
+			{
+				do_kill = TRUE;
+				note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
+				if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
+			}
+			if (hates_elec(o_ptr))
+			{
+				ignore = FALSE;
+				do_kill = TRUE;
+				note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
+				if (have_flag(flgs, TR_IGNORE_ELEC)) ignore = TRUE;
+			}
+			break;
+		}
+
+		/* Fire + Cold */
+		case GF_METEOR:
+		{
+			if (hates_fire(o_ptr))
+			{
+				do_kill = TRUE;
+				note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
+				if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
+			}
+			if (hates_cold(o_ptr))
+			{
+				ignore = FALSE;
+				do_kill = TRUE;
+				note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
+				if (have_flag(flgs, TR_IGNORE_COLD)) ignore = TRUE;
+			}
+			break;
+		}
+
+		/* Hack -- break potions and such */
+		case GF_ICE:
+		case GF_SHARDS:
+		case GF_FORCE:
+		case GF_SOUND:
+		{
+			if (hates_cold(o_ptr))
+			{
+				note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
+				do_kill = TRUE;
+			}
+			break;
+		}
+
+		/* Mana and Chaos -- destroy everything */
+		case GF_MANA:
+		case GF_SEEKER:
+		case GF_SUPER_RAY:
+		{
+			do_kill = TRUE;
+			note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
+			break;
+		}
+
+		case GF_DISINTEGRATE:
+		{
+			do_kill = TRUE;
+			note_kill = _("蒸発してしまった！", (plural ? " evaporate!" : " evaporates!"));
+			break;
+		}
+
+		case GF_CHAOS:
+		{
+			do_kill = TRUE;
+			note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
+			if (have_flag(flgs, TR_RES_CHAOS)) ignore = TRUE;
+			else if ((o_ptr->tval == TV_SCROLL) && (o_ptr->sval == SV_SCROLL_CHAOS)) ignore = TRUE;
+			break;
+		}
+
+		/* Holy Fire and Hell Fire -- destroys cursed non-artifacts */
+		case GF_HOLY_FIRE:
+		case GF_HELL_FIRE:
+		{
+			if (object_is_cursed(o_ptr))
 			{
 				do_kill = TRUE;
 				note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
-				if (have_flag(flgs, TR_RES_CHAOS)) ignore = TRUE;
-				else if ((o_ptr->tval == TV_SCROLL) && (o_ptr->sval == SV_SCROLL_CHAOS)) ignore = TRUE;
-				break;
 			}
+			break;
+		}
 
-			/* Holy Fire and Hell Fire -- destroys cursed non-artifacts */
-			case GF_HOLY_FIRE:
-			case GF_HELL_FIRE:
+		case GF_IDENTIFY:
+		{
+			identify_item(caster_ptr, o_ptr);
+
+			/* Auto-inscription */
+			autopick_alter_item(caster_ptr, (-this_o_idx), FALSE);
+			break;
+		}
+
+		/* Unlock chests */
+		case GF_KILL_TRAP:
+		case GF_KILL_DOOR:
+		{
+			/* Chests are noticed only if trapped or locked */
+			if (o_ptr->tval == TV_CHEST)
 			{
-				if (object_is_cursed(o_ptr))
+				/* Disarm/Unlock traps */
+				if (o_ptr->pval > 0)
 				{
-					do_kill = TRUE;
-					note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
-				}
-				break;
-			}
+					/* Disarm or Unlock */
+					o_ptr->pval = (0 - o_ptr->pval);
 
-			case GF_IDENTIFY:
-			{
-				identify_item(caster_ptr, o_ptr);
+					/* Identify */
+					object_known(o_ptr);
 
-				/* Auto-inscription */
-				autopick_alter_item(caster_ptr, (-this_o_idx), FALSE);
-				break;
-			}
-
-			/* Unlock chests */
-			case GF_KILL_TRAP:
-			case GF_KILL_DOOR:
-			{
-				/* Chests are noticed only if trapped or locked */
-				if (o_ptr->tval == TV_CHEST)
-				{
-					/* Disarm/Unlock traps */
-					if (o_ptr->pval > 0)
+					if (known && (o_ptr->marked & OM_FOUND))
 					{
-						/* Disarm or Unlock */
-						o_ptr->pval = (0 - o_ptr->pval);
-
-						/* Identify */
-						object_known(o_ptr);
-
-						if (known && (o_ptr->marked & OM_FOUND))
-						{
-							msg_print(_("カチッと音がした！", "Click!"));
-							obvious = TRUE;
-						}
+						msg_print(_("カチッと音がした！", "Click!"));
+						obvious = TRUE;
 					}
 				}
-
-				break;
 			}
-			case GF_ANIM_DEAD:
+
+			break;
+		}
+		case GF_ANIM_DEAD:
+		{
+			if (o_ptr->tval == TV_CORPSE)
 			{
-				if (o_ptr->tval == TV_CORPSE)
+				int i;
+				BIT_FLAGS mode = 0L;
+
+				if (!who || is_pet(&caster_ptr->current_floor_ptr->m_list[who]))
+					mode |= PM_FORCE_PET;
+
+				for (i = 0; i < o_ptr->number; i++)
 				{
-					int i;
-					BIT_FLAGS mode = 0L;
-
-					if (!who || is_pet(&caster_ptr->current_floor_ptr->m_list[who]))
-						mode |= PM_FORCE_PET;
-
-					for (i = 0; i < o_ptr->number ; i++)
+					if (((o_ptr->sval == SV_CORPSE) && (randint1(100) > 80)) ||
+						((o_ptr->sval == SV_SKELETON) && (randint1(100) > 60)))
 					{
-						if (((o_ptr->sval == SV_CORPSE) && (randint1(100) > 80)) ||
-							((o_ptr->sval == SV_SKELETON) && (randint1(100) > 60)))
-						{
-							if (!note_kill)
-							{
-								note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
-							}
-							continue;
-						}
-						else if (summon_named_creature(who, y, x, o_ptr->pval, mode))
-						{
-							note_kill = _("生き返った。", " revived.");
-						}
-						else if (!note_kill)
+						if (!note_kill)
 						{
 							note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
 						}
+						continue;
 					}
-					do_kill = TRUE;
-					obvious = TRUE;
+					else if (summon_named_creature(who, y, x, o_ptr->pval, mode))
+					{
+						note_kill = _("生き返った。", " revived.");
+					}
+					else if (!note_kill)
+					{
+						note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
+					}
 				}
-				break;
+				do_kill = TRUE;
+				obvious = TRUE;
 			}
+			break;
+		}
 		}
 
 
@@ -1036,8 +1038,8 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				/* Observe the resist */
 				if (known && (o_ptr->marked & OM_FOUND))
 				{
-					msg_format(_("%sは影響を受けない！", 
-					   (plural ? "The %s are unaffected!" : "The %s is unaffected!")), o_name);
+					msg_format(_("%sは影響を受けない！",
+						(plural ? "The %s are unaffected!" : "The %s is unaffected!")), o_name);
 				}
 			}
 
@@ -1102,7 +1104,7 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
  * </pre>
  * <pre>
  * Note that "polymorph" is dangerous, since a failure in "place_monster()"'
- * may result in a dereference of an invalid pointer.  
+ * may result in a dereference of an invalid pointer.
  * </pre>
  * <pre>
  * Various messages are produced, and damage is applied.
@@ -1584,7 +1586,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				/* Normal monsters slow down */
 				else
 				{
-					if (set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
+					if (set_monster_slow(caster_ptr, g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 					{
 						note = _("の動きが遅くなった。", " starts moving slower.");
 					}
@@ -1652,7 +1654,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				/* Normal monsters slow down */
 				else
 				{
-					if (set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
+					if (set_monster_slow(caster_ptr, g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 					{
 						note = _("の動きが遅くなった。", " starts moving slower.");
 					}
@@ -2127,7 +2129,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			if (seen) obvious = TRUE;
 
 			/* Wake up */
-			(void)set_monster_csleep(g_ptr->m_idx, 0);
+			(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
 
 			if (m_ptr->maxhp < m_ptr->max_maxhp)
 			{
@@ -2150,21 +2152,21 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			if (seen) obvious = TRUE;
 
 			/* Wake up */
-			(void)set_monster_csleep(g_ptr->m_idx, 0);
+			(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
 			if (MON_STUNNED(m_ptr))
 			{
 				if (seen_msg) msg_format(_("%^sは朦朧状態から立ち直った。", "%^s is no longer stunned."), m_name);
-				(void)set_monster_stunned(g_ptr->m_idx, 0);
+				(void)set_monster_stunned(caster_ptr, g_ptr->m_idx, 0);
 			}
 			if (MON_CONFUSED(m_ptr))
 			{
 				if (seen_msg) msg_format(_("%^sは混乱から立ち直った。", "%^s is no longer confused."), m_name);
-				(void)set_monster_confused(g_ptr->m_idx, 0);
+				(void)set_monster_confused(caster_ptr, g_ptr->m_idx, 0);
 			}
 			if (MON_MONFEAR(m_ptr))
 			{
 				if (seen_msg) msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
-				(void)set_monster_monfear(g_ptr->m_idx, 0);
+				(void)set_monster_monfear(caster_ptr, g_ptr->m_idx, 0);
 			}
 
 			/* Heal */
@@ -2218,7 +2220,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			if (seen) obvious = TRUE;
 
 			/* Speed up */
-			if (set_monster_fast(g_ptr->m_idx, MON_FAST(m_ptr) + 100))
+			if (set_monster_fast(caster_ptr, g_ptr->m_idx, MON_FAST(m_ptr) + 100))
 			{
 				note = _("の動きが速くなった。", " starts moving faster.");
 			}
@@ -2253,7 +2255,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			/* Normal monsters slow down */
 			else
 			{
-				if (set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
+				if (set_monster_slow(caster_ptr, g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 				{
 					note = _("の動きが遅くなった。", " starts moving slower.");
 				}
@@ -3229,7 +3231,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					do_conf = randint0(8) + 8;
 					do_stun = randint0(8) + 8;
 				}
-				(void)set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 10);
+				(void)set_monster_slow(caster_ptr, g_ptr->m_idx, MON_SLOW(m_ptr) + 10);
 			}
 			break;
 		}
@@ -3419,7 +3421,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				/* Normal monsters slow down */
 				else
 				{
-					if (set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
+					if (set_monster_slow(caster_ptr, g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 					{
 						note = _("の動きが遅くなった。", " starts moving slower.");
 					}
@@ -3544,7 +3546,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (is_pet(m_ptr))
 				{
 					note = _("の動きが速くなった。", " starts moving faster.");
-					(void)set_monster_fast(g_ptr->m_idx, MON_FAST(m_ptr) + 100);
+					(void)set_monster_fast(caster_ptr, g_ptr->m_idx, MON_FAST(m_ptr) + 100);
 					success = TRUE;
 				}
 
@@ -3562,7 +3564,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				{
 					note = _("を支配した。", " is tamed!");
 					set_pet(m_ptr);
-					(void)set_monster_fast(g_ptr->m_idx, MON_FAST(m_ptr) + 100);
+					(void)set_monster_fast(caster_ptr, g_ptr->m_idx, MON_FAST(m_ptr) + 100);
 
 					/* Learn about type */
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
@@ -3635,7 +3637,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 	/* Modify the damage */
 	tmp = dam;
-	dam = mon_damage_mod(m_ptr, dam, (bool)(typ == GF_PSY_SPEAR));
+	dam = mon_damage_mod(caster_ptr, m_ptr, dam, (bool)(typ == GF_PSY_SPEAR));
 	if ((tmp > 0) && (dam == 0)) note = _("はダメージを受けていない。", " is unharmed.");
 
 	/* Check for death */
@@ -3666,7 +3668,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 
 			/* Apply stun */
-			(void)set_monster_stunned(g_ptr->m_idx, tmp);
+			(void)set_monster_stunned(caster_ptr, g_ptr->m_idx, tmp);
 
 			/* Get angry */
 			get_angry = TRUE;
@@ -3694,7 +3696,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 
 			/* Apply confusion */
-			(void)set_monster_confused(g_ptr->m_idx, tmp);
+			(void)set_monster_confused(caster_ptr, g_ptr->m_idx, tmp);
 
 			/* Get angry */
 			get_angry = TRUE;
@@ -3761,7 +3763,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		if (do_fear)
 		{
 			/* Set fear */
-			(void)set_monster_monfear(g_ptr->m_idx, MON_MONFEAR(m_ptr) + do_fear);
+			(void)set_monster_monfear(caster_ptr, g_ptr->m_idx, MON_MONFEAR(m_ptr) + do_fear);
 
 			/* Get angry */
 			get_angry = TRUE;
@@ -3781,7 +3783,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		if (caster_ptr->riding == g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
 
 		/* Wake the monster up */
-		(void)set_monster_csleep(g_ptr->m_idx, 0);
+		(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
 
 		/* Hurt the monster */
 		m_ptr->hp -= dam;
@@ -3808,7 +3810,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				}
 			}
 
-			if (who > 0) monster_gain_exp(who, m_ptr->r_idx);
+			if (who > 0) monster_gain_exp(caster_ptr, who, m_ptr->r_idx);
 
 			/* Generate treasure, etc */
 			monster_death(g_ptr->m_idx, FALSE);
@@ -3839,7 +3841,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 
 			/* Hack -- handle sleep */
-			if (do_sleep) (void)set_monster_csleep(g_ptr->m_idx, do_sleep);
+			if (do_sleep) (void)set_monster_csleep(caster_ptr, g_ptr->m_idx, do_sleep);
 		}
 	}
 
@@ -3896,7 +3898,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 
 			/* Hack -- handle sleep */
-			if (do_sleep) (void)set_monster_csleep(g_ptr->m_idx, do_sleep);
+			if (do_sleep) (void)set_monster_csleep(caster_ptr, g_ptr->m_idx, do_sleep);
 		}
 	}
 
@@ -4965,7 +4967,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		else
 		{
-			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(15, 0);
+			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(target_ptr, 15, 0);
 			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		}
 		break;
@@ -4981,7 +4983,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		else
 		{
-			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(25, MIN(rlev / 2 - 15, 5));
+			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(target_ptr, 25, MIN(rlev / 2 - 15, 5));
 			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		}
 		break;
@@ -4997,7 +4999,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		else
 		{
-			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(33, MIN(rlev / 2 - 15, 15));
+			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(target_ptr, 33, MIN(rlev / 2 - 15, 15));
 			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		}
 		break;
@@ -5032,7 +5034,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 			if (!CHECK_MULTISHADOW(target_ptr))
 			{
 				msg_print(_("あなたは命が薄まっていくように感じた！", "You feel your life fade away!"));
-				curse_equipment(40, 20);
+				curse_equipment(target_ptr, 40, 20);
 			}
 
 			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, m_name, monspell);
@@ -5115,7 +5117,7 @@ POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION
 
 
 /*
- * 
+ *
  * Modified version of los() for calculation of disintegration balls.
  * Disintegration effects are stopped by permanent walls.
  */
@@ -5876,7 +5878,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			gy[grids] = y;
 			gx[grids] = x;
 			grids++;
-			
+
 			/* Only do visuals if requested */
 			if (!blind && !(flg & (PROJECT_HIDE)))
 			{
@@ -6615,7 +6617,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 	POSITION centersign;
 	POSITION x1, x2, y1, y2;
 	u16b p;
-	int msec = delay_factor*delay_factor*delay_factor;
+	int msec = delay_factor * delay_factor*delay_factor;
 
 	/* 三角形の頂点 */
 	POSITION point_x[3];
@@ -6781,11 +6783,11 @@ void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam)
 		{
 			if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
 				continue;
-			
+
 			if (!project_m(caster_ptr, 0, 0, y, x, dam, GF_GENOCIDE,
 				(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE))
 				continue;
-			
+
 			if (!caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 			{
 				remove_mirror(caster_ptr, y, x);

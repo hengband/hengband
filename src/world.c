@@ -21,16 +21,17 @@ bool is_daytime(void)
 /*!
  * @brief 現在の日数、時刻を返す /
  * Extract day, hour, min
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param day 日数を返すための参照ポインタ
  * @param hour 時数を返すための参照ポインタ
  * @param min 分数を返すための参照ポインタ
  */
-void extract_day_hour_min(int *day, int *hour, int *min)
+void extract_day_hour_min(player_type *player_ptr, int *day, int *hour, int *min)
 {
 	const s32b A_DAY = TURNS_PER_TICK * TOWN_DAWN;
 	s32b turn_in_today = (current_world_ptr->game_turn + A_DAY / 4) % A_DAY;
 
-	switch (p_ptr->start_race)
+	switch (player_ptr->start_race)
 	{
 	case RACE_VAMPIRE:
 	case RACE_SKELETON:

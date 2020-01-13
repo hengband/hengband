@@ -123,16 +123,6 @@ bool item_tester_hook_eatable(object_type *o_ptr)
 {
 	if (o_ptr->tval == TV_FOOD) return TRUE;
 
-#if 0
-	if (PRACE_IS_(p_ptr, RACE_SKELETON))
-	{
-		if (o_ptr->tval == TV_SKELETON ||
-			(o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_SKELETON))
-			return TRUE;
-	}
-	else
-#endif
-
 	if (PRACE_IS_(p_ptr, RACE_SKELETON) ||
 		PRACE_IS_(p_ptr, RACE_GOLEM) ||
 		PRACE_IS_(p_ptr, RACE_ZOMBIE) ||

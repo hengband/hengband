@@ -1174,7 +1174,7 @@ void do_cmd_locate(player_type *creature_ptr)
 
 
 	/* Recenter the map around the player */
-	verify_panel();
+	verify_panel(creature_ptr);
 
 	creature_ptr->update |= (PU_MONSTERS);
 	creature_ptr->redraw |= (PR_MAP);

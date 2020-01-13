@@ -403,20 +403,6 @@ void update_lite(player_type *subject_ptr)
 	POSITION p = subject_ptr->cur_lite;
 	grid_type *g_ptr;
 
-	/*** Special case ***/
-
-#if 0
-	/* Hack -- Player has no lite */
-	if (p <= 0)
-	{
-		/* Forget the old lite */
-		/* forget_lite(); Perhaps don't need? */
-
-		/* Add it to later visual update */
-		cave_redraw_later(floor_ptr, &floor_ptr->grid_array[subject_ptr->y][subject_ptr->x], subject_ptr->y, subject_ptr->x);
-	}
-#endif
-
 	/*** Save the old "lite" grids for later ***/
 
 	/* Clear them all */
@@ -1485,7 +1471,7 @@ void update_mon_lite(player_type *subject_ptr)
 
 			/* Exit if has no light */
 			if (!rad) continue;
-			
+
 			int f_flag;
 			if (rad > 0)
 			{

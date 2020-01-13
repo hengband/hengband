@@ -289,7 +289,7 @@ static void show_building(player_type *player_ptr, building_type* bldg)
 			c_put_str(action_color, tmp_str, 19 + (i / 2), 35 * (i % 2));
 			continue;
 		}
-		
+
 		if (bldg->action_restr[i] == 1)
 		{
 			if (!is_member(player_ptr, bldg))
@@ -318,7 +318,7 @@ static void show_building(player_type *player_ptr, building_type* bldg)
 			c_put_str(action_color, tmp_str, 19 + (i / 2), 35 * (i % 2));
 			continue;
 		}
-		
+
 		if (!is_owner(player_ptr, bldg))
 		{
 			action_color = TERM_L_DARK;
@@ -372,7 +372,7 @@ static void arena_comm(player_type *player_ptr, int cmd)
 			player_ptr->arena_number++;
 			break;
 		}
-		
+
 		if (player_ptr->arena_number > MAX_ARENA_MONS)
 		{
 			if (player_ptr->arena_number < MAX_ARENA_MONS + 2)
@@ -408,7 +408,7 @@ static void arena_comm(player_type *player_ptr, int cmd)
 
 			break;
 		}
-		
+
 		if (player_ptr->riding && (player_ptr->pclass != CLASS_BEASTMASTER) && (player_ptr->pclass != CLASS_CAVALRY))
 		{
 			msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。",
@@ -416,7 +416,7 @@ static void arena_comm(player_type *player_ptr, int cmd)
 			msg_print(NULL);
 			break;
 		}
-		
+
 		player_ptr->exit_bldg = FALSE;
 		reset_tim_flags(player_ptr);
 
@@ -440,7 +440,7 @@ static void arena_comm(player_type *player_ptr, int cmd)
 			msg_print(_("あなたはすべての敵に勝利した。", "You have won against all foes."));
 			break;
 		}
-		
+
 		r_ptr = &r_info[arena_info[player_ptr->arena_number].r_idx];
 		name = (r_name + r_ptr->name);
 		msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), name);
@@ -1142,7 +1142,7 @@ static int do_poker(void)
 	{
 		if (draw)
 		{
-			display_kaeruka(k + decision * 5, is_put); 
+			display_kaeruka(k + decision * 5, is_put);
 		}
 
 		draw = FALSE;
@@ -1172,7 +1172,7 @@ static int do_poker(void)
 				k = 4;
 				decision = FALSE;
 			}
-			
+
 			draw = TRUE;
 			break;
 		case '2': case 'j': case 'J': case KTRL('N'):
@@ -1198,7 +1198,7 @@ static int do_poker(void)
 			{
 				is_put[k] = !is_put[k]; draw = TRUE;
 			}
-			
+
 			break;
 		default:
 			break;
@@ -1679,7 +1679,7 @@ static bool kakutoujou(player_type *player_ptr)
 		screen_load();
 		return FALSE;
 	}
-	
+
 	int i;
 
 	clear_bldg(4, 10);
@@ -1741,7 +1741,7 @@ static bool kakutoujou(player_type *player_ptr)
 		screen_load();
 		return FALSE;
 	}
-	
+
 	/* Strip spaces */
 	for (p = out_val; *p == ' '; p++);
 
@@ -2030,17 +2030,6 @@ static bool kankin(player_type *player_ptr)
 			sprintf(buf, _("%sを渡しますか？", "Hand %s over? "), o_name);
 			if (!get_check(buf)) continue;
 
-#if 0 /* Obsoleted */
-			msg_format(_("賞金 %ld＄を手に入れた。", "You get %ldgp."), (r_info[current_world_ptr->bounty_r_idx[j]].level + 1) * 300 * o_ptr->number);
-			player_ptr->au += (r_info[current_world_ptr->bounty_r_idx[j]].level + 1) * 300 * o_ptr->number;
-			player_ptr->redraw |= (PR_GOLD);
-			vary_item(i, -o_ptr->number);
-			chg_virtue(player_ptr, V_JUSTICE, 5);
-			current_world_ptr->bounty_r_idx[j] += 10000;
-
-			change = TRUE;
-#endif /* Obsoleted */
-
 			/* Hand it first */
 			vary_item(player_ptr, i, -o_ptr->number);
 
@@ -2128,7 +2117,7 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 		s32b oldturn = current_world_ptr->game_turn;
 		int prev_day, prev_hour, prev_min;
 
-		extract_day_hour_min(&prev_day, &prev_hour, &prev_min);
+		extract_day_hour_min(customer_ptr, &prev_day, &prev_hour, &prev_min);
 		if ((prev_hour >= 6) && (prev_hour <= 17))
 			exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over daytime at the inn."));
 		else
@@ -2161,7 +2150,7 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 			exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("悪夢にうなされてよく眠れなかった。", "be troubled by a nightmare."));
 			break;
 		}
-		
+
 		set_blind(customer_ptr, 0);
 		set_confused(customer_ptr, 0);
 		customer_ptr->stun = 0;
@@ -2187,14 +2176,14 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 			exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("夕方を迎えた。", "awake refreshed."));
 			break;
 		}
-		
+
 		msg_print(_("あなたはリフレッシュして目覚め、新たな日を迎えた。", "You awake refreshed for the new day."));
 		exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("すがすがしい朝を迎えた。", "awake refreshed."));
 		break;
 	}
 	case BACT_RUMORS: /* Listen for rumors */
 	{
-		display_rumor(TRUE);
+		display_rumor(customer_ptr, TRUE);
 		break;
 	}
 	}
@@ -2288,7 +2277,7 @@ static void castle_quest(player_type *player_ptr)
 		put_str(_("クエストを終わらせたら戻って来て下さい。", "Return when you have completed your quest."), 12, 0);
 		return;
 	}
-	
+
 	if (q_ptr->status != QUEST_STATUS_UNTAKEN) return;
 
 	q_ptr->status = QUEST_STATUS_TAKEN;
@@ -2363,7 +2352,7 @@ static HIT_POINT calc_slaydam(HIT_POINT dam, int mult, int div, bool force)
 		tmp /= 60;
 		return tmp;
 	}
-	
+
 	tmp = dam * 60;
 	tmp *= mult;
 	tmp /= div;
@@ -2689,11 +2678,11 @@ static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN ro
 
 	/* Print the weapons base damage dice */
 	sprintf(tmp_str, "        %2d  %2d  %2d  %2d  %2d (%%)",
-		(int)hit_chance(reli, 0),
-		(int)hit_chance(reli, 50),
-		(int)hit_chance(reli, 100),
-		(int)hit_chance(reli, 150),
-		(int)hit_chance(reli, 200));
+		(int)hit_chance(player_ptr, reli, 0),
+		(int)hit_chance(player_ptr, reli, 50),
+		(int)hit_chance(player_ptr, reli, 100),
+		(int)hit_chance(player_ptr, reli, 150),
+		(int)hit_chance(player_ptr, reli, 200));
 	put_str(tmp_str, row + 3, col);
 	c_put_str(TERM_YELLOW, _("可能なダメージ:", "Possible Damage:"), row + 5, col);
 
@@ -2993,20 +2982,20 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), 0);
-	if (!o_ptr) return (0);
+	if (!o_ptr) return 0;
 
 	/* It is worthless */
 	if (!object_is_ego(o_ptr) && !object_is_artifact(o_ptr))
 	{
 		msg_format(_("それは直してもしょうがないぜ。", "It is worthless to repair."));
-		return (0);
+		return 0;
 	}
 
 	/* They are too many */
 	if (o_ptr->number > 1)
 	{
 		msg_format(_("一度に複数を修復することはできません！", "They are too many to repair at once!"));
-		return (0);
+		return 0;
 	}
 
 	/* Display item name */
@@ -3023,11 +3012,11 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	OBJECT_IDX mater;
 	object_type *mo_ptr;
 	mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), 0);
-	if (!mo_ptr) return (0);
+	if (!mo_ptr) return 0;
 	if (mater == item)
 	{
 		msg_print(_("クラインの壷じゃない！", "This is not a klein bottle!"));
-		return (0);
+		return 0;
 	}
 
 	/* Display item name */
@@ -3045,7 +3034,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 		object_desc(basenm, o_ptr, OD_NAME_ONLY);
 		msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), basenm);
 		msg_print(NULL);
-		return (0);
+		return 0;
 	}
 
 	player_ptr->total_weight -= o_ptr->weight;
@@ -3305,7 +3294,7 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 		msg_print(_("改良に失敗した。", "The improvement failed."));
 		return FALSE;
 	}
-	
+
 	object_desc(tmp_str, o_ptr, OD_NAME_AND_ENCHANT);
 #ifdef JP
 	msg_format("＄%dで%sに改良しました。", cost * o_ptr->number, tmp_str);
@@ -3375,7 +3364,7 @@ static void building_recharge(player_type *player_ptr)
 			/* Update the gold display */
 			building_prt_gold(player_ptr);
 		}
-		
+
 		return;
 	}
 

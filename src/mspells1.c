@@ -63,13 +63,13 @@
 #define DO_SPELL_BR_DISI 2
 #define DO_SPELL_BA_LITE 3
 
-/*!
- * @brief モンスターがプレイヤーの弱点をついた選択を取るかどうかの判定 /
- * Internal probability routine
- * @param r_ptr モンスター種族の構造体参照ポインタ
- * @param prob 基本確率(%)
- * @return 適した選択を取るならばTRUEを返す。
- */
+ /*!
+  * @brief モンスターがプレイヤーの弱点をついた選択を取るかどうかの判定 /
+  * Internal probability routine
+  * @param r_ptr モンスター種族の構造体参照ポインタ
+  * @param prob 基本確率(%)
+  * @return 適した選択を取るならばTRUEを返す。
+  */
 static bool int_outof(monster_race *r_ptr, PERCENTAGE prob)
 {
 	/* Non-Smart monsters are half as "smart" */
@@ -159,7 +159,7 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 	}
 
 	if (!smart) return;
-	
+
 	if (smart & SM_IMM_ACID)
 	{
 		f4 &= ~(RF4_BR_ACID);
@@ -217,7 +217,7 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 		if (int_outof(r_ptr, 30)) f5 &= ~(RF5_BA_FIRE);
 		if (int_outof(r_ptr, 30)) f5 &= ~(RF5_BO_FIRE);
 	}
-	
+
 	if (smart & (SM_IMM_COLD))
 	{
 		f4 &= ~(RF4_BR_COLD);
@@ -239,7 +239,7 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 		if (int_outof(r_ptr, 30)) f5 &= ~(RF5_BO_COLD);
 		if (int_outof(r_ptr, 20)) f5 &= ~(RF5_BO_ICEE);
 	}
-	
+
 	if ((smart & (SM_OPP_POIS)) && (smart & (SM_RES_POIS)))
 	{
 		if (int_outof(r_ptr, 80)) f4 &= ~(RF4_BR_POIS);
@@ -252,7 +252,7 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 		if (int_outof(r_ptr, 30)) f4 &= ~(RF4_BR_POIS);
 		if (int_outof(r_ptr, 30)) f5 &= ~(RF5_BA_POIS);
 	}
-	
+
 	if (smart & (SM_RES_NETH))
 	{
 		if (PRACE_IS_(target_ptr, RACE_SPECTRE))
@@ -388,7 +388,7 @@ bool summon_possible(player_type *target_ptr, POSITION y1, POSITION x1)
 			if (!in_bounds(floor_ptr, y, x)) continue;
 
 			/* Only check a circular area */
-			if (distance(y1, x1, y, x)>2) continue;
+			if (distance(y1, x1, y, x) > 2) continue;
 
 			/* ...nor on the Pattern */
 			if (pattern_tile(y, x)) continue;
@@ -475,8 +475,8 @@ bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, 
 	if (!grid_n) return FALSE;
 
 	/* Final grid */
-	POSITION y = GRID_Y(grid_g[grid_n-1]);
-	POSITION x = GRID_X(grid_g[grid_n-1]);
+	POSITION y = GRID_Y(grid_g[grid_n - 1]);
+	POSITION x = GRID_X(grid_g[grid_n - 1]);
 
 	/* May not end in an unrequested grid */
 	if ((y != y2) || (x != x2)) return FALSE;
@@ -517,17 +517,17 @@ bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, 
  * @return なし
  */
 void bolt(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EFFECT_ID typ, int dam_hp, int monspell, int target_type)
-  {
+{
 	BIT_FLAGS flg = 0;
 	switch (target_type)
-    {
-    case MONSTER_TO_MONSTER:
-        flg = PROJECT_STOP | PROJECT_KILL;
-        break;
-    case MONSTER_TO_PLAYER:
-        flg = PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER;
-        break;
-    }
+	{
+	case MONSTER_TO_MONSTER:
+		flg = PROJECT_STOP | PROJECT_KILL;
+		break;
+	case MONSTER_TO_PLAYER:
+		flg = PROJECT_STOP | PROJECT_KILL | PROJECT_PLAYER;
+		break;
+	}
 
 	/* Target the player with a bolt attack */
 	if (typ != GF_ARROW) flg |= PROJECT_REFLECTABLE;
@@ -552,14 +552,14 @@ void beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
 {
 	BIT_FLAGS flg = 0;
 	switch (target_type)
-    {
-    case MONSTER_TO_MONSTER:
-        flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU;
-        break;
-    case MONSTER_TO_PLAYER:
-        flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_PLAYER;
-        break;
-    }
+	{
+	case MONSTER_TO_MONSTER:
+		flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU;
+		break;
+	case MONSTER_TO_PLAYER:
+		flg = PROJECT_BEAM | PROJECT_KILL | PROJECT_THRU | PROJECT_PLAYER;
+		break;
+	}
 
 	/* Target the player with a bolt attack */
 	bool learnable = spell_learnable(target_ptr, m_idx);
@@ -577,25 +577,25 @@ void beam(player_type *target_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, EF
  * @param typ 効果属性ID
  * @param dam_hp 威力
  * @param rad 半径
- * @param breath 
+ * @param breath
  * @param monspell モンスター魔法のID
  * @param target_type モンスターからモンスターへ撃つならMONSTER_TO_MONSTER、モンスターからプレイヤーならMONSTER_TO_PLAYER
  * @return なし
  */
 void breath(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, EFFECT_ID typ, int dam_hp, POSITION rad, bool breath, int monspell, int target_type)
 {
-    monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	BIT_FLAGS flg = 0x00;
-    switch (target_type)
-    {
-        case MONSTER_TO_MONSTER:
-            flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-            break;
-        case MONSTER_TO_PLAYER:
-            flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER;
-            break;
-    }
+	switch (target_type)
+	{
+	case MONSTER_TO_MONSTER:
+		flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+		break;
+	case MONSTER_TO_PLAYER:
+		flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_PLAYER;
+		break;
+	}
 
 	/* Determine the radius of the blast */
 	if ((rad < 1) && breath) rad = (r_ptr->flags2 & (RF2_POWERFUL)) ? 3 : 2;
@@ -1060,13 +1060,13 @@ static int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte 
 	if (special_num)
 	{
 		bool success = FALSE;
-		switch(m_ptr->r_idx)
+		switch (m_ptr->r_idx)
 		{
-			case MON_BANOR:
-			case MON_LUPART:
-				if ((m_ptr->hp < m_ptr->maxhp / 2) && r_info[MON_BANOR].max_num && r_info[MON_LUPART].max_num) success = TRUE;
-				break;
-			default: break;
+		case MON_BANOR:
+		case MON_LUPART:
+			if ((m_ptr->hp < m_ptr->maxhp / 2) && r_info[MON_BANOR].max_num && r_info[MON_LUPART].max_num) success = TRUE;
+			break;
+		default: break;
 		}
 
 		if (success) return (special[randint0(special_num)]);
@@ -1092,19 +1092,19 @@ static int choose_attack_spell(player_type *target_ptr, MONSTER_IDX m_idx, byte 
 		bool success = FALSE;
 		switch (m_ptr->r_idx)
 		{
-			case MON_OHMU:
-			case MON_BANOR:
-			case MON_LUPART:
-				break;
-			case MON_BANORLUPART:
-				if (randint0(100) < 70) success = TRUE;
-				break;
-			case MON_ROLENTO:
-				if (randint0(100) < 40) success = TRUE;
-				break;
-			default:
-				if (randint0(100) < 50) success = TRUE;
-				break;
+		case MON_OHMU:
+		case MON_BANOR:
+		case MON_LUPART:
+			break;
+		case MON_BANORLUPART:
+			if (randint0(100) < 70) success = TRUE;
+			break;
+		case MON_ROLENTO:
+			if (randint0(100) < 40) success = TRUE;
+			break;
+		default:
+			if (randint0(100) < 50) success = TRUE;
+			break;
 		}
 		if (success) return (special[randint0(special_num)]);
 	}
@@ -1212,12 +1212,12 @@ bool spell_is_inate(SPELL_IDX spell)
 	{
 		if ((1L << (spell - 32 * 3)) & RF4_NOMAGIC_MASK) return TRUE;
 	}
-	
+
 	if (spell < 32 * 5) /* Set RF5 */
 	{
 		if ((1L << (spell - 32 * 4)) & RF5_NOMAGIC_MASK) return TRUE;
 	}
-	
+
 	if (spell < 32 * 6) /* Set RF6 */
 	{
 		if ((1L << (spell - 32 * 5)) & RF6_NOMAGIC_MASK) return TRUE;
@@ -1239,16 +1239,16 @@ bool spell_is_inate(SPELL_IDX spell)
  * @return 有効な座標があった場合TRUEを返す
  */
 static bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, POSITION *yp, POSITION *xp,
-	int f_flag, bool (*path_check)(player_type *, POSITION, POSITION, POSITION, POSITION))
+	int f_flag, bool(*path_check)(player_type *, POSITION, POSITION, POSITION, POSITION))
 {
-	static int tonari_y[4][8] = {{-1, -1, -1,  0,  0,  1,  1,  1},
-			                     {-1, -1, -1,  0,  0,  1,  1,  1},
-			                     { 1,  1,  1,  0,  0, -1, -1, -1},
-			                     { 1,  1,  1,  0,  0, -1, -1, -1}};
-	static int tonari_x[4][8] = {{-1,  0,  1, -1,  1, -1,  0,  1},
-			                     { 1,  0, -1,  1, -1,  1,  0, -1},
-			                     {-1,  0,  1, -1,  1, -1,  0,  1},
-			                     { 1,  0, -1,  1, -1,  1,  0, -1}};
+	static int tonari_y[4][8] = { {-1, -1, -1,  0,  0,  1,  1,  1},
+								 {-1, -1, -1,  0,  0,  1,  1,  1},
+								 { 1,  1,  1,  0,  0, -1, -1, -1},
+								 { 1,  1,  1,  0,  0, -1, -1, -1} };
+	static int tonari_x[4][8] = { {-1,  0,  1, -1,  1, -1,  0,  1},
+								 { 1,  0, -1,  1, -1,  1,  0, -1},
+								 {-1,  0,  1, -1,  1, -1,  0,  1},
+								 { 1,  0, -1,  1, -1,  1,  0, -1} };
 
 	int next;
 	if (m_ptr->fy < target_ptr->y && m_ptr->fx < target_ptr->x) next = 0;
@@ -1343,7 +1343,9 @@ static bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, PO
  */
 bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 {
-#ifndef JP
+#ifdef JP
+#else
+
 	char m_poss[80];
 #endif
 	/* Extract the "see-able-ness" */
@@ -1429,15 +1431,15 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	{
 		bool success = FALSE;
 
-		if ((f4 & RF4_BR_DISI) && (m_ptr->cdis < MAX_RANGE/2) &&
-		    in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, y, x) &&
-		    (one_in_(10) || (projectable(target_ptr, y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
+		if ((f4 & RF4_BR_DISI) && (m_ptr->cdis < MAX_RANGE / 2) &&
+			in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, y, x) &&
+			(one_in_(10) || (projectable(target_ptr, y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
 		{
 			do_spell = DO_SPELL_BR_DISI;
 			success = TRUE;
 		}
-		else if ((f4 & RF4_BR_LITE) && (m_ptr->cdis < MAX_RANGE/2) &&
-		    los(target_ptr, m_ptr->fy, m_ptr->fx, y, x) && one_in_(5))
+		else if ((f4 & RF4_BR_LITE) && (m_ptr->cdis < MAX_RANGE / 2) &&
+			los(target_ptr, m_ptr->fy, m_ptr->fx, y, x) && one_in_(5))
 		{
 			do_spell = DO_SPELL_BR_LITE;
 			success = TRUE;
@@ -1467,7 +1469,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 				success = TRUE;
 			}
 
-			if (y_br_lite && x_br_lite && (m_ptr->cdis < MAX_RANGE/2) && one_in_(5))
+			if (y_br_lite && x_br_lite && (m_ptr->cdis < MAX_RANGE / 2) && one_in_(5))
 			{
 				if (!success)
 				{
@@ -1500,8 +1502,8 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	if (f6 & RF6_DARKNESS)
 	{
 		if ((target_ptr->pclass == CLASS_NINJA) &&
-		    !(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) &&
-		    !(r_ptr->flags7 & RF7_DARK_MASK))
+			!(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) &&
+			!(r_ptr->flags7 & RF7_DARK_MASK))
 			can_use_lite_area = TRUE;
 
 		if (!(r_ptr->flags2 & RF2_STUPID))
@@ -1563,9 +1565,9 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 
 		/* Check for a clean bolt shot */
 		if (((f4 & RF4_BOLT_MASK) ||
-		     (f5 & RF5_BOLT_MASK) ||
-		     (f6 & RF6_BOLT_MASK)) &&
-		    !clean_shot(target_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x, FALSE))
+			(f5 & RF5_BOLT_MASK) ||
+			(f6 & RF6_BOLT_MASK)) &&
+			!clean_shot(target_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x, FALSE))
 		{
 			/* Remove spells that will only hurt friends */
 			f4 &= ~(RF4_BOLT_MASK);
@@ -1575,9 +1577,9 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 
 		/* Check for a possible summon */
 		if (((f4 & RF4_SUMMON_MASK) ||
-		     (f5 & RF5_SUMMON_MASK) ||
-		     (f6 & RF6_SUMMON_MASK)) &&
-		    !(summon_possible(target_ptr, y, x)))
+			(f5 & RF5_SUMMON_MASK) ||
+			(f6 & RF6_SUMMON_MASK)) &&
+			!(summon_possible(target_ptr, y, x)))
 		{
 			/* Remove summoning spells */
 			f4 &= ~(RF4_SUMMON_MASK);
@@ -1609,19 +1611,19 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	byte spell[96], num = 0;
 	for (int k = 0; k < 32; k++)
 	{
-        if (f4 & (1L << k)) spell[num++] = k + RF4_SPELL_START;
+		if (f4 & (1L << k)) spell[num++] = k + RF4_SPELL_START;
 	}
 
 	/* Extract the "normal" spells */
 	for (int k = 0; k < 32; k++)
 	{
-        if (f5 & (1L << k)) spell[num++] = k + RF5_SPELL_START;
+		if (f5 & (1L << k)) spell[num++] = k + RF5_SPELL_START;
 	}
 
 	/* Extract the "bizarre" spells */
 	for (int k = 0; k < 32; k++)
 	{
-        if (f6 & (1L << k)) spell[num++] = k + RF6_SPELL_START;
+		if (f6 & (1L << k)) spell[num++] = k + RF6_SPELL_START;
 	}
 
 	/* No spells left */
@@ -1637,7 +1639,9 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_desc(m_name, m_ptr, 0x00);
 
-#ifndef JP
+#ifdef JP
+#else
+
 	/* Get the monster possessive ("his"/"her"/"its") */
 	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif
@@ -1646,27 +1650,27 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	switch (do_spell)
 	{
 	case DO_SPELL_NONE:
+	{
+		int attempt = 10;
+		while (attempt--)
 		{
-			int attempt = 10;
-			while (attempt--)
-			{
-				thrown_spell = choose_attack_spell(target_ptr, m_idx, spell, num);
-				if (thrown_spell) break;
-			}
+			thrown_spell = choose_attack_spell(target_ptr, m_idx, spell, num);
+			if (thrown_spell) break;
 		}
+	}
 
-		break;
+	break;
 
 	case DO_SPELL_BR_LITE:
-		thrown_spell = 96+14; /* RF4_BR_LITE */
+		thrown_spell = 96 + 14; /* RF4_BR_LITE */
 		break;
 
 	case DO_SPELL_BR_DISI:
-		thrown_spell = 96+31; /* RF4_BR_DISI */
+		thrown_spell = 96 + 31; /* RF4_BR_DISI */
 		break;
 
 	case DO_SPELL_BA_LITE:
-		thrown_spell = 128+20; /* RF5_BA_LITE */
+		thrown_spell = 128 + 20; /* RF5_BA_LITE */
 		break;
 
 	default:
@@ -1684,7 +1688,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 
 	/* Check for spell failure (inate attacks never fail) */
 	if (!spell_is_inate(thrown_spell)
-	    && (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2)) || (randint0(100) < failrate)))
+		&& (in_no_magic_dungeon || (MON_STUNNED(m_ptr) && one_in_(2)) || (randint0(100) < failrate)))
 	{
 		disturb(target_ptr, TRUE, TRUE);
 		msg_format(_("%^sは呪文を唱えようとしたが失敗した。", "%^s tries to cast a spell, but fails."), m_name);
@@ -1702,48 +1706,48 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	/* Projectable? */
 	bool direct = player_bold(target_ptr, y, x);
 	bool can_remember = is_original_ap_and_seen(m_ptr);
-    if (!direct)
-    {
-        switch (thrown_spell)
-        {
-            case 96 + 2:    /* RF4_DISPEL */
-            case 96 + 4:    /* RF4_SHOOT */
-            case 128 + 9:   /* RF5_DRAIN_MANA */
-            case 128 + 10:  /* RF5_MIND_BLAST */
-            case 128 + 11:  /* RF5_BRAIN_SMASH */
-            case 128 + 12:  /* RF5_CAUSE_1 */
-            case 128 + 13:  /* RF5_CAUSE_2 */
-            case 128 + 14:  /* RF5_CAUSE_3 */
-            case 128 + 15:  /* RF5_CAUSE_4 */
-            case 128 + 16:  /* RF5_BO_ACID */
-            case 128 + 17:  /* RF5_BO_ELEC */
-            case 128 + 18:  /* RF5_BO_FIRE */
-            case 128 + 19:  /* RF5_BO_COLD */
-            case 128 + 21:  /* RF5_BO_NETH */
-            case 128 + 22:  /* RF5_BO_WATE */
-            case 128 + 23:  /* RF5_BO_MANA */
-            case 128 + 24:  /* RF5_BO_PLAS */
-            case 128 + 25:  /* RF5_BO_ICEE */
-            case 128 + 26:  /* RF5_MISSILE */
-            case 128 + 27:  /* RF5_SCARE */
-            case 128 + 28:  /* RF5_BLIND */
-            case 128 + 29:  /* RF5_CONF */
-            case 128 + 30:  /* RF5_SLOW */
-            case 128 + 31:  /* RF5_HOLD */
-            case 160 + 1:   /* RF6_HAND_DOOM */
-            case 160 + 8:   /* RF6_TELE_TO */
-            case 160 + 9:   /* RF6_TELE_AWAY */
-            case 160 + 10:  /* RF6_TELE_LEVEL */
-            case 160 + 11:  /* RF6_PSY_SPEAR */
-            case 160 + 12:  /* RF6_DARKNESS */
-            case 160 + 14:  /* RF6_FORGET */
-                return FALSE;
-        }
-    }
+	if (!direct)
+	{
+		switch (thrown_spell)
+		{
+		case 96 + 2:    /* RF4_DISPEL */
+		case 96 + 4:    /* RF4_SHOOT */
+		case 128 + 9:   /* RF5_DRAIN_MANA */
+		case 128 + 10:  /* RF5_MIND_BLAST */
+		case 128 + 11:  /* RF5_BRAIN_SMASH */
+		case 128 + 12:  /* RF5_CAUSE_1 */
+		case 128 + 13:  /* RF5_CAUSE_2 */
+		case 128 + 14:  /* RF5_CAUSE_3 */
+		case 128 + 15:  /* RF5_CAUSE_4 */
+		case 128 + 16:  /* RF5_BO_ACID */
+		case 128 + 17:  /* RF5_BO_ELEC */
+		case 128 + 18:  /* RF5_BO_FIRE */
+		case 128 + 19:  /* RF5_BO_COLD */
+		case 128 + 21:  /* RF5_BO_NETH */
+		case 128 + 22:  /* RF5_BO_WATE */
+		case 128 + 23:  /* RF5_BO_MANA */
+		case 128 + 24:  /* RF5_BO_PLAS */
+		case 128 + 25:  /* RF5_BO_ICEE */
+		case 128 + 26:  /* RF5_MISSILE */
+		case 128 + 27:  /* RF5_SCARE */
+		case 128 + 28:  /* RF5_BLIND */
+		case 128 + 29:  /* RF5_CONF */
+		case 128 + 30:  /* RF5_SLOW */
+		case 128 + 31:  /* RF5_HOLD */
+		case 160 + 1:   /* RF6_HAND_DOOM */
+		case 160 + 8:   /* RF6_TELE_TO */
+		case 160 + 9:   /* RF6_TELE_AWAY */
+		case 160 + 10:  /* RF6_TELE_LEVEL */
+		case 160 + 11:  /* RF6_PSY_SPEAR */
+		case 160 + 12:  /* RF6_DARKNESS */
+		case 160 + 14:  /* RF6_FORGET */
+			return FALSE;
+		}
+	}
 
-    /* Cast the spell. */
-	int dam  = monspell_to_player(thrown_spell, target_ptr, y, x, m_idx);
-    if (dam < 0) return FALSE;
+	/* Cast the spell. */
+	int dam = monspell_to_player(thrown_spell, target_ptr, y, x, m_idx);
+	if (dam < 0) return FALSE;
 
 	if ((target_ptr->action == ACTION_LEARN) && thrown_spell > 175)
 	{
@@ -1760,10 +1764,10 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 			{
 				int i;
 				target_ptr->mane_num--;
-				for (i = 0;i < target_ptr->mane_num;i++)
+				for (i = 0; i < target_ptr->mane_num; i++)
 				{
-					target_ptr->mane_spell[i] = target_ptr->mane_spell[i+1];
-					target_ptr->mane_dam[i] = target_ptr->mane_dam[i+1];
+					target_ptr->mane_spell[i] = target_ptr->mane_spell[i + 1];
+					target_ptr->mane_dam[i] = target_ptr->mane_dam[i + 1];
 				}
 			}
 			target_ptr->mane_spell[target_ptr->mane_num] = thrown_spell - 96;

@@ -49,4 +49,4 @@ extern errr predict_score(player_type *current_player_ptr);
 extern void race_legends(player_type *current_player_ptr);
 extern void race_score(player_type *current_player_ptr, int race_num);
 extern void show_highclass(player_type *current_player_ptr);
-extern bool check_score(void);
+extern bool check_score(player_type *current_player_ptr);

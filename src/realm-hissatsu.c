@@ -313,7 +313,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				{
 					y += ddy[dir];
 					x += ddx[dir];
-					if (cave_empty_bold(p_ptr->current_floor_ptr, y, x))
+					if (cave_empty_bold(caster_ptr->current_floor_ptr, y, x))
 					{
 						ty = y;
 						tx = x;
@@ -825,7 +825,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 		{
 			POSITION x, y;
 
-			if (!get_rep_dir(&dir, FALSE)) return NULL;
+			if (!get_rep_dir(caster_ptr, &dir, FALSE)) return NULL;
 
 			y = caster_ptr->y + ddy[dir];
 			x = caster_ptr->x + ddx[dir];

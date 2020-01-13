@@ -356,7 +356,8 @@ void quest_discovery(QUEST_IDX q_idx)
 
 	if (q_num != 1)
 	{
-#ifndef JP
+#ifdef JP
+#else
 		plural_aux(name);
 #endif
 		msg_format(_("注意しろ！この階は%d体の%sによって守られている！", "Be warned, this level is guarded by %d %s!"), q_num, name);
@@ -519,7 +520,7 @@ void do_cmd_quest(player_type *player_ptr)
 		msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
 		return;
 	}
-	
+
 	msg_print(_("ここにはクエストへの入口があります。", "There is an entry of a quest."));
 	if (!get_check(_("クエストに入りますか？", "Do you enter? "))) return;
 	if ((player_ptr->pseikaku == SEIKAKU_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))

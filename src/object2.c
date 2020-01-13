@@ -115,7 +115,7 @@ void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 				prev_o_idx = this_o_idx;
 				continue;
 			}
-			
+
 			/* No previous */
 			if (prev_o_idx == 0)
 			{
@@ -409,7 +409,7 @@ OBJECT_IDX get_obj_num(player_type *owner_ptr, DEPTH level, BIT_FLAGS mode)
 	}
 
 	/* No legal objects */
-	if (total <= 0) return (0);
+	if (total <= 0) return 0;
 
 
 	/* Pick an object */
@@ -453,7 +453,7 @@ OBJECT_IDX get_obj_num(player_type *owner_ptr, DEPTH level, BIT_FLAGS mode)
 
 	/* Try for a "better" object twice (10%) */
 	if (p >= 10) return (table[i].index);
-	
+
 	/* Save old */
 	j = i;
 
@@ -1504,7 +1504,7 @@ bool object_similar(object_type *o_ptr, object_type *j_ptr)
 	if (!max_num) return FALSE;
 
 	/* Maximal "stacking" limit */
-	if (total > max_num) return (0);
+	if (total > max_num) return 0;
 
 
 	/* They match, so they must be similar */
@@ -1607,12 +1607,7 @@ KIND_OBJECT_IDX lookup_kind(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval)
 		return bk;
 	}
 
-#if 0
-	msg_format(_("アイテムがない (%d,%d)", "No object (%d,%d)"), tval, sval);
-#endif
-
-
-	return (0);
+	return 0;
 }
 
 
@@ -3361,17 +3356,6 @@ static void a_m_aux_4(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 	{
 	case TV_WHISTLE:
 	{
-#if 0
-		/* Cursed */
-		if (power < 0)
-		{
-			/* Broken */
-			o_ptr->ident |= (IDENT_BROKEN);
-
-			/* Cursed */
-			o_ptr->curse_flags |= (TRC_CURSED);
-		}
-#endif
 		break;
 	}
 	case TV_FLASK:
@@ -3838,16 +3822,12 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
 			((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_KUROSHOUZOKU)))
 			o_ptr->pval = randint1(4);
 
-#if 1
 		if (power ||
 			((o_ptr->tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM)) ||
 			((o_ptr->tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD)) ||
 			((o_ptr->tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)) ||
 			((o_ptr->tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)))
 			a_m_aux_2(owner_ptr, o_ptr, lev, power);
-#else
-		if (power) a_m_aux_2(o_ptr, lev, power);
-#endif
 		break;
 	}
 
@@ -4215,7 +4195,9 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 	bool flag = FALSE;
 	bool done = FALSE;
 
-#ifndef JP
+#ifdef JP
+#else
+
 	/* Extract plural */
 	bool plural = (j_ptr->number != 1);
 #endif
@@ -4235,7 +4217,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 		if (current_world_ptr->wizard) msg_print(_("(破損)", "(breakage)"));
 
 		/* Failure */
-		return (0);
+		return 0;
 	}
 
 
@@ -4333,7 +4315,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 		if (current_world_ptr->wizard) msg_print(_("(床スペースがない)", "(no floor space)"));
 
 		/* Failure */
-		return (0);
+		return 0;
 	}
 
 
@@ -4975,7 +4957,7 @@ s16b inven_carry(player_type *owner_ptr, object_type *o_ptr)
 		}
 	}
 
-	if (owner_ptr->inven_cnt > INVEN_PACK) return (-1);
+	if (owner_ptr->inven_cnt > INVEN_PACK) return -1;
 
 	/* Find an empty slot */
 	for (j = 0; j <= INVEN_PACK; j++)
@@ -5076,7 +5058,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
 
 	/* Get the item to take off */
 	o_ptr = &owner_ptr->inventory_list[item];
-	if (amt <= 0) return (-1);
+	if (amt <= 0) return -1;
 
 	/* Verify */
 	if (amt > o_ptr->number) amt = o_ptr->number;
@@ -5261,9 +5243,7 @@ void combine_pack(player_type *owner_ptr)
 				{
 					int old_num = o_ptr->number;
 					int remain = j_ptr->number + o_ptr->number - max_num;
-#if 0
-					o_ptr->number -= remain;
-#endif
+
 					/* Add together the item counts */
 					object_absorb(j_ptr, o_ptr);
 

@@ -35,8 +35,8 @@
  */
 bool monster_near_player(floor_type *floor_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
-	monster_type	*m_ptr = &floor_ptr->m_list[m_idx];
-	monster_type	*t_ptr = &floor_ptr->m_list[t_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+	monster_type *t_ptr = &floor_ptr->m_list[t_idx];
 	return (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
 }
 
@@ -193,7 +193,7 @@ void spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 
 	if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
-		set_monster_csleep(t_idx, 0);
+		set_monster_csleep(target_ptr, t_idx, 0);
 	}
 }
 
@@ -220,7 +220,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
 		dispel_player(target_ptr);
-		if (target_ptr->riding) dispel_monster_status(target_ptr->riding);
+		if (target_ptr->riding) dispel_monster_status(target_ptr, target_ptr->riding);
 
 		if ((target_ptr->pseikaku == SEIKAKU_COMBAT) || (target_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("やりやがったな！", ""));
@@ -237,7 +237,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 	if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
 		if (t_idx == target_ptr->riding) dispel_player(target_ptr);
-		dispel_monster_status(t_idx);
+		dispel_monster_status(target_ptr, t_idx);
 	}
 }
 
@@ -315,7 +315,7 @@ HIT_POINT spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITION y, POS
 	concptr type_s;
 	bool smart_learn_aux = TRUE;
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
-	monster_type	*m_ptr = &floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 	bool see_either = see_monster(target_ptr->current_floor_ptr, m_idx) || see_monster(target_ptr->current_floor_ptr, t_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
@@ -587,7 +587,7 @@ HIT_POINT spell_RF5_BA_ACID(player_type *target_ptr, POSITION y, POSITION x, MON
 			"%^s casts an acid ball at %s."),
 		TARGET_TYPE);
 
-	rad = monster_is_powerful(m_idx) ? 4 : 2;
+	rad = monster_is_powerful(target_ptr->current_floor_ptr, m_idx) ? 4 : 2;
 	dam = monspell_damage(target_ptr, (MS_BALL_ACID), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -618,7 +618,7 @@ HIT_POINT spell_RF5_BA_ELEC(player_type *target_ptr, POSITION y, POSITION x, MON
 			"%^s casts a lightning ball at %s."),
 		TARGET_TYPE);
 
-	rad = monster_is_powerful(m_idx) ? 4 : 2;
+	rad = monster_is_powerful(target_ptr->current_floor_ptr, m_idx) ? 4 : 2;
 	dam = monspell_damage(target_ptr, (MS_BALL_ELEC), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -641,7 +641,7 @@ HIT_POINT spell_RF5_BA_ELEC(player_type *target_ptr, POSITION y, POSITION x, MON
 HIT_POINT spell_RF5_BA_FIRE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	HIT_POINT dam, rad;
-	monster_type	*m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 
 	if (m_ptr->r_idx == MON_ROLENTO)
 	{
@@ -660,7 +660,7 @@ HIT_POINT spell_RF5_BA_FIRE(player_type *target_ptr, POSITION y, POSITION x, MON
 				"%^s casts a fire ball at %s."),
 			TARGET_TYPE);
 	}
-	rad = monster_is_powerful(m_idx) ? 4 : 2;
+	rad = monster_is_powerful(target_ptr->current_floor_ptr, m_idx) ? 4 : 2;
 	dam = monspell_damage(target_ptr, (MS_BALL_FIRE), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -691,7 +691,7 @@ HIT_POINT spell_RF5_BA_COLD(player_type *target_ptr, POSITION y, POSITION x, MON
 			"%^s casts a frost ball at %s."),
 		TARGET_TYPE);
 
-	rad = monster_is_powerful(m_idx) ? 4 : 2;
+	rad = monster_is_powerful(target_ptr->current_floor_ptr, m_idx) ? 4 : 2;
 	dam = monspell_damage(target_ptr, (MS_BALL_COLD), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -906,7 +906,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, 
 HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
-	monster_type	*m_ptr = &floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	bool seen = (!target_ptr->blind && m_ptr->ml);
 	HIT_POINT dam;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
@@ -1482,9 +1482,10 @@ HIT_POINT spell_RF5_MISSILE(player_type *target_ptr, POSITION y, POSITION x, MON
 */
 void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, concptr msg4, bool resist, bool saving_throw, int TARGET_TYPE)
 {
-	bool see_either = see_monster(target_ptr->current_floor_ptr, m_idx) || see_monster(target_ptr->current_floor_ptr, t_idx);
-	bool see_t = see_monster(target_ptr->current_floor_ptr, t_idx);
-	bool known = monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	bool see_either = see_monster(floor_ptr, m_idx) || see_monster(floor_ptr, t_idx);
+	bool see_t = see_monster(floor_ptr, t_idx);
+	bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 	monster_name(t_idx, t_name);
@@ -1519,7 +1520,7 @@ void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
 		}
 		else
 		{
-			target_ptr->current_floor_ptr->monster_noise = TRUE;
+			floor_ptr->monster_noise = TRUE;
 		}
 	}
 
@@ -1536,7 +1537,7 @@ void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
 		if (see_t) msg_format(msg4, t_name);
 	}
 
-	set_monster_csleep(t_idx, 0);
+	set_monster_csleep(target_ptr, t_idx, 0);
 }
 
 
@@ -1548,9 +1549,10 @@ void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
  */
 void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *t_ptr = &floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
-	DEPTH rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool resist, saving_throw;
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -1588,7 +1590,7 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
 
 	if (!resist && !saving_throw)
 	{
-		set_monster_monfear(t_idx, MON_MONFEAR(t_ptr) + randint0(4) + 4);
+		set_monster_monfear(target_ptr, t_idx, MON_MONFEAR(t_ptr) + randint0(4) + 4);
 	}
 }
 
@@ -1601,9 +1603,10 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
  */
 void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
-	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
-	DEPTH rlev = monster_level_idx(m_idx);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *t_ptr = &floor_ptr->m_list[t_idx];
+	monster_race *tr_ptr = &r_info[t_ptr->r_idx];
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool resist, saving_throw;
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -1654,7 +1657,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
 
 	if (!resist && !saving_throw)
 	{
-		(void)set_monster_confused(t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
+		(void)set_monster_confused(target_ptr, t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
 	}
 }
 
@@ -1667,9 +1670,10 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
  */
 void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *t_ptr = &floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
-	DEPTH rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool resist, saving_throw;
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -1707,7 +1711,7 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 
 	if (!resist && !saving_throw)
 	{
-		(void)set_monster_confused(t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
+		(void)set_monster_confused(target_ptr, t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
 	}
 }
 
@@ -1720,9 +1724,10 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
  */
 void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *t_ptr = &floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
-	DEPTH rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool resist, saving_throw;
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -1773,7 +1778,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 
 	if (!resist && !saving_throw)
 	{
-		set_monster_slow(t_idx, MON_SLOW(t_ptr) + 50);
+		set_monster_slow(target_ptr, t_idx, MON_SLOW(t_ptr) + 50);
 	}
 }
 
@@ -1786,9 +1791,10 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
  */
 void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *t_ptr = &floor_ptr->m_list[t_idx];
 	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
-	DEPTH rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool resist, saving_throw;
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -1826,7 +1832,7 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 
 	if (!resist && !saving_throw)
 	{
-		(void)set_monster_stunned(t_idx, MON_STUNNED(t_ptr) + randint1(4) + 4);
+		(void)set_monster_stunned(target_ptr, t_idx, MON_STUNNED(t_ptr) + randint1(4) + 4);
 	}
 }
 
@@ -1842,7 +1848,7 @@ void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_i
 {
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	bool see_m = see_monster(floor_ptr, m_idx);
-	monster_type	*m_ptr = &floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
@@ -1854,7 +1860,7 @@ void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_i
 		target_ptr->blind > 0, TARGET_TYPE);
 
 	/* Allow quick speed increases to base+10 */
-	if (set_monster_fast(m_idx, MON_FAST(m_ptr) + 100))
+	if (set_monster_fast(target_ptr, m_idx, MON_FAST(m_ptr) + 100))
 	{
 		if (TARGET_TYPE == MONSTER_TO_PLAYER ||
 			(TARGET_TYPE == MONSTER_TO_MONSTER && see_m))
@@ -1905,8 +1911,9 @@ HIT_POINT spell_RF6_HAND_DOOM(player_type *target_ptr, POSITION y, POSITION x, M
 */
 void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	DEPTH rlev = monster_level_idx(m_idx);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool seen = (!target_ptr->blind && m_ptr->ml);
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
@@ -1956,9 +1963,9 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 	if (!MON_MONFEAR(m_ptr)) return;
 
 	/* Cancel fear */
-	(void)set_monster_monfear(m_idx, 0);
+	(void)set_monster_monfear(target_ptr, m_idx, 0);
 
-	if (see_monster(target_ptr->current_floor_ptr, m_idx))
+	if (see_monster(floor_ptr, m_idx))
 		msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
 }
 
@@ -1972,7 +1979,7 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 */
 void spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	bool seen = (!target_ptr->blind && m_ptr->ml);
 
 	monspell_message_base(target_ptr, m_idx, t_idx,
@@ -1982,7 +1989,7 @@ void spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX 
 		_("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."),
 		!seen, TARGET_TYPE);
 
-	if (!MON_INVULNER(m_ptr)) (void)set_monster_invulner(m_idx, randint1(4) + 4, FALSE);
+	if (!MON_INVULNER(m_ptr)) (void)set_monster_invulner(target_ptr, m_idx, randint1(4) + 4, FALSE);
 }
 
 
@@ -2000,15 +2007,16 @@ void spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		disturb(target_ptr, TRUE, TRUE);
 
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	if (teleport_barrier(target_ptr, m_idx))
 	{
-		if (see_monster(target_ptr->current_floor_ptr, m_idx))
+		if (see_monster(floor_ptr, m_idx))
 			msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。",
 				"Magic barrier obstructs teleporting of %^s."), m_name);
 		return;
 	}
 
-	if (see_monster(target_ptr->current_floor_ptr, m_idx))
+	if (see_monster(floor_ptr, m_idx))
 		msg_format(_("%^sが瞬時に消えた。", "%^s blinks away."), m_name);
 
 	teleport_away(target_ptr, m_idx, 10, 0L);
@@ -2029,17 +2037,18 @@ void spell_RF6_TPORT(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		disturb(target_ptr, TRUE, TRUE);
 	if (teleport_barrier(target_ptr, m_idx))
 	{
-		if (see_monster(target_ptr->current_floor_ptr, m_idx))
+		if (see_monster(floor_ptr, m_idx))
 			msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。",
 				"Magic barrier obstructs teleporting of %^s."), m_name);
 		return;
 	}
 
-	if (see_monster(target_ptr->current_floor_ptr, m_idx))
+	if (see_monster(floor_ptr, m_idx))
 		msg_format(_("%^sがテレポートした。", "%^s teleports away."), m_name);
 
 	teleport_away_followable(target_ptr, m_idx);
@@ -2183,9 +2192,9 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
 {
 	HIT_POINT dam = -1;
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
-	monster_type	*m_ptr = &floor_ptr->m_list[m_idx];
-	monster_type	*t_ptr = &floor_ptr->m_list[t_idx];
-	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+	monster_type *t_ptr = &floor_ptr->m_list[t_idx];
+	monster_race *tr_ptr = &r_info[t_ptr->r_idx];
 	bool monster_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	bool monster_to_monster = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool direct = player_bold(target_ptr, y, x);
@@ -2260,10 +2269,10 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
 	}
 
 	if (monster_to_player && target_ptr->riding)
-		mon_take_hit_mon(target_ptr->riding, dam, &dead, &fear, extract_note_dies(real_r_idx(&floor_ptr->m_list[target_ptr->riding])), m_idx);
+		mon_take_hit_mon(target_ptr, target_ptr->riding, dam, &dead, &fear, extract_note_dies(real_r_idx(&floor_ptr->m_list[target_ptr->riding])), m_idx);
 
 	if (monster_to_monster)
-		mon_take_hit_mon(t_idx, dam, &dead, &fear, extract_note_dies(real_r_idx(t_ptr)), m_idx);
+		mon_take_hit_mon(target_ptr, t_idx, dam, &dead, &fear, extract_note_dies(real_r_idx(t_ptr)), m_idx);
 	return dam;
 }
 
@@ -2281,8 +2290,8 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
 HIT_POINT spell_RF6_SPECIAL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
-	monster_type	*m_ptr = &floor_ptr->m_list[m_idx];
-	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	disturb(target_ptr, TRUE, TRUE);
 	switch (m_ptr->r_idx)
@@ -2324,9 +2333,9 @@ HIT_POINT spell_RF6_SPECIAL(player_type *target_ptr, POSITION y, POSITION x, MON
 void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
-	monster_type	*m_ptr = &floor_ptr->m_list[m_idx];
-	monster_type	*t_ptr = &floor_ptr->m_list[t_idx];
-	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+	monster_type *t_ptr = &floor_ptr->m_list[t_idx];
+	monster_race *tr_ptr = &r_info[t_ptr->r_idx];
 
 	simple_monspell_message(target_ptr, m_idx, t_idx,
 		_("%^sがあなたを引き戻した。", "%^s commands you to return."),
@@ -2351,7 +2360,7 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 		if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 		{
 			if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
-			if (see_monster(target_ptr->current_floor_ptr, t_idx))
+			if (see_monster(floor_ptr, t_idx))
 			{
 				msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
 			}
@@ -2360,7 +2369,7 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 		else if (tr_ptr->level > randint1(100))
 		{
 			if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
-			if (see_monster(target_ptr->current_floor_ptr, t_idx))
+			if (see_monster(floor_ptr, t_idx))
 			{
 				msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
 			}
@@ -2370,7 +2379,7 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 
 	if (resists_tele)
 	{
-		set_monster_csleep(t_idx, 0);
+		set_monster_csleep(target_ptr, t_idx, 0);
 		return;
 	}
 
@@ -2378,7 +2387,7 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 		teleport_player_to(target_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
 	else
 		teleport_monster_to(target_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_PASSIVE);
-	set_monster_csleep(t_idx, 0);
+	set_monster_csleep(target_ptr, t_idx, 0);
 }
 
 
@@ -2392,8 +2401,9 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 */
 void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
-	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *t_ptr = &floor_ptr->m_list[t_idx];
+	monster_race *tr_ptr = &r_info[t_ptr->r_idx];
 
 	simple_monspell_message(target_ptr, m_idx, t_idx,
 		_("%^sにテレポートさせられた。", "%^s teleports you away."),
@@ -2426,7 +2436,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 		if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 		{
 			if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
-			if (see_monster(target_ptr->current_floor_ptr, t_idx))
+			if (see_monster(floor_ptr, t_idx))
 			{
 				msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
 			}
@@ -2435,7 +2445,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 		else if (tr_ptr->level > randint1(100))
 		{
 			if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
-			if (see_monster(target_ptr->current_floor_ptr, t_idx))
+			if (see_monster(floor_ptr, t_idx))
 			{
 				msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
 			}
@@ -2445,7 +2455,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
 	if (resists_tele)
 	{
-		set_monster_csleep(t_idx, 0);
+		set_monster_csleep(target_ptr, t_idx, 0);
 		return;
 	}
 
@@ -2453,7 +2463,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 		teleport_player_away(m_idx, target_ptr, MAX_SIGHT * 2 + 5);
 	else
 		teleport_away(target_ptr, t_idx, MAX_SIGHT * 2 + 5, TELEPORT_PASSIVE);
-	set_monster_csleep(t_idx, 0);
+	set_monster_csleep(target_ptr, t_idx, 0);
 }
 
 
@@ -2467,9 +2477,10 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 */
 void spell_RF6_TELE_LEVEL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
-	monster_race	*tr_ptr = &r_info[t_ptr->r_idx];
-	DEPTH rlev = monster_level_idx(m_idx);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *t_ptr = &floor_ptr->m_list[t_idx];
+	monster_race *tr_ptr = &r_info[t_ptr->r_idx];
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool resist, saving_throw;
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -2547,9 +2558,10 @@ HIT_POINT spell_RF6_PSY_SPEAR(player_type *target_ptr, POSITION y, POSITION x, M
 */
 void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	monster_type	*m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	monster_type	*t_ptr = &target_ptr->current_floor_ptr->m_list[t_idx];
-	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+	monster_type *t_ptr = &floor_ptr->m_list[t_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool can_use_lite_area = FALSE;
 	bool monster_to_monster = TARGET_TYPE == MONSTER_TO_MONSTER;
 	bool monster_to_player = TARGET_TYPE == MONSTER_TO_PLAYER;
@@ -2573,7 +2585,7 @@ void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 			_("%^sが辺りを明るく照らした。", "%^s cast a spell to light up."),
 			TARGET_TYPE);
 
-		if (see_monster(target_ptr->current_floor_ptr, t_idx) && monster_to_monster)
+		if (see_monster(floor_ptr, t_idx) && monster_to_monster)
 		{
 			msg_format(_("%^sは白い光に包まれた。", "%^s is surrounded by a white light."), t_name);
 		}
@@ -2586,7 +2598,7 @@ void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 			_("%^sが暗闇の中で手を振った。", "%^s gestures in shadow."),
 			TARGET_TYPE);
 
-		if (see_monster(target_ptr->current_floor_ptr, t_idx) && monster_to_monster)
+		if (see_monster(floor_ptr, t_idx) && monster_to_monster)
 		{
 			msg_format(_("%^sは暗闇に包まれた。", "%^s is surrounded by darkness."), t_name);
 		}
@@ -2649,7 +2661,7 @@ void spell_RF6_TRAPS(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 */
 void spell_RF6_FORGET(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-	DEPTH rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(target_ptr->current_floor_ptr, m_idx);
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(m_idx, m_name);
 
@@ -2852,7 +2864,7 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	DEPTH rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	int count = 0;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN], m_poss[80];
 	monster_name(m_idx, m_name);
@@ -2860,8 +2872,8 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
 	disturb(target_ptr, TRUE, TRUE);
-	bool known = monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx);
-	bool see_either = see_monster(target_ptr->current_floor_ptr, m_idx) || see_monster(target_ptr->current_floor_ptr, t_idx);
+	bool known = monster_near_player(floor_ptr, m_idx, t_idx);
+	bool see_either = see_monster(floor_ptr, m_idx) || see_monster(floor_ptr, t_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	if (m_ptr->r_idx == MON_SERPENT || m_ptr->r_idx == MON_ZOMBI_SERPENT)
@@ -2928,7 +2940,7 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
-	if (known && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
+	if (known && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
 }
 
@@ -2948,7 +2960,7 @@ void spell_RF6_S_CYBER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	int count = 0;
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-	DEPTH rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 
@@ -2964,13 +2976,13 @@ void spell_RF6_S_CYBER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	}
 	else
 	{
-		count += summon_cyber(m_idx, y, x);
+		count += summon_cyber(floor_ptr, m_idx, y, x);
 	}
 
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("重厚な足音が近くで聞こえる。", "You hear heavy steps nearby."));
 
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
+	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
 }
 
@@ -2994,7 +3006,7 @@ void spell_RF6_S_MONSTER(player_type *target_ptr, POSITION y, POSITION x, MONSTE
 
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	int count = 0;
-	DEPTH rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	for (int k = 0; k < 1; k++)
@@ -3034,7 +3046,7 @@ void spell_RF6_S_MONSTERS(player_type *target_ptr, POSITION y, POSITION x, MONST
 
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	int count = 0;
-	DEPTH rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	for (int k = 0; k < S_NUM_6; k++)
@@ -3049,7 +3061,7 @@ void spell_RF6_S_MONSTERS(player_type *target_ptr, POSITION y, POSITION x, MONST
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
 }
 
@@ -3073,7 +3085,8 @@ void spell_RF6_S_ANT(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 		TARGET_TYPE);
 
 	int count = 0;
-	DEPTH rlev = monster_level_idx(m_idx);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	for (int k = 0; k < S_NUM_6; k++)
@@ -3084,8 +3097,8 @@ void spell_RF6_S_ANT(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
-		target_ptr->current_floor_ptr->monster_noise = TRUE;
+	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+		floor_ptr->monster_noise = TRUE;
 }
 
 
@@ -3110,7 +3123,8 @@ void spell_RF6_S_SPIDER(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 	int count = 0;
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
-	DEPTH rlev = monster_level_idx(m_idx);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	for (int k = 0; k < S_NUM_6; k++)
 	{
 		count += summon_specific(m_idx, y, x, rlev, SUMMON_SPIDER, PM_ALLOW_GROUP);
@@ -3119,8 +3133,8 @@ void spell_RF6_S_SPIDER(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
-		target_ptr->current_floor_ptr->monster_noise = TRUE;
+	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+		floor_ptr->monster_noise = TRUE;
 }
 
 
@@ -3143,7 +3157,8 @@ void spell_RF6_S_HOUND(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 		TARGET_TYPE);
 
 	int count = 0;
-	DEPTH rlev = monster_level_idx(m_idx);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	for (int k = 0; k < S_NUM_4; k++)
@@ -3154,7 +3169,6 @@ void spell_RF6_S_HOUND(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
-	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
 }
@@ -3179,7 +3193,8 @@ void spell_RF6_S_HYDRA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 		TARGET_TYPE);
 
 	int count = 0;
-	DEPTH rlev = monster_level_idx(m_idx);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	for (int k = 0; k < S_NUM_4; k++)
@@ -3190,7 +3205,6 @@ void spell_RF6_S_HYDRA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	if (target_ptr->blind && count && mon_to_player)
 		msg_print(_("多くのものが間近に現れた音がする。", "You hear many things appear nearby."));
 
-	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
 }
@@ -3223,7 +3237,7 @@ void spell_RF6_S_ANGEL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 		num += r_ptr->level / 40;
 	}
 
-	DEPTH rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	int count = 0;
 	for (int k = 0; k < num; k++)
 	{
@@ -3242,7 +3256,7 @@ void spell_RF6_S_ANGEL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	}
 
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
+	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
 }
 
@@ -3265,7 +3279,8 @@ void spell_RF6_S_DEMON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 		_("%^sは魔法で混沌の宮廷から悪魔を召喚した！", "%^s magically summons a demon from the Courts of Chaos!"),
 		TARGET_TYPE);
 
-	DEPTH rlev = monster_level_idx(m_idx);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	int count = 0;
 	for (int k = 0; k < 1; k++)
 	{
@@ -3275,7 +3290,6 @@ void spell_RF6_S_DEMON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	if (target_ptr->blind && count)
 		msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 
-	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
@@ -3300,7 +3314,8 @@ void spell_RF6_S_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 		_("%sが魔法でアンデッドを召喚した。", "%^s magically summons undead."),
 		TARGET_TYPE);
 
-	DEPTH rlev = monster_level_idx(m_idx);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	int count = 0;
 	for (int k = 0; k < 1; k++)
 	{
@@ -3310,7 +3325,6 @@ void spell_RF6_S_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 	if (target_ptr->blind && count)
 		msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 
-	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
@@ -3335,7 +3349,8 @@ void spell_RF6_S_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 		_("%^sが魔法でドラゴンを召喚した！", "%^s magically summons a dragon!"),
 		TARGET_TYPE);
 
-	DEPTH rlev = monster_level_idx(m_idx);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	int count = 0;
 	for (int k = 0; k < 1; k++)
 	{
@@ -3345,7 +3360,6 @@ void spell_RF6_S_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 	if (target_ptr->blind && count)
 		msg_print(_("何かが間近に現れた音がする。", "You hear something appear nearby."));
 
-	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
@@ -3451,7 +3465,7 @@ void spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONS
 			_("%sが魔法でアンデッドを召喚した。", "%^s magically summons undead."),
 			TARGET_TYPE);
 
-		DEPTH rlev = monster_level_idx(m_idx);
+		DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 		for (int k = 0; k < S_NUM_6; k++)
 		{
 			if (mon_to_player)
@@ -3490,7 +3504,7 @@ void spell_RF6_S_HI_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONS
 		TARGET_TYPE);
 
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
-	DEPTH rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	int count = 0;
@@ -3532,7 +3546,8 @@ void spell_RF6_S_AMBERITES(player_type *target_ptr, POSITION y, POSITION x, MONS
 		TARGET_TYPE);
 
 	int count = 0;
-	DEPTH rlev = monster_level_idx(m_idx);
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	for (int k = 0; k < S_NUM_4; k++)
@@ -3545,8 +3560,8 @@ void spell_RF6_S_AMBERITES(player_type *target_ptr, POSITION y, POSITION x, MONS
 		msg_print(_("不死の者が近くに現れるのが聞こえた。", "You hear immortal beings appear nearby."));
 	}
 
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
-		target_ptr->current_floor_ptr->monster_noise = TRUE;
+	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
+		floor_ptr->monster_noise = TRUE;
 }
 
 
@@ -3569,8 +3584,8 @@ void spell_RF6_S_UNIQUE(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 		TARGET_TYPE);
 
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
-	monster_type	*m_ptr = &floor_ptr->m_list[m_idx];
-	DEPTH rlev = monster_level_idx(m_idx);
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	bool uniques_are_summoned = FALSE;
@@ -3599,7 +3614,7 @@ void spell_RF6_S_UNIQUE(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 			uniques_are_summoned ? _("力強いもの", "powerful things") : _("もの", "things"));
 	}
 
-	if (monster_near_player(target_ptr->current_floor_ptr, m_idx, t_idx) && !see_monster(target_ptr->current_floor_ptr, t_idx) && count && mon_to_mon)
+	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
 }
 
@@ -4301,15 +4316,16 @@ HIT_POINT monspell_damage_base(player_type *target_ptr, int SPELL_NUM, int hp, i
 */
 HIT_POINT monspell_damage(player_type *target_ptr, int SPELL_NUM, MONSTER_IDX m_idx, int TYPE)
 {
-	monster_type	*m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	monster_race	*r_ptr = &r_info[m_ptr->r_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	int hp;
-	DEPTH rlev = monster_level_idx(m_idx);
+	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	int shoot_dd = r_ptr->blow[0].d_dice;
 	int shoot_ds = r_ptr->blow[0].d_side;
 
 	hp = (TYPE == DAM_ROLL) ? m_ptr->hp : m_ptr->max_maxhp;
-	return monspell_damage_base(target_ptr, SPELL_NUM, hp, rlev, monster_is_powerful(m_idx), shoot_dd, shoot_ds, 0, TYPE);
+	return monspell_damage_base(target_ptr, SPELL_NUM, hp, rlev, monster_is_powerful(floor_ptr, m_idx), shoot_dd, shoot_ds, 0, TYPE);
 }
 
 

@@ -480,7 +480,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		{
 			msg_print(_("巻物にはメッセージが書かれている:", "There is message on the scroll. It says:"));
 			msg_print(NULL);
-			display_rumor(TRUE);
+			display_rumor(creature_ptr, TRUE);
 			msg_print(NULL);
 			msg_print(_("巻物は煙を立てて消え去った！", "The scroll disappears in a puff of smoke!"));
 

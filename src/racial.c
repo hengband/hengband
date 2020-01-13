@@ -65,7 +65,7 @@ static bool choose_kamae(player_type *creature_ptr)
 	prt("", 1, 0);
 	prt(_("        どの構えをとりますか？", "        Choose Form: "), 1, 14);
 
-	while(1)
+	while (TRUE)
 	{
 		choice = inkey();
 
@@ -164,7 +164,7 @@ static bool choose_kata(player_type *creature_ptr)
 	prt("", 1, 0);
 	prt(_("        どの型で構えますか？", "        Choose Form: "), 1, 14);
 
-	while(1)
+	while (TRUE)
 	{
 		choice = inkey();
 
@@ -261,7 +261,7 @@ static PERCENTAGE racial_chance(player_type *creature_ptr, power_desc_type *pd_p
 	/* No chance for success */
 	if ((creature_ptr->lev < min_level) || creature_ptr->confused)
 	{
-		return (0);
+		return 0;
 	}
 
 	if (difficulty == 0) return 100;

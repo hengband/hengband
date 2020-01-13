@@ -80,7 +80,7 @@ int m_bonus(int max, DEPTH level)
 	value = randnor(bonus, stand);
 
 	/* Enforce the minimum value */
-	if (value < 0) return (0);
+	if (value < 0) return 0;
 
 	/* Enforce the maximum value */
 	if (value > max) return (max);

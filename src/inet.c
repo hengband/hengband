@@ -38,72 +38,9 @@ bool browsing_movie;
 
 #ifdef MACINTOSH
 static InetSvcRef inet_services = nil;
-static EndpointRef ep 		= kOTInvalidEndpointRef;
+static EndpointRef ep = kOTInvalidEndpointRef;
 #endif
 
-#if 0 /* とりあえず現在は使わない。by Habu*/
-static char	*homeurl;
-
-void
-set_homeurl(char *s)
-{
-	if(homeurl)
-		free(homeurl);
-
-	homeurl = malloc(strlen(s) + 1);
-	strcpy(homeurl, s);
-}
-
-char *
-get_homeurl()
-{
-	if(homeurl)
-		return homeurl;
-	else
-		return "";
-}
-
-
-char *
-get_proxy()
-{
-	static char buf[BUFSIZ];
-
-	if(proxy && proxy[0]){
-#ifndef WINDOWS
-		snprintf(buf, sizeof(buf), "%s:%d", proxy, proxy_port);
-#else
-		_snprintf(buf, sizeof(buf), "%s:%d", proxy, proxy_port);
-#endif
-		buf[sizeof(buf)-1] = '\0';
-		return buf;
-	}
-	else
-		return "";
-}
-
-char *
-get_proxy_host()
-{
-	return proxy;
-}
-
-int
-get_proxy_port()
-{
-	return proxy_port;
-}
-
-int soc_read(int sd, char *buf, size_t sz)
-{
-#ifndef WINDOWS
-	return read(sd, buf, sz);
-#else
-	return recv(sd, buf, sz, 0);
-#endif
-}
-
-#endif /* if 0 */
 
 /* プロキシサーバのアドレスををファイルから読んで設定する */
 void set_proxy(char *default_url, int default_port)
@@ -131,7 +68,7 @@ void set_proxy(char *default_url, int default_port)
 		return;
 	}
 
-	while (my_fgets(fp, buf, sizeof(buf))==0)
+	while (my_fgets(fp, buf, sizeof(buf)) == 0)
 	{
 		if (buf[0] != '#' && buf[0] != '\0') break;
 	}
@@ -148,11 +85,11 @@ void set_proxy(char *default_url, int default_port)
 		s += 7;
 	}
 #elif defined(MACINTOSH)
-	strncpy( tmp , s , 7 );
-	for ( i = 0 ; i < 7 ; i++ )
+	strncpy(tmp, s, 7);
+	for (i = 0; i < 7; i++)
 	{
-		if ( isalpha(tmp[i]) )
-			tmp[i]= tolower(tmp[i]);
+		if (isalpha(tmp[i]))
+			tmp[i] = tolower(tmp[i]);
 	}
 	if (!strncmp(s, "http://", 7))
 	{
@@ -210,8 +147,8 @@ int soc_write(int sd, char *buf, size_t sz)
 #else /* !MACINTOSH */
 
 	OTResult bytesSent;
-	
-	OTSnd(ep, (void *) buf, sz, 0);
+
+	OTSnd(ep, (void *)buf, sz, 0);
 
 #endif
 	return sz;
@@ -242,17 +179,10 @@ int soc_read(int sd, char *buf, size_t sz)
 	return nread;
 }
 
-#if 0 /* おそらく使わない */
-int soc_write_str(int sd, char *buf)
-{
-	return soc_write(sd, buf, strlen(buf));
-}
-#endif
-
 #if !defined(WINDOWS) && !defined(MACINTOSH)
 static sigjmp_buf	env;
-static void (*sig_int_saved)(int);
-static void (*sig_alm_saved)(int);
+static void(*sig_int_saved)(int);
+static void(*sig_alm_saved)(int);
 #endif
 
 static void restore_signal(void)
@@ -302,7 +232,7 @@ int connect_server(int timeout, concptr host, int port)
 	val.it_value.tv_usec = 0;
 
 	/* タイムアウト、もしくは中断した時の処理。 */
-	if ((ret = sigsetjmp(env,1)) != 0)
+	if ((ret = sigsetjmp(env, 1)) != 0)
 	{
 #ifdef JP
 		if (ret == SIGALRM)
@@ -361,7 +291,7 @@ int connect_server(int timeout, concptr host, int port)
 
 	to.sin_family = AF_INET;
 
-	if(proxy && proxy[0] && proxy_port)
+	if (proxy && proxy[0] && proxy_port)
 		to.sin_port = htons((unsigned short int)proxy_port);
 	else
 		to.sin_port = htons((unsigned short int)port);
@@ -369,7 +299,7 @@ int connect_server(int timeout, concptr host, int port)
 #ifndef WINDOWS
 	if ((sd = socket(PF_INET, SOCK_STREAM, 0)) < 0)
 #else
-	if  ((sd = socket(PF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
+	if ((sd = socket(PF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
 #endif
 	{
 #ifdef JP
@@ -404,25 +334,25 @@ int connect_server(int timeout, concptr host, int port)
 
 #else /* !MACINTOSH */
 
-        /* サーバにコネクトする関数。 Mac */
+	/* サーバにコネクトする関数。 Mac */
 {
 	OSStatus err;
 	InetHostInfo 	response;
 	InetHost 		host_addr;
 	InetAddress 	inAddr;
 	TCall 			sndCall;
-	Boolean			bind	= false;
-	
+	Boolean			bind = false;
+
 	memset(&response, 0, sizeof(response));
-	
+
 #if TARGET_API_MAC_CARBON
 	inet_services = OTOpenInternetServicesInContext(kDefaultInternetServicesPath, 0, &err, NULL);
 #else
 	inet_services = OTOpenInternetServices(kDefaultInternetServicesPath, 0, &err);
 #endif 
-	
+
 	if (err == noErr) {
-		
+
 		if (proxy && proxy[0])
 		{
 			err = OTInetStringToAddress(inet_services, proxy, &response);
@@ -431,7 +361,7 @@ int connect_server(int timeout, concptr host, int port)
 		{
 			err = OTInetStringToAddress(inet_services, (char *)host, &response);
 		}
-		
+
 		if (err == noErr)
 		{
 			host_addr = response.addrs[0];
@@ -440,7 +370,7 @@ int connect_server(int timeout, concptr host, int port)
 		{
 			errstr = "error: bad score server!\n";
 		}
-		
+
 #if TARGET_API_MAC_CARBON
 		ep = (void *)OTOpenEndpointInContext(OTCreateConfiguration(kTCPName), 0, nil, &err, NULL);
 #else
@@ -458,27 +388,27 @@ int connect_server(int timeout, concptr host, int port)
 				OTInitInetAddress(&inAddr, proxy_port, host_addr);
 			else
 				OTInitInetAddress(&inAddr, port, host_addr);
-			
-			sndCall.addr.len 	= sizeof(InetAddress);				
-			sndCall.addr.buf	= (unsigned char*) &inAddr;
-			sndCall.opt.buf 	= nil;	      /* no connection options */
-			sndCall.opt.len 	= 0;
-			sndCall.udata.buf 	= nil;	      /* no connection data */
-			sndCall.udata.len 	= 0;
-			sndCall.sequence 	= 0;	      /* ignored by OTConnect */
-			
+
+			sndCall.addr.len = sizeof(InetAddress);
+			sndCall.addr.buf = (unsigned char*)&inAddr;
+			sndCall.opt.buf = nil;	      /* no connection options */
+			sndCall.opt.len = 0;
+			sndCall.udata.buf = nil;	      /* no connection data */
+			sndCall.udata.len = 0;
+			sndCall.sequence = 0;	      /* ignored by OTConnect */
+
 			err = OTConnect(ep, &sndCall, NULL);
-			
+
 			if (err != noErr)
 			{
 				errstr = "error: cannot connect score server!\n";
 			}
 		}
 	}
-	
-	if ( err != noErr )
+
+	if (err != noErr)
 	{
-		if ( bind )
+		if (bind)
 		{
 			OTUnbind(ep);
 		}
@@ -493,10 +423,10 @@ int connect_server(int timeout, concptr host, int port)
 			OTCloseProvider(inet_services);
 			inet_services = nil;
 		}
-	
+
 		return -1;
 	}
-	
+
 	return 1;
 }
 #endif
@@ -511,7 +441,7 @@ int disconnect_server(int sd)
 	{
 		OTCloseProvider(ep);
 	}
-	
+
 	if (inet_services != nil)
 	{
 		OTCloseProvider(inet_services);

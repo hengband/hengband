@@ -177,7 +177,7 @@
 #define OBJ_GOLD_LIST   480     /* First "gold" entry */
 #define MAX_GOLD        18      /* Number of "gold" entries */
 
-/* Lite flag macro */
+ /* Lite flag macro */
 #define HAVE_LITE_FLAG(ARRAY) \
 	(have_flag(ARRAY, TR_LITE_1) || have_flag(ARRAY, TR_LITE_2) || have_flag(ARRAY, TR_LITE_3))
 
@@ -207,71 +207,71 @@ struct object_type
 	 * only armor and weapons and a few other items use any of these flags.
 	 */
 
-	#define TV_SKELETON      1      /* Skeletons ('s'), not specified */
-	#define TV_BOTTLE        2      /* Empty bottles ('!') */
-	#define TV_JUNK          3      /* Sticks, Pottery, etc ('~') */
-	#define TV_WHISTLE       4      /* Whistle ('~') */
-	#define TV_SPIKE         5      /* Spikes ('~') */
-	#define TV_CHEST         7      /* Chests ('&') */
-	#define TV_FIGURINE      8      /* Magical figurines */
-	#define TV_STATUE        9      /* Statue, what a silly object... */
-	#define TV_CORPSE       10      /* Corpses and Skeletons, specific */
-	#define TV_CAPTURE      11      /* Monster ball */
-	#define TV_NO_AMMO      15      /* Ammo for crimson */
-	#define TV_SHOT         16      /* Ammo for slings */
-	#define TV_ARROW        17      /* Ammo for bows */
-	#define TV_BOLT         18      /* Ammo for x-bows */
-	#define TV_BOW          19      /* Slings/Bows/Xbows */
-	#define TV_DIGGING      20      /* Shovels/Picks */
-	#define TV_HAFTED       21      /* Priest Weapons */
-	#define TV_POLEARM      22      /* Axes and Pikes */
-	#define TV_SWORD        23      /* Edged Weapons */
-	#define TV_BOOTS        30      /* Boots */
-	#define TV_GLOVES       31      /* Gloves */
-	#define TV_HELM         32      /* Helms */
-	#define TV_CROWN        33      /* Crowns */
-	#define TV_SHIELD       34      /* Shields */
-	#define TV_CLOAK        35      /* Cloaks */
-	#define TV_SOFT_ARMOR   36      /* Soft Armor */
-	#define TV_HARD_ARMOR   37      /* Hard Armor */
-	#define TV_DRAG_ARMOR   38      /* Dragon Scale Mail */
-	#define TV_LITE         39      /* Lites (including Specials) */
-	#define TV_AMULET       40      /* Amulets (including Specials) */
-	#define TV_RING         45      /* Rings (including Specials) */
-	#define TV_CARD         50
-	#define TV_STAFF        55
-	#define TV_WAND         65
-	#define TV_ROD          66
-	#define TV_PARCHMENT    69
-	#define TV_SCROLL       70
-	#define TV_POTION       75
-	#define TV_FLASK        77
-	#define TV_FOOD         80
-	#define TV_LIFE_BOOK    90
-	#define TV_SORCERY_BOOK 91
-	#define TV_NATURE_BOOK  92
-	#define TV_CHAOS_BOOK   93
-	#define TV_DEATH_BOOK   94
-	#define TV_TRUMP_BOOK   95
-	#define TV_ARCANE_BOOK  96
-	#define TV_CRAFT_BOOK 97
-	#define TV_DAEMON_BOOK  98
-	#define TV_CRUSADE_BOOK 99
-	#define TV_MUSIC_BOOK   105
-	#define TV_HISSATSU_BOOK 106
-	#define TV_HEX_BOOK     107
-	#define TV_GOLD         127     /* Gold can only be picked up by players */
+#define TV_SKELETON      1      /* Skeletons ('s'), not specified */
+#define TV_BOTTLE        2      /* Empty bottles ('!') */
+#define TV_JUNK          3      /* Sticks, Pottery, etc ('~') */
+#define TV_WHISTLE       4      /* Whistle ('~') */
+#define TV_SPIKE         5      /* Spikes ('~') */
+#define TV_CHEST         7      /* Chests ('&') */
+#define TV_FIGURINE      8      /* Magical figurines */
+#define TV_STATUE        9      /* Statue, what a silly object... */
+#define TV_CORPSE       10      /* Corpses and Skeletons, specific */
+#define TV_CAPTURE      11      /* Monster ball */
+#define TV_NO_AMMO      15      /* Ammo for crimson */
+#define TV_SHOT         16      /* Ammo for slings */
+#define TV_ARROW        17      /* Ammo for bows */
+#define TV_BOLT         18      /* Ammo for x-bows */
+#define TV_BOW          19      /* Slings/Bows/Xbows */
+#define TV_DIGGING      20      /* Shovels/Picks */
+#define TV_HAFTED       21      /* Priest Weapons */
+#define TV_POLEARM      22      /* Axes and Pikes */
+#define TV_SWORD        23      /* Edged Weapons */
+#define TV_BOOTS        30      /* Boots */
+#define TV_GLOVES       31      /* Gloves */
+#define TV_HELM         32      /* Helms */
+#define TV_CROWN        33      /* Crowns */
+#define TV_SHIELD       34      /* Shields */
+#define TV_CLOAK        35      /* Cloaks */
+#define TV_SOFT_ARMOR   36      /* Soft Armor */
+#define TV_HARD_ARMOR   37      /* Hard Armor */
+#define TV_DRAG_ARMOR   38      /* Dragon Scale Mail */
+#define TV_LITE         39      /* Lites (including Specials) */
+#define TV_AMULET       40      /* Amulets (including Specials) */
+#define TV_RING         45      /* Rings (including Specials) */
+#define TV_CARD         50
+#define TV_STAFF        55
+#define TV_WAND         65
+#define TV_ROD          66
+#define TV_PARCHMENT    69
+#define TV_SCROLL       70
+#define TV_POTION       75
+#define TV_FLASK        77
+#define TV_FOOD         80
+#define TV_LIFE_BOOK    90
+#define TV_SORCERY_BOOK 91
+#define TV_NATURE_BOOK  92
+#define TV_CHAOS_BOOK   93
+#define TV_DEATH_BOOK   94
+#define TV_TRUMP_BOOK   95
+#define TV_ARCANE_BOOK  96
+#define TV_CRAFT_BOOK 97
+#define TV_DAEMON_BOOK  98
+#define TV_CRUSADE_BOOK 99
+#define TV_MUSIC_BOOK   105
+#define TV_HISSATSU_BOOK 106
+#define TV_HEX_BOOK     107
+#define TV_GOLD         127     /* Gold can only be picked up by players */
 
-	#define TV_EQUIP_BEGIN    TV_SHOT
-	#define TV_EQUIP_END      TV_CARD
-	#define TV_MISSILE_BEGIN  TV_SHOT
-	#define TV_MISSILE_END    TV_BOLT
-	#define TV_WEARABLE_BEGIN TV_BOW
-	#define TV_WEARABLE_END   TV_CARD
-	#define TV_WEAPON_BEGIN   TV_BOW
-	#define TV_WEAPON_END     TV_SWORD
-	#define TV_ARMOR_BEGIN    TV_BOOTS
-	#define TV_ARMOR_END      TV_DRAG_ARMOR
+#define TV_EQUIP_BEGIN    TV_SHOT
+#define TV_EQUIP_END      TV_CARD
+#define TV_MISSILE_BEGIN  TV_SHOT
+#define TV_MISSILE_END    TV_BOLT
+#define TV_WEARABLE_BEGIN TV_BOW
+#define TV_WEARABLE_END   TV_CARD
+#define TV_WEAPON_BEGIN   TV_BOW
+#define TV_WEAPON_END     TV_SWORD
+#define TV_ARMOR_BEGIN    TV_BOOTS
+#define TV_ARMOR_END      TV_DRAG_ARMOR
 	OBJECT_TYPE_VALUE tval;			/* Item type (from kind) */
 
 	OBJECT_SUBTYPE_VALUE sval;			/* Item sub-type (from kind) */
@@ -291,9 +291,9 @@ struct object_type
 	/*
 	 * 変愚ver1.5.0以前に使われていたアイテムの追加特性フラグ / Hack -- special "xtra" object powers
 	 */
-	#define EGO_XTRA_SUSTAIN        1 /*!< 旧版アイテムフラグ(非推奨): 追加維持能力 / Sustain one stat */
-	#define EGO_XTRA_POWER          2 /*!< 旧版アイテムフラグ(非推奨): 追加上級耐性 / High resist */
-	#define EGO_XTRA_ABILITY        3 /*!< 旧版アイテムフラグ(非推奨): 追加能力 / Special ability */
+#define EGO_XTRA_SUSTAIN        1 /*!< 旧版アイテムフラグ(非推奨): 追加維持能力 / Sustain one stat */
+#define EGO_XTRA_POWER          2 /*!< 旧版アイテムフラグ(非推奨): 追加上級耐性 / High resist */
+#define EGO_XTRA_ABILITY        3 /*!< 旧版アイテムフラグ(非推奨): 追加能力 / Special ability */
 	XTRA8 xtra1;			/* Extra info type (now unused) */
 
 	XTRA8 xtra2;			/* Extra info activation index */
@@ -315,16 +315,13 @@ struct object_type
 	/*
 	 * Special Object Flags
 	 */
-	#define IDENT_SENSE     0x01    /* Item has been "sensed" */
-	#define IDENT_FIXED     0x02    /* Item has been "haggled" */
-	#define IDENT_EMPTY     0x04    /* Item charges are known */
-	#define IDENT_KNOWN     0x08    /* Item abilities are known */
-	#define IDENT_STORE     0x10    /* Item is storebought !!!! */
-	#define IDENT_MENTAL    0x20    /* Item information is known */
-	#if 0
-	#define IDENT_CURSED    0x40    /* Item is temporarily cursed */
-	#endif
-	#define IDENT_BROKEN    0x80    /* Item is permanently worthless */
+#define IDENT_SENSE     0x01    /* Item has been "sensed" */
+#define IDENT_FIXED     0x02    /* Item has been "haggled" */
+#define IDENT_EMPTY     0x04    /* Item charges are known */
+#define IDENT_KNOWN     0x08    /* Item abilities are known */
+#define IDENT_STORE     0x10    /* Item is storebought !!!! */
+#define IDENT_MENTAL    0x20    /* Item information is known */
+#define IDENT_BROKEN    0x80    /* Item is permanently worthless */
 	byte ident;			/* Special flags  */
 
 	/*
@@ -333,11 +330,11 @@ struct object_type
 	 * OM_NOMSG --- temporary flag to suppress messages which were
 	 *              already printed in autopick_pickup_items().
 	 */
-	#define OM_FOUND        0x01    /*!< アイテムを一度でも視界に収めたことがあるか */
-	#define OM_NOMSG        0x02    /* temporary flag to suppress messages */
-	#define OM_NO_QUERY     0x04    /* Query for auto-pick was already answered as 'No' */
-	#define OM_AUTODESTROY  0x08    /* Destroy later to avoid illegal inventry shift */
-	#define OM_TOUCHED      0x10    /* Object was touched by player */
+#define OM_FOUND        0x01    /*!< アイテムを一度でも視界に収めたことがあるか */
+#define OM_NOMSG        0x02    /* temporary flag to suppress messages */
+#define OM_NO_QUERY     0x04    /* Query for auto-pick was already answered as 'No' */
+#define OM_AUTODESTROY  0x08    /* Destroy later to avoid illegal inventry shift */
+#define OM_TOUCHED      0x10    /* Object was touched by player */
 	byte marked;		/* Object is marked */
 
 	u16b inscription;	/* Inscription index */
@@ -347,37 +344,37 @@ struct object_type
 
 	BIT_FLAGS art_flags[TR_FLAG_SIZE];        /* Extra Flags for ego and artifacts */
 
-	#define TRC_CURSED              0x00000001L
-	#define TRC_HEAVY_CURSE         0x00000002L
-	#define TRC_PERMA_CURSE         0x00000004L
-	#define TRC_XXX1                0x00000008L
-	#define TRC_TY_CURSE            0x00000010L
-	#define TRC_AGGRAVATE           0x00000020L
-	#define TRC_DRAIN_EXP           0x00000040L
-	#define TRC_SLOW_REGEN          0x00000080L
-	#define TRC_ADD_L_CURSE         0x00000100L
-	#define TRC_ADD_H_CURSE         0x00000200L
-	#define TRC_CALL_ANIMAL         0x00000400L
-	#define TRC_CALL_DEMON          0x00000800L
-	#define TRC_CALL_DRAGON         0x00001000L
-	#define TRC_COWARDICE           0x00002000L
-	#define TRC_TELEPORT            0x00004000L
-	#define TRC_LOW_MELEE           0x00008000L
-	#define TRC_LOW_AC              0x00010000L
-	#define TRC_LOW_MAGIC           0x00020000L
-	#define TRC_FAST_DIGEST         0x00040000L
-	#define TRC_DRAIN_HP            0x00080000L
-	#define TRC_DRAIN_MANA          0x00100000L
-	#define TRC_CALL_UNDEAD         0x00200000L
-	#define MAX_CURSE 18
-	#define TRC_TELEPORT_SELF       0x00000001L
-	#define TRC_CHAINSWORD          0x00000002L
-	#define TRC_SPECIAL_MASK \
+#define TRC_CURSED              0x00000001L
+#define TRC_HEAVY_CURSE         0x00000002L
+#define TRC_PERMA_CURSE         0x00000004L
+#define TRC_XXX1                0x00000008L
+#define TRC_TY_CURSE            0x00000010L
+#define TRC_AGGRAVATE           0x00000020L
+#define TRC_DRAIN_EXP           0x00000040L
+#define TRC_SLOW_REGEN          0x00000080L
+#define TRC_ADD_L_CURSE         0x00000100L
+#define TRC_ADD_H_CURSE         0x00000200L
+#define TRC_CALL_ANIMAL         0x00000400L
+#define TRC_CALL_DEMON          0x00000800L
+#define TRC_CALL_DRAGON         0x00001000L
+#define TRC_COWARDICE           0x00002000L
+#define TRC_TELEPORT            0x00004000L
+#define TRC_LOW_MELEE           0x00008000L
+#define TRC_LOW_AC              0x00010000L
+#define TRC_LOW_MAGIC           0x00020000L
+#define TRC_FAST_DIGEST         0x00040000L
+#define TRC_DRAIN_HP            0x00080000L
+#define TRC_DRAIN_MANA          0x00100000L
+#define TRC_CALL_UNDEAD         0x00200000L
+#define MAX_CURSE 18
+#define TRC_TELEPORT_SELF       0x00000001L
+#define TRC_CHAINSWORD          0x00000002L
+#define TRC_SPECIAL_MASK \
 		(TRC_TY_CURSE | TRC_AGGRAVATE)
-	#define TRC_HEAVY_MASK   \
+#define TRC_HEAVY_MASK   \
 		(TRC_TY_CURSE | TRC_AGGRAVATE | TRC_DRAIN_EXP | TRC_ADD_H_CURSE | \
 		 TRC_CALL_DEMON | TRC_CALL_DRAGON | TRC_CALL_UNDEAD | TRC_TELEPORT)
-	#define TRC_P_FLAG_MASK  \
+#define TRC_P_FLAG_MASK  \
 		(TRC_TELEPORT_SELF | TRC_CHAINSWORD | \
 		 TRC_TY_CURSE | TRC_DRAIN_EXP | TRC_ADD_L_CURSE | TRC_ADD_H_CURSE | \
 		 TRC_CALL_ANIMAL | TRC_CALL_DEMON | TRC_CALL_DRAGON | TRC_COWARDICE | \

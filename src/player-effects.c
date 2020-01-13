@@ -272,9 +272,9 @@ void reset_tim_flags(player_type *creature_ptr)
 
 	if (creature_ptr->riding)
 	{
-		(void)set_monster_fast(creature_ptr->riding, 0);
-		(void)set_monster_slow(creature_ptr->riding, 0);
-		(void)set_monster_invulner(creature_ptr->riding, 0, FALSE);
+		(void)set_monster_fast(creature_ptr, creature_ptr->riding, 0);
+		(void)set_monster_slow(creature_ptr, creature_ptr->riding, 0);
+		(void)set_monster_invulner(creature_ptr, creature_ptr->riding, 0, FALSE);
 	}
 
 	if (creature_ptr->pclass == CLASS_BARD)

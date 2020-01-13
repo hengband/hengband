@@ -748,7 +748,7 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
 	max_num = num;
 
 	/* Choose! */
-	if (!get_com("Get what type of object? ", &ch, FALSE)) return (0);
+	if (!get_com("Get what type of object? ", &ch, FALSE)) return 0;
 
 	/* Analyze choice */
 	for (num = 0; num < max_num; num++)
@@ -757,7 +757,7 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
 	}
 
 	/* Bail out if choice is illegal */
-	if ((num < 0) || (num >= max_num)) return (0);
+	if ((num < 0) || (num >= max_num)) return 0;
 
 	/* Base object type chosen, fill in tval */
 	tval = tvals[num].tval;
@@ -794,7 +794,7 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
 	max_num = num;
 
 	/* Choose! */
-	if (!get_com(format("What Kind of %s? ", tval_desc), &ch, FALSE)) return (0);
+	if (!get_com(format("What Kind of %s? ", tval_desc), &ch, FALSE)) return 0;
 
 	/* Analyze choice */
 	for (num = 0; num < max_num; num++)
@@ -803,7 +803,7 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
 	}
 
 	/* Bail out if choice is "illegal" */
-	if ((num < 0) || (num >= max_num)) return (0);
+	if ((num < 0) || (num >= max_num)) return 0;
 
 	/* And return successful */
 	return (choice[num]);

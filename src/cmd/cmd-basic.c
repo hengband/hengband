@@ -830,7 +830,7 @@ void do_cmd_open(player_type *creature_ptr)
 	}
 
 	/* Get a "repeated" direction */
-	if (get_rep_dir(&dir, TRUE))
+	if (get_rep_dir(creature_ptr, &dir, TRUE))
 	{
 		FEAT_IDX feat;
 		grid_type *g_ptr;
@@ -973,7 +973,7 @@ void do_cmd_close(player_type *creature_ptr)
 	}
 
 	/* Get a "repeated" direction */
-	if (get_rep_dir(&dir, FALSE))
+	if (get_rep_dir(creature_ptr, &dir, FALSE))
 	{
 		grid_type *g_ptr;
 		FEAT_IDX feat;
@@ -1209,7 +1209,7 @@ void do_cmd_tunnel(player_type *creature_ptr)
 	}
 
 	/* Get a direction to tunnel, or Abort */
-	if (get_rep_dir(&dir,FALSE))
+	if (get_rep_dir(creature_ptr, &dir,FALSE))
 	{
 		/* Get location */
 		y = creature_ptr->y + ddy[dir];
@@ -1563,7 +1563,7 @@ void do_cmd_disarm(player_type *creature_ptr)
 	}
 
 	/* Get a direction (or abort) */
-	if (get_rep_dir(&dir,TRUE))
+	if (get_rep_dir(creature_ptr, &dir,TRUE))
 	{
 		grid_type *g_ptr;
 		FEAT_IDX feat;
@@ -1745,7 +1745,7 @@ void do_cmd_bash(player_type *creature_ptr)
 	}
 
 	/* Get a "repeated" direction */
-	if (get_rep_dir(&dir,FALSE))
+	if (get_rep_dir(creature_ptr, &dir,FALSE))
 	{
 		FEAT_IDX feat;
 
@@ -1827,7 +1827,7 @@ void do_cmd_alter(player_type *creature_ptr)
 	}
 
 	/* Get a direction */
-	if (get_rep_dir(&dir,TRUE))
+	if (get_rep_dir(creature_ptr, &dir,TRUE))
 	{
 		FEAT_IDX feat;
 		feature_type *f_ptr;
@@ -1946,7 +1946,7 @@ void do_cmd_spike(player_type *creature_ptr)
 	}
 
 	/* Get a "repeated" direction */
-	if (!get_rep_dir(&dir, FALSE)) return;
+	if (!get_rep_dir(creature_ptr, &dir, FALSE)) return;
 
 	POSITION y = creature_ptr->y + ddy[dir];
 	POSITION x = creature_ptr->x + ddx[dir];
@@ -2017,7 +2017,7 @@ void do_cmd_walk(player_type *creature_ptr, bool pickup)
 	/* Get a "repeated" direction */
 	bool more = FALSE;
 	DIRECTION dir;
-	if (get_rep_dir(&dir, FALSE))
+	if (get_rep_dir(creature_ptr, &dir, FALSE))
 	{
 		take_turn(creature_ptr, 100);
 
@@ -2081,7 +2081,7 @@ void do_cmd_run(player_type *creature_ptr)
 	}
 
 	/* Get a "repeated" direction */
-	if (get_rep_dir(&dir,FALSE))
+	if (get_rep_dir(creature_ptr, &dir,FALSE))
 	{
 		/* Hack -- Set the run counter */
 		creature_ptr->running = (command_arg ? command_arg : 1000);
@@ -2629,7 +2629,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 				if (tdam < 0) tdam = 0;
 
 				/* Modify the damage */
-				tdam = mon_damage_mod(m_ptr, tdam, FALSE);
+				tdam = mon_damage_mod(creature_ptr, m_ptr, tdam, FALSE);
 
 				msg_format_wizard(CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"),
 					tdam, m_ptr->hp - tdam, m_ptr->maxhp, m_ptr->max_maxhp);

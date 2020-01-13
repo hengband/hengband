@@ -1116,7 +1116,7 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 	fp = my_fopen(name, "r");
 
 	/* No such file */
-	if (!fp) return (-1);
+	if (!fp) return -1;
 
 	/* Process the file */
 	char buf[1024];
@@ -1292,19 +1292,19 @@ errr check_time(void)
 	struct tm   *tp;
 
 	/* No restrictions */
-	if (!check_time_flag) return (0);
+	if (!check_time_flag) return 0;
 
 	/* Check for time violation */
 	c = time((time_t *)0);
 	tp = localtime(&c);
 
 	/* Violation */
-	if (days[tp->tm_wday][tp->tm_hour + 4] != 'X') return (1);
+	if (days[tp->tm_wday][tp->tm_hour + 4] != 'X') return 1;
 
 #endif
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -1326,7 +1326,7 @@ errr check_time_init(void)
 	fp = my_fopen(buf, "r");
 
 	/* No file, no restrictions */
-	if (!fp) return (0);
+	if (!fp) return 0;
 
 	/* Assume restrictions */
 	check_time_flag = TRUE;
@@ -1354,7 +1354,7 @@ errr check_time_init(void)
 #endif
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -1407,7 +1407,7 @@ errr check_load(void)
 	struct statstime    st;
 
 	/* Success if not checking */
-	if (!check_load_value) return (0);
+	if (!check_load_value) return 0;
 
 	/* Check the load */
 	if (0 == rstat("localhost", &st))
@@ -1416,13 +1416,13 @@ errr check_load(void)
 		long val2 = (long)(check_load_value)* FSCALE;
 
 		/* Check for violation */
-		if (val1 >= val2) return (1);
+		if (val1 >= val2) return 1;
 	}
 
 #endif
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -1449,7 +1449,7 @@ errr check_load_init(void)
 	fp = my_fopen(buf, "r");
 
 	/* No file, no restrictions */
-	if (!fp) return (0);
+	if (!fp) return 0;
 
 	/* Default load */
 	check_load_value = 100;
@@ -1482,7 +1482,7 @@ errr check_load_init(void)
 #endif
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -1879,7 +1879,7 @@ static void display_player_middle(player_type *creature_ptr)
 
 	/* Dump Day */
 	int day, hour, min;
-	extract_day_hour_min(&day, &hour, &min);
+	extract_day_hour_min(creature_ptr, &day, &hour, &min);
 
 	if (day < MAX_DAYS) sprintf(buf, _("%d日目 %2d:%02d", "Day %d %2d:%02d"), day, hour, min);
 	else sprintf(buf, _("*****日目 %2d:%02d", "Day ***** %2d:%02d"), hour, min);
@@ -4913,7 +4913,7 @@ errr file_character(player_type *creature_ptr, concptr name)
 		(void)inkey();
 
 		/* Error */
-		return (-1);
+		return -1;
 	}
 
 	(void)make_character_dump(creature_ptr, fff);
@@ -5850,7 +5850,7 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
 	update_creature(creature_ptr);
 
 	/* Initialize monster process */
-	mproc_init();
+	mproc_init(creature_ptr->current_floor_ptr);
 
 	/* HACK -- reset the hackish flag */
 	current_world_ptr->is_loading_now = TRUE;
@@ -5888,74 +5888,6 @@ static void center_string(char *buf, concptr str)
 	/* Mega-Hack */
 	(void)sprintf(buf, "%*s%s%*s", j, "", str, GRAVE_LINE_WIDTH - i - j, "");
 }
-
-
-#if 0
-/*!
- * @brief 骨ファイル出力 /
- * Save a "bones" file for a dead character
- * @details
- * <pre>
- * Note that we will not use these files until Angband 2.8.0, and
- * then we will only use the name and level on which death occured.
- * Should probably attempt some form of locking...
- * </pre>
- */
-static void make_bones(void)
-{
-	FILE                *fp;
-
-	char                str[1024];
-
-
-	/* Ignore wizards and borgs */
-	if (!(current_world_ptr->noscore & 0x00FF))
-	{
-		/* Ignore people who die in town */
-		if (p_ptr->current_floor_ptr->dun_level)
-		{
-			char tmp[128];
-
-			/* "Bones" name */
-			sprintf(tmp, "bone.%03d", p_ptr->current_floor_ptr->dun_level);
-			path_build(str, sizeof(str), ANGBAND_DIR_BONE, tmp);
-
-			/* Attempt to open the bones file */
-			fp = my_fopen(str, "r");
-
-			/* Close it right away */
-			if (fp) my_fclose(fp);
-
-			/* Do not over-write a previous ghost */
-			if (fp) return;
-
-			/* File type is "TEXT" */
-			FILE_TYPE(FILE_TYPE_TEXT);
-
-			/* Grab permissions */
-			safe_setuid_grab();
-
-			/* Try to write a new "Bones File" */
-			fp = my_fopen(str, "w");
-
-			/* Drop permissions */
-			safe_setuid_drop();
-
-			/* Not allowed to write it?  Weird. */
-			if (!fp) return;
-
-			/* Save the info */
-			fprintf(fp, "%s\n", p_ptr->name);
-			fprintf(fp, "%d\n", p_ptr->mhp);
-			fprintf(fp, "%d\n", p_ptr->prace);
-			fprintf(fp, "%d\n", p_ptr->pclass);
-
-			/* Close and save the Bones file */
-			my_fclose(fp);
-		}
-	}
-}
-#endif
 
 
 /*
@@ -6022,7 +5954,8 @@ void print_tomb(player_type *dead_ptr)
 	center_string(buf, dead_ptr->name);
 	put_str(buf, 6, 11);
 
-#ifndef JP
+#ifdef JP
+#else
 	center_string(buf, "the");
 	put_str(buf, 7, 11);
 #endif
@@ -6683,7 +6616,7 @@ static void handle_signal_suspend(int sig)
 
 
 /*!
- * todo ここにp_ptrを追加すると関数ポインタ周りの収拾がつかなくなるので保留
+ * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @brief OSからのシグナルを受けて中断、終了する /
  * Handle signals -- simple (interrupt and quit)
  * @param sig 受け取ったシグナル

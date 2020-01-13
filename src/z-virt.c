@@ -166,7 +166,7 @@ errr string_free(concptr str)
 	huge len = 0;
 
 	/* Succeed on non-strings */
-	if (!str) return (0);
+	if (!str) return 0;
 
 	/* Count the number of chars in 'str' plus the terminator */
 	while (str[len++]) /* loop */;
@@ -175,7 +175,7 @@ errr string_free(concptr str)
 	(void)rnfree((vptr)(str), len);
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
