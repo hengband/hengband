@@ -4313,7 +4313,7 @@ static char inkey_from_menu(void)
 
 	screen_save();
 
-	while(1)
+	while (TRUE)
 	{
 		int i;
 		char sub_cmd;

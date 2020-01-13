@@ -561,7 +561,7 @@ void do_cmd_snipe_browse(player_type *sniper_ptr)
 
 	screen_save();
 
-	while(1)
+	while (TRUE)
 	{
 		if (!get_snipe_power(sniper_ptr, &n, TRUE))
 		{

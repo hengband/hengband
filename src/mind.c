@@ -2080,7 +2080,7 @@ void do_cmd_mind_browse(player_type *caster_ptr)
 
 	screen_save();
 
-	while(1)
+	while (TRUE)
 	{
 		if (!get_mind_power(caster_ptr, &n, TRUE))
 		{

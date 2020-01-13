@@ -4023,7 +4023,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 	/* Choose the players race */
 	creature_ptr->prace = 0;
-	while(1)
+	while (TRUE)
 	{
 		char temp[80*10];
 		concptr t;
@@ -4059,7 +4059,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 	/* Choose the players class */
 	creature_ptr->pclass = 0;
-	while(1)
+	while (TRUE)
 	{
 		char temp[80*9];
 		concptr t;
@@ -4094,7 +4094,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 	/* Choose the players seikaku */
 	creature_ptr->pseikaku = 0;
-	while(1)
+	while (TRUE)
 	{
 		char temp[80*8];
 		concptr t;

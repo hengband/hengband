@@ -14,7 +14,7 @@ BIT_FLAGS get_curse(int power, object_type *o_ptr)
 {
 	BIT_FLAGS new_curse;
 
-	while(1)
+	while (TRUE)
 	{
 		new_curse = (1 << (randint0(MAX_CURSE)+4));
 		if (power == 2)
@@ -29,12 +29,15 @@ BIT_FLAGS get_curse(int power, object_type *o_ptr)
 		{
 			if (new_curse & TRC_HEAVY_MASK) continue;
 		}
+
 		if (new_curse == TRC_LOW_MELEE && !object_is_weapon(o_ptr)) continue;
 		if (new_curse == TRC_LOW_AC && !object_is_armour(o_ptr)) continue;
 		break;
 	}
+
 	return new_curse;
 }
+
 
 /*!
  * @brief 装備への呪い付加判定と付加処理
@@ -45,16 +48,13 @@ BIT_FLAGS get_curse(int power, object_type *o_ptr)
  */
 void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy_chance)
 {
-	bool changed = FALSE;
-	int curse_power = 0;
-	BIT_FLAGS new_curse;
-	BIT_FLAGS oflgs[TR_FLAG_SIZE];
-	object_type *o_ptr = &owner_ptr->inventory_list[INVEN_RARM + randint0(12)];
-	GAME_TEXT o_name[MAX_NLEN];
-
 	if (randint1(100) > chance) return;
+
+	object_type *o_ptr = &owner_ptr->inventory_list[INVEN_RARM + randint0(12)];
 	if (!o_ptr->k_idx) return;
+	BIT_FLAGS oflgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, oflgs);
+	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/* Extra, biased saving throw for blessed items */
@@ -69,6 +69,8 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
 		return;
 	}
 
+	bool changed = FALSE;
+	int curse_power = 0;
 	if ((randint1(100) <= heavy_chance) &&
 	    (object_is_artifact(o_ptr) || object_is_ego(o_ptr)))
 	{
@@ -84,9 +86,10 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
 			changed = TRUE;
 		o_ptr->curse_flags |= TRC_CURSED;
 	}
+
 	if (heavy_chance >= 50) curse_power++;
 
-	new_curse = get_curse(curse_power, o_ptr);
+	BIT_FLAGS new_curse = get_curse(curse_power, o_ptr);
 	if (!(o_ptr->curse_flags & new_curse))
 	{
 		changed = TRUE;
@@ -98,6 +101,6 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
 		msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding %s..."), o_name);
 		o_ptr->feeling = FEEL_NONE;
 	}
-	owner_ptr->update |= (PU_BONUS);
-}
 
+	owner_ptr->update |= PU_BONUS;
+}
