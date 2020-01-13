@@ -522,13 +522,13 @@ static bool get_moves_aux(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *
  * but instead of heading directly for it, the monster should "swerve"\n
  * around the player so that he has a smaller chance of getting hit.\n
  */
-static bool get_fear_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
+static bool get_fear_moves_aux(floor_type *floor_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
 	POSITION y, x, y1, x1, fy, fx, gy = 0, gx = 0;
 	int score = -1;
 	int i;
 
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 
 	/* Monster location */
 	fy = m_ptr->fy;
@@ -547,13 +547,13 @@ static bool get_fear_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 		x = fx + ddx_ddd[i];
 
 		/* Ignore locations off of edge */
-		if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) continue;
+		if (!in_bounds2(floor_ptr, y, x)) continue;
 
 		/* Calculate distance of this grid from our destination */
 		dis = distance(y, x, y1, x1);
 
 		/* Score this grid */
-		s = 5000 / (dis + 3) - 500 / (p_ptr->current_floor_ptr->grid_array[y][x].dist + 1);
+		s = 5000 / (dis + 3) - 500 / (floor_ptr->grid_array[y][x].dist + 1);
 
 		/* No negative scores */
 		if (s < 0) s = 0;
@@ -1030,7 +1030,7 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 				if (!no_flow)
 				{
 					/* Adjust movement */
-					if (get_fear_moves_aux(m_idx, &y, &x)) done = TRUE;
+					if (get_fear_moves_aux(target_ptr->current_floor_ptr, m_idx, &y, &x)) done = TRUE;
 				}
 			}
 
