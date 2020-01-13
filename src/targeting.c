@@ -1935,18 +1935,19 @@ bool get_rep_dir(DIRECTION *dp, bool under)
  * XAngband: determine if a given location is "interesting"
  * based on target_set_accept function.
  */
-static bool tgt_pt_accept(POSITION y, POSITION x)
+static bool tgt_pt_accept(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
 
-	if (!(in_bounds(p_ptr->current_floor_ptr, y, x))) return FALSE;
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	if (!(in_bounds(floor_ptr, y, x))) return FALSE;
 
 	/* Player grid is always interesting */
-	if ((y == p_ptr->y) && (x == p_ptr->x)) return TRUE;
+	if ((y == creature_ptr->y) && (x == creature_ptr->x)) return TRUE;
 
-	if (p_ptr->image) return FALSE;
+	if (creature_ptr->image) return FALSE;
 
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Interesting memorized features */
 	if (g_ptr->info & (CAVE_MARK))
@@ -1968,7 +1969,7 @@ static bool tgt_pt_accept(POSITION y, POSITION x)
  * XAngband: Prepare the "temp" array for "tget_pt"
  * based on target_set_prepare funciton.
  */
-static void tgt_pt_prepare(void)
+static void tgt_pt_prepare(player_type *creature_ptr)
 {
 	POSITION y, x;
 
@@ -1978,12 +1979,13 @@ static void tgt_pt_prepare(void)
 	if (!expand_list) return;
 
 	/* Scan the current panel */
-	for (y = 1; y < p_ptr->current_floor_ptr->height; y++)
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	for (y = 1; y < floor_ptr->height; y++)
 	{
-		for (x = 1; x < p_ptr->current_floor_ptr->width; x++)
+		for (x = 1; x < floor_ptr->width; x++)
 		{
 			/* Require "interesting" contents */
-			if (!tgt_pt_accept(y, x)) continue;
+			if (!tgt_pt_accept(creature_ptr, y, x)) continue;
 
 			/* Save the location */
 			tmp_pos.x[tmp_pos.n] = x;
@@ -1995,6 +1997,7 @@ static void tgt_pt_prepare(void)
 	/* Sort the positions */
 	ang_sort(tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_distance, ang_sort_swap_distance);
 }
+
 
 /*
  * old -- from PsiAngband.
@@ -2015,7 +2018,7 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
 
 	if (expand_list) 
 	{
-		tgt_pt_prepare();
+		tgt_pt_prepare(creature_ptr);
 	}
 
 	msg_print(_("場所を選んでスペースキーを押して下さい。", "Select a point and press space."));
