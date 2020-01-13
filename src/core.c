@@ -1,13 +1,13 @@
 ﻿/*!
-    @file dungeon.c
-    @brief Angbandゲームエンジン / Angband game engine
-    @date 2013/12/31
-    @author
-    Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
-    This software may be copied and distributed for educational, research, and\n
-    not for profit purposes provided that this copyright and statement are\n
-    included in all such copies.\n
-    2013 Deskull rearranged comment for Doxygen.
+	@file dungeon.c
+	@brief Angbandゲームエンジン / Angband game engine
+	@date 2013/12/31
+	@author
+	Copyright (c) 1989 James E. Wilson, Robert A. Koeneke\n
+	This software may be copied and distributed for educational, research, and\n
+	not for profit purposes provided that this copyright and statement are\n
+	included in all such copies.\n
+	2013 Deskull rearranged comment for Doxygen.
  */
 
 #include "angband.h"
@@ -157,47 +157,47 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
 	{
 		switch (feel)
 		{
-			case FEEL_TERRIBLE:
-			{
-				feel = FEEL_SPECIAL;
-				break;
-			}
-			case FEEL_WORTHLESS:
-			{
-				feel = FEEL_EXCELLENT;
-				break;
-			}
-			case FEEL_CURSED:
-			{
-				if (heavy)
-					feel = randint0(3) ? FEEL_GOOD : FEEL_AVERAGE;
-				else
-					feel = FEEL_UNCURSED;
-				break;
-			}
-			case FEEL_AVERAGE:
-			{
-				feel = randint0(2) ? FEEL_CURSED : FEEL_GOOD;
-				break;
-			}
-			case FEEL_GOOD:
-			{
-				if (heavy)
-					feel = randint0(3) ? FEEL_CURSED : FEEL_AVERAGE;
-				else
-					feel = FEEL_CURSED;
-				break;
-			}
-			case FEEL_EXCELLENT:
-			{
-				feel = FEEL_WORTHLESS;
-				break;
-			}
-			case FEEL_SPECIAL:
-			{
-				feel = FEEL_TERRIBLE;
-				break;
-			}
+		case FEEL_TERRIBLE:
+		{
+			feel = FEEL_SPECIAL;
+			break;
+		}
+		case FEEL_WORTHLESS:
+		{
+			feel = FEEL_EXCELLENT;
+			break;
+		}
+		case FEEL_CURSED:
+		{
+			if (heavy)
+				feel = randint0(3) ? FEEL_GOOD : FEEL_AVERAGE;
+			else
+				feel = FEEL_UNCURSED;
+			break;
+		}
+		case FEEL_AVERAGE:
+		{
+			feel = randint0(2) ? FEEL_CURSED : FEEL_GOOD;
+			break;
+		}
+		case FEEL_GOOD:
+		{
+			if (heavy)
+				feel = randint0(3) ? FEEL_CURSED : FEEL_AVERAGE;
+			else
+				feel = FEEL_CURSED;
+			break;
+		}
+		case FEEL_EXCELLENT:
+		{
+			feel = FEEL_WORTHLESS;
+			break;
+		}
+		case FEEL_SPECIAL:
+		{
+			feel = FEEL_TERRIBLE;
+			break;
+		}
 		}
 	}
 
@@ -212,12 +212,12 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
 	{
 #ifdef JP
 		msg_format("%s%s(%c)は%sという感じがする...",
-			describe_use(creature_ptr, slot),o_name, index_to_label(slot),game_inscriptions[feel]);
+			describe_use(creature_ptr, slot), o_name, index_to_label(slot), game_inscriptions[feel]);
 #else
 		msg_format("You feel the %s (%c) you are %s %s %s...",
-			   o_name, index_to_label(slot), describe_use(slot),
-			   ((o_ptr->number == 1) ? "is" : "are"),
-				   game_inscriptions[feel]);
+			o_name, index_to_label(slot), describe_use(slot),
+			((o_ptr->number == 1) ? "is" : "are"),
+			game_inscriptions[feel]);
 #endif
 
 	}
@@ -225,12 +225,12 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
 	{
 #ifdef JP
 		msg_format("ザックの中の%s(%c)は%sという感じがする...",
-			o_name, index_to_label(slot),game_inscriptions[feel]);
+			o_name, index_to_label(slot), game_inscriptions[feel]);
 #else
 		msg_format("You feel the %s (%c) in your pack %s %s...",
-			   o_name, index_to_label(slot),
-			   ((o_ptr->number == 1) ? "is" : "are"),
-				   game_inscriptions[feel]);
+			o_name, index_to_label(slot),
+			((o_ptr->number == 1) ? "is" : "are"),
+			game_inscriptions[feel]);
 #endif
 
 	}
@@ -276,151 +276,151 @@ static void sense_inventory1(player_type *creature_ptr)
 	/* Analyze the class */
 	switch (creature_ptr->pclass)
 	{
-		case CLASS_WARRIOR:
-		case CLASS_ARCHER:
-		case CLASS_SAMURAI:
-		case CLASS_CAVALRY:
-		{
-			/* Good sensing */
-			if (0 != randint0(9000L / (plev * plev + 40))) return;
+	case CLASS_WARRIOR:
+	case CLASS_ARCHER:
+	case CLASS_SAMURAI:
+	case CLASS_CAVALRY:
+	{
+		/* Good sensing */
+		if (0 != randint0(9000L / (plev * plev + 40))) return;
 
-			/* Heavy sensing */
-			heavy = TRUE;
+		/* Heavy sensing */
+		heavy = TRUE;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_SMITH:
-		{
-			/* Good sensing */
-			if (0 != randint0(6000L / (plev * plev + 50))) return;
+	case CLASS_SMITH:
+	{
+		/* Good sensing */
+		if (0 != randint0(6000L / (plev * plev + 50))) return;
 
-			/* Heavy sensing */
-			heavy = TRUE;
+		/* Heavy sensing */
+		heavy = TRUE;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_MAGE:
-		case CLASS_HIGH_MAGE:
-		case CLASS_SORCERER:
-		case CLASS_MAGIC_EATER:
-		{
-			/* Very bad (light) sensing */
-			if (0 != randint0(240000L / (plev + 5))) return;
+	case CLASS_MAGE:
+	case CLASS_HIGH_MAGE:
+	case CLASS_SORCERER:
+	case CLASS_MAGIC_EATER:
+	{
+		/* Very bad (light) sensing */
+		if (0 != randint0(240000L / (plev + 5))) return;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_PRIEST:
-		case CLASS_BARD:
-		{
-			/* Good (light) sensing */
-			if (0 != randint0(10000L / (plev * plev + 40))) return;
+	case CLASS_PRIEST:
+	case CLASS_BARD:
+	{
+		/* Good (light) sensing */
+		if (0 != randint0(10000L / (plev * plev + 40))) return;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_ROGUE:
-		case CLASS_NINJA:
-		{
-			/* Okay sensing */
-			if (0 != randint0(20000L / (plev * plev + 40))) return;
+	case CLASS_ROGUE:
+	case CLASS_NINJA:
+	{
+		/* Okay sensing */
+		if (0 != randint0(20000L / (plev * plev + 40))) return;
 
-			/* Heavy sensing */
-			heavy = TRUE;
+		/* Heavy sensing */
+		heavy = TRUE;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_RANGER:
-		{
-			/* Bad sensing */
-			if (0 != randint0(95000L / (plev * plev + 40))) return;
+	case CLASS_RANGER:
+	{
+		/* Bad sensing */
+		if (0 != randint0(95000L / (plev * plev + 40))) return;
 
-			/* Changed! */
-			heavy = TRUE;
+		/* Changed! */
+		heavy = TRUE;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_PALADIN:
-		case CLASS_SNIPER:
-		{
-			/* Bad sensing */
-			if (0 != randint0(77777L / (plev * plev + 40))) return;
+	case CLASS_PALADIN:
+	case CLASS_SNIPER:
+	{
+		/* Bad sensing */
+		if (0 != randint0(77777L / (plev * plev + 40))) return;
 
-			/* Heavy sensing */
-			heavy = TRUE;
+		/* Heavy sensing */
+		heavy = TRUE;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_WARRIOR_MAGE:
-		case CLASS_RED_MAGE:
-		{
-			/* Bad sensing */
-			if (0 != randint0(75000L / (plev * plev + 40))) return;
+	case CLASS_WARRIOR_MAGE:
+	case CLASS_RED_MAGE:
+	{
+		/* Bad sensing */
+		if (0 != randint0(75000L / (plev * plev + 40))) return;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_MINDCRAFTER:
-		case CLASS_IMITATOR:
-		case CLASS_BLUE_MAGE:
-		case CLASS_MIRROR_MASTER:
-		{
-			/* Bad sensing */
-			if (0 != randint0(55000L / (plev * plev + 40))) return;
+	case CLASS_MINDCRAFTER:
+	case CLASS_IMITATOR:
+	case CLASS_BLUE_MAGE:
+	case CLASS_MIRROR_MASTER:
+	{
+		/* Bad sensing */
+		if (0 != randint0(55000L / (plev * plev + 40))) return;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_CHAOS_WARRIOR:
-		{
-			/* Bad sensing */
-			if (0 != randint0(80000L / (plev * plev + 40))) return;
+	case CLASS_CHAOS_WARRIOR:
+	{
+		/* Bad sensing */
+		if (0 != randint0(80000L / (plev * plev + 40))) return;
 
-			/* Changed! */
-			heavy = TRUE;
+		/* Changed! */
+		heavy = TRUE;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_MONK:
-		case CLASS_FORCETRAINER:
-		{
-			/* Okay sensing */
-			if (0 != randint0(20000L / (plev * plev + 40))) return;
+	case CLASS_MONK:
+	case CLASS_FORCETRAINER:
+	{
+		/* Okay sensing */
+		if (0 != randint0(20000L / (plev * plev + 40))) return;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_TOURIST:
-		{
-			/* Good sensing */
-			if (0 != randint0(20000L / ((plev+50)*(plev+50)))) return;
+	case CLASS_TOURIST:
+	{
+		/* Good sensing */
+		if (0 != randint0(20000L / ((plev + 50)*(plev + 50)))) return;
 
-			/* Heavy sensing */
-			heavy = TRUE;
+		/* Heavy sensing */
+		heavy = TRUE;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_BEASTMASTER:
-		{
-			/* Bad sensing */
-			if (0 != randint0(65000L / (plev * plev + 40))) return;
+	case CLASS_BEASTMASTER:
+	{
+		/* Bad sensing */
+		if (0 != randint0(65000L / (plev * plev + 40))) return;
 
-			break;
-		}
-		case CLASS_BERSERKER:
-		{
-			/* Heavy sensing */
-			heavy = TRUE;
+		break;
+	}
+	case CLASS_BERSERKER:
+	{
+		/* Heavy sensing */
+		heavy = TRUE;
 
-			break;
-		}
+		break;
+	}
 	}
 
 	if (compare_virtue(creature_ptr, V_KNOWLEDGE, 100, VIRTUE_LARGE)) heavy = TRUE;
@@ -440,28 +440,28 @@ static void sense_inventory1(player_type *creature_ptr)
 		/* Valid "tval" codes */
 		switch (o_ptr->tval)
 		{
-			case TV_SHOT:
-			case TV_ARROW:
-			case TV_BOLT:
-			case TV_BOW:
-			case TV_DIGGING:
-			case TV_HAFTED:
-			case TV_POLEARM:
-			case TV_SWORD:
-			case TV_BOOTS:
-			case TV_GLOVES:
-			case TV_HELM:
-			case TV_CROWN:
-			case TV_SHIELD:
-			case TV_CLOAK:
-			case TV_SOFT_ARMOR:
-			case TV_HARD_ARMOR:
-			case TV_DRAG_ARMOR:
-			case TV_CARD:
-			{
-				okay = TRUE;
-				break;
-			}
+		case TV_SHOT:
+		case TV_ARROW:
+		case TV_BOLT:
+		case TV_BOW:
+		case TV_DIGGING:
+		case TV_HAFTED:
+		case TV_POLEARM:
+		case TV_SWORD:
+		case TV_BOOTS:
+		case TV_GLOVES:
+		case TV_HELM:
+		case TV_CROWN:
+		case TV_SHIELD:
+		case TV_CLOAK:
+		case TV_SOFT_ARMOR:
+		case TV_HARD_ARMOR:
+		case TV_DRAG_ARMOR:
+		case TV_CARD:
+		{
+			okay = TRUE;
+			break;
+		}
 		}
 
 		/* Skip non-sense machines */
@@ -499,72 +499,72 @@ static void sense_inventory2(player_type *creature_ptr)
 	/* Analyze the class */
 	switch (creature_ptr->pclass)
 	{
-		case CLASS_WARRIOR:
-		case CLASS_ARCHER:
-		case CLASS_SAMURAI:
-		case CLASS_CAVALRY:
-		case CLASS_BERSERKER:
-		case CLASS_SNIPER:
-		{
-			return;
-		}
+	case CLASS_WARRIOR:
+	case CLASS_ARCHER:
+	case CLASS_SAMURAI:
+	case CLASS_CAVALRY:
+	case CLASS_BERSERKER:
+	case CLASS_SNIPER:
+	{
+		return;
+	}
 
-		case CLASS_SMITH:
-		case CLASS_PALADIN:
-		case CLASS_CHAOS_WARRIOR:
-		case CLASS_IMITATOR:
-		case CLASS_BEASTMASTER:
-		case CLASS_NINJA:
-		{
-			/* Very bad (light) sensing */
-			if (0 != randint0(240000L / (plev + 5))) return;
+	case CLASS_SMITH:
+	case CLASS_PALADIN:
+	case CLASS_CHAOS_WARRIOR:
+	case CLASS_IMITATOR:
+	case CLASS_BEASTMASTER:
+	case CLASS_NINJA:
+	{
+		/* Very bad (light) sensing */
+		if (0 != randint0(240000L / (plev + 5))) return;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_RANGER:
-		case CLASS_WARRIOR_MAGE:
-		case CLASS_RED_MAGE:
-		case CLASS_MONK:
-		{
-			/* Bad sensing */
-			if (0 != randint0(95000L / (plev * plev + 40))) return;
+	case CLASS_RANGER:
+	case CLASS_WARRIOR_MAGE:
+	case CLASS_RED_MAGE:
+	case CLASS_MONK:
+	{
+		/* Bad sensing */
+		if (0 != randint0(95000L / (plev * plev + 40))) return;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_PRIEST:
-		case CLASS_BARD:
-		case CLASS_ROGUE:
-		case CLASS_FORCETRAINER:
-		case CLASS_MINDCRAFTER:
-		{
-			/* Good sensing */
-			if (0 != randint0(20000L / (plev * plev + 40))) return;
+	case CLASS_PRIEST:
+	case CLASS_BARD:
+	case CLASS_ROGUE:
+	case CLASS_FORCETRAINER:
+	case CLASS_MINDCRAFTER:
+	{
+		/* Good sensing */
+		if (0 != randint0(20000L / (plev * plev + 40))) return;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_MAGE:
-		case CLASS_HIGH_MAGE:
-		case CLASS_SORCERER:
-		case CLASS_MAGIC_EATER:
-		case CLASS_MIRROR_MASTER:
-		case CLASS_BLUE_MAGE:
-		{
-			/* Good sensing */
-			if (0 != randint0(9000L / (plev * plev + 40))) return;
+	case CLASS_MAGE:
+	case CLASS_HIGH_MAGE:
+	case CLASS_SORCERER:
+	case CLASS_MAGIC_EATER:
+	case CLASS_MIRROR_MASTER:
+	case CLASS_BLUE_MAGE:
+	{
+		/* Good sensing */
+		if (0 != randint0(9000L / (plev * plev + 40))) return;
 
-			break;
-		}
+		break;
+	}
 
-		case CLASS_TOURIST:
-		{
-			/* Good sensing */
-			if (0 != randint0(20000L / ((plev+50)*(plev+50)))) return;
+	case CLASS_TOURIST:
+	{
+		/* Good sensing */
+		if (0 != randint0(20000L / ((plev + 50)*(plev + 50)))) return;
 
-			break;
-		}
+		break;
+	}
 	}
 
 	/*** Sense everything ***/
@@ -582,14 +582,14 @@ static void sense_inventory2(player_type *creature_ptr)
 		/* Valid "tval" codes */
 		switch (o_ptr->tval)
 		{
-			case TV_RING:
-			case TV_AMULET:
-			case TV_LITE:
-			case TV_FIGURINE:
-			{
-				okay = TRUE;
-				break;
-			}
+		case TV_RING:
+		case TV_AMULET:
+		case TV_LITE:
+		case TV_FIGURINE:
+		{
+			okay = TRUE;
+			break;
+		}
 		}
 
 		/* Skip non-sense machines */
@@ -695,7 +695,7 @@ static bool pattern_effect(player_type *creature_ptr)
 	if (!pattern_tile(creature_ptr->y, creature_ptr->x)) return FALSE;
 
 	if ((PRACE_IS_(creature_ptr, RACE_AMBERITE)) &&
-	    (creature_ptr->cut > 0) && one_in_(10))
+		(creature_ptr->cut > 0) && one_in_(10))
 	{
 		wreck_the_pattern(creature_ptr);
 	}
@@ -895,7 +895,7 @@ static void regenmagic(player_type *creature_ptr, int regen_amount)
 	int dev = 30;
 	int mult = (dev + adj_mag_mana[creature_ptr->stat_ind[A_INT]]); /* x1 to x2 speed bonus for recharging */
 
-	for (i = 0; i < EATER_EXT*2; i++)
+	for (i = 0; i < EATER_EXT * 2; i++)
 	{
 		if (!creature_ptr->magic_num2[i]) continue;
 		if (creature_ptr->magic_num1[i] == ((long)creature_ptr->magic_num2[i] << 16)) continue;
@@ -911,14 +911,14 @@ static void regenmagic(player_type *creature_ptr, int regen_amount)
 		}
 		wild_regen = 20;
 	}
-	for (i = EATER_EXT*2; i < EATER_EXT*3; i++)
+	for (i = EATER_EXT * 2; i < EATER_EXT * 3; i++)
 	{
 		if (!creature_ptr->magic_num1[i]) continue;
 		if (!creature_ptr->magic_num2[i]) continue;
 
 		/* Decrease remaining period for charging */
-		new_mana = (regen_amount * mult * ((long)creature_ptr->magic_num2[i] + 10) * EATER_ROD_CHARGE) 
-					/ (dev * 16 * PY_REGEN_NORMAL); 
+		new_mana = (regen_amount * mult * ((long)creature_ptr->magic_num2[i] + 10) * EATER_ROD_CHARGE)
+			/ (dev * 16 * PY_REGEN_NORMAL);
 		creature_ptr->magic_num1[i] -= new_mana;
 
 		/* Check minimum remaining period for charging */
@@ -1063,7 +1063,7 @@ static void notice_lite_change(player_type *creature_ptr, object_type *o_ptr)
 	else if (o_ptr->name2 == EGO_LITE_LONG)
 	{
 		if ((o_ptr->xtra4 < 50) && (!(o_ptr->xtra4 % 5))
-		    && (current_world_ptr->game_turn % (TURNS_PER_TICK*2)))
+			&& (current_world_ptr->game_turn % (TURNS_PER_TICK * 2)))
 		{
 			if (disturb_minor) disturb(creature_ptr, FALSE, TRUE);
 			msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));
@@ -1074,7 +1074,7 @@ static void notice_lite_change(player_type *creature_ptr, object_type *o_ptr)
 	else if ((o_ptr->xtra4 < 100) && (!(o_ptr->xtra4 % 10)))
 	{
 		if (disturb_minor) disturb(creature_ptr, FALSE, TRUE);
-			msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));
+		msg_print(_("明かりが微かになってきている。", "Your light is growing faint."));
 	}
 }
 
@@ -1179,12 +1179,18 @@ static void check_music(player_type *caster_ptr)
 	}
 	if (caster_ptr->spell_exp[spell] < SPELL_EXP_BEGINNER)
 		caster_ptr->spell_exp[spell] += 5;
-	else if(caster_ptr->spell_exp[spell] < SPELL_EXP_SKILLED)
-	{ if (one_in_(2) && (caster_ptr->current_floor_ptr->dun_level > 4) && ((caster_ptr->current_floor_ptr->dun_level + 10) > caster_ptr->lev)) caster_ptr->spell_exp[spell] += 1; }
-	else if(caster_ptr->spell_exp[spell] < SPELL_EXP_EXPERT)
-	{ if (one_in_(5) && ((caster_ptr->current_floor_ptr->dun_level + 5) > caster_ptr->lev) && ((caster_ptr->current_floor_ptr->dun_level + 5) > s_ptr->slevel)) caster_ptr->spell_exp[spell] += 1; }
-	else if(caster_ptr->spell_exp[spell] < SPELL_EXP_MASTER)
-	{ if (one_in_(5) && ((caster_ptr->current_floor_ptr->dun_level + 5) > caster_ptr->lev) && (caster_ptr->current_floor_ptr->dun_level > s_ptr->slevel)) caster_ptr->spell_exp[spell] += 1; }
+	else if (caster_ptr->spell_exp[spell] < SPELL_EXP_SKILLED)
+	{
+		if (one_in_(2) && (caster_ptr->current_floor_ptr->dun_level > 4) && ((caster_ptr->current_floor_ptr->dun_level + 10) > caster_ptr->lev)) caster_ptr->spell_exp[spell] += 1;
+	}
+	else if (caster_ptr->spell_exp[spell] < SPELL_EXP_EXPERT)
+	{
+		if (one_in_(5) && ((caster_ptr->current_floor_ptr->dun_level + 5) > caster_ptr->lev) && ((caster_ptr->current_floor_ptr->dun_level + 5) > s_ptr->slevel)) caster_ptr->spell_exp[spell] += 1;
+	}
+	else if (caster_ptr->spell_exp[spell] < SPELL_EXP_MASTER)
+	{
+		if (one_in_(5) && ((caster_ptr->current_floor_ptr->dun_level + 5) > caster_ptr->lev) && (caster_ptr->current_floor_ptr->dun_level > s_ptr->slevel)) caster_ptr->spell_exp[spell] += 1;
+	}
 
 	/* Do any effects of continual song */
 	exe_spell(caster_ptr, REALM_MUSIC, spell, SPELL_CONT);
@@ -1199,7 +1205,7 @@ static void check_music(player_type *caster_ptr)
 static object_type *choose_cursed_obj_name(BIT_FLAGS flag)
 {
 	int i;
-	int choices[INVEN_TOTAL-INVEN_RARM];
+	int choices[INVEN_TOTAL - INVEN_RARM];
 	int number = 0;
 
 	/* Paranoia -- Player has no warning-item */
@@ -1215,41 +1221,41 @@ static object_type *choose_cursed_obj_name(BIT_FLAGS flag)
 			choices[number] = i;
 			number++;
 		}
-		else if ((flag == TRC_ADD_L_CURSE) || 
-					(flag == TRC_ADD_H_CURSE) || 
-					(flag == TRC_DRAIN_HP) || 
-					(flag == TRC_DRAIN_MANA) || 
-					(flag == TRC_CALL_ANIMAL) || 
-					(flag == TRC_CALL_DEMON) || 
-					(flag == TRC_CALL_DRAGON) || 
-					(flag == TRC_CALL_UNDEAD) || 
-					(flag == TRC_COWARDICE) || 
-					(flag == TRC_LOW_MELEE) || 
-					(flag == TRC_LOW_AC) || 
-					(flag == TRC_LOW_MAGIC) || 
-					(flag == TRC_FAST_DIGEST) || 
-					(flag == TRC_SLOW_REGEN) )
+		else if ((flag == TRC_ADD_L_CURSE) ||
+			(flag == TRC_ADD_H_CURSE) ||
+			(flag == TRC_DRAIN_HP) ||
+			(flag == TRC_DRAIN_MANA) ||
+			(flag == TRC_CALL_ANIMAL) ||
+			(flag == TRC_CALL_DEMON) ||
+			(flag == TRC_CALL_DRAGON) ||
+			(flag == TRC_CALL_UNDEAD) ||
+			(flag == TRC_COWARDICE) ||
+			(flag == TRC_LOW_MELEE) ||
+			(flag == TRC_LOW_AC) ||
+			(flag == TRC_LOW_MAGIC) ||
+			(flag == TRC_FAST_DIGEST) ||
+			(flag == TRC_SLOW_REGEN))
 		{
 			u32b cf = 0L;
 			BIT_FLAGS flgs[TR_FLAG_SIZE];
 			object_flags(o_ptr, flgs);
 			switch (flag)
 			{
-			  case TRC_ADD_L_CURSE	: cf = TR_ADD_L_CURSE; break;
-			  case TRC_ADD_H_CURSE	: cf = TR_ADD_H_CURSE; break;
-			  case TRC_DRAIN_HP		: cf = TR_DRAIN_HP; break;
-			  case TRC_DRAIN_MANA	: cf = TR_DRAIN_MANA; break;
-			  case TRC_CALL_ANIMAL	: cf = TR_CALL_ANIMAL; break;
-			  case TRC_CALL_DEMON	: cf = TR_CALL_DEMON; break;
-			  case TRC_CALL_DRAGON	: cf = TR_CALL_DRAGON; break;
-			  case TRC_CALL_UNDEAD	: cf = TR_CALL_UNDEAD; break;
-			  case TRC_COWARDICE	: cf = TR_COWARDICE; break;
-			  case TRC_LOW_MELEE	: cf = TR_LOW_MELEE; break;
-			  case TRC_LOW_AC		: cf = TR_LOW_AC; break;
-			  case TRC_LOW_MAGIC	: cf = TR_LOW_MAGIC; break;
-			  case TRC_FAST_DIGEST	: cf = TR_FAST_DIGEST; break;
-			  case TRC_SLOW_REGEN	: cf = TR_SLOW_REGEN; break;
-			  default 				: break;
+			case TRC_ADD_L_CURSE: cf = TR_ADD_L_CURSE; break;
+			case TRC_ADD_H_CURSE: cf = TR_ADD_H_CURSE; break;
+			case TRC_DRAIN_HP: cf = TR_DRAIN_HP; break;
+			case TRC_DRAIN_MANA: cf = TR_DRAIN_MANA; break;
+			case TRC_CALL_ANIMAL: cf = TR_CALL_ANIMAL; break;
+			case TRC_CALL_DEMON: cf = TR_CALL_DEMON; break;
+			case TRC_CALL_DRAGON: cf = TR_CALL_DRAGON; break;
+			case TRC_CALL_UNDEAD: cf = TR_CALL_UNDEAD; break;
+			case TRC_COWARDICE: cf = TR_COWARDICE; break;
+			case TRC_LOW_MELEE: cf = TR_LOW_MELEE; break;
+			case TRC_LOW_AC: cf = TR_LOW_AC; break;
+			case TRC_LOW_MAGIC: cf = TR_LOW_MAGIC; break;
+			case TRC_FAST_DIGEST: cf = TR_FAST_DIGEST; break;
+			case TRC_SLOW_REGEN: cf = TR_SLOW_REGEN; break;
+			default: break;
 			}
 			if (have_flag(flgs, cf))
 			{
@@ -1411,11 +1417,11 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		}
 
 		if (creature_ptr->inventory_list[INVEN_LITE].tval && (creature_ptr->inventory_list[INVEN_LITE].name2 != EGO_LITE_DARKNESS) &&
-		    !creature_ptr->resist_lite)
+			!creature_ptr->resist_lite)
 		{
 			object_type *o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
-			GAME_TEXT o_name [MAX_NLEN];
-			char ouch [MAX_NLEN+40];
+			GAME_TEXT o_name[MAX_NLEN];
+			char ouch[MAX_NLEN + 40];
 
 			/* Get an object description */
 			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -1446,18 +1452,18 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 
 		if (damage)
 		{
-			if(PRACE_IS_(creature_ptr, RACE_ENT)) damage += damage / 3;
-			if(creature_ptr->resist_fire) damage = damage / 3;
-			if(is_oppose_fire(creature_ptr)) damage = damage / 3;
-			if(creature_ptr->levitation) damage = damage / 5;
+			if (PRACE_IS_(creature_ptr, RACE_ENT)) damage += damage / 3;
+			if (creature_ptr->resist_fire) damage = damage / 3;
+			if (is_oppose_fire(creature_ptr)) damage = damage / 3;
+			if (creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
 
 			if (creature_ptr->levitation)
 			{
 				msg_print(_("熱で火傷した！", "The heat burns you!"));
-				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), 
-								f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+				take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"),
+					f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
 			}
 			else
 			{
@@ -1625,7 +1631,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 	}
 
 	if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) &&
-	    !creature_ptr->levitation && !creature_ptr->can_swim && !creature_ptr->resist_water)
+		!creature_ptr->levitation && !creature_ptr->can_swim && !creature_ptr->resist_water)
 	{
 		if (creature_ptr->total_weight > weight_limit(creature_ptr))
 		{
@@ -1749,8 +1755,8 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 
 	/* No regeneration while special action */
 	if ((creature_ptr->action == ACTION_LEARN) ||
-	    (creature_ptr->action == ACTION_HAYAGAKE) ||
-	    (creature_ptr->special_defense & KATA_KOUKIJIN))
+		(creature_ptr->action == ACTION_HAYAGAKE) ||
+		(creature_ptr->special_defense & KATA_KOUKIJIN))
 	{
 		upkeep_factor += 100;
 	}
@@ -2104,7 +2110,7 @@ static void process_world_aux_timeout(player_type *creature_ptr)
 		if (creature_ptr->cut > 1000) adjust = 0;
 
 		/* Apply some healing */
-		(void)set_cut(creature_ptr,creature_ptr->cut - adjust);
+		(void)set_cut(creature_ptr, creature_ptr->cut - adjust);
 	}
 }
 
@@ -2128,7 +2134,7 @@ static void process_world_aux_light(player_type *creature_ptr)
 			/* Decrease life-span */
 			if (o_ptr->name2 == EGO_LITE_LONG)
 			{
-				if (current_world_ptr->game_turn % (TURNS_PER_TICK*2)) o_ptr->xtra4--;
+				if (current_world_ptr->game_turn % (TURNS_PER_TICK * 2)) o_ptr->xtra4--;
 			}
 			else o_ptr->xtra4--;
 
@@ -2206,7 +2212,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 				msg_print(NULL);
 				if (one_in_(3)) lose_all_info(creature_ptr);
 				else wiz_dark(creature_ptr);
-				(void)teleport_player_aux(creature_ptr,100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+				(void)teleport_player_aux(creature_ptr, 100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 				wiz_dark(creature_ptr);
 				msg_print(_("あなたは見知らぬ場所で目が醒めた...頭が痛い。", "You wake up somewhere with a sore head..."));
 				msg_print(_("何も覚えていない。どうやってここに来たかも分からない！", "You can't remember a thing, or how you got here!"));
@@ -2241,12 +2247,12 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 	}
 
 	if ((creature_ptr->muta2 & MUT2_PROD_MANA) &&
-	    !creature_ptr->anti_magic && one_in_(9000))
+		!creature_ptr->anti_magic && one_in_(9000))
 	{
 		int dire = 0;
 		disturb(creature_ptr, FALSE, TRUE);
-		msg_print(_("魔法のエネルギーが突然あなたの中に流れ込んできた！エネルギーを解放しなければならない！", 
-						"Magical energy flows through you! You must release it!"));
+		msg_print(_("魔法のエネルギーが突然あなたの中に流れ込んできた！エネルギーを解放しなければならない！",
+			"Magical energy flows through you! You must release it!"));
 
 		flush();
 		msg_print(NULL);
@@ -2314,8 +2320,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 			do
 			{
 				n = randint0(MAX_STORES);
-			}
-			while ((n == STORE_HOME) || (n == STORE_MUSEUM));
+			} while ((n == STORE_HOME) || (n == STORE_MUSEUM));
 
 			msg_print(_("店の主人が丘に向かって走っている！", "You see one of the shopkeepers running for the hills!"));
 			store_shuffle(creature_ptr, n);
@@ -2636,8 +2641,8 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			}
 			else
 			{
-				msg_format(_("%sに{.}(ピリオド)と銘を刻むと発動を抑制できます。", 
-							 "You can inscribe {.} on your %s to disable random teleportation. "), o_name);
+				msg_format(_("%sに{.}(ピリオド)と銘を刻むと発動を抑制できます。",
+					"You can inscribe {.} on your %s to disable random teleportation. "), o_name);
 				disturb(creature_ptr, TRUE, TRUE);
 			}
 		}
@@ -2737,7 +2742,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		if ((creature_ptr->cursed & TRC_CALL_DRAGON) && one_in_(800))
 		{
 			if (summon_specific(0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DRAGON,
-			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+				(PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
@@ -2750,7 +2755,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		if ((creature_ptr->cursed & TRC_CALL_UNDEAD) && one_in_(1111))
 		{
 			if (summon_specific(0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD,
-			    (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+				(PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
@@ -2783,7 +2788,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 
 			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sはあなたの体力を吸収した！", "Your %s drains HP from you!"), o_name);
-			take_hit(creature_ptr, DAMAGE_LOSELIFE, MIN(creature_ptr->lev*2, 100), o_name, -1);
+			take_hit(creature_ptr, DAMAGE_LOSELIFE, MIN(creature_ptr->lev * 2, 100), o_name, -1);
 		}
 		/* Handle mana draining */
 		if ((creature_ptr->cursed & TRC_DRAIN_MANA) && creature_ptr->csp && one_in_(666))
@@ -3031,10 +3036,10 @@ static void process_world_aux_movement(player_type *creature_ptr)
 					{
 						quest_type* const q_ptr = &quest[i];
 
-						
+
 						if ((q_ptr->type == QUEST_TYPE_RANDOM) &&
-						    (q_ptr->status == QUEST_STATUS_TAKEN) &&
-						    (q_ptr->level < floor_ptr->dun_level))
+							(q_ptr->status == QUEST_STATUS_TAKEN) &&
+							(q_ptr->level < floor_ptr->dun_level))
 						{
 							q_ptr->status = QUEST_STATUS_FAILED;
 							q_ptr->complev = (byte)creature_ptr->lev;
@@ -3102,7 +3107,7 @@ static void process_world(player_type *player_ptr)
 	const s32b A_DAY = TURNS_PER_TICK * TOWN_DAWN;
 	s32b prev_turn_in_today = ((current_world_ptr->game_turn - TURNS_PER_TICK) % A_DAY + A_DAY / 4) % A_DAY;
 	int prev_min = (1440 * prev_turn_in_today / A_DAY) % 60;
-	
+
 	extract_day_hour_min(player_ptr, &day, &hour, &min);
 
 	/* Update dungeon feeling, and announce it if changed */
@@ -3147,7 +3152,7 @@ static void process_world(player_type *player_ptr)
 			player_ptr->energy_need = 0;
 			update_gambling_monsters(player_ptr);
 		}
-		else if ((number_mon-1) == 0)
+		else if ((number_mon - 1) == 0)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_type *wm_ptr;
@@ -3158,7 +3163,7 @@ static void process_world(player_type *player_ptr)
 			msg_format(_("%sが勝利した！", "%s is winner!"), m_name);
 			msg_print(NULL);
 
-			if (win_m_idx == (sel_monster+1))
+			if (win_m_idx == (sel_monster + 1))
 			{
 				msg_print(_("おめでとうございます。", "Congratulations."));
 				msg_format(_("%d＄を受け取った。", "You received %d gold."), battle_odds);
@@ -3234,8 +3239,7 @@ static void process_world(player_type *player_ptr)
 				do
 				{
 					n = randint0(MAX_STORES);
-				}
-				while ((n == STORE_HOME) || (n == STORE_MUSEUM));
+				} while ((n == STORE_HOME) || (n == STORE_MUSEUM));
 
 				/* Check every feature */
 				for (i = 1; i < max_f_idx; i++)
@@ -3267,7 +3271,7 @@ static void process_world(player_type *player_ptr)
 
 	/* Check for creature generation. */
 	if (one_in_(d_info[player_ptr->dungeon_idx].max_m_alloc_chance) &&
-	    !floor_ptr->inside_arena && !floor_ptr->inside_quest && !player_ptr->phase_out)
+		!floor_ptr->inside_arena && !floor_ptr->inside_quest && !player_ptr->phase_out)
 	{
 		/* Make a new monster */
 		(void)alloc_monster(MAX_SIGHT + 5, 0);
@@ -3517,784 +3521,784 @@ static void process_command(player_type *creature_ptr)
 	switch (command_cmd)
 	{
 		/* Ignore */
-		case ESCAPE:
-		case ' ':
-		{
-			break;
-		}
+	case ESCAPE:
+	case ' ':
+	{
+		break;
+	}
 
-		/* Ignore return */
-		case '\r':
-		case '\n':
-		{
-			break;
-		}
+	/* Ignore return */
+	case '\r':
+	case '\n':
+	{
+		break;
+	}
 
-		/*** Wizard Commands ***/
-		case KTRL('W'):
+	/*** Wizard Commands ***/
+	case KTRL('W'):
+	{
+		if (current_world_ptr->wizard)
 		{
-			if (current_world_ptr->wizard)
-			{
-				current_world_ptr->wizard = FALSE;
-				msg_print(_("ウィザードモード解除。", "Wizard mode off."));
-			}
-			else if (enter_wizard_mode())
-			{
-				current_world_ptr->wizard = TRUE;
-				msg_print(_("ウィザードモード突入。", "Wizard mode on."));
-			}
-			creature_ptr->update |= (PU_MONSTERS);
-			creature_ptr->redraw |= (PR_TITLE);
-
-			break;
+			current_world_ptr->wizard = FALSE;
+			msg_print(_("ウィザードモード解除。", "Wizard mode off."));
 		}
+		else if (enter_wizard_mode())
+		{
+			current_world_ptr->wizard = TRUE;
+			msg_print(_("ウィザードモード突入。", "Wizard mode on."));
+		}
+		creature_ptr->update |= (PU_MONSTERS);
+		creature_ptr->redraw |= (PR_TITLE);
+
+		break;
+	}
 
 
 #ifdef ALLOW_WIZARD
 
-		/* Special "debug" commands */
-		case KTRL('A'):
+	/* Special "debug" commands */
+	case KTRL('A'):
+	{
+		if (enter_debug_mode())
 		{
-			if (enter_debug_mode())
-			{
-				do_cmd_debug(creature_ptr);
-			}
-			break;
+			do_cmd_debug(creature_ptr);
 		}
+		break;
+	}
 
 #endif /* ALLOW_WIZARD */
 
 
 #ifdef ALLOW_BORG
 
-		/* Special "borg" commands */
-		case KTRL('Z'):
+	/* Special "borg" commands */
+	case KTRL('Z'):
+	{
+		if (enter_borg_mode())
 		{
-			if (enter_borg_mode())
-			{
-				if (!creature_ptr->wild_mode) do_cmd_borg();
-			}
-			break;
+			if (!creature_ptr->wild_mode) do_cmd_borg();
 		}
+		break;
+	}
 
 #endif /* ALLOW_BORG */
 
 
 
-		/*** Inventory Commands ***/
+	/*** Inventory Commands ***/
 
-		/* Wear/wield equipment */
-		case 'w':
+	/* Wear/wield equipment */
+	case 'w':
+	{
+		if (!creature_ptr->wild_mode) do_cmd_wield(creature_ptr);
+		break;
+	}
+
+	/* Take off equipment */
+	case 't':
+	{
+		if (!creature_ptr->wild_mode) do_cmd_takeoff(creature_ptr);
+		break;
+	}
+
+	/* Drop an item */
+	case 'd':
+	{
+		if (!creature_ptr->wild_mode) do_cmd_drop(creature_ptr);
+		break;
+	}
+
+	/* Destroy an item */
+	case 'k':
+	{
+		do_cmd_destroy(creature_ptr);
+		break;
+	}
+
+	/* Equipment list */
+	case 'e':
+	{
+		do_cmd_equip(creature_ptr);
+		break;
+	}
+
+	/* Inventory list */
+	case 'i':
+	{
+		do_cmd_inven(creature_ptr);
+		break;
+	}
+
+
+	/*** Various commands ***/
+
+	/* Identify an object */
+	case 'I':
+	{
+		do_cmd_observe(creature_ptr);
+		break;
+	}
+
+	case KTRL('I'):
+	{
+		toggle_inven_equip(creature_ptr);
+		break;
+	}
+
+
+	/*** Standard "Movement" Commands ***/
+
+	/* Alter a grid */
+	case '+':
+	{
+		if (!creature_ptr->wild_mode) do_cmd_alter(creature_ptr);
+		break;
+	}
+
+	/* Dig a tunnel */
+	case 'T':
+	{
+		if (!creature_ptr->wild_mode) do_cmd_tunnel(creature_ptr);
+		break;
+	}
+
+	/* Move (usually pick up things) */
+	case ';':
+	{
+		do_cmd_walk(creature_ptr, FALSE);
+		break;
+	}
+
+	/* Move (usually do not pick up) */
+	case '-':
+	{
+		do_cmd_walk(creature_ptr, TRUE);
+		break;
+	}
+
+
+	/*** Running, Resting, Searching, Staying */
+
+	/* Begin Running -- Arg is Max Distance */
+	case '.':
+	{
+		if (!creature_ptr->wild_mode) do_cmd_run(creature_ptr);
+		break;
+	}
+
+	/* Stay still (usually pick things up) */
+	case ',':
+	{
+		do_cmd_stay(creature_ptr, always_pickup);
+		break;
+	}
+
+	/* Stay still (usually do not pick up) */
+	case 'g':
+	{
+		do_cmd_stay(creature_ptr, !always_pickup);
+		break;
+	}
+
+	/* Rest -- Arg is time */
+	case 'R':
+	{
+		do_cmd_rest(creature_ptr);
+		break;
+	}
+
+	/* Search for traps/doors */
+	case 's':
+	{
+		do_cmd_search(creature_ptr);
+		break;
+	}
+
+	case 'S':
+	{
+		if (creature_ptr->action == ACTION_SEARCH) set_action(creature_ptr, ACTION_NONE);
+		else set_action(creature_ptr, ACTION_SEARCH);
+		break;
+	}
+
+
+	/*** Stairs and Doors and Chests and Traps ***/
+
+	/* Enter store */
+	case SPECIAL_KEY_STORE:
+	{
+		do_cmd_store(creature_ptr);
+		break;
+	}
+
+	/* Enter building -KMW- */
+	case SPECIAL_KEY_BUILDING:
+	{
+		do_cmd_bldg(creature_ptr);
+		break;
+	}
+
+	/* Enter quest level -KMW- */
+	case SPECIAL_KEY_QUEST:
+	{
+		do_cmd_quest(creature_ptr);
+		break;
+	}
+
+	/* Go up staircase */
+	case '<':
+	{
+		if (!creature_ptr->wild_mode && !floor_ptr->dun_level && !floor_ptr->inside_arena && !floor_ptr->inside_quest)
 		{
-			if (!creature_ptr->wild_mode) do_cmd_wield(creature_ptr);
-			break;
-		}
+			if (vanilla_town) break;
 
-		/* Take off equipment */
-		case 't':
-		{
-			if (!creature_ptr->wild_mode) do_cmd_takeoff(creature_ptr);
-			break;
-		}
-
-		/* Drop an item */
-		case 'd':
-		{
-			if (!creature_ptr->wild_mode) do_cmd_drop(creature_ptr);
-			break;
-		}
-
-		/* Destroy an item */
-		case 'k':
-		{
-			do_cmd_destroy(creature_ptr);
-			break;
-		}
-
-		/* Equipment list */
-		case 'e':
-		{
-			do_cmd_equip(creature_ptr);
-			break;
-		}
-
-		/* Inventory list */
-		case 'i':
-		{
-			do_cmd_inven(creature_ptr);
-			break;
-		}
-
-
-		/*** Various commands ***/
-
-		/* Identify an object */
-		case 'I':
-		{
-			do_cmd_observe(creature_ptr);
-			break;
-		}
-
-		case KTRL('I'):
-		{
-			toggle_inven_equip(creature_ptr);
-			break;
-		}
-
-
-		/*** Standard "Movement" Commands ***/
-
-		/* Alter a grid */
-		case '+':
-		{
-			if (!creature_ptr->wild_mode) do_cmd_alter(creature_ptr);
-			break;
-		}
-
-		/* Dig a tunnel */
-		case 'T':
-		{
-			if (!creature_ptr->wild_mode) do_cmd_tunnel(creature_ptr);
-			break;
-		}
-
-		/* Move (usually pick up things) */
-		case ';':
-		{
-			do_cmd_walk(creature_ptr, FALSE);
-			break;
-		}
-
-		/* Move (usually do not pick up) */
-		case '-':
-		{
-			do_cmd_walk(creature_ptr, TRUE);
-			break;
-		}
-
-
-		/*** Running, Resting, Searching, Staying */
-
-		/* Begin Running -- Arg is Max Distance */
-		case '.':
-		{
-			if (!creature_ptr->wild_mode) do_cmd_run(creature_ptr);
-			break;
-		}
-
-		/* Stay still (usually pick things up) */
-		case ',':
-		{
-			do_cmd_stay(creature_ptr, always_pickup);
-			break;
-		}
-
-		/* Stay still (usually do not pick up) */
-		case 'g':
-		{
-			do_cmd_stay(creature_ptr, !always_pickup);
-			break;
-		}
-
-		/* Rest -- Arg is time */
-		case 'R':
-		{
-			do_cmd_rest(creature_ptr);
-			break;
-		}
-
-		/* Search for traps/doors */
-		case 's':
-		{
-			do_cmd_search(creature_ptr);
-			break;
-		}
-
-		case 'S':
-		{
-			if (creature_ptr->action == ACTION_SEARCH) set_action(creature_ptr, ACTION_NONE);
-			else set_action(creature_ptr, ACTION_SEARCH);
-			break;
-		}
-
-
-		/*** Stairs and Doors and Chests and Traps ***/
-
-		/* Enter store */
-		case SPECIAL_KEY_STORE:
-		{
-			do_cmd_store(creature_ptr);
-			break;
-		}
-
-		/* Enter building -KMW- */
-		case SPECIAL_KEY_BUILDING:
-		{
-			do_cmd_bldg(creature_ptr);
-			break;
-		}
-
-		/* Enter quest level -KMW- */
-		case SPECIAL_KEY_QUEST:
-		{
-			do_cmd_quest(creature_ptr);
-			break;
-		}
-
-		/* Go up staircase */
-		case '<':
-		{
-			if (!creature_ptr->wild_mode && !floor_ptr->dun_level && !floor_ptr->inside_arena && !floor_ptr->inside_quest)
+			if (creature_ptr->ambush_flag)
 			{
-				if (vanilla_town) break;
+				msg_print(_("襲撃から逃げるにはマップの端まで移動しなければならない。", "To flee the ambush you have to reach the edge of the map."));
+				break;
+			}
 
-				if (creature_ptr->ambush_flag)
-				{
-					msg_print(_("襲撃から逃げるにはマップの端まで移動しなければならない。", "To flee the ambush you have to reach the edge of the map."));
-					break;
-				}
+			if (creature_ptr->food < PY_FOOD_WEAK)
+			{
+				msg_print(_("その前に食事をとらないと。", "You must eat something here."));
+				break;
+			}
 
-				if (creature_ptr->food < PY_FOOD_WEAK)
-				{
-					msg_print(_("その前に食事をとらないと。", "You must eat something here."));
-					break;
-				}
+			change_wild_mode(creature_ptr, FALSE);
+		}
+		else
+			do_cmd_go_up(creature_ptr);
+		break;
+	}
 
-				change_wild_mode(creature_ptr, FALSE);
+	/* Go down staircase */
+	case '>':
+	{
+		if (creature_ptr->wild_mode)
+			change_wild_mode(creature_ptr, FALSE);
+		else
+			do_cmd_go_down(creature_ptr);
+		break;
+	}
+
+	/* Open a door or chest */
+	case 'o':
+	{
+		do_cmd_open(creature_ptr);
+		break;
+	}
+
+	/* Close a door */
+	case 'c':
+	{
+		do_cmd_close(creature_ptr);
+		break;
+	}
+
+	/* Jam a door with spikes */
+	case 'j':
+	{
+		do_cmd_spike(creature_ptr);
+		break;
+	}
+
+	/* Bash a door */
+	case 'B':
+	{
+		do_cmd_bash(creature_ptr);
+		break;
+	}
+
+	/* Disarm a trap or chest */
+	case 'D':
+	{
+		do_cmd_disarm(creature_ptr);
+		break;
+	}
+
+
+	/*** Magic and Prayers ***/
+
+	/* Gain new spells/prayers */
+	case 'G':
+	{
+		if ((creature_ptr->pclass == CLASS_SORCERER) || (creature_ptr->pclass == CLASS_RED_MAGE))
+			msg_print(_("呪文を学習する必要はない！", "You don't have to learn spells!"));
+		else if (creature_ptr->pclass == CLASS_SAMURAI)
+			do_cmd_gain_hissatsu(creature_ptr);
+		else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
+			import_magic_device(creature_ptr);
+		else
+			do_cmd_study(creature_ptr);
+		break;
+	}
+
+	/* Browse a book */
+	case 'b':
+	{
+		if ((creature_ptr->pclass == CLASS_MINDCRAFTER) ||
+			(creature_ptr->pclass == CLASS_BERSERKER) ||
+			(creature_ptr->pclass == CLASS_NINJA) ||
+			(creature_ptr->pclass == CLASS_MIRROR_MASTER)
+			) do_cmd_mind_browse(creature_ptr);
+		else if (creature_ptr->pclass == CLASS_SMITH)
+			do_cmd_kaji(creature_ptr, TRUE);
+		else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
+			do_cmd_magic_eater(creature_ptr, TRUE, FALSE);
+		else if (creature_ptr->pclass == CLASS_SNIPER)
+			do_cmd_snipe_browse(creature_ptr);
+		else do_cmd_browse(creature_ptr);
+		break;
+	}
+
+	/* Cast a spell */
+	case 'm':
+	{
+		/* -KMW- */
+		if (!creature_ptr->wild_mode)
+		{
+			if ((creature_ptr->pclass == CLASS_WARRIOR) || (creature_ptr->pclass == CLASS_ARCHER) || (creature_ptr->pclass == CLASS_CAVALRY))
+			{
+				msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
+			}
+			else if (floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH))
+			{
+				msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
+				msg_print(NULL);
+			}
+			else if (creature_ptr->anti_magic && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH))
+			{
+				concptr which_power = _("魔法", "magic");
+				if (creature_ptr->pclass == CLASS_MINDCRAFTER)
+					which_power = _("超能力", "psionic powers");
+				else if (creature_ptr->pclass == CLASS_IMITATOR)
+					which_power = _("ものまね", "imitation");
+				else if (creature_ptr->pclass == CLASS_SAMURAI)
+					which_power = _("必殺剣", "hissatsu");
+				else if (creature_ptr->pclass == CLASS_MIRROR_MASTER)
+					which_power = _("鏡魔法", "mirror magic");
+				else if (creature_ptr->pclass == CLASS_NINJA)
+					which_power = _("忍術", "ninjutsu");
+				else if (mp_ptr->spell_book == TV_LIFE_BOOK)
+					which_power = _("祈り", "prayer");
+
+				msg_format(_("反魔法バリアが%sを邪魔した！", "An anti-magic shell disrupts your %s!"), which_power);
+				free_turn(creature_ptr);
+			}
+			else if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER))
+			{
+				msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
+				free_turn(creature_ptr);
 			}
 			else
-				do_cmd_go_up(creature_ptr);
-			break;
-		}
-
-		/* Go down staircase */
-		case '>':
-		{
-			if (creature_ptr->wild_mode)
-				change_wild_mode(creature_ptr, FALSE);
-			else
-				do_cmd_go_down(creature_ptr);
-			break;
-		}
-
-		/* Open a door or chest */
-		case 'o':
-		{
-			do_cmd_open(creature_ptr);
-			break;
-		}
-
-		/* Close a door */
-		case 'c':
-		{
-			do_cmd_close(creature_ptr);
-			break;
-		}
-
-		/* Jam a door with spikes */
-		case 'j':
-		{
-			do_cmd_spike(creature_ptr);
-			break;
-		}
-
-		/* Bash a door */
-		case 'B':
-		{
-			do_cmd_bash(creature_ptr);
-			break;
-		}
-
-		/* Disarm a trap or chest */
-		case 'D':
-		{
-			do_cmd_disarm(creature_ptr);
-			break;
-		}
-
-
-		/*** Magic and Prayers ***/
-
-		/* Gain new spells/prayers */
-		case 'G':
-		{
-			if ((creature_ptr->pclass == CLASS_SORCERER) || (creature_ptr->pclass == CLASS_RED_MAGE))
-				msg_print(_("呪文を学習する必要はない！", "You don't have to learn spells!"));
-			else if (creature_ptr->pclass == CLASS_SAMURAI)
-				do_cmd_gain_hissatsu(creature_ptr);
-			else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
-				import_magic_device(creature_ptr);
-			else
-				do_cmd_study(creature_ptr);
-			break;
-		}
-
-		/* Browse a book */
-		case 'b':
-		{
-			if ( (creature_ptr->pclass == CLASS_MINDCRAFTER) ||
-			     (creature_ptr->pclass == CLASS_BERSERKER) ||
-			     (creature_ptr->pclass == CLASS_NINJA) ||
-			     (creature_ptr->pclass == CLASS_MIRROR_MASTER) 
-			     ) do_cmd_mind_browse(creature_ptr);
-			else if (creature_ptr->pclass == CLASS_SMITH)
-				do_cmd_kaji(creature_ptr, TRUE);
-			else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
-				do_cmd_magic_eater(creature_ptr, TRUE, FALSE);
-			else if (creature_ptr->pclass == CLASS_SNIPER)
-				do_cmd_snipe_browse(creature_ptr);
-			else do_cmd_browse(creature_ptr);
-			break;
-		}
-
-		/* Cast a spell */
-		case 'm':
-		{
-			/* -KMW- */
-			if (!creature_ptr->wild_mode)
 			{
-				if ((creature_ptr->pclass == CLASS_WARRIOR) || (creature_ptr->pclass == CLASS_ARCHER) || (creature_ptr->pclass == CLASS_CAVALRY))
-				{
-					msg_print(_("呪文を唱えられない！", "You cannot cast spells!"));
-				}
-				else if (floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_NO_MAGIC) && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH))
-				{
-					msg_print(_("ダンジョンが魔法を吸収した！", "The dungeon absorbs all attempted magic!"));
-					msg_print(NULL);
-				}
-				else if (creature_ptr->anti_magic && (creature_ptr->pclass != CLASS_BERSERKER) && (creature_ptr->pclass != CLASS_SMITH))
-				{
-					concptr which_power = _("魔法", "magic");
-					if (creature_ptr->pclass == CLASS_MINDCRAFTER)
-						which_power = _("超能力", "psionic powers");
-					else if (creature_ptr->pclass == CLASS_IMITATOR)
-						which_power = _("ものまね", "imitation");
-					else if (creature_ptr->pclass == CLASS_SAMURAI)
-						which_power = _("必殺剣", "hissatsu");
-					else if (creature_ptr->pclass == CLASS_MIRROR_MASTER)
-						which_power = _("鏡魔法", "mirror magic");
-					else if (creature_ptr->pclass == CLASS_NINJA)
-						which_power = _("忍術", "ninjutsu");
-					else if (mp_ptr->spell_book == TV_LIFE_BOOK)
-						which_power = _("祈り", "prayer");
-
-					msg_format(_("反魔法バリアが%sを邪魔した！", "An anti-magic shell disrupts your %s!"), which_power);
-					free_turn(creature_ptr);
-				}
-				else if (creature_ptr->shero && (creature_ptr->pclass != CLASS_BERSERKER))
-				{
-					msg_format(_("狂戦士化していて頭が回らない！", "You cannot think directly!"));
-					free_turn(creature_ptr);
-				}
+				if ((creature_ptr->pclass == CLASS_MINDCRAFTER) ||
+					(creature_ptr->pclass == CLASS_BERSERKER) ||
+					(creature_ptr->pclass == CLASS_NINJA) ||
+					(creature_ptr->pclass == CLASS_MIRROR_MASTER)
+					)
+					do_cmd_mind(creature_ptr);
+				else if (creature_ptr->pclass == CLASS_IMITATOR)
+					do_cmd_mane(creature_ptr, FALSE);
+				else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
+					do_cmd_magic_eater(creature_ptr, FALSE, FALSE);
+				else if (creature_ptr->pclass == CLASS_SAMURAI)
+					do_cmd_hissatsu(creature_ptr);
+				else if (creature_ptr->pclass == CLASS_BLUE_MAGE)
+					do_cmd_cast_learned(creature_ptr);
+				else if (creature_ptr->pclass == CLASS_SMITH)
+					do_cmd_kaji(creature_ptr, FALSE);
+				else if (creature_ptr->pclass == CLASS_SNIPER)
+					do_cmd_snipe(creature_ptr);
 				else
-				{
-					if ((creature_ptr->pclass == CLASS_MINDCRAFTER) ||
-					    (creature_ptr->pclass == CLASS_BERSERKER) ||
-					    (creature_ptr->pclass == CLASS_NINJA) ||
-					    (creature_ptr->pclass == CLASS_MIRROR_MASTER)
-					    )
-						do_cmd_mind(creature_ptr);
-					else if (creature_ptr->pclass == CLASS_IMITATOR)
-						do_cmd_mane(creature_ptr, FALSE);
-					else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
-						do_cmd_magic_eater(creature_ptr, FALSE, FALSE);
-					else if (creature_ptr->pclass == CLASS_SAMURAI)
-						do_cmd_hissatsu(creature_ptr);
-					else if (creature_ptr->pclass == CLASS_BLUE_MAGE)
-						do_cmd_cast_learned(creature_ptr);
-					else if (creature_ptr->pclass == CLASS_SMITH)
-						do_cmd_kaji(creature_ptr, FALSE);
-					else if (creature_ptr->pclass == CLASS_SNIPER)
-						do_cmd_snipe(creature_ptr);
-					else
-						do_cmd_cast(creature_ptr);
-				}
+					do_cmd_cast(creature_ptr);
 			}
-			break;
 		}
+		break;
+	}
 
-		/* Issue a pet command */
-		case 'p':
+	/* Issue a pet command */
+	case 'p':
+	{
+		do_cmd_pet(creature_ptr);
+		break;
+	}
+
+	/*** Use various objects ***/
+
+	/* Inscribe an object */
+	case '{':
+	{
+		do_cmd_inscribe(creature_ptr);
+		break;
+	}
+
+	/* Uninscribe an object */
+	case '}':
+	{
+		do_cmd_uninscribe(creature_ptr);
+		break;
+	}
+
+	/* Activate an artifact */
+	case 'A':
+	{
+		do_cmd_activate(creature_ptr);
+		break;
+	}
+
+	/* Eat some food */
+	case 'E':
+	{
+		do_cmd_eat_food(creature_ptr);
+		break;
+	}
+
+	/* Fuel your lantern/torch */
+	case 'F':
+	{
+		do_cmd_refill(creature_ptr);
+		break;
+	}
+
+	/* Fire an item */
+	case 'f':
+	{
+		do_cmd_fire(creature_ptr, SP_NONE);
+		break;
+	}
+
+	/* Throw an item */
+	case 'v':
+	{
+		do_cmd_throw(creature_ptr, 1, FALSE, -1);
+		break;
+	}
+
+	/* Aim a wand */
+	case 'a':
+	{
+		do_cmd_aim_wand(creature_ptr);
+		break;
+	}
+
+	/* Zap a rod */
+	case 'z':
+	{
+		if (use_command && rogue_like_commands)
 		{
-			do_cmd_pet(creature_ptr);
-			break;
+			do_cmd_use(creature_ptr);
 		}
-
-		/*** Use various objects ***/
-
-		/* Inscribe an object */
-		case '{':
+		else
 		{
-			do_cmd_inscribe(creature_ptr);
-			break;
+			do_cmd_zap_rod(creature_ptr);
 		}
+		break;
+	}
 
-		/* Uninscribe an object */
-		case '}':
-		{
-			do_cmd_uninscribe(creature_ptr);
-			break;
-		}
+	/* Quaff a potion */
+	case 'q':
+	{
+		do_cmd_quaff_potion(creature_ptr);
+		break;
+	}
 
-		/* Activate an artifact */
-		case 'A':
-		{
-			do_cmd_activate(creature_ptr);
-			break;
-		}
+	/* Read a scroll */
+	case 'r':
+	{
+		do_cmd_read_scroll(creature_ptr);
+		break;
+	}
 
-		/* Eat some food */
-		case 'E':
-		{
-			do_cmd_eat_food(creature_ptr);
-			break;
-		}
+	/* Use a staff */
+	case 'u':
+	{
+		if (use_command && !rogue_like_commands)
+			do_cmd_use(creature_ptr);
+		else
+			do_cmd_use_staff(creature_ptr);
+		break;
+	}
 
-		/* Fuel your lantern/torch */
-		case 'F':
-		{
-			do_cmd_refill(creature_ptr);
-			break;
-		}
-
-		/* Fire an item */
-		case 'f':
-		{
-			do_cmd_fire(creature_ptr, SP_NONE);
-			break;
-		}
-
-		/* Throw an item */
-		case 'v':
-		{
-			do_cmd_throw(creature_ptr, 1, FALSE, -1);
-			break;
-		}
-
-		/* Aim a wand */
-		case 'a':
-		{
-			do_cmd_aim_wand(creature_ptr);
-			break;
-		}
-
-		/* Zap a rod */
-		case 'z':
-		{
-			if (use_command && rogue_like_commands)
-			{
-				do_cmd_use(creature_ptr);
-			}
-			else
-			{
-				do_cmd_zap_rod(creature_ptr);
-			}
-			break;
-		}
-
-		/* Quaff a potion */
-		case 'q':
-		{
-			do_cmd_quaff_potion(creature_ptr);
-			break;
-		}
-
-		/* Read a scroll */
-		case 'r':
-		{
-			do_cmd_read_scroll(creature_ptr);
-			break;
-		}
-
-		/* Use a staff */
-		case 'u':
-		{
-			if (use_command && !rogue_like_commands)
-				do_cmd_use(creature_ptr);
-			else
-				do_cmd_use_staff(creature_ptr);
-			break;
-		}
-
-		/* Use racial power */
-		case 'U':
-		{
-			do_cmd_racial_power(creature_ptr);
-			break;
-		}
+	/* Use racial power */
+	case 'U':
+	{
+		do_cmd_racial_power(creature_ptr);
+		break;
+	}
 
 
-		/*** Looking at Things (nearby or on map) ***/
+	/*** Looking at Things (nearby or on map) ***/
 
-		/* Full dungeon map */
-		case 'M':
-		{
-			do_cmd_view_map(creature_ptr);
-			break;
-		}
+	/* Full dungeon map */
+	case 'M':
+	{
+		do_cmd_view_map(creature_ptr);
+		break;
+	}
 
-		/* Locate player on map */
-		case 'L':
-		{
-			do_cmd_locate(creature_ptr);
-			break;
-		}
+	/* Locate player on map */
+	case 'L':
+	{
+		do_cmd_locate(creature_ptr);
+		break;
+	}
 
-		/* Look around */
-		case 'l':
-		{
-			do_cmd_look(creature_ptr);
-			break;
-		}
+	/* Look around */
+	case 'l':
+	{
+		do_cmd_look(creature_ptr);
+		break;
+	}
 
-		/* Target monster or location */
-		case '*':
-		{
-			do_cmd_target(creature_ptr);
-			break;
-		}
+	/* Target monster or location */
+	case '*':
+	{
+		do_cmd_target(creature_ptr);
+		break;
+	}
 
 
 
-		/*** Help and Such ***/
+	/*** Help and Such ***/
 
-		/* Help */
-		case '?':
-		{
-			do_cmd_help(creature_ptr);
-			break;
-		}
+	/* Help */
+	case '?':
+	{
+		do_cmd_help(creature_ptr);
+		break;
+	}
 
-		/* Identify symbol */
-		case '/':
-		{
-			do_cmd_query_symbol(creature_ptr);
-			break;
-		}
+	/* Identify symbol */
+	case '/':
+	{
+		do_cmd_query_symbol(creature_ptr);
+		break;
+	}
 
-		/* Character description */
-		case 'C':
-		{
-			do_cmd_player_status(creature_ptr);
-			break;
-		}
+	/* Character description */
+	case 'C':
+	{
+		do_cmd_player_status(creature_ptr);
+		break;
+	}
 
 
-		/*** System Commands ***/
+	/*** System Commands ***/
 
-		/* Hack -- User interface */
-		case '!':
-		{
-			(void)Term_user(0);
-			break;
-		}
+	/* Hack -- User interface */
+	case '!':
+	{
+		(void)Term_user(0);
+		break;
+	}
 
-		/* Single line from a pref file */
-		case '"':
-		{
-			do_cmd_pref(creature_ptr);
-			break;
-		}
+	/* Single line from a pref file */
+	case '"':
+	{
+		do_cmd_pref(creature_ptr);
+		break;
+	}
 
-		case '$':
-		{
-			do_cmd_reload_autopick(creature_ptr);
-			break;
-		}
+	case '$':
+	{
+		do_cmd_reload_autopick(creature_ptr);
+		break;
+	}
 
-		case '_':
-		{
-			do_cmd_edit_autopick(creature_ptr);
-			break;
-		}
+	case '_':
+	{
+		do_cmd_edit_autopick(creature_ptr);
+		break;
+	}
 
-		/* Interact with macros */
-		case '@':
-		{
-			do_cmd_macros(creature_ptr);
-			break;
-		}
+	/* Interact with macros */
+	case '@':
+	{
+		do_cmd_macros(creature_ptr);
+		break;
+	}
 
-		/* Interact with visuals */
-		case '%':
-		{
-			do_cmd_visuals(creature_ptr);
-			do_cmd_redraw(creature_ptr);
-			break;
-		}
+	/* Interact with visuals */
+	case '%':
+	{
+		do_cmd_visuals(creature_ptr);
+		do_cmd_redraw(creature_ptr);
+		break;
+	}
 
-		/* Interact with colors */
-		case '&':
-		{
-			do_cmd_colors(creature_ptr);
-			do_cmd_redraw(creature_ptr);
-			break;
-		}
+	/* Interact with colors */
+	case '&':
+	{
+		do_cmd_colors(creature_ptr);
+		do_cmd_redraw(creature_ptr);
+		break;
+	}
 
-		/* Interact with options */
-		case '=':
-		{
-			do_cmd_options();
-			(void)combine_and_reorder_home(STORE_HOME);
-			do_cmd_redraw(creature_ptr);
-			break;
-		}
+	/* Interact with options */
+	case '=':
+	{
+		do_cmd_options();
+		(void)combine_and_reorder_home(STORE_HOME);
+		do_cmd_redraw(creature_ptr);
+		break;
+	}
 
-		/*** Misc Commands ***/
+	/*** Misc Commands ***/
 
-		/* Take notes */
-		case ':':
-		{
-			do_cmd_note();
-			break;
-		}
+	/* Take notes */
+	case ':':
+	{
+		do_cmd_note();
+		break;
+	}
 
-		/* Version info */
-		case 'V':
-		{
-			do_cmd_version();
-			break;
-		}
+	/* Version info */
+	case 'V':
+	{
+		do_cmd_version();
+		break;
+	}
 
-		/* Repeat level feeling */
-		case KTRL('F'):
-		{
-			do_cmd_feeling(creature_ptr);
-			break;
-		}
+	/* Repeat level feeling */
+	case KTRL('F'):
+	{
+		do_cmd_feeling(creature_ptr);
+		break;
+	}
 
-		/* Show previous message */
-		case KTRL('O'):
-		{
-			do_cmd_message_one();
-			break;
-		}
+	/* Show previous message */
+	case KTRL('O'):
+	{
+		do_cmd_message_one();
+		break;
+	}
 
-		/* Show previous messages */
-		case KTRL('P'):
-		{
-			do_cmd_messages(old_now_message);
-			break;
-		}
+	/* Show previous messages */
+	case KTRL('P'):
+	{
+		do_cmd_messages(old_now_message);
+		break;
+	}
 
-		/* Show quest status -KMW- */
-		case KTRL('Q'):
-		{
-			do_cmd_checkquest(creature_ptr);
-			break;
-		}
+	/* Show quest status -KMW- */
+	case KTRL('Q'):
+	{
+		do_cmd_checkquest(creature_ptr);
+		break;
+	}
 
-		/* Redraw the screen */
-		case KTRL('R'):
-		{
-			now_message = old_now_message;
-			do_cmd_redraw(creature_ptr);
-			break;
-		}
+	/* Redraw the screen */
+	case KTRL('R'):
+	{
+		now_message = old_now_message;
+		do_cmd_redraw(creature_ptr);
+		break;
+	}
 
 #ifndef VERIFY_SAVEFILE
 
-		/* Hack -- Save and don't quit */
-		case KTRL('S'):
-		{
-			do_cmd_save_game(creature_ptr, FALSE);
-			break;
-		}
+	/* Hack -- Save and don't quit */
+	case KTRL('S'):
+	{
+		do_cmd_save_game(creature_ptr, FALSE);
+		break;
+	}
 
 #endif /* VERIFY_SAVEFILE */
 
-		case KTRL('T'):
-		{
-			do_cmd_time(creature_ptr);
-			break;
-		}
+	case KTRL('T'):
+	{
+		do_cmd_time(creature_ptr);
+		break;
+	}
 
-		/* Save and quit */
-		case KTRL('X'):
-		case SPECIAL_KEY_QUIT:
-		{
-			do_cmd_save_and_exit(creature_ptr);
-			break;
-		}
+	/* Save and quit */
+	case KTRL('X'):
+	case SPECIAL_KEY_QUIT:
+	{
+		do_cmd_save_and_exit(creature_ptr);
+		break;
+	}
 
-		/* Quit (commit suicide) */
-		case 'Q':
-		{
-			do_cmd_suicide(creature_ptr);
-			break;
-		}
+	/* Quit (commit suicide) */
+	case 'Q':
+	{
+		do_cmd_suicide(creature_ptr);
+		break;
+	}
 
-		case '|':
-		{
-			do_cmd_diary(creature_ptr);
-			break;
-		}
+	case '|':
+	{
+		do_cmd_diary(creature_ptr);
+		break;
+	}
 
-		/* Check artifacts, uniques, objects */
-		case '~':
-		{
-			do_cmd_knowledge(creature_ptr);
-			break;
-		}
+	/* Check artifacts, uniques, objects */
+	case '~':
+	{
+		do_cmd_knowledge(creature_ptr);
+		break;
+	}
 
-		/* Load "screen dump" */
-		case '(':
-		{
-			do_cmd_load_screen();
-			break;
-		}
+	/* Load "screen dump" */
+	case '(':
+	{
+		do_cmd_load_screen();
+		break;
+	}
 
-		/* Save "screen dump" */
-		case ')':
-		{
-			do_cmd_save_screen(creature_ptr);
-			break;
-		}
+	/* Save "screen dump" */
+	case ')':
+	{
+		do_cmd_save_screen(creature_ptr);
+		break;
+	}
 
-		/* Record/stop "Movie" */
-		case ']':
-		{
-			prepare_movie_hooks();
-			break;
-		}
+	/* Record/stop "Movie" */
+	case ']':
+	{
+		prepare_movie_hooks();
+		break;
+	}
 
-		/* Make random artifact list */
-		case KTRL('V'):
-		{
-			spoil_random_artifact(creature_ptr, "randifact.txt");
-			break;
-		}
+	/* Make random artifact list */
+	case KTRL('V'):
+	{
+		spoil_random_artifact(creature_ptr, "randifact.txt");
+		break;
+	}
 
 #ifdef TRAVEL
-		case '`':
+	case '`':
+	{
+		if (!creature_ptr->wild_mode) do_cmd_travel(creature_ptr);
+		if (creature_ptr->special_defense & KATA_MUSOU)
 		{
-			if (!creature_ptr->wild_mode) do_cmd_travel(creature_ptr);
-			if (creature_ptr->special_defense & KATA_MUSOU)
-			{
-				set_action(creature_ptr, ACTION_NONE);
-			}
-			break;
+			set_action(creature_ptr, ACTION_NONE);
 		}
+		break;
+	}
 #endif
 
-		/* Hack -- Unknown command */
-		default:
+	/* Hack -- Unknown command */
+	default:
+	{
+		if (flush_failure) flush();
+		if (one_in_(2))
 		{
-			if (flush_failure) flush();
-			if (one_in_(2))
-			{
-				char error_m[1024];
-				sound(SOUND_ILLEGAL);
-				if (!get_rnd_line(_("error_j.txt", "error.txt"), 0, error_m))
-					msg_print(error_m);
-			}
-			else
-			{
-				prt(_(" '?' でヘルプが表示されます。", "Type '?' for help."), 0, 0);
-			}
-
-			break;
+			char error_m[1024];
+			sound(SOUND_ILLEGAL);
+			if (!get_rnd_line(_("error_j.txt", "error.txt"), 0, error_m))
+				msg_print(error_m);
 		}
+		else
+		{
+			prt(_(" '?' でヘルプが表示されます。", "Type '?' for help."), 0, 0);
+		}
+
+		break;
+	}
 	}
 	if (!creature_ptr->energy_use && !now_message)
 		now_message = old_now_message;
@@ -4344,10 +4348,10 @@ static void process_upkeep_with_speed(player_type *creature_ptr)
 	{
 		creature_ptr->enchant_energy_need -= SPEED_TO_ENERGY(creature_ptr->pspeed);
 	}
-	
+
 	/* No turn yet */
 	if (creature_ptr->enchant_energy_need > 0) return;
-	
+
 	while (creature_ptr->enchant_energy_need <= 0)
 	{
 		/* Handle the player song */
@@ -4356,7 +4360,7 @@ static void process_upkeep_with_speed(player_type *creature_ptr)
 		/* Hex - Handle the hex spells */
 		if (!load) check_hex(creature_ptr);
 		if (!load) revenge_spell(creature_ptr);
-		
+
 		/* There is some randomness of needed energy */
 		creature_ptr->enchant_energy_need += ENERGY_NEED();
 	}
@@ -4424,7 +4428,7 @@ static void process_player(player_type *creature_ptr)
 
 	if (creature_ptr->phase_out)
 	{
-		for(m_idx = 1; m_idx < creature_ptr->current_floor_ptr->m_max; m_idx++)
+		for (m_idx = 1; m_idx < creature_ptr->current_floor_ptr->m_max; m_idx++)
 		{
 			monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
 
@@ -4457,7 +4461,7 @@ static void process_player(player_type *creature_ptr)
 		{
 			/* Stop resting */
 			if ((creature_ptr->chp == creature_ptr->mhp) &&
-			    (creature_ptr->csp >= creature_ptr->msp))
+				(creature_ptr->csp >= creature_ptr->msp))
 			{
 				set_action(creature_ptr, ACTION_NONE);
 			}
@@ -4468,13 +4472,13 @@ static void process_player(player_type *creature_ptr)
 		{
 			/* Stop resting */
 			if ((creature_ptr->chp == creature_ptr->mhp) &&
-			    (creature_ptr->csp >= creature_ptr->msp) &&
-			    !creature_ptr->blind && !creature_ptr->confused &&
-			    !creature_ptr->poisoned && !creature_ptr->afraid &&
-			    !creature_ptr->stun && !creature_ptr->cut &&
-			    !creature_ptr->slow && !creature_ptr->paralyzed &&
-			    !creature_ptr->image && !creature_ptr->word_recall &&
-			    !creature_ptr->alter_reality)
+				(creature_ptr->csp >= creature_ptr->msp) &&
+				!creature_ptr->blind && !creature_ptr->confused &&
+				!creature_ptr->poisoned && !creature_ptr->afraid &&
+				!creature_ptr->stun && !creature_ptr->cut &&
+				!creature_ptr->slow && !creature_ptr->paralyzed &&
+				!creature_ptr->image && !creature_ptr->word_recall &&
+				!creature_ptr->alter_reality)
 			{
 				set_action(creature_ptr, ACTION_NONE);
 			}
@@ -4547,7 +4551,7 @@ static void process_player(player_type *creature_ptr)
 		if (MON_MONFEAR(m_ptr))
 		{
 			/* Hack -- Recover from fear */
-			if(set_monster_monfear(creature_ptr, creature_ptr->riding,
+			if (set_monster_monfear(creature_ptr, creature_ptr->riding,
 				(randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_MONFEAR(m_ptr) - 1)))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
@@ -4558,7 +4562,7 @@ static void process_player(player_type *creature_ptr)
 
 		handle_stuff(creature_ptr);
 	}
-	
+
 	load = FALSE;
 
 	/* Fast */
@@ -4568,7 +4572,7 @@ static void process_player(player_type *creature_ptr)
 	}
 	if ((creature_ptr->pclass == CLASS_FORCETRAINER) && P_PTR_KI)
 	{
-		if(P_PTR_KI < 40) P_PTR_KI = 0;
+		if (P_PTR_KI < 40) P_PTR_KI = 0;
 		else P_PTR_KI -= 40;
 		creature_ptr->update |= (PU_BONUS);
 	}
@@ -4579,7 +4583,7 @@ static void process_player(player_type *creature_ptr)
 
 		/* Convert the unit (1/2^16) to (1/2^32) */
 		s64b_LSHIFT(cost, cost_frac, 16);
- 
+
 		if (s64b_cmp(creature_ptr->csp, creature_ptr->csp_frac, cost, cost_frac) < 0)
 		{
 			/* Mana run out */
@@ -4847,7 +4851,7 @@ static void process_player(player_type *creature_ptr)
 				creature_ptr->redraw |= (PR_STATE);
 			}
 
-			if (creature_ptr->timewalk && (creature_ptr->energy_need > - 1000))
+			if (creature_ptr->timewalk && (creature_ptr->energy_need > -1000))
 			{
 
 				creature_ptr->redraw |= (PR_MAP);
@@ -4982,8 +4986,8 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	Term_fresh();
 
 	if (quest_num && (is_fixed_quest_idx(quest_num) &&
-	    !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) ||
-	    !(quest[quest_num].flags & QUEST_FLAG_PRESET)))) do_cmd_feeling(player_ptr);
+		!((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) ||
+			!(quest[quest_num].flags & QUEST_FLAG_PRESET)))) do_cmd_feeling(player_ptr);
 
 	if (player_ptr->phase_out)
 	{
@@ -5016,12 +5020,12 @@ static void dungeon(player_type *player_ptr, bool load_game)
 		if (r_info[d_info[player_ptr->dungeon_idx].final_guardian].max_num)
 #ifdef JP
 			msg_format("この階には%sの主である%sが棲んでいる。",
-				   d_name+d_info[player_ptr->dungeon_idx].name, 
-				   r_name+r_info[d_info[player_ptr->dungeon_idx].final_guardian].name);
+				d_name + d_info[player_ptr->dungeon_idx].name,
+				r_name + r_info[d_info[player_ptr->dungeon_idx].final_guardian].name);
 #else
 			msg_format("%^s lives in this level as the keeper of %s.",
-					   r_name+r_info[d_info[player_ptr->dungeon_idx].final_guardian].name, 
-					   d_name+d_info[player_ptr->dungeon_idx].name);
+				r_name + r_info[d_info[player_ptr->dungeon_idx].final_guardian].name,
+				d_name + d_info[player_ptr->dungeon_idx].name);
 #endif
 	}
 
@@ -5038,7 +5042,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	current_world_ptr->is_loading_now = TRUE;
 
 	if (player_ptr->energy_need > 0 && !player_ptr->phase_out &&
-	    (floor_ptr->dun_level || player_ptr->leaving_dungeon || floor_ptr->inside_arena))
+		(floor_ptr->dun_level || player_ptr->leaving_dungeon || floor_ptr->inside_arena))
 		player_ptr->energy_need = 0;
 
 	/* Not leaving dungeon */
@@ -5301,7 +5305,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
 		/* No suspending now */
 		signals_ignore_tstp();
-		
+
 		/* Hack -- Character is now "icky" */
 		current_world_ptr->character_icky = TRUE;
 		path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
@@ -5331,7 +5335,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
 		/* Forget the high score fd */
 		highscore_fd = -1;
-		
+
 		/* Allow suspending now */
 		signals_handle_tstp();
 
@@ -5400,7 +5404,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		/* Roll up a new character */
 		player_birth(player_ptr);
 
-		counts_write(player_ptr, 2,0);
+		counts_write(player_ptr, 2, 0);
 		player_ptr->count = 0;
 
 		load = FALSE;
@@ -5415,14 +5419,14 @@ void play_game(player_type *player_ptr, bool new_game)
 	{
 		write_level = FALSE;
 
-		exe_write_diary(player_ptr, NIKKI_GAMESTART, 1, 
-					  _("                            ----ゲーム再開----",
-						"                            ---- Restart Game ----"));
+		exe_write_diary(player_ptr, NIKKI_GAMESTART, 1,
+			_("                            ----ゲーム再開----",
+				"                            ---- Restart Game ----"));
 
-/*
- * 1.0.9 以前はセーブ前に player_ptr->riding = -1 としていたので、再設定が必要だった。
- * もう不要だが、以前のセーブファイルとの互換のために残しておく。
- */
+		/*
+		 * 1.0.9 以前はセーブ前に player_ptr->riding = -1 としていたので、再設定が必要だった。
+		 * もう不要だが、以前のセーブファイルとの互換のために残しておく。
+		 */
 		if (player_ptr->riding == -1)
 		{
 			player_ptr->riding = 0;
@@ -5453,7 +5457,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
 	/* Sexy gal gets bonus to maximum weapon skill of whip */
 	if (player_ptr->pseikaku == SEIKAKU_SEXY)
-		s_info[player_ptr->pclass].w_max[TV_HAFTED-TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_MASTER;
+		s_info[player_ptr->pclass].w_max[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_MASTER;
 
 	/* Fill the arrays of floors and walls in the good proportions */
 	set_floor_and_wall(player_ptr->dungeon_idx);
@@ -5577,12 +5581,12 @@ void play_game(player_type *player_ptr, bool new_game)
 		MONRACE_IDX pet_r_idx = ((player_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
 		monster_race *r_ptr = &r_info[pet_r_idx];
 		place_monster_aux(0, player_ptr->y, player_ptr->x - 1, pet_r_idx,
-				  (PM_FORCE_PET | PM_NO_KAGE));
+			(PM_FORCE_PET | PM_NO_KAGE));
 		m_ptr = &floor_ptr->m_list[hack_m_idx_ii];
 		m_ptr->mspeed = r_ptr->speed;
-		m_ptr->maxhp = r_ptr->hdice*(r_ptr->hside+1)/2;
+		m_ptr->maxhp = r_ptr->hdice*(r_ptr->hside + 1) / 2;
 		m_ptr->max_maxhp = m_ptr->maxhp;
-		m_ptr->hp = r_ptr->hdice*(r_ptr->hside+1)/2;
+		m_ptr->hp = r_ptr->hdice*(r_ptr->hside + 1) / 2;
 		m_ptr->dealt_damage = 0;
 		m_ptr->energy_need = ENERGY_NEED() + ENERGY_NEED();
 	}

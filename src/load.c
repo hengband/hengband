@@ -37,7 +37,7 @@
  * the existing "number of turns to protect for", and where each hit
  * by a monster will reduce the shield by that amount.
  *
- * 
+ *
  */
 
 #include "angband.h"
@@ -85,14 +85,14 @@
 #include "realm-song.h"
 #include "cmd-smith.h"
 
-/*
- * Maximum number of tries for selection of a proper quest monster
- */
+ /*
+  * Maximum number of tries for selection of a proper quest monster
+  */
 #define MAX_TRIES 100
 
 #define OLD_MAX_MANE 22
 
- /* Old hidden trap flag */
+  /* Old hidden trap flag */
 #define CAVE_TRAP       0x8000
 
 /*** Terrain Feature Indexes (see "lib/edit/f_info.txt") ***/
@@ -323,7 +323,7 @@ static void rd_string(char *str, int max)
 	}
 
 	/* Terminate */
-	str[max-1] = '\0';
+	str[max - 1] = '\0';
 
 #ifdef JP
 	/* Convert Kanji code */
@@ -435,7 +435,7 @@ static void rd_item_old(object_type *o_ptr)
 	rd_s16b(&o_ptr->timeout);
 
 	rd_s16b(&o_ptr->to_h);
-	
+
 	rd_s16b(&tmp16s);
 	o_ptr->to_d = tmp16s;
 	rd_s16b(&o_ptr->to_a);
@@ -531,7 +531,7 @@ static void rd_item_old(object_type *o_ptr)
 			case 10: add_flag(o_ptr->art_flags, TR_RES_LITE);   break;
 			}
 			o_ptr->xtra2 = 0;
-		}		
+		}
 		else if (o_ptr->xtra1 == EGO_XTRA_ABILITY)
 		{
 			switch (o_ptr->xtra2 % 8)
@@ -568,7 +568,7 @@ static void rd_item_old(object_type *o_ptr)
 				o_ptr->xtra5 = damroll(r_info[o_ptr->pval].hdice, r_info[o_ptr->pval].hside);
 			if (ironman_nightmare)
 			{
-				o_ptr->xtra5 = (s16b)MIN(30000, o_ptr->xtra5*2L);
+				o_ptr->xtra5 = (s16b)MIN(30000, o_ptr->xtra5 * 2L);
 			}
 			o_ptr->xtra4 = o_ptr->xtra5;
 		}
@@ -578,7 +578,7 @@ static void rd_item_old(object_type *o_ptr)
 		rd_byte(&o_ptr->xtra3);
 		if (h_older_than(1, 3, 0, 1))
 		{
-			if (object_is_smith(o_ptr) && o_ptr->xtra3 >= 1+96)
+			if (object_is_smith(o_ptr) && o_ptr->xtra3 >= 1 + 96)
 				o_ptr->xtra3 += -96 + MIN_SPECIAL_ESSENCE;
 		}
 
@@ -689,7 +689,7 @@ static void rd_item(object_type *o_ptr)
 	if (flags & SAVE_ITEM_NUMBER) {
 		rd_byte(&tmp8u);
 		o_ptr->number = tmp8u;
-	}	
+	}
 	else o_ptr->number = 1;
 
 	s16b tmp16s;
@@ -731,8 +731,8 @@ static void rd_item(object_type *o_ptr)
 
 	if (flags & SAVE_ITEM_DD)
 	{
-		 rd_byte(&tmp8u);
-		 o_ptr->dd = tmp8u;
+		rd_byte(&tmp8u);
+		o_ptr->dd = tmp8u;
 	}
 	else o_ptr->dd = 0;
 
@@ -809,7 +809,7 @@ static void rd_item(object_type *o_ptr)
 	{
 		o_ptr->art_name = 0;
 	}
-	
+
 	if (!h_older_than(2, 1, 2, 4)) return;
 
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -823,7 +823,7 @@ static void rd_item(object_type *o_ptr)
 		remove_flag(o_ptr->art_flags, TR_LITE_3);
 		return;
 	}
-	
+
 	if (o_ptr->name2 == EGO_LITE_DARKNESS)
 	{
 		if (o_ptr->tval != TV_LITE)
@@ -928,15 +928,15 @@ static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 		rd_s16b(&tmp16s);
 		m_ptr->max_maxhp = (HIT_POINT)tmp16s;
 	}
-	if(h_older_than(2, 1, 2, 1))
+	if (h_older_than(2, 1, 2, 1))
 	{
 		m_ptr->dealt_damage = 0;
 	}
 	else
 	{
-		rd_s32b(&m_ptr->dealt_damage); 
+		rd_s32b(&m_ptr->dealt_damage);
 	}
-	
+
 	rd_s16b(&m_ptr->mtimed[MTIMED_CSLEEP]);
 
 	rd_byte(&tmp8u);
@@ -952,7 +952,7 @@ static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 	if (z_older_than(11, 0, 13))
 		m_ptr->energy_need = 100 - m_ptr->energy_need;
 
-	if (z_older_than(10,0,7))
+	if (z_older_than(10, 0, 7))
 	{
 		m_ptr->mtimed[MTIMED_FAST] = 0;
 		m_ptr->mtimed[MTIMED_SLOW] = 0;
@@ -972,11 +972,11 @@ static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 	rd_byte(&tmp8u);
 	m_ptr->mtimed[MTIMED_MONFEAR] = (s16b)tmp8u;
 
-	if (z_older_than(10,0,10))
+	if (z_older_than(10, 0, 10))
 	{
 		reset_target(m_ptr);
 	}
-	else if (z_older_than(10,0,11))
+	else if (z_older_than(10, 0, 11))
 	{
 		rd_s16b(&tmp16s);
 		reset_target(m_ptr);
@@ -1001,7 +1001,8 @@ static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 	if (z_older_than(10, 4, 5))
 	{
 		m_ptr->exp = 0;
-	} else 
+	}
+	else
 	{
 		rd_u32b(&tmp32u);
 		m_ptr->exp = tmp32u;
@@ -1011,7 +1012,7 @@ static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 	{
 		if (m_ptr->r_idx < 0)
 		{
-			m_ptr->r_idx = (0-m_ptr->r_idx);
+			m_ptr->r_idx = (0 - m_ptr->r_idx);
 			m_ptr->mflag2 |= MFLAG2_KAGE;
 		}
 	}
@@ -1079,13 +1080,13 @@ static void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 	rd_s16b(&tmp16s);
 	m_ptr->max_maxhp = (HIT_POINT)tmp16s;
 
-	if(h_older_than(2, 1, 2, 1))
+	if (h_older_than(2, 1, 2, 1))
 	{
 		m_ptr->dealt_damage = 0;
 	}
 	else
 	{
-		rd_s32b(&m_ptr->dealt_damage); 
+		rd_s32b(&m_ptr->dealt_damage);
 	}
 
 	/* Monster race index of its appearance */
@@ -1175,7 +1176,7 @@ static void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 	if (flags & SAVE_MON_MFLAG2) rd_byte(&m_ptr->mflag2);
 	else m_ptr->mflag2 = 0;
 
-	if (flags & SAVE_MON_NICKNAME) 
+	if (flags & SAVE_MON_NICKNAME)
 	{
 		char buf[128];
 		rd_string(buf, sizeof(buf));
@@ -1232,11 +1233,11 @@ static void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 #define RF4_BR_SHAR         0x01000000  /* Breathe Shards */
 #define RF4_BR_WALL         0x04000000  /* Breathe Force */
 
-/*!
- * @brief モンスターの思い出を読み込む / Read the monster lore
- * @param r_idx 読み込み先モンスターID
- * @return なし
- */
+ /*!
+  * @brief モンスターの思い出を読み込む / Read the monster lore
+  * @param r_idx 読み込み先モンスターID
+  * @return なし
+  */
 static void rd_lore(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
@@ -1256,7 +1257,7 @@ static void rd_lore(MONRACE_IDX r_idx)
 	else
 	{
 		rd_s16b(&tmp16s);
-		r_ptr->r_akills = (MONSTER_NUMBER)tmp16s; 
+		r_ptr->r_akills = (MONSTER_NUMBER)tmp16s;
 	}
 
 	rd_s16b(&tmp16s);
@@ -1299,18 +1300,18 @@ static void rd_lore(MONRACE_IDX r_idx)
 		r_ptr->r_flagsr = 0L;
 
 		/* Move RF3 resistance flags to RFR */
-		MOVE_RF3_TO_RFR(r_ptr, RF3_IM_ACID,  RFR_IM_ACID);
-		MOVE_RF3_TO_RFR(r_ptr, RF3_IM_ELEC,  RFR_IM_ELEC);
-		MOVE_RF3_TO_RFR(r_ptr, RF3_IM_FIRE,  RFR_IM_FIRE);
-		MOVE_RF3_TO_RFR(r_ptr, RF3_IM_COLD,  RFR_IM_COLD);
-		MOVE_RF3_TO_RFR(r_ptr, RF3_IM_POIS,  RFR_IM_POIS);
+		MOVE_RF3_TO_RFR(r_ptr, RF3_IM_ACID, RFR_IM_ACID);
+		MOVE_RF3_TO_RFR(r_ptr, RF3_IM_ELEC, RFR_IM_ELEC);
+		MOVE_RF3_TO_RFR(r_ptr, RF3_IM_FIRE, RFR_IM_FIRE);
+		MOVE_RF3_TO_RFR(r_ptr, RF3_IM_COLD, RFR_IM_COLD);
+		MOVE_RF3_TO_RFR(r_ptr, RF3_IM_POIS, RFR_IM_POIS);
 		MOVE_RF3_TO_RFR(r_ptr, RF3_RES_TELE, RFR_RES_TELE);
 		MOVE_RF3_TO_RFR(r_ptr, RF3_RES_NETH, RFR_RES_NETH);
 		MOVE_RF3_TO_RFR(r_ptr, RF3_RES_WATE, RFR_RES_WATE);
 		MOVE_RF3_TO_RFR(r_ptr, RF3_RES_PLAS, RFR_RES_PLAS);
 		MOVE_RF3_TO_RFR(r_ptr, RF3_RES_NEXU, RFR_RES_NEXU);
 		MOVE_RF3_TO_RFR(r_ptr, RF3_RES_DISE, RFR_RES_DISE);
-		MOVE_RF3_TO_RFR(r_ptr, RF3_RES_ALL,  RFR_RES_ALL);
+		MOVE_RF3_TO_RFR(r_ptr, RF3_RES_ALL, RFR_RES_ALL);
 
 		/* Separate breathers resistance from RF4 to RFR */
 		RF4_BR_TO_RFR(r_ptr, RF4_BR_LITE, RFR_RES_LITE);
@@ -1401,7 +1402,7 @@ static void home_carry(player_type *player_ptr, store_type *st_ptr, object_type 
 	/* Slide the others up */
 	for (int i = st_ptr->stock_num; i > slot; i--)
 	{
-		st_ptr->stock[i] = st_ptr->stock[i-1];
+		st_ptr->stock[i] = st_ptr->stock[i - 1];
 	}
 
 	/* More stuff now */
@@ -1535,11 +1536,11 @@ static void rd_options(void)
 	hitpoint_warn = b;
 
 	/* Read "mana_warn" */
-	if(h_older_than(1, 7, 0, 0))
+	if (h_older_than(1, 7, 0, 0))
 	{
-		mana_warn=2;
+		mana_warn = 2;
 	}
-	else 
+	else
 	{
 		rd_byte(&b);
 		mana_warn = b;
@@ -1978,7 +1979,7 @@ static void rd_extra(player_type *creature_ptr)
 	rd_s16b(&tmp16s);
 	creature_ptr->oldpy = (POSITION)tmp16s;
 
-	if (z_older_than(10, 3, 13) && !creature_ptr->current_floor_ptr->dun_level && !creature_ptr->current_floor_ptr->inside_arena) {creature_ptr->oldpy = 33;creature_ptr->oldpx = 131;}
+	if (z_older_than(10, 3, 13) && !creature_ptr->current_floor_ptr->dun_level && !creature_ptr->current_floor_ptr->inside_arena) { creature_ptr->oldpy = 33; creature_ptr->oldpx = 131; }
 
 	/* Was creature_ptr->rewards[MAX_BACT] */
 	rd_s16b(&tmp16s);
@@ -2038,7 +2039,7 @@ static void rd_extra(player_type *creature_ptr)
 
 		rd_byte(&max);
 
-		for(int i = 0; i < max; i++)
+		for (int i = 0; i < max; i++)
 		{
 			rd_s16b(&tmp16s);
 			max_dlv[i] = tmp16s;
@@ -2079,7 +2080,7 @@ static void rd_extra(player_type *creature_ptr)
 	rd_s16b(&creature_ptr->image);
 	rd_s16b(&creature_ptr->protevil);
 	rd_s16b(&creature_ptr->invuln);
-	if(z_older_than(10, 0, 0))
+	if (z_older_than(10, 0, 0))
 		creature_ptr->ult_res = 0;
 	else
 		rd_s16b(&creature_ptr->ult_res);
@@ -2109,7 +2110,7 @@ static void rd_extra(player_type *creature_ptr)
 	rd_s16b(&creature_ptr->oppose_acid);
 	rd_s16b(&creature_ptr->oppose_elec);
 	rd_s16b(&creature_ptr->oppose_pois);
-	if (z_older_than(10,0,2)) creature_ptr->tsuyoshi = 0;
+	if (z_older_than(10, 0, 2)) creature_ptr->tsuyoshi = 0;
 	else rd_s16b(&creature_ptr->tsuyoshi);
 
 	/* Old savefiles do not have the following fields... */
@@ -2187,15 +2188,15 @@ static void rd_extra(player_type *creature_ptr)
 		}
 
 		/* by henkma */
-		if ( z_older_than(11,0,3) ){
-		  creature_ptr->tim_reflect=0;
-		  creature_ptr->multishadow=0;
-		  creature_ptr->dustrobe=0;
+		if (z_older_than(11, 0, 3)) {
+			creature_ptr->tim_reflect = 0;
+			creature_ptr->multishadow = 0;
+			creature_ptr->dustrobe = 0;
 		}
 		else {
-		  rd_s16b(&creature_ptr->tim_reflect);
-		  rd_s16b(&creature_ptr->multishadow);
-		  rd_s16b(&creature_ptr->dustrobe);
+			rd_s16b(&creature_ptr->tim_reflect);
+			rd_s16b(&creature_ptr->multishadow);
+			rd_s16b(&creature_ptr->dustrobe);
 		}
 
 		rd_s16b(&creature_ptr->chaos_patron);
@@ -2212,7 +2213,7 @@ static void rd_extra(player_type *creature_ptr)
 	/* Calc the regeneration modifier for mutations */
 	creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
 
-	if (z_older_than(10,0,9))
+	if (z_older_than(10, 0, 9))
 	{
 		rd_byte(&tmp8u);
 		if (tmp8u) creature_ptr->special_attack = ATTACK_CONFUSE;
@@ -2226,7 +2227,7 @@ static void rd_extra(player_type *creature_ptr)
 
 	if (creature_ptr->special_attack & KAMAE_MASK) creature_ptr->action = ACTION_KAMAE;
 	else if (creature_ptr->special_attack & KATA_MASK) creature_ptr->action = ACTION_KATA;
-	if (z_older_than(10,0,12))
+	if (z_older_than(10, 0, 12))
 	{
 		creature_ptr->ele_immune = 0;
 		creature_ptr->special_defense = 0;
@@ -2326,7 +2327,7 @@ static void rd_extra(player_type *creature_ptr)
 	}
 	else rd_s32b(&current_world_ptr->arena_start_turn);
 
-	if (z_older_than(10,0,3))
+	if (z_older_than(10, 0, 3))
 	{
 		determine_daily_bounty(creature_ptr, TRUE);
 	}
@@ -2336,7 +2337,7 @@ static void rd_extra(player_type *creature_ptr)
 		rd_s16b(&creature_ptr->today_mon);
 	}
 
-	if (z_older_than(10,0,7))
+	if (z_older_than(10, 0, 7))
 	{
 		creature_ptr->riding = 0;
 	}
@@ -2373,7 +2374,7 @@ static void rd_extra(player_type *creature_ptr)
 		}
 	}
 
-	if (z_older_than(10,1,2))
+	if (z_older_than(10, 1, 2))
 	{
 		current_world_ptr->play_time = 0;
 	}
@@ -2382,7 +2383,7 @@ static void rd_extra(player_type *creature_ptr)
 		rd_u32b(&current_world_ptr->play_time);
 	}
 
-	if (z_older_than(10,3,9))
+	if (z_older_than(10, 3, 9))
 	{
 		creature_ptr->visit = 1L;
 	}
@@ -2511,7 +2512,7 @@ static void rd_messages(void)
 			message_add(buf);
 		}
 	}
-	
+
 	u32b num;
 	rd_u32b(&num);
 	int message_max;
@@ -2544,7 +2545,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 	floor_ptr->dun_level = (DEPTH)tmp16s;
 	if (z_older_than(10, 3, 8)) creature_ptr->dungeon_idx = DUNGEON_ANGBAND;
 	else
-	{ 
+	{
 		byte tmp8u;
 		rd_byte(&tmp8u);
 		creature_ptr->dungeon_idx = (IDX)tmp8u;
@@ -2562,7 +2563,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 	creature_ptr->y = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
 	creature_ptr->x = (POSITION)tmp16s;
-	if (z_older_than(10, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena) { creature_ptr->y = 33; creature_ptr->x = 131;}
+	if (z_older_than(10, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena) { creature_ptr->y = 33; creature_ptr->x = 131; }
 	rd_s16b(&tmp16s);
 	floor_ptr->height = (POSITION)tmp16s;
 	rd_s16b(&tmp16s);
@@ -2582,7 +2583,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		/* Grab RLE info */
 		byte count;
 		rd_byte(&count);
-		if (z_older_than(10,3,6))
+		if (z_older_than(10, 3, 6))
 		{
 			byte tmp8u;
 			rd_byte(&tmp8u);
@@ -3026,8 +3027,8 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 
 	/* Maximal size */
 	POSITION ymax = floor_ptr->height;
-	POSITION xmax= floor_ptr->width;
-	
+	POSITION xmax = floor_ptr->width;
+
 	/* Load the dungeon data */
 	for (POSITION x = 0, y = 0; y < ymax; )
 	{
@@ -3222,7 +3223,7 @@ static errr rd_dungeon(player_type *player_ptr)
 	}
 
 	/*** Meta info ***/
-    /* Number of floor_id used from birth */
+	/* Number of floor_id used from birth */
 	rd_s16b(&max_floor_id);
 
 	/* Current dungeon type */
@@ -3457,8 +3458,8 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 
 		rd_byte(&tmp8u);
 
-		k_ptr->aware = (tmp8u & 0x01) ? TRUE: FALSE;
-		k_ptr->tried = (tmp8u & 0x02) ? TRUE: FALSE;
+		k_ptr->aware = (tmp8u & 0x01) ? TRUE : FALSE;
+		k_ptr->tried = (tmp8u & 0x02) ? TRUE : FALSE;
 	}
 	if (arg_fiddle) note(_("アイテムの記録をロードしました", "Loaded Object Memory"));
 
@@ -3697,22 +3698,22 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	cp_ptr = &class_info[creature_ptr->pclass];
 	ap_ptr = &seikaku_info[creature_ptr->pseikaku];
 
-	if(z_older_than(10, 2, 2) && (creature_ptr->pclass == CLASS_BEASTMASTER) && !creature_ptr->is_dead)
+	if (z_older_than(10, 2, 2) && (creature_ptr->pclass == CLASS_BEASTMASTER) && !creature_ptr->is_dead)
 	{
 		creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 		roll_hitdice(creature_ptr, 0L);
 	}
-	if(z_older_than(10, 3, 2) && (creature_ptr->pclass == CLASS_ARCHER) && !creature_ptr->is_dead)
+	if (z_older_than(10, 3, 2) && (creature_ptr->pclass == CLASS_ARCHER) && !creature_ptr->is_dead)
 	{
 		creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 		roll_hitdice(creature_ptr, 0L);
 	}
-	if(z_older_than(10, 2, 6) && (creature_ptr->pclass == CLASS_SORCERER) && !creature_ptr->is_dead)
+	if (z_older_than(10, 2, 6) && (creature_ptr->pclass == CLASS_SORCERER) && !creature_ptr->is_dead)
 	{
-		creature_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
+		creature_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
 		roll_hitdice(creature_ptr, 0L);
 	}
-	if(z_older_than(10, 4, 7) && (creature_ptr->pclass == CLASS_BLUE_MAGE) && !creature_ptr->is_dead)
+	if (z_older_than(10, 4, 7) && (creature_ptr->pclass == CLASS_BLUE_MAGE) && !creature_ptr->is_dead)
 	{
 		creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 		roll_hitdice(creature_ptr, 0L);
@@ -3729,15 +3730,15 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	rd_u32b(&creature_ptr->spell_forgotten1);
 	rd_u32b(&creature_ptr->spell_forgotten2);
 
-	if (z_older_than(10,0,5))
+	if (z_older_than(10, 0, 5))
 	{
 		creature_ptr->learned_spells = 0;
 		for (int i = 0; i < 64; i++)
 		{
 			/* Count known spells */
 			if ((i < 32) ?
-			    (creature_ptr->spell_learned1 & (1L << i)) :
-			    (creature_ptr->spell_learned2 & (1L << (i - 32))))
+				(creature_ptr->spell_learned1 & (1L << i)) :
+				(creature_ptr->spell_learned2 & (1L << (i - 32))))
 			{
 				creature_ptr->learned_spells++;
 			}
@@ -3745,7 +3746,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	}
 	else rd_s16b(&creature_ptr->learned_spells);
 
-	if (z_older_than(10,0,6))
+	if (z_older_than(10, 0, 6))
 	{
 		creature_ptr->add_spells = 0;
 	}
@@ -3788,28 +3789,28 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		rd_byte(&tmp8u);
 		if (tmp8u) creature_ptr->pet_extra_flags |= PF_PICKUP_ITEMS;
 
-		if (z_older_than(10,0,4)) creature_ptr->pet_extra_flags |= PF_TELEPORT;
+		if (z_older_than(10, 0, 4)) creature_ptr->pet_extra_flags |= PF_TELEPORT;
 		else
 		{
 			rd_byte(&tmp8u);
 			if (tmp8u) creature_ptr->pet_extra_flags |= PF_TELEPORT;
 		}
 
-		if (z_older_than(10,0,7)) creature_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
+		if (z_older_than(10, 0, 7)) creature_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
 		else
 		{
 			rd_byte(&tmp8u);
 			if (tmp8u) creature_ptr->pet_extra_flags |= PF_ATTACK_SPELL;
 		}
 
-		if (z_older_than(10,0,8)) creature_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
+		if (z_older_than(10, 0, 8)) creature_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
 		else
 		{
 			rd_byte(&tmp8u);
 			if (tmp8u) creature_ptr->pet_extra_flags |= PF_SUMMON_SPELL;
 		}
 
-		if (!z_older_than(10,0,8))
+		if (!z_older_than(10, 0, 8))
 		{
 			rd_byte(&tmp8u);
 			if (tmp8u) creature_ptr->pet_extra_flags |= PF_BALL_SPELL;
@@ -4002,7 +4003,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	 */
 #ifdef JP
 # ifdef EUC
-	/* EUC kanji code */
+	 /* EUC kanji code */
 	kanji_code = 2;
 # endif
 # ifdef SJIS
@@ -4010,7 +4011,7 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	kanji_code = 3;
 # endif
 #else
-	/* ASCII */
+	 /* ASCII */
 	kanji_code = 1;
 #endif
 

@@ -27,11 +27,11 @@
 #include "realm-song.h"
 #include "view-mainwindow.h"
 
-/*!
- * @brief 食料を食べるコマンドのサブルーチン
- * @param item 食べるオブジェクトの所持品ID
- * @return なし
- */
+ /*!
+  * @brief 食料を食べるコマンドのサブルーチン
+  * @param item 食べるオブジェクトの所持品ID
+  * @return なし
+  */
 void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 {
 	int ident, lev;
@@ -413,22 +413,22 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 	}
 	else if (PRACE_IS_(creature_ptr, RACE_SKELETON))
 	{
-			if (!((o_ptr->sval == SV_FOOD_WAYBREAD) ||
-				(o_ptr->sval < SV_FOOD_BISCUIT)))
-			{
-				object_type forge;
-				object_type *q_ptr = &forge;
+		if (!((o_ptr->sval == SV_FOOD_WAYBREAD) ||
+			(o_ptr->sval < SV_FOOD_BISCUIT)))
+		{
+			object_type forge;
+			object_type *q_ptr = &forge;
 
-				msg_print(_("食べ物がアゴを素通りして落ちた！", "The food falls through your jaws!"));
-				object_prep(q_ptr, lookup_kind(o_ptr->tval, o_ptr->sval));
+			msg_print(_("食べ物がアゴを素通りして落ちた！", "The food falls through your jaws!"));
+			object_prep(q_ptr, lookup_kind(o_ptr->tval, o_ptr->sval));
 
-				/* Drop the object from heaven */
-				(void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
-			}
-			else
-			{
-				msg_print(_("食べ物がアゴを素通りして落ち、消えた！", "The food falls through your jaws and vanishes!"));
-			}
+			/* Drop the object from heaven */
+			(void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
+		}
+		else
+		{
+			msg_print(_("食べ物がアゴを素通りして落ち、消えた！", "The food falls through your jaws and vanishes!"));
+		}
 	}
 	else if (PRACE_IS_(creature_ptr, RACE_GOLEM) ||
 		PRACE_IS_(creature_ptr, RACE_ZOMBIE) ||

@@ -1408,7 +1408,7 @@ void calc_bonuses(player_type *creature_ptr)
 	/* Save the old armor class */
 	ARMOUR_CLASS old_dis_ac = creature_ptr->dis_ac;
 	ARMOUR_CLASS old_dis_to_a = creature_ptr->dis_to_a;
-	
+
 	/* Clear extra blows/shots */
 	extra_blows[0] = extra_blows[1] = 0;
 
@@ -2970,7 +2970,7 @@ void calc_bonuses(player_type *creature_ptr)
 	{
 		creature_ptr->resist_fear = TRUE;
 	}
-	
+
 	/* Hack -- Telepathy Change */
 	if (creature_ptr->telepathy != old_telepathy)
 	{
@@ -3724,7 +3724,7 @@ void calc_bonuses(player_type *creature_ptr)
 	if (creature_ptr->immune_elec) creature_ptr->resist_elec = TRUE;
 	if (creature_ptr->immune_fire) creature_ptr->resist_fire = TRUE;
 	if (creature_ptr->immune_cold) creature_ptr->resist_cold = TRUE;
-	
+
 	/* Hack -- handle "xtra" mode */
 	if (current_world_ptr->character_xtra) return;
 
@@ -4475,7 +4475,7 @@ static void calc_spells(player_type *creature_ptr)
 				(creature_ptr->new_spells != 1) ? "s" : "");
 #endif
 
-		}
+			}
 
 		/* Save the new_spells value */
 		creature_ptr->old_spells = creature_ptr->new_spells;
@@ -4485,8 +4485,8 @@ static void calc_spells(player_type *creature_ptr)
 
 		/* Redraw object recall */
 		creature_ptr->window |= (PW_OBJECT);
+		}
 	}
-}
 
 
 /*!
@@ -4581,7 +4581,7 @@ static void calc_mana(player_type *creature_ptr)
 			msp = (3 * msp) / 4;
 		}
 	}
-	
+
 	/* Assume player not encumbered by armor */
 	creature_ptr->cumber_armor = FALSE;
 

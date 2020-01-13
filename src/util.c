@@ -8,7 +8,7 @@
  * are included in all such copies.  Other copyrights may also apply.
  */
 
-/* Purpose: Angband utilities -BEN- */
+ /* Purpose: Angband utilities -BEN- */
 
 #include "angband.h"
 #include "core.h"
@@ -264,9 +264,9 @@ void user_name(char *buf, int id)
 #ifdef ACORN
 
 
-/*
- * Most of the "file" routines for "ACORN" should be in "main-acn.c"
- */
+ /*
+  * Most of the "file" routines for "ACORN" should be in "main-acn.c"
+  */
 
 
 #else /* ACORN */
@@ -274,13 +274,13 @@ void user_name(char *buf, int id)
 
 #ifdef SET_UID
 
-/*
- * Extract a "parsed" path from an initial filename
- * Normally, we simply copy the filename into the buffer
- * But leading tilde symbols must be handled in a special way
- * Replace "~user/" by the home directory of the user named "user"
- * Replace "~/" by the home directory of the current user
- */
+ /*
+  * Extract a "parsed" path from an initial filename
+  * Normally, we simply copy the filename into the buffer
+  * But leading tilde symbols must be handled in a special way
+  * Replace "~user/" by the home directory of the user named "user"
+  * Replace "~/" by the home directory of the current user
+  */
 errr path_parse(char *buf, int max, concptr file)
 {
 	concptr		u, s;
@@ -302,7 +302,7 @@ errr path_parse(char *buf, int max, concptr file)
 	}
 
 	/* Point at the user */
-	u = file+1;
+	u = file + 1;
 
 	/* Look for non-user portion of the file */
 	s = my_strstr(u, PATH_SEP);
@@ -341,20 +341,20 @@ errr path_parse(char *buf, int max, concptr file)
 #else /* SET_UID */
 
 
-/*
- * Extract a "parsed" path from an initial filename
- *
- * This requires no special processing on simple machines,
- * except for verifying the size of the filename.
- */
+ /*
+  * Extract a "parsed" path from an initial filename
+  *
+  * This requires no special processing on simple machines,
+  * except for verifying the size of the filename.
+  */
 errr path_parse(char *buf, int max, concptr file)
 {
 	/* Accept the filename */
 	(void)strnfmt(buf, max, "%s", file);
 
 #if defined(MAC_MPW) && defined(CARBON)
-     /* Fix it according to the current operating system */
-    convert_pathname(buf);
+	/* Fix it according to the current operating system */
+	convert_pathname(buf);
 #endif /* MAC_MPW && CARBON */
 
 	/* Success */
@@ -666,17 +666,17 @@ write(F,(char*)(B),S)
 #endif /* MACINTOSH */
 
 
-/*
- * Several systems have no "O_BINARY" flag
- */
+ /*
+  * Several systems have no "O_BINARY" flag
+  */
 #ifndef O_BINARY
 # define O_BINARY 0
 #endif /* O_BINARY */
 
 
-/*
- * Hack -- attempt to delete a file
- */
+  /*
+   * Hack -- attempt to delete a file
+   */
 errr fd_kill(concptr file)
 {
 	char buf[1024];
@@ -733,7 +733,7 @@ errr fd_copy(concptr file, concptr what)
 	if (src_fd < 0) return -1;
 
 	/* Open destination file */
-	dst_fd = fd_open(aux, O_WRONLY|O_TRUNC|O_CREAT);
+	dst_fd = fd_open(aux, O_WRONLY | O_TRUNC | O_CREAT);
 	if (dst_fd < 0) return -1;
 
 	/* Copy */
@@ -1001,7 +1001,7 @@ errr fd_close(int fd)
 
 
 /*
- * Important note about "colors" 
+ * Important note about "colors"
  *
  * The "TERM_*" color definitions list the "composition" of each
  * "Angband color" in terms of "quarters" of each of the three color
@@ -1046,9 +1046,9 @@ errr fd_close(int fd)
  */
 
 
-/*
- * Move the cursor
- */
+ /*
+  * Move the cursor
+  */
 void move_cursor(int row, int col)
 {
 	Term_gotoxy(col, row);
@@ -1061,7 +1061,7 @@ void move_cursor(int row, int col)
  */
 static char octify(uint i)
 {
-	return (hexsym[i%8]);
+	return (hexsym[i % 8]);
 }
 
 /*
@@ -1069,7 +1069,7 @@ static char octify(uint i)
  */
 static char hexify(uint i)
 {
-	return (hexsym[i%16]);
+	return (hexsym[i % 16]);
 }
 
 
@@ -1140,7 +1140,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
 
 	if (macro_template == NULL)
 		return;
-	
+
 	for (i = 0; macro_modifier_chr[i]; i++)
 		mod_status[i] = FALSE;
 	str++;
@@ -1148,11 +1148,11 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
 	/* Examine modifier keys */
 	while (TRUE)
 	{
-		for (i=0; macro_modifier_chr[i]; i++)
+		for (i = 0; macro_modifier_chr[i]; i++)
 		{
 			len = strlen(macro_modifier_name[i]);
-			
-			if(!my_strnicmp(str, macro_modifier_name[i], len))
+
+			if (!my_strnicmp(str, macro_modifier_name[i], len))
 				break;
 		}
 		if (!macro_modifier_chr[i]) break;
@@ -1193,7 +1193,7 @@ static void trigger_text_to_ascii(char **bufptr, concptr *strptr)
 		char ch = macro_template[i];
 		int j;
 
-		switch(ch)
+		switch (ch)
 		{
 		case '&':
 			for (j = 0; macro_modifier_chr[j]; j++) {
@@ -1246,88 +1246,88 @@ void text_to_ascii(char *buf, concptr str)
 			}
 			else
 
-			/* Hex-mode XXX */
-			if (*str == 'x')
-			{
-				*s = 16 * (char)dehex(*++str);
-				*s++ += (char)dehex(*++str);
-			}
+				/* Hex-mode XXX */
+				if (*str == 'x')
+				{
+					*s = 16 * (char)dehex(*++str);
+					*s++ += (char)dehex(*++str);
+				}
 
 			/* Hack -- simple way to specify "backslash" */
-			else if (*str == '\\')
-			{
-				*s++ = '\\';
-			}
+				else if (*str == '\\')
+				{
+					*s++ = '\\';
+				}
 
 			/* Hack -- simple way to specify "caret" */
-			else if (*str == '^')
-			{
-				*s++ = '^';
-			}
+				else if (*str == '^')
+				{
+					*s++ = '^';
+				}
 
 			/* Hack -- simple way to specify "space" */
-			else if (*str == 's')
-			{
-				*s++ = ' ';
-			}
+				else if (*str == 's')
+				{
+					*s++ = ' ';
+				}
 
 			/* Hack -- simple way to specify Escape */
-			else if (*str == 'e')
-			{
-				*s++ = ESCAPE;
-			}
+				else if (*str == 'e')
+				{
+					*s++ = ESCAPE;
+				}
 
 			/* Backspace */
-			else if (*str == 'b')
-			{
-				*s++ = '\b';
-			}
+				else if (*str == 'b')
+				{
+					*s++ = '\b';
+				}
 
 			/* Newline */
-			else if (*str == 'n')
-			{
-				*s++ = '\n';
-			}
+				else if (*str == 'n')
+				{
+					*s++ = '\n';
+				}
 
 			/* Return */
-			else if (*str == 'r')
-			{
-				*s++ = '\r';
-			}
+				else if (*str == 'r')
+				{
+					*s++ = '\r';
+				}
 
 			/* Tab */
-			else if (*str == 't')
-			{
-				*s++ = '\t';
-			}
+				else if (*str == 't')
+				{
+					*s++ = '\t';
+				}
 
 			/* Octal-mode */
-			else if (*str == '0')
-			{
-				*s = 8 * (char)deoct(*++str);
-				*s++ += (char)deoct(*++str);
-			}
+				else if (*str == '0')
+				{
+					*s = 8 * (char)deoct(*++str);
+					*s++ += (char)deoct(*++str);
+				}
 
 			/* Octal-mode */
-			else if (*str == '1')
-			{
-				*s = 64 + 8 * (char)deoct(*++str);
-				*s++ += (char)deoct(*++str);
-			}
+				else if (*str == '1')
+				{
+					*s = 64 + 8 * (char)deoct(*++str);
+					*s++ += (char)deoct(*++str);
+				}
 
 			/* Octal-mode */
-			else if (*str == '2')
-			{
-				*s = 64 * 2 + 8 * (char)deoct(*++str);
-				*s++ += (char)deoct(*++str);
-			}
+				else if (*str == '2')
+				{
+					*s = 64 * 2 + 8 * (char)deoct(*++str);
+					*s++ += (char)deoct(*++str);
+				}
 
 			/* Octal-mode */
-			else if (*str == '3')
-			{
-				*s = 64 * 3 + 8 * (char)deoct(*++str);
-				*s++ += (char)deoct(*++str);
-			}
+				else if (*str == '3')
+				{
+					*s = 64 * 3 + 8 * (char)deoct(*++str);
+					*s++ += (char)deoct(*++str);
+				}
 
 			/* Skip the final char */
 			str++;
@@ -1371,14 +1371,14 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
 		int j;
 		char ch = macro_template[i];
 
-		switch(ch)
+		switch (ch)
 		{
 		case '&':
 			while ((tmp = my_strchr(macro_modifier_chr, *str)) != 0)
 			{
 				j = (int)(tmp - macro_modifier_chr);
 				tmp = macro_modifier_name[j];
-				while(*tmp) *s++ = *tmp++;
+				while (*tmp) *s++ = *tmp++;
 				str++;
 			}
 			break;
@@ -1397,7 +1397,7 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
 	for (i = 0; i < max_macrotrigger; i++)
 	{
 		if (!my_stricmp(key_code, macro_trigger_keycode[0][i])
-		    || !my_stricmp(key_code, macro_trigger_keycode[1][i]))
+			|| !my_stricmp(key_code, macro_trigger_keycode[1][i]))
 			break;
 	}
 	if (i == max_macrotrigger)
@@ -1407,7 +1407,7 @@ static bool trigger_ascii_to_text(char **bufptr, concptr *strptr)
 	while (*tmp) *s++ = *tmp++;
 
 	*s++ = ']';
-	
+
 	*bufptr = s;
 	*strptr = str;
 	return TRUE;
@@ -1429,7 +1429,7 @@ void ascii_to_text(char *buf, concptr str)
 		/* Macro Trigger */
 		if (i == 31)
 		{
-			if(!trigger_ascii_to_text(&s, &str))
+			if (!trigger_ascii_to_text(&s, &str))
 			{
 				*s++ = '^';
 				*s++ = '_';
@@ -1437,69 +1437,69 @@ void ascii_to_text(char *buf, concptr str)
 		}
 		else
 
-		if (i == ESCAPE)
-		{
-			*s++ = '\\';
-			*s++ = 'e';
-		}
-		else if (i == ' ')
-		{
-			*s++ = '\\';
-			*s++ = 's';
-		}
-		else if (i == '\b')
-		{
-			*s++ = '\\';
-			*s++ = 'b';
-		}
-		else if (i == '\t')
-		{
-			*s++ = '\\';
-			*s++ = 't';
-		}
-		else if (i == '\n')
-		{
-			*s++ = '\\';
-			*s++ = 'n';
-		}
-		else if (i == '\r')
-		{
-			*s++ = '\\';
-			*s++ = 'r';
-		}
-		else if (i == '^')
-		{
-			*s++ = '\\';
-			*s++ = '^';
-		}
-		else if (i == '\\')
-		{
-			*s++ = '\\';
-			*s++ = '\\';
-		}
-		else if (i < 32)
-		{
-			*s++ = '^';
-			*s++ = i + 64;
-		}
-		else if (i < 127)
-		{
-			*s++ = i;
-		}
-		else if (i < 64)
-		{
-			*s++ = '\\';
-			*s++ = '0';
-			*s++ = octify(i / 8);
-			*s++ = octify(i % 8);
-		}
-		else
-		{
-			*s++ = '\\';
-			*s++ = 'x';
-			*s++ = hexify(i / 16);
-			*s++ = hexify(i % 16);
-		}
+			if (i == ESCAPE)
+			{
+				*s++ = '\\';
+				*s++ = 'e';
+			}
+			else if (i == ' ')
+			{
+				*s++ = '\\';
+				*s++ = 's';
+			}
+			else if (i == '\b')
+			{
+				*s++ = '\\';
+				*s++ = 'b';
+			}
+			else if (i == '\t')
+			{
+				*s++ = '\\';
+				*s++ = 't';
+			}
+			else if (i == '\n')
+			{
+				*s++ = '\\';
+				*s++ = 'n';
+			}
+			else if (i == '\r')
+			{
+				*s++ = '\\';
+				*s++ = 'r';
+			}
+			else if (i == '^')
+			{
+				*s++ = '\\';
+				*s++ = '^';
+			}
+			else if (i == '\\')
+			{
+				*s++ = '\\';
+				*s++ = '\\';
+			}
+			else if (i < 32)
+			{
+				*s++ = '^';
+				*s++ = i + 64;
+			}
+			else if (i < 127)
+			{
+				*s++ = i;
+			}
+			else if (i < 64)
+			{
+				*s++ = '\\';
+				*s++ = '0';
+				*s++ = octify(i / 8);
+				*s++ = octify(i % 8);
+			}
+			else
+			{
+				*s++ = '\\';
+				*s++ = 'x';
+				*s++ = hexify(i / 16);
+				*s++ = hexify(i % 16);
+			}
 	}
 
 	/* Terminate */
@@ -1518,9 +1518,9 @@ void ascii_to_text(char *buf, concptr str)
 
 
 
-/*
- * Determine if any macros have ever started with a given character.
- */
+ /*
+  * Determine if any macros have ever started with a given character.
+  */
 static bool macro__use[256];
 
 
@@ -1648,15 +1648,15 @@ static sint macro_find_ready(concptr pat)
  * Add a macro definition (or redefinition).
  *
  * We should use "act == NULL" to "remove" a macro, but this might make it
- * impossible to save the "removal" of a macro definition.  
+ * impossible to save the "removal" of a macro definition.
  *
  * We should consider refusing to allow macros which contain existing macros,
  * or which are contained in existing macros, because this would simplify the
- * macro analysis code.  
+ * macro analysis code.
  *
  * We should consider removing the "command macro" crap, and replacing it
  * with some kind of "powerful keymap" ability, but this might make it hard
- * to change the "roguelike" option from inside the game.  
+ * to change the "roguelike" option from inside the game.
  */
 errr macro_add(concptr pat, concptr act)
 {
@@ -1778,30 +1778,30 @@ void select_floor_music(player_type *player_ptr)
 	if (player_ptr->ambush_flag)
 	{
 		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_AMBUSH)) return;
-	} 
+	}
 
-	if(player_ptr->wild_mode)
+	if (player_ptr->wild_mode)
 	{
 		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_WILD)) return;
 	}
 
-	if(player_ptr->current_floor_ptr->inside_arena)
+	if (player_ptr->current_floor_ptr->inside_arena)
 	{
 		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_ARENA)) return;
 	}
 
-	if(player_ptr->phase_out)
+	if (player_ptr->phase_out)
 	{
 		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BATTLE)) return;
 	}
 
-	if(player_ptr->current_floor_ptr->inside_quest)
+	if (player_ptr->current_floor_ptr->inside_quest)
 	{
 		if (!play_music(TERM_XTRA_MUSIC_QUEST, player_ptr->current_floor_ptr->inside_quest)) return;
 		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_QUEST)) return;
 	}
 
-	if(player_ptr->dungeon_idx)
+	if (player_ptr->dungeon_idx)
 	{
 		if (player_ptr->feeling == 2)
 		{
@@ -1830,14 +1830,14 @@ void select_floor_music(player_type *player_ptr)
 		}
 	}
 
-	if(player_ptr->town_num)
+	if (player_ptr->town_num)
 	{
 		if (!play_music(TERM_XTRA_MUSIC_TOWN, player_ptr->town_num)) return;
 		if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_TOWN)) return;
 		return;
 	}
 
-	if(!player_ptr->current_floor_ptr->dun_level)
+	if (!player_ptr->current_floor_ptr->dun_level)
 	{
 		if (player_ptr->lev >= 45)
 		{
@@ -1852,7 +1852,7 @@ void select_floor_music(player_type *player_ptr)
 			if (!play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FIELD1)) return;
 		}
 	}
-	
+
 	play_music(TERM_XTRA_MUSIC_MUTE, 0);
 }
 
@@ -1873,7 +1873,7 @@ void select_floor_music(player_type *player_ptr)
  * Only 500 (0+1+2+...+29+30) milliseconds may elapse between each key in
  * the macro trigger sequence.  If a key sequence forms the "prefix" of a
  * macro trigger, 500 milliseconds must pass before the key sequence is
- * known not to be that macro trigger.  
+ * known not to be that macro trigger.
  */
 static char inkey_aux(void)
 {
@@ -1900,7 +1900,7 @@ static char inkey_aux(void)
 	else
 	{
 		/* Wait for a keypress */
-		(void) (Term_inkey(&ch, TRUE, TRUE));
+		(void)(Term_inkey(&ch, TRUE, TRUE));
 	}
 
 
@@ -2051,7 +2051,7 @@ static void forget_macro_action(void)
 
 
 /*
- * Mega-Hack -- special "inkey_next" pointer.  
+ * Mega-Hack -- special "inkey_next" pointer.
  *
  * This special pointer allows a sequence of keys to be "inserted" into
  * the stream of keys returned by "inkey()".  This key sequence will not
@@ -2064,12 +2064,12 @@ static concptr inkey_next = NULL;
 #ifdef ALLOW_BORG
 
 /*
- * Mega-Hack -- special "inkey_hack" hook.  
+ * Mega-Hack -- special "inkey_hack" hook.
  *
  * This special function hook allows the "Borg" (see elsewhere) to take
  * control of the "inkey()" function, and substitute in fake keypresses.
  */
-char (*inkey_hack)(int flush_first) = NULL;
+char(*inkey_hack)(int flush_first) = NULL;
 
 #endif /* ALLOW_BORG */
 
@@ -2371,9 +2371,9 @@ char inkey(void)
  * Note that "quark zero" is NULL and should not be "dereferenced".
  */
 
-/*
- * Initialize the quark array
- */
+ /*
+  * Initialize the quark array
+  */
 void quark_init(void)
 {
 	/* Quark variables */
@@ -2458,10 +2458,10 @@ concptr quark_str(STR_OFFSET i)
 
 
 
-/*!
- * @brief 保存中の過去ゲームメッセージの数を返す。 / How many messages are "available"?
- * @return 残っているメッセージの数
- */
+ /*!
+  * @brief 保存中の過去ゲームメッセージの数を返す。 / How many messages are "available"?
+  * @return 残っているメッセージの数
+  */
 s32b message_num(void)
 {
 	int last, next, n;
@@ -2541,7 +2541,7 @@ void message_add(concptr str)
 
 		for (n = 0; n < 80; n++, t++)
 		{
-			if(iskanji(*t)) {
+			if (iskanji(*t)) {
 				t++;
 				n++;
 			}
@@ -2553,10 +2553,11 @@ void message_add(concptr str)
 		if (n == 60) n = 80;
 #endif
 		splitted2 = str + n;
-		strncpy(splitted1, str ,n);
+		strncpy(splitted1, str, n);
 		splitted1[n] = '\0';
 		str = splitted1;
-	} else {
+	}
+	else {
 		splitted2 = NULL;
 	}
 
@@ -2590,8 +2591,8 @@ void message_add(concptr str)
 
 		/* Find multiple */
 #ifdef JP
-		for (t = buf; *t && (*t != '<' || (*(t+1) != 'x' )); t++) 
-			if(iskanji(*t))t++;
+		for (t = buf; *t && (*t != '<' || (*(t + 1) != 'x')); t++)
+			if (iskanji(*t))t++;
 #else
 		for (t = buf; *t && (*t != '<'); t++);
 #endif
@@ -2605,7 +2606,7 @@ void message_add(concptr str)
 			*(t - 1) = '\0';
 
 			/* Get multiplier */
-			j = atoi(t+2);
+			j = atoi(t + 2);
 		}
 
 		/* Limit the multiplier to 1000 */
@@ -2720,7 +2721,7 @@ void message_add(concptr str)
 		message__tail = message__head + n + 1;
 
 		/* Advance tail while possible past first "nul" */
-		while (message__buf[message__tail-1]) message__tail++;
+		while (message__buf[message__tail - 1]) message__tail++;
 
 		/* Kill all "dead" messages */
 		for (i = message__last; TRUE; i++)
@@ -2779,7 +2780,7 @@ void message_add(concptr str)
 	/* recursively add splitted message (added by Mogami) */
 end_of_message_add:
 	if (splitted2 != NULL)
-	  message_add(splitted2);
+		message_add(splitted2);
 }
 
 
@@ -2792,7 +2793,7 @@ static void msg_flush(player_type *player_ptr, int x)
 	byte a = TERM_L_BLUE;
 	bool nagasu = FALSE;
 
-	if ((auto_more && !player_ptr->now_damaged) || num_more < 0){
+	if ((auto_more && !player_ptr->now_damaged) || num_more < 0) {
 		int i;
 		for (i = 0; i < 8; i++)
 		{
@@ -2820,14 +2821,16 @@ static void msg_flush(player_type *player_ptr, int x)
 		{
 			int cmd = inkey();
 			if (cmd == ESCAPE) {
-			    num_more = -9999; /*auto_moreのとき、全て流す。 */
-			    break;
-			} else if (cmd == ' ') {
-			    num_more = 0; /*１画面だけ流す。 */
-			    break;
-			} else if ((cmd == '\n') || (cmd == '\r')) {
-			    num_more--; /*１行だけ流す。 */
-			    break;
+				num_more = -9999; /*auto_moreのとき、全て流す。 */
+				break;
+			}
+			else if (cmd == ' ') {
+				num_more = 0; /*１画面だけ流す。 */
+				break;
+			}
+			else if ((cmd == '\n') || (cmd == '\r')) {
+				num_more--; /*１行だけ流す。 */
+				break;
 			}
 			if (quick_messages) break;
 			bell();
@@ -3026,7 +3029,7 @@ void msg_print_wizard(int cheat_type, concptr msg)
 	if (!cheat_hear && cheat_type == CHEAT_MONSTER) return;
 	if (!cheat_xtra && cheat_type == CHEAT_MISC) return;
 
-	concptr cheat_mes[] = {"ITEM", "MONS", "DUNG", "MISC"};
+	concptr cheat_mes[] = { "ITEM", "MONS", "DUNG", "MISC" };
 	char buf[1024];
 	sprintf(buf, "WIZ-%s:%s", cheat_mes[cheat_type], msg);
 	msg_print(buf);
@@ -3108,10 +3111,10 @@ void msg_format(concptr fmt, ...)
  */
 void msg_format_wizard(int cheat_type, concptr fmt, ...)
 {
-	if(!cheat_room && cheat_type == CHEAT_DUNGEON) return;
-	if(!cheat_peek && cheat_type == CHEAT_OBJECT) return;
-	if(!cheat_hear && cheat_type == CHEAT_MONSTER) return;
-	if(!cheat_xtra && cheat_type == CHEAT_MISC) return;
+	if (!cheat_room && cheat_type == CHEAT_DUNGEON) return;
+	if (!cheat_peek && cheat_type == CHEAT_OBJECT) return;
+	if (!cheat_hear && cheat_type == CHEAT_MONSTER) return;
+	if (!cheat_xtra && cheat_type == CHEAT_MISC) return;
 
 	va_list vp;
 	char buf[1024];
@@ -3207,7 +3210,7 @@ void c_roff(byte a, concptr str)
 	(void)Term_locate(&x, &y);
 
 	/* Hack -- No more space */
-	if( y == h - 1 && x > w - 3) return;
+	if (y == h - 1 && x > w - 3) return;
 
 	/* Process the string */
 	for (s = str; *s; s++)
@@ -3225,7 +3228,7 @@ void c_roff(byte a, concptr str)
 			y++;
 
 			/* No more space */
-			if( y == h ) break;
+			if (y == h) break;
 
 			/* Clear line, move cursor */
 			Term_erase(x, y, 255);
@@ -3243,7 +3246,7 @@ void c_roff(byte a, concptr str)
 
 		/* Wrap words as needed */
 #ifdef JP
-		if (( x >= ( (k_flag) ? w - 2 : w - 1 ) ) && (ch != ' '))
+		if ((x >= ((k_flag) ? w - 2 : w - 1)) && (ch != ' '))
 #else
 		if ((x >= w - 1) && (ch != ' '))
 #endif
@@ -3258,41 +3261,41 @@ void c_roff(byte a, concptr str)
 			if (x < w)
 #ifdef JP
 			{
-			/* 現在が半角文字の場合 */
-			if( !k_flag )
+				/* 現在が半角文字の場合 */
+				if (!k_flag)
 #endif
-			{
-				/* Scan existing text */
-				for (i = w - 2; i >= 0; i--)
 				{
-					/* Grab existing attr/char */
-					Term_what(i, y, &av[i], &cv[i]);
+					/* Scan existing text */
+					for (i = w - 2; i >= 0; i--)
+					{
+						/* Grab existing attr/char */
+						Term_what(i, y, &av[i], &cv[i]);
 
-					/* Break on space */
-					if (cv[i] == ' ') break;
+						/* Break on space */
+						if (cv[i] == ' ') break;
 
-					/* Track current word */
-					n = i;
+						/* Track current word */
+						n = i;
 #ifdef JP
-					if (cv[i] == '(') break;
+						if (cv[i] == '(') break;
 #endif
+					}
 				}
-			}
 
 #ifdef JP
-			else
-			{
-				/* 現在が全角文字のとき */
-				/* 文頭が「。」「、」等になるときは、その１つ前の語で改行 */
-				if (strncmp(s, "。", 2) == 0 || strncmp(s, "、", 2) == 0)
+				else
 				{
-					Term_what(x  , y, &av[x  ], &cv[x  ]);
-					Term_what(x-1, y, &av[x-1], &cv[x-1]);
-					Term_what(x-2, y, &av[x-2], &cv[x-2]);
-					n = x - 2;
-					cv[ x ] = '\0';
+					/* 現在が全角文字のとき */
+					/* 文頭が「。」「、」等になるときは、その１つ前の語で改行 */
+					if (strncmp(s, "。", 2) == 0 || strncmp(s, "、", 2) == 0)
+					{
+						Term_what(x, y, &av[x], &cv[x]);
+						Term_what(x - 1, y, &av[x - 1], &cv[x - 1]);
+						Term_what(x - 2, y, &av[x - 2], &cv[x - 2]);
+						n = x - 2;
+						cv[x] = '\0';
+					}
 				}
-			}
 			}
 #endif
 			/* Special case */
@@ -3306,7 +3309,7 @@ void c_roff(byte a, concptr str)
 			y++;
 
 			/* No more space */
-			if( y == h ) break;
+			if (y == h) break;
 
 			/* Clear line, move cursor */
 			Term_erase(x, y, 255);
@@ -3315,7 +3318,7 @@ void c_roff(byte a, concptr str)
 			for (i = n; i < w - 1; i++)
 			{
 #ifdef JP
-				if( cv[i] == '\0' ) break;
+				if (cv[i] == '\0') break;
 #endif
 				/* Dump */
 				Term_addch(av[i], cv[i]);
@@ -3327,7 +3330,7 @@ void c_roff(byte a, concptr str)
 
 		/* Dump */
 #ifdef JP
-		Term_addch((byte)(a|0x10), ch);
+		Term_addch((byte)(a | 0x10), ch);
 #else
 		Term_addch(a, ch);
 #endif
@@ -3339,7 +3342,7 @@ void c_roff(byte a, concptr str)
 			s++;
 			x++;
 			ch = *s;
-			Term_addch((byte)(a|0x20), ch);
+			Term_addch((byte)(a | 0x20), ch);
 		}
 #endif
 		/* Advance */
@@ -3459,7 +3462,7 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
 				if (iskanji(buf[i])) next_pos++;
 #endif
 
-				/* Is there the cursor at next position? */ 
+				/* Is there the cursor at next position? */
 				if (next_pos >= pos) break;
 
 				/* Move to next */
@@ -3519,7 +3522,7 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
 				if (iskanji(buf[i])) next_pos++;
 #endif
 
-				/* Is there the cursor at next position? */ 
+				/* Is there the cursor at next position? */
 				if (next_pos >= pos) break;
 
 				/* Move to next */
@@ -3715,17 +3718,17 @@ bool get_check_strict(concptr prompt, BIT_FLAGS mode)
 	/* Hack -- Build a "useful" prompt */
 	if (mode & CHECK_OKAY_CANCEL)
 	{
-		my_strcpy(buf, prompt, sizeof(buf)-15);
+		my_strcpy(buf, prompt, sizeof(buf) - 15);
 		strcat(buf, "[(O)k/(C)ancel]");
 	}
 	else if (mode & CHECK_DEFAULT_Y)
 	{
-		my_strcpy(buf, prompt, sizeof(buf)-5);
+		my_strcpy(buf, prompt, sizeof(buf) - 5);
 		strcat(buf, "[Y/n]");
 	}
 	else
 	{
-		my_strcpy(buf, prompt, sizeof(buf)-5);
+		my_strcpy(buf, prompt, sizeof(buf) - 5);
 		strcat(buf, "[y/n]");
 	}
 
@@ -3926,7 +3929,7 @@ QUANTITY get_quantity(concptr prompt, QUANTITY max)
 
 
 /*
- * Pause for user response 
+ * Pause for user response
  */
 void pause_line(int row)
 {
@@ -4290,23 +4293,23 @@ static char inkey_from_menu(void)
 		concptr menu_name;
 		if (!menu) old_num = num;
 		put_str("+----------------------------------------------------+", basey, basex);
-		put_str("|                                                    |", basey+1, basex);
-		put_str("|                                                    |", basey+2, basex);
-		put_str("|                                                    |", basey+3, basex);
-		put_str("|                                                    |", basey+4, basex);
-		put_str("|                                                    |", basey+5, basex);
-		put_str("+----------------------------------------------------+", basey+6, basex);
+		put_str("|                                                    |", basey + 1, basex);
+		put_str("|                                                    |", basey + 2, basex);
+		put_str("|                                                    |", basey + 3, basex);
+		put_str("|                                                    |", basey + 4, basex);
+		put_str("|                                                    |", basey + 5, basex);
+		put_str("+----------------------------------------------------+", basey + 6, basex);
 
-		for(i = 0; i < 10; i++)
+		for (i = 0; i < 10; i++)
 		{
 			int hoge;
 			if (!menu_info[menu][i].cmd) break;
 			menu_name = menu_info[menu][i].name;
-			for(hoge = 0; ; hoge++)
+			for (hoge = 0; ; hoge++)
 			{
 				if (!special_menu_info[hoge].name[0]) break;
 				if ((menu != special_menu_info[hoge].window) || (i != special_menu_info[hoge].number)) continue;
-				switch(special_menu_info[hoge].jouken)
+				switch (special_menu_info[hoge].jouken)
 				{
 				case MENU_CLASS:
 					if (p_ptr->pclass == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
@@ -4325,7 +4328,7 @@ static char inkey_from_menu(void)
 		}
 		max_num = i;
 		kisuu = max_num % 2;
-		put_str(_("》", "> "),basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
+		put_str(_("》", "> "), basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
 
 		/* Place the cursor on the player */
 		move_cursor_relative(p_ptr->y, p_ptr->x);
@@ -4422,7 +4425,7 @@ static char inkey_from_menu(void)
  * Note that this command is used both in the dungeon and in
  * stores, and must be careful to work in both situations.
  *
- * Note that "p_ptr->command_new" may not work any more.  
+ * Note that "p_ptr->command_new" may not work any more.
  */
 void request_command(int shopping)
 {
@@ -4489,7 +4492,7 @@ void request_command(int shopping)
 			cmd = inkey();
 
 			if (!shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X'))
-			    && !keymap_act[mode][(byte)(cmd)])
+				&& !keymap_act[mode][(byte)(cmd)])
 				cmd = inkey_from_menu();
 		}
 
@@ -4665,7 +4668,7 @@ void request_command(int shopping)
 		concptr s;
 		if ((s = keymap_act[mode][i]) != NULL)
 		{
-			if (*s == command_cmd && *(s+1) == 0)
+			if (*s == command_cmd && *(s + 1) == 0)
 			{
 				caretcmd = i;
 				break;
@@ -4888,11 +4891,11 @@ void repeat_check(void)
 #define CUTOFF 4
 
 
-/*
- * Exchange two sort-entries
- * (should probably be coded inline
- * for speed increase)
- */
+ /*
+  * Exchange two sort-entries
+  * (should probably be coded inline
+  * for speed increase)
+  */
 static void swap(tag_type *a, tag_type *b)
 {
 	tag_type temp;
@@ -4963,7 +4966,7 @@ static void quicksort(tag_type elements[], int left, int right)
 	{
 		pivot = median3(elements, left, right);
 
-		i = left; j = right -1;
+		i = left; j = right - 1;
 
 		while (TRUE)
 		{
@@ -5030,49 +5033,49 @@ static s16b gamma_helper[256] =
 };
 
 
-/* 
+/*
  * Build the gamma table so that floating point isn't needed.
- * 
+ *
  * Note gamma goes from 0->256.  The old value of 100 is now 128.
  */
 void build_gamma_table(int gamma)
 {
 	int i, n;
-	
+
 	/*
 	 * value is the current sum.
 	 * diff is the new term to add to the series.
 	 */
 	long value, diff;
-	
+
 	/* Hack - convergence is bad in these cases. */
 	gamma_table[0] = 0;
 	gamma_table[255] = 255;
-	
+
 	for (i = 1; i < 255; i++)
 	{
-		/* 
+		/*
 		 * Initialise the Taylor series
 		 *
 		 * value and diff have been scaled by 256
 		 */
-		
+
 		n = 1;
 		value = 256 * 256;
 		diff = ((long)gamma_helper[i]) * (gamma - 256);
-		
+
 		while (diff)
 		{
 			value += diff;
 			n++;
-			
-			
+
+
 			/*
 			 * Use the following identiy to calculate the gamma table.
 			 * exp(x) = 1 + x + x^2/2 + x^3/(2*3) + x^4/(2*3*4) +...
 			 *
 			 * n is the current term number.
-			 * 
+			 *
 			 * The gamma_helper array contains a table of
 			 * ln(x/256) * 256
 			 * This is used because a^b = exp(b*ln(a))
@@ -5089,8 +5092,8 @@ void build_gamma_table(int gamma)
 			 */
 			diff = (((diff / 256) * gamma_helper[i]) * (gamma - 256)) / (256 * n);
 		}
-		
-		/* 
+
+		/*
 		 * Store the value in the table so that the
 		 * floating point pow function isn't needed .
 		 */
@@ -5127,7 +5130,7 @@ errr type_string(concptr str, uint len)
 	/* Activate the main window, as all pastes go there. */
 	Term_activate(term_screen);
 
-	for (s = str; s < str+len; s++)
+	for (s = str; s < str + len; s++)
 	{
 		/* Catch end of string */
 		if (*s == '\0') break;
@@ -5167,17 +5170,17 @@ void roff_to_buf(concptr str, int maxlen, char *tbuf, size_t bufsize)
 		ch[0] = str[read_pt];
 		ch[1] = '\0';
 #ifdef JP
-		kanji  = iskanji(ch[0]);
+		kanji = iskanji(ch[0]);
 
 		if (kanji)
 		{
-			ch[1] = str[read_pt+1];
+			ch[1] = str[read_pt + 1];
 			ch_len = 2;
 
 			if (strcmp(ch, "。") == 0 ||
-			    strcmp(ch, "、") == 0 ||
-			    strcmp(ch, "ィ") == 0 ||
-			    strcmp(ch, "ー") == 0)
+				strcmp(ch, "、") == 0 ||
+				strcmp(ch, "ィ") == 0 ||
+				strcmp(ch, "ー") == 0)
 				kinsoku = TRUE;
 		}
 		else if (!isprint(ch[0]))
@@ -5196,18 +5199,18 @@ void roff_to_buf(concptr str, int maxlen, char *tbuf, size_t bufsize)
 			word_len = read_pt - word_punct;
 #ifdef JP
 			if (kanji && !kinsoku)
-				/* nothing */ ;
+				/* nothing */;
 			else
 #endif
-			if (ch[0] == ' ' || word_len >= line_len/2)
-				read_pt++;
-			else
-			{
-				read_pt = word_punct;
-				if (str[word_punct] == ' ')
+				if (ch[0] == ' ' || word_len >= line_len / 2)
 					read_pt++;
-				write_pt -= word_len;
-			}
+				else
+				{
+					read_pt = word_punct;
+					if (str[word_punct] == ' ')
+						read_pt++;
+					write_pt -= word_len;
+				}
 
 			tbuf[write_pt++] = '\0';
 			line_len = 0;
@@ -5236,7 +5239,7 @@ void roff_to_buf(concptr str, int maxlen, char *tbuf, size_t bufsize)
 #endif
 	}
 	tbuf[write_pt] = '\0';
-	tbuf[write_pt+1] = '\0';
+	tbuf[write_pt + 1] = '\0';
 
 	return;
 }
@@ -5269,7 +5272,7 @@ size_t my_strcpy(char *buf, concptr src, size_t bufsize)
 		{
 			if (iskanji(*s))
 			{
-				if (len + 1 >= bufsize || !*(s+1)) break;
+				if (len + 1 >= bufsize || !*(s + 1)) break;
 				*d++ = *s++;
 				*d++ = *s++;
 				len += 2;
@@ -5283,7 +5286,7 @@ size_t my_strcpy(char *buf, concptr src, size_t bufsize)
 		*d = '\0';
 	}
 
-	while(*s++) len++;
+	while (*s++) len++;
 
 	return len;
 
@@ -5349,9 +5352,9 @@ char *my_strstr(concptr haystack, concptr needle)
 
 	if (l1 >= l2)
 	{
-		for(i = 0; i <= l1 - l2; i++)
+		for (i = 0; i <= l1 - l2; i++)
 		{
-			if(!strncmp(haystack + i, needle, l2))
+			if (!strncmp(haystack + i, needle, l2))
 				return (char *)haystack + i;
 
 #ifdef JP
@@ -5371,7 +5374,7 @@ char *my_strstr(concptr haystack, concptr needle)
  */
 char *my_strchr(concptr ptr, char ch)
 {
-	for ( ; *ptr != '\0'; ptr++)
+	for (; *ptr != '\0'; ptr++)
 	{
 		if (*ptr == ch) return (char *)ptr;
 
@@ -5539,7 +5542,7 @@ int inkey_special(bool numpad_cursor)
 		for (i = 0; special_key_list[i].keyname; i++)
 		{
 			if ((!special_key_list[i].numpad || numpad_cursor) &&
-			    streq(str, special_key_list[i].keyname))
+				streq(str, special_key_list[i].keyname))
 			{
 				skey = special_key_list[i].keycode;
 				break;

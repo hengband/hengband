@@ -115,7 +115,7 @@ void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 				prev_o_idx = this_o_idx;
 				continue;
 			}
-			
+
 			/* No previous */
 			if (prev_o_idx == 0)
 			{
@@ -453,7 +453,7 @@ OBJECT_IDX get_obj_num(player_type *owner_ptr, DEPTH level, BIT_FLAGS mode)
 
 	/* Try for a "better" object twice (10%) */
 	if (p >= 10) return (table[i].index);
-	
+
 	/* Save old */
 	j = i;
 

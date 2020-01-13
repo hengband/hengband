@@ -2591,7 +2591,7 @@ errr parse_e_info(char *buf, header *head)
 		}
 	}
 	else return 6;
-	
+
 	return 0;
 }
 

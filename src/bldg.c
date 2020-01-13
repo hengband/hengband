@@ -289,7 +289,7 @@ static void show_building(player_type *player_ptr, building_type* bldg)
 			c_put_str(action_color, tmp_str, 19 + (i / 2), 35 * (i % 2));
 			continue;
 		}
-		
+
 		if (bldg->action_restr[i] == 1)
 		{
 			if (!is_member(player_ptr, bldg))
@@ -318,7 +318,7 @@ static void show_building(player_type *player_ptr, building_type* bldg)
 			c_put_str(action_color, tmp_str, 19 + (i / 2), 35 * (i % 2));
 			continue;
 		}
-		
+
 		if (!is_owner(player_ptr, bldg))
 		{
 			action_color = TERM_L_DARK;
@@ -372,7 +372,7 @@ static void arena_comm(player_type *player_ptr, int cmd)
 			player_ptr->arena_number++;
 			break;
 		}
-		
+
 		if (player_ptr->arena_number > MAX_ARENA_MONS)
 		{
 			if (player_ptr->arena_number < MAX_ARENA_MONS + 2)
@@ -408,7 +408,7 @@ static void arena_comm(player_type *player_ptr, int cmd)
 
 			break;
 		}
-		
+
 		if (player_ptr->riding && (player_ptr->pclass != CLASS_BEASTMASTER) && (player_ptr->pclass != CLASS_CAVALRY))
 		{
 			msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。",
@@ -416,7 +416,7 @@ static void arena_comm(player_type *player_ptr, int cmd)
 			msg_print(NULL);
 			break;
 		}
-		
+
 		player_ptr->exit_bldg = FALSE;
 		reset_tim_flags(player_ptr);
 
@@ -440,7 +440,7 @@ static void arena_comm(player_type *player_ptr, int cmd)
 			msg_print(_("あなたはすべての敵に勝利した。", "You have won against all foes."));
 			break;
 		}
-		
+
 		r_ptr = &r_info[arena_info[player_ptr->arena_number].r_idx];
 		name = (r_name + r_ptr->name);
 		msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), name);
@@ -1142,7 +1142,7 @@ static int do_poker(void)
 	{
 		if (draw)
 		{
-			display_kaeruka(k + decision * 5, is_put); 
+			display_kaeruka(k + decision * 5, is_put);
 		}
 
 		draw = FALSE;
@@ -1172,7 +1172,7 @@ static int do_poker(void)
 				k = 4;
 				decision = FALSE;
 			}
-			
+
 			draw = TRUE;
 			break;
 		case '2': case 'j': case 'J': case KTRL('N'):
@@ -1198,7 +1198,7 @@ static int do_poker(void)
 			{
 				is_put[k] = !is_put[k]; draw = TRUE;
 			}
-			
+
 			break;
 		default:
 			break;
@@ -1679,7 +1679,7 @@ static bool kakutoujou(player_type *player_ptr)
 		screen_load();
 		return FALSE;
 	}
-	
+
 	int i;
 
 	clear_bldg(4, 10);
@@ -1741,7 +1741,7 @@ static bool kakutoujou(player_type *player_ptr)
 		screen_load();
 		return FALSE;
 	}
-	
+
 	/* Strip spaces */
 	for (p = out_val; *p == ' '; p++);
 
@@ -2150,7 +2150,7 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 			exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("悪夢にうなされてよく眠れなかった。", "be troubled by a nightmare."));
 			break;
 		}
-		
+
 		set_blind(customer_ptr, 0);
 		set_confused(customer_ptr, 0);
 		customer_ptr->stun = 0;
@@ -2176,7 +2176,7 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 			exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("夕方を迎えた。", "awake refreshed."));
 			break;
 		}
-		
+
 		msg_print(_("あなたはリフレッシュして目覚め、新たな日を迎えた。", "You awake refreshed for the new day."));
 		exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("すがすがしい朝を迎えた。", "awake refreshed."));
 		break;
@@ -2277,7 +2277,7 @@ static void castle_quest(player_type *player_ptr)
 		put_str(_("クエストを終わらせたら戻って来て下さい。", "Return when you have completed your quest."), 12, 0);
 		return;
 	}
-	
+
 	if (q_ptr->status != QUEST_STATUS_UNTAKEN) return;
 
 	q_ptr->status = QUEST_STATUS_TAKEN;
@@ -2352,7 +2352,7 @@ static HIT_POINT calc_slaydam(HIT_POINT dam, int mult, int div, bool force)
 		tmp /= 60;
 		return tmp;
 	}
-	
+
 	tmp = dam * 60;
 	tmp *= mult;
 	tmp /= div;
@@ -3294,7 +3294,7 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 		msg_print(_("改良に失敗した。", "The improvement failed."));
 		return FALSE;
 	}
-	
+
 	object_desc(tmp_str, o_ptr, OD_NAME_AND_ENCHANT);
 #ifdef JP
 	msg_format("＄%dで%sに改良しました。", cost * o_ptr->number, tmp_str);
@@ -3364,7 +3364,7 @@ static void building_recharge(player_type *player_ptr)
 			/* Update the gold display */
 			building_prt_gold(player_ptr);
 		}
-		
+
 		return;
 	}
 

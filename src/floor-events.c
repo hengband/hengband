@@ -1471,7 +1471,7 @@ void update_mon_lite(player_type *subject_ptr)
 
 			/* Exit if has no light */
 			if (!rad) continue;
-			
+
 			int f_flag;
 			if (rad > 0)
 			{

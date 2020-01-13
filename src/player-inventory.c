@@ -1508,7 +1508,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			item = TRUE;
 			done = TRUE;
 			break;
-			}
+		}
 		}
 	}
 

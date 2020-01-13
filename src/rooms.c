@@ -59,22 +59,22 @@
 #include "monster.h"
 
 
-/*!
- * 各部屋タイプの生成比定義
- *[from SAngband (originally from OAngband)]\n
- *\n
- * Table of values that control how many times each type of room will\n
- * appear.  Each type of room has its own row, and each column\n
- * corresponds to dungeon levels 0, 10, 20, and so on.  The final\n
- * value is the minimum depth the room can appear at.  -LM-\n
- *\n
- * Level 101 and below use the values for level 100.\n
- *\n
- * Rooms with lots of monsters or loot may not be generated if the\n
- * object or monster lists are already nearly full.  Rooms will not\n
- * appear above their minimum depth.  Tiny levels will not have space\n
- * for all the rooms you ask for.\n
- */
+ /*!
+  * 各部屋タイプの生成比定義
+  *[from SAngband (originally from OAngband)]\n
+  *\n
+  * Table of values that control how many times each type of room will\n
+  * appear.  Each type of room has its own row, and each column\n
+  * corresponds to dungeon levels 0, 10, 20, and so on.  The final\n
+  * value is the minimum depth the room can appear at.  -LM-\n
+  *\n
+  * Level 101 and below use the values for level 100.\n
+  *\n
+  * Rooms with lots of monsters or loot may not be generated if the\n
+  * object or monster lists are already nearly full.  Rooms will not\n
+  * appear above their minimum depth.  Tiny levels will not have space\n
+  * for all the rooms you ask for.\n
+  */
 
 #if 1
 
@@ -156,10 +156,10 @@ void build_small_room(player_type *player_ptr, POSITION x0, POSITION y0)
 	/* Place a secret door on one side */
 	switch (randint0(4))
 	{
-		case 0: place_secret_door(player_ptr, y0, x0 - 1, DOOR_DEFAULT); break;
-		case 1: place_secret_door(player_ptr, y0, x0 + 1, DOOR_DEFAULT); break;
-		case 2: place_secret_door(player_ptr, y0 - 1, x0, DOOR_DEFAULT); break;
-		case 3: place_secret_door(player_ptr, y0 + 1, x0, DOOR_DEFAULT); break;
+	case 0: place_secret_door(player_ptr, y0, x0 - 1, DOOR_DEFAULT); break;
+	case 1: place_secret_door(player_ptr, y0, x0 + 1, DOOR_DEFAULT); break;
+	case 2: place_secret_door(player_ptr, y0 - 1, x0, DOOR_DEFAULT); break;
+	case 3: place_secret_door(player_ptr, y0 + 1, x0, DOOR_DEFAULT); break;
 	}
 
 	/* Clear mimic type */
@@ -194,7 +194,7 @@ static void check_room_boundary(floor_type *floor_ptr, POSITION x1, POSITION y1,
 	 * to bypass these if needed.
 	 */
 
-	/* Above the top boundary */
+	 /* Above the top boundary */
 	for (x = x1; x <= x2; x++)
 	{
 		new_is_floor = get_is_floor(floor_ptr, x, y1 - 1);
@@ -316,7 +316,7 @@ static bool find_space_aux(POSITION blocks_high, POSITION blocks_wide, POSITION 
 	/* Never run off the screen */
 	if ((by1 < 0) || (by2 > dun->row_rooms)) return FALSE;
 	if ((bx1 < 0) || (bx2 > dun->col_rooms)) return FALSE;
-	
+
 	/* Verify available space */
 	for (by = by1; by < by2; by++)
 	{
@@ -401,7 +401,7 @@ bool find_space(floor_type *floor_ptr, POSITION *y, POSITION *x, POSITION height
 	else
 	{
 		/* Always choose the center one */
-		pick = candidates/2 + 1;
+		pick = candidates / 2 + 1;
 	}
 
 	/* Pick up the choosen location */
@@ -432,7 +432,7 @@ bool find_space(floor_type *floor_ptr, POSITION *y, POSITION *x, POSITION height
 	 * be *exactly* correct to prevent memory errors
 	 */
 
-	/* Acquire the location of the room */
+	 /* Acquire the location of the room */
 	(*y) = ((by1 + by2) * BLOCK_HGT) / 2;
 	(*x) = ((bx1 + bx2) * BLOCK_WID) / 2;
 
@@ -559,17 +559,17 @@ static void store_height(floor_type *floor_ptr, POSITION x, POSITION y, FEAT_IDX
  */
 
 
-/*
- *  Note that this uses the floor array in a very hackish way
- *  the values are first set to zero, and then each array location
- *  is used as a "heightmap"
- *  The heightmap then needs to be converted back into the "feat" format.
- *
- *  grd=level at which fractal turns on.  smaller gives more mazelike caves
- *  roug=roughness level.  16=normal.  higher values make things more convoluted
- *    small values are good for smooth walls.
- *  size=length of the side of the square grid system.
- */
+ /*
+  *  Note that this uses the floor array in a very hackish way
+  *  the values are first set to zero, and then each array location
+  *  is used as a "heightmap"
+  *  The heightmap then needs to be converted back into the "feat" format.
+  *
+  *  grd=level at which fractal turns on.  smaller gives more mazelike caves
+  *  roug=roughness level.  16=normal.  higher values make things more convoluted
+  *    small values are good for smooth walls.
+  *  size=length of the side of the square grid system.
+  */
 void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsiz, POSITION ysiz, int grd, int roug, int cutoff)
 {
 	POSITION xhsize, yhsize, xsize, ysize, maxsize;
@@ -582,7 +582,7 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 	POSITION xstep, xhstep, ystep, yhstep;
 	POSITION xstep2, xhstep2, ystep2, yhstep2;
 	POSITION i, j, ii, jj, diagsize, xxsize, yysize;
-	
+
 	/* Cache for speed */
 	POSITION xm, xp, ym, yp;
 
@@ -691,8 +691,8 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 						/* Average of left and right points +random bit */
 						store_height(floor_ptr, ii, jj,
 							(floor_ptr->grid_array[jj][fill_data.xmin + (i - xhstep) / 256].feat
-							 + floor_ptr->grid_array[jj][fill_data.xmin + (i + xhstep) / 256].feat) / 2
-							 + (randint1(xstep2) - xhstep2) * roug / 16);
+								+ floor_ptr->grid_array[jj][fill_data.xmin + (i + xhstep) / 256].feat) / 2
+							+ (randint1(xstep2) - xhstep2) * roug / 16);
 					}
 				}
 			}
@@ -721,7 +721,7 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 						/* Average of up and down points +random bit */
 						store_height(floor_ptr, ii, jj,
 							(floor_ptr->grid_array[fill_data.ymin + (j - yhstep) / 256][ii].feat
-							+ floor_ptr->grid_array[fill_data.ymin + (j + yhstep) / 256][ii].feat) / 2
+								+ floor_ptr->grid_array[fill_data.ymin + (j + yhstep) / 256][ii].feat) / 2
 							+ (randint1(ystep2) - yhstep2) * roug / 16);
 					}
 				}
@@ -753,13 +753,13 @@ void generate_hmap(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 						ym = fill_data.ymin + (j - yhstep) / 256;
 						yp = fill_data.ymin + (j + yhstep) / 256;
 
-						/* 
+						/*
 						 * Average over all four corners + scale by diagsize to
 						 * reduce the effect of the square grid on the shape of the fractal
 						 */
 						store_height(floor_ptr, ii, jj,
 							(floor_ptr->grid_array[ym][xm].feat + floor_ptr->grid_array[yp][xm].feat
-							+ floor_ptr->grid_array[ym][xp].feat + floor_ptr->grid_array[yp][xp].feat) / 4
+								+ floor_ptr->grid_array[ym][xp].feat + floor_ptr->grid_array[yp][xp].feat) / 4
 							+ (randint1(xstep2) - xhstep2) * (diagsize / 16) / 256 * roug);
 					}
 				}
@@ -783,7 +783,7 @@ static bool hack_isnt_wall(floor_type *floor_ptr, POSITION y, POSITION x, int c1
 	else
 	{
 		/* Show that have looked at this square */
-		floor_ptr->grid_array[y][x].info|= (CAVE_ICKY);
+		floor_ptr->grid_array[y][x].info |= (CAVE_ICKY);
 
 		/* Use cutoffs c1-c3 to allocate regions of floor /water/ lava etc. */
 		if (floor_ptr->grid_array[y][x].feat <= c1)
@@ -884,7 +884,7 @@ static void cave_fill(floor_type *floor_ptr, POSITION y, POSITION x)
 			{
 				/* affect boundary */
 				floor_ptr->grid_array[j][i].info |= CAVE_ICKY;
-/*				return; */
+				/*				return; */
 			}
 
 			/* If within bounds */
@@ -942,7 +942,7 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 	 * can make teleport traps instadeaths...
 	 */
 
-	/* cutoffs */
+	 /* cutoffs */
 	fill_data.c1 = cutoff;
 	fill_data.c2 = 0;
 	fill_data.c3 = 0;
@@ -1003,8 +1003,8 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 		{
 			/* Next to a 'filled' region? - set to be room walls */
 			place_outer_bold(floor_ptr, y0 + ysize - yhsize, x0 + i - xhsize);
-			if (light) floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info|=(CAVE_GLOW);
-			floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info|=(CAVE_ROOM);
+			if (light) floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info |= (CAVE_GLOW);
+			floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info |= (CAVE_ROOM);
 			place_outer_bold(floor_ptr, y0 + ysize - yhsize, x0 + i - xhsize);
 		}
 		else
@@ -1062,7 +1062,7 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 		for (y = 1; y < ysize; ++y)
 		{
 			if (is_floor_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize) &&
-			    (floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY))
+				(floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY))
 			{
 				/* Clear the icky flag in the filled region */
 				floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~CAVE_ICKY;
@@ -1072,7 +1072,7 @@ bool generate_fracave(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION 
 				if (room) floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info |= (CAVE_ROOM);
 			}
 			else if (is_outer_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize) &&
-				 (floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY))
+				(floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY))
 			{
 				/* Walls */
 				floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY);
@@ -1145,7 +1145,7 @@ void build_cavern(floor_type *floor_ptr)
 		/* about size/2 */
 		cutoff = xsize / 2;
 
-		 /* make it */
+		/* make it */
 		generate_hmap(floor_ptr, y0 + 1, x0 + 1, xsize, ysize, grd, roug, cutoff);
 
 		/* Convert to normal format+ clean up */
@@ -1210,7 +1210,7 @@ bool generate_lake(floor_type *floor_ptr, POSITION y0, POSITION x0, POSITION xsi
 	 * can make teleport traps instadeaths...
 	 */
 
-	/* cutoffs */
+	 /* cutoffs */
 	fill_data.c1 = c1;
 	fill_data.c2 = c2;
 	fill_data.c3 = c3;
@@ -1378,9 +1378,9 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
 			/* hack- empty square part of the time */
 			if ((randint1(100) - difficulty * 3) > 50) value = 20;
 
-			 /* if floor, shallow water and lava */
+			/* if floor, shallow water and lava */
 			if (is_floor_bold(floor_ptr, y, x) ||
-			    (cave_have_flag_bold(floor_ptr, y, x, FF_PLACE) && cave_have_flag_bold(floor_ptr, y, x, FF_DROP)))
+				(cave_have_flag_bold(floor_ptr, y, x, FF_PLACE) && cave_have_flag_bold(floor_ptr, y, x, FF_DROP)))
 			{
 				/* The smaller 'value' is, the better the stuff */
 				if (value < 0)
@@ -1534,9 +1534,9 @@ void build_room(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1, PO
 	for (i = 1; i < ysize; i++)
 	{
 		place_outer_noperm_bold(floor_ptr, y1 + i, x1);
-		floor_ptr->grid_array[y1 + i][x1].info|=(CAVE_ROOM | CAVE_ICKY);
+		floor_ptr->grid_array[y1 + i][x1].info |= (CAVE_ROOM | CAVE_ICKY);
 		place_outer_noperm_bold(floor_ptr, y1 + i, x2);
-		floor_ptr->grid_array[y1 + i][x2].info|=(CAVE_ROOM | CAVE_ICKY);
+		floor_ptr->grid_array[y1 + i][x2].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
 	/* Middle */
@@ -1544,7 +1544,7 @@ void build_room(floor_type *floor_ptr, POSITION x1, POSITION x2, POSITION y1, PO
 	{
 		for (y = 1; y < ysize; y++)
 		{
-			if (is_extra_bold(floor_ptr, y1+y, x1+x))
+			if (is_extra_bold(floor_ptr, y1 + y, x1 + x))
 			{
 				/* clear the untouched region */
 				place_floor_bold(floor_ptr, y1 + y, x1 + x);
@@ -1627,37 +1627,37 @@ void r_visit(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSIT
 	{
 		switch (adj[i])
 		{
-			case 0:
-				/* (0,+) - check for bottom boundary */
-				if ((node / m < n - 1) && (visited[node + m] == 0))
-				{
-					place_floor_bold(floor_ptr, y + 1, x);
-					r_visit(floor_ptr, y1, x1, y2, x2, node + m, dir, visited);
-				}
-				break;
-			case 1:
-				/* (0,-) - check for top boundary */
-				if ((node / m > 0) && (visited[node - m] == 0))
-				{
-					place_floor_bold(floor_ptr, y - 1, x);
-					r_visit(floor_ptr, y1, x1, y2, x2, node - m, dir, visited);
-				}
-				break;
-			case 2:
-				/* (+,0) - check for right boundary */
-				if ((node % m < m - 1) && (visited[node + 1] == 0))
-				{
-					place_floor_bold(floor_ptr, y, x + 1);
-					r_visit(floor_ptr, y1, x1, y2, x2, node + 1, dir, visited);
-				}
-				break;
-			case 3:
-				/* (-,0) - check for left boundary */
-				if ((node % m > 0) && (visited[node - 1] == 0))
-				{
-					place_floor_bold(floor_ptr, y, x - 1);
-					r_visit(floor_ptr, y1, x1, y2, x2, node - 1, dir, visited);
-				}
+		case 0:
+			/* (0,+) - check for bottom boundary */
+			if ((node / m < n - 1) && (visited[node + m] == 0))
+			{
+				place_floor_bold(floor_ptr, y + 1, x);
+				r_visit(floor_ptr, y1, x1, y2, x2, node + m, dir, visited);
+			}
+			break;
+		case 1:
+			/* (0,-) - check for top boundary */
+			if ((node / m > 0) && (visited[node - m] == 0))
+			{
+				place_floor_bold(floor_ptr, y - 1, x);
+				r_visit(floor_ptr, y1, x1, y2, x2, node - m, dir, visited);
+			}
+			break;
+		case 2:
+			/* (+,0) - check for right boundary */
+			if ((node % m < m - 1) && (visited[node + 1] == 0))
+			{
+				place_floor_bold(floor_ptr, y, x + 1);
+				r_visit(floor_ptr, y1, x1, y2, x2, node + 1, dir, visited);
+			}
+			break;
+		case 3:
+			/* (-,0) - check for left boundary */
+			if ((node % m > 0) && (visited[node - 1] == 0))
+			{
+				place_floor_bold(floor_ptr, y, x - 1);
+				r_visit(floor_ptr, y1, x1, y2, x2, node - 1, dir, visited);
+			}
 		} /* end switch */
 	}
 }
@@ -1777,159 +1777,159 @@ void build_recursive_room(floor_type *floor_ptr, POSITION x1, POSITION y1, POSIT
 
 	switch (choice)
 	{
-		case 1:
+	case 1:
+	{
+		/* Outer walls */
+
+		/* top and bottom */
+		for (x = x1; x <= x2; x++)
 		{
-			/* Outer walls */
+			place_outer_bold(floor_ptr, y1, x);
+			place_outer_bold(floor_ptr, y2, x);
+		}
 
-			/* top and bottom */
-			for (x = x1; x <= x2; x++)
-			{
-				place_outer_bold(floor_ptr, y1, x);
-				place_outer_bold(floor_ptr, y2, x);
-			}
+		/* left and right */
+		for (y = y1 + 1; y < y2; y++)
+		{
+			place_outer_bold(floor_ptr, y, x1);
+			place_outer_bold(floor_ptr, y, x2);
+		}
 
+		/* Make a couple of entrances */
+		if (one_in_(2))
+		{
 			/* left and right */
-			for (y = y1 + 1; y < y2; y++)
-			{
-				place_outer_bold(floor_ptr, y, x1);
-				place_outer_bold(floor_ptr, y, x2);
-			}
-
-			/* Make a couple of entrances */
-			if (one_in_(2))
-			{
-				/* left and right */
-				y = randint1(ysize) + y1;
-				place_floor_bold(floor_ptr, y, x1);
-				place_floor_bold(floor_ptr, y, x2);
-			}
-			else
-			{
-				/* top and bottom */
-				x = randint1(xsize) + x1;
-				place_floor_bold(floor_ptr, y1, x);
-				place_floor_bold(floor_ptr, y2, x);
-			}
-
-			/* Select size of keep */
-			t1 = randint1(ysize / 3) + y1;
-			t2 = y2 - randint1(ysize / 3);
-			t3 = randint1(xsize / 3) + x1;
-			t4 = x2 - randint1(xsize / 3);
-
-			/* Do outside areas */
-
-			/* Above and below keep */
-			build_recursive_room(floor_ptr, x1 + 1, y1 + 1, x2 - 1, t1, power + 1);
-			build_recursive_room(floor_ptr, x1 + 1, t2, x2 - 1, y2, power + 1);
-
-			/* Left and right of keep */
-			build_recursive_room(floor_ptr, x1 + 1, t1 + 1, t3, t2 - 1, power + 3);
-			build_recursive_room(floor_ptr, t4, t1 + 1, x2 - 1, t2 - 1, power + 3);
-
-			/* Make the keep itself: */
-			x1 = t3;
-			x2 = t4;
-			y1 = t1;
-			y2 = t2;
-			xsize = x2 - x1;
-			ysize = y2 - y1;
-			power += 2;
-
-			/* Fall through */
+			y = randint1(ysize) + y1;
+			place_floor_bold(floor_ptr, y, x1);
+			place_floor_bold(floor_ptr, y, x2);
 		}
-		case 4:
+		else
 		{
-			/* Try to build a room */
-			if ((xsize < 3) || (ysize < 3))
-			{
-				for (y = y1; y < y2; y++)
-				{
-					for (x = x1; x < x2; x++)
-					{
-						place_inner_bold(floor_ptr, y, x);
-					}
-				}
-
-				/* Too small */
-				return;
-			}
-
-			/* Make outside walls */
 			/* top and bottom */
-			for (x = x1 + 1; x <= x2 - 1; x++)
-			{
-				place_inner_bold(floor_ptr, y1 + 1, x);
-				place_inner_bold(floor_ptr, y2 - 1, x);
-			}
-
-			/* left and right */
-			for (y = y1 + 1; y <= y2 - 1; y++)
-			{
-				place_inner_bold(floor_ptr, y, x1 + 1);
-				place_inner_bold(floor_ptr, y, x2 - 1);
-			}
-
-			/* Make a door */
-			y = randint1(ysize - 3) + y1 + 1;
-
-			if (one_in_(2))
-			{
-				/* left */
-				place_floor_bold(floor_ptr, y, x1 + 1);
-			}
-			else
-			{
-				/* right */
-				place_floor_bold(floor_ptr, y, x2 - 1);
-			}
-
-			/* Build the room */
-			build_recursive_room(floor_ptr, x1 + 2, y1 + 2, x2 - 2, y2 - 2, power + 3);
-			break;
+			x = randint1(xsize) + x1;
+			place_floor_bold(floor_ptr, y1, x);
+			place_floor_bold(floor_ptr, y2, x);
 		}
-		case 2:
+
+		/* Select size of keep */
+		t1 = randint1(ysize / 3) + y1;
+		t2 = y2 - randint1(ysize / 3);
+		t3 = randint1(xsize / 3) + x1;
+		t4 = x2 - randint1(xsize / 3);
+
+		/* Do outside areas */
+
+		/* Above and below keep */
+		build_recursive_room(floor_ptr, x1 + 1, y1 + 1, x2 - 1, t1, power + 1);
+		build_recursive_room(floor_ptr, x1 + 1, t2, x2 - 1, y2, power + 1);
+
+		/* Left and right of keep */
+		build_recursive_room(floor_ptr, x1 + 1, t1 + 1, t3, t2 - 1, power + 3);
+		build_recursive_room(floor_ptr, t4, t1 + 1, x2 - 1, t2 - 1, power + 3);
+
+		/* Make the keep itself: */
+		x1 = t3;
+		x2 = t4;
+		y1 = t1;
+		y2 = t2;
+		xsize = x2 - x1;
+		ysize = y2 - y1;
+		power += 2;
+
+		/* Fall through */
+	}
+	case 4:
+	{
+		/* Try to build a room */
+		if ((xsize < 3) || (ysize < 3))
 		{
-			/* Try and divide vertically */
-			if (xsize < 3)
+			for (y = y1; y < y2; y++)
 			{
-				/* Too small */
-				for (y = y1; y < y2; y++)
+				for (x = x1; x < x2; x++)
 				{
-					for (x = x1; x < x2; x++)
-					{
-						place_inner_bold(floor_ptr, y, x);
-					}
+					place_inner_bold(floor_ptr, y, x);
 				}
-				return;
 			}
 
-			t1 = randint1(xsize - 2) + x1 + 1;
-			build_recursive_room(floor_ptr, x1, y1, t1, y2, power - 2);
-			build_recursive_room(floor_ptr, t1 + 1, y1, x2, y2, power - 2);
-			break;
+			/* Too small */
+			return;
 		}
-		case 3:
+
+		/* Make outside walls */
+		/* top and bottom */
+		for (x = x1 + 1; x <= x2 - 1; x++)
 		{
-			/* Try and divide horizontally */
-			if (ysize < 3)
-			{
-				/* Too small */
-				for (y = y1; y < y2; y++)
-				{
-					for (x = x1; x < x2; x++)
-					{
-						place_inner_bold(floor_ptr, y, x);
-					}
-				}
-				return;
-			}
-
-			t1 = randint1(ysize - 2) + y1 + 1;
-			build_recursive_room(floor_ptr, x1, y1, x2, t1, power - 2);
-			build_recursive_room(floor_ptr, x1, t1 + 1, x2, y2, power - 2);
-			break;
+			place_inner_bold(floor_ptr, y1 + 1, x);
+			place_inner_bold(floor_ptr, y2 - 1, x);
 		}
+
+		/* left and right */
+		for (y = y1 + 1; y <= y2 - 1; y++)
+		{
+			place_inner_bold(floor_ptr, y, x1 + 1);
+			place_inner_bold(floor_ptr, y, x2 - 1);
+		}
+
+		/* Make a door */
+		y = randint1(ysize - 3) + y1 + 1;
+
+		if (one_in_(2))
+		{
+			/* left */
+			place_floor_bold(floor_ptr, y, x1 + 1);
+		}
+		else
+		{
+			/* right */
+			place_floor_bold(floor_ptr, y, x2 - 1);
+		}
+
+		/* Build the room */
+		build_recursive_room(floor_ptr, x1 + 2, y1 + 2, x2 - 2, y2 - 2, power + 3);
+		break;
+	}
+	case 2:
+	{
+		/* Try and divide vertically */
+		if (xsize < 3)
+		{
+			/* Too small */
+			for (y = y1; y < y2; y++)
+			{
+				for (x = x1; x < x2; x++)
+				{
+					place_inner_bold(floor_ptr, y, x);
+				}
+			}
+			return;
+		}
+
+		t1 = randint1(xsize - 2) + x1 + 1;
+		build_recursive_room(floor_ptr, x1, y1, t1, y2, power - 2);
+		build_recursive_room(floor_ptr, t1 + 1, y1, x2, y2, power - 2);
+		break;
+	}
+	case 3:
+	{
+		/* Try and divide horizontally */
+		if (ysize < 3)
+		{
+			/* Too small */
+			for (y = y1; y < y2; y++)
+			{
+				for (x = x1; x < x2; x++)
+				{
+					place_inner_bold(floor_ptr, y, x);
+				}
+			}
+			return;
+		}
+
+		t1 = randint1(ysize - 2) + y1 + 1;
+		build_recursive_room(floor_ptr, x1, y1, x2, t1, power - 2);
+		build_recursive_room(floor_ptr, x1, t1 + 1, x2, y2, power - 2);
+		break;
+	}
 	}
 }
 
@@ -2003,7 +2003,7 @@ POSITION dist2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, POSITION h1, 
 	 * trying to fix the circular rooms.)
 	 */
 
-	/* h1-h4 are constants that describe the metric */
+	 /* h1-h4 are constants that describe the metric */
 	if (dx >= 2 * dy) return (dx + (dy * h1) / h2);
 	if (dy >= 2 * dx) return (dy + (dx * h1) / h2);
 	return (((dx + dy) * 128) / 181 +
@@ -2018,7 +2018,7 @@ POSITION dist2(POSITION x1, POSITION y1, POSITION x2, POSITION y2, POSITION h1, 
 void generate_room_floor(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2, int light)
 {
 	POSITION y, x;
-	
+
 	grid_type *g_ptr;
 
 	for (y = y1; y <= y2; y++)
@@ -2043,7 +2043,7 @@ void generate_fill_perm_bold(floor_type *floor_ptr, POSITION y1, POSITION x1, PO
 		for (x = x1; x <= x2; x++)
 		{
 			/* Point to grid */
-			place_inner_perm_bold(floor_ptr ,y, x);
+			place_inner_perm_bold(floor_ptr, y, x);
 		}
 	}
 }
@@ -2061,7 +2061,7 @@ static bool room_build(player_type *player_ptr, EFFECT_ID typ)
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	switch (typ)
 	{
-	/* Build an appropriate room */
+		/* Build an appropriate room */
 	case ROOM_T_NORMAL:        return build_type1(floor_ptr);
 	case ROOM_T_OVERLAP:       return build_type2(floor_ptr);
 	case ROOM_T_CROSS:         return build_type3(player_ptr);
@@ -2090,11 +2090,11 @@ static bool room_build(player_type *player_ptr, EFFECT_ID typ)
  */
 #define MOVE_PLIST(dst, src) (prob_list[dst] += prob_list[src], prob_list[src] = 0) 
 
-/*!
- * @brief 部屋生成処理のメインルーチン(Sangbandを経由してOangbandからの実装を引用) / Generate rooms in dungeon.  Build bigger rooms at first.　[from SAngband (originally from OAngband)]
- * @param player_ptr プレーヤーへの参照ポインタ
- * @return 部屋生成に成功した場合 TRUE を返す。
- */
+ /*!
+  * @brief 部屋生成処理のメインルーチン(Sangbandを経由してOangbandからの実装を引用) / Generate rooms in dungeon.  Build bigger rooms at first.　[from SAngband (originally from OAngband)]
+  * @param player_ptr プレーヤーへの参照ポインタ
+  * @return 部屋生成に成功した場合 TRUE を返す。
+  */
 bool generate_rooms(player_type *player_ptr)
 {
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
@@ -2136,9 +2136,9 @@ bool generate_rooms(player_type *player_ptr)
 	 * XXX -- Various dungeon types and options.
 	 */
 
-	/*! @details ダンジョンにBEGINNER、CHAMELEON、SMALLESTいずれのフラグもなく、
-	 * かつ「常に通常でない部屋を生成する」フラグがONならば、
-	 * GRATER_VAULTのみを生成対象とする。 / Ironman sees only Greater Vaults */
+	 /*! @details ダンジョンにBEGINNER、CHAMELEON、SMALLESTいずれのフラグもなく、
+	  * かつ「常に通常でない部屋を生成する」フラグがONならば、
+	  * GRATER_VAULTのみを生成対象とする。 / Ironman sees only Greater Vaults */
 	if (ironman_rooms && !((d_info[floor_ptr->dungeon_idx].flags1 & (DF1_BEGINNER | DF1_CHAMELEON | DF1_SMALLEST))))
 	{
 		for (i = 0; i < ROOM_T_MAX; i++)
