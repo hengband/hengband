@@ -193,7 +193,7 @@ void spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 
 	if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
-		set_monster_csleep(t_idx, 0);
+		set_monster_csleep(target_ptr, t_idx, 0);
 	}
 }
 
@@ -220,7 +220,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
 		dispel_player(target_ptr);
-		if (target_ptr->riding) dispel_monster_status(target_ptr->riding);
+		if (target_ptr->riding) dispel_monster_status(target_ptr, target_ptr->riding);
 
 		if ((target_ptr->pseikaku == SEIKAKU_COMBAT) || (target_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 			msg_print(_("やりやがったな！", ""));
@@ -237,7 +237,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 	if (TARGET_TYPE == MONSTER_TO_MONSTER)
 	{
 		if (t_idx == target_ptr->riding) dispel_player(target_ptr);
-		dispel_monster_status(t_idx);
+		dispel_monster_status(target_ptr, t_idx);
 	}
 }
 
@@ -1537,7 +1537,7 @@ void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
 		if (see_t) msg_format(msg4, t_name);
 	}
 
-	set_monster_csleep(t_idx, 0);
+	set_monster_csleep(target_ptr, t_idx, 0);
 }
 
 
@@ -1590,7 +1590,7 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
 
 	if (!resist && !saving_throw)
 	{
-		set_monster_monfear(t_idx, MON_MONFEAR(t_ptr) + randint0(4) + 4);
+		set_monster_monfear(target_ptr, t_idx, MON_MONFEAR(t_ptr) + randint0(4) + 4);
 	}
 }
 
@@ -1657,7 +1657,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
 
 	if (!resist && !saving_throw)
 	{
-		(void)set_monster_confused(t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
+		(void)set_monster_confused(target_ptr, t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
 	}
 }
 
@@ -1711,7 +1711,7 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 
 	if (!resist && !saving_throw)
 	{
-		(void)set_monster_confused(t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
+		(void)set_monster_confused(target_ptr, t_idx, MON_CONFUSED(t_ptr) + 12 + randint0(4));
 	}
 }
 
@@ -1778,7 +1778,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 
 	if (!resist && !saving_throw)
 	{
-		set_monster_slow(t_idx, MON_SLOW(t_ptr) + 50);
+		set_monster_slow(target_ptr, t_idx, MON_SLOW(t_ptr) + 50);
 	}
 }
 
@@ -1832,7 +1832,7 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 
 	if (!resist && !saving_throw)
 	{
-		(void)set_monster_stunned(t_idx, MON_STUNNED(t_ptr) + randint1(4) + 4);
+		(void)set_monster_stunned(target_ptr, t_idx, MON_STUNNED(t_ptr) + randint1(4) + 4);
 	}
 }
 
@@ -1860,7 +1860,7 @@ void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_i
 		target_ptr->blind > 0, TARGET_TYPE);
 
 	/* Allow quick speed increases to base+10 */
-	if (set_monster_fast(m_idx, MON_FAST(m_ptr) + 100))
+	if (set_monster_fast(target_ptr, m_idx, MON_FAST(m_ptr) + 100))
 	{
 		if (TARGET_TYPE == MONSTER_TO_PLAYER ||
 			(TARGET_TYPE == MONSTER_TO_MONSTER && see_m))
@@ -1963,7 +1963,7 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 	if (!MON_MONFEAR(m_ptr)) return;
 
 	/* Cancel fear */
-	(void)set_monster_monfear(m_idx, 0);
+	(void)set_monster_monfear(target_ptr, m_idx, 0);
 
 	if (see_monster(floor_ptr, m_idx))
 		msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
@@ -1989,7 +1989,7 @@ void spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX 
 		_("%sは無傷の球の呪文を唱えた。", "%^s casts a Globe of Invulnerability."),
 		!seen, TARGET_TYPE);
 
-	if (!MON_INVULNER(m_ptr)) (void)set_monster_invulner(m_idx, randint1(4) + 4, FALSE);
+	if (!MON_INVULNER(m_ptr)) (void)set_monster_invulner(target_ptr, m_idx, randint1(4) + 4, FALSE);
 }
 
 
@@ -2379,7 +2379,7 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 
 	if (resists_tele)
 	{
-		set_monster_csleep(t_idx, 0);
+		set_monster_csleep(target_ptr, t_idx, 0);
 		return;
 	}
 
@@ -2387,7 +2387,7 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 		teleport_player_to(target_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_PASSIVE);
 	else
 		teleport_monster_to(target_ptr, t_idx, m_ptr->fy, m_ptr->fx, 100, TELEPORT_PASSIVE);
-	set_monster_csleep(t_idx, 0);
+	set_monster_csleep(target_ptr, t_idx, 0);
 }
 
 
@@ -2455,7 +2455,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
 	if (resists_tele)
 	{
-		set_monster_csleep(t_idx, 0);
+		set_monster_csleep(target_ptr, t_idx, 0);
 		return;
 	}
 
@@ -2463,7 +2463,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 		teleport_player_away(m_idx, target_ptr, MAX_SIGHT * 2 + 5);
 	else
 		teleport_away(target_ptr, t_idx, MAX_SIGHT * 2 + 5, TELEPORT_PASSIVE);
-	set_monster_csleep(t_idx, 0);
+	set_monster_csleep(target_ptr, t_idx, 0);
 }
 
 

@@ -1410,7 +1410,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		/* Handle non-aggravation - Still sleeping */
 		if (!(target_ptr->cursed & TRC_AGGRAVATE)) return;
 
-		(void)set_monster_csleep(m_idx, 0);
+		(void)set_monster_csleep(target_ptr, m_idx, 0);
 
 		/* Notice the "waking up" */
 		if (m_ptr->ml)
@@ -2069,7 +2069,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				did_move_body = TRUE;
 
 				/* Wake up the moved monster */
-				(void)set_monster_csleep(g_ptr->m_idx, 0);
+				(void)set_monster_csleep(target_ptr, g_ptr->m_idx, 0);
 
 				/* Message */
 			}
@@ -2391,7 +2391,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (!is_battle_determined) return;
 
 	/* No longer afraid */
-	(void)set_monster_monfear(m_idx, 0);
+	(void)set_monster_monfear(target_ptr, m_idx, 0);
 
 	/* Message if seen */
 	if (see_m)

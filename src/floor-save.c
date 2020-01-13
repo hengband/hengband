@@ -1235,12 +1235,12 @@ void change_floor(player_type *creature_ptr)
 					m_ptr->hp = m_ptr->maxhp = m_ptr->max_maxhp;
 
 					/* Remove timed status (except MTIMED_CSLEEP) */
-					(void)set_monster_fast(i, 0);
-					(void)set_monster_slow(i, 0);
-					(void)set_monster_stunned(i, 0);
-					(void)set_monster_confused(i, 0);
-					(void)set_monster_monfear(i, 0);
-					(void)set_monster_invulner(i, 0, FALSE);
+					(void)set_monster_fast(creature_ptr, i, 0);
+					(void)set_monster_slow(creature_ptr, i, 0);
+					(void)set_monster_stunned(creature_ptr, i, 0);
+					(void)set_monster_confused(creature_ptr, i, 0);
+					(void)set_monster_monfear(creature_ptr, i, 0);
+					(void)set_monster_invulner(creature_ptr, i, 0, FALSE);
 				}
 
 				/* Extract real monster race */

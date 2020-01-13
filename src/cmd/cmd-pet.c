@@ -364,7 +364,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(m_name, m_ptr, 0);
-			(void)set_monster_csleep(g_ptr->m_idx, 0);
+			(void)set_monster_csleep(creature_ptr, g_ptr->m_idx, 0);
 			msg_format(_("%sを起こした。", "You have woken %s up."), m_name);
 		}
 

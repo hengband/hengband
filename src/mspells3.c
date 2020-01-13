@@ -879,7 +879,7 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 		if (!m_idx) break;
 		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
 		if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
-		dispel_monster_status(m_idx);
+		dispel_monster_status(caster_ptr, m_idx);
 		break;
 	}
 	case MS_ROCKET:

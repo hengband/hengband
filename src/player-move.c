@@ -992,7 +992,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		    pattern_seq(creature_ptr, creature_ptr->y, creature_ptr->x, y, x) && (p_can_enter || p_can_kill_walls))
 		{
 			/* Disturb the monster */
-			(void)set_monster_csleep(g_ptr->m_idx, 0);
+			(void)set_monster_csleep(creature_ptr, g_ptr->m_idx, 0);
 
 			monster_desc(m_name, m_ptr, 0);
 

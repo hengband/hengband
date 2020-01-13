@@ -1389,7 +1389,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 	}
 
 	/* Disturb the monster */
-	(void)set_monster_csleep(g_ptr->m_idx, 0);
+	(void)set_monster_csleep(attacker_ptr, g_ptr->m_idx, 0);
 
 	monster_desc(m_name, m_ptr, 0);
 
@@ -1731,7 +1731,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 			{
 				if (attacker_ptr->lev > randint1(r_ptr->level + resist_stun + 10))
 				{
-					if (set_monster_stunned(g_ptr->m_idx, stun_effect + MON_STUNNED(m_ptr)))
+					if (set_monster_stunned(attacker_ptr, g_ptr->m_idx, stun_effect + MON_STUNNED(m_ptr)))
 					{
 						msg_format(_("%^sはフラフラになった。", "%^s is stunned."), m_name);
 					}
@@ -1877,7 +1877,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 				}
 
 				/* Apply stun */
-				(void)set_monster_stunned(g_ptr->m_idx, MON_STUNNED(m_ptr) + tmp);
+				(void)set_monster_stunned(attacker_ptr, g_ptr->m_idx, MON_STUNNED(m_ptr) + tmp);
 			}
 			else
 			{
@@ -2059,7 +2059,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 			else
 			{
 				msg_format(_("%^sは混乱したようだ。", "%^s appears confused."), m_name);
-				(void)set_monster_confused(g_ptr->m_idx, MON_CONFUSED(m_ptr) + 10 + randint0(attacker_ptr->lev) / 5);
+				(void)set_monster_confused(attacker_ptr, g_ptr->m_idx, MON_CONFUSED(m_ptr) + 10 + randint0(attacker_ptr->lev) / 5);
 			}
 		}
 
@@ -2257,7 +2257,7 @@ bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_
 			msg_format(_("そっちには何か恐いものがいる！", "There is something scary in your way!"));
 
 		/* Disturb the monster */
-		(void)set_monster_csleep(g_ptr->m_idx, 0);
+		(void)set_monster_csleep(attacker_ptr, g_ptr->m_idx, 0);
 
 		return FALSE;
 	}
@@ -4202,7 +4202,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 		/* Monster hits */
 		if (!effect || check_hit2(power, rlev, ac, MON_STUNNED(m_ptr)))
 		{
-			(void)set_monster_csleep(t_idx, 0);
+			(void)set_monster_csleep(subject_ptr, t_idx, 0);
 
 			if (t_ptr->ml)
 			{
@@ -4655,7 +4655,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 			case RBM_ENGULF:
 			case RBM_CHARGE:
 			{
-				(void)set_monster_csleep(t_idx, 0);
+				(void)set_monster_csleep(subject_ptr, t_idx, 0);
 
 				/* Visible monsters */
 				if (see_m)
@@ -4693,7 +4693,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 		sound(SOUND_EXPLODE);
 
 		/* Cancel Invulnerability */
-		(void)set_monster_invulner(m_idx, 0, FALSE);
+		(void)set_monster_invulner(subject_ptr, m_idx, 0, FALSE);
 		mon_take_hit_mon(subject_ptr, m_idx, m_ptr->hp + 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
 		blinked = FALSE;
 	}
@@ -4761,7 +4761,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
 		if (player_ptr->riding == m_idx) player_ptr->redraw |= (PR_UHEALTH);
 	}
 
-	(void)set_monster_csleep(m_idx, 0);
+	(void)set_monster_csleep(player_ptr, m_idx, 0);
 
 	if (player_ptr->riding && (m_idx == player_ptr->riding)) disturb(player_ptr, TRUE, TRUE);
 
@@ -4862,7 +4862,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
 	if (MON_MONFEAR(m_ptr) && (dam > 0))
 	{
 		/* Cure fear */
-		if (set_monster_monfear(m_idx, MON_MONFEAR(m_ptr) - randint1(dam / 4)))
+		if (set_monster_monfear(player_ptr, m_idx, MON_MONFEAR(m_ptr) - randint1(dam / 4)))
 		{
 			/* No more fear */
 			(*fear) = FALSE;
@@ -4886,7 +4886,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
 			(*fear) = TRUE;
 
 			/* Hack -- Add some timed fear */
-			(void)set_monster_monfear(m_idx, (randint1(10) +
+			(void)set_monster_monfear(player_ptr, m_idx, (randint1(10) +
 				(((dam >= m_ptr->hp) && (percentage > 7)) ?
 					20 : ((11 - percentage) * 5))));
 		}

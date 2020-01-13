@@ -5850,7 +5850,7 @@ void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
 	update_creature(creature_ptr);
 
 	/* Initialize monster process */
-	mproc_init();
+	mproc_init(creature_ptr->current_floor_ptr);
 
 	/* HACK -- reset the hackish flag */
 	current_world_ptr->is_loading_now = TRUE;

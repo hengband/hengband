@@ -980,7 +980,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			damage = (sn ? damroll(4, 8) : (m_ptr->hp + 1));
 
 			/* Monster is certainly awake */
-			(void)set_monster_csleep(g_ptr->m_idx, 0);
+			(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
 
 			/* Apply damage directly */
 			m_ptr->hp -= damage;

@@ -3109,12 +3109,13 @@ static void process_world(player_type *player_ptr)
 	update_dungeon_feeling(player_ptr);
 
 	/* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (ironman_downward && (player_ptr->dungeon_idx != DUNGEON_ANGBAND && player_ptr->dungeon_idx != 0))
 	{
-		player_ptr->current_floor_ptr->dun_level = 0;
+		floor_ptr->dun_level = 0;
 		player_ptr->dungeon_idx = 0;
 		prepare_change_floor_mode(player_ptr, CFM_FIRST_FLOOR | CFM_RAND_PLACE);
-		player_ptr->current_floor_ptr->inside_arena = FALSE;
+		floor_ptr->inside_arena = FALSE;
 		player_ptr->wild_mode = FALSE;
 		player_ptr->leaving = TRUE;
 	}
@@ -3127,10 +3128,10 @@ static void process_world(player_type *player_ptr)
 		int number_mon = 0;
 
 		/* Count all hostile monsters */
-		for (i2 = 0; i2 < player_ptr->current_floor_ptr->width; ++i2)
-			for (j2 = 0; j2 < player_ptr->current_floor_ptr->height; j2++)
+		for (i2 = 0; i2 < floor_ptr->width; ++i2)
+			for (j2 = 0; j2 < floor_ptr->height; j2++)
 			{
-				grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[j2][i2];
+				grid_type *g_ptr = &floor_ptr->grid_array[j2][i2];
 
 				if ((g_ptr->m_idx > 0) && (g_ptr->m_idx != player_ptr->riding))
 				{
@@ -3151,7 +3152,7 @@ static void process_world(player_type *player_ptr)
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_type *wm_ptr;
 
-			wm_ptr = &player_ptr->current_floor_ptr->m_list[win_m_idx];
+			wm_ptr = &floor_ptr->m_list[win_m_idx];
 
 			monster_desc(m_name, wm_ptr, 0);
 			msg_format(_("%sが勝利した！", "%s is winner!"), m_name);
@@ -3171,7 +3172,7 @@ static void process_world(player_type *player_ptr)
 			player_ptr->energy_need = 0;
 			update_gambling_monsters(player_ptr);
 		}
-		else if (current_world_ptr->game_turn - player_ptr->current_floor_ptr->generated_turn == 150 * TURNS_PER_TICK)
+		else if (current_world_ptr->game_turn - floor_ptr->generated_turn == 150 * TURNS_PER_TICK)
 		{
 			msg_print(_("申し分けありませんが、この勝負は引き分けとさせていただきます。", "This battle have ended in a draw."));
 			player_ptr->au += kakekin;
@@ -3191,7 +3192,7 @@ static void process_world(player_type *player_ptr)
 			do_cmd_save_game(player_ptr, TRUE);
 	}
 
-	if (player_ptr->current_floor_ptr->monster_noise && !ignore_unview)
+	if (floor_ptr->monster_noise && !ignore_unview)
 	{
 		msg_print(_("何かが聞こえた。", "You hear noise."));
 	}
@@ -3199,7 +3200,7 @@ static void process_world(player_type *player_ptr)
 	/*** Handle the wilderness/town (sunshine) ***/
 
 	/* While in town/wilderness */
-	if (!player_ptr->current_floor_ptr->dun_level && !player_ptr->current_floor_ptr->inside_quest && !player_ptr->phase_out && !player_ptr->current_floor_ptr->inside_arena)
+	if (!floor_ptr->dun_level && !floor_ptr->inside_quest && !player_ptr->phase_out && !floor_ptr->inside_arena)
 	{
 		/* Hack -- Daybreak/Nighfall in town */
 		if (!(current_world_ptr->game_turn % ((TURNS_PER_TICK * TOWN_DAWN) / 2)))
@@ -3216,7 +3217,7 @@ static void process_world(player_type *player_ptr)
 	}
 
 	/* While in the dungeon (vanilla_town or lite_town mode only) */
-	else if ((vanilla_town || (lite_town && !player_ptr->current_floor_ptr->inside_quest && !player_ptr->phase_out && !player_ptr->current_floor_ptr->inside_arena)) && player_ptr->current_floor_ptr->dun_level)
+	else if ((vanilla_town || (lite_town && !floor_ptr->inside_quest && !player_ptr->phase_out && !floor_ptr->inside_arena)) && floor_ptr->dun_level)
 	{
 		/*** Shuffle the Storekeepers ***/
 
@@ -3266,7 +3267,7 @@ static void process_world(player_type *player_ptr)
 
 	/* Check for creature generation. */
 	if (one_in_(d_info[player_ptr->dungeon_idx].max_m_alloc_chance) &&
-	    !player_ptr->current_floor_ptr->inside_arena && !player_ptr->current_floor_ptr->inside_quest && !player_ptr->phase_out)
+	    !floor_ptr->inside_arena && !floor_ptr->inside_quest && !player_ptr->phase_out)
 	{
 		/* Make a new monster */
 		(void)alloc_monster(MAX_SIGHT + 5, 0);
@@ -3283,7 +3284,7 @@ static void process_world(player_type *player_ptr)
 		/* Hack -- Process the counters of monsters if needed */
 		for (i = 0; i < MAX_MTIMED; i++)
 		{
-			if (player_ptr->current_floor_ptr->mproc_max[i] > 0) process_monsters_mtimed(i);
+			if (floor_ptr->mproc_max[i] > 0) process_monsters_mtimed(player_ptr, i);
 		}
 	}
 
@@ -4514,7 +4515,7 @@ static void process_player(player_type *creature_ptr)
 			GAME_TEXT m_name[MAX_NLEN];
 
 			/* Recover fully */
-			(void)set_monster_csleep(creature_ptr->riding, 0);
+			(void)set_monster_csleep(creature_ptr, creature_ptr->riding, 0);
 			monster_desc(m_name, m_ptr, 0);
 			msg_format(_("%^sを起こした。", "You have woken %s up."), m_name);
 		}
@@ -4522,7 +4523,7 @@ static void process_player(player_type *creature_ptr)
 		if (MON_STUNNED(m_ptr))
 		{
 			/* Hack -- Recover from stun */
-			if (set_monster_stunned(creature_ptr->riding,
+			if (set_monster_stunned(creature_ptr, creature_ptr->riding,
 				(randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_STUNNED(m_ptr) - 1)))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
@@ -4534,7 +4535,7 @@ static void process_player(player_type *creature_ptr)
 		if (MON_CONFUSED(m_ptr))
 		{
 			/* Hack -- Recover from confusion */
-			if (set_monster_confused(creature_ptr->riding,
+			if (set_monster_confused(creature_ptr, creature_ptr->riding,
 				(randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_CONFUSED(m_ptr) - 1)))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
@@ -4546,7 +4547,7 @@ static void process_player(player_type *creature_ptr)
 		if (MON_MONFEAR(m_ptr))
 		{
 			/* Hack -- Recover from fear */
-			if(set_monster_monfear(creature_ptr->riding,
+			if(set_monster_monfear(creature_ptr, creature_ptr->riding,
 				(randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_MONFEAR(m_ptr) - 1)))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
@@ -4898,7 +4899,8 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	int quest_num = 0;
 
 	/* Set the base level */
-	player_ptr->current_floor_ptr->base_level = player_ptr->current_floor_ptr->dun_level;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	floor_ptr->base_level = floor_ptr->dun_level;
 
 	/* Reset various flags */
 	current_world_ptr->is_loading_now = FALSE;
@@ -4934,7 +4936,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	disturb(player_ptr, TRUE, TRUE);
 
 	/* Get index of current quest (if any) */
-	quest_num = quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
+	quest_num = quest_number(player_ptr, floor_ptr->dun_level);
 
 	/* Inside a quest? */
 	if (quest_num)
@@ -4951,10 +4953,10 @@ static void dungeon(player_type *player_ptr, bool load_game)
 
 
 	/* Track maximum dungeon level (if not in quest -KMW-) */
-	if ((max_dlv[player_ptr->dungeon_idx] < player_ptr->current_floor_ptr->dun_level) && !player_ptr->current_floor_ptr->inside_quest)
+	if ((max_dlv[player_ptr->dungeon_idx] < floor_ptr->dun_level) && !floor_ptr->inside_quest)
 	{
-		max_dlv[player_ptr->dungeon_idx] = player_ptr->current_floor_ptr->dun_level;
-		if (record_maxdepth) exe_write_diary(player_ptr, NIKKI_MAXDEAPTH, player_ptr->current_floor_ptr->dun_level, NULL);
+		max_dlv[player_ptr->dungeon_idx] = floor_ptr->dun_level;
+		if (record_maxdepth) exe_write_diary(player_ptr, NIKKI_MAXDEAPTH, floor_ptr->dun_level, NULL);
 	}
 
 	(void)calculate_upkeep(player_ptr);
@@ -5010,12 +5012,12 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	if (!player_ptr->playing || player_ptr->is_dead) return;
 
 	/* Print quest message if appropriate */
-	if (!player_ptr->current_floor_ptr->inside_quest && (player_ptr->dungeon_idx == DUNGEON_ANGBAND))
+	if (!floor_ptr->inside_quest && (player_ptr->dungeon_idx == DUNGEON_ANGBAND))
 	{
-		quest_discovery(random_quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level));
-		player_ptr->current_floor_ptr->inside_quest = random_quest_number(player_ptr, player_ptr->current_floor_ptr->dun_level);
+		quest_discovery(random_quest_number(player_ptr, floor_ptr->dun_level));
+		floor_ptr->inside_quest = random_quest_number(player_ptr, floor_ptr->dun_level);
 	}
-	if ((player_ptr->current_floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && d_info[player_ptr->dungeon_idx].final_guardian)
+	if ((floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && d_info[player_ptr->dungeon_idx].final_guardian)
 	{
 		if (r_info[d_info[player_ptr->dungeon_idx].final_guardian].max_num)
 #ifdef JP
@@ -5034,38 +5036,38 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	/*** Process this dungeon level ***/
 
 	/* Reset the monster generation level */
-	player_ptr->current_floor_ptr->monster_level = player_ptr->current_floor_ptr->base_level;
+	floor_ptr->monster_level = floor_ptr->base_level;
 
 	/* Reset the object generation level */
-	player_ptr->current_floor_ptr->object_level = player_ptr->current_floor_ptr->base_level;
+	floor_ptr->object_level = floor_ptr->base_level;
 
 	current_world_ptr->is_loading_now = TRUE;
 
 	if (player_ptr->energy_need > 0 && !player_ptr->phase_out &&
-	    (player_ptr->current_floor_ptr->dun_level || player_ptr->leaving_dungeon || player_ptr->current_floor_ptr->inside_arena))
+	    (floor_ptr->dun_level || player_ptr->leaving_dungeon || floor_ptr->inside_arena))
 		player_ptr->energy_need = 0;
 
 	/* Not leaving dungeon */
 	player_ptr->leaving_dungeon = FALSE;
 
 	/* Initialize monster process */
-	mproc_init();
+	mproc_init(floor_ptr);
 
 	/* Main loop */
 	while (TRUE)
 	{
 		/* Hack -- Compact the monster list occasionally */
-		if ((player_ptr->current_floor_ptr->m_cnt + 32 > current_world_ptr->max_m_idx) && !player_ptr->phase_out) compact_monsters(64);
+		if ((floor_ptr->m_cnt + 32 > current_world_ptr->max_m_idx) && !player_ptr->phase_out) compact_monsters(64);
 
 		/* Hack -- Compress the monster list occasionally */
-		if ((player_ptr->current_floor_ptr->m_cnt + 32 < player_ptr->current_floor_ptr->m_max) && !player_ptr->phase_out) compact_monsters(0);
+		if ((floor_ptr->m_cnt + 32 < floor_ptr->m_max) && !player_ptr->phase_out) compact_monsters(0);
 
 
 		/* Hack -- Compact the object list occasionally */
-		if (player_ptr->current_floor_ptr->o_cnt + 32 > current_world_ptr->max_o_idx) compact_objects(player_ptr, 64);
+		if (floor_ptr->o_cnt + 32 > current_world_ptr->max_o_idx) compact_objects(player_ptr, 64);
 
 		/* Hack -- Compress the object list occasionally */
-		if (player_ptr->current_floor_ptr->o_cnt + 32 < player_ptr->current_floor_ptr->o_max) compact_objects(player_ptr, 0);
+		if (floor_ptr->o_cnt + 32 < floor_ptr->o_max) compact_objects(player_ptr, 0);
 
 		/* Process the player */
 		process_player(player_ptr);
@@ -5381,15 +5383,16 @@ void play_game(player_type *player_ptr, bool new_game)
 	}
 
 	/* Roll new character */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (new_game)
 	{
 		/* The dungeon is not ready */
 		current_world_ptr->character_dungeon = FALSE;
 
 		/* Start in town */
-		player_ptr->current_floor_ptr->dun_level = 0;
-		player_ptr->current_floor_ptr->inside_quest = 0;
-		player_ptr->current_floor_ptr->inside_arena = FALSE;
+		floor_ptr->dun_level = 0;
+		floor_ptr->inside_quest = 0;
+		floor_ptr->inside_arena = FALSE;
 		player_ptr->phase_out = FALSE;
 
 		write_level = TRUE;
@@ -5412,7 +5415,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		determine_daily_bounty(player_ptr, FALSE);
 
 		/* Initialize object array */
-		wipe_o_list(player_ptr->current_floor_ptr);
+		wipe_o_list(floor_ptr);
 	}
 	else
 	{
@@ -5429,9 +5432,9 @@ void play_game(player_type *player_ptr, bool new_game)
 		if (player_ptr->riding == -1)
 		{
 			player_ptr->riding = 0;
-			for (i = player_ptr->current_floor_ptr->m_max; i > 0; i--)
+			for (i = floor_ptr->m_max; i > 0; i--)
 			{
-				if (player_bold(player_ptr, player_ptr->current_floor_ptr->m_list[i].fy, player_ptr->current_floor_ptr->m_list[i].fx))
+				if (player_bold(player_ptr, floor_ptr->m_list[i].fy, floor_ptr->m_list[i].fx))
 				{
 					player_ptr->riding = i;
 					break;
@@ -5451,8 +5454,8 @@ void play_game(player_type *player_ptr, bool new_game)
 	record_o_name[0] = '\0';
 
 	/* Reset map panel */
-	panel_row_min = player_ptr->current_floor_ptr->height;
-	panel_col_min = player_ptr->current_floor_ptr->width;
+	panel_row_min = floor_ptr->height;
+	panel_col_min = floor_ptr->width;
 
 	/* Sexy gal gets bonus to maximum weapon skill of whip */
 	if (player_ptr->pseikaku == SEIKAKU_SEXY)
@@ -5484,7 +5487,7 @@ void play_game(player_type *player_ptr, bool new_game)
 				init_saved_floors(player_ptr, TRUE);
 
 				/* Avoid crash */
-				player_ptr->current_floor_ptr->inside_quest = 0;
+				floor_ptr->inside_quest = 0;
 
 				/* Avoid crash in update_view() */
 				player_ptr->y = player_ptr->x = 10;
@@ -5497,7 +5500,7 @@ void play_game(player_type *player_ptr, bool new_game)
 	}
 
 	/* Initialize the town-buildings if necessary */
-	if (!player_ptr->current_floor_ptr->dun_level && !player_ptr->current_floor_ptr->inside_quest)
+	if (!floor_ptr->dun_level && !floor_ptr->inside_quest)
 	{
 		process_dungeon_file(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 		init_flags = INIT_ONLY_BUILDINGS;
@@ -5581,7 +5584,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		monster_race *r_ptr = &r_info[pet_r_idx];
 		place_monster_aux(0, player_ptr->y, player_ptr->x - 1, pet_r_idx,
 				  (PM_FORCE_PET | PM_NO_KAGE));
-		m_ptr = &player_ptr->current_floor_ptr->m_list[hack_m_idx_ii];
+		m_ptr = &floor_ptr->m_list[hack_m_idx_ii];
 		m_ptr->mspeed = r_ptr->speed;
 		m_ptr->maxhp = r_ptr->hdice*(r_ptr->hside+1)/2;
 		m_ptr->max_maxhp = m_ptr->maxhp;
@@ -5613,14 +5616,14 @@ void play_game(player_type *player_ptr, bool new_game)
 
 		health_track(player_ptr, 0);
 
-		forget_lite(player_ptr->current_floor_ptr);
-		forget_view(player_ptr->current_floor_ptr);
-		clear_mon_lite(player_ptr->current_floor_ptr);
+		forget_lite(floor_ptr);
+		forget_view(floor_ptr);
+		clear_mon_lite(floor_ptr);
 
 		/* Handle "quit and save" */
 		if (!player_ptr->playing && !player_ptr->is_dead) break;
 
-		wipe_o_list(player_ptr->current_floor_ptr);
+		wipe_o_list(floor_ptr);
 		if (!player_ptr->is_dead) wipe_m_list();
 
 
@@ -5631,9 +5634,9 @@ void play_game(player_type *player_ptr, bool new_game)
 		/* Accidental Death */
 		if (player_ptr->playing && player_ptr->is_dead)
 		{
-			if (player_ptr->current_floor_ptr->inside_arena)
+			if (floor_ptr->inside_arena)
 			{
-				player_ptr->current_floor_ptr->inside_arena = FALSE;
+				floor_ptr->inside_arena = FALSE;
 				if (player_ptr->arena_number > MAX_ARENA_MONS)
 					player_ptr->arena_number++;
 				else

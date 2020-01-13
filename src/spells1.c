@@ -1584,7 +1584,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				/* Normal monsters slow down */
 				else
 				{
-					if (set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
+					if (set_monster_slow(caster_ptr, g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 					{
 						note = _("の動きが遅くなった。", " starts moving slower.");
 					}
@@ -1652,7 +1652,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				/* Normal monsters slow down */
 				else
 				{
-					if (set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
+					if (set_monster_slow(caster_ptr, g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 					{
 						note = _("の動きが遅くなった。", " starts moving slower.");
 					}
@@ -2127,7 +2127,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			if (seen) obvious = TRUE;
 
 			/* Wake up */
-			(void)set_monster_csleep(g_ptr->m_idx, 0);
+			(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
 
 			if (m_ptr->maxhp < m_ptr->max_maxhp)
 			{
@@ -2150,21 +2150,21 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			if (seen) obvious = TRUE;
 
 			/* Wake up */
-			(void)set_monster_csleep(g_ptr->m_idx, 0);
+			(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
 			if (MON_STUNNED(m_ptr))
 			{
 				if (seen_msg) msg_format(_("%^sは朦朧状態から立ち直った。", "%^s is no longer stunned."), m_name);
-				(void)set_monster_stunned(g_ptr->m_idx, 0);
+				(void)set_monster_stunned(caster_ptr, g_ptr->m_idx, 0);
 			}
 			if (MON_CONFUSED(m_ptr))
 			{
 				if (seen_msg) msg_format(_("%^sは混乱から立ち直った。", "%^s is no longer confused."), m_name);
-				(void)set_monster_confused(g_ptr->m_idx, 0);
+				(void)set_monster_confused(caster_ptr, g_ptr->m_idx, 0);
 			}
 			if (MON_MONFEAR(m_ptr))
 			{
 				if (seen_msg) msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
-				(void)set_monster_monfear(g_ptr->m_idx, 0);
+				(void)set_monster_monfear(caster_ptr, g_ptr->m_idx, 0);
 			}
 
 			/* Heal */
@@ -2218,7 +2218,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			if (seen) obvious = TRUE;
 
 			/* Speed up */
-			if (set_monster_fast(g_ptr->m_idx, MON_FAST(m_ptr) + 100))
+			if (set_monster_fast(caster_ptr, g_ptr->m_idx, MON_FAST(m_ptr) + 100))
 			{
 				note = _("の動きが速くなった。", " starts moving faster.");
 			}
@@ -2253,7 +2253,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			/* Normal monsters slow down */
 			else
 			{
-				if (set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
+				if (set_monster_slow(caster_ptr, g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 				{
 					note = _("の動きが遅くなった。", " starts moving slower.");
 				}
@@ -3229,7 +3229,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					do_conf = randint0(8) + 8;
 					do_stun = randint0(8) + 8;
 				}
-				(void)set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 10);
+				(void)set_monster_slow(caster_ptr, g_ptr->m_idx, MON_SLOW(m_ptr) + 10);
 			}
 			break;
 		}
@@ -3419,7 +3419,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				/* Normal monsters slow down */
 				else
 				{
-					if (set_monster_slow(g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
+					if (set_monster_slow(caster_ptr, g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
 					{
 						note = _("の動きが遅くなった。", " starts moving slower.");
 					}
@@ -3544,7 +3544,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (is_pet(m_ptr))
 				{
 					note = _("の動きが速くなった。", " starts moving faster.");
-					(void)set_monster_fast(g_ptr->m_idx, MON_FAST(m_ptr) + 100);
+					(void)set_monster_fast(caster_ptr, g_ptr->m_idx, MON_FAST(m_ptr) + 100);
 					success = TRUE;
 				}
 
@@ -3562,7 +3562,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				{
 					note = _("を支配した。", " is tamed!");
 					set_pet(m_ptr);
-					(void)set_monster_fast(g_ptr->m_idx, MON_FAST(m_ptr) + 100);
+					(void)set_monster_fast(caster_ptr, g_ptr->m_idx, MON_FAST(m_ptr) + 100);
 
 					/* Learn about type */
 					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
@@ -3666,7 +3666,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 
 			/* Apply stun */
-			(void)set_monster_stunned(g_ptr->m_idx, tmp);
+			(void)set_monster_stunned(caster_ptr, g_ptr->m_idx, tmp);
 
 			/* Get angry */
 			get_angry = TRUE;
@@ -3694,7 +3694,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 
 			/* Apply confusion */
-			(void)set_monster_confused(g_ptr->m_idx, tmp);
+			(void)set_monster_confused(caster_ptr, g_ptr->m_idx, tmp);
 
 			/* Get angry */
 			get_angry = TRUE;
@@ -3761,7 +3761,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		if (do_fear)
 		{
 			/* Set fear */
-			(void)set_monster_monfear(g_ptr->m_idx, MON_MONFEAR(m_ptr) + do_fear);
+			(void)set_monster_monfear(caster_ptr, g_ptr->m_idx, MON_MONFEAR(m_ptr) + do_fear);
 
 			/* Get angry */
 			get_angry = TRUE;
@@ -3781,7 +3781,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		if (caster_ptr->riding == g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
 
 		/* Wake the monster up */
-		(void)set_monster_csleep(g_ptr->m_idx, 0);
+		(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
 
 		/* Hurt the monster */
 		m_ptr->hp -= dam;
@@ -3839,7 +3839,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 
 			/* Hack -- handle sleep */
-			if (do_sleep) (void)set_monster_csleep(g_ptr->m_idx, do_sleep);
+			if (do_sleep) (void)set_monster_csleep(caster_ptr, g_ptr->m_idx, do_sleep);
 		}
 	}
 
@@ -3896,7 +3896,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 
 			/* Hack -- handle sleep */
-			if (do_sleep) (void)set_monster_csleep(g_ptr->m_idx, do_sleep);
+			if (do_sleep) (void)set_monster_csleep(caster_ptr, g_ptr->m_idx, do_sleep);
 		}
 	}
 

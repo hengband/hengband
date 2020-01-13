@@ -127,13 +127,13 @@ void delete_monster_idx(MONSTER_IDX i)
 	/* Hack -- count the number of "reproducers" */
 	if (r_ptr->flags2 & (RF2_MULTIPLY)) p_ptr->current_floor_ptr->num_repro--;
 
-	if (MON_CSLEEP(m_ptr)) (void)set_monster_csleep(i, 0);
-	if (MON_FAST(m_ptr)) (void)set_monster_fast(i, 0);
-	if (MON_SLOW(m_ptr)) (void)set_monster_slow(i, 0);
-	if (MON_STUNNED(m_ptr)) (void)set_monster_stunned(i, 0);
-	if (MON_CONFUSED(m_ptr)) (void)set_monster_confused(i, 0);
-	if (MON_MONFEAR(m_ptr)) (void)set_monster_monfear(i, 0);
-	if (MON_INVULNER(m_ptr)) (void)set_monster_invulner(i, 0, FALSE);
+	if (MON_CSLEEP(m_ptr)) (void)set_monster_csleep(p_ptr, i, 0);
+	if (MON_FAST(m_ptr)) (void)set_monster_fast(p_ptr, i, 0);
+	if (MON_SLOW(m_ptr)) (void)set_monster_slow(p_ptr, i, 0);
+	if (MON_STUNNED(m_ptr)) (void)set_monster_stunned(p_ptr, i, 0);
+	if (MON_CONFUSED(m_ptr)) (void)set_monster_confused(p_ptr, i, 0);
+	if (MON_MONFEAR(m_ptr)) (void)set_monster_monfear(p_ptr, i, 0);
+	if (MON_INVULNER(m_ptr)) (void)set_monster_invulner(p_ptr, i, 0, FALSE);
 
 	/* Hack -- remove target monster */
 	if (i == target_who) target_who = 0;
@@ -193,13 +193,14 @@ static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 	if (i1 == i2) return;
 
 	/* Old monster */
-	m_ptr = &p_ptr->current_floor_ptr->m_list[i1];
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	m_ptr = &floor_ptr->m_list[i1];
 
 	y = m_ptr->fy;
 	x = m_ptr->fx;
 
 	/* Cave grid */
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	g_ptr = &floor_ptr->grid_array[y][x];
 
 	g_ptr->m_idx = i2;
 
@@ -207,7 +208,7 @@ static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 	for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Reset monster pointer */
@@ -230,9 +231,9 @@ static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 	/* Hack -- Update parent index */
 	if (is_pet(m_ptr))
 	{
-		for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+		for (i = 1; i < floor_ptr->m_max; i++)
 		{
-			monster_type *m2_ptr = &p_ptr->current_floor_ptr->m_list[i];
+			monster_type *m2_ptr = &floor_ptr->m_list[i];
 
 			if (m2_ptr->parent_m_idx == i1)
 				m2_ptr->parent_m_idx = i2;
@@ -240,15 +241,15 @@ static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 	}
 
 	/* Structure copy */
-	(void)COPY(&p_ptr->current_floor_ptr->m_list[i2], &p_ptr->current_floor_ptr->m_list[i1], monster_type);
+	(void)COPY(&floor_ptr->m_list[i2], &floor_ptr->m_list[i1], monster_type);
 
 	/* Wipe the hole */
-	(void)WIPE(&p_ptr->current_floor_ptr->m_list[i1], monster_type);
+	(void)WIPE(&floor_ptr->m_list[i1], monster_type);
 
 	for (i = 0; i < MAX_MTIMED; i++)
 	{
-		int mproc_idx = get_mproc_idx(i1, i);
-		if (mproc_idx >= 0) p_ptr->current_floor_ptr->mproc_list[i][mproc_idx] = i2;
+		int mproc_idx = get_mproc_idx(floor_ptr, i1, i);
+		if (mproc_idx >= 0) floor_ptr->mproc_list[i][mproc_idx] = i2;
 	}
 }
 
@@ -2701,7 +2702,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	if ((mode & PM_ALLOW_SLEEP) && r_ptr->sleep && !ironman_nightmare)
 	{
 		int val = r_ptr->sleep;
-		(void)set_monster_csleep(g_ptr->m_idx, (val * 2) + randint1(val * 10));
+		(void)set_monster_csleep(p_ptr, g_ptr->m_idx, (val * 2) + randint1(val * 10));
 	}
 
 	/* Assign maximal hitpoints */
@@ -2737,8 +2738,8 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	/* Extract the monster base speed */
 	m_ptr->mspeed = get_mspeed(r_ptr);
 
-	if (mode & PM_HASTE) (void)set_monster_fast(g_ptr->m_idx, 100);
-
+	if (mode & PM_HASTE) (void)set_monster_fast(p_ptr, g_ptr->m_idx, 100);
+	
 	/* Give a random starting energy */
 	if (!ironman_nightmare)
 	{

@@ -1041,7 +1041,7 @@ bool vanish_dungeon(player_type *caster_ptr)
 			/* Awake monster */
 			if (g_ptr->m_idx && MON_CSLEEP(m_ptr))
 			{
-				(void)set_monster_csleep(g_ptr->m_idx, 0);
+				(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
 
 				/* Notice the "waking up" */
 				if (m_ptr->ml)
@@ -2778,7 +2778,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 			floor_ptr->m_list[hack_m_idx_ii] = back_m;
 
 			/* Re-initialize monster process */
-			mproc_init();
+			mproc_init(floor_ptr);
 		}
 		else preserve_hold_objects = FALSE;
 	}

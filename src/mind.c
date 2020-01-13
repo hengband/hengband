@@ -1247,7 +1247,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 		if (!m_idx) break;
 		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
 		if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
-		dispel_monster_status(m_idx);
+		dispel_monster_status(caster_ptr, m_idx);
 		break;
 	}
 	case 10:
@@ -1681,7 +1681,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		m_ptr->fx = tx;
 
 		/* Wake the monster up */
-		(void)set_monster_csleep(m_idx, 0);
+		(void)set_monster_csleep(caster_ptr, m_idx, 0);
 
 		update_monster(caster_ptr, m_idx, TRUE);
 		lite_spot(target_row, target_col);

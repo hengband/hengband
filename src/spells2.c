@@ -1029,7 +1029,7 @@ void aggravate_monsters(player_type *caster_ptr, MONSTER_IDX who)
 			/* Wake up */
 			if (MON_CSLEEP(m_ptr))
 			{
-				(void)set_monster_csleep(i, 0);
+				(void)set_monster_csleep(caster_ptr, i, 0);
 				sleep = TRUE;
 			}
 			if (!is_pet(m_ptr)) m_ptr->mflag2 |= MFLAG2_NOPET;
@@ -1040,7 +1040,7 @@ void aggravate_monsters(player_type *caster_ptr, MONSTER_IDX who)
 		{
 			if (!is_pet(m_ptr))
 			{
-				(void)set_monster_fast(i, MON_FAST(m_ptr) + 100);
+				(void)set_monster_fast(caster_ptr, i, MON_FAST(m_ptr) + 100);
 				speed = TRUE;
 			}
 		}
@@ -1101,7 +1101,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 
 		if (MON_CSLEEP(m_ptr))
 		{
-			(void)set_monster_csleep(m_idx, 0);
+			(void)set_monster_csleep(caster_ptr, m_idx, 0);
 			if (m_ptr->ml)
 			{
 				msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
@@ -1502,7 +1502,7 @@ static void cave_temp_room_lite(player_type *caster_ptr)
 			if (MON_CSLEEP(m_ptr) && (randint0(100) < chance))
 			{
 				/* Wake up! */
-				(void)set_monster_csleep(g_ptr->m_idx, 0);
+				(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
 
 				/* Notice the "waking up" */
 				if (m_ptr->ml)
@@ -2192,7 +2192,7 @@ bool teleport_swap(player_type *caster_ptr, DIRECTION dir)
 	m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
 
-	(void)set_monster_csleep(g_ptr->m_idx, 0);
+	(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
 
 	if (r_ptr->flagsr & RFR_RES_TELE)
 	{
