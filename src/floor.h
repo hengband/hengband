@@ -3,7 +3,6 @@
 #include "feature.h"
 #include "grid.h"
 #include "object.h"
-#include "monster.h"
 
 /*!
  * @brief ダンジョンの最深層 / Maximum dungeon level.

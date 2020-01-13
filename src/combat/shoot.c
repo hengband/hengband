@@ -672,8 +672,8 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
 						if (m_ptr->ml)
 						{
-							if (!shooter_ptr->image) monster_race_track(m_ptr->ap_r_idx);
-							health_track(c_mon_ptr->m_idx);
+							if (!shooter_ptr->image) monster_race_track(shooter_ptr, m_ptr->ap_r_idx);
+							health_track(shooter_ptr, c_mon_ptr->m_idx);
 						}
 					}
 
@@ -728,7 +728,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 					}
 
 					/* Hit the monster, check for death */
-					if (mon_take_hit(c_mon_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_idx(m_ptr))))
+					if (mon_take_hit(shooter_ptr, c_mon_ptr->m_idx, tdam, &fear, extract_note_dies(real_r_idx(m_ptr))))
 					{
 						/* Dead monster */
 					}

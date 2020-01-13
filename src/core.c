@@ -137,7 +137,7 @@ int init_flags;
 static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, bool heavy)
 {
 	byte feel;
-	object_type *o_ptr = &p_ptr->inventory_list[slot];
+	object_type *o_ptr = &creature_ptr->inventory_list[slot];
 	GAME_TEXT o_name[MAX_NLEN];
 
 	/* We know about it already, do not tell us again */
@@ -153,7 +153,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
 	if (!feel) return;
 
 	/* Bad luck */
-	if ((p_ptr->muta3 & MUT3_BAD_LUCK) && !randint0(13))
+	if ((creature_ptr->muta3 & MUT3_BAD_LUCK) && !randint0(13))
 	{
 		switch (feel)
 		{
@@ -202,7 +202,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
 	}
 
 	/* Stop everything */
-	if (disturb_minor) disturb(p_ptr, FALSE, FALSE);
+	if (disturb_minor) disturb(creature_ptr, FALSE, FALSE);
 
 	/* Get an object description */
 	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -242,11 +242,9 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
 
 	/* Auto-inscription/destroy */
 	autopick_alter_item(creature_ptr, slot, destroy_feeling);
-	p_ptr->update |= (PU_COMBINE | PU_REORDER);
-
-	p_ptr->window |= (PW_INVEN | PW_EQUIP);
+	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
+	creature_ptr->window |= (PW_INVEN | PW_EQUIP);
 }
-
 
 
 /*!
@@ -1451,7 +1449,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		{
 			if(PRACE_IS_(creature_ptr, RACE_ENT)) damage += damage / 3;
 			if(creature_ptr->resist_fire) damage = damage / 3;
-			if(IS_OPPOSE_FIRE()) damage = damage / 3;
+			if(is_oppose_fire(creature_ptr)) damage = damage / 3;
 			if(creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
@@ -1489,7 +1487,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		if (damage)
 		{
 			if (creature_ptr->resist_cold) damage = damage / 3;
-			if (IS_OPPOSE_COLD()) damage = damage / 3;
+			if (is_oppose_cold(creature_ptr)) damage = damage / 3;
 			if (creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
@@ -1527,7 +1525,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		if (damage)
 		{
 			if (creature_ptr->resist_elec) damage = damage / 3;
-			if (IS_OPPOSE_ELEC()) damage = damage / 3;
+			if (is_oppose_elec(creature_ptr)) damage = damage / 3;
 			if (creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
@@ -1565,7 +1563,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		if (damage)
 		{
 			if (creature_ptr->resist_acid) damage = damage / 3;
-			if (IS_OPPOSE_ACID()) damage = damage / 3;
+			if (is_oppose_acid(creature_ptr)) damage = damage / 3;
 			if (creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
@@ -1603,7 +1601,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		if (damage)
 		{
 			if (creature_ptr->resist_pois) damage = damage / 3;
-			if (IS_OPPOSE_POIS()) damage = damage / 3;
+			if (is_oppose_pois(creature_ptr)) damage = damage / 3;
 			if (creature_ptr->levitation) damage = damage / 5;
 
 			damage = damage / 100 + (randint0(100) < (damage % 100));
@@ -1646,7 +1644,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
 			if (PRACE_IS_(creature_ptr, RACE_ENT)) damage += damage / 3;
 			if (creature_ptr->resist_fire) damage = damage / 3;
-			if (IS_OPPOSE_FIRE()) damage = damage / 3;
+			if (is_oppose_fire(creature_ptr)) damage = damage / 3;
 			msg_print(_("熱い！", "It's hot!"));
 			take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("炎のオーラ", "Fire aura"), -1);
 		}
@@ -1655,7 +1653,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
 			if (PRACE_IS_(creature_ptr, RACE_ANDROID)) damage += damage / 3;
 			if (creature_ptr->resist_elec) damage = damage / 3;
-			if (IS_OPPOSE_ELEC()) damage = damage / 3;
+			if (is_oppose_elec(creature_ptr)) damage = damage / 3;
 			msg_print(_("痛い！", "It hurts!"));
 			take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("電気のオーラ", "Elec aura"), -1);
 		}
@@ -1663,7 +1661,7 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 		{
 			damage = r_info[creature_ptr->current_floor_ptr->m_list[creature_ptr->riding].r_idx].level / 2;
 			if (creature_ptr->resist_cold) damage = damage / 3;
-			if (IS_OPPOSE_COLD()) damage = damage / 3;
+			if (is_oppose_cold(creature_ptr)) damage = damage / 3;
 			msg_print(_("冷たい！", "It's cold!"));
 			take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, _("冷気のオーラ", "Cold aura"), -1);
 		}
@@ -3109,7 +3107,7 @@ static void process_world(player_type *player_ptr)
 	extract_day_hour_min(&day, &hour, &min);
 
 	/* Update dungeon feeling, and announce it if changed */
-	update_dungeon_feeling(player_ptr, player_ptr->current_floor_ptr);
+	update_dungeon_feeling(player_ptr);
 
 	/* 帰還無しモード時のレベルテレポバグ対策 / Fix for level teleport bugs on ironman_downward.*/
 	if (ironman_downward && (player_ptr->dungeon_idx != DUNGEON_ANGBAND && player_ptr->dungeon_idx != 0))
@@ -3212,8 +3210,8 @@ static void process_world(player_type *player_ptr)
 			/* Check for dawn */
 			dawn = (!(current_world_ptr->game_turn % (TURNS_PER_TICK * TOWN_DAWN)));
 
-			if (dawn) day_break(player_ptr->current_floor_ptr);
-			else night_falls(player_ptr->current_floor_ptr);
+			if (dawn) day_break(player_ptr);
+			else night_falls(player_ptr);
 
 		}
 	}
@@ -4033,7 +4031,7 @@ static void process_command(player_type *creature_ptr)
 		/* Full dungeon map */
 		case 'M':
 		{
-			do_cmd_view_map();
+			do_cmd_view_map(creature_ptr);
 			break;
 		}
 
@@ -4065,7 +4063,7 @@ static void process_command(player_type *creature_ptr)
 		/* Help */
 		case '?':
 		{
-			do_cmd_help();
+			do_cmd_help(creature_ptr);
 			break;
 		}
 
@@ -4096,7 +4094,7 @@ static void process_command(player_type *creature_ptr)
 		/* Single line from a pref file */
 		case '"':
 		{
-			do_cmd_pref();
+			do_cmd_pref(creature_ptr);
 			break;
 		}
 
@@ -4217,7 +4215,7 @@ static void process_command(player_type *creature_ptr)
 		case KTRL('X'):
 		case SPECIAL_KEY_QUIT:
 		{
-			do_cmd_save_and_exit();
+			do_cmd_save_and_exit(creature_ptr);
 			break;
 		}
 
@@ -4437,7 +4435,8 @@ static void process_player(player_type *creature_ptr)
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(creature_ptr, m_idx, FALSE);
 		}
-		prt_time();
+
+		print_time();
 	}
 
 	/* Give the player some energy */
@@ -4448,7 +4447,7 @@ static void process_player(player_type *creature_ptr)
 
 	/* No turn yet */
 	if (creature_ptr->energy_need > 0) return;
-	if (!command_rep) prt_time();
+	if (!command_rep) print_time();
 
 	/*** Check for interupts ***/
 
@@ -4684,7 +4683,7 @@ static void process_player(player_type *creature_ptr)
 		else if (creature_ptr->running)
 		{
 			/* Take a step */
-			run_step(0);
+			run_step(creature_ptr, 0);
 		}
 
 #ifdef TRAVEL
@@ -4928,8 +4927,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	player_ptr->riding_t_m_idx = 0;
 	player_ptr->ambush_flag = FALSE;
 
-	/* Cancel the health bar */
-	health_track(0);
+	health_track(player_ptr, 0);
 
 	/* Check visual effects */
 	repair_monsters = TRUE;
@@ -5173,31 +5171,31 @@ static void load_all_pref_files(player_type *player_ptr)
 	sprintf(buf, "user.prf");
 
 	/* Process that file */
-	process_pref_file(buf);
+	process_pref_file(player_ptr, buf);
 
 	/* Access the "user" system pref file */
 	sprintf(buf, "user-%s.prf", ANGBAND_SYS);
 
 	/* Process that file */
-	process_pref_file(buf);
+	process_pref_file(player_ptr, buf);
 
 	/* Access the "race" pref file */
 	sprintf(buf, "%s.prf", rp_ptr->title);
 
 	/* Process that file */
-	process_pref_file(buf);
+	process_pref_file(player_ptr, buf);
 
 	/* Access the "class" pref file */
 	sprintf(buf, "%s.prf", cp_ptr->title);
 
 	/* Process that file */
-	process_pref_file(buf);
+	process_pref_file(player_ptr, buf);
 
 	/* Access the "character" pref file */
 	sprintf(buf, "%s.prf", p_ptr->base_name);
 
 	/* Process that file */
-	process_pref_file(buf);
+	process_pref_file(player_ptr, buf);
 
 	/* Access the "realm 1" pref file */
 	if (p_ptr->realm1 != REALM_NONE)
@@ -5205,7 +5203,7 @@ static void load_all_pref_files(player_type *player_ptr)
 		sprintf(buf, "%s.prf", realm_names[p_ptr->realm1]);
 
 		/* Process that file */
-		process_pref_file(buf);
+		process_pref_file(player_ptr, buf);
 	}
 
 	/* Access the "realm 2" pref file */
@@ -5214,7 +5212,7 @@ static void load_all_pref_files(player_type *player_ptr)
 		sprintf(buf, "%s.prf", realm_names[p_ptr->realm2]);
 
 		/* Process that file */
-		process_pref_file(buf);
+		process_pref_file(player_ptr, buf);
 	}
 
 
@@ -5284,7 +5282,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
 
 	/* Attempt to load */
-	if (!load_player())
+	if (!load_player(player_ptr))
 	{
 		quit(_("セーブファイルが壊れています", "broken savefile"));
 	}
@@ -5408,7 +5406,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		/* Roll up a new character */
 		player_birth(player_ptr);
 
-		counts_write(2,0);
+		counts_write(player_ptr, 2,0);
 		player_ptr->count = 0;
 
 		load = FALSE;
@@ -5538,18 +5536,15 @@ void play_game(player_type *player_ptr, bool new_game)
 	/* Character is now "complete" */
 	current_world_ptr->character_generated = TRUE;
 
-
 	/* Hack -- Character is no longer "icky" */
 	current_world_ptr->character_icky = FALSE;
-
 
 	if (new_game)
 	{
 		char buf[80];
-		sprintf(buf, _("%sに降り立った。", "You are standing in the %s."), map_name());
+		sprintf(buf, _("%sに降り立った。", "You are standing in the %s."), map_name(player_ptr));
 		exe_write_diary(player_ptr, NIKKI_BUNSHOU, 0, buf);
 	}
-
 
 	/* Start game */
 	player_ptr->playing = TRUE;
@@ -5619,8 +5614,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		/* Cancel the target */
 		target_who = 0;
 
-		/* Cancel the health bar */
-		health_track(0);
+		health_track(player_ptr, 0);
 
 		forget_lite(player_ptr->current_floor_ptr);
 		forget_view(player_ptr->current_floor_ptr);

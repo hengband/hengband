@@ -448,7 +448,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		{
 			fire_ball(creature_ptr, GF_FIRE, 0, 666, 4);
 			/* Note: "Double" damage since it is centered on the player ... */
-			if (!(IS_OPPOSE_FIRE() || creature_ptr->resist_fire || creature_ptr->immune_fire))
+			if (!(is_oppose_fire(creature_ptr) || creature_ptr->resist_fire || creature_ptr->immune_fire))
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, 50+randint1(50), _("炎の巻物", "a Scroll of Fire"), -1);
 
 			ident = TRUE;
@@ -459,7 +459,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		case SV_SCROLL_ICE:
 		{
 			fire_ball(creature_ptr, GF_ICE, 0, 777, 4);
-			if (!(IS_OPPOSE_COLD() || creature_ptr->resist_cold || creature_ptr->immune_cold))
+			if (!(is_oppose_cold(creature_ptr) || creature_ptr->resist_cold || creature_ptr->immune_cold))
 				take_hit(creature_ptr, DAMAGE_NOESCAPE, 100+randint1(100), _("氷の巻物", "a Scroll of Ice"), -1);
 
 			ident = TRUE;
@@ -548,7 +548,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, q);
 
 		/* Peruse the help file */
-		(void)show_file(TRUE, buf, o_name, 0, 0);
+		(void)show_file(creature_ptr, TRUE, buf, o_name, 0, 0);
 		screen_load();
 
 		used_up=FALSE;

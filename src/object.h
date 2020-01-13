@@ -660,7 +660,7 @@ extern void py_pickup_floor(player_type *creature_ptr, bool pickup);
 #define SV_ZWEIHANDER                   29  /* 4d6 */
 #define SV_BLADE_OF_CHAOS               30  /* 6d5 */
 #define SV_DIAMOND_EDGE                 31  /* 7d5 */
-#define SV_DOKUBARI                     32  /* 1d1 */
+#define SV_POISON_NEEDLE                32  /* 1d1 */
 #define SV_HAYABUSA                     33  /* 1d6 */
 
 /* The "sval" codes for TV_SHIELD */

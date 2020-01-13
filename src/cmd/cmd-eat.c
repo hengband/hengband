@@ -58,7 +58,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 		{
 		case SV_FOOD_POISON:
 		{
-			if (!(creature_ptr->resist_pois || IS_OPPOSE_POIS()))
+			if (!(creature_ptr->resist_pois || is_oppose_pois(creature_ptr)))
 			{
 				if (set_poisoned(creature_ptr, creature_ptr->poisoned + randint0(10) + 10))
 				{

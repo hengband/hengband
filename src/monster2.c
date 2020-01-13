@@ -139,7 +139,7 @@ void delete_monster_idx(MONSTER_IDX i)
 	if (i == target_who) target_who = 0;
 
 	/* Hack -- remove tracked monster */
-	if (i == p_ptr->health_who) health_track(0);
+	if (i == p_ptr->health_who) health_track(p_ptr, 0);
 
 	if (p_ptr->pet_t_m_idx == i ) p_ptr->pet_t_m_idx = 0;
 	if (p_ptr->riding_t_m_idx == i) p_ptr->riding_t_m_idx = 0;
@@ -225,7 +225,7 @@ static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 	if (p_ptr->riding == i1) p_ptr->riding = i2;
 
 	/* Hack -- Update the health bar */
-	if (p_ptr->health_who == i1) health_track(i2);
+	if (p_ptr->health_who == i1) health_track(p_ptr, i2);
 
 	/* Hack -- Update parent index */
 	if (is_pet(m_ptr))
@@ -418,8 +418,7 @@ void wipe_m_list(void)
 	p_ptr->pet_t_m_idx = 0;
 	p_ptr->riding_t_m_idx = 0;
 
-	/* Hack -- no more tracking */
-	health_track(0);
+	health_track(p_ptr, 0);
 }
 
 
@@ -3919,31 +3918,31 @@ void update_smart_learn(MONSTER_IDX m_idx, int what)
 	{
 	case DRS_ACID:
 		if (p_ptr->resist_acid) m_ptr->smart |= (SM_RES_ACID);
-		if (IS_OPPOSE_ACID()) m_ptr->smart |= (SM_OPP_ACID);
+		if (is_oppose_acid(p_ptr)) m_ptr->smart |= (SM_OPP_ACID);
 		if (p_ptr->immune_acid) m_ptr->smart |= (SM_IMM_ACID);
 		break;
 
 	case DRS_ELEC:
 		if (p_ptr->resist_elec) m_ptr->smart |= (SM_RES_ELEC);
-		if (IS_OPPOSE_ELEC()) m_ptr->smart |= (SM_OPP_ELEC);
+		if (is_oppose_elec(p_ptr)) m_ptr->smart |= (SM_OPP_ELEC);
 		if (p_ptr->immune_elec) m_ptr->smart |= (SM_IMM_ELEC);
 		break;
 
 	case DRS_FIRE:
 		if (p_ptr->resist_fire) m_ptr->smart |= (SM_RES_FIRE);
-		if (IS_OPPOSE_FIRE()) m_ptr->smart |= (SM_OPP_FIRE);
+		if (is_oppose_fire(p_ptr)) m_ptr->smart |= (SM_OPP_FIRE);
 		if (p_ptr->immune_fire) m_ptr->smart |= (SM_IMM_FIRE);
 		break;
 
 	case DRS_COLD:
 		if (p_ptr->resist_cold) m_ptr->smart |= (SM_RES_COLD);
-		if (IS_OPPOSE_COLD()) m_ptr->smart |= (SM_OPP_COLD);
+		if (is_oppose_cold(p_ptr)) m_ptr->smart |= (SM_OPP_COLD);
 		if (p_ptr->immune_cold) m_ptr->smart |= (SM_IMM_COLD);
 		break;
 
 	case DRS_POIS:
 		if (p_ptr->resist_pois) m_ptr->smart |= (SM_RES_POIS);
-		if (IS_OPPOSE_POIS()) m_ptr->smart |= (SM_OPP_POIS);
+		if (is_oppose_pois(p_ptr)) m_ptr->smart |= (SM_OPP_POIS);
 		break;
 
 

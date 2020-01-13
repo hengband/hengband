@@ -123,23 +123,21 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 	/* Cheat if requested */
 	if (smart_cheat)
 	{
-		/* Know basic info */
+		/* Know element info */
 		if (target_ptr->resist_acid) smart |= (SM_RES_ACID);
-		if (IS_OPPOSE_ACID()) smart |= (SM_OPP_ACID);
+		if (is_oppose_acid(target_ptr)) smart |= (SM_OPP_ACID);
 		if (target_ptr->immune_acid) smart |= (SM_IMM_ACID);
 		if (target_ptr->resist_elec) smart |= (SM_RES_ELEC);
-		if (IS_OPPOSE_ELEC()) smart |= (SM_OPP_ELEC);
+		if (is_oppose_elec(target_ptr)) smart |= (SM_OPP_ELEC);
 		if (target_ptr->immune_elec) smart |= (SM_IMM_ELEC);
 		if (target_ptr->resist_fire) smart |= (SM_RES_FIRE);
-		if (IS_OPPOSE_FIRE()) smart |= (SM_OPP_FIRE);
+		if (is_oppose_fire(target_ptr)) smart |= (SM_OPP_FIRE);
 		if (target_ptr->immune_fire) smart |= (SM_IMM_FIRE);
 		if (target_ptr->resist_cold) smart |= (SM_RES_COLD);
-		if (IS_OPPOSE_COLD()) smart |= (SM_OPP_COLD);
+		if (is_oppose_cold(target_ptr)) smart |= (SM_OPP_COLD);
 		if (target_ptr->immune_cold) smart |= (SM_IMM_COLD);
-
-		/* Know poison info */
 		if (target_ptr->resist_pois) smart |= (SM_RES_POIS);
-		if (IS_OPPOSE_POIS()) smart |= (SM_OPP_POIS);
+		if (is_oppose_pois(target_ptr)) smart |= (SM_OPP_POIS);
 
 		/* Know special resistances */
 		if (target_ptr->resist_neth) smart |= (SM_RES_NETH);

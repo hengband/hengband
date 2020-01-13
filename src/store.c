@@ -2626,7 +2626,7 @@ static int store_check_num(object_type *o_ptr)
  * @param o_ptr 判定したいオブジェクト構造体の参照ポインタ
  * @return アイテムが祝福されたアイテムならばTRUEを返す
  */
-static bool is_blessed(object_type *o_ptr)
+static bool is_blessed_item(object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
@@ -2766,7 +2766,7 @@ static bool store_will_buy(object_type *o_ptr)
 				case TV_POLEARM:
 				case TV_SWORD:
 				{
-					if (is_blessed(o_ptr)) break;
+					if (is_blessed_item(o_ptr)) break;
 				}
 				default:
 				return FALSE;
@@ -5520,7 +5520,7 @@ static void store_process_command(player_type *client_ptr)
 		/* Help */
 		case '?':
 		{
-			do_cmd_help();
+			do_cmd_help(client_ptr);
 			break;
 		}
 
@@ -5554,7 +5554,7 @@ static void store_process_command(player_type *client_ptr)
 		case '"':
 		{
 			client_ptr->town_num = old_town_num;
-			do_cmd_pref();
+			do_cmd_pref(client_ptr);
 			client_ptr->town_num = inner_town_num;
 			break;
 		}

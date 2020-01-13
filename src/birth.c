@@ -550,13 +550,14 @@ static void birth_quit(void)
 
 /*!
  * @brief 指定されたヘルプファイルを表示する / Show specific help file
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param helpfile ファイル名
  * @return なし
  */
-static void show_help(concptr helpfile)
+static void show_help(player_type *creature_ptr, concptr helpfile)
 {
 	screen_save();
-	(void)show_file(TRUE, helpfile, NULL, 0, 0);
+	(void)show_file(creature_ptr, TRUE, helpfile, NULL, 0, 0);
 	screen_load();
 }
 
@@ -783,7 +784,7 @@ static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 		else k = -1;
 		if (c == '?')
 		{
-			show_help(_("jmagic.txt#MagicRealms", "magic.txt#MagicRealms"));
+			show_help(creature_ptr, _("jmagic.txt#MagicRealms", "magic.txt#MagicRealms"));
 		}
 		else if (c == '=')
 		{
@@ -2616,9 +2617,9 @@ static bool get_player_race(player_type *creature_ptr)
 		if (c == '?')
 		{
 #ifdef JP
-			show_help("jraceclas.txt#TheRaces");
+			show_help(creature_ptr, "jraceclas.txt#TheRaces");
 #else
-			show_help("raceclas.txt#TheRaces");
+			show_help(creature_ptr, "raceclas.txt#TheRaces");
 #endif
 		}
 		else if (c == '=')
@@ -2788,9 +2789,9 @@ static bool get_player_class(player_type *creature_ptr)
 		if (c == '?')
 		{
 #ifdef JP
-			show_help("jraceclas.txt#TheClasses");
+			show_help(creature_ptr, "jraceclas.txt#TheClasses");
 #else
-			show_help("raceclas.txt#TheClasses");
+			show_help(creature_ptr, "raceclas.txt#TheClasses");
 #endif
 		}
 		else if (c == '=')
@@ -2989,9 +2990,9 @@ static bool get_player_seikaku(player_type *creature_ptr)
 		if (c == '?')
 		{
 #ifdef JP
-			show_help("jraceclas.txt#ThePersonalities");
+			show_help(creature_ptr, "jraceclas.txt#ThePersonalities");
 #else
-			show_help("raceclas.txt#ThePersonalities");
+			show_help(creature_ptr, "raceclas.txt#ThePersonalities");
 #endif
 		}
 		else if (c == '=')
@@ -3024,9 +3025,10 @@ static bool get_player_seikaku(player_type *creature_ptr)
 #ifdef ALLOW_AUTOROLLER
 /*!
  * @brief オートローラで得たい能力値の基準を決める。
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static bool get_stat_limits(void)
+static bool get_stat_limits(player_type *creature_ptr)
 {
 	int i, j, m, cs, os;
 	int cval[6];
@@ -3215,9 +3217,9 @@ static bool get_stat_limits(void)
 			break;
 		case '?':
 #ifdef JP
-			show_help("jbirth.txt#AutoRoller");
+			show_help(creature_ptr, "jbirth.txt#AutoRoller");
 #else
-			show_help("birth.txt#AutoRoller");
+			show_help(creature_ptr, "birth.txt#AutoRoller");
 #endif
 			break;
 		case '=':
@@ -3501,9 +3503,9 @@ static bool get_chara_limits(player_type *creature_ptr)
 			break;
 		case '?':
 #ifdef JP
-			show_help("jbirth.txt#AutoRoller");
+			show_help(creature_ptr, "jbirth.txt#AutoRoller");
 #else
-			show_help("birth.txt#AutoRoller");
+			show_help(creature_ptr, "birth.txt#AutoRoller");
 #endif
 			break;
 		case '=':
@@ -3571,7 +3573,7 @@ static bool do_cmd_histpref(player_type *creature_ptr)
 #else
 	sprintf(buf, "histpref-%s.prf", creature_ptr->base_name);
 #endif
-	err = process_histpref_file(buf);
+	err = process_histpref_file(creature_ptr, buf);
 
 	/* Process 'hist????.prf' if 'hist????-<name>.prf' doesn't exist */
 	if (0 > err)
@@ -3581,7 +3583,7 @@ static bool do_cmd_histpref(player_type *creature_ptr)
 #else
 		strcpy(buf, "histpref.prf");
 #endif
-		err = process_histpref_file(buf);
+		err = process_histpref_file(creature_ptr, buf);
 	}
 
 	if (err)
@@ -3994,7 +3996,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 			continue;
 		}
 		else k = -1;
-		if (c == '?') do_cmd_help();
+		if (c == '?') do_cmd_help(creature_ptr);
 		else if (c == '=')
 		{
 			screen_save();
@@ -4149,7 +4151,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 	if (autoroller)
 	{
-		if (!get_stat_limits()) return FALSE;
+		if (!get_stat_limits(creature_ptr)) return FALSE;
 	}
 
 	if (autochara)
@@ -4411,9 +4413,9 @@ static bool player_birth_aux(player_type *creature_ptr)
 			if (c == '?')
 			{
 #ifdef JP
-				show_help("jbirth.txt#AutoRoller");
+				show_help(creature_ptr, "jbirth.txt#AutoRoller");
 #else
-				show_help("birth.txt#AutoRoller");
+				show_help(creature_ptr, "birth.txt#AutoRoller");
 #endif
 				continue;
 			}
@@ -4514,9 +4516,9 @@ static bool ask_quick_start(player_type *creature_ptr)
 		else if (c == '?')
 		{
 #ifdef JP
-			show_help("jbirth.txt#QuickStart");
+			show_help(creature_ptr, "jbirth.txt#QuickStart");
 #else
-			show_help("birth.txt#QuickStart");
+			show_help(creature_ptr, "birth.txt#QuickStart");
 #endif
 		}
 		else if ((c == 'y') || (c == 'Y'))

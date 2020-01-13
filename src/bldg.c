@@ -453,7 +453,7 @@ static void arena_comm(player_type *player_ptr, int cmd)
 		screen_save();
 
 		/* Peruse the arena help file */
-		(void)show_file(TRUE, _("arena_j.txt", "arena.txt"), NULL, 0, 0);
+		(void)show_file(player_ptr, TRUE, _("arena_j.txt", "arena.txt"), NULL, 0, 0);
 		screen_load();
 		break;
 	}
@@ -1246,7 +1246,7 @@ static bool gamble_comm(player_type *player_ptr, int cmd)
 	if (cmd == BACT_GAMBLE_RULES)
 	{
 		/* Peruse the gambling help file */
-		(void)show_file(TRUE, _("jgambling.txt", "gambling.txt"), NULL, 0, 0);
+		(void)show_file(player_ptr, TRUE, _("jgambling.txt", "gambling.txt"), NULL, 0, 0);
 		screen_load();
 		return TRUE;
 	}
@@ -2332,12 +2332,13 @@ static void castle_quest(player_type *player_ptr)
 
 /*!
  * @brief 町に関するヘルプを表示する / Display town history
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void town_history(void)
+static void town_history(player_type *player_ptr)
 {
 	screen_save();
-	(void)show_file(TRUE, _("jbldg.txt", "bldg.txt"), NULL, 0, 0);
+	(void)show_file(player_ptr, TRUE, _("jbldg.txt", "bldg.txt"), NULL, 0, 0);
 	screen_load();
 }
 
@@ -2459,7 +2460,7 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
 	/* Get the flags of the weapon */
 	object_flags(o_ptr, flgs);
 
-	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI)) dokubari = TRUE;
+	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) dokubari = TRUE;
 
 
 	/* Show Critical Damage*/
@@ -3065,7 +3066,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 			if (k_aux_ptr->tval != TV_SWORD) continue;
 			if ((k_aux_ptr->sval == SV_BROKEN_DAGGER) ||
 				(k_aux_ptr->sval == SV_BROKEN_SWORD) ||
-				(k_aux_ptr->sval == SV_DOKUBARI)) continue;
+				(k_aux_ptr->sval == SV_POISON_NEEDLE)) continue;
 			if (k_aux_ptr->weight > 99) continue;
 
 			if (one_in_(n))
@@ -3092,7 +3093,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 				if ((ck_ptr->sval == SV_BROKEN_DAGGER) ||
 					(ck_ptr->sval == SV_BROKEN_SWORD) ||
 					(ck_ptr->sval == SV_DIAMOND_EDGE) ||
-					(ck_ptr->sval == SV_DOKUBARI)) continue;
+					(ck_ptr->sval == SV_POISON_NEEDLE)) continue;
 			}
 			if (tval == TV_POLEARM)
 			{
@@ -3823,7 +3824,7 @@ static bool research_mon(player_type *player_ptr)
 				lore_do_probe(r_idx);
 
 				/* Save this monster ID */
-				monster_race_track(r_idx);
+				monster_race_track(player_ptr, r_idx);
 				handle_stuff(player_ptr);
 
 				/* know every thing mode */
@@ -3917,7 +3918,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		paid = identify_fully(player_ptr, FALSE);
 		break;
 	case BACT_TOWN_HISTORY:
-		town_history();
+		town_history(player_ptr);
 		break;
 	case BACT_RACE_LEGENDS:
 		race_legends(player_ptr);

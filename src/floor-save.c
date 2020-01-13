@@ -411,7 +411,7 @@ static void preserve_pet(player_type *master_ptr)
 		if (m_ptr->parent_m_idx)
 		{
 			master_ptr->riding = 0;
-			master_ptr->pet_extra_flags &= ~(PF_RYOUTE);
+			master_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
 			master_ptr->riding_ryoute = master_ptr->old_riding_ryoute = FALSE;
 		}
 		else

@@ -2805,7 +2805,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 	}
 
 	if (targeted) target_who = hack_m_idx_ii;
-	if (health_tracked) health_track(hack_m_idx_ii);
+	if (health_tracked) health_track(caster_ptr, hack_m_idx_ii);
 	return polymorphed;
 }
 

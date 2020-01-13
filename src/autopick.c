@@ -1215,7 +1215,7 @@ void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 	my_strcpy(buf, pickpref_filename(player_ptr, PT_WITH_PNAME), sizeof(buf));
 
 	/* Load the file */
-	errr err = process_autopick_file(buf);
+	errr err = process_autopick_file(player_ptr, buf);
 
 	if (err == 0 && disp_mes)
 	{
@@ -1229,7 +1229,7 @@ void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 		my_strcpy(buf, pickpref_filename(player_ptr, PT_DEFAULT), sizeof(buf));
 
 		/* Load the file */
-		err = process_autopick_file(buf);
+		err = process_autopick_file(player_ptr, buf);
 
 		if (err == 0 && disp_mes)
 		{
@@ -4300,7 +4300,7 @@ static void copy_text_to_yank(text_body_type *tb)
 /*
  * Draw text
  */
-static void draw_text_editor(text_body_type *tb)
+static void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 {
 	int i;
 	int by1 = 0, by2 = 0;
@@ -4400,7 +4400,7 @@ static void draw_text_editor(text_body_type *tb)
 			s_keep = ss;
 
 			/* Parse the expr */
-			v = process_pref_file_expr(&ss, &f);
+			v = process_pref_file_expr(player_ptr, &ss, &f);
 
 			/* Set flag */
 			if (streq(v, "0")) state |= LSTAT_BYPASS;
@@ -4847,7 +4847,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 
 	case EC_HELP:
 		/* Peruse the main help file */
-		(void)show_file(TRUE, _("jeditor.txt", "editor.txt"), NULL, 0, 0);
+		(void)show_file(player_ptr, TRUE, _("jeditor.txt", "editor.txt"), NULL, 0, 0);
 		/* Redraw all */
 		tb->dirty_flags |= DIRTY_SCREEN;
 
@@ -5536,7 +5536,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 
 	case EC_INSERT_MACRO:
 		/* Draw_everythig (delete menu) */
-		draw_text_editor(tb);
+		draw_text_editor(player_ptr, tb);
 
 		/* Erase line */
 		Term_erase(0, tb->cy - tb->upper + 1, tb->wid);
@@ -5553,7 +5553,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 
 	case EC_INSERT_KEYMAP:
 		/* Draw_everythig (delete menu) */
-		draw_text_editor(tb);
+		draw_text_editor(player_ptr, tb);
 
 		/* Erase line */
 		Term_erase(0, tb->cy - tb->upper + 1, tb->wid);
@@ -5863,7 +5863,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 		int com_id = 0;
 
 		/* Draw_everythig */
-		draw_text_editor(tb);
+		draw_text_editor(player_ptr, tb);
 
 		/* Display header line */
 		prt(_("(^Q:終了 ^W:セーブして終了, ESC:メニュー, その他:入力)",
@@ -5953,7 +5953,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	kill_yank_chain(tb);
 
 	/* Reload autopick pref */
-	process_autopick_file(buf);
+	process_autopick_file(player_ptr, buf);
 
 	/* HACK -- reset current_world_ptr->start_time so that current_world_ptr->play_time is not increase while edit */
 	current_world_ptr->start_time = (u32b)time(NULL);

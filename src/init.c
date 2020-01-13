@@ -1892,13 +1892,13 @@ void init_angband(player_type *player_ptr)
 	strcpy(buf, "pref.prf");
 
 	/* Process that file */
-	process_pref_file(buf);
+	process_pref_file(player_ptr, buf);
 
 	/* Access the "basic" system pref file */
 	sprintf(buf, "pref-%s.prf", ANGBAND_SYS);
 
 	/* Process that file */
-	process_pref_file(buf);
+	process_pref_file(player_ptr, buf);
 
 	note(_("[初期化終了]", "[Initialization complete]"));
 }

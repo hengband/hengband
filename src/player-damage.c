@@ -190,7 +190,7 @@ HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 {
 	HIT_POINT get_damage;
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
-	bool double_resist = IS_OPPOSE_ACID();
+	bool double_resist = is_oppose_acid(creature_ptr);
 
 	/* Total Immunity */
 	if (creature_ptr->immune_acid || (dam <= 0))
@@ -240,7 +240,7 @@ HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 {
 	HIT_POINT get_damage;
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
-	bool double_resist = IS_OPPOSE_ELEC();
+	bool double_resist = is_oppose_elec(creature_ptr);
 
 	/* Total immunity */
 	if (creature_ptr->immune_elec || (dam <= 0))
@@ -289,7 +289,7 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 {
 	HIT_POINT get_damage;
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
-	bool double_resist = IS_OPPOSE_FIRE();
+	bool double_resist = is_oppose_fire(creature_ptr);
 
 	/* Totally immune */
 	if (creature_ptr->immune_fire || (dam <= 0))
@@ -338,7 +338,7 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 {
 	HIT_POINT get_damage;
 	int inv = (dam < 30) ? 1 : (dam < 60) ? 2 : 3;
-	bool double_resist = IS_OPPOSE_COLD();
+	bool double_resist = is_oppose_cold(creature_ptr);
 
 	/* Total immunity */
 	if (creature_ptr->immune_cold || (dam <= 0))

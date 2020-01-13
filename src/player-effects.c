@@ -1070,13 +1070,12 @@ bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->blessed > v) return FALSE;
 		}
-		else if (!IS_BLESSED())
+		else if (!is_blessed(creature_ptr))
 		{
 			msg_print(_("高潔な気分になった！", "You feel righteous!"));
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->blessed && !music_singing(creature_ptr, MUSIC_BLESS))
@@ -1397,13 +1396,12 @@ bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->tim_esp > v) return FALSE;
 		}
-		else if (!IS_TIM_ESP())
+		else if (!is_time_limit_esp(creature_ptr))
 		{
 			msg_print(_("意識が広がった気がする！", "You feel your consciousness expand!"));
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tim_esp && !music_singing(creature_ptr, MUSIC_MIND))
@@ -1596,7 +1594,7 @@ bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->tim_stealth > v) return FALSE;
 		}
-		else if (!IS_TIM_STEALTH())
+		else if (!is_time_limit_stealth(creature_ptr))
 		{
 			msg_print(_("足音が小さくなった！", "You begin to walk silently!"));
 			notice = TRUE;
@@ -2367,7 +2365,7 @@ bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->oppose_acid > v) return FALSE;
 		}
-		else if (!IS_OPPOSE_ACID())
+		else if (!is_oppose_acid(creature_ptr))
 		{
 			msg_print(_("酸への耐性がついた気がする！", "You feel resistant to acid!"));
 			notice = TRUE;
@@ -2414,7 +2412,7 @@ bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->oppose_elec > v) return FALSE;
 		}
-		else if (!IS_OPPOSE_ELEC())
+		else if (!is_oppose_elec(creature_ptr))
 		{
 			msg_print(_("電撃への耐性がついた気がする！", "You feel resistant to electricity!"));
 			notice = TRUE;
@@ -2462,7 +2460,7 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->oppose_fire > v) return FALSE;
 		}
-		else if (!IS_OPPOSE_FIRE())
+		else if (!is_oppose_fire(creature_ptr))
 		{
 			msg_print(_("火への耐性がついた気がする！", "You feel resistant to fire!"));
 			notice = TRUE;
@@ -2509,7 +2507,7 @@ bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->oppose_cold > v) return FALSE;
 		}
-		else if (!IS_OPPOSE_COLD())
+		else if (!is_oppose_cold(creature_ptr))
 		{
 			msg_print(_("冷気への耐性がついた気がする！", "You feel resistant to cold!"));
 			notice = TRUE;
@@ -2557,7 +2555,7 @@ bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		{
 			if (creature_ptr->oppose_pois > v) return FALSE;
 		}
-		else if (!IS_OPPOSE_POIS())
+		else if (!is_oppose_pois(creature_ptr))
 		{
 			msg_print(_("毒への耐性がついた気がする！", "You feel resistant to poison!"));
 			notice = TRUE;
@@ -4221,4 +4219,3 @@ bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT immune_turn)
 	screen_load();
 	return TRUE;
 }
-

@@ -685,7 +685,7 @@ void do_cmd_browse(player_type *caster_ptr)
 	use_realm = tval2realm(o_ptr->tval);
 
 	/* Track the object kind */
-	object_kind_track(o_ptr->k_idx);
+	object_kind_track(caster_ptr, o_ptr->k_idx);
 	handle_stuff(caster_ptr);
 
 	/* Extract spells */
@@ -860,7 +860,7 @@ void do_cmd_study(player_type *caster_ptr)
 	}
 
 	/* Track the object kind */
-	object_kind_track(o_ptr->k_idx);
+	object_kind_track(caster_ptr, o_ptr->k_idx);
 	handle_stuff(caster_ptr);
 
 	/* Mage -- Learn a selected spell */
@@ -1113,7 +1113,7 @@ void do_cmd_cast(player_type *caster_ptr)
 	if ((caster_ptr->pclass != CLASS_SORCERER) && (caster_ptr->pclass != CLASS_RED_MAGE) && (o_ptr->tval == REALM2_BOOK)) increment = 32;
 
 	/* Track the object kind */
-	object_kind_track(o_ptr->k_idx);
+	object_kind_track(caster_ptr, o_ptr->k_idx);
 	handle_stuff(caster_ptr);
 
 	if ((caster_ptr->pclass == CLASS_SORCERER) || (caster_ptr->pclass == CLASS_RED_MAGE))

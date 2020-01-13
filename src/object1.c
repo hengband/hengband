@@ -94,13 +94,13 @@ void reset_visuals(void)
 		char buf[1024];
 
 		/* Process "graf.prf" */
-		process_pref_file("graf.prf");
+		process_pref_file(p_ptr, "graf.prf");
 
 		/* Access the "character" pref file */
 		sprintf(buf, "graf-%s.prf", p_ptr->base_name);
 
 		/* Process "graf-<playername>.prf" */
-		process_pref_file(buf);
+		process_pref_file(p_ptr, buf);
 	}
 
 	/* Normal symbols */
@@ -109,13 +109,13 @@ void reset_visuals(void)
 		char buf[1024];
 
 		/* Process "font.prf" */
-		process_pref_file("font.prf");
+		process_pref_file(p_ptr, "font.prf");
 
 		/* Access the "character" pref file */
 		sprintf(buf, "font-%s.prf", p_ptr->base_name);
 
 		/* Process "font-<playername>.prf" */
-		process_pref_file(buf);
+		process_pref_file(p_ptr, buf);
 	}
 }
 
@@ -575,7 +575,7 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 		info[i++] = _("それを装備した者は吸血鬼になる。", "It makes you current_world_ptr->game_turn into a vampire permanently.");
 	}
 
-	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_DOKUBARI))
+	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
 	{
 		info[i++] = _("それは相手を一撃で倒すことがある。", "It will attempt to kill a monster instantly.");
 	}

@@ -37,7 +37,7 @@ bool player_can_ride_aux(player_type *creature_ptr, grid_type *g_ptr, bool now_r
 	MONSTER_IDX old_riding = creature_ptr->riding;
 	bool old_riding_ryoute = creature_ptr->riding_ryoute;
 	bool old_old_riding_ryoute = creature_ptr->old_riding_ryoute;
-	bool old_pf_ryoute = (creature_ptr->pet_extra_flags & PF_RYOUTE) ? TRUE : FALSE;
+	bool old_pf_ryoute = (creature_ptr->pet_extra_flags & PF_TWO_HANDS) ? TRUE : FALSE;
 
 	/* Hack -- prevent "icky" message */
 	current_world_ptr->character_xtra = TRUE;
@@ -46,7 +46,7 @@ bool player_can_ride_aux(player_type *creature_ptr, grid_type *g_ptr, bool now_r
 	else
 	{
 		creature_ptr->riding = 0;
-		creature_ptr->pet_extra_flags &= ~(PF_RYOUTE);
+		creature_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
 		creature_ptr->riding_ryoute = creature_ptr->old_riding_ryoute = FALSE;
 	}
 
@@ -56,8 +56,8 @@ bool player_can_ride_aux(player_type *creature_ptr, grid_type *g_ptr, bool now_r
 	p_can_enter = player_can_enter(creature_ptr, g_ptr->feat, CEM_P_CAN_ENTER_PATTERN);
 
 	creature_ptr->riding = old_riding;
-	if (old_pf_ryoute) creature_ptr->pet_extra_flags |= (PF_RYOUTE);
-	else creature_ptr->pet_extra_flags &= ~(PF_RYOUTE);
+	if (old_pf_ryoute) creature_ptr->pet_extra_flags |= (PF_TWO_HANDS);
+	else creature_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
 	creature_ptr->riding_ryoute = old_riding_ryoute;
 	creature_ptr->old_riding_ryoute = old_old_riding_ryoute;
 
@@ -178,7 +178,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 		if (!all_pets)
 		{
 			/* Hack -- health bar for this monster */
-			health_track(pet_ctr);
+			health_track(creature_ptr, pet_ctr);
 			handle_stuff(creature_ptr);
 
 			msg_format(_("%sを放しますか？ [Yes/No/Unnamed (%d体)]", "Dismiss %s? [Yes/No/Unnamed (%d remain)]"), friend_name, max_pet - i);
@@ -308,7 +308,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 		}
 
 		creature_ptr->riding = 0;
-		creature_ptr->pet_extra_flags &= ~(PF_RYOUTE);
+		creature_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
 		creature_ptr->riding_ryoute = creature_ptr->old_riding_ryoute = FALSE;
 	}
 	else
@@ -373,7 +373,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 		creature_ptr->riding = g_ptr->m_idx;
 
 		/* Hack -- remove tracked monster */
-		if (creature_ptr->riding == creature_ptr->health_who) health_track(0);
+		if (creature_ptr->riding == creature_ptr->health_who) health_track(creature_ptr, 0);
 	}
 
 	take_turn(creature_ptr, 100);
@@ -607,7 +607,7 @@ void do_cmd_pet(player_type *creature_ptr)
 			(creature_ptr->hidarite && (empty_hands(creature_ptr, FALSE) == EMPTY_HAND_RARM) &&
 				object_allow_two_hands_wielding(&creature_ptr->inventory_list[INVEN_LARM])))
 		{
-			if (creature_ptr->pet_extra_flags & PF_RYOUTE)
+			if (creature_ptr->pet_extra_flags & PF_TWO_HANDS)
 			{
 				power_desc[num] = _("武器を片手で持つ", "use one hand to control a riding pet");
 			}
@@ -627,7 +627,7 @@ void do_cmd_pet(player_type *creature_ptr)
 			case CLASS_BERSERKER:
 				if (empty_hands(creature_ptr, FALSE) == (EMPTY_HAND_RARM | EMPTY_HAND_LARM))
 				{
-					if (creature_ptr->pet_extra_flags & PF_RYOUTE)
+					if (creature_ptr->pet_extra_flags & PF_TWO_HANDS)
 					{
 						power_desc[num] = _("片手で格闘する", "use one hand to control a riding pet");
 					}
@@ -640,7 +640,7 @@ void do_cmd_pet(player_type *creature_ptr)
 				}
 				else if ((empty_hands(creature_ptr, FALSE) != EMPTY_HAND_NONE) && !has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
 				{
-					if (creature_ptr->pet_extra_flags & PF_RYOUTE)
+					if (creature_ptr->pet_extra_flags & PF_TWO_HANDS)
 					{
 						power_desc[num] = _("格闘を行わない", "use one hand to control a riding pet");
 					}
@@ -951,8 +951,8 @@ void do_cmd_pet(player_type *creature_ptr)
 
 	case PET_RYOUTE:
 	{
-		if (creature_ptr->pet_extra_flags & PF_RYOUTE) creature_ptr->pet_extra_flags &= ~(PF_RYOUTE);
-		else creature_ptr->pet_extra_flags |= (PF_RYOUTE);
+		if (creature_ptr->pet_extra_flags & PF_TWO_HANDS) creature_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
+		else creature_ptr->pet_extra_flags |= (PF_TWO_HANDS);
 		creature_ptr->update |= (PU_BONUS);
 		handle_stuff(creature_ptr);
 		break;
@@ -1069,7 +1069,7 @@ bool rakuba(player_type *creature_ptr, HIT_POINT dam, bool force)
 	}
 
 	creature_ptr->riding = 0;
-	creature_ptr->pet_extra_flags &= ~(PF_RYOUTE);
+	creature_ptr->pet_extra_flags &= ~(PF_TWO_HANDS);
 	creature_ptr->riding_ryoute = creature_ptr->old_riding_ryoute = FALSE;
 
 	creature_ptr->update |= (PU_BONUS | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
