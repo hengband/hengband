@@ -38,7 +38,7 @@ concptr rumor_bind_name(char *base, concptr fullname)
 	return v;
 }
 
-void display_rumor(bool ex)
+void display_rumor(player_type *player_ptr, bool ex)
 {
 	errr err;
 	int section = 0;
@@ -140,9 +140,9 @@ void display_rumor(bool ex)
 				strcpy(fullname, town_info[t_idx].name);
 
 				visit = (1L << (t_idx - 1));
-				if ((t_idx != SECRET_TOWN) && !(p_ptr->visit & visit))
+				if ((t_idx != SECRET_TOWN) && !(player_ptr->visit & visit))
 				{
-					p_ptr->visit |= visit;
+					player_ptr->visit |= visit;
 					rumor_eff_format = _("%sに行ったことがある気がする。", "You feel you have been to %s.");
 				}
 			}

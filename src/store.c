@@ -1635,9 +1635,10 @@ byte store_table[MAX_STORES][STORE_CHOICES][2] =
 /*!
  * @brief 取引成功時の店主のメッセージ処理 /
  * Successful haggle.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void say_comment_1(void)
+static void say_comment_1(player_type *player_ptr)
 {
 #ifdef JP
 	/* ブラックマーケットのときは別のメッセージを出す */
@@ -1659,7 +1660,7 @@ static void say_comment_1(void)
 #else
 		msg_print("The shopkeeper whispers something into your ear:");
 #endif
-		display_rumor(TRUE);
+		display_rumor(player_ptr, TRUE);
 	}
 }
 
@@ -4706,7 +4707,7 @@ static void store_purchase(player_type *player_ptr)
 			if (player_ptr->au >= price)
 			{
 				/* Say "okay" */
-				say_comment_1();
+				say_comment_1(player_ptr);
 
 				if (cur_store_num == STORE_BLACK) /* The black market is illegal! */
 					chg_virtue(player_ptr, V_JUSTICE, -1);
@@ -5018,7 +5019,7 @@ static void store_sell(player_type *owner_ptr)
 		if (choice == 0)
 		{
 			/* Say "okay" */
-			say_comment_1();
+			say_comment_1(owner_ptr);
 
 			/* Make a sound */
 			sound(SOUND_SELL);

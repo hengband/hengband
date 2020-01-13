@@ -2194,7 +2194,7 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 	}
 	case BACT_RUMORS: /* Listen for rumors */
 	{
-		display_rumor(TRUE);
+		display_rumor(customer_ptr, TRUE);
 		break;
 	}
 	}
