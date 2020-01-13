@@ -976,7 +976,7 @@ static void regenerate_monsters(player_type *player_ptr)
  * @return なし
  * @note Should probably be done during monster turns.
  */
-static void regen_captured_monsters(player_type *creature_ptr)
+static void regenerate_captured_monsters(player_type *creature_ptr)
 {
 	int i, frac;
 	bool heal = FALSE;
@@ -3274,7 +3274,7 @@ static void process_world(player_type *player_ptr)
 
 	/* Hack -- Check for creature regeneration */
 	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !player_ptr->phase_out) regenerate_monsters(player_ptr);
-	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3))) regen_captured_monsters(player_ptr);
+	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3))) regenerate_captured_monsters(player_ptr);
 
 	if (!player_ptr->leaving)
 	{
