@@ -6683,7 +6683,7 @@ static void handle_signal_suspend(int sig)
 
 
 /*!
- * todo ここにp_ptrを追加すると関数ポインタ周りの収拾がつかなくなるので保留
+ * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @brief OSからのシグナルを受けて中断、終了する /
  * Handle signals -- simple (interrupt and quit)
  * @param sig 受け取ったシグナル

@@ -5189,24 +5189,24 @@ static void load_all_pref_files(player_type *player_ptr)
 	process_pref_file(player_ptr, buf);
 
 	/* Access the "character" pref file */
-	sprintf(buf, "%s.prf", p_ptr->base_name);
+	sprintf(buf, "%s.prf", player_ptr->base_name);
 
 	/* Process that file */
 	process_pref_file(player_ptr, buf);
 
 	/* Access the "realm 1" pref file */
-	if (p_ptr->realm1 != REALM_NONE)
+	if (player_ptr->realm1 != REALM_NONE)
 	{
-		sprintf(buf, "%s.prf", realm_names[p_ptr->realm1]);
+		sprintf(buf, "%s.prf", realm_names[player_ptr->realm1]);
 
 		/* Process that file */
 		process_pref_file(player_ptr, buf);
 	}
 
 	/* Access the "realm 2" pref file */
-	if (p_ptr->realm2 != REALM_NONE)
+	if (player_ptr->realm2 != REALM_NONE)
 	{
-		sprintf(buf, "%s.prf", realm_names[p_ptr->realm2]);
+		sprintf(buf, "%s.prf", realm_names[player_ptr->realm2]);
 
 		/* Process that file */
 		process_pref_file(player_ptr, buf);
