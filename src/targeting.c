@@ -1803,7 +1803,7 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
  * This function tracks and uses the "global direction", and uses
  * that as the "desired direction", to which "confusion" is applied.
  */
-bool get_rep_dir(DIRECTION *dp, bool under)
+bool get_rep_dir(player_type *creature_ptr, DIRECTION *dp, bool under)
 {
 	DIRECTION dir;
 	concptr prompt;
@@ -1862,7 +1862,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 	command_dir = dir;
 
 	/* Apply "confusion" */
-	if (p_ptr->confused)
+	if (creature_ptr->confused)
 	{
 		/* Standard confusion */
 		if (randint0(100) < 75)
@@ -1871,9 +1871,9 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 			dir = ddd[randint0(8)];
 		}
 	}
-	else if (p_ptr->riding)
+	else if (creature_ptr->riding)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->riding];
+		monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 		if (MON_CONFUSED(m_ptr))
@@ -1900,7 +1900,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 	/* Notice confusion */
 	if (command_dir != dir)
 	{
-		if (p_ptr->confused)
+		if (creature_ptr->confused)
 		{
 			/* Warn the user */
 			msg_print(_("あなたは混乱している。", "You are confused."));
@@ -1908,7 +1908,7 @@ bool get_rep_dir(DIRECTION *dp, bool under)
 		else
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[p_ptr->riding];
+			monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 
 			monster_desc(m_name, m_ptr, 0);
 			if (MON_CONFUSED(m_ptr))

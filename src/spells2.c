@@ -4460,7 +4460,7 @@ void hayagake(player_type *creature_ptr)
 bool double_attack(player_type *creature_ptr)
 {
 	DIRECTION dir;
-	if (!get_rep_dir(&dir, FALSE)) return FALSE;
+	if (!get_rep_dir(creature_ptr, &dir, FALSE)) return FALSE;
 	POSITION y = creature_ptr->y + ddy[dir];
 	POSITION x = creature_ptr->x + ddx[dir];
 	if (!creature_ptr->current_floor_ptr->grid_array[y][x].m_idx)

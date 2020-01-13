@@ -135,7 +135,7 @@ bool create_ammo(player_type *creature_ptr)
 		DIRECTION dir;
 		grid_type *g_ptr;
 
-		if (!get_rep_dir(&dir, FALSE)) return FALSE;
+		if (!get_rep_dir(creature_ptr, &dir, FALSE)) return FALSE;
 		y = creature_ptr->y + ddy[dir];
 		x = creature_ptr->x + ddx[dir];
 		g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
