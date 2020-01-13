@@ -52,13 +52,15 @@ void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 
 /*!
 * @brief 隠しドアを配置する
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param y 配置したいフロアのY座標
 * @param x 配置したいフロアのX座標
 * @param type DOOR_DEFAULT / DOOR_DOOR / DOOR_GLASS_DOOR / DOOR_CURTAIN のいずれか
 * @return なし
 */
-void place_secret_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
+void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type)
 {
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(floor_ptr, y, x);
@@ -75,7 +77,7 @@ void place_secret_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
 		}
 
 		/* Create secret door */
-		place_closed_door(floor_ptr, y, x, type);
+		place_closed_door(player_ptr, y, x, type);
 
 		if (type != DOOR_CURTAIN)
 		{
@@ -207,9 +209,10 @@ void forget_flow(floor_type *floor_ptr)
  *
  * The doors must be INSIDE the allocated region.
  */
-void add_door(floor_type* floor_ptr, POSITION x, POSITION y)
+void add_door(player_type *player_ptr, POSITION x, POSITION y)
 {
 	/* Need to have a wall in the center square */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!is_outer_bold(floor_ptr, y, x)) return;
 
 	/* look at:
@@ -225,7 +228,7 @@ void add_door(floor_type* floor_ptr, POSITION x, POSITION y)
 		(is_outer_bold(floor_ptr, y, x - 1) && is_outer_bold(floor_ptr, y, x + 1)))
 	{
 		/* secret door */
-		place_secret_door(floor_ptr, y, x, DOOR_DEFAULT);
+		place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
 
 		/* set boundarys so don't get wide doors */
 		place_solid_bold(floor_ptr, y, x - 1);
@@ -245,7 +248,7 @@ void add_door(floor_type* floor_ptr, POSITION x, POSITION y)
 		is_floor_bold(floor_ptr, y, x - 1) && is_floor_bold(floor_ptr, y, x + 1))
 	{
 		/* secret door */
-		place_secret_door(floor_ptr, y, x, DOOR_DEFAULT);
+		place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
 
 		/* set boundarys so don't get wide doors */
 		place_solid_bold(floor_ptr, y - 1, x);
@@ -255,7 +258,7 @@ void add_door(floor_type* floor_ptr, POSITION x, POSITION y)
 
 /*!
  * @brief 所定の位置に上り階段か下り階段を配置する / Place an up/down staircase at given location
-* @param player_ptr プレーヤーへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 配置を試みたいマスのY座標
  * @param x 配置を試みたいマスのX座標
  * @return なし
@@ -271,7 +274,7 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 
 	if (!floor_ptr->dun_level) up_stairs = FALSE;
 	if (ironman_downward) up_stairs = FALSE;
-	if (floor_ptr->dun_level >= d_info[p_ptr->dungeon_idx].maxdepth) down_stairs = FALSE;
+	if (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth) down_stairs = FALSE;
 	if (quest_number(player_ptr, floor_ptr->dun_level) && (floor_ptr->dun_level > 1)) down_stairs = FALSE;
 
 	/* We can't place both */
@@ -658,8 +661,9 @@ bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 /*
  * Change the "feat" flag for a grid, and notice/redraw the grid
  */
-void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat)
+void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 {
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[feat];
 	bool old_los, old_mirror;
@@ -707,12 +711,12 @@ void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 		g_ptr->info &= ~(CAVE_GLOW);
 		if (!view_torch_grids) g_ptr->info &= ~(CAVE_MARK);
 
-		update_local_illumination(p_ptr, y, x);
+		update_local_illumination(player_ptr, y, x);
 	}
 
 	/* Check for change to boring grid */
 	if (!have_flag(f_ptr->flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
-	if (g_ptr->m_idx) update_monster(p_ptr, g_ptr->m_idx, FALSE);
+	if (g_ptr->m_idx) update_monster(player_ptr, g_ptr->m_idx, FALSE);
 
 	note_spot(y, x);
 	lite_spot(y, x);
@@ -723,16 +727,16 @@ void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 
 #ifdef COMPLEX_WALL_ILLUMINATION /* COMPLEX_WALL_ILLUMINATION */
 
-		update_local_illumination(p_ptr, y, x);
+		update_local_illumination(player_ptr, y, x);
 
 #endif /* COMPLEX_WALL_ILLUMINATION */
 
 		/* Update the visuals */
-		p_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS);
+		player_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS);
 	}
 
 	/* Hack -- glow the GLOW terrain */
-	if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
+	if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[player_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 	{
 		DIRECTION i;
 		POSITION yy, xx;
@@ -748,17 +752,17 @@ void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 
 			if (player_has_los_grid(cc_ptr))
 			{
-				if (cc_ptr->m_idx) update_monster(p_ptr, cc_ptr->m_idx, FALSE);
+				if (cc_ptr->m_idx) update_monster(player_ptr, cc_ptr->m_idx, FALSE);
 				note_spot(yy, xx);
 				lite_spot(yy, xx);
 			}
 
-			update_local_illumination(p_ptr, yy, xx);
+			update_local_illumination(player_ptr, yy, xx);
 		}
 
-		if (p_ptr->special_defense & NINJA_S_STEALTH)
+		if (player_ptr->special_defense & NINJA_S_STEALTH)
 		{
-			if (floor_ptr->grid_array[p_ptr->y][p_ptr->x].info & CAVE_GLOW) set_superstealth(p_ptr, FALSE);
+			if (floor_ptr->grid_array[player_ptr->y][player_ptr->x].info & CAVE_GLOW) set_superstealth(player_ptr, FALSE);
 		}
 	}
 }
@@ -766,15 +770,17 @@ void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat)
 
 /*!
  * @brief 所定の位置にさまざまな状態や種類のドアを配置する / Place a random type of door at the given location
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y ドアの配置を試みたいマスのY座標
  * @param x ドアの配置を試みたいマスのX座標
  * @param room 部屋に接している場合向けのドア生成か否か
  * @return なし
  */
-void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, bool room)
+void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool room)
 {
 	int tmp, type;
 	FEAT_IDX feat = feat_none;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Initialize mimic info */
@@ -811,7 +817,7 @@ void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, bool room)
 	else if (tmp < 600)
 	{
 		/* Create secret door */
-		place_closed_door(floor_ptr, y, x, type);
+		place_closed_door(player_ptr, y, x, type);
 
 		if (type != DOOR_CURTAIN)
 		{
@@ -831,7 +837,7 @@ void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, bool room)
 	}
 
 	/* Closed, locked, or stuck doors (400/1000) */
-	else place_closed_door(floor_ptr, y, x, type);
+	else place_closed_door(player_ptr, y, x, type);
 
 	if (tmp < 400)
 	{
@@ -921,16 +927,18 @@ void wipe_o_list(floor_type *floor_ptr)
 
 /*!
  * @brief 所定の位置に各種の閉じたドアを配置する / Place a random type of normal door at the given location.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y ドアの配置を試みたいマスのY座標
  * @param x ドアの配置を試みたいマスのX座標
  * @param type ドアの地形ID
  * @return なし
  */
-void place_closed_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
+void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type)
 {
 	int tmp;
 	FEAT_IDX feat = feat_none;
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
 		place_floor_bold(floor_ptr, y, x);
@@ -963,7 +971,7 @@ void place_closed_door(floor_type *floor_ptr, POSITION y, POSITION x, int type)
 
 	if (feat != feat_none)
 	{
-		cave_set_feat(floor_ptr, y, x, feat);
+		cave_set_feat(player_ptr, y, x, feat);
 
 		/* Now it is not floor */
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
@@ -1125,8 +1133,9 @@ static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
 * @param x 設置を行いたいマスのX座標
 * @return なし
 */
-void try_door(floor_type *floor_ptr, POSITION y, POSITION x)
+void try_door(player_type *player_ptr, POSITION y, POSITION x)
 {
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!in_bounds(floor_ptr, y, x)) return;
 
 	/* Ignore walls */
@@ -1136,10 +1145,10 @@ void try_door(floor_type *floor_ptr, POSITION y, POSITION x)
 	if (floor_ptr->grid_array[y][x].info & (CAVE_ROOM)) return;
 
 	/* Occasional door (if allowed) */
-	if ((randint0(100) < dun_tun_jct) && possible_doorway(floor_ptr, y, x) && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_NO_DOORS))
+	if ((randint0(100) < dun_tun_jct) && possible_doorway(floor_ptr, y, x) && !(d_info[player_ptr->dungeon_idx].flags1 & DF1_NO_DOORS))
 	{
 		/* Place a door */
-		place_random_door(floor_ptr, y, x, FALSE);
+		place_random_door(player_ptr, y, x, FALSE);
 	}
 }
 

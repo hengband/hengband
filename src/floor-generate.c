@@ -855,7 +855,7 @@ static bool cave_gen(player_type *player_ptr)
 				if ((randint0(100) < dun_tun_pen) && !(dungeon_ptr->flags1 & DF1_NO_DOORS))
 				{
 					/* Place a random door */
-					place_random_door(floor_ptr, y, x, TRUE);
+					place_random_door(player_ptr, y, x, TRUE);
 				}
 			}
 
@@ -872,10 +872,10 @@ static bool cave_gen(player_type *player_ptr)
 			x = dun->door[i].x;
 
 			/* Try placing doors */
-			try_door(floor_ptr, y, x - 1);
-			try_door(floor_ptr, y, x + 1);
-			try_door(floor_ptr, y - 1, x);
-			try_door(floor_ptr, y + 1, x);
+			try_door(player_ptr, y, x - 1);
+			try_door(player_ptr, y, x + 1);
+			try_door(player_ptr, y - 1, x);
+			try_door(player_ptr, y + 1, x);
 		}
 
 		/* Place 3 or 4 down stairs near some walls */

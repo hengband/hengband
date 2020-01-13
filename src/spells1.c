@@ -321,7 +321,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 		if (message)
 		{
 			msg_format(_("木は%s。", "A tree %s"), message);
-			cave_set_feat(floor_ptr, y, x, one_in_(3) ? feat_brake : feat_grass);
+			cave_set_feat(caster_ptr, y, x, one_in_(3) ? feat_brake : feat_grass);
 
 			/* Observe */
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
@@ -498,7 +498,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 		{
 			if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
 			if (player_bold(caster_ptr, y, x)) break;
-			cave_set_feat(floor_ptr, y, x, feat_door[DOOR_DOOR].closed);
+			cave_set_feat(caster_ptr, y, x, feat_door[DOOR_DOOR].closed);
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
 			break;
 		}
@@ -513,7 +513,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 		{
 			if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
 			if (player_bold(caster_ptr, y, x)) break;
-			cave_set_feat(floor_ptr, y, x, feat_tree);
+			cave_set_feat(caster_ptr, y, x, feat_tree);
 			if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
 			break;
 		}
@@ -532,7 +532,7 @@ if (have_flag(f_ptr->flags, FF_TREE))
 		{
 			if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
 			if (player_bold(caster_ptr, y, x)) break;
-			cave_set_feat(floor_ptr, y, x, feat_granite);
+			cave_set_feat(caster_ptr, y, x, feat_granite);
 			break;
 		}
 
@@ -542,11 +542,11 @@ if (have_flag(f_ptr->flags, FF_TREE))
 			if (dam == 1)
 			{
 				if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
-				cave_set_feat(floor_ptr, y, x, feat_shallow_lava);
+				cave_set_feat(caster_ptr, y, x, feat_shallow_lava);
 			}
 			else if (dam)
 			{
-				cave_set_feat(floor_ptr, y, x, feat_deep_lava);
+				cave_set_feat(caster_ptr, y, x, feat_deep_lava);
 			}
 
 			break;
@@ -558,11 +558,11 @@ if (have_flag(f_ptr->flags, FF_TREE))
 			if (dam == 1)
 			{
 				if (!have_flag(f_ptr->flags, FF_FLOOR)) break;
-				cave_set_feat(floor_ptr, y, x, feat_shallow_water);
+				cave_set_feat(caster_ptr, y, x, feat_shallow_water);
 			}
 			else if (dam)
 			{
-				cave_set_feat(floor_ptr, y, x, feat_deep_water);
+				cave_set_feat(caster_ptr, y, x, feat_deep_water);
 			}
 
 			break;

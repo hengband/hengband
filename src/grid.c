@@ -991,7 +991,7 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, int action
 	if (newfeat == oldfeat) return;
 
 	/* Set the new feature */
-	cave_set_feat(floor_ptr, y, x, newfeat);
+	cave_set_feat(player_ptr, y, x, newfeat);
 
 	if (!(feature_action_flags[action] & FAF_NO_DROP))
 	{

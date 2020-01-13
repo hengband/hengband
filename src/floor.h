@@ -375,8 +375,8 @@ extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 
 extern void update_smell(floor_type *floor_ptr, player_type *subject_ptr);
 
-extern void add_door(floor_type *floor_ptr, POSITION x, POSITION y);
-extern void place_secret_door(floor_type *floor_ptr, POSITION y, POSITION x, int type);
+extern void add_door(player_type *player_ptr, POSITION x, POSITION y);
+extern void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type);
 extern void place_locked_door(player_type *player_ptr, POSITION y, POSITION x);
 extern void forget_flow(floor_type *floor_ptr);
 extern void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x);
@@ -387,15 +387,15 @@ extern int project_length;
 
 extern void vault_monsters(floor_type *floor_ptr, POSITION y1, POSITION x1, int num);
 extern bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x);
-extern void cave_set_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feat);
-extern void place_random_door(floor_type *floor_ptr, POSITION y, POSITION x, bool room);
-extern void place_closed_door(floor_type *floor_ptr, POSITION y, POSITION x, int type);
+extern void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX feat);
+extern void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool room);
+extern void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type);
 
 extern void wipe_o_list(floor_type *floor_ptr);
 extern void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd);
 
 extern bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y);
-extern void try_door(floor_type *floor_ptr, POSITION y, POSITION x);
+extern void try_door(player_type *player_ptr, POSITION y, POSITION x);
 
 extern FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat);
 extern void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num);
