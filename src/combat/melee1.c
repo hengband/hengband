@@ -1232,7 +1232,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
 	if (k < 0) k = 0;
 
 	/* Modify the damage */
-	k = mon_damage_mod(m_ptr, k, FALSE);
+	k = mon_damage_mod(attacker_ptr, m_ptr, k, FALSE);
 
 	/* Complex message */
 	msg_format_wizard(CHEAT_MONSTER,
@@ -1886,7 +1886,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 		}
 
 		/* Modify the damage */
-		k = mon_damage_mod(m_ptr, k, (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((attacker_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
+		k = mon_damage_mod(attacker_ptr, m_ptr, k, (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((attacker_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
 		if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (mode == HISSATSU_KYUSHO))
 		{
 			if ((randint1(randint1(r_ptr->level / 7) + 5) == 1) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))
@@ -3745,7 +3745,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
-						dam = mon_damage_mod(m_ptr, dam, FALSE);
+						dam = mon_damage_mod(target_ptr, m_ptr, dam, FALSE);
 
 						msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), m_name);
 
@@ -3769,7 +3769,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
-						dam = mon_damage_mod(m_ptr, dam, FALSE);
+						dam = mon_damage_mod(target_ptr, m_ptr, dam, FALSE);
 
 						msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), m_name);
 						if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は燃え殻の山になった。", " turns into a pile of cinder.")))
@@ -3792,7 +3792,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
-						dam = mon_damage_mod(m_ptr, dam, FALSE);
+						dam = mon_damage_mod(target_ptr, m_ptr, dam, FALSE);
 
 						msg_format(_("%^sは冷気をくらった！", "%^s is very cold!"), m_name);
 						if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は凍りついた。", " was frozen.")))
@@ -3816,7 +3816,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
-						dam = mon_damage_mod(m_ptr, dam, FALSE);
+						dam = mon_damage_mod(target_ptr, m_ptr, dam, FALSE);
 
 						msg_format(_("%^sは鏡の破片をくらった！", "%^s gets zapped!"), m_name);
 						if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("はズタズタになった。", " had torn to pieces.")))
@@ -3846,7 +3846,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 							HIT_POINT dam = damroll(2, 6);
 
 							/* Modify the damage */
-							dam = mon_damage_mod(m_ptr, dam, FALSE);
+							dam = mon_damage_mod(target_ptr, m_ptr, dam, FALSE);
 
 							msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), m_name);
 							if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed.")))
@@ -3872,7 +3872,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						HIT_POINT dam = damroll(2, 6);
 
 						/* Modify the damage */
-						dam = mon_damage_mod(m_ptr, dam, FALSE);
+						dam = mon_damage_mod(target_ptr, m_ptr, dam, FALSE);
 
 						msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), m_name);
 						if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed.")))
@@ -3906,7 +3906,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr)) dam *= 2;
 
 						/* Modify the damage */
-						dam = mon_damage_mod(m_ptr, dam, FALSE);
+						dam = mon_damage_mod(target_ptr, m_ptr, dam, FALSE);
 
 						msg_format(_("影のオーラが%^sに反撃した！", "Enveloping shadows attack %^s."), m_name);
 						if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed.")))

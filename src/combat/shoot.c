@@ -702,7 +702,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 						if (tdam < 0) tdam = 0;
 
 						/* Modify the damage */
-						tdam = mon_damage_mod(m_ptr, tdam, FALSE);
+						tdam = mon_damage_mod(shooter_ptr, m_ptr, tdam, FALSE);
 					}
 
 					msg_format_wizard(CHEAT_MONSTER,

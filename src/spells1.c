@@ -3635,7 +3635,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 	/* Modify the damage */
 	tmp = dam;
-	dam = mon_damage_mod(m_ptr, dam, (bool)(typ == GF_PSY_SPEAR));
+	dam = mon_damage_mod(caster_ptr, m_ptr, dam, (bool)(typ == GF_PSY_SPEAR));
 	if ((tmp > 0) && (dam == 0)) note = _("はダメージを受けていない。", " is unharmed.");
 
 	/* Check for death */

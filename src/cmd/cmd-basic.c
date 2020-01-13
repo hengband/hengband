@@ -2629,7 +2629,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 				if (tdam < 0) tdam = 0;
 
 				/* Modify the damage */
-				tdam = mon_damage_mod(m_ptr, tdam, FALSE);
+				tdam = mon_damage_mod(creature_ptr, m_ptr, tdam, FALSE);
 
 				msg_format_wizard(CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"),
 					tdam, m_ptr->hp - tdam, m_ptr->maxhp, m_ptr->max_maxhp);

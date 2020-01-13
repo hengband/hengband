@@ -56,6 +56,7 @@ DEPTH monster_level_idx(floor_type *floor_ptr, MONSTER_IDX m_idx)
 /*!
  * @brief モンスターに与えたダメージの修正処理 /
  * Modify the physical damage done to the monster.
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_ptr ダメージを受けるモンスターの構造体参照ポインタ
  * @param dam ダメージ基本値
  * @param is_psy_spear 攻撃手段が光の剣ならばTRUE
@@ -68,7 +69,7 @@ DEPTH monster_level_idx(floor_type *floor_ptr, MONSTER_IDX m_idx)
  * "type" is not yet used and should be 0.
  * </pre>
  */
-HIT_POINT mon_damage_mod(monster_type *m_ptr, HIT_POINT dam, bool is_psy_spear)
+HIT_POINT mon_damage_mod(player_type *target_ptr, monster_type *m_ptr, HIT_POINT dam, bool is_psy_spear)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -82,7 +83,7 @@ HIT_POINT mon_damage_mod(monster_type *m_ptr, HIT_POINT dam, bool is_psy_spear)
 	{
 		if (is_psy_spear)
 		{
-			if (!p_ptr->blind && is_seen(m_ptr))
+			if (!target_ptr->blind && is_seen(m_ptr))
 			{
 				msg_print(_("バリアを切り裂いた！", "The barrier is penetrated!"));
 			}
