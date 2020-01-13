@@ -2405,6 +2405,7 @@ static void rd_extra(player_type *creature_ptr)
 
 /*!
  * @brief プレイヤーの所持品情報を読み込む / Read the player inventory
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * Note that the inventory changed in Angband 2.7.4.  Two extra
@@ -2415,7 +2416,7 @@ static void rd_extra(player_type *creature_ptr)
  *
  * Note that the inventory is "re-sorted" later by "dungeon()".
  */
-static errr rd_inventory(void)
+static errr rd_inventory(player_type *player_ptr)
 {
 	int slot = 0;
 
@@ -2423,14 +2424,14 @@ static errr rd_inventory(void)
 	object_type *q_ptr;
 
 	/* No weight */
-	p_ptr->total_weight = 0;
+	player_ptr->total_weight = 0;
 
 	/* No items */
-	p_ptr->inven_cnt = 0;
-	p_ptr->equip_cnt = 0;
+	player_ptr->inven_cnt = 0;
+	player_ptr->equip_cnt = 0;
 
-	if (p_ptr->inventory_list != NULL) C_WIPE(p_ptr->inventory_list, INVEN_TOTAL, object_type);
-	C_MAKE(p_ptr->inventory_list, INVEN_TOTAL, object_type);
+	if (player_ptr->inventory_list != NULL) C_WIPE(player_ptr->inventory_list, INVEN_TOTAL, object_type);
+	C_MAKE(player_ptr->inventory_list, INVEN_TOTAL, object_type);
 
 	/* Read until done */
 	while (TRUE)
@@ -2455,17 +2456,17 @@ static errr rd_inventory(void)
 		if (n >= INVEN_RARM)
 		{
 			q_ptr->marked |= OM_TOUCHED;
-			object_copy(&p_ptr->inventory_list[n], q_ptr);
+			object_copy(&player_ptr->inventory_list[n], q_ptr);
 
 			/* Add the weight */
-			p_ptr->total_weight += (q_ptr->number * q_ptr->weight);
+			player_ptr->total_weight += (q_ptr->number * q_ptr->weight);
 
 			/* One more item */
-			p_ptr->equip_cnt++;
+			player_ptr->equip_cnt++;
 		}
 
 		/* Warning -- backpack is full */
-		else if (p_ptr->inven_cnt == INVEN_PACK)
+		else if (player_ptr->inven_cnt == INVEN_PACK)
 		{
 			note(_("持ち物の中のアイテムが多すぎる！", "Too many items in the inventory"));
 
@@ -2478,13 +2479,13 @@ static errr rd_inventory(void)
 			n = slot++;
 
 			q_ptr->marked |= OM_TOUCHED;
-			object_copy(&p_ptr->inventory_list[n], q_ptr);
+			object_copy(&player_ptr->inventory_list[n], q_ptr);
 
 			/* Add the weight */
-			p_ptr->total_weight += (q_ptr->number * q_ptr->weight);
+			player_ptr->total_weight += (q_ptr->number * q_ptr->weight);
 
 			/* One more item */
-			p_ptr->inven_cnt++;
+			player_ptr->inven_cnt++;
 		}
 	}
 
@@ -2615,7 +2616,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 	rd_s16b(&tmp16s); /* max_panel_cols */
 
 #if 0
-	if (!p_ptr->y || !p_ptr->x) {p_ptr->y = 10;p_ptr->x = 10;}/* ダンジョン生成に失敗してセグメンテったときの復旧用 */
+	if (!creature_ptr->y || !creature_ptr->x) {creature_ptr->y = 10;creature_ptr->x = 10;}/* ダンジョン生成に失敗してセグメンテったときの復旧用 */
 #endif
 
 	/* Maximal size */
@@ -3855,7 +3856,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		creature_ptr->spell_order[i] = (SPELL_IDX)tmp8u;
 	}
 
-	if (rd_inventory())
+	if (rd_inventory(creature_ptr))
 	{
 		note(_("持ち物情報を読み込むことができません", "Unable to read inventory"));
 		return (21);
