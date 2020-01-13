@@ -2814,12 +2814,12 @@ end_of_message_add:
 /*
  * Hack -- flush
  */
-static void msg_flush(int x)
+static void msg_flush(player_type *player_ptr, int x)
 {
 	byte a = TERM_L_BLUE;
 	bool nagasu = FALSE;
 
-	if ((auto_more && !p_ptr->now_damaged) || num_more < 0){
+	if ((auto_more && !player_ptr->now_damaged) || num_more < 0){
 		int i;
 		for (i = 0; i < 8; i++)
 		{
@@ -2834,9 +2834,10 @@ static void msg_flush(int x)
 			nagasu = TRUE;
 		}
 	}
-	p_ptr->now_damaged = FALSE;
 
-	if (!p_ptr->playing || !nagasu)
+	player_ptr->now_damaged = FALSE;
+
+	if (!player_ptr->playing || !nagasu)
 	{
 		/* Pause for response */
 		Term_putstr(x, 0, -1, a, _("-続く-", "-more-"));
@@ -2918,7 +2919,7 @@ void msg_print(concptr msg)
 	/* Hack -- flush when requested or needed */
 	if (p && (!msg || ((p + n) > 72)))
 	{
-		msg_flush(p);
+		msg_flush(p_ptr, p);
 
 		/* Forget it */
 		msg_flag = FALSE;
@@ -3006,7 +3007,7 @@ void msg_print(concptr msg)
 		Term_putstr(0, 0, split, TERM_WHITE, t);
 
 		/* Flush it */
-		msg_flush(split + 1);
+		msg_flush(p_ptr, split + 1);
 
 		/* Memorize the piece */
 		/* if (current_world_ptr->character_generated) message_add(t); */
