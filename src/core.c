@@ -972,10 +972,11 @@ static void regenerate_monsters(player_type *player_ptr)
 
 /*!
  * @brief 30ゲームターン毎のボール中モンスターのHP自然回復処理 / Regenerate the captured monsters (once per 30 game turns)
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @note Should probably be done during monster turns.
  */
-static void regen_captured_monsters(void)
+static void regen_captured_monsters(player_type *creature_ptr)
 {
 	int i, frac;
 	bool heal = FALSE;
@@ -984,7 +985,7 @@ static void regen_captured_monsters(void)
 	for (i = 0; i < INVEN_TOTAL; i++)
 	{
 		monster_race *r_ptr;
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &creature_ptr->inventory_list[i];
 
 		if (!o_ptr->k_idx) continue;
 		if (o_ptr->tval != TV_CAPTURE) continue;
@@ -1017,15 +1018,16 @@ static void regen_captured_monsters(void)
 	if (heal)
 	{
 		/* Combine pack */
-		p_ptr->update |= (PU_COMBINE);
-		p_ptr->window |= (PW_INVEN);
-		p_ptr->window |= (PW_EQUIP);
+		creature_ptr->update |= (PU_COMBINE);
+		creature_ptr->window |= (PW_INVEN);
+		creature_ptr->window |= (PW_EQUIP);
 		wild_regen = 20;
 	}
 }
 
 /*!
  * @brief 寿命つき光源の警告メッセージ処理
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 現在光源として使っているオブジェクトの構造体参照ポインタ
  * @return なし
  */
@@ -3272,7 +3274,7 @@ static void process_world(player_type *player_ptr)
 
 	/* Hack -- Check for creature regeneration */
 	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 10)) && !player_ptr->phase_out) regenerate_monsters(player_ptr);
-	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3))) regen_captured_monsters();
+	if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 3))) regen_captured_monsters(player_ptr);
 
 	if (!player_ptr->leaving)
 	{
