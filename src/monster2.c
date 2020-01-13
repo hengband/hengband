@@ -114,7 +114,8 @@ MONRACE_IDX real_r_idx(monster_type *m_ptr)
 void delete_monster_idx(MONSTER_IDX i)
 {
 	POSITION x, y;
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[i];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -125,7 +126,7 @@ void delete_monster_idx(MONSTER_IDX i)
 	real_r_ptr(m_ptr)->cur_num--;
 
 	/* Hack -- count the number of "reproducers" */
-	if (r_ptr->flags2 & (RF2_MULTIPLY)) p_ptr->current_floor_ptr->num_repro--;
+	if (r_ptr->flags2 & (RF2_MULTIPLY)) floor_ptr->num_repro--;
 
 	if (MON_CSLEEP(m_ptr)) (void)set_monster_csleep(p_ptr, i, 0);
 	if (MON_FAST(m_ptr)) (void)set_monster_fast(p_ptr, i, 0);
@@ -146,12 +147,12 @@ void delete_monster_idx(MONSTER_IDX i)
 	if (p_ptr->riding == i) p_ptr->riding = 0;
 
 	/* Monster is gone */
-	p_ptr->current_floor_ptr->grid_array[y][x].m_idx = 0;
+	floor_ptr->grid_array[y][x].m_idx = 0;
 
 	for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/*
@@ -159,13 +160,13 @@ void delete_monster_idx(MONSTER_IDX i)
 		 * to prevent calling lite_spot()
 		 */
 
-		delete_object_idx(p_ptr->current_floor_ptr, this_o_idx);
+		delete_object_idx(floor_ptr, this_o_idx);
 	}
 
 	(void)WIPE(m_ptr, monster_type);
 
 	/* Count monsters */
-	p_ptr->current_floor_ptr->m_cnt--;
+	floor_ptr->m_cnt--;
 
 	lite_spot(y, x);
 	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
@@ -277,8 +278,8 @@ void compact_monsters(int size)
 	/* Message (only if compacting) */
 	if (size) msg_print(_("モンスター情報を圧縮しています...", "Compacting monsters..."));
 
-
 	/* Compact at least 'size' objects */
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	for (num = 0, cnt = 1; num < size; cnt++)
 	{
 		/* Get more vicious each iteration */
@@ -288,9 +289,9 @@ void compact_monsters(int size)
 		cur_dis = 5 * (20 - cnt);
 
 		/* Check all the monsters */
-		for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+		for (i = 1; i < floor_ptr->m_max; i++)
 		{
-			monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+			monster_type *m_ptr = &floor_ptr->m_list[i];
 
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -333,19 +334,19 @@ void compact_monsters(int size)
 
 
 	/* Excise dead monsters (backwards!) */
-	for (i = p_ptr->current_floor_ptr->m_max - 1; i >= 1; i--)
+	for (i = floor_ptr->m_max - 1; i >= 1; i--)
 	{
 		/* Get the i'th monster */
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &floor_ptr->m_list[i];
 
 		/* Skip real monsters */
 		if (m_ptr->r_idx) continue;
 
 		/* Move last monster into open hole */
-		compact_monsters_aux(p_ptr->current_floor_ptr->m_max - 1, i);
+		compact_monsters_aux(floor_ptr->m_max - 1, i);
 
-		/* Compress "p_ptr->current_floor_ptr->m_max" */
-		p_ptr->current_floor_ptr->m_max--;
+		/* Compress "floor_ptr->m_max" */
+		floor_ptr->m_max--;
 	}
 }
 
@@ -381,13 +382,14 @@ void wipe_m_list(void)
 	}
 
 	/* Delete all the monsters */
-	for (i = p_ptr->current_floor_ptr->m_max - 1; i >= 1; i--)
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	for (i = floor_ptr->m_max - 1; i >= 1; i--)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 
 		/* Monster is gone */
-		p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx = 0;
+		floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx = 0;
 
 		(void)WIPE(m_ptr, monster_type);
 
@@ -402,17 +404,17 @@ void wipe_m_list(void)
 	/* Hack -- Wipe the racial counter of all monster races */
 	for (i = 1; i < max_r_idx; i++) r_info[i].cur_num = 0;
 
-	/* Reset "p_ptr->current_floor_ptr->m_max" */
-	p_ptr->current_floor_ptr->m_max = 1;
+	/* Reset "floor_ptr->m_max" */
+	floor_ptr->m_max = 1;
 
-	/* Reset "p_ptr->current_floor_ptr->m_cnt" */
-	p_ptr->current_floor_ptr->m_cnt = 0;
+	/* Reset "floor_ptr->m_cnt" */
+	floor_ptr->m_cnt = 0;
 
-	/* Reset "p_ptr->current_floor_ptr->mproc_max[]" */
-	for (i = 0; i < MAX_MTIMED; i++) p_ptr->current_floor_ptr->mproc_max[i] = 0;
+	/* Reset "floor_ptr->mproc_max[]" */
+	for (i = 0; i < MAX_MTIMED; i++) floor_ptr->mproc_max[i] = 0;
 
 	/* Hack -- reset "reproducer" count */
-	p_ptr->current_floor_ptr->num_repro = 0;
+	floor_ptr->num_repro = 0;
 
 	/* Hack -- no more target */
 	target_who = 0;
@@ -434,32 +436,33 @@ MONSTER_IDX m_pop(void)
 	MONSTER_IDX i;
 
 	/* Normal allocation */
-	if (p_ptr->current_floor_ptr->m_max < current_world_ptr->max_m_idx)
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	if (floor_ptr->m_max < current_world_ptr->max_m_idx)
 	{
 		/* Access the next hole */
-		i = p_ptr->current_floor_ptr->m_max;
+		i = floor_ptr->m_max;
 
 		/* Expand the array */
-		p_ptr->current_floor_ptr->m_max++;
+		floor_ptr->m_max++;
 
 		/* Count monsters */
-		p_ptr->current_floor_ptr->m_cnt++;
+		floor_ptr->m_cnt++;
 
 		/* Return the index */
 		return (i);
 	}
 
 	/* Recycle dead monsters */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr;
-		m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		m_ptr = &floor_ptr->m_list[i];
 
 		/* Skip live monsters */
 		if (m_ptr->r_idx) continue;
 
 		/* Count monsters */
-		p_ptr->current_floor_ptr->m_cnt++;
+		floor_ptr->m_cnt++;
 
 		/* Use this monster */
 		return (i);
@@ -828,6 +831,7 @@ static bool restrict_monster_to_dungeon(DUNGEON_IDX d_idx, MONRACE_IDX r_idx)
 	{
 		if (chameleon_change_m_idx) return TRUE;
 	}
+
 	if (d_ptr->flags1 & DF1_NO_MAGIC)
 	{
 		if (r_idx != MON_CHAMELEON &&
@@ -837,6 +841,7 @@ static bool restrict_monster_to_dungeon(DUNGEON_IDX d_idx, MONRACE_IDX r_idx)
 		    !(r_ptr->a_ability_flags2 & RF6_NOMAGIC_MASK))
 			return FALSE;
 	}
+
 	if (d_ptr->flags1 & DF1_NO_MELEE)
 	{
 		if (r_idx == MON_CHAMELEON) return TRUE;
@@ -845,9 +850,11 @@ static bool restrict_monster_to_dungeon(DUNGEON_IDX d_idx, MONRACE_IDX r_idx)
 		    !(r_ptr->a_ability_flags2 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK)))
 			return FALSE;
 	}
+
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	if (d_ptr->flags1 & DF1_BEGINNER)
 	{
-		if (r_ptr->level > p_ptr->current_floor_ptr->dun_level)
+		if (r_ptr->level > floor_ptr->dun_level)
 			return FALSE;
 	}
 
@@ -1028,6 +1035,7 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 	get_mon_num2_hook = monster_hook2;
 
 	/* Scan the allocation table */
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	for (i = 0; i < alloc_race_size; i++)
 	{
 		monster_race *r_ptr;
@@ -1055,14 +1063,14 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 
 			/* Depth Monsters never appear out of depth */
 			if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) &&
-			    (r_ptr->level > p_ptr->current_floor_ptr->dun_level))
+			    (r_ptr->level > floor_ptr->dun_level))
 				continue;
 		}
 
 		/* Accept this monster */
 		entry->prob2 = entry->prob1;
 
-		if (p_ptr->current_floor_ptr->dun_level && (!p_ptr->current_floor_ptr->inside_quest || is_fixed_quest_idx(p_ptr->current_floor_ptr->inside_quest)) &&
+		if (floor_ptr->dun_level && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest)) &&
 			!restrict_monster_to_dungeon(p_ptr->dungeon_idx, entry->index) && !p_ptr->phase_out)
 		{
 			int hoge = entry->prob2 * d_info[p_ptr->dungeon_idx].special_div;
@@ -1367,6 +1375,7 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 
 
 	/* First, try using pronouns, or describing hidden monsters */
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	if (!seen || pron)
 	{
 		/* an encoding of the monster "sex" */
@@ -1516,7 +1525,7 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 
 			/* Inside monster arena, and it is not your mount */
 			else if (p_ptr->phase_out &&
-				 !(p_ptr->riding && (&p_ptr->current_floor_ptr->m_list[p_ptr->riding] == m_ptr)))
+				 !(p_ptr->riding && (&floor_ptr->m_list[p_ptr->riding] == m_ptr)))
 			{
 				/* It is a fake unique monster */
 				(void)sprintf(desc, _("%sもどき", "fake %s"), name);
@@ -1561,7 +1570,7 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 			strcat(desc,buf);
 		}
 
-		if (p_ptr->riding && (&p_ptr->current_floor_ptr->m_list[p_ptr->riding] == m_ptr))
+		if (p_ptr->riding && (&floor_ptr->m_list[p_ptr->riding] == m_ptr))
 		{
 			strcat(desc,_("(乗馬中)", "(riding)"));
 		}
@@ -2195,9 +2204,10 @@ void update_monsters(bool full)
 	MONSTER_IDX i;
 
 	/* Update each (live) monster */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	for (i = 1; i < floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 		update_monster(p_ptr, i, full);
 	}
@@ -2211,8 +2221,9 @@ void update_monsters(bool full)
  */
 static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
 {
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	monster_race *r_ptr = &r_info[r_idx];
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[chameleon_change_m_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
 	monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
 
 	if (!(r_ptr->flags1 & (RF1_UNIQUE))) return FALSE;
@@ -2223,7 +2234,7 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
 	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
 		return FALSE;
 
-	if (!monster_can_cross_terrain(p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
+	if (!monster_can_cross_terrain(floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
 
 	/* Not born */
 	if (!(old_r_ptr->flags7 & RF7_CHAMELEON))
@@ -2234,7 +2245,7 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
 	/* Born now */
 	else if (summon_specific_who > 0)
 	{
-		if (monster_has_hostile_align(&p_ptr->current_floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr)) return FALSE;
+		if (monster_has_hostile_align(&floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr)) return FALSE;
 	}
 
 	return TRUE;
@@ -2248,8 +2259,9 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
  */
 static bool monster_hook_chameleon(MONRACE_IDX r_idx)
 {
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	monster_race *r_ptr = &r_info[r_idx];
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[chameleon_change_m_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[chameleon_change_m_idx];
 	monster_race *old_r_ptr = &r_info[m_ptr->r_idx];
 
 	if (r_ptr->flags1 & (RF1_UNIQUE)) return FALSE;
@@ -2259,7 +2271,7 @@ static bool monster_hook_chameleon(MONRACE_IDX r_idx)
 	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
 		return FALSE;
 
-	if (!monster_can_cross_terrain(p_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
+	if (!monster_can_cross_terrain(floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
 
 	/* Not born */
 	if (!(old_r_ptr->flags7 & RF7_CHAMELEON))
@@ -2272,7 +2284,7 @@ static bool monster_hook_chameleon(MONRACE_IDX r_idx)
 	/* Born now */
 	else if (summon_specific_who > 0)
 	{
-		if (monster_has_hostile_align(&p_ptr->current_floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr)) return FALSE;
+		if (monster_has_hostile_align(&floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr)) return FALSE;
 	}
 
 	return (*(get_monster_hook()))(r_idx);
@@ -2288,7 +2300,8 @@ static bool monster_hook_chameleon(MONRACE_IDX r_idx)
 void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 {
 	int oldmaxhp;
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr;
 	char old_m_name[MAX_NLEN];
 	bool old_unique = FALSE;
@@ -2313,10 +2326,10 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 
 		if (old_unique)
 			level = r_info[MON_CHAMELEON_K].level;
-		else if (!p_ptr->current_floor_ptr->dun_level)
+		else if (!floor_ptr->dun_level)
 			level = wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].level;
 		else
-			level = p_ptr->current_floor_ptr->dun_level;
+			level = floor_ptr->dun_level;
 
 		if (d_info[p_ptr->dungeon_idx].flags1 & DF1_CHAMELEON) level+= 2+randint1(3);
 
@@ -2416,13 +2429,14 @@ static bool monster_hook_tanuki(MONRACE_IDX r_idx)
  */
 static MONRACE_IDX initial_r_appearance(MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
 {
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	int attempts = 1000;
 	MONRACE_IDX ap_r_idx;
-	DEPTH min = MIN(p_ptr->current_floor_ptr->base_level - 5, 50);
+	DEPTH min = MIN(floor_ptr->base_level - 5, 50);
 
 	if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN && !(generate_mode & (PM_MULTIPLY | PM_KAGE)))
 	{
-		if (p_ptr->current_floor_ptr->base_level == 0 ||
+		if (floor_ptr->base_level == 0 ||
 			(one_in_(5) && my_strchr("hkoptuyAHOPTUVY", r_info[r_idx].d_char))) return MON_ALIEN_JURAL;
 	}
 
@@ -2433,7 +2447,7 @@ static MONRACE_IDX initial_r_appearance(MONRACE_IDX r_idx, BIT_FLAGS generate_mo
 
 	while (--attempts)
 	{
-		ap_r_idx = get_mon_num(p_ptr->current_floor_ptr->base_level + 10);
+		ap_r_idx = get_mon_num(floor_ptr->base_level + 10);
 		if (r_info[ap_r_idx].level >= min) return ap_r_idx;
 	}
 
@@ -2492,7 +2506,8 @@ SPEED get_mspeed(monster_race *r_ptr)
  */
 static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
-	grid_type		*g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	grid_type		*g_ptr = &floor_ptr->grid_array[y][x];
 	monster_type	*m_ptr;
 	monster_race	*r_ptr = &r_info[r_idx];
 	concptr		name = (r_name + r_ptr->name);
@@ -2502,7 +2517,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	/* DO NOT PLACE A MONSTER IN THE SMALL SCALE WILDERNESS !!! */
 	if (p_ptr->wild_mode) return FALSE;
 
-	if (!in_bounds(p_ptr->current_floor_ptr, y, x)) return FALSE;
+	if (!in_bounds(floor_ptr, y, x)) return FALSE;
 	if (!r_idx) return FALSE;
 	if (!r_ptr->name) return FALSE;
 
@@ -2539,7 +2554,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		}
 
 		/* Depth monsters may NOT be created out of depth, unless in Nightmare mode */
-		if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (p_ptr->current_floor_ptr->dun_level < r_ptr->level) &&
+		if ((r_ptr->flags1 & (RF1_FORCE_DEPTH)) && (floor_ptr->dun_level < r_ptr->level) &&
 		    (!ironman_nightmare || (r_ptr->flags1 & (RF1_QUESTOR))))
 		{
 			/* Cannot create */
@@ -2547,9 +2562,9 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		}
 	}
 
-	if (quest_number(p_ptr, p_ptr->current_floor_ptr->dun_level))
+	if (quest_number(p_ptr, floor_ptr->dun_level))
 	{
-		int hoge = quest_number(p_ptr, p_ptr->current_floor_ptr->dun_level);
+		int hoge = quest_number(p_ptr, floor_ptr->dun_level);
 		if ((quest[hoge].type == QUEST_TYPE_KILL_LEVEL) || (quest[hoge].type == QUEST_TYPE_RANDOM))
 		{
 			if(r_idx == quest[hoge].r_idx)
@@ -2558,10 +2573,10 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 				number_mon = 0;
 
 				/* Count all quest monsters */
-				for (i2 = 0; i2 < p_ptr->current_floor_ptr->width; ++i2)
-					for (j2 = 0; j2 < p_ptr->current_floor_ptr->height; j2++)
-						if (p_ptr->current_floor_ptr->grid_array[j2][i2].m_idx > 0)
-							if (p_ptr->current_floor_ptr->m_list[p_ptr->current_floor_ptr->grid_array[j2][i2].m_idx].r_idx == quest[hoge].r_idx)
+				for (i2 = 0; i2 < floor_ptr->width; ++i2)
+					for (j2 = 0; j2 < floor_ptr->height; j2++)
+						if (floor_ptr->grid_array[j2][i2].m_idx > 0)
+							if (floor_ptr->m_list[floor_ptr->grid_array[j2][i2].m_idx].r_idx == quest[hoge].r_idx)
 								number_mon++;
 				if(number_mon + quest[hoge].cur_num >= quest[hoge].max_num)
 					return FALSE;
@@ -2604,7 +2619,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 
 
 	/* Get a new monster record */
-	m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+	m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
 	/* Save the race */
 	m_ptr->r_idx = r_idx;
@@ -2615,17 +2630,17 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	m_ptr->mflag2 = 0;
 
 	/* Hack -- Appearance transfer */
-	if ((mode & PM_MULTIPLY) && (who > 0) && !is_original_ap(&p_ptr->current_floor_ptr->m_list[who]))
+	if ((mode & PM_MULTIPLY) && (who > 0) && !is_original_ap(&floor_ptr->m_list[who]))
 	{
-		m_ptr->ap_r_idx = p_ptr->current_floor_ptr->m_list[who].ap_r_idx;
+		m_ptr->ap_r_idx = floor_ptr->m_list[who].ap_r_idx;
 
 		/* Hack -- Shadower spawns Shadower */
-		if (p_ptr->current_floor_ptr->m_list[who].mflag2 & MFLAG2_KAGE) m_ptr->mflag2 |= MFLAG2_KAGE;
+		if (floor_ptr->m_list[who].mflag2 & MFLAG2_KAGE) m_ptr->mflag2 |= MFLAG2_KAGE;
 	}
 
 	/* Sub-alignment of a monster */
 	if ((who > 0) && !(r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)))
-		m_ptr->sub_align = p_ptr->current_floor_ptr->m_list[who].sub_align;
+		m_ptr->sub_align = floor_ptr->m_list[who].sub_align;
 	else
 	{
 		m_ptr->sub_align = SUB_ALIGN_NEUTRAL;
@@ -2636,7 +2651,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	/* Place the monster at the location */
 	m_ptr->fy = y;
 	m_ptr->fx = x;
-	m_ptr->current_floor_ptr = p_ptr->current_floor_ptr;
+	m_ptr->current_floor_ptr = floor_ptr;
 
 	/* No "timed status" yet */
 	for (cmi = 0; cmi < MAX_MTIMED; cmi++) m_ptr->mtimed[cmi] = 0;
@@ -2652,7 +2667,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 
 
 	/* Your pet summons its pet. */
-	if (who > 0 && is_pet(&p_ptr->current_floor_ptr->m_list[who]))
+	if (who > 0 && is_pet(&floor_ptr->m_list[who]))
 	{
 		mode |= PM_FORCE_PET;
 		m_ptr->parent_m_idx = who;
@@ -2788,7 +2803,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		real_r_ptr(m_ptr)->floor_id = p_ptr->floor_id;
 
 	/* Hack -- Count the number of "reproducers" */
-	if (r_ptr->flags2 & RF2_MULTIPLY) p_ptr->current_floor_ptr->num_repro++;
+	if (r_ptr->flags2 & RF2_MULTIPLY) floor_ptr->num_repro++;
 
 	if (p_ptr->warning && current_world_ptr->character_dungeon)
 	{
@@ -2885,12 +2900,13 @@ static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION 
 	for (i = 0; i < MON_SCAT_MAXD; i++)
 		num[i] = 0;
 
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	for (nx = x - max_dist; nx <= x + max_dist; nx++)
 	{
 		for (ny = y - max_dist; ny <= y + max_dist; ny++)
 		{
 			/* Ignore annoying locations */
-			if (!in_bounds(p_ptr->current_floor_ptr, ny, nx)) continue;
+			if (!in_bounds(floor_ptr, ny, nx)) continue;
 
 			/* Require "line of projection" */
 			if (!projectable(p_ptr, y, x, ny, nx)) continue;
@@ -2906,7 +2922,7 @@ static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION 
 			else
 			{
 				/* Walls and Monsters block flow */
-				if (!cave_empty_bold2(p_ptr->current_floor_ptr, ny, nx)) continue;
+				if (!cave_empty_bold2(floor_ptr, ny, nx)) continue;
 
 				/* ... nor on the Pattern */
 				if (pattern_tile(ny, nx)) continue;
@@ -2966,16 +2982,17 @@ static bool place_monster_group(MONSTER_IDX who, POSITION y, POSITION x, MONRACE
 	total = randint1(10);
 
 	/* Hard monsters, small groups */
-	if (r_ptr->level > p_ptr->current_floor_ptr->dun_level)
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	if (r_ptr->level > floor_ptr->dun_level)
 	{
-		extra = r_ptr->level - p_ptr->current_floor_ptr->dun_level;
+		extra = r_ptr->level - floor_ptr->dun_level;
 		extra = 0 - randint1(extra);
 	}
 
 	/* Easy monsters, large groups */
-	else if (r_ptr->level < p_ptr->current_floor_ptr->dun_level)
+	else if (r_ptr->level < floor_ptr->dun_level)
 	{
-		extra = p_ptr->current_floor_ptr->dun_level - r_ptr->level;
+		extra = floor_ptr->dun_level - r_ptr->level;
 		extra = randint1(extra);
 	}
 
@@ -3012,7 +3029,7 @@ static bool place_monster_group(MONSTER_IDX who, POSITION y, POSITION x, MONRACE
 			scatter(p_ptr, &my, &mx, hy, hx, 4, 0);
 
 			/* Walls and Monsters block flow */
-			if (!cave_empty_bold2(p_ptr->current_floor_ptr, my, mx)) continue;
+			if (!cave_empty_bold2(floor_ptr, my, mx)) continue;
 
 			/* Attempt to place another monster */
 			if (place_monster_one(who, my, mx, r_idx, mode))
@@ -3228,10 +3245,11 @@ bool alloc_horde(POSITION y, POSITION x)
 	POSITION cx = x;
 	get_mon_num_prep(get_monster_hook(), get_monster_hook2(y, x));
 
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	while (--attempts)
 	{
 		/* Pick a monster */
-		r_idx = get_mon_num(p_ptr->current_floor_ptr->monster_level);
+		r_idx = get_mon_num(floor_ptr->monster_level);
 
 		/* Handle failure */
 		if (!r_idx) return FALSE;
@@ -3255,15 +3273,15 @@ bool alloc_horde(POSITION y, POSITION x)
 
 	if (attempts < 1) return FALSE;
 
-	m_idx = p_ptr->current_floor_ptr->grid_array[y][x].m_idx;
+	m_idx = floor_ptr->grid_array[y][x].m_idx;
 
-	if (p_ptr->current_floor_ptr->m_list[m_idx].mflag2 & MFLAG2_CHAMELEON) r_ptr = &r_info[p_ptr->current_floor_ptr->m_list[m_idx].r_idx];
+	if (floor_ptr->m_list[m_idx].mflag2 & MFLAG2_CHAMELEON) r_ptr = &r_info[floor_ptr->m_list[m_idx].r_idx];
 
 	for (attempts = randint1(10) + 5; attempts; attempts--)
 	{
 		scatter(p_ptr, &cy, &cx, y, x, 5, 0);
 
-		(void)summon_specific(m_idx, cy, cx, p_ptr->current_floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
+		(void)summon_specific(m_idx, cy, cx, floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
 
 		y = cy;
 		x = cx;
@@ -3282,7 +3300,8 @@ bool alloc_guardian(bool def_val)
 {
 	MONRACE_IDX guardian = d_info[p_ptr->dungeon_idx].final_guardian;
 
-	if (guardian && (d_info[p_ptr->dungeon_idx].maxdepth == p_ptr->current_floor_ptr->dun_level) && (r_info[guardian].cur_num < r_info[guardian].max_num))
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	if (guardian && (d_info[p_ptr->dungeon_idx].maxdepth == floor_ptr->dun_level) && (r_info[guardian].cur_num < r_info[guardian].max_num))
 	{
 		POSITION oy;
 		POSITION ox;
@@ -3292,11 +3311,11 @@ bool alloc_guardian(bool def_val)
 		while (try_count)
 		{
 			/* Get a random spot */
-			oy = randint1(p_ptr->current_floor_ptr->height - 4) + 2;
-			ox = randint1(p_ptr->current_floor_ptr->width - 4) + 2;
+			oy = randint1(floor_ptr->height - 4) + 2;
+			ox = randint1(floor_ptr->width - 4) + 2;
 
 			/* Is it a good spot ? */
-			if (cave_empty_bold2(p_ptr->current_floor_ptr, oy, ox) && monster_can_cross_terrain(p_ptr->current_floor_ptr->grid_array[oy][ox].feat, &r_info[guardian], 0))
+			if (cave_empty_bold2(floor_ptr, oy, ox) && monster_can_cross_terrain(floor_ptr->grid_array[oy][ox].feat, &r_info[guardian], 0))
 			{
 				/* Place the guardian */
 				if (place_monster_aux(0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) return TRUE;
@@ -3321,7 +3340,7 @@ bool alloc_guardian(bool def_val)
  * @details
  * Place the monster at least "dis" distance from the player.
  * Use "slp" to choose the initial "sleep" status
- * Use "p_ptr->current_floor_ptr->monster_level" for the monster level
+ * Use "floor_ptr->monster_level" for the monster level
  */
 bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 {
@@ -3332,20 +3351,21 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 	if (alloc_guardian(FALSE)) return TRUE;
 
 	/* Find a legal, distant, unoccupied, space */
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	while (attempts_left--)
 	{
 		/* Pick a location */
-		y = randint0(p_ptr->current_floor_ptr->height);
-		x = randint0(p_ptr->current_floor_ptr->width);
+		y = randint0(floor_ptr->height);
+		x = randint0(floor_ptr->width);
 
 		/* Require empty floor grid (was "naked") */
-		if (p_ptr->current_floor_ptr->dun_level)
+		if (floor_ptr->dun_level)
 		{
-			if (!cave_empty_bold2(p_ptr->current_floor_ptr, y, x)) continue;
+			if (!cave_empty_bold2(floor_ptr, y, x)) continue;
 		}
 		else
 		{
-			if (!cave_empty_bold(p_ptr->current_floor_ptr, y, x)) continue;
+			if (!cave_empty_bold(floor_ptr, y, x)) continue;
 		}
 
 		/* Accept far away grids */
@@ -3363,7 +3383,7 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 	}
 
 
-	if (randint1(5000) <= p_ptr->current_floor_ptr->dun_level)
+	if (randint1(5000) <= floor_ptr->dun_level)
 	{
 		if (alloc_horde(y, x))
 		{
@@ -3464,7 +3484,8 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 	POSITION x, y;
 	MONRACE_IDX r_idx;
 
-	if (p_ptr->current_floor_ptr->inside_arena) return FALSE;
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	if (floor_ptr->inside_arena) return FALSE;
 
 	if (!mon_scatter(0, &y, &x, y1, x1, 2)) return FALSE;
 
@@ -3478,7 +3499,7 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 	get_mon_num_prep(summon_specific_okay, get_monster_hook2(y, x));
 
 	/* Pick a monster, using the level calculation */
-	r_idx = get_mon_num((p_ptr->current_floor_ptr->dun_level + lev) / 2 + 5);
+	r_idx = get_mon_num((floor_ptr->dun_level + lev) / 2 + 5);
 
 	/* Handle failure */
 	if (!r_idx)
@@ -3540,7 +3561,8 @@ bool summon_named_creature(MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_ID
  */
 bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	POSITION y, x;
 
 	if (!mon_scatter(m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1))
@@ -3555,8 +3577,8 @@ bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 	/* Hack -- Transfer "clone" flag */
 	if (clone || (m_ptr->smart & SM_CLONED))
 	{
-		p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].smart |= SM_CLONED;
-		p_ptr->current_floor_ptr->m_list[hack_m_idx_ii].mflag2 |= MFLAG2_NOPET;
+		floor_ptr->m_list[hack_m_idx_ii].smart |= SM_CLONED;
+		floor_ptr->m_list[hack_m_idx_ii].mflag2 |= MFLAG2_NOPET;
 	}
 
 	return TRUE;
@@ -4018,11 +4040,11 @@ void monster_drop_carried_objects(monster_type *m_ptr)
 	object_type *o_ptr;
 	object_type *q_ptr;
 
-
 	/* Drop objects being carried */
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 		q_ptr = &forge;
 
@@ -4031,7 +4053,7 @@ void monster_drop_carried_objects(monster_type *m_ptr)
 		/* Forget monster */
 		q_ptr->held_m_idx = 0;
 
-		delete_object_idx(p_ptr->current_floor_ptr, this_o_idx);
+		delete_object_idx(floor_ptr, this_o_idx);
 
 		/* Drop it */
 		(void)drop_near(p_ptr, q_ptr, -1, m_ptr->fy, m_ptr->fx);
@@ -4049,7 +4071,8 @@ void monster_drop_carried_objects(monster_type *m_ptr)
  */
 int get_monster_crowd_number(MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	POSITION my = m_ptr->fy;
 	POSITION mx = m_ptr->fx;
 	int i;
@@ -4060,10 +4083,10 @@ int get_monster_crowd_number(MONSTER_IDX m_idx)
 		int ay = my + ddy_ddd[i];
 		int ax = mx + ddx_ddd[i];
 
-		if (!in_bounds(p_ptr->current_floor_ptr, ay, ax)) continue;
+		if (!in_bounds(floor_ptr, ay, ax)) continue;
 
 		/* Count number of monsters */
-		if (p_ptr->current_floor_ptr->grid_array[ay][ax].m_idx > 0) count++;
+		if (floor_ptr->grid_array[ay][ax].m_idx > 0) count++;
 	}
 
 	return count;
