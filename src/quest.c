@@ -520,7 +520,7 @@ void do_cmd_quest(player_type *player_ptr)
 		msg_print(_("ここにはクエストの入口はない。", "You see no quest level here."));
 		return;
 	}
-	
+
 	msg_print(_("ここにはクエストへの入口があります。", "There is an entry of a quest."));
 	if (!get_check(_("クエストに入りますか？", "Do you enter? "))) return;
 	if ((player_ptr->pseikaku == SEIKAKU_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))

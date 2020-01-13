@@ -377,23 +377,23 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 	/* Confusion hurts skill */
 	if (user_ptr->confused) chance = chance / 2;
 
-	fail = lev+5;
-	if (chance > fail) fail -= (chance - fail)*2;
-	else chance -= (fail - chance)*2;
+	fail = lev + 5;
+	if (chance > fail) fail -= (chance - fail) * 2;
+	else chance -= (fail - chance) * 2;
 	if (fail < USE_DEVICE) fail = USE_DEVICE;
 	if (chance < USE_DEVICE) chance = USE_DEVICE;
 
-	if(cmd_limit_time_walk(user_ptr)) return;
+	if (cmd_limit_time_walk(user_ptr)) return;
 
 	if (user_ptr->pclass == CLASS_BERSERKER) success = FALSE;
 	else if (chance > fail)
 	{
-		if (randint0(chance*2) < fail) success = FALSE;
+		if (randint0(chance * 2) < fail) success = FALSE;
 		else success = TRUE;
 	}
 	else
 	{
-		if (randint0(fail*2) < chance) success = TRUE;
+		if (randint0(fail * 2) < chance) success = TRUE;
 		else success = FALSE;
 	}
 
@@ -457,7 +457,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 			for (pet_ctr = user_ptr->current_floor_ptr->m_max - 1; pet_ctr >= 1; pet_ctr--)
 			{
 				if (is_pet(&user_ptr->current_floor_ptr->m_list[pet_ctr]) && (user_ptr->riding != pet_ctr))
-				  who[max_pet++] = pet_ctr;
+					who[max_pet++] = pet_ctr;
 			}
 
 			ang_sort(who, &dummy_why, max_pet, ang_sort_comp_pet, ang_sort_swap_hook);
@@ -477,7 +477,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 	}
 	else if (o_ptr->tval == TV_CAPTURE)
 	{
-		if(!o_ptr->pval)
+		if (!o_ptr->pval)
 		{
 			bool old_target_pet = target_pet;
 			target_pet = TRUE;
@@ -488,7 +488,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 			}
 			target_pet = old_target_pet;
 
-			if(fire_ball(user_ptr, GF_CAPTURE, dir, 0, 0))
+			if (fire_ball(user_ptr, GF_CAPTURE, dir, 0, 0))
 			{
 				o_ptr->pval = (PARAMETER_VALUE)cap_mon;
 				o_ptr->xtra3 = (XTRA8)cap_mspeed;
@@ -503,7 +503,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 					if (o_ptr->inscription)
 						strcpy(buf, quark_str(o_ptr->inscription));
 					s = buf;
-					for (s = buf;*s && (*s != '#'); s++)
+					for (s = buf; *s && (*s != '#'); s++)
 					{
 #ifdef JP
 						if (iskanji(*s)) s++;
@@ -512,7 +512,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 					*s = '#';
 					s++;
 #ifdef JP
- /*nothing*/
+					/*nothing*/
 #else
 					*s++ = '\'';
 #endif
@@ -524,7 +524,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 						t++;
 					}
 #ifdef JP
- /*nothing*/
+					/*nothing*/
 #else
 					*s++ = '\'';
 #endif
@@ -555,7 +555,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 #endif
 
 						t = quark_str(o_ptr->inscription);
-						for (t = quark_str(o_ptr->inscription);*t && (*t != '#'); t++)
+						for (t = quark_str(o_ptr->inscription); *t && (*t != '#'); t++)
 						{
 #ifdef JP
 							if (iskanji(*t)) t++;
@@ -568,13 +568,13 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 #ifdef JP
 							/* nothing */
 #else
-							if (*t =='\'')
+							if (*t == '\'')
 							{
 								t++;
 								quote = TRUE;
 							}
 #endif
-							while(*t)
+							while (*t)
 							{
 								*s = *t;
 								t++;
@@ -583,14 +583,14 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 #ifdef JP
 							/* nothing */
 #else
-							if (quote && *(s-1) =='\'')
+							if (quote && *(s - 1) == '\'')
 								s--;
 #endif
 							*s = '\0';
 							user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].nickname = quark_add(buf);
 							t = quark_str(o_ptr->inscription);
 							s = buf;
-							while(*t && (*t != '#'))
+							while (*t && (*t != '#'))
 							{
 								*s = *t;
 								t++;
@@ -1807,5 +1807,3 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 
 	return TRUE;
 }
-
-

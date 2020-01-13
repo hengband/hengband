@@ -4475,7 +4475,7 @@ static void calc_spells(player_type *creature_ptr)
 				(creature_ptr->new_spells != 1) ? "s" : "");
 #endif
 
-			}
+		}
 
 		/* Save the new_spells value */
 		creature_ptr->old_spells = creature_ptr->new_spells;
@@ -4485,8 +4485,8 @@ static void calc_spells(player_type *creature_ptr)
 
 		/* Redraw object recall */
 		creature_ptr->window |= (PW_OBJECT);
-		}
 	}
+}
 
 
 /*!

@@ -778,7 +778,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 
 		break;
 	}
-}
+	}
 }
 
 
@@ -1340,7 +1340,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 			for (i = 0; i < 4; i++)
 			{
 				if (r_ptr->blow[i].method == RBM_EXPLODE) explode = TRUE;
-		}
+			}
 
 			/* Special note at death */
 			if (explode)
@@ -1356,7 +1356,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 				msg_format("You have destroyed %s.", m_name);
 #endif
 			}
-	}
+		}
 
 		/* Death by Physical attack -- living monster */
 		else
@@ -1411,7 +1411,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 
 		/* Monster is dead */
 		return TRUE;
-}
+	}
 
 #ifdef ALLOW_FEAR
 

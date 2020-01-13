@@ -39,9 +39,9 @@
 #include "english.h"
 
 
-/*
- * Pronoun arrays, by gender.
- */
+ /*
+  * Pronoun arrays, by gender.
+  */
 static concptr wd_he[3] =
 #ifdef JP
 { "それ", "彼", "彼女" };
@@ -66,20 +66,20 @@ static concptr wd_his[3] =
 
 
 
-/*!
- * @brief モンスターのAC情報を得ることができるかを返す / Determine if the "armor" is known
- * @param r_idx モンスターの種族ID
- * @return 敵のACを知る条件が満たされているならTRUEを返す
- * @details
- * The higher the level, the fewer kills needed.
- */
+ /*!
+  * @brief モンスターのAC情報を得ることができるかを返す / Determine if the "armor" is known
+  * @param r_idx モンスターの種族ID
+  * @return 敵のACを知る条件が満たされているならTRUEを返す
+  * @details
+  * The higher the level, the fewer kills needed.
+  */
 static bool know_armour(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 	DEPTH level = r_ptr->level;
 	MONSTER_NUMBER kills = r_ptr->r_tkills;
 
-    bool known = (r_ptr->r_cast_spell == MAX_UCHAR)? TRUE: FALSE;
+	bool known = (r_ptr->r_cast_spell == MAX_UCHAR) ? TRUE : FALSE;
 
 	if (cheat_know || known) return TRUE;
 	if (kills > 304 / (4 + level)) return TRUE;
@@ -114,7 +114,7 @@ static bool know_damage(MONRACE_IDX r_idx, int i)
 
 	s32b d = d1 * d2;
 
-	if (d >= ((4+level)*MAX_UCHAR)/80) d = ((4+level)*MAX_UCHAR-1)/80;
+	if (d >= ((4 + level)*MAX_UCHAR) / 80) d = ((4 + level)*MAX_UCHAR - 1) / 80;
 	if ((4 + level) * a > 80 * d) return TRUE;
 	if (!(r_ptr->flags1 & RF1_UNIQUE)) return FALSE;
 	if ((4 + level) * (2 * a) > 80 * d) return TRUE;
@@ -127,7 +127,7 @@ static bool know_damage(MONRACE_IDX r_idx, int i)
 /*
  * Prepare hook for c_roff(). It will be changed for spoiler generation in wizard1.c.
  */
-void (*hook_c_roff)(TERM_COLOR attr, concptr str) = c_roff;
+void(*hook_c_roff)(TERM_COLOR attr, concptr str) = c_roff;
 
 /*!
  * @brief モンスターの思い出メッセージをあらかじめ指定された関数ポインタに基づき出力する
@@ -268,9 +268,9 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	flags7 = (r_ptr->flags7 & r_ptr->flags7);
 	flagsr = (r_ptr->flagsr & r_ptr->r_flagsr);
 
-	for(n = 0; n < A_MAX; n++)
+	for (n = 0; n < A_MAX; n++)
 	{
-		if(r_ptr->reinforce_id[n] > 0) reinforce = TRUE;
+		if (r_ptr->reinforce_id[n] > 0) reinforce = TRUE;
 	}
 
 	/* cheat_know or research_mon() */
@@ -282,12 +282,12 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	{
 		/* Hack -- maximal drops */
 		drop_gold = drop_item =
-		(((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) +
-		 ((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) +
-		 ((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) +
-		 ((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) +
-		 ((r_ptr->flags1 & RF1_DROP_90)  ? 1 : 0) +
-		 ((r_ptr->flags1 & RF1_DROP_60)  ? 1 : 0));
+			(((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) +
+			((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) +
+				((r_ptr->flags1 & RF1_DROP_2D2) ? 4 : 0) +
+				((r_ptr->flags1 & RF1_DROP_1D2) ? 2 : 0) +
+				((r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) +
+				((r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
 
 		/* Hack -- but only "valid" drops */
 		if (r_ptr->flags1 & RF1_ONLY_GOLD) drop_item = 0;
@@ -350,111 +350,111 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	}
 	else
 
-	/* Treat uniques differently */
-	if (flags1 & RF1_UNIQUE)
-	{
-		/* Hack -- Determine if the unique is "dead" */
-		bool dead = (r_ptr->max_num == 0) ? TRUE : FALSE;
-
-		/* We've been killed... */
-		if (r_ptr->r_deaths)
+		/* Treat uniques differently */
+		if (flags1 & RF1_UNIQUE)
 		{
-			/* Killed ancestors */
-			hooked_roff(format(_("%^sはあなたの先祖を %d 人葬っている", "%^s has slain %d of your ancestors"),
-					   wd_he[msex], r_ptr->r_deaths));
+			/* Hack -- Determine if the unique is "dead" */
+			bool dead = (r_ptr->max_num == 0) ? TRUE : FALSE;
 
-			/* But we've also killed it */
-			if (dead)
+			/* We've been killed... */
+			if (r_ptr->r_deaths)
 			{
-				hooked_roff(
-					_(format("が、すでに仇討ちは果たしている！"),
-						format(", but you have avenged %s!  ", plural(r_ptr->r_deaths, "him", "them"))));
+				/* Killed ancestors */
+				hooked_roff(format(_("%^sはあなたの先祖を %d 人葬っている", "%^s has slain %d of your ancestors"),
+					wd_he[msex], r_ptr->r_deaths));
+
+				/* But we've also killed it */
+				if (dead)
+				{
+					hooked_roff(
+						_(format("が、すでに仇討ちは果たしている！"),
+							format(", but you have avenged %s!  ", plural(r_ptr->r_deaths, "him", "them"))));
+				}
+
+				/* Unavenged (ever) */
+				else
+				{
+					hooked_roff(
+						_(format("のに、まだ仇討ちを果たしていない。"),
+							format(", who %s unavenged.  ", plural(r_ptr->r_deaths, "remains", "remain"))));
+				}
+
+				/* Start a new line */
+				hooked_roff("\n");
 			}
 
-			/* Unavenged (ever) */
-			else
+			/* Dead unique who never hurt us */
+			else if (dead)
 			{
-				hooked_roff(
-					_(format("のに、まだ仇討ちを果たしていない。"),
-						format(", who %s unavenged.  ", plural(r_ptr->r_deaths, "remains", "remain"))));
+				hooked_roff(_("あなたはこの仇敵をすでに葬り去っている。", "You have slain this foe.  "));
+
+				/* Start a new line */
+				hooked_roff("\n");
 			}
-
-			/* Start a new line */
-			hooked_roff("\n");
 		}
-
-		/* Dead unique who never hurt us */
-		else if (dead)
-		{
-			hooked_roff(_("あなたはこの仇敵をすでに葬り去っている。", "You have slain this foe.  "));
-
-			/* Start a new line */
-			hooked_roff("\n");
-		}
-	}
 
 	/* Not unique, but killed us */
-	else if (r_ptr->r_deaths)
-	{
-		/* Dead ancestors */
-		hooked_roff(
-			_(format("このモンスターはあなたの先祖を %d 人葬っている", r_ptr->r_deaths),
-			  format("%d of your ancestors %s been killed by this creature, ", r_ptr->r_deaths, plural(r_ptr->r_deaths, "has", "have"))));
-
-		/* Some kills this life */
-		if (r_ptr->r_pkills)
+		else if (r_ptr->r_deaths)
 		{
-			hooked_roff(format(
-				_("が、あなたはこのモンスターを少なくとも %d 体は倒している。", 
-				 "and you have exterminated at least %d of the creatures.  "), r_ptr->r_pkills));
-		}
+			/* Dead ancestors */
+			hooked_roff(
+				_(format("このモンスターはあなたの先祖を %d 人葬っている", r_ptr->r_deaths),
+					format("%d of your ancestors %s been killed by this creature, ", r_ptr->r_deaths, plural(r_ptr->r_deaths, "has", "have"))));
 
-		/* Some kills past lives */
-		else if (r_ptr->r_tkills)
-		{
-			hooked_roff(format(
-				_("が、あなたの先祖はこのモンスターを少なくとも %d 体は倒している。", 
-				  "and your ancestors have exterminated at least %d of the creatures.  "), r_ptr->r_tkills));
-		}
+			/* Some kills this life */
+			if (r_ptr->r_pkills)
+			{
+				hooked_roff(format(
+					_("が、あなたはこのモンスターを少なくとも %d 体は倒している。",
+						"and you have exterminated at least %d of the creatures.  "), r_ptr->r_pkills));
+			}
 
-		/* No kills */
+			/* Some kills past lives */
+			else if (r_ptr->r_tkills)
+			{
+				hooked_roff(format(
+					_("が、あなたの先祖はこのモンスターを少なくとも %d 体は倒している。",
+						"and your ancestors have exterminated at least %d of the creatures.  "), r_ptr->r_tkills));
+			}
+
+			/* No kills */
+			else
+			{
+				hooked_roff(format(
+					_("が、まだ%sを倒したことはない。",
+						"and %s is not ever known to have been defeated.  "), wd_he[msex]));
+			}
+
+			/* Start a new line */
+			hooked_roff("\n");
+		}
 		else
 		{
-			hooked_roff(format(
-				_("が、まだ%sを倒したことはない。", 
-				  "and %s is not ever known to have been defeated.  "), wd_he[msex]));
-		}
+			/* Killed some this life */
+			if (r_ptr->r_pkills)
+			{
+				hooked_roff(format(
+					_("あなたはこのモンスターを少なくとも %d 体は殺している。",
+						"You have killed at least %d of these creatures.  "), r_ptr->r_pkills));
+			}
 
-		/* Start a new line */
-		hooked_roff("\n");
-	}
-	else
-	{
-		/* Killed some this life */
-		if (r_ptr->r_pkills)
-		{
-			hooked_roff(format(
-				_("あなたはこのモンスターを少なくとも %d 体は殺している。",
-				  "You have killed at least %d of these creatures.  "), r_ptr->r_pkills));
-		}
+			/* Killed some last life */
+			else if (r_ptr->r_tkills)
+			{
+				hooked_roff(format(
+					_("あなたの先祖はこのモンスターを少なくとも %d 体は殺している。",
+						"Your ancestors have killed at least %d of these creatures.  "), r_ptr->r_tkills));
+			}
 
-		/* Killed some last life */
-		else if (r_ptr->r_tkills)
-		{
-			hooked_roff(format(
-				_("あなたの先祖はこのモンスターを少なくとも %d 体は殺している。", 
-				  "Your ancestors have killed at least %d of these creatures.  "), r_ptr->r_tkills));
-		}
+			/* Killed none */
+			else
+			{
+				hooked_roff(_("このモンスターを倒したことはない。", "No battles to the death are recalled.  "));
+			}
 
-		/* Killed none */
-		else
-		{
-			hooked_roff(_("このモンスターを倒したことはない。", "No battles to the death are recalled.  "));
+			/* Start a new line */
+			hooked_roff("\n");
 		}
-
-		/* Start a new line */
-		hooked_roff("\n");
-	}
 
 	/* Descriptions */
 	{
@@ -493,13 +493,13 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		{
 			hooked_roff(format(
 				_("%^sは通常地下 %d フィートで出現し", "%^s is normally found at depths of %d feet"),
-				  wd_he[msex], r_ptr->level * 50));
+				wd_he[msex], r_ptr->level * 50));
 		}
 		else
 		{
 			hooked_roff(format(
 				_("%^sは通常地下 %d 階で出現し", "%^s is normally found on dungeon level %d"),
-				  wd_he[msex], r_ptr->level));
+				wd_he[msex], r_ptr->level));
 		}
 		old = TRUE;
 	}
@@ -630,7 +630,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 		if ((flags3 & (RF3_DRAGON | RF3_DEMON | RF3_GIANT | RF3_TROLL | RF3_ORC | RF3_ANGEL)) || (flags2 & (RF2_QUANTUM | RF2_HUMAN)))
 		{
-		/* Describe the "race" */
+			/* Describe the "race" */
 			if (flags3 & RF3_DRAGON)   hook_c_roff(TERM_ORANGE, _("ドラゴン", " dragon"));
 			if (flags3 & RF3_DEMON)    hook_c_roff(TERM_VIOLET, _("デーモン", " demon"));
 			if (flags3 & RF3_GIANT)    hook_c_roff(TERM_L_UMBER, _("巨人", " giant"));
@@ -661,7 +661,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 				(long)1000 / (p_ptr->max_plv + 2) + 5) / 10);
 
 #ifdef JP
-			hooked_roff(format(" %d レベルのキャラクタにとって 約%ld.%02ld ポイントの経験となる。", p_ptr->lev, (long)i, (long)j ));
+			hooked_roff(format(" %d レベルのキャラクタにとって 約%ld.%02ld ポイントの経験となる。", p_ptr->lev, (long)i, (long)j));
 #else
 
 			/* Mention the experience */
@@ -683,7 +683,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 			/* Mention the dependance on the player's level */
 			hooked_roff(format(" for a%s %lu%s level character.  ",
-				    q, (long)i, p));
+				q, (long)i, p));
 #endif
 
 		}
@@ -734,10 +734,10 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		hooked_roff(format(
 			_("%^sは通常護衛を伴って現れる。", "%^s usually appears with escorts.  "), wd_he[msex]));
 
-		if(reinforce)
+		if (reinforce)
 		{
 			hooked_roff(_("護衛の構成は", "These escorts"));
-			if((flags1 & RF1_ESCORT) || (flags1 & RF1_ESCORTS))
+			if ((flags1 & RF1_ESCORT) || (flags1 & RF1_ESCORTS))
 			{
 				hooked_roff(_("少なくとも", " at the least"));
 			}
@@ -745,12 +745,12 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 #else
 			hooked_roff(" contain ");
 #endif			
-			for(n = 0; n < A_MAX; n++)
+			for (n = 0; n < A_MAX; n++)
 			{
-				if(r_ptr->reinforce_id[n] && r_ptr->reinforce_dd[n] && r_ptr->reinforce_ds[n])
+				if (r_ptr->reinforce_id[n] && r_ptr->reinforce_dd[n] && r_ptr->reinforce_ds[n])
 				{
 					monster_race *rf_ptr = &r_info[r_ptr->reinforce_id[n]];
-					if(rf_ptr->flags1 & RF1_UNIQUE)
+					if (rf_ptr->flags1 & RF1_UNIQUE)
 					{
 						hooked_roff(format(_("、%s", ", %s"), r_name + rf_ptr->name));
 					}
@@ -762,7 +762,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 						bool plural = (r_ptr->reinforce_dd[n] * r_ptr->reinforce_ds[n] > 1);
 						GAME_TEXT name[MAX_NLEN];
 						strcpy(name, r_name + rf_ptr->name);
-						if(plural) plural_aux(name);
+						if (plural) plural_aux(name);
 						hooked_roff(format(",%dd%d %s", r_ptr->reinforce_dd[n], r_ptr->reinforce_ds[n], name));
 #endif
 					}
@@ -781,14 +781,14 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 	/* Collect inate attacks */
 	vn = 0;
-	if (flags4 & RF4_SHRIEK)  { vp[vn] = _("悲鳴で助けを求める", "shriek for help"); color[vn++] = TERM_L_WHITE; }
-	if (flags4 & RF4_ROCKET)  
-    {
+	if (flags4 & RF4_SHRIEK) { vp[vn] = _("悲鳴で助けを求める", "shriek for help"); color[vn++] = TERM_L_WHITE; }
+	if (flags4 & RF4_ROCKET)
+	{
 		set_damage(r_idx, (MS_ROCKET), _("ロケット%sを発射する", "shoot a rocket%s"), tmp_msg[vn]);
-        vp[vn] = tmp_msg[vn];
-        color[vn++] = TERM_UMBER; 
-    }
-    
+		vp[vn] = tmp_msg[vn];
+		color[vn++] = TERM_UMBER;
+	}
+
 	if (flags4 & RF4_SHOOT)
 	{
 		for (r = 0, m = 0; m < 4; m++)
@@ -802,7 +802,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 				vp[vn] = tmp_msg[vn]; color[vn++] = TERM_UMBER;
 				break;
 			}
-		}		
+		}
 	}
 	if (a_ability_flags2 & (RF6_SPECIAL)) { vp[vn] = _("特別な行動をする", "do something"); color[vn++] = TERM_VIOLET; }
 
@@ -991,10 +991,10 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		{
 			/* Intro */
 #ifdef JP
-			if ( n != 0 ) hooked_roff("や");
+			if (n != 0) hooked_roff("や");
 #else
 			if (n == 0) hooked_roff(" may breathe ");
-			else if (n < vn-1) hooked_roff(", ");
+			else if (n < vn - 1) hooked_roff(", ");
 			else hooked_roff(" or ");
 #endif
 
@@ -1195,21 +1195,21 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_SLATE;
 	}
-	if (a_ability_flags1 & (RF5_SCARE))           { vp[vn] = _("恐怖", "terrify"); color[vn++] = TERM_SLATE; }
-	if (a_ability_flags1 & (RF5_BLIND))           { vp[vn] = _("目くらまし", "blind"); color[vn++] = TERM_L_DARK; }
-	if (a_ability_flags1 & (RF5_CONF))            { vp[vn] = _("混乱", "confuse"); color[vn++] = TERM_L_UMBER; }
-	if (a_ability_flags1 & (RF5_SLOW))            { vp[vn] = _("減速", "slow"); color[vn++] = TERM_UMBER; }
-	if (a_ability_flags1 & (RF5_HOLD))            { vp[vn] = _("麻痺", "paralyze"); color[vn++] = TERM_RED; }
-	if (a_ability_flags2 & (RF6_HASTE))           { vp[vn] = _("加速", "haste-self"); color[vn++] = TERM_L_GREEN; }
-	if (a_ability_flags2 & (RF6_HEAL))            { vp[vn] = _("治癒", "heal-self"); color[vn++] = TERM_WHITE; }
-	if (a_ability_flags2 & (RF6_INVULNER))        { vp[vn] = _("無敵化", "make invulnerable"); color[vn++] = TERM_WHITE; }
-	if (flags4 & RF4_DISPEL)            { vp[vn] = _("魔力消去", "dispel-magic"); color[vn++] = TERM_L_WHITE; }
-	if (a_ability_flags2 & (RF6_BLINK))           { vp[vn] = _("ショートテレポート", "blink-self"); color[vn++] = TERM_UMBER; }
-	if (a_ability_flags2 & (RF6_TPORT))           { vp[vn] = _("テレポート", "teleport-self"); color[vn++] = TERM_ORANGE; }
-	if (a_ability_flags2 & (RF6_WORLD))           { vp[vn] = _("時を止める", "stop the time"); color[vn++] = TERM_L_BLUE; }
-	if (a_ability_flags2 & (RF6_TELE_TO))         { vp[vn] = _("テレポートバック", "teleport to"); color[vn++] = TERM_L_UMBER; }
-	if (a_ability_flags2 & (RF6_TELE_AWAY))       { vp[vn] = _("テレポートアウェイ", "teleport away"); color[vn++] = TERM_UMBER; }
-	if (a_ability_flags2 & (RF6_TELE_LEVEL))      { vp[vn] = _("テレポート・レベル", "teleport level"); color[vn++] = TERM_ORANGE; }
+	if (a_ability_flags1 & (RF5_SCARE)) { vp[vn] = _("恐怖", "terrify"); color[vn++] = TERM_SLATE; }
+	if (a_ability_flags1 & (RF5_BLIND)) { vp[vn] = _("目くらまし", "blind"); color[vn++] = TERM_L_DARK; }
+	if (a_ability_flags1 & (RF5_CONF)) { vp[vn] = _("混乱", "confuse"); color[vn++] = TERM_L_UMBER; }
+	if (a_ability_flags1 & (RF5_SLOW)) { vp[vn] = _("減速", "slow"); color[vn++] = TERM_UMBER; }
+	if (a_ability_flags1 & (RF5_HOLD)) { vp[vn] = _("麻痺", "paralyze"); color[vn++] = TERM_RED; }
+	if (a_ability_flags2 & (RF6_HASTE)) { vp[vn] = _("加速", "haste-self"); color[vn++] = TERM_L_GREEN; }
+	if (a_ability_flags2 & (RF6_HEAL)) { vp[vn] = _("治癒", "heal-self"); color[vn++] = TERM_WHITE; }
+	if (a_ability_flags2 & (RF6_INVULNER)) { vp[vn] = _("無敵化", "make invulnerable"); color[vn++] = TERM_WHITE; }
+	if (flags4 & RF4_DISPEL) { vp[vn] = _("魔力消去", "dispel-magic"); color[vn++] = TERM_L_WHITE; }
+	if (a_ability_flags2 & (RF6_BLINK)) { vp[vn] = _("ショートテレポート", "blink-self"); color[vn++] = TERM_UMBER; }
+	if (a_ability_flags2 & (RF6_TPORT)) { vp[vn] = _("テレポート", "teleport-self"); color[vn++] = TERM_ORANGE; }
+	if (a_ability_flags2 & (RF6_WORLD)) { vp[vn] = _("時を止める", "stop the time"); color[vn++] = TERM_L_BLUE; }
+	if (a_ability_flags2 & (RF6_TELE_TO)) { vp[vn] = _("テレポートバック", "teleport to"); color[vn++] = TERM_L_UMBER; }
+	if (a_ability_flags2 & (RF6_TELE_AWAY)) { vp[vn] = _("テレポートアウェイ", "teleport away"); color[vn++] = TERM_UMBER; }
+	if (a_ability_flags2 & (RF6_TELE_LEVEL)) { vp[vn] = _("テレポート・レベル", "teleport level"); color[vn++] = TERM_ORANGE; }
 
 	if (a_ability_flags2 & (RF6_DARKNESS))
 	{
@@ -1223,25 +1223,25 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		}
 	}
 
-	if (a_ability_flags2 & (RF6_TRAPS))           { vp[vn] = _("トラップ", "create traps"); color[vn++] = TERM_BLUE; }
-	if (a_ability_flags2 & (RF6_FORGET))          { vp[vn] = _("記憶消去", "cause amnesia"); color[vn++] = TERM_BLUE; }
-	if (a_ability_flags2 & (RF6_RAISE_DEAD))      { vp[vn] = _("死者復活", "raise dead"); color[vn++] = TERM_RED; }
-	if (a_ability_flags2 & (RF6_S_MONSTER))       { vp[vn] = _("モンスター一体召喚", "summon a monster"); color[vn++] = TERM_SLATE; }
-	if (a_ability_flags2 & (RF6_S_MONSTERS))      { vp[vn] = _("モンスター複数召喚", "summon monsters"); color[vn++] = TERM_L_WHITE; }
-	if (a_ability_flags2 & (RF6_S_KIN))           { vp[vn] = _("救援召喚", "summon aid"); color[vn++] = TERM_ORANGE; }
-	if (a_ability_flags2 & (RF6_S_ANT))           { vp[vn] = _("アリ召喚", "summon ants"); color[vn++] = TERM_RED; }
-	if (a_ability_flags2 & (RF6_S_SPIDER))        { vp[vn] = _("クモ召喚", "summon spiders"); color[vn++] = TERM_L_DARK; }
-	if (a_ability_flags2 & (RF6_S_HOUND))         { vp[vn] = _("ハウンド召喚", "summon hounds"); color[vn++] = TERM_L_UMBER; }
-	if (a_ability_flags2 & (RF6_S_HYDRA))         { vp[vn] = _("ヒドラ召喚", "summon hydras"); color[vn++] = TERM_L_GREEN; }
-	if (a_ability_flags2 & (RF6_S_ANGEL))         { vp[vn] = _("天使一体召喚", "summon an angel"); color[vn++] = TERM_YELLOW; }
-	if (a_ability_flags2 & (RF6_S_DEMON))         { vp[vn] = _("デーモン一体召喚", "summon a demon"); color[vn++] = TERM_L_RED; }
-	if (a_ability_flags2 & (RF6_S_UNDEAD))        { vp[vn] = _("アンデッド一体召喚", "summon an undead"); color[vn++] = TERM_L_DARK; }
-	if (a_ability_flags2 & (RF6_S_DRAGON))        { vp[vn] = _("ドラゴン一体召喚", "summon a dragon"); color[vn++] = TERM_ORANGE; }
-	if (a_ability_flags2 & (RF6_S_HI_UNDEAD))     { vp[vn] = _("強力なアンデッド召喚", "summon Greater Undead"); color[vn++] = TERM_L_DARK; }
-	if (a_ability_flags2 & (RF6_S_HI_DRAGON))     { vp[vn] = _("古代ドラゴン召喚", "summon Ancient Dragons"); color[vn++] = TERM_ORANGE; }	
-	if (a_ability_flags2 & (RF6_S_CYBER))         { vp[vn] = _("サイバーデーモン召喚", "summon Cyberdemons"); color[vn++] = TERM_UMBER; }
-	if (a_ability_flags2 & (RF6_S_AMBERITES))     { vp[vn] = _("アンバーの王族召喚", "summon Lords of Amber"); color[vn++] = TERM_VIOLET; }
-	if (a_ability_flags2 & (RF6_S_UNIQUE))        { vp[vn] = _("ユニーク・モンスター召喚", "summon Unique Monsters"); color[vn++] = TERM_VIOLET; }
+	if (a_ability_flags2 & (RF6_TRAPS)) { vp[vn] = _("トラップ", "create traps"); color[vn++] = TERM_BLUE; }
+	if (a_ability_flags2 & (RF6_FORGET)) { vp[vn] = _("記憶消去", "cause amnesia"); color[vn++] = TERM_BLUE; }
+	if (a_ability_flags2 & (RF6_RAISE_DEAD)) { vp[vn] = _("死者復活", "raise dead"); color[vn++] = TERM_RED; }
+	if (a_ability_flags2 & (RF6_S_MONSTER)) { vp[vn] = _("モンスター一体召喚", "summon a monster"); color[vn++] = TERM_SLATE; }
+	if (a_ability_flags2 & (RF6_S_MONSTERS)) { vp[vn] = _("モンスター複数召喚", "summon monsters"); color[vn++] = TERM_L_WHITE; }
+	if (a_ability_flags2 & (RF6_S_KIN)) { vp[vn] = _("救援召喚", "summon aid"); color[vn++] = TERM_ORANGE; }
+	if (a_ability_flags2 & (RF6_S_ANT)) { vp[vn] = _("アリ召喚", "summon ants"); color[vn++] = TERM_RED; }
+	if (a_ability_flags2 & (RF6_S_SPIDER)) { vp[vn] = _("クモ召喚", "summon spiders"); color[vn++] = TERM_L_DARK; }
+	if (a_ability_flags2 & (RF6_S_HOUND)) { vp[vn] = _("ハウンド召喚", "summon hounds"); color[vn++] = TERM_L_UMBER; }
+	if (a_ability_flags2 & (RF6_S_HYDRA)) { vp[vn] = _("ヒドラ召喚", "summon hydras"); color[vn++] = TERM_L_GREEN; }
+	if (a_ability_flags2 & (RF6_S_ANGEL)) { vp[vn] = _("天使一体召喚", "summon an angel"); color[vn++] = TERM_YELLOW; }
+	if (a_ability_flags2 & (RF6_S_DEMON)) { vp[vn] = _("デーモン一体召喚", "summon a demon"); color[vn++] = TERM_L_RED; }
+	if (a_ability_flags2 & (RF6_S_UNDEAD)) { vp[vn] = _("アンデッド一体召喚", "summon an undead"); color[vn++] = TERM_L_DARK; }
+	if (a_ability_flags2 & (RF6_S_DRAGON)) { vp[vn] = _("ドラゴン一体召喚", "summon a dragon"); color[vn++] = TERM_ORANGE; }
+	if (a_ability_flags2 & (RF6_S_HI_UNDEAD)) { vp[vn] = _("強力なアンデッド召喚", "summon Greater Undead"); color[vn++] = TERM_L_DARK; }
+	if (a_ability_flags2 & (RF6_S_HI_DRAGON)) { vp[vn] = _("古代ドラゴン召喚", "summon Ancient Dragons"); color[vn++] = TERM_ORANGE; }
+	if (a_ability_flags2 & (RF6_S_CYBER)) { vp[vn] = _("サイバーデーモン召喚", "summon Cyberdemons"); color[vn++] = TERM_UMBER; }
+	if (a_ability_flags2 & (RF6_S_AMBERITES)) { vp[vn] = _("アンバーの王族召喚", "summon Lords of Amber"); color[vn++] = TERM_VIOLET; }
+	if (a_ability_flags2 & (RF6_S_UNIQUE)) { vp[vn] = _("ユニーク・モンスター召喚", "summon Unique Monsters"); color[vn++] = TERM_VIOLET; }
 
 
 	/* Describe spells */
@@ -1280,10 +1280,10 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		{
 			/* Intro */
 #ifdef JP
-			if ( n != 0 ) hooked_roff("、");
+			if (n != 0) hooked_roff("、");
 #else
 			if (n == 0) hooked_roff(" which ");
-			else if (n < vn-1) hooked_roff(", ");
+			else if (n < vn - 1) hooked_roff(", ");
 			else hooked_roff(" or ");
 #endif
 
@@ -1326,12 +1326,12 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	}
 
 	/* Describe monster "toughness" */
-    if (know_everything || know_armour(r_idx))
+	if (know_everything || know_armour(r_idx))
 	{
 		/* Armor */
 		hooked_roff(format(
 			_("%^sは AC%d の防御力と", "%^s has an armor rating of %d"),
-			    wd_he[msex], r_ptr->ac));
+			wd_he[msex], r_ptr->ac));
 
 		/* Maximized hitpoints */
 		if ((flags1 & RF1_FORCE_MAXHP) || (r_ptr->hside == 1))
@@ -1339,7 +1339,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 			u32b hp = r_ptr->hdice * (nightmare ? 2 : 1) * r_ptr->hside;
 			hooked_roff(format(
 				_(" %d の体力がある。", " and a life rating of %d.  "),
-				    (s16b)MIN(30000, hp)));
+				(s16b)MIN(30000, hp)));
 		}
 
 		/* Variable hitpoints */
@@ -1347,7 +1347,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		{
 			hooked_roff(format(
 				_(" %dd%d の体力がある。", " and a life rating of %dd%d.  "),
-				    r_ptr->hdice * (nightmare ? 2 : 1), r_ptr->hside));
+				r_ptr->hdice * (nightmare ? 2 : 1), r_ptr->hside));
 		}
 	}
 
@@ -1359,8 +1359,8 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	if (flags7 & (RF7_HAS_DARK_1 | RF7_HAS_DARK_2)) { vp[vn] = _("ダンジョンを暗くする", "darken the dungeon");   color[vn++] = TERM_L_DARK; }
 	if (flags2 & RF2_OPEN_DOOR) { vp[vn] = _("ドアを開ける", "open doors"); color[vn++] = TERM_WHITE; }
 	if (flags2 & RF2_BASH_DOOR) { vp[vn] = _("ドアを打ち破る", "bash down doors"); color[vn++] = TERM_WHITE; }
-	if (flags7 & RF7_CAN_FLY)  { vp[vn] = _("空を飛ぶ", "fly"); color[vn++] = TERM_WHITE; }
-	if (flags7 & RF7_CAN_SWIM)   { vp[vn] = _("水を渡る", "swim"); color[vn++] = TERM_WHITE; }
+	if (flags7 & RF7_CAN_FLY) { vp[vn] = _("空を飛ぶ", "fly"); color[vn++] = TERM_WHITE; }
+	if (flags7 & RF7_CAN_SWIM) { vp[vn] = _("水を渡る", "swim"); color[vn++] = TERM_WHITE; }
 	if (flags2 & RF2_PASS_WALL) { vp[vn] = _("壁をすり抜ける", "pass through walls"); color[vn++] = TERM_WHITE; }
 	if (flags2 & RF2_KILL_WALL) { vp[vn] = _("壁を掘り進む", "bore through walls"); color[vn++] = TERM_WHITE; }
 	if (flags2 & RF2_MOVE_BODY) { vp[vn] = _("弱いモンスターを押しのける", "push past weaker monsters"); color[vn++] = TERM_WHITE; }
@@ -1402,7 +1402,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		hooked_roff(_("ことができる。", ".  "));
 
 	}
-	
+
 	/* Aquatic */
 	if (flags7 & RF7_AQUATIC)
 	{
@@ -1467,10 +1467,10 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		{
 			/* Intro */
 #ifdef JP
-			if ( n != 0 ) hooked_roff("や");
+			if (n != 0) hooked_roff("や");
 #else
 			if (n == 0) hooked_roff(" is hurt by ");
-			else if (n < vn-1) hooked_roff(", ");
+			else if (n < vn - 1) hooked_roff(", ");
 			else hooked_roff(" and ");
 #endif
 
@@ -1522,10 +1522,10 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		{
 			/* Intro */
 #ifdef JP
-			if ( n != 0 ) hooked_roff("と");
+			if (n != 0) hooked_roff("と");
 #else
 			if (n == 0) hooked_roff(" resists ");
-			else if (n < vn-1) hooked_roff(", ");
+			else if (n < vn - 1) hooked_roff(", ");
 			else hooked_roff(" and ");
 #endif
 
@@ -1544,7 +1544,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		if (r_ptr->next_r_idx)
 		{
 			hooked_roff(format(_("%^sは経験を積むと、", "%^s will evolve into "), wd_he[msex]));
-			hook_c_roff(TERM_YELLOW, format("%s", r_name+r_info[r_ptr->next_r_idx].name));
+			hook_c_roff(TERM_YELLOW, format("%s", r_name + r_info[r_ptr->next_r_idx].name));
 
 			hooked_roff(
 				_(format("に進化する。"),
@@ -1558,9 +1558,9 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 	/* Collect non-effects */
 	vn = 0;
-	if (flags3 & RF3_NO_STUN)  { vp[vn] = _("朦朧としない", "stunned"); color[vn++] = TERM_ORANGE; }
-	if (flags3 & RF3_NO_FEAR)  { vp[vn] = _("恐怖を感じない", "frightened"); color[vn++] = TERM_SLATE; }
-	if (flags3 & RF3_NO_CONF)  { vp[vn] = _("混乱しない", "confused"); color[vn++] = TERM_L_UMBER; }
+	if (flags3 & RF3_NO_STUN) { vp[vn] = _("朦朧としない", "stunned"); color[vn++] = TERM_ORANGE; }
+	if (flags3 & RF3_NO_FEAR) { vp[vn] = _("恐怖を感じない", "frightened"); color[vn++] = TERM_SLATE; }
+	if (flags3 & RF3_NO_CONF) { vp[vn] = _("混乱しない", "confused"); color[vn++] = TERM_L_UMBER; }
 	if (flags3 & RF3_NO_SLEEP) { vp[vn] = _("眠らされない", "slept"); color[vn++] = TERM_BLUE; }
 	if ((flagsr & RFR_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) { vp[vn] = _("テレポートされない", "teleported"); color[vn++] = TERM_ORANGE; }
 
@@ -1576,7 +1576,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		{
 			/* Intro */
 #ifdef JP
-			if ( n != 0 ) hooked_roff("し、");
+			if (n != 0) hooked_roff("し、");
 #else
 			if (n == 0) hooked_roff(" cannot be ");
 			else if (n < vn - 1) hooked_roff(", ");
@@ -1595,8 +1595,8 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 	/* Do we know how aware it is? */
 	if ((((int)r_ptr->r_wake * (int)r_ptr->r_wake) > r_ptr->sleep) ||
-		  (r_ptr->r_ignore == MAX_UCHAR) ||
-	    (r_ptr->sleep == 0 && r_ptr->r_tkills >= 10) || know_everything)
+		(r_ptr->r_ignore == MAX_UCHAR) ||
+		(r_ptr->sleep == 0 && r_ptr->r_tkills >= 10) || know_everything)
 	{
 		concptr act;
 
@@ -1647,7 +1647,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 		hooked_roff(
 			_(format("%^sは侵入者%s、 %d フィート先から侵入者に気付くことがある。", wd_he[msex], act, 10 * r_ptr->aaf),
-			  format("%^s %s intruders, which %s may notice from %d feet.  ", wd_he[msex], act, wd_he[msex], 10 * r_ptr->aaf)));
+				format("%^s %s intruders, which %s may notice from %d feet.  ", wd_he[msex], act, wd_he[msex], 10 * r_ptr->aaf)));
 	}
 
 
@@ -1801,30 +1801,30 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		/* Acquire the method */
 		switch (method)
 		{
-			case RBM_HIT:		p = _("殴る", "hit"); break;
-			case RBM_TOUCH:		p = _("触る", "touch"); break;
-			case RBM_PUNCH:		p = _("パンチする", "punch"); break;
-			case RBM_KICK:		p = _("蹴る", "kick"); break;
-			case RBM_CLAW:		p = _("ひっかく", "claw"); break;
-			case RBM_BITE:		p = _("噛む", "bite"); break;
-			case RBM_STING:		p = _("刺す", "sting"); break;
-			case RBM_SLASH:		p = _("斬る", "slash"); break;
-			case RBM_BUTT:		p = _("角で突く", "butt"); break;
-			case RBM_CRUSH:		p = _("体当たりする", "crush"); break;
-			case RBM_ENGULF:	p = _("飲み込む", "engulf"); break;
-			case RBM_CHARGE: 	p = _("請求書をよこす", "charge"); break;
-			case RBM_CRAWL:		p = _("体の上を這い回る", "crawl on you"); break;
-			case RBM_DROOL:		p = _("よだれをたらす", "drool on you"); break;
-			case RBM_SPIT:		p = _("つばを吐く", "spit"); break;
-			case RBM_EXPLODE:	p = _("爆発する", "explode"); break;
-			case RBM_GAZE:		p = _("にらむ", "gaze"); break;
-			case RBM_WAIL:		p = _("泣き叫ぶ", "wail"); break;
-			case RBM_SPORE:		p = _("胞子を飛ばす", "release spores"); break;
-			case RBM_XXX4:		break;
-			case RBM_BEG:		p = _("金をせがむ", "beg"); break;
-			case RBM_INSULT:	p = _("侮辱する", "insult"); break;
-			case RBM_MOAN:		p = _("うめく", "moan"); break;
-			case RBM_SHOW:  	p = _("歌う", "sing"); break;
+		case RBM_HIT:		p = _("殴る", "hit"); break;
+		case RBM_TOUCH:		p = _("触る", "touch"); break;
+		case RBM_PUNCH:		p = _("パンチする", "punch"); break;
+		case RBM_KICK:		p = _("蹴る", "kick"); break;
+		case RBM_CLAW:		p = _("ひっかく", "claw"); break;
+		case RBM_BITE:		p = _("噛む", "bite"); break;
+		case RBM_STING:		p = _("刺す", "sting"); break;
+		case RBM_SLASH:		p = _("斬る", "slash"); break;
+		case RBM_BUTT:		p = _("角で突く", "butt"); break;
+		case RBM_CRUSH:		p = _("体当たりする", "crush"); break;
+		case RBM_ENGULF:	p = _("飲み込む", "engulf"); break;
+		case RBM_CHARGE: 	p = _("請求書をよこす", "charge"); break;
+		case RBM_CRAWL:		p = _("体の上を這い回る", "crawl on you"); break;
+		case RBM_DROOL:		p = _("よだれをたらす", "drool on you"); break;
+		case RBM_SPIT:		p = _("つばを吐く", "spit"); break;
+		case RBM_EXPLODE:	p = _("爆発する", "explode"); break;
+		case RBM_GAZE:		p = _("にらむ", "gaze"); break;
+		case RBM_WAIL:		p = _("泣き叫ぶ", "wail"); break;
+		case RBM_SPORE:		p = _("胞子を飛ばす", "release spores"); break;
+		case RBM_XXX4:		break;
+		case RBM_BEG:		p = _("金をせがむ", "beg"); break;
+		case RBM_INSULT:	p = _("侮辱する", "insult"); break;
+		case RBM_MOAN:		p = _("うめく", "moan"); break;
+		case RBM_SHOW:  	p = _("歌う", "sing"); break;
 		}
 
 
@@ -1834,64 +1834,64 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		/* Acquire the effect */
 		switch (effect)
 		{
-			case RBE_SUPERHURT: q = _("強力に攻撃する", "slaughter"); break;
-			case RBE_HURT:    	q = _("攻撃する", "attack"); break;
-			case RBE_POISON:  	q = _("毒をくらわす", "poison"); break;
-			case RBE_UN_BONUS:	q = _("劣化させる", "disenchant"); break;
-			case RBE_UN_POWER:	q = _("充填魔力を吸収する", "drain charges"); break;
-			case RBE_EAT_GOLD:	q = _("金を盗む", "steal gold"); break;
-			case RBE_EAT_ITEM:	q = _("アイテムを盗む", "steal items"); break;
-			case RBE_EAT_FOOD:	q = _("あなたの食料を食べる", "eat your food"); break;
-			case RBE_EAT_LITE:	q = _("明かりを吸収する", "absorb light"); break;
-			case RBE_ACID:    	q = _("酸を飛ばす", "shoot acid"); break;
-			case RBE_ELEC:    	q = _("感電させる", "electrocute"); break;
-			case RBE_FIRE:    	q = _("燃やす", "burn"); break;
-			case RBE_COLD:    	q = _("凍らせる", "freeze"); break;
-			case RBE_BLIND:   	q = _("盲目にする", "blind"); break;
-			case RBE_CONFUSE: 	q = _("混乱させる", "confuse"); break;
-			case RBE_TERRIFY: 	q = _("恐怖させる", "terrify"); break;
-			case RBE_PARALYZE:	q = _("麻痺させる", "paralyze"); break;
-			case RBE_LOSE_STR:	q = _("腕力を減少させる", "reduce strength"); break;
-			case RBE_LOSE_INT:	q = _("知能を減少させる", "reduce intelligence"); break;
-			case RBE_LOSE_WIS:	q = _("賢さを減少させる", "reduce wisdom"); break;
-			case RBE_LOSE_DEX:	q = _("器用さを減少させる", "reduce dexterity"); break;
-			case RBE_LOSE_CON:	q = _("耐久力を減少させる", "reduce constitution"); break;
-			case RBE_LOSE_CHR:	q = _("魅力を減少させる", "reduce charisma"); break;
-			case RBE_LOSE_ALL:	q = _("全ステータスを減少させる", "reduce all stats"); break;
-			case RBE_SHATTER:	q = _("粉砕する", "shatter"); break;
-			case RBE_EXP_10:	q = _("経験値を減少(10d6+)させる", "lower experience (by 10d6+)"); break;
-			case RBE_EXP_20:	q = _("経験値を減少(20d6+)させる", "lower experience (by 20d6+)"); break;
-			case RBE_EXP_40:	q = _("経験値を減少(40d6+)させる", "lower experience (by 40d6+)"); break;
-			case RBE_EXP_80:	q = _("経験値を減少(80d6+)させる", "lower experience (by 80d6+)"); break;
-			case RBE_DISEASE:	q = _("病気にする", "disease"); break;
-			case RBE_TIME:      q = _("時間を逆戻りさせる", "time"); break;
-			case RBE_DR_LIFE:   q = _("生命力を吸収する", "drain life"); break;
-			case RBE_DR_MANA:   q = _("魔力を奪う", "drain mana force"); break;
-			case RBE_INERTIA:   q = _("減速させる", "slow"); break;
-			case RBE_STUN:      q = _("朦朧とさせる", "stun"); break;
+		case RBE_SUPERHURT: q = _("強力に攻撃する", "slaughter"); break;
+		case RBE_HURT:    	q = _("攻撃する", "attack"); break;
+		case RBE_POISON:  	q = _("毒をくらわす", "poison"); break;
+		case RBE_UN_BONUS:	q = _("劣化させる", "disenchant"); break;
+		case RBE_UN_POWER:	q = _("充填魔力を吸収する", "drain charges"); break;
+		case RBE_EAT_GOLD:	q = _("金を盗む", "steal gold"); break;
+		case RBE_EAT_ITEM:	q = _("アイテムを盗む", "steal items"); break;
+		case RBE_EAT_FOOD:	q = _("あなたの食料を食べる", "eat your food"); break;
+		case RBE_EAT_LITE:	q = _("明かりを吸収する", "absorb light"); break;
+		case RBE_ACID:    	q = _("酸を飛ばす", "shoot acid"); break;
+		case RBE_ELEC:    	q = _("感電させる", "electrocute"); break;
+		case RBE_FIRE:    	q = _("燃やす", "burn"); break;
+		case RBE_COLD:    	q = _("凍らせる", "freeze"); break;
+		case RBE_BLIND:   	q = _("盲目にする", "blind"); break;
+		case RBE_CONFUSE: 	q = _("混乱させる", "confuse"); break;
+		case RBE_TERRIFY: 	q = _("恐怖させる", "terrify"); break;
+		case RBE_PARALYZE:	q = _("麻痺させる", "paralyze"); break;
+		case RBE_LOSE_STR:	q = _("腕力を減少させる", "reduce strength"); break;
+		case RBE_LOSE_INT:	q = _("知能を減少させる", "reduce intelligence"); break;
+		case RBE_LOSE_WIS:	q = _("賢さを減少させる", "reduce wisdom"); break;
+		case RBE_LOSE_DEX:	q = _("器用さを減少させる", "reduce dexterity"); break;
+		case RBE_LOSE_CON:	q = _("耐久力を減少させる", "reduce constitution"); break;
+		case RBE_LOSE_CHR:	q = _("魅力を減少させる", "reduce charisma"); break;
+		case RBE_LOSE_ALL:	q = _("全ステータスを減少させる", "reduce all stats"); break;
+		case RBE_SHATTER:	q = _("粉砕する", "shatter"); break;
+		case RBE_EXP_10:	q = _("経験値を減少(10d6+)させる", "lower experience (by 10d6+)"); break;
+		case RBE_EXP_20:	q = _("経験値を減少(20d6+)させる", "lower experience (by 20d6+)"); break;
+		case RBE_EXP_40:	q = _("経験値を減少(40d6+)させる", "lower experience (by 40d6+)"); break;
+		case RBE_EXP_80:	q = _("経験値を減少(80d6+)させる", "lower experience (by 80d6+)"); break;
+		case RBE_DISEASE:	q = _("病気にする", "disease"); break;
+		case RBE_TIME:      q = _("時間を逆戻りさせる", "time"); break;
+		case RBE_DR_LIFE:   q = _("生命力を吸収する", "drain life"); break;
+		case RBE_DR_MANA:   q = _("魔力を奪う", "drain mana force"); break;
+		case RBE_INERTIA:   q = _("減速させる", "slow"); break;
+		case RBE_STUN:      q = _("朦朧とさせる", "stun"); break;
 		}
 
 
 #ifdef JP
-		if ( r == 0 ) hooked_roff( format("%^sは", wd_he[msex]) );
+		if (r == 0) hooked_roff(format("%^sは", wd_he[msex]));
 
 		/***若干表現を変更 ita ***/
 
 			/* Describe damage (if known) */
 		if (d1 && d2 && (know_everything || know_damage(r_idx, m)))
-		  {
-		    
-		    /* Display the damage */
-		    hooked_roff(format(" %dd%d ", d1, d2));
-		    hooked_roff("のダメージで");
-		  }
+		{
+
+			/* Display the damage */
+			hooked_roff(format(" %dd%d ", d1, d2));
+			hooked_roff("のダメージで");
+		}
 		/* Hack -- force a method */
 		if (!p) p = "何か奇妙なことをする";
 
 		/* Describe the method */
 		/* XXしてYYし/XXしてYYする/XXし/XXする */
-		if(q) jverb( p ,jverb_buf, JVERB_TO);
-		else if(r!=n-1) jverb( p ,jverb_buf, JVERB_AND);
+		if (q) jverb(p, jverb_buf, JVERB_TO);
+		else if (r != n - 1) jverb(p, jverb_buf, JVERB_AND);
 		else strcpy(jverb_buf, p);
 
 		hooked_roff(jverb_buf);
@@ -1899,18 +1899,18 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 		/* Describe the effect (if any) */
 		if (q)
 		{
-		  if(r!=n-1) jverb( q,jverb_buf, JVERB_AND);
-		  else strcpy(jverb_buf,q); 
-		  hooked_roff(jverb_buf);
+			if (r != n - 1) jverb(q, jverb_buf, JVERB_AND);
+			else strcpy(jverb_buf, q);
+			hooked_roff(jverb_buf);
 		}
-		if(r!=n-1) hooked_roff("、");
+		if (r != n - 1) hooked_roff("、");
 #else
 		/* Introduce the attack description */
 		if (!r)
 		{
 			hooked_roff(format("%^s can ", wd_he[msex]));
 		}
-		else if (r < n-1)
+		else if (r < n - 1)
 		{
 			hooked_roff(", ");
 		}
@@ -1961,7 +1961,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	{
 		hooked_roff(format(
 			_("%^sは物理的な攻撃方法を持たない。",
-			  "%^s has no physical attacks.  "), wd_he[msex]));
+				"%^s has no physical attacks.  "), wd_he[msex]));
 	}
 
 	/* Or describe the lack of knowledge */
@@ -1969,7 +1969,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	{
 		hooked_roff(format(
 			_("%s攻撃については何も知らない。",
-			  "Nothing is known about %s attack.  "), wd_his[msex]));
+				"Nothing is known about %s attack.  "), wd_his[msex]));
 	}
 
 
@@ -1979,16 +1979,16 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	 */
 	if ((flags1 & RF1_QUESTOR) && ((r_ptr->r_sights) && (r_ptr->max_num) && ((r_idx == MON_OBERON) || (r_idx == MON_SERPENT))))
 	{
-		hook_c_roff(TERM_VIOLET, 
+		hook_c_roff(TERM_VIOLET,
 			_("あなたはこのモンスターを殺したいという強い欲望を感じている...",
-			  "You feel an intense desire to kill this monster...  "));
+				"You feel an intense desire to kill this monster...  "));
 	}
 
 	else if (flags7 & RF7_GUARDIAN)
 	{
-		hook_c_roff(TERM_L_RED, 
+		hook_c_roff(TERM_L_RED,
 			_("このモンスターはダンジョンの主である。",
-			  "This monster is the master of a dungeon."));
+				"This monster is the master of a dungeon."));
 	}
 
 
@@ -2128,7 +2128,7 @@ void display_roff(MONRACE_IDX r_idx)
  * @param roff_func 出力処理を行う関数ポインタ
  * @return なし
  */
-void output_monster_spoiler(MONRACE_IDX r_idx, void (*roff_func)(TERM_COLOR attr, concptr str))
+void output_monster_spoiler(MONRACE_IDX r_idx, void(*roff_func)(TERM_COLOR attr, concptr str))
 {
 	hook_c_roff = roff_func;
 
@@ -2424,7 +2424,7 @@ bool are_enemies(monster_type *m_ptr, monster_type *n_ptr)
 	}
 
 	if ((r_ptr->flags8 & (RF8_WILD_TOWN | RF8_WILD_ALL))
-	    && (s_ptr->flags8 & (RF8_WILD_TOWN | RF8_WILD_ALL)))
+		&& (s_ptr->flags8 & (RF8_WILD_TOWN | RF8_WILD_ALL)))
 	{
 		if (!is_pet(m_ptr) && !is_pet(n_ptr)) return FALSE;
 	}
@@ -3231,4 +3231,3 @@ concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
 	}
 
 }
-
