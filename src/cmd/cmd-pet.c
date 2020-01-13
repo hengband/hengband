@@ -1065,7 +1065,7 @@ bool rakuba(player_type *creature_ptr, HIT_POINT dam, bool force)
 		lite_spot(creature_ptr->y, creature_ptr->x);
 
 		/* Check for new panel */
-		verify_panel();
+		verify_panel(creature_ptr);
 	}
 
 	creature_ptr->riding = 0;

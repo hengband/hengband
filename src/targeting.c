@@ -89,6 +89,7 @@ static bool change_panel_xy(player_type *creature_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief マップ描画のフォーカスを当てるべき座標を更新する
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @details
  * Given an row (y) and col (x), this routine detects when a move
  * off the screen has occurred and figures new borders. -RAK-
@@ -96,10 +97,10 @@ static bool change_panel_xy(player_type *creature_ptr, POSITION y, POSITION x)
  * The map is reprinted if necessary, and "TRUE" is returned.
  * @return 実際に再描画が必要だった場合TRUEを返す
  */
-void verify_panel(void)
+void verify_panel(player_type *creature_ptr)
 {
-	POSITION y = p_ptr->y;
-	POSITION x = p_ptr->x;
+	POSITION y = creature_ptr->y;
+	POSITION x = creature_ptr->x;
 	TERM_LEN wid, hgt;
 
 	int prow_min;
@@ -109,15 +110,15 @@ void verify_panel(void)
 
 	get_screen_size(&wid, &hgt);
 
-	max_prow_min = p_ptr->current_floor_ptr->height - hgt;
-	max_pcol_min = p_ptr->current_floor_ptr->width - wid;
+	max_prow_min = creature_ptr->current_floor_ptr->height - hgt;
+	max_pcol_min = creature_ptr->current_floor_ptr->width - wid;
 
 	/* Bounds checking */
 	if (max_prow_min < 0) max_prow_min = 0;
 	if (max_pcol_min < 0) max_pcol_min = 0;
 
 		/* Center on player */
-	if (center_player && (center_running || !p_ptr->running))
+	if (center_player && (center_running || !creature_ptr->running))
 	{
 		/* Center vertically */
 		prow_min = y - hgt / 2;
@@ -183,13 +184,13 @@ void verify_panel(void)
 	panel_col_min = pcol_min;
 
 	/* Hack -- optional disturb on "panel change" */
-	if (disturb_panel && !center_player) disturb(p_ptr, FALSE, FALSE);
+	if (disturb_panel && !center_player) disturb(creature_ptr, FALSE, FALSE);
 
 	panel_bounds_center();
 
-	p_ptr->update |= (PU_MONSTERS);
-	p_ptr->redraw |= (PR_MAP);
-	p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	creature_ptr->update |= (PU_MONSTERS);
+	creature_ptr->redraw |= (PR_MAP);
+	creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
 
@@ -1195,7 +1196,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 				case 'p':
 				{
 					/* Recenter the map around the player */
-					verify_panel();
+					verify_panel(creature_ptr);
 					creature_ptr->update |= (PU_MONSTERS);
 					creature_ptr->redraw |= (PR_MAP);
 					creature_ptr->window |= (PW_OVERHEAD);
@@ -1391,7 +1392,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 				case 'p':
 				{
 					/* Recenter the map around the player */
-					verify_panel();
+					verify_panel(creature_ptr);
 					creature_ptr->update |= (PU_MONSTERS);
 					creature_ptr->redraw |= (PR_MAP);
 					creature_ptr->window |= (PW_OVERHEAD);
@@ -1510,7 +1511,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 	prt("", 0, 0);
 
 	/* Recenter the map around the player */
-	verify_panel();
+	verify_panel(creature_ptr);
 	creature_ptr->update |= (PU_MONSTERS);
 	creature_ptr->redraw |= (PR_MAP);
 	creature_ptr->window |= (PW_OVERHEAD);
@@ -2076,7 +2077,7 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
 					n = 0;
 					y = creature_ptr->y;
 					x = creature_ptr->x;
-					verify_panel();	/* Move cursor to player */
+					verify_panel(creature_ptr);	/* Move cursor to player */
 
 					creature_ptr->update |= (PU_MONSTERS);
 
@@ -2161,7 +2162,7 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
 	prt("", 0, 0);
 
 	/* Recenter the map around the player */
-	verify_panel();
+	verify_panel(creature_ptr);
 
 	creature_ptr->update |= (PU_MONSTERS);
 

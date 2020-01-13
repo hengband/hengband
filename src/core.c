@@ -4965,7 +4965,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	panel_bounds_center();
 
 	/* Verify the panel */
-	verify_panel();
+	verify_panel(player_ptr);
 
 	msg_erase();
 

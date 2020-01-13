@@ -354,7 +354,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 void carry(player_type *creature_ptr, bool pickup)
 {
 	/* Recenter the map around the player */
-	verify_panel();
+	verify_panel(creature_ptr);
 
 	creature_ptr->update |= (PU_MONSTERS);
 	creature_ptr->redraw |= (PR_MAP);
@@ -623,7 +623,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 		lite_spot(ny, nx);
 
 		/* Check for new panel (redraw map) */
-		verify_panel();
+		verify_panel(creature_ptr);
 
 		if (mpe_mode & MPE_FORGET_FLOW)
 		{
@@ -2247,7 +2247,7 @@ void disturb(player_type *creature_ptr, bool stop_search, bool stop_travel)
 		creature_ptr->running = 0;
 
 		/* Check for new panel if appropriate */
-		if (center_player && !center_running) verify_panel();
+		if (center_player && !center_running) verify_panel(creature_ptr);
 
 		/* Calculate torch radius */
 		creature_ptr->update |= (PU_TORCH);
@@ -2263,7 +2263,7 @@ void disturb(player_type *creature_ptr, bool stop_search, bool stop_travel)
 		travel.run = 0;
 
 		/* Check for new panel if appropriate */
-		if (center_player && !center_running) verify_panel();
+		if (center_player && !center_running) verify_panel(creature_ptr);
 
 		/* Calculate torch radius */
 		creature_ptr->update |= (PU_TORCH);

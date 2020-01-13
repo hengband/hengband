@@ -2348,7 +2348,7 @@ void window_stuff(player_type *player_ptr)
  * Map resizing whenever the main term changes size
  * @return なし
  */
-void resize_map(void)
+void resize_map()
 {
 	/* Only if the dungeon exists */
 	if (!current_world_ptr->character_dungeon) return;
@@ -2361,7 +2361,7 @@ void resize_map(void)
 	panel_row_min = p_ptr->current_floor_ptr->height;
 	panel_col_min = p_ptr->current_floor_ptr->width;
 
-	verify_panel();
+	verify_panel(p_ptr);
 
 	p_ptr->update |= (PU_TORCH | PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 	p_ptr->update |= (PU_UN_VIEW | PU_UN_LITE);
