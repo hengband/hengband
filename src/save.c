@@ -871,7 +871,7 @@ static void wr_extra(player_type *creature_ptr)
  * @param sf_ptr 保存したいフロアの参照ポインタ
  * @return なし
  */
-static void wr_saved_floor(saved_floor_type *sf_ptr)
+static void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
 	grid_template_type *templates;
 	u16b max_num_temp;
@@ -889,12 +889,12 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	/*** Basic info ***/
 
 	/* Dungeon floor specific info follows */
-
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!sf_ptr)
 	{
 		/*** Not a saved floor ***/
 
-		wr_s16b((s16b)p_ptr->current_floor_ptr->dun_level);
+		wr_s16b((s16b)floor_ptr->dun_level);
 	}
 	else
 	{
@@ -909,13 +909,13 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 		wr_s16b(sf_ptr->lower_floor_id);
 	}
 
-	wr_u16b((u16b)p_ptr->current_floor_ptr->base_level);
-	wr_u16b((s16b)p_ptr->current_floor_ptr->num_repro);
-	wr_u16b((u16b)p_ptr->y);
-	wr_u16b((u16b)p_ptr->x);
-	wr_u16b((u16b)p_ptr->current_floor_ptr->height);
-	wr_u16b((u16b)p_ptr->current_floor_ptr->width);
-	wr_byte(p_ptr->feeling);
+	wr_u16b((u16b)floor_ptr->base_level);
+	wr_u16b((s16b)player_ptr->current_floor_ptr->num_repro);
+	wr_u16b((u16b)player_ptr->y);
+	wr_u16b((u16b)player_ptr->x);
+	wr_u16b((u16b)floor_ptr->height);
+	wr_u16b((u16b)floor_ptr->width);
+	wr_byte(player_ptr->feeling);
 
 
 
@@ -939,11 +939,11 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	C_MAKE(templates, max_num_temp, grid_template_type);
 
 	/* Extract template array */
-	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+	for (y = 0; y < floor_ptr->height; y++)
 	{
-		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+		for (x = 0; x < floor_ptr->width; x++)
 		{
-			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 			for (i = 0; i < num_temp; i++)
 			{
@@ -1013,11 +1013,11 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	count = 0;
 	prev_u16b = 0;
 
-	for (y = 0; y < p_ptr->current_floor_ptr->height; y++)
+	for (y = 0; y < floor_ptr->height; y++)
 	{
-		for (x = 0; x < p_ptr->current_floor_ptr->width; x++)
+		for (x = 0; x < floor_ptr->width; x++)
 		{
-			grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 			for (i = 0; i < num_temp; i++)
 			{
@@ -1078,12 +1078,12 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	/*** Dump objects ***/
 
 	/* Total objects */
-	wr_u16b(p_ptr->current_floor_ptr->o_max);
+	wr_u16b(floor_ptr->o_max);
 
 	/* Dump the objects */
-	for (i = 1; i < p_ptr->current_floor_ptr->o_max; i++)
+	for (i = 1; i < floor_ptr->o_max; i++)
 	{
-		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[i];
+		object_type *o_ptr = &floor_ptr->o_list[i];
 
 		/* Dump it */
 		wr_item(o_ptr);
@@ -1093,12 +1093,12 @@ static void wr_saved_floor(saved_floor_type *sf_ptr)
 	/*** Dump the monsters ***/
 
 	/* Total monsters */
-	wr_u16b(p_ptr->current_floor_ptr->m_max);
+	wr_u16b(floor_ptr->m_max);
 
 	/* Dump the monsters */
-	for (i = 1; i < p_ptr->current_floor_ptr->m_max; i++)
+	for (i = 1; i < floor_ptr->m_max; i++)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[i];
+		monster_type *m_ptr = &floor_ptr->m_list[i];
 
 		/* Dump it */
 		wr_monster(m_ptr);
@@ -1141,7 +1141,7 @@ static bool wr_dungeon(player_type *player_ptr)
 		wr_byte(0);
 
 		/* Write the current floor data */
-		wr_saved_floor(NULL);
+		wr_saved_floor(player_ptr, NULL);
 
 		/* Success */
 		return TRUE;
@@ -1188,7 +1188,7 @@ static bool wr_dungeon(player_type *player_ptr)
 			wr_byte(0);
 
 			/* Write saved floor data to the save file */
-			wr_saved_floor(sf_ptr);
+			wr_saved_floor(player_ptr, sf_ptr);
 		}
 		else
 		{
@@ -2028,7 +2028,7 @@ static bool save_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 	wr_u32b(saved_floor_file_sign);
 
 	/* Dump the dungeon floor */
-	wr_saved_floor(sf_ptr);
+	wr_saved_floor(player_ptr, sf_ptr);
 
 
 	/* Write the "value check-sum" */
