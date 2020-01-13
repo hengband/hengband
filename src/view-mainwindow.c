@@ -3585,17 +3585,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
 		Term_putstr(0, y, 12, 0, "            ");
 
 		if (match_autopick != -1)
-#if 1
 			display_shortened_item_name(player_ptr, autopick_obj, y);
-#else
-		{
-			char buf[13] = "\0";
-			strncpy(buf, autopick_list[match_autopick].name, 12);
-			buf[12] = '\0';
-			put_str(buf, y, 0);
-		}
-#endif
-
 	}
 
 	/* Player location */

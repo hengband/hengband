@@ -76,8 +76,6 @@
   * for all the rooms you ask for.\n
   */
 
-#if 1
-
 static room_info_type room_info_normal[ROOM_T_MAX] =
 {
 	/* Depth */
@@ -100,8 +98,6 @@ static room_info_type room_info_normal[ROOM_T_MAX] =
 	{{  1,  1,  1,  1,  1,  1,  1,  2,  2,  3,  3},  1}, /*ARCADE   */
 	{{  1,  8, 16, 24, 32, 40, 48, 56, 64, 72, 80},  1}, /*FIX      */
 };
-
-#endif
 
 /*! 部屋の生成処理順 / Build rooms in descending order of difficulty. */
 static byte room_build_order[ROOM_T_MAX] = {

@@ -552,9 +552,7 @@ struct _term_data
 	uint map_tile_hgt;
 
 	bool map_active;
-#if 1 /* #ifdef JP */
 	LOGFONT lf;
-#endif
 
 	bool posfix;
 
@@ -763,7 +761,6 @@ static BYTE win_pal[256] =
 static bool special_key[256];
 static bool ignore_key[256];
 
-#if 1
 /*
  * Hack -- initialization list for "special_key"
  */
@@ -797,67 +794,6 @@ static byte ignore_key_list[] = {
 	VK_LMENU, VK_RMENU,
 	0	/* End of List */
 };
-#else
-/*
- * Hack -- initialization list for "special_key"
- *
- * We ignore the modifier keys (shift, control, alt, num lock, scroll lock),
- * and the normal keys (escape, tab, return, letters, numbers, etc), but we
- * catch the keypad keys (with and without numlock set, including keypad 5),
- * the function keys (including the "menu" key which maps to F10), and the
- * "pause" key (between scroll lock and numlock).  We also catch a few odd
- * keys which I do not recognize, but which are listed among keys which we
- * do catch, so they should be harmless to catch.
- */
-static byte special_key_list[] =
-{
-	VK_CLEAR,		/* 0x0C (KP<5>) */
-
-	VK_PAUSE,		/* 0x13 (pause) */
-
-	VK_PRIOR,		/* 0x21 (KP<9>) */
-	VK_NEXT,		/* 0x22 (KP<3>) */
-	VK_END,			/* 0x23 (KP<1>) */
-	VK_HOME,		/* 0x24 (KP<7>) */
-	VK_LEFT,		/* 0x25 (KP<4>) */
-	VK_UP,			/* 0x26 (KP<8>) */
-	VK_RIGHT,		/* 0x27 (KP<6>) */
-	VK_DOWN,		/* 0x28 (KP<2>) */
-	VK_SELECT,		/* 0x29 (?????) */
-	VK_PRINT,		/* 0x2A (?????) */
-	VK_EXECUTE,		/* 0x2B (?????) */
-	VK_SNAPSHOT,	/* 0x2C (?????) */
-	VK_INSERT,		/* 0x2D (KP<0>) */
-	VK_DELETE,		/* 0x2E (KP<.>) */
-	VK_HELP,		/* 0x2F (?????) */
-	VK_F1,			/* 0x70 */
-	VK_F2,			/* 0x71 */
-	VK_F3,			/* 0x72 */
-	VK_F4,			/* 0x73 */
-	VK_F5,			/* 0x74 */
-	VK_F6,			/* 0x75 */
-	VK_F7,			/* 0x76 */
-	VK_F8,			/* 0x77 */
-	VK_F9,			/* 0x78 */
-	VK_F10,			/* 0x79 */
-	VK_F11,			/* 0x7A */
-	VK_F12,			/* 0x7B */
-	VK_F13,			/* 0x7C */
-	VK_F14,			/* 0x7D */
-	VK_F15,			/* 0x7E */
-	VK_F16,			/* 0x7F */
-	VK_F17,			/* 0x80 */
-	VK_F18,			/* 0x81 */
-	VK_F19,			/* 0x82 */
-	VK_F20,			/* 0x83 */
-	VK_F21,			/* 0x84 */
-	VK_F22,			/* 0x85 */
-	VK_F23,			/* 0x86 */
-	VK_F24,			/* 0x87 */
-	0
-};
-#endif
-
 
 /* Function prototype */
 
@@ -1142,14 +1078,12 @@ static void save_prefs_aux(int i)
 
 	WritePrivateProfileString(sec_name, "Font", buf, ini_file);
 
-#if 1 /* #ifdef JP */
 	wsprintf(buf, "%d", td->lf.lfWidth);
 	WritePrivateProfileString(sec_name, "FontWid", buf, ini_file);
 	wsprintf(buf, "%d", td->lf.lfHeight);
 	WritePrivateProfileString(sec_name, "FontHgt", buf, ini_file);
 	wsprintf(buf, "%d", td->lf.lfWeight);
 	WritePrivateProfileString(sec_name, "FontWgt", buf, ini_file);
-#endif
 	/* Bizarre */
 	strcpy(buf, td->bizarre ? "1" : "0");
 	WritePrivateProfileString(sec_name, "Bizarre", buf, ini_file);
@@ -1285,26 +1219,15 @@ static void load_prefs_aux(int i)
 	td->bizarre = (GetPrivateProfileInt(sec_name, "Bizarre", td->bizarre, ini_file) != 0);
 
 	/* Analyze font, save desired font name */
-#if 1 /* #ifdef JP */
 	td->font_want = string_make(tmp);
 	hgt = 15; wid = 0;
 	td->lf.lfWidth = GetPrivateProfileInt(sec_name, "FontWid", wid, ini_file);
 	td->lf.lfHeight = GetPrivateProfileInt(sec_name, "FontHgt", hgt, ini_file);
 	td->lf.lfWeight = GetPrivateProfileInt(sec_name, "FontWgt", 0, ini_file);
-#else
-	td->font_want = string_make(analyze_font(tmp, &wid, &hgt));
-#endif
-
 
 	/* Tile size */
-#if 1 /* #ifdef JP */
 	td->tile_wid = GetPrivateProfileInt(sec_name, "TileWid", td->lf.lfWidth, ini_file);
 	td->tile_hgt = GetPrivateProfileInt(sec_name, "TileHgt", td->lf.lfHeight, ini_file);
-#else
-	td->tile_wid = GetPrivateProfileInt(sec_name, "TileWid", wid, ini_file);
-	td->tile_hgt = GetPrivateProfileInt(sec_name, "TileHgt", hgt, ini_file);
-#endif
-
 
 	/* Window size */
 	td->cols = GetPrivateProfileInt(sec_name, "NumCols", td->cols, ini_file);
@@ -1883,7 +1806,6 @@ static errr term_force_font(term_data *td, concptr path)
 	/* Forget the old font (if needed) */
 	if (td->font_id) DeleteObject(td->font_id);
 
-#if 1 /* #ifdef JP */
 	/* Unused */
 	(void)path;
 
@@ -1892,67 +1814,6 @@ static errr term_force_font(term_data *td, concptr path)
 	wid = td->lf.lfWidth;
 	hgt = td->lf.lfHeight;
 	if (!td->font_id) return 1;
-#else
-	/* Forget old font */
-	if (td->font_file)
-	{
-		bool used = FALSE;
-
-		/* Scan windows */
-		for (i = 0; i < MAX_TERM_DATA; i++)
-		{
-			/* Don't check when closing the application */
-			if (!path) break;
-
-			/* Check "screen" */
-			if ((td != &data[i]) &&
-				(data[i].font_file) &&
-				(streq(data[i].font_file, td->font_file)))
-			{
-				used = TRUE;
-			}
-		}
-
-		/* Remove unused font resources */
-		if (!used) RemoveFontResource(td->font_file);
-
-		/* Free the old name */
-		string_free(td->font_file);
-
-		/* Forget it */
-		td->font_file = NULL;
-	}
-
-	/* No path given */
-	if (!path) return 1;
-
-	/* Local copy */
-	strcpy(buf, path);
-
-	/* Analyze font path */
-	base = analyze_font(buf, &wid, &hgt);
-
-	/* Verify suffix */
-	if (!suffix(base, ".FON")) return 1;
-
-	/* Verify file */
-	if (!check_file(buf)) return 1;
-
-	/* Load the new font */
-	if (!AddFontResource(buf)) return 1;
-
-	/* Save new font name */
-	td->font_file = string_make(base);
-
-	/* Remove the "suffix" */
-	base[strlen(base) - 4] = '\0';
-
-	/* Create the font (using the 'base' of the font file name!) */
-	td->font_id = CreateFont(hgt, wid, 0, 0, FW_DONTCARE, 0, 0, 0,
-		ANSI_CHARSET, OUT_DEFAULT_PRECIS,
-		CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY,
-		FIXED_PITCH | FF_DONTCARE, base);
-#endif
 
 	/* Hack -- Unknown size */
 	if (!wid || !hgt)
@@ -1988,7 +1849,6 @@ static errr term_force_font(term_data *td, concptr path)
  */
 static void term_change_font(term_data *td)
 {
-#if 1 /* #ifdef JP */
 	CHOOSEFONT cf;
 
 	memset(&cf, 0, sizeof(cf));
@@ -2014,56 +1874,8 @@ static void term_change_font(term_data *td)
 		/* Resize the window */
 		term_window_resize(td);
 	}
-
-#else
-	OPENFILENAME ofn;
-
-	char tmp[1024] = "";
-
-	/* Extract a default if possible */
-	if (td->font_file) strcpy(tmp, td->font_file);
-
-	/* Ask for a choice */
-	memset(&ofn, 0, sizeof(ofn));
-	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = data[0].w;
-	ofn.lpstrFilter = "Angband Font Files (*.fon)\0*.fon\0";
-	ofn.nFilterIndex = 1;
-	ofn.lpstrFile = tmp;
-	ofn.nMaxFile = 128;
-	ofn.lpstrInitialDir = ANGBAND_DIR_XTRA_FONT;
-	ofn.Flags = OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
-	ofn.lpstrDefExt = "fon";
-
-	/* Force choice if legal */
-	if (GetOpenFileName(&ofn))
-	{
-		/* Force the font */
-		if (term_force_font(td, tmp))
-		{
-			/* Access the standard font file */
-			path_build(tmp, sizeof(tmp), ANGBAND_DIR_XTRA_FONT, "8X13.FON");
-
-			/* Force the use of that font */
-			(void)term_force_font(td, tmp);
-		}
-
-		/* Assume not bizarre */
-		td->bizarre = FALSE;
-
-		/* Reset the tile info */
-		td->tile_wid = td->font_wid;
-		td->tile_hgt = td->font_hgt;
-
-		/* Analyze the font */
-		term_getsize(td);
-
-		/* Resize the window */
-		term_window_resize(td);
-	}
-#endif
-
 }
+
 
 /*
  * Allow the user to lock this window.
@@ -2777,7 +2589,6 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 	RECT rc;
 	HDC hdc;
 
-#if 1 /* #ifdef JP */
 	static HBITMAP  WALL;
 	static HBRUSH   myBrush, oldBrush;
 	static HPEN     oldPen;
@@ -2788,7 +2599,6 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 		myBrush = CreatePatternBrush(WALL);
 		init_done = TRUE;
 	}
-#endif
 
 	/* Total rectangle */
 	rc.left = x * td->tile_wid + td->size_ow1;
@@ -2900,7 +2710,6 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 				rc.right += td->tile_wid;
 			}
 #else
-#if 1
 			if (*(s + i) == 127) {
 				oldBrush = SelectObject(hdc, myBrush);
 				oldPen = SelectObject(hdc, GetStockObject(NULL_PEN));
@@ -2924,15 +2733,6 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 				rc.left += td->tile_wid;
 				rc.right += td->tile_wid;
 			}
-#else
-			/* Dump the text */
-			ExtTextOut(hdc, rc.left, rc.top, 0, &rc,
-				s + i, 1, NULL);
-
-			/* Advance */
-			rc.left += td->tile_wid;
-			rc.right += td->tile_wid;
-#endif
 #endif
 
 		}
@@ -3261,9 +3061,7 @@ static void init_windows(void)
 	td->pos_x = 7 * 30;
 	td->pos_y = 7 * 20;
 	td->posfix = FALSE;
-#if 1 /* #ifdef JP */
 	td->bizarre = TRUE;
-#endif
 	/* Sub windows */
 	for (i = 1; i < MAX_TERM_DATA; i++)
 	{
@@ -3281,15 +3079,11 @@ static void init_windows(void)
 		td->pos_x = (7 - i) * 30;
 		td->pos_y = (7 - i) * 20;
 		td->posfix = FALSE;
-#if 1 /* #ifdef JP */
 		td->bizarre = TRUE;
-#endif
 	}
-
 
 	/* Load prefs */
 	load_prefs();
-
 
 	/* Main window (need these before term_getsize gets called) */
 	td = &data[0];
@@ -3313,7 +3107,6 @@ static void init_windows(void)
 	{
 		td = &data[i];
 
-#if 1 /* #ifdef JP */
 		strncpy(td->lf.lfFaceName, td->font_want, LF_FACESIZE);
 		td->lf.lfCharSet = DEFAULT_CHARSET;
 		td->lf.lfPitchAndFamily = FIXED_PITCH | FF_DONTCARE;
@@ -3321,27 +3114,6 @@ static void init_windows(void)
 		term_force_font(td, NULL);
 		if (!td->tile_wid) td->tile_wid = td->font_wid;
 		if (!td->tile_hgt) td->tile_hgt = td->font_hgt;
-#else
-		/* Access the standard font file */
-		path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_FONT, td->font_want);
-
-		/* Activate the chosen font */
-		if (term_force_font(td, buf))
-		{
-			/* Access the standard font file */
-			path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA_FONT, "8X13.FON");
-
-			/* Force the use of that font */
-			(void)term_force_font(td, buf);
-
-			td->tile_wid = 8;
-			td->tile_hgt = 13;
-
-			/* Assume not bizarre */
-			td->bizarre = FALSE;
-		}
-#endif
-
 
 		/* Analyze the font */
 		term_getsize(td);
