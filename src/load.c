@@ -846,6 +846,7 @@ static void rd_item(object_type *o_ptr)
 
 /*!
  * @brief モンスターを読み込む(変愚ver1.5.0以前) / Read a monster (Old method)
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_ptr モンスター保存先ポインタ
  * @return なし
  */
@@ -1006,6 +1007,7 @@ static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 
 /*!
  * @brief モンスターを読み込む(現版) / Read a monster (New method)
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_ptr モンスター保存先ポインタ
  * @return なし
  */
@@ -1315,6 +1317,7 @@ static void rd_lore(MONRACE_IDX r_idx)
 
 /*!
  * @brief 店置きのアイテムオブジェクトを読み込む / Add the item "o_ptr" to the inventory of the "Home"
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param st_ptr 店舗の参照ポインタ
  * @param o_ptr アイテムオブジェクト参照ポインタ
  * @return なし
@@ -1326,7 +1329,7 @@ static void rd_lore(MONRACE_IDX r_idx)
  * Also note that it may not correctly "adapt" to "knowledge" bacoming
  * known, the player may have to pick stuff up and drop it again.
  */
-static void home_carry(store_type *st_ptr, object_type *o_ptr)
+static void home_carry(player_type *player_ptr, store_type *st_ptr, object_type *o_ptr)
 {
 	int 				slot;
 	s32b			   value;
@@ -1377,7 +1380,7 @@ static void home_carry(store_type *st_ptr, object_type *o_ptr)
 	/* Insert the new item */
 	st_ptr->stock[slot] = *o_ptr;
 
-	chg_virtue(p_ptr, V_SACRIFICE, -1);
+	chg_virtue(player_ptr, V_SACRIFICE, -1);
 
 	/* Return the location */
 	return;
@@ -1385,11 +1388,12 @@ static void home_carry(store_type *st_ptr, object_type *o_ptr)
 
 /*!
  * @brief 店舗情報を読み込む / Read a store
- * @param town_number 街ID 
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param town_number 街ID
  * @param store_number 店舗ID
  * @return エラーID
  */
-static errr rd_store(int town_number, int store_number)
+static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 {
 	store_type *st_ptr;
 
@@ -1450,7 +1454,7 @@ static errr rd_store(int town_number, int store_number)
 			int k;
 			if (sort)
 			{
-				home_carry(st_ptr, q_ptr);
+				home_carry(player_ptr, st_ptr, q_ptr);
 			}
 			else
 			{
@@ -3867,7 +3871,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	{
 		for (j = 0; j < tmp16u; j++)
 		{
-			if (rd_store(i, j)) return (22);
+			if (rd_store(creature_ptr, i, j)) return (22);
 		}
 	}
 
