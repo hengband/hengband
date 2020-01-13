@@ -10,7 +10,6 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-
 #include "angband.h"
 #include "util.h"
 #include "core.h"
@@ -41,11 +40,11 @@
 #include "spells.h"
 #include "world.h"
 
-/*!
- * @brief コンソール上におけるマップ表示の左上位置を返す /
- * Calculates current boundaries Called below and from "do_cmd_locate()".
- * @return なし
- */
+ /*!
+  * @brief コンソール上におけるマップ表示の左上位置を返す /
+  * Calculates current boundaries Called below and from "do_cmd_locate()".
+  * @return なし
+  */
 void panel_bounds_center(void)
 {
 	TERM_LEN wid, hgt;
@@ -73,7 +72,6 @@ static bool change_panel_xy(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	POSITION dy = 0, dx = 0;
 	TERM_LEN wid, hgt;
-
 	get_screen_size(&wid, &hgt);
 
 	if (y < panel_row_min) dy = -1;
@@ -103,21 +101,18 @@ void verify_panel(player_type *creature_ptr)
 	POSITION x = creature_ptr->x;
 	TERM_LEN wid, hgt;
 
-	int prow_min;
-	int pcol_min;
-	int max_prow_min;
-	int max_pcol_min;
-
 	get_screen_size(&wid, &hgt);
 
-	max_prow_min = creature_ptr->current_floor_ptr->height - hgt;
-	max_pcol_min = creature_ptr->current_floor_ptr->width - wid;
+	int max_prow_min = creature_ptr->current_floor_ptr->height - hgt;
+	int max_pcol_min = creature_ptr->current_floor_ptr->width - wid;
 
 	/* Bounds checking */
+	int prow_min;
+	int pcol_min;
 	if (max_prow_min < 0) max_prow_min = 0;
 	if (max_pcol_min < 0) max_pcol_min = 0;
 
-		/* Center on player */
+	/* Center on player */
 	if (center_player && (center_running || !creature_ptr->running))
 	{
 		/* Center vertically */
@@ -138,7 +133,7 @@ void verify_panel(player_type *creature_ptr)
 		/* Scroll screen when 2 grids from top/bottom edge */
 		if (y > panel_row_max - 2)
 		{
-			while (y > prow_min + hgt-1 - 2)
+			while (y > prow_min + hgt - 1 - 2)
 			{
 				prow_min += (hgt / 2);
 			}
@@ -158,12 +153,12 @@ void verify_panel(player_type *creature_ptr)
 		/* Scroll screen when 4 grids from left/right edge */
 		if (x > panel_col_max - 4)
 		{
-			while (x > pcol_min + wid-1 - 4)
+			while (x > pcol_min + wid - 1 - 4)
 			{
 				pcol_min += (wid / 2);
 			}
 		}
-		
+
 		if (x < panel_col_min + 4)
 		{
 			while (x < pcol_min + 4)
@@ -193,8 +188,6 @@ void verify_panel(player_type *creature_ptr)
 	creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 }
 
-
-/*** Targeting Code ***/
 
 /*
  * Determine is a monster makes a reasonable target
@@ -255,24 +248,19 @@ bool target_okay(player_type *creature_ptr)
 	if (target_who < 0) return TRUE;
 
 	/* Check moving targets */
-	if (target_who > 0)
-	{
-		/* Accept reasonable targets */
-		if (target_able(creature_ptr, target_who))
-		{
-			monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[target_who];
+	if (target_who <= 0) return FALSE;
 
-			/* Acquire monster location */
-			target_row = m_ptr->fy;
-			target_col = m_ptr->fx;
+	/* Accept reasonable targets */
+	if (!target_able(creature_ptr, target_who)) return FALSE;
 
-			/* Good target */
-			return TRUE;
-		}
-	}
+	monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[target_who];
 
-	/* Assume no target */
-	return FALSE;
+	/* Acquire monster location */
+	target_row = m_ptr->fy;
+	target_col = m_ptr->fx;
+
+	/* Good target */
+	return TRUE;
 }
 
 
@@ -281,41 +269,38 @@ bool target_okay(player_type *creature_ptr)
  */
 static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION dx)
 {
-	POSITION_IDX i, v;
-	POSITION x2, y2, x3, y3, x4, y4;
-	POSITION_IDX b_i = -1, b_v = 9999;
-
-
 	/* Scan the locations */
-	for (i = 0; i < tmp_pos.n; i++)
+	POSITION_IDX b_i = -1, b_v = 9999;
+	for (POSITION_IDX i = 0; i < tmp_pos.n; i++)
 	{
 		/* Point 2 */
-		x2 = tmp_pos.x[i];
-		y2 = tmp_pos.y[i];
+		POSITION x2 = tmp_pos.x[i];
+		POSITION y2 = tmp_pos.y[i];
 
 		/* Directed distance */
-		x3 = (x2 - x1);
-		y3 = (y2 - y1);
+		POSITION x3 = (x2 - x1);
+		POSITION y3 = (y2 - y1);
 
 		/* Verify quadrant */
 		if (dx && (x3 * dx <= 0)) continue;
 		if (dy && (y3 * dy <= 0)) continue;
 
-		x4 = ABS(x3);
-		y4 = ABS(y3);
+		POSITION x4 = ABS(x3);
+		POSITION y4 = ABS(y3);
 
 		/* Verify quadrant */
 		if (dy && !dx && (x4 > y4)) continue;
 		if (dx && !dy && (y4 > x4)) continue;
 
 		/* Approximate Double Distance */
-		v = ((x4 > y4) ? (x4 + x4 + y4) : (y4 + y4 + x4));
+		POSITION_IDX v = ((x4 > y4) ? (x4 + x4 + y4) : (y4 + y4 + x4));
 
 		/* Penalize location */
 		if ((b_i >= 0) && (v >= b_v)) continue;
 		b_i = i; b_v = v;
 	}
-	return (b_i);
+
+	return b_i;
 }
 
 
@@ -324,9 +309,6 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
  */
 static bool target_set_accept(player_type *creature_ptr, POSITION y, POSITION x)
 {
-	grid_type *g_ptr;
-	OBJECT_IDX this_o_idx, next_o_idx = 0;
-
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	if (!(in_bounds(floor_ptr, y, x))) return FALSE;
 
@@ -335,6 +317,7 @@ static bool target_set_accept(player_type *creature_ptr, POSITION y, POSITION x)
 
 	if (creature_ptr->image) return FALSE;
 
+	grid_type *g_ptr;
 	g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Visible monsters */
@@ -347,7 +330,8 @@ static bool target_set_accept(player_type *creature_ptr, POSITION y, POSITION x)
 	}
 
 	/* Scan all objects in the grid */
-	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	OBJECT_IDX next_o_idx = 0;
+	for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 		o_ptr = &floor_ptr->o_list[this_o_idx];
@@ -378,9 +362,7 @@ static bool target_set_accept(player_type *creature_ptr, POSITION y, POSITION x)
  */
 static void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
 {
-	POSITION y, x;
 	POSITION min_hgt, max_hgt, min_wid, max_wid;
-
 	if (mode & TARGET_KILL)
 	{
 		/* Inner range */
@@ -402,9 +384,9 @@ static void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
 	tmp_pos.n = 0;
 
 	/* Scan the current panel */
-	for (y = min_hgt; y <= max_hgt; y++)
+	for (POSITION y = min_hgt; y <= max_hgt; y++)
 	{
-		for (x = min_wid; x <= max_wid; x++)
+		for (POSITION x = min_wid; x <= max_wid; x++)
 		{
 			grid_type *g_ptr;
 
@@ -435,18 +417,17 @@ static void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
 		ang_sort(tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_importance, ang_sort_swap_distance);
 	}
 
-	if (creature_ptr->riding && target_pet && (tmp_pos.n > 1) && (mode & (TARGET_KILL)))
-	{
-		POSITION tmp;
+	if (creature_ptr->riding == 0 || !target_pet || (tmp_pos.n <= 1) || !(mode & (TARGET_KILL)))
+		return;
 
-		tmp = tmp_pos.y[0];
-		tmp_pos.y[0] = tmp_pos.y[1];
-		tmp_pos.y[1] = tmp;
-		tmp = tmp_pos.x[0];
-		tmp_pos.x[0] = tmp_pos.x[1];
-		tmp_pos.x[1] = tmp;
-	}
+	POSITION tmp = tmp_pos.y[0];
+	tmp_pos.y[0] = tmp_pos.y[1];
+	tmp_pos.y[1] = tmp;
+	tmp = tmp_pos.x[0];
+	tmp_pos.x[0] = tmp_pos.x[1];
+	tmp_pos.x[1] = tmp;
 }
+
 
 void target_set_prepare_look(player_type *creature_ptr)
 {
@@ -466,18 +447,17 @@ static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_t
 
 	if ((creature_ptr->lev >= PY_MAX_LEVEL) || (creature_ptr->prace == RACE_ANDROID))
 	{
-		sprintf(buf,"**");
+		sprintf(buf, "**");
 		return;
 	}
 	else if (!ap_r_ptr->r_tkills || (m_ptr->mflag2 & MFLAG2_KAGE))
 	{
 		if (!current_world_ptr->wizard)
 		{
-			sprintf(buf,"??");
+			sprintf(buf, "??");
 			return;
 		}
 	}
-
 
 	/* The monster's experience point (assuming average monster speed) */
 	exp_mon = ap_r_ptr->mexp * ap_r_ptr->level;
@@ -486,7 +466,7 @@ static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_t
 
 
 	/* Total experience value for next level */
-	exp_adv = player_exp[creature_ptr->lev -1] * creature_ptr->expfact;
+	exp_adv = player_exp[creature_ptr->lev - 1] * creature_ptr->expfact;
 	exp_adv_frac = 0;
 	s64b_div(&exp_adv, &exp_adv_frac, 0, 100);
 
@@ -505,7 +485,7 @@ static void evaluate_monster_exp(player_type *creature_ptr, char *buf, monster_t
 	num = MIN(999, exp_adv_frac);
 
 	/* Display the number */
-	sprintf(buf,"%03ld", (long int)num);
+	sprintf(buf, "%03ld", (long int)num);
 }
 
 
@@ -528,20 +508,19 @@ bool show_gold_on_floor = FALSE;
  * recall info and the health bar info to track that monster.
  *
  * Eventually, we may allow multiple objects per grid, or objects
- * and terrain features in the same grid. 
+ * and terrain features in the same grid.
  *
  * This function must handle blindness/hallucination.
  */
 static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT_FLAGS mode, concptr info)
 {
-	grid_type *g_ptr = &subject_ptr->current_floor_ptr->grid_array[y][x];
-	OBJECT_IDX this_o_idx, next_o_idx = 0;
+	OBJECT_IDX next_o_idx = 0;
 	concptr s1 = "", s2 = "", s3 = "", x_info = "";
 	bool boring = TRUE;
 	FEAT_IDX feat;
 	feature_type *f_ptr;
 	char query = '\001';
-	char out_val[MAX_NLEN+80];
+	char out_val[MAX_NLEN + 80];
 	OBJECT_IDX floor_list[23];
 	ITEM_NUMBER floor_num = 0;
 
@@ -596,8 +575,8 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 		return 0;
 	}
 
-
 	/* Actual monsters */
+	grid_type *g_ptr = &subject_ptr->current_floor_ptr->grid_array[y][x];
 	if (g_ptr->m_idx && subject_ptr->current_floor_ptr->m_list[g_ptr->m_idx].ml)
 	{
 		monster_type *m_ptr = &subject_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
@@ -686,9 +665,8 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 		s2 = "carrying ";
 #endif
 
-
 		/* Scan all objects being carried */
-		for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
+		for (OBJECT_IDX this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			GAME_TEXT o_name[MAX_NLEN];
 
@@ -810,7 +788,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 
 				/* Get the object being moved. */
 				o_idx = g_ptr->o_idx;
- 
+
 				/* Only rotate a pile of two or more objects. */
 				if (!(o_idx && subject_ptr->current_floor_ptr->o_list[o_idx].next_o_idx)) continue;
 
@@ -833,7 +811,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 	}
 
 	/* Scan all objects in the grid */
-	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 		o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
@@ -881,7 +859,6 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 		}
 	}
 
-
 	/* Feature code (applying "mimic" field) */
 	feat = get_feat_mimic(g_ptr);
 
@@ -895,121 +872,116 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 	f_ptr = &f_info[feat];
 
 	/* Terrain feature if needed */
-	if (boring || have_flag(f_ptr->flags, FF_REMEMBER))
+	if (!boring && !have_flag(f_ptr->flags, FF_REMEMBER))
 	{
-		concptr name;
-
-		/* Hack -- special handling for quest entrances */
-		if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
-		{
-			/* Set the quest number temporary */
-			IDX old_quest = subject_ptr->current_floor_ptr->inside_quest;
-			int j;
-
-			/* Clear the text */
-			for (j = 0; j < 10; j++) quest_text[j][0] = '\0';
-			quest_text_line = 0;
-
-			subject_ptr->current_floor_ptr->inside_quest = g_ptr->special;
-
-			/* Get the quest text */
-			init_flags = INIT_NAME_ONLY;
-
-			process_dungeon_file(subject_ptr, "q_info.txt", 0, 0, 0, 0);
-
-			name = format(_("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"), 
-						quest[g_ptr->special].name, quest[g_ptr->special].level);
-
-			/* Reset the old quest number */
-			subject_ptr->current_floor_ptr->inside_quest = old_quest;
-		}
-
-		/* Hack -- special handling for building doors */
-		else if (have_flag(f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena)
-		{
-			name = building[f_ptr->subtype].name;
-		}
-		else if (have_flag(f_ptr->flags, FF_ENTRANCE))
-		{
-			name = format(_("%s(%d階相当)", "%s(level %d)"), d_text + d_info[g_ptr->special].text, d_info[g_ptr->special].mindepth);
-		}
-		else if (have_flag(f_ptr->flags, FF_TOWN))
-		{
-			name = town_info[g_ptr->special].name;
-		}
-		else if (subject_ptr->wild_mode && (feat == feat_floor))
-		{
-			name = _("道", "road");
-		}
-		else
-		{
-			name = f_name + f_ptr->name;
-		}
-
-
-		/* Pick a prefix */
-		if (*s2 &&
-		    ((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) ||
-		     (!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE)) ||
-		     have_flag(f_ptr->flags, FF_TOWN)))
-		{
-			s2 = _("の中", "in ");
-		}
-
-		/* Hack -- special introduction for store & building doors -KMW- */
-		if (have_flag(f_ptr->flags, FF_STORE) ||
-		    have_flag(f_ptr->flags, FF_QUEST_ENTER) ||
-		    (have_flag(f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena) ||
-		    have_flag(f_ptr->flags, FF_ENTRANCE))
-		{
-			s2 = _("の入口", "");
-		}
-#ifndef JP
-		else if (have_flag(f_ptr->flags, FF_FLOOR) ||
-			 have_flag(f_ptr->flags, FF_TOWN) ||
-			 have_flag(f_ptr->flags, FF_SHALLOW) ||
-			 have_flag(f_ptr->flags, FF_DEEP))
-		{
-			s3 ="";
-		}
-		else
-		{
-			/* Pick proper indefinite article */
-			s3 = (is_a_vowel(name[0])) ? "an " : "a ";
-		}
-#endif
-
-		/* Display a message */
-		if (current_world_ptr->wizard)
-		{
-			char f_idx_str[32];
-			if (g_ptr->mimic) sprintf(f_idx_str, "%d/%d", g_ptr->feat, g_ptr->mimic);
-			else sprintf(f_idx_str, "%d", g_ptr->feat);
-#ifdef JP
-			sprintf(out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", s1, name, s2, s3, info, (unsigned int)g_ptr->info, f_idx_str, g_ptr->dist, g_ptr->cost, g_ptr->when, (int)y, (int)x, travel.cost[y][x]);
-#else
-			sprintf(out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", s1, s2, s3, name, info, g_ptr->info, f_idx_str, g_ptr->dist, g_ptr->cost, g_ptr->when, (int)y, (int)x);
-#endif
-		}
-		else
-#ifdef JP
-			sprintf(out_val, "%s%s%s%s[%s]", s1, name, s2, s3, info);
-#else
-			sprintf(out_val, "%s%s%s%s [%s]", s1, s2, s3, name, info);
-#endif
-
-		prt(out_val, 0, 0);
-		move_cursor_relative(y, x);
-		query = inkey();
-
-		/* Always stop at "normal" keys */
-		if ((query != '\r') && (query != '\n') && (query != ' ')) return query;
+		if ((query != '\r') && (query != '\n')) return query;
+		return 0;
 	}
 
-	/* Stop on everything but "return" */
-	if ((query != '\r') && (query != '\n')) return query;
+	/* Hack -- special handling for quest entrances */
+	concptr name;
+	if (have_flag(f_ptr->flags, FF_QUEST_ENTER))
+	{
+		/* Set the quest number temporary */
+		IDX old_quest = subject_ptr->current_floor_ptr->inside_quest;
+		int j;
 
-	/* Repeat forever */
+		/* Clear the text */
+		for (j = 0; j < 10; j++) quest_text[j][0] = '\0';
+		quest_text_line = 0;
+
+		subject_ptr->current_floor_ptr->inside_quest = g_ptr->special;
+
+		/* Get the quest text */
+		init_flags = INIT_NAME_ONLY;
+
+		process_dungeon_file(subject_ptr, "q_info.txt", 0, 0, 0, 0);
+
+		name = format(_("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"),
+			quest[g_ptr->special].name, quest[g_ptr->special].level);
+
+		/* Reset the old quest number */
+		subject_ptr->current_floor_ptr->inside_quest = old_quest;
+	}
+
+	/* Hack -- special handling for building doors */
+	else if (have_flag(f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena)
+	{
+		name = building[f_ptr->subtype].name;
+	}
+	else if (have_flag(f_ptr->flags, FF_ENTRANCE))
+	{
+		name = format(_("%s(%d階相当)", "%s(level %d)"), d_text + d_info[g_ptr->special].text, d_info[g_ptr->special].mindepth);
+	}
+	else if (have_flag(f_ptr->flags, FF_TOWN))
+	{
+		name = town_info[g_ptr->special].name;
+	}
+	else if (subject_ptr->wild_mode && (feat == feat_floor))
+	{
+		name = _("道", "road");
+	}
+	else
+	{
+		name = f_name + f_ptr->name;
+	}
+
+	/* Pick a prefix */
+	if (*s2 &&
+		((!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) ||
+		(!have_flag(f_ptr->flags, FF_LOS) && !have_flag(f_ptr->flags, FF_TREE)) ||
+			have_flag(f_ptr->flags, FF_TOWN)))
+	{
+		s2 = _("の中", "in ");
+	}
+
+	/* Hack -- special introduction for store & building doors -KMW- */
+	if (have_flag(f_ptr->flags, FF_STORE) ||
+		have_flag(f_ptr->flags, FF_QUEST_ENTER) ||
+		(have_flag(f_ptr->flags, FF_BLDG) && !subject_ptr->current_floor_ptr->inside_arena) ||
+		have_flag(f_ptr->flags, FF_ENTRANCE))
+	{
+		s2 = _("の入口", "");
+	}
+#ifndef JP
+	else if (have_flag(f_ptr->flags, FF_FLOOR) ||
+		have_flag(f_ptr->flags, FF_TOWN) ||
+		have_flag(f_ptr->flags, FF_SHALLOW) ||
+		have_flag(f_ptr->flags, FF_DEEP))
+	{
+		s3 = "";
+	}
+	else
+	{
+		/* Pick proper indefinite article */
+		s3 = (is_a_vowel(name[0])) ? "an " : "a ";
+	}
+#endif
+
+	/* Display a message */
+	if (current_world_ptr->wizard)
+	{
+		char f_idx_str[32];
+		if (g_ptr->mimic) sprintf(f_idx_str, "%d/%d", g_ptr->feat, g_ptr->mimic);
+		else sprintf(f_idx_str, "%d", g_ptr->feat);
+#ifdef JP
+		sprintf(out_val, "%s%s%s%s[%s] %x %s %d %d %d (%d,%d) %d", s1, name, s2, s3, info, (unsigned int)g_ptr->info, f_idx_str, g_ptr->dist, g_ptr->cost, g_ptr->when, (int)y, (int)x, travel.cost[y][x]);
+#else
+		sprintf(out_val, "%s%s%s%s [%s] %x %s %d %d %d (%d,%d)", s1, s2, s3, name, info, g_ptr->info, f_idx_str, g_ptr->dist, g_ptr->cost, g_ptr->when, (int)y, (int)x);
+#endif
+	}
+	else
+#ifdef JP
+		sprintf(out_val, "%s%s%s%s[%s]", s1, name, s2, s3, info);
+#else
+		sprintf(out_val, "%s%s%s%s [%s]", s1, s2, s3, name, info);
+#endif
+
+	prt(out_val, 0, 0);
+	move_cursor_relative(y, x);
+	query = inkey();
+
+	if ((query != '\r') && (query != '\n') && (query != ' ')) return query;
 	return 0;
 }
 
@@ -1021,7 +993,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
  *
  * All locations must be on the current panel.  Consider the use of
  * "panel_bounds()" to allow "off-panel" targets, perhaps by using
- * some form of "scrolling" the map around the cursor.  
+ * some form of "scrolling" the map around the cursor.
  * That is, consider the possibility of "auto-scrolling" the screen
  * while the cursor moves around.  This may require changes in the
  * "update_monster()" code to allow "visibility" even if off panel, and
@@ -1057,7 +1029,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
  */
 bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 {
-	int i, d, m, t, bd;
+	int i, d, t, bd;
 	POSITION y = creature_ptr->y;
 	POSITION x = creature_ptr->x;
 
@@ -1068,7 +1040,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 	char same_key;
 	grid_type *g_ptr;
 	TERM_LEN wid, hgt;
-	
+
 	get_screen_size(&wid, &hgt);
 
 	/* Cancel target */
@@ -1087,7 +1059,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 	target_set_prepare(creature_ptr, mode);
 
 	/* Start near the player */
-	m = 0;
+	int m = 0;
 
 	/* Interact */
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
@@ -1126,12 +1098,12 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 					los(creature_ptr, creature_ptr->y, creature_ptr->x, y, x), projectable(creature_ptr, creature_ptr->y, creature_ptr->x, y, x));
 				strcat(info, cheatinfo);
 			}
-			
+
 			/* Describe and Prompt */
 			while (TRUE)
 			{
 				query = target_set_aux(creature_ptr, y, x, mode, info);
-				if(query)break;
+				if (query)break;
 			}
 
 			/* Assume no "direction" */
@@ -1140,106 +1112,106 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 			if (use_menu)
 			{
 				if (query == '\r') query = 't';
-			}  
+			}
 
 			/* Analyze */
 			switch (query)
 			{
-				case ESCAPE:
-				case 'q':
+			case ESCAPE:
+			case 'q':
+			{
+				done = TRUE;
+				break;
+			}
+
+			case 't':
+			case '.':
+			case '5':
+			case '0':
+			{
+				if (target_able(creature_ptr, g_ptr->m_idx))
 				{
+					health_track(creature_ptr, g_ptr->m_idx);
+					target_who = g_ptr->m_idx;
+					target_row = y;
+					target_col = x;
 					done = TRUE;
-					break;
 				}
-
-				case 't':
-				case '.':
-				case '5':
-				case '0':
+				else
 				{
-					if (target_able(creature_ptr, g_ptr->m_idx))
-					{
-						health_track(creature_ptr, g_ptr->m_idx);
-						target_who = g_ptr->m_idx;
-						target_row = y;
-						target_col = x;
-						done = TRUE;
-					}
-					else
-					{
-						bell();
-					}
-					break;
+					bell();
 				}
+				break;
+			}
 
-				case ' ':
-				case '*':
-				case '+':
+			case ' ':
+			case '*':
+			case '+':
+			{
+				if (++m == tmp_pos.n)
+				{
+					m = 0;
+					if (!expand_list) done = TRUE;
+				}
+				break;
+			}
+
+			case '-':
+			{
+				if (m-- == 0)
+				{
+					m = tmp_pos.n - 1;
+					if (!expand_list) done = TRUE;
+				}
+				break;
+			}
+
+			case 'p':
+			{
+				/* Recenter the map around the player */
+				verify_panel(creature_ptr);
+				creature_ptr->update |= (PU_MONSTERS);
+				creature_ptr->redraw |= (PR_MAP);
+				creature_ptr->window |= (PW_OVERHEAD);
+				handle_stuff(creature_ptr);
+
+				/* Recalculate interesting grids */
+				target_set_prepare(creature_ptr, mode);
+
+				y = creature_ptr->y;
+				x = creature_ptr->x;
+			}
+
+			case 'o':
+			{
+				flag = FALSE;
+				break;
+			}
+
+			case 'm':
+			{
+				break;
+			}
+
+			default:
+			{
+				if (query == same_key)
 				{
 					if (++m == tmp_pos.n)
 					{
 						m = 0;
 						if (!expand_list) done = TRUE;
 					}
+				}
+				else
+				{
+					/* Extract the action (if any) */
+					d = get_keymap_dir(query);
+
+					if (!d) bell();
 					break;
 				}
-
-				case '-':
-				{
-					if (m-- == 0)
-					{
-						m = tmp_pos.n - 1;
-						if (!expand_list) done = TRUE;
-					}
-					break;
-				}
-
-				case 'p':
-				{
-					/* Recenter the map around the player */
-					verify_panel(creature_ptr);
-					creature_ptr->update |= (PU_MONSTERS);
-					creature_ptr->redraw |= (PR_MAP);
-					creature_ptr->window |= (PW_OVERHEAD);
-					handle_stuff(creature_ptr);
-
-					/* Recalculate interesting grids */
-					target_set_prepare(creature_ptr, mode);
-
-					y = creature_ptr->y;
-					x = creature_ptr->x;
-				}
-
-				case 'o':
-				{
-					flag = FALSE;
-					break;
-				}
-
-				case 'm':
-				{
-					break;
-				}
-
-				default:
-				{
-					if(query == same_key)
-					{
-						if (++m == tmp_pos.n)
-						{
-							m = 0;
-							if (!expand_list) done = TRUE;
-						}
-					}
-					else
-					{
-						/* Extract the action (if any) */
-						d = get_keymap_dir(query);
-
-						if (!d) bell();
-						break;
-					}
-				}
+			}
 			}
 			/* Hack -- move around */
 			if (d)
@@ -1271,129 +1243,18 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 
 						/* Use that grid */
 						if (i >= 0) m = i;
+						continue;
 					}
 
 					/* Nothing interesting */
-					else
-					{
-						POSITION dx = ddx[d];
-						POSITION dy = ddy[d];
+					POSITION dx = ddx[d];
+					POSITION dy = ddy[d];
 
-						/* Restore previous position */
-						panel_row_min = y2;
-						panel_col_min = x2;
-						panel_bounds_center();
+					/* Restore previous position */
+					panel_row_min = y2;
+					panel_col_min = x2;
+					panel_bounds_center();
 
-						creature_ptr->update |= (PU_MONSTERS);
-						creature_ptr->redraw |= (PR_MAP);
-						creature_ptr->window |= (PW_OVERHEAD);
-						handle_stuff(creature_ptr);
-
-						/* Recalculate interesting grids */
-						target_set_prepare(creature_ptr, mode);
-
-						/* Look at boring grids */
-						flag = FALSE;
-
-						/* Move */
-						x += dx;
-						y += dy;
-
-						/* Do not move horizontally if unnecessary */
-						if (((x < panel_col_min + wid / 2) && (dx > 0)) ||
-							 ((x > panel_col_min + wid / 2) && (dx < 0)))
-						{
-							dx = 0;
-						}
-
-						/* Do not move vertically if unnecessary */
-						if (((y < panel_row_min + hgt / 2) && (dy > 0)) ||
-							 ((y > panel_row_min + hgt / 2) && (dy < 0)))
-						{
-							dy = 0;
-						}
-
-						/* Apply the motion */
-						if ((y >= panel_row_min+hgt) || (y < panel_row_min) ||
-						    (x >= panel_col_min+wid) || (x < panel_col_min))
-						{
-							if (change_panel(creature_ptr, dy, dx)) target_set_prepare(creature_ptr, mode);
-						}
-
-						/* Slide into legality */
-						if (x >= floor_ptr->width-1) x = floor_ptr->width - 2;
-						else if (x <= 0) x = 1;
-
-						/* Slide into legality */
-						if (y >= floor_ptr->height-1) y = floor_ptr->height- 2;
-						else if (y <= 0) y = 1;
-					}
-				}
-
-				/* Use that grid */
-				m = i;
-			}
-		}
-
-		/* Arbitrary grids */
-		else
-		{
-			bool move_fast = FALSE;
-
-			if (!(mode & TARGET_LOOK)) print_path(creature_ptr, y, x);
-
-			/* Access */
-			g_ptr = &floor_ptr->grid_array[y][x];
-
-			/* Default prompt */
-			strcpy(info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
-
-			if (cheat_sight)
-			{
-				char cheatinfo[100];
-				sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d, SPECIAL:%d",
-					los(creature_ptr, creature_ptr->y, creature_ptr->x, y, x),
-					projectable(creature_ptr, creature_ptr->y, creature_ptr->x, y, x), g_ptr->special);
-				strcat(info, cheatinfo);
-			}
-
-			/* Describe and Prompt (enable "TARGET_LOOK") */
-			while ((query = target_set_aux(creature_ptr, y, x, mode | TARGET_LOOK, info)) == 0);
-
-			/* Assume no direction */
-			d = 0;
-
-			if (use_menu)
-			{
-				if (query == '\r') query = 't';
-			}  
-
-			/* Analyze the keypress */
-			switch (query)
-			{
-				case ESCAPE:
-				case 'q':
-				{
-					done = TRUE;
-					break;
-				}
-
-				case 't':
-				case '.':
-				case '5':
-				case '0':
-				{
-					target_who = -1;
-					target_row = y;
-					target_col = x;
-					done = TRUE;
-					break;
-				}
-
-				case 'p':
-				{
-					/* Recenter the map around the player */
-					verify_panel(creature_ptr);
 					creature_ptr->update |= (PU_MONSTERS);
 					creature_ptr->redraw |= (PR_MAP);
 					creature_ptr->window |= (PW_OVERHEAD);
@@ -1402,106 +1263,215 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 					/* Recalculate interesting grids */
 					target_set_prepare(creature_ptr, mode);
 
-					y = creature_ptr->y;
-					x = creature_ptr->x;
-				}
+					/* Look at boring grids */
+					flag = FALSE;
 
-				case 'o':
-				{
-					break;
-				}
-
-				case ' ':
-				case '*':
-				case '+':
-				case '-':
-				case 'm':
-				{
-					flag = TRUE;
-
-					m = 0;
-					bd = 999;
-
-					/* Pick a nearby monster */
-					for (i = 0; i < tmp_pos.n; i++)
-					{
-						t = distance(y, x, tmp_pos.y[i], tmp_pos.x[i]);
-
-						/* Pick closest */
-						if (t < bd)
-						{
-							m = i;
-							bd = t;
-						}
-					}
-
-					/* Nothing interesting */
-					if (bd == 999) flag = FALSE;
-
-					break;
-				}
-
-				default:
-				{
-					/* Extract the action (if any) */
-					d = get_keymap_dir(query);
-
-					/* XTRA HACK MOVEFAST */
-					if (isupper(query)) move_fast = TRUE;
-
-					if (!d) bell();
-					break;
-				}
-			}
-
-			/* Handle "direction" */
-			if (d)
-			{
-				POSITION dx = ddx[d];
-				POSITION dy = ddy[d];
-
-				/* XTRA HACK MOVEFAST */
-				if (move_fast)
-				{
-					int mag = MIN(wid / 2, hgt / 2);
-					x += dx * mag;
-					y += dy * mag;
-				}
-				else
-				{
+					/* Move */
 					x += dx;
 					y += dy;
+
+					/* Do not move horizontally if unnecessary */
+					if (((x < panel_col_min + wid / 2) && (dx > 0)) ||
+						((x > panel_col_min + wid / 2) && (dx < 0)))
+					{
+						dx = 0;
+					}
+
+					/* Do not move vertically if unnecessary */
+					if (((y < panel_row_min + hgt / 2) && (dy > 0)) ||
+						((y > panel_row_min + hgt / 2) && (dy < 0)))
+					{
+						dy = 0;
+					}
+
+					/* Apply the motion */
+					if ((y >= panel_row_min + hgt) || (y < panel_row_min) ||
+						(x >= panel_col_min + wid) || (x < panel_col_min))
+					{
+						if (change_panel(creature_ptr, dy, dx)) target_set_prepare(creature_ptr, mode);
+					}
+
+					/* Slide into legality */
+					if (x >= floor_ptr->width - 1) x = floor_ptr->width - 2;
+					else if (x <= 0) x = 1;
+
+					/* Slide into legality */
+					if (y >= floor_ptr->height - 1) y = floor_ptr->height - 2;
+					else if (y <= 0) y = 1;
 				}
 
-				/* Do not move horizontally if unnecessary */
-				if (((x < panel_col_min + wid / 2) && (dx > 0)) ||
-					 ((x > panel_col_min + wid / 2) && (dx < 0)))
-				{
-					dx = 0;
-				}
-
-				/* Do not move vertically if unnecessary */
-				if (((y < panel_row_min + hgt / 2) && (dy > 0)) ||
-					 ((y > panel_row_min + hgt / 2) && (dy < 0)))
-				{
-					dy = 0;
-				}
-
-				/* Apply the motion */
-				if ((y >= panel_row_min + hgt) || (y < panel_row_min) ||
-					 (x >= panel_col_min + wid) || (x < panel_col_min))
-				{
-					if (change_panel(creature_ptr, dy, dx)) target_set_prepare(creature_ptr, mode);
-				}
-
-				/* Slide into legality */
-				if (x >= floor_ptr->width-1) x = floor_ptr->width - 2;
-				else if (x <= 0) x = 1;
-
-				/* Slide into legality */
-				if (y >= floor_ptr->height-1) y = floor_ptr->height- 2;
-				else if (y <= 0) y = 1;
+				/* Use that grid */
+				m = i;
 			}
+
+			continue;
+		}
+
+		/* Arbitrary grids */
+
+		bool move_fast = FALSE;
+
+		if (!(mode & TARGET_LOOK)) print_path(creature_ptr, y, x);
+
+		/* Access */
+		g_ptr = &floor_ptr->grid_array[y][x];
+
+		/* Default prompt */
+		strcpy(info, _("q止 t決 p自 m近 +次 -前", "q,t,p,m,+,-,<dir>"));
+
+		if (cheat_sight)
+		{
+			char cheatinfo[100];
+			sprintf(cheatinfo, " LOS:%d, PROJECTABLE:%d, SPECIAL:%d",
+				los(creature_ptr, creature_ptr->y, creature_ptr->x, y, x),
+				projectable(creature_ptr, creature_ptr->y, creature_ptr->x, y, x), g_ptr->special);
+			strcat(info, cheatinfo);
+		}
+
+		/* Describe and Prompt (enable "TARGET_LOOK") */
+		while ((query = target_set_aux(creature_ptr, y, x, mode | TARGET_LOOK, info)) == 0);
+
+		/* Assume no direction */
+		d = 0;
+
+		if (use_menu)
+		{
+			if (query == '\r') query = 't';
+		}
+
+		/* Analyze the keypress */
+		switch (query)
+		{
+		case ESCAPE:
+		case 'q':
+		{
+			done = TRUE;
+			break;
+		}
+
+		case 't':
+		case '.':
+		case '5':
+		case '0':
+		{
+			target_who = -1;
+			target_row = y;
+			target_col = x;
+			done = TRUE;
+			break;
+		}
+
+		case 'p':
+		{
+			/* Recenter the map around the player */
+			verify_panel(creature_ptr);
+			creature_ptr->update |= (PU_MONSTERS);
+			creature_ptr->redraw |= (PR_MAP);
+			creature_ptr->window |= (PW_OVERHEAD);
+			handle_stuff(creature_ptr);
+
+			/* Recalculate interesting grids */
+			target_set_prepare(creature_ptr, mode);
+
+			y = creature_ptr->y;
+			x = creature_ptr->x;
+		}
+
+		case 'o':
+		{
+			break;
+		}
+
+		case ' ':
+		case '*':
+		case '+':
+		case '-':
+		case 'm':
+		{
+			flag = TRUE;
+
+			m = 0;
+			bd = 999;
+
+			/* Pick a nearby monster */
+			for (i = 0; i < tmp_pos.n; i++)
+			{
+				t = distance(y, x, tmp_pos.y[i], tmp_pos.x[i]);
+
+				/* Pick closest */
+				if (t < bd)
+				{
+					m = i;
+					bd = t;
+				}
+			}
+
+			/* Nothing interesting */
+			if (bd == 999) flag = FALSE;
+
+			break;
+		}
+
+		default:
+		{
+			/* Extract the action (if any) */
+			d = get_keymap_dir(query);
+
+			/* XTRA HACK MOVEFAST */
+			if (isupper(query)) move_fast = TRUE;
+
+			if (!d) bell();
+			break;
+		}
+		}
+
+		/* Handle "direction" */
+		if (d)
+		{
+			POSITION dx = ddx[d];
+			POSITION dy = ddy[d];
+
+			/* XTRA HACK MOVEFAST */
+			if (move_fast)
+			{
+				int mag = MIN(wid / 2, hgt / 2);
+				x += dx * mag;
+				y += dy * mag;
+			}
+			else
+			{
+				x += dx;
+				y += dy;
+			}
+
+			/* Do not move horizontally if unnecessary */
+			if (((x < panel_col_min + wid / 2) && (dx > 0)) ||
+				((x > panel_col_min + wid / 2) && (dx < 0)))
+			{
+				dx = 0;
+			}
+
+			/* Do not move vertically if unnecessary */
+			if (((y < panel_row_min + hgt / 2) && (dy > 0)) ||
+				((y > panel_row_min + hgt / 2) && (dy < 0)))
+			{
+				dy = 0;
+			}
+
+			/* Apply the motion */
+			if ((y >= panel_row_min + hgt) || (y < panel_row_min) ||
+				(x >= panel_col_min + wid) || (x < panel_col_min))
+			{
+				if (change_panel(creature_ptr, dy, dx)) target_set_prepare(creature_ptr, mode);
+			}
+
+			/* Slide into legality */
+			if (x >= floor_ptr->width - 1) x = floor_ptr->width - 2;
+			else if (x <= 0) x = 1;
+
+			/* Slide into legality */
+			if (y >= floor_ptr->height - 1) y = floor_ptr->height - 2;
+			else if (y <= 0) y = 1;
 		}
 	}
 
@@ -1518,9 +1488,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 	creature_ptr->window |= (PW_OVERHEAD);
 	handle_stuff(creature_ptr);
 
-	if (!target_who) return FALSE;
-
-	return TRUE;
+	return target_who > 0;
 }
 
 
@@ -1537,19 +1505,13 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
  */
 bool get_aim_dir(player_type *creature_ptr, DIRECTION *dp)
 {
-	DIRECTION dir;
-	char	command;
-	concptr	p;
-	COMMAND_CODE code;
-
-	(*dp) = 0;
-
 	/* Global direction */
-	dir = command_dir;
+	DIRECTION dir = command_dir;
 
 	/* Hack -- auto-target if requested */
 	if (use_old_target && target_okay(creature_ptr)) dir = 5;
 
+	COMMAND_CODE code;
 	if (repeat_pull(&code))
 	{
 		/* Confusion? */
@@ -1557,16 +1519,19 @@ bool get_aim_dir(player_type *creature_ptr, DIRECTION *dp)
 		/* Verify */
 		if (!(code == 5 && !target_okay(creature_ptr)))
 		{
-/*			return TRUE; */
+			/*			return TRUE; */
 			dir = (DIRECTION)code;
 		}
 	}
+
 	*dp = (DIRECTION)code;
 
 	/* Ask until satisfied */
+	char command;
 	while (!dir)
 	{
 		/* Choose a prompt */
+		concptr	p;
 		if (!target_okay(creature_ptr))
 		{
 			p = _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
@@ -1582,38 +1547,38 @@ bool get_aim_dir(player_type *creature_ptr, DIRECTION *dp)
 		if (use_menu)
 		{
 			if (command == '\r') command = 't';
-		}  
+		}
 
 		/* Convert various keys to "standard" keys */
 		switch (command)
 		{
 			/* Use current target */
-			case 'T':
-			case 't':
-			case '.':
-			case '5':
-			case '0':
-			{
-				dir = 5;
-				break;
-			}
+		case 'T':
+		case 't':
+		case '.':
+		case '5':
+		case '0':
+		{
+			dir = 5;
+			break;
+		}
 
-			/* Set new target */
-			case '*':
-			case ' ':
-			case '\r':
-			{
-				if (target_set(creature_ptr, TARGET_KILL)) dir = 5;
-				break;
-			}
+		/* Set new target */
+		case '*':
+		case ' ':
+		case '\r':
+		{
+			if (target_set(creature_ptr, TARGET_KILL)) dir = 5;
+			break;
+		}
 
-			default:
-			{
-				/* Extract the action (if any) */
-				dir = get_keymap_dir(command);
+		default:
+		{
+			/* Extract the action (if any) */
+			dir = get_keymap_dir(command);
 
-				break;
-			}
+			break;
+		}
 		}
 
 		/* Verify requested targets */
@@ -1650,32 +1615,26 @@ bool get_aim_dir(player_type *creature_ptr, DIRECTION *dp)
 	/* Save direction */
 	(*dp) = dir;
 
-/*	repeat_push(dir); */
 	repeat_push((COMMAND_CODE)command_dir);
-
-	/* A "valid" direction was entered */
 	return TRUE;
 }
 
 
 bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, bool with_steed)
 {
-	DIRECTION dir;
-	concptr prompt;
-	COMMAND_CODE code;
-
-	(*dp) = 0;
-
 	/* Global direction */
-	dir = command_dir;
+	DIRECTION dir = command_dir;
 
+	COMMAND_CODE code;
 	if (repeat_pull(&code))
 	{
 		dir = (DIRECTION)code;
 		/*		return TRUE; */
 	}
+
 	*dp = (DIRECTION)code;
 
+	concptr prompt;
 	if (allow_under)
 	{
 		prompt = _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ");
@@ -1777,15 +1736,11 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
 		}
 	}
 
-	/* Save direction */
-	(*dp) = dir;
-
-	/*	repeat_push(dir); */
+	*dp = dir;
 	repeat_push((COMMAND_CODE)command_dir);
-
-	/* Success */
 	return TRUE;
 }
+
 
 /*
  * @brief 進行方向を指定する(騎乗対象の混乱の影響を受ける) / Request a "movement" direction (1,2,3,4,6,7,8,9) from the user,
@@ -1805,22 +1760,19 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
  */
 bool get_rep_dir(player_type *creature_ptr, DIRECTION *dp, bool under)
 {
-	DIRECTION dir;
-	concptr prompt;
-	COMMAND_CODE code;
-
-	(*dp) = 0;
-
 	/* Global direction */
-	dir = command_dir;
+	DIRECTION dir = command_dir;
 
+	COMMAND_CODE code;
 	if (repeat_pull(&code))
 	{
 		dir = (DIRECTION)code;
-/*		return TRUE; */
+		/*		return TRUE; */
 	}
+
 	*dp = (DIRECTION)code;
 
+	concptr prompt;
 	if (under)
 	{
 		prompt = _("方向 ('.'足元, ESCで中断)? ", "Direction ('.' at feet, Escape to cancel)? ");
@@ -1829,7 +1781,7 @@ bool get_rep_dir(player_type *creature_ptr, DIRECTION *dp, bool under)
 	{
 		prompt = _("方向 (ESCで中断)? ", "Direction (Escape to cancel)? ");
 	}
-	
+
 	/* Get a direction */
 	while (!dir)
 	{
@@ -1922,13 +1874,8 @@ bool get_rep_dir(player_type *creature_ptr, DIRECTION *dp, bool under)
 		}
 	}
 
-	/* Save direction */
-	(*dp) = dir;
-
-/*	repeat_push(dir); */
+	*dp = dir;
 	repeat_push((COMMAND_CODE)command_dir);
-
-	/* Success */
 	return TRUE;
 }
 
@@ -1939,8 +1886,6 @@ bool get_rep_dir(player_type *creature_ptr, DIRECTION *dp, bool under)
  */
 static bool tgt_pt_accept(player_type *creature_ptr, POSITION y, POSITION x)
 {
-	grid_type *g_ptr;
-
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	if (!(in_bounds(floor_ptr, y, x))) return FALSE;
 
@@ -1949,19 +1894,19 @@ static bool tgt_pt_accept(player_type *creature_ptr, POSITION y, POSITION x)
 
 	if (creature_ptr->image) return FALSE;
 
+	grid_type *g_ptr;
 	g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Interesting memorized features */
-	if (g_ptr->info & (CAVE_MARK))
-	{
-		/* Notice stairs */
-		if (cave_have_flag_grid(g_ptr, FF_LESS)) return TRUE;
-		if (cave_have_flag_grid(g_ptr, FF_MORE)) return TRUE;
+	if (!(g_ptr->info & (CAVE_MARK))) return FALSE;
 
-		/* Notice quest features */
-		if (cave_have_flag_grid(g_ptr, FF_QUEST_ENTER)) return TRUE;
-		if (cave_have_flag_grid(g_ptr, FF_QUEST_EXIT)) return TRUE;
-	}
+	/* Notice stairs */
+	if (cave_have_flag_grid(g_ptr, FF_LESS)) return TRUE;
+	if (cave_have_flag_grid(g_ptr, FF_MORE)) return TRUE;
+
+	/* Notice quest features */
+	if (cave_have_flag_grid(g_ptr, FF_QUEST_ENTER)) return TRUE;
+	if (cave_have_flag_grid(g_ptr, FF_QUEST_EXIT)) return TRUE;
 
 	return FALSE;
 }
@@ -1973,18 +1918,15 @@ static bool tgt_pt_accept(player_type *creature_ptr, POSITION y, POSITION x)
  */
 static void tgt_pt_prepare(player_type *creature_ptr)
 {
-	POSITION y, x;
-
-	/* Reset "temp" array */
 	tmp_pos.n = 0;
 
 	if (!expand_list) return;
 
 	/* Scan the current panel */
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-	for (y = 1; y < floor_ptr->height; y++)
+	for (POSITION y = 1; y < floor_ptr->height; y++)
 	{
-		for (x = 1; x < floor_ptr->width; x++)
+		for (POSITION x = 1; x < floor_ptr->width; x++)
 		{
 			/* Require "interesting" contents */
 			if (!tgt_pt_accept(creature_ptr, y, x)) continue;
@@ -1996,7 +1938,6 @@ static void tgt_pt_prepare(player_type *creature_ptr)
 		}
 	}
 
-	/* Sort the positions */
 	ang_sort(tmp_pos.x, tmp_pos.y, tmp_pos.n, ang_sort_comp_distance, ang_sort_swap_distance);
 }
 
@@ -2006,26 +1947,20 @@ static void tgt_pt_prepare(player_type *creature_ptr)
  */
 bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
 {
-	char ch = 0;
-	int d, n = 0;
-	POSITION x, y;
-	bool success = FALSE;
-
 	TERM_LEN wid, hgt;
-
 	get_screen_size(&wid, &hgt);
 
-	x = creature_ptr->x;
-	y = creature_ptr->y;
+	POSITION x = creature_ptr->x;
+	POSITION y = creature_ptr->y;
 
-	if (expand_list) 
-	{
-		tgt_pt_prepare(creature_ptr);
-	}
+	if (expand_list) tgt_pt_prepare(creature_ptr);
 
 	msg_print(_("場所を選んでスペースキーを押して下さい。", "Select a point and press space."));
 	msg_flag = FALSE; /* prevents "-more-" message. */
 
+	char ch = 0;
+	int n = 0;
+	bool success = FALSE;
 	while ((ch != ESCAPE) && !success)
 	{
 		bool move_fast = FALSE;
@@ -2049,126 +1984,123 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
 
 			break;
 
-		/* XAngband: Move cursor to stairs */
+			/* XAngband: Move cursor to stairs */
 		case '>':
 		case '<':
-			if (expand_list && tmp_pos.n)
+		{
+			if (!expand_list || !tmp_pos.n) break;
+
+			int dx, dy;
+			int cx = (panel_col_min + panel_col_max) / 2;
+			int cy = (panel_row_min + panel_row_max) / 2;
+
+			n++;
+
+			/* Skip stairs which have defferent distance */
+			for (; n < tmp_pos.n; ++n)
 			{
-				int dx, dy;
-				int cx = (panel_col_min + panel_col_max) / 2;
-				int cy = (panel_row_min + panel_row_max) / 2;
+				grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[tmp_pos.y[n]][tmp_pos.x[n]];
 
-				n++;
-
-				/* Skip stairs which have defferent distance */
-				for (; n < tmp_pos.n; ++ n)
+				if (cave_have_flag_grid(g_ptr, FF_STAIRS) &&
+					cave_have_flag_grid(g_ptr, ch == '>' ? FF_MORE : FF_LESS))
 				{
-					grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[tmp_pos.y[n]][tmp_pos.x[n]];
-
-					if (cave_have_flag_grid(g_ptr, FF_STAIRS) &&
-					    cave_have_flag_grid(g_ptr, ch == '>' ? FF_MORE : FF_LESS))
-					{
-						/* Found */
-						break;
-					}
-				}
-
-				if (n == tmp_pos.n)	/* Loop out taget list */
-				{
-					n = 0;
-					y = creature_ptr->y;
-					x = creature_ptr->x;
-					verify_panel(creature_ptr);	/* Move cursor to player */
-
-					creature_ptr->update |= (PU_MONSTERS);
-
-					creature_ptr->redraw |= (PR_MAP);
-
-					creature_ptr->window |= (PW_OVERHEAD);
-					handle_stuff(creature_ptr);
-				}
-				else	/* move cursor to next stair and change panel */
-				{
-					y = tmp_pos.y[n];
-					x = tmp_pos.x[n];
-
-					dy = 2 * (y - cy) / hgt;
-					dx = 2 * (x - cx) / wid;
-					if (dy || dx) change_panel(creature_ptr, dy, dx);
+					/* Found */
+					break;
 				}
 			}
+
+			if (n == tmp_pos.n)	/* Loop out taget list */
+			{
+				n = 0;
+				y = creature_ptr->y;
+				x = creature_ptr->x;
+				verify_panel(creature_ptr);	/* Move cursor to player */
+
+				creature_ptr->update |= (PU_MONSTERS);
+
+				creature_ptr->redraw |= (PR_MAP);
+
+				creature_ptr->window |= (PW_OVERHEAD);
+				handle_stuff(creature_ptr);
+			}
+			else	/* move cursor to next stair and change panel */
+			{
+				y = tmp_pos.y[n];
+				x = tmp_pos.x[n];
+
+				dy = 2 * (y - cy) / hgt;
+				dx = 2 * (x - cx) / wid;
+				if (dy || dx) change_panel(creature_ptr, dy, dx);
+			}
+
 			break;
+		}
 
 		default:
+		{
 			/* Look up the direction */
-			d = get_keymap_dir(ch);
+			int d = get_keymap_dir(ch);
 
 			/* XTRA HACK MOVEFAST */
 			if (isupper(ch)) move_fast = TRUE;
 
 			/* Handle "direction" */
-			if (d)
+			if (d == 0) break;
+
+			int dx = ddx[d];
+			int dy = ddy[d];
+
+			/* XTRA HACK MOVEFAST */
+			if (move_fast)
 			{
-				int dx = ddx[d];
-				int dy = ddy[d];
-
-				/* XTRA HACK MOVEFAST */
-				if (move_fast)
-				{
-					int mag = MIN(wid / 2, hgt / 2);
-					x += dx * mag;
-					y += dy * mag;
-				}
-				else
-				{
-					x += dx;
-					y += dy;
-				}
-
-				/* Do not move horizontally if unnecessary */
-				if (((x < panel_col_min + wid / 2) && (dx > 0)) ||
-					 ((x > panel_col_min + wid / 2) && (dx < 0)))
-				{
-					dx = 0;
-				}
-
-				/* Do not move vertically if unnecessary */
-				if (((y < panel_row_min + hgt / 2) && (dy > 0)) ||
-					 ((y > panel_row_min + hgt / 2) && (dy < 0)))
-				{
-					dy = 0;
-				}
-
-				/* Apply the motion */
-				if ((y >= panel_row_min + hgt) || (y < panel_row_min) ||
-					 (x >= panel_col_min + wid) || (x < panel_col_min))
-				{
-					change_panel(creature_ptr, dy, dx);
-				}
-
-				/* Slide into legality */
-				if (x >= creature_ptr->current_floor_ptr->width-1) x = creature_ptr->current_floor_ptr->width - 2;
-				else if (x <= 0) x = 1;
-
-				/* Slide into legality */
-				if (y >= creature_ptr->current_floor_ptr->height-1) y = creature_ptr->current_floor_ptr->height- 2;
-				else if (y <= 0) y = 1;
-
+				int mag = MIN(wid / 2, hgt / 2);
+				x += dx * mag;
+				y += dy * mag;
 			}
+			else
+			{
+				x += dx;
+				y += dy;
+			}
+
+			/* Do not move horizontally if unnecessary */
+			if (((x < panel_col_min + wid / 2) && (dx > 0)) ||
+				((x > panel_col_min + wid / 2) && (dx < 0)))
+			{
+				dx = 0;
+			}
+
+			/* Do not move vertically if unnecessary */
+			if (((y < panel_row_min + hgt / 2) && (dy > 0)) ||
+				((y > panel_row_min + hgt / 2) && (dy < 0)))
+			{
+				dy = 0;
+			}
+
+			/* Apply the motion */
+			if ((y >= panel_row_min + hgt) || (y < panel_row_min) ||
+				(x >= panel_col_min + wid) || (x < panel_col_min))
+			{
+				change_panel(creature_ptr, dy, dx);
+			}
+
+			/* Slide into legality */
+			if (x >= creature_ptr->current_floor_ptr->width - 1) x = creature_ptr->current_floor_ptr->width - 2;
+			else if (x <= 0) x = 1;
+
+			/* Slide into legality */
+			if (y >= creature_ptr->current_floor_ptr->height - 1) y = creature_ptr->current_floor_ptr->height - 2;
+			else if (y <= 0) y = 1;
+
 			break;
+		}
 		}
 	}
 
-	/* Clear the top line */
 	prt("", 0, 0);
-
-	/* Recenter the map around the player */
 	verify_panel(creature_ptr);
-
 	creature_ptr->update |= (PU_MONSTERS);
-
 	creature_ptr->redraw |= (PR_MAP);
-
 	creature_ptr->window |= (PW_OVERHEAD);
 	handle_stuff(creature_ptr);
 
@@ -2180,21 +2112,15 @@ bool tgt_pt(player_type *creature_ptr, POSITION *x_ptr, POSITION *y_ptr)
 
 bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
 {
-	DIRECTION dir;
-	concptr    p;
-	char    command;
-
-	(*dp) = 0;
-
-	/* Global direction */
-	dir = 0;
-
-	/* (No auto-targeting) */
+	*dp = 0;
 
 	/* Ask until satisfied */
+	char command;
+	DIRECTION dir = 0;
 	while (!dir)
 	{
 		/* Choose a prompt */
+		concptr p;
 		if (!target_okay(creature_ptr))
 		{
 			p = _("方向 ('*'でターゲット選択, ESCで中断)? ", "Direction ('*' to choose a target, Escape to cancel)? ");
@@ -2210,38 +2136,38 @@ bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
 		if (use_menu)
 		{
 			if (command == '\r') command = 't';
-		}  
+		}
 
 		/* Convert various keys to "standard" keys */
 		switch (command)
 		{
 			/* Use current target */
-			case 'T':
-			case 't':
-			case '.':
-			case '5':
-			case '0':
-			{
-				dir = 5;
-				break;
-			}
+		case 'T':
+		case 't':
+		case '.':
+		case '5':
+		case '0':
+		{
+			dir = 5;
+			break;
+		}
 
-			/* Set new target */
-			case '*':
-			case ' ':
-			case '\r':
-			{
-				if (target_set(creature_ptr, TARGET_KILL)) dir = 5;
-				break;
-			}
+		/* Set new target */
+		case '*':
+		case ' ':
+		case '\r':
+		{
+			if (target_set(creature_ptr, TARGET_KILL)) dir = 5;
+			break;
+		}
 
-			default:
-			{
-				/* Look up the direction */
-				dir = get_keymap_dir(command);
+		default:
+		{
+			/* Look up the direction */
+			dir = get_keymap_dir(command);
 
-				break;
-			}
+			break;
+		}
 		}
 
 		/* Verify requested targets */
@@ -2251,7 +2177,6 @@ bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
 		if (!dir) bell();
 	}
 
-	/* No direction */
 	if (!dir) return FALSE;
 
 	/* Save the direction */
@@ -2271,9 +2196,6 @@ bool get_hack_dir(player_type *creature_ptr, DIRECTION *dp)
 		msg_print(_("あなたは混乱している。", "You are confused."));
 	}
 
-	/* Save direction */
-	(*dp) = dir;
-
-	/* A "valid" direction was entered */
+	*dp = dir;
 	return TRUE;
 }
