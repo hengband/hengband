@@ -65,7 +65,6 @@ extern bool cast_summon_octopus(player_type *creature_ptr);
 extern bool item_tester_offer(object_type *o_ptr);
 extern bool cast_summon_greater_demon(player_type *caster_ptr);
 extern bool summon_kin_player(DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode);
-extern int summon_cyber(MONSTER_IDX who, POSITION y, POSITION x);
+extern int summon_cyber(floor_type *floor_ptr, MONSTER_IDX who, POSITION y, POSITION x);
 
 extern void mitokohmon(player_type *kohmon_ptr);
-

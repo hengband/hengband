@@ -250,17 +250,17 @@ bool summon_kin_player(DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode)
  * @param x 召喚位置X座標
  * @return 作用が実際にあった場合TRUEを返す
  */
-int summon_cyber(MONSTER_IDX who, POSITION y, POSITION x)
+int summon_cyber(floor_type *floor_ptr, MONSTER_IDX who, POSITION y, POSITION x)
 {
 	int i;
-	int max_cyber = (easy_band ? 1 : (p_ptr->current_floor_ptr->dun_level / 50) + randint1(2));
+	int max_cyber = (easy_band ? 1 : (floor_ptr->dun_level / 50) + randint1(2));
 	int count = 0;
 	BIT_FLAGS mode = PM_ALLOW_GROUP;
 
 	/* Summoned by a monster */
 	if (who > 0)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[who];
+		monster_type *m_ptr = &floor_ptr->m_list[who];
 		if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
 	}
 

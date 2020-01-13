@@ -2976,7 +2976,7 @@ void spell_RF6_S_CYBER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	}
 	else
 	{
-		count += summon_cyber(m_idx, y, x);
+		count += summon_cyber(floor_ptr, m_idx, y, x);
 	}
 
 	if (target_ptr->blind && count && mon_to_player)
