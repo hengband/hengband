@@ -322,24 +322,25 @@ static POSITION_IDX target_pick(POSITION y1, POSITION x1, POSITION dy, POSITION 
 /*
  * Hack -- determine if a given location is "interesting"
  */
-static bool target_set_accept(POSITION y, POSITION x)
+static bool target_set_accept(player_type *creature_ptr, POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
-	if (!(in_bounds(p_ptr->current_floor_ptr, y, x))) return FALSE;
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	if (!(in_bounds(floor_ptr, y, x))) return FALSE;
 
 	/* Player grid is always interesting */
-	if (player_bold(p_ptr, y, x)) return TRUE;
+	if (player_bold(creature_ptr, y, x)) return TRUE;
 
-	if (p_ptr->image) return FALSE;
+	if (creature_ptr->image) return FALSE;
 
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Visible monsters */
 	if (g_ptr->m_idx)
 	{
-		monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+		monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
 		/* Visible monsters */
 		if (m_ptr->ml) return TRUE;
@@ -349,7 +350,7 @@ static bool target_set_accept(POSITION y, POSITION x)
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Memorized object */
@@ -408,7 +409,7 @@ static void target_set_prepare(player_type *creature_ptr, BIT_FLAGS mode)
 			grid_type *g_ptr;
 
 			/* Require "interesting" contents */
-			if (!target_set_accept(y, x)) continue;
+			if (!target_set_accept(creature_ptr, y, x)) continue;
 
 			g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
