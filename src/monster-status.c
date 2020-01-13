@@ -239,7 +239,7 @@ void mproc_init(floor_type *floor_ptr)
 	MONSTER_IDX i;
 	int cmi;
 
-	/* Reset "p_ptr->current_floor_ptr->mproc_max[]" */
+	/* Reset "target_ptr->current_floor_ptr->mproc_max[]" */
 	for (cmi = 0; cmi < MAX_MTIMED; cmi++) floor_ptr->mproc_max[cmi] = 0;
 
 	/* Process the monsters (backwards) */
@@ -347,7 +347,7 @@ bool set_monster_fast(player_type *target_ptr, MONSTER_IDX m_idx, int v)
 
 	if (!notice) return FALSE;
 
-	if ((target_ptr->riding == m_idx) && !p_ptr->leaving) target_ptr->update |= (PU_BONUS);
+	if ((target_ptr->riding == m_idx) && !target_ptr->leaving) target_ptr->update |= (PU_BONUS);
 
 	return TRUE;
 }
@@ -583,7 +583,7 @@ static u32b csleep_noise;
 */
 static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_idx, int mtimed_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 
 	switch (mtimed_idx)
 	{
@@ -605,7 +605,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 			}
 
 			/* Handle "sight" and "aggravation" */
-			else if ((m_ptr->cdis <= MAX_SIGHT) && (player_has_los_bold(p_ptr, m_ptr->fy, m_ptr->fx)))
+			else if ((m_ptr->cdis <= MAX_SIGHT) && (player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx)))
 			{
 				/* We may wake up */
 				test = TRUE;
@@ -627,7 +627,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 				int d = (m_ptr->cdis < AAF_LIMIT / 2) ? (AAF_LIMIT / m_ptr->cdis) : 1;
 
 				/* Hack -- amount of "waking" is affected by speed of player */
-				d = (d * SPEED_TO_ENERGY(p_ptr->pspeed)) / 10;
+				d = (d * SPEED_TO_ENERGY(target_ptr->pspeed)) / 10;
 				if (d < 0) d = 1;
 
 				/* Monster wakes up "a little bit" */
@@ -779,7 +779,7 @@ void process_monsters_mtimed(player_type *target_ptr, int mtimed_idx)
 	s16b *cur_mproc_list = floor_ptr->mproc_list[mtimed_idx];
 
 	/* Hack -- calculate the "player noise" */
-	if (mtimed_idx == MTIMED_CSLEEP) csleep_noise = (1L << (30 - p_ptr->skill_stl));
+	if (mtimed_idx == MTIMED_CSLEEP) csleep_noise = (1L << (30 - target_ptr->skill_stl));
 
 	/* Process the monsters (backwards) */
 	for (i = floor_ptr->mproc_max[mtimed_idx] - 1; i >= 0; i--)
@@ -797,7 +797,7 @@ void process_monsters_mtimed(player_type *target_ptr, int mtimed_idx)
 */
 void dispel_monster_status(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 
 	monster_desc(m_name, m_ptr, 0);
