@@ -5809,7 +5809,7 @@ void close_game(player_type *player_ptr)
 		show_info(player_ptr);
 		Term_clear();
 
-		if (check_score())
+		if (check_score(player_ptr))
 		{
 			if ((!send_world_score(player_ptr, do_send)))
 			{

@@ -927,7 +927,7 @@ void kingly(player_type *winner_ptr)
  * Display some character info
  * @return なし
  */
-bool check_score(void)
+bool check_score(player_type *current_player_ptr)
 {
 	Term_clear();
 
@@ -970,7 +970,7 @@ bool check_score(void)
 #endif
 
 	/* Interupted */
-	if (!current_world_ptr->total_winner && streq(p_ptr->died_from, _("強制終了", "Interrupting")))
+	if (!current_world_ptr->total_winner && streq(current_player_ptr->died_from, _("強制終了", "Interrupting")))
 	{
 		msg_print(_("強制終了のためスコアが記録されません。", "Score not registered due to interruption."));
 		msg_print(NULL);
@@ -978,7 +978,7 @@ bool check_score(void)
 	}
 
 	/* Quitter */
-	if (!current_world_ptr->total_winner && streq(p_ptr->died_from, _("途中終了", "Quitting")))
+	if (!current_world_ptr->total_winner && streq(current_player_ptr->died_from, _("途中終了", "Quitting")))
 	{
 		msg_print(_("途中終了のためスコアが記録されません。", "Score not registered due to quitting."));
 		msg_print(NULL);
