@@ -1084,7 +1084,7 @@ void leave_floor(player_type *creature_ptr)
 		clear_mon_lite(creature_ptr->current_floor_ptr);
 
 		/* Save current floor */
-		if (!save_floor(sf_ptr, 0))
+		if (!save_floor(creature_ptr, sf_ptr, 0))
 		{
 			/* Save failed -- No return */
 			prepare_change_floor_mode(creature_ptr, CFM_NO_RETURN);

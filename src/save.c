@@ -1171,7 +1171,7 @@ static bool wr_dungeon(player_type *player_ptr)
 	cur_sf_ptr = get_sf_ptr(player_ptr->floor_id);
 
 	/* Save current floor to temporary file */
-	if (!save_floor(cur_sf_ptr, (SLF_SECOND))) return FALSE;
+	if (!save_floor(player_ptr, cur_sf_ptr, (SLF_SECOND))) return FALSE;
 
 	/* Move data in temporary files to the savefile */
 	for (i = 0; i < MAX_SAVED_FLOORS; i++)
@@ -1225,7 +1225,7 @@ static bool wr_savefile_new(player_type *player_ptr)
 	KIND_OBJECT_IDX k_idx;
 
 	/* Compact the objects */
-	compact_objects(player_ptr->current_floor_ptr, 0);
+	compact_objects(player_ptr, 0);
 	/* Compact the monsters */
 	compact_monsters(0);
 
@@ -1998,15 +1998,16 @@ void remove_loc(void)
 
 /*!
  * @brief ゲームプレイ中のフロア一時保存出力処理サブルーチン / Actually write a temporary saved floor file
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param sf_ptr 保存フロア参照ポインタ
  * @return なし
  */
-static bool save_floor_aux(saved_floor_type *sf_ptr)
+static bool save_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
 	byte tmp8u;
 
 	/* Compact the objects */
-	compact_objects(p_ptr->current_floor_ptr, 0);
+	compact_objects(player_ptr, 0);
 	/* Compact the monsters */
 	compact_monsters(0);
 
@@ -2047,11 +2048,12 @@ static bool save_floor_aux(saved_floor_type *sf_ptr)
 
 /*!
  * @brief ゲームプレイ中のフロア一時保存出力処理メインルーチン / Attempt to save the temporarily saved-floor data
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param sf_ptr 保存フロア参照ポインタ
  * @param mode 保存オプション
  * @return なし
  */
-bool save_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode)
+bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode)
 {
 	FILE *old_fff = NULL;
 	byte old_xor_byte = 0;
@@ -2131,7 +2133,7 @@ bool save_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode)
 		if (fff)
 		{
 			/* Write the savefile */
-			if (save_floor_aux(sf_ptr)) ok = TRUE;
+			if (save_floor_aux(player_ptr, sf_ptr)) ok = TRUE;
 
 			/* Attempt to close it */
 			if (my_fclose(fff)) ok = FALSE;

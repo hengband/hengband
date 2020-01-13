@@ -5060,10 +5060,10 @@ static void dungeon(player_type *player_ptr, bool load_game)
 
 
 		/* Hack -- Compact the object list occasionally */
-		if (player_ptr->current_floor_ptr->o_cnt + 32 > current_world_ptr->max_o_idx) compact_objects(player_ptr->current_floor_ptr, 64);
+		if (player_ptr->current_floor_ptr->o_cnt + 32 > current_world_ptr->max_o_idx) compact_objects(player_ptr, 64);
 
 		/* Hack -- Compress the object list occasionally */
-		if (player_ptr->current_floor_ptr->o_cnt + 32 < player_ptr->current_floor_ptr->o_max) compact_objects(player_ptr->current_floor_ptr, 0);
+		if (player_ptr->current_floor_ptr->o_cnt + 32 < player_ptr->current_floor_ptr->o_max) compact_objects(player_ptr, 0);
 
 		/* Process the player */
 		process_player(player_ptr);

@@ -1856,7 +1856,7 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
  * After "compacting" (if needed), we "reorder" the objects into a more\n
  * compact order, and we reset the allocation info, and the "live" array.\n
  */
-void compact_objects(floor_type *floor_ptr, int size)
+void compact_objects(player_type *player_ptr, int size)
 {
 	OBJECT_IDX i;
 	POSITION y, x;
@@ -1868,12 +1868,13 @@ void compact_objects(floor_type *floor_ptr, int size)
 	if (size)
 	{
 		msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
-		p_ptr->redraw |= (PR_MAP);
-		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+		player_ptr->redraw |= (PR_MAP);
+		player_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	}
 
 
 	/* Compact at least 'size' objects */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (num = 0, cnt = 1; num < size; cnt++)
 	{
 		/* Get more vicious each iteration */
@@ -1912,7 +1913,7 @@ void compact_objects(floor_type *floor_ptr, int size)
 			}
 
 			/* Nearby objects start out "immune" */
-			if ((cur_dis > 0) && (distance(p_ptr->y, p_ptr->x, y, x) < cur_dis)) continue;
+			if ((cur_dis > 0) && (distance(player_ptr->y, player_ptr->x, y, x) < cur_dis)) continue;
 
 			/* Saving throw */
 			chance = 90;

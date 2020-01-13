@@ -3353,7 +3353,7 @@ static errr rd_dungeon(player_type *player_ptr)
 			if (err) break;
 
 			/* Re-save as temporary saved floor file */
-			if (!save_floor(sf_ptr, SLF_SECOND)) err = 182;
+			if (!save_floor(player_ptr, sf_ptr, SLF_SECOND)) err = 182;
 
 			/* Error? */
 			if (err) break;

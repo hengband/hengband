@@ -425,6 +425,6 @@ extern void set_floor(floor_type *floor_ptr, POSITION x, POSITION y);
 extern void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
 extern void place_gold(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void delete_monster(floor_type *floor_ptr, POSITION y, POSITION x);
-extern void compact_objects(floor_type *floor_ptr, int size);
+extern void compact_objects(player_type *owner_ptr, int size);
 extern void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num);
 extern void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);

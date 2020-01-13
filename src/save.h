@@ -10,4 +10,4 @@
 extern bool save_player(player_type *player_ptr);
 extern bool load_player(player_type *player_ptr);
 extern void remove_loc(void);
-extern bool save_floor(saved_floor_type *sf_ptr, BIT_FLAGS mode);
+extern bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mode);
