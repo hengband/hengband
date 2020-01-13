@@ -450,7 +450,7 @@ static errr wr_randomizer(void)
 		wr_u32b(Rand_state[i]);
 	}
 
-	return (0);
+	return 0;
 }
 
 

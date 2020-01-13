@@ -472,7 +472,7 @@ MONSTER_IDX m_pop(void)
 	if (current_world_ptr->character_dungeon) msg_print(_("モンスターが多すぎる！", "Too many monsters!"));
 
 	/* Try not to crash */
-	return (0);
+	return 0;
 }
 
 
@@ -1080,7 +1080,7 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 	}
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -1204,7 +1204,7 @@ MONRACE_IDX get_mon_num(DEPTH level)
 	}
 
 	/* No legal monsters */
-	if (total <= 0) return (0);
+	if (total <= 0) return 0;
 
 	/* Pick a monster */
 	value = randint0(total);

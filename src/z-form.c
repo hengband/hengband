@@ -351,7 +351,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 				buf[0] = '\0';
 
 				/* Return "error" */
-				return (0);
+				return 0;
 			}
 
 			/* Error -- format sequence may be too long */
@@ -361,7 +361,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 				buf[0] = '\0';
 
 				/* Return "error" */
-				return (0);
+				return 0;
 			}
 
 			/* Handle "alphabetic" chars */
@@ -384,7 +384,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 					buf[0] = '\0';
 
 					/* Return "error" */
-					return (0);
+					return 0;
 				}
 
 				/* Handle normal end of format sequence */
@@ -588,7 +588,7 @@ uint vstrnfmt(char *buf, uint max, concptr fmt, va_list vp)
 				buf[0] = '\0';
 
 				/* Return "error" */
-				return (0);
+				return 0;
 			}
 		}
 

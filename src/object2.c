@@ -409,7 +409,7 @@ OBJECT_IDX get_obj_num(player_type *owner_ptr, DEPTH level, BIT_FLAGS mode)
 	}
 
 	/* No legal objects */
-	if (total <= 0) return (0);
+	if (total <= 0) return 0;
 
 
 	/* Pick an object */
@@ -1504,7 +1504,7 @@ bool object_similar(object_type *o_ptr, object_type *j_ptr)
 	if (!max_num) return FALSE;
 
 	/* Maximal "stacking" limit */
-	if (total > max_num) return (0);
+	if (total > max_num) return 0;
 
 
 	/* They match, so they must be similar */
@@ -1612,7 +1612,7 @@ KIND_OBJECT_IDX lookup_kind(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval)
 #endif
 
 
-	return (0);
+	return 0;
 }
 
 
@@ -4235,7 +4235,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 		if (current_world_ptr->wizard) msg_print(_("(破損)", "(breakage)"));
 
 		/* Failure */
-		return (0);
+		return 0;
 	}
 
 
@@ -4333,7 +4333,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 		if (current_world_ptr->wizard) msg_print(_("(床スペースがない)", "(no floor space)"));
 
 		/* Failure */
-		return (0);
+		return 0;
 	}
 
 
@@ -4975,7 +4975,7 @@ s16b inven_carry(player_type *owner_ptr, object_type *o_ptr)
 		}
 	}
 
-	if (owner_ptr->inven_cnt > INVEN_PACK) return (-1);
+	if (owner_ptr->inven_cnt > INVEN_PACK) return -1;
 
 	/* Find an empty slot */
 	for (j = 0; j <= INVEN_PACK; j++)
@@ -5076,7 +5076,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
 
 	/* Get the item to take off */
 	o_ptr = &owner_ptr->inventory_list[item];
-	if (amt <= 0) return (-1);
+	if (amt <= 0) return -1;
 
 	/* Verify */
 	if (amt > o_ptr->number) amt = o_ptr->number;

@@ -1403,7 +1403,7 @@ s16b wield_slot(player_type *owner_ptr, object_type *o_ptr)
 	}
 
 	/* No slot available */
-	return (-1);
+	return -1;
 }
 
 /*!

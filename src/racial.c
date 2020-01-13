@@ -261,7 +261,7 @@ static PERCENTAGE racial_chance(player_type *creature_ptr, power_desc_type *pd_p
 	/* No chance for success */
 	if ((creature_ptr->lev < min_level) || creature_ptr->confused)
 	{
-		return (0);
+		return 0;
 	}
 
 	if (difficulty == 0) return 100;

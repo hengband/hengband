@@ -324,7 +324,7 @@ static errr make_dump(player_type *creature_ptr, BUF* dumpbuf)
 	fd_kill(file_name);
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 

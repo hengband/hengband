@@ -2993,20 +2993,20 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), 0);
-	if (!o_ptr) return (0);
+	if (!o_ptr) return 0;
 
 	/* It is worthless */
 	if (!object_is_ego(o_ptr) && !object_is_artifact(o_ptr))
 	{
 		msg_format(_("それは直してもしょうがないぜ。", "It is worthless to repair."));
-		return (0);
+		return 0;
 	}
 
 	/* They are too many */
 	if (o_ptr->number > 1)
 	{
 		msg_format(_("一度に複数を修復することはできません！", "They are too many to repair at once!"));
-		return (0);
+		return 0;
 	}
 
 	/* Display item name */
@@ -3023,11 +3023,11 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	OBJECT_IDX mater;
 	object_type *mo_ptr;
 	mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), 0);
-	if (!mo_ptr) return (0);
+	if (!mo_ptr) return 0;
 	if (mater == item)
 	{
 		msg_print(_("クラインの壷じゃない！", "This is not a klein bottle!"));
-		return (0);
+		return 0;
 	}
 
 	/* Display item name */
@@ -3045,7 +3045,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 		object_desc(basenm, o_ptr, OD_NAME_ONLY);
 		msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), basenm);
 		msg_print(NULL);
-		return (0);
+		return 0;
 	}
 
 	player_ptr->total_weight -= o_ptr->weight;

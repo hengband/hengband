@@ -78,10 +78,10 @@ static int highscore_write(high_score *score)
 static int highscore_where(high_score *score)
 {
 	/* Paranoia -- it may not have opened */
-	if (highscore_fd < 0) return (-1);
+	if (highscore_fd < 0) return -1;
 
 	/* Go to the start of the highscore file */
-	if (highscore_seek(0)) return (-1);
+	if (highscore_seek(0)) return -1;
 
 	/* Read until we get to a higher score */
 	high_score the_score;
@@ -107,13 +107,13 @@ static int highscore_where(high_score *score)
 static int highscore_add(high_score *score)
 {
 	/* Paranoia -- it may not have opened */
-	if (highscore_fd < 0) return (-1);
+	if (highscore_fd < 0) return -1;
 
 	/* Determine where the score should go */
 	int slot = highscore_where(score);
 
 	/* Hack -- Not on the list */
-	if (slot < 0) return (-1);
+	if (slot < 0) return -1;
 
 	/* Hack -- prepare to dump the new score */
 	high_score the_score = (*score);
@@ -124,12 +124,12 @@ static int highscore_add(high_score *score)
 	for (int i = slot; !done && (i < MAX_HISCORES); i++)
 	{
 		/* Read the old guy, note errors */
-		if (highscore_seek(i)) return (-1);
+		if (highscore_seek(i)) return -1;
 		if (highscore_read(&tmpscore)) done = TRUE;
 
 		/* Back up and dump the score we were holding */
-		if (highscore_seek(i)) return (-1);
-		if (highscore_write(&the_score)) return (-1);
+		if (highscore_seek(i)) return -1;
+		if (highscore_write(&the_score)) return -1;
 
 		/* Hack -- Save the old score, for the next pass */
 		the_score = tmpscore;

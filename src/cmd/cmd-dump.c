@@ -452,7 +452,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		msg_format(_("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporarily."), buf);
 		msg_format(NULL);
 		disable_diary=TRUE;
-		return (-1);
+		return -1;
 	}
 
 	q_idx = quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level);
@@ -744,7 +744,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 
 	if (do_level) write_level = FALSE;
 
-	return (0);
+	return 0;
 }
 
 
@@ -1398,7 +1398,7 @@ static errr macro_dump(concptr fname)
 	FILE_TYPE(FILE_TYPE_TEXT);
 
 	/* Append to the file */
-	if (!open_auto_dump(buf, mark)) return (-1);
+	if (!open_auto_dump(buf, mark)) return -1;
 
 	/* Start dumping */
 	auto_dump_printf(_("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
@@ -1423,7 +1423,7 @@ static errr macro_dump(concptr fname)
 	}
 
 	close_auto_dump();
-	return (0);
+	return 0;
 }
 
 
@@ -1575,7 +1575,7 @@ static errr keymap_dump(concptr fname)
 	}
 
 	close_auto_dump();
-	return (0);
+	return 0;
 }
 
 

@@ -1990,7 +1990,7 @@ static errr term_force_font(term_data *td, concptr path)
 	td->font_id = CreateFontIndirect(&(td->lf));
 	wid = td->lf.lfWidth;
 	hgt = td->lf.lfHeight;
-	if (!td->font_id) return (1);
+	if (!td->font_id) return 1;
 #else
 	/* Forget old font */
 	if (td->font_file)
@@ -2023,7 +2023,7 @@ static errr term_force_font(term_data *td, concptr path)
 	}
 
 	/* No path given */
-	if (!path) return (1);
+	if (!path) return 1;
 
 	/* Local copy */
 	strcpy(buf, path);
@@ -2032,13 +2032,13 @@ static errr term_force_font(term_data *td, concptr path)
 	base = analyze_font(buf, &wid, &hgt);
 
 	/* Verify suffix */
-	if (!suffix(base, ".FON")) return (1);
+	if (!suffix(base, ".FON")) return 1;
 
 	/* Verify file */
-	if (!check_file(buf)) return (1);
+	if (!check_file(buf)) return 1;
 
 	/* Load the new font */
-	if (!AddFontResource(buf)) return (1);
+	if (!AddFontResource(buf)) return 1;
 
 	/* Save new font name */
 	td->font_file = string_make(base);
@@ -2077,7 +2077,7 @@ static errr term_force_font(term_data *td, concptr path)
 	td->font_hgt = hgt;
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -2258,7 +2258,7 @@ static errr Term_user_win(int n)
 	(void)n;
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -2415,7 +2415,7 @@ static errr Term_xtra_win_react(void)
 
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -2468,7 +2468,7 @@ static errr Term_xtra_win_flush(void)
 	}
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -2515,7 +2515,7 @@ static errr Term_xtra_win_clear(void)
 static errr Term_xtra_win_noise(void)
 {
 	MessageBeep(MB_ICONASTERISK);
-	return (0);
+	return 0;
 }
 
 
@@ -2530,10 +2530,10 @@ static errr Term_xtra_win_sound(int v)
 #endif /* USE_SOUND */
 
 	/* Sound disabled */
-	if (!use_sound) return (1);
+	if (!use_sound) return 1;
 
 	/* Illegal sound */
-	if ((v < 0) || (v >= SOUND_MAX)) return (1);
+	if ((v < 0) || (v >= SOUND_MAX)) return 1;
 
 #ifdef USE_SOUND
 
@@ -2545,7 +2545,7 @@ static errr Term_xtra_win_sound(int v)
 	}
 
 	/* No sample */
-	if (i == 0) return (1);
+	if (i == 0) return 1;
 
 	/* Build the path */
 	path_build(buf, 1024, ANGBAND_DIR_XTRA_SOUND, sound_file[v][Rand_external(i)]);
@@ -2564,7 +2564,7 @@ static errr Term_xtra_win_sound(int v)
 
 #else /* USE_SOUND */
 
-	return (1);
+	return 1;
 
 #endif /* USE_SOUND */
 }
@@ -2586,10 +2586,10 @@ static errr Term_xtra_win_music(int n, int v)
 		mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
 	}
 
-	if(!use_music) return (1);
+	if(!use_music) return 1;
 
 	/* Illegal sound */
-	if(n == TERM_XTRA_MUSIC_BASIC && ((v < 0) || (v >= MUSIC_BASIC_MAX))) return (1);
+	if(n == TERM_XTRA_MUSIC_BASIC && ((v < 0) || (v >= MUSIC_BASIC_MAX))) return 1;
 	else if(v < 0 || v >= 1000) return(1); /*!< TODO */
 
 #ifdef USE_MUSIC
@@ -2613,7 +2613,7 @@ static errr Term_xtra_win_music(int n, int v)
 	/* No sample */
 	if (i == 0)
 	{
-		return (1);
+		return 1;
 	}
 
 	switch(n)
@@ -2634,7 +2634,7 @@ static errr Term_xtra_win_music(int n, int v)
 
 	if(current_music_type == n && current_music_id == v)
 	{
-		return (0);
+		return 0;
 	}
 	current_music_type = n;
 	current_music_id = v;
@@ -2648,13 +2648,13 @@ static errr Term_xtra_win_music(int n, int v)
 	mciSendCommand(mop.wDeviceID, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_ELEMENT, (DWORD)&mop);
 	mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, 0);
 	mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mop);
-	return (0);
+	return 0;
 
 #endif /* WIN32 */
 
 #else /* USE_MUSIC */
 
-	return (1);
+	return 1;
 
 #endif /* USE_MUSIC */
 
@@ -2694,7 +2694,7 @@ static int Term_xtra_win_delay(int v)
 #endif /* WIN32 */
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -5820,7 +5820,7 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 		DispatchMessage(&msg);
 	}
 	quit(NULL);
-	return (0);
+	return 0;
 }
 
 

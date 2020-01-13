@@ -2447,47 +2447,47 @@ static bool store_object_similar(object_type *o_ptr, object_type *j_ptr)
 	int i;
 
 	/* Hack -- Identical items cannot be stacked */
-	if (o_ptr == j_ptr) return (0);
+	if (o_ptr == j_ptr) return 0;
 
 	/* Different objects cannot be stacked */
-	if (o_ptr->k_idx != j_ptr->k_idx) return (0);
+	if (o_ptr->k_idx != j_ptr->k_idx) return 0;
 
 	/* Different charges (etc) cannot be stacked, unless wands or rods. */
-	if ((o_ptr->pval != j_ptr->pval) && (o_ptr->tval != TV_WAND) && (o_ptr->tval != TV_ROD)) return (0);
+	if ((o_ptr->pval != j_ptr->pval) && (o_ptr->tval != TV_WAND) && (o_ptr->tval != TV_ROD)) return 0;
 
 	/* Require many identical values */
-	if (o_ptr->to_h != j_ptr->to_h) return (0);
-	if (o_ptr->to_d != j_ptr->to_d) return (0);
-	if (o_ptr->to_a != j_ptr->to_a) return (0);
+	if (o_ptr->to_h != j_ptr->to_h) return 0;
+	if (o_ptr->to_d != j_ptr->to_d) return 0;
+	if (o_ptr->to_a != j_ptr->to_a) return 0;
 
 	/* Require identical "ego-item" names */
-	if (o_ptr->name2 != j_ptr->name2) return (0);
+	if (o_ptr->name2 != j_ptr->name2) return 0;
 
 	/* Artifacts don't stack! */
-	if (object_is_artifact(o_ptr) || object_is_artifact(j_ptr)) return (0);
+	if (object_is_artifact(o_ptr) || object_is_artifact(j_ptr)) return 0;
 
 	/* Hack -- Identical art_flags! */
 	for (i = 0; i < TR_FLAG_SIZE; i++)
-		if (o_ptr->art_flags[i] != j_ptr->art_flags[i]) return (0);
+		if (o_ptr->art_flags[i] != j_ptr->art_flags[i]) return 0;
 
 	/* Hack -- Never stack "powerful" items */
-	if (o_ptr->xtra1 || j_ptr->xtra1) return (0);
+	if (o_ptr->xtra1 || j_ptr->xtra1) return 0;
 
 	/* Hack -- Never stack recharging items */
-	if (o_ptr->timeout || j_ptr->timeout) return (0);
+	if (o_ptr->timeout || j_ptr->timeout) return 0;
 
 	/* Require many identical values */
-	if (o_ptr->ac != j_ptr->ac)   return (0);
-	if (o_ptr->dd != j_ptr->dd)   return (0);
-	if (o_ptr->ds != j_ptr->ds)   return (0);
+	if (o_ptr->ac != j_ptr->ac)   return 0;
+	if (o_ptr->dd != j_ptr->dd)   return 0;
+	if (o_ptr->ds != j_ptr->ds)   return 0;
 
 	/* Hack -- Never stack chests */
-	if (o_ptr->tval == TV_CHEST) return (0);
-	if (o_ptr->tval == TV_STATUE) return (0);
-	if (o_ptr->tval == TV_CAPTURE) return (0);
+	if (o_ptr->tval == TV_CHEST) return 0;
+	if (o_ptr->tval == TV_STATUE) return 0;
+	if (o_ptr->tval == TV_CAPTURE) return 0;
 
 	/* Require matching discounts */
-	if (o_ptr->discount != j_ptr->discount) return (0);
+	if (o_ptr->discount != j_ptr->discount) return 0;
 
 	/* They match, so they must be similar */
 	return TRUE;
@@ -3079,12 +3079,12 @@ static int home_carry(object_type *o_ptr)
 	/* No space? */
 	if ((cur_store_num != STORE_HOME) || (powerup_home == TRUE)) {
 		if (st_ptr->stock_num >= st_ptr->stock_size) {
-			return (-1);
+			return -1;
 		}
 	}
 	else{
 		if (st_ptr->stock_num >= ((st_ptr->stock_size) / 10)) {
-			return (-1);
+			return -1;
 		}
 	}
 
@@ -3143,7 +3143,7 @@ static int store_carry(object_type *o_ptr)
 	value = object_value(o_ptr);
 
 	/* Cursed/Worthless items "disappear" when sold */
-	if (value <= 0) return (-1);
+	if (value <= 0) return -1;
 
 	/* All store items are fully *identified* */
 	o_ptr->ident |= IDENT_MENTAL;
@@ -3172,7 +3172,7 @@ static int store_carry(object_type *o_ptr)
 	}
 
 	/* No space? */
-	if (st_ptr->stock_num >= st_ptr->stock_size) return (-1);
+	if (st_ptr->stock_num >= st_ptr->stock_size) return -1;
 
 
 	/* Check existing slots to see if we must "slide" */

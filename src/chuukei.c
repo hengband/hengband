@@ -141,9 +141,9 @@ static errr init_buffer(void)
 	ring.wptr = ring.rptr = ring.inlen = 0;
 	fresh_queue.time[0] = 0;
 	ring.buf = malloc(RINGBUF_SIZE);
-	if (ring.buf == NULL) return (-1);
+	if (ring.buf == NULL) return -1;
 
-	return (0);
+	return 0;
 }
 
 /* 現在の時間を100ms単位で取得する */
@@ -190,7 +190,7 @@ static errr insert_ringbuf(char *buf)
 
 		close(sd);
 #endif
-		return (-1);
+		return -1;
 	}
 
 	/* バッファの終端までに収まる */
@@ -213,7 +213,7 @@ static errr insert_ringbuf(char *buf)
 	ring.inlen += len;
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 #ifdef CHUUKEI
@@ -308,7 +308,7 @@ static int read_chuukei_prf(concptr prf_name)
 	path_build(buf, sizeof(buf), ANGBAND_DIR_XTRA, prf_name);
 	fp = my_fopen(buf, "r");
 
-	if (!fp) return (-1);
+	if (!fp) return -1;
 
 	/* 初期化 */
 	server_port = -1;
@@ -340,9 +340,9 @@ static int read_chuukei_prf(concptr prf_name)
 	my_fclose(fp);
 
 	/* prfファイルが完全でない */
-	if (server_port == -1 || server_name[0] == 0) return (-1);
+	if (server_port == -1 || server_name[0] == 0) return -1;
 
-	return (0);
+	return 0;
 }
 
 int connect_chuukei_server(char *prf_name)
@@ -360,20 +360,20 @@ int connect_chuukei_server(char *prf_name)
 	if (read_chuukei_prf(prf_name) < 0)
 	{
 		printf("Wrong prf file\n");
-		return (-1);
+		return -1;
 	}
 
 	if (init_buffer() < 0)
 	{
 		printf("Malloc error\n");
-		return (-1);
+		return -1;
 	}
 
 #ifdef WINDOWS
 	if (WSAStartup(wVersionRequested, &wsaData))
 	{
 		msg_print("Report: WSAStartup failed.");
-		return (-1);
+		return -1;
 	}
 #endif
 
@@ -389,7 +389,7 @@ int connect_chuukei_server(char *prf_name)
 		if ((ask.sin_addr.s_addr=inet_addr(server_name)) == 0)
 		{
 			printf("Bad hostname\n");
-			return (-1);
+			return -1;
 		}
 	}
 
@@ -403,17 +403,17 @@ int connect_chuukei_server(char *prf_name)
 #endif
 	{
 		printf("Can't create socket\n");
-		return (-1);
+		return -1;
 	}
 
 	if (connect(sd, (struct sockaddr *)&ask, sizeof(ask)) < 0)
 	{
 		close(sd);
 		printf("Can't connect %s port %d\n", server_name, server_port);
-		return (-1);
+		return -1;
 	}
 
-	return (0);
+	return 0;
 #else	/* MACINTOSH */
 	OSStatus err;
 	InetHostInfo 	response;
@@ -425,7 +425,7 @@ int connect_chuukei_server(char *prf_name)
 
 	if (read_chuukei_prf(prf_name) < 0){
 		printf("Wrong prf file\n");
-		return (-1);
+		return -1;
 	}
 	
 	init_buffer();

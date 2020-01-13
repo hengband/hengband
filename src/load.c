@@ -1463,7 +1463,7 @@ static errr rd_store(int town_number, int store_number)
 	}
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -2485,7 +2485,7 @@ static errr rd_inventory(void)
 	}
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -2960,7 +2960,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		current_world_ptr->character_dungeon = TRUE;
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -3996,7 +3996,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 #endif
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 /*!
@@ -4015,7 +4015,7 @@ errr rd_savefile_new(void)
 
 	/* Drop permissions */
 	safe_setuid_drop();
-	if (!fff) return (-1);
+	if (!fff) return -1;
 
 	/* Call the sub-function */
 	err = rd_savefile_new_aux(p_ptr);

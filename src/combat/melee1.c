@@ -977,10 +977,10 @@ static int monster_critical(DICE_NUMBER dice, DICE_SID sides, HIT_POINT dam)
 {
 	/* Must do at least 95% of perfect */
 	int total = dice * sides;
-	if (dam < total * 19 / 20) return (0);
+	if (dam < total * 19 / 20) return 0;
 
 	/* Weak blows rarely work */
-	if ((dam < 20) && (randint0(100) >= dam)) return (0);
+	if ((dam < 20) && (randint0(100) >= dam)) return 0;
 
 	/* Perfect damage */
 	int max = 0;

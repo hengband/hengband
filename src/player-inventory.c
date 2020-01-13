@@ -39,12 +39,12 @@ static INVENTORY_IDX label_to_equip(player_type* owner_ptr, int c)
 	INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1) + INVEN_RARM;
 
 	/* Verify the index */
-	if ((i < INVEN_RARM) || (i >= INVEN_TOTAL)) return (-1);
+	if ((i < INVEN_RARM) || (i >= INVEN_TOTAL)) return -1;
 
 	if (select_ring_slot) return is_ring_slot(i) ? i : -1;
 
 	/* Empty slots can never be chosen */
-	if (!owner_ptr->inventory_list[i].k_idx) return (-1);
+	if (!owner_ptr->inventory_list[i].k_idx) return -1;
 
 	return i;
 }
@@ -63,10 +63,10 @@ static INVENTORY_IDX label_to_inven(player_type* owner_ptr, int c)
 	INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1);
 
 	/* Verify the index */
-	if ((i < 0) || (i > INVEN_PACK)) return (-1);
+	if ((i < 0) || (i > INVEN_PACK)) return -1;
 
 	/* Empty slots can never be chosen */
-	if (!owner_ptr->inventory_list[i].k_idx) return (-1);
+	if (!owner_ptr->inventory_list[i].k_idx) return -1;
 
 	return i;
 }

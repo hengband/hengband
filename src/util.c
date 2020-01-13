@@ -159,9 +159,9 @@ int stricmp(concptr a, concptr b)
 	{
 		z1 = FORCEUPPER(*s1);
 		z2 = FORCEUPPER(*s2);
-		if (z1 < z2) return (-1);
-		if (z1 > z2) return (1);
-		if (!z1) return (0);
+		if (z1 < z2) return -1;
+		if (z1 > z2) return 1;
+		if (!z1) return 0;
 	}
 }
 
@@ -319,13 +319,13 @@ errr path_parse(char *buf, int max, concptr file)
 	buf[0] = '\0';
 
 	/* No file? */
-	if (!file) return (-1);
+	if (!file) return -1;
 
 	/* File needs no parsing */
 	if (file[0] != '~')
 	{
 		(void)strnfmt(buf, max, "%s", file);
-		return (0);
+		return 0;
 	}
 
 	/* Point at the user */
@@ -335,7 +335,7 @@ errr path_parse(char *buf, int max, concptr file)
 	s = my_strstr(u, PATH_SEP);
 
 	/* Hack -- no long user names */
-	if (s && (s >= u + sizeof(user))) return (1);
+	if (s && (s >= u + sizeof(user))) return 1;
 
 	/* Extract a user name */
 	if (s)
@@ -354,14 +354,14 @@ errr path_parse(char *buf, int max, concptr file)
 	else pw = getpwuid(getuid());
 
 	/* Nothing found? */
-	if (!pw) return (1);
+	if (!pw) return 1;
 
 	/* Make use of the info */
 	if (s) strnfmt(buf, max, "%s%s", pw->pw_dir, s);
 	else strnfmt(buf, max, "%s", pw->pw_dir);
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -385,7 +385,7 @@ errr path_parse(char *buf, int max, concptr file)
 #endif /* MAC_MPW && CARBON */
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -406,7 +406,7 @@ static errr path_temp(char *buf, int max)
 	/* Temp file */
 	s = tmpnam(NULL);
 
-	if (!s) return (-1);
+	if (!s) return -1;
 
 	/* Format to length */
 #if !defined(WIN32) || (defined(_MSC_VER) && (_MSC_VER >= 1900))
@@ -416,7 +416,7 @@ static errr path_temp(char *buf, int max)
 #endif
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 #endif
@@ -470,7 +470,7 @@ errr path_build(char *buf, int max, concptr path, concptr file)
 	}
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -509,13 +509,13 @@ FILE *my_fopen(concptr file, concptr mode)
 errr my_fclose(FILE *fff)
 {
 	/* Require a file */
-	if (!fff) return (-1);
+	if (!fff) return -1;
 
 	/* Close, check for error */
-	if (fclose(fff) == EOF) return (1);
+	if (fclose(fff) == EOF) return 1;
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -594,7 +594,7 @@ errr my_fgets(FILE *fff, char *buf, huge n)
 				buf[i] = '\0';
 
 				/* Success */
-				return (0);
+				return 0;
 			}
 
 			/* Handle tabs */
@@ -639,14 +639,14 @@ errr my_fgets(FILE *fff, char *buf, huge n)
 		buf[i] = '\0';
 
 		/* Success */
-		return (0);
+		return 0;
 	}
 
 	/* Nothing */
 	buf[0] = '\0';
 
 	/* Failure */
-	return (1);
+	return 1;
 }
 
 
@@ -664,7 +664,7 @@ errr my_fputs(FILE *fff, concptr buf, huge n)
 	(void)fprintf(fff, "%s\n", buf);
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -709,12 +709,12 @@ errr fd_kill(concptr file)
 	char buf[1024];
 
 	/* Hack -- Try to parse the path */
-	if (path_parse(buf, 1024, file)) return (-1);
+	if (path_parse(buf, 1024, file)) return -1;
 
 	/* Remove */
 	(void)remove(buf);
 
-	return (0);
+	return 0;
 }
 
 
@@ -727,15 +727,15 @@ errr fd_move(concptr file, concptr what)
 	char aux[1024];
 
 	/* Hack -- Try to parse the path */
-	if (path_parse(buf, 1024, file)) return (-1);
+	if (path_parse(buf, 1024, file)) return -1;
 
 	/* Hack -- Try to parse the path */
-	if (path_parse(aux, 1024, what)) return (-1);
+	if (path_parse(aux, 1024, what)) return -1;
 
 	/* Rename */
 	(void)rename(buf, aux);
 
-	return (0);
+	return 0;
 }
 
 
@@ -750,18 +750,18 @@ errr fd_copy(concptr file, concptr what)
 	int src_fd, dst_fd;
 
 	/* Hack -- Try to parse the path */
-	if (path_parse(buf, 1024, file)) return (-1);
+	if (path_parse(buf, 1024, file)) return -1;
 
 	/* Hack -- Try to parse the path */
-	if (path_parse(aux, 1024, what)) return (-1);
+	if (path_parse(aux, 1024, what)) return -1;
 
 	/* Open source file */
 	src_fd = fd_open(buf, O_RDONLY);
-	if (src_fd < 0) return (-1);
+	if (src_fd < 0) return -1;
 
 	/* Open destination file */
 	dst_fd = fd_open(aux, O_WRONLY|O_TRUNC|O_CREAT);
-	if (dst_fd < 0) return (-1);
+	if (dst_fd < 0) return -1;
 
 	/* Copy */
 	while ((read_num = read(src_fd, buf, 1024)) > 0)
@@ -785,7 +785,7 @@ errr fd_copy(concptr file, concptr what)
 	fd_close(src_fd);
 	fd_close(dst_fd);
 
-	return (0);
+	return 0;
 }
 
 /*
@@ -798,7 +798,7 @@ int fd_make(concptr file, BIT_FLAGS mode)
 	char buf[1024];
 
 	/* Hack -- Try to parse the path */
-	if (path_parse(buf, 1024, file)) return (-1);
+	if (path_parse(buf, 1024, file)) return -1;
 
 #if defined(MAC_MPW) || defined(MACH_O_CARBON)
 	{
@@ -828,7 +828,7 @@ int fd_open(concptr file, int flags)
 	char buf[1024];
 
 	/* Hack -- Try to parse the path */
-	if (path_parse(buf, 1024, file)) return (-1);
+	if (path_parse(buf, 1024, file)) return -1;
 
 	/* Attempt to open the file */
 	return (open(buf, flags | O_BINARY, 0));
@@ -846,7 +846,7 @@ errr fd_lock(int fd, int what)
 	what = what ? what : 0;
 
 	/* Verify the fd */
-	if (fd < 0) return (-1);
+	if (fd < 0) return -1;
 
 #ifdef SET_UID
 
@@ -865,7 +865,7 @@ errr fd_lock(int fd, int what)
 	else
 	{
 		/* Lock the score file */
-		if (lockf(fd, F_LOCK, 0) != 0) return (1);
+		if (lockf(fd, F_LOCK, 0) != 0) return 1;
 	}
 
 #  endif
@@ -885,7 +885,7 @@ errr fd_lock(int fd, int what)
 	else
 	{
 		/* Lock the score file */
-		if (flock(fd, LOCK_EX) != 0) return (1);
+		if (flock(fd, LOCK_EX) != 0) return 1;
 	}
 
 #  endif
@@ -895,7 +895,7 @@ errr fd_lock(int fd, int what)
 #endif
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -907,16 +907,16 @@ errr fd_seek(int fd, huge n)
 	huge p;
 
 	/* Verify fd */
-	if (fd < 0) return (-1);
+	if (fd < 0) return -1;
 
 	/* Seek to the given position */
 	p = lseek(fd, n, SEEK_SET);
 
 	/* Failure */
-	if (p != n) return (1);
+	if (p != n) return 1;
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -929,7 +929,7 @@ errr fd_chop(int fd, huge n)
 	n = n ? n : 0;
 
 	/* Verify the fd */
-	if (fd < 0) return (-1);
+	if (fd < 0) return -1;
 
 #if defined(ULTRIX) || defined(NeXT)
 	/* Truncate */
@@ -937,7 +937,7 @@ errr fd_chop(int fd, huge n)
 #endif
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -947,7 +947,7 @@ errr fd_chop(int fd, huge n)
 errr fd_read(int fd, char *buf, huge n)
 {
 	/* Verify the fd */
-	if (fd < 0) return (-1);
+	if (fd < 0) return -1;
 
 #ifndef SET_UID
 
@@ -955,7 +955,7 @@ errr fd_read(int fd, char *buf, huge n)
 	while (n >= 16384)
 	{
 		/* Read a piece */
-		if (read(fd, buf, 16384) != 16384) return (1);
+		if (read(fd, buf, 16384) != 16384) return 1;
 
 		/* Shorten the task */
 		buf += 16384;
@@ -967,10 +967,10 @@ errr fd_read(int fd, char *buf, huge n)
 #endif
 
 	/* Read the final piece */
-	if (read(fd, buf, n) != (int)n) return (1);
+	if (read(fd, buf, n) != (int)n) return 1;
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -980,7 +980,7 @@ errr fd_read(int fd, char *buf, huge n)
 errr fd_write(int fd, concptr buf, huge n)
 {
 	/* Verify the fd */
-	if (fd < 0) return (-1);
+	if (fd < 0) return -1;
 
 #ifndef SET_UID
 
@@ -988,7 +988,7 @@ errr fd_write(int fd, concptr buf, huge n)
 	while (n >= 16384)
 	{
 		/* Write a piece */
-		if (write(fd, buf, 16384) != 16384) return (1);
+		if (write(fd, buf, 16384) != 16384) return 1;
 
 		/* Shorten the task */
 		buf += 16384;
@@ -1000,10 +1000,10 @@ errr fd_write(int fd, concptr buf, huge n)
 #endif
 
 	/* Write the final piece */
-	if (write(fd, buf, n) != (int)n) return (1);
+	if (write(fd, buf, n) != (int)n) return 1;
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -1013,12 +1013,12 @@ errr fd_write(int fd, concptr buf, huge n)
 errr fd_close(int fd)
 {
 	/* Verify the fd */
-	if (fd < 0) return (-1);
+	if (fd < 0) return -1;
 
 	/* Close */
 	(void)close(fd);
 
-	return (0);
+	return 0;
 }
 
 
@@ -1106,7 +1106,7 @@ static char hexify(uint i)
 static int deoct(char c)
 {
 	if (isdigit(c)) return (D2I(c));
-	return (0);
+	return 0;
 }
 
 /*
@@ -1117,7 +1117,7 @@ static int dehex(char c)
 	if (isdigit(c)) return (D2I(c));
 	if (islower(c)) return (A2I(c) + 10);
 	if (isupper(c)) return (A2I(tolower(c)) + 10);
-	return (0);
+	return 0;
 }
 
 
@@ -1131,9 +1131,9 @@ static int my_stricmp(concptr a, concptr b)
 	{
 		z1 = FORCEUPPER(*s1);
 		z2 = FORCEUPPER(*s2);
-		if (z1 < z2) return (-1);
-		if (z1 > z2) return (1);
-		if (!z1) return (0);
+		if (z1 < z2) return -1;
+		if (z1 > z2) return 1;
+		if (!z1) return 0;
 	}
 }
 
@@ -1147,9 +1147,9 @@ static int my_strnicmp(concptr a, concptr b, int n)
 	{
 		z1 = FORCEUPPER(*s1);
 		z2 = FORCEUPPER(*s2);
-		if (z1 < z2) return (-1);
-		if (z1 > z2) return (1);
-		if (!z1) return (0);
+		if (z1 < z2) return -1;
+		if (z1 > z2) return 1;
+		if (!z1) return 0;
 	}
 	return 0;
 }
@@ -1561,7 +1561,7 @@ sint macro_find_exact(concptr pat)
 	/* Nothing possible */
 	if (!macro__use[(byte)(pat[0])])
 	{
-		return (-1);
+		return -1;
 	}
 
 	/* Scan the macros */
@@ -1575,7 +1575,7 @@ sint macro_find_exact(concptr pat)
 	}
 
 	/* No matches */
-	return (-1);
+	return -1;
 }
 
 
@@ -1589,7 +1589,7 @@ static sint macro_find_check(concptr pat)
 	/* Nothing possible */
 	if (!macro__use[(byte)(pat[0])])
 	{
-		return (-1);
+		return -1;
 	}
 
 	/* Scan the macros */
@@ -1603,7 +1603,7 @@ static sint macro_find_check(concptr pat)
 	}
 
 	/* Nothing */
-	return (-1);
+	return -1;
 }
 
 
@@ -1617,7 +1617,7 @@ static sint macro_find_maybe(concptr pat)
 	/* Nothing possible */
 	if (!macro__use[(byte)(pat[0])])
 	{
-		return (-1);
+		return -1;
 	}
 
 	/* Scan the macros */
@@ -1634,7 +1634,7 @@ static sint macro_find_maybe(concptr pat)
 	}
 
 	/* Nothing */
-	return (-1);
+	return -1;
 }
 
 
@@ -1648,7 +1648,7 @@ static sint macro_find_ready(concptr pat)
 	/* Nothing possible */
 	if (!macro__use[(byte)(pat[0])])
 	{
-		return (-1);
+		return -1;
 	}
 
 	/* Scan the macros */
@@ -1691,7 +1691,7 @@ errr macro_add(concptr pat, concptr act)
 
 
 	/* Paranoia -- require data */
-	if (!pat || !act) return (-1);
+	if (!pat || !act) return -1;
 
 
 	/* Look for any existing macro */
@@ -1721,7 +1721,7 @@ errr macro_add(concptr pat, concptr act)
 	macro__use[(byte)(pat[0])] = TRUE;
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -1999,7 +1999,7 @@ static char inkey_aux(void)
 		while (p > 0)
 		{
 			/* Push the key, notice over-flow */
-			if (Term_key_push(buf[--p])) return (0);
+			if (Term_key_push(buf[--p])) return 0;
 		}
 
 		/* Wait for (and remove) a pending key */
@@ -2020,7 +2020,7 @@ static char inkey_aux(void)
 	while (p > n)
 	{
 		/* Push the key, notice over-flow */
-		if (Term_key_push(buf[--p])) return (0);
+		if (Term_key_push(buf[--p])) return 0;
 	}
 
 
@@ -2028,7 +2028,7 @@ static char inkey_aux(void)
 	parse_macro = TRUE;
 
 	/* Push the "end of macro action" key */
-	if (Term_key_push(30)) return (0);
+	if (Term_key_push(30)) return 0;
 
 
 	/* Access the macro action */
@@ -2041,12 +2041,12 @@ static char inkey_aux(void)
 	while (n > 0)
 	{
 		/* Push the key, notice over-flow */
-		if (Term_key_push(act[--n])) return (0);
+		if (Term_key_push(act[--n])) return 0;
 	}
 
 
 	/* Hack -- Force "inkey()" to call us again */
-	return (0);
+	return 0;
 }
 
 

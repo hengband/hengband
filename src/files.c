@@ -1116,7 +1116,7 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 	fp = my_fopen(name, "r");
 
 	/* No such file */
-	if (!fp) return (-1);
+	if (!fp) return -1;
 
 	/* Process the file */
 	char buf[1024];
@@ -1292,19 +1292,19 @@ errr check_time(void)
 	struct tm   *tp;
 
 	/* No restrictions */
-	if (!check_time_flag) return (0);
+	if (!check_time_flag) return 0;
 
 	/* Check for time violation */
 	c = time((time_t *)0);
 	tp = localtime(&c);
 
 	/* Violation */
-	if (days[tp->tm_wday][tp->tm_hour + 4] != 'X') return (1);
+	if (days[tp->tm_wday][tp->tm_hour + 4] != 'X') return 1;
 
 #endif
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -1326,7 +1326,7 @@ errr check_time_init(void)
 	fp = my_fopen(buf, "r");
 
 	/* No file, no restrictions */
-	if (!fp) return (0);
+	if (!fp) return 0;
 
 	/* Assume restrictions */
 	check_time_flag = TRUE;
@@ -1354,7 +1354,7 @@ errr check_time_init(void)
 #endif
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -1407,7 +1407,7 @@ errr check_load(void)
 	struct statstime    st;
 
 	/* Success if not checking */
-	if (!check_load_value) return (0);
+	if (!check_load_value) return 0;
 
 	/* Check the load */
 	if (0 == rstat("localhost", &st))
@@ -1416,13 +1416,13 @@ errr check_load(void)
 		long val2 = (long)(check_load_value)* FSCALE;
 
 		/* Check for violation */
-		if (val1 >= val2) return (1);
+		if (val1 >= val2) return 1;
 	}
 
 #endif
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -1449,7 +1449,7 @@ errr check_load_init(void)
 	fp = my_fopen(buf, "r");
 
 	/* No file, no restrictions */
-	if (!fp) return (0);
+	if (!fp) return 0;
 
 	/* Default load */
 	check_load_value = 100;
@@ -1482,7 +1482,7 @@ errr check_load_init(void)
 #endif
 
 	/* Success */
-	return (0);
+	return 0;
 }
 
 
@@ -4913,7 +4913,7 @@ errr file_character(player_type *creature_ptr, concptr name)
 		(void)inkey();
 
 		/* Error */
-		return (-1);
+		return -1;
 	}
 
 	(void)make_character_dump(creature_ptr, fff);

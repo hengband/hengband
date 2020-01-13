@@ -1849,7 +1849,7 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
 	if (creature_ptr->blind || no_lite(creature_ptr))
 	{
 		msg_print(_("目が見えない！", "You cannot see!"));
-		return (0);
+		return 0;
 	}
 
 	/* break run when leaving trap detected region */
@@ -1871,7 +1871,7 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
 			if (disturb_trap_detect)
 			{
 				/* Break Run */
-				return (0);
+				return 0;
 			}
 		}
 	}
@@ -1898,7 +1898,7 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
 			monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
 			/* Visible monster */
-			if (m_ptr->ml) return (0);
+			if (m_ptr->ml) return 0;
 		}
 
 	}
@@ -1919,16 +1919,16 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
 		}
 	}
 
-	if (!new_dir) return (0);
+	if (!new_dir) return 0;
 
 	/* Access newly move grid */
 	g_ptr = &floor_ptr->grid_array[creature_ptr->y+ddy[new_dir]][creature_ptr->x+ddx[new_dir]];
 
 	/* Close door abort traveling */
-	if (!easy_open && is_closed_door(g_ptr->feat)) return (0);
+	if (!easy_open && is_closed_door(g_ptr->feat)) return 0;
 
 	/* Visible and unignorable trap abort tarveling */
-	if (!g_ptr->mimic && !trap_can_be_ignored(creature_ptr, g_ptr->feat)) return (0);
+	if (!g_ptr->mimic && !trap_can_be_ignored(creature_ptr, g_ptr->feat)) return 0;
 
 	/* Move new grid */
 	return new_dir;
