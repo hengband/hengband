@@ -215,7 +215,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
 			describe_use(creature_ptr, slot), o_name, index_to_label(slot), game_inscriptions[feel]);
 #else
 		msg_format("You feel the %s (%c) you are %s %s %s...",
-			o_name, index_to_label(slot), describe_use(slot),
+			o_name, index_to_label(slot), describe_use(creature_ptr, slot),
 			((o_ptr->number == 1) ? "is" : "are"),
 			game_inscriptions[feel]);
 #endif

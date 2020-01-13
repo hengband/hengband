@@ -987,7 +987,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 #ifdef JP
 			msg_print("武器の渇望が消え去った。");
 #else
-			msg_format("Your weapon%s less thirsty now.", (empty_hands(FALSE)) ? " is" : "s are");
+			msg_format("Your weapon%s less thirsty now.", (empty_hands(caster_ptr, FALSE)) ? " is" : "s are");
 #endif
 		}
 		break;

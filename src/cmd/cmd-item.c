@@ -266,9 +266,9 @@ void do_cmd_wield(player_type *creature_ptr)
 	{
 		object_desc(o_name, &creature_ptr->inventory_list[slot], (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-		msg_format("%s%sは呪われているようだ。", describe_use(creature_ptr, slot) , o_name);
+		msg_format("%s%sは呪われているようだ。", describe_use(creature_ptr, slot), o_name);
 #else
-		msg_format("The %s you are %s appears to be cursed.", o_name, describe_use(slot));
+		msg_format("The %s you are %s appears to be cursed.", o_name, describe_use(creature_ptr, slot));
 #endif
 		return;
 	}

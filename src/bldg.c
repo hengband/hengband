@@ -2785,7 +2785,7 @@ static PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 		put_str("(一番高いダメージが適用されます。複数の倍打効果は足し算されません。)", row + 4, 0);
 		prt("現在の技量から判断すると、あなたの武器は以下のような威力を発揮します:", 0, 0);
 #else
-		put_str(format("[ 's' Select secondary weapon($%d) ]", cost), row + 1, (wid * i + mgn));
+		put_str(format("[ 's' Select secondary weapon($%d) ]", cost), 1, (wid + mgn));
 		put_str("(Only highest damage applies per monster. Special damage not cumulative.)", row + 4, 0);
 		prt("Based on your current abilities, here is what your weapons will do", 0, 0);
 #endif

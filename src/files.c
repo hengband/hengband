@@ -6075,10 +6075,12 @@ void print_tomb(player_type *dead_ptr)
 
 	roff_to_buf(format("by %s.", dead_ptr->died_from), GRAVE_LINE_WIDTH + 1, tmp, sizeof tmp);
 	center_string(buf, tmp);
+	char *t;
 	put_str(buf, 15, 11);
 	t = tmp + strlen(tmp) + 1;
 	if (*t)
 	{
+		char dummy[80];
 		strcpy(dummy, t); /* 2nd line */
 		if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
 		{
