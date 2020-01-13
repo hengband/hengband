@@ -440,7 +440,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		}
 		case CLASS_PALADIN:
 		{
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			fire_beam(creature_ptr, is_good_realm(creature_ptr->realm1) ? GF_HOLY_FIRE : GF_HELL_FIRE,
 			          dir, plev * 3);
 			break;
@@ -495,7 +495,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		{
 			if (command == -3)
 			{
-				if (!get_aim_dir(&dir)) return FALSE;
+				if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 				project_length = 1;
 				fire_beam(creature_ptr, GF_PHOTO, dir, 1);
 			}
@@ -515,7 +515,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 		{
 			if (command == -3)
 			{
-				if (!get_aim_dir(&dir)) return FALSE;
+				if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 				(void)fire_ball_hide(creature_ptr, GF_CHARM_LIVING, dir, creature_ptr->lev, 0);
 			}
 			else if (command == -4)
@@ -701,7 +701,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			break;
 
 		case RACE_HALF_GIANT:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			(void)wall_to_mud(creature_ptr, dir, 20 + randint1(30));
 			break;
 
@@ -711,20 +711,20 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			break;
 
 		case RACE_CYCLOPS:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			msg_print(_("巨大な岩を投げた。", "You throw a huge boulder."));
 			fire_bolt(creature_ptr, GF_MISSILE, dir, (3 * plev) / 2);
 			break;
 
 		case RACE_YEEK:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			stop_mouth(creature_ptr);
 			msg_print(_("身の毛もよだつ叫び声を上げた！", "You make a horrible scream!"));
 			(void)fear_monster(creature_ptr, dir, plev);
 			break;
 
 		case RACE_KLACKON:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			stop_mouth(creature_ptr);
 			msg_print(_("酸を吐いた。", "You spit acid."));
 			if (plev < 25) fire_bolt(creature_ptr, GF_ACID, dir, plev);
@@ -732,7 +732,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			break;
 
 		case RACE_KOBOLD:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			msg_print(_("毒のダーツを投げた。", "You throw a dart of poison."));
 			fire_bolt(creature_ptr, GF_POIS, dir, plev);
 			break;
@@ -745,7 +745,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			break;
 
 		case RACE_DARK_ELF:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			msg_print(_("マジック・ミサイルを放った。", "You cast a magic missile."));
 			fire_bolt_or_beam(creature_ptr, 10, GF_MISSILE, dir, damroll(3 + ((plev - 1) / 5), 4));
 			break;
@@ -755,13 +755,13 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			break;
 
 		case RACE_MIND_FLAYER:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			msg_print(_("あなたは集中し、目が赤く輝いた...", "You concentrate and your eyes glow red..."));
 			fire_bolt(creature_ptr, GF_PSI, dir, plev);
 			break;
 
 		case RACE_IMP:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			if (plev >= 30)
 			{
 				msg_print(_("ファイア・ボールを放った。", "You cast a ball of fire."));
@@ -789,7 +789,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			break;
 
 		case RACE_SPECTRE:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			stop_mouth(creature_ptr);
 			msg_print(_("あなたはおどろおどろしい叫び声をあげた！", "You emit an eldritch howl!"));
 			(void)fear_monster(creature_ptr, dir, plev);

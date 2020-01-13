@@ -1066,7 +1066,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		break;
 	case 1:
 		/* Mindblast */
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 
 		if (randint1(100) < plev * 2)
 			fire_beam(caster_ptr, GF_PSI, dir, damroll(3 + ((plev - 1) / 4), (3 + plev / 15)));
@@ -1085,7 +1085,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		/* Domination */
 		if (plev < 30)
 		{
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 
 			fire_ball(caster_ptr, GF_DOMINATION, dir, plev, 0);
 		}
@@ -1096,7 +1096,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		break;
 	case 5:
 		/* Fist of Force  ---  not 'true' TK  */
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 
 		fire_ball(caster_ptr, GF_TELEKINESIS, dir, damroll(8 + ((plev - 5) / 4), 8),
 			(plev > 20 ? (plev - 20) / 8 + 1 : 0));
@@ -1147,14 +1147,14 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		break;
 	case 10:
 		/* Telekinesis */
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 
 		fetch(caster_ptr, dir, plev * 15, FALSE);
 
 		break;
 	case 11:
 		/* Psychic Drain */
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 
 		b = damroll(plev / 2, 6);
 
@@ -1164,7 +1164,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		break;
 	case 12:
 		/* psycho-spear */
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 
 		fire_beam(caster_ptr, GF_PSY_SPEAR, dir, randint1(plev*3)+plev*3);
 		break;
@@ -1198,7 +1198,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 	switch (spell)
 	{
 	case 0:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		fire_ball(caster_ptr, GF_MISSILE, dir, damroll(3 + ((plev - 1) / 5) + boost / 12, 4), 0);
 		break;
 	case 1:
@@ -1209,7 +1209,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 		break;
 	case 3:
 		project_length = plev / 8 + 3;
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 
 		fire_beam(caster_ptr, GF_MISSILE, dir, damroll(5 + ((plev - 1) / 5) + boost / 10, 5));
 		break;
@@ -1235,7 +1235,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 		return shock_power(caster_ptr);
 		break;
 	case 8:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		fire_ball(caster_ptr, GF_MISSILE, dir, damroll(10, 6) + plev * 3 / 2 + boost * 3 / 5, (plev < 30) ? 2 : 3);
 		break;
 	case 9:
@@ -1246,7 +1246,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 		m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
-		if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
+		if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
 		dispel_monster_status(m_idx);
 		break;
 	}
@@ -1272,7 +1272,7 @@ static bool cast_force_spell(player_type *caster_ptr, int spell)
 		fire_ball(caster_ptr, GF_FIRE, 0, 200 + (2 * plev) + boost * 2, 10);
 		break;
 	case 12:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 
 		fire_beam(caster_ptr, GF_MANA, dir, damroll(10 + (plev / 2) + boost * 3 / 10, 15));
 		break;
@@ -1345,7 +1345,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		}
 		break;
 	case 2:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		if (plev > 9 && is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x])) {
 			fire_beam(caster_ptr, GF_LITE, dir, damroll(3 + ((plev - 1) / 5), 4));
 		}
@@ -1371,12 +1371,12 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		break;
 		/* banishing mirror */
 	case 7:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		(void)fire_beam(caster_ptr, GF_AWAY_ALL, dir, plev);
 		break;
 		/* mirror clashing */
 	case 8:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		fire_ball(caster_ptr, GF_SHARDS, dir, damroll(8 + ((plev - 5) / 4), 8),
 			(plev > 20 ? (plev - 20) / 8 + 1 : 0));
 		break;
@@ -1392,7 +1392,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		break;
 		/* seeker ray */
 	case 10:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		fire_beam(caster_ptr, GF_SEEKER, dir, damroll(11 + (plev - 5) / 4, 8));
 		break;
 		/* seal of mirror */
@@ -1408,7 +1408,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		break;
 		/* super ray */
 	case 13:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		fire_beam(caster_ptr, GF_SUPER_RAY, dir, 150 + randint1(2 * plev));
 		break;
 		/* illusion light */
@@ -1594,7 +1594,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 	}
 	case 6:
 	{
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		(void)stasis_monster(caster_ptr, dir);
 		break;
 	}
@@ -1650,11 +1650,11 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		if (!m_idx) break;
 		if (m_idx == caster_ptr->riding) break;
 		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
-		if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
+		if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
 		m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 		monster_desc(m_name, m_ptr, 0);
 		msg_format(_("%sを引き戻した。", "You pull back %s."), m_name);
-		path_n = project_path(caster_ptr->current_floor_ptr, path_g, MAX_RANGE, target_row, target_col, caster_ptr->y, caster_ptr->x, 0);
+		path_n = project_path(caster_ptr, path_g, MAX_RANGE, target_row, target_col, caster_ptr->y, caster_ptr->x, 0);
 		ty = target_row, tx = target_col;
 		for (i = 1; i < path_n; i++)
 		{
@@ -1700,12 +1700,12 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		break;
 	}
 	case 13:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		fire_ball(caster_ptr, GF_OLD_CONF, dir, plev*3, 3);
 		break;
 	case 14:
 		project_length = -1;
-		if (!get_aim_dir(&dir))
+		if (!get_aim_dir(caster_ptr, &dir))
 		{
 			project_length = 0;
 			return FALSE;
@@ -1739,7 +1739,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 
 			while (attempts--)
 			{
-				scatter(caster_ptr->current_floor_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
+				scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
 
 				if (!player_bold(caster_ptr, y, x)) break;
 			}

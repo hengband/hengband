@@ -299,7 +299,7 @@ void exe_zap_rod(player_type *creature_ptr, INVENTORY_IDX item)
 		!object_is_aware(o_ptr))
 	{
 		/* Get a direction, allow cancel */
-		if (!get_aim_dir(&dir)) return;
+		if (!get_aim_dir(creature_ptr, &dir)) return;
 	}
 
 

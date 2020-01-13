@@ -47,7 +47,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 		if (cast)
 		{
 			project_length = 2;
-			if (!get_aim_dir(&dir)) return NULL;
+			if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 			project_hook(caster_ptr, GF_ATTACK, dir, HISSATSU_2, PROJECT_STOP | PROJECT_KILL);
 		}
@@ -588,7 +588,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 			int total_damage = 0, basedam, i;
 			BIT_FLAGS flgs[TR_FLAG_SIZE];
 			object_type *o_ptr;
-			if (!get_aim_dir(&dir)) return NULL;
+			if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 			msg_print(_("武器を大きく振り下ろした。", "You swing your weapon downward."));
 			for (i = 0; i < 2; i++)
 			{
@@ -802,7 +802,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 			if (!cave_player_teleportable_bold(y, x, 0L) ||
 				(distance(y, x, caster_ptr->y, caster_ptr->x) > MAX_SIGHT / 2) ||
-				!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, y, x))
+				!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
 			{
 				msg_print(_("失敗！", "You cannot move to that place!"));
 				break;

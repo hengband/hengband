@@ -2441,14 +2441,14 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 		project_length = tdis + 1;
 
 		/* Get a direction (or cancel) */
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 
 		/* Predict the "target" location */
 		tx = creature_ptr->x + 99 * ddx[dir];
 		ty = creature_ptr->y + 99 * ddy[dir];
 
 		/* Check for "target request" */
-		if ((dir == 5) && target_okay())
+		if ((dir == 5) && target_okay(creature_ptr))
 		{
 			tx = target_col;
 			ty = target_row;

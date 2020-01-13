@@ -44,11 +44,12 @@
 /*!
  * @brief モンスターが敵に接近するための方向を決める /
  * Calculate the direction to the next enemy
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターの参照ID
  * @param mm 移動するべき方角IDを返す参照ポインタ
  * @return 方向が確定した場合TRUE、接近する敵がそもそもいない場合FALSEを返す
  */
-static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
+static bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 {
 	int i;
 	POSITION x = 0, y = 0;
@@ -56,38 +57,39 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 	int start;
 	int plus = 1;
 
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	monster_type *t_ptr;
 
-	if (p_ptr->riding_t_m_idx && player_bold(p_ptr, m_ptr->fy, m_ptr->fx))
+	if (target_ptr->riding_t_m_idx && player_bold(target_ptr, m_ptr->fy, m_ptr->fx))
 	{
-		y = p_ptr->current_floor_ptr->m_list[p_ptr->riding_t_m_idx].fy;
-		x = p_ptr->current_floor_ptr->m_list[p_ptr->riding_t_m_idx].fx;
+		y = floor_ptr->m_list[target_ptr->riding_t_m_idx].fy;
+		x = floor_ptr->m_list[target_ptr->riding_t_m_idx].fx;
 	}
-	else if (is_pet(m_ptr) && p_ptr->pet_t_m_idx)
+	else if (is_pet(m_ptr) && target_ptr->pet_t_m_idx)
 	{
-		y = p_ptr->current_floor_ptr->m_list[p_ptr->pet_t_m_idx].fy;
-		x = p_ptr->current_floor_ptr->m_list[p_ptr->pet_t_m_idx].fx;
+		y = floor_ptr->m_list[target_ptr->pet_t_m_idx].fy;
+		x = floor_ptr->m_list[target_ptr->pet_t_m_idx].fx;
 	}
 	else
 	{
-		if (p_ptr->phase_out)
+		if (target_ptr->phase_out)
 		{
-			start = randint1(p_ptr->current_floor_ptr->m_max-1)+p_ptr->current_floor_ptr->m_max;
+			start = randint1(floor_ptr->m_max-1)+floor_ptr->m_max;
 			if(randint0(2)) plus = -1;
 		}
-		else start = p_ptr->current_floor_ptr->m_max + 1;
+		else start = floor_ptr->m_max + 1;
 
 		/* Scan thru all monsters */
-		for (i = start; ((i < start + p_ptr->current_floor_ptr->m_max) && (i > start - p_ptr->current_floor_ptr->m_max)); i+=plus)
+		for (i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i+=plus)
 		{
-			MONSTER_IDX dummy = (i % p_ptr->current_floor_ptr->m_max);
+			MONSTER_IDX dummy = (i % floor_ptr->m_max);
 
 			if (!dummy) continue;
 
 			t_idx = dummy;
-			t_ptr = &p_ptr->current_floor_ptr->m_list[t_idx];
+			t_ptr = &floor_ptr->m_list[t_idx];
 
 			/* The monster itself isn't a target */
 			if (t_ptr == m_ptr) continue;
@@ -97,16 +99,16 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 			if (is_pet(m_ptr))
 			{
 				/* Hack -- only fight away from player */
-				if (p_ptr->pet_follow_distance < 0)
+				if (target_ptr->pet_follow_distance < 0)
 				{
 					/* No fighting near player */
-					if (t_ptr->cdis <= (0 - p_ptr->pet_follow_distance))
+					if (t_ptr->cdis <= (0 - target_ptr->pet_follow_distance))
 					{
 						continue;
 					}
 				}
 				/* Hack -- no fighting away from player */
-				else if ((m_ptr->cdis < t_ptr->cdis) && (t_ptr->cdis > p_ptr->pet_follow_distance))
+				else if ((m_ptr->cdis < t_ptr->cdis) && (t_ptr->cdis > target_ptr->pet_follow_distance))
 				{
 					continue;
 				}
@@ -118,14 +120,14 @@ static bool get_enemy_dir(MONSTER_IDX m_idx, int *mm)
 			if (!are_enemies(m_ptr, t_ptr)) continue;
 
 			/* Monster must be projectable if we can't pass through walls */
-			if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall)) ||
-			    ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != p_ptr->riding)))
+			if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) ||
+			    ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding)))
 			{
-				if (!in_disintegration_range(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
+				if (!in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
 			}
 			else
 			{
-				if (!projectable(p_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
+				if (!projectable(target_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
 			}
 
 			/* OK -- we've got a target */
@@ -288,12 +290,13 @@ static bool mon_will_run(MONSTER_IDX m_idx)
 /*!
  * @brief モンスターがプレイヤーに向けて遠距離攻撃を行うことが可能なマスを走査する /
  * Search spell castable grid
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターの参照ID
  * @param yp 適したマスのY座標を返す参照ポインタ
  * @param xp 適したマスのX座標を返す参照ポインタ
  * @return 有効なマスがあった場合TRUEを返す
  */
-static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
+static bool get_moves_aux2(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
 	int i, best = 999;
 	POSITION y, x, y1, x1;
@@ -302,7 +305,8 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	bool can_open_door = FALSE;
 	int now_cost;
 
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Monster location */
@@ -310,10 +314,10 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 	x1 = m_ptr->fx;
 
 	/* Monster can already cast spell to player */
-	if (projectable(p_ptr->current_floor_ptr, y1, x1, p_ptr->y, p_ptr->x)) return FALSE;
+	if (projectable(target_ptr, y1, x1, target_ptr->y, target_ptr->x)) return FALSE;
 
 	/* Set current grid cost */
-	now_cost = p_ptr->current_floor_ptr->grid_array[y1][x1].cost;
+	now_cost = floor_ptr->grid_array[y1][x1].cost;
 	if (now_cost == 0) now_cost = 999;
 
 	/* Can monster bash or open doors? */
@@ -331,17 +335,17 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 		x = x1 + ddx_ddd[i];
 
 		/* Ignore locations off of edge */
-		if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) continue;
+		if (!in_bounds2(floor_ptr, y, x)) continue;
 
 		/* Simply move to player */
-		if (player_bold(p_ptr, y, x)) return FALSE;
+		if (player_bold(target_ptr, y, x)) return FALSE;
 
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &floor_ptr->grid_array[y][x];
 
 		cost = g_ptr->cost;
 
 		/* Monster cannot kill or pass walls */
-		if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall)) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != p_ptr->riding))))
+		if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding))))
 		{
 			if (cost == 0) continue;
 			if (!can_open_door && is_closed_door(g_ptr->feat)) continue;
@@ -352,7 +356,7 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 
 		if (now_cost < cost) continue;
 
-		if (!projectable(p_ptr->current_floor_ptr, y, x, p_ptr->y, p_ptr->x)) continue;
+		if (!projectable(target_ptr, y, x, target_ptr->y, target_ptr->x)) continue;
 
 		/* Accept louder sounds */
 		if (best < cost) continue;
@@ -398,7 +402,7 @@ static bool get_moves_aux2(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
  * being close enough to chase directly.  I have no idea what will\n
  * happen if you combine "smell" with low "aaf" values.\n
  */
-static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no_flow)
+static bool get_moves_aux(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no_flow)
 {
 	int i, best;
 	POSITION y, x, y1, x1;
@@ -406,7 +410,8 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 	grid_type *g_ptr;
 	bool use_scent = FALSE;
 
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	/* Can monster cast attack spell? */
@@ -415,25 +420,25 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 	    r_ptr->a_ability_flags2 & (RF6_ATTACK_MASK))
 	{
 		/* Can move spell castable grid? */
-		if (get_moves_aux2(m_idx, yp, xp)) return TRUE;
+		if (get_moves_aux2(target_ptr, m_idx, yp, xp)) return TRUE;
 	}
 
 	/* Monster can't flow */
 	if (no_flow) return FALSE;
 
 	/* Monster can go through rocks */
-	if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != p_ptr->riding) || p_ptr->pass_wall)) return FALSE;
-	if ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != p_ptr->riding)) return FALSE;
+	if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) return FALSE;
+	if ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding)) return FALSE;
 
 	/* Monster location */
 	y1 = m_ptr->fy;
 	x1 = m_ptr->fx;
 
 	/* Hack -- Player can see us, run towards him */
-	if (player_has_los_bold(p_ptr, y1, x1) && projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y1, x1)) return FALSE;
+	if (player_has_los_bold(target_ptr, y1, x1) && projectable(target_ptr, target_ptr->y, target_ptr->x, y1, x1)) return FALSE;
 
 	/* Monster grid */
-	g_ptr = &p_ptr->current_floor_ptr->grid_array[y1][x1];
+	g_ptr = &floor_ptr->grid_array[y1][x1];
 
 	/* If we can hear noises, advance towards them */
 	if (g_ptr->cost)
@@ -445,7 +450,7 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 	else if (g_ptr->when)
 	{
 		/* Too old smell */
-		if (p_ptr->current_floor_ptr->grid_array[p_ptr->y][p_ptr->x].when - g_ptr->when > 127) return FALSE;
+		if (floor_ptr->grid_array[target_ptr->y][target_ptr->x].when - g_ptr->when > 127) return FALSE;
 
 		use_scent = TRUE;
 		best = 0;
@@ -464,9 +469,9 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 		x = x1 + ddx_ddd[i];
 
 		/* Ignore locations off of edge */
-		if (!in_bounds2(p_ptr->current_floor_ptr, y, x)) continue;
+		if (!in_bounds2(floor_ptr, y, x)) continue;
 
-		g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+		g_ptr = &floor_ptr->grid_array[y][x];
 
 		/* We're following a scent trail */
 		if (use_scent)
@@ -493,8 +498,8 @@ static bool get_moves_aux(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no
 		}
 
 		/* Hack -- Save the "twiddled" location */
-		(*yp) = p_ptr->y + 16 * ddy_ddd[i];
-		(*xp) = p_ptr->x + 16 * ddx_ddd[i];
+		(*yp) = target_ptr->y + 16 * ddy_ddd[i];
+		(*xp) = target_ptr->x + 16 * ddx_ddd[i];
 	}
 
 	/* No legal move (?) */
@@ -690,6 +695,7 @@ static POSITION *dist_offsets_x[10] =
 /*!
  * @brief モンスターが逃げ込める安全な地点を返す /
  * Choose a "safe" location near a monster for it to run toward.
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターの参照ID
  * @param yp 移動先のマスのY座標を返す参照ポインタ
  * @param xp 移動先のマスのX座標を返す参照ポインタ
@@ -705,9 +711,10 @@ static POSITION *dist_offsets_x[10] =
  *\n
  * Return TRUE if a safe location is available.\n
  */
-static bool find_safety(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
+static bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 
 	POSITION fy = m_ptr->fy;
 	POSITION fx = m_ptr->fx;
@@ -736,12 +743,12 @@ static bool find_safety(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 			x = fx + dx;
 
 			/* Skip illegal locations */
-			if (!in_bounds(p_ptr->current_floor_ptr, y, x)) continue;
+			if (!in_bounds(floor_ptr, y, x)) continue;
 
-			g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Skip locations in a wall */
-			if (!monster_can_cross_terrain(g_ptr->feat, &r_info[m_ptr->r_idx], (m_idx == p_ptr->riding) ? CEM_RIDING : 0)) continue;
+			if (!monster_can_cross_terrain(g_ptr->feat, &r_info[m_ptr->r_idx], (m_idx == target_ptr->riding) ? CEM_RIDING : 0)) continue;
 
 			/* Check for "availability" (if monsters can flow) */
 			if (!(m_ptr->mflag2 & MFLAG2_NOFLOW))
@@ -750,14 +757,14 @@ static bool find_safety(MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 				if (g_ptr->dist == 0) continue;
 
 				/* Ignore too-distant grids */
-				if (g_ptr->dist > p_ptr->current_floor_ptr->grid_array[fy][fx].dist + 2 * d) continue;
+				if (g_ptr->dist > floor_ptr->grid_array[fy][fx].dist + 2 * d) continue;
 			}
 
 			/* Check for absence of shot (more or less) */
-			if (!projectable(p_ptr->current_floor_ptr, p_ptr->y, p_ptr->x, y, x))
+			if (!projectable(target_ptr, target_ptr->y, target_ptr->x, y, x))
 			{
 				/* Calculate distance from player */
-				dis = distance(y, x, p_ptr->y, p_ptr->x);
+				dis = distance(y, x, target_ptr->y, target_ptr->x);
 
 				/* Remember if further than previous */
 				if (dis > gdis)
@@ -836,7 +843,7 @@ static bool find_hiding(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp
 			if (!monster_can_enter(y, x, r_ptr, 0)) continue;
 
 			/* Check for hidden, available grid */
-			if (!projectable(floor_ptr, target_ptr->y, target_ptr->x, y, x) && clean_shot(target_ptr, fy, fx, y, x, FALSE))
+			if (!projectable(target_ptr, target_ptr->y, target_ptr->x, y, x) && clean_shot(target_ptr, fy, fx, y, x, FALSE))
 			{
 				/* Calculate distance from player */
 				dis = distance(y, x, target_ptr->y, target_ptr->x);
@@ -899,8 +906,8 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 		/* The monster must be an enemy, and in LOS */
 		if (t_m_idx &&
 		    are_enemies(m_ptr, &floor_ptr->m_list[t_m_idx]) &&
-		    los(floor_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x) &&
-		    projectable(floor_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
+		    los(target_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x) &&
+		    projectable(target_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
 		{
 			/* Extract the "pseudo-direction" */
 			y = m_ptr->fy - m_ptr->target_y;
@@ -911,7 +918,7 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 
 	if (!done && !will_run && is_hostile(m_ptr) &&
 	    (r_ptr->flags1 & RF1_FRIENDS) &&
-	    ((los(floor_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x) && projectable(floor_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x)) ||
+	    ((los(target_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x) && projectable(target_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x)) ||
 	    (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].dist < MAX_SIGHT / 2)))
 	{
 	/*
@@ -994,7 +1001,7 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 	if (!done)
 	{
 		/* Flow towards the player */
-		(void)get_moves_aux(m_idx, &y2, &x2, no_flow);
+		(void)get_moves_aux(target_ptr, m_idx, &y2, &x2, no_flow);
 
 		/* Extract the "pseudo-direction" */
 		y = m_ptr->fy - y2;
@@ -1017,7 +1024,7 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 			int tmp_y = (-y);
 
 			/* Try to find safe place */
-			if (find_safety(m_idx, &y, &x))
+			if (find_safety(target_ptr, m_idx, &y, &x))
 			{
 				/* Attempt to avoid the player */
 				if (!no_flow)
@@ -1402,7 +1409,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				if (see_m)
 				{
 					if ((r_ptr->flags2 & RF2_CAN_SPEAK) && (m_ptr->r_idx != MON_GRIP) && (m_ptr->r_idx != MON_WOLF) && (m_ptr->r_idx != MON_FANG) &&
-					    player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx) && projectable(target_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x))
+					    player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx) && projectable(target_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x))
 					{
 						msg_format(_("%^s「ピンチだ！退却させてもらう！」", "%^s says 'It is the pinch! I will retreat'."), m_name);
 					}
@@ -1570,7 +1577,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		if ((ap_r_ptr->flags2 & RF2_CAN_SPEAK) && aware &&
 		    one_in_(SPEAK_CHANCE) &&
 		    player_has_los_bold(target_ptr, oy, ox) &&
-		    projectable(target_ptr->current_floor_ptr, oy, ox, target_ptr->y, target_ptr->x))
+		    projectable(target_ptr, oy, ox, target_ptr->y, target_ptr->x))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 			char monmessage[1024];
@@ -1612,7 +1619,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 			/* The monster must be an enemy, and projectable */
 			if (t_m_idx && are_enemies(m_ptr, &target_ptr->current_floor_ptr->m_list[t_m_idx]) &&
-			    projectable(target_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
+			    projectable(target_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
 			{
 				counterattack = TRUE;
 			}
@@ -1711,7 +1718,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
 
 		/* Look for an enemy */
-		if (!get_enemy_dir(m_idx, mm))
+		if (!get_enemy_dir(target_ptr, m_idx, mm))
 		{
 			/* Find the player if necessary */
 			if (avoid || lonely || distant)
@@ -1741,7 +1748,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
 
 		/* Look for an enemy */
-		get_enemy_dir(m_idx, mm);
+		get_enemy_dir(target_ptr, m_idx, mm);
 	}
 	/* Normal movement */
 	else
@@ -2211,7 +2218,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			/* Possible disturb */
 			if (m_ptr->ml &&
 			    (disturb_move ||
-			     (disturb_near && (m_ptr->mflag & MFLAG_VIEW) && projectable(target_ptr->current_floor_ptr, target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx)) ||
+			     (disturb_near && (m_ptr->mflag & MFLAG_VIEW) && projectable(target_ptr, target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx)) ||
 			     (disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= target_ptr->lev)))
 			{
 				if (is_hostile(m_ptr))

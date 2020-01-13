@@ -840,7 +840,7 @@ bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, boo
 	target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 	current_world_ptr->timewalk_m_idx = 0;
-	if (vs_player || (player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx) && projectable(target_ptr->current_floor_ptr, target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx)))
+	if (vs_player || (player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx) && projectable(target_ptr, target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx)))
 	{
 		msg_print(_("「時は動きだす…」", "You feel time flowing around you once more."));
 		msg_print(NULL);

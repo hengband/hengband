@@ -292,6 +292,7 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief LOS(Line Of Sight / 視線が通っているか)の判定を行う。
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y1 始点のy座標
  * @param x1 始点のx座標
  * @param y2 終点のy座標
@@ -332,7 +333,7 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
  *\n
  * Use the "update_view()" function to determine player line-of-sight.\n
  */
-bool los(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	/* Delta */
 	POSITION dx, dy;
@@ -373,7 +374,7 @@ bool los(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION 
 	/* if (!in_bounds(floor_ptr, y1, x1)) return FALSE; */
 	/* if (!in_bounds(floor_ptr, y2, x2)) return FALSE; */
 
-
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	/* Directly South/North */
 	if (!dx)
 	{
@@ -562,7 +563,7 @@ bool los(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION 
  *
  * This is slightly (but significantly) different from "los(y1,x1,y2,x2)".
  */
-bool projectable(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
+bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
 	POSITION y, x;
 
@@ -570,7 +571,7 @@ bool projectable(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, P
 	u16b grid_g[512];
 
 	/* Check the projection path */
-	grid_n = project_path(floor_ptr, grid_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, 0);
+	grid_n = project_path(player_ptr, grid_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, 0);
 
 	/* Identical grid */
 	if (!grid_n) return TRUE;
@@ -589,6 +590,7 @@ bool projectable(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, P
 
 /*!
  * @brief 特殊な部屋地形向けにモンスターを配置する / Hack -- Place some sleeping monsters near the given location
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y1 モンスターを配置したいマスの中心Y座標
  * @param x1 モンスターを配置したいマスの中心X座標
  * @param num 配置したいモンスターの数
@@ -596,13 +598,14 @@ bool projectable(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, P
  * @details
  * Only really called by some of the "vault" routines.
  */
-void vault_monsters(floor_type *floor_ptr, POSITION y1, POSITION x1, int num)
+void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num)
 {
 	int k, i;
 	POSITION y, x;
 	grid_type *g_ptr;
 
 	/* Try to summon "num" monsters "near" the given location */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (k = 0; k < num; k++)
 	{
 		/* Try nine locations */
@@ -611,10 +614,10 @@ void vault_monsters(floor_type *floor_ptr, POSITION y1, POSITION x1, int num)
 			int d = 1;
 
 			/* Pick a nearby location */
-			scatter(floor_ptr, &y, &x, y1, x1, d, 0);
+			scatter(player_ptr, &y, &x, y1, x1, d, 0);
 
 			/* Require "empty" floor grids */
-			g_ptr = &floor_ptr->grid_array[y][x];
+			g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 			if (!cave_empty_grid(g_ptr)) continue;
 
 			/* Place the monster (allow groups) */
@@ -1293,7 +1296,7 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
  * by "update_view_los()", and very different from the one used by "los()".
  * </pre>
  */
-sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg)
+sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg)
 {
 	POSITION y, x;
 
@@ -1351,6 +1354,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 	full = half << 1;
 
 	/* Vertical */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (ay > ax)
 	{
 		/* Let m = ((dx/dy) * full) = (dx * dx * 2) */
@@ -1407,7 +1411,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-					(player_bold(p_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
+					(player_bold(player_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
 					break;
 			}
 
@@ -1496,7 +1500,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-					(player_bold(p_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
+					(player_bold(player_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
 					break;
 			}
 
@@ -1567,7 +1571,7 @@ sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, 
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
-					(player_bold(p_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
+					(player_bold(player_ptr, y, x) || floor_ptr->grid_array[y][x].m_idx != 0))
 					break;
 			}
 
@@ -1978,11 +1982,12 @@ void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, P
  *
  * Currently the "m" parameter is unused.
  */
-void scatter(floor_type *floor_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
+void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
 {
 	POSITION nx, ny;
 
 	/* Pick a location */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	while (TRUE)
 	{
 		/* Pick a new location */
@@ -1997,11 +2002,11 @@ void scatter(floor_type *floor_ptr, POSITION *yp, POSITION *xp, POSITION y, POSI
 
 		if (mode & PROJECT_LOS)
 		{
-			if (los(floor_ptr, y, x, ny, nx)) break;
+			if (los(player_ptr, y, x, ny, nx)) break;
 		}
 		else
 		{
-			if (projectable(floor_ptr, y, x, ny, nx)) break;
+			if (projectable(player_ptr, y, x, ny, nx)) break;
 		}
 
 	}

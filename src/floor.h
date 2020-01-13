@@ -381,11 +381,11 @@ extern void place_locked_door(player_type *player_ptr, POSITION y, POSITION x);
 extern void forget_flow(floor_type *floor_ptr);
 extern void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x);
 
-extern bool los(floor_type* floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-extern bool projectable(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+extern bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
+extern bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern int project_length;
 
-extern void vault_monsters(floor_type *floor_ptr, POSITION y1, POSITION x1, int num);
+extern void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num);
 extern bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX feat);
 extern void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool room);
@@ -419,7 +419,7 @@ extern void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int n
 #define PROJECT_PATH        0x2000 /*!< 遠隔攻撃特性: / Only used for printing project path */
 #define PROJECT_FAST        0x4000 /*!< 遠隔攻撃特性: / Hide "visual" of flying bolts until blast */
 #define PROJECT_LOS         0x8000 /*!< 遠隔攻撃特性: /  */
-extern sint project_path(floor_type *floor_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);
+extern sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);
 
 extern void set_floor(floor_type *floor_ptr, POSITION x, POSITION y);
 extern void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
@@ -427,4 +427,4 @@ extern void place_gold(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void delete_monster(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void compact_objects(floor_type *floor_ptr, int size);
 extern void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num);
-extern void scatter(floor_type *floor_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
+extern void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);

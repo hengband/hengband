@@ -44,7 +44,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			if (info) return info_damage(dice, sides, 0);
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_ELEC, dir, damroll(dice, sides));
 			}
 		}
@@ -80,7 +80,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			if (info) return info_power(power);
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fear_monster(caster_ptr, dir, power);
 			}
 		}
@@ -117,7 +117,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			if (info) return info_multi_damage_dice(dice, sides);
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fire_blast(caster_ptr, GF_LITE, dir, dice, sides, 10, 3);
 			}
 		}
@@ -145,7 +145,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 			if (info) return info_power(power);
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fire_ball(caster_ptr, GF_AWAY_EVIL, dir, power, 0);
 			}
 		}
@@ -173,7 +173,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball(caster_ptr, GF_HOLY_FIRE, dir, damroll(dice, sides) + base, rad);
 			}
@@ -249,7 +249,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fire_bolt(caster_ptr, GF_ELEC, dir, dam);
 			}
 		}
@@ -284,7 +284,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 		{
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				destroy_door(caster_ptr, dir);
 			}
@@ -302,7 +302,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				stasis_evil(caster_ptr, dir);
 			}
 		}
@@ -382,7 +382,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball(caster_ptr, GF_LITE, dir, dam, rad);
 			}
@@ -559,7 +559,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 					while (attempt--)
 					{
-						scatter(caster_ptr->current_floor_ptr, &my, &mx, caster_ptr->y, caster_ptr->x, 4, 0);
+						scatter(caster_ptr, &my, &mx, caster_ptr->y, caster_ptr->x, 4, 0);
 
 						/* Require empty grids */
 						if (cave_empty_bold2(caster_ptr->current_floor_ptr, my, mx)) break;

@@ -295,19 +295,19 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 		if (!m_idx) break;
 		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
-		if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
+		if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
 		dispel_monster_status(m_idx);
 		break;
 	}
 
 	case MS_ROCKET:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("ロケットを発射した。", "You fire a rocket."));
 			fire_rocket(caster_ptr, GF_ROCKET, dir, damage, 2);
 		break;
 
 	case MS_SHOOT:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("矢を放った。", "You fire an arrow."));
 			fire_bolt(caster_ptr, GF_ARROW, dir, damage);
 		break;
@@ -322,324 +322,324 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		break;
 
 	case MS_BR_ACID:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("酸のブレスを吐いた。", "You breathe acid."));
 		fire_breath(caster_ptr, GF_ACID, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_ELEC:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("稲妻のブレスを吐いた。", "You breathe lightning."));
 		fire_breath(caster_ptr, GF_ELEC, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_FIRE:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("火炎のブレスを吐いた。", "You breathe fire."));
 		fire_breath(caster_ptr, GF_FIRE, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_COLD:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("冷気のブレスを吐いた。", "You breathe frost."));
 		fire_breath(caster_ptr, GF_COLD, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_POIS:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("ガスのブレスを吐いた。", "You breathe gas."));
 		fire_breath(caster_ptr, GF_POIS, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_NETHER:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("地獄のブレスを吐いた。", "You breathe nether."));
 		fire_breath(caster_ptr, GF_NETHER, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_LITE:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("閃光のブレスを吐いた。", "You breathe light."));
 		fire_breath(caster_ptr, GF_LITE, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_DARK:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("暗黒のブレスを吐いた。", "You breathe darkness."));
 		fire_breath(caster_ptr, GF_DARK, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_CONF:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("混乱のブレスを吐いた。", "You breathe confusion."));
 		fire_breath(caster_ptr, GF_CONFUSION, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_SOUND:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("轟音のブレスを吐いた。", "You breathe sound."));
 		fire_breath(caster_ptr, GF_SOUND, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_CHAOS:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("カオスのブレスを吐いた。", "You breathe chaos."));
 		fire_breath(caster_ptr, GF_CHAOS, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_DISEN:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("劣化のブレスを吐いた。", "You breathe disenchantment."));
 		fire_breath(caster_ptr, GF_DISENCHANT, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_NEXUS:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("因果混乱のブレスを吐いた。", "You breathe nexus."));
 			fire_breath(caster_ptr, GF_NEXUS, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_TIME:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("時間逆転のブレスを吐いた。", "You breathe time."));
 		fire_breath(caster_ptr, GF_TIME, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_INERTIA:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("遅鈍のブレスを吐いた。", "You breathe inertia."));
 			fire_breath(caster_ptr, GF_INERTIAL, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_GRAVITY:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("重力のブレスを吐いた。", "You breathe gravity."));		
 		fire_breath(caster_ptr, GF_GRAVITY, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_SHARDS:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("破片のブレスを吐いた。", "You breathe shards."));
 		fire_breath(caster_ptr, GF_SHARDS, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_PLASMA:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("プラズマのブレスを吐いた。", "You breathe plasma."));
 		
 		fire_breath(caster_ptr, GF_PLASMA, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_FORCE:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("フォースのブレスを吐いた。", "You breathe force."));
 		
 		fire_breath(caster_ptr, GF_FORCE, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BR_MANA:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("魔力のブレスを吐いた。", "You breathe mana."));
 		
 		fire_breath(caster_ptr, GF_MANA, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BALL_NUKE:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("放射能球を放った。", "You cast a ball of radiation."));
 		
 			fire_ball(caster_ptr, GF_NUKE, dir, damage, 2);
 		break;
 
 	case MS_BR_NUKE:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("放射性廃棄物のブレスを吐いた。", "You breathe toxic waste."));
 		
 		fire_breath(caster_ptr, GF_NUKE, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 
 	case MS_BALL_CHAOS:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("純ログルスを放った。", "You invoke a raw Logrus."));
 		
 			fire_ball(caster_ptr, GF_CHAOS, dir, damage, 4);
 		break;
 	case MS_BR_DISI:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("分解のブレスを吐いた。", "You breathe disintegration."));
 		
 		fire_breath(caster_ptr, GF_DISINTEGRATE, dir, damage, (plev > 35 ? 3 : 2));
 		break;
 	case MS_BALL_ACID:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("アシッド・ボールの呪文を唱えた。", "You cast an acid ball."));
 		
 			fire_ball(caster_ptr, GF_ACID, dir, damage, 2);
 		break;
 	case MS_BALL_ELEC:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("サンダー・ボールの呪文を唱えた。", "You cast a lightning ball."));
 		
 			fire_ball(caster_ptr, GF_ELEC, dir, damage, 2);
 		break;
 	case MS_BALL_FIRE:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("ファイア・ボールの呪文を唱えた。", "You cast a fire ball."));
 		
 			fire_ball(caster_ptr, GF_FIRE, dir, damage, 2);
 		break;
 	case MS_BALL_COLD:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("アイス・ボールの呪文を唱えた。", "You cast a frost ball."));
 		
 			fire_ball(caster_ptr, GF_COLD, dir, damage, 2);
 		break;
 	case MS_BALL_POIS:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("悪臭雲の呪文を唱えた。", "You cast a stinking cloud."));
 		
 			fire_ball(caster_ptr, GF_POIS, dir, damage, 2);
 		break;
 	case MS_BALL_NETHER:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("地獄球の呪文を唱えた。", "You cast a nether ball."));
 		
 			fire_ball(caster_ptr, GF_NETHER, dir, damage, 2);
 		break;
 	case MS_BALL_WATER:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("流れるような身振りをした。", "You gesture fluidly."));
 		
 			fire_ball(caster_ptr, GF_WATER, dir, damage, 4);
 		break;
 	case MS_BALL_MANA:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("魔力の嵐の呪文を念じた。", "You invoke a mana storm."));
 		
 			fire_ball(caster_ptr, GF_MANA, dir, damage, 4);
 		break;
 	case MS_BALL_DARK:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("暗黒の嵐の呪文を念じた。", "You invoke a darkness storm."));
 		
 			fire_ball(caster_ptr, GF_DARK, dir, damage, 4);
 		break;
 	case MS_DRAIN_MANA:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		fire_ball_hide(caster_ptr, GF_DRAIN_MANA, dir, randint1(plev*3)+plev, 0);
 		break;
 	case MS_MIND_BLAST:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		fire_ball_hide(caster_ptr, GF_MIND_BLAST, dir, damage, 0);
 		break;
 	case MS_BRAIN_SMASH:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		fire_ball_hide(caster_ptr, GF_BRAIN_SMASH, dir, damage, 0);
 		break;
 	case MS_CAUSE_1:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		fire_ball_hide(caster_ptr, GF_CAUSE_1, dir, damage, 0);
 		break;
 	case MS_CAUSE_2:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		fire_ball_hide(caster_ptr, GF_CAUSE_2, dir, damage, 0);
 		break;
 	case MS_CAUSE_3:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		fire_ball_hide(caster_ptr, GF_CAUSE_3, dir, damage, 0);
 		break;
 	case MS_CAUSE_4:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		fire_ball_hide(caster_ptr, GF_CAUSE_4, dir, damage, 0);
 		break;
 	case MS_BOLT_ACID:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("アシッド・ボルトの呪文を唱えた。", "You cast an acid bolt."));
 		
 			fire_bolt(caster_ptr, GF_ACID, dir, damage);
 		break;
 	case MS_BOLT_ELEC:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("サンダー・ボルトの呪文を唱えた。", "You cast a lightning bolt."));
 		
 			fire_bolt(caster_ptr, GF_ELEC, dir, damage);
 		break;
 	case MS_BOLT_FIRE:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("ファイア・ボルトの呪文を唱えた。", "You cast a fire bolt."));
 		
 			fire_bolt(caster_ptr, GF_FIRE, dir, damage);
 		break;
 	case MS_BOLT_COLD:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("アイス・ボルトの呪文を唱えた。", "You cast a frost bolt."));
 		
 			fire_bolt(caster_ptr, GF_COLD, dir, damage);
 		break;
 	case MS_STARBURST:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("スターバーストの呪文を念じた。", "You invoke a starburst."));
 		
 			fire_ball(caster_ptr, GF_LITE, dir, damage, 4);
 		break;
 	case MS_BOLT_NETHER:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("地獄の矢の呪文を唱えた。", "You cast a nether bolt."));
 		
 			fire_bolt(caster_ptr, GF_NETHER, dir, damage);
 		break;
 	case MS_BOLT_WATER:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("ウォーター・ボルトの呪文を唱えた。", "You cast a water bolt."));
 		
 			fire_bolt(caster_ptr, GF_WATER, dir, damage);
 		break;
 	case MS_BOLT_MANA:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("魔力の矢の呪文を唱えた。", "You cast a mana bolt."));
 		
 			fire_bolt(caster_ptr, GF_MANA, dir, damage);
 		break;
 	case MS_BOLT_PLASMA:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("プラズマ・ボルトの呪文を唱えた。", "You cast a plasma bolt."));
 		
 			fire_bolt(caster_ptr, GF_PLASMA, dir, damage);
 		break;
 	case MS_BOLT_ICE:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("極寒の矢の呪文を唱えた。", "You cast a ice bolt."));
 		
 			fire_bolt(caster_ptr, GF_ICE, dir, damage);
 		break;
 	case MS_MAGIC_MISSILE:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("マジック・ミサイルの呪文を唱えた。", "You cast a magic missile."));
 		
 			fire_bolt(caster_ptr, GF_MISSILE, dir, damage);
 		break;
 	case MS_SCARE:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("恐ろしげな幻覚を作り出した。", "You cast a fearful illusion."));
 		
 			fear_monster(caster_ptr, dir, plev+10);
 		break;
 	case MS_BLIND:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		confuse_monster(caster_ptr, dir, plev * 2);
 		break;
 	case MS_CONF:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("誘惑的な幻覚をつくり出した。", "You cast a mesmerizing illusion."));
 		
 			confuse_monster(caster_ptr, dir, plev * 2);
 		break;
 	case MS_SLOW:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		slow_monster(caster_ptr, dir, plev);
 		break;
 	case MS_SLEEP:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		sleep_monster(caster_ptr, dir, plev);
 		break;
 	case MS_SPEED:
@@ -647,7 +647,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		break;
 	case MS_HAND_DOOM:
 	{
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
 
 		fire_ball_hide(caster_ptr, GF_HAND_DOOM, dir, 200, 0);
@@ -683,7 +683,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		if (!caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx) break;
 		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
-		if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
+		if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
 		m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
 		r_ptr = &r_info[m_ptr->r_idx];
 		monster_desc(m_name, m_ptr, 0);
@@ -710,7 +710,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		break;
 	}
 	case MS_TELE_AWAY:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 
 		(void)fire_beam(caster_ptr, GF_AWAY_ALL, dir, plev);
 		break;
@@ -720,7 +720,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		break;
 
 	case MS_PSY_SPEAR:
-		if (!get_aim_dir(&dir)) return FALSE;
+		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		else msg_print(_("光の剣を放った。", "You throw a psycho-spear."));
 		(void)fire_beam(caster_ptr, GF_PSY_SPEAR, dir, damage);
 		break;

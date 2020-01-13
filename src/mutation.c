@@ -2094,27 +2094,27 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 	switch (power)
 	{
 		case MUT1_SPIT_ACID:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			stop_mouth(creature_ptr);
 			msg_print(_("酸を吐きかけた...", "You spit acid..."));
 			fire_ball(creature_ptr, GF_ACID, dir, lvl, 1 + (lvl / 30));
 			break;
 
 		case MUT1_BR_FIRE:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			stop_mouth(creature_ptr);
 			msg_print(_("あなたは火炎のブレスを吐いた...", "You breathe fire..."));
 			fire_breath(creature_ptr, GF_FIRE, dir, lvl * 2, 1 + (lvl / 20));
 			break;
 
 		case MUT1_HYPN_GAZE:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			msg_print(_("あなたの目は幻惑的になった...", "Your eyes look mesmerizing..."));
 			(void)charm_monster(creature_ptr, dir, lvl);
 			break;
 
 		case MUT1_TELEKINES:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			msg_print(_("集中している...", "You concentrate..."));
 			fetch(creature_ptr, dir, lvl * 10, TRUE);
 			break;
@@ -2125,7 +2125,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_MIND_BLST:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			msg_print(_("集中している...", "You concentrate..."));
 			fire_bolt(creature_ptr, GF_PSI, dir, damroll(3 + ((lvl - 1) / 5), 3));
 			break;
@@ -2159,7 +2159,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 
 		case MUT1_SWAP_POS:
 			project_length = -1;
-			if (!get_aim_dir(&dir))
+			if (!get_aim_dir(creature_ptr, &dir))
 			{
 				project_length = 0;
 				return FALSE;
@@ -2280,7 +2280,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_LASER_EYE:
-			if (!get_aim_dir(&dir)) return FALSE;
+			if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 			fire_beam(creature_ptr, GF_LITE, dir, 2 * lvl);
 			break;
 

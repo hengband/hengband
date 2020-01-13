@@ -516,7 +516,7 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
 	is_followable &= old_cdis <= MAX_SIGHT;
 	is_followable &= !current_world_ptr->timewalk_m_idx;
 	is_followable &= !tracer_ptr->phase_out;
-	is_followable &= los(tracer_ptr->current_floor_ptr, tracer_ptr->y, tracer_ptr->x, oldfy, oldfx);
+	is_followable &= los(tracer_ptr, tracer_ptr->y, tracer_ptr->x, oldfy, oldfx);
 	if (!is_followable) return;
 
 	bool follow = FALSE;
@@ -566,7 +566,7 @@ bool teleport_level_other(player_type *caster_ptr)
 	MONSTER_IDX target_m_idx = caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx;
 	if (!target_m_idx) return TRUE;
 	if (!player_has_los_bold(caster_ptr, target_row, target_col)) return TRUE;
-	if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) return TRUE;
+	if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) return TRUE;
 
 	monster_type *m_ptr;
 	monster_race *r_ptr;
@@ -1235,7 +1235,7 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 	}
 
 	POSITION ty, tx;
-	if (dir == 5 && target_okay())
+	if (dir == 5 && target_okay(caster_ptr))
 	{
 		tx = target_col;
 		ty = target_row;
@@ -1270,7 +1270,7 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 				msg_print(_("そこはあなたの視界に入っていません。", "You have no direct line of sight to that location."));
 				return;
 			}
-			else if (!projectable(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x, ty, tx))
+			else if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, ty, tx))
 			{
 				msg_print(_("そこは壁の向こうです。", "You have no direct line of sight to that location."));
 				return;
@@ -3188,7 +3188,7 @@ bool shock_power(player_type *caster_ptr)
 
 	project_length = 1;
 	DIRECTION dir;
-	if (!get_aim_dir(&dir)) return FALSE;
+	if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 
 	POSITION y = caster_ptr->y + ddy[dir];
 	POSITION x = caster_ptr->x + ddx[dir];
@@ -3389,14 +3389,14 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 bool fire_crimson(player_type *shooter_ptr)
 {
 	DIRECTION dir;
-	if (!get_aim_dir(&dir)) return FALSE;
+	if (!get_aim_dir(shooter_ptr, &dir)) return FALSE;
 
 	/* Use the given direction */
 	POSITION tx = shooter_ptr->x + 99 * ddx[dir];
 	POSITION ty = shooter_ptr->y + 99 * ddy[dir];
 
 	/* Hack -- Use an actual "target" */
-	if ((dir == 5) && target_okay())
+	if ((dir == 5) && target_okay(shooter_ptr))
 	{
 		tx = target_col;
 		ty = target_row;

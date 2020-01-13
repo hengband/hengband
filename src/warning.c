@@ -429,7 +429,7 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
 			r_ptr = &r_info[m_ptr->r_idx];
 
 			/* Monster spells (only powerful ones)*/
-			if (projectable(creature_ptr->current_floor_ptr, my, mx, yy, xx))
+			if (projectable(creature_ptr, my, mx, yy, xx))
 			{
 				BIT_FLAGS f4 = r_ptr->flags4;
 				BIT_FLAGS f5 = r_ptr->a_ability_flags1;

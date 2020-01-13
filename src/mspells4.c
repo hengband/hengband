@@ -2087,7 +2087,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_i
 		dummy_hp = (m_ptr->hp + 1) / 2;
 		dummy_maxhp = m_ptr->maxhp / 2;
 
-		if (floor_ptr->inside_arena || target_ptr->phase_out || !summon_possible(floor_ptr, m_ptr->fy, m_ptr->fx))
+		if (floor_ptr->inside_arena || target_ptr->phase_out || !summon_possible(target_ptr, m_ptr->fy, m_ptr->fx))
 			return -1;
 
 		delete_monster_idx(floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
@@ -3379,12 +3379,12 @@ MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MO
 	int count = 0;
 	for (int k = 0; k < 30; k++)
 	{
-		if (!summon_possible(floor_ptr, cy, cx) || !cave_empty_bold(floor_ptr, cy, cx))
+		if (!summon_possible(target_ptr, cy, cx) || !cave_empty_bold(floor_ptr, cy, cx))
 		{
 			int j;
 			for (j = 100; j > 0; j--)
 			{
-				scatter(floor_ptr, &cy, &cx, y, x, 2, 0);
+				scatter(target_ptr, &cy, &cx, y, x, 2, 0);
 				if (cave_empty_bold(floor_ptr, cy, cx)) break;
 			}
 

@@ -46,7 +46,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_MISSILE, dir, damroll(dice, sides));
 			}
@@ -113,7 +113,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fear_monster(caster_ptr, dir, power);
 				stun_monster(caster_ptr, dir, power);
@@ -133,7 +133,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_NETHER, dir, damroll(dice, sides));
 			}
@@ -176,7 +176,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball(caster_ptr, GF_HELL_FIRE, dir, damroll(dice, sides) + base, rad);
 			}
@@ -194,7 +194,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				control_one_demon(caster_ptr, dir, plev);
 			}
@@ -245,7 +245,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_PLASMA, dir, damroll(dice, sides));
 			}
@@ -264,7 +264,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball(caster_ptr, GF_FIRE, dir, dam, rad);
 			}
@@ -295,7 +295,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball(caster_ptr, GF_NETHER, dir, dam, rad);
 			}
@@ -385,7 +385,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball(caster_ptr, GF_PLASMA, dir, dam, rad);
 			}
@@ -440,7 +440,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fire_ball(caster_ptr, GF_NEXUS, dir, dam, rad);
 			}
 		}
@@ -453,7 +453,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			if (cast)
 			{
-				if (!get_aim_dir(&dir))
+				if (!get_aim_dir(caster_ptr, &dir))
 					return NULL;
 				else
 					msg_print(_("<破滅の手>を放った！", "You invoke the Hand of Doom!"));
@@ -548,7 +548,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball(caster_ptr, GF_NETHER, dir, dam, rad);
 			}
@@ -568,7 +568,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 
 				fire_ball_hide(caster_ptr, GF_BLOOD_CURSE, dir, dam, rad);
 				take_hit(caster_ptr, DAMAGE_USELIFE, 20 + randint1(30), _("血の呪い", "Blood curse"), -1);

@@ -300,8 +300,8 @@ void mitokohmon(player_type *kohmon_ptr)
 			m_ptr = &kohmon_ptr->current_floor_ptr->m_list[i];
 			if (!monster_is_valid(m_ptr)) continue;
 			if (!((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU))) continue;
-			if (!los(kohmon_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, kohmon_ptr->y, kohmon_ptr->x)) continue;
-			if (!projectable(kohmon_ptr->current_floor_ptr, m_ptr->fy, m_ptr->fx, kohmon_ptr->y, kohmon_ptr->x)) continue;
+			if (!los(kohmon_ptr, m_ptr->fy, m_ptr->fx, kohmon_ptr->y, kohmon_ptr->x)) continue;
+			if (!projectable(kohmon_ptr, m_ptr->fy, m_ptr->fx, kohmon_ptr->y, kohmon_ptr->x)) continue;
 			count++;
 			break;
 		}

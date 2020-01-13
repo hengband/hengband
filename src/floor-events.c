@@ -718,7 +718,7 @@ static bool update_view_aux(player_type *subject_ptr, POSITION y, POSITION x, PO
 	}
 
 	/* Hack -- check line of sight */
-	if (los(floor_ptr, subject_ptr->y, subject_ptr->x, y, x))
+	if (los(subject_ptr, subject_ptr->y, subject_ptr->x, y, x))
 	{
 		cave_view_hack(floor_ptr, g_ptr, y, x);
 		return wall;

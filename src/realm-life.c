@@ -64,7 +64,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fire_ball_hide(caster_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
 			}
 		}
@@ -157,7 +157,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fire_ball_hide(caster_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
 			}
 		}
@@ -310,7 +310,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 			if (cast)
 			{
-				if (!get_aim_dir(&dir)) return NULL;
+				if (!get_aim_dir(caster_ptr, &dir)) return NULL;
 				fire_ball_hide(caster_ptr, GF_WOUNDS, dir, damroll(dice, sides), 0);
 			}
 		}

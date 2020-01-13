@@ -350,7 +350,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 	if (object_is_aware(o_ptr) && (o_ptr->sval == SV_WAND_HEAL_MONSTER
 		|| o_ptr->sval == SV_WAND_HASTE_MONSTER))
 		target_pet = TRUE;
-	if (!get_aim_dir(&dir))
+	if (!get_aim_dir(creature_ptr, &dir))
 	{
 		target_pet = old_target_pet;
 		return;

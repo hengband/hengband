@@ -369,16 +369,17 @@ static void remove_bad_spells(MONSTER_IDX m_idx, player_type *target_ptr, u32b *
 /*!
  * @brief モンスターにとって所定の地点が召還に相応しい地点かどうかを返す。 /
  * Determine if there is a space near the player in which a summoned creature can appear
- * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param y1 判定を行いたいマスのY座標
  * @param x1 判定を行いたいマスのX座標
  * @return 召還に相応しいならばTRUEを返す
  */
-bool summon_possible(floor_type *floor_ptr, POSITION y1, POSITION x1)
+bool summon_possible(player_type *target_ptr, POSITION y1, POSITION x1)
 {
 	POSITION y, x;
 
 	/* Start at the player's location, and check 2 grids in each dir */
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	for (y = y1 - 2; y <= y1 + 2; y++)
 	{
 		for (x = x1 - 2; x <= x1 + 2; x++)
@@ -393,7 +394,7 @@ bool summon_possible(floor_type *floor_ptr, POSITION y1, POSITION x1)
 			if (pattern_tile(y, x)) continue;
 
 			/* Require empty floor grid in line of projection */
-			if (cave_empty_bold(floor_ptr, y, x) && projectable(floor_ptr, y1, x1, y, x) && projectable(floor_ptr, y, x, y1, x1)) return TRUE;
+			if (cave_empty_bold(floor_ptr, y, x) && projectable(target_ptr, y1, x1, y, x) && projectable(target_ptr, y, x, y1, x1)) return TRUE;
 		}
 	}
 
@@ -404,22 +405,23 @@ bool summon_possible(floor_type *floor_ptr, POSITION y1, POSITION x1)
 /*!
  * @brief モンスターにとって死者復活を行うべき状態かどうかを返す /
  * Determine if there is a space near the player in which a summoned creature can appear
- * @param floor_type 現在フロアへの参照ポインタ
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_ptr 判定を行いたいモンスターの構造体参照ポインタ
  * @return 死者復活が有効な状態ならばTRUEを返す。
  */
-bool raise_possible(floor_type *floor_ptr, monster_type *m_ptr)
+bool raise_possible(player_type *target_ptr, monster_type *m_ptr)
 {
 	POSITION y = m_ptr->fy;
 	POSITION x = m_ptr->fx;
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	for (POSITION xx = x - 5; xx <= x + 5; xx++)
 	{
 		grid_type *g_ptr;
 		for (POSITION yy = y - 5; yy <= y + 5; yy++)
 		{
 			if (distance(y, x, yy, xx) > 5) continue;
-			if (!los(floor_ptr, y, x, yy, xx)) continue;
-			if (!projectable(floor_ptr, y, x, yy, xx)) continue;
+			if (!los(target_ptr, y, x, yy, xx)) continue;
+			if (!projectable(target_ptr, y, x, yy, xx)) continue;
 
 			g_ptr = &floor_ptr->grid_array[yy][xx];
 			/* Scan the pile of objects */
@@ -467,7 +469,7 @@ bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, 
 	/* Check the projection path */
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	u16b grid_g[512];
-	int grid_n = grid_n = project_path(floor_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, 0);
+	int grid_n = grid_n = project_path(target_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, 0);
 
 	/* No grid is ever projectable from itself */
 	if (!grid_n) return FALSE;
@@ -1237,7 +1239,7 @@ bool spell_is_inate(SPELL_IDX spell)
  * @return 有効な座標があった場合TRUEを返す
  */
 static bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, POSITION *yp, POSITION *xp,
-	int f_flag, bool (*path_check)(floor_type *, POSITION, POSITION, POSITION, POSITION))
+	int f_flag, bool (*path_check)(player_type *, POSITION, POSITION, POSITION, POSITION))
 {
 	static int tonari_y[4][8] = {{-1, -1, -1,  0,  0,  1,  1,  1},
 			                     {-1, -1, -1,  0,  0,  1,  1,  1},
@@ -1267,7 +1269,7 @@ static bool adjacent_grid_check(player_type *target_ptr, monster_type *m_ptr, PO
 		/* Skip this feature */
 		if (!cave_have_flag_grid(g_ptr, f_flag)) continue;
 
-		if (path_check(floor_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x))
+		if (path_check(target_ptr, m_ptr->fy, m_ptr->fx, next_y, next_x))
 		{
 			*yp = next_y;
 			*xp = next_x;
@@ -1385,7 +1387,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		y_br_lite = y;
 		x_br_lite = x;
 
-		if (los(floor_ptr, m_ptr->fy, m_ptr->fx, y_br_lite, x_br_lite))
+		if (los(target_ptr, m_ptr->fy, m_ptr->fx, y_br_lite, x_br_lite))
 		{
 			feature_type *f_ptr = &f_info[floor_ptr->grid_array[y_br_lite][x_br_lite].feat];
 
@@ -1408,7 +1410,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 
 	/* Check path */
 	bool do_spell = DO_SPELL_NONE;
-	if (projectable(floor_ptr, m_ptr->fy, m_ptr->fx, y, x))
+	if (projectable(target_ptr, m_ptr->fy, m_ptr->fx, y, x))
 	{
 		feature_type *f_ptr = &f_info[floor_ptr->grid_array[y][x].feat];
 
@@ -1429,13 +1431,13 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 
 		if ((f4 & RF4_BR_DISI) && (m_ptr->cdis < MAX_RANGE/2) &&
 		    in_disintegration_range(floor_ptr, m_ptr->fy, m_ptr->fx, y, x) &&
-		    (one_in_(10) || (projectable(floor_ptr, y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
+		    (one_in_(10) || (projectable(target_ptr, y, x, m_ptr->fy, m_ptr->fx) && one_in_(2))))
 		{
 			do_spell = DO_SPELL_BR_DISI;
 			success = TRUE;
 		}
 		else if ((f4 & RF4_BR_LITE) && (m_ptr->cdis < MAX_RANGE/2) &&
-		    los(floor_ptr, m_ptr->fy, m_ptr->fx, y, x) && one_in_(5))
+		    los(target_ptr, m_ptr->fy, m_ptr->fx, y, x) && one_in_(5))
 		{
 			do_spell = DO_SPELL_BR_LITE;
 			success = TRUE;
@@ -1443,8 +1445,8 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		else if ((f5 & RF5_BA_LITE) && (m_ptr->cdis <= MAX_RANGE))
 		{
 			POSITION by = y, bx = x;
-			get_project_point(floor_ptr, m_ptr->fy, m_ptr->fx, &by, &bx, 0L);
-			if ((distance(by, bx, y, x) <= 3) && los(floor_ptr, by, bx, y, x) && one_in_(5))
+			get_project_point(target_ptr, m_ptr->fy, m_ptr->fx, &by, &bx, 0L);
+			if ((distance(by, bx, y, x) <= 3) && los(target_ptr, by, bx, y, x) && one_in_(5))
 			{
 				do_spell = DO_SPELL_BA_LITE;
 				success = TRUE;
@@ -1575,7 +1577,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		if (((f4 & RF4_SUMMON_MASK) ||
 		     (f5 & RF5_SUMMON_MASK) ||
 		     (f6 & RF6_SUMMON_MASK)) &&
-		    !(summon_possible(floor_ptr, y, x)))
+		    !(summon_possible(target_ptr, y, x)))
 		{
 			/* Remove summoning spells */
 			f4 &= ~(RF4_SUMMON_MASK);
@@ -1584,7 +1586,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		}
 
 		/* Check for a possible raise dead */
-		if ((f6 & RF6_RAISE_DEAD) && !raise_possible(floor_ptr, m_ptr))
+		if ((f6 & RF6_RAISE_DEAD) && !raise_possible(target_ptr, m_ptr))
 		{
 			/* Remove raise dead spell */
 			f6 &= ~(RF6_RAISE_DEAD);
@@ -1593,7 +1595,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 		/* Special moves restriction */
 		if (f6 & RF6_SPECIAL)
 		{
-			if ((m_ptr->r_idx == MON_ROLENTO) && !summon_possible(floor_ptr, y, x))
+			if ((m_ptr->r_idx == MON_ROLENTO) && !summon_possible(target_ptr, y, x))
 			{
 				f6 &= ~(RF6_SPECIAL);
 			}
