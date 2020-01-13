@@ -28,12 +28,13 @@
 
 /*!
 * @brief モンスターIDからPOWERFULフラグの有無を取得する /
+* @param floor_ptr 現在フロアへの参照ポインタ
 * @param m_idx モンスターID
 * @return POWERFULフラグがあればTRUE、なければFALSEを返す。
 */
-bool monster_is_powerful(MONSTER_IDX m_idx)
+bool monster_is_powerful(floor_type *floor_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	bool powerful = r_ptr->flags2 & RF2_POWERFUL ? TRUE : FALSE;
 	return powerful;

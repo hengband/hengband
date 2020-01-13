@@ -587,7 +587,7 @@ HIT_POINT spell_RF5_BA_ACID(player_type *target_ptr, POSITION y, POSITION x, MON
 			"%^s casts an acid ball at %s."),
 		TARGET_TYPE);
 
-	rad = monster_is_powerful(m_idx) ? 4 : 2;
+	rad = monster_is_powerful(target_ptr->current_floor_ptr, m_idx) ? 4 : 2;
 	dam = monspell_damage(target_ptr, (MS_BALL_ACID), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -618,7 +618,7 @@ HIT_POINT spell_RF5_BA_ELEC(player_type *target_ptr, POSITION y, POSITION x, MON
 			"%^s casts a lightning ball at %s."),
 		TARGET_TYPE);
 
-	rad = monster_is_powerful(m_idx) ? 4 : 2;
+	rad = monster_is_powerful(target_ptr->current_floor_ptr, m_idx) ? 4 : 2;
 	dam = monspell_damage(target_ptr, (MS_BALL_ELEC), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -660,7 +660,7 @@ HIT_POINT spell_RF5_BA_FIRE(player_type *target_ptr, POSITION y, POSITION x, MON
 				"%^s casts a fire ball at %s."),
 			TARGET_TYPE);
 	}
-	rad = monster_is_powerful(m_idx) ? 4 : 2;
+	rad = monster_is_powerful(target_ptr->current_floor_ptr, m_idx) ? 4 : 2;
 	dam = monspell_damage(target_ptr, (MS_BALL_FIRE), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -691,7 +691,7 @@ HIT_POINT spell_RF5_BA_COLD(player_type *target_ptr, POSITION y, POSITION x, MON
 			"%^s casts a frost ball at %s."),
 		TARGET_TYPE);
 
-	rad = monster_is_powerful(m_idx) ? 4 : 2;
+	rad = monster_is_powerful(target_ptr->current_floor_ptr, m_idx) ? 4 : 2;
 	dam = monspell_damage(target_ptr, (MS_BALL_COLD), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -4309,7 +4309,7 @@ HIT_POINT monspell_damage(player_type *target_ptr, int SPELL_NUM, MONSTER_IDX m_
 	int shoot_ds = r_ptr->blow[0].d_side;
 
 	hp = (TYPE == DAM_ROLL) ? m_ptr->hp : m_ptr->max_maxhp;
-	return monspell_damage_base(target_ptr, SPELL_NUM, hp, rlev, monster_is_powerful(m_idx), shoot_dd, shoot_ds, 0, TYPE);
+	return monspell_damage_base(target_ptr, SPELL_NUM, hp, rlev, monster_is_powerful(target_ptr->current_floor_ptr, m_idx), shoot_dd, shoot_ds, 0, TYPE);
 }
 
 

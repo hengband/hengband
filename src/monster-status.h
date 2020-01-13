@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-extern bool monster_is_powerful(MONSTER_IDX m_idx);
+extern bool monster_is_powerful(floor_type *floor_ptr, MONSTER_IDX m_idx);
 extern DEPTH monster_level_idx(MONSTER_IDX m_idx);
 
 extern HIT_POINT mon_damage_mod(monster_type *m_ptr, HIT_POINT dam, bool is_psy_spear);
