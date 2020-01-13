@@ -20,15 +20,11 @@
 */
 bool trump_summoning(player_type *caster_ptr, int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode)
 {
-	PLAYER_LEVEL plev = caster_ptr->lev;
-
-	MONSTER_IDX who;
-	int i;
-	bool success = FALSE;
-
 	/* Default level */
+	PLAYER_LEVEL plev = caster_ptr->lev;
 	if (!lev) lev = plev * 2 / 3 + randint1(plev / 2);
 
+	MONSTER_IDX who;
 	if (pet)
 	{
 		/* Become pet */
@@ -54,7 +50,8 @@ bool trump_summoning(player_type *caster_ptr, int num, bool pet, POSITION y, POS
 		who = 0;
 	}
 
-	for (i = 0; i < num; i++)
+	bool success = FALSE;
+	for (int i = 0; i < num; i++)
 	{
 		if (summon_specific(who, y, x, lev, type, mode))
 			success = TRUE;
@@ -73,35 +70,33 @@ bool cast_summon_demon(player_type *caster_ptr, int power)
 {
 	u32b flg = 0L;
 	bool pet = !one_in_(3);
-
 	if (pet) flg |= PM_FORCE_PET;
 	else flg |= PM_NO_PET;
 	if (!(pet && (caster_ptr->lev < 50))) flg |= PM_ALLOW_GROUP;
 
-	if (summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, power, SUMMON_DEMON, flg))
+	if (!summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, power, SUMMON_DEMON, flg))
+		return TRUE;
+
+	msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
+	if (pet)
 	{
-		msg_print(_("硫黄の悪臭が充満した。", "The area fills with a stench of sulphur and brimstone."));
-		if (pet)
-		{
-			msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
-		}
-		else
-		{
-			msg_print(_("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」",
-				"'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"));
-		}
+		msg_print(_("「ご用でございますか、ご主人様」", "'What is thy bidding... Master?'"));
 	}
+	else
+	{
+		msg_print(_("「卑しき者よ、我は汝の下僕にあらず！ お前の魂を頂くぞ！」",
+			"'NON SERVIAM! Wretch! I shall feast on thy mortal soul!'"));
+	}
+
 	return TRUE;
 }
 
 bool cast_summon_undead(player_type *creature_ptr, int power)
 {
 	bool pet = one_in_(3);
-	int type;
+	int type = (creature_ptr->lev > 47 ? SUMMON_HI_UNDEAD : SUMMON_UNDEAD);
+
 	BIT_FLAGS mode = 0L;
-
-	type = (creature_ptr->lev > 47 ? SUMMON_HI_UNDEAD : SUMMON_UNDEAD);
-
 	if (!pet || ((creature_ptr->lev > 24) && one_in_(3))) mode |= PM_ALLOW_GROUP;
 	if (pet) mode |= PM_FORCE_PET;
 	else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
@@ -135,14 +130,15 @@ bool cast_summon_hound(player_type *creature_ptr, int power)
 		else
 			msg_print(_("ハウンドはあなたに牙を向けている！", "A group of hounds appear as your enemy!"));
 	}
+
 	return TRUE;
 }
+
 
 bool cast_summon_elemental(player_type *creature_ptr, int power)
 {
 	bool pet = one_in_(3);
 	BIT_FLAGS mode = 0L;
-
 	if (!(pet && (creature_ptr->lev < 50))) mode |= PM_ALLOW_GROUP;
 	if (pet) mode |= PM_FORCE_PET;
 	else mode |= PM_NO_PET;
@@ -165,7 +161,6 @@ bool cast_summon_octopus(player_type *creature_ptr)
 	BIT_FLAGS mode = PM_ALLOW_GROUP;
 	bool pet = !one_in_(5);
 	if (pet) mode |= PM_FORCE_PET;
-
 	if (summon_named_creature(0, creature_ptr->y, creature_ptr->x, MON_JIZOTAKO, mode))
 	{
 		if (pet)
@@ -177,6 +172,7 @@ bool cast_summon_octopus(player_type *creature_ptr)
 	return TRUE;
 }
 
+
 /*!
 * @brief 悪魔領域のグレーターデーモン召喚に利用可能な死体かどうかを返す。 / An "item_tester_hook" for offer
 * @param o_ptr オブジェクト構造体の参照ポインタ
@@ -184,15 +180,12 @@ bool cast_summon_octopus(player_type *creature_ptr)
 */
 bool item_tester_offer(object_type *o_ptr)
 {
-	/* Flasks of oil are okay */
 	if (o_ptr->tval != TV_CORPSE) return FALSE;
 	if (o_ptr->sval != SV_CORPSE) return FALSE;
-
 	if (my_strchr("pht", r_info[o_ptr->pval].d_char)) return TRUE;
-
-	/* Assume not okay */
 	return FALSE;
 }
+
 
 /*!
 * @brief 悪魔領域のグレーターデーモン召喚を処理する / Daemon spell Summon Greater Demon
@@ -200,19 +193,16 @@ bool item_tester_offer(object_type *o_ptr)
 */
 bool cast_summon_greater_demon(player_type *caster_ptr)
 {
-	PLAYER_LEVEL plev = caster_ptr->lev;
-	OBJECT_IDX item;
-	concptr q, s;
-	int summon_lev;
-	object_type *o_ptr;
-
 	item_tester_hook = item_tester_offer;
-	q = _("どの死体を捧げますか? ", "Sacrifice which corpse? ");
-	s = _("捧げられる死体を持っていない。", "You have nothing to scrifice.");
+	concptr q = _("どの死体を捧げますか? ", "Sacrifice which corpse? ");
+	concptr s = _("捧げられる死体を持っていない。", "You have nothing to scrifice.");
+	OBJECT_IDX item;
+	object_type *o_ptr;
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return FALSE;
 
-	summon_lev = plev * 2 / 3 + r_info[o_ptr->pval].level;
+	PLAYER_LEVEL plev = caster_ptr->lev;
+	int summon_lev = plev * 2 / 3 + r_info[o_ptr->pval].level;
 
 	if (summon_specific(-1, caster_ptr->y, caster_ptr->x, summon_lev, SUMMON_HI_DEMON, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 	{
@@ -227,6 +217,7 @@ bool cast_summon_greater_demon(player_type *caster_ptr)
 
 	return TRUE;
 }
+
 
 /*!
  * @brief 同族召喚(援軍)処理
@@ -243,6 +234,7 @@ bool summon_kin_player(DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode)
 	return summon_specific((pet ? -1 : 0), y, x, level, SUMMON_KIN, mode);
 }
 
+
 /*!
  * @brief サイバーデーモンの召喚
  * @param who 召喚主のモンスターID(0ならばプレイヤー)
@@ -252,21 +244,19 @@ bool summon_kin_player(DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode)
  */
 int summon_cyber(floor_type *floor_ptr, MONSTER_IDX who, POSITION y, POSITION x)
 {
-	int i;
-	int max_cyber = (easy_band ? 1 : (floor_ptr->dun_level / 50) + randint1(2));
-	int count = 0;
-	BIT_FLAGS mode = PM_ALLOW_GROUP;
-
 	/* Summoned by a monster */
+	BIT_FLAGS mode = PM_ALLOW_GROUP;
 	if (who > 0)
 	{
 		monster_type *m_ptr = &floor_ptr->m_list[who];
 		if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
 	}
 
+	int max_cyber = (easy_band ? 1 : (floor_ptr->dun_level / 50) + randint1(2));
 	if (max_cyber > 4) max_cyber = 4;
 
-	for (i = 0; i < max_cyber; i++)
+	int count = 0;
+	for (int i = 0; i < max_cyber; i++)
 	{
 		count += summon_specific(who, y, x, 100, SUMMON_CYBER, mode);
 	}
@@ -277,26 +267,27 @@ int summon_cyber(floor_type *floor_ptr, MONSTER_IDX who, POSITION y, POSITION x)
 
 void mitokohmon(player_type *kohmon_ptr)
 {
-	int count = 0, i;
-	monster_type *m_ptr;
-	concptr kakusan = "";
-
+	int count = 0;
+	concptr sukekakusan = "";
 	if (summon_named_creature(0, kohmon_ptr->y, kohmon_ptr->x, MON_SUKE, PM_FORCE_PET))
 	{
 		msg_print(_("『助さん』が現れた。", "Suke-san apperars."));
-		kakusan = "Suke-san";
+		sukekakusan = "Suke-san";
 		count++;
 	}
+
 	if (summon_named_creature(0, kohmon_ptr->y, kohmon_ptr->x, MON_KAKU, PM_FORCE_PET))
 	{
 		msg_print(_("『格さん』が現れた。", "Kaku-san appears."));
-		kakusan = "Kaku-san";
+		sukekakusan = "Kaku-san";
 		count++;
 	}
+
 	if (!count)
 	{
-		for (i = kohmon_ptr->current_floor_ptr->m_max - 1; i > 0; i--)
+		for (int i = kohmon_ptr->current_floor_ptr->m_max - 1; i > 0; i--)
 		{
+			monster_type *m_ptr;
 			m_ptr = &kohmon_ptr->current_floor_ptr->m_list[i];
 			if (!monster_is_valid(m_ptr)) continue;
 			if (!((m_ptr->r_idx == MON_SUKE) || (m_ptr->r_idx == MON_KAKU))) continue;
@@ -307,19 +298,18 @@ void mitokohmon(player_type *kohmon_ptr)
 		}
 	}
 
-	if (count)
-	{
-		msg_format(_("「者ども、ひかえおろう！！！このお方をどなたとこころえる。」",
-			"%^s says 'WHO do you think this person is! Bow your head, down to your knees!'"), kakusan);
-		sukekaku = TRUE;
-		stun_monsters(kohmon_ptr, 120);
-		confuse_monsters(kohmon_ptr, 120);
-		turn_monsters(kohmon_ptr, 120);
-		stasis_monsters(kohmon_ptr, 120);
-		sukekaku = FALSE;
-	}
-	else
+	if (count == 0)
 	{
 		msg_print(_("しかし、何も起きなかった。", "Nothing happen."));
+		return;
 	}
+
+	msg_format(_("「者ども、ひかえおろう！！！このお方をどなたとこころえる。」",
+		"%^s says 'WHO do you think this person is! Bow your head, down to your knees!'"), sukekakusan);
+	sukekaku = TRUE;
+	stun_monsters(kohmon_ptr, 120);
+	confuse_monsters(kohmon_ptr, 120);
+	turn_monsters(kohmon_ptr, 120);
+	stasis_monsters(kohmon_ptr, 120);
+	sukekaku = FALSE;
 }
