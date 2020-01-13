@@ -875,11 +875,12 @@ bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, boo
 
 /*!
 * @brief モンスターの経験値取得処理
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param m_idx 経験値を得るモンスターの参照ID
 * @param s_idx 撃破されたモンスター種族の参照ID
 * @return なし
 */
-void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx)
+void monster_gain_exp(player_type *target_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_idx)
 {
 	monster_type *m_ptr;
 	monster_race *r_ptr;
@@ -887,20 +888,21 @@ void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx)
 	int new_exp;
 	if (m_idx <= 0 || s_idx <= 0) return;
 
-	m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	m_ptr = &floor_ptr->m_list[m_idx];
 
 	if (!monster_is_valid(m_ptr)) return;
 
 	r_ptr = &r_info[m_ptr->r_idx];
 	s_ptr = &r_info[s_idx];
 
-	if (p_ptr->phase_out) return;
+	if (target_ptr->phase_out) return;
 
 	if (!r_ptr->next_exp) return;
 
 	new_exp = s_ptr->mexp * s_ptr->level / (r_ptr->level + 2);
-	if (m_idx == p_ptr->riding) new_exp = (new_exp + 1) / 2;
-	if (!p_ptr->current_floor_ptr->dun_level) new_exp /= 5;
+	if (m_idx == target_ptr->riding) new_exp = (new_exp + 1) / 2;
+	if (!floor_ptr->dun_level) new_exp /= 5;
 	m_ptr->exp += new_exp;
 	if (m_ptr->mflag2 & MFLAG2_CHAMELEON) return;
 
@@ -960,9 +962,9 @@ void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx)
 
 		if (is_pet(m_ptr) || m_ptr->ml)
 		{
-			if (!ignore_unview || player_can_see_bold(p_ptr, m_ptr->fy, m_ptr->fx))
+			if (!ignore_unview || player_can_see_bold(target_ptr, m_ptr->fy, m_ptr->fx))
 			{
-				if (p_ptr->image)
+				if (target_ptr->image)
 				{
 					monster_race *hallu_race;
 
@@ -978,15 +980,15 @@ void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx)
 				}
 			}
 
-			if (!p_ptr->image) r_info[old_r_idx].r_xtra1 |= MR1_SINKA;
+			if (!target_ptr->image) r_info[old_r_idx].r_xtra1 |= MR1_SINKA;
 
 			/* Now you feel very close to this pet. */
 			m_ptr->parent_m_idx = 0;
 		}
-		update_monster(p_ptr, m_idx, FALSE);
+		update_monster(target_ptr, m_idx, FALSE);
 		lite_spot(m_ptr->fy, m_ptr->fx);
 	}
-	if (m_idx == p_ptr->riding) p_ptr->update |= PU_BONUS;
+	if (m_idx == target_ptr->riding) target_ptr->update |= PU_BONUS;
 }
 
 /*!

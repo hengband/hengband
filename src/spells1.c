@@ -3808,7 +3808,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				}
 			}
 
-			if (who > 0) monster_gain_exp(who, m_ptr->r_idx);
+			if (who > 0) monster_gain_exp(caster_ptr, who, m_ptr->r_idx);
 
 			/* Generate treasure, etc */
 			monster_death(g_ptr->m_idx, FALSE);

@@ -18,7 +18,7 @@ extern bool set_monster_invulner(player_type *target_ptr, MONSTER_IDX m_idx, int
 extern bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, bool vs_player);
 
 extern void dispel_monster_status(player_type *target_ptr, MONSTER_IDX m_idx);
-extern void monster_gain_exp(MONSTER_IDX m_idx, MONRACE_IDX s_idx);
+extern void monster_gain_exp(player_type *target_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_idx);
 
 extern int get_mproc_idx(floor_type *floor_ptr, MONSTER_IDX m_idx, int mproc_type);
 extern void mproc_init(floor_type *floor_ptr);
