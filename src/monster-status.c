@@ -45,9 +45,9 @@ bool monster_is_powerful(floor_type *floor_ptr, MONSTER_IDX m_idx)
 * @param m_idx モンスターID
 * @return モンスターのレベル
 */
-DEPTH monster_level_idx(MONSTER_IDX m_idx)
+DEPTH monster_level_idx(floor_type *floor_ptr, MONSTER_IDX m_idx)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 	return rlev;
