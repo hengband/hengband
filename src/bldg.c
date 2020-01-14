@@ -2130,7 +2130,7 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 			if (current_world_ptr->dungeon_turn > current_world_ptr->dungeon_turn_limit) current_world_ptr->dungeon_turn = current_world_ptr->dungeon_turn_limit;
 		}
 
-		prevent_turn_overflow();
+		prevent_turn_overflow(customer_ptr);
 
 		if ((prev_hour >= 18) && (prev_hour <= 23)) exe_write_diary(customer_ptr, DIARY_DIALY, 0, NULL);
 		customer_ptr->chp = customer_ptr->mhp;

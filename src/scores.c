@@ -486,7 +486,7 @@ errr top_twenty(player_type *current_player_ptr)
 	the_score.gold[9] = '\0';
 
 	/* Save the current turn */
-	sprintf(the_score.turns, "%9lu", (long)turn_real(current_world_ptr->game_turn));
+	sprintf(the_score.turns, "%9lu", (long)turn_real(current_player_ptr, current_world_ptr->game_turn));
 	the_score.turns[9] = '\0';
 
 	time_t ct = time((time_t*)0);
@@ -599,7 +599,7 @@ errr predict_score(player_type *current_player_ptr)
 	sprintf(the_score.gold, "%9lu", (long)current_player_ptr->au);
 
 	/* Save the current turn */
-	sprintf(the_score.turns, "%9lu", (long)turn_real(current_world_ptr->game_turn));
+	sprintf(the_score.turns, "%9lu", (long)turn_real(current_player_ptr, current_world_ptr->game_turn));
 
 	/* Hack -- no time needed */
 	strcpy(the_score.day, _("今日", "TODAY"));

@@ -5120,7 +5120,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 			else if (player_ptr->wild_mode && !(current_world_ptr->game_turn % ((MAX_HGT + MAX_WID) / 2))) current_world_ptr->dungeon_turn++;
 		}
 
-		prevent_turn_overflow();
+		prevent_turn_overflow(player_ptr);
 
 		/* Handle "leaving" */
 		if (player_ptr->leaving) break;
@@ -5682,9 +5682,9 @@ void play_game(player_type *player_ptr, bool new_game)
  * @details アンデッド種族は18:00からゲームを開始するので、この修正を予め行う。
  * @return 修正をかけた後のゲームターン
  */
-s32b turn_real(s32b hoge)
+s32b turn_real(player_type *player_ptr, s32b hoge)
 {
-	switch (p_ptr->start_race)
+	switch (player_ptr->start_race)
 	{
 	case RACE_VAMPIRE:
 	case RACE_SKELETON:
@@ -5699,10 +5699,11 @@ s32b turn_real(s32b hoge)
 
 /*!
  * @brief ターンのオーバーフローに対する対処
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @details ターン及びターンを記録する変数をターンの限界の1日前まで巻き戻す.
  * @return 修正をかけた後のゲームターン
  */
-void prevent_turn_overflow(void)
+void prevent_turn_overflow(player_type *player_ptr)
 {
 	int rollback_days, i, j;
 	s32b rollback_turns;
@@ -5714,12 +5715,13 @@ void prevent_turn_overflow(void)
 
 	if (current_world_ptr->game_turn > rollback_turns) current_world_ptr->game_turn -= rollback_turns;
 	else current_world_ptr->game_turn = 1;
-	if (p_ptr->current_floor_ptr->generated_turn > rollback_turns) p_ptr->current_floor_ptr->generated_turn -= rollback_turns;
-	else p_ptr->current_floor_ptr->generated_turn = 1;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	if (floor_ptr->generated_turn > rollback_turns) floor_ptr->generated_turn -= rollback_turns;
+	else floor_ptr->generated_turn = 1;
 	if (current_world_ptr->arena_start_turn > rollback_turns) current_world_ptr->arena_start_turn -= rollback_turns;
 	else current_world_ptr->arena_start_turn = 1;
-	if (p_ptr->feeling_turn > rollback_turns) p_ptr->feeling_turn -= rollback_turns;
-	else p_ptr->feeling_turn = 1;
+	if (player_ptr->feeling_turn > rollback_turns) player_ptr->feeling_turn -= rollback_turns;
+	else player_ptr->feeling_turn = 1;
 
 	for (i = 1; i < max_towns; i++)
 	{
@@ -5860,7 +5862,7 @@ void close_game(player_type *player_ptr)
 
 /*!
  * @brief 全更新処理をチェックして処理していく
- * Handle "p_ptr->update" and "p_ptr->redraw" and "p_ptr->window"
+ * Handle "player_ptr->update" and "player_ptr->redraw" and "player_ptr->window"
  * @return なし
  */
 void handle_stuff(player_type *player_ptr)
