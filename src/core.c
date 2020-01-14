@@ -1084,7 +1084,7 @@ static void notice_lite_change(player_type *creature_ptr, object_type *o_ptr)
  * @param o_ptr 対象オブジェクトの構造体参照ポインタ
  * @return なし
  */
-static void recharged_notice(object_type *o_ptr)
+static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
 {
 	GAME_TEXT o_name[MAX_NLEN];
 
@@ -1115,7 +1115,7 @@ static void recharged_notice(object_type *o_ptr)
 				msg_format("Your %s is recharged.", o_name);
 #endif
 
-			disturb(p_ptr, FALSE, FALSE);
+			disturb(owner_ptr, FALSE, FALSE);
 
 			/* Done. */
 			return;
@@ -1202,19 +1202,19 @@ static void check_music(player_type *caster_ptr)
  * @return 該当の呪いが一つでもあった場合にランダムに選ばれた装備品のオブジェクト構造体参照ポインタを返す。\n
  * 呪いがない場合NULLを返す。
  */
-static object_type *choose_cursed_obj_name(BIT_FLAGS flag)
+static object_type *choose_cursed_obj_name(player_type *player_ptr, BIT_FLAGS flag)
 {
 	int i;
 	int choices[INVEN_TOTAL - INVEN_RARM];
 	int number = 0;
 
 	/* Paranoia -- Player has no warning-item */
-	if (!(p_ptr->cursed & flag)) return NULL;
+	if (!(player_ptr->cursed & flag)) return NULL;
 
 	/* Search Inventry */
 	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &player_ptr->inventory_list[i];
 
 		if (o_ptr->curse_flags & flag)
 		{
@@ -1265,8 +1265,7 @@ static object_type *choose_cursed_obj_name(BIT_FLAGS flag)
 		}
 	}
 
-	/* Choice one of them */
-	return (&p_ptr->inventory_list[choices[randint0(number)]]);
+	return &player_ptr->inventory_list[choices[randint0(number)]];
 }
 
 
@@ -2675,7 +2674,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			BIT_FLAGS new_curse;
 			object_type *o_ptr;
 
-			o_ptr = choose_cursed_obj_name(TRC_ADD_L_CURSE);
+			o_ptr = choose_cursed_obj_name(creature_ptr, TRC_ADD_L_CURSE);
 
 			new_curse = get_curse(0, o_ptr);
 			if (!(o_ptr->curse_flags & new_curse))
@@ -2698,7 +2697,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			BIT_FLAGS new_curse;
 			object_type *o_ptr;
 
-			o_ptr = choose_cursed_obj_name(TRC_ADD_H_CURSE);
+			o_ptr = choose_cursed_obj_name(creature_ptr, TRC_ADD_H_CURSE);
 
 			new_curse = get_curse(1, o_ptr);
 			if (!(o_ptr->curse_flags & new_curse))
@@ -2721,7 +2720,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_ANIMAL), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_ANIMAL), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが動物を引き寄せた！", "Your %s has attracted an animal!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
@@ -2733,7 +2732,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DEMON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DEMON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが悪魔を引き寄せた！", "Your %s has attracted a demon!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
@@ -2746,7 +2745,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_DRAGON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DRAGON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sがドラゴンを引き寄せた！", "Your %s has attracted an dragon!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
@@ -2759,7 +2758,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(TRC_CALL_UNDEAD), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_UNDEAD), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが死霊を引き寄せた！", "Your %s has attracted an undead!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
@@ -2786,7 +2785,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		{
 			GAME_TEXT o_name[MAX_NLEN];
 
-			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+			object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sはあなたの体力を吸収した！", "Your %s drains HP from you!"), o_name);
 			take_hit(creature_ptr, DAMAGE_LOSELIFE, MIN(creature_ptr->lev * 2, 100), o_name, -1);
 		}
@@ -2795,7 +2794,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		{
 			GAME_TEXT o_name[MAX_NLEN];
 
-			object_desc(o_name, choose_cursed_obj_name(TRC_DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+			object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sはあなたの魔力を吸収した！", "Your %s drains mana from you!"), o_name);
 			creature_ptr->csp -= MIN(creature_ptr->lev, 50);
 			if (creature_ptr->csp < 0)
@@ -2850,7 +2849,7 @@ static void process_world_aux_recharge(player_type *creature_ptr)
 			/* Notice changes */
 			if (!o_ptr->timeout)
 			{
-				recharged_notice(o_ptr);
+				recharged_notice(creature_ptr, o_ptr);
 				changed = TRUE;
 			}
 		}
@@ -2890,7 +2889,7 @@ static void process_world_aux_recharge(player_type *creature_ptr)
 			/* Notice changes, provide message if object is inscribed. */
 			if (!(o_ptr->timeout))
 			{
-				recharged_notice(o_ptr);
+				recharged_notice(creature_ptr, o_ptr);
 				changed = TRUE;
 			}
 
@@ -3373,9 +3372,10 @@ static void process_world(player_type *player_ptr)
 /*!
  * @brief ウィザードモードへの導入処理
  * / Verify use of "wizard" mode
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 実際にウィザードモードへ移行したらTRUEを返す。
  */
-static bool enter_wizard_mode(void)
+static bool enter_wizard_mode(player_type *player_ptr)
 {
 	/* Ask first time */
 	if (!current_world_ptr->noscore)
@@ -3398,7 +3398,7 @@ static bool enter_wizard_mode(void)
 			return FALSE;
 		}
 
-		exe_write_diary(p_ptr, DIARY_DESCRIPTION, 0, _("ウィザードモードに突入してスコアを残せなくなった。", "give up recording score to enter wizard mode."));
+		exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("ウィザードモードに突入してスコアを残せなくなった。", "give up recording score to enter wizard mode."));
 		/* Mark savefile */
 		current_world_ptr->noscore |= 0x0002;
 	}
@@ -3413,9 +3413,10 @@ static bool enter_wizard_mode(void)
 /*!
  * @brief デバッグコマンドへの導入処理
  * / Verify use of "debug" commands
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 実際にデバッグコマンドへ移行したらTRUEを返す。
  */
-static bool enter_debug_mode(void)
+static bool enter_debug_mode(player_type *player_ptr)
 {
 	/* Ask first time */
 	if (!current_world_ptr->noscore)
@@ -3439,7 +3440,7 @@ static bool enter_debug_mode(void)
 			return FALSE;
 		}
 
-		exe_write_diary(p_ptr, DIARY_DESCRIPTION, 0, _("デバッグモードに突入してスコアを残せなくなった。", "give up sending score to use debug commands."));
+		exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("デバッグモードに突入してスコアを残せなくなった。", "give up sending score to use debug commands."));
 		/* Mark savefile */
 		current_world_ptr->noscore |= 0x0008;
 	}
@@ -3542,7 +3543,7 @@ static void process_command(player_type *creature_ptr)
 			current_world_ptr->wizard = FALSE;
 			msg_print(_("ウィザードモード解除。", "Wizard mode off."));
 		}
-		else if (enter_wizard_mode())
+		else if (enter_wizard_mode(creature_ptr))
 		{
 			current_world_ptr->wizard = TRUE;
 			msg_print(_("ウィザードモード突入。", "Wizard mode on."));
@@ -3559,7 +3560,7 @@ static void process_command(player_type *creature_ptr)
 	/* Special "debug" commands */
 	case KTRL('A'):
 	{
-		if (enter_debug_mode())
+		if (enter_debug_mode(creature_ptr))
 		{
 			do_cmd_debug(creature_ptr);
 		}
@@ -5475,7 +5476,7 @@ void play_game(player_type *player_ptr, bool new_game)
 	/* Hack -- Enter wizard mode */
 	if (arg_wizard)
 	{
-		if (enter_wizard_mode())
+		if (enter_wizard_mode(player_ptr))
 		{
 			current_world_ptr->wizard = TRUE;
 
