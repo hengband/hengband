@@ -490,7 +490,7 @@ static void preserve_pet(player_type *master_ptr)
 			if (master_ptr->riding == i) continue;
 
 			monster_desc(m_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
-			exe_write_diary(master_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_MOVED, m_name);
+			exe_write_diary(master_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_MOVED, m_name);
 		}
 	}
 
@@ -637,7 +637,7 @@ static void place_pet(player_type *master_ptr)
 			if (record_named_pet && m_ptr->nickname)
 			{
 				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-				exe_write_diary(master_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, m_name);
+				exe_write_diary(master_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, m_name);
 			}
 
 			/* Pre-calculated in precalc_cur_num_of_pet(), but need to decrease */

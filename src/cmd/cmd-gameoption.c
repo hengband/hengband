@@ -1104,7 +1104,7 @@ static void do_cmd_options_cheat(concptr info)
 		case '6':
 		{
 			if (!current_world_ptr->noscore)
-				exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0,
+				exe_write_diary(p_ptr, DIARY_DESCRIPTION, 0,
 					_("詐欺オプションをONにして、スコアを残せなくなった。", "give up sending score to use cheating options."));
 			current_world_ptr->noscore |= (cheat_info[k].o_set * 256 + cheat_info[k].o_bit);
 			(*cheat_info[k].o_var) = TRUE;

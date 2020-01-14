@@ -1306,7 +1306,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 		{
 			char note_buf[160];
 			sprintf(note_buf, "%s%s", r_name + r_ptr->name, (m_ptr->smart & SM_CLONED) ? _("(クローン)", "(Clone)") : "");
-			exe_write_diary(target_ptr, NIKKI_UNIQUE, 0, note_buf);
+			exe_write_diary(target_ptr, DIARY_UNIQUE, 0, note_buf);
 		}
 
 		/* Make a sound */

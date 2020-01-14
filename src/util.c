@@ -3036,7 +3036,7 @@ void msg_print_wizard(int cheat_type, concptr msg)
 
 	if (cheat_diary_output)
 	{
-		exe_write_diary(p_ptr, NIKKI_WIZARD_LOG, 0, buf);
+		exe_write_diary(p_ptr, DIARY_WIZARD_LOG, 0, buf);
 	}
 
 }

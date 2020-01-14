@@ -1249,7 +1249,7 @@ static void generate_fixed_floor(player_type *player_ptr)
 	floor_ptr->object_level = floor_ptr->base_level;
 	floor_ptr->monster_level = floor_ptr->base_level;
 
-	if (record_stair) exe_write_diary(player_ptr, NIKKI_TO_QUEST, floor_ptr->inside_quest, NULL);
+	if (record_stair) exe_write_diary(player_ptr, DIARY_TO_QUEST, floor_ptr->inside_quest, NULL);
 	get_mon_num_prep(get_monster_hook(), NULL);
 
 	init_flags = INIT_CREATE_DUNGEON;

@@ -224,7 +224,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 				GAME_TEXT m_name[MAX_NLEN];
 
 				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-				exe_write_diary(creature_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name);
+				exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name);
 			}
 
 			if (pet_ctr == creature_ptr->riding)
@@ -450,7 +450,7 @@ static void do_name_pet(player_type *creature_ptr)
 				if (record_named_pet)
 				{
 					monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-					exe_write_diary(creature_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_NAME, m_name);
+					exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_NAME, m_name);
 				}
 			}
 			else
@@ -458,7 +458,7 @@ static void do_name_pet(player_type *creature_ptr)
 				if (record_named_pet && old_name)
 				{
 					monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-					exe_write_diary(creature_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_UNNAME, m_name);
+					exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_UNNAME, m_name);
 				}
 				m_ptr->nickname = 0;
 			}

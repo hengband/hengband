@@ -1301,7 +1301,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-			exe_write_diary(target_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name);
+			exe_write_diary(target_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name);
 		}
 
 		delete_monster_idx(m_idx);

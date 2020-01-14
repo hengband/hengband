@@ -3854,7 +3854,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			char m2_name[MAX_NLEN];
 
 			monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
-			exe_write_diary(caster_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
+			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
 		}
 
 		delete_monster_idx(g_ptr->m_idx);

@@ -4503,7 +4503,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 			/* Mega-Hack -- Delay death */
 			if (p_ptr->chp < 0) p_ptr->is_dead = FALSE;
-			exe_write_diary(p_ptr, NIKKI_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
+			exe_write_diary(p_ptr, DIARY_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
 
 			/* Hardcode panic save */
 			p_ptr->panic_save = 1;

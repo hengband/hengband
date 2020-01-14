@@ -1424,7 +1424,7 @@ static void do_cmd_wiz_jump(player_type *creature_ptr)
 
 	leave_quest_check(creature_ptr);
 
-	if (record_stair) exe_write_diary(creature_ptr, NIKKI_WIZ_TELE, 0, NULL);
+	if (record_stair) exe_write_diary(creature_ptr, DIARY_WIZ_TELE, 0, NULL);
 
 	creature_ptr->current_floor_ptr->inside_quest = 0;
 	free_turn(creature_ptr);
@@ -1535,7 +1535,7 @@ static void do_cmd_wiz_zap(player_type *caster_ptr)
 			GAME_TEXT m_name[MAX_NLEN];
 
 			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-			exe_write_diary(caster_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
 		}
 
 		delete_monster_idx(i);
@@ -1565,7 +1565,7 @@ static void do_cmd_wiz_zap_all(player_type *caster_ptr)
 			GAME_TEXT m_name[MAX_NLEN];
 
 			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-			exe_write_diary(caster_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
+			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
 		}
 
 		/* Delete this monster */

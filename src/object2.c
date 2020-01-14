@@ -537,7 +537,7 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
 	q_ptr->number = 1;
 	object_desc(o_name, q_ptr, OD_NAME_ONLY);
 
-	exe_write_diary(owner_ptr, NIKKI_HANMEI, 0, o_name);
+	exe_write_diary(owner_ptr, DIARY_FOUND, 0, o_name);
 }
 
 

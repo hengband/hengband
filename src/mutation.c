@@ -2320,7 +2320,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 					{
 						GAME_TEXT m_name[MAX_NLEN];
 						monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-						exe_write_diary(creature_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
+						exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
 					}
 					/* Delete the monster, rather than killing it. */
 					delete_monster_idx(g_ptr->m_idx);

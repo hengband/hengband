@@ -875,9 +875,9 @@ void kingly(player_type *winner_ptr)
 	/* If player did Seppuku, that is already written in playrecord */
 	if (!seppuku)
 	{
-		exe_write_diary(winner_ptr, NIKKI_BUNSHOU, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
-		exe_write_diary(winner_ptr, NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
-		exe_write_diary(winner_ptr, NIKKI_BUNSHOU, 1, "\n\n\n\n");
+		exe_write_diary(winner_ptr, DIARY_DESCRIPTION, 0, _("ダンジョンの探索から引退した。", "retired exploring dungeons."));
+		exe_write_diary(winner_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+		exe_write_diary(winner_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
 	}
 
 	/* Flush input */

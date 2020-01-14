@@ -417,11 +417,11 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 
 	if (disable_diary) return(-1);
 
-	if (type == NIKKI_FIX_QUEST_C ||
-		type == NIKKI_FIX_QUEST_F ||
-		type == NIKKI_RAND_QUEST_C ||
-		type == NIKKI_RAND_QUEST_F ||
-		type == NIKKI_TO_QUEST)
+	if (type == DIARY_FIX_QUEST_C ||
+		type == DIARY_FIX_QUEST_F ||
+		type == DIARY_RAND_QUEST_C ||
+		type == DIARY_RAND_QUEST_F ||
+		type == DIARY_TO_QUEST)
 	{
 		QUEST_IDX old_quest;
 
@@ -479,14 +479,14 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 
 	switch (type)
 	{
-	case NIKKI_HIGAWARI:
+	case DIARY_DIALY:
 	{
 		if (day < MAX_DAYS) fprintf(fff, _("%d日目\n", "Day %d\n"), day);
 		else fputs(_("*****日目\n", "Day *****\n"), fff);
 		do_level = FALSE;
 		break;
 	}
-	case NIKKI_BUNSHOU:
+	case DIARY_DESCRIPTION:
 	{
 		if (num)
 		{
@@ -497,36 +497,36 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 			fprintf(fff, " %2d:%02d %20s %s\n", hour, min, note_level, note);
 		break;
 	}
-	case NIKKI_ART:
+	case DIARY_ART:
 	{
 		fprintf(fff, _(" %2d:%02d %20s %sを発見した。\n", " %2d:%02d %20s discovered %s.\n"), hour, min, note_level, note);
 		break;
 	}
-	case NIKKI_ART_SCROLL:
+	case DIARY_ART_SCROLL:
 	{
 		fprintf(fff, _(" %2d:%02d %20s 巻物によって%sを生成した。\n", " %2d:%02d %20s created %s by scroll.\n"), hour, min, note_level, note);
 		break;
 	}
-	case NIKKI_UNIQUE:
+	case DIARY_UNIQUE:
 	{
 		fprintf(fff, _(" %2d:%02d %20s %sを倒した。\n", " %2d:%02d %20s defeated %s.\n"), hour, min, note_level, note);
 		break;
 	}
-	case NIKKI_FIX_QUEST_C:
+	case DIARY_FIX_QUEST_C:
 	{
 		if (quest[num].flags & QUEST_FLAG_SILENT) break;
 		fprintf(fff, _(" %2d:%02d %20s クエスト「%s」を達成した。\n",
 			" %2d:%02d %20s completed quest '%s'.\n"), hour, min, note_level, quest[num].name);
 		break;
 	}
-	case NIKKI_FIX_QUEST_F:
+	case DIARY_FIX_QUEST_F:
 	{
 		if (quest[num].flags & QUEST_FLAG_SILENT) break;
 		fprintf(fff, _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n",
 			" %2d:%02d %20s run away from quest '%s'.\n"), hour, min, note_level, quest[num].name);
 		break;
 	}
-	case NIKKI_RAND_QUEST_C:
+	case DIARY_RAND_QUEST_C:
 	{
 		GAME_TEXT name[MAX_NLEN];
 		strcpy(name, r_name + r_info[quest[num].r_idx].name);
@@ -534,7 +534,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 			" %2d:%02d %20s completed random quest '%s'\n"), hour, min, note_level, name);
 		break;
 	}
-	case NIKKI_RAND_QUEST_F:
+	case DIARY_RAND_QUEST_F:
 	{
 		GAME_TEXT name[MAX_NLEN];
 		strcpy(name, r_name + r_info[quest[num].r_idx].name);
@@ -542,7 +542,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 			" %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, name);
 		break;
 	}
-	case NIKKI_MAXDEAPTH:
+	case DIARY_MAXDEAPTH:
 	{
 		fprintf(fff, _(" %2d:%02d %20s %sの最深階%d階に到達した。\n",
 			" %2d:%02d %20s reached level %d of %s for the first time.\n"), hour, min, note_level,
@@ -550,7 +550,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 			_(num, d_name + d_info[creature_ptr->dungeon_idx].name));
 		break;
 	}
-	case NIKKI_TRUMP:
+	case DIARY_TRUMP:
 	{
 		fprintf(fff, _(" %2d:%02d %20s %s%sの最深階を%d階にセットした。\n",
 			" %2d:%02d %20s reset recall level of %s to %d %s.\n"), hour, min, note_level, note,
@@ -558,7 +558,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 			_((int)max_dlv[num], d_name + d_info[num].name));
 		break;
 	}
-	case NIKKI_STAIR:
+	case DIARY_STAIR:
 	{
 		concptr to;
 		if (q_idx && (is_fixed_quest_idx(q_idx)
@@ -574,7 +574,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		fprintf(fff, _(" %2d:%02d %20s %sへ%s。\n", " %2d:%02d %20s %s %s.\n"), hour, min, note_level, _(to, note), _(note, to));
 		break;
 	}
-	case NIKKI_RECALL:
+	case DIARY_RECALL:
 	{
 		if (!num)
 			fprintf(fff, _(" %2d:%02d %20s 帰還を使って%sの%d階へ下りた。\n", " %2d:%02d %20s recalled to dungeon level %d of %s.\n"),
@@ -584,30 +584,30 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 			fprintf(fff, _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n"), hour, min, note_level);
 		break;
 	}
-	case NIKKI_TO_QUEST:
+	case DIARY_TO_QUEST:
 	{
 		if (quest[num].flags & QUEST_FLAG_SILENT) break;
 		fprintf(fff, _(" %2d:%02d %20s クエスト「%s」へと突入した。\n", " %2d:%02d %20s entered the quest '%s'.\n"),
 			hour, min, note_level, quest[num].name);
 		break;
 	}
-	case NIKKI_TELE_LEV:
+	case DIARY_TELE_LEV:
 	{
 		fprintf(fff, _(" %2d:%02d %20s レベル・テレポートで脱出した。\n", " %2d:%02d %20s Got out using teleport level.\n"),
 			hour, min, note_level);
 		break;
 	}
-	case NIKKI_BUY:
+	case DIARY_BUY:
 	{
 		fprintf(fff, _(" %2d:%02d %20s %sを購入した。\n", " %2d:%02d %20s bought %s.\n"), hour, min, note_level, note);
 		break;
 	}
-	case NIKKI_SELL:
+	case DIARY_SELL:
 	{
 		fprintf(fff, _(" %2d:%02d %20s %sを売却した。\n", " %2d:%02d %20s sold %s.\n"), hour, min, note_level, note);
 		break;
 	}
-	case NIKKI_ARENA:
+	case DIARY_ARENA:
 	{
 		if (num < 0)
 		{
@@ -627,12 +627,12 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		}
 		break;
 	}
-	case NIKKI_HANMEI:
+	case DIARY_FOUND:
 	{
 		fprintf(fff, _(" %2d:%02d %20s %sを識別した。\n", " %2d:%02d %20s identified %s.\n"), hour, min, note_level, note);
 		break;
 	}
-	case NIKKI_WIZ_TELE:
+	case DIARY_WIZ_TELE:
 	{
 		concptr to;
 		if (!creature_ptr->current_floor_ptr->dun_level)
@@ -644,7 +644,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 			" %2d:%02d %20s wizard-teleport to %s.\n"), hour, min, note_level, to);
 		break;
 	}
-	case NIKKI_PAT_TELE:
+	case DIARY_PAT_TELE:
 	{
 		concptr to;
 		if (!creature_ptr->current_floor_ptr->dun_level)
@@ -656,12 +656,12 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 			" %2d:%02d %20s used Pattern to teleport to %s.\n"), hour, min, note_level, to);
 		break;
 	}
-	case NIKKI_LEVELUP:
+	case DIARY_LEVELUP:
 	{
 		fprintf(fff, _(" %2d:%02d %20s レベルが%dに上がった。\n", " %2d:%02d %20s reached player level %d.\n"), hour, min, note_level, num);
 		break;
 	}
-	case NIKKI_GAMESTART:
+	case DIARY_GAMESTART:
 	{
 		time_t ct = time((time_t*)0);
 		do_level = FALSE;
@@ -673,7 +673,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 			fprintf(fff, " %2d:%02d %20s %s %s", hour, min, note_level, note, ctime(&ct));
 		break;
 	}
-	case NIKKI_NAMED_PET:
+	case DIARY_NAMED_PET:
 	{
 		fprintf(fff, " %2d:%02d %20s ", hour, min, note_level);
 		switch (num)
@@ -732,7 +732,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		break;
 	}
 
-	case NIKKI_WIZARD_LOG:
+	case DIARY_WIZARD_LOG:
 		fprintf(fff, "%s\n", note);
 		break;
 
@@ -864,7 +864,7 @@ static void add_diary_note(player_type *creature_ptr)
 	if (get_string(_("内容: ", "diary note: "), tmp, 79))
 	{
 		strcpy(bunshou, tmp);
-		exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 0, bunshou);
+		exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 0, bunshou);
 	}
 }
 
@@ -883,7 +883,7 @@ static void do_cmd_last_get(player_type *creaute_ptr)
 	GAME_TURN turn_tmp = current_world_ptr->game_turn;
 	current_world_ptr->game_turn = record_turn;
 	sprintf(buf, _("%sを手に入れた。", "descover %s."), record_o_name);
-	exe_write_diary(creaute_ptr, NIKKI_BUNSHOU, 0, buf);
+	exe_write_diary(creaute_ptr, DIARY_DESCRIPTION, 0, buf);
 	current_world_ptr->game_turn = turn_tmp;
 }
 

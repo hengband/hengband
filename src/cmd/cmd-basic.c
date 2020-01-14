@@ -307,7 +307,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 		if (creature_ptr->current_floor_ptr->dun_level - up_num < d_info[creature_ptr->dungeon_idx].mindepth)
 			up_num = creature_ptr->current_floor_ptr->dun_level;
 	}
-	if (record_stair) exe_write_diary(creature_ptr, NIKKI_STAIR, 0-up_num, _("階段を上った", "climbed up the stairs to"));
+	if (record_stair) exe_write_diary(creature_ptr, DIARY_STAIR, 0-up_num, _("階段を上った", "climbed up the stairs to"));
 
 	/* Success */
 	if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
@@ -440,8 +440,8 @@ void do_cmd_go_down(player_type *creature_ptr)
 
 	if (record_stair)
 	{
-		if (fall_trap) exe_write_diary(creature_ptr, NIKKI_STAIR, down_num, _("落とし戸に落ちた", "fell through a trap door"));
-		else exe_write_diary(creature_ptr, NIKKI_STAIR, down_num, _("階段を下りた", "climbed down the stairs to"));
+		if (fall_trap) exe_write_diary(creature_ptr, DIARY_STAIR, down_num, _("落とし戸に落ちた", "fell through a trap door"));
+		else exe_write_diary(creature_ptr, DIARY_STAIR, down_num, _("階段を下りた", "climbed down the stairs to"));
 	}
 
 	if (fall_trap)
@@ -2880,9 +2880,9 @@ void do_cmd_suicide(player_type *creature_ptr)
 
 	if (!current_world_ptr->total_winner)
 	{
-		exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 0, _("ダンジョンの探索に絶望して自殺した。", "give up all hope to commit suicide."));
-		exe_write_diary(creature_ptr, NIKKI_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
-		exe_write_diary(creature_ptr, NIKKI_BUNSHOU, 1, "\n\n\n\n");
+		exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 0, _("ダンジョンの探索に絶望して自殺した。", "give up all hope to commit suicide."));
+		exe_write_diary(creature_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
+		exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
 	}
 
 	/* Cause of death */

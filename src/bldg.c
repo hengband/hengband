@@ -2119,9 +2119,9 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 
 		extract_day_hour_min(customer_ptr, &prev_day, &prev_hour, &prev_min);
 		if ((prev_hour >= 6) && (prev_hour <= 17))
-			exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over daytime at the inn."));
+			exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("宿屋に泊まった。", "stay over daytime at the inn."));
 		else
-			exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("宿屋に泊まった。", "stay over night at the inn."));
+			exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("宿屋に泊まった。", "stay over night at the inn."));
 
 		current_world_ptr->game_turn = (current_world_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
 		if (current_world_ptr->dungeon_turn < current_world_ptr->dungeon_turn_limit)
@@ -2132,7 +2132,7 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 
 		prevent_turn_overflow();
 
-		if ((prev_hour >= 18) && (prev_hour <= 23)) exe_write_diary(customer_ptr, NIKKI_HIGAWARI, 0, NULL);
+		if ((prev_hour >= 18) && (prev_hour <= 23)) exe_write_diary(customer_ptr, DIARY_DIALY, 0, NULL);
 		customer_ptr->chp = customer_ptr->mhp;
 
 		if (ironman_nightmare)
@@ -2147,7 +2147,7 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 			}
 
 			msg_print(_("あなたは絶叫して目を覚ました。", "You awake screaming."));
-			exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("悪夢にうなされてよく眠れなかった。", "be troubled by a nightmare."));
+			exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("悪夢にうなされてよく眠れなかった。", "be troubled by a nightmare."));
 			break;
 		}
 
@@ -2173,12 +2173,12 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 		if ((prev_hour >= 6) && (prev_hour <= 17))
 		{
 			msg_print(_("あなたはリフレッシュして目覚め、夕方を迎えた。", "You awake refreshed for the evening."));
-			exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("夕方を迎えた。", "awake refreshed."));
+			exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("夕方を迎えた。", "awake refreshed."));
 			break;
 		}
 
 		msg_print(_("あなたはリフレッシュして目覚め、新たな日を迎えた。", "You awake refreshed for the new day."));
-		exe_write_diary(customer_ptr, NIKKI_BUNSHOU, 0, _("すがすがしい朝を迎えた。", "awake refreshed."));
+		exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("すがすがしい朝を迎えた。", "awake refreshed."));
 		break;
 	}
 	case BACT_RUMORS: /* Listen for rumors */

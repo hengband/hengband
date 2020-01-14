@@ -656,7 +656,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 				creature_ptr->oldpx = creature_ptr->x;
 			}
 
-			if (record_stair) exe_write_diary(creature_ptr, NIKKI_TELE_LEV, 1, NULL);
+			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELE_LEV, 1, NULL);
 
 			if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
@@ -686,7 +686,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 
 		if (m_idx <= 0) /* To player */
 		{
-			if (record_stair) exe_write_diary(creature_ptr, NIKKI_TELE_LEV, -1, NULL);
+			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELE_LEV, -1, NULL);
 
 			if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
@@ -708,7 +708,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 
 		if (m_idx <= 0) /* To player */
 		{
-			if (record_stair) exe_write_diary(creature_ptr, NIKKI_TELE_LEV, -1, NULL);
+			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELE_LEV, -1, NULL);
 
 			if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
@@ -728,7 +728,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 		{
 			/* Never reach this code on the surface */
 			/* if (!creature_ptr->current_floor_ptr->dun_level) creature_ptr->dungeon_idx = creature_ptr->recall_dungeon; */
-			if (record_stair) exe_write_diary(creature_ptr, NIKKI_TELE_LEV, 1, NULL);
+			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELE_LEV, 1, NULL);
 			if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
 			prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
@@ -750,7 +750,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 		char m2_name[MAX_NLEN];
 
 		monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
-		exe_write_diary(creature_ptr, NIKKI_NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
+		exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
 	}
 
 	delete_monster_idx(m_idx);
@@ -789,7 +789,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 		{
 			max_dlv[creature_ptr->dungeon_idx] = creature_ptr->current_floor_ptr->dun_level;
 			if (record_maxdepth)
-				exe_write_diary(creature_ptr, NIKKI_TRUMP, creature_ptr->dungeon_idx, _("帰還のときに", "when recall from dungeon"));
+				exe_write_diary(creature_ptr, DIARY_TRUMP, creature_ptr->dungeon_idx, _("帰還のときに", "when recall from dungeon"));
 		}
 
 	}
@@ -844,7 +844,7 @@ bool free_level_recall(player_type *creature_ptr)
 	creature_ptr->recall_dungeon = select_dungeon;
 	max_dlv[creature_ptr->recall_dungeon] = ((amt > d_info[select_dungeon].maxdepth) ? d_info[select_dungeon].maxdepth : ((amt < d_info[select_dungeon].mindepth) ? d_info[select_dungeon].mindepth : amt));
 	if (record_maxdepth)
-		exe_write_diary(creature_ptr, NIKKI_TRUMP, select_dungeon, _("トランプタワーで", "at Trump Tower"));
+		exe_write_diary(creature_ptr, DIARY_TRUMP, select_dungeon, _("トランプタワーで", "at Trump Tower"));
 
 	msg_print(_("回りの大気が張りつめてきた...", "The air about you becomes charged..."));
 
@@ -896,7 +896,7 @@ bool reset_recall(player_type *caster_ptr)
 	max_dlv[select_dungeon] = dummy;
 
 	if (record_maxdepth)
-		exe_write_diary(caster_ptr, NIKKI_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
+		exe_write_diary(caster_ptr, DIARY_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
 	/* Accept request */
 #ifdef JP
 	msg_format("%sの帰還レベルを %d 階にセット。", d_name + d_info[select_dungeon].name, dummy, dummy * 50);
@@ -1624,7 +1624,7 @@ bool artifact_scroll(player_type *caster_ptr)
 	if (record_rand_art)
 	{
 		object_desc(o_name, o_ptr, OD_NAME_ONLY);
-		exe_write_diary(caster_ptr, NIKKI_ART_SCROLL, 0, o_name);
+		exe_write_diary(caster_ptr, DIARY_ART_SCROLL, 0, o_name);
 	}
 
 	chg_virtue(caster_ptr, V_ENCHANT, 1);
@@ -1668,9 +1668,9 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 
 	if(record_fix_art && !old_known && object_is_fixed_artifact(o_ptr))
-		exe_write_diary(owner_ptr, NIKKI_ART, 0, o_name);
+		exe_write_diary(owner_ptr, DIARY_ART, 0, o_name);
 	if(record_rand_art && !old_known && o_ptr->art_name)
-		exe_write_diary(owner_ptr, NIKKI_ART, 0, o_name);
+		exe_write_diary(owner_ptr, DIARY_ART, 0, o_name);
 
 	return old_known;
 }

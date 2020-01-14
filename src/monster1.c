@@ -2572,7 +2572,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		GAME_TEXT m_name[MAX_NLEN];
 
 		monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-		exe_write_diary(p_ptr, NIKKI_NAMED_PET, 3, m_name);
+		exe_write_diary(p_ptr, DIARY_NAMED_PET, 3, m_name);
 	}
 
 	/* Let monsters explode! */
@@ -2631,7 +2631,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 			monster_desc(m_name, m_ptr, MD_WRONGDOER_NAME);
 
-			exe_write_diary(p_ptr, NIKKI_ARENA, p_ptr->arena_number, m_name);
+			exe_write_diary(p_ptr, DIARY_ARENA, p_ptr->arena_number, m_name);
 		}
 	}
 
@@ -3114,7 +3114,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FINAL_QUEST_CLEAR);
 
-		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("見事に変愚蛮怒の勝利者となった！", "become *WINNER* of Hengband finely!"));
+		exe_write_diary(p_ptr, DIARY_DESCRIPTION, 0, _("見事に変愚蛮怒の勝利者となった！", "become *WINNER* of Hengband finely!"));
 
 		admire_from_patron(p_ptr);
 

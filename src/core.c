@@ -671,7 +671,7 @@ static void pattern_teleport(player_type *creature_ptr)
 
 	leave_quest_check(creature_ptr);
 
-	if (record_stair) exe_write_diary(creature_ptr, NIKKI_PAT_TELE, 0, NULL);
+	if (record_stair) exe_write_diary(creature_ptr, DIARY_PAT_TELE, 0, NULL);
 
 	creature_ptr->current_floor_ptr->inside_quest = 0;
 	free_turn(creature_ptr);
@@ -2966,7 +2966,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 
 				if (creature_ptr->dungeon_idx) creature_ptr->recall_dungeon = creature_ptr->dungeon_idx;
 				if (record_stair)
-					exe_write_diary(creature_ptr, NIKKI_RECALL, floor_ptr->dun_level, NULL);
+					exe_write_diary(creature_ptr, DIARY_RECALL, floor_ptr->dun_level, NULL);
 
 				floor_ptr->dun_level = 0;
 				creature_ptr->dungeon_idx = 0;
@@ -2985,7 +2985,7 @@ static void process_world_aux_movement(player_type *creature_ptr)
 				creature_ptr->dungeon_idx = creature_ptr->recall_dungeon;
 
 				if (record_stair)
-					exe_write_diary(creature_ptr, NIKKI_RECALL, floor_ptr->dun_level, NULL);
+					exe_write_diary(creature_ptr, DIARY_RECALL, floor_ptr->dun_level, NULL);
 
 				/* New depth */
 				floor_ptr->dun_level = max_dlv[creature_ptr->dungeon_idx];
@@ -3297,7 +3297,7 @@ static void process_world(player_type *player_ptr)
 	{
 		if (min != prev_min)
 		{
-			exe_write_diary(player_ptr, NIKKI_HIGAWARI, 0, NULL);
+			exe_write_diary(player_ptr, DIARY_DIALY, 0, NULL);
 			determine_daily_bounty(player_ptr, FALSE);
 		}
 	}
@@ -3398,7 +3398,7 @@ static bool enter_wizard_mode(void)
 			return FALSE;
 		}
 
-		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("ウィザードモードに突入してスコアを残せなくなった。", "give up recording score to enter wizard mode."));
+		exe_write_diary(p_ptr, DIARY_DESCRIPTION, 0, _("ウィザードモードに突入してスコアを残せなくなった。", "give up recording score to enter wizard mode."));
 		/* Mark savefile */
 		current_world_ptr->noscore |= 0x0002;
 	}
@@ -3439,7 +3439,7 @@ static bool enter_debug_mode(void)
 			return FALSE;
 		}
 
-		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("デバッグモードに突入してスコアを残せなくなった。", "give up sending score to use debug commands."));
+		exe_write_diary(p_ptr, DIARY_DESCRIPTION, 0, _("デバッグモードに突入してスコアを残せなくなった。", "give up sending score to use debug commands."));
 		/* Mark savefile */
 		current_world_ptr->noscore |= 0x0008;
 	}
@@ -4954,7 +4954,7 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	if ((max_dlv[player_ptr->dungeon_idx] < floor_ptr->dun_level) && !floor_ptr->inside_quest)
 	{
 		max_dlv[player_ptr->dungeon_idx] = floor_ptr->dun_level;
-		if (record_maxdepth) exe_write_diary(player_ptr, NIKKI_MAXDEAPTH, floor_ptr->dun_level, NULL);
+		if (record_maxdepth) exe_write_diary(player_ptr, DIARY_MAXDEAPTH, floor_ptr->dun_level, NULL);
 	}
 
 	(void)calculate_upkeep(player_ptr);
@@ -5419,7 +5419,7 @@ void play_game(player_type *player_ptr, bool new_game)
 	{
 		write_level = FALSE;
 
-		exe_write_diary(player_ptr, NIKKI_GAMESTART, 1,
+		exe_write_diary(player_ptr, DIARY_GAMESTART, 1,
 			_("                            ----ゲーム再開----",
 				"                            ---- Restart Game ----"));
 
@@ -5541,7 +5541,7 @@ void play_game(player_type *player_ptr, bool new_game)
 	{
 		char buf[80];
 		sprintf(buf, _("%sに降り立った。", "You are standing in the %s."), map_name(player_ptr));
-		exe_write_diary(player_ptr, NIKKI_BUNSHOU, 0, buf);
+		exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, buf);
 	}
 
 	/* Start game */

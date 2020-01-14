@@ -771,7 +771,7 @@ static void change_realm2(player_type *caster_ptr, CHARACTER_IDX next_realm)
 	caster_ptr->spell_forgotten2 = 0L;
 
 	sprintf(tmp, _("魔法の領域を%sから%sに変更した。", "change magic realm from %s to %s."), realm_names[caster_ptr->realm2], realm_names[next_realm]);
-	exe_write_diary(caster_ptr, NIKKI_BUNSHOU, 0, tmp);
+	exe_write_diary(caster_ptr, DIARY_DESCRIPTION, 0, tmp);
 	caster_ptr->old_realm |= 1 << (caster_ptr->realm2 - 1);
 	caster_ptr->realm2 = next_realm;
 

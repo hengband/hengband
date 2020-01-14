@@ -5867,7 +5867,7 @@ void do_cmd_save_and_exit(player_type *creature_ptr)
 {
 	creature_ptr->playing = FALSE;
 	creature_ptr->leaving = TRUE;
-	exe_write_diary(creature_ptr, NIKKI_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
+	exe_write_diary(creature_ptr, DIARY_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
 }
 
 
@@ -6751,7 +6751,7 @@ static void handle_signal_abort(int sig)
 
 	Term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ...", "Panic save..."));
 
-	exe_write_diary(p_ptr, NIKKI_GAMESTART, 0, _("----ゲーム異常終了----", "---- Panic Save and Abort Game ----"));
+	exe_write_diary(p_ptr, DIARY_GAMESTART, 0, _("----ゲーム異常終了----", "---- Panic Save and Abort Game ----"));
 	Term_fresh();
 
 	p_ptr->panic_save = 1;
