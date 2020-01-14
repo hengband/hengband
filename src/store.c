@@ -3636,7 +3636,7 @@ static void display_entry(player_type *player_ptr, int pos)
  * @details
  * All prices are listed as "per individual object".  -BEN-
  */
-static void display_inventory(player_type *player_ptr)
+static void display_store_inventory(player_type *player_ptr)
 {
 	/* Display the next 12 items */
 	int k;
@@ -3727,7 +3727,7 @@ static void display_store(player_type *player_ptr)
 		}
 
 		store_prt_gold(player_ptr);
-		display_inventory(player_ptr);
+		display_store_inventory(player_ptr);
 		return;
 	}
 
@@ -3747,7 +3747,7 @@ static void display_store(player_type *player_ptr)
 		}
 
 		store_prt_gold(player_ptr);
-		display_inventory(player_ptr);
+		display_store_inventory(player_ptr);
 		return;
 	}
 
@@ -3778,7 +3778,7 @@ static void display_store(player_type *player_ptr)
 	/* Label the asking price (in stores) */
 	put_str(_(" 価格", "Price"), 5, 72);
 	store_prt_gold(player_ptr);
-	display_inventory(player_ptr);
+	display_store_inventory(player_ptr);
 }
 
 
@@ -4594,7 +4594,7 @@ static void store_purchase(player_type *player_ptr)
 		/* Hack -- Item is still here */
 		if (i == st_ptr->stock_num)
 		{
-			if (combined_or_reordered) display_inventory(player_ptr);
+			if (combined_or_reordered) display_store_inventory(player_ptr);
 
 			/* Redraw the item */
 			else display_entry(player_ptr, item);
@@ -4608,7 +4608,7 @@ static void store_purchase(player_type *player_ptr)
 
 			/* Nothing left on that screen */
 			else if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
-			display_inventory(player_ptr);
+			display_store_inventory(player_ptr);
 
 			chg_virtue(player_ptr, V_SACRIFICE, 1);
 		}
@@ -4761,7 +4761,7 @@ static void store_purchase(player_type *player_ptr)
 
 		/* Start over */
 		store_top = 0;
-		display_inventory(player_ptr);
+		display_store_inventory(player_ptr);
 	}
 
 	/* The item is gone */
@@ -4769,7 +4769,7 @@ static void store_purchase(player_type *player_ptr)
 	{
 		/* Pick the correct screen */
 		if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
-		display_inventory(player_ptr);
+		display_store_inventory(player_ptr);
 	}
 
 	/* Item is still here */
@@ -4991,7 +4991,7 @@ static void store_sell(player_type *owner_ptr)
 			if (item_pos >= 0)
 			{
 				store_top = (item_pos / store_bottom) * store_bottom;
-				display_inventory(owner_ptr);
+				display_store_inventory(owner_ptr);
 			}
 		}
 	}
@@ -5031,7 +5031,7 @@ static void store_sell(player_type *owner_ptr)
 		if (item_pos >= 0)
 		{
 			store_top = (item_pos / store_bottom) * store_bottom;
-			display_inventory(owner_ptr);
+			display_store_inventory(owner_ptr);
 		}
 	}
 	/* Player is at home */
@@ -5053,7 +5053,7 @@ static void store_sell(player_type *owner_ptr)
 		if (item_pos >= 0)
 		{
 			store_top = (item_pos / store_bottom) * store_bottom;
-			display_inventory(owner_ptr);
+			display_store_inventory(owner_ptr);
 		}
 	}
 
@@ -5180,7 +5180,7 @@ static void museum_remove_object(player_type *player_ptr)
 
 	/* Nothing left on that screen */
 	else if (store_top >= st_ptr->stock_num) store_top -= store_bottom;
-	display_inventory(player_ptr);
+	display_store_inventory(player_ptr);
 }
 
 
@@ -5236,7 +5236,7 @@ static void store_process_command(player_type *client_ptr)
 					store_top = ((st_ptr->stock_num - 1 )/store_bottom) * store_bottom;
 				if ( (cur_store_num == STORE_HOME) && (powerup_home == FALSE) )
 					if ( store_top >= store_bottom ) store_top = store_bottom;
-				display_inventory(client_ptr);
+				display_store_inventory(client_ptr);
 			}
 
 			break;
@@ -5270,7 +5270,7 @@ static void store_process_command(player_type *client_ptr)
 					if (store_top >= st_ptr->stock_num) store_top = 0;
 				}
 
-				display_inventory(client_ptr);
+				display_store_inventory(client_ptr);
 			}
 
 			break;
@@ -5359,7 +5359,7 @@ static void store_process_command(player_type *client_ptr)
 
 		case KTRL('I'):
 		{
-			toggle_inven_equip(client_ptr);
+			toggle_inventory_equipment(client_ptr);
 			break;
 		}
 
@@ -5792,14 +5792,14 @@ void do_cmd_store(player_type *player_ptr)
 				if (item_pos >= 0)
 				{
 					store_top = (item_pos / store_bottom) * store_bottom;
-					display_inventory(player_ptr);
+					display_store_inventory(player_ptr);
 				}
 			}
 		}
 
 		/* Hack -- Redisplay store prices if charisma changes */
 		/* Hack -- Redraw missiles damage if player changes bow */
-		if (need_redraw_store_inv) display_inventory(player_ptr);
+		if (need_redraw_store_inv) display_store_inventory(player_ptr);
 
 		/* Hack -- get kicked out of the store */
 		if (st_ptr->store_open >= current_world_ptr->game_turn) leave_store = TRUE;

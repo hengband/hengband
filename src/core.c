@@ -3641,7 +3641,7 @@ static void process_command(player_type *creature_ptr)
 
 	case KTRL('I'):
 	{
-		toggle_inven_equip(creature_ptr);
+		toggle_inventory_equipment(creature_ptr);
 		break;
 	}
 

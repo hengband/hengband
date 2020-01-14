@@ -1583,7 +1583,7 @@ static void fix_inventory(player_type *player_ptr)
 		/* Activate */
 		Term_activate(angband_term[j]);
 
-		display_inven(player_ptr, item_tester_tval);
+		display_inventory(player_ptr, item_tester_tval);
 		Term_fresh();
 		Term_activate(old);
 	}
@@ -1771,7 +1771,7 @@ static void fix_equip(player_type *player_ptr)
 		Term_activate(angband_term[j]);
 
 		/* Display equipment */
-		display_equip(player_ptr, item_tester_tval);
+		display_equipment(player_ptr, item_tester_tval);
 		Term_fresh();
 		Term_activate(old);
 	}

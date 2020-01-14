@@ -30,6 +30,7 @@
 #include "floor.h"
 #include "floor-events.h"
 #include "floor-town.h"
+#include "player-inventory.h"
 #include "player-move.h"
 #include "player-status.h"
 #include "monster-status.h"

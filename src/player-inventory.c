@@ -34,7 +34,7 @@ bool is_ring_slot(int i)
  * Convert a label into the index of a item in the "equip"
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  */
-static INVENTORY_IDX label_to_equip(player_type* owner_ptr, int c)
+static INVENTORY_IDX label_to_equipment(player_type* owner_ptr, int c)
 {
 	INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1) + INVEN_RARM;
 
@@ -58,7 +58,7 @@ static INVENTORY_IDX label_to_equip(player_type* owner_ptr, int c)
  * @return 対応するID。該当スロットにオブジェクトが存在しなかった場合-1を返す / Return "-1" if the label does not indicate a real item
  * @details Note that the label does NOT distinguish inven/equip.
  */
-static INVENTORY_IDX label_to_inven(player_type* owner_ptr, int c)
+static INVENTORY_IDX label_to_inventory(player_type* owner_ptr, int c)
 {
 	INVENTORY_IDX i = (INVENTORY_IDX)(islower(c) ? A2I(c) : -1);
 
@@ -120,7 +120,7 @@ static concptr mention_use(player_type *owner_ptr, int i)
  * Choice window "shadow" of the "show_equip()" function
  * @return なし
  */
-void display_equip(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
+void display_equipment(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
 {
 	if (!owner_ptr || !owner_ptr->inventory_list) return;
 
@@ -193,7 +193,7 @@ void display_equip(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
  * Flip "inven" and "equip" in any sub-windows
  * @return なし
  */
-void toggle_inven_equip(player_type *owner_ptr)
+void toggle_inventory_equipment(player_type *owner_ptr)
 {
 	for (int j = 0; j < 8; j++)
 	{
@@ -544,7 +544,7 @@ static void prepare_label_string_floor(floor_type *floor_ptr, char *label, FLOOR
  * @details
  * Hack -- do not display "trailing" empty slots
  */
-COMMAND_CODE show_inven(player_type *owner_ptr, int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	COMMAND_CODE i;
 	int k, l, z = 0;
@@ -1091,7 +1091,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 
 		if ((command_wrk && ni && !ne) || (!command_wrk && !ni && ne))
 		{
-			toggle_inven_equip(owner_ptr);
+			toggle_inventory_equipment(owner_ptr);
 			toggle = !toggle;
 		}
 
@@ -1102,14 +1102,14 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 		if (!command_wrk)
 		{
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_inven(owner_ptr, menu_line, mode, tval);
+			if (command_see) get_item_label = show_inventory(owner_ptr, menu_line, mode, tval);
 		}
 
 		/* Equipment screen */
 		else
 		{
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_equip(owner_ptr, menu_line, mode, tval);
+			if (command_see) get_item_label = show_equipment(owner_ptr, menu_line, mode, tval);
 		}
 
 		if (!command_wrk)
@@ -1471,7 +1471,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			{
 				if (which == '(') k = i1;
 				else if (which == ')') k = i2;
-				else k = label_to_inven(owner_ptr, which);
+				else k = label_to_inventory(owner_ptr, which);
 			}
 
 			/* Convert letter to equipment index */
@@ -1479,7 +1479,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			{
 				if (which == '(') k = e1;
 				else if (which == ')') k = e2;
-				else k = label_to_equip(owner_ptr, which);
+				else k = label_to_equipment(owner_ptr, which);
 			}
 
 			/* Validate the item */
@@ -1529,7 +1529,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 
 
 	/* Clean up  'show choices' */
-	if (toggle) toggle_inven_equip(owner_ptr);
+	if (toggle) toggle_inventory_equipment(owner_ptr);
 
 	owner_ptr->window |= (PW_INVEN | PW_EQUIP);
 	handle_stuff(owner_ptr);
@@ -2031,7 +2031,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 		if ((command_wrk == (USE_EQUIP) && ni && !ne) ||
 			(command_wrk == (USE_INVEN) && !ni && ne))
 		{
-			toggle_inven_equip(owner_ptr);
+			toggle_inventory_equipment(owner_ptr);
 			toggle = !toggle;
 		}
 
@@ -2046,7 +2046,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			n2 = I2A(i2);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_inven(owner_ptr, menu_line, mode, tval);
+			if (command_see) get_item_label = show_inventory(owner_ptr, menu_line, mode, tval);
 		}
 
 		/* Equipment screen */
@@ -2057,7 +2057,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			n2 = I2A(e2 - INVEN_RARM);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_equip(owner_ptr, menu_line, mode, tval);
+			if (command_see) get_item_label = show_equipment(owner_ptr, menu_line, mode, tval);
 		}
 
 		/* Floor screen */
@@ -2721,7 +2721,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			{
 				if (which == '(') k = i1;
 				else if (which == ')') k = i2;
-				else k = label_to_inven(owner_ptr, which);
+				else k = label_to_inventory(owner_ptr, which);
 			}
 
 			/* Convert letter to equipment index */
@@ -2729,7 +2729,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			{
 				if (which == '(') k = e1;
 				else if (which == ')') k = e2;
-				else k = label_to_equip(owner_ptr, which);
+				else k = label_to_equipment(owner_ptr, which);
 			}
 
 			/* Convert letter to floor index */
@@ -2796,7 +2796,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 
 
 	/* Clean up  'show choices' */
-	if (toggle) toggle_inven_equip(owner_ptr);
+	if (toggle) toggle_inventory_equipment(owner_ptr);
 
 	owner_ptr->window |= (PW_INVEN | PW_EQUIP);
 	handle_stuff(owner_ptr);
@@ -3064,7 +3064,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
  * Choice window "shadow" of the "show_inven()" function
  * @return なし
  */
-void display_inven(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
+void display_inventory(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
 {
 	register int i, n, z = 0;
 	object_type *o_ptr;
@@ -3131,7 +3131,7 @@ void display_inven(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
  * @param target_item アイテムの選択処理を行うか否か。
  * @return 選択したアイテムのタグ
  */
-COMMAND_CODE show_equip(player_type *owner_ptr, int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
 {
 	COMMAND_CODE i;
 	int j, k, l;

@@ -6181,7 +6181,7 @@ void show_info(player_type *creature_ptr)
 	if (creature_ptr->equip_cnt)
 	{
 		Term_clear();
-		(void)show_equip(creature_ptr, 0, USE_FULL, 0);
+		(void)show_equipment(creature_ptr, 0, USE_FULL, 0);
 		prt(_("装備していたアイテム: -続く-", "You are using: -more-"), 0, 0);
 
 		if (inkey() == ESCAPE) return;
@@ -6191,7 +6191,7 @@ void show_info(player_type *creature_ptr)
 	if (creature_ptr->inven_cnt)
 	{
 		Term_clear();
-		(void)show_inven(creature_ptr, 0, USE_FULL, 0);
+		(void)show_inventory(creature_ptr, 0, USE_FULL, 0);
 		prt(_("持っていたアイテム: -続く-", "You are carrying: -more-"), 0, 0);
 
 		if (inkey() == ESCAPE) return;

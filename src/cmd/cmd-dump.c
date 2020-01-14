@@ -591,7 +591,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 			hour, min, note_level, quest[num].name);
 		break;
 	}
-	case DIARY_TELE_LEV:
+	case DIARY_TELEPORT_LEVEL:
 	{
 		fprintf(fff, _(" %2d:%02d %20s レベル・テレポートで脱出した。\n", " %2d:%02d %20s Got out using teleport level.\n"),
 			hour, min, note_level);

@@ -656,7 +656,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 				creature_ptr->oldpx = creature_ptr->x;
 			}
 
-			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELE_LEV, 1, NULL);
+			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, 1, NULL);
 
 			if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
@@ -686,7 +686,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 
 		if (m_idx <= 0) /* To player */
 		{
-			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELE_LEV, -1, NULL);
+			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, -1, NULL);
 
 			if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
@@ -708,7 +708,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 
 		if (m_idx <= 0) /* To player */
 		{
-			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELE_LEV, -1, NULL);
+			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, -1, NULL);
 
 			if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
@@ -728,7 +728,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 		{
 			/* Never reach this code on the surface */
 			/* if (!creature_ptr->current_floor_ptr->dun_level) creature_ptr->dungeon_idx = creature_ptr->recall_dungeon; */
-			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELE_LEV, 1, NULL);
+			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, 1, NULL);
 			if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
 			prepare_change_floor_mode(creature_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);

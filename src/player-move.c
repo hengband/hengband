@@ -156,6 +156,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-class.h"
+#include "player-inventory.h"
 #include "player-personality.h"
 #include "spells-floor.h"
 #include "feature.h"
