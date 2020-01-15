@@ -2666,7 +2666,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	if (hit_body) torch_lost_fuel(q_ptr);
 
 	/* Chance of breakage (during attacks) */
-	j = (hit_body ? breakage_chance(q_ptr, creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
+	j = (hit_body ? breakage_chance(creature_ptr, q_ptr, creature_ptr->pclass == CLASS_ARCHER, 0) : 0);
 
 	/* Figurines transform */
 	if ((q_ptr->tval == TV_FIGURINE) && !(creature_ptr->current_floor_ptr->inside_arena))

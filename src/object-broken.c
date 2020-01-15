@@ -412,9 +412,9 @@ bool potion_smash_effect(player_type *owner_ptr, MONSTER_IDX who, POSITION y, PO
  * @details
  * Note that artifacts never break, see the "drop_near()" function.
  */
-PERCENTAGE breakage_chance(object_type *o_ptr, bool has_archer_bonus, SPELL_IDX snipe_type)
+PERCENTAGE breakage_chance(player_type *owner_ptr, object_type *o_ptr, bool has_archer_bonus, SPELL_IDX snipe_type)
 {
-	PERCENTAGE archer_bonus = (has_archer_bonus ? (PERCENTAGE)(p_ptr->lev - 1) / 7 + 4 : 0);
+	PERCENTAGE archer_bonus = (has_archer_bonus ? (PERCENTAGE)(owner_ptr->lev - 1) / 7 + 4 : 0);
 
 	/* Examine the snipe type */
 	if (snipe_type)

@@ -825,7 +825,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 		}
 
 		/* Chance of breakage (during attacks) */
-		j = (hit_body ? breakage_chance(q_ptr, shooter_ptr->pclass == CLASS_ARCHER, snipe_type) : 0);
+		j = (hit_body ? breakage_chance(shooter_ptr, q_ptr, shooter_ptr->pclass == CLASS_ARCHER, snipe_type) : 0);
 
 		if (stick_to)
 		{
