@@ -975,7 +975,7 @@ OBJECT_TYPE_VALUE item_tester_tval;
  * @param o_ptr 判定を行いたいオブジェクト構造体参照ポインタ
  * @return item_tester_hookの参照先、その他いくつかの例外に応じてTRUE/FALSEを返す。
  */
-bool item_tester_okay(object_type *o_ptr, OBJECT_TYPE_VALUE tval)
+bool item_tester_okay(player_type *player_ptr, object_type *o_ptr, OBJECT_TYPE_VALUE tval)
 {
 	/* Hack -- allow listing empty slots */
 	// if (item_tester_full) return TRUE; // TODO:DELETE
@@ -997,7 +997,7 @@ bool item_tester_okay(object_type *o_ptr, OBJECT_TYPE_VALUE tval)
 	{
 		/* Is it a spellbook? If so, we need a hack -- TY */
 		if ((tval <= TV_DEATH_BOOK) && (tval >= TV_LIFE_BOOK))
-			return check_book_realm(o_ptr->tval, o_ptr->sval);
+			return check_book_realm(player_ptr, o_ptr->tval, o_ptr->sval);
 		else
 			if (tval != o_ptr->tval) return FALSE;
 	}

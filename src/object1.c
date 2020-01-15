@@ -1413,15 +1413,14 @@ s16b wield_slot(player_type *owner_ptr, object_type *o_ptr)
  * @param book_sval ベースアイテムのsval
  * @return 使用可能な魔法書ならばTRUEを返す。
  */
-
-bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VALUE book_sval)
+bool check_book_realm(player_type *owner_ptr, const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VALUE book_sval)
 {
 	if (book_tval < TV_LIFE_BOOK) return FALSE;
-	if (p_ptr->pclass == CLASS_SORCERER)
+	if (owner_ptr->pclass == CLASS_SORCERER)
 	{
 		return is_magic(tval2realm(book_tval));
 	}
-	else if (p_ptr->pclass == CLASS_RED_MAGE)
+	else if (owner_ptr->pclass == CLASS_RED_MAGE)
 	{
 		if (is_magic(tval2realm(book_tval)))
 			return ((book_tval == TV_ARCANE_BOOK) || (book_sval < 2));

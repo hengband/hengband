@@ -404,7 +404,7 @@ extern bool screen_object(object_type *o_ptr, BIT_FLAGS mode);
 extern char index_to_label(int i);
 extern s16b wield_slot(player_type *owner_ptr, object_type *o_ptr);
 
-extern bool check_book_realm(const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
+extern bool check_book_realm(player_type *owner_ptr, const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
 
 /*
  * get_item()関数でアイテムの選択を行うフラグ / Bit flags for the "get_item" function

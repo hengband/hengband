@@ -92,4 +92,4 @@ extern bool object_is_quest_target(object_type *o_ptr);
  */
 #define object_is_cursed(T) ((T)->curse_flags)
 
-extern bool item_tester_okay(object_type *o_ptr, OBJECT_TYPE_VALUE tval);
+extern bool item_tester_okay(player_type *player_ptr, object_type *o_ptr, OBJECT_TYPE_VALUE tval);

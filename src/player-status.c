@@ -5032,14 +5032,14 @@ bool player_has_no_spellbooks(player_type *creature_ptr)
 	for (int i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &creature_ptr->inventory_list[i];
-		if (o_ptr->k_idx && check_book_realm(o_ptr->tval, o_ptr->sval)) return FALSE;
+		if (o_ptr->k_idx && check_book_realm(creature_ptr, o_ptr->tval, o_ptr->sval)) return FALSE;
 	}
 
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	for (int i = floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; i; i = o_ptr->next_o_idx)
 	{
 		o_ptr = &floor_ptr->o_list[i];
-		if (o_ptr->k_idx && (o_ptr->marked & OM_FOUND) && check_book_realm(o_ptr->tval, o_ptr->sval)) return FALSE;
+		if (o_ptr->k_idx && (o_ptr->marked & OM_FOUND) && check_book_realm(creature_ptr, o_ptr->tval, o_ptr->sval)) return FALSE;
 	}
 
 	return TRUE;
