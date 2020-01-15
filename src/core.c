@@ -5249,7 +5249,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
 	if (browsing_movie)
 	{
-		reset_visuals();
+		reset_visuals(player_ptr);
 		browse_movie();
 		return;
 	}
@@ -5549,7 +5549,7 @@ void play_game(player_type *player_ptr, bool new_game)
 	player_ptr->playing = TRUE;
 
 	/* Reset the visual mappings */
-	reset_visuals();
+	reset_visuals(player_ptr);
 
 	/* Load the "pref" files */
 	load_all_pref_files(player_ptr);

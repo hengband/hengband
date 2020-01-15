@@ -52,7 +52,7 @@
  *\n
  * The "prefs" parameter is no longer meaningful.  \n
  */
-void reset_visuals(void)
+void reset_visuals(player_type *owner_ptr)
 {
 	int i, j;
 
@@ -94,13 +94,13 @@ void reset_visuals(void)
 		char buf[1024];
 
 		/* Process "graf.prf" */
-		process_pref_file(p_ptr, "graf.prf");
+		process_pref_file(owner_ptr, "graf.prf");
 
 		/* Access the "character" pref file */
-		sprintf(buf, "graf-%s.prf", p_ptr->base_name);
+		sprintf(buf, "graf-%s.prf", owner_ptr->base_name);
 
 		/* Process "graf-<playername>.prf" */
-		process_pref_file(p_ptr, buf);
+		process_pref_file(owner_ptr, buf);
 	}
 
 	/* Normal symbols */
@@ -109,13 +109,13 @@ void reset_visuals(void)
 		char buf[1024];
 
 		/* Process "font.prf" */
-		process_pref_file(p_ptr, "font.prf");
+		process_pref_file(owner_ptr, "font.prf");
 
 		/* Access the "character" pref file */
-		sprintf(buf, "font-%s.prf", p_ptr->base_name);
+		sprintf(buf, "font-%s.prf", owner_ptr->base_name);
 
 		/* Process "font-<playername>.prf" */
-		process_pref_file(p_ptr, buf);
+		process_pref_file(owner_ptr, buf);
 	}
 }
 

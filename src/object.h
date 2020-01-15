@@ -392,7 +392,7 @@ extern OBJECT_TYPE_VALUE item_tester_tval;
 extern bool(*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
 /* object1.c */
-extern void reset_visuals(void);
+extern void reset_visuals(player_type *owner_ptr);
 extern void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
 extern void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
 extern concptr item_activation(object_type *o_ptr);

@@ -2069,7 +2069,7 @@ static errr Term_xtra_win_react(void)
 
 		/* Reset visuals */
 #ifdef ANGBAND_2_8_1
-		reset_visuals();
+		reset_visuals(p_ptr);
 #else /* ANGBAND_2_8_1 */
 		reset_visuals(TRUE);
 #endif /* ANGBAND_2_8_1 */

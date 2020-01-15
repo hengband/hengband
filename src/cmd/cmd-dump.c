@@ -2580,7 +2580,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 		case 'R':
 		case 'r':
 			/* Reset */
-			reset_visuals();
+			reset_visuals(creature_ptr);
 
 			msg_print(_("画面上の[色/文字]を初期値にリセットしました。", "Visual attr/char tables reset."));
 			need_redraw = TRUE;
@@ -3977,7 +3977,7 @@ void do_cmd_save_screen(player_type *creature_ptr)
 	if (old_use_graphics)
 	{
 		use_graphics = FALSE;
-		reset_visuals();
+		reset_visuals(creature_ptr);
 		creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 		handle_stuff(creature_ptr);
 	}
@@ -4074,7 +4074,7 @@ void do_cmd_save_screen(player_type *creature_ptr)
 	if (!old_use_graphics) return;
 
 	use_graphics = TRUE;
-	reset_visuals();
+	reset_visuals(creature_ptr);
 	creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 	handle_stuff(creature_ptr);
 }
