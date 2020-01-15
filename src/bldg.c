@@ -2460,7 +2460,7 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
 
 
 	/* Vorpal Hit*/
-	if ((have_flag(flgs, TR_VORPAL) || hex_spelling(HEX_RUNESWORD)))
+	if ((have_flag(flgs, TR_VORPAL) || hex_spelling(owner_ptr, HEX_RUNESWORD)))
 	{
 		if ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))
 		{

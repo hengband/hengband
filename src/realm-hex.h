@@ -4,8 +4,6 @@
 
 #define hex_spelling_any(CREATURE_PTR) \
 	(((CREATURE_PTR)->realm1 == REALM_HEX) && ((CREATURE_PTR)->magic_num1[0]))
-#define hex_spelling(X) \
-	((p_ptr->realm1 == REALM_HEX) && (p_ptr->magic_num1[0] & (1L << (X))))
 #define CASTING_HEX_FLAGS(P_PTR) ((P_PTR)->magic_num1[0])
 #define CASTING_HEX_NUM(P_PTR) ((P_PTR)->magic_num2[0])
 #define HEX_REVENGE_POWER(P_PTR) ((P_PTR)->magic_num1[2])
@@ -59,4 +57,4 @@ extern bool teleport_barrier(player_type *caster_ptr, MONSTER_IDX m_idx);
 extern bool magic_barrier(player_type *target_ptr, MONSTER_IDX m_idx);
 extern bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx);
 extern concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode);
-
+extern bool hex_spelling(player_type *caster_type, int hex);

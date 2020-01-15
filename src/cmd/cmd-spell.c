@@ -1142,7 +1142,7 @@ void do_cmd_cast(player_type *caster_ptr)
 	use_realm = tval2realm(o_ptr->tval);
 	if (use_realm == REALM_HEX)
 	{
-		if (hex_spelling(spell))
+		if (hex_spelling(caster_ptr, spell))
 		{
 			msg_print(_("その呪文はすでに詠唱中だ。", "You are already casting it."));
 			return;

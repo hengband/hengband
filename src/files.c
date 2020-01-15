@@ -2763,14 +2763,14 @@ static void tim_player_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_S
 
 	if (creature_ptr->realm1 != REALM_HEX) return;
 
-	if (hex_spelling(HEX_DEMON_AURA))
+	if (hex_spelling(creature_ptr, HEX_DEMON_AURA))
 	{
 		add_flag(flgs, TR_SH_FIRE);
 		add_flag(flgs, TR_REGEN);
 	}
 
-	if (hex_spelling(HEX_ICE_ARMOR)) add_flag(flgs, TR_SH_COLD);
-	if (hex_spelling(HEX_SHOCK_CLOAK)) add_flag(flgs, TR_SH_ELEC);
+	if (hex_spelling(creature_ptr, HEX_ICE_ARMOR)) add_flag(flgs, TR_SH_COLD);
+	if (hex_spelling(creature_ptr, HEX_SHOCK_CLOAK)) add_flag(flgs, TR_SH_ELEC);
 }
 
 

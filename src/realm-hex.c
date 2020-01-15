@@ -50,7 +50,7 @@ bool stop_hex_spell_all(player_type *caster_ptr)
 
 	for (i = 0; i < 32; i++)
 	{
-		if (hex_spelling(i)) exe_spell(caster_ptr, REALM_HEX, i, SPELL_STOP);
+		if (hex_spelling(caster_ptr, i)) exe_spell(caster_ptr, REALM_HEX, i, SPELL_STOP);
 	}
 
 	CASTING_HEX_FLAGS(caster_ptr) = 0;
@@ -103,7 +103,7 @@ bool stop_hex_spell(player_type *caster_ptr)
 			prt(_("     名前", "     Name"), y, x + 5);
 			for (spell = 0; spell < 32; spell++)
 			{
-				if (hex_spelling(spell))
+				if (hex_spelling(caster_ptr, spell))
 				{
 					Term_erase(x, y + n + 1, 255);
 					put_str(format("%c)  %s", I2A(n), exe_spell(caster_ptr, REALM_HEX, spell, SPELL_NAME)), y + n + 1, x + 2);
@@ -175,7 +175,7 @@ void check_hex(player_type *caster_ptr)
 	need_mana = 0;
 	for (spell = 0; spell < 32; spell++)
 	{
-		if (hex_spelling(spell))
+		if (hex_spelling(caster_ptr, spell))
 		{
 			const magic_type *s_ptr;
 			s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
@@ -219,7 +219,7 @@ void check_hex(player_type *caster_ptr)
 	{
 		const magic_type *s_ptr;
 
-		if (!hex_spelling(spell)) continue;
+		if (!hex_spelling(caster_ptr, spell)) continue;
 
 		s_ptr = &technic_info[REALM_HEX - MIN_TECHNIC][spell];
 
@@ -236,7 +236,7 @@ void check_hex(player_type *caster_ptr)
 	/* Do any effects of continual spells */
 	for (spell = 0; spell < 32; spell++)
 	{
-		if (hex_spelling(spell))
+		if (hex_spelling(caster_ptr, spell))
 		{
 			exe_spell(caster_ptr, REALM_HEX, spell, SPELL_CONT);
 		}
@@ -295,7 +295,7 @@ bool teleport_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
 	monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if (!hex_spelling(HEX_ANTI_TELE)) return FALSE;
+	if (!hex_spelling(caster_ptr, HEX_ANTI_TELE)) return FALSE;
 	if ((caster_ptr->lev * 3 / 2) < randint1(r_ptr->level)) return FALSE;
 
 	return TRUE;
@@ -311,7 +311,7 @@ bool magic_barrier(player_type *target_ptr, MONSTER_IDX m_idx)
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if (!hex_spelling(HEX_ANTI_MAGIC)) return FALSE;
+	if (!hex_spelling(target_ptr, HEX_ANTI_MAGIC)) return FALSE;
 	if ((target_ptr->lev * 3 / 2) < randint1(r_ptr->level)) return FALSE;
 
 	return TRUE;
@@ -327,7 +327,7 @@ bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx)
 	monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	if (!hex_spelling(HEX_ANTI_MULTI)) return FALSE;
+	if (!hex_spelling(caster_ptr, HEX_ANTI_MULTI)) return FALSE;
 	if ((caster_ptr->lev * 3 / 2) < randint1(r_ptr->level)) return FALSE;
 
 	return TRUE;
@@ -1134,4 +1134,9 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	}
 
 	return "";
+}
+
+bool hex_spelling(player_type *caster_ptr, int hex)
+{
+	return (caster_ptr->realm1 == REALM_HEX) && (caster_ptr->magic_num1[0] & (1L << (hex)));
 }

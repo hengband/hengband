@@ -656,24 +656,24 @@ static void print_status(player_type *creature_ptr)
 	/* Hex spells */
 	if (creature_ptr->realm1 == REALM_HEX)
 	{
-		if (hex_spelling(HEX_BLESS)) ADD_FLG(BAR_BLESSED);
-		if (hex_spelling(HEX_DEMON_AURA)) { ADD_FLG(BAR_SHFIRE); ADD_FLG(BAR_REGENERATION); }
-		if (hex_spelling(HEX_XTRA_MIGHT)) ADD_FLG(BAR_MIGHT);
-		if (hex_spelling(HEX_DETECT_EVIL)) ADD_FLG(BAR_ESP_EVIL);
-		if (hex_spelling(HEX_ICE_ARMOR)) ADD_FLG(BAR_SHCOLD);
-		if (hex_spelling(HEX_RUNESWORD)) ADD_FLG(BAR_RUNESWORD);
-		if (hex_spelling(HEX_BUILDING)) ADD_FLG(BAR_BUILD);
-		if (hex_spelling(HEX_ANTI_TELE)) ADD_FLG(BAR_ANTITELE);
-		if (hex_spelling(HEX_SHOCK_CLOAK)) ADD_FLG(BAR_SHELEC);
-		if (hex_spelling(HEX_SHADOW_CLOAK)) ADD_FLG(BAR_SHSHADOW);
-		if (hex_spelling(HEX_CONFUSION)) ADD_FLG(BAR_ATTKCONF);
-		if (hex_spelling(HEX_EYE_FOR_EYE)) ADD_FLG(BAR_EYEEYE);
-		if (hex_spelling(HEX_ANTI_MULTI)) ADD_FLG(BAR_ANTIMULTI);
-		if (hex_spelling(HEX_VAMP_BLADE)) ADD_FLG(BAR_VAMPILIC);
-		if (hex_spelling(HEX_ANTI_MAGIC)) ADD_FLG(BAR_ANTIMAGIC);
-		if (hex_spelling(HEX_CURE_LIGHT) ||
-			hex_spelling(HEX_CURE_SERIOUS) ||
-			hex_spelling(HEX_CURE_CRITICAL)) ADD_FLG(BAR_CURE);
+		if (hex_spelling(creature_ptr, HEX_BLESS)) ADD_FLG(BAR_BLESSED);
+		if (hex_spelling(creature_ptr, HEX_DEMON_AURA)) { ADD_FLG(BAR_SHFIRE); ADD_FLG(BAR_REGENERATION); }
+		if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT)) ADD_FLG(BAR_MIGHT);
+		if (hex_spelling(creature_ptr, HEX_DETECT_EVIL)) ADD_FLG(BAR_ESP_EVIL);
+		if (hex_spelling(creature_ptr, HEX_ICE_ARMOR)) ADD_FLG(BAR_SHCOLD);
+		if (hex_spelling(creature_ptr, HEX_RUNESWORD)) ADD_FLG(BAR_RUNESWORD);
+		if (hex_spelling(creature_ptr, HEX_BUILDING)) ADD_FLG(BAR_BUILD);
+		if (hex_spelling(creature_ptr, HEX_ANTI_TELE)) ADD_FLG(BAR_ANTITELE);
+		if (hex_spelling(creature_ptr, HEX_SHOCK_CLOAK)) ADD_FLG(BAR_SHELEC);
+		if (hex_spelling(creature_ptr, HEX_SHADOW_CLOAK)) ADD_FLG(BAR_SHSHADOW);
+		if (hex_spelling(creature_ptr, HEX_CONFUSION)) ADD_FLG(BAR_ATTKCONF);
+		if (hex_spelling(creature_ptr, HEX_EYE_FOR_EYE)) ADD_FLG(BAR_EYEEYE);
+		if (hex_spelling(creature_ptr, HEX_ANTI_MULTI)) ADD_FLG(BAR_ANTIMULTI);
+		if (hex_spelling(creature_ptr, HEX_VAMP_BLADE)) ADD_FLG(BAR_VAMPILIC);
+		if (hex_spelling(creature_ptr, HEX_ANTI_MAGIC)) ADD_FLG(BAR_ANTIMAGIC);
+		if (hex_spelling(creature_ptr, HEX_CURE_LIGHT) ||
+			hex_spelling(creature_ptr, HEX_CURE_SERIOUS) ||
+			hex_spelling(creature_ptr, HEX_CURE_CRITICAL)) ADD_FLG(BAR_CURE);
 
 		if (HEX_REVENGE_TURN(creature_ptr))
 		{

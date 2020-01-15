@@ -865,7 +865,7 @@ HIT_POINT tot_dam_aux(player_type *attacker_ptr, object_type *o_ptr, HIT_POINT t
 		if (attacker_ptr->special_attack & (ATTACK_POIS)) add_flag(flgs, TR_BRAND_POIS);
 	}
 
-	if (hex_spelling(HEX_RUNESWORD)) add_flag(flgs, TR_SLAY_GOOD);
+	if (hex_spelling(attacker_ptr, HEX_RUNESWORD)) add_flag(flgs, TR_SLAY_GOOD);
 
 	MULTIPLY mult = 10;
 	switch (o_ptr->tval)
@@ -1599,7 +1599,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 		}
 
 		/* Vampiric drain */
-		if ((have_flag(flgs, TR_VAMPIRIC)) || (chaos_effect == 1) || (mode == HISSATSU_DRAIN) || hex_spelling(HEX_VAMP_BLADE))
+		if ((have_flag(flgs, TR_VAMPIRIC)) || (chaos_effect == 1) || (mode == HISSATSU_DRAIN) || hex_spelling(attacker_ptr, HEX_VAMP_BLADE))
 		{
 			/* Only drain "living" monsters */
 			if (monster_living(m_ptr->r_idx))
@@ -1608,7 +1608,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 				can_drain = FALSE;
 		}
 
-		if ((have_flag(flgs, TR_VORPAL) || hex_spelling(HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !zantetsu_mukou)
+		if ((have_flag(flgs, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !zantetsu_mukou)
 			vorpal_cut = TRUE;
 		else vorpal_cut = FALSE;
 
@@ -1991,7 +1991,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 				{
 					drain_heal = damroll(2, drain_result / 6);
 
-					if (hex_spelling(HEX_VAMP_BLADE)) drain_heal *= 2;
+					if (hex_spelling(attacker_ptr, HEX_VAMP_BLADE)) drain_heal *= 2;
 
 					if (cheat_xtra)
 					{
@@ -2034,7 +2034,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 		drain_result = 0;
 
 		/* Confusion attack */
-		if ((attacker_ptr->special_attack & ATTACK_CONFUSE) || (chaos_effect == 3) || (mode == HISSATSU_CONF) || hex_spelling(HEX_CONFUSION))
+		if ((attacker_ptr->special_attack & ATTACK_CONFUSE) || (chaos_effect == 3) || (mode == HISSATSU_CONF) || hex_spelling(attacker_ptr, HEX_CONFUSION))
 		{
 			/* Cancel glowing hands */
 			if (attacker_ptr->special_attack & ATTACK_CONFUSE)
@@ -3888,7 +3888,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					}
 				}
 
-				if (hex_spelling(HEX_SHADOW_CLOAK) && alive && !target_ptr->is_dead)
+				if (hex_spelling(target_ptr, HEX_SHADOW_CLOAK) && alive && !target_ptr->is_dead)
 				{
 					HIT_POINT dam = 1;
 					object_type *o_armed_ptr = &target_ptr->inventory_list[INVEN_RARM];
@@ -4044,7 +4044,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 	/* Hex - revenge damage stored */
 	revenge_store(target_ptr, get_damage);
 
-	if ((target_ptr->tim_eyeeye || hex_spelling(HEX_EYE_FOR_EYE))
+	if ((target_ptr->tim_eyeeye || hex_spelling(target_ptr, HEX_EYE_FOR_EYE))
 		&& get_damage > 0 && !target_ptr->is_dead)
 	{
 #ifdef JP

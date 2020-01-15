@@ -2669,26 +2669,26 @@ void calc_bonuses(player_type *creature_ptr)
 	if (creature_ptr->realm1 == REALM_HEX)
 	{
 		if (hex_spelling_any(creature_ptr)) creature_ptr->skill_stl -= (1 + CASTING_HEX_NUM(creature_ptr));
-		if (hex_spelling(HEX_DETECT_EVIL)) creature_ptr->esp_evil = TRUE;
-		if (hex_spelling(HEX_XTRA_MIGHT)) creature_ptr->stat_add[A_STR] += 4;
-		if (hex_spelling(HEX_BUILDING))
+		if (hex_spelling(creature_ptr, HEX_DETECT_EVIL)) creature_ptr->esp_evil = TRUE;
+		if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT)) creature_ptr->stat_add[A_STR] += 4;
+		if (hex_spelling(creature_ptr, HEX_BUILDING))
 		{
 			creature_ptr->stat_add[A_STR] += 4;
 			creature_ptr->stat_add[A_DEX] += 4;
 			creature_ptr->stat_add[A_CON] += 4;
 		}
-		if (hex_spelling(HEX_DEMON_AURA))
+		if (hex_spelling(creature_ptr, HEX_DEMON_AURA))
 		{
 			creature_ptr->sh_fire = TRUE;
 			creature_ptr->regenerate = TRUE;
 		}
-		if (hex_spelling(HEX_ICE_ARMOR))
+		if (hex_spelling(creature_ptr, HEX_ICE_ARMOR))
 		{
 			creature_ptr->sh_cold = TRUE;
 			creature_ptr->to_a += 30;
 			creature_ptr->dis_to_a += 30;
 		}
-		if (hex_spelling(HEX_SHOCK_CLOAK))
+		if (hex_spelling(creature_ptr, HEX_SHOCK_CLOAK))
 		{
 			creature_ptr->sh_elec = TRUE;
 			new_speed += 3;
@@ -3295,7 +3295,7 @@ void calc_bonuses(player_type *creature_ptr)
 			}
 
 			/* Hex - extra mights gives +1 bonus to max blows */
-			if (hex_spelling(HEX_XTRA_MIGHT) || hex_spelling(HEX_BUILDING)) { num++; wgt /= 2; mul += 2; }
+			if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT) || hex_spelling(creature_ptr, HEX_BUILDING)) { num++; wgt /= 2; mul += 2; }
 
 			/* Enforce a minimum "weight" (tenth pounds) */
 			div = ((o_ptr->weight < wgt) ? wgt : o_ptr->weight);
@@ -3409,7 +3409,7 @@ void calc_bonuses(player_type *creature_ptr)
 				if (o_ptr->curse_flags & (TRC_HEAVY_CURSE)) { creature_ptr->to_h[i] += 7; creature_ptr->dis_to_h[i] += 7; }
 				if (o_ptr->curse_flags & (TRC_PERMA_CURSE)) { creature_ptr->to_h[i] += 13; creature_ptr->dis_to_h[i] += 13; }
 				if (o_ptr->curse_flags & (TRC_TY_CURSE)) { creature_ptr->to_h[i] += 5; creature_ptr->dis_to_h[i] += 5; }
-				if (hex_spelling(HEX_RUNESWORD))
+				if (hex_spelling(creature_ptr, HEX_RUNESWORD))
 				{
 					if (o_ptr->curse_flags & (TRC_CURSED)) { creature_ptr->to_d[i] += 5; creature_ptr->dis_to_d[i] += 5; }
 					if (o_ptr->curse_flags & (TRC_HEAVY_CURSE)) { creature_ptr->to_d[i] += 7; creature_ptr->dis_to_d[i] += 7; }
@@ -4036,8 +4036,8 @@ static void calc_hitpoints(player_type *creature_ptr)
 	if (creature_ptr->tsuyoshi) mhp += 50;
 
 	/* Factor in the hex spell settings */
-	if (hex_spelling(HEX_XTRA_MIGHT)) mhp += 15;
-	if (hex_spelling(HEX_BUILDING)) mhp += 60;
+	if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT)) mhp += 15;
+	if (hex_spelling(creature_ptr, HEX_BUILDING)) mhp += 60;
 
 	/* New maximum hitpoints */
 	if (creature_ptr->mhp != mhp)
@@ -5907,7 +5907,7 @@ void cheat_death(player_type *creature_ptr)
  */
 bool is_blessed(player_type *creature_ptr)
 {
-	return creature_ptr->blessed || music_singing(creature_ptr, MUSIC_BLESS) || hex_spelling(HEX_BLESS);
+	return creature_ptr->blessed || music_singing(creature_ptr, MUSIC_BLESS) || hex_spelling(creature_ptr, HEX_BLESS);
 }
 
 
