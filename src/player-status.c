@@ -5036,7 +5036,6 @@ bool player_has_no_spellbooks(player_type *creature_ptr)
 	}
 
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-	object_type *o_ptr;
 	for (int i = floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].o_idx; i; i = o_ptr->next_o_idx)
 	{
 		o_ptr = &floor_ptr->o_list[i];

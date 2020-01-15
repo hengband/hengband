@@ -1059,7 +1059,7 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				/* Potions produce effects when 'shattered' */
 				if (is_potion)
 				{
-					(void)potion_smash_effect(who, y, x, k_idx);
+					(void)potion_smash_effect(caster_ptr, who, y, x, k_idx);
 				}
 
 				lite_spot(y, x);

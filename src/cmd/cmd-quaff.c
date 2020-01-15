@@ -492,7 +492,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 	if (PRACE_IS_(creature_ptr, RACE_SKELETON))
 	{
 		msg_print(_("液体の一部はあなたのアゴを素通りして落ちた！", "Some of the fluid falls through your jaws!"));
-		(void)potion_smash_effect(0, creature_ptr->y, creature_ptr->x, q_ptr->k_idx);
+		(void)potion_smash_effect(creature_ptr, 0, creature_ptr->y, creature_ptr->x, q_ptr->k_idx);
 	}
 	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
 

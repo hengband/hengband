@@ -265,7 +265,7 @@ int set_cold_destroy(object_type *o_ptr)
  *    o_ptr --- pointer to the potion object.
  * </pre>
  */
-bool potion_smash_effect(MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx)
+bool potion_smash_effect(player_type *owner_ptr, MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_IDX k_idx)
 {
 	int     radius = 2;
 	int     dt = 0;
@@ -398,7 +398,7 @@ bool potion_smash_effect(MONSTER_IDX who, POSITION y, POSITION x, KIND_OBJECT_ID
 		/* Do nothing */;
 	}
 
-	(void)project(p_ptr, who, radius, y, x, dam, dt, (PROJECT_JUMP | PROJECT_ITEM | PROJECT_KILL), -1);
+	(void)project(owner_ptr, who, radius, y, x, dam, dt, (PROJECT_JUMP | PROJECT_ITEM | PROJECT_KILL), -1);
 
 	/* XXX  those potions that explode need to become "known" */
 	return angry;
