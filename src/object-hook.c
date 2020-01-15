@@ -114,6 +114,7 @@ bool item_tester_hook_boomerang(object_type *o_ptr)
 }
 
 /*!
+* todo ここにplayer_type を追加すると関数ポインタの収拾がつかなくなったので保留
 * @brief オブジェクトをプレイヤーが食べることができるかを判定する /
 * Hook to determine if an object is eatable
 * @param o_ptr 判定したいオブジェクトの構造体参照ポインタ
