@@ -2003,7 +2003,7 @@ static void roff_func(TERM_COLOR attr, concptr str)
  * @param fname ファイル名
  * @return なし
  */
-static void spoil_mon_info(concptr fname)
+static void spoil_mon_info(player_type *player_ptr, concptr fname)
 {
 	char buf[1024];
 	int i, l, n = 0;
@@ -2132,7 +2132,7 @@ static void spoil_mon_info(concptr fname)
 		spoil_out(buf);
 
 		/* Reuse the code of monster recall. */
-		output_monster_spoiler(who[l], roff_func);
+		output_monster_spoiler(player_ptr, who[l], roff_func);
 
 		spoil_out(NULL);
 	}
@@ -2331,7 +2331,7 @@ static void spoil_mon_evol(concptr fname)
  * Create Spoiler files -BEN-
  * @return なし
  */
-void do_cmd_spoilers(void)
+void do_cmd_spoilers(player_type *player_ptr)
 {
 	screen_save();
 
@@ -2378,7 +2378,7 @@ void do_cmd_spoilers(void)
 
 			/* Option (4) */
 		case '4':
-			spoil_mon_info("mon-info.txt");
+			spoil_mon_info(player_ptr, "mon-info.txt");
 			break;
 
 			/* Option (5) */

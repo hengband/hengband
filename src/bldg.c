@@ -3817,7 +3817,7 @@ static bool research_mon(player_type *player_ptr)
 				handle_stuff(player_ptr);
 
 				/* know every thing mode */
-				screen_roff(r_idx, 0x01);
+				screen_roff(player_ptr, r_idx, 0x01);
 				notpicked = FALSE;
 
 				/* XTRA HACK REMEMBER_IDX */

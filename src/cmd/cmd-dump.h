@@ -74,7 +74,7 @@ extern void do_cmd_time(player_type *creature_ptr);
 /*
  * Forward declare
  */
-extern void do_cmd_spoilers(void);
+extern void do_cmd_spoilers(player_type *creature_ptr);
 
 /* wizard1.c */
 extern void spoil_random_artifact(player_type *creature_ptr, concptr fname);

@@ -436,9 +436,9 @@ extern void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode);
 extern void monster_name(MONSTER_IDX m_idx, char* m_name);
 
 extern void roff_top(MONRACE_IDX r_idx);
-extern void screen_roff(MONRACE_IDX r_idx, BIT_FLAGS mode);
-extern void display_roff(MONRACE_IDX r_idx);
-extern void output_monster_spoiler(MONRACE_IDX r_idx, void(*roff_func)(TERM_COLOR attr, concptr str));
+extern void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode);
+extern void display_roff(player_type *player_ptr);
+extern void output_monster_spoiler(player_type *player_ptr, MONRACE_IDX r_idx, void(*roff_func)(TERM_COLOR attr, concptr str));
 extern concptr extract_note_dies(MONRACE_IDX r_idx);
 extern void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item);
 extern monsterrace_hook_type get_monster_hook(void);

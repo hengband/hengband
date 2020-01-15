@@ -187,13 +187,13 @@ void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult,
 * @param tmp 返すメッセージを格納する配列
 * @return なし
 */
-void set_damage(MONRACE_IDX r_idx, int SPELL_NUM, char* msg, char* tmp)
+void set_damage(player_type *player_ptr, MONRACE_IDX r_idx, int SPELL_NUM, char* msg, char* tmp)
 {
-	int base_damage = monspell_race_damage(p_ptr, SPELL_NUM, r_idx, BASE_DAM);
-	int dice_num = monspell_race_damage(p_ptr, SPELL_NUM, r_idx, DICE_NUM);
-	int dice_side = monspell_race_damage(p_ptr, SPELL_NUM, r_idx, DICE_SIDE);
-	int dice_mult = monspell_race_damage(p_ptr, SPELL_NUM, r_idx, DICE_MULT);
-	int dice_div = monspell_race_damage(p_ptr, SPELL_NUM, r_idx, DICE_DIV);
+	int base_damage = monspell_race_damage(player_ptr, SPELL_NUM, r_idx, BASE_DAM);
+	int dice_num = monspell_race_damage(player_ptr, SPELL_NUM, r_idx, DICE_NUM);
+	int dice_side = monspell_race_damage(player_ptr, SPELL_NUM, r_idx, DICE_SIDE);
+	int dice_mult = monspell_race_damage(player_ptr, SPELL_NUM, r_idx, DICE_MULT);
+	int dice_div = monspell_race_damage(player_ptr, SPELL_NUM, r_idx, DICE_DIV);
 	char dmg_str[80], dice_str[80];
 	dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div, dmg_str);
 	sprintf(dice_str, "(%s)", dmg_str);
@@ -215,7 +215,7 @@ void set_damage(MONRACE_IDX r_idx, int SPELL_NUM, char* msg, char* tmp)
  * left edge of the screen, on a cleared line, in which the recall is
  * to take place.  One extra blank line is left after the recall.
  */
-static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
+static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	monster_race    *r_ptr = &r_info[r_idx];
 	bool            old = FALSE;
@@ -653,15 +653,15 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 			long i, j;
 
 			/* calculate the integer exp part */
-			i = (long)r_ptr->mexp * r_ptr->level / (p_ptr->max_plv + 2) * 3 / 2;
+			i = (long)r_ptr->mexp * r_ptr->level / (player_ptr->max_plv + 2) * 3 / 2;
 
 			/* calculate the fractional exp part scaled by 100, */
 			/* must use long arithmetic to avoid overflow  */
-			j = ((((long)r_ptr->mexp * r_ptr->level % (p_ptr->max_plv + 2) * 3 / 2) *
-				(long)1000 / (p_ptr->max_plv + 2) + 5) / 10);
+			j = ((((long)r_ptr->mexp * r_ptr->level % (player_ptr->max_plv + 2) * 3 / 2) *
+				(long)1000 / (player_ptr->max_plv + 2) + 5) / 10);
 
 #ifdef JP
-			hooked_roff(format(" %d レベルのキャラクタにとって 約%ld.%02ld ポイントの経験となる。", p_ptr->lev, (long)i, (long)j));
+			hooked_roff(format(" %d レベルのキャラクタにとって 約%ld.%02ld ポイントの経験となる。", player_ptr->lev, (long)i, (long)j));
 #else
 
 			/* Mention the experience */
@@ -670,15 +670,15 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 			/* Take account of annoying English */
 			p = "th";
-			i = p_ptr->lev % 10;
-			if ((p_ptr->lev / 10) == 1) /* nothing */;
+			i = player_ptr->lev % 10;
+			if ((player_ptr->lev / 10) == 1) /* nothing */;
 			else if (i == 1) p = "st";
 			else if (i == 2) p = "nd";
 			else if (i == 3) p = "rd";
 
 			/* Take account of "leading vowels" in numbers */
 			q = "";
-			i = p_ptr->lev;
+			i = player_ptr->lev;
 			if ((i == 8) || (i == 11) || (i == 18)) q = "n";
 
 			/* Mention the dependance on the player's level */
@@ -784,7 +784,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	if (flags4 & RF4_SHRIEK) { vp[vn] = _("悲鳴で助けを求める", "shriek for help"); color[vn++] = TERM_L_WHITE; }
 	if (flags4 & RF4_ROCKET)
 	{
-		set_damage(r_idx, (MS_ROCKET), _("ロケット%sを発射する", "shoot a rocket%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_ROCKET), _("ロケット%sを発射する", "shoot a rocket%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_UMBER;
 	}
@@ -846,133 +846,133 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	vn = 0;
 	if (flags4 & (RF4_BR_ACID))
 	{
-		set_damage(r_idx, (MS_BR_ACID), _("酸%s", "acid%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_ACID), _("酸%s", "acid%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_GREEN;
 	}
 	if (flags4 & (RF4_BR_ELEC))
 	{
-		set_damage(r_idx, (MS_BR_ELEC), _("稲妻%s", "lightning%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_ELEC), _("稲妻%s", "lightning%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_BLUE;
 	}
 	if (flags4 & (RF4_BR_FIRE))
 	{
-		set_damage(r_idx, (MS_BR_FIRE), _("火炎%s", "fire%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_FIRE), _("火炎%s", "fire%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_RED;
 	}
 	if (flags4 & (RF4_BR_COLD))
 	{
-		set_damage(r_idx, (MS_BR_COLD), _("冷気%s", "frost%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_COLD), _("冷気%s", "frost%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
 	if (flags4 & (RF4_BR_POIS))
 	{
-		set_damage(r_idx, (MS_BR_POIS), _("毒%s", "poison%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_POIS), _("毒%s", "poison%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_GREEN;
 	}
 	if (flags4 & (RF4_BR_NETH))
 	{
-		set_damage(r_idx, (MS_BR_NETHER), _("地獄%s", "nether%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_NETHER), _("地獄%s", "nether%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_DARK;
 	}
 	if (flags4 & (RF4_BR_LITE))
 	{
-		set_damage(r_idx, (MS_BR_LITE), _("閃光%s", "light%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_LITE), _("閃光%s", "light%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_YELLOW;
 	}
 	if (flags4 & (RF4_BR_DARK))
 	{
-		set_damage(r_idx, (MS_BR_DARK), _("暗黒%s", "darkness%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_DARK), _("暗黒%s", "darkness%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_DARK;
 	}
 	if (flags4 & (RF4_BR_CONF))
 	{
-		set_damage(r_idx, (MS_BR_CONF), _("混乱%s", "confusion%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_CONF), _("混乱%s", "confusion%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_UMBER;
 	}
 	if (flags4 & (RF4_BR_SOUN))
 	{
-		set_damage(r_idx, (MS_BR_SOUND), _("轟音%s", "sound%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_SOUND), _("轟音%s", "sound%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_ORANGE;
 	}
 	if (flags4 & (RF4_BR_CHAO))
 	{
-		set_damage(r_idx, (MS_BR_CHAOS), _("カオス%s", "chaos%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_CHAOS), _("カオス%s", "chaos%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_VIOLET;
 	}
 	if (flags4 & (RF4_BR_DISE))
 	{
-		set_damage(r_idx, (MS_BR_DISEN), _("劣化%s", "disenchantment%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_DISEN), _("劣化%s", "disenchantment%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_VIOLET;
 	}
 	if (flags4 & (RF4_BR_NEXU))
 	{
-		set_damage(r_idx, (MS_BR_NEXUS), _("因果混乱%s", "nexus%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_NEXUS), _("因果混乱%s", "nexus%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_VIOLET;
 	}
 	if (flags4 & (RF4_BR_TIME))
 	{
-		set_damage(r_idx, (MS_BR_TIME), _("時間逆転%s", "time%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_TIME), _("時間逆転%s", "time%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_BLUE;
 	}
 	if (flags4 & (RF4_BR_INER))
 	{
-		set_damage(r_idx, (MS_BR_INERTIA), _("遅鈍%s", "inertia%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_INERTIA), _("遅鈍%s", "inertia%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_SLATE;
 	}
 	if (flags4 & (RF4_BR_GRAV))
 	{
-		set_damage(r_idx, (MS_BR_GRAVITY), _("重力%s", "gravity%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_GRAVITY), _("重力%s", "gravity%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_SLATE;
 	}
 	if (flags4 & (RF4_BR_SHAR))
 	{
-		set_damage(r_idx, (MS_BR_SHARDS), _("破片%s", "shards%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_SHARDS), _("破片%s", "shards%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_UMBER;
 	}
 	if (flags4 & (RF4_BR_PLAS))
 	{
-		set_damage(r_idx, (MS_BR_PLASMA), _("プラズマ%s", "plasma%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_PLASMA), _("プラズマ%s", "plasma%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_RED;
 	}
 	if (flags4 & (RF4_BR_WALL))
 	{
-		set_damage(r_idx, (MS_BR_FORCE), _("フォース%s", "force%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_FORCE), _("フォース%s", "force%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_UMBER;
 	}
 	if (flags4 & (RF4_BR_MANA))
 	{
-		set_damage(r_idx, (MS_BR_MANA), _("魔力%s", "mana%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_MANA), _("魔力%s", "mana%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_BLUE;
 	}
 	if (flags4 & (RF4_BR_NUKE))
 	{
-		set_damage(r_idx, (MS_BR_NUKE), _("放射性廃棄物%s", "toxic waste%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_NUKE), _("放射性廃棄物%s", "toxic waste%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_GREEN;
 	}
 	if (flags4 & (RF4_BR_DISI))
 	{
-		set_damage(r_idx, (MS_BR_DISI), _("分解%s", "disintegration%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BR_DISI), _("分解%s", "disintegration%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_SLATE;
 	}
@@ -1012,186 +1012,186 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	vn = 0;
 	if (a_ability_flags1 & (RF5_BA_ACID))
 	{
-		set_damage(r_idx, (MS_BALL_ACID), _("アシッド・ボール%s", "produce acid balls%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BALL_ACID), _("アシッド・ボール%s", "produce acid balls%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_GREEN;
 	}
 	if (a_ability_flags1 & (RF5_BA_ELEC))
 	{
-		set_damage(r_idx, (MS_BALL_ELEC), _("サンダー・ボール%s", "produce lightning balls%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BALL_ELEC), _("サンダー・ボール%s", "produce lightning balls%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_BLUE;
 	}
 	if (a_ability_flags1 & (RF5_BA_FIRE))
 	{
-		set_damage(r_idx, (MS_BALL_FIRE), _("ファイア・ボール%s", "produce fire balls%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BALL_FIRE), _("ファイア・ボール%s", "produce fire balls%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_RED;
 	}
 	if (a_ability_flags1 & (RF5_BA_COLD))
 	{
-		set_damage(r_idx, (MS_BALL_COLD), _("アイス・ボール%s", "produce frost balls%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BALL_COLD), _("アイス・ボール%s", "produce frost balls%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
 	if (a_ability_flags1 & (RF5_BA_POIS))
 	{
-		set_damage(r_idx, (MS_BALL_POIS), _("悪臭雲%s", "produce poison balls%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BALL_POIS), _("悪臭雲%s", "produce poison balls%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_GREEN;
 	}
 	if (a_ability_flags1 & (RF5_BA_NETH))
 	{
-		set_damage(r_idx, (MS_BALL_NETHER), _("地獄球%s", "produce nether balls%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BALL_NETHER), _("地獄球%s", "produce nether balls%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_DARK;
 	}
 	if (a_ability_flags1 & (RF5_BA_WATE))
 	{
-		set_damage(r_idx, (MS_BALL_WATER), _("ウォーター・ボール%s", "produce water balls%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BALL_WATER), _("ウォーター・ボール%s", "produce water balls%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_BLUE;
 	}
 	if (flags4 & (RF4_BA_NUKE))
 	{
-		set_damage(r_idx, (MS_BALL_NUKE), _("放射能球%s", "produce balls of radiation%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BALL_NUKE), _("放射能球%s", "produce balls of radiation%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_GREEN;
 	}
 	if (a_ability_flags1 & (RF5_BA_MANA))
 	{
-		set_damage(r_idx, (MS_BALL_MANA), _("魔力の嵐%s", "invoke mana storms%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BALL_MANA), _("魔力の嵐%s", "invoke mana storms%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_BLUE;
 	}
 	if (a_ability_flags1 & (RF5_BA_DARK))
 	{
-		set_damage(r_idx, (MS_BALL_DARK), _("暗黒の嵐%s", "invoke darkness storms%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BALL_DARK), _("暗黒の嵐%s", "invoke darkness storms%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_DARK;
 	}
 	if (a_ability_flags1 & (RF5_BA_LITE))
 	{
-		set_damage(r_idx, (MS_STARBURST), _("スターバースト%s", "invoke starburst%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_STARBURST), _("スターバースト%s", "invoke starburst%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_YELLOW;
 	}
 	if (flags4 & (RF4_BA_CHAO))
 	{
-		set_damage(r_idx, (MS_BALL_CHAOS), _("純ログルス%s", "invoke raw Logrus%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BALL_CHAOS), _("純ログルス%s", "invoke raw Logrus%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_VIOLET;
 	}
 	if (a_ability_flags2 & (RF6_HAND_DOOM)) { vp[vn] = _("破滅の手(40%-60%)", "invoke the Hand of Doom(40%-60%)"); color[vn++] = TERM_VIOLET; }
 	if (a_ability_flags2 & (RF6_PSY_SPEAR))
 	{
-		set_damage(r_idx, (MS_PSY_SPEAR), _("光の剣%s", "psycho-spear%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_PSY_SPEAR), _("光の剣%s", "psycho-spear%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_YELLOW;
 	}
 	if (a_ability_flags1 & (RF5_DRAIN_MANA))
 	{
-		set_damage(r_idx, (MS_DRAIN_MANA), _("魔力吸収%s", "drain mana%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_DRAIN_MANA), _("魔力吸収%s", "drain mana%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_SLATE;
 	}
 	if (a_ability_flags1 & (RF5_MIND_BLAST))
 	{
-		set_damage(r_idx, (MS_MIND_BLAST), _("精神攻撃%s", "cause mind blasting%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_MIND_BLAST), _("精神攻撃%s", "cause mind blasting%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_RED;
 	}
 	if (a_ability_flags1 & (RF5_BRAIN_SMASH))
 	{
-		set_damage(r_idx, (MS_BRAIN_SMASH), _("脳攻撃%s", "cause brain smashing%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BRAIN_SMASH), _("脳攻撃%s", "cause brain smashing%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_RED;
 	}
 	if (a_ability_flags1 & (RF5_CAUSE_1))
 	{
-		set_damage(r_idx, (MS_CAUSE_1),
+		set_damage(player_ptr, r_idx, (MS_CAUSE_1),
 			_("軽傷＋呪い%s", "cause light wounds and cursing%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
 	if (a_ability_flags1 & (RF5_CAUSE_2))
 	{
-		set_damage(r_idx, (MS_CAUSE_2),
+		set_damage(player_ptr, r_idx, (MS_CAUSE_2),
 			_("重傷＋呪い%s", "cause serious wounds and cursing%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
 	if (a_ability_flags1 & (RF5_CAUSE_3))
 	{
-		set_damage(r_idx, (MS_CAUSE_3),
+		set_damage(player_ptr, r_idx, (MS_CAUSE_3),
 			_("致命傷＋呪い%s", "cause critical wounds and cursing%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
 	if (a_ability_flags1 & (RF5_CAUSE_4))
 	{
-		set_damage(r_idx, (MS_CAUSE_4),
+		set_damage(player_ptr, r_idx, (MS_CAUSE_4),
 			_("秘孔を突く%s", "cause mortal wounds%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
 	if (a_ability_flags1 & (RF5_BO_ACID))
 	{
-		set_damage(r_idx, (MS_BOLT_ACID), _("アシッド・ボルト%s", "produce acid bolts%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BOLT_ACID), _("アシッド・ボルト%s", "produce acid bolts%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_GREEN;
 	}
 	if (a_ability_flags1 & (RF5_BO_ELEC))
 	{
-		set_damage(r_idx, (MS_BOLT_ELEC), _("サンダー・ボルト%s", "produce lightning bolts%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BOLT_ELEC), _("サンダー・ボルト%s", "produce lightning bolts%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_BLUE;
 	}
 	if (a_ability_flags1 & (RF5_BO_FIRE))
 	{
-		set_damage(r_idx, (MS_BOLT_FIRE), _("ファイア・ボルト%s", "produce fire bolts%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BOLT_FIRE), _("ファイア・ボルト%s", "produce fire bolts%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_RED;
 	}
 	if (a_ability_flags1 & (RF5_BO_COLD))
 	{
-		set_damage(r_idx, (MS_BOLT_COLD), _("アイス・ボルト%s", "produce frost bolts%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BOLT_COLD), _("アイス・ボルト%s", "produce frost bolts%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_WHITE;
 	}
 	if (a_ability_flags1 & (RF5_BO_NETH))
 	{
-		set_damage(r_idx, (MS_BOLT_NETHER), _("地獄の矢%s", "produce nether bolts%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BOLT_NETHER), _("地獄の矢%s", "produce nether bolts%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_DARK;
 	}
 	if (a_ability_flags1 & (RF5_BO_WATE))
 	{
-		set_damage(r_idx, (MS_BOLT_WATER), _("ウォーター・ボルト%s", "produce water bolts%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BOLT_WATER), _("ウォーター・ボルト%s", "produce water bolts%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_BLUE;
 	}
 	if (a_ability_flags1 & (RF5_BO_MANA))
 	{
-		set_damage(r_idx, (MS_BOLT_MANA), _("魔力の矢%s", "produce mana bolts%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BOLT_MANA), _("魔力の矢%s", "produce mana bolts%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_BLUE;
 	}
 	if (a_ability_flags1 & (RF5_BO_PLAS))
 	{
-		set_damage(r_idx, (MS_BOLT_PLASMA), _("プラズマ・ボルト%s", "produce plasma bolts%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BOLT_PLASMA), _("プラズマ・ボルト%s", "produce plasma bolts%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_L_RED;
 	}
 	if (a_ability_flags1 & (RF5_BO_ICEE))
 	{
-		set_damage(r_idx, (MS_BOLT_ICE), _("極寒の矢%s", "produce ice bolts%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_BOLT_ICE), _("極寒の矢%s", "produce ice bolts%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_WHITE;
 	}
 	if (a_ability_flags1 & (RF5_MISSILE))
 	{
-		set_damage(r_idx, (MS_MAGIC_MISSILE), _("マジックミサイル%s", "produce magic missiles%s"), tmp_msg[vn]);
+		set_damage(player_ptr, r_idx, (MS_MAGIC_MISSILE), _("マジックミサイル%s", "produce magic missiles%s"), tmp_msg[vn]);
 		vp[vn] = tmp_msg[vn];
 		color[vn++] = TERM_SLATE;
 	}
@@ -1213,7 +1213,7 @@ static void roff_aux(MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 	if (a_ability_flags2 & (RF6_DARKNESS))
 	{
-		if ((p_ptr->pclass != CLASS_NINJA) || (r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (r_ptr->flags7 & RF7_DARK_MASK))
+		if ((player_ptr->pclass != CLASS_NINJA) || (r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (r_ptr->flags7 & RF7_DARK_MASK))
 		{
 			vp[vn] = _("暗闇", "create darkness"); color[vn++] = TERM_L_DARK;
 		}
@@ -2072,7 +2072,7 @@ void roff_top(MONRACE_IDX r_idx)
  * @param mode 表示オプション
  * @return なし
  */
-void screen_roff(MONRACE_IDX r_idx, BIT_FLAGS mode)
+void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	msg_erase();
 
@@ -2082,7 +2082,7 @@ void screen_roff(MONRACE_IDX r_idx, BIT_FLAGS mode)
 	hook_c_roff = c_roff;
 
 	/* Recall monster */
-	roff_aux(r_idx, mode);
+	roff_aux(player_ptr, r_idx, mode);
 
 	/* Describe monster */
 	roff_top(r_idx);
@@ -2097,8 +2097,9 @@ void screen_roff(MONRACE_IDX r_idx, BIT_FLAGS mode)
  * @param r_idx モンスターの種族ID
  * @return なし
  */
-void display_roff(MONRACE_IDX r_idx)
+void display_roff(player_type *player_ptr)
 {
+	MONRACE_IDX r_idx = player_ptr->monster_race_idx;
 	int y;
 
 	/* Erase the window */
@@ -2114,7 +2115,7 @@ void display_roff(MONRACE_IDX r_idx)
 	hook_c_roff = c_roff;
 
 	/* Recall monster */
-	roff_aux(r_idx, 0);
+	roff_aux(player_ptr, r_idx, 0);
 
 	/* Describe monster */
 	roff_top(r_idx);
@@ -2128,12 +2129,12 @@ void display_roff(MONRACE_IDX r_idx)
  * @param roff_func 出力処理を行う関数ポインタ
  * @return なし
  */
-void output_monster_spoiler(MONRACE_IDX r_idx, void(*roff_func)(TERM_COLOR attr, concptr str))
+void output_monster_spoiler(player_type *player_ptr, MONRACE_IDX r_idx, void(*roff_func)(TERM_COLOR attr, concptr str))
 {
 	hook_c_roff = roff_func;
 
 	/* Recall monster */
-	roff_aux(r_idx, 0x03);
+	roff_aux(player_ptr, r_idx, 0x03);
 }
 
 

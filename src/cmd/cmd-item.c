@@ -1384,7 +1384,7 @@ void do_cmd_query_symbol(player_type *creature_ptr)
 				screen_save();
 
 				/* Recall on screen */
-				screen_roff(who[i], 0);
+				screen_roff(creature_ptr, who[i], 0);
 			}
 
 			/* Hack -- Begin the prompt */

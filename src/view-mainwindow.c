@@ -2009,7 +2009,7 @@ static void fix_monster(player_type *player_ptr)
 		Term_activate(angband_term[j]);
 
 		/* Display monster race info */
-		if (player_ptr->monster_race_idx) display_roff(player_ptr->monster_race_idx);
+		if (player_ptr->monster_race_idx) display_roff(player_ptr);
 		Term_fresh();
 		Term_activate(old);
 	}

@@ -603,7 +603,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 				screen_save();
 
 				/* Recall on screen */
-				screen_roff(m_ptr->ap_r_idx, 0);
+				screen_roff(subject_ptr, m_ptr->ap_r_idx, 0);
 
 				/* Hack -- Complete the prompt (again) */
 				Term_addstr(-1, TERM_WHITE, format(_("  [r思 %s%s]", "  [r,%s%s]"), x_info, info));

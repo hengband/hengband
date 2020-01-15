@@ -1728,7 +1728,7 @@ void do_cmd_debug(player_type *creature_ptr)
 #ifdef ALLOW_SPOILERS
 		/* Hack -- Generate Spoilers */
 	case '"':
-		do_cmd_spoilers();
+		do_cmd_spoilers(creature_ptr);
 		break;
 #endif /* ALLOW_SPOILERS */
 
