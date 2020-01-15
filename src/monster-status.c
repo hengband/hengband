@@ -1384,7 +1384,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 		}
 
 		/* Generate treasure */
-		monster_death(m_idx, TRUE);
+		monster_death(target_ptr, m_idx, TRUE);
 
 		/* Mega hack : replace IKETA to BIKETAL */
 		if ((m_ptr->r_idx == MON_IKETA) && !(target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out))

@@ -3813,7 +3813,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			if (who > 0) monster_gain_exp(caster_ptr, who, m_ptr->r_idx);
 
 			/* Generate treasure, etc */
-			monster_death(g_ptr->m_idx, FALSE);
+			monster_death(caster_ptr, g_ptr->m_idx, FALSE);
 
 
 			delete_monster_idx(g_ptr->m_idx);

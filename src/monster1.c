@@ -2526,7 +2526,7 @@ static OBJECT_SUBTYPE_VALUE get_coin_type(MONRACE_IDX r_idx)
  * it drops all of its objects, which may disappear in crowded rooms.
  * </pre>
  */
-void monster_death(MONSTER_IDX m_idx, bool drop_item)
+void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 {
 	int i, j;
 	POSITION y, x;
@@ -2535,12 +2535,11 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	int dump_gold = 0;
 	int number = 0;
 
-	// todo ここをplayer_type に差し替えれば少しは楽ができる
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	bool visible = ((m_ptr->ml && !p_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE));
+	bool visible = ((m_ptr->ml && !player_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE));
 
 	u32b mo_mode = 0L;
 
@@ -2553,7 +2552,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	object_type *q_ptr;
 
 	bool drop_chosen_item = drop_item && !cloned && !floor_ptr->inside_arena
-		&& !p_ptr->phase_out && !is_pet(m_ptr);
+		&& !player_ptr->phase_out && !is_pet(m_ptr);
 
 	/* The caster is dead? */
 	if (current_world_ptr->timewalk_m_idx && current_world_ptr->timewalk_m_idx == m_idx) current_world_ptr->timewalk_m_idx = 0;
@@ -2561,7 +2560,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	/* Notice changes in view */
 	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 	{
-		p_ptr->update |= (PU_MON_LITE);
+		player_ptr->update |= (PU_MON_LITE);
 	}
 
 	y = m_ptr->fy;
@@ -2572,7 +2571,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		GAME_TEXT m_name[MAX_NLEN];
 
 		monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-		exe_write_diary(p_ptr, DIARY_NAMED_PET, 3, m_name);
+		exe_write_diary(player_ptr, DIARY_NAMED_PET, 3, m_name);
 	}
 
 	/* Let monsters explode! */
@@ -2586,7 +2585,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			DICE_SID d_side = r_ptr->blow[i].d_side;
 			HIT_POINT damage = damroll(d_dice, d_side);
 
-			project(p_ptr, m_idx, 3, y, x, damage, typ, flg, -1);
+			project(player_ptr, m_idx, 3, y, x, damage, typ, flg, -1);
 			break;
 		}
 	}
@@ -2597,14 +2596,14 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		r_ptr = &r_info[m_ptr->r_idx];
 	}
 
-	check_quest_completion(p_ptr, m_ptr);
+	check_quest_completion(player_ptr, m_ptr);
 
 	/* Handle the possibility of player vanquishing arena combatant -KMW- */
 	if (floor_ptr->inside_arena && !is_pet(m_ptr))
 	{
-		p_ptr->exit_bldg = TRUE;
+		player_ptr->exit_bldg = TRUE;
 
-		if (p_ptr->arena_number > MAX_ARENA_MONS)
+		if (player_ptr->arena_number > MAX_ARENA_MONS)
 		{
 			msg_print(_("素晴らしい！君こそ真の勝利者だ。", "You are a Genuine Champion!"));
 		}
@@ -2613,31 +2612,31 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			msg_print(_("勝利！チャンピオンへの道を進んでいる。", "Victorious! You're on your way to becoming Champion."));
 		}
 
-		if (arena_info[p_ptr->arena_number].tval)
+		if (arena_info[player_ptr->arena_number].tval)
 		{
 			q_ptr = &forge;
 
 			/* Prepare to make a prize */
-			object_prep(q_ptr, lookup_kind(arena_info[p_ptr->arena_number].tval, arena_info[p_ptr->arena_number].sval));
-			apply_magic(p_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
-			(void)drop_near(p_ptr, q_ptr, -1, y, x);
+			object_prep(q_ptr, lookup_kind(arena_info[player_ptr->arena_number].tval, arena_info[player_ptr->arena_number].sval));
+			apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
+			(void)drop_near(player_ptr, q_ptr, -1, y, x);
 		}
 
-		if (p_ptr->arena_number > MAX_ARENA_MONS) p_ptr->arena_number++;
-		p_ptr->arena_number++;
+		if (player_ptr->arena_number > MAX_ARENA_MONS) player_ptr->arena_number++;
+		player_ptr->arena_number++;
 		if (record_arena)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 
 			monster_desc(m_name, m_ptr, MD_WRONGDOER_NAME);
 
-			exe_write_diary(p_ptr, DIARY_ARENA, p_ptr->arena_number, m_name);
+			exe_write_diary(player_ptr, DIARY_ARENA, player_ptr->arena_number, m_name);
 		}
 	}
 
-	if (m_idx == p_ptr->riding)
+	if (m_idx == player_ptr->riding)
 	{
-		if (rakuba(p_ptr, -1, FALSE))
+		if (rakuba(player_ptr, -1, FALSE))
 		{
 			msg_print(_("地面に落とされた。", "You have fallen from your riding pet."));
 		}
@@ -2646,7 +2645,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	/* Drop a dead corpse? */
 	if (one_in_(r_ptr->flags1 & RF1_UNIQUE ? 1 : 4) &&
 		(r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) &&
-		!(floor_ptr->inside_arena || p_ptr->phase_out || cloned || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
+		!(floor_ptr->inside_arena || player_ptr->phase_out || cloned || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr))))
 	{
 		/* Assume skeleton */
 		bool corpse = FALSE;
@@ -2678,10 +2677,10 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		/* Prepare to make an object */
 		object_prep(q_ptr, lookup_kind(TV_CORPSE, (corpse ? SV_CORPSE : SV_SKELETON)));
 
-		apply_magic(p_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
+		apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
 
 		q_ptr->pval = m_ptr->r_idx;
-		(void)drop_near(p_ptr, q_ptr, -1, y, x);
+		(void)drop_near(player_ptr, q_ptr, -1, y, x);
 	}
 
 	/* Drop objects being carried */
@@ -2694,7 +2693,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	{
 	case MON_PINK_HORROR:
 		/* Pink horrors are replaced with 2 Blue horrors */
-		if (!(floor_ptr->inside_arena || p_ptr->phase_out))
+		if (!(floor_ptr->inside_arena || player_ptr->phase_out))
 		{
 			bool notice = FALSE;
 
@@ -2708,7 +2707,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_BLUE_HORROR, mode))
 				{
-					if (player_can_see_bold(p_ptr, wy, wx)) notice = TRUE;
+					if (player_can_see_bold(player_ptr, wy, wx)) notice = TRUE;
 				}
 			}
 
@@ -2725,8 +2724,8 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			/* Prepare to make a Blade of Chaos */
 			object_prep(q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
 
-			apply_magic(p_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART | mo_mode);
-			(void)drop_near(p_ptr, q_ptr, -1, y, x);
+			apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART | mo_mode);
+			(void)drop_near(player_ptr, q_ptr, -1, y, x);
 		}
 		break;
 
@@ -2743,8 +2742,8 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				get_obj_num_hook = kind_is_book;
 
 			/* Make a book */
-			make_object(p_ptr, q_ptr, mo_mode);
-			(void)drop_near(p_ptr, q_ptr, -1, y, x);
+			make_object(player_ptr, q_ptr, mo_mode);
+			(void)drop_near(player_ptr, q_ptr, -1, y, x);
 		}
 		break;
 
@@ -2753,7 +2752,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		 * Mega^3-hack: killing a 'Warrior of the Dawn' is likely to
 		 * spawn another in the fallen one's place!
 		 */
-		if (!floor_ptr->inside_arena && !p_ptr->phase_out)
+		if (!floor_ptr->inside_arena && !player_ptr->phase_out)
 		{
 			if (!one_in_(7))
 			{
@@ -2763,7 +2762,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 				do
 				{
-					scatter(p_ptr, &wy, &wx, y, x, 20, 0);
+					scatter(player_ptr, &wy, &wx, y, x, 20, 0);
 				} while (!(in_bounds(floor_ptr, wy, wx) && cave_empty_bold2(floor_ptr, wy, wx)) && --attempts);
 
 				if (attempts > 0)
@@ -2773,7 +2772,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 					if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_DAWN, mode))
 					{
-						if (player_can_see_bold(p_ptr, wy, wx))
+						if (player_can_see_bold(player_ptr, wy, wx))
 							msg_print(_("新たな戦士が現れた！", "A new warrior steps forth!"));
 					}
 				}
@@ -2785,7 +2784,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		/* One more ultra-hack: An Unmaker goes out with a big bang! */
 	{
 		BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-		(void)project(p_ptr, m_idx, 6, y, x, 100, GF_CHAOS, flg, -1);
+		(void)project(player_ptr, m_idx, 6, y, x, 100, GF_CHAOS, flg, -1);
 	}
 	break;
 
@@ -2793,7 +2792,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	case MON_MORGOTH:
 	case MON_ONE_RING:
 		/* Reward for "lazy" player */
-		if (p_ptr->pseikaku == SEIKAKU_NAMAKE)
+		if (player_ptr->pseikaku == SEIKAKU_NAMAKE)
 		{
 			ARTIFACT_IDX a_idx = 0;
 			artifact_type *a_ptr = NULL;
@@ -2818,12 +2817,12 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				a_ptr = &a_info[a_idx];
 			} while (a_ptr->cur_num);
 
-			if (create_named_art(p_ptr, a_idx, y, x))
+			if (create_named_art(player_ptr, a_idx, y, x))
 			{
 				a_ptr->cur_num = 1;
 
 				/* Hack -- Memorize location of artifact in saved floors */
-				if (current_world_ptr->character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
+				if (current_world_ptr->character_dungeon) a_ptr->floor_id = player_ptr->floor_id;
 			}
 			else if (!preserve_mode) a_ptr->cur_num = 1;
 		}
@@ -2840,8 +2839,8 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		q_ptr->name1 = ART_GROND;
 
 		/* Mega-Hack -- Actually create "Grond" */
-		apply_magic(p_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
-		(void)drop_near(p_ptr, q_ptr, -1, y, x);
+		apply_magic(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
+		(void)drop_near(player_ptr, q_ptr, -1, y, x);
 		q_ptr = &forge;
 
 		/* Mega-Hack -- Prepare to make "Chaos" */
@@ -2851,8 +2850,8 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		q_ptr->name1 = ART_CHAOS;
 
 		/* Mega-Hack -- Actually create "Chaos" */
-		apply_magic(p_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
-		(void)drop_near(p_ptr, q_ptr, -1, y, x);
+		apply_magic(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
+		(void)drop_near(player_ptr, q_ptr, -1, y, x);
 		break;
 
 	case MON_B_DEATH_SWORD:
@@ -2862,7 +2861,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 			/* Prepare to make a broken sword */
 			object_prep(q_ptr, lookup_kind(TV_SWORD, randint1(2)));
-			(void)drop_near(p_ptr, q_ptr, -1, y, x);
+			(void)drop_near(player_ptr, q_ptr, -1, y, x);
 		}
 		break;
 
@@ -2876,15 +2875,15 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 			/* Prepare to make a Can of Toys */
 			object_prep(q_ptr, lookup_kind(TV_CHEST, SV_CHEST_KANDUME));
 
-			apply_magic(p_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
-			(void)drop_near(p_ptr, q_ptr, -1, y, x);
+			apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
+			(void)drop_near(player_ptr, q_ptr, -1, y, x);
 		}
 		break;
 
 	case MON_ROLENTO:
 	{
 		BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-		(void)project(p_ptr, m_idx, 3, y, x, damroll(20, 10), GF_FIRE, flg, -1);
+		(void)project(player_ptr, m_idx, 3, y, x, damroll(20, 10), GF_FIRE, flg, -1);
 	}
 	break;
 
@@ -2903,8 +2902,8 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				get_obj_num_hook = kind_is_cloak;
 
 				/* Make a cloak */
-				make_object(p_ptr, q_ptr, mo_mode);
-				(void)drop_near(p_ptr, q_ptr, -1, y, x);
+				make_object(player_ptr, q_ptr, mo_mode);
+				(void)drop_near(player_ptr, q_ptr, -1, y, x);
 			}
 			break;
 
@@ -2918,8 +2917,8 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				get_obj_num_hook = kind_is_polearm;
 
 				/* Make a poleweapon */
-				make_object(p_ptr, q_ptr, mo_mode);
-				(void)drop_near(p_ptr, q_ptr, -1, y, x);
+				make_object(player_ptr, q_ptr, mo_mode);
+				(void)drop_near(player_ptr, q_ptr, -1, y, x);
 			}
 			break;
 
@@ -2933,8 +2932,8 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				get_obj_num_hook = kind_is_armor;
 
 				/* Make a hard armor */
-				make_object(p_ptr, q_ptr, mo_mode);
-				(void)drop_near(p_ptr, q_ptr, -1, y, x);
+				make_object(player_ptr, q_ptr, mo_mode);
+				(void)drop_near(player_ptr, q_ptr, -1, y, x);
 			}
 			break;
 
@@ -2948,8 +2947,8 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				get_obj_num_hook = kind_is_hafted;
 
 				/* Make a hafted weapon */
-				make_object(p_ptr, q_ptr, mo_mode);
-				(void)drop_near(p_ptr, q_ptr, -1, y, x);
+				make_object(player_ptr, q_ptr, mo_mode);
+				(void)drop_near(player_ptr, q_ptr, -1, y, x);
 			}
 			break;
 
@@ -2963,8 +2962,8 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				get_obj_num_hook = kind_is_sword;
 
 				/* Make a sword */
-				make_object(p_ptr, q_ptr, mo_mode);
-				(void)drop_near(p_ptr, q_ptr, -1, y, x);
+				make_object(player_ptr, q_ptr, mo_mode);
+				(void)drop_near(player_ptr, q_ptr, -1, y, x);
 			}
 			break;
 		}
@@ -2990,40 +2989,40 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 			if (!a_ptr->cur_num)
 			{
-				if (create_named_art(p_ptr, a_idx, y, x))
+				if (create_named_art(player_ptr, a_idx, y, x))
 				{
 					a_ptr->cur_num = 1;
 
 					/* Hack -- Memorize location of artifact in saved floors */
-					if (current_world_ptr->character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
+					if (current_world_ptr->character_dungeon) a_ptr->floor_id = player_ptr->floor_id;
 				}
 				else if (!preserve_mode) a_ptr->cur_num = 1;
 			}
 		}
 
-		if ((r_ptr->flags7 & RF7_GUARDIAN) && (d_info[p_ptr->dungeon_idx].final_guardian == m_ptr->r_idx))
+		if ((r_ptr->flags7 & RF7_GUARDIAN) && (d_info[player_ptr->dungeon_idx].final_guardian == m_ptr->r_idx))
 		{
-			KIND_OBJECT_IDX k_idx = d_info[p_ptr->dungeon_idx].final_object ? d_info[p_ptr->dungeon_idx].final_object
+			KIND_OBJECT_IDX k_idx = d_info[player_ptr->dungeon_idx].final_object ? d_info[player_ptr->dungeon_idx].final_object
 				: lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
 
-			if (d_info[p_ptr->dungeon_idx].final_artifact)
+			if (d_info[player_ptr->dungeon_idx].final_artifact)
 			{
-				a_idx = d_info[p_ptr->dungeon_idx].final_artifact;
+				a_idx = d_info[player_ptr->dungeon_idx].final_artifact;
 				artifact_type *a_ptr = &a_info[a_idx];
 
 				if (!a_ptr->cur_num)
 				{
-					if (create_named_art(p_ptr, a_idx, y, x))
+					if (create_named_art(player_ptr, a_idx, y, x))
 					{
 						a_ptr->cur_num = 1;
 
 						/* Hack -- Memorize location of artifact in saved floors */
-						if (current_world_ptr->character_dungeon) a_ptr->floor_id = p_ptr->floor_id;
+						if (current_world_ptr->character_dungeon) a_ptr->floor_id = player_ptr->floor_id;
 					}
 					else if (!preserve_mode) a_ptr->cur_num = 1;
 
 					/* Prevent rewarding both artifact and "default" object */
-					if (!d_info[p_ptr->dungeon_idx].final_object) k_idx = 0;
+					if (!d_info[player_ptr->dungeon_idx].final_object) k_idx = 0;
 				}
 			}
 
@@ -3034,10 +3033,10 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 				/* Prepare to make a reward */
 				object_prep(q_ptr, k_idx);
 
-				apply_magic(p_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD);
-				(void)drop_near(p_ptr, q_ptr, -1, y, x);
+				apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD);
+				(void)drop_near(player_ptr, q_ptr, -1, y, x);
 			}
-			msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_name + d_info[p_ptr->dungeon_idx].name);
+			msg_format(_("あなたは%sを制覇した！", "You have conquered %s!"), d_name + d_info[player_ptr->dungeon_idx].name);
 		}
 	}
 
@@ -3052,7 +3051,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 	if (cloned && !(r_ptr->flags1 & RF1_UNIQUE))
 		number = 0; /* Clones drop no stuff unless Cloning Pits */
 
-	if (is_pet(m_ptr) || p_ptr->phase_out || floor_ptr->inside_arena)
+	if (is_pet(m_ptr) || player_ptr->phase_out || floor_ptr->inside_arena)
 		number = 0; /* Pets drop no stuff */
 	if (!drop_item && (r_ptr->d_char != '$')) number = 0;
 
@@ -3078,11 +3077,11 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		}
 		else
 		{
-			if (!make_object(p_ptr, q_ptr, mo_mode)) continue;
+			if (!make_object(player_ptr, q_ptr, mo_mode)) continue;
 			dump_item++;
 		}
 
-		(void)drop_near(p_ptr, q_ptr, -1, y, x);
+		(void)drop_near(player_ptr, q_ptr, -1, y, x);
 	}
 
 	/* Reset the object level */
@@ -3101,7 +3100,7 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 
 	/* Only process "Quest Monsters" */
 	if (!(r_ptr->flags1 & RF1_QUESTOR)) return;
-	if (p_ptr->phase_out) return;
+	if (player_ptr->phase_out) return;
 
 	/* Winner? */
 	if ((m_ptr->r_idx == MON_SERPENT) && !cloned)
@@ -3110,13 +3109,13 @@ void monster_death(MONSTER_IDX m_idx, bool drop_item)
 		current_world_ptr->total_winner = TRUE;
 
 		/* Redraw the "title" */
-		p_ptr->redraw |= (PR_TITLE);
+		player_ptr->redraw |= (PR_TITLE);
 
 		play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_FINAL_QUEST_CLEAR);
 
-		exe_write_diary(p_ptr, DIARY_DESCRIPTION, 0, _("見事に変愚蛮怒の勝利者となった！", "become *WINNER* of Hengband finely!"));
+		exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("見事に変愚蛮怒の勝利者となった！", "become *WINNER* of Hengband finely!"));
 
-		admire_from_patron(p_ptr);
+		admire_from_patron(player_ptr);
 
 		/* Congratulations */
 		msg_print(_("*** おめでとう ***", "*** CONGRATULATIONS ***"));

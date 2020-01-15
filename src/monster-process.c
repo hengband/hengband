@@ -1331,7 +1331,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			}
 
 			/* Generate treasure, etc */
-			monster_death(m_idx, FALSE);
+			monster_death(target_ptr, m_idx, FALSE);
 
 			delete_monster_idx(m_idx);
 			if (sad)
