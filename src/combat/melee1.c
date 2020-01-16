@@ -1240,7 +1240,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
 		k, m_ptr->hp - k, m_ptr->maxhp, m_ptr->max_maxhp);
 
 	/* Anger the monster */
-	if (k > 0) anger_monster(m_ptr);
+	if (k > 0) anger_monster(attacker_ptr, m_ptr);
 
 	/* Damage, check for fear and mdeath */
 	switch (attack)
@@ -1861,7 +1861,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 			int tmp = (10 + randint1(15) + attacker_ptr->lev / 5);
 
 			k = 0;
-			anger_monster(m_ptr);
+			anger_monster(attacker_ptr, m_ptr);
 
 			if (!(r_ptr->flags3 & (RF3_NO_STUN)))
 			{
@@ -1952,7 +1952,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 		}
 
 		/* Anger the monster */
-		if (k > 0) anger_monster(m_ptr);
+		if (k > 0) anger_monster(attacker_ptr, m_ptr);
 
 		touch_zap_player(m_ptr, attacker_ptr);
 

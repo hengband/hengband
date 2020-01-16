@@ -751,7 +751,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 						message_pain(c_mon_ptr->m_idx, tdam);
 
 						/* Anger the monster */
-						if (tdam > 0) anger_monster(m_ptr);
+						if (tdam > 0) anger_monster(shooter_ptr, m_ptr);
 
 						if (fear && m_ptr->ml)
 						{

@@ -446,7 +446,7 @@ extern monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION
 extern void set_friendly(monster_type *m_ptr);
 extern void set_pet(monster_type *m_ptr);
 extern void set_hostile(monster_type *m_ptr);
-extern void anger_monster(monster_type *m_ptr);
+extern void anger_monster(player_type *player_ptr, monster_type *m_ptr);
 
 /*
  * Bit flags for the *_can_enter() and monster_can_cross_terrain()

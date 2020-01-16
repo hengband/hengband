@@ -2257,9 +2257,9 @@ void set_hostile(monster_type *m_ptr)
  * @param m_ptr モンスター情報構造体の参照ポインタ
  * @return なし
  */
-void anger_monster(monster_type *m_ptr)
+void anger_monster(player_type *player_ptr, monster_type *m_ptr)
 {
-	if (p_ptr->phase_out) return;
+	if (player_ptr->phase_out) return;
 	if (is_friendly(m_ptr))
 	{
 		GAME_TEXT m_name[MAX_NLEN];
@@ -2269,10 +2269,10 @@ void anger_monster(monster_type *m_ptr)
 
 		set_hostile(m_ptr);
 
-		chg_virtue(p_ptr, V_INDIVIDUALISM, 1);
-		chg_virtue(p_ptr, V_HONOUR, -1);
-		chg_virtue(p_ptr, V_JUSTICE, -1);
-		chg_virtue(p_ptr, V_COMPASSION, -1);
+		chg_virtue(player_ptr, V_INDIVIDUALISM, 1);
+		chg_virtue(player_ptr, V_HONOUR, -1);
+		chg_virtue(player_ptr, V_JUSTICE, -1);
+		chg_virtue(player_ptr, V_COMPASSION, -1);
 	}
 }
 

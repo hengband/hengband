@@ -3875,7 +3875,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		else
 		{
 			/* HACK - anger the monster before showing the sleep message */
-			if (do_sleep) anger_monster(m_ptr);
+			if (do_sleep) anger_monster(caster_ptr, m_ptr);
 
 			/* Give detailed messages if visible or destroyed */
 			if (note && seen_msg)
@@ -3889,7 +3889,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 			/* Anger monsters */
 			if (((dam > 0) || get_angry) && !do_sleep)
-				anger_monster(m_ptr);
+				anger_monster(caster_ptr, m_ptr);
 
 			if ((fear || do_fear) && seen)
 			{

@@ -2647,7 +2647,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 
 					/* Anger the monster */
 					if ((tdam > 0) && !object_is_potion(q_ptr))
-						anger_monster(m_ptr);
+						anger_monster(creature_ptr, m_ptr);
 
 					if (fear && m_ptr->ml)
 					{
