@@ -5719,7 +5719,7 @@ void do_cmd_store(player_type *player_ptr)
 		/* Prompt */
 		prt(_("コマンド:", "You may: "), 20 + xtra_stock, 0);
 
-		request_command(TRUE);
+		request_command(player_ptr, TRUE);
 
 		/* Process the command */
 		store_process_command(player_ptr);

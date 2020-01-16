@@ -4725,7 +4725,7 @@ static void process_player(player_type *creature_ptr)
 
 			can_save = TRUE;
 			/* Get a command (normal) */
-			request_command(FALSE);
+			request_command(creature_ptr, FALSE);
 			can_save = FALSE;
 
 			/* Process the command */

@@ -4411,8 +4411,8 @@ static char inkey_from_menu(void)
 /*
  * Request a command from the user.
  *
- * Sets p_ptr->command_cmd, p_ptr->command_dir, p_ptr->command_rep,
- * p_ptr->command_arg.  May modify p_ptr->command_new.
+ * Sets player_ptr->command_cmd, player_ptr->command_dir, player_ptr->command_rep,
+ * player_ptr->command_arg.  May modify player_ptr->command_new.
  *
  * Note that "caret" ("^") is treated specially, and is used to
  * allow manual input of control characters.  This can be used
@@ -4425,9 +4425,9 @@ static char inkey_from_menu(void)
  * Note that this command is used both in the dungeon and in
  * stores, and must be careful to work in both situations.
  *
- * Note that "p_ptr->command_new" may not work any more.
+ * Note that "player_ptr->command_new" may not work any more.
  */
-void request_command(int shopping)
+void request_command(player_type *player_ptr, int shopping)
 {
 	int i;
 
@@ -4684,7 +4684,7 @@ void request_command(int shopping)
 	{
 		concptr s;
 
-		object_type *o_ptr = &p_ptr->inventory_list[i];
+		object_type *o_ptr = &player_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		/* No inscription */
