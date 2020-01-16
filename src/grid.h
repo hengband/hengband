@@ -125,14 +125,6 @@ typedef struct
 	delete_monster(F, Y, X); \
 }
 
-#define place_floor_grid(C) \
-{ \
-	(C)->feat = feat_ground_type[randint0(100)]; \
-	(C)->info &= ~(CAVE_MASK); \
-	(C)->info |= CAVE_FLOOR; \
-	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
-}
-
 #define place_extra_bold(F, Y, X) \
 { \
 	set_cave_feat((F), Y,X,feat_wall_type[randint0(100)]); \
@@ -141,28 +133,12 @@ typedef struct
 	delete_monster(F, Y, X); \
 }
 
-#define place_extra_grid(C) \
-{ \
-	(C)->feat = feat_wall_type[randint0(100)]; \
-	(C)->info &= ~(CAVE_MASK); \
-	(C)->info |= CAVE_EXTRA; \
-	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
-}
-
 #define place_extra_perm_bold(F, Y, X) \
 { \
 	set_cave_feat(F, Y, X,feat_permanent); \
 	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(F, Y, X, CAVE_EXTRA); \
 	delete_monster(F, Y, X); \
-}
-
-#define place_extra_perm_grid(C) \
-{ \
-	(C)->feat = feat_permanent; \
-	(C)->info &= ~(CAVE_MASK); \
-	(C)->info |= CAVE_EXTRA; \
-	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
 }
 
 #define place_extra_noperm_bold(F, Y, X) \
@@ -184,28 +160,12 @@ typedef struct
 	delete_monster(F, Y, X); \
 }
 
-#define place_inner_grid(C) \
-{ \
-	(C)->feat = feat_wall_inner; \
-	(C)->info &= ~(CAVE_MASK); \
-	(C)->info |= CAVE_INNER; \
-	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
-}
-
 #define place_inner_perm_bold(F, Y, X) \
 { \
 	set_cave_feat(F, Y,X,feat_permanent); \
 	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info((F), Y,X,CAVE_INNER); \
 	delete_monster(F, Y, X); \
-}
-
-#define place_inner_perm_grid(C) \
-{ \
-	(C)->feat = feat_permanent; \
-	(C)->info &= ~(CAVE_MASK); \
-	(C)->info |= CAVE_INNER; \
-	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
 }
 
 #define place_outer_bold(F, Y, X) \
@@ -216,28 +176,12 @@ typedef struct
 	delete_monster(F, Y, X); \
 }
 
-#define place_outer_grid(C) \
-{ \
-	(C)->feat = feat_wall_outer; \
-	(C)->info &= ~(CAVE_MASK); \
-	(C)->info |= CAVE_OUTER; \
-	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
-}
-
 #define place_outer_perm_bold(F, Y, X) \
 { \
 	set_cave_feat(F, Y, X, feat_permanent); \
 	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info((F), Y,X,CAVE_OUTER); \
 	delete_monster(F, Y, X); \
-}
-
-#define place_outer_perm_grid(C) \
-{ \
-	(C)->feat = feat_permanent; \
-	(C)->info &= ~(CAVE_MASK); \
-	(C)->info |= CAVE_OUTER; \
-	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
 }
 
 #define place_outer_noperm_bold(F, Y, X) \
@@ -250,16 +194,6 @@ typedef struct
 	delete_monster(F, Y, X); \
 }
 
-#define place_outer_noperm_grid(C) \
-{ \
-	feature_type *_f_ptr = &f_info[feat_wall_outer]; \
-	if (permanent_wall(_f_ptr)) (C)->feat = (s16b)feat_state(feat_wall_outer, FF_UNPERM); \
-	else (C)->feat = feat_wall_outer; \
-	(C)->info &= ~(CAVE_MASK); \
-	(C)->info |= (CAVE_OUTER | CAVE_VAULT); \
-	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
-}
-
 #define place_solid_bold(F, Y, X) \
 { \
 	set_cave_feat(F,Y,X,feat_wall_solid); \
@@ -268,28 +202,12 @@ typedef struct
 	delete_monster(F, Y, X); \
 }
 
-#define place_solid_grid(C) \
-{ \
-	(C)->feat = feat_wall_solid; \
-	(C)->info &= ~(CAVE_MASK); \
-	(C)->info |= CAVE_SOLID; \
-	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
-}
-
 #define place_solid_perm_bold(F, Y, X) \
 { \
 	set_cave_feat(F, Y, X, feat_permanent); \
 	F->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(F, Y, X, CAVE_SOLID); \
 	delete_monster(F, Y, X); \
-}
-
-#define place_solid_perm_grid(C) \
-{ \
-	(C)->feat = feat_permanent; \
-	(C)->info &= ~(CAVE_MASK); \
-	(C)->info |= CAVE_SOLID; \
-	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
 }
 
 #define place_solid_noperm_bold(F, Y, X) \
@@ -301,17 +219,6 @@ typedef struct
 	F->grid_array[Y][X].info &= ~(CAVE_MASK); \
 	add_cave_info(F, Y, X, CAVE_SOLID); \
 	delete_monster(F, Y, X); \
-}
-
-#define place_solid_noperm_grid(C) \
-{ \
-	feature_type *_f_ptr = &f_info[feat_wall_solid]; \
-	if (((C)->info & CAVE_VAULT) && permanent_wall(_f_ptr)) \
-		(C)->feat = feat_state(feat_wall_solid, FF_UNPERM); \
-	else (C)->feat = feat_wall_solid; \
-	(C)->info &= ~(CAVE_MASK); \
-	(C)->info |= CAVE_SOLID; \
-	if ((C)->m_idx) delete_monster_idx((C)->m_idx); \
 }
 
 
@@ -400,6 +307,14 @@ extern bool check_local_illumination(player_type *creature_ptr, POSITION y, POSI
 extern bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode);
 
+extern void place_floor_grid(grid_type *g_ptr);
+extern void place_extra_grid(grid_type *g_ptr);
+extern void place_inner_grid(grid_type *g_ptr);
+extern void place_inner_grid(grid_type *g_ptr);
+extern void place_inner_perm_grid(grid_type *g_ptr);
+extern void place_outer_grid(grid_type *g_ptr);
+extern void place_outer_noperm_grid(grid_type *g_ptr);
+extern void place_solid_perm_grid(grid_type *g_ptr);
 
 /*!
  * モンスターにより照明が消されている地形か否かを判定する。 / Is this grid "darkened" by monster?

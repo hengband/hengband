@@ -1209,3 +1209,67 @@ bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 m
 	return TRUE;
 }
 
+
+void place_floor_grid(grid_type *g_ptr)
+{
+	g_ptr->feat = feat_ground_type[randint0(100)];
+	g_ptr->info &= ~(CAVE_MASK);
+	g_ptr->info |= CAVE_FLOOR;
+	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
+}
+
+
+void place_extra_grid(grid_type *g_ptr)
+{
+	g_ptr->feat = feat_wall_type[randint0(100)];
+	g_ptr->info &= ~(CAVE_MASK);
+	g_ptr->info |= CAVE_EXTRA;
+	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
+}
+
+
+void place_inner_grid(grid_type *g_ptr)
+{
+	g_ptr->feat = feat_wall_inner;
+	g_ptr->info &= ~(CAVE_MASK);
+	g_ptr->info |= CAVE_INNER;
+	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
+}
+
+
+void place_inner_perm_grid(grid_type *g_ptr)
+{
+	g_ptr->feat = feat_permanent;
+	g_ptr->info &= ~(CAVE_MASK);
+	g_ptr->info |= CAVE_INNER;
+	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
+}
+
+
+void place_outer_grid(grid_type *g_ptr)
+{
+	g_ptr->feat = feat_wall_outer;
+	g_ptr->info &= ~(CAVE_MASK);
+	g_ptr->info |= CAVE_OUTER;
+	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
+}
+
+
+void place_outer_noperm_grid(grid_type *g_ptr)
+{
+	feature_type *_f_ptr = &f_info[feat_wall_outer];
+	if (permanent_wall(_f_ptr)) g_ptr->feat = (s16b)feat_state(feat_wall_outer, FF_UNPERM);
+	else g_ptr->feat = feat_wall_outer;
+	g_ptr->info &= ~(CAVE_MASK);
+	g_ptr->info |= (CAVE_OUTER | CAVE_VAULT);
+	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
+}
+
+
+void place_solid_perm_grid(grid_type *g_ptr)
+{
+	g_ptr->feat = feat_permanent;
+	g_ptr->info &= ~(CAVE_MASK);
+	g_ptr->info |= CAVE_SOLID;
+	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
+}
