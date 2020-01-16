@@ -2282,7 +2282,7 @@ static bool monster_hook_chameleon(MONRACE_IDX r_idx)
 		if (monster_has_hostile_align(&floor_ptr->m_list[summon_specific_who], 0, 0, r_ptr)) return FALSE;
 	}
 
-	return (*(get_monster_hook()))(r_idx);
+	return (*(get_monster_hook(p_ptr)))(r_idx);
 }
 
 /*!
@@ -2413,7 +2413,7 @@ static bool monster_hook_tanuki(MONRACE_IDX r_idx)
 	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
 		return FALSE;
 
-	return (*(get_monster_hook()))(r_idx);
+	return (*(get_monster_hook(p_ptr)))(r_idx);
 }
 
 
@@ -3210,7 +3210,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	MONRACE_IDX r_idx;
-	get_mon_num_prep(get_monster_hook(), get_monster_hook2(y, x));
+	get_mon_num_prep(get_monster_hook(p_ptr), get_monster_hook2(y, x));
 
 	/* Pick a monster */
 	r_idx = get_mon_num(p_ptr->current_floor_ptr->monster_level);
@@ -3238,7 +3238,7 @@ bool alloc_horde(POSITION y, POSITION x)
 	int attempts = 1000;
 	POSITION cy = y;
 	POSITION cx = x;
-	get_mon_num_prep(get_monster_hook(), get_monster_hook2(y, x));
+	get_mon_num_prep(get_monster_hook(p_ptr), get_monster_hook2(y, x));
 
 	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	while (--attempts)

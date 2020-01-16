@@ -2143,11 +2143,11 @@ void output_monster_spoiler(player_type *player_ptr, MONRACE_IDX r_idx, void(*ro
  * @brief プレイヤーの現在の広域マップ座標から得た地勢を元にモンスターの生成条件関数を返す
  * @return 地勢にあったモンスターの生成条件関数
  */
-monsterrace_hook_type get_monster_hook(void)
+monsterrace_hook_type get_monster_hook(player_type *player_ptr)
 {
-	if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_quest)
+	if (!player_ptr->current_floor_ptr->dun_level && !player_ptr->current_floor_ptr->inside_quest)
 	{
-		switch (wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].terrain)
+		switch (wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].terrain)
 		{
 		case TERRAIN_TOWN:
 			return (monsterrace_hook_type)mon_hook_town;

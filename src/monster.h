@@ -441,7 +441,7 @@ extern void display_roff(player_type *player_ptr);
 extern void output_monster_spoiler(player_type *player_ptr, MONRACE_IDX r_idx, void(*roff_func)(TERM_COLOR attr, concptr str));
 extern concptr extract_note_dies(MONRACE_IDX r_idx);
 extern void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item);
-extern monsterrace_hook_type get_monster_hook(void);
+extern monsterrace_hook_type get_monster_hook(player_type *player_ptr);
 extern monsterrace_hook_type get_monster_hook2(POSITION y, POSITION x);
 extern void set_friendly(monster_type *m_ptr);
 extern void set_pet(monster_type *m_ptr);
