@@ -2963,7 +2963,7 @@ static void windows_map(void)
 	{
 		for (y = min_y; y < max_y; y++)
 		{
-			map_info(y, x, &a, (char*)&c, &ta, (char*)&tc);
+			map_info(p_ptr, y, x, &a, (char*)&c, &ta, (char*)&tc);
 
 			/* Ignore non-graphics */
 			if ((a & 0x80) && (c & 0x80))

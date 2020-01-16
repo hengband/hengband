@@ -618,7 +618,7 @@ void lite_spot(POSITION y, POSITION x)
 		TERM_COLOR ta;
 		SYMBOL_CODE tc;
 
-		map_info(y, x, &a, &c, &ta, &tc);
+		map_info(p_ptr, y, x, &a, &c, &ta, &tc);
 
 		/* Hack -- fake monochrome */
 		if (!use_graphics)

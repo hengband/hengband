@@ -1942,7 +1942,7 @@ static void display_dungeon(player_type *player_ptr)
 				continue;
 			}
 
-			map_info(y, x, &a, &c, &ta, &tc);
+			map_info(player_ptr, y, x, &a, &c, &ta, &tc);
 
 			if (!use_graphics)
 			{
@@ -2538,7 +2538,7 @@ void print_map(player_type *player_ptr)
 			SYMBOL_CODE tc;
 
 			/* Determine what is there */
-			map_info(y, x, &a, &c, &ta, &tc);
+			map_info(player_ptr, y, x, &a, &c, &ta, &tc);
 
 			/* Hack -- fake monochrome */
 			if (!use_graphics)
@@ -2726,7 +2726,6 @@ void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_cha
 
 
 /*!
- * todo main-gnuにも影響があるのでplayer_typeの追加は保留
  * @brief Mコマンドによる縮小マップの表示を行う / Extract the attr/char to display at the given (legal) map location
  * @details
  * Basically, we "paint" the chosen attr/char in several passes, starting\n
@@ -2844,9 +2843,10 @@ void apply_default_feat_lighting(TERM_COLOR f_attr[F_LIT_MAX], SYMBOL_CODE f_cha
  * "x_ptr->xxx", is quicker than "x_info[x].xxx", if this is incorrect\n
  * then a whole lot of code should be changed...  XXX XXX\n
  */
-void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp)
+void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLOR *tap, SYMBOL_CODE *tcp)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -2873,15 +2873,15 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 		 *   (Such grids also have CAVE_VIEW)
 		 * - Can see grids with CAVE_VIEW unless darkened by monsters.
 		 */
-		if (!p_ptr->blind &&
+		if (!player_ptr->blind &&
 			((g_ptr->info & (CAVE_MARK | CAVE_LITE | CAVE_MNLT)) ||
-			((g_ptr->info & CAVE_VIEW) && (((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) || p_ptr->see_nocto))))
+			((g_ptr->info & CAVE_VIEW) && (((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) == CAVE_GLOW) || player_ptr->see_nocto))))
 		{
 			/* Normal attr/char */
 			a = f_ptr->x_attr[F_LIT_STANDARD];
 			c = f_ptr->x_char[F_LIT_STANDARD];
 
-			if (p_ptr->wild_mode)
+			if (player_ptr->wild_mode)
 			{
 				/* Special lighting effects */
 				/* Handle "night" */
@@ -2894,7 +2894,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 			}
 
 			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
-			else if (darkened_grid(p_ptr, g_ptr))
+			else if (darkened_grid(player_ptr, g_ptr))
 			{
 				/* Unsafe grid -- idea borrowed from Unangband */
 				feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
@@ -2969,11 +2969,11 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 			a = f_ptr->x_attr[F_LIT_STANDARD];
 			c = f_ptr->x_char[F_LIT_STANDARD];
 
-			if (p_ptr->wild_mode)
+			if (player_ptr->wild_mode)
 			{
 				/* Special lighting effects */
 				/* Handle "blind" or "night" */
-				if (view_granite_lite && (p_ptr->blind || !is_daytime()))
+				if (view_granite_lite && (player_ptr->blind || !is_daytime()))
 				{
 					/* Use a darkened colour/tile */
 					a = f_ptr->x_attr[F_LIT_DARK];
@@ -2982,7 +2982,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 			}
 
 			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
-			else if (darkened_grid(p_ptr, g_ptr) && !p_ptr->blind)
+			else if (darkened_grid(player_ptr, g_ptr) && !player_ptr->blind)
 			{
 				if (have_flag(f_ptr->flags, FF_LOS) && have_flag(f_ptr->flags, FF_PROJECT))
 				{
@@ -3008,7 +3008,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 			else if (view_granite_lite)
 			{
 				/* Handle "blind" */
-				if (p_ptr->blind)
+				if (player_ptr->blind)
 				{
 					/* Use a darkened colour/tile */
 					a = f_ptr->x_attr[F_LIT_DARK];
@@ -3047,7 +3047,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 					}
 
 					/* Not glowing correctly */
-					else if (!have_flag(f_ptr->flags, FF_LOS) && !check_local_illumination(p_ptr, y, x))
+					else if (!have_flag(f_ptr->flags, FF_LOS) && !check_local_illumination(player_ptr, y, x))
 					{
 						/* Use a darkened colour/tile */
 						a = f_ptr->x_attr[F_LIT_DARK];
@@ -3083,14 +3083,14 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 	(*cp) = c;
 
 	/* Hack -- rare random hallucination, except on outer dungeon walls */
-	if (p_ptr->image && one_in_(256))
+	if (player_ptr->image && one_in_(256))
 		image_random(ap, cp);
 
 	/* Objects */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
-		o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Memorized objects */
@@ -3100,7 +3100,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 		{
 			byte act;
 
-			match_autopick = is_autopick(p_ptr, o_ptr);
+			match_autopick = is_autopick(player_ptr, o_ptr);
 			if (match_autopick == -1)
 				continue;
 
@@ -3126,7 +3126,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 		feat_priority = 20;
 
 		/* Hack -- hallucination */
-		if (p_ptr->image) image_object(ap, cp);
+		if (player_ptr->image) image_object(ap, cp);
 
 		break;
 	}
@@ -3134,16 +3134,16 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 	/* Handle monsters */
 	if (g_ptr->m_idx && display_autopick != 0)
 	{
-		set_term_color(p_ptr, y, x, ap, cp);
+		set_term_color(player_ptr, y, x, ap, cp);
 		return;
 	}
 
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+	monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
 	/* Visible monster */
 	if (!m_ptr->ml)
 	{
-		set_term_color(p_ptr, y, x, ap, cp);
+		set_term_color(player_ptr, y, x, ap, cp);
 		return;
 	}
 
@@ -3153,7 +3153,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 	feat_priority = 30;
 
 	/* Hallucination */
-	if (p_ptr->image)
+	if (player_ptr->image)
 	{
 		/*
 		 * Monsters with both CHAR_CLEAR and ATTR_CLEAR
@@ -3168,7 +3168,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 			image_monster(ap, cp);
 		}
 
-		set_term_color(p_ptr, y, x, ap, cp);
+		set_term_color(player_ptr, y, x, ap, cp);
 		return;
 	}
 
@@ -3182,7 +3182,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 		/* Desired monster attr/char */
 		*ap = a;
 		*cp = c;
-		set_term_color(p_ptr, y, x, ap, cp);
+		set_term_color(player_ptr, y, x, ap, cp);
 		return;
 	}
 
@@ -3192,7 +3192,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 	 */
 	if ((r_ptr->flags1 & (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR)) == (RF1_CHAR_CLEAR | RF1_ATTR_CLEAR))
 	{
-		set_term_color(p_ptr, y, x, ap, cp);
+		set_term_color(player_ptr, y, x, ap, cp);
 		return;
 	}
 
@@ -3231,7 +3231,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 	/***  Monster's char  ***/
 	if ((r_ptr->flags1 & RF1_CHAR_CLEAR) && (*cp != ' ') && !use_graphics)
 	{
-		set_term_color(p_ptr, y, x, ap, cp);
+		set_term_color(player_ptr, y, x, ap, cp);
 		return;
 	}
 
@@ -3250,12 +3250,12 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 				image_monster_hack[randint0(sizeof(image_monster_hack) - 1)]);
 		}
 
-		set_term_color(p_ptr, y, x, ap, cp);
+		set_term_color(player_ptr, y, x, ap, cp);
 		return;
 	}
 
 	*cp = c;
-	set_term_color(p_ptr, y, x, ap, cp);
+	set_term_color(player_ptr, y, x, ap, cp);
 }
 
 
@@ -3472,7 +3472,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
 			feat_priority = -1;
 
 			/* Extract the current attr/char at that map location */
-			map_info(j, i, &ta, &tc, &ta, &tc);
+			map_info(player_ptr, j, i, &ta, &tc, &ta, &tc);
 
 			/* Extract the priority */
 			tp = (byte_hack)feat_priority;
@@ -3773,7 +3773,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
 			if (g_ptr->m_idx && floor_ptr->m_list[g_ptr->m_idx].ml)
 			{
 				/* Determine what is there */
-				map_info(ny, nx, &a, &c, &ta, &tc);
+				map_info(player_ptr, ny, nx, &a, &c, &ta, &tc);
 
 				if (!IS_ASCII_GRAPHICS(a))
 					a = default_color;
