@@ -1273,3 +1273,12 @@ void place_solid_perm_grid(grid_type *g_ptr)
 	g_ptr->info |= CAVE_SOLID;
 	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
 }
+
+/*!
+ * モンスターにより照明が消されている地形か否かを判定する。 / Is this grid "darkened" by monster?
+ */
+bool darkened_grid(player_type *player_ptr, grid_type *g_ptr)
+{
+	return ((g_ptr->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) &&
+		!player_ptr->see_nocto;
+}

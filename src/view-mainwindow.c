@@ -2894,7 +2894,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 			}
 
 			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
-			else if (darkened_grid(g_ptr))
+			else if (darkened_grid(p_ptr, g_ptr))
 			{
 				/* Unsafe grid -- idea borrowed from Unangband */
 				feat = (view_unsafe_grids && (g_ptr->info & CAVE_UNSAFE)) ? feat_undetected : feat_none;
@@ -2982,7 +2982,7 @@ void map_info(POSITION y, POSITION x, TERM_COLOR *ap, SYMBOL_CODE *cp, TERM_COLO
 			}
 
 			/* Mega-Hack -- Handle "in-sight" and "darkened" grids */
-			else if (darkened_grid(g_ptr) && !p_ptr->blind)
+			else if (darkened_grid(p_ptr, g_ptr) && !p_ptr->blind)
 			{
 				if (have_flag(f_ptr->flags, FF_LOS) && have_flag(f_ptr->flags, FF_PROJECT))
 				{

@@ -315,13 +315,7 @@ extern void place_inner_perm_grid(grid_type *g_ptr);
 extern void place_outer_grid(grid_type *g_ptr);
 extern void place_outer_noperm_grid(grid_type *g_ptr);
 extern void place_solid_perm_grid(grid_type *g_ptr);
-
-/*!
- * モンスターにより照明が消されている地形か否かを判定する。 / Is this grid "darkened" by monster?
- */
-#define darkened_grid(C) \
-	((((C)->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) && \
-	!p_ptr->see_nocto)
+extern bool darkened_grid(grid_type *g_ptr);
 
 /*
  * Get feature mimic from f_info[] (applying "mimic" field)
