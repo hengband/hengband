@@ -4269,7 +4269,7 @@ special_menu_naiyou special_menu_info[] =
 };
 #endif
 
-static char inkey_from_menu(void)
+static char inkey_from_menu(player_type *player_ptr)
 {
 	char cmd;
 	int basey, basex;
@@ -4277,7 +4277,7 @@ static char inkey_from_menu(void)
 	int menu = 0;
 	bool kisuu;
 
-	if (p_ptr->y - panel_row_min > 10) basey = 2;
+	if (player_ptr->y - panel_row_min > 10) basey = 2;
 	else basey = 13;
 	basex = 15;
 
@@ -4286,6 +4286,7 @@ static char inkey_from_menu(void)
 
 	screen_save();
 
+	floor_type* floor_ptr = player_ptr->current_floor_ptr;
 	while (TRUE)
 	{
 		int i;
@@ -4312,12 +4313,12 @@ static char inkey_from_menu(void)
 				switch (special_menu_info[hoge].jouken)
 				{
 				case MENU_CLASS:
-					if (p_ptr->pclass == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
+					if (player_ptr->pclass == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
 					break;
 				case MENU_WILD:
-					if (!p_ptr->current_floor_ptr->dun_level && !p_ptr->current_floor_ptr->inside_arena && !p_ptr->current_floor_ptr->inside_quest)
+					if (!floor_ptr->dun_level && !floor_ptr->inside_arena && !floor_ptr->inside_quest)
 					{
-						if ((byte)p_ptr->wild_mode == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
+						if ((byte)player_ptr->wild_mode == special_menu_info[hoge].jouken_naiyou) menu_name = special_menu_info[hoge].name;
 					}
 					break;
 				default:
@@ -4331,7 +4332,7 @@ static char inkey_from_menu(void)
 		put_str(_("》", "> "), basey + 1 + num / 2, basex + 2 + (num % 2) * 24);
 
 		/* Place the cursor on the player */
-		move_cursor_relative(p_ptr->y, p_ptr->x);
+		move_cursor_relative(player_ptr->y, player_ptr->x);
 
 		sub_cmd = inkey();
 		if ((sub_cmd == ' ') || (sub_cmd == 'x') || (sub_cmd == 'X') || (sub_cmd == '\r') || (sub_cmd == '\n'))
@@ -4493,7 +4494,7 @@ void request_command(player_type *player_ptr, int shopping)
 
 			if (!shopping && command_menu && ((cmd == '\r') || (cmd == '\n') || (cmd == 'x') || (cmd == 'X'))
 				&& !keymap_act[mode][(byte)(cmd)])
-				cmd = inkey_from_menu();
+				cmd = inkey_from_menu(player_ptr);
 		}
 
 		/* Clear top line */
