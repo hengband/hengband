@@ -3175,7 +3175,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 
 			/* Require empty grids */
 			if (!cave_empty_bold2(p_ptr->current_floor_ptr, ny, nx)) continue;
-			get_mon_num_prep(place_monster_can_escort, get_monster_hook2(ny, nx));
+			get_mon_num_prep(place_monster_can_escort, get_monster_hook2(p_ptr, ny, nx));
 
 			/* Pick a random race */
 			z = get_mon_num(r_ptr->level);
@@ -3210,7 +3210,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	MONRACE_IDX r_idx;
-	get_mon_num_prep(get_monster_hook(p_ptr), get_monster_hook2(y, x));
+	get_mon_num_prep(get_monster_hook(p_ptr), get_monster_hook2(p_ptr, y, x));
 
 	/* Pick a monster */
 	r_idx = get_mon_num(p_ptr->current_floor_ptr->monster_level);
@@ -3238,7 +3238,7 @@ bool alloc_horde(POSITION y, POSITION x)
 	int attempts = 1000;
 	POSITION cy = y;
 	POSITION cx = x;
-	get_mon_num_prep(get_monster_hook(p_ptr), get_monster_hook2(y, x));
+	get_mon_num_prep(get_monster_hook(p_ptr), get_monster_hook2(p_ptr, y, x));
 
 	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	while (--attempts)
@@ -3491,7 +3491,7 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 	summon_specific_type = type;
 
 	summon_unique_okay = (mode & PM_ALLOW_UNIQUE) ? TRUE : FALSE;
-	get_mon_num_prep(summon_specific_okay, get_monster_hook2(y, x));
+	get_mon_num_prep(summon_specific_okay, get_monster_hook2(p_ptr, y, x));
 
 	/* Pick a monster, using the level calculation */
 	r_idx = get_mon_num((floor_ptr->dun_level + lev) / 2 + 5);

@@ -2182,9 +2182,9 @@ monsterrace_hook_type get_monster_hook(player_type *player_ptr)
  * @brief 指定された広域マップ座標の地勢を元にモンスターの生成条件関数を返す
  * @return 地勢にあったモンスターの生成条件関数
  */
-monsterrace_hook_type get_monster_hook2(POSITION y, POSITION x)
+monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POSITION x)
 {
-	feature_type *f_ptr = &f_info[p_ptr->current_floor_ptr->grid_array[y][x].feat];
+	feature_type *f_ptr = &f_info[player_ptr->current_floor_ptr->grid_array[y][x].feat];
 
 	/* Set the monster list */
 
