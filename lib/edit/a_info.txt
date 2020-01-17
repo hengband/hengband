@@ -2950,6 +2950,8 @@ W:60:150:130:100000
 P:0:4d5:-10:25:0
 F:VORPAL | VAMPIRIC | SLAY_EVIL | KILL_DEMON | ESP_DEMON |
 F:AGGRAVATE | LITE | CON 
+D:$As you handle this reddish gold blade, you have the strong urge to find
+D:$ and kill some demons.
 D:彼女は史上最強の破妖刀だ。
 D:朱金に輝く刀身で魔性の心臓をつらぬき、その命を食べつくす。
 
