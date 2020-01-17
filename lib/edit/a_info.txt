@@ -3067,6 +3067,9 @@ W:25:5:15:808
 P:0:1d2:-3:-7:6
 F:SEARCH | ACTIVATE | SHOW_MODS | HIDE_TYPE
 U:AGGRAVATE
+D:$It is two wooden prisms joined by a thin rope.  Though a poor weapon,
+D:$ firefighters use such devices as percussion instruments to warn others of
+D:$ danger.
 D:角柱二本の互いの端が、細い縄で結ばれている。
 D:武器としては見るからに貧相だが、 防火をその任とする衛士たちが使った、
 D:由緒正しい武器だといわれている。
