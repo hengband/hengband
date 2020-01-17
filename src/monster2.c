@@ -49,7 +49,7 @@
 MONSTER_IDX hack_m_idx = 0;	/* Hack -- see "process_monsters()" */
 MONSTER_IDX hack_m_idx_ii = 0;
 
-bool is_friendly_idx(MONSTER_IDX m_idx);
+bool is_friendly_idx(player_type *player_ptr, MONSTER_IDX m_idx);
 
 /*!
  * @brief モンスターの目標地点をセットする / Set the target of counter attack
