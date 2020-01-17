@@ -1383,7 +1383,7 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
 				{
 					/* Meanest monster + treasure */
 					floor_ptr->monster_level = floor_ptr->base_level + 40;
-					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+					place_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 					floor_ptr->monster_level = floor_ptr->base_level;
 					floor_ptr->object_level = floor_ptr->base_level + 20;
 					place_object(player_ptr, y, x, AM_GOOD);
@@ -1393,7 +1393,7 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
 				{
 					/* Mean monster +treasure */
 					floor_ptr->monster_level = floor_ptr->base_level + 20;
-					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+					place_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 					floor_ptr->monster_level = floor_ptr->base_level;
 					floor_ptr->object_level = floor_ptr->base_level + 10;
 					place_object(player_ptr, y, x, AM_GOOD);
@@ -1402,7 +1402,7 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
 				else if (value < 10)
 				{
 					floor_ptr->monster_level = floor_ptr->base_level + 9;
-					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+					place_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 					floor_ptr->monster_level = floor_ptr->base_level;
 				}
 				else if (value < 17)
@@ -1432,7 +1432,7 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
 				{
 					/* Monster and trap */
 					floor_ptr->monster_level = floor_ptr->base_level + 5;
-					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+					place_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 					floor_ptr->monster_level = floor_ptr->base_level;
 					place_trap(player_ptr, y, x);
 				}
@@ -1442,7 +1442,7 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
 					if (randint0(100) < 50)
 					{
 						floor_ptr->monster_level = floor_ptr->base_level + 3;
-						place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+						place_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 						floor_ptr->monster_level = floor_ptr->base_level;
 					}
 					if (randint0(100) < 50)
@@ -1464,7 +1464,7 @@ void fill_treasure(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y
 					/* 20% monster, 40% trap, 20% object, 20% blank space */
 					if (randint0(100) < 20)
 					{
-						place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+						place_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 					}
 					else if (randint0(100) < 50)
 					{
@@ -2070,7 +2070,7 @@ static bool room_build(player_type *player_ptr, EFFECT_ID typ)
 	case ROOM_T_RANDOM_VAULT:  return build_type10(player_ptr);
 	case ROOM_T_OVAL:          return build_type11(floor_ptr);
 	case ROOM_T_CRYPT:         return build_type12(player_ptr);
-	case ROOM_T_TRAP_PIT:      return build_type13(floor_ptr);
+	case ROOM_T_TRAP_PIT:      return build_type13(player_ptr);
 	case ROOM_T_TRAP:          return build_type14(floor_ptr);
 	case ROOM_T_GLASS:         return build_type15(player_ptr);
 	case ROOM_T_ARCADE:        return build_type16(player_ptr);

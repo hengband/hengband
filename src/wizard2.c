@@ -200,7 +200,7 @@ static void do_cmd_summon_horde(player_type *caster_ptr)
 		if (cave_empty_bold(caster_ptr->current_floor_ptr, wy, wx)) break;
 	}
 
-	(void)alloc_horde(wy, wx);
+	(void)alloc_horde(caster_ptr, wy, wx);
 }
 
 /*!
@@ -1478,7 +1478,7 @@ static void do_cmd_wiz_summon(player_type *caster_ptr, int num)
 {
 	for (int i = 0; i < num; i++)
 	{
-		(void)summon_specific(0, caster_ptr->y, caster_ptr->x, caster_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+		(void)summon_specific(caster_ptr, 0, caster_ptr->y, caster_ptr->x, caster_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 	}
 }
 
@@ -1493,7 +1493,7 @@ static void do_cmd_wiz_summon(player_type *caster_ptr, int num)
  */
 static void do_cmd_wiz_named(player_type *summoner_ptr, MONRACE_IDX r_idx)
 {
-	(void)summon_named_creature(0, summoner_ptr->y, summoner_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+	(void)summon_named_creature(summoner_ptr, 0, summoner_ptr->y, summoner_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 }
 
 
@@ -1507,7 +1507,7 @@ static void do_cmd_wiz_named(player_type *summoner_ptr, MONRACE_IDX r_idx)
  */
 static void do_cmd_wiz_named_friendly(player_type *summoner_ptr, MONRACE_IDX r_idx)
 {
-	(void)summon_named_creature(0, summoner_ptr->y, summoner_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET));
+	(void)summon_named_creature(summoner_ptr, 0, summoner_ptr->y, summoner_ptr->x, r_idx, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP | PM_FORCE_PET));
 }
 
 

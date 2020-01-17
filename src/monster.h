@@ -412,11 +412,11 @@ struct monster_type
 #define PM_KAGE           0x00000200    /*!< モンスター生成フラグ: 必ずあやしい影として生成する */
 #define PM_MULTIPLY       0x00000400    /*!< モンスター生成フラグ: 増殖処理時として生成する */
 
-extern bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode);
-extern bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode);
-extern bool alloc_horde(POSITION y, POSITION x);
-extern bool alloc_guardian(bool def_val);
-extern bool alloc_monster(POSITION dis, BIT_FLAGS mode);
+extern bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode);
+extern bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
+extern bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x);
+extern bool alloc_guardian(player_type *player_ptr, bool def_val);
+extern bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode);
 
 extern void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode);
 /* Bit flags for monster_desc() */
@@ -444,7 +444,7 @@ extern void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_
 extern monsterrace_hook_type get_monster_hook(player_type *player_ptr);
 extern monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POSITION x);
 extern void set_friendly(monster_type *m_ptr);
-extern void set_pet(monster_type *m_ptr);
+extern void set_pet(player_type *player_ptr, monster_type *m_ptr);
 extern void set_hostile(monster_type *m_ptr);
 extern void anger_monster(player_type *player_ptr, monster_type *m_ptr);
 
@@ -478,8 +478,9 @@ extern int lore_do_probe(MONRACE_IDX r_idx);
 extern void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold);
 extern void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full);
 extern void update_monsters(bool full);
-extern bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);
-
+extern bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);
+extern bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode);
+extern bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode);
 
 /*
  * Some things which induce learning

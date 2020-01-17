@@ -2225,12 +2225,13 @@ void set_friendly(monster_type *m_ptr)
 
 /*!
  * @brief モンスターをペットにする
+ * @param player_type プレーヤーへの参照ポインタ
  * @param m_ptr モンスター情報構造体の参照ポインタ
  * @return なし
  */
-void set_pet(monster_type *m_ptr)
+void set_pet(player_type *player_ptr, monster_type *m_ptr)
 {
-	check_quest_completion(p_ptr, m_ptr);
+	check_quest_completion(player_ptr, m_ptr);
 
 	m_ptr->smart |= SM_PET;
 	if (!(r_info[m_ptr->r_idx].flags3 & (RF3_EVIL | RF3_GOOD)))
@@ -2706,7 +2707,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
 				if (pet) mode |= PM_FORCE_PET;
 
-				if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_BLUE_HORROR, mode))
+				if (summon_specific(player_ptr, (pet ? -1 : m_idx), wy, wx, 100, SUMMON_BLUE_HORROR, mode))
 				{
 					if (player_can_see_bold(player_ptr, wy, wx)) notice = TRUE;
 				}
@@ -2771,7 +2772,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 					BIT_FLAGS mode = 0L;
 					if (pet) mode |= PM_FORCE_PET;
 
-					if (summon_specific((pet ? -1 : m_idx), wy, wx, 100, SUMMON_DAWN, mode))
+					if (summon_specific(player_ptr, (pet ? -1 : m_idx), wy, wx, 100, SUMMON_DAWN, mode))
 					{
 						if (player_can_see_bold(player_ptr, wy, wx))
 							msg_print(_("新たな戦士が現れた！", "A new warrior steps forth!"));

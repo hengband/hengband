@@ -1491,7 +1491,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		if ((k < 4) && (!k || !randint0(k * MON_MULT_ADJ)))
 		{
 			/* Try to multiply */
-			if (multiply_monster(m_idx, FALSE, (is_pet(m_ptr) ? PM_FORCE_PET : 0)))
+			if (multiply_monster(target_ptr, m_idx, FALSE, (is_pet(m_ptr) ? PM_FORCE_PET : 0)))
 			{
 				/* Take note if visible */
 				if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(m_ptr))
@@ -1520,7 +1520,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 					for (k = 0; k < A_MAX; k++)
 					{
-						if (summon_specific(m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_MOLD, (PM_ALLOW_GROUP | p_mode)))
+						if (summon_specific(target_ptr, m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_MOLD, (PM_ALLOW_GROUP | p_mode)))
 						{
 							if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml) count++;
 						}

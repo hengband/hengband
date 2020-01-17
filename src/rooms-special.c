@@ -89,7 +89,7 @@ bool build_type15(player_type *player_ptr)
 
 			y = yval + 2 * ddy_ddd[dir1];
 			x = xval + 2 * ddx_ddd[dir1];
-			if (r_idx) place_monster_aux(0, y, x, r_idx, PM_ALLOW_SLEEP);
+			if (r_idx) place_monster_aux(player_ptr, 0, y, x, r_idx, PM_ALLOW_SLEEP);
 
 			/* Walls around the breather */
 			for (dir2 = 0; dir2 < 8; dir2++)
@@ -150,7 +150,7 @@ bool build_type15(player_type *player_ptr)
 		get_mon_num_prep(vault_aux_lite, NULL);
 
 		r_idx = get_mon_num(floor_ptr->dun_level);
-		if (r_idx) place_monster_aux(0, yval, xval, r_idx, 0L);
+		if (r_idx) place_monster_aux(player_ptr, 0, yval, xval, r_idx, 0L);
 
 		/* Walls around the breather */
 		for (dir1 = 0; dir1 < 8; dir1++)
@@ -216,7 +216,7 @@ bool build_type15(player_type *player_ptr)
 
 			y = yval + ddy_ddd[dir1];
 			x = xval + ddx_ddd[dir1];
-			if (r_idx) place_monster_aux(0, y, x, r_idx, 0L);
+			if (r_idx) place_monster_aux(player_ptr, 0, y, x, r_idx, 0L);
 		}
 
 		/* Place two potions */

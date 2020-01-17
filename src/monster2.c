@@ -2476,6 +2476,7 @@ SPEED get_mspeed(monster_race *r_ptr)
 
 /*!
  * @brief モンスターを一体生成する / Attempt to place a monster of the given race at the given location.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param who 召喚を行ったモンスターID
  * @param y 生成位置y座標
  * @param x 生成位置x座標
@@ -2499,9 +2500,9 @@ SPEED get_mspeed(monster_race *r_ptr)
  * This is the only function which may place a monster in the dungeon,
  * except for the savefile loading code.
  */
-static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
+static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	grid_type		*g_ptr = &floor_ptr->grid_array[y][x];
 	monster_type	*m_ptr;
 	monster_race	*r_ptr = &r_info[r_idx];
@@ -2510,7 +2511,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	int cmi;
 
 	/* DO NOT PLACE A MONSTER IN THE SMALL SCALE WILDERNESS !!! */
-	if (p_ptr->wild_mode) return FALSE;
+	if (player_ptr->wild_mode) return FALSE;
 
 	if (!in_bounds(floor_ptr, y, x)) return FALSE;
 	if (!r_idx) return FALSE;
@@ -2525,7 +2526,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		if (!monster_can_enter(y, x, r_ptr, 0)) return FALSE;
 	}
 
-	if (!p_ptr->phase_out)
+	if (!player_ptr->phase_out)
 	{
 		/* Hack -- "unique" monsters must be "unique" */
 		if (((r_ptr->flags1 & (RF1_UNIQUE)) ||
@@ -2557,9 +2558,9 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 		}
 	}
 
-	if (quest_number(p_ptr, floor_ptr->dun_level))
+	if (quest_number(player_ptr, floor_ptr->dun_level))
 	{
-		int hoge = quest_number(p_ptr, floor_ptr->dun_level);
+		int hoge = quest_number(player_ptr, floor_ptr->dun_level);
 		if ((quest[hoge].type == QUEST_TYPE_KILL_LEVEL) || (quest[hoge].type == QUEST_TYPE_RANDOM))
 		{
 			if (r_idx == quest[hoge].r_idx)
@@ -2696,7 +2697,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	/* Pet? */
 	if (mode & PM_FORCE_PET)
 	{
-		set_pet(m_ptr);
+		set_pet(player_ptr, m_ptr);
 	}
 	/* Friendly? */
 	else if ((r_ptr->flags7 & RF7_FRIENDLY) ||
@@ -2712,7 +2713,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	if ((mode & PM_ALLOW_SLEEP) && r_ptr->sleep && !ironman_nightmare)
 	{
 		int val = r_ptr->sleep;
-		(void)set_monster_csleep(p_ptr, g_ptr->m_idx, (val * 2) + randint1(val * 10));
+		(void)set_monster_csleep(player_ptr, g_ptr->m_idx, (val * 2) + randint1(val * 10));
 	}
 
 	/* Assign maximal hitpoints */
@@ -2748,7 +2749,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	/* Extract the monster base speed */
 	m_ptr->mspeed = get_mspeed(r_ptr);
 
-	if (mode & PM_HASTE) (void)set_monster_fast(p_ptr, g_ptr->m_idx, 100);
+	if (mode & PM_HASTE) (void)set_monster_fast(player_ptr, g_ptr->m_idx, 100);
 
 	/* Give a random starting energy */
 	if (!ironman_nightmare)
@@ -2780,10 +2781,10 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 
 
 	if (r_ptr->flags7 & RF7_SELF_LD_MASK)
-		p_ptr->update |= (PU_MON_LITE);
+		player_ptr->update |= (PU_MON_LITE);
 	else if ((r_ptr->flags7 & RF7_HAS_LD_MASK) && !MON_CSLEEP(m_ptr))
-		p_ptr->update |= (PU_MON_LITE);
-	update_monster(p_ptr, g_ptr->m_idx, TRUE);
+		player_ptr->update |= (PU_MON_LITE);
+	update_monster(player_ptr, g_ptr->m_idx, TRUE);
 
 
 	/* Count the monsters on the level */
@@ -2795,12 +2796,12 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 	 */
 	if (current_world_ptr->character_dungeon &&
 		((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)))
-		real_r_ptr(m_ptr)->floor_id = p_ptr->floor_id;
+		real_r_ptr(m_ptr)->floor_id = player_ptr->floor_id;
 
 	/* Hack -- Count the number of "reproducers" */
 	if (r_ptr->flags2 & RF2_MULTIPLY) floor_ptr->num_repro++;
 
-	if (p_ptr->warning && current_world_ptr->character_dungeon)
+	if (player_ptr->warning && current_world_ptr->character_dungeon)
 	{
 		if (r_ptr->flags1 & RF1_UNIQUE)
 		{
@@ -2808,20 +2809,20 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 			object_type *o_ptr;
 			GAME_TEXT o_name[MAX_NLEN];
 
-			if (r_ptr->level > p_ptr->lev + 30)
+			if (r_ptr->level > player_ptr->lev + 30)
 				color = _("黒く", "black");
-			else if (r_ptr->level > p_ptr->lev + 15)
+			else if (r_ptr->level > player_ptr->lev + 15)
 				color = _("紫色に", "purple");
-			else if (r_ptr->level > p_ptr->lev + 5)
+			else if (r_ptr->level > player_ptr->lev + 5)
 				color = _("ルビー色に", "deep red");
-			else if (r_ptr->level > p_ptr->lev - 5)
+			else if (r_ptr->level > player_ptr->lev - 5)
 				color = _("赤く", "red");
-			else if (r_ptr->level > p_ptr->lev - 15)
+			else if (r_ptr->level > player_ptr->lev - 15)
 				color = _("ピンク色に", "pink");
 			else
 				color = _("白く", "white");
 
-			o_ptr = choose_warning_item(p_ptr);
+			o_ptr = choose_warning_item(player_ptr);
 			if (o_ptr)
 			{
 				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -2843,7 +2844,7 @@ static bool place_monster_one(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_I
 			if (g_ptr->info & CAVE_MARK)
 			{
 				msg_print(_("ルーンが爆発した！", "The rune explodes!"));
-				project(p_ptr, 0, 2, y, x, 2 * (p_ptr->lev + damroll(7, 7)), GF_MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+				project(player_ptr, 0, 2, y, x, 2 * (player_ptr->lev + damroll(7, 7)), GF_MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
 			}
 		}
 		else
@@ -2960,7 +2961,7 @@ static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION 
  * @param mode 生成オプション
  * @return 成功したらtrue
  */
-static bool place_monster_group(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
+static bool place_monster_group(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
@@ -3027,7 +3028,7 @@ static bool place_monster_group(MONSTER_IDX who, POSITION y, POSITION x, MONRACE
 			if (!cave_empty_bold2(floor_ptr, my, mx)) continue;
 
 			/* Attempt to place another monster */
-			if (place_monster_one(who, my, mx, r_idx, mode))
+			if (place_monster_one(player_ptr, who, my, mx, r_idx, mode))
 			{
 				/* Add it to the "hack" set */
 				hack_y[hack_n] = my;
@@ -3100,6 +3101,7 @@ static bool place_monster_can_escort(MONRACE_IDX r_idx)
 
 /*!
  * @brief 一般的なモンスター生成処理のサブルーチン / Attempt to place a monster of the given race at the given location
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param who 召喚主のモンスター情報ID
  * @param y 生成地点y座標
  * @param x 生成地点x座標
@@ -3122,7 +3124,7 @@ static bool place_monster_can_escort(MONRACE_IDX r_idx)
  * Note the use of the new "monster allocation table" code to restrict
  * the "get_mon_num()" function to "legal" escort types.
  */
-bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
+bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	int             i, j, n;
 	monster_race    *r_ptr = &r_info[r_idx];
@@ -3131,7 +3133,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 		mode |= PM_KAGE;
 
 	/* Place one monster, or fail */
-	if (!place_monster_one(who, y, x, r_idx, mode)) return FALSE;
+	if (!place_monster_one(player_ptr, who, y, x, r_idx, mode)) return FALSE;
 
 	/* Require the "group" flag */
 	if (!(mode & PM_ALLOW_GROUP)) return TRUE;
@@ -3147,7 +3149,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 		{
 			POSITION nx, ny, d = 7;
 			scatter(p_ptr, &ny, &nx, y, x, d, 0);
-			(void)place_monster_one(place_monster_m_idx, ny, nx, r_ptr->reinforce_id[i], mode);
+			(void)place_monster_one(player_ptr, place_monster_m_idx, ny, nx, r_ptr->reinforce_id[i], mode);
 		}
 	}
 
@@ -3155,7 +3157,7 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 	if (r_ptr->flags1 & (RF1_FRIENDS))
 	{
 		/* Attempt to place a group */
-		(void)place_monster_group(who, y, x, r_idx, mode);
+		(void)place_monster_group(player_ptr, who, y, x, r_idx, mode);
 	}
 
 	/* Escorts for certain monsters */
@@ -3184,14 +3186,14 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 			if (!z) break;
 
 			/* Place a single escort */
-			(void)place_monster_one(place_monster_m_idx, ny, nx, z, mode);
+			(void)place_monster_one(player_ptr, place_monster_m_idx, ny, nx, z, mode);
 
 			/* Place a "group" of escorts if needed */
 			if ((r_info[z].flags1 & RF1_FRIENDS) ||
 				(r_ptr->flags1 & RF1_ESCORTS))
 			{
 				/* Place a group of monsters */
-				(void)place_monster_group(place_monster_m_idx, ny, nx, z, mode);
+				(void)place_monster_group(player_ptr, place_monster_m_idx, ny, nx, z, mode);
 			}
 		}
 	}
@@ -3202,12 +3204,13 @@ bool place_monster_aux(MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_id
 
 /*!
  * @brief 一般的なモンスター生成処理のメインルーチン / Attempt to place a monster of the given race at the given location
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 生成地点y座標
  * @param x 生成地点x座標
  * @param mode 生成オプション
  * @return 生成に成功したらtrue
  */
-bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode)
+bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	MONRACE_IDX r_idx;
 	get_mon_num_prep(get_monster_hook(p_ptr), get_monster_hook2(p_ptr, y, x));
@@ -3219,18 +3222,19 @@ bool place_monster(POSITION y, POSITION x, BIT_FLAGS mode)
 	if (!r_idx) return FALSE;
 
 	/* Attempt to place the monster */
-	if (place_monster_aux(0, y, x, r_idx, mode)) return TRUE;
+	if (place_monster_aux(player_ptr, 0, y, x, r_idx, mode)) return TRUE;
 
 	return FALSE;
 }
 
 /*!
  * @brief 指定地点に1種類のモンスター種族による群れを生成する
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 生成地点y座標
  * @param x 生成地点x座標
  * @return 生成に成功したらtrue
  */
-bool alloc_horde(POSITION y, POSITION x)
+bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x)
 {
 	monster_race *r_ptr = NULL;
 	MONRACE_IDX r_idx = 0;
@@ -3263,7 +3267,7 @@ bool alloc_horde(POSITION y, POSITION x)
 	while (--attempts)
 	{
 		/* Attempt to place the monster */
-		if (place_monster_aux(0, y, x, r_idx, 0L)) break;
+		if (place_monster_aux(player_ptr, 0, y, x, r_idx, 0L)) break;
 	}
 
 	if (attempts < 1) return FALSE;
@@ -3276,7 +3280,7 @@ bool alloc_horde(POSITION y, POSITION x)
 	{
 		scatter(p_ptr, &cy, &cx, y, x, 5, 0);
 
-		(void)summon_specific(m_idx, cy, cx, floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
+		(void)summon_specific(player_ptr, m_idx, cy, cx, floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
 
 		y = cy;
 		x = cx;
@@ -3288,10 +3292,11 @@ bool alloc_horde(POSITION y, POSITION x)
 
 /*!
  * @brief ダンジョンの主生成を試みる / Put the Guardian
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param def_val 現在の主の生成状態
  * @return 生成に成功したらtrue
  */
-bool alloc_guardian(bool def_val)
+bool alloc_guardian(player_type *player_ptr, bool def_val)
 {
 	MONRACE_IDX guardian = d_info[p_ptr->dungeon_idx].final_guardian;
 
@@ -3313,7 +3318,7 @@ bool alloc_guardian(bool def_val)
 			if (cave_empty_bold2(floor_ptr, oy, ox) && monster_can_cross_terrain(floor_ptr->grid_array[oy][ox].feat, &r_info[guardian], 0))
 			{
 				/* Place the guardian */
-				if (place_monster_aux(0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) return TRUE;
+				if (place_monster_aux(player_ptr, 0, oy, ox, guardian, (PM_ALLOW_GROUP | PM_NO_KAGE | PM_NO_PET))) return TRUE;
 			}
 
 			/* One less try count */
@@ -3337,13 +3342,13 @@ bool alloc_guardian(bool def_val)
  * Use "slp" to choose the initial "sleep" status
  * Use "floor_ptr->monster_level" for the monster level
  */
-bool alloc_monster(POSITION dis, BIT_FLAGS mode)
+bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode)
 {
 	POSITION y = 0, x = 0;
 	int attempts_left = 10000;
 
 	/* Put the Guardian */
-	if (alloc_guardian(FALSE)) return TRUE;
+	if (alloc_guardian(player_ptr, FALSE)) return TRUE;
 
 	/* Find a legal, distant, unoccupied, space */
 	floor_type *floor_ptr = p_ptr->current_floor_ptr;
@@ -3380,7 +3385,7 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 
 	if (randint1(5000) <= floor_ptr->dun_level)
 	{
-		if (alloc_horde(y, x))
+		if (alloc_horde(player_ptr, y, x))
 		{
 			return TRUE;
 		}
@@ -3388,7 +3393,7 @@ bool alloc_monster(POSITION dis, BIT_FLAGS mode)
 	else
 	{
 		/* Attempt to place the monster, allow groups */
-		if (place_monster(y, x, (mode | PM_ALLOW_GROUP))) return TRUE;
+		if (place_monster(player_ptr, y, x, (mode | PM_ALLOW_GROUP))) return TRUE;
 	}
 
 	return FALSE;
@@ -3445,6 +3450,7 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
 
 /*!
  * @brief モンスターを召喚により配置する / Place a monster (of the specified "type") near the given location. Return TRUE if a monster was actually summoned.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param who 召喚主のモンスター情報ID
  * @param y1 目標地点y座標
  * @param x1 目標地点x座標
@@ -3474,7 +3480,7 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
  *
  * Note that this function may not succeed, though this is very rare.
  */
-bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode)
+bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode)
 {
 	POSITION x, y;
 	MONRACE_IDX r_idx;
@@ -3506,7 +3512,7 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 	if ((type == SUMMON_BLUE_HORROR) || (type == SUMMON_DAWN)) mode |= PM_NO_KAGE;
 
 	/* Attempt to place the monster (awake, allow groups) */
-	if (!place_monster_aux(who, y, x, r_idx, mode))
+	if (!place_monster_aux(player_ptr, who, y, x, r_idx, mode))
 	{
 		summon_specific_type = 0;
 		return FALSE;
@@ -3521,6 +3527,7 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
 
 /*!
  * @brief 特定モンスター種族を召喚により生成する / A "dangerous" function, creates a pet of the specified type
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param who 召喚主のモンスター情報ID
  * @param oy 目標地点y座標
  * @param ox 目標地点x座標
@@ -3528,7 +3535,7 @@ bool summon_specific(MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int t
  * @param mode 生成オプション
  * @return 召喚できたらtrueを返す
  */
-bool summon_named_creature(MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
+bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode)
 {
 	POSITION x, y;
 	/* if (!r_idx) return; */
@@ -3541,12 +3548,13 @@ bool summon_named_creature(MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_ID
 	if (!mon_scatter(r_idx, &y, &x, oy, ox, 2)) return FALSE;
 
 	/* Place it (allow groups) */
-	return place_monster_aux(who, y, x, r_idx, (mode | PM_NO_KAGE));
+	return place_monster_aux(player_ptr, who, y, x, r_idx, (mode | PM_NO_KAGE));
 }
 
 
 /*!
  * @brief モンスターを増殖生成する / Let the given monster attempt to reproduce.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_idx 増殖するモンスター情報ID
  * @param clone クローン・モンスター処理ならばtrue
  * @param mode 生成オプション
@@ -3554,7 +3562,7 @@ bool summon_named_creature(MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_ID
  * @details
  * Note that "reproduction" REQUIRES empty space.
  */
-bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
+bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 {
 	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -3566,7 +3574,7 @@ bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 	if (m_ptr->mflag2 & MFLAG2_NOPET) mode |= PM_NO_PET;
 
 	/* Create a new monster (awake, no groups) */
-	if (!place_monster_aux(m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY)))
+	if (!place_monster_aux(player_ptr, m_idx, y, x, m_ptr->r_idx, (mode | PM_NO_KAGE | PM_MULTIPLY)))
 		return FALSE;
 
 	/* Hack -- Transfer "clone" flag */
@@ -3578,7 +3586,6 @@ bool multiply_monster(MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 
 	return TRUE;
 }
-
 
 
 /*!

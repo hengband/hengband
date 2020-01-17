@@ -2267,7 +2267,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, mode))
+		if (summon_specific(creature_ptr, (pet ? -1 : 0), creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, mode))
 		{
 			msg_print(_("あなたはデーモンを引き寄せた！", "You have attracted a demon!"));
 			disturb(creature_ptr, FALSE, TRUE);
@@ -2375,7 +2375,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_ANIMAL, mode))
+		if (summon_specific(creature_ptr, (pet ? -1 : 0), creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_ANIMAL, mode))
 		{
 			msg_print(_("動物を引き寄せた！", "You have attracted an animal!"));
 			disturb(creature_ptr, FALSE, TRUE);
@@ -2453,7 +2453,7 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 		if (pet) mode |= PM_FORCE_PET;
 		else mode |= (PM_ALLOW_UNIQUE | PM_NO_PET);
 
-		if (summon_specific((pet ? -1 : 0), creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DRAGON, mode))
+		if (summon_specific(creature_ptr, (pet ? -1 : 0), creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DRAGON, mode))
 		{
 			msg_print(_("ドラゴンを引き寄せた！", "You have attracted a dragon!"));
 			disturb(creature_ptr, FALSE, TRUE);
@@ -2716,7 +2716,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		/* Call animal */
 		if ((creature_ptr->cursed & TRC_CALL_ANIMAL) && one_in_(2500))
 		{
-			if (summon_specific(0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_ANIMAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+			if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_ANIMAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
@@ -2728,7 +2728,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		/* Call demon */
 		if ((creature_ptr->cursed & TRC_CALL_DEMON) && one_in_(1111))
 		{
-			if (summon_specific(0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+			if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
@@ -2740,7 +2740,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		/* Call dragon */
 		if ((creature_ptr->cursed & TRC_CALL_DRAGON) && one_in_(800))
 		{
-			if (summon_specific(0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DRAGON,
+			if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DRAGON,
 				(PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
@@ -2753,7 +2753,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		/* Call undead */
 		if ((creature_ptr->cursed & TRC_CALL_UNDEAD) && one_in_(1111))
 		{
-			if (summon_specific(0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD,
+			if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD,
 				(PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 			{
 				GAME_TEXT o_name[MAX_NLEN];
@@ -3273,7 +3273,7 @@ static void process_world(player_type *player_ptr)
 		!floor_ptr->inside_arena && !floor_ptr->inside_quest && !player_ptr->phase_out)
 	{
 		/* Make a new monster */
-		(void)alloc_monster(MAX_SIGHT + 5, 0);
+		(void)alloc_monster(player_ptr, MAX_SIGHT + 5, 0);
 	}
 
 	/* Hack -- Check for creature regeneration */
@@ -4382,7 +4382,7 @@ static void process_fishing(player_type *creature_ptr)
 			POSITION y, x;
 			y = creature_ptr->y + ddy[creature_ptr->fishing_dir];
 			x = creature_ptr->x + ddx[creature_ptr->fishing_dir];
-			if (place_monster_aux(0, y, x, r_idx, PM_NO_KAGE))
+			if (place_monster_aux(creature_ptr, 0, y, x, r_idx, PM_NO_KAGE))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
 				monster_desc(m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
@@ -5581,7 +5581,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		monster_type *m_ptr;
 		MONRACE_IDX pet_r_idx = ((player_ptr->pclass == CLASS_CAVALRY) ? MON_HORSE : MON_YASE_HORSE);
 		monster_race *r_ptr = &r_info[pet_r_idx];
-		place_monster_aux(0, player_ptr->y, player_ptr->x - 1, pet_r_idx,
+		place_monster_aux(player_ptr, 0, player_ptr->y, player_ptr->x - 1, pet_r_idx,
 			(PM_FORCE_PET | PM_NO_KAGE));
 		m_ptr = &floor_ptr->m_list[hack_m_idx_ii];
 		m_ptr->mspeed = r_ptr->speed;

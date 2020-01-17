@@ -1292,7 +1292,7 @@ void change_floor(player_type *creature_ptr)
 			for (i = 0; i < alloc_times; i++)
 			{
 				/* Make a (group of) new monster */
-				(void)alloc_monster(0, 0);
+				(void)alloc_monster(creature_ptr, 0, 0);
 			}
 
 		}

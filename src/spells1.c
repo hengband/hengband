@@ -1005,7 +1005,7 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 						}
 						continue;
 					}
-					else if (summon_named_creature(who, y, x, o_ptr->pval, mode))
+					else if (summon_named_creature(caster_ptr, who, y, x, o_ptr->pval, mode))
 					{
 						note_kill = _("生き返った。", " revived.");
 					}
@@ -1977,7 +1977,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (!common_saving_throw_charm(caster_ptr, dam, m_ptr))
 				{
 					note = _("があなたに隷属した。", " is in your thrall!");
-					set_pet(m_ptr);
+					set_pet(caster_ptr, m_ptr);
 				}
 				else
 				{
@@ -2110,7 +2110,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				m_ptr->hp = m_ptr->maxhp;
 
 				/* Attempt to clone. */
-				if (multiply_monster(g_ptr->m_idx, TRUE, 0L))
+				if (multiply_monster(caster_ptr, g_ptr->m_idx, TRUE, 0L))
 				{
 					note = _("が分裂した！", " spawns!");
 				}
@@ -2385,7 +2385,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			else
 			{
 				note = _("は突然友好的になったようだ！", " suddenly seems friendly!");
-				set_pet(m_ptr);
+				set_pet(caster_ptr, m_ptr);
 
 				chg_virtue(caster_ptr, V_INDIVIDUALISM, -1);
 				if (r_ptr->flags3 & RF3_ANIMAL)
@@ -2432,7 +2432,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			else
 			{
 				note = _("は既にあなたの奴隷だ！", " is in your thrall!");
-				set_pet(m_ptr);
+				set_pet(caster_ptr, m_ptr);
 			}
 
 			/* No "real" damage */
@@ -2475,7 +2475,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			else
 			{
 				note = _("は既にあなたの奴隷だ！", " is in your thrall!");
-				set_pet(m_ptr);
+				set_pet(caster_ptr, m_ptr);
 			}
 
 			/* No "real" damage */
@@ -2519,7 +2519,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			else
 			{
 				note = _("はなついた。", " is tamed!");
-				set_pet(m_ptr);
+				set_pet(caster_ptr, m_ptr);
 				if (r_ptr->flags3 & RF3_ANIMAL)
 					chg_virtue(caster_ptr, V_NATURE, 1);
 			}
@@ -2569,7 +2569,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			else
 			{
 				note = _("を支配した。", " is tamed!");
-				set_pet(m_ptr);
+				set_pet(caster_ptr, m_ptr);
 				if (r_ptr->flags3 & RF3_ANIMAL)
 					chg_virtue(caster_ptr, V_NATURE, 1);
 			}
@@ -3563,7 +3563,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				else
 				{
 					note = _("を支配した。", " is tamed!");
-					set_pet(m_ptr);
+					set_pet(caster_ptr, m_ptr);
 					(void)set_monster_fast(caster_ptr, g_ptr->m_idx, MON_FAST(m_ptr) + 100);
 
 					/* Learn about type */

@@ -2645,7 +2645,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 			(*count) += activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, FALSE);
 			if (!one_in_(6)) break;
 		case 7: case 8: case 9: case 18:
-			(*count) += summon_specific(0, target_ptr->y, target_ptr->x, floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+			(*count) += summon_specific(target_ptr, 0, target_ptr->y, target_ptr->x, floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			if (!one_in_(6)) break;
 		case 10: case 11: case 12:
 			msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away..."));
@@ -2677,7 +2677,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 		case 25:
 			if ((floor_ptr->dun_level > 65) && !stop_ty)
 			{
-				(*count) += summon_cyber(floor_ptr, -1, target_ptr->y, target_ptr->x);
+				(*count) += summon_cyber(target_ptr, -1, target_ptr->y, target_ptr->x);
 				stop_ty = TRUE;
 				break;
 			}
@@ -2737,51 +2737,51 @@ int activate_hi_summon(player_type *caster_ptr, POSITION y, POSITION x, bool can
 		switch (randint1(25) + (dungeon_level / 20))
 		{
 		case 1: case 2:
-			count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_ANT, mode);
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_ANT, mode);
 			break;
 		case 3: case 4:
-			count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_SPIDER, mode);
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_SPIDER, mode);
 			break;
 		case 5: case 6:
-			count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HOUND, mode);
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_HOUND, mode);
 			break;
 		case 7: case 8:
-			count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HYDRA, mode);
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_HYDRA, mode);
 			break;
 		case 9: case 10:
-			count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_ANGEL, mode);
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_ANGEL, mode);
 			break;
 		case 11: case 12:
-			count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_UNDEAD, mode);
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_UNDEAD, mode);
 			break;
 		case 13: case 14:
-			count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_DRAGON, mode);
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_DRAGON, mode);
 			break;
 		case 15: case 16:
-			count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_DEMON, mode);
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_DEMON, mode);
 			break;
 		case 17:
 			if (can_pet) break;
-			count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_AMBERITES, (mode | PM_ALLOW_UNIQUE));
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_AMBERITES, (mode | PM_ALLOW_UNIQUE));
 			break;
 		case 18: case 19:
 			if (can_pet) break;
-			count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_UNIQUE, (mode | PM_ALLOW_UNIQUE));
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_UNIQUE, (mode | PM_ALLOW_UNIQUE));
 			break;
 		case 20: case 21:
 			if (!can_pet) mode |= PM_ALLOW_UNIQUE;
-			count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_UNDEAD, mode);
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_UNDEAD, mode);
 			break;
 		case 22: case 23:
 			if (!can_pet) mode |= PM_ALLOW_UNIQUE;
-			count += summon_specific((pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_DRAGON, mode);
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), y, x, summon_lev, SUMMON_HI_DRAGON, mode);
 			break;
 		case 24:
-			count += summon_specific((pet ? -1 : 0), y, x, 100, SUMMON_CYBER, mode);
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), y, x, 100, SUMMON_CYBER, mode);
 			break;
 		default:
 			if (!can_pet) mode |= PM_ALLOW_UNIQUE;
-			count += summon_specific((pet ? -1 : 0), y, x, pet ? summon_lev : (((summon_lev * 3) / 2) + 5), 0, mode);
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), y, x, pet ? summon_lev : (((summon_lev * 3) / 2) + 5), 0, mode);
 		}
 	}
 
@@ -3336,7 +3336,7 @@ void wild_magic(player_type *caster_ptr, int spell)
 	case 35:
 		for (int counter = 0; counter < 8; counter++)
 		{
-			(void)summon_specific(0, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET));
+			(void)summon_specific(caster_ptr, 0, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3) / 2, type, (PM_ALLOW_GROUP | PM_NO_PET));
 		}
 
 		break;
@@ -3345,7 +3345,7 @@ void wild_magic(player_type *caster_ptr, int spell)
 		activate_hi_summon(caster_ptr, caster_ptr->y, caster_ptr->x, FALSE);
 		break;
 	case 38:
-		(void)summon_cyber(floor_ptr, -1, caster_ptr->y, caster_ptr->x);
+		(void)summon_cyber(caster_ptr, -1, caster_ptr->y, caster_ptr->x);
 		break;
 	default:
 	{
@@ -3710,7 +3710,7 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 		msg_print(_("なんてこった！あなたの周りの地面から朽ちた人影が立ち上がってきた！",
 			"Oh no! Mouldering forms rise from the earth around you!"));
 
-		(void)summon_specific(0, caster_ptr->y, caster_ptr->x, caster_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+		(void)summon_specific(caster_ptr, 0, caster_ptr->y, caster_ptr->x, caster_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		chg_virtue(caster_ptr, V_UNLIFE, 1);
 	}
 	else if (die < 14)
@@ -3878,7 +3878,7 @@ void cast_shuffle(player_type *caster_ptr)
 	if (die < 14)
 	{
 		msg_print(_("なんてこった！《悪魔》だ！", "Oh no! It's the Devil!"));
-		summon_specific(0, caster_ptr->y, caster_ptr->x, floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
+		summon_specific(caster_ptr, 0, caster_ptr->y, caster_ptr->x, floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		return;
 	}
 	
@@ -4660,7 +4660,7 @@ bool rodeo(player_type *creature_ptr)
 		&& (rlev < creature_ptr->lev * 3 / 2 + randint0(creature_ptr->lev / 5)))
 	{
 		msg_format(_("%sを手なずけた。", "You tame %s."), m_name);
-		set_pet(m_ptr);
+		set_pet(creature_ptr, m_ptr);
 	}
 	else
 	{

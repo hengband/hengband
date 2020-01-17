@@ -464,7 +464,7 @@ bool place_quest_monsters(player_type *creature_ptr)
 				if (!l) return FALSE;
 
 				/* Try to place the monster */
-				if (place_monster_aux(0, y, x, quest[i].r_idx, mode))
+				if (place_monster_aux(creature_ptr, 0, y, x, quest[i].r_idx, mode))
 				{
 					/* Success */
 					break;
@@ -953,7 +953,7 @@ static bool cave_gen(player_type *player_ptr)
 	/* Put some monsters in the dungeon */
 	for (i = i + k; i > 0; i--)
 	{
-		(void)alloc_monster(0, PM_ALLOW_SLEEP);
+		(void)alloc_monster(player_ptr, 0, PM_ALLOW_SLEEP);
 	}
 
 	/* Place some traps in the dungeon */
@@ -980,7 +980,7 @@ static bool cave_gen(player_type *player_ptr)
 	floor_ptr->object_level = floor_ptr->base_level;
 
 	/* Put the Guardian */
-	if (!alloc_guardian(TRUE)) return FALSE;
+	if (!alloc_guardian(player_ptr, TRUE)) return FALSE;
 
 	bool is_empty_or_dark = dun->empty_level;
 	is_empty_or_dark &= !one_in_(DARK_EMPTY) || (randint1(100) > floor_ptr->dun_level);
@@ -1095,14 +1095,14 @@ static void generate_challenge_arena(floor_type *floor_ptr, player_type *challan
 	build_arena(floor_ptr, &y, &x);
 	player_place(challanger_ptr, y, x);
 
-	if(!place_monster_aux(0, challanger_ptr->y + 5, challanger_ptr->x, arena_info[challanger_ptr->arena_number].r_idx, (PM_NO_KAGE | PM_NO_PET)))
+	if(!place_monster_aux(challanger_ptr, 0, challanger_ptr->y + 5, challanger_ptr->x, arena_info[challanger_ptr->arena_number].r_idx, (PM_NO_KAGE | PM_NO_PET)))
 	{
 		challanger_ptr->exit_bldg = TRUE;
 		challanger_ptr->arena_number++;
 		msg_print(_("相手は欠場した。あなたの不戦勝だ。", "The enemy is unable appear. You won by default."));
 	}
-
 }
+
 
 /*!
  * @brief モンスター闘技場のフロア生成 / Builds the arena after it is entered -KMW-
@@ -1210,7 +1210,7 @@ static void generate_gambling_arena(player_type *creature_ptr)
 
 	for(i = 0; i < 4; i++)
 	{
-		place_monster_aux(0, creature_ptr->y + 8 + (i/2)*4, creature_ptr->x - 2 + (i%2)*4, battle_mon[i], (PM_NO_KAGE | PM_NO_PET));
+		place_monster_aux(creature_ptr, 0, creature_ptr->y + 8 + (i/2)*4, creature_ptr->x - 2 + (i%2)*4, battle_mon[i], (PM_NO_KAGE | PM_NO_PET));
 		set_friendly(&floor_ptr->m_list[floor_ptr->grid_array[creature_ptr->y+8+(i/2)*4][creature_ptr->x-2+(i%2)*4].m_idx]);
 	}
 	for(i = 1; i < floor_ptr->m_max; i++)

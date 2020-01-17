@@ -2761,7 +2761,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 
 	/* Create a new monster (no groups) */
 	bool polymorphed = FALSE;
-	if (place_monster_aux(0, y, x, new_r_idx, mode))
+	if (place_monster_aux(caster_ptr, 0, y, x, new_r_idx, mode))
 	{
 		floor_ptr->m_list[hack_m_idx_ii].nickname = back_m.nickname;
 		floor_ptr->m_list[hack_m_idx_ii].parent_m_idx = back_m.parent_m_idx;
@@ -2773,7 +2773,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 	else
 	{
 		/* Placing the new monster failed */
-		if (place_monster_aux(0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN)))
+		if (place_monster_aux(caster_ptr, 0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN)))
 		{
 			floor_ptr->m_list[hack_m_idx_ii] = back_m;
 
@@ -3343,7 +3343,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 			if (pet) mode |= PM_FORCE_PET;
 			else mode |= (PM_NO_PET | PM_FORCE_FRIENDLY);
 
-			count += summon_specific((pet ? -1 : 0), caster_ptr->y, caster_ptr->x, (pet ? caster_ptr->lev * 2 / 3 + randint1(caster_ptr->lev / 2) : caster_ptr->current_floor_ptr->dun_level), 0, mode);
+			count += summon_specific(caster_ptr, (pet ? -1 : 0), caster_ptr->y, caster_ptr->x, (pet ? caster_ptr->lev * 2 / 3 + randint1(caster_ptr->lev / 2) : caster_ptr->current_floor_ptr->dun_level), 0, mode);
 			if (!one_in_(6)) break;
 		}
 		case 23: case 24: case 25:

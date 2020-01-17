@@ -9,4 +9,4 @@ nest_mon_info_type;
 
 extern bool build_type5(player_type *player_ptr);
 extern bool build_type6(player_type *player_ptr);
-extern bool build_type13(floor_type *floor_ptr);
+extern bool build_type13(player_type *player_ptr);

@@ -2213,7 +2213,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 				DIRECTION i;
 				for (i = 0; i < 8; i++)
 				{
-					summon_specific(-1, creature_ptr->y, creature_ptr->x, lvl, SUMMON_MOLD, PM_FORCE_PET);
+					summon_specific(creature_ptr, -1, creature_ptr->y, creature_ptr->x, lvl, SUMMON_MOLD, PM_FORCE_PET);
 				}
 			}
 			break;

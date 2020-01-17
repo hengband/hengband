@@ -750,7 +750,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		msg_print(_("援軍を召喚した。", "You summon minions."));
 		for (k = 0;k < 4; k++)
 		{
-			(void)summon_kin_player(plev, target_row, target_col, (PM_FORCE_PET | PM_ALLOW_GROUP));
+			(void)summon_kin_player(caster_ptr, plev, target_row, target_col, (PM_FORCE_PET | PM_ALLOW_GROUP));
 		}
 		break;
 	}
@@ -762,7 +762,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		msg_print(_("サイバーデーモンを召喚した！", "You summon Cyberdemons!"));
 		if (max_cyber > 4) max_cyber = 4;
 		for (k = 0;k < max_cyber; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_CYBER, mode);
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_CYBER, mode);
 		break;
 	}
 	case MS_S_MONSTER:
@@ -771,7 +771,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		msg_print(_("仲間を召喚した。", "You summon help."));
 		for (k = 0;k < 1; k++)
-			summon_specific(-1, target_row, target_col, plev, 0, (mode | u_mode));
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, 0, (mode | u_mode));
 		break;
 	}
 	case MS_S_MONSTERS:
@@ -780,7 +780,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		msg_print(_("モンスターを召喚した！", "You summon monsters!"));
 		for (k = 0; k < 6; k++)
-			summon_specific(-1, target_row, target_col, plev, 0, (mode | u_mode));
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, 0, (mode | u_mode));
 		break;
 	}
 	case MS_S_ANT:
@@ -789,7 +789,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		msg_print(_("アリを召喚した。", "You summon ants."));
 		for (k = 0; k < 6; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_ANT, mode);
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_ANT, mode);
 		break;
 	}
 	case MS_S_SPIDER:
@@ -798,7 +798,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		msg_print(_("蜘蛛を召喚した。", "You summon spiders."));
 		for (k = 0; k < 6; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_SPIDER, mode);
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_SPIDER, mode);
 		break;
 	}
 	case MS_S_HOUND:
@@ -807,7 +807,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		msg_print(_("ハウンドを召喚した。", "You summon hounds."));
 		for (k = 0; k < 4; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_HOUND, mode);
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_HOUND, mode);
 		break;
 	}
 	case MS_S_HYDRA:
@@ -816,7 +816,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		msg_print(_("ヒドラを召喚した。", "You summon hydras."));
 		for (k = 0; k < 4; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_HYDRA, mode);
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_HYDRA, mode);
 		break;
 	}
 	case MS_S_ANGEL:
@@ -825,7 +825,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		msg_print(_("天使を召喚した！", "You summon angel!"));
 		for (k = 0; k < 1; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_ANGEL, mode);
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_ANGEL, mode);
 		break;
 	}
 	case MS_S_DEMON:
@@ -834,7 +834,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		msg_print(_("混沌の宮廷から悪魔を召喚した！", "You summon a demon from the Courts of Chaos!"));
 		for (k = 0; k < 1; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_DEMON, (mode | u_mode));
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_DEMON, (mode | u_mode));
 		break;
 	}
 	case MS_S_UNDEAD:
@@ -843,7 +843,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		msg_print(_("アンデッドの強敵を召喚した！", "You summon an undead adversary!"));
 		for (k = 0; k < 1; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_UNDEAD, (mode | u_mode));
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_UNDEAD, (mode | u_mode));
 		break;
 	}
 	case MS_S_DRAGON:
@@ -852,7 +852,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		msg_print(_("ドラゴンを召喚した！", "You summon dragon!"));
 		for (k = 0; k < 1; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_DRAGON, (mode | u_mode));
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_DRAGON, (mode | u_mode));
 		break;
 	}
 	case MS_S_HI_UNDEAD:
@@ -861,7 +861,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		msg_print(_("強力なアンデッドを召喚した！", "You summon greater undead!"));
 		for (k = 0; k < 6; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_HI_UNDEAD, (mode | u_mode));
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_HI_UNDEAD, (mode | u_mode));
 		break;
 	}
 	case MS_S_HI_DRAGON:
@@ -870,7 +870,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		msg_print(_("古代ドラゴンを召喚した！", "You summon ancient dragons!"));
 		for (k = 0; k < 4; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_HI_DRAGON, (mode | u_mode));
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_HI_DRAGON, (mode | u_mode));
 		break;
 	}
 	case MS_S_AMBERITE:
@@ -879,7 +879,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		msg_print(_("アンバーの王族を召喚した！", "You summon Lords of Amber!"));
 		for (k = 0; k < 4; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_AMBERITES, (mode | PM_ALLOW_UNIQUE));
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_AMBERITES, (mode | PM_ALLOW_UNIQUE));
 		break;
 	}
 	case MS_S_UNIQUE:
@@ -888,9 +888,9 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
 		msg_print(_("特別な強敵を召喚した！", "You summon special opponents!"));
 		for (k = 0;k < 4; k++)
-			if (summon_specific(-1, target_row, target_col, plev, SUMMON_UNIQUE, (mode | PM_ALLOW_UNIQUE))) count++;
+			if (summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_UNIQUE, (mode | PM_ALLOW_UNIQUE))) count++;
 		for (k = count;k < 4; k++)
-			summon_specific(-1, target_row, target_col, plev, SUMMON_HI_UNDEAD, (mode | u_mode));
+			summon_specific(caster_ptr, -1, target_row, target_col, plev, SUMMON_HI_UNDEAD, (mode | u_mode));
 		break;
 	}
 	default:

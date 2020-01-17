@@ -122,7 +122,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		{
 			for (k = 0; k < randint1(3); k++)
 			{
-				if (summon_specific(0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+				if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 				{
 					ident = TRUE;
 				}
@@ -134,7 +134,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		{
 			for (k = 0; k < randint1(3); k++)
 			{
-				if (summon_specific(0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
+				if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET)))
 				{
 					ident = TRUE;
 				}
@@ -144,7 +144,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_SUMMON_PET:
 		{
-			if (summon_specific(-1, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_FORCE_PET)))
+			if (summon_specific(creature_ptr, -1, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 			{
 				ident = TRUE;
 			}
@@ -153,7 +153,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_SUMMON_KIN:
 		{
-			if (summon_kin_player(creature_ptr->lev, creature_ptr->y, creature_ptr->x, (PM_FORCE_PET | PM_ALLOW_GROUP)))
+			if (summon_kin_player(creature_ptr, creature_ptr->lev, creature_ptr->y, creature_ptr->x, (PM_FORCE_PET | PM_ALLOW_GROUP)))
 			{
 				ident = TRUE;
 			}

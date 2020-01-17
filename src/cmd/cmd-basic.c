@@ -2673,7 +2673,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	{
 		j = 100;
 
-		if (!(summon_named_creature(0, y, x, q_ptr->pval, !(object_is_cursed(q_ptr)) ? PM_FORCE_PET : 0L)))
+		if (!(summon_named_creature(creature_ptr, 0, y, x, q_ptr->pval, !(object_is_cursed(q_ptr)) ? PM_FORCE_PET : 0L)))
 			msg_print(_("人形は捻じ曲がり砕け散ってしまった！", "The Figurine writhes and then shatters."));
 		else if (object_is_cursed(q_ptr))
 			msg_print(_("これはあまり良くない気がする。", "You have a bad feeling about this."));

@@ -429,7 +429,7 @@ bool build_type5(player_type *player_ptr)
 			r_idx = nest_mon_info[i].r_idx;
 
 			/* Place that "random" monster (no groups) */
-			(void)place_monster_aux(0, y, x, r_idx, 0L);
+			(void)place_monster_aux(player_ptr, 0, y, x, r_idx, 0L);
 
 			nest_mon_info[i].used = TRUE;
 		}
@@ -658,51 +658,51 @@ bool build_type6(player_type *player_ptr)
 	/* Top and bottom rows */
 	for (x = xval - 9; x <= xval + 9; x++)
 	{
-		place_monster_aux(0, yval - 2, x, what[0], PM_NO_KAGE);
-		place_monster_aux(0, yval + 2, x, what[0], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, yval - 2, x, what[0], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, yval + 2, x, what[0], PM_NO_KAGE);
 	}
 
 	/* Middle columns */
 	for (y = yval - 1; y <= yval + 1; y++)
 	{
-		place_monster_aux(0, y, xval - 9, what[0], PM_NO_KAGE);
-		place_monster_aux(0, y, xval + 9, what[0], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval - 9, what[0], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval + 9, what[0], PM_NO_KAGE);
 
-		place_monster_aux(0, y, xval - 8, what[1], PM_NO_KAGE);
-		place_monster_aux(0, y, xval + 8, what[1], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval - 8, what[1], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval + 8, what[1], PM_NO_KAGE);
 
-		place_monster_aux(0, y, xval - 7, what[1], PM_NO_KAGE);
-		place_monster_aux(0, y, xval + 7, what[1], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval - 7, what[1], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval + 7, what[1], PM_NO_KAGE);
 
-		place_monster_aux(0, y, xval - 6, what[2], PM_NO_KAGE);
-		place_monster_aux(0, y, xval + 6, what[2], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval - 6, what[2], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval + 6, what[2], PM_NO_KAGE);
 
-		place_monster_aux(0, y, xval - 5, what[2], PM_NO_KAGE);
-		place_monster_aux(0, y, xval + 5, what[2], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval - 5, what[2], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval + 5, what[2], PM_NO_KAGE);
 
-		place_monster_aux(0, y, xval - 4, what[3], PM_NO_KAGE);
-		place_monster_aux(0, y, xval + 4, what[3], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval - 4, what[3], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval + 4, what[3], PM_NO_KAGE);
 
-		place_monster_aux(0, y, xval - 3, what[3], PM_NO_KAGE);
-		place_monster_aux(0, y, xval + 3, what[3], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval - 3, what[3], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval + 3, what[3], PM_NO_KAGE);
 
-		place_monster_aux(0, y, xval - 2, what[4], PM_NO_KAGE);
-		place_monster_aux(0, y, xval + 2, what[4], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval - 2, what[4], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, xval + 2, what[4], PM_NO_KAGE);
 	}
 
 	/* Above/Below the center monster */
 	for (x = xval - 1; x <= xval + 1; x++)
 	{
-		place_monster_aux(0, yval + 1, x, what[5], PM_NO_KAGE);
-		place_monster_aux(0, yval - 1, x, what[5], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, yval + 1, x, what[5], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, yval - 1, x, what[5], PM_NO_KAGE);
 	}
 
 	/* Next to the center monster */
-	place_monster_aux(0, yval, xval + 1, what[6], PM_NO_KAGE);
-	place_monster_aux(0, yval, xval - 1, what[6], PM_NO_KAGE);
+	place_monster_aux(player_ptr, 0, yval, xval + 1, what[6], PM_NO_KAGE);
+	place_monster_aux(player_ptr, 0, yval, xval - 1, what[6], PM_NO_KAGE);
 
 	/* Center monster */
-	place_monster_aux(0, yval, xval, what[7], PM_NO_KAGE);
+	place_monster_aux(player_ptr, 0, yval, xval, what[7], PM_NO_KAGE);
 
 	return TRUE;
 }
@@ -770,7 +770,7 @@ static bool vault_aux_trapped_pit(MONRACE_IDX r_idx)
 *\n
 * Note that "monster pits" will never contain "unique" monsters.\n
 */
-bool build_type13(floor_type *floor_ptr)
+bool build_type13(player_type *player_ptr)
 {
 	static int placing[][3] = {
 		{ -2, -9, 0 },{ -2, -8, 0 },{ -3, -7, 0 },{ -3, -6, 0 },
@@ -810,6 +810,7 @@ bool build_type13(floor_type *floor_ptr)
 
 	grid_type *g_ptr;
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	int cur_pit_type = pick_vault_type(floor_ptr, pit_types, d_info[floor_ptr->dungeon_idx].pit);
 	vault_aux_type *n_ptr;
 
@@ -1001,7 +1002,7 @@ bool build_type13(floor_type *floor_ptr)
 	{
 		y = yval + placing[i][0];
 		x = xval + placing[i][1];
-		place_monster_aux(0, y, x, what[placing[i][2]], PM_NO_KAGE);
+		place_monster_aux(player_ptr, 0, y, x, what[placing[i][2]], PM_NO_KAGE);
 	}
 
 	return TRUE;

@@ -676,7 +676,7 @@ void wilderness_gen(player_type *creature_ptr)
 			mode |= PM_ALLOW_SLEEP;
 
 		/* Make a resident */
-		(void)alloc_monster(generate_encounter ? 0 : 3, mode);
+		(void)alloc_monster(creature_ptr, generate_encounter ? 0 : 3, mode);
 	}
 
 	if(generate_encounter) creature_ptr->ambush_flag = TRUE;

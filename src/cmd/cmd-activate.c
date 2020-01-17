@@ -539,7 +539,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 			if (!get_direction(user_ptr, &dir, FALSE, FALSE)) return;
 			if (monster_can_enter(user_ptr->y + ddy[dir], user_ptr->x + ddx[dir], &r_info[o_ptr->pval], 0))
 			{
-				if (place_monster_aux(0, user_ptr->y + ddy[dir], user_ptr->x + ddx[dir], o_ptr->pval, (PM_FORCE_PET | PM_NO_KAGE)))
+				if (place_monster_aux(user_ptr, 0, user_ptr->y + ddy[dir], user_ptr->x + ddx[dir], o_ptr->pval, (PM_FORCE_PET | PM_NO_KAGE)))
 				{
 					if (o_ptr->xtra3) user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].mspeed = o_ptr->xtra3;
 					if (o_ptr->xtra5) user_ptr->current_floor_ptr->m_list[hack_m_idx_ii].max_maxhp = o_ptr->xtra5;
@@ -1189,14 +1189,14 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 
 	case ACT_SUMMON_ANIMAL:
 	{
-		(void)summon_specific(-1, user_ptr->y, user_ptr->x, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET));
+		(void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, plev, SUMMON_ANIMAL_RANGER, (PM_ALLOW_GROUP | PM_FORCE_PET));
 		break;
 	}
 
 	case ACT_SUMMON_PHANTOM:
 	{
 		msg_print(_("幻霊を召喚した。", "You summon a phantasmal servant."));
-		(void)summon_specific(-1, user_ptr->y, user_ptr->x, user_ptr->current_floor_ptr->dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
+		(void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, user_ptr->current_floor_ptr->dun_level, SUMMON_PHANTOM, (PM_ALLOW_GROUP | PM_FORCE_PET));
 		break;
 	}
 
@@ -1221,7 +1221,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_SUMMON_DAWN:
 	{
 		msg_print(_("暁の師団を召喚した。", "You summon the Legion of the Dawn."));
-		(void)summon_specific(-1, user_ptr->y, user_ptr->x, user_ptr->current_floor_ptr->dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
+		(void)summon_specific(user_ptr, -1, user_ptr->y, user_ptr->x, user_ptr->current_floor_ptr->dun_level, SUMMON_DAWN, (PM_ALLOW_GROUP | PM_FORCE_PET));
 		break;
 	}
 

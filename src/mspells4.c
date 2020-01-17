@@ -2100,10 +2100,10 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_i
 			return -1;
 
 		delete_monster_idx(floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
-		summon_named_creature(0, dummy_y, dummy_x, MON_BANOR, mode);
+		summon_named_creature(target_ptr, 0, dummy_y, dummy_x, MON_BANOR, mode);
 		floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
 		floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
-		summon_named_creature(0, dummy_y, dummy_x, MON_LUPART, mode);
+		summon_named_creature(target_ptr, 0, dummy_y, dummy_x, MON_LUPART, mode);
 		floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
 		floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
@@ -2132,7 +2132,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_i
 				delete_monster_idx(k);
 			}
 		}
-		summon_named_creature(0, dummy_y, dummy_x, MON_BANORLUPART, mode);
+		summon_named_creature(target_ptr, 0, dummy_y, dummy_x, MON_BANORLUPART, mode);
 		floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
 		floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
 
@@ -2168,7 +2168,7 @@ HIT_POINT spell_RF6_SPECIAL_ROLENTO(player_type *target_ptr, POSITION y, POSITIO
 
 	for (k = 0; k < num; k++)
 	{
-		count += summon_named_creature(m_idx, y, x, MON_SHURYUUDAN, mode);
+		count += summon_named_creature(target_ptr, m_idx, y, x, MON_SHURYUUDAN, mode);
 	}
 
 	if (target_ptr->blind && count)
@@ -2706,19 +2706,20 @@ void spell_RF6_RAISE_DEAD(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_ID
 
 /*!
 * @brief 鷹召喚の処理。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param rlev 呪文を唱えるモンスターのレベル
 * @param m_idx 呪文を唱えるモンスターID
 * @return 召喚したモンスターの数を返す。
 */
-MONSTER_NUMBER summon_EAGLE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
+MONSTER_NUMBER summon_EAGLE(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 {
 	int count = 0;
 	int num = 4 + randint1(3);
 	for (int k = 0; k < num; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_EAGLES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_EAGLES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 	}
 
 	return count;
@@ -2727,20 +2728,21 @@ MONSTER_NUMBER summon_EAGLE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 
 /*!
  * @brief インターネット・エクスプローダー召喚の処理。 /
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param rlev 呪文を唱えるモンスターのレベル
  * @param m_idx 呪文を唱えるモンスターID
  * @return 召喚したモンスターの数を返す。
  */
-MONSTER_NUMBER summon_IE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
+MONSTER_NUMBER summon_IE(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 {
 	BIT_FLAGS mode = 0L;
 	int count = 0;
 	int num = 2 + randint1(1 + rlev / 20);
 	for (int k = 0; k < num; k++)
 	{
-		count += summon_named_creature(m_idx, y, x, MON_IE, mode);
+		count += summon_named_creature(target_ptr, m_idx, y, x, MON_IE, mode);
 	}
 
 	return count;
@@ -2780,7 +2782,7 @@ MONSTER_NUMBER summon_guardian(player_type *target_ptr, POSITION y, POSITION x, 
 	int count = 0;
 	for (int k = 0; k < num; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_GUARDIANS, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_GUARDIANS, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 	}
 
 	return count;
@@ -2789,19 +2791,20 @@ MONSTER_NUMBER summon_guardian(player_type *target_ptr, POSITION y, POSITION x, 
 
 /*!
 * @brief ロックのクローン召喚の処理。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
 * @return 召喚したモンスターの数を返す。
 */
-MONSTER_NUMBER summon_LOCKE_CLONE(POSITION y, POSITION x, MONSTER_IDX m_idx)
+MONSTER_NUMBER summon_LOCKE_CLONE(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
 	BIT_FLAGS mode = 0L;
 	int count = 0;
 	int num = randint1(3);
 	for (int k = 0; k < num; k++)
 	{
-		count += summon_named_creature(m_idx, y, x, MON_LOCKE_CLONE, mode);
+		count += summon_named_creature(target_ptr, m_idx, y, x, MON_LOCKE_CLONE, mode);
 	}
 
 	return count;
@@ -2810,19 +2813,20 @@ MONSTER_NUMBER summon_LOCKE_CLONE(POSITION y, POSITION x, MONSTER_IDX m_idx)
 
 /*!
 * @brief シラミ召喚の処理。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param rlev 呪文を唱えるモンスターのレベル
 * @param m_idx 呪文を唱えるモンスターID
 * @return 召喚したモンスターの数を返す。
 */
-MONSTER_NUMBER summon_LOUSE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
+MONSTER_NUMBER summon_LOUSE(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 {
 	int count = 0;
 	int num = 2 + randint1(3);
 	for (int k = 0; k < num; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_LOUSE, PM_ALLOW_GROUP);
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_LOUSE, PM_ALLOW_GROUP);
 	}
 
 	return count;
@@ -2831,18 +2835,19 @@ MONSTER_NUMBER summon_LOUSE(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 
 /*!
 * @brief 救援召喚の通常処理。同シンボルのモンスターを召喚する。 /
+* @param target_ptr プレーヤーへの参照ポインタ
 * @param y 対象の地点のy座標
 * @param x 対象の地点のx座標
 * @param rlev 呪文を唱えるモンスターのレベル
 * @param m_idx 呪文を唱えるモンスターID
 * @return 召喚したモンスターの数を返す。
 */
-MONSTER_NUMBER summon_Kin(POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
+MONSTER_NUMBER summon_Kin(player_type *target_ptr, POSITION y, POSITION x, int rlev, MONSTER_IDX m_idx)
 {
 	int count = 0;
 	for (int k = 0; k < 4; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_KIN, PM_ALLOW_GROUP);
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_KIN, PM_ALLOW_GROUP);
 	}
 
 	return count;
@@ -2912,11 +2917,11 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 	case MON_MENELDOR:
 	case MON_GWAIHIR:
 	case MON_THORONDOR:
-		count += summon_EAGLE(y, x, rlev, m_idx);
+		count += summon_EAGLE(target_ptr, y, x, rlev, m_idx);
 		break;
 
 	case MON_BULLGATES:
-		count += summon_IE(y, x, rlev, m_idx);
+		count += summon_IE(target_ptr, y, x, rlev, m_idx);
 		break;
 
 	case MON_SERPENT:
@@ -2925,15 +2930,15 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 		break;
 
 	case MON_CALDARM:
-		count += summon_LOCKE_CLONE(y, x, m_idx);
+		count += summon_LOCKE_CLONE(target_ptr, y, x, m_idx);
 		break;
 
 	case MON_LOUSY:
-		count += summon_LOUSE(y, x, rlev, m_idx);
+		count += summon_LOUSE(target_ptr, y, x, rlev, m_idx);
 		break;
 
 	default:
-		count += summon_Kin(y, x, rlev, m_idx);
+		count += summon_Kin(target_ptr, y, x, rlev, m_idx);
 		break;
 	}
 
@@ -2972,11 +2977,11 @@ void spell_RF6_S_CYBER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 
 	if (is_friendly(m_ptr) && mon_to_mon)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_CYBER, (PM_ALLOW_GROUP));
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_CYBER, (PM_ALLOW_GROUP));
 	}
 	else
 	{
-		count += summon_cyber(floor_ptr, m_idx, y, x);
+		count += summon_cyber(target_ptr, m_idx, y, x);
 	}
 
 	if (target_ptr->blind && count && mon_to_player)
@@ -2985,6 +2990,7 @@ void spell_RF6_S_CYBER(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	if (monster_near_player(floor_ptr, m_idx, t_idx) && !see_monster(floor_ptr, t_idx) && count && mon_to_mon)
 		floor_ptr->monster_noise = TRUE;
 }
+
 
 /*!
 * @brief RF6_S_MONSTERの処理。モンスター一体召喚。 /
@@ -3012,10 +3018,10 @@ void spell_RF6_S_MONSTER(player_type *target_ptr, POSITION y, POSITION x, MONSTE
 	for (int k = 0; k < 1; k++)
 	{
 		if (mon_to_player)
-			count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+			count += summon_specific(target_ptr, m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 
 		if (mon_to_mon)
-			count += summon_specific(m_idx, y, x, rlev, 0, (monster_u_mode(floor_ptr, m_idx)));
+			count += summon_specific(target_ptr, m_idx, y, x, rlev, 0, (monster_u_mode(floor_ptr, m_idx)));
 	}
 
 	if (target_ptr->blind && count && mon_to_player)
@@ -3052,10 +3058,10 @@ void spell_RF6_S_MONSTERS(player_type *target_ptr, POSITION y, POSITION x, MONST
 	for (int k = 0; k < S_NUM_6; k++)
 	{
 		if (mon_to_player)
-			count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+			count += summon_specific(target_ptr, m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 
 		if (mon_to_mon)
-			count += summon_specific(m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
+			count += summon_specific(target_ptr, m_idx, y, x, rlev, 0, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
 	}
 
 	if (target_ptr->blind && count && mon_to_player)
@@ -3091,7 +3097,7 @@ void spell_RF6_S_ANT(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	for (int k = 0; k < S_NUM_6; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_ANT, PM_ALLOW_GROUP);
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_ANT, PM_ALLOW_GROUP);
 	}
 
 	if (target_ptr->blind && count && mon_to_player)
@@ -3127,7 +3133,7 @@ void spell_RF6_S_SPIDER(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	for (int k = 0; k < S_NUM_6; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_SPIDER, PM_ALLOW_GROUP);
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_SPIDER, PM_ALLOW_GROUP);
 	}
 
 	if (target_ptr->blind && count && mon_to_player)
@@ -3163,7 +3169,7 @@ void spell_RF6_S_HOUND(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	for (int k = 0; k < S_NUM_4; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_HOUND, PM_ALLOW_GROUP);
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_HOUND, PM_ALLOW_GROUP);
 	}
 
 	if (target_ptr->blind && count && mon_to_player)
@@ -3199,7 +3205,7 @@ void spell_RF6_S_HYDRA(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	for (int k = 0; k < S_NUM_4; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_HYDRA, PM_ALLOW_GROUP);
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_HYDRA, PM_ALLOW_GROUP);
 	}
 
 	if (target_ptr->blind && count && mon_to_player)
@@ -3241,7 +3247,7 @@ void spell_RF6_S_ANGEL(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	int count = 0;
 	for (int k = 0; k < num; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_ANGEL, PM_ALLOW_GROUP);
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_ANGEL, PM_ALLOW_GROUP);
 	}
 
 	if (count < 2)
@@ -3284,7 +3290,7 @@ void spell_RF6_S_DEMON(player_type *target_ptr, POSITION y, POSITION x, MONSTER_
 	int count = 0;
 	for (int k = 0; k < 1; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_DEMON, PM_ALLOW_GROUP);
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_DEMON, PM_ALLOW_GROUP);
 	}
 
 	if (target_ptr->blind && count)
@@ -3319,7 +3325,7 @@ void spell_RF6_S_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 	int count = 0;
 	for (int k = 0; k < 1; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_UNDEAD, PM_ALLOW_GROUP);
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_UNDEAD, PM_ALLOW_GROUP);
 	}
 
 	if (target_ptr->blind && count)
@@ -3354,7 +3360,7 @@ void spell_RF6_S_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 	int count = 0;
 	for (int k = 0; k < 1; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_DRAGON, PM_ALLOW_GROUP);
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_DRAGON, PM_ALLOW_GROUP);
 	}
 
 	if (target_ptr->blind && count)
@@ -3407,7 +3413,7 @@ MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MO
 
 		if (!cave_empty_bold(floor_ptr, cy, cx)) continue;
 
-		if (!summon_named_creature(m_idx, cy, cx, MON_NAZGUL, mode)) continue;
+		if (!summon_named_creature(target_ptr, m_idx, cy, cx, MON_NAZGUL, mode)) continue;
 
 		y = cy;
 		x = cx;
@@ -3469,10 +3475,10 @@ void spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONS
 		for (int k = 0; k < S_NUM_6; k++)
 		{
 			if (mon_to_player)
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+				count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 
 			if (mon_to_mon)
-				count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
+				count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_HI_UNDEAD, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
 		}
 	}
 
@@ -3511,10 +3517,10 @@ void spell_RF6_S_HI_DRAGON(player_type *target_ptr, POSITION y, POSITION x, MONS
 	for (int k = 0; k < S_NUM_4; k++)
 	{
 		if (mon_to_player)
-			count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+			count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 
 		if (mon_to_mon)
-			count += summon_specific(m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
+			count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_HI_DRAGON, (PM_ALLOW_GROUP | monster_u_mode(floor_ptr, m_idx)));
 	}
 
 	if (target_ptr->blind && count && mon_to_player)
@@ -3552,7 +3558,7 @@ void spell_RF6_S_AMBERITES(player_type *target_ptr, POSITION y, POSITION x, MONS
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	for (int k = 0; k < S_NUM_4; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_AMBERITES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_AMBERITES, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 	}
 
 	if (target_ptr->blind && count && mon_to_player)
@@ -3592,7 +3598,7 @@ void spell_RF6_S_UNIQUE(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 	int count = 0;
 	for (int k = 0; k < S_NUM_4; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, SUMMON_UNIQUE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, SUMMON_UNIQUE, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 	}
 
 	if (count) uniques_are_summoned = TRUE;
@@ -3605,7 +3611,7 @@ void spell_RF6_S_UNIQUE(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 
 	for (int k = count; k < S_NUM_4; k++)
 	{
-		count += summon_specific(m_idx, y, x, rlev, non_unique_type, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
+		count += summon_specific(target_ptr, m_idx, y, x, rlev, non_unique_type, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE));
 	}
 
 	if (target_ptr->blind && count && mon_to_player)

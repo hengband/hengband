@@ -574,7 +574,7 @@ static void build_vault(player_type *player_ptr, POSITION yval, POSITION xval, P
 				case '&':
 				{
 					floor_ptr->monster_level = floor_ptr->base_level + 5;
-					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+					place_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 					floor_ptr->monster_level = floor_ptr->base_level;
 					break;
 				}
@@ -583,7 +583,7 @@ static void build_vault(player_type *player_ptr, POSITION yval, POSITION xval, P
 				case '@':
 				{
 					floor_ptr->monster_level = floor_ptr->base_level + 11;
-					place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+					place_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 					floor_ptr->monster_level = floor_ptr->base_level;
 					break;
 				}
@@ -592,7 +592,7 @@ static void build_vault(player_type *player_ptr, POSITION yval, POSITION xval, P
 				case '9':
 				{
 					floor_ptr->monster_level = floor_ptr->base_level + 9;
-					place_monster(y, x, PM_ALLOW_SLEEP);
+					place_monster(player_ptr, y, x, PM_ALLOW_SLEEP);
 					floor_ptr->monster_level = floor_ptr->base_level;
 					floor_ptr->object_level = floor_ptr->base_level + 7;
 					place_object(player_ptr, y, x, AM_GOOD);
@@ -604,7 +604,7 @@ static void build_vault(player_type *player_ptr, POSITION yval, POSITION xval, P
 				case '8':
 				{
 					floor_ptr->monster_level = floor_ptr->base_level + 40;
-					place_monster(y, x, PM_ALLOW_SLEEP);
+					place_monster(player_ptr, y, x, PM_ALLOW_SLEEP);
 					floor_ptr->monster_level = floor_ptr->base_level;
 					floor_ptr->object_level = floor_ptr->base_level + 20;
 					place_object(player_ptr, y, x, AM_GOOD | AM_GREAT);
@@ -618,7 +618,7 @@ static void build_vault(player_type *player_ptr, POSITION yval, POSITION xval, P
 					if (randint0(100) < 50)
 					{
 						floor_ptr->monster_level = floor_ptr->base_level + 3;
-						place_monster(y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+						place_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 						floor_ptr->monster_level = floor_ptr->base_level;
 					}
 					if (randint0(100) < 50)

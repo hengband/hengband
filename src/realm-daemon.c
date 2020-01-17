@@ -147,7 +147,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			if (cast)
 			{
-				if (!summon_specific(-1, caster_ptr->y, caster_ptr->x, (plev * 3) / 2, SUMMON_MANES, (PM_ALLOW_GROUP | PM_FORCE_PET)))
+				if (!summon_specific(caster_ptr, -1, caster_ptr->y, caster_ptr->x, (plev * 3) / 2, SUMMON_MANES, (PM_ALLOW_GROUP | PM_FORCE_PET)))
 				{
 					msg_print(_("古代の死霊は現れなかった。", "No Manes arrive."));
 				}
