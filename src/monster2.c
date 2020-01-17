@@ -2978,7 +2978,7 @@ static bool place_monster_group(player_type *player_ptr, MONSTER_IDX who, POSITI
 	total = randint1(10);
 
 	/* Hard monsters, small groups */
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (r_ptr->level > floor_ptr->dun_level)
 	{
 		extra = r_ptr->level - floor_ptr->dun_level;
@@ -3022,7 +3022,7 @@ static bool place_monster_group(player_type *player_ptr, MONSTER_IDX who, POSITI
 		{
 			POSITION mx, my;
 
-			scatter(p_ptr, &my, &mx, hy, hx, 4, 0);
+			scatter(player_ptr, &my, &mx, hy, hx, 4, 0);
 
 			/* Walls and Monsters block flow */
 			if (!cave_empty_bold2(floor_ptr, my, mx)) continue;
@@ -3148,7 +3148,7 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 		for (j = 0; j < n; j++)
 		{
 			POSITION nx, ny, d = 7;
-			scatter(p_ptr, &ny, &nx, y, x, d, 0);
+			scatter(player_ptr, &ny, &nx, y, x, d, 0);
 			(void)place_monster_one(player_ptr, place_monster_m_idx, ny, nx, r_ptr->reinforce_id[i], mode);
 		}
 	}
@@ -3173,11 +3173,11 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 			MONRACE_IDX z;
 
 			/* Pick a location */
-			scatter(p_ptr, &ny, &nx, y, x, d, 0);
+			scatter(player_ptr, &ny, &nx, y, x, d, 0);
 
 			/* Require empty grids */
-			if (!cave_empty_bold2(p_ptr->current_floor_ptr, ny, nx)) continue;
-			get_mon_num_prep(place_monster_can_escort, get_monster_hook2(p_ptr, ny, nx));
+			if (!cave_empty_bold2(player_ptr->current_floor_ptr, ny, nx)) continue;
+			get_mon_num_prep(place_monster_can_escort, get_monster_hook2(player_ptr, ny, nx));
 
 			/* Pick a random race */
 			z = get_mon_num(r_ptr->level);
@@ -3213,10 +3213,10 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	MONRACE_IDX r_idx;
-	get_mon_num_prep(get_monster_hook(p_ptr), get_monster_hook2(p_ptr, y, x));
+	get_mon_num_prep(get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
 
 	/* Pick a monster */
-	r_idx = get_mon_num(p_ptr->current_floor_ptr->monster_level);
+	r_idx = get_mon_num(player_ptr->current_floor_ptr->monster_level);
 
 	/* Handle failure */
 	if (!r_idx) return FALSE;
@@ -3242,9 +3242,9 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x)
 	int attempts = 1000;
 	POSITION cy = y;
 	POSITION cx = x;
-	get_mon_num_prep(get_monster_hook(p_ptr), get_monster_hook2(p_ptr, y, x));
+	get_mon_num_prep(get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
 
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	while (--attempts)
 	{
 		/* Pick a monster */
@@ -3278,7 +3278,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x)
 
 	for (attempts = randint1(10) + 5; attempts; attempts--)
 	{
-		scatter(p_ptr, &cy, &cx, y, x, 5, 0);
+		scatter(player_ptr, &cy, &cx, y, x, 5, 0);
 
 		(void)summon_specific(player_ptr, m_idx, cy, cx, floor_ptr->dun_level + 5, SUMMON_KIN, PM_ALLOW_GROUP);
 
@@ -3298,10 +3298,10 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x)
  */
 bool alloc_guardian(player_type *player_ptr, bool def_val)
 {
-	MONRACE_IDX guardian = d_info[p_ptr->dungeon_idx].final_guardian;
+	MONRACE_IDX guardian = d_info[player_ptr->dungeon_idx].final_guardian;
 
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
-	if (guardian && (d_info[p_ptr->dungeon_idx].maxdepth == floor_ptr->dun_level) && (r_info[guardian].cur_num < r_info[guardian].max_num))
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	if (guardian && (d_info[player_ptr->dungeon_idx].maxdepth == floor_ptr->dun_level) && (r_info[guardian].cur_num < r_info[guardian].max_num))
 	{
 		POSITION oy;
 		POSITION ox;
@@ -3351,7 +3351,7 @@ bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode)
 	if (alloc_guardian(player_ptr, FALSE)) return TRUE;
 
 	/* Find a legal, distant, unoccupied, space */
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	while (attempts_left--)
 	{
 		/* Pick a location */
@@ -3369,7 +3369,7 @@ bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode)
 		}
 
 		/* Accept far away grids */
-		if (distance(y, x, p_ptr->y, p_ptr->x) > dis) break;
+		if (distance(y, x, player_ptr->y, player_ptr->x) > dis) break;
 	}
 
 	if (!attempts_left)
@@ -3485,7 +3485,7 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
 	POSITION x, y;
 	MONRACE_IDX r_idx;
 
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (floor_ptr->inside_arena) return FALSE;
 
 	if (!mon_scatter(0, &y, &x, y1, x1, 2)) return FALSE;
@@ -3497,7 +3497,7 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
 	summon_specific_type = type;
 
 	summon_unique_okay = (mode & PM_ALLOW_UNIQUE) ? TRUE : FALSE;
-	get_mon_num_prep(summon_specific_okay, get_monster_hook2(p_ptr, y, x));
+	get_mon_num_prep(summon_specific_okay, get_monster_hook2(player_ptr, y, x));
 
 	/* Pick a monster, using the level calculation */
 	r_idx = get_mon_num((floor_ptr->dun_level + lev) / 2 + 5);
@@ -3543,7 +3543,7 @@ bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSITION oy
 	/* Prevent illegal monsters */
 	if (r_idx >= max_r_idx) return FALSE;
 
-	if (p_ptr->current_floor_ptr->inside_arena) return FALSE;
+	if (player_ptr->current_floor_ptr->inside_arena) return FALSE;
 
 	if (!mon_scatter(r_idx, &y, &x, oy, ox, 2)) return FALSE;
 
@@ -3564,7 +3564,7 @@ bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSITION oy
  */
 bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode)
 {
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	POSITION y, x;
 
