@@ -180,11 +180,12 @@ void delete_monster_idx(MONSTER_IDX i)
 
 /*!
  * @brief モンスター情報を配列内移動する / Move an object from index i1 to index i2 in the object list
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param i1 配列移動元添字
  * @param i2 配列移動先添字
  * @return なし
  */
-static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
+static void compact_monsters_aux(player_type *player_ptr, MONSTER_IDX i1, MONSTER_IDX i2)
 {
 	POSITION y, x;
 	int i;
@@ -196,7 +197,7 @@ static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 	if (i1 == i2) return;
 
 	/* Old monster */
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	m_ptr = &floor_ptr->m_list[i1];
 
 	y = m_ptr->fy;
@@ -222,14 +223,14 @@ static void compact_monsters_aux(MONSTER_IDX i1, MONSTER_IDX i2)
 	if (target_who == i1) target_who = i2;
 
 	/* Hack -- Update the target */
-	if (p_ptr->pet_t_m_idx == i1) p_ptr->pet_t_m_idx = i2;
-	if (p_ptr->riding_t_m_idx == i1) p_ptr->riding_t_m_idx = i2;
+	if (player_ptr->pet_t_m_idx == i1) player_ptr->pet_t_m_idx = i2;
+	if (player_ptr->riding_t_m_idx == i1) player_ptr->riding_t_m_idx = i2;
 
 	/* Hack -- Update the riding */
-	if (p_ptr->riding == i1) p_ptr->riding = i2;
+	if (player_ptr->riding == i1) player_ptr->riding = i2;
 
 	/* Hack -- Update the health bar */
-	if (p_ptr->health_who == i1) health_track(p_ptr, i2);
+	if (player_ptr->health_who == i1) health_track(player_ptr, i2);
 
 	/* Hack -- Update parent index */
 	if (is_pet(m_ptr))
@@ -345,7 +346,7 @@ void compact_monsters(int size)
 		if (m_ptr->r_idx) continue;
 
 		/* Move last monster into open hole */
-		compact_monsters_aux(floor_ptr->m_max - 1, i);
+		compact_monsters_aux(p_ptr, floor_ptr->m_max - 1, i);
 
 		/* Compress "floor_ptr->m_max" */
 		floor_ptr->m_max--;
