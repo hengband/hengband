@@ -3081,6 +3081,11 @@ W:40:5:100:808
 P:0:1d7:-5:10:3
 F:STR | CHR | RES_FIRE | ACTIVATE | 
 U:HERO
+D:$It is a short staff with an attached flag.  The opposite end of the staff
+D:$ from the flag has a disk with the mark of a firefighting squad.  Staffs
+D:$ like this were used to rally firefighters to sites of fires in Edo period
+D:$ Japan.  The bearers, matoimachi, of such staffs were noted for their
+D:$ courage.
 D:消火作業にあたって、士気を鼓舞すべく振りたてられた杖だ。
 D:杖の先に隊のマーク入りの円盤があり、その下側から
 D:長い帯状の飾りが幾本ものびている。
