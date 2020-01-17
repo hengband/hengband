@@ -49,6 +49,8 @@
 MONSTER_IDX hack_m_idx = 0;	/* Hack -- see "process_monsters()" */
 MONSTER_IDX hack_m_idx_ii = 0;
 
+bool is_friendly_idx(MONSTER_IDX m_idx);
+
 /*!
  * @brief モンスターの目標地点をセットする / Set the target of counter attack
  * @param m_ptr モンスターの参照ポインタ
@@ -2701,7 +2703,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
 	}
 	/* Friendly? */
 	else if ((r_ptr->flags7 & RF7_FRIENDLY) ||
-		(mode & PM_FORCE_FRIENDLY) || is_friendly_idx(who))
+		(mode & PM_FORCE_FRIENDLY) || is_friendly_idx(player_ptr, who))
 	{
 		if (!monster_has_hostile_align(NULL, 0, -1, r_ptr)) set_friendly(m_ptr);
 	}
@@ -4092,4 +4094,10 @@ int get_monster_crowd_number(MONSTER_IDX m_idx)
 	}
 
 	return count;
+}
+
+
+bool is_friendly_idx(player_type *player_ptr, MONSTER_IDX m_idx)
+{
+	return m_idx > 0 && is_friendly(&player_ptr->current_floor_ptr->m_list[(m_idx)]);
 }
