@@ -2823,7 +2823,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Learn about the player */
-					update_smart_learn(m_idx, DRS_POIS);
+					update_smart_learn(target_ptr, m_idx, DRS_POIS);
 
 					break;
 				}
@@ -2847,7 +2847,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
 					/* Learn about the player */
-					update_smart_learn(m_idx, DRS_DISEN);
+					update_smart_learn(target_ptr, m_idx, DRS_DISEN);
 
 					break;
 				}
@@ -3132,7 +3132,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					msg_print(_("酸を浴びせられた！", "You are covered in acid!"));
 					get_damage += acid_dam(target_ptr, damage, ddesc, -1, FALSE);
 					update_creature(target_ptr);
-					update_smart_learn(m_idx, DRS_ACID);
+					update_smart_learn(target_ptr, m_idx, DRS_ACID);
 					break;
 				}
 
@@ -3142,7 +3142,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					obvious = TRUE;
 					msg_print(_("電撃を浴びせられた！", "You are struck by electricity!"));
 					get_damage += elec_dam(target_ptr, damage, ddesc, -1, FALSE);
-					update_smart_learn(m_idx, DRS_ELEC);
+					update_smart_learn(target_ptr, m_idx, DRS_ELEC);
 					break;
 				}
 
@@ -3152,7 +3152,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					obvious = TRUE;
 					msg_print(_("全身が炎に包まれた！", "You are enveloped in flames!"));
 					get_damage += fire_dam(target_ptr, damage, ddesc, -1, FALSE);
-					update_smart_learn(m_idx, DRS_FIRE);
+					update_smart_learn(target_ptr, m_idx, DRS_FIRE);
 					break;
 				}
 
@@ -3162,7 +3162,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					obvious = TRUE;
 					msg_print(_("全身が冷気で覆われた！", "You are covered with frost!"));
 					get_damage += cold_dam(target_ptr, damage, ddesc, -1, FALSE);
-					update_smart_learn(m_idx, DRS_COLD);
+					update_smart_learn(target_ptr, m_idx, DRS_COLD);
 					break;
 				}
 
@@ -3186,7 +3186,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					}
 
 					/* Learn about the player */
-					update_smart_learn(m_idx, DRS_BLIND);
+					update_smart_learn(target_ptr, m_idx, DRS_BLIND);
 
 					break;
 				}
@@ -3208,7 +3208,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					}
 
 					/* Learn about the player */
-					update_smart_learn(m_idx, DRS_CONF);
+					update_smart_learn(target_ptr, m_idx, DRS_CONF);
 
 					break;
 				}
@@ -3243,7 +3243,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					}
 
 					/* Learn about the player */
-					update_smart_learn(m_idx, DRS_FEAR);
+					update_smart_learn(target_ptr, m_idx, DRS_FEAR);
 
 					break;
 				}
@@ -3281,7 +3281,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					}
 
 					/* Learn about the player */
-					update_smart_learn(m_idx, DRS_FREE);
+					update_smart_learn(target_ptr, m_idx, DRS_FREE);
 
 					break;
 				}
@@ -3611,7 +3611,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					}
 
 					/* Learn about the player */
-					update_smart_learn(m_idx, DRS_MANA);
+					update_smart_learn(target_ptr, m_idx, DRS_MANA);
 
 					break;
 				}

@@ -504,7 +504,7 @@ extern bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSI
 #define DRS_FREE        30
 #define DRS_MANA        31
 #define DRS_REFLECT     32
-extern void update_smart_learn(MONSTER_IDX m_idx, int what);
+extern void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what);
 
 extern void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
 extern SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr);

@@ -265,7 +265,7 @@ HIT_POINT spell_RF4_ROCKET(player_type *target_ptr, POSITION y, POSITION x, MONS
 	dam = monspell_damage(target_ptr, (MS_ROCKET), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_ROCKET, dam, 2, FALSE, MS_ROCKET, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_SHARD);
+		update_smart_learn(target_ptr, m_idx, DRS_SHARD);
 	return dam;
 }
 
@@ -502,7 +502,7 @@ HIT_POINT spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITION y, POS
 	sound(SOUND_BREATH);
 	breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type, TARGET_TYPE);
 	if (smart_learn_aux && mon_to_player)
-		update_smart_learn(m_idx, drs_type);
+		update_smart_learn(target_ptr, m_idx, drs_type);
 
 	return dam;
 }
@@ -531,7 +531,7 @@ HIT_POINT spell_RF4_BA_NUKE(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_NUKE), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_POIS);
+		update_smart_learn(target_ptr, m_idx, DRS_POIS);
 
 	return dam;
 }
@@ -560,7 +560,7 @@ HIT_POINT spell_RF4_BA_CHAO(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_CHAOS), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_CHAOS);
+		update_smart_learn(target_ptr, m_idx, DRS_CHAOS);
 
 	return dam;
 }
@@ -591,7 +591,7 @@ HIT_POINT spell_RF5_BA_ACID(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_ACID), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_ACID);
+		update_smart_learn(target_ptr, m_idx, DRS_ACID);
 
 	return dam;
 }
@@ -622,7 +622,7 @@ HIT_POINT spell_RF5_BA_ELEC(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_ELEC), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_ELEC);
+		update_smart_learn(target_ptr, m_idx, DRS_ELEC);
 
 	return dam;
 }
@@ -664,7 +664,7 @@ HIT_POINT spell_RF5_BA_FIRE(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_FIRE), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_FIRE);
+		update_smart_learn(target_ptr, m_idx, DRS_FIRE);
 
 	return dam;
 }
@@ -695,7 +695,7 @@ HIT_POINT spell_RF5_BA_COLD(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_COLD), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_COLD);
+		update_smart_learn(target_ptr, m_idx, DRS_COLD);
 
 	return dam;
 }
@@ -724,7 +724,7 @@ HIT_POINT spell_RF5_BA_POIS(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_POIS), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_POIS);
+		update_smart_learn(target_ptr, m_idx, DRS_POIS);
 
 	return dam;
 }
@@ -753,7 +753,7 @@ HIT_POINT spell_RF5_BA_NETH(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_NETHER), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_NETH);
+		update_smart_learn(target_ptr, m_idx, DRS_NETH);
 
 	return dam;
 }
@@ -850,7 +850,7 @@ HIT_POINT spell_RF5_BA_DARK(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_DARK), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_DARK, dam, 4, FALSE, MS_BALL_DARK, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_DARK);
+		update_smart_learn(target_ptr, m_idx, DRS_DARK);
 
 	return dam;
 }
@@ -887,7 +887,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, 
 	dam = monspell_damage(target_ptr, (MS_DRAIN_MANA), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_MANA);
+		update_smart_learn(target_ptr, m_idx, DRS_MANA);
 
 	return dam;
 }
@@ -1146,8 +1146,8 @@ HIT_POINT spell_RF5_BO_ACID(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_ACID, dam, MS_BOLT_ACID, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_ACID);
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_ACID);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1178,8 +1178,8 @@ HIT_POINT spell_RF5_BO_ELEC(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_ELEC, dam, MS_BOLT_ELEC, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_ELEC);
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_ELEC);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1210,8 +1210,8 @@ HIT_POINT spell_RF5_BO_FIRE(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_FIRE, dam, MS_BOLT_FIRE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_FIRE);
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_FIRE);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1242,8 +1242,8 @@ HIT_POINT spell_RF5_BO_COLD(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_COLD, dam, MS_BOLT_COLD, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_COLD);
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_COLD);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1273,7 +1273,7 @@ HIT_POINT spell_RF5_BA_LITE(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_STARBURST), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_LITE, dam, 4, FALSE, MS_STARBURST, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_LITE);
+		update_smart_learn(target_ptr, m_idx, DRS_LITE);
 
 	return dam;
 }
@@ -1303,8 +1303,8 @@ HIT_POINT spell_RF5_BO_NETH(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_NETHER, dam, MS_BOLT_NETHER, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_NETH);
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_NETH);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1335,7 +1335,7 @@ HIT_POINT spell_RF5_BO_WATE(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_WATER, dam, MS_BOLT_WATER, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1366,7 +1366,7 @@ HIT_POINT spell_RF5_BO_MANA(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_MANA, dam, MS_BOLT_MANA, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1397,7 +1397,7 @@ HIT_POINT spell_RF5_BO_PLAS(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_PLASMA, dam, MS_BOLT_PLASMA, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1428,8 +1428,8 @@ HIT_POINT spell_RF5_BO_ICEE(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_ICE, dam, MS_BOLT_ICE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_COLD);
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_COLD);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1460,7 +1460,7 @@ HIT_POINT spell_RF5_MISSILE(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_MISSILE, dam, MS_MAGIC_MISSILE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1572,7 +1572,7 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
 		}
 
 		learn_spell(target_ptr, MS_SCARE);
-		update_smart_learn(m_idx, DRS_FEAR);
+		update_smart_learn(target_ptr, m_idx, DRS_FEAR);
 		return;
 	}
 
@@ -1626,7 +1626,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
 		}
 
 		learn_spell(target_ptr, MS_BLIND);
-		update_smart_learn(m_idx, DRS_BLIND);
+		update_smart_learn(target_ptr, m_idx, DRS_BLIND);
 		return;
 	}
 
@@ -1693,7 +1693,7 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 		}
 
 		learn_spell(target_ptr, MS_CONF);
-		update_smart_learn(m_idx, DRS_CONF);
+		update_smart_learn(target_ptr, m_idx, DRS_CONF);
 		return;
 	}
 
@@ -1747,7 +1747,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 		}
 
 		learn_spell(target_ptr, MS_SLOW);
-		update_smart_learn(m_idx, DRS_FREE);
+		update_smart_learn(target_ptr, m_idx, DRS_FREE);
 		return;
 	}
 
@@ -1814,7 +1814,7 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 		}
 
 		learn_spell(target_ptr, MS_SLEEP);
-		update_smart_learn(m_idx, DRS_FREE);
+		update_smart_learn(target_ptr, m_idx, DRS_FREE);
 		return;
 	}
 
@@ -2500,7 +2500,7 @@ void spell_RF6_TELE_LEVEL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_ID
 		}
 
 		learn_spell(target_ptr, MS_TELE_LEVEL);
-		update_smart_learn(m_idx, DRS_NEXUS);
+		update_smart_learn(target_ptr, m_idx, DRS_NEXUS);
 		return;
 	}
 
