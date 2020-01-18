@@ -1094,23 +1094,24 @@ bool is_explosive_rune_grid(grid_type *g_ptr)
 
 /*!
 * @brief 指定されたマスがモンスターのテレポート可能先かどうかを判定する。
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param m_idx モンスターID
 * @param y 移動先Y座標
 * @param x 移動先X座標
 * @param mode オプション
 * @return テレポート先として妥当ならばtrue
 */
-bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode)
+bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
-	grid_type    *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+	grid_type    *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	/* Require "teleportable" space */
 	if (!have_flag(f_ptr->flags, FF_TELEPORTABLE)) return FALSE;
 
 	if (g_ptr->m_idx && (g_ptr->m_idx != m_idx)) return FALSE;
-	if (player_bold(p_ptr, y, x)) return FALSE;
+	if (player_bold(player_ptr, y, x)) return FALSE;
 
 	/* Hack -- no teleport onto glyph of warding */
 	if (is_glyph_grid(g_ptr)) return FALSE;
@@ -1126,14 +1127,15 @@ bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, B
 
 /*!
 * @brief 指定されたマスにプレイヤーがテレポート可能かどうかを判定する。
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param y 移動先Y座標
 * @param x 移動先X座標
 * @param mode オプション
 * @return テレポート先として妥当ならばtrue
 */
-bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode)
+bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
-	grid_type    *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type    *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	/* Require "teleportable" space */
@@ -1142,27 +1144,27 @@ bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode)
 	/* No magical teleporting into vaults and such */
 	if (!(mode & TELEPORT_NONMAGICAL) && (g_ptr->info & CAVE_ICKY)) return FALSE;
 
-	if (g_ptr->m_idx && (g_ptr->m_idx != p_ptr->riding)) return FALSE;
+	if (g_ptr->m_idx && (g_ptr->m_idx != player_ptr->riding)) return FALSE;
 
 	/* don't teleport on a trap. */
 	if (have_flag(f_ptr->flags, FF_HIT_TRAP)) return FALSE;
 
 	if (!(mode & TELEPORT_PASSIVE))
 	{
-		if (!player_can_enter(p_ptr, g_ptr->feat, 0)) return FALSE;
+		if (!player_can_enter(player_ptr, g_ptr->feat, 0)) return FALSE;
 
 		if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP))
 		{
-			if (!p_ptr->levitation && !p_ptr->can_swim) return FALSE;
+			if (!player_ptr->levitation && !player_ptr->can_swim) return FALSE;
 		}
 
-		if (have_flag(f_ptr->flags, FF_LAVA) && !p_ptr->immune_fire && !IS_INVULN(p_ptr))
+		if (have_flag(f_ptr->flags, FF_LAVA) && !player_ptr->immune_fire && !IS_INVULN(player_ptr))
 		{
 			/* Always forbid deep lava */
 			if (have_flag(f_ptr->flags, FF_DEEP)) return FALSE;
 
 			/* Forbid shallow lava when the player don't have levitation */
-			if (!p_ptr->levitation) return FALSE;
+			if (!player_ptr->levitation) return FALSE;
 		}
 
 	}

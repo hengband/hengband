@@ -117,7 +117,7 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT
 			/* Ignore illegal locations */
 			if (!in_bounds(caster_ptr->current_floor_ptr, ny, nx)) continue;
 
-			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
+			if (!cave_monster_teleportable_bold(caster_ptr, m_idx, ny, nx, mode)) continue;
 
 			/* No teleporting into vaults and such */
 			if (!(caster_ptr->current_floor_ptr->inside_quest || caster_ptr->current_floor_ptr->inside_arena))
@@ -208,7 +208,7 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
 			/* Ignore illegal locations */
 			if (!in_bounds(caster_ptr->current_floor_ptr, ny, nx)) continue;
 
-			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
+			if (!cave_monster_teleportable_bold(caster_ptr, m_idx, ny, nx, mode)) continue;
 
 			look = FALSE;
 			break;
@@ -294,7 +294,7 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode
 		for (POSITION x = left; x <= right; x++)
 		{
 			/* Skip illegal locations */
-			if (!cave_player_teleportable_bold(y, x, mode)) continue;
+			if (!cave_player_teleportable_bold(creature_ptr, y, x, mode)) continue;
 
 			/* Calculate distance */
 			int d = distance(creature_ptr->y, creature_ptr->x, y, x);
@@ -334,7 +334,7 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode
 		for (xx = left; xx <= right; xx++)
 		{
 			/* Skip illegal locations */
-			if (!cave_player_teleportable_bold(yy, xx, mode)) continue;
+			if (!cave_player_teleportable_bold(creature_ptr, yy, xx, mode)) continue;
 
 			/* Calculate distance */
 			int d = distance(creature_ptr->y, creature_ptr->x, yy, xx);
@@ -487,7 +487,7 @@ void teleport_player_to(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 		if (current_world_ptr->wizard && !(mode & TELEPORT_PASSIVE) && (!creature_ptr->current_floor_ptr->grid_array[y][x].m_idx || (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx == creature_ptr->riding))) break;
 
 		/* Accept teleportable floor grids */
-		if (cave_player_teleportable_bold(y, x, mode)) break;
+		if (cave_player_teleportable_bold(creature_ptr, y, x, mode)) break;
 
 		/* Occasionally advance the distance */
 		if (++ctr > (4 * dis * dis + 4 * dis + 1))
@@ -2823,7 +2823,7 @@ static bool dimension_door_aux(player_type *caster_ptr, POSITION x, POSITION y)
 
 	caster_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
-	if (!cave_player_teleportable_bold(y, x, 0L) ||
+	if (!cave_player_teleportable_bold(caster_ptr, y, x, 0L) ||
 	    (distance(y, x, caster_ptr->y, caster_ptr->x) > plev / 2 + 10) ||
 	    (!randint0(plev / 10 + 10)))
 	{
