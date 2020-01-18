@@ -323,7 +323,7 @@ bool build_type5(player_type *player_ptr)
 			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
-			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
+			if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) continue;
 
 			/* Accept this monster */
 			break;
@@ -533,7 +533,7 @@ bool build_type6(player_type *player_ptr)
 			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
-			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
+			if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) continue;
 
 			/* Accept this monster */
 			break;
@@ -842,7 +842,7 @@ bool build_type13(player_type *player_ptr)
 			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
-			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
+			if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) continue;
 
 			/* Accept this monster */
 			break;

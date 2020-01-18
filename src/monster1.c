@@ -2285,6 +2285,7 @@ bool are_enemies(player_type *player_ptr, monster_type *m_ptr, monster_type *n_p
 /*!
  * @brief モンスターがプレイヤーに対して敵意を抱くかどうかを返す
  * Check if this monster race has "hostile" alignment
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_ptr モンスター情報構造体の参照ポインタ
  * @param pa_good プレイヤーの善傾向値
  * @param pa_evil プレイヤーの悪傾向値
@@ -2293,7 +2294,7 @@ bool are_enemies(player_type *player_ptr, monster_type *m_ptr, monster_type *n_p
  * @details
  * If user is player, m_ptr == NULL.
  */
-bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr)
+bool monster_has_hostile_align(player_type *player_ptr, monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr)
 {
 	byte sub_align1 = SUB_ALIGN_NEUTRAL;
 	byte sub_align2 = SUB_ALIGN_NEUTRAL;
@@ -2304,8 +2305,8 @@ bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, mo
 	}
 	else /* For player */
 	{
-		if (p_ptr->align >= pa_good) sub_align1 |= SUB_ALIGN_GOOD;
-		if (p_ptr->align <= pa_evil) sub_align1 |= SUB_ALIGN_EVIL;
+		if (player_ptr->align >= pa_good) sub_align1 |= SUB_ALIGN_GOOD;
+		if (player_ptr->align <= pa_evil) sub_align1 |= SUB_ALIGN_EVIL;
 	}
 
 	/* Racial alignment flags */

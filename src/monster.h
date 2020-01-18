@@ -457,7 +457,7 @@ extern bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, mo
 extern bool monster_can_enter(player_type *player_ptr, POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode);
 
 extern bool are_enemies(player_type *player_ptr, monster_type *m_ptr1, monster_type *m_ptr2);
-extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
+extern bool monster_has_hostile_align(player_type *player_ptr, monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
 extern void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char* msg);
 extern concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode);
 extern int get_monster_crowd_number(player_type *player_ptr, MONSTER_IDX m_idx);
