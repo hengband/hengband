@@ -460,7 +460,7 @@ extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
 extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
 extern void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char* msg);
 extern concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode);
-extern int get_monster_crowd_number(MONSTER_IDX m_idx);
+extern int get_monster_crowd_number(player_type *player_ptr, MONSTER_IDX m_idx);
 extern void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam);
 
 /* monster2.c */

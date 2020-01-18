@@ -4096,14 +4096,16 @@ void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr)
 }
 
 /*!
+ * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * @brief 指定したモンスターに隣接しているモンスターの数を返す。
  * / Count number of adjacent monsters
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_idx 隣接数を調べたいモンスターのID
  * @return 隣接しているモンスターの数
  */
-int get_monster_crowd_number(MONSTER_IDX m_idx)
+int get_monster_crowd_number(player_type *player_ptr, MONSTER_IDX m_idx)
 {
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	POSITION my = m_ptr->fy;
 	POSITION mx = m_ptr->fx;
