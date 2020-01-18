@@ -4992,10 +4992,7 @@ void update_creature(player_type *creature_ptr)
 	{
 		creature_ptr->update &= ~(PU_DISTANCE);
 
-		/* Still need to call update_monsters(FALSE) after update_mon_lite() */
-		/* creature_ptr->update &= ~(PU_MONSTERS); */
-
-		update_monsters(TRUE);
+		update_monsters(creature_ptr, TRUE);
 	}
 
 	if (creature_ptr->update & (PU_MON_LITE))
@@ -5017,7 +5014,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_MONSTERS))
 	{
 		creature_ptr->update &= ~(PU_MONSTERS);
-		update_monsters(FALSE);
+		update_monsters(creature_ptr, FALSE);
 	}
 }
 

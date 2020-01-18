@@ -2205,21 +2205,22 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 
 
 /*!
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @brief 単純に生存している全モンスターの更新処理を行う / This function simply updates all the (non-dead) monsters (see above).
  * @param full 距離更新を行うならtrue
  * @return なし
  */
-void update_monsters(bool full)
+void update_monsters(player_type *player_ptr, bool full)
 {
 	MONSTER_IDX i;
 
 	/* Update each (live) monster */
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (i = 1; i < floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
-		update_monster(p_ptr, i, full);
+		update_monster(player_ptr, i, full);
 	}
 }
 
