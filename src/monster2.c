@@ -1097,6 +1097,7 @@ errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hoo
 
 /*!
  * @brief 生成モンスター種族を1種生成テーブルから選択する
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param level 生成階
  * @return 選択されたモンスター生成種族
  * @details
@@ -1121,7 +1122,7 @@ errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hoo
  * Note that if no monsters are "appropriate", then this function will
  * fail, and return zero, but this should *almost* never happen.
  */
-MONRACE_IDX get_mon_num(DEPTH level)
+MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level)
 {
 	int i, j, p;
 	MONRACE_IDX r_idx;
@@ -1135,7 +1136,7 @@ MONRACE_IDX get_mon_num(DEPTH level)
 	pls_kakuritu = MAX(NASTY_MON_MAX, NASTY_MON_BASE - ((current_world_ptr->dungeon_turn / (TURNS_PER_TICK * 5000L) - delay / 10)));
 	pls_level = MIN(NASTY_MON_PLUS_MAX, 3 + current_world_ptr->dungeon_turn / (TURNS_PER_TICK * 40000L) - delay / 40 + MIN(5, level / 10));
 
-	if (d_info[p_ptr->dungeon_idx].flags1 & DF1_MAZE)
+	if (d_info[player_ptr->dungeon_idx].flags1 & DF1_MAZE)
 	{
 		pls_kakuritu = MIN(pls_kakuritu / 2, pls_kakuritu - 10);
 		if (pls_kakuritu < 2) pls_kakuritu = 2;
@@ -1144,7 +1145,7 @@ MONRACE_IDX get_mon_num(DEPTH level)
 	}
 
 	/* Boost the level */
-	if (!p_ptr->phase_out && !(d_info[p_ptr->dungeon_idx].flags1 & DF1_BEGINNER))
+	if (!player_ptr->phase_out && !(d_info[player_ptr->dungeon_idx].flags1 & DF1_BEGINNER))
 	{
 		/* Nightmare mode allows more out-of depth monsters */
 		if (ironman_nightmare && !randint0(pls_kakuritu))
@@ -1184,7 +1185,7 @@ MONRACE_IDX get_mon_num(DEPTH level)
 		/* Access the actual race */
 		r_ptr = &r_info[r_idx];
 
-		if (!p_ptr->phase_out && !chameleon_change_m_idx)
+		if (!player_ptr->phase_out && !chameleon_change_m_idx)
 		{
 			/* Hack -- "unique" monsters must be "unique" */
 			if (((r_ptr->flags1 & (RF1_UNIQUE)) ||
@@ -2340,7 +2341,7 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
 
 		if (d_info[player_ptr->dungeon_idx].flags1 & DF1_CHAMELEON) level += 2 + randint1(3);
 
-		r_idx = get_mon_num(level);
+		r_idx = get_mon_num(player_ptr, level);
 		r_ptr = &r_info[r_idx];
 
 		chameleon_change_m_idx = 0;
@@ -2455,7 +2456,7 @@ static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_i
 
 	while (--attempts)
 	{
-		ap_r_idx = get_mon_num(floor_ptr->base_level + 10);
+		ap_r_idx = get_mon_num(player_ptr, floor_ptr->base_level + 10);
 		if (r_info[ap_r_idx].level >= min) return ap_r_idx;
 	}
 
@@ -3193,7 +3194,7 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 			get_mon_num_prep(player_ptr, place_monster_can_escort, get_monster_hook2(player_ptr, ny, nx));
 
 			/* Pick a random race */
-			z = get_mon_num(r_ptr->level);
+			z = get_mon_num(player_ptr, r_ptr->level);
 
 			/* Handle failure */
 			if (!z) break;
@@ -3229,7 +3230,7 @@ bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mo
 	get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
 
 	/* Pick a monster */
-	r_idx = get_mon_num(player_ptr->current_floor_ptr->monster_level);
+	r_idx = get_mon_num(player_ptr, player_ptr->current_floor_ptr->monster_level);
 
 	/* Handle failure */
 	if (!r_idx) return FALSE;
@@ -3261,7 +3262,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x)
 	while (--attempts)
 	{
 		/* Pick a monster */
-		r_idx = get_mon_num(floor_ptr->monster_level);
+		r_idx = get_mon_num(player_ptr, floor_ptr->monster_level);
 
 		/* Handle failure */
 		if (!r_idx) return FALSE;
@@ -3513,7 +3514,7 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
 	get_mon_num_prep(player_ptr, summon_specific_okay, get_monster_hook2(player_ptr, y, x));
 
 	/* Pick a monster, using the level calculation */
-	r_idx = get_mon_num((floor_ptr->dun_level + lev) / 2 + 5);
+	r_idx = get_mon_num(player_ptr, (floor_ptr->dun_level + lev) / 2 + 5);
 
 	/* Handle failure */
 	if (!r_idx)

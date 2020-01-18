@@ -2261,7 +2261,7 @@ void player_outfit(player_type *creature_ptr)
 		for (i = rand_range(3, 4); i > 0; i--)
 		{
 			object_prep(q_ptr, lookup_kind(TV_CORPSE, SV_CORPSE));
-			q_ptr->pval = get_mon_num(2);
+			q_ptr->pval = get_mon_num(creature_ptr, 2);
 			if (q_ptr->pval)
 			{
 				q_ptr->number = 1;

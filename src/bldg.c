@@ -1586,7 +1586,7 @@ void update_gambling_monsters(player_type *player_ptr)
 			{
 				get_mon_num_prep(player_ptr, monster_can_entry_arena, NULL);
 				player_ptr->phase_out = TRUE;
-				r_idx = get_mon_num(mon_level);
+				r_idx = get_mon_num(player_ptr, mon_level);
 				player_ptr->phase_out = old_inside_battle;
 				if (!r_idx) continue;
 
@@ -2291,7 +2291,7 @@ static void castle_quest(player_type *player_ptr)
 	if (q_ptr->r_idx == 0)
 	{
 		/* Random monster at least 5 - 10 levels out of deep */
-		q_ptr->r_idx = get_mon_num(q_ptr->level + 4 + randint1(6));
+		q_ptr->r_idx = get_mon_num(player_ptr, q_ptr->level + 4 + randint1(6));
 	}
 
 	monster_race *r_ptr;
@@ -2299,7 +2299,7 @@ static void castle_quest(player_type *player_ptr)
 
 	while ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->rarity != 1))
 	{
-		q_ptr->r_idx = get_mon_num(q_ptr->level) + 4 + randint1(6);
+		q_ptr->r_idx = get_mon_num(player_ptr, q_ptr->level) + 4 + randint1(6);
 		r_ptr = &r_info[q_ptr->r_idx];
 	}
 
@@ -4239,7 +4239,7 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 
 	while (TRUE)
 	{
-		today_mon = get_mon_num(max_dl);
+		today_mon = get_mon_num(player_ptr, max_dl);
 		monster_race *r_ptr;
 		r_ptr = &r_info[today_mon];
 
@@ -4270,7 +4270,7 @@ void determine_bounty_uniques(player_type *player_ptr)
 	{
 		while (TRUE)
 		{
-			current_world_ptr->bounty_r_idx[i] = get_mon_num(MAX_DEPTH - 1);
+			current_world_ptr->bounty_r_idx[i] = get_mon_num(player_ptr, MAX_DEPTH - 1);
 			monster_race *r_ptr;
 			r_ptr = &r_info[current_world_ptr->bounty_r_idx[i]];
 

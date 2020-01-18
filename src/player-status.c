@@ -5195,7 +5195,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 
 		get_mon_num_prep(creature_ptr, get_nightmare, NULL);
 
-		r_ptr = &r_info[get_mon_num(MAX_DEPTH)];
+		r_ptr = &r_info[get_mon_num(creature_ptr, MAX_DEPTH)];
 		power = r_ptr->level + 10;
 		desc = r_name + r_ptr->name;
 

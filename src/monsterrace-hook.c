@@ -30,7 +30,7 @@ void vault_prep_clone(player_type *player_ptr)
 	get_mon_num_prep(player_ptr, vault_aux_simple, NULL);
 
 	/* Pick a race to clone */
-	vault_aux_race = get_mon_num(p_ptr->current_floor_ptr->dun_level + 10);
+	vault_aux_race = get_mon_num(player_ptr, player_ptr->current_floor_ptr->dun_level + 10);
 
 	/* Remove the monster restriction */
 	get_mon_num_prep(player_ptr, NULL, NULL);
@@ -50,7 +50,7 @@ void vault_prep_symbol(player_type *player_ptr)
 	get_mon_num_prep(player_ptr, vault_aux_simple, NULL);
 
 	/* Pick a race to clone */
-	r_idx = get_mon_num(p_ptr->current_floor_ptr->dun_level + 10);
+	r_idx = get_mon_num(player_ptr, player_ptr->current_floor_ptr->dun_level + 10);
 
 	/* Remove the monster restriction */
 	get_mon_num_prep(player_ptr, NULL, NULL);

@@ -3521,7 +3521,7 @@ static void a_m_aux_4(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 		/* Pick a random non-unique monster race */
 		while (TRUE)
 		{
-			i = get_mon_num(floor_ptr->dun_level);
+			i = get_mon_num(owner_ptr, floor_ptr->dun_level);
 
 			r_ptr = &r_info[i];
 
