@@ -39,7 +39,7 @@ void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(player_ptr, y, x);
+		place_bold(player_ptr, y, x, floor);
 		return;
 	}
 
@@ -62,7 +62,7 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(player_ptr, y, x);
+		place_bold(player_ptr, y, x, floor);
 		return;
 	}
 
@@ -740,7 +740,7 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(player_ptr, y, x);
+		place_bold(player_ptr, y, x, floor);
 		return;
 	}
 
@@ -804,7 +804,7 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 	}
 	else
 	{
-		place_floor_bold(player_ptr, y, x);
+		place_bold(player_ptr, y, x, floor);
 	}
 
 	delete_monster(player_ptr, y, x);
@@ -887,7 +887,7 @@ void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(player_ptr, y, x);
+		place_bold(player_ptr, y, x, floor);
 		return;
 	}
 
@@ -918,7 +918,7 @@ void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type
 
 	if (feat == feat_none)
 	{
-		place_floor_bold(player_ptr, y, x);
+		place_bold(player_ptr, y, x, floor);
 		return;
 	}
 
@@ -1534,7 +1534,7 @@ void set_floor(player_type *player_ptr, POSITION x, POSITION y)
 
 	/* Set to be floor if is a wall (don't touch lakes). */
 	if (is_extra_bold(floor_ptr, y, x))
-		place_floor_bold(player_ptr, y, x);
+		place_bold(player_ptr, y, x, floor);
 }
 
 

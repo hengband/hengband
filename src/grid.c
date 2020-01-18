@@ -1208,9 +1208,9 @@ bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 m
 }
 
 
-void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_hold_type gh_type)
+void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_type)
 {
-	switch (gh_type)
+	switch (gb_type)
 	{
 	case floor:
 	{
@@ -1292,16 +1292,6 @@ bool darkened_grid(player_type *player_ptr, grid_type *g_ptr)
 {
 	return ((g_ptr->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) &&
 		!player_ptr->see_nocto;
-}
-
-
-void place_floor_bold(player_type *player_ptr, POSITION y, POSITION x)
-{
-	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	set_cave_feat(floor_ptr, y, x, feat_ground_type[randint0(100)]);
-	floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-	add_cave_info(floor_ptr, y, x, CAVE_FLOOR);
-	delete_monster(player_ptr, y, x);
 }
 
 
@@ -1399,10 +1389,10 @@ void place_solid_noperm_bold(player_type *player_ptr, POSITION y, POSITION x)
 	delete_monster(player_ptr, y, x);
 }
 
-void place_hold(player_type *player_ptr, POSITION y, POSITION x, grid_hold_type gh_type)
+void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type gb_type)
 {
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	switch (gh_type)
+	switch (gb_type)
 	{
 	case floor:
 	{

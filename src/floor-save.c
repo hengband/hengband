@@ -382,7 +382,7 @@ static void build_dead_end(player_type *creature_ptr)
 	creature_ptr->x = creature_ptr->current_floor_ptr->width / 2;
 
 	/* Give one square */
-	place_floor_bold(creature_ptr, creature_ptr->y, creature_ptr->x);
+	place_bold(creature_ptr, creature_ptr->y, creature_ptr->x, floor);
 
 	wipe_generate_random_floor_flags(creature_ptr->current_floor_ptr);
 }

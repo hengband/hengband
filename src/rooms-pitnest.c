@@ -934,12 +934,12 @@ bool build_type13(player_type *player_ptr)
 	{
 		for (y = y1; y <= yval; y++)
 		{
-			place_floor_bold(player_ptr, y, x2);
+			place_bold(player_ptr, y, x2, floor);
 			place_solid_bold(player_ptr, y, x1 - 1);
 		}
 		for (y = yval; y <= y2 + 1; y++)
 		{
-			place_floor_bold(player_ptr, y, x1);
+			place_bold(player_ptr, y, x1, floor);
 			place_solid_bold(player_ptr, y, x2 + 1);
 		}
 	}
@@ -947,12 +947,12 @@ bool build_type13(player_type *player_ptr)
 	{
 		for (y = yval; y <= y2 + 1; y++)
 		{
-			place_floor_bold(player_ptr, y, x1);
+			place_bold(player_ptr, y, x1, floor);
 			place_solid_bold(player_ptr, y, x2 + 1);
 		}
 		for (y = y1; y <= yval; y++)
 		{
-			place_floor_bold(player_ptr, y, x2);
+			place_bold(player_ptr, y, x2, floor);
 			place_solid_bold(player_ptr, y, x1 - 1);
 		}
 	}

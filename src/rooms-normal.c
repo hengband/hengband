@@ -941,7 +941,7 @@ bool build_type11(player_type *player_ptr)
 			if (distance(y0, x0, y, x) <= rad - 1)
 			{
 				/* inside- so is floor */
-				place_floor_bold(player_ptr, y, x);
+				place_bold(player_ptr, y, x, floor);
 			}
 			else if (distance(y0, x0, y, x) <= rad + 1)
 			{
@@ -1001,11 +1001,11 @@ bool build_type12(player_type *player_ptr)
 			if (dist2(y0, x0, y, x, h1, h2, h3, h4) <= rad - 1)
 			{
 				/* inside - so is floor */
-				place_floor_bold(player_ptr, y, x);
+				place_bold(player_ptr, y, x, floor);
 			}
 			else if (distance(y0, x0, y, x) < 3)
 			{
-				place_floor_bold(player_ptr, y, x);
+				place_bold(player_ptr, y, x, floor);
 			}
 			else
 			{

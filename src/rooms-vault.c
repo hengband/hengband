@@ -148,7 +148,7 @@ static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0
 			else
 			{
 				/* middle of a bubble */
-				place_floor_bold(player_ptr, y0 - yhsize + y, x0 - xhsize + x);
+				place_bold(player_ptr, y0 - yhsize + y, x0 - xhsize + x, floor);
 			}
 
 			/* clean up rest of flags */
@@ -848,7 +848,7 @@ static void build_target_vault(player_type *player_ptr, POSITION x0, POSITION y0
 			if (dist2(y0, x0, y, x, h1, h2, h3, h4) <= rad - 1)
 			{
 				/* inside- so is floor */
-				place_floor_bold(player_ptr, y, x);
+				place_bold(player_ptr, y, x, floor);
 			}
 			else
 			{
@@ -904,7 +904,7 @@ static void build_target_vault(player_type *player_ptr, POSITION x0, POSITION y0
 		place_inner_bold(player_ptr, y0 + 1, x);
 	}
 
-	place_floor_bold(player_ptr, y0, x0);
+	place_bold(player_ptr, y0, x0, floor);
 
 
 	/* Add doors to vault */
@@ -1177,7 +1177,7 @@ static void build_castle_vault(player_type *player_ptr, POSITION x0, POSITION y0
 		{
 			floor_ptr->grid_array[y][x].info |= (CAVE_ROOM | CAVE_ICKY);
 			/* Make everything a floor */
-			place_floor_bold(player_ptr, y, x);
+			place_bold(player_ptr, y, x, floor);
 		}
 	}
 
