@@ -645,7 +645,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 		if (!set_monster_csleep(target_ptr, m_idx, MON_CSLEEP(m_ptr) - d))
 		{
 			/* Notice the "not waking up" */
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(target_ptr, m_ptr))
 			{
 				/* Hack -- Count the ignores */
 				if (r_ptr->r_ignore < MAX_UCHAR) r_ptr->r_ignore++;
@@ -662,7 +662,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 			msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 		}
 
-		if (is_original_ap_and_seen(m_ptr))
+		if (is_original_ap_and_seen(target_ptr, m_ptr))
 		{
 			/* Hack -- Count the wakings */
 			if (r_ptr->r_wake < MAX_UCHAR) r_ptr->r_wake++;

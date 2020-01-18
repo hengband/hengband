@@ -1705,7 +1705,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 
 	/* Projectable? */
 	bool direct = player_bold(target_ptr, y, x);
-	bool can_remember = is_original_ap_and_seen(m_ptr);
+	bool can_remember = is_original_ap_and_seen(target_ptr, m_ptr);
 	if (!direct)
 	{
 		switch (thrown_spell)

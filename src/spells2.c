@@ -2197,7 +2197,7 @@ bool teleport_swap(player_type *caster_ptr, DIRECTION dir)
 	if (r_ptr->flagsr & RFR_RES_TELE)
 	{
 		msg_print(_("テレポートを邪魔された！", "Your teleportation is blocked!"));
-		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+		if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 		return FALSE;
 	}
 

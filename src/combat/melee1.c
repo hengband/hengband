@@ -529,12 +529,13 @@ PERCENTAGE hit_chance(player_type *attacker_ptr, HIT_RELIABILITY reli, ARMOUR_CL
 
 /*!
  * @brief プレイヤー攻撃の種族スレイング倍率計算
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param mult 算出前の基本倍率(/10倍)
  * @param flgs スレイフラグ配列
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイング加味後の倍率(/10倍)
  */
-static MULTIPLY mult_slaying(MULTIPLY mult, const BIT_FLAGS* flgs, const monster_type* m_ptr)
+static MULTIPLY mult_slaying(player_type *player_ptr, MULTIPLY mult, const BIT_FLAGS* flgs, monster_type* m_ptr)
 {
 	static const struct slay_table_t {
 		int slay_flag;
@@ -576,7 +577,7 @@ static MULTIPLY mult_slaying(MULTIPLY mult, const BIT_FLAGS* flgs, const monster
 			!(atoffset(BIT_FLAGS, r_ptr, p->flag_offset) & p->affect_race_flag))
 			continue;
 
-		if (is_original_ap_and_seen(m_ptr))
+		if (is_original_ap_and_seen(player_ptr, m_ptr))
 		{
 			atoffset(BIT_FLAGS, r_ptr, p->r_flag_offset) |= p->affect_race_flag;
 		}
@@ -590,12 +591,13 @@ static MULTIPLY mult_slaying(MULTIPLY mult, const BIT_FLAGS* flgs, const monster
 
 /*!
  * @brief プレイヤー攻撃の属性スレイング倍率計算
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param mult 算出前の基本倍率(/10倍)
  * @param flgs スレイフラグ配列
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイング加味後の倍率(/10倍)
  */
-static MULTIPLY mult_brand(MULTIPLY mult, const BIT_FLAGS* flgs, const monster_type* m_ptr)
+static MULTIPLY mult_brand(player_type *player_ptr, MULTIPLY mult, const BIT_FLAGS* flgs, monster_type* m_ptr)
 {
 	static const struct brand_table_t {
 		int brand_flag;
@@ -619,7 +621,7 @@ static MULTIPLY mult_brand(MULTIPLY mult, const BIT_FLAGS* flgs, const monster_t
 		/* Notice immunity */
 		if (r_ptr->flagsr & p->resist_mask)
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(player_ptr, m_ptr))
 			{
 				r_ptr->r_flagsr |= (r_ptr->flagsr & p->resist_mask);
 			}
@@ -630,7 +632,7 @@ static MULTIPLY mult_brand(MULTIPLY mult, const BIT_FLAGS* flgs, const monster_t
 		/* Otherwise, take the damage */
 		if (r_ptr->flags3 & p->hurt_flag)
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(player_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= p->hurt_flag;
 			}
@@ -665,7 +667,7 @@ static MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAG
 		/* Notice immunity */
 		if (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(attacker_ptr, m_ptr))
 			{
 				r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
 			}
@@ -677,7 +679,7 @@ static MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAG
 			if (r_ptr->flags3 & RF3_HURT_FIRE)
 			{
 				if (mult < 70) mult = 70;
-				if (is_original_ap_and_seen(m_ptr))
+				if (is_original_ap_and_seen(attacker_ptr, m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_HURT_FIRE;
 				}
@@ -689,7 +691,7 @@ static MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAG
 			if (r_ptr->flags3 & RF3_HURT_FIRE)
 			{
 				if (mult < 50) mult = 50;
-				if (is_original_ap_and_seen(m_ptr))
+				if (is_original_ap_and_seen(attacker_ptr, m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_HURT_FIRE;
 				}
@@ -704,7 +706,7 @@ static MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAG
 		/* Notice immunity */
 		if (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK)
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(attacker_ptr, m_ptr))
 			{
 				r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK);
 			}
@@ -736,7 +738,7 @@ static MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAG
 	{
 		if (r_ptr->flags3 & RF3_HURT_ROCK)
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(attacker_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_HURT_ROCK;
 			}
@@ -751,7 +753,7 @@ static MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAG
 		/* Notice immunity */
 		if (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(attacker_ptr, m_ptr))
 			{
 				r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
 			}
@@ -762,7 +764,7 @@ static MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAG
 			if (r_ptr->flags3 & RF3_HURT_COLD)
 			{
 				if (mult < 70) mult = 70;
-				if (is_original_ap_and_seen(m_ptr))
+				if (is_original_ap_and_seen(attacker_ptr, m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_HURT_COLD;
 				}
@@ -774,7 +776,7 @@ static MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAG
 			if (r_ptr->flags3 & RF3_HURT_COLD)
 			{
 				if (mult < 50) mult = 50;
-				if (is_original_ap_and_seen(m_ptr))
+				if (is_original_ap_and_seen(attacker_ptr, m_ptr))
 				{
 					r_ptr->r_flags3 |= RF3_HURT_COLD;
 				}
@@ -789,7 +791,7 @@ static MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAG
 		/* Notice immunity */
 		if (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(attacker_ptr, m_ptr))
 			{
 				r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
 			}
@@ -818,7 +820,7 @@ static MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAG
 	{
 		if (r_ptr->flags3 & RF3_UNDEAD)
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(attacker_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_UNDEAD;
 			}
@@ -879,9 +881,9 @@ HIT_POINT tot_dam_aux(player_type *attacker_ptr, object_type *o_ptr, HIT_POINT t
 	case TV_DIGGING:
 	case TV_LITE:
 	{
-		mult = mult_slaying(mult, flgs, m_ptr);
+		mult = mult_slaying(attacker_ptr, mult, flgs, m_ptr);
 
-		mult = mult_brand(mult, flgs, m_ptr);
+		mult = mult_brand(attacker_ptr, mult, flgs, m_ptr);
 
 		if (attacker_ptr->pclass == CLASS_SAMURAI)
 		{
@@ -1117,7 +1119,7 @@ static void touch_zap_player_aux(monster_type *m_ptr, player_type *touched_ptr, 
 	msg_print(message);
 	dam_func(touched_ptr, aura_damage, mon_name, -1, TRUE);
 
-	if (is_original_ap_and_seen(m_ptr))
+	if (is_original_ap_and_seen(touched_ptr, m_ptr))
 	{
 		atoffset(BIT_FLAGS, r_ptr, r_flags_offset) |= aura_flag;
 	}
@@ -2048,7 +2050,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 			/* Confuse the monster */
 			if (r_ptr->flags3 & RF3_NO_CONF)
 			{
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= RF3_NO_CONF;
+				if (is_original_ap_and_seen(attacker_ptr, m_ptr)) r_ptr->r_flags3 |= RF3_NO_CONF;
 				msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), m_name);
 
 			}
@@ -2071,13 +2073,13 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 			{
 				if (r_ptr->flags1 & RF1_UNIQUE)
 				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+					if (is_original_ap_and_seen(attacker_ptr, m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 					msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), m_name);
 					resists_tele = TRUE;
 				}
 				else if (r_ptr->level > randint1(100))
 				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+					if (is_original_ap_and_seen(attacker_ptr, m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 					msg_format(_("%^sは抵抗力を持っている！", "%^s resists!"), m_name);
 					resists_tele = TRUE;
 				}
@@ -2466,7 +2468,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 			    ((randint0(100) + target_ptr->lev) > 50))
 			{
 				/* Remember the Evil-ness */
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= RF3_EVIL;
+				if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags3 |= RF3_EVIL;
 
 #ifdef JP
 				if (abbreviate) msg_format("撃退した。");
@@ -3757,7 +3759,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					}
 					else
 					{
-						if (is_original_ap_and_seen(m_ptr))
+						if (is_original_ap_and_seen(target_ptr, m_ptr))
 							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
 					}
 				}
@@ -3780,7 +3782,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					}
 					else
 					{
-						if (is_original_ap_and_seen(m_ptr))
+						if (is_original_ap_and_seen(target_ptr, m_ptr))
 							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
 					}
 				}
@@ -3803,7 +3805,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					}
 					else
 					{
-						if (is_original_ap_and_seen(m_ptr))
+						if (is_original_ap_and_seen(target_ptr, m_ptr))
 							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
 					}
 				}
@@ -3827,7 +3829,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					}
 					else
 					{
-						if (is_original_ap_and_seen(m_ptr))
+						if (is_original_ap_and_seen(target_ptr, m_ptr))
 							r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
 					}
 
@@ -3854,12 +3856,12 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 								blinked = FALSE;
 								alive = FALSE;
 							}
-							if (is_original_ap_and_seen(m_ptr))
+							if (is_original_ap_and_seen(target_ptr, m_ptr))
 								r_ptr->r_flags3 |= RF3_EVIL;
 						}
 						else
 						{
-							if (is_original_ap_and_seen(m_ptr))
+							if (is_original_ap_and_seen(target_ptr, m_ptr))
 								r_ptr->r_flagsr |= RFR_RES_ALL;
 						}
 					}
@@ -3883,7 +3885,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					}
 					else
 					{
-						if (is_original_ap_and_seen(m_ptr))
+						if (is_original_ap_and_seen(target_ptr, m_ptr))
 							r_ptr->r_flagsr |= RFR_RES_ALL;
 					}
 				}
@@ -3936,7 +3938,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					}
 					else
 					{
-						if (is_original_ap_and_seen(m_ptr))
+						if (is_original_ap_and_seen(target_ptr, m_ptr))
 							r_ptr->r_flagsr |= (RFR_RES_ALL | RFR_RES_DARK);
 					}
 				}
@@ -4012,7 +4014,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 
 		/* Analyze "visible" monsters only */
-		if (is_original_ap_and_seen(m_ptr) && !do_silly_attack)
+		if (is_original_ap_and_seen(target_ptr, m_ptr) && !do_silly_attack)
 		{
 			/* Count "obvious" attacks (and ones that cause damage) */
 			if (obvious || damage || (r_ptr->r_blows[ap_cnt] > 10))
@@ -4579,7 +4581,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 							{
 								msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), m_name);
 							}
-							if (m_ptr->ml && is_original_ap_and_seen(t_ptr)) tr_ptr->r_flags2 |= RF2_AURA_FIRE;
+							if (m_ptr->ml && is_original_ap_and_seen(subject_ptr, t_ptr)) tr_ptr->r_flags2 |= RF2_AURA_FIRE;
 							project(subject_ptr, t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll(1 + ((tr_ptr->level) / 26),
 									1 + ((tr_ptr->level) / 17)),
@@ -4587,7 +4589,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 						}
 						else
 						{
-							if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
+							if (is_original_ap_and_seen(subject_ptr, m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
 						}
 					}
 
@@ -4600,7 +4602,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 							{
 								msg_format(_("%^sは突然寒くなった！", "%^s is suddenly very cold!"), m_name);
 							}
-							if (m_ptr->ml && is_original_ap_and_seen(t_ptr)) tr_ptr->r_flags3 |= RF3_AURA_COLD;
+							if (m_ptr->ml && is_original_ap_and_seen(subject_ptr, t_ptr)) tr_ptr->r_flags3 |= RF3_AURA_COLD;
 							project(subject_ptr, t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll(1 + ((tr_ptr->level) / 26),
 									1 + ((tr_ptr->level) / 17)),
@@ -4608,7 +4610,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 						}
 						else
 						{
-							if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
+							if (is_original_ap_and_seen(subject_ptr, m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
 						}
 					}
 
@@ -4621,7 +4623,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 							{
 								msg_format(_("%^sは電撃を食らった！", "%^s gets zapped!"), m_name);
 							}
-							if (m_ptr->ml && is_original_ap_and_seen(t_ptr)) tr_ptr->r_flags2 |= RF2_AURA_ELEC;
+							if (m_ptr->ml && is_original_ap_and_seen(subject_ptr, t_ptr)) tr_ptr->r_flags2 |= RF2_AURA_ELEC;
 							project(subject_ptr, t_idx, 0, m_ptr->fy, m_ptr->fx,
 								damroll(1 + ((tr_ptr->level) / 26),
 									1 + ((tr_ptr->level) / 17)),
@@ -4629,7 +4631,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 						}
 						else
 						{
-							if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
+							if (is_original_ap_and_seen(subject_ptr, m_ptr)) r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
 						}
 					}
 				}
@@ -4674,7 +4676,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
 
 		/* Analyze "visible" monsters only */
-		if (is_original_ap_and_seen(m_ptr) && !do_silly_attack)
+		if (is_original_ap_and_seen(subject_ptr, m_ptr) && !do_silly_attack)
 		{
 			/* Count "obvious" attacks (and ones that cause damage) */
 			if (obvious || damage || (r_ptr->r_blows[ap_cnt] > 10))

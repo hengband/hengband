@@ -2359,7 +2359,7 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 	{
 		if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 		{
-			if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+			if (is_original_ap_and_seen(target_ptr, t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 			if (see_monster(floor_ptr, t_idx))
 			{
 				msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
@@ -2368,7 +2368,7 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 		}
 		else if (tr_ptr->level > randint1(100))
 		{
-			if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+			if (is_original_ap_and_seen(target_ptr, t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 			if (see_monster(floor_ptr, t_idx))
 			{
 				msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
@@ -2435,7 +2435,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 	{
 		if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 		{
-			if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+			if (is_original_ap_and_seen(target_ptr, t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 			if (see_monster(floor_ptr, t_idx))
 			{
 				msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
@@ -2444,7 +2444,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 		}
 		else if (tr_ptr->level > randint1(100))
 		{
-			if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+			if (is_original_ap_and_seen(target_ptr, t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 			if (see_monster(floor_ptr, t_idx))
 			{
 				msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);

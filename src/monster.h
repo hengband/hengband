@@ -509,6 +509,7 @@ extern void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int w
 extern void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
 extern SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr);
 extern void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr);
+extern bool is_original_ap_and_seen(player_type *player_ptr, monster_type *m_ptr);
 
 #define is_friendly(A) \
 	 (bool)(((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)
@@ -522,6 +523,3 @@ extern void monster_drop_carried_objects(player_type *player_ptr, monster_type *
 /* Hack -- Determine monster race appearance index is same as race index */
 #define is_original_ap(A) \
 	 (bool)(((A)->ap_r_idx == (A)->r_idx) ? TRUE : FALSE)
-
-#define is_original_ap_and_seen(A) \
-	 (bool)((A)->ml && !p_ptr->image && ((A)->ap_r_idx == (A)->r_idx))

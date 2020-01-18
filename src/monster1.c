@@ -3024,3 +3024,9 @@ concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode)
 
 	return format(_("レベル???, %s%s%s", "Level ???, %s%s%s"), desc, attitude, clone);
 }
+
+
+bool is_original_ap_and_seen(player_type *player_ptr, monster_type *m_ptr)
+{
+	return m_ptr->ml && !player_ptr->image && (m_ptr->ap_r_idx == m_ptr->r_idx);
+}

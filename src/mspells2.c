@@ -696,7 +696,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 		return TRUE;
 	}
 
-	can_remember = is_original_ap_and_seen(m_ptr);
+	can_remember = is_original_ap_and_seen(target_ptr, m_ptr);
 
 	dam = monspell_to_monster(target_ptr, thrown_spell, y, x, m_idx, target_idx);
 	if (dam < 0) return FALSE;

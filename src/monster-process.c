@@ -1421,7 +1421,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 
 		/* Hack -- Count the wakings */
-		if (is_original_ap_and_seen(m_ptr) && (r_ptr->r_wake < MAX_UCHAR))
+		if (is_original_ap_and_seen(target_ptr, m_ptr) && (r_ptr->r_wake < MAX_UCHAR))
 		{
 			r_ptr->r_wake++;
 		}
@@ -1494,7 +1494,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			if (multiply_monster(target_ptr, m_idx, FALSE, (is_pet(m_ptr) ? PM_FORCE_PET : 0)))
 			{
 				/* Take note if visible */
-				if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(m_ptr))
+				if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(target_ptr, m_ptr))
 				{
 					r_ptr->r_flags2 |= (RF2_MULTIPLY);
 				}
@@ -1526,7 +1526,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 						}
 					}
 
-					if (count && is_original_ap_and_seen(m_ptr)) r_ptr->r_flags6 |= (RF6_SPECIAL);
+					if (count && is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags6 |= (RF6_SPECIAL);
 				}
 			}
 		}
@@ -1632,7 +1632,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		(randint0(100) < 75))
 	{
 		/* Memorize flags */
-		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50 | RF1_RAND_25);
+		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50 | RF1_RAND_25);
 
 		/* Try four "random" directions */
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
@@ -1643,7 +1643,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		(randint0(100) < 50))
 	{
 		/* Memorize flags */
-		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50);
+		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50);
 
 		/* Try four "random" directions */
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
@@ -1654,7 +1654,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		(randint0(100) < 25))
 	{
 		/* Memorize flags */
-		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags1 |= RF1_RAND_25;
+		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= RF1_RAND_25;
 
 		/* Try four "random" directions */
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
@@ -1880,7 +1880,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 					{
 						target_ptr->update |= (PU_FLOW);
 						target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_BASH_DOOR);
+						if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_BASH_DOOR);
 
 						return;
 					}
@@ -1975,7 +1975,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			if (r_ptr->flags1 & RF1_NEVER_BLOW)
 			{
 				/* Hack -- memorize lack of attacks */
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_BLOW);
+				if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_BLOW);
 
 				/* Do not move */
 				do_move = FALSE;
@@ -1989,7 +1989,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (!(r_ptr->flags2 & RF2_STUPID)) do_move = FALSE;
 					else
 					{
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_STUPID);
+						if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_STUPID);
 					}
 				}
 			}
@@ -2029,7 +2029,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				{
 					if (r_ptr->flags2 & RF2_KILL_BODY)
 					{
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_BODY);
+						if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_BODY);
 					}
 
 					/* attack */
@@ -2043,7 +2043,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 							if (MON_CONFUSED(m_ptr)) return;
 							else if (r_ptr->flags2 & RF2_STUPID)
 							{
-								if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_STUPID);
+								if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_STUPID);
 								return;
 							}
 						}
@@ -2091,7 +2091,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			{
 				target_ptr->update |= (PU_FLOW);
 				target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_WALL);
+				if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_WALL);
 
 				return;
 			}
@@ -2128,7 +2128,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (do_move && (r_ptr->flags1 & RF1_NEVER_MOVE))
 		{
 			/* Hack -- memorize lack of moves */
-			if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_MOVE);
+			if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_MOVE);
 
 			/* Do not move */
 			do_move = FALSE;
@@ -2358,7 +2358,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	}
 
 	/* Learn things from observable monster */
-	if (is_original_ap_and_seen(m_ptr))
+	if (is_original_ap_and_seen(target_ptr, m_ptr))
 	{
 		/* Monster opened a door */
 		if (did_open_door) r_ptr->r_flags2 |= (RF2_OPEN_DOOR);

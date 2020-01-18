@@ -1240,7 +1240,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	{
 		note = _("には完全な耐性がある！", " is immune.");
 		dam = 0;
-		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
+		if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 		if (typ == GF_LITE_WEAK || typ == GF_KILL_WALL) skipped = TRUE;
 	}
 	else
@@ -1263,7 +1263,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("にはかなり耐性がある！", " resists a lot.");
 				dam /= 9;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_ACID);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_IM_ACID);
 			}
 			break;
 		}
@@ -1276,7 +1276,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("にはかなり耐性がある！", " resists a lot.");
 				dam /= 9;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_ELEC);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_IM_ELEC);
 			}
 			break;
 		}
@@ -1289,13 +1289,13 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("にはかなり耐性がある！", " resists a lot.");
 				dam /= 9;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_FIRE);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_IM_FIRE);
 			}
 			else if (r_ptr->flags3 & (RF3_HURT_FIRE))
 			{
 				note = _("はひどい痛手をうけた。", " is hit hard.");
 				dam *= 2;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_FIRE);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_FIRE);
 			}
 			break;
 		}
@@ -1308,13 +1308,13 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("にはかなり耐性がある！", " resists a lot.");
 				dam /= 9;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_COLD);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_IM_COLD);
 			}
 			else if (r_ptr->flags3 & (RF3_HURT_COLD))
 			{
 				note = _("はひどい痛手をうけた。", " is hit hard.");
 				dam *= 2;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_COLD);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_COLD);
 			}
 			break;
 		}
@@ -1327,7 +1327,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("にはかなり耐性がある！", " resists a lot.");
 				dam /= 9;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_POIS);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_IM_POIS);
 			}
 			break;
 		}
@@ -1340,7 +1340,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_POIS);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_IM_POIS);
 			}
 			else if (one_in_(3)) do_poly = TRUE;
 			break;
@@ -1354,7 +1354,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("はひどい痛手をうけた。", " is hit hard.");
 				dam *= 2;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
 			}
 			break;
 		}
@@ -1367,7 +1367,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				dam *= 2;
 				note = _("はひどい痛手をうけた。", " is hit hard.");
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= RF3_EVIL;
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= RF3_EVIL;
 			}
 			else
 			{
@@ -1392,7 +1392,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_PLAS);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_PLAS);
 			}
 			break;
 		}
@@ -1407,20 +1407,20 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				{
 					note = _("には完全な耐性がある！", " is immune.");
 					dam = 0;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
+					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
 				}
 				else
 				{
 					note = _("には耐性がある。", " resists.");
 					dam *= 3; dam /= randint1(6) + 6;
 				}
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_NETH);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_NETH);
 			}
 			else if (r_ptr->flags3 & RF3_EVIL)
 			{
 				note = _("はいくらか耐性を示した。", " resists somewhat.");
 				dam /= 2;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
 			}
 			break;
 		}
@@ -1441,7 +1441,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					note = _("には耐性がある。", " resists.");
 					dam *= 3; dam /= randint1(6) + 6;
 				}
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_WATE);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_WATE);
 			}
 			break;
 		}
@@ -1454,13 +1454,13 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_CHAO);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_CHAO);
 			}
 			else if ((r_ptr->flags3 & RF3_DEMON) && one_in_(3))
 			{
 				note = _("はいくらか耐性を示した。", " resists somewhat.");
 				dam *= 3; dam /= randint1(6) + 6;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
 			}
 			else
 			{
@@ -1478,7 +1478,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SHAR);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SHAR);
 			}
 			break;
 		}
@@ -1491,7 +1491,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("はいくらか耐性を示した。", " resists somewhat.");
 				dam /= 2;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SHAR);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SHAR);
 			}
 			break;
 		}
@@ -1505,7 +1505,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("には耐性がある。", " resists.");
 				dam *= 2; dam /= randint1(6) + 6;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SOUN);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SOUN);
 			}
 			else do_stun = (10 + randint1(15) + r) / (r + 1);
 			break;
@@ -1519,7 +1519,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 			}
 			else do_conf = (10 + randint1(15) + r) / (r + 1);
 			break;
@@ -1533,7 +1533,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_DISE);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_DISE);
 			}
 			break;
 		}
@@ -1546,7 +1546,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_NEXU);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_NEXU);
 			}
 			break;
 		}
@@ -1559,7 +1559,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_WALL);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_WALL);
 			}
 			else do_stun = (randint1(15) + r) / (r + 1);
 			break;
@@ -1573,7 +1573,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_INER);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_INER);
 			}
 			else
 			{
@@ -1603,7 +1603,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("には耐性がある。", " resists.");
 				dam *= 3; dam /= randint1(6) + 6;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_TIME);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_TIME);
 			}
 			else do_time = (dam + 1) / 2;
 			break;
@@ -1619,13 +1619,13 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				if (r_ptr->flags1 & (RF1_UNIQUE))
 				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 					note = _("には効果がなかった。", " is unaffected!");
 					resist_tele = TRUE;
 				}
 				else if (r_ptr->level > randint1(100))
 				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 					note = _("には耐性がある！", " resists!");
 					resist_tele = TRUE;
 				}
@@ -1640,7 +1640,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				note = _("には耐性がある！", " resists!");
 				dam *= 3; dam /= randint1(6) + 6;
 				do_dist = 0;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_GRAV);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_GRAV);
 			}
 			else
 			{
@@ -1693,7 +1693,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			if (seen) obvious = TRUE;
 			if (r_ptr->flags3 & RF3_HURT_ROCK)
 			{
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_ROCK);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_ROCK);
 				note = _("の皮膚がただれた！", " loses some skin!");
 				note_dies = _("は蒸発した！", " evaporates!");
 				dam *= 2;
@@ -1717,7 +1717,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				dam = 0;
 				note = _("には完全な耐性がある！", " is immune.");
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
 
 			}
 			else if ((r_ptr->flags2 & (RF2_STUPID | RF2_WEIRD_MIND)) ||
@@ -1920,7 +1920,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				/* Memorize a flag */
 				if (r_ptr->flags3 & RF3_NO_CONF)
 				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
+					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 				}
 
 				/* Resist */
@@ -2009,13 +2009,13 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("にはかなり耐性がある！", " resists a lot.");
 				dam /= 9;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_IM_COLD);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_IM_COLD);
 			}
 			else if (r_ptr->flags3 & (RF3_HURT_COLD))
 			{
 				note = _("はひどい痛手をうけた。", " is hit hard.");
 				dam *= 2;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_COLD);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_COLD);
 			}
 			break;
 		}
@@ -2027,7 +2027,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			if (seen) obvious = TRUE;
 			if (!monster_living(m_ptr->r_idx))
 			{
-				if (is_original_ap_and_seen(m_ptr))
+				if (is_original_ap_and_seen(caster_ptr, m_ptr))
 				{
 					if (r_ptr->flags3 & RF3_DEMON) r_ptr->r_flags3 |= (RF3_DEMON);
 					if (r_ptr->flags3 & RF3_UNDEAD) r_ptr->r_flags3 |= (RF3_UNDEAD);
@@ -2048,7 +2048,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			if (seen) obvious = TRUE;
 			if (!monster_living(m_ptr->r_idx))
 			{
-				if (is_original_ap_and_seen(m_ptr))
+				if (is_original_ap_and_seen(caster_ptr, m_ptr))
 				{
 					if (r_ptr->flags3 & RF3_DEMON) r_ptr->r_flags3 |= (RF3_DEMON);
 					if (r_ptr->flags3 & RF3_UNDEAD) r_ptr->r_flags3 |= (RF3_UNDEAD);
@@ -2280,7 +2280,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				/* Memorize a flag */
 				if (r_ptr->flags3 & RF3_NO_SLEEP)
 				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_SLEEP);
+					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_SLEEP);
 				}
 				/* No obvious effect */
 				note = _("には効果がなかった。", " is unaffected.");
@@ -2595,7 +2595,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
 				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
+					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 				}
 
 				/* Resist */
@@ -2649,7 +2649,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (seen) obvious = TRUE;
 
 				/* Memorize the effects */
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
 
 				/* Special effect */
 				note = _("は光に身をすくめた！", " cringes from the light!");
@@ -2677,11 +2677,11 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("には耐性がある！", " resists!");
 				dam *= 2; dam /= (randint1(6) + 6);
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_LITE);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_LITE);
 			}
 			else if (r_ptr->flags3 & (RF3_HURT_LITE))
 			{
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
 				note = _("は光に身をすくめた！", " cringes from the light!");
 				note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
 				dam *= 2;
@@ -2699,7 +2699,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("には耐性がある！", " resists!");
 				dam *= 2; dam /= (randint1(6) + 6);
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_DARK);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_DARK);
 			}
 			break;
 		}
@@ -2715,7 +2715,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (seen) obvious = TRUE;
 
 				/* Memorize the effects */
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_ROCK);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_ROCK);
 
 				/* Cute little message */
 				note = _("の皮膚がただれた！", " loses some skin!");
@@ -2745,13 +2745,13 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				{
 					if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
 					{
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+						if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 						note = _("には効果がなかった。", " is unaffected.");
 						resists_tele = TRUE;
 					}
 					else if (r_ptr->level > randint1(100))
 					{
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+						if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 						note = _("には耐性がある！", " resists!");
 						resists_tele = TRUE;
 					}
@@ -2760,7 +2760,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (!resists_tele)
 				{
 					if (seen) obvious = TRUE;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
+					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
 					do_dist = dam;
 				}
 			}
@@ -2790,13 +2790,13 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				{
 					if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
 					{
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+						if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 						note = _("には効果がなかった。", " is unaffected.");
 						resists_tele = TRUE;
 					}
 					else if (r_ptr->level > randint1(100))
 					{
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+						if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 						note = _("には耐性がある！", " resists!");
 						resists_tele = TRUE;
 					}
@@ -2805,7 +2805,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (!resists_tele)
 				{
 					if (seen) obvious = TRUE;
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
+					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
 					do_dist = dam;
 				}
 			}
@@ -2831,13 +2831,13 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))
 				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 					note = _("には効果がなかった。", " is unaffected.");
 					resists_tele = TRUE;
 				}
 				else if (r_ptr->level > randint1(100))
 				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 					note = _("には耐性がある！", " resists!");
 					resists_tele = TRUE;
 				}
@@ -2866,7 +2866,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (seen) obvious = TRUE;
 
 				/* Learn about type */
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
 
 				/* Apply some fear */
 				do_fear = damroll(3, (dam / 2)) + 1;
@@ -2903,7 +2903,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (seen) obvious = TRUE;
 
 				/* Learn about type */
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
 
 				/* Apply some fear */
 				do_fear = damroll(3, (dam / 2)) + 1;
@@ -2965,7 +2965,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (seen) obvious = TRUE;
 
 				/* Learn about type */
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
 
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
@@ -2994,7 +2994,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (seen) obvious = TRUE;
 
 				/* Learn about type */
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
 
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
@@ -3022,7 +3022,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (seen) obvious = TRUE;
 
 				/* Learn about type */
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
 
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
@@ -3075,7 +3075,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (seen) obvious = TRUE;
 
 				/* Learn about type */
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
 
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
@@ -3157,20 +3157,20 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
 				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
+					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 				}
 				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
 			else if (r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
 				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 			}
 			else if (r_ptr->flags2 & RF2_WEIRD_MIND)
 			{
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
 				note = _("には耐性がある。", " resists.");
 				dam /= 3;
 			}
@@ -3199,20 +3199,20 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
 				{
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
+					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 				}
 				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
 			else if (r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
 				note = _("には完全な耐性がある！", " is immune.");
 				dam = 0;
 			}
 			else if (r_ptr->flags2 & RF2_WEIRD_MIND)
 			{
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
 				note = _("には耐性がある！", " resists!");
 				dam /= 3;
 			}
@@ -3392,7 +3392,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 				skipped = TRUE;
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
 				break;
 			}
 			if (MON_CSLEEP(m_ptr))
@@ -3455,7 +3455,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					/* Memorize a flag */
 					if (r_ptr->flags3 & RF3_NO_SLEEP)
 					{
-						if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_SLEEP);
+						if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_SLEEP);
 					}
 
 					/* No obvious effect */
@@ -3505,7 +3505,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (seen) obvious = TRUE;
 
 				/* Memorize the effects */
-				if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
+				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
 
 				/* Special effect */
 				note = _("は光に身をすくめた！", " cringes from the light!");
@@ -3567,7 +3567,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					(void)set_monster_fast(caster_ptr, g_ptr->m_idx, MON_FAST(m_ptr) + 100);
 
 					/* Learn about type */
-					if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
+					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
 					success = TRUE;
 				}
 			}
@@ -3578,7 +3578,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				{
 					do_fear = randint1(90) + 10;
 				}
-				else if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_FEAR);
+				else if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_FEAR);
 			}
 
 			/* No "real" damage */
@@ -6383,7 +6383,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 						else
 							msg_print(_("攻撃は跳ね返った！", "The attack bounces!"));
 					}
-					if (is_original_ap_and_seen(m_ptr)) ref_ptr->r_flags2 |= RF2_REFLECTING;
+					if (is_original_ap_and_seen(caster_ptr, m_ptr)) ref_ptr->r_flags2 |= RF2_REFLECTING;
 
 					/* Reflected bolts randomly target either one */
 					if (player_bold(caster_ptr, y, x) || one_in_(2)) flg &= ~(PROJECT_PLAYER);
