@@ -218,7 +218,6 @@ extern void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type
 extern bool darkened_grid(player_type *player_ptr, grid_type *g_ptr);
 extern void delete_monster(player_type *player_ptr, POSITION y, POSITION x);
 extern void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type gh_type);
-void place_inner_bold(player_type *player_ptr, POSITION y, POSITION x);
 void place_inner_perm_bold(player_type *player_ptr, POSITION y, POSITION x);
 void place_outer_bold(player_type *player_ptr, POSITION y, POSITION x);
 void place_outer_noperm_bold(player_type *player_ptr, POSITION y, POSITION x);
