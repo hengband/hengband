@@ -2226,6 +2226,9 @@ void update_monsters(player_type *player_ptr, bool full)
 
 
 /*!
+ * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
+ * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @brief カメレオンの王の変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
@@ -2263,6 +2266,8 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
 }
 
 /*!
+ * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
+ * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @brief カメレオンの変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
@@ -2383,7 +2388,7 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
 	}
 
 	/* Extract the monster base speed */
-	m_ptr->mspeed = get_mspeed(r_ptr);
+	m_ptr->mspeed = get_mspeed(player_ptr, r_ptr);
 
 	oldmaxhp = m_ptr->max_maxhp;
 	/* Assign maximal hitpoints */
@@ -2413,6 +2418,7 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
 
 
 /*!
+ * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @brief たぬきの変身対象となるモンスターかどうか判定する / Hook for Tanuki
  * @param r_idx モンスター種族ID
  * @return 対象にできるならtrueを返す
@@ -2442,12 +2448,12 @@ static bool monster_hook_tanuki(MONRACE_IDX r_idx)
  */
 static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
 {
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	int attempts = 1000;
 	MONRACE_IDX ap_r_idx;
 	DEPTH min = MIN(floor_ptr->base_level - 5, 50);
 
-	if (p_ptr->pseikaku == SEIKAKU_CHARGEMAN && !(generate_mode & (PM_MULTIPLY | PM_KAGE)))
+	if (player_ptr->pseikaku == SEIKAKU_CHARGEMAN && !(generate_mode & (PM_MULTIPLY | PM_KAGE)))
 	{
 		if (floor_ptr->base_level == 0 ||
 			(one_in_(5) && my_strchr("hkoptuyAHOPTUVY", r_info[r_idx].d_char))) return MON_ALIEN_JURAL;
@@ -2469,17 +2475,18 @@ static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_i
 
 
 /*!
+ * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * @brief モンスターの個体加速を設定する / Get initial monster speed
  * @param r_ptr モンスター種族の参照ポインタ
  * @return 加速値
  */
-SPEED get_mspeed(monster_race *r_ptr)
+SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr)
 {
 	/* Extract the monster base speed */
 	SPEED mspeed = r_ptr->speed;
 
 	/* Hack -- small racial variety */
-	if (!(r_ptr->flags1 & RF1_UNIQUE) && !p_ptr->current_floor_ptr->inside_arena)
+	if (!(r_ptr->flags1 & RF1_UNIQUE) && !player_ptr->current_floor_ptr->inside_arena)
 	{
 		/* Allow some small variation per monster */
 		int i = SPEED_TO_ENERGY(r_ptr->speed) / (one_in_(4) ? 3 : 10);
@@ -2765,7 +2772,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
 
 
 	/* Extract the monster base speed */
-	m_ptr->mspeed = get_mspeed(r_ptr);
+	m_ptr->mspeed = get_mspeed(player_ptr, r_ptr);
 
 	if (mode & PM_HASTE) (void)set_monster_fast(player_ptr, g_ptr->m_idx, 100);
 

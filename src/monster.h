@@ -507,7 +507,7 @@ extern bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSI
 extern void update_smart_learn(MONSTER_IDX m_idx, int what);
 
 extern void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
-extern SPEED get_mspeed(monster_race *r_ptr);
+extern SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr);
 extern void monster_drop_carried_objects(monster_type *m_ptr);
 
 #define is_friendly(A) \
