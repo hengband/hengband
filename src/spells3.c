@@ -3215,7 +3215,7 @@ bool shock_power(player_type *caster_ptr)
 	{
 		y += ddy[dir];
 		x += ddx[dir];
-		if (cave_empty_bold(caster_ptr->current_floor_ptr, y, x))
+		if (is_cave_empty_bold(caster_ptr, y, x))
 		{
 			ty = y;
 			tx = x;

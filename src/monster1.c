@@ -2583,7 +2583,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 		do
 		{
 			scatter(player_ptr, &wy, &wx, y, x, 20, 0);
-		} while (!(in_bounds(floor_ptr, wy, wx) && cave_empty_bold2(floor_ptr, wy, wx)) && --attempts);
+		} while (!(in_bounds(floor_ptr, wy, wx) && is_cave_empty_bold2(player_ptr, wy, wx)) && --attempts);
 
 		if (attempts <= 0) break;
 

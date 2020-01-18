@@ -738,7 +738,7 @@ static void get_out_monster(player_type *protected_ptr)
 		if (!in_bounds(floor_ptr, ny, nx)) continue;
 
 		/* Require "empty" floor space */
-		if (!cave_empty_bold(floor_ptr, ny, nx)) continue;
+		if (!is_cave_empty_bold(protected_ptr, ny, nx)) continue;
 
 		/* Hack -- no teleport onto glyph of warding */
 		if (is_glyph_grid(&floor_ptr->grid_array[ny][nx])) continue;

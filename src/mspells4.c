@@ -3395,23 +3395,22 @@ MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MO
 
 	msg_print(NULL);
 
-	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	int count = 0;
 	for (int k = 0; k < 30; k++)
 	{
-		if (!summon_possible(target_ptr, cy, cx) || !cave_empty_bold(floor_ptr, cy, cx))
+		if (!summon_possible(target_ptr, cy, cx) || !is_cave_empty_bold(target_ptr, cy, cx))
 		{
 			int j;
 			for (j = 100; j > 0; j--)
 			{
 				scatter(target_ptr, &cy, &cx, y, x, 2, 0);
-				if (cave_empty_bold(floor_ptr, cy, cx)) break;
+				if (is_cave_empty_bold(target_ptr, cy, cx)) break;
 			}
 
 			if (!j) break;
 		}
 
-		if (!cave_empty_bold(floor_ptr, cy, cx)) continue;
+		if (!is_cave_empty_bold(target_ptr, cy, cx)) continue;
 
 		if (!summon_named_creature(target_ptr, m_idx, cy, cx, MON_NAZGUL, mode)) continue;
 

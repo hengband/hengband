@@ -800,7 +800,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			x = caster_ptr->x + ddx_ddd[i];
 
 			/* Skip non-empty grids */
-			if (!cave_empty_bold(floor_ptr, y, x)) continue;
+			if (!is_cave_empty_bold(caster_ptr, y, x)) continue;
 
 			/* Important -- Skip "quake" grids */
 			if (map[16 + y - cy][16 + x - cx]) continue;
@@ -949,7 +949,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 					x = xx + ddx_ddd[i];
 
 					/* Skip non-empty grids */
-					if (!cave_empty_bold(floor_ptr, y, x)) continue;
+					if (!is_cave_empty_bold(caster_ptr, y, x)) continue;
 
 					/* Hack -- no safety on glyph of warding */
 					if (is_glyph_grid(&floor_ptr->grid_array[y][x])) continue;

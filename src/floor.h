@@ -255,32 +255,6 @@ extern floor_type floor_info;
 
 
 /*
- * Determine if a "legal" grid is an "empty" floor grid
- * Determine if monsters are allowed to move into a grid
- *
- * Line 1 -- forbid non-placement grids
- * Line 2 -- forbid normal monsters
- * Line 3 -- forbid the player
- */
-#define cave_empty_bold(F,Y,X) \
-	(cave_have_flag_bold((F), (Y), (X), FF_PLACE) && \
-	 !((F)->grid_array[Y][X].m_idx) && \
-	 !player_bold(p_ptr, Y,X))
-
-
-/*
- * Determine if a "legal" grid is an "empty" floor grid
- * Determine if monster generation is allowed in a grid
- *
- * Line 1 -- forbid non-empty grids
- * Line 2 -- forbid trees while dungeon generation
- */
-#define cave_empty_bold2(F,Y,X) \
-	(cave_empty_bold(F,Y,X) && \
-	 (current_world_ptr->character_dungeon || !cave_have_flag_bold((F), (Y), (X), FF_TREE)))
-
-
-/*
  * Determine if a "legal" grid is an "naked" floor grid
  *
  * Line 1 -- forbid non-clean gird
@@ -363,6 +337,8 @@ extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 	((int)((G) % 256U))
 
 extern bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x);
+extern bool is_cave_empty_bold(player_type *player_ptr, POSITION x, POSITION y);
+extern bool is_cave_empty_bold2(player_type *player_ptr, POSITION x, POSITION y);
 extern void update_smell(floor_type *floor_ptr, player_type *subject_ptr);
 
 extern void add_door(player_type *player_ptr, POSITION x, POSITION y);

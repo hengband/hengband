@@ -2873,7 +2873,7 @@ static bool mon_scatter(player_type *player_ptr, MONRACE_IDX r_idx, POSITION *yp
 			else
 			{
 				/* Walls and Monsters block flow */
-				if (!cave_empty_bold2(floor_ptr, ny, nx)) continue;
+				if (!is_cave_empty_bold2(player_ptr, ny, nx)) continue;
 
 				/* ... nor on the Pattern */
 				if (pattern_tile(floor_ptr, ny, nx)) continue;
@@ -2972,7 +2972,7 @@ static bool place_monster_group(player_type *player_ptr, MONSTER_IDX who, POSITI
 			scatter(player_ptr, &my, &mx, hy, hx, 4, 0);
 
 			/* Walls and Monsters block flow */
-			if (!cave_empty_bold2(floor_ptr, my, mx)) continue;
+			if (!is_cave_empty_bold2(player_ptr, my, mx)) continue;
 
 			/* Attempt to place another monster */
 			if (place_monster_one(player_ptr, who, my, mx, r_idx, mode))
@@ -3122,7 +3122,7 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 		scatter(player_ptr, &ny, &nx, y, x, d, 0);
 
 		/* Require empty grids */
-		if (!cave_empty_bold2(player_ptr->current_floor_ptr, ny, nx)) continue;
+		if (!is_cave_empty_bold2(player_ptr, ny, nx)) continue;
 		get_mon_num_prep(player_ptr, place_monster_can_escort, get_monster_hook2(player_ptr, ny, nx));
 
 		/* Pick a random race */
@@ -3260,7 +3260,7 @@ bool alloc_guardian(player_type *player_ptr, bool def_val)
 		POSITION ox = randint1(floor_ptr->width - 4) + 2;
 
 		/* Is it a good spot ? */
-		if (!cave_empty_bold2(floor_ptr, oy, ox))
+		if (!is_cave_empty_bold2(player_ptr, oy, ox))
 		{
 			try_count++;
 			continue;
@@ -3310,11 +3310,11 @@ bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode)
 		/* Require empty floor grid (was "naked") */
 		if (floor_ptr->dun_level)
 		{
-			if (!cave_empty_bold2(floor_ptr, y, x)) continue;
+			if (!is_cave_empty_bold2(player_ptr, y, x)) continue;
 		}
 		else
 		{
-			if (!cave_empty_bold(floor_ptr, y, x)) continue;
+			if (!is_cave_empty_bold(player_ptr, y, x)) continue;
 		}
 
 		/* Accept far away grids */
