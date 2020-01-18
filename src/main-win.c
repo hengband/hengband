@@ -1952,7 +1952,7 @@ static errr term_user_win(int n)
 /*
  * React to global changes
  */
-static errr term_xtra_win_react(void)
+static errr term_xtra_win_react(player_type *player_ptr)
 {
 	int i;
 
@@ -2042,7 +2042,7 @@ static errr term_xtra_win_react(void)
 		use_music = arg_music;
 
 		if (!arg_music) stop_music();
-		else select_floor_music(p_ptr);
+		else select_floor_music(player_ptr);
 
 	}
 
@@ -2069,7 +2069,7 @@ static errr term_xtra_win_react(void)
 
 		/* Reset visuals */
 #ifdef ANGBAND_2_8_1
-		reset_visuals(p_ptr);
+		reset_visuals(player_ptr);
 #else /* ANGBAND_2_8_1 */
 		reset_visuals(TRUE);
 #endif /* ANGBAND_2_8_1 */
@@ -2386,6 +2386,7 @@ static int term_xtra_win_delay(int v)
 
 
 /*
+ * todo z-termに影響があるのでplayer_typeの追加は保留
  * Do a "special thing"
  */
 static errr term_xtra_win(int n, int v)
@@ -2441,7 +2442,7 @@ static errr term_xtra_win(int n, int v)
 	/* React to global changes */
 	case TERM_XTRA_REACT:
 	{
-		return (term_xtra_win_react());
+		return (term_xtra_win_react(p_ptr));
 	}
 
 	/* Delay for some milliseconds */
@@ -3896,7 +3897,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		if (arg_graphics != GRAPHICS_NONE)
 		{
 			arg_graphics = GRAPHICS_NONE;
-			term_xtra_win_react();
+			term_xtra_win_react(player_ptr);
 			Term_key_push(KTRL('R'));
 		}
 
@@ -3914,7 +3915,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		if (arg_graphics != GRAPHICS_ORIGINAL)
 		{
 			arg_graphics = GRAPHICS_ORIGINAL;
-			term_xtra_win_react();
+			term_xtra_win_react(player_ptr);
 			Term_key_push(KTRL('R'));
 		}
 
@@ -3932,7 +3933,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		if (arg_graphics != GRAPHICS_ADAM_BOLT)
 		{
 			arg_graphics = GRAPHICS_ADAM_BOLT;
-			term_xtra_win_react();
+			term_xtra_win_react(player_ptr);
 			Term_key_push(KTRL('R'));
 		}
 
@@ -3950,7 +3951,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		if (arg_graphics != GRAPHICS_HENGBAND)
 		{
 			arg_graphics = GRAPHICS_HENGBAND;
-			term_xtra_win_react();
+			term_xtra_win_react(player_ptr);
 			Term_key_push(KTRL('R'));
 		}
 
@@ -3982,7 +3983,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		}
 
 		arg_music = !arg_music;
-		term_xtra_win_react();
+		term_xtra_win_react(player_ptr);
 		Term_key_push(KTRL('R'));
 		break;
 	}
@@ -3996,7 +3997,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		}
 
 		arg_sound = !arg_sound;
-		term_xtra_win_react();
+		term_xtra_win_react(player_ptr);
 		Term_key_push(KTRL('R'));
 		break;
 	}
@@ -4012,7 +4013,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
 		use_bg = !use_bg;
 		init_bg();
-		term_xtra_win_react();
+		term_xtra_win_react(player_ptr);
 		Term_key_push(KTRL('R'));
 		break;
 	}
@@ -4046,7 +4047,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 			}
 
 			/* React to changes */
-			term_xtra_win_react();
+			term_xtra_win_react(player_ptr);
 
 			/* Hack -- Force redraw */
 			Term_key_push(KTRL('R'));
@@ -4244,6 +4245,9 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
 }
 
 
+/*!
+ * todo WNDCLASSに影響があるのでplayer_type*の追加は保留
+ */
 #ifdef __MWERKS__
 LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam);
@@ -4675,6 +4679,9 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 }
 
 
+/*!
+ * todo WNDCLASSに影響があるのでplayer_type*の追加は保留
+ */
 #ifdef __MWERKS__
 LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam);
