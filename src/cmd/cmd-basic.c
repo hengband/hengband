@@ -2413,7 +2413,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	/* Single object */
 	q_ptr->number = 1;
 
-	object_desc(o_name, q_ptr, OD_OMIT_PREFIX);
+	object_desc(creature_ptr, o_name, q_ptr, OD_OMIT_PREFIX);
 
 	if (creature_ptr->mighty_throw) mult += 3;
 
@@ -2715,7 +2715,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 		j = -1;
 		if (boomerang) back_chance += 4+randint1(5);
 		if (super_boomerang) back_chance += 100;
-		object_desc(o2_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+		object_desc(creature_ptr, o2_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 		if((back_chance > 30) && (!one_in_(100) || super_boomerang))
 		{

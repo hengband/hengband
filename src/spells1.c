@@ -1029,7 +1029,7 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			if (known && (o_ptr->marked & OM_FOUND))
 			{
 				obvious = TRUE;
-				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			}
 
 			/* Artifacts, and other objects, get to resist */

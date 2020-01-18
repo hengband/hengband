@@ -1908,7 +1908,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 		/* For being treated as random artifact in screen_object() */
 		o_ptr->art_name = quark_add("");
 
-		(void)screen_object(o_ptr, 0L);
+		(void)screen_object(player_ptr, o_ptr, 0L);
 
 		if (!get_string(ask_msg, dummy_name, sizeof dummy_name)
 			|| !dummy_name[0])

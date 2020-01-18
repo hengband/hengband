@@ -1445,7 +1445,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	/* Paranoia... no pet uniques outside wizard mode -- TY */
 	if (is_pet(m_ptr) && ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) &&
-		monster_has_hostile_align(NULL, 10, -10, r_ptr)) || (r_ptr->flagsr & RFR_RES_ALL)))
+		monster_has_hostile_align(target_ptr, NULL, 10, -10, r_ptr)) || (r_ptr->flagsr & RFR_RES_ALL)))
 	{
 		gets_angry = TRUE;
 	}
@@ -2233,7 +2233,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			object_flags(o_ptr, flgs);
 
 			/* Acquire the object name */
-			object_desc(o_name, o_ptr, 0);
+			object_desc(target_ptr, o_name, o_ptr, 0);
 			monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_HIDDEN);
 
 			/* React to objects that hurt the monster */

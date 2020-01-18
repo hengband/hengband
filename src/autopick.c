@@ -1128,7 +1128,7 @@ static void autopick_entry_from_object(player_type *player_ptr, autopick_type *e
 	}
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL | OD_NAME_ONLY));
+	object_desc(player_ptr, o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL | OD_NAME_ONLY));
 
 	/*
 	 * If necessary, add a '^' which indicates the
@@ -1885,7 +1885,7 @@ int is_autopick(player_type *player_ptr, object_type *o_ptr)
 	if (o_ptr->tval == TV_GOLD) return -1;
 
 	/* Prepare object name string first */
-	object_desc(o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
+	object_desc(player_ptr, o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
 
 	/* Convert the string to lower case */
 	str_tolower(o_name);
@@ -2020,7 +2020,7 @@ static void auto_destroy_item(player_type *player_ptr, object_type *o_ptr, int a
 		GAME_TEXT o_name[MAX_NLEN];
 
 		/* Describe the object (with {terrible/special}) */
-		object_desc(o_name, o_ptr, 0);
+		object_desc(player_ptr, o_name, o_ptr, 0);
 
 		msg_format(_("%sは破壊不能だ。", "You cannot auto-destroy %s."), o_name);
 
@@ -2049,7 +2049,7 @@ static void autopick_delayed_alter_aux(player_type *player_ptr, INVENTORY_IDX it
 	GAME_TEXT o_name[MAX_NLEN];
 
 	/* Describe the object (with {terrible/special}) */
-	object_desc(o_name, o_ptr, 0);
+	object_desc(player_ptr, o_name, o_ptr, 0);
 
 	/* Eliminate the item (from the pack) */
 	if (item >= 0)
@@ -2152,7 +2152,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 		{
 			GAME_TEXT o_name[MAX_NLEN];
 
-			object_desc(o_name, o_ptr, 0);
+			object_desc(player_ptr, o_name, o_ptr, 0);
 
 			msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
 			/* Hack - remember that the item has given a message here. */
@@ -2175,7 +2175,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 			continue;
 		}
 
-		object_desc(o_name, o_ptr, 0);
+		object_desc(player_ptr, o_name, o_ptr, 0);
 
 		sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
 
@@ -2326,7 +2326,7 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 		GAME_TEXT o_name[MAX_NLEN];
 
 		/* Describe the object (with {terrible/special}) */
-		object_desc(o_name, o_ptr, 0);
+		object_desc(player_ptr, o_name, o_ptr, 0);
 
 		msg_format(_("%sは破壊不能だ。", "You cannot auto-destroy %s."), o_name);
 
@@ -3577,7 +3577,7 @@ static bool get_object_for_search(player_type *player_ptr, object_type **o_handl
 
 	string_free(*search_strp);
 	char buf[MAX_NLEN + 20];
-	object_desc(buf, *o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
+	object_desc(player_ptr, buf, *o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
 	*search_strp = string_make(format("<%s>", buf));
 	return TRUE;
 }
@@ -3586,7 +3586,7 @@ static bool get_object_for_search(player_type *player_ptr, object_type **o_handl
 /*
  * Prepare for search by destroyed object
  */
-static bool get_destroyed_object_for_search(object_type **o_handle, concptr *search_strp)
+static bool get_destroyed_object_for_search(player_type *player_ptr, object_type **o_handle, concptr *search_strp)
 {
 	if (!autopick_last_destroyed_object.k_idx) return FALSE;
 
@@ -3594,7 +3594,7 @@ static bool get_destroyed_object_for_search(object_type **o_handle, concptr *sea
 
 	string_free(*search_strp);
 	char buf[MAX_NLEN + 20];
-	object_desc(buf, *o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
+	object_desc(player_ptr, buf, *o_handle, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
 	*search_strp = string_make(format("<%s>", buf));
 	return TRUE;
 }
@@ -3718,7 +3718,7 @@ static byte get_string_for_search(player_type *player_ptr, object_type **o_handl
 
 		case KTRL('l'):
 			/* Prepare string for destroyed object if there is one. */
-			if (get_destroyed_object_for_search(o_handle, search_strp))
+			if (get_destroyed_object_for_search(player_ptr, o_handle, search_strp))
 				return 1;
 			break;
 
@@ -3890,7 +3890,7 @@ static void search_for_object(player_type *player_ptr, text_body_type *tb, objec
 	int i = tb->cy;
 
 	/* Prepare object name string first */
-	object_desc(o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
+	object_desc(player_ptr, o_name, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NO_PLURAL));
 
 	/* Convert the string to lower case */
 	str_tolower(o_name);
@@ -5451,7 +5451,7 @@ static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int c
 		break;
 
 	case EC_SEARCH_DESTROYED:
-		if (!get_destroyed_object_for_search(&tb->search_o_ptr, &tb->search_str))
+		if (!get_destroyed_object_for_search(player_ptr, &tb->search_o_ptr, &tb->search_str))
 		{
 			/* There is no object to search */
 			tb->dirty_flags |= DIRTY_NO_SEARCH;

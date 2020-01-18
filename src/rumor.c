@@ -76,7 +76,7 @@ void display_rumor(player_type *player_ptr, bool ex)
 		object_prep(q_ptr, k_idx);
 		q_ptr->name1 = a_idx;
 		q_ptr->ident = IDENT_STORE;
-		object_desc(fullname, q_ptr, OD_NAME_ONLY);
+		object_desc(player_ptr, fullname, q_ptr, OD_NAME_ONLY);
 	}
 	else if (strcmp(zz[0], "MONSTER") == 0)
 	{

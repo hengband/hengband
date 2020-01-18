@@ -947,7 +947,7 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
 	}
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(target_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/* Artifacts have 71% chance to resist */
 	if (object_is_artifact(o_ptr) && (randint0(100) < 71))
@@ -1312,7 +1312,7 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 	o_ptr->iy = caster_ptr->y;
 	o_ptr->ix = caster_ptr->x;
 
-	object_desc(o_name, o_ptr, OD_NAME_ONLY);
+	object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
 	msg_format(_("%^sがあなたの足元に飛んできた。", "%^s flies through the air to your feet."), o_name);
 
 	note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
@@ -1485,7 +1485,7 @@ bool alchemy(player_type *caster_ptr)
 	ITEM_NUMBER old_number = o_ptr->number;
 	o_ptr->number = amt;
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, 0);
+	object_desc(caster_ptr, o_name, o_ptr, 0);
 	o_ptr->number = old_number;
 
 	/* Verify unless quantity given */
@@ -1548,7 +1548,7 @@ bool artifact_scroll(player_type *caster_ptr)
 	if (!o_ptr) return FALSE;
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
 	msg_format("%s は眩い光を発した！",o_name);
 #else
@@ -1623,7 +1623,7 @@ bool artifact_scroll(player_type *caster_ptr)
 
 	if (record_rand_art)
 	{
-		object_desc(o_name, o_ptr, OD_NAME_ONLY);
+		object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
 		exe_write_diary(caster_ptr, DIARY_ART_SCROLL, 0, o_name);
 	}
 
@@ -1643,7 +1643,7 @@ bool artifact_scroll(player_type *caster_ptr)
 bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 {
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, 0);
+	object_desc(owner_ptr, o_name, o_ptr, 0);
 
 	bool old_known = FALSE;
 	if (o_ptr->ident & IDENT_KNOWN)
@@ -1665,7 +1665,7 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 	strcpy(record_o_name, o_name);
 	record_turn = current_world_ptr->game_turn;
 
-	object_desc(o_name, o_ptr, OD_NAME_ONLY);
+	object_desc(owner_ptr, o_name, o_ptr, OD_NAME_ONLY);
 
 	if(record_fix_art && !old_known && object_is_fixed_artifact(o_ptr))
 		exe_write_diary(owner_ptr, DIARY_ART, 0, o_name);
@@ -1718,7 +1718,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 	bool old_known = identify_item(caster_ptr, o_ptr);
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, 0);
+	object_desc(caster_ptr, o_name, o_ptr, 0);
 	if (item >= INVEN_RARM)
 	{
 		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(caster_ptr, item), o_name, index_to_label(item));
@@ -1829,7 +1829,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 	handle_stuff(caster_ptr);
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, 0);
+	object_desc(caster_ptr, o_name, o_ptr, 0);
 	if (item >= INVEN_RARM)
 	{
 		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(caster_ptr, item), o_name, index_to_label(item));
@@ -1843,7 +1843,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 		msg_format(_("床上: %s。", "On the ground: %s."), o_name);
 	}
 
-	(void)screen_object(o_ptr, 0L);
+	(void)screen_object(caster_ptr, o_ptr, 0L);
 	autopick_alter_item(caster_ptr, item, (bool)(destroy_identify && !old_known));
 	return TRUE;
 }
@@ -1980,7 +1980,7 @@ bool recharge(player_type *caster_ptr, int power)
 	GAME_TEXT o_name[MAX_NLEN];
 	if (object_is_fixed_artifact(o_ptr))
 	{
-		object_desc(o_name, o_ptr, OD_NAME_ONLY);
+		object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
 		msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
 
 		/* Artifact rods. */
@@ -1993,7 +1993,7 @@ bool recharge(player_type *caster_ptr, int power)
 		return update_player(caster_ptr);
 	}
 	
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	if (IS_WIZARD_CLASS(caster_ptr) || caster_ptr->pclass == CLASS_MAGIC_EATER || caster_ptr->pclass == CLASS_BLUE_MAGE)
 	{
@@ -2981,7 +2981,7 @@ bool eat_magic(player_type *caster_ptr, int power)
 	/* Artifacts are never destroyed. */
 	if (object_is_fixed_artifact(o_ptr))
 	{
-		object_desc(o_name, o_ptr, OD_NAME_ONLY);
+		object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
 		msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
 
 		/* Artifact rods. */
@@ -2995,7 +2995,7 @@ bool eat_magic(player_type *caster_ptr, int power)
 	}
 	
 	/* Get the object description */
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/*** Determine Seriousness of Failure ***/
 

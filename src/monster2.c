@@ -2785,7 +2785,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
 			o_ptr = choose_warning_item(player_ptr);
 			if (o_ptr)
 			{
-				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(player_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sは%s光った。", "%s glows %s."), o_name, color);
 			}
 			else

@@ -165,7 +165,7 @@ bool create_ammo(player_type *creature_ptr)
 
 		slot = inven_carry(creature_ptr, q_ptr);
 
-		object_desc(o_name, q_ptr, 0);
+		object_desc(creature_ptr, o_name, q_ptr, 0);
 		msg_format(_("%sを作った。", "You make some ammo."), o_name);
 
 		/* Auto-inscription */
@@ -203,7 +203,7 @@ bool create_ammo(player_type *creature_ptr)
 
 		q_ptr->discount = 99;
 
-		object_desc(o_name, q_ptr, 0);
+		object_desc(creature_ptr, o_name, q_ptr, 0);
 		msg_format(_("%sを作った。", "You make some ammo."), o_name);
 
 		vary_item(creature_ptr, item, -1);
@@ -240,7 +240,7 @@ bool create_ammo(player_type *creature_ptr)
 
 		q_ptr->discount = 99;
 
-		object_desc(o_name, q_ptr, 0);
+		object_desc(creature_ptr, o_name, q_ptr, 0);
 		msg_format(_("%sを作った。", "You make some ammo."), o_name);
 
 		vary_item(creature_ptr, item, -1);
@@ -326,7 +326,7 @@ bool import_magic_device(player_type *user_ptr)
 	}
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, 0);
+	object_desc(user_ptr, o_name, o_ptr, 0);
 	msg_format(_("%sの魔力を取り込んだ。", "You absorb magic of %s."), o_name);
 
 	vary_item(user_ptr, item, -999);
@@ -577,7 +577,7 @@ bool curse_armor(player_type *owner_ptr)
 	if (!o_ptr->k_idx) return FALSE;
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
+	object_desc(owner_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
 	/* Attempt a saving throw for artifacts */
 	if (object_is_artifact(o_ptr) && (randint0(100) < 50))
@@ -635,7 +635,7 @@ bool curse_weapon_object(player_type *owner_ptr, bool force, object_type *o_ptr)
 	if (!o_ptr->k_idx) return FALSE;
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
+	object_desc(owner_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
 	/* Attempt a saving throw */
 	if (object_is_artifact(o_ptr) && (randint0(100) < 50) && !force)
@@ -697,7 +697,7 @@ bool rustproof(player_type *caster_ptr)
 	if (!o_ptr) return FALSE;
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
 
@@ -906,7 +906,7 @@ bool bless_weapon(player_type *caster_ptr)
 	if (!o_ptr) return FALSE;
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
 
@@ -1050,7 +1050,7 @@ bool pulish_shield(player_type *caster_ptr)
 	if (!o_ptr) return FALSE;
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
 
@@ -1251,7 +1251,7 @@ bool enchant_spell(player_type *caster_ptr, HIT_PROB num_hit, HIT_POINT num_dam,
 	if (!o_ptr) return FALSE;
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
 	msg_format("%s は明るく輝いた！", o_name);
 #else
@@ -1317,7 +1317,7 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
 
 	/* Let's get the name before it is changed... */
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	concptr act = NULL;
 	switch (brand_type)

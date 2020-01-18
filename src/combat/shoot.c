@@ -395,7 +395,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 	/* Sniper - Cannot shot a single arrow twice */
 	if ((snipe_type == SP_DOUBLE) && (o_ptr->number < 2)) snipe_type = SP_NONE;
 
-	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
+	object_desc(shooter_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
 	/* Use the proper number of shots */
 	thits = shooter_ptr->num_fire;

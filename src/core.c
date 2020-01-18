@@ -205,7 +205,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
 	if (disturb_minor) disturb(creature_ptr, FALSE, FALSE);
 
 	/* Get an object description */
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/* Message (equipment) */
 	if (slot >= INVEN_RARM)
@@ -1103,7 +1103,7 @@ static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
 		if (s[1] == '!')
 		{
 			/* Describe (briefly) */
-			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+			object_desc(owner_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 			/* Notify the player */
 #ifdef JP
@@ -1423,13 +1423,13 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			char ouch[MAX_NLEN + 40];
 
 			/* Get an object description */
-			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+			object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sがあなたのアンデッドの肉体を焼き焦がした！", "The %s scorches your undead flesh!"), o_name);
 
 			cave_no_regen = TRUE;
 
 			/* Get an object description */
-			object_desc(o_name, o_ptr, OD_NAME_ONLY);
+			object_desc(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
 			sprintf(ouch, _("%sを装備したダメージ", "wielding %s"), o_name);
 
 			if (!IS_INVULN(creature_ptr)) take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, ouch, -1);
@@ -2631,7 +2631,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			}
 
 			o_ptr = &creature_ptr->inventory_list[i_keep];
-			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+			object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sがテレポートの能力を発動させようとしている。", "Your %s is activating teleportation."), o_name);
 			if (get_check_strict(_("テレポートしますか？", "Teleport? "), CHECK_OKAY_CANCEL))
 			{
@@ -2681,7 +2681,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 				o_ptr->curse_flags |= new_curse;
 				msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
@@ -2704,7 +2704,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 				o_ptr->curse_flags |= new_curse;
 				msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
@@ -2720,7 +2720,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_ANIMAL), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_ANIMAL), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが動物を引き寄せた！", "Your %s has attracted an animal!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
@@ -2732,7 +2732,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DEMON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DEMON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが悪魔を引き寄せた！", "Your %s has attracted a demon!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
@@ -2745,7 +2745,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DRAGON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DRAGON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sがドラゴンを引き寄せた！", "Your %s has attracted an dragon!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
@@ -2758,7 +2758,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_UNDEAD), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_UNDEAD), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが死霊を引き寄せた！", "Your %s has attracted an undead!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
@@ -2785,7 +2785,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		{
 			GAME_TEXT o_name[MAX_NLEN];
 
-			object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+			object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sはあなたの体力を吸収した！", "Your %s drains HP from you!"), o_name);
 			take_hit(creature_ptr, DAMAGE_LOSELIFE, MIN(creature_ptr->lev * 2, 100), o_name, -1);
 		}
@@ -2794,7 +2794,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		{
 			GAME_TEXT o_name[MAX_NLEN];
 
-			object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+			object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sはあなたの魔力を吸収した！", "Your %s drains mana from you!"), o_name);
 			creature_ptr->csp -= MIN(creature_ptr->lev, 50);
 			if (creature_ptr->csp < 0)
@@ -4327,7 +4327,7 @@ static void pack_overflow(player_type *owner_ptr)
 
 	/* Warning */
 	msg_print(_("ザックからアイテムがあふれた！", "Your pack overflows!"));
-	object_desc(o_name, o_ptr, 0);
+	object_desc(owner_ptr, o_name, o_ptr, 0);
 
 	msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(INVEN_PACK));
 

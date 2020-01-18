@@ -149,7 +149,7 @@ void display_equipment(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
 		}
 		else
 		{
-			object_desc(o_name, o_ptr, 0);
+			object_desc(owner_ptr, o_name, o_ptr, 0);
 			attr = tval_to_attr[o_ptr->tval % 128];
 		}
 
@@ -585,7 +585,7 @@ COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS m
 		/* Is this item acceptable? */
 		if (!item_tester_okay(owner_ptr, o_ptr, tval) && !(mode & USE_FULL)) continue;
 
-		object_desc(o_name, o_ptr, 0);
+		object_desc(owner_ptr, o_name, o_ptr, 0);
 
 		/* Save the object index, color, and description */
 		out_index[k] = i;
@@ -724,7 +724,7 @@ static bool verify(player_type *owner_ptr, concptr prompt, INVENTORY_IDX item)
 	{
 		o_ptr = &owner_ptr->current_floor_ptr->o_list[0 - item];
 	}
-	object_desc(o_name, o_ptr, 0);
+	object_desc(owner_ptr, o_name, o_ptr, 0);
 
 	/* Prompt */
 	(void)sprintf(out_val, _("%s%sですか? ", "%s %s? "), prompt, o_name);
@@ -1661,7 +1661,7 @@ COMMAND_CODE show_floor(player_type *owner_ptr, int target_item, POSITION y, POS
 	{
 		o_ptr = &floor_ptr->o_list[floor_list[i]];
 
-		object_desc(o_name, o_ptr, 0);
+		object_desc(owner_ptr, o_name, o_ptr, 0);
 
 		/* Save the index */
 		out_index[k] = i;
@@ -2873,7 +2873,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 		/* Access the object */
 		o_ptr = &owner_ptr->current_floor_ptr->o_list[this_o_idx];
 
-		object_desc(o_name, o_ptr, 0);
+		object_desc(owner_ptr, o_name, o_ptr, 0);
 
 		/* Access the next object */
 		next_o_idx = o_ptr->next_o_idx;
@@ -2950,7 +2950,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 
 #endif /* ALLOW_EASY_SENSE */
 
-			object_desc(o_name, o_ptr, 0);
+			object_desc(owner_ptr, o_name, o_ptr, 0);
 
 			msg_format(_("%sがある。", "You see %s."), o_name);
 		}
@@ -2984,7 +2984,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 
 #endif /* ALLOW_EASY_SENSE */
 
-			object_desc(o_name, o_ptr, 0);
+			object_desc(owner_ptr, o_name, o_ptr, 0);
 
 			msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
 		}
@@ -3028,7 +3028,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 
 #endif /* ALLOW_EASY_SENSE */
 
-		object_desc(o_name, o_ptr, 0);
+		object_desc(owner_ptr, o_name, o_ptr, 0);
 
 		(void)sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
 
@@ -3095,7 +3095,7 @@ void display_inventory(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
 		}
 
 		Term_putstr(0, i, 3, TERM_WHITE, tmp_val);
-		object_desc(o_name, o_ptr, 0);
+		object_desc(owner_ptr, o_name, o_ptr, 0);
 		n = strlen(o_name);
 		attr = tval_to_attr[o_ptr->tval % 128];
 		if (o_ptr->timeout)
@@ -3163,7 +3163,7 @@ COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS m
 			(!((((i == INVEN_RARM) && owner_ptr->hidarite) || ((i == INVEN_LARM) && owner_ptr->migite)) && owner_ptr->ryoute) ||
 			(mode & IGNORE_BOTHHAND_SLOT))) continue;
 
-		object_desc(o_name, o_ptr, 0);
+		object_desc(owner_ptr, o_name, o_ptr, 0);
 
 		if ((((i == INVEN_RARM) && owner_ptr->hidarite) || ((i == INVEN_LARM) && owner_ptr->migite)) && owner_ptr->ryoute)
 		{

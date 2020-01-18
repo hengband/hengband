@@ -556,7 +556,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 						if (in_generate && cheat_peek)
 						{
 							GAME_TEXT o_name[MAX_NLEN];
-							object_desc(o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
+							object_desc(caster_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
 							msg_format(_("伝説のアイテム (%s) は生成中に*破壊*された。", "Artifact (%s) was *destroyed* during generation."), o_name);
 						}
 					}

@@ -478,7 +478,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 	o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, OD_NAME_ONLY);
+	object_desc(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
 	msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), o_name);
 
 	/* Get effects */

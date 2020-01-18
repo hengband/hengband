@@ -520,11 +520,12 @@ concptr item_activation(object_type *o_ptr)
 /*!
  * @brief オブジェクトの*鑑定*内容を詳述して表示する /
  * Describe a "fully identified" item
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr *鑑定*情報を取得する元のオブジェクト構造体参照ポインタ
  * @param mode 表示オプション
  * @return 特筆すべき情報が一つでもあった場合TRUE、一つもなく表示がキャンセルされた場合FALSEを返す。
  */
-bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
+bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 {
 	int i = 0, j, k;
 
@@ -1252,9 +1253,9 @@ bool screen_object(object_type *o_ptr, BIT_FLAGS mode)
 
 	/* Display Item name */
 	if (!(mode & SCROBJ_FAKE_OBJECT))
-		object_desc(o_name, o_ptr, 0);
+		object_desc(player_ptr, o_name, o_ptr, 0);
 	else
-		object_desc(o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
+		object_desc(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
 
 	prt(o_name, 0, 0);
 

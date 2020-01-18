@@ -319,7 +319,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
 						if (cheat_peek)
 						{
 							GAME_TEXT o_name[MAX_NLEN];
-							object_desc(o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
+							object_desc(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
 							msg_format(_("伝説のアイテム (%s) はストリーマーにより削除された。",
 								"Artifact (%s) was deleted by streamer."), o_name);
 						}

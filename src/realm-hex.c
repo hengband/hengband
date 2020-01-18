@@ -437,7 +437,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP), 0);
 			if (!o_ptr) return FALSE;
 
-			object_desc(o_name, o_ptr, OD_NAME_ONLY);
+			object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
 			object_flags(o_ptr, f);
 
 			if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name))) return FALSE;
@@ -734,7 +734,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			if (!o_ptr) return FALSE;
 
 			o_ptr = &caster_ptr->inventory_list[item];
-			object_desc(o_name, o_ptr, OD_NAME_ONLY);
+			object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
 			object_flags(o_ptr, f);
 
 			if (!get_check(format(_("本当に %s を呪いますか？", "Do you curse %s, really？"), o_name))) return FALSE;

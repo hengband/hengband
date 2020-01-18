@@ -77,7 +77,7 @@ void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
 		/* Some casualities */
 		if (!amt) continue;
 		
-		object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
+		object_desc(player_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
 		msg_format(_("%s(%c)が%s壊れてしまった！", "%sour %s (%c) %s destroyed!"),
 #ifdef JP
@@ -144,7 +144,7 @@ static bool acid_minus_ac(player_type *creature_ptr)
 	if (!o_ptr->k_idx) return FALSE;
 	if (!object_is_armour(o_ptr)) return FALSE;
 
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 	object_flags(o_ptr, flgs);
 	/* No damage left to be done */
 	if (o_ptr->ac + o_ptr->to_a <= 0)

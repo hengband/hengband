@@ -434,7 +434,7 @@ bool raise_possible(player_type *target_ptr, monster_type *m_ptr)
 				/* Known to be worthless? */
 				if (o_ptr->tval == TV_CORPSE)
 				{
-					if (!monster_has_hostile_align(m_ptr, 0, 0, &r_info[o_ptr->pval])) return TRUE;
+					if (!monster_has_hostile_align(target_ptr, m_ptr, 0, 0, &r_info[o_ptr->pval])) return TRUE;
 				}
 			}
 		}

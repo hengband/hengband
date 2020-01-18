@@ -81,7 +81,7 @@ bool(*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 */
 OBJECT_SUBTYPE_VALUE coin_type;	/* Hack -- force coin type */
 
-void floor_item_describe(floor_type *floor_ptr, INVENTORY_IDX item);
+void floor_item_describe(player_type *player_ptr, INVENTORY_IDX item);
 
 /*!
  * @brief 床上、モンスター所持でスタックされたアイテムを削除しスタックを補完する / Excise a dungeon object from any stacks
@@ -537,7 +537,7 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
 	object_copy(q_ptr, o_ptr);
 
 	q_ptr->number = 1;
-	object_desc(o_name, q_ptr, OD_NAME_ONLY);
+	object_desc(owner_ptr, o_name, q_ptr, OD_NAME_ONLY);
 
 	exe_write_diary(owner_ptr, DIARY_FOUND, 0, o_name);
 }
@@ -1711,7 +1711,7 @@ static void object_mention(player_type *owner_ptr, object_type *o_ptr)
 
 	/* Mark the item as fully known */
 	o_ptr->ident |= (IDENT_MENTAL);
-	object_desc(o_name, o_ptr, 0);
+	object_desc(owner_ptr, o_name, o_ptr, 0);
 	msg_format_wizard(CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
 }
 
@@ -4205,7 +4205,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 #endif
 
 	/* Describe object */
-	object_desc(o_name, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(owner_ptr, o_name, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 
 	/* Handle normal "breakage" */
@@ -4540,7 +4540,7 @@ void inven_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 	object_type *o_ptr = &owner_ptr->inventory_list[item];
 	GAME_TEXT o_name[MAX_NLEN];
 
-	object_desc(o_name, o_ptr, 0);
+	object_desc(owner_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
 	/* "no more" の場合はこちらで表示する */
@@ -4573,7 +4573,7 @@ void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 
 	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
 	floor_item_increase(floor_ptr, 0 - item, num);
-	floor_item_describe(floor_ptr, 0 - item);
+	floor_item_describe(owner_ptr, 0 - item);
 	floor_item_optimize(owner_ptr, 0 - item);
 }
 
@@ -4720,12 +4720,12 @@ void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
  * @param item メッセージの対象にしたいアイテム所持スロット
  * @return なし
  */
-void floor_item_describe(floor_type *floor_ptr, INVENTORY_IDX item)
+void floor_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 {
-	object_type *o_ptr = &floor_ptr->o_list[item];
+	object_type *o_ptr = &owner_ptr->current_floor_ptr->o_list[item];
 	GAME_TEXT o_name[MAX_NLEN];
 
-	object_desc(o_name, o_ptr, 0);
+	object_desc(owner_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
 	/* "no more" の場合はこちらで表示を分ける */
@@ -5070,7 +5070,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
 	/* Modify quantity */
 	q_ptr->number = amt;
 
-	object_desc(o_name, q_ptr, 0);
+	object_desc(owner_ptr, o_name, q_ptr, 0);
 
 	/* Took off weapon */
 	if (((item == INVEN_RARM) || (item == INVEN_LARM)) &&
@@ -5163,7 +5163,7 @@ void drop_from_inventory(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
 	q_ptr->number = amt;
 
 	/* Describe local object */
-	object_desc(o_name, q_ptr, 0);
+	object_desc(owner_ptr, o_name, q_ptr, 0);
 
 	msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(item));
 
@@ -5376,7 +5376,7 @@ void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx)
 
 	/* Prepare the object */
 	object_prep(q_ptr, k_idx);
-	object_desc(o_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+	object_desc(owner_ptr, o_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 
 	/* Mention the object name */
 	Term_putstr(0, 0, -1, TERM_WHITE, o_name);

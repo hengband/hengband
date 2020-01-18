@@ -282,7 +282,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 	o_ptr = &owner_ptr->current_floor_ptr->o_list[o_idx];
 
 #ifdef JP
-	object_desc(old_name, o_ptr, OD_NAME_ONLY);
+	object_desc(owner_ptr, old_name, o_ptr, OD_NAME_ONLY);
 	object_desc_kosuu(kazu_str, o_ptr);
 	hirottakazu = o_ptr->number;
 #endif
@@ -306,7 +306,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 		if (o_ptr->marked & OM_AUTODESTROY) return;
 	}
 
-	object_desc(o_name, o_ptr, 0);
+	object_desc(owner_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
 	if ((o_ptr->name1 == ART_CRIMSON) && (owner_ptr->pseikaku == SEIKAKU_COMBAT))
@@ -391,7 +391,7 @@ void carry(player_type *creature_ptr, bool pickup)
 #endif /* ALLOW_EASY_SENSE -- TNB */
 
 		GAME_TEXT o_name[MAX_NLEN];
-		object_desc(o_name, o_ptr, 0);
+		object_desc(creature_ptr, o_name, o_ptr, 0);
 		next_o_idx = o_ptr->next_o_idx;
 
 		disturb(creature_ptr, FALSE, FALSE);

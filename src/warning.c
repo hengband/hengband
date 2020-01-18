@@ -502,7 +502,7 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
 			object_type *o_ptr = choose_warning_item(creature_ptr);
 
 			if (o_ptr)
-				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			else
 				strcpy(o_name, _("体", "body")); /* Warning ability without item */
 			msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
@@ -520,7 +520,7 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
 
 	object_type *o_ptr = choose_warning_item(creature_ptr);
 	if (o_ptr != NULL)
-		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+		object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 	else
 		strcpy(o_name, _("体", "body")); /* Warning ability without item */
 	msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);

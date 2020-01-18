@@ -2129,7 +2129,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 				object_type *q_ptr = &floor_ptr->o_list[target_ptr->hold_o_idx];
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, q_ptr, OD_NAME_ONLY);
+				object_desc(attacker_ptr, o_name, q_ptr, OD_NAME_ONLY);
 				q_ptr->held_m_idx = 0;
 				q_ptr->marked = OM_TOUCHED;
 				target_ptr->hold_o_idx = q_ptr->next_o_idx;
@@ -3004,7 +3004,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						/* Skip artifacts */
 						if (object_is_artifact(o_ptr)) continue;
 
-						object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
+						object_desc(target_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
 #ifdef JP
 						msg_format("%s(%c)を%s盗まれた！", o_name, index_to_label(i), ((o_ptr->number > 1) ? "一つ" : ""));
@@ -3080,7 +3080,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						/* Skip non-food objects */
 						if ((o_ptr->tval != TV_FOOD) && !((o_ptr->tval == TV_CORPSE) && (o_ptr->sval))) continue;
 
-						object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+						object_desc(target_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 #ifdef JP
 						msg_format("%s(%c)を%s食べられてしまった！", o_name, index_to_label(i), ((o_ptr->number > 1) ? "一つ" : ""));

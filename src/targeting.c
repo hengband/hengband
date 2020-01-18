@@ -675,7 +675,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 			o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
-			object_desc(o_name, o_ptr, 0);
+			object_desc(subject_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
 			sprintf(out_val, "%s%s%s%s[%s]", s1, o_name, s2, s3, info);
@@ -719,7 +719,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 				object_type *o_ptr;
 				o_ptr = &subject_ptr->current_floor_ptr->o_list[floor_list[0]];
 
-				object_desc(o_name, o_ptr, 0);
+				object_desc(subject_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
 				sprintf(out_val, "%s%s%s%s[%s]", s1, o_name, s2, s3, info);
@@ -825,7 +825,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 			/* Not boring */
 			boring = FALSE;
 
-			object_desc(o_name, o_ptr, 0);
+			object_desc(subject_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
 			sprintf(out_val, "%s%s%s%s[%s]", s1, o_name, s2, s3, info);

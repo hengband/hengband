@@ -4173,7 +4173,7 @@ bool psychometry(player_type *caster_ptr)
 
 	/* Get an object description */
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/* Skip non-feelings */
 	if (!feel)

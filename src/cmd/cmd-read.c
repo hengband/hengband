@@ -544,7 +544,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		q=format("book-%d_jp.txt",o_ptr->sval);
 
 		/* Display object description */
-		object_desc(o_name, o_ptr, OD_NAME_ONLY);
+		object_desc(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
 		path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, q);
 
 		/* Peruse the help file */

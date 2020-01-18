@@ -1920,7 +1920,7 @@ static bool kankin(player_type *player_ptr)
 		if ((o_ptr->tval == TV_CAPTURE) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN + 20];
-			object_desc(o_name, o_ptr, 0);
+			object_desc(player_ptr, o_name, o_ptr, 0);
 			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
@@ -1941,7 +1941,7 @@ static bool kankin(player_type *player_ptr)
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN + 20];
-			object_desc(o_name, o_ptr, 0);
+			object_desc(player_ptr, o_name, o_ptr, 0);
 			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
@@ -1962,7 +1962,7 @@ static bool kankin(player_type *player_ptr)
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN + 20];
-			object_desc(o_name, o_ptr, 0);
+			object_desc(player_ptr, o_name, o_ptr, 0);
 			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
@@ -1981,7 +1981,7 @@ static bool kankin(player_type *player_ptr)
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
 		{
 			char buf[MAX_NLEN + 20];
-			object_desc(o_name, o_ptr, 0);
+			object_desc(player_ptr, o_name, o_ptr, 0);
 			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
@@ -2001,7 +2001,7 @@ static bool kankin(player_type *player_ptr)
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
 		{
 			char buf[MAX_NLEN + 20];
-			object_desc(o_name, o_ptr, 0);
+			object_desc(player_ptr, o_name, o_ptr, 0);
 			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
@@ -2026,7 +2026,7 @@ static bool kankin(player_type *player_ptr)
 			INVENTORY_IDX item_new;
 			object_type forge;
 
-			object_desc(o_name, o_ptr, 0);
+			object_desc(player_ptr, o_name, o_ptr, 0);
 			sprintf(buf, _("%sを渡しますか？", "Hand %s over? "), o_name);
 			if (!get_check(buf)) continue;
 
@@ -2058,7 +2058,7 @@ static bool kankin(player_type *player_ptr)
 			 */
 			item_new = inven_carry(player_ptr, &forge);
 
-			object_desc(o_name, &forge, 0);
+			object_desc(player_ptr, o_name, &forge, 0);
 			msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), o_name, index_to_label(item_new));
 
 			/* Auto-inscription */
@@ -2665,7 +2665,7 @@ static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN ro
 	HIT_RELIABILITY reli = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
 
 	/* Print the weapon name */
-	object_desc(o_name, o_ptr, OD_NAME_ONLY);
+	object_desc(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
 	c_put_str(TERM_YELLOW, o_name, row, col);
 
 	/* Print the player's number of blows */
@@ -3000,7 +3000,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
 	/* Display item name */
 	char basenm[MAX_NLEN];
-	object_desc(basenm, o_ptr, OD_NAME_ONLY);
+	object_desc(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
 	prt(format(_("修復する武器　： %s", "Repairing: %s"), basenm), row + 3, 2);
 
 	q = _("材料となる武器は？", "Which weapon for material? ");
@@ -3020,7 +3020,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	}
 
 	/* Display item name */
-	object_desc(basenm, mo_ptr, OD_NAME_ONLY);
+	object_desc(player_ptr, basenm, mo_ptr, OD_NAME_ONLY);
 	prt(format(_("材料とする武器： %s", "Material : %s"), basenm), row + 4, 2);
 
 	/* Get the value of one of the items (except curses) */
@@ -3031,7 +3031,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	/* Check if the player has enough money */
 	if (player_ptr->au < cost)
 	{
-		object_desc(basenm, o_ptr, OD_NAME_ONLY);
+		object_desc(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
 		msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), basenm);
 		msg_print(NULL);
 		return 0;
@@ -3180,7 +3180,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 		msg_print(_("これはかなりの業物だったようだ。", "This blade seems to be exceptionally."));
 	}
 
-	object_desc(basenm, o_ptr, OD_NAME_ONLY);
+	object_desc(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
 #ifdef JP
 	msg_format("＄%dで%sに修復しました。", cost, basenm);
 #else
@@ -3251,7 +3251,7 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 	char tmp_str[MAX_NLEN];
 	if (player_ptr->au < (cost * o_ptr->number))
 	{
-		object_desc(tmp_str, o_ptr, OD_NAME_ONLY);
+		object_desc(player_ptr, tmp_str, o_ptr, OD_NAME_ONLY);
 		msg_format(_("%sを改良するだけのゴールドがありません！", "You do not have the gold to improve %s!"), tmp_str);
 		return FALSE;
 	}
@@ -3295,7 +3295,7 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 		return FALSE;
 	}
 
-	object_desc(tmp_str, o_ptr, OD_NAME_AND_ENCHANT);
+	object_desc(player_ptr, tmp_str, o_ptr, OD_NAME_AND_ENCHANT);
 #ifdef JP
 	msg_format("＄%dで%sに改良しました。", cost * o_ptr->number, tmp_str);
 #else
@@ -3355,7 +3355,7 @@ static void building_recharge(player_type *player_ptr)
 		{
 			player_ptr->au -= 50;
 			identify_item(player_ptr, o_ptr);
-			object_desc(tmp_str, o_ptr, 0);
+			object_desc(player_ptr, tmp_str, o_ptr, 0);
 			msg_format(_("%s です。", "You have: %s."), tmp_str);
 
 			/* Auto-inscription */
@@ -3429,7 +3429,7 @@ static void building_recharge(player_type *player_ptr)
 	/* Check if the player has enough money */
 	if (player_ptr->au < price)
 	{
-		object_desc(tmp_str, o_ptr, OD_NAME_ONLY);
+		object_desc(player_ptr, tmp_str, o_ptr, OD_NAME_ONLY);
 #ifdef JP
 		msg_format("%sを再充填するには＄%d 必要です！", tmp_str, price);
 #else
@@ -3477,7 +3477,7 @@ static void building_recharge(player_type *player_ptr)
 		o_ptr->ident &= ~(IDENT_EMPTY);
 	}
 
-	object_desc(tmp_str, o_ptr, 0);
+	object_desc(player_ptr, tmp_str, o_ptr, 0);
 #ifdef JP
 	msg_format("%sを＄%d で再充填しました。", tmp_str, price);
 #else

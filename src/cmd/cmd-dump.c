@@ -2198,7 +2198,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 					object_prep(&forge, k_idx);
 
 					/* Get un-shuffled flavor name */
-					object_desc(o_name, &forge, OD_FORCE_FLAVOR);
+					object_desc(creature_ptr, o_name, &forge, OD_FORCE_FLAVOR);
 				}
 
 				/* Dump a comment */
@@ -3605,7 +3605,7 @@ concptr inven_res_label = _("                               酸電火冷毒光�
 
 
 /* XTRA HACK RESLIST */
-static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, OBJECT_TYPE_VALUE tval, char *where)
+static void do_cmd_knowledge_inven_aux(player_type *creature_ptr, FILE *fff, object_type *o_ptr, int *j, OBJECT_TYPE_VALUE tval, char *where)
 {
 	GAME_TEXT o_name[MAX_NLEN];
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
@@ -3634,7 +3634,7 @@ static void do_cmd_knowledge_inven_aux(FILE *fff, object_type *o_ptr, int *j, OB
 	}
 
 	int i = 0;
-	object_desc(o_name, o_ptr, OD_NAME_ONLY);
+	object_desc(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
 
 	while (o_name[i] && (i < 26))
 	{
@@ -3740,20 +3740,20 @@ static void do_cmd_knowledge_inven(player_type *creature_ptr)
 		strcpy(where, _("装", "E "));
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
-			do_cmd_knowledge_inven_aux(fff, &creature_ptr->inventory_list[i], &j, tval, where);
+			do_cmd_knowledge_inven_aux(creature_ptr, fff, &creature_ptr->inventory_list[i], &j, tval, where);
 		}
 
 		strcpy(where, _("持", "I "));
 		for (i = 0; i < INVEN_PACK; i++)
 		{
-			do_cmd_knowledge_inven_aux(fff, &creature_ptr->inventory_list[i], &j, tval, where);
+			do_cmd_knowledge_inven_aux(creature_ptr, fff, &creature_ptr->inventory_list[i], &j, tval, where);
 		}
 
 		st_ptr = &town_info[1].store[STORE_HOME];
 		strcpy(where, _("家", "H "));
 		for (i = 0; i < st_ptr->stock_num; i++)
 		{
-			do_cmd_knowledge_inven_aux(fff, &st_ptr->stock[i], &j, tval, where);
+			do_cmd_knowledge_inven_aux(creature_ptr, fff, &st_ptr->stock[i], &j, tval, where);
 		}
 	}
 
@@ -4208,7 +4208,7 @@ static void do_cmd_knowledge_artifacts(player_type *player_ptr)
 			q_ptr->ident |= IDENT_STORE;
 
 			/* Describe the artifact */
-			object_desc(base_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+			object_desc(player_ptr, base_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 		}
 
 		/* Hack -- Build the artifact name */
@@ -5460,7 +5460,7 @@ static void desc_obj_fake(player_type *creature_ptr, KIND_OBJECT_IDX k_idx)
 	o_ptr->ident |= IDENT_KNOWN;
 	handle_stuff(creature_ptr);
 
-	if (screen_object(o_ptr, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL)) return;
+	if (screen_object(creature_ptr, o_ptr, SCROBJ_FAKE_OBJECT | SCROBJ_FORCE_DETAIL)) return;
 
 	msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
 	msg_print(NULL);
@@ -6355,7 +6355,7 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
 						object_prep(q_ptr, k_idx);
 						q_ptr->name1 = quest[i].k_idx;
 						q_ptr->ident = IDENT_STORE;
-						object_desc(name, q_ptr, OD_NAME_ONLY);
+						object_desc(creature_ptr, name, q_ptr, OD_NAME_ONLY);
 					}
 					sprintf(note, _("\n   - %sを見つけ出す。", "\n   - Find out %s."), name);
 					break;
@@ -6677,7 +6677,7 @@ static void do_cmd_knowledge_home(player_type *player_ptr)
 		{
 #ifdef JP
 			if ((i % 12) == 0) fprintf(fff, "\n ( %d ページ )\n", x++);
-			object_desc(o_name, &st_ptr->stock[i], 0);
+			object_desc(player_ptr, o_name, &st_ptr->stock[i], 0);
 			if (strlen(o_name) <= 80 - 3)
 			{
 				fprintf(fff, "%c%s %s\n", I2A(i % 12), paren, o_name);
@@ -6694,7 +6694,7 @@ static void do_cmd_knowledge_home(player_type *player_ptr)
 				fprintf(fff, "   %.77s\n", o_name + n);
 			}
 #else
-			object_desc(o_name, &st_ptr->stock[i], 0);
+			object_desc(player_ptr, o_name, &st_ptr->stock[i], 0);
 			fprintf(fff, "%c%s %s\n", I2A(i % 12), paren, o_name);
 #endif
 		}

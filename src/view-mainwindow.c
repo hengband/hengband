@@ -3299,7 +3299,7 @@ static concptr simplify_list[][2] =
 static void display_shortened_item_name(player_type *player_ptr, object_type *o_ptr, int y)
 {
 	char buf[MAX_NLEN];
-	object_desc(buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(player_ptr, buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
 	TERM_COLOR attr = tval_to_attr[o_ptr->tval % 128];
 
 	if (player_ptr->image)
