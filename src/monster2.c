@@ -431,6 +431,7 @@ void wipe_monsters_list(player_type *player_ptr)
 
 
 /*!
+ * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * @brief モンスター配列の空きを探す / Acquires and returns the index of a "free" monster.
  * @return 利用可能なモンスター配列の添字
  * @details
@@ -481,8 +482,6 @@ MONSTER_IDX m_pop(void)
 }
 
 
-
-
 /*!
  * @var summon_specific_type
  * @brief 召喚条件を指定するグローバル変数 / Hack -- the "type" of the current "summon specific"
@@ -498,6 +497,7 @@ static int summon_specific_type = 0;
  */
 static int summon_specific_who = -1;
 
+
 /*!
  * @var summon_unique_okay
  * @brief 召喚対象にユニークを含めるかを示すグローバル変数 / summoning unique enable
@@ -505,12 +505,14 @@ static int summon_specific_who = -1;
  */
 static bool summon_unique_okay = FALSE;
 
+
 /*!
  * @brief 指定されたモンスター種族がsummon_specific_typeで指定された召喚条件に合うかどうかを返す
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return 召喚条件が一致するならtrue
  * @details
  */
-static bool summon_specific_aux(MONRACE_IDX summoner_idx, MONRACE_IDX r_idx)
+static bool summon_specific_aux(player_type *player_ptr, MONRACE_IDX summoner_idx, MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 	int okay = FALSE;
@@ -655,7 +657,7 @@ static bool summon_specific_aux(MONRACE_IDX summoner_idx, MONRACE_IDX r_idx)
 		}
 		else
 		{
-			summon_kin_type = get_summon_symbol_from_player(p_ptr);
+			summon_kin_type = get_summon_symbol_from_player(player_ptr);
 		}
 
 		okay = ((r_ptr->d_char == summon_kin_type) && (r_idx != MON_HAGURE));
@@ -3449,7 +3451,7 @@ static bool summon_specific_okay(MONRACE_IDX r_idx)
 
 	if ((r_ptr->flags7 & RF7_CHAMELEON) && (d_info[p_ptr->dungeon_idx].flags1 & DF1_CHAMELEON)) return TRUE;
 
-	return (summon_specific_aux(m_ptr->r_idx, r_idx));
+	return (summon_specific_aux(p_ptr, m_ptr->r_idx, r_idx));
 }
 
 
