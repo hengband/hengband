@@ -357,12 +357,13 @@ void compact_monsters(player_type *player_ptr, int size)
 
 /*!
  * @brief プレイヤーのフロア離脱に伴う全モンスター配列の消去 / Delete/Remove all the monsters when the player leaves the level
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
  * This is an efficient method of simulating multiple calls to the
  * "delete_monster()" function, with no visual effects.
  */
-void wipe_m_list(void)
+void wipe_monsters_list(player_type *player_ptr)
 {
 	int i;
 
@@ -386,7 +387,7 @@ void wipe_m_list(void)
 	}
 
 	/* Delete all the monsters */
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (i = floor_ptr->m_max - 1; i >= 1; i--)
 	{
 		monster_type *m_ptr = &floor_ptr->m_list[i];
@@ -422,10 +423,10 @@ void wipe_m_list(void)
 
 	/* Hack -- no more target */
 	target_who = 0;
-	p_ptr->pet_t_m_idx = 0;
-	p_ptr->riding_t_m_idx = 0;
+	player_ptr->pet_t_m_idx = 0;
+	player_ptr->riding_t_m_idx = 0;
 
-	health_track(p_ptr, 0);
+	health_track(player_ptr, 0);
 }
 
 

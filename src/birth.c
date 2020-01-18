@@ -23,6 +23,7 @@
 #include "cmd-dump.h"
 #include "dungeon.h"
 #include "history.h"
+#include "monster.h"
 #include "monsterrace-hook.h"
 #include "store.h"
 #include "patron.h"
@@ -4559,11 +4560,7 @@ void player_birth(player_type *creature_ptr)
 
 	current_world_ptr->play_time = 0;
 
-	/*
-	 * Wipe monsters in old dungeon
-	 * This wipe destroys value of m_list[].cur_num .
-	 */
-	wipe_m_list();
+	wipe_monsters_list(creature_ptr);
 
 	/* Wipe the player */
 	player_wipe_without_name(creature_ptr);

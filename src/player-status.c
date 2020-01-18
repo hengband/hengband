@@ -5815,7 +5815,7 @@ void cheat_death(player_type *creature_ptr)
 
 	/* Prepare next floor */
 	leave_floor(creature_ptr);
-	wipe_m_list();
+	wipe_monsters_list(creature_ptr);
 }
 
 

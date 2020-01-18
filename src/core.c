@@ -5623,7 +5623,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		if (!player_ptr->playing && !player_ptr->is_dead) break;
 
 		wipe_o_list(floor_ptr);
-		if (!player_ptr->is_dead) wipe_m_list();
+		if (!player_ptr->is_dead) wipe_monsters_list(player_ptr);
 
 
 		msg_print(NULL);

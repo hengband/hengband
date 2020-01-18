@@ -1493,7 +1493,7 @@ void generate_floor(player_type *player_ptr)
 		if (why) msg_format(_("生成やり直し(%s)", "Generation restarted (%s)"), why);
 
 		wipe_o_list(floor_ptr);
-		wipe_m_list();
+		wipe_monsters_list(player_ptr);
 	}
 
 	/* Glow deep lava and building entrances tempor */
