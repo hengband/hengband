@@ -508,7 +508,7 @@ extern void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int w
 
 extern void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
 extern SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr);
-extern void monster_drop_carried_objects(monster_type *m_ptr);
+extern void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr);
 
 #define is_friendly(A) \
 	 (bool)(((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)

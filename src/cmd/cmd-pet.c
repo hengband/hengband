@@ -900,7 +900,7 @@ void do_cmd_pet(player_type *creature_ptr)
 
 				if (is_pet(m_ptr))
 				{
-					monster_drop_carried_objects(m_ptr);
+					monster_drop_carried_objects(creature_ptr, m_ptr);
 				}
 			}
 		}

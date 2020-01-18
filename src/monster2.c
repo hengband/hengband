@@ -4061,10 +4061,11 @@ void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what)
 
 /*!
  * @brief モンスターが盗みや拾いで確保していたアイテムを全てドロップさせる / Drop all items carried by a monster
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_ptr モンスター参照ポインタ
  * @return なし
  */
-void monster_drop_carried_objects(monster_type *m_ptr)
+void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 	object_type forge;
@@ -4072,7 +4073,7 @@ void monster_drop_carried_objects(monster_type *m_ptr)
 	object_type *q_ptr;
 
 	/* Drop objects being carried */
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		o_ptr = &floor_ptr->o_list[this_o_idx];
@@ -4087,7 +4088,7 @@ void monster_drop_carried_objects(monster_type *m_ptr)
 		delete_object_idx(floor_ptr, this_o_idx);
 
 		/* Drop it */
-		(void)drop_near(p_ptr, q_ptr, -1, m_ptr->fy, m_ptr->fx);
+		(void)drop_near(player_ptr, q_ptr, -1, m_ptr->fy, m_ptr->fx);
 	}
 
 	/* Forget objects */

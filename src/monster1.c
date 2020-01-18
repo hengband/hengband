@@ -2686,7 +2686,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 	}
 
 	/* Drop objects being carried */
-	monster_drop_carried_objects(m_ptr);
+	monster_drop_carried_objects(player_ptr, m_ptr);
 
 	if (r_ptr->flags1 & RF1_DROP_GOOD) mo_mode |= AM_GOOD;
 	if (r_ptr->flags1 & RF1_DROP_GREAT) mo_mode |= AM_GREAT;
