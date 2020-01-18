@@ -2050,7 +2050,7 @@ void generate_fill_perm_bold(player_type *player_ptr, POSITION y1, POSITION x1, 
 		for (x = x1; x <= x2; x++)
 		{
 			/* Point to grid */
-			place_inner_perm_bold(player_ptr, y, x);
+			place_bold(player_ptr, y, x, inner_perm);
 		}
 	}
 }
