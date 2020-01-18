@@ -833,7 +833,7 @@ static bool cave_gen(player_type *player_ptr)
 					/* Clear mimic type */
 					g_ptr->mimic = 0;
 
-					place_floor_grid(g_ptr);
+					place_grid(g_ptr, floor);
 				}
 			}
 
@@ -849,7 +849,7 @@ static bool cave_gen(player_type *player_ptr)
 				g_ptr->mimic = 0;
 
 				/* Clear previous contents, add up floor */
-				place_floor_grid(g_ptr);
+				place_grid(g_ptr, floor);
 
 				/* Occasional doorway */
 				if ((randint0(100) < dun_tun_pen) && !(dungeon_ptr->flags1 & DF1_NO_DOORS))

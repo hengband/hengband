@@ -67,7 +67,7 @@ bool build_type1(player_type *player_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(g_ptr, floor);
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);
 		}
@@ -241,7 +241,7 @@ bool build_type2(floor_type *floor_ptr)
 		for (x = x1a - 1; x <= x2a + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(g_ptr, floor);
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);
 		}
@@ -253,7 +253,7 @@ bool build_type2(floor_type *floor_ptr)
 		for (x = x1b - 1; x <= x2b + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(g_ptr, floor);
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);
 		}
@@ -300,7 +300,7 @@ bool build_type2(floor_type *floor_ptr)
 		for (x = x1a; x <= x2a; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(g_ptr, floor);
 		}
 	}
 
@@ -310,7 +310,7 @@ bool build_type2(floor_type *floor_ptr)
 		for (x = x1b; x <= x2b; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(g_ptr, floor);
 		}
 	}
 
@@ -377,7 +377,7 @@ bool build_type3(player_type *player_ptr)
 		for (x = x1a - 1; x <= x2a + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(g_ptr, floor);
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);
 		}
@@ -389,7 +389,7 @@ bool build_type3(player_type *player_ptr)
 		for (x = x1b - 1; x <= x2b + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(g_ptr, floor);
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);
 		}
@@ -435,7 +435,7 @@ bool build_type3(player_type *player_ptr)
 		for (x = x1a; x <= x2a; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(g_ptr, floor);
 		}
 	}
 
@@ -445,7 +445,7 @@ bool build_type3(player_type *player_ptr)
 		for (x = x1b; x <= x2b; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(g_ptr, floor);
 		}
 	}
 
@@ -615,7 +615,7 @@ bool build_type4(player_type *player_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(g_ptr, floor);
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);
 		}

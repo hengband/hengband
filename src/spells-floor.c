@@ -616,7 +616,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 			else
 			{
 				/* Create floor */
-				place_floor_grid(g_ptr);
+				place_grid(g_ptr, floor);
 			}
 
 			/* Clear garbage of hidden trap or door */

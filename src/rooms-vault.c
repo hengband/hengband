@@ -364,7 +364,7 @@ static void build_vault(player_type *player_ptr, POSITION yval, POSITION xval, P
 			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Lay down a floor */
-			place_floor_grid(g_ptr);
+			place_grid(g_ptr, floor);
 
 			/* Remove any mimic */
 			g_ptr->mimic = 0;

@@ -48,7 +48,7 @@ bool build_type15(player_type *player_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(g_ptr, floor);
 			g_ptr->feat = feat_glass_floor;
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);

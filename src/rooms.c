@@ -2023,7 +2023,7 @@ void generate_room_floor(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITI
 		{
 			/* Point to grid */
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(g_ptr, floor);
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);
 		}
