@@ -995,7 +995,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			/* Disturb the monster */
 			(void)set_monster_csleep(creature_ptr, g_ptr->m_idx, 0);
 
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(creature_ptr, m_name, m_ptr, 0);
 
 			if (m_ptr->ml)
 			{
@@ -1044,7 +1044,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		else if (MON_MONFEAR(riding_m_ptr))
 		{
 			GAME_TEXT steed_name[MAX_NLEN];
-			monster_desc(steed_name, riding_m_ptr, 0);
+			monster_desc(creature_ptr, steed_name, riding_m_ptr, 0);
 			msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name);
 			can_move = FALSE;
 			disturb(creature_ptr, FALSE, TRUE);
@@ -1089,7 +1089,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		if (can_move && MON_STUNNED(riding_m_ptr) && one_in_(2))
 		{
 			GAME_TEXT steed_name[MAX_NLEN];
-			monster_desc(steed_name, riding_m_ptr, 0);
+			monster_desc(creature_ptr, steed_name, riding_m_ptr, 0);
 			msg_format(_("%sが朦朧としていてうまく動けない！", "You cannot control stunned %s!"), steed_name);
 			can_move = FALSE;
 			disturb(creature_ptr, FALSE, TRUE);

@@ -1637,7 +1637,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 
 	/* Get the monster name (or "it") */
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_desc(m_name, m_ptr, 0x00);
+	monster_desc(target_ptr, m_name, m_ptr, 0x00);
 
 #ifdef JP
 #else

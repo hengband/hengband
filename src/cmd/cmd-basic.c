@@ -2561,7 +2561,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 			grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 			monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_name(g_ptr->m_idx, m_name);
+			monster_name(creature_ptr, g_ptr->m_idx, m_name);
 
 			/* Check the visibility */
 			visible = m_ptr->ml;
@@ -2643,7 +2643,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 				/* No death */
 				else
 				{
-					message_pain(g_ptr->m_idx, tdam);
+					message_pain(creature_ptr, g_ptr->m_idx, tdam);
 
 					/* Anger the monster */
 					if ((tdam > 0) && !object_is_potion(q_ptr))
@@ -2693,7 +2693,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 				if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx && is_friendly(m_ptr) && !MON_INVULNER(m_ptr))
 				{
 					GAME_TEXT m_name[MAX_NLEN];
-					monster_desc(m_name, m_ptr, 0);
+					monster_desc(creature_ptr, m_name, m_ptr, 0);
 					msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
 					set_hostile(&creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx]);
 				}

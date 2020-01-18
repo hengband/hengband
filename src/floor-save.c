@@ -489,7 +489,7 @@ static void preserve_pet(player_type *master_ptr)
 			if (!m_ptr->nickname) continue;
 			if (master_ptr->riding == i) continue;
 
-			monster_desc(m_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+			monster_desc(master_ptr, m_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 			exe_write_diary(master_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_MOVED, m_name);
 		}
 	}
@@ -508,7 +508,7 @@ static void preserve_pet(player_type *master_ptr)
 			if (is_seen(m_ptr))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(master_ptr, m_name, m_ptr, 0);
 				msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
 			}
 
@@ -632,11 +632,11 @@ static void place_pet(player_type *master_ptr)
 			monster_race *r_ptr = real_r_ptr(m_ptr);
 			GAME_TEXT m_name[MAX_NLEN];
 
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(master_ptr, m_name, m_ptr, 0);
 			msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), m_name);
 			if (record_named_pet && m_ptr->nickname)
 			{
-				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+				monster_desc(master_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 				exe_write_diary(master_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, m_name);
 			}
 

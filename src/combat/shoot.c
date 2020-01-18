@@ -666,7 +666,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 						GAME_TEXT m_name[MAX_NLEN];
 
 						/* Get "the monster" or "it" */
-						monster_desc(m_name, m_ptr, 0);
+						monster_desc(shooter_ptr, m_name, m_ptr, 0);
 
 						msg_format(_("%sが%sに命中した。", "The %s hits %s."), o_name, m_name);
 
@@ -685,7 +685,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 							GAME_TEXT m_name[MAX_NLEN];
 
 							/* Get "the monster" or "it" */
-							monster_desc(m_name, m_ptr, 0);
+							monster_desc(shooter_ptr, m_name, m_ptr, 0);
 
 							tdam = m_ptr->hp + 1;
 							msg_format(_("%sの急所に突き刺さった！", "Your shot hit a fatal spot of %s!"), m_name);
@@ -742,13 +742,13 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 						{
 							GAME_TEXT m_name[MAX_NLEN];
 
-							monster_desc(m_name, m_ptr, 0);
+							monster_desc(shooter_ptr, m_name, m_ptr, 0);
 
 							stick_to = TRUE;
 							msg_format(_("%sは%sに突き刺さった！", "%^s is stuck in %s!"), o_name, m_name);
 						}
 
-						message_pain(c_mon_ptr->m_idx, tdam);
+						message_pain(shooter_ptr, c_mon_ptr->m_idx, tdam);
 
 						/* Anger the monster */
 						if (tdam > 0) anger_monster(shooter_ptr, m_ptr);
@@ -757,7 +757,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 						{
 							GAME_TEXT m_name[MAX_NLEN];
 							sound(SOUND_FLEE);
-							monster_desc(m_name, m_ptr, 0);
+							monster_desc(shooter_ptr, m_name, m_ptr, 0);
 							msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 						}
 
@@ -930,7 +930,7 @@ bool test_hit_fire(player_type *shooter_ptr, int chance, monster_type *m_ptr, in
 		if (m_ptr->r_idx == MON_GOEMON && !MON_CSLEEP(m_ptr))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(shooter_ptr, m_name, m_ptr, 0);
 			msg_format(_("%sは%sを斬り捨てた！", "%s cuts down %s!"), m_name, o_name);
 		}
 		return FALSE;

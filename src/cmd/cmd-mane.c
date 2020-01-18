@@ -686,7 +686,7 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
 		m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[target_row][target_col].m_idx];
 		r_ptr = &r_info[m_ptr->r_idx];
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(caster_ptr, m_name, m_ptr, 0);
 		if (r_ptr->flagsr & RFR_RES_TELE)
 		{
 			if ((r_ptr->flags1 & (RF1_UNIQUE)) || (r_ptr->flagsr & RFR_RES_ALL))

@@ -2265,7 +2265,7 @@ void anger_monster(player_type *player_ptr, monster_type *m_ptr)
 	{
 		GAME_TEXT m_name[MAX_NLEN];
 
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(player_ptr, m_name, m_ptr, 0);
 		msg_format(_("%^sは怒った！", "%^s gets angry!"), m_name);
 
 		set_hostile(m_ptr);
@@ -2572,7 +2572,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 	{
 		GAME_TEXT m_name[MAX_NLEN];
 
-		monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+		monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 		exe_write_diary(player_ptr, DIARY_NAMED_PET, 3, m_name);
 	}
 
@@ -2630,7 +2630,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 
-			monster_desc(m_name, m_ptr, MD_WRONGDOER_NAME);
+			monster_desc(player_ptr, m_name, m_ptr, MD_WRONGDOER_NAME);
 
 			exe_write_diary(player_ptr, DIARY_ARENA, player_ptr->arena_number, m_name);
 		}

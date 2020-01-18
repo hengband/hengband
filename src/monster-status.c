@@ -658,7 +658,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 		if (m_ptr->ml)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(target_ptr, m_name, m_ptr, 0);
 			msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 		}
 
@@ -678,7 +678,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 			if (is_seen(m_ptr))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(target_ptr, m_name, m_ptr, 0);
 				msg_format(_("%^sはもう加速されていない。", "%^s is no longer fast."), m_name);
 			}
 		}
@@ -692,7 +692,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 			if (is_seen(m_ptr))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(target_ptr, m_name, m_ptr, 0);
 				msg_format(_("%^sはもう減速されていない。", "%^s is no longer slow."), m_name);
 			}
 		}
@@ -710,7 +710,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 			if (is_seen(m_ptr))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(target_ptr, m_name, m_ptr, 0);
 				msg_format(_("%^sは朦朧状態から立ち直った。", "%^s is no longer stunned."), m_name);
 			}
 		}
@@ -727,7 +727,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 		if (is_seen(m_ptr))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(target_ptr, m_name, m_ptr, 0);
 			msg_format(_("%^sは混乱から立ち直った。", "%^s is no longer confused."), m_name);
 		}
 
@@ -752,7 +752,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 			/* Acquire the monster possessive */
 			monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(target_ptr, m_name, m_ptr, 0);
 #ifdef JP
 			msg_format("%^sは勇気を取り戻した。", m_name);
 #else
@@ -772,7 +772,7 @@ static void process_monsters_mtimed_aux(player_type *target_ptr, MONSTER_IDX m_i
 		if (is_seen(m_ptr))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(target_ptr, m_name, m_ptr, 0);
 			msg_format(_("%^sはもう無敵でない。", "%^s is no longer invulnerable."), m_name);
 		}
 
@@ -818,7 +818,7 @@ void dispel_monster_status(player_type *target_ptr, MONSTER_IDX m_idx)
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(target_ptr, m_name, m_ptr, 0);
 	if (set_monster_invulner(target_ptr, m_idx, 0, TRUE))
 	{
 		if (m_ptr->ml) msg_format(_("%sはもう無敵ではない。", "%^s is no longer invulnerable."), m_name);
@@ -853,7 +853,7 @@ bool set_monster_timewalk(player_type *target_ptr, int num, MONSTER_IDX who, boo
 	if (vs_player)
 	{
 		GAME_TEXT m_name[MAX_NLEN];
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(target_ptr, m_name, m_ptr, 0);
 
 		if (who == 1)
 			msg_format(_("「『ザ・ワールド』！時は止まった！」", "%s yells 'The World! Time has stopped!'"), m_name);
@@ -941,7 +941,7 @@ void monster_gain_exp(player_type *target_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
 	/* Hack -- Reduce the racial counter of previous monster */
 	real_r_ptr(m_ptr)->cur_num--;
 
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(target_ptr, m_name, m_ptr, 0);
 	m_ptr->r_idx = r_ptr->next_r_idx;
 
 	/* Count the monsters on the level */
@@ -1161,7 +1161,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 			monster_race_track(target_ptr, m_ptr->ap_r_idx);
 		}
 
-		monster_desc(m_name, m_ptr, MD_TRUE_NAME);
+		monster_desc(target_ptr, m_name, m_ptr, MD_TRUE_NAME);
 
 		/* Don't kill Amberites */
 		if ((r_ptr->flags3 & RF3_AMBERITE) && one_in_(2))

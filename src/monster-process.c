@@ -1293,14 +1293,14 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (see_m)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(target_ptr, m_name, m_ptr, 0);
 			msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
 		}
 
 		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+			monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 			exe_write_diary(target_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name);
 		}
 
@@ -1325,7 +1325,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			if (see_m)
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(target_ptr, m_name, m_ptr, 0);
 
 				msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
 			}
@@ -1356,7 +1356,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (m_ptr->hp < m_ptr->maxhp / 3)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(target_ptr, m_name, m_ptr, 0);
 
 			if (is_riding_mon && riding_pinch < 2)
 			{
@@ -1416,7 +1416,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (m_ptr->ml)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(target_ptr, m_name, m_ptr, 0);
 			msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 		}
 
@@ -1457,7 +1457,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (is_pet(m_ptr) || see_m)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, m_ptr, is_pet(m_ptr) ? MD_ASSUME_VISIBLE : 0);
+			monster_desc(target_ptr, m_name, m_ptr, is_pet(m_ptr) ? MD_ASSUME_VISIBLE : 0);
 			msg_format(_("%^sは突然敵にまわった！", "%^s suddenly becomes hostile!"), m_name);
 		}
 
@@ -1555,7 +1555,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 			/* Acquire the monster name/poss */
 			if (m_ptr->ml)
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(target_ptr, m_name, m_ptr, 0);
 			else
 				strcpy(m_name, _("それ", "It"));
 
@@ -2234,7 +2234,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 			/* Acquire the object name */
 			object_desc(o_name, o_ptr, 0);
-			monster_desc(m_name, m_ptr, MD_INDEF_HIDDEN);
+			monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_HIDDEN);
 
 			/* React to objects that hurt the monster */
 			if (have_flag(flgs, TR_SLAY_DRAGON)) flg3 |= (RF3_DRAGON);
@@ -2392,7 +2392,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (see_m)
 	{
 		GAME_TEXT m_name[MAX_NLEN];
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(target_ptr, m_name, m_ptr, 0);
 		msg_format(_("%^sは戦いを決意した！", "%^s turns to fight!"), m_name);
 	}
 

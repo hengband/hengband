@@ -1081,7 +1081,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 
-			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+			monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
 		}
 
@@ -1093,7 +1093,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 		bool see_m = is_seen(m_ptr);
 		GAME_TEXT m_name[MAX_NLEN];
 
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(caster_ptr, m_name, m_ptr, 0);
 		if (see_m)
 		{
 			msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), m_name);
@@ -1315,7 +1315,7 @@ bool probing(player_type *caster_ptr)
 		}
 
 		/* Get "the monster" or "something" */
-		monster_desc(m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
+		monster_desc(caster_ptr, m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
 
 		speed = m_ptr->mspeed - 110;
 		if (MON_FAST(m_ptr)) speed += 10;
@@ -1424,7 +1424,7 @@ void discharge_minion(player_type *caster_ptr)
 		if (r_ptr->flags1 & RF1_UNIQUE)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, m_ptr, 0x00);
+			monster_desc(caster_ptr, m_name, m_ptr, 0x00);
 			msg_format(_("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", "%^s resists being blasted and runs away."), m_name);
 			delete_monster_idx(i);
 			continue;
@@ -1441,7 +1441,7 @@ void discharge_minion(player_type *caster_ptr)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 
-			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+			monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name);
 		}
 
@@ -1508,7 +1508,7 @@ static void cave_temp_room_lite(player_type *caster_ptr)
 				if (m_ptr->ml)
 				{
 					GAME_TEXT m_name[MAX_NLEN];
-					monster_desc(m_name, m_ptr, 0);
+					monster_desc(caster_ptr, m_name, m_ptr, 0);
 					msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 				}
 			}
@@ -3149,7 +3149,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 			GAME_TEXT m_name[MAX_NLEN];
 
 			/* Get the monster name (BEFORE polymorphing) */
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(attacker_ptr, m_name, m_ptr, 0);
 			msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name);
 		}
 
@@ -4645,7 +4645,7 @@ bool rodeo(player_type *creature_ptr)
 
 	m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 	r_ptr = &r_info[m_ptr->r_idx];
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(creature_ptr, m_name, m_ptr, 0);
 	msg_format(_("%sに乗った。", "You ride on %s."), m_name);
 
 	if (is_pet(m_ptr)) return TRUE;

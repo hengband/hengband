@@ -2319,7 +2319,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 					if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 					{
 						GAME_TEXT m_name[MAX_NLEN];
-						monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+						monster_desc(creature_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 						exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
 					}
 					/* Delete the monster, rather than killing it. */

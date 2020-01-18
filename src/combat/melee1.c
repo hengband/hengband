@@ -1113,7 +1113,7 @@ static void touch_zap_player_aux(monster_type *m_ptr, player_type *touched_ptr, 
 	GAME_TEXT mon_name[MAX_NLEN];
 	int aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
 
-	monster_desc(mon_name, m_ptr, MD_WRONGDOER_NAME);
+	monster_desc(touched_ptr, mon_name, m_ptr, MD_WRONGDOER_NAME);
 	msg_print(message);
 	dam_func(touched_ptr, aura_damage, mon_name, -1, TRUE);
 
@@ -1204,7 +1204,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
 	}
 
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(attacker_ptr, m_name, m_ptr, 0);
 
 	/* Calculate the "attack quality" */
 	int bonus = attacker_ptr->to_h_m + (attacker_ptr->lev * 6 / 5);
@@ -1391,7 +1391,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 	/* Disturb the monster */
 	(void)set_monster_csleep(attacker_ptr, g_ptr->m_idx, 0);
 
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(attacker_ptr, m_name, m_ptr, 0);
 
 	/* Calculate the "attack quality" */
 	bonus = attacker_ptr->to_h[hand] + o_ptr->to_h;
@@ -2112,7 +2112,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 				m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
 				/* Oops, we need a different name... */
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(attacker_ptr, m_name, m_ptr, 0);
 
 				/* Hack -- Get new race */
 				r_ptr = &r_info[m_ptr->r_idx];
@@ -2189,7 +2189,7 @@ bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_
 		return FALSE;
 	}
 
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(attacker_ptr, m_name, m_ptr, 0);
 
 	if (m_ptr->ml)
 	{
@@ -2392,9 +2392,9 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 	rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
 	/* Get the monster name (or "it") */
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(target_ptr, m_name, m_ptr, 0);
 
-	monster_desc(ddesc, m_ptr, MD_WRONGDOER_NAME);
+	monster_desc(target_ptr, ddesc, m_ptr, MD_WRONGDOER_NAME);
 
 	if (target_ptr->special_defense & KATA_IAI)
 	{
@@ -4028,7 +4028,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (target_ptr->riding && damage)
 		{
 			char m_steed_name[MAX_NLEN];
-			monster_desc(m_steed_name, &floor_ptr->m_list[target_ptr->riding], 0);
+			monster_desc(target_ptr, m_steed_name, &floor_ptr->m_list[target_ptr->riding], 0);
 			if (rakuba(target_ptr, (damage > 200) ? 200 : damage, FALSE))
 			{
 				msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);
@@ -4064,7 +4064,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 	if ((target_ptr->counter || (target_ptr->special_defense & KATA_MUSOU)) && alive && !target_ptr->is_dead && m_ptr->ml && (target_ptr->csp > 7))
 	{
 		char m_target_name[MAX_NLEN];
-		monster_desc(m_target_name, m_ptr, 0);
+		monster_desc(target_ptr, m_target_name, m_ptr, 0);
 
 		target_ptr->csp -= 7;
 		msg_format(_("%^sに反撃した！", "Your counterattacked to %s!"), m_target_name);
@@ -4156,8 +4156,8 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 	/* Extract the effective monster level */
 	rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
-	monster_desc(m_name, m_ptr, 0);
-	monster_desc(t_name, t_ptr, 0);
+	monster_desc(subject_ptr, m_name, m_ptr, 0);
+	monster_desc(subject_ptr, t_name, t_ptr, 0);
 
 	/* Assume no blink */
 	blinked = FALSE;
@@ -4752,7 +4752,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
 	/* Can the player be aware of this attack? */
 	bool known = (m_ptr->cdis <= MAX_SIGHT);
 
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(player_ptr, m_name, m_ptr, 0);
 
 	/* Redraw (later) if needed */
 	if (m_ptr->ml)
@@ -4819,7 +4819,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
 
 			if (known)
 			{
-				monster_desc(m_name, m_ptr, MD_TRUE_NAME);
+				monster_desc(player_ptr, m_name, m_ptr, MD_TRUE_NAME);
 				/* Unseen death by normal attack */
 				if (!seen)
 				{
@@ -4904,7 +4904,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
 
 	if (player_ptr->riding && (player_ptr->riding == m_idx) && (dam > 0))
 	{
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(player_ptr, m_name, m_ptr, 0);
 
 		if (m_ptr->hp > m_ptr->maxhp / 3) dam = (dam + 1) / 2;
 		if (rakuba(player_ptr, (dam > 200) ? 200 : dam, FALSE))

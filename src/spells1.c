@@ -1227,10 +1227,10 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 
 	/* Get the monster name (BEFORE polymorphing) */
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(caster_ptr, m_name, m_ptr, 0);
 
 	/* Get the monster possessive ("his"/"her"/"its") */
-	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+	monster_desc(caster_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
 	if (caster_ptr->riding && (g_ptr->m_idx == caster_ptr->riding)) disturb(caster_ptr, TRUE, TRUE);
 
@@ -1748,7 +1748,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					else
 					{
 						/* Injure +/- confusion */
-						monster_desc(killer, m_ptr, MD_WRONGDOER_NAME);
+						monster_desc(caster_ptr, killer, m_ptr, MD_WRONGDOER_NAME);
 						take_hit(caster_ptr, DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
 						if (one_in_(4) && !CHECK_MULTISHADOW(caster_ptr))
 						{
@@ -1838,7 +1838,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					else
 					{
 						/* Injure + mana drain */
-						monster_desc(killer, m_ptr, MD_WRONGDOER_NAME);
+						monster_desc(caster_ptr, killer, m_ptr, MD_WRONGDOER_NAME);
 						if (!CHECK_MULTISHADOW(caster_ptr))
 						{
 							msg_print(_("超能力パワーを吸いとられた！", "Your psychic energy is drained!"));
@@ -3125,7 +3125,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 						/* Special message */
 						if (see_s_msg)
 						{
-							monster_desc(killer, m_caster_ptr, 0);
+							monster_desc(caster_ptr, killer, m_caster_ptr, 0);
 							msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), killer);
 						}
 					}
@@ -3799,7 +3799,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			/* Give detailed messages if destroyed */
 			if (known && note)
 			{
-				monster_desc(m_name, m_ptr, MD_TRUE_NAME);
+				monster_desc(caster_ptr, m_name, m_ptr, MD_TRUE_NAME);
 				if (see_s_msg)
 				{
 					msg_format("%^s%s", m_name, note);
@@ -3833,7 +3833,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			/* Hack -- Pain message */
 			else if (see_s_msg)
 			{
-				message_pain(g_ptr->m_idx, dam);
+				message_pain(caster_ptr, g_ptr->m_idx, dam);
 			}
 			else
 			{
@@ -3853,7 +3853,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		{
 			char m2_name[MAX_NLEN];
 
-			monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
+			monster_desc(caster_ptr, m2_name, m_ptr, MD_INDEF_VISIBLE);
 			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
 		}
 
@@ -3884,7 +3884,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			/* Hack -- Pain message */
 			else if (known && (dam || !do_fear))
 			{
-				message_pain(g_ptr->m_idx, dam);
+				message_pain(caster_ptr, g_ptr->m_idx, dam);
 			}
 
 			/* Anger monsters */
@@ -4095,7 +4095,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 	{
 		m_ptr = &target_ptr->current_floor_ptr->m_list[who];
 		rlev = (((&r_info[m_ptr->r_idx])->level >= 1) ? (&r_info[m_ptr->r_idx])->level : 1);
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(target_ptr, m_name, m_ptr, 0);
 
 		/* Get the monster's real name (gotten before polymorph!) */
 		strcpy(killer, who_name);
@@ -5063,7 +5063,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		GAME_TEXT m_name_self[80];
 
 		/* hisself */
-		monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+		monster_desc(target_ptr, m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 
 		msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name, m_name_self);
 		project(target_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
@@ -5645,7 +5645,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	{
 		x1 = caster_ptr->current_floor_ptr->m_list[who].fx;
 		y1 = caster_ptr->current_floor_ptr->m_list[who].fy;
-		monster_desc(who_name, &caster_ptr->current_floor_ptr->m_list[who], MD_WRONGDOER_NAME);
+		monster_desc(caster_ptr, who_name, &caster_ptr->current_floor_ptr->m_list[who], MD_WRONGDOER_NAME);
 	}
 
 	else
@@ -6582,7 +6582,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	{
 		GAME_TEXT m_name[MAX_NLEN];
 
-		monster_desc(m_name, &caster_ptr->current_floor_ptr->m_list[caster_ptr->riding], 0);
+		monster_desc(caster_ptr, m_name, &caster_ptr->current_floor_ptr->m_list[caster_ptr->riding], 0);
 
 		if (rakubadam_m > 0)
 		{

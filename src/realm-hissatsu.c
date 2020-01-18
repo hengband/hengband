@@ -307,7 +307,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 				GAME_TEXT m_name[MAX_NLEN];
 
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(caster_ptr, m_name, m_ptr, 0);
 
 				for (i = 0; i < 5; i++)
 				{
@@ -549,7 +549,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 					{
 						GAME_TEXT m_name[MAX_NLEN];
 
-						monster_desc(m_name, m_ptr, 0);
+						monster_desc(caster_ptr, m_name, m_ptr, 0);
 						msg_format(_("%sには効果がない！", "%s is unharmed!"), m_name);
 					}
 					else py_attack(caster_ptr, y, x, HISSATSU_SEKIRYUKA);

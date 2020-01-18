@@ -107,8 +107,8 @@ static void monspell_message_base(player_type *target_ptr, MONSTER_IDX m_idx, MO
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if (mon_to_player || (mon_to_mon && known && see_either))
 		disturb(target_ptr, TRUE, TRUE);
@@ -208,8 +208,8 @@ void spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	monspell_message(target_ptr, m_idx, t_idx,
 		_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
@@ -321,8 +321,8 @@ HIT_POINT spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITION y, POS
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	switch (GF_TYPE)
 	{
@@ -777,7 +777,7 @@ HIT_POINT spell_RF5_BA_WATE(player_type *target_ptr, POSITION y, POSITION x, MON
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	GAME_TEXT t_name[MAX_NLEN];
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 
 	monspell_message(target_ptr, m_idx, t_idx,
@@ -870,8 +870,8 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, 
 {
 	HIT_POINT dam;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -910,8 +910,8 @@ HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, 
 	bool seen = (!target_ptr->blind && m_ptr->ml);
 	HIT_POINT dam;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -950,8 +950,8 @@ HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x,
 	bool seen = (!target_ptr->blind && m_ptr->ml);
 	HIT_POINT dam;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -992,8 +992,8 @@ HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x,
 void spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, int MS_TYPE, int TARGET_TYPE)
 {
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
@@ -1487,8 +1487,8 @@ void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
 	bool see_t = see_monster(floor_ptr, t_idx);
 	bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
@@ -1634,7 +1634,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
 
 	concptr msg1;
 	GAME_TEXT t_name[MAX_NLEN];
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if (streq(t_name, "it"))
 	{
@@ -1755,7 +1755,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 
 	concptr msg1;
 	GAME_TEXT t_name[MAX_NLEN];
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if (streq(t_name, "it"))
 	{
@@ -1850,7 +1850,7 @@ void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_i
 	bool see_m = see_monster(floor_ptr, m_idx);
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	monspell_message_base(target_ptr, m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1916,7 +1916,7 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool seen = (!target_ptr->blind && m_ptr->ml);
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	disturb(target_ptr, TRUE, TRUE);
 
@@ -2002,7 +2002,7 @@ void spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX 
 void spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE)
 {
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		disturb(target_ptr, TRUE, TRUE);
@@ -2035,7 +2035,7 @@ void spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE
 void spell_RF6_TPORT(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE)
 {
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -2065,7 +2065,7 @@ HIT_POINT spell_RF6_WORLD(player_type *target_ptr, MONSTER_IDX m_idx)
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	MONSTER_IDX who = 0;
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	disturb(target_ptr, TRUE, TRUE);
 	if (m_ptr->r_idx == MON_DIO) who = 1;
@@ -2199,7 +2199,7 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
 	bool monster_to_monster = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool direct = player_bold(target_ptr, y, x);
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	disturb(target_ptr, TRUE, TRUE);
 	if (one_in_(3) || !direct)
@@ -2259,7 +2259,7 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
 		{
 			GAME_TEXT m_name_self[80];
 			/* hisself */
-			monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+			monster_desc(target_ptr, m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 
 			msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name, m_name_self);
 
@@ -2353,7 +2353,7 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 
 	bool resists_tele = FALSE;
 	GAME_TEXT t_name[MAX_NLEN];
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if (tr_ptr->flagsr & RFR_RES_TELE)
 	{
@@ -2429,7 +2429,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
 	bool resists_tele = FALSE;
 	GAME_TEXT t_name[MAX_NLEN];
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if (tr_ptr->flagsr & RFR_RES_TELE)
 	{
@@ -2566,7 +2566,7 @@ void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 	bool monster_to_monster = TARGET_TYPE == MONSTER_TO_MONSTER;
 	bool monster_to_player = TARGET_TYPE == MONSTER_TO_PLAYER;
 	GAME_TEXT t_name[MAX_NLEN];
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if ((target_ptr->pclass == CLASS_NINJA) &&
 		!(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) &&
@@ -2638,7 +2638,7 @@ void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 void spell_RF6_TRAPS(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 	disturb(target_ptr, TRUE, TRUE);
 
 	if (target_ptr->blind)
@@ -2663,7 +2663,7 @@ void spell_RF6_FORGET(player_type *target_ptr, MONSTER_IDX m_idx)
 {
 	DEPTH rlev = monster_level_idx(target_ptr->current_floor_ptr, m_idx);
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	disturb(target_ptr, TRUE, TRUE);
 
@@ -2872,9 +2872,9 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	int count = 0;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN], m_poss[80];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
-	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
+	monster_desc(target_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
 	disturb(target_ptr, TRUE, TRUE);
 	bool known = monster_near_player(floor_ptr, m_idx, t_idx);
@@ -3386,7 +3386,7 @@ MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MO
 	POSITION cy = y;
 	POSITION cx = x;
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	if (target_ptr->blind)
 		msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
@@ -3448,7 +3448,7 @@ MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MO
 void spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	disturb(target_ptr, TRUE, TRUE);
 

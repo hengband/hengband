@@ -4563,7 +4563,7 @@ static void do_cmd_knowledge_pets(player_type *creature_ptr)
 		if (!is_pet(m_ptr)) continue;
 
 		t_friends++;
-		monster_desc(pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+		monster_desc(creature_ptr, pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 		fprintf(fff, "%s (%s)\n", pet_name, look_mon_desc(m_ptr, 0x00));
 	}
 

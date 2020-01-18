@@ -418,7 +418,7 @@ extern bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x);
 extern bool alloc_guardian(player_type *player_ptr, bool def_val);
 extern bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode);
 
-extern void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode);
+extern void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_FLAGS mode);
 /* Bit flags for monster_desc() */
 #define MD_OBJECTIVE      0x00000001 /* Objective (or Reflexive) */
 #define MD_POSSESSIVE     0x00000002 /* Possessive (or Reflexive) */
@@ -433,7 +433,7 @@ extern void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode);
 
 #define MD_WRONGDOER_NAME (MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE) /* 加害明記向け */
 
-extern void monster_name(MONSTER_IDX m_idx, char* m_name);
+extern void monster_name(player_type *player_ptr, MONSTER_IDX m_idx, char* m_name);
 
 extern void roff_top(MONRACE_IDX r_idx);
 extern void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode);
@@ -461,7 +461,7 @@ extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_e
 extern void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char* msg);
 extern concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode);
 extern int get_monster_crowd_number(MONSTER_IDX m_idx);
-extern void message_pain(MONSTER_IDX m_idx, HIT_POINT dam);
+extern void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam);
 
 /* monster2.c */
 extern void set_target(monster_type *m_ptr, POSITION y, POSITION x);

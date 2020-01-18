@@ -573,7 +573,7 @@ bool teleport_level_other(player_type *caster_ptr)
 	m_ptr = &caster_ptr->current_floor_ptr->m_list[target_m_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(caster_ptr, m_name, m_ptr, 0);
 	msg_format(_("%^sの足を指さした。", "You gesture at %^s's feet."), m_name);
 
 	if ((r_ptr->flagsr & (RFR_EFF_RES_NEXU_MASK | RFR_RES_TELE)) ||
@@ -610,7 +610,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 		monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
 
 		/* Get the monster name (or "it") */
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(creature_ptr, m_name, m_ptr, 0);
 
 		see_m = is_seen(m_ptr);
 	}
@@ -749,7 +749,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 	{
 		char m2_name[MAX_NLEN];
 
-		monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
+		monster_desc(creature_ptr, m2_name, m_ptr, MD_INDEF_VISIBLE);
 		exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
 	}
 
@@ -1046,7 +1046,7 @@ bool vanish_dungeon(player_type *caster_ptr)
 				/* Notice the "waking up" */
 				if (m_ptr->ml)
 				{
-					monster_desc(m_name, m_ptr, 0);
+					monster_desc(caster_ptr, m_name, m_ptr, 0);
 					msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 				}
 			}
@@ -3203,7 +3203,7 @@ bool shock_power(player_type *caster_ptr)
 	monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(caster_ptr, m_name, m_ptr, 0);
 
 	if (randint1(r_ptr->level * 3 / 2) > randint0(dam / 2) + dam / 2)
 	{

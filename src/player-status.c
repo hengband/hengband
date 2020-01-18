@@ -5126,7 +5126,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 
 		power = r_ptr->level / 2;
 
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(creature_ptr, m_name, m_ptr, 0);
 
 		if (!(r_ptr->flags1 & RF1_UNIQUE))
 		{

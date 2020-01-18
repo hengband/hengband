@@ -661,7 +661,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (target_ptr->leaving) return FALSE;
 
 	/* Get the monster name (or "it") */
-	monster_desc(m_name, m_ptr, 0x00);
+	monster_desc(target_ptr, m_name, m_ptr, 0x00);
 
 #ifdef JP
 #else
@@ -671,7 +671,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 #endif
 
 	/* Get the target's name (or "it") */
-	monster_desc(t_name, t_ptr, 0x00);
+	monster_desc(target_ptr, t_name, t_ptr, 0x00);
 
 	/* Choose a spell to cast */
 	thrown_spell = spell[randint0(num)];

@@ -3158,7 +3158,7 @@ static void process_world(player_type *player_ptr)
 
 			wm_ptr = &floor_ptr->m_list[win_m_idx];
 
-			monster_desc(m_name, wm_ptr, 0);
+			monster_desc(player_ptr, m_name, wm_ptr, 0);
 			msg_format(_("%sが勝利した！", "%s is winner!"), m_name);
 			msg_print(NULL);
 
@@ -4385,7 +4385,7 @@ static void process_fishing(player_type *creature_ptr)
 			if (place_monster_aux(creature_ptr, 0, y, x, r_idx, PM_NO_KAGE))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
+				monster_desc(creature_ptr, m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
 				msg_format(_("%sが釣れた！", "You have a good catch!"), m_name);
 				success = TRUE;
 			}
@@ -4521,7 +4521,7 @@ static void process_player(player_type *creature_ptr)
 
 			/* Recover fully */
 			(void)set_monster_csleep(creature_ptr, creature_ptr->riding, 0);
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(creature_ptr, m_name, m_ptr, 0);
 			msg_format(_("%^sを起こした。", "You have woken %s up."), m_name);
 		}
 
@@ -4532,7 +4532,7 @@ static void process_player(player_type *creature_ptr)
 				(randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_STUNNED(m_ptr) - 1)))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(creature_ptr, m_name, m_ptr, 0);
 				msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name);
 			}
 		}
@@ -4544,7 +4544,7 @@ static void process_player(player_type *creature_ptr)
 				(randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_CONFUSED(m_ptr) - 1)))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(creature_ptr, m_name, m_ptr, 0);
 				msg_format(_("%^sを混乱状態から立ち直らせた。", "%^s is no longer confused."), m_name);
 			}
 		}
@@ -4556,7 +4556,7 @@ static void process_player(player_type *creature_ptr)
 				(randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_MONFEAR(m_ptr) - 1)))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(creature_ptr, m_name, m_ptr, 0);
 				msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer afraid."), m_name);
 			}
 		}

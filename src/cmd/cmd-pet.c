@@ -173,7 +173,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 
 		delete_this = FALSE;
 		kakunin = ((pet_ctr == creature_ptr->riding) || (m_ptr->nickname));
-		monster_desc(friend_name, m_ptr, MD_ASSUME_VISIBLE);
+		monster_desc(creature_ptr, friend_name, m_ptr, MD_ASSUME_VISIBLE);
 
 		if (!all_pets)
 		{
@@ -223,7 +223,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 			{
 				GAME_TEXT m_name[MAX_NLEN];
 
-				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+				monster_desc(creature_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 				exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_DISMISS, m_name);
 			}
 
@@ -363,7 +363,7 @@ bool do_cmd_riding(player_type *creature_ptr, bool force)
 		if (MON_CSLEEP(m_ptr))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(creature_ptr, m_name, m_ptr, 0);
 			(void)set_monster_csleep(creature_ptr, g_ptr->m_idx, 0);
 			msg_format(_("%sを起こした。", "You have woken %s up."), m_name);
 		}
@@ -424,7 +424,7 @@ static void do_name_pet(player_type *creature_ptr)
 			msg_print(_("そのモンスターの名前は変えられない！", "You cannot change name of this monster!"));
 			return;
 		}
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(creature_ptr, m_name, m_ptr, 0);
 
 		msg_format(_("%sに名前をつける。", "Name %s."), m_name);
 		msg_print(NULL);
@@ -449,7 +449,7 @@ static void do_name_pet(player_type *creature_ptr)
 				m_ptr->nickname = quark_add(out_val);
 				if (record_named_pet)
 				{
-					monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+					monster_desc(creature_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 					exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_NAME, m_name);
 				}
 			}
@@ -457,7 +457,7 @@ static void do_name_pet(player_type *creature_ptr)
 			{
 				if (record_named_pet && old_name)
 				{
-					monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+					monster_desc(creature_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 					exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_UNNAME, m_name);
 				}
 				m_ptr->nickname = 0;
@@ -1046,7 +1046,7 @@ bool rakuba(player_type *creature_ptr, HIT_POINT dam, bool force)
 		}
 		if (!sn)
 		{
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(creature_ptr, m_name, m_ptr, 0);
 			msg_format(_("%sから振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from %s, but bumped into wall."), m_name);
 			take_hit(creature_ptr, DAMAGE_NOESCAPE, r_ptr->level + 3, _("壁への衝突", "bumping into wall"), -1);
 			return FALSE;
@@ -1084,7 +1084,7 @@ bool rakuba(player_type *creature_ptr, HIT_POINT dam, bool force)
 
 	if (creature_ptr->levitation && !force)
 	{
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(creature_ptr, m_name, m_ptr, 0);
 		msg_format(_("%sから落ちたが、空中でうまく体勢を立て直して着地した。", "You are thrown from %s, but make a good landing."), m_name);
 	}
 	else

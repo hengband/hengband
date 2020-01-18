@@ -4107,7 +4107,7 @@ static void dump_aux_pet(player_type *master_ptr, FILE *fff)
 		}
 
 		GAME_TEXT pet_name[MAX_NLEN];
-		monster_desc(pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+		monster_desc(master_ptr, pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 		fprintf(fff, "%s\n", pet_name);
 	}
 

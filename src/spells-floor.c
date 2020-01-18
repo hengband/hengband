@@ -522,7 +522,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 					{
 						GAME_TEXT m_name[MAX_NLEN];
 
-						monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+						monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 						exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
 					}
 
@@ -884,7 +884,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			{
 				GAME_TEXT m_name[MAX_NLEN];
 				monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-				monster_desc(m_name, m_ptr, MD_WRONGDOER_NAME);
+				monster_desc(caster_ptr, m_name, m_ptr, MD_WRONGDOER_NAME);
 				killer = format(_("%sの起こした地震", "an earthquake caused by %s"), m_name);
 			}
 			else
@@ -971,7 +971,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 				}
 			}
 
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(caster_ptr, m_name, m_ptr, 0);
 
 			/* Scream in pain */
 			if (!ignore_unview || is_seen(m_ptr)) msg_format(_("%^sは苦痛で泣きわめいた！", "%^s wails out in pain!"), m_name);
@@ -997,7 +997,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 					{
 						char m2_name[MAX_NLEN];
 
-						monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
+						monster_desc(caster_ptr, m2_name, m_ptr, MD_INDEF_VISIBLE);
 						exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name);
 					}
 				}

@@ -325,7 +325,7 @@ void compact_monsters(player_type *player_ptr, int size)
 			if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+				monster_desc(player_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 				exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_COMPACT, m_name);
 			}
 
@@ -1336,7 +1336,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level)
  *  MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE
  *    --> Reflexive, genderized if visable ("himself") or "itself"
  */
-void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
+void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 {
 	concptr            res;
 	monster_race    *r_ptr;
@@ -1354,7 +1354,7 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 	else name = (r_name + r_ptr->name);
 
 	/* Are we hallucinating? (Idea from Nethack...) */
-	if (p_ptr->image && !(mode & MD_IGNORE_HALLU))
+	if (player_ptr->image && !(mode & MD_IGNORE_HALLU))
 	{
 		if (one_in_(2))
 		{
@@ -1386,7 +1386,7 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 
 
 	/* First, try using pronouns, or describing hidden monsters */
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!seen || pron)
 	{
 		/* an encoding of the monster "sex" */
@@ -1512,7 +1512,7 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 		else
 
 			/* It could be a Unique */
-			if ((r_ptr->flags1 & RF1_UNIQUE) && !(p_ptr->image && !(mode & MD_IGNORE_HALLU)))
+			if ((r_ptr->flags1 & RF1_UNIQUE) && !(player_ptr->image && !(mode & MD_IGNORE_HALLU)))
 			{
 				/* Start with the name (thus nominative and objective) */
 				if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && !(mode & MD_TRUE_NAME))
@@ -1535,8 +1535,8 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 				}
 
 				/* Inside monster arena, and it is not your mount */
-				else if (p_ptr->phase_out &&
-					!(p_ptr->riding && (&floor_ptr->m_list[p_ptr->riding] == m_ptr)))
+				else if (player_ptr->phase_out &&
+					!(player_ptr->riding && (&floor_ptr->m_list[player_ptr->riding] == m_ptr)))
 				{
 					/* It is a fake unique monster */
 					(void)sprintf(desc, _("%sもどき", "fake %s"), name);
@@ -1581,7 +1581,7 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 			strcat(desc, buf);
 		}
 
-		if (p_ptr->riding && (&floor_ptr->m_list[p_ptr->riding] == m_ptr))
+		if (player_ptr->riding && (&floor_ptr->m_list[player_ptr->riding] == m_ptr))
 		{
 			strcat(desc, _("(乗馬中)", "(riding)"));
 		}
@@ -1616,13 +1616,14 @@ void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode)
 
 /*!
 * @brief モンスターIDを取り、モンスター名をm_nameに代入する /
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param m_idx モンスターID
 * @param m_name モンスター名を入力する配列
 */
-void monster_name(MONSTER_IDX m_idx, char* m_name)
+void monster_name(player_type *player_ptr, MONSTER_IDX m_idx, char* m_name)
 {
 	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
-	monster_desc(m_name, m_ptr, 0x00);
+	monster_desc(player_ptr, m_name, m_ptr, 0x00);
 }
 
 
@@ -2320,7 +2321,7 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
 	if (old_unique && (r_idx == MON_CHAMELEON)) r_idx = MON_CHAMELEON_K;
 	r_ptr = &r_info[r_idx];
 
-	monster_desc(old_m_name, m_ptr, 0);
+	monster_desc(player_ptr, old_m_name, m_ptr, 0);
 
 	if (!r_idx)
 	{
@@ -2372,7 +2373,7 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
 	if (m_idx == player_ptr->riding)
 	{
 		GAME_TEXT m_name[MAX_NLEN];
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(player_ptr, m_name, m_ptr, 0);
 		msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name);
 		if (!(r_ptr->flags7 & RF7_RIDING))
 			if (rakuba(player_ptr, 0, TRUE)) msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
@@ -3604,13 +3605,14 @@ bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BI
 
 /*!
  * @brief ダメージを受けたモンスターの様子を記述する / Dump a message describing a monster's reaction to damage
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスター情報ID
  * @param dam 与えたダメージ
  * @return なし
  * @details
  * Technically should attempt to treat "Beholder"'s as jelly's
  */
-void message_pain(MONSTER_IDX m_idx, HIT_POINT dam)
+void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
 {
 	HIT_POINT oldhp, newhp;
 	HIT_POINT tmp;
@@ -3621,7 +3623,7 @@ void message_pain(MONSTER_IDX m_idx, HIT_POINT dam)
 
 	GAME_TEXT m_name[MAX_NLEN];
 
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(player_ptr, m_name, m_ptr, 0);
 
 	if (dam == 0) // Notice non-damage
 	{
