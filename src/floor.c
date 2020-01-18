@@ -27,6 +27,18 @@ floor_type floor_info;
  */
 saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 
+/*
+ * Grid based version of "cave_empty_bold()"
+ */
+bool is_cave_empty_grid(player_type *player_ptr, grid_type *g_ptr)
+{
+	bool is_empty_grid = cave_have_flag_grid(g_ptr, FF_PLACE);
+	is_empty_grid &= g_ptr->m_idx == 0;
+	is_empty_grid &= !player_grid(player_ptr, g_ptr);
+	return is_empty_grid;
+}
+
+
 /*!
 * @brief 鍵のかかったドアを配置する
 * @param player_ptr プレーヤーへの参照ポインタ
@@ -576,7 +588,7 @@ void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num)
 			/* Require "empty" floor grids */
 			grid_type *g_ptr;
 			g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-			if (!cave_empty_grid(g_ptr)) continue;
+			if (!is_cave_empty_grid(player_ptr, g_ptr)) continue;
 
 			/* Place the monster (allow groups) */
 			floor_ptr->monster_level = floor_ptr->base_level + 2;

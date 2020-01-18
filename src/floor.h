@@ -303,14 +303,6 @@ extern floor_type floor_info;
 
 
 /*
- * Grid based version of "cave_empty_bold()"
- */
-#define cave_empty_grid(C) \
-	(cave_have_flag_grid((C), FF_PLACE) && \
-	 !((C)->m_idx) && !player_grid(p_ptr, C))
-
-
-/*
  * Grid based version of "cave_perma_bold()"
  */
 #define cave_perma_grid(C) \
