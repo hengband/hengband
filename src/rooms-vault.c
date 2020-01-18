@@ -393,12 +393,12 @@ static void build_vault(player_type *player_ptr, POSITION yval, POSITION xval, P
 
 				/* Permanent wall (inner) */
 			case 'X':
-				place_inner_perm_grid(g_ptr);
+				place_grid(g_ptr, inner_perm);
 				break;
 
 				/* Permanent glass wall (inner) */
 			case 'Y':
-				place_inner_perm_grid(g_ptr);
+				place_grid(g_ptr, inner_perm);
 				g_ptr->feat = feat_permanent_glass_wall;
 				break;
 
@@ -1094,7 +1094,7 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
 			g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
 
 			/* Permanent walls */
-			place_inner_perm_grid(g_ptr);
+			place_grid(g_ptr, inner_perm);
 		}
 	}
 

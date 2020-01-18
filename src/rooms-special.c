@@ -107,7 +107,7 @@ bool build_type15(player_type *player_ptr)
 			y = yval + 2 * ddy_ddd[dir1];
 			x = xval + 2 * ddx_ddd[dir1];
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_inner_perm_grid(g_ptr);
+			place_grid(g_ptr, inner_perm);
 			g_ptr->feat = feat_permanent_glass_wall;
 			floor_ptr->grid_array[yval + ddy_ddd[dir1]][xval + ddx_ddd[dir1]].info |= (CAVE_ICKY);
 		}
