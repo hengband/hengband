@@ -1886,17 +1886,17 @@ static void term_window_pos(term_data *td, HWND hWnd)
 		SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE);
 }
 
-static void windows_map(void);
+static void windows_map(player_type *player_ptr);
 
 /*
  * Hack -- redraw a term_data
  */
-static void term_data_redraw(term_data *td)
+static void term_data_redraw(player_type *player_ptr, term_data *td)
 {
 	if (td->map_active)
 	{
 		/* Redraw the map */
-		windows_map();
+		windows_map(player_ptr);
 	}
 	else
 	{
@@ -2932,7 +2932,7 @@ static errr Term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
 }
 
 
-static void windows_map(void)
+static void windows_map(player_type *player_ptr)
 {
 	term_data *td = &data[0];
 	TERM_COLOR a;
@@ -2954,8 +2954,8 @@ static void windows_map(void)
 	{
 		min_x = 0;
 		min_y = 0;
-		max_x = p_ptr->current_floor_ptr->width;
-		max_y = p_ptr->current_floor_ptr->height;
+		max_x = player_ptr->current_floor_ptr->width;
+		max_y = player_ptr->current_floor_ptr->height;
 	}
 
 	/* Draw the map */
@@ -2963,7 +2963,7 @@ static void windows_map(void)
 	{
 		for (y = min_y; y < max_y; y++)
 		{
-			map_info(p_ptr, y, x, &a, (char*)&c, &ta, (char*)&tc);
+			map_info(player_ptr, y, x, &a, (char*)&c, &ta, (char*)&tc);
 
 			/* Ignore non-graphics */
 			if ((a & 0x80) && (c & 0x80))
@@ -2974,7 +2974,7 @@ static void windows_map(void)
 	}
 
 	/* Hilite the player */
-	Term_curs_win(p_ptr->x - min_x, p_ptr->y - min_y);
+	Term_curs_win(player_ptr->x - min_x, player_ptr->y - min_y);
 
 	/* Wait for a keypress, flush key buffer */
 	Term_inkey(&c, TRUE, TRUE);
@@ -3448,7 +3448,7 @@ static void setup_menus(void)
  * piece of the "command line string".  Perhaps we should extract
  * the "basename" of that filename and append it to the "save" dir.
  */
-static void check_for_save_file(LPSTR cmd_line)
+static void check_for_save_file(player_type *player_ptr, LPSTR cmd_line)
 {
 	char *s;
 
@@ -3468,14 +3468,14 @@ static void check_for_save_file(LPSTR cmd_line)
 	game_in_progress = TRUE;
 
 	/* Play game */
-	play_game(p_ptr, FALSE);
+	play_game(player_ptr, FALSE);
 }
 
 
 /*
  * Process a menu command
  */
-static void process_menus(WORD wCmd)
+static void process_menus(player_type *player_ptr, WORD wCmd)
 {
 	int i;
 
@@ -3501,7 +3501,7 @@ static void process_menus(WORD wCmd)
 		{
 			game_in_progress = TRUE;
 			Term_flush();
-			play_game(p_ptr, TRUE);
+			play_game(player_ptr, TRUE);
 			quit(NULL);
 		}
 		break;
@@ -3536,7 +3536,7 @@ static void process_menus(WORD wCmd)
 				validate_file(savefile);
 				game_in_progress = TRUE;
 				Term_flush();
-				play_game(p_ptr, FALSE);
+				play_game(player_ptr, FALSE);
 				quit(NULL);
 			}
 		}
@@ -3559,7 +3559,7 @@ static void process_menus(WORD wCmd)
 
 			/* Save the game */
 #ifdef ZANGBAND
-			do_cmd_save_game(p_ptr, FALSE);
+			do_cmd_save_game(player_ptr, FALSE);
 #else /* ZANGBAND */
 			do_cmd_save_game();
 #endif /* ZANGBAND */
@@ -3584,9 +3584,9 @@ static void process_menus(WORD wCmd)
 			/* Hack -- Forget messages */
 			msg_flag = FALSE;
 
-			forget_lite(p_ptr->current_floor_ptr);
-			forget_view(p_ptr->current_floor_ptr);
-			clear_mon_lite(p_ptr->current_floor_ptr);
+			forget_lite(player_ptr->current_floor_ptr);
+			forget_view(player_ptr->current_floor_ptr);
+			clear_mon_lite(player_ptr->current_floor_ptr);
 
 			/* Save the game */
 #ifdef ZANGBAND
@@ -3664,7 +3664,7 @@ static void process_menus(WORD wCmd)
 			{
 				/* Load 'savefile' */
 				prepare_browse_movie_aux(savefile);
-				play_game(p_ptr, FALSE);
+				play_game(player_ptr, FALSE);
 				quit(NULL);
 				return;
 			}
@@ -3698,7 +3698,7 @@ static void process_menus(WORD wCmd)
 		{
 			td->visible = TRUE;
 			ShowWindow(td->w, SW_SHOW);
-			term_data_redraw(td);
+			term_data_redraw(player_ptr, td);
 		}
 		else
 		{
@@ -4112,7 +4112,7 @@ static void process_menus(WORD wCmd)
 
 	case IDM_OPTIONS_MAP:
 	{
-		windows_map();
+		windows_map(player_ptr);
 		break;
 	}
 
@@ -4307,7 +4307,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 	case WM_PAINT:
 	{
 		BeginPaint(hWnd, &ps);
-		if (td) term_data_redraw(td);
+		if (td) term_data_redraw(p_ptr, td);
 		EndPaint(hWnd, &ps);
 		ValidateRect(hWnd, NULL);
 		return 0;
@@ -4529,7 +4529,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 	case WM_COMMAND:
 	{
-		process_menus(LOWORD(wParam));
+		process_menus(p_ptr, LOWORD(wParam));
 		return 0;
 	}
 
@@ -4787,7 +4787,7 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 	case WM_PAINT:
 	{
 		BeginPaint(hWnd, &ps);
-		if (td) term_data_redraw(td);
+		if (td) term_data_redraw(p_ptr, td);
 		EndPaint(hWnd, &ps);
 		return 0;
 	}
@@ -5393,7 +5393,7 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 			if (!lpCmdLine[2]) break;
 			chuukei_client = TRUE;
 			connect_chuukei_server(&lpCmdLine[2]);
-			play_game(p_ptr, FALSE);
+			play_game(player_ptr, FALSE);
 			quit(NULL);
 			return 0;
 		}
@@ -5402,7 +5402,7 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 		{
 			if (!lpCmdLine[2]) break;
 			prepare_browse_movie(&lpCmdLine[2]);
-			play_game(p_ptr, FALSE);
+			play_game(player_ptr, FALSE);
 			quit(NULL);
 			return 0;
 		}
@@ -5415,7 +5415,7 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 	if (!chuukei_server) check_for_save_file(lpCmdLine);
 #else
 	/* Did the user double click on a save file? */
-	check_for_save_file(lpCmdLine);
+	check_for_save_file(p_ptr, lpCmdLine);
 #endif
 
 	/* Prompt the user */
