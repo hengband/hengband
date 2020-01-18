@@ -88,9 +88,9 @@ static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0
 	{
 		int side_x = x0 - xhsize + i;
 
-		place_outer_noperm_bold(player_ptr, y0 - yhsize + 0, side_x);
+		place_bold(player_ptr, y0 - yhsize + 0, side_x, outer_noperm);
 		floor_ptr->grid_array[y0 - yhsize + 0][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
-		place_outer_noperm_bold(player_ptr, y0 - yhsize + ysize - 1, side_x);
+		place_bold(player_ptr, y0 - yhsize + ysize - 1, side_x, outer_noperm);
 		floor_ptr->grid_array[y0 - yhsize + ysize - 1][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
@@ -99,9 +99,9 @@ static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0
 	{
 		int side_y = y0 - yhsize + i;
 
-		place_outer_noperm_bold(player_ptr, side_y, x0 - xhsize + 0);
+		place_bold(player_ptr, side_y, x0 - xhsize + 0, outer_noperm);
 		floor_ptr->grid_array[side_y][x0 - xhsize + 0].info |= (CAVE_ROOM | CAVE_ICKY);
-		place_outer_noperm_bold(player_ptr, side_y, x0 - xhsize + xsize - 1);
+		place_bold(player_ptr, side_y, x0 - xhsize + xsize - 1, outer_noperm);
 		floor_ptr->grid_array[side_y][x0 - xhsize + xsize - 1].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
@@ -143,7 +143,7 @@ static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0
 			if (((min2 - min1) <= 2) && (!(min1 < 3)))
 			{
 				/* Boundary at midpoint+ not at inner region of bubble */
-				place_outer_noperm_bold(player_ptr, y0 - yhsize + y, x0 - xhsize + x);
+				place_bold(player_ptr, y0 - yhsize + y, x0 - xhsize + x, outer_noperm);
 			}
 			else
 			{
@@ -1055,7 +1055,7 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
 
 		floor_ptr->grid_array[y1 - 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
 
-		place_outer_noperm_bold(player_ptr, y1 - 2, x);
+		place_bold(player_ptr, y1 - 2, x, outer_noperm);
 	}
 
 	for (x = x1 - 2; x <= x2 + 2; x++)
@@ -1064,7 +1064,7 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
 
 		floor_ptr->grid_array[y2 + 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
 
-		place_outer_noperm_bold(player_ptr, y2 + 2, x);
+		place_bold(player_ptr, y2 + 2, x, outer_noperm);
 	}
 
 	for (y = y1 - 2; y <= y2 + 2; y++)
@@ -1073,7 +1073,7 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
 
 		floor_ptr->grid_array[y][x1 - 2].info |= (CAVE_ROOM | CAVE_ICKY);
 
-		place_outer_noperm_bold(player_ptr, y, x1 - 2);
+		place_bold(player_ptr, y, x1 - 2, outer_noperm);
 	}
 
 	for (y = y1 - 2; y <= y2 + 2; y++)
@@ -1082,7 +1082,7 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
 
 		floor_ptr->grid_array[y][x2 + 2].info |= (CAVE_ROOM | CAVE_ICKY);
 
-		place_outer_noperm_bold(player_ptr, y, x2 + 2);
+		place_bold(player_ptr, y, x2 + 2, outer_noperm);
 	}
 
 	for (y = y1 - 1; y <= y2 + 1; y++)

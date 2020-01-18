@@ -1531,18 +1531,18 @@ void build_room(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y1, 
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (i = 0; i <= xsize; i++)
 	{
-		place_outer_noperm_bold(player_ptr, y1, x1 + i);
+		place_bold(player_ptr, y1, x1 + i, outer_noperm);
 		floor_ptr->grid_array[y1][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
-		place_outer_noperm_bold(player_ptr, y2, x1 + i);
+		place_bold(player_ptr, y2, x1 + i, outer_noperm);
 		floor_ptr->grid_array[y2][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
 	/* Left and right boundaries */
 	for (i = 1; i < ysize; i++)
 	{
-		place_outer_noperm_bold(player_ptr, y1 + i, x1);
+		place_bold(player_ptr, y1 + i, x1, outer_noperm);
 		floor_ptr->grid_array[y1 + i][x1].info |= (CAVE_ROOM | CAVE_ICKY);
-		place_outer_noperm_bold(player_ptr, y1 + i, x2);
+		place_bold(player_ptr, y1 + i, x2, outer_noperm);
 		floor_ptr->grid_array[y1 + i][x2].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
