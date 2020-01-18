@@ -1362,7 +1362,7 @@ bool probing(player_type *caster_ptr)
 
 		Term_erase(0, 0, 255);
 
-		if (lore_do_probe(m_ptr->r_idx))
+		if (lore_do_probe(caster_ptr, m_ptr->r_idx))
 		{
 			strcpy(buf, (r_name + r_ptr->name));
 #ifdef JP

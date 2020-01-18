@@ -3810,7 +3810,7 @@ static bool research_mon(player_type *player_ptr)
 				/*** Recall on screen ***/
 
 				/* Get maximal info about this monster */
-				lore_do_probe(r_idx);
+				lore_do_probe(player_ptr, r_idx);
 
 				/* Save this monster ID */
 				monster_race_track(player_ptr, r_idx);

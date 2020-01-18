@@ -1622,19 +1622,20 @@ void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_
 */
 void monster_name(player_type *player_ptr, MONSTER_IDX m_idx, char* m_name)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
 	monster_desc(player_ptr, m_name, m_ptr, 0x00);
 }
 
 
 /*!
  * @brief モンスターの調査による思い出補完処理 / Learn about a monster (by "probing" it)
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param r_idx 補完されるモンスター種族ID
  * @return 明らかになった情報の度数
  * @details
  * Return the number of new flags learnt.  -Mogami-
  */
-int lore_do_probe(MONRACE_IDX r_idx)
+int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 	int i, n = 0;
@@ -1720,9 +1721,9 @@ int lore_do_probe(MONRACE_IDX r_idx)
 	r_ptr->r_xtra1 |= MR1_SINKA;
 
 	/* Update monster recall window */
-	if (p_ptr->monster_race_idx == r_idx)
+	if (player_ptr->monster_race_idx == r_idx)
 	{
-		p_ptr->window |= (PW_MONSTER);
+		player_ptr->window |= (PW_MONSTER);
 	}
 
 	/* Return the number of new flags learnt */
