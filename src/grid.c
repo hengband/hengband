@@ -1,21 +1,19 @@
-﻿
- /*!
-  * @file grid.c
-  * @brief グリッドの実装 / low level dungeon routines -BEN-
-  * @date 2013/12/30
-  * @author
-  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
-  *\n
-  * This software may be copied and distributed for educational, research,\n
-  * and not for profit purposes provided that this copyright and statement\n
-  * are included in all such copies.  Other copyrights may also apply.\n
-  * \n
-  * Support for Adam Bolt's tileset, lighting and transparency effects\n
-  * by Robert Ruehlmann (rr9@angband.org)\n
-  * \n
-  * 2013 Deskull Doxygen向けのコメント整理\n
-  */
-
+﻿/*!
+ * @file grid.c
+ * @brief グリッドの実装 / low level dungeon routines -BEN-
+ * @date 2013/12/30
+ * @author
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
+ *\n
+ * This software may be copied and distributed for educational, research,\n
+ * and not for profit purposes provided that this copyright and statement\n
+ * are included in all such copies.  Other copyrights may also apply.\n
+ * \n
+ * Support for Adam Bolt's tileset, lighting and transparency effects\n
+ * by Robert Ruehlmann (rr9@angband.org)\n
+ * \n
+ * 2013 Deskull Doxygen向けのコメント整理\n
+ */
 
 #include "angband.h"
 #include "util.h"
@@ -1274,8 +1272,12 @@ void place_solid_perm_grid(grid_type *g_ptr)
 	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
 }
 
+
 /*!
  * モンスターにより照明が消されている地形か否かを判定する。 / Is this grid "darkened" by monster?
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param g_ptr グリッドへの参照ポインタ
+ * @return 照明が消されている地形ならばTRUE
  */
 bool darkened_grid(player_type *player_ptr, grid_type *g_ptr)
 {

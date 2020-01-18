@@ -236,7 +236,7 @@ typedef struct
 #define CAVE_MNLT       0x0100    /*!< モンスターの光源によって照らされている / Illuminated by monster */
 #define CAVE_MNDK       0x8000    /*!< モンスターの暗源によって暗闇になっている / Darken by monster */
 
- /* Used only while floor generation */
+/* Used only while floor generation */
 #define CAVE_FLOOR      0x0200	/*!< フロア属性のあるマス */
 #define CAVE_EXTRA      0x0400
 #define CAVE_INNER      0x0800
@@ -309,7 +309,6 @@ extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode
 extern void place_floor_grid(grid_type *g_ptr);
 extern void place_extra_grid(grid_type *g_ptr);
 extern void place_inner_grid(grid_type *g_ptr);
-extern void place_inner_grid(grid_type *g_ptr);
 extern void place_inner_perm_grid(grid_type *g_ptr);
 extern void place_outer_grid(grid_type *g_ptr);
 extern void place_outer_noperm_grid(grid_type *g_ptr);
@@ -348,8 +347,8 @@ extern bool darkened_grid(player_type *player_ptr, grid_type *g_ptr);
 }
 
 /*
- * For delayed visual update
- */
+* For delayed visual update
+*/
 #define cave_redraw_later(F,G,Y,X) \
 {\
 	if (!((G)->info & CAVE_REDRAW)) \
@@ -360,12 +359,12 @@ extern bool darkened_grid(player_type *player_ptr, grid_type *g_ptr);
 	} \
 }
 
- /*
-  * This macro allows us to efficiently add a grid to the "view" array,
-  * note that we are never called for illegal grids, or for grids which
-  * have already been placed into the "view" array, and we are never
-  * called when the "view" array is full.
-  */
+/*
+ * This macro allows us to efficiently add a grid to the "view" array,
+ * note that we are never called for illegal grids, or for grids which
+ * have already been placed into the "view" array, and we are never
+ * called when the "view" array is full.
+ */
 #define cave_view_hack(F,C,Y,X) \
 {\
     if (!((C)->info & (CAVE_VIEW))){\
@@ -374,4 +373,3 @@ extern bool darkened_grid(player_type *player_ptr, grid_type *g_ptr);
     (F)->view_x[(F)->view_n] = (X); \
     (F)->view_n++;}\
 }
-
