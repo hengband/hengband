@@ -649,15 +649,15 @@ static bool cave_gen(player_type *player_ptr)
 		/* Special boundary walls -- Top and bottom */
 		for (x = 0; x < floor_ptr->width; x++)
 		{
-			place_extra_bold(player_ptr, 0, x);
-			place_extra_bold(player_ptr, floor_ptr->height - 1, x);
+			place_bold(player_ptr, 0, x, extra);
+			place_bold(player_ptr, floor_ptr->height - 1, x, extra);
 		}
 
 		/* Special boundary walls -- Left and right */
 		for (y = 1; y < (floor_ptr->height - 1); y++)
 		{
-			place_extra_bold(player_ptr, y, 0);
-			place_extra_bold(player_ptr, y, floor_ptr->width - 1);
+			place_bold(player_ptr, y, 0, extra);
+			place_bold(player_ptr, y, floor_ptr->width - 1, extra);
 		}
 	}
 	else
@@ -667,7 +667,7 @@ static bool cave_gen(player_type *player_ptr)
 		{
 			for (x = 0; x < floor_ptr->width; x++)
 			{
-				place_extra_bold(player_ptr, y, x);
+				place_bold(player_ptr, y, x, extra);
 			}
 		}
 	}

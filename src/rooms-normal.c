@@ -946,7 +946,7 @@ bool build_type11(player_type *player_ptr)
 			else if (distance(y0, x0, y, x) <= rad + 1)
 			{
 				/* make granite outside so arena works */
-				place_extra_bold(player_ptr, y, x);
+				place_bold(player_ptr, y, x, extra);
 			}
 		}
 	}
@@ -1010,14 +1010,14 @@ bool build_type12(player_type *player_ptr)
 			else
 			{
 				/* make granite outside so arena works */
-				place_extra_bold(player_ptr, y, x);
+				place_bold(player_ptr, y, x, extra);
 			}
 
 			/* proper boundary for arena */
 			if (((y + rad) == y0) || ((y - rad) == y0) ||
 				((x + rad) == x0) || ((x - rad) == x0))
 			{
-				place_extra_bold(player_ptr, y, x);
+				place_bold(player_ptr, y, x, extra);
 			}
 		}
 	}

@@ -190,7 +190,7 @@ static void build_room_vault(player_type *player_ptr, POSITION x0, POSITION y0, 
 		{
 			POSITION y = y0 - yhsize + y1;
 
-			place_extra_bold(player_ptr, y, x);
+			place_bold(player_ptr, y, x, extra);
 			floor_ptr->grid_array[y][x].info &= (~CAVE_ICKY);
 		}
 	}
@@ -853,14 +853,14 @@ static void build_target_vault(player_type *player_ptr, POSITION x0, POSITION y0
 			else
 			{
 				/* make granite outside so arena works */
-				place_extra_bold(player_ptr, y, x);
+				place_bold(player_ptr, y, x, extra);
 			}
 
 			/* proper boundary for arena */
 			if (((y + rad) == y0) || ((y - rad) == y0) ||
 				((x + rad) == x0) || ((x - rad) == x0))
 			{
-				place_extra_bold(player_ptr, y, x);
+				place_bold(player_ptr, y, x, extra);
 			}
 		}
 	}
