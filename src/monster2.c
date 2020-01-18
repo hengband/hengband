@@ -356,6 +356,7 @@ void compact_monsters(player_type *player_ptr, int size)
 
 
 /*!
+ * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * @brief プレイヤーのフロア離脱に伴う全モンスター配列の消去 / Delete/Remove all the monsters when the player leaves the level
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -437,12 +438,12 @@ void wipe_monsters_list(player_type *player_ptr)
  * @details
  * This routine should almost never fail, but it *can* happen.
  */
-MONSTER_IDX m_pop(void)
+MONSTER_IDX m_pop(player_type *player_ptr)
 {
 	MONSTER_IDX i;
 
 	/* Normal allocation */
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (floor_ptr->m_max < current_world_ptr->max_m_idx)
 	{
 		/* Access the next hole */
@@ -2614,7 +2615,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
 	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL) || (r_ptr->level < 10)) mode &= ~PM_KAGE;
 
 	/* Make a new monster */
-	g_ptr->m_idx = m_pop();
+	g_ptr->m_idx = m_pop(player_ptr);
 	hack_m_idx_ii = g_ptr->m_idx;
 
 	/* Mega-Hack -- catch "failure" */

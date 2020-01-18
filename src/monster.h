@@ -471,7 +471,7 @@ extern MONRACE_IDX real_r_idx(monster_type *m_ptr);
 extern void delete_monster_idx(MONSTER_IDX i);
 extern void compact_monsters(player_type *player_ptr, int size);
 extern void wipe_monsters_list(player_type *player_ptr);
-extern MONSTER_IDX m_pop(void);
+extern MONSTER_IDX m_pop(player_type *player_ptr);
 extern errr get_mon_num_prep(monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2);
 extern MONRACE_IDX get_mon_num(DEPTH level);
 extern int lore_do_probe(MONRACE_IDX r_idx);
