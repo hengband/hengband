@@ -1687,7 +1687,7 @@ bool build_tunnel(player_type *player_ptr, POSITION row1, POSITION col1, POSITIO
 					if (is_outer_bold(floor_ptr, y, x))
 					{
 						/* Change the wall to a "solid" wall */
-						place_solid_noperm_bold(player_ptr, y, x);
+						place_bold(player_ptr, y, x, solid_noperm);
 					}
 				}
 			}
@@ -1838,7 +1838,7 @@ static bool set_tunnel(player_type *player_ptr, POSITION *x, POSITION *y, bool a
 				if (is_outer_bold(floor_ptr, j, i))
 				{
 					/* Change the wall to a "solid" wall */
-					place_solid_noperm_bold(player_ptr, j, i);
+					place_bold(player_ptr, j, i, solid_noperm);
 				}
 			}
 		}

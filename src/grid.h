@@ -211,14 +211,14 @@ typedef enum grid_bold_type
 	outer,
 	outer_noperm,
 	solid,
-	solid_perm
+	solid_perm,
+	solid_noperm
 } grid_bold_type;
 
 extern void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type pg_type);
 extern bool darkened_grid(player_type *player_ptr, grid_type *g_ptr);
 extern void delete_monster(player_type *player_ptr, POSITION y, POSITION x);
 extern void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type gh_type);
-void place_solid_noperm_bold(player_type *player_ptr, POSITION y, POSITION x);
 
 /*
  * Get feature mimic from f_info[] (applying "mimic" field)

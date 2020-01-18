@@ -1273,6 +1273,11 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
 		g_ptr->info |= CAVE_SOLID;
 		break;
 	}
+	case solid_noperm:
+	{
+		// No such grid
+		return;
+	}
 	default:
 		return;
 	}
@@ -1294,18 +1299,6 @@ bool darkened_grid(player_type *player_ptr, grid_type *g_ptr)
 		!player_ptr->see_nocto;
 }
 
-
-void place_solid_noperm_bold(player_type *player_ptr, POSITION y, POSITION x)
-{
-	feature_type *f_ptr = &f_info[feat_wall_solid];
-	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	if ((floor_ptr->grid_array[y][x].info & CAVE_VAULT) && permanent_wall(f_ptr))
-		set_cave_feat(floor_ptr, y, x, feat_state(feat_wall_solid, FF_UNPERM));
-	else set_cave_feat(floor_ptr, y, x, feat_wall_solid);
-	floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-	add_cave_info(floor_ptr, y, x, CAVE_SOLID);
-	delete_monster(player_ptr, y, x);
-}
 
 void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type gb_type)
 {
