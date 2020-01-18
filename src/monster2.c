@@ -2166,7 +2166,6 @@ void update_monsters(player_type *player_ptr, bool full)
 
 
 /*!
- * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @param player_ptr プレーヤーへの参照ポインタ
  * @brief カメレオンの王の変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
@@ -2207,7 +2206,6 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
 
 
 /*!
- * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * todo ここにplayer_typeを追加すると関数ポインタ周りの収拾がつかなくなるので保留
  * @brief カメレオンの変身対象となるモンスターかどうか判定する / Hack -- the index of the summoning monster
  * @param r_idx モンスター種族ID
