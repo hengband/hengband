@@ -257,7 +257,7 @@ void place_bound_perm_wall(grid_type *g_ptr)
 	}
 
 	/* Add "solid" perma-wall */
-	place_solid_perm_grid(g_ptr);
+	place_grid(g_ptr, solid_perm);
 }
 
 /*!
@@ -1208,15 +1208,6 @@ bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 m
 }
 
 
-void place_solid_perm_grid(grid_type *g_ptr)
-{
-	g_ptr->feat = feat_permanent;
-	g_ptr->info &= ~(CAVE_MASK);
-	g_ptr->info |= CAVE_SOLID;
-	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
-}
-
-
 void place_grid(grid_type *g_ptr, place_grid_type pg_type)
 {
 	switch (pg_type)
@@ -1277,7 +1268,7 @@ void place_grid(grid_type *g_ptr, place_grid_type pg_type)
 	}
 
 	g_ptr->info &= ~(CAVE_MASK);
-	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
+	if (g_ptr->m_idx > 0) delete_monster_idx(g_ptr->m_idx);
 }
 
 

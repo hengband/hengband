@@ -10,7 +10,7 @@
 * @brief タイプ9の部屋…フラクタルカーブによる洞窟生成 / Type 9 -- Driver routine to create fractal grid
 * @return なし
 */
-bool build_type9(floor_type *floor_ptr)
+bool build_type9(player_type *player_ptr)
 {
 	int grd, roug, cutoff;
 	POSITION xsize, ysize, y0, x0;
@@ -22,6 +22,7 @@ bool build_type9(floor_type *floor_ptr)
 	ysize = randint1(15) * 2 + 6;
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!find_space(floor_ptr, &y0, &x0, ysize + 1, xsize + 1))
 	{
 		/* Limit to the minimum room size, and retry */
@@ -35,7 +36,7 @@ bool build_type9(floor_type *floor_ptr)
 			* Still no space?!
 			* Try normal room
 			*/
-			return build_type1(floor_ptr);
+			return build_type1(player_ptr);
 		}
 	}
 

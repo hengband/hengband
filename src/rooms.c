@@ -2058,7 +2058,7 @@ static bool room_build(player_type *player_ptr, EFFECT_ID typ)
 	switch (typ)
 	{
 		/* Build an appropriate room */
-	case ROOM_T_NORMAL:        return build_type1(floor_ptr);
+	case ROOM_T_NORMAL:        return build_type1(player_ptr);
 	case ROOM_T_OVERLAP:       return build_type2(floor_ptr);
 	case ROOM_T_CROSS:         return build_type3(player_ptr);
 	case ROOM_T_INNER_FEAT:    return build_type4(player_ptr);
@@ -2066,7 +2066,7 @@ static bool room_build(player_type *player_ptr, EFFECT_ID typ)
 	case ROOM_T_PIT:           return build_type6(player_ptr);
 	case ROOM_T_LESSER_VAULT:  return build_type7(player_ptr);
 	case ROOM_T_GREATER_VAULT: return build_type8(player_ptr);
-	case ROOM_T_FRACAVE:       return build_type9(floor_ptr);
+	case ROOM_T_FRACAVE:       return build_type9(player_ptr);
 	case ROOM_T_RANDOM_VAULT:  return build_type10(player_ptr);
 	case ROOM_T_OVAL:          return build_type11(floor_ptr);
 	case ROOM_T_CRYPT:         return build_type12(player_ptr);
