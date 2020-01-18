@@ -3120,6 +3120,9 @@ W:45:40:666:66666
 P:0:25d4:-30:0:20
 F:SPEED | STEALTH | WIS | IMPACT | SHOW_MODS | HIDE_TYPE |
 F:CURSED | HEAVY_CURSE
+D:$It is a very heavy iron ball, likely too cumbersome to be effective as
+D:$ a weapon, with an attached chain and metal ring, ready to be fastened to
+D:$ an ankle or wrist.
 D:不信心者の足にくくりつけられ、その動きを阻害する。
 D:重いが武器としても使えない事はない。
 
