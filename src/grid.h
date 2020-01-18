@@ -201,20 +201,23 @@ extern bool check_local_illumination(player_type *creature_ptr, POSITION y, POSI
 extern bool cave_monster_teleportable_bold(MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode);
 extern bool cave_player_teleportable_bold(POSITION y, POSITION x, BIT_FLAGS mode);
 
-typedef enum place_grid_type
+typedef enum grid_hold_type
 {
 	floor,
 	extra,
+	extra_perm,
 	inner,
 	inner_perm,
 	outer,
 	outer_noperm,
+	solid,
 	solid_perm
-} place_grid_type;
+} grid_hold_type;
 
-extern void place_grid(player_type *player_ptr, grid_type *g_ptr, place_grid_type pg_type);
+extern void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_hold_type pg_type);
 extern bool darkened_grid(player_type *player_ptr, grid_type *g_ptr);
 extern void delete_monster(player_type *player_ptr, POSITION y, POSITION x);
+extern void place_hold(player_type *player_ptr, POSITION y, POSITION x, grid_hold_type gh_type);
 void place_floor_bold(player_type *player_ptr, POSITION y, POSITION x);
 void place_extra_bold(player_type *player_ptr, POSITION y, POSITION x);
 void place_extra_perm_bold(player_type *player_ptr, POSITION y, POSITION x);
