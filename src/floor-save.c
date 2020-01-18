@@ -580,7 +580,7 @@ static void place_pet(player_type *master_ptr)
 				for (j = 1000; j > 0; j--)
 				{
 					scatter(master_ptr, &cy, &cx, master_ptr->y, master_ptr->x, d, 0);
-					if (monster_can_enter(cy, cx, &r_info[party_mon[i].r_idx], 0)) break;
+					if (monster_can_enter(master_ptr, cy, cx, &r_info[party_mon[i].r_idx], 0)) break;
 				}
 				if (j) break;
 			}

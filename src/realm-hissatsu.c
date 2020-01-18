@@ -678,7 +678,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 
 				/* Monster cannot move back? */
-				if (!monster_can_enter(ny, nx, &r_info[m_ptr->r_idx], 0))
+				if (!monster_can_enter(caster_ptr, ny, nx, &r_info[m_ptr->r_idx], 0))
 				{
 					/* -more- */
 					if (i < 2) msg_print(NULL);

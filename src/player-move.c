@@ -1010,7 +1010,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 				py_attack(creature_ptr, y, x, 0);
 				can_move = FALSE;
 			}
-			else if (monster_can_cross_terrain(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat, r_ptr, 0))
+			else if (monster_can_cross_terrain(creature_ptr, floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat, r_ptr, 0))
 			{
 				do_past = TRUE;
 			}

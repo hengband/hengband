@@ -2117,12 +2117,13 @@ void anger_monster(player_type *player_ptr, monster_type *m_ptr)
 /*!
  * @brief モンスターが地形を踏破できるかどうかを返す
  * Check if monster can cross terrain
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param feat 地形ID
  * @param r_ptr モンスター種族構造体の参照ポインタ
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode)
+bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
 	feature_type *f_ptr = &f_info[feat];
 
@@ -2143,7 +2144,7 @@ bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 m
 	if (have_flag(f_ptr->flags, FF_CAN_SWIM) && (r_ptr->flags7 & RF7_CAN_SWIM)) return TRUE;
 	if (have_flag(f_ptr->flags, FF_CAN_PASS))
 	{
-		if ((r_ptr->flags2 & RF2_PASS_WALL) && (!(mode & CEM_RIDING) || p_ptr->pass_wall)) return TRUE;
+		if ((r_ptr->flags2 & RF2_PASS_WALL) && (!(mode & CEM_RIDING) || player_ptr->pass_wall)) return TRUE;
 	}
 
 	if (!have_flag(f_ptr->flags, FF_MOVE)) return FALSE;
@@ -2204,19 +2205,20 @@ bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 m
 /*!
  * @brief 指定された座標の地形をモンスターが踏破できるかどうかを返す
  * Strictly check if monster can enter the grid
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 地形のY座標
  * @param x 地形のX座標
  * @param r_ptr モンスター種族構造体の参照ポインタ
  * @param mode オプション
  * @return 踏破可能ならばTRUEを返す
  */
-bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode)
+bool monster_can_enter(player_type *player_ptr, POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
-	if (player_bold(p_ptr, y, x)) return FALSE;
+	grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
+	if (player_bold(player_ptr, y, x)) return FALSE;
 	if (g_ptr->m_idx) return FALSE;
 
-	return monster_can_cross_terrain(g_ptr->feat, r_ptr, mode);
+	return monster_can_cross_terrain(player_ptr, g_ptr->feat, r_ptr, mode);
 }
 
 

@@ -454,7 +454,7 @@ bool place_quest_monsters(player_type *creature_ptr)
 					f_ptr = &f_info[g_ptr->feat];
 
 					if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) continue;
-					if (!monster_can_enter(y, x, r_ptr, 0)) continue;
+					if (!monster_can_enter(creature_ptr, y, x, r_ptr, 0)) continue;
 					if (distance(y, x, creature_ptr->y, creature_ptr->x) < 10) continue;
 					if (g_ptr->info & CAVE_ICKY) continue;
 					else break;

@@ -2188,7 +2188,7 @@ static bool monster_hook_chameleon_lord(MONRACE_IDX r_idx)
 	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
 		return FALSE;
 
-	if (!monster_can_cross_terrain(floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
+	if (!monster_can_cross_terrain(p_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
 
 	/* Not born */
 	if (!(old_r_ptr->flags7 & RF7_CHAMELEON))
@@ -2228,7 +2228,7 @@ static bool monster_hook_chameleon(MONRACE_IDX r_idx)
 	if ((r_ptr->blow[0].method == RBM_EXPLODE) || (r_ptr->blow[1].method == RBM_EXPLODE) || (r_ptr->blow[2].method == RBM_EXPLODE) || (r_ptr->blow[3].method == RBM_EXPLODE))
 		return FALSE;
 
-	if (!monster_can_cross_terrain(floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
+	if (!monster_can_cross_terrain(p_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, r_ptr, 0)) return FALSE;
 
 	/* Not born */
 	if (!(old_r_ptr->flags7 & RF7_CHAMELEON))
@@ -2483,7 +2483,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
 		if (pattern_tile(y, x)) return FALSE;
 
 		/* Require empty space (if not ghostly) */
-		if (!monster_can_enter(y, x, r_ptr, 0)) return FALSE;
+		if (!monster_can_enter(player_ptr, y, x, r_ptr, 0)) return FALSE;
 	}
 
 	if (!player_ptr->phase_out)
@@ -2867,7 +2867,7 @@ static bool mon_scatter(player_type *player_ptr, MONRACE_IDX r_idx, POSITION *yp
 				monster_race *r_ptr = &r_info[r_idx];
 
 				/* Require empty space (if not ghostly) */
-				if (!monster_can_enter(ny, nx, r_ptr, 0))
+				if (!monster_can_enter(player_ptr, ny, nx, r_ptr, 0))
 					continue;
 			}
 			else
@@ -3266,7 +3266,7 @@ bool alloc_guardian(player_type *player_ptr, bool def_val)
 			continue;
 		}
 
-		if (!monster_can_cross_terrain(floor_ptr->grid_array[oy][ox].feat, &r_info[guardian], 0))
+		if (!monster_can_cross_terrain(player_ptr, floor_ptr->grid_array[oy][ox].feat, &r_info[guardian], 0))
 		{
 			try_count++;
 			continue;

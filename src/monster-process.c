@@ -728,7 +728,7 @@ static bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp
 			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Skip locations in a wall */
-			if (!monster_can_cross_terrain(g_ptr->feat, &r_info[m_ptr->r_idx], (m_idx == target_ptr->riding) ? CEM_RIDING : 0)) continue;
+			if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, &r_info[m_ptr->r_idx], (m_idx == target_ptr->riding) ? CEM_RIDING : 0)) continue;
 
 			/* Check for "availability" (if monsters can flow) */
 			if (!(m_ptr->mflag2 & MFLAG2_NOFLOW))
@@ -815,7 +815,7 @@ static bool find_hiding(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp
 			if (!in_bounds(floor_ptr, y, x)) continue;
 
 			/* Skip occupied locations */
-			if (!monster_can_enter(y, x, r_ptr, 0)) continue;
+			if (!monster_can_enter(target_ptr, y, x, r_ptr, 0)) continue;
 
 			/* Check for hidden, available grid */
 			if (projectable(target_ptr, target_ptr->y, target_ptr->x, y, x) && clean_shot(target_ptr, fy, fx, y, x, FALSE))
@@ -911,7 +911,7 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 				g_ptr = &floor_ptr->grid_array[yy][xx];
 
 				/* Check grid */
-				if (monster_can_cross_terrain(g_ptr->feat, r_ptr, 0))
+				if (monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, 0))
 				{
 					/* One more room grid */
 					room++;
@@ -954,7 +954,7 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 				if (!in_bounds2(floor_ptr, y2, x2)) continue;
 
 				/* Ignore filled grids */
-				if (!monster_can_enter(y2, x2, r_ptr, 0)) continue;
+				if (!monster_can_enter(target_ptr, y2, x2, r_ptr, 0)) continue;
 
 				/* Try to fill this hole */
 				break;
@@ -1756,7 +1756,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		/* Access that grid */
 		g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
 		f_ptr = &f_info[g_ptr->feat];
-		can_cross = monster_can_cross_terrain(g_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0);
+		can_cross = monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0);
 
 		/* Access that grid's contents */
 		y_ptr = &target_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
@@ -2055,7 +2055,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			else if ((r_ptr->flags2 & RF2_MOVE_BODY) && !(r_ptr->flags1 & RF1_NEVER_MOVE) &&
 				(r_ptr->mexp > z_ptr->mexp) &&
 				can_cross && (g_ptr->m_idx != target_ptr->riding) &&
-				monster_can_cross_terrain(target_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0))
+				monster_can_cross_terrain(target_ptr, target_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0))
 			{
 				/* Allow movement */
 				do_move = TRUE;
@@ -2105,7 +2105,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 		if (must_alter_to_move && (r_ptr->flags7 & RF7_AQUATIC))
 		{
-			if (!monster_can_cross_terrain(g_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0))
+			if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0))
 			{
 				/* Assume no move allowed */
 				do_move = FALSE;
