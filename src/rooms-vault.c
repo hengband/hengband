@@ -377,7 +377,7 @@ static void build_vault(player_type *player_ptr, POSITION yval, POSITION xval, P
 			{
 				/* Granite wall (outer) */
 			case '%':
-				place_outer_noperm_grid(g_ptr);
+				place_grid(g_ptr, outer_noperm);
 				break;
 
 				/* Granite wall (inner) */
