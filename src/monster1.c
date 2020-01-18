@@ -3097,7 +3097,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 	if (visible && (dump_item || dump_gold))
 	{
 		/* Take notes on treasure */
-		lore_treasure(m_idx, dump_item, dump_gold);
+		lore_treasure(player_ptr, m_idx, dump_item, dump_gold);
 	}
 
 	/* Only process "Quest Monsters" */

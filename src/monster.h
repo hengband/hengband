@@ -475,7 +475,7 @@ extern MONSTER_IDX m_pop(player_type *player_ptr);
 extern errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2);
 extern MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level);
 extern int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx);
-extern void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold);
+extern void lore_treasure(player_type *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold);
 extern void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full);
 extern void update_monsters(bool full);
 extern bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);

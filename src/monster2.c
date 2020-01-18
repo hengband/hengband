@@ -1733,6 +1733,7 @@ int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx)
 
 /*!
  * @brief モンスターの撃破に伴うドロップ情報の保管処理 / Take note that the given monster just dropped some treasure
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスター情報のID
  * @param num_item 手に入れたアイテム数
  * @param num_gold 手に入れた財宝の単位数
@@ -1748,9 +1749,9 @@ int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx)
  * gold and items are dropped, and remembers that information to be
  * described later by the monster recall code.
  */
-void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold)
+void lore_treasure(player_type *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold)
 {
-	monster_type *m_ptr = &p_ptr->current_floor_ptr->m_list[m_idx];
+	monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
 
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -1766,9 +1767,9 @@ void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold
 	if (r_ptr->flags1 & (RF1_DROP_GREAT)) r_ptr->r_flags1 |= (RF1_DROP_GREAT);
 
 	/* Update monster recall window */
-	if (p_ptr->monster_race_idx == m_ptr->r_idx)
+	if (player_ptr->monster_race_idx == m_ptr->r_idx)
 	{
-		p_ptr->window |= (PW_MONSTER);
+		player_ptr->window |= (PW_MONSTER);
 	}
 }
 
