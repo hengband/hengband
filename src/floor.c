@@ -224,8 +224,8 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
 		place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
 
 		/* set boundarys so don't get wide doors */
-		place_solid_bold(player_ptr, y, x - 1);
-		place_solid_bold(player_ptr, y, x + 1);
+		place_bold(player_ptr, y, x - 1, solid);
+		place_bold(player_ptr, y, x + 1, solid);
 	}
 
 	/* look at:
@@ -243,8 +243,8 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
 		place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
 
 		/* set boundarys so don't get wide doors */
-		place_solid_bold(player_ptr, y - 1, x);
-		place_solid_bold(player_ptr, y + 1, x);
+		place_bold(player_ptr, y - 1, x, solid);
+		place_bold(player_ptr, y + 1, x, solid);
 	}
 }
 
