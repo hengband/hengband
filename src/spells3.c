@@ -1315,7 +1315,7 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 	object_desc(o_name, o_ptr, OD_NAME_ONLY);
 	msg_format(_("%^sがあなたの足元に飛んできた。", "%^s flies through the air to your feet."), o_name);
 
-	note_spot(caster_ptr->y, caster_ptr->x);
+	note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
 	caster_ptr->redraw |= PR_MAP;
 }
 

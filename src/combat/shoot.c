@@ -550,7 +550,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 			if (snipe_type == SP_LITE)
 			{
 				shooter_ptr->current_floor_ptr->grid_array[ny][nx].info |= (CAVE_GLOW);
-				note_spot(ny, nx);
+				note_spot(shooter_ptr, ny, nx);
 				lite_spot(ny, nx);
 			}
 
@@ -587,7 +587,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 			if (snipe_type == SP_EVILNESS)
 			{
 				shooter_ptr->current_floor_ptr->grid_array[ny][nx].info &= ~(CAVE_GLOW | CAVE_MARK);
-				note_spot(ny, nx);
+				note_spot(shooter_ptr, ny, nx);
 				lite_spot(ny, nx);
 			}
 
@@ -723,7 +723,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 					if (snipe_type == SP_HOLYNESS)
 					{
 						shooter_ptr->current_floor_ptr->grid_array[ny][nx].info |= (CAVE_GLOW);
-						note_spot(ny, nx);
+						note_spot(shooter_ptr, ny, nx);
 						lite_spot(ny, nx);
 					}
 

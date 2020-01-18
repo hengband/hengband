@@ -676,7 +676,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
 	if (!have_flag(f_ptr->flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 	if (g_ptr->m_idx) update_monster(player_ptr, g_ptr->m_idx, FALSE);
 
-	note_spot(y, x);
+	note_spot(player_ptr, y, x);
 	lite_spot(y, x);
 
 	/* Check if los has changed */
@@ -710,7 +710,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
 		if (player_has_los_grid(cc_ptr))
 		{
 			if (cc_ptr->m_idx) update_monster(player_ptr, cc_ptr->m_idx, FALSE);
-			note_spot(yy, xx);
+			note_spot(player_ptr, yy, xx);
 			lite_spot(yy, xx);
 		}
 
@@ -1172,7 +1172,7 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
 			}
 			else
 			{
-				place_gold(floor_ptr, j, k);
+				place_gold(player_ptr, j, k);
 			}
 
 			/* Placement accomplished */
@@ -1603,7 +1603,7 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
 	o_ptr->next_o_idx = g_ptr->o_idx;
 
 	g_ptr->o_idx = o_idx;
-	note_spot(y, x);
+	note_spot(owner_ptr, y, x);
 	lite_spot(y, x);
 }
 
@@ -1611,16 +1611,17 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
 /*!
  * @brief フロアの指定位置に生成階に応じた財宝オブジェクトの生成を行う。
  * Places a treasure (Gold or Gems) at given location
- * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 配置したいフロアのY座標
  * @param x 配置したいフロアのX座標
  * @return 生成に成功したらTRUEを返す。
  * @details
  * The location must be a legal, clean, floor grid.
  */
-void place_gold(floor_type *floor_ptr, POSITION y, POSITION x)
+void place_gold(player_type *player_ptr, POSITION y, POSITION x)
 {
 	/* Acquire grid */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Paranoia -- check bounds */
@@ -1657,7 +1658,7 @@ void place_gold(floor_type *floor_ptr, POSITION y, POSITION x)
 	o_ptr->next_o_idx = g_ptr->o_idx;
 
 	g_ptr->o_idx = o_idx;
-	note_spot(y, x);
+	note_spot(player_ptr, y, x);
 	lite_spot(y, x);
 }
 

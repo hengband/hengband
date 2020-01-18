@@ -461,7 +461,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			cave_alter_feat(caster_ptr, y, x, FF_SPIKE);
 			g_ptr->mimic = old_mimic;
 
-			note_spot(y, x);
+			note_spot(caster_ptr, y, x);
 			lite_spot(y, x);
 
 			/* Check line of sight */
@@ -523,7 +523,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
 		g_ptr->info |= CAVE_OBJECT;
 		g_ptr->mimic = feat_glyph;
-		note_spot(y, x);
+		note_spot(caster_ptr, y, x);
 		lite_spot(y, x);
 		break;
 	}
@@ -576,7 +576,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		if (!(d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 		{
 			g_ptr->info |= (CAVE_GLOW);
-			note_spot(y, x);
+			note_spot(caster_ptr, y, x);
 			lite_spot(y, x);
 			update_local_illumination(caster_ptr, y, x);
 
@@ -636,7 +636,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				/* Forget */
 				g_ptr->info &= ~(CAVE_MARK);
 
-				note_spot(y, x);
+				note_spot(caster_ptr, y, x);
 			}
 
 			lite_spot(y, x);

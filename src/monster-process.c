@@ -1925,7 +1925,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				/* Allow movement */
 				do_move = TRUE;
 
-				note_spot(ny, nx);
+				note_spot(target_ptr, ny, nx);
 			}
 		}
 		else if (do_move && is_explosive_rune_grid(g_ptr) &&
@@ -1959,7 +1959,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				g_ptr->info &= ~(CAVE_OBJECT);
 				g_ptr->mimic = 0;
 
-				note_spot(ny, nx);
+				note_spot(target_ptr, ny, nx);
 				lite_spot(ny, nx);
 
 				if (!monster_is_valid(m_ptr)) return;

@@ -2557,7 +2557,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
 			g_ptr->info &= ~(CAVE_OBJECT);
 			g_ptr->mimic = 0;
 
-			note_spot(y, x);
+			note_spot(player_ptr, y, x);
 		}
 		else return FALSE;
 	}
@@ -2819,7 +2819,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
 	g_ptr->info &= ~(CAVE_OBJECT);
 	g_ptr->mimic = 0;
 
-	note_spot(y, x);
+	note_spot(player_ptr, y, x);
 	lite_spot(y, x);
 
 	return TRUE;

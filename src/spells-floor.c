@@ -192,7 +192,7 @@ bool warding_glyph(player_type *caster_ptr)
 	caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info |= CAVE_OBJECT;
 	caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].mimic = feat_glyph;
 
-	note_spot(caster_ptr->y, caster_ptr->x);
+	note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
 	lite_spot(caster_ptr->y, caster_ptr->x);
 
 	return TRUE;
@@ -202,10 +202,14 @@ bool warding_glyph(player_type *caster_ptr)
 /*!
  * @brief 爆発のルーン設置処理 /
  * Leave an "explosive rune" which prevents monster movement
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param y 設置場所
+ * @param x 設置場所
  * @return 実際に設置が行われた場合TRUEを返す
  */
-bool explosive_rune(floor_type *floor_ptr, POSITION y, POSITION x)
+bool explosive_rune(player_type *caster_ptr, POSITION y, POSITION x)
 {
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	if (!cave_clean_bold(floor_ptr, y, x))
 	{
 		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
@@ -216,7 +220,7 @@ bool explosive_rune(floor_type *floor_ptr, POSITION y, POSITION x)
 	floor_ptr->grid_array[y][x].info |= CAVE_OBJECT;
 	floor_ptr->grid_array[y][x].mimic = feat_explosive_rune;
 
-	note_spot(y, x);
+	note_spot(caster_ptr, y, x);
 	lite_spot(y, x);
 
 	return TRUE;
@@ -242,7 +246,7 @@ bool place_mirror(player_type *caster_ptr)
 	/* Turn on the light */
 	caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info |= CAVE_GLOW;
 
-	note_spot(caster_ptr->y, caster_ptr->x);
+	note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
 	lite_spot(caster_ptr->y, caster_ptr->x);
 	update_local_illumination(caster_ptr, caster_ptr->y, caster_ptr->x);
 

@@ -42,7 +42,7 @@ void day_break(player_type *subject_ptr)
 				/* Hack -- Memorize lit grids if allowed */
 				if (view_perma_grids) g_ptr->info |= (CAVE_MARK);
 
-				note_spot(y, x);
+				note_spot(subject_ptr, y, x);
 			}
 		}
 	}
@@ -87,7 +87,7 @@ void night_falls(player_type *subject_ptr)
 						/* Forget the normal floor grid */
 						g_ptr->info &= ~(CAVE_MARK);
 
-						note_spot(y, x);
+						note_spot(subject_ptr, y, x);
 					}
 				}
 			}

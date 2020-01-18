@@ -3859,7 +3859,7 @@ void delayed_visual_update(player_type *player_ptr)
 		if (!(g_ptr->info & CAVE_REDRAW)) continue;
 
 		/* If required, note */
-		if (g_ptr->info & CAVE_NOTE) note_spot(y, x);
+		if (g_ptr->info & CAVE_NOTE) note_spot(player_ptr, y, x);
 
 		lite_spot(y, x);
 

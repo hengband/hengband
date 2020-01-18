@@ -193,7 +193,7 @@ void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x)
 		/* No longer hidden */
 		g_ptr->mimic = 0;
 
-		note_spot(y, x);
+		note_spot(trapped_ptr, y, x);
 		lite_spot(y, x);
 	}
 }

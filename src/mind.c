@@ -1715,7 +1715,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		(void)teleport_swap(caster_ptr, dir);
 		break;
 	case 15:
-		explosive_rune(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x);
+		explosive_rune(caster_ptr, caster_ptr->y, caster_ptr->x);
 		break;
 	case 16:
 		(void)set_kabenuke(caster_ptr, randint1(plev/2) + plev/2, FALSE);

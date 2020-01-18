@@ -338,7 +338,7 @@ bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
 		if ((C)->current_floor_ptr->grid_array[(Y)][(X)].m_idx) update_monster((C), (C)->current_floor_ptr->grid_array[(Y)][(X)].m_idx, FALSE); \
 \
 		/* Notice and redraw */ \
-		note_spot((Y), (X)); \
+		note_spot((C), (Y), (X)); \
 		lite_spot((Y), (X)); \
 	} \
 }
@@ -515,13 +515,13 @@ void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y
  * optimized primarily for the most common cases, that is, for the
  * non-marked floor grids.
  */
-void note_spot(POSITION y, POSITION x)
+void note_spot(player_type *player_ptr, POSITION y, POSITION x)
 {
-	grid_type *g_ptr = &p_ptr->current_floor_ptr->grid_array[y][x];
+	grid_type *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Blind players see nothing */
-	if (p_ptr->blind) return;
+	if (player_ptr->blind) return;
 
 	/* Analyze non-torch-lit grids */
 	if (!(g_ptr->info & (CAVE_LITE | CAVE_MNLT)))
@@ -533,7 +533,7 @@ void note_spot(POSITION y, POSITION x)
 		if ((g_ptr->info & (CAVE_GLOW | CAVE_MNDK)) != CAVE_GLOW)
 		{
 			/* Not Ninja */
-			if (!p_ptr->see_nocto) return;
+			if (!player_ptr->see_nocto) return;
 		}
 	}
 
@@ -541,7 +541,7 @@ void note_spot(POSITION y, POSITION x)
 	/* Hack -- memorize objects */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
-		object_type *o_ptr = &p_ptr->current_floor_ptr->o_list[this_o_idx];
+		object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
 
 		/* Memorize objects */
@@ -560,7 +560,7 @@ void note_spot(POSITION y, POSITION x)
 		{
 			/* Option -- memorize all torch-lit floors */
 			if (view_torch_grids &&
-				((g_ptr->info & (CAVE_LITE | CAVE_MNLT)) || p_ptr->see_nocto))
+				((g_ptr->info & (CAVE_LITE | CAVE_MNLT)) || player_ptr->see_nocto))
 			{
 				g_ptr->info |= (CAVE_MARK);
 			}
@@ -585,13 +585,13 @@ void note_spot(POSITION y, POSITION x)
 		}
 
 		/* Memorize walls seen by noctovision of Ninja */
-		else if (p_ptr->see_nocto)
+		else if (player_ptr->see_nocto)
 		{
 			g_ptr->info |= (CAVE_MARK);
 		}
 
 		/* Memorize certain non-torch-lit wall grids */
-		else if (check_local_illumination(p_ptr, y, x))
+		else if (check_local_illumination(player_ptr, y, x))
 		{
 			g_ptr->info |= (CAVE_MARK);
 		}
@@ -1002,7 +1002,7 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, int action
 		if (have_flag(old_f_ptr->flags, FF_HAS_GOLD) && !have_flag(f_ptr->flags, FF_HAS_GOLD))
 		{
 			/* Place some gold */
-			place_gold(floor_ptr, y, x);
+			place_gold(player_ptr, y, x);
 			found = TRUE;
 		}
 
@@ -1051,7 +1051,7 @@ void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x)
 		update_local_illumination(caster_ptr, y, x);
 	}
 
-	note_spot(y, x);
+	note_spot(caster_ptr, y, x);
 
 	lite_spot(y, x);
 }

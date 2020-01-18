@@ -4469,7 +4469,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 		done = TRUE;
 	}
 
-	note_spot(by, bx);
+	note_spot(owner_ptr, by, bx);
 	lite_spot(by, bx);
 	sound(SOUND_DROP);
 

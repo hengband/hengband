@@ -1625,7 +1625,7 @@ static void do_cmd_wiz_create_feature(player_type *creature_ptr)
 	else if (have_flag(f_ptr->flags, FF_MIRROR))
 		g_ptr->info |= (CAVE_GLOW | CAVE_OBJECT);
 
-	note_spot(y, x);
+	note_spot(creature_ptr, y, x);
 	lite_spot(y, x);
 	creature_ptr->update |= (PU_FLOW);
 

@@ -1514,7 +1514,7 @@ static void cave_temp_room_lite(player_type *caster_ptr)
 			}
 		}
 
-		note_spot(y, x);
+		note_spot(caster_ptr, y, x);
 		lite_spot(y, x);
 		update_local_illumination(caster_ptr, y, x);
 	}
@@ -1583,7 +1583,7 @@ static void cave_temp_room_unlite(player_type *caster_ptr)
 		{
 			/* Forget the grid */
 			if (!view_torch_grids) g_ptr->info &= ~(CAVE_MARK);
-			note_spot(y, x);
+			note_spot(caster_ptr, y, x);
 		}
 
 		/* Process affected monsters */

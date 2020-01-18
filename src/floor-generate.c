@@ -377,7 +377,7 @@ static void alloc_object(player_type *owner_ptr, int set, EFFECT_ID typ, int num
 
 			case ALLOC_TYP_GOLD:
 			{
-				place_gold(floor_ptr, y, x);
+				place_gold(owner_ptr, y, x);
 				break;
 			}
 
