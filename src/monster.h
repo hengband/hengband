@@ -445,7 +445,7 @@ extern monsterrace_hook_type get_monster_hook(player_type *player_ptr);
 extern monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POSITION x);
 extern void set_friendly(monster_type *m_ptr);
 extern void set_pet(player_type *player_ptr, monster_type *m_ptr);
-extern void set_hostile(monster_type *m_ptr);
+extern void set_hostile(player_type *player_ptr, monster_type *m_ptr);
 extern void anger_monster(player_type *player_ptr, monster_type *m_ptr);
 
 /*

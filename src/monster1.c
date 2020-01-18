@@ -2083,9 +2083,9 @@ void set_pet(player_type *player_ptr, monster_type *m_ptr)
  * @param m_ptr モンスター情報構造体の参照ポインタ
  * @return なし
  */
-void set_hostile(monster_type *m_ptr)
+void set_hostile(player_type *player_ptr, monster_type *m_ptr)
 {
-	if (p_ptr->phase_out) return;
+	if (player_ptr->phase_out) return;
 	m_ptr->smart &= ~SM_PET;
 	m_ptr->smart &= ~SM_FRIENDLY;
 }
@@ -2106,7 +2106,7 @@ void anger_monster(player_type *player_ptr, monster_type *m_ptr)
 
 	monster_desc(player_ptr, m_name, m_ptr, 0);
 	msg_format(_("%^sは怒った！", "%^s gets angry!"), m_name);
-	set_hostile(m_ptr);
+	set_hostile(player_ptr, m_ptr);
 	chg_virtue(player_ptr, V_INDIVIDUALISM, 1);
 	chg_virtue(player_ptr, V_HONOUR, -1);
 	chg_virtue(player_ptr, V_JUSTICE, -1);

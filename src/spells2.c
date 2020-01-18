@@ -1115,7 +1115,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 				msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
 			}
 
-			set_hostile(m_ptr);
+			set_hostile(caster_ptr, m_ptr);
 		}
 
 		if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;

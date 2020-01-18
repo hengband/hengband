@@ -1461,7 +1461,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			msg_format(_("%^sは突然敵にまわった！", "%^s suddenly becomes hostile!"), m_name);
 		}
 
-		set_hostile(m_ptr);
+		set_hostile(target_ptr, m_ptr);
 	}
 
 	/* Get the origin */
