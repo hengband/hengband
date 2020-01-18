@@ -5056,10 +5056,10 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	while (TRUE)
 	{
 		/* Hack -- Compact the monster list occasionally */
-		if ((floor_ptr->m_cnt + 32 > current_world_ptr->max_m_idx) && !player_ptr->phase_out) compact_monsters(64);
+		if ((floor_ptr->m_cnt + 32 > current_world_ptr->max_m_idx) && !player_ptr->phase_out) compact_monsters(player_ptr, 64);
 
 		/* Hack -- Compress the monster list occasionally */
-		if ((floor_ptr->m_cnt + 32 < floor_ptr->m_max) && !player_ptr->phase_out) compact_monsters(0);
+		if ((floor_ptr->m_cnt + 32 < floor_ptr->m_max) && !player_ptr->phase_out) compact_monsters(player_ptr, 0);
 
 
 		/* Hack -- Compact the object list occasionally */

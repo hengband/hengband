@@ -1,4 +1,5 @@
 ﻿/*!
+* todo main関数を含むファイルの割に長過ぎる。main-win-utils.cなどといった形で分割したい
 * @file main-win.c
 * @brief Windows版固有実装(メインエントリポイント含む)
 * @date 2018/03/16

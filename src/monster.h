@@ -469,7 +469,7 @@ extern void reset_target(monster_type *m_ptr);
 extern monster_race *real_r_ptr(monster_type *m_ptr);
 extern MONRACE_IDX real_r_idx(monster_type *m_ptr);
 extern void delete_monster_idx(MONSTER_IDX i);
-extern void compact_monsters(int size);
+extern void compact_monsters(player_type *player_ptr, int size);
 extern void wipe_m_list(void);
 extern MONSTER_IDX m_pop(void);
 extern errr get_mon_num_prep(monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2);

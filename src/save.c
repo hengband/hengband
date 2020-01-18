@@ -1147,7 +1147,7 @@ static bool wr_savefile_new(player_type *player_ptr)
 	compact_objects(player_ptr, 0);
 
 	/* Compact the monsters */
-	compact_monsters(0);
+	compact_monsters(player_ptr, 0);
 
 	/* Guess at the current time */
 	u32b now = (u32b)time((time_t *)0);
@@ -1888,7 +1888,7 @@ static bool save_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 	/* Compact the objects */
 	compact_objects(player_ptr, 0);
 	/* Compact the monsters */
-	compact_monsters(0);
+	compact_monsters(player_ptr, 0);
 
 	/*** Actually write the file ***/
 	/* Initial value of xor_byte */

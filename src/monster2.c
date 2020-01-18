@@ -260,6 +260,7 @@ static void compact_monsters_aux(player_type *player_ptr, MONSTER_IDX i1, MONSTE
 
 /*!
  * @brief モンスター情報配列を圧縮する / Compact and Reorder the monster list
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param size 圧縮後のモンスター件数目標
  * @return なし
  * @details
@@ -272,7 +273,7 @@ static void compact_monsters_aux(player_type *player_ptr, MONSTER_IDX i1, MONSTE
  * After "compacting" (if needed), we "reorder" the monsters into a more
  * compact order, and we reset the allocation info, and the "live" array.
  */
-void compact_monsters(int size)
+void compact_monsters(player_type *player_ptr, int size)
 {
 	MONSTER_IDX i;
 	int num, cnt;
@@ -282,7 +283,7 @@ void compact_monsters(int size)
 	if (size) msg_print(_("モンスター情報を圧縮しています...", "Compacting monsters..."));
 
 	/* Compact at least 'size' objects */
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (num = 0, cnt = 1; num < size; cnt++)
 	{
 		/* Get more vicious each iteration */
@@ -304,7 +305,7 @@ void compact_monsters(int size)
 			/* Hack -- High level monsters start out "immune" */
 			if (r_ptr->level > cur_lev) continue;
 
-			if (i == p_ptr->riding) continue;
+			if (i == player_ptr->riding) continue;
 
 			/* Ignore nearby monsters */
 			if ((cur_dis > 0) && (m_ptr->cdis < cur_dis)) continue;
@@ -325,7 +326,7 @@ void compact_monsters(int size)
 			{
 				GAME_TEXT m_name[MAX_NLEN];
 				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
-				exe_write_diary(p_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_COMPACT, m_name);
+				exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_COMPACT, m_name);
 			}
 
 			delete_monster_idx(i);
@@ -346,7 +347,7 @@ void compact_monsters(int size)
 		if (m_ptr->r_idx) continue;
 
 		/* Move last monster into open hole */
-		compact_monsters_aux(p_ptr, floor_ptr->m_max - 1, i);
+		compact_monsters_aux(player_ptr, floor_ptr->m_max - 1, i);
 
 		/* Compress "floor_ptr->m_max" */
 		floor_ptr->m_max--;
