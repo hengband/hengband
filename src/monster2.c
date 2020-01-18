@@ -2898,6 +2898,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
 
 /*!
  * @brief モンスター1体を目標地点に可能な限り近い位置に生成する / improved version of scatter() for place monster
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param r_idx 生成モンスター種族
  * @param yp 結果生成位置y座標
  * @param xp 結果生成位置x座標
@@ -2907,7 +2908,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
  * @return 成功したらtrue
  *
  */
-static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist)
+static bool mon_scatter(player_type *player_ptr, MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION max_dist)
 {
 	POSITION place_x[MON_SCAT_MAXD];
 	POSITION place_y[MON_SCAT_MAXD];
@@ -2921,7 +2922,7 @@ static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION 
 	for (i = 0; i < MON_SCAT_MAXD; i++)
 		num[i] = 0;
 
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (nx = x - max_dist; nx <= x + max_dist; nx++)
 	{
 		for (ny = y - max_dist; ny <= y + max_dist; ny++)
@@ -2930,7 +2931,7 @@ static bool mon_scatter(MONRACE_IDX r_idx, POSITION *yp, POSITION *xp, POSITION 
 			if (!in_bounds(floor_ptr, ny, nx)) continue;
 
 			/* Require "line of projection" */
-			if (!projectable(p_ptr, y, x, ny, nx)) continue;
+			if (!projectable(player_ptr, y, x, ny, nx)) continue;
 
 			if (r_idx > 0)
 			{
@@ -3513,7 +3514,7 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (floor_ptr->inside_arena) return FALSE;
 
-	if (!mon_scatter(0, &y, &x, y1, x1, 2)) return FALSE;
+	if (!mon_scatter(player_ptr, 0, &y, &x, y1, x1, 2)) return FALSE;
 
 	/* Save the summoner */
 	summon_specific_who = who;
@@ -3570,7 +3571,7 @@ bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSITION oy
 
 	if (player_ptr->current_floor_ptr->inside_arena) return FALSE;
 
-	if (!mon_scatter(r_idx, &y, &x, oy, ox, 2)) return FALSE;
+	if (!mon_scatter(player_ptr, r_idx, &y, &x, oy, ox, 2)) return FALSE;
 
 	/* Place it (allow groups) */
 	return place_monster_aux(player_ptr, who, y, x, r_idx, (mode | PM_NO_KAGE));
@@ -3593,7 +3594,7 @@ bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BI
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	POSITION y, x;
 
-	if (!mon_scatter(m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1))
+	if (!mon_scatter(player_ptr, m_ptr->r_idx, &y, &x, m_ptr->fy, m_ptr->fx, 1))
 		return FALSE;
 
 	if (m_ptr->mflag2 & MFLAG2_NOPET) mode |= PM_NO_PET;
