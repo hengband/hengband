@@ -693,7 +693,7 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 #endif			
 			for (int n = 0; n < A_MAX; n++)
 			{
-				bool is_reinforced = r_ptr->reinforce_id[n];
+				bool is_reinforced = r_ptr->reinforce_id[n] > 0;
 				is_reinforced &= r_ptr->reinforce_dd[n];
 				is_reinforced &= r_ptr->reinforce_ds[n];
 				if (!is_reinforced) continue;
@@ -739,7 +739,7 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 	if (flags4 & RF4_SHOOT)
 	{
-		for (int r = 0, m = 0; m < 4; m++)
+		for (int m = 0; m < 4; m++)
 		{
 			if (r_ptr->blow[m].method != RBM_SHOOT) continue;
 
@@ -1701,7 +1701,7 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		d1 = r_ptr->blow[m].d_dice;
 		d2 = r_ptr->blow[m].d_side;
 
-		concptr p;
+		concptr p = NULL;
 		switch (method)
 		{
 		case RBM_HIT:		p = _("殴る", "hit"); break;
@@ -1730,7 +1730,7 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		case RBM_SHOW:  	p = _("歌う", "sing"); break;
 		}
 
-		concptr q;
+		concptr q = NULL;
 		switch (effect)
 		{
 		case RBE_SUPERHURT: q = _("強力に攻撃する", "slaughter"); break;
@@ -1786,7 +1786,7 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 		/* Describe the method */
 		/* XXしてYYし/XXしてYYする/XXし/XXする */
-		if (q) jverb(p, jverb_buf, JVERB_TO);
+		if (!q) jverb(p, jverb_buf, JVERB_TO);
 		else if (attack_numbers != count - 1) jverb(p, jverb_buf, JVERB_AND);
 		else strcpy(jverb_buf, p);
 
@@ -2778,7 +2778,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
 		case '|':
 		{
-			if (m_ptr->r_idx = MON_STORMBRINGER) break;
+			if (m_ptr->r_idx == MON_STORMBRINGER) break;
 			q_ptr = &forge;
 			object_wipe(q_ptr);
 
