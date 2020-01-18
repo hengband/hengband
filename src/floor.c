@@ -53,7 +53,7 @@ bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x)
  * Line 2 -- forbid normal monsters
  * Line 3 -- forbid the player
  */
-bool is_cave_empty_bold(player_type *player_ptr, POSITION x, POSITION y)
+bool is_cave_empty_bold(player_type *player_ptr, POSITION y, POSITION x)
 {
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	bool is_empty_grid = cave_have_flag_bold(floor_ptr, y, x, FF_PLACE);
