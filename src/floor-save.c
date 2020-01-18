@@ -373,7 +373,7 @@ static void build_dead_end(player_type *creature_ptr)
 		for (x = 0; x < MAX_WID; x++)
 		{
 			/* Create "solid" perma-wall */
-			place_solid_perm_bold(creature_ptr->current_floor_ptr, y, x);
+			place_solid_perm_bold(creature_ptr, y, x);
 		}
 	}
 
@@ -382,7 +382,7 @@ static void build_dead_end(player_type *creature_ptr)
 	creature_ptr->x = creature_ptr->current_floor_ptr->width / 2;
 
 	/* Give one square */
-	place_floor_bold(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x);
+	place_floor_bold(creature_ptr, creature_ptr->y, creature_ptr->x);
 
 	wipe_generate_random_floor_flags(creature_ptr->current_floor_ptr);
 }
@@ -420,7 +420,7 @@ static void preserve_pet(player_type *master_ptr)
 			(void)COPY(&party_mon[0], m_ptr, monster_type);
 
 			/* Delete from this floor */
-			delete_monster_idx(master_ptr->riding);
+			delete_monster_idx(master_ptr, master_ptr->riding);
 		}
 	}
 
@@ -473,7 +473,7 @@ static void preserve_pet(player_type *master_ptr)
 			num++;
 
 			/* Delete from this floor */
-			delete_monster_idx(i);
+			delete_monster_idx(master_ptr, i);
 		}
 	}
 
@@ -512,7 +512,7 @@ static void preserve_pet(player_type *master_ptr)
 				msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
 			}
 
-			delete_monster_idx(i);
+			delete_monster_idx(master_ptr, i);
 		}
 	}
 }
@@ -933,7 +933,7 @@ void leave_floor(player_type *creature_ptr)
 		    (r_ptr->flags7 & RF7_NAZGUL)) continue;
 
 		/* Delete non-unique quest monsters */
-		delete_monster_idx(i);
+		delete_monster_idx(creature_ptr, i);
 	}
 
 	/* Check if there is a same item */
@@ -1254,7 +1254,7 @@ void change_floor(player_type *creature_ptr)
 				if (r_ptr->floor_id != new_floor_id)
 				{
 					/* Disapper from here */
-					delete_monster_idx(i);
+					delete_monster_idx(creature_ptr, i);
 				}
 			}
 

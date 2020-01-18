@@ -630,7 +630,7 @@ void wilderness_gen(player_type *creature_ptr)
 
 				if (g_ptr->m_idx)
 				{
-					delete_monster_idx(g_ptr->m_idx);
+					delete_monster_idx(creature_ptr, g_ptr->m_idx);
 				}
 
 				creature_ptr->oldpy = y;
@@ -653,7 +653,7 @@ void wilderness_gen(player_type *creature_ptr)
 
 				if (g_ptr->m_idx)
 				{
-					delete_monster_idx(g_ptr->m_idx);
+					delete_monster_idx(creature_ptr, g_ptr->m_idx);
 				}
 
 				creature_ptr->oldpy = y;

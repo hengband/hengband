@@ -1304,7 +1304,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			exe_write_diary(target_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name);
 		}
 
-		delete_monster_idx(m_idx);
+		delete_monster_idx(target_ptr, m_idx);
 
 		return;
 	}
@@ -1333,7 +1333,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			/* Generate treasure, etc */
 			monster_death(target_ptr, m_idx, FALSE);
 
-			delete_monster_idx(m_idx);
+			delete_monster_idx(target_ptr, m_idx);
 			if (sad)
 			{
 				msg_print(_("少しの間悲しい気分になった。", "You feel sad for a moment."));
@@ -1393,7 +1393,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				}
 
 				check_quest_completion(target_ptr, m_ptr);
-				delete_monster_idx(m_idx);
+				delete_monster_idx(target_ptr, m_idx);
 				return;
 			}
 		}

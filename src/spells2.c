@@ -1085,7 +1085,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
 		}
 
-		delete_monster_idx(m_idx);
+		delete_monster_idx(caster_ptr, m_idx);
 	}
 
 	if (resist && player_cast)
@@ -1426,7 +1426,7 @@ void discharge_minion(player_type *caster_ptr)
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_desc(caster_ptr, m_name, m_ptr, 0x00);
 			msg_format(_("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", "%^s resists being blasted and runs away."), m_name);
-			delete_monster_idx(i);
+			delete_monster_idx(caster_ptr, i);
 			continue;
 		}
 
@@ -1445,7 +1445,7 @@ void discharge_minion(player_type *caster_ptr)
 			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name);
 		}
 
-		delete_monster_idx(i);
+		delete_monster_idx(caster_ptr, i);
 	}
 }
 

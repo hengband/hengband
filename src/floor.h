@@ -421,10 +421,10 @@ extern void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int n
 #define PROJECT_LOS         0x8000 /*!< 遠隔攻撃特性: /  */
 extern sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg);
 
-extern void set_floor(floor_type *floor_ptr, POSITION x, POSITION y);
+extern void set_floor(player_type *player_ptr, POSITION x, POSITION y);
 extern void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
 extern void place_gold(floor_type *floor_ptr, POSITION y, POSITION x);
-extern void delete_monster(floor_type *floor_ptr, POSITION y, POSITION x);
+extern void delete_monster(player_type *player_ptr, POSITION y, POSITION x);
 extern void compact_objects(player_type *owner_ptr, int size);
 extern void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num);
 extern void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);

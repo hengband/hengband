@@ -39,13 +39,13 @@ void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(floor_ptr, y, x);
+		place_floor_bold(player_ptr, y, x);
 		return;
 	}
 
 	set_cave_feat(floor_ptr, y, x, feat_locked_door_random((d_info[player_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
 	floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
-	delete_monster(floor_ptr, y, x);
+	delete_monster(player_ptr, y, x);
 }
 
 
@@ -62,7 +62,7 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(floor_ptr, y, x);
+		place_floor_bold(player_ptr, y, x);
 		return;
 	}
 
@@ -95,7 +95,7 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
 	}
 
 	g_ptr->info &= ~(CAVE_FLOOR);
-	delete_monster(floor_ptr, y, x);
+	delete_monster(player_ptr, y, x);
 }
 
 static int scent_when = 0;
@@ -224,8 +224,8 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
 		place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
 
 		/* set boundarys so don't get wide doors */
-		place_solid_bold(floor_ptr, y, x - 1);
-		place_solid_bold(floor_ptr, y, x + 1);
+		place_solid_bold(player_ptr, y, x - 1);
+		place_solid_bold(player_ptr, y, x + 1);
 	}
 
 	/* look at:
@@ -243,8 +243,8 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
 		place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
 
 		/* set boundarys so don't get wide doors */
-		place_solid_bold(floor_ptr, y - 1, x);
-		place_solid_bold(floor_ptr, y + 1, x);
+		place_solid_bold(player_ptr, y - 1, x);
+		place_solid_bold(player_ptr, y + 1, x);
 	}
 }
 
@@ -740,7 +740,7 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(floor_ptr, y, x);
+		place_floor_bold(player_ptr, y, x);
 		return;
 	}
 
@@ -794,7 +794,7 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 
 	if (tmp >= 400)
 	{
-		delete_monster(floor_ptr, y, x);
+		delete_monster(player_ptr, y, x);
 		return;
 	}
 
@@ -804,10 +804,10 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 	}
 	else
 	{
-		place_floor_bold(floor_ptr, y, x);
+		place_floor_bold(player_ptr, y, x);
 	}
 
-	delete_monster(floor_ptr, y, x);
+	delete_monster(player_ptr, y, x);
 }
 
 
@@ -887,7 +887,7 @@ void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(floor_ptr, y, x);
+		place_floor_bold(player_ptr, y, x);
 		return;
 	}
 
@@ -918,7 +918,7 @@ void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type
 
 	if (feat == feat_none)
 	{
-		place_floor_bold(floor_ptr, y, x);
+		place_floor_bold(player_ptr, y, x);
 		return;
 	}
 
@@ -1512,12 +1512,14 @@ sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1
 
 /*!
  * @brief 指定のマスを床地形に変える / Set a square to be floor.  (Includes range checking.)
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param x 地形を変えたいマスのX座標
  * @param y 地形を変えたいマスのY座標
  * @return なし
  */
-void set_floor(floor_type *floor_ptr, POSITION x, POSITION y)
+void set_floor(player_type *player_ptr, POSITION x, POSITION y)
 {
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!in_bounds(floor_ptr, y, x))
 	{
 		/* Out of bounds */
@@ -1532,7 +1534,7 @@ void set_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 
 	/* Set to be floor if is a wall (don't touch lakes). */
 	if (is_extra_bold(floor_ptr, y, x))
-		place_floor_bold(floor_ptr, y, x);
+		place_floor_bold(player_ptr, y, x);
 }
 
 
@@ -1662,20 +1664,22 @@ void place_gold(floor_type *floor_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief 指定位置に存在するモンスターを削除する / Delete the monster, if any, at a given location
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param x 削除位置x座標
  * @param y 削除位置y座標
  * @return なし
  */
-void delete_monster(floor_type *floor_ptr, POSITION y, POSITION x)
+void delete_monster(player_type *player_ptr, POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!in_bounds(floor_ptr, y, x)) return;
 
 	/* Check the grid */
 	g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Delete the monster (if any) */
-	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
+	if (g_ptr->m_idx) delete_monster_idx(player_ptr, g_ptr->m_idx);
 }
 
 

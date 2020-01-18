@@ -1,1 +1,1 @@
-﻿extern bool build_type14(floor_type *floor_ptr);
+﻿extern bool build_type14(player_type *player_ptr);

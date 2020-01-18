@@ -4846,7 +4846,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
 
 			monster_gain_exp(player_ptr, who, m_ptr->r_idx);
 			monster_death(player_ptr, m_idx, FALSE);
-			delete_monster_idx(m_idx);
+			delete_monster_idx(player_ptr, m_idx);
 
 			/* Not afraid */
 			(*fear) = FALSE;

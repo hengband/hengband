@@ -1393,7 +1393,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 			POSITION dummy_x = m_ptr->fx;
 			BIT_FLAGS mode = 0L;
 			if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
-			delete_monster_idx(m_idx);
+			delete_monster_idx(target_ptr, m_idx);
 			if (summon_named_creature(target_ptr, 0, dummy_y, dummy_x, MON_BIKETAL, mode))
 			{
 				msg_print(_("「ハァッハッハッハ！！私がバイケタルだ！！」", "Uwa-hahaha!  *I* am Biketal!"));
@@ -1401,7 +1401,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 		}
 		else
 		{
-			delete_monster_idx(m_idx);
+			delete_monster_idx(target_ptr, m_idx);
 		}
 
 		get_exp_from_mon(target_ptr, (long)exp_mon.max_maxhp * 2, &exp_mon);

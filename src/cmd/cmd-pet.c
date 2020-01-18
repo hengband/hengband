@@ -242,7 +242,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 			creature_ptr->update |= (PU_BONUS);
 			creature_ptr->window |= (PW_MESSAGE);
 
-			delete_monster_idx(pet_ctr);
+			delete_monster_idx(creature_ptr, pet_ctr);
 			Dismissed++;
 		}
 	}

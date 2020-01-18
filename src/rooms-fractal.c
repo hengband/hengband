@@ -23,14 +23,14 @@ bool build_type9(player_type *player_ptr)
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	if (!find_space(floor_ptr, &y0, &x0, ysize + 1, xsize + 1))
+	if (!find_space(player_ptr, &y0, &x0, ysize + 1, xsize + 1))
 	{
 		/* Limit to the minimum room size, and retry */
 		xsize = 8;
 		ysize = 8;
 
 		/* Find and reserve some space in the dungeon.  Get center of room. */
-		if (!find_space(floor_ptr, &y0, &x0, ysize + 1, xsize + 1))
+		if (!find_space(player_ptr, &y0, &x0, ysize + 1, xsize + 1))
 		{
 			/*
 			* Still no space?!
@@ -64,7 +64,7 @@ bool build_type9(player_type *player_ptr)
 		generate_hmap(floor_ptr, y0, x0, xsize, ysize, grd, roug, cutoff);
 
 		/* Convert to normal format + clean up */
-		done = generate_fracave(floor_ptr, y0, x0, xsize, ysize, cutoff, light, room);
+		done = generate_fracave(player_ptr, y0, x0, xsize, ysize, cutoff, light, room);
 	}
 
 	return TRUE;

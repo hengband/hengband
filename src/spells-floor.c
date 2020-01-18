@@ -506,7 +506,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 				if (in_generate) /* In generation */
 				{
 					/* Delete the monster (if any) */
-					delete_monster(floor_ptr, y, x);
+					delete_monster(caster_ptr, y, x);
 				}
 				else if (r_ptr->flags1 & RF1_QUESTOR)
 				{
@@ -527,7 +527,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 					}
 
 					/* Delete the monster (if any) */
-					delete_monster(floor_ptr, y, x);
+					delete_monster(caster_ptr, y, x);
 				}
 			}
 
@@ -601,7 +601,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 			if (t < 20)
 			{
 				/* Create granite wall */
-				place_grid(g_ptr, extra);
+				place_grid(caster_ptr, g_ptr, extra);
 			}
 			else if (t < 70)
 			{
@@ -616,7 +616,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 			else
 			{
 				/* Create floor */
-				place_grid(g_ptr, floor);
+				place_grid(caster_ptr, g_ptr, floor);
 			}
 
 			/* Clear garbage of hidden trap or door */
@@ -1002,7 +1002,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 					}
 				}
 
-				delete_monster(floor_ptr, yy, xx);
+				delete_monster(caster_ptr, yy, xx);
 
 				sn = 0;
 			}

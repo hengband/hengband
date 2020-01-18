@@ -117,111 +117,6 @@ typedef struct
 #define is_outer_grid(C) ((C)->info & CAVE_OUTER)
 #define is_solid_grid(C) ((C)->info & CAVE_SOLID)
 
-#define place_floor_bold(F, Y, X) \
-{ \
-	set_cave_feat((F), Y,X,feat_ground_type[randint0(100)]); \
-	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info((F), Y,X,CAVE_FLOOR); \
-	delete_monster(F, Y, X); \
-}
-
-#define place_extra_bold(F, Y, X) \
-{ \
-	set_cave_feat((F), Y,X,feat_wall_type[randint0(100)]); \
-	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info((F), Y,X,CAVE_EXTRA); \
-	delete_monster(F, Y, X); \
-}
-
-#define place_extra_perm_bold(F, Y, X) \
-{ \
-	set_cave_feat(F, Y, X,feat_permanent); \
-	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(F, Y, X, CAVE_EXTRA); \
-	delete_monster(F, Y, X); \
-}
-
-#define place_extra_noperm_bold(F, Y, X) \
-{ \
-	feature_type *_f_ptr; \
-	set_cave_feat((F), Y,X,feat_wall_type[randint0(100)]); \
-	_f_ptr = &f_info[(F)->grid_array[Y][X].feat]; \
-	if (permanent_wall(_f_ptr)) (F)->grid_array[Y][X].feat = feat_state((F)->grid_array[Y][X].feat, FF_UNPERM); \
-	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info((F), Y, X, CAVE_EXTRA); \
-	delete_monster(Y, X); \
-}
-
-#define place_inner_bold(F, Y, X) \
-{ \
-	set_cave_feat((F), Y, X, feat_wall_inner); \
-	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info((F), Y, X, CAVE_INNER); \
-	delete_monster(F, Y, X); \
-}
-
-#define place_inner_perm_bold(F, Y, X) \
-{ \
-	set_cave_feat(F, Y,X,feat_permanent); \
-	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info((F), Y,X,CAVE_INNER); \
-	delete_monster(F, Y, X); \
-}
-
-#define place_outer_bold(F, Y, X) \
-{ \
-	set_cave_feat((F), Y, X, feat_wall_outer); \
-	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info((F), Y,X,CAVE_OUTER); \
-	delete_monster(F, Y, X); \
-}
-
-#define place_outer_perm_bold(F, Y, X) \
-{ \
-	set_cave_feat(F, Y, X, feat_permanent); \
-	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info((F), Y,X,CAVE_OUTER); \
-	delete_monster(F, Y, X); \
-}
-
-#define place_outer_noperm_bold(F, Y, X) \
-{ \
-	feature_type *_f_ptr = &f_info[feat_wall_outer]; \
-	if (permanent_wall(_f_ptr)) set_cave_feat((F), Y, X, (s16b)feat_state(feat_wall_outer, FF_UNPERM)); \
-	else set_cave_feat((F), Y,X,feat_wall_outer); \
-	(F)->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info((F), Y,X,(CAVE_OUTER | CAVE_VAULT)); \
-	delete_monster(F, Y, X); \
-}
-
-#define place_solid_bold(F, Y, X) \
-{ \
-	set_cave_feat(F,Y,X,feat_wall_solid); \
-	F->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(F,Y,X,CAVE_SOLID); \
-	delete_monster(F, Y, X); \
-}
-
-#define place_solid_perm_bold(F, Y, X) \
-{ \
-	set_cave_feat(F, Y, X, feat_permanent); \
-	F->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(F, Y, X, CAVE_SOLID); \
-	delete_monster(F, Y, X); \
-}
-
-#define place_solid_noperm_bold(F, Y, X) \
-{ \
-	feature_type *_f_ptr = &f_info[feat_wall_solid]; \
-	if ((F->grid_array[Y][X].info & CAVE_VAULT) && permanent_wall(_f_ptr)) \
-		set_cave_feat(F, Y, X, feat_state(feat_wall_solid, FF_UNPERM)); \
-	else set_cave_feat(F, Y, X, feat_wall_solid); \
-	F->grid_array[Y][X].info &= ~(CAVE_MASK); \
-	add_cave_info(F, Y, X, CAVE_SOLID); \
-	delete_monster(F, Y, X); \
-}
-
-
 /*
  * 特殊なマス状態フラグ / Special grid flags
  */
@@ -274,7 +169,7 @@ extern bool new_player_spot(player_type *creature_ptr);
 
 #define MAX_DOOR_TYPES   3
 
-extern void place_bound_perm_wall(grid_type *g_ptr);
+extern void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr);
 
 extern bool is_known_trap(grid_type *g_ptr);
 extern bool is_hidden_door(grid_type *g_ptr);
@@ -317,8 +212,19 @@ typedef enum place_grid_type
 	solid_perm
 } place_grid_type;
 
-extern void place_grid(grid_type *g_ptr, place_grid_type pg_type);
+extern void place_grid(player_type *player_ptr, grid_type *g_ptr, place_grid_type pg_type);
 extern bool darkened_grid(player_type *player_ptr, grid_type *g_ptr);
+extern void delete_monster(player_type *player_ptr, POSITION y, POSITION x);
+void place_floor_bold(player_type *player_ptr, POSITION y, POSITION x);
+void place_extra_bold(player_type *player_ptr, POSITION y, POSITION x);
+void place_extra_perm_bold(player_type *player_ptr, POSITION y, POSITION x);
+void place_inner_bold(player_type *player_ptr, POSITION y, POSITION x);
+void place_inner_perm_bold(player_type *player_ptr, POSITION y, POSITION x);
+void place_outer_bold(player_type *player_ptr, POSITION y, POSITION x);
+void place_outer_noperm_bold(player_type *player_ptr, POSITION y, POSITION x);
+void place_solid_bold(player_type *player_ptr, POSITION y, POSITION x);
+void place_solid_perm_bold(player_type *player_ptr, POSITION y, POSITION x);
+void place_solid_noperm_bold(player_type *player_ptr, POSITION y, POSITION x);
 
 /*
  * Get feature mimic from f_info[] (applying "mimic" field)

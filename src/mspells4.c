@@ -2099,7 +2099,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_i
 		if (floor_ptr->inside_arena || target_ptr->phase_out || !summon_possible(target_ptr, m_ptr->fy, m_ptr->fx))
 			return -1;
 
-		delete_monster_idx(floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
+		delete_monster_idx(target_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
 		summon_named_creature(target_ptr, 0, dummy_y, dummy_x, MON_BANOR, mode);
 		floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
 		floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
@@ -2129,7 +2129,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_i
 					dummy_y = floor_ptr->m_list[k].fy;
 					dummy_x = floor_ptr->m_list[k].fx;
 				}
-				delete_monster_idx(k);
+				delete_monster_idx(target_ptr, k);
 			}
 		}
 		summon_named_creature(target_ptr, 0, dummy_y, dummy_x, MON_BANORLUPART, mode);

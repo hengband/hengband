@@ -41,17 +41,17 @@
 
 #define MONSTER_FLOW_DEPTH 32 /*!< 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る) / OPTION: Maximum flow depth when using "MONSTER_FLOW" */
 
-/*
- * Feature action flags
- */
+ /*
+  * Feature action flags
+  */
 #define FAF_DESTROY     0x01
 #define FAF_NO_DROP     0x02
 #define FAF_CRASH_GLASS 0x04
 
-/*!
- * @brief 地形状態フラグテーブル /
- * The table of features' actions
- */
+  /*!
+   * @brief 地形状態フラグテーブル /
+   * The table of features' actions
+   */
 static const byte feature_action_flags[FF_FLAG_MAX] =
 {
 	0, /* LOS */
@@ -236,7 +236,7 @@ bool new_player_spot(player_type *creature_ptr)
  * @param g_ptr 永久壁を配置したいマス構造体の参照ポインタ
  * @return なし
  */
-void place_bound_perm_wall(grid_type *g_ptr)
+void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
 {
 	if (bound_walls_perm)
 	{
@@ -257,7 +257,7 @@ void place_bound_perm_wall(grid_type *g_ptr)
 	}
 
 	/* Add "solid" perma-wall */
-	place_grid(g_ptr, solid_perm);
+	place_grid(player_ptr, g_ptr, solid_perm);
 }
 
 /*!
@@ -840,11 +840,11 @@ void lite_spot(POSITION y, POSITION x)
  * Oh, and outside of the "torch radius", only "lite" grids need to be scanned.
  */
 
-/*
- * Hack - speed up the update_flow algorithm by only doing
- * it everytime the player moves out of LOS of the last
- * "way-point".
- */
+ /*
+  * Hack - speed up the update_flow algorithm by only doing
+  * it everytime the player moves out of LOS of the last
+  * "way-point".
+  */
 static POSITION flow_x = 0;
 static POSITION flow_y = 0;
 
@@ -1208,7 +1208,7 @@ bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 m
 }
 
 
-void place_grid(grid_type *g_ptr, place_grid_type pg_type)
+void place_grid(player_type *player_ptr, grid_type *g_ptr, place_grid_type pg_type)
 {
 	switch (pg_type)
 	{
@@ -1268,7 +1268,7 @@ void place_grid(grid_type *g_ptr, place_grid_type pg_type)
 	}
 
 	g_ptr->info &= ~(CAVE_MASK);
-	if (g_ptr->m_idx > 0) delete_monster_idx(g_ptr->m_idx);
+	if (g_ptr->m_idx > 0) delete_monster_idx(player_ptr, g_ptr->m_idx);
 }
 
 
@@ -1282,4 +1282,109 @@ bool darkened_grid(player_type *player_ptr, grid_type *g_ptr)
 {
 	return ((g_ptr->info & (CAVE_VIEW | CAVE_LITE | CAVE_MNLT | CAVE_MNDK)) == (CAVE_VIEW | CAVE_MNDK)) &&
 		!player_ptr->see_nocto;
+}
+
+
+void place_floor_bold(player_type *player_ptr, POSITION y, POSITION x)
+{
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	set_cave_feat(floor_ptr, y, x, feat_ground_type[randint0(100)]);
+	floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+	add_cave_info(floor_ptr, y, x, CAVE_FLOOR);
+	delete_monster(player_ptr, y, x);
+}
+
+
+void place_extra_bold(player_type *player_ptr, POSITION y, POSITION x)
+{
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	set_cave_feat(floor_ptr, y, x, feat_wall_type[randint0(100)]);
+	floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+	add_cave_info(floor_ptr, y, x, CAVE_EXTRA);
+	delete_monster(player_ptr, y, x);
+}
+
+
+void place_extra_perm_bold(player_type *player_ptr, POSITION y, POSITION x)
+{
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	set_cave_feat(floor_ptr, y, x, feat_permanent);
+	floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+	add_cave_info(floor_ptr, y, x, CAVE_EXTRA);
+	delete_monster(player_ptr, y, x);
+}
+
+
+void place_inner_bold(player_type *player_ptr, POSITION y, POSITION x)
+{
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	set_cave_feat(floor_ptr, y, x, feat_wall_inner);
+	floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+	add_cave_info(floor_ptr, y, x, CAVE_INNER);
+	delete_monster(player_ptr, y, x);
+}
+
+
+void place_inner_perm_bold(player_type *player_ptr, POSITION y, POSITION x)
+{
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	set_cave_feat(floor_ptr, y, x, feat_permanent);
+	floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+	add_cave_info(floor_ptr, y, x, CAVE_INNER);
+	delete_monster(player_ptr, y, x);
+}
+
+
+void place_outer_bold(player_type *player_ptr, POSITION y, POSITION x)
+{
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	set_cave_feat(floor_ptr, y, x, feat_wall_outer);
+	floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+	add_cave_info(floor_ptr, y, x, CAVE_OUTER);
+	delete_monster(player_ptr, y, x);
+}
+
+
+void place_outer_noperm_bold(player_type *player_ptr, POSITION y, POSITION x)
+{
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	feature_type *_f_ptr = &f_info[feat_wall_outer];
+	if (permanent_wall(_f_ptr)) set_cave_feat(floor_ptr, y, x, (s16b)feat_state(feat_wall_outer, FF_UNPERM));
+	else set_cave_feat(floor_ptr, y, x, feat_wall_outer);
+	floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+	add_cave_info(floor_ptr, y, x, (CAVE_OUTER | CAVE_VAULT));
+	delete_monster(player_ptr, y, x);
+}
+
+
+void place_solid_bold(player_type *player_ptr, POSITION y, POSITION x)
+{
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	set_cave_feat(floor_ptr, y, x, feat_wall_solid);
+	floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+	add_cave_info(floor_ptr, y, x, CAVE_SOLID);
+	delete_monster(player_ptr, y, x);
+}
+
+
+void place_solid_perm_bold(player_type *player_ptr, POSITION y, POSITION x)
+{
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	set_cave_feat(floor_ptr, y, x, feat_permanent);
+	floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+	add_cave_info(floor_ptr, y, x, CAVE_SOLID);
+	delete_monster(player_ptr, y, x);
+}
+
+
+void place_solid_noperm_bold(player_type *player_ptr, POSITION y, POSITION x)
+{
+	feature_type *_f_ptr = &f_info[feat_wall_solid];
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	if ((floor_ptr->grid_array[y][x].info & CAVE_VAULT) && permanent_wall(_f_ptr))
+		set_cave_feat(floor_ptr, y, x, feat_state(feat_wall_solid, FF_UNPERM));
+	else set_cave_feat(floor_ptr, y, x, feat_wall_solid);
+	floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+	add_cave_info(floor_ptr, y, x, CAVE_SOLID);
+	delete_monster(player_ptr, y, x);
 }

@@ -1538,7 +1538,7 @@ static void do_cmd_wiz_zap(player_type *caster_ptr)
 			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
 		}
 
-		delete_monster_idx(i);
+		delete_monster_idx(caster_ptr, i);
 	}
 }
 
@@ -1569,7 +1569,7 @@ static void do_cmd_wiz_zap_all(player_type *caster_ptr)
 		}
 
 		/* Delete this monster */
-		delete_monster_idx(i);
+		delete_monster_idx(caster_ptr, i);
 	}
 }
 

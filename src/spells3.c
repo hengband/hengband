@@ -753,7 +753,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 		exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
 	}
 
-	delete_monster_idx(m_idx);
+	delete_monster_idx(creature_ptr, m_idx);
 	sound(SOUND_TPLEVEL);
 }
 
@@ -2757,7 +2757,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 	m_ptr->hold_o_idx = 0;
 
 	/* "Kill" the "old" monster */
-	delete_monster_idx(g_ptr->m_idx);
+	delete_monster_idx(caster_ptr, g_ptr->m_idx);
 
 	/* Create a new monster (no groups) */
 	bool polymorphed = FALSE;

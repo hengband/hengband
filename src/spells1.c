@@ -3361,7 +3361,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					}
 				}
 
-				delete_monster_idx(g_ptr->m_idx);
+				delete_monster_idx(caster_ptr, g_ptr->m_idx);
 
 				return TRUE;
 			}
@@ -3816,7 +3816,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			monster_death(caster_ptr, g_ptr->m_idx, FALSE);
 
 
-			delete_monster_idx(g_ptr->m_idx);
+			delete_monster_idx(caster_ptr, g_ptr->m_idx);
 
 			if (sad)
 			{
@@ -3857,7 +3857,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
 		}
 
-		delete_monster_idx(g_ptr->m_idx);
+		delete_monster_idx(caster_ptr, g_ptr->m_idx);
 	}
 
 	/* If the player did it, give him experience, check fear */

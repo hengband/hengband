@@ -468,7 +468,7 @@ extern void set_target(monster_type *m_ptr, POSITION y, POSITION x);
 extern void reset_target(monster_type *m_ptr);
 extern monster_race *real_r_ptr(monster_type *m_ptr);
 extern MONRACE_IDX real_r_idx(monster_type *m_ptr);
-extern void delete_monster_idx(MONSTER_IDX i);
+extern void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i);
 extern void compact_monsters(player_type *player_ptr, int size);
 extern void wipe_monsters_list(player_type *player_ptr);
 extern MONSTER_IDX m_pop(player_type *player_ptr);

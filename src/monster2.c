@@ -111,9 +111,9 @@ MONRACE_IDX real_r_idx(monster_type *m_ptr)
  * モンスターを削除するとそのモンスターが拾っていたアイテムも同時に削除される。 /
  * When a monster is deleted, all of its objects are deleted.
  */
-void delete_monster_idx(MONSTER_IDX i)
+void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i)
 {
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[i];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -126,23 +126,23 @@ void delete_monster_idx(MONSTER_IDX i)
 	/* Hack -- count the number of "reproducers" */
 	if (r_ptr->flags2 & (RF2_MULTIPLY)) floor_ptr->num_repro--;
 
-	if (MON_CSLEEP(m_ptr)) (void)set_monster_csleep(p_ptr, i, 0);
-	if (MON_FAST(m_ptr)) (void)set_monster_fast(p_ptr, i, 0);
-	if (MON_SLOW(m_ptr)) (void)set_monster_slow(p_ptr, i, 0);
-	if (MON_STUNNED(m_ptr)) (void)set_monster_stunned(p_ptr, i, 0);
-	if (MON_CONFUSED(m_ptr)) (void)set_monster_confused(p_ptr, i, 0);
-	if (MON_MONFEAR(m_ptr)) (void)set_monster_monfear(p_ptr, i, 0);
-	if (MON_INVULNER(m_ptr)) (void)set_monster_invulner(p_ptr, i, 0, FALSE);
+	if (MON_CSLEEP(m_ptr)) (void)set_monster_csleep(player_ptr, i, 0);
+	if (MON_FAST(m_ptr)) (void)set_monster_fast(player_ptr, i, 0);
+	if (MON_SLOW(m_ptr)) (void)set_monster_slow(player_ptr, i, 0);
+	if (MON_STUNNED(m_ptr)) (void)set_monster_stunned(player_ptr, i, 0);
+	if (MON_CONFUSED(m_ptr)) (void)set_monster_confused(player_ptr, i, 0);
+	if (MON_MONFEAR(m_ptr)) (void)set_monster_monfear(player_ptr, i, 0);
+	if (MON_INVULNER(m_ptr)) (void)set_monster_invulner(player_ptr, i, 0, FALSE);
 
 	/* Hack -- remove target monster */
 	if (i == target_who) target_who = 0;
 
 	/* Hack -- remove tracked monster */
-	if (i == p_ptr->health_who) health_track(p_ptr, 0);
+	if (i == player_ptr->health_who) health_track(player_ptr, 0);
 
-	if (p_ptr->pet_t_m_idx == i) p_ptr->pet_t_m_idx = 0;
-	if (p_ptr->riding_t_m_idx == i) p_ptr->riding_t_m_idx = 0;
-	if (p_ptr->riding == i) p_ptr->riding = 0;
+	if (player_ptr->pet_t_m_idx == i) player_ptr->pet_t_m_idx = 0;
+	if (player_ptr->riding_t_m_idx == i) player_ptr->riding_t_m_idx = 0;
+	if (player_ptr->riding == i) player_ptr->riding = 0;
 
 	/* Monster is gone */
 	floor_ptr->grid_array[y][x].m_idx = 0;
@@ -161,7 +161,7 @@ void delete_monster_idx(MONSTER_IDX i)
 	lite_spot(y, x);
 	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 	{
-		p_ptr->update |= (PU_MON_LITE);
+		player_ptr->update |= (PU_MON_LITE);
 	}
 }
 
@@ -308,7 +308,7 @@ void compact_monsters(player_type *player_ptr, int size)
 				exe_write_diary(player_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_COMPACT, m_name);
 			}
 
-			delete_monster_idx(i);
+			delete_monster_idx(player_ptr, i);
 			num++;
 		}
 	}

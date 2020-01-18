@@ -341,7 +341,7 @@ bool build_type5(player_type *player_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(floor_ptr, &yval, &xval, 11, 25)) return FALSE;
+	if (!find_space(player_ptr, &yval, &xval, 11, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 4;
@@ -355,7 +355,7 @@ bool build_type5(player_type *player_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_grid(g_ptr, floor);
+			place_grid(player_ptr, g_ptr, floor);
 			g_ptr->info |= (CAVE_ROOM);
 		}
 	}
@@ -364,16 +364,16 @@ bool build_type5(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_grid(g_ptr, outer);
+		place_grid(player_ptr, g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_grid(g_ptr, outer);
+		place_grid(player_ptr, g_ptr, outer);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_grid(g_ptr, outer);
+		place_grid(player_ptr, g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_grid(g_ptr, outer);
+		place_grid(player_ptr, g_ptr, outer);
 	}
 
 
@@ -387,17 +387,17 @@ bool build_type5(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_grid(g_ptr, inner);
+		place_grid(player_ptr, g_ptr, inner);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_grid(g_ptr, inner);
+		place_grid(player_ptr, g_ptr, inner);
 	}
 
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_grid(g_ptr, inner);
+		place_grid(player_ptr, g_ptr, inner);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_grid(g_ptr, inner);
+		place_grid(player_ptr, g_ptr, inner);
 	}
 	for (y = y1; y <= y2; y++)
 	{
@@ -550,7 +550,7 @@ bool build_type6(player_type *player_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(floor_ptr, &yval, &xval, 11, 25)) return FALSE;
+	if (!find_space(player_ptr, &yval, &xval, 11, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 4;
@@ -564,7 +564,7 @@ bool build_type6(player_type *player_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_grid(g_ptr, floor);
+			place_grid(player_ptr, g_ptr, floor);
 			g_ptr->info |= (CAVE_ROOM);
 		}
 	}
@@ -573,16 +573,16 @@ bool build_type6(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_grid(g_ptr, outer);
+		place_grid(player_ptr, g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_grid(g_ptr, outer);
+		place_grid(player_ptr, g_ptr, outer);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_grid(g_ptr, outer);
+		place_grid(player_ptr, g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_grid(g_ptr, outer);
+		place_grid(player_ptr, g_ptr, outer);
 	}
 
 	/* Advance to the center room */
@@ -595,16 +595,16 @@ bool build_type6(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_grid(g_ptr, inner);
+		place_grid(player_ptr, g_ptr, inner);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_grid(g_ptr, inner);
+		place_grid(player_ptr, g_ptr, inner);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_grid(g_ptr, inner);
+		place_grid(player_ptr, g_ptr, inner);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_grid(g_ptr, inner);
+		place_grid(player_ptr, g_ptr, inner);
 	}
 	for (y = y1; y <= y2; y++)
 	{
@@ -859,7 +859,7 @@ bool build_type13(player_type *player_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(floor_ptr, &yval, &xval, 13, 25)) return FALSE;
+	if (!find_space(player_ptr, &yval, &xval, 13, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 5;
@@ -873,7 +873,7 @@ bool build_type13(player_type *player_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_grid(g_ptr, inner);
+			place_grid(player_ptr, g_ptr, inner);
 			g_ptr->info |= (CAVE_ROOM);
 		}
 	}
@@ -882,11 +882,11 @@ bool build_type13(player_type *player_ptr)
 	for (x = x1 + 3; x <= x2 - 3; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[yval - 2][x];
-		place_grid(g_ptr, floor);
+		place_grid(player_ptr, g_ptr, floor);
 		add_cave_info(floor_ptr, yval - 2, x, CAVE_ICKY);
 
 		g_ptr = &floor_ptr->grid_array[yval + 2][x];
-		place_grid(g_ptr, floor);
+		place_grid(player_ptr, g_ptr, floor);
 		add_cave_info(floor_ptr, yval + 2, x, CAVE_ICKY);
 	}
 
@@ -894,11 +894,11 @@ bool build_type13(player_type *player_ptr)
 	for (x = x1 + 5; x <= x2 - 5; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[yval - 3][x];
-		place_grid(g_ptr, floor);
+		place_grid(player_ptr, g_ptr, floor);
 		add_cave_info(floor_ptr, yval - 3, x, CAVE_ICKY);
 
 		g_ptr = &floor_ptr->grid_array[yval + 3][x];
-		place_grid(g_ptr, floor);
+		place_grid(player_ptr, g_ptr, floor);
 		add_cave_info(floor_ptr, yval + 3, x, CAVE_ICKY);
 	}
 
@@ -906,27 +906,27 @@ bool build_type13(player_type *player_ptr)
 	for (x = x1; x <= x2; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[yval][x];
-		place_grid(g_ptr, floor);
+		place_grid(player_ptr, g_ptr, floor);
 		g_ptr = &floor_ptr->grid_array[y1][x];
-		place_grid(g_ptr, floor);
+		place_grid(player_ptr, g_ptr, floor);
 		g_ptr = &floor_ptr->grid_array[y2][x];
-		place_grid(g_ptr, floor);
+		place_grid(player_ptr, g_ptr, floor);
 	}
 
 	/* Place the outer walls */
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_grid(g_ptr, outer);
+		place_grid(player_ptr, g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_grid(g_ptr, outer);
+		place_grid(player_ptr, g_ptr, outer);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_grid(g_ptr, outer);
+		place_grid(player_ptr, g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_grid(g_ptr, outer);
+		place_grid(player_ptr, g_ptr, outer);
 	}
 
 	/* Random corridor */
@@ -934,26 +934,26 @@ bool build_type13(player_type *player_ptr)
 	{
 		for (y = y1; y <= yval; y++)
 		{
-			place_floor_bold(floor_ptr, y, x2);
-			place_solid_bold(floor_ptr, y, x1 - 1);
+			place_floor_bold(player_ptr, y, x2);
+			place_solid_bold(player_ptr, y, x1 - 1);
 		}
 		for (y = yval; y <= y2 + 1; y++)
 		{
-			place_floor_bold(floor_ptr, y, x1);
-			place_solid_bold(floor_ptr, y, x2 + 1);
+			place_floor_bold(player_ptr, y, x1);
+			place_solid_bold(player_ptr, y, x2 + 1);
 		}
 	}
 	else
 	{
 		for (y = yval; y <= y2 + 1; y++)
 		{
-			place_floor_bold(floor_ptr, y, x1);
-			place_solid_bold(floor_ptr, y, x2 + 1);
+			place_floor_bold(player_ptr, y, x1);
+			place_solid_bold(player_ptr, y, x2 + 1);
 		}
 		for (y = y1; y <= yval; y++)
 		{
-			place_floor_bold(floor_ptr, y, x2);
-			place_solid_bold(floor_ptr, y, x1 - 1);
+			place_floor_bold(player_ptr, y, x2);
+			place_solid_bold(player_ptr, y, x1 - 1);
 		}
 	}
 
