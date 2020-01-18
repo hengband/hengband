@@ -1295,16 +1295,6 @@ bool darkened_grid(player_type *player_ptr, grid_type *g_ptr)
 }
 
 
-void place_solid_perm_bold(player_type *player_ptr, POSITION y, POSITION x)
-{
-	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	set_cave_feat(floor_ptr, y, x, feat_permanent);
-	floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
-	add_cave_info(floor_ptr, y, x, CAVE_SOLID);
-	delete_monster(player_ptr, y, x);
-}
-
-
 void place_solid_noperm_bold(player_type *player_ptr, POSITION y, POSITION x)
 {
 	feature_type *f_ptr = &f_info[feat_wall_solid];
