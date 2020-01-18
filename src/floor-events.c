@@ -807,7 +807,7 @@ static bool update_view_aux(player_type *subject_ptr, POSITION y, POSITION x, PO
  * just use an optimized hack of "you see me, so I see you", and then use the
  * actual "projectable()" function to check spell attacks.
  */
-void update_view(player_type *subject_ptr, floor_type *floor_ptr)
+void update_view(player_type *subject_ptr)
 {
 	int n, m, d, k, z;
 	POSITION y, x;
@@ -816,6 +816,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 
 	int full, over;
 
+	floor_type *floor_ptr = subject_ptr->current_floor_ptr;
 	POSITION y_max = floor_ptr->height - 1;
 	POSITION x_max = floor_ptr->width - 1;
 

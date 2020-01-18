@@ -4973,7 +4973,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_VIEW))
 	{
 		creature_ptr->update &= ~(PU_VIEW);
-		update_view(creature_ptr, floor_ptr);
+		update_view(creature_ptr);
 	}
 
 	if (creature_ptr->update & (PU_LITE))
