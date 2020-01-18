@@ -64,7 +64,7 @@
 * </p>
 *
 * <p>
-* The "Term_xtra_win_clear()" function should probably do a low-level
+* The "term_xtra_win_clear()" function should probably do a low-level
 * clear of the current window, and redraw the borders and other things,
 * if only for efficiency.
 * </p>
@@ -716,7 +716,7 @@ static COLORREF win_clr[256];
 /*
  * Flag for macro trigger with dump ASCII
  */
-static bool Term_no_press = FALSE;
+static bool term_no_press = FALSE;
 
 /*
  * Copy and paste
@@ -1912,7 +1912,7 @@ static void term_data_redraw(player_type *player_ptr, term_data *td)
 }
 
 
-void Term_inversed_area(HWND hWnd, int x, int y, int w, int h)
+void term_inversed_area(HWND hWnd, int x, int y, int w, int h)
 {
 	HDC hdc;
 	HPEN oldPen;
@@ -1939,7 +1939,7 @@ void Term_inversed_area(HWND hWnd, int x, int y, int w, int h)
 /*!
  * @brief //!< Windows版ユーザ設定項目実装部(実装必須) /Interact with the User
  */
-static errr Term_user_win(int n)
+static errr term_user_win(int n)
 {
 	/* Unused */
 	(void)n;
@@ -1952,7 +1952,7 @@ static errr Term_user_win(int n)
 /*
  * React to global changes
  */
-static errr Term_xtra_win_react(void)
+static errr term_xtra_win_react(void)
 {
 	int i;
 
@@ -2109,7 +2109,7 @@ static errr Term_xtra_win_react(void)
 /*
  * Process at least one event
  */
-static errr Term_xtra_win_event(int v)
+static errr term_xtra_win_event(int v)
 {
 	MSG msg;
 
@@ -2143,7 +2143,7 @@ static errr Term_xtra_win_event(int v)
 /*
  * Process all pending events
  */
-static errr Term_xtra_win_flush(void)
+static errr term_xtra_win_flush(void)
 {
 	MSG msg;
 
@@ -2164,7 +2164,7 @@ static errr Term_xtra_win_flush(void)
  *
  * Make this more efficient
  */
-static errr Term_xtra_win_clear(void)
+static errr term_xtra_win_clear(void)
 {
 	term_data *td = (term_data*)(Term->data);
 
@@ -2199,7 +2199,7 @@ static errr Term_xtra_win_clear(void)
 /*
  * Hack -- make a noise
  */
-static errr Term_xtra_win_noise(void)
+static errr term_xtra_win_noise(void)
 {
 	MessageBeep(MB_ICONASTERISK);
 	return 0;
@@ -2209,7 +2209,7 @@ static errr Term_xtra_win_noise(void)
 /*
  * Hack -- make a sound
  */
-static errr Term_xtra_win_sound(int v)
+static errr term_xtra_win_sound(int v)
 {
 #ifdef USE_SOUND
 	int i;
@@ -2259,7 +2259,7 @@ static errr Term_xtra_win_sound(int v)
 /*
  * Hack -- play a music
  */
-static errr Term_xtra_win_music(int n, int v)
+static errr term_xtra_win_music(int n, int v)
 {
 #ifdef USE_MUSIC
 	int i = 0;
@@ -2351,7 +2351,7 @@ static errr Term_xtra_win_music(int n, int v)
 /*
  * Delay for "x" milliseconds
  */
-static int Term_xtra_win_delay(int v)
+static int term_xtra_win_delay(int v)
 {
 
 #ifdef WIN32
@@ -2388,7 +2388,7 @@ static int Term_xtra_win_delay(int v)
 /*
  * Do a "special thing"
  */
-static errr Term_xtra_win(int n, int v)
+static errr term_xtra_win(int n, int v)
 {
 	/* Handle a subset of the legal requests */
 	switch (n)
@@ -2396,7 +2396,7 @@ static errr Term_xtra_win(int n, int v)
 		/* Make a bell sound */
 	case TERM_XTRA_NOISE:
 	{
-		return (Term_xtra_win_noise());
+		return (term_xtra_win_noise());
 	}
 
 	/* Play a music */
@@ -2405,49 +2405,49 @@ static errr Term_xtra_win(int n, int v)
 	case TERM_XTRA_MUSIC_QUEST:
 	case TERM_XTRA_MUSIC_TOWN:
 	{
-		return (Term_xtra_win_music(n, v));
+		return (term_xtra_win_music(n, v));
 	}
 
 	/* Make a special sound */
 	case TERM_XTRA_SOUND:
 	{
-		return (Term_xtra_win_sound(v));
+		return (term_xtra_win_sound(v));
 	}
 
 	/* Process random events */
 	case TERM_XTRA_BORED:
 	{
-		return (Term_xtra_win_event(0));
+		return (term_xtra_win_event(0));
 	}
 
 	/* Process an event */
 	case TERM_XTRA_EVENT:
 	{
-		return (Term_xtra_win_event(v));
+		return (term_xtra_win_event(v));
 	}
 
 	/* Flush all events */
 	case TERM_XTRA_FLUSH:
 	{
-		return (Term_xtra_win_flush());
+		return (term_xtra_win_flush());
 	}
 
 	/* Clear the screen */
 	case TERM_XTRA_CLEAR:
 	{
-		return (Term_xtra_win_clear());
+		return (term_xtra_win_clear());
 	}
 
 	/* React to global changes */
 	case TERM_XTRA_REACT:
 	{
-		return (Term_xtra_win_react());
+		return (term_xtra_win_react());
 	}
 
 	/* Delay for some milliseconds */
 	case TERM_XTRA_DELAY:
 	{
-		return (Term_xtra_win_delay(v));
+		return (term_xtra_win_delay(v));
 	}
 	}
 
@@ -2461,7 +2461,7 @@ static errr Term_xtra_win(int n, int v)
  *
  * Draw a "cursor" at (x,y), using a "yellow box".
  */
-static errr Term_curs_win(int x, int y)
+static errr term_curs_win(int x, int y)
 {
 	term_data *td = (term_data*)(Term->data);
 
@@ -2502,7 +2502,7 @@ static errr Term_curs_win(int x, int y)
  *
  * Draw a "big cursor" at (x,y), using a "yellow box".
  */
-static errr Term_bigcurs_win(int x, int y)
+static errr term_bigcurs_win(int x, int y)
 {
 	term_data *td = (term_data*)(Term->data);
 
@@ -2514,7 +2514,7 @@ static errr Term_bigcurs_win(int x, int y)
 	if (td->map_active)
 	{
 		/* Normal cursor in map window */
-		Term_curs_win(x, y);
+		term_curs_win(x, y);
 		return 0;
 	}
 	else
@@ -2544,7 +2544,7 @@ static errr Term_bigcurs_win(int x, int y)
  *
  * Erase a "block" of "n" characters starting at (x,y).
  */
-static errr Term_wipe_win(int x, int y, int n)
+static errr term_wipe_win(int x, int y, int n)
 {
 	term_data *td = (term_data*)(Term->data);
 
@@ -2577,13 +2577,13 @@ static errr Term_wipe_win(int x, int y, int n)
  *
  * Draw several ("n") chars, with an attr, at a given location.
  *
- * All "graphic" data is handled by "Term_pict_win()", below.
+ * All "graphic" data is handled by "term_pict_win()", below.
  *
  * One would think there is a more efficient method for telling a window
  * what color it should be using to draw with, but perhaps simply changing
  * it every time is not too inefficient.
  */
-static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
+static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 {
 	term_data *td = (term_data*)(Term->data);
 	RECT rc;
@@ -2759,7 +2759,7 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
  *
  * Draw an array of "special" attr/char pairs at the given location.
  *
- * We use the "Term_pict_win()" function for "graphic" data, which are
+ * We use the "term_pict_win()" function for "graphic" data, which are
  * encoded by setting the "high-bits" of both the "attr" and the "char"
  * data.  We use the "attr" to represent the "row" of the main bitmap,
  * and the "char" to represent the "col" of the main bitmap.  The use
@@ -2767,7 +2767,7 @@ static errr Term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
  *
  * If "graphics" is not available, we simply "wipe" the given grids.
  */
-static errr Term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap, concptr tcp)
+static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap, concptr tcp)
 {
 	term_data *td = (term_data*)(Term->data);
 
@@ -2786,7 +2786,7 @@ static errr Term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
 	if (!use_graphics)
 	{
 		/* Erase the grids */
-		return (Term_wipe_win(x, y, n));
+		return (term_wipe_win(x, y, n));
 	}
 
 	/* Size of bitmap cell */
@@ -2945,7 +2945,7 @@ static void windows_map(player_type *player_ptr)
 
 	/* Only in graphics mode */
 	if (!use_graphics) return;
-	Term_xtra_win_clear();
+	term_xtra_win_clear();
 
 	td->map_tile_wid = (td->tile_wid * td->cols) / MAX_WID;
 	td->map_tile_hgt = (td->tile_hgt * td->rows) / MAX_HGT;
@@ -2968,13 +2968,13 @@ static void windows_map(player_type *player_ptr)
 			/* Ignore non-graphics */
 			if ((a & 0x80) && (c & 0x80))
 			{
-				Term_pict_win(x - min_x, y - min_y, 1, &a, &c, &ta, &tc);
+				term_pict_win(x - min_x, y - min_y, 1, &a, &c, &ta, &tc);
 			}
 		}
 	}
 
 	/* Hilite the player */
-	Term_curs_win(player_ptr->x - min_x, player_ptr->y - min_y);
+	term_curs_win(player_ptr->x - min_x, player_ptr->y - min_y);
 
 	/* Wait for a keypress, flush key buffer */
 	Term_inkey(&c, TRUE, TRUE);
@@ -2984,7 +2984,7 @@ static void windows_map(player_type *player_ptr)
 	td->map_active = FALSE;
 
 	/* Restore screen */
-	Term_xtra_win_clear();
+	term_xtra_win_clear();
 	Term_redraw();
 }
 
@@ -3005,7 +3005,7 @@ static void term_data_link(term_data *td)
 	/* Use a "software" cursor */
 	t->soft_cursor = TRUE;
 
-	/* Use "Term_pict" for "graphic" data */
+	/* Use "term_pict" for "graphic" data */
 	t->higher_pict = TRUE;
 
 	/* Erase with "white space" */
@@ -3013,13 +3013,13 @@ static void term_data_link(term_data *td)
 	t->char_blank = ' ';
 
 	/* Prepare the template hooks */
-	t->user_hook = Term_user_win;
-	t->xtra_hook = Term_xtra_win;
-	t->curs_hook = Term_curs_win;
-	t->bigcurs_hook = Term_bigcurs_win;
-	t->wipe_hook = Term_wipe_win;
-	t->text_hook = Term_text_win;
-	t->pict_hook = Term_pict_win;
+	t->user_hook = term_user_win;
+	t->xtra_hook = term_xtra_win;
+	t->curs_hook = term_curs_win;
+	t->bigcurs_hook = term_bigcurs_win;
+	t->wipe_hook = term_wipe_win;
+	t->text_hook = term_text_win;
+	t->pict_hook = term_pict_win;
 
 	/* Remember where we came from */
 	t->data = (vptr)(td);
@@ -3199,7 +3199,7 @@ static void init_windows(void)
 
 
 	/* Process pending messages */
-	(void)Term_xtra_win_flush();
+	(void)term_xtra_win_flush();
 }
 
 
@@ -3896,7 +3896,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		if (arg_graphics != GRAPHICS_NONE)
 		{
 			arg_graphics = GRAPHICS_NONE;
-			Term_xtra_win_react();
+			term_xtra_win_react();
 			Term_key_push(KTRL('R'));
 		}
 
@@ -3914,7 +3914,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		if (arg_graphics != GRAPHICS_ORIGINAL)
 		{
 			arg_graphics = GRAPHICS_ORIGINAL;
-			Term_xtra_win_react();
+			term_xtra_win_react();
 			Term_key_push(KTRL('R'));
 		}
 
@@ -3932,7 +3932,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		if (arg_graphics != GRAPHICS_ADAM_BOLT)
 		{
 			arg_graphics = GRAPHICS_ADAM_BOLT;
-			Term_xtra_win_react();
+			term_xtra_win_react();
 			Term_key_push(KTRL('R'));
 		}
 
@@ -3950,7 +3950,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		if (arg_graphics != GRAPHICS_HENGBAND)
 		{
 			arg_graphics = GRAPHICS_HENGBAND;
-			Term_xtra_win_react();
+			term_xtra_win_react();
 			Term_key_push(KTRL('R'));
 		}
 
@@ -3982,7 +3982,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		}
 
 		arg_music = !arg_music;
-		Term_xtra_win_react();
+		term_xtra_win_react();
 		Term_key_push(KTRL('R'));
 		break;
 	}
@@ -3996,7 +3996,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		}
 
 		arg_sound = !arg_sound;
-		Term_xtra_win_react();
+		term_xtra_win_react();
 		Term_key_push(KTRL('R'));
 		break;
 	}
@@ -4012,7 +4012,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
 		use_bg = !use_bg;
 		init_bg();
-		Term_xtra_win_react();
+		term_xtra_win_react();
 		Term_key_push(KTRL('R'));
 		break;
 	}
@@ -4046,7 +4046,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 			}
 
 			/* React to changes */
-			Term_xtra_win_react();
+			term_xtra_win_react();
 
 			/* Hack -- Force redraw */
 			Term_key_push(KTRL('R'));
@@ -4165,7 +4165,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
 	if (GetKeyState(VK_SHIFT) & 0x8000) ms = TRUE;
 	if (GetKeyState(VK_MENU) & 0x8000) ma = TRUE;
 
-	Term_no_press = (ma) ? TRUE : FALSE;
+	term_no_press = (ma) ? TRUE : FALSE;
 
 	/* Handle "special" keys */
 	if (special_key[(byte)(wParam)] || (ma && !ignore_key[(byte)(wParam)]))
@@ -4192,7 +4192,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
 		{
 			/* Numpad Enter and '/' are extended key */
 		case VK_DIVIDE:
-			Term_no_press = TRUE;
+			term_no_press = TRUE;
 		case VK_RETURN:	/* Enter */
 			numpad = ext_key;
 			break;
@@ -4212,7 +4212,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
 		case VK_SUBTRACT:
 		case VK_SEPARATOR:
 		case VK_DECIMAL:
-			Term_no_press = TRUE;
+			term_no_press = TRUE;
 		case VK_CLEAR:
 		case VK_HOME:
 		case VK_END:
@@ -4335,7 +4335,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 	case WM_CHAR:
 	{
-		if (Term_no_press) Term_no_press = FALSE;
+		if (term_no_press) term_no_press = FALSE;
 		else Term_keypress(wParam);
 		return 0;
 	}
@@ -4439,7 +4439,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 				dy = abs(oldy - mousey) + 1;
 				ox = (oldx > mousex) ? mousex : oldx;
 				oy = (oldy > mousey) ? mousey : oldy;
-				Term_inversed_area(hWnd, ox, oy, dx, dy);
+				term_inversed_area(hWnd, ox, oy, dx, dy);
 			}
 			else
 			{
@@ -4450,7 +4450,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 			dy = abs(cy - mousey) + 1;
 			ox = (cx > mousex) ? mousex : cx;
 			oy = (cy > mousey) ? mousey : cy;
-			Term_inversed_area(hWnd, ox, oy, dx, dy);
+			term_inversed_area(hWnd, ox, oy, dx, dy);
 
 			oldx = cx;
 			oldy = cy;
@@ -4802,7 +4802,7 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 
 	case WM_CHAR:
 	{
-		if (Term_no_press) Term_no_press = FALSE;
+		if (term_no_press) term_no_press = FALSE;
 		else Term_keypress(wParam);
 		return 0;
 	}
@@ -5036,9 +5036,6 @@ static void hook_quit(concptr str)
 
 	/* Save the preferences */
 	save_prefs();
-
-
-	/*** Could use 'Term_nuke_win()' */
 
 	/* Destroy all windows */
 	for (i = MAX_TERM_DATA - 1; i >= 0; --i)
