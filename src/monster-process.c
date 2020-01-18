@@ -114,7 +114,7 @@ static bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 			}
 
 			/* Monster must be 'an enemy' */
-			if (!are_enemies(m_ptr, t_ptr)) continue;
+			if (!are_enemies(target_ptr, m_ptr, t_ptr)) continue;
 
 			/* Monster must be projectable if we can't pass through walls */
 			if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) ||
@@ -875,7 +875,7 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 
 		/* The monster must be an enemy, and in LOS */
 		if (t_m_idx &&
-			are_enemies(m_ptr, &floor_ptr->m_list[t_m_idx]) &&
+			are_enemies(target_ptr, m_ptr, &floor_ptr->m_list[t_m_idx]) &&
 			los(target_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x) &&
 			projectable(target_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
 		{
@@ -1588,7 +1588,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			MONSTER_IDX t_m_idx = target_ptr->current_floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
 
 			/* The monster must be an enemy, and projectable */
-			if (t_m_idx && are_enemies(m_ptr, &target_ptr->current_floor_ptr->m_list[t_m_idx]) &&
+			if (t_m_idx && are_enemies(target_ptr, m_ptr, &target_ptr->current_floor_ptr->m_list[t_m_idx]) &&
 				projectable(target_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
 			{
 				counterattack = TRUE;
@@ -2023,7 +2023,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			if (((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW) &&
 				(r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level) &&
 				can_cross && (g_ptr->m_idx != target_ptr->riding)) ||
-				are_enemies(m_ptr, y_ptr) || MON_CONFUSED(m_ptr))
+				are_enemies(target_ptr, m_ptr, y_ptr) || MON_CONFUSED(m_ptr))
 			{
 				if (!(r_ptr->flags1 & RF1_NEVER_BLOW))
 				{

@@ -61,7 +61,7 @@ static bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSIT
 		if (y == y2 && x == x2)
 			hit2 = TRUE;
 		else if (is_friend && floor_ptr->grid_array[y][x].m_idx > 0 &&
-			!are_enemies(m_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx]))
+			!are_enemies(target_ptr, m_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx]))
 		{
 			/* Friends don't shoot friends */
 			return FALSE;
@@ -321,7 +321,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 
 			/* Cancel if neither enemy nor a given target */
 			if ((m_idx == target_idx) ||
-				((target_idx != target_ptr->pet_t_m_idx) && !are_enemies(m_ptr, t_ptr)))
+				((target_idx != target_ptr->pet_t_m_idx) && !are_enemies(target_ptr, m_ptr, t_ptr)))
 			{
 				target_idx = 0;
 			}
@@ -360,7 +360,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 			if (!monster_is_valid(t_ptr)) continue;
 
 			/* Monster must be 'an enemy' */
-			if ((m_idx == target_idx) || !are_enemies(m_ptr, t_ptr)) continue;
+			if ((m_idx == target_idx) || !are_enemies(target_ptr, m_ptr, t_ptr)) continue;
 
 			/* Monster must be projectable */
 			if (!projectable(target_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;

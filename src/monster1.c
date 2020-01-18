@@ -2249,12 +2249,12 @@ static bool check_hostile_align(byte sub_align1, byte sub_align2)
  * @param n_ptr モンスター2の構造体参照ポインタ
  * @return 敵対関係にあるならばTRUEを返す
  */
-bool are_enemies(monster_type *m_ptr, monster_type *n_ptr)
+bool are_enemies(player_type *player_ptr, monster_type *m_ptr, monster_type *n_ptr)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	monster_race *s_ptr = &r_info[n_ptr->r_idx];
 
-	if (p_ptr->phase_out)
+	if (player_ptr->phase_out)
 	{
 		if (is_pet(m_ptr) || is_pet(n_ptr)) return FALSE;
 		return TRUE;
