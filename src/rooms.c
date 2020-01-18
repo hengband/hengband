@@ -1696,7 +1696,7 @@ void build_maze_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITIO
 			}
 			else if (!is_vault)
 			{
-				place_extra_grid(g_ptr);
+				place_grid(g_ptr, extra);
 			}
 			else
 			{

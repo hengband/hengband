@@ -601,7 +601,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 			if (t < 20)
 			{
 				/* Create granite wall */
-				place_extra_grid(g_ptr);
+				place_grid(g_ptr, extra);
 			}
 			else if (t < 70)
 			{
