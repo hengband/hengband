@@ -670,7 +670,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 	}
 	}
 
-	if (break_trap && is_trap(g_ptr->feat))
+	if (break_trap && is_trap(trapped_ptr, g_ptr->feat))
 	{
 		cave_alter_feat(trapped_ptr, y, x, FF_DISARM);
 		msg_print(_("トラップを粉砕した。", "You destroyed the trap."));

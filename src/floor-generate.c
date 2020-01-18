@@ -287,7 +287,7 @@ static bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int wal
 			g_ptr->mimic = 0;
 
 			/* Clear previous contents, add stairs */
-			g_ptr->feat = (i < shaft_num) ? feat_state(feat, FF_SHAFT) : feat;
+			g_ptr->feat = (i < shaft_num) ? feat_state(owner_ptr, feat, FF_SHAFT) : feat;
 
 			/* No longer "FLOOR" */
 			g_ptr->info &= ~(CAVE_FLOOR);

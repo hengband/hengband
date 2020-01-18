@@ -370,7 +370,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	case GF_KILL_TRAP:
 	{
 		/* Reveal secret doors */
-		if (is_hidden_door(g_ptr))
+		if (is_hidden_door(caster_ptr, g_ptr))
 		{
 			/* Pick a door */
 			disclose_grid(caster_ptr, y, x);
@@ -383,7 +383,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		}
 
 		/* Destroy traps */
-		if (is_trap(g_ptr->feat))
+		if (is_trap(caster_ptr, g_ptr->feat))
 		{
 			/* Check line of sight */
 			if (known)
@@ -397,7 +397,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		}
 
 		/* Locked doors are unlocked */
-		if (is_closed_door(g_ptr->feat) && f_ptr->power && have_flag(f_ptr->flags, FF_OPEN))
+		if (is_closed_door(caster_ptr, g_ptr->feat) && f_ptr->power && have_flag(f_ptr->flags, FF_OPEN))
 		{
 			FEAT_IDX old_feat = g_ptr->feat;
 
@@ -427,7 +427,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	case GF_KILL_DOOR:
 	{
 		/* Destroy all doors and traps */
-		if (is_trap(g_ptr->feat) || have_flag(f_ptr->flags, FF_DOOR))
+		if (is_trap(caster_ptr, g_ptr->feat) || have_flag(f_ptr->flags, FF_DOOR))
 		{
 			/* Check line of sight */
 			if (known)

@@ -250,7 +250,7 @@ void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
 		/* Hack -- Decline boundary walls with known treasure  */
 		if ((have_flag(f_ptr->flags, FF_HAS_GOLD) || have_flag(f_ptr->flags, FF_HAS_ITEM)) &&
 			!have_flag(f_ptr->flags, FF_SECRET))
-			g_ptr->feat = feat_state(g_ptr->feat, FF_ENSECRET);
+			g_ptr->feat = feat_state(player_ptr, g_ptr->feat, FF_ENSECRET);
 
 		/* Set boundary mimic */
 		g_ptr->mimic = g_ptr->feat;
@@ -262,13 +262,14 @@ void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
 
 /*!
  * @brief マスに看破済みの罠があるかの判定を行う。 / Return TRUE if the given grid is a known trap
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param g_ptr マス構造体の参照ポインタ
  * @return 看破済みの罠があるならTRUEを返す。
  */
-bool is_known_trap(grid_type *g_ptr)
+bool is_known_trap(player_type *player_ptr, grid_type *g_ptr)
 {
 	if (!g_ptr->mimic && !cave_have_flag_grid(g_ptr, FF_SECRET) &&
-		is_trap(g_ptr->feat)) return TRUE;
+		is_trap(player_ptr, g_ptr->feat)) return TRUE;
 	else
 		return FALSE;
 }
@@ -277,13 +278,14 @@ bool is_known_trap(grid_type *g_ptr)
 
 /*!
  * @brief マスに隠されたドアがあるかの判定を行う。 / Return TRUE if the given grid is a hidden closed door
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param g_ptr マス構造体の参照ポインタ
  * @return 隠されたドアがあるならTRUEを返す。
  */
-bool is_hidden_door(grid_type *g_ptr)
+bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr)
 {
 	if ((g_ptr->mimic || cave_have_flag_grid(g_ptr, FF_SECRET)) &&
-		is_closed_door(g_ptr->feat))
+		is_closed_door(player_ptr, g_ptr->feat))
 		return TRUE;
 	else
 		return FALSE;
@@ -925,13 +927,13 @@ void update_flow(player_type *subject_ptr)
 
 			g_ptr = &subject_ptr->current_floor_ptr->grid_array[y][x];
 
-			if (is_closed_door(g_ptr->feat)) m += 3;
+			if (is_closed_door(subject_ptr, g_ptr->feat)) m += 3;
 
 			/* Ignore "pre-stamped" entries */
 			if (g_ptr->dist != 0 && g_ptr->dist <= n && g_ptr->cost <= m) continue;
 
 			/* Ignore "walls" and "rubble" */
-			if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(g_ptr->feat)) continue;
+			if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(subject_ptr, g_ptr->feat)) continue;
 
 			/* Save the flow cost */
 			if (g_ptr->cost == 0 || g_ptr->cost > m) g_ptr->cost = m;
@@ -957,20 +959,21 @@ void update_flow(player_type *subject_ptr)
  * Take a feature, determine what that feature becomes
  * through applying the given action.
  */
-FEAT_IDX feat_state(FEAT_IDX feat, int action)
+FEAT_IDX feat_state(player_type *player_ptr, FEAT_IDX feat, int action)
 {
 	feature_type *f_ptr = &f_info[feat];
 	int i;
 
 	/* Get the new feature */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (i = 0; i < MAX_FEAT_STATES; i++)
 	{
-		if (f_ptr->state[i].action == action) return conv_dungeon_feat(p_ptr->current_floor_ptr, f_ptr->state[i].result);
+		if (f_ptr->state[i].action == action) return conv_dungeon_feat(floor_ptr, f_ptr->state[i].result);
 	}
 
 	if (have_flag(f_ptr->flags, FF_PERMANENT)) return feat;
 
-	return (feature_action_flags[action] & FAF_DESTROY) ? conv_dungeon_feat(p_ptr->current_floor_ptr, f_ptr->destroyed) : feat;
+	return (feature_action_flags[action] & FAF_DESTROY) ? conv_dungeon_feat(floor_ptr, f_ptr->destroyed) : feat;
 }
 
 /*
@@ -984,7 +987,7 @@ void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, int action
 	FEAT_IDX oldfeat = floor_ptr->grid_array[y][x].feat;
 
 	/* Get the new feat */
-	FEAT_IDX newfeat = feat_state(oldfeat, action);
+	FEAT_IDX newfeat = feat_state(player_ptr, oldfeat, action);
 
 	/* No change */
 	if (newfeat == oldfeat) return;
@@ -1178,9 +1181,9 @@ bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION
  * @param feat 地形ID
  * @return 開いた地形である場合TRUEを返す /  Return TRUE if the given feature is an open door
  */
-bool is_open(FEAT_IDX feat)
+bool is_open(player_type *player_ptr, FEAT_IDX feat)
 {
-	return have_flag(f_info[feat].flags, FF_CLOSE) && (feat != feat_state(feat, FF_CLOSE));
+	return have_flag(f_info[feat].flags, FF_CLOSE) && (feat != feat_state(player_ptr, feat, FF_CLOSE));
 }
 
 /*!
@@ -1254,7 +1257,7 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
 		feature_type *f_ptr = &f_info[feat_wall_outer];
 		if (permanent_wall(f_ptr))
 		{
-			g_ptr->feat = (s16b)feat_state(feat_wall_outer, FF_UNPERM);
+			g_ptr->feat = (s16b)feat_state(player_ptr, feat_wall_outer, FF_UNPERM);
 		}
 		else
 		{
@@ -1352,7 +1355,7 @@ void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type 
 	case outer_noperm:
 	{
 		feature_type *_f_ptr = &f_info[feat_wall_outer];
-		if (permanent_wall(_f_ptr)) set_cave_feat(floor_ptr, y, x, (s16b)feat_state(feat_wall_outer, FF_UNPERM));
+		if (permanent_wall(_f_ptr)) set_cave_feat(floor_ptr, y, x, (s16b)feat_state(player_ptr, feat_wall_outer, FF_UNPERM));
 		else set_cave_feat(floor_ptr, y, x, feat_wall_outer);
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		add_cave_info(floor_ptr, y, x, (CAVE_OUTER | CAVE_VAULT));
@@ -1369,7 +1372,7 @@ void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type 
 	{
 		feature_type *f_ptr = &f_info[feat_wall_solid];
 		if ((floor_ptr->grid_array[y][x].info & CAVE_VAULT) && permanent_wall(f_ptr))
-			set_cave_feat(floor_ptr, y, x, feat_state(feat_wall_solid, FF_UNPERM));
+			set_cave_feat(floor_ptr, y, x, feat_state(player_ptr, feat_wall_solid, FF_UNPERM));
 		else set_cave_feat(floor_ptr, y, x, feat_wall_solid);
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		add_cave_info(floor_ptr, y, x, CAVE_SOLID);

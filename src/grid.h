@@ -171,8 +171,8 @@ extern bool new_player_spot(player_type *creature_ptr);
 
 extern void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr);
 
-extern bool is_known_trap(grid_type *g_ptr);
-extern bool is_hidden_door(grid_type *g_ptr);
+extern bool is_known_trap(player_type *player_ptr, grid_type *g_ptr);
+extern bool is_hidden_door(player_type *player_ptr, grid_type *g_ptr);
 extern bool is_mirror_grid(grid_type *g_ptr);
 extern bool is_glyph_grid(grid_type *g_ptr);
 extern bool is_explosive_rune_grid(grid_type *g_ptr);
@@ -184,7 +184,10 @@ extern bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FL
  */
 #define feat_uses_special(F) (have_flag(f_info[(F)].flags, FF_SPECIAL))
 
-/* grids.c */
+/*!
+ * grids.c
+ * ここにfloor_type を引数として加えるとコンパイルエラー
+ */
 extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x);
 extern bool no_lite(player_type *creature_ptr);
@@ -192,10 +195,10 @@ extern void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, TER
 extern void note_spot(player_type *player_ptr, POSITION y, POSITION x);
 extern void lite_spot(player_type *player_ptr, POSITION y, POSITION x);
 extern void update_flow(player_type *subject_ptr);
-extern FEAT_IDX feat_state(FEAT_IDX feat, int action);
+extern FEAT_IDX feat_state(player_type *player_ptr, FEAT_IDX feat, int action);
 extern void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, int action);
 extern void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x);
-extern bool is_open(FEAT_IDX feat);
+extern bool is_open(player_type *player_ptr, FEAT_IDX feat);
 extern bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x);
 
 extern bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode);

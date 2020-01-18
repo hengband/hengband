@@ -291,7 +291,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
 			if (streamer_is_wall)
 			{
 				if (!is_extra_grid(g_ptr) && !is_inner_grid(g_ptr) && !is_outer_grid(g_ptr) && !is_solid_grid(g_ptr)) continue;
-				if (is_closed_door(g_ptr->feat)) continue;
+				if (is_closed_door(player_ptr, g_ptr->feat)) continue;
 			}
 
 			if (g_ptr->m_idx && !(have_flag(streamer_ptr->flags, FF_PLACE) && monster_can_cross_terrain(feat, &r_info[floor_ptr->m_list[g_ptr->m_idx].r_idx], 0)))

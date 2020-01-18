@@ -1497,13 +1497,13 @@ static bool cast_berserk_spell(player_type *caster_ptr, int spell)
 
 		py_attack(caster_ptr, y, x, 0);
 
-		if (!player_can_enter(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0) || is_trap(caster_ptr->current_floor_ptr->grid_array[y][x].feat))
+		if (!player_can_enter(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0) || is_trap(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat))
 			break;
 
 		y += ddy[dir];
 		x += ddx[dir];
 
-		if (player_can_enter(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(caster_ptr->current_floor_ptr->grid_array[y][x].feat) && !caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+		if (player_can_enter(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat) && !caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 		{
 			msg_print(NULL);
 			(void)move_player_effect(caster_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);

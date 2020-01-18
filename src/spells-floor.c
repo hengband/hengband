@@ -361,13 +361,13 @@ void stair_creation(player_type *caster_ptr)
 	{
 		cave_set_feat(caster_ptr, caster_ptr->y, caster_ptr->x,
 			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor_ptr->dun_level - 2)) ?
-			feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair);
+			feat_state(caster_ptr, feat_up_stair, FF_SHAFT) : feat_up_stair);
 	}
 	else
 	{
 		cave_set_feat(caster_ptr, caster_ptr->y, caster_ptr->x,
 			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor_ptr->dun_level + 2)) ?
-			feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair);
+			feat_state(caster_ptr, feat_down_stair, FF_SHAFT) : feat_down_stair);
 	}
 
 	/* Connect this stairs to the destination */

@@ -432,7 +432,7 @@ static void build_vault(player_type *player_ptr, POSITION yval, POSITION xval, P
 				/* Secret glass doors */
 			case '-':
 				place_secret_door(player_ptr, y, x, DOOR_GLASS_DOOR);
-				if (is_closed_door(g_ptr->feat)) g_ptr->mimic = feat_glass_wall;
+				if (is_closed_door(player_ptr, g_ptr->feat)) g_ptr->mimic = feat_glass_wall;
 				break;
 
 				/* Curtains */

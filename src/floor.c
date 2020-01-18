@@ -162,7 +162,7 @@ void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
 			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Walls, water, and lava cannot hold scent. */
-			if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(g_ptr->feat)) continue;
+			if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(subject_ptr, g_ptr->feat)) continue;
 
 			/* Grid must not be blocked by walls from the character */
 			if (!player_has_los_bold(subject_ptr, y, x)) continue;

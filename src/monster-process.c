@@ -340,7 +340,7 @@ static bool get_moves_aux2(player_type *target_ptr, MONSTER_IDX m_idx, POSITION 
 		if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding))))
 		{
 			if (cost == 0) continue;
-			if (!can_open_door && is_closed_door(g_ptr->feat)) continue;
+			if (!can_open_door && is_closed_door(target_ptr, g_ptr->feat)) continue;
 		}
 
 		/* Hack -- for kill or pass wall monster.. */
@@ -1803,7 +1803,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 
 		/* Handle doors and secret doors */
-		else if (is_closed_door(g_ptr->feat))
+		else if (is_closed_door(target_ptr, g_ptr->feat))
 		{
 			bool may_bash = TRUE;
 
@@ -1872,7 +1872,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			if (did_open_door || did_bash_door)
 			{
 				/* Break down the door */
-				if (did_bash_door && ((randint0(100) < 50) || (feat_state(g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS)))
+				if (did_bash_door && ((randint0(100) < 50) || (feat_state(target_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS)))
 				{
 					cave_alter_feat(target_ptr, ny, nx, FF_BASH);
 

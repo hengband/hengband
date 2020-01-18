@@ -621,7 +621,7 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
  * @details Return the number of features around (or under) the character.
  * Usually look for doors and floor traps.
  */
-static int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(FEAT_IDX feat), bool under)
+static int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(player_type*, FEAT_IDX feat), bool under)
 {
 	/* Check around (and under) the character */
 	int count = 0;
@@ -647,7 +647,7 @@ static int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*
 		feat = get_feat_mimic(g_ptr);
 
 		/* Not looking for this feature */
-		if (!((*test)(feat))) continue;
+		if (!((*test)(creature_ptr, feat))) continue;
 
 		/* OK */
 		++count;
@@ -902,7 +902,7 @@ static bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
 		return more;
 	}
 	
-	s16b closed_feat = feat_state(old_feat, FF_CLOSE);
+	s16b closed_feat = feat_state(creature_ptr, old_feat, FF_CLOSE);
 
 	/* Hack -- object in the way */
 	if ((g_ptr->o_idx || (g_ptr->info & CAVE_OBJECT)) &&
@@ -1160,7 +1160,7 @@ static bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
 		}
 	}
 
-	if (is_hidden_door(g_ptr))
+	if (is_hidden_door(creature_ptr, g_ptr))
 	{
 		/* Occasional Search XXX XXX */
 		if (randint0(100) < 25) search(creature_ptr);
@@ -1276,7 +1276,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	/* Must be a closed door */
-	if (!is_closed_door(g_ptr->feat))
+	if (!is_closed_door(creature_ptr, g_ptr->feat))
 	{
 		return FALSE;
 	}
@@ -1579,7 +1579,7 @@ void do_cmd_disarm(player_type *creature_ptr)
 		o_idx = chest_check(creature_ptr->current_floor_ptr, y, x, TRUE);
 
 		/* Disarm a trap */
-		if (!is_trap(feat) && !o_idx)
+		if (!is_trap(creature_ptr, feat) && !o_idx)
 		{
 			msg_print(_("そこには解除するものが見当たらない。", "You see nothing there to disarm."));
 		}
@@ -1663,7 +1663,7 @@ static bool do_cmd_bash_aux(player_type *creature_ptr, POSITION y, POSITION x, D
 		sound(have_flag(f_ptr->flags, FF_GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
 
 		/* Break down the door */
-		if ((randint0(100) < 50) || (feat_state(g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS))
+		if ((randint0(100) < 50) || (feat_state(creature_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS))
 		{
 			cave_alter_feat(creature_ptr, y, x, FF_BASH);
 		}

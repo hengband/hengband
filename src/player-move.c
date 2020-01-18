@@ -193,14 +193,14 @@ static void discover_hidden_things(player_type *creature_ptr, POSITION y, POSITI
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	g_ptr = &floor_ptr->grid_array[y][x];
 
-	if (g_ptr->mimic && is_trap(g_ptr->feat))
+	if (g_ptr->mimic && is_trap(creature_ptr, g_ptr->feat))
 	{
 		disclose_grid(creature_ptr, y, x);
 		msg_print(_("トラップを発見した。", "You have found a trap."));
 		disturb(creature_ptr, FALSE, TRUE);
 	}
 
-	if (is_hidden_door(g_ptr))
+	if (is_hidden_door(creature_ptr, g_ptr))
 	{
 		msg_print(_("隠しドアを発見した。", "You have found a secret door."));
 		disclose_grid(creature_ptr, y, x);
@@ -638,7 +638,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 		creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		/* Remove "unsafe" flag */
-		if ((!creature_ptr->blind && !no_lite(creature_ptr)) || !is_trap(g_ptr->feat)) g_ptr->info &= ~(CAVE_UNSAFE);
+		if ((!creature_ptr->blind && !no_lite(creature_ptr)) || !is_trap(creature_ptr, g_ptr->feat)) g_ptr->info &= ~(CAVE_UNSAFE);
 
 		/* For get everything when requested hehe I'm *NASTY* */
 		if (floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_FORGET)) wiz_dark(creature_ptr);
@@ -1177,7 +1177,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			else
 			{
 				/* Closed doors */
-				if (easy_open && is_closed_door(feat) && easy_open_door(creature_ptr, y, x)) return;
+				if (easy_open && is_closed_door(creature_ptr, feat) && easy_open_door(creature_ptr, y, x)) return;
 
 #ifdef JP
 				msg_format("%sが行く手をはばんでいる。", name);
@@ -1926,7 +1926,7 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
 	g_ptr = &floor_ptr->grid_array[creature_ptr->y+ddy[new_dir]][creature_ptr->x+ddx[new_dir]];
 
 	/* Close door abort traveling */
-	if (!easy_open && is_closed_door(g_ptr->feat)) return 0;
+	if (!easy_open && is_closed_door(creature_ptr, g_ptr->feat)) return 0;
 
 	/* Visible and unignorable trap abort tarveling */
 	if (!g_ptr->mimic && !trap_can_be_ignored(creature_ptr, g_ptr->feat)) return 0;
