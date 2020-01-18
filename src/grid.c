@@ -1208,15 +1208,6 @@ bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FLAGS16 m
 }
 
 
-void place_inner_grid(grid_type *g_ptr)
-{
-	g_ptr->feat = feat_wall_inner;
-	g_ptr->info &= ~(CAVE_MASK);
-	g_ptr->info |= CAVE_INNER;
-	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
-}
-
-
 void place_inner_perm_grid(grid_type *g_ptr)
 {
 	g_ptr->feat = feat_permanent;
@@ -1271,7 +1262,7 @@ void place_grid(grid_type *g_ptr, place_grid_type pg_type)
 		g_ptr->info |= CAVE_EXTRA;
 		break;
 	}
-	case innner:
+	case inner:
 	{
 		g_ptr->feat = feat_wall_inner;
 		g_ptr->info |= CAVE_INNER;

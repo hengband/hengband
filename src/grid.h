@@ -310,13 +310,12 @@ typedef enum place_grid_type
 {
 	floor,
 	extra,
-	innner,
+	inner,
 	outer,
 	outer_noperm,
 	solid_perm
 } place_grid_type;
 
-extern void place_inner_grid(grid_type *g_ptr);
 extern void place_inner_perm_grid(grid_type *g_ptr);
 extern void place_outer_grid(grid_type *g_ptr);
 extern void place_outer_noperm_grid(grid_type *g_ptr);

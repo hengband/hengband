@@ -1700,7 +1700,7 @@ void build_maze_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITIO
 			}
 			else
 			{
-				place_inner_grid(g_ptr);
+				place_grid(g_ptr, inner);
 			}
 			if (light) g_ptr->info |= (CAVE_GLOW);
 		}

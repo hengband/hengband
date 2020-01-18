@@ -387,17 +387,17 @@ bool build_type5(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_inner_grid(g_ptr);
+		place_grid(g_ptr, inner);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_inner_grid(g_ptr);
+		place_grid(g_ptr, inner);
 	}
 
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_inner_grid(g_ptr);
+		place_grid(g_ptr, inner);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_inner_grid(g_ptr);
+		place_grid(g_ptr, inner);
 	}
 	for (y = y1; y <= y2; y++)
 	{
@@ -595,16 +595,16 @@ bool build_type6(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_inner_grid(g_ptr);
+		place_grid(g_ptr, inner);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_inner_grid(g_ptr);
+		place_grid(g_ptr, inner);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_inner_grid(g_ptr);
+		place_grid(g_ptr, inner);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_inner_grid(g_ptr);
+		place_grid(g_ptr, inner);
 	}
 	for (y = y1; y <= y2; y++)
 	{
@@ -873,7 +873,7 @@ bool build_type13(player_type *player_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_inner_grid(g_ptr);
+			place_grid(g_ptr, inner);
 			g_ptr->info |= (CAVE_ROOM);
 		}
 	}

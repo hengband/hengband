@@ -96,7 +96,7 @@ bool build_type15(player_type *player_ptr)
 			for (dir2 = 0; dir2 < 8; dir2++)
 			{
 				g_ptr = &floor_ptr->grid_array[y + ddy_ddd[dir2]][x + ddx_ddd[dir2]];
-				place_inner_grid(g_ptr);
+				place_grid(g_ptr, inner);
 				g_ptr->feat = feat_glass_wall;
 			}
 		}
@@ -134,19 +134,19 @@ bool build_type15(player_type *player_ptr)
 
 		/* Pillars */
 		g_ptr = &floor_ptr->grid_array[y1 + 1][x1 + 1];
-		place_inner_grid(g_ptr);
+		place_grid(g_ptr, inner);
 		g_ptr->feat = feat_glass_wall;
 
 		g_ptr = &floor_ptr->grid_array[y1 + 1][x2 - 1];
-		place_inner_grid(g_ptr);
+		place_grid(g_ptr, inner);
 		g_ptr->feat = feat_glass_wall;
 
 		g_ptr = &floor_ptr->grid_array[y2 - 1][x1 + 1];
-		place_inner_grid(g_ptr);
+		place_grid(g_ptr, inner);
 		g_ptr->feat = feat_glass_wall;
 
 		g_ptr = &floor_ptr->grid_array[y2 - 1][x2 - 1];
-		place_inner_grid(g_ptr);
+		place_grid(g_ptr, inner);
 		g_ptr->feat = feat_glass_wall;
 		get_mon_num_prep(player_ptr, vault_aux_lite, NULL);
 
@@ -157,7 +157,7 @@ bool build_type15(player_type *player_ptr)
 		for (dir1 = 0; dir1 < 8; dir1++)
 		{
 			g_ptr = &floor_ptr->grid_array[yval + ddy_ddd[dir1]][xval + ddx_ddd[dir1]];
-			place_inner_grid(g_ptr);
+			place_grid(g_ptr, inner);
 			g_ptr->feat = feat_glass_wall;
 		}
 
@@ -188,27 +188,27 @@ bool build_type15(player_type *player_ptr)
 		for (y = yval - 2; y <= yval + 2; y++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][xval - 3];
-			place_inner_grid(g_ptr);
+			place_grid(g_ptr, inner);
 			g_ptr->feat = feat_glass_wall;
 			g_ptr = &floor_ptr->grid_array[y][xval + 3];
-			place_inner_grid(g_ptr);
+			place_grid(g_ptr, inner);
 			g_ptr->feat = feat_glass_wall;
 		}
 
 		for (x = xval - 2; x <= xval + 2; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[yval - 3][x];
-			place_inner_grid(g_ptr);
+			place_grid(g_ptr, inner);
 			g_ptr->feat = feat_glass_wall;
 			g_ptr = &floor_ptr->grid_array[yval + 3][x];
-			place_inner_grid(g_ptr);
+			place_grid(g_ptr, inner);
 			g_ptr->feat = feat_glass_wall;
 		}
 
 		for (dir1 = 4; dir1 < 8; dir1++)
 		{
 			g_ptr = &floor_ptr->grid_array[yval + 2 * ddy_ddd[dir1]][xval + 2 * ddx_ddd[dir1]];
-			place_inner_grid(g_ptr);
+			place_grid(g_ptr, inner);
 			g_ptr->feat = feat_glass_wall;
 		}
 

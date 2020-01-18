@@ -382,12 +382,12 @@ static void build_vault(player_type *player_ptr, POSITION yval, POSITION xval, P
 
 				/* Granite wall (inner) */
 			case '#':
-				place_inner_grid(g_ptr);
+				place_grid(g_ptr, inner);
 				break;
 
 				/* Glass wall (inner) */
 			case '$':
-				place_inner_grid(g_ptr);
+				place_grid(g_ptr, inner);
 				g_ptr->feat = feat_glass_wall;
 				break;
 
