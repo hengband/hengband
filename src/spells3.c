@@ -150,8 +150,8 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT
 	reset_target(m_ptr);
 
 	update_monster(caster_ptr, m_idx, TRUE);
-	lite_spot(oy, ox);
-	lite_spot(ny, nx);
+	lite_spot(caster_ptr, oy, ox);
+	lite_spot(caster_ptr, ny, nx);
 
 	if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 		caster_ptr->update |= (PU_MON_LITE);
@@ -236,8 +236,8 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
 	m_ptr->fx = nx;
 
 	update_monster(caster_ptr, m_idx, TRUE);
-	lite_spot(oy, ox);
-	lite_spot(ny, nx);
+	lite_spot(caster_ptr, oy, ox);
+	lite_spot(caster_ptr, ny, nx);
 
 	if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 		caster_ptr->update |= (PU_MON_LITE);
@@ -2800,7 +2800,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 		for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			next_o_idx = floor_ptr->o_list[this_o_idx].next_o_idx;
-			delete_object_idx(floor_ptr, this_o_idx);
+			delete_object_idx(caster_ptr, this_o_idx);
 		}
 	}
 
@@ -3234,8 +3234,8 @@ bool shock_power(player_type *caster_ptr)
 	m_ptr->fx = tx;
 
 	update_monster(caster_ptr, m_idx, TRUE);
-	lite_spot(oy, ox);
-	lite_spot(ty, tx);
+	lite_spot(caster_ptr, oy, ox);
+	lite_spot(caster_ptr, ty, tx);
 
 	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 		caster_ptr->update |= (PU_MON_LITE);

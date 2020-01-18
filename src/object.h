@@ -427,8 +427,8 @@ extern int bow_tval_ammo(object_type *o_ptr);
 
 /* object2.c */
 extern void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx);
-extern void delete_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx);
-extern void delete_object(floor_type *floor_ptr, POSITION y, POSITION x);
+extern void delete_object_idx(player_type *owner_ptr, OBJECT_IDX o_idx);
+extern void delete_object(player_type *owner_ptr, POSITION y, POSITION x);
 
 extern OBJECT_IDX o_pop(floor_type *floor_ptr);
 extern OBJECT_IDX get_obj_num(player_type *o_ptr, DEPTH level, BIT_FLAGS mode);
@@ -489,7 +489,7 @@ extern void inven_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM
 extern void inven_item_optimize(player_type *owner_ptr, INVENTORY_IDX item);
 extern void floor_item_charges(floor_type *owner_ptr, INVENTORY_IDX item);
 extern void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER num);
-extern void floor_item_optimize(floor_type *floor_ptr, INVENTORY_IDX item);
+extern void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item);
 extern bool inven_carry_okay(object_type *o_ptr);
 extern bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr);
 extern s16b inven_carry(player_type *owner_ptr, object_type *o_ptr);

@@ -1012,7 +1012,7 @@ void monster_gain_exp(player_type *target_ptr, MONSTER_IDX m_idx, MONRACE_IDX s_
 	}
 
 	update_monster(target_ptr, m_idx, FALSE);
-	lite_spot(m_ptr->fy, m_ptr->fx);
+	lite_spot(target_ptr, m_ptr->fy, m_ptr->fx);
 
 	if (m_idx == target_ptr->riding) target_ptr->update |= PU_BONUS;
 }

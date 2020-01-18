@@ -339,7 +339,7 @@ bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x)
 \
 		/* Notice and redraw */ \
 		note_spot((C), (Y), (X)); \
-		lite_spot((Y), (X)); \
+		lite_spot((C), (Y), (X)); \
 	} \
 }
 
@@ -606,31 +606,31 @@ void note_spot(player_type *player_ptr, POSITION y, POSITION x)
  *
  * This function should only be called on "legal" grids
  */
-void lite_spot(POSITION y, POSITION x)
+void lite_spot(player_type *player_ptr, POSITION y, POSITION x)
 {
 	/* Redraw if on screen */
-	if (panel_contains(y, x) && in_bounds2(p_ptr->current_floor_ptr, y, x))
+	if (panel_contains(y, x) && in_bounds2(player_ptr->current_floor_ptr, y, x))
 	{
 		TERM_COLOR a;
 		SYMBOL_CODE c;
 		TERM_COLOR ta;
 		SYMBOL_CODE tc;
 
-		map_info(p_ptr, y, x, &a, &c, &ta, &tc);
+		map_info(player_ptr, y, x, &a, &c, &ta, &tc);
 
 		/* Hack -- fake monochrome */
 		if (!use_graphics)
 		{
 			if (current_world_ptr->timewalk_m_idx) a = TERM_DARK;
-			else if (IS_INVULN(p_ptr) || p_ptr->timewalk) a = TERM_WHITE;
-			else if (p_ptr->wraith_form) a = TERM_L_DARK;
+			else if (IS_INVULN(player_ptr) || player_ptr->timewalk) a = TERM_WHITE;
+			else if (player_ptr->wraith_form) a = TERM_L_DARK;
 		}
 
 		/* Hack -- Queue it */
 		Term_queue_bigchar(panel_col_of(x), y - panel_row_prt, a, c, ta, tc);
 
 		/* Update sub-windows */
-		p_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+		player_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	}
 }
 
@@ -1053,7 +1053,7 @@ void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x)
 
 	note_spot(caster_ptr, y, x);
 
-	lite_spot(y, x);
+	lite_spot(caster_ptr, y, x);
 }
 
 

@@ -193,7 +193,7 @@ bool warding_glyph(player_type *caster_ptr)
 	caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].mimic = feat_glyph;
 
 	note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
-	lite_spot(caster_ptr->y, caster_ptr->x);
+	lite_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
 
 	return TRUE;
 }
@@ -221,7 +221,7 @@ bool explosive_rune(player_type *caster_ptr, POSITION y, POSITION x)
 	floor_ptr->grid_array[y][x].mimic = feat_explosive_rune;
 
 	note_spot(caster_ptr, y, x);
-	lite_spot(y, x);
+	lite_spot(caster_ptr, y, x);
 
 	return TRUE;
 }
@@ -247,7 +247,7 @@ bool place_mirror(player_type *caster_ptr)
 	caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info |= CAVE_GLOW;
 
 	note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
-	lite_spot(caster_ptr->y, caster_ptr->x);
+	lite_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
 	update_local_illumination(caster_ptr, caster_ptr->y, caster_ptr->x);
 
 	return TRUE;
@@ -288,7 +288,7 @@ void stair_creation(player_type *caster_ptr)
 	}
 
 	/* Destroy all objects in the grid */
-	delete_object(floor_ptr, caster_ptr->y, caster_ptr->x);
+	delete_object(caster_ptr, caster_ptr->y, caster_ptr->x);
 
 	/* Extract current floor data */
 	saved_floor_type *sf_ptr;
@@ -568,7 +568,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 				}
 			}
 
-			delete_object(floor_ptr, y, x);
+			delete_object(caster_ptr, y, x);
 
 			/* Destroy "non-permanent" grids */
 			if (cave_perma_grid(g_ptr)) continue;
@@ -1027,8 +1027,8 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			m_ptr->fx = sx;
 
 			update_monster(caster_ptr, m_idx, TRUE);
-			lite_spot(yy, xx);
-			lite_spot(sy, sx);
+			lite_spot(caster_ptr, yy, xx);
+			lite_spot(caster_ptr, sy, sx);
 		}
 	}
 
@@ -1052,7 +1052,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			/* Destroy location (if valid) */
 			if (!cave_valid_bold(floor_ptr, yy, xx)) continue;
 
-			delete_object(floor_ptr, yy, xx);
+			delete_object(caster_ptr, yy, xx);
 
 			/* Wall (or floor) type */
 			int t = cave_have_flag_bold(floor_ptr, yy, xx, FF_PROJECT) ? randint0(100) : 200;

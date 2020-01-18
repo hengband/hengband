@@ -416,7 +416,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		if (!caster_ptr->blind && player_has_los_bold(caster_ptr, y, x))
 		{
 			g_ptr->info &= ~(CAVE_UNSAFE);
-			lite_spot(y, x);
+			lite_spot(caster_ptr, y, x);
 			obvious = TRUE;
 		}
 
@@ -444,7 +444,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		if (!caster_ptr->blind && player_has_los_bold(caster_ptr, y, x))
 		{
 			g_ptr->info &= ~(CAVE_UNSAFE);
-			lite_spot(y, x);
+			lite_spot(caster_ptr, y, x);
 			obvious = TRUE;
 		}
 
@@ -462,7 +462,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			g_ptr->mimic = old_mimic;
 
 			note_spot(caster_ptr, y, x);
-			lite_spot(y, x);
+			lite_spot(caster_ptr, y, x);
 
 			/* Check line of sight */
 			if (known && have_flag(mimic_f_ptr->flags, FF_OPEN))
@@ -524,7 +524,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		g_ptr->info |= CAVE_OBJECT;
 		g_ptr->mimic = feat_glyph;
 		note_spot(caster_ptr, y, x);
-		lite_spot(y, x);
+		lite_spot(caster_ptr, y, x);
 		break;
 	}
 
@@ -577,7 +577,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		{
 			g_ptr->info |= (CAVE_GLOW);
 			note_spot(caster_ptr, y, x);
-			lite_spot(y, x);
+			lite_spot(caster_ptr, y, x);
 			update_local_illumination(caster_ptr, y, x);
 
 			/* Observe */
@@ -639,7 +639,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				note_spot(caster_ptr, y, x);
 			}
 
-			lite_spot(y, x);
+			lite_spot(caster_ptr, y, x);
 
 			update_local_illumination(caster_ptr, y, x);
 
@@ -727,7 +727,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	}
 	}
 
-	lite_spot(y, x);
+	lite_spot(caster_ptr, y, x);
 	/* Return "Anything seen?" */
 	return (obvious);
 }
@@ -1054,7 +1054,7 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 				k_idx = o_ptr->k_idx;
 				is_potion = object_is_potion(o_ptr);
-				delete_object_idx(caster_ptr->current_floor_ptr, this_o_idx);
+				delete_object_idx(caster_ptr, this_o_idx);
 
 				/* Potions produce effects when 'shattered' */
 				if (is_potion)
@@ -1062,7 +1062,7 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					(void)potion_smash_effect(caster_ptr, who, y, x, k_idx);
 				}
 
-				lite_spot(y, x);
+				lite_spot(caster_ptr, y, x);
 			}
 		}
 	}
@@ -3918,7 +3918,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	if (m_ptr->r_idx) update_monster(caster_ptr, g_ptr->m_idx, FALSE);
 
 	/* Redraw the monster grid */
-	lite_spot(y, x);
+	lite_spot(caster_ptr, y, x);
 
 	/* Update monster recall window */
 	if ((caster_ptr->monster_race_idx == m_ptr->r_idx) && (seen || !m_ptr->r_idx))
@@ -5763,7 +5763,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					move_cursor_relative(y, x);
 					Term_fresh();
 					Term_xtra(TERM_XTRA_DELAY, msec);
-					lite_spot(y, x);
+					lite_spot(caster_ptr, y, x);
 					Term_fresh();
 
 					/* Display "beam" grids */
@@ -5902,7 +5902,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					move_cursor_relative(y, x);
 					/*if (fresh_before)*/ Term_fresh();
 					Term_xtra(TERM_XTRA_DELAY, msec);
-					lite_spot(y, x);
+					lite_spot(caster_ptr, y, x);
 					/*if (fresh_before)*/ Term_fresh();
 
 					/* Display "beam" grids */
@@ -6048,7 +6048,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				move_cursor_relative(y, x);
 				/*if (fresh_before)*/ Term_fresh();
 				Term_xtra(TERM_XTRA_DELAY, msec);
-				lite_spot(y, x);
+				lite_spot(caster_ptr, y, x);
 				/*if (fresh_before)*/ Term_fresh();
 
 				/* Display "beam" grids */
@@ -6236,7 +6236,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				/* Hack -- Erase if needed */
 				if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x))
 				{
-					lite_spot(y, x);
+					lite_spot(caster_ptr, y, x);
 				}
 			}
 

@@ -2061,7 +2061,7 @@ static void autopick_delayed_alter_aux(player_type *player_ptr, INVENTORY_IDX it
 	/* Eliminate the item (from the floor) */
 	else
 	{
-		delete_object_idx(player_ptr->current_floor_ptr, 0 - item);
+		delete_object_idx(player_ptr, 0 - item);
 	}
 
 	msg_format(_("%sを自動破壊します。", "Auto-destroying %s."), o_name);

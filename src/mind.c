@@ -1684,8 +1684,8 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		(void)set_monster_csleep(caster_ptr, m_idx, 0);
 
 		update_monster(caster_ptr, m_idx, TRUE);
-		lite_spot(target_row, target_col);
-		lite_spot(ty, tx);
+		lite_spot(caster_ptr, target_row, target_col);
+		lite_spot(caster_ptr, ty, tx);
 
 		if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 			caster_ptr->update |= (PU_MON_LITE);

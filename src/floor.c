@@ -677,7 +677,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
 	if (g_ptr->m_idx) update_monster(player_ptr, g_ptr->m_idx, FALSE);
 
 	note_spot(player_ptr, y, x);
-	lite_spot(y, x);
+	lite_spot(player_ptr, y, x);
 
 	/* Check if los has changed */
 	if (old_los ^ have_flag(f_ptr->flags, FF_LOS))
@@ -711,7 +711,7 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
 		{
 			if (cc_ptr->m_idx) update_monster(player_ptr, cc_ptr->m_idx, FALSE);
 			note_spot(player_ptr, yy, xx);
-			lite_spot(yy, xx);
+			lite_spot(player_ptr, yy, xx);
 		}
 
 		update_local_illumination(player_ptr, yy, xx);
@@ -1604,7 +1604,7 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
 
 	g_ptr->o_idx = o_idx;
 	note_spot(owner_ptr, y, x);
-	lite_spot(y, x);
+	lite_spot(owner_ptr, y, x);
 }
 
 
@@ -1659,7 +1659,7 @@ void place_gold(player_type *player_ptr, POSITION y, POSITION x)
 
 	g_ptr->o_idx = o_idx;
 	note_spot(player_ptr, y, x);
-	lite_spot(y, x);
+	lite_spot(player_ptr, y, x);
 }
 
 
@@ -1836,7 +1836,7 @@ void compact_objects(player_type *player_ptr, int size)
 			/* Apply the saving throw */
 			if (randint0(100) < chance) continue;
 
-			delete_object_idx(floor_ptr, i);
+			delete_object_idx(player_ptr, i);
 			num++;
 		}
 	}

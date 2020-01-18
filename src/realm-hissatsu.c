@@ -329,8 +329,8 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 					m_ptr->fx = tx;
 
 					update_monster(caster_ptr, m_idx, TRUE);
-					lite_spot(oy, ox);
-					lite_spot(ty, tx);
+					lite_spot(caster_ptr, oy, ox);
+					lite_spot(caster_ptr, ty, tx);
 
 					if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 						caster_ptr->update |= (PU_MON_LITE);
@@ -693,10 +693,10 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				update_monster(caster_ptr, m_idx, TRUE);
 
 				/* Redraw the old spot */
-				lite_spot(y, x);
+				lite_spot(caster_ptr, y, x);
 
 				/* Redraw the new spot */
-				lite_spot(ny, nx);
+				lite_spot(caster_ptr, ny, nx);
 
 				/* Player can move forward? */
 				if (player_can_enter(caster_ptr, g_ptr->feat, 0))

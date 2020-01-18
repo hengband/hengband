@@ -3674,7 +3674,7 @@ void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effe
 	if (old_race != creature_ptr->prace) autopick_load_pref(creature_ptr, FALSE);
 
 	/* Player's graphic tile may change */
-	lite_spot(creature_ptr->y, creature_ptr->x);
+	lite_spot(creature_ptr, creature_ptr->y, creature_ptr->x);
 }
 
 

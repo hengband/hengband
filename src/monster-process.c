@@ -1960,7 +1960,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				g_ptr->mimic = 0;
 
 				note_spot(target_ptr, ny, nx);
-				lite_spot(ny, nx);
+				lite_spot(target_ptr, ny, nx);
 
 				if (!monster_is_valid(m_ptr)) return;
 				/* Allow movement */
@@ -2175,8 +2175,8 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			m_ptr->fx = nx;
 			update_monster(target_ptr, m_idx, TRUE);
 
-			lite_spot(oy, ox);
-			lite_spot(ny, nx);
+			lite_spot(target_ptr, oy, ox);
+			lite_spot(target_ptr, ny, nx);
 		}
 		else
 		{
@@ -2319,7 +2319,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 					msg_format(_("%^sが%sを破壊した。", "%^s destroys %s."), m_name, o_name);
 				}
 
-				delete_object_idx(target_ptr->current_floor_ptr, this_o_idx);
+				delete_object_idx(target_ptr, this_o_idx);
 			}
 		}
 

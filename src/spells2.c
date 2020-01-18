@@ -91,7 +91,7 @@ static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, 
 
 					g_ptr->info &= ~(CAVE_UNSAFE);
 
-					lite_spot(y, x);
+					lite_spot(caster_ptr, y, x);
 				}
 			}
 
@@ -99,7 +99,7 @@ static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, 
 			{
 				disclose_grid(caster_ptr, y, x);
 				g_ptr->info |= (CAVE_MARK);
-				lite_spot(y, x);
+				lite_spot(caster_ptr, y, x);
 				detect = TRUE;
 			}
 		}
@@ -223,7 +223,7 @@ bool detect_objects_gold(player_type *caster_ptr, POSITION range)
 		if (o_ptr->tval == TV_GOLD)
 		{
 			o_ptr->marked |= OM_FOUND;
-			lite_spot(y, x);
+			lite_spot(caster_ptr, y, x);
 			detect = TRUE;
 		}
 	}
@@ -274,7 +274,7 @@ bool detect_objects_normal(player_type *caster_ptr, POSITION range)
 		if (o_ptr->tval != TV_GOLD)
 		{
 			o_ptr->marked |= OM_FOUND;
-			lite_spot(y, x);
+			lite_spot(caster_ptr, y, x);
 			detect = TRUE;
 		}
 	}
@@ -360,7 +360,7 @@ bool detect_objects_magic(player_type *caster_ptr, POSITION range)
 		{
 			/* Memorize the item */
 			o_ptr->marked |= OM_FOUND;
-			lite_spot(y, x);
+			lite_spot(caster_ptr, y, x);
 			detect = TRUE;
 		}
 	}
@@ -1311,7 +1311,7 @@ bool probing(player_type *caster_ptr)
 				m_ptr->mflag2 &= ~(MFLAG2_KAGE);
 
 			m_ptr->ap_r_idx = m_ptr->r_idx;
-			lite_spot(m_ptr->fy, m_ptr->fx);
+			lite_spot(caster_ptr, m_ptr->fy, m_ptr->fx);
 		}
 
 		/* Get "the monster" or "something" */
@@ -1515,7 +1515,7 @@ static void cave_temp_room_lite(player_type *caster_ptr)
 		}
 
 		note_spot(caster_ptr, y, x);
-		lite_spot(y, x);
+		lite_spot(caster_ptr, y, x);
 		update_local_illumination(caster_ptr, y, x);
 	}
 
@@ -1592,7 +1592,7 @@ static void cave_temp_room_unlite(player_type *caster_ptr)
 			update_monster(caster_ptr, g_ptr->m_idx, FALSE);
 		}
 
-		lite_spot(y, x);
+		lite_spot(caster_ptr, y, x);
 		update_local_illumination(caster_ptr, y, x);
 	}
 

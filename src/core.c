@@ -4775,7 +4775,7 @@ static void process_player(player_type *creature_ptr)
 					continue;
 
 				/* Redraw regardless */
-				lite_spot(m_ptr->fy, m_ptr->fx);
+				lite_spot(creature_ptr, m_ptr->fy, m_ptr->fx);
 			}
 
 
@@ -4826,7 +4826,7 @@ static void process_player(player_type *creature_ptr)
 							if (creature_ptr->riding == m_idx) creature_ptr->redraw |= (PR_UHEALTH);
 
 							/* Redraw regardless */
-							lite_spot(m_ptr->fy, m_ptr->fx);
+							lite_spot(creature_ptr, m_ptr->fy, m_ptr->fx);
 						}
 					}
 				}

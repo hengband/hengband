@@ -293,7 +293,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 	/* Get the object again */
 	o_ptr = &owner_ptr->inventory_list[slot];
 
-	delete_object_idx(owner_ptr->current_floor_ptr, o_idx);
+	delete_object_idx(owner_ptr, o_idx);
 
 	if (owner_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 	{
@@ -399,7 +399,7 @@ void carry(player_type *creature_ptr, bool pickup)
 		if (o_ptr->tval == TV_GOLD)
 		{
 			int value = (long)o_ptr->pval;
-			delete_object_idx(creature_ptr->current_floor_ptr, this_o_idx);
+			delete_object_idx(creature_ptr, this_o_idx);
 			msg_format(_(" $%ld の価値がある%sを見つけた。", "You collect %ld gold pieces worth of %s."),
 			   (long)value, o_name);
 
@@ -620,8 +620,8 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 			}
 		}
 
-		lite_spot(oy, ox);
-		lite_spot(ny, nx);
+		lite_spot(creature_ptr, oy, ox);
+		lite_spot(creature_ptr, ny, nx);
 
 		/* Check for new panel (redraw map) */
 		verify_panel(creature_ptr);
@@ -1158,7 +1158,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 #endif
 
 				g_ptr->info |= (CAVE_MARK);
-				lite_spot(y, x);
+				lite_spot(creature_ptr, y, x);
 			}
 		}
 

@@ -551,7 +551,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 			{
 				shooter_ptr->current_floor_ptr->grid_array[ny][nx].info |= (CAVE_GLOW);
 				note_spot(shooter_ptr, ny, nx);
-				lite_spot(ny, nx);
+				lite_spot(shooter_ptr, ny, nx);
 			}
 
 			/* The player can see the (on screen) missile */
@@ -565,7 +565,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 				move_cursor_relative(ny, nx);
 				Term_fresh();
 				Term_xtra(TERM_XTRA_DELAY, msec);
-				lite_spot(ny, nx);
+				lite_spot(shooter_ptr, ny, nx);
 				Term_fresh();
 			}
 
@@ -588,7 +588,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 			{
 				shooter_ptr->current_floor_ptr->grid_array[ny][nx].info &= ~(CAVE_GLOW | CAVE_MARK);
 				note_spot(shooter_ptr, ny, nx);
-				lite_spot(ny, nx);
+				lite_spot(shooter_ptr, ny, nx);
 			}
 
 			prev_y = y;
@@ -724,7 +724,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 					{
 						shooter_ptr->current_floor_ptr->grid_array[ny][nx].info |= (CAVE_GLOW);
 						note_spot(shooter_ptr, ny, nx);
-						lite_spot(ny, nx);
+						lite_spot(shooter_ptr, ny, nx);
 					}
 
 					/* Hit the monster, check for death */
@@ -796,8 +796,8 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
 								update_monster(shooter_ptr, c_mon_ptr->m_idx, TRUE);
 
-								lite_spot(ny, nx);
-								lite_spot(oy, ox);
+								lite_spot(shooter_ptr, ny, nx);
+								lite_spot(shooter_ptr, oy, ox);
 
 								Term_fresh();
 								Term_xtra(TERM_XTRA_DELAY, msec);

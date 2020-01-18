@@ -2554,7 +2554,7 @@ void print_map(player_type *player_ptr)
 	}
 
 	/* Display player */
-	lite_spot(player_ptr->y, player_ptr->x);
+	lite_spot(player_ptr, player_ptr->y, player_ptr->x);
 
 	/* Restore the cursor */
 	(void)Term_set_cursor(v);
@@ -3861,7 +3861,7 @@ void delayed_visual_update(player_type *player_ptr)
 		/* If required, note */
 		if (g_ptr->info & CAVE_NOTE) note_spot(player_ptr, y, x);
 
-		lite_spot(y, x);
+		lite_spot(player_ptr, y, x);
 
 		/* Hack -- Visual update of monster on this grid */
 		if (g_ptr->m_idx) update_monster(player_ptr, g_ptr->m_idx, FALSE);

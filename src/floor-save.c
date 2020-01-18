@@ -617,7 +617,7 @@ static void place_pet(player_type *master_ptr)
 				repair_monsters = TRUE;
 			}
 			update_monster(master_ptr, m_idx, TRUE);
-			lite_spot(cy, cx);
+			lite_spot(master_ptr, cy, cx);
 
 			/* Pre-calculated in precalc_cur_num_of_pet() */
 			/* r_ptr->cur_num++; */
@@ -1272,7 +1272,7 @@ void change_floor(player_type *creature_ptr)
 				if (a_info[o_ptr->name1].floor_id != new_floor_id)
 				{
 					/* Disappear from here */
-					delete_object_idx(creature_ptr->current_floor_ptr, i);
+					delete_object_idx(creature_ptr, i);
 				}
 				else
 				{

@@ -153,12 +153,12 @@ void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i)
 		object_type *o_ptr;
 		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
-		delete_object_idx(floor_ptr, this_o_idx);
+		delete_object_idx(player_ptr, this_o_idx);
 	}
 
 	(void)WIPE(m_ptr, monster_type);
 	floor_ptr->m_cnt--;
-	lite_spot(y, x);
+	lite_spot(player_ptr, y, x);
 	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 	{
 		player_ptr->update |= (PU_MON_LITE);
@@ -2055,7 +2055,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 			m_ptr->ml = TRUE;
 
 			/* Draw the monster */
-			lite_spot(fy, fx);
+			lite_spot(subject_ptr, fy, fx);
 
 			/* Update health bar as needed */
 			if (subject_ptr->health_who == m_idx) subject_ptr->redraw |= (PR_HEALTH);
@@ -2094,7 +2094,7 @@ void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full)
 			m_ptr->ml = FALSE;
 
 			/* Erase the monster */
-			lite_spot(fy, fx);
+			lite_spot(subject_ptr, fy, fx);
 
 			/* Update health bar as needed */
 			if (subject_ptr->health_who == m_idx) subject_ptr->redraw |= (PR_HEALTH);
@@ -2300,7 +2300,7 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
 	m_ptr->r_idx = r_idx;
 	m_ptr->ap_r_idx = r_idx;
 	update_monster(player_ptr, m_idx, FALSE);
-	lite_spot(m_ptr->fy, m_ptr->fx);
+	lite_spot(player_ptr, m_ptr->fy, m_ptr->fx);
 
 	int old_r_idx = m_ptr->r_idx;
 	if ((r_info[old_r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) ||
@@ -2820,7 +2820,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
 	g_ptr->mimic = 0;
 
 	note_spot(player_ptr, y, x);
-	lite_spot(y, x);
+	lite_spot(player_ptr, y, x);
 
 	return TRUE;
 }
@@ -4019,7 +4019,7 @@ void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr)
 
 		object_copy(q_ptr, o_ptr);
 		q_ptr->held_m_idx = 0;
-		delete_object_idx(floor_ptr, this_o_idx);
+		delete_object_idx(player_ptr, this_o_idx);
 		(void)drop_near(player_ptr, q_ptr, -1, m_ptr->fy, m_ptr->fx);
 	}
 

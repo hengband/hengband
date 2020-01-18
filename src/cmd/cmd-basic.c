@@ -2471,7 +2471,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	else
 	{
 		floor_item_increase(creature_ptr->current_floor_ptr, 0 - item, -1);
-		floor_item_optimize(creature_ptr->current_floor_ptr, 0 - item);
+		floor_item_optimize(creature_ptr, 0 - item);
 	}
 
 	if (item >= INVEN_RARM)
@@ -2534,7 +2534,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 			move_cursor_relative(ny[cur_dis], nx[cur_dis]);
 			Term_fresh();
 			Term_xtra(TERM_XTRA_DELAY, msec);
-			lite_spot(ny[cur_dis], nx[cur_dis]);
+			lite_spot(creature_ptr, ny[cur_dis], nx[cur_dis]);
 			Term_fresh();
 		}
 
@@ -2731,7 +2731,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 					move_cursor_relative(ny[i], nx[i]);
 					Term_fresh();
 					Term_xtra(TERM_XTRA_DELAY, msec);
-					lite_spot(ny[i], nx[i]);
+					lite_spot(creature_ptr, ny[i], nx[i]);
 					Term_fresh();
 				}
 				else

@@ -2900,7 +2900,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 			owner_ptr->window |= (PW_PLAYER);
 
 			/* Delete the gold */
-			delete_object_idx(owner_ptr->current_floor_ptr, this_o_idx);
+			delete_object_idx(owner_ptr, this_o_idx);
 
 			/* Check the next object */
 			continue;

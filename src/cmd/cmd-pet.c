@@ -1059,10 +1059,10 @@ bool rakuba(player_type *creature_ptr, HIT_POINT dam, bool force)
 		creature_ptr->x = sx;
 
 		/* Redraw the old spot */
-		lite_spot(oy, ox);
+		lite_spot(creature_ptr, oy, ox);
 
 		/* Redraw the new spot */
-		lite_spot(creature_ptr->y, creature_ptr->x);
+		lite_spot(creature_ptr, creature_ptr->y, creature_ptr->x);
 
 		/* Check for new panel */
 		verify_panel(creature_ptr);

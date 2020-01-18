@@ -190,7 +190,7 @@ extern void update_local_illumination(player_type *creature_ptr, POSITION y, POS
 extern bool no_lite(player_type *creature_ptr);
 extern void print_rel(player_type *subject_ptr, SYMBOL_CODE c, TERM_COLOR a, TERM_LEN y, TERM_LEN x);
 extern void note_spot(player_type *player_ptr, POSITION y, POSITION x);
-extern void lite_spot(POSITION y, POSITION x);
+extern void lite_spot(player_type *player_ptr, POSITION y, POSITION x);
 extern void update_flow(player_type *subject_ptr);
 extern FEAT_IDX feat_state(FEAT_IDX feat, int action);
 extern void cave_alter_feat(player_type *player_ptr, POSITION y, POSITION x, int action);

@@ -1626,7 +1626,7 @@ static void do_cmd_wiz_create_feature(player_type *creature_ptr)
 		g_ptr->info |= (CAVE_GLOW | CAVE_OBJECT);
 
 	note_spot(creature_ptr, y, x);
-	lite_spot(y, x);
+	lite_spot(creature_ptr, y, x);
 	creature_ptr->update |= (PU_FLOW);
 
 	prev_feat = tmp_feat;

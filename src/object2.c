@@ -195,17 +195,18 @@ void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 /*!
  * @brief オブジェクトを削除する /
  * Delete a dungeon object
- * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_idx 削除対象のオブジェクト構造体ポインタ
  * @return なし
  * @details
  * Handle "stacks" of objects correctly.
  */
-void delete_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
+void delete_object_idx(player_type *player_ptr, OBJECT_IDX o_idx)
 {
 	object_type *j_ptr;
 
 	/* Excise */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	excise_object_idx(floor_ptr, o_idx);
 
 	/* Object */
@@ -217,7 +218,7 @@ void delete_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 		POSITION y, x;
 		y = j_ptr->iy;
 		x = j_ptr->ix;
-		lite_spot(y, x);
+		lite_spot(player_ptr, y, x);
 	}
 
 	object_wipe(j_ptr);
@@ -228,17 +229,18 @@ void delete_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 /*!
  * @brief フロアにマスに落ちているオブジェクトを全て削除する / Deletes all objects at given location
  * Delete a dungeon object
- * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 削除したフロアマスのY座標
  * @param x 削除したフロアマスのX座標
  * @return なし
  */
-void delete_object(floor_type *floor_ptr, POSITION y, POSITION x)
+void delete_object(player_type *player_ptr, POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Refuse "illegal" locations */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!in_bounds(floor_ptr, y, x)) return;
 
 	g_ptr = &floor_ptr->grid_array[y][x];
@@ -254,7 +256,7 @@ void delete_object(floor_type *floor_ptr, POSITION y, POSITION x)
 	}
 
 	g_ptr->o_idx = 0;
-	lite_spot(y, x);
+	lite_spot(player_ptr, y, x);
 }
 
 
@@ -4470,7 +4472,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 	}
 
 	note_spot(owner_ptr, by, bx);
-	lite_spot(by, bx);
+	lite_spot(owner_ptr, by, bx);
 	sound(SOUND_DROP);
 
 	/* Mega-Hack -- no message if "dropped" by player */
@@ -4572,7 +4574,7 @@ void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
 	floor_item_increase(floor_ptr, 0 - item, num);
 	floor_item_describe(floor_ptr, 0 - item);
-	floor_item_optimize(floor_ptr, 0 - item);
+	floor_item_optimize(owner_ptr, 0 - item);
 }
 
 
@@ -4772,13 +4774,13 @@ void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER 
 /*!
  * @brief 床上の数の無くなったアイテムスロットを消去する /
  * Optimize an item on the floor (destroy "empty" items)
- * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param item 消去したいアイテムの所持スロット
  * @return なし
  */
-void floor_item_optimize(floor_type *floor_ptr, INVENTORY_IDX item)
+void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
 {
-	object_type *o_ptr = &floor_ptr->o_list[item];
+	object_type *o_ptr = &owner_ptr->current_floor_ptr->o_list[item];
 
 	/* Paranoia -- be sure it exists */
 	if (!o_ptr->k_idx) return;
@@ -4786,7 +4788,7 @@ void floor_item_optimize(floor_type *floor_ptr, INVENTORY_IDX item)
 	/* Only optimize empty items */
 	if (o_ptr->number) return;
 
-	delete_object_idx(floor_ptr, item);
+	delete_object_idx(owner_ptr, item);
 }
 
 
