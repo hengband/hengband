@@ -317,7 +317,6 @@ typedef enum place_grid_type
 	solid_perm
 } place_grid_type;
 
-extern void place_outer_grid(grid_type *g_ptr);
 extern void place_outer_noperm_grid(grid_type *g_ptr);
 extern void place_solid_perm_grid(grid_type *g_ptr);
 extern void place_grid(grid_type *g_ptr, place_grid_type pg_type);

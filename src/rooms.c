@@ -1692,7 +1692,7 @@ void build_maze_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITIO
 			if (is_vault) g_ptr->info |= CAVE_ICKY;
 			if ((x == x1 - 1) || (x == x2 + 1) || (y == y1 - 1) || (y == y2 + 1))
 			{
-				place_outer_grid(g_ptr);
+				place_grid(g_ptr, outer);
 			}
 			else if (!is_vault)
 			{

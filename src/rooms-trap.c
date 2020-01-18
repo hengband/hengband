@@ -63,16 +63,16 @@ bool build_type14(floor_type *floor_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 
 	if (floor_ptr->dun_level < 30 + randint1(30))

@@ -77,16 +77,16 @@ bool build_type1(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 
 
@@ -264,32 +264,32 @@ bool build_type2(floor_type *floor_ptr)
 	for (y = y1a - 1; y <= y2a + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1a - 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2a + 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 	for (x = x1a - 1; x <= x2a + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1a - 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2a + 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 
 	/* Place the walls around room "b" */
 	for (y = y1b - 1; y <= y2b + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1b - 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2b + 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 	for (x = x1b - 1; x <= x2b + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1b - 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2b + 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 
 
@@ -400,32 +400,32 @@ bool build_type3(player_type *player_ptr)
 	for (y = y1a - 1; y <= y2a + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1a - 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2a + 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 	for (x = x1a - 1; x <= x2a + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1a - 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2a + 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 
 	/* Place the walls around room "b" */
 	for (y = y1b - 1; y <= y2b + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1b - 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2b + 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 	for (x = x1b - 1; x <= x2b + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1b - 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2b + 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 
 
@@ -625,16 +625,16 @@ bool build_type4(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 
 

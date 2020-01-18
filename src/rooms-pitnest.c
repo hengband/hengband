@@ -364,16 +364,16 @@ bool build_type5(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 
 
@@ -573,16 +573,16 @@ bool build_type6(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 
 	/* Advance to the center room */
@@ -917,16 +917,16 @@ bool build_type13(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(g_ptr, outer);
 	}
 
 	/* Random corridor */

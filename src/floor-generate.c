@@ -1869,7 +1869,7 @@ static bool set_tunnel(floor_type *floor_ptr, POSITION *x, POSITION *y, bool aff
 		if (i == 0)
 		{
 			/* Failed for some reason: hack - ignore the solidness */
-			place_outer_grid(g_ptr);
+			place_grid(g_ptr, outer);
 			dx = 0;
 			dy = 0;
 		}
