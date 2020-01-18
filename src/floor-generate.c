@@ -1020,35 +1020,35 @@ static void build_arena(player_type *player_ptr, POSITION *start_y, POSITION *st
 	for (i = y_height; i <= y_height + 5; i++)
 		for (j = x_left; j <= x_right; j++)
 		{
-			place_extra_perm_bold(player_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (i = y_depth; i >= y_depth - 5; i--)
 		for (j = x_left; j <= x_right; j++)
 		{
-			place_extra_perm_bold(player_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_left; j <= x_left + 17; j++)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			place_extra_perm_bold(player_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_right; j >= x_right - 17; j--)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			place_extra_perm_bold(player_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 
-	place_extra_perm_bold(player_ptr, y_height + 6, x_left + 18);
+	place_bold(player_ptr, y_height + 6, x_left + 18, extra_perm);
 	floor_ptr->grid_array[y_height + 6][x_left + 18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(player_ptr, y_depth - 6, x_left + 18);
+	place_bold(player_ptr, y_depth - 6, x_left + 18, extra_perm);
 	floor_ptr->grid_array[y_depth - 6][x_left + 18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(player_ptr, y_height + 6, x_right - 18);
+	place_bold(player_ptr, y_height + 6, x_right - 18, extra_perm);
 	floor_ptr->grid_array[y_height + 6][x_right - 18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(player_ptr, y_depth - 6, x_right - 18);
+	place_bold(player_ptr, y_depth - 6, x_right - 18, extra_perm);
 	floor_ptr->grid_array[y_depth - 6][x_right - 18].info |= (CAVE_GLOW | CAVE_MARK);
 
 	*start_y = y_height + 5;
@@ -1128,35 +1128,35 @@ static void build_battle(player_type *player_ptr, POSITION *y, POSITION *x)
 	for (i = y_height; i <= y_height + 5; i++)
 		for (j = x_left; j <= x_right; j++)
 		{
-			place_extra_perm_bold(player_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (i = y_depth; i >= y_depth - 3; i--)
 		for (j = x_left; j <= x_right; j++)
 		{
-			place_extra_perm_bold(player_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_left; j <= x_left + 17; j++)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			place_extra_perm_bold(player_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_right; j >= x_right - 17; j--)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			place_extra_perm_bold(player_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 
-	place_extra_perm_bold(player_ptr, y_height+6, x_left+18);
+	place_bold(player_ptr, y_height+6, x_left+18, extra_perm);
 	floor_ptr->grid_array[y_height+6][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(player_ptr, y_depth-4, x_left+18);
+	place_bold(player_ptr, y_depth-4, x_left+18, extra_perm);
 	floor_ptr->grid_array[y_depth-4][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(player_ptr, y_height+6, x_right-18);
+	place_bold(player_ptr, y_height+6, x_right-18, extra_perm);
 	floor_ptr->grid_array[y_height+6][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(player_ptr, y_depth-4, x_right-18);
+	place_bold(player_ptr, y_depth-4, x_right-18, extra_perm);
 	floor_ptr->grid_array[y_depth-4][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
 
 	for (i = y_height + 1; i <= y_height + 5; i++)
