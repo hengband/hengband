@@ -956,7 +956,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 					if (is_explosive_rune_grid(&floor_ptr->grid_array[y][x])) continue;
 
 					/* ... nor on the Pattern */
-					if (pattern_tile(y, x)) continue;
+					if (pattern_tile(floor_ptr, y, x)) continue;
 
 					/* Important -- Skip "quake" grids */
 					if (map[16 + y - cy][16 + x - cx]) continue;

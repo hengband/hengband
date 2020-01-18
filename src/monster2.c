@@ -2480,7 +2480,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
 	if (!(mode & PM_IGNORE_TERRAIN))
 	{
 		/* Not on the Pattern */
-		if (pattern_tile(y, x)) return FALSE;
+		if (pattern_tile(floor_ptr, y, x)) return FALSE;
 
 		/* Require empty space (if not ghostly) */
 		if (!monster_can_enter(player_ptr, y, x, r_ptr, 0)) return FALSE;
@@ -2876,7 +2876,7 @@ static bool mon_scatter(player_type *player_ptr, MONRACE_IDX r_idx, POSITION *yp
 				if (!cave_empty_bold2(floor_ptr, ny, nx)) continue;
 
 				/* ... nor on the Pattern */
-				if (pattern_tile(ny, nx)) continue;
+				if (pattern_tile(floor_ptr, ny, nx)) continue;
 			}
 
 			i = distance(y, x, ny, nx);

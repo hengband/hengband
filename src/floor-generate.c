@@ -161,18 +161,20 @@ static int next_to_walls(floor_type* floor_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief alloc_stairs()の補助として指定の位置に階段を生成できるかの判定を行う / Helper function for alloc_stairs(). Is this a good location for stairs?
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 基準のy座標
  * @param x 基準のx座標
  * @param walls 最低減隣接させたい外壁の数
  * @return 階段を生成して問題がないならばTRUEを返す。
  */
-static bool alloc_stairs_aux(floor_type *floor_ptr, POSITION y, POSITION x, int walls)
+static bool alloc_stairs_aux(player_type *player_ptr, POSITION y, POSITION x, int walls)
 {
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Require "naked" floor grid */
 	if (!is_floor_grid(g_ptr)) return FALSE;
-	if (pattern_tile(y, x)) return FALSE;
+	if (pattern_tile(floor_ptr, y, x)) return FALSE;
 	if (g_ptr->o_idx || g_ptr->m_idx) return FALSE;
 
 	/* Require a certain number of adjacent walls */
@@ -244,7 +246,7 @@ static bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int wal
 			{
 				for (x = 1; x < floor_ptr->width - 1; x++)
 				{
-					if (alloc_stairs_aux(floor_ptr, y, x, walls))
+					if (alloc_stairs_aux(owner_ptr, y, x, walls))
 					{
 						/* A valid space found */
 						candidates++;
@@ -270,7 +272,7 @@ static bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int wal
 			{
 				for (x = 1; x < floor_ptr->width - 1; x++)
 				{
-					if (alloc_stairs_aux(floor_ptr, y, x, walls))
+					if (alloc_stairs_aux(owner_ptr, y, x, walls))
 					{
 						pick--;
 

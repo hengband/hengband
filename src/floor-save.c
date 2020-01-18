@@ -702,12 +702,13 @@ static void update_unique_artifact(floor_type *floor_ptr, s16b cur_floor_id)
  * @brief フロア移動時、プレイヤーの移動先モンスターが既にいた場合ランダムな近隣に移動させる / When a monster is at a place where player will return,
  * @return なし
  */
-static void get_out_monster(floor_type *floor_ptr, player_type *protected_ptr)
+static void get_out_monster(player_type *protected_ptr)
 {
 	int tries = 0;
 	POSITION dis = 1;
 	POSITION oy = protected_ptr->y;
 	POSITION ox = protected_ptr->x;
+	floor_type *floor_ptr = protected_ptr->current_floor_ptr;
 	MONSTER_IDX m_idx = floor_ptr->grid_array[oy][ox].m_idx;
 
 	/* Nothing to do if no monster */
@@ -737,14 +738,14 @@ static void get_out_monster(floor_type *floor_ptr, player_type *protected_ptr)
 		if (!in_bounds(floor_ptr, ny, nx)) continue;
 
 		/* Require "empty" floor space */
-		if (!cave_empty_bold(protected_ptr->current_floor_ptr, ny, nx)) continue;
+		if (!cave_empty_bold(floor_ptr, ny, nx)) continue;
 
 		/* Hack -- no teleport onto glyph of warding */
 		if (is_glyph_grid(&floor_ptr->grid_array[ny][nx])) continue;
 		if (is_explosive_rune_grid(&floor_ptr->grid_array[ny][nx])) continue;
 
 		/* ...nor onto the Pattern */
-		if (pattern_tile(ny, nx)) continue;
+		if (pattern_tile(floor_ptr, ny, nx)) continue;
 
 		/*** It's a good place ***/
 
@@ -1074,7 +1075,7 @@ void leave_floor(player_type *creature_ptr)
 	    !(creature_ptr->change_floor_mode & CFM_NO_RETURN))
 	{
 		/* Get out of the my way! */
-		get_out_monster(creature_ptr->current_floor_ptr, creature_ptr);
+		get_out_monster(creature_ptr);
 
 		/* Record the last visit turn of current floor */
 		sf_ptr->last_visit = current_world_ptr->game_turn;

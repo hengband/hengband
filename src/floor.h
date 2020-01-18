@@ -309,9 +309,6 @@ extern floor_type floor_info;
 	(cave_have_flag_grid((C), FF_PERMANENT))
 
 
-#define pattern_tile(Y,X) \
-	(cave_have_flag_bold(p_ptr->current_floor_ptr, (Y), (X), FF_PATTERN))
-
 /*
  * Does the grid stop disintegration?
  */
@@ -365,6 +362,7 @@ extern saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 #define GRID_X(G) \
 	((int)((G) % 256U))
 
+extern bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x);
 extern void update_smell(floor_type *floor_ptr, player_type *subject_ptr);
 
 extern void add_door(player_type *player_ptr, POSITION x, POSITION y);

@@ -391,7 +391,7 @@ bool summon_possible(player_type *target_ptr, POSITION y1, POSITION x1)
 			if (distance(y1, x1, y, x) > 2) continue;
 
 			/* ...nor on the Pattern */
-			if (pattern_tile(y, x)) continue;
+			if (pattern_tile(floor_ptr, y, x)) continue;
 
 			/* Require empty floor grid in line of projection */
 			if (cave_empty_bold(floor_ptr, y, x) && projectable(target_ptr, y1, x1, y, x) && projectable(target_ptr, y, x, y1, x1)) return TRUE;

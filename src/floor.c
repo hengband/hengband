@@ -39,6 +39,12 @@ bool is_cave_empty_grid(player_type *player_ptr, grid_type *g_ptr)
 }
 
 
+bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x)
+{
+	return cave_have_flag_bold(floor_ptr, y, x, FF_PATTERN);
+}
+
+
 /*!
 * @brief 鍵のかかったドアを配置する
 * @param player_ptr プレーヤーへの参照ポインタ

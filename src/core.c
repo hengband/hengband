@@ -692,7 +692,8 @@ static bool pattern_effect(player_type *creature_ptr)
 {
 	int pattern_type;
 
-	if (!pattern_tile(creature_ptr->y, creature_ptr->x)) return FALSE;
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	if (!pattern_tile(floor_ptr, creature_ptr->y, creature_ptr->x)) return FALSE;
 
 	if ((PRACE_IS_(creature_ptr, RACE_AMBERITE)) &&
 		(creature_ptr->cut > 0) && one_in_(10))
@@ -700,7 +701,6 @@ static bool pattern_effect(player_type *creature_ptr)
 		wreck_the_pattern(creature_ptr);
 	}
 
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	pattern_type = f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat].subtype;
 
 	switch (pattern_type)
