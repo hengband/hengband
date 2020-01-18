@@ -85,7 +85,7 @@ extern char quest_text[10][80];
 extern int quest_text_line;
 extern int leaving_quest;
 
-extern void determine_random_questor(quest_type *q_ptr);
+extern void determine_random_questor(player_type *player_ptr, quest_type *q_ptr);
 extern void complete_quest(player_type *player_ptr, QUEST_IDX quest_num);
 extern void check_quest_completion(player_type *player_ptr, monster_type *m_ptr);
 extern void check_find_art_quest_completion(player_type *player_ptr, object_type *o_ptr);

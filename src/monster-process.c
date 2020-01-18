@@ -1270,7 +1270,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && one_in_(13) && !MON_CSLEEP(m_ptr))
 	{
-		choose_new_monster(m_idx, FALSE, 0);
+		choose_new_monster(target_ptr, m_idx, FALSE, 0);
 		r_ptr = &r_info[m_ptr->r_idx];
 	}
 

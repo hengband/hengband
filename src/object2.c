@@ -3516,7 +3516,7 @@ static void a_m_aux_4(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 		}
 
 		/* Hack -- Remove the monster restriction */
-		get_mon_num_prep(item_monster_okay, NULL);
+		get_mon_num_prep(owner_ptr, item_monster_okay, NULL);
 
 		/* Pick a random non-unique monster race */
 		while (TRUE)

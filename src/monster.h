@@ -472,7 +472,7 @@ extern void delete_monster_idx(MONSTER_IDX i);
 extern void compact_monsters(player_type *player_ptr, int size);
 extern void wipe_monsters_list(player_type *player_ptr);
 extern MONSTER_IDX m_pop(player_type *player_ptr);
-extern errr get_mon_num_prep(monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2);
+extern errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2);
 extern MONRACE_IDX get_mon_num(DEPTH level);
 extern int lore_do_probe(MONRACE_IDX r_idx);
 extern void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold);
@@ -506,7 +506,7 @@ extern bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSI
 #define DRS_REFLECT     32
 extern void update_smart_learn(MONSTER_IDX m_idx, int what);
 
-extern void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
+extern void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
 extern SPEED get_mspeed(monster_race *r_ptr);
 extern void monster_drop_carried_objects(monster_type *m_ptr);
 

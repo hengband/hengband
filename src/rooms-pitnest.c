@@ -24,7 +24,7 @@ struct vault_aux_type
 {
 	concptr name;
 	bool(*hook_func)(MONRACE_IDX r_idx);
-	void(*prep_func)(void);
+	void(*prep_func)(player_type *player_ptr);
 	DEPTH level;
 	int chance;
 };
@@ -304,8 +304,8 @@ bool build_type5(player_type *player_ptr)
 	n_ptr = &nest_types[cur_nest_type];
 
 	/* Process a preparation function if necessary */
-	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
-	get_mon_num_prep(n_ptr->hook_func, NULL);
+	if (n_ptr->prep_func) (*(n_ptr->prep_func))(player_ptr);
+	get_mon_num_prep(player_ptr, n_ptr->hook_func, NULL);
 
 	align.sub_align = SUB_ALIGN_NEUTRAL;
 
@@ -514,8 +514,8 @@ bool build_type6(player_type *player_ptr)
 	n_ptr = &pit_types[cur_pit_type];
 
 	/* Process a preparation function if necessary */
-	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
-	get_mon_num_prep(n_ptr->hook_func, NULL);
+	if (n_ptr->prep_func) (*(n_ptr->prep_func))(player_ptr);
+	get_mon_num_prep(player_ptr, n_ptr->hook_func, NULL);
 
 	align.sub_align = SUB_ALIGN_NEUTRAL;
 
@@ -823,8 +823,8 @@ bool build_type13(player_type *player_ptr)
 	n_ptr = &pit_types[cur_pit_type];
 
 	/* Process a preparation function if necessary */
-	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
-	get_mon_num_prep(n_ptr->hook_func, vault_aux_trapped_pit);
+	if (n_ptr->prep_func) (*(n_ptr->prep_func))(player_ptr);
+	get_mon_num_prep(player_ptr, n_ptr->hook_func, vault_aux_trapped_pit);
 
 	align.sub_align = SUB_ALIGN_NEUTRAL;
 

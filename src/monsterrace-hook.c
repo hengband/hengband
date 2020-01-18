@@ -21,37 +21,39 @@ BIT_FLAGS vault_aux_dragon_mask4;
 
 /*!
 * @brief pit/nestの基準となる単種モンスターを決める /
+* @param player_ptr プレーヤーへの参照ポインタ
 * @return なし
 */
-void vault_prep_clone(void)
+void vault_prep_clone(player_type *player_ptr)
 {
 	/* Apply the monster restriction */
-	get_mon_num_prep(vault_aux_simple, NULL);
+	get_mon_num_prep(player_ptr, vault_aux_simple, NULL);
 
 	/* Pick a race to clone */
 	vault_aux_race = get_mon_num(p_ptr->current_floor_ptr->dun_level + 10);
 
 	/* Remove the monster restriction */
-	get_mon_num_prep(NULL, NULL);
+	get_mon_num_prep(player_ptr, NULL, NULL);
 }
 
 
 /*!
 * @brief pit/nestの基準となるモンスターシンボルを決める /
+* @param player_ptr プレーヤーへの参照ポインタ
 * @return なし
 */
-void vault_prep_symbol(void)
+void vault_prep_symbol(player_type *player_ptr)
 {
 	MONRACE_IDX r_idx;
 
 	/* Apply the monster restriction */
-	get_mon_num_prep(vault_aux_simple, NULL);
+	get_mon_num_prep(player_ptr, vault_aux_simple, NULL);
 
 	/* Pick a race to clone */
 	r_idx = get_mon_num(p_ptr->current_floor_ptr->dun_level + 10);
 
 	/* Remove the monster restriction */
-	get_mon_num_prep(NULL, NULL);
+	get_mon_num_prep(player_ptr, NULL, NULL);
 
 	/* Extract the symbol */
 	vault_aux_char = r_info[r_idx].d_char;
@@ -59,11 +61,14 @@ void vault_prep_symbol(void)
 
 
 /*!
+* todo 関数ポインタ設計の都合上、使わないが引数に含めなければならない
 * @brief pit/nestの基準となるドラゴンの種類を決める /
+* @param player_ptr プレーヤーへの参照ポインタ
 * @return なし
 */
-void vault_prep_dragon(void)
+void vault_prep_dragon(player_type *player_ptr)
 {
+	(void)player_ptr;
 	/* Pick dragon type */
 	switch (randint0(6))
 	{

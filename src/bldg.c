@@ -1584,7 +1584,7 @@ void update_gambling_monsters(player_type *player_ptr)
 			int j;
 			while (TRUE)
 			{
-				get_mon_num_prep(monster_can_entry_arena, NULL);
+				get_mon_num_prep(player_ptr, monster_can_entry_arena, NULL);
 				player_ptr->phase_out = TRUE;
 				r_idx = get_mon_num(mon_level);
 				player_ptr->phase_out = old_inside_battle;
@@ -4235,7 +4235,7 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 	}
 
 	player_ptr->phase_out = TRUE;
-	get_mon_num_prep(NULL, NULL);
+	get_mon_num_prep(player_ptr, NULL, NULL);
 
 	while (TRUE)
 	{
@@ -4260,11 +4260,12 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 
 /*!
  * @brief 賞金首となるユニークを確定する / Determine bounty uniques
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void determine_bounty_uniques(void)
+void determine_bounty_uniques(player_type *player_ptr)
 {
-	get_mon_num_prep(NULL, NULL);
+	get_mon_num_prep(player_ptr, NULL, NULL);
 	for (int i = 0; i < MAX_BOUNTY; i++)
 	{
 		while (TRUE)

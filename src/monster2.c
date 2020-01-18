@@ -825,12 +825,15 @@ static int chameleon_change_m_idx = 0;
 
 
 /*!
+ * todo ここには本来floor_type*を追加したいが、monster.hにfloor.hの参照を追加するとコンパイルエラーが出るので保留
  * @brief 指定されたモンスター種族がダンジョンの制限にかかるかどうかをチェックする / Some dungeon types restrict the possible monsters.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param r_idx チェックするモンスター種族ID
  * @return 召喚条件が一致するならtrue / Return TRUE is the monster is OK and FALSE otherwise
  */
-static bool restrict_monster_to_dungeon(DUNGEON_IDX d_idx, MONRACE_IDX r_idx)
+static bool restrict_monster_to_dungeon(player_type *player_ptr, MONRACE_IDX r_idx)
 {
+	DUNGEON_IDX d_idx = player_ptr->dungeon_idx;
 	dungeon_type *d_ptr = &d_info[d_idx];
 	monster_race *r_ptr = &r_info[r_idx];
 	byte a;
@@ -859,7 +862,7 @@ static bool restrict_monster_to_dungeon(DUNGEON_IDX d_idx, MONRACE_IDX r_idx)
 			return FALSE;
 	}
 
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_ptr->flags1 & DF1_BEGINNER)
 	{
 		if (r_ptr->level > floor_ptr->dun_level)
@@ -1027,12 +1030,12 @@ monsterrace_hook_type get_mon_num2_hook;
 
 /*!
  * @brief モンスター生成制限関数最大2つから / Apply a "monster restriction function" to the "monster allocation table"
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param monster_hook 制限関数1
  * @param monster_hook2 制限関数2
  * @return エラーコード
  */
-errr get_mon_num_prep(monsterrace_hook_type monster_hook,
-	monsterrace_hook_type monster_hook2)
+errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2)
 {
 	int i;
 
@@ -1043,7 +1046,7 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 	get_mon_num2_hook = monster_hook2;
 
 	/* Scan the allocation table */
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (i = 0; i < alloc_race_size; i++)
 	{
 		monster_race *r_ptr;
@@ -1059,7 +1062,7 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 			(get_mon_num2_hook && !((*get_mon_num2_hook)(entry->index))))
 			continue;
 
-		if (!p_ptr->phase_out && !chameleon_change_m_idx &&
+		if (!player_ptr->phase_out && !chameleon_change_m_idx &&
 			summon_specific_type != SUMMON_GUARDIANS)
 		{
 			/* Hack -- don't create questors */
@@ -1079,9 +1082,9 @@ errr get_mon_num_prep(monsterrace_hook_type monster_hook,
 		entry->prob2 = entry->prob1;
 
 		if (floor_ptr->dun_level && (!floor_ptr->inside_quest || is_fixed_quest_idx(floor_ptr->inside_quest)) &&
-			!restrict_monster_to_dungeon(p_ptr->dungeon_idx, entry->index) && !p_ptr->phase_out)
+			!restrict_monster_to_dungeon(player_ptr, entry->index) && !player_ptr->phase_out)
 		{
-			int hoge = entry->prob2 * d_info[p_ptr->dungeon_idx].special_div;
+			int hoge = entry->prob2 * d_info[player_ptr->dungeon_idx].special_div;
 			entry->prob2 = hoge / 64;
 			if (randint0(64) < (hoge & 0x3f)) entry->prob2++;
 		}
@@ -2295,15 +2298,16 @@ static bool monster_hook_chameleon(MONRACE_IDX r_idx)
 
 /*!
  * @brief モンスターの変身処理
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param m_idx 変身処理を受けるモンスター情報のID
  * @param born 生成時の初変身先指定ならばtrue
  * @param r_idx 旧モンスター種族のID
  * @return なし
  */
-void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
+void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 {
 	int oldmaxhp;
-	floor_type *floor_ptr = p_ptr->current_floor_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr;
 	char old_m_name[MAX_NLEN];
@@ -2323,18 +2327,18 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 
 		chameleon_change_m_idx = m_idx;
 		if (old_unique)
-			get_mon_num_prep(monster_hook_chameleon_lord, NULL);
+			get_mon_num_prep(player_ptr, monster_hook_chameleon_lord, NULL);
 		else
-			get_mon_num_prep(monster_hook_chameleon, NULL);
+			get_mon_num_prep(player_ptr, monster_hook_chameleon, NULL);
 
 		if (old_unique)
 			level = r_info[MON_CHAMELEON_K].level;
 		else if (!floor_ptr->dun_level)
-			level = wilderness[p_ptr->wilderness_y][p_ptr->wilderness_x].level;
+			level = wilderness[player_ptr->wilderness_y][player_ptr->wilderness_x].level;
 		else
 			level = floor_ptr->dun_level;
 
-		if (d_info[p_ptr->dungeon_idx].flags1 & DF1_CHAMELEON) level += 2 + randint1(3);
+		if (d_info[player_ptr->dungeon_idx].flags1 & DF1_CHAMELEON) level += 2 + randint1(3);
 
 		r_idx = get_mon_num(level);
 		r_ptr = &r_info[r_idx];
@@ -2345,12 +2349,12 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 
 	m_ptr->r_idx = r_idx;
 	m_ptr->ap_r_idx = r_idx;
-	update_monster(p_ptr, m_idx, FALSE);
+	update_monster(player_ptr, m_idx, FALSE);
 	lite_spot(m_ptr->fy, m_ptr->fx);
 
 	if ((r_info[old_r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)) ||
 		(r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK)))
-		p_ptr->update |= (PU_MON_LITE);
+		player_ptr->update |= (PU_MON_LITE);
 
 	if (born)
 	{
@@ -2364,13 +2368,13 @@ void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx)
 		return;
 	}
 
-	if (m_idx == p_ptr->riding)
+	if (m_idx == player_ptr->riding)
 	{
 		GAME_TEXT m_name[MAX_NLEN];
 		monster_desc(m_name, m_ptr, 0);
 		msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name);
 		if (!(r_ptr->flags7 & RF7_RIDING))
-			if (rakuba(p_ptr, 0, TRUE)) msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
+			if (rakuba(player_ptr, 0, TRUE)) msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
 	}
 
 	/* Extract the monster base speed */
@@ -2426,11 +2430,12 @@ static bool monster_hook_tanuki(MONRACE_IDX r_idx)
 
 
 /*!
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @brief モンスターの表層IDを設定する / Set initial racial appearance of a monster
  * @param r_idx モンスター種族ID
  * @return モンスター種族の表層ID
  */
-static MONRACE_IDX initial_r_appearance(MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
+static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
 {
 	floor_type *floor_ptr = p_ptr->current_floor_ptr;
 	int attempts = 1000;
@@ -2446,7 +2451,7 @@ static MONRACE_IDX initial_r_appearance(MONRACE_IDX r_idx, BIT_FLAGS generate_mo
 	if (!(r_info[r_idx].flags7 & RF7_TANUKI))
 		return r_idx;
 
-	get_mon_num_prep(monster_hook_tanuki, NULL);
+	get_mon_num_prep(player_ptr, monster_hook_tanuki, NULL);
 
 	while (--attempts)
 	{
@@ -2627,7 +2632,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
 
 	/* Save the race */
 	m_ptr->r_idx = r_idx;
-	m_ptr->ap_r_idx = initial_r_appearance(r_idx, mode);
+	m_ptr->ap_r_idx = initial_r_appearance(player_ptr, r_idx, mode);
 
 	/* No flags */
 	m_ptr->mflag = 0;
@@ -2683,7 +2688,7 @@ static bool place_monster_one(player_type *player_ptr, MONSTER_IDX who, POSITION
 
 	if (r_ptr->flags7 & RF7_CHAMELEON)
 	{
-		choose_new_monster(g_ptr->m_idx, TRUE, 0);
+		choose_new_monster(player_ptr, g_ptr->m_idx, TRUE, 0);
 		r_ptr = &r_info[m_ptr->r_idx];
 		m_ptr->mflag2 |= MFLAG2_CHAMELEON;
 
@@ -3185,7 +3190,7 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 
 			/* Require empty grids */
 			if (!cave_empty_bold2(player_ptr->current_floor_ptr, ny, nx)) continue;
-			get_mon_num_prep(place_monster_can_escort, get_monster_hook2(player_ptr, ny, nx));
+			get_mon_num_prep(player_ptr, place_monster_can_escort, get_monster_hook2(player_ptr, ny, nx));
 
 			/* Pick a random race */
 			z = get_mon_num(r_ptr->level);
@@ -3221,7 +3226,7 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	MONRACE_IDX r_idx;
-	get_mon_num_prep(get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
+	get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
 
 	/* Pick a monster */
 	r_idx = get_mon_num(player_ptr->current_floor_ptr->monster_level);
@@ -3250,7 +3255,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x)
 	int attempts = 1000;
 	POSITION cy = y;
 	POSITION cx = x;
-	get_mon_num_prep(get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
+	get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
 
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	while (--attempts)
@@ -3505,7 +3510,7 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
 	summon_specific_type = type;
 
 	summon_unique_okay = (mode & PM_ALLOW_UNIQUE) ? TRUE : FALSE;
-	get_mon_num_prep(summon_specific_okay, get_monster_hook2(player_ptr, y, x));
+	get_mon_num_prep(player_ptr, summon_specific_okay, get_monster_hook2(player_ptr, y, x));
 
 	/* Pick a monster, using the level calculation */
 	r_idx = get_mon_num((floor_ptr->dun_level + lev) / 2 + 5);

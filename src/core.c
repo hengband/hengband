@@ -4374,7 +4374,7 @@ static void process_fishing(player_type *creature_ptr)
 	{
 		MONRACE_IDX r_idx;
 		bool success = FALSE;
-		get_mon_num_prep(monster_is_fishing_target, NULL);
+		get_mon_num_prep(creature_ptr, monster_is_fishing_target, NULL);
 		r_idx = get_mon_num(creature_ptr->current_floor_ptr->dun_level ? creature_ptr->current_floor_ptr->dun_level : wilderness[creature_ptr->wilderness_y][creature_ptr->wilderness_x].level);
 		msg_print(NULL);
 		if (r_idx && one_in_(2))
@@ -5410,7 +5410,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
 		load = FALSE;
 
-		determine_bounty_uniques();
+		determine_bounty_uniques(player_ptr);
 		determine_daily_bounty(player_ptr, FALSE);
 
 		/* Initialize object array */

@@ -34,9 +34,9 @@ extern bool mon_hook_shallow_water(MONRACE_IDX r_idx);
 extern bool mon_hook_lava(MONRACE_IDX r_idx);
 extern bool mon_hook_floor(MONRACE_IDX r_idx);
 
-extern void vault_prep_clone(void);
-extern void vault_prep_dragon(void);
-extern void vault_prep_symbol(void);
+extern void vault_prep_clone(player_type *player_ptr);
+extern void vault_prep_dragon(player_type *player_ptr);
+extern void vault_prep_symbol(player_type *player_ptr);
 
 extern bool vault_aux_lite(MONRACE_IDX r_idx);
 extern bool vault_aux_shards(MONRACE_IDX r_idx);

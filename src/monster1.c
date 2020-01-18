@@ -2594,7 +2594,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
 	if (m_ptr->mflag2 & MFLAG2_CHAMELEON)
 	{
-		choose_new_monster(m_idx, TRUE, MON_CHAMELEON);
+		choose_new_monster(player_ptr, m_idx, TRUE, MON_CHAMELEON);
 		r_ptr = &r_info[m_ptr->r_idx];
 	}
 

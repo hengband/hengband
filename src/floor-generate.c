@@ -603,7 +603,7 @@ static bool cave_gen(player_type *player_ptr)
 
 	/* Fill the arrays of floors and walls in the good proportions */
 	set_floor_and_wall(floor_ptr->dungeon_idx);
-	get_mon_num_prep(get_monster_hook(player_ptr), NULL);
+	get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), NULL);
 
 	/* Randomize the dungeon creation values */
 	dun_tun_rnd = rand_range(DUN_TUN_RND_MIN, DUN_TUN_RND_MAX);
@@ -1250,7 +1250,7 @@ static void generate_fixed_floor(player_type *player_ptr)
 	floor_ptr->monster_level = floor_ptr->base_level;
 
 	if (record_stair) exe_write_diary(player_ptr, DIARY_TO_QUEST, floor_ptr->inside_quest, NULL);
-	get_mon_num_prep(get_monster_hook(player_ptr), NULL);
+	get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), NULL);
 
 	init_flags = INIT_CREATE_DUNGEON;
 

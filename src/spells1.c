@@ -3346,7 +3346,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			else if (m_ptr->hp < randint0(nokori_hp))
 			{
-				if (m_ptr->mflag2 & MFLAG2_CHAMELEON) choose_new_monster(g_ptr->m_idx, FALSE, MON_CHAMELEON);
+				if (m_ptr->mflag2 & MFLAG2_CHAMELEON) choose_new_monster(caster_ptr, g_ptr->m_idx, FALSE, MON_CHAMELEON);
 				msg_format(_("%sを捕えた！", "You capture %^s!"), m_name);
 				cap_mon = m_ptr->r_idx;
 				cap_mspeed = m_ptr->mspeed;

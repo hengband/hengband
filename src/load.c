@@ -1916,7 +1916,7 @@ static void rd_extra(player_type *creature_ptr)
 
 	if (z_older_than(10, 0, 3))
 	{
-		determine_bounty_uniques();
+		determine_bounty_uniques(creature_ptr);
 
 		for (int i = 0; i < MAX_BOUNTY; i++)
 		{
@@ -2882,7 +2882,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		monster_type *m_ptr;
 
 		/* Get a new record */
-		m_idx = m_pop();
+		m_idx = m_pop(creature_ptr);
 
 		if (i != m_idx)
 		{
@@ -3169,7 +3169,7 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 		monster_type *m_ptr;
 
 		/* Get a new record */
-		m_idx = m_pop();
+		m_idx = m_pop(player_ptr);
 
 		if (i != m_idx) return 162;
 
@@ -3549,7 +3549,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 
 			if ((q_ptr->type == QUEST_TYPE_RANDOM) && (!q_ptr->r_idx))
 			{
-				determine_random_questor(&quest[i]);
+				determine_random_questor(creature_ptr, &quest[i]);
 			}
 
 			/* Load quest item index */

@@ -65,6 +65,7 @@ bool build_type15(player_type *player_ptr)
 		place_outer_grid(g_ptr);
 		g_ptr->feat = feat_glass_wall;
 	}
+
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
@@ -80,7 +81,7 @@ bool build_type15(player_type *player_ptr)
 	case 1: /* 4 lite breathers + potion */
 	{
 		DIRECTION dir1, dir2;
-		get_mon_num_prep(vault_aux_lite, NULL);
+		get_mon_num_prep(player_ptr, vault_aux_lite, NULL);
 
 		/* Place fixed lite berathers */
 		for (dir1 = 4; dir1 < 8; dir1++)
@@ -147,7 +148,7 @@ bool build_type15(player_type *player_ptr)
 		g_ptr = &floor_ptr->grid_array[y2 - 1][x2 - 1];
 		place_inner_grid(g_ptr);
 		g_ptr->feat = feat_glass_wall;
-		get_mon_num_prep(vault_aux_lite, NULL);
+		get_mon_num_prep(player_ptr, vault_aux_lite, NULL);
 
 		r_idx = get_mon_num(floor_ptr->dun_level);
 		if (r_idx) place_monster_aux(player_ptr, 0, yval, xval, r_idx, 0L);
@@ -166,6 +167,7 @@ bool build_type15(player_type *player_ptr)
 			place_secret_door(player_ptr, y, xval - 2, DOOR_CURTAIN);
 			place_secret_door(player_ptr, y, xval + 2, DOOR_CURTAIN);
 		}
+
 		for (x = xval - 1; x <= xval + 1; x++)
 		{
 			place_secret_door(player_ptr, yval - 2, x, DOOR_CURTAIN);
@@ -192,6 +194,7 @@ bool build_type15(player_type *player_ptr)
 			place_inner_grid(g_ptr);
 			g_ptr->feat = feat_glass_wall;
 		}
+
 		for (x = xval - 2; x <= xval + 2; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[yval - 3][x];
@@ -201,13 +204,15 @@ bool build_type15(player_type *player_ptr)
 			place_inner_grid(g_ptr);
 			g_ptr->feat = feat_glass_wall;
 		}
+
 		for (dir1 = 4; dir1 < 8; dir1++)
 		{
 			g_ptr = &floor_ptr->grid_array[yval + 2 * ddy_ddd[dir1]][xval + 2 * ddx_ddd[dir1]];
 			place_inner_grid(g_ptr);
 			g_ptr->feat = feat_glass_wall;
 		}
-		get_mon_num_prep(vault_aux_shards, NULL);
+
+		get_mon_num_prep(player_ptr, vault_aux_shards, NULL);
 
 		/* Place shard berathers */
 		for (dir1 = 4; dir1 < 8; dir1++)

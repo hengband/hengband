@@ -562,7 +562,7 @@ static void place_pet(player_type *master_ptr)
 
 		if (i == 0)
 		{
-			m_idx = m_pop();
+			m_idx = m_pop(master_ptr);
 			master_ptr->riding = m_idx;
 			if (m_idx)
 			{
@@ -584,7 +584,7 @@ static void place_pet(player_type *master_ptr)
 				}
 				if (j) break;
 			}
-			m_idx = (d == 6) ? 0 : m_pop();
+			m_idx = (d == 6) ? 0 : m_pop(master_ptr);
 		}
 
 		if (m_idx)

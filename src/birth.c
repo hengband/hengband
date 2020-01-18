@@ -1883,11 +1883,12 @@ static void init_dungeon_quests(player_type *creature_ptr)
 
 	/* Init the random quests */
 	init_flags = INIT_ASSIGN;
-	creature_ptr->current_floor_ptr->inside_quest = MIN_RANDOM_QUEST;
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	floor_ptr->inside_quest = MIN_RANDOM_QUEST;
 
 	process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
-	creature_ptr->current_floor_ptr->inside_quest = 0;
+	floor_ptr->inside_quest = 0;
 
 	/* Generate quests */
 	for (i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--)
@@ -1896,7 +1897,7 @@ static void init_dungeon_quests(player_type *creature_ptr)
 		monster_race *quest_r_ptr;
 
 		q_ptr->status = QUEST_STATUS_TAKEN;
-		determine_random_questor(q_ptr);
+		determine_random_questor(creature_ptr, q_ptr);
 
 		/* Mark uniques */
 		quest_r_ptr = &r_info[q_ptr->r_idx];
@@ -1907,19 +1908,20 @@ static void init_dungeon_quests(player_type *creature_ptr)
 
 	/* Init the two main quests (Oberon + Serpent) */
 	init_flags = INIT_ASSIGN;
-	creature_ptr->current_floor_ptr->inside_quest = QUEST_OBERON;
+	floor_ptr->inside_quest = QUEST_OBERON;
 
 	process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
 	quest[QUEST_OBERON].status = QUEST_STATUS_TAKEN;
 
-	creature_ptr->current_floor_ptr->inside_quest = QUEST_SERPENT;
+	floor_ptr->inside_quest = QUEST_SERPENT;
 
 	process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
 	quest[QUEST_SERPENT].status = QUEST_STATUS_TAKEN;
-	creature_ptr->current_floor_ptr->inside_quest = 0;
+	floor_ptr->inside_quest = 0;
 }
+
 
 /*!
  * @brief ゲームターンを初期化する / Reset turn
@@ -2254,7 +2256,7 @@ void player_outfit(player_type *creature_ptr)
 
 	case RACE_DEMON:
 		/* Demon can drain vitality from humanoid corpse */
-		get_mon_num_prep(monster_hook_human, NULL);
+		get_mon_num_prep(creature_ptr, monster_hook_human, NULL);
 
 		for (i = rand_range(3, 4); i > 0; i--)
 		{
