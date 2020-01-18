@@ -2136,7 +2136,7 @@ bool build_tunnel2(player_type *player_ptr, POSITION x1, POSITION y1, POSITION x
 			if (i == 0)
 			{
 				/* Failed for some reason: hack - ignore the solidness */
-				place_outer_bold(player_ptr, y3, x3);
+				place_bold(player_ptr, y3, x3, outer);
 				dx = 0;
 				dy = 0;
 			}

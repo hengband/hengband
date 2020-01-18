@@ -832,7 +832,7 @@ static bool hack_isnt_wall(player_type *player_ptr, POSITION y, POSITION x, int 
 		/* if greater than cutoff then is a wall */
 		else
 		{
-			place_outer_bold(player_ptr, y, x);
+			place_bold(player_ptr, y, x, outer);
 			return FALSE;
 		}
 	}
@@ -989,10 +989,10 @@ bool generate_fracave(player_type *player_ptr, POSITION y0, POSITION x0, POSITIO
 		if ((floor_ptr->grid_array[0 + y0 - yhsize][i + x0 - xhsize].info & CAVE_ICKY) && (room))
 		{
 			/* Next to a 'filled' region? - set to be room walls */
-			place_outer_bold(player_ptr, y0 + 0 - yhsize, x0 + i - xhsize);
+			place_bold(player_ptr, y0 + 0 - yhsize, x0 + i - xhsize, outer);
 			if (light) floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info |= (CAVE_GLOW);
 			floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info |= (CAVE_ROOM);
-			place_outer_bold(player_ptr, y0 + 0 - yhsize, x0 + i - xhsize);
+			place_bold(player_ptr, y0 + 0 - yhsize, x0 + i - xhsize, outer);
 		}
 		else
 		{
@@ -1004,10 +1004,10 @@ bool generate_fracave(player_type *player_ptr, POSITION y0, POSITION x0, POSITIO
 		if ((floor_ptr->grid_array[ysize + y0 - yhsize][i + x0 - xhsize].info & CAVE_ICKY) && (room))
 		{
 			/* Next to a 'filled' region? - set to be room walls */
-			place_outer_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize);
+			place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, outer);
 			if (light) floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info |= (CAVE_GLOW);
 			floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info |= (CAVE_ROOM);
-			place_outer_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize);
+			place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, outer);
 		}
 		else
 		{
@@ -1027,10 +1027,10 @@ bool generate_fracave(player_type *player_ptr, POSITION y0, POSITION x0, POSITIO
 		if ((floor_ptr->grid_array[i + y0 - yhsize][0 + x0 - xhsize].info & CAVE_ICKY) && room)
 		{
 			/* room boundary */
-			place_outer_bold(player_ptr, y0 + i - yhsize, x0 + 0 - xhsize);
+			place_bold(player_ptr, y0 + i - yhsize, x0 + 0 - xhsize, outer);
 			if (light) floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info |= (CAVE_GLOW);
 			floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info |= (CAVE_ROOM);
-			place_outer_bold(player_ptr, y0 + i - yhsize, x0 + 0 - xhsize);
+			place_bold(player_ptr, y0 + i - yhsize, x0 + 0 - xhsize, outer);
 		}
 		else
 		{
@@ -1041,10 +1041,10 @@ bool generate_fracave(player_type *player_ptr, POSITION y0, POSITION x0, POSITIO
 		if ((floor_ptr->grid_array[i + y0 - yhsize][xsize + x0 - xhsize].info & CAVE_ICKY) && room)
 		{
 			/* room boundary */
-			place_outer_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize);
+			place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, outer);
 			if (light) floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info |= (CAVE_GLOW);
 			floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info |= (CAVE_ROOM);
-			place_outer_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize);
+			place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, outer);
 		}
 		else
 		{
@@ -1790,15 +1790,15 @@ void build_recursive_room(player_type *player_ptr, POSITION x1, POSITION y1, POS
 		/* top and bottom */
 		for (x = x1; x <= x2; x++)
 		{
-			place_outer_bold(player_ptr, y1, x);
-			place_outer_bold(player_ptr, y2, x);
+			place_bold(player_ptr, y1, x, outer);
+			place_bold(player_ptr, y2, x, outer);
 		}
 
 		/* left and right */
 		for (y = y1 + 1; y < y2; y++)
 		{
-			place_outer_bold(player_ptr, y, x1);
-			place_outer_bold(player_ptr, y, x2);
+			place_bold(player_ptr, y, x1, outer);
+			place_bold(player_ptr, y, x2, outer);
 		}
 
 		/* Make a couple of entrances */
@@ -1982,7 +1982,7 @@ void add_outer_wall(player_type *player_ptr, POSITION x, POSITION y, int light, 
 	else if (is_extra_bold(floor_ptr, y, x))
 	{
 		/* Set bounding walls */
-		place_outer_bold(player_ptr, y, x);
+		place_bold(player_ptr, y, x, outer);
 		if (light) g_ptr->info |= CAVE_GLOW;
 	}
 	else if (permanent_wall(f_ptr))
