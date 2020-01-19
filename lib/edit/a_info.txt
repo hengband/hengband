@@ -3412,6 +3412,8 @@ W:60:60:320:200000
 P:0:4d5:20:20:5
 F:STR | DEX | CON | SLAY_EVIL | SLAY_HUMAN |
 F:VORPAL | SHOW_MODS
+D:$Guan Yu, who has a long, lush beard, knocked many great men to the ground
+D:$ with this blue dragon sword.
 D:豊かな髯を蓄えた義人・関羽はこの青龍刀で多くの豪傑を地に
 D:叩き伏せて来た。
 
