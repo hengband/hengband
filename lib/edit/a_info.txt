@@ -3476,6 +3476,7 @@ I:36:8:-10
 W:20:3:110:0
 P:8:1d1:-1:0:64
 F:AGGRAVATE | SUST_CHR | CHR
+D:$It's a rugged cuirass with a noticeable and offensive odor.
 D:なんとゴツゴツとした鎧だこと。
 
 N:201:『青龍の霊鱗』
