@@ -3423,6 +3423,8 @@ I:21:16:6
 W:40:40:350:100000
 P:0:4d7:0:20:10
 F:STR | RES_FEAR
+D:$It is the heavy gold war club of Shuten-douji, sake lover and leader of the
+D:$ ogres on Mt. Oe.
 D:大江山の鬼の首領たる酒呑童子の重い金棒だ。
 
 N:195:『ゴールデンハンマー』
