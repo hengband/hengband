@@ -3488,6 +3488,9 @@ F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC |
 F:RES_DARK | RES_CONF | RES_POIS |
 F:FREE_ACT | SEE_INVIS | ACTIVATE
 U:RESIST_ALL
+D:$This blue dragon scale armor has been blessed by the azure dragon that
+D:$ guards the east and the three other guardians, Byakko, Genbu, and Suzaku.
+D:$ Even a god would be envious of the protection this armor provides.
 D:玄武、白虎、朱雀とともに四獣と呼ばれる青龍の鱗鎧を
 D:身に纏えば、神の如き守護の力が得られる。
 
