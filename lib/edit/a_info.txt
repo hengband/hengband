@@ -3504,6 +3504,9 @@ F:SLAY_EVIL | SLAY_DEMON | SLAY_UNDEAD |
 F:RES_ACID | RES_COLD | RES_BLIND | RES_CHAOS |
 F:LITE | ACTIVATE | BLESSED | SEE_INVIS | SHOW_MODS
 U:BA_WATER
+D:$From the bridge between heaven and earth, Izanagi and Izanami churned the
+D:$ sea with this jeweled weapon.  The first land sprung up from where drops
+D:$ of salty water fell from the weapon's tip.
 D:「是に天つ神、諸の命以ちて、伊邪那岐命、伊邪那美命、
 D:二柱の神に、『是の多陀用弊流国を修め理り固め成せ。』
 D:と詔りて、天の沼矛を賜ひて、言依さし賜ひき。故、二柱
