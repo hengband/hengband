@@ -3448,6 +3448,8 @@ W:30:10:65:45000
 P:5:1d2:0:0:15
 F:STR | RES_ACID | RES_COLD | RES_FEAR |
 F:REFLECT | SUST_STR | 
+D:$Perseus evaded the snake-haired Medusa's petrifying gaze with this
+D:$ reflective shield in hand.
 D:蛇の髪を持つメドゥーサの石化の睨みも、この反射の盾の前には
 D:効果がなかった。
 
