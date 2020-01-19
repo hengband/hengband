@@ -3566,6 +3566,7 @@ W:45:5:340:80000
 P:23:1d6:5:5:17
 F:CHR | REFLECT |
 F:RES_FIRE | RES_CHAOS | LITE
+D:$It is the suit of shining western-style armor that Nobunaga Oda loved.
 D:織田信長の愛用した光り輝く西洋の鎧だ。
 
 # グレート・ソード『真魔剛竜剣』 (from ダイの大冒険)
