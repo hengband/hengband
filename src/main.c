@@ -9,7 +9,20 @@
  */
 
 #include "angband.h"
+#include "core.h"
+#include "files.h"
+#include "inet.h"
+#include "init.h"
+#include "scores.h"
+#include "term.h"
 
+/*
+ * Available graphic modes
+ */
+#define GRAPHICS_NONE       0
+#define GRAPHICS_ORIGINAL   1
+#define GRAPHICS_ADAM_BOLT  2
+#define GRAPHICS_HENGBAND   3
 
 /*
  * Some machines have a "main()" function in their "main-xxx.c" file,
