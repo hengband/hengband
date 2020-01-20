@@ -3668,13 +3668,17 @@ D:この正視するもかなわぬ眩い炎のムチをひとたび手に取れ
 D:バルログの長ゴズモグは戦において負け知らずであった。
 
 N:213:天性寺聖地蔵尊の六環
-E:of The Bonze Octopus
+E:of The Bronze Octopus
 I:21:7:2
 W:35:40:70:125000
 P:0:1d7:8:8:8
 F:STR | WIS | BLOWS | TUNNEL | ACTIVATE | RES_ACID | RES_ELEC
 F:REGEN | FREE_ACT | BRAND_ELEC | BLESSED | XTRA_H_RES
 U:SUMMON_OCTOPUS
+D:$It is a walking stick bound with six rings of bronze.  According to legend,
+D:$ an incarnation of Jizo Daibosatsu carried this staff when he defended
+D:$ Kishiwada castle with the assistance of a horde of octopuses he had called
+D:$ from the sea.
 D:その昔、蛸を引き連れて岸和田の地を守るために戦かったという
 D:蛸法師こと地蔵大菩薩の化身が使っていた六環の錫杖だ。
 D:「…その時。一人の法師がどこからともなく現れて、何万という敵に飛びかかり、
