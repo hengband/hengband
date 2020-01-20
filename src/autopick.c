@@ -2408,7 +2408,9 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 
 	/* Add a line to the file */
 	/* Don't kill "entry" */
-	fprintf(pref_fff, "%s\n", autopick_line_from_entry(entry));
+	concptr tmp = autopick_line_from_entry(entry);
+	fprintf(pref_fff, "%s\n", tmp);
+	string_free(tmp);
 	fclose(pref_fff);
 
 	return TRUE;
