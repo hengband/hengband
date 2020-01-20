@@ -3620,6 +3620,10 @@ W:20:15:150:40000
 P:6:1d1:-5:10:20
 F:INT | WIS | CHR | STEALTH | SPEED | RES_FIRE |
 F:SUST_STR | SUST_CON | SH_FIRE | REGEN | RES_FEAR
+D:$Since ancient times, some martial artists have trained with weighted sandals
+D:$ to build leg strength.  This is a pair of those, warm to the touch and
+D:$ with soles fashioned out of iron.  Wear them enough, you'll feel light as
+D:$ a feather when you take them off.
 D:古来より伝わる、男を磨くための靴だ。
 D:ふだん身に付けていれば、外したときに自分のからだが羽根のように
 D:軽く感じられるだろう。
