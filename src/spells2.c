@@ -91,7 +91,7 @@ static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, 
 
 					g_ptr->info &= ~(CAVE_UNSAFE);
 
-					lite_spot(y, x);
+					lite_spot(caster_ptr, y, x);
 				}
 			}
 
@@ -99,7 +99,7 @@ static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, 
 			{
 				disclose_grid(caster_ptr, y, x);
 				g_ptr->info |= (CAVE_MARK);
-				lite_spot(y, x);
+				lite_spot(caster_ptr, y, x);
 				detect = TRUE;
 			}
 		}
@@ -223,7 +223,7 @@ bool detect_objects_gold(player_type *caster_ptr, POSITION range)
 		if (o_ptr->tval == TV_GOLD)
 		{
 			o_ptr->marked |= OM_FOUND;
-			lite_spot(y, x);
+			lite_spot(caster_ptr, y, x);
 			detect = TRUE;
 		}
 	}
@@ -274,7 +274,7 @@ bool detect_objects_normal(player_type *caster_ptr, POSITION range)
 		if (o_ptr->tval != TV_GOLD)
 		{
 			o_ptr->marked |= OM_FOUND;
-			lite_spot(y, x);
+			lite_spot(caster_ptr, y, x);
 			detect = TRUE;
 		}
 	}
@@ -360,7 +360,7 @@ bool detect_objects_magic(player_type *caster_ptr, POSITION range)
 		{
 			/* Memorize the item */
 			o_ptr->marked |= OM_FOUND;
-			lite_spot(y, x);
+			lite_spot(caster_ptr, y, x);
 			detect = TRUE;
 		}
 	}
@@ -1081,11 +1081,11 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 
-			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+			monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
 		}
 
-		delete_monster_idx(m_idx);
+		delete_monster_idx(caster_ptr, m_idx);
 	}
 
 	if (resist && player_cast)
@@ -1093,7 +1093,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 		bool see_m = is_seen(m_ptr);
 		GAME_TEXT m_name[MAX_NLEN];
 
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(caster_ptr, m_name, m_ptr, 0);
 		if (see_m)
 		{
 			msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), m_name);
@@ -1115,7 +1115,7 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 				msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
 			}
 
-			set_hostile(m_ptr);
+			set_hostile(caster_ptr, m_ptr);
 		}
 
 		if (one_in_(13)) m_ptr->mflag2 |= MFLAG2_NOGENO;
@@ -1311,11 +1311,11 @@ bool probing(player_type *caster_ptr)
 				m_ptr->mflag2 &= ~(MFLAG2_KAGE);
 
 			m_ptr->ap_r_idx = m_ptr->r_idx;
-			lite_spot(m_ptr->fy, m_ptr->fx);
+			lite_spot(caster_ptr, m_ptr->fy, m_ptr->fx);
 		}
 
 		/* Get "the monster" or "something" */
-		monster_desc(m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
+		monster_desc(caster_ptr, m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
 
 		speed = m_ptr->mspeed - 110;
 		if (MON_FAST(m_ptr)) speed += 10;
@@ -1362,7 +1362,7 @@ bool probing(player_type *caster_ptr)
 
 		Term_erase(0, 0, 255);
 
-		if (lore_do_probe(m_ptr->r_idx))
+		if (lore_do_probe(caster_ptr, m_ptr->r_idx))
 		{
 			strcpy(buf, (r_name + r_ptr->name));
 #ifdef JP
@@ -1424,9 +1424,9 @@ void discharge_minion(player_type *caster_ptr)
 		if (r_ptr->flags1 & RF1_UNIQUE)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, m_ptr, 0x00);
+			monster_desc(caster_ptr, m_name, m_ptr, 0x00);
 			msg_format(_("%sは爆破されるのを嫌がり、勝手に自分の世界へと帰った。", "%^s resists being blasted and runs away."), m_name);
-			delete_monster_idx(i);
+			delete_monster_idx(caster_ptr, i);
 			continue;
 		}
 
@@ -1441,11 +1441,11 @@ void discharge_minion(player_type *caster_ptr)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 
-			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+			monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_BLAST, m_name);
 		}
 
-		delete_monster_idx(i);
+		delete_monster_idx(caster_ptr, i);
 	}
 }
 
@@ -1508,14 +1508,14 @@ static void cave_temp_room_lite(player_type *caster_ptr)
 				if (m_ptr->ml)
 				{
 					GAME_TEXT m_name[MAX_NLEN];
-					monster_desc(m_name, m_ptr, 0);
+					monster_desc(caster_ptr, m_name, m_ptr, 0);
 					msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 				}
 			}
 		}
 
-		note_spot(y, x);
-		lite_spot(y, x);
+		note_spot(caster_ptr, y, x);
+		lite_spot(caster_ptr, y, x);
 		update_local_illumination(caster_ptr, y, x);
 	}
 
@@ -1583,7 +1583,7 @@ static void cave_temp_room_unlite(player_type *caster_ptr)
 		{
 			/* Forget the grid */
 			if (!view_torch_grids) g_ptr->info &= ~(CAVE_MARK);
-			note_spot(y, x);
+			note_spot(caster_ptr, y, x);
 		}
 
 		/* Process affected monsters */
@@ -1592,7 +1592,7 @@ static void cave_temp_room_unlite(player_type *caster_ptr)
 			update_monster(caster_ptr, g_ptr->m_idx, FALSE);
 		}
 
-		lite_spot(y, x);
+		lite_spot(caster_ptr, y, x);
 		update_local_illumination(caster_ptr, y, x);
 	}
 
@@ -2197,7 +2197,7 @@ bool teleport_swap(player_type *caster_ptr, DIRECTION dir)
 	if (r_ptr->flagsr & RFR_RES_TELE)
 	{
 		msg_print(_("テレポートを邪魔された！", "Your teleportation is blocked!"));
-		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
+		if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
 		return FALSE;
 	}
 
@@ -3104,7 +3104,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 		int ny = GRID_Y(path_g[i]);
 		int nx = GRID_X(path_g[i]);
 
-		if (cave_empty_bold(floor_ptr, ny, nx) && player_can_enter(attacker_ptr, floor_ptr->grid_array[ny][nx].feat, 0))
+		if (is_cave_empty_bold(attacker_ptr, ny, nx) && player_can_enter(attacker_ptr, floor_ptr->grid_array[ny][nx].feat, 0))
 		{
 			ty = ny;
 			tx = nx;
@@ -3149,7 +3149,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 			GAME_TEXT m_name[MAX_NLEN];
 
 			/* Get the monster name (BEFORE polymorphing) */
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(attacker_ptr, m_name, m_ptr, 0);
 			msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name);
 		}
 
@@ -4173,7 +4173,7 @@ bool psychometry(player_type *caster_ptr)
 
 	/* Get an object description */
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/* Skip non-feelings */
 	if (!feel)
@@ -4645,7 +4645,7 @@ bool rodeo(player_type *creature_ptr)
 
 	m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 	r_ptr = &r_info[m_ptr->r_idx];
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(creature_ptr, m_name, m_ptr, 0);
 	msg_format(_("%sに乗った。", "You ride on %s."), m_name);
 
 	if (is_pet(m_ptr)) return TRUE;

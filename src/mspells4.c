@@ -107,8 +107,8 @@ static void monspell_message_base(player_type *target_ptr, MONSTER_IDX m_idx, MO
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if (mon_to_player || (mon_to_mon && known && see_either))
 		disturb(target_ptr, TRUE, TRUE);
@@ -208,8 +208,8 @@ void spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	monspell_message(target_ptr, m_idx, t_idx,
 		_("%^sが何かを力強くつぶやいた。", "%^s mumbles powerfully."),
@@ -265,7 +265,7 @@ HIT_POINT spell_RF4_ROCKET(player_type *target_ptr, POSITION y, POSITION x, MONS
 	dam = monspell_damage(target_ptr, (MS_ROCKET), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_ROCKET, dam, 2, FALSE, MS_ROCKET, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_SHARD);
+		update_smart_learn(target_ptr, m_idx, DRS_SHARD);
 	return dam;
 }
 
@@ -321,8 +321,8 @@ HIT_POINT spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITION y, POS
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	switch (GF_TYPE)
 	{
@@ -502,7 +502,7 @@ HIT_POINT spell_RF4_BREATH(player_type *target_ptr, int GF_TYPE, POSITION y, POS
 	sound(SOUND_BREATH);
 	breath(target_ptr, y, x, m_idx, GF_TYPE, dam, 0, TRUE, ms_type, TARGET_TYPE);
 	if (smart_learn_aux && mon_to_player)
-		update_smart_learn(m_idx, drs_type);
+		update_smart_learn(target_ptr, m_idx, drs_type);
 
 	return dam;
 }
@@ -531,7 +531,7 @@ HIT_POINT spell_RF4_BA_NUKE(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_NUKE), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_NUKE, dam, 2, FALSE, MS_BALL_NUKE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_POIS);
+		update_smart_learn(target_ptr, m_idx, DRS_POIS);
 
 	return dam;
 }
@@ -560,7 +560,7 @@ HIT_POINT spell_RF4_BA_CHAO(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_CHAOS), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_CHAOS, dam, 4, FALSE, MS_BALL_CHAOS, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_CHAOS);
+		update_smart_learn(target_ptr, m_idx, DRS_CHAOS);
 
 	return dam;
 }
@@ -591,7 +591,7 @@ HIT_POINT spell_RF5_BA_ACID(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_ACID), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_ACID, dam, rad, FALSE, MS_BALL_ACID, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_ACID);
+		update_smart_learn(target_ptr, m_idx, DRS_ACID);
 
 	return dam;
 }
@@ -622,7 +622,7 @@ HIT_POINT spell_RF5_BA_ELEC(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_ELEC), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_ELEC, dam, rad, FALSE, MS_BALL_ELEC, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_ELEC);
+		update_smart_learn(target_ptr, m_idx, DRS_ELEC);
 
 	return dam;
 }
@@ -664,7 +664,7 @@ HIT_POINT spell_RF5_BA_FIRE(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_FIRE), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_FIRE, dam, rad, FALSE, MS_BALL_FIRE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_FIRE);
+		update_smart_learn(target_ptr, m_idx, DRS_FIRE);
 
 	return dam;
 }
@@ -695,7 +695,7 @@ HIT_POINT spell_RF5_BA_COLD(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_COLD), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_COLD, dam, rad, FALSE, MS_BALL_COLD, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_COLD);
+		update_smart_learn(target_ptr, m_idx, DRS_COLD);
 
 	return dam;
 }
@@ -724,7 +724,7 @@ HIT_POINT spell_RF5_BA_POIS(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_POIS), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_POIS, dam, 2, FALSE, MS_BALL_POIS, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_POIS);
+		update_smart_learn(target_ptr, m_idx, DRS_POIS);
 
 	return dam;
 }
@@ -753,7 +753,7 @@ HIT_POINT spell_RF5_BA_NETH(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_NETHER), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_NETHER, dam, 2, FALSE, MS_BALL_NETHER, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_NETH);
+		update_smart_learn(target_ptr, m_idx, DRS_NETH);
 
 	return dam;
 }
@@ -777,7 +777,7 @@ HIT_POINT spell_RF5_BA_WATE(player_type *target_ptr, POSITION y, POSITION x, MON
 	bool mon_to_mon = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool mon_to_player = (TARGET_TYPE == MONSTER_TO_PLAYER);
 	GAME_TEXT t_name[MAX_NLEN];
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 
 	monspell_message(target_ptr, m_idx, t_idx,
@@ -850,7 +850,7 @@ HIT_POINT spell_RF5_BA_DARK(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_BALL_DARK), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_DARK, dam, 4, FALSE, MS_BALL_DARK, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_DARK);
+		update_smart_learn(target_ptr, m_idx, DRS_DARK);
 
 	return dam;
 }
@@ -870,8 +870,8 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, 
 {
 	HIT_POINT dam;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -887,7 +887,7 @@ HIT_POINT spell_RF5_DRAIN_MANA(player_type *target_ptr, POSITION y, POSITION x, 
 	dam = monspell_damage(target_ptr, (MS_DRAIN_MANA), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_DRAIN_MANA, dam, 0, FALSE, MS_DRAIN_MANA, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_MANA);
+		update_smart_learn(target_ptr, m_idx, DRS_MANA);
 
 	return dam;
 }
@@ -910,8 +910,8 @@ HIT_POINT spell_RF5_MIND_BLAST(player_type *target_ptr, POSITION y, POSITION x, 
 	bool seen = (!target_ptr->blind && m_ptr->ml);
 	HIT_POINT dam;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -950,8 +950,8 @@ HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x,
 	bool seen = (!target_ptr->blind && m_ptr->ml);
 	HIT_POINT dam;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -992,8 +992,8 @@ HIT_POINT spell_RF5_BRAIN_SMASH(player_type *target_ptr, POSITION y, POSITION x,
 void spell_RF5_CAUSE(player_type *target_ptr, int GF_TYPE, HIT_POINT dam, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, concptr msg1, concptr msg2, concptr msg3, int MS_TYPE, int TARGET_TYPE)
 {
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
@@ -1146,8 +1146,8 @@ HIT_POINT spell_RF5_BO_ACID(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_ACID, dam, MS_BOLT_ACID, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_ACID);
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_ACID);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1178,8 +1178,8 @@ HIT_POINT spell_RF5_BO_ELEC(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_ELEC, dam, MS_BOLT_ELEC, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_ELEC);
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_ELEC);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1210,8 +1210,8 @@ HIT_POINT spell_RF5_BO_FIRE(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_FIRE, dam, MS_BOLT_FIRE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_FIRE);
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_FIRE);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1242,8 +1242,8 @@ HIT_POINT spell_RF5_BO_COLD(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_COLD, dam, MS_BOLT_COLD, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_COLD);
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_COLD);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1273,7 +1273,7 @@ HIT_POINT spell_RF5_BA_LITE(player_type *target_ptr, POSITION y, POSITION x, MON
 	dam = monspell_damage(target_ptr, (MS_STARBURST), m_idx, DAM_ROLL);
 	breath(target_ptr, y, x, m_idx, GF_LITE, dam, 4, FALSE, MS_STARBURST, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
-		update_smart_learn(m_idx, DRS_LITE);
+		update_smart_learn(target_ptr, m_idx, DRS_LITE);
 
 	return dam;
 }
@@ -1303,8 +1303,8 @@ HIT_POINT spell_RF5_BO_NETH(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_NETHER, dam, MS_BOLT_NETHER, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_NETH);
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_NETH);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1335,7 +1335,7 @@ HIT_POINT spell_RF5_BO_WATE(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_WATER, dam, MS_BOLT_WATER, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1366,7 +1366,7 @@ HIT_POINT spell_RF5_BO_MANA(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_MANA, dam, MS_BOLT_MANA, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1397,7 +1397,7 @@ HIT_POINT spell_RF5_BO_PLAS(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_PLASMA, dam, MS_BOLT_PLASMA, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1428,8 +1428,8 @@ HIT_POINT spell_RF5_BO_ICEE(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_ICE, dam, MS_BOLT_ICE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_COLD);
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_COLD);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1460,7 +1460,7 @@ HIT_POINT spell_RF5_MISSILE(player_type *target_ptr, POSITION y, POSITION x, MON
 	bolt(target_ptr, m_idx, y, x, GF_MISSILE, dam, MS_MAGIC_MISSILE, TARGET_TYPE);
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		update_smart_learn(m_idx, DRS_REFLECT);
+		update_smart_learn(target_ptr, m_idx, DRS_REFLECT);
 	}
 
 	return dam;
@@ -1487,8 +1487,8 @@ void spell_badstatus_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
 	bool see_t = see_monster(floor_ptr, t_idx);
 	bool known = monster_near_player(floor_ptr, m_idx, t_idx);
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
@@ -1572,7 +1572,7 @@ void spell_RF5_SCARE(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
 		}
 
 		learn_spell(target_ptr, MS_SCARE);
-		update_smart_learn(m_idx, DRS_FEAR);
+		update_smart_learn(target_ptr, m_idx, DRS_FEAR);
 		return;
 	}
 
@@ -1626,7 +1626,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
 		}
 
 		learn_spell(target_ptr, MS_BLIND);
-		update_smart_learn(m_idx, DRS_BLIND);
+		update_smart_learn(target_ptr, m_idx, DRS_BLIND);
 		return;
 	}
 
@@ -1634,7 +1634,7 @@ void spell_RF5_BLIND(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_i
 
 	concptr msg1;
 	GAME_TEXT t_name[MAX_NLEN];
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if (streq(t_name, "it"))
 	{
@@ -1693,7 +1693,7 @@ void spell_RF5_CONF(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 		}
 
 		learn_spell(target_ptr, MS_CONF);
-		update_smart_learn(m_idx, DRS_CONF);
+		update_smart_learn(target_ptr, m_idx, DRS_CONF);
 		return;
 	}
 
@@ -1747,7 +1747,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 		}
 
 		learn_spell(target_ptr, MS_SLOW);
-		update_smart_learn(m_idx, DRS_FREE);
+		update_smart_learn(target_ptr, m_idx, DRS_FREE);
 		return;
 	}
 
@@ -1755,7 +1755,7 @@ void spell_RF5_SLOW(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 
 	concptr msg1;
 	GAME_TEXT t_name[MAX_NLEN];
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if (streq(t_name, "it"))
 	{
@@ -1814,7 +1814,7 @@ void spell_RF5_HOLD(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_id
 		}
 
 		learn_spell(target_ptr, MS_SLEEP);
-		update_smart_learn(m_idx, DRS_FREE);
+		update_smart_learn(target_ptr, m_idx, DRS_FREE);
 		return;
 	}
 
@@ -1850,7 +1850,7 @@ void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_i
 	bool see_m = see_monster(floor_ptr, m_idx);
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	monspell_message_base(target_ptr, m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
@@ -1916,7 +1916,7 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	bool seen = (!target_ptr->blind && m_ptr->ml);
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	disturb(target_ptr, TRUE, TRUE);
 
@@ -2002,7 +2002,7 @@ void spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX 
 void spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE)
 {
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		disturb(target_ptr, TRUE, TRUE);
@@ -2035,7 +2035,7 @@ void spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE
 void spell_RF6_TPORT(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE)
 {
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
@@ -2065,7 +2065,7 @@ HIT_POINT spell_RF6_WORLD(player_type *target_ptr, MONSTER_IDX m_idx)
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	MONSTER_IDX who = 0;
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	disturb(target_ptr, TRUE, TRUE);
 	if (m_ptr->r_idx == MON_DIO) who = 1;
@@ -2099,7 +2099,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_i
 		if (floor_ptr->inside_arena || target_ptr->phase_out || !summon_possible(target_ptr, m_ptr->fy, m_ptr->fx))
 			return -1;
 
-		delete_monster_idx(floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
+		delete_monster_idx(target_ptr, floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].m_idx);
 		summon_named_creature(target_ptr, 0, dummy_y, dummy_x, MON_BANOR, mode);
 		floor_ptr->m_list[hack_m_idx_ii].hp = dummy_hp;
 		floor_ptr->m_list[hack_m_idx_ii].maxhp = dummy_maxhp;
@@ -2129,7 +2129,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_i
 					dummy_y = floor_ptr->m_list[k].fy;
 					dummy_x = floor_ptr->m_list[k].fx;
 				}
-				delete_monster_idx(k);
+				delete_monster_idx(target_ptr, k);
 			}
 		}
 		summon_named_creature(target_ptr, 0, dummy_y, dummy_x, MON_BANORLUPART, mode);
@@ -2199,7 +2199,7 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
 	bool monster_to_monster = (TARGET_TYPE == MONSTER_TO_MONSTER);
 	bool direct = player_bold(target_ptr, y, x);
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	disturb(target_ptr, TRUE, TRUE);
 	if (one_in_(3) || !direct)
@@ -2259,7 +2259,7 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
 		{
 			GAME_TEXT m_name_self[80];
 			/* hisself */
-			monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+			monster_desc(target_ptr, m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 
 			msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name, m_name_self);
 
@@ -2353,13 +2353,13 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 
 	bool resists_tele = FALSE;
 	GAME_TEXT t_name[MAX_NLEN];
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if (tr_ptr->flagsr & RFR_RES_TELE)
 	{
 		if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 		{
-			if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+			if (is_original_ap_and_seen(target_ptr, t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 			if (see_monster(floor_ptr, t_idx))
 			{
 				msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
@@ -2368,7 +2368,7 @@ void spell_RF6_TELE_TO(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t
 		}
 		else if (tr_ptr->level > randint1(100))
 		{
-			if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+			if (is_original_ap_and_seen(target_ptr, t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 			if (see_monster(floor_ptr, t_idx))
 			{
 				msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
@@ -2429,13 +2429,13 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
 	bool resists_tele = FALSE;
 	GAME_TEXT t_name[MAX_NLEN];
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if (tr_ptr->flagsr & RFR_RES_TELE)
 	{
 		if ((tr_ptr->flags1 & RF1_UNIQUE) || (tr_ptr->flagsr & RFR_RES_ALL))
 		{
-			if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+			if (is_original_ap_and_seen(target_ptr, t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 			if (see_monster(floor_ptr, t_idx))
 			{
 				msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), t_name);
@@ -2444,7 +2444,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 		}
 		else if (tr_ptr->level > randint1(100))
 		{
-			if (is_original_ap_and_seen(t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
+			if (is_original_ap_and_seen(target_ptr, t_ptr)) tr_ptr->r_flagsr |= RFR_RES_TELE;
 			if (see_monster(floor_ptr, t_idx))
 			{
 				msg_format(_("%^sは耐性を持っている！", "%^s resists!"), t_name);
@@ -2500,7 +2500,7 @@ void spell_RF6_TELE_LEVEL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_ID
 		}
 
 		learn_spell(target_ptr, MS_TELE_LEVEL);
-		update_smart_learn(m_idx, DRS_NEXUS);
+		update_smart_learn(target_ptr, m_idx, DRS_NEXUS);
 		return;
 	}
 
@@ -2566,7 +2566,7 @@ void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 	bool monster_to_monster = TARGET_TYPE == MONSTER_TO_MONSTER;
 	bool monster_to_player = TARGET_TYPE == MONSTER_TO_PLAYER;
 	GAME_TEXT t_name[MAX_NLEN];
-	monster_name(t_idx, t_name);
+	monster_name(target_ptr, t_idx, t_name);
 
 	if ((target_ptr->pclass == CLASS_NINJA) &&
 		!(r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) &&
@@ -2638,7 +2638,7 @@ void spell_RF6_DARKNESS(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 void spell_RF6_TRAPS(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 	disturb(target_ptr, TRUE, TRUE);
 
 	if (target_ptr->blind)
@@ -2663,7 +2663,7 @@ void spell_RF6_FORGET(player_type *target_ptr, MONSTER_IDX m_idx)
 {
 	DEPTH rlev = monster_level_idx(target_ptr->current_floor_ptr, m_idx);
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	disturb(target_ptr, TRUE, TRUE);
 
@@ -2872,9 +2872,9 @@ void spell_RF6_S_KIN(player_type *target_ptr, POSITION y, POSITION x, MONSTER_ID
 	DEPTH rlev = monster_level_idx(floor_ptr, m_idx);
 	int count = 0;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN], m_poss[80];
-	monster_name(m_idx, m_name);
-	monster_name(t_idx, t_name);
-	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+	monster_name(target_ptr, m_idx, m_name);
+	monster_name(target_ptr, t_idx, t_name);
+	monster_desc(target_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
 	disturb(target_ptr, TRUE, TRUE);
 	bool known = monster_near_player(floor_ptr, m_idx, t_idx);
@@ -3386,7 +3386,7 @@ MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MO
 	POSITION cy = y;
 	POSITION cx = x;
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	if (target_ptr->blind)
 		msg_format(_("%^sが何かをつぶやいた。", "%^s mumbles."), m_name);
@@ -3395,23 +3395,22 @@ MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MO
 
 	msg_print(NULL);
 
-	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	int count = 0;
 	for (int k = 0; k < 30; k++)
 	{
-		if (!summon_possible(target_ptr, cy, cx) || !cave_empty_bold(floor_ptr, cy, cx))
+		if (!summon_possible(target_ptr, cy, cx) || !is_cave_empty_bold(target_ptr, cy, cx))
 		{
 			int j;
 			for (j = 100; j > 0; j--)
 			{
 				scatter(target_ptr, &cy, &cx, y, x, 2, 0);
-				if (cave_empty_bold(floor_ptr, cy, cx)) break;
+				if (is_cave_empty_bold(target_ptr, cy, cx)) break;
 			}
 
 			if (!j) break;
 		}
 
-		if (!cave_empty_bold(floor_ptr, cy, cx)) continue;
+		if (!is_cave_empty_bold(target_ptr, cy, cx)) continue;
 
 		if (!summon_named_creature(target_ptr, m_idx, cy, cx, MON_NAZGUL, mode)) continue;
 
@@ -3448,7 +3447,7 @@ MONSTER_NUMBER summon_NAZGUL(player_type *target_ptr, POSITION y, POSITION x, MO
 void spell_RF6_S_HI_UNDEAD(player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_name(m_idx, m_name);
+	monster_name(target_ptr, m_idx, m_name);
 
 	disturb(target_ptr, TRUE, TRUE);
 

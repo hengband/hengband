@@ -3536,7 +3536,7 @@ static void display_entry(player_type *player_ptr, int pos)
 		if (show_weights) maxwid -= 10;
 
 		GAME_TEXT o_name[MAX_NLEN];
-		object_desc(o_name, o_ptr, 0);
+		object_desc(player_ptr, o_name, o_ptr, 0);
 		o_name[maxwid] = '\0';
 		c_put_str(tval_to_attr[o_ptr->tval], o_name, i+6, cur_col);
 
@@ -3567,7 +3567,7 @@ static void display_entry(player_type *player_ptr, int pos)
 
 	/* Describe the object (fully) */
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, 0);
+	object_desc(player_ptr, o_name, o_ptr, 0);
 	o_name[maxwid] = '\0';
 	c_put_str(tval_to_attr[o_ptr->tval], o_name, i + 6, cur_col);
 
@@ -4577,7 +4577,7 @@ static void store_purchase(player_type *player_ptr)
 
 		/* Describe just the result */
 		GAME_TEXT o_name[MAX_NLEN];
-		object_desc(o_name, &player_ptr->inventory_list[item_new], 0);
+		object_desc(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
 
 		msg_format(_("%s(%c)を取った。", "You have %s (%c)."), o_name, index_to_label(item_new));
 		handle_stuff(player_ptr);
@@ -4631,7 +4631,7 @@ static void store_purchase(player_type *player_ptr)
 	{
 		/* Describe the object (fully) */
 		GAME_TEXT o_name[MAX_NLEN];
-		object_desc(o_name, j_ptr, 0);
+		object_desc(player_ptr, o_name, j_ptr, 0);
 		msg_format(_("%s(%c)を購入する。", "Buying %s (%c)."), o_name, I2A(item));
 		msg_print(NULL);
 
@@ -4683,7 +4683,7 @@ static void store_purchase(player_type *player_ptr)
 
 	/* Describe the transaction */
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, j_ptr, 0);
+	object_desc(player_ptr, o_name, j_ptr, 0);
 
 	msg_format(_("%sを $%ldで購入しました。", "You bought %s for %ld gold."), o_name, (long)price);
 
@@ -4691,7 +4691,7 @@ static void store_purchase(player_type *player_ptr)
 	record_turn = current_world_ptr->game_turn;
 
 	if (record_buy) exe_write_diary(player_ptr, DIARY_BUY, 0, o_name);
-	object_desc(o_name, o_ptr, OD_NAME_ONLY);
+	object_desc(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
 	if (record_rand_art && o_ptr->art_name)
 		exe_write_diary(player_ptr, DIARY_ART, 0, o_name);
 
@@ -4705,7 +4705,7 @@ static void store_purchase(player_type *player_ptr)
 	item_new = inven_carry(player_ptr, j_ptr);
 
 	/* Describe the final result */
-	object_desc(o_name, &player_ptr->inventory_list[item_new], 0);
+	object_desc(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
 	msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), o_name, index_to_label(item_new));
 
 	/* Auto-inscription */
@@ -4860,7 +4860,7 @@ static void store_sell(player_type *owner_ptr)
 
 	/* Get a full description */
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, q_ptr, 0);
+	object_desc(owner_ptr, o_name, q_ptr, 0);
 
 	/* Remove any inscription, feeling for stores */
 	if ((cur_store_num != STORE_HOME) && (cur_store_num != STORE_MUSEUM))
@@ -4951,7 +4951,7 @@ static void store_sell(player_type *owner_ptr)
 			value = object_value(q_ptr) * q_ptr->number;
 
 			/* Get the description all over again */
-			object_desc(o_name, q_ptr, 0);
+			object_desc(owner_ptr, o_name, q_ptr, 0);
 
 			/* Describe the result (in message buffer) */
 			msg_format(_("%sを $%ldで売却しました。", "You sold %s for %ld gold."), o_name, (long)price);
@@ -5000,7 +5000,7 @@ static void store_sell(player_type *owner_ptr)
 	else if (cur_store_num == STORE_MUSEUM)
 	{
 		char o2_name[MAX_NLEN];
-		object_desc(o2_name, q_ptr, OD_NAME_ONLY);
+		object_desc(owner_ptr, o2_name, q_ptr, OD_NAME_ONLY);
 
 		if (-1 == store_check_num(q_ptr))
 		{
@@ -5070,7 +5070,7 @@ static void store_sell(player_type *owner_ptr)
  * Examine an item in a store			   -JDL-
  * @return なし
  */
-static void store_examine(void)
+static void store_examine(player_type *player_ptr)
 {
 	/* Empty? */
 	if (st_ptr->stock_num <= 0)
@@ -5114,10 +5114,10 @@ static void store_examine(void)
 	}
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, 0);
+	object_desc(player_ptr, o_name, o_ptr, 0);
 	msg_format(_("%sを調べている...", "Examining %s..."), o_name);
 
-	if (!screen_object(o_ptr, SCROBJ_FORCE_DETAIL))
+	if (!screen_object(player_ptr, o_ptr, SCROBJ_FORCE_DETAIL))
 		msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
 
 	return;
@@ -5160,7 +5160,7 @@ static void museum_remove_object(player_type *player_ptr)
 	o_ptr = &st_ptr->stock[item];
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, 0);
+	object_desc(player_ptr, o_name, o_ptr, 0);
 
 	msg_print(_("展示をやめさせたアイテムは二度と見ることはできません！", "You cannot see items which is removed from the Museum!"));
 	if (!get_check(format(_("本当に%sの展示をやめさせますか？", "Really order to remove %s from the Museum? "), o_name))) return;
@@ -5300,7 +5300,7 @@ static void store_process_command(player_type *client_ptr)
 		/* Examine */
 		case 'x':
 		{
-			store_examine();
+			store_examine(client_ptr);
 			break;
 		}
 
@@ -5778,7 +5778,7 @@ void do_cmd_store(player_type *player_ptr)
 				q_ptr = &forge;
 
 				object_copy(q_ptr, o_ptr);
-				object_desc(o_name, q_ptr, 0);
+				object_desc(player_ptr, o_name, q_ptr, 0);
 
 				msg_format(_("%sが落ちた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
 

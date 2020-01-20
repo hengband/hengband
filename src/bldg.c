@@ -1584,9 +1584,9 @@ void update_gambling_monsters(player_type *player_ptr)
 			int j;
 			while (TRUE)
 			{
-				get_mon_num_prep(monster_can_entry_arena, NULL);
+				get_mon_num_prep(player_ptr, monster_can_entry_arena, NULL);
 				player_ptr->phase_out = TRUE;
-				r_idx = get_mon_num(mon_level);
+				r_idx = get_mon_num(player_ptr, mon_level);
 				player_ptr->phase_out = old_inside_battle;
 				if (!r_idx) continue;
 
@@ -1920,7 +1920,7 @@ static bool kankin(player_type *player_ptr)
 		if ((o_ptr->tval == TV_CAPTURE) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN + 20];
-			object_desc(o_name, o_ptr, 0);
+			object_desc(player_ptr, o_name, o_ptr, 0);
 			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
@@ -1941,7 +1941,7 @@ static bool kankin(player_type *player_ptr)
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN + 20];
-			object_desc(o_name, o_ptr, 0);
+			object_desc(player_ptr, o_name, o_ptr, 0);
 			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
@@ -1962,7 +1962,7 @@ static bool kankin(player_type *player_ptr)
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN + 20];
-			object_desc(o_name, o_ptr, 0);
+			object_desc(player_ptr, o_name, o_ptr, 0);
 			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
@@ -1981,7 +1981,7 @@ static bool kankin(player_type *player_ptr)
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
 		{
 			char buf[MAX_NLEN + 20];
-			object_desc(o_name, o_ptr, 0);
+			object_desc(player_ptr, o_name, o_ptr, 0);
 			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
@@ -2001,7 +2001,7 @@ static bool kankin(player_type *player_ptr)
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (streq(r_name + r_info[o_ptr->pval].name, r_name + r_info[today_mon].name)))
 		{
 			char buf[MAX_NLEN + 20];
-			object_desc(o_name, o_ptr, 0);
+			object_desc(player_ptr, o_name, o_ptr, 0);
 			sprintf(buf, _("%s を換金しますか？", "Convert %s into money? "), o_name);
 			if (get_check(buf))
 			{
@@ -2026,7 +2026,7 @@ static bool kankin(player_type *player_ptr)
 			INVENTORY_IDX item_new;
 			object_type forge;
 
-			object_desc(o_name, o_ptr, 0);
+			object_desc(player_ptr, o_name, o_ptr, 0);
 			sprintf(buf, _("%sを渡しますか？", "Hand %s over? "), o_name);
 			if (!get_check(buf)) continue;
 
@@ -2058,7 +2058,7 @@ static bool kankin(player_type *player_ptr)
 			 */
 			item_new = inven_carry(player_ptr, &forge);
 
-			object_desc(o_name, &forge, 0);
+			object_desc(player_ptr, o_name, &forge, 0);
 			msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), o_name, index_to_label(item_new));
 
 			/* Auto-inscription */
@@ -2291,7 +2291,7 @@ static void castle_quest(player_type *player_ptr)
 	if (q_ptr->r_idx == 0)
 	{
 		/* Random monster at least 5 - 10 levels out of deep */
-		q_ptr->r_idx = get_mon_num(q_ptr->level + 4 + randint1(6));
+		q_ptr->r_idx = get_mon_num(player_ptr, q_ptr->level + 4 + randint1(6));
 	}
 
 	monster_race *r_ptr;
@@ -2299,7 +2299,7 @@ static void castle_quest(player_type *player_ptr)
 
 	while ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->rarity != 1))
 	{
-		q_ptr->r_idx = get_mon_num(q_ptr->level) + 4 + randint1(6);
+		q_ptr->r_idx = get_mon_num(player_ptr, q_ptr->level) + 4 + randint1(6);
 		r_ptr = &r_info[q_ptr->r_idx];
 	}
 
@@ -2665,7 +2665,7 @@ static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN ro
 	HIT_RELIABILITY reli = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
 
 	/* Print the weapon name */
-	object_desc(o_name, o_ptr, OD_NAME_ONLY);
+	object_desc(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
 	c_put_str(TERM_YELLOW, o_name, row, col);
 
 	/* Print the player's number of blows */
@@ -3000,7 +3000,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
 	/* Display item name */
 	char basenm[MAX_NLEN];
-	object_desc(basenm, o_ptr, OD_NAME_ONLY);
+	object_desc(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
 	prt(format(_("修復する武器　： %s", "Repairing: %s"), basenm), row + 3, 2);
 
 	q = _("材料となる武器は？", "Which weapon for material? ");
@@ -3020,7 +3020,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	}
 
 	/* Display item name */
-	object_desc(basenm, mo_ptr, OD_NAME_ONLY);
+	object_desc(player_ptr, basenm, mo_ptr, OD_NAME_ONLY);
 	prt(format(_("材料とする武器： %s", "Material : %s"), basenm), row + 4, 2);
 
 	/* Get the value of one of the items (except curses) */
@@ -3031,7 +3031,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	/* Check if the player has enough money */
 	if (player_ptr->au < cost)
 	{
-		object_desc(basenm, o_ptr, OD_NAME_ONLY);
+		object_desc(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
 		msg_format(_("%sを修復するだけのゴールドがありません！", "You do not have the gold to repair %s!"), basenm);
 		msg_print(NULL);
 		return 0;
@@ -3180,7 +3180,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 		msg_print(_("これはかなりの業物だったようだ。", "This blade seems to be exceptional."));
 	}
 
-	object_desc(basenm, o_ptr, OD_NAME_ONLY);
+	object_desc(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
 #ifdef JP
 	msg_format("＄%dで%sに修復しました。", cost, basenm);
 #else
@@ -3251,7 +3251,7 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 	char tmp_str[MAX_NLEN];
 	if (player_ptr->au < (cost * o_ptr->number))
 	{
-		object_desc(tmp_str, o_ptr, OD_NAME_ONLY);
+		object_desc(player_ptr, tmp_str, o_ptr, OD_NAME_ONLY);
 		msg_format(_("%sを改良するだけのゴールドがありません！", "You do not have the gold to improve %s!"), tmp_str);
 		return FALSE;
 	}
@@ -3295,7 +3295,7 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 		return FALSE;
 	}
 
-	object_desc(tmp_str, o_ptr, OD_NAME_AND_ENCHANT);
+	object_desc(player_ptr, tmp_str, o_ptr, OD_NAME_AND_ENCHANT);
 #ifdef JP
 	msg_format("＄%dで%sに改良しました。", cost * o_ptr->number, tmp_str);
 #else
@@ -3355,7 +3355,7 @@ static void building_recharge(player_type *player_ptr)
 		{
 			player_ptr->au -= 50;
 			identify_item(player_ptr, o_ptr);
-			object_desc(tmp_str, o_ptr, 0);
+			object_desc(player_ptr, tmp_str, o_ptr, 0);
 			msg_format(_("%s です。", "You have: %s."), tmp_str);
 
 			/* Auto-inscription */
@@ -3429,7 +3429,7 @@ static void building_recharge(player_type *player_ptr)
 	/* Check if the player has enough money */
 	if (player_ptr->au < price)
 	{
-		object_desc(tmp_str, o_ptr, OD_NAME_ONLY);
+		object_desc(player_ptr, tmp_str, o_ptr, OD_NAME_ONLY);
 #ifdef JP
 		msg_format("%sを再充填するには＄%d 必要です！", tmp_str, price);
 #else
@@ -3477,7 +3477,7 @@ static void building_recharge(player_type *player_ptr)
 		o_ptr->ident &= ~(IDENT_EMPTY);
 	}
 
-	object_desc(tmp_str, o_ptr, 0);
+	object_desc(player_ptr, tmp_str, o_ptr, 0);
 #ifdef JP
 	msg_format("%sを＄%d で再充填しました。", tmp_str, price);
 #else
@@ -3809,7 +3809,7 @@ static bool research_mon(player_type *player_ptr)
 				/*** Recall on screen ***/
 
 				/* Get maximal info about this monster */
-				lore_do_probe(r_idx);
+				lore_do_probe(player_ptr, r_idx);
 
 				/* Save this monster ID */
 				monster_race_track(player_ptr, r_idx);
@@ -4234,11 +4234,11 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 	}
 
 	player_ptr->phase_out = TRUE;
-	get_mon_num_prep(NULL, NULL);
+	get_mon_num_prep(player_ptr, NULL, NULL);
 
 	while (TRUE)
 	{
-		today_mon = get_mon_num(max_dl);
+		today_mon = get_mon_num(player_ptr, max_dl);
 		monster_race *r_ptr;
 		r_ptr = &r_info[today_mon];
 
@@ -4259,16 +4259,17 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 
 /*!
  * @brief 賞金首となるユニークを確定する / Determine bounty uniques
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void determine_bounty_uniques(void)
+void determine_bounty_uniques(player_type *player_ptr)
 {
-	get_mon_num_prep(NULL, NULL);
+	get_mon_num_prep(player_ptr, NULL, NULL);
 	for (int i = 0; i < MAX_BOUNTY; i++)
 	{
 		while (TRUE)
 		{
-			current_world_ptr->bounty_r_idx[i] = get_mon_num(MAX_DEPTH - 1);
+			current_world_ptr->bounty_r_idx[i] = get_mon_num(player_ptr, MAX_DEPTH - 1);
 			monster_race *r_ptr;
 			r_ptr = &r_info[current_world_ptr->bounty_r_idx[i]];
 

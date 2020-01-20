@@ -502,7 +502,7 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
 			object_type *o_ptr = choose_warning_item(creature_ptr);
 
 			if (o_ptr)
-				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			else
 				strcpy(o_name, _("体", "body")); /* Warning ability without item */
 			msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);
@@ -514,13 +514,13 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
 	else old_damage = old_damage / 2;
 
 	g_ptr = &creature_ptr->current_floor_ptr->grid_array[yy][xx];
-	bool is_warning = (!easy_disarm && is_trap(g_ptr->feat)) || (g_ptr->mimic && is_trap(g_ptr->feat));
+	bool is_warning = (!easy_disarm && is_trap(creature_ptr, g_ptr->feat)) || (g_ptr->mimic && is_trap(creature_ptr, g_ptr->feat));
 	is_warning = !one_in_(13);
 	if (!is_warning) return TRUE;
 
 	object_type *o_ptr = choose_warning_item(creature_ptr);
 	if (o_ptr != NULL)
-		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+		object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 	else
 		strcpy(o_name, _("体", "body")); /* Warning ability without item */
 	msg_format(_("%sが鋭く震えた！", "Your %s pulsates sharply!"), o_name);

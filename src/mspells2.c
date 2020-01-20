@@ -61,7 +61,7 @@ static bool direct_beam(player_type *target_ptr, POSITION y1, POSITION x1, POSIT
 		if (y == y2 && x == x2)
 			hit2 = TRUE;
 		else if (is_friend && floor_ptr->grid_array[y][x].m_idx > 0 &&
-			!are_enemies(m_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx]))
+			!are_enemies(target_ptr, m_ptr, &floor_ptr->m_list[floor_ptr->grid_array[y][x].m_idx]))
 		{
 			/* Friends don't shoot friends */
 			return FALSE;
@@ -321,7 +321,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 
 			/* Cancel if neither enemy nor a given target */
 			if ((m_idx == target_idx) ||
-				((target_idx != target_ptr->pet_t_m_idx) && !are_enemies(m_ptr, t_ptr)))
+				((target_idx != target_ptr->pet_t_m_idx) && !are_enemies(target_ptr, m_ptr, t_ptr)))
 			{
 				target_idx = 0;
 			}
@@ -360,7 +360,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 			if (!monster_is_valid(t_ptr)) continue;
 
 			/* Monster must be 'an enemy' */
-			if ((m_idx == target_idx) || !are_enemies(m_ptr, t_ptr)) continue;
+			if ((m_idx == target_idx) || !are_enemies(target_ptr, m_ptr, t_ptr)) continue;
 
 			/* Monster must be projectable */
 			if (!projectable(target_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
@@ -661,7 +661,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (target_ptr->leaving) return FALSE;
 
 	/* Get the monster name (or "it") */
-	monster_desc(m_name, m_ptr, 0x00);
+	monster_desc(target_ptr, m_name, m_ptr, 0x00);
 
 #ifdef JP
 #else
@@ -671,7 +671,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 #endif
 
 	/* Get the target's name (or "it") */
-	monster_desc(t_name, t_ptr, 0x00);
+	monster_desc(target_ptr, t_name, t_ptr, 0x00);
 
 	/* Choose a spell to cast */
 	thrown_spell = spell[randint0(num)];
@@ -696,7 +696,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 		return TRUE;
 	}
 
-	can_remember = is_original_ap_and_seen(m_ptr);
+	can_remember = is_original_ap_and_seen(target_ptr, m_ptr);
 
 	dam = monspell_to_monster(target_ptr, thrown_spell, y, x, m_idx, target_idx);
 	if (dam < 0) return FALSE;

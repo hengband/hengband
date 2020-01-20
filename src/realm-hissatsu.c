@@ -210,13 +210,13 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 			py_attack(caster_ptr, y, x, 0);
 
-			if (!player_can_enter(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0) || is_trap(caster_ptr->current_floor_ptr->grid_array[y][x].feat))
+			if (!player_can_enter(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0) || is_trap(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat))
 				break;
 
 			y += ddy[dir];
 			x += ddx[dir];
 
-			if (player_can_enter(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(caster_ptr->current_floor_ptr->grid_array[y][x].feat) && !caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
+			if (player_can_enter(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat, 0) && !is_trap(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].feat) && !caster_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 			{
 				msg_print(NULL);
 				(void)move_player_effect(caster_ptr, y, x, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
@@ -307,13 +307,13 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 				GAME_TEXT m_name[MAX_NLEN];
 
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(caster_ptr, m_name, m_ptr, 0);
 
 				for (i = 0; i < 5; i++)
 				{
 					y += ddy[dir];
 					x += ddx[dir];
-					if (cave_empty_bold(caster_ptr->current_floor_ptr, y, x))
+					if (is_cave_empty_bold(caster_ptr, y, x))
 					{
 						ty = y;
 						tx = x;
@@ -329,8 +329,8 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 					m_ptr->fx = tx;
 
 					update_monster(caster_ptr, m_idx, TRUE);
-					lite_spot(oy, ox);
-					lite_spot(ty, tx);
+					lite_spot(caster_ptr, oy, ox);
+					lite_spot(caster_ptr, ty, tx);
 
 					if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 						caster_ptr->update |= (PU_MON_LITE);
@@ -549,7 +549,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 					{
 						GAME_TEXT m_name[MAX_NLEN];
 
-						monster_desc(m_name, m_ptr, 0);
+						monster_desc(caster_ptr, m_name, m_ptr, 0);
 						msg_format(_("%sには効果がない！", "%s is unharmed!"), m_name);
 					}
 					else py_attack(caster_ptr, y, x, HISSATSU_SEKIRYUKA);
@@ -678,7 +678,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 
 				/* Monster cannot move back? */
-				if (!monster_can_enter(ny, nx, &r_info[m_ptr->r_idx], 0))
+				if (!monster_can_enter(caster_ptr, ny, nx, &r_info[m_ptr->r_idx], 0))
 				{
 					/* -more- */
 					if (i < 2) msg_print(NULL);
@@ -693,10 +693,10 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 				update_monster(caster_ptr, m_idx, TRUE);
 
 				/* Redraw the old spot */
-				lite_spot(y, x);
+				lite_spot(caster_ptr, y, x);
 
 				/* Redraw the new spot */
-				lite_spot(ny, nx);
+				lite_spot(caster_ptr, ny, nx);
 
 				/* Player can move forward? */
 				if (player_can_enter(caster_ptr, g_ptr->feat, 0))
@@ -800,7 +800,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 			if (!tgt_pt(caster_ptr, &x, &y)) return NULL;
 
-			if (!cave_player_teleportable_bold(y, x, 0L) ||
+			if (!cave_player_teleportable_bold(caster_ptr, y, x, 0L) ||
 				(distance(y, x, caster_ptr->y, caster_ptr->x) > MAX_SIGHT / 2) ||
 				!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
 			{

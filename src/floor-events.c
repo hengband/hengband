@@ -19,6 +19,7 @@
 
 static bool mon_invis;
 static POSITION mon_fy, mon_fx;
+byte get_dungeon_feeling(player_type *subject_ptr);
 
 void day_break(player_type *subject_ptr)
 {
@@ -41,7 +42,7 @@ void day_break(player_type *subject_ptr)
 				/* Hack -- Memorize lit grids if allowed */
 				if (view_perma_grids) g_ptr->info |= (CAVE_MARK);
 
-				note_spot(y, x);
+				note_spot(subject_ptr, y, x);
 			}
 		}
 	}
@@ -86,7 +87,7 @@ void night_falls(player_type *subject_ptr)
 						/* Forget the normal floor grid */
 						g_ptr->info &= ~(CAVE_MARK);
 
-						note_spot(y, x);
+						note_spot(subject_ptr, y, x);
 					}
 				}
 			}
@@ -140,9 +141,10 @@ MONSTER_NUMBER count_all_hostile_monsters(floor_type *floor_ptr)
   * / Examine all monsters and unidentified objects, and get the feeling of current dungeon floor
   * @return 算出されたダンジョンの雰囲気ランク
   */
-byte get_dungeon_feeling(floor_type *floor_ptr)
+byte get_dungeon_feeling(player_type *subject_ptr)
 {
 	/* Hack -- no feeling in the town */
+	floor_type *floor_ptr = subject_ptr->current_floor_ptr;
 	if (!floor_ptr->dun_level) return 0;
 
 	/* Examine each monster */
@@ -181,11 +183,11 @@ byte get_dungeon_feeling(floor_type *floor_ptr)
 		/* Unusually crowded monsters get a little bit of rating boost */
 		if (r_ptr->flags1 & RF1_FRIENDS)
 		{
-			if (5 <= get_monster_crowd_number(i)) delta += 1;
+			if (5 <= get_monster_crowd_number(subject_ptr, i)) delta += 1;
 		}
 		else
 		{
-			if (2 <= get_monster_crowd_number(i)) delta += 1;
+			if (2 <= get_monster_crowd_number(subject_ptr, i)) delta += 1;
 		}
 
 
@@ -295,7 +297,7 @@ void update_dungeon_feeling(player_type *subject_ptr)
 
 
 	/* Get new dungeon feeling */
-	byte new_feeling = get_dungeon_feeling(floor_ptr);
+	byte new_feeling = get_dungeon_feeling(subject_ptr);
 
 	/* Remember last time updated */
 	subject_ptr->feeling_turn = current_world_ptr->game_turn;
@@ -805,7 +807,7 @@ static bool update_view_aux(player_type *subject_ptr, POSITION y, POSITION x, PO
  * just use an optimized hack of "you see me, so I see you", and then use the
  * actual "projectable()" function to check spell attacks.
  */
-void update_view(player_type *subject_ptr, floor_type *floor_ptr)
+void update_view(player_type *subject_ptr)
 {
 	int n, m, d, k, z;
 	POSITION y, x;
@@ -814,6 +816,7 @@ void update_view(player_type *subject_ptr, floor_type *floor_ptr)
 
 	int full, over;
 
+	floor_type *floor_ptr = subject_ptr->current_floor_ptr;
 	POSITION y_max = floor_ptr->height - 1;
 	POSITION x_max = floor_ptr->width - 1;
 

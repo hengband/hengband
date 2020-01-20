@@ -193,8 +193,8 @@ void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x)
 		/* No longer hidden */
 		g_ptr->mimic = 0;
 
-		note_spot(y, x);
-		lite_spot(y, x);
+		note_spot(trapped_ptr, y, x);
+		lite_spot(trapped_ptr, y, x);
 	}
 }
 
@@ -392,12 +392,12 @@ static void hit_trap_set_abnormal_status(concptr trap_message, bool resist, bool
 	}
 }
 
-static void hit_trap_set_abnormal_status_p(concptr trap_message, bool resist, bool(*set_status)(player_type *, IDX), IDX turn_aux)
+static void hit_trap_set_abnormal_status_p(player_type *trapped_ptr, concptr trap_message, bool resist, bool(*set_status)(player_type *, IDX), IDX turn_aux)
 {
 	msg_print(trap_message);
 	if (!resist)
 	{
-		set_status(p_ptr, turn_aux);
+		set_status(trapped_ptr, turn_aux);
 	}
 }
 
@@ -534,7 +534,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 
 	case TRAP_BLIND:
 	{
-		hit_trap_set_abnormal_status_p(
+		hit_trap_set_abnormal_status_p(trapped_ptr,
 			_("黒いガスに包み込まれた！", "A black gas surrounds you!"),
 			trapped_ptr->resist_blind,
 			set_blind, trapped_ptr->blind + (TIME_EFFECT)randint0(50) + 25);
@@ -543,7 +543,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 
 	case TRAP_CONFUSE:
 	{
-		hit_trap_set_abnormal_status_p(
+		hit_trap_set_abnormal_status_p(trapped_ptr,
 			_("きらめくガスに包み込まれた！", "A gas of scintillating colors surrounds you!"),
 			trapped_ptr->resist_conf,
 			set_confused, trapped_ptr->confused + (TIME_EFFECT)randint0(20) + 10);
@@ -552,7 +552,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 
 	case TRAP_POISON:
 	{
-		hit_trap_set_abnormal_status_p(
+		hit_trap_set_abnormal_status_p(trapped_ptr,
 			_("刺激的な緑色のガスに包み込まれた！", "A pungent green gas surrounds you!"),
 			trapped_ptr->resist_pois || is_oppose_pois(trapped_ptr),
 			set_poisoned, trapped_ptr->poisoned + (TIME_EFFECT)randint0(20) + 10);
@@ -670,7 +670,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 	}
 	}
 
-	if (break_trap && is_trap(g_ptr->feat))
+	if (break_trap && is_trap(trapped_ptr, g_ptr->feat))
 	{
 		cave_alter_feat(trapped_ptr, y, x, FF_DISARM);
 		msg_print(_("トラップを粉砕した。", "You destroyed the trap."));

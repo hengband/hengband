@@ -588,7 +588,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 		/* Not boring */
 		boring = FALSE;
 
-		monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+		monster_desc(subject_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 		monster_race_track(subject_ptr, m_ptr->ap_r_idx);
 		health_track(subject_ptr, g_ptr->m_idx);
 		handle_stuff(subject_ptr);
@@ -675,7 +675,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 			o_ptr = &subject_ptr->current_floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
-			object_desc(o_name, o_ptr, 0);
+			object_desc(subject_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
 			sprintf(out_val, "%s%s%s%s[%s]", s1, o_name, s2, s3, info);
@@ -719,7 +719,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 				object_type *o_ptr;
 				o_ptr = &subject_ptr->current_floor_ptr->o_list[floor_list[0]];
 
-				object_desc(o_name, o_ptr, 0);
+				object_desc(subject_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
 				sprintf(out_val, "%s%s%s%s[%s]", s1, o_name, s2, s3, info);
@@ -825,7 +825,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 			/* Not boring */
 			boring = FALSE;
 
-			object_desc(o_name, o_ptr, 0);
+			object_desc(subject_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
 			sprintf(out_val, "%s%s%s%s[%s]", s1, o_name, s2, s3, info);
@@ -1726,7 +1726,7 @@ bool get_direction(player_type *creature_ptr, DIRECTION *dp, bool allow_under, b
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(creature_ptr, m_name, m_ptr, 0);
 			if (MON_CONFUSED(m_ptr))
 			{
 				msg_format(_("%sは混乱している。", "%^s is confused."), m_name);
@@ -1864,7 +1864,7 @@ bool get_rep_dir(player_type *creature_ptr, DIRECTION *dp, bool under)
 			GAME_TEXT m_name[MAX_NLEN];
 			monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
 
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(creature_ptr, m_name, m_ptr, 0);
 			if (MON_CONFUSED(m_ptr))
 			{
 				msg_format(_("%sは混乱している。", "%^s is confused."), m_name);

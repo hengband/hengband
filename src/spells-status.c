@@ -447,7 +447,7 @@ bool fishing(player_type *creature_ptr)
 	if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx)
 	{
 		GAME_TEXT m_name[MAX_NLEN];
-		monster_desc(m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
+		monster_desc(creature_ptr, m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
 		msg_format(_("%sが邪魔だ！", "%^s is standing in your way."), m_name);
 		free_turn(creature_ptr);
 		return FALSE;
@@ -478,7 +478,7 @@ bool cosmic_cast_off(player_type *creature_ptr, object_type *o_ptr)
 	o_ptr = &creature_ptr->current_floor_ptr->o_list[o_idx];
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, OD_NAME_ONLY);
+	object_desc(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
 	msg_format(_("%sを脱ぎ捨てた。", "You cast off %s."), o_name);
 
 	/* Get effects */

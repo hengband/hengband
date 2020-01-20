@@ -546,7 +546,7 @@ static void drain_essence(player_type *creature_ptr)
 	if (object_is_known(o_ptr) && !object_is_nameless(o_ptr))
 	{
 		GAME_TEXT o_name[MAX_NLEN];
-		object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+		object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 		if (!get_check(format(_("本当に%sから抽出してよろしいですか？", "Really extract from %s? "), o_name))) return;
 	}
 
@@ -1126,7 +1126,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
 		return;
 	}
 
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	use_essence = es_ptr->value;
 	if ((o_ptr->tval >= TV_SHOT) && (o_ptr->tval <= TV_BOLT)) use_essence = (use_essence + 9) / 10;
@@ -1343,7 +1343,7 @@ static void erase_essence(player_type *creature_ptr)
 	o_ptr = choose_object(creature_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return;
 
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 	if (!get_check(format(_("よろしいですか？ [%s]", "Are you sure? [%s]"), o_name))) return;
 
 	take_turn(creature_ptr, 100);

@@ -391,10 +391,10 @@ bool summon_possible(player_type *target_ptr, POSITION y1, POSITION x1)
 			if (distance(y1, x1, y, x) > 2) continue;
 
 			/* ...nor on the Pattern */
-			if (pattern_tile(y, x)) continue;
+			if (pattern_tile(floor_ptr, y, x)) continue;
 
 			/* Require empty floor grid in line of projection */
-			if (cave_empty_bold(floor_ptr, y, x) && projectable(target_ptr, y1, x1, y, x) && projectable(target_ptr, y, x, y1, x1)) return TRUE;
+			if (is_cave_empty_bold(target_ptr, y, x) && projectable(target_ptr, y1, x1, y, x) && projectable(target_ptr, y, x, y1, x1)) return TRUE;
 		}
 	}
 
@@ -434,7 +434,7 @@ bool raise_possible(player_type *target_ptr, monster_type *m_ptr)
 				/* Known to be worthless? */
 				if (o_ptr->tval == TV_CORPSE)
 				{
-					if (!monster_has_hostile_align(m_ptr, 0, 0, &r_info[o_ptr->pval])) return TRUE;
+					if (!monster_has_hostile_align(target_ptr, m_ptr, 0, 0, &r_info[o_ptr->pval])) return TRUE;
 				}
 			}
 		}
@@ -1637,7 +1637,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 
 	/* Get the monster name (or "it") */
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_desc(m_name, m_ptr, 0x00);
+	monster_desc(target_ptr, m_name, m_ptr, 0x00);
 
 #ifdef JP
 #else
@@ -1705,7 +1705,7 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 
 	/* Projectable? */
 	bool direct = player_bold(target_ptr, y, x);
-	bool can_remember = is_original_ap_and_seen(m_ptr);
+	bool can_remember = is_original_ap_and_seen(target_ptr, m_ptr);
 	if (!direct)
 	{
 		switch (thrown_spell)

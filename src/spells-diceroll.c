@@ -24,13 +24,13 @@ bool_hack common_saving_throw_charm(player_type *operator_ptr, HIT_POINT pow, mo
 	/* Memorize a flag */
 	if (r_ptr->flagsr & RFR_RES_ALL)
 	{
-		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
+		if (is_original_ap_and_seen(operator_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 		return TRUE;
 	}
 
 	if (r_ptr->flags3 & RF3_NO_CONF)
 	{
-		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
+		if (is_original_ap_and_seen(operator_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 		return TRUE;
 	}
 
@@ -56,7 +56,7 @@ bool_hack common_saving_throw_control(player_type *operator_ptr, HIT_POINT pow, 
 	/* Memorize a flag */
 	if (r_ptr->flagsr & RFR_RES_ALL)
 	{
-		if (is_original_ap_and_seen(m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
+		if (is_original_ap_and_seen(operator_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_ALL);
 		return TRUE;
 	}
 

@@ -418,7 +418,7 @@ extern bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x);
 extern bool alloc_guardian(player_type *player_ptr, bool def_val);
 extern bool alloc_monster(player_type *player_ptr, POSITION dis, BIT_FLAGS mode);
 
-extern void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode);
+extern void monster_desc(player_type *player_ptr, char *desc, monster_type *m_ptr, BIT_FLAGS mode);
 /* Bit flags for monster_desc() */
 #define MD_OBJECTIVE      0x00000001 /* Objective (or Reflexive) */
 #define MD_POSSESSIVE     0x00000002 /* Possessive (or Reflexive) */
@@ -433,7 +433,7 @@ extern void monster_desc(char *desc, monster_type *m_ptr, BIT_FLAGS mode);
 
 #define MD_WRONGDOER_NAME (MD_IGNORE_HALLU | MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE) /* 加害明記向け */
 
-extern void monster_name(MONSTER_IDX m_idx, char* m_name);
+extern void monster_name(player_type *player_ptr, MONSTER_IDX m_idx, char* m_name);
 
 extern void roff_top(MONRACE_IDX r_idx);
 extern void screen_roff(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode);
@@ -445,7 +445,7 @@ extern monsterrace_hook_type get_monster_hook(player_type *player_ptr);
 extern monsterrace_hook_type get_monster_hook2(player_type *player_ptr, POSITION y, POSITION x);
 extern void set_friendly(monster_type *m_ptr);
 extern void set_pet(player_type *player_ptr, monster_type *m_ptr);
-extern void set_hostile(monster_type *m_ptr);
+extern void set_hostile(player_type *player_ptr, monster_type *m_ptr);
 extern void anger_monster(player_type *player_ptr, monster_type *m_ptr);
 
 /*
@@ -453,31 +453,31 @@ extern void anger_monster(player_type *player_ptr, monster_type *m_ptr);
  */
 #define CEM_RIDING              0x0001
 #define CEM_P_CAN_ENTER_PATTERN 0x0002
-extern bool monster_can_cross_terrain(FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode);
-extern bool monster_can_enter(POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode);
+extern bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_race *r_ptr, BIT_FLAGS16 mode);
+extern bool monster_can_enter(player_type *player_ptr, POSITION y, POSITION x, monster_race *r_ptr, BIT_FLAGS16 mode);
 
-extern bool are_enemies(monster_type *m_ptr1, monster_type *m_ptr2);
-extern bool monster_has_hostile_align(monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
+extern bool are_enemies(player_type *player_ptr, monster_type *m_ptr1, monster_type *m_ptr2);
+extern bool monster_has_hostile_align(player_type *player_ptr, monster_type *m_ptr, int pa_good, int pa_evil, monster_race *r_ptr);
 extern void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult, int dice_div, char* msg);
 extern concptr look_mon_desc(monster_type *m_ptr, BIT_FLAGS mode);
-extern int get_monster_crowd_number(MONSTER_IDX m_idx);
-extern void message_pain(MONSTER_IDX m_idx, HIT_POINT dam);
+extern int get_monster_crowd_number(player_type *player_ptr, MONSTER_IDX m_idx);
+extern void message_pain(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam);
 
 /* monster2.c */
 extern void set_target(monster_type *m_ptr, POSITION y, POSITION x);
 extern void reset_target(monster_type *m_ptr);
 extern monster_race *real_r_ptr(monster_type *m_ptr);
 extern MONRACE_IDX real_r_idx(monster_type *m_ptr);
-extern void delete_monster_idx(MONSTER_IDX i);
-extern void compact_monsters(int size);
-extern void wipe_m_list(void);
-extern MONSTER_IDX m_pop(void);
-extern errr get_mon_num_prep(monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2);
-extern MONRACE_IDX get_mon_num(DEPTH level);
-extern int lore_do_probe(MONRACE_IDX r_idx);
-extern void lore_treasure(MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold);
+extern void delete_monster_idx(player_type *player_ptr, MONSTER_IDX i);
+extern void compact_monsters(player_type *player_ptr, int size);
+extern void wipe_monsters_list(player_type *player_ptr);
+extern MONSTER_IDX m_pop(player_type *player_ptr);
+extern errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hook, monsterrace_hook_type monster_hook2);
+extern MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level);
+extern int lore_do_probe(player_type *player_ptr, MONRACE_IDX r_idx);
+extern void lore_treasure(player_type *player_ptr, MONSTER_IDX m_idx, ITEM_NUMBER num_item, ITEM_NUMBER num_gold);
 extern void update_monster(player_type *subject_ptr, MONSTER_IDX m_idx, bool full);
-extern void update_monsters(bool full);
+extern void update_monsters(player_type *player_ptr, bool full);
 extern bool multiply_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool clone, BIT_FLAGS mode);
 extern bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSITION x1, DEPTH lev, int type, BIT_FLAGS mode);
 extern bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSITION oy, POSITION ox, MONRACE_IDX r_idx, BIT_FLAGS mode);
@@ -504,11 +504,12 @@ extern bool summon_named_creature(player_type *player_ptr, MONSTER_IDX who, POSI
 #define DRS_FREE        30
 #define DRS_MANA        31
 #define DRS_REFLECT     32
-extern void update_smart_learn(MONSTER_IDX m_idx, int what);
+extern void update_smart_learn(player_type *player_ptr, MONSTER_IDX m_idx, int what);
 
-extern void choose_new_monster(MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
-extern SPEED get_mspeed(monster_race *r_ptr);
-extern void monster_drop_carried_objects(monster_type *m_ptr);
+extern void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, MONRACE_IDX r_idx);
+extern SPEED get_mspeed(player_type *player_ptr, monster_race *r_ptr);
+extern void monster_drop_carried_objects(player_type *player_ptr, monster_type *m_ptr);
+extern bool is_original_ap_and_seen(player_type *player_ptr, monster_type *m_ptr);
 
 #define is_friendly(A) \
 	 (bool)(((A)->smart & SM_FRIENDLY) ? TRUE : FALSE)
@@ -522,6 +523,3 @@ extern void monster_drop_carried_objects(monster_type *m_ptr);
 /* Hack -- Determine monster race appearance index is same as race index */
 #define is_original_ap(A) \
 	 (bool)(((A)->ap_r_idx == (A)->r_idx) ? TRUE : FALSE)
-
-#define is_original_ap_and_seen(A) \
-	 (bool)((A)->ml && !p_ptr->image && ((A)->ap_r_idx == (A)->r_idx))

@@ -562,7 +562,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 						scatter(caster_ptr, &my, &mx, caster_ptr->y, caster_ptr->x, 4, 0);
 
 						/* Require empty grids */
-						if (cave_empty_bold2(caster_ptr->current_floor_ptr, my, mx)) break;
+						if (is_cave_empty_bold2(caster_ptr, my, mx)) break;
 					}
 					if (attempt < 0) continue;
 					summon_specific(caster_ptr, -1, my, mx, plev, SUMMON_KNIGHTS, (PM_ALLOW_GROUP | PM_FORCE_PET | PM_HASTE));

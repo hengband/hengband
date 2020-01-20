@@ -161,18 +161,20 @@ static int next_to_walls(floor_type* floor_ptr, POSITION y, POSITION x)
 
 /*!
  * @brief alloc_stairs()の補助として指定の位置に階段を生成できるかの判定を行う / Helper function for alloc_stairs(). Is this a good location for stairs?
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 基準のy座標
  * @param x 基準のx座標
  * @param walls 最低減隣接させたい外壁の数
  * @return 階段を生成して問題がないならばTRUEを返す。
  */
-static bool alloc_stairs_aux(floor_type *floor_ptr, POSITION y, POSITION x, int walls)
+static bool alloc_stairs_aux(player_type *player_ptr, POSITION y, POSITION x, int walls)
 {
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Require "naked" floor grid */
 	if (!is_floor_grid(g_ptr)) return FALSE;
-	if (pattern_tile(y, x)) return FALSE;
+	if (pattern_tile(floor_ptr, y, x)) return FALSE;
 	if (g_ptr->o_idx || g_ptr->m_idx) return FALSE;
 
 	/* Require a certain number of adjacent walls */
@@ -244,7 +246,7 @@ static bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int wal
 			{
 				for (x = 1; x < floor_ptr->width - 1; x++)
 				{
-					if (alloc_stairs_aux(floor_ptr, y, x, walls))
+					if (alloc_stairs_aux(owner_ptr, y, x, walls))
 					{
 						/* A valid space found */
 						candidates++;
@@ -270,7 +272,7 @@ static bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int wal
 			{
 				for (x = 1; x < floor_ptr->width - 1; x++)
 				{
-					if (alloc_stairs_aux(floor_ptr, y, x, walls))
+					if (alloc_stairs_aux(owner_ptr, y, x, walls))
 					{
 						pick--;
 
@@ -287,7 +289,7 @@ static bool alloc_stairs(player_type *owner_ptr, FEAT_IDX feat, int num, int wal
 			g_ptr->mimic = 0;
 
 			/* Clear previous contents, add stairs */
-			g_ptr->feat = (i < shaft_num) ? feat_state(feat, FF_SHAFT) : feat;
+			g_ptr->feat = (i < shaft_num) ? feat_state(owner_ptr, feat, FF_SHAFT) : feat;
 
 			/* No longer "FLOOR" */
 			g_ptr->info &= ~(CAVE_FLOOR);
@@ -377,7 +379,7 @@ static void alloc_object(player_type *owner_ptr, int set, EFFECT_ID typ, int num
 
 			case ALLOC_TYP_GOLD:
 			{
-				place_gold(floor_ptr, y, x);
+				place_gold(owner_ptr, y, x);
 				break;
 			}
 
@@ -454,7 +456,7 @@ bool place_quest_monsters(player_type *creature_ptr)
 					f_ptr = &f_info[g_ptr->feat];
 
 					if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) continue;
-					if (!monster_can_enter(y, x, r_ptr, 0)) continue;
+					if (!monster_can_enter(creature_ptr, y, x, r_ptr, 0)) continue;
 					if (distance(y, x, creature_ptr->y, creature_ptr->x) < 10) continue;
 					if (g_ptr->info & CAVE_ICKY) continue;
 					else break;
@@ -499,7 +501,7 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, player_type *owner_
 		dun->destroyed = TRUE;
 
 		/* extra rubble around the place looks cool */
-		build_lake(floor_ptr, one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
+		build_lake(owner_ptr, one_in_(2) ? LAKE_T_CAVE : LAKE_T_EARTH_VAULT);
 	}
 
 	/* Make a lake some of the time */
@@ -551,7 +553,7 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, player_type *owner_
 		if (dun->laketype)
 		{
 			msg_print_wizard(CHEAT_DUNGEON, _("湖を生成します。", "Lake on the level."));
-			build_lake(floor_ptr, dun->laketype);
+			build_lake(owner_ptr, dun->laketype);
 		}
 	}
 
@@ -564,7 +566,7 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, player_type *owner_
 		/* make a large fractal floor_ptr->grid_array in the middle of the dungeon */
 
 		msg_print_wizard(CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));
-		build_cavern(floor_ptr);
+		build_cavern(owner_ptr);
 	}
 #endif /* ALLOW_CAVERNS_AND_LAKES */
 
@@ -603,7 +605,7 @@ static bool cave_gen(player_type *player_ptr)
 
 	/* Fill the arrays of floors and walls in the good proportions */
 	set_floor_and_wall(floor_ptr->dungeon_idx);
-	get_mon_num_prep(get_monster_hook(player_ptr), NULL);
+	get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), NULL);
 
 	/* Randomize the dungeon creation values */
 	dun_tun_rnd = rand_range(DUN_TUN_RND_MIN, DUN_TUN_RND_MAX);
@@ -642,22 +644,22 @@ static bool cave_gen(player_type *player_ptr)
 		{
 			for (x = 0; x < floor_ptr->width; x++)
 			{
-				place_floor_bold(floor_ptr, y, x);
+				place_bold(player_ptr, y, x, floor);
 			}
 		}
 
 		/* Special boundary walls -- Top and bottom */
 		for (x = 0; x < floor_ptr->width; x++)
 		{
-			place_extra_bold(floor_ptr, 0, x);
-			place_extra_bold(floor_ptr, floor_ptr->height - 1, x);
+			place_bold(player_ptr, 0, x, extra);
+			place_bold(player_ptr, floor_ptr->height - 1, x, extra);
 		}
 
 		/* Special boundary walls -- Left and right */
 		for (y = 1; y < (floor_ptr->height - 1); y++)
 		{
-			place_extra_bold(floor_ptr, y, 0);
-			place_extra_bold(floor_ptr, y, floor_ptr->width - 1);
+			place_bold(player_ptr, y, 0, extra);
+			place_bold(player_ptr, y, floor_ptr->width - 1, extra);
 		}
 	}
 	else
@@ -667,7 +669,7 @@ static bool cave_gen(player_type *player_ptr)
 		{
 			for (x = 0; x < floor_ptr->width; x++)
 			{
-				place_extra_bold(floor_ptr, y, x);
+				place_bold(player_ptr, y, x, extra);
 			}
 		}
 	}
@@ -807,12 +809,12 @@ static bool cave_gen(player_type *player_ptr)
 			if (randint1(floor_ptr->dun_level) > dungeon_ptr->tunnel_percent)
 			{
 				/* make cavelike tunnel */
-				(void)build_tunnel2(floor_ptr, dun->cent[i].x, dun->cent[i].y, x, y, 2, 2);
+				(void)build_tunnel2(player_ptr, dun->cent[i].x, dun->cent[i].y, x, y, 2, 2);
 			}
 			else
 			{
 				/* make normal tunnel */
-				if (!build_tunnel(floor_ptr, dun->cent[i].y, dun->cent[i].x, y, x)) tunnel_fail_count++;
+				if (!build_tunnel(player_ptr, dun->cent[i].y, dun->cent[i].x, y, x)) tunnel_fail_count++;
 			}
 
 			if (tunnel_fail_count >= 2) return FALSE;
@@ -833,7 +835,7 @@ static bool cave_gen(player_type *player_ptr)
 					/* Clear mimic type */
 					g_ptr->mimic = 0;
 
-					place_floor_grid(g_ptr);
+					place_grid(player_ptr, g_ptr, floor);
 				}
 			}
 
@@ -849,7 +851,7 @@ static bool cave_gen(player_type *player_ptr)
 				g_ptr->mimic = 0;
 
 				/* Clear previous contents, add up floor */
-				place_floor_grid(g_ptr);
+				place_grid(player_ptr, g_ptr, floor);
 
 				/* Occasional doorway */
 				if ((randint0(100) < dun_tun_pen) && !(dungeon_ptr->flags1 & DF1_NO_DOORS))
@@ -909,15 +911,15 @@ static bool cave_gen(player_type *player_ptr)
 	/* Special boundary walls -- Top and bottom */
 	for (x = 0; x < floor_ptr->width; x++)
 	{
-		place_bound_perm_wall(&floor_ptr->grid_array[0][x]);
-		place_bound_perm_wall(&floor_ptr->grid_array[floor_ptr->height - 1][x]);
+		place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[0][x]);
+		place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[floor_ptr->height - 1][x]);
 	}
 
 	/* Special boundary walls -- Left and right */
 	for (y = 1; y < (floor_ptr->height - 1); y++)
 	{
-		place_bound_perm_wall(&floor_ptr->grid_array[y][0]);
-		place_bound_perm_wall(&floor_ptr->grid_array[y][floor_ptr->width - 1]);
+		place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[y][0]);
+		place_bound_perm_wall(player_ptr, &floor_ptr->grid_array[y][floor_ptr->width - 1]);
 	}
 
 	/* Determine the character location */
@@ -1001,9 +1003,10 @@ static bool cave_gen(player_type *player_ptr)
 
 /*!
  * @brief 闘技場用のアリーナ地形を作成する / Builds the arena after it is entered -KMW-
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void build_arena(floor_type *floor_ptr, POSITION *start_y, POSITION *start_x)
+static void build_arena(player_type *player_ptr, POSITION *start_y, POSITION *start_x)
 {
 	POSITION yval, y_height, y_depth, xval, x_left, x_right;
 	POSITION i, j;
@@ -1015,38 +1018,39 @@ static void build_arena(floor_type *floor_ptr, POSITION *start_y, POSITION *star
 	x_left = xval - 32;
 	x_right = xval + 32;
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (i = y_height; i <= y_height + 5; i++)
 		for (j = x_left; j <= x_right; j++)
 		{
-			place_extra_perm_bold(floor_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (i = y_depth; i >= y_depth - 5; i--)
 		for (j = x_left; j <= x_right; j++)
 		{
-			place_extra_perm_bold(floor_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_left; j <= x_left + 17; j++)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			place_extra_perm_bold(floor_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_right; j >= x_right - 17; j--)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			place_extra_perm_bold(floor_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 
-	place_extra_perm_bold(floor_ptr, y_height + 6, x_left + 18);
+	place_bold(player_ptr, y_height + 6, x_left + 18, extra_perm);
 	floor_ptr->grid_array[y_height + 6][x_left + 18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(floor_ptr, y_depth - 6, x_left + 18);
+	place_bold(player_ptr, y_depth - 6, x_left + 18, extra_perm);
 	floor_ptr->grid_array[y_depth - 6][x_left + 18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(floor_ptr, y_height + 6, x_right - 18);
+	place_bold(player_ptr, y_height + 6, x_right - 18, extra_perm);
 	floor_ptr->grid_array[y_height + 6][x_right - 18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(floor_ptr, y_depth - 6, x_right - 18);
+	place_bold(player_ptr, y_depth - 6, x_right - 18, extra_perm);
 	floor_ptr->grid_array[y_depth - 6][x_right - 18].info |= (CAVE_GLOW | CAVE_MARK);
 
 	*start_y = y_height + 5;
@@ -1059,13 +1063,14 @@ static void build_arena(floor_type *floor_ptr, POSITION *start_y, POSITION *star
  * @brief 挑戦時闘技場への入場処理 / Town logic flow for generation of arena -KMW-
  * @return なし
  */
-static void generate_challenge_arena(floor_type *floor_ptr, player_type *challanger_ptr)
+static void generate_challenge_arena(player_type *challanger_ptr)
 {
 	POSITION y, x;
 	POSITION qy = 0;
 	POSITION qx = 0;
 
 	/* Smallest area */
+	floor_type *floor_ptr = challanger_ptr->current_floor_ptr;
 	floor_ptr->height = SCREEN_HGT;
 	floor_ptr->width = SCREEN_WID;
 
@@ -1075,7 +1080,7 @@ static void generate_challenge_arena(floor_type *floor_ptr, player_type *challan
 		for (x = 0; x < MAX_WID; x++)
 		{
 			/* Create "solid" perma-wall */
-			place_solid_perm_bold(floor_ptr, y, x);
+			place_bold(challanger_ptr, y, x, solid_perm);
 
 			/* Illuminate and memorize the walls */
 			floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
@@ -1092,7 +1097,7 @@ static void generate_challenge_arena(floor_type *floor_ptr, player_type *challan
 		}
 	}
 
-	build_arena(floor_ptr, &y, &x);
+	build_arena(challanger_ptr, &y, &x);
 	player_place(challanger_ptr, y, x);
 
 	if(!place_monster_aux(challanger_ptr, 0, challanger_ptr->y + 5, challanger_ptr->x, arena_info[challanger_ptr->arena_number].r_idx, (PM_NO_KAGE | PM_NO_PET)))
@@ -1106,9 +1111,10 @@ static void generate_challenge_arena(floor_type *floor_ptr, player_type *challan
 
 /*!
  * @brief モンスター闘技場のフロア生成 / Builds the arena after it is entered -KMW-
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void build_battle(floor_type *floor_ptr, POSITION *y, POSITION *x)
+static void build_battle(player_type *player_ptr, POSITION *y, POSITION *x)
 {
 	POSITION yval, y_height, y_depth, xval, x_left, x_right;
 	register int i, j;
@@ -1120,38 +1126,39 @@ static void build_battle(floor_type *floor_ptr, POSITION *y, POSITION *x)
 	x_left = xval - 32;
 	x_right = xval + 32;
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (i = y_height; i <= y_height + 5; i++)
 		for (j = x_left; j <= x_right; j++)
 		{
-			place_extra_perm_bold(floor_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (i = y_depth; i >= y_depth - 3; i--)
 		for (j = x_left; j <= x_right; j++)
 		{
-			place_extra_perm_bold(floor_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_left; j <= x_left + 17; j++)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			place_extra_perm_bold(floor_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_right; j >= x_right - 17; j--)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			place_extra_perm_bold(floor_ptr, i, j);
+			place_bold(player_ptr, i, j, extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 
-	place_extra_perm_bold(floor_ptr, y_height+6, x_left+18);
+	place_bold(player_ptr, y_height+6, x_left+18, extra_perm);
 	floor_ptr->grid_array[y_height+6][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(floor_ptr, y_depth-4, x_left+18);
+	place_bold(player_ptr, y_depth-4, x_left+18, extra_perm);
 	floor_ptr->grid_array[y_depth-4][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(floor_ptr, y_height+6, x_right-18);
+	place_bold(player_ptr, y_height+6, x_right-18, extra_perm);
 	floor_ptr->grid_array[y_height+6][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_extra_perm_bold(floor_ptr, y_depth-4, x_right-18);
+	place_bold(player_ptr, y_depth-4, x_right-18, extra_perm);
 	floor_ptr->grid_array[y_depth-4][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
 
 	for (i = y_height + 1; i <= y_height + 5; i++)
@@ -1187,7 +1194,7 @@ static void generate_gambling_arena(player_type *creature_ptr)
 		for (x = 0; x < MAX_WID; x++)
 		{
 			/* Create "solid" perma-wall */
-			place_solid_perm_bold(floor_ptr, y, x);
+			place_bold(creature_ptr, y, x, solid_perm);
 
 			/* Illuminate and memorize the walls */
 			floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
@@ -1204,7 +1211,7 @@ static void generate_gambling_arena(player_type *creature_ptr)
 		}
 	}
 
-	build_battle(floor_ptr, &y, &x);
+	build_battle(creature_ptr, &y, &x);
 
 	player_place(creature_ptr, y, x);
 
@@ -1239,7 +1246,7 @@ static void generate_fixed_floor(player_type *player_ptr)
 	{
 		for (x = 0; x < floor_ptr->width; x++)
 		{
-			place_solid_perm_bold(floor_ptr, y, x);
+			place_bold(player_ptr, y, x, solid_perm);
 		}
 	}
 
@@ -1250,7 +1257,7 @@ static void generate_fixed_floor(player_type *player_ptr)
 	floor_ptr->monster_level = floor_ptr->base_level;
 
 	if (record_stair) exe_write_diary(player_ptr, DIARY_TO_QUEST, floor_ptr->inside_quest, NULL);
-	get_mon_num_prep(get_monster_hook(player_ptr), NULL);
+	get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), NULL);
 
 	init_flags = INIT_CREATE_DUNGEON;
 
@@ -1446,7 +1453,7 @@ void generate_floor(player_type *player_ptr)
 
 		if (floor_ptr->inside_arena)
 		{
-			generate_challenge_arena(floor_ptr, player_ptr);
+			generate_challenge_arena(player_ptr);
 		}
 
 		else if (player_ptr->phase_out)
@@ -1493,7 +1500,7 @@ void generate_floor(player_type *player_ptr)
 		if (why) msg_format(_("生成やり直し(%s)", "Generation restarted (%s)"), why);
 
 		wipe_o_list(floor_ptr);
-		wipe_m_list();
+		wipe_monsters_list(player_ptr);
 	}
 
 	/* Glow deep lava and building entrances tempor */
@@ -1549,6 +1556,7 @@ static void correct_dir(POSITION *rdir, POSITION *cdir, POSITION y1, POSITION x1
 
 /*!
 * @brief 部屋間のトンネルを生成する / Constructs a tunnel between two points
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param row1 始点Y座標
 * @param col1 始点X座標
 * @param row2 終点Y座標
@@ -1582,7 +1590,7 @@ static void correct_dir(POSITION *rdir, POSITION *cdir, POSITION y1, POSITION x1
 *   outer -- outer room walls\n
 *   solid -- solid room walls\n
 */
-bool build_tunnel(floor_type *floor_ptr, POSITION row1, POSITION col1, POSITION row2, POSITION col2)
+bool build_tunnel(player_type *player_ptr, POSITION row1, POSITION col1, POSITION row2, POSITION col2)
 {
 	POSITION y, x;
 	POSITION tmp_row, tmp_col;
@@ -1602,6 +1610,7 @@ bool build_tunnel(floor_type *floor_ptr, POSITION row1, POSITION col1, POSITION 
 	correct_dir(&row_dir, &col_dir, row1, col1, row2, col2);
 
 	/* Keep going until done (or bored) */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	while ((row1 != row2) || (col1 != col2))
 	{
 		/* Mega-Hack -- Paranoia -- prevent infinite loops */
@@ -1680,7 +1689,7 @@ bool build_tunnel(floor_type *floor_ptr, POSITION row1, POSITION col1, POSITION 
 					if (is_outer_bold(floor_ptr, y, x))
 					{
 						/* Change the wall to a "solid" wall */
-						place_solid_noperm_bold(floor_ptr, y, x);
+						place_bold(player_ptr, y, x, solid_noperm);
 					}
 				}
 			}
@@ -1760,6 +1769,7 @@ bool build_tunnel(floor_type *floor_ptr, POSITION row1, POSITION col1, POSITION 
 
 /*!
 * @brief トンネル生成のための基準点を指定する。
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param x 基準点を指定するX座標の参照ポインタ、適時値が修正される。
 * @param y 基準点を指定するY座標の参照ポインタ、適時値が修正される。
 * @param affectwall (調査中)
@@ -1776,10 +1786,11 @@ bool build_tunnel(floor_type *floor_ptr, POSITION row1, POSITION col1, POSITION 
 * routine.\n
 * @todo 特に詳細な処理の意味を調査すべし
 */
-static bool set_tunnel(floor_type *floor_ptr, POSITION *x, POSITION *y, bool affectwall)
+static bool set_tunnel(player_type *player_ptr, POSITION *x, POSITION *y, bool affectwall)
 {
 	int i, j, dx, dy;
 
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	grid_type *g_ptr = &floor_ptr->grid_array[*y][*x];
 
 	if (!in_bounds(floor_ptr, *y, *x)) return TRUE;
@@ -1829,7 +1840,7 @@ static bool set_tunnel(floor_type *floor_ptr, POSITION *x, POSITION *y, bool aff
 				if (is_outer_bold(floor_ptr, j, i))
 				{
 					/* Change the wall to a "solid" wall */
-					place_solid_noperm_bold(floor_ptr, j, i);
+					place_bold(player_ptr, j, i, solid_noperm);
 				}
 			}
 		}
@@ -1837,7 +1848,7 @@ static bool set_tunnel(floor_type *floor_ptr, POSITION *x, POSITION *y, bool aff
 		/* Clear mimic type */
 		floor_ptr->grid_array[*y][*x].mimic = 0;
 
-		place_floor_bold(floor_ptr, *y, *x);
+		place_bold(player_ptr, *y, *x, floor);
 
 		return TRUE;
 	}
@@ -1869,7 +1880,7 @@ static bool set_tunnel(floor_type *floor_ptr, POSITION *x, POSITION *y, bool aff
 		if (i == 0)
 		{
 			/* Failed for some reason: hack - ignore the solidness */
-			place_outer_grid(g_ptr);
+			place_grid(player_ptr, g_ptr, outer);
 			dx = 0;
 			dy = 0;
 		}
@@ -1887,6 +1898,7 @@ static bool set_tunnel(floor_type *floor_ptr, POSITION *x, POSITION *y, bool aff
 
 /*!
 * @brief 外壁を削って「カタコンベ状」の通路を作成する / This routine creates the catacomb-like tunnels by removing extra rock.
+* @param player_ptr プレーヤーへの参照ポインタ
 * @param x 基準点のX座標
 * @param y 基準点のY座標
 * @return なし
@@ -1894,31 +1906,32 @@ static bool set_tunnel(floor_type *floor_ptr, POSITION *x, POSITION *y, bool aff
 * Note that this routine is only called on "even" squares - so it gives
 * a natural checkerboard pattern.
 */
-static void create_cata_tunnel(floor_type *floor_ptr, POSITION x, POSITION y)
+static void create_cata_tunnel(player_type *player_ptr, POSITION x, POSITION y)
 {
 	POSITION x1, y1;
 
 	/* Build tunnel */
 	x1 = x - 1;
 	y1 = y;
-	set_tunnel(floor_ptr, &x1, &y1, FALSE);
+	set_tunnel(player_ptr, &x1, &y1, FALSE);
 
 	x1 = x + 1;
 	y1 = y;
-	set_tunnel(floor_ptr, &x1, &y1, FALSE);
+	set_tunnel(player_ptr, &x1, &y1, FALSE);
 
 	x1 = x;
 	y1 = y - 1;
-	set_tunnel(floor_ptr, &x1, &y1, FALSE);
+	set_tunnel(player_ptr, &x1, &y1, FALSE);
 
 	x1 = x;
 	y1 = y + 1;
-	set_tunnel(floor_ptr, &x1, &y1, FALSE);
+	set_tunnel(player_ptr, &x1, &y1, FALSE);
 }
 
 
 /*!
 * @brief トンネル生成処理（詳細調査中）/ This routine does the bulk of the work in creating the new types of tunnels.
+* @param player_ptr プレーヤーへの参照ポインタ
 * @return なし
 * @todo 詳細用調査
 * @details
@@ -1939,7 +1952,7 @@ static void create_cata_tunnel(floor_type *floor_ptr, POSITION x, POSITION y)
 * This, when used with longer line segments gives the "catacomb-like" tunnels seen near\n
 * the surface.\n
 */
-static void short_seg_hack(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int count, bool *fail)
+static void short_seg_hack(player_type *player_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int count, bool *fail)
 {
 	int i;
 	POSITION x, y;
@@ -1959,7 +1972,7 @@ static void short_seg_hack(floor_type *floor_ptr, POSITION x1, POSITION y1, POSI
 		{
 			x = x1 + i * (x2 - x1) / length;
 			y = y1 + i * (y2 - y1) / length;
-			if (!set_tunnel(floor_ptr, &x, &y, TRUE))
+			if (!set_tunnel(player_ptr, &x, &y, TRUE))
 			{
 				if (count > 50)
 				{
@@ -1969,8 +1982,8 @@ static void short_seg_hack(floor_type *floor_ptr, POSITION x1, POSITION y1, POSI
 				}
 
 				/* solid wall - so try to go around */
-				short_seg_hack(floor_ptr, x, y, x1 + (i - 1) * (x2 - x1) / length, y1 + (i - 1) * (y2 - y1) / length, 1, count, fail);
-				short_seg_hack(floor_ptr, x, y, x1 + (i + 1) * (x2 - x1) / length, y1 + (i + 1) * (y2 - y1) / length, 1, count, fail);
+				short_seg_hack(player_ptr, x, y, x1 + (i - 1) * (x2 - x1) / length, y1 + (i - 1) * (y2 - y1) / length, 1, count, fail);
+				short_seg_hack(player_ptr, x, y, x1 + (i + 1) * (x2 - x1) / length, y1 + (i + 1) * (y2 - y1) / length, 1, count, fail);
 			}
 		}
 	}
@@ -1982,15 +1995,15 @@ static void short_seg_hack(floor_type *floor_ptr, POSITION x1, POSITION y1, POSI
 			{
 				x = i;
 				y = y1;
-				if (!set_tunnel(floor_ptr, &x, &y, TRUE))
+				if (!set_tunnel(player_ptr, &x, &y, TRUE))
 				{
 					/* solid wall - so try to go around */
-					short_seg_hack(floor_ptr, x, y, i - 1, y1, 1, count, fail);
-					short_seg_hack(floor_ptr, x, y, i + 1, y1, 1, count, fail);
+					short_seg_hack(player_ptr, x, y, i - 1, y1, 1, count, fail);
+					short_seg_hack(player_ptr, x, y, i + 1, y1, 1, count, fail);
 				}
 				if ((type == 3) && ((x + y) % 2))
 				{
-					create_cata_tunnel(floor_ptr, i, y1);
+					create_cata_tunnel(player_ptr, i, y1);
 				}
 			}
 		}
@@ -2000,15 +2013,15 @@ static void short_seg_hack(floor_type *floor_ptr, POSITION x1, POSITION y1, POSI
 			{
 				x = i;
 				y = y1;
-				if (!set_tunnel(floor_ptr, &x, &y, TRUE))
+				if (!set_tunnel(player_ptr, &x, &y, TRUE))
 				{
 					/* solid wall - so try to go around */
-					short_seg_hack(floor_ptr, x, y, i - 1, y1, 1, count, fail);
-					short_seg_hack(floor_ptr, x, y, i + 1, y1, 1, count, fail);
+					short_seg_hack(player_ptr, x, y, i - 1, y1, 1, count, fail);
+					short_seg_hack(player_ptr, x, y, i + 1, y1, 1, count, fail);
 				}
 				if ((type == 3) && ((x + y) % 2))
 				{
-					create_cata_tunnel(floor_ptr, i, y1);
+					create_cata_tunnel(player_ptr, i, y1);
 				}
 			}
 
@@ -2019,15 +2032,15 @@ static void short_seg_hack(floor_type *floor_ptr, POSITION x1, POSITION y1, POSI
 			{
 				x = x2;
 				y = i;
-				if (!set_tunnel(floor_ptr, &x, &y, TRUE))
+				if (!set_tunnel(player_ptr, &x, &y, TRUE))
 				{
 					/* solid wall - so try to go around */
-					short_seg_hack(floor_ptr, x, y, x2, i - 1, 1, count, fail);
-					short_seg_hack(floor_ptr, x, y, x2, i + 1, 1, count, fail);
+					short_seg_hack(player_ptr, x, y, x2, i - 1, 1, count, fail);
+					short_seg_hack(player_ptr, x, y, x2, i + 1, 1, count, fail);
 				}
 				if ((type == 3) && ((x + y) % 2))
 				{
-					create_cata_tunnel(floor_ptr, x2, i);
+					create_cata_tunnel(player_ptr, x2, i);
 				}
 			}
 		}
@@ -2037,15 +2050,15 @@ static void short_seg_hack(floor_type *floor_ptr, POSITION x1, POSITION y1, POSI
 			{
 				x = x2;
 				y = i;
-				if (!set_tunnel(floor_ptr, &x, &y, TRUE))
+				if (!set_tunnel(player_ptr, &x, &y, TRUE))
 				{
 					/* solid wall - so try to go around */
-					short_seg_hack(floor_ptr, x, y, x2, i - 1, 1, count, fail);
-					short_seg_hack(floor_ptr, x, y, x2, i + 1, 1, count, fail);
+					short_seg_hack(player_ptr, x, y, x2, i - 1, 1, count, fail);
+					short_seg_hack(player_ptr, x, y, x2, i + 1, 1, count, fail);
 				}
 				if ((type == 3) && ((x + y) % 2))
 				{
-					create_cata_tunnel(floor_ptr, x2, i);
+					create_cata_tunnel(player_ptr, x2, i);
 				}
 			}
 		}
@@ -2067,7 +2080,7 @@ static void short_seg_hack(floor_type *floor_ptr, POSITION x1, POSITION y1, POSI
 * Note it is VERY important that the "stop if hit another passage" logic\n
 * stays as is.  Without this the dungeon turns into Swiss Cheese...\n
 */
-bool build_tunnel2(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff)
+bool build_tunnel2(player_type *player_ptr, POSITION x1, POSITION y1, POSITION x2, POSITION y2, int type, int cutoff)
 {
 	POSITION x3, y3, dx, dy;
 	POSITION changex, changey;
@@ -2077,7 +2090,7 @@ bool build_tunnel2(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2,
 	grid_type *g_ptr;
 
 	length = distance(x1, y1, x2, y2);
-
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (length > cutoff)
 	{
 		/*
@@ -2125,7 +2138,7 @@ bool build_tunnel2(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2,
 			if (i == 0)
 			{
 				/* Failed for some reason: hack - ignore the solidness */
-				place_outer_bold(floor_ptr, y3, x3);
+				place_bold(player_ptr, y3, x3, outer);
 				dx = 0;
 				dy = 0;
 			}
@@ -2136,12 +2149,12 @@ bool build_tunnel2(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2,
 
 		if (is_floor_grid(g_ptr))
 		{
-			if (build_tunnel2(floor_ptr, x1, y1, x3, y3, type, cutoff))
+			if (build_tunnel2(player_ptr, x1, y1, x3, y3, type, cutoff))
 			{
 				if ((floor_ptr->grid_array[y3][x3].info & CAVE_ROOM) || (randint1(100) > 95))
 				{
 					/* do second half only if works + if have hit a room */
-					retval = build_tunnel2(floor_ptr, x3, y3, x2, y2, type, cutoff);
+					retval = build_tunnel2(player_ptr, x3, y3, x2, y2, type, cutoff);
 				}
 				else
 				{
@@ -2169,9 +2182,9 @@ bool build_tunnel2(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2,
 		else
 		{
 			/* tunnel through walls */
-			if (build_tunnel2(floor_ptr, x1, y1, x3, y3, type, cutoff))
+			if (build_tunnel2(player_ptr, x1, y1, x3, y3, type, cutoff))
 			{
-				retval = build_tunnel2(floor_ptr, x3, y3, x2, y2, type, cutoff);
+				retval = build_tunnel2(player_ptr, x3, y3, x2, y2, type, cutoff);
 				firstsuccede = TRUE;
 			}
 			else
@@ -2184,7 +2197,7 @@ bool build_tunnel2(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2,
 		if (firstsuccede)
 		{
 			/* only do this if the first half has worked */
-			set_tunnel(floor_ptr, &x3, &y3, TRUE);
+			set_tunnel(player_ptr, &x3, &y3, TRUE);
 		}
 		/* return value calculated above */
 		return retval;
@@ -2193,7 +2206,7 @@ bool build_tunnel2(floor_type *floor_ptr, POSITION x1, POSITION y1, POSITION x2,
 	{
 		/* Do a short segment */
 		retval = TRUE;
-		short_seg_hack(floor_ptr, x1, y1, x2, y2, type, 0, &retval);
+		short_seg_hack(player_ptr, x1, y1, x2, y2, type, 0, &retval);
 
 		/* Hack - ignore return value so avoid infinite loops */
 		return TRUE;

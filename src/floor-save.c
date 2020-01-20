@@ -373,7 +373,7 @@ static void build_dead_end(player_type *creature_ptr)
 		for (x = 0; x < MAX_WID; x++)
 		{
 			/* Create "solid" perma-wall */
-			place_solid_perm_bold(creature_ptr->current_floor_ptr, y, x);
+			place_bold(creature_ptr, y, x, solid_perm);
 		}
 	}
 
@@ -382,7 +382,7 @@ static void build_dead_end(player_type *creature_ptr)
 	creature_ptr->x = creature_ptr->current_floor_ptr->width / 2;
 
 	/* Give one square */
-	place_floor_bold(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x);
+	place_bold(creature_ptr, creature_ptr->y, creature_ptr->x, floor);
 
 	wipe_generate_random_floor_flags(creature_ptr->current_floor_ptr);
 }
@@ -420,7 +420,7 @@ static void preserve_pet(player_type *master_ptr)
 			(void)COPY(&party_mon[0], m_ptr, monster_type);
 
 			/* Delete from this floor */
-			delete_monster_idx(master_ptr->riding);
+			delete_monster_idx(master_ptr, master_ptr->riding);
 		}
 	}
 
@@ -473,7 +473,7 @@ static void preserve_pet(player_type *master_ptr)
 			num++;
 
 			/* Delete from this floor */
-			delete_monster_idx(i);
+			delete_monster_idx(master_ptr, i);
 		}
 	}
 
@@ -489,7 +489,7 @@ static void preserve_pet(player_type *master_ptr)
 			if (!m_ptr->nickname) continue;
 			if (master_ptr->riding == i) continue;
 
-			monster_desc(m_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+			monster_desc(master_ptr, m_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 			exe_write_diary(master_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_MOVED, m_name);
 		}
 	}
@@ -508,11 +508,11 @@ static void preserve_pet(player_type *master_ptr)
 			if (is_seen(m_ptr))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(master_ptr, m_name, m_ptr, 0);
 				msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
 			}
 
-			delete_monster_idx(i);
+			delete_monster_idx(master_ptr, i);
 		}
 	}
 }
@@ -562,7 +562,7 @@ static void place_pet(player_type *master_ptr)
 
 		if (i == 0)
 		{
-			m_idx = m_pop();
+			m_idx = m_pop(master_ptr);
 			master_ptr->riding = m_idx;
 			if (m_idx)
 			{
@@ -580,11 +580,11 @@ static void place_pet(player_type *master_ptr)
 				for (j = 1000; j > 0; j--)
 				{
 					scatter(master_ptr, &cy, &cx, master_ptr->y, master_ptr->x, d, 0);
-					if (monster_can_enter(cy, cx, &r_info[party_mon[i].r_idx], 0)) break;
+					if (monster_can_enter(master_ptr, cy, cx, &r_info[party_mon[i].r_idx], 0)) break;
 				}
 				if (j) break;
 			}
-			m_idx = (d == 6) ? 0 : m_pop();
+			m_idx = (d == 6) ? 0 : m_pop(master_ptr);
 		}
 
 		if (m_idx)
@@ -617,7 +617,7 @@ static void place_pet(player_type *master_ptr)
 				repair_monsters = TRUE;
 			}
 			update_monster(master_ptr, m_idx, TRUE);
-			lite_spot(cy, cx);
+			lite_spot(master_ptr, cy, cx);
 
 			/* Pre-calculated in precalc_cur_num_of_pet() */
 			/* r_ptr->cur_num++; */
@@ -632,11 +632,11 @@ static void place_pet(player_type *master_ptr)
 			monster_race *r_ptr = real_r_ptr(m_ptr);
 			GAME_TEXT m_name[MAX_NLEN];
 
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(master_ptr, m_name, m_ptr, 0);
 			msg_format(_("%sとはぐれてしまった。", "You have lost sight of %s."), m_name);
 			if (record_named_pet && m_ptr->nickname)
 			{
-				monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+				monster_desc(master_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 				exe_write_diary(master_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOST_SIGHT, m_name);
 			}
 
@@ -702,12 +702,13 @@ static void update_unique_artifact(floor_type *floor_ptr, s16b cur_floor_id)
  * @brief フロア移動時、プレイヤーの移動先モンスターが既にいた場合ランダムな近隣に移動させる / When a monster is at a place where player will return,
  * @return なし
  */
-static void get_out_monster(floor_type *floor_ptr, player_type *protected_ptr)
+static void get_out_monster(player_type *protected_ptr)
 {
 	int tries = 0;
 	POSITION dis = 1;
 	POSITION oy = protected_ptr->y;
 	POSITION ox = protected_ptr->x;
+	floor_type *floor_ptr = protected_ptr->current_floor_ptr;
 	MONSTER_IDX m_idx = floor_ptr->grid_array[oy][ox].m_idx;
 
 	/* Nothing to do if no monster */
@@ -737,14 +738,14 @@ static void get_out_monster(floor_type *floor_ptr, player_type *protected_ptr)
 		if (!in_bounds(floor_ptr, ny, nx)) continue;
 
 		/* Require "empty" floor space */
-		if (!cave_empty_bold(protected_ptr->current_floor_ptr, ny, nx)) continue;
+		if (!is_cave_empty_bold(protected_ptr, ny, nx)) continue;
 
 		/* Hack -- no teleport onto glyph of warding */
 		if (is_glyph_grid(&floor_ptr->grid_array[ny][nx])) continue;
 		if (is_explosive_rune_grid(&floor_ptr->grid_array[ny][nx])) continue;
 
 		/* ...nor onto the Pattern */
-		if (pattern_tile(ny, nx)) continue;
+		if (pattern_tile(floor_ptr, ny, nx)) continue;
 
 		/*** It's a good place ***/
 
@@ -933,7 +934,7 @@ void leave_floor(player_type *creature_ptr)
 		    (r_ptr->flags7 & RF7_NAZGUL)) continue;
 
 		/* Delete non-unique quest monsters */
-		delete_monster_idx(i);
+		delete_monster_idx(creature_ptr, i);
 	}
 
 	/* Check if there is a same item */
@@ -1074,7 +1075,7 @@ void leave_floor(player_type *creature_ptr)
 	    !(creature_ptr->change_floor_mode & CFM_NO_RETURN))
 	{
 		/* Get out of the my way! */
-		get_out_monster(creature_ptr->current_floor_ptr, creature_ptr);
+		get_out_monster(creature_ptr);
 
 		/* Record the last visit turn of current floor */
 		sf_ptr->last_visit = current_world_ptr->game_turn;
@@ -1254,7 +1255,7 @@ void change_floor(player_type *creature_ptr)
 				if (r_ptr->floor_id != new_floor_id)
 				{
 					/* Disapper from here */
-					delete_monster_idx(i);
+					delete_monster_idx(creature_ptr, i);
 				}
 			}
 
@@ -1272,7 +1273,7 @@ void change_floor(player_type *creature_ptr)
 				if (a_info[o_ptr->name1].floor_id != new_floor_id)
 				{
 					/* Disappear from here */
-					delete_object_idx(creature_ptr->current_floor_ptr, i);
+					delete_object_idx(creature_ptr, i);
 				}
 				else
 				{
@@ -1340,13 +1341,13 @@ void change_floor(player_type *creature_ptr)
 				/* No stairs down from Quest */
 				if ((creature_ptr->change_floor_mode & CFM_UP) && !quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level))
 				{
-					g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair;
+					g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(creature_ptr, feat_down_stair, FF_SHAFT) : feat_down_stair;
 				}
 
 				/* No stairs up when ironman_downward */
 				else if ((creature_ptr->change_floor_mode & CFM_DOWN) && !ironman_downward)
 				{
-					g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair;
+					g_ptr->feat = (creature_ptr->change_floor_mode & CFM_SHAFT) ? feat_state(creature_ptr, feat_up_stair, FF_SHAFT) : feat_up_stair;
 				}
 
 				/* Paranoia -- Clear mimic */

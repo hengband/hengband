@@ -197,7 +197,7 @@ static void do_cmd_summon_horde(player_type *caster_ptr)
 	while (--attempts)
 	{
 		scatter(caster_ptr, &wy, &wx, caster_ptr->y, caster_ptr->x, 3, 0);
-		if (cave_empty_bold(caster_ptr->current_floor_ptr, wy, wx)) break;
+		if (is_cave_empty_bold(caster_ptr, wy, wx)) break;
 	}
 
 	(void)alloc_horde(caster_ptr, wy, wx);
@@ -496,6 +496,7 @@ static void do_cmd_wiz_change(player_type *creature_ptr)
 /*!
  * @brief アイテムの詳細ステータスを表示する /
  * Change various "permanent" player variables.
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 詳細を表示するアイテム情報の参照ポインタ
  * @return なし
  * @details
@@ -556,7 +557,7 @@ static void do_cmd_wiz_change(player_type *creature_ptr)
  * Originally by David Reeve Sward <sward+@CMU.EDU>
  * Verbose item flags by -Bernd-
  */
-static void wiz_display_item(object_type *o_ptr)
+static void wiz_display_item(player_type *player_ptr, object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
@@ -569,7 +570,7 @@ static void wiz_display_item(object_type *o_ptr)
 
 	/* Describe fully */
 	char buf[256];
-	object_desc(buf, o_ptr, OD_STORE);
+	object_desc(player_ptr, buf, o_ptr, OD_STORE);
 
 	prt(buf, 2, j);
 
@@ -812,10 +813,11 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
 
 /*!
  * @briefアイテムの基礎能力値を調整する / Tweak an item
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 調整するアイテムの参照ポインタ
  * @return なし
  */
-static void wiz_tweak_item(object_type *o_ptr)
+static void wiz_tweak_item(player_type *player_ptr, object_type *o_ptr)
 {
 	if (object_is_artifact(o_ptr)) return;
 
@@ -824,25 +826,25 @@ static void wiz_tweak_item(object_type *o_ptr)
 	sprintf(tmp_val, "%d", o_ptr->pval);
 	if (!get_string(p, tmp_val, 5)) return;
 	o_ptr->pval = (s16b)atoi(tmp_val);
-	wiz_display_item(o_ptr);
+	wiz_display_item(player_ptr, o_ptr);
 
 	p = "Enter new 'to_a' setting: ";
 	sprintf(tmp_val, "%d", o_ptr->to_a);
 	if (!get_string(p, tmp_val, 5)) return;
 	o_ptr->to_a = (s16b)atoi(tmp_val);
-	wiz_display_item(o_ptr);
+	wiz_display_item(player_ptr, o_ptr);
 
 	p = "Enter new 'to_h' setting: ";
 	sprintf(tmp_val, "%d", o_ptr->to_h);
 	if (!get_string(p, tmp_val, 5)) return;
 	o_ptr->to_h = (s16b)atoi(tmp_val);
-	wiz_display_item(o_ptr);
+	wiz_display_item(player_ptr, o_ptr);
 
 	p = "Enter new 'to_d' setting: ";
 	sprintf(tmp_val, "%d", (int)o_ptr->to_d);
 	if (!get_string(p, tmp_val, 5)) return;
 	o_ptr->to_d = (s16b)atoi(tmp_val);
-	wiz_display_item(o_ptr);
+	wiz_display_item(player_ptr, o_ptr);
 }
 
 
@@ -867,7 +869,7 @@ static void wiz_reroll_item(player_type *owner_ptr, object_type *o_ptr)
 	while (TRUE)
 	{
 		/* Display full item debug information */
-		wiz_display_item(q_ptr);
+		wiz_display_item(owner_ptr, q_ptr);
 
 		/* Ask wizard what to do. */
 		if (!get_com("[a]ccept, [w]orthless, [c]ursed, [n]ormal, [g]ood, [e]xcellent, [s]pecial? ", &ch, FALSE))
@@ -998,7 +1000,7 @@ static void wiz_statistics(player_type *caster_ptr, object_type *o_ptr)
 		concptr pmt = "Roll for [n]ormal, [g]ood, or [e]xcellent treasure? ";
 
 		/* Display item */
-		wiz_display_item(o_ptr);
+		wiz_display_item(caster_ptr, o_ptr);
 
 		/* Get choices */
 		if (!get_com(pmt, &ch, FALSE)) break;
@@ -1221,7 +1223,7 @@ static void do_cmd_wiz_play(player_type *creature_ptr)
 	while (TRUE)
 	{
 		/* Display the item */
-		wiz_display_item(q_ptr);
+		wiz_display_item(creature_ptr, q_ptr);
 
 		/* Get choice */
 		if (!get_com("[a]ccept [s]tatistics [r]eroll [t]weak [q]uantity? ", &ch, FALSE))
@@ -1248,7 +1250,7 @@ static void do_cmd_wiz_play(player_type *creature_ptr)
 
 		if (ch == 't' || ch == 'T')
 		{
-			wiz_tweak_item(q_ptr);
+			wiz_tweak_item(creature_ptr, q_ptr);
 		}
 
 		if (ch == 'q' || ch == 'Q')
@@ -1534,11 +1536,11 @@ static void do_cmd_wiz_zap(player_type *caster_ptr)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 
-			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+			monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
 		}
 
-		delete_monster_idx(i);
+		delete_monster_idx(caster_ptr, i);
 	}
 }
 
@@ -1564,12 +1566,12 @@ static void do_cmd_wiz_zap_all(player_type *caster_ptr)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
 
-			monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+			monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_WIZ_ZAP, m_name);
 		}
 
 		/* Delete this monster */
-		delete_monster_idx(i);
+		delete_monster_idx(caster_ptr, i);
 	}
 }
 
@@ -1625,8 +1627,8 @@ static void do_cmd_wiz_create_feature(player_type *creature_ptr)
 	else if (have_flag(f_ptr->flags, FF_MIRROR))
 		g_ptr->info |= (CAVE_GLOW | CAVE_OBJECT);
 
-	note_spot(y, x);
-	lite_spot(y, x);
+	note_spot(creature_ptr, y, x);
+	lite_spot(creature_ptr, y, x);
 	creature_ptr->update |= (PU_FLOW);
 
 	prev_feat = tmp_feat;

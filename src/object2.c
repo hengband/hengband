@@ -81,7 +81,7 @@ bool(*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 */
 OBJECT_SUBTYPE_VALUE coin_type;	/* Hack -- force coin type */
 
-void floor_item_describe(floor_type *floor_ptr, INVENTORY_IDX item);
+void floor_item_describe(player_type *player_ptr, INVENTORY_IDX item);
 
 /*!
  * @brief 床上、モンスター所持でスタックされたアイテムを削除しスタックを補完する / Excise a dungeon object from any stacks
@@ -195,17 +195,18 @@ void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 /*!
  * @brief オブジェクトを削除する /
  * Delete a dungeon object
- * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_idx 削除対象のオブジェクト構造体ポインタ
  * @return なし
  * @details
  * Handle "stacks" of objects correctly.
  */
-void delete_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
+void delete_object_idx(player_type *player_ptr, OBJECT_IDX o_idx)
 {
 	object_type *j_ptr;
 
 	/* Excise */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	excise_object_idx(floor_ptr, o_idx);
 
 	/* Object */
@@ -217,7 +218,7 @@ void delete_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 		POSITION y, x;
 		y = j_ptr->iy;
 		x = j_ptr->ix;
-		lite_spot(y, x);
+		lite_spot(player_ptr, y, x);
 	}
 
 	object_wipe(j_ptr);
@@ -228,17 +229,18 @@ void delete_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
 /*!
  * @brief フロアにマスに落ちているオブジェクトを全て削除する / Deletes all objects at given location
  * Delete a dungeon object
- * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 削除したフロアマスのY座標
  * @param x 削除したフロアマスのX座標
  * @return なし
  */
-void delete_object(floor_type *floor_ptr, POSITION y, POSITION x)
+void delete_object(player_type *player_ptr, POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
 	/* Refuse "illegal" locations */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!in_bounds(floor_ptr, y, x)) return;
 
 	g_ptr = &floor_ptr->grid_array[y][x];
@@ -254,7 +256,7 @@ void delete_object(floor_type *floor_ptr, POSITION y, POSITION x)
 	}
 
 	g_ptr->o_idx = 0;
-	lite_spot(y, x);
+	lite_spot(player_ptr, y, x);
 }
 
 
@@ -535,7 +537,7 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
 	object_copy(q_ptr, o_ptr);
 
 	q_ptr->number = 1;
-	object_desc(o_name, q_ptr, OD_NAME_ONLY);
+	object_desc(owner_ptr, o_name, q_ptr, OD_NAME_ONLY);
 
 	exe_write_diary(owner_ptr, DIARY_FOUND, 0, o_name);
 }
@@ -1709,7 +1711,7 @@ static void object_mention(player_type *owner_ptr, object_type *o_ptr)
 
 	/* Mark the item as fully known */
 	o_ptr->ident |= (IDENT_MENTAL);
-	object_desc(o_name, o_ptr, 0);
+	object_desc(owner_ptr, o_name, o_ptr, 0);
 	msg_format_wizard(CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);
 }
 
@@ -3516,12 +3518,12 @@ static void a_m_aux_4(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
 		}
 
 		/* Hack -- Remove the monster restriction */
-		get_mon_num_prep(item_monster_okay, NULL);
+		get_mon_num_prep(owner_ptr, item_monster_okay, NULL);
 
 		/* Pick a random non-unique monster race */
 		while (TRUE)
 		{
-			i = get_mon_num(floor_ptr->dun_level);
+			i = get_mon_num(owner_ptr, floor_ptr->dun_level);
 
 			r_ptr = &r_info[i];
 
@@ -4203,7 +4205,7 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 #endif
 
 	/* Describe object */
-	object_desc(o_name, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(owner_ptr, o_name, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 
 	/* Handle normal "breakage" */
@@ -4469,8 +4471,8 @@ OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chan
 		done = TRUE;
 	}
 
-	note_spot(by, bx);
-	lite_spot(by, bx);
+	note_spot(owner_ptr, by, bx);
+	lite_spot(owner_ptr, by, bx);
 	sound(SOUND_DROP);
 
 	/* Mega-Hack -- no message if "dropped" by player */
@@ -4538,7 +4540,7 @@ void inven_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 	object_type *o_ptr = &owner_ptr->inventory_list[item];
 	GAME_TEXT o_name[MAX_NLEN];
 
-	object_desc(o_name, o_ptr, 0);
+	object_desc(owner_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
 	/* "no more" の場合はこちらで表示する */
@@ -4571,8 +4573,8 @@ void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
 
 	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
 	floor_item_increase(floor_ptr, 0 - item, num);
-	floor_item_describe(floor_ptr, 0 - item);
-	floor_item_optimize(floor_ptr, 0 - item);
+	floor_item_describe(owner_ptr, 0 - item);
+	floor_item_optimize(owner_ptr, 0 - item);
 }
 
 
@@ -4718,12 +4720,12 @@ void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
  * @param item メッセージの対象にしたいアイテム所持スロット
  * @return なし
  */
-void floor_item_describe(floor_type *floor_ptr, INVENTORY_IDX item)
+void floor_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 {
-	object_type *o_ptr = &floor_ptr->o_list[item];
+	object_type *o_ptr = &owner_ptr->current_floor_ptr->o_list[item];
 	GAME_TEXT o_name[MAX_NLEN];
 
-	object_desc(o_name, o_ptr, 0);
+	object_desc(owner_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
 	/* "no more" の場合はこちらで表示を分ける */
@@ -4772,13 +4774,13 @@ void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER 
 /*!
  * @brief 床上の数の無くなったアイテムスロットを消去する /
  * Optimize an item on the floor (destroy "empty" items)
- * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param item 消去したいアイテムの所持スロット
  * @return なし
  */
-void floor_item_optimize(floor_type *floor_ptr, INVENTORY_IDX item)
+void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
 {
-	object_type *o_ptr = &floor_ptr->o_list[item];
+	object_type *o_ptr = &owner_ptr->current_floor_ptr->o_list[item];
 
 	/* Paranoia -- be sure it exists */
 	if (!o_ptr->k_idx) return;
@@ -4786,7 +4788,7 @@ void floor_item_optimize(floor_type *floor_ptr, INVENTORY_IDX item)
 	/* Only optimize empty items */
 	if (o_ptr->number) return;
 
-	delete_object_idx(floor_ptr, item);
+	delete_object_idx(owner_ptr, item);
 }
 
 
@@ -5068,7 +5070,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
 	/* Modify quantity */
 	q_ptr->number = amt;
 
-	object_desc(o_name, q_ptr, 0);
+	object_desc(owner_ptr, o_name, q_ptr, 0);
 
 	/* Took off weapon */
 	if (((item == INVEN_RARM) || (item == INVEN_LARM)) &&
@@ -5161,7 +5163,7 @@ void drop_from_inventory(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
 	q_ptr->number = amt;
 
 	/* Describe local object */
-	object_desc(o_name, q_ptr, 0);
+	object_desc(owner_ptr, o_name, q_ptr, 0);
 
 	msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(item));
 
@@ -5374,7 +5376,7 @@ void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx)
 
 	/* Prepare the object */
 	object_prep(q_ptr, k_idx);
-	object_desc(o_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
+	object_desc(owner_ptr, o_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
 
 	/* Mention the object name */
 	Term_putstr(0, 0, -1, TERM_WHITE, o_name);

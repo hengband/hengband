@@ -10,7 +10,7 @@ extern void get_table_sindarin_aux(char *out_string);
 extern void get_table_sindarin(char *out_string);
 extern void flavor_init(void);
 extern char *object_desc_kosuu(char *t, object_type *o_ptr);
-extern void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode);
+extern void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode);
 extern void strip_name(char *buf, KIND_OBJECT_IDX k_idx);
 
 extern const concptr game_inscriptions[];

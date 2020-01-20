@@ -27,6 +27,57 @@ floor_type floor_info;
  */
 saved_floor_type saved_floors[MAX_SAVED_FLOORS];
 
+/*
+ * Grid based version of "cave_empty_bold()"
+ */
+bool is_cave_empty_grid(player_type *player_ptr, grid_type *g_ptr)
+{
+	bool is_empty_grid = cave_have_flag_grid(g_ptr, FF_PLACE);
+	is_empty_grid &= g_ptr->m_idx == 0;
+	is_empty_grid &= !player_grid(player_ptr, g_ptr);
+	return is_empty_grid;
+}
+
+
+bool pattern_tile(floor_type *floor_ptr, POSITION y, POSITION x)
+{
+	return cave_have_flag_bold(floor_ptr, y, x, FF_PATTERN);
+}
+
+
+/*
+ * Determine if a "legal" grid is an "empty" floor grid
+ * Determine if monsters are allowed to move into a grid
+ *
+ * Line 1 -- forbid non-placement grids
+ * Line 2 -- forbid normal monsters
+ * Line 3 -- forbid the player
+ */
+bool is_cave_empty_bold(player_type *player_ptr, POSITION y, POSITION x)
+{
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	bool is_empty_grid = cave_have_flag_bold(floor_ptr, y, x, FF_PLACE);
+	is_empty_grid &= !(floor_ptr->grid_array[y][x].m_idx);
+	is_empty_grid &= !player_bold(player_ptr, y, x);
+	return is_empty_grid;
+}
+
+
+/*
+  * Determine if a "legal" grid is an "empty" floor grid
+  * Determine if monster generation is allowed in a grid
+  *
+  * Line 1 -- forbid non-empty grids
+  * Line 2 -- forbid trees while dungeon generation
+  */
+bool is_cave_empty_bold2(player_type *player_ptr, POSITION y, POSITION x)
+{
+	bool is_empty_grid = is_cave_empty_bold(player_ptr, y, x);
+	is_empty_grid &= current_world_ptr->character_dungeon || !cave_have_flag_bold(player_ptr->current_floor_ptr, y, x, FF_TREE);
+	return is_empty_grid;
+}
+
+
 /*!
 * @brief 鍵のかかったドアを配置する
 * @param player_ptr プレーヤーへの参照ポインタ
@@ -39,13 +90,13 @@ void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(floor_ptr, y, x);
+		place_bold(player_ptr, y, x, floor);
 		return;
 	}
 
 	set_cave_feat(floor_ptr, y, x, feat_locked_door_random((d_info[player_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR));
 	floor_ptr->grid_array[y][x].info &= ~(CAVE_FLOOR);
-	delete_monster(floor_ptr, y, x);
+	delete_monster(player_ptr, y, x);
 }
 
 
@@ -62,7 +113,7 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(floor_ptr, y, x);
+		place_bold(player_ptr, y, x, floor);
 		return;
 	}
 
@@ -95,7 +146,7 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
 	}
 
 	g_ptr->info &= ~(CAVE_FLOOR);
-	delete_monster(floor_ptr, y, x);
+	delete_monster(player_ptr, y, x);
 }
 
 static int scent_when = 0;
@@ -162,7 +213,7 @@ void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
 			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Walls, water, and lava cannot hold scent. */
-			if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(g_ptr->feat)) continue;
+			if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(subject_ptr, g_ptr->feat)) continue;
 
 			/* Grid must not be blocked by walls from the character */
 			if (!player_has_los_bold(subject_ptr, y, x)) continue;
@@ -224,8 +275,8 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
 		place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
 
 		/* set boundarys so don't get wide doors */
-		place_solid_bold(floor_ptr, y, x - 1);
-		place_solid_bold(floor_ptr, y, x + 1);
+		place_bold(player_ptr, y, x - 1, solid);
+		place_bold(player_ptr, y, x + 1, solid);
 	}
 
 	/* look at:
@@ -243,8 +294,8 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
 		place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
 
 		/* set boundarys so don't get wide doors */
-		place_solid_bold(floor_ptr, y - 1, x);
-		place_solid_bold(floor_ptr, y + 1, x);
+		place_bold(player_ptr, y - 1, x, solid);
+		place_bold(player_ptr, y + 1, x, solid);
 	}
 }
 
@@ -576,7 +627,7 @@ void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num)
 			/* Require "empty" floor grids */
 			grid_type *g_ptr;
 			g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-			if (!cave_empty_grid(g_ptr)) continue;
+			if (!is_cave_empty_grid(player_ptr, g_ptr)) continue;
 
 			/* Place the monster (allow groups) */
 			floor_ptr->monster_level = floor_ptr->base_level + 2;
@@ -676,8 +727,8 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
 	if (!have_flag(f_ptr->flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 	if (g_ptr->m_idx) update_monster(player_ptr, g_ptr->m_idx, FALSE);
 
-	note_spot(y, x);
-	lite_spot(y, x);
+	note_spot(player_ptr, y, x);
+	lite_spot(player_ptr, y, x);
 
 	/* Check if los has changed */
 	if (old_los ^ have_flag(f_ptr->flags, FF_LOS))
@@ -710,8 +761,8 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
 		if (player_has_los_grid(cc_ptr))
 		{
 			if (cc_ptr->m_idx) update_monster(player_ptr, cc_ptr->m_idx, FALSE);
-			note_spot(yy, xx);
-			lite_spot(yy, xx);
+			note_spot(player_ptr, yy, xx);
+			lite_spot(player_ptr, yy, xx);
 		}
 
 		update_local_illumination(player_ptr, yy, xx);
@@ -740,7 +791,7 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(floor_ptr, y, x);
+		place_bold(player_ptr, y, x, floor);
 		return;
 	}
 
@@ -794,7 +845,7 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 
 	if (tmp >= 400)
 	{
-		delete_monster(floor_ptr, y, x);
+		delete_monster(player_ptr, y, x);
 		return;
 	}
 
@@ -804,10 +855,10 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 	}
 	else
 	{
-		place_floor_bold(floor_ptr, y, x);
+		place_bold(player_ptr, y, x, floor);
 	}
 
-	delete_monster(floor_ptr, y, x);
+	delete_monster(player_ptr, y, x);
 }
 
 
@@ -887,7 +938,7 @@ void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_floor_bold(floor_ptr, y, x);
+		place_bold(player_ptr, y, x, floor);
 		return;
 	}
 
@@ -918,7 +969,7 @@ void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type
 
 	if (feat == feat_none)
 	{
-		place_floor_bold(floor_ptr, y, x);
+		place_bold(player_ptr, y, x, floor);
 		return;
 	}
 
@@ -1172,7 +1223,7 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
 			}
 			else
 			{
-				place_gold(floor_ptr, j, k);
+				place_gold(player_ptr, j, k);
 			}
 
 			/* Placement accomplished */
@@ -1512,12 +1563,14 @@ sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1
 
 /*!
  * @brief 指定のマスを床地形に変える / Set a square to be floor.  (Includes range checking.)
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param x 地形を変えたいマスのX座標
  * @param y 地形を変えたいマスのY座標
  * @return なし
  */
-void set_floor(floor_type *floor_ptr, POSITION x, POSITION y)
+void set_floor(player_type *player_ptr, POSITION x, POSITION y)
 {
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!in_bounds(floor_ptr, y, x))
 	{
 		/* Out of bounds */
@@ -1532,7 +1585,7 @@ void set_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 
 	/* Set to be floor if is a wall (don't touch lakes). */
 	if (is_extra_bold(floor_ptr, y, x))
-		place_floor_bold(floor_ptr, y, x);
+		place_bold(player_ptr, y, x, floor);
 }
 
 
@@ -1601,24 +1654,25 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
 	o_ptr->next_o_idx = g_ptr->o_idx;
 
 	g_ptr->o_idx = o_idx;
-	note_spot(y, x);
-	lite_spot(y, x);
+	note_spot(owner_ptr, y, x);
+	lite_spot(owner_ptr, y, x);
 }
 
 
 /*!
  * @brief フロアの指定位置に生成階に応じた財宝オブジェクトの生成を行う。
  * Places a treasure (Gold or Gems) at given location
- * @param floor_ptr 現在フロアへの参照ポインタ
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 配置したいフロアのY座標
  * @param x 配置したいフロアのX座標
  * @return 生成に成功したらTRUEを返す。
  * @details
  * The location must be a legal, clean, floor grid.
  */
-void place_gold(floor_type *floor_ptr, POSITION y, POSITION x)
+void place_gold(player_type *player_ptr, POSITION y, POSITION x)
 {
 	/* Acquire grid */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Paranoia -- check bounds */
@@ -1655,27 +1709,29 @@ void place_gold(floor_type *floor_ptr, POSITION y, POSITION x)
 	o_ptr->next_o_idx = g_ptr->o_idx;
 
 	g_ptr->o_idx = o_idx;
-	note_spot(y, x);
-	lite_spot(y, x);
+	note_spot(player_ptr, y, x);
+	lite_spot(player_ptr, y, x);
 }
 
 
 /*!
  * @brief 指定位置に存在するモンスターを削除する / Delete the monster, if any, at a given location
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param x 削除位置x座標
  * @param y 削除位置y座標
  * @return なし
  */
-void delete_monster(floor_type *floor_ptr, POSITION y, POSITION x)
+void delete_monster(player_type *player_ptr, POSITION y, POSITION x)
 {
 	grid_type *g_ptr;
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!in_bounds(floor_ptr, y, x)) return;
 
 	/* Check the grid */
 	g_ptr = &floor_ptr->grid_array[y][x];
 
 	/* Delete the monster (if any) */
-	if (g_ptr->m_idx) delete_monster_idx(g_ptr->m_idx);
+	if (g_ptr->m_idx) delete_monster_idx(player_ptr, g_ptr->m_idx);
 }
 
 
@@ -1831,7 +1887,7 @@ void compact_objects(player_type *player_ptr, int size)
 			/* Apply the saving throw */
 			if (randint0(100) < chance) continue;
 
-			delete_object_idx(floor_ptr, i);
+			delete_object_idx(player_ptr, i);
 			num++;
 		}
 	}

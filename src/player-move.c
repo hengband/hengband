@@ -193,14 +193,14 @@ static void discover_hidden_things(player_type *creature_ptr, POSITION y, POSITI
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	g_ptr = &floor_ptr->grid_array[y][x];
 
-	if (g_ptr->mimic && is_trap(g_ptr->feat))
+	if (g_ptr->mimic && is_trap(creature_ptr, g_ptr->feat))
 	{
 		disclose_grid(creature_ptr, y, x);
 		msg_print(_("トラップを発見した。", "You have found a trap."));
 		disturb(creature_ptr, FALSE, TRUE);
 	}
 
-	if (is_hidden_door(g_ptr))
+	if (is_hidden_door(creature_ptr, g_ptr))
 	{
 		msg_print(_("隠しドアを発見した。", "You have found a secret door."));
 		disclose_grid(creature_ptr, y, x);
@@ -282,7 +282,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 	o_ptr = &owner_ptr->current_floor_ptr->o_list[o_idx];
 
 #ifdef JP
-	object_desc(old_name, o_ptr, OD_NAME_ONLY);
+	object_desc(owner_ptr, old_name, o_ptr, OD_NAME_ONLY);
 	object_desc_kosuu(kazu_str, o_ptr);
 	hirottakazu = o_ptr->number;
 #endif
@@ -293,7 +293,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 	/* Get the object again */
 	o_ptr = &owner_ptr->inventory_list[slot];
 
-	delete_object_idx(owner_ptr->current_floor_ptr, o_idx);
+	delete_object_idx(owner_ptr, o_idx);
 
 	if (owner_ptr->pseikaku == SEIKAKU_MUNCHKIN)
 	{
@@ -306,7 +306,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 		if (o_ptr->marked & OM_AUTODESTROY) return;
 	}
 
-	object_desc(o_name, o_ptr, 0);
+	object_desc(owner_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
 	if ((o_ptr->name1 == ART_CRIMSON) && (owner_ptr->pseikaku == SEIKAKU_COMBAT))
@@ -391,7 +391,7 @@ void carry(player_type *creature_ptr, bool pickup)
 #endif /* ALLOW_EASY_SENSE -- TNB */
 
 		GAME_TEXT o_name[MAX_NLEN];
-		object_desc(o_name, o_ptr, 0);
+		object_desc(creature_ptr, o_name, o_ptr, 0);
 		next_o_idx = o_ptr->next_o_idx;
 
 		disturb(creature_ptr, FALSE, FALSE);
@@ -399,7 +399,7 @@ void carry(player_type *creature_ptr, bool pickup)
 		if (o_ptr->tval == TV_GOLD)
 		{
 			int value = (long)o_ptr->pval;
-			delete_object_idx(creature_ptr->current_floor_ptr, this_o_idx);
+			delete_object_idx(creature_ptr, this_o_idx);
 			msg_format(_(" $%ld の価値がある%sを見つけた。", "You collect %ld gold pieces worth of %s."),
 			   (long)value, o_name);
 
@@ -620,8 +620,8 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 			}
 		}
 
-		lite_spot(oy, ox);
-		lite_spot(ny, nx);
+		lite_spot(creature_ptr, oy, ox);
+		lite_spot(creature_ptr, ny, nx);
 
 		/* Check for new panel (redraw map) */
 		verify_panel(creature_ptr);
@@ -638,7 +638,7 @@ bool move_player_effect(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 		creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 
 		/* Remove "unsafe" flag */
-		if ((!creature_ptr->blind && !no_lite(creature_ptr)) || !is_trap(g_ptr->feat)) g_ptr->info &= ~(CAVE_UNSAFE);
+		if ((!creature_ptr->blind && !no_lite(creature_ptr)) || !is_trap(creature_ptr, g_ptr->feat)) g_ptr->info &= ~(CAVE_UNSAFE);
 
 		/* For get everything when requested hehe I'm *NASTY* */
 		if (floor_ptr->dun_level && (d_info[creature_ptr->dungeon_idx].flags1 & DF1_FORGET)) wiz_dark(creature_ptr);
@@ -995,7 +995,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			/* Disturb the monster */
 			(void)set_monster_csleep(creature_ptr, g_ptr->m_idx, 0);
 
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(creature_ptr, m_name, m_ptr, 0);
 
 			if (m_ptr->ml)
 			{
@@ -1010,7 +1010,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 				py_attack(creature_ptr, y, x, 0);
 				can_move = FALSE;
 			}
-			else if (monster_can_cross_terrain(floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat, r_ptr, 0))
+			else if (monster_can_cross_terrain(creature_ptr, floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat, r_ptr, 0))
 			{
 				do_past = TRUE;
 			}
@@ -1044,7 +1044,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		else if (MON_MONFEAR(riding_m_ptr))
 		{
 			GAME_TEXT steed_name[MAX_NLEN];
-			monster_desc(steed_name, riding_m_ptr, 0);
+			monster_desc(creature_ptr, steed_name, riding_m_ptr, 0);
 			msg_format(_("%sが恐怖していて制御できない。", "%^s is too scared to control."), steed_name);
 			can_move = FALSE;
 			disturb(creature_ptr, FALSE, TRUE);
@@ -1089,7 +1089,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 		if (can_move && MON_STUNNED(riding_m_ptr) && one_in_(2))
 		{
 			GAME_TEXT steed_name[MAX_NLEN];
-			monster_desc(steed_name, riding_m_ptr, 0);
+			monster_desc(creature_ptr, steed_name, riding_m_ptr, 0);
 			msg_format(_("%sが朦朧としていてうまく動けない！", "You cannot control stunned %s!"), steed_name);
 			can_move = FALSE;
 			disturb(creature_ptr, FALSE, TRUE);
@@ -1158,7 +1158,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 #endif
 
 				g_ptr->info |= (CAVE_MARK);
-				lite_spot(y, x);
+				lite_spot(creature_ptr, y, x);
 			}
 		}
 
@@ -1177,7 +1177,7 @@ void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool 
 			else
 			{
 				/* Closed doors */
-				if (easy_open && is_closed_door(feat) && easy_open_door(creature_ptr, y, x)) return;
+				if (easy_open && is_closed_door(creature_ptr, feat) && easy_open_door(creature_ptr, y, x)) return;
 
 #ifdef JP
 				msg_format("%sが行く手をはばんでいる。", name);
@@ -1926,7 +1926,7 @@ static DIRECTION travel_test(player_type *creature_ptr, DIRECTION prev_dir)
 	g_ptr = &floor_ptr->grid_array[creature_ptr->y+ddy[new_dir]][creature_ptr->x+ddx[new_dir]];
 
 	/* Close door abort traveling */
-	if (!easy_open && is_closed_door(g_ptr->feat)) return 0;
+	if (!easy_open && is_closed_door(creature_ptr, g_ptr->feat)) return 0;
 
 	/* Visible and unignorable trap abort tarveling */
 	if (!g_ptr->mimic && !trap_can_be_ignored(creature_ptr, g_ptr->feat)) return 0;

@@ -621,7 +621,7 @@ static bool exe_open_chest(player_type *creature_ptr, POSITION y, POSITION x, OB
  * @details Return the number of features around (or under) the character.
  * Usually look for doors and floor traps.
  */
-static int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(FEAT_IDX feat), bool under)
+static int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*test)(player_type*, FEAT_IDX feat), bool under)
 {
 	/* Check around (and under) the character */
 	int count = 0;
@@ -647,7 +647,7 @@ static int count_dt(player_type *creature_ptr, POSITION *y, POSITION *x, bool (*
 		feat = get_feat_mimic(g_ptr);
 
 		/* Not looking for this feature */
-		if (!((*test)(feat))) continue;
+		if (!((*test)(creature_ptr, feat))) continue;
 
 		/* OK */
 		++count;
@@ -902,7 +902,7 @@ static bool exe_close(player_type *creature_ptr, POSITION y, POSITION x)
 		return more;
 	}
 	
-	s16b closed_feat = feat_state(old_feat, FF_CLOSE);
+	s16b closed_feat = feat_state(creature_ptr, old_feat, FF_CLOSE);
 
 	/* Hack -- object in the way */
 	if ((g_ptr->o_idx || (g_ptr->info & CAVE_OBJECT)) &&
@@ -1160,7 +1160,7 @@ static bool exe_tunnel(player_type *creature_ptr, POSITION y, POSITION x)
 		}
 	}
 
-	if (is_hidden_door(g_ptr))
+	if (is_hidden_door(creature_ptr, g_ptr))
 	{
 		/* Occasional Search XXX XXX */
 		if (randint0(100) < 25) search(creature_ptr);
@@ -1276,7 +1276,7 @@ bool easy_open_door(player_type *creature_ptr, POSITION y, POSITION x)
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
 	/* Must be a closed door */
-	if (!is_closed_door(g_ptr->feat))
+	if (!is_closed_door(creature_ptr, g_ptr->feat))
 	{
 		return FALSE;
 	}
@@ -1579,7 +1579,7 @@ void do_cmd_disarm(player_type *creature_ptr)
 		o_idx = chest_check(creature_ptr->current_floor_ptr, y, x, TRUE);
 
 		/* Disarm a trap */
-		if (!is_trap(feat) && !o_idx)
+		if (!is_trap(creature_ptr, feat) && !o_idx)
 		{
 			msg_print(_("そこには解除するものが見当たらない。", "You see nothing there to disarm."));
 		}
@@ -1663,7 +1663,7 @@ static bool do_cmd_bash_aux(player_type *creature_ptr, POSITION y, POSITION x, D
 		sound(have_flag(f_ptr->flags, FF_GLASS) ? SOUND_GLASS : SOUND_OPENDOOR);
 
 		/* Break down the door */
-		if ((randint0(100) < 50) || (feat_state(g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS))
+		if ((randint0(100) < 50) || (feat_state(creature_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS))
 		{
 			cave_alter_feat(creature_ptr, y, x, FF_BASH);
 		}
@@ -2413,7 +2413,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	/* Single object */
 	q_ptr->number = 1;
 
-	object_desc(o_name, q_ptr, OD_OMIT_PREFIX);
+	object_desc(creature_ptr, o_name, q_ptr, OD_OMIT_PREFIX);
 
 	if (creature_ptr->mighty_throw) mult += 3;
 
@@ -2471,7 +2471,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 	else
 	{
 		floor_item_increase(creature_ptr->current_floor_ptr, 0 - item, -1);
-		floor_item_optimize(creature_ptr->current_floor_ptr, 0 - item);
+		floor_item_optimize(creature_ptr, 0 - item);
 	}
 
 	if (item >= INVEN_RARM)
@@ -2534,7 +2534,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 			move_cursor_relative(ny[cur_dis], nx[cur_dis]);
 			Term_fresh();
 			Term_xtra(TERM_XTRA_DELAY, msec);
-			lite_spot(ny[cur_dis], nx[cur_dis]);
+			lite_spot(creature_ptr, ny[cur_dis], nx[cur_dis]);
 			Term_fresh();
 		}
 
@@ -2561,7 +2561,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 			grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 			monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_name(g_ptr->m_idx, m_name);
+			monster_name(creature_ptr, g_ptr->m_idx, m_name);
 
 			/* Check the visibility */
 			visible = m_ptr->ml;
@@ -2643,7 +2643,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 				/* No death */
 				else
 				{
-					message_pain(g_ptr->m_idx, tdam);
+					message_pain(creature_ptr, g_ptr->m_idx, tdam);
 
 					/* Anger the monster */
 					if ((tdam > 0) && !object_is_potion(q_ptr))
@@ -2693,9 +2693,9 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 				if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx && is_friendly(m_ptr) && !MON_INVULNER(m_ptr))
 				{
 					GAME_TEXT m_name[MAX_NLEN];
-					monster_desc(m_name, m_ptr, 0);
+					monster_desc(creature_ptr, m_name, m_ptr, 0);
 					msg_format(_("%sは怒った！", "%^s gets angry!"), m_name);
-					set_hostile(&creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx]);
+					set_hostile(creature_ptr, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx]);
 				}
 			}
 			do_drop = FALSE;
@@ -2715,7 +2715,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 		j = -1;
 		if (boomerang) back_chance += 4+randint1(5);
 		if (super_boomerang) back_chance += 100;
-		object_desc(o2_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+		object_desc(creature_ptr, o2_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 		if((back_chance > 30) && (!one_in_(100) || super_boomerang))
 		{
@@ -2731,7 +2731,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 					move_cursor_relative(ny[i], nx[i]);
 					Term_fresh();
 					Term_xtra(TERM_XTRA_DELAY, msec);
-					lite_spot(ny[i], nx[i]);
+					lite_spot(creature_ptr, ny[i], nx[i]);
 					Term_fresh();
 				}
 				else

@@ -205,7 +205,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
 	if (disturb_minor) disturb(creature_ptr, FALSE, FALSE);
 
 	/* Get an object description */
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/* Message (equipment) */
 	if (slot >= INVEN_RARM)
@@ -692,7 +692,8 @@ static bool pattern_effect(player_type *creature_ptr)
 {
 	int pattern_type;
 
-	if (!pattern_tile(creature_ptr->y, creature_ptr->x)) return FALSE;
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	if (!pattern_tile(floor_ptr, creature_ptr->y, creature_ptr->x)) return FALSE;
 
 	if ((PRACE_IS_(creature_ptr, RACE_AMBERITE)) &&
 		(creature_ptr->cut > 0) && one_in_(10))
@@ -700,7 +701,6 @@ static bool pattern_effect(player_type *creature_ptr)
 		wreck_the_pattern(creature_ptr);
 	}
 
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	pattern_type = f_info[floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat].subtype;
 
 	switch (pattern_type)
@@ -1103,7 +1103,7 @@ static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
 		if (s[1] == '!')
 		{
 			/* Describe (briefly) */
-			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+			object_desc(owner_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 			/* Notify the player */
 #ifdef JP
@@ -1423,13 +1423,13 @@ static void process_world_aux_hp_and_sp(player_type *creature_ptr)
 			char ouch[MAX_NLEN + 40];
 
 			/* Get an object description */
-			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+			object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sがあなたのアンデッドの肉体を焼き焦がした！", "The %s scorches your undead flesh!"), o_name);
 
 			cave_no_regen = TRUE;
 
 			/* Get an object description */
-			object_desc(o_name, o_ptr, OD_NAME_ONLY);
+			object_desc(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
 			sprintf(ouch, _("%sを装備したダメージ", "wielding %s"), o_name);
 
 			if (!IS_INVULN(creature_ptr)) take_hit(creature_ptr, DAMAGE_NOESCAPE, 1, ouch, -1);
@@ -2631,7 +2631,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			}
 
 			o_ptr = &creature_ptr->inventory_list[i_keep];
-			object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+			object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sがテレポートの能力を発動させようとしている。", "Your %s is activating teleportation."), o_name);
 			if (get_check_strict(_("テレポートしますか？", "Teleport? "), CHECK_OKAY_CANCEL))
 			{
@@ -2681,7 +2681,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 				o_ptr->curse_flags |= new_curse;
 				msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
@@ -2704,7 +2704,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 				o_ptr->curse_flags |= new_curse;
 				msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
@@ -2720,7 +2720,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_ANIMAL), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_ANIMAL), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが動物を引き寄せた！", "Your %s has attracted an animal!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
@@ -2732,7 +2732,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DEMON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DEMON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが悪魔を引き寄せた！", "Your %s has attracted a demon!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
@@ -2745,7 +2745,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DRAGON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DRAGON), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sがドラゴンを引き寄せた！", "Your %s has attracted an dragon!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
@@ -2758,7 +2758,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 
-				object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_UNDEAD), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+				object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_UNDEAD), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 				msg_format(_("%sが死霊を引き寄せた！", "Your %s has attracted an undead!"), o_name);
 				disturb(creature_ptr, FALSE, TRUE);
 			}
@@ -2785,7 +2785,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		{
 			GAME_TEXT o_name[MAX_NLEN];
 
-			object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+			object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sはあなたの体力を吸収した！", "Your %s drains HP from you!"), o_name);
 			take_hit(creature_ptr, DAMAGE_LOSELIFE, MIN(creature_ptr->lev * 2, 100), o_name, -1);
 		}
@@ -2794,7 +2794,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 		{
 			GAME_TEXT o_name[MAX_NLEN];
 
-			object_desc(o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+			object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			msg_format(_("%sはあなたの魔力を吸収した！", "Your %s drains mana from you!"), o_name);
 			creature_ptr->csp -= MIN(creature_ptr->lev, 50);
 			if (creature_ptr->csp < 0)
@@ -3158,7 +3158,7 @@ static void process_world(player_type *player_ptr)
 
 			wm_ptr = &floor_ptr->m_list[win_m_idx];
 
-			monster_desc(m_name, wm_ptr, 0);
+			monster_desc(player_ptr, m_name, wm_ptr, 0);
 			msg_format(_("%sが勝利した！", "%s won!"), m_name);
 			msg_print(NULL);
 
@@ -4327,7 +4327,7 @@ static void pack_overflow(player_type *owner_ptr)
 
 	/* Warning */
 	msg_print(_("ザックからアイテムがあふれた！", "Your pack overflows!"));
-	object_desc(o_name, o_ptr, 0);
+	object_desc(owner_ptr, o_name, o_ptr, 0);
 
 	msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(INVEN_PACK));
 
@@ -4374,8 +4374,8 @@ static void process_fishing(player_type *creature_ptr)
 	{
 		MONRACE_IDX r_idx;
 		bool success = FALSE;
-		get_mon_num_prep(monster_is_fishing_target, NULL);
-		r_idx = get_mon_num(creature_ptr->current_floor_ptr->dun_level ? creature_ptr->current_floor_ptr->dun_level : wilderness[creature_ptr->wilderness_y][creature_ptr->wilderness_x].level);
+		get_mon_num_prep(creature_ptr, monster_is_fishing_target, NULL);
+		r_idx = get_mon_num(creature_ptr, creature_ptr->current_floor_ptr->dun_level ? creature_ptr->current_floor_ptr->dun_level : wilderness[creature_ptr->wilderness_y][creature_ptr->wilderness_x].level);
 		msg_print(NULL);
 		if (r_idx && one_in_(2))
 		{
@@ -4385,7 +4385,7 @@ static void process_fishing(player_type *creature_ptr)
 			if (place_monster_aux(creature_ptr, 0, y, x, r_idx, PM_NO_KAGE))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
+				monster_desc(creature_ptr, m_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->current_floor_ptr->grid_array[y][x].m_idx], 0);
 				msg_format(_("%sが釣れた！", "You have a good catch!"), m_name);
 				success = TRUE;
 			}
@@ -4521,7 +4521,7 @@ static void process_player(player_type *creature_ptr)
 
 			/* Recover fully */
 			(void)set_monster_csleep(creature_ptr, creature_ptr->riding, 0);
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(creature_ptr, m_name, m_ptr, 0);
 			msg_format(_("%^sを起こした。", "You have woken %s up."), m_name);
 		}
 
@@ -4532,7 +4532,7 @@ static void process_player(player_type *creature_ptr)
 				(randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_STUNNED(m_ptr) - 1)))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(creature_ptr, m_name, m_ptr, 0);
 				msg_format(_("%^sを朦朧状態から立ち直らせた。", "%^s is no longer stunned."), m_name);
 			}
 		}
@@ -4544,7 +4544,7 @@ static void process_player(player_type *creature_ptr)
 				(randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_CONFUSED(m_ptr) - 1)))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(creature_ptr, m_name, m_ptr, 0);
 				msg_format(_("%^sを混乱状態から立ち直らせた。", "%^s is no longer confused."), m_name);
 			}
 		}
@@ -4556,7 +4556,7 @@ static void process_player(player_type *creature_ptr)
 				(randint0(r_ptr->level) < creature_ptr->skill_exp[GINOU_RIDING]) ? 0 : (MON_MONFEAR(m_ptr) - 1)))
 			{
 				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(m_name, m_ptr, 0);
+				monster_desc(creature_ptr, m_name, m_ptr, 0);
 				msg_format(_("%^sを恐怖から立ち直らせた。", "%^s is no longer afraid."), m_name);
 			}
 		}
@@ -4775,7 +4775,7 @@ static void process_player(player_type *creature_ptr)
 					continue;
 
 				/* Redraw regardless */
-				lite_spot(m_ptr->fy, m_ptr->fx);
+				lite_spot(creature_ptr, m_ptr->fy, m_ptr->fx);
 			}
 
 
@@ -4826,7 +4826,7 @@ static void process_player(player_type *creature_ptr)
 							if (creature_ptr->riding == m_idx) creature_ptr->redraw |= (PR_UHEALTH);
 
 							/* Redraw regardless */
-							lite_spot(m_ptr->fy, m_ptr->fx);
+							lite_spot(creature_ptr, m_ptr->fy, m_ptr->fx);
 						}
 					}
 				}
@@ -5056,10 +5056,10 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	while (TRUE)
 	{
 		/* Hack -- Compact the monster list occasionally */
-		if ((floor_ptr->m_cnt + 32 > current_world_ptr->max_m_idx) && !player_ptr->phase_out) compact_monsters(64);
+		if ((floor_ptr->m_cnt + 32 > current_world_ptr->max_m_idx) && !player_ptr->phase_out) compact_monsters(player_ptr, 64);
 
 		/* Hack -- Compress the monster list occasionally */
-		if ((floor_ptr->m_cnt + 32 < floor_ptr->m_max) && !player_ptr->phase_out) compact_monsters(0);
+		if ((floor_ptr->m_cnt + 32 < floor_ptr->m_max) && !player_ptr->phase_out) compact_monsters(player_ptr, 0);
 
 
 		/* Hack -- Compact the object list occasionally */
@@ -5410,7 +5410,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
 		load = FALSE;
 
-		determine_bounty_uniques();
+		determine_bounty_uniques(player_ptr);
 		determine_daily_bounty(player_ptr, FALSE);
 
 		/* Initialize object array */
@@ -5623,7 +5623,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		if (!player_ptr->playing && !player_ptr->is_dead) break;
 
 		wipe_o_list(floor_ptr);
-		if (!player_ptr->is_dead) wipe_m_list();
+		if (!player_ptr->is_dead) wipe_monsters_list(player_ptr);
 
 
 		msg_print(NULL);

@@ -291,13 +291,13 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
 			if (streamer_is_wall)
 			{
 				if (!is_extra_grid(g_ptr) && !is_inner_grid(g_ptr) && !is_outer_grid(g_ptr) && !is_solid_grid(g_ptr)) continue;
-				if (is_closed_door(g_ptr->feat)) continue;
+				if (is_closed_door(player_ptr, g_ptr->feat)) continue;
 			}
 
-			if (g_ptr->m_idx && !(have_flag(streamer_ptr->flags, FF_PLACE) && monster_can_cross_terrain(feat, &r_info[floor_ptr->m_list[g_ptr->m_idx].r_idx], 0)))
+			if (g_ptr->m_idx && !(have_flag(streamer_ptr->flags, FF_PLACE) && monster_can_cross_terrain(player_ptr, feat, &r_info[floor_ptr->m_list[g_ptr->m_idx].r_idx], 0)))
 			{
 				/* Delete the monster (if any) */
-				delete_monster(floor_ptr, ty, tx);
+				delete_monster(player_ptr, ty, tx);
 			}
 
 			if (g_ptr->o_idx && !have_flag(streamer_ptr->flags, FF_DROP))
@@ -319,7 +319,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
 						if (cheat_peek)
 						{
 							GAME_TEXT o_name[MAX_NLEN];
-							object_desc(o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
+							object_desc(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
 							msg_format(_("伝説のアイテム (%s) はストリーマーにより削除された。",
 								"Artifact (%s) was deleted by streamer."), o_name);
 						}
@@ -331,7 +331,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
 					}
 				}
 
-				delete_object(floor_ptr, ty, tx);
+				delete_object(player_ptr, ty, tx);
 			}
 
 			/* Clear previous contents, add proper vein type */

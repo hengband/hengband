@@ -23,6 +23,7 @@
 #include "cmd-dump.h"
 #include "dungeon.h"
 #include "history.h"
+#include "monster.h"
 #include "monsterrace-hook.h"
 #include "store.h"
 #include "patron.h"
@@ -1882,11 +1883,12 @@ static void init_dungeon_quests(player_type *creature_ptr)
 
 	/* Init the random quests */
 	init_flags = INIT_ASSIGN;
-	creature_ptr->current_floor_ptr->inside_quest = MIN_RANDOM_QUEST;
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	floor_ptr->inside_quest = MIN_RANDOM_QUEST;
 
 	process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
-	creature_ptr->current_floor_ptr->inside_quest = 0;
+	floor_ptr->inside_quest = 0;
 
 	/* Generate quests */
 	for (i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--)
@@ -1895,7 +1897,7 @@ static void init_dungeon_quests(player_type *creature_ptr)
 		monster_race *quest_r_ptr;
 
 		q_ptr->status = QUEST_STATUS_TAKEN;
-		determine_random_questor(q_ptr);
+		determine_random_questor(creature_ptr, q_ptr);
 
 		/* Mark uniques */
 		quest_r_ptr = &r_info[q_ptr->r_idx];
@@ -1906,19 +1908,20 @@ static void init_dungeon_quests(player_type *creature_ptr)
 
 	/* Init the two main quests (Oberon + Serpent) */
 	init_flags = INIT_ASSIGN;
-	creature_ptr->current_floor_ptr->inside_quest = QUEST_OBERON;
+	floor_ptr->inside_quest = QUEST_OBERON;
 
 	process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
 	quest[QUEST_OBERON].status = QUEST_STATUS_TAKEN;
 
-	creature_ptr->current_floor_ptr->inside_quest = QUEST_SERPENT;
+	floor_ptr->inside_quest = QUEST_SERPENT;
 
 	process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 
 	quest[QUEST_SERPENT].status = QUEST_STATUS_TAKEN;
-	creature_ptr->current_floor_ptr->inside_quest = 0;
+	floor_ptr->inside_quest = 0;
 }
+
 
 /*!
  * @brief ゲームターンを初期化する / Reset turn
@@ -1989,7 +1992,7 @@ static void wield_all(player_type *creature_ptr)
 		else
 		{
 			floor_item_increase(creature_ptr->current_floor_ptr, 0 - item, -1);
-			floor_item_optimize(creature_ptr->current_floor_ptr, 0 - item);
+			floor_item_optimize(creature_ptr, 0 - item);
 		}
 
 		o_ptr = &creature_ptr->inventory_list[slot];
@@ -2253,12 +2256,12 @@ void player_outfit(player_type *creature_ptr)
 
 	case RACE_DEMON:
 		/* Demon can drain vitality from humanoid corpse */
-		get_mon_num_prep(monster_hook_human, NULL);
+		get_mon_num_prep(creature_ptr, monster_hook_human, NULL);
 
 		for (i = rand_range(3, 4); i > 0; i--)
 		{
 			object_prep(q_ptr, lookup_kind(TV_CORPSE, SV_CORPSE));
-			q_ptr->pval = get_mon_num(2);
+			q_ptr->pval = get_mon_num(creature_ptr, 2);
 			if (q_ptr->pval)
 			{
 				q_ptr->number = 1;
@@ -4559,11 +4562,7 @@ void player_birth(player_type *creature_ptr)
 
 	current_world_ptr->play_time = 0;
 
-	/*
-	 * Wipe monsters in old dungeon
-	 * This wipe destroys value of m_list[].cur_num .
-	 */
-	wipe_m_list();
+	wipe_monsters_list(creature_ptr);
 
 	/* Wipe the player */
 	player_wipe_without_name(creature_ptr);

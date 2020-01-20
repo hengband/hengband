@@ -51,7 +51,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 	{
 		if ((have_flag(flgs, TR_SLAY_ANIMAL)) && (r_ptr->flags3 & RF3_ANIMAL))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_ANIMAL;
 			}
@@ -60,7 +60,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_KILL_ANIMAL)) && (r_ptr->flags3 & RF3_ANIMAL))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_ANIMAL;
 			}
@@ -69,7 +69,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_SLAY_EVIL)) && (r_ptr->flags3 & RF3_EVIL))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_EVIL;
 			}
@@ -78,7 +78,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_KILL_EVIL)) && (r_ptr->flags3 & RF3_EVIL))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_EVIL;
 			}
@@ -87,7 +87,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_SLAY_HUMAN)) && (r_ptr->flags2 & RF2_HUMAN))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags2 |= RF2_HUMAN;
 			}
@@ -96,7 +96,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_KILL_HUMAN)) && (r_ptr->flags2 & RF2_HUMAN))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags2 |= RF2_HUMAN;
 			}
@@ -105,7 +105,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_SLAY_UNDEAD)) && (r_ptr->flags3 & RF3_UNDEAD))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_UNDEAD;
 			}
@@ -114,7 +114,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_KILL_UNDEAD)) && (r_ptr->flags3 & RF3_UNDEAD))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_UNDEAD;
 			}
@@ -123,7 +123,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_SLAY_DEMON)) && (r_ptr->flags3 & RF3_DEMON))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_DEMON;
 			}
@@ -132,7 +132,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_KILL_DEMON)) && (r_ptr->flags3 & RF3_DEMON))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_DEMON;
 			}
@@ -141,7 +141,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_SLAY_ORC)) && (r_ptr->flags3 & RF3_ORC))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_ORC;
 			}
@@ -150,7 +150,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_KILL_ORC)) && (r_ptr->flags3 & RF3_ORC))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_ORC;
 			}
@@ -159,7 +159,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_SLAY_TROLL)) && (r_ptr->flags3 & RF3_TROLL))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_TROLL;
 			}
@@ -169,7 +169,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_KILL_TROLL)) && (r_ptr->flags3 & RF3_TROLL))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_TROLL;
 			}
@@ -178,7 +178,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_SLAY_GIANT)) && (r_ptr->flags3 & RF3_GIANT))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_GIANT;
 			}
@@ -187,7 +187,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_KILL_GIANT)) && (r_ptr->flags3 & RF3_GIANT))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_GIANT;
 			}
@@ -196,7 +196,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_SLAY_DRAGON)) && (r_ptr->flags3 & RF3_DRAGON))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_DRAGON;
 			}
@@ -205,7 +205,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 
 		if ((have_flag(flgs, TR_KILL_DRAGON)) && (r_ptr->flags3 & RF3_DRAGON))
 		{
-			if (is_original_ap_and_seen(m_ptr))
+			if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 			{
 				r_ptr->r_flags3 |= RF3_DRAGON;
 			}
@@ -220,7 +220,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 			/* Notice immunity */
 			if (r_ptr->flagsr & RFR_EFF_IM_ACID_MASK)
 			{
-				if (is_original_ap_and_seen(m_ptr))
+				if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 				{
 					r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ACID_MASK);
 				}
@@ -236,7 +236,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 			/* Notice immunity */
 			if (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)
 			{
-				if (is_original_ap_and_seen(m_ptr))
+				if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 				{
 					r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
 				}
@@ -252,7 +252,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 			/* Notice immunity */
 			if (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)
 			{
-				if (is_original_ap_and_seen(m_ptr))
+				if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 				{
 					r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
 				}
@@ -263,7 +263,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 				if (r_ptr->flags3 & RF3_HURT_FIRE)
 				{
 					if (mult < 25) mult = 25;
-					if (is_original_ap_and_seen(m_ptr))
+					if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 					{
 						r_ptr->r_flags3 |= RF3_HURT_FIRE;
 					}
@@ -277,7 +277,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 			/* Notice immunity */
 			if (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)
 			{
-				if (is_original_ap_and_seen(m_ptr))
+				if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 				{
 					r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
 				}
@@ -288,7 +288,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 				if (r_ptr->flags3 & RF3_HURT_COLD)
 				{
 					if (mult < 25) mult = 25;
-					if (is_original_ap_and_seen(m_ptr))
+					if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 					{
 						r_ptr->r_flags3 |= RF3_HURT_COLD;
 					}
@@ -302,7 +302,7 @@ static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HI
 			/* Notice immunity */
 			if (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK)
 			{
-				if (is_original_ap_and_seen(m_ptr))
+				if (is_original_ap_and_seen(sniper_ptr, m_ptr))
 				{
 					r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK);
 				}
@@ -395,7 +395,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 	/* Sniper - Cannot shot a single arrow twice */
 	if ((snipe_type == SP_DOUBLE) && (o_ptr->number < 2)) snipe_type = SP_NONE;
 
-	object_desc(o_name, o_ptr, OD_OMIT_PREFIX);
+	object_desc(shooter_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 
 	/* Use the proper number of shots */
 	thits = shooter_ptr->num_fire;
@@ -550,8 +550,8 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 			if (snipe_type == SP_LITE)
 			{
 				shooter_ptr->current_floor_ptr->grid_array[ny][nx].info |= (CAVE_GLOW);
-				note_spot(ny, nx);
-				lite_spot(ny, nx);
+				note_spot(shooter_ptr, ny, nx);
+				lite_spot(shooter_ptr, ny, nx);
 			}
 
 			/* The player can see the (on screen) missile */
@@ -565,7 +565,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 				move_cursor_relative(ny, nx);
 				Term_fresh();
 				Term_xtra(TERM_XTRA_DELAY, msec);
-				lite_spot(ny, nx);
+				lite_spot(shooter_ptr, ny, nx);
 				Term_fresh();
 			}
 
@@ -587,8 +587,8 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 			if (snipe_type == SP_EVILNESS)
 			{
 				shooter_ptr->current_floor_ptr->grid_array[ny][nx].info &= ~(CAVE_GLOW | CAVE_MARK);
-				note_spot(ny, nx);
-				lite_spot(ny, nx);
+				note_spot(shooter_ptr, ny, nx);
+				lite_spot(shooter_ptr, ny, nx);
 			}
 
 			prev_y = y;
@@ -666,7 +666,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 						GAME_TEXT m_name[MAX_NLEN];
 
 						/* Get "the monster" or "it" */
-						monster_desc(m_name, m_ptr, 0);
+						monster_desc(shooter_ptr, m_name, m_ptr, 0);
 
 						msg_format(_("%sが%sに命中した。", "The %s hits %s."), o_name, m_name);
 
@@ -685,7 +685,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 							GAME_TEXT m_name[MAX_NLEN];
 
 							/* Get "the monster" or "it" */
-							monster_desc(m_name, m_ptr, 0);
+							monster_desc(shooter_ptr, m_name, m_ptr, 0);
 
 							tdam = m_ptr->hp + 1;
 							msg_format(_("%sの急所に突き刺さった！", "Your shot hit a fatal spot of %s!"), m_name);
@@ -723,8 +723,8 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 					if (snipe_type == SP_HOLYNESS)
 					{
 						shooter_ptr->current_floor_ptr->grid_array[ny][nx].info |= (CAVE_GLOW);
-						note_spot(ny, nx);
-						lite_spot(ny, nx);
+						note_spot(shooter_ptr, ny, nx);
+						lite_spot(shooter_ptr, ny, nx);
 					}
 
 					/* Hit the monster, check for death */
@@ -742,13 +742,13 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 						{
 							GAME_TEXT m_name[MAX_NLEN];
 
-							monster_desc(m_name, m_ptr, 0);
+							monster_desc(shooter_ptr, m_name, m_ptr, 0);
 
 							stick_to = TRUE;
 							msg_format(_("%sは%sに突き刺さった！", "%^s is stuck in %s!"), o_name, m_name);
 						}
 
-						message_pain(c_mon_ptr->m_idx, tdam);
+						message_pain(shooter_ptr, c_mon_ptr->m_idx, tdam);
 
 						/* Anger the monster */
 						if (tdam > 0) anger_monster(shooter_ptr, m_ptr);
@@ -757,7 +757,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 						{
 							GAME_TEXT m_name[MAX_NLEN];
 							sound(SOUND_FLEE);
-							monster_desc(m_name, m_ptr, 0);
+							monster_desc(shooter_ptr, m_name, m_ptr, 0);
 							msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 						}
 
@@ -786,7 +786,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 								if (!player_can_enter(shooter_ptr, shooter_ptr->current_floor_ptr->grid_array[ny][nx].feat, 0)) break;
 
 								/* Stopped by monsters */
-								if (!cave_empty_bold(shooter_ptr->current_floor_ptr, ny, nx)) break;
+								if (!is_cave_empty_bold(shooter_ptr, ny, nx)) break;
 
 								shooter_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
 								shooter_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
@@ -796,8 +796,8 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 
 								update_monster(shooter_ptr, c_mon_ptr->m_idx, TRUE);
 
-								lite_spot(ny, nx);
-								lite_spot(oy, ox);
+								lite_spot(shooter_ptr, ny, nx);
+								lite_spot(shooter_ptr, oy, ox);
 
 								Term_fresh();
 								Term_xtra(TERM_XTRA_DELAY, msec);
@@ -930,7 +930,7 @@ bool test_hit_fire(player_type *shooter_ptr, int chance, monster_type *m_ptr, in
 		if (m_ptr->r_idx == MON_GOEMON && !MON_CSLEEP(m_ptr))
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(shooter_ptr, m_name, m_ptr, 0);
 			msg_format(_("%sは%sを斬り捨てた！", "%s cuts down %s!"), m_name, o_name);
 		}
 		return FALSE;

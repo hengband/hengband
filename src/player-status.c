@@ -4973,7 +4973,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_VIEW))
 	{
 		creature_ptr->update &= ~(PU_VIEW);
-		update_view(creature_ptr, floor_ptr);
+		update_view(creature_ptr);
 	}
 
 	if (creature_ptr->update & (PU_LITE))
@@ -4992,10 +4992,7 @@ void update_creature(player_type *creature_ptr)
 	{
 		creature_ptr->update &= ~(PU_DISTANCE);
 
-		/* Still need to call update_monsters(FALSE) after update_mon_lite() */
-		/* creature_ptr->update &= ~(PU_MONSTERS); */
-
-		update_monsters(TRUE);
+		update_monsters(creature_ptr, TRUE);
 	}
 
 	if (creature_ptr->update & (PU_MON_LITE))
@@ -5017,7 +5014,7 @@ void update_creature(player_type *creature_ptr)
 	if (creature_ptr->update & (PU_MONSTERS))
 	{
 		creature_ptr->update &= ~(PU_MONSTERS);
-		update_monsters(FALSE);
+		update_monsters(creature_ptr, FALSE);
 	}
 }
 
@@ -5097,7 +5094,7 @@ void wreck_the_pattern(player_type *creature_ptr)
 		POSITION r_y, r_x;
 		scatter(creature_ptr, &r_y, &r_x, creature_ptr->y, creature_ptr->x, 4, 0);
 
-		if (pattern_tile(r_y, r_x) &&
+		if (pattern_tile(floor_ptr, r_y, r_x) &&
 			(f_info[floor_ptr->grid_array[r_y][r_x].feat].subtype != PATTERN_TILE_WRECKED))
 		{
 			cave_set_feat(creature_ptr, r_y, r_x, feat_pattern_corrupted);
@@ -5126,7 +5123,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 
 		power = r_ptr->level / 2;
 
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(creature_ptr, m_name, m_ptr, 0);
 
 		if (!(r_ptr->flags1 & RF1_UNIQUE))
 		{
@@ -5193,13 +5190,13 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 		GAME_TEXT m_name[MAX_NLEN];
 		concptr desc;
 
-		get_mon_num_prep(get_nightmare, NULL);
+		get_mon_num_prep(creature_ptr, get_nightmare, NULL);
 
-		r_ptr = &r_info[get_mon_num(MAX_DEPTH)];
+		r_ptr = &r_info[get_mon_num(creature_ptr, MAX_DEPTH)];
 		power = r_ptr->level + 10;
 		desc = r_name + r_ptr->name;
 
-		get_mon_num_prep(NULL, NULL);
+		get_mon_num_prep(creature_ptr, NULL, NULL);
 
 #ifdef JP
 #else
@@ -5815,7 +5812,7 @@ void cheat_death(player_type *creature_ptr)
 
 	/* Prepare next floor */
 	leave_floor(creature_ptr);
-	wipe_m_list();
+	wipe_monsters_list(creature_ptr);
 }
 
 

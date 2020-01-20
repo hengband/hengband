@@ -190,6 +190,7 @@ static grouper group_item[] =
 /*!
  * @brief ベースアイテムの各情報を文字列化する /
  * Describe the kind
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param buf 名称を返すバッファ参照ポインタ
  * @param dam ダメージダイス記述を返すバッファ参照ポインタ
  * @param wgt 重量記述を返すバッファ参照ポインタ
@@ -199,7 +200,7 @@ static grouper group_item[] =
  * @param k ベースアイテムID
  * @return なし
  */
-static void kind_info(char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, OBJECT_IDX k)
+static void kind_info(player_type *player_ptr, char *buf, char *dam, char *wgt, char *chance, DEPTH *lev, PRICE *val, OBJECT_IDX k)
 {
 	object_type forge;
 	object_type *q_ptr;
@@ -224,7 +225,7 @@ static void kind_info(char *buf, char *dam, char *wgt, char *chance, DEPTH *lev,
 	if (!buf || !dam || !chance || !wgt) return;
 
 	/* Description (too brief) */
-	object_desc(buf, q_ptr, (OD_NAME_ONLY | OD_STORE));
+	object_desc(player_ptr, buf, q_ptr, (OD_NAME_ONLY | OD_STORE));
 
 	/* Misc info */
 	strcpy(dam, "");
@@ -294,11 +295,12 @@ static void kind_info(char *buf, char *dam, char *wgt, char *chance, DEPTH *lev,
 
 /*!
  * @brief 各ベースアイテムの情報を一行毎に記述する /
+ * @param player_ptr プレーヤーへの参照ポインタ
  * Create a spoiler file for items
  * @param fname ファイル名
  * @return なし
  */
-static void spoil_obj_desc(concptr fname)
+static void spoil_obj_desc(player_type *player_ptr, concptr fname)
 {
 	int i, k, s, t, n = 0, group_start = 0;
 
@@ -355,8 +357,8 @@ static void spoil_obj_desc(concptr fname)
 						PRICE t1;
 						PRICE t2;
 
-						kind_info(NULL, NULL, NULL, NULL, &e1, &t1, who[i1]);
-						kind_info(NULL, NULL, NULL, NULL, &e2, &t2, who[i2]);
+						kind_info(player_ptr, NULL, NULL, NULL, NULL, &e1, &t1, who[i1]);
+						kind_info(player_ptr, NULL, NULL, NULL, NULL, &e2, &t2, who[i2]);
 
 						if ((t1 > t2) || ((t1 == t2) && (e1 > e2)))
 						{
@@ -376,7 +378,7 @@ static void spoil_obj_desc(concptr fname)
 					PRICE v;
 
 					/* Describe the kind */
-					kind_info(buf, dam, wgt, chance, &e, &v, who[s]);
+					kind_info(player_ptr, buf, dam, wgt, chance, &e, &v, who[s]);
 
 					/* Dump it */
 					fprintf(fff, "  %-35s%8s%7s%5d %-40s%9ld\n",
@@ -1006,10 +1008,10 @@ static concptr *spoiler_flag_aux(const BIT_FLAGS art_flags[TR_FLAG_SIZE],
  * @param desc_ptr 記述内容を返すための文字列参照ポインタ
  * @return なし
  */
-static void analyze_general(object_type *o_ptr, char *desc_ptr)
+static void analyze_general(player_type *player_ptr, object_type *o_ptr, char *desc_ptr)
 {
 	/* Get a "useful" description of the object */
-	object_desc(desc_ptr, o_ptr, (OD_NAME_AND_ENCHANT | OD_STORE));
+	object_desc(player_ptr, desc_ptr, o_ptr, (OD_NAME_AND_ENCHANT | OD_STORE));
 }
 
 
@@ -1328,13 +1330,14 @@ static void analyze_misc(object_type *o_ptr, char *misc_desc)
  * @brief アーティファクトの情報全体を構造体に収める /
  * Fill in an object description structure for a given object
  * and its value in gold pieces
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr オブジェクト構造体の参照ポインタ
  * @param desc_ptr 全アーティファクト情報を収める文字列参照ポインタ
  * @return なし
  */
-static void object_analyze(object_type *o_ptr, obj_desc_list *desc_ptr)
+static void object_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc_list *desc_ptr)
 {
-	analyze_general(o_ptr, desc_ptr->description);
+	analyze_general(player_ptr, o_ptr, desc_ptr->description);
 	analyze_pval(o_ptr, &desc_ptr->pval_info);
 	analyze_brand(o_ptr, desc_ptr->brands);
 	analyze_slay(o_ptr, desc_ptr->slays);
@@ -1589,10 +1592,11 @@ static bool make_fake_artifact(object_type *o_ptr, IDX name1)
 /*!
  * @brief アーティファクト情報のスポイラー出力を行うメインルーチン /
  * Create a spoiler file for artifacts
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param fname 生成ファイル名
  * @return なし
  */
-static void spoil_artifact(concptr fname)
+static void spoil_artifact(player_type *player_ptr, concptr fname)
 {
 	int i;
 	IDX j;
@@ -1641,7 +1645,7 @@ static void spoil_artifact(concptr fname)
 			if (!make_fake_artifact(q_ptr, j)) continue;
 
 			/* Analyze the artifact */
-			object_analyze(q_ptr, &artifact);
+			object_analyze(player_ptr, q_ptr, &artifact);
 
 			/* Write out the artifact description to the spoiler file */
 			spoiler_print_art(&artifact);
@@ -2363,12 +2367,12 @@ void do_cmd_spoilers(player_type *player_ptr)
 
 			/* Option (1) */
 		case '1':
-			spoil_obj_desc("obj-desc.txt");
+			spoil_obj_desc(player_ptr, "obj-desc.txt");
 			break;
 
 			/* Option (2) */
 		case '2':
-			spoil_artifact("artifact.txt");
+			spoil_artifact(player_ptr, "artifact.txt");
 			break;
 
 			/* Option (3) */
@@ -2398,13 +2402,14 @@ void do_cmd_spoilers(player_type *player_ptr)
 /*!
  * @brief ランダムアーティファクト１件を解析する /
  * Fill in an object description structure for a given object
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param desc_ptr 記述内容を収める構造体参照ポインタ
  * @return なし
  */
-static void random_artifact_analyze(object_type *o_ptr, obj_desc_list *desc_ptr)
+static void random_artifact_analyze(player_type *player_ptr, object_type *o_ptr, obj_desc_list *desc_ptr)
 {
-	analyze_general(o_ptr, desc_ptr->description);
+	analyze_general(player_ptr, o_ptr, desc_ptr->description);
 	analyze_pval(o_ptr, &desc_ptr->pval_info);
 	analyze_brand(o_ptr, desc_ptr->brands);
 	analyze_slay(o_ptr, desc_ptr->slays);
@@ -2475,11 +2480,12 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
 
 /*!
  * @brief ランダムアーティファクト内容をスポイラー出力するサブルーチン /
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param o_ptr ランダムアーティファクトのオブジェクト構造体参照ポインタ
  * @param i 出力したい記録ランダムアーティファクトID
  * @return なし
  */
-static void spoil_random_artifact_aux(object_type *o_ptr, int i)
+static void spoil_random_artifact_aux(player_type *player_ptr, object_type *o_ptr, int i)
 {
 	obj_desc_list artifact;
 
@@ -2488,7 +2494,7 @@ static void spoil_random_artifact_aux(object_type *o_ptr, int i)
 		return;
 
 	/* Analyze the artifact */
-	random_artifact_analyze(o_ptr, &artifact);
+	random_artifact_analyze(player_ptr, o_ptr, &artifact);
 
 	/* Write out the artifact description to the spoiler file */
 	spoiler_print_randart(o_ptr, &artifact);
@@ -2531,13 +2537,13 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
 		for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
 			q_ptr = &creature_ptr->inventory_list[i];
-			spoil_random_artifact_aux(q_ptr, j);
+			spoil_random_artifact_aux(creature_ptr, q_ptr, j);
 		}
 
 		for (i = 0; i < INVEN_PACK; i++)
 		{
 			q_ptr = &creature_ptr->inventory_list[i];
-			spoil_random_artifact_aux(q_ptr, j);
+			spoil_random_artifact_aux(creature_ptr, q_ptr, j);
 		}
 
 		/* random artifacts in home */
@@ -2545,7 +2551,7 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
 		for (i = 0; i < st_ptr->stock_num; i++)
 		{
 			q_ptr = &st_ptr->stock[i];
-			spoil_random_artifact_aux(q_ptr, j);
+			spoil_random_artifact_aux(creature_ptr, q_ptr, j);
 		}
 
 		/* random artifacts in museum */
@@ -2553,7 +2559,7 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
 		for (i = 0; i < st_ptr->stock_num; i++)
 		{
 			q_ptr = &st_ptr->stock[i];
-			spoil_random_artifact_aux(q_ptr, j);
+			spoil_random_artifact_aux(creature_ptr, q_ptr, j);
 		}
 	}
 

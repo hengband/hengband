@@ -4107,7 +4107,7 @@ static void dump_aux_pet(player_type *master_ptr, FILE *fff)
 		}
 
 		GAME_TEXT pet_name[MAX_NLEN];
-		monster_desc(pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
+		monster_desc(master_ptr, pet_name, m_ptr, MD_ASSUME_VISIBLE | MD_INDEF_VISIBLE);
 		fprintf(fff, "%s\n", pet_name);
 	}
 
@@ -4755,7 +4755,7 @@ static void dump_aux_equipment_inventory(player_type *creature_ptr, FILE *fff)
 		fprintf(fff, _("  [キャラクタの装備]\n\n", "  [Character Equipment]\n\n"));
 		for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
-			object_desc(o_name, &creature_ptr->inventory_list[i], 0);
+			object_desc(creature_ptr, o_name, &creature_ptr->inventory_list[i], 0);
 			if ((((i == INVEN_RARM) && creature_ptr->hidarite) || ((i == INVEN_LARM) && creature_ptr->migite)) && creature_ptr->ryoute)
 				strcpy(o_name, _("(武器を両手持ち)", "(wielding with two-hands)"));
 
@@ -4771,7 +4771,7 @@ static void dump_aux_equipment_inventory(player_type *creature_ptr, FILE *fff)
 	for (int i = 0; i < INVEN_PACK; i++)
 	{
 		if (!creature_ptr->inventory_list[i].k_idx) break;
-		object_desc(o_name, &creature_ptr->inventory_list[i], 0);
+		object_desc(creature_ptr, o_name, &creature_ptr->inventory_list[i], 0);
 		fprintf(fff, "%c) %s\n", index_to_label(i), o_name);
 	}
 
@@ -4784,7 +4784,7 @@ static void dump_aux_equipment_inventory(player_type *creature_ptr, FILE *fff)
  * @param fff ファイルポインタ
  * @return なし
  */
-static void dump_aux_home_museum(FILE *fff)
+static void dump_aux_home_museum(player_type *creature_ptr, FILE *fff)
 {
 	store_type  *st_ptr;
 	st_ptr = &town_info[1].store[STORE_HOME];
@@ -4799,7 +4799,7 @@ static void dump_aux_home_museum(FILE *fff)
 		{
 			if ((i % 12) == 0)
 				fprintf(fff, _("\n ( %d ページ )\n", "\n ( page %d )\n"), x++);
-			object_desc(o_name, &st_ptr->stock[i], 0);
+			object_desc(creature_ptr, o_name, &st_ptr->stock[i], 0);
 			fprintf(fff, "%c) %s\n", I2A(i % 12), o_name);
 		}
 
@@ -4817,11 +4817,11 @@ static void dump_aux_home_museum(FILE *fff)
 	{
 #ifdef JP
 		if ((i % 12) == 0) fprintf(fff, "\n ( %d ページ )\n", x++);
-		object_desc(o_name, &st_ptr->stock[i], 0);
+		object_desc(creature_ptr, o_name, &st_ptr->stock[i], 0);
 		fprintf(fff, "%c) %s\n", I2A(i % 12), o_name);
 #else
 		if ((i % 12) == 0) fprintf(fff, "\n ( page %d )\n", x++);
-		object_desc(o_name, &st_ptr->stock[i], 0);
+		object_desc(player_ptr, o_name, &st_ptr->stock[i], 0);
 		fprintf(fff, "%c) %s\n", I2A(i % 12), o_name);
 #endif
 	}
@@ -4864,7 +4864,7 @@ errr make_character_dump(player_type *creature_ptr, FILE *fff)
 	dump_aux_pet(creature_ptr, fff);
 	fputs("\n\n", fff);
 	dump_aux_equipment_inventory(creature_ptr, fff);
-	dump_aux_home_museum(fff);
+	dump_aux_home_museum(creature_ptr, fff);
 
 	fprintf(fff, _("  [チェックサム: \"%s\"]\n\n", "  [Check Sum: \"%s\"]\n\n"), get_check_sum());
 	return 0;
@@ -6224,7 +6224,7 @@ void show_info(player_type *creature_ptr)
 				prt(tmp_val, j + 2, 4);
 
 				/* Display object description */
-				object_desc(o_name, o_ptr, 0);
+				object_desc(creature_ptr, o_name, o_ptr, 0);
 				c_put_str(tval_to_attr[o_ptr->tval], o_name, j + 2, 7);
 			}
 

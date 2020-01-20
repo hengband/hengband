@@ -4047,7 +4047,7 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 					POSITION py, px;
 
 					/* Delete the monster (if any) */
-					delete_monster(player_ptr->current_floor_ptr, player_ptr->y, player_ptr->x);
+					delete_monster(player_ptr, player_ptr->y, player_ptr->x);
 
 					py = atoi(zz[0]);
 					px = atoi(zz[1]);

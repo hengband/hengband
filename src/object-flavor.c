@@ -1282,6 +1282,7 @@ static void get_inscription(char *buff, object_type *o_ptr)
 
 /*!
  * @brief オブジェクトの各表記を返すメイン関数 / Creates a description of the item "o_ptr", and stores it in "out_val".
+ * @param player_ptr プレーヤーへの参照ポインタ
  * @param buf 表記を返すための文字列参照ポインタ
  * @param o_ptr 特性短縮表記を得たいオブジェクト構造体の参照ポインタ
  * @param mode 表記に関するオプション指定
@@ -1330,7 +1331,7 @@ static void get_inscription(char *buff, object_type *o_ptr)
  *   OD_NO_FLAVOR        : Allow to hidden flavor\n
  *   OD_FORCE_FLAVOR     : Get un-shuffled flavor name\n
  */
-void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
+void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLAGS mode)
 {
 	/* Extract object kind name */
 	concptr            kindname = k_name + k_info[o_ptr->k_idx].name;
@@ -2032,7 +2033,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 #ifdef JP
 	if (object_is_smith(o_ptr))
 	{
-		t = object_desc_str(t, format("鍛冶師%sの", p_ptr->name));
+		t = object_desc_str(t, format("鍛冶師%sの", player_ptr->name));
 	}
 
 	/* 伝説のアイテム、名のあるアイテムの名前を付加する */
@@ -2200,7 +2201,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 #else
 	if (object_is_smith(o_ptr))
 	{
-		t = object_desc_str(t, format(" of %s the Smith", p_ptr->name));
+		t = object_desc_str(t, format(" of %s the Smith", player_ptr->name));
 	}
 
 	/* Hack -- Append "Artifact" or "Special" names */
@@ -2401,7 +2402,7 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 		t = object_desc_num(t, power);
 		t = object_desc_chr(t, p2);
 
-		fire_rate = calc_num_fire(p_ptr, o_ptr);
+		fire_rate = calc_num_fire(player_ptr, o_ptr);
 		/* Show Fire rate */
 		if (fire_rate != 0 && power > 0 && known)
 		{
@@ -2454,10 +2455,10 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 		}
 	}
 
-	bow_ptr = &p_ptr->inventory_list[INVEN_BOW];
+	bow_ptr = &player_ptr->inventory_list[INVEN_BOW];
 
 	/* If have a firing weapon + ammo matches bow */
-	if (bow_ptr->k_idx && (o_ptr->tval == p_ptr->tval_ammo))
+	if (bow_ptr->k_idx && (o_ptr->tval == player_ptr->tval_ammo))
 	{
 		int avgdam = o_ptr->dd * (o_ptr->ds + 1) * 10 / 2;
 		int tmul = bow_tmul(bow_ptr->sval);
@@ -2470,16 +2471,16 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 		if (known) avgdam += (o_ptr->to_d * 10);
 
 		/* Get extra "power" from "extra might" */
-		if (p_ptr->xtra_might) tmul++;
+		if (player_ptr->xtra_might) tmul++;
 
-		tmul = tmul * (100 + (int)(adj_str_td[p_ptr->stat_ind[A_STR]]) - 128);
+		tmul = tmul * (100 + (int)(adj_str_td[player_ptr->stat_ind[A_STR]]) - 128);
 
 		/* Launcher multiplier */
 		avgdam *= tmul;
 		avgdam /= (100 * 10);
 
 		/* Get extra damage from concentration */
-		if (p_ptr->concent) avgdam = boost_concentration_damage(p_ptr, avgdam);
+		if (player_ptr->concent) avgdam = boost_concentration_damage(player_ptr, avgdam);
 
 		if (avgdam < 0) avgdam = 0;
 
@@ -2495,27 +2496,27 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 		}
 
 		/* Apply Expect damage of Critical */
-		avgdam = calc_expect_crit_shot(p_ptr, o_ptr->weight, o_ptr->to_h, bow_ptr->to_h, avgdam);
+		avgdam = calc_expect_crit_shot(player_ptr, o_ptr->weight, o_ptr->to_h, bow_ptr->to_h, avgdam);
 		t = object_desc_num(t, avgdam);
 
 		t = show_ammo_no_crit ? object_desc_str(t, show_ammo_detail ? "/crit " : "/")
 			: object_desc_str(t, show_ammo_detail ? "/shot " : "/");
 
-		if (p_ptr->num_fire == 0)
+		if (player_ptr->num_fire == 0)
 		{
 			t = object_desc_chr(t, '0');
 		}
 		else
 		{
 			/* Calc effects of energy */
-			avgdam *= (p_ptr->num_fire * 100);
+			avgdam *= (player_ptr->num_fire * 100);
 			avgdam /= energy_fire;
 			t = object_desc_num(t, avgdam);
 			t = object_desc_str(t, show_ammo_detail ? "/turn" : "");
 
 			if (show_ammo_crit_ratio)
 			{
-				int percent = calc_crit_ratio_shot(p_ptr, known ? o_ptr->to_h : 0, known ? bow_ptr->to_h : 0);
+				int percent = calc_crit_ratio_shot(player_ptr, known ? o_ptr->to_h : 0, known ? bow_ptr->to_h : 0);
 
 				t = object_desc_chr(t, '/');
 				t = object_desc_num(t, percent / 100);
@@ -2531,12 +2532,12 @@ void object_desc(char *buf, object_type *o_ptr, BIT_FLAGS mode)
 
 		t = object_desc_chr(t, p2);
 	}
-	else if ((p_ptr->pclass == CLASS_NINJA) && (o_ptr->tval == TV_SPIKE))
+	else if ((player_ptr->pclass == CLASS_NINJA) && (o_ptr->tval == TV_SPIKE))
 	{
-		int avgdam = p_ptr->mighty_throw ? (1 + 3) : 1;
-		s16b energy_fire = 100 - p_ptr->lev;
+		int avgdam = player_ptr->mighty_throw ? (1 + 3) : 1;
+		s16b energy_fire = 100 - player_ptr->lev;
 
-		avgdam += ((p_ptr->lev + 30) * (p_ptr->lev + 30) - 900) / 55;
+		avgdam += ((player_ptr->lev + 30) * (player_ptr->lev + 30) - 900) / 55;
 
 		/* Display (shot damage/ avg damage) */
 		t = object_desc_chr(t, ' ');

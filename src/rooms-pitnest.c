@@ -24,7 +24,7 @@ struct vault_aux_type
 {
 	concptr name;
 	bool(*hook_func)(MONRACE_IDX r_idx);
-	void(*prep_func)(void);
+	void(*prep_func)(player_type *player_ptr);
 	DEPTH level;
 	int chance;
 };
@@ -304,8 +304,8 @@ bool build_type5(player_type *player_ptr)
 	n_ptr = &nest_types[cur_nest_type];
 
 	/* Process a preparation function if necessary */
-	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
-	get_mon_num_prep(n_ptr->hook_func, NULL);
+	if (n_ptr->prep_func) (*(n_ptr->prep_func))(player_ptr);
+	get_mon_num_prep(player_ptr, n_ptr->hook_func, NULL);
 
 	align.sub_align = SUB_ALIGN_NEUTRAL;
 
@@ -319,11 +319,11 @@ bool build_type5(player_type *player_ptr)
 		while (attempts--)
 		{
 			/* Get a (hard) monster type */
-			r_idx = get_mon_num(floor_ptr->dun_level + 11);
+			r_idx = get_mon_num(player_ptr, floor_ptr->dun_level + 11);
 			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
-			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
+			if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) continue;
 
 			/* Accept this monster */
 			break;
@@ -341,7 +341,7 @@ bool build_type5(player_type *player_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(floor_ptr, &yval, &xval, 11, 25)) return FALSE;
+	if (!find_space(player_ptr, &yval, &xval, 11, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 4;
@@ -355,7 +355,7 @@ bool build_type5(player_type *player_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(player_ptr, g_ptr, floor);
 			g_ptr->info |= (CAVE_ROOM);
 		}
 	}
@@ -364,16 +364,16 @@ bool build_type5(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 	}
 
 
@@ -387,17 +387,17 @@ bool build_type5(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_inner_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, inner);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_inner_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, inner);
 	}
 
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_inner_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, inner);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_inner_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, inner);
 	}
 	for (y = y1; y <= y2; y++)
 	{
@@ -514,8 +514,8 @@ bool build_type6(player_type *player_ptr)
 	n_ptr = &pit_types[cur_pit_type];
 
 	/* Process a preparation function if necessary */
-	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
-	get_mon_num_prep(n_ptr->hook_func, NULL);
+	if (n_ptr->prep_func) (*(n_ptr->prep_func))(player_ptr);
+	get_mon_num_prep(player_ptr, n_ptr->hook_func, NULL);
 
 	align.sub_align = SUB_ALIGN_NEUTRAL;
 
@@ -529,11 +529,11 @@ bool build_type6(player_type *player_ptr)
 		while (attempts--)
 		{
 			/* Get a (hard) monster type */
-			r_idx = get_mon_num(floor_ptr->dun_level + 11);
+			r_idx = get_mon_num(player_ptr, floor_ptr->dun_level + 11);
 			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
-			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
+			if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) continue;
 
 			/* Accept this monster */
 			break;
@@ -550,7 +550,7 @@ bool build_type6(player_type *player_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(floor_ptr, &yval, &xval, 11, 25)) return FALSE;
+	if (!find_space(player_ptr, &yval, &xval, 11, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 4;
@@ -564,7 +564,7 @@ bool build_type6(player_type *player_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(player_ptr, g_ptr, floor);
 			g_ptr->info |= (CAVE_ROOM);
 		}
 	}
@@ -573,16 +573,16 @@ bool build_type6(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 	}
 
 	/* Advance to the center room */
@@ -595,16 +595,16 @@ bool build_type6(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_inner_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, inner);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_inner_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, inner);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_inner_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, inner);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_inner_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, inner);
 	}
 	for (y = y1; y <= y2; y++)
 	{
@@ -823,8 +823,8 @@ bool build_type13(player_type *player_ptr)
 	n_ptr = &pit_types[cur_pit_type];
 
 	/* Process a preparation function if necessary */
-	if (n_ptr->prep_func) (*(n_ptr->prep_func))();
-	get_mon_num_prep(n_ptr->hook_func, vault_aux_trapped_pit);
+	if (n_ptr->prep_func) (*(n_ptr->prep_func))(player_ptr);
+	get_mon_num_prep(player_ptr, n_ptr->hook_func, vault_aux_trapped_pit);
 
 	align.sub_align = SUB_ALIGN_NEUTRAL;
 
@@ -838,11 +838,11 @@ bool build_type13(player_type *player_ptr)
 		while (attempts--)
 		{
 			/* Get a (hard) monster type */
-			r_idx = get_mon_num(floor_ptr->dun_level + 0);
+			r_idx = get_mon_num(player_ptr, floor_ptr->dun_level + 0);
 			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
-			if (monster_has_hostile_align(&align, 0, 0, r_ptr)) continue;
+			if (monster_has_hostile_align(player_ptr, &align, 0, 0, r_ptr)) continue;
 
 			/* Accept this monster */
 			break;
@@ -859,7 +859,7 @@ bool build_type13(player_type *player_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(floor_ptr, &yval, &xval, 13, 25)) return FALSE;
+	if (!find_space(player_ptr, &yval, &xval, 13, 25)) return FALSE;
 
 	/* Large room */
 	y1 = yval - 5;
@@ -873,7 +873,7 @@ bool build_type13(player_type *player_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_inner_grid(g_ptr);
+			place_grid(player_ptr, g_ptr, inner);
 			g_ptr->info |= (CAVE_ROOM);
 		}
 	}
@@ -882,11 +882,11 @@ bool build_type13(player_type *player_ptr)
 	for (x = x1 + 3; x <= x2 - 3; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[yval - 2][x];
-		place_floor_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, floor);
 		add_cave_info(floor_ptr, yval - 2, x, CAVE_ICKY);
 
 		g_ptr = &floor_ptr->grid_array[yval + 2][x];
-		place_floor_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, floor);
 		add_cave_info(floor_ptr, yval + 2, x, CAVE_ICKY);
 	}
 
@@ -894,11 +894,11 @@ bool build_type13(player_type *player_ptr)
 	for (x = x1 + 5; x <= x2 - 5; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[yval - 3][x];
-		place_floor_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, floor);
 		add_cave_info(floor_ptr, yval - 3, x, CAVE_ICKY);
 
 		g_ptr = &floor_ptr->grid_array[yval + 3][x];
-		place_floor_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, floor);
 		add_cave_info(floor_ptr, yval + 3, x, CAVE_ICKY);
 	}
 
@@ -906,27 +906,27 @@ bool build_type13(player_type *player_ptr)
 	for (x = x1; x <= x2; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[yval][x];
-		place_floor_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, floor);
 		g_ptr = &floor_ptr->grid_array[y1][x];
-		place_floor_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, floor);
 		g_ptr = &floor_ptr->grid_array[y2][x];
-		place_floor_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, floor);
 	}
 
 	/* Place the outer walls */
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 	}
 
 	/* Random corridor */
@@ -934,26 +934,26 @@ bool build_type13(player_type *player_ptr)
 	{
 		for (y = y1; y <= yval; y++)
 		{
-			place_floor_bold(floor_ptr, y, x2);
-			place_solid_bold(floor_ptr, y, x1 - 1);
+			place_bold(player_ptr, y, x2, floor);
+			place_bold(player_ptr, y, x1 - 1, solid);
 		}
 		for (y = yval; y <= y2 + 1; y++)
 		{
-			place_floor_bold(floor_ptr, y, x1);
-			place_solid_bold(floor_ptr, y, x2 + 1);
+			place_bold(player_ptr, y, x1, floor);
+			place_bold(player_ptr, y, x2 + 1, solid);
 		}
 	}
 	else
 	{
 		for (y = yval; y <= y2 + 1; y++)
 		{
-			place_floor_bold(floor_ptr, y, x1);
-			place_solid_bold(floor_ptr, y, x2 + 1);
+			place_bold(player_ptr, y, x1, floor);
+			place_bold(player_ptr, y, x2 + 1, solid);
 		}
 		for (y = y1; y <= yval; y++)
 		{
-			place_floor_bold(floor_ptr, y, x2);
-			place_solid_bold(floor_ptr, y, x1 - 1);
+			place_bold(player_ptr, y, x2, floor);
+			place_bold(player_ptr, y, x1 - 1, solid);
 		}
 	}
 

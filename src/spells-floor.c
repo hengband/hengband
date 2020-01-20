@@ -192,8 +192,8 @@ bool warding_glyph(player_type *caster_ptr)
 	caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info |= CAVE_OBJECT;
 	caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].mimic = feat_glyph;
 
-	note_spot(caster_ptr->y, caster_ptr->x);
-	lite_spot(caster_ptr->y, caster_ptr->x);
+	note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
+	lite_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
 
 	return TRUE;
 }
@@ -202,10 +202,14 @@ bool warding_glyph(player_type *caster_ptr)
 /*!
  * @brief 爆発のルーン設置処理 /
  * Leave an "explosive rune" which prevents monster movement
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param y 設置場所
+ * @param x 設置場所
  * @return 実際に設置が行われた場合TRUEを返す
  */
-bool explosive_rune(floor_type *floor_ptr, POSITION y, POSITION x)
+bool explosive_rune(player_type *caster_ptr, POSITION y, POSITION x)
 {
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	if (!cave_clean_bold(floor_ptr, y, x))
 	{
 		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
@@ -216,8 +220,8 @@ bool explosive_rune(floor_type *floor_ptr, POSITION y, POSITION x)
 	floor_ptr->grid_array[y][x].info |= CAVE_OBJECT;
 	floor_ptr->grid_array[y][x].mimic = feat_explosive_rune;
 
-	note_spot(y, x);
-	lite_spot(y, x);
+	note_spot(caster_ptr, y, x);
+	lite_spot(caster_ptr, y, x);
 
 	return TRUE;
 }
@@ -242,8 +246,8 @@ bool place_mirror(player_type *caster_ptr)
 	/* Turn on the light */
 	caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info |= CAVE_GLOW;
 
-	note_spot(caster_ptr->y, caster_ptr->x);
-	lite_spot(caster_ptr->y, caster_ptr->x);
+	note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
+	lite_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
 	update_local_illumination(caster_ptr, caster_ptr->y, caster_ptr->x);
 
 	return TRUE;
@@ -284,7 +288,7 @@ void stair_creation(player_type *caster_ptr)
 	}
 
 	/* Destroy all objects in the grid */
-	delete_object(floor_ptr, caster_ptr->y, caster_ptr->x);
+	delete_object(caster_ptr, caster_ptr->y, caster_ptr->x);
 
 	/* Extract current floor data */
 	saved_floor_type *sf_ptr;
@@ -357,13 +361,13 @@ void stair_creation(player_type *caster_ptr)
 	{
 		cave_set_feat(caster_ptr, caster_ptr->y, caster_ptr->x,
 			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level <= floor_ptr->dun_level - 2)) ?
-			feat_state(feat_up_stair, FF_SHAFT) : feat_up_stair);
+			feat_state(caster_ptr, feat_up_stair, FF_SHAFT) : feat_up_stair);
 	}
 	else
 	{
 		cave_set_feat(caster_ptr, caster_ptr->y, caster_ptr->x,
 			(dest_sf_ptr->last_visit && (dest_sf_ptr->dun_level >= floor_ptr->dun_level + 2)) ?
-			feat_state(feat_down_stair, FF_SHAFT) : feat_down_stair);
+			feat_state(caster_ptr, feat_down_stair, FF_SHAFT) : feat_down_stair);
 	}
 
 	/* Connect this stairs to the destination */
@@ -506,7 +510,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 				if (in_generate) /* In generation */
 				{
 					/* Delete the monster (if any) */
-					delete_monster(floor_ptr, y, x);
+					delete_monster(caster_ptr, y, x);
 				}
 				else if (r_ptr->flags1 & RF1_QUESTOR)
 				{
@@ -522,12 +526,12 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 					{
 						GAME_TEXT m_name[MAX_NLEN];
 
-						monster_desc(m_name, m_ptr, MD_INDEF_VISIBLE);
+						monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 						exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_DESTROY, m_name);
 					}
 
 					/* Delete the monster (if any) */
-					delete_monster(floor_ptr, y, x);
+					delete_monster(caster_ptr, y, x);
 				}
 			}
 
@@ -552,7 +556,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 						if (in_generate && cheat_peek)
 						{
 							GAME_TEXT o_name[MAX_NLEN];
-							object_desc(o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
+							object_desc(caster_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
 							msg_format(_("伝説のアイテム (%s) は生成中に*破壊*された。", "Artifact (%s) was *destroyed* during generation."), o_name);
 						}
 					}
@@ -564,7 +568,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 				}
 			}
 
-			delete_object(floor_ptr, y, x);
+			delete_object(caster_ptr, y, x);
 
 			/* Destroy "non-permanent" grids */
 			if (cave_perma_grid(g_ptr)) continue;
@@ -601,7 +605,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 			if (t < 20)
 			{
 				/* Create granite wall */
-				place_extra_grid(g_ptr);
+				place_grid(caster_ptr, g_ptr, extra);
 			}
 			else if (t < 70)
 			{
@@ -616,7 +620,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 			else
 			{
 				/* Create floor */
-				place_floor_grid(g_ptr);
+				place_grid(caster_ptr, g_ptr, floor);
 			}
 
 			/* Clear garbage of hidden trap or door */
@@ -796,7 +800,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			x = caster_ptr->x + ddx_ddd[i];
 
 			/* Skip non-empty grids */
-			if (!cave_empty_bold(floor_ptr, y, x)) continue;
+			if (!is_cave_empty_bold(caster_ptr, y, x)) continue;
 
 			/* Important -- Skip "quake" grids */
 			if (map[16 + y - cy][16 + x - cx]) continue;
@@ -884,7 +888,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			{
 				GAME_TEXT m_name[MAX_NLEN];
 				monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-				monster_desc(m_name, m_ptr, MD_WRONGDOER_NAME);
+				monster_desc(caster_ptr, m_name, m_ptr, MD_WRONGDOER_NAME);
 				killer = format(_("%sの起こした地震", "an earthquake caused by %s"), m_name);
 			}
 			else
@@ -945,14 +949,14 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 					x = xx + ddx_ddd[i];
 
 					/* Skip non-empty grids */
-					if (!cave_empty_bold(floor_ptr, y, x)) continue;
+					if (!is_cave_empty_bold(caster_ptr, y, x)) continue;
 
 					/* Hack -- no safety on glyph of warding */
 					if (is_glyph_grid(&floor_ptr->grid_array[y][x])) continue;
 					if (is_explosive_rune_grid(&floor_ptr->grid_array[y][x])) continue;
 
 					/* ... nor on the Pattern */
-					if (pattern_tile(y, x)) continue;
+					if (pattern_tile(floor_ptr, y, x)) continue;
 
 					/* Important -- Skip "quake" grids */
 					if (map[16 + y - cy][16 + x - cx]) continue;
@@ -971,7 +975,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 				}
 			}
 
-			monster_desc(m_name, m_ptr, 0);
+			monster_desc(caster_ptr, m_name, m_ptr, 0);
 
 			/* Scream in pain */
 			if (!ignore_unview || is_seen(m_ptr)) msg_format(_("%^sは苦痛で泣きわめいた！", "%^s wails out in pain!"), m_name);
@@ -997,12 +1001,12 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 					{
 						char m2_name[MAX_NLEN];
 
-						monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
+						monster_desc(caster_ptr, m2_name, m_ptr, MD_INDEF_VISIBLE);
 						exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_EARTHQUAKE, m2_name);
 					}
 				}
 
-				delete_monster(floor_ptr, yy, xx);
+				delete_monster(caster_ptr, yy, xx);
 
 				sn = 0;
 			}
@@ -1023,8 +1027,8 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			m_ptr->fx = sx;
 
 			update_monster(caster_ptr, m_idx, TRUE);
-			lite_spot(yy, xx);
-			lite_spot(sy, sx);
+			lite_spot(caster_ptr, yy, xx);
+			lite_spot(caster_ptr, sy, sx);
 		}
 	}
 
@@ -1048,7 +1052,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			/* Destroy location (if valid) */
 			if (!cave_valid_bold(floor_ptr, yy, xx)) continue;
 
-			delete_object(floor_ptr, yy, xx);
+			delete_object(caster_ptr, yy, xx);
 
 			/* Wall (or floor) type */
 			int t = cave_have_flag_bold(floor_ptr, yy, xx, FF_PROJECT) ? randint0(100) : 200;

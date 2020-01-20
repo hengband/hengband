@@ -10,11 +10,12 @@
 
 /*!
 * @brief タイプ14の部屋…特殊トラップ部屋の生成 / Type 14 -- trapped rooms
+* @param player_ptr プレーヤーへの参照ポインタ
 * @return なし
 * @details
 * A special trap is placed at center of the room
 */
-bool build_type14(floor_type *floor_ptr)
+bool build_type14(player_type *player_ptr)
 {
 	POSITION y, x, y2, x2, yval, xval;
 	POSITION y1, x1, xsize, ysize;
@@ -34,9 +35,10 @@ bool build_type14(floor_type *floor_ptr)
 	ysize = y1 + y2 + 1;
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(floor_ptr, &yval, &xval, ysize + 2, xsize + 2)) return FALSE;
+	if (!find_space(player_ptr, &yval, &xval, ysize + 2, xsize + 2)) return FALSE;
 
 	/* Choose lite or dark */
+	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	light = ((floor_ptr->dun_level <= randint1(25)) && !(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS));
 
 
@@ -53,7 +55,7 @@ bool build_type14(floor_type *floor_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_floor_grid(g_ptr);
+			place_grid(player_ptr, g_ptr, floor);
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);
 		}
@@ -63,16 +65,16 @@ bool build_type14(floor_type *floor_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_outer_grid(g_ptr);
+		place_grid(player_ptr, g_ptr, outer);
 	}
 
 	if (floor_ptr->dun_level < 30 + randint1(30))

@@ -1,2 +1,1 @@
-﻿
-extern bool build_type9(floor_type *floor_ptr);
+﻿extern bool build_type9(player_type *player_ptr);

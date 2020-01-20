@@ -99,7 +99,7 @@ void chest_death(player_type *owner_ptr, bool scatter, POSITION y, POSITION x, O
 				x = randint0(MAX_WID);
 
 				/* Must be an empty floor. */
-				if (!cave_empty_bold(floor_ptr, y, x)) continue;
+				if (!is_cave_empty_bold(owner_ptr, y, x)) continue;
 
 				/* Place the object there. */
 				(void)drop_near(owner_ptr, q_ptr, -1, y, x);

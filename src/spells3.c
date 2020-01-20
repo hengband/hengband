@@ -117,7 +117,7 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT
 			/* Ignore illegal locations */
 			if (!in_bounds(caster_ptr->current_floor_ptr, ny, nx)) continue;
 
-			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
+			if (!cave_monster_teleportable_bold(caster_ptr, m_idx, ny, nx, mode)) continue;
 
 			/* No teleporting into vaults and such */
 			if (!(caster_ptr->current_floor_ptr->inside_quest || caster_ptr->current_floor_ptr->inside_arena))
@@ -150,8 +150,8 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT
 	reset_target(m_ptr);
 
 	update_monster(caster_ptr, m_idx, TRUE);
-	lite_spot(oy, ox);
-	lite_spot(ny, nx);
+	lite_spot(caster_ptr, oy, ox);
+	lite_spot(caster_ptr, ny, nx);
 
 	if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 		caster_ptr->update |= (PU_MON_LITE);
@@ -208,7 +208,7 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
 			/* Ignore illegal locations */
 			if (!in_bounds(caster_ptr->current_floor_ptr, ny, nx)) continue;
 
-			if (!cave_monster_teleportable_bold(m_idx, ny, nx, mode)) continue;
+			if (!cave_monster_teleportable_bold(caster_ptr, m_idx, ny, nx, mode)) continue;
 
 			look = FALSE;
 			break;
@@ -236,8 +236,8 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
 	m_ptr->fx = nx;
 
 	update_monster(caster_ptr, m_idx, TRUE);
-	lite_spot(oy, ox);
-	lite_spot(ny, nx);
+	lite_spot(caster_ptr, oy, ox);
+	lite_spot(caster_ptr, ny, nx);
 
 	if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 		caster_ptr->update |= (PU_MON_LITE);
@@ -294,7 +294,7 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode
 		for (POSITION x = left; x <= right; x++)
 		{
 			/* Skip illegal locations */
-			if (!cave_player_teleportable_bold(y, x, mode)) continue;
+			if (!cave_player_teleportable_bold(creature_ptr, y, x, mode)) continue;
 
 			/* Calculate distance */
 			int d = distance(creature_ptr->y, creature_ptr->x, y, x);
@@ -334,7 +334,7 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode
 		for (xx = left; xx <= right; xx++)
 		{
 			/* Skip illegal locations */
-			if (!cave_player_teleportable_bold(yy, xx, mode)) continue;
+			if (!cave_player_teleportable_bold(creature_ptr, yy, xx, mode)) continue;
 
 			/* Calculate distance */
 			int d = distance(creature_ptr->y, creature_ptr->x, yy, xx);
@@ -487,7 +487,7 @@ void teleport_player_to(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 		if (current_world_ptr->wizard && !(mode & TELEPORT_PASSIVE) && (!creature_ptr->current_floor_ptr->grid_array[y][x].m_idx || (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx == creature_ptr->riding))) break;
 
 		/* Accept teleportable floor grids */
-		if (cave_player_teleportable_bold(y, x, mode)) break;
+		if (cave_player_teleportable_bold(creature_ptr, y, x, mode)) break;
 
 		/* Occasionally advance the distance */
 		if (++ctr > (4 * dis * dis + 4 * dis + 1))
@@ -573,7 +573,7 @@ bool teleport_level_other(player_type *caster_ptr)
 	m_ptr = &caster_ptr->current_floor_ptr->m_list[target_m_idx];
 	r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(caster_ptr, m_name, m_ptr, 0);
 	msg_format(_("%^sの足を指さした。", "You gesture at %^s's feet."), m_name);
 
 	if ((r_ptr->flagsr & (RFR_EFF_RES_NEXU_MASK | RFR_RES_TELE)) ||
@@ -610,7 +610,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 		monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
 
 		/* Get the monster name (or "it") */
-		monster_desc(m_name, m_ptr, 0);
+		monster_desc(creature_ptr, m_name, m_ptr, 0);
 
 		see_m = is_seen(m_ptr);
 	}
@@ -749,11 +749,11 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 	{
 		char m2_name[MAX_NLEN];
 
-		monster_desc(m2_name, m_ptr, MD_INDEF_VISIBLE);
+		monster_desc(creature_ptr, m2_name, m_ptr, MD_INDEF_VISIBLE);
 		exe_write_diary(creature_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_TELE_LEVEL, m2_name);
 	}
 
-	delete_monster_idx(m_idx);
+	delete_monster_idx(creature_ptr, m_idx);
 	sound(SOUND_TPLEVEL);
 }
 
@@ -947,7 +947,7 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
 	}
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(target_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/* Artifacts have 71% chance to resist */
 	if (object_is_artifact(o_ptr) && (randint0(100) < 71))
@@ -1046,7 +1046,7 @@ bool vanish_dungeon(player_type *caster_ptr)
 				/* Notice the "waking up" */
 				if (m_ptr->ml)
 				{
-					monster_desc(m_name, m_ptr, 0);
+					monster_desc(caster_ptr, m_name, m_ptr, 0);
 					msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
 				}
 			}
@@ -1068,7 +1068,7 @@ bool vanish_dungeon(player_type *caster_ptr)
 		/* Set boundary mimic if needed */
 		if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
-			g_ptr->mimic = feat_state(g_ptr->mimic, FF_HURT_DISI);
+			g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
 
 			/* Check for change to boring grid */
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
@@ -1083,7 +1083,7 @@ bool vanish_dungeon(player_type *caster_ptr)
 		/* Set boundary mimic if needed */
 		if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
-			g_ptr->mimic = feat_state(g_ptr->mimic, FF_HURT_DISI);
+			g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
 
 			/* Check for change to boring grid */
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
@@ -1102,7 +1102,7 @@ bool vanish_dungeon(player_type *caster_ptr)
 		/* Set boundary mimic if needed */
 		if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
-			g_ptr->mimic = feat_state(g_ptr->mimic, FF_HURT_DISI);
+			g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
 
 			/* Check for change to boring grid */
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
@@ -1117,7 +1117,7 @@ bool vanish_dungeon(player_type *caster_ptr)
 		/* Set boundary mimic if needed */
 		if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
-			g_ptr->mimic = feat_state(g_ptr->mimic, FF_HURT_DISI);
+			g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
 
 			/* Check for change to boring grid */
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
@@ -1312,10 +1312,10 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 	o_ptr->iy = caster_ptr->y;
 	o_ptr->ix = caster_ptr->x;
 
-	object_desc(o_name, o_ptr, OD_NAME_ONLY);
+	object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
 	msg_format(_("%^sがあなたの足元に飛んできた。", "%^s flies through the air to your feet."), o_name);
 
-	note_spot(caster_ptr->y, caster_ptr->x);
+	note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
 	caster_ptr->redraw |= PR_MAP;
 }
 
@@ -1485,7 +1485,7 @@ bool alchemy(player_type *caster_ptr)
 	ITEM_NUMBER old_number = o_ptr->number;
 	o_ptr->number = amt;
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, 0);
+	object_desc(caster_ptr, o_name, o_ptr, 0);
 	o_ptr->number = old_number;
 
 	/* Verify unless quantity given */
@@ -1548,7 +1548,7 @@ bool artifact_scroll(player_type *caster_ptr)
 	if (!o_ptr) return FALSE;
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
 	msg_format("%s は眩い光を発した！",o_name);
 #else
@@ -1623,7 +1623,7 @@ bool artifact_scroll(player_type *caster_ptr)
 
 	if (record_rand_art)
 	{
-		object_desc(o_name, o_ptr, OD_NAME_ONLY);
+		object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
 		exe_write_diary(caster_ptr, DIARY_ART_SCROLL, 0, o_name);
 	}
 
@@ -1643,7 +1643,7 @@ bool artifact_scroll(player_type *caster_ptr)
 bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 {
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, 0);
+	object_desc(owner_ptr, o_name, o_ptr, 0);
 
 	bool old_known = FALSE;
 	if (o_ptr->ident & IDENT_KNOWN)
@@ -1665,7 +1665,7 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 	strcpy(record_o_name, o_name);
 	record_turn = current_world_ptr->game_turn;
 
-	object_desc(o_name, o_ptr, OD_NAME_ONLY);
+	object_desc(owner_ptr, o_name, o_ptr, OD_NAME_ONLY);
 
 	if(record_fix_art && !old_known && object_is_fixed_artifact(o_ptr))
 		exe_write_diary(owner_ptr, DIARY_ART, 0, o_name);
@@ -1718,7 +1718,7 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 	bool old_known = identify_item(caster_ptr, o_ptr);
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, 0);
+	object_desc(caster_ptr, o_name, o_ptr, 0);
 	if (item >= INVEN_RARM)
 	{
 		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(caster_ptr, item), o_name, index_to_label(item));
@@ -1829,7 +1829,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 	handle_stuff(caster_ptr);
 
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, 0);
+	object_desc(caster_ptr, o_name, o_ptr, 0);
 	if (item >= INVEN_RARM)
 	{
 		msg_format(_("%^s: %s(%c)。", "%^s: %s (%c)."), describe_use(caster_ptr, item), o_name, index_to_label(item));
@@ -1843,7 +1843,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 		msg_format(_("床上: %s。", "On the ground: %s."), o_name);
 	}
 
-	(void)screen_object(o_ptr, 0L);
+	(void)screen_object(caster_ptr, o_ptr, 0L);
 	autopick_alter_item(caster_ptr, item, (bool)(destroy_identify && !old_known));
 	return TRUE;
 }
@@ -1980,7 +1980,7 @@ bool recharge(player_type *caster_ptr, int power)
 	GAME_TEXT o_name[MAX_NLEN];
 	if (object_is_fixed_artifact(o_ptr))
 	{
-		object_desc(o_name, o_ptr, OD_NAME_ONLY);
+		object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
 		msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
 
 		/* Artifact rods. */
@@ -1993,7 +1993,7 @@ bool recharge(player_type *caster_ptr, int power)
 		return update_player(caster_ptr);
 	}
 	
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	if (IS_WIZARD_CLASS(caster_ptr) || caster_ptr->pclass == CLASS_MAGIC_EATER || caster_ptr->pclass == CLASS_BLUE_MAGE)
 	{
@@ -2691,7 +2691,7 @@ static MONRACE_IDX poly_r_idx(player_type *caster_ptr, MONRACE_IDX r_idx)
 	for (int i = 0; i < 1000; i++)
 	{
 		/* Pick a new race, using a level calculation */
-		r = get_mon_num((caster_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5);
+		r = get_mon_num(caster_ptr, (caster_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5);
 
 		/* Handle failure */
 		if (!r) break;
@@ -2757,7 +2757,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 	m_ptr->hold_o_idx = 0;
 
 	/* "Kill" the "old" monster */
-	delete_monster_idx(g_ptr->m_idx);
+	delete_monster_idx(caster_ptr, g_ptr->m_idx);
 
 	/* Create a new monster (no groups) */
 	bool polymorphed = FALSE;
@@ -2800,7 +2800,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 		for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			next_o_idx = floor_ptr->o_list[this_o_idx].next_o_idx;
-			delete_object_idx(floor_ptr, this_o_idx);
+			delete_object_idx(caster_ptr, this_o_idx);
 		}
 	}
 
@@ -2823,7 +2823,7 @@ static bool dimension_door_aux(player_type *caster_ptr, POSITION x, POSITION y)
 
 	caster_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
-	if (!cave_player_teleportable_bold(y, x, 0L) ||
+	if (!cave_player_teleportable_bold(caster_ptr, y, x, 0L) ||
 	    (distance(y, x, caster_ptr->y, caster_ptr->x) > plev / 2 + 10) ||
 	    (!randint0(plev / 10 + 10)))
 	{
@@ -2981,7 +2981,7 @@ bool eat_magic(player_type *caster_ptr, int power)
 	/* Artifacts are never destroyed. */
 	if (object_is_fixed_artifact(o_ptr))
 	{
-		object_desc(o_name, o_ptr, OD_NAME_ONLY);
+		object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
 		msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
 
 		/* Artifact rods. */
@@ -2995,7 +2995,7 @@ bool eat_magic(player_type *caster_ptr, int power)
 	}
 	
 	/* Get the object description */
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/*** Determine Seriousness of Failure ***/
 
@@ -3203,7 +3203,7 @@ bool shock_power(player_type *caster_ptr)
 	monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	GAME_TEXT m_name[MAX_NLEN];
-	monster_desc(m_name, m_ptr, 0);
+	monster_desc(caster_ptr, m_name, m_ptr, 0);
 
 	if (randint1(r_ptr->level * 3 / 2) > randint0(dam / 2) + dam / 2)
 	{
@@ -3215,7 +3215,7 @@ bool shock_power(player_type *caster_ptr)
 	{
 		y += ddy[dir];
 		x += ddx[dir];
-		if (cave_empty_bold(caster_ptr->current_floor_ptr, y, x))
+		if (is_cave_empty_bold(caster_ptr, y, x))
 		{
 			ty = y;
 			tx = x;
@@ -3234,8 +3234,8 @@ bool shock_power(player_type *caster_ptr)
 	m_ptr->fx = tx;
 
 	update_monster(caster_ptr, m_idx, TRUE);
-	lite_spot(oy, ox);
-	lite_spot(ty, tx);
+	lite_spot(caster_ptr, oy, ox);
+	lite_spot(caster_ptr, ty, tx);
 
 	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 		caster_ptr->update |= (PU_MON_LITE);

@@ -43,9 +43,9 @@ static concptr find_quest[] =
  * @param q_ptr クエスト構造体の参照ポインタ
  * @return なし
  */
-void determine_random_questor(quest_type *q_ptr)
+void determine_random_questor(player_type *player_ptr, quest_type *q_ptr)
 {
-	get_mon_num_prep(mon_hook_quest, NULL);
+	get_mon_num_prep(player_ptr, mon_hook_quest, NULL);
 
 	MONRACE_IDX r_idx;
 	while (TRUE)
@@ -54,7 +54,7 @@ void determine_random_questor(quest_type *q_ptr)
 		 * Random monster 5 - 10 levels out of depth
 		 * (depending on level)
 		 */
-		r_idx = get_mon_num(q_ptr->level + 5 + randint1(q_ptr->level / 10));
+		r_idx = get_mon_num(player_ptr, q_ptr->level + 5 + randint1(q_ptr->level / 10));
 		monster_race *r_ptr;
 		r_ptr = &r_info[r_idx];
 

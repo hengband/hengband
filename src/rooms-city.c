@@ -110,13 +110,12 @@ static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, 
 	FEAT_IDX j;
 	ugbldg_type *cur_ugbldg;
 
-	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (i = 0; i < n; i++)
 	{
 		cur_ugbldg = &ugbldg[i];
 
 		/* Generate new room */
-		generate_room_floor(floor_ptr,
+		generate_room_floor(player_ptr,
 			ltcy + cur_ugbldg->y0 - 2, ltcx + cur_ugbldg->x0 - 2,
 			ltcy + cur_ugbldg->y1 + 2, ltcx + cur_ugbldg->x1 + 2,
 			FALSE);
@@ -127,7 +126,7 @@ static void build_stores(player_type *player_ptr, POSITION ltcy, POSITION ltcx, 
 		cur_ugbldg = &ugbldg[i];
 
 		/* Build an invulnerable rectangular building */
-		generate_fill_perm_bold(floor_ptr, 
+		generate_fill_perm_bold(player_ptr, 
 			ltcy + cur_ugbldg->y0, ltcx + cur_ugbldg->x0,
 			ltcy + cur_ugbldg->y1, ltcx + cur_ugbldg->x1);
 
@@ -237,7 +236,7 @@ bool build_type16(player_type *player_ptr)
 	}
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
-	if (!find_space(floor_ptr, &yval, &xval, town_hgt + 4, town_wid + 4))
+	if (!find_space(player_ptr, &yval, &xval, town_hgt + 4, town_wid + 4))
 	{
 		/* Free buildings array */
 		C_KILL(ugbldg, n, ugbldg_type);
@@ -249,7 +248,7 @@ bool build_type16(player_type *player_ptr)
 	x1 = xval - (town_wid / 2);
 
 	/* Generate new room */
-	generate_room_floor(floor_ptr,
+	generate_room_floor(player_ptr,
 		y1 + town_hgt / 3, x1 + town_wid / 3,
 		y1 + town_hgt * 2 / 3, x1 + town_wid * 2 / 3, FALSE);
 
@@ -263,4 +262,3 @@ bool build_type16(player_type *player_ptr)
 
 	return TRUE;
 }
-

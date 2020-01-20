@@ -55,7 +55,7 @@ void curse_equipment(player_type *owner_ptr, PERCENTAGE chance, PERCENTAGE heavy
 	BIT_FLAGS oflgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, oflgs);
 	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(owner_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
 	/* Extra, biased saving throw for blessed items */
 	if (have_flag(oflgs, TR_BLESSED))

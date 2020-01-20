@@ -537,7 +537,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 		{
 			success = FALSE;
 			if (!get_direction(user_ptr, &dir, FALSE, FALSE)) return;
-			if (monster_can_enter(user_ptr->y + ddy[dir], user_ptr->x + ddx[dir], &r_info[o_ptr->pval], 0))
+			if (monster_can_enter(user_ptr, user_ptr->y + ddy[dir], user_ptr->x + ddx[dir], &r_info[o_ptr->pval], 0))
 			{
 				if (place_monster_aux(user_ptr, 0, user_ptr->y + ddy[dir], user_ptr->x + ddx[dir], o_ptr->pval, (PM_FORCE_PET | PM_NO_KAGE)))
 				{
@@ -1483,7 +1483,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_RUNE_EXPLO:
 	{
 		msg_print(_("明るい赤色に輝いている...", "It glows bright red..."));
-		explosive_rune(user_ptr->current_floor_ptr, user_ptr->y, user_ptr->x);
+		explosive_rune(user_ptr, user_ptr->y, user_ptr->x);
 		break;
 	}
 

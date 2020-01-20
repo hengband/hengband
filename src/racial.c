@@ -697,7 +697,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 
 		case RACE_HALF_OGRE:
 			msg_print(_("爆発のルーンを慎重に仕掛けた...", "You carefully set an explosive rune..."));
-			explosive_rune(creature_ptr->current_floor_ptr, creature_ptr->y, creature_ptr->x);
+			explosive_rune(creature_ptr, creature_ptr->y, creature_ptr->x);
 			break;
 
 		case RACE_HALF_GIANT:

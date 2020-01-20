@@ -2554,7 +2554,7 @@ void print_map(player_type *player_ptr)
 	}
 
 	/* Display player */
-	lite_spot(player_ptr->y, player_ptr->x);
+	lite_spot(player_ptr, player_ptr->y, player_ptr->x);
 
 	/* Restore the cursor */
 	(void)Term_set_cursor(v);
@@ -3299,7 +3299,7 @@ static concptr simplify_list[][2] =
 static void display_shortened_item_name(player_type *player_ptr, object_type *o_ptr, int y)
 {
 	char buf[MAX_NLEN];
-	object_desc(buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
+	object_desc(player_ptr, buf, o_ptr, (OD_NO_FLAVOR | OD_OMIT_PREFIX | OD_NAME_ONLY));
 	TERM_COLOR attr = tval_to_attr[o_ptr->tval % 128];
 
 	if (player_ptr->image)
@@ -3859,9 +3859,9 @@ void delayed_visual_update(player_type *player_ptr)
 		if (!(g_ptr->info & CAVE_REDRAW)) continue;
 
 		/* If required, note */
-		if (g_ptr->info & CAVE_NOTE) note_spot(y, x);
+		if (g_ptr->info & CAVE_NOTE) note_spot(player_ptr, y, x);
 
-		lite_spot(y, x);
+		lite_spot(player_ptr, y, x);
 
 		/* Hack -- Visual update of monster on this grid */
 		if (g_ptr->m_idx) update_monster(player_ptr, g_ptr->m_idx, FALSE);

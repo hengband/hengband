@@ -103,8 +103,10 @@ FEAT_IDX max_f_idx;
  * @param feat 地形情報のID
  * @return 罠持ちの地形ならばTRUEを返す。
  */
-bool is_trap(FEAT_IDX feat)
+bool is_trap(player_type *player_ptr, FEAT_IDX feat)
 {
+	/* 関数ポインタの都合 */
+	(void)player_ptr;
 	return have_flag(f_info[feat].flags, FF_TRAP);
 }
 
@@ -113,11 +115,12 @@ bool is_trap(FEAT_IDX feat)
  * @param feat 地形情報のID
  * @return 閉じたドアのある地形ならばTRUEを返す。
  */
-bool is_closed_door(FEAT_IDX feat)
+bool is_closed_door(player_type *player_ptr, FEAT_IDX feat)
 {
+	/* 関数ポインタの都合 */
+	(void)player_ptr;
 	feature_type *f_ptr = &f_info[feat];
 
 	return (have_flag(f_ptr->flags, FF_OPEN) || have_flag(f_ptr->flags, FF_BASH)) &&
 		!have_flag(f_ptr->flags, FF_MOVE);
 }
-
