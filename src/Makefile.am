@@ -1,6 +1,6 @@
 ## Makefile.am -- Process this file with automake to process Makefile.in
 
-AUTOMAKE_OPTIONS = foreign
+AUTOMAKE_OPTIONS = foreign subdir-objects
 
 bin_PROGRAMS = hengband
 
@@ -11,13 +11,7 @@ hengband_SOURCES = \
 	\
 	avatar.h avatar.c birth.c birth.h \
 	\
-	bldg.c bldg.h chest.c chest.h chuukei.c \
-	cmd-basic.c cmd-basic.h cmd-dump.c cmd-dump.h cmd-activate.c cmd-activate.h cmd-eat.c cmd-eat.h \
-	cmd-item.c cmd-item.h cmd-magiceat.c cmd-magiceat.h \
-	cmd-mane.c cmd-mane.h cmd-pet.c cmd-pet.h cmd-gameoption.c cmd-gameoption.h\
-	cmd-quaff.c cmd-quaff.h cmd-read.c cmd-read.h cmd-spell.c cmd-spell.h \
-	cmd-usestaff.c cmd-usestaff.h cmd-zaprod.c cmd-zaprod.h cmd-zapwand.c \
-	cmd-zapwand.h cmd-smith.c cmd-smith.h cmd-hissatsu.c cmd-hissatsu.h\
+	bldg.c bldg.h chest.c chest.h chuukei.c chuukei.h \
 	\
 	core.c core.h files.c files.h \
 	\
@@ -37,7 +31,7 @@ hengband_SOURCES = \
 	load.c load.h \
 	dungeon-file.c dungeon-file.h \
 	main.c main-x11.c main-gcu.c \
-	melee.h melee1.c mind.c mind.h \
+	mind.c mind.h \
 	\
 	monster.h monsterrace.c monsterrace.h \
 	monsterrace-hook.c monsterrace-hook.h monster-process.c \
@@ -54,12 +48,10 @@ hengband_SOURCES = \
 	\
 	patron.h patron.c \
 	\
-	projection.h projection.c \
-	\
 	creature.h creature.c \
 	player-move.c player-move.h player-damage.c player-damage.h player-status.c player-status.h \
 	player-effects.c player-effects.h player-skill.c player-skill.h player-class.c player-class.h \
-	player-race.c player-race.h player-pesonality.c player-pesonality.h player-sex.c player-sex.h \
+	player-race.c player-race.h player-personality.c player-personality.h player-sex.c player-sex.h \
 	player-inventory.c player-inventory.h \
 	\
 	quest.h quest.c\
@@ -75,7 +67,7 @@ hengband_SOURCES = \
 	rooms.h rooms-normal.c rooms-normal.h rooms-pitnest.c rooms-pitnest.h \
 	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h rooms-vault.c \
 	rooms-vault.h save.c save.h scores.c scores.h selfinfo.c selfinfo.h \
-	shoot.c shoot.h snipe.c snipe.h \
+	snipe.c snipe.h \
 	\
 	rumor.h rumor.c \
 	\
@@ -89,23 +81,35 @@ hengband_SOURCES = \
 	spells-world.c spells-world.h \
 	\
 	sort.c sort.h \
-	store.h store.c tables.c term.c term.h trap.c trap.h types.h util.c \
+	store.h store.c term.c term.h trap.c trap.h util.c util.h \
 	wild.h wild.c wizard1.c wizard2.c \
 	warning.c warning.h world.c world.h \
 	\
-	view-mainwindow.c view-mainwindow.h targeting.c \
+	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\
 	z-form.c z-form.h z-rand.c z-rand.h z-term.c z-term.h z-util.c z-util.h \
-	z-virt.c z-virt.h 
+	z-virt.c z-virt.h \
+	\
+	cmd/cmd-activate.c cmd/cmd-activate.h cmd/cmd-basic.c cmd/cmd-basic.h \
+	cmd/cmd-dump.c cmd/cmd-dump.h cmd/cmd-eat.c cmd/cmd-eat.h \
+	cmd/cmd-gameoption.c cmd/cmd-gameoption.h cmd/cmd-hissatsu.c cmd/cmd-hissatsu.h \
+	cmd/cmd-item.c cmd/cmd-item.h cmd/cmd-magiceat.c cmd/cmd-magiceat.h \
+	cmd/cmd-mane.c cmd/cmd-mane.h cmd/cmd-pet.c cmd/cmd-pet.h \
+	cmd/cmd-quaff.c cmd/cmd-quaff.h cmd/cmd-read.c cmd/cmd-read.h \
+	cmd/cmd-smith.c cmd/cmd-smith.h cmd/cmd-spell.c cmd/cmd-spell.h \
+	cmd/cmd-usestaff.c cmd/cmd-usestaff.h cmd/cmd-zaprod.c cmd/cmd-zaprod.h \
+	cmd/cmd-zapwand.c cmd/cmd-zapwand.h \
+	\
+	combat/melee.h combat/melee1.c combat/shoot.c combat/shoot.h
 
 EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc maid-x11.c main-mac.c main-win.c \
 	main-dos.c main-ibm.c \
 	makefile.bcc makefile.std makefile.dos makefile.ibm \
-	readdib.c wall.bmp
+	readdib.c readdib.h wall.bmp
 
 COMPILE = ./gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat
 
 install-exec-hook:
 if SET_GID

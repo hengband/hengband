@@ -107,8 +107,18 @@
 
 
 #include "angband.h"
+#include "core.h"
+#include "files.h"
+#include "term.h"
 
 
+/*
+ * Available graphic modes
+ */
+#define GRAPHICS_NONE       0
+#define GRAPHICS_ORIGINAL   1
+#define GRAPHICS_ADAM_BOLT  2
+#define GRAPHICS_HENGBAND   3
 #ifdef USE_X11
 
 
@@ -2826,6 +2836,80 @@ static errr CheckEvent(bool wait)
 
 
 #ifdef USE_SOUND
+
+ /*
+  * Standard sound names
+  */
+static const concptr angband_sound_name[SOUND_MAX] =
+{
+	"dummy",
+	"hit",
+	"miss",
+	"flee",
+	"drop",
+	"kill",
+	"level",
+	"death",
+	"study",
+	"teleport",
+	"shoot",
+	"quaff",
+	"zap",
+	"walk",
+	"tpother",
+	"hitwall",
+	"eat",
+	"store1",
+	"store2",
+	"store3",
+	"store4",
+	"dig",
+	"opendoor",
+	"shutdoor",
+	"tplevel",
+	"scroll",
+	"buy",
+	"sell",
+	"warn",
+	"rocket",
+	"n_kill",
+	"u_kill",
+	"quest",
+	"heal",
+	"x_heal",
+	"bite",
+	"claw",
+	"m_spell",
+	"summon",
+	"breath",
+	"ball",
+	"m_heal",
+	"atkspell",
+	"evil",
+	"touch",
+	"sting",
+	"crush",
+	"slime",
+	"wail",
+	"winner",
+	"fire",
+	"acid",
+	"elec",
+	"cold",
+	"illegal",
+	"fail",
+	"wakeup",
+	"invuln",
+	"fall",
+	"pain",
+	"destitem",
+	"moan",
+	"show",
+	"unused",
+	"explode",
+	"glass",
+	"reflect",
+};
 
 /*
  * An array of sound file names
