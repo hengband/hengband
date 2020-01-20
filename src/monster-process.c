@@ -1262,7 +1262,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			msg_print("地面に落とされた。");
 #else
 			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(m_name, &target_ptr->current_floor_ptr->m_list[target_ptr->riding], 0);
+			monster_desc(target_ptr, m_name, &target_ptr->current_floor_ptr->m_list[target_ptr->riding], 0);
 			msg_format("You have fallen from %s.", m_name);
 #endif
 		}

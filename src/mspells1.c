@@ -1639,11 +1639,9 @@ bool make_attack_spell(MONSTER_IDX m_idx, player_type *target_ptr)
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_desc(target_ptr, m_name, m_ptr, 0x00);
 
-#ifdef JP
-#else
-
+#ifndef JP
 	/* Get the monster possessive ("his"/"her"/"its") */
-	monster_desc(m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+	monster_desc(target_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif
 
 	SPELL_IDX thrown_spell = 0;

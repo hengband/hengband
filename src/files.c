@@ -4821,7 +4821,7 @@ static void dump_aux_home_museum(player_type *creature_ptr, FILE *fff)
 		fprintf(fff, "%c) %s\n", I2A(i % 12), o_name);
 #else
 		if ((i % 12) == 0) fprintf(fff, "\n ( page %d )\n", x++);
-		object_desc(player_ptr, o_name, &st_ptr->stock[i], 0);
+		object_desc(creature_ptr, o_name, &st_ptr->stock[i], 0);
 		fprintf(fff, "%c) %s\n", I2A(i % 12), o_name);
 #endif
 	}

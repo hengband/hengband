@@ -4055,7 +4055,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 		GAME_TEXT m_name_self[80];
 
 		/* hisself */
-		monster_desc(m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+		monster_desc(target_ptr, m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 
 		msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
 #endif

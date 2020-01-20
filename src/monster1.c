@@ -609,27 +609,29 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 #ifdef JP
 			hooked_roff(format(" %d レベルのキャラクタにとって 約%ld.%02ld ポイントの経験となる。", player_ptr->lev, (long)i, (long)j));
 #else
+			{
+				char *p, *q;
+				/* Mention the experience */
+				hooked_roff(format(" is worth about %ld.%02ld point%s",
+					(long)i, (long)j, ((i == 1) && (j == 0)) ? "" : "s"));
 
-			/* Mention the experience */
-			hooked_roff(format(" is worth about %ld.%02ld point%s",
-				(long)i, (long)j, ((i == 1) && (j == 0)) ? "" : "s"));
+				/* Take account of annoying English */
+				p = "th";
+				i = player_ptr->lev % 10;
+				if ((player_ptr->lev / 10) == 1) /* nothing */;
+				else if (i == 1) p = "st";
+				else if (i == 2) p = "nd";
+				else if (i == 3) p = "rd";
 
-			/* Take account of annoying English */
-			p = "th";
-			i = player_ptr->lev % 10;
-			if ((player_ptr->lev / 10) == 1) /* nothing */;
-			else if (i == 1) p = "st";
-			else if (i == 2) p = "nd";
-			else if (i == 3) p = "rd";
+				/* Take account of "leading vowels" in numbers */
+				q = "";
+				i = player_ptr->lev;
+				if ((i == 8) || (i == 11) || (i == 18)) q = "n";
 
-			/* Take account of "leading vowels" in numbers */
-			q = "";
-			i = player_ptr->lev;
-			if ((i == 8) || (i == 11) || (i == 18)) q = "n";
-
-			/* Mention the dependance on the player's level */
-			hooked_roff(format(" for a%s %lu%s level character.  ",
-				q, (long)i, p));
+				/* Mention the dependance on the player's level */
+				hooked_roff(format(" for a%s %lu%s level character.  ",
+					q, (long)i, p));
+			}
 #endif
 
 		}
