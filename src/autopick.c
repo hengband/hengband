@@ -653,6 +653,7 @@ command_menu_type menu_data[] =
 	{NULL, -1, -1, 0}
 };
 
+
 /*
  * A function to create new entry
  */
@@ -2351,38 +2352,39 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 	}
 
 	/* Check the header */
-	while (TRUE)
+	if (pref_fff)
 	{
-		/* Read a line */
-		if (my_fgets(pref_fff, buf, sizeof(buf)))
+		while (TRUE)
 		{
-			/* No header found */
-			player_ptr->autopick_autoregister = FALSE;
+			if (my_fgets(pref_fff, buf, sizeof(buf)))
+			{
+				player_ptr->autopick_autoregister = FALSE;
+				break;
+			}
 
-			break;
+			if (streq(buf, autoregister_header))
+			{
+				player_ptr->autopick_autoregister = TRUE;
+				break;
+			}
 		}
 
-		if (streq(buf, autoregister_header))
-		{
-			/* Found the header */
-			player_ptr->autopick_autoregister = TRUE;
-
-			break;
-		}
+		fclose(pref_fff);
+	}
+	else
+	{
+		/*
+		 * File could not be opened for reading.  Assume header not
+		 * present.
+		 */
+		player_ptr->autopick_autoregister = FALSE;
 	}
 
-	/* Close read only FILE* */
-	fclose(pref_fff);
-
-	/* Open for append */
 	pref_fff = my_fopen(pref_file, "a");
-
-	/* Failure */
-	if (!pref_fff) {
+	if (!pref_fff)
+	{
 		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), pref_file);
 		msg_print(NULL);
-
-		/* Failed */
 		return FALSE;
 	}
 
@@ -2395,15 +2397,10 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 			"# *Warning!* The lines below will be deleated later."));
 		fprintf(pref_fff, "%s\n", _("# 後で自動的に削除されますので、必要な行は上の方へ移動しておいてください。",
 			"# Keep it by cut & paste if you need these lines for future characters."));
-
-		/* Now auto register is in-use */
 		player_ptr->autopick_autoregister = TRUE;
 	}
 
-	/* Get a preference entry */
 	autopick_entry_from_object(player_ptr, entry, o_ptr);
-
-	/* Set to auto-destroy (with no-display) */
 	entry->action = DO_AUTODESTROY;
 
 	/* Load the new line as preference */
