@@ -292,7 +292,16 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 
 		}
 	}
-	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
+	
+	/*
+	 * Store what may have to be updated for the inventory (including
+	 * autodestroy if set by something else).  Then turn off those flags
+	 * so that updates triggered by calling gain_exp() or set_food() below
+	 * do not rearrange the inventory before the food item is destroyed in
+	 * the pack.
+	 */
+	BIT_FLAGS inventory_flags = (PU_COMBINE | PU_REORDER | (creature_ptr->update & PU_AUTODESTROY));
+	creature_ptr->update &= ~(PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
 
 	if (!(object_is_aware(o_ptr)))
 	{
@@ -312,7 +321,6 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 	}
 
 	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
-
 
 	/* Food can feed the player */
 	if (PRACE_IS_(creature_ptr, RACE_VAMPIRE) || (creature_ptr->mimic_form == MIMIC_VAMPIRE))
@@ -337,6 +345,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 		if (o_ptr->tval == TV_STAFF &&
 			(item < 0) && (o_ptr->number > 1))
 		{
+			creature_ptr->update |= inventory_flags;
 			msg_print(_("まずは杖を拾わなければ。", "You must first pick up the staffs."));
 			return;
 		}
@@ -347,7 +356,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 		{
 			msg_format(_("この%sにはもう魔力が残っていない。", "The %s has no charges left."), staff);
 			o_ptr->ident |= (IDENT_EMPTY);
-			creature_ptr->update |= (PU_COMBINE | PU_REORDER);
+			creature_ptr->update |= inventory_flags;
 			creature_ptr->window |= (PW_INVEN);
 
 			return;
@@ -396,11 +405,13 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 		}
 
 		creature_ptr->window |= (PW_INVEN | PW_EQUIP);
+		creature_ptr->update |= inventory_flags;
 
 		/* Don't eat a staff/wand itself */
 		return;
 	}
-	else if ((PRACE_IS_(creature_ptr, RACE_DEMON) ||
+
+	if ((PRACE_IS_(creature_ptr, RACE_DEMON) ||
 		(mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) &&
 		(o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE &&
 			my_strchr("pht", r_info[o_ptr->pval].d_char)))
@@ -452,6 +463,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 		(void)set_food(creature_ptr, creature_ptr->food + o_ptr->pval);
 	}
 
+	creature_ptr->update |= inventory_flags;
 	vary_item(creature_ptr, item, -1);
 }
 

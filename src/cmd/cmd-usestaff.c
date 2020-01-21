@@ -352,7 +352,14 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 		chg_virtue(creature_ptr, V_CHANCE, 1);
 		chg_virtue(creature_ptr, V_KNOWLEDGE, -1);
 	}
-	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
+
+	/*
+	 * Temporarily remove the flags for updating the inventory so
+	 * gain_exp() does not reorder the inventory before the charge
+	 * is deducted from the staff.
+	 */
+	BIT_FLAGS inventory_flags = (PU_COMBINE | PU_REORDER | (creature_ptr->update & PU_AUTODESTROY));
+	creature_ptr->update &= ~(PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
 
 	/* Tried the item */
 	object_tried(o_ptr);
@@ -365,7 +372,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 	}
 
 	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
-
+	creature_ptr->update |= inventory_flags;
 
 	/* Hack -- some uses are "free" */
 	if (!use_charge) return;

@@ -1851,12 +1851,14 @@ void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_i
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(target_ptr, m_idx, m_name);
+	char m_poss[10];
+	monster_desc(target_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
 	monspell_message_base(target_ptr, m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
-		_("%^sが自分の体に念を送った。", "%^s concentrates on %s body."),
-		_("%^sが自分の体に念を送った。", "%^s concentrates on %s body."),
-		_("%^sが自分の体に念を送った。", "%^s concentrates on %s body."),
+		_("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)),
+		_("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)),
+		_("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)),
 		target_ptr->blind > 0, TARGET_TYPE);
 
 	/* Allow quick speed increases to base+10 */
@@ -1917,14 +1919,16 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 	bool seen = (!target_ptr->blind && m_ptr->ml);
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(target_ptr, m_idx, m_name);
+	char m_poss[10];
+	monster_desc(target_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 
 	disturb(target_ptr, TRUE, TRUE);
 
 	monspell_message_base(target_ptr, m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
-		_("%^sは自分の傷に念を集中した。", "%^s concentrates on his wounds."),
-		_("%^sが自分の傷に集中した。", "%^s concentrates on his wounds."),
-		_("%^sは自分の傷に念を集中した。", "%^s concentrates on his wounds."),
+		_("%^sは自分の傷に念を集中した。", format("%%^s concentrates on his wounds.", m_poss)),
+		_("%^sが自分の傷に集中した。", format("%%^s concentrates on his wounds.", m_poss)),
+		_("%^sは自分の傷に念を集中した。", format("%%^s concentrates on his wounds.", m_poss)),
 		target_ptr->blind > 0, TARGET_TYPE);
 
 	/* Heal some */

@@ -554,7 +554,14 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 		used_up=FALSE;
 	}
 
-	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
+	/*
+	 * Store what may have to be updated for the inventory (including
+	 * autodestroy if set by something else).  Then turn off those flags
+	 * so that updates triggered by calling gain_exp() below do not
+	 * rearrange the inventory before destroying the scroll in the pack.
+	 */
+	BIT_FLAGS inventory_flags = (PU_COMBINE | PU_REORDER | (creature_ptr->update & PU_AUTODESTROY));
+	creature_ptr->update &= ~(PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
 
 	if (!(object_is_aware(o_ptr)))
 	{
@@ -574,7 +581,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 	}
 
 	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
-
+	creature_ptr->update |= inventory_flags;
 
 	/* Hack -- allow certain scrolls to be "preserved" */
 	if (!used_up)

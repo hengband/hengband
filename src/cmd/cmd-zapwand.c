@@ -404,7 +404,14 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 	sound(SOUND_ZAP);
 
 	ident = wand_effect(creature_ptr, o_ptr->sval, dir, FALSE, FALSE);
-	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
+	
+	/*
+	 * Temporarily remove the flags for updating the inventory so
+	 * gain_exp() does not reorder the inventory before the charge
+	 * is deducted from the wand.
+	 */
+	BIT_FLAGS inventory_flags = (PU_COMBINE | PU_REORDER | (creature_ptr->update & PU_AUTODESTROY));
+	creature_ptr->update &= ~(PU_COMBINE | PU_REORDER | PU_AUTODESTROY);
 
 	if (!(object_is_aware(o_ptr)))
 	{
@@ -424,6 +431,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 	}
 
 	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
+	creature_ptr->window |= inventory_flags;
 
 	/* Use a single charge */
 	o_ptr->pval--;
