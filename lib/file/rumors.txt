@@ -24,9 +24,9 @@ There are Black Market stores hidden deep in the dungeon, with COOL stuff!
 Have you ever seen a Rod of Havoc inscribed {BFG9000}?
 What a pity, you cannot read it!
 You will encounter a dark, tall stranger...
-A Mithril mail will not rust.
-An Adamantite mail will not rust.
-A Rusty Chain Mail cannot rust any further.
+Mithril mail will not rust.
+Adamantite mail will not rust.
+Rusty Chain Mail cannot rust any further.
 If you are a mage, you will NOT want to find Raal's Tome of Destruction!
 You won't want to find Raal's Tome of Destruction!
 You won't want to find Raal's Tome of Destruction, unless you are a mage.
@@ -241,7 +241,7 @@ Autorollers aren't wary bright things.
 The Wargs give ah very sharpee Choir tonightee!
 The depths are about as unreliable as a dish of over-ripe figs.
 May all the Crows of the Volcano pick your bones clean!
-Ever made your dance around enthousiastic lice without a certain staff?
+Ever made your dance around enthusiastic lice without a certain staff?
 A staff is just like a colleague. But a reliable one!
 You are prepared to thrill us with a traditional heroic display?
 Some underworld lads would *LOVE* to blacken your name!
@@ -297,7 +297,7 @@ Have a rest and a rumor in the inn over some comfortable pitchers of beer.
 The stakes are far too high for a weak bluff, so watch the scores?
 Be not like the others. Proceed carefully, cover yourself at all times.
 You wouldn't want to fool with the Trumps! Aren't they of Doom quality?
-Smeagols removal is high on your list of things that needed knowing or doing?
+Smeagol's removal is high on your list of things that needed knowing or doing?
 Matter of recollection: find the inn and nurse some rumors for a while.
 Served you right: 3 quarters dead. Wasn't it purely a result of your arrogance?
 Confident - Cocky - Lazy - Dead. The Old Man's mantra, and a serious good one.
@@ -395,7 +395,7 @@ Morgoth is the very brink where hope and despair are akin.
 Give little heed to the wreck and slaughter that will lay around the pits.
 Accidents? what accidents? Mighty were your fallen ancestors.
 Fortune has betrayed you but for the momentum. Confidence!
-On the long run - IF you're survivor - winds of fortune will not wreck you.
+In the long run - IF you're survivor - winds of fortune will not wreck you.
 As a spell-striking egghead you'd need convincing offensive powers!
 Once no Recall is left the way up will seem never ending to you.
 The simple scheme ended in failure. That demon called lots of companions.
@@ -418,7 +418,7 @@ Zelazny said: "Sometimes it's damned hard to tell the dancer from the dance."
 If it's not quite visible if you caught a gear curse look it up by Ctrl-C.
 Any lesser titan will not just summon a monster but several combos of them.
 Robin Hood nowadays leads a wretched existence as a trapper and master thief.
-Too many different Zephyrs are the heroes death. IF caught on open ground.
+Too many different Zephyrs are the hero's death. IF caught on open ground.
 If you ever confront a Hru have a Teleport Other at hand!
 Any Hru will rage, spreading earthquake and ruin. Only Shudde is worse.
 You cannot escape a Hru just by blinking. Your life will be shattered!
@@ -548,7 +548,7 @@ It's deciding which things are crucial that separates the wise from others.
 Invulnerability is impenetrable.
 Invulnerability may be penetrated by evil creatures.
 Resistance to nether will guard against invulnerability-penetration.
-Creatures of good alignment are not deterred by invlnerability.
+Creatures of good alignment are not deterred by invulnerability.
 Being clocked backwards is just a terrible irony of fate.
 Time is a weird attack - not even sustained stats will save you.
 Stumble on a death mold: another unsettling occurrence in an unsettling world.
@@ -572,7 +572,7 @@ There are no guarantees in life, but it's smarter to take fewer chances.
 Artsi is not susceptible to sorcery, ideal warrior! If ever get him in melee.
 It's a crying shame, but 30000's the highest you'll ever sell an item for.
 There is a shopkeeper who may pay 50000 gold for an item.
-Is it really true that a good chain armour once rusted can't be restored?
+Is it really true that good chain armour once rusted can't be restored?
 Never thought about that daylight might be not just an illumination?
 Stone Skin is valuable as diamonds: even the tougher foes will miss you.
 You WILL need some means to prevent to be teleported to and fro unwanted.
@@ -600,7 +600,7 @@ Survival challenges use up superabundant energies, burn off the gland-juices.
 Kittens. Always going for the dramatic. Watching too many adventure holos.
 Young Heroes-to-be are always kept on diet, to increase their aggressiveness.
 Free at last from the blood curse: mirth welled up, boiled over as pure laughter.
-If you encounter groups of usual solitary cats look out for Bast, Cat's godess!
+If you encounter groups of usual solitary cats look out for Bast, Cat's goddess!
 Even protected Books are destroyed by breathers of chaos balls.
 It is more secure to carry precious books yourself, IF you provide resistances.
 Do not cast stone-to-mud while your skin is made of stone.
