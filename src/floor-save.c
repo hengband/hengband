@@ -373,7 +373,7 @@ static void build_dead_end(player_type *creature_ptr)
 		for (x = 0; x < MAX_WID; x++)
 		{
 			/* Create "solid" perma-wall */
-			place_bold(creature_ptr, y, x, solid_perm);
+			place_bold(creature_ptr, y, x, gb_solid_perm);
 		}
 	}
 
@@ -382,7 +382,7 @@ static void build_dead_end(player_type *creature_ptr)
 	creature_ptr->x = creature_ptr->current_floor_ptr->width / 2;
 
 	/* Give one square */
-	place_bold(creature_ptr, creature_ptr->y, creature_ptr->x, floor);
+	place_bold(creature_ptr, creature_ptr->y, creature_ptr->x, gb_floor);
 
 	wipe_generate_random_floor_flags(creature_ptr->current_floor_ptr);
 }

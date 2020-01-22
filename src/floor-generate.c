@@ -644,22 +644,22 @@ static bool cave_gen(player_type *player_ptr)
 		{
 			for (x = 0; x < floor_ptr->width; x++)
 			{
-				place_bold(player_ptr, y, x, floor);
+				place_bold(player_ptr, y, x, gb_floor);
 			}
 		}
 
 		/* Special boundary walls -- Top and bottom */
 		for (x = 0; x < floor_ptr->width; x++)
 		{
-			place_bold(player_ptr, 0, x, extra);
-			place_bold(player_ptr, floor_ptr->height - 1, x, extra);
+			place_bold(player_ptr, 0, x, gb_extra);
+			place_bold(player_ptr, floor_ptr->height - 1, x, gb_extra);
 		}
 
 		/* Special boundary walls -- Left and right */
 		for (y = 1; y < (floor_ptr->height - 1); y++)
 		{
-			place_bold(player_ptr, y, 0, extra);
-			place_bold(player_ptr, y, floor_ptr->width - 1, extra);
+			place_bold(player_ptr, y, 0, gb_extra);
+			place_bold(player_ptr, y, floor_ptr->width - 1, gb_extra);
 		}
 	}
 	else
@@ -669,7 +669,7 @@ static bool cave_gen(player_type *player_ptr)
 		{
 			for (x = 0; x < floor_ptr->width; x++)
 			{
-				place_bold(player_ptr, y, x, extra);
+				place_bold(player_ptr, y, x, gb_extra);
 			}
 		}
 	}
@@ -835,7 +835,7 @@ static bool cave_gen(player_type *player_ptr)
 					/* Clear mimic type */
 					g_ptr->mimic = 0;
 
-					place_grid(player_ptr, g_ptr, floor);
+					place_grid(player_ptr, g_ptr, gb_floor);
 				}
 			}
 
@@ -851,7 +851,7 @@ static bool cave_gen(player_type *player_ptr)
 				g_ptr->mimic = 0;
 
 				/* Clear previous contents, add up floor */
-				place_grid(player_ptr, g_ptr, floor);
+				place_grid(player_ptr, g_ptr, gb_floor);
 
 				/* Occasional doorway */
 				if ((randint0(100) < dun_tun_pen) && !(dungeon_ptr->flags1 & DF1_NO_DOORS))
@@ -1022,35 +1022,35 @@ static void build_arena(player_type *player_ptr, POSITION *start_y, POSITION *st
 	for (i = y_height; i <= y_height + 5; i++)
 		for (j = x_left; j <= x_right; j++)
 		{
-			place_bold(player_ptr, i, j, extra_perm);
+			place_bold(player_ptr, i, j, gb_extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (i = y_depth; i >= y_depth - 5; i--)
 		for (j = x_left; j <= x_right; j++)
 		{
-			place_bold(player_ptr, i, j, extra_perm);
+			place_bold(player_ptr, i, j, gb_extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_left; j <= x_left + 17; j++)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			place_bold(player_ptr, i, j, extra_perm);
+			place_bold(player_ptr, i, j, gb_extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_right; j >= x_right - 17; j--)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			place_bold(player_ptr, i, j, extra_perm);
+			place_bold(player_ptr, i, j, gb_extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 
-	place_bold(player_ptr, y_height + 6, x_left + 18, extra_perm);
+	place_bold(player_ptr, y_height + 6, x_left + 18, gb_extra_perm);
 	floor_ptr->grid_array[y_height + 6][x_left + 18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_bold(player_ptr, y_depth - 6, x_left + 18, extra_perm);
+	place_bold(player_ptr, y_depth - 6, x_left + 18, gb_extra_perm);
 	floor_ptr->grid_array[y_depth - 6][x_left + 18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_bold(player_ptr, y_height + 6, x_right - 18, extra_perm);
+	place_bold(player_ptr, y_height + 6, x_right - 18, gb_extra_perm);
 	floor_ptr->grid_array[y_height + 6][x_right - 18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_bold(player_ptr, y_depth - 6, x_right - 18, extra_perm);
+	place_bold(player_ptr, y_depth - 6, x_right - 18, gb_extra_perm);
 	floor_ptr->grid_array[y_depth - 6][x_right - 18].info |= (CAVE_GLOW | CAVE_MARK);
 
 	*start_y = y_height + 5;
@@ -1080,7 +1080,7 @@ static void generate_challenge_arena(player_type *challanger_ptr)
 		for (x = 0; x < MAX_WID; x++)
 		{
 			/* Create "solid" perma-wall */
-			place_bold(challanger_ptr, y, x, solid_perm);
+			place_bold(challanger_ptr, y, x, gb_solid_perm);
 
 			/* Illuminate and memorize the walls */
 			floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
@@ -1130,35 +1130,35 @@ static void build_battle(player_type *player_ptr, POSITION *y, POSITION *x)
 	for (i = y_height; i <= y_height + 5; i++)
 		for (j = x_left; j <= x_right; j++)
 		{
-			place_bold(player_ptr, i, j, extra_perm);
+			place_bold(player_ptr, i, j, gb_extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (i = y_depth; i >= y_depth - 3; i--)
 		for (j = x_left; j <= x_right; j++)
 		{
-			place_bold(player_ptr, i, j, extra_perm);
+			place_bold(player_ptr, i, j, gb_extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_left; j <= x_left + 17; j++)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			place_bold(player_ptr, i, j, extra_perm);
+			place_bold(player_ptr, i, j, gb_extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 	for (j = x_right; j >= x_right - 17; j--)
 		for (i = y_height; i <= y_depth; i++)
 		{
-			place_bold(player_ptr, i, j, extra_perm);
+			place_bold(player_ptr, i, j, gb_extra_perm);
 			floor_ptr->grid_array[i][j].info |= (CAVE_GLOW | CAVE_MARK);
 		}
 
-	place_bold(player_ptr, y_height+6, x_left+18, extra_perm);
+	place_bold(player_ptr, y_height+6, x_left+18, gb_extra_perm);
 	floor_ptr->grid_array[y_height+6][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_bold(player_ptr, y_depth-4, x_left+18, extra_perm);
+	place_bold(player_ptr, y_depth-4, x_left+18, gb_extra_perm);
 	floor_ptr->grid_array[y_depth-4][x_left+18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_bold(player_ptr, y_height+6, x_right-18, extra_perm);
+	place_bold(player_ptr, y_height+6, x_right-18, gb_extra_perm);
 	floor_ptr->grid_array[y_height+6][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
-	place_bold(player_ptr, y_depth-4, x_right-18, extra_perm);
+	place_bold(player_ptr, y_depth-4, x_right-18, gb_extra_perm);
 	floor_ptr->grid_array[y_depth-4][x_right-18].info |= (CAVE_GLOW | CAVE_MARK);
 
 	for (i = y_height + 1; i <= y_height + 5; i++)
@@ -1194,7 +1194,7 @@ static void generate_gambling_arena(player_type *creature_ptr)
 		for (x = 0; x < MAX_WID; x++)
 		{
 			/* Create "solid" perma-wall */
-			place_bold(creature_ptr, y, x, solid_perm);
+			place_bold(creature_ptr, y, x, gb_solid_perm);
 
 			/* Illuminate and memorize the walls */
 			floor_ptr->grid_array[y][x].info |= (CAVE_GLOW | CAVE_MARK);
@@ -1246,7 +1246,7 @@ static void generate_fixed_floor(player_type *player_ptr)
 	{
 		for (x = 0; x < floor_ptr->width; x++)
 		{
-			place_bold(player_ptr, y, x, solid_perm);
+			place_bold(player_ptr, y, x, gb_solid_perm);
 		}
 	}
 
@@ -1689,7 +1689,7 @@ bool build_tunnel(player_type *player_ptr, POSITION row1, POSITION col1, POSITIO
 					if (is_outer_bold(floor_ptr, y, x))
 					{
 						/* Change the wall to a "solid" wall */
-						place_bold(player_ptr, y, x, solid_noperm);
+						place_bold(player_ptr, y, x, gb_solid_noperm);
 					}
 				}
 			}
@@ -1840,7 +1840,7 @@ static bool set_tunnel(player_type *player_ptr, POSITION *x, POSITION *y, bool a
 				if (is_outer_bold(floor_ptr, j, i))
 				{
 					/* Change the wall to a "solid" wall */
-					place_bold(player_ptr, j, i, solid_noperm);
+					place_bold(player_ptr, j, i, gb_solid_noperm);
 				}
 			}
 		}
@@ -1848,7 +1848,7 @@ static bool set_tunnel(player_type *player_ptr, POSITION *x, POSITION *y, bool a
 		/* Clear mimic type */
 		floor_ptr->grid_array[*y][*x].mimic = 0;
 
-		place_bold(player_ptr, *y, *x, floor);
+		place_bold(player_ptr, *y, *x, gb_floor);
 
 		return TRUE;
 	}
@@ -1880,7 +1880,7 @@ static bool set_tunnel(player_type *player_ptr, POSITION *x, POSITION *y, bool a
 		if (i == 0)
 		{
 			/* Failed for some reason: hack - ignore the solidness */
-			place_grid(player_ptr, g_ptr, outer);
+			place_grid(player_ptr, g_ptr, gb_outer);
 			dx = 0;
 			dy = 0;
 		}
@@ -2138,7 +2138,7 @@ bool build_tunnel2(player_type *player_ptr, POSITION x1, POSITION y1, POSITION x
 			if (i == 0)
 			{
 				/* Failed for some reason: hack - ignore the solidness */
-				place_bold(player_ptr, y3, x3, outer);
+				place_bold(player_ptr, y3, x3, gb_outer);
 				dx = 0;
 				dy = 0;
 			}

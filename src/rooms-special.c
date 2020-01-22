@@ -48,7 +48,7 @@ bool build_type15(player_type *player_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_grid(player_ptr, g_ptr, floor);
+			place_grid(player_ptr, g_ptr, gb_floor);
 			g_ptr->feat = feat_glass_floor;
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);
@@ -59,20 +59,20 @@ bool build_type15(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_grid(player_ptr, g_ptr, outer);
+		place_grid(player_ptr, g_ptr, gb_outer);
 		g_ptr->feat = feat_glass_wall;
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_grid(player_ptr, g_ptr, outer);
+		place_grid(player_ptr, g_ptr, gb_outer);
 		g_ptr->feat = feat_glass_wall;
 	}
 
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_grid(player_ptr, g_ptr, outer);
+		place_grid(player_ptr, g_ptr, gb_outer);
 		g_ptr->feat = feat_glass_wall;
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_grid(player_ptr, g_ptr, outer);
+		place_grid(player_ptr, g_ptr, gb_outer);
 		g_ptr->feat = feat_glass_wall;
 	}
 
@@ -96,7 +96,7 @@ bool build_type15(player_type *player_ptr)
 			for (dir2 = 0; dir2 < 8; dir2++)
 			{
 				g_ptr = &floor_ptr->grid_array[y + ddy_ddd[dir2]][x + ddx_ddd[dir2]];
-				place_grid(player_ptr, g_ptr, inner);
+				place_grid(player_ptr, g_ptr, gb_inner);
 				g_ptr->feat = feat_glass_wall;
 			}
 		}
@@ -107,7 +107,7 @@ bool build_type15(player_type *player_ptr)
 			y = yval + 2 * ddy_ddd[dir1];
 			x = xval + 2 * ddx_ddd[dir1];
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_grid(player_ptr, g_ptr, inner_perm);
+			place_grid(player_ptr, g_ptr, gb_inner_perm);
 			g_ptr->feat = feat_permanent_glass_wall;
 			floor_ptr->grid_array[yval + ddy_ddd[dir1]][xval + ddx_ddd[dir1]].info |= (CAVE_ICKY);
 		}
@@ -134,19 +134,19 @@ bool build_type15(player_type *player_ptr)
 
 		/* Pillars */
 		g_ptr = &floor_ptr->grid_array[y1 + 1][x1 + 1];
-		place_grid(player_ptr, g_ptr, inner);
+		place_grid(player_ptr, g_ptr, gb_inner);
 		g_ptr->feat = feat_glass_wall;
 
 		g_ptr = &floor_ptr->grid_array[y1 + 1][x2 - 1];
-		place_grid(player_ptr, g_ptr, inner);
+		place_grid(player_ptr, g_ptr, gb_inner);
 		g_ptr->feat = feat_glass_wall;
 
 		g_ptr = &floor_ptr->grid_array[y2 - 1][x1 + 1];
-		place_grid(player_ptr, g_ptr, inner);
+		place_grid(player_ptr, g_ptr, gb_inner);
 		g_ptr->feat = feat_glass_wall;
 
 		g_ptr = &floor_ptr->grid_array[y2 - 1][x2 - 1];
-		place_grid(player_ptr, g_ptr, inner);
+		place_grid(player_ptr, g_ptr, gb_inner);
 		g_ptr->feat = feat_glass_wall;
 		get_mon_num_prep(player_ptr, vault_aux_lite, NULL);
 
@@ -157,7 +157,7 @@ bool build_type15(player_type *player_ptr)
 		for (dir1 = 0; dir1 < 8; dir1++)
 		{
 			g_ptr = &floor_ptr->grid_array[yval + ddy_ddd[dir1]][xval + ddx_ddd[dir1]];
-			place_grid(player_ptr, g_ptr, inner);
+			place_grid(player_ptr, g_ptr, gb_inner);
 			g_ptr->feat = feat_glass_wall;
 		}
 
@@ -188,27 +188,27 @@ bool build_type15(player_type *player_ptr)
 		for (y = yval - 2; y <= yval + 2; y++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][xval - 3];
-			place_grid(player_ptr, g_ptr, inner);
+			place_grid(player_ptr, g_ptr, gb_inner);
 			g_ptr->feat = feat_glass_wall;
 			g_ptr = &floor_ptr->grid_array[y][xval + 3];
-			place_grid(player_ptr, g_ptr, inner);
+			place_grid(player_ptr, g_ptr, gb_inner);
 			g_ptr->feat = feat_glass_wall;
 		}
 
 		for (x = xval - 2; x <= xval + 2; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[yval - 3][x];
-			place_grid(player_ptr, g_ptr, inner);
+			place_grid(player_ptr, g_ptr, gb_inner);
 			g_ptr->feat = feat_glass_wall;
 			g_ptr = &floor_ptr->grid_array[yval + 3][x];
-			place_grid(player_ptr, g_ptr, inner);
+			place_grid(player_ptr, g_ptr, gb_inner);
 			g_ptr->feat = feat_glass_wall;
 		}
 
 		for (dir1 = 4; dir1 < 8; dir1++)
 		{
 			g_ptr = &floor_ptr->grid_array[yval + 2 * ddy_ddd[dir1]][xval + 2 * ddx_ddd[dir1]];
-			place_grid(player_ptr, g_ptr, inner);
+			place_grid(player_ptr, g_ptr, gb_inner);
 			g_ptr->feat = feat_glass_wall;
 		}
 

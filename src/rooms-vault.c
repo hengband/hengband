@@ -88,9 +88,9 @@ static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0
 	{
 		int side_x = x0 - xhsize + i;
 
-		place_bold(player_ptr, y0 - yhsize + 0, side_x, outer_noperm);
+		place_bold(player_ptr, y0 - yhsize + 0, side_x, gb_outer_noperm);
 		floor_ptr->grid_array[y0 - yhsize + 0][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
-		place_bold(player_ptr, y0 - yhsize + ysize - 1, side_x, outer_noperm);
+		place_bold(player_ptr, y0 - yhsize + ysize - 1, side_x, gb_outer_noperm);
 		floor_ptr->grid_array[y0 - yhsize + ysize - 1][side_x].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
@@ -99,9 +99,9 @@ static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0
 	{
 		int side_y = y0 - yhsize + i;
 
-		place_bold(player_ptr, side_y, x0 - xhsize + 0, outer_noperm);
+		place_bold(player_ptr, side_y, x0 - xhsize + 0, gb_outer_noperm);
 		floor_ptr->grid_array[side_y][x0 - xhsize + 0].info |= (CAVE_ROOM | CAVE_ICKY);
-		place_bold(player_ptr, side_y, x0 - xhsize + xsize - 1, outer_noperm);
+		place_bold(player_ptr, side_y, x0 - xhsize + xsize - 1, gb_outer_noperm);
 		floor_ptr->grid_array[side_y][x0 - xhsize + xsize - 1].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
@@ -143,12 +143,12 @@ static void build_bubble_vault(player_type *player_ptr, POSITION x0, POSITION y0
 			if (((min2 - min1) <= 2) && (!(min1 < 3)))
 			{
 				/* Boundary at midpoint+ not at inner region of bubble */
-				place_bold(player_ptr, y0 - yhsize + y, x0 - xhsize + x, outer_noperm);
+				place_bold(player_ptr, y0 - yhsize + y, x0 - xhsize + x, gb_outer_noperm);
 			}
 			else
 			{
 				/* middle of a bubble */
-				place_bold(player_ptr, y0 - yhsize + y, x0 - xhsize + x, floor);
+				place_bold(player_ptr, y0 - yhsize + y, x0 - xhsize + x, gb_floor);
 			}
 
 			/* clean up rest of flags */
@@ -190,7 +190,7 @@ static void build_room_vault(player_type *player_ptr, POSITION x0, POSITION y0, 
 		{
 			POSITION y = y0 - yhsize + y1;
 
-			place_bold(player_ptr, y, x, extra);
+			place_bold(player_ptr, y, x, gb_extra);
 			floor_ptr->grid_array[y][x].info &= (~CAVE_ICKY);
 		}
 	}
@@ -364,7 +364,7 @@ static void build_vault(player_type *player_ptr, POSITION yval, POSITION xval, P
 			g_ptr = &floor_ptr->grid_array[y][x];
 
 			/* Lay down a floor */
-			place_grid(player_ptr, g_ptr, floor);
+			place_grid(player_ptr, g_ptr, gb_floor);
 
 			/* Remove any mimic */
 			g_ptr->mimic = 0;
@@ -377,28 +377,28 @@ static void build_vault(player_type *player_ptr, POSITION yval, POSITION xval, P
 			{
 				/* Granite wall (outer) */
 			case '%':
-				place_grid(player_ptr, g_ptr, outer_noperm);
+				place_grid(player_ptr, g_ptr, gb_outer_noperm);
 				break;
 
 				/* Granite wall (inner) */
 			case '#':
-				place_grid(player_ptr, g_ptr, inner);
+				place_grid(player_ptr, g_ptr, gb_inner);
 				break;
 
 				/* Glass wall (inner) */
 			case '$':
-				place_grid(player_ptr, g_ptr, inner);
+				place_grid(player_ptr, g_ptr, gb_inner);
 				g_ptr->feat = feat_glass_wall;
 				break;
 
 				/* Permanent wall (inner) */
 			case 'X':
-				place_grid(player_ptr, g_ptr, inner_perm);
+				place_grid(player_ptr, g_ptr, gb_inner_perm);
 				break;
 
 				/* Permanent glass wall (inner) */
 			case 'Y':
-				place_grid(player_ptr, g_ptr, inner_perm);
+				place_grid(player_ptr, g_ptr, gb_inner_perm);
 				g_ptr->feat = feat_permanent_glass_wall;
 				break;
 
@@ -848,19 +848,19 @@ static void build_target_vault(player_type *player_ptr, POSITION x0, POSITION y0
 			if (dist2(y0, x0, y, x, h1, h2, h3, h4) <= rad - 1)
 			{
 				/* inside- so is floor */
-				place_bold(player_ptr, y, x, floor);
+				place_bold(player_ptr, y, x, gb_floor);
 			}
 			else
 			{
 				/* make granite outside so arena works */
-				place_bold(player_ptr, y, x, extra);
+				place_bold(player_ptr, y, x, gb_extra);
 			}
 
 			/* proper boundary for arena */
 			if (((y + rad) == y0) || ((y - rad) == y0) ||
 				((x + rad) == x0) || ((x - rad) == x0))
 			{
-				place_bold(player_ptr, y, x, extra);
+				place_bold(player_ptr, y, x, gb_extra);
 			}
 		}
 	}
@@ -876,7 +876,7 @@ static void build_target_vault(player_type *player_ptr, POSITION x0, POSITION y0
 			if (dist2(y0, x0, y, x, h1, h2, h3, h4) == rad / 2)
 			{
 				/* Make an internal wall */
-				place_bold(player_ptr, y, x, inner);
+				place_bold(player_ptr, y, x, gb_inner);
 			}
 		}
 	}
@@ -884,27 +884,27 @@ static void build_target_vault(player_type *player_ptr, POSITION x0, POSITION y0
 	/* Add perpendicular walls */
 	for (x = x0 - rad; x <= x0 + rad; x++)
 	{
-		place_bold(player_ptr, y0, x, inner);
+		place_bold(player_ptr, y0, x, gb_inner);
 	}
 
 	for (y = y0 - rad; y <= y0 + rad; y++)
 	{
-		place_bold(player_ptr, y, x0, inner);
+		place_bold(player_ptr, y, x0, gb_inner);
 	}
 
 	/* Make inner vault */
 	for (y = y0 - 1; y <= y0 + 1; y++)
 	{
-		place_bold(player_ptr, y, x0 - 1, inner);
-		place_bold(player_ptr, y, x0 + 1, inner);
+		place_bold(player_ptr, y, x0 - 1, gb_inner);
+		place_bold(player_ptr, y, x0 + 1, gb_inner);
 	}
 	for (x = x0 - 1; x <= x0 + 1; x++)
 	{
-		place_bold(player_ptr, y0 - 1, x, inner);
-		place_bold(player_ptr, y0 + 1, x, inner);
+		place_bold(player_ptr, y0 - 1, x, gb_inner);
+		place_bold(player_ptr, y0 + 1, x, gb_inner);
 	}
 
-	place_bold(player_ptr, y0, x0, floor);
+	place_bold(player_ptr, y0, x0, gb_floor);
 
 
 	/* Add doors to vault */
@@ -1055,7 +1055,7 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
 
 		floor_ptr->grid_array[y1 - 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
 
-		place_bold(player_ptr, y1 - 2, x, outer_noperm);
+		place_bold(player_ptr, y1 - 2, x, gb_outer_noperm);
 	}
 
 	for (x = x1 - 2; x <= x2 + 2; x++)
@@ -1064,7 +1064,7 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
 
 		floor_ptr->grid_array[y2 + 2][x].info |= (CAVE_ROOM | CAVE_ICKY);
 
-		place_bold(player_ptr, y2 + 2, x, outer_noperm);
+		place_bold(player_ptr, y2 + 2, x, gb_outer_noperm);
 	}
 
 	for (y = y1 - 2; y <= y2 + 2; y++)
@@ -1073,7 +1073,7 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
 
 		floor_ptr->grid_array[y][x1 - 2].info |= (CAVE_ROOM | CAVE_ICKY);
 
-		place_bold(player_ptr, y, x1 - 2, outer_noperm);
+		place_bold(player_ptr, y, x1 - 2, gb_outer_noperm);
 	}
 
 	for (y = y1 - 2; y <= y2 + 2; y++)
@@ -1082,7 +1082,7 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
 
 		floor_ptr->grid_array[y][x2 + 2].info |= (CAVE_ROOM | CAVE_ICKY);
 
-		place_bold(player_ptr, y, x2 + 2, outer_noperm);
+		place_bold(player_ptr, y, x2 + 2, gb_outer_noperm);
 	}
 
 	for (y = y1 - 1; y <= y2 + 1; y++)
@@ -1094,7 +1094,7 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
 			g_ptr->info |= (CAVE_ROOM | CAVE_ICKY);
 
 			/* Permanent walls */
-			place_grid(player_ptr, g_ptr, inner_perm);
+			place_grid(player_ptr, g_ptr, gb_inner_perm);
 		}
 	}
 
@@ -1119,7 +1119,7 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
 			/* If total is odd- and is a floor then make a wall */
 			if ((total % 2 == 1) && is_floor_bold(floor_ptr, y, x))
 			{
-				place_bold(player_ptr, y, x, inner);
+				place_bold(player_ptr, y, x, gb_inner);
 			}
 		}
 	}
@@ -1129,15 +1129,15 @@ static void build_mini_c_vault(player_type *player_ptr, POSITION x0, POSITION y0
 	{
 		/* left and right */
 		y = randint1(dy) + dy / 2;
-		place_bold(player_ptr, y1 + y, x1 - 1, inner);
-		place_bold(player_ptr, y1 + y, x2 + 1, inner);
+		place_bold(player_ptr, y1 + y, x1 - 1, gb_inner);
+		place_bold(player_ptr, y1 + y, x2 + 1, gb_inner);
 	}
 	else
 	{
 		/* top and bottom */
 		x = randint1(dx) + dx / 2;
-		place_bold(player_ptr, y1 - 1, x1 + x, inner);
-		place_bold(player_ptr, y2 + 1, x1 + x, inner);
+		place_bold(player_ptr, y1 - 1, x1 + x, gb_inner);
+		place_bold(player_ptr, y2 + 1, x1 + x, gb_inner);
 	}
 
 	/* Fill with monsters and treasure, highest difficulty */
@@ -1177,7 +1177,7 @@ static void build_castle_vault(player_type *player_ptr, POSITION x0, POSITION y0
 		{
 			floor_ptr->grid_array[y][x].info |= (CAVE_ROOM | CAVE_ICKY);
 			/* Make everything a floor */
-			place_bold(player_ptr, y, x, floor);
+			place_bold(player_ptr, y, x, gb_floor);
 		}
 	}
 

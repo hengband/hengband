@@ -206,16 +206,16 @@ extern bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, P
 
 typedef enum grid_bold_type
 {
-	floor,
-	extra,
-	extra_perm,
-	inner,
-	inner_perm,
-	outer,
-	outer_noperm,
-	solid,
-	solid_perm,
-	solid_noperm
+	gb_floor,
+	gb_extra,
+	gb_extra_perm,
+	gb_inner,
+	gb_inner_perm,
+	gb_outer,
+	gb_outer_noperm,
+	gb_solid,
+	gb_solid_perm,
+	gb_solid_noperm
 } grid_bold_type;
 
 extern void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type pg_type);
