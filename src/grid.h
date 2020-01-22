@@ -41,8 +41,6 @@
   * Note the special fields for the "MONSTER_FLOW" code.
   */
 
-typedef struct player_type player_type; // TODO: Delete Finally.
-
 typedef struct grid_type grid_type;
 
 struct grid_type
