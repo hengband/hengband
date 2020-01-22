@@ -449,16 +449,20 @@ melee weapons.)
 
 Many weapons you find in the dungeon are considered to be particularly
 deadly against a type of creature. These qualities are collectively
-known as slays. They double, triple, or multiply by five *the damage
-done by the damage dice*. They DO NOT affect bonuses to damage. Thus,
-while slays may play an important part in the early game (especially if
-you find a weapon of Slay Orc), in the later part of the game, where
-magical bonuses to damage all but take over combat, slays play a very
-minor role. The rundown on slays:
+known as slays. They multiply *the damage done by the damage dice* by
+a value between two and five, depending on the specific quality. They
+DO NOT affect bonuses to damage. Thus, while slays may play an
+important part in the early game (especially if you find a weapon
+of Slay Orc), in the later part of the game, where magical bonuses
+to damage all but take over combat, slays play a very minor role. The
+rundown on slays:
 
-     Slay (or *Slay*) Evil: x2 damage dice against evil monsters
-     Slay (or *Slay*) Animal, Undead, Demon, Giant, Dragon: x2 damage
-       dice against the relevant monster type
+     Slay (or *Slay*) Evil: x2 (x3.5 for *Slay*) damage dice against
+       evil monsters
+     Slay (or *Slay*) Animal, Human: x2.5 (x4.0 for *Slay*) against
+       the relevant monster type
+     Slay (or *Slay*) Undead, Demon, Orc, Troll, Giant, Dragon: x3
+       (x5 for *Slay*) damage dice against the relevant monster type
 
 The brands ("of Melting", "of Burning", "of Freezing", "of Shocking",
 and "of Poisoning") all do x2 damage dice to those monsters not
