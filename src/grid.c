@@ -19,7 +19,6 @@
 #include "util.h"
 #include "term.h"
 
-#include "floor.h"
 #include "world.h"
 #include "object-flavor.h"
 #include "object-hook.h"
