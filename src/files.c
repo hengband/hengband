@@ -6091,7 +6091,7 @@ void print_tomb(player_type *dead_ptr)
 		put_str(buf, 16, 11);
 	}
 #endif
-	time_t ct = time((time_t)0);
+	time_t ct = time((time_t*)0);
 	(void)sprintf(tmp, "%-.24s", ctime(&ct));
 	center_string(buf, tmp);
 	put_str(buf, 17, 11);
