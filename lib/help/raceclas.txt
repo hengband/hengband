@@ -67,7 +67,7 @@ by the racial/class power command ("U"/"O").
     make excellent mages and have very good saving throws.  They are
     good at searching, disarming, perception, and stealth.  They have
     lower strength than humans so they are not very good at fighting
-    with hand weapons.  Gnomes have fair infra-vision, so they can
+    with hand weapons.  Gnomes have fair infravision, so they can
     detect warm-blooded creatures at a distance.  Gnomes are
     intrinsically protected against paralysis.
 
