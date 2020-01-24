@@ -578,7 +578,7 @@ int main(int argc, char *argv[])
 
 
 	/* Process the player name */
-	process_player_name(TRUE);
+	process_player_name(p_ptr,TRUE);
 
 
 
@@ -679,13 +679,13 @@ int main(int argc, char *argv[])
 	signals_init();
 
 	/* Initialize */
-	init_angband();
+	init_angband(p_ptr);
 
 	/* Wait for response */
 	pause_line(23);
 
 	/* Play the game */
-	play_game(new_game);
+	play_game(p_ptr, new_game);
 
 	/* Quit */
 	quit(NULL);
