@@ -3016,7 +3016,6 @@ static bool get_player_seikaku(player_type *creature_ptr)
 	return TRUE;
 }
 
-#ifdef ALLOW_AUTOROLLER
 /*!
  * @brief オートローラで得たい能力値の基準を決める。
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -3241,9 +3240,8 @@ static bool get_stat_limits(player_type *creature_ptr)
 
 	return TRUE;
 }
-#endif
 
-#ifdef ALLOW_AUTOROLLER
+
 /*!
  * @brief オートローラで得たい年齢、身長、体重、社会的地位の基準を決める。
  * @return なし
@@ -3526,7 +3524,6 @@ static bool get_chara_limits(player_type *creature_ptr)
 
 	return TRUE;
 }
-#endif
 
 #define HISTPREF_LIMIT 1024
 static char *histpref_buf = NULL;
@@ -4129,10 +4126,6 @@ static bool player_birth_aux(player_type *creature_ptr)
 
 	screen_load();
 
-#ifdef ALLOW_AUTOROLLER
-
-	/*** Autoroll ***/
-
 	if (autoroller || autochara)
 	{
 		/* Clear fields */
@@ -4149,7 +4142,6 @@ static bool player_birth_aux(player_type *creature_ptr)
 		if (!get_chara_limits(creature_ptr)) return FALSE;
 	}
 
-#endif /* ALLOW_AUTOROLLER */
 	clear_from(10);
 
 	/* Reset turn; before auto-roll and after choosing race */

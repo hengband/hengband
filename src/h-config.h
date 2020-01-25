@@ -441,11 +441,6 @@
  */
 #define ALLOW_MACROS
 
-/*!
- * @brief オートローラー機能を付加する / OPTION: Allow characteres to be "auto-rolled"
- */
-#define ALLOW_AUTOROLLER
-
  /*
  * OPTION: Handle signals
  */
