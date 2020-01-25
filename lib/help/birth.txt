@@ -358,16 +358,16 @@ Searching (Searching Ability)
      entirely upon race and class, and will never improve unless
      magically enhanced.
 
-Infra-vision
-     Infra-vision is the ability to see heat sources.  Since most of
-     the dungeon is cool or cold, infra-vision will not allow the
-     player to see walls and objects.  Infra-vision will allow a
+Infravision
+     Infravision is the ability to see heat sources.  Since most of
+     the dungeon is cool or cold, infravision will not allow the
+     player to see walls and objects.  Infravision will allow a
      character to see any warm-blooded creatures up to a certain
      distance.  This ability works equally well with or with out a
      light source.  The majority of Hengband's creatures are
      cold-blooded, and will not be detected unless lit up by a light
-     source.  Most non-human races have innate infra-vision ability.
-     Humans can gain infra-vision only if it is magically enhanced.
+     source.  Most non-human races have innate infravision ability.
+     Humans can gain infravision only if it is magically enhanced.
 
 
 ***** <Proficiency>

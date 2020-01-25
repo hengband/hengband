@@ -1626,7 +1626,7 @@ static struct
 	{ 1, 12, 25, "Blows/Round"},
 	{ 1, 17, 25, "Shots/Round"},
 	{ 1, 13, 25, "AverageDmg/Rnd"},
-	{53, 20, -1, "Infra-Vision: "},
+	{53, 20, -1, "Infravision: "},
 	{26,  1, -1, "Name  : "},
 	{ 1,  3, -1, "Sex      : "},
 	{ 1,  4, -1, "Race     : "},
@@ -1640,7 +1640,7 @@ static struct
 	{29,  7, 21, "Align"},
 	{29, 14, 21, "Construction"},
 	{29, 16, 21, "Const to Adv"},
-	{53, 19, -1, "Digging    :" },
+	{53, 19, -1, "Digging    : " },
 };
 #endif
 
@@ -6091,7 +6091,7 @@ void print_tomb(player_type *dead_ptr)
 		put_str(buf, 16, 11);
 	}
 #endif
-	time_t ct = time((time_t)0);
+	time_t ct = time((time_t*)0);
 	(void)sprintf(tmp, "%-.24s", ctime(&ct));
 	center_string(buf, tmp);
 	put_str(buf, 17, 11);
