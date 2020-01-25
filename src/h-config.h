@@ -451,13 +451,8 @@
  */
 #define ALLOW_FEAR
 
-/*!
- * @brief 一定以上のレベルを持ったプレイヤーが相手ならば、弱いモンスターは逃げ出す/ OPTION: Allow monsters to "flee" from strong players
- */
-#define ALLOW_TERROR
 
-
-/*
+ /*
  * OPTION: Handle signals
  */
 #define HANDLE_SIGNALS

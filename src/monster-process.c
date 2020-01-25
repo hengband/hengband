@@ -220,9 +220,6 @@ static bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 static bool mon_will_run(player_type *target_ptr, MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-
-#ifdef ALLOW_TERROR
-
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
 	PLAYER_LEVEL p_lev;
@@ -230,8 +227,6 @@ static bool mon_will_run(player_type *target_ptr, MONSTER_IDX m_idx)
 	HIT_POINT p_chp, p_mhp;
 	HIT_POINT m_chp, m_mhp;
 	u32b p_val, m_val;
-
-#endif
 
 	/* Friends can be commanded to avoid the player */
 	if (is_pet(m_ptr))
@@ -246,8 +241,6 @@ static bool mon_will_run(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	/* All "afraid" monsters will run away */
 	if (MON_MONFEAR(m_ptr)) return TRUE;
-
-#ifdef ALLOW_TERROR
 
 	/* Nearby monsters will not become terrified */
 	if (m_ptr->cdis <= 5) return FALSE;
@@ -276,8 +269,6 @@ static bool mon_will_run(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	/* Strong players scare strong monsters */
 	if (p_val * m_mhp > m_val * p_mhp) return TRUE;
-
-#endif
 
 	return FALSE;
 }
