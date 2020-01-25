@@ -515,7 +515,7 @@ bool process_warning(player_type *creature_ptr, POSITION xx, POSITION yy)
 
 	g_ptr = &creature_ptr->current_floor_ptr->grid_array[yy][xx];
 	bool is_warning = (!easy_disarm && is_trap(creature_ptr, g_ptr->feat)) || (g_ptr->mimic && is_trap(creature_ptr, g_ptr->feat));
-	is_warning = !one_in_(13);
+	is_warning &= !one_in_(13);
 	if (!is_warning) return TRUE;
 
 	object_type *o_ptr = choose_warning_item(creature_ptr);
