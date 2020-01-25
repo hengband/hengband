@@ -431,11 +431,6 @@
  */
 #define ALLOW_COLORS
 
-/*!
- * @brief キャラクターのシンボル変更機能を付加する / OPTION: Allow "do_cmd_visuals" at run-time
- */
-#define ALLOW_VISUALS
-
  /*
  * OPTION: Handle signals
  */

@@ -2021,8 +2021,6 @@ static void print_visuals_menu(concptr choice_msg)
 
 	/* Give some choices */
 	prt(_("(0) ユーザー設定ファイルのロード", "(0) Load a user pref file"), 3, 5);
-
-#ifdef ALLOW_VISUALS
 	prt(_("(1) モンスターの 色/文字 をファイルに書き出す", "(1) Dump monster attr/chars"), 4, 5);
 	prt(_("(2) アイテムの   色/文字 をファイルに書き出す", "(2) Dump object attr/chars"), 5, 5);
 	prt(_("(3) 地形の       色/文字 をファイルに書き出す", "(3) Dump feature attr/chars"), 6, 5);
@@ -2032,8 +2030,6 @@ static void print_visuals_menu(concptr choice_msg)
 	prt(_("(7) モンスターの 色/文字 を変更する (シンボルエディタ)", "(7) Change monster attr/chars (visual mode)"), 10, 5);
 	prt(_("(8) アイテムの   色/文字 を変更する (シンボルエディタ)", "(8) Change object attr/chars (visual mode)"), 11, 5);
 	prt(_("(9) 地形の       色/文字 を変更する (シンボルエディタ)", "(9) Change feature attr/chars (visual mode)"), 12, 5);
-#endif /* ALLOW_VISUALS */
-
 	prt(_("(R) 画面表示方法の初期化", "(R) Reset visuals"), 13, 5);
 
 	/* Prompt */
@@ -2092,8 +2088,6 @@ void do_cmd_visuals(player_type *creature_ptr)
 
 			need_redraw = TRUE;
 			break;
-
-#ifdef ALLOW_VISUALS
 
 			/* Dump monster attr/chars */
 		case '1':
@@ -2565,8 +2559,6 @@ void do_cmd_visuals(player_type *creature_ptr)
 			do_cmd_knowledge_features(&need_redraw, TRUE, -1, &lighting_level);
 			break;
 		}
-
-#endif /* ALLOW_VISUALS */
 
 		/* Reset visuals */
 		case 'R':
