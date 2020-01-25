@@ -426,11 +426,6 @@
 
 #endif /* USE_DEBUG */
 
-/*!
- * @brief キャラクターの色変更機能を付加する / OPTION: Allow "do_cmd_colors" at run-time
- */
-#define ALLOW_COLORS
-
  /*
  * OPTION: Handle signals
  */

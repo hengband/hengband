@@ -2609,11 +2609,8 @@ void do_cmd_colors(player_type *creature_ptr)
 
 		/* Give some choices */
 		prt(_("(1) ユーザー設定ファイルのロード", "(1) Load a user pref file"), 4, 5);
-
-#ifdef ALLOW_COLORS
 		prt(_("(2) カラーの設定をファイルに書き出す", "(2) Dump colors"), 5, 5);
 		prt(_("(3) カラーの設定を変更する", "(3) Modify colors"), 6, 5);
-#endif
 
 		/* Prompt */
 		prt(_("コマンド: ", "Command: "), 8, 0);
@@ -2646,8 +2643,6 @@ void do_cmd_colors(player_type *creature_ptr)
 			/* Mega-Hack -- redraw */
 			Term_redraw();
 		}
-
-#ifdef ALLOW_COLORS
 
 		/* Dump colors */
 		else if (i == '2')
@@ -2771,8 +2766,6 @@ void do_cmd_colors(player_type *creature_ptr)
 				Term_redraw();
 			}
 		}
-
-#endif
 
 		/* Unknown option */
 		else
