@@ -45,8 +45,6 @@ extern const concptr copyright[5];
 #define H_VER_PATCH FAKE_VER_PATCH /*!< セーブファイル上のバージョン定義(パッチ番号) */
 #define H_VER_EXTRA FAKE_VER_EXTRA /*!< セーブファイル上のバージョン定義(エクストラ番号) */
 
-#define ZANGBAND /*!< Zangband 以降から有効な処理分岐を定義 */
-
 /*
  * Special internal key
  */

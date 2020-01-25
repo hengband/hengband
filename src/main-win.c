@@ -3556,11 +3556,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 			msg_flag = FALSE;
 
 			/* Save the game */
-#ifdef ZANGBAND
 			do_cmd_save_game(player_ptr, FALSE);
-#else /* ZANGBAND */
-			do_cmd_save_game();
-#endif /* ZANGBAND */
 		}
 		else
 		{
@@ -3586,12 +3582,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 			forget_view(player_ptr->current_floor_ptr);
 			clear_mon_lite(player_ptr->current_floor_ptr);
 
-			/* Save the game */
-#ifdef ZANGBAND
-				/* do_cmd_save_game(FALSE); */
-#else /* ZANGBAND */
-				/* do_cmd_save_game(); */
-#endif /* ZANGBAND */
 			Term_key_push(SPECIAL_KEY_QUIT);
 			break;
 		}
@@ -4482,12 +4472,6 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 			forget_view(p_ptr->current_floor_ptr);
 			clear_mon_lite(p_ptr->current_floor_ptr);
 
-			/* Save the game */
-#ifdef ZANGBAND
-				/* do_cmd_save_game(FALSE); */
-#else /* ZANGBAND */
-				/* do_cmd_save_game(); */
-#endif /* ZANGBAND */
 			Term_key_push(SPECIAL_KEY_QUIT);
 			return 0;
 		}
