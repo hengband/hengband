@@ -239,10 +239,6 @@
 
 #endif /* INCLUDED_H_CONFIG_H */
 
-
-/* Allow debug commands */
-#define USE_DEBUG
-
 /* Allow various special stuff (sound, graphics, etc.) */
 #define USE_SPECIAL
 
@@ -404,17 +400,6 @@
  * the use of the savefile until the file is deleted.  Not ready yet.
  */
 /* #define VERIFY_SAVEFILE */
-
-
-
-/*
- * OPTION: Hack -- Compile in support for "Cyborg" mode
- */
-/*#define ALLOW_BORG*/
-
-#ifdef USE_DEBUG
-
-#endif /* USE_DEBUG */
 
  /*
  * OPTION: Handle signals
