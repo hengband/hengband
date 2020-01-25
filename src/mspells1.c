@@ -469,7 +469,7 @@ bool clean_shot(player_type *target_ptr, POSITION y1, POSITION x1, POSITION y2, 
 	/* Check the projection path */
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	u16b grid_g[512];
-	int grid_n = grid_n = project_path(target_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, 0);
+	int grid_n = project_path(target_ptr, grid_g, MAX_RANGE, y1, x1, y2, x2, 0);
 
 	/* No grid is ever projectable from itself */
 	if (!grid_n) return FALSE;
