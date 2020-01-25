@@ -4601,7 +4601,7 @@ void inven_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER
 	num -= o_ptr->number;
 
 	/* Change the number and weight */
-	if (num != 0) return;
+	if (num == 0) return;
 
 	/* Add the number */
 	o_ptr->number += num;
