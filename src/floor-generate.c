@@ -494,7 +494,6 @@ bool place_quest_monsters(player_type *creature_ptr)
 static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, player_type *owner_ptr)
 {
 	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
-#ifdef ALLOW_CAVERNS_AND_LAKES
 	/* Possible "destroyed" level */
 	if ((floor_ptr->dun_level > 30) && one_in_(DUN_DEST*2) && (small_levels) && (dungeon_ptr->flags1 & DF1_DESTROY))
 	{
@@ -568,7 +567,6 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, player_type *owner_
 		msg_print_wizard(CHEAT_DUNGEON, _("洞窟を生成。", "Cavern on level."));
 		build_cavern(owner_ptr);
 	}
-#endif /* ALLOW_CAVERNS_AND_LAKES */
 
 	/* Hack -- No destroyed "quest" levels */
 	if (quest_number(owner_ptr, floor_ptr->dun_level)) dun->destroyed = FALSE;

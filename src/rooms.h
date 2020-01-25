@@ -63,11 +63,8 @@ struct room_info_type
         byte min_level;
 };
 
-/* Externs */
-#ifdef ALLOW_CAVERNS_AND_LAKES
 extern void build_lake(player_type *player_ptr, int type);
 extern void build_cavern(player_type *player_ptr);
-#endif /* ALLOW_CAVERNS_AND_LAKES */
 
 /* Maximum locked/jammed doors */
 #define MAX_LJ_DOORS 8

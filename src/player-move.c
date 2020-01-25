@@ -378,18 +378,6 @@ void carry(player_type *creature_ptr, bool pickup)
 	{
 		object_type *o_ptr;
 		o_ptr = &creature_ptr->current_floor_ptr->o_list[this_o_idx];
-
-#ifdef ALLOW_EASY_SENSE /* TNB */
-
-		/* Option: Make item sensing easy */
-		if (easy_sense)
-		{
-			/* Sense the object */
-			(void)sense_object(o_ptr);
-		}
-
-#endif /* ALLOW_EASY_SENSE -- TNB */
-
 		GAME_TEXT o_name[MAX_NLEN];
 		object_desc(creature_ptr, o_name, o_ptr, 0);
 		next_o_idx = o_ptr->next_o_idx;

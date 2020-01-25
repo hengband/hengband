@@ -1113,7 +1113,6 @@ bool generate_fracave(player_type *player_ptr, POSITION y0, POSITION x0, POSITIO
 }
 
 
-#ifdef ALLOW_CAVERNS_AND_LAKES
 /*
  * Builds a cave system in the center of the dungeon.
  */
@@ -1353,8 +1352,6 @@ void build_lake(player_type *player_ptr, int type)
 		done = generate_lake(player_ptr, y0 + 1, x0 + 1, xsize, ysize, c1, c2, c3, type);
 	}
 }
-#endif /* ALLOW_CAVERNS_AND_LAKES */
-
 
 
 /*

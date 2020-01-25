@@ -926,7 +926,6 @@ static void build_target_vault(player_type *player_ptr, POSITION x0, POSITION y0
 }
 
 
-#ifdef ALLOW_CAVERNS_AND_LAKES
 /*
 * This routine uses a modified version of the lake code to make a
 * distribution of some terrain type over the vault.  This type
@@ -1018,7 +1017,6 @@ static void build_elemental_vault(player_type *player_ptr, POSITION x0, POSITION
 	fill_treasure(player_ptr, x0 - xhsize + 1, x0 - xhsize + xsize - 1,
 		y0 - yhsize + 1, y0 - yhsize + ysize - 1, randint1(5));
 }
-#endif /* ALLOW_CAVERNS_AND_LAKES */
 
 
 /* Build a "mini" checkerboard vault
@@ -1207,19 +1205,11 @@ bool build_type10(player_type *player_ptr)
 	if (!find_space(player_ptr, &y0, &x0, ysize + 1, xsize + 1)) return FALSE;
 
 	/* Select type of vault */
-#ifdef ALLOW_CAVERNS_AND_LAKES
 	do
 	{
 		vtype = randint1(15);
 	} while ((d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) &&
 		((vtype == 1) || (vtype == 3) || (vtype == 8) || (vtype == 9) || (vtype == 11)));
-#else /* ALLOW_CAVERNS_AND_LAKES */
-	do
-	{
-		vtype = randint1(7);
-	} while ((d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) &&
-		((vtype == 1) || (vtype == 3)));
-#endif /* ALLOW_CAVERNS_AND_LAKES */
 
 	switch (vtype)
 	{
@@ -1231,9 +1221,7 @@ bool build_type10(player_type *player_ptr)
 	case 5: case 13: build_mini_c_vault(player_ptr, x0, y0, xsize, ysize); break;
 	case 6: case 14: build_castle_vault(player_ptr, x0, y0, xsize, ysize); break;
 	case 7: case 15: build_target_vault(player_ptr, x0, y0, xsize, ysize); break;
-#ifdef ALLOW_CAVERNS_AND_LAKES
 	case 8: build_elemental_vault(player_ptr, x0, y0, xsize, ysize); break;
-#endif /* ALLOW_CAVERNS_AND_LAKES */
 		/* I know how to add a few more... give me some time. */
 	default: return FALSE;
 	}

@@ -2938,18 +2938,6 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 		{
 			/* Access the object */
 			o_ptr = &owner_ptr->current_floor_ptr->o_list[floor_o_idx];
-
-#ifdef ALLOW_EASY_SENSE
-
-			/* Option: Make object sensing easy */
-			if (easy_sense)
-			{
-				/* Sense the object */
-				(void)sense_object(o_ptr);
-			}
-
-#endif /* ALLOW_EASY_SENSE */
-
 			object_desc(owner_ptr, o_name, o_ptr, 0);
 
 			msg_format(_("%sがある。", "You see %s."), o_name);
@@ -2972,18 +2960,6 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 		{
 			/* Access the object */
 			o_ptr = &owner_ptr->current_floor_ptr->o_list[floor_o_idx];
-
-#ifdef ALLOW_EASY_SENSE
-
-			/* Option: Make object sensing easy */
-			if (easy_sense)
-			{
-				/* Sense the object */
-				(void)sense_object(o_ptr);
-			}
-
-#endif /* ALLOW_EASY_SENSE */
-
 			object_desc(owner_ptr, o_name, o_ptr, 0);
 
 			msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
@@ -3016,18 +2992,6 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 
 		/* Access the object */
 		o_ptr = &owner_ptr->current_floor_ptr->o_list[floor_o_idx];
-
-#ifdef ALLOW_EASY_SENSE
-
-		/* Option: Make object sensing easy */
-		if (easy_sense)
-		{
-			/* Sense the object */
-			(void)sense_object(o_ptr);
-		}
-
-#endif /* ALLOW_EASY_SENSE */
-
 		object_desc(owner_ptr, o_name, o_ptr, 0);
 
 		(void)sprintf(out_val, _("%sを拾いますか? ", "Pick up %s? "), o_name);
@@ -3042,20 +3006,8 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 	/* Access the object */
 	o_ptr = &owner_ptr->current_floor_ptr->o_list[floor_o_idx];
 
-#ifdef ALLOW_EASY_SENSE
-
-	/* Option: Make object sensing easy */
-	if (easy_sense)
-	{
-		/* Sense the object */
-		(void)sense_object(o_ptr);
-	}
-
-#endif /* ALLOW_EASY_SENSE */
-
 	/* Pick up the object */
 	py_pickup_aux(owner_ptr, floor_o_idx);
-
 }
 
 
