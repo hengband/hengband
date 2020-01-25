@@ -555,14 +555,6 @@ int main(int argc, char *argv[])
 				puts("  -mcap    To use CAP (\"Termcap\" calls)");
 #endif /* USE_CAP */
 
-#ifdef USE_DOS
-				puts("  -mdos    To use DOS (Graphics)");
-#endif /* USE_DOS */
-
-#ifdef USE_IBM
-				puts("  -mibm    To use IBM (BIOS text mode)");
-#endif /* USE_IBM */
-
 				/* Actually abort the process */
 				quit(NULL);
 			}
@@ -638,34 +630,6 @@ int main(int argc, char *argv[])
 		}
 	}
 #endif
-
-
-#ifdef USE_DOS
-	/* Attempt to use the "main-dos.c" support */
-	if (!done && (!mstr || (streq(mstr, "dos"))))
-	{
-		extern errr init_dos(void);
-		if (0 == init_dos())
-		{
-			ANGBAND_SYS = "dos";
-			done = TRUE;
-		}
-	}
-#endif
-
-#ifdef USE_IBM
-	/* Attempt to use the "main-ibm.c" support */
-	if (!done && (!mstr || (streq(mstr, "ibm"))))
-	{
-		extern errr init_ibm(void);
-		if (0 == init_ibm())
-		{
-			ANGBAND_SYS = "ibm";
-			done = TRUE;
-		}
-	}
-#endif
-
 
 	/* Make sure we have a display! */
 	if (!done) quit("Unable to prepare any 'display module'!");

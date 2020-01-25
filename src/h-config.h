@@ -51,17 +51,6 @@
 # endif
 #endif
 
-
-#ifdef USE_IBM
-
-  /* Use the new SVGA code */
-  #ifndef USE_IBM_SVGA
-    #define USE_IBM_SVGA
-  #endif
-
-
-#endif
-
 /*
  * OPTION: Compile on a HPUX version of UNIX
  */
@@ -236,12 +225,6 @@
 # endif
 #endif
 
-#ifdef USE_IBM
-# ifndef HAVE_USLEEP
-#  define HAVE_USLEEP /* Set for gcc (djgpp-v2), TY */
-# endif
-#endif
-
 #ifdef JP
 # if defined(EUC)
 #  define iskanji(x) (((unsigned char)(x) >= 0xa1 && (unsigned char)(x) <= 0xfe) || (unsigned char)(x) == 0x8e)
@@ -312,7 +295,7 @@
  * The old "USE_NCU" option has been replaced with "USE_GCU".
  *
  * Several other such options are available for non-unix machines,
- * such as "MACINTOSH", "WINDOWS", "USE_IBM".
+ * such as "MACINTOSH", "WINDOWS".
  *
  * You may also need to specify the "system", using defines such as
  * "SOLARIS" (for Solaris), etc, see "h-config.h" for more info.
