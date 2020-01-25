@@ -414,11 +414,6 @@
 
 #ifdef USE_DEBUG
 
-/*!
- * @brief ウィザードモードへの移行を許可する / OPTION: Hack -- Compile in support for "Wizard Commands"
- */
-#define ALLOW_WIZARD
-
 #endif /* USE_DEBUG */
 
  /*

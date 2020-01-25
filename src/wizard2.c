@@ -57,41 +57,6 @@
 
 extern void do_cmd_debug(player_type *creature_ptr);
 
-#ifdef ALLOW_WIZARD
-/*
-typedef struct debug_spell_commands1
-{
-	int type;
-	char *command;
-	bool(*spell_function_type1)(player_type *);
-} debug_spell_commands1;
-
-typedef struct debug_spell_commands2
-{
-	int type;
-	char *command;
-	bool(*spell_function_type2)(player_type *, floor_type *);
-} debug_spell_commands2;
-
-typedef struct debug_spell_commands3
-{
-	int type;
-	char *command;
-	bool(*spell_function_type3)(player_type *, HIT_POINT);
-} debug_spell_commands3;
-
-typedef union debug_spell_commands {
-	debug_spell_commands1 command1;
-	debug_spell_commands2 command2;
-	debug_spell_commands3 command3;
-} debug_spell_commands;
-
-debug_spell_commands debug_spell_commands_list[] =
-{
-	.command3 = {3, "true healing", true_healing}
-};
-*/
-
 typedef union spell_functions {
 	struct debug_spell_type1 { bool(*spell_function)(player_type *, floor_type *); } spell1;
 	struct debug_spell_type2 { bool(*spell_function)(player_type *); } spell2;
@@ -2012,10 +1977,6 @@ void do_cmd_debug(player_type *creature_ptr)
 	}
 }
 
-#else
-
 #ifdef MACINTOSH
 static int i = 0;
-#endif
-
 #endif

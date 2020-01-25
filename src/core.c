@@ -3408,8 +3408,6 @@ static bool enter_wizard_mode(player_type *player_ptr)
 }
 
 
-#ifdef ALLOW_WIZARD
-
 /*!
  * @brief デバッグコマンドへの導入処理
  * / Verify use of "debug" commands
@@ -3453,9 +3451,6 @@ static bool enter_debug_mode(player_type *player_ptr)
  * Hack -- Declare the Debug Routines
  */
 extern void do_cmd_debug(player_type *creature_ptr);
-
-#endif /* ALLOW_WIZARD */
-
 
 #ifdef ALLOW_BORG
 
@@ -3554,9 +3549,6 @@ static void process_command(player_type *creature_ptr)
 		break;
 	}
 
-
-#ifdef ALLOW_WIZARD
-
 	/* Special "debug" commands */
 	case KTRL('A'):
 	{
@@ -3566,9 +3558,6 @@ static void process_command(player_type *creature_ptr)
 		}
 		break;
 	}
-
-#endif /* ALLOW_WIZARD */
-
 
 #ifdef ALLOW_BORG
 
