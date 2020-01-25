@@ -339,13 +339,6 @@ errr path_parse(char *buf, int max, concptr file)
 {
 	/* Accept the filename */
 	(void)strnfmt(buf, max, "%s", file);
-
-#if defined(MAC_MPW) && defined(CARBON)
-	/* Fix it according to the current operating system */
-	convert_pathname(buf);
-#endif /* MAC_MPW && CARBON */
-
-	/* Success */
 	return 0;
 }
 
@@ -442,14 +435,14 @@ FILE *my_fopen(concptr file, concptr mode)
 {
 	char buf[1024];
 
-#if defined(MAC_MPW) || defined(MACH_O_CARBON)
+#if defined(MACH_O_CARBON)
 	FILE *tempfff;
 #endif
 
 	/* Hack -- Try to parse the path */
 	if (path_parse(buf, 1024, file)) return (NULL);
 
-#if defined(MAC_MPW) || defined(MACH_O_CARBON)
+#if defined(MACH_O_CARBON)
 	if (my_strchr(mode, 'w'))
 	{
 		/* setting file type/creator */
@@ -733,7 +726,7 @@ int fd_make(concptr file, BIT_FLAGS mode)
 	/* Hack -- Try to parse the path */
 	if (path_parse(buf, 1024, file)) return -1;
 
-#if defined(MAC_MPW) || defined(MACH_O_CARBON)
+#if defined(MACH_O_CARBON)
 	{
 		int fdes;
 		/* Create the file, fail if exists, write-only, binary */

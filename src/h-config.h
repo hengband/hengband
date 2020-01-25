@@ -32,15 +32,6 @@
 #endif
 
 /*
- * Extract the "MAC_MPW" flag from the compiler
- */
-#if defined(__SC__) || defined(__MRC__)
-# ifndef MAC_MPW
-#  define MAC_MPW
-# endif
-#endif
-
-/*
  * OPTION: Compile on a HPUX version of UNIX
  */
 #ifndef HPUX
@@ -593,9 +584,7 @@
  * Check the modification time of *_info.raw files
  * (by Keldon Jones)
  */
-#ifndef MAC_MPW
 #define CHECK_MODIFICATION_TIME
-#endif
 
 /*
  * Use the new sorting routines for creation
