@@ -2069,11 +2069,7 @@ static errr term_xtra_win_react(player_type *player_ptr)
 		use_graphics = arg_graphics;
 
 		/* Reset visuals */
-#ifdef ANGBAND_2_8_1
 		reset_visuals(player_ptr);
-#else /* ANGBAND_2_8_1 */
-		reset_visuals(TRUE);
-#endif /* ANGBAND_2_8_1 */
 	}
 
 #endif /* USE_GRAPHICS */
