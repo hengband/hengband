@@ -6289,10 +6289,10 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
 
 	for (QUEST_IDX i = 1; i < max_q_idx; i++)
 	{
-		bool is_no_print = quest[i].status != QUEST_STATUS_TAKEN;
-		is_no_print &= (quest[i].status != QUEST_STATUS_STAGE_COMPLETED) || (quest[i].type != QUEST_TYPE_TOWER);
-		is_no_print &= quest[i].status == QUEST_STATUS_COMPLETED;
-		if (is_no_print)
+		bool is_print = quest[i].status == QUEST_STATUS_TAKEN;
+		is_print |= (quest[i].status == QUEST_STATUS_STAGE_COMPLETED) && (quest[i].type == QUEST_TYPE_TOWER);
+		is_print |= quest[i].status == QUEST_STATUS_COMPLETED;
+		if (!is_print)
 			continue;
 
 		/* Set the quest number temporary */
