@@ -436,11 +436,6 @@
  */
 #define ALLOW_VISUALS
 
-/*!
- * @brief マクロ機能を付加する / OPTION: Allow "do_cmd_macros" at run-time
- */
-#define ALLOW_MACROS
-
  /*
  * OPTION: Handle signals
  */

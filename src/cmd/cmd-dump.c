@@ -1380,8 +1380,6 @@ void do_cmd_reload_autopick(player_type *creature_ptr)
 	autopick_load_pref(creature_ptr, TRUE);
 }
 
-#ifdef ALLOW_MACROS
-
 
 /*!
  * @brief マクロ情報をprefファイルに保存する /
@@ -1479,7 +1477,6 @@ static void do_cmd_macro_aux(char *buf)
 	Term_addstr(-1, TERM_WHITE, tmp);
 }
 
-#endif
 
 /*!
  * @brief マクロのキー表記からアスキーコードを得てターミナルに表示する /
@@ -1632,7 +1629,6 @@ void do_cmd_macros(player_type *creature_ptr)
 
 		/* Selections */
 		prt(_("(1) ユーザー設定ファイルのロード", "(1) Load a user pref file"), 4, 5);
-#ifdef ALLOW_MACROS
 		prt(_("(2) ファイルにマクロを追加", "(2) Append macros to a file"), 5, 5);
 		prt(_("(3) マクロの確認", "(3) Query a macro"), 6, 5);
 		prt(_("(4) マクロの作成", "(4) Create a macro"), 7, 5);
@@ -1642,7 +1638,6 @@ void do_cmd_macros(player_type *creature_ptr)
 		prt(_("(8) キー配置の作成", "(8) Create a keymap"), 11, 5);
 		prt(_("(9) キー配置の削除", "(9) Remove a keymap"), 12, 5);
 		prt(_("(0) マクロ行動の入力", "(0) Enter a new action"), 13, 5);
-#endif /* ALLOW_MACROS */
 
 		/* Prompt */
 		prt(_("コマンド: ", "Command: "), 16, 0);
@@ -1686,7 +1681,6 @@ void do_cmd_macros(player_type *creature_ptr)
 			}
 		}
 
-#ifdef ALLOW_MACROS
 		/* Save macros */
 		else if (i == '2')
 		{
@@ -1955,7 +1949,6 @@ void do_cmd_macros(player_type *creature_ptr)
 			/* Extract an action */
 			text_to_ascii(macro__buf, buf);
 		}
-#endif /* ALLOW_MACROS */
 
 		else
 		{
