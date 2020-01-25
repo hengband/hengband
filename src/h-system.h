@@ -72,8 +72,7 @@
 # include <io.h>
 #endif
 
-#if !defined(MACINTOSH) && \
-    !defined(ACORN) && !defined(VM)
+#if !defined(MACINTOSH) && !defined(VM)
 # if defined(__TURBOC__) || defined(__WATCOMC__)
 #  include <mem.h>
 # else
@@ -82,7 +81,7 @@
 #endif
 
 
-#if !defined(NeXT) && !defined(__MWERKS__) && !defined(ACORN)
+#if !defined(NeXT) && !defined(__MWERKS__)
 # include <fcntl.h>
 #endif
 

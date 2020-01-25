@@ -5614,7 +5614,7 @@ void process_player_name(player_type *creature_ptr, bool sf)
 	if (current_world_ptr->character_generated) strcpy(old_player_base, creature_ptr->base_name);
 
 	/* Cannot be too long */
-#if defined(MACINTOSH) || defined(ACORN)
+#if defined(MACINTOSH)
 	if (strlen(creature_ptr->name) > 15)
 	{
 		/* Name too long */
