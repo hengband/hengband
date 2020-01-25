@@ -27,15 +27,10 @@
 #include "files.h"
 
 
-#ifdef ALLOW_SPOILERS
-
-
  /*
   * The spoiler file being created
   */
 static FILE *fff = NULL;
-
-
 
 /*!
  * @brief シンボル職の記述名を返す /
@@ -2573,10 +2568,6 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
 	msg_print("Successfully created a list file.");
 }
 
-#else
-
 #ifdef MACINTOSH
 static int i = 0;
 #endif /* MACINTOSH */
-
-#endif

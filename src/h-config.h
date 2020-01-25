@@ -419,11 +419,6 @@
  */
 #define ALLOW_WIZARD
 
-/*!
- * @brief スポイラー出力を許可する / OPTION: Hack -- Compile in support for "Spoiler Generation"
- */
-#define ALLOW_SPOILERS
-
 #endif /* USE_DEBUG */
 
  /*
