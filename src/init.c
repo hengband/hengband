@@ -58,6 +58,11 @@
 #include "rooms-vault.h"
 #include "world.h"
 
+#ifdef CHECK_MODIFICATION_TIME
+#include <sys/types.h>
+#include <sys/stat.h>
+#endif /* CHECK_MODIFICATION_TIME */
+
 static void put_title(void);
 
 /*!

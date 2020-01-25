@@ -1997,7 +1997,6 @@ static void forget_macro_action(void)
 	parse_macro = FALSE;
 }
 
-
 /*
  * Mega-Hack -- special "inkey_next" pointer.
  *
@@ -2007,21 +2006,6 @@ static void forget_macro_action(void)
  * in Angband to handle "keymaps".
  */
 static concptr inkey_next = NULL;
-
-
-#ifdef ALLOW_BORG
-
-/*
- * Mega-Hack -- special "inkey_hack" hook.
- *
- * This special function hook allows the "Borg" (see elsewhere) to take
- * control of the "inkey()" function, and substitute in fake keypresses.
- */
-char(*inkey_hack)(int flush_first) = NULL;
-
-#endif /* ALLOW_BORG */
-
-
 
 /*
  * Get a keypress from the user.
@@ -2108,22 +2092,6 @@ char inkey(void)
 
 	/* Forget pointer */
 	inkey_next = NULL;
-
-
-#ifdef ALLOW_BORG
-
-	/* Mega-Hack -- Use the special hook */
-	if (inkey_hack && ((ch = (*inkey_hack)(inkey_xtra)) != 0))
-	{
-		/* Cancel the various "global parameters" */
-		inkey_base = inkey_xtra = inkey_flag = inkey_scan = FALSE;
-
-		/* Accept result */
-		return (ch);
-	}
-
-#endif /* ALLOW_BORG */
-
 
 	/* Hack -- handle delayed "flush()" */
 	if (inkey_xtra)

@@ -3452,47 +3452,6 @@ static bool enter_debug_mode(player_type *player_ptr)
  */
 extern void do_cmd_debug(player_type *creature_ptr);
 
-#ifdef ALLOW_BORG
-
-/*!
- * @brief ボーグコマンドへの導入処理
- * / Verify use of "borg" commands
- * @return 実際にボーグコマンドへ移行したらTRUEを返す。
- */
-static bool enter_borg_mode(void)
-{
-	/* Ask first time */
-	if (!(current_world_ptr->noscore & 0x0010))
-	{
-		/* Mention effects */
-		msg_print(_("ボーグ・コマンドはデバッグと実験のためのコマンドです。 ", "The borg commands are for debugging and experimenting."));
-		msg_print(_("ボーグ・コマンドを使うとスコアは記録されません。", "The game will not be scored if you use borg commands."));
-
-		msg_print(NULL);
-
-		/* Verify request */
-		if (!get_check(_("本当にボーグ・コマンドを使いますか? ", "Are you sure you want to use borg commands? ")))
-		{
-			return FALSE;
-		}
-
-		exe_write_diary(p_ptr, NIKKI_BUNSHOU, 0, _("ボーグ・コマンドを使用してスコアを残せなくなった。", "give up recording score to use borg commands."));
-		/* Mark savefile */
-		current_world_ptr->noscore |= 0x0010;
-	}
-
-	/* Success */
-	return TRUE;
-}
-
-/*
- * Hack -- Declare the Ben Borg
- */
-extern void do_cmd_borg(void);
-
-#endif /* ALLOW_BORG */
-
-
 /*!
  * @brief プレイヤーから受けた入力コマンドの分岐処理。
  * / Parse and execute the current command Give "Warning" on illegal commands.
@@ -3559,24 +3518,7 @@ static void process_command(player_type *creature_ptr)
 		break;
 	}
 
-#ifdef ALLOW_BORG
-
-	/* Special "borg" commands */
-	case KTRL('Z'):
-	{
-		if (enter_borg_mode())
-		{
-			if (!creature_ptr->wild_mode) do_cmd_borg();
-		}
-		break;
-	}
-
-#endif /* ALLOW_BORG */
-
-
-
 	/*** Inventory Commands ***/
-
 	/* Wear/wield equipment */
 	case 'w':
 	{

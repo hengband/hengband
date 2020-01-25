@@ -915,16 +915,6 @@ bool check_score(player_type *current_player_ptr)
 	}
 #endif
 
-#ifndef SCORE_BORGS
-	/* Borg-mode pre-empts scoring */
-	if (current_world_ptr->noscore & 0x00F0)
-	{
-		msg_print(_("ボーグ・モードではスコアが記録されません。", "Score not registered for borgs."));
-		msg_print(NULL);
-		return FALSE;
-	}
-#endif
-
 #ifndef SCORE_CHEATERS
 	/* Cheaters are not scored */
 	if (current_world_ptr->noscore & 0xFF00)

@@ -371,11 +371,6 @@
 /* #define SCORE_WIZARDS */
 
 /*
- * Allow "Borgs" to yield "high scores"
- */
-/*#define SCORE_BORGS*/
-
-/*
  * Allow "Cheaters" to yield "high scores"
  */
 /* #define SCORE_CHEATERS */

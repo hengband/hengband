@@ -594,8 +594,6 @@ struct player_type
 #define PW_OBJECT       0x00000200L     /*!<サブウィンドウ描画フラグ: アイテムの知識 / Display object recall */
 #define PW_DUNGEON      0x00000400L     /*!<サブウィンドウ描画フラグ: ダンジョンの地形 / Display dungeon view */
 #define PW_SNAPSHOT     0x00000800L     /*!<サブウィンドウ描画フラグ: 記念写真 / Display snap-shot */
-#define PW_BORG_1       0x00004000L     /*!<サブウィンドウ描画フラグ: ボーグメッセージ / Display borg messages */
-#define PW_BORG_2       0x00008000L     /*!<サブウィンドウ描画フラグ: ボーグステータス / Display borg status */
 
 	s16b stat_use[A_MAX];	/* Current modified stats */
 	s16b stat_top[A_MAX];	/* Maximal modified stats */
