@@ -53,21 +53,6 @@ dungeon_grid letter[255];
  * be able to load any template file with more than 20K of names or 60K
  * of text, even though technically, up to 64K should be legal.
  *
- * Note that if "ALLOW_TEMPLATES" is not defined, then a lot of the code
- * in this file is compiled out, and the game will not run unless valid
- * "binary template files" already exist in "lib/data".  Thus, one can
- * compile Angband with ALLOW_TEMPLATES defined, run once to create the
- * "*.raw" files in "lib/data", and then quit, and recompile without
- * defining ALLOW_TEMPLATES, which will both save 20K and prevent people
- * from changing the ascii template files in potentially dangerous ways.
- * ノートとして記録：ALLOW_TEMPLATESが定義されていない場合、
- * このファイルのコードの多くはコンパイル出力され、本ゲームは
- * 正規の「バイナリテンプレートファイル」がlib/dataファイル内に
- * 存在しない限り起動しなくなる。一方ALLOW_TEMPLATESが定義されている
- * ならば１度ゲームが起動するごとに*.rawファイル群が作成され、終了時には
- * ALLOW_TEMPLATEの定義に関係なくリコンパイルされる。これにより20K(バイト？)
- * のデータが保存され、プレイヤーが潜在的に危険な方法でascii文字の
- * テンプレートファイルを変更することを妨げることができる。
  * The code could actually be removed and placed into a "stand-alone"
  * program, but that feels a little silly, especially considering some
  * of the platforms that we currently support.
@@ -86,8 +71,6 @@ dungeon_grid letter[255];
 #include "quest.h"
 #include "view-mainwindow.h"
 #include "player-class.h"
-
-#ifdef ALLOW_TEMPLATES
 
 #include "init.h"
 
@@ -3361,13 +3344,9 @@ errr parse_d_info(char *buf, header *head)
 }
 
 
-#else	/* ALLOW_TEMPLATES */
-
 #ifdef MACINTOSH
 static int i = 0;
 #endif
-
-#endif	/* ALLOW_TEMPLATES */
 
 
 /*!

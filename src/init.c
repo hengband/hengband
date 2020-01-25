@@ -25,10 +25,8 @@
  * be able to load any template file with more than 20K of names or 60K
  * of text, even though technically, up to 64K should be legal.
  * The "init1.c" file is used only to parse the ascii template files,
- * to create the binary image files.  If you include the binary image
- * files instead of the ascii template files, then you can undefine
- * "ALLOW_TEMPLATES", saving about 20K by removing "init1.c".  Note
- * that the binary image files are extremely system dependant.
+ * to create the binary image files.  Note that the binary image files
+ * are extremely system dependant.
  * </pre>
  */
 
@@ -238,8 +236,6 @@ void init_file_paths(char *path)
 }
 
 
-#ifdef ALLOW_TEMPLATES
-
 /*
  * Hack -- help give useful error messages
  */
@@ -277,8 +273,6 @@ concptr err_str[PARSE_ERROR_MAX] =
 #endif
 
 };
-
-#endif /* ALLOW_TEMPLATES */
 
 
 /*
@@ -448,8 +442,6 @@ static errr init_info(concptr filename, header *head, void **info, char **name, 
 	/* General buffer */
 	char buf[1024];
 
-#ifdef ALLOW_TEMPLATES
-
 	/*** Load the binary image file ***/
 	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, format(_("%s_j.raw", "%s.raw"), filename));
 
@@ -594,9 +586,6 @@ static errr init_info(concptr filename, header *head, void **info, char **name, 
 		if (text) C_KILL(head->text_ptr, FAKE_TEXT_SIZE, char);
 		if (tag)  C_KILL(head->tag_ptr, FAKE_TAG_SIZE, char);
 
-#endif	/* ALLOW_TEMPLATES */
-
-
 		/*** Load the binary image file ***/
 		path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, format(_("%s_j.raw", "%s.raw"), filename));
 
@@ -612,10 +601,7 @@ static errr init_info(concptr filename, header *head, void **info, char **name, 
 
 		/* Error */
 		if (err) quit(format(_("'%s_j.raw'ファイルを解析できません。", "Cannot parse '%s.raw' file."), filename));
-
-#ifdef ALLOW_TEMPLATES
 	}
-#endif
 
 	if (info) *info = head->info_ptr;
 	if (name) *name = head->name_ptr;
@@ -635,15 +621,11 @@ static errr init_f_info(void)
 	/* Init the header */
 	init_header(&f_head, max_f_idx, sizeof(feature_type));
 
-#ifdef ALLOW_TEMPLATES
-
 	/* Save a pointer to the parsing function */
 	f_head.parse_info_txt = parse_f_info;
 
 	/* Save a pointer to the retouch fake tags */
 	f_head.retouch = retouch_f_info;
-
-#endif /* ALLOW_TEMPLATES */
 
 	return init_info("f_info", &f_head,
 		(void*)&f_info, &f_name, NULL, &f_tag);
@@ -660,12 +642,8 @@ static errr init_k_info(void)
 	/* Init the header */
 	init_header(&k_head, max_k_idx, sizeof(object_kind));
 
-#ifdef ALLOW_TEMPLATES
-
 	/* Save a pointer to the parsing function */
 	k_head.parse_info_txt = parse_k_info;
-
-#endif /* ALLOW_TEMPLATES */
 
 	return init_info("k_info", &k_head,
 		(void*)&k_info, &k_name, &k_text, NULL);
@@ -682,12 +660,8 @@ static errr init_a_info(void)
 	/* Init the header */
 	init_header(&a_head, max_a_idx, sizeof(artifact_type));
 
-#ifdef ALLOW_TEMPLATES
-
 	/* Save a pointer to the parsing function */
 	a_head.parse_info_txt = parse_a_info;
-
-#endif /* ALLOW_TEMPLATES */
 
 	return init_info("a_info", &a_head,
 		(void*)&a_info, &a_name, &a_text, NULL);
@@ -704,12 +678,8 @@ static errr init_e_info(void)
 	/* Init the header */
 	init_header(&e_head, max_e_idx, sizeof(ego_item_type));
 
-#ifdef ALLOW_TEMPLATES
-
 	/* Save a pointer to the parsing function */
 	e_head.parse_info_txt = parse_e_info;
-
-#endif /* ALLOW_TEMPLATES */
 
 	return init_info("e_info", &e_head,
 		(void*)&e_info, &e_name, &e_text, NULL);
@@ -726,12 +696,8 @@ static errr init_r_info(void)
 	/* Init the header */
 	init_header(&r_head, max_r_idx, sizeof(monster_race));
 
-#ifdef ALLOW_TEMPLATES
-
 	/* Save a pointer to the parsing function */
 	r_head.parse_info_txt = parse_r_info;
-
-#endif /* ALLOW_TEMPLATES */
 
 	return init_info("r_info", &r_head,
 		(void*)&r_info, &r_name, &r_text, NULL);
@@ -748,12 +714,8 @@ static errr init_d_info(void)
 	/* Init the header */
 	init_header(&d_head, current_world_ptr->max_d_idx, sizeof(dungeon_type));
 
-#ifdef ALLOW_TEMPLATES
-
 	/* Save a pointer to the parsing function */
 	d_head.parse_info_txt = parse_d_info;
-
-#endif /* ALLOW_TEMPLATES */
 
 	return init_info("d_info", &d_head,
 		(void*)&d_info, &d_name, &d_text, NULL);
@@ -773,12 +735,8 @@ errr init_v_info(void)
 	/* Init the header */
 	init_header(&v_head, max_v_idx, sizeof(vault_type));
 
-#ifdef ALLOW_TEMPLATES
-
 	/* Save a pointer to the parsing function */
 	v_head.parse_info_txt = parse_v_info;
-
-#endif /* ALLOW_TEMPLATES */
 
 	return init_info("v_info", &v_head,
 		(void*)&v_info, &v_name, &v_text, NULL);
@@ -795,12 +753,8 @@ static errr init_s_info(void)
 	/* Init the header */
 	init_header(&s_head, MAX_CLASS, sizeof(skill_table));
 
-#ifdef ALLOW_TEMPLATES
-
 	/* Save a pointer to the parsing function */
 	s_head.parse_info_txt = parse_s_info;
-
-#endif /* ALLOW_TEMPLATES */
 
 	return init_info("s_info", &s_head,
 		(void*)&s_info, NULL, NULL, NULL);
@@ -817,12 +771,8 @@ static errr init_m_info(void)
 	/* Init the header */
 	init_header(&m_head, MAX_CLASS, sizeof(player_magic));
 
-#ifdef ALLOW_TEMPLATES
-
 	/* Save a pointer to the parsing function */
 	m_head.parse_info_txt = parse_m_info;
-
-#endif /* ALLOW_TEMPLATES */
 
 	return init_info("m_info", &m_head,
 		(void*)&m_info, NULL, NULL, NULL);
