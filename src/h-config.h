@@ -446,12 +446,6 @@
  */
 #define ALLOW_AUTOROLLER
 
-/*!
- * @brief 一定以上のダメージを受けたモンスターが恐怖して逃走する / OPTION: Allow monsters to "flee" when hit hard
- */
-#define ALLOW_FEAR
-
-
  /*
  * OPTION: Handle signals
  */

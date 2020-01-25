@@ -1411,8 +1411,6 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 		return TRUE;
 	}
 
-#ifdef ALLOW_FEAR
-
 	/* Mega-Hack -- Pain cancels fear */
 	if (MON_MONFEAR(m_ptr) && (dam > 0))
 	{
@@ -1446,11 +1444,10 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 		}
 	}
 
-#endif
-
 	/* Not dead yet */
 	return FALSE;
 }
+
 
 bool monster_is_valid(monster_type *m_ptr)
 {

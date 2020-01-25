@@ -4858,8 +4858,6 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
 
 	*dead = FALSE;
 
-#ifdef ALLOW_FEAR
-
 	/* Mega-Hack -- Pain cancels fear */
 	if (MON_MONFEAR(m_ptr) && (dam > 0))
 	{
@@ -4893,8 +4891,6 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
 					20 : ((11 - percentage) * 5))));
 		}
 	}
-
-#endif /* ALLOW_FEAR */
 
 	if ((dam > 0) && !is_pet(m_ptr) && !is_friendly(m_ptr) && (who != m_idx))
 	{
