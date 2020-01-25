@@ -2884,7 +2884,7 @@ bool combine_and_reorder_home(int store_num)
 				int max_num = object_similar_part(j_ptr, o_ptr);
 
 				/* Can we (partialy) drop "o_ptr" onto "j_ptr"? */
-				if (max_num && j_ptr->number >= max_num) continue;
+				if (max_num == 0 || j_ptr->number >= max_num) continue;
 
 				if (o_ptr->number + j_ptr->number <= max_num)
 				{
