@@ -1543,7 +1543,7 @@ XDrawMultiString(display,d,gc, x, y, string, len, afont,
 
     while ( str < endp && *str ) {
 
-#ifdef TOFU      
+#ifdef TOFU
       if ( (*str) == 0x7f ) {
 	  
 	  /* 0x7Fは■で決め打ち */
