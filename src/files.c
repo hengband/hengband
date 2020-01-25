@@ -5613,15 +5613,6 @@ void process_player_name(player_type *creature_ptr, bool sf)
 
 	if (current_world_ptr->character_generated) strcpy(old_player_base, creature_ptr->base_name);
 
-	/* Cannot be too long */
-#if defined(MACINTOSH)
-	if (strlen(creature_ptr->name) > 15)
-	{
-		/* Name too long */
-		quit_fmt(_("'%s'という名前は長すぎます！", "The name '%s' is too long!"), creature_ptr->name);
-	}
-#endif
-
 	/* Cannot contain "icky" characters */
 	for (int i = 0; creature_ptr->name[i]; i++)
 	{
@@ -5637,24 +5628,6 @@ void process_player_name(player_type *creature_ptr, bool sf)
 			quit_fmt(_("'%s' という名前は不正なコントロールコードを含んでいます。", "The name '%s' contains control chars!"), creature_ptr->name);
 		}
 	}
-
-
-#ifdef MACINTOSH
-	/* Extract "useful" letters */
-	for (int i = 0; creature_ptr->name[i]; i++)
-	{
-#ifdef JP
-		unsigned char c = creature_ptr->name[i];
-#else
-		char c = creature_ptr->name[i];
-#endif
-		/* Convert "dot" to "underscore" */
-		if (c == '.') c = '_';
-
-		/* Accept all the letters */
-		creature_ptr->base_name[k++] = c;
-	}
-#else
 
 	/* Extract "useful" letters */
 	int k = 0;
@@ -5690,7 +5663,7 @@ void process_player_name(player_type *creature_ptr, bool sf)
 #endif
 			else if (isprint(c)) creature_ptr->base_name[k++] = c;
 	}
-#endif
+
 	creature_ptr->base_name[k] = '\0';
 
 	/* Require a "base" name */

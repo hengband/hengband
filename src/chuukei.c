@@ -26,9 +26,6 @@
 #ifdef CHUUKEI
 #if defined(WINDOWS)
 #include <winsock.h>
-#elif defined(MACINTOSH)
-#include <OpenTransport.h>
-#include <OpenTptInternet.h>
 #else
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -77,12 +74,8 @@ static int movie_mode;
 #ifdef WINDOWS
 #define close closesocket
 #endif
+#endif
 
-#ifdef MACINTOSH
-static InetSvcRef inet_services = nil;
-static EndpointRef ep			= kOTInvalidEndpointRef;
-#endif
-#endif
 /* 描画する時刻を覚えておくキュー構造体 */
 static struct
 {
@@ -100,17 +93,6 @@ static struct
 	int rptr;
 	int inlen;
 }ring;
-
-#ifdef MACINTOSH
-int recv(int s, char *buffer, size_t buflen, int flags)
-{
-	OTFlags 	junkFlags;
-	int n = OTRcv(ep, (void *) buffer, buflen, &junkFlags);
-	if( n <= 0 )
-		return n;
-	return n;
-}
-#endif
 
 /*
  * Original hooks
@@ -151,8 +133,6 @@ static long get_current_time(void)
 {
 #ifdef WINDOWS
 	return timeGetTime() / 100;
-#elif defined(MACINTOSH)
-	return TickCount();
 #else
 	struct timeval tv;
 	gettimeofday(&tv, NULL);
@@ -219,7 +199,6 @@ static errr insert_ringbuf(char *buf)
 #ifdef CHUUKEI
 void flush_ringbuf(void)
 {
-#ifndef MACINTOSH
 	fd_set fdset;
 	struct timeval tv;
 
@@ -266,37 +245,6 @@ void flush_ringbuf(void)
 		if (ring.rptr == RINGBUF_SIZE) ring.rptr = 0;
 		if (ring.inlen == 0) break;
 	}
-#else
-	if (!chuukei_server) return;
-
-	if (ring.inlen == 0) return;
-
-	while (TRUE)
-	{
-		int result;
-
-		/* ソケットにデータを書き込めるかどうか調べる */
-		result = OTSnd(ep, ring.buf + ring.rptr, ((ring.wptr > ring.rptr ) ? ring.wptr : RINGBUF_SIZE) - ring.rptr, 0);
-
-		if (result <= 0)
-		{
-			/* サーバとの接続断？ */
-			if (chuukei_server) disable_chuukei_server();
-
-			prt("サーバとの接続が切断されました。", 0, 0);
-			inkey();
-			close(sd);
-
-			return;
-		}
-
-		ring.rptr += result;
-		ring.inlen -= result;
-
-		if (ring.rptr == RINGBUF_SIZE) ring.rptr = 0;
-		if (ring.inlen == 0) break;
-	}
-#endif
 }
 
 
@@ -347,8 +295,6 @@ static int read_chuukei_prf(concptr prf_name)
 
 int connect_chuukei_server(char *prf_name)
 {
-#ifndef MACINTOSH
-
 #ifdef WINDOWS
 	WSADATA wsaData;
 	WORD wVersionRequested = (WORD) (( 1) |  ( 1 << 8));
@@ -414,103 +360,6 @@ int connect_chuukei_server(char *prf_name)
 	}
 
 	return 0;
-#else	/* MACINTOSH */
-	OSStatus err;
-	InetHostInfo 	response;
-	InetHost 		host_addr;
-	InetAddress 	inAddr;
-	TCall 			sndCall;
-	Boolean			bind	= false;
-	OSStatus 	junk;
-
-	if (read_chuukei_prf(prf_name) < 0){
-		printf("Wrong prf file\n");
-		return -1;
-	}
-	
-	init_buffer();
-	
-	printf("server = %s\nport = %d\n", server_name, server_port);
-
-
-#if TARGET_API_MAC_CARBON
-	err = InitOpenTransportInContext(kInitOTForApplicationMask, NULL);
-#else
-	err = InitOpenTransport();
-#endif
-
-	memset(&response, 0, sizeof(response));
-
-
-#if TARGET_API_MAC_CARBON
-	inet_services = OTOpenInternetServicesInContext(kDefaultInternetServicesPath, 0, &err, NULL);
-#else
-	inet_services = OTOpenInternetServices(kDefaultInternetServicesPath, 0, &err);
-#endif
-	
-	if (err == noErr) {
-		err = OTInetStringToAddress(inet_services, (char *)server_name, &response);
-		
-		if (err == noErr) {
-			host_addr = response.addrs[0];
-		} else {
-			printf("Bad hostname\n");
-		}
-		
-#if TARGET_API_MAC_CARBON
-		ep = (void *)OTOpenEndpointInContext(OTCreateConfiguration(kTCPName), 0, nil, &err, NULL);
-#else
-		ep = (void *)OTOpenEndpoint(OTCreateConfiguration(kTCPName), 0, nil, &err);
-#endif
-
-		if (err == noErr) {
-			err = OTBind(ep, nil, nil);
-			bind = (err == noErr);
-	    }
-	    if (err == noErr){
-		OTInitInetAddress(&inAddr, server_port, host_addr);
-			
-			sndCall.addr.len 	= sizeof(InetAddress);				
-			sndCall.addr.buf	= (unsigned char*) &inAddr;
-			sndCall.opt.buf 	= nil;		/* no connection options */
-			sndCall.opt.len 	= 0;
-			sndCall.udata.buf 	= nil;		/* no connection data */
-			sndCall.udata.len 	= 0;
-			sndCall.sequence 	= 0;		/* ignored by OTConnect */
-			
-			err = OTConnect(ep, &sndCall, NULL);
-			
-			if( err != noErr ){
-				printf("Can't connect %s port %d\n", server_name, server_port);
-			}
-		}
-		
-		err = OTSetSynchronous(ep);
-		if (err == noErr)		
-			err = OTSetBlocking(ep);
-		
-	}
-	
-	if( err != noErr ){
-		if( bind ){
-			OTUnbind(ep);
-		}
-		/* Clean up. */
-		if (ep != kOTInvalidEndpointRef) {
-			OTCloseProvider(ep);
-			ep = nil;
-		}
-		if (inet_services != nil) {
-			OTCloseProvider(inet_services);
-			inet_services = nil;
-		}
-	
-		return -1;
-	}
-	
-	return 0;
-
-#endif
 }
 #endif /* CHUUKEI */
 
@@ -1029,7 +878,6 @@ static bool flush_ringbuf_client(void)
 #ifdef CHUUKEI
 void browse_chuukei()
 {
-#ifndef MACINTOSH
 	fd_set fdset;
 	struct timeval tv;
 
@@ -1069,34 +917,6 @@ void browse_chuukei()
 		/* 接続が切れた状態で書くべきデータがなくなっていたら終了 */
 		if (!chuukei_client && fresh_queue.next == fresh_queue.tail ) break;
 	}
-#else
-	Term_clear();
-	Term_fresh();
-	Term_xtra(TERM_XTRA_REACT, 0);
-
-	while (TRUE)
-	{
-		UInt32	unreadData = 0;
-		int n;
-
-		if (flush_ringbuf_client()) continue;
-
-		/* ソケットにデータが来ているかどうか調べる */
-
-		OTCountDataBytes(ep, &unreadData);
-		if(unreadData <= 0 ){
-			Term_xtra(TERM_XTRA_FLUSH, 0);
-			continue;
-		}
-		if (read_sock() < 0)
-		{
-			chuukei_client = FALSE;
-		}
-
-		/* 接続が切れた状態で書くべきデータがなくなっていたら終了 */
-		if (!chuukei_client && fresh_queue.next == fresh_queue.tail ) break;
-	}
-#endif /*MACINTOSH*/
 }
 #endif /* CHUUKEI */
 

@@ -3344,11 +3344,6 @@ errr parse_d_info(char *buf, header *head)
 }
 
 
-#ifdef MACINTOSH
-static int i = 0;
-#endif
-
-
 /*!
  * @brief 地形情報の「F:」情報をパースする
  * Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid

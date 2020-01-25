@@ -57,7 +57,7 @@ typedef double real;      /*!< doubleをreal型として定義 / Since float's a
 typedef int errr;
 
 #undef uint
-#define uint uint_hack /*!< 非マッキントッシュ環境で重複を避けるためのuint_hack型定義 / Hack -- prevent problems with non-MACINTOSH */
+#define uint uint_hack /*!< Windows/OS X/Linux環境で重複を避けるためのuint_hack型定義 / Hack -- prevent problems with Windows/OS X/Linux */
 
 #undef huge
 #define huge huge_hack /*!< WINDOWS環境で重複を避けるためのhuge_hack定義 / Hack -- prevent problems with WINDOWS */

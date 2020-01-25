@@ -57,22 +57,11 @@
 #include <time.h>
 
 
-#if defined(MACINTOSH)
-# if defined(MAC_MPW)
-#  ifdef __STDC__
-#   undef __STDC__
-#  endif
-# else
-#  include <unix.h>
-# endif
-#endif
-
-
 #if defined(WINDOWS)
 # include <io.h>
 #endif
 
-#if !defined(MACINTOSH) && !defined(VM)
+#if !defined(VM)
 # if defined(__TURBOC__) || defined(__WATCOMC__)
 #  include <mem.h>
 # else

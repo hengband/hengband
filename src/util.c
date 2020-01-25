@@ -253,9 +253,8 @@ void user_name(char *buf, int id)
  * path, and a leading "tilde" to indicate a special directory, and default to a
  * relative path, but MSDOS uses a leading "drivename plus colon" to indicate the
  * use of a "special drive", and then the rest of the path is parsed "normally",
- * and MACINTOSH uses a leading colon to indicate a relative path, and an embedded
- * colon to indicate a "drive plus absolute path", and finally defaults to a file
- * in the current working directory, which may or may not be defined.
+ * and an embedded colon to indicate a "drive plus absolute path", and finally
+ * defaults to a file in the current working directory, which may or may not be defined.
  *
  * We should probably parse a leading "~~/" as referring to "ANGBAND_DIR". (?)
  */
@@ -535,7 +534,7 @@ errr my_fgets(FILE *fff, char *buf, huge n)
 		/* Convert weirdness */
 		for (s = tmp; *s; s++)
 		{
-#if defined(MACINTOSH) || defined(MACH_O_CARBON)
+#if defined(MACH_O_CARBON)
 
 			/*
 			 * Be nice to the Macintosh, where a file can have Mac or Unix
@@ -544,7 +543,7 @@ errr my_fgets(FILE *fff, char *buf, huge n)
 			 */
 			if (*s == '\r') *s = '\n';
 
-#endif /* MACINTOSH || MACH_O_CARBON */
+#endif /* MACH_O_CARBON */
 
 			/* Handle newline */
 			if (*s == '\n')
@@ -625,17 +624,6 @@ errr my_fputs(FILE *fff, concptr buf, huge n)
 	/* Success */
 	return 0;
 }
-
-
-/*
- * The Macintosh is a little bit brain-dead sometimes
- */
-#ifdef MACINTOSH
-# define open(N,F,M) \
-((M), open((char*)(N),F))
-# define write(F,B,S) \
-write(F,(char*)(B),S)
-#endif /* MACINTOSH */
 
 
  /*

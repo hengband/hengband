@@ -32,9 +32,6 @@
 
 #if defined(WINDOWS)
 #include <winsock.h>
-#elif defined(MACINTOSH)
-#include <OpenTransport.h>
-#include <OpenTptInternet.h>
 #else
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -398,12 +395,7 @@ concptr make_screen_dump(player_type *creature_ptr)
  */
 errr report_score(player_type *creature_ptr)
 {
-#ifdef MACINTOSH
-	OSStatus err;
-#else
 	errr err = 0;
-#endif
-
 #ifdef WINDOWS
 	WSADATA wsaData;
 	WORD wVersionRequested = (WORD)((1) | (1 << 8));
@@ -456,19 +448,6 @@ errr report_score(player_type *creature_ptr)
 	{
 		msg_print("Report: WSAStartup failed.");
 		goto report_end;
-	}
-#endif
-
-#ifdef MACINTOSH
-#if TARGET_API_MAC_CARBON
-	err = InitOpenTransportInContext(kInitOTForApplicationMask, NULL);
-#else
-	err = InitOpenTransport();
-#endif
-	if (err != noErr)
-	{
-		msg_print("Report: OpenTransport failed.");
-		return 1;
 	}
 #endif
 
@@ -551,14 +530,6 @@ errr report_score(player_type *creature_ptr)
 report_end:
 #ifdef WINDOWS
 	WSACleanup();
-#endif
-
-#ifdef MACINTOSH
-#if TARGET_API_MAC_CARBON
-	CloseOpenTransportInContext(NULL);
-#else
-	CloseOpenTransport();
-#endif
 #endif
 
 	return err;

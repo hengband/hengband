@@ -1976,7 +1976,3 @@ void do_cmd_debug(player_type *creature_ptr)
 		break;
 	}
 }
-
-#ifdef MACINTOSH
-static int i = 0;
-#endif

@@ -25,14 +25,6 @@
 #define INCLUDED_H_CONFIG_H
 
 /*
- * OPTION: Compile on a Macintosh (see "A-mac-h" or "A-mac-pch")
- * Automatic for Mac MPW compilation
- */
-#ifndef MACINTOSH
-/* #define MACINTOSH */
-#endif
-
-/*
  * OPTION: Compile on Windows (automatic)
  */
 #ifndef WINDOWS
@@ -43,9 +35,6 @@
  * Extract the "MAC_MPW" flag from the compiler
  */
 #if defined(__SC__) || defined(__MRC__)
-# ifndef MACINTOSH
-#  define MACINTOSH
-# endif
 # ifndef MAC_MPW
 #  define MAC_MPW
 # endif
@@ -134,7 +123,7 @@
  * Basically, SET_UID should *only* be set for "Unix" machines,
  * or for the "Atari" platform which is Unix-like, apparently
  */
-#if !defined(MACINTOSH) && !defined(WINDOWS) && !defined(VM)
+#if !defined(WINDOWS) && !defined(VM)
 # define SET_UID
 #endif
 
@@ -167,10 +156,6 @@
  */
 #undef PATH_SEP
 #define PATH_SEP "/"
-#ifdef MACINTOSH
-# undef PATH_SEP
-# define PATH_SEP ":"
-#endif
 #if defined(WINDOWS) || defined(WINNT)
 # undef PATH_SEP
 # define PATH_SEP "\\"
@@ -188,7 +173,7 @@
 /*
  * The Macintosh allows the use of a "file type" when creating a file
  */
-#if defined(MACINTOSH) || defined(MACH_O_CARBON)
+#if defined(MACH_O_CARBON)
 # define FILE_TYPE_TEXT 'TEXT'
 # define FILE_TYPE_DATA 'DATA'
 # define FILE_TYPE_SAVE 'SAVE'
@@ -277,24 +262,6 @@
  *
  * And finally, remember that the "Makefile" will specify some rather
  * important compile time options, like what visual module to use.
- */
-
-
-/*
- * OPTION: See the Makefile(s), where several options may be declared.
- *
- * Some popular options include "USE_GCU" (allow use with Unix "curses"),
- * "USE_X11" (allow basic use with Unix X11), "USE_XAW" (allow use with
- * Unix X11 plus the Athena Widget set), and "USE_CAP" (allow use with
- * the "termcap" library, or with hard-coded vt100 terminals).
- *
- * The old "USE_NCU" option has been replaced with "USE_GCU".
- *
- * Several other such options are available for non-unix machines,
- * such as "MACINTOSH", "WINDOWS".
- *
- * You may also need to specify the "system", using defines such as
- * "SOLARIS" (for Solaris), etc, see "h-config.h" for more info.
  */
 
 
@@ -493,23 +460,6 @@
  */
 /* #define CHECK_LOAD */
 
-
-/*
- * OPTION: For some brain-dead computers with no command line interface,
- * namely Macintosh, there has to be some way of "naming" your savefiles.
- * The current "Macintosh" hack is to make it so whenever the character
- * name changes, the savefile is renamed accordingly.  But on normal
- * machines, once you manage to "load" a savefile, it stays that way.
- * Macintosh is particularly weird because you can load savefiles that
- * are not contained in the "lib:save:" folder, and if you change the
- * player's name, it will then save the savefile elsewhere.  Note that
- * this also gives a method of "bypassing" the "VERIFY_TIMESTAMP" code.
- */
-/*
-#if defined(MACINTOSH) || defined(WINDOWS)
-# define SAVEFILE_MUTABLE
-#endif
-*/
 
 /*
  * OPTION: Capitalize the "user_name" (for "default" player name)

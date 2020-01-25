@@ -30,7 +30,7 @@
  */
 
 
-#if !defined(MACINTOSH) && !defined(WINDOWS)
+#if !defined(WINDOWS)
 
 
 /*

@@ -14,9 +14,6 @@
 
 #if defined(WINDOWS)
 #include <winsock.h>
-#elif defined(MACINTOSH)
-#include <OpenTransport.h>
-#include <OpenTptInternet.h>
 #else
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -36,12 +33,6 @@ static int	proxy_port;
 
 bool browsing_movie;
 
-#ifdef MACINTOSH
-static InetSvcRef inet_services = nil;
-static EndpointRef ep = kOTInvalidEndpointRef;
-#endif
-
-
 /* プロキシサーバのアドレスををファイルから読んで設定する */
 void set_proxy(char *default_url, int default_port)
 {
@@ -49,11 +40,6 @@ void set_proxy(char *default_url, int default_port)
 	size_t len;
 	FILE *fp;
 	char *s;
-
-#ifdef MACINTOSH
-	int i;
-	char tmp[8];
-#endif
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, "proxy.prf");
 
@@ -81,17 +67,6 @@ void set_proxy(char *default_url, int default_port)
 	/* "http://" から始まっている場合はその部分をカットする。 */
 #if defined(WINDOWS)
 	if (!strnicmp(s, "http://", 7))
-	{
-		s += 7;
-	}
-#elif defined(MACINTOSH)
-	strncpy(tmp, s, 7);
-	for (i = 0; i < 7; i++)
-	{
-		if (isalpha(tmp[i]))
-			tmp[i] = tolower(tmp[i]);
-	}
-	if (!strncmp(s, "http://", 7))
 	{
 		s += 7;
 	}
@@ -132,7 +107,6 @@ void set_proxy(char *default_url, int default_port)
 /* ソケットにバッファの内容を書き込む */
 int soc_write(int sd, char *buf, size_t sz)
 {
-#ifndef MACINTOSH
 	int nleft, nwritten;
 
 	nleft = sz;
@@ -144,19 +118,12 @@ int soc_write(int sd, char *buf, size_t sz)
 		nleft -= nwritten;
 		buf += nwritten;
 	}
-#else /* !MACINTOSH */
 
-	OTResult bytesSent;
-
-	OTSnd(ep, (void *)buf, sz, 0);
-
-#endif
 	return sz;
 }
 
 int soc_read(int sd, char *buf, size_t sz)
 {
-#ifndef MACINTOSH
 	int nleft, nread = 0;
 
 	nleft = sz;
@@ -169,17 +136,11 @@ int soc_read(int sd, char *buf, size_t sz)
 		nleft -= n;
 		nread += n;
 	}
-#else /* !MACINTOSH */
 
-	OTResult bytesSent;
-
-	OTSnd(ep, (void *)buf, sz, 0);
-
-#endif
 	return nread;
 }
 
-#if !defined(WINDOWS) && !defined(MACINTOSH)
+#if !defined(WINDOWS)
 static sigjmp_buf	env;
 static void(*sig_int_saved)(int);
 static void(*sig_alm_saved)(int);
@@ -187,7 +148,7 @@ static void(*sig_alm_saved)(int);
 
 static void restore_signal(void)
 {
-#if !defined(WINDOWS) && !defined(MACINTOSH)
+#if !defined(WINDOWS)
 	struct itimerval	val0;
 
 	/* itimerリセット用 */
@@ -204,7 +165,7 @@ static void restore_signal(void)
 }
 
 
-#if !defined(WINDOWS) && !defined(MACINTOSH)
+#if !defined(WINDOWS)
 static void interrupt_report(int sig)
 {
 	restore_signal();
@@ -215,7 +176,6 @@ static void interrupt_report(int sig)
 
 /* サーバにコネクトする関数。 */
 int connect_server(int timeout, concptr host, int port)
-#ifndef MACINTOSH
 {
 	int			sd;
 	struct sockaddr_in	to;
@@ -332,120 +292,11 @@ int connect_server(int timeout, concptr host, int port)
 	return sd;
 }
 
-#else /* !MACINTOSH */
-
-	/* サーバにコネクトする関数。 Mac */
-{
-	OSStatus err;
-	InetHostInfo 	response;
-	InetHost 		host_addr;
-	InetAddress 	inAddr;
-	TCall 			sndCall;
-	Boolean			bind = false;
-
-	memset(&response, 0, sizeof(response));
-
-#if TARGET_API_MAC_CARBON
-	inet_services = OTOpenInternetServicesInContext(kDefaultInternetServicesPath, 0, &err, NULL);
-#else
-	inet_services = OTOpenInternetServices(kDefaultInternetServicesPath, 0, &err);
-#endif 
-
-	if (err == noErr) {
-
-		if (proxy && proxy[0])
-		{
-			err = OTInetStringToAddress(inet_services, proxy, &response);
-		}
-		else
-		{
-			err = OTInetStringToAddress(inet_services, (char *)host, &response);
-		}
-
-		if (err == noErr)
-		{
-			host_addr = response.addrs[0];
-		}
-		else
-		{
-			errstr = "error: bad score server!\n";
-		}
-
-#if TARGET_API_MAC_CARBON
-		ep = (void *)OTOpenEndpointInContext(OTCreateConfiguration(kTCPName), 0, nil, &err, NULL);
-#else
-		ep = (void *)OTOpenEndpoint(OTCreateConfiguration(kTCPName), 0, nil, &err);
-#endif
-
-		if (err == noErr)
-		{
-			err = OTBind(ep, nil, nil);
-			bind = (err == noErr);
-		}
-		if (err == noErr)
-		{
-			if (proxy && proxy[0] && proxy_port)
-				OTInitInetAddress(&inAddr, proxy_port, host_addr);
-			else
-				OTInitInetAddress(&inAddr, port, host_addr);
-
-			sndCall.addr.len = sizeof(InetAddress);
-			sndCall.addr.buf = (unsigned char*)&inAddr;
-			sndCall.opt.buf = nil;	      /* no connection options */
-			sndCall.opt.len = 0;
-			sndCall.udata.buf = nil;	      /* no connection data */
-			sndCall.udata.len = 0;
-			sndCall.sequence = 0;	      /* ignored by OTConnect */
-
-			err = OTConnect(ep, &sndCall, NULL);
-
-			if (err != noErr)
-			{
-				errstr = "error: cannot connect score server!\n";
-			}
-		}
-	}
-
-	if (err != noErr)
-	{
-		if (bind)
-		{
-			OTUnbind(ep);
-		}
-		/* Clean up. */
-		if (ep != kOTInvalidEndpointRef)
-		{
-			OTCloseProvider(ep);
-			ep = nil;
-		}
-		if (inet_services != nil)
-		{
-			OTCloseProvider(inet_services);
-			inet_services = nil;
-		}
-
-		return -1;
-	}
-
-	return 1;
-}
-#endif
-
 
 int disconnect_server(int sd)
 {
 #if defined(WINDOWS)
 	return closesocket(sd);
-#elif defined(MACINTOSH)
-	if (ep != kOTInvalidEndpointRef)
-	{
-		OTCloseProvider(ep);
-	}
-
-	if (inet_services != nil)
-	{
-		OTCloseProvider(inet_services);
-	}
 #else
 	return close(sd);
 #endif

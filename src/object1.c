@@ -32,7 +32,7 @@
 #include "snipe.h"
 #include "view-mainwindow.h"
 
-#if defined(MACINTOSH) || defined(MACH_O_CARBON)
+#if defined(MACH_O_CARBON)
 #ifdef verify
 #undef verify
 #endif

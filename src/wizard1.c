@@ -2567,7 +2567,3 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
 
 	msg_print("Successfully created a list file.");
 }
-
-#ifdef MACINTOSH
-static int i = 0;
-#endif /* MACINTOSH */

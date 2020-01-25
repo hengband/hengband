@@ -1626,7 +1626,7 @@ bool load_player(player_type *player_ptr)
 	if (!savefile[0]) return TRUE;
 
 
-#if !defined(MACINTOSH) && !defined(WINDOWS)
+#if !defined(WINDOWS)
 
 	/* Fix this */
 
