@@ -786,7 +786,7 @@ static errr Term_xtra_cap_event(int v)
 		i = read(0, buf, 1);
 
 		/* Hack -- Handle "errors" */
-		if ((i <= 0) && (errno != EINTR)) exit_game_panic();
+		if ((i <= 0) && (errno != EINTR)) exit_game_panic(p_ptr);
 	}
 
 	/* Do not wait */
