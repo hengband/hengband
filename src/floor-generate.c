@@ -1364,7 +1364,6 @@ static bool level_gen(player_type *player_ptr, concptr *why)
 		panel_col_min = floor_ptr->width;
 	}
 
-	floor_ptr->dungeon_idx = d_idx;
 	if (!cave_gen(player_ptr, why))
 	{
 		return FALSE;
@@ -1469,9 +1468,9 @@ void clear_cave(player_type *player_ptr)
 void generate_floor(player_type *player_ptr)
 {
 	int num;
-
 	/* Fill the arrays of floors and walls in the good proportions */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
+	floor_ptr->dungeon_idx = player_ptr->dungeon_idx;
 	set_floor_and_wall(floor_ptr->dungeon_idx);
 
 	/* Generate */
