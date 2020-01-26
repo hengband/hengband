@@ -32,13 +32,6 @@
 #endif
 
 /*
- * OPTION: Compile on an SGI running IRIX
- */
-#ifndef SGI
-/* #define SGI */
-#endif
-
-/*
  * OPTION: Compile on an ultrix/4.2BSD/Dynix/etc. version of UNIX,
  * Do not define this if you are on any kind of SunOS.
  */
@@ -53,15 +46,6 @@
 #if defined(ultrix) || defined(Pyramid)
 # ifndef ULTRIX
 #  define ULTRIX
-# endif
-#endif
-
-/*
- * Extract the "SGI" flag from the compiler
- */
-#ifdef sgi
-# ifndef SGI
-#  define SGI
 # endif
 #endif
 
@@ -102,22 +86,6 @@
  */
 #if !defined(WINDOWS) && !defined(VM)
 # define SET_UID
-#endif
-
-
-/*
- * OPTION: Set "USG" for "System V" versions of Unix
- * This is used to choose a "lock()" function, and to choose
- * which header files ("string.h" vs "strings.h") to include.
- * It is also used to allow certain other options, such as options
- * involving userid's, or multiple users on a single machine, etc.
- */
-#ifdef SET_UID
-# if defined(SGI)
-#  ifndef USG
-#   define USG
-#  endif
-# endif
 #endif
 
 
@@ -178,7 +146,6 @@
  * OPTION: Define "HAVE_USLEEP" only if "usleep()" exists.
  *
  * Note that this is only relevant for "SET_UID" machines.
- * Note that new "SGI" machines have "usleep()".
  */
 #if defined(SET_UID) && !defined(HAVE_CONFIG_H)
 # if !defined(ULTRIX) && !defined(ISC)

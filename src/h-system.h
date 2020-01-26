@@ -42,12 +42,11 @@
 
 # if defined(Pyramid) || defined(NeXT) || \
      defined(NCR3K) || defined(ibm032) || \
-     defined(__osf__) || defined(ISC) || defined(SGI) || \
-     defined(linux)
+     defined(__osf__) || defined(ISC) || defined(linux)
 #  include <sys/time.h>
 # endif
 
-# if !defined(SGI) && !defined(ULTRIX)
+# if !defined(ULTRIX)
 #  include <sys/timeb.h>
 # endif
 

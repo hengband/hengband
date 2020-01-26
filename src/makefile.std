@@ -210,14 +210,6 @@ LIBS = -L/usr/X11R6/lib -lX11 -lncurses
 
 
 ##
-## Variation -- compile for SGI Indigo runnig Irix
-##
-#CFLAGS = -Wall -O2  -fno-strength-reduce -g -D"USE_X11" $(JP_OPT) -D"USE_GCU" -I/usr/X11R6/include
-#LIBS = -L/usr/X11R6/lib -lX11 -lncurses -ltermcap -lsun
-
-
-
-##
 ## Variation -- compile for Dec ALPHA OSF/1 v2.0
 ##
 #CC     = cc
