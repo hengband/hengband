@@ -540,12 +540,6 @@
 # define VERIFY_TIMESTAMPS
 #endif
 
-/*
- * Check the modification time of *_info.raw files
- * (by Keldon Jones)
- */
-#define CHECK_MODIFICATION_TIME
-
 #ifndef HAVE_CONFIG_H
 #define WORLD_SCORE
 #endif /* HAVE_CONFIG_H */

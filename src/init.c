@@ -58,10 +58,8 @@
 #include "rooms-vault.h"
 #include "world.h"
 
-#ifdef CHECK_MODIFICATION_TIME
 #include <sys/types.h>
 #include <sys/stat.h>
-#endif /* CHECK_MODIFICATION_TIME */
 
 static void put_title(void);
 
@@ -286,8 +284,6 @@ header d_head; /*!< ダンジョン情報のヘッダ構造体 */
 header s_head; /*!< プレイヤー職業技能情報のヘッダ構造体 */
 header m_head; /*!< プレイヤー職業魔法情報のヘッダ構造体 */
 
-#ifdef CHECK_MODIFICATION_TIME
-
 /*!
  * @brief テキストファイルとrawファイルの更新時刻を比較する
  * Find the default paths to all of our important sub-directories.
@@ -322,7 +318,6 @@ static errr check_modification_date(int fd, concptr template_file)
 	return 0;
 }
 
-#endif /* CHECK_MODIFICATION_TIME */
 
 /*** Initialize from binary image files ***/
 
@@ -456,11 +451,7 @@ static errr init_info(concptr filename, header *head, void **info, char **name, 
 	errr err = 1;
 	if (fd >= 0)
 	{
-#ifdef CHECK_MODIFICATION_TIME
-
 		err = check_modification_date(fd, format("%s.txt", filename));
-
-#endif /* CHECK_MODIFICATION_TIME */
 
 		/* Attempt to parse the "raw" file */
 		if (!err)
