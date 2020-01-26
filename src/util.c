@@ -210,14 +210,12 @@ void user_name(char *buf, int id)
 		(void)strcpy(buf, pw->pw_name);
 		buf[16] = '\0';
 
-#ifdef CAPITALIZE_USER_NAME
 		/* Hack -- capitalize the user name */
 #ifdef JP
 		if (!iskanji(buf[0]))
 #endif
 			if (islower(buf[0]))
 				buf[0] = toupper(buf[0]);
-#endif /* CAPITALIZE_USER_NAME */
 
 		return;
 	}
