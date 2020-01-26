@@ -32,24 +32,6 @@
 #endif
 
 /*
- * OPTION: Compile on an ultrix/4.2BSD/Dynix/etc. version of UNIX,
- * Do not define this if you are on any kind of SunOS.
- */
-#ifndef ULTRIX
-/* #define ULTRIX */
-#endif
-
-
-/*
- * Extract the "ULTRIX" flag from the compiler
- */
-#if defined(ultrix) || defined(Pyramid)
-# ifndef ULTRIX
-#  define ULTRIX
-# endif
-#endif
-
-/*
  * Extract the "WINDOWS" flag from the compiler
  */
 #if defined(_Windows) || defined(__WINDOWS__) || \
@@ -148,7 +130,7 @@
  * Note that this is only relevant for "SET_UID" machines.
  */
 #if defined(SET_UID) && !defined(HAVE_CONFIG_H)
-# if !defined(ULTRIX) && !defined(ISC)
+# if !defined(ISC)
 #  define HAVE_USLEEP
 # endif
 #endif

@@ -855,7 +855,7 @@ errr fd_chop(int fd, huge n)
 	/* Verify the fd */
 	if (fd < 0) return -1;
 
-#if defined(ULTRIX) || defined(NeXT)
+#if defined(NeXT)
 	/* Truncate */
 	ftruncate(fd, n);
 #endif
