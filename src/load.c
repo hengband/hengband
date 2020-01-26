@@ -3342,10 +3342,8 @@ static errr rd_dungeon(player_type *player_ptr)
  */
 static errr rd_savefile_new_aux(player_type *creature_ptr)
 {
-#ifdef VERIFY_CHECKSUMS
 	u32b n_x_check, n_v_check;
 	u32b o_x_check, o_v_check;
-#endif
 
 	/* Strip the version bytes */
 	strip_bytes(4);
@@ -3869,7 +3867,6 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		}
 	}
 
-#ifdef VERIFY_CHECKSUMS
 	/* Save the checksum */
 	n_v_check = v_check;
 
@@ -3896,7 +3893,6 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		return 11;
 	}
 
-#endif
 	return 0;
 }
 
@@ -3936,10 +3932,8 @@ errr rd_savefile_new(player_type *player_ptr)
  */
 static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 {
-#ifdef VERIFY_CHECKSUMS
 	u32b n_x_check, n_v_check;
 	u32b o_x_check, o_v_check;
-#endif
 
 	/* Hack -- decrypt (read xor_byte) */
 	xor_byte = 0;
@@ -3965,7 +3959,6 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 	/* Read -- have error? */
 	if (rd_saved_floor(player_ptr, sf_ptr)) return FALSE;
 
-#ifdef VERIFY_CHECKSUMS
 	/* Save the checksum */
 	n_v_check = v_check;
 
@@ -3983,7 +3976,6 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 
 	/* Verify */
 	if (o_x_check != n_x_check) return FALSE;
-#endif
 	return TRUE;
 }
 
