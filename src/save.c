@@ -1489,17 +1489,6 @@ static bool save_player_aux(player_type *player_ptr, char *name)
  */
 bool save_player(player_type *player_ptr)
 {
-#ifdef SET_UID
-
-# ifdef SECURE
-
-	/* Get "games" permissions */
-	beGames();
-
-# endif
-
-#endif
-
 	char safe[1024];
 	strcpy(safe, savefile);
 	strcat(safe, ".new");
@@ -1563,19 +1552,7 @@ bool save_player(player_type *player_ptr)
 
 		/* Success */
 		result = TRUE;
-}
-
-
-#ifdef SET_UID
-
-# ifdef SECURE
-
-	/* Drop "games" permissions */
-	bePlayer();
-
-# endif
-
-#endif
+	}
 
 	/* Return the result */
 	return result;
@@ -1845,15 +1822,6 @@ void remove_loc(void)
 	char temp[1024];
 #endif /* VERIFY_SAVEFILE */
 
-#ifdef SET_UID
-# ifdef SECURE
-
-	/* Get "games" permissions */
-	beGames();
-
-# endif /* SECURE */
-#endif /* SET_UID */
-
 #ifdef VERIFY_SAVEFILE
 
 	/* Lock on savefile */
@@ -1864,16 +1832,6 @@ void remove_loc(void)
 	fd_kill(temp);
 
 #endif /* VERIFY_SAVEFILE */
-
-#ifdef SET_UID
-# ifdef SECURE
-
-	/* Drop "games" permissions */
-	bePlayer();
-
-# endif /* SECURE */
-#endif /* SET_UID */
-
 }
 
 
@@ -1934,12 +1892,6 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	char floor_savefile[1024];
 	if (!(mode & SLF_SECOND))
 	{
-#ifdef SET_UID
-# ifdef SECURE
-		/* Get "games" permissions */
-		beGames();
-# endif
-#endif
 	}
 
 	/* We have one file already opened */
@@ -2021,12 +1973,6 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 
 	if (!(mode & SLF_SECOND))
 	{
-#ifdef SET_UID
-# ifdef SECURE
-		/* Drop "games" permissions */
-		bePlayer();
-# endif
-#endif
 	}
 
 	/* We have one file already opened */

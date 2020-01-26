@@ -297,18 +297,6 @@
 
 
 /*
- * OPTION: for the AFS distributed file system, define this to ensure that
- * the program is secure with respect to the setuid code.  This option has
- * not been tested (to the best of my knowledge).  This option may require
- * some weird tricks with "player_uid" and such involving "defines".
- * Note that this option used the AFS library routines Authenticate(),
- * bePlayer(), beGames() to enforce the proper priviledges.
- * You may need to turn "SAFE_SETUID" off to use this option.
- */
-/* #define SECURE */
-
-
-/*
  * OPTION: Forbid the use of "fiddled" savefiles.  As far as I can tell,
  * a fiddled savefile is one with an internal timestamp different from
  * the actual timestamp.  Thus, turning this option on forbids one from

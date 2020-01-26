@@ -278,11 +278,6 @@ int main(int argc, char *argv[])
 	/* Default permissions on files */
 	(void)umask(022);
 
-# ifdef SECURE
-	/* Authenticate */
-	Authenticate();
-# endif
-
 #endif
 
 

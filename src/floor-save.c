@@ -74,14 +74,6 @@ void init_saved_floors(player_type *creature_ptr, bool force)
 	int i;
 	int fd = -1;
 	BIT_FLAGS mode = 0644;
-
-#ifdef SET_UID
-# ifdef SECURE
-	/* Get "games" permissions */
-	beGames();
-# endif
-#endif
-
 	for (i = 0; i < MAX_SAVED_FLOORS; i++)
 	{
 		saved_floor_type *sf_ptr = &saved_floors[i];
@@ -144,13 +136,6 @@ void init_saved_floors(player_type *creature_ptr, bool force)
 
 	/* No change floor mode yet */
 	creature_ptr->change_floor_mode = 0;
-
-#ifdef SET_UID
-# ifdef SECURE
-	/* Drop "games" permissions */
-	bePlayer();
-# endif
-#endif
 }
 
 /*!
@@ -163,14 +148,6 @@ void clear_saved_floor_files(player_type *creature_ptr)
 {
 	char floor_savefile[1024];
 	int i;
-
-#ifdef SET_UID
-# ifdef SECURE
-	/* Get "games" permissions */
-	beGames();
-# endif
-#endif
-
 	for (i = 0; i < MAX_SAVED_FLOORS; i++)
 	{
 		saved_floor_type *sf_ptr = &saved_floors[i];
@@ -191,13 +168,6 @@ void clear_saved_floor_files(player_type *creature_ptr)
 		/* Drop permissions */
 		safe_setuid_drop();
 	}
-
-#ifdef SET_UID
-# ifdef SECURE
-	/* Drop "games" permissions */
-	bePlayer();
-# endif
-#endif
 }
 
 /*!
