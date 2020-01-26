@@ -4129,6 +4129,9 @@ F:SUST_CHR | SUST_CON |
 F:RES_SOUND | RES_DISEN | REFLECT | FREE_ACT | ACTIVATE
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | AGGRAVATE
 U:STRAIN_HASTE
+D:$A result of Steel Staff Ymir's research project, this swimsuit, powered by
+D:$ a hyper vibration crystal, provides much more protection than you might
+D:$ expect.
 D:ドワーフの姫、鋼鉄参謀ユーミルの研究の成果だ。
 D:超振動クリスタルが高い防御力をもたらしているらしい。
 
