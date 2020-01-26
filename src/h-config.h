@@ -32,13 +32,6 @@
 #endif
 
 /*
- * OPTION: Compile on a HPUX version of UNIX
- */
-#ifndef HPUX
-/* #define HPUX */
-#endif
-
-/*
  * OPTION: Compile on an SGI running IRIX
  */
 #ifndef SGI
@@ -120,7 +113,7 @@
  * involving userid's, or multiple users on a single machine, etc.
  */
 #ifdef SET_UID
-# if defined(HPUX) || defined(SGI)
+# if defined(SGI)
 #  ifndef USG
 #   define USG
 #  endif
@@ -188,7 +181,7 @@
  * Note that new "SGI" machines have "usleep()".
  */
 #if defined(SET_UID) && !defined(HAVE_CONFIG_H)
-# if !defined(HPUX) && !defined(ULTRIX) && !defined(ISC)
+# if !defined(ULTRIX) && !defined(ISC)
 #  define HAVE_USLEEP
 # endif
 #endif
