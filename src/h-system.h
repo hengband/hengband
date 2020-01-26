@@ -92,10 +92,6 @@
 
 # include <sys/stat.h>
 
-# ifdef SOLARIS
-#  include <netdb.h>
-# endif
-
 #endif /* SET_UID */
 
 #ifdef __DJGPP__

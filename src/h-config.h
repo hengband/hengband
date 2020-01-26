@@ -46,13 +46,6 @@
 #endif
 
 /*
- * OPTION: Compile on a Solaris machine
- */
-#ifndef SOLARIS
-/* #define SOLARIS */
-#endif
-
-/*
  * OPTION: Compile on an ultrix/4.2BSD/Dynix/etc. version of UNIX,
  * Do not define this if you are on any kind of SunOS.
  */
@@ -127,8 +120,7 @@
  * involving userid's, or multiple users on a single machine, etc.
  */
 #ifdef SET_UID
-# if defined(SOLARIS) || \
-     defined(HPUX) || defined(SGI)
+# if defined(HPUX) || defined(SGI)
 #  ifndef USG
 #   define USG
 #  endif
@@ -193,7 +185,7 @@
  * OPTION: Define "HAVE_USLEEP" only if "usleep()" exists.
  *
  * Note that this is only relevant for "SET_UID" machines.
- * Note that new "SOLARIS" and "SGI" machines have "usleep()".
+ * Note that new "SGI" machines have "usleep()".
  */
 #if defined(SET_UID) && !defined(HAVE_CONFIG_H)
 # if !defined(HPUX) && !defined(ULTRIX) && !defined(ISC)
@@ -302,17 +294,6 @@
 #ifdef _POSIX_SAVED_IDS
 # define SAFE_SETUID_POSIX
 #endif
-
-
-/*
- * Prevent problems on (non-Solaris) Suns using "SAFE_SETUID".
- * The SAFE_SETUID code is weird, use it at your own risk...
- */
-#if !defined(SOLARIS)
-# undef SAFE_SETUID_POSIX
-#endif
-
-
 
 
 /*
