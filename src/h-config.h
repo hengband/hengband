@@ -415,12 +415,6 @@
 # define SAVEFILE_USE_UID
 #endif
 
-
-/*
- * OPTION: Check the "time" against "lib/file/hours.txt"
- */
-/* #define CHECK_TIME */
-
 /*
  * OPTION: Check the "load" against "lib/file/load.txt"
  * This may require the 'rpcsvs' library
