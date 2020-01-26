@@ -68,10 +68,8 @@
   ((unsigned)(keysym) >= 0xFF00)
 
 
-#ifdef SUPPORT_GAMMA
 static bool gamma_table_ready = FALSE;
 static int gamma_val = 0;
-#endif /* SUPPORT_GAMMA */
 
 
 /*
@@ -81,9 +79,6 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
 {
 	Colormap cmap = DefaultColormapOfScreen(DefaultScreenOfDisplay(dpy));
 	XColor xcolour;
-
-#ifdef SUPPORT_GAMMA
-
 	if (!gamma_table_ready)
 	{
 		concptr str = getenv("ANGBAND_X11_GAMMA");
@@ -102,8 +97,6 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
 		green = gamma_table[green];
 		blue = gamma_table[blue];
 	}
-
-#endif /* SUPPORT_GAMMA */
 
 	/* Build the color */
 	

@@ -4919,8 +4919,6 @@ void tag_sort(tag_type elements[], int number)
 	quicksort(elements, 0, number - 1);
 }
 
-#ifdef SUPPORT_GAMMA
-
 /* Table of gamma values */
 byte gamma_table[256];
 
@@ -5013,8 +5011,6 @@ void build_gamma_table(int gamma)
 		gamma_table[i] = ((long)(value / 256) * i) / 256;
 	}
 }
-
-#endif /* SUPPORT_GAMMA */
 
 
 /*

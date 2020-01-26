@@ -507,12 +507,6 @@
 
 
 /*
- * OPTION: Gamma correct X11 colours.
- */
- 
-#define SUPPORT_GAMMA
-
-/*
  * Hack -- Mach-O (native binary format of OS X) is basically a Un*x
  * but has Mac OS/Windows-like user interface
  */

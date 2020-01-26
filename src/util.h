@@ -424,10 +424,8 @@ extern void roff_to_buf(concptr str, int wlen, char *tbuf, size_t bufsize);
 
 extern void tag_sort(tag_type elements[], int number);
 
-#ifdef SUPPORT_GAMMA
 extern byte gamma_table[256];
 extern void build_gamma_table(int gamma);
-#endif /* SUPPORT_GAMMA */
 
 extern size_t my_strcpy(char *buf, concptr src, size_t bufsize);
 extern size_t my_strcat(char *buf, concptr src, size_t bufsize);
