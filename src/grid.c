@@ -1219,12 +1219,14 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
 	case gb_floor:
 	{
 		g_ptr->feat = feat_ground_type[randint0(100)];
+		g_ptr->info &= ~(CAVE_MASK);
 		g_ptr->info |= CAVE_FLOOR;
 		break;
 	}
 	case gb_extra:
 	{
 		g_ptr->feat = feat_wall_type[randint0(100)];
+		g_ptr->info &= ~(CAVE_MASK);
 		g_ptr->info |= CAVE_EXTRA;
 		break;
 	}
@@ -1236,18 +1238,21 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
 	case gb_inner:
 	{
 		g_ptr->feat = feat_wall_inner;
+		g_ptr->info &= ~(CAVE_MASK);
 		g_ptr->info |= CAVE_INNER;
 		break;
 	}
 	case gb_inner_perm:
 	{
 		g_ptr->feat = feat_permanent;
+		g_ptr->info &= ~(CAVE_MASK);
 		g_ptr->info |= CAVE_INNER;
 		break;
 	}
 	case gb_outer:
 	{
 		g_ptr->feat = feat_wall_outer;
+		g_ptr->info &= ~(CAVE_MASK);
 		g_ptr->info |= CAVE_OUTER;
 		break;
 	}
@@ -1263,6 +1268,7 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
 			g_ptr->feat = feat_wall_outer;
 		}
 
+		g_ptr->info &= ~(CAVE_MASK);
 		g_ptr->info |= (CAVE_OUTER | CAVE_VAULT);
 		break;
 	}
@@ -1274,6 +1280,7 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
 	case gb_solid_perm:
 	{
 		g_ptr->feat = feat_permanent;
+		g_ptr->info &= ~(CAVE_MASK);
 		g_ptr->info |= CAVE_SOLID;
 		break;
 	}
@@ -1286,7 +1293,6 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
 		return;
 	}
 
-	g_ptr->info &= ~(CAVE_MASK);
 	if (g_ptr->m_idx > 0) delete_monster_idx(player_ptr, g_ptr->m_idx);
 }
 
