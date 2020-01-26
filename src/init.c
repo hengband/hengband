@@ -1322,9 +1322,6 @@ static errr init_object_alloc(void)
 static errr init_alloc(void)
 {
 	monster_race *r_ptr;
-
-#ifdef SORT_R_INFO
-
 	tag_type *elements;
 
 	/* Allocate the "r_info" array */
@@ -1372,94 +1369,6 @@ static errr init_alloc(void)
 
 	/* Free the "r_info" array */
 	C_KILL(elements, max_r_idx, tag_type);
-
-#else /* SORT_R_INFO */
-
-	alloc_entry *table;
-	s16b num[MAX_DEPTH];
-	s16b aux[MAX_DEPTH];
-
-	/*** Analyze monster allocation info ***/
-
-	/* Clear the "aux" array */
-	C_WIPE(&aux, MAX_DEPTH, s16b);
-
-	/* Clear the "num" array */
-	C_WIPE(&num, MAX_DEPTH, s16b);
-
-	/* Size of "alloc_race_table" */
-	alloc_race_size = 0;
-
-	/* Scan the monsters */
-	for (int i = 1; i < max_r_idx; i++)
-	{
-		/* Get the i'th race */
-		r_ptr = &r_info[i];
-
-		/* Legal monsters */
-		if (r_ptr->rarity)
-		{
-			/* Count the entries */
-			alloc_race_size++;
-
-			/* Group by level */
-			num[r_ptr->level]++;
-		}
-	}
-
-	/* Collect the level indexes */
-	for (int i = 1; i < MAX_DEPTH; i++)
-	{
-		/* Group by level */
-		num[i] += num[i - 1];
-	}
-	if (!num[0]) quit(_("町のモンスターがない！", "No town monsters!"));
-
-	/*** Initialize monster allocation info ***/
-
-	/* Allocate the alloc_race_table */
-	C_MAKE(alloc_race_table, alloc_race_size, alloc_entry);
-
-	/* Access the table entry */
-	table = alloc_race_table;
-
-	/* Scan the monsters */
-	for (int i = 1; i < max_r_idx; i++)
-	{
-		/* Get the i'th race */
-		r_ptr = &r_info[i];
-
-		/* Count valid pairs */
-		if (r_ptr->rarity)
-		{
-			int p, x, y, z;
-
-			/* Extract the base level */
-			x = r_ptr->level;
-
-			/* Extract the base probability */
-			p = (100 / r_ptr->rarity);
-
-			/* Skip entries preceding our locale */
-			y = (x > 0) ? num[x - 1] : 0;
-
-			/* Skip previous entries at this locale */
-			z = y + aux[x];
-
-			/* Load the entry */
-			table[z].index = i;
-			table[z].level = x;
-			table[z].prob1 = p;
-			table[z].prob2 = p;
-			table[z].prob3 = p;
-
-			/* Another entry complete for this locale */
-			aux[x]++;
-		}
-	}
-
-#endif /* SORT_R_INFO */
-
 	(void)init_object_alloc();
 	return 0;
 }

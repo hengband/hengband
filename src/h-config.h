@@ -546,13 +546,6 @@
  */
 #define CHECK_MODIFICATION_TIME
 
-/*
- * Use the new sorting routines for creation
- * of the monster allocation table
- */
-#define SORT_R_INFO
-
-
 #ifndef HAVE_CONFIG_H
 #define WORLD_SCORE
 #endif /* HAVE_CONFIG_H */

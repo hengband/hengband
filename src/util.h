@@ -422,9 +422,7 @@ extern int get_keymap_dir(char ch);
 extern errr type_string(concptr str, uint len);
 extern void roff_to_buf(concptr str, int wlen, char *tbuf, size_t bufsize);
 
-#ifdef SORT_R_INFO
 extern void tag_sort(tag_type elements[], int number);
-#endif /* SORT_R_INFO */
 
 #ifdef SUPPORT_GAMMA
 extern byte gamma_table[256];
