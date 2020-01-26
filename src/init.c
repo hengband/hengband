@@ -418,8 +418,16 @@ static void init_header(header *head, IDX num, int len)
 }
 
 
+static void update_header(header *head, void **info, char **name, char **text, char **tag)
+{
+	if (info) *info = head->info_ptr;
+	if (name) *name = head->name_ptr;
+	if (text) *text = head->text_ptr;
+	if (tag)  *tag = head->tag_ptr;
+}
+
+
 /*!
- * todo プリプロがゴミすぎて整理不可能
  * @brief ヘッダ構造体の更新
  * Initialize the "*_info" array
  * @param filename ファイル名(拡張子txt/raw)
@@ -435,8 +443,6 @@ static void init_header(header *head, IDX num, int len)
  */
 static errr init_info(concptr filename, header *head, void **info, char **name, char **text, char **tag)
 {
-	FILE *fp;
-
 	/* General buffer */
 	char buf[1024];
 
@@ -464,147 +470,139 @@ static errr init_info(concptr filename, header *head, void **info, char **name, 
 
 	/* Do we have to parse the *.txt file? */
 	BIT_FLAGS file_permission = 0644;
-	if (err)
+	if (err == 0)
 	{
-		/*** Make the fake arrays ***/
-
-		/* Allocate the "*_info" array */
-		C_MAKE(head->info_ptr, head->info_size, char);
-
-		/* Hack -- make "fake" arrays */
-		if (name) C_MAKE(head->name_ptr, FAKE_NAME_SIZE, char);
-		if (text) C_MAKE(head->text_ptr, FAKE_TEXT_SIZE, char);
-		if (tag)  C_MAKE(head->tag_ptr, FAKE_TAG_SIZE, char);
-
-		if (info) (*info) = head->info_ptr;
-		if (name) (*name) = head->name_ptr;
-		if (text) (*text) = head->text_ptr;
-		if (tag)  (*tag) = head->tag_ptr;
-
-		/*** Load the ascii template file ***/
-
-		path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, format("%s.txt", filename));
-		fp = my_fopen(buf, "r");
-
-		/* Parse it */
-		if (!fp) quit(format(_("'%s.txt'ファイルをオープンできません。", "Cannot open '%s.txt' file."), filename));
-
-		/* Parse the file */
-		err = init_info_txt(fp, buf, head, head->parse_info_txt);
-		my_fclose(fp);
-
-		/* Errors */
-		if (err)
-		{
-			concptr oops;
-
-#ifdef JP
-			/* Error string */
-			oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "未知の");
-
-			msg_format("'%s.txt'ファイルの %d 行目にエラー。", filename, error_line);
-			msg_format("レコード %d は '%s' エラーがあります。", error_idx, oops);
-			msg_format("構文 '%s'。", buf);
-			msg_print(NULL);
-
-			/* Quit */
-			quit(format("'%s.txt'ファイルにエラー", filename));
-#else
-			/* Error string */
-			oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
-
-			msg_format("Error %d at line %d of '%s.txt'.", err, error_line, filename);
-			msg_format("Record %d contains a '%s' error.", error_idx, oops);
-			msg_format("Parsing '%s'.", buf);
-			msg_print(NULL);
-
-			/* Quit */
-			quit(format("Error in '%s.txt' file.", filename));
-#endif
-
-		}
-
-
-		/*** Make final retouch on fake tags ***/
-
-		if (head->retouch)
-		{
-			(*head->retouch)(head);
-		}
-
-
-		/*** Dump the binary image file ***/
-
-		/* File type is "DATA" */
-		FILE_TYPE(FILE_TYPE_DATA);
-		path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, format(_("%s_j.raw", "%s.raw"), filename));
-
-
-		/* Grab permissions */
-		safe_setuid_grab();
-
-		/* Kill the old file */
-		(void)fd_kill(buf);
-
-		/* Attempt to create the raw file */
-		fd = fd_make(buf, file_permission);
-
-		/* Drop permissions */
-		safe_setuid_drop();
-
-		/* Dump to the file */
-		if (fd >= 0)
-		{
-			/* Dump it */
-			fd_write(fd, (concptr)(head), head->head_size);
-
-			/* Dump the "*_info" array */
-			fd_write(fd, head->info_ptr, head->info_size);
-
-			/* Dump the "*_name" array */
-			fd_write(fd, head->name_ptr, head->name_size);
-
-			/* Dump the "*_text" array */
-			fd_write(fd, head->text_ptr, head->text_size);
-
-			/* Dump the "*_tag" array */
-			fd_write(fd, head->tag_ptr, head->tag_size);
-
-			/* Close */
-			(void)fd_close(fd);
-		}
-
-		/*** Kill the fake arrays ***/
-
-		/* Free the "*_info" array */
-		C_KILL(head->info_ptr, head->info_size, char);
-
-		/* Hack -- Free the "fake" arrays */
-		if (name) C_KILL(head->name_ptr, FAKE_NAME_SIZE, char);
-		if (text) C_KILL(head->text_ptr, FAKE_TEXT_SIZE, char);
-		if (tag)  C_KILL(head->tag_ptr, FAKE_TAG_SIZE, char);
-
-		/*** Load the binary image file ***/
-		path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, format(_("%s_j.raw", "%s.raw"), filename));
-
-		/* Attempt to open the "raw" file */
-		fd = fd_open(buf, O_RDONLY);
-
-		/* Process existing "raw" file */
-		if (fd < 0) quit(format(_("'%s_j.raw'ファイルをロードできません。", "Cannot load '%s.raw' file."), filename));
-
-		/* Attempt to parse the "raw" file */
-		err = init_info_raw(fd, head);
-		(void)fd_close(fd);
-
-		/* Error */
-		if (err) quit(format(_("'%s_j.raw'ファイルを解析できません。", "Cannot parse '%s.raw' file."), filename));
+		update_header(head, info, name, text, tag);
+		return 0;
 	}
 
-	if (info) *info = head->info_ptr;
-	if (name) *name = head->name_ptr;
-	if (text) *text = head->text_ptr;
-	if (tag)  *tag = head->tag_ptr;
+	/*** Make the fake arrays ***/
+	C_MAKE(head->info_ptr, head->info_size, char);
+
+	/* Hack -- make "fake" arrays */
+	if (name) C_MAKE(head->name_ptr, FAKE_NAME_SIZE, char);
+	if (text) C_MAKE(head->text_ptr, FAKE_TEXT_SIZE, char);
+	if (tag)  C_MAKE(head->tag_ptr, FAKE_TAG_SIZE, char);
+
+	if (info) (*info) = head->info_ptr;
+	if (name) (*name) = head->name_ptr;
+	if (text) (*text) = head->text_ptr;
+	if (tag)  (*tag) = head->tag_ptr;
+
+	/*** Load the ascii template file ***/
+	path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, format("%s.txt", filename));
+	FILE *fp;
+	fp = my_fopen(buf, "r");
+
+	/* Parse it */
+	if (!fp) quit(format(_("'%s.txt'ファイルをオープンできません。", "Cannot open '%s.txt' file."), filename));
+
+	/* Parse the file */
+	err = init_info_txt(fp, buf, head, head->parse_info_txt);
+	my_fclose(fp);
+
+	/* Errors */
+	if (err)
+	{
+		concptr oops;
+
+#ifdef JP
+		/* Error string */
+		oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "未知の");
+
+		msg_format("'%s.txt'ファイルの %d 行目にエラー。", filename, error_line);
+		msg_format("レコード %d は '%s' エラーがあります。", error_idx, oops);
+		msg_format("構文 '%s'。", buf);
+		msg_print(NULL);
+
+		/* Quit */
+		quit(format("'%s.txt'ファイルにエラー", filename));
+#else
+		/* Error string */
+		oops = (((err > 0) && (err < PARSE_ERROR_MAX)) ? err_str[err] : "unknown");
+
+		msg_format("Error %d at line %d of '%s.txt'.", err, error_line, filename);
+		msg_format("Record %d contains a '%s' error.", error_idx, oops);
+		msg_format("Parsing '%s'.", buf);
+		msg_print(NULL);
+
+		/* Quit */
+		quit(format("Error in '%s.txt' file.", filename));
+#endif
+	}
+
+	/*** Make final retouch on fake tags ***/
+	if (head->retouch)
+	{
+		(*head->retouch)(head);
+	}
+
+	/*** Dump the binary image file ***/
+	/* File type is "DATA" */
+	FILE_TYPE(FILE_TYPE_DATA);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, format(_("%s_j.raw", "%s.raw"), filename));
+
+	/* Grab permissions */
+	safe_setuid_grab();
+
+	/* Kill the old file */
+	(void)fd_kill(buf);
+
+	/* Attempt to create the raw file */
+	fd = fd_make(buf, file_permission);
+
+	/* Drop permissions */
+	safe_setuid_drop();
+
+	/* Dump to the file */
+	if (fd >= 0)
+	{
+		/* Dump it */
+		fd_write(fd, (concptr)(head), head->head_size);
+
+		/* Dump the "*_info" array */
+		fd_write(fd, head->info_ptr, head->info_size);
+
+		/* Dump the "*_name" array */
+		fd_write(fd, head->name_ptr, head->name_size);
+
+		/* Dump the "*_text" array */
+		fd_write(fd, head->text_ptr, head->text_size);
+
+		/* Dump the "*_tag" array */
+		fd_write(fd, head->tag_ptr, head->tag_size);
+
+		/* Close */
+		(void)fd_close(fd);
+	}
+
+	/*** Kill the fake arrays ***/
+
+	/* Free the "*_info" array */
+	C_KILL(head->info_ptr, head->info_size, char);
+
+	/* Hack -- Free the "fake" arrays */
+	if (name) C_KILL(head->name_ptr, FAKE_NAME_SIZE, char);
+	if (text) C_KILL(head->text_ptr, FAKE_TEXT_SIZE, char);
+	if (tag)  C_KILL(head->tag_ptr, FAKE_TAG_SIZE, char);
+
+	/*** Load the binary image file ***/
+	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, format(_("%s_j.raw", "%s.raw"), filename));
+
+	/* Attempt to open the "raw" file */
+	fd = fd_open(buf, O_RDONLY);
+
+	/* Process existing "raw" file */
+	if (fd < 0) quit(format(_("'%s_j.raw'ファイルをロードできません。", "Cannot load '%s.raw' file."), filename));
+
+	/* Attempt to parse the "raw" file */
+	err = init_info_raw(fd, head);
+	(void)fd_close(fd);
+
+	/* Error */
+	if (err) quit(format(_("'%s_j.raw'ファイルを解析できません。", "Cannot parse '%s.raw' file."), filename));
+
+	update_header(head, info, name, text, tag);
 	return 0;
 }
 
@@ -1167,21 +1165,20 @@ static errr init_other(player_type *player_ptr)
 		int ob = option_info[i].o_bit;
 
 		/* Set the "default" options */
-		if (option_info[i].o_var)
-		{
-			/* Accept */
-			option_mask[os] |= (1L << ob);
+		if (!option_info[i].o_var) continue;
 
+		/* Accept */
+		option_mask[os] |= (1L << ob);
+
+		/* Set */
+		if (option_info[i].o_norm)
+		{
 			/* Set */
-			if (option_info[i].o_norm)
-			{
-				/* Set */
-				option_flag[os] |= (1L << ob);
-			}
-			else
-			{
-				option_flag[os] &= ~(1L << ob);
-			}
+			option_flag[os] |= (1L << ob);
+		}
+		else
+		{
+			option_flag[os] &= ~(1L << ob);
 		}
 	}
 
