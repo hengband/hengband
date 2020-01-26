@@ -338,12 +338,6 @@ int main(int argc, char *argv[])
 
 #ifdef SET_UID
 
-	/* Initialize the "load" checker */
-	if (check_load_init() || check_load())
-	{
-		quit("The gates to Angband are closed (bad load).");
-	}
-
 	/* Acquire the "user name" as a default player name */
 	user_name(p_ptr->name, p_ptr->player_uid);
 

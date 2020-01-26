@@ -407,7 +407,6 @@
 #define PRIVATE_USER_PATH "~/.angband"
 #endif /* SET_UID */
 
-
 /*
  * On multiuser systems, add the "uid" to savefile names
  */
@@ -416,19 +415,10 @@
 #endif
 
 /*
- * OPTION: Check the "load" against "lib/file/load.txt"
- * This may require the 'rpcsvs' library
- */
-/* #define CHECK_LOAD */
-
-
-/*
  * OPTION: Capitalize the "user_name" (for "default" player name)
  * This option is only relevant on SET_UID machines.
  */
 #define CAPITALIZE_USER_NAME
-
-
 
 /*
  * OPTION: Person to bother if something goes wrong.
