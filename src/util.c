@@ -3109,7 +3109,7 @@ void prt(concptr str, TERM_LEN row, TERM_LEN col)
  * This function will correctly handle any width up to the maximum legal
  * value of 256, though it works best for a standard 80 character width.
  */
-void c_roff(byte a, concptr str)
+void c_roff(TERM_COLOR a, concptr str)
 {
 	int x, y;
 
