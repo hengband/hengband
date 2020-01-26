@@ -577,9 +577,10 @@ static void gen_caverns_and_lakes(dungeon_type *dungeon_ptr, player_type *owner_
  * @brief ダンジョン生成のメインルーチン / Generate a new dungeon level
  * @details Note that "dun_body" adds about 4000 bytes of memory to the stack.
  * @param player_ptr プレーヤーへの参照ポインタ
+ * @param why エラー原因メッセージを返す
  * @return ダンジョン生成が全て無事に成功したらTRUEを返す。
  */
-static bool cave_gen(player_type *player_ptr)
+static bool cave_gen(player_type *player_ptr, concptr *why)
 {
 	int i, k;
 	POSITION y, x;
@@ -681,10 +682,18 @@ static bool cave_gen(player_type *player_ptr)
 		build_maze_vault(player_ptr, floor_ptr->width/2-1, floor_ptr->height/2-1, floor_ptr->width-4, floor_ptr->height-4, FALSE);
 
 		/* Place 3 or 4 down stairs near some walls */
-		if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(2, 3), 3)) return FALSE;
+		if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(2, 3), 3))
+		{
+			*why = _("迷宮ダンジョンの下り階段生成に失敗", "Failed to alloc up stairs in maze dungeon.");
+			return FALSE;
+		}
 
 		/* Place 1 or 2 up stairs near some walls */
-		if (!alloc_stairs(player_ptr, feat_up_stair, 1, 3)) return FALSE;
+		if (!alloc_stairs(player_ptr, feat_up_stair, 1, 3))
+		{
+			*why = _("迷宮ダンジョンの上り階段生成に失敗", "Failed to alloc down stairs in maze dungeon.");
+			return FALSE;
+		}
 	}
 
 	/* Build some rooms */
@@ -695,7 +704,11 @@ static bool cave_gen(player_type *player_ptr)
 		/*
 		 * Build each type of room in turn until we cannot build any more.
 		 */
-		if (!generate_rooms(player_ptr)) return FALSE;
+		if (!generate_rooms(player_ptr))
+		{
+			*why = _("部屋群の生成に失敗", "Failed to generate rooms");
+			return FALSE;
+		}
 
 
 		/* Make a hole in the dungeon roof sometimes at level 1 */
@@ -815,7 +828,11 @@ static bool cave_gen(player_type *player_ptr)
 				if (!build_tunnel(player_ptr, dun->cent[i].y, dun->cent[i].x, y, x)) tunnel_fail_count++;
 			}
 
-			if (tunnel_fail_count >= 2) return FALSE;
+			if (tunnel_fail_count >= 2)
+			{
+				*why = _("トンネル接続に失敗", "Failed to generate tunnels");
+				return FALSE;
+			}
 
 			/* Turn the tunnel into corridor */
 			for (j = 0; j < dun->tunn_n; j++)
@@ -879,10 +896,18 @@ static bool cave_gen(player_type *player_ptr)
 		}
 
 		/* Place 3 or 4 down stairs near some walls */
-		if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(3, 4), 3)) return FALSE;
+		if (!alloc_stairs(player_ptr, feat_down_stair, rand_range(3, 4), 3))
+		{
+			*why = _("下り階段生成に失敗", "Failed to generate down stairs.");
+			return FALSE;
+		}
 
 		/* Place 1 or 2 up stairs near some walls */
-		if (!alloc_stairs(player_ptr, feat_up_stair, rand_range(1, 2), 3)) return FALSE;
+		if (!alloc_stairs(player_ptr, feat_up_stair, rand_range(1, 2), 3))
+		{
+			*why = _("上り階段生成に失敗", "Failed to generate up stairs.");
+			return FALSE;
+		}
 	}
 
 	if (!dun->laketype)
@@ -921,9 +946,17 @@ static bool cave_gen(player_type *player_ptr)
 	}
 
 	/* Determine the character location */
-	if (!new_player_spot(player_ptr)) return FALSE;
+	if (!new_player_spot(player_ptr))
+	{
+		*why = _("プレイヤー配置に失敗", "Failed to place a player");
+		return FALSE;
+	}
 
-	if (!place_quest_monsters(player_ptr)) return FALSE;
+	if (!place_quest_monsters(player_ptr))
+	{
+		*why = _("クエストモンスター配置に失敗", "Failed to place a quest monster");
+		return FALSE;
+	}
 
 	/* Basic "amount" */
 	k = (floor_ptr->dun_level / 3);
@@ -980,7 +1013,11 @@ static bool cave_gen(player_type *player_ptr)
 	floor_ptr->object_level = floor_ptr->base_level;
 
 	/* Put the Guardian */
-	if (!alloc_guardian(player_ptr, TRUE)) return FALSE;
+	if (!alloc_guardian(player_ptr, TRUE))
+	{
+		*why = _("ダンジョンの主配置に失敗", "Failed to place a dungeon guardian");
+		return FALSE;
+	}
 
 	bool is_empty_or_dark = dun->empty_level;
 	is_empty_or_dark &= !one_in_(DARK_EMPTY) || (randint1(100) > floor_ptr->dun_level);
@@ -1328,9 +1365,8 @@ static bool level_gen(player_type *player_ptr, concptr *why)
 	}
 
 	floor_ptr->dungeon_idx = d_idx;
-	if (!cave_gen(player_ptr))
+	if (!cave_gen(player_ptr, why))
 	{
-		*why = _("ダンジョン生成に失敗", "could not place player");
 		return FALSE;
 	}
 
