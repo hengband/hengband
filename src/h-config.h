@@ -236,19 +236,6 @@
 
 
 /*
- * OPTION: Forbid the use of "fiddled" savefiles.  As far as I can tell,
- * a fiddled savefile is one with an internal timestamp different from
- * the actual timestamp.  Thus, turning this option on forbids one from
- * copying a savefile to a different name.  Combined with disabling the
- * ability to save the game without quitting, and with some method of
- * stopping the user from killing the process at the tombstone screen,
- * this should prevent the use of backup savefiles.  It may also stop
- * the use of savefiles from other platforms, so be careful.
- */
-/* #define VERIFY_TIMESTAMP */
-
-
-/*
  * OPTION: Forbid the "savefile over-write" cheat, in which you simply
  * run another copy of the game, loading a previously saved savefile,
  * and let that copy over-write the "dead" savefile later.  This option
@@ -409,7 +396,6 @@
  */
 #ifdef VERIFY_HONOR
 # define VERIFY_SAVEFILE
-# define VERIFY_TIMESTAMPS
 #endif
 
 #ifndef HAVE_CONFIG_H

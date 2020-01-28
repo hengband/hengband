@@ -1589,10 +1589,6 @@ bool save_player(player_type *player_ptr)
  */
 bool load_player(player_type *player_ptr)
 {
-#ifdef VERIFY_TIMESTAMP
-	struct stat     statbuf;
-#endif
-
 	concptr    what = "generic";
 
 	current_world_ptr->game_turn = 0;
@@ -1678,11 +1674,6 @@ bool load_player(player_type *player_ptr)
 	/* Process file */
 	if (!err)
 	{
-#ifdef VERIFY_TIMESTAMP
-		/* Get the timestamp */
-		(void)fstat(fd, &statbuf);
-#endif
-
 		/* Read the first four bytes */
 		if (fd_read(fd, (char*)(vvv), 4)) err = -1;
 
@@ -1717,21 +1708,6 @@ bool load_player(player_type *player_ptr)
 		/* Message (below) */
 		if (err) what = _("セーブファイルが壊れています", "Broken savefile");
 	}
-
-#ifdef VERIFY_TIMESTAMP
-	/* Verify timestamp */
-	if (!err && !arg_wizard)
-	{
-		/* Hack -- Verify the timestamp */
-		if (current_world_ptr->sf_when > (statbuf.st_ctime + 100) ||
-			current_world_ptr->sf_when < (statbuf.st_ctime - 100))
-		{
-			what = _("無効なタイム・スタンプです", "Invalid timestamp");
-
-			err = -1;
-		}
-	}
-#endif
 
 	if (!err)
 	{
