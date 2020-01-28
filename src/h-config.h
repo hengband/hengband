@@ -375,18 +375,6 @@
 # endif
 #endif
 
-/*
- * OPTION: Attempt to prevent all "cheating"
- */
-/* #define VERIFY_HONOR */
-
-
-/*
- * React to the "VERIFY_HONOR" flag
- */
-#ifdef VERIFY_HONOR
-#endif
-
 #ifndef HAVE_CONFIG_H
 #define WORLD_SCORE
 #endif /* HAVE_CONFIG_H */
