@@ -4128,16 +4128,12 @@ static void process_command(player_type *creature_ptr)
 		break;
 	}
 
-#ifndef VERIFY_SAVEFILE
-
 	/* Hack -- Save and don't quit */
 	case KTRL('S'):
 	{
 		do_cmd_save_game(creature_ptr, FALSE);
 		break;
 	}
-
-#endif /* VERIFY_SAVEFILE */
 
 	case KTRL('T'):
 	{

@@ -1533,24 +1533,6 @@ bool save_player(player_type *player_ptr)
 		/* Hack -- Pretend the character was loaded */
 		current_world_ptr->character_loaded = TRUE;
 
-#ifdef VERIFY_SAVEFILE
-
-		/* Lock on savefile */
-		strcpy(temp, savefile);
-		strcat(temp, ".lok");
-
-		/* Grab permissions */
-		safe_setuid_grab();
-
-		/* Remove lock file */
-		fd_kill(temp);
-
-		/* Drop permissions */
-		safe_setuid_drop();
-
-#endif
-
-		/* Success */
 		result = TRUE;
 	}
 
@@ -1618,45 +1600,6 @@ bool load_player(player_type *player_ptr)
 #endif
 
 	errr err = 0;
-#ifdef VERIFY_SAVEFILE
-
-	/* Verify savefile usage */
-	if (!err)
-	{
-		FILE *fkk;
-
-		char temp[1024];
-
-		/* Extract name of lock file */
-		strcpy(temp, savefile);
-		strcat(temp, ".lok");
-
-		/* Check for lock */
-		fkk = my_fopen(temp, "r");
-
-		/* Oops, lock exists */
-		if (fkk)
-		{
-			my_fclose(fkk);
-
-			msg_print(_("セーブファイルは現在使用中です。", "Savefile is currently in use."));
-			msg_print(NULL);
-
-			return FALSE;
-		}
-
-		/* Create a lock file */
-		fkk = my_fopen(temp, "w");
-
-		/* Dump a line of info */
-		fprintf(fkk, "Lock file for savefile '%s'\n", savefile);
-
-		/* Close the lock file */
-		my_fclose(fkk);
-	}
-
-#endif
-
 	int fd = -1;
 	byte vvv[4];
 	if (!err)
@@ -1764,23 +1707,6 @@ bool load_player(player_type *player_ptr)
 		return TRUE;
 	}
 
-#ifdef VERIFY_SAVEFILE
-
-	/* Verify savefile usage */
-	if (TRUE)
-	{
-		char temp[1024];
-
-		/* Extract name of lock file */
-		strcpy(temp, savefile);
-		strcat(temp, ".lok");
-
-		/* Remove lock */
-		fd_kill(temp);
-	}
-
-#endif
-
 	msg_format(_("エラー(%s)がバージョン%d.%d.%d 用セーブファイル読み込み中に発生。", "Error (%s) reading %d.%d.%d savefile."),
 		what, (current_world_ptr->z_major > 9) ? current_world_ptr->z_major - 10 : current_world_ptr->z_major, current_world_ptr->z_minor, current_world_ptr->z_patch);
 	msg_print(NULL);
@@ -1794,20 +1720,6 @@ bool load_player(player_type *player_ptr)
  */
 void remove_loc(void)
 {
-#ifdef VERIFY_SAVEFILE
-	char temp[1024];
-#endif /* VERIFY_SAVEFILE */
-
-#ifdef VERIFY_SAVEFILE
-
-	/* Lock on savefile */
-	strcpy(temp, savefile);
-	strcat(temp, ".lok");
-
-	/* Remove lock file */
-	fd_kill(temp);
-
-#endif /* VERIFY_SAVEFILE */
 }
 
 

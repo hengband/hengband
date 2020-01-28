@@ -234,16 +234,6 @@
 # define SAFE_SETUID_POSIX
 #endif
 
-
-/*
- * OPTION: Forbid the "savefile over-write" cheat, in which you simply
- * run another copy of the game, loading a previously saved savefile,
- * and let that copy over-write the "dead" savefile later.  This option
- * either locks the savefile, or creates a fake "xxx.lok" file to prevent
- * the use of the savefile until the file is deleted.  Not ready yet.
- */
-/* #define VERIFY_SAVEFILE */
-
  /*
  * OPTION: Handle signals
  */
@@ -395,7 +385,6 @@
  * React to the "VERIFY_HONOR" flag
  */
 #ifdef VERIFY_HONOR
-# define VERIFY_SAVEFILE
 #endif
 
 #ifndef HAVE_CONFIG_H
