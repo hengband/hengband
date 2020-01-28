@@ -1715,15 +1715,6 @@ bool load_player(player_type *player_ptr)
 
 
 /*!
- * @brief ファイルロック処理
- * @return なし
- */
-void remove_loc(void)
-{
-}
-
-
-/*!
  * @brief ゲームプレイ中のフロア一時保存出力処理サブルーチン / Actually write a temporary saved floor file
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param sf_ptr 保存フロア参照ポインタ

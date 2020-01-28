@@ -538,7 +538,6 @@ static s32b auto_round;
  */
 static void birth_quit(void)
 {
-	remove_loc();
 	quit(NULL);
 }
 
