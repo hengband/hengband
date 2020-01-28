@@ -149,9 +149,6 @@
 
 #endif /* INCLUDED_H_CONFIG_H */
 
-/* Allow various special stuff (sound, graphics, etc.) */
-#define USE_SPECIAL
-
 #ifndef HAVE_CONFIG_H
 
 /*
@@ -277,8 +274,6 @@
 /* #define SCORE_CHEATERS */
 
 
-#ifdef USE_SPECIAL
-
 /*
  * OPTION: Allow the use of "sound" in various places.
  */
@@ -293,8 +288,6 @@
  * OPTION: Allow the use of "music" in various places
  */
 #define USE_MUSIC
-
-#endif /* USE_SPECIAL */
 
 
 /*
