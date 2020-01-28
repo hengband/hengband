@@ -446,7 +446,7 @@ void leave_quest_check(player_type *player_ptr)
 	quest_type* const q_ptr = &quest[leaving_quest];
 	bool is_one_time_quest = ((q_ptr->flags & QUEST_FLAG_ONCE) || (q_ptr->type == QUEST_TYPE_RANDOM)) &&
 		(q_ptr->status == QUEST_STATUS_TAKEN);
-	if (is_one_time_quest) return;
+	if (!is_one_time_quest) return;
 
 	q_ptr->status = QUEST_STATUS_FAILED;
 	q_ptr->complev = player_ptr->lev;
