@@ -646,8 +646,6 @@ static bool can_use_sound = FALSE;
  */
 static concptr sound_file[SOUND_MAX][SAMPLE_SOUND_MAX];
 
-#ifdef USE_MUSIC
-
 #define SAMPLE_MUSIC_MAX 16
 static concptr music_file[MUSIC_BASIC_MAX][SAMPLE_MUSIC_MAX];
 static concptr dungeon_music_file[1000][SAMPLE_MUSIC_MAX];
@@ -660,9 +658,6 @@ static char mci_device_type[256];
 
 int current_music_type = 0;
 int current_music_id = 0;
-
-#endif /* USE_MUSIC */
-
 
 /*
  * Full path to ANGBAND.INI
@@ -686,10 +681,7 @@ static concptr ANGBAND_DIR_XTRA_GRAF;
 static concptr ANGBAND_DIR_XTRA_SOUND;
 static concptr ANGBAND_DIR_XTRA_MUSIC;
 static concptr ANGBAND_DIR_XTRA_HELP;
-#ifdef USE_MUSIC
 static concptr ANGBAND_DIR_XTRA_MUSIC;
-#endif
-
 
 /*
  * The "complex" color values
@@ -1269,7 +1261,6 @@ static void load_prefs(void)
 	}
 }
 
-#if defined(USE_MUSIC)
 
 /*
  * - Taken from files.c.
@@ -1319,7 +1310,6 @@ static s16b tokenize_whitespace(char *buf, s16b num, char **tokens)
 	return (k);
 }
 
-#endif /* USE_MUSIC */
 
 static void load_sound_prefs(void)
 {
@@ -1351,8 +1341,6 @@ static void load_sound_prefs(void)
 	}
 }
 
-
-#ifdef USE_MUSIC
 
 static void load_music_prefs(void)
 {
@@ -1443,7 +1431,6 @@ static void load_music_prefs(void)
 
 }
 
-#endif /* USE_MUSIC */
 
 /*
  * Create the new global palette based on the bitmap palette
@@ -1698,7 +1685,6 @@ static bool init_graphics(void)
 }
 
 
-#ifdef USE_MUSIC
 /*
  * Initialize music
  */
@@ -1725,7 +1711,6 @@ static void stop_music(void)
 	mciSendCommand(mop.wDeviceID, MCI_CLOSE, 0, 0);
 }
 
-#endif /* USE_MUSIC */
 
 /*
  * Initialize sound
@@ -1992,8 +1977,6 @@ static errr term_xtra_win_react(player_type *player_ptr)
 		use_sound = arg_sound;
 	}
 
-#ifdef USE_MUSIC
-
 	/* Handle "arg_sound" */
 	if (use_music != arg_music)
 	{
@@ -2013,8 +1996,6 @@ static errr term_xtra_win_react(player_type *player_ptr)
 		else select_floor_music(player_ptr);
 
 	}
-
-#endif
 
 	/* Handle "arg_graphics" */
 	if (use_graphics != arg_graphics)
@@ -2209,11 +2190,8 @@ static errr term_xtra_win_sound(int v)
  */
 static errr term_xtra_win_music(int n, int v)
 {
-#ifdef USE_MUSIC
 	int i = 0;
 	char buf[1024];
-#endif /* USE_MUSIC */
-
 	/* Sound disabled */
 	if (n == TERM_XTRA_MUSIC_MUTE)
 	{
@@ -2226,8 +2204,6 @@ static errr term_xtra_win_music(int n, int v)
 	/* Illegal sound */
 	if (n == TERM_XTRA_MUSIC_BASIC && ((v < 0) || (v >= MUSIC_BASIC_MAX))) return 1;
 	else if (v < 0 || v >= 1000) return(1); /*!< TODO */
-
-#ifdef USE_MUSIC
 
 	switch (n)
 	{
@@ -2286,13 +2262,6 @@ static errr term_xtra_win_music(int n, int v)
 	return 0;
 
 #endif /* WIN32 */
-
-#else /* USE_MUSIC */
-
-	return 1;
-
-#endif /* USE_MUSIC */
-
 }
 
 
@@ -4201,9 +4170,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 
 	case WM_CREATE:
 	{
-#ifdef USE_MUSIC
 		mop.dwCallback = (DWORD)hWnd;
-#endif
 		return 0;
 	}
 
@@ -4241,7 +4208,6 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		return 0;
 	}
 
-#ifdef USE_MUSIC
 	case MM_MCINOTIFY:
 	{
 		if (wParam == MCI_NOTIFY_SUCCESSFUL)
@@ -4251,7 +4217,6 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 		}
 		return 0;
 	}
-#endif
 
 	case WM_SYSKEYDOWN:
 	case WM_KEYDOWN:
@@ -5089,8 +5054,6 @@ static void init_stuff(void)
 	/* Validate the "sound" directory */
 	validate_dir(ANGBAND_DIR_XTRA_SOUND, FALSE);
 
-#ifdef USE_MUSIC
-
 	/* Build the "music" path */
 	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "music");
 
@@ -5099,8 +5062,6 @@ static void init_stuff(void)
 
 	/* Validate the "music" directory */
 	validate_dir(ANGBAND_DIR_XTRA_MUSIC, FALSE);
-
-#endif /* USE_MUSIC */
 
 	/* Build the "help" path */
 	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "help");
@@ -5111,6 +5072,7 @@ static void init_stuff(void)
 	/* Validate the "help" directory */
 	/* validate_dir(ANGBAND_DIR_XTRA_HELP); */
 }
+
 
 /*!
  * @brief (Windows固有)変愚蛮怒が起動済かどうかのチェック

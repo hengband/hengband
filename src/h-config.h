@@ -274,12 +274,6 @@
 /* #define SCORE_CHEATERS */
 
 /*
- * OPTION: Allow the use of "music" in various places
- */
-#define USE_MUSIC
-
-
-/*
  * OPTION: Set the "default" path to the angband "lib" directory.
  *
  * See "main.c" for usage, and note that this value is only used on
