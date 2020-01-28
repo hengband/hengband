@@ -284,8 +284,6 @@ static term_data data[MAX_TERM_DATA];
 /* #define nl() */
 
 
-#ifdef USE_SOUND
-
  /*
   * Standard sound names
   */
@@ -372,7 +370,6 @@ static bool can_use_sound = FALSE;
  */
 static concptr sound_file[SOUND_MAX];
 
-#endif /* USE_SOUND */
 
 /*
  * Save the "normal" and "angband" terminal settings
@@ -724,9 +721,6 @@ static bool check_file(concptr s)
 }
 
 
-
-#ifdef USE_SOUND
-
 /*
  * Initialize sound
  */
@@ -760,9 +754,6 @@ static bool init_sound(void)
    /* Result */
    return (can_use_sound);
 }
-
-#endif /* USE_SOUND */
-
 
 
 /*
@@ -933,8 +924,6 @@ static errr Term_xtra_gcu_event(int v)
 
 #endif   /* USE_GETCH */
 
-#ifdef USE_SOUND
-
 /*
  * Hack -- make a sound
  */
@@ -987,7 +976,7 @@ static errr Term_xtra_gcu_sound(int v)
    return (0);
 
 }
-#endif
+
 
 /*
  * React to changes
@@ -1038,11 +1027,9 @@ static errr Term_xtra_gcu(int n, int v)
       case TERM_XTRA_NOISE:
       return write(1, "\007", 1) != 1;
 
-#ifdef USE_SOUND
       /* Make a special sound */
       case TERM_XTRA_SOUND:
 	 return (Term_xtra_gcu_sound(v));
-#endif
 
       /* Flush the Curses buffer */
       case TERM_XTRA_FRESH:
@@ -1284,15 +1271,11 @@ errr init_gcu(int argc, char *argv[])
 
    setlocale(LC_ALL, "");
 
-#ifdef USE_SOUND
-
    /* Build the "sound" path */
    path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
 
    /* Allocate the path */
    ANGBAND_DIR_XTRA_SOUND = string_make(path);
-
-#endif
 
    /* Extract the normal keymap */
    keymap_norm_prepare();
@@ -1382,7 +1365,6 @@ errr init_gcu(int argc, char *argv[])
 
 #endif
 
-#ifdef USE_SOUND
    /* Handle "arg_sound" */
    if (use_sound != arg_sound)
    {
@@ -1399,7 +1381,6 @@ errr init_gcu(int argc, char *argv[])
       /* Change setting */
       use_sound = arg_sound;
    }
-#endif
 
 #ifdef USE_GRAPHICS
 

@@ -58,10 +58,7 @@
 * be placed into "src/", and the "8X8.BMP" bitmap file must be placed
 * into "lib/xtra/graf".  In any case, some "*.fon" files (including
 * "8X13.FON" if nothing else) must be placed into "lib/xtra/font/".
-* If "USE_SOUND" is defined, then some special library (for example,
-* "winmm.lib") may need to be linked in, and desired "*.WAV" sound
-* files must be placed into "lib/xtra/sound/".  All of these extra
-* files can be found in the "ext-win" archive.
+* All of these extra files can be found in the "ext-win" archive.
 * </p>
 *
 * <p>
@@ -646,8 +643,6 @@ static DIBINIT infMask;
 #endif /* USE_GRAPHICS */
 
 
-#ifdef USE_SOUND
-
 /*
  * Flag set once "sound" has been initialized
  */
@@ -658,10 +653,6 @@ static bool can_use_sound = FALSE;
  * An array of sound file names
  */
 static concptr sound_file[SOUND_MAX][SAMPLE_SOUND_MAX];
-
-#endif /* USE_SOUND */
-
-
 
 #ifdef USE_MUSIC
 
@@ -1286,7 +1277,7 @@ static void load_prefs(void)
 	}
 }
 
-#if defined(USE_SOUND) || defined(USE_MUSIC)
+#if defined(USE_MUSIC)
 
 /*
  * - Taken from files.c.
@@ -1336,9 +1327,7 @@ static s16b tokenize_whitespace(char *buf, s16b num, char **tokens)
 	return (k);
 }
 
-#endif /* USE_SOUND || USE_MUSIC */
-
-#ifdef USE_SOUND
+#endif /* USE_MUSIC */
 
 static void load_sound_prefs(void)
 {
@@ -1370,7 +1359,6 @@ static void load_sound_prefs(void)
 	}
 }
 
-#endif /* USE_SOUND */
 
 #ifdef USE_MUSIC
 
@@ -1753,7 +1741,6 @@ static void stop_music(void)
 
 #endif /* USE_MUSIC */
 
-#ifdef USE_SOUND
 /*
  * Initialize sound
  */
@@ -1770,7 +1757,6 @@ static bool init_sound(void)
 	}
 	return (can_use_sound);
 }
-#endif /* USE_SOUND */
 
 
 /*
@@ -2003,9 +1989,6 @@ static errr term_xtra_win_react(player_type *player_ptr)
 		if (change) (void)new_palette();
 	}
 
-
-#ifdef USE_SOUND
-
 	/* Handle "arg_sound" */
 	if (use_sound != arg_sound)
 	{
@@ -2022,8 +2005,6 @@ static errr term_xtra_win_react(player_type *player_ptr)
 		/* Change setting */
 		use_sound = arg_sound;
 	}
-
-#endif
 
 #ifdef USE_MUSIC
 
@@ -2208,18 +2189,14 @@ static errr term_xtra_win_noise(void)
  */
 static errr term_xtra_win_sound(int v)
 {
-#ifdef USE_SOUND
 	int i;
 	char buf[1024];
-#endif /* USE_SOUND */
 
 	/* Sound disabled */
 	if (!use_sound) return 1;
 
 	/* Illegal sound */
 	if ((v < 0) || (v >= SOUND_MAX)) return 1;
-
-#ifdef USE_SOUND
 
 	/* Count the samples */
 	for (i = 0; i < SAMPLE_SOUND_MAX; i++)
@@ -2245,12 +2222,6 @@ static errr term_xtra_win_sound(int v)
 	return (sndPlaySound(buf, SND_ASYNC));
 
 #endif /* WIN32 */
-
-#else /* USE_SOUND */
-
-	return 1;
-
-#endif /* USE_SOUND */
 }
 
 /*
@@ -3426,10 +3397,8 @@ static void setup_menus(void)
 	EnableMenuItem(hm, IDM_OPTIONS_BIGTILE, MF_ENABLED);
 #endif /* USE_GRAPHICS */
 
-#ifdef USE_SOUND
 	/* Menu "Options", Item "Sound" */
 	EnableMenuItem(hm, IDM_OPTIONS_SOUND, MF_ENABLED);
-#endif /* USE_SOUND */
 
 #ifdef USE_SAVER
 	/* Menu "Options", Item "ScreenSaver" */
@@ -5150,9 +5119,6 @@ static void init_stuff(void)
 
 #endif /* USE_GRAPHICS */
 
-
-#ifdef USE_SOUND
-
 	/* Build the "sound" path */
 	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
 
@@ -5161,8 +5127,6 @@ static void init_stuff(void)
 
 	/* Validate the "sound" directory */
 	validate_dir(ANGBAND_DIR_XTRA_SOUND, FALSE);
-
-#endif /* USE_SOUND */
 
 #ifdef USE_MUSIC
 

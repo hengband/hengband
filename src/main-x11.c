@@ -2835,8 +2835,6 @@ static errr CheckEvent(bool wait)
 }
 
 
-#ifdef USE_SOUND
-
  /*
   * Standard sound names
   */
@@ -2980,7 +2978,6 @@ static errr Term_xtra_x11_sound(int v)
 	return (system(buf) < 0);
 	
 }
-#endif /* USE_SOUND */
 
 
 /*
@@ -3062,10 +3059,8 @@ static errr Term_xtra_x11(int n, int v)
 		/* Make a noise */
 		case TERM_XTRA_NOISE: Metadpy_do_beep(); return (0);
 
-#ifdef USE_SOUND
 		/* Make a special sound */
 		case TERM_XTRA_SOUND: return (Term_xtra_x11_sound(v));
-#endif
 
 		/* Flush the output XXX XXX */
 		case TERM_XTRA_FRESH: Metadpy_update(1, 0, 0); return (0);
@@ -3926,10 +3921,8 @@ errr init_x11(int argc, char *argv[])
 	XRegisterIMInstantiateCallback(Metadpy->dpy, NULL, NULL, NULL, IMInstantiateCallback, NULL);
 #endif
 
-#ifdef USE_SOUND
 	/* initialize sound */
 	if (arg_sound) init_sound();
-#endif
 
 #ifdef USE_GRAPHICS
 
