@@ -302,39 +302,6 @@ static XtResource resources[] =
 	{ XtNcolor15, XtCColor, XtRPixel, sizeof(Pixel),
 	offset(color[15]), XtRString, "#ffcc80" },
 
-#if 0
-
-	{ XtNcolor2, XtCColor, XtRPixel, sizeof(Pixel),
-	offset(color[2]), XtRString, "#a6a6a6" },
-	{ XtNcolor3, XtCColor, XtRPixel, sizeof(Pixel),
-	offset(color[3]), XtRString, "#ff6302" },
-	{ XtNcolor4, XtCColor, XtRPixel, sizeof(Pixel),
-	offset(color[4]), XtRString, "#ca0808" },
-	{ XtNcolor5, XtCColor, XtRPixel, sizeof(Pixel),
-	offset(color[5]), XtRString, "#008e18" },
-	{ XtNcolor6, XtCColor, XtRPixel, sizeof(Pixel),
-	offset(color[6]), XtRString, "#0000e3" },
-	{ XtNcolor7, XtCColor, XtRPixel, sizeof(Pixel),
-	offset(color[7]), XtRString, "#814007" },
-	{ XtNcolor8, XtCColor, XtRPixel, sizeof(Pixel),
-	offset(color[8]), XtRString, "#6b6b6b" },
-	{ XtNcolor9, XtCColor, XtRPixel, sizeof(Pixel),
-	offset(color[9]), XtRString, "#d6d6d6" },
-	{ XtNcolor10, XtCColor, XtRPixel, sizeof(Pixel),
-	offset(color[10]), XtRString, "#5100c2" },
-	{ XtNcolor11, XtCColor, XtRPixel, sizeof(Pixel),
-	offset(color[11]), XtRString, "#fdf105" },
-	{ XtNcolor12, XtCColor, XtRPixel, sizeof(Pixel),
-	offset(color[12]), XtRString, "#ff9259" },
-	{ XtNcolor13, XtCColor, XtRPixel, sizeof(Pixel),
-	offset(color[13]), XtRString, "#26cf17" },
-	{ XtNcolor14, XtCColor, XtRPixel, sizeof(Pixel),
-	offset(color[14]), XtRString, "#02b2f2" },
-	{ XtNcolor15, XtCColor, XtRPixel, sizeof(Pixel),
-	offset(color[15]), XtRString, "#b28b48" },
-
-#endif
-
 	{ XtNredrawCallback, XtCCallback, XtRCallback, sizeof(XtPointer),
 	offset(redraw_callbacks), XtRCallback, (XtPointer)NULL }
 };

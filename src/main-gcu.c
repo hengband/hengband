@@ -594,18 +594,6 @@ static void keymap_game_prepare(void)
    game_termio.c_cc[VEOF] = (char)-1;
    game_termio.c_cc[VEOL] = (char)-1;
 
-#if 0
-   /* Disable the non-posix control characters */
-   game_termio.c_cc[VEOL2] = (char)-1;
-   game_termio.c_cc[VSWTCH] = (char)-1;
-   game_termio.c_cc[VDSUSP] = (char)-1;
-   game_termio.c_cc[VREPRINT] = (char)-1;
-   game_termio.c_cc[VDISCARD] = (char)-1;
-   game_termio.c_cc[VWERASE] = (char)-1;
-   game_termio.c_cc[VLNEXT] = (char)-1;
-   game_termio.c_cc[VSTATUS] = (char)-1;
-#endif
-
    /* Normally, block until a character is read */
    game_termio.c_cc[VMIN] = 1;
    game_termio.c_cc[VTIME] = 0;
@@ -944,35 +932,6 @@ static errr Term_xtra_gcu_sound(int v)
    
    return (system(buf) < 0);
 
-#if 0
-   char *argv[4];
-   pid_t pid;
-
-   /* Sound disabled */
-   if (!use_sound) return (1);
-
-   /* Illegal sound */
-   if ((v < 0) || (v >= SOUND_MAX)) return (1);
-
-   /* Unknown sound */
-   if (!sound_file[v]) return (1);
-
-   pid=fork();
-
-   /* cannot fork? */
-   if (pid==-1) return (1);
-
-   if (pid==0)
-   {
-      char *argv[4];
-      argv[0]="sh";
-      argv[1]="-c";
-      argv[2]="./gcusound.sh";
-      strcpy(argv[3],sound_file[v]);
-      execvp(argv[0], argv);
-      exit(0);
-   }
-#endif
    return (0);
 
 }

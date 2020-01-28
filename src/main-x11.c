@@ -130,9 +130,6 @@
 #ifdef USE_LOCALE
 #include <X11/Xlocale.h>
 #endif
-#if 0
-char *XSetIMValues(XIM, ...); /* Hack for XFree86 4.0 */
-#endif
 #include <X11/Xatom.h>
 #endif /* __MAKEDEPEND__ */
 
