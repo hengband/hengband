@@ -784,7 +784,6 @@ static bool get_item_allow(player_type *owner_ptr, INVENTORY_IDX item)
 
 
 /*!
- * todo この関数のプロトタイプ宣言がobject.hにいる。player_inventory.hであるべき
  * @brief オブジェクト選択の汎用関数 /
  * Let the user select an item, save its "index"
  * @param owner_ptr プレーヤーへの参照ポインタ
