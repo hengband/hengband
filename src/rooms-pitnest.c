@@ -710,6 +710,7 @@ bool build_type6(player_type *player_ptr)
 
 
 /*
+* todo vault_monster_okay() をmonsterrace-hook以外から呼んでいるのはここだけなので、何とかしたい
 * Helper function for "trapped monster pit"
 */
 static bool vault_aux_trapped_pit(MONRACE_IDX r_idx)

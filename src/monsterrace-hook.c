@@ -93,6 +93,7 @@ void vault_prep_dragon(player_type *player_ptr)
 	}
 }
 
+
 /*!
 * @brief モンスターがクエストの討伐対象に成り得るかを返す / Hook function for quest monsters
 * @param r_idx モンスターＩＤ
@@ -234,6 +235,7 @@ bool mon_hook_volcano(MONRACE_IDX r_idx)
 		return FALSE;
 }
 
+
 /*!
 * @brief モンスターが山地に出現するかどうかを返す
 * @param r_idx 判定するモンスターの種族ID
@@ -264,6 +266,7 @@ bool mon_hook_grass(MONRACE_IDX r_idx)
 	else
 		return FALSE;
 }
+
 
 /*!
 * @brief モンスターが深い水地形に出現するかどうかを返す
@@ -333,6 +336,7 @@ bool mon_hook_floor(MONRACE_IDX r_idx)
 		return FALSE;
 }
 
+
 /*
 * Helper function for "glass room"
 */
@@ -345,6 +349,7 @@ bool vault_aux_lite(MONRACE_IDX r_idx)
 	if (r_ptr->flags4 & RF4_BR_DISI) return FALSE;
 	return TRUE;
 }
+
 
 /*
 * Helper function for "glass room"
@@ -386,6 +391,7 @@ bool vault_aux_jelly(MONRACE_IDX r_idx)
 	return TRUE;
 }
 
+
 /*!
 * @brief モンスターが動物nestの生成必要条件を満たしているかを返す /
 * Helper function for "monster nest (animal)"
@@ -415,6 +421,7 @@ bool vault_aux_undead(MONRACE_IDX r_idx)
 	return TRUE;
 }
 
+
 /*!
 * @brief モンスターが聖堂nestの生成必要条件を満たしているかを返す /
 * Helper function for "monster nest (chapel)"
@@ -440,6 +447,7 @@ bool vault_aux_chapel_g(MONRACE_IDX r_idx)
 	return FALSE;
 }
 
+
 /*!
 * @brief モンスターが犬小屋nestの生成必要条件を満たしているかを返す /
 * Helper function for "monster nest (kennel)"
@@ -454,6 +462,7 @@ bool vault_aux_kennel(MONRACE_IDX r_idx)
 	return TRUE;
 }
 
+
 /*!
 * @brief モンスターがミミックnestの生成必要条件を満たしているかを返す /
 * Helper function for "monster nest (mimic)"
@@ -467,6 +476,7 @@ bool vault_aux_mimic(MONRACE_IDX r_idx)
 	if (!my_strchr("!$&(/=?[\\|", r_ptr->d_char)) return FALSE;
 	return TRUE;
 }
+
 
 /*!
 * @brief モンスターが単一クローンnestの生成必要条件を満たしているかを返す /
@@ -612,6 +622,7 @@ bool vault_aux_cthulhu(MONRACE_IDX r_idx)
 	return TRUE;
 }
 
+
 /*!
 * @brief モンスターがダークエルフpitの生成必要条件を満たしているかを返す /
 * Helper function for "monster pit (dark elf)"
@@ -633,7 +644,6 @@ bool vault_aux_dark_elf(MONRACE_IDX r_idx)
 }
 
 
-
 /*!
  * @brief モンスターが生命体かどうかを返す
  * Is the monster "alive"?
@@ -653,6 +663,7 @@ bool monster_living(MONRACE_IDX r_idx)
 	else
 		return TRUE;
 }
+
 
 /*!
  * @brief モンスターが特殊能力上、賞金首から排除する必要があるかどうかを返す。
@@ -679,6 +690,7 @@ bool no_questor_or_bounty_uniques(MONRACE_IDX r_idx)
 	}
 }
 
+
 /*!
  * @brief バルログが死体を食べられるモンスターかの判定 / Hook function for human corpses
  * @param r_idx モンスターＩＤ
@@ -692,6 +704,7 @@ bool monster_hook_human(MONRACE_IDX r_idx)
 
 	return FALSE;
 }
+
 
 /*!
  * @brief 悪夢の元凶となるモンスターかどうかを返す。
@@ -712,6 +725,7 @@ bool get_nightmare(MONRACE_IDX r_idx)
 	return TRUE;
 }
 
+
 /*!
  * @brief モンスター種族が釣れる種族かどうかを判定する。
  * @param r_idx 判定したいモンスター種族のID
@@ -726,6 +740,7 @@ bool monster_is_fishing_target(MONRACE_IDX r_idx)
 	else
 		return FALSE;
 }
+
 
 /*!
  * @brief モンスター闘技場に参加できるモンスターの判定
@@ -764,6 +779,7 @@ bool monster_can_entry_arena(MONRACE_IDX r_idx)
 	return TRUE;
 }
 
+
 /*!
  * @brief モンスターが人形のベースにできるかを返す
  * @param r_idx チェックしたいモンスター種族のID
@@ -784,3 +800,21 @@ bool item_monster_okay(MONRACE_IDX r_idx)
 	return TRUE;
 }
 
+
+/*!
+* vaultに配置可能なモンスターの条件を指定するマクロ / Monster validation macro
+* @param r_idx モンスター種別ID
+* @param Vaultに配置可能であればTRUE
+* @details
+* Line 1 -- forbid town monsters
+* Line 2 -- forbid uniques
+* Line 3 -- forbid aquatic monsters
+*/
+bool vault_monster_okay(MONRACE_IDX r_idx)
+{
+	return (mon_hook_dungeon(r_idx) &&
+		!(r_info[r_idx].flags1 & RF1_UNIQUE) &&
+		!(r_info[r_idx].flags7 & RF7_UNIQUE2) &&
+		!(r_info[r_idx].flagsr & RFR_RES_ALL) &&
+		!(r_info[r_idx].flags7 & RF7_AQUATIC));
+}
