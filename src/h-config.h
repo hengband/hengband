@@ -262,17 +262,6 @@
  */
 #define HANDLE_SIGNALS
 
-
-/*
- * Allow "Wizards" to yield "high scores"
- */
-/* #define SCORE_WIZARDS */
-
-/*
- * Allow "Cheaters" to yield "high scores"
- */
-/* #define SCORE_CHEATERS */
-
 /*
  * OPTION: Set the "default" path to the angband "lib" directory.
  *

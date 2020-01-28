@@ -905,7 +905,6 @@ bool check_score(player_type *current_player_ptr)
 		return FALSE;
 	}
 
-#ifndef SCORE_WIZARDS
 	/* Wizard-mode pre-empts scoring */
 	if (current_world_ptr->noscore & 0x000F)
 	{
@@ -913,9 +912,7 @@ bool check_score(player_type *current_player_ptr)
 		msg_print(NULL);
 		return FALSE;
 	}
-#endif
 
-#ifndef SCORE_CHEATERS
 	/* Cheaters are not scored */
 	if (current_world_ptr->noscore & 0xFF00)
 	{
@@ -923,7 +920,6 @@ bool check_score(player_type *current_player_ptr)
 		msg_print(NULL);
 		return FALSE;
 	}
-#endif
 
 	/* Interupted */
 	if (!current_world_ptr->total_winner && streq(current_player_ptr->died_from, _("強制終了", "Interrupting")))
