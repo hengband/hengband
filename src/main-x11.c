@@ -774,19 +774,6 @@ static errr Infowin_init_data(Window dad, int x, int y, int w, int h,
 	/* If no parent given, depend on root */
 	if (dad == None)
 
-/* #ifdef USE_GRAPHICS
-
-		xid = XCreateWindow(Metadpy->dpy, Metadpy->root, x, y, w, h, b, 8, InputOutput, CopyFromParent, 0, 0);
-
-	else
-*/
-
-/* #else */
-
-		dad = Metadpy->root;
-
-/* #endif */
-
 	/* Create the Window XXX Error Check */
 	xid = XCreateSimpleWindow(Metadpy->dpy, dad, x, y, w, h, b, fg, bg);
 
@@ -1790,15 +1777,10 @@ struct term_data
 
 	infowin *win;
 
-#ifdef USE_GRAPHICS
-
 	XImage *tiles;
 
 	/* Tempory storage for overlaying tiles. */
 	XImage *TmpImage;
-
-#endif
-
 };
 
 
@@ -3191,8 +3173,6 @@ static errr Term_text_x11(TERM_LEN x, TERM_LEN y, int n, TERM_COLOR a, concptr s
 }
 
 
-#ifdef USE_GRAPHICS
-
 /*
  * Draw some graphical characters.
  */
@@ -3302,8 +3282,6 @@ static errr Term_pict_x11(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
 	/* Success */
 	return (0);
 }
-
-#endif /* USE_GRAPHICS */
 
 #ifdef USE_XIM
 static void IMDestroyCallback(XIM, XPointer, XPointer);
@@ -3750,16 +3728,12 @@ errr init_x11(int argc, char *argv[])
 
 	int num_term = 3;
 
-#ifdef USE_GRAPHICS
-
 	char filename[1024];
 
 	int pict_wid = 0;
 	int pict_hgt = 0;
 
 	char *TmpData;
-#endif /* USE_GRAPHICS */
-
 
 	/* Parse args */
 	for (i = 1; i < argc; i++)
@@ -3770,7 +3744,6 @@ errr init_x11(int argc, char *argv[])
 			continue;
 		}
 		
-#ifdef USE_GRAPHICS
 		if (prefix(argv[i], "-s"))
 		{
 			smoothRescaling = FALSE;
@@ -3794,7 +3767,6 @@ errr init_x11(int argc, char *argv[])
 			arg_bigtile = use_bigtile = TRUE;
 			continue;
 		}
-#endif /* USE_GRAPHICS */
 
 		if (prefix(argv[i], "-n"))
 		{
@@ -3924,8 +3896,6 @@ errr init_x11(int argc, char *argv[])
 	/* initialize sound */
 	if (arg_sound) init_sound();
 
-#ifdef USE_GRAPHICS
-
 	/* Try graphics */
 	switch (arg_graphics)
 	{
@@ -4022,12 +3992,8 @@ errr init_x11(int argc, char *argv[])
 		/* Free tiles_raw? XXX XXX */
 	}
 
-#endif /* USE_GRAPHICS */
-
-
 	/* Success */
 	return (0);
 }
 
 #endif /* USE_X11 */
-

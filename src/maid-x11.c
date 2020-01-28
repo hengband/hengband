@@ -117,8 +117,6 @@ static unsigned long create_pixel(Display *dpy, byte red, byte green, byte blue)
 
 
 
-#ifdef USE_GRAPHICS
-
 /*
  * The Win32 "BITMAPFILEHEADER" type.
  */
@@ -871,8 +869,5 @@ static XImage *ResizeImage(Display *dpy, XImage *Im,
 
 	return Tmp;
 }
-
-#endif /* USE_GRAPHICS */
-
 
 #endif /* USE_X11 */

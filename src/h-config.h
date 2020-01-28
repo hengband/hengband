@@ -274,11 +274,6 @@
 /* #define SCORE_CHEATERS */
 
 /*
- * OPTION: Allow the use of "graphics" in various places
- */
-#define USE_GRAPHICS
-
-/*
  * OPTION: Allow the use of "music" in various places
  */
 #define USE_MUSIC

@@ -1382,8 +1382,6 @@ errr init_gcu(int argc, char *argv[])
       use_sound = arg_sound;
    }
 
-#ifdef USE_GRAPHICS
-
    /* Try graphics */
    if (arg_graphics)
    {
@@ -1392,10 +1390,6 @@ errr init_gcu(int argc, char *argv[])
       use_graphics = TRUE;
 #endif
    }
-
-#endif /* USE_GRAPHICS */
-
-
 
    /*** Low level preparation ***/
 

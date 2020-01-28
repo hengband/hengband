@@ -54,11 +54,9 @@
 * <p>
 * Compiling this file, and using the resulting executable, requires
 * several extra files not distributed with the standard Angband code.
-* If "USE_GRAPHICS" is defined, then "readdib.h" and "readdib.c" must
-* be placed into "src/", and the "8X8.BMP" bitmap file must be placed
-* into "lib/xtra/graf".  In any case, some "*.fon" files (including
-* "8X13.FON" if nothing else) must be placed into "lib/xtra/font/".
-* All of these extra files can be found in the "ext-win" archive.
+* In any case, some "*.fon" files (including "8X13.FON" if nothing else)
+* must be placed into "lib/xtra/font/".  All of these extra files can be found
+* in the "ext-win" archive.
 * </p>
 *
 * <p>
@@ -423,9 +421,7 @@ const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 /*
  * Include the support for loading bitmaps
  */
-#ifdef USE_GRAPHICS
-# include "readdib.h"
-#endif
+#include "readdib.h"
 
  /*
   * Hack -- Fake declarations from "dos.h"
@@ -622,8 +618,6 @@ static HWND hwndSaver;
 #endif /* USE_SAVER */
 
 
-#ifdef USE_GRAPHICS
-
 /*!
  * 現在使用中のタイルID(0ならば未使用)
  * Flag set once "graphics" has been initialized
@@ -639,8 +633,6 @@ static DIBINIT infGraph;
  * The global bitmap mask
  */
 static DIBINIT infMask;
-
-#endif /* USE_GRAPHICS */
 
 
 /*
@@ -1488,8 +1480,6 @@ static int new_palette(void)
 	lppe = NULL;
 	nEntries = 0;
 
-#ifdef USE_GRAPHICS
-
 	/* Check the bitmap palette */
 	hBmPal = infGraph.hPalette;
 
@@ -1511,8 +1501,6 @@ static int new_palette(void)
 			return FALSE;
 		}
 	}
-
-#endif /* USE_GRAPHICS */
 
 	/* Size of palette */
 	pLogPalSize = sizeof(LOGPALETTE) + (nEntries + 16) * sizeof(PALETTEENTRY);
@@ -1591,7 +1579,6 @@ static int new_palette(void)
 }
 
 
-#ifdef USE_GRAPHICS
 /*!
  * @brief グラフィクスを初期化する / Initialize graphics
  * @details
@@ -1709,7 +1696,6 @@ static bool init_graphics(void)
 	current_graphics_mode = arg_graphics;
 	return (current_graphics_mode);
 }
-#endif /* USE_GRAPHICS */
 
 
 #ifdef USE_MUSIC
@@ -2030,9 +2016,6 @@ static errr term_xtra_win_react(player_type *player_ptr)
 
 #endif
 
-
-#ifdef USE_GRAPHICS
-
 	/* Handle "arg_graphics" */
 	if (use_graphics != arg_graphics)
 	{
@@ -2052,9 +2035,6 @@ static errr term_xtra_win_react(player_type *player_ptr)
 		/* Reset visuals */
 		reset_visuals(player_ptr);
 	}
-
-#endif /* USE_GRAPHICS */
-
 
 	/* Clean up windows */
 	for (i = 0; i < MAX_TERM_DATA; i++)
@@ -2739,9 +2719,6 @@ static errr term_text_win(int x, int y, int n, TERM_COLOR a, concptr s)
 static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, concptr cp, const TERM_COLOR *tap, concptr tcp)
 {
 	term_data *td = (term_data*)(Term->data);
-
-#ifdef USE_GRAPHICS
-
 	int i;
 	TERM_LEN x1, y1, w1, h1, tw1, th1;
 	TERM_LEN x2, y2, w2, h2, tw2 = 0;
@@ -2888,13 +2865,6 @@ static errr term_pict_win(TERM_LEN x, TERM_LEN y, int n, const TERM_COLOR *ap, c
 
 	/* Release */
 	ReleaseDC(td->w, hdc);
-
-#else /* USE_GRAPHICS */
-
-	/* Just erase this grid */
-	return (Term_wipe_win(x, y, n));
-
-#endif /* USE_GRAPHICS */
 
 	/* Success */
 	return 0;
@@ -3386,7 +3356,6 @@ static void setup_menus(void)
 		(hwndSaver ? MF_CHECKED : MF_UNCHECKED));
 #endif
 
-#ifdef USE_GRAPHICS
 	/* Menu "Options", Item "Graphics" */
 	EnableMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, MF_ENABLED);
 	/* Menu "Options", Item "Graphics" */
@@ -3395,7 +3364,6 @@ static void setup_menus(void)
 	EnableMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, MF_ENABLED);
 	/* Menu "Options", Item "Graphics" */
 	EnableMenuItem(hm, IDM_OPTIONS_BIGTILE, MF_ENABLED);
-#endif /* USE_GRAPHICS */
 
 	/* Menu "Options", Item "Sound" */
 	EnableMenuItem(hm, IDM_OPTIONS_SOUND, MF_ENABLED);
@@ -5004,14 +4972,11 @@ static void hook_quit(concptr str)
 	}
 
 	/* Free the bitmap stuff */
-#ifdef USE_GRAPHICS
 	if (infGraph.hPalette) DeleteObject(infGraph.hPalette);
 	if (infGraph.hBitmap) DeleteObject(infGraph.hBitmap);
 
 	if (infMask.hPalette) DeleteObject(infMask.hPalette);
 	if (infMask.hBitmap) DeleteObject(infMask.hBitmap);
-
-#endif /* USE_GRAPHICS */
 
 	/*** Free some other stuff ***/
 
@@ -5106,8 +5071,6 @@ static void init_stuff(void)
 	/* Hack -- Validate the "news.txt" file */
 	validate_file(path);
 
-#ifdef USE_GRAPHICS
-
 	/* Build the "graf" path */
 	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "graf");
 
@@ -5116,8 +5079,6 @@ static void init_stuff(void)
 
 	/* Validate the "graf" directory */
 	validate_dir(ANGBAND_DIR_XTRA_GRAF, TRUE);
-
-#endif /* USE_GRAPHICS */
 
 	/* Build the "sound" path */
 	path_build(path, sizeof(path), ANGBAND_DIR_XTRA, "sound");
