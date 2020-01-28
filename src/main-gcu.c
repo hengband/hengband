@@ -203,7 +203,7 @@ static term_data data[MAX_TERM_DATA];
 #  if defined(_POSIX_VERSION)
 #   define USE_TPOSIX
 #  else
-#   if defined(USG) || defined(linux)
+#   if defined(linux)
 #    define USE_TERMIO
 #   else
 #    define USE_TCHARS
@@ -1297,13 +1297,8 @@ errr init_gcu(int argc, char *argv[])
    /* Extract the normal keymap */
    keymap_norm_prepare();
 
-#if defined(USG)
-   /* Initialize for USG Unix */
-   if (initscr() == NULL) return (-1);
-#else
    /* Initialize for others systems */
    if (initscr() == (WINDOW*)ERR) return (-1);
-#endif
 
    /* Activate hooks */
    quit_aux = hook_quit;

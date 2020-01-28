@@ -74,10 +74,8 @@
 
 #ifdef SET_UID
 
-# ifndef USG
 #  include <sys/param.h>
 #  include <sys/file.h>
-# endif /* !USG */
 
 # ifdef linux
 #  include <sys/file.h>

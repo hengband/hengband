@@ -46,7 +46,7 @@
 #  if defined(_POSIX_VERSION)
 #   define USE_TPOSIX
 #  else
-#   if defined(USG) || defined(linux)
+#   if defined(linux)
 #    define USE_TERMIO
 #   else
 #    define USE_TCHARS

@@ -772,32 +772,7 @@ errr fd_lock(int fd, int what)
 	/* Verify the fd */
 	if (fd < 0) return -1;
 
-#ifdef SET_UID
-
-# ifdef USG
-
-#  if defined(F_ULOCK) && defined(F_LOCK)
-
-	/* Un-Lock */
-	if (what == F_UNLCK)
-	{
-		/* Unlock it, Ignore errors */
-		lockf(fd, F_ULOCK, 0);
-	}
-
-	/* Lock */
-	else
-	{
-		/* Lock the score file */
-		if (lockf(fd, F_LOCK, 0) != 0) return 1;
-	}
-
-#  endif
-
-# else
-
-#  if defined(LOCK_UN) && defined(LOCK_EX)
-
+#if defined(SET_UID) && defined(LOCK_UN) && defined(LOCK_EX)
 	/* Un-Lock */
 	if (what == F_UNLCK)
 	{
@@ -811,11 +786,6 @@ errr fd_lock(int fd, int what)
 		/* Lock the score file */
 		if (flock(fd, LOCK_EX) != 0) return 1;
 	}
-
-#  endif
-
-# endif
-
 #endif
 
 	/* Success */
