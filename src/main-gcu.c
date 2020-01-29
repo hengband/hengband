@@ -198,7 +198,6 @@ static term_data data[MAX_TERM_DATA];
  * Mega-Hack -- try to guess when "POSIX" is available.
  * If the user defines two of these, we will probably crash.
  */
-#if !defined(USE_TPOSIX)
 # if !defined(USE_TERMIO) && !defined(USE_TCHARS)
 #  if defined(_POSIX_VERSION)
 #   define USE_TPOSIX
@@ -210,7 +209,6 @@ static term_data data[MAX_TERM_DATA];
 #   endif
 #  endif
 # endif
-#endif
 
 /*
  * Hack -- Amiga uses "fake curses" and cannot do any of this stuff

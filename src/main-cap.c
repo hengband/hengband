@@ -40,7 +40,6 @@
  * Mega-Hack -- try to guess when "POSIX" is available.
  * If the user defines two of these, we will probably crash.
  */
-#if !defined(USE_TPOSIX)
 # if !defined(USE_TERMIO) && !defined(USE_TCHARS)
 #  if defined(_POSIX_VERSION)
 #   define USE_TPOSIX
@@ -52,8 +51,6 @@
 #   endif
 #  endif
 # endif
-#endif
-
 
 
 /*

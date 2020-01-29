@@ -168,12 +168,6 @@
  * important compile time options, like what visual module to use.
  */
 
-
-/*
- * OPTION: Use the POSIX "termios" methods in "main-gcu.c"
- */
-/* #define USE_TPOSIX */
-
 /*
  * OPTION: Use the "termio" methods in "main-gcu.c"
  */
