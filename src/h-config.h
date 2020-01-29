@@ -108,18 +108,10 @@
 # define FILE_TYPE(X) ((void)0)
 #endif
 
-
-/*
- * OPTION: Define "HAS_STRICMP" only if "stricmp()" exists.
- * Note that "stricmp()" is not actually used by Angband.
- */
-/* #define HAS_STRICMP */
-
 /*
  * Linux has "stricmp()" with a different name
  */
 #if defined(linux)
-# define HAS_STRICMP
 # define stricmp strcasecmp
 #endif
 
