@@ -1254,12 +1254,6 @@ static errr Infofnt_prepare(XFontSet info)
 		ifnt->twid = ifnt->wid;
 
 #ifndef JP
-#ifdef OBSOLETE_SIZING_METHOD
-	/* Extract default sizing info */
-	ifnt->asc = cs->ascent;
-	ifnt->hgt = (cs->ascent + cs->descent);
-	ifnt->wid = cs->width;
-#endif
 #endif
 
 	/* Success */
