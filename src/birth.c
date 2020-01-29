@@ -156,8 +156,6 @@ static concptr race_jouhou[MAX_RACES] =
 
 "アンドロイドは機械の身体を持つ人工的な存在です。魔法をうまく使うことはできませんが、戦士としては非常に優れています。彼らは他の種族のように経験値を得て成長するということはありません。身体に身につける装備によって成長します。ただし、指輪、アミュレット、光源は成長に影響しません。彼らは毒の耐性を持ち、麻痺知らずで、生命力を吸収されることがありません。また、身体が頑丈なのでACにボーナスを得ます。しかし身体のいたるところに電子回路が組み込まれているため、電撃によって通常よりも大きなダメージを受けてしまいます。彼らは食物からほとんど動力を得られませんが、油を補給する事で動力源を得る事ができます。",
 
-"マーフォーク実装中",
-
 #else
 
 "The human is the base character.  All other races are compared to them.  Humans can choose any class and are average at everything.  Humans tend to go up levels faster than most other races because of their shorter life spans.  No racial adjustments or intrinsics occur to characters choosing human.",
@@ -234,9 +232,13 @@ static concptr race_jouhou[MAX_RACES] =
 
 "An android is a artificial creation with a body of machinery.  They are poor at spell casting, but they make excellent warriors.  They don't acquire experience like other races, but rather gain in power as they attach new equipment to their frame.  Rings, amulets, and lights do not influence growth.  Androids are resistant to poison, can move freely, and are immune to exp-draining attacks.  Moreover, because of their hard metallic bodies, they get a bonus to AC.  Androids have electronic circuits throughout their body and must beware of electric shocks.  They gain very little nutrition from the food of mortals, but they can use flasks of oil as their energy source.",
 
-"Merfolk implementing.",
-
 #endif
+
+_(
+	"マーフォークは人型生物と水棲生物の合いの子たちの総称です。彼らは知的であり、陸上よりも水中での営みに適応している点で共通しています。彼らの真価は水中でこそ発揮されますが、彼らの文明は大抵陸上に長く滞在する何らかの術も有しています。それを失わない限り、陸上でも不自由はないでしょう。また、彼らは致命的な水難にも抗える能力を生まれつき持っています。",
+	"Merfolks are general terms for people of mixed races between humanoids and aquatic habitats. They have in common that they are intelligent and adapt to working underwater rather than on land. Their true value comes in water, but their civilization also has some form of staying longer on land. As long as you do not lose it, there will be no inconvenience on land. They also have the ability to withstand disaster by water."
+),
+
 };
 
 /*! 職業の解説メッセージテーブル */
@@ -1271,7 +1273,6 @@ static void get_history(player_type *creature_ptr)
 	case RACE_HUMAN:
 	case RACE_BARBARIAN:
 	case RACE_DUNADAN:
-	case RACE_MERFOLK:
 	{
 		chart = 1;
 		break;
@@ -1437,6 +1438,11 @@ static void get_history(player_type *creature_ptr)
 		chart = 155;
 		break;
 	}
+	case RACE_MERFOLK:
+	{
+		chart = 170;
+		break;
+	}
 	default:
 	{
 		chart = 0;
@@ -1456,7 +1462,10 @@ static void get_history(player_type *creature_ptr)
 
 
 		/* Access the proper entry in the table */
-		while ((chart != bg[i].chart) || (roll > bg[i].roll)) i++;
+		while ((chart != bg[i].chart) || (roll > bg[i].roll))
+		{
+			i++;
+		}
 
 		/* Acquire the textual history */
 		(void)strcat(buf, bg[i].info);

@@ -1543,7 +1543,6 @@ hist_type bg[] =
 { "as a combat trooper. ", 90, 156, 157, 20 },
 { "as a tool for conquest of the world. ", 100, 156, 157, 10 },
 
-
 { "You have a cat-like appearance", 15, 157, 158, 40 },
 { "You have a dog-like appearance", 30, 157, 158, 30 },
 { "You have a Kutar-like appearance", 45, 157, 158, 20 },
@@ -1558,4 +1557,87 @@ hist_type bg[] =
 { ", and you firmly believe that you are a real one.", 95, 158, 0, 50 },
 { ", and you are almost indistinguishable from a real one.", 100, 158, 0, 100 },
 #endif
+
+#ifdef JP
+{ "あなたはマーフォークの乞食の",			  5, 170, 171,  30 },
+{ "あなたはマーフォークの物あさりの",			  10, 170, 171,  50 },
+{ "あなたはマーフォークのペテン師の",		 15, 170, 171,  70 },
+{ "あなたはマーフォークの平民の",		 60, 170, 171,  90 },
+{ "あなたは川守りの",							 70, 170, 171,  80 },
+{ "あなたはメロウの",							 80, 170, 171,  80 },
+{ "あなたはセルキーの",							 85, 170, 171,  80 },
+{ "あなたはトリトンの",							 90, 170, 171,  80 },
+{ "あなたはマーフォークの交易商人の",			 95, 170, 171, 100 },
+{ "あなたはマーフォークの君主の",				100, 170, 171, 130 },
+{ "何人かの子供のうちの一人です。",      80, 171, 172, 45 },
+{ "一粒種です。",         	 100, 171, 172, 55 },
+#else
+{ "a Merfolk Begger. ",               5 , 171, 172, 30 },
+{ "a Merfolk Looter. ",			  10, 171, 172, 50 },
+{ "a Merfolk Trickster. ",		      15, 171, 172, 70 },
+{ "a Merfolk Citizen. ",		        60, 171, 172,  90 },
+{ "a River Herald. ",							 70, 171, 172,  80 },
+{ "a Merrow. ",							 80, 171, 172,  80 },
+{ "a Selkie. ",							 85, 171, 172,  80 },
+{ "a Triton. ",							 90, 171, 172,  80 },
+{ "a Merfolk Traders. ",			 95, 171, 172, 100 },
+{ "a Merfolk Sovereign. ",				100, 171, 172, 130 },
+{ "You are one of several children of ",      80, 170, 171, 45 },
+{ "You are the only child of ",         	 100, 170, 171, 55 },
+#endif
+
+#ifdef JP
+{ "あなたの下半身は一本の尾で、", 50, 172, 173, 50},
+{ "あなたの下半身は二股の尾で、", 60, 172, 173, 50},
+{ "あなたの下半身は陸上の種族とあまり変わりなく、", 100, 172, 173, 50 },
+#else
+{ "Your lower body is a tail, ", 50, 172, 173, 50 },
+{ "Your lower body are two tails, ", 60, 172, 173, 50 },
+{ "Your lower body is not much different from a land race, ", 100, 172, 173, 50 },
+#endif
+
+
+#ifdef JP
+{ "全身のほとんどが鱗に覆われています。", 20, 173, 174, 50 },
+{ "主に上半身が鱗に覆われています。", 30, 173, 174, 50 },
+{ "主に下半身が鱗に覆われています。", 40, 173, 174, 50 },
+{ "全身の半分が鱗に覆われています。", 60, 173, 174, 50 },
+{ "全身のいくらかが鱗に覆われています。", 80, 173, 174, 50 },
+{ "鱗はほとんど見られません。", 100, 173, 174, 50 },
+#else
+{ "and most of your whole body is covered with scales. ", 20, 173, 174, 50 },
+{ "and mainly your upper body is covered with scales. ", 30, 173, 174, 50 },
+{ "and mainly your lower body is covered with scales. ", 40, 173, 174, 50 },
+{ "and half of your body is covered with scales. ", 60, 173, 174, 50 },
+{ "and some of your body is covered with scales. ", 80, 173, 174, 50 },
+{ "and there are few scales on your body. ", 100, 173, 174, 50 },
+
+#endif
+
+#ifdef JP
+{ "あなたは黒の瞳と",					 20, 174, 175, 50 },
+{ "あなたは緑の瞳と",					 40, 174, 175, 50 },
+{ "あなたは黄色い瞳と",					 60, 174, 175, 50 },
+{ "あなたは青い瞳と",					 80, 174, 175, 50 },
+{ "あなたは赤い瞳と",					100, 174, 175, 50 },
+#else
+{ "You have black eyes, ",				 20, 174, 175, 50 },
+{ "You have green eyes, ",				 40, 174, 175, 50 },
+{ "You have yellow eyes, ",				 60, 174, 175, 50 },
+{ "You have blue eyes, ",				 80, 174, 175, 50 },
+{ "You have red eyes, ",				100, 174, 175, 55 },
+#endif
+
+#ifdef JP
+{ "海藻の様な髪を持っています。",			 25, 175, 0, 50 },
+{ "珊瑚のような角を持っています。",			 50, 175, 0, 50 },
+{ "地上人に似た髪を持っています。",			 75, 175, 0, 50 },
+{ "大きく発達した鰓を持っています。",		100, 175, 0, 50 },
+#else
+{ "hair like seaweed.",			 25, 175, 0, 50 },
+{ "coral-like horns.",			 50, 175, 0, 50 },
+{ "hair similar to land races.",	 75, 175, 0, 50 },
+{ "large gills.",		        100, 175, 0, 50 },
+#endif
+
 };
