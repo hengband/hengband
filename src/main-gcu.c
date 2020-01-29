@@ -659,13 +659,8 @@ static errr Term_xtra_gcu_alive(int v)
       /* Flush the curses buffer */
       (void)refresh();
 
-#ifdef SPECIAL_BSD
-      /* this moves curses to bottom right corner */
-      mvcur(curscr->cury, curscr->curx, LINES - 1, 0);
-#else
       /* this moves curses to bottom right corner */
       mvcur(getcury(curscr), getcurx(curscr), LINES - 1, 0);
-#endif
 
       /* Exit curses */
       endwin();
@@ -789,13 +784,8 @@ static void Term_nuke_gcu(term *t)
   start_color();
 #endif
 
-#ifdef SPECIAL_BSD
-   /* This moves curses to bottom right corner */
-   mvcur(curscr->cury, curscr->curx, LINES - 1, 0);
-#else
    /* This moves curses to bottom right corner */
    mvcur(getcury(curscr), getcurx(curscr), LINES - 1, 0);
-#endif
 
    /* Flush the curses buffer */
    (void)refresh();
