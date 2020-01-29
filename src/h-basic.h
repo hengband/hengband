@@ -7,7 +7,6 @@
  * 不明(変愚蛮怒スタッフ？)
  */
 
-
 #ifndef INCLUDED_H_BASIC_H
 #define INCLUDED_H_BASIC_H
 
@@ -42,4 +41,3 @@
 #  define NULL ((char*)0) /*!< コンパイル環境に定義がない場合のNULL定義 */
 # endif /* __STDC__ */
 #endif /* NULL */
-

@@ -16,11 +16,8 @@
  * because VMS does not use the "ASCII" character set.
  */
 
-
 #ifndef INCLUDED_H_SYSTEM_H
 #define INCLUDED_H_SYSTEM_H
-
-
 
 #include <stdio.h>
 #include <ctype.h>
@@ -28,13 +25,11 @@
 #include <errno.h>
 #include <stddef.h>
 
-
 #if defined(NeXT)
 # include <libc.h>
 #else
 # include <stdlib.h>
 #endif /* NeXT */
-
 
 #ifdef SET_UID
 
@@ -50,9 +45,7 @@
 
 #endif /* SET_UID */
 
-
 #include <time.h>
-
 
 #if defined(WINDOWS)
 # include <io.h>
@@ -66,11 +59,9 @@
 # endif
 #endif
 
-
 #if !defined(NeXT) && !defined(__MWERKS__)
 # include <fcntl.h>
 #endif
-
 
 #ifdef SET_UID
 

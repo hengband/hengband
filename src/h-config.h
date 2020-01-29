@@ -42,8 +42,6 @@
 # endif
 #endif
 
-
-
 /*
  * OPTION: Define "L64" if a "long" is 64-bits.  See "h-types.h".
  * The only such platform that angband is ported to is currently
@@ -52,8 +50,6 @@
 #if defined(__alpha) && defined(__osf__)
 # define L64
 #endif
-
-
 
 /*
  * OPTION: set "SET_UID" if the machine is a "multi-user" machine.
@@ -69,7 +65,6 @@
 #if !defined(WINDOWS) && !defined(VM)
 # define SET_UID
 #endif
-
 
 /*
  * Every system seems to use its own symbol as a path separator.
@@ -95,7 +90,6 @@
 # define PATH_SEP "/"
 #endif
 
-
 /*
  * The Macintosh allows the use of a "file type" when creating a file
  */
@@ -114,7 +108,6 @@
 #if defined(linux)
 # define stricmp strcasecmp
 #endif
-
 
 /*
  * OPTION: Define "HAVE_USLEEP" only if "usleep()" exists.
@@ -153,7 +146,6 @@
 
 #endif /* HAVE_CONFIG_H */
 
-
 /*
  * Look through the following lines, and where a comment includes the
  * tag "OPTION:", examine the associated "#define" statements, and decide
@@ -178,7 +170,6 @@
  * This will handle "gids" correctly once the permissions are set right.
  */
 #define SAFE_SETUID
-
 
 /*
  * This flag enables the "POSIX" methods for "SAFE_SETUID".
@@ -213,7 +204,6 @@
 # define DEFAULT_PATH "./lib/"
 #endif
 
-
 /*
  * OPTION: Create and use a hidden directory in the users home directory
  * for storing pref-files and character-dumps.
@@ -233,8 +223,7 @@
  * OPTION: Person to bother if something goes wrong.
  */
 /* #define MAINTAINER	"rr9@angband.org" */
-#define MAINTAINER	"echizen@users.sourceforge.jp"
-
+#define MAINTAINER "echizen@users.sourceforge.jp"
 
 #ifdef JP
 /*
@@ -281,7 +270,6 @@
 #define DEFAULT_X11_FONT_6		"5x8"
 #define DEFAULT_X11_FONT_7		"5x8"
 #endif
-
 
 /*
  * Hack -- Mach-O (native binary format of OS X) is basically a Un*x

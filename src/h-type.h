@@ -42,11 +42,9 @@
 #endif
 
 /*** Special 4 letter names for some standard types ***/
-
 typedef void *vptr;       /*!< void型ポインタ定義 / A standard pointer (to "void" because ANSI C says so) */
 typedef const char *concptr; /*!< 文字列定数用ポインタ定義 / A simple pointer (to unmodifiable strings) */
 typedef double real;      /*!< doubleをreal型として定義 / Since float's are silly, hard code real numbers as doubles */
-
 
 /*!
  * @brief エラーコードの定義 / Error codes for function return values
@@ -73,19 +71,14 @@ typedef int errr;
 
 #define MAX_NLEN        160 /*!< Maximum length of object's name */
 
-
 /* Note that "signed char" is not always "defined" */
 /* So always use "s16b" to hold small signed values */
 /* A signed byte of memory */
 /* typedef signed char syte; */
-
 typedef unsigned char byte; /*!< byte型をunsighned charとして定義 / Note that unsigned values can cause math problems / An unsigned byte of memory */
 typedef char bool; /*!< bool型をcharとして定義 / Note that a bool is smaller than a full "int" / Simple True/False type */
 typedef int sint; /*!< sint型をintとして定義 / A signed, standard integer (at least 2 bytes) */
 typedef unsigned int uint; /* uint型をintとして定義 /  An unsigned, "standard" integer (often pre-defined) */
-
-/* The largest possible signed integer (pre-defined) */
-/* typedef long long; */
 
 /* The largest possible unsigned integer */
 typedef unsigned long huge;
@@ -107,7 +100,6 @@ typedef uint32_t u32b;
 typedef signed long s32b;
 typedef unsigned long u32b;
 #endif
-
 
 typedef s16b IDX;				/*!< ゲーム中のID型を定義 */
 
@@ -150,7 +142,6 @@ typedef s32b ALIGNMENT;		/*!< 善悪属性の型定義 */
 typedef byte FEAT_SUBTYPE;	/*!< 地形情報の副値 (トラップ種別/パターン種別/店舗種別)*/
 
 typedef char GAME_TEXT;		/*!< ゲーム中のテキスト型定義 */
-
 
 /*!
  * @var typedef s32b HIT_POINT
@@ -264,7 +255,6 @@ typedef s16b FEAT_PRIORITY; /*!< 地形の縮小表示優先順位 */
 typedef BIT_FLAGS SPOP_FLAGS; /*!< スペル用オプション */
 
 /*** Pointers to all the basic types defined above ***/
-
 typedef real *real_ptr;
 typedef errr *errr_ptr;
 typedef char *char_ptr;
@@ -281,9 +271,7 @@ typedef u32b *u32b_ptr;
 typedef vptr *vptr_ptr;
 typedef concptr *cptr_ptr;
 
-
 /*** Pointers to Functions of special types (for various purposes) ***/
-
 /* A generic function takes a user data and a special data */
 typedef errr	(*func_gen)(vptr, vptr);
 
@@ -298,6 +286,4 @@ typedef uint	(*func_hsh)(vptr, uint);
 
 /* A key extractor takes a thing and returns (a pointer to) some key */
 typedef vptr	(*func_key)(vptr);
-
-
 #endif

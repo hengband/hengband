@@ -9,7 +9,6 @@
 #ifndef INCLUDED_H_DEFINE_H
 #define INCLUDED_H_DEFINE_H
 
-
 /*
  * The constants "TRUE" and "FALSE"
  */
@@ -19,9 +18,6 @@
 
 #undef FALSE
 #define FALSE	0 /*!< コンパイル環境に定義がない場合のFALSE定義 */
-
-
-
 
 /**** Simple "Macros" ****/
 #ifdef JP
@@ -35,7 +31,6 @@
  */
 #define FORCELOWER(A)  ((isupper((A))) ? tolower((A)) : (A))
 #define FORCEUPPER(A)  ((islower((A))) ? toupper((A)) : (A))
-
 
 /*
  * Non-typed minimum value macro
@@ -67,4 +62,3 @@
 #define atoffset(TYPE, STRUCT_PTR, OFFSET) (*(TYPE*)(((char*)STRUCT_PTR) + (OFFSET)))
 
 #endif
-
