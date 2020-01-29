@@ -169,12 +169,6 @@
  */
 
 /*
- * OPTION: Include "ncurses.h" instead of "curses.h" in "main-gcu.c"
- */
-/* #define USE_NCURSES */
-
-
-/*
  * OPTION: for multi-user machines running the game setuid to some other
  * user (like 'games') this SAFE_SETUID option allows the program to drop
  * its privileges when saving files that allow for user specified pathnames.

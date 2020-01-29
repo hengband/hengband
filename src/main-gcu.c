@@ -171,12 +171,7 @@
 /*
  * Include the proper "header" file
  */
-#ifdef USE_NCURSES
-# undef bool
-# include <ncurses.h>
-#else
 # include <curses.h>
-#endif
 
 typedef struct term_data term_data;
 
