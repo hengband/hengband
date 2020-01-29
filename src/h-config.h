@@ -169,11 +169,6 @@
  */
 
 /*
- * OPTION: Use the icky BSD "tchars" methods in "main-gcu.c"
- */
-/* #define USE_TCHARS */
-
-/*
  * OPTION: Include "ncurses.h" instead of "curses.h" in "main-gcu.c"
  */
 /* #define USE_NCURSES */
