@@ -5148,19 +5148,3 @@ void store_init(int town_num, int store_num)
 		object_wipe(&st_ptr->stock[k]);
 	}
 }
-
-
-/*!
- * @brief アイテムを町のブラックマーケットに移動させる /
- * @param o_ptr 移動させたいオブジェクトの構造体参照ポインタ
- * @return なし
- */
-void move_to_black_market(player_type *player_ptr, object_type *o_ptr)
-{
-	if (!player_ptr->town_num) return;
-
-	st_ptr = &town_info[player_ptr->town_num].store[STORE_BLACK];
-	o_ptr->ident |= IDENT_STORE;
-	(void)store_carry(o_ptr);
-	object_wipe(o_ptr);
-}
