@@ -232,13 +232,9 @@ static void next_mirror(player_type *creature_ptr, POSITION* next_y, POSITION* n
 }
 
 
-/*
- * Mega-Hack -- track "affected" monsters (see "project()" comments)
- */
 static int project_m_n; /*!< 魔法効果範囲内にいるモンスターの数 */
 static POSITION project_m_x; /*!< 処理中のモンスターX座標 */
 static POSITION project_m_y; /*!< 処理中のモンスターY座標 */
-/* Mega-Hack -- monsters target */
 static POSITION monster_target_x; /*!< モンスターの攻撃目標X座標 */
 static POSITION monster_target_y; /*!< モンスターの攻撃目標Y座標 */
 
@@ -279,8 +275,6 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	bool known = player_has_los_bold(caster_ptr, y, x);
 
 	who = who ? who : 0;
-
-	/* Reduce damage by distance */
 	dam = (dam + r) / (r + 1);
 
 	if (have_flag(f_ptr->flags, FF_TREE))
@@ -365,46 +359,32 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	{
 		break;
 	}
-
-	/* Destroy Traps (and Locks) */
 	case GF_KILL_TRAP:
 	{
-		/* Reveal secret doors */
 		if (is_hidden_door(caster_ptr, g_ptr))
 		{
-			/* Pick a door */
 			disclose_grid(caster_ptr, y, x);
-
-			/* Check line of sight */
 			if (known)
 			{
 				obvious = TRUE;
 			}
 		}
 
-		/* Destroy traps */
 		if (is_trap(caster_ptr, g_ptr->feat))
 		{
-			/* Check line of sight */
 			if (known)
 			{
 				msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
 				obvious = TRUE;
 			}
 
-			/* Destroy the trap */
 			cave_alter_feat(caster_ptr, y, x, FF_DISARM);
 		}
 
-		/* Locked doors are unlocked */
 		if (is_closed_door(caster_ptr, g_ptr->feat) && f_ptr->power && have_flag(f_ptr->flags, FF_OPEN))
 		{
 			FEAT_IDX old_feat = g_ptr->feat;
-
-			/* Unlock the door */
 			cave_alter_feat(caster_ptr, y, x, FF_DISARM);
-
-			/* Check line of sound */
 			if (known && (old_feat != g_ptr->feat))
 			{
 				msg_print(_("カチッと音がした！", "Click!"));
@@ -412,7 +392,6 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 		}
 
-		/* Remove "unsafe" flag if player is not blind */
 		if (!caster_ptr->blind && player_has_los_bold(caster_ptr, y, x))
 		{
 			g_ptr->info &= ~(CAVE_UNSAFE);
@@ -422,25 +401,19 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 		break;
 	}
-
-	/* Destroy Doors (and traps) */
 	case GF_KILL_DOOR:
 	{
-		/* Destroy all doors and traps */
 		if (is_trap(caster_ptr, g_ptr->feat) || have_flag(f_ptr->flags, FF_DOOR))
 		{
-			/* Check line of sight */
 			if (known)
 			{
 				msg_print(_("まばゆい閃光が走った！", "There is a bright flash of light!"));
 				obvious = TRUE;
 			}
 
-			/* Destroy the feature */
 			cave_alter_feat(caster_ptr, y, x, FF_TUNNEL);
 		}
 
-		/* Remove "unsafe" flag if player is not blind */
 		if (!caster_ptr->blind && player_has_los_bold(caster_ptr, y, x))
 		{
 			g_ptr->info &= ~(CAVE_UNSAFE);
@@ -450,8 +423,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 		break;
 	}
-
-	case GF_JAM_DOOR: /* Jams a door (as if with a spike) */
+	case GF_JAM_DOOR:
 	{
 		if (have_flag(f_ptr->flags, FF_SPIKE))
 		{
@@ -464,7 +436,6 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			note_spot(caster_ptr, y, x);
 			lite_spot(caster_ptr, y, x);
 
-			/* Check line of sight */
 			if (known && have_flag(mimic_f_ptr->flags, FF_OPEN))
 			{
 				msg_format(_("%sに何かがつっかえて開かなくなった。", "The %s seems stuck."), f_name + mimic_f_ptr->name);
@@ -474,8 +445,6 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 		break;
 	}
-
-	/* Destroy walls (and doors) */
 	case GF_KILL_WALL:
 	{
 		if (have_flag(f_ptr->flags, FF_HURT_ROCK))
@@ -486,14 +455,12 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				obvious = TRUE;
 			}
 
-			/* Destroy the wall */
 			cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
 			caster_ptr->update |= (PU_FLOW);
 		}
 
 		break;
 	}
-
 	case GF_MAKE_DOOR:
 	{
 		if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
@@ -502,13 +469,11 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
 		break;
 	}
-
 	case GF_MAKE_TRAP:
 	{
 		place_trap(caster_ptr, y, x);
 		break;
 	}
-
 	case GF_MAKE_TREE:
 	{
 		if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
@@ -517,7 +482,6 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		if (g_ptr->info & (CAVE_MARK)) obvious = TRUE;
 		break;
 	}
-
 	case GF_MAKE_GLYPH:
 	{
 		if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
@@ -527,7 +491,6 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		lite_spot(caster_ptr, y, x);
 		break;
 	}
-
 	case GF_STONE_WALL:
 	{
 		if (!cave_naked_bold(caster_ptr, floor_ptr, y, x)) break;
@@ -535,7 +498,6 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		cave_set_feat(caster_ptr, y, x, feat_granite);
 		break;
 	}
-
 	case GF_LAVA_FLOW:
 	{
 		if (have_flag(f_ptr->flags, FF_PERMANENT)) break;
@@ -551,7 +513,6 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 		break;
 	}
-
 	case GF_WATER_FLOW:
 	{
 		if (have_flag(f_ptr->flags, FF_PERMANENT)) break;
@@ -567,12 +528,9 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 		break;
 	}
-
-	/* Lite up the grid */
 	case GF_LITE_WEAK:
 	case GF_LITE:
 	{
-		/* Turn on the light */
 		if (!(d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 		{
 			g_ptr->info |= (CAVE_GLOW);
@@ -580,11 +538,7 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			lite_spot(caster_ptr, y, x);
 			update_local_illumination(caster_ptr, y, x);
 
-			/* Observe */
 			if (player_can_see_bold(caster_ptr, y, x)) obvious = TRUE;
-
-			/* Mega-Hack -- Update the monster in the affected grid */
-			/* This allows "spear of light" (etc) to work "correctly" */
 			if (g_ptr->m_idx) update_monster(caster_ptr, g_ptr->m_idx, FALSE);
 
 			if (caster_ptr->special_defense & NINJA_S_STEALTH)
@@ -595,15 +549,12 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 		break;
 	}
-
-	/* Darken the grid */
 	case GF_DARK_WEAK:
 	case GF_DARK:
 	{
 		bool do_dark = !caster_ptr->phase_out && !is_mirror_grid(g_ptr);
 		int j;
 
-		/* Turn off the light. */
 		if (do_dark)
 		{
 			if (floor_ptr->dun_level || !is_daytime())
@@ -644,16 +595,11 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			update_local_illumination(caster_ptr, y, x);
 
 			if (player_can_see_bold(caster_ptr, y, x)) obvious = TRUE;
-
-			/* Mega-Hack -- Update the monster in the affected grid */
-			/* This allows "spear of light" (etc) to work "correctly" */
 			if (g_ptr->m_idx) update_monster(caster_ptr, g_ptr->m_idx, FALSE);
 		}
 
-		/* All done */
 		break;
 	}
-
 	case GF_SHARDS:
 	case GF_ROCKET:
 	{
@@ -673,14 +619,12 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				sound(SOUND_GLASS);
 			}
 
-			/* Destroy the wall */
 			cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
 			caster_ptr->update |= (PU_FLOW);
 		}
 
 		break;
 	}
-
 	case GF_SOUND:
 	{
 		if (is_mirror_grid(g_ptr) && caster_ptr->lev < 40)
@@ -699,27 +643,20 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				sound(SOUND_GLASS);
 			}
 
-			/* Destroy the wall */
 			cave_alter_feat(caster_ptr, y, x, FF_HURT_ROCK);
 			caster_ptr->update |= (PU_FLOW);
 		}
 
 		break;
 	}
-
 	case GF_DISINTEGRATE:
 	{
-		/* Destroy mirror/glyph */
 		if (is_mirror_grid(g_ptr) || is_glyph_grid(g_ptr) || is_explosive_rune_grid(g_ptr))
 			remove_mirror(caster_ptr, y, x);
 
-		/* Permanent features don't get effect */
-		/* But not protect monsters and other objects */
 		if (have_flag(f_ptr->flags, FF_HURT_DISI) && !have_flag(f_ptr->flags, FF_PERMANENT))
 		{
 			cave_alter_feat(caster_ptr, y, x, FF_HURT_DISI);
-
-			/* Update some things -- similar to GF_KILL_WALL */
 			caster_ptr->update |= (PU_FLOW);
 		}
 
@@ -728,10 +665,8 @@ static bool project_f(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	}
 
 	lite_spot(caster_ptr, y, x);
-	/* Return "Anything seen?" */
 	return (obvious);
 }
-
 
 
 /*!
@@ -780,12 +715,8 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 
 	who = who ? who : 0;
-
-	/* Reduce damage by distance */
 	dam = (dam + r) / (r + 1);
 
-
-	/* Scan all objects in the grid */
 	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[this_o_idx];
@@ -798,20 +729,14 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 #ifdef JP
 #else
-
-		/* Get the "plural"-ness */
 		bool plural = (o_ptr->number > 1);
 #endif
 		next_o_idx = o_ptr->next_o_idx;
 		object_flags(o_ptr, flgs);
-
-		/* Check for artifact */
 		if (object_is_artifact(o_ptr)) is_art = TRUE;
 
-		/* Analyze the type */
 		switch (typ)
 		{
-			/* Acid -- Lots of things */
 		case GF_ACID:
 		{
 			if (hates_acid(o_ptr))
@@ -822,8 +747,6 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-		/* Elec -- Rings and Wands */
 		case GF_ELEC:
 		{
 			if (hates_elec(o_ptr))
@@ -834,8 +757,6 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-		/* Fire -- Flammable objects */
 		case GF_FIRE:
 		{
 			if (hates_fire(o_ptr))
@@ -846,8 +767,6 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-		/* Cold -- potions and flasks */
 		case GF_COLD:
 		{
 			if (hates_cold(o_ptr))
@@ -858,8 +777,6 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-		/* Fire + Elec */
 		case GF_PLASMA:
 		{
 			if (hates_fire(o_ptr))
@@ -877,8 +794,6 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-		/* Fire + Cold */
 		case GF_METEOR:
 		{
 			if (hates_fire(o_ptr))
@@ -887,6 +802,7 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
 				if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
 			}
+
 			if (hates_cold(o_ptr))
 			{
 				ignore = FALSE;
@@ -894,10 +810,9 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
 				if (have_flag(flgs, TR_IGNORE_COLD)) ignore = TRUE;
 			}
+
 			break;
 		}
-
-		/* Hack -- break potions and such */
 		case GF_ICE:
 		case GF_SHARDS:
 		case GF_FORCE:
@@ -908,10 +823,9 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				note_kill = _("砕け散ってしまった！", (plural ? " shatter!" : " shatters!"));
 				do_kill = TRUE;
 			}
+
 			break;
 		}
-
-		/* Mana and Chaos -- destroy everything */
 		case GF_MANA:
 		case GF_SEEKER:
 		case GF_SUPER_RAY:
@@ -920,14 +834,12 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
 			break;
 		}
-
 		case GF_DISINTEGRATE:
 		{
 			do_kill = TRUE;
 			note_kill = _("蒸発してしまった！", (plural ? " evaporate!" : " evaporates!"));
 			break;
 		}
-
 		case GF_CHAOS:
 		{
 			do_kill = TRUE;
@@ -936,8 +848,6 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			else if ((o_ptr->tval == TV_SCROLL) && (o_ptr->sval == SV_SCROLL_CHAOS)) ignore = TRUE;
 			break;
 		}
-
-		/* Holy Fire and Hell Fire -- destroys cursed non-artifacts */
 		case GF_HOLY_FIRE:
 		case GF_HELL_FIRE:
 		{
@@ -948,32 +858,21 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
 		case GF_IDENTIFY:
 		{
 			identify_item(caster_ptr, o_ptr);
-
-			/* Auto-inscription */
 			autopick_alter_item(caster_ptr, (-this_o_idx), FALSE);
 			break;
 		}
-
-		/* Unlock chests */
 		case GF_KILL_TRAP:
 		case GF_KILL_DOOR:
 		{
-			/* Chests are noticed only if trapped or locked */
 			if (o_ptr->tval == TV_CHEST)
 			{
-				/* Disarm/Unlock traps */
 				if (o_ptr->pval > 0)
 				{
-					/* Disarm or Unlock */
 					o_ptr->pval = (0 - o_ptr->pval);
-
-					/* Identify */
 					object_known(o_ptr);
-
 					if (known && (o_ptr->marked & OM_FOUND))
 					{
 						msg_print(_("カチッと音がした！", "Click!"));
@@ -1014,39 +913,33 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 						note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
 					}
 				}
+
 				do_kill = TRUE;
 				obvious = TRUE;
 			}
+
 			break;
 		}
 		}
 
-
-		/* Attempt to destroy the object */
 		if (do_kill)
 		{
-			/* Effect "observed" */
 			if (known && (o_ptr->marked & OM_FOUND))
 			{
 				obvious = TRUE;
 				object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 			}
 
-			/* Artifacts, and other objects, get to resist */
 			if (is_art || ignore)
 			{
-				/* Observe the resist */
 				if (known && (o_ptr->marked & OM_FOUND))
 				{
 					msg_format(_("%sは影響を受けない！",
 						(plural ? "The %s are unaffected!" : "The %s is unaffected!")), o_name);
 				}
 			}
-
-			/* Kill it */
 			else
 			{
-				/* Describe if needed */
 				if (known && (o_ptr->marked & OM_FOUND) && note_kill)
 				{
 					msg_format(_("%sは%s", "The %s%s"), o_name, note_kill);
@@ -1056,7 +949,6 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				is_potion = object_is_potion(o_ptr);
 				delete_object_idx(caster_ptr, this_o_idx);
 
-				/* Potions produce effects when 'shattered' */
 				if (is_potion)
 				{
 					(void)potion_smash_effect(caster_ptr, who, y, x, k_idx);
@@ -1067,7 +959,6 @@ static bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		}
 	}
 
-	/* Return "Anything seen?" */
 	return obvious;
 }
 
@@ -1155,62 +1046,28 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 	char killer[80];
 
-	/* Is the monster "seen"? */
 	bool seen = m_ptr->ml;
 	bool seen_msg = is_seen(m_ptr);
-
 	bool slept = (bool)MON_CSLEEP(m_ptr);
-
-	/* Were the effects "obvious" (if seen)? */
 	bool obvious = FALSE;
-
-	/* Can the player know about this effect? */
 	bool known = ((m_ptr->cdis <= MAX_SIGHT) || caster_ptr->phase_out);
-
-	/* Were the effects "irrelevant"? */
 	bool skipped = FALSE;
-
-	/* Gets the monster angry at the source of the effect? */
 	bool get_angry = FALSE;
-
-	/* Polymorph setting (true or false) */
 	bool do_poly = FALSE;
-
-	/* Teleport setting (max distance) */
 	int do_dist = 0;
-
-	/* Confusion setting (amount to confuse) */
 	int do_conf = 0;
-
-	/* Stunning setting (amount to stun) */
 	int do_stun = 0;
-
-	/* Sleep amount (amount to sleep) */
 	int do_sleep = 0;
-
-	/* Fear amount (amount to fear) */
 	int do_fear = 0;
-
-	/* Time amount (amount to time) */
 	int do_time = 0;
-
 	bool heal_leper = FALSE;
-
-	/* Hold the monster name */
 	GAME_TEXT m_name[MAX_NLEN];
 	char m_poss[10];
-
 	PARAMETER_VALUE photo = 0;
-
-	/* Assume no note */
 	concptr note = NULL;
-
-	/* Assume a default death */
 	concptr note_dies = extract_note_dies(real_r_idx(m_ptr));
-
 	DEPTH caster_lev = (who > 0) ? r_info[m_caster_ptr->r_idx].level : (caster_ptr->lev * 2);
 
-	/* Nobody here */
 	if (!g_ptr->m_idx) return FALSE;
 
 	/* Never affect projector */
@@ -1222,9 +1079,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	/* Prevents problems with chain reactions of exploding monsters */
 	if (m_ptr->hp < 0) return FALSE;
 
-	/* Reduce damage by distance */
 	dam = (dam + r) / (r + 1);
-
 
 	/* Get the monster name (BEFORE polymorphing) */
 	monster_desc(caster_ptr, m_name, m_ptr, 0);
@@ -1245,17 +1100,13 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	}
 	else
 	{
-		/* Analyze the damage type */
 		switch (typ)
 		{
-			/* Magic Missile -- pure damage */
 		case GF_MISSILE:
 		{
 			if (seen) obvious = TRUE;
 			break;
 		}
-
-		/* Acid */
 		case GF_ACID:
 		{
 			if (seen) obvious = TRUE;
@@ -1267,8 +1118,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-		/* Electricity */
 		case GF_ELEC:
 		{
 			if (seen) obvious = TRUE;
@@ -1280,8 +1129,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-		/* Fire damage */
 		case GF_FIRE:
 		{
 			if (seen) obvious = TRUE;
@@ -1299,8 +1146,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-		/* Cold */
 		case GF_COLD:
 		{
 			if (seen) obvious = TRUE;
@@ -1318,8 +1163,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-		/* Poison */
 		case GF_POIS:
 		{
 			if (seen) obvious = TRUE;
@@ -1331,8 +1174,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-		/* Nuclear waste */
 		case GF_NUKE:
 		{
 			if (seen) obvious = TRUE;
@@ -1345,8 +1186,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			else if (one_in_(3)) do_poly = TRUE;
 			break;
 		}
-
-		/* Hellfire -- hurts Evil */
 		case GF_HELL_FIRE:
 		{
 			if (seen) obvious = TRUE;
@@ -1358,8 +1197,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-		/* Holy Fire -- hurts Evil, Good are immune, others _resist_ */
 		case GF_HOLY_FIRE:
 		{
 			if (seen) obvious = TRUE;
@@ -1376,15 +1213,11 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-		/* Arrow -- XXX no defense */
 		case GF_ARROW:
 		{
 			if (seen) obvious = TRUE;
 			break;
 		}
-
-		/* Plasma -- XXX perhaps check ELEC or FIRE */
 		case GF_PLASMA:
 		{
 			if (seen) obvious = TRUE;
@@ -1394,10 +1227,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_PLAS);
 			}
+
 			break;
 		}
-
-		/* Nether -- see above */
 		case GF_NETHER:
 		{
 			if (seen) obvious = TRUE;
@@ -1422,10 +1254,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam /= 2;
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
 			}
+
 			break;
 		}
-
-		/* Water (acid) damage -- Water spirits/elementals are immune */
 		case GF_WATER:
 		{
 			if (seen) obvious = TRUE;
@@ -1443,10 +1274,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				}
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_WATE);
 			}
+
 			break;
 		}
-
-		/* Chaos -- Chaos breathers resist */
 		case GF_CHAOS:
 		{
 			if (seen) obvious = TRUE;
@@ -1467,10 +1297,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				do_poly = TRUE;
 				do_conf = (5 + randint1(11) + r) / (r + 1);
 			}
+
 			break;
 		}
-
-		/* Shards -- Shard breathers resist */
 		case GF_SHARDS:
 		{
 			if (seen) obvious = TRUE;
@@ -1480,10 +1309,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SHAR);
 			}
+
 			break;
 		}
-
-		/* Rocket: Shard resistance helps */
 		case GF_ROCKET:
 		{
 			if (seen) obvious = TRUE;
@@ -1493,11 +1321,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam /= 2;
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SHAR);
 			}
+
 			break;
 		}
-
-
-		/* Sound -- Sound breathers resist */
 		case GF_SOUND:
 		{
 			if (seen) obvious = TRUE;
@@ -1507,11 +1333,11 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam *= 2; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_SOUN);
 			}
-			else do_stun = (10 + randint1(15) + r) / (r + 1);
+			else
+				do_stun = (10 + randint1(15) + r) / (r + 1);
+
 			break;
 		}
-
-		/* Confusion */
 		case GF_CONFUSION:
 		{
 			if (seen) obvious = TRUE;
@@ -1521,11 +1347,11 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 			}
-			else do_conf = (10 + randint1(15) + r) / (r + 1);
+			else
+				do_conf = (10 + randint1(15) + r) / (r + 1);
+
 			break;
 		}
-
-		/* Disenchantment -- Breathers and Disenchanters resist */
 		case GF_DISENCHANT:
 		{
 			if (seen) obvious = TRUE;
@@ -1535,10 +1361,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_DISE);
 			}
+
 			break;
 		}
-
-		/* Nexus -- Breathers and Existers resist */
 		case GF_NEXUS:
 		{
 			if (seen) obvious = TRUE;
@@ -1548,10 +1373,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_NEXU);
 			}
+
 			break;
 		}
-
-		/* Force */
 		case GF_FORCE:
 		{
 			if (seen) obvious = TRUE;
@@ -1561,11 +1385,11 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_WALL);
 			}
-			else do_stun = (randint1(15) + r) / (r + 1);
+			else
+				do_stun = (randint1(15) + r) / (r + 1);
+
 			break;
 		}
-
-		/* Inertia -- breathers resist */
 		case GF_INERTIAL:
 		{
 			if (seen) obvious = TRUE;
@@ -1592,10 +1416,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					}
 				}
 			}
+
 			break;
 		}
-
-		/* Time -- breathers resist */
 		case GF_TIME:
 		{
 			if (seen) obvious = TRUE;
@@ -1605,11 +1428,11 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam *= 3; dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_TIME);
 			}
-			else do_time = (dam + 1) / 2;
+			else
+				do_time = (dam + 1) / 2;
+
 			break;
 		}
-
-		/* Gravity -- breathers resist */
 		case GF_GRAVITY:
 		{
 			bool resist_tele = FALSE;
@@ -1633,6 +1456,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 			if (!resist_tele) do_dist = 10;
 			else do_dist = 0;
+
 			if (caster_ptr->riding && (g_ptr->m_idx == caster_ptr->riding)) do_dist = 0;
 
 			if (r_ptr->flagsr & RFR_RES_GRAV)
@@ -1674,10 +1498,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					obvious = FALSE;
 				}
 			}
+
 			break;
 		}
-
-		/* Pure damage */
 		case GF_MANA:
 		case GF_SEEKER:
 		case GF_SUPER_RAY:
@@ -1685,9 +1508,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			if (seen) obvious = TRUE;
 			break;
 		}
-
-
-		/* Pure damage */
 		case GF_DISINTEGRATE:
 		{
 			if (seen) obvious = TRUE;
@@ -1698,14 +1518,12 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				note_dies = _("は蒸発した！", " evaporates!");
 				dam *= 2;
 			}
+
 			break;
 		}
-
 		case GF_PSI:
 		{
 			if (seen) obvious = TRUE;
-
-			/* PSI only works if the monster can see you! -- RG */
 			if (!(los(caster_ptr, m_ptr->fy, m_ptr->fx, caster_ptr->y, caster_ptr->x)))
 			{
 				if (seen_msg)
@@ -1713,6 +1531,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				skipped = TRUE;
 				break;
 			}
+
 			if (r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
 				dam = 0;
@@ -1740,7 +1559,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 						(seen ? "%^s's corrupted mind backlashes your attack!" :
 							"%^ss corrupted mind backlashes your attack!")), m_name);
 
-					/* Saving throw */
 					if ((randint0(100 + r_ptr->level / 2) < caster_ptr->skill_sav) && !CHECK_MULTISHADOW(caster_ptr))
 					{
 						msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
@@ -1775,6 +1593,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 							}
 						}
 					}
+
 					dam = 0;
 				}
 			}
@@ -1802,7 +1621,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
 			break;
 		}
-
 		case GF_PSI_DRAIN:
 		{
 			if (seen) obvious = TRUE;
@@ -1830,14 +1648,12 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！",
 						(seen ? "%^s's corrupted mind backlashes your attack!" :
 							"%^ss corrupted mind backlashes your attack!")), m_name);
-					/* Saving throw */
 					if ((randint0(100 + r_ptr->level / 2) < caster_ptr->skill_sav) && !CHECK_MULTISHADOW(caster_ptr))
 					{
 						msg_print(_("あなたは効力を跳ね返した！", "You resist the effects!"));
 					}
 					else
 					{
-						/* Injure + mana drain */
 						monster_desc(caster_ptr, killer, m_ptr, MD_WRONGDOER_NAME);
 						if (!CHECK_MULTISHADOW(caster_ptr))
 						{
@@ -1849,6 +1665,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 						}
 						take_hit(caster_ptr, DAMAGE_ATTACK, dam, killer, -1);  /* has already been /3 */
 					}
+
 					dam = 0;
 				}
 			}
@@ -1866,10 +1683,10 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				caster_ptr->redraw |= PR_MANA;
 				caster_ptr->window |= (PW_SPELL);
 			}
+
 			note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
 			break;
 		}
-
 		case GF_TELEKINESIS:
 		{
 			if (seen) obvious = TRUE;
@@ -1879,51 +1696,39 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				else do_dist = 7;
 			}
 
-			/* 1. stun */
 			do_stun = damroll((caster_lev / 20) + 3, dam) + 1;
-
-			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 				(r_ptr->level > 5 + randint1(dam)))
 			{
-				/* Resist */
 				do_stun = 0;
-				/* No obvious effect */
 				obvious = FALSE;
 			}
+
 			break;
 		}
-
-		/* Psycho-spear -- powerful magic missile */
 		case GF_PSY_SPEAR:
 		{
 			if (seen) obvious = TRUE;
 			break;
 		}
-
-		/* Meteor -- powerful magic missile */
 		case GF_METEOR:
 		{
 			if (seen) obvious = TRUE;
 			break;
 		}
-
 		case GF_DOMINATION:
 		{
 			if (!is_hostile(m_ptr)) break;
 			if (seen) obvious = TRUE;
-			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) ||
 				(r_ptr->flags3 & RF3_NO_CONF) ||
 				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
-				/* Memorize a flag */
 				if (r_ptr->flags3 & RF3_NO_CONF)
 				{
 					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 				}
 
-				/* Resist */
 				do_conf = 0;
 
 				/*
@@ -1967,7 +1772,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				}
 				else
 				{
-					/* No obvious effect */
 					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 				}
@@ -1995,12 +1799,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				}
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-		/* Ice -- Cold + Cuts + Stun */
 		case GF_ICE:
 		{
 			if (seen) obvious = TRUE;
@@ -2017,11 +1818,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam *= 2;
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_COLD);
 			}
+
 			break;
 		}
-
-
-		/* Drain Life */
 		case GF_HYPODYNAMIA:
 		{
 			if (seen) obvious = TRUE;
@@ -2037,12 +1836,11 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				obvious = FALSE;
 				dam = 0;
 			}
-			else do_time = (dam + 7) / 8;
+			else
+				do_time = (dam + 7) / 8;
 
 			break;
 		}
-
-		/* Death Ray */
 		case GF_DEATH_RAY:
 		{
 			if (seen) obvious = TRUE;
@@ -2070,12 +1868,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 			break;
 		}
-
-		/* Polymorph monster (Use "dam" as "power") */
 		case GF_OLD_POLY:
 		{
 			if (seen) obvious = TRUE;
-			/* Attempt to polymorph (see below) */
 			do_poly = TRUE;
 
 			/* Powerful monsters can resist */
@@ -2088,14 +1883,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				obvious = FALSE;
 			}
 
-			/* No "real" damage */
 			dam = 0;
-
 			break;
 		}
-
-
-		/* Clone monsters (Ignore "dam") */
 		case GF_OLD_CLONE:
 		{
 			if (seen) obvious = TRUE;
@@ -2106,29 +1896,20 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			else
 			{
-				/* Heal fully */
 				m_ptr->hp = m_ptr->maxhp;
-
-				/* Attempt to clone. */
 				if (multiply_monster(caster_ptr, g_ptr->m_idx, TRUE, 0L))
 				{
 					note = _("が分裂した！", " spawns!");
 				}
 			}
 
-			/* No "real" damage */
 			dam = 0;
-
 			break;
 		}
-
-
-		/* Heal Monster (use "dam" as amount of healing) */
 		case GF_STAR_HEAL:
 		{
 			if (seen) obvious = TRUE;
 
-			/* Wake up */
 			(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
 
 			if (m_ptr->maxhp < m_ptr->max_maxhp)
@@ -2139,13 +1920,10 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 			if (!dam)
 			{
-				/* Redraw (later) if needed */
 				if (caster_ptr->health_who == g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
 				if (caster_ptr->riding == g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
 				break;
 			}
-
-			/* Fall through */
 		}
 		case GF_OLD_HEAL:
 		{
@@ -2169,10 +1947,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				(void)set_monster_monfear(caster_ptr, g_ptr->m_idx, 0);
 			}
 
-			/* Heal */
 			if (m_ptr->hp < 30000) m_ptr->hp += dam;
-
-			/* No overflow */
 			if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
 
 			if (!who)
@@ -2202,24 +1977,18 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (!who) chg_virtue(caster_ptr, V_COMPASSION, 5);
 			}
 
-			/* Redraw (later) if needed */
 			if (caster_ptr->health_who == g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
 			if (caster_ptr->riding == g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
 
 			note = _("は体力を回復したようだ。", " looks healthier.");
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-
-		/* Speed Monster (Ignore "dam") */
 		case GF_OLD_SPEED:
 		{
 			if (seen) obvious = TRUE;
 
-			/* Speed up */
 			if (set_monster_fast(caster_ptr, g_ptr->m_idx, MON_FAST(m_ptr) + 100))
 			{
 				note = _("の動きが速くなった。", " starts moving faster.");
@@ -2233,13 +2002,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					chg_virtue(caster_ptr, V_HONOUR, 1);
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-
-		/* Slow Monster (Use "dam" as "power") */
 		case GF_OLD_SLOW:
 		{
 			if (seen) obvious = TRUE;
@@ -2251,8 +2016,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 			}
-
-			/* Normal monsters slow down */
 			else
 			{
 				if (set_monster_slow(caster_ptr, g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
@@ -2261,50 +2024,38 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				}
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-
-		/* Sleep (Use "dam" as "power") */
 		case GF_OLD_SLEEP:
 		{
 			if (seen) obvious = TRUE;
 
-			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 				(r_ptr->flags3 & RF3_NO_SLEEP) ||
 				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
-				/* Memorize a flag */
 				if (r_ptr->flags3 & RF3_NO_SLEEP)
 				{
 					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_SLEEP);
 				}
-				/* No obvious effect */
+
 				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 			}
 			else
 			{
-				/* Go to sleep (much) later */
 				note = _("は眠り込んでしまった！", " falls asleep!");
 				do_sleep = 500;
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-
-		/* Sleep (Use "dam" as "power") */
 		case GF_STASIS_EVIL:
 		{
 			if (seen) obvious = TRUE;
 
-			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 				!(r_ptr->flags3 & RF3_EVIL) ||
 				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
@@ -2314,22 +2065,17 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			else
 			{
-				/* Go to sleep (much) later */
 				note = _("は動けなくなった！", " is suspended!");
 				do_sleep = 500;
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-		/* Sleep (Use "dam" as "power") */
 		case GF_STASIS:
 		{
 			if (seen) obvious = TRUE;
 
-			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
@@ -2338,17 +2084,13 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			else
 			{
-				/* Go to sleep (much) later */
 				note = _("は動けなくなった！", " is suspended!");
 				do_sleep = 500;
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-		/* Charm monster */
 		case GF_CHARM:
 		{
 			int vir;
@@ -2366,12 +2108,8 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 			if (seen) obvious = TRUE;
 
-			/* Attempt a saving throw */
 			if (common_saving_throw_charm(caster_ptr, dam, m_ptr))
 			{
-
-				/* Resist */
-				/* No obvious effect */
 				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 
@@ -2392,12 +2130,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					chg_virtue(caster_ptr, V_NATURE, 1);
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-		/* Control undead */
 		case GF_CONTROL_UNDEAD:
 		{
 			int vir;
@@ -2415,11 +2150,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam -= caster_ptr->virtues[vir - 1] / 20;
 			}
 
-			/* Attempt a saving throw */
 			if (common_saving_throw_control(caster_ptr, dam, m_ptr) ||
 				!(r_ptr->flags3 & RF3_UNDEAD))
 			{
-				/* No obvious effect */
 				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
@@ -2435,12 +2168,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				set_pet(caster_ptr, m_ptr);
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-		/* Control demon */
 		case GF_CONTROL_DEMON:
 		{
 			int vir;
@@ -2458,11 +2188,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam -= caster_ptr->virtues[vir - 1] / 20;
 			}
 
-			/* Attempt a saving throw */
 			if (common_saving_throw_control(caster_ptr, dam, m_ptr) ||
 				!(r_ptr->flags3 & RF3_DEMON))
 			{
-				/* No obvious effect */
 				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
@@ -2478,12 +2206,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				set_pet(caster_ptr, m_ptr);
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-		/* Tame animal */
 		case GF_CONTROL_ANIMAL:
 		{
 			int vir;
@@ -2501,12 +2226,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam -= caster_ptr->virtues[vir - 1] / 20;
 			}
 
-			/* Attempt a saving throw */
 			if (common_saving_throw_control(caster_ptr, dam, m_ptr) ||
 				!(r_ptr->flags3 & RF3_ANIMAL))
 			{
-				/* Resist */
-				/* No obvious effect */
 				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
@@ -2524,12 +2246,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					chg_virtue(caster_ptr, V_NATURE, 1);
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-		/* Tame animal */
 		case GF_CHARM_LIVING:
 		{
 			int vir;
@@ -2551,12 +2270,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 			msg_format(_("%sを見つめた。", "You stare into %s."), m_name);
 
-			/* Attempt a saving throw */
 			if (common_saving_throw_charm(caster_ptr, dam, m_ptr) ||
 				!monster_living(m_ptr->r_idx))
 			{
-				/* Resist */
-				/* No obvious effect */
 				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 				if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
@@ -2574,67 +2290,47 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					chg_virtue(caster_ptr, V_NATURE, 1);
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-		/* Confusion (Use "dam" as "power") */
 		case GF_OLD_CONF:
 		{
 			if (seen) obvious = TRUE;
 
-			/* Get confused later */
 			do_conf = damroll(3, (dam / 2)) + 1;
-
-			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
 				(r_ptr->flags3 & (RF3_NO_CONF)) ||
 				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
-				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
 				{
 					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 				}
 
-				/* Resist */
 				do_conf = 0;
-
-				/* No obvious effect */
 				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
 		case GF_STUN:
 		{
 			if (seen) obvious = TRUE;
 
 			do_stun = damroll((caster_lev / 20) + 3, (dam)) + 1;
-
-			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
 				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
-				/* Resist */
 				do_stun = 0;
-
-				/* No obvious effect */
 				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-		/* Lite, but only hurts susceptible creatures */
 		case GF_LITE_WEAK:
 		{
 			if (!dam)
@@ -2642,33 +2338,23 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				skipped = TRUE;
 				break;
 			}
-			/* Hurt by light */
+
 			if (r_ptr->flags3 & (RF3_HURT_LITE))
 			{
-				/* Obvious effect */
 				if (seen) obvious = TRUE;
 
-				/* Memorize the effects */
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
 
-				/* Special effect */
 				note = _("は光に身をすくめた！", " cringes from the light!");
 				note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
 			}
-
-			/* Normally no damage */
 			else
 			{
-				/* No damage */
 				dam = 0;
 			}
 
 			break;
 		}
-
-
-
-		/* Lite -- opposite of Dark */
 		case GF_LITE:
 		{
 			if (seen) obvious = TRUE;
@@ -2688,9 +2374,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-
-		/* Dark -- opposite of Lite */
 		case GF_DARK:
 		{
 			if (seen) obvious = TRUE;
@@ -2701,42 +2384,29 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				dam *= 2; dam /= (randint1(6) + 6);
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= (RFR_RES_DARK);
 			}
+
 			break;
 		}
-
-
-		/* Stone to Mud */
 		case GF_KILL_WALL:
 		{
-			/* Hurt by rock remover */
 			if (r_ptr->flags3 & (RF3_HURT_ROCK))
 			{
-				/* Notice effect */
 				if (seen) obvious = TRUE;
 
-				/* Memorize the effects */
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_ROCK);
 
-				/* Cute little message */
 				note = _("の皮膚がただれた！", " loses some skin!");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
-
-			/* Usually, ignore the effects */
 			else
 			{
-				/* No damage */
 				dam = 0;
 			}
 
 			break;
 		}
-
-
-		/* Teleport undead (Use "dam" as "power") */
 		case GF_AWAY_UNDEAD:
 		{
-			/* Only affect undead */
 			if (r_ptr->flags3 & (RF3_UNDEAD))
 			{
 				bool resists_tele = FALSE;
@@ -2764,24 +2434,16 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					do_dist = dam;
 				}
 			}
-
-			/* Others ignore */
 			else
 			{
-				/* Irrelevant */
 				skipped = TRUE;
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-
-		/* Teleport evil (Use "dam" as "power") */
 		case GF_AWAY_EVIL:
 		{
-			/* Only affect evil */
 			if (r_ptr->flags3 & (RF3_EVIL))
 			{
 				bool resists_tele = FALSE;
@@ -2809,21 +2471,14 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					do_dist = dam;
 				}
 			}
-
-			/* Others ignore */
 			else
 			{
-				/* Irrelevant */
 				skipped = TRUE;
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-
-		/* Teleport monster (Use "dam" as "power") */
 		case GF_AWAY_ALL:
 		{
 			bool resists_tele = FALSE;
@@ -2847,119 +2502,79 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				if (seen) obvious = TRUE;
 
-				/* Prepare to teleport */
 				do_dist = dam;
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-
-		/* Turn undead (Use "dam" as "power") */
 		case GF_TURN_UNDEAD:
 		{
-			/* Only affect undead */
 			if (r_ptr->flags3 & (RF3_UNDEAD))
 			{
 				if (seen) obvious = TRUE;
 
-				/* Learn about type */
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_UNDEAD);
 
-				/* Apply some fear */
 				do_fear = damroll(3, (dam / 2)) + 1;
-
-				/* Attempt a saving throw */
 				if (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
 				{
-					/* No obvious effect */
 					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 					do_fear = 0;
 				}
 			}
-
-			/* Others ignore */
 			else
 			{
-				/* Irrelevant */
 				skipped = TRUE;
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-
-		/* Turn evil (Use "dam" as "power") */
 		case GF_TURN_EVIL:
 		{
-			/* Only affect evil */
 			if (r_ptr->flags3 & (RF3_EVIL))
 			{
 				if (seen) obvious = TRUE;
 
-				/* Learn about type */
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
 
-				/* Apply some fear */
 				do_fear = damroll(3, (dam / 2)) + 1;
-
-				/* Attempt a saving throw */
 				if (r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
 				{
-					/* No obvious effect */
 					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 					do_fear = 0;
 				}
 			}
-
-			/* Others ignore */
 			else
 			{
-				/* Irrelevant */
 				skipped = TRUE;
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-
-		/* Turn monster (Use "dam" as "power") */
 		case GF_TURN_ALL:
 		{
 			if (seen) obvious = TRUE;
 
-			/* Apply some fear */
 			do_fear = damroll(3, (dam / 2)) + 1;
-
-			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
 				(r_ptr->flags3 & (RF3_NO_FEAR)) ||
 				(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 			{
-				/* No obvious effect */
 				note = _("には効果がなかった。", " is unaffected.");
 				obvious = FALSE;
 				do_fear = 0;
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-
-		/* Dispel undead */
 		case GF_DISP_UNDEAD:
 		{
-			/* Only affect undead */
 			if (r_ptr->flags3 & (RF3_UNDEAD))
 			{
 				if (seen) obvious = TRUE;
@@ -2970,81 +2585,54 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
-
-			/* Others ignore */
 			else
 			{
-				/* Irrelevant */
 				skipped = TRUE;
-
-				/* No damage */
 				dam = 0;
 			}
 
 			break;
 		}
-
-
-		/* Dispel evil */
 		case GF_DISP_EVIL:
 		{
-			/* Only affect evil */
 			if (r_ptr->flags3 & (RF3_EVIL))
 			{
 				if (seen) obvious = TRUE;
 
-				/* Learn about type */
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_EVIL);
 
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
-
-			/* Others ignore */
 			else
 			{
-				/* Irrelevant */
 				skipped = TRUE;
-
-				/* No damage */
 				dam = 0;
 			}
 
 			break;
 		}
-
-		/* Dispel good */
 		case GF_DISP_GOOD:
 		{
-			/* Only affect good */
 			if (r_ptr->flags3 & (RF3_GOOD))
 			{
 				if (seen) obvious = TRUE;
 
-				/* Learn about type */
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
 
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
-
-			/* Others ignore */
 			else
 			{
-				/* Irrelevant */
 				skipped = TRUE;
-
-				/* No damage */
 				dam = 0;
 			}
 
 			break;
 		}
-
-		/* Dispel living */
 		case GF_DISP_LIVING:
 		{
-			/* Only affect non-undead */
 			if (monster_living(m_ptr->r_idx))
 			{
 				if (seen) obvious = TRUE;
@@ -3052,49 +2640,33 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
-
-			/* Others ignore */
 			else
 			{
-				/* Irrelevant */
 				skipped = TRUE;
-
-				/* No damage */
 				dam = 0;
 			}
 
 			break;
 		}
-
-		/* Dispel demons */
 		case GF_DISP_DEMON:
 		{
-			/* Only affect demons */
 			if (r_ptr->flags3 & (RF3_DEMON))
 			{
 				if (seen) obvious = TRUE;
 
-				/* Learn about type */
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_DEMON);
 
 				note = _("は身震いした。", " shudders.");
 				note_dies = _("はドロドロに溶けた！", " dissolves!");
 			}
-
-			/* Others ignore */
 			else
 			{
-				/* Irrelevant */
 				skipped = TRUE;
-
-				/* No damage */
 				dam = 0;
 			}
 
 			break;
 		}
-
-		/* Dispel monster */
 		case GF_DISP_ALL:
 		{
 			if (seen) obvious = TRUE;
@@ -3102,8 +2674,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			note_dies = _("はドロドロに溶けた！", " dissolves!");
 			break;
 		}
-
-		/* Drain mana */
 		case GF_DRAIN_MANA:
 		{
 			if (seen) obvious = TRUE;
@@ -3111,18 +2681,13 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				if (who > 0)
 				{
-					/* Heal the monster */
 					if (m_caster_ptr->hp < m_caster_ptr->maxhp)
 					{
-						/* Heal */
 						m_caster_ptr->hp += dam;
 						if (m_caster_ptr->hp > m_caster_ptr->maxhp) m_caster_ptr->hp = m_caster_ptr->maxhp;
-
-						/* Redraw (later) if needed */
 						if (caster_ptr->health_who == who) caster_ptr->redraw |= (PR_HEALTH);
 						if (caster_ptr->riding == who) caster_ptr->redraw |= (PR_UHEALTH);
 
-						/* Special message */
 						if (see_s_msg)
 						{
 							monster_desc(caster_ptr, killer, m_caster_ptr, 0);
@@ -3140,25 +2705,24 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				if (see_s_msg) msg_format(_("%sには効果がなかった。", "%s is unaffected."), m_name);
 			}
+
 			dam = 0;
 			break;
 		}
-
-		/* Mind blast */
 		case GF_MIND_BLAST:
 		{
 			if (seen) obvious = TRUE;
 			if (!who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), m_name);
-			/* Attempt a saving throw */
+
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 				(r_ptr->flags3 & RF3_NO_CONF) ||
 				(r_ptr->level > randint1((caster_lev - 10) < 1 ? 1 : (caster_lev - 10)) + 10))
 			{
-				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
 				{
 					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 				}
+
 				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
@@ -3182,25 +2746,23 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (who > 0) do_conf = randint0(4) + 4;
 				else do_conf = randint0(8) + 8;
 			}
+
 			break;
 		}
-
-		/* Brain smash */
 		case GF_BRAIN_SMASH:
 		{
 			if (seen) obvious = TRUE;
 			if (!who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), m_name);
 
-			/* Attempt a saving throw */
 			if ((r_ptr->flags1 & RF1_UNIQUE) ||
 				(r_ptr->flags3 & RF3_NO_CONF) ||
 				(r_ptr->level > randint1((caster_lev - 10) < 1 ? 1 : (caster_lev - 10)) + 10))
 			{
-				/* Memorize a flag */
 				if (r_ptr->flags3 & (RF3_NO_CONF))
 				{
 					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_CONF);
 				}
+
 				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
@@ -3220,7 +2782,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			{
 				note = _("は精神攻撃を食らった。", " is blasted by psionic energy.");
 				note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
-
 				if (who > 0)
 				{
 					do_conf = randint0(4) + 4;
@@ -3233,59 +2794,54 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				}
 				(void)set_monster_slow(caster_ptr, g_ptr->m_idx, MON_SLOW(m_ptr) + 10);
 			}
+
 			break;
 		}
-
-		/* CAUSE_1 */
 		case GF_CAUSE_1:
 		{
 			if (seen) obvious = TRUE;
 			if (!who) msg_format(_("%sを指差して呪いをかけた。", "You point at %s and curse."), m_name);
-			/* Attempt a saving throw */
 			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
 			{
 				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
+
 			break;
 		}
-
-		/* CAUSE_2 */
 		case GF_CAUSE_2:
 		{
 			if (seen) obvious = TRUE;
 			if (!who) msg_format(_("%sを指差して恐ろしげに呪いをかけた。", "You point at %s and curse horribly."), m_name);
-			/* Attempt a saving throw */
+
 			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
 			{
 				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
+
 			break;
 		}
-
-		/* CAUSE_3 */
 		case GF_CAUSE_3:
 		{
 			if (seen) obvious = TRUE;
 			if (!who) msg_format(_("%sを指差し、恐ろしげに呪文を唱えた！", "You point at %s, incanting terribly!"), m_name);
-			/* Attempt a saving throw */
+
 			if (randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35))
 			{
 				note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
 			}
+
 			break;
 		}
-
-		/* CAUSE_4 */
 		case GF_CAUSE_4:
 		{
 			if (seen) obvious = TRUE;
 			if (!who)
 				msg_format(_("%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。",
 					"You point at %s, screaming the word, 'DIE!'."), m_name);
-			/* Attempt a saving throw */
+
 			if ((randint0(100 + (caster_lev / 2)) < (r_ptr->level + 35)) && ((who <= 0) || (m_caster_ptr->r_idx != MON_KENSHIROU)))
 			{
 				note = _("には効果がなかった。", " is unaffected.");
@@ -3293,8 +2849,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-		/* HAND_DOOM */
 		case GF_HAND_DOOM:
 		{
 			if (seen) obvious = TRUE;
@@ -3314,14 +2868,14 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				}
 				else
 				{
+					/* todo 乱数で破滅のを弾いた結果が「耐性を持っている」ことになるのはおかしい */
 					note = _("は耐性を持っている！", "resists!");
 					dam = 0;
 				}
 			}
+
 			break;
 		}
-
-		/* Capture monster */
 		case GF_CAPTURE:
 		{
 			int nokori_hp;
@@ -3352,7 +2906,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				cap_mspeed = m_ptr->mspeed;
 				cap_hp = m_ptr->hp;
 				cap_maxhp = m_ptr->max_maxhp;
-				cap_nickname = m_ptr->nickname; /* Quark transfer */
+				cap_nickname = m_ptr->nickname;
 				if (g_ptr->m_idx == caster_ptr->riding)
 				{
 					if (rakuba(caster_ptr, -1, FALSE))
@@ -3370,17 +2924,13 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), m_name);
 				skipped = TRUE;
 			}
+
 			break;
 		}
-
-		/* Attack (Use "dam" as attack type) */
 		case GF_ATTACK:
 		{
-			/* Return this monster's death */
 			return py_attack(caster_ptr, y, x, dam);
 		}
-
-		/* Sleep (Use "dam" as "power") */
 		case GF_ENGETSU:
 		{
 			int effect = 0;
@@ -3410,15 +2960,12 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 			if (effect == 1)
 			{
-				/* Powerful monsters can resist */
 				if ((r_ptr->flags1 & RF1_UNIQUE) ||
 					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
 					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 				}
-
-				/* Normal monsters slow down */
 				else
 				{
 					if (set_monster_slow(caster_ptr, g_ptr->m_idx, MON_SLOW(m_ptr) + 50))
@@ -3427,38 +2974,28 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					}
 				}
 			}
-
 			else if (effect == 2)
 			{
 				do_stun = damroll((caster_ptr->lev / 10) + 3, (dam)) + 1;
-
-				/* Attempt a saving throw */
 				if ((r_ptr->flags1 & (RF1_UNIQUE)) ||
 					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
-					/* Resist */
 					do_stun = 0;
-
-					/* No obvious effect */
 					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 				}
 			}
-
 			else if (effect == 3)
 			{
-				/* Attempt a saving throw */
 				if ((r_ptr->flags1 & RF1_UNIQUE) ||
 					(r_ptr->flags3 & RF3_NO_SLEEP) ||
 					(r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
 				{
-					/* Memorize a flag */
 					if (r_ptr->flags3 & RF3_NO_SLEEP)
 					{
 						if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_SLEEP);
 					}
 
-					/* No obvious effect */
 					note = _("には効果がなかった。", " is unaffected.");
 					obvious = FALSE;
 				}
@@ -3475,12 +3012,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				note = _("には効果がなかった。", " is unaffected.");
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
-		/* GENOCIDE */
 		case GF_GENOCIDE:
 		{
 			if (seen) obvious = TRUE;
@@ -3494,44 +3028,33 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			skipped = TRUE;
 			break;
 		}
-
 		case GF_PHOTO:
 		{
-			if (!who) msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), m_name);
-			/* Hurt by light */
+			if (!who)
+				msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), m_name);
+
 			if (r_ptr->flags3 & (RF3_HURT_LITE))
 			{
-				/* Obvious effect */
 				if (seen) obvious = TRUE;
 
-				/* Memorize the effects */
 				if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_HURT_LITE);
 
-				/* Special effect */
 				note = _("は光に身をすくめた！", " cringes from the light!");
 				note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
 			}
-
-			/* Normally no damage */
 			else
 			{
-				/* No damage */
 				dam = 0;
 			}
 
 			photo = m_ptr->r_idx;
-
 			break;
 		}
-
-
-		/* blood curse */
 		case GF_BLOOD_CURSE:
 		{
 			if (seen) obvious = TRUE;
 			break;
 		}
-
 		case GF_CRUSADE:
 		{
 			bool success = FALSE;
@@ -3542,22 +3065,18 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				if (r_ptr->flags3 & (RF3_NO_CONF)) dam -= 50;
 				if (dam < 1) dam = 1;
 
-				/* No need to tame your pet */
 				if (is_pet(m_ptr))
 				{
 					note = _("の動きが速くなった。", " starts moving faster.");
 					(void)set_monster_fast(caster_ptr, g_ptr->m_idx, MON_FAST(m_ptr) + 100);
 					success = TRUE;
 				}
-
-				/* Attempt a saving throw */
 				else if ((r_ptr->flags1 & (RF1_QUESTOR)) ||
 					(r_ptr->flags1 & (RF1_UNIQUE)) ||
 					(m_ptr->mflag2 & MFLAG2_NOPET) ||
 					(caster_ptr->cursed & TRC_AGGRAVATE) ||
 					((r_ptr->level + 10) > randint1(dam)))
 				{
-					/* Resist */
 					if (one_in_(4)) m_ptr->mflag2 |= MFLAG2_NOPET;
 				}
 				else
@@ -3566,7 +3085,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 					set_pet(caster_ptr, m_ptr);
 					(void)set_monster_fast(caster_ptr, g_ptr->m_idx, MON_FAST(m_ptr) + 100);
 
-					/* Learn about type */
 					if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_GOOD);
 					success = TRUE;
 				}
@@ -3578,18 +3096,17 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				{
 					do_fear = randint1(90) + 10;
 				}
-				else if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flags3 |= (RF3_NO_FEAR);
+				else if (is_original_ap_and_seen(caster_ptr, m_ptr))
+					r_ptr->r_flags3 |= (RF3_NO_FEAR);
 			}
 
-			/* No "real" damage */
 			dam = 0;
 			break;
 		}
-
 		case GF_WOUNDS:
 		{
 			if (seen) obvious = TRUE;
-			/* Attempt a saving throw */
+
 			if (randint0(100 + dam) < (r_ptr->level + 50))
 			{
 				note = _("には効果がなかった。", " is unaffected.");
@@ -3597,33 +3114,22 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			}
 			break;
 		}
-
-		/* Default */
 		default:
 		{
-			/* Irrelevant */
 			skipped = TRUE;
-
-			/* No damage */
 			dam = 0;
-
 			break;
 		}
 		}
 	}
 
-	/* Absolutely no effect */
 	if (skipped) return FALSE;
 
-	/* "Unique" monsters cannot be polymorphed */
 	if (r_ptr->flags1 & (RF1_UNIQUE)) do_poly = FALSE;
-
-	/* Quest monsters cannot be polymorphed */
 	if (r_ptr->flags1 & RF1_QUESTOR) do_poly = FALSE;
+	if (caster_ptr->riding && (g_ptr->m_idx == caster_ptr->riding))
+		do_poly = FALSE;
 
-	if (caster_ptr->riding && (g_ptr->m_idx == caster_ptr->riding)) do_poly = FALSE;
-
-	/* "Unique" and "quest" monsters can only be "killed" by the player. */
 	if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & RF7_NAZGUL)) && !caster_ptr->phase_out)
 	{
 		if (who && (dam > m_ptr->hp)) dam = m_ptr->hp;
@@ -3635,27 +3141,22 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(caster_ptr, V_HONOUR, -1);
 	}
 
-	/* Modify the damage */
 	tmp = dam;
 	dam = mon_damage_mod(caster_ptr, m_ptr, dam, (bool)(typ == GF_PSY_SPEAR));
 	if ((tmp > 0) && (dam == 0)) note = _("はダメージを受けていない。", " is unharmed.");
 
-	/* Check for death */
 	if (dam > m_ptr->hp)
 	{
-		/* Extract method of death */
 		note = note_dies;
 	}
 	else
 	{
-		/* Sound and Impact resisters never stun */
 		if (do_stun &&
 			!(r_ptr->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)) &&
 			!(r_ptr->flags3 & RF3_NO_STUN))
 		{
 			if (seen) obvious = TRUE;
 
-			/* Get stunned */
 			if (MON_STUNNED(m_ptr))
 			{
 				note = _("はひどくもうろうとした。", " is more dazed.");
@@ -3667,38 +3168,28 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				tmp = do_stun;
 			}
 
-			/* Apply stun */
 			(void)set_monster_stunned(caster_ptr, g_ptr->m_idx, tmp);
-
-			/* Get angry */
 			get_angry = TRUE;
 		}
 
-		/* Confusion and Chaos resisters (and sleepers) never confuse */
 		if (do_conf &&
 			!(r_ptr->flags3 & RF3_NO_CONF) &&
 			!(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
 		{
 			if (seen) obvious = TRUE;
 
-			/* Already partially confused */
 			if (MON_CONFUSED(m_ptr))
 			{
 				note = _("はさらに混乱したようだ。", " looks more confused.");
 				tmp = MON_CONFUSED(m_ptr) + (do_conf / 2);
 			}
-
-			/* Was not confused */
 			else
 			{
 				note = _("は混乱したようだ。", " looks confused.");
 				tmp = do_conf;
 			}
 
-			/* Apply confusion */
 			(void)set_monster_confused(caster_ptr, g_ptr->m_idx, tmp);
-
-			/* Get angry */
 			get_angry = TRUE;
 		}
 
@@ -3714,31 +3205,24 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				m_ptr->maxhp -= do_time;
 				if ((m_ptr->hp - dam) > m_ptr->maxhp) dam = m_ptr->hp - m_ptr->maxhp;
 			}
+
 			get_angry = TRUE;
 		}
 
-		/* Mega-Hack -- Handle "polymorph" -- monsters get a saving throw */
 		if (do_poly && (randint1(90) > r_ptr->level))
 		{
 			if (polymorph_monster(caster_ptr, y, x))
 			{
 				if (seen) obvious = TRUE;
 
-				/* Monster polymorphs */
 				note = _("が変身した！", " changes!");
-
-				/* Turn off the damage */
 				dam = 0;
 			}
 
-			/* Hack -- Get new monster */
 			m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-
-			/* Hack -- Get new race */
 			r_ptr = &r_info[m_ptr->r_idx];
 		}
 
-		/* Handle "teleport" */
 		if (do_dist)
 		{
 			if (seen) obvious = TRUE;
@@ -3747,25 +3231,17 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 			if (!who) chg_virtue(caster_ptr, V_VALOUR, -1);
 
-			/* Teleport */
 			teleport_away(caster_ptr, g_ptr->m_idx, do_dist,
 				(!who ? TELEPORT_DEC_VALOUR : 0L) | TELEPORT_PASSIVE);
 
-			/* Hack -- get new location */
 			y = m_ptr->fy;
 			x = m_ptr->fx;
-
-			/* Hack -- get new grid */
 			g_ptr = &floor_ptr->grid_array[y][x];
 		}
 
-		/* Fear */
 		if (do_fear)
 		{
-			/* Set fear */
 			(void)set_monster_monfear(caster_ptr, g_ptr->m_idx, MON_MONFEAR(m_ptr) + do_fear);
-
-			/* Get angry */
 			get_angry = TRUE;
 		}
 	}
@@ -3778,17 +3254,11 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	/* If another monster did the damage, hurt the monster by hand */
 	else if (who)
 	{
-		/* Redraw (later) if needed */
 		if (caster_ptr->health_who == g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
 		if (caster_ptr->riding == g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
 
-		/* Wake the monster up */
 		(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
-
-		/* Hurt the monster */
 		m_ptr->hp -= dam;
-
-		/* Dead monster */
 		if (m_ptr->hp < 0)
 		{
 			bool sad = FALSE;
@@ -3796,7 +3266,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 			if (is_pet(m_ptr) && !(m_ptr->ml))
 				sad = TRUE;
 
-			/* Give detailed messages if destroyed */
 			if (known && note)
 			{
 				monster_desc(caster_ptr, m_name, m_ptr, MD_TRUE_NAME);
@@ -3812,25 +3281,17 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 
 			if (who > 0) monster_gain_exp(caster_ptr, who, m_ptr->r_idx);
 
-			/* Generate treasure, etc */
 			monster_death(caster_ptr, g_ptr->m_idx, FALSE);
-
-
 			delete_monster_idx(caster_ptr, g_ptr->m_idx);
-
 			if (sad)
 			{
 				msg_print(_("少し悲しい気分がした。", "You feel sad for a moment."));
 			}
 		}
-
-		/* Damaged monster */
 		else
 		{
-			/* Give detailed messages if visible or destroyed */
-			if (note && seen_msg) msg_format("%^s%s", m_name, note);
-
-			/* Hack -- Pain message */
+			if (note && seen_msg)
+				msg_format("%^s%s", m_name, note);
 			else if (see_s_msg)
 			{
 				message_pain(caster_ptr, g_ptr->m_idx, dam);
@@ -3840,14 +3301,13 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				floor_ptr->monster_noise = TRUE;
 			}
 
-			/* Hack -- handle sleep */
 			if (do_sleep) (void)set_monster_csleep(caster_ptr, g_ptr->m_idx, do_sleep);
 		}
 	}
-
 	else if (heal_leper)
 	{
-		if (seen_msg) msg_print(_("不潔な病人は病気が治った！", "The Mangy looking leper is healed!"));
+		if (seen_msg)
+			msg_print(_("不潔な病人は病気が治った！", "The Mangy looking leper is healed!"));
 
 		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 		{
@@ -3864,30 +3324,21 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	else
 	{
 		bool fear = FALSE;
-
-		/* Hurt the monster, check for fear and death */
 		if (mon_take_hit(caster_ptr, g_ptr->m_idx, dam, &fear, note_dies))
 		{
 			/* Dead monster */
 		}
-
-		/* Damaged monster */
 		else
 		{
-			/* HACK - anger the monster before showing the sleep message */
 			if (do_sleep) anger_monster(caster_ptr, m_ptr);
 
-			/* Give detailed messages if visible or destroyed */
 			if (note && seen_msg)
 				msg_format(_("%s%s", "%^s%s"), m_name, note);
-
-			/* Hack -- Pain message */
 			else if (known && (dam || !do_fear))
 			{
 				message_pain(caster_ptr, g_ptr->m_idx, dam);
 			}
 
-			/* Anger monsters */
 			if (((dam > 0) || get_angry) && !do_sleep)
 				anger_monster(caster_ptr, m_ptr);
 
@@ -3897,7 +3348,6 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
 			}
 
-			/* Hack -- handle sleep */
 			if (do_sleep) (void)set_monster_csleep(caster_ptr, g_ptr->m_idx, do_sleep);
 		}
 	}
@@ -3914,13 +3364,9 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		handle_stuff(caster_ptr);
 	}
 
-	/* Verify this code */
 	if (m_ptr->r_idx) update_monster(caster_ptr, g_ptr->m_idx, FALSE);
 
-	/* Redraw the monster grid */
 	lite_spot(caster_ptr, y, x);
-
-	/* Update monster recall window */
 	if ((caster_ptr->monster_race_idx == m_ptr->r_idx) && (seen || !m_ptr->r_idx))
 	{
 		caster_ptr->window |= (PW_MONSTER);
@@ -3947,29 +3393,20 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		rakubadam_m = (dam > 200) ? 200 : dam;
 	}
 
-
 	if (photo)
 	{
 		object_type *q_ptr;
 		object_type forge;
 		q_ptr = &forge;
-
-		/* Prepare to make a Blade of Chaos */
 		object_prep(q_ptr, lookup_kind(TV_STATUE, SV_PHOTO));
-
 		q_ptr->pval = photo;
-
-		/* Mark the item as fully known */
 		q_ptr->ident |= (IDENT_MENTAL);
 		(void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
 	}
 
-	/* Track it */
 	project_m_n++;
 	project_m_x = x;
 	project_m_y = y;
-
-	/* Return "Anything seen?" */
 	return (obvious);
 }
 
@@ -4002,32 +3439,14 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 {
 	int k = 0;
 	DEPTH rlev = 0;
-
-	/* Hack -- assume obvious */
 	bool obvious = TRUE;
-
-	/* Player blind-ness */
 	bool blind = (target_ptr->blind ? TRUE : FALSE);
-
-	/* Player needs a "description" (he is blind) */
 	bool fuzzy = FALSE;
-
-	/* Source monster */
 	monster_type *m_ptr = NULL;
-
-	/* Monster name (for attacks) */
 	GAME_TEXT m_name[MAX_NLEN];
-
-	/* Monster name (for damage) */
 	char killer[80];
-
-	/* Hack -- messages */
 	concptr act = NULL;
-
 	int get_damage = 0;
-
-
-	/* Player is not here */
 	if (!player_bold(target_ptr, y, x)) return FALSE;
 
 	if ((target_ptr->special_defense & NINJA_KAWARIMI) && dam && (randint0(55) < (target_ptr->lev * 3 / 5 + 20)) && who && (who != target_ptr->riding))
@@ -4035,7 +3454,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		if (kawarimi(target_ptr, TRUE)) return FALSE;
 	}
 
-	/* Player cannot hurt himself */
 	if (!who) return FALSE;
 	if (who == target_ptr->riding) return FALSE;
 
@@ -4052,7 +3470,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		else
 			msg_print(_("攻撃が跳ね返った！", "The attack bounces!"));
 
-		/* Choose 'new' target */
 		if (who > 0)
 		{
 			do
@@ -4080,24 +3497,16 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		return TRUE;
 	}
 
-	/* Limit maximum damage */
 	if (dam > 1600) dam = 1600;
 
-	/* Reduce damage by distance */
 	dam = (dam + r) / (r + 1);
-
-
-	/* If the player is blind, be more descriptive */
 	if (blind) fuzzy = TRUE;
-
 
 	if (who > 0)
 	{
 		m_ptr = &target_ptr->current_floor_ptr->m_list[who];
 		rlev = (((&r_info[m_ptr->r_idx])->level >= 1) ? (&r_info[m_ptr->r_idx])->level : 1);
 		monster_desc(target_ptr, m_name, m_ptr, 0);
-
-		/* Get the monster's real name (gotten before polymorph!) */
 		strcpy(killer, who_name);
 	}
 	else
@@ -4119,42 +3528,32 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		strcpy(m_name, killer);
 	}
 
-	/* Analyze the damage */
 	switch (typ)
 	{
-		/* Standard damage -- hurts target_ptr->inventory_list too */
 	case GF_ACID:
 	{
 		if (fuzzy) msg_print(_("酸で攻撃された！", "You are hit by acid!"));
 		get_damage = acid_dam(target_ptr, dam, killer, monspell, FALSE);
 		break;
 	}
-
-	/* Standard damage -- hurts target_ptr->inventory_list too */
 	case GF_FIRE:
 	{
 		if (fuzzy) msg_print(_("火炎で攻撃された！", "You are hit by fire!"));
 		get_damage = fire_dam(target_ptr, dam, killer, monspell, FALSE);
 		break;
 	}
-
-	/* Standard damage -- hurts target_ptr->inventory_list too */
 	case GF_COLD:
 	{
 		if (fuzzy) msg_print(_("冷気で攻撃された！", "You are hit by cold!"));
 		get_damage = cold_dam(target_ptr, dam, killer, monspell, FALSE);
 		break;
 	}
-
-	/* Standard damage -- hurts target_ptr->inventory_list too */
 	case GF_ELEC:
 	{
 		if (fuzzy) msg_print(_("電撃で攻撃された！", "You are hit by lightning!"));
 		get_damage = elec_dam(target_ptr, dam, killer, monspell, FALSE);
 		break;
 	}
-
-	/* Standard damage -- also poisons player */
 	case GF_POIS:
 	{
 		bool double_resist = is_oppose_pois(target_ptr);
@@ -4176,8 +3575,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		break;
 	}
-
-	/* Standard damage -- also poisons / mutates player */
 	case GF_NUKE:
 	{
 		bool double_resist = is_oppose_pois(target_ptr);
@@ -4206,16 +3603,12 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		break;
 	}
-
-	/* Standard damage */
 	case GF_MISSILE:
 	{
 		if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Holy Orb -- Player only takes partial damage */
 	case GF_HOLY_FIRE:
 	{
 		if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
@@ -4226,7 +3619,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
 	case GF_HELL_FIRE:
 	{
 		if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
@@ -4235,8 +3627,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Arrow -- XXX no dodging */
 	case GF_ARROW:
 	{
 		if (fuzzy)
@@ -4248,11 +3638,10 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 			msg_print(_("矢を斬り捨てた！", "You cut down the arrow!"));
 			break;
 		}
+
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Plasma -- XXX No resist */
 	case GF_PLASMA:
 	{
 		if (fuzzy) msg_print(_("何かとても熱いもので攻撃された！", "You are hit by something *HOT*!"));
@@ -4271,8 +3660,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 		break;
 	}
-
-	/* Nether -- drain experience */
 	case GF_NETHER:
 	{
 		if (fuzzy) msg_print(_("地獄の力で攻撃された！", "You are hit by nether forces!"));
@@ -4298,8 +3685,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 		break;
 	}
-
-	/* Water -- stun/confuse */
 	case GF_WATER:
 	{
 		if (fuzzy) msg_print(_("何か湿ったもので攻撃された！", "You are hit by something wet!"));
@@ -4325,8 +3710,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Chaos -- many effects */
 	case GF_CHAOS:
 	{
 		if (fuzzy) msg_print(_("無秩序の波動で攻撃された！", "You are hit by a wave of anarchy!"));
@@ -4365,8 +3748,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Shards -- mostly cutting */
 	case GF_SHARDS:
 	{
 		if (fuzzy) msg_print(_("何か鋭いもので攻撃された！", "You are hit by something sharp!"));
@@ -4387,8 +3768,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Sound -- mostly stunning */
 	case GF_SOUND:
 	{
 		if (fuzzy) msg_print(_("轟音で攻撃された！", "You are hit by a loud noise!"));
@@ -4410,8 +3789,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Pure confusion */
 	case GF_CONFUSION:
 	{
 		if (fuzzy) msg_print(_("何か混乱するもので攻撃された！", "You are hit by something puzzling!"));
@@ -4426,8 +3803,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Disenchantment -- see above */
 	case GF_DISENCHANT:
 	{
 		if (fuzzy) msg_print(_("何かさえないもので攻撃された！", "You are hit by something static!"));
@@ -4442,8 +3817,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Nexus -- see above */
 	case GF_NEXUS:
 	{
 		if (fuzzy) msg_print(_("何か奇妙なもので攻撃された！", "You are hit by something strange!"));
@@ -4455,11 +3828,10 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		{
 			apply_nexus(m_ptr, target_ptr);
 		}
+
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Force -- mostly stun */
 	case GF_FORCE:
 	{
 		if (fuzzy) msg_print(_("運動エネルギーで攻撃された！", "You are hit by kinetic force!"));
@@ -4467,12 +3839,10 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		{
 			(void)set_stun(target_ptr, target_ptr->stun + randint1(20));
 		}
+
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-
-	/* Rocket -- stun, cut */
 	case GF_ROCKET:
 	{
 		if (fuzzy) msg_print(_("爆発があった！", "There is an explosion!"));
@@ -4498,8 +3868,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Inertia -- slowness */
 	case GF_INERTIAL:
 	{
 		if (fuzzy) msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
@@ -4507,8 +3875,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Lite -- blinding */
 	case GF_LITE:
 	{
 		if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
@@ -4547,8 +3913,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 		break;
 	}
-
-	/* Dark -- blinding */
 	case GF_DARK:
 	{
 		if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
@@ -4562,11 +3926,10 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		{
 			(void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
 		}
+
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Time -- bolt fewer effects XXX */
 	case GF_TIME:
 	{
 		if (fuzzy) msg_print(_("過去からの衝撃に攻撃された！", "You are hit by a blast from the past!"));
@@ -4628,8 +3991,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Gravity -- stun plus slowness plus teleport */
 	case GF_GRAVITY:
 	{
 		if (fuzzy) msg_print(_("何か重いもので攻撃された！", "You are hit by something heavy!"));
@@ -4646,6 +4007,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 				(void)set_stun(target_ptr, target_ptr->stun + plus_stun);
 			}
 		}
+
 		if (target_ptr->levitation)
 		{
 			dam = (dam * 2) / 3;
@@ -4659,8 +4021,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Standard damage */
 	case GF_DISINTEGRATE:
 	{
 		if (fuzzy) msg_print(_("純粋なエネルギーで攻撃された！", "You are hit by pure energy!"));
@@ -4668,7 +4028,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
 	case GF_OLD_HEAL:
 	{
 		if (fuzzy) msg_print(_("何らかの攻撃によって気分がよくなった。", "You are hit by something invigorating!"));
@@ -4677,7 +4036,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		dam = 0;
 		break;
 	}
-
 	case GF_OLD_SPEED:
 	{
 		if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
@@ -4685,14 +4043,12 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		dam = 0;
 		break;
 	}
-
 	case GF_OLD_SLOW:
 	{
 		if (fuzzy) msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
 		(void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
 		break;
 	}
-
 	case GF_OLD_SLEEP:
 	{
 		if (target_ptr->free_act)  break;
@@ -4709,8 +4065,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		dam = 0;
 		break;
 	}
-
-	/* Pure damage */
 	case GF_MANA:
 	case GF_SEEKER:
 	case GF_SUPER_RAY:
@@ -4719,16 +4073,12 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
-
-	/* Pure damage */
 	case GF_PSY_SPEAR:
 	{
 		if (fuzzy) msg_print(_("エネルギーの塊で攻撃された！", "You are hit by an energy!"));
 		get_damage = take_hit(target_ptr, DAMAGE_FORCE, dam, killer, monspell);
 		break;
 	}
-
-	/* Pure damage */
 	case GF_METEOR:
 	{
 		if (fuzzy) msg_print(_("何かが空からあなたの頭上に落ちてきた！", "Something falls from the sky on you!"));
@@ -4742,8 +4092,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 		break;
 	}
-
-	/* Ice -- cold plus stun plus cuts */
 	case GF_ICE:
 	{
 		if (fuzzy) msg_print(_("何か鋭く冷たいもので攻撃された！", "You are hit by something sharp and cold!"));
@@ -4767,8 +4115,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 		break;
 	}
-
-	/* Death Ray */
 	case GF_DEATH_RAY:
 	{
 		if (fuzzy) msg_print(_("何か非常に冷たいもので攻撃された！", "You are hit by something extremely cold!"));
@@ -4783,7 +4129,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 			switch (target_ptr->prace)
 			{
-				/* Some races are immune */
 			case RACE_GOLEM:
 			case RACE_SKELETON:
 			case RACE_ZOMBIE:
@@ -4794,7 +4139,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 				dam = 0;
 				break;
 			}
-			/* Hurt a lot */
 			default:
 			{
 				get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
@@ -4805,8 +4149,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 		break;
 	}
-
-	/* Drain mana */
 	case GF_DRAIN_MANA:
 	{
 		if (CHECK_MULTISHADOW(target_ptr))
@@ -4815,21 +4157,17 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		else if (target_ptr->csp)
 		{
-			/* Basic message */
 			if (who > 0)
 				msg_format(_("%^sに精神エネルギーを吸い取られてしまった！", "%^s draws psychic energy from you!"), m_name);
 			else
 				msg_print(_("精神エネルギーを吸い取られてしまった！", "Your psychic energy is drawn!"));
 
-			/* Full drain */
 			if (dam >= target_ptr->csp)
 			{
 				dam = target_ptr->csp;
 				target_ptr->csp = 0;
 				target_ptr->csp_frac = 0;
 			}
-
-			/* Partial drain */
 			else
 			{
 				target_ptr->csp -= dam;
@@ -4841,18 +4179,14 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 			if (who > 0)
 			{
-				/* Heal the monster */
 				if (m_ptr->hp < m_ptr->maxhp)
 				{
-					/* Heal */
 					m_ptr->hp += dam;
 					if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
 
-					/* Redraw (later) if needed */
 					if (target_ptr->health_who == who) target_ptr->redraw |= (PR_HEALTH);
 					if (target_ptr->riding == who) target_ptr->redraw |= (PR_UHEALTH);
 
-					/* Special message */
 					if (m_ptr->ml)
 					{
 						msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), m_name);
@@ -4864,8 +4198,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		dam = 0;
 		break;
 	}
-
-	/* Mind blast */
 	case GF_MIND_BLAST:
 	{
 		if ((randint0(100 + rlev / 2) < MAX(5, target_ptr->skill_sav)) && !CHECK_MULTISHADOW(target_ptr))
@@ -4900,10 +4232,9 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 
 			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		}
+
 		break;
 	}
-
-	/* Brain smash */
 	case GF_BRAIN_SMASH:
 	{
 		if ((randint0(100 + rlev / 2) < MAX(5, target_ptr->skill_sav)) && !CHECK_MULTISHADOW(target_ptr))
@@ -4956,8 +4287,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		break;
 	}
-
-	/* cause 1 */
 	case GF_CAUSE_1:
 	{
 		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
@@ -4972,8 +4301,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		break;
 	}
-
-	/* cause 2 */
 	case GF_CAUSE_2:
 	{
 		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
@@ -4988,8 +4315,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		break;
 	}
-
-	/* cause 3 */
 	case GF_CAUSE_3:
 	{
 		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
@@ -5004,8 +4329,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		break;
 	}
-
-	/* cause 4 */
 	case GF_CAUSE_4:
 	{
 		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !(m_ptr->r_idx == MON_KENSHIROU) && !CHECK_MULTISHADOW(target_ptr))
@@ -5020,8 +4343,6 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		break;
 	}
-
-	/* Hand of Doom */
 	case GF_HAND_DOOM:
 	{
 		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
@@ -5043,28 +4364,19 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		}
 		break;
 	}
-
-	/* Default */
 	default:
 	{
-		/* No damage */
 		dam = 0;
-
 		break;
 	}
 	}
 
-	/* Hex - revenge damage stored */
 	revenge_store(target_ptr, get_damage);
-
 	if ((target_ptr->tim_eyeeye || hex_spelling(target_ptr, HEX_EYE_FOR_EYE))
 		&& (get_damage > 0) && !target_ptr->is_dead && (who > 0))
 	{
 		GAME_TEXT m_name_self[80];
-
-		/* hisself */
 		monster_desc(target_ptr, m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-
 		msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name, m_name_self);
 		project(target_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
 		if (target_ptr->tim_eyeeye) set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
@@ -5075,16 +4387,12 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 		rakubadam_p = (dam > 200) ? 200 : dam;
 	}
 
-
 	disturb(target_ptr, TRUE, TRUE);
-
-
 	if ((target_ptr->special_defense & NINJA_KAWARIMI) && dam && who && (who != target_ptr->riding))
 	{
 		(void)kawarimi(target_ptr, FALSE);
 	}
 
-	/* Return "Anything seen?" */
 	return (obvious);
 }
 
@@ -5094,24 +4402,16 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
  */
 POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	/* Vector from (x, y) to (x1, y1) */
 	POSITION py = y1 - y;
 	POSITION px = x1 - x;
-
-	/* Normal vector */
 	POSITION ny = x2 - x1;
 	POSITION nx = y1 - y2;
-
-	/* Length of N */
 	POSITION pd = distance(y1, x1, y, x);
 	POSITION nd = distance(y1, x1, y2, x2);
 
 	if (pd > nd) return distance(y, x, y2, x2);
 
-	/* Component of P on N */
 	nd = ((nd) ? ((py * ny + px * nx) / nd) : 0);
-
-	/* Absolute value */
 	return((nd >= 0) ? nd : 0 - nd);
 }
 
@@ -5123,197 +4423,164 @@ POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, POSITION
  */
 bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	POSITION dx, dy; /* Delta */
-	POSITION ax, ay; /* Absolute */
-	POSITION sx, sy; /* Signs */
-	POSITION qx, qy; /* Fractions */
-	POSITION tx, ty; /* Scanners */
-	POSITION f1, f2; /* Scale factors */
-	POSITION m; /* Slope, or 1/Slope, of LOS */
+	POSITION delta_y = y2 - y1;
+	POSITION delta_x = x2 - x1;
+	POSITION absolute_y = ABS(delta_y);
+	POSITION absolute_x = ABS(delta_x);
+	if ((absolute_x < 2) && (absolute_y < 2)) return TRUE;
 
-	/* Extract the offset */
-	dy = y2 - y1;
-	dx = x2 - x1;
-
-	/* Extract the absolute offset */
-	ay = ABS(dy);
-	ax = ABS(dx);
-
-	/* Handle adjacent (or identical) grids */
-	if ((ax < 2) && (ay < 2)) return TRUE;
-
-	/* Paranoia -- require "safe" origin */
-	/* if (!in_bounds(floor_ptr, y1, x1)) return FALSE; */
-
-	/* Directly South/North */
-	if (!dx)
+	POSITION scanner_y;
+	if (!delta_x)
 	{
 		/* South -- check for walls */
-		if (dy > 0)
+		if (delta_y > 0)
 		{
-			for (ty = y1 + 1; ty < y2; ty++)
+			for (scanner_y = y1 + 1; scanner_y < y2; scanner_y++)
 			{
-				if (cave_stop_disintegration(floor_ptr, ty, x1)) return FALSE;
+				if (cave_stop_disintegration(floor_ptr, scanner_y, x1)) return FALSE;
 			}
 		}
 
 		/* North -- check for walls */
 		else
 		{
-			for (ty = y1 - 1; ty > y2; ty--)
+			for (scanner_y = y1 - 1; scanner_y > y2; scanner_y--)
 			{
-				if (cave_stop_disintegration(floor_ptr, ty, x1)) return FALSE;
+				if (cave_stop_disintegration(floor_ptr, scanner_y, x1)) return FALSE;
 			}
 		}
 
-		/* Assume los */
 		return TRUE;
 	}
 
 	/* Directly East/West */
-	if (!dy)
+	POSITION scanner_x;
+	if (!delta_y)
 	{
 		/* East -- check for walls */
-		if (dx > 0)
+		if (delta_x > 0)
 		{
-			for (tx = x1 + 1; tx < x2; tx++)
+			for (scanner_x = x1 + 1; scanner_x < x2; scanner_x++)
 			{
-				if (cave_stop_disintegration(floor_ptr, y1, tx)) return FALSE;
+				if (cave_stop_disintegration(floor_ptr, y1, scanner_x)) return FALSE;
 			}
 		}
 
 		/* West -- check for walls */
 		else
 		{
-			for (tx = x1 - 1; tx > x2; tx--)
+			for (scanner_x = x1 - 1; scanner_x > x2; scanner_x--)
 			{
-				if (cave_stop_disintegration(floor_ptr, y1, tx)) return FALSE;
+				if (cave_stop_disintegration(floor_ptr, y1, scanner_x)) return FALSE;
 			}
 		}
 
-		/* Assume los */
 		return TRUE;
 	}
 
-	/* Extract some signs */
-	sx = (dx < 0) ? -1 : 1;
-	sy = (dy < 0) ? -1 : 1;
-
-	/* Vertical "knights" */
-	if (ax == 1)
+	POSITION sign_x = (delta_x < 0) ? -1 : 1;
+	POSITION sign_y = (delta_y < 0) ? -1 : 1;
+	if (absolute_x == 1)
 	{
-		if (ay == 2)
+		if (absolute_y == 2)
 		{
-			if (!cave_stop_disintegration(floor_ptr, y1 + sy, x1)) return TRUE;
+			if (!cave_stop_disintegration(floor_ptr, y1 + sign_y, x1)) return TRUE;
+		}
+	}
+	else if (absolute_y == 1)
+	{
+		if (absolute_x == 2)
+		{
+			if (!cave_stop_disintegration(floor_ptr, y1, x1 + sign_x)) return TRUE;
 		}
 	}
 
-	/* Horizontal "knights" */
-	else if (ay == 1)
+	POSITION scale_factor_2 = (absolute_x * absolute_y);
+	POSITION scale_factor_1 = scale_factor_2 << 1;
+	POSITION fraction_y;
+	POSITION m; /* Slope, or 1/Slope, of LOS */
+	if (absolute_x >= absolute_y)
 	{
-		if (ax == 2)
+		fraction_y = absolute_y * absolute_y;
+		m = fraction_y << 1;
+		scanner_x = x1 + sign_x;
+		if (fraction_y == scale_factor_2)
 		{
-			if (!cave_stop_disintegration(floor_ptr, y1, x1 + sx)) return TRUE;
-		}
-	}
-
-	/* Calculate scale factor div 2 */
-	f2 = (ax * ay);
-
-	/* Calculate scale factor */
-	f1 = f2 << 1;
-
-
-	/* Travel horizontally */
-	if (ax >= ay)
-	{
-		/* Let m = dy / dx * 2 * (dy * dx) = 2 * dy * dy */
-		qy = ay * ay;
-		m = qy << 1;
-
-		tx = x1 + sx;
-
-		/* Consider the special case where slope == 1. */
-		if (qy == f2)
-		{
-			ty = y1 + sy;
-			qy -= f1;
+			scanner_y = y1 + sign_y;
+			fraction_y -= scale_factor_1;
 		}
 		else
 		{
-			ty = y1;
+			scanner_y = y1;
 		}
 
 		/* Note (below) the case (qy == f2), where */
 		/* the LOS exactly meets the corner of a tile. */
-		while (x2 - tx)
+		while (x2 - scanner_x)
 		{
-			if (cave_stop_disintegration(floor_ptr, ty, tx)) return FALSE;
+			if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) return FALSE;
 
-			qy += m;
+			fraction_y += m;
 
-			if (qy < f2)
+			if (fraction_y < scale_factor_2)
 			{
-				tx += sx;
+				scanner_x += sign_x;
 			}
-			else if (qy > f2)
+			else if (fraction_y > scale_factor_2)
 			{
-				ty += sy;
-				if (cave_stop_disintegration(floor_ptr, ty, tx)) return FALSE;
-				qy -= f1;
-				tx += sx;
+				scanner_y += sign_y;
+				if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) return FALSE;
+				fraction_y -= scale_factor_1;
+				scanner_x += sign_x;
 			}
 			else
 			{
-				ty += sy;
-				qy -= f1;
-				tx += sx;
+				scanner_y += sign_y;
+				fraction_y -= scale_factor_1;
+				scanner_x += sign_x;
 			}
 		}
 
 		return TRUE;
 	}
 
-	/* Let m = dx / dy * 2 * (dx * dy) = 2 * dx * dx */
-	qx = ax * ax;
-	m = qx << 1;
-
-	ty = y1 + sy;
-
-	if (qx == f2)
+	POSITION fraction_x = absolute_x * absolute_x;
+	m = fraction_x << 1;
+	scanner_y = y1 + sign_y;
+	if (fraction_x == scale_factor_2)
 	{
-		tx = x1 + sx;
-		qx -= f1;
+		scanner_x = x1 + sign_x;
+		fraction_x -= scale_factor_1;
 	}
 	else
 	{
-		tx = x1;
+		scanner_x = x1;
 	}
 
 	/* Note (below) the case (qx == f2), where */
 	/* the LOS exactly meets the corner of a tile. */
-	while (y2 - ty)
+	while (y2 - scanner_y)
 	{
-		if (cave_stop_disintegration(floor_ptr, ty, tx)) return FALSE;
+		if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) return FALSE;
 
-		qx += m;
+		fraction_x += m;
 
-		if (qx < f2)
+		if (fraction_x < scale_factor_2)
 		{
-			ty += sy;
+			scanner_y += sign_y;
 		}
-		else if (qx > f2)
+		else if (fraction_x > scale_factor_2)
 		{
-			tx += sx;
-			if (cave_stop_disintegration(floor_ptr, ty, tx)) return FALSE;
-			qx -= f1;
-			ty += sy;
+			scanner_x += sign_x;
+			if (cave_stop_disintegration(floor_ptr, scanner_y, scanner_x)) return FALSE;
+			fraction_x -= scale_factor_1;
+			scanner_y += sign_y;
 		}
 		else
 		{
-			tx += sx;
-			qx -= f1;
-			ty += sy;
+			scanner_x += sign_x;
+			fraction_x -= scale_factor_1;
+			scanner_y += sign_y;
 		}
 	}
 
@@ -5346,7 +4613,6 @@ void breath_shape(player_type *caster_ptr, u16b *path_g, int dist, int *pgrids, 
 			POSITION nx = GRID_X(path_g[path_n]);
 			POSITION nd = distance(ny, nx, y1, x1);
 
-			/* Get next base point */
 			if (bdis >= nd)
 			{
 				by = ny;
@@ -5358,18 +4624,12 @@ void breath_shape(player_type *caster_ptr, u16b *path_g, int dist, int *pgrids, 
 		/* Travel from center outward */
 		for (cdis = 0; cdis <= brad; cdis++)
 		{
-			/* Scan the maximal blast area of radius "cdis" */
 			for (y = by - cdis; y <= by + cdis; y++)
 			{
 				for (x = bx - cdis; x <= bx + cdis; x++)
 				{
-					/* Ignore "illegal" locations */
 					if (!in_bounds(floor_ptr, y, x)) continue;
-
-					/* Enforce a circular "ripple" */
 					if (distance(y1, x1, y, x) != bdis) continue;
-
-					/* Enforce an arc */
 					if (distance(by, bx, y, x) != cdis) continue;
 
 					switch (typ)
@@ -5389,7 +4649,6 @@ void breath_shape(player_type *caster_ptr, u16b *path_g, int dist, int *pgrids, 
 						break;
 					}
 
-					/* Save this grid */
 					gy[*pgrids] = y;
 					gx[*pgrids] = x;
 					(*pgrids)++;
@@ -5397,22 +4656,17 @@ void breath_shape(player_type *caster_ptr, u16b *path_g, int dist, int *pgrids, 
 			}
 		}
 
-		/* Encode some more "radius" info */
 		gm[bdis + 1] = *pgrids;
-
-		/* Increase the size */
 		brad = rad * (path_n + brev) / (dist + brev);
-
-		/* Find the next ripple */
 		bdis++;
 	}
 
-	/* Store the effect size */
 	*pgm_rad = bdis;
 }
 
 
 /*!
+ * todo 似たような処理が山ほど並んでいる、何とかならないものか
  * @brief 汎用的なビーム/ボルト/ボール系処理のルーチン Generic "beam"/"bolt"/"ball" projection routine.
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
  * @param rad 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
@@ -5557,97 +4811,51 @@ void breath_shape(player_type *caster_ptr, u16b *path_g, int dist, int *pgrids, 
 bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, int monspell)
 {
 	int i, t, dist;
-
 	POSITION y1, x1;
 	POSITION y2, x2;
 	POSITION by, bx;
-
 	int dist_hack = 0;
-
 	POSITION y_saver, x_saver; /* For reflecting monsters */
-
 	int msec = delay_factor * delay_factor * delay_factor;
-
-	/* Assume the player sees nothing */
 	bool notice = FALSE;
-
-	/* Assume the player has seen nothing */
 	bool visual = FALSE;
-
-	/* Assume the player has seen no blast grids */
 	bool drawn = FALSE;
-
-	/* Assume to be a normal ball spell */
 	bool breath = FALSE;
-
-	/* Is the player blind? */
-	bool blind = (caster_ptr->blind ? TRUE : FALSE);
-
+	bool blind = caster_ptr->blind != 0;
 	bool old_hide = FALSE;
-
-	/* Number of grids in the "path" */
 	int path_n = 0;
-
-	/* Actual grids in the "path" */
 	u16b path_g[512];
-
-	/* Number of grids in the "blast area" (including the "beam" path) */
 	int grids = 0;
-
-	/* Coordinates of the affected grids */
 	POSITION gx[1024], gy[1024];
-
-	/* Encoded "radius" info (see above) */
 	POSITION gm[32];
-
-	/* Actual radius encoded in gm[] */
 	POSITION gm_rad = rad;
-
 	bool jump = FALSE;
-
-	/* Attacker's name (prepared before polymorph)*/
 	GAME_TEXT who_name[MAX_NLEN];
-
-	/* Can the player see the source of this effect? */
 	bool see_s_msg = TRUE;
-
-	/* Initialize by null string */
 	who_name[0] = '\0';
-
 	rakubadam_p = 0;
 	rakubadam_m = 0;
-
-	/* Default target of monsterspell is player */
 	monster_target_y = caster_ptr->y;
 	monster_target_x = caster_ptr->x;
 
-	/* Hack -- Jump to target */
 	if (flg & (PROJECT_JUMP))
 	{
 		x1 = x;
 		y1 = y;
-
-		/* Clear the flag */
 		flg &= ~(PROJECT_JUMP);
-
 		jump = TRUE;
 	}
-
-	/* Start at player */
 	else if (who <= 0)
 	{
 		x1 = caster_ptr->x;
 		y1 = caster_ptr->y;
 	}
-
-	/* Start at monster */
 	else if (who > 0)
 	{
 		x1 = caster_ptr->current_floor_ptr->m_list[who].fx;
 		y1 = caster_ptr->current_floor_ptr->m_list[who].fy;
 		monster_desc(caster_ptr, who_name, &caster_ptr->current_floor_ptr->m_list[who], MD_WRONGDOER_NAME);
 	}
-
 	else
 	{
 		x1 = x;
@@ -5656,13 +4864,9 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 	y_saver = y1;
 	x_saver = x1;
-
-	/* Default "destination" */
 	y2 = y;
 	x2 = x;
 
-
-	/* Hack -- verify stuff */
 	if (flg & (PROJECT_THRU))
 	{
 		if ((x1 == x2) && (y1 == y2))
@@ -5671,7 +4875,6 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		}
 	}
 
-	/* Handle a breath attack */
 	if (rad < 0)
 	{
 		rad = 0 - rad;
@@ -5680,16 +4883,11 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		flg |= PROJECT_HIDE;
 	}
 
-	/* Hack -- Assume there will be no blast (max radius 32) */
 	for (dist = 0; dist < 32; dist++) gm[dist] = 0;
 
-
-	/* Initial grid */
 	y = y1;
 	x = x1;
 	dist = 0;
-
-	/* Collect beam grids */
 	if (flg & (PROJECT_BEAM))
 	{
 		gy[grids] = y;
@@ -5710,84 +4908,55 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	}
 
 	/* Calculate the projection path */
-
 	path_n = project_path(caster_ptr, path_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, flg);
 	handle_stuff(caster_ptr);
-
-	/* Giga-Hack SEEKER & SUPER_RAY */
 
 	if (typ == GF_SEEKER)
 	{
 		int j;
 		int last_i = 0;
-
-		/* Mega-Hack */
 		project_m_n = 0;
 		project_m_x = 0;
 		project_m_y = 0;
-
 		for (i = 0; i < path_n; ++i)
 		{
 			POSITION oy = y;
 			POSITION ox = x;
-
 			POSITION ny = GRID_Y(path_g[i]);
 			POSITION nx = GRID_X(path_g[i]);
-
-			/* Advance */
 			y = ny;
 			x = nx;
-
 			gy[grids] = y;
 			gx[grids] = x;
 			grids++;
 
-			/* Only do visuals if requested */
 			if (!blind && !(flg & (PROJECT_HIDE)))
 			{
-				/* Only do visuals if the player can "see" the bolt */
 				if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x))
 				{
 					TERM_COLOR a;
 					SYMBOL_CODE c;
-
-					/* Obtain the bolt pict */
 					u16b p = bolt_pict(oy, ox, y, x, typ);
-
-					/* Extract attr/char */
 					a = PICT_A(p);
 					c = PICT_C(p);
-
-					/* Visual effects */
 					print_rel(caster_ptr, c, a, y, x);
 					move_cursor_relative(y, x);
 					Term_fresh();
 					Term_xtra(TERM_XTRA_DELAY, msec);
 					lite_spot(caster_ptr, y, x);
 					Term_fresh();
-
-					/* Display "beam" grids */
 					if (flg & (PROJECT_BEAM))
 					{
-						/* Obtain the explosion pict */
 						p = bolt_pict(y, x, y, x, typ);
-
-						/* Extract attr/char */
 						a = PICT_A(p);
 						c = PICT_C(p);
-
-						/* Visual effects */
 						print_rel(caster_ptr, c, a, y, x);
 					}
 
-					/* Hack -- Activate delay */
 					visual = TRUE;
 				}
-
-				/* Hack -- delay anyway for consistency */
 				else if (visual)
 				{
-					/* Delay for consistency */
 					Term_xtra(TERM_XTRA_DELAY, msec);
 				}
 			}
@@ -5795,13 +4964,10 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			if (project_o(caster_ptr, 0, 0, y, x, dam, GF_SEEKER))notice = TRUE;
 			if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
 			{
-				/* The target of monsterspell becomes tha mirror(broken) */
 				monster_target_y = y;
 				monster_target_x = x;
-
 				remove_mirror(caster_ptr, y, x);
 				next_mirror(caster_ptr, &oy, &ox, y, x);
-
 				path_n = i + project_path(caster_ptr, &(path_g[i + 1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flg);
 				for (j = last_i; j <= i; j++)
 				{
@@ -5857,76 +5023,47 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	{
 		int j;
 		int second_step = 0;
-
-		/* Mega-Hack */
 		project_m_n = 0;
 		project_m_x = 0;
 		project_m_y = 0;
-
 		for (i = 0; i < path_n; ++i)
 		{
 			POSITION oy = y;
 			POSITION ox = x;
-
 			POSITION ny = GRID_Y(path_g[i]);
 			POSITION nx = GRID_X(path_g[i]);
-
-			/* Advance */
 			y = ny;
 			x = nx;
-
 			gy[grids] = y;
 			gx[grids] = x;
 			grids++;
-
-			/* Only do visuals if requested */
-			if (!blind && !(flg & (PROJECT_HIDE)))
 			{
-				/* Only do visuals if the player can "see" the bolt */
 				if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x))
 				{
 					u16b p;
-
 					TERM_COLOR a;
 					SYMBOL_CODE c;
-
-					/* Obtain the bolt pict */
 					p = bolt_pict(oy, ox, y, x, typ);
-
-					/* Extract attr/char */
 					a = PICT_A(p);
 					c = PICT_C(p);
-
-					/* Visual effects */
 					print_rel(caster_ptr, c, a, y, x);
 					move_cursor_relative(y, x);
-					/*if (fresh_before)*/ Term_fresh();
+					Term_fresh();
 					Term_xtra(TERM_XTRA_DELAY, msec);
 					lite_spot(caster_ptr, y, x);
-					/*if (fresh_before)*/ Term_fresh();
-
-					/* Display "beam" grids */
+					Term_fresh();
 					if (flg & (PROJECT_BEAM))
 					{
-						/* Obtain the explosion pict */
 						p = bolt_pict(y, x, y, x, typ);
-
-						/* Extract attr/char */
 						a = PICT_A(p);
 						c = PICT_C(p);
-
-						/* Visual effects */
 						print_rel(caster_ptr, c, a, y, x);
 					}
 
-					/* Hack -- Activate delay */
 					visual = TRUE;
 				}
-
-				/* Hack -- delay anyway for consistency */
 				else if (visual)
 				{
-					/* Delay for consistency */
 					Term_xtra(TERM_XTRA_DELAY, msec);
 				}
 			}
@@ -5940,10 +5077,8 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 			if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]) && !second_step)
 			{
-				/* The target of monsterspell becomes tha mirror(broken) */
 				monster_target_y = y;
 				monster_target_x = x;
-
 				remove_mirror(caster_ptr, y, x);
 				for (j = 0; j <= i; j++)
 				{
@@ -5988,36 +5123,27 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		return notice;
 	}
 
-	/* Project along the path */
 	for (i = 0; i < path_n; ++i)
 	{
 		POSITION oy = y;
 		POSITION ox = x;
-
 		POSITION ny = GRID_Y(path_g[i]);
 		POSITION nx = GRID_X(path_g[i]);
-
 		if (flg & PROJECT_DISI)
 		{
-			/* Hack -- Balls explode before reaching walls */
 			if (cave_stop_disintegration(caster_ptr->current_floor_ptr, ny, nx) && (rad > 0)) break;
 		}
 		else if (flg & PROJECT_LOS)
 		{
-			/* Hack -- Balls explode before reaching walls */
 			if (!cave_los_bold(caster_ptr->current_floor_ptr, ny, nx) && (rad > 0)) break;
 		}
 		else
 		{
-			/* Hack -- Balls explode before reaching walls */
 			if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, ny, nx, FF_PROJECT) && (rad > 0)) break;
 		}
 
-		/* Advance */
 		y = ny;
 		x = nx;
-
-		/* Collect beam grids */
 		if (flg & (PROJECT_BEAM))
 		{
 			gy[grids] = y;
@@ -6025,65 +5151,42 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			grids++;
 		}
 
-		/* Only do visuals if requested */
 		if (!blind && !(flg & (PROJECT_HIDE | PROJECT_FAST)))
 		{
-			/* Only do visuals if the player can "see" the bolt */
 			if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x))
 			{
 				u16b p;
-
 				TERM_COLOR a;
 				SYMBOL_CODE c;
-
-				/* Obtain the bolt pict */
 				p = bolt_pict(oy, ox, y, x, typ);
-
-				/* Extract attr/char */
 				a = PICT_A(p);
 				c = PICT_C(p);
-
-				/* Visual effects */
 				print_rel(caster_ptr, c, a, y, x);
 				move_cursor_relative(y, x);
-				/*if (fresh_before)*/ Term_fresh();
+				Term_fresh();
 				Term_xtra(TERM_XTRA_DELAY, msec);
 				lite_spot(caster_ptr, y, x);
-				/*if (fresh_before)*/ Term_fresh();
-
-				/* Display "beam" grids */
+				Term_fresh();
 				if (flg & (PROJECT_BEAM))
 				{
-					/* Obtain the explosion pict */
 					p = bolt_pict(y, x, y, x, typ);
-
-					/* Extract attr/char */
 					a = PICT_A(p);
 					c = PICT_C(p);
-
-					/* Visual effects */
 					print_rel(caster_ptr, c, a, y, x);
 				}
 
-				/* Hack -- Activate delay */
 				visual = TRUE;
 			}
-
-			/* Hack -- delay anyway for consistency */
 			else if (visual)
 			{
-				/* Delay for consistency */
 				Term_xtra(TERM_XTRA_DELAY, msec);
 			}
 		}
 	}
 
 	path_n = i;
-
-	/* Save the "blast epicenter" */
 	by = y;
 	bx = x;
-
 	if (breath && !path_n)
 	{
 		breath = FALSE;
@@ -6094,21 +5197,15 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		}
 	}
 
-	/* Start the "explosion" */
 	gm[0] = 0;
-
-	/* Hack -- make sure beams get to "explode" */
 	gm[1] = grids;
-
 	dist = path_n;
 	dist_hack = dist;
-
 	project_length = 0;
 
 	/* If we found a "target", explode there */
 	if (dist <= MAX_RANGE)
 	{
-		/* Mega-Hack -- remove the final "beam" grid */
 		if ((flg & (PROJECT_BEAM)) && (grids > 0)) grids--;
 
 		/*
@@ -6120,131 +5217,92 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		 *   ********
 		 *       ***
 		 */
-
 		if (breath)
 		{
 			flg &= ~(PROJECT_HIDE);
-
 			breath_shape(caster_ptr, path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
 		}
 		else
 		{
-			/* Determine the blast area, work from the inside out */
 			for (dist = 0; dist <= rad; dist++)
 			{
-				/* Scan the maximal blast area of radius "dist" */
 				for (y = by - dist; y <= by + dist; y++)
 				{
 					for (x = bx - dist; x <= bx + dist; x++)
 					{
-						/* Ignore "illegal" locations */
 						if (!in_bounds2(caster_ptr->current_floor_ptr, y, x)) continue;
-
-						/* Enforce a "circular" explosion */
 						if (distance(by, bx, y, x) != dist) continue;
 
 						switch (typ)
 						{
 						case GF_LITE:
 						case GF_LITE_WEAK:
-							/* Lights are stopped by opaque terrains */
 							if (!los(caster_ptr, by, bx, y, x)) continue;
 							break;
 						case GF_DISINTEGRATE:
-							/* Disintegration are stopped only by perma-walls */
 							if (!in_disintegration_range(caster_ptr->current_floor_ptr, by, bx, y, x)) continue;
 							break;
 						default:
-							/* Ball explosions are stopped by walls */
 							if (!projectable(caster_ptr, by, bx, y, x)) continue;
 							break;
 						}
 
-						/* Save this grid */
 						gy[grids] = y;
 						gx[grids] = x;
 						grids++;
 					}
 				}
 
-				/* Encode some more "radius" info */
 				gm[dist + 1] = grids;
 			}
 		}
 	}
 
-	/* Speed -- ignore "non-explosions" */
 	if (!grids) return FALSE;
 
-
-	/* Display the "blast area" if requested */
 	if (!blind && !(flg & (PROJECT_HIDE)))
 	{
-		/* Then do the "blast", from inside out */
 		for (t = 0; t <= gm_rad; t++)
 		{
-			/* Dump everything with this radius */
 			for (i = gm[t]; i < gm[t + 1]; i++)
 			{
 				y = gy[i];
 				x = gx[i];
-
-				/* Only do visuals if the player can "see" the blast */
 				if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x))
 				{
 					u16b p;
-
 					TERM_COLOR a;
 					SYMBOL_CODE c;
-
 					drawn = TRUE;
-
-					/* Obtain the explosion pict */
 					p = bolt_pict(y, x, y, x, typ);
-
-					/* Extract attr/char */
 					a = PICT_A(p);
 					c = PICT_C(p);
-
-					/* Visual effects -- Display */
 					print_rel(caster_ptr, c, a, y, x);
 				}
 			}
 
-			/* Hack -- center the cursor */
 			move_cursor_relative(by, bx);
-
-			/* Flush each "radius" seperately */
-			/*if (fresh_before)*/ Term_fresh();
-
-			/* Delay (efficiently) */
+			Term_fresh();
 			if (visual || drawn)
 			{
 				Term_xtra(TERM_XTRA_DELAY, msec);
 			}
 		}
 
-		/* Flush the erasing */
 		if (drawn)
 		{
-			/* Erase the explosion drawn above */
 			for (i = 0; i < grids; i++)
 			{
 				y = gy[i];
 				x = gx[i];
-
-				/* Hack -- Erase if needed */
 				if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x))
 				{
 					lite_spot(caster_ptr, y, x);
 				}
 			}
 
-			/* Hack -- center the cursor */
 			move_cursor_relative(by, bx);
-
-			/* Flush the explosion */
-			/*if (fresh_before)*/ Term_fresh();
+			Term_fresh();
 		}
 	}
 
@@ -6256,110 +5314,71 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			(!who ? TRUE : (player_can_see_bold(caster_ptr, y1, x1) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y1, x1)));
 	}
 
-	/* Check features */
 	if (flg & (PROJECT_GRID))
 	{
-		/* Start with "dist" of zero */
 		dist = 0;
-
-		/* Scan for features */
 		for (i = 0; i < grids; i++)
 		{
-			/* Hack -- Notice new "dist" values */
 			if (gm[dist + 1] == i) dist++;
-
-			/* Get the grid location */
 			y = gy[i];
 			x = gx[i];
-
-			/* Find the closest point in the blast */
 			if (breath)
 			{
 				int d = dist_to_line(y, x, y1, x1, by, bx);
-
-				/* Affect the grid */
 				if (project_f(caster_ptr, who, d, y, x, dam, typ)) notice = TRUE;
 			}
-
 			else
 			{
-				/* Affect the grid */
 				if (project_f(caster_ptr, who, dist, y, x, dam, typ)) notice = TRUE;
 			}
 		}
 	}
 
 	update_creature(caster_ptr);
-
-	/* Check objects */
 	if (flg & (PROJECT_ITEM))
 	{
-		/* Start with "dist" of zero */
 		dist = 0;
-
-		/* Scan for objects */
 		for (i = 0; i < grids; i++)
 		{
-			/* Hack -- Notice new "dist" values */
 			if (gm[dist + 1] == i) dist++;
 
-			/* Get the grid location */
 			y = gy[i];
 			x = gx[i];
-
-			/* Find the closest point in the blast */
 			if (breath)
 			{
 				int d = dist_to_line(y, x, y1, x1, by, bx);
-
-				/* Affect the object in the grid */
 				if (project_o(caster_ptr, who, d, y, x, dam, typ)) notice = TRUE;
 			}
 			else
 			{
-				/* Affect the object in the grid */
 				if (project_o(caster_ptr, who, dist, y, x, dam, typ)) notice = TRUE;
 			}
 		}
 	}
 
-	/* Check monsters */
 	if (flg & (PROJECT_KILL))
 	{
-		/* Mega-Hack */
 		project_m_n = 0;
 		project_m_x = 0;
 		project_m_y = 0;
-
-		/* Start with "dist" of zero */
 		dist = 0;
-
-		/* Scan for monsters */
 		for (i = 0; i < grids; i++)
 		{
 			int effective_dist;
-
-			/* Hack -- Notice new "dist" values */
 			if (gm[dist + 1] == i) dist++;
 
-			/* Get the grid location */
 			y = gy[i];
 			x = gx[i];
-
-			/* A single bolt may be reflected */
 			if (grids <= 1)
 			{
 				monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[y][x].m_idx];
 				monster_race *ref_ptr = &r_info[m_ptr->r_idx];
-
 				if ((flg & PROJECT_REFLECTABLE) && caster_ptr->current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) &&
 					((caster_ptr->current_floor_ptr->grid_array[y][x].m_idx != caster_ptr->riding) || !(flg & PROJECT_PLAYER)) &&
 					(!who || dist_hack > 1) && !one_in_(10))
 				{
 					POSITION t_y, t_x;
 					int max_attempts = 10;
-
-					/* Choose 'new' target */
 					do
 					{
 						t_y = y_saver - 1 + randint1(3);
@@ -6383,16 +5402,13 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 						else
 							msg_print(_("攻撃は跳ね返った！", "The attack bounces!"));
 					}
+
 					if (is_original_ap_and_seen(caster_ptr, m_ptr)) ref_ptr->r_flags2 |= RF2_REFLECTING;
 
-					/* Reflected bolts randomly target either one */
 					if (player_bold(caster_ptr, y, x) || one_in_(2)) flg &= ~(PROJECT_PLAYER);
 					else flg |= PROJECT_PLAYER;
 
-					/* The bolt is reflected */
 					project(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].m_idx, 0, t_y, t_x, dam, typ, flg, monspell);
-
-					/* Don't affect the monster any longer */
 					continue;
 				}
 			}
@@ -6407,10 +5423,8 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				effective_dist = dist;
 			}
 
-			/* There is the riding player on this monster */
 			if (caster_ptr->riding && player_bold(caster_ptr, y, x))
 			{
-				/* Aimed on the player */
 				if (flg & PROJECT_PLAYER)
 				{
 					if (flg & (PROJECT_BEAM | PROJECT_REFLECTABLE | PROJECT_AIMED))
@@ -6459,10 +5473,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					}
 					else
 					{
-						/* Hit the player later */
 						flg |= PROJECT_PLAYER;
-
-						/* Don't affect the mount */
 						continue;
 					}
 				}
@@ -6478,18 +5489,14 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				}
 			}
 
-			/* Affect the monster in the grid */
 			if (project_m(caster_ptr, who, effective_dist, y, x, dam, typ, flg, see_s_msg)) notice = TRUE;
 		}
-
 
 		/* Player affected one monster (without "jumping") */
 		if (!who && (project_m_n == 1) && !jump)
 		{
 			x = project_m_x;
 			y = project_m_y;
-
-			/* Track if possible */
 			if (caster_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0)
 			{
 				monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[y][x].m_idx];
@@ -6503,25 +5510,16 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		}
 	}
 
-	/* Check player */
 	if (flg & (PROJECT_KILL))
 	{
-		/* Start with "dist" of zero */
 		dist = 0;
-
-		/* Scan for player */
 		for (i = 0; i < grids; i++)
 		{
 			int effective_dist;
-
-			/* Hack -- Notice new "dist" values */
 			if (gm[dist + 1] == i) dist++;
 
-			/* Get the grid location */
 			y = gy[i];
 			x = gx[i];
-
-			/* Affect the player? */
 			if (!player_bold(caster_ptr, y, x)) continue;
 
 			/* Find the closest point in the blast */
@@ -6534,10 +5532,8 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				effective_dist = dist;
 			}
 
-			/* Target may be your horse */
 			if (caster_ptr->riding)
 			{
-				/* Aimed on the player */
 				if (flg & PROJECT_PLAYER)
 				{
 					/* Hit the player with full damage */
@@ -6573,7 +5569,6 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				}
 			}
 
-			/* Affect the player */
 			if (project_p(who, caster_ptr, who_name, effective_dist, y, x, dam, typ, flg, monspell)) notice = TRUE;
 		}
 	}
@@ -6581,9 +5576,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	if (caster_ptr->riding)
 	{
 		GAME_TEXT m_name[MAX_NLEN];
-
 		monster_desc(caster_ptr, m_name, &caster_ptr->current_floor_ptr->m_list[caster_ptr->riding], 0);
-
 		if (rakubadam_m > 0)
 		{
 			if (rakuba(caster_ptr, rakubadam_m, FALSE))
@@ -6591,6 +5584,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				msg_format(_("%^sに振り落とされた！", "%^s has thrown you off!"), m_name);
 			}
 		}
+
 		if (caster_ptr->riding && rakubadam_p > 0)
 		{
 			if (rakuba(caster_ptr, rakubadam_p, FALSE))
@@ -6600,9 +5594,9 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		}
 	}
 
-	/* Return "something was noticed" */
 	return (notice);
 }
+
 
 /*!
  * @brief 鏡魔法「封魔結界」の効果処理
@@ -6612,7 +5606,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 {
 	POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
-	int mirror_num = 0;			  /* 鏡の数 */
+	int mirror_num = 0;	/* 鏡の数 */
 	POSITION x, y;
 	POSITION centersign;
 	POSITION x1, x2, y1, y2;
@@ -6688,14 +5682,13 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 			{
 				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
 				{
-					/* Visual effects */
 					if (!(caster_ptr->blind)
 						&& panel_contains(y, x))
 					{
 						p = bolt_pict(y, x, y, x, GF_MANA);
 						print_rel(caster_ptr, PICT_C(p), PICT_A(p), y, x);
 						move_cursor_relative(y, x);
-						/*if (fresh_before)*/ Term_fresh();
+						Term_fresh();
 						Term_xtra(TERM_XTRA_DELAY, msec);
 					}
 				}
@@ -6769,6 +5762,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 
 	return TRUE;
 }
+
 
 /*!
  * @brief 鏡魔法「鏡の封印」の効果処理
