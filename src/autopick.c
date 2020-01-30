@@ -3098,7 +3098,7 @@ static void check_expression_line(text_body_type *tb, int y)
 static bool add_empty_line(text_body_type *tb)
 {
 	int num_lines;
-	for (num_lines = 0; tb->lines_list[num_lines]; num_lines++)
+	for (num_lines = 0; tb->lines_list[num_lines]; num_lines++);
 
 	if (num_lines >= MAX_LINES - 2) return FALSE;
 	if (!tb->lines_list[num_lines - 1][0]) return FALSE;
@@ -3118,7 +3118,7 @@ static bool insert_return_code(text_body_type *tb)
 	char buf[MAX_LINELEN];
 	int i, j, num_lines;
 
-	for (num_lines = 0; tb->lines_list[num_lines]; num_lines++)
+	for (num_lines = 0; tb->lines_list[num_lines]; num_lines++);
 
 	if (num_lines >= MAX_LINES - 2) return FALSE;
 	num_lines--;
@@ -3325,7 +3325,7 @@ static byte get_string_for_search(player_type *player_ptr, object_type **o_handl
 			if (iskanji(buf[pos])) src++;
 #endif
 			dst = pos;
-			while ('\0' != (buf[dst++] = buf[src++]))
+			while ('\0' != (buf[dst++] = buf[src++]));
 
 			break;
 		}
