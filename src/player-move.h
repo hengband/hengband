@@ -1,11 +1,6 @@
 ﻿#pragma once
 #include "floor.h"
 
-/*
- * For travel command (auto run)
- */
-#define TRAVEL
-
 extern void disturb(player_type *creature_ptr, bool stop_search, bool flush_output);
 extern void move_player(player_type *creature_ptr, DIRECTION dir, bool do_pickup, bool break_trap);
 extern void run_step(player_type *creature_ptr, DIRECTION dir);
@@ -25,10 +20,8 @@ extern bool pattern_seq(player_type *creature_ptr, POSITION c_y, POSITION c_x, P
 extern bool trap_can_be_ignored(player_type *creature_ptr, FEAT_IDX feat);
 extern void search(player_type *creature_ptr);
 extern void carry(player_type *creature_ptr, bool pickup);
-#ifdef TRAVEL
 extern void do_cmd_travel(player_type *creature_ptr);
 extern void travel_step(player_type *creature_ptr);
-#endif
 
 /* Types of pattern tiles */
 #define NOT_PATTERN_TILE      -1
@@ -42,7 +35,6 @@ extern void travel_step(player_type *creature_ptr);
 #define PATTERN_TILE_TELEPORT 7
 #define PATTERN_TILE_WRECKED  8
 
-#ifdef TRAVEL
  /*
   *  A structure type for travel command
   */
@@ -54,7 +46,4 @@ typedef struct {
 	DIRECTION dir; /* Running direction */
 } travel_type;
 
-/* for travel */
 extern travel_type travel;
-#endif
-

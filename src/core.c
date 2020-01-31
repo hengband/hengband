@@ -3532,7 +3532,6 @@ static void process_command(player_type *creature_ptr)
 		spoil_random_artifact(creature_ptr, "randifact.txt");
 		break;
 	}
-#ifdef TRAVEL
 	case '`':
 	{
 		if (!creature_ptr->wild_mode) do_cmd_travel(creature_ptr);
@@ -3542,7 +3541,6 @@ static void process_command(player_type *creature_ptr)
 		}
 		break;
 	}
-#endif
 	default:
 	{
 		if (flush_failure) flush();
@@ -3880,12 +3878,10 @@ static void process_player(player_type *creature_ptr)
 		{
 			run_step(creature_ptr, 0);
 		}
-#ifdef TRAVEL
 		else if (travel.run)
 		{
 			travel_step(creature_ptr);
 		}
-#endif
 		else if (command_rep)
 		{
 			command_rep--;

@@ -174,10 +174,7 @@
 #include "autopick.h"
 #include "targeting.h"
 
-#ifdef TRAVEL
- /* for travel */
 travel_type travel;
-#endif
 
 /*!
  * @brief 地形やその上のアイテムの隠された要素を全て明かす /
@@ -1823,8 +1820,6 @@ void run_step(player_type *creature_ptr, DIRECTION dir)
 }
 
 
-#ifdef TRAVEL
-
 /*!
  * @brief トラベル機能の判定処理 /
  * Test for traveling
@@ -1964,20 +1959,14 @@ void travel_step(player_type *creature_ptr)
 	/* Travel Delay */
 	Term_xtra(TERM_XTRA_DELAY, delay_factor);
 }
-#endif
 
 
-#ifdef TRAVEL
-/*
- * Hack: travel command
- */
 #define TRAVEL_UNABLE 9999
 
 static int flow_head = 0;
 static int flow_tail = 0;
 static POSITION temp2_x[MAX_SHORT];
 static POSITION temp2_y[MAX_SHORT];
-
 
 /*!
  * @brief トラベル処理の記憶配列を初期化する Hack: forget the "flow" information
@@ -2196,7 +2185,6 @@ void do_cmd_travel(player_type *creature_ptr)
 		if ((sx == ddx[i]) && (sy == ddy[i])) travel.dir = i;
 	}
 }
-#endif
 
 
 /*
@@ -2207,11 +2195,6 @@ void do_cmd_travel(player_type *creature_ptr)
  */
 void disturb(player_type *creature_ptr, bool stop_search, bool stop_travel)
 {
-#ifndef TRAVEL
-	/* Unused */
-	stop_travel = stop_travel;
-#endif
-
 	/* Cancel repeated commands */
 	if (command_rep)
 	{
@@ -2245,7 +2228,6 @@ void disturb(player_type *creature_ptr, bool stop_search, bool stop_travel)
 		creature_ptr->update |= (PU_FLOW);
 	}
 
-#ifdef TRAVEL
 	if (stop_travel)
 	{
 		/* Cancel */
@@ -2257,7 +2239,6 @@ void disturb(player_type *creature_ptr, bool stop_search, bool stop_travel)
 		/* Calculate torch radius */
 		creature_ptr->update |= (PU_TORCH);
 	}
-#endif
 
 	if (flush_disturb) flush();
 }
