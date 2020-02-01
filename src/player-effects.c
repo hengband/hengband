@@ -304,7 +304,6 @@ void dispel_player(player_type *creature_ptr)
 	(void)set_kabenuke(creature_ptr, 0, TRUE);
 	(void)set_tim_res_nether(creature_ptr, 0, TRUE);
 	(void)set_tim_res_time(creature_ptr, 0, TRUE);
-	/* by henkma */
 	(void)set_tim_reflect(creature_ptr, 0,TRUE);
 	(void)set_multishadow(creature_ptr, 0,TRUE);
 	(void)set_dustrobe(creature_ptr, 0,TRUE);
@@ -331,7 +330,6 @@ void dispel_player(player_type *creature_ptr)
 	(void)set_ele_attack(creature_ptr, 0, 0);
 	(void)set_ele_immune(creature_ptr, 0, 0);
 
-	/* Cancel glowing hands */
 	if (creature_ptr->special_attack & ATTACK_CONFUSE)
 	{
 		creature_ptr->special_attack &= ~(ATTACK_CONFUSE);
@@ -394,10 +392,7 @@ bool set_mimic(player_type *creature_ptr, TIME_EFFECT v, MIMIC_RACE_IDX p, bool 
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tim_mimic = v;
-
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, TRUE);
@@ -461,15 +456,11 @@ bool set_blind(player_type *creature_ptr, TIME_EFFECT v)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->blind = v;
 	creature_ptr->redraw |= (PR_STATUS);
-
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 
-	/* Fully update the visuals */
 	creature_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_MONSTERS | PU_MON_LITE);
 	creature_ptr->redraw |= (PR_MAP);
 	creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -533,7 +524,6 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 			chg_virtue(creature_ptr, V_HARMONY, -1);
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->confused)
@@ -544,11 +534,9 @@ bool set_confused(player_type *creature_ptr, TIME_EFFECT v)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->confused = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -577,7 +565,6 @@ bool set_poisoned(player_type *creature_ptr, TIME_EFFECT v)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->poisoned)
@@ -587,11 +574,9 @@ bool set_poisoned(player_type *creature_ptr, TIME_EFFECT v)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->poisoned = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -634,7 +619,6 @@ bool set_afraid(player_type *creature_ptr, TIME_EFFECT v)
 			chg_virtue(creature_ptr, V_VALOUR, -1);
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->afraid)
@@ -644,17 +628,16 @@ bool set_afraid(player_type *creature_ptr, TIME_EFFECT v)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->afraid = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 麻痺の継続時間をセットする / Set "paralyzed", notice observable changes
@@ -680,7 +663,6 @@ bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->paralyzed)
@@ -690,11 +672,9 @@ bool set_paralyzed(player_type *creature_ptr, TIME_EFFECT v)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->paralyzed = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -731,7 +711,6 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->image)
@@ -741,11 +720,9 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->image = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, TRUE);
@@ -756,6 +733,7 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 加速の継続時間をセットする / Set "fast", notice observable changes
@@ -784,7 +762,6 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			chg_virtue(creature_ptr, V_DILIGENCE, 1);
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->fast && !creature_ptr->lightspeed && !music_singing(creature_ptr, MUSIC_SPEED) && !music_singing(creature_ptr, MUSIC_SHERO))
@@ -794,10 +771,7 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->fast = v;
-
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -805,6 +779,7 @@ bool set_fast(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 光速移動の継続時間をセットする / Set "lightspeed", notice observable changes
@@ -835,7 +810,6 @@ bool set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			chg_virtue(creature_ptr, V_DILIGENCE, 1);
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->lightspeed)
@@ -845,10 +819,8 @@ bool set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->lightspeed = v;
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -856,6 +828,7 @@ bool set_lightspeed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 減速の継続時間をセットする / Set "slow", notice observable changes
@@ -882,7 +855,6 @@ bool set_slow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->slow)
@@ -892,10 +864,7 @@ bool set_slow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->slow = v;
-
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -930,7 +899,6 @@ bool set_shield(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->shield)
@@ -940,11 +908,9 @@ bool set_shield(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->shield = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -979,7 +945,6 @@ bool set_tsubureru(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tsubureru)
@@ -989,11 +954,9 @@ bool set_tsubureru(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tsubureru = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -1028,7 +991,6 @@ bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->magicdef)
@@ -1038,11 +1000,9 @@ bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->magicdef = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -1050,6 +1010,7 @@ bool set_magicdef(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 祝福の継続時間をセットする / Set "blessed", notice observable changes
@@ -1085,11 +1046,9 @@ bool set_blessed(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->blessed = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -1124,7 +1083,6 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->hero && !music_singing(creature_ptr, MUSIC_HERO) && !music_singing(creature_ptr, MUSIC_SHERO))
@@ -1134,17 +1092,13 @@ bool set_hero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->hero = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-
-	/* Recalculate hitpoints */
 	creature_ptr->update |= (PU_HP);
 	handle_stuff(creature_ptr);
 	return TRUE;
@@ -1176,7 +1130,6 @@ bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->shero)
@@ -1186,21 +1139,18 @@ bool set_shero(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->shero = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-
-	/* Recalculate hitpoints */
 	creature_ptr->update |= (PU_HP);
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 対邪悪結界の継続時間をセットする / Set "protevil", notice observable changes
@@ -1227,7 +1177,6 @@ bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->protevil)
@@ -1237,17 +1186,16 @@ bool set_protevil(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->protevil = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 幽体化の継続時間をセットする / Set "wraith_form", notice observable changes
@@ -1283,7 +1231,6 @@ bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->wraith_form)
@@ -1298,19 +1245,17 @@ bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->wraith_form = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff(creature_ptr);
 	return TRUE;
-
 }
+
 
 /*!
  * @brief 無傷球の継続時間をセットする / Set "invuln", notice observable changes
@@ -1347,7 +1292,6 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			creature_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->invuln && !music_singing(creature_ptr, MUSIC_INVULN))
@@ -1364,11 +1308,9 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->invuln = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -1376,6 +1318,7 @@ bool set_invuln(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 時限ESPの継続時間をセットする / Set "tim_esp", notice observable changes
@@ -1411,11 +1354,9 @@ bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tim_esp = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -1424,6 +1365,7 @@ bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 時限透明視の継続時間をセットする / Set "tim_invis", notice observable changes
@@ -1450,7 +1392,6 @@ bool set_tim_invis(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tim_invis)
@@ -1460,21 +1401,18 @@ bool set_tim_invis(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tim_invis = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-
-	/* Update the monsters */
 	creature_ptr->update |= (PU_MONSTERS);
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 時限赤外線視力の継続時間をセットする / Set "tim_infra", notice observable changes
@@ -1501,7 +1439,6 @@ bool set_tim_infra(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tim_infra)
@@ -1511,21 +1448,18 @@ bool set_tim_infra(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tim_infra = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-
-	/* Update the monsters */
 	creature_ptr->update |= (PU_MONSTERS);
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 時限急回復の継続時間をセットする / Set "tim_regen", notice observable changes
@@ -1552,7 +1486,6 @@ bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tim_regen)
@@ -1562,11 +1495,9 @@ bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tim_regen = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -1574,6 +1505,7 @@ bool set_tim_regen(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 隠密の歌の継続時間をセットする / Set "tim_stealth", notice observable changes
@@ -1600,7 +1532,6 @@ bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tim_stealth && !music_singing(creature_ptr, MUSIC_STEALTH))
@@ -1610,11 +1541,9 @@ bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tim_stealth = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -1622,6 +1551,7 @@ bool set_tim_stealth(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 超隠密状態をセットする
@@ -1650,31 +1580,26 @@ bool set_superstealth(player_type *creature_ptr, bool set)
 			}
 
 			notice = TRUE;
-
-			/* Use the value */
 			creature_ptr->special_defense |= NINJA_S_STEALTH;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->special_defense & NINJA_S_STEALTH)
 		{
 			msg_print(_("再び敵の目にさらされるようになった。", "You are exposed to common sight once more."));
 			notice = TRUE;
-
-			/* Use the value */
 			creature_ptr->special_defense &= ~(NINJA_S_STEALTH);
 		}
 	}
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 	creature_ptr->redraw |= (PR_STATUS);
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	return TRUE;
 }
+
 
 /*!
  * @brief 一時的浮遊の継続時間をセットする / Set "tim_levitation", notice observable changes
@@ -1701,7 +1626,6 @@ bool set_tim_levitation(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tim_levitation)
@@ -1711,11 +1635,9 @@ bool set_tim_levitation(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tim_levitation = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -1723,6 +1645,7 @@ bool set_tim_levitation(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 一時的闘気のオーラの継続時間をセットする / Set "tim_sh_touki", notice observable changes
@@ -1749,7 +1672,6 @@ bool set_tim_sh_touki(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tim_sh_touki)
@@ -1759,17 +1681,16 @@ bool set_tim_sh_touki(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tim_sh_touki = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 一時的火炎のオーラの継続時間をセットする / Set "tim_sh_fire", notice observable changes
@@ -1796,7 +1717,6 @@ bool set_tim_sh_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tim_sh_fire)
@@ -1806,11 +1726,9 @@ bool set_tim_sh_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tim_sh_fire = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -1818,6 +1736,7 @@ bool set_tim_sh_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 一時的聖なるのオーラの継続時間をセットする / Set "tim_sh_holy", notice observable changes
@@ -1844,7 +1763,6 @@ bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tim_sh_holy)
@@ -1854,11 +1772,9 @@ bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tim_sh_holy = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -1866,6 +1782,7 @@ bool set_tim_sh_holy(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 目には目をの残り時間をセットする / Set "tim_eyeeye", notice observable changes
@@ -1892,7 +1809,6 @@ bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tim_eyeeye)
@@ -1902,11 +1818,9 @@ bool set_tim_eyeeye(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tim_eyeeye = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -1941,7 +1855,6 @@ bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->resist_magic)
@@ -1951,11 +1864,9 @@ bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->resist_magic = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -1963,6 +1874,7 @@ bool set_resist_magic(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 一時的反射の継続時間をセットする / Set "tim_reflect", notice observable changes
@@ -1989,7 +1901,6 @@ bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tim_reflect)
@@ -1999,11 +1910,9 @@ bool set_tim_reflect(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tim_reflect = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -2035,7 +1944,6 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->multishadow)
@@ -2045,11 +1953,9 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->multishadow = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -2057,6 +1963,7 @@ bool set_multishadow(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 一時的破片のオーラの継続時間をセットする / Set "dustrobe", notice observable changes
@@ -2083,7 +1990,6 @@ bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->dustrobe)
@@ -2093,11 +1999,9 @@ bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->dustrobe = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -2105,6 +2009,7 @@ bool set_dustrobe(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 一時的壁抜けの継続時間をセットする / Set "kabenuke", notice observable changes
@@ -2131,7 +2036,6 @@ bool set_kabenuke(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->kabenuke)
@@ -2141,11 +2045,9 @@ bool set_kabenuke(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->kabenuke = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -2153,6 +2055,7 @@ bool set_kabenuke(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief オクレ兄さんの継続時間をセットする / Set "tsuyoshi", notice observable changes
@@ -2180,7 +2083,6 @@ bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			chg_virtue(creature_ptr, V_VITALITY, 2);
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tsuyoshi)
@@ -2195,21 +2097,18 @@ bool set_tsuyoshi(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tsuyoshi = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-
-	/* Recalculate hitpoints */
 	creature_ptr->update |= (PU_HP);
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 一時的元素スレイの継続時間をセットする / Set a temporary elemental brand. Clear all other brands. Print status messages. -LM-
@@ -2221,27 +2120,30 @@ bool set_ele_attack(player_type *creature_ptr, u32b attack_type, TIME_EFFECT v)
 {
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	/* Clear all elemental attacks (only one is allowed at a time). */
 	if ((creature_ptr->special_attack & (ATTACK_ACID)) && (attack_type != ATTACK_ACID))
 	{
 		creature_ptr->special_attack &= ~(ATTACK_ACID);
 		msg_print(_("酸で攻撃できなくなった。", "Your temporary acidic brand fades away."));
 	}
+
 	if ((creature_ptr->special_attack & (ATTACK_ELEC)) && (attack_type != ATTACK_ELEC))
 	{
 		creature_ptr->special_attack &= ~(ATTACK_ELEC);
 		msg_print(_("電撃で攻撃できなくなった。", "Your temporary electrical brand fades away."));
 	}
+
 	if ((creature_ptr->special_attack & (ATTACK_FIRE)) && (attack_type != ATTACK_FIRE))
 	{
 		creature_ptr->special_attack &= ~(ATTACK_FIRE);
 		msg_print(_("火炎で攻撃できなくなった。", "Your temporary fiery brand fades away."));
 	}
+
 	if ((creature_ptr->special_attack & (ATTACK_COLD)) && (attack_type != ATTACK_COLD))
 	{
 		creature_ptr->special_attack &= ~(ATTACK_COLD);
 		msg_print(_("冷気で攻撃できなくなった。", "Your temporary frost brand fades away."));
 	}
+
 	if ((creature_ptr->special_attack & (ATTACK_POIS)) && (attack_type != ATTACK_POIS))
 	{
 		creature_ptr->special_attack &= ~(ATTACK_POIS);
@@ -2250,12 +2152,8 @@ bool set_ele_attack(player_type *creature_ptr, u32b attack_type, TIME_EFFECT v)
 
 	if ((v) && (attack_type))
 	{
-		/* Set attack type. */
 		creature_ptr->special_attack |= (attack_type);
-
-		/* Set duration. */
 		creature_ptr->ele_attack = v;
-
 #ifdef JP
 		msg_format("%sで攻撃できるようになった！",
 			     ((attack_type == ATTACK_ACID) ? "酸" :
@@ -2277,12 +2175,12 @@ bool set_ele_attack(player_type *creature_ptr, u32b attack_type, TIME_EFFECT v)
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->redraw |= (PR_STATUS);
-
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff(creature_ptr);
 
 	return TRUE;
 }
+
 
 /*!
  * @brief 一時的元素免疫の継続時間をセットする / Set a temporary elemental brand.  Clear all other brands.  Print status messages. -LM-
@@ -2294,27 +2192,30 @@ bool set_ele_immune(player_type *creature_ptr, u32b immune_type, TIME_EFFECT v)
 {
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
-	/* Clear all elemental attacks (only one is allowed at a time). */
 	if ((creature_ptr->special_defense & (DEFENSE_ACID)) && (immune_type != DEFENSE_ACID))
 	{
 		creature_ptr->special_defense &= ~(DEFENSE_ACID);
 		msg_print(_("酸の攻撃で傷つけられるようになった。。", "You are no longer immune to acid."));
 	}
+
 	if ((creature_ptr->special_defense & (DEFENSE_ELEC)) && (immune_type != DEFENSE_ELEC))
 	{
 		creature_ptr->special_defense &= ~(DEFENSE_ELEC);
 		msg_print(_("電撃の攻撃で傷つけられるようになった。。", "You are no longer immune to electricity."));
 	}
+
 	if ((creature_ptr->special_defense & (DEFENSE_FIRE)) && (immune_type != DEFENSE_FIRE))
 	{
 		creature_ptr->special_defense &= ~(DEFENSE_FIRE);
 		msg_print(_("火炎の攻撃で傷つけられるようになった。。", "You are no longer immune to fire."));
 	}
+
 	if ((creature_ptr->special_defense & (DEFENSE_COLD)) && (immune_type != DEFENSE_COLD))
 	{
 		creature_ptr->special_defense &= ~(DEFENSE_COLD);
 		msg_print(_("冷気の攻撃で傷つけられるようになった。。", "You are no longer immune to cold."));
 	}
+
 	if ((creature_ptr->special_defense & (DEFENSE_POIS)) && (immune_type != DEFENSE_POIS))
 	{
 		creature_ptr->special_defense &= ~(DEFENSE_POIS);
@@ -2323,12 +2224,8 @@ bool set_ele_immune(player_type *creature_ptr, u32b immune_type, TIME_EFFECT v)
 
 	if ((v) && (immune_type))
 	{
-		/* Set attack type. */
 		creature_ptr->special_defense |= (immune_type);
-
-		/* Set duration. */
 		creature_ptr->ele_immune = v;
-
 		msg_format(_("%sの攻撃を受けつけなくなった！", "For a while, You are immune to %s"),
 			     ((immune_type == DEFENSE_ACID) ? _("酸", "acid!") :
 			      ((immune_type == DEFENSE_ELEC) ? _("電撃", "electricity!") :
@@ -2356,7 +2253,6 @@ bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-
 	if (creature_ptr->is_dead) return FALSE;
 
 	if (v)
@@ -2371,7 +2267,6 @@ bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->oppose_acid && !music_singing(creature_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
@@ -2381,10 +2276,8 @@ bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->oppose_acid = v;
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 	creature_ptr->redraw |= (PR_STATUS);
 
@@ -2392,6 +2285,7 @@ bool set_oppose_acid(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 一時的電撃耐性の継続時間をセットする / Set "oppose_elec", notice observable changes
@@ -2418,7 +2312,6 @@ bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->oppose_elec && !music_singing(creature_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
@@ -2428,10 +2321,8 @@ bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->oppose_elec = v;
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 	creature_ptr->redraw |= (PR_STATUS);
 
@@ -2439,6 +2330,7 @@ bool set_oppose_elec(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 一時的火炎耐性の継続時間をセットする / Set "oppose_fire", notice observable changes
@@ -2450,7 +2342,6 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-
 	if (creature_ptr->is_dead) return FALSE;
 
 	if ((PRACE_IS_(creature_ptr, RACE_DEMON) && (creature_ptr->lev > 44)) || (creature_ptr->mimic_form == MIMIC_DEMON)) v = 1;
@@ -2466,7 +2357,6 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->oppose_fire && !music_singing(creature_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
@@ -2476,10 +2366,8 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->oppose_fire = v;
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 	creature_ptr->redraw |= (PR_STATUS);
 
@@ -2487,6 +2375,7 @@ bool set_oppose_fire(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 一時的冷気耐性の継続時間をセットする / Set "oppose_cold", notice observable changes
@@ -2498,7 +2387,6 @@ bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-
 	if (creature_ptr->is_dead) return FALSE;
 
 	if (v)
@@ -2513,7 +2401,6 @@ bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->oppose_cold && !music_singing(creature_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
@@ -2523,10 +2410,8 @@ bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->oppose_cold = v;
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 	creature_ptr->redraw |= (PR_STATUS);
 
@@ -2534,6 +2419,7 @@ bool set_oppose_cold(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 一時的毒耐性の継続時間をセットする / Set "oppose_pois", notice observable changes
@@ -2545,7 +2431,6 @@ bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-
 	if ((creature_ptr->pclass == CLASS_NINJA) && (creature_ptr->lev > 44)) v = 1;
 	if (creature_ptr->is_dead) return FALSE;
 
@@ -2561,7 +2446,6 @@ bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->oppose_pois && !music_singing(creature_ptr, MUSIC_RESIST) && !(creature_ptr->special_defense & KATA_MUSOU))
@@ -2571,10 +2455,7 @@ bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->oppose_pois = v;
-
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 	creature_ptr->redraw |= (PR_STATUS);
 
@@ -2582,6 +2463,7 @@ bool set_oppose_pois(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 朦朧の継続時間をセットする / Set "stun", notice observable changes
@@ -2595,71 +2477,49 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
 	int old_aux, new_aux;
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-
 	if (creature_ptr->is_dead) return FALSE;
 	if (PRACE_IS_(creature_ptr, RACE_GOLEM) || ((creature_ptr->pclass == CLASS_BERSERKER) && (creature_ptr->lev > 34))) v = 0;
 
-	/* Knocked out */
 	if (creature_ptr->stun > 100)
 	{
 		old_aux = 3;
 	}
-
-	/* Heavy stun */
 	else if (creature_ptr->stun > 50)
 	{
 		old_aux = 2;
 	}
-
-	/* Stun */
 	else if (creature_ptr->stun > 0)
 	{
 		old_aux = 1;
 	}
-
-	/* None */
 	else
 	{
 		old_aux = 0;
 	}
 
-	/* Knocked out */
 	if (v > 100)
 	{
 		new_aux = 3;
 	}
-
-	/* Heavy stun */
 	else if (v > 50)
 	{
 		new_aux = 2;
 	}
-
-	/* Stun */
 	else if (v > 0)
 	{
 		new_aux = 1;
 	}
-
-	/* None */
 	else
 	{
 		new_aux = 0;
 	}
 
-	/* Increase cut */
 	if (new_aux > old_aux)
 	{
-		/* Describe the state */
 		switch (new_aux)
 		{
-			/* Stun */
 			case 1: msg_print(_("意識がもうろうとしてきた。", "You have been stunned.")); break;
-
-			/* Heavy stun */
 			case 2: msg_print(_("意識がひどくもうろうとしてきた。", "You have been heavily stunned.")); break;
-
-			/* Knocked out */
 			case 3: msg_print(_("頭がクラクラして意識が遠のいてきた。", "You have been knocked out.")); break;
 		}
 
@@ -2681,6 +2541,7 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
 				if (!creature_ptr->sustain_wis) (void)do_dec_stat(creature_ptr, A_WIS);
 			}
 		}
+
 		if (creature_ptr->special_defense & KATA_MASK)
 		{
 			msg_print(_("型が崩れた。", "You lose your stance."));
@@ -2692,40 +2553,28 @@ bool set_stun(player_type *creature_ptr, TIME_EFFECT v)
 			creature_ptr->action = ACTION_NONE;
 		}
 
-		/* Sniper */
 		if (creature_ptr->concent) reset_concentration(creature_ptr, TRUE);
 		if (hex_spelling_any(creature_ptr)) stop_hex_spell_all(creature_ptr);
 
 		notice = TRUE;
 	}
-
-	/* Decrease cut */
 	else if (new_aux < old_aux)
 	{
-		/* Describe the state */
-		switch (new_aux)
+		if (new_aux == 0)
 		{
-			/* None */
-		case 0:
 			msg_print(_("やっと朦朧状態から回復した。", "You are no longer stunned."));
-
 			if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
-			break;
 		}
 
 		notice = TRUE;
 	}
 
-	/* Use the value */
 	creature_ptr->stun = v;
 
-	/* No change */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-
-	/* Redraw the "stun" */
 	creature_ptr->redraw |= (PR_STUN);
 	handle_stuff(creature_ptr);
 	return TRUE;
@@ -2744,7 +2593,6 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
 	int old_aux, new_aux;
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-
 	if (creature_ptr->is_dead) return FALSE;
 
 	if ((creature_ptr->prace == RACE_GOLEM ||
@@ -2754,132 +2602,86 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
 	    !creature_ptr->mimic_form)
 		v = 0;
 
-	/* Mortal wound */
 	if (creature_ptr->cut > 1000)
 	{
 		old_aux = 7;
 	}
-
-	/* Deep gash */
 	else if (creature_ptr->cut > 200)
 	{
 		old_aux = 6;
 	}
-
-	/* Severe cut */
 	else if (creature_ptr->cut > 100)
 	{
 		old_aux = 5;
 	}
-
-	/* Nasty cut */
 	else if (creature_ptr->cut > 50)
 	{
 		old_aux = 4;
 	}
-
-	/* Bad cut */
 	else if (creature_ptr->cut > 25)
 	{
 		old_aux = 3;
 	}
-
-	/* Light cut */
 	else if (creature_ptr->cut > 10)
 	{
 		old_aux = 2;
 	}
-
-	/* Graze */
 	else if (creature_ptr->cut > 0)
 	{
 		old_aux = 1;
 	}
-
-	/* None */
 	else
 	{
 		old_aux = 0;
 	}
 
-	/* Mortal wound */
 	if (v > 1000)
 	{
 		new_aux = 7;
 	}
-
-	/* Deep gash */
 	else if (v > 200)
 	{
 		new_aux = 6;
 	}
-
-	/* Severe cut */
 	else if (v > 100)
 	{
 		new_aux = 5;
 	}
-
-	/* Nasty cut */
 	else if (v > 50)
 	{
 		new_aux = 4;
 	}
-
-	/* Bad cut */
 	else if (v > 25)
 	{
 		new_aux = 3;
 	}
-
-	/* Light cut */
 	else if (v > 10)
 	{
 		new_aux = 2;
 	}
-
-	/* Graze */
 	else if (v > 0)
 	{
 		new_aux = 1;
 	}
-
-	/* None */
 	else
 	{
 		new_aux = 0;
 	}
 
-	/* Increase cut */
 	if (new_aux > old_aux)
 	{
-		/* Describe the state */
 		switch (new_aux)
 		{
-			/* Graze */
 			case 1: msg_print(_("かすり傷を負ってしまった。", "You have been given a graze.")); break;
-
-			/* Light cut */
 			case 2: msg_print(_("軽い傷を負ってしまった。", "You have been given a light cut.")); break;
-
-			/* Bad cut */
 			case 3: msg_print(_("ひどい傷を負ってしまった。", "You have been given a bad cut.")); break;
-
-			/* Nasty cut */
 			case 4: msg_print(_("大変な傷を負ってしまった。", "You have been given a nasty cut.")); break;
-
-			/* Severe cut */
 			case 5: msg_print(_("重大な傷を負ってしまった。", "You have been given a severe cut.")); break;
-
-			/* Deep gash */
 			case 6: msg_print(_("ひどい深手を負ってしまった。", "You have been given a deep gash.")); break;
-
-			/* Mortal wound */
 			case 7: msg_print(_("致命的な傷を負ってしまった。", "You have been given a mortal wound.")); break;
 		}
 
 		notice = TRUE;
-
 		if (randint1(1000) < v || one_in_(16))
 		{
 			if (!creature_ptr->sustain_chr)
@@ -2889,38 +2691,27 @@ bool set_cut(player_type *creature_ptr, TIME_EFFECT v)
 			}
 		}
 	}
-
-	/* Decrease cut */
 	else if (new_aux < old_aux)
 	{
-		/* Describe the state */
-		switch (new_aux)
+		if (new_aux == 0)
 		{
-			/* None */
-			case 0:
 			msg_format(_("やっと%s。", "You are no longer bleeding."), creature_ptr->prace == RACE_ANDROID ? "怪我が直った" : "出血が止まった");
-
 			if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
-			break;
 		}
 
 		notice = TRUE;
 	}
 
-	/* Use the value */
 	creature_ptr->cut = v;
-
-	/* No change */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-
-	/* Redraw the "cut" */
 	creature_ptr->redraw |= (PR_CUT);
 	handle_stuff(creature_ptr);
 	return TRUE;
 }
+
 
 /*!
  * @brief 空腹状態をセットする / Set "food", notice observable changes
@@ -2954,74 +2745,51 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
 
 	bool notice = FALSE;
 	v = (v > 20000) ? 20000 : (v < 0) ? 0 : v;
-
-	/* Fainting / Starving */
 	if (creature_ptr->food < PY_FOOD_FAINT)
 	{
 		old_aux = 0;
 	}
-
-	/* Weak */
 	else if (creature_ptr->food < PY_FOOD_WEAK)
 	{
 		old_aux = 1;
 	}
-
-	/* Hungry */
 	else if (creature_ptr->food < PY_FOOD_ALERT)
 	{
 		old_aux = 2;
 	}
-
-	/* Normal */
 	else if (creature_ptr->food < PY_FOOD_FULL)
 	{
 		old_aux = 3;
 	}
-
-	/* Full */
 	else if (creature_ptr->food < PY_FOOD_MAX)
 	{
 		old_aux = 4;
 	}
-
-	/* Gorged */
 	else
 	{
 		old_aux = 5;
 	}
 
-	/* Fainting / Starving */
 	if (v < PY_FOOD_FAINT)
 	{
 		new_aux = 0;
 	}
-
-	/* Weak */
 	else if (v < PY_FOOD_WEAK)
 	{
 		new_aux = 1;
 	}
-
-	/* Hungry */
 	else if (v < PY_FOOD_ALERT)
 	{
 		new_aux = 2;
 	}
-
-	/* Normal */
 	else if (v < PY_FOOD_FULL)
 	{
 		new_aux = 3;
 	}
-
-	/* Full */
 	else if (v < PY_FOOD_MAX)
 	{
 		new_aux = 4;
 	}
-
-	/* Gorged */
 	else
 	{
 		new_aux = 5;
@@ -3036,57 +2804,33 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
 	if (old_aux == 0)
 		chg_virtue(creature_ptr, V_TEMPERANCE, -1);
 
-	/* Food increase */
 	if (new_aux > old_aux)
 	{
-		/* Describe the state */
 		switch (new_aux)
 		{
-			/* Weak */
 			case 1: msg_print(_("まだ空腹で倒れそうだ。", "You are still weak.")); break;
-
-			/* Hungry */
 			case 2: msg_print(_("まだ空腹だ。", "You are still hungry.")); break;
-
-			/* Normal */
 			case 3: msg_print(_("空腹感がおさまった。", "You are no longer hungry.")); break;
-
-			/* Full */
 			case 4: msg_print(_("満腹だ！", "You are full!")); break;
 
-			/* Bloated */
 			case 5:
 			msg_print(_("食べ過ぎだ！", "You have gorged yourself!"));
 			chg_virtue(creature_ptr, V_HARMONY, -1);
 			chg_virtue(creature_ptr, V_PATIENCE, -1);
 			chg_virtue(creature_ptr, V_TEMPERANCE, -2);
-
 			break;
 		}
 
-		/* Change */
 		notice = TRUE;
 	}
-
-	/* Food decrease */
 	else if (new_aux < old_aux)
 	{
-		/* Describe the state */
 		switch (new_aux)
 		{
-			/* Fainting / Starving */
 			case 0: msg_print(_("あまりにも空腹で気を失ってしまった！", "You are getting faint from hunger!")); break;
-
-			/* Weak */
 			case 1: msg_print(_("お腹が空いて倒れそうだ。", "You are getting weak from hunger!")); break;
-
-			/* Hungry */
 			case 2: msg_print(_("お腹が空いてきた。", "You are getting hungry.")); break;
-
-			/* Normal */
 			case 3: msg_print(_("満腹感がなくなった。", "You are no longer full.")); break;
-
-			/* Full */
 			case 4: msg_print(_("やっとお腹がきつくなくなった。", "You are no longer gorged.")); break;
 		}
 
@@ -3095,24 +2839,20 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
 			change_wild_mode(creature_ptr, FALSE);
 		}
 
-		/* Change */
 		notice = TRUE;
 	}
 
-	/* Use the value */
 	creature_ptr->food = v;
-
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
-
-	/* Redraw hunger */
 	creature_ptr->redraw |= (PR_HUNGER);
 	handle_stuff(creature_ptr);
+
 	return TRUE;
 }
+
 
 /*!
  * @brief プレイヤーの基本能力値を増加させる / Increases a stat by one randomized level -RAK-
@@ -3124,58 +2864,42 @@ bool set_food(player_type *creature_ptr, TIME_EFFECT v)
  */
 bool inc_stat(player_type *creature_ptr, int stat)
 {
-	BASE_STATUS value, gain;
+	BASE_STATUS gain;
+	BASE_STATUS value = creature_ptr->stat_cur[stat];
 
-	/* Then augment the current/max stat */
-	value = creature_ptr->stat_cur[stat];
-
-	/* Cannot go above 18/100 */
 	if (value < creature_ptr->stat_max_max[stat])
 	{
-		/* Gain one (sometimes two) points */
 		if (value < 18)
 		{
 			gain = ((randint0(100) < 75) ? 1 : 2);
 			value += gain;
 		}
-
-		/* Gain 1/6 to 1/3 of distance to 18/100 */
 		else if (value < (creature_ptr->stat_max_max[stat]-2))
 		{
-			/* Approximate gain value */
 			gain = (((creature_ptr->stat_max_max[stat]) - value) / 2 + 3) / 2;
 			if (gain < 1) gain = 1;
 
-			/* Apply the bonus */
 			value += randint1(gain) + gain / 2;
-
-			/* Maximal value */
 			if (value > (creature_ptr->stat_max_max[stat]-1)) value = creature_ptr->stat_max_max[stat]-1;
 		}
-
-		/* Gain one point at a time */
 		else
 		{
 			value++;
 		}
 
-		/* Save the new value */
 		creature_ptr->stat_cur[stat] = value;
-
-		/* Bring up the maximum too */
 		if (value > creature_ptr->stat_max[stat])
 		{
 			creature_ptr->stat_max[stat] = value;
 		}
-		creature_ptr->update |= (PU_BONUS);
 
-		/* Success */
+		creature_ptr->update |= (PU_BONUS);
 		return TRUE;
 	}
 
-	/* Nothing to gain */
 	return FALSE;
 }
+
 
 /*!
  * @brief プレイヤーの基本能力値を減少させる / Decreases a stat by an amount indended to vary from 0 to 100 percent.
@@ -3196,21 +2920,14 @@ bool inc_stat(player_type *creature_ptr, int stat)
  */
 bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
 {
-	BASE_STATUS cur, max;
-	int loss, same;
+	int loss;
 	bool res = FALSE;
 
-	/* Acquire current value */
-	cur = creature_ptr->stat_cur[stat];
-	max = creature_ptr->stat_max[stat];
-
-	/* Note when the values are identical */
-	same = (cur == max);
-
-	/* Damage "current" value */
+	BASE_STATUS cur = creature_ptr->stat_cur[stat];
+	BASE_STATUS max = creature_ptr->stat_max[stat];
+	int same = (cur == max);
 	if (cur > 3)
 	{
-		/* Handle "low" values */
 		if (cur <= 18)
 		{
 			if (amount > 90) cur--;
@@ -3218,44 +2935,29 @@ bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
 			if (amount > 20) cur--;
 			cur--;
 		}
-
-		/* Handle "high" values */
 		else
 		{
-			/* Hack -- Decrement by a random amount between one-quarter */
-			/* and one-half of the stat bonus times the percentage, with a */
-			/* minimum damage of half the percentage. -CWS */
 			loss = (((cur-18) / 2 + 1) / 2 + 1);
 			if (loss < 1) loss = 1;
 
-			/* Randomize the loss */
 			loss = ((randint1(loss) + loss) * amount) / 100;
-
-			/* Maximal loss */
 			if (loss < amount/2) loss = amount/2;
 
-			/* Lose some points */
 			cur = cur - loss;
-
-			/* Hack -- Only reduce stat to 17 sometimes */
 			if (cur < 18) cur = (amount <= 20) ? 18 : 17;
 		}
 
-		/* Prevent illegal values */
 		if (cur < 3) cur = 3;
 
-		/* Something happened */
 		if (cur != creature_ptr->stat_cur[stat]) res = TRUE;
 	}
 
-	/* Damage "max" value */
 	if (permanent && (max > 3))
 	{
 		chg_virtue(creature_ptr, V_SACRIFICE, 1);
 		if (stat == A_WIS || stat == A_INT)
 			chg_virtue(creature_ptr, V_ENLIGHTEN, -2);
 
-		/* Handle "low" values */
 		if (max <= 18)
 		{
 			if (amount > 90) max--;
@@ -3263,37 +2965,25 @@ bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
 			if (amount > 20) max--;
 			max--;
 		}
-
-		/* Handle "high" values */
 		else
 		{
-			/* Hack -- Decrement by a random amount between one-quarter */
-			/* and one-half of the stat bonus times the percentage, with a */
-			/* minimum damage of half the percentage. -CWS */
 			loss = (((max-18) / 2 + 1) / 2 + 1);
 			loss = ((randint1(loss) + loss) * amount) / 100;
 			if (loss < amount/2) loss = amount/2;
 
-			/* Lose some points */
 			max = max - loss;
-
-			/* Hack -- Only reduce stat to 17 sometimes */
 			if (max < 18) max = (amount <= 20) ? 18 : 17;
 		}
 
-		/* Hack -- keep it clean */
 		if (same || (max < cur)) max = cur;
 
-		/* Something happened */
 		if (max != creature_ptr->stat_max[stat]) res = TRUE;
 	}
 
 	if (res)
 	{
-		/* Actually set the stat to its new value. */
 		creature_ptr->stat_cur[stat] = cur;
 		creature_ptr->stat_max[stat] = max;
-
 		creature_ptr->redraw |= (PR_STATS);
 		creature_ptr->update |= (PU_BONUS);
 	}
@@ -3309,18 +2999,14 @@ bool dec_stat(player_type *creature_ptr, int stat, int amount, int permanent)
  */
 bool res_stat(player_type *creature_ptr, int stat)
 {
-	/* Restore if needed */
 	if (creature_ptr->stat_cur[stat] != creature_ptr->stat_max[stat])
 	{
 		creature_ptr->stat_cur[stat] = creature_ptr->stat_max[stat];
 		creature_ptr->update |= (PU_BONUS);
 		creature_ptr->redraw |= (PR_STATS);
-
-		/* Success */
 		return TRUE;
 	}
 
-	/* Nothing to restore */
 	return FALSE;
 }
 
@@ -3339,15 +3025,13 @@ bool hp_player(player_type *creature_ptr, int num)
 	{
 		num = num * (creature_ptr->virtues[vir - 1] + 1250) / 1250;
 	}
-	/* Healing needed */
+
 	if (creature_ptr->chp < creature_ptr->mhp)
 	{
 		if ((num > 0) && (creature_ptr->chp < (creature_ptr->mhp/3)))
 			chg_virtue(creature_ptr, V_TEMPERANCE, 1);
-		/* Gain hitpoints */
-		creature_ptr->chp += num;
 
-		/* Enforce maximum */
+		creature_ptr->chp += num;
 		if (creature_ptr->chp >= creature_ptr->mhp)
 		{
 			creature_ptr->chp = creature_ptr->mhp;
@@ -3355,28 +3039,19 @@ bool hp_player(player_type *creature_ptr, int num)
 		}
 
 		creature_ptr->redraw |= (PR_HP);
-
 		creature_ptr->window |= (PW_PLAYER);
-
-		/* Heal 0-4 */
 		if (num < 5)
 		{
 			msg_print(_("少し気分が良くなった。", "You feel a little better."));
 		}
-
-		/* Heal 5-14 */
 		else if (num < 15)
 		{
 			msg_print(_("気分が良くなった。", "You feel better."));
 		}
-
-		/* Heal 15-34 */
 		else if (num < 35)
 		{
 			msg_print(_("とても気分が良くなった。", "You feel much better."));
 		}
-
-		/* Heal 35+ */
 		else
 		{
 			msg_print(_("ひじょうに気分が良くなった。", "You feel very good."));
@@ -3385,7 +3060,6 @@ bool hp_player(player_type *creature_ptr, int num)
 		return TRUE;
 	}
 
-	/* Ignore */
 	return FALSE;
 }
 
@@ -3435,26 +3109,21 @@ bool do_dec_stat(player_type *creature_ptr, int stat)
 		case A_CHR: if (creature_ptr->sustain_chr) sust = TRUE; break;
 	}
 
-	/* Sustain */
 	if (sust && (!ironman_nightmare || randint0(13)))
 	{
 		msg_format(_("%sなった気がしたが、すぐに元に戻った。", "You feel %s for a moment, but the feeling passes."),
 					desc_stat_neg[stat]);
 
-		/* Notice effect */
 		return TRUE;
 	}
 
-	/* Attempt to reduce the stat */
 	if (dec_stat(creature_ptr, stat, 10, (ironman_nightmare && !randint0(13))))
 	{
 		msg_format(_("ひどく%sなった気がする。", "You feel %s."), desc_stat_neg[stat]);
 
-		/* Notice effect */
 		return TRUE;
 	}
 
-	/* Nothing obvious */
 	return FALSE;
 }
 
@@ -3464,14 +3133,12 @@ bool do_dec_stat(player_type *creature_ptr, int stat)
  */
 bool do_res_stat(player_type *creature_ptr, int stat)
 {
-	/* Attempt to increase */
 	if (res_stat(creature_ptr, stat))
 	{
 		msg_format(_("元通りに%sなった気がする。", "You feel %s."), desc_stat_pos[stat]);
 		return TRUE;
 	}
 
-	/* Nothing obvious */
 	return FALSE;
 }
 
@@ -3481,12 +3148,7 @@ bool do_res_stat(player_type *creature_ptr, int stat)
  */
 bool do_inc_stat(player_type *creature_ptr, int stat)
 {
-	bool res;
-
-	/* Restore strength */
-	res = res_stat(creature_ptr, stat);
-
-	/* Attempt to increase */
+	bool res = res_stat(creature_ptr, stat);
 	if (inc_stat(creature_ptr, stat))
 	{
 		if (stat == A_WIS)
@@ -3503,19 +3165,15 @@ bool do_inc_stat(player_type *creature_ptr, int stat)
 			chg_virtue(creature_ptr, V_VITALITY, 1);
 
 		msg_format(_("ワーオ！とても%sなった！", "Wow! You feel %s!"), desc_stat_pos[stat]);
-
 		return TRUE;
 	}
 
-	/* Restoration worked */
 	if (res)
 	{
 		msg_format(_("元通りに%sなった気がする。", "You feel %s."), desc_stat_pos[stat]);
-
 		return TRUE;
 	}
 
-	/* Nothing obvious */
 	return FALSE;
 }
 
@@ -3525,77 +3183,51 @@ bool do_inc_stat(player_type *creature_ptr, int stat)
  */
 bool restore_level(player_type *creature_ptr)
 {
-	/* Restore experience */
 	if (creature_ptr->exp < creature_ptr->max_exp)
 	{
 		msg_print(_("経験値が戻ってきた気がする。", "You feel your experience returning."));
-
-		/* Restore the experience */
 		creature_ptr->exp = creature_ptr->max_exp;
-
-		/* Check the experience */
 		check_experience(creature_ptr);
-
-		/* Did something */
 		return TRUE;
 	}
 
-	/* No effect */
 	return FALSE;
 }
+
 
 /*
  * Forget everything
  */
 bool lose_all_info(player_type *creature_ptr)
 {
-	int i;
-
 	chg_virtue(creature_ptr, V_KNOWLEDGE, -5);
 	chg_virtue(creature_ptr, V_ENLIGHTEN, -5);
-
-	/* Forget info about objects */
-	for (i = 0; i < INVEN_TOTAL; i++)
+	for (int i = 0; i < INVEN_TOTAL; i++)
 	{
 		object_type *o_ptr = &creature_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
-
-		/* Allow "protection" by the MENTAL flag */
 		if (o_ptr->ident & (IDENT_MENTAL)) continue;
 
-		/* Remove "default inscriptions" */
 		o_ptr->feeling = FEEL_NONE;
-
-		/* Hack -- Clear the "empty" flag */
 		o_ptr->ident &= ~(IDENT_EMPTY);
-
-		/* Hack -- Clear the "known" flag */
 		o_ptr->ident &= ~(IDENT_KNOWN);
-
-		/* Hack -- Clear the "felt" flag */
 		o_ptr->ident &= ~(IDENT_SENSE);
 	}
+
 	creature_ptr->update |= (PU_BONUS);
 	creature_ptr->update |= (PU_COMBINE | PU_REORDER);
-
 	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
-
-	/* Mega-Hack -- Forget the map */
 	wiz_dark(creature_ptr);
-
-	/* It worked */
 	return TRUE;
 }
 
 
 void do_poly_wounds(player_type *creature_ptr)
 {
-	/* Changed to always provide at least _some_ healing */
 	s16b wounds = creature_ptr->cut;
 	s16b hit_p = (creature_ptr->mhp - creature_ptr->chp);
 	s16b change = damroll(creature_ptr->lev, 5);
 	bool Nasty_effect = one_in_(5);
-
 	if (!(wounds || hit_p || Nasty_effect)) return;
 
 	msg_print(_("傷がより軽いものに変化した。", "Your wounds are polymorphed into less serious ones."));
@@ -3620,7 +3252,6 @@ void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effe
 {
 	concptr title = race_info[new_race].title;
 	int  old_race = creature_ptr->prace;
-
 #ifdef JP
 	msg_format("あなたは%s%sに変化した！", effect_msg, title);
 #else
@@ -3628,7 +3259,6 @@ void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effe
 #endif
 
 	chg_virtue(creature_ptr, V_CHANCE, 2);
-
 	if (creature_ptr->prace < 32)
 	{
 		creature_ptr->old_race1 |= 1L << creature_ptr->prace;
@@ -3637,43 +3267,34 @@ void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effe
 	{
 		creature_ptr->old_race2 |= 1L << (creature_ptr->prace - 32);
 	}
+
 	creature_ptr->prace = new_race;
 	rp_ptr = &race_info[creature_ptr->prace];
-
-	/* Experience factor */
 	creature_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
 
-	/*
-	 * The speed bonus of Klackons and Sprites are disabled
-	 * and the experience penalty is decreased.
-	 */
-	if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER) || (creature_ptr->pclass == CLASS_NINJA)) && ((creature_ptr->prace == RACE_KLACKON) || (creature_ptr->prace == RACE_SPRITE)))
+	bool is_special_class = creature_ptr->pclass == CLASS_MONK;
+	is_special_class |= creature_ptr->pclass == CLASS_FORCETRAINER;
+	is_special_class |= creature_ptr->pclass == CLASS_NINJA;
+	bool is_special_race = creature_ptr->prace == RACE_KLACKON;
+	is_special_race |= creature_ptr->prace == RACE_SPRITE;
+	if (is_special_class && is_special_race)
 		creature_ptr->expfact -= 15;
 
-	/* Get character's height and weight */
 	get_height_weight(creature_ptr);
 
-	/* Hitdice */
 	if (creature_ptr->pclass == CLASS_SORCERER)
 		creature_ptr->hitdie = rp_ptr->r_mhp/2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
 	else
 		creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 
 	roll_hitdice(creature_ptr, 0L);
-
-	/* The experience level may be modified */
 	check_experience(creature_ptr);
-
 	creature_ptr->redraw |= (PR_BASIC);
-
 	creature_ptr->update |= (PU_BONUS);
-
 	handle_stuff(creature_ptr);
 
-	/* Load an autopick preference file */
 	if (old_race != creature_ptr->prace) autopick_load_pref(creature_ptr, FALSE);
 
-	/* Player's graphic tile may change */
 	lite_spot(creature_ptr, creature_ptr->y, creature_ptr->x);
 }
 
@@ -3690,14 +3311,10 @@ void do_poly_self(player_type *creature_ptr)
 		char effect_msg[80] = "";
 		CHARACTER_IDX new_race;
 
-		/* Some form of racial polymorph... */
 		power -= 10;
-
 		if ((power > randint0(5)) && one_in_(4))
 		{
-			/* sex change */
 			power -= 2;
-
 			if (creature_ptr->psex == SEX_MALE)
 			{
 				creature_ptr->psex = SEX_FEMALE;
@@ -3715,10 +3332,7 @@ void do_poly_self(player_type *creature_ptr)
 		if ((power > randint0(30)) && one_in_(5))
 		{
 			int tmp = 0;
-
-			/* Harmful deformity */
 			power -= 15;
-
 			while (tmp < A_MAX)
 			{
 				if (one_in_(2))
@@ -3729,7 +3343,6 @@ void do_poly_self(player_type *creature_ptr)
 				tmp++;
 			}
 
-			/* Deformities are discriminated against! */
 			(void)dec_stat(creature_ptr, A_CHR, randint1(6), TRUE);
 
 			if (effect_msg[0])
@@ -3746,7 +3359,6 @@ void do_poly_self(player_type *creature_ptr)
 
 		while ((power > randint0(20)) && one_in_(10))
 		{
-			/* Polymorph into a less mutated form */
 			power -= 10;
 
 			if (!lose_mutation(creature_ptr, 0))
@@ -3765,8 +3377,6 @@ void do_poly_self(player_type *creature_ptr)
 	if ((power > randint0(30)) && one_in_(6))
 	{
 		int tmp = 0;
-
-		/* Abomination! */
 		power -= 20;
 		msg_format(_("%sの構成が変化した！", "Your internal organs are rearranged!"), creature_ptr->prace == RACE_ANDROID ? "機械" : "内臓");
 
@@ -3804,7 +3414,6 @@ void do_poly_self(player_type *creature_ptr)
 		do_poly_wounds(creature_ptr);
 	}
 
-	/* Note: earlier deductions may have left power < 0 already. */
 	while (power > 0)
 	{
 		status_shuffle(creature_ptr);
@@ -3812,22 +3421,19 @@ void do_poly_self(player_type *creature_ptr)
 	}
 }
 
+
 /*
  * Gain experience
  */
 void gain_exp_64(player_type *creature_ptr, s32b amount, u32b amount_frac)
 {
 	if (creature_ptr->is_dead) return;
-
 	if (creature_ptr->prace == RACE_ANDROID) return;
 
-	/* Gain some experience */
 	s64b_add(&(creature_ptr->exp), &(creature_ptr->exp_frac), amount, amount_frac);
 
-	/* Slowly recover from experience drainage */
 	if (creature_ptr->exp < creature_ptr->max_exp)
 	{
-		/* Gain max experience (20%) (was 10%) */
 		creature_ptr->max_exp += amount / 5;
 	}
 
@@ -3846,13 +3452,11 @@ void gain_exp(player_type *creature_ptr, s32b amount)
 
 void calc_android_exp(player_type *creature_ptr)
 {
-	int i;
 	u32b total_exp = 0;
 	if (creature_ptr->is_dead) return;
-
 	if (creature_ptr->prace != RACE_ANDROID) return;
 
-	for (i = INVEN_RARM; i < INVEN_TOTAL; i++)
+	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
 		object_type *o_ptr = &creature_ptr->inventory_list[i];
 		object_type forge;
@@ -3862,8 +3466,8 @@ void calc_android_exp(player_type *creature_ptr)
 
 		if ((i == INVEN_RIGHT) || (i == INVEN_LEFT) || (i == INVEN_NECK) || (i == INVEN_LITE)) continue;
 		if (!o_ptr->k_idx) continue;
-		object_wipe(q_ptr);
 
+		object_wipe(q_ptr);
 		object_copy(q_ptr, o_ptr);
 		q_ptr->discount = 0;
 		q_ptr->curse_flags = 0L;
@@ -3884,14 +3488,12 @@ void calc_android_exp(player_type *creature_ptr)
 
 			if (!object_is_weapon_ammo(o_ptr))
 			{
-				/* For armors */
 				if (total_flags < 15000) fake_level = 10;
 				else if (total_flags < 35000) fake_level = 25;
 				else fake_level = 40;
 			}
 			else
 			{
-				/* For weapons */
 				if (total_flags < 20000) fake_level = 10;
 				else if (total_flags < 45000) fake_level = 25;
 				else fake_level = 40;
@@ -3901,7 +3503,6 @@ void calc_android_exp(player_type *creature_ptr)
 		}
 
 		value = object_value_real(q_ptr);
-
 		if (value <= 0) continue;
 		if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (creature_ptr->pseikaku != SEIKAKU_SEXY)) value /= 32;
 		if (value > 5000000L) value = 5000000L;
@@ -3932,6 +3533,7 @@ void calc_android_exp(player_type *creature_ptr)
 		else total_exp += exp / 16;
 		if (i == INVEN_BODY) total_exp += exp / 32;
 	}
+
 	creature_ptr->exp = creature_ptr->max_exp = total_exp;
 	check_experience(creature_ptr);
 }
@@ -3957,17 +3559,14 @@ void lose_exp(player_type *creature_ptr, s32b amount)
  */
 bool drain_exp(player_type *creature_ptr, s32b drain, s32b slip, int hold_exp_prob)
 {
-	/* Androids and their mimics are never drained */
 	if (creature_ptr->prace == RACE_ANDROID) return FALSE;
 
 	if (creature_ptr->hold_exp && (randint0(100) < hold_exp_prob))
 	{
-		/* Hold experience */
 		msg_print(_("しかし自己の経験値を守りきった！", "You keep hold of your experience!"));
 		return FALSE;
 	}
 
-	/* Hold experience failed */
 	if (creature_ptr->hold_exp)
 	{
 		msg_print(_("経験値を少し吸い取られた気がする！", "You feel your experience slipping away!"));
@@ -4012,18 +3611,18 @@ bool set_ultimate_res(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->ult_res = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff(creature_ptr);
+
 	return TRUE;
 }
+
 
 bool set_tim_res_nether(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
@@ -4054,11 +3653,9 @@ bool set_tim_res_nether(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tim_res_nether = v;
 	creature_ptr->redraw |= (PR_STATUS);
 
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -4067,11 +3664,11 @@ bool set_tim_res_nether(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 	return TRUE;
 }
 
+
 bool set_tim_res_time(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 {
 	bool notice = FALSE;
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
-
 	if (creature_ptr->is_dead) return FALSE;
 
 	if (v)
@@ -4086,7 +3683,6 @@ bool set_tim_res_time(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 			notice = TRUE;
 		}
 	}
-
 	else
 	{
 		if (creature_ptr->tim_res_time)
@@ -4096,11 +3692,8 @@ bool set_tim_res_time(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 	}
 
-	/* Use the value */
 	creature_ptr->tim_res_time = v;
 	creature_ptr->redraw |= (PR_STATUS);
-
-	/* Nothing to notice */
 	if (!notice) return FALSE;
 
 	if (disturb_state) disturb(creature_ptr, FALSE, FALSE);
@@ -4115,18 +3708,14 @@ bool set_tim_res_time(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
  */
 bool choose_ele_attack(player_type *creature_ptr)
 {
-	int num;
-
-	char choice;
-
 	if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
 	{
 		msg_format(_("武器を持たないと魔法剣は使えない。", "You cannot use temporary branding with no weapon."));
 		return FALSE;
 	}
-	screen_save();
 
-	num = (creature_ptr->lev - 20) / 5;
+	screen_save();
+	int num = (creature_ptr->lev - 20) / 5;
 	c_prt(TERM_RED,    _("        a) 焼棄", "        a) Fire Brand"), 2, 14);
 
 	if (num >= 2) 
@@ -4156,7 +3745,7 @@ bool choose_ele_attack(player_type *creature_ptr)
 	prt("", 1, 0);
 	prt(_("        どの元素攻撃をしますか？", "        Choose a temporary elemental brand "), 1, 14);
 
-	choice = inkey();
+	char choice = inkey();
 
 	if ((choice == 'a') || (choice == 'A')) 
 		set_ele_attack(creature_ptr, ATTACK_FIRE, creature_ptr->lev/2 + randint1(creature_ptr->lev/2));
@@ -4174,6 +3763,7 @@ bool choose_ele_attack(player_type *creature_ptr)
 		screen_load();
 		return FALSE;
 	}
+
 	screen_load();
 	return TRUE;
 }
@@ -4184,7 +3774,6 @@ bool choose_ele_attack(player_type *creature_ptr)
  */
 bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT immune_turn)
 {
-	char choice;
 	screen_save();
 
 	c_prt(TERM_RED,    _("        a) 火炎", "        a) Immunity to fire"), 2, 14);
@@ -4200,7 +3789,7 @@ bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT immune_turn)
 	prt("", 1, 0);
 	prt(_("        どの元素の免疫をつけますか？", "        Choose a temporary elemental immunity "), 1, 14);
 
-	choice = inkey();
+	char choice = inkey();
 
 	if ((choice == 'a') || (choice == 'A')) 
 		set_ele_immune(creature_ptr, DEFENSE_FIRE, immune_turn);
@@ -4216,6 +3805,7 @@ bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT immune_turn)
 		screen_load();
 		return FALSE;
 	}
+
 	screen_load();
 	return TRUE;
 }
