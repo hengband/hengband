@@ -1325,7 +1325,7 @@ static void object_mention(player_type *owner_ptr, object_type *o_ptr)
 
 
 /*!
- * 
+ *
  * @brief アイテムのエゴをレア度の重みに合わせてランダムに選択する
  * Choose random ego type
  * @param slot 取得したいエゴの装備部位
