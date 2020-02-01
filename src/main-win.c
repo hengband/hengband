@@ -240,9 +240,9 @@
 
 #define IDM_HELP_CONTENTS       901
 
-	/*
-	 * Exclude parts of WINDOWS.H that are not needed
-	 */
+/*
+ * Exclude parts of WINDOWS.H that are not needed
+ */
 #define NOCOMM            /* Comm driver APIs and definitions */
 #define NOLOGERROR        /* LogError() and related definitions */
 #define NOPROFILER        /* Profiler APIs */
@@ -267,26 +267,26 @@
 #define NOMDI             /* MDI support */
 #define NOHELP            /* Help support */
 
-	 /* Not defined since it breaks Borland C++ 5.5 */
-	 /* #define NOCTLMGR */    /* Control management and controls */
+/* Not defined since it breaks Borland C++ 5.5 */
+/* #define NOCTLMGR */    /* Control management and controls */
 
-	 /*
-	  * Exclude parts of WINDOWS.H that are not needed (Win32)
-	  */
+/*
+ * Exclude parts of WINDOWS.H that are not needed (Win32)
+ */
 #define WIN32_LEAN_AND_MEAN
 #define NONLS             /* All NLS defines and routines */
 #define NOSERVICE         /* All Service Controller routines, SERVICE_ equates, etc. */
 #define NOKANJI           /* Kanji support stuff. */
 #define NOMCX             /* Modem Configuration Extensions */
 
-	  /*
-	   * Include the "windows" support file
-	   */
+/*
+ * Include the "windows" support file
+ */
 #include <windows.h>
 
-	   /*
-		* Exclude parts of MMSYSTEM.H that are not needed
-		*/
+/*
+* Exclude parts of MMSYSTEM.H that are not needed
+*/
 #define MMNODRV          /* Installable driver support */
 #define MMNOWAVE         /* Waveform support */
 #define MMNOMIDI         /* MIDI support */
@@ -297,10 +297,9 @@
 #define MMNOMMIO         /* Multimedia file I/O support */
 #define MMNOMMSYSTEM     /* General MMSYSTEM functions */
 
-
-		/*
-		 * Standard sound names
-		 */
+/*
+ * Standard sound names
+ */
 const concptr angband_sound_name[SOUND_MAX] =
 {
 	"dummy",
@@ -407,16 +406,6 @@ const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
  */
 #include <mmsystem.h>
 #include <commdlg.h>
-
- /*
-  * HTML-Help requires htmlhelp.h and htmlhelp.lib from Microsoft's
-  * HTML Workshop < http://msdn.microsoft.com/workshop/author/htmlhelp/ >.
-  */
-  /* #define HTML_HELP */
-
-#ifdef HTML_HELP
-#include <htmlhelp.h>
-#endif /* HTML_HELP */
 
 /*
  * Include the support for loading bitmaps
@@ -4012,20 +4001,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
 	case IDM_HELP_CONTENTS:
 	{
-#ifdef HTML_HELP
-		char tmp[1024];
-		path_build(tmp, sizeof(tmp), ANGBAND_DIR_XTRA_HELP, "zangband.chm");
-		if (check_file(tmp))
-		{
-			HtmlHelp(data[0].w, tmp, HH_DISPLAY_TOPIC, 0);
-		}
-		else
-		{
-			plog_fmt(_("ヘルプファイル[%s]が見付かりません。", "Cannot find help file: %s"), tmp);
-			plog(_("代わりにオンラインヘルプを使用してください。", "Use the online help files instead."));
-		}
-		break;
-#else /* HTML_HELP */
 		char buf[1024];
 		char tmp[1024];
 		path_build(tmp, sizeof(tmp), ANGBAND_DIR_XTRA_HELP, "zangband.hlp");
@@ -4041,7 +4016,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
 		}
 		break;
-#endif /* HTML_HELP */
 	}
 	}
 }
