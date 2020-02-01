@@ -2744,18 +2744,14 @@ static void a_m_aux_3(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
  * Apply magic to an item known to be "boring"
  * @param owner_ptr プレーヤーへの参照ポインタ
  * @param o_ptr 強化を与えたいオブジェクトの構造体参照ポインタ
- * @param level 生成基準階
  * @param power 生成ランク
  * @return なし
  * @details
  * Hack -- note the special code for various items
  */
-static void a_m_aux_4(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
+static void a_m_aux_4(player_type *owner_ptr, object_type *o_ptr, int power)
 {
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
-
-	/* Unused */
-	(void)level;
 
 	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
 	switch (o_ptr->tval)
@@ -3149,7 +3145,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
 	}
 	default:
 	{
-		a_m_aux_4(owner_ptr, o_ptr, lev, power);
+		a_m_aux_4(owner_ptr, o_ptr, power);
 		break;
 	}
 	}
