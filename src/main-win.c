@@ -127,24 +127,17 @@
 # endif
 #endif
 
- /*
-  * Available graphic modes
-  */
+/*
+ * Available graphic modes
+ */
 #define GRAPHICS_NONE       0
 #define GRAPHICS_ORIGINAL   1
 #define GRAPHICS_ADAM_BOLT  2
 #define GRAPHICS_HENGBAND   3
 
-  /*
-   * Hack -- allow use of "screen saver" mode
-   */
-#define USE_SAVER
-
-
-   /*
-	* Menu constants -- see "ANGBAND.RC"
-	*/
-
+/*
+ * Menu constants -- see "ANGBAND.RC"
+ */
 #define IDM_FILE_NEW			100
 #define IDM_FILE_OPEN			101
 #define IDM_FILE_SAVE			110
@@ -597,15 +590,10 @@ static HBITMAP hBG = NULL;
 static int use_bg = 0; //!< 背景使用フラグ、1なら私用。
 static char bg_bitmap_file[1024] = "bg.bmp"; //!< 現在の背景ビットマップファイル名。
 
-#ifdef USE_SAVER
-
 /*
  * The screen saver window
  */
 static HWND hwndSaver;
-
-#endif /* USE_SAVER */
-
 
 /*!
  * 現在使用中のタイルID(0ならば未使用)
@@ -622,7 +610,6 @@ static DIBINIT infGraph;
  * The global bitmap mask
  */
 static DIBINIT infMask;
-
 
 /*
  * Flag set once "sound" has been initialized
@@ -3309,28 +3296,16 @@ static void setup_menus(void)
 		(use_bg ? MF_CHECKED : MF_UNCHECKED));
 #ifdef JP
 #else
-
 	CheckMenuItem(hm, IDM_OPTIONS_SAVER,
 		(hwndSaver ? MF_CHECKED : MF_UNCHECKED));
 #endif
-
-	/* Menu "Options", Item "Graphics" */
 	EnableMenuItem(hm, IDM_OPTIONS_NO_GRAPHICS, MF_ENABLED);
-	/* Menu "Options", Item "Graphics" */
 	EnableMenuItem(hm, IDM_OPTIONS_OLD_GRAPHICS, MF_ENABLED);
-	/* Menu "Options", Item "Graphics" */
 	EnableMenuItem(hm, IDM_OPTIONS_NEW_GRAPHICS, MF_ENABLED);
-	/* Menu "Options", Item "Graphics" */
 	EnableMenuItem(hm, IDM_OPTIONS_BIGTILE, MF_ENABLED);
-
-	/* Menu "Options", Item "Sound" */
 	EnableMenuItem(hm, IDM_OPTIONS_SOUND, MF_ENABLED);
-
-#ifdef USE_SAVER
-	/* Menu "Options", Item "ScreenSaver" */
 	EnableMenuItem(hm, IDM_OPTIONS_SAVER,
 		MF_BYCOMMAND | MF_ENABLED);
-#endif /* USE_SAVER */
 }
 
 
@@ -3370,16 +3345,10 @@ static void check_for_save_file(player_type *player_ptr, LPSTR cmd_line)
  */
 static void process_menus(player_type *player_ptr, WORD wCmd)
 {
-	int i;
-
 	term_data *td;
-
 	OPENFILENAME ofn;
-
-	/* Analyze */
 	switch (wCmd)
 	{
-		/* New game */
 	case IDM_FILE_NEW:
 	{
 		if (!initialized)
@@ -3399,8 +3368,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		}
 		break;
 	}
-
-	/* Open game */
 	case IDM_FILE_OPEN:
 	{
 		if (!initialized)
@@ -3425,7 +3392,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
 			if (GetOpenFileName(&ofn))
 			{
-				/* Load 'savefile' */
 				validate_file(savefile);
 				game_in_progress = TRUE;
 				Term_flush();
@@ -3435,8 +3401,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		}
 		break;
 	}
-
-	/* Save game */
 	case IDM_FILE_SAVE:
 	{
 		if (game_in_progress && current_world_ptr->character_generated)
@@ -3447,19 +3411,16 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 				break;
 			}
 
-			/* Hack -- Forget messages */
 			msg_flag = FALSE;
-
-			/* Save the game */
 			do_cmd_save_game(player_ptr, FALSE);
 		}
 		else
 		{
 			plog(_("今、セーブすることは出来ません。", "You may not do that right now."));
 		}
+
 		break;
 	}
-
 	case IDM_FILE_EXIT:
 	{
 		if (game_in_progress && current_world_ptr->character_generated)
@@ -3470,9 +3431,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 				break;
 			}
 
-			/* Hack -- Forget messages */
 			msg_flag = FALSE;
-
 			forget_lite(player_ptr->current_floor_ptr);
 			forget_view(player_ptr->current_floor_ptr);
 			clear_mon_lite(player_ptr->current_floor_ptr);
@@ -3480,20 +3439,15 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 			Term_key_push(SPECIAL_KEY_QUIT);
 			break;
 		}
+
 		quit(NULL);
 		break;
 	}
-
-	/* Show scores */
 	case IDM_FILE_SCORE:
 	{
 		char buf[1024];
 		path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
-
-		/* Open the binary high score file, for reading */
 		highscore_fd = fd_open(buf, O_RDONLY);
-
-		/* Paranoia -- No score file */
 		if (highscore_fd < 0)
 		{
 			msg_print("Score file unavailable.");
@@ -3502,25 +3456,15 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		{
 			screen_save();
 			Term_clear();
-
-			/* Display the scores */
 			display_scores_aux(0, MAX_HISCORES, -1, NULL);
-
-			/* Shut the high score file */
 			(void)fd_close(highscore_fd);
-
-			/* Forget the high score fd */
 			highscore_fd = -1;
 			screen_load();
-
-			/* Hack - Flush it */
 			Term_fresh();
 		}
 
 		break;
 	}
-
-	/* Open game */
 	case IDM_FILE_MOVIE:
 	{
 		if (!initialized)
@@ -3545,7 +3489,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
 			if (GetOpenFileName(&ofn))
 			{
-				/* Load 'savefile' */
 				prepare_browse_movie_aux(savefile);
 				play_game(player_ptr, FALSE);
 				quit(NULL);
@@ -3554,15 +3497,11 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		}
 		break;
 	}
-
-
 	case IDM_WINDOW_VIS_0:
 	{
 		plog(_("メインウィンドウは非表示にできません！", "You are not allowed to do that!"));
 		break;
 	}
-
-	/* Window visibility */
 	case IDM_WINDOW_VIS_1:
 	case IDM_WINDOW_VIS_2:
 	case IDM_WINDOW_VIS_3:
@@ -3571,8 +3510,7 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 	case IDM_WINDOW_VIS_6:
 	case IDM_WINDOW_VIS_7:
 	{
-		i = wCmd - IDM_WINDOW_VIS_0;
-
+		int i = wCmd - IDM_WINDOW_VIS_0;
 		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
 
 		td = &data[i];
@@ -3592,8 +3530,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
 		break;
 	}
-
-	/* Window fonts */
 	case IDM_WINDOW_FONT_0:
 	case IDM_WINDOW_FONT_1:
 	case IDM_WINDOW_FONT_2:
@@ -3603,18 +3539,13 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 	case IDM_WINDOW_FONT_6:
 	case IDM_WINDOW_FONT_7:
 	{
-		i = wCmd - IDM_WINDOW_FONT_0;
-
+		int i = wCmd - IDM_WINDOW_FONT_0;
 		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
 
 		td = &data[i];
-
 		term_change_font(td);
-
 		break;
 	}
-
-	/* Window Z Position */
 	case IDM_WINDOW_POS_1:
 	case IDM_WINDOW_POS_2:
 	case IDM_WINDOW_POS_3:
@@ -3623,12 +3554,10 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 	case IDM_WINDOW_POS_6:
 	case IDM_WINDOW_POS_7:
 	{
-		i = wCmd - IDM_WINDOW_POS_0;
-
+		int i = wCmd - IDM_WINDOW_POS_0;
 		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
 
 		td = &data[i];
-
 		if (!td->posfix && td->visible)
 		{
 			td->posfix = TRUE;
@@ -3642,8 +3571,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
 		break;
 	}
-
-	/* Bizarre Display */
 	case IDM_WINDOW_BIZ_0:
 	case IDM_WINDOW_BIZ_1:
 	case IDM_WINDOW_BIZ_2:
@@ -3653,22 +3580,15 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 	case IDM_WINDOW_BIZ_6:
 	case IDM_WINDOW_BIZ_7:
 	{
-		i = wCmd - IDM_WINDOW_BIZ_0;
-
+		int i = wCmd - IDM_WINDOW_BIZ_0;
 		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
 
 		td = &data[i];
-
 		td->bizarre = !td->bizarre;
-
 		term_getsize(td);
-
 		term_window_resize(td);
-
 		break;
 	}
-
-	/* Increase Tile Width */
 	case IDM_WINDOW_I_WID_0:
 	case IDM_WINDOW_I_WID_1:
 	case IDM_WINDOW_I_WID_2:
@@ -3678,22 +3598,15 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 	case IDM_WINDOW_I_WID_6:
 	case IDM_WINDOW_I_WID_7:
 	{
-		i = wCmd - IDM_WINDOW_I_WID_0;
-
+		int i = wCmd - IDM_WINDOW_I_WID_0;
 		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
 
 		td = &data[i];
-
 		td->tile_wid += 1;
-
 		term_getsize(td);
-
 		term_window_resize(td);
-
 		break;
 	}
-
-	/* Decrease Tile Height */
 	case IDM_WINDOW_D_WID_0:
 	case IDM_WINDOW_D_WID_1:
 	case IDM_WINDOW_D_WID_2:
@@ -3703,22 +3616,15 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 	case IDM_WINDOW_D_WID_6:
 	case IDM_WINDOW_D_WID_7:
 	{
-		i = wCmd - IDM_WINDOW_D_WID_0;
-
+		int i = wCmd - IDM_WINDOW_D_WID_0;
 		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
 
 		td = &data[i];
-
 		td->tile_wid -= 1;
-
 		term_getsize(td);
-
 		term_window_resize(td);
-
 		break;
 	}
-
-	/* Increase Tile Height */
 	case IDM_WINDOW_I_HGT_0:
 	case IDM_WINDOW_I_HGT_1:
 	case IDM_WINDOW_I_HGT_2:
@@ -3728,22 +3634,15 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 	case IDM_WINDOW_I_HGT_6:
 	case IDM_WINDOW_I_HGT_7:
 	{
-		i = wCmd - IDM_WINDOW_I_HGT_0;
-
+		int i = wCmd - IDM_WINDOW_I_HGT_0;
 		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
 
 		td = &data[i];
-
 		td->tile_hgt += 1;
-
 		term_getsize(td);
-
 		term_window_resize(td);
-
 		break;
 	}
-
-	/* Decrease Tile Height */
 	case IDM_WINDOW_D_HGT_0:
 	case IDM_WINDOW_D_HGT_1:
 	case IDM_WINDOW_D_HGT_2:
@@ -3753,21 +3652,15 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 	case IDM_WINDOW_D_HGT_6:
 	case IDM_WINDOW_D_HGT_7:
 	{
-		i = wCmd - IDM_WINDOW_D_HGT_0;
-
+		int i = wCmd - IDM_WINDOW_D_HGT_0;
 		if ((i < 0) || (i >= MAX_TERM_DATA)) break;
 
 		td = &data[i];
-
 		td->tile_hgt -= 1;
-
 		term_getsize(td);
-
 		term_window_resize(td);
-
 		break;
 	}
-
 	case IDM_OPTIONS_NO_GRAPHICS:
 	{
 		if (!inkey_flag)
@@ -3785,7 +3678,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
 		break;
 	}
-
 	case IDM_OPTIONS_OLD_GRAPHICS:
 	{
 		if (!inkey_flag)
@@ -3803,7 +3695,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
 		break;
 	}
-
 	case IDM_OPTIONS_NEW_GRAPHICS:
 	{
 		if (!inkey_flag)
@@ -3821,7 +3712,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
 		break;
 	}
-
 	case IDM_OPTIONS_NEW2_GRAPHICS:
 	{
 		if (!inkey_flag)
@@ -3839,7 +3729,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
 		break;
 	}
-
 	case IDM_OPTIONS_BIGTILE:
 	{
 		td = &data[0];
@@ -3855,7 +3744,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		InvalidateRect(td->w, NULL, TRUE);
 		break;
 	}
-
 	case IDM_OPTIONS_MUSIC:
 	{
 		if (!inkey_flag)
@@ -3869,7 +3757,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		Term_key_push(KTRL('R'));
 		break;
 	}
-
 	case IDM_OPTIONS_SOUND:
 	{
 		if (!inkey_flag)
@@ -3883,8 +3770,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		Term_key_push(KTRL('R'));
 		break;
 	}
-
-	/* bg */
 	case IDM_OPTIONS_BG:
 	{
 		if (!inkey_flag)
@@ -3899,8 +3784,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		Term_key_push(KTRL('R'));
 		break;
 	}
-
-	/* bg */
 	case IDM_OPTIONS_OPEN_BG:
 	{
 		if (!inkey_flag)
@@ -3923,20 +3806,16 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
 			if (GetOpenFileName(&ofn))
 			{
-				/* Load 'savefile' */
 				use_bg = 1;
 				init_bg();
 			}
 
-			/* React to changes */
 			term_xtra_win_react(player_ptr);
-
-			/* Hack -- Force redraw */
 			Term_key_push(KTRL('R'));
 		}
+
 		break;
 	}
-
 	case IDM_DUMP_SCREEN_HTML:
 	{
 		static char buf[1024] = "";
@@ -3958,9 +3837,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		}
 		break;
 	}
-
-#ifdef USE_SAVER
-
 	case IDM_OPTIONS_SAVER:
 	{
 		if (hwndSaver)
@@ -3970,7 +3846,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 		}
 		else
 		{
-			/* Create a screen scaver window */
 			hwndSaver = CreateWindowEx(WS_EX_TOPMOST, "WindowsScreenSaverClass",
 				"Angband Screensaver",
 				WS_POPUP | WS_MAXIMIZE | WS_VISIBLE,
@@ -3980,7 +3855,6 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 
 			if (hwndSaver)
 			{
-				/* Push the window to the bottom */
 				SetWindowPos(hwndSaver, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 			}
 			else
@@ -3988,11 +3862,9 @@ static void process_menus(player_type *player_ptr, WORD wCmd)
 				plog(_("ウィンドウを作成出来ません", "Failed to create saver window"));
 			}
 		}
+
 		break;
 	}
-
-#endif
-
 	case IDM_OPTIONS_MAP:
 	{
 		windows_map(player_ptr);
@@ -4587,8 +4459,6 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 }
 
 
-#ifdef USE_SAVER
-
 #define MOUSE_SENS 40
 
 #ifdef __MWERKS__
@@ -4658,8 +4528,6 @@ LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
 
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
-
-#endif /* USE_SAVER */
 
 
 /*
@@ -4885,8 +4753,6 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 
 		if (!RegisterClass(&wc)) exit(2);
 
-#ifdef USE_SAVER
-
 		wc.style = CS_VREDRAW | CS_HREDRAW | CS_SAVEBITS | CS_DBLCLKS;
 		wc.lpfnWndProc = AngbandSaverProc;
 		wc.hCursor = NULL;
@@ -4894,9 +4760,6 @@ int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
 		wc.lpszClassName = "WindowsScreenSaverClass";
 
 		if (!RegisterClass(&wc)) exit(3);
-
-#endif
-
 	}
 
 	plog_aux = hack_plog;
