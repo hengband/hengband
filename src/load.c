@@ -92,7 +92,7 @@
 
 #define OLD_MAX_MANE 22
 
-  /* Old hidden trap flag */
+/* Old hidden trap flag */
 #define CAVE_TRAP       0x8000
 
 /*** Terrain Feature Indexes (see "lib/edit/f_info.txt") ***/
@@ -150,23 +150,18 @@ static byte kanji_code = 0;
  */
 static bool h_older_than(byte major, byte minor, byte patch, byte extra)
 {
-	/* Much older, or much more recent */
 	if (current_world_ptr->h_ver_major < major) return TRUE;
 	if (current_world_ptr->h_ver_major > major) return FALSE;
 
-	/* Distinctly older, or distinctly more recent */
 	if (current_world_ptr->h_ver_minor < minor) return TRUE;
 	if (current_world_ptr->h_ver_minor > minor) return FALSE;
 
-	/* Barely older, or barely more recent */
 	if (current_world_ptr->h_ver_patch < patch) return TRUE;
 	if (current_world_ptr->h_ver_patch > patch) return FALSE;
 
-	/* Barely older, or barely more recent */
 	if (current_world_ptr->h_ver_extra < extra) return TRUE;
 	if (current_world_ptr->h_ver_extra > extra) return FALSE;
 
-	/* Identical versions */
 	return FALSE;
 }
 
@@ -180,19 +175,15 @@ static bool h_older_than(byte major, byte minor, byte patch, byte extra)
  */
 static bool z_older_than(byte x, byte y, byte z)
 {
-	/* Much older, or much more recent */
 	if (current_world_ptr->z_major < x) return TRUE;
 	if (current_world_ptr->z_major > x) return FALSE;
 
-	/* Distinctly older, or distinctly more recent */
 	if (current_world_ptr->z_minor < y) return TRUE;
 	if (current_world_ptr->z_minor > y) return FALSE;
 
-	/* Barely older, or barely more recent */
 	if (current_world_ptr->z_patch < z) return TRUE;
 	if (current_world_ptr->z_patch > z) return FALSE;
 
-	/* Identical versions */
 	return FALSE;
 }
 
@@ -207,14 +198,9 @@ static bool z_older_than(byte x, byte y, byte z)
 static void note(concptr msg)
 {
 	static TERM_LEN y = 2;
-
-	/* Draw the message */
 	prt(msg, y, 0);
-
-	/* Advance one line (wrap if needed) */
 	if (++y >= 24) y = 2;
 
-	/* Flush it */
 	Term_fresh();
 }
 
@@ -228,16 +214,12 @@ static void note(concptr msg)
  */
 static byte sf_get(void)
 {
-	/* Get a character, decode the value */
 	byte c = getc(fff) & 0xFF;
 	byte v = c ^ xor_byte;
 	xor_byte = c;
 
-	/* Maintain the checksum info */
 	v_check += v;
 	x_check += xor_byte;
-
-	/* Return the value */
 	return v;
 }
 
@@ -309,43 +291,33 @@ static void rd_s32b(s32b *ip)
  */
 static void rd_string(char *str, int max)
 {
-	/* Read the string */
 	for (int i = 0; TRUE; i++)
 	{
 		byte tmp8u;
 		rd_byte(&tmp8u);
-
-		/* Collect string while legal */
 		if (i < max) str[i] = tmp8u;
 
-		/* End of string */
 		if (!tmp8u) break;
 	}
 
-	/* Terminate */
 	str[max - 1] = '\0';
-
 #ifdef JP
-	/* Convert Kanji code */
 	switch (kanji_code)
 	{
 #ifdef SJIS
 	case 2:
-		/* EUC to SJIS */
 		euc2sjis(str);
 		break;
 #endif
 
 #ifdef EUC
 	case 3:
-		/* SJIS to EUC */
 		sjis2euc(str);
 		break;
 #endif
 
 	case 0:
 	{
-		/* 不明の漢字コードからシステムの漢字コードに変換 */
 		byte code = codeconv(str);
 
 		/* 漢字コードが判明したら、それを記録 */
@@ -354,7 +326,6 @@ static void rd_string(char *str, int max)
 		break;
 	}
 	default:
-		/* No conversion needed */
 		break;
 	}
 #endif
@@ -415,9 +386,7 @@ static void rd_item_old(object_type *o_ptr)
 		if (o_ptr->tval == 110) o_ptr->tval = TV_HISSATSU_BOOK;
 	}
 
-	/* Special pval */
 	rd_s16b(&o_ptr->pval);
-
 	rd_byte(&o_ptr->discount);
 	rd_byte(&tmp8u);
 	o_ptr->number = (ITEM_NUMBER)tmp8u;
@@ -433,25 +402,20 @@ static void rd_item_old(object_type *o_ptr)
 	o_ptr->name2 = tmp8u;
 
 	rd_s16b(&o_ptr->timeout);
-
 	rd_s16b(&o_ptr->to_h);
-
 	rd_s16b(&tmp16s);
 	o_ptr->to_d = tmp16s;
+
 	rd_s16b(&o_ptr->to_a);
-
 	rd_s16b(&o_ptr->ac);
-
 	rd_byte(&tmp8u);
 	o_ptr->dd = tmp8u;
+
 	rd_byte(&tmp8u);
 	o_ptr->ds = tmp8u;
 
 	rd_byte(&o_ptr->ident);
-
 	rd_byte(&o_ptr->marked);
-
-	/* Object flags */
 	rd_u32b(&o_ptr->art_flags[0]);
 	rd_u32b(&o_ptr->art_flags[1]);
 	rd_u32b(&o_ptr->art_flags[2]);
@@ -492,10 +456,7 @@ static void rd_item_old(object_type *o_ptr)
 		rd_u32b(&o_ptr->curse_flags);
 	}
 
-	/* Monster holding object */
 	rd_s16b(&o_ptr->held_m_idx);
-
-	/* Special powers */
 	rd_byte(&o_ptr->xtra1);
 	rd_byte(&o_ptr->xtra2);
 
@@ -596,14 +557,12 @@ static void rd_item_old(object_type *o_ptr)
 
 	char buf[128];
 	rd_string(buf, sizeof(buf));
-
-	/* Save the inscription */
 	if (buf[0]) o_ptr->inscription = quark_add(buf);
 
 	rd_string(buf, sizeof(buf));
-	if (buf[0]) o_ptr->art_name = quark_add(buf);
 
-	/* The Python object */
+	/* todo 元々このif文には末尾に";"が付いていた、バグかもしれない */
+	if (buf[0]) o_ptr->art_name = quark_add(buf);
 	{
 		s32b tmp32s;
 
@@ -611,7 +570,6 @@ static void rd_item_old(object_type *o_ptr)
 		strip_bytes(tmp32s);
 	}
 
-	/* Mega-Hack -- handle "dungeon objects" later */
 	if ((o_ptr->k_idx >= 445) && (o_ptr->k_idx <= 479)) return;
 
 	if (z_older_than(10, 4, 10) && (o_ptr->name2 == EGO_YOIYAMI)) o_ptr->k_idx = lookup_kind(TV_SOFT_ARMOR, SV_YOIYAMI_ROBE);
@@ -624,26 +582,19 @@ static void rd_item_old(object_type *o_ptr)
 			add_flag(o_ptr->art_flags, TR_DEC_MANA);
 		}
 	}
+
 	if (object_is_fixed_artifact(o_ptr))
 	{
 		artifact_type *a_ptr;
-
-		/* Obtain the artifact info */
 		a_ptr = &a_info[o_ptr->name1];
-
-		/* Verify that artifact */
 		if (!a_ptr->name) o_ptr->name1 = 0;
 	}
+
 	if (object_is_ego(o_ptr))
 	{
 		ego_item_type *e_ptr;
-
-		/* Obtain the ego-item info */
 		e_ptr = &e_info[o_ptr->name2];
-
-		/* Verify that ego-item */
 		if (!e_ptr->name) o_ptr->name2 = 0;
-
 	}
 }
 
@@ -663,9 +614,6 @@ static void rd_item(object_type *o_ptr)
 
 	BIT_FLAGS flags;
 	rd_u32b(&flags);
-
-	/*** Read un-obvious elements ***/
-	/* Kind */
 	rd_s16b(&o_ptr->k_idx);
 
 	byte_hack tmp8u;
@@ -674,13 +622,11 @@ static void rd_item(object_type *o_ptr)
 	rd_byte(&tmp8u);
 	o_ptr->ix = (POSITION)tmp8u;
 
-	/* Type/Subtype */
 	object_kind *k_ptr;
 	k_ptr = &k_info[o_ptr->k_idx];
 	o_ptr->tval = k_ptr->tval;
 	o_ptr->sval = k_ptr->sval;
 
-	/* Special pval */
 	if (flags & SAVE_ITEM_PVAL) rd_s16b(&o_ptr->pval);
 	else o_ptr->pval = 0;
 
@@ -905,7 +851,6 @@ static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 	else
 		rd_byte(&m_ptr->sub_align);
 
-	/* Read the other information */
 	byte tmp8u;
 	rd_byte(&tmp8u);
 	m_ptr->fy = (POSITION)tmp8u;
@@ -938,7 +883,6 @@ static void rd_monster_old(player_type *player_ptr, monster_type *m_ptr)
 	}
 
 	rd_s16b(&m_ptr->mtimed[MTIMED_CSLEEP]);
-
 	rd_byte(&tmp8u);
 	m_ptr->mspeed = tmp8u;
 
@@ -1056,16 +1000,9 @@ static void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 		return;
 	}
 
-	/*** Monster save flags ***/
 	BIT_FLAGS flags;
 	rd_u32b(&flags);
-
-	/*** Read un-obvious elements ***/
-
-	/* Read the monster race */
 	rd_s16b(&m_ptr->r_idx);
-
-	/* Read the other information */
 	byte tmp8u;
 	rd_byte(&tmp8u);
 	m_ptr->fy = (POSITION)tmp8u;
@@ -1089,7 +1026,6 @@ static void rd_monster(player_type *player_ptr, monster_type *m_ptr)
 		rd_s32b(&m_ptr->dealt_damage);
 	}
 
-	/* Monster race index of its appearance */
 	if (flags & SAVE_MON_AP_R_IDX) rd_s16b(&m_ptr->ap_r_idx);
 	else m_ptr->ap_r_idx = m_ptr->r_idx;
 
@@ -1242,14 +1178,16 @@ static void rd_lore(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	/* Count sights/deaths/kills */
 	s16b tmp16s;
 	rd_s16b(&tmp16s);
 	r_ptr->r_sights = (MONSTER_NUMBER)tmp16s;
+
 	rd_s16b(&tmp16s);
 	r_ptr->r_deaths = (MONSTER_NUMBER)tmp16s;
+
 	rd_s16b(&tmp16s);
 	r_ptr->r_pkills = (MONSTER_NUMBER)tmp16s;
+
 	if (h_older_than(1, 7, 0, 5))
 	{
 		r_ptr->r_akills = r_ptr->r_pkills;
@@ -1263,32 +1201,25 @@ static void rd_lore(MONRACE_IDX r_idx)
 	rd_s16b(&tmp16s);
 	r_ptr->r_tkills = (MONSTER_NUMBER)tmp16s;
 
-	/* Count wakes and ignores */
 	rd_byte(&r_ptr->r_wake);
 	rd_byte(&r_ptr->r_ignore);
-
-	/* Extra stuff */
 	rd_byte(&r_ptr->r_xtra1);
 	rd_byte(&r_ptr->r_xtra2);
 
-	/* Count drops */
 	byte tmp8u;
 	rd_byte(&tmp8u);
 	r_ptr->r_drop_gold = (ITEM_NUMBER)tmp8u;
 	rd_byte(&tmp8u);
 	r_ptr->r_drop_item = (ITEM_NUMBER)tmp8u;
 
-	/* Count spells */
 	rd_byte(&tmp8u);
 	rd_byte(&r_ptr->r_cast_spell);
 
-	/* Count blows of each type */
 	rd_byte(&r_ptr->r_blows[0]);
 	rd_byte(&r_ptr->r_blows[1]);
 	rd_byte(&r_ptr->r_blows[2]);
 	rd_byte(&r_ptr->r_blows[3]);
 
-	/* Memorize flags */
 	rd_u32b(&r_ptr->r_flags1);
 	rd_u32b(&r_ptr->r_flags2);
 	rd_u32b(&r_ptr->r_flags3);
@@ -1298,8 +1229,6 @@ static void rd_lore(MONRACE_IDX r_idx)
 	if (h_older_than(1, 5, 0, 3))
 	{
 		r_ptr->r_flagsr = 0L;
-
-		/* Move RF3 resistance flags to RFR */
 		MOVE_RF3_TO_RFR(r_ptr, RF3_IM_ACID, RFR_IM_ACID);
 		MOVE_RF3_TO_RFR(r_ptr, RF3_IM_ELEC, RFR_IM_ELEC);
 		MOVE_RF3_TO_RFR(r_ptr, RF3_IM_FIRE, RFR_IM_FIRE);
@@ -1313,7 +1242,6 @@ static void rd_lore(MONRACE_IDX r_idx)
 		MOVE_RF3_TO_RFR(r_ptr, RF3_RES_DISE, RFR_RES_DISE);
 		MOVE_RF3_TO_RFR(r_ptr, RF3_RES_ALL, RFR_RES_ALL);
 
-		/* Separate breathers resistance from RF4 to RFR */
 		RF4_BR_TO_RFR(r_ptr, RF4_BR_LITE, RFR_RES_LITE);
 		RF4_BR_TO_RFR(r_ptr, RF4_BR_DARK, RFR_RES_DARK);
 		RF4_BR_TO_RFR(r_ptr, RF4_BR_SOUN, RFR_RES_SOUN);
@@ -1324,10 +1252,7 @@ static void rd_lore(MONRACE_IDX r_idx)
 		RF4_BR_TO_RFR(r_ptr, RF4_BR_SHAR, RFR_RES_SHAR);
 		RF4_BR_TO_RFR(r_ptr, RF4_BR_WALL, RFR_RES_WALL);
 
-		/* Resist confusion is merged to RF3_NO_CONF */
 		if (r_ptr->r_flags4 & RF4_BR_CONF) r_ptr->r_flags3 |= RF3_NO_CONF;
-
-		/* Misc resistance hack to RFR */
 		if (r_idx == MON_STORMBRINGER) r_ptr->r_flagsr |= RFR_RES_CHAO;
 		if (r_ptr->r_flags3 & RF3_ORC) r_ptr->r_flagsr |= RFR_RES_DARK;
 	}
@@ -1336,17 +1261,12 @@ static void rd_lore(MONRACE_IDX r_idx)
 		rd_u32b(&r_ptr->r_flagsr);
 	}
 
-	/* Read the "Racial" monster limit per level */
 	rd_byte(&tmp8u);
 	r_ptr->max_num = (MONSTER_NUMBER)tmp8u;
 
-	/* Location in saved floor */
 	rd_s16b(&r_ptr->floor_id);
-
-	/* Later (?) */
 	rd_byte(&tmp8u);
 
-	/* Repair the lore flags */
 	r_ptr->r_flags1 &= r_ptr->flags1;
 	r_ptr->r_flags2 &= r_ptr->flags2;
 	r_ptr->r_flags3 &= r_ptr->flags3;
@@ -1355,6 +1275,7 @@ static void rd_lore(MONRACE_IDX r_idx)
 	r_ptr->r_flags6 &= r_ptr->a_ability_flags2;
 	r_ptr->r_flagsr &= r_ptr->flagsr;
 }
+
 
 /*!
  * @brief 店置きのアイテムオブジェクトを読み込む / Add the item "o_ptr" to the inventory of the "Home"
@@ -1372,47 +1293,35 @@ static void rd_lore(MONRACE_IDX r_idx)
  */
 static void home_carry(player_type *player_ptr, store_type *st_ptr, object_type *o_ptr)
 {
-	/* Check each existing item (try to combine) */
 	for (int i = 0; i < st_ptr->stock_num; i++)
 	{
-		/* Get the existing item */
 		object_type *j_ptr;
 		j_ptr = &st_ptr->stock[i];
-
-		/* The home acts just like the player */
 		if (!object_similar(j_ptr, o_ptr)) continue;
 
 		object_absorb(j_ptr, o_ptr);
 		return;
 	}
 
-	/* No space? */
 	if (st_ptr->stock_num >= STORE_INVEN_MAX * 10) return;
 
-	/* Determine the "value" of the item */
 	s32b value = object_value(o_ptr);
-
-	/* Check existing slots to see if we must "slide" */
 	int slot;
 	for (slot = 0; slot < st_ptr->stock_num; slot++)
 	{
 		if (object_sort_comp(o_ptr, value, &st_ptr->stock[slot])) break;
 	}
 
-	/* Slide the others up */
 	for (int i = st_ptr->stock_num; i > slot; i--)
 	{
 		st_ptr->stock[i] = st_ptr->stock[i - 1];
 	}
 
-	/* More stuff now */
 	st_ptr->stock_num++;
-
-	/* Insert the new item */
 	st_ptr->stock[slot] = *o_ptr;
-
 	chg_virtue(player_ptr, V_SACRIFICE, -1);
 }
+
 
 /*!
  * @brief 店舗情報を読み込む / Read a store
@@ -1435,7 +1344,6 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 		st_ptr = &town_info[town_number].store[store_number];
 	}
 
-	/* Read the basic info */
 	byte own;
 	byte tmp8u;
 	s16b num;
@@ -1455,13 +1363,9 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 	rd_s16b(&st_ptr->good_buy);
 	rd_s16b(&st_ptr->bad_buy);
 
-	/* Read last visit */
 	rd_s32b(&st_ptr->last_visit);
-
-	/* Extract the owner (see above) */
 	st_ptr->owner = own;
 
-	/* Read the items */
 	for (int j = 0; j < num; j++)
 	{
 		object_type forge;
@@ -1469,7 +1373,6 @@ static errr rd_store(player_type *player_ptr, int town_number, int store_number)
 		q_ptr = &forge;
 		object_wipe(q_ptr);
 
-		/* Read the item */
 		rd_item(q_ptr);
 
 		bool is_valid_item = st_ptr->stock_num < (store_number == STORE_HOME ? STORE_INVEN_MAX * 10 : store_number == STORE_MUSEUM ? STORE_INVEN_MAX * 50 : STORE_INVEN_MAX);
@@ -1521,21 +1424,15 @@ static void rd_randomizer(void)
  */
 static void rd_options(void)
 {
-	/* Ignore old options */
 	strip_bytes(16);
 
-	/*** Special info */
-
-	/* Read "delay_factor" */
 	byte b;
 	rd_byte(&b);
 	delay_factor = b;
 
-	/* Read "hitpoint_warn" */
 	rd_byte(&b);
 	hitpoint_warn = b;
 
-	/* Read "mana_warn" */
 	if (h_older_than(1, 7, 0, 0))
 	{
 		mana_warn = 2;
@@ -1546,7 +1443,6 @@ static void rd_options(void)
 		mana_warn = b;
 	}
 
-	/*** Cheating options ***/
 	u16b c;
 	rd_u16b(&c);
 
@@ -1567,31 +1463,21 @@ static void rd_options(void)
 	rd_byte((byte *)&autosave_t);
 	rd_s16b(&autosave_freq);
 
-	/*** Normal Options ***/
-	/* Read the option flags */
 	BIT_FLAGS flag[8];
 	for (int n = 0; n < 8; n++) rd_u32b(&flag[n]);
 
-	/* Read the option masks */
 	BIT_FLAGS mask[8];
 	for (int n = 0; n < 8; n++) rd_u32b(&mask[n]);
 
-	/* Analyze the options */
 	for (int n = 0; n < 8; n++)
 	{
-		/* Analyze the options */
 		for (int i = 0; i < 32; i++)
 		{
-			/* Process valid flags */
 			if (!(mask[n] & (1L << i))) continue;
-
-			/* Process valid flags */
 			if (!(option_mask[n] & (1L << i))) continue;
 
-			/* Set */
 			if (flag[n] & (1L << i))
 			{
-				/* Set */
 				option_flag[n] |= (1L << i);
 			}
 			else
@@ -1623,33 +1509,20 @@ static void rd_options(void)
 		else option_flag[5] |= (0x00000001 << 3);
 	}
 
-	/* Extract the options */
 	extract_option_vars();
-
-	/*** Window Options ***/
-
-	/* Read the window flags */
 	for (int n = 0; n < 8; n++) rd_u32b(&flag[n]);
 
-	/* Read the window masks */
 	for (int n = 0; n < 8; n++) rd_u32b(&mask[n]);
 
-	/* Analyze the options */
 	for (int n = 0; n < 8; n++)
 	{
-		/* Analyze the options */
 		for (int i = 0; i < 32; i++)
 		{
-			/* Process valid flags */
 			if (!(mask[n] & (1L << i))) continue;
-
-			/* Process valid flags */
 			if (!(window_mask[n] & (1L << i))) continue;
 
-			/* Set */
 			if (flag[n] & (1L << i))
 			{
-				/* Set */
 				window_flag[n] |= (1L << i);
 			}
 			else
@@ -1722,12 +1595,10 @@ static void load_quick_start(void)
 
 	for (int i = 0; i < 4; i++) rd_string(previous_char.history[i], sizeof(previous_char.history[i]));
 
-	/* UNUSED : Was number of random quests */
-	rd_byte(&tmp8u);
-
 	rd_byte(&tmp8u);
 	previous_char.quick_ok = (bool)tmp8u;
 }
+
 
 /*!
  * @brief その他の情報を読み込む / Read the "extra" information
@@ -1736,40 +1607,38 @@ static void load_quick_start(void)
 static void rd_extra(player_type *creature_ptr)
 {
 	rd_string(creature_ptr->name, sizeof(creature_ptr->name));
-
 	rd_string(creature_ptr->died_from, sizeof(creature_ptr->died_from));
-
 	if (!h_older_than(1, 7, 0, 1))
 	{
 		char buf[1024];
-
-		/* Read the message */
 		rd_string(buf, sizeof buf);
 		if (buf[0]) creature_ptr->last_message = string_make(buf);
 	}
 
 	load_quick_start();
-
 	for (int i = 0; i < 4; i++)
 	{
 		rd_string(creature_ptr->history[i], sizeof(creature_ptr->history[i]));
 	}
 
-	/* Class/Race/Seikaku/Gender/Spells */
 	byte tmp8u;
 	rd_byte(&tmp8u);
 	creature_ptr->prace = (RACE_IDX)tmp8u;
+
 	rd_byte(&tmp8u);
 	creature_ptr->pclass = (CLASS_IDX)tmp8u;
+
 	rd_byte(&tmp8u);
 	creature_ptr->pseikaku = (CHARACTER_IDX)tmp8u;
+
 	rd_byte(&creature_ptr->psex);
 	rd_byte(&tmp8u);
 	creature_ptr->realm1 = (REALM_IDX)tmp8u;
+
 	rd_byte(&tmp8u);
 	creature_ptr->realm2 = (REALM_IDX)tmp8u;
-	rd_byte(&tmp8u);
 
+	rd_byte(&tmp8u);
 	if (z_older_than(10, 4, 4))
 	{
 		if (creature_ptr->realm1 == 9) creature_ptr->realm1 = REALM_MUSIC;
@@ -1778,17 +1647,14 @@ static void rd_extra(player_type *creature_ptr)
 		if (creature_ptr->realm2 == 10) creature_ptr->realm2 = REALM_HISSATSU;
 	}
 
-	/* Special Race/Class info */
 	rd_byte(&tmp8u);
 	creature_ptr->hitdie = tmp8u;
 	rd_u16b(&creature_ptr->expfact);
 
-	/* Age/Height/Weight */
 	rd_s16b(&creature_ptr->age);
 	rd_s16b(&creature_ptr->ht);
 	rd_s16b(&creature_ptr->wt);
 
-	/* Read the stat info */
 	for (int i = 0; i < A_MAX; i++) rd_s16b(&creature_ptr->stat_max[i]);
 	for (int i = 0; i < A_MAX; i++) rd_s16b(&creature_ptr->stat_max_max[i]);
 	for (int i = 0; i < A_MAX; i++) rd_s16b(&creature_ptr->stat_cur[i]);
@@ -1952,12 +1818,9 @@ static void rd_extra(player_type *creature_ptr)
 	}
 
 	rd_s16b(&creature_ptr->town_num);
-
-	/* Read arena and rewards information */
 	rd_s16b(&creature_ptr->arena_number);
 	if (h_older_than(1, 5, 0, 1))
 	{
-		/* Arena loser of previous version was marked number 99 */
 		if (creature_ptr->arena_number >= 99) creature_ptr->arena_number = ARENA_DEFEATED_OLD_VER;
 	}
 
@@ -1971,17 +1834,17 @@ static void rd_extra(player_type *creature_ptr)
 		rd_s16b(&tmp16s);
 		creature_ptr->phase_out = (bool)tmp16s;
 	}
+
 	rd_byte(&creature_ptr->exit_bldg);
 	rd_byte(&tmp8u);
 
 	rd_s16b(&tmp16s);
 	creature_ptr->oldpx = (POSITION)tmp16s;
+
 	rd_s16b(&tmp16s);
 	creature_ptr->oldpy = (POSITION)tmp16s;
-
 	if (z_older_than(10, 3, 13) && !creature_ptr->current_floor_ptr->dun_level && !creature_ptr->current_floor_ptr->inside_arena) { creature_ptr->oldpy = 33; creature_ptr->oldpx = 131; }
 
-	/* Was creature_ptr->rewards[MAX_BACT] */
 	rd_s16b(&tmp16s);
 	for (int i = 0; i < tmp16s; i++)
 	{
@@ -2047,15 +1910,12 @@ static void rd_extra(player_type *creature_ptr)
 		}
 	}
 
-	/* Repair maximum player level */
 	if (creature_ptr->max_plv < creature_ptr->lev) creature_ptr->max_plv = creature_ptr->lev;
 
-	/* More info */
 	strip_bytes(8);
 	rd_s16b(&creature_ptr->sc);
 	rd_s16b(&creature_ptr->concent);
 
-	/* Read the flags */
 	strip_bytes(2); /* Old "rest" */
 	rd_s16b(&creature_ptr->blind);
 	rd_s16b(&creature_ptr->paralyzed);
@@ -2131,12 +1991,9 @@ static void rd_extra(player_type *creature_ptr)
 		creature_ptr->mimic_form = 0;
 		creature_ptr->tim_mimic = 0;
 		creature_ptr->tim_sh_fire = 0;
-
-		/* by henkma */
 		creature_ptr->tim_reflect = 0;
 		creature_ptr->multishadow = 0;
 		creature_ptr->dustrobe = 0;
-
 		creature_ptr->chaos_patron = ((creature_ptr->age + creature_ptr->sc) % MAX_PATRON);
 		creature_ptr->muta1 = 0;
 		creature_ptr->muta2 = 0;
@@ -2187,13 +2044,13 @@ static void rd_extra(player_type *creature_ptr)
 			rd_s16b(&creature_ptr->tim_eyeeye);
 		}
 
-		/* by henkma */
 		if (z_older_than(11, 0, 3)) {
 			creature_ptr->tim_reflect = 0;
 			creature_ptr->multishadow = 0;
 			creature_ptr->dustrobe = 0;
 		}
-		else {
+		else
+		{
 			rd_s16b(&creature_ptr->tim_reflect);
 			rd_s16b(&creature_ptr->multishadow);
 			rd_s16b(&creature_ptr->dustrobe);
@@ -2210,9 +2067,7 @@ static void rd_extra(player_type *creature_ptr)
 			rd_s16b(&creature_ptr->vir_types[i]);
 	}
 
-	/* Calc the regeneration modifier for mutations */
 	creature_ptr->mutant_regenerate_mod = calc_mutant_regenerate_mod(creature_ptr);
-
 	if (z_older_than(10, 0, 9))
 	{
 		rd_byte(&tmp8u);
@@ -2239,7 +2094,6 @@ static void rd_extra(player_type *creature_ptr)
 	}
 
 	rd_byte(&creature_ptr->knowledge);
-
 	rd_byte(&tmp8u);
 	creature_ptr->autopick_autoregister = tmp8u ? TRUE : FALSE;
 
@@ -2255,26 +2109,19 @@ static void rd_extra(player_type *creature_ptr)
 	rd_byte((byte *)&preserve_mode);
 	rd_byte((byte *)&creature_ptr->wait_report_score);
 
-	/* Future use */
 	for (int i = 0; i < 48; i++) rd_byte(&tmp8u);
 
-	/* Skip the flags */
 	strip_bytes(12);
-
-	/* Hack -- the two "special seeds" */
 	rd_u32b(&current_world_ptr->seed_flavor);
 	rd_u32b(&current_world_ptr->seed_town);
 
-	/* Special stuff */
 	rd_u16b(&creature_ptr->panic_save);
 	rd_u16b(&current_world_ptr->total_winner);
 	rd_u16b(&current_world_ptr->noscore);
 
-	/* Read "death" */
 	rd_byte(&tmp8u);
 	creature_ptr->is_dead = tmp8u;
 
-	/* Read "feeling" */
 	rd_byte(&creature_ptr->feeling);
 
 	switch (creature_ptr->start_race)
@@ -2289,24 +2136,19 @@ static void rd_extra(player_type *creature_ptr)
 		current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
 		break;
 	}
+
 	current_world_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
-
-	/* Turn when level began */
 	rd_s32b(&creature_ptr->current_floor_ptr->generated_turn);
-
 	if (h_older_than(1, 7, 0, 4))
 	{
 		creature_ptr->feeling_turn = creature_ptr->current_floor_ptr->generated_turn;
 	}
 	else
 	{
-		/* Turn of last "feeling" */
 		rd_s32b(&creature_ptr->feeling_turn);
 	}
 
-	/* Current turn */
 	rd_s32b(&current_world_ptr->game_turn);
-
 	if (z_older_than(10, 3, 12))
 	{
 		current_world_ptr->dungeon_turn = current_world_ptr->game_turn;
@@ -2346,7 +2188,6 @@ static void rd_extra(player_type *creature_ptr)
 		rd_s16b(&creature_ptr->riding);
 	}
 
-	/* Current floor_id */
 	if (h_older_than(1, 5, 0, 0))
 	{
 		creature_ptr->floor_id = 0;
@@ -2362,14 +2203,10 @@ static void rd_extra(player_type *creature_ptr)
 	}
 	else
 	{
-		/* Get number of party_mon array */
 		rd_s16b(&tmp16s);
-
-		/* Strip old temporary preserved pets */
 		for (int i = 0; i < tmp16s; i++)
 		{
 			monster_type dummy_mon;
-
 			rd_monster(creature_ptr, &dummy_mon);
 		}
 	}
@@ -2423,68 +2260,46 @@ static void rd_extra(player_type *creature_ptr)
 static errr rd_inventory(player_type *player_ptr)
 {
 	player_ptr->total_weight = 0;
-
-	/* No items */
 	player_ptr->inven_cnt = 0;
 	player_ptr->equip_cnt = 0;
 
 	if (player_ptr->inventory_list != NULL) C_WIPE(player_ptr->inventory_list, INVEN_TOTAL, object_type);
 	C_MAKE(player_ptr->inventory_list, INVEN_TOTAL, object_type);
 
-	/* Read until done */
 	int slot = 0;
 	while (TRUE)
 	{
-		/* Get the next item index */
 		u16b n;
 		rd_u16b(&n);
 
-		/* Nope, we reached the end */
 		if (n == 0xFFFF) break;
 		object_type forge;
 		object_type *q_ptr;
 		q_ptr = &forge;
 		object_wipe(q_ptr);
 
-		/* Read the item */
 		rd_item(q_ptr);
-
-		/* Hack -- verify item */
 		if (!q_ptr->k_idx) return (53);
 
-		/* Wield equipment */
 		if (n >= INVEN_RARM)
 		{
 			q_ptr->marked |= OM_TOUCHED;
 			object_copy(&player_ptr->inventory_list[n], q_ptr);
-
-			/* Add the weight */
 			player_ptr->total_weight += (q_ptr->number * q_ptr->weight);
-
-			/* One more item */
 			player_ptr->equip_cnt++;
 			continue;
 		}
 
-		/* Warning -- backpack is full */
 		if (player_ptr->inven_cnt == INVEN_PACK)
 		{
 			note(_("持ち物の中のアイテムが多すぎる！", "Too many items in the inventory"));
-
-			/* Fail */
 			return (54);
 		}
 
-		/* Get a slot */
 		n = slot++;
-
 		q_ptr->marked |= OM_TOUCHED;
 		object_copy(&player_ptr->inventory_list[n], q_ptr);
-
-		/* Add the weight */
 		player_ptr->total_weight += (q_ptr->number * q_ptr->weight);
-
-		/* One more item */
 		player_ptr->inven_cnt++;
 	}
 
@@ -2537,8 +2352,6 @@ static void rd_messages(void)
  */
 static errr rd_dungeon_old(player_type *creature_ptr)
 {
-	/*** Basic info ***/
-	/* Header info */
 	s16b tmp16s;
 	rd_s16b(&tmp16s);
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
@@ -2551,9 +2364,7 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		creature_ptr->dungeon_idx = (IDX)tmp8u;
 	}
 
-	/* Set the base level for old versions */
 	floor_ptr->base_level = floor_ptr->dun_level;
-
 	rd_s16b(&tmp16s);
 	floor_ptr->base_level = (DEPTH)tmp16s;
 
@@ -2571,16 +2382,12 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 	rd_s16b(&tmp16s); /* max_panel_rows */
 	rd_s16b(&tmp16s); /* max_panel_cols */
 
-	/* Maximal size */
 	int ymax = floor_ptr->height;
 	int xmax = floor_ptr->width;
 
-	/* Load the dungeon data */
 	for (int x = 0, y = 0; y < ymax; )
 	{
 		u16b info;
-
-		/* Grab RLE info */
 		byte count;
 		rd_byte(&count);
 		if (z_older_than(10, 3, 6))
@@ -2592,118 +2399,73 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		else
 		{
 			rd_u16b(&info);
-
-			/* Decline invalid flags */
 			info &= ~(CAVE_LITE | CAVE_VIEW | CAVE_MNLT | CAVE_MNDK);
 		}
 
-		/* Apply the RLE info */
 		for (int i = count; i > 0; i--)
 		{
 			grid_type *g_ptr;
 			g_ptr = &floor_ptr->grid_array[y][x];
-
-			/* Extract "info" */
 			g_ptr->info = info;
-
-			/* Advance/Wrap */
 			if (++x >= xmax)
 			{
-				/* Wrap */
 				x = 0;
-
-				/* Advance/Wrap */
 				if (++y >= ymax) break;
 			}
 		}
 	}
 
-	/* Load the dungeon data */
 	for (int x = 0, y = 0; y < ymax; )
 	{
-		/* Grab RLE info */
 		byte count;
 		rd_byte(&count);
 		byte tmp8u;
 		rd_byte(&tmp8u);
-
-		/* Apply the RLE info */
 		for (int i = count; i > 0; i--)
 		{
 			grid_type *g_ptr;
 			g_ptr = &floor_ptr->grid_array[y][x];
-
-			/* Extract "feat" */
 			g_ptr->feat = (s16b)tmp8u;
-
-			/* Advance/Wrap */
 			if (++x >= xmax)
 			{
-				/* Wrap */
 				x = 0;
-
-				/* Advance/Wrap */
 				if (++y >= ymax) break;
 			}
 		}
 	}
 
-	/* Load the dungeon data */
 	for (int x = 0, y = 0; y < ymax; )
 	{
-		/* Grab RLE info */
 		byte count;
 		rd_byte(&count);
 		byte tmp8u;
 		rd_byte(&tmp8u);
-
-		/* Apply the RLE info */
 		for (int i = count; i > 0; i--)
 		{
 			grid_type *g_ptr;
 			g_ptr = &floor_ptr->grid_array[y][x];
-
-			/* Extract "mimic" */
 			g_ptr->mimic = (s16b)tmp8u;
-
-			/* Advance/Wrap */
 			if (++x >= xmax)
 			{
-				/* Wrap */
 				x = 0;
-
-				/* Advance/Wrap */
 				if (++y >= ymax) break;
 			}
 		}
 	}
 
-	/*** Run length decoding ***/
-
-	/* Load the dungeon data */
 	for (int x = 0, y = 0; y < ymax; )
 	{
-		/* Grab RLE info */
 		byte count;
 		rd_byte(&count);
 		rd_s16b(&tmp16s);
-
-		/* Apply the RLE info */
 		for (int i = count; i > 0; i--)
 		{
 			grid_type *g_ptr;
 			g_ptr = &floor_ptr->grid_array[y][x];
-
-			/* Extract "feat" */
 			g_ptr->special = tmp16s;
-
-			/* Advance/Wrap */
 			if (++x >= xmax)
 			{
-				/* Wrap */
 				x = 0;
-
-				/* Advance/Wrap */
 				if (++y >= ymax) break;
 			}
 		}
@@ -2715,7 +2477,6 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		{
 			for (int x = 0; x < xmax; x++)
 			{
-				/* Wipe old unused flags */
 				floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 			}
 		}
@@ -2761,8 +2522,6 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 				{
 					g_ptr->mimic = feat_mirror;
 				}
-
-				/* Runes will be mimics and flags */
 				else if ((g_ptr->feat == OLD_FEAT_MINOR_GLYPH) ||
 					(g_ptr->feat == OLD_FEAT_GLYPH))
 				{
@@ -2770,16 +2529,12 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 					g_ptr->mimic = g_ptr->feat;
 					g_ptr->feat = feat_floor;
 				}
-
-				/* Hidden traps will be trap terrains mimicing floor */
 				else if (g_ptr->info & CAVE_TRAP)
 				{
 					g_ptr->info &= ~CAVE_TRAP;
 					g_ptr->mimic = g_ptr->feat;
 					g_ptr->feat = choose_random_trap(creature_ptr);
 				}
-
-				/* Another hidden trap */
 				else if (g_ptr->feat == OLD_FEAT_INVIS)
 				{
 					g_ptr->mimic = feat_floor;
@@ -2821,24 +2576,17 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		}
 	}
 
-	/*** Objects ***/
-
-	/* Read the item count */
 	u16b limit;
 	rd_u16b(&limit);
-
-	/* Verify maximum */
 	if (limit > current_world_ptr->max_o_idx)
 	{
 		note(format(_("アイテムの配列が大きすぎる(%d)！", "Too many (%d) object entries!"), limit));
 		return (151);
 	}
 
-	/* Read the dungeon items */
 	for (int i = 1; i < limit; i++)
 	{
 		OBJECT_IDX o_idx = o_pop(floor_ptr);
-
 		if (i != o_idx)
 		{
 			note(format(_("アイテム配置エラー (%d <> %d)", "Object allocation error (%d <> %d)"), i, o_idx));
@@ -2848,7 +2596,6 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		object_type *o_ptr;
 		o_ptr = &floor_ptr->o_list[o_idx];
 		rd_item(o_ptr);
-
 		if (OBJECT_IS_HELD_MONSTER(o_ptr))
 		{
 			monster_type *m_ptr;
@@ -2864,26 +2611,18 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		g_ptr->o_idx = o_idx;
 	}
 
-	/*** Monsters ***/
-	/* Read the monster count */
 	rd_u16b(&limit);
-
-	/* Hack -- verify */
 	if (limit > current_world_ptr->max_m_idx)
 	{
 		note(format(_("モンスターの配列が大きすぎる(%d)！", "Too many (%d) monster entries!"), limit));
 		return (161);
 	}
 
-	/* Read the monsters */
 	for (int i = 1; i < limit; i++)
 	{
 		MONSTER_IDX m_idx;
 		monster_type *m_ptr;
-
-		/* Get a new record */
 		m_idx = m_pop(creature_ptr);
-
 		if (i != m_idx)
 		{
 			note(format(_("モンスター配置エラー (%d <> %d)", "Monster allocation error (%d <> %d)"), i, m_idx));
@@ -2898,11 +2637,11 @@ static errr rd_dungeon_old(player_type *creature_ptr)
 		real_r_ptr(m_ptr)->cur_num++;
 	}
 
-	/* The dungeon is ready */
 	if (z_older_than(10, 3, 13) && !floor_ptr->dun_level && !floor_ptr->inside_arena)
 		current_world_ptr->character_dungeon = FALSE;
 	else
 		current_world_ptr->character_dungeon = TRUE;
+
 	return 0;
 }
 
@@ -2927,16 +2666,10 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 	grid_template_type *templates;
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	clear_cave(player_ptr);
-
-	/* Mega-Hack -- no player yet */
 	player_ptr->x = player_ptr->y = 0;
-
-	/*** Basic info ***/
-	/* Dungeon floor specific info follows */
 
 	if (!sf_ptr)
 	{
-		/*** Not a saved floor ***/
 		s16b tmp16s;
 		rd_s16b(&tmp16s);
 		floor_ptr->dun_level = (DEPTH)tmp16s;
@@ -2944,7 +2677,6 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 	}
 	else
 	{
-		/*** The saved floor ***/
 		s16b tmp16s;
 		rd_s16b(&tmp16s);
 		if (tmp16s != sf_ptr->floor_id) return 171;
@@ -2992,21 +2724,13 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 
 	rd_byte(&player_ptr->feeling);
 
-	/*** Read template for grid_type ***/
-
-	/* Read the template count */
 	u16b limit;
 	rd_u16b(&limit);
-
-	/* Allocate the "template" array */
 	C_MAKE(templates, limit, grid_template_type);
 
-	/* Read the templates */
 	for (int i = 0; i < limit; i++)
 	{
 		grid_template_type *ct_ptr = &templates[i];
-
-		/* Read it */
 		rd_u16b(&tmp16u);
 		ct_ptr->info = (BIT_FLAGS)tmp16u;
 		if (h_older_than(1, 7, 0, 2))
@@ -3022,23 +2746,18 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 			rd_s16b(&ct_ptr->feat);
 			rd_s16b(&ct_ptr->mimic);
 		}
+
 		rd_s16b(&ct_ptr->special);
 	}
 
-	/* Maximal size */
 	POSITION ymax = floor_ptr->height;
 	POSITION xmax = floor_ptr->width;
-
-	/* Load the dungeon data */
 	for (POSITION x = 0, y = 0; y < ymax; )
 	{
-		u16b id;
-
-		/* Grab RLE info */
 		byte count;
 		rd_byte(&count);
 
-		id = 0;
+		u16b id = 0;
 		byte tmp8u;
 		do
 		{
@@ -3046,7 +2765,6 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 			id += tmp8u;
 		} while (tmp8u == MAX_UCHAR);
 
-		/* Apply the RLE info */
 		for (int i = count; i > 0; i--)
 		{
 			grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -3055,13 +2773,9 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 			g_ptr->mimic = templates[id].mimic;
 			g_ptr->special = templates[id].special;
 
-			/* Advance/Wrap */
 			if (++x >= xmax)
 			{
-				/* Wrap */
 				x = 0;
-
-				/* Advance/Wrap */
 				if (++y >= ymax) break;
 			}
 		}
@@ -3098,94 +2812,49 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 		}
 	}
 
-	/* Free the "template" array */
 	C_KILL(templates, limit, grid_template_type);
-
-
-	/*** Objects ***/
-
-	/* Read the item count */
 	rd_u16b(&limit);
-
-	/* Verify maximum */
 	if (limit > current_world_ptr->max_o_idx) return 151;
-
-	/* Read the dungeon items */
 	for (int i = 1; i < limit; i++)
 	{
 		OBJECT_IDX o_idx;
 		object_type *o_ptr;
-
-
-		/* Get a new record */
 		o_idx = o_pop(floor_ptr);
-
 		if (i != o_idx) return 152;
 
-		/* Acquire place */
 		o_ptr = &floor_ptr->o_list[o_idx];
-
-		/* Read the item */
 		rd_item(o_ptr);
 
 		if (OBJECT_IS_HELD_MONSTER(o_ptr))
 		{
 			monster_type *m_ptr;
 			m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
-
-			/* Build a stack */
 			o_ptr->next_o_idx = m_ptr->hold_o_idx;
-
 			m_ptr->hold_o_idx = o_idx;
 		}
-
-		/* Dungeon */
 		else
 		{
-			/* Access the item location */
 			grid_type *g_ptr = &floor_ptr->grid_array[o_ptr->iy][o_ptr->ix];
-
-			/* Build a stack */
 			o_ptr->next_o_idx = g_ptr->o_idx;
-
 			g_ptr->o_idx = o_idx;
 		}
 	}
 
-
-	/*** Monsters ***/
-
-	/* Read the monster count */
 	rd_u16b(&limit);
-
-	/* Hack -- verify */
 	if (limit > current_world_ptr->max_m_idx) return 161;
 
-	/* Read the monsters */
 	for (int i = 1; i < limit; i++)
 	{
 		grid_type *g_ptr;
 		MONSTER_IDX m_idx;
 		monster_type *m_ptr;
-
-		/* Get a new record */
 		m_idx = m_pop(player_ptr);
-
 		if (i != m_idx) return 162;
 
 		m_ptr = &floor_ptr->m_list[m_idx];
-
-		/* Read the monster */
 		rd_monster(player_ptr, m_ptr);
-
-
-		/* Access grid */
 		g_ptr = &floor_ptr->grid_array[m_ptr->fy][m_ptr->fx];
-
-		/* Mark the location */
 		g_ptr->m_idx = m_idx;
-
-		/* Count */
 		real_r_ptr(m_ptr)->cur_num++;
 	}
 
@@ -3203,16 +2872,11 @@ static errr rd_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
  */
 static errr rd_dungeon(player_type *player_ptr)
 {
-	/* Initialize saved_floors array and temporary files */
 	init_saved_floors(player_ptr, FALSE);
-
-	/* Older method */
 	errr err = 0;
 	if (h_older_than(1, 5, 0, 0))
 	{
 		err = rd_dungeon_old(player_ptr);
-
-		/* Prepare floor_id of current floor */
 		if (player_ptr->dungeon_idx)
 		{
 			player_ptr->floor_id = get_new_floor_id(player_ptr);
@@ -3222,31 +2886,18 @@ static errr rd_dungeon(player_type *player_ptr)
 		return err;
 	}
 
-	/*** Meta info ***/
-	/* Number of floor_id used from birth */
 	rd_s16b(&max_floor_id);
-
-	/* Current dungeon type */
 	byte_hack tmp8u;
 	rd_byte(&tmp8u);
 	player_ptr->dungeon_idx = (DUNGEON_IDX)tmp8u;
-
-	/* Number of the saved_floors array elements */
 	byte num;
 	rd_byte(&num);
-
-	/*** No saved floor (On the surface etc.) ***/
-	if (!num)
+	if (num == 0)
 	{
-		/* Read the current floor data */
 		err = rd_saved_floor(player_ptr, NULL);
 	}
-
-	/*** In the dungeon ***/
 	else
 	{
-
-		/* Read the saved_floors array */
 		for (int i = 0; i < num; i++)
 		{
 			saved_floor_type *sf_ptr = &saved_floors[i];
@@ -3265,41 +2916,27 @@ static errr rd_dungeon(player_type *player_ptr)
 			rd_s16b(&sf_ptr->lower_floor_id);
 		}
 
-
-		/* Move saved floors data to temporary files */
 		for (int i = 0; i < num; i++)
 		{
 			saved_floor_type *sf_ptr = &saved_floors[i];
-
-			/* Unused element */
 			if (!sf_ptr->floor_id) continue;
-
-			/* Read the failure mark */
 			rd_byte(&tmp8u);
 			if (tmp8u) continue;
 
-			/* Read from the save file */
 			err = rd_saved_floor(player_ptr, sf_ptr);
-
-			/* Error? */
 			if (err) break;
 
-			/* Re-save as temporary saved floor file */
 			if (!save_floor(player_ptr, sf_ptr, SLF_SECOND)) err = 182;
 
-			/* Error? */
 			if (err) break;
 		}
 
-		/* Finally load current floor data from temporary file */
-		if (!err)
+		if (err == 0)
 		{
 			if (!load_floor(player_ptr, get_sf_ptr(player_ptr->floor_id), SLF_SECOND)) err = 183;
 		}
 	}
 
-
-	/*** Error messages ***/
 	switch (err)
 	{
 	case 151:
@@ -3345,117 +2982,79 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 	u32b n_x_check, n_v_check;
 	u32b o_x_check, o_v_check;
 
-	/* Strip the version bytes */
 	strip_bytes(4);
-
-	/* Hack -- decrypt */
 	xor_byte = current_world_ptr->sf_extra;
-
-	/* Clear the checksums */
 	v_check = 0L;
 	x_check = 0L;
 
-	/* Read the version number of the savefile */
 	/* Old savefile will be version 0.0.0.3 */
 	rd_byte(&current_world_ptr->h_ver_extra);
 	rd_byte(&current_world_ptr->h_ver_patch);
 	rd_byte(&current_world_ptr->h_ver_minor);
 	rd_byte(&current_world_ptr->h_ver_major);
 
-	/* Mention the savefile version */
 	note(format(
 		_("バージョン %d.%d.%d.%d のセーブ・ファイルをロード中...", "Loading a %d.%d.%d.%d savefile..."),
 		(current_world_ptr->h_ver_major > 9) ? current_world_ptr->h_ver_major - 10 : current_world_ptr->h_ver_major, current_world_ptr->h_ver_minor, current_world_ptr->h_ver_patch, current_world_ptr->h_ver_extra));
 
-	/* Operating system info */
 	rd_u32b(&current_world_ptr->sf_system);
-
-	/* Time of savefile creation */
 	rd_u32b(&current_world_ptr->sf_when);
-
-	/* Number of resurrections */
 	rd_u16b(&current_world_ptr->sf_lives);
-
-	/* Number of times played */
 	rd_u16b(&current_world_ptr->sf_saves);
 
-	/* Later use (always zero) */
 	u32b tmp32u;
 	rd_u32b(&tmp32u);
 
-	/* Later use (always zero) */
 	u16b tmp16u;
 	rd_u16b(&tmp16u);
 
-	/* Later use (always zero) */
 	byte tmp8u;
 	rd_byte(&tmp8u);
-
-	/* Kanji code */
 	rd_byte(&kanji_code);
 
-	/* Read RNG state */
 	rd_randomizer();
 	if (arg_fiddle) note(_("乱数情報をロードしました", "Loaded Randomizer Info"));
 
-	/* Then the options */
 	rd_options();
 	if (arg_fiddle) note(_("オプションをロードしました", "Loaded Option Flags"));
 
-	/* Then the "messages" */
 	rd_messages();
 	if (arg_fiddle) note(_("メッセージをロードしました", "Loaded Messages"));
 
 	for (int i = 0; i < max_r_idx; i++)
 	{
-		/* Access that monster */
 		monster_race *r_ptr = &r_info[i];
-
-		/* Hack -- Reset the death counter */
 		r_ptr->max_num = 100;
 
 		if (r_ptr->flags1 & RF1_UNIQUE) r_ptr->max_num = 1;
-
-		/* Hack -- Non-unique Nazguls are semi-unique */
 		else if (r_ptr->flags7 & RF7_NAZGUL) r_ptr->max_num = MAX_NAZGUL_NUM;
 	}
 
-	/* Monster Memory */
 	rd_u16b(&tmp16u);
-
-	/* Incompatible save files */
 	if (tmp16u > max_r_idx)
 	{
 		note(format(_("モンスターの種族が多すぎる(%u)！", "Too many (%u) monster races!"), tmp16u));
 		return (21);
 	}
 
-	/* Read the available records */
 	for (int i = 0; i < tmp16u; i++)
 	{
-		/* Read the lore */
 		rd_lore((MONRACE_IDX)i);
 	}
 
 	if (arg_fiddle) note(_("モンスターの思い出をロードしました", "Loaded Monster Memory"));
 
-	/* Object Memory */
 	rd_u16b(&tmp16u);
-
-	/* Incompatible save files */
 	if (tmp16u > max_k_idx)
 	{
 		note(format(_("アイテムの種類が多すぎる(%u)！", "Too many (%u) object kinds!"), tmp16u));
 		return (22);
 	}
 
-	/* Read the object memory */
 	for (int i = 0; i < tmp16u; i++)
 	{
 		object_kind *k_ptr = &k_info[i];
-
 		rd_byte(&tmp8u);
-
 		k_ptr->aware = (tmp8u & 0x01) ? TRUE : FALSE;
 		k_ptr->tried = (tmp8u & 0x02) ? TRUE : FALSE;
 	}
@@ -3468,19 +3067,14 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		byte max_rquests_load;
 		s16b old_inside_quest = creature_ptr->current_floor_ptr->inside_quest;
 
-		/* Number of towns */
 		rd_u16b(&max_towns_load);
-
-		/* Incompatible save files */
 		if (max_towns_load > max_towns)
 		{
 			note(format(_("町が多すぎる(%u)！", "Too many (%u) towns!"), max_towns_load));
 			return (23);
 		}
 
-		/* Number of quests */
 		rd_u16b(&max_quests_load);
-
 		if (z_older_than(11, 0, 7))
 		{
 			max_rquests_load = 10;
@@ -3490,7 +3084,6 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 			rd_byte(&max_rquests_load);
 		}
 
-		/* Incompatible save files */
 		if (max_quests_load > max_q_idx)
 		{
 			note(format(_("クエストが多すぎる(%u)！", "Too many (%u) quests!"), max_quests_load));
@@ -3542,17 +3135,13 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 			q_ptr->max_num = (MONSTER_NUMBER)tmp16s;
 			rd_s16b(&q_ptr->type);
 
-			/* Load quest monster index */
 			rd_s16b(&q_ptr->r_idx);
-
 			if ((q_ptr->type == QUEST_TYPE_RANDOM) && (!q_ptr->r_idx))
 			{
 				determine_random_questor(creature_ptr, &quest[i]);
 			}
 
-			/* Load quest item index */
 			rd_s16b(&q_ptr->k_idx);
-
 			if (q_ptr->k_idx)
 				a_info[q_ptr->k_idx].gen_flags |= TRG_QUESTITEM;
 
@@ -3592,7 +3181,6 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 			quest[OLD_QUEST_WATER_CAVE].status = QUEST_STATUS_UNTAKEN;
 		}
 
-		/* Position in the wilderness */
 		rd_s32b(&creature_ptr->wilderness_x);
 		rd_s32b(&creature_ptr->wilderness_y);
 		if (z_older_than(10, 3, 13))
@@ -3611,14 +3199,12 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		rd_s32b(&wild_x_size);
 		rd_s32b(&wild_y_size);
 
-		/* Incompatible save files */
 		if ((wild_x_size > current_world_ptr->max_wild_x) || (wild_y_size > current_world_ptr->max_wild_y))
 		{
 			note(format(_("荒野が大きすぎる(%u/%u)！", "Wilderness is too big (%u/%u)!"), wild_x_size, wild_y_size));
 			return (23);
 		}
 
-		/* Load the wilderness seeds */
 		for (int i = 0; i < wild_x_size; i++)
 		{
 			for (int j = 0; j < wild_y_size; j++)
@@ -3630,17 +3216,13 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 
 	if (arg_fiddle) note(_("クエスト情報をロードしました", "Loaded Quests"));
 
-	/* Load the Artifacts */
 	rd_u16b(&tmp16u);
-
-	/* Incompatible save files */
 	if (tmp16u > max_a_idx)
 	{
 		note(format(_("伝説のアイテムが多すぎる(%u)！", "Too many (%u) artifacts!"), tmp16u));
 		return (24);
 	}
 
-	/* Read the artifact flags */
 	for (int i = 0; i < tmp16u; i++)
 	{
 		artifact_type *a_ptr = &a_info[i];
@@ -3661,26 +3243,21 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 			rd_s16b(&a_ptr->floor_id);
 		}
 	}
+
 	if (arg_fiddle) note(_("伝説のアイテムをロードしました", "Loaded Artifacts"));
 
-	/* Read the extra stuff */
 	rd_extra(creature_ptr);
 	if (creature_ptr->energy_need < -999) creature_ptr->timewalk = TRUE;
 
 	if (arg_fiddle) note(_("特別情報をロードしました", "Loaded extra information"));
 
-
-	/* Read the player_hp array */
 	rd_u16b(&tmp16u);
-
-	/* Incompatible save files */
 	if (tmp16u > PY_MAX_LEVEL)
 	{
 		note(format(_("ヒットポイント配列が大きすぎる(%u)！", "Too many (%u) hitpoint entries!"), tmp16u));
 		return (25);
 	}
 
-	/* Read the player_hp array */
 	for (int i = 0; i < tmp16u; i++)
 	{
 		s16b tmp16s;
@@ -3688,10 +3265,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		creature_ptr->player_hp[i] = (HIT_POINT)tmp16s;
 	}
 
-	/* Important -- Initialize the sex */
 	sp_ptr = &sex_info[creature_ptr->psex];
-
-	/* Important -- Initialize the race/class */
 	rp_ptr = &race_info[creature_ptr->prace];
 	cp_ptr = &class_info[creature_ptr->pclass];
 	ap_ptr = &seikaku_info[creature_ptr->pseikaku];
@@ -3701,26 +3275,27 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 		roll_hitdice(creature_ptr, 0L);
 	}
+
 	if (z_older_than(10, 3, 2) && (creature_ptr->pclass == CLASS_ARCHER) && !creature_ptr->is_dead)
 	{
 		creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 		roll_hitdice(creature_ptr, 0L);
 	}
+
 	if (z_older_than(10, 2, 6) && (creature_ptr->pclass == CLASS_SORCERER) && !creature_ptr->is_dead)
 	{
 		creature_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
 		roll_hitdice(creature_ptr, 0L);
 	}
+
 	if (z_older_than(10, 4, 7) && (creature_ptr->pclass == CLASS_BLUE_MAGE) && !creature_ptr->is_dead)
 	{
 		creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 		roll_hitdice(creature_ptr, 0L);
 	}
 
-	/* Important -- Initialize the magic */
 	mp_ptr = &m_info[creature_ptr->pclass];
 
-	/* Read spell info */
 	rd_u32b(&creature_ptr->spell_learned1);
 	rd_u32b(&creature_ptr->spell_learned2);
 	rd_u32b(&creature_ptr->spell_worked1);
@@ -3733,7 +3308,6 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		creature_ptr->learned_spells = 0;
 		for (int i = 0; i < 64; i++)
 		{
-			/* Count known spells */
 			if ((i < 32) ?
 				(creature_ptr->spell_learned1 & (1L << i)) :
 				(creature_ptr->spell_learned2 & (1L << (i - 32))))
@@ -3764,11 +3338,9 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		return (21);
 	}
 
-	/* Read number of towns */
 	rd_u16b(&tmp16u);
 	int town_count = tmp16u;
 
-	/* Read the stores */
 	rd_u16b(&tmp16u);
 	for (int i = 1; i < town_count; i++)
 	{
@@ -3836,18 +3408,14 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 
 	if (!creature_ptr->is_dead)
 	{
-		/* Dead players have no dungeon */
 		note(_("ダンジョン復元中...", "Restoring Dungeon..."));
-
 		if (rd_dungeon(creature_ptr))
 		{
 			note(_("ダンジョンデータ読み込み失敗", "Error reading dungeon data"));
 			return (34);
 		}
 
-		/* Read the ghost info */
 		rd_ghost();
-
 		{
 			s32b tmp32s;
 
@@ -3867,26 +3435,16 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 		}
 	}
 
-	/* Save the checksum */
 	n_v_check = v_check;
-
-	/* Read the old checksum */
 	rd_u32b(&o_v_check);
-
-	/* Verify */
 	if (o_v_check != n_v_check)
 	{
 		note(_("チェックサムがおかしい", "Invalid checksum"));
 		return 11;
 	}
 
-	/* Save the encoded checksum */
 	n_x_check = x_check;
-
-	/* Read the checksum */
 	rd_u32b(&o_x_check);
-
-	/* Verify */
 	if (o_x_check != n_x_check)
 	{
 		note(_("エンコードされたチェックサムがおかしい", "Invalid encoded checksum"));
@@ -3904,20 +3462,12 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
  */
 errr rd_savefile_new(player_type *player_ptr)
 {
-	/* Grab permissions */
 	safe_setuid_grab();
-
-	/* The savefile is a binary file */
 	fff = my_fopen(savefile, "rb");
-
-	/* Drop permissions */
 	safe_setuid_drop();
 	if (!fff) return -1;
-
-	/* Call the sub-function */
 	errr err = rd_savefile_new_aux(player_ptr);
 
-	/* Check for errors */
 	if (ferror(fff)) err = -1;
 	my_fclose(fff);
 	return err;
@@ -3935,46 +3485,32 @@ static bool load_floor_aux(player_type *player_ptr, saved_floor_type *sf_ptr)
 	u32b n_x_check, n_v_check;
 	u32b o_x_check, o_v_check;
 
-	/* Hack -- decrypt (read xor_byte) */
 	xor_byte = 0;
 	byte tmp8u;
 	rd_byte(&tmp8u);
 
-	/* Clear the checksums */
 	v_check = 0L;
 	x_check = 0L;
 
-	/* Set the version number to current version */
-	/* Never load old temporary files */
 	current_world_ptr->h_ver_extra = H_VER_EXTRA;
 	current_world_ptr->h_ver_patch = H_VER_PATCH;
 	current_world_ptr->h_ver_minor = H_VER_MINOR;
 	current_world_ptr->h_ver_major = H_VER_MAJOR;
 
-	/* Verify the sign */
 	u32b tmp32u;
 	rd_u32b(&tmp32u);
 	if (saved_floor_file_sign != tmp32u) return FALSE;
 
-	/* Read -- have error? */
 	if (rd_saved_floor(player_ptr, sf_ptr)) return FALSE;
 
-	/* Save the checksum */
 	n_v_check = v_check;
-
-	/* Read the old checksum */
 	rd_u32b(&o_v_check);
 
-	/* Verify */
 	if (o_v_check != n_v_check) return FALSE;
 
-	/* Save the encoded checksum */
 	n_x_check = x_check;
-
-	/* Read the checksum */
 	rd_u32b(&o_x_check);
 
-	/* Verify */
 	if (o_x_check != n_x_check) return FALSE;
 	return TRUE;
 }
@@ -3995,19 +3531,15 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	 */
 #ifdef JP
 # ifdef EUC
-	 /* EUC kanji code */
 	kanji_code = 2;
 # endif
 # ifdef SJIS
-	/* SJIS kanji code */
 	kanji_code = 3;
 # endif
 #else
-	 /* ASCII */
 	kanji_code = 1;
 #endif
 
-	/* We have one file already opened */
 	FILE *old_fff = NULL;
 	byte old_xor_byte = 0;
 	u32b old_v_check = 0;
@@ -4018,7 +3550,6 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 	byte old_h_ver_extra = 0;
 	if (mode & SLF_SECOND)
 	{
-		/* Backup original values */
 		old_fff = fff;
 		old_xor_byte = xor_byte;
 		old_v_check = v_check;
@@ -4029,47 +3560,30 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 		old_h_ver_extra = current_world_ptr->h_ver_extra;
 	}
 
-	/* floor savefile */
 	char floor_savefile[1024];
 	sprintf(floor_savefile, "%s.F%02d", savefile, (int)sf_ptr->savefile_id);
 
-	/* Grab permissions */
 	safe_setuid_grab();
-
-	/* The savefile is a binary file */
 	fff = my_fopen(floor_savefile, "rb");
-
-	/* Drop permissions */
 	safe_setuid_drop();
 
-	/* Couldn't read */
 	bool is_save_successful = TRUE;
 	if (!fff) is_save_successful = FALSE;
 
-	/* Attempt to load */
 	if (is_save_successful)
 	{
-		/* Load saved floor data from file */
 		is_save_successful = load_floor_aux(player_ptr, sf_ptr);
-
-		/* Check for errors */
 		if (ferror(fff)) is_save_successful = FALSE;
 		my_fclose(fff);
 
-		/* Grab permissions */
 		safe_setuid_grab();
-
-		/* Delete the file */
 		if (!(mode & SLF_NO_KILL)) (void)fd_kill(floor_savefile);
 
-		/* Drop permissions */
 		safe_setuid_drop();
 	}
 
-	/* We have one file already opened */
 	if (mode & SLF_SECOND)
 	{
-		/* Restore original values */
 		fff = old_fff;
 		xor_byte = old_xor_byte;
 		v_check = old_v_check;
@@ -4080,7 +3594,6 @@ bool load_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 		current_world_ptr->h_ver_extra = old_h_ver_extra;
 	}
 
-	/* Restore old knowledge */
 	byte old_kanji_code = kanji_code;
 	kanji_code = old_kanji_code;
 	return is_save_successful;
