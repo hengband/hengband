@@ -124,16 +124,11 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
 			((d_info[floor_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 	}
 
-	/* Create secret door */
 	place_closed_door(player_ptr, y, x, type);
-
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 	if (type != DOOR_CURTAIN)
 	{
-		/* Hide by inner wall because this is used in rooms only */
 		g_ptr->mimic = feat_wall_inner;
-
-		/* Floor type terrain cannot hide a door */
 		if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat))
 		{
 			if (have_flag(f_info[g_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[g_ptr->mimic].flags, FF_CAN_FLY))
@@ -179,10 +174,8 @@ void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
 		{ -1, 0, 0, 0,-1 },
 	};
 
-	/* Loop the age and adjust scent values when necessary */
 	if (++scent_when == 254)
 	{
-		/* Scan the entire dungeon */
 		for (POSITION y = 0; y < floor_ptr->height; y++)
 		{
 			for (POSITION x = 0; x < floor_ptr->width; x++)
@@ -192,36 +185,23 @@ void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
 			}
 		}
 
-		/* Restart */
 		scent_when = 126;
 	}
 
-	/* Lay down new scent */
 	for (POSITION i = 0; i < 5; i++)
 	{
 		for (POSITION j = 0; j < 5; j++)
 		{
 			grid_type *g_ptr;
-
-			/* Translate table to map grids */
 			POSITION y = i + subject_ptr->y - 2;
 			POSITION x = j + subject_ptr->x - 2;
-
-			/* Check Bounds */
 			if (!in_bounds(floor_ptr, y, x)) continue;
 
 			g_ptr = &floor_ptr->grid_array[y][x];
-
-			/* Walls, water, and lava cannot hold scent. */
 			if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !is_closed_door(subject_ptr, g_ptr->feat)) continue;
-
-			/* Grid must not be blocked by walls from the character */
 			if (!player_has_los_bold(subject_ptr, y, x)) continue;
-
-			/* Note grids that are too far away */
 			if (scent_adjust[i][j] == -1) continue;
 
-			/* Mark the grid with new scent */
 			g_ptr->when = scent_when + scent_adjust[i][j];
 		}
 	}
@@ -233,12 +213,10 @@ void update_smell(floor_type *floor_ptr, player_type *subject_ptr)
  */
 void forget_flow(floor_type *floor_ptr)
 {
-	/* Check the entire dungeon */
 	for (POSITION y = 0; y < floor_ptr->height; y++)
 	{
 		for (POSITION x = 0; x < floor_ptr->width; x++)
 		{
-			/* Forget the old data */
 			floor_ptr->grid_array[y][x].dist = 0;
 			floor_ptr->grid_array[y][x].cost = 0;
 			floor_ptr->grid_array[y][x].when = 0;
@@ -255,7 +233,6 @@ void forget_flow(floor_type *floor_ptr)
  */
 void add_door(player_type *player_ptr, POSITION x, POSITION y)
 {
-	/* Need to have a wall in the center square */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!is_outer_bold(floor_ptr, y, x)) return;
 
@@ -271,10 +248,7 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
 	if (is_floor_bold(floor_ptr, y - 1, x) && is_floor_bold(floor_ptr, y + 1, x) &&
 		(is_outer_bold(floor_ptr, y, x - 1) && is_outer_bold(floor_ptr, y, x + 1)))
 	{
-		/* secret door */
 		place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
-
-		/* set boundarys so don't get wide doors */
 		place_bold(player_ptr, y, x - 1, gb_solid);
 		place_bold(player_ptr, y, x + 1, gb_solid);
 	}
@@ -290,10 +264,7 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
 	if (is_outer_bold(floor_ptr, y - 1, x) && is_outer_bold(floor_ptr, y + 1, x) &&
 		is_floor_bold(floor_ptr, y, x - 1) && is_floor_bold(floor_ptr, y, x + 1))
 	{
-		/* secret door */
 		place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
-
-		/* set boundarys so don't get wide doors */
 		place_bold(player_ptr, y - 1, x, gb_solid);
 		place_bold(player_ptr, y + 1, x, gb_solid);
 	}
@@ -321,15 +292,12 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 	if (floor_ptr->dun_level >= d_info[player_ptr->dungeon_idx].maxdepth) down_stairs = FALSE;
 	if (quest_number(player_ptr, floor_ptr->dun_level) && (floor_ptr->dun_level > 1)) down_stairs = FALSE;
 
-	/* We can't place both */
 	if (down_stairs && up_stairs)
 	{
-		/* Choose a staircase randomly */
 		if (randint0(100) < 50) up_stairs = FALSE;
 		else down_stairs = FALSE;
 	}
 
-	/* Place the stairs */
 	if (up_stairs) set_cave_feat(floor_ptr, y, x, feat_up_stair);
 	else if (down_stairs) set_cave_feat(floor_ptr, y, x, feat_down_stair);
 }
@@ -380,15 +348,10 @@ void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
  */
 bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	/* Extract the offset */
 	POSITION dy = y2 - y1;
 	POSITION dx = x2 - x1;
-
-	/* Extract the absolute offset */
 	POSITION ay = ABS(dy);
 	POSITION ax = ABS(dx);
-
-	/* Handle adjacent (or identical) grids */
 	if ((ax < 2) && (ay < 2)) return TRUE;
 
 	/* Directly South/North */
@@ -439,15 +402,12 @@ bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITIO
 			}
 		}
 
-		/* Assume los */
 		return TRUE;
 	}
 
-	/* Extract some signs */
 	POSITION sx = (dx < 0) ? -1 : 1;
 	POSITION sy = (dy < 0) ? -1 : 1;
 
-	/* Vertical "knights" */
 	if (ax == 1)
 	{
 		if (ay == 2)
@@ -455,8 +415,6 @@ bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITIO
 			if (cave_los_bold(floor_ptr, y1 + sy, x1)) return TRUE;
 		}
 	}
-
-	/* Horizontal "knights" */
 	else if (ay == 1)
 	{
 		if (ax == 2)
@@ -465,24 +423,15 @@ bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITIO
 		}
 	}
 
-	/* Calculate scale factor div 2 */
 	POSITION f2 = (ax * ay);
-
-	/* Calculate scale factor */
 	POSITION f1 = f2 << 1;
-
-	/* Travel horizontally */
 	POSITION qy;
 	POSITION m;
 	if (ax >= ay)
 	{
-		/* Let m = dy / dx * 2 * (dy * dx) = 2 * dy * dy */
 		qy = ay * ay;
 		m = qy << 1;
-
 		tx = x1 + sx;
-
-		/* Consider the special case where slope == 1. */
 		if (qy == f2)
 		{
 			ty = y1 + sy;
@@ -525,12 +474,9 @@ bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITIO
 	}
 
 	/* Travel vertically */
-	/* Let m = dx / dy * 2 * (dx * dy) = 2 * dx * dx */
 	POSITION qx = ax * ax;
 	m = qx << 1;
-
 	ty = y1 + sy;
-
 	if (qx == f2)
 	{
 		tx = x1 + sx;
@@ -581,18 +527,12 @@ bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITIO
  */
 bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 {
-	/* Check the projection path */
 	u16b grid_g[512];
 	int grid_n = project_path(player_ptr, grid_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, 0);
-
-	/* Identical grid */
 	if (!grid_n) return TRUE;
 
-	/* Final grid */
 	POSITION y = GRID_Y(grid_g[grid_n - 1]);
 	POSITION x = GRID_X(grid_g[grid_n - 1]);
-
-	/* May not end in an unrequested grid */
 	if ((y != y2) || (x != x2)) return FALSE;
 
 	return TRUE;
@@ -611,25 +551,18 @@ bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2,
  */
 void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num)
 {
-	/* Try to summon "num" monsters "near" the given location */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (int k = 0; k < num; k++)
 	{
-		/* Try nine locations */
 		for (int i = 0; i < 9; i++)
 		{
 			int d = 1;
-
-			/* Pick a nearby location */
 			POSITION y, x;
 			scatter(player_ptr, &y, &x, y1, x1, d, 0);
-
-			/* Require "empty" floor grids */
 			grid_type *g_ptr;
 			g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 			if (!is_cave_empty_grid(player_ptr, g_ptr)) continue;
 
-			/* Place the monster (allow groups) */
 			floor_ptr->monster_level = floor_ptr->base_level + 2;
 			(void)place_monster(player_ptr, y, x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 			floor_ptr->monster_level = floor_ptr->base_level;
@@ -649,19 +582,15 @@ void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num)
  */
 bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-	/* Forbid perma-grids */
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
 	if (cave_perma_grid(g_ptr)) return FALSE;
 
-	/* Check objects */
 	OBJECT_IDX next_o_idx = 0;
 	for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr;
 		o_ptr = &floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
-
-		/* Forbid artifact grids */
 		if (object_is_artifact(o_ptr)) return FALSE;
 	}
 
@@ -679,22 +608,14 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
 	feature_type *f_ptr = &f_info[feat];
 	if (!current_world_ptr->character_dungeon)
 	{
-		/* Clear mimic type */
 		g_ptr->mimic = 0;
-
-		/* Change the feature */
 		g_ptr->feat = feat;
-
-		/* Hack -- glow the GLOW terrain */
 		if (have_flag(f_ptr->flags, FF_GLOW) && !(d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 		{
-			DIRECTION i;
-			POSITION yy, xx;
-
-			for (i = 0; i < 9; i++)
+			for (DIRECTION i = 0; i < 9; i++)
 			{
-				yy = y + ddy_ddd[i];
-				xx = x + ddx_ddd[i];
+				POSITION yy = y + ddy_ddd[i];
+				POSITION xx = x + ddx_ddd[i];
 				if (!in_bounds2(floor_ptr, yy, xx)) continue;
 				floor_ptr->grid_array[yy][xx].info |= CAVE_GLOW;
 			}
@@ -706,15 +627,9 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
 	bool old_los = cave_have_flag_bold(floor_ptr, y, x, FF_LOS);
 	bool old_mirror = is_mirror_grid(g_ptr);
 
-	/* Clear mimic type */
 	g_ptr->mimic = 0;
-
-	/* Change the feature */
 	g_ptr->feat = feat;
-
-	/* Remove flag for mirror/glyph */
 	g_ptr->info &= ~(CAVE_OBJECT);
-
 	if (old_mirror && (d_info[floor_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 	{
 		g_ptr->info &= ~(CAVE_GLOW);
@@ -723,14 +638,11 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
 		update_local_illumination(player_ptr, y, x);
 	}
 
-	/* Check for change to boring grid */
 	if (!have_flag(f_ptr->flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 	if (g_ptr->m_idx) update_monster(player_ptr, g_ptr->m_idx, FALSE);
 
 	note_spot(player_ptr, y, x);
 	lite_spot(player_ptr, y, x);
-
-	/* Check if los has changed */
 	if (old_los ^ have_flag(f_ptr->flags, FF_LOS))
 	{
 
@@ -740,11 +652,9 @@ void cave_set_feat(player_type *player_ptr, POSITION y, POSITION x, FEAT_IDX fea
 
 #endif /* COMPLEX_WALL_ILLUMINATION */
 
-		/* Update the visuals */
 		player_ptr->update |= (PU_VIEW | PU_LITE | PU_MON_LITE | PU_MONSTERS);
 	}
 
-	/* Hack -- glow the GLOW terrain */
 	if (!have_flag(f_ptr->flags, FF_GLOW) || (d_info[player_ptr->dungeon_idx].flags1 & DF1_DARKNESS))
 		return;
 
@@ -799,36 +709,23 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 		one_in_((d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_CAVE) ? 16 : 256)) ? DOOR_CURTAIN :
 		((d_info[floor_ptr->dungeon_idx].flags1 & DF1_GLASS_DOOR) ? DOOR_GLASS_DOOR : DOOR_DOOR);
 
-	/* Choose an object */
 	int tmp = randint0(1000);
-
-	/* Open doors (300/1000) */
 	FEAT_IDX feat = feat_none;
 	if (tmp < 300)
 	{
-		/* Create open door */
 		feat = feat_door[type].open;
 	}
-
-	/* Broken doors (100/1000) */
 	else if (tmp < 400)
 	{
-		/* Create broken door */
 		feat = feat_door[type].broken;
 	}
-
-	/* Secret doors (200/1000) */
 	else if (tmp < 600)
 	{
-		/* Create secret door */
 		place_closed_door(player_ptr, y, x, type);
 
 		if (type != DOOR_CURTAIN)
 		{
-			/* Hide. If on the edge of room, use outer wall. */
 			g_ptr->mimic = room ? feat_wall_outer : feat_wall_type[randint0(100)];
-
-			/* Floor type terrain cannot hide a door */
 			if (feat_supports_los(g_ptr->mimic) && !feat_supports_los(g_ptr->feat))
 			{
 				if (have_flag(f_info[g_ptr->mimic].flags, FF_MOVE) || have_flag(f_info[g_ptr->mimic].flags, FF_CAN_FLY))
@@ -839,9 +736,10 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 			}
 		}
 	}
-
-	/* Closed, locked, or stuck doors (400/1000) */
-	else place_closed_door(player_ptr, y, x, type);
+	else
+	{
+		place_closed_door(player_ptr, y, x, type);
+	}
 
 	if (tmp >= 400)
 	{
@@ -876,20 +774,15 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
  */
 void wipe_o_list(floor_type *floor_ptr)
 {
-	/* Delete the existing objects */
 	for (int i = 1; i < floor_ptr->o_max; i++)
 	{
 		object_type *o_ptr = &floor_ptr->o_list[i];
-
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
 
-		/* Mega-Hack -- preserve artifacts */
 		if (!current_world_ptr->character_dungeon || preserve_mode)
 		{
-			/* Hack -- Preserve unknown artifacts */
 			if (object_is_fixed_artifact(o_ptr) && !object_is_known(o_ptr))
 			{
-				/* Mega-Hack -- Preserve the artifact */
 				a_info[o_ptr->name1].cur_num = 0;
 			}
 		}
@@ -898,24 +791,16 @@ void wipe_o_list(floor_type *floor_ptr)
 		{
 			monster_type *m_ptr;
 			m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
-
-			/* Hack -- see above */
 			m_ptr->hold_o_idx = 0;
 			object_wipe(o_ptr);
 			continue;
 		}
 
-		/* Dungeon */
 		grid_type *g_ptr;
-
-		/* Access location */
 		POSITION y = o_ptr->iy;
 		POSITION x = o_ptr->ix;
 
-		/* Access grid */
 		g_ptr = &floor_ptr->grid_array[y][x];
-
-		/* Hack -- see above */
 		g_ptr->o_idx = 0;
 		object_wipe(o_ptr);
 	}
@@ -942,28 +827,19 @@ void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type
 		return;
 	}
 
-	/* Choose an object */
 	int tmp = randint0(400);
-
-	/* Closed doors (300/400) */
 	FEAT_IDX feat = feat_none;
 	if (tmp < 300)
 	{
 		/* Create closed door */
 		feat = feat_door[type].closed;
 	}
-
-	/* Locked doors (99/400) */
 	else if (tmp < 399)
 	{
-		/* Create locked door */
 		feat = feat_locked_door_random(type);
 	}
-
-	/* Stuck doors (1/400) */
 	else
 	{
-		/* Create jammed door */
 		feat = feat_jammed_door_random(type);
 	}
 
@@ -991,14 +867,11 @@ void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type
 void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd)
 {
 	grid_type *g_ptr;
-
-	/* Place traps */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	int y1 = y, x1 = x;
 	int dummy = 0;
 	for (int count = 0; count <= 5; count++)
 	{
-		/* Get a location */
 		while (dummy < SAFE_MAX_ATTEMPTS)
 		{
 			y1 = rand_spread(y, yd);
@@ -1013,13 +886,10 @@ void vault_trap_aux(player_type *player_ptr, POSITION y, POSITION x, POSITION yd
 			msg_print(_("警告！地下室のトラップを配置できません！", "Warning! Could not place vault trap!"));
 		}
 
-		/* Require "naked" floor grids */
 		g_ptr = &floor_ptr->grid_array[y1][x1];
 		if (!is_floor_grid(g_ptr) || g_ptr->o_idx || g_ptr->m_idx) continue;
 
-		/* Place the trap */
 		place_trap(player_ptr, y1, x1);
-
 		break;
 	}
 }
@@ -1035,11 +905,9 @@ bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 {
 	if (!in_bounds(floor_ptr, y, x))
 	{
-		/* Out of bounds */
 		return FALSE;
 	}
 
-	/* Do the real check */
 	if (is_floor_bold(floor_ptr, y, x)) return TRUE;
 
 	return FALSE;
@@ -1059,7 +927,6 @@ bool get_is_floor(floor_type *floor_ptr, POSITION x, POSITION y)
 */
 static int next_to_corr(floor_type *floor_ptr, POSITION y1, POSITION x1)
 {
-	/* Scan adjacent grids */
 	int k = 0;
 	for (int i = 0; i < 4; i++)
 	{
@@ -1068,21 +935,13 @@ static int next_to_corr(floor_type *floor_ptr, POSITION y1, POSITION x1)
 		grid_type *g_ptr;
 		g_ptr = &floor_ptr->grid_array[y][x];
 
-		/* Skip non floors */
 		if (cave_have_flag_grid(g_ptr, FF_WALL)) continue;
-
-		/* Skip non "empty floor" grids */
-		if (!is_floor_grid(g_ptr))
-			continue;
-
-		/* Skip grids inside rooms */
+		if (!is_floor_grid(g_ptr)) continue;
 		if (g_ptr->info & (CAVE_ROOM)) continue;
 
-		/* Count these grids */
 		k++;
 	}
 
-	/* Return the number of corridors */
 	return k;
 }
 
@@ -1098,7 +957,6 @@ static int next_to_corr(floor_type *floor_ptr, POSITION y1, POSITION x1)
 */
 static bool possible_doorway(floor_type *floor_ptr, POSITION y, POSITION x)
 {
-	/* Count the adjacent corridors */
 	if (next_to_corr(floor_ptr, y, x) < 2) return FALSE;
 
 	/* Check Vertical */
@@ -1131,16 +989,14 @@ void try_door(player_type *player_ptr, POSITION y, POSITION x)
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!in_bounds(floor_ptr, y, x)) return;
 
-	/* Ignore walls */
 	if (cave_have_flag_bold(floor_ptr, y, x, FF_WALL)) return;
-
-	/* Ignore room grids */
 	if (floor_ptr->grid_array[y][x].info & (CAVE_ROOM)) return;
 
-	/* Occasional door (if allowed) */
-	if ((randint0(100) < dun_tun_jct) && possible_doorway(floor_ptr, y, x) && !(d_info[player_ptr->dungeon_idx].flags1 & DF1_NO_DOORS))
+	bool can_place_door = randint0(100) < dun_tun_jct;
+	can_place_door &= possible_doorway(floor_ptr, y, x);
+	can_place_door &= !(d_info[player_ptr->dungeon_idx].flags1 & DF1_NO_DOORS);
+	if (can_place_door)
 	{
-		/* Place a door */
 		place_random_door(player_ptr, y, x, FALSE);
 	}
 }
@@ -1188,16 +1044,12 @@ FEAT_IDX conv_dungeon_feat(floor_type *floor_ptr, FEAT_IDX newfeat)
 void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
 {
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-
-	/* Attempt to place 'num' objects */
 	for (; num > 0; --num)
 	{
-		/* Try up to 11 spots looking for empty space */
 		int j = y, k = x;
 		int dummy = 0;
 		for (int i = 0; i < 11; ++i)
 		{
-			/* Pick a random location */
 			while (dummy < SAFE_MAX_ATTEMPTS)
 			{
 				j = rand_spread(y, 2);
@@ -1212,7 +1064,6 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
 				msg_print(_("警告！地下室のアイテムを配置できません！", "Warning! Could not place vault object!"));
 			}
 
-			/* Require "clean" floor space */
 			grid_type *g_ptr;
 			g_ptr = &floor_ptr->grid_array[j][k];
 			if (!is_floor_grid(g_ptr) || g_ptr->o_idx) continue;
@@ -1226,7 +1077,6 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
 				place_gold(player_ptr, j, k);
 			}
 
-			/* Placement accomplished */
 			break;
 		}
 	}
@@ -1287,10 +1137,8 @@ void vault_objects(player_type *player_ptr, POSITION y, POSITION x, int num)
  */
 sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1, POSITION x1, POSITION y2, POSITION x2, BIT_FLAGS flg)
 {
-	/* No path necessary (or allowed) */
 	if ((x1 == x2) && (y1 == y2)) return 0;
 
-	/* Analyze "dy" */
 	POSITION y, x;
 	POSITION ay, ax;
 	POSITION sy, sx;
@@ -1308,7 +1156,6 @@ sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1
 		sy = 1;
 	}
 
-	/* Analyze "dx" */
 	if (x2 < x1)
 	{
 		ax = (x1 - x2);
@@ -1320,10 +1167,7 @@ sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1
 		sx = 1;
 	}
 
-	/* Number of "units" in one "half" grid */
 	int half = (ay * ax);
-
-	/* Number of "units" in one "full" grid */
 	int full = half << 1;
 
 	/* Vertical */
@@ -1332,37 +1176,22 @@ sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1
 	int k = 0;
 	if (ay > ax)
 	{
-		/* Let m = ((dx/dy) * full) = (dx * dx * 2) */
 		m = ax * ax * 2;
-
-		/* Start */
 		y = y1 + sy;
 		x = x1;
-
 		frac = m;
-
 		if (frac > half)
 		{
-			/* Advance (X) part 2 */
 			x += sx;
-
-			/* Advance (X) part 3 */
 			frac -= full;
-
-			/* Track distance */
 			k++;
 		}
 
-		/* Create the projection path */
 		while (TRUE)
 		{
-			/* Save grid */
 			gp[n++] = GRID(y, x);
-
-			/* Hack -- Check maximum range */
 			if ((n + (k >> 1)) >= range) break;
 
-			/* Sometimes stop at destination grid */
 			if (!(flg & (PROJECT_THRU)))
 			{
 				if ((x == x2) && (y == y2)) break;
@@ -1378,11 +1207,9 @@ sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1
 			}
 			else if (!(flg & (PROJECT_PATH)))
 			{
-				/* Always stop at non-initial wall grids */
 				if ((n > 0) && !cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT)) break;
 			}
 
-			/* Sometimes stop at non-initial monsters/players */
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
@@ -1392,27 +1219,17 @@ sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1
 
 			if (!in_bounds(floor_ptr, y, x)) break;
 
-			/* Slant */
 			if (m)
 			{
-				/* Advance (X) part 1 */
 				frac += m;
-
-				/* Horizontal change */
 				if (frac > half)
 				{
-					/* Advance (X) part 2 */
 					x += sx;
-
-					/* Advance (X) part 3 */
 					frac -= full;
-
-					/* Track distance */
 					k++;
 				}
 			}
 
-			/* Advance (Y) */
 			y += sy;
 		}
 
@@ -1422,38 +1239,22 @@ sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1
 	/* Horizontal */
 	if (ax > ay)
 	{
-		/* Let m = ((dy/dx) * full) = (dy * dy * 2) */
 		m = ay * ay * 2;
-
-		/* Start */
 		y = y1;
 		x = x1 + sx;
-
 		frac = m;
-
-		/* Vertical change */
 		if (frac > half)
 		{
-			/* Advance (Y) part 2 */
 			y += sy;
-
-			/* Advance (Y) part 3 */
 			frac -= full;
-
-			/* Track distance */
 			k++;
 		}
 
-		/* Create the projection path */
 		while (TRUE)
 		{
-			/* Save grid */
 			gp[n++] = GRID(y, x);
-
-			/* Hack -- Check maximum range */
 			if ((n + (k >> 1)) >= range) break;
 
-			/* Sometimes stop at destination grid */
 			if (!(flg & (PROJECT_THRU)))
 			{
 				if ((x == x2) && (y == y2)) break;
@@ -1469,11 +1270,9 @@ sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1
 			}
 			else if (!(flg & (PROJECT_PATH)))
 			{
-				/* Always stop at non-initial wall grids */
 				if ((n > 0) && !cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT)) break;
 			}
 
-			/* Sometimes stop at non-initial monsters/players */
 			if (flg & (PROJECT_STOP))
 			{
 				if ((n > 0) &&
@@ -1483,47 +1282,31 @@ sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1
 
 			if (!in_bounds(floor_ptr, y, x)) break;
 
-			/* Slant */
 			if (m)
 			{
-				/* Advance (Y) part 1 */
 				frac += m;
-
-				/* Vertical change */
 				if (frac > half)
 				{
-					/* Advance (Y) part 2 */
 					y += sy;
-
-					/* Advance (Y) part 3 */
 					frac -= full;
-
-					/* Track distance */
 					k++;
 				}
 			}
 
-			/* Advance (X) */
 			x += sx;
 		}
 
 		return n;
 	}
 
-	/* Diagonal */
 	y = y1 + sy;
 	x = x1 + sx;
 
-	/* Create the projection path */
 	while (TRUE)
 	{
-		/* Save grid */
 		gp[n++] = GRID(y, x);
-
-		/* Hack -- Check maximum range */
 		if ((n + (n >> 1)) >= range) break;
 
-		/* Sometimes stop at destination grid */
 		if (!(flg & (PROJECT_THRU)))
 		{
 			if ((x == x2) && (y == y2)) break;
@@ -1539,11 +1322,9 @@ sint project_path(player_type *player_ptr, u16b *gp, POSITION range, POSITION y1
 		}
 		else if (!(flg & (PROJECT_PATH)))
 		{
-			/* Always stop at non-initial wall grids */
 			if ((n > 0) && !cave_have_flag_bold(floor_ptr, y, x, FF_PROJECT)) break;
 		}
 
-		/* Sometimes stop at non-initial monsters/players */
 		if (flg & (PROJECT_STOP))
 		{
 			if ((n > 0) &&
@@ -1573,17 +1354,14 @@ void set_floor(player_type *player_ptr, POSITION x, POSITION y)
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!in_bounds(floor_ptr, y, x))
 	{
-		/* Out of bounds */
 		return;
 	}
 
 	if (floor_ptr->grid_array[y][x].info & CAVE_ROOM)
 	{
-		/* A room border don't touch. */
 		return;
 	}
 
-	/* Set to be floor if is a wall (don't touch lakes). */
 	if (is_extra_bold(floor_ptr, y, x))
 		place_bold(player_ptr, y, x, gb_floor);
 }
@@ -1605,34 +1383,20 @@ void set_floor(player_type *player_ptr, POSITION x, POSITION y)
 void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
 {
 	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
-
-	/* Acquire grid */
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-
 	object_type forge;
 	object_type *q_ptr;
-
-	/* Paranoia -- check bounds */
 	if (!in_bounds(floor_ptr, y, x)) return;
-
-	/* Require floor space */
 	if (!cave_drop_bold(floor_ptr, y, x)) return;
-
-	/* Avoid stacking on other objects */
 	if (g_ptr->o_idx) return;
 
 	q_ptr = &forge;
 	object_wipe(q_ptr);
-
-	/* Make an object (if possible) */
 	if (!make_object(owner_ptr, q_ptr, mode)) return;
 
 	OBJECT_IDX o_idx = o_pop(floor_ptr);
-
-	/* Success */
 	if (o_idx == 0)
 	{
-		/* Hack -- Preserve artifacts */
 		if (object_is_fixed_artifact(q_ptr))
 		{
 			a_info[q_ptr->name1].cur_num = 0;
@@ -1643,14 +1407,10 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
 
 	object_type *o_ptr;
 	o_ptr = &floor_ptr->o_list[o_idx];
-
-	/* Structure Copy */
 	object_copy(o_ptr, q_ptr);
 
 	o_ptr->iy = y;
 	o_ptr->ix = x;
-
-	/* Build a stack */
 	o_ptr->next_o_idx = g_ptr->o_idx;
 
 	g_ptr->o_idx = o_idx;
@@ -1671,41 +1431,27 @@ void place_object(player_type *owner_ptr, POSITION y, POSITION x, BIT_FLAGS mode
  */
 void place_gold(player_type *player_ptr, POSITION y, POSITION x)
 {
-	/* Acquire grid */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-
-	/* Paranoia -- check bounds */
 	if (!in_bounds(floor_ptr, y, x)) return;
-
-	/* Require floor space */
 	if (!cave_drop_bold(floor_ptr, y, x)) return;
-
-	/* Avoid stacking on other objects */
 	if (g_ptr->o_idx) return;
 
 	object_type forge;
 	object_type *q_ptr;
 	q_ptr = &forge;
 	object_wipe(q_ptr);
-
-	/* Make some gold */
 	if (!make_gold(floor_ptr, q_ptr)) return;
 
 	OBJECT_IDX o_idx = o_pop(floor_ptr);
-
-	/* Success */
 	if (o_idx == 0) return;
 
 	object_type *o_ptr;
 	o_ptr = &floor_ptr->o_list[o_idx];
 	object_copy(o_ptr, q_ptr);
 
-	/* Save location */
 	o_ptr->iy = y;
 	o_ptr->ix = x;
-
-	/* Build a stack */
 	o_ptr->next_o_idx = g_ptr->o_idx;
 
 	g_ptr->o_idx = o_idx;
@@ -1727,10 +1473,7 @@ void delete_monster(player_type *player_ptr, POSITION y, POSITION x)
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (!in_bounds(floor_ptr, y, x)) return;
 
-	/* Check the grid */
 	g_ptr = &floor_ptr->grid_array[y][x];
-
-	/* Delete the monster (if any) */
 	if (g_ptr->m_idx) delete_monster_idx(player_ptr, g_ptr->m_idx);
 }
 
@@ -1744,22 +1487,16 @@ void delete_monster(player_type *player_ptr, POSITION y, POSITION x)
  */
 static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX i2)
 {
-	/* Do nothing */
 	if (i1 == i2) return;
 
-	/* Repair objects */
 	object_type *o_ptr;
 	for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++)
 	{
 		o_ptr = &floor_ptr->o_list[i];
-
-		/* Skip "dead" objects */
 		if (!o_ptr->k_idx) continue;
 
-		/* Repair "next" pointers */
 		if (o_ptr->next_o_idx == i1)
 		{
-			/* Repair */
 			o_ptr->next_o_idx = i2;
 		}
 	}
@@ -1770,32 +1507,20 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
 	{
 		monster_type *m_ptr;
 		m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
-
-		/* Repair monster */
 		if (m_ptr->hold_o_idx == i1)
 		{
-			/* Repair */
 			m_ptr->hold_o_idx = i2;
 		}
 	}
-
-	/* Dungeon */
 	else
 	{
-		POSITION y, x;
-
-		/* Acquire location */
-		y = o_ptr->iy;
-		x = o_ptr->ix;
-
-		/* Acquire grid */
+		POSITION y = o_ptr->iy;
+		POSITION x = o_ptr->ix;
 		grid_type *g_ptr;
 		g_ptr = &floor_ptr->grid_array[y][x];
 
-		/* Repair grid */
 		if (g_ptr->o_idx == i1)
 		{
-			/* Repair */
 			g_ptr->o_idx = i2;
 		}
 	}
@@ -1825,8 +1550,6 @@ static void compact_objects_aux(floor_type *floor_ptr, OBJECT_IDX i1, OBJECT_IDX
 void compact_objects(player_type *player_ptr, int size)
 {
 	object_type *o_ptr;
-
-	/* Compact */
 	if (size)
 	{
 		msg_print(_("アイテム情報を圧縮しています...", "Compacting objects..."));
@@ -1834,24 +1557,16 @@ void compact_objects(player_type *player_ptr, int size)
 		player_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	}
 
-	/* Compact at least 'size' objects */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (int num = 0, cnt = 1; num < size; cnt++)
 	{
-		/* Get more vicious each iteration */
 		int cur_lev = 5 * cnt;
-
-		/* Get closer each iteration */
 		int cur_dis = 5 * (20 - cnt);
-
-		/* Examine the objects */
 		for (OBJECT_IDX i = 1; i < floor_ptr->o_max; i++)
 		{
 			o_ptr = &floor_ptr->o_list[i];
 
 			if (!OBJECT_IS_VALID(o_ptr)) continue;
-
-			/* Hack -- High level objects start out "immune" */
 			if (k_info[o_ptr->k_idx].level > cur_lev) continue;
 
 			POSITION y, x;
@@ -1859,32 +1574,23 @@ void compact_objects(player_type *player_ptr, int size)
 			{
 				monster_type *m_ptr;
 				m_ptr = &floor_ptr->m_list[o_ptr->held_m_idx];
-
 				y = m_ptr->fy;
 				x = m_ptr->fx;
 
-				/* Monsters protect their objects */
 				if (randint0(100) < 90) continue;
 			}
-
-			/* Dungeon */
 			else
 			{
 				y = o_ptr->iy;
 				x = o_ptr->ix;
 			}
 
-			/* Nearby objects start out "immune" */
 			if ((cur_dis > 0) && (distance(player_ptr->y, player_ptr->x, y, x) < cur_dis)) continue;
 
-			/* Saving throw */
 			int chance = 90;
-
-			/* Hack -- only compact artifacts in emergencies */
 			if ((object_is_fixed_artifact(o_ptr) || o_ptr->art_name) &&
 				(cnt < 1000)) chance = 100;
 
-			/* Apply the saving throw */
 			if (randint0(100) < chance) continue;
 
 			delete_object_idx(player_ptr, i);
@@ -1892,18 +1598,12 @@ void compact_objects(player_type *player_ptr, int size)
 		}
 	}
 
-	/* Excise dead objects (backwards!) */
 	for (OBJECT_IDX i = floor_ptr->o_max - 1; i >= 1; i--)
 	{
 		o_ptr = &floor_ptr->o_list[i];
-
-		/* Skip real objects */
 		if (o_ptr->k_idx) continue;
 
-		/* Move last object into open hole */
 		compact_objects_aux(floor_ptr, floor_ptr->o_max - 1, i);
-
-		/* Compress "floor_ptr->o_max" */
 		floor_ptr->o_max--;
 	}
 }
@@ -1943,21 +1643,15 @@ void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, P
  */
 void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode)
 {
-	/* Pick a location */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	POSITION nx, ny;
 	while (TRUE)
 	{
-		/* Pick a new location */
 		ny = rand_spread(y, d);
 		nx = rand_spread(x, d);
 
-		/* Ignore annoying locations */
 		if (!in_bounds(floor_ptr, ny, nx)) continue;
-
-		/* Ignore "excessively distant" locations */
 		if ((d > 1) && (distance(y, x, ny, nx) > d)) continue;
-
 		if (mode & PROJECT_LOS)
 		{
 			if (los(player_ptr, y, x, ny, nx)) break;
@@ -1969,4 +1663,17 @@ void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, PO
 
 	*yp = ny;
 	*xp = nx;
+}
+
+
+/*
+ * @brief 指定のマスが光を通すか(LOSフラグを持つか)を返す。 / Aux function -- see below
+ * @param floor_ptr 配置するフロアの参照ポインタ
+ * @param y 指定Y座標
+ * @param x 指定X座標
+ * @return 光を通すならばtrueを返す。
+ */
+bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x)
+{
+	return feat_supports_los(floor_ptr->grid_array[y][x].feat);
 }
