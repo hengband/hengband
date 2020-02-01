@@ -1573,20 +1573,6 @@ static void cave_temp_room_aux(player_type *caster_ptr, POSITION y, POSITION x, 
 
 
 /*!
- * todo このシンタックスシュガーは不要だが、関数ポインタなので安易には消せず……
- * @brief 指定のマスが光を通すか(LOSフラグを持つか)を返す。 / Aux function -- see below
- * @param floor_ptr 配置するフロアの参照ポインタ
- * @param y 指定Y座標
- * @param x 指定X座標
- * @return 光を通すならばtrueを返す。
- */
-static bool cave_pass_lite_bold(floor_type *floor_ptr, POSITION y, POSITION x)
-{
-	return cave_los_bold(floor_ptr, y, x);
-}
-
-
-/*!
  * @brief 部屋内にある一点の周囲がいくつ光を通すかをグローバル変数tmp_pos.nに返す / Aux function -- see below
 * @param caster_ptr プレーヤーへの参照ポインタ
   * @param y 指定Y座標
@@ -1595,7 +1581,7 @@ static bool cave_pass_lite_bold(floor_type *floor_ptr, POSITION y, POSITION x)
  */
 static void cave_temp_lite_room_aux(player_type *caster_ptr, POSITION y, POSITION x)
 {
-	cave_temp_room_aux(caster_ptr, y, x, FALSE, cave_pass_lite_bold);
+	cave_temp_room_aux(caster_ptr, y, x, FALSE, cave_los_bold);
 }
 
 
@@ -1641,7 +1627,7 @@ void lite_room(player_type *caster_ptr, POSITION y1, POSITION x1)
 		POSITION x = tmp_pos.x[i];
 		POSITION y = tmp_pos.y[i];
 
-		if (!cave_pass_lite_bold(floor_ptr, y, x)) continue;
+		if (!cave_los_bold(floor_ptr, y, x)) continue;
 
 		cave_temp_lite_room_aux(caster_ptr, y + 1, x);
 		cave_temp_lite_room_aux(caster_ptr, y - 1, x);

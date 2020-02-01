@@ -219,12 +219,6 @@ extern floor_type floor_info;
 	(have_flag(f_info[(F)].flags, FF_LOS))
 
 
-/*
- * Determine if a "legal" grid supports "los"
- */
-#define cave_los_bold(F,Y,X) \
-	(feat_supports_los((F)->grid_array[(Y)][(X)].feat))
-
 #define cave_los_grid(C) \
 	(feat_supports_los((C)->feat))
 
@@ -394,3 +388,5 @@ extern void delete_monster(player_type *player_ptr, POSITION y, POSITION x);
 extern void compact_objects(player_type *owner_ptr, int size);
 extern void vault_traps(player_type *player_ptr, POSITION y, POSITION x, POSITION yd, POSITION xd, int num);
 extern void scatter(player_type *player_ptr, POSITION *yp, POSITION *xp, POSITION y, POSITION x, POSITION d, BIT_FLAGS mode);
+
+extern bool cave_los_bold(floor_type *floor_ptr, POSITION y, POSITION x);
