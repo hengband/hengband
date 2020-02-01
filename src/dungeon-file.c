@@ -1,32 +1,4 @@
-﻿
-#include "angband.h"
-#include "util.h"
-#include "core.h"
-
-#include "files.h"
-#include "dungeon-file.h"
-#include "rooms-vault.h"
-#include "feature.h"
-#include "grid.h"
-#include "quest.h"
-#include "monster.h"
-#include "files.h"
-#include "player-skill.h"
-#include "player-race.h"
-#include "dungeon.h"
-#include "floor.h"
-#include "bldg.h"
-#include "world.h"
-#include "rooms-vault.h"
-#include "objectkind.h"
-#include "object-ego.h"
-#include "monsterrace.h"
-#include "floor-town.h"
-#include "realm.h"
-
-dungeon_grid letter[255];
-
-/*!
+﻿/*!
  * @file init1.c
  * @brief ゲームデータ初期化1 / Initialization (part 1) -BEN-
  * @date 2014/01/28
@@ -60,19 +32,41 @@ dungeon_grid letter[255];
  */
 
 #include "angband.h"
+#include "util.h"
+#include "core.h"
+
+#include "files.h"
 #include "dungeon-file.h"
-#include "trap.h"
+#include "rooms-vault.h"
+#include "feature.h"
 #include "grid.h"
+#include "quest.h"
 #include "monster.h"
+#include "files.h"
+#include "player-skill.h"
+#include "player-race.h"
+#include "dungeon.h"
+#include "floor.h"
+#include "bldg.h"
+#include "world.h"
+#include "rooms-vault.h"
+#include "objectkind.h"
+#include "object-ego.h"
+#include "monsterrace.h"
+#include "floor-town.h"
+#include "realm.h"
+
+#include "trap.h"
 #include "artifact.h"
 #include "cmd-activate.h"
 #include "term.h"
 #include "wild.h"
-#include "quest.h"
 #include "view-mainwindow.h"
 #include "player-class.h"
 
 #include "init.h"
+
+dungeon_grid letter[255];
 
  /*** Helper arrays for parsing ascii template files ***/
 
@@ -926,18 +920,13 @@ static concptr d_info_flags1[] =
  */
 static bool add_text(u32b *offset, header *head, concptr buf, bool normal_text)
 {
-	/* Hack -- Verify space */
 	if (head->text_size + strlen(buf) + 8 > FAKE_TEXT_SIZE)
 		return FALSE;
 
-	/* New text? */
 	if (*offset == 0)
 	{
-		/* Advance and save the text index */
 		*offset = ++head->text_size;
 	}
-
-	/* Additional text */
 	else if (normal_text)
 	{
 		/*
@@ -956,10 +945,7 @@ static bool add_text(u32b *offset, header *head, concptr buf, bool normal_text)
 #endif
 			)
 		{
-			/* Append a space */
 			*(head->text_ptr + head->text_size) = ' ';
-
-			/* Advance the index */
 			head->text_size++;
 		}
 	}
@@ -983,24 +969,16 @@ static bool add_text(u32b *offset, header *head, concptr buf, bool normal_text)
  */
 static bool add_name(u32b *offset, header *head, concptr buf)
 {
-	/* Hack -- Verify space */
 	if (head->name_size + strlen(buf) + 8 > FAKE_NAME_SIZE)
 		return FALSE;
 
-	/* New name? */
 	if (*offset == 0)
 	{
-		/* Advance and save the name index */
 		*offset = ++head->name_size;
 	}
 
-	/* Append chars to the names */
 	strcpy(head->name_ptr + head->name_size, buf);
-
-	/* Advance the index */
 	head->name_size += strlen(buf);
-
-	/* Success */
 	return TRUE;
 }
 
