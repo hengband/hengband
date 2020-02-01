@@ -58,19 +58,18 @@
 #include "realm-song.h"
 #include "english.h"
 
-/*!
- * @brief プレイヤー周辺の地形を感知する
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @param range 効果範囲
- * @param flag 特定地形ID
- * @param known 地形から危険フラグを外すならTRUE
- * @return 効力があった場合TRUEを返す
- */
+ /*!
+  * @brief プレイヤー周辺の地形を感知する
+  * @param caster_ptr プレーヤーへの参照ポインタ
+  * @param range 効果範囲
+  * @param flag 特定地形ID
+  * @param known 地形から危険フラグを外すならTRUE
+  * @return 効力があった場合TRUEを返す
+  */
 static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, bool known)
 {
 	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	/* Scan the current panel */
 	grid_type *g_ptr;
 	bool detect = FALSE;
 	for (POSITION y = 1; y < caster_ptr->current_floor_ptr->height - 1; y++)
@@ -80,8 +79,6 @@ static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, 
 			int dist = distance(caster_ptr->y, caster_ptr->x, y, x);
 			if (dist > range) continue;
 			g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
-
-			/* Hack -- Safe */
 			if (flag == FF_TRAP)
 			{
 				/* Mark as detected */
@@ -215,11 +212,8 @@ bool detect_objects_gold(player_type *caster_ptr, POSITION range)
 
 		y = o_ptr->iy;
 		x = o_ptr->ix;
-
-		/* Only detect nearby objects */
 		if (distance(caster_ptr->y, caster_ptr->x, y, x) > range2) continue;
 
-		/* Detect "gold" objects */
 		if (o_ptr->tval == TV_GOLD)
 		{
 			o_ptr->marked |= OM_FOUND;
@@ -254,8 +248,6 @@ bool detect_objects_normal(player_type *caster_ptr, POSITION range)
 	POSITION range2 = range;
 	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range2 /= 3;
 
-	/* Scan objects */
-	POSITION y, x;
 	bool detect = FALSE;
 	for (OBJECT_IDX i = 1; i < caster_ptr->current_floor_ptr->o_max; i++)
 	{
@@ -264,13 +256,11 @@ bool detect_objects_normal(player_type *caster_ptr, POSITION range)
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
 		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
 
-		y = o_ptr->iy;
-		x = o_ptr->ix;
+		POSITION y = o_ptr->iy;
+		POSITION x = o_ptr->ix;
 
-		/* Only detect nearby objects */
 		if (distance(caster_ptr->y, caster_ptr->x, y, x) > range2) continue;
 
-		/* Detect "real" objects */
 		if (o_ptr->tval != TV_GOLD)
 		{
 			o_ptr->marked |= OM_FOUND;
@@ -312,9 +302,7 @@ bool detect_objects_magic(player_type *caster_ptr, POSITION range)
 {
 	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	/* Scan all objects */
 	OBJECT_TYPE_VALUE tv;
-	POSITION y, x;
 	bool detect = FALSE;
 	for (OBJECT_IDX i = 1; i < caster_ptr->current_floor_ptr->o_max; i++)
 	{
@@ -323,32 +311,28 @@ bool detect_objects_magic(player_type *caster_ptr, POSITION range)
 		if (!OBJECT_IS_VALID(o_ptr)) continue;
 		if (OBJECT_IS_HELD_MONSTER(o_ptr)) continue;
 
-		y = o_ptr->iy;
-		x = o_ptr->ix;
+		POSITION y = o_ptr->iy;
+		POSITION x = o_ptr->ix;
 
-		/* Only detect nearby objects */
 		if (distance(caster_ptr->y, caster_ptr->x, y, x) > range) continue;
 
-		/* Examine the tval */
 		tv = o_ptr->tval;
-
-		/* Artifacts, misc magic items, or enchanted wearables */
 		if (object_is_artifact(o_ptr) ||
 			object_is_ego(o_ptr) ||
-		    (tv == TV_WHISTLE) ||
-		    (tv == TV_AMULET) ||
+			(tv == TV_WHISTLE) ||
+			(tv == TV_AMULET) ||
 			(tv == TV_RING) ||
-		    (tv == TV_STAFF) ||
+			(tv == TV_STAFF) ||
 			(tv == TV_WAND) ||
 			(tv == TV_ROD) ||
-		    (tv == TV_SCROLL) ||
+			(tv == TV_SCROLL) ||
 			(tv == TV_POTION) ||
-		    (tv == TV_LIFE_BOOK) ||
+			(tv == TV_LIFE_BOOK) ||
 			(tv == TV_SORCERY_BOOK) ||
-		    (tv == TV_NATURE_BOOK) ||
+			(tv == TV_NATURE_BOOK) ||
 			(tv == TV_CHAOS_BOOK) ||
-		    (tv == TV_DEATH_BOOK) ||
-		    (tv == TV_TRUMP_BOOK) ||
+			(tv == TV_DEATH_BOOK) ||
+			(tv == TV_TRUMP_BOOK) ||
 			(tv == TV_ARCANE_BOOK) ||
 			(tv == TV_CRAFT_BOOK) ||
 			(tv == TV_DAEMON_BOOK) ||
@@ -356,9 +340,8 @@ bool detect_objects_magic(player_type *caster_ptr, POSITION range)
 			(tv == TV_MUSIC_BOOK) ||
 			(tv == TV_HISSATSU_BOOK) ||
 			(tv == TV_HEX_BOOK) ||
-		    ((o_ptr->to_a > 0) || (o_ptr->to_h + o_ptr->to_d > 0)))
+			((o_ptr->to_a > 0) || (o_ptr->to_h + o_ptr->to_d > 0)))
 		{
-			/* Memorize the item */
 			o_ptr->marked |= OM_FOUND;
 			lite_spot(caster_ptr, y, x);
 			detect = TRUE;
@@ -384,7 +367,6 @@ bool detect_monsters_normal(player_type *caster_ptr, POSITION range)
 {
 	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	POSITION y, x;
 	bool flag = FALSE;
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
@@ -392,18 +374,13 @@ bool detect_monsters_normal(player_type *caster_ptr, POSITION range)
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
-		y = m_ptr->fy;
-		x = m_ptr->fx;
-
-		/* Only detect nearby monsters */
+		POSITION y = m_ptr->fy;
+		POSITION x = m_ptr->fx;
 		if (distance(caster_ptr->y, caster_ptr->x, y, x) > range) continue;
 
-		/* Detect all non-invisible monsters */
 		if (!(r_ptr->flags2 & RF2_INVISIBLE) || caster_ptr->see_inv)
 		{
-			/* Repair visibility later */
 			repair_monsters = TRUE;
-
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(caster_ptr, i, FALSE);
 			flag = TRUE;
@@ -430,7 +407,6 @@ bool detect_monsters_invis(player_type *caster_ptr, POSITION range)
 {
 	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	POSITION y, x;
 	bool flag = FALSE;
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
@@ -439,24 +415,19 @@ bool detect_monsters_invis(player_type *caster_ptr, POSITION range)
 
 		if (!monster_is_valid(m_ptr)) continue;
 
-		y = m_ptr->fy;
-		x = m_ptr->fx;
+		POSITION y = m_ptr->fy;
+		POSITION x = m_ptr->fx;
 
-		/* Only detect nearby monsters */
 		if (distance(caster_ptr->y, caster_ptr->x, y, x) > range) continue;
 
-		/* Detect invisible monsters */
 		if (r_ptr->flags2 & RF2_INVISIBLE)
 		{
-			/* Update monster recall window */
 			if (caster_ptr->monster_race_idx == m_ptr->r_idx)
 			{
 				caster_ptr->window |= (PW_MONSTER);
 			}
 
-			/* Repair visibility later */
 			repair_monsters = TRUE;
-
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(caster_ptr, i, FALSE);
 			flag = TRUE;
@@ -472,6 +443,7 @@ bool detect_monsters_invis(player_type *caster_ptr, POSITION range)
 	return flag;
 }
 
+
 /*!
  * @brief 邪悪なモンスターを感知する / Detect all "evil" monsters on current panel
  * @param caster_ptr プレーヤーへの参照ポインタ
@@ -482,7 +454,6 @@ bool detect_monsters_evil(player_type *caster_ptr, POSITION range)
 {
 	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	POSITION y, x;
 	bool flag = FALSE;
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
@@ -490,30 +461,23 @@ bool detect_monsters_evil(player_type *caster_ptr, POSITION range)
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
-		y = m_ptr->fy;
-		x = m_ptr->fx;
+		POSITION y = m_ptr->fy;
+		POSITION x = m_ptr->fx;
 
-		/* Only detect nearby monsters */
 		if (distance(caster_ptr->y, caster_ptr->x, y, x) > range) continue;
 
-		/* Detect evil monsters */
 		if (r_ptr->flags3 & RF3_EVIL)
 		{
 			if (is_original_ap(m_ptr))
 			{
-				/* Take note that they are evil */
 				r_ptr->r_flags3 |= (RF3_EVIL);
-
-				/* Update monster recall window */
 				if (caster_ptr->monster_race_idx == m_ptr->r_idx)
 				{
 					caster_ptr->window |= (PW_MONSTER);
 				}
 			}
 
-			/* Repair visibility later */
 			repair_monsters = TRUE;
-
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(caster_ptr, i, FALSE);
 			flag = TRUE;
@@ -528,6 +492,7 @@ bool detect_monsters_evil(player_type *caster_ptr, POSITION range)
 	return flag;
 }
 
+
 /*!
  * @brief 無生命のモンスターを感知する(アンデッド、悪魔系を含む) / Detect all "nonliving", "undead" or "demonic" monsters on current panel
  * @param caster_ptr プレーヤーへの参照ポインタ
@@ -538,31 +503,24 @@ bool detect_monsters_nonliving(player_type *caster_ptr, POSITION range)
 {
 	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	POSITION y, x;
 	bool flag = FALSE;
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 
-		y = m_ptr->fy;
-		x = m_ptr->fx;
-
-		/* Only detect nearby monsters */
+		POSITION y = m_ptr->fy;
+		POSITION x = m_ptr->fx;
 		if (distance(caster_ptr->y, caster_ptr->x, y, x) > range) continue;
 
-		/* Detect non-living monsters */
 		if (!monster_living(m_ptr->r_idx))
 		{
-			/* Update monster recall window */
 			if (caster_ptr->monster_race_idx == m_ptr->r_idx)
 			{
 				caster_ptr->window |= (PW_MONSTER);
 			}
 
-			/* Repair visibility later */
 			repair_monsters = TRUE;
-
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(caster_ptr, i, FALSE);
 			flag = TRUE;
@@ -577,6 +535,7 @@ bool detect_monsters_nonliving(player_type *caster_ptr, POSITION range)
 	return flag;
 }
 
+
 /*!
  * @brief 精神のあるモンスターを感知する / Detect all monsters it has mind on current panel
  * @param caster_ptr プレーヤーへの参照ポインタ
@@ -587,7 +546,6 @@ bool detect_monsters_mind(player_type *caster_ptr, POSITION range)
 {
 	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	POSITION y, x;
 	bool flag = FALSE;
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
@@ -595,24 +553,19 @@ bool detect_monsters_mind(player_type *caster_ptr, POSITION range)
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
-		y = m_ptr->fy;
-		x = m_ptr->fx;
+		POSITION y = m_ptr->fy;
+		POSITION x = m_ptr->fx;
 
-		/* Only detect nearby monsters */
 		if (distance(caster_ptr->y, caster_ptr->x, y, x) > range) continue;
 
-		/* Detect non-living monsters */
 		if (!(r_ptr->flags2 & RF2_EMPTY_MIND))
 		{
-			/* Update monster recall window */
 			if (caster_ptr->monster_race_idx == m_ptr->r_idx)
 			{
 				caster_ptr->window |= (PW_MONSTER);
 			}
 
-			/* Repair visibility later */
 			repair_monsters = TRUE;
-
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(caster_ptr, i, FALSE);
 			flag = TRUE;
@@ -639,7 +592,6 @@ bool detect_monsters_string(player_type *caster_ptr, POSITION range, concptr Mat
 {
 	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	POSITION y, x;
 	bool flag = FALSE;
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
@@ -647,24 +599,19 @@ bool detect_monsters_string(player_type *caster_ptr, POSITION range, concptr Mat
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
-		y = m_ptr->fy;
-		x = m_ptr->fx;
+		POSITION y = m_ptr->fy;
+		POSITION x = m_ptr->fx;
 
-		/* Only detect nearby monsters */
 		if (distance(caster_ptr->y, caster_ptr->x, y, x) > range) continue;
 
-		/* Detect monsters with the same symbol */
 		if (my_strchr(Match, r_ptr->d_char))
 		{
-			/* Update monster recall window */
 			if (caster_ptr->monster_race_idx == m_ptr->r_idx)
 			{
 				caster_ptr->window |= (PW_MONSTER);
 			}
 
-			/* Repair visibility later */
 			repair_monsters = TRUE;
-
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(caster_ptr, i, FALSE);
 			flag = TRUE;
@@ -680,6 +627,7 @@ bool detect_monsters_string(player_type *caster_ptr, POSITION range, concptr Mat
 	return flag;
 }
 
+
 /*!
  * @brief flags3に対応するモンスターを感知する / A "generic" detect monsters routine, tagged to flags3
  * @param caster_ptr プレーヤーへの参照ポインタ
@@ -691,7 +639,6 @@ bool detect_monsters_xxx(player_type *caster_ptr, POSITION range, u32b match_fla
 {
 	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
 
-	POSITION y, x;
 	bool flag = FALSE;
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
@@ -699,30 +646,23 @@ bool detect_monsters_xxx(player_type *caster_ptr, POSITION range, u32b match_fla
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
 
-		y = m_ptr->fy;
-		x = m_ptr->fx;
+		POSITION y = m_ptr->fy;
+		POSITION x = m_ptr->fx;
 
-		/* Only detect nearby monsters */
 		if (distance(caster_ptr->y, caster_ptr->x, y, x) > range) continue;
 
-		/* Detect evil monsters */
 		if (r_ptr->flags3 & (match_flag))
 		{
 			if (is_original_ap(m_ptr))
 			{
-				/* Take note that they are something */
 				r_ptr->r_flags3 |= (match_flag);
-
-				/* Update monster recall window */
 				if (caster_ptr->monster_race_idx == m_ptr->r_idx)
 				{
 					caster_ptr->window |= (PW_MONSTER);
 				}
 			}
 
-			/* Repair visibility later */
 			repair_monsters = TRUE;
-
 			m_ptr->mflag2 |= (MFLAG2_MARK | MFLAG2_SHOW);
 			update_monster(caster_ptr, i, FALSE);
 			flag = TRUE;
@@ -734,12 +674,12 @@ bool detect_monsters_xxx(player_type *caster_ptr, POSITION range, u32b match_fla
 	{
 		switch (match_flag)
 		{
-			case RF3_DEMON:
+		case RF3_DEMON:
 			desc_monsters = _("デーモン", "demons");
-				break;
-			case RF3_UNDEAD:
+			break;
+		case RF3_UNDEAD:
 			desc_monsters = _("アンデッド", "the undead");
-				break;
+			break;
 		}
 
 		msg_format(_("%sの存在を感じとった！", "You sense the presence of %s!"), desc_monsters);
@@ -759,15 +699,9 @@ bool detect_monsters_xxx(player_type *caster_ptr, POSITION range, u32b match_fla
 bool detect_all(player_type *caster_ptr, POSITION range)
 {
 	bool detect = FALSE;
-
-	/* Detect everything */
 	if (detect_traps(caster_ptr, range, TRUE)) detect = TRUE;
 	if (detect_doors(caster_ptr, range)) detect = TRUE;
 	if (detect_stairs(caster_ptr, range)) detect = TRUE;
-
-	/* There are too many hidden treasure.  So... */
-	/* if (detect_treasure(range)) detect = TRUE; */
-
 	if (detect_objects_gold(caster_ptr, range)) detect = TRUE;
 	if (detect_objects_normal(caster_ptr, range)) detect = TRUE;
 	if (detect_monsters_invis(caster_ptr, range)) detect = TRUE;
@@ -791,40 +725,29 @@ bool detect_all(player_type *caster_ptr, POSITION range)
  */
 bool project_all_los(player_type *caster_ptr, EFFECT_ID typ, HIT_POINT dam)
 {
-	/* Mark all (nearby) monsters */
-	POSITION x, y;
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
 
-		y = m_ptr->fy;
-		x = m_ptr->fx;
-
-		/* Require line of sight */
+		POSITION y = m_ptr->fy;
+		POSITION x = m_ptr->fx;
 		if (!player_has_los_bold(caster_ptr, y, x) || !projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x)) continue;
 
-		/* Mark the monster */
 		m_ptr->mflag |= (MFLAG_LOS);
 	}
 
-	/* Affect all marked monsters */
 	BIT_FLAGS flg = PROJECT_JUMP | PROJECT_KILL | PROJECT_HIDE;
 	bool obvious = FALSE;
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
-
-		/* Skip unmarked monsters */
 		if (!(m_ptr->mflag & (MFLAG_LOS))) continue;
 
-		/* Remove mark */
 		m_ptr->mflag &= ~(MFLAG_LOS);
+		POSITION y = m_ptr->fy;
+		POSITION x = m_ptr->fx;
 
-		y = m_ptr->fy;
-		x = m_ptr->fx;
-
-		/* Jump directly to the target monster */
 		if (project(caster_ptr, 0, 0, y, x, dam, typ, flg, -1)) obvious = TRUE;
 	}
 
@@ -936,6 +859,13 @@ bool dispel_monsters(player_type *caster_ptr, HIT_POINT dam)
 }
 
 
+/*!
+ * todo ここにこれがあるのは少し違和感、spells-staffonlyとかに分離したい
+ * @brief 聖浄の杖の効果
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @magic 魔法の効果である場合TRUE (杖と同じ効果の呪文はあったか？ 要調査)
+ * @powerful 効果が増強される時TRUE (TRUEになるタイミングはあるか？ 要調査)
+ */
 bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 {
 	bool ident = FALSE;
@@ -946,16 +876,22 @@ bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 	if (set_afraid(creature_ptr, 0)) ident = TRUE;
 	if (hp_player(creature_ptr, 50)) ident = TRUE;
 	if (set_stun(creature_ptr, 0)) ident = TRUE;
-	if (set_cut(creature_ptr,0)) ident = TRUE;
+	if (set_cut(creature_ptr, 0)) ident = TRUE;
 	return ident;
 }
 
 
+/*!
+ * todo ここにこれがあるのは少し違和感、spells-staffonlyとかに分離したい
+ * @brief 魔力の嵐の杖の効果
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @powerful 効果が増強される時TRUE (TRUEになるタイミングはあるか？ 要調査)
+ */
 bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
 {
 	msg_print(_("強力な魔力が敵を引き裂いた！", "Mighty magics rend your enemies!"));
 	project(creature_ptr, 0, (powerful ? 7 : 5), creature_ptr->y, creature_ptr->x,
-	(randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+		(randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
 
 	bool is_special_class = creature_ptr->pclass != CLASS_MAGE;
 	is_special_class &= creature_ptr->pclass != CLASS_HIGH_MAGE;
@@ -1000,7 +936,7 @@ bool dispel_demons(player_type *caster_ptr, HIT_POINT dam)
  */
 bool crusade(player_type *caster_ptr)
 {
-	return (project_all_los(caster_ptr, GF_CRUSADE, caster_ptr->lev*4));
+	return (project_all_los(caster_ptr, GF_CRUSADE, caster_ptr->lev * 4));
 }
 
 
@@ -1012,30 +948,25 @@ bool crusade(player_type *caster_ptr)
  */
 void aggravate_monsters(player_type *caster_ptr, MONSTER_IDX who)
 {
-	/* Aggravate everyone nearby */
 	bool sleep = FALSE;
 	bool speed = FALSE;
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
-
-		/* Skip aggravating monster (or player) */
 		if (i == who) continue;
 
-		/* Wake up nearby sleeping monsters */
 		if (m_ptr->cdis < MAX_SIGHT * 2)
 		{
-			/* Wake up */
 			if (MON_CSLEEP(m_ptr))
 			{
 				(void)set_monster_csleep(caster_ptr, i, 0);
 				sleep = TRUE;
 			}
+
 			if (!is_pet(m_ptr)) m_ptr->mflag2 |= MFLAG2_NOPET;
 		}
 
-		/* Speed up monsters in line of sight */
 		if (player_has_los_bold(caster_ptr, m_ptr->fy, m_ptr->fx))
 		{
 			if (!is_pet(m_ptr))
@@ -1067,7 +998,6 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	if (is_pet(m_ptr) && !player_cast) return FALSE;
 
-	/* Hack -- Skip Unique Monsters or Quest Monsters */
 	bool resist = FALSE;
 	if (r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) resist = TRUE;
 	else if (r_ptr->flags7 & RF7_UNIQUE2) resist = TRUE;
@@ -1080,7 +1010,6 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-
 			monster_desc(caster_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
 			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_GENOCIDE, m_name);
 		}
@@ -1092,7 +1021,6 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 	{
 		bool see_m = is_seen(m_ptr);
 		GAME_TEXT m_name[MAX_NLEN];
-
 		monster_desc(caster_ptr, m_name, m_ptr, 0);
 		if (see_m)
 		{
@@ -1126,12 +1054,9 @@ bool genocide_aux(player_type *caster_ptr, MONSTER_IDX m_idx, int power, bool pl
 		take_hit(caster_ptr, DAMAGE_GENO, randint1(dam_side), format(_("%^sの呪文を唱えた疲労", "the strain of casting %^s"), spell_name), -1);
 	}
 
-	/* Visual feedback */
 	move_cursor_relative(caster_ptr->y, caster_ptr->x);
-
 	caster_ptr->redraw |= (PR_HP);
 	caster_ptr->window |= (PW_PLAYER);
-
 	handle_stuff(caster_ptr);
 	Term_fresh();
 
@@ -1160,19 +1085,14 @@ bool symbol_genocide(player_type *caster_ptr, int power, bool player_cast)
 		return FALSE;
 	}
 
-	/* Mega-Hack -- Get a monster symbol */
 	char typ;
-	while (!get_com(_("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: "), &typ, FALSE)) ;
-
-	/* Delete the monsters of that "type" */
+	while (!get_com(_("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: "), &typ, FALSE));
 	bool result = FALSE;
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
-
-		/* Skip "wrong" monsters */
 		if (r_ptr->d_char != typ) continue;
 
 		result |= genocide_aux(caster_ptr, i, power, player_cast, 4, _("抹殺", "Genocide"));
@@ -1205,17 +1125,13 @@ bool mass_genocide(player_type *caster_ptr, int power, bool player_cast)
 		return FALSE;
 	}
 
-	/* Delete the (nearby) monsters */
 	bool result = FALSE;
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		if (!monster_is_valid(m_ptr)) continue;
-
-		/* Skip distant monsters */
 		if (m_ptr->cdis > MAX_SIGHT) continue;
 
-		/* Note effect */
 		result |= genocide_aux(caster_ptr, i, power, player_cast, 3, _("周辺抹殺", "Mass Genocide"));
 	}
 
@@ -1246,20 +1162,15 @@ bool mass_genocide_undead(player_type *caster_ptr, int power, bool player_cast)
 		return FALSE;
 	}
 
-	/* Delete the (nearby) monsters */
 	bool result = FALSE;
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
-
 		if (!(r_ptr->flags3 & RF3_UNDEAD)) continue;
-
-		/* Skip distant monsters */
 		if (m_ptr->cdis > MAX_SIGHT) continue;
 
-		/* Note effect */
 		result |= genocide_aux(caster_ptr, i, power, player_cast, 3, _("アンデッド消滅", "Annihilate Undead"));
 	}
 
@@ -1293,15 +1204,10 @@ bool probing(player_type *caster_ptr)
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
 		monster_race *r_ptr = &r_info[m_ptr->r_idx];
 		if (!monster_is_valid(m_ptr)) continue;
-
-		/* Require line of sight */
 		if (!player_has_los_bold(caster_ptr, m_ptr->fy, m_ptr->fx)) continue;
-
 		if (!m_ptr->ml) continue;
-		
-		GAME_TEXT m_name[MAX_NLEN];
 
-		/* Start the message */
+		GAME_TEXT m_name[MAX_NLEN];
 		if (!probe) msg_print(_("調査中...", "Probing..."));
 		msg_print(NULL);
 
@@ -1314,15 +1220,12 @@ bool probing(player_type *caster_ptr)
 			lite_spot(caster_ptr, m_ptr->fy, m_ptr->fx);
 		}
 
-		/* Get "the monster" or "something" */
 		monster_desc(caster_ptr, m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
-
 		speed = m_ptr->mspeed - 110;
 		if (MON_FAST(m_ptr)) speed += 10;
 		if (MON_SLOW(m_ptr)) speed -= 10;
 		if (ironman_nightmare) speed += 5;
 
-		/* Get the monster's alignment */
 		if ((r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) == (RF3_EVIL | RF3_GOOD)) align = _("善悪", "good&evil");
 		else if (r_ptr->flags3 & RF3_EVIL) align = _("邪悪", "evil");
 		else if (r_ptr->flags3 & RF3_GOOD) align = _("善良", "good");
@@ -1351,17 +1254,12 @@ bool probing(player_type *caster_ptr)
 		buf[strlen(buf) - 1] = '\0';
 		prt(buf, 0, 0);
 
-		/* HACK : Add the line to message buffer */
 		message_add(buf);
-
 		caster_ptr->window |= (PW_MESSAGE);
 		handle_stuff(caster_ptr);
 		move_cursor_relative(m_ptr->fy, m_ptr->fx);
-
 		inkey();
-
 		Term_erase(0, 0, 255);
-
 		if (lore_do_probe(caster_ptr, m_ptr->r_idx))
 		{
 			strcpy(buf, (r_name + r_ptr->name));
@@ -1398,7 +1296,6 @@ bool probing(player_type *caster_ptr)
 void discharge_minion(player_type *caster_ptr)
 {
 	bool okay = TRUE;
-
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
@@ -1419,8 +1316,6 @@ void discharge_minion(player_type *caster_ptr)
 
 		monster_race *r_ptr;
 		r_ptr = &r_info[m_ptr->r_idx];
-
-		/* Uniques resist discharging */
 		if (r_ptr->flags1 & RF1_UNIQUE)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
@@ -1434,7 +1329,7 @@ void discharge_minion(player_type *caster_ptr)
 		if (dam > 100) dam = (dam - 100) / 2 + 100;
 		if (dam > 400) dam = (dam - 400) / 2 + 400;
 		if (dam > 800) dam = 800;
-		project(caster_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, GF_PLASMA, 
+		project(caster_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, GF_PLASMA,
 			PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
 
 		if (record_named_pet && m_ptr->nickname)
@@ -1470,41 +1365,25 @@ void discharge_minion(player_type *caster_ptr)
  */
 static void cave_temp_room_lite(player_type *caster_ptr)
 {
-	/* Clear them all */
 	for (int i = 0; i < tmp_pos.n; i++)
 	{
 		POSITION y = tmp_pos.y[i];
 		POSITION x = tmp_pos.x[i];
-
 		grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
-
-		/* No longer in the array */
 		g_ptr->info &= ~(CAVE_TEMP);
-
-		/* Perma-Lite */
 		g_ptr->info |= (CAVE_GLOW);
-
-		/* Process affected monsters */
 		if (g_ptr->m_idx)
 		{
 			PERCENTAGE chance = 25;
 			monster_type    *m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 			monster_race    *r_ptr = &r_info[m_ptr->r_idx];
 			update_monster(caster_ptr, g_ptr->m_idx, FALSE);
-
-			/* Stupid monsters rarely wake up */
 			if (r_ptr->flags2 & (RF2_STUPID)) chance = 10;
-
-			/* Smart monsters always wake up */
 			if (r_ptr->flags2 & (RF2_SMART)) chance = 100;
 
-			/* Sometimes monsters wake up */
 			if (MON_CSLEEP(m_ptr) && (randint0(100) < chance))
 			{
-				/* Wake up! */
 				(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
-
-				/* Notice the "waking up" */
 				if (m_ptr->ml)
 				{
 					GAME_TEXT m_name[MAX_NLEN];
@@ -1539,19 +1418,13 @@ static void cave_temp_room_lite(player_type *caster_ptr)
  */
 static void cave_temp_room_unlite(player_type *caster_ptr)
 {
-	/* Clear them all */
 	for (int i = 0; i < tmp_pos.n; i++)
 	{
 		POSITION y = tmp_pos.y[i];
 		POSITION x = tmp_pos.x[i];
-
 		grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 		bool do_dark = !is_mirror_grid(g_ptr);
-
-		/* No longer in the array */
 		g_ptr->info &= ~(CAVE_TEMP);
-
-		/* Darken the grid */
 		if (!do_dark) continue;
 
 		if (caster_ptr->current_floor_ptr->dun_level || !is_daytime())
@@ -1577,16 +1450,12 @@ static void cave_temp_room_unlite(player_type *caster_ptr)
 		}
 
 		g_ptr->info &= ~(CAVE_GLOW);
-
-		/* Hack -- Forget "boring" grids */
 		if (!have_flag(f_info[get_feat_mimic(g_ptr)].flags, FF_REMEMBER))
 		{
-			/* Forget the grid */
 			if (!view_torch_grids) g_ptr->info &= ~(CAVE_MARK);
 			note_spot(caster_ptr, y, x);
 		}
 
-		/* Process affected monsters */
 		if (g_ptr->m_idx)
 		{
 			update_monster(caster_ptr, g_ptr->m_idx, FALSE);
@@ -1608,20 +1477,16 @@ static void cave_temp_room_unlite(player_type *caster_ptr)
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_open(floor_type *floor_ptr, POSITION cy, POSITION cx, bool (*pass_bold)(floor_type*, POSITION, POSITION))
+static int next_to_open(floor_type *floor_ptr, POSITION cy, POSITION cx, bool(*pass_bold)(floor_type*, POSITION, POSITION))
 {
-	POSITION y, x;
 	int len = 0;
 	int blen = 0;
 	for (int i = 0; i < 16; i++)
 	{
-		y = cy + ddy_cdd[i % 8];
-		x = cx + ddx_cdd[i % 8];
-
-		/* Found a wall, break the length */
+		POSITION y = cy + ddy_cdd[i % 8];
+		POSITION x = cx + ddx_cdd[i % 8];
 		if (!pass_bold(floor_ptr, y, x))
 		{
-			/* Track best length */
 			if (len > blen)
 			{
 				blen = len;
@@ -1647,7 +1512,7 @@ static int next_to_open(floor_type *floor_ptr, POSITION cy, POSITION cx, bool (*
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_walls_adj(floor_type *floor_ptr, POSITION cy, POSITION cx, bool (*pass_bold)(floor_type*, POSITION, POSITION))
+static int next_to_walls_adj(floor_type *floor_ptr, POSITION cy, POSITION cx, bool(*pass_bold)(floor_type*, POSITION, POSITION))
 {
 	POSITION y, x;
 	int c = 0;
@@ -1672,24 +1537,17 @@ static int next_to_walls_adj(floor_type *floor_ptr, POSITION cy, POSITION cx, bo
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static void cave_temp_room_aux(player_type *caster_ptr, POSITION y, POSITION x, bool only_room, bool (*pass_bold)(floor_type*, POSITION, POSITION))
+static void cave_temp_room_aux(player_type *caster_ptr, POSITION y, POSITION x, bool only_room, bool(*pass_bold)(floor_type*, POSITION, POSITION))
 {
 	grid_type *g_ptr;
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	g_ptr = &floor_ptr->grid_array[y][x];
-
-	/* Avoid infinite recursion */
 	if (g_ptr->info & (CAVE_TEMP)) return;
 
-	/* Do not "leave" the current room */
 	if (!(g_ptr->info & (CAVE_ROOM)))
 	{
 		if (only_room) return;
-
-		/* Verify */
 		if (!in_bounds2(floor_ptr, y, x)) return;
-
-		/* Do not exceed the maximum spell range */
 		if (distance(caster_ptr->y, caster_ptr->x, y, x) > MAX_RANGE) return;
 
 		/* Verify this grid */
@@ -1702,33 +1560,15 @@ static void cave_temp_room_aux(player_type *caster_ptr, POSITION y, POSITION x, 
 		 * This leaves only a check for 6 bounding walls!
 		 */
 		if (in_bounds(floor_ptr, y, x) && pass_bold(floor_ptr, y, x) &&
-		    (next_to_walls_adj(floor_ptr, y, x, pass_bold) == 6) && (next_to_open(floor_ptr, y, x, pass_bold) <= 1)) return;
+			(next_to_walls_adj(floor_ptr, y, x, pass_bold) == 6) && (next_to_open(floor_ptr, y, x, pass_bold) <= 1)) return;
 	}
 
-	/* Paranoia -- verify space */
 	if (tmp_pos.n == TEMP_MAX) return;
 
-	/* Mark the grid as "seen" */
 	g_ptr->info |= (CAVE_TEMP);
-
-	/* Add it to the "seen" set */
 	tmp_pos.y[tmp_pos.n] = y;
 	tmp_pos.x[tmp_pos.n] = x;
 	tmp_pos.n++;
-}
-
-
-/*!
- * todo このシンタックスシュガーは不要だが、関数ポインタなので安易には消せず……
- * @brief 指定のマスが光を通すか(LOSフラグを持つか)を返す。 / Aux function -- see below
- * @param floor_ptr 配置するフロアの参照ポインタ
- * @param y 指定Y座標
- * @param x 指定X座標
- * @return 光を通すならばtrueを返す。
- */
-static bool cave_pass_lite_bold(floor_type *floor_ptr, POSITION y, POSITION x)
-{
-	return cave_los_bold(floor_ptr, y, x);
 }
 
 
@@ -1741,7 +1581,7 @@ static bool cave_pass_lite_bold(floor_type *floor_ptr, POSITION y, POSITION x)
  */
 static void cave_temp_lite_room_aux(player_type *caster_ptr, POSITION y, POSITION x)
 {
-	cave_temp_room_aux(caster_ptr, y, x, FALSE, cave_pass_lite_bold);
+	cave_temp_room_aux(caster_ptr, y, x, FALSE, cave_los_bold);
 }
 
 
@@ -1780,38 +1620,31 @@ static void cave_temp_unlite_room_aux(player_type *caster_ptr, POSITION y, POSIT
  */
 void lite_room(player_type *caster_ptr, POSITION y1, POSITION x1)
 {
-	/* Add the initial grid */
 	cave_temp_lite_room_aux(caster_ptr, y1, x1);
-
-	/* While grids are in the queue, add their neighbors */
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-	POSITION x, y;
 	for (int i = 0; i < tmp_pos.n; i++)
 	{
-		x = tmp_pos.x[i], y = tmp_pos.y[i];
+		POSITION x = tmp_pos.x[i];
+		POSITION y = tmp_pos.y[i];
 
-		/* Walls get lit, but stop light */
-		if (!cave_pass_lite_bold(floor_ptr, y, x)) continue;
+		if (!cave_los_bold(floor_ptr, y, x)) continue;
 
-		/* Spread adjacent */
 		cave_temp_lite_room_aux(caster_ptr, y + 1, x);
 		cave_temp_lite_room_aux(caster_ptr, y - 1, x);
 		cave_temp_lite_room_aux(caster_ptr, y, x + 1);
 		cave_temp_lite_room_aux(caster_ptr, y, x - 1);
 
-		/* Spread diagonal */
 		cave_temp_lite_room_aux(caster_ptr, y + 1, x + 1);
 		cave_temp_lite_room_aux(caster_ptr, y - 1, x - 1);
 		cave_temp_lite_room_aux(caster_ptr, y - 1, x + 1);
 		cave_temp_lite_room_aux(caster_ptr, y + 1, x - 1);
 	}
 
-	/* Now, lite them all up at once */
 	cave_temp_room_lite(caster_ptr);
-
 	if (caster_ptr->special_defense & NINJA_S_STEALTH)
 	{
-		if (floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW) set_superstealth(caster_ptr, FALSE);
+		if (floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info & CAVE_GLOW)
+			set_superstealth(caster_ptr, FALSE);
 	}
 }
 
@@ -1825,32 +1658,24 @@ void lite_room(player_type *caster_ptr, POSITION y1, POSITION x1)
  */
 void unlite_room(player_type *caster_ptr, POSITION y1, POSITION x1)
 {
-	/* Add the initial grid */
 	cave_temp_unlite_room_aux(caster_ptr, y1, x1);
-
-	/* Spread, breadth first */
-	POSITION x, y;
 	for (int i = 0; i < tmp_pos.n; i++)
 	{
-		x = tmp_pos.x[i], y = tmp_pos.y[i];
-
-		/* Walls get dark, but stop darkness */
+		POSITION x = tmp_pos.x[i];
+		POSITION y = tmp_pos.y[i];
 		if (!cave_pass_dark_bold(caster_ptr->current_floor_ptr, y, x)) continue;
 
-		/* Spread adjacent */
 		cave_temp_unlite_room_aux(caster_ptr, y + 1, x);
 		cave_temp_unlite_room_aux(caster_ptr, y - 1, x);
 		cave_temp_unlite_room_aux(caster_ptr, y, x + 1);
 		cave_temp_unlite_room_aux(caster_ptr, y, x - 1);
 
-		/* Spread diagonal */
 		cave_temp_unlite_room_aux(caster_ptr, y + 1, x + 1);
 		cave_temp_unlite_room_aux(caster_ptr, y - 1, x - 1);
 		cave_temp_unlite_room_aux(caster_ptr, y - 1, x + 1);
 		cave_temp_unlite_room_aux(caster_ptr, y + 1, x - 1);
 	}
 
-	/* Now, darken them all at once */
 	cave_temp_room_unlite(caster_ptr);
 }
 
@@ -1960,12 +1785,11 @@ bool unlite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 bool fire_ball(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-	if (typ == GF_CHARM_LIVING) flg|= PROJECT_HIDE;
+	if (typ == GF_CHARM_LIVING) flg |= PROJECT_HIDE;
 
 	POSITION tx = caster_ptr->x + 99 * ddx[dir];
 	POSITION ty = caster_ptr->y + 99 * ddy[dir];
 
-	/* Hack -- Use an actual "target" */
 	if ((dir == 5) && target_okay(caster_ptr))
 	{
 		flg &= ~(PROJECT_STOP);
@@ -1973,7 +1797,6 @@ bool fire_ball(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT 
 		ty = target_row;
 	}
 
-	/* Analyze the "dir" and the "target".  Hurt items on floor. */
 	return project(caster_ptr, 0, rad, ty, tx, dam, typ, flg, -1);
 }
 
@@ -2018,15 +1841,12 @@ bool fire_rocket(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POIN
 {
 	POSITION tx = caster_ptr->x + 99 * ddx[dir];
 	POSITION ty = caster_ptr->y + 99 * ddy[dir];
-
-	/* Hack -- Use an actual "target" */
 	if ((dir == 5) && target_okay(caster_ptr))
 	{
 		tx = target_col;
 		ty = target_row;
 	}
 
-	/* Analyze the "dir" and the "target".  Hurt items on floor. */
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 	return (project(caster_ptr, 0, rad, ty, tx, dam, typ, flg, -1));
 }
@@ -2051,7 +1871,6 @@ bool fire_ball_hide(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_P
 {
 	POSITION tx = caster_ptr->x + 99 * ddx[dir];
 	POSITION ty = caster_ptr->y + 99 * ddy[dir];
-
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_HIDE;
 	if ((dir == 5) && target_okay(caster_ptr))
 	{
@@ -2060,7 +1879,6 @@ bool fire_ball_hide(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_P
 		ty = target_row;
 	}
 
-	/* Analyze the "dir" and the "target".  Hurt items on floor. */
 	return (project(caster_ptr, 0, rad, ty, tx, dam, typ, flg, -1));
 }
 
@@ -2077,9 +1895,9 @@ bool fire_ball_hide(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_P
  * @return 作用が実際にあった場合TRUEを返す
  * @details
  * <pre>
- * Cast a meteor spell, defined as a ball spell cast by an arbitary monster, 
- * player, or outside source, that starts out at an arbitrary location, and 
- * leaving no trail from the "caster" to the target.  This function is 
+ * Cast a meteor spell, defined as a ball spell cast by an arbitary monster,
+ * player, or outside source, that starts out at an arbitrary location, and
+ * leaving no trail from the "caster" to the target.  This function is
  * especially useful for bombardments and similar. -LM-
  * Option to hurt the player.
  * </pre>
@@ -2087,8 +1905,6 @@ bool fire_ball_hide(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_P
 bool fire_meteor(player_type *caster_ptr, MONSTER_IDX who, EFFECT_ID typ, POSITION y, POSITION x, HIT_POINT dam, POSITION rad)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-
-	/* Analyze the "target" and the caster. */
 	return (project(caster_ptr, who, rad, y, x, dam, typ, flg, -1));
 }
 
@@ -2202,11 +2018,7 @@ bool teleport_swap(player_type *caster_ptr, DIRECTION dir)
 	}
 
 	sound(SOUND_TELEPORT);
-
-	/* Swap the player and monster */
 	(void)move_player_effect(caster_ptr, ty, tx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
-
-	/* Success */
 	return TRUE;
 }
 
@@ -2222,9 +2034,7 @@ bool teleport_swap(player_type *caster_ptr, DIRECTION dir)
  */
 bool project_hook(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg)
 {
-	/* Pass through the target if needed */
 	flg |= (PROJECT_THRU);
-
 	POSITION tx = caster_ptr->x + ddx[dir];
 	POSITION ty = caster_ptr->y + ddy[dir];
 	if ((dir == 5) && target_okay(caster_ptr))
@@ -2233,7 +2043,6 @@ bool project_hook(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POI
 		ty = target_row;
 	}
 
-	/* Analyze the "dir" and the "target", do NOT explode */
 	return (project(caster_ptr, 0, 0, ty, tx, dam, typ, flg, -1));
 }
 
@@ -2299,7 +2108,7 @@ bool fire_bolt_or_beam(player_type *caster_ptr, PERCENTAGE prob, EFFECT_ID typ, 
 	{
 		return (fire_beam(caster_ptr, typ, dir, dam));
 	}
-	
+
 	return (fire_bolt(caster_ptr, typ, dir, dam));
 }
 
@@ -2652,11 +2461,11 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 			lose_exp(target_ptr, target_ptr->exp / 16);
 			if (!one_in_(6)) break;
 		case 13: case 14: case 15: case 19: case 20:
-			if (stop_ty || (target_ptr->free_act && (randint1(125) < target_ptr->skill_sav)) || (target_ptr->pclass == CLASS_BERSERKER))
-			{
-				/* Do nothing */ ;
-			}
-			else
+		{
+			bool is_statue = stop_ty;
+			is_statue |= target_ptr->free_act && (randint1(125) < target_ptr->skill_sav);
+			is_statue |= target_ptr->pclass == CLASS_BERSERKER;
+			if (!is_statue)
 			{
 				msg_print(_("彫像になった気分だ！", "You feel like a statue!"));
 				if (target_ptr->free_act)
@@ -2667,6 +2476,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 			}
 
 			if (!one_in_(6)) break;
+		}
 		case 21: case 22: case 23:
 			(void)do_dec_stat(target_ptr, randint0(6));
 			if (!one_in_(6)) break;
@@ -2730,7 +2540,6 @@ int activate_hi_summon(player_type *caster_ptr, POSITION y, POSITION x, bool can
 
 	DEPTH dungeon_level = caster_ptr->current_floor_ptr->dun_level;
 	DEPTH summon_lev = (pet ? caster_ptr->lev * 2 / 3 + randint1(caster_ptr->lev / 2) : dungeon_level);
-
 	int count = 0;
 	for (int i = 0; i < (randint1(7) + (dungeon_level / 40)); i++)
 	{
@@ -2810,7 +2619,7 @@ void wall_breaker(player_type *caster_ptr)
 		}
 
 		project(caster_ptr, 0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
-				  (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+			(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
 		return;
 	}
 
@@ -3049,8 +2858,6 @@ bool kawarimi(player_type *caster_ptr, bool success)
 
 	caster_ptr->special_defense &= ~(NINJA_KAWARIMI);
 	caster_ptr->redraw |= (PR_STATUS);
-
-	/* Teleported */
 	return TRUE;
 }
 
@@ -3069,7 +2876,6 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 	DIRECTION dir;
 	if (!get_aim_dir(attacker_ptr, &dir)) return FALSE;
 
-	/* Use the given direction */
 	int tx = attacker_ptr->x + project_length * ddx[dir];
 	int ty = attacker_ptr->y + project_length * ddy[dir];
 
@@ -3086,15 +2892,10 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 	u16b path_g[32];
 	int path_n = project_path(attacker_ptr, path_g, project_length, attacker_ptr->y, attacker_ptr->x, ty, tx, PROJECT_STOP | PROJECT_KILL);
 	project_length = 0;
-
-	/* No need to move */
 	if (!path_n) return TRUE;
 
-	/* Use ty and tx as to-move point */
 	ty = attacker_ptr->y;
 	tx = attacker_ptr->x;
-
-	/* Project along the path */
 	bool tmp_mdeath = FALSE;
 	bool moved = FALSE;
 	for (int i = 0; i < path_n; i++)
@@ -3108,8 +2909,6 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 		{
 			ty = ny;
 			tx = nx;
-
-			/* Go to next grid */
 			continue;
 		}
 
@@ -3124,17 +2923,13 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 				msg_print(_("ここには入身では入れない。", "You can't move to that place."));
 			}
 
-			/* Exit loop */
 			break;
 		}
 
-		/* Move player before updating the monster */
 		if (!player_bold(attacker_ptr, ty, tx)) teleport_player_to(attacker_ptr, ty, tx, TELEPORT_NONMAGICAL);
 		update_monster(attacker_ptr, floor_ptr->grid_array[ny][nx].m_idx, TRUE);
 
-		/* Found a monster */
 		m_ptr = &floor_ptr->m_list[floor_ptr->grid_array[ny][nx].m_idx];
-
 		if (tm_idx != floor_ptr->grid_array[ny][nx].m_idx)
 		{
 #ifdef JP
@@ -3145,10 +2940,7 @@ bool rush_attack(player_type *attacker_ptr, bool *mdeath)
 		}
 		else if (!player_bold(attacker_ptr, ty, tx))
 		{
-			/* Hold the monster name */
 			GAME_TEXT m_name[MAX_NLEN];
-
-			/* Get the monster name (BEFORE polymorphing) */
 			monster_desc(attacker_ptr, m_name, m_ptr, 0);
 			msg_format(_("素早く%sの懐に入り込んだ！", "You quickly jump in and attack %s!"), m_name);
 		}
@@ -3379,11 +3171,8 @@ void cast_meteor(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 
 			x = caster_ptr->x - 8 + randint0(17);
 			y = caster_ptr->y - 8 + randint0(17);
-
 			dx = (caster_ptr->x > x) ? (caster_ptr->x - x) : (x - caster_ptr->x);
 			dy = (caster_ptr->y > y) ? (caster_ptr->y - y) : (y - caster_ptr->y);
-
-			/* Approximate distance */
 			d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
 
 			if (d >= 9) continue;
@@ -3414,11 +3203,8 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 	DIRECTION dir;
 	if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 
-	/* Use the given direction */
 	POSITION tx = caster_ptr->x + 99 * ddx[dir];
 	POSITION ty = caster_ptr->y + 99 * ddy[dir];
-
-	/* Hack -- Use an actual "target" */
 	if ((dir == 5) && target_okay(caster_ptr))
 	{
 		tx = target_col;
@@ -3430,23 +3216,15 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 	POSITION nx, ny;
 	while (TRUE)
 	{
-		/* Hack -- Stop at the target */
 		if ((y == ty) && (x == tx)) break;
 
 		ny = y;
 		nx = x;
 		mmove2(&ny, &nx, caster_ptr->y, caster_ptr->x, ty, tx);
-
-		/* Stop at maximum range */
 		if (MAX_RANGE <= distance(caster_ptr->y, caster_ptr->x, ny, nx)) break;
-
-		/* Stopped by walls/doors */
 		if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, ny, nx, FF_PROJECT)) break;
-
-		/* Stopped by monsters */
 		if ((dir != 5) && caster_ptr->current_floor_ptr->grid_array[ny][nx].m_idx != 0) break;
 
-		/* Save the new location */
 		x = nx;
 		y = ny;
 	}
@@ -3469,15 +3247,12 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 			dx = (tx > x) ? (tx - x) : (x - tx);
 			dy = (ty > y) ? (ty - y) : (y - ty);
 
-			/* Approximate distance */
 			d = (dy > dx) ? (dy + (dx >> 1)) : (dx + (dy >> 1));
-			/* Within the radius */
 			if (d < 5) break;
 		}
 
 		if (count < 0) continue;
 
-		/* Cannot penetrate perm walls */
 		if (!in_bounds(caster_ptr->current_floor_ptr, y, x) ||
 			cave_stop_disintegration(caster_ptr->current_floor_ptr, y, x) ||
 			!in_disintegration_range(caster_ptr->current_floor_ptr, ty, tx, y, x))
@@ -3488,6 +3263,7 @@ bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 
 	return TRUE;
 }
+
 
 /*!
 * @brief 「ワンダー」のランダムな効果を決定して処理する。
@@ -3533,7 +3309,7 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 		clone_monster(caster_ptr, dir);
 		return;
 	}
-	
+
 	if (die < 14)
 	{
 		speed_monster(caster_ptr, dir, plev);
@@ -3564,7 +3340,7 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 		confuse_monster(caster_ptr, dir, plev);
 		return;
 	}
-	
+
 	if (die < 46)
 	{
 		fire_ball(caster_ptr, GF_POIS, dir, 20 + (plev / 2), 3);
@@ -3576,53 +3352,53 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 		(void)lite_line(caster_ptr, dir, damroll(6, 8));
 		return;
 	}
-	
+
 	if (die < 56)
 	{
 		fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_ELEC, dir,
 			damroll(3 + ((plev - 5) / 4), 8));
 		return;
 	}
-	
+
 	if (die < 61)
 	{
 		fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_COLD, dir,
 			damroll(5 + ((plev - 5) / 4), 8));
 		return;
 	}
-	
+
 	if (die < 66)
 	{
 		fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_ACID, dir,
 			damroll(6 + ((plev - 5) / 4), 8));
 		return;
 	}
-	
+
 	if (die < 71)
 	{
 		fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_FIRE, dir,
 			damroll(8 + ((plev - 5) / 4), 8));
 		return;
 	}
-	
+
 	if (die < 76)
 	{
 		hypodynamic_bolt(caster_ptr, dir, 75);
 		return;
 	}
-	
+
 	if (die < 81)
 	{
 		fire_ball(caster_ptr, GF_ELEC, dir, 30 + plev / 2, 2);
 		return;
 	}
-	
+
 	if (die < 86)
 	{
 		fire_ball(caster_ptr, GF_ACID, dir, 40 + plev, 2);
 		return;
 	}
-	
+
 	if (die < 91)
 	{
 		fire_ball(caster_ptr, GF_ICE, dir, 70 + plev, 3);
@@ -3640,7 +3416,7 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 		hypodynamic_bolt(caster_ptr, dir, 100 + plev);
 		return;
 	}
-	
+
 	if (die < 104)
 	{
 		earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 12, 0);
@@ -3652,7 +3428,7 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 		(void)destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, 13 + randint0(5), FALSE);
 		return;
 	}
-	
+
 	if (die < 108)
 	{
 		symbol_genocide(caster_ptr, plev + 50, TRUE);
@@ -3664,7 +3440,7 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 		dispel_monsters(caster_ptr, 120);
 		return;
 	}
-	
+
 	dispel_monsters(caster_ptr, 150);
 	slow_monsters(caster_ptr, plev);
 	sleep_monsters(caster_ptr, plev);
@@ -3684,7 +3460,7 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 	int die = randint1(100) + plev / 5;
 	int vir = virtue_number(caster_ptr, V_CHANCE);
 
-	if (vir)
+	if (vir != 0)
 	{
 		if (caster_ptr->virtues[vir - 1] > 0)
 		{
@@ -3822,6 +3598,7 @@ void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir)
 	}
 }
 
+
 /*!
 * @brief トランプ領域の「シャッフル」の効果をランダムに決めて処理する。
 * @param caster_ptr プレーヤーへの参照ポインタ
@@ -3835,14 +3612,13 @@ void cast_shuffle(player_type *caster_ptr)
 	int vir = virtue_number(caster_ptr, V_CHANCE);
 	int i;
 
-	/* Card sharks and high mages get a level bonus */
 	if ((caster_ptr->pclass == CLASS_ROGUE) ||
 		(caster_ptr->pclass == CLASS_HIGH_MAGE) ||
 		(caster_ptr->pclass == CLASS_SORCERER))
 		die = (randint1(110)) + plev / 5;
 	else
 		die = randint1(120);
-	
+
 	if (vir)
 	{
 		if (caster_ptr->virtues[vir - 1] > 0)
@@ -3881,7 +3657,7 @@ void cast_shuffle(player_type *caster_ptr)
 		summon_specific(caster_ptr, 0, caster_ptr->y, caster_ptr->x, floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		return;
 	}
-	
+
 	if (die < 18)
 	{
 		int count = 0;
@@ -3889,14 +3665,14 @@ void cast_shuffle(player_type *caster_ptr)
 		activate_ty_curse(caster_ptr, FALSE, &count);
 		return;
 	}
-	
+
 	if (die < 22)
 	{
 		msg_print(_("《不調和の剣》だ。", "It's the swords of discord."));
 		aggravate_monsters(caster_ptr, 0);
 		return;
 	}
-	
+
 	if (die < 26)
 	{
 		msg_print(_("《愚者》だ。", "It's the Fool."));
@@ -3904,42 +3680,42 @@ void cast_shuffle(player_type *caster_ptr)
 		do_dec_stat(caster_ptr, A_WIS);
 		return;
 	}
-	
+
 	if (die < 30)
 	{
 		msg_print(_("奇妙なモンスターの絵だ。", "It's the picture of a strange monster."));
 		trump_summoning(caster_ptr, 1, FALSE, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3 / 2), (32 + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
 		return;
 	}
-	
+
 	if (die < 33)
 	{
 		msg_print(_("《月》だ。", "It's the Moon."));
 		unlite_area(caster_ptr, 10, 3);
 		return;
 	}
-	
+
 	if (die < 38)
 	{
 		msg_print(_("《運命の輪》だ。", "It's the Wheel of Fortune."));
 		wild_magic(caster_ptr, randint0(32));
 		return;
 	}
-	
+
 	if (die < 40)
 	{
 		msg_print(_("テレポート・カードだ。", "It's a teleport trump card."));
 		teleport_player(caster_ptr, 10, TELEPORT_PASSIVE);
 		return;
 	}
-	
+
 	if (die < 42)
 	{
 		msg_print(_("《正義》だ。", "It's Justice."));
 		set_blessed(caster_ptr, caster_ptr->lev, FALSE);
 		return;
 	}
-	
+
 	if (die < 47)
 	{
 		msg_print(_("テレポート・カードだ。", "It's a teleport trump card."));
@@ -3953,56 +3729,56 @@ void cast_shuffle(player_type *caster_ptr)
 		teleport_player(caster_ptr, 200, TELEPORT_PASSIVE);
 		return;
 	}
-	
+
 	if (die < 60)
 	{
 		msg_print(_("《塔》だ。", "It's the Tower."));
 		wall_breaker(caster_ptr);
 		return;
 	}
-	
+
 	if (die < 72)
 	{
 		msg_print(_("《節制》だ。", "It's Temperance."));
 		sleep_monsters_touch(caster_ptr);
 		return;
 	}
-	
+
 	if (die < 80)
 	{
 		msg_print(_("《塔》だ。", "It's the Tower."));
 		earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 5, 0);
 		return;
 	}
-	
+
 	if (die < 82)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
 		trump_summoning(caster_ptr, 1, TRUE, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3 / 2), SUMMON_MOLD, 0L);
 		return;
 	}
-	
+
 	if (die < 84)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
 		trump_summoning(caster_ptr, 1, TRUE, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3 / 2), SUMMON_BAT, 0L);
 		return;
 	}
-	
+
 	if (die < 86)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
 		trump_summoning(caster_ptr, 1, TRUE, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3 / 2), SUMMON_VORTEX, 0L);
 		return;
 	}
-	
+
 	if (die < 88)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
 		trump_summoning(caster_ptr, 1, TRUE, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3 / 2), SUMMON_COIN_MIMIC, 0L);
 		return;
 	}
-	
+
 	if (die < 96)
 	{
 		msg_print(_("《恋人》だ。", "It's the Lovers."));
@@ -4014,14 +3790,14 @@ void cast_shuffle(player_type *caster_ptr)
 
 		return;
 	}
-	
+
 	if (die < 101)
 	{
 		msg_print(_("《隠者》だ。", "It's the Hermit."));
 		wall_stone(caster_ptr);
 		return;
 	}
-	
+
 	if (die < 111)
 	{
 		msg_print(_("《審判》だ。", "It's the Judgement."));
@@ -4029,7 +3805,7 @@ void cast_shuffle(player_type *caster_ptr)
 		lose_all_mutations(caster_ptr);
 		return;
 	}
-	
+
 	if (die < 120)
 	{
 		msg_print(_("《太陽》だ。", "It's the Sun."));
@@ -4038,7 +3814,7 @@ void cast_shuffle(player_type *caster_ptr)
 		wiz_lite(caster_ptr, FALSE);
 		return;
 	}
-	
+
 	msg_print(_("《世界》だ。", "It's the World."));
 	if (caster_ptr->exp >= PY_MAX_EXP)
 	{
@@ -4050,6 +3826,7 @@ void cast_shuffle(player_type *caster_ptr)
 	msg_print(_("更に経験を積んだような気がする。", "You feel more experienced."));
 	gain_exp(caster_ptr, ee);
 }
+
 
 /*!
  * @brief 口を使う継続的な処理を中断する
@@ -4071,7 +3848,6 @@ bool_hack vampirism(player_type *caster_ptr)
 		return FALSE;
 	}
 
-	/* Only works on adjacent monsters */
 	DIRECTION dir;
 	if (!get_direction(caster_ptr, &dir, FALSE, FALSE)) return FALSE;
 
@@ -4079,9 +3855,7 @@ bool_hack vampirism(player_type *caster_ptr)
 	POSITION x = caster_ptr->x + ddx[dir];
 	grid_type *g_ptr;
 	g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
-
 	stop_mouth(caster_ptr);
-
 	if (!(g_ptr->m_idx))
 	{
 		msg_print(_("何もない場所に噛みついた！", "You bite into thin air!"));
@@ -4133,7 +3907,7 @@ bool hit_and_away(player_type *caster_ptr)
 			teleport_player(caster_ptr, 30, 0L);
 		return TRUE;
 	}
-	
+
 	msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
 	msg_print(NULL);
 	return FALSE;
@@ -4168,14 +3942,10 @@ bool psychometry(player_type *caster_ptr)
 		return TRUE;
 	}
 
-	/* Check for a feeling */
 	byte feel = value_check_aux1(o_ptr);
-
-	/* Get an object description */
 	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 
-	/* Skip non-feelings */
 	if (!feel)
 	{
 		msg_format(_("%sからは特に変わった事は感じとれなかった。", "You do not perceive anything unusual about the %s."), o_name);
@@ -4225,9 +3995,7 @@ bool psychometry(player_type *caster_ptr)
 		break;
 	}
 
-	/* Auto-inscription/destroy */
 	autopick_alter_item(caster_ptr, item, (bool)(okay && destroy_feeling));
-
 	return TRUE;
 }
 
@@ -4236,7 +4004,6 @@ bool draconian_breath(player_type *creature_ptr)
 {
 	int Type = (one_in_(3) ? GF_COLD : GF_FIRE);
 	concptr Type_desc = ((Type == GF_COLD) ? _("冷気", "cold") : _("炎", "fire"));
-
 	DIRECTION dir;
 	if (!get_aim_dir(creature_ptr, &dir)) return FALSE;
 
@@ -4439,7 +4206,7 @@ void hayagake(player_type *creature_ptr)
 		creature_ptr->energy_use = 0;
 		return;
 	}
-	
+
 	grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
@@ -4469,7 +4236,7 @@ bool double_attack(player_type *creature_ptr)
 		msg_print(NULL);
 		return TRUE;
 	}
-	
+
 	if (one_in_(3))
 		msg_print(_("あーたたたたたたたたたたたたたたたたたたたたたた！！！",
 			"Ahhhtatatatatatatatatatatatatatataatatatatattaaaaa!!!!"));
@@ -4501,7 +4268,7 @@ bool comvert_hp_to_mp(player_type *creature_ptr)
 		creature_ptr->redraw |= (PR_HP | PR_MANA);
 		return TRUE;
 	}
-	
+
 	creature_ptr->csp += gain_sp;
 	if (creature_ptr->csp > creature_ptr->msp)
 	{
@@ -4666,6 +4433,7 @@ bool rodeo(player_type *creature_ptr)
 	{
 		msg_format(_("%sに振り落とされた！", "You have been thrown off by %s."), m_name);
 		rakuba(creature_ptr, 1, TRUE);
+
 		/* 落馬処理に失敗してもとにかく乗馬解除 */
 		creature_ptr->riding = 0;
 	}

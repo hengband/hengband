@@ -50,6 +50,7 @@ lib/save/
 *.userprefs
 
 # Build results
+[Ee]nglish-[Dd]ebug/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/

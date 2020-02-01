@@ -419,8 +419,6 @@ static void arena_comm(player_type *player_ptr, int cmd)
 
 		player_ptr->exit_bldg = FALSE;
 		reset_tim_flags(player_ptr);
-
-		/* Save the surface floor as saved floor */
 		prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
 
 		player_ptr->current_floor_ptr->inside_arena = TRUE;
@@ -578,7 +576,6 @@ static void reset_deck(int deck[])
 		deck[i] = i;
 	}
 
-	/* shuffle cards */
 	for (int i = 0; i < 53; i++) {
 		int tmp1 = randint0(53 - i) + i;
 		int tmp2 = deck[i];
@@ -651,14 +648,12 @@ static int poker_hand_check_straight(void)
 	bool joker_is_used = FALSE;
 	bool straight = FALSE;
 
-	/* get lowest */
 	for (int i = 0; i < 5; i++)
 	{
 		if (NUM_OF(cards[i]) < lowest && !IS_JOKER(cards[i]))
 			lowest = NUM_OF(cards[i]);
 	}
 
-	/* Check Royal Straight Flush */
 	if (poker_hand_check_flush())
 	{
 		int i;
@@ -674,7 +669,7 @@ static int poker_hand_check_straight(void)
 				}
 			}
 
-			if (i == 4) return 3; /* Wow! Royal Straight Flush!!! */
+			if (i == 4) return 3;
 		}
 
 		if (lowest == 9)
@@ -685,14 +680,12 @@ static int poker_hand_check_straight(void)
 					break;
 			}
 
-			if (i == 3 && have_joker()) return 3; /* Wow! Royal Straight Flush!!! */
+			if (i == 3 && have_joker()) return 3;
 		}
 	}
 
 	joker_is_used = FALSE;
 
-	/* Straight Only Check */
-	/* (10 - J - Q - K)[JOKER] - A */
 	if (lowest == 0)
 	{
 		int i;
@@ -702,7 +695,7 @@ static int poker_hand_check_straight(void)
 				if (have_joker() && !joker_is_used)
 					joker_is_used = TRUE;
 				else
-					break; /* None */
+					break;
 			}
 		}
 
@@ -867,7 +860,6 @@ static void display_kaeruka(int hoge, int kaeruka[])
 	else col = TERM_WHITE;
 	c_put_str(col, _("決定", "Sure"), 16, 38);
 
-	/* Hilite current option */
 	if (hoge < 5) move_cursor(14, 5 + hoge * 16);
 	else move_cursor(16, 38);
 }
@@ -1115,7 +1107,7 @@ static void display_cards(void)
  */
 static int do_poker(void)
 {
-	int is_put[5]; /* 0:kaenai 1:kaeru */
+	int is_put[5];
 
 	bool done = FALSE;
 	bool decision = TRUE;
@@ -1245,13 +1237,11 @@ static bool gamble_comm(player_type *player_ptr, int cmd)
 
 	if (cmd == BACT_GAMBLE_RULES)
 	{
-		/* Peruse the gambling help file */
 		(void)show_file(player_ptr, TRUE, _("jgambling.txt", "gambling.txt"), NULL, 0, 0);
 		screen_load();
 		return TRUE;
 	}
 
-	/* No money */
 	if (player_ptr->au < 1)
 	{
 		msg_print(_("おい！おまえ一文なしじゃないか！こっから出ていけ！",
@@ -1262,13 +1252,9 @@ static bool gamble_comm(player_type *player_ptr, int cmd)
 	}
 
 	clear_bldg(5, 23);
-
 	maxbet = player_ptr->lev * 200;
-
-	/* We can't bet more than we have */
 	maxbet = MIN(maxbet, player_ptr->au);
 
-	/* Get the wager */
 	strcpy(out_val, "");
 	sprintf(tmp_str, _("賭け金 (1-%ld)？", "Your wager (1-%ld) ? "), (long int)maxbet);
 
@@ -1284,12 +1270,9 @@ static bool gamble_comm(player_type *player_ptr, int cmd)
 		return TRUE;
 	}
 
-	/* Strip spaces */
 	for (p = out_val; *p == ' '; p++);
 
-	/* Get the wager */
 	wager = atol(p);
-
 	if (wager > player_ptr->au)
 	{
 		msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
@@ -1680,13 +1663,11 @@ static bool kakutoujou(player_type *player_ptr)
 		return FALSE;
 	}
 
-	int i;
-
 	clear_bldg(4, 10);
 
 	prt(_("モンスター                                                     倍率",
 		"Monsters                                                       Odds"), 4, 4);
-	for (i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		char buf[80];
 		monster_race *r_ptr = &r_info[battle_mon[i]];
@@ -1701,7 +1682,7 @@ static bool kakutoujou(player_type *player_ptr)
 	prt(_("どれに賭けますか:", "Which monster: "), 0, 0);
 	while (TRUE)
 	{
-		i = inkey();
+		int i = inkey();
 
 		if (i == ESCAPE)
 		{
@@ -1720,7 +1701,7 @@ static bool kakutoujou(player_type *player_ptr)
 	}
 
 	clear_bldg(4, 4);
-	for (i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 		if (i != sel_monster) clear_bldg(i + 5, i + 5);
 
 	maxbet = player_ptr->lev * 200;
@@ -1742,12 +1723,9 @@ static bool kakutoujou(player_type *player_ptr)
 		return FALSE;
 	}
 
-	/* Strip spaces */
 	for (p = out_val; *p == ' '; p++);
 
-	/* Get the wager */
 	wager = atol(p);
-
 	if (wager > player_ptr->au)
 	{
 		msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
@@ -1774,7 +1752,6 @@ static bool kakutoujou(player_type *player_ptr)
 	player_ptr->au -= wager;
 	reset_tim_flags(player_ptr);
 
-	/* Save the surface floor as saved floor */
 	prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
 
 	player_ptr->phase_out = TRUE;
@@ -1911,12 +1888,9 @@ static bool kankin(player_type *player_ptr)
 	GAME_TEXT o_name[MAX_NLEN];
 	object_type *o_ptr;
 
-	/* Loop for inventory and right/left arm */
 	for (INVENTORY_IDX i = 0; i <= INVEN_LARM; i++)
 	{
 		o_ptr = &player_ptr->inventory_list[i];
-
-		/* Living Tsuchinoko worthes $1000000 */
 		if ((o_ptr->tval == TV_CAPTURE) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN + 20];
@@ -1929,6 +1903,7 @@ static bool kankin(player_type *player_ptr)
 				player_ptr->redraw |= (PR_GOLD);
 				vary_item(player_ptr, i, -o_ptr->number);
 			}
+
 			change = TRUE;
 		}
 	}
@@ -1936,8 +1911,6 @@ static bool kankin(player_type *player_ptr)
 	for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &player_ptr->inventory_list[i];
-
-		/* Corpse of Tsuchinoko worthes $200000 */
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_CORPSE) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN + 20];
@@ -1950,6 +1923,7 @@ static bool kankin(player_type *player_ptr)
 				player_ptr->redraw |= (PR_GOLD);
 				vary_item(player_ptr, i, -o_ptr->number);
 			}
+
 			change = TRUE;
 		}
 	}
@@ -1957,8 +1931,6 @@ static bool kankin(player_type *player_ptr)
 	for (INVENTORY_IDX i = 0; i < INVEN_PACK; i++)
 	{
 		o_ptr = &player_ptr->inventory_list[i];
-
-		/* Bones of Tsuchinoko worthes $100000 */
 		if ((o_ptr->tval == TV_CORPSE) && (o_ptr->sval == SV_SKELETON) && (o_ptr->pval == MON_TSUCHINOKO))
 		{
 			char buf[MAX_NLEN + 20];
@@ -2010,6 +1982,7 @@ static bool kankin(player_type *player_ptr)
 				player_ptr->redraw |= (PR_GOLD);
 				vary_item(player_ptr, i, -o_ptr->number);
 			}
+
 			change = TRUE;
 		}
 	}
@@ -2030,13 +2003,10 @@ static bool kankin(player_type *player_ptr)
 			sprintf(buf, _("%sを渡しますか？", "Hand %s over? "), o_name);
 			if (!get_check(buf)) continue;
 
-			/* Hand it first */
 			vary_item(player_ptr, i, -o_ptr->number);
-
 			chg_virtue(player_ptr, V_JUSTICE, 5);
 			current_world_ptr->bounty_r_idx[j] += 10000;
 
-			/* Count number of unique corpses already handed */
 			for (num = 0, k = 0; k < MAX_BOUNTY; k++)
 			{
 				if (current_world_ptr->bounty_r_idx[k] >= 10000) num++;
@@ -2044,7 +2014,6 @@ static bool kankin(player_type *player_ptr)
 
 			msg_format(_("これで合計 %d ポイント獲得しました。", "You earned %d point%s total."), num, (num > 1 ? "s" : ""));
 
-			/* Prepare to make a prize */
 			object_prep(&forge, lookup_kind(prize_list[num - 1].tval, prize_list[num - 1].sval));
 			apply_magic(player_ptr, &forge, player_ptr->current_floor_ptr->object_level, AM_NO_FIXED_ART);
 
@@ -2057,14 +2026,11 @@ static bool kankin(player_type *player_ptr)
 			 * there is at least one empty slot.
 			 */
 			item_new = inven_carry(player_ptr, &forge);
-
 			object_desc(player_ptr, o_name, &forge, 0);
 			msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), o_name, index_to_label(item_new));
 
-			/* Auto-inscription */
 			autopick_alter_item(player_ptr, item_new, FALSE);
 			handle_stuff(player_ptr);
-
 			change = TRUE;
 		}
 	}
@@ -2139,7 +2105,6 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 		{
 			msg_print(_("眠りに就くと恐ろしい光景が心をよぎった。", "Horrible visions flit through your mind as you sleep."));
 
-			/* Have some nightmares */
 			while (TRUE)
 			{
 				sanity_blast(customer_ptr, NULL, FALSE);
@@ -2208,26 +2173,19 @@ static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
 
 	quest_text_line = 0;
 
-	/* Set the quest number temporary */
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	QUEST_IDX old_quest = floor_ptr->inside_quest;
 	floor_ptr->inside_quest = questnum;
 
-	/* Get the quest text */
 	init_flags = INIT_SHOW_TEXT;
 	if (do_init) init_flags |= INIT_ASSIGN;
 
 	process_dungeon_file(player_ptr, "q_info.txt", 0, 0, 0, 0);
-
-	/* Reset the old quest number */
 	floor_ptr->inside_quest = old_quest;
 
-	/* Print the quest info */
 	GAME_TEXT tmp_str[80];
 	sprintf(tmp_str, _("クエスト情報 (危険度: %d 階相当)", "Quest Information (Danger level: %d)"), (int)quest[questnum].level);
-
 	prt(tmp_str, 5, 0);
-
 	prt(quest[questnum].name, 7, 0);
 
 	for (int i = 0; i < 10; i++)
@@ -2290,13 +2248,11 @@ static void castle_quest(player_type *player_ptr)
 
 	if (q_ptr->r_idx == 0)
 	{
-		/* Random monster at least 5 - 10 levels out of deep */
 		q_ptr->r_idx = get_mon_num(player_ptr, q_ptr->level + 4 + randint1(6));
 	}
 
 	monster_race *r_ptr;
 	r_ptr = &r_info[q_ptr->r_idx];
-
 	while ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->rarity != 1))
 	{
 		q_ptr->r_idx = get_mon_num(player_ptr, q_ptr->level) + 4 + randint1(6);
@@ -2305,7 +2261,6 @@ static void castle_quest(player_type *player_ptr)
 
 	if (q_ptr->max_num == 0)
 	{
-		/* Random monster number */
 		if (randint1(10) > 7)
 			q_ptr->max_num = 1;
 		else
@@ -2433,7 +2388,6 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
 	bool force = FALSE;
 	bool dokubari = FALSE;
 
-	/* Effective dices */
 	int eff_dd = o_ptr->dd + owner_ptr->to_dd[0];
 	int eff_ds = o_ptr->ds + owner_ptr->to_ds[0];
 
@@ -2445,21 +2399,12 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
 	int vorpal_div = 1;
 	int dmg_bonus = o_ptr->to_d + owner_ptr->to_d[0];
 
-
-	/* Get the flags of the weapon */
 	object_flags(o_ptr, flgs);
-
 	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) dokubari = TRUE;
 
-
-	/* Show Critical Damage*/
 	mindam = calc_expect_crit(owner_ptr, o_ptr->weight, o_ptr->to_h, mindice, owner_ptr->to_h[0], dokubari);
 	maxdam = calc_expect_crit(owner_ptr, o_ptr->weight, o_ptr->to_h, maxdice, owner_ptr->to_h[0], dokubari);
-
 	show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("会心:", "Critical:"), TERM_L_RED);
-
-
-	/* Vorpal Hit*/
 	if ((have_flag(flgs, TR_VORPAL) || hex_spelling(owner_ptr, HEX_RUNESWORD)))
 	{
 		if ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD))
@@ -2487,7 +2432,6 @@ static void compare_weapon_aux(player_type *owner_ptr, object_type *o_ptr, int c
 		show_weapon_dmg(r++, col, mindam, maxdam, blow, dmg_bonus, _("理力:", "Force  :"), TERM_L_BLUE);
 	}
 
-	/* Print the relevant lines */
 	if (have_flag(flgs, TR_KILL_ANIMAL))
 	{
 		mindam = calc_expect_dice(owner_ptr, mindice, 4, 1, force, o_ptr->weight, o_ptr->to_h, owner_ptr->to_h[0], dokubari, vorpal_mult, vorpal_div);
@@ -2664,19 +2608,13 @@ static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN ro
 	DICE_SID eff_ds = o_ptr->ds + player_ptr->to_ds[0];
 	HIT_RELIABILITY reli = player_ptr->skill_thn + (player_ptr->to_h[0] + o_ptr->to_h) * BTH_PLUS_ADJ;
 
-	/* Print the weapon name */
 	object_desc(player_ptr, o_name, o_ptr, OD_NAME_ONLY);
 	c_put_str(TERM_YELLOW, o_name, row, col);
-
-	/* Print the player's number of blows */
 	sprintf(tmp_str, _("攻撃回数: %d", "Number of Blows: %d"), player_ptr->num_blow[0]);
 	put_str(tmp_str, row + 1, col);
 
-	/* Print to_hit and to_dam of the weapon */
 	sprintf(tmp_str, _("命中率:  0  50 100 150 200 (敵のAC)", "To Hit:  0  50 100 150 200 (AC)"));
 	put_str(tmp_str, row + 2, col);
-
-	/* Print the weapons base damage dice */
 	sprintf(tmp_str, "        %2d  %2d  %2d  %2d  %2d (%%)",
 		(int)hit_chance(player_ptr, reli, 0),
 		(int)hit_chance(player_ptr, reli, 50),
@@ -2686,13 +2624,11 @@ static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN ro
 	put_str(tmp_str, row + 3, col);
 	c_put_str(TERM_YELLOW, _("可能なダメージ:", "Possible Damage:"), row + 5, col);
 
-	/* Damage for one blow (if it hits) */
 	sprintf(tmp_str, _("攻撃一回につき %d-%d", "One Strike: %d-%d damage"),
 		(int)(eff_dd + o_ptr->to_d + player_ptr->to_d[0]),
 		(int)(eff_ds * eff_dd + o_ptr->to_d + player_ptr->to_d[0]));
 	put_str(tmp_str, row + 6, col + 1);
 
-	/* Damage for the complete attack (if all blows hit) */
 	sprintf(tmp_str, _("１ターンにつき %d-%d", "One Attack: %d-%d damage"),
 		(int)(player_ptr->num_blow[0] * (eff_dd + o_ptr->to_d + player_ptr->to_d[0])),
 		(int)(player_ptr->num_blow[0] * (eff_ds * eff_dd + o_ptr->to_d + player_ptr->to_d[0])));
@@ -2723,14 +2659,10 @@ static PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 
 	screen_save();
 	clear_bldg(0, 22);
-
-	/* Store copy of original wielded weapon */
 	i_ptr = &customer_ptr->inventory_list[INVEN_RARM];
 	object_copy(&orig_weapon, i_ptr);
 
 	item_tester_hook = item_tester_hook_orthodox_melee_weapons;
-
-	/* Get the first weapon */
 	concptr q = _("第一の武器は？", "What is your first weapon? ");
 	concptr s = _("比べるものがありません。", "You have nothing to compare.");
 
@@ -2748,38 +2680,25 @@ static PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 	while (TRUE)
 	{
 		clear_bldg(0, 22);
-
-		/* Only compare melee weapons */
 		item_tester_hook = item_tester_hook_orthodox_melee_weapons;
-
-		/* Hack -- prevent "icky" message */
 		current_world_ptr->character_xtra = TRUE;
-
-		/* Diaplay selected weapon's infomation */
 		for (int i = 0; i < n; i++)
 		{
 			int col = (wid * i + mgn);
-
-			/* Copy i-th weapon into the weapon slot (if it's not already there) */
 			if (o_ptr[i] != i_ptr) object_copy(i_ptr, o_ptr[i]);
 
 			customer_ptr->update |= PU_BONUS;
 			handle_stuff(customer_ptr);
 
-			/* List the new values */
 			list_weapon(customer_ptr, o_ptr[i], row, col);
 			compare_weapon_aux(customer_ptr, o_ptr[i], col, row + 8);
-
-			/* Copy back the original weapon into the weapon slot */
 			object_copy(i_ptr, &orig_weapon);
 		}
 
-		/* Reset the values for the old weapon */
 		customer_ptr->update |= PU_BONUS;
 		handle_stuff(customer_ptr);
 
 		current_world_ptr->character_xtra = old_character_xtra;
-
 #ifdef JP
 		put_str(format("[ 比較対象: 's'で変更 ($%d) ]", cost), 1, (wid + mgn));
 		put_str("(一番高いダメージが適用されます。複数の倍打効果は足し算されません。)", row + 4, 0);
@@ -2792,7 +2711,6 @@ static PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 
 		flush();
 		ch = inkey();
-
 		if (ch != 's') break;
 
 		if (total + cost > customer_ptr->au)
@@ -2804,8 +2722,6 @@ static PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 
 		q = _("第二の武器は？", "What is your second weapon? ");
 		s = _("比べるものがありません。", "You have nothing to compare.");
-
-		/* Get the second weapon */
 		OBJECT_IDX item2;
 		o_ptr[1] = choose_object(customer_ptr, &item2, q, s, (USE_EQUIP | USE_INVEN | IGNORE_BOTHHAND_SLOT), 0);
 		if (!o_ptr[1]) continue;
@@ -2814,8 +2730,8 @@ static PRICE compare_weapons(player_type *customer_ptr, PRICE bcost)
 		cost = bcost / 2;
 		n = 2;
 	}
-	screen_load();
 
+	screen_load();
 	return total;
 }
 
@@ -2859,12 +2775,9 @@ static bool eval_ac(ARMOUR_CLASS iAC)
 	DEPTH lvl;
 	char buf[80 * 20], *t;
 
-	/* AC lower than zero has no effect */
 	if (iAC < 0) iAC = 0;
 
-	/* ダメージ軽減率を計算 */
 	protection = 100 * MIN(iAC, 150) / 250;
-
 	screen_save();
 	clear_bldg(0, 22);
 
@@ -2893,7 +2806,6 @@ static bool eval_ac(ARMOUR_CLASS iAC)
 		put_str(format("%3d", average), row + 2, col);
 	}
 
-	/* Display note */
 	roff_to_buf(memo, 70, buf, sizeof(buf));
 	for (t = buf; t[0]; t += strlen(t) + 1)
 		put_str(t, (row++) + 4, 4);
@@ -2975,8 +2887,6 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 
 	concptr q = _("どの折れた武器を修復しますか？", "Repair which broken weapon? ");
 	concptr s = _("修復できる折れた武器がありません。", "You have no broken weapon to repair.");
-
-	/* Only forge broken weapons */
 	item_tester_hook = item_tester_hook_broken_weapon;
 
 	OBJECT_IDX item;
@@ -2984,21 +2894,18 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP), 0);
 	if (!o_ptr) return 0;
 
-	/* It is worthless */
 	if (!object_is_ego(o_ptr) && !object_is_artifact(o_ptr))
 	{
 		msg_format(_("それは直してもしょうがないぜ。", "It is worthless to repair."));
 		return 0;
 	}
 
-	/* They are too many */
 	if (o_ptr->number > 1)
 	{
 		msg_format(_("一度に複数を修復することはできません！", "They are too many to repair at once!"));
 		return 0;
 	}
 
-	/* Display item name */
 	char basenm[MAX_NLEN];
 	object_desc(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
 	prt(format(_("修復する武器　： %s", "Repairing: %s"), basenm), row + 3, 2);
@@ -3006,9 +2913,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	q = _("材料となる武器は？", "Which weapon for material? ");
 	s = _("材料となる武器がありません。", "You have no material to repair.");
 
-	/* Only forge broken weapons */
 	item_tester_hook = item_tester_hook_orthodox_melee_weapons;
-
 	OBJECT_IDX mater;
 	object_type *mo_ptr;
 	mo_ptr = choose_object(player_ptr, &mater, q, s, (USE_INVEN | USE_EQUIP), 0);
@@ -3019,16 +2924,11 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 		return 0;
 	}
 
-	/* Display item name */
 	object_desc(player_ptr, basenm, mo_ptr, OD_NAME_ONLY);
 	prt(format(_("材料とする武器： %s", "Material : %s"), basenm), row + 4, 2);
-
-	/* Get the value of one of the items (except curses) */
 	PRICE cost = bcost + object_value_real(o_ptr) * 2;
-
 	if (!get_check(format(_("＄%dかかりますがよろしいですか？ ", "Costs %d gold, okay? "), cost))) return 0;
 
-	/* Check if the player has enough money */
 	if (player_ptr->au < cost)
 	{
 		object_desc(player_ptr, basenm, o_ptr, OD_NAME_ONLY);
@@ -3038,17 +2938,12 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	}
 
 	player_ptr->total_weight -= o_ptr->weight;
-
 	KIND_OBJECT_IDX k_idx;
 	if (o_ptr->sval == SV_BROKEN_DAGGER)
 	{
-		KIND_OBJECT_IDX j;
 		int n = 1;
-
-		/* Suppress compiler warning */
 		k_idx = 0;
-
-		for (j = 1; j < max_k_idx; j++)
+		for (KIND_OBJECT_IDX j = 1; j < max_k_idx; j++)
 		{
 			object_kind *k_aux_ptr = &k_info[j];
 
@@ -3065,15 +2960,12 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 			}
 		}
 	}
-	else /* TV_BROKEN_SWORD */
+	else
 	{
-		/* Repair to a sword or sometimes material's type weapon */
 		OBJECT_TYPE_VALUE tval = (one_in_(5) ? mo_ptr->tval : TV_SWORD);
-
 		while (TRUE)
 		{
 			object_kind *ck_ptr;
-
 			k_idx = lookup_kind(tval, SV_ANY);
 			ck_ptr = &k_info[k_idx];
 
@@ -3100,13 +2992,11 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 		}
 	}
 
-	/* Calculate dice bonuses */
 	int dd_bonus = o_ptr->dd - k_info[o_ptr->k_idx].dd;
 	int ds_bonus = o_ptr->ds - k_info[o_ptr->k_idx].ds;
 	dd_bonus += mo_ptr->dd - k_info[mo_ptr->k_idx].dd;
 	ds_bonus += mo_ptr->ds - k_info[mo_ptr->k_idx].ds;
 
-	/* Change base object */
 	object_kind *k_ptr;
 	k_ptr = &k_info[k_idx];
 	o_ptr->k_idx = k_idx;
@@ -3116,7 +3006,6 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	o_ptr->dd = k_ptr->dd;
 	o_ptr->ds = k_ptr->ds;
 
-	/* Copy base object's ability */
 	for (int i = 0; i < TR_FLAG_SIZE; i++) o_ptr->art_flags[i] |= k_ptr->flags[i];
 	if (k_ptr->pval) o_ptr->pval = MAX(o_ptr->pval, randint1(k_ptr->pval));
 	if (have_flag(k_ptr->flags, TR_ACTIVATE)) o_ptr->xtra2 = (byte_hack)k_ptr->act_idx;
@@ -3145,10 +3034,7 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 		o_ptr->pval = MIN(o_ptr->pval, bmax);
 	}
 
-	/* Add one random ability from material weapon */
 	give_one_ability_of_object(o_ptr, mo_ptr);
-
-	/* Add to-dam, to-hit and to-ac from material weapon */
 	o_ptr->to_d += MAX(0, (mo_ptr->to_d / 3));
 	o_ptr->to_h += MAX(0, (mo_ptr->to_h / 3));
 	o_ptr->to_a += MAX(0, (mo_ptr->to_a));
@@ -3157,20 +3043,15 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 		(object_is_random_artifact(o_ptr) && one_in_(1)) ||
 		(object_is_ego(o_ptr) && one_in_(7)))
 	{
-		/* Forge it */
 		if (object_is_ego(o_ptr))
 		{
 			add_flag(o_ptr->art_flags, TR_IGNORE_FIRE);
 			add_flag(o_ptr->art_flags, TR_IGNORE_ACID);
 		}
 
-		/* Add one random ability from material weapon */
 		give_one_ability_of_object(o_ptr, mo_ptr);
-
-		/* Add one random activation */
 		if (!activation_index(o_ptr)) one_activation(o_ptr);
 
-		/* Narsil */
 		if (o_ptr->name1 == ART_NARSIL)
 		{
 			one_high_resistance(o_ptr);
@@ -3187,17 +3068,11 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
 	msg_format("Repaired into %s for %d gold.", basenm, cost);
 #endif
 	msg_print(NULL);
-
-	/* Remove BROKEN flag */
 	o_ptr->ident &= ~(IDENT_BROKEN);
-
-	/* Add repaired flag */
 	o_ptr->discount = 99;
 
 	player_ptr->total_weight += o_ptr->weight;
 	calc_android_exp(player_ptr);
-
-	/* Decrease material object */
 	inven_item_increase(player_ptr, mater, -1);
 	inven_item_optimize(player_ptr, mater);
 
@@ -3247,7 +3122,6 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 	o_ptr = choose_object(player_ptr, &item, q, s, (USE_INVEN | USE_EQUIP | IGNORE_BOTHHAND_SLOT), item_tester_tval);
 	if (!o_ptr) return FALSE;
 
-	/* Check if the player has enough money */
 	char tmp_str[MAX_NLEN];
 	if (player_ptr->au < (cost * o_ptr->number))
 	{
@@ -3256,7 +3130,6 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 		return FALSE;
 	}
 
-	/* Enchant to hit */
 	bool okay = FALSE;
 	for (int i = 0; i < to_hit; i++)
 	{
@@ -3267,7 +3140,6 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 		}
 	}
 
-	/* Enchant to damage */
 	for (int i = 0; i < to_dam; i++)
 	{
 		if ((o_ptr->to_d < maxenchant) && enchant(player_ptr, o_ptr, 1, (ENCH_TODAM | ENCH_FORCE)))
@@ -3277,7 +3149,6 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 		}
 	}
 
-	/* Enchant to AC */
 	for (int i = 0; i < to_ac; i++)
 	{
 		if ((o_ptr->to_a < maxenchant) && enchant(player_ptr, o_ptr, 1, (ENCH_TOAC | ENCH_FORCE)))
@@ -3287,7 +3158,6 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 		}
 	}
 
-	/* Failure */
 	if (!okay)
 	{
 		if (flush_failure) flush();
@@ -3358,29 +3228,23 @@ static void building_recharge(player_type *player_ptr)
 			object_desc(player_ptr, tmp_str, o_ptr, 0);
 			msg_format(_("%s です。", "You have: %s."), tmp_str);
 
-			/* Auto-inscription */
 			autopick_alter_item(player_ptr, item, FALSE);
-
-			/* Update the gold display */
 			building_prt_gold(player_ptr);
 		}
 
 		return;
 	}
 
-	/* Extract the object "level" */
 	DEPTH lev = k_info[o_ptr->k_idx].level;
 	PRICE price;
 	if (o_ptr->tval == TV_ROD)
 	{
 		if (o_ptr->timeout > 0)
 		{
-			/* Fully recharge */
 			price = (lev * 50 * o_ptr->timeout) / k_ptr->pval;
 		}
 		else
 		{
-			/* No recharge necessary */
 			price = 0;
 			msg_format(_("それは再充填する必要はありません。", "That doesn't need to be recharged."));
 			return;
@@ -3397,7 +3261,6 @@ static void building_recharge(player_type *player_ptr)
 		price = MAX(10, price);
 	}
 
-	/* Limit the number of charges for wands and staffs */
 	if (o_ptr->tval == TV_WAND
 		&& (o_ptr->pval / o_ptr->number >= k_ptr->pval))
 	{
@@ -3426,7 +3289,6 @@ static void building_recharge(player_type *player_ptr)
 		return;
 	}
 
-	/* Check if the player has enough money */
 	if (player_ptr->au < price)
 	{
 		object_desc(player_ptr, tmp_str, o_ptr, OD_NAME_ONLY);
@@ -3449,7 +3311,6 @@ static void building_recharge(player_type *player_ptr)
 #endif
 
 		{
-			/* Recharge fully */
 			o_ptr->timeout = 0;
 		}
 		else
@@ -3465,11 +3326,9 @@ static void building_recharge(player_type *player_ptr)
 		else
 			max_charges = o_ptr->number * k_ptr->pval - o_ptr->pval;
 
-		/* Get the quantity for staves and wands */
 		charges = (PARAMETER_VALUE)get_quantity(format(_("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold? "), price),
 			MIN(player_ptr->au / price, max_charges));
 
-		/* Do nothing */
 		if (charges < 1) return;
 
 		price *= charges;
@@ -3514,13 +3373,9 @@ static void building_recharge_all(player_type *player_ptr)
 		object_type *o_ptr;
 		o_ptr = &player_ptr->inventory_list[i];
 
-		/* skip non magic device */
 		if (o_ptr->tval < TV_STAFF || o_ptr->tval > TV_ROD) continue;
-
-		/* need identified */
 		if (!object_is_known(o_ptr)) total_cost += 50;
 
-		/* Extract the object "level" */
 		DEPTH lev = k_info[o_ptr->k_idx].level;
 		object_kind *k_ptr;
 		k_ptr = &k_info[o_ptr->k_idx];
@@ -3532,29 +3387,18 @@ static void building_recharge_all(player_type *player_ptr)
 			break;
 
 		case TV_STAFF:
-			/* Price per charge ( = double the price paid by shopkeepers for the charge) */
 			price = (k_info[o_ptr->k_idx].cost / 10) * o_ptr->number;
-
-			/* Pay at least 10 gold per charge */
 			price = MAX(10, price);
-
-			/* Fully charge */
 			price = (k_ptr->pval - o_ptr->pval) * price;
 			break;
 
 		case TV_WAND:
-			/* Price per charge ( = double the price paid by shopkeepers for the charge) */
 			price = (k_info[o_ptr->k_idx].cost / 10);
-
-			/* Pay at least 10 gold per charge */
 			price = MAX(10, price);
-
-			/* Fully charge */
 			price = (o_ptr->number * k_ptr->pval - o_ptr->pval) * price;
 			break;
 		}
 
-		/* if price <= 0 then item have enough charge */
 		if (price > 0) total_cost += price;
 	}
 
@@ -3565,7 +3409,6 @@ static void building_recharge_all(player_type *player_ptr)
 		return;
 	}
 
-	/* Check if the player has enough money */
 	if (player_ptr->au < total_cost)
 	{
 		msg_format(_("すべてのアイテムを再充填するには＄%d 必要です！", "You need %d gold to recharge all items!"), total_cost);
@@ -3582,18 +3425,14 @@ static void building_recharge_all(player_type *player_ptr)
 		object_kind *k_ptr;
 		k_ptr = &k_info[o_ptr->k_idx];
 
-		/* skip non magic device */
 		if (o_ptr->tval < TV_STAFF || o_ptr->tval > TV_ROD) continue;
 
 		if (!object_is_known(o_ptr))
 		{
 			identify_item(player_ptr, o_ptr);
-
-			/* Auto-inscription */
 			autopick_alter_item(player_ptr, i, FALSE);
 		}
 
-		/* Recharge */
 		switch (o_ptr->tval)
 		{
 		case TV_ROD:
@@ -3601,13 +3440,13 @@ static void building_recharge_all(player_type *player_ptr)
 			break;
 		case TV_STAFF:
 			if (o_ptr->pval < k_ptr->pval) o_ptr->pval = k_ptr->pval;
-			/* We no longer think the item is empty */
+
 			o_ptr->ident &= ~(IDENT_EMPTY);
 			break;
 		case TV_WAND:
 			if (o_ptr->pval < o_ptr->number * k_ptr->pval)
 				o_ptr->pval = o_ptr->number * k_ptr->pval;
-			/* We no longer think the item is empty */
+
 			o_ptr->ident &= ~(IDENT_EMPTY);
 			break;
 		}
@@ -3619,6 +3458,7 @@ static void building_recharge_all(player_type *player_ptr)
 	player_ptr->window |= (PW_INVEN);
 	player_ptr->au -= total_cost;
 }
+
 
 /*!
  * @brief 施設でモンスターの情報を知るメインルーチン / research_mon -KMW-
@@ -3634,19 +3474,15 @@ static bool research_mon(player_type *player_ptr)
 	u16b why = 0;
 	MONSTER_IDX *who;
 
-	/* XTRA HACK WHATSEARCH */
 	bool all = FALSE;
 	bool uniq = FALSE;
 	bool norm = FALSE;
 	char temp[80] = "";
 
-	/* XTRA HACK REMEMBER_IDX */
 	static int old_sym = '\0';
 	static IDX old_i = 0;
-
 	screen_save();
 
-	/* Get a character, or abort */
 	char sym;
 	if (!get_com(_("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):",
 		"Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "), &sym, FALSE))
@@ -3656,7 +3492,6 @@ static bool research_mon(player_type *player_ptr)
 		return FALSE;
 	}
 
-	/* Find that character info, and describe it */
 	IDX i;
 	for (i = 0; ident_info[i]; ++i)
 	{
@@ -3708,8 +3543,8 @@ static bool research_mon(player_type *player_ptr)
 	C_MAKE(who, max_r_idx, MONRACE_IDX);
 
 	/* Collect matching monsters */
-	int n;
-	for (n = 0, i = 1; i < max_r_idx; i++)
+	int n = 0;
+	for (i = 1; i < max_r_idx; i++)
 	{
 		monster_race *r_ptr = &r_info[i];
 
@@ -3762,80 +3597,53 @@ static bool research_mon(player_type *player_ptr)
 		}
 	}
 
-	/* Nothing to recall */
-	if (!n)
+	if (n == 0)
 	{
-		/* Free the "who" array */
 		C_KILL(who, max_r_idx, MONRACE_IDX);
 		screen_load();
 
 		return FALSE;
 	}
 
-	/* Sort by level */
 	why = 2;
 	char query = 'y';
 
-	/* Sort if needed */
 	if (why)
 	{
 		ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
 	}
 
-	/* Start at the end */
-	/* XTRA HACK REMEMBER_IDX */
 	if (old_sym == sym && old_i < n) i = old_i;
 	else i = n - 1;
 
 	notpicked = TRUE;
-
-	/* Scan the monster memory */
 	MONRACE_IDX r_idx;
 	while (notpicked)
 	{
 		r_idx = who[i];
-
-		/* Hack -- Begin the prompt */
 		roff_top(r_idx);
-
-		/* Hack -- Complete the prompt */
 		Term_addstr(-1, TERM_WHITE, _(" ['r'思い出, ' 'で続行, ESC]", " [(r)ecall, ESC, space to continue]"));
-
-		/* Interact */
 		while (TRUE)
 		{
 			if (recall)
 			{
-				/*** Recall on screen ***/
-
-				/* Get maximal info about this monster */
 				lore_do_probe(player_ptr, r_idx);
-
-				/* Save this monster ID */
 				monster_race_track(player_ptr, r_idx);
 				handle_stuff(player_ptr);
-
-				/* know every thing mode */
 				screen_roff(player_ptr, r_idx, 0x01);
 				notpicked = FALSE;
-
-				/* XTRA HACK REMEMBER_IDX */
 				old_sym = sym;
 				old_i = i;
 			}
 
 			query = inkey();
-
-			/* Normal commands */
 			if (query != 'r') break;
 
 			recall = !recall;
 		}
 
-		/* Stop scanning */
 		if (query == ESCAPE) break;
 
-		/* Move to "prev" monster */
 		if (query == '-')
 		{
 			if (++i == n)
@@ -3886,7 +3694,6 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		return;
 	}
 
-	/* check gold (HACK - Recharge uses variable costs) */
 	BACT_IDX bact = bldg->actions[i];
 	if ((bact != BACT_RECHARGE) &&
 		(((bldg->member_costs[i] > player_ptr->au) && is_owner(player_ptr, bldg)) ||
@@ -3958,22 +3765,22 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 	case BACT_RECHARGE_ALL:
 		building_recharge_all(player_ptr);
 		break;
-	case BACT_IDENTS: /* needs work */
+	case BACT_IDENTS:
 		if (!get_check(_("持ち物を全て鑑定してよろしいですか？", "Do you pay for identify all your possession? "))) break;
 		identify_pack(player_ptr);
 		msg_print(_(" 持ち物全てが鑑定されました。", "Your possessions have been identified."));
 		paid = TRUE;
 		break;
-	case BACT_IDENT_ONE: /* needs work */
+	case BACT_IDENT_ONE:
 		paid = ident_spell(player_ptr, FALSE);
 		break;
 	case BACT_LEARN:
 		do_cmd_study(player_ptr);
 		break;
-	case BACT_HEALING: /* needs work */
+	case BACT_HEALING:
 		paid = cure_critical_wounds(player_ptr, 200);
 		break;
-	case BACT_RESTORE: /* needs work */
+	case BACT_RESTORE:
 		paid = restore_all_status(player_ptr);
 		break;
 	case BACT_ENCHANT_ARROWS:
@@ -4091,7 +3898,6 @@ void do_cmd_bldg(player_type *player_ptr)
 	building_type *bldg;
 	bldg = &building[which];
 
-	/* Don't re-init the wilderness */
 	reinit_wilderness = FALSE;
 
 	if ((which == 2) && (player_ptr->arena_number < 0))
@@ -4107,16 +3913,10 @@ void do_cmd_bldg(player_type *player_ptr)
 		}
 		else
 		{
-			/* Don't save the arena as saved floor */
 			prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_NO_RETURN);
-
 			player_ptr->current_floor_ptr->inside_arena = FALSE;
 			player_ptr->leaving = TRUE;
-
-			/* Re-enter the arena */
 			command_new = SPECIAL_KEY_BUILDING;
-
-			/* No energy needed to re-enter the arena */
 			free_turn(player_ptr);
 		}
 
@@ -4124,18 +3924,11 @@ void do_cmd_bldg(player_type *player_ptr)
 	}
 	else if (player_ptr->phase_out)
 	{
-		/* Don't save the arena as saved floor */
 		prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS | CFM_NO_RETURN);
-
 		player_ptr->leaving = TRUE;
 		player_ptr->phase_out = FALSE;
-
-		/* Re-enter the monster arena */
 		command_new = SPECIAL_KEY_BUILDING;
-
-		/* No energy needed to re-enter the arena */
 		free_turn(player_ptr);
-
 		return;
 	}
 	else
@@ -4146,8 +3939,6 @@ void do_cmd_bldg(player_type *player_ptr)
 
 	forget_lite(player_ptr->current_floor_ptr);
 	forget_view(player_ptr->current_floor_ptr);
-
-	/* Hack -- Increase "icky" depth */
 	current_world_ptr->character_icky++;
 
 	command_arg = 0;
@@ -4156,7 +3947,6 @@ void do_cmd_bldg(player_type *player_ptr)
 
 	show_building(player_ptr, bldg);
 	player_ptr->leave_bldg = FALSE;
-
 	play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_BUILD);
 
 	bool validcmd;
@@ -4197,12 +3987,9 @@ void do_cmd_bldg(player_type *player_ptr)
 	msg_flag = FALSE;
 	msg_erase();
 
-	/* Reinit wilderness to activate quests ... */
 	if (reinit_wilderness) player_ptr->leaving = TRUE;
 
-	/* Hack -- Decrease "icky" depth */
 	current_world_ptr->character_icky--;
-
 	Term_clear();
 
 	player_ptr->update |= (PU_VIEW | PU_MONSTERS | PU_BONUS | PU_LITE | PU_MON_LITE);
@@ -4294,7 +4081,6 @@ void determine_bounty_uniques(player_type *player_ptr)
 		}
 	}
 
-	/* Sort them */
 	for (int i = 0; i < MAX_BOUNTY - 1; i++)
 	{
 		for (int j = i; j < MAX_BOUNTY; j++)

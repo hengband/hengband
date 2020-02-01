@@ -1861,7 +1861,6 @@ void spell_RF6_HASTE(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_i
 		_("%^sが自分の体に念を送った。", format("%%^s concentrates on %s body.", m_poss)),
 		target_ptr->blind > 0, TARGET_TYPE);
 
-	/* Allow quick speed increases to base+10 */
 	if (set_monster_fast(target_ptr, m_idx, MON_FAST(m_ptr) + 100))
 	{
 		if (TARGET_TYPE == MONSTER_TO_PLAYER ||
@@ -1931,10 +1930,7 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 		_("%^sは自分の傷に念を集中した。", format("%%^s concentrates on his wounds.", m_poss)),
 		target_ptr->blind > 0, TARGET_TYPE);
 
-	/* Heal some */
 	m_ptr->hp += (rlev * 6);
-
-	/* Fully healed */
 	if (m_ptr->hp >= m_ptr->maxhp)
 	{
 		/* Fully healed */
@@ -1947,8 +1943,6 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 			_("%^sは完全に治った！", "%^s looks completely healed!"),
 			!seen, TARGET_TYPE);
 	}
-
-	/* Partially healed */
 	else
 	{
 		monspell_message_base(target_ptr, m_idx, t_idx,
@@ -1959,14 +1953,11 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 			!seen, TARGET_TYPE);
 	}
 
-	/* Redraw (later) if needed */
 	if (target_ptr->health_who == m_idx) target_ptr->redraw |= (PR_HEALTH);
 	if (target_ptr->riding == m_idx) target_ptr->redraw |= (PR_UHEALTH);
 
-	/* Cancel fear */
 	if (!MON_MONFEAR(m_ptr)) return;
 
-	/* Cancel fear */
 	(void)set_monster_monfear(target_ptr, m_idx, 0);
 
 	if (see_monster(floor_ptr, m_idx))
@@ -2255,18 +2246,12 @@ HIT_POINT spell_RF6_SPECIAL_B(player_type *target_ptr, POSITION y, POSITION x, M
 	if (monster_to_player ||
 		(monster_to_monster && target_ptr->riding == t_idx))
 	{
-		/* Mega hack -- this special action deals damage to the player. Therefore the code of "eyeeye" is necessary.
-		-- henkma
-		*/
 		get_damage = take_hit(target_ptr, DAMAGE_NOESCAPE, dam, m_name, -1);
 		if (target_ptr->tim_eyeeye && get_damage > 0 && !target_ptr->is_dead)
 		{
 			GAME_TEXT m_name_self[80];
-			/* hisself */
 			monster_desc(target_ptr, m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-
 			msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name, m_name_self);
-
 			project(target_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
 			set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
 		}
@@ -2301,7 +2286,6 @@ HIT_POINT spell_RF6_SPECIAL(player_type *target_ptr, POSITION y, POSITION x, MON
 	switch (m_ptr->r_idx)
 	{
 	case MON_OHMU:
-		/* Moved to process_monster(), like multiplication */
 		return -1;
 
 	case MON_BANORLUPART:
@@ -2320,7 +2304,6 @@ HIT_POINT spell_RF6_SPECIAL(player_type *target_ptr, POSITION y, POSITION x, MON
 			break;
 		}
 
-		/* Something is wrong */
 		else return -1;
 	}
 }
@@ -3907,133 +3890,86 @@ HIT_POINT monspell_damage_base(player_type *target_ptr, int SPELL_NUM, int hp, i
 
 	switch (SPELL_NUM)
 	{
-	case MS_SHRIEK:   return -1;   /* RF4_SHRIEK */
-	case MS_XXX1:   return -1;   /* RF4_XXX1 */
-	case MS_DISPEL:   return -1;   /* RF4_DISPEL */
-
-		/* RF4_ROCKET */
+	case MS_SHRIEK: return -1;
+	case MS_XXX1: return -1;
+	case MS_DISPEL: return -1;
 	case MS_ROCKET:
 		dam = (hp / 4) > 800 ? 800 : (hp / 4);
 		break;
-
-		/* RF4_SHOOT */
 	case MS_SHOOT:
 		dice_num = shoot_dd;
 		dice_side = shoot_ds;
 		dam = shoot_base;
 		break;
-	case MS_XXX2:   return -1;   /* RF4_XXX2 */
-	case MS_XXX3:   return -1;   /* RF4_XXX3 */
-	case MS_XXX4:   return -1;   /* RF4_XXX4 */
+	case MS_XXX2: return -1;
+	case MS_XXX3: return -1;
+	case MS_XXX4: return -1;
 
-		/* RF4_BR_ACID */
-		/* RF4_BR_ELEC */
-		/* RF4_BR_FIRE */
-		/* RF4_BR_COLD */
 	case MS_BR_ACID:
 	case MS_BR_ELEC:
 	case MS_BR_FIRE:
 	case MS_BR_COLD:
 		dam = ((hp / 3) > 1600 ? 1600 : (hp / 3));
 		break;
-
-		/* RF4_BR_POIS */
 	case MS_BR_POIS:
 		dam = ((hp / 3) > 800 ? 800 : (hp / 3));
 		break;
-
-		/* RF4_BR_NETH */
 	case MS_BR_NETHER:
 		dam = ((hp / 6) > 550 ? 550 : (hp / 6));
 		break;
-
-		/* RF4_BR_LITE */
-		/* RF4_BR_DARK */
 	case MS_BR_LITE:
 	case MS_BR_DARK:
 		dam = ((hp / 6) > 400 ? 400 : (hp / 6));
 		break;
-
-		/* RF4_BR_CONF */
-		/* RF4_BR_SOUN */
 	case MS_BR_CONF:
 	case MS_BR_SOUND:
 		dam = ((hp / 6) > 450 ? 450 : (hp / 6));
 		break;
-
-		/* RF4_BR_CHAO */
 	case MS_BR_CHAOS:
 		dam = ((hp / 6) > 600 ? 600 : (hp / 6));
 		break;
-
-		/* RF4_BR_DISE */
 	case MS_BR_DISEN:
 		dam = ((hp / 6) > 500 ? 500 : (hp / 6));
 		break;
-
-		/* RF4_BR_NEXU */
 	case MS_BR_NEXUS:
 		dam = ((hp / 3) > 250 ? 250 : (hp / 3));
 		break;
-
-		/* RF4_BR_TIME */
 	case MS_BR_TIME:
 		dam = ((hp / 3) > 150 ? 150 : (hp / 3));
 		break;
-
-		/* RF4_BR_INER */
-		/* RF4_BR_GRAV */
 	case MS_BR_INERTIA:
 	case MS_BR_GRAVITY:
 		dam = ((hp / 6) > 200 ? 200 : (hp / 6));
 		break;
-
-		/* RF4_BR_SHAR */
 	case MS_BR_SHARDS:
 		dam = ((hp / 6) > 500 ? 500 : (hp / 6));
 		break;
-
-		/* RF4_BR_PLAS */
 	case MS_BR_PLASMA:
 		dam = ((hp / 6) > 150 ? 150 : (hp / 6));
 		break;
-
-		/* RF4_BR_WALL */
 	case MS_BR_FORCE:
 		dam = ((hp / 6) > 200 ? 200 : (hp / 6));
 		break;
-
-		/* RF4_BR_MANA */
 	case MS_BR_MANA:
 		dam = ((hp / 3) > 250 ? 250 : (hp / 3));
 		break;
-
-		/* RF4_BA_NUKE */
 	case MS_BALL_NUKE:
 		mult = powerful ? 2 : 1;
 		dam = rlev * (mult / div);
 		dice_num = 10;
 		dice_side = 6;
 		break;
-
-		/* RF4_BR_NUKE */
 	case MS_BR_NUKE:
 		dam = ((hp / 3) > 800 ? 800 : (hp / 3));
 		break;
-
-		/* RF4_BA_CHAO */
 	case MS_BALL_CHAOS:
 		dam = (powerful ? (rlev * 3) : (rlev * 2));
 		dice_num = 10;
 		dice_side = 10;
 		break;
-
-		/* RF4_BR_DISI */
 	case MS_BR_DISI:
 		dam = ((hp / 6) > 150 ? 150 : (hp / 6));
 		break;
-
-		/* RF5_BA_ACID */
 	case MS_BALL_ACID:
 		if (powerful)
 		{
@@ -4049,8 +3985,6 @@ HIT_POINT monspell_damage_base(player_type *target_ptr, int SPELL_NUM, int hp, i
 		}
 
 		break;
-
-		/* RF5_BA_ELEC */
 	case MS_BALL_ELEC:
 		if (powerful)
 		{
@@ -4066,8 +4000,6 @@ HIT_POINT monspell_damage_base(player_type *target_ptr, int SPELL_NUM, int hp, i
 		}
 
 		break;
-
-		/* RF5_BA_FIRE */
 	case MS_BALL_FIRE:
 		if (powerful)
 		{
@@ -4083,8 +4015,6 @@ HIT_POINT monspell_damage_base(player_type *target_ptr, int SPELL_NUM, int hp, i
 		}
 
 		break;
-
-		/* RF5_BA_COLD */
 	case MS_BALL_COLD:
 		if (powerful)
 		{
@@ -4100,170 +4030,123 @@ HIT_POINT monspell_damage_base(player_type *target_ptr, int SPELL_NUM, int hp, i
 		}
 
 		break;
-
-		/* RF5_BA_POIS */
 	case MS_BALL_POIS:
 		mult = powerful ? 2 : 1;
 		dice_num = 12;
 		dice_side = 2;
 		break;
-
-		/* RF5_BA_NETH */
 	case MS_BALL_NETHER:
 		dam = 50 + rlev * (powerful ? 2 : 1);
 		dice_num = 10;
 		dice_side = 10;
 		break;
-
-		/* RF5_BA_WATE */
 	case MS_BALL_WATER:
 		dam = 50;
 		dice_num = 1;
 		dice_side = powerful ? (rlev * 3) : (rlev * 2);
 		break;
-
-		/* RF5_BA_MANA */
-		/* RF5_BA_DARK */
 	case MS_BALL_MANA:
 	case MS_BALL_DARK:
 		dam = (rlev * 4) + 50;
 		dice_num = 10;
 		dice_side = 10;
 		break;
-
-		/* RF5_DRAIN_MANA */
 	case MS_DRAIN_MANA:
 		dam = rlev;
 		div = 1;
 		dice_num = 1;
 		dice_side = rlev;
 		break;
-
-		/* RF5_MIND_BLAST */
 	case MS_MIND_BLAST:
 		dice_num = 7;
 		dice_side = 7;
 		break;
-
-		/* RF5_BRAIN_SMASH */
 	case MS_BRAIN_SMASH:
 		dice_num = 12;
 		dice_side = 12;
 		break;
-
-		/* RF5_CAUSE_1 */
 	case MS_CAUSE_1:
 		dice_num = 3;
 		dice_side = 8;
 		break;
-
-		/* RF5_CAUSE_2 */
 	case MS_CAUSE_2:
 		dice_num = 8;
 		dice_side = 8;
 		break;
-
-		/* RF5_CAUSE_3 */
 	case MS_CAUSE_3:
 		dice_num = 10;
 		dice_side = 15;
 		break;
-
-		/* RF5_CAUSE_4 */
 	case MS_CAUSE_4:
 		dice_num = 15;
 		dice_side = 15;
 		break;
-
-		/* RF5_BO_ACID */
 	case MS_BOLT_ACID:
 		mult = powerful ? 2 : 1;
 		dam = rlev / 3 * (mult / div);
 		dice_num = 7;
 		dice_side = 8;
 		break;
-
-		/* RF5_BO_ELEC */
 	case MS_BOLT_ELEC:
 		mult = powerful ? 2 : 1;
 		dam = rlev / 3 * (mult / div);
 		dice_num = 4;
 		dice_side = 8;
 		break;
-
-		/* RF5_BO_FIRE */
 	case MS_BOLT_FIRE:
 		mult = powerful ? 2 : 1;
 		dam = rlev / 3 * (mult / div);
 		dice_num = 9;
 		dice_side = 8;
 		break;
-
-		/* RF5_BO_COLD */
 	case MS_BOLT_COLD:
 		mult = powerful ? 2 : 1;
 		dam = rlev / 3 * (mult / div);
 		dice_num = 6;
 		dice_side = 8;
 		break;
-
-		/* RF5_BA_LITE */
 	case MS_STARBURST:
 		dam = (rlev * 4) + 50;
 		dice_num = 10;
 		dice_side = 10;
 		break;
-
-		/* RF5_BO_NETH */
 	case MS_BOLT_NETHER:
 		dam = 30 + (rlev * 4) / (powerful ? 2 : 3);
 		dice_num = 5;
 		dice_side = 5;
 		break;
-
-		/* RF5_BO_WATE */
 	case MS_BOLT_WATER:
 		dam = (rlev * 3 / (powerful ? 2 : 3));
 		dice_num = 10;
 		dice_side = 10;
 		break;
-
-		/* RF5_BO_MANA */
 	case MS_BOLT_MANA:
 		dam = 50;
 		dice_num = 1;
 		dice_side = rlev * 7 / 2;
 		break;
-
-		/* RF5_BO_PLAS */
 	case MS_BOLT_PLASMA:
 		dam = 10 + (rlev * 3 / (powerful ? 2 : 3));
 		dice_num = 8;
 		dice_side = 7;
 		break;
-
-		/* RF5_BO_ICEE */
 	case MS_BOLT_ICE:
 		dam = (rlev * 3 / (powerful ? 2 : 3));
 		dice_num = 6;
 		dice_side = 6;
 		break;
-
-		/* RF5_MISSILE */
 	case MS_MAGIC_MISSILE:
 		dam = (rlev / 3);
 		dice_num = 2;
 		dice_side = 6;
 		break;
+	case MS_SCARE: return -1;
+	case MS_BLIND: return -1;
+	case MS_CONF: return -1;
+	case MS_SLOW: return -1;
+	case MS_SLEEP: return -1;
+	case MS_SPEED:  return -1;
 
-	case MS_SCARE: return -1;   /* RF5_SCARE */
-	case MS_BLIND: return -1;   /* RF5_BLIND */
-	case MS_CONF: return -1;   /* RF5_CONF */
-	case MS_SLOW: return -1;   /* RF5_SLOW */
-	case MS_SLEEP: return -1;   /* RF5_HOLD */
-	case MS_SPEED:  return -1;   /* RF6_HASTE */
-
-		/* RF6_HAND_DOOM */
 	case MS_HAND_DOOM:
 		mult = target_ptr->chp;
 		div = 100;
@@ -4272,43 +4155,42 @@ HIT_POINT monspell_damage_base(player_type *target_ptr, int SPELL_NUM, int hp, i
 		dice_side = 20;
 		break;
 
-	case MS_HEAL:  return -1;   /* RF6_HEAL */
-	case MS_INVULNER:  return -1;   /* RF6_INVULNER */
-	case MS_BLINK:  return -1;   /* RF6_BLINK */
-	case MS_TELEPORT:  return -1;   /* RF6_TPORT */
-	case MS_WORLD:  return -1;   /* RF6_WORLD */
-	case MS_SPECIAL:  return -1;   /* RF6_SPECIAL */
-	case MS_TELE_TO:  return -1;   /* RF6_TELE_TO */
-	case MS_TELE_AWAY:  return -1;   /* RF6_TELE_AWAY */
-	case MS_TELE_LEVEL: return -1;   /* RF6_TELE_LEVEL */
+	case MS_HEAL:  return -1;
+	case MS_INVULNER:  return -1;
+	case MS_BLINK:  return -1;
+	case MS_TELEPORT:  return -1;
+	case MS_WORLD:  return -1;
+	case MS_SPECIAL:  return -1;
+	case MS_TELE_TO:  return -1;
+	case MS_TELE_AWAY:  return -1;
+	case MS_TELE_LEVEL: return -1;
 
-		/* RF6_PSY_SPEAR */
 	case MS_PSY_SPEAR:
 		dam = powerful ? 150 : 100;
 		dice_num = 1;
 		dice_side = powerful ? (rlev * 2) : (rlev * 3 / 2);
 		break;
 
-	case MS_DARKNESS: return -1;   /* RF6_DARKNESS */
-	case MS_MAKE_TRAP: return -1;   /* RF6_TRAPS */
-	case MS_FORGET: return -1;   /* RF6_FORGET */
-	case MS_RAISE_DEAD: return -1;   /* RF6_RAISE_DEAD */
-	case MS_S_KIN: return -1;   /* RF6_S_KIN */
-	case MS_S_CYBER: return -1;   /* RF6_S_CYBER */
-	case MS_S_MONSTER: return -1;   /* RF6_S_MONSTER */
-	case MS_S_MONSTERS: return -1;   /* RF6_S_MONSTER */
-	case MS_S_ANT: return -1;   /* RF6_S_ANT */
-	case MS_S_SPIDER: return -1;   /* RF6_S_SPIDER */
-	case MS_S_HOUND: return -1;   /* RF6_S_HOUND */
-	case MS_S_HYDRA: return -1;   /* RF6_S_HYDRA */
-	case MS_S_ANGEL: return -1;   /* RF6_S_ANGEL */
-	case MS_S_DEMON: return -1;   /* RF6_S_DEMON */
-	case MS_S_UNDEAD: return -1;   /* RF6_S_UNDEAD */
-	case MS_S_DRAGON: return -1;   /* RF6_S_DRAGON */
-	case MS_S_HI_UNDEAD: return -1;   /* RF6_S_HI_UNDEAD */
-	case MS_S_HI_DRAGON: return -1;   /* RF6_S_HI_DRAGON */
-	case MS_S_AMBERITE: return -1;   /* RF6_S_AMBERITES */
-	case MS_S_UNIQUE: return -1;   /* RF6_S_UNIQUE */
+	case MS_DARKNESS: return -1;   
+	case MS_MAKE_TRAP: return -1;  
+	case MS_FORGET: return -1;
+	case MS_RAISE_DEAD: return -1;
+	case MS_S_KIN: return -1;
+	case MS_S_CYBER: return -1;
+	case MS_S_MONSTER: return -1;
+	case MS_S_MONSTERS: return -1;
+	case MS_S_ANT: return -1;
+	case MS_S_SPIDER: return -1;
+	case MS_S_HOUND: return -1;
+	case MS_S_HYDRA: return -1;
+	case MS_S_ANGEL: return -1;
+	case MS_S_DEMON: return -1;
+	case MS_S_UNDEAD: return -1;
+	case MS_S_DRAGON: return -1;
+	case MS_S_HI_UNDEAD: return -1;
+	case MS_S_HI_DRAGON: return -1;
+	case MS_S_AMBERITE: return -1;
+	case MS_S_UNIQUE: return -1;
 	}
 
 	return monspell_damage_roll(dam, dice_num, dice_side, mult, div, TYPE);
