@@ -1882,7 +1882,7 @@ void message_add(concptr str)
 
 	if (!str) return;
 
-	int n = strlen(str);
+	u32b n = strlen(str);
 	if (n >= MESSAGE_BUF / 4) return;
 
 	if (n > 80)

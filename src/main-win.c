@@ -4696,11 +4696,13 @@ static void init_stuff(void)
 
 
 /*!
+ * todo よく見るとhMutexはちゃんと使われていない……？
  * @brief (Windows固有)変愚蛮怒が起動済かどうかのチェック
  */
 static bool is_already_running(void)
 {
-	HANDLE hMutex = CreateMutex(NULL, TRUE, VERSION_NAME);
+	HANDLE hMutex;
+	hMutex = CreateMutex(NULL, TRUE, VERSION_NAME);
 	if (GetLastError() == ERROR_ALREADY_EXISTS)
 	{
 		return TRUE;
