@@ -58,14 +58,14 @@
 #include "realm-song.h"
 #include "english.h"
 
-/*!
- * @brief プレイヤー周辺の地形を感知する
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @param range 効果範囲
- * @param flag 特定地形ID
- * @param known 地形から危険フラグを外すならTRUE
- * @return 効力があった場合TRUEを返す
- */
+ /*!
+  * @brief プレイヤー周辺の地形を感知する
+  * @param caster_ptr プレーヤーへの参照ポインタ
+  * @param range 効果範囲
+  * @param flag 特定地形ID
+  * @param known 地形から危険フラグを外すならTRUE
+  * @return 効力があった場合TRUEを返す
+  */
 static bool detect_feat_flag(player_type *caster_ptr, POSITION range, int flag, bool known)
 {
 	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS) range /= 3;
@@ -319,20 +319,20 @@ bool detect_objects_magic(player_type *caster_ptr, POSITION range)
 		tv = o_ptr->tval;
 		if (object_is_artifact(o_ptr) ||
 			object_is_ego(o_ptr) ||
-		    (tv == TV_WHISTLE) ||
-		    (tv == TV_AMULET) ||
+			(tv == TV_WHISTLE) ||
+			(tv == TV_AMULET) ||
 			(tv == TV_RING) ||
-		    (tv == TV_STAFF) ||
+			(tv == TV_STAFF) ||
 			(tv == TV_WAND) ||
 			(tv == TV_ROD) ||
-		    (tv == TV_SCROLL) ||
+			(tv == TV_SCROLL) ||
 			(tv == TV_POTION) ||
-		    (tv == TV_LIFE_BOOK) ||
+			(tv == TV_LIFE_BOOK) ||
 			(tv == TV_SORCERY_BOOK) ||
-		    (tv == TV_NATURE_BOOK) ||
+			(tv == TV_NATURE_BOOK) ||
 			(tv == TV_CHAOS_BOOK) ||
-		    (tv == TV_DEATH_BOOK) ||
-		    (tv == TV_TRUMP_BOOK) ||
+			(tv == TV_DEATH_BOOK) ||
+			(tv == TV_TRUMP_BOOK) ||
 			(tv == TV_ARCANE_BOOK) ||
 			(tv == TV_CRAFT_BOOK) ||
 			(tv == TV_DAEMON_BOOK) ||
@@ -340,7 +340,7 @@ bool detect_objects_magic(player_type *caster_ptr, POSITION range)
 			(tv == TV_MUSIC_BOOK) ||
 			(tv == TV_HISSATSU_BOOK) ||
 			(tv == TV_HEX_BOOK) ||
-		    ((o_ptr->to_a > 0) || (o_ptr->to_h + o_ptr->to_d > 0)))
+			((o_ptr->to_a > 0) || (o_ptr->to_h + o_ptr->to_d > 0)))
 		{
 			o_ptr->marked |= OM_FOUND;
 			lite_spot(caster_ptr, y, x);
@@ -674,12 +674,12 @@ bool detect_monsters_xxx(player_type *caster_ptr, POSITION range, u32b match_fla
 	{
 		switch (match_flag)
 		{
-			case RF3_DEMON:
+		case RF3_DEMON:
 			desc_monsters = _("デーモン", "demons");
-				break;
-			case RF3_UNDEAD:
+			break;
+		case RF3_UNDEAD:
 			desc_monsters = _("アンデッド", "the undead");
-				break;
+			break;
 		}
 
 		msg_format(_("%sの存在を感じとった！", "You sense the presence of %s!"), desc_monsters);
@@ -876,7 +876,7 @@ bool cleansing_nova(player_type *creature_ptr, bool magic, bool powerful)
 	if (set_afraid(creature_ptr, 0)) ident = TRUE;
 	if (hp_player(creature_ptr, 50)) ident = TRUE;
 	if (set_stun(creature_ptr, 0)) ident = TRUE;
-	if (set_cut(creature_ptr,0)) ident = TRUE;
+	if (set_cut(creature_ptr, 0)) ident = TRUE;
 	return ident;
 }
 
@@ -891,7 +891,7 @@ bool unleash_mana_storm(player_type *creature_ptr, bool powerful)
 {
 	msg_print(_("強力な魔力が敵を引き裂いた！", "Mighty magics rend your enemies!"));
 	project(creature_ptr, 0, (powerful ? 7 : 5), creature_ptr->y, creature_ptr->x,
-	(randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
+		(randint1(200) + (powerful ? 500 : 300)) * 2, GF_MANA, PROJECT_KILL | PROJECT_ITEM | PROJECT_GRID, -1);
 
 	bool is_special_class = creature_ptr->pclass != CLASS_MAGE;
 	is_special_class &= creature_ptr->pclass != CLASS_HIGH_MAGE;
@@ -936,7 +936,7 @@ bool dispel_demons(player_type *caster_ptr, HIT_POINT dam)
  */
 bool crusade(player_type *caster_ptr)
 {
-	return (project_all_los(caster_ptr, GF_CRUSADE, caster_ptr->lev*4));
+	return (project_all_los(caster_ptr, GF_CRUSADE, caster_ptr->lev * 4));
 }
 
 
@@ -1086,7 +1086,7 @@ bool symbol_genocide(player_type *caster_ptr, int power, bool player_cast)
 	}
 
 	char typ;
-	while (!get_com(_("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: "), &typ, FALSE)) ;
+	while (!get_com(_("どの種類(文字)のモンスターを抹殺しますか: ", "Choose a monster race (by symbol) to genocide: "), &typ, FALSE));
 	bool result = FALSE;
 	for (MONSTER_IDX i = 1; i < caster_ptr->current_floor_ptr->m_max; i++)
 	{
@@ -1206,7 +1206,7 @@ bool probing(player_type *caster_ptr)
 		if (!monster_is_valid(m_ptr)) continue;
 		if (!player_has_los_bold(caster_ptr, m_ptr->fy, m_ptr->fx)) continue;
 		if (!m_ptr->ml) continue;
-		
+
 		GAME_TEXT m_name[MAX_NLEN];
 		if (!probe) msg_print(_("調査中...", "Probing..."));
 		msg_print(NULL);
@@ -1329,7 +1329,7 @@ void discharge_minion(player_type *caster_ptr)
 		if (dam > 100) dam = (dam - 100) / 2 + 100;
 		if (dam > 400) dam = (dam - 400) / 2 + 400;
 		if (dam > 800) dam = 800;
-		project(caster_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, GF_PLASMA, 
+		project(caster_ptr, i, 2 + (r_ptr->level / 20), m_ptr->fy, m_ptr->fx, dam, GF_PLASMA,
 			PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL, -1);
 
 		if (record_named_pet && m_ptr->nickname)
@@ -1477,7 +1477,7 @@ static void cave_temp_room_unlite(player_type *caster_ptr)
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_open(floor_type *floor_ptr, POSITION cy, POSITION cx, bool (*pass_bold)(floor_type*, POSITION, POSITION))
+static int next_to_open(floor_type *floor_ptr, POSITION cy, POSITION cx, bool(*pass_bold)(floor_type*, POSITION, POSITION))
 {
 	int len = 0;
 	int blen = 0;
@@ -1512,7 +1512,7 @@ static int next_to_open(floor_type *floor_ptr, POSITION cy, POSITION cx, bool (*
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static int next_to_walls_adj(floor_type *floor_ptr, POSITION cy, POSITION cx, bool (*pass_bold)(floor_type*, POSITION, POSITION))
+static int next_to_walls_adj(floor_type *floor_ptr, POSITION cy, POSITION cx, bool(*pass_bold)(floor_type*, POSITION, POSITION))
 {
 	POSITION y, x;
 	int c = 0;
@@ -1537,7 +1537,7 @@ static int next_to_walls_adj(floor_type *floor_ptr, POSITION cy, POSITION cx, bo
  * @param pass_bold 地形条件を返す関数ポインタ
  * @return 該当地形の数
  */
-static void cave_temp_room_aux(player_type *caster_ptr, POSITION y, POSITION x, bool only_room, bool (*pass_bold)(floor_type*, POSITION, POSITION))
+static void cave_temp_room_aux(player_type *caster_ptr, POSITION y, POSITION x, bool only_room, bool(*pass_bold)(floor_type*, POSITION, POSITION))
 {
 	grid_type *g_ptr;
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
@@ -1560,7 +1560,7 @@ static void cave_temp_room_aux(player_type *caster_ptr, POSITION y, POSITION x, 
 		 * This leaves only a check for 6 bounding walls!
 		 */
 		if (in_bounds(floor_ptr, y, x) && pass_bold(floor_ptr, y, x) &&
-		    (next_to_walls_adj(floor_ptr, y, x, pass_bold) == 6) && (next_to_open(floor_ptr, y, x, pass_bold) <= 1)) return;
+			(next_to_walls_adj(floor_ptr, y, x, pass_bold) == 6) && (next_to_open(floor_ptr, y, x, pass_bold) <= 1)) return;
 	}
 
 	if (tmp_pos.n == TEMP_MAX) return;
@@ -1799,7 +1799,7 @@ bool unlite_area(player_type *caster_ptr, HIT_POINT dam, POSITION rad)
 bool fire_ball(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, POSITION rad)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-	if (typ == GF_CHARM_LIVING) flg|= PROJECT_HIDE;
+	if (typ == GF_CHARM_LIVING) flg |= PROJECT_HIDE;
 
 	POSITION tx = caster_ptr->x + 99 * ddx[dir];
 	POSITION ty = caster_ptr->y + 99 * ddy[dir];
@@ -1909,9 +1909,9 @@ bool fire_ball_hide(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_P
  * @return 作用が実際にあった場合TRUEを返す
  * @details
  * <pre>
- * Cast a meteor spell, defined as a ball spell cast by an arbitary monster, 
- * player, or outside source, that starts out at an arbitrary location, and 
- * leaving no trail from the "caster" to the target.  This function is 
+ * Cast a meteor spell, defined as a ball spell cast by an arbitary monster,
+ * player, or outside source, that starts out at an arbitrary location, and
+ * leaving no trail from the "caster" to the target.  This function is
  * especially useful for bombardments and similar. -LM-
  * Option to hurt the player.
  * </pre>
@@ -2122,7 +2122,7 @@ bool fire_bolt_or_beam(player_type *caster_ptr, PERCENTAGE prob, EFFECT_ID typ, 
 	{
 		return (fire_beam(caster_ptr, typ, dir, dam));
 	}
-	
+
 	return (fire_bolt(caster_ptr, typ, dir, dam));
 }
 
@@ -2633,7 +2633,7 @@ void wall_breaker(player_type *caster_ptr)
 		}
 
 		project(caster_ptr, 0, 0, y, x, 20 + randint1(30), GF_KILL_WALL,
-				  (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+			(PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
 		return;
 	}
 
@@ -3323,7 +3323,7 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 		clone_monster(caster_ptr, dir);
 		return;
 	}
-	
+
 	if (die < 14)
 	{
 		speed_monster(caster_ptr, dir, plev);
@@ -3354,7 +3354,7 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 		confuse_monster(caster_ptr, dir, plev);
 		return;
 	}
-	
+
 	if (die < 46)
 	{
 		fire_ball(caster_ptr, GF_POIS, dir, 20 + (plev / 2), 3);
@@ -3366,53 +3366,53 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 		(void)lite_line(caster_ptr, dir, damroll(6, 8));
 		return;
 	}
-	
+
 	if (die < 56)
 	{
 		fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_ELEC, dir,
 			damroll(3 + ((plev - 5) / 4), 8));
 		return;
 	}
-	
+
 	if (die < 61)
 	{
 		fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr) - 10, GF_COLD, dir,
 			damroll(5 + ((plev - 5) / 4), 8));
 		return;
 	}
-	
+
 	if (die < 66)
 	{
 		fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_ACID, dir,
 			damroll(6 + ((plev - 5) / 4), 8));
 		return;
 	}
-	
+
 	if (die < 71)
 	{
 		fire_bolt_or_beam(caster_ptr, beam_chance(caster_ptr), GF_FIRE, dir,
 			damroll(8 + ((plev - 5) / 4), 8));
 		return;
 	}
-	
+
 	if (die < 76)
 	{
 		hypodynamic_bolt(caster_ptr, dir, 75);
 		return;
 	}
-	
+
 	if (die < 81)
 	{
 		fire_ball(caster_ptr, GF_ELEC, dir, 30 + plev / 2, 2);
 		return;
 	}
-	
+
 	if (die < 86)
 	{
 		fire_ball(caster_ptr, GF_ACID, dir, 40 + plev, 2);
 		return;
 	}
-	
+
 	if (die < 91)
 	{
 		fire_ball(caster_ptr, GF_ICE, dir, 70 + plev, 3);
@@ -3430,7 +3430,7 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 		hypodynamic_bolt(caster_ptr, dir, 100 + plev);
 		return;
 	}
-	
+
 	if (die < 104)
 	{
 		earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 12, 0);
@@ -3442,7 +3442,7 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 		(void)destroy_area(caster_ptr, caster_ptr->y, caster_ptr->x, 13 + randint0(5), FALSE);
 		return;
 	}
-	
+
 	if (die < 108)
 	{
 		symbol_genocide(caster_ptr, plev + 50, TRUE);
@@ -3454,7 +3454,7 @@ void cast_wonder(player_type *caster_ptr, DIRECTION dir)
 		dispel_monsters(caster_ptr, 120);
 		return;
 	}
-	
+
 	dispel_monsters(caster_ptr, 150);
 	slow_monsters(caster_ptr, plev);
 	sleep_monsters(caster_ptr, plev);
@@ -3632,7 +3632,7 @@ void cast_shuffle(player_type *caster_ptr)
 		die = (randint1(110)) + plev / 5;
 	else
 		die = randint1(120);
-	
+
 	if (vir)
 	{
 		if (caster_ptr->virtues[vir - 1] > 0)
@@ -3671,7 +3671,7 @@ void cast_shuffle(player_type *caster_ptr)
 		summon_specific(caster_ptr, 0, caster_ptr->y, caster_ptr->x, floor_ptr->dun_level, SUMMON_DEMON, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 		return;
 	}
-	
+
 	if (die < 18)
 	{
 		int count = 0;
@@ -3679,14 +3679,14 @@ void cast_shuffle(player_type *caster_ptr)
 		activate_ty_curse(caster_ptr, FALSE, &count);
 		return;
 	}
-	
+
 	if (die < 22)
 	{
 		msg_print(_("《不調和の剣》だ。", "It's the swords of discord."));
 		aggravate_monsters(caster_ptr, 0);
 		return;
 	}
-	
+
 	if (die < 26)
 	{
 		msg_print(_("《愚者》だ。", "It's the Fool."));
@@ -3694,42 +3694,42 @@ void cast_shuffle(player_type *caster_ptr)
 		do_dec_stat(caster_ptr, A_WIS);
 		return;
 	}
-	
+
 	if (die < 30)
 	{
 		msg_print(_("奇妙なモンスターの絵だ。", "It's the picture of a strange monster."));
 		trump_summoning(caster_ptr, 1, FALSE, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3 / 2), (32 + randint1(6)), PM_ALLOW_GROUP | PM_ALLOW_UNIQUE);
 		return;
 	}
-	
+
 	if (die < 33)
 	{
 		msg_print(_("《月》だ。", "It's the Moon."));
 		unlite_area(caster_ptr, 10, 3);
 		return;
 	}
-	
+
 	if (die < 38)
 	{
 		msg_print(_("《運命の輪》だ。", "It's the Wheel of Fortune."));
 		wild_magic(caster_ptr, randint0(32));
 		return;
 	}
-	
+
 	if (die < 40)
 	{
 		msg_print(_("テレポート・カードだ。", "It's a teleport trump card."));
 		teleport_player(caster_ptr, 10, TELEPORT_PASSIVE);
 		return;
 	}
-	
+
 	if (die < 42)
 	{
 		msg_print(_("《正義》だ。", "It's Justice."));
 		set_blessed(caster_ptr, caster_ptr->lev, FALSE);
 		return;
 	}
-	
+
 	if (die < 47)
 	{
 		msg_print(_("テレポート・カードだ。", "It's a teleport trump card."));
@@ -3743,56 +3743,56 @@ void cast_shuffle(player_type *caster_ptr)
 		teleport_player(caster_ptr, 200, TELEPORT_PASSIVE);
 		return;
 	}
-	
+
 	if (die < 60)
 	{
 		msg_print(_("《塔》だ。", "It's the Tower."));
 		wall_breaker(caster_ptr);
 		return;
 	}
-	
+
 	if (die < 72)
 	{
 		msg_print(_("《節制》だ。", "It's Temperance."));
 		sleep_monsters_touch(caster_ptr);
 		return;
 	}
-	
+
 	if (die < 80)
 	{
 		msg_print(_("《塔》だ。", "It's the Tower."));
 		earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 5, 0);
 		return;
 	}
-	
+
 	if (die < 82)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
 		trump_summoning(caster_ptr, 1, TRUE, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3 / 2), SUMMON_MOLD, 0L);
 		return;
 	}
-	
+
 	if (die < 84)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
 		trump_summoning(caster_ptr, 1, TRUE, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3 / 2), SUMMON_BAT, 0L);
 		return;
 	}
-	
+
 	if (die < 86)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
 		trump_summoning(caster_ptr, 1, TRUE, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3 / 2), SUMMON_VORTEX, 0L);
 		return;
 	}
-	
+
 	if (die < 88)
 	{
 		msg_print(_("友好的なモンスターの絵だ。", "It's the picture of a friendly monster."));
 		trump_summoning(caster_ptr, 1, TRUE, caster_ptr->y, caster_ptr->x, (floor_ptr->dun_level * 3 / 2), SUMMON_COIN_MIMIC, 0L);
 		return;
 	}
-	
+
 	if (die < 96)
 	{
 		msg_print(_("《恋人》だ。", "It's the Lovers."));
@@ -3804,14 +3804,14 @@ void cast_shuffle(player_type *caster_ptr)
 
 		return;
 	}
-	
+
 	if (die < 101)
 	{
 		msg_print(_("《隠者》だ。", "It's the Hermit."));
 		wall_stone(caster_ptr);
 		return;
 	}
-	
+
 	if (die < 111)
 	{
 		msg_print(_("《審判》だ。", "It's the Judgement."));
@@ -3819,7 +3819,7 @@ void cast_shuffle(player_type *caster_ptr)
 		lose_all_mutations(caster_ptr);
 		return;
 	}
-	
+
 	if (die < 120)
 	{
 		msg_print(_("《太陽》だ。", "It's the Sun."));
@@ -3828,7 +3828,7 @@ void cast_shuffle(player_type *caster_ptr)
 		wiz_lite(caster_ptr, FALSE);
 		return;
 	}
-	
+
 	msg_print(_("《世界》だ。", "It's the World."));
 	if (caster_ptr->exp >= PY_MAX_EXP)
 	{
@@ -3921,7 +3921,7 @@ bool hit_and_away(player_type *caster_ptr)
 			teleport_player(caster_ptr, 30, 0L);
 		return TRUE;
 	}
-	
+
 	msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
 	msg_print(NULL);
 	return FALSE;
@@ -4220,7 +4220,7 @@ void hayagake(player_type *creature_ptr)
 		creature_ptr->energy_use = 0;
 		return;
 	}
-	
+
 	grid_type *g_ptr = &creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];
 
@@ -4250,7 +4250,7 @@ bool double_attack(player_type *creature_ptr)
 		msg_print(NULL);
 		return TRUE;
 	}
-	
+
 	if (one_in_(3))
 		msg_print(_("あーたたたたたたたたたたたたたたたたたたたたたた！！！",
 			"Ahhhtatatatatatatatatatatatatatataatatatatattaaaaa!!!!"));
@@ -4282,7 +4282,7 @@ bool comvert_hp_to_mp(player_type *creature_ptr)
 		creature_ptr->redraw |= (PR_HP | PR_MANA);
 		return TRUE;
 	}
-	
+
 	creature_ptr->csp += gain_sp;
 	if (creature_ptr->csp > creature_ptr->msp)
 	{
