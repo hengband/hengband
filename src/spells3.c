@@ -98,14 +98,10 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT
 	while (look)
 	{
 		tries++;
-
-		/* Verify max distance */
 		if (dis > 200) dis = 200;
 
-		/* Try several locations */
 		for (int i = 0; i < 500; i++)
 		{
-			/* Pick a (possibly illegal) location */
 			while (TRUE)
 			{
 				ny = rand_spread(oy, dis);
@@ -114,12 +110,8 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT
 				if ((d >= min) && (d <= dis)) break;
 			}
 
-			/* Ignore illegal locations */
 			if (!in_bounds(caster_ptr->current_floor_ptr, ny, nx)) continue;
-
 			if (!cave_monster_teleportable_bold(caster_ptr, m_idx, ny, nx, mode)) continue;
-
-			/* No teleporting into vaults and such */
 			if (!(caster_ptr->current_floor_ptr->inside_quest || caster_ptr->current_floor_ptr->inside_arena))
 				if (caster_ptr->current_floor_ptr->grid_array[ny][nx].info & CAVE_ICKY) continue;
 
@@ -127,28 +119,19 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT
 			break;
 		}
 
-		/* Increase the maximum distance */
 		dis = dis * 2;
-
 		min = min / 2;
 		if (tries > MAX_TRIES) return FALSE;
 	}
 
 	sound(SOUND_TPOTHER);
-
-	/* Update the old location */
 	caster_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
-
-	/* Update the new location */
 	caster_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
 
-	/* Move the monster */
 	m_ptr->fy = ny;
 	m_ptr->fx = nx;
 
-	/* Forget the counter target */
 	reset_target(m_ptr);
-
 	update_monster(caster_ptr, m_idx, TRUE);
 	lite_spot(caster_ptr, oy, ox);
 	lite_spot(caster_ptr, ny, nx);
@@ -175,8 +158,6 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
 {
 	monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 	if(!m_ptr->r_idx) return;
-
-	/* "Skill" test */
 	if(randint1(100) > power) return;
 
 	POSITION ny = m_ptr->fy;
@@ -190,13 +171,10 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
 	bool look = TRUE;
 	while (look && --attempts)
 	{
-		/* Verify max distance */
 		if (dis > 200) dis = 200;
 
-		/* Try several locations */
 		for (int i = 0; i < 500; i++)
 		{
-			/* Pick a (possibly illegal) location */
 			while (TRUE)
 			{
 				ny = rand_spread(ty, dis);
@@ -205,33 +183,23 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
 				if ((d >= min) && (d <= dis)) break;
 			}
 
-			/* Ignore illegal locations */
 			if (!in_bounds(caster_ptr->current_floor_ptr, ny, nx)) continue;
-
 			if (!cave_monster_teleportable_bold(caster_ptr, m_idx, ny, nx, mode)) continue;
 
 			look = FALSE;
 			break;
 		}
 
-		/* Increase the maximum distance */
 		dis = dis * 2;
-
-		/* Decrease the minimum distance */
 		min = min / 2;
 	}
 
 	if (attempts < 1) return;
 
 	sound(SOUND_TPOTHER);
-
-	/* Update the old location */
 	caster_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = 0;
-
-	/* Update the new location */
 	caster_ptr->current_floor_ptr->grid_array[ny][nx].m_idx = m_idx;
 
-	/* Move the monster */
 	m_ptr->fy = ny;
 	m_ptr->fx = nx;
 
@@ -280,10 +248,8 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode
 	for (int i = 0; i <= MAX_TELEPORT_DISTANCE; i++)
 		candidates_at[i] = 0;
 
-	/* Limit the distance */
 	if (dis > MAX_TELEPORT_DISTANCE) dis = MAX_TELEPORT_DISTANCE;
 
-	/* Search valid locations */
 	int left = MAX(1, creature_ptr->x - dis);
 	int right = MIN(creature_ptr->current_floor_ptr->width - 2, creature_ptr->x + dis);
 	int top = MAX(1, creature_ptr->y - dis);
@@ -293,38 +259,26 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode
 	{
 		for (POSITION x = left; x <= right; x++)
 		{
-			/* Skip illegal locations */
 			if (!cave_player_teleportable_bold(creature_ptr, y, x, mode)) continue;
 
-			/* Calculate distance */
 			int d = distance(creature_ptr->y, creature_ptr->x, y, x);
-
-			/* Skip too far locations */
 			if (d > dis) continue;
 
-			/* Count the total number of candidates */
 			total_candidates++;
-
-			/* Count the number of candidates in this circumference */
 			candidates_at[d]++;
 		}
 	}
 
-	/* No valid location! */
 	if (0 == total_candidates) return FALSE;
 
-	/* Fix the minimum distance */
 	int cur_candidates;
 	int min = dis;
 	for (cur_candidates = 0; min >= 0; min--)
 	{
 		cur_candidates += candidates_at[min];
-
-		/* 50% of all candidates will have an equal chance to be choosen. */
 		if (cur_candidates && (cur_candidates >= total_candidates / 2)) break;
 	}
 
-	/* Pick up a single location randomly */
 	int pick = randint1(cur_candidates);
 
 	/* Search again the choosen location */
@@ -333,39 +287,30 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode
 	{
 		for (xx = left; xx <= right; xx++)
 		{
-			/* Skip illegal locations */
 			if (!cave_player_teleportable_bold(creature_ptr, yy, xx, mode)) continue;
 
-			/* Calculate distance */
 			int d = distance(creature_ptr->y, creature_ptr->x, yy, xx);
-
-			/* Skip too far locations */
 			if (d > dis) continue;
-
-			/* Skip too close locations */
 			if (d < min) continue;
 
-			/* This grid was picked up? */
 			pick--;
 			if (!pick) break;
 		}
 
-		/* Exit the loop */
 		if (!pick) break;
 	}
 
 	if (player_bold(creature_ptr, yy, xx)) return FALSE;
 
 	sound(SOUND_TELEPORT);
-
 #ifdef JP
 	if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 		msg_format("『こっちだぁ、%s』", creature_ptr->name);
 #endif
-
 	(void)move_player_effect(creature_ptr, yy, xx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
 	return TRUE;
 }
+
 
 /*!
  * @brief プレイヤーのテレポート処理メインルーチン
@@ -475,7 +420,6 @@ void teleport_player_to(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 	POSITION dis = 0, ctr = 0;
 	while (TRUE)
 	{
-		/* Pick a nearby legal location */
 		while (TRUE)
 		{
 			y = (POSITION)rand_spread(ny, dis);
@@ -483,13 +427,14 @@ void teleport_player_to(player_type *creature_ptr, POSITION ny, POSITION nx, BIT
 			if (in_bounds(creature_ptr->current_floor_ptr, y, x)) break;
 		}
 
-		/* Accept any grid when wizard mode */
-		if (current_world_ptr->wizard && !(mode & TELEPORT_PASSIVE) && (!creature_ptr->current_floor_ptr->grid_array[y][x].m_idx || (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx == creature_ptr->riding))) break;
+		bool is_anywhere = current_world_ptr->wizard;
+		is_anywhere &= !(mode & TELEPORT_PASSIVE);
+		is_anywhere &= (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx > 0) ||
+			creature_ptr->current_floor_ptr->grid_array[y][x].m_idx == creature_ptr->riding;
+		if (is_anywhere) break;
 
-		/* Accept teleportable floor grids */
 		if (cave_player_teleportable_bold(creature_ptr, y, x, mode)) break;
 
-		/* Occasionally advance the distance */
 		if (++ctr > (4 * dis * dis + 4 * dis + 1))
 		{
 			ctr = 0;
@@ -601,34 +546,29 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 {
 	GAME_TEXT m_name[160];
 	bool see_m = TRUE;
-	if (m_idx <= 0) /* To player */
+	if (m_idx <= 0)
 	{
 		strcpy(m_name, _("あなた", "you"));
 	}
-	else /* To monster */
+	else
 	{
 		monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
-
-		/* Get the monster name (or "it") */
 		monster_desc(creature_ptr, m_name, m_ptr, 0);
-
 		see_m = is_seen(m_ptr);
 	}
 
-	/* No effect in some case */
 	if (is_teleport_level_ineffective(creature_ptr, m_idx))
 	{
 		if (see_m) msg_print(_("効果がなかった。", "There is no effect."));
 		return;
 	}
 
-	if ((m_idx <= 0) && creature_ptr->anti_tele) /* To player */
+	if ((m_idx <= 0) && creature_ptr->anti_tele)
 	{
 		msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
 		return;
 	}
 
-	/* Choose up or down */
 	bool go_up;
 	if (randint0(100) < 50) go_up = TRUE;
 	else go_up = FALSE;
@@ -639,7 +579,6 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 		else if (get_check("Force to go down? ")) go_up = FALSE;
 	}
 
-	/* Down only */ 
 	if ((ironman_downward && (m_idx <= 0)) || (creature_ptr->current_floor_ptr->dun_level <= d_info[creature_ptr->dungeon_idx].mindepth))
 	{
 #ifdef JP
@@ -647,7 +586,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 #else
 		if (see_m) msg_format("%^s sink%s through the floor.", m_name, (m_idx <= 0) ? "" : "s");
 #endif
-		if (m_idx <= 0) /* To player */
+		if (m_idx <= 0)
 		{
 			if (!creature_ptr->current_floor_ptr->dun_level)
 			{
@@ -673,8 +612,6 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 			creature_ptr->leaving = TRUE;
 		}
 	}
-
-	/* Up only */
 	else if (quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level) || (creature_ptr->current_floor_ptr->dun_level >= d_info[creature_ptr->dungeon_idx].maxdepth))
 	{
 #ifdef JP
@@ -683,8 +620,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 		if (see_m) msg_format("%^s rise%s up through the ceiling.", m_name, (m_idx <= 0) ? "" : "s");
 #endif
 
-
-		if (m_idx <= 0) /* To player */
+		if (m_idx <= 0)
 		{
 			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, -1, NULL);
 
@@ -705,8 +641,7 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 		if (see_m) msg_format("%^s rise%s up through the ceiling.", m_name, (m_idx <= 0) ? "" : "s");
 #endif
 
-
-		if (m_idx <= 0) /* To player */
+		if (m_idx <= 0)
 		{
 			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, -1, NULL);
 
@@ -724,10 +659,8 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 		if (see_m) msg_format("%^s sink%s through the floor.", m_name, (m_idx <= 0) ? "" : "s");
 #endif
 
-		if (m_idx <= 0) /* To player */
+		if (m_idx <= 0)
 		{
-			/* Never reach this code on the surface */
-			/* if (!creature_ptr->current_floor_ptr->dun_level) creature_ptr->dungeon_idx = creature_ptr->recall_dungeon; */
 			if (record_stair) exe_write_diary(creature_ptr, DIARY_TELEPORT_LEVEL, 1, NULL);
 			if (autosave_l) do_cmd_save_game(creature_ptr, TRUE);
 
@@ -736,7 +669,6 @@ void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx)
 		}
 	}
 
-	/* Monster level teleportation is simple deleting now */
 	if (m_idx <= 0)
 	{
 		sound(SOUND_TPLEVEL);
@@ -771,8 +703,6 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 	 * TODO: Recall the player to the last
 	 * visited town when in the wilderness
 	 */
-
-	/* Ironman option */
 	if (creature_ptr->current_floor_ptr->inside_arena || ironman_downward)
 	{
 		msg_print(_("何も起こらなかった。", "Nothing happens."));
@@ -820,12 +750,9 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 bool free_level_recall(player_type *creature_ptr)
 {
 	DUNGEON_IDX select_dungeon = choose_dungeon(_("にテレポート", "teleport"), 4, 0);
-
 	if (!select_dungeon) return FALSE;
 
 	DEPTH max_depth = d_info[select_dungeon].maxdepth;
-
-	/* Limit depth in Angband */
 	if (select_dungeon == DUNGEON_ANGBAND)
 	{
 		if (quest[QUEST_OBERON].status != QUEST_STATUS_FINISHED) max_depth = 98;
@@ -834,7 +761,6 @@ bool free_level_recall(player_type *creature_ptr)
 
 	QUANTITY amt = get_quantity(format(_("%sの何階にテレポートしますか？", "Teleport to which level of %s? "),
 		d_name + d_info[select_dungeon].name), (QUANTITY)max_depth);
-
 	if (amt <= 0)
 	{
 		return FALSE;
@@ -865,8 +791,6 @@ bool reset_recall(player_type *caster_ptr)
 	char tmp_val[160];
 
 	select_dungeon = choose_dungeon(_("をセット", "reset"), 2, 14);
-
-	/* Ironman option */
 	if (ironman_downward)
 	{
 		msg_print(_("何も起こらなかった。", "Nothing happens."));
@@ -874,20 +798,15 @@ bool reset_recall(player_type *caster_ptr)
 	}
 
 	if (!select_dungeon) return FALSE;
-	/* Prompt */
 	sprintf(ppp, _("何階にセットしますか (%d-%d):", "Reset to which level (%d-%d): "),
 		(int)d_info[select_dungeon].mindepth, (int)max_dlv[select_dungeon]);
-
-	/* Default */
 	sprintf(tmp_val, "%d", (int)MAX(caster_ptr->current_floor_ptr->dun_level, 1));
 
-	/* Ask for a level */
 	if (!get_string(ppp, tmp_val, 10))
 	{
 		return FALSE;
 	}
 
-	/* Extract request */
 	dummy = atoi(tmp_val);
 	if (dummy < 1) dummy = 1;
 	if (dummy > max_dlv[select_dungeon]) dummy = max_dlv[select_dungeon];
@@ -897,7 +816,6 @@ bool reset_recall(player_type *caster_ptr)
 
 	if (record_maxdepth)
 		exe_write_diary(caster_ptr, DIARY_TRUMP, select_dungeon, _("フロア・リセットで", "using a scroll of reset recall"));
-	/* Accept request */
 #ifdef JP
 	msg_format("%sの帰還レベルを %d 階にセット。", d_name + d_info[select_dungeon].name, dummy, dummy * 50);
 #else
@@ -932,15 +850,11 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
 
 	object_type *o_ptr;
 	o_ptr = &target_ptr->inventory_list[t];
-
-	/* No item, nothing happens */
 	if (!o_ptr->k_idx) return FALSE;
 
-	/* Disenchant equipments only -- No disenchant on monster ball */
 	if (!object_is_weapon_armour_ammo(o_ptr))
 		return FALSE;
 
-	/* Nothing to disenchant */
 	if ((o_ptr->to_h <= 0) && (o_ptr->to_d <= 0) && (o_ptr->to_a <= 0) && (o_ptr->pval <= 1))
 	{
 		return FALSE;
@@ -948,8 +862,6 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
 
 	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(target_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
-	/* Artifacts have 71% chance to resist */
 	if (object_is_artifact(o_ptr) && (randint0(100) < 71))
 	{
 #ifdef JP
@@ -961,26 +873,20 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
 		return TRUE;
 	}
 	
-	/* Memorize old value */
 	int to_h = o_ptr->to_h;
 	int to_d = o_ptr->to_d;
 	int to_a = o_ptr->to_a;
 	int pval = o_ptr->pval;
 
-	/* Disenchant tohit */
 	if (o_ptr->to_h > 0) o_ptr->to_h--;
 	if ((o_ptr->to_h > 5) && (randint0(100) < 20)) o_ptr->to_h--;
 
-	/* Disenchant todam */
 	if (o_ptr->to_d > 0) o_ptr->to_d--;
 	if ((o_ptr->to_d > 5) && (randint0(100) < 20)) o_ptr->to_d--;
 
-	/* Disenchant toac */
 	if (o_ptr->to_a > 0) o_ptr->to_a--;
 	if ((o_ptr->to_a > 5) && (randint0(100) < 20)) o_ptr->to_a--;
 
-	/* Disenchant pval (occasionally) */
-	/* Unless called from wild_magic() */
 	if ((o_ptr->pval > 1) && one_in_(13) && !(mode & 0x01)) o_ptr->pval--;
 
 	bool is_actually_disenchanted = to_h != o_ptr->to_h;
@@ -995,7 +901,6 @@ bool apply_disenchant(player_type *target_ptr, BIT_FLAGS mode)
 	msg_format("Your %s (%c) %s disenchanted!", o_name, index_to_label(t),
 		((o_ptr->number != 1) ? "were" : "was"));
 #endif
-
 	chg_virtue(target_ptr, V_HARMONY, 1);
 	chg_virtue(target_ptr, V_ENCHANT, -2);
 	target_ptr->update |= (PU_BONUS);
@@ -1019,7 +924,6 @@ bool vanish_dungeon(player_type *caster_ptr)
 	is_special_floor |= !caster_ptr->current_floor_ptr->dun_level;
 	if (is_special_floor) return FALSE;
 
-	/* Scan all normal grids */
 	grid_type *g_ptr;
 	feature_type *f_ptr;
 	monster_type *m_ptr;
@@ -1030,20 +934,12 @@ bool vanish_dungeon(player_type *caster_ptr)
 		{
 			g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
-			/* Seeing true feature code (ignore mimic) */
 			f_ptr = &f_info[g_ptr->feat];
-
-			/* Lose room and vault */
 			g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
-
 			m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-
-			/* Awake monster */
 			if (g_ptr->m_idx && MON_CSLEEP(m_ptr))
 			{
 				(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
-
-				/* Notice the "waking up" */
 				if (m_ptr->ml)
 				{
 					monster_desc(caster_ptr, m_name, m_ptr, 0);
@@ -1051,41 +947,29 @@ bool vanish_dungeon(player_type *caster_ptr)
 				}
 			}
 
-			/* Process all walls, doors and patterns */
 			if (have_flag(f_ptr->flags, FF_HURT_DISI)) cave_alter_feat(caster_ptr, y, x, FF_HURT_DISI);
 		}
 	}
 
-	/* Special boundary walls -- Top and bottom */
 	for (POSITION x = 0; x < caster_ptr->current_floor_ptr->width; x++)
 	{
 		g_ptr = &caster_ptr->current_floor_ptr->grid_array[0][x];
 		f_ptr = &f_info[g_ptr->mimic];
-
-		/* Lose room and vault */
 		g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-		/* Set boundary mimic if needed */
 		if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
 			g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
-
-			/* Check for change to boring grid */
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 
 		g_ptr = &caster_ptr->current_floor_ptr->grid_array[caster_ptr->current_floor_ptr->height - 1][x];
 		f_ptr = &f_info[g_ptr->mimic];
-
-		/* Lose room and vault */
 		g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-		/* Set boundary mimic if needed */
 		if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
 			g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
-
-			/* Check for change to boring grid */
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 	}
@@ -1095,42 +979,31 @@ bool vanish_dungeon(player_type *caster_ptr)
 	{
 		g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][0];
 		f_ptr = &f_info[g_ptr->mimic];
-
-		/* Lose room and vault */
 		g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-		/* Set boundary mimic if needed */
 		if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
 			g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
-
-			/* Check for change to boring grid */
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 
 		g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][caster_ptr->current_floor_ptr->width - 1];
 		f_ptr = &f_info[g_ptr->mimic];
-
-		/* Lose room and vault */
 		g_ptr->info &= ~(CAVE_ROOM | CAVE_ICKY);
 
-		/* Set boundary mimic if needed */
 		if (g_ptr->mimic && have_flag(f_ptr->flags, FF_HURT_DISI))
 		{
 			g_ptr->mimic = feat_state(caster_ptr, g_ptr->mimic, FF_HURT_DISI);
-
-			/* Check for change to boring grid */
 			if (!have_flag(f_info[g_ptr->mimic].flags, FF_REMEMBER)) g_ptr->info &= ~(CAVE_MARK);
 		}
 	}
 
-	/* Mega-Hack -- Forget the view and lite */
 	caster_ptr->update |= (PU_UN_VIEW | PU_UN_LITE | PU_VIEW | PU_LITE | PU_FLOW | PU_MON_LITE | PU_MONSTERS);
 	caster_ptr->redraw |= (PR_MAP);
 	caster_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-
 	return TRUE;
 }
+
 
 /*!
  * @brief 虚無招来処理 /
@@ -1178,7 +1051,6 @@ void call_the_void(player_type *caster_ptr)
 		return;
 	}
 
-	/* Prevent destruction of quest levels and town */
 	bool is_special_fllor = caster_ptr->current_floor_ptr->inside_quest && is_fixed_quest_idx(caster_ptr->current_floor_ptr->inside_quest);
 	is_special_fllor |= !caster_ptr->current_floor_ptr->dun_level;
 	if (is_special_fllor)
@@ -1227,7 +1099,6 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 	object_type *o_ptr;
 	GAME_TEXT o_name[MAX_NLEN];
 
-	/* Check to see if an object is already there */
 	if (caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].o_idx)
 	{
 		msg_print(_("自分の足の下にある物は取れません。", "You can't fetch when you're already standing on something."));
@@ -1247,22 +1118,18 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 		}
 
 		g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
-
-		/* We need an item to fetch */
 		if (!g_ptr->o_idx)
 		{
 			msg_print(_("そこには何もありません。", "There is no object at this place."));
 			return;
 		}
 
-		/* No fetching from vault */
 		if (g_ptr->info & CAVE_ICKY)
 		{
 			msg_print(_("アイテムがコントロールを外れて落ちた。", "The item slips from your control."));
 			return;
 		}
 
-		/* We need to see the item */
 		if (require_los)
 		{
 			if (!player_has_los_bold(caster_ptr, ty, tx))
@@ -1296,10 +1163,8 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
 	}
 
 	o_ptr = &caster_ptr->current_floor_ptr->o_list[g_ptr->o_idx];
-
 	if (o_ptr->weight > wgt)
 	{
-		/* Too heavy to 'fetch' */
 		msg_print(_("そのアイテムは重過ぎます。", "The object is too heavy."));
 		return;
 	}
@@ -1327,7 +1192,6 @@ void fetch(player_type *caster_ptr, DIRECTION dir, WEIGHT wgt, bool require_los)
  */
 void reserve_alter_reality(player_type *caster_ptr)
 {
-	/* Ironman option */
 	if (caster_ptr->current_floor_ptr->inside_arena || ironman_downward)
 	{
 		msg_print(_("何も起こらなかった。", "Nothing happens."));
@@ -1358,17 +1222,12 @@ void reserve_alter_reality(player_type *caster_ptr)
  */
 void identify_pack(player_type *target_ptr)
 {
-	INVENTORY_IDX i;
-
-	/* Simply identify and know every item */
-	for (i = 0; i < INVEN_TOTAL; i++)
+	for (INVENTORY_IDX i = 0; i < INVEN_TOTAL; i++)
 	{
 		object_type *o_ptr = &target_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
 
 		identify_item(target_ptr, o_ptr);
-
-		/* Auto-inscription */
 		autopick_alter_item(target_ptr, i, FALSE);
 	}
 }
@@ -1397,14 +1256,8 @@ static int remove_curse_aux(player_type *creature_ptr, int all)
 	{
 		object_type *o_ptr = &creature_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
-
-		/* Uncursed already */
 		if (!object_is_cursed(o_ptr)) continue;
-
-		/* Heavily Cursed Items need a special spell */
 		if (!all && (o_ptr->curse_flags & TRC_HEAVY_CURSE)) continue;
-
-		/* Perma-Cursed Items can NEVER be uncursed */
 		if (o_ptr->curse_flags & TRC_PERMA_CURSE)
 		{
 			o_ptr->curse_flags &= (TRC_CURSED | TRC_HEAVY_CURSE | TRC_PERMA_CURSE);
@@ -1417,15 +1270,11 @@ static int remove_curse_aux(player_type *creature_ptr, int all)
 
 		creature_ptr->update |= (PU_BONUS);
 		creature_ptr->window |= (PW_EQUIP);
-
-		/* Count the uncursings */
 		cnt++;
 	}
 
 	if (cnt)
-	{
 		msg_print(_("誰かに見守られているような気がする。", "You feel as if someone is watching over you."));
-	}
 	
 	return cnt;
 }
@@ -1472,13 +1321,10 @@ bool alchemy(player_type *caster_ptr)
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), 0);
 	if (!o_ptr) return FALSE;
 
-	/* See how many items */
 	int amt = 1;
 	if (o_ptr->number > 1)
 	{
 		amt = get_quantity(NULL, o_ptr->number);
-
-		/* Allow user abort */
 		if (amt <= 0) return FALSE;
 	}
 
@@ -1488,19 +1334,16 @@ bool alchemy(player_type *caster_ptr)
 	object_desc(caster_ptr, o_name, o_ptr, 0);
 	o_ptr->number = old_number;
 
-	/* Verify unless quantity given */
 	if (!force)
 	{
 		if (confirm_destroy || (object_value(o_ptr) > 0))
 		{
-			/* Make a verification */
 			char out_val[MAX_NLEN + 40];
 			sprintf(out_val, _("本当に%sを金に変えますか？", "Really current_world_ptr->game_turn %s to gold? "), o_name);
 			if (!get_check(out_val)) return FALSE;
 		}
 	}
 
-	/* Artifacts cannot be destroyed */
 	if (!can_player_destroy_object(o_ptr))
 	{
 		msg_format(_("%sを金に変えることに失敗した。", "You fail to current_world_ptr->game_turn %s to gold!"), o_name);
@@ -1541,7 +1384,6 @@ bool artifact_scroll(player_type *caster_ptr)
 
 	concptr q = _("どのアイテムを強化しますか? ", "Enchant which item? ");
 	concptr s = _("強化できるアイテムがない。", "You have nothing to enchant.");
-
 	object_type *o_ptr;
 	OBJECT_IDX item;
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
@@ -1565,7 +1407,6 @@ bool artifact_scroll(player_type *caster_ptr)
 #endif
 		okay = FALSE;
 	}
-
 	else if (object_is_ego(o_ptr))
 	{
 #ifdef JP
@@ -1577,7 +1418,6 @@ bool artifact_scroll(player_type *caster_ptr)
 #endif
 		okay = FALSE;
 	}
-
 	else if (o_ptr->xtra3)
 	{
 #ifdef JP
@@ -1587,7 +1427,6 @@ bool artifact_scroll(player_type *caster_ptr)
 		    ((o_ptr->number > 1) ? "customized items" : "a customized item"));
 #endif
 	}
-
 	else
 	{
 		if (o_ptr->number > 1)
@@ -1709,7 +1548,6 @@ bool ident_spell(player_type *caster_ptr, bool only_equip)
 	}
 
 	concptr s = _("鑑定するべきアイテムがない。", "You have nothing to identify.");
-
 	OBJECT_IDX item;
 	object_type *o_ptr;
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
@@ -1783,6 +1621,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
 	return TRUE;
 }
 
+
 /*!
  * @brief アイテム*鑑定*のメインルーチン処理 /
  * Identify an object in the inventory (or on the floor)
@@ -1824,7 +1663,6 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 
 	bool old_known = identify_item(caster_ptr, o_ptr);
 
-	/* Mark the item as fully known */
 	o_ptr->ident |= (IDENT_MENTAL);
 	handle_stuff(caster_ptr);
 
@@ -1890,58 +1728,35 @@ bool recharge(player_type *caster_ptr, int power)
 	bool is_recharge_successful = TRUE;
 	if (o_ptr->tval == TV_ROD)
 	{
-		/* Extract a recharge strength by comparing object level to power. */
 		recharge_strength = ((power > lev / 2) ? (power - lev / 2) : 0) / 5;
-
-
-		/* Back-fire */
 		if (one_in_(recharge_strength))
 		{
-			/* Activate the failure code. */
 			is_recharge_successful = FALSE;
 		}
-
-		/* Recharge */
 		else
 		{
-			/* Recharge amount */
 			recharge_amount = (power * damroll(3, 2));
-
-			/* Recharge by that amount */
 			if (o_ptr->timeout > recharge_amount)
 				o_ptr->timeout -= recharge_amount;
 			else
 				o_ptr->timeout = 0;
 		}
 	}
-	
-	/* Recharge wand/staff */
 	else
 	{
-		/* Extract a recharge strength by comparing object level to power.
-		 * Divide up a stack of wands' charges to calculate charge penalty.
-		 */
 		if ((o_ptr->tval == TV_WAND) && (o_ptr->number > 1))
 			recharge_strength = (100 + power - lev - (8 * o_ptr->pval / o_ptr->number)) / 15;
-
-		/* All staffs, unstacked wands. */
 		else recharge_strength = (100 + power - lev - (8 * o_ptr->pval)) / 15;
+
 		if (recharge_strength < 0) recharge_strength = 0;
 
-		/* Back-fire */
 		if (one_in_(recharge_strength))
 		{
-			/* Activate the failure code. */
 			is_recharge_successful = FALSE;
 		}
-
-		/* If the spell didn't backfire, recharge the wand or staff. */
 		else
 		{
-			/* Recharge based on the standard number of charges. */
 			recharge_amount = randint1(1 + k_ptr->pval / 2);
-
-			/* Multiple wands in a stack increase recharging somewhat. */
 			if ((o_ptr->tval == TV_WAND) && (o_ptr->number > 1))
 			{
 				recharge_amount +=
@@ -1950,23 +1765,14 @@ bool recharge(player_type *caster_ptr, int power)
 				if (recharge_amount > 12) recharge_amount = 12;
 			}
 
-			/* But each staff in a stack gets fewer additional charges,
-			 * although always at least one.
-			 */
 			if ((o_ptr->tval == TV_STAFF) && (o_ptr->number > 1))
 			{
 				recharge_amount /= (TIME_EFFECT)o_ptr->number;
 				if (recharge_amount < 1) recharge_amount = 1;
 			}
 
-			/* Recharge the wand or staff. */
 			o_ptr->pval += recharge_amount;
-
-
-			/* Hack -- we no longer "know" the item */
 			o_ptr->ident &= ~(IDENT_KNOWN);
-
-			/* Hack -- we no longer think the item is empty */
 			o_ptr->ident &= ~(IDENT_EMPTY);
 		}
 	}
@@ -1982,12 +1788,8 @@ bool recharge(player_type *caster_ptr, int power)
 	{
 		object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
 		msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
-
-		/* Artifact rods. */
 		if ((o_ptr->tval == TV_ROD) && (o_ptr->timeout < 10000))
 			o_ptr->timeout = (o_ptr->timeout + 100) * 2;
-
-		/* Artifact wands and staffs. */
 		else if ((o_ptr->tval == TV_WAND) || (o_ptr->tval == TV_STAFF))
 			o_ptr->pval = 0;
 		return update_player(caster_ptr);
@@ -2099,17 +1901,14 @@ void display_spell_list(player_type *caster_ptr)
 
 	clear_from(0);
 
-	/* They have too many spells to list */
 	if (caster_ptr->pclass == CLASS_SORCERER) return;
 	if (caster_ptr->pclass == CLASS_RED_MAGE) return;
-
 	if (caster_ptr->pclass == CLASS_SNIPER)
 	{
 		display_snipe_list(caster_ptr);
 		return;
 	}
 
-	/* mind.c type classes */
 	if ((caster_ptr->pclass == CLASS_MINDCRAFTER) ||
 	    (caster_ptr->pclass == CLASS_BERSERKER) ||
 	    (caster_ptr->pclass == CLASS_NINJA) ||
@@ -2119,16 +1918,15 @@ void display_spell_list(player_type *caster_ptr)
 		PERCENTAGE minfail = 0;
 		PLAYER_LEVEL plev = caster_ptr->lev;
 		PERCENTAGE chance = 0;
-		mind_type       spell;
-		char            comment[80];
-		char            psi_desc[80];
-		int             use_mind;
+		mind_type spell;
+		char comment[80];
+		char psi_desc[80];
+		int use_mind;
 		bool use_hp = FALSE;
 
 		y = 1;
 		x = 1;
 
-		/* Display a list of spells */
 		prt("", y, x);
 		put_str(_("名前", "Name"), y, x + 5);
 		put_str(_("Lv   MP 失率 効果", "Lv Mana Fail Info"), y, x + 35);
@@ -2143,28 +1941,17 @@ void display_spell_list(player_type *caster_ptr)
 		default:                use_mind = 0;break;
 		}
 
-		/* Dump the spells */
-		int i;
-		for (i = 0; i < MAX_MIND_POWERS; i++)
+		for (int i = 0; i < MAX_MIND_POWERS; i++)
 		{
 			byte a = TERM_WHITE;
-
-			/* Access the available spell */
 			spell = mind_powers[use_mind].info[i];
 			if (spell.min_lev > plev) break;
 
-			/* Get the failure rate */
 			chance = spell.fail;
-
-			/* Reduce failure rate by "effective" level adjustment */
 			chance -= 3 * (caster_ptr->lev - spell.min_lev);
-
-			/* Reduce failure rate by INT/WIS adjustment */
 			chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
-
 			if (!use_hp)
 			{
-				/* Not enough mana to cast */
 				if (spell.mana_cost > caster_ptr->csp)
 				{
 					chance += 5 * (spell.mana_cost - caster_ptr->csp);
@@ -2173,7 +1960,6 @@ void display_spell_list(player_type *caster_ptr)
 			}
 			else
 			{
-				/* Not enough hp to cast */
 				if (spell.mana_cost > caster_ptr->chp)
 				{
 					chance += 100;
@@ -2181,23 +1967,15 @@ void display_spell_list(player_type *caster_ptr)
 				}
 			}
 
-			/* Extract the minimum failure rate */
 			minfail = adj_mag_fail[caster_ptr->stat_ind[mp_ptr->spell_stat]];
-
-			/* Minimum failure rate */
 			if (chance < minfail) chance = minfail;
 
-			/* Stunning makes spells harder */
 			if (caster_ptr->stun > 50) chance += 25;
 			else if (caster_ptr->stun) chance += 15;
 
-			/* Always a 5 percent chance of working */
 			if (chance > 95) chance = 95;
 
-			/* Get info */
 			mindcraft_info(caster_ptr, comment, use_mind, i);
-
-			/* Dump the spell */
 			sprintf(psi_desc, "  %c) %-30s%2d %4d %3d%%%s",
 			    I2A(i), spell.name,
 			    spell.min_lev, spell.mana_cost, chance, comment);
@@ -2208,30 +1986,18 @@ void display_spell_list(player_type *caster_ptr)
 		return;
 	}
 
-	/* Cannot read spellbooks */
 	if (REALM_NONE == caster_ptr->realm1) return;
 
-	/* Normal spellcaster with books */
-
-	/* Scan books */
 	for (int j = 0; j < ((caster_ptr->realm2 > REALM_NONE) ? 2 : 1); j++)
 	{
-		/* Reset vertical */
 		m[j] = 0;
-
-		/* Vertical location */
 		y = (j < 3) ? 0 : (m[j - 3] + 2);
-
-		/* Horizontal location */
 		x = 27 * (j % 3);
-
-		/* Scan spells */
 		int n = 0;
 		for (int i = 0; i < 32; i++)
 		{
 			byte a = TERM_WHITE;
 
-			/* Access the spell */
 			if (!is_magic((j < 1) ? caster_ptr->realm1 : caster_ptr->realm2))
 			{
 				s_ptr = &technic_info[((j < 1) ? caster_ptr->realm1 : caster_ptr->realm2) - MIN_TECHNIC][i % 32];
@@ -2243,48 +2009,33 @@ void display_spell_list(player_type *caster_ptr)
 
 			strcpy(name, exe_spell(caster_ptr, (j < 1) ? caster_ptr->realm1 : caster_ptr->realm2, i % 32, SPELL_NAME));
 
-			/* Illegible */
 			if (s_ptr->slevel >= 99)
 			{
-				/* Illegible */
 				strcpy(name, _("(判読不能)", "(illegible)"));
-
-				/* Unusable */
 				a = TERM_L_DARK;
 			}
-
-			/* Forgotten */
 			else if ((j < 1) ?
 				((caster_ptr->spell_forgotten1 & (1L << i))) :
 				((caster_ptr->spell_forgotten2 & (1L << (i % 32)))))
 			{
-				/* Forgotten */
 				a = TERM_ORANGE;
 			}
-
-			/* Unknown */
 			else if (!((j < 1) ?
 				(caster_ptr->spell_learned1 & (1L << i)) :
 				(caster_ptr->spell_learned2 & (1L << (i % 32)))))
 			{
-				/* Unknown */
 				a = TERM_RED;
 			}
-
-			/* Untried */
 			else if (!((j < 1) ?
 				(caster_ptr->spell_worked1 & (1L << i)) :
 				(caster_ptr->spell_worked2 & (1L << (i % 32)))))
 			{
-				/* Untried */
 				a = TERM_YELLOW;
 			}
 
-			/* Dump the spell --(-- */
 			sprintf(out_val, "%c/%c) %-20.20s",
 				I2A(n / 8), I2A(n % 8), name);
 
-			/* Track maximum */
 			m[j] = y + n;
 			Term_putstr(x, m[j], -1, a, out_val);
 			n++;
@@ -2325,21 +2076,13 @@ MANA_POINT mod_need_mana(player_type *caster_ptr, MANA_POINT need_mana, SPELL_ID
 #define MANA_CONST   2400
 #define MANA_DIV        4
 #define DEC_MANA_DIV    3
-
-	/* Realm magic */
 	if ((realm > REALM_NONE) && (realm <= MAX_REALM))
 	{
-		/*
-		 * need_mana defaults if spell exp equals SPELL_EXP_EXPERT and !caster_ptr->dec_mana.
-		 * MANA_CONST is used to calculate need_mana effected from spell proficiency.
-		 */
 		need_mana = need_mana * (MANA_CONST + SPELL_EXP_EXPERT - experience_of_spell(caster_ptr, spell, realm)) + (MANA_CONST - 1);
 		need_mana *= caster_ptr->dec_mana ? DEC_MANA_DIV : MANA_DIV;
 		need_mana /= MANA_CONST * MANA_DIV;
 		if (need_mana < 1) need_mana = 1;
 	}
-
-	/* Non-realm magic */
 	else
 	{
 		if (caster_ptr->dec_mana) need_mana = (need_mana + 1) * DEC_MANA_DIV / MANA_DIV;
@@ -2406,12 +2149,9 @@ PERCENTAGE mod_spell_chance_2(player_type *caster_ptr, PERCENTAGE chance)
  */
 PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_realm)
 {
-	/* Paranoia -- must be literate */
 	if (!mp_ptr->spell_book) return 100;
-
 	if (use_realm == REALM_HISSATSU) return 0;
 
-	/* Access the spell */
 	const magic_type *s_ptr;
 	if (!is_magic(use_realm))
 	{
@@ -2422,22 +2162,13 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
 		s_ptr = &mp_ptr->info[use_realm - 1][spell];
 	}
 
-	/* Extract the base spell failure rate */
 	PERCENTAGE chance = s_ptr->sfail;
-
-	/* Reduce failure rate by "effective" level adjustment */
 	chance -= 3 * (caster_ptr->lev - s_ptr->slevel);
-
-	/* Reduce failure rate by INT/WIS adjustment */
 	chance -= 3 * (adj_mag_stat[caster_ptr->stat_ind[mp_ptr->spell_stat]] - 1);
-
 	if (caster_ptr->riding)
 		chance += (MAX(r_info[caster_ptr->current_floor_ptr->m_list[caster_ptr->riding].r_idx].level - caster_ptr->skill_exp[GINOU_RIDING] / 100 - 10, 0));
 
-	/* Extract mana consumption rate */
 	MANA_POINT need_mana = mod_need_mana(caster_ptr, s_ptr->smana, spell, use_realm);
-
-	/* Not enough mana to cast */
 	if (need_mana > caster_ptr->csp)
 	{
 		chance += 5 * (need_mana - caster_ptr->csp);
@@ -2445,25 +2176,16 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
 
 	if ((use_realm != caster_ptr->realm1) && ((caster_ptr->pclass == CLASS_MAGE) || (caster_ptr->pclass == CLASS_PRIEST))) chance += 5;
 
-	/* Extract the minimum failure rate */
 	PERCENTAGE minfail = adj_mag_fail[caster_ptr->stat_ind[mp_ptr->spell_stat]];
-
-	/*
-	 * Non mage/priest characters never get too good
-	 * (added high mage, mindcrafter)
-	 */
 	if (mp_ptr->spell_xtra & MAGIC_FAIL_5PERCENT)
 	{
 		if (minfail < 5) minfail = 5;
 	}
 
-	/* Hack -- Priest prayer penalty for "edged" weapons  -DGK */
 	if (((caster_ptr->pclass == CLASS_PRIEST) || (caster_ptr->pclass == CLASS_SORCERER)) && caster_ptr->icky_wield[0]) chance += 25;
 	if (((caster_ptr->pclass == CLASS_PRIEST) || (caster_ptr->pclass == CLASS_SORCERER)) && caster_ptr->icky_wield[1]) chance += 25;
 
 	chance = mod_spell_chance_1(caster_ptr, chance);
-
-	/* Goodness or evilness gives a penalty to failure rate */
 	PERCENTAGE penalty = (mp_ptr->spell_stat == A_WIS) ? 10 : 4;
 	switch (use_realm)
 	{
@@ -2483,7 +2205,6 @@ PERCENTAGE spell_chance(player_type *caster_ptr, SPELL_IDX spell, REALM_IDX use_
 	if (caster_ptr->stun > 50) chance += 25;
 	else if (caster_ptr->stun) chance += 15;
 
-	/* Always a 5 percent chance of working */
 	if (chance > 95) chance = 95;
 
 	if ((use_realm == caster_ptr->realm1) || (use_realm == caster_ptr->realm2)
@@ -2515,7 +2236,6 @@ void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
 	if (((use_realm <= REALM_NONE) || (use_realm > MAX_REALM)) && current_world_ptr->wizard)
 	msg_print(_("警告！ print_spell が領域なしに呼ばれた", "Warning! print_spells called with null realm"));
 
-	/* Title the list */
 	prt("", y, x);
 	char buf[256];
 	if (use_realm == REALM_HISSATSU)
@@ -2533,7 +2253,6 @@ void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
 
 	int i;
 	int exp_level;
-	SPELL_IDX spell;
 	const magic_type *s_ptr;
 	char info[80];
 	char out_val[160];
@@ -2541,7 +2260,7 @@ void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
 	bool max = FALSE;
 	for (i = 0; i < num; i++)
 	{
-		spell = spells[i];
+		SPELL_IDX spell = spells[i];
 
 		if (!is_magic(use_realm))
 		{
@@ -2558,10 +2277,7 @@ void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
 		else
 		{
 			EXP exp = experience_of_spell(caster_ptr, spell, use_realm);
-
-			/* Extract mana consumption rate */
 			need_mana = mod_need_mana(caster_ptr, s_ptr->smana, spell, use_realm);
-
 			if ((increment == 64) || (s_ptr->slevel >= 99)) exp_level = EXP_LEVEL_UNSKILLED;
 			else exp_level = spell_exp_level(exp);
 
@@ -2584,7 +2300,7 @@ void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
 				strcpy(out_val, "     ");
 		}
 		else sprintf(out_val, "  %c) ", I2A(i));
-		/* Skip illegible spells */
+
 		if (s_ptr->slevel >= 99)
 		{
 			strcat(out_val, format("%-30s", _("(判読不能)", "(illegible)")));
@@ -2592,18 +2308,9 @@ void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
 			continue;
 		}
 
-		/* XXX XXX Could label spells above the players level */
-
-		/* Get extra info */
 		strcpy(info, exe_spell(caster_ptr, use_realm, spell, SPELL_INFO));
-
-		/* Use that info */
 		concptr comment = info;
-
-		/* Assume spell is known and tried */
 		byte line_attr = TERM_WHITE;
-
-		/* Analyze the spell */
 		if ((caster_ptr->pclass == CLASS_SORCERER) || (caster_ptr->pclass == CLASS_RED_MAGE))
 		{
 			if (s_ptr->slevel > caster_ptr->max_plv)
@@ -2644,18 +2351,15 @@ void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
 			line_attr = TERM_L_GREEN;
 		}
 
-		/* Dump the spell --(-- */
 		if (use_realm == REALM_HISSATSU)
 		{
 			strcat(out_val, format("%-25s %2d %4d",
-			    exe_spell(caster_ptr, use_realm, spell, SPELL_NAME), /* realm, spell */
-			    s_ptr->slevel, need_mana));
+			    exe_spell(caster_ptr, use_realm, spell, SPELL_NAME), s_ptr->slevel, need_mana));
 		}
 		else
 		{
 			strcat(out_val, format("%-25s%c%-4s %2d %4d %3d%% %s",
-			    exe_spell(caster_ptr, use_realm, spell, SPELL_NAME), /* realm, spell */
-			    (max ? '!' : ' '), ryakuji,
+			    exe_spell(caster_ptr, use_realm, spell, SPELL_NAME), (max ? '!' : ' '), ryakuji,
 			    s_ptr->slevel, need_mana, spell_chance(caster_ptr, spell, use_realm), comment));
 		}
 
@@ -2677,36 +2381,23 @@ void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX *sp
  */
 static MONRACE_IDX poly_r_idx(player_type *caster_ptr, MONRACE_IDX r_idx)
 {
-	/* Hack -- Uniques/Questors never polymorph */
 	monster_race *r_ptr = &r_info[r_idx];
 	if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags1 & RF1_QUESTOR))
 		return (r_idx);
 
-	/* Allowable range of "levels" for resulting monster */
 	DEPTH lev1 = r_ptr->level - ((randint1(20) / randint1(9)) + 1);
 	DEPTH lev2 = r_ptr->level + ((randint1(20) / randint1(9)) + 1);
-
-	/* Pick a (possibly new) non-unique race */
 	MONRACE_IDX r;
 	for (int i = 0; i < 1000; i++)
 	{
-		/* Pick a new race, using a level calculation */
 		r = get_mon_num(caster_ptr, (caster_ptr->current_floor_ptr->dun_level + r_ptr->level) / 2 + 5);
-
-		/* Handle failure */
 		if (!r) break;
 
 		r_ptr = &r_info[r];
-
-		/* Ignore unique monsters */
 		if (r_ptr->flags1 & RF1_UNIQUE) continue;
-
-		/* Ignore monsters with incompatible levels */
 		if ((r_ptr->level < lev1) || (r_ptr->level > lev2)) continue;
 
-		/* Use that index */
 		r_idx = r;
-
 		break;
 	}
 
@@ -2735,67 +2426,48 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 	if (floor_ptr->inside_arena || caster_ptr->phase_out) return FALSE;
 	if ((caster_ptr->riding == g_ptr->m_idx) || (m_ptr->mflag2 & MFLAG2_KAGE)) return FALSE;
 
-	/* Memorize the monster before polymorphing */
 	monster_type back_m = *m_ptr;
-
-	/* Pick a "new" monster race */
 	new_r_idx = poly_r_idx(caster_ptr, old_r_idx);
-
-	/* Handle polymorph */
 	if (new_r_idx == old_r_idx) return FALSE;
 
 	bool preserve_hold_objects = back_m.hold_o_idx ? TRUE : FALSE;
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
-	/* Get the monsters attitude */
 	BIT_FLAGS mode = 0L;
 	if (is_friendly(m_ptr)) mode |= PM_FORCE_FRIENDLY;
 	if (is_pet(m_ptr)) mode |= PM_FORCE_PET;
 	if (m_ptr->mflag2 & MFLAG2_NOPET) mode |= PM_NO_PET;
 
-	/* Mega-hack -- ignore held objects */
 	m_ptr->hold_o_idx = 0;
-
-	/* "Kill" the "old" monster */
 	delete_monster_idx(caster_ptr, g_ptr->m_idx);
-
-	/* Create a new monster (no groups) */
 	bool polymorphed = FALSE;
 	if (place_monster_aux(caster_ptr, 0, y, x, new_r_idx, mode))
 	{
 		floor_ptr->m_list[hack_m_idx_ii].nickname = back_m.nickname;
 		floor_ptr->m_list[hack_m_idx_ii].parent_m_idx = back_m.parent_m_idx;
 		floor_ptr->m_list[hack_m_idx_ii].hold_o_idx = back_m.hold_o_idx;
-
-		/* Success */
 		polymorphed = TRUE;
 	}
 	else
 	{
-		/* Placing the new monster failed */
 		if (place_monster_aux(caster_ptr, 0, y, x, old_r_idx, (mode | PM_NO_KAGE | PM_IGNORE_TERRAIN)))
 		{
 			floor_ptr->m_list[hack_m_idx_ii] = back_m;
-
-			/* Re-initialize monster process */
 			mproc_init(floor_ptr);
 		}
 		else preserve_hold_objects = FALSE;
 	}
 
-	/* Mega-hack -- preserve held objects */
 	if (preserve_hold_objects)
 	{
 		for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			object_type *o_ptr = &floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
-
-			/* Held by new monster */
 			o_ptr->held_m_idx = hack_m_idx_ii;
 		}
 	}
-	else if (back_m.hold_o_idx) /* Failed (paranoia) */
+	else if (back_m.hold_o_idx)
 	{
 		for (this_o_idx = back_m.hold_o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
@@ -2808,6 +2480,7 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 	if (health_tracked) health_track(caster_ptr, hack_m_idx_ii);
 	return polymorphed;
 }
+
 
 /*!
  * @brief 次元の扉処理 /
@@ -2846,7 +2519,6 @@ static bool dimension_door_aux(player_type *caster_ptr, POSITION x, POSITION y)
 bool dimension_door(player_type *caster_ptr)
 {
 	DEPTH x = 0, y = 0;
-
 	if (!tgt_pt(caster_ptr, &x, &y)) return FALSE;
 	if (dimension_door_aux(caster_ptr, x, y)) return TRUE;
 
@@ -2881,14 +2553,12 @@ bool mirror_tunnel(player_type *caster_ptr)
 bool eat_magic(player_type *caster_ptr, int power)
 {
 	byte fail_type = 1;
-
-	concptr q, s;
 	GAME_TEXT o_name[MAX_NLEN];
 
 	item_tester_hook = item_tester_hook_recharge;
 
-	q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
-	s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
+	concptr q = _("どのアイテムから魔力を吸収しますか？", "Drain which item? ");
+	concptr s = _("魔力を吸収できるアイテムがありません。", "You have nothing to drain.");
 
 	object_type *o_ptr;
 	OBJECT_IDX item;
@@ -2904,11 +2574,8 @@ bool eat_magic(player_type *caster_ptr, int power)
 	if (o_ptr->tval == TV_ROD)
 	{
 		recharge_strength = ((power > lev/2) ? (power - lev/2) : 0) / 5;
-
-		/* Back-fire */
 		if (one_in_(recharge_strength))
 		{
-			/* Activate the failure code. */
 			is_eating_successful = FALSE;
 		}
 		else
@@ -2926,11 +2593,9 @@ bool eat_magic(player_type *caster_ptr, int power)
 	}
 	else
 	{
-		/* All staffs, wands. */
 		recharge_strength = (100 + power - lev) / 15;
 		if (recharge_strength < 0) recharge_strength = 0;
 
-		/* Back-fire */
 		if (one_in_(recharge_strength))
 		{
 			is_eating_successful = FALSE;
@@ -2942,7 +2607,6 @@ bool eat_magic(player_type *caster_ptr, int power)
 				caster_ptr->csp += lev / 2;
 				o_ptr->pval --;
 
-				/* XXX Hack -- unstack if necessary */
 				if ((o_ptr->tval == TV_STAFF) && (item >= 0) && (o_ptr->number > 1))
 				{
 					object_type forge;
@@ -2950,13 +2614,8 @@ bool eat_magic(player_type *caster_ptr, int power)
 					q_ptr = &forge;
 					object_copy(q_ptr, o_ptr);
 
-					/* Modify quantity */
 					q_ptr->number = 1;
-
-					/* Restore the charges */
 					o_ptr->pval++;
-
-					/* Unstack the used item */
 					o_ptr->number--;
 					caster_ptr->total_weight -= q_ptr->weight;
 					item = inven_carry(caster_ptr, q_ptr);
@@ -2978,26 +2637,19 @@ bool eat_magic(player_type *caster_ptr, int power)
 		return redraw_player(caster_ptr);
 	}
 
-	/* Artifacts are never destroyed. */
 	if (object_is_fixed_artifact(o_ptr))
 	{
 		object_desc(caster_ptr, o_name, o_ptr, OD_NAME_ONLY);
 		msg_format(_("魔力が逆流した！%sは完全に魔力を失った。", "The recharging backfires - %s is completely drained!"), o_name);
-
-		/* Artifact rods. */
 		if (o_ptr->tval == TV_ROD)
 			o_ptr->timeout = k_ptr->pval * o_ptr->number;
-
-		/* Artifact wands and staffs. */
 		else if ((o_ptr->tval == TV_WAND) || (o_ptr->tval == TV_STAFF))
 			o_ptr->pval = 0;
+
 		return redraw_player(caster_ptr);
 	}
 	
-	/* Get the object description */
 	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
-	/*** Determine Seriousness of Failure ***/
 
 	/* Mages recharge objects more safely. */
 	if (IS_WIZARD_CLASS(caster_ptr))
@@ -3044,9 +2696,6 @@ bool eat_magic(player_type *caster_ptr, int power)
 		}
 	}
 
-	/*** Apply draining and destruction. ***/
-
-	/* Drain object or stack of objects. */
 	if (fail_type == 1)
 	{
 		if (o_ptr->tval == TV_ROD)
@@ -3062,7 +2711,6 @@ bool eat_magic(player_type *caster_ptr, int power)
 		}
 	}
 
-	/* Destroy an object or one in a stack of objects. */
 	if (fail_type == 2)
 	{
 		if (o_ptr->number > 1)
@@ -3080,7 +2728,6 @@ bool eat_magic(player_type *caster_ptr, int power)
 		vary_item(caster_ptr, item, -1);
 	}
 
-	/* Destroy all members of a stack of objects. */
 	if (fail_type == 3)
 	{
 		if (o_ptr->number > 1)
@@ -3102,17 +2749,14 @@ bool eat_magic(player_type *caster_ptr, int power)
  */
 void massacre(player_type *caster_ptr)
 {
-	POSITION x, y;
 	grid_type *g_ptr;
 	monster_type *m_ptr;
 	for (DIRECTION dir = 0; dir < 8; dir++)
 	{
-		y = caster_ptr->y + ddy_ddd[dir];
-		x = caster_ptr->x + ddx_ddd[dir];
+		POSITION y = caster_ptr->y + ddy_ddd[dir];
+		POSITION x = caster_ptr->x + ddx_ddd[dir];
 		g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 		m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-
-		/* Hack -- attack monsters */
 		if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)))
 			py_attack(caster_ptr, y, x, 0);
 	}
@@ -3137,7 +2781,6 @@ bool eat_rock(player_type *caster_ptr)
 	mimic_f_ptr = &f_info[get_feat_mimic(g_ptr)];
 
 	stop_mouth(caster_ptr);
-
 	if (!have_flag(mimic_f_ptr->flags, FF_HURT_ROCK))
 	{
 		msg_print(_("この地形は食べられない。", "You cannot eat this feature."));
@@ -3220,7 +2863,10 @@ bool shock_power(player_type *caster_ptr)
 			ty = y;
 			tx = x;
 		}
-		else break;
+		else
+		{
+			break;
+		}
 	}
 
 	bool is_shock_successful = ty != oy;
@@ -3391,11 +3037,8 @@ bool fire_crimson(player_type *shooter_ptr)
 	DIRECTION dir;
 	if (!get_aim_dir(shooter_ptr, &dir)) return FALSE;
 
-	/* Use the given direction */
 	POSITION tx = shooter_ptr->x + 99 * ddx[dir];
 	POSITION ty = shooter_ptr->y + 99 * ddy[dir];
-
-	/* Hack -- Use an actual "target" */
 	if ((dir == 5) && target_okay(shooter_ptr))
 	{
 		tx = target_col;
@@ -3405,13 +3048,8 @@ bool fire_crimson(player_type *shooter_ptr)
 	int num = 1;
 	if (shooter_ptr->pclass == CLASS_ARCHER)
 	{
-		/* Extra shot at level 10 */
 		if (shooter_ptr->lev >= 10) num++;
-
-		/* Extra shot at level 30 */
 		if (shooter_ptr->lev >= 30) num++;
-
-		/* Extra shot at level 45 */
 		if (shooter_ptr->lev >= 45) num++;
 	}
 
@@ -3458,7 +3096,7 @@ bool tele_town(player_type *caster_ptr)
 		num++;
 	}
 
-	if (!num)
+	if (num == 0)
 	{
 		msg_print(_("まだ行けるところがない。", "You have not yet visited any town."));
 		msg_print(NULL);
