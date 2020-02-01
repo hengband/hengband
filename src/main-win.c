@@ -4102,7 +4102,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 				*lpStr++ = s[j];
 			}
 #else
-			for (j = 0; j < dx; j++)
+			for (int j = 0; j < dx; j++)
 			{
 				*lpStr++ = data[0].t.scr->c[oy + i][ox + j];
 			}
