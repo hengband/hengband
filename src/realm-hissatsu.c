@@ -902,7 +902,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 	case 30:
 		if (name) return _("慶雲鬼忍剣", "Keiun-Kininken");
 		if (desc) return _("自分もダメージをくらうが、相手に非常に大きなダメージを与える。アンデッドには特に効果がある。",
-			"Attacks a monster with extremely powerful damage. But you also takes some damage. Hurts an undead monster greatly.");
+			"Attacks a monster with extremely powerful damage, but you also take some damage. Hurts an undead monster greatly.");
 
 		if (cast)
 		{
