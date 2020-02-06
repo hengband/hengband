@@ -1668,7 +1668,7 @@ bool set_tim_sh_touki(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 		else if (!creature_ptr->tim_sh_touki)
 		{
-			msg_print(_("体が闘気のオーラで覆われた。", "You are enveloped by the aura of the Force!"));
+			msg_print(_("体が闘気のオーラで覆われた。", "You are enveloped by an aura of the Force!"));
 			notice = TRUE;
 		}
 	}
