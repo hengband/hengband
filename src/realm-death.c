@@ -622,7 +622,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 31:
 		if (name) return _("幽体化", "Wraithform");
 		if (desc) return _("一定時間、壁を通り抜けることができ受けるダメージが軽減される幽体の状態に変身する。",
-			"Causes you to be ghost-like for a while.  That reduces the damage you take and allows you to pass through walls.");
+			"Causes you to be ghost-like for a while. That reduces the damage you take and allows you to pass through walls.");
 
 		{
 			int base = plev / 2;
