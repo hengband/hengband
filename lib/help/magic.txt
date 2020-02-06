@@ -234,7 +234,7 @@ See raceclas.txt#TheClasses [a] for more details.
 --- Hex ---
 
      Hex is an abomination of magic, closer to swordsmanship than
-     spell casting.  Many of the spells can be cast continuously,
+     spell casting.  Some of the spells can be cast continuously,
      like songs, for more powerful effects.  Hex spells are good
      at obstructing opponents and returning damage to those who
      have damaged the caster.  The fail rate of Hex spells goes
