@@ -603,7 +603,7 @@ command("U"/"O").
     between the warrior and mage classes.  Unlike rangers, who
     specialize in Nature magic and survival skills, true Warrior-
     Mages attempt to reach the best of both worlds.  As warriors
-    they are much superior to the usual Mage class. Intelligence
+    they are much superior to the usual Mage class.  Intelligence
     determines a Warrior-Mage's spell casting ability.
 
     Warrior-mages begin the game with Arcane magic, and they can
