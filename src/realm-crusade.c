@@ -541,7 +541,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 	case 31:
 		if (name) return _("聖戦", "Crusade");
 		if (desc) return _("視界内の善良なモンスターをペットにしようとし、ならなかった場合及び善良でないモンスターを恐怖させる。さらに多数の加速された騎士を召喚し、ヒーロー、祝福、加速、対邪悪結界を得る。",
-			"Attempts to charm all good monsters in sight and scares all non-charmed monsters.  Summons a great number of knights. Gives heroism, bless, speed and protection from evil to the caster.");
+			"Attempts to charm all good monsters in sight and scares all non-charmed monsters. Summons a great number of knights. Gives heroism, bless, speed and protection from evil to the caster.");
 
 		{
 			if (cast)
