@@ -457,7 +457,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 {
 	"Fires a very small energy ball.",
 	"Lights up nearby area and the inside of a room permanently.",
-	"Gives levitaion a while.",
+	"Gives levitation a while.",
 	"Fires a short energy beam.",
 	"Gives magic resistance for a while.",
 	"Increases your spirit energy temporarily. More spirit energy will boost the effect or duration of your force abilities. Too much spirit energy can result in an explosion.",
