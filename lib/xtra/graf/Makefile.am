@@ -7,7 +7,7 @@ EXTRA_DIST = \
   $(angband_files)
 
 if SET_GID
-angbanddir = @DEFAULT_PATH@xtra/graf
+angbanddir = @DEFAULT_LIB_PATH@/xtra/graf
 
 angband_DATA = \
   $(angband_files)

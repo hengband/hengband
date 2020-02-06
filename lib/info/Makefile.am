@@ -7,7 +7,7 @@ EXTRA_DIST = \
   $(angband_files)
 
 if SET_GID
-angbanddir = @DEFAULT_PATH@info
+angbanddir = @DEFAULT_LIB_PATH@/info
 
 angband_DATA = \
   $(angband_files)

@@ -19,20 +19,29 @@ AC_LANG_C
 
 dnl generate the installation path for the ./lib/ folder
 if test "$GAMEGROUP" != ""; then
-  MY_EXPAND_DIR(game_datadir, "$datadir/games/$PACKAGE/lib/")
+  MY_EXPAND_DIR(game_libpath, "$datadir/games/$PACKAGE/lib/")
 else
-  MY_EXPAND_DIR(game_datadir, "./lib/")
+  MY_EXPAND_DIR(game_libpath, "./lib/")
   bindir=".."
 fi
 
 dnl overwrite the path with an user-specified value
 AC_ARG_WITH(libpath,
 [  --with-libpath=path     specify the path to the Hengband lib folder],
-[game_datadir="$withval"])
+[game_libpath="$withval"])
 
-AC_DEFINE_UNQUOTED(DEFAULT_PATH, "$game_datadir", [Path to the Hengband lib folder])
-DEFAULT_PATH="$game_datadir"
-AC_SUBST(DEFAULT_PATH)
+AC_ARG_WITH(varpath,
+[  --with-varpath=path     specify the path to the Hengband var folder],
+[game_varpath="$withval"],
+[game_varpath="$game_libpath"])
+
+AC_DEFINE_UNQUOTED(DEFAULT_LIB_PATH, "$game_libpath", [Path to the Hengband lib folder])
+DEFAULT_LIB_PATH="$game_libpath"
+AC_SUBST(DEFAULT_LIB_PATH)
+
+AC_DEFINE_UNQUOTED(DEFAULT_VAR_PATH, "$game_varpath", [Path to the Hengband var folder])
+DEFAULT_VAR_PATH="$game_varpath"
+AC_SUBST(DEFAULT_VAR_PATH)
 
 dnl Checks for programs.
 AC_PROG_CC

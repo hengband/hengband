@@ -7,7 +7,7 @@ EXTRA_DIST = \
   $(angband_files)
 
 if SET_GID
-angbanddir = @DEFAULT_PATH@apex
+angbanddir = @DEFAULT_VAR_PATH@/apex
 
 angband_DATA = \
   $(angband_files)
