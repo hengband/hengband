@@ -445,7 +445,7 @@ static concptr const mind_tips[5][MAX_MIND_POWERS] =
 	"Pulls a distant item close to you.",
 	"Fires a ball which damages. When not resisted, you gain SP. You will be occupied for 0 to 1.5 turns after casting as your mind recovers.",
 	"Fires a beam of pure energy which penetrates invulnerability barriers.",
-	"Stops time. Consumes all of your SP. The more SP consumed, the longer the duration of spell.",
+	"Stops time. Consumes all of your SP. The more SP consumed, the longer the duration of the spell.",
 	"",
 	"",
 	"",
