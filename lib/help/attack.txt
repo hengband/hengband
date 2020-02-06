@@ -274,7 +274,7 @@ Weapon of Slay Animal
 
 Weapon of Slay Evil
     This weapon is especially effective against evil creatures and
-    will inflict damage with 3.5 times the normal dice against such
+    will inflict damage with two times the normal dice against such
     creatures.
 
 Weapon of Slay Human
