@@ -345,7 +345,7 @@ static concptr class_jouhou[MAX_CLASS] =
 
 "A ForceTrainer is a master of the spiritual Force.  They prefer fighting with neither weapons nor armor.  They are not as good fighters as are Monks, but they can use both magic and the spiritual Force.  Wielding weapons or wearing heavy armor disturbs use of the Force.  Wisdom is a ForceTrainer's primary stat.",
 
-"A Blue-Mage is a spell caster that must live by his or her wits, as a Blue-Mage cannot hope to simply hack his or her way through the dungeon like a warrior.  A major difference between the Mage and the Blue-Mage is the method of learning spells: Blue-Mages may learn spells from monsters by activating his or her Learning ability.  A Blue-Mage's prime statistic is Intelligence as this determines his or her spell casting ability.",
+"A Blue-Mage is a spell caster that must live by his or her wits, as a Blue-Mage cannot hope to simply hack his or her way through the dungeon like a warrior.  A major difference between the Mage and the Blue-Mage is the method of learning spells: a Blue-Mage may learn spells from monsters by activating his or her Learning ability.  A Blue-Mage's prime statistic is Intelligence as this determines his or her spell casting ability.",
 
 "Cavalry ride on horses into battle.  Although they cannot cast spells, they are proud of their overwhelming offensive strength on horseback.  They are good at shooting.  At high levels, they learn to forcibly saddle and tame wild monsters.  Since they take pride in the body and the soul, they don't use magical devices well.",
 
