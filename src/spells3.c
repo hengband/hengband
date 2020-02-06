@@ -1071,7 +1071,7 @@ void call_the_void(player_type *caster_ptr)
 
 	if (one_in_(666))
 	{
-		if (!vanish_dungeon(caster_ptr)) msg_print(_("ダンジョンは一瞬静まり返った。", "The dungeon beomes quiet for a moment."));
+		if (!vanish_dungeon(caster_ptr)) msg_print(_("ダンジョンは一瞬静まり返った。", "The dungeon becomes quiet for a moment."));
 		take_hit(caster_ptr, DAMAGE_NOESCAPE, 100 + randint1(150), _("自殺的な虚無招来", "a suicidal Call the Void"), -1);
 		return;
 	}
