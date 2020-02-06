@@ -102,7 +102,7 @@ by the racial/class power command ("U"/"O").
     ugly that a Half-Orc grimaces in their presence.  They also happen
     to be fun to run...  Half-trolls always have their strength
     sustained.  At higher levels, Half-Trolls regenerate wounds
-    automatically, and, if a warrior, require food less often.
+    automatically and, if a warrior, require food less often.
 
 
 ***** <Amberite>
@@ -735,7 +735,7 @@ command("U"/"O").
     world of Hengband.  They are very good at riding, and have enough
     fighting ability.  The monsters that a beastmaster summons or
     dominates become the beastmaster's hands and feet.  Beastmasters
-    can cast trump magic, and are very good at summoning spells, but
+    can cast trump magic and are very good at summoning spells, but
     they can not summon non-living creatures.  Charisma determines a
     Beastmaster's spell casting ability.
 
