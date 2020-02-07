@@ -69,7 +69,7 @@ hengband_SOURCES = \
 	\
 	rumor.h rumor.c \
 	\
-	spells.h
+	spells.h \
 	spells1.c spells2.c spells3.c \
 	spells-diceroll.c spells-diceroll.h \
 	spells-floor.c spells-floor.h \
@@ -79,7 +79,7 @@ hengband_SOURCES = \
 	spells-world.c spells-world.h \
 	\
 	sort.c sort.h \
-	store.h store.c tables.c trap.c trap.h types.h util.c \
+	store.h store.c tables.c term.c term.h trap.c trap.h types.h util.c \
 	variable.c wild.h wild.c wizard1.c wizard2.c \
 	warning.c warning.h world.c world.h \
 	\
