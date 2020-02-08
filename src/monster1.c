@@ -2329,7 +2329,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 	}
 
 	bool is_drop_corpse = one_in_(r_ptr->flags1 & RF1_UNIQUE ? 1 : 4);
-	is_drop_corpse &= (r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON));
+	is_drop_corpse &= (r_ptr->flags9 & (RF9_DROP_CORPSE | RF9_DROP_SKELETON)) != 0;
 	is_drop_corpse &= !(floor_ptr->inside_arena || player_ptr->phase_out || cloned || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr)));
 	if (is_drop_corpse)
 	{
