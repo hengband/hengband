@@ -339,9 +339,9 @@ void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
 			monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[tmp_m_idx];
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-			bool is_resistible = r_ptr->a_ability_flags2 & RF6_TPORT;
-			is_resistible &= !(r_ptr->flagsr & RFR_RES_TELE);
-			is_resistible &= !MON_CSLEEP(m_ptr);
+			bool is_resistible = (r_ptr->a_ability_flags2 & RF6_TPORT) != 0;
+			is_resistible &= r_ptr->flagsr & RFR_RES_TELE == 0;
+			is_resistible &= MON_CSLEEP(m_ptr) == 0;
 			if (is_resistible)
 			{
 				teleport_monster_to(creature_ptr, tmp_m_idx, creature_ptr->y, creature_ptr->x, r_ptr->level, 0L);
@@ -381,9 +381,9 @@ void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION d
 			monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[tmp_m_idx];
 			monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-			bool is_resistible = r_ptr->a_ability_flags2 & RF6_TPORT;
-			is_resistible &= !(r_ptr->flagsr & RFR_RES_TELE);
-			is_resistible &= !MON_CSLEEP(m_ptr);
+			bool is_resistible = (r_ptr->a_ability_flags2 & RF6_TPORT) != 0;
+			is_resistible &= r_ptr->flagsr & RFR_RES_TELE == 0;
+			is_resistible &= MON_CSLEEP(m_ptr) == 0;
 			if (is_resistible)
 			{
 				teleport_monster_to(target_ptr, tmp_m_idx, target_ptr->y, target_ptr->x, r_ptr->level, 0L);
