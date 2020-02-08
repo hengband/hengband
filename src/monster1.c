@@ -1788,7 +1788,7 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 		/* Describe the method */
 		/* XXしてYYし/XXしてYYする/XXし/XXする */
-		if (!q) jverb(p, jverb_buf, JVERB_TO);
+		if (q != NULL) jverb(p, jverb_buf, JVERB_TO);
 		else if (attack_numbers != count - 1) jverb(p, jverb_buf, JVERB_AND);
 		else strcpy(jverb_buf, p);
 
