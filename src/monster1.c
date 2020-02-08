@@ -61,7 +61,12 @@ static concptr wd_his[3] =
 #define plural(c,s,p) \
     (((c) == 1) ? (s) : (p))
 
- /*!
+/*
+ * Prepare hook for c_roff(). It will be changed for spoiler generation in wizard1.c.
+ */
+void(*hook_c_roff)(TERM_COLOR attr, concptr str) = c_roff;
+
+/*!
   * @brief モンスターのAC情報を得ることができるかを返す / Determine if the "armor" is known
   * @param r_idx モンスターの種族ID
   * @return 敵のACを知る条件が満たされているならTRUEを返す
@@ -99,14 +104,11 @@ static bool know_armour(MONRACE_IDX r_idx)
 static bool know_damage(MONRACE_IDX r_idx, int i)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
 	DEPTH level = r_ptr->level;
-
 	s32b a = r_ptr->r_blows[i];
 
 	s32b d1 = r_ptr->blow[i].d_dice;
 	s32b d2 = r_ptr->blow[i].d_side;
-
 	s32b d = d1 * d2;
 
 	if (d >= ((4 + level)*MAX_UCHAR) / 80) d = ((4 + level)*MAX_UCHAR - 1) / 80;
@@ -114,14 +116,9 @@ static bool know_damage(MONRACE_IDX r_idx, int i)
 	if (!(r_ptr->flags1 & RF1_UNIQUE)) return FALSE;
 	if ((4 + level) * (2 * a) > 80 * d) return TRUE;
 
-	/* Assume false */
 	return FALSE;
 }
 
-/*
- * Prepare hook for c_roff(). It will be changed for spoiler generation in wizard1.c.
- */
-void(*hook_c_roff)(TERM_COLOR attr, concptr str) = c_roff;
 
 /*!
  * @brief モンスターの思い出メッセージをあらかじめ指定された関数ポインタに基づき出力する
@@ -130,9 +127,9 @@ void(*hook_c_roff)(TERM_COLOR attr, concptr str) = c_roff;
  */
 static void hooked_roff(concptr str)
 {
-	/* Spawn */
 	hook_c_roff(TERM_WHITE, str);
 }
+
 
 /*!
 * @brief ダイス目を文字列に変換する
@@ -243,15 +240,14 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		if (r_ptr->reinforce_id[n] > 0) reinforce = TRUE;
 	}
 
-	/* cheat_know or research_mon() */
 	bool know_everything = FALSE;
 	if (cheat_know || (mode & 0x01))
+	{
 		know_everything = TRUE;
+	}
 
-	/* Cheat -- Know everything */
 	if (know_everything)
 	{
-		/* Hack -- maximal drops */
 		drop_gold = drop_item =
 			(((r_ptr->flags1 & RF1_DROP_4D2) ? 8 : 0) +
 			((r_ptr->flags1 & RF1_DROP_3D2) ? 6 : 0) +
@@ -260,11 +256,9 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 				((r_ptr->flags1 & RF1_DROP_90) ? 1 : 0) +
 				((r_ptr->flags1 & RF1_DROP_60) ? 1 : 0));
 
-		/* Hack -- but only "valid" drops */
 		if (r_ptr->flags1 & RF1_ONLY_GOLD) drop_item = 0;
 		if (r_ptr->flags1 & RF1_ONLY_ITEM) drop_gold = 0;
 
-		/* Hack -- know all the flags */
 		flags1 = r_ptr->flags1;
 		flags2 = r_ptr->flags2;
 		flags3 = r_ptr->flags3;
@@ -274,26 +268,21 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		flagsr = r_ptr->flagsr;
 	}
 
-	/* Extract a gender (if applicable) */
 	int msex = 0;
 	if (r_ptr->flags1 & RF1_FEMALE) msex = 2;
 	else if (r_ptr->flags1 & RF1_MALE) msex = 1;
 
-	/* Assume some "obvious" flags */
 	if (r_ptr->flags1 & RF1_UNIQUE)  flags1 |= (RF1_UNIQUE);
 	if (r_ptr->flags1 & RF1_QUESTOR) flags1 |= (RF1_QUESTOR);
 	if (r_ptr->flags1 & RF1_MALE)    flags1 |= (RF1_MALE);
 	if (r_ptr->flags1 & RF1_FEMALE)  flags1 |= (RF1_FEMALE);
 
-	/* Assume some "creation" flags */
 	if (r_ptr->flags1 & RF1_FRIENDS) flags1 |= (RF1_FRIENDS);
 	if (r_ptr->flags1 & RF1_ESCORT)  flags1 |= (RF1_ESCORT);
 	if (r_ptr->flags1 & RF1_ESCORTS) flags1 |= (RF1_ESCORTS);
 
-	/* Killing a monster reveals some properties */
 	if (r_ptr->r_tkills || know_everything)
 	{
-		/* Know "race" flags */
 		if (r_ptr->flags3 & RF3_ORC)      flags3 |= (RF3_ORC);
 		if (r_ptr->flags3 & RF3_TROLL)    flags3 |= (RF3_TROLL);
 		if (r_ptr->flags3 & RF3_GIANT)    flags3 |= (RF3_GIANT);
@@ -305,40 +294,28 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		if (r_ptr->flags3 & RF3_ANIMAL)   flags3 |= (RF3_ANIMAL);
 		if (r_ptr->flags3 & RF3_AMBERITE) flags3 |= (RF3_AMBERITE);
 		if (r_ptr->flags2 & RF2_HUMAN)    flags2 |= (RF2_HUMAN);
-
-		/* Know 'quantum' flag */
 		if (r_ptr->flags2 & RF2_QUANTUM)  flags2 |= (RF2_QUANTUM);
 
-		/* Know "forced" flags */
 		if (r_ptr->flags1 & RF1_FORCE_DEPTH) flags1 |= (RF1_FORCE_DEPTH);
 		if (r_ptr->flags1 & RF1_FORCE_MAXHP) flags1 |= (RF1_FORCE_MAXHP);
 	}
 
-	/* For output_monster_spoiler() */
 	if (!(mode & 0x02))
 	{
-		/* Treat uniques differently */
 		if (flags1 & RF1_UNIQUE)
 		{
-			/* Hack -- Determine if the unique is "dead" */
 			bool dead = (r_ptr->max_num == 0) ? TRUE : FALSE;
-
-			/* We've been killed... */
 			if (r_ptr->r_deaths)
 			{
-				/* Killed ancestors */
 				hooked_roff(format(_("%^sはあなたの先祖を %d 人葬っている", "%^s has slain %d of your ancestors"),
 					wd_he[msex], r_ptr->r_deaths));
 
-				/* But we've also killed it */
 				if (dead)
 				{
 					hooked_roff(
 						_(format("が、すでに仇討ちは果たしている！"),
 							format(", but you have avenged %s!  ", plural(r_ptr->r_deaths, "him", "them"))));
 				}
-
-				/* Unavenged (ever) */
 				else
 				{
 					hooked_roff(
@@ -346,45 +323,32 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 							format(", who %s unavenged.  ", plural(r_ptr->r_deaths, "remains", "remain"))));
 				}
 
-				/* Start a new line */
 				hooked_roff("\n");
 			}
-
-			/* Dead unique who never hurt us */
 			else if (dead)
 			{
 				hooked_roff(_("あなたはこの仇敵をすでに葬り去っている。", "You have slain this foe.  "));
-
-				/* Start a new line */
 				hooked_roff("\n");
 			}
 		}
-
-		/* Not unique, but killed us */
 		else if (r_ptr->r_deaths)
 		{
-			/* Dead ancestors */
 			hooked_roff(
 				_(format("このモンスターはあなたの先祖を %d 人葬っている", r_ptr->r_deaths),
 					format("%d of your ancestors %s been killed by this creature, ", r_ptr->r_deaths, plural(r_ptr->r_deaths, "has", "have"))));
 
-			/* Some kills this life */
 			if (r_ptr->r_pkills)
 			{
 				hooked_roff(format(
 					_("が、あなたはこのモンスターを少なくとも %d 体は倒している。",
 						"and you have exterminated at least %d of the creatures.  "), r_ptr->r_pkills));
 			}
-
-			/* Some kills past lives */
 			else if (r_ptr->r_tkills)
 			{
 				hooked_roff(format(
 					_("が、あなたの先祖はこのモンスターを少なくとも %d 体は倒している。",
 						"and your ancestors have exterminated at least %d of the creatures.  "), r_ptr->r_tkills));
 			}
-
-			/* No kills */
 			else
 			{
 				hooked_roff(format(
@@ -392,34 +356,27 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 						"and %s is not ever known to have been defeated.  "), wd_he[msex]));
 			}
 
-			/* Start a new line */
 			hooked_roff("\n");
 		}
 		else
 		{
-			/* Killed some this life */
 			if (r_ptr->r_pkills)
 			{
 				hooked_roff(format(
 					_("あなたはこのモンスターを少なくとも %d 体は殺している。",
 						"You have killed at least %d of these creatures.  "), r_ptr->r_pkills));
 			}
-
-			/* Killed some last life */
 			else if (r_ptr->r_tkills)
 			{
 				hooked_roff(format(
 					_("あなたの先祖はこのモンスターを少なくとも %d 体は殺している。",
 						"Your ancestors have killed at least %d of these creatures.  "), r_ptr->r_tkills));
 			}
-
-			/* Killed none */
 			else
 			{
 				hooked_roff(_("このモンスターを倒したことはない。", "No battles to the death are recalled.  "));
 			}
 
-			/* Start a new line */
 			hooked_roff("\n");
 		}
 	}
@@ -427,10 +384,7 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 	concptr tmp = r_text + r_ptr->text;
 	if (tmp[0])
 	{
-		/* Dump it */
 		hooked_roff(tmp);
-
-		/* Start a new line */
 		hooked_roff("\n");
 	}
 
@@ -469,73 +423,69 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		hooked_roff(_("、他のモンスターに化ける。", "and can take the shape of other monster."));
 		return;
 	}
+	
+	if (old)
+	{
+		hooked_roff(_("、", ", and "));
+	}
 	else
 	{
-		if (old)
-		{
-			hooked_roff(_("、", ", and "));
-		}
-		else
-		{
-			hooked_roff(format(_("%^sは", "%^s "), wd_he[msex]));
-			old = TRUE;
-		}
+		hooked_roff(format(_("%^sは", "%^s "), wd_he[msex]));
+		old = TRUE;
+	}
 
 #ifdef JP
 #else
-		hooked_roff("moves");
+	hooked_roff("moves");
 #endif
 
-		if ((flags1 & RF1_RAND_50) || (flags1 & RF1_RAND_25))
+	if ((flags1 & RF1_RAND_50) || (flags1 & RF1_RAND_25))
+	{
+		if ((flags1 & RF1_RAND_50) && (flags1 & RF1_RAND_25))
 		{
-			if ((flags1 & RF1_RAND_50) && (flags1 & RF1_RAND_25))
-			{
-				hooked_roff(_("かなり", " extremely"));
-			}
-			else if (flags1 & RF1_RAND_50)
-			{
-				hooked_roff(_("幾分", " somewhat"));
-			}
-			else if (flags1 & RF1_RAND_25)
-			{
-				hooked_roff(_("少々", " a bit"));
-			}
-
-			hooked_roff(_("不規則に", " erratically"));
-			if (speed != 110) hooked_roff(_("、かつ", ", and"));
+			hooked_roff(_("かなり", " extremely"));
+		}
+		else if (flags1 & RF1_RAND_50)
+		{
+			hooked_roff(_("幾分", " somewhat"));
+		}
+		else if (flags1 & RF1_RAND_25)
+		{
+			hooked_roff(_("少々", " a bit"));
 		}
 
-		if (speed > 110)
-		{
-			if (speed > 139) hook_c_roff(TERM_RED, _("信じ難いほど", " incredibly"));
-			else if (speed > 134) hook_c_roff(TERM_ORANGE, _("猛烈に", " extremely"));
-			else if (speed > 129) hook_c_roff(TERM_ORANGE, _("非常に", " very"));
-			else if (speed > 124) hook_c_roff(TERM_UMBER, _("かなり", " fairly"));
-			else if (speed < 120) hook_c_roff(TERM_L_UMBER, _("やや", " somewhat"));
-			hook_c_roff(TERM_L_RED, _("素早く", " quickly"));
-		}
-		else if (speed < 110)
-		{
-			if (speed < 90) hook_c_roff(TERM_L_GREEN, _("信じ難いほど", " incredibly"));
-			else if (speed < 95) hook_c_roff(TERM_BLUE, _("非常に", " very"));
-			else if (speed < 100) hook_c_roff(TERM_BLUE, _("かなり", " fairly"));
-			else if (speed > 104) hook_c_roff(TERM_GREEN, _("やや", " somewhat"));
-			hook_c_roff(TERM_L_BLUE, _("ゆっくりと", " slowly"));
-		}
-		else
-		{
-			hooked_roff(_("普通の速さで", " at normal speed"));
-		}
-
-#ifdef JP
-		hooked_roff("動いている");
-#endif
+		hooked_roff(_("不規則に", " erratically"));
+		if (speed != 110) hooked_roff(_("、かつ", ", and"));
 	}
 
-	/* The code above includes "attack speed" */
+	if (speed > 110)
+	{
+		if (speed > 139) hook_c_roff(TERM_RED, _("信じ難いほど", " incredibly"));
+		else if (speed > 134) hook_c_roff(TERM_ORANGE, _("猛烈に", " extremely"));
+		else if (speed > 129) hook_c_roff(TERM_ORANGE, _("非常に", " very"));
+		else if (speed > 124) hook_c_roff(TERM_UMBER, _("かなり", " fairly"));
+		else if (speed < 120) hook_c_roff(TERM_L_UMBER, _("やや", " somewhat"));
+		hook_c_roff(TERM_L_RED, _("素早く", " quickly"));
+	}
+	else if (speed < 110)
+	{
+		if (speed < 90) hook_c_roff(TERM_L_GREEN, _("信じ難いほど", " incredibly"));
+		else if (speed < 95) hook_c_roff(TERM_BLUE, _("非常に", " very"));
+		else if (speed < 100) hook_c_roff(TERM_BLUE, _("かなり", " fairly"));
+		else if (speed > 104) hook_c_roff(TERM_GREEN, _("やや", " somewhat"));
+		hook_c_roff(TERM_L_BLUE, _("ゆっくりと", " slowly"));
+	}
+	else
+	{
+		hooked_roff(_("普通の速さで", " at normal speed"));
+	}
+
+#ifdef JP
+	hooked_roff("動いている");
+#endif
+
 	if (flags1 & RF1_NEVER_MOVE)
 	{
-		/* Introduce */
 		if (old)
 		{
 			hooked_roff(_("、しかし", ", but "));
@@ -570,7 +520,7 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		}
 #endif
 
-		if (flags2 & RF2_ELDRITCH_HORROR) hook_c_roff(TERM_VIOLET, _("狂気を誘う", " sanity-blasting"));/*nuke me*/
+		if (flags2 & RF2_ELDRITCH_HORROR) hook_c_roff(TERM_VIOLET, _("狂気を誘う", " sanity-blasting"));
 		if (flags3 & RF3_ANIMAL)          hook_c_roff(TERM_L_GREEN, _("自然界の", " natural"));
 		if (flags3 & RF3_EVIL)            hook_c_roff(TERM_L_DARK, _("邪悪なる", " evil"));
 		if (flags3 & RF3_GOOD)            hook_c_roff(TERM_YELLOW, _("善良な", " good"));
@@ -596,45 +546,33 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 #ifdef JP
 		hooked_roff("を倒すことは");
 #endif
-		/* Group some variables */
-		{
-			/* calculate the integer exp part */
-			long i = (long)r_ptr->mexp * r_ptr->level / (player_ptr->max_plv + 2) * 3 / 2;
-
-			/* calculate the fractional exp part scaled by 100, */
-			/* must use long arithmetic to avoid overflow  */
-			long j = ((((long)r_ptr->mexp * r_ptr->level % (player_ptr->max_plv + 2) * 3 / 2) *
-				(long)1000 / (player_ptr->max_plv + 2) + 5) / 10);
+		long exp_integer = (long)r_ptr->mexp * r_ptr->level / (player_ptr->max_plv + 2) * 3 / 2;
+		long exp_decimal = ((((long)r_ptr->mexp * r_ptr->level % (player_ptr->max_plv + 2) * 3 / 2) *
+			(long)1000 / (player_ptr->max_plv + 2) + 5) / 10);
 
 #ifdef JP
-			hooked_roff(format(" %d レベルのキャラクタにとって 約%ld.%02ld ポイントの経験となる。", player_ptr->lev, (long)i, (long)j));
+		hooked_roff(format(" %d レベルのキャラクタにとって 約%ld.%02ld ポイントの経験となる。", player_ptr->lev, (long)exp_integer, (long)exp_decimal));
 #else
-			{
-				char *p, *q;
-				/* Mention the experience */
-				hooked_roff(format(" is worth about %ld.%02ld point%s",
-					(long)i, (long)j, ((i == 1) && (j == 0)) ? "" : "s"));
+		hooked_roff(format(" is worth about %ld.%02ld point%s",
+			(long)exp_integer, (long)exp_decimal, ((exp_integer == 1) && (exp_decimal == 0)) ? "" : "s"));
 
-				/* Take account of annoying English */
-				p = "th";
-				i = player_ptr->lev % 10;
-				if ((player_ptr->lev / 10) == 1) /* nothing */;
-				else if (i == 1) p = "st";
-				else if (i == 2) p = "nd";
-				else if (i == 3) p = "rd";
-
-				/* Take account of "leading vowels" in numbers */
-				q = "";
-				i = player_ptr->lev;
-				if ((i == 8) || (i == 11) || (i == 18)) q = "n";
-
-				/* Mention the dependance on the player's level */
-				hooked_roff(format(" for a%s %lu%s level character.  ",
-					q, (long)i, p));
-			}
-#endif
-
+		char *ordinal;
+		ordinal = "th";
+		exp_integer = player_ptr->lev % 10;
+		if ((player_ptr->lev / 10) != 1)
+		{
+			if (exp_integer == 1) ordinal = "st";
+			else if (exp_integer == 2) ordinal = "nd";
+			else if (exp_integer == 3) ordinal = "rd";
 		}
+
+		char *vowel;
+		vowel = "";
+		exp_integer = player_ptr->lev;
+		if ((exp_integer == 8) || (exp_integer == 11) || (exp_integer == 18)) vowel = "n";
+
+		hooked_roff(format(" for a%s %lu%s level character.  ", vowel, (long)exp_integer, ordinal));
+#endif
 	}
 
 	if ((flags2 & RF2_AURA_FIRE) && (flags2 & RF2_AURA_ELEC) && (flags3 & RF3_AURA_COLD))
@@ -676,7 +614,6 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 	if (flags2 & RF2_REFLECTING)
 		hooked_roff(format(_("%^sは矢の呪文を跳ね返す。", "%^s reflects bolt spells.  "), wd_he[msex]));
 
-	/* Describe escorts */
 	if ((flags1 & RF1_ESCORT) || (flags1 & RF1_ESCORTS) || reinforce)
 	{
 		hooked_roff(format(
@@ -731,7 +668,12 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 	byte color[96];
 	concptr vp[96];
 	char tmp_msg[96][96];
-	if (flags4 & RF4_SHRIEK) { vp[vn] = _("悲鳴で助けを求める", "shriek for help"); color[vn++] = TERM_L_WHITE; }
+	if (flags4 & RF4_SHRIEK)
+	{
+		vp[vn] = _("悲鳴で助けを求める", "shriek for help");
+		color[vn++] = TERM_L_WHITE;
+	}
+
 	if (flags4 & RF4_ROCKET)
 	{
 		set_damage(player_ptr, r_idx, (MS_ROCKET), _("ロケット%sを発射する", "shoot a rocket%s"), tmp_msg[vn]);
@@ -754,9 +696,13 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		}
 	}
 
-	if (a_ability_flags2 & (RF6_SPECIAL)) { vp[vn] = _("特別な行動をする", "do something"); color[vn++] = TERM_VIOLET; }
+	if (a_ability_flags2 & (RF6_SPECIAL))
+	{
+		vp[vn] = _("特別な行動をする", "do something");
+		color[vn++] = TERM_VIOLET;
+	}
 
-	if (vn)
+	if (vn > 0)
 	{
 		hooked_roff(format(_("%^sは", "%^s"), wd_he[msex]));
 		for (int n = 0; n < vn; n++)
@@ -782,8 +728,6 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		hooked_roff(_("ことがある。", ".  "));
 	}
 
-
-	/* Collect breaths */
 	vn = 0;
 	if (flags4 & (RF4_BR_ACID))
 	{
@@ -940,7 +884,7 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 	}
 
 	bool breath = FALSE;
-	if (vn)
+	if (vn > 0)
 	{
 		breath = TRUE;
 		hooked_roff(format(_("%^sは", "%^s"), wd_he[msex]));
@@ -955,6 +899,7 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 #endif
 			hook_c_roff(color[n], vp[n]);
 		}
+
 #ifdef JP
 		hooked_roff("のブレスを吐くことがある");
 #endif
@@ -1201,11 +1146,13 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 	{
 		if ((player_ptr->pclass != CLASS_NINJA) || (r_ptr->flags3 & (RF3_UNDEAD | RF3_HURT_LITE)) || (r_ptr->flags7 & RF7_DARK_MASK))
 		{
-			vp[vn] = _("暗闇", "create darkness"); color[vn++] = TERM_L_DARK;
+			vp[vn] = _("暗闇", "create darkness");
+			color[vn++] = TERM_L_DARK;
 		}
 		else
 		{
-			vp[vn] = _("閃光", "create light"); color[vn++] = TERM_YELLOW;
+			vp[vn] = _("閃光", "create light");
+			color[vn++] = TERM_YELLOW;
 		}
 	}
 
@@ -1267,23 +1214,15 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 #endif
 	}
 
-	/* End the sentence about inate/other spells */
 	if (breath || magic)
 	{
-		/* Total casting */
 		int m = r_ptr->r_cast_spell;
-
-		/* Average frequency */
 		int n = r_ptr->freq_spell;
-
-		/* Describe the spell frequency */
 		if (m > 100 || know_everything)
 		{
 			hooked_roff(format(
 				_("(確率:1/%d)", "; 1 time in %d"), 100 / n));
 		}
-
-		/* Guess at the frequency */
 		else if (m)
 		{
 			n = ((n + 9) / 10) * 10;
@@ -1294,15 +1233,12 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		hooked_roff(_("。", ".  "));
 	}
 
-	/* Describe monster "toughness" */
 	if (know_everything || know_armour(r_idx))
 	{
-		/* Armor */
 		hooked_roff(format(
 			_("%^sは AC%d の防御力と", "%^s has an armor rating of %d"),
 			wd_he[msex], r_ptr->ac));
 
-		/* Maximized hitpoints */
 		if ((flags1 & RF1_FORCE_MAXHP) || (r_ptr->hside == 1))
 		{
 			u32b hp = r_ptr->hdice * (nightmare ? 2 : 1) * r_ptr->hside;
@@ -1310,8 +1246,6 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 				_(" %d の体力がある。", " and a life rating of %d.  "),
 				(s16b)MIN(30000, hp)));
 		}
-
-		/* Variable hitpoints */
 		else
 		{
 			hooked_roff(format(
@@ -1320,7 +1254,6 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		}
 	}
 
-	/* Collect special abilities. */
 	vn = 0;
 	if (flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) { vp[vn] = _("ダンジョンを照らす", "illuminate the dungeon");     color[vn++] = TERM_WHITE; }
 	if (flags7 & (RF7_HAS_DARK_1 | RF7_HAS_DARK_2)) { vp[vn] = _("ダンジョンを暗くする", "darken the dungeon");   color[vn++] = TERM_L_DARK; }
@@ -1335,8 +1268,7 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 	if (flags2 & RF2_TAKE_ITEM) { vp[vn] = _("アイテムを拾う", "pick up objects"); color[vn++] = TERM_WHITE; }
 	if (flags2 & RF2_KILL_ITEM) { vp[vn] = _("アイテムを壊す", "destroy objects"); color[vn++] = TERM_WHITE; }
 
-	/* Describe special abilities. */
-	if (vn)
+	if (vn > 0)
 	{
 		hooked_roff(format(_("%^sは", "%^s"), wd_he[msex]));
 		for (int n = 0; n < vn; n++)
@@ -1348,7 +1280,10 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 				hook_c_roff(color[n], jverb_buf);
 				hooked_roff("、");
 			}
-			else hook_c_roff(color[n], vp[n]);
+			else
+			{
+				hook_c_roff(color[n], vp[n]);
+			}
 #else
 			if (n == 0) hooked_roff(" can ");
 			else if (n < vn - 1) hooked_roff(", ");
@@ -1362,13 +1297,11 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		hooked_roff(_("ことができる。", ".  "));
 	}
 
-	/* Aquatic */
 	if (flags7 & RF7_AQUATIC)
 	{
 		hooked_roff(format(_("%^sは水中に棲んでいる。", "%^s lives in water.  "), wd_he[msex]));
 	}
 
-	/* Describe special abilities. */
 	if (flags7 & (RF7_SELF_LITE_1 | RF7_SELF_LITE_2))
 	{
 		hooked_roff(format(_("%^sは光っている。", "%^s is shining.  "), wd_he[msex]));
@@ -1413,14 +1346,12 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		hook_c_roff(TERM_SLATE, format(_("%^sに乗ることができる。", "%^s is suitable for riding.  "), wd_he[msex]));
 	}
 
-	/* Collect susceptibilities */
 	vn = 0;
 	if (flags3 & RF3_HURT_ROCK) { vp[vn] = _("岩を除去するもの", "rock remover"); color[vn++] = TERM_UMBER; }
 	if (flags3 & RF3_HURT_LITE) { vp[vn] = _("明るい光", "bright light"); color[vn++] = TERM_YELLOW; }
 	if (flags3 & RF3_HURT_FIRE) { vp[vn] = _("炎", "fire"); color[vn++] = TERM_RED; }
 	if (flags3 & RF3_HURT_COLD) { vp[vn] = _("冷気", "cold"); color[vn++] = TERM_L_WHITE; }
 
-	/* Describe susceptibilities */
 	if (vn > 0)
 	{
 		hooked_roff(format(_("%^sには", "%^s"), wd_he[msex]));
@@ -1440,7 +1371,6 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		hooked_roff(_("でダメージを与えられる。", ".  "));
 	}
 
-	/* Collect immunities */
 	vn = 0;
 	if (flagsr & RFR_IM_ACID) { vp[vn] = _("酸", "acid"); color[vn++] = TERM_GREEN; }
 	if (flagsr & RFR_IM_ELEC) { vp[vn] = _("稲妻", "lightning"); color[vn++] = TERM_BLUE; }
@@ -1448,7 +1378,6 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 	if (flagsr & RFR_IM_COLD) { vp[vn] = _("冷気", "cold"); color[vn++] = TERM_L_WHITE; }
 	if (flagsr & RFR_IM_POIS) { vp[vn] = _("毒", "poison"); color[vn++] = TERM_L_GREEN; }
 
-	/* Collect resistances */
 	if (flagsr & RFR_RES_LITE) { vp[vn] = _("閃光", "light"); color[vn++] = TERM_YELLOW; }
 	if (flagsr & RFR_RES_DARK) { vp[vn] = _("暗黒", "dark"); color[vn++] = TERM_L_DARK; }
 	if (flagsr & RFR_RES_NETH) { vp[vn] = _("地獄", "nether"); color[vn++] = TERM_L_DARK; }
@@ -1466,8 +1395,7 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 	if (flagsr & RFR_RES_ALL) { vp[vn] = _("あらゆる攻撃", "all"); color[vn++] = TERM_YELLOW; }
 	if ((flagsr & RFR_RES_TELE) && !(r_ptr->flags1 & RF1_UNIQUE)) { vp[vn] = _("テレポート", "teleportation"); color[vn++] = TERM_ORANGE; }
 
-	/* Describe immunities and resistances */
-	if (vn)
+	if (vn > 0)
 	{
 		hooked_roff(format(_("%^sは", "%^s"), wd_he[msex]));
 		for (int n = 0; n < vn; n++)
@@ -1502,7 +1430,6 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		}
 	}
 
-	/* Collect non-effects */
 	vn = 0;
 	if (flags3 & RF3_NO_STUN) { vp[vn] = _("朦朧としない", "stunned"); color[vn++] = TERM_ORANGE; }
 	if (flags3 & RF3_NO_FEAR) { vp[vn] = _("恐怖を感じない", "frightened"); color[vn++] = TERM_SLATE; }
@@ -1510,14 +1437,9 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 	if (flags3 & RF3_NO_SLEEP) { vp[vn] = _("眠らされない", "slept"); color[vn++] = TERM_BLUE; }
 	if ((flagsr & RFR_RES_TELE) && (r_ptr->flags1 & RF1_UNIQUE)) { vp[vn] = _("テレポートされない", "teleported"); color[vn++] = TERM_ORANGE; }
 
-	/* Describe non-effects */
 	if (vn > 0)
 	{
-		/* Intro */
-		hooked_roff(format(
-			_("%^sは", "%^s"), wd_he[msex]));
-
-		/* Scan */
+		hooked_roff(format(_("%^sは", "%^s"), wd_he[msex]));
 		for (int n = 0; n < vn; n++)
 		{
 #ifdef JP
@@ -1533,13 +1455,11 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		hooked_roff(_("。", ".  "));
 	}
 
-	/* Do we know how aware it is? */
 	if ((((int)r_ptr->r_wake * (int)r_ptr->r_wake) > r_ptr->sleep) ||
 		(r_ptr->r_ignore == MAX_UCHAR) ||
 		(r_ptr->sleep == 0 && r_ptr->r_tkills >= 10) || know_everything)
 	{
 		concptr act;
-
 		if (r_ptr->sleep > 200)
 		{
 			act = _("を無視しがちであるが", "prefers to ignore");
@@ -1590,13 +1510,11 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 				format("%^s %s intruders, which %s may notice from %d feet.  ", wd_he[msex], act, wd_he[msex], 10 * r_ptr->aaf)));
 	}
 
-	/* Drops gold and/or items */
 	if (drop_gold || drop_item)
 	{
 		hooked_roff(format(_("%^sは", "%^s may carry"), wd_he[msex]));
 #ifdef JP
 #else
-		/* No "n" needed */
 		sin = FALSE;
 #endif
 
@@ -1671,37 +1589,27 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		hooked_roff(_("を持っていることがある。", ".  "));
 	}
 
-
-	/* Count the number of "known" attacks */
+	const int max_attack_numbers = 4;
 	int count = 0;
-	for (int m = 0; m < 4; m++)
+	for (int m = 0; m < max_attack_numbers; m++)
 	{
-		/* Skip non-attacks */
 		if (!r_ptr->blow[m].method) continue;
 		if (r_ptr->blow[m].method == RBM_SHOOT) continue;
 
-		/* Count known attacks */
 		if (r_ptr->r_blows[m] || know_everything) count++;
 	}
 
-	/* Examine (and count) the actual attacks */
 	int attack_numbers = 0;
-	for (int m = 0; m < 4; m++)
+	for (int m = 0; m < max_attack_numbers; m++)
 	{
-		int method, effect, d1, d2;
-
-		/* Skip non-attacks */
 		if (!r_ptr->blow[m].method) continue;
 		if (r_ptr->blow[m].method == RBM_SHOOT) continue;
-
-		/* Skip unknown attacks */
 		if (!r_ptr->r_blows[m] && !know_everything) continue;
 
-		/* Extract the attack info */
-		method = r_ptr->blow[m].method;
-		effect = r_ptr->blow[m].effect;
-		d1 = r_ptr->blow[m].d_dice;
-		d2 = r_ptr->blow[m].d_side;
+		int method = r_ptr->blow[m].method;
+		int effect = r_ptr->blow[m].effect;
+		int d1 = r_ptr->blow[m].d_dice;
+		int d2 = r_ptr->blow[m].d_side;
 
 		concptr p = NULL;
 		switch (method)
@@ -1773,9 +1681,10 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		}
 
 #ifdef JP
-		if (attack_numbers == 0) hooked_roff(format("%^sは", wd_he[msex]));
-
-		/***若干表現を変更 ita ***/
+		if (attack_numbers == 0)
+		{
+			hooked_roff(format("%^sは", wd_he[msex]));
+		}
 
 		if (d1 && d2 && (know_everything || know_damage(r_idx, m)))
 		{
@@ -1783,18 +1692,14 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 			hooked_roff("のダメージで");
 		}
 
-		/* Hack -- force a method */
 		if (!p) p = "何か奇妙なことをする";
 
-		/* Describe the method */
 		/* XXしてYYし/XXしてYYする/XXし/XXする */
 		if (q != NULL) jverb(p, jverb_buf, JVERB_TO);
 		else if (attack_numbers != count - 1) jverb(p, jverb_buf, JVERB_AND);
 		else strcpy(jverb_buf, p);
 
 		hooked_roff(jverb_buf);
-
-		/* Describe the effect (if any) */
 		if (q)
 		{
 			if (attack_numbers != count - 1) jverb(q, jverb_buf, JVERB_AND);
@@ -1804,7 +1709,6 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 		if (attack_numbers != count - 1) hooked_roff("、");
 #else
-		/* Introduce the attack description */
 		if (attack_numbers == 0)
 		{
 			hooked_roff(format("%^s can ", wd_he[msex]));
@@ -1818,23 +1722,14 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 			hooked_roff(", and ");
 		}
 
-		/* Hack -- force a method */
 		if (!p) p = "do something weird";
-
-		/* Describe the method */
 		hooked_roff(p);
-
-		/* Describe the effect (if any) */
 		if (q)
 		{
-			/* Describe the attack type */
 			hooked_roff(" to ");
 			hooked_roff(q);
-
-			/* Describe damage (if known) */
 			if (d1 && d2 && (know_everything || know_damage(r_idx, m)))
 			{
-				/* Display the damage */
 				hooked_roff(" with damage");
 				hooked_roff(format(" %dd%d", d1, d2));
 			}
@@ -1844,7 +1739,6 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		attack_numbers++;
 	}
 
-	/* Finish sentence above */
 	if (attack_numbers > 0)
 	{
 		hooked_roff(_("。", ".  "));
@@ -1862,11 +1756,11 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 				"Nothing is known about %s attack.  "), wd_his[msex]));
 	}
 
-	/*
-	 * Notice "Quest" monsters, but only if you
-	 * already encountered the monster.
-	 */
-	if ((flags1 & RF1_QUESTOR) && ((r_ptr->r_sights) && (r_ptr->max_num) && ((r_idx == MON_OBERON) || (r_idx == MON_SERPENT))))
+	bool is_kingpin = (flags1 & RF1_QUESTOR) != 0;
+	is_kingpin &= r_ptr->r_sights > 0;
+	is_kingpin &= r_ptr->max_num > 0;
+	is_kingpin &= (r_idx == MON_OBERON) || (r_idx == MON_SERPENT);
+	if (is_kingpin)
 	{
 		hook_c_roff(TERM_VIOLET,
 			_("あなたはこのモンスターを殺したいという強い欲望を感じている...",
@@ -1898,15 +1792,11 @@ void roff_top(MONRACE_IDX r_idx)
 	TERM_COLOR a1 = r_ptr->d_attr;
 	TERM_COLOR a2 = r_ptr->x_attr;
 
-	/* Clear the top line */
 	Term_erase(0, 0, 255);
-
-	/* Reset the cursor */
 	Term_gotoxy(0, 0);
 
 #ifdef JP
 #else
-	/* A title (use "The" for non-uniques) */
 	if (!(r_ptr->flags1 & RF1_UNIQUE))
 	{
 		Term_addstr(-1, TERM_WHITE, "The ");
@@ -1915,17 +1805,14 @@ void roff_top(MONRACE_IDX r_idx)
 
 	Term_addstr(-1, TERM_WHITE, (r_name + r_ptr->name));
 
-	/* Append the "standard" attr/char info */
 	Term_addstr(-1, TERM_WHITE, " ('");
 	Term_add_bigch(a1, c1);
 	Term_addstr(-1, TERM_WHITE, "')");
 
-	/* Append the "optional" attr/char info */
 	Term_addstr(-1, TERM_WHITE, "/('");
 	Term_add_bigch(a2, c2);
 	Term_addstr(-1, TERM_WHITE, "'):");
 
-	/* Wizards get extra info */
 	if (!current_world_ptr->wizard) return;
 
 	char buf[16];
@@ -2141,7 +2028,6 @@ bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_r
 		}
 	}
 
-	/* "CAN" flags */
 	if (have_flag(f_ptr->flags, FF_CAN_FLY) && (r_ptr->flags7 & RF7_CAN_FLY)) return TRUE;
 	if (have_flag(f_ptr->flags, FF_CAN_SWIM) && (r_ptr->flags7 & RF7_CAN_SWIM)) return TRUE;
 	if (have_flag(f_ptr->flags, FF_CAN_PASS))
@@ -2151,50 +2037,38 @@ bool monster_can_cross_terrain(player_type *player_ptr, FEAT_IDX feat, monster_r
 
 	if (!have_flag(f_ptr->flags, FF_MOVE)) return FALSE;
 
-	/* Some monsters can walk on mountains */
 	if (have_flag(f_ptr->flags, FF_MOUNTAIN) && (r_ptr->flags8 & RF8_WILD_MOUNTAIN)) return TRUE;
 
-	/* Water */
 	if (have_flag(f_ptr->flags, FF_WATER))
 	{
 		if (!(r_ptr->flags7 & RF7_AQUATIC))
 		{
-			/* Deep water */
 			if (have_flag(f_ptr->flags, FF_DEEP)) return FALSE;
-
-			/* Shallow water */
 			else if (r_ptr->flags2 & RF2_AURA_FIRE) return FALSE;
 		}
 	}
-
-	/* Aquatic monster into non-water? */
 	else if (r_ptr->flags7 & RF7_AQUATIC) return FALSE;
 
-	/* Lava */
 	if (have_flag(f_ptr->flags, FF_LAVA))
 	{
 		if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) return FALSE;
 	}
 
-	/* Cold */
 	if (have_flag(f_ptr->flags, FF_COLD_PUDDLE))
 	{
 		if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)) return FALSE;
 	}
 
-	/* Elec */
 	if (have_flag(f_ptr->flags, FF_ELEC_PUDDLE))
 	{
 		if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)) return FALSE;
 	}
 
-	/* Acid */
 	if (have_flag(f_ptr->flags, FF_ACID_PUDDLE))
 	{
 		if (!(r_ptr->flagsr & RFR_EFF_IM_ACID_MASK)) return FALSE;
 	}
 
-	/* Poison */
 	if (have_flag(f_ptr->flags, FF_POISON_PUDDLE))
 	{
 		if (!(r_ptr->flagsr & RFR_EFF_IM_POIS_MASK)) return FALSE;
@@ -2268,13 +2142,11 @@ bool are_enemies(player_type *player_ptr, monster_type *m_ptr, monster_type *n_p
 		if (!is_pet(m_ptr) && !is_pet(n_ptr)) return FALSE;
 	}
 
-	/* Friendly vs. opposite aligned normal or pet */
 	if (check_hostile_align(m_ptr->sub_align, n_ptr->sub_align))
 	{
 		if (!(m_ptr->mflag2 & MFLAG2_CHAMELEON) || !(n_ptr->mflag2 & MFLAG2_CHAMELEON)) return TRUE;
 	}
 
-	/* Hostile vs. non-hostile */
 	if (is_hostile(m_ptr) != is_hostile(n_ptr))
 	{
 		return TRUE;
@@ -2376,11 +2248,11 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
 	bool drop_chosen_item = drop_item && !cloned && !floor_ptr->inside_arena && !player_ptr->phase_out && !is_pet(m_ptr);
 
-	/* The caster is dead? */
 	if (current_world_ptr->timewalk_m_idx && current_world_ptr->timewalk_m_idx == m_idx)
+	{
 		current_world_ptr->timewalk_m_idx = 0;
+	}
 
-	/* Notice changes in view */
 	if (r_ptr->flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
 	{
 		player_ptr->update |= (PU_MON_LITE);
@@ -2419,13 +2291,11 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
 	check_quest_completion(player_ptr, m_ptr);
 
-	/* Handle the possibility of player vanquishing arena combatant -KMW- */
 	object_type forge;
 	object_type *q_ptr;
 	if (floor_ptr->inside_arena && !is_pet(m_ptr))
 	{
 		player_ptr->exit_bldg = TRUE;
-
 		if (player_ptr->arena_number > MAX_ARENA_MONS)
 		{
 			msg_print(_("素晴らしい！君こそ真の勝利者だ。", "You are a Genuine Champion!"));
@@ -2438,8 +2308,6 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 		if (arena_info[player_ptr->arena_number].tval)
 		{
 			q_ptr = &forge;
-
-			/* Prepare to make a prize */
 			object_prep(q_ptr, lookup_kind(arena_info[player_ptr->arena_number].tval, arena_info[player_ptr->arena_number].sval));
 			apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART);
 			(void)drop_near(player_ptr, q_ptr, -1, y, x);
@@ -2450,19 +2318,14 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 		if (record_arena)
 		{
 			GAME_TEXT m_name[MAX_NLEN];
-
 			monster_desc(player_ptr, m_name, m_ptr, MD_WRONGDOER_NAME);
-
 			exe_write_diary(player_ptr, DIARY_ARENA, player_ptr->arena_number, m_name);
 		}
 	}
 	
-	if (m_idx == player_ptr->riding)
+	if (m_idx == player_ptr->riding && rakuba(player_ptr, -1, FALSE))
 	{
-		if (rakuba(player_ptr, -1, FALSE))
-		{
 			msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
-		}
 	}
 
 	bool is_drop_corpse = one_in_(r_ptr->flags1 & RF1_UNIQUE ? 1 : 4);
@@ -2470,22 +2333,14 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 	is_drop_corpse &= !(floor_ptr->inside_arena || player_ptr->phase_out || cloned || ((m_ptr->r_idx == today_mon) && is_pet(m_ptr)));
 	if (is_drop_corpse)
 	{
-		/* Assume skeleton */
 		bool corpse = FALSE;
 
-		/*
-		 * We cannot drop a skeleton? Note, if we are in this check,
-		 * we *know* we can drop at least a corpse or a skeleton
-		 */
 		if (!(r_ptr->flags9 & RF9_DROP_SKELETON))
 			corpse = TRUE;
 		else if ((r_ptr->flags9 & RF9_DROP_CORPSE) && (r_ptr->flags1 & RF1_UNIQUE))
 			corpse = TRUE;
-
-		/* Else, a corpse is more likely unless we did a "lot" of damage */
 		else if (r_ptr->flags9 & RF9_DROP_CORPSE)
 		{
-			/* Lots of damage in one blow */
 			if ((0 - ((m_ptr->maxhp) / 4)) > m_ptr->hp)
 			{
 				if (one_in_(5)) corpse = TRUE;
@@ -2503,7 +2358,6 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 		(void)drop_near(player_ptr, q_ptr, -1, y, x);
 	}
 
-	/* Drop objects being carried */
 	monster_drop_carried_objects(player_ptr, m_ptr);
 
 	u32b mo_mode = 0L;
@@ -2514,7 +2368,6 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 	{
 	case MON_PINK_HORROR:
 	{
-		/* Pink horrors are replaced with 2 Blue horrors */
 		if (floor_ptr->inside_arena || player_ptr->phase_out) break;
 
 		bool notice = FALSE;
@@ -2524,7 +2377,10 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 			bool pet = is_pet(m_ptr);
 			BIT_FLAGS mode = 0L;
 
-			if (pet) mode |= PM_FORCE_PET;
+			if (pet)
+			{
+				mode |= PM_FORCE_PET;
+			}
 
 			if (summon_specific(player_ptr, (pet ? -1 : m_idx), wy, wx, 100, SUMMON_BLUE_HORROR, mode))
 			{
@@ -2532,51 +2388,40 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 			}
 		}
 
-		if (notice) msg_print(_("ピンク・ホラーは分裂した！", "The Pink horror divides!"));
+		if (notice)
+		{
+			msg_print(_("ピンク・ホラーは分裂した！", "The Pink horror divides!"));
+		}
 
 		break;
 	}
-
 	case MON_BLOODLETTER:
 	{
-		/* Bloodletters of Khorne may drop a blade of chaos */
 		if (!drop_chosen_item || (randint1(100) >= 15)) break;
 
 		q_ptr = &forge;
-
-		/* Prepare to make a Blade of Chaos */
 		object_prep(q_ptr, lookup_kind(TV_SWORD, SV_BLADE_OF_CHAOS));
-
 		apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART | mo_mode);
 		(void)drop_near(player_ptr, q_ptr, -1, y, x);
 		break;
 	}
-
 	case MON_RAAL:
 	{
 		if (!drop_chosen_item || (floor_ptr->dun_level <= 9)) break;
 
 		q_ptr = &forge;
 		object_wipe(q_ptr);
-
-		/* Activate restriction */
 		if ((floor_ptr->dun_level > 49) && one_in_(5))
 			get_obj_num_hook = kind_is_good_book;
 		else
 			get_obj_num_hook = kind_is_book;
 
-		/* Make a book */
 		make_object(player_ptr, q_ptr, mo_mode);
 		(void)drop_near(player_ptr, q_ptr, -1, y, x);
 		break;
 	}
-
 	case MON_DAWN:
 	{
-		/*
-		 * Mega^3-hack: killing a 'Warrior of the Dawn' is likely to
-		 * spawn another in the fallen one's place!
-		 */
 		if (floor_ptr->inside_arena || player_ptr->phase_out) break;
 		if (one_in_(7)) break;
 
@@ -2601,20 +2446,16 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
 		break;
 	}
-
-	/* One more ultra-hack: An Unmaker goes out with a big bang! */
 	case MON_UNMAKER:
 	{
 		BIT_FLAGS flg = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
 		(void)project(player_ptr, m_idx, 6, y, x, 100, GF_CHAOS, flg, -1);
 		break;
 	}
-
 	case MON_UNICORN_ORD:
 	case MON_MORGOTH:
 	case MON_ONE_RING:
 	{
-		/* Reward for "lazy" player */
 		if (player_ptr->pseikaku != SEIKAKU_NAMAKE) break;
 		if (!drop_chosen_item) break;
 
@@ -2641,43 +2482,28 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 		if (create_named_art(player_ptr, a_idx, y, x))
 		{
 			a_ptr->cur_num = 1;
-
-			/* Hack -- Memorize location of artifact in saved floors */
 			if (current_world_ptr->character_dungeon) a_ptr->floor_id = player_ptr->floor_id;
 		}
 		else if (!preserve_mode) a_ptr->cur_num = 1;
 
 		break;
 	}
-
 	case MON_SERPENT:
 	{
 		if (!drop_chosen_item) break;
+
 		q_ptr = &forge;
-
-		/* Mega-Hack -- Prepare to make "Grond" */
 		object_prep(q_ptr, lookup_kind(TV_HAFTED, SV_GROND));
-
-		/* Mega-Hack -- Mark this item as "Grond" */
 		q_ptr->name1 = ART_GROND;
-
-		/* Mega-Hack -- Actually create "Grond" */
 		apply_magic(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
 		(void)drop_near(player_ptr, q_ptr, -1, y, x);
 		q_ptr = &forge;
-
-		/* Mega-Hack -- Prepare to make "Chaos" */
 		object_prep(q_ptr, lookup_kind(TV_CROWN, SV_CHAOS));
-
-		/* Mega-Hack -- Mark this item as "Chaos" */
 		q_ptr->name1 = ART_CHAOS;
-
-		/* Mega-Hack -- Actually create "Chaos" */
 		apply_magic(player_ptr, q_ptr, -1, AM_GOOD | AM_GREAT);
 		(void)drop_near(player_ptr, q_ptr, -1, y, x);
 		break;
 	}
-
 	case MON_B_DEATH_SWORD:
 	{
 		if (!drop_chosen_item) break;
@@ -2687,7 +2513,6 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 		(void)drop_near(player_ptr, q_ptr, -1, y, x);
 		break;
 	}
-
 	case MON_A_GOLD:
 	case MON_A_SILVER:
 	{
@@ -2710,7 +2535,6 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 		(void)project(player_ptr, m_idx, 3, y, x, damroll(20, 10), GF_FIRE, flg, -1);
 		break;
 	}
-
 	default:
 	{
 		if (!drop_chosen_item) break;
@@ -2723,74 +2547,50 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
 			q_ptr = &forge;
 			object_wipe(q_ptr);
-
-			/* Activate restriction */
 			get_obj_num_hook = kind_is_cloak;
-
-			/* Make a cloak */
 			make_object(player_ptr, q_ptr, mo_mode);
 			(void)drop_near(player_ptr, q_ptr, -1, y, x);
 			break;
 		}
-
 		case '/':
 		{
 			if (floor_ptr->dun_level <= 4) break;
 
 			q_ptr = &forge;
 			object_wipe(q_ptr);
-
-			/* Activate restriction */
 			get_obj_num_hook = kind_is_polearm;
-
-			/* Make a poleweapon */
 			make_object(player_ptr, q_ptr, mo_mode);
 			(void)drop_near(player_ptr, q_ptr, -1, y, x);
 			break;
 		}
-
 		case '[':
 		{
 			if (floor_ptr->dun_level <= 19) break;
 
 			q_ptr = &forge;
 			object_wipe(q_ptr);
-
-			/* Activate restriction */
 			get_obj_num_hook = kind_is_armor;
-
-			/* Make a hard armor */
 			make_object(player_ptr, q_ptr, mo_mode);
 			(void)drop_near(player_ptr, q_ptr, -1, y, x);
 			break;
 		}
-
 		case '\\':
 		{
 			if (floor_ptr->dun_level <= 4) break;
 			q_ptr = &forge;
 			object_wipe(q_ptr);
-
-			/* Activate restriction */
 			get_obj_num_hook = kind_is_hafted;
-
-			/* Make a hafted weapon */
 			make_object(player_ptr, q_ptr, mo_mode);
 			(void)drop_near(player_ptr, q_ptr, -1, y, x);
-
 			break;
 		}
-
 		case '|':
 		{
 			if (m_ptr->r_idx == MON_STORMBRINGER) break;
+
 			q_ptr = &forge;
 			object_wipe(q_ptr);
-
-			/* Activate restriction */
 			get_obj_num_hook = kind_is_sword;
-
-			/* Make a sword */
 			make_object(player_ptr, q_ptr, mo_mode);
 			(void)drop_near(player_ptr, q_ptr, -1, y, x);
 			break;
@@ -2799,12 +2599,10 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 	}
 	}
 
-	/* Mega-Hack -- drop fixed items */
 	if (drop_chosen_item)
 	{
 		ARTIFACT_IDX a_idx = 0;
 		PERCENTAGE chance = 0;
-
 		for (int i = 0; i < 4; i++)
 		{
 			if (!r_ptr->artifact_id[i]) break;
@@ -2815,53 +2613,50 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 		if ((a_idx > 0) && ((randint0(100) < chance) || current_world_ptr->wizard))
 		{
 			artifact_type *a_ptr = &a_info[a_idx];
-
 			if (!a_ptr->cur_num)
 			{
 				if (create_named_art(player_ptr, a_idx, y, x))
 				{
 					a_ptr->cur_num = 1;
-
-					/* Hack -- Memorize location of artifact in saved floors */
 					if (current_world_ptr->character_dungeon) a_ptr->floor_id = player_ptr->floor_id;
 				}
-				else if (!preserve_mode) a_ptr->cur_num = 1;
+				else if (!preserve_mode)
+				{
+					a_ptr->cur_num = 1;
+				}
 			}
 		}
 
 		if ((r_ptr->flags7 & RF7_GUARDIAN) && (d_info[player_ptr->dungeon_idx].final_guardian == m_ptr->r_idx))
 		{
-			KIND_OBJECT_IDX k_idx = d_info[player_ptr->dungeon_idx].final_object ? d_info[player_ptr->dungeon_idx].final_object
+			KIND_OBJECT_IDX k_idx = d_info[player_ptr->dungeon_idx].final_object != 0
+				? d_info[player_ptr->dungeon_idx].final_object
 				: lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
 
-			if (d_info[player_ptr->dungeon_idx].final_artifact)
+			if (d_info[player_ptr->dungeon_idx].final_artifact != 0)
 			{
 				a_idx = d_info[player_ptr->dungeon_idx].final_artifact;
 				artifact_type *a_ptr = &a_info[a_idx];
-
 				if (!a_ptr->cur_num)
 				{
 					if (create_named_art(player_ptr, a_idx, y, x))
 					{
 						a_ptr->cur_num = 1;
-
-						/* Hack -- Memorize location of artifact in saved floors */
 						if (current_world_ptr->character_dungeon) a_ptr->floor_id = player_ptr->floor_id;
 					}
-					else if (!preserve_mode) a_ptr->cur_num = 1;
+					else if (!preserve_mode)
+					{
+						a_ptr->cur_num = 1;
+					}
 
-					/* Prevent rewarding both artifact and "default" object */
 					if (!d_info[player_ptr->dungeon_idx].final_object) k_idx = 0;
 				}
 			}
 
-			if (k_idx)
+			if (k_idx != 0)
 			{
 				q_ptr = &forge;
-
-				/* Prepare to make a reward */
 				object_prep(q_ptr, k_idx);
-
 				apply_magic(player_ptr, q_ptr, floor_ptr->object_level, AM_NO_FIXED_ART | AM_GOOD);
 				(void)drop_near(player_ptr, q_ptr, -1, y, x);
 			}
@@ -2870,7 +2665,6 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 		}
 	}
 
-	/* Determine how much we can drop */
 	int number = 0;
 	if ((r_ptr->flags1 & RF1_DROP_60) && (randint0(100) < 60)) number++;
 	if ((r_ptr->flags1 & RF1_DROP_90) && (randint0(100) < 90)) number++;
@@ -2880,22 +2674,20 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 	if (r_ptr->flags1 & RF1_DROP_4D2) number += damroll(4, 2);
 
 	if (cloned && !(r_ptr->flags1 & RF1_UNIQUE))
-		number = 0; /* Clones drop no stuff unless Cloning Pits */
+		number = 0;
 
 	if (is_pet(m_ptr) || player_ptr->phase_out || floor_ptr->inside_arena)
-		number = 0; /* Pets drop no stuff */
-	if (!drop_item && (r_ptr->d_char != '$')) number = 0;
+		number = 0;
+
+	if (!drop_item && (r_ptr->d_char != '$'))
+		number = 0;
 
 	if ((r_ptr->flags2 & (RF2_MULTIPLY)) && (r_ptr->r_akills > 1024))
-		number = 0; /* Limit of Multiply monster drop */
+		number = 0;
 
-	/* Hack -- handle creeping coins */
 	coin_type = force_coin;
-
-	/* Average dungeon and monster levels */
 	floor_ptr->object_level = (floor_ptr->dun_level + r_ptr->level) / 2;
 
-	/* Drop some objects */
 	int dump_item = 0;
 	int dump_gold = 0;
 	for (int i = 0; i < number; i++)
@@ -2917,25 +2709,16 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 		(void)drop_near(player_ptr, q_ptr, -1, y, x);
 	}
 
-	/* Reset the object level */
 	floor_ptr->object_level = floor_ptr->base_level;
-
-	/* Reset "coin" type */
 	coin_type = 0;
-
-	/* Take note of any dropped treasure */
-	bool visible = ((m_ptr->ml && !player_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE));
+	bool visible = (m_ptr->ml && !player_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE);
 	if (visible && (dump_item || dump_gold))
 	{
-		/* Take notes on treasure */
 		lore_treasure(player_ptr, m_idx, dump_item, dump_gold);
 	}
 
-	/* Only process "Quest Monsters" */
 	if (!(r_ptr->flags1 & RF1_QUESTOR)) return;
 	if (player_ptr->phase_out) return;
-
-	/* Winner? */
 	if ((m_ptr->r_idx != MON_SERPENT) || cloned) return;
 
 	current_world_ptr->total_winner = TRUE;
