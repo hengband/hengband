@@ -22255,6 +22255,8 @@ S:1_IN_4 |
 S:BLIND | SCARE |
 S:BO_MANA | HOLD |
 S:PSY_SPEAR | BA_LITE | BR_LITE
+D:$He is a light-manipulating psychics with a neutral appearance.
+D:$His back has shining light feathers.
 D:光を操るサイキッカーで、中性的な容姿と背中に輝く光の羽根を背負っている。
 
 N:1107:さまようもの
@@ -22329,7 +22331,7 @@ D:自分を含めた全ての人々に及ぶことを常に望んでいる。
 N:1111:ファイア・コボルド
 E:Fire kobold
 G:k:R
-I:110:11d9:20:35:30
+I:110:11d9:20:35:25
 W:12:1:0:42:800:1116
 B:HIT:FIRE:4d5
 F:DROP_90
@@ -22342,7 +22344,7 @@ D:それは単なる赤いコボルドに見えるが、火の使い方を覚え
 N:1112:アイス・コボルド
 E:Ice kobold
 G:k:W
-I:110:11d9:20:35:30
+I:110:11d9:20:35:25
 W:12:1:0:42:800:1117
 B:HIT:COLD:4d5
 F:DROP_90
@@ -22355,7 +22357,7 @@ D:それは単なる白いコボルドに見えるが、冷気の浴びせ方を
 N:1113:サンダー・コボルド
 E:Electric kobold
 G:k:B
-I:110:11d9:20:35:30
+I:110:11d9:20:35:25
 W:12:1:0:42:800:1118
 B:HIT:ELEC:4d5
 F:DROP_90
@@ -22368,7 +22370,7 @@ D:それは単なる青いコボルドに見えるが、電撃の浴びせ方を
 N:1114:アシッド・コボルド
 E:Acid kobold
 G:k:s
-I:110:11d9:20:35:30
+I:110:11d9:20:35:25
 W:12:1:0:42:800:1119
 B:HIT:ACID:4d5
 F:DROP_90
@@ -22381,7 +22383,7 @@ D:それは単なる黒いコボルドに見えるが、酸の浴びせ方を覚
 N:1115:ポイズン・コボルド
 E:Poison kobold
 G:k:G
-I:115:12d10:25:45:35
+I:115:12d10:25:45:20
 W:14:1:0:55:1100:1120
 B:HIT:POISON:4d6
 F:DROP_90
@@ -22393,7 +22395,7 @@ D:それは単なる緑色のコボルドに見えるが、毒のくらわし方
 N:1116:フレイム・コボルド
 E:Flame kobold
 G:k:r
-I:110:20d10:25:40:35
+I:110:20d10:25:40:20
 W:23:1:0:240:0:0
 B:HIT:FIRE:8d6
 B:HIT:FIRE:8d6
@@ -22412,7 +22414,7 @@ D:コボルド仲間の間でも暑苦しいと煙たがれることがある。
 N:1117:ブリザード・コボルド
 E:Blizzard kobold
 G:k:w
-I:110:20d10:25:40:35
+I:110:20d10:25:40:20
 W:23:1:0:240:0:0
 B:HIT:COLD:8d6
 B:HIT:COLD:8d6
@@ -22430,7 +22432,7 @@ D:それの周りではダイアモンドダストを見ることができると
 N:1118:ライトニング・コボルド
 E:Lightning kobold
 G:k:b
-I:110:20d10:25:40:35
+I:110:20d10:25:40:20
 W:23:1:0:240:0:0
 B:HIT:ELEC:8d6
 B:HIT:ELEC:8d6
@@ -22443,13 +22445,13 @@ F:IM_ELEC | FRIENDS
 F:SELF_LITE_1
 D:$Have you seen the very experiment by Edison?
 D:$This kobold can kill an elephant easily by its breath!
-D:君は見たことがあるだろうか、あのエジソンの忌まわしい実験を！
+D:君は見たことがあるだろうか、あのヱヅソンの忌まわしい実験を！
 D:このコボルドはあれと同じことができる！
 
 N:1119:カルボラン・コボルド
 E:Carborane kobold
 G:k:D
-I:110:20d10:25:40:35
+I:110:20d10:25:40:20
 W:23:1:0:240:0:0
 B:HIT:ACID:8d6
 B:HIT:ACID:8d6
@@ -22467,7 +22469,7 @@ D:このコボルドが吐き出す酸はロウソクをも溶かしてしまう
 N:1120:アポトキシン・コボルド
 E:Apotoxin kobold
 G:k:g
-I:115:21d11:30:45:40
+I:115:21d11:30:45:15
 W:24:1:0:333:0:0
 B:HIT:POISON:9d6
 B:HIT:POISON:9d6
@@ -22484,7 +22486,7 @@ D:やつの毒は大の大人を無力な子供に変えてしまう！
 N:1121:ジャイアンの腰巾着『スネヲ』
 E:Suneo, the Follower of Jaian
 G:k:u
-I:120:35d20:30:50:40
+I:120:35d20:30:50:10
 W:25:1:0:410:0:0
 B:HIT:HURT:10d6
 S:1_IN_8 | S_KIN | SHRIEK
@@ -22532,7 +22534,293 @@ F:UNIQUE | BASH_DOOR | OPEN_DOOR | ESCORT | DROP_90 |
 F:NO_SLEEP | NO_CONF | FORCE_MAXHP | DROP_4D2 | DROP_GOOD |
 F:MALE | DROP_CORPSE | DROP_SKELETON | CAN_SPEAK | HUMAN
 S:1_IN_5 | S_KIN | SHOOT | BO_ELEC
-D:葦名一心亡き後の故国の存亡を憂うこの一門の将は、いかなる異形の力を顧みず手に入れようとする。
+D:$The leader of this family, worried about the death of his homeland
+D:$ after the death of Isshin Ashina,
+D:$ seeks to obtain it without regard to any monstrous power.
+D:$  Therefore, it will also be inevitable that he sought them and went to Angband.
+D:葦名一心亡き後の故国の存亡を憂うこの一門の将は、いかなる異形の力をも顧みず手に入れようとする。
 D:ゆえにそれらを求め鉄獄に至ったこともまた必然であるだろう。
 
+N:1124:撲殺の天使
+E:Dokuro, the Bludgeoning Angel
+G:A:B
+I:115:30d30:30:60:10
+W:30:2:0:1300:0:0
+B:SLASH:SUPERHURT:15d1
+B:HIT:SUPERHURT:15d1
+B:CRAWL:SUPERHURT:15d1
+B:STING:SUPERHURT:15d1
+F:UNIQUE | FORCE_MAXHP | GOOD | FEMALE | ANGEL
+F:IM_FIRE | RES_LITE
+F:BASH_DOOR | NO_SLEEP | NO_CONF
+F:DROP_GOOD | DROP_GREAT | ONLY_ITEM | DROP_1D2
+S:1_IN_5
+S:ANIM_DEAD | BA_LITE | CAUSE_3 | CONF | HOLD | BLIND | SHRIEK | BLINK
+D:$You are a UNIQUE.
+D:$  She will surely fail your animation!
+D:あなたはユニークな存在だ。
+D:あなたの死体は蘇ることなく灰になるだろう。
 
+N:1125:赤鬼
+E:Red ogre
+G:O:R
+I:115:26d20:20:70:15
+W:36:2:0:580:0:0
+B:CRUSH:HURT:10d4
+B:CRUSH:HURT:10d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
+F:DROP_CORPSE | DROP_SKELETON
+F:IM_FIRE | RES_NETH | NO_FEAR | NO_CONF | HURT_COLD | DROP_60
+S:1_IN_10
+S:SCARE | BLIND | CONF | HOLD
+S:BA_FIRE | BO_NETH | BO_PLAS | S_DEMON
+D:$This ogre is the one of the weakest resitents in the hell.
+D:$  It hits sinners and gives punishment to them in the blood pond.
+D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
+D:それは罪人を殴りつけ、血の池で劫罰を与え続ける。
+
+N:1126:青鬼
+E:Blue ogre
+G:O:B
+I:115:26d20:20:70:15
+W:36:2:0:580:0:0
+B:SLASH:HURT:10d4
+B:SLASH:HURT:10d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
+F:DROP_CORPSE | DROP_SKELETON
+F:IM_COLD | RES_NETH | NO_FEAR | NO_CONF | HURT_FIRE | DROP_60
+S:1_IN_10
+S:SCARE | BLIND | CONF | HOLD
+S:BA_COLD | BO_NETH | BO_ICEE | S_DEMON
+D:$This ogre is the one of the weakest resitents in the hell.
+D:$  It hashes sinners and gives punishment to them on the mountain of needles.
+D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
+D:それは罪人を斬りつけ、針の山で劫罰を与え続ける。
+
+N:1127:緑鬼
+E:Green ogre
+G:O:G
+I:115:26d20:20:70:15
+W:36:2:0:580:0:0
+B:SLASH:HURT:10d4
+B:SLASH:HURT:10d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
+F:DROP_CORPSE | DROP_SKELETON
+F:IM_COLD | RES_NETH | NO_FEAR | NO_CONF | HURT_FIRE | DROP_60
+S:1_IN_10
+S:SCARE | BLIND | CONF | HOLD
+S:BO_PLAS | BO_ICEE | BO_NETH | S_DEMON
+D:$This ogre is the one of the weakest resitents in the hell.
+D:$  It slahes sinners and gives punishment to them by its heated axe.
+D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
+D:それは罪人を斬りつけ、灼けた斧で劫罰を与え続ける。
+
+N:1128:首なし鬼
+E:Headless ogre
+G:O:u
+I:120:33d23:20:70:15
+W:38:2:0:660:0:0
+B:SLASH:HURT:11d4
+B:CRUSH:HURT:11d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | UNDEAD | INVISIBLE
+F:DROP_CORPSE | DROP_SKELETON | HURT_LITE
+F:IM_POIS | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_10
+S:SCARE | BLIND | CONF | HOLD
+S:BA_FIRE | BA_COLD | BO_NETH | S_DEMON
+D:$Considering its position as hell guard, this ogre has gone to Asura realm.
+D:$  It attacks whoever is innocent or guilty.
+D:鬼とあろうものが罪を犯して修羅の道へ堕ちた姿だ。
+D:それは罪人でも天上人でもなりふり構わず攻撃する。
+
+N:1129:金銀パールプレゼントの鬼
+E:Ogre gifting gold, silver and pearl
+G:O:y
+I:120:50d20:20:120:15
+W:40:5:0:700:0:0
+B:CRUSH:HURT:11d4
+B:SLASH:HURT:11d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
+F:ONLY_GOLD | DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_4D2
+F:DROP_CORPSE | DROP_SKELETON
+F:RES_LITE | RES_NETH | NO_FEAR | NO_CONF | HURT_ROCK
+S:1_IN_8
+S:SCARE | BLIND | CONF | HOLD
+S:BR_LITE | BA_LITE | S_DEMON | CAUSE_2
+D:$Hmmm, you may have seen this ogre a long time ago.
+D:おや、どこかで見たことがあるぞ？
+
+N:1130:冥界オーガ
+E:Styx ogre
+G:O:d
+I:120:40d20:20:70:15
+W:44:2:0:800:0:0
+B:CRUSH:SUPERHURT:10d4
+B:SLASH:SUPERHURT:10d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
+F:DROP_CORPSE | DROP_SKELETON | HURT_LITE
+F:IM_COLD | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_9
+S:SCARE | BLIND | CONF | HOLD
+S:BO_NETH | BR_NETH
+D:$It is a ogre who guards Styx following its masters.
+D:$  It destorys cairn piled up by children having died before parents.
+D:奪衣婆と懸衣翁に仕え、三途の川に佇む鬼だ。
+D:それは時々賽の河原を見回って、積石塚を破壊して回る。
+
+N:1131:土の鬼
+E:Earth ogre
+G:O:r
+I:120:18d50:25:80:10
+W:45:2:0:900:0:0
+B:CRUSH:SUPERHURT:10d4
+B:CRUSH:SUPERHURT:10d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
+F:DROP_CORPSE | DROP_SKELETON | HURT_LITE | ESCORT
+F:IM_FIRE | RES_NETH | NO_FEAR | NO_CONF | DROP_90
+S:1_IN_5
+S:SCARE | BLIND | CONF | HOLD
+S:BR_WALL | BA_NETH | BR_PLAS | S_DEMON
+D:土気色の肌をした鬼だ。
+D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
+
+N:1132:水の鬼
+E:Water ogre
+G:O:b
+I:120:18d50:25:80:10
+W:45:2:0:900:0:0
+B:SLASH:SUPERHURT:10d4
+B:SLASH:SUPERHURT:10d4
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
+F:DROP_CORPSE | DROP_SKELETON | HURT_LITE | ESCORT
+F:IM_COLD | RES_NETH | NO_FEAR | NO_CONF | DROP_90 | CAN_SWIM
+S:1_IN_5
+S:SCARE | BLIND | CONF | HOLD
+S:BO_WATE | BA_WATE | BA_NETH | S_DEMON
+D:淀んだ川の色の肌をした鬼だ。
+D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
+
+# 元は羅城門ともいったそうで、英語の発音はそれにならうこととした
+N:1133:羅生門の鬼
+E:Ogre in Rajoumon
+G:O:b
+I:120:10d100:25:90:10
+W:46:2:0:1000:0:0
+B:SLASH:SUPERHURT:10d5
+B:SLASH:SUPERHURT:10d5
+F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
+F:DROP_CORPSE | DROP_SKELETON | HURT_LITE | ESCORT
+F:IM_FIRE | IM_COLD | IM_POIS | RES_NETH | NO_FEAR | NO_CONF | DROP_90
+S:1_IN_5
+S:SCARE | BLIND | CONF | HOLD
+S:BA_NUKE | BA_NETH | BR_GRAV | S_DEMON
+D:羅生門に巣食う鬼だ。
+D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
+
+N:1134:冥界の裁判長『閻魔大王』
+E:Yama, the Judge of the afterlife
+G:O:v
+I:120:50d60:30:100:10
+W:57:2:0:24000:0:0
+B:SLASH:HURT:10d5
+B:SLASH:HURT:10d5
+B:CRUSH:SUPERHURT:40d1
+F:UNIQUE | FORCE_MAXHP
+F:ONLY_ITEM | DROP_GOOD | DROP_1D2 | ATTR_MULTI | ESCORT | ESCORTS
+F:IM_FIRE | IM_COLD | IM_ELEC | RES_NETH | RES_LITE | RES_DARK
+F:NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_4
+S:BLIND | CONF | HOLD | SCARE
+S:BO_NETH | BR_NETH | BA_NETH | CAUSE_4 | S_KIN
+D:$Be honest with him. Otherwise he will send you to hell straight.
+D:彼の前では正直でいることだ。さもなくば地獄へ一直線だろう。
+
+N:1135:狂気を紡ぎしもの『アブドゥル・アルハザード』
+E:Abdul Alhazred, the Mad Arab
+G:p:g
+I:120:50d100:20:100:1
+W:60:1:0:35000:0:0
+B:SLASH:LOSE_ALL:5d5
+B:SLASH:LOSE_ALL:5d5
+B:SLASH:LOSE_ALL:6d8
+B:SLASH:LOSE_ALL:6d8
+F:UNIQUE | FORCE_MAXHP | ONLY_ITEM | DROP_GOOD | DROP_GREAT | DROP_2D2
+F:DROP_CORPSE | DROP_SKELETON
+F:REGENERATE | ELDRITCH_HORROR | OPEN_DOOR | BASH_DOOR | MOVE_BODY
+F:HUMAN | MALE | FRIENDLY | SELF_DARK_2 | SMART | POWERFUL
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS | 
+F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
+S:1_IN_2 | BA_NETH | BA_WATE | BA_DARK | BA_NUKE | BA_CHAO
+S:S_HI_UNDEAD | S_DEMON | DISPEL
+D:$Undoubtedly, it was this man who unleashed the cursed artifacts
+D:$ and called upon the great old ones who came from the outside world and settled in Llouis.
+D:$  It is told that his book, Necronomicon, namely stargate to the abyss,
+D:$ is still slept somewhere in the land.
+D:呪われしアーティファクトを世に解き放ち、
+D:外界より来たりてルルイエに住み着いた旧支配者達を呼び寄せたのは、
+D:紛れもなくこの男である。
+D:彼の著した深淵の書『ネクロノミコン』は、今もこの地のどこかに眠ると云う。
+
+N:1136:スケイヴン・ウォーリア
+E:Skaven warriar
+G:r:u
+I:110:10d10:20:10:25
+W:12:1:0:48:0:0
+B:BITE:HURT:6d2
+B:BITE:HURT:6d2
+F:MALE | WILD_SWAMP | WILD_WASTE
+F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON
+F:ANIMAL | EVIL | DROP_90
+D:$The warrior of skaven mess around with the power of chaos and slaughter their prey from one end.
+D:スケイヴン族の戦士は混沌の力をいたずらに振り回し、目についた獲物を片っ端から屠っていく。
+
+N:1137:殺人イタチ
+E:Killer weasel
+G:r:W
+I:110:12d12:20:10:25
+W:15:1:0:55:0:0
+B:BITE:HURT:5d2
+B:BITE:HURT:5d2
+B:CRUSH:HURT:5d2
+F:OPEN_DOOR | BASH_DOOR | DROP_60
+F:ANIMAL | EVIL | DROP_CORPSE | DROP_SKELETON
+D:$It has a bushy tail, but does not allow adventurers to stroke it.
+D:それはふさふさのしっぽを持っているが、冒険者が撫でることを許さない。
+
+N:1138:白き悪魔『ノロイ』
+E:Norowi, the White Devil
+G:r:w
+I:115:20d16:20:10:20
+W:16:2:0:220:0:0
+B:BITE:HURT:7d3
+B:CRUSH:HURT:7d3
+F:EVIL | ESCORT | ESCORTS | MALE | UNIQUE | FORCE_MAXHP
+F:DROP_GOOD | DROP_60 | ONLY_ITEM | DROP_CORPSE | DROP_SKELETON
+S:1_IN_8 | CAUSE_2 | MISSILE | SCARE | S_KIN
+D:$It is the head of weasel who works with wisdom.
+D:$  Your adventure will be terminated soon.
+D:悪知恵の働くイタチどもの頭領だ。あなたの冒険は間もなく打ち切られるだろう。
+
+N:1139:遍在する意識『岩倉玲音』
+E:lain, the Master of Wired
+G:p:u
+I:135:130d50:60:100:5
+W:80:3:0:30000:0:0
+B:TOUCH:UN_BONUS:5d6
+B:TOUCH:UN_BONUS:5d6
+B:TOUCH:UN_BONUS:5d6
+B:TOUCH:UN_BONUS:5d6
+F:QUANTUM | FEMALE | ATTR_CLEAR | FORCE_MAXHP | RAND_25
+F:ONLY_ITEM | DROP_GOOD | DROP_GREAT | DROP_3D2
+F:DROP_CORPSE | DROP_SKELETON
+F:SMART | REFLECTING | INVISIBLE | WEIRD_MIND | REGENERATE
+F:POWERFUL | ELDRITCH_HORROR | AURA_ELEC | PASS_WALL
+F:MOVE_BODY | TAKE_ITEM
+F:NO_FEAR | NO_CONF | NO_SLEEP | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS
+F:RES_CHAO | RES_NEXU | RES_TIME | CAN_FLY | SELF_DARK_1
+S:1_IN_2 | DISPEL | BA_CHAO | BA_LITE | BA_DARK | BA_MANA | HAND_DOOM | BRAIN_SMASH
+S:SLOW | HASTE | HEAL | INVULNER | TPORT | WORLD | PSY_SPEAR
+D:$She recognizes you as a bug that appears to be
+D:$ a myriad of connected consciousness in the Wired.
+D:あなたは、相互に結合している無数の意識達に表れたちっぽけなバグだと
+D:認識されている。
