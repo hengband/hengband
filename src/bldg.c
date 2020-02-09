@@ -1792,7 +1792,7 @@ static void today_target(player_type *player_ptr)
 static void tsuchinoko(void)
 {
 	clear_bldg(4, 18);
-	c_put_str(TERM_YELLOW, _("一獲千金の大チャンス！！！", "Big chance to quick money!!!"), 5, 10);
+	c_put_str(TERM_YELLOW, _("一獲千金の大チャンス！！！", "Big chance for quick money!!!"), 5, 10);
 	c_put_str(TERM_YELLOW, _("ターゲット：幻の珍獣「ツチノコ」", "target: the rarest animal 'Tsuchinoko'"), 6, 10);
 	c_put_str(TERM_WHITE, _("生け捕り ---- $1,000,000", "catch alive ---- $1,000,000"), 8, 10);
 	c_put_str(TERM_WHITE, _("死体     ----   $200,000", "corpse      ----   $200,000"), 9, 10);
@@ -2269,7 +2269,11 @@ static void castle_quest(player_type *player_ptr)
 
 	q_ptr->cur_num = 0;
 	concptr name = (r_name + r_ptr->name);
-	msg_format(_("クエスト: %sを %d体倒す", "Your quest: kill %d %s"), name, q_ptr->max_num);
+#ifdef JP
+	msg_format("クエスト: %sを %d体倒す", name, q_ptr->max_num);
+#else
+	msg_format("Your quest: kill %d %s", q_ptr->max_num, name);
+#endif
 	get_questinfo(player_ptr, q_index, TRUE);
 }
 
@@ -3179,13 +3183,13 @@ static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, H
 
 
 /*!
- * @brief 魔道具の使用回数を回復させる施設のメインルーチン / Recharge rods, wands and staves
+ * @brief 魔道具の使用回数を回復させる施設のメインルーチン / Recharge rods, wands and staffs
  * @details
  * The player can select the number of charges to add\n
  * (up to a limit), and the recharge never fails.\n
  *\n
  * The cost for rods depends on the level of the rod. The prices\n
- * for recharging wands and staves are dependent on the cost of\n
+ * for recharging wands and staffs are dependent on the cost of\n
  * the base-item.\n
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -3349,13 +3353,13 @@ static void building_recharge(player_type *player_ptr)
 
 
 /*!
- * @brief 魔道具の使用回数を回復させる施設の一括処理向けサブルーチン / Recharge rods, wands and staves
+ * @brief 魔道具の使用回数を回復させる施設の一括処理向けサブルーチン / Recharge rods, wands and staffs
  * @details
  * The player can select the number of charges to add\n
  * (up to a limit), and the recharge never fails.\n
  *\n
  * The cost for rods depends on the level of the rod. The prices\n
- * for recharging wands and staves are dependent on the cost of\n
+ * for recharging wands and staffs are dependent on the cost of\n
  * the base-item.\n
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし

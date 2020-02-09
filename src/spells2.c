@@ -292,7 +292,7 @@ bool detect_objects_normal(player_type *caster_ptr, POSITION range)
  * @details
  * <pre>
  * This will light up all spaces with "magic" items, including artifacts,
- * ego-items, potions, scrolls, books, rods, wands, staves, amulets, rings,
+ * ego-items, potions, scrolls, books, rods, wands, staffs, amulets, rings,
  * and "enchanted" items of the "good" variety.
  *
  * It can probably be argued that this function is now too powerful.
@@ -4261,7 +4261,7 @@ bool double_attack(player_type *creature_ptr)
 
 bool comvert_hp_to_mp(player_type *creature_ptr)
 {
-	int gain_sp = take_hit(creature_ptr, DAMAGE_USELIFE, creature_ptr->lev, _("ＨＰからＭＰへの無謀な変換", "thoughtless convertion from HP to SP"), -1) / 5;
+	int gain_sp = take_hit(creature_ptr, DAMAGE_USELIFE, creature_ptr->lev, _("ＨＰからＭＰへの無謀な変換", "thoughtless conversion from HP to SP"), -1) / 5;
 	if (!gain_sp)
 	{
 		msg_print(_("変換に失敗した。", "You failed to convert."));
@@ -4446,7 +4446,7 @@ bool clear_mind(player_type *creature_ptr)
 {
 	if (total_friends)
 	{
-		msg_print(_("今はペットを操ることに集中していないと。", "You need concentration on the pets now."));
+		msg_print(_("今はペットを操ることに集中していないと。", "Your pets demand all of your attention."));
 		return FALSE;
 	}
 

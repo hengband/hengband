@@ -110,7 +110,7 @@ concptr do_craft_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 5:
 		if (name) return _("士気高揚", "Heroism");
-		if (desc) return _("一定時間、ヒーロー気分になる。", "Removes fear, and gives a bonus to hit and 10 more HP for a while.");
+		if (desc) return _("一定時間、ヒーロー気分になる。", "Removes fear. Gives a bonus to hit for a while. Heals you for 10 HP.");
 
 		{
 			int base = 25;

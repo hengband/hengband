@@ -546,7 +546,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 				}
 				if (current_world_ptr->wizard)
 				{
-					msg_format(_("%d点のダメージを返した。", "You return %d damages."), power);
+					msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
 				}
 
 				/* Reset */
@@ -609,7 +609,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 12:
 		if (name) return _("魔剣化", "Swords to runeswords");
 		if (desc) return _("武器の攻撃力を上げる。切れ味を得、呪いに応じて与えるダメージが上昇し、善良なモンスターに対するダメージが2倍になる。",
-			"Gives vorpal ability to your weapon. Increases damages by your weapon acccording to curse of your weapon.");
+			"Gives vorpal ability to your weapon. Increases damage from your weapon acccording to curse of your weapon.");
 		if (cast)
 		{
 #ifdef JP
@@ -837,7 +837,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 22:
 		if (name) return _("苦痛を魔力に", "Pain to mana");
-		if (desc) return _("視界内のモンスターに精神ダメージ与え、魔力を吸い取る。", "Deals psychic damages to all monsters in sight and drains some mana.");
+		if (desc) return _("視界内のモンスターに精神ダメージ与え、魔力を吸い取る。", "Deals psychic damage to all monsters in sight and drains some mana.");
 		power = plev * 3 / 2;
 		if (info) return info_damage(1, power, 0);
 		if (cast || cont)
@@ -851,7 +851,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 		if (desc) return _("打撃や魔法で受けたダメージを、攻撃元のモンスターにも与える。", "Returns same damage which you got to the monster which damaged you.");
 		if (cast)
 		{
-			msg_print(_("復讐したい欲望にかられた。", "You feel verry vengeful."));
+			msg_print(_("復讐したい欲望にかられた。", "You feel very vengeful."));
 		}
 		break;
 
@@ -1104,7 +1104,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 					if (current_world_ptr->wizard)
 					{
-						msg_format(_("%d点のダメージを返した。", "You return %d damages."), power);
+						msg_format(_("%d点のダメージを返した。", "You return %d damage."), power);
 					}
 				}
 				else

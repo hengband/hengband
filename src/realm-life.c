@@ -235,7 +235,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 15:
 		if (name) return _("結界の紋章", "Glyph of Warding");
 		if (desc) return _("自分のいる床の上に、モンスターが通り抜けたり召喚されたりすることができなくなるルーンを描く。",
-			"Sets a glyph on the floor beneath you. Monsters cannot attack you if you are on a glyph, but can try to break glyph.");
+			"Sets a glyph on the floor beneath you. If you are on a glyph, monsters cannot attack you but can try to break the glyph.");
 
 		{
 			if (cast)
@@ -318,7 +318,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	case 21:
 		if (name) return _("帰還の詔", "Word of Recall");
-		if (desc) return _("地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。", "Recalls player from dungeon to town, or from town to the deepest level of dungeon.");
+		if (desc) return _("地上にいるときはダンジョンの最深階へ、ダンジョンにいるときは地上へと移動する。", "Recalls player from dungeon to town or from town to the deepest level of dungeon.");
 
 		{
 			int base = 15;
@@ -398,7 +398,7 @@ concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 26:
 		if (name) return _("アンデッド消滅", "Annihilate Undead");
 		if (desc) return _("自分の周囲にいるアンデッドを現在の階から消し去る。抵抗されると無効。",
-			"Eliminates all nearby undead monsters, exhausting you.  Powerful or unique monsters may be able to resist.");
+			"Eliminates all nearby undead monsters, exhausting you. Powerful or unique monsters may be able to resist.");
 
 		{
 			int power = plev + 50;

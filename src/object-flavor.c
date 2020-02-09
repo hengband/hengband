@@ -359,7 +359,7 @@ void flavor_init(void)
 	/* Shuffle Amulets */
 	shuffle_flavors(TV_AMULET);
 
-	/* Shuffle Staves */
+	/* Shuffle Staffs */
 	shuffle_flavors(TV_STAFF);
 
 	/* Shuffle Wands */

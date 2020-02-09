@@ -206,7 +206,7 @@ Implemented 'Saved Floors':
 - Removed scrolls of satisfy hunger and that class power of Berserkers.
   Androids can quaff flasks of oil.
   Barlogs can sacrifice corpses with symbol 't','p', or 'h' using the Eat command.
-  Golems, Zombies, Skeletons, and Spectors can Eat charges of wands and staves.
+  Golems, Zombies, Skeletons, and Spectors can Eat charges of wands and staffs.
   Ents can get nutritions from water in any potions.
 - Added lists of known monsters/objects from Eyangband.
 - Shift + direction keys will move cursor quickly in the look command.

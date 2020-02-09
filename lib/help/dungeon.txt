@@ -39,7 +39,7 @@ to something you are more comfortable with.
   [[[[g|.|   Patch of grass              [[[[b|*|   Section of the Pattern  
   [[[[G|:|   Flower                      [[[[U|1|   General Store             
   [[[[g|:|   Brake                       [[[[s|2|   Armoury                     
-  [[[[B|.|   Swamp                       [[[[w|3|   Weapon Smiths             
+  [[[[B|.|   Swamp                       [[[[w|3|   Weaponsmith's Shop
   [[[[B|~|   Shallow Water               [[[[g|4|   Temple                     
   [[[[b|~|   Deep Water                  [[[[b|5|   Alchemy Shop             
   [[[[U|~|   Shallow Lava                [[[[r|6|   Magic Shop                     

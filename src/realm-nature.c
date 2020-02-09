@@ -539,7 +539,7 @@ concptr do_nature_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 	case 30:
 		if (name) return _("精霊の刃", "Elemental Branding");
-		if (desc) return _("武器に炎か冷気の属性をつける。", "Makes current weapon fire or frost branded.");
+		if (desc) return _("武器に炎か冷気の属性をつける。", "Brands current weapon with fire or frost.");
 
 		{
 			if (cast)

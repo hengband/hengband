@@ -130,13 +130,13 @@ void set_action(player_type *creature_ptr, ACTION_IDX typ)
 			}
 			case ACTION_KAMAE:
 			{
-				msg_print(_("構えをといた。", "You stop assuming the posture."));
+				msg_print(_("構えをといた。", "You stop assuming the special stance."));
 				creature_ptr->special_defense &= ~(KAMAE_MASK);
 				break;
 			}
 			case ACTION_KATA:
 			{
-				msg_print(_("型を崩した。", "You stop assuming the posture."));
+				msg_print(_("型を崩した。", "You stop assuming the special stance."));
 				creature_ptr->special_defense &= ~(KATA_MASK);
 				creature_ptr->update |= (PU_MONSTERS);
 				creature_ptr->redraw |= (PR_STATUS);
@@ -338,7 +338,7 @@ void dispel_player(player_type *creature_ptr)
 
 	if (music_singing_any(creature_ptr) || hex_spelling_any(creature_ptr))
 	{
-		concptr str = (music_singing_any(creature_ptr)) ? _("歌", "singing") : _("呪文", "spelling");
+		concptr str = (music_singing_any(creature_ptr)) ? _("歌", "singing") : _("呪文", "casting");
 		INTERUPTING_SONG_EFFECT(creature_ptr) = SINGING_SONG_EFFECT(creature_ptr);
 		SINGING_SONG_EFFECT(creature_ptr) = MUSIC_NONE;
 		msg_format(_("%sが途切れた。", "Your %s is interrupted."), str);
@@ -1218,7 +1218,7 @@ bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 		else if (!creature_ptr->wraith_form)
 		{
-			msg_print(_("物質界を離れて幽鬼のような存在になった！", "You leave the physical world and current_world_ptr->game_turn into a wraith-being!"));
+			msg_print(_("物質界を離れて幽鬼のような存在になった！", "You leave the physical world and turn into a wraith-being!"));
 			notice = TRUE;
 			chg_virtue(creature_ptr, V_UNLIFE, 3);
 			chg_virtue(creature_ptr, V_HONOUR, -2);
@@ -1668,7 +1668,7 @@ bool set_tim_sh_touki(player_type *creature_ptr, TIME_EFFECT v, bool do_dec)
 		}
 		else if (!creature_ptr->tim_sh_touki)
 		{
-			msg_print(_("体が闘気のオーラで覆われた。", "You are enveloped by the aura of the Force!"));
+			msg_print(_("体が闘気のオーラで覆われた。", "You are enveloped by an aura of the Force!"));
 			notice = TRUE;
 		}
 	}
@@ -3255,7 +3255,7 @@ void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effe
 #ifdef JP
 	msg_format("あなたは%s%sに変化した！", effect_msg, title);
 #else
-	msg_format("You current_world_ptr->game_turn into %s %s%s!", (!effect_msg[0] && is_a_vowel(title[0]) ? "an" : "a"), effect_msg, title);
+	msg_format("You turn into %s %s%s!", (!effect_msg[0] && is_a_vowel(title[0]) ? "an" : "a"), effect_msg, title);
 #endif
 
 	chg_virtue(creature_ptr, V_CHANCE, 2);

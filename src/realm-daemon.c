@@ -465,7 +465,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 
 	case 24:
 		if (name) return _("士気高揚", "Raise the Morale");
-		if (desc) return _("一定時間、ヒーロー気分になる。", "Removes fear, and gives bonus to hit and 10 more HP for a while.");
+		if (desc) return _("一定時間、ヒーロー気分になる。", "Removes fear. Gives a bonus to hit for a while. Heals you for 10 HP.");
 
 		{
 			int base = 25;
@@ -526,7 +526,7 @@ concptr do_daemon_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 	case 28:
 		if (name) return _("グレーターデーモン召喚", "Summon Greater Demon");
 		if (desc) return _("上級デーモンを召喚する。召喚するには人間('p','h','t'で表されるモンスター)の死体を捧げなければならない。",
-			"Summons greater demon. Requires the sacrifice of a human corpse ('p','h' or 't').");
+			"Summons greater demon. Requires the sacrifice of a human corpse ('p', 'h' or 't').");
 
 		{
 			if (cast)

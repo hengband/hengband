@@ -622,7 +622,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		if (num == MAX_ARENA_MONS)
 		{
 			fprintf(fff, _("                 闘技場のすべての敵に勝利し、チャンピオンとなった。\n",
-				"                 won all fight to become a Chanpion.\n"));
+				"                 won all fights to become a Champion.\n"));
 			do_level = FALSE;
 		}
 		break;
@@ -881,7 +881,7 @@ static void do_cmd_last_get(player_type *creaute_ptr)
 
 	GAME_TURN turn_tmp = current_world_ptr->game_turn;
 	current_world_ptr->game_turn = record_turn;
-	sprintf(buf, _("%sを手に入れた。", "descover %s."), record_o_name);
+	sprintf(buf, _("%sを手に入れた。", "discover %s."), record_o_name);
 	exe_write_diary(creaute_ptr, DIARY_DESCRIPTION, 0, buf);
 	current_world_ptr->game_turn = turn_tmp;
 }
@@ -2920,7 +2920,7 @@ static concptr monster_group_text[] =
 	"ユニーク",	/* "Uniques" */
 	"乗馬可能なモンスター",	/* "Riding" */
 	"賞金首", /* "Wanted */
-	"アンバーの王族", /* "Ambertite" */
+	"アンバーの王族", /* "Amberite" */
 	"アリ",
 	"コウモリ",
 	"ムカデ",
@@ -2981,7 +2981,7 @@ static concptr monster_group_text[] =
 	"Uniques",
 	"Ridable monsters",
 	"Wanted monsters",
-	"Ambertite",
+	"Amberite",
 	"Ant",
 	"Bat",
 	"Centipede",
@@ -3262,7 +3262,7 @@ static concptr object_group_text[] =
 	"Whistle",
 	"Lanterns",
 	"Wands",
-	"Staves",
+	"Staffs",
 	"Rods",
 	"Cards",
 	"Capture Balls",
@@ -6115,7 +6115,7 @@ static void do_cmd_knowledge_bounty(player_type *creature_ptr)
 		return;
 	}
 
-	fprintf(fff, _("今日のターゲット : %s\n", "Today target : %s\n"),
+	fprintf(fff, _("今日のターゲット : %s\n", "Today's target : %s\n"),
 		(creature_ptr->today_mon ? r_name + r_info[creature_ptr->today_mon].name : _("不明", "unknown")));
 	fprintf(fff, "\n");
 	fprintf(fff, _("賞金首リスト\n", "List of wanted monsters\n"));
@@ -6133,7 +6133,7 @@ static void do_cmd_knowledge_bounty(player_type *creature_ptr)
 
 	if (!listed)
 	{
-		fprintf(fff, "\n%s\n", _("賞金首はもう残っていません。", "There is no more wanted monster."));
+		fprintf(fff, "\n%s\n", _("賞金首はもう残っていません。", "There are no more wanted monster."));
 	}
 
 	my_fclose(fff);
@@ -6159,7 +6159,7 @@ static void do_cmd_knowledge_virtues(player_type *creature_ptr)
 		return;
 	}
 
-	fprintf(fff, _("現在の属性 : %s\n\n", "Your alighnment : %s\n\n"), your_alignment(creature_ptr));
+	fprintf(fff, _("現在の属性 : %s\n\n", "Your alignment : %s\n\n"), your_alignment(creature_ptr));
 	dump_virtues(creature_ptr, fff);
 	my_fclose(fff);
 
@@ -6334,10 +6334,10 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
 						q_ptr->ident = IDENT_STORE;
 						object_desc(creature_ptr, name, q_ptr, OD_NAME_ONLY);
 					}
-					sprintf(note, _("\n   - %sを見つけ出す。", "\n   - Find out %s."), name);
+					sprintf(note, _("\n   - %sを見つけ出す。", "\n   - Find %s."), name);
 					break;
 				case QUEST_TYPE_FIND_EXIT:
-					sprintf(note, _(" - 出口に到達する。", " - Reach to Exit."));
+					sprintf(note, _(" - 出口に到達する。", " - Reach exit."));
 					break;
 
 				case QUEST_TYPE_KILL_NUMBER:

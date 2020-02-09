@@ -353,7 +353,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 15:
 		if (name) return _("抹殺", "Genocide");
 		if (desc) return _("指定した文字のモンスターを現在の階から消し去る。抵抗されると無効。",
-			"Eliminates an entire class of monster, exhausting you.  Powerful or unique monsters may resist.");
+			"Eliminates an entire class of monster, exhausting you. Powerful or unique monsters may resist.");
 
 		{
 			int power = plev + 50;
@@ -584,7 +584,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 29:
 		if (name) return _("周辺抹殺", "Mass Genocide");
 		if (desc) return _("自分の周囲にいるモンスターを現在の階から消し去る。抵抗されると無効。",
-			"Eliminates all nearby monsters, exhausting you.  Powerful or unique monsters may be able to resist.");
+			"Eliminates all nearby monsters, exhausting you. Powerful or unique monsters may be able to resist.");
 
 		{
 			int power = plev + 50;
@@ -622,7 +622,7 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 	case 31:
 		if (name) return _("幽体化", "Wraithform");
 		if (desc) return _("一定時間、壁を通り抜けることができ受けるダメージが軽減される幽体の状態に変身する。",
-			"Causes you to be ghost-like for a while.  That reduces the damage you take and allows you to pass through walls.");
+			"Causes you to be ghost-like for a while. That reduces the damage you take and allows you to pass through walls.");
 
 		{
 			int base = plev / 2;

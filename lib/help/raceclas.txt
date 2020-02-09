@@ -53,9 +53,9 @@ by the racial/class power command ("U"/"O").
     good saving throws.  They also are very good at searching,
     disarming, perception, and stealth; so they make excellent rogues,
     but prefer to be called burglars.  They are much weaker than
-    humans, and no good at melee fighting.  Halflings have fair
+    humans and no good at melee fighting.  Halflings have fair
     infravision, so they can detect warm creatures at a distance.
-    They have a strong hold on their life force, and are thus
+    They have a strong hold on their life force and are thus
     intrinsically resistant to life draining.
 
 
@@ -88,7 +88,7 @@ by the racial/class power command ("U"/"O").
 
     Half-orcs make excellent warriors, but are terrible at magic.
     They are as bad as dwarves at stealth, and horrible at searching,
-    disarming, and perception.  Half-orcs are quite ugly, and tend to
+    disarming, and perception.  Half-orcs are quite ugly and tend to
     pay more for goods in town.  Because of their preference to living
     underground to on the surface, half-orcs resist darkness attacks.
 
@@ -102,8 +102,7 @@ by the racial/class power command ("U"/"O").
     ugly that a Half-Orc grimaces in their presence.  They also happen
     to be fun to run...  Half-trolls always have their strength
     sustained.  At higher levels, Half-Trolls regenerate wounds
-    automatically, and, if he or she is a warrior, require food less
-    often.
+    automatically and, if a warrior, require food less often.
 
 
 ***** <Amberite>
@@ -158,7 +157,7 @@ by the racial/class power command ("U"/"O").
     Half-Giants' limited intelligence makes it difficult for them to
     become full spellcasters, but, with their great strength, they
     make excellent warriors.  Their thick skin makes them resistant
-    to shards, and like Half-Ogres and Half-Trolls, they have their
+    to shards, and, like Half-Ogres and Half-Trolls, they have their
     strength sustained.
 
 
@@ -259,9 +258,9 @@ by the racial/class power command ("U"/"O").
 ***** <Imp>
 --- Imp ---
 
-    A demon-creature from the nether-world, naturally resistant to
-    fire attacks, and capable of learning fire bolt and fire ball
-    attacks.  They are little loved by other races, but can perform
+    Demon-creatures from the nether-world, imps are naturally resistant
+    to fire attacks and capable of learning fire bolt and fire ball
+    attacks.  They are little loved by other races but can perform
     fairly well in most professions.  As they advance levels, they
     gain the powers of See Invisible.
 
@@ -276,7 +275,7 @@ by the racial/class power command ("U"/"O").
     poison, they can see invisible things, and move freely.  At higher
     levels, they also become resistant to attacks which threaten to
     drain away their life force.  Golems gain very little nutrition
-    from ordinary food, but can absorb mana from staves and wands as
+    from ordinary food, but can absorb mana from staffs and wands as
     their power source.  Golems also gain a natural armor class bonus
     from their tough body.
 
@@ -294,7 +293,7 @@ by the racial/class power command ("U"/"O").
     effects of these will affect the skeleton even without entering
     the skeleton's (non-existent) belly, the potion or food itself
     will fall through the skeleton's jaws, giving no nutritional
-    benefit.  They can absorb mana from staves and wands as their
+    benefit.  They can absorb mana from staffs and wands as their
     energy source.
 
 
@@ -308,7 +307,7 @@ by the racial/class power command ("U"/"O").
     see invisible.  While still vulnerable to cuts (unlike skeletons),
     Zombies are resistant to Nether.  Like Golems, they gain very
     little nutrition from the food of mortals, but can absorb mana
-    from staves and wands as their energy source.
+    from staffs and wands as their energy source.
 
 
 ***** <Vampire>
@@ -338,7 +337,7 @@ by the racial/class power command ("U"/"O").
     cold.  They also resist nether.  At higher levels they develop
     telepathic abilities.  Spectres make superb spellcasters, but
     their physical form is very weak.  They gain very little nutrition
-    from the food of mortals, but can absorb mana from staves and
+    from the food of mortals, but can absorb mana from staffs and
     wands as their energy source.
 
 
@@ -506,7 +505,7 @@ command("U"/"O").
     second realm can be changed in the middle of the game.  You can
     change second realm by studying ("G") from a spellbook of new
     realm.  They have a class power - 'Eat Magic' - which absorbs mana
-    from wands, staves or rods.
+    from wands, staffs or rods.
 
 
 ***** <Priest>
@@ -560,11 +559,10 @@ command("U"/"O").
 --- Ranger ---
 
     A Ranger is a combination of a warrior and a mage who has
-
-    developed a special affinity for the natural world around him.
-    He or she is a good fighter and also good with missile weapons
-    such as bows.  A ranger has a good stealth, good perception, good
-    searching, a good saving throw and is good with magical devices.
+    developed a special affinity for the natural world.  He or she
+    is a good fighter and also good with missile weapons such as
+    bows.  A ranger has good stealth, good perception, good
+    searching, good saving throws and is good with magical devices.
     Intelligence determines a Ranger's spell casting ability.
 
     All rangers are trained in Nature magic, and all Nature spells are
@@ -585,7 +583,7 @@ command("U"/"O").
     paladin lacks much in the way of abilities.  He or she is poor at
     stealth, perception, searching, and magical devices but has a
     decent saving throw due to his divine alliance.  Wisdom determines
-    a Paladin's success at praying to his deity.
+    a Paladin's success at praying to his or her deity.
 
     Paladins can select a realm from Crusade and Death.  Like priests,
     they cannot select which prayers to learn, but are rewarded with
@@ -605,7 +603,7 @@ command("U"/"O").
     between the warrior and mage classes.  Unlike rangers, who
     specialize in Nature magic and survival skills, true Warrior-
     Mages attempt to reach the best of both worlds.  As warriors
-    they are much superior to the usual Mage class. Intelligence
+    they are much superior to the usual Mage class.  Intelligence
     determines a Warrior-Mage's spell casting ability.
 
     Warrior-mages begin the game with Arcane magic, and they can
@@ -624,11 +622,11 @@ command("U"/"O").
     of Chaos.  Every Chaos Warrior has a Patron Demon and, when
     gaining a level, may receive a reward from his or her Patron.  He
     or she might be healed or polymorphed, given an awesome weapon,
-    or have his or stats increased.  On the other hand, the Patron
+    or have his or her stats increased.  On the other hand, the Patron
     might surround the Chaos Warrior with monsters, drain his or her
-    stats, wreck or her equipment, or simply ignore the Chaos Warrior.
-    The Demon Lords of Chaos are chaotic and unpredictable indeed.
-    The exact type of reward depends on both the Patron Demon
+    stats, wreck his or her equipment, or simply ignore the Chaos
+    Warrior.  The Demon Lords of Chaos are chaotic and unpredictable
+    indeed.  The exact type of reward depends on both the Patron Demon
     (different Demons give different rewards) and chance.
 
     Chaos Warriors can select a realm from Chaos and Daemon.  They are
@@ -683,13 +681,13 @@ command("U"/"O").
     High-mages are mages who specialize in one particular field of
     magic and learn it very well - much better than the ordinary mage.
     A high mage's prime statistic is intelligence as this determines
-    his spell casting ability.
+    his or her spell casting ability.
 
     For the price of giving up a second realm of magic, High-mages
     gain substantial benefits in the mana costs, minimum levels, and
     failure rates of the spells in their speciality realm.  They have
     a class power - 'Eat Magic' - which absorbs mana from wands,
-    staves, or rods.
+    staffs, or rods.
 
     And then, only High-Mages are able to cast Hex spells.
 
@@ -737,7 +735,7 @@ command("U"/"O").
     world of Hengband.  They are very good at riding, and have enough
     fighting ability.  The monsters that a beastmaster summons or
     dominates become the beastmaster's hands and feet.  Beastmasters
-    can cast trump magic, and are very good at summoning spells, but
+    can cast trump magic and are very good at summoning spells, but
     they can not summon non-living creatures.  Charisma determines a
     Beastmaster's spell casting ability.
 
@@ -760,7 +758,7 @@ command("U"/"O").
     Sorcerers can cast any spell from any spellbooks of all nine magic
     realms with 'Master' proficiency level without having to learn it.
     They have a class power - 'Eat Magic' - which absorbs mana from
-    wands, staves or rods.
+    wands, staffs or rods.
 
 
 ***** <Archer>
@@ -839,7 +837,7 @@ command("U"/"O").
     techniques.  Samurai are not good at most other skills, and many
     magical devices may be too difficult for them to use.  Wisdom
     determines a Samurai's ability to use the special combat
-    techniques available to him.
+    techniques available to him or her.
 
     Samurai use the art of the blade called Kendo (or Bugei).  Books
     of Kendo are similar to spellbooks, but Samurai don't need to

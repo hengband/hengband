@@ -320,7 +320,7 @@ E:& Strip~ of Venison
 G:,:u
 I:80:33:1500
 W:0:0:2:2
-D:$A strip of jerked beef that seems never to spoil.
+D:$A strip of jerked beef that never seems to spoil.
 D:良く乾燥させた肉。決して腐る事が無さそうだ。
 
 N:24:スライムモルド
@@ -805,6 +805,8 @@ W:10:0:300:230
 A:10/1
 P:0:2d8:0:0:0
 F:SHOW_MODS | RIDING
+D:$A spear with a long conical tip.  It is well-suited for the rider of
+D:$ a charging horse.
 D:大きく長い円錐形の穂先を持った槍だ。
 D:馬上で構えて突撃する為に作られている。
 
@@ -921,9 +923,8 @@ I:19:24:0
 W:30:0:200:500
 A:30/2:40/2
 F:SHOW_MODS
-# Not all heavy crossbow is the arbalest with a crank!
-#D:$The arbalest is so powerful it has to be reinforced with metal and 
-#D:$requires a crank to be cocked.
+D:$A heavy mechanical bow.  It is slower to fire than its lighter
+D:$ cousin but each bolt fired is deadlier.
 D:鋼鉄製の弦をあらかじめ引いておき、機械式の引き金を引くだけで矢を発射
 D:する事ができる。ショート・ボウやロング・ボウに比べて扱いが簡単な武器だ。
 D:ヘヴィ・クロスボウはライト・クロスボウに比べて威力は強いが、
@@ -2262,7 +2263,7 @@ G:?:w
 I:70:0:0
 W:1:0:5:0
 A:1/1
-D:$It darkens nearby area or current room and blinds you when you read it.
+D:$It darkens the nearby area or current room and blinds you when you read it.
 D:それは読むと自分の周囲もしくは部屋全体が暗闇に包まれ、盲目になる。
 
 N:209:対邪悪結界:頭森 地跳 真骨
@@ -2369,7 +2370,7 @@ G:?:w
 I:70:11:0
 W:5:0:5:150
 A:5/1
-D:$It recalls you to the town, or back into the dungeon you have entered when 
+D:$It recalls you to the town or back into the dungeon you have entered when 
 D:$you read it.
 D:それは読むと地上にいる時は行ったことのあるダンジョンの最深階へ、
 D:ダンジョンにいる時は地上へと移動する。
@@ -2625,7 +2626,8 @@ I:75:59:0
 W:65:0:4:25000
 A:65/1
 P:0:1d1:0:0:0
-D:$You gain experience half of your experience (max: 100000) when you quaff it.
+D:$You gain experience equal to the lesser of 100000 or half of your current
+D:$ experience when you quaff it.
 D:それは飲むと現在の経験値の半分(100000を超えない)の経験を得る。
 
 N:245:眠り:ぼやけた色の
@@ -2656,8 +2658,8 @@ I:75:9:50
 W:0:0:4:0
 A:0/1
 P:0:1d1:0:0:0
-D:$It confuses and hallucinates you when you quaff it. If you are a monk, 
-D:$you may be a drunken master.
+D:$It confuses you and causes you to hallucinate when you quaff it. If you are
+D:$ a monk, you may be a drunken master.
 D:それは飲むと混乱し、幻覚に侵される。修行僧が飲むと酔拳を使えるらしい。
 
 N:248:毒:薄い緑色の
@@ -2879,7 +2881,7 @@ A:20/1:45/1:80/1:100/1
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
 D:$You get temporary resistances to elements and poison when you quaff it. 
-D:$These resistances is cumulative with equipment.
+D:$These resistances are cumulative with equipment.
 D:それは飲むと一時的に酸・電撃・火炎・冷気・毒の耐性を得る。
 D:装備による耐性に累積する。
 
@@ -3017,7 +3019,8 @@ I:65:5:15
 W:10:0:10:100
 A:10/1
 P:0:1d1:0:0:0
-D:$It fires a beam destroys all traps and doors on the line when you use it.
+D:$It fires a beam that destroys all traps and doors along a line when you
+D:$ use it.
 D:それは使うとトラップやドアを破壊するビームを放つ。
 
 N:282:マジック・ミサイル:チタンの
@@ -3058,7 +3061,7 @@ I:65:3:12
 W:20:0:10:350
 A:20/1
 P:0:1d1:0:0:0
-D:$It fires a beam teleports all monsters on the line when you use it.
+D:$It fires a beam that teleports all monsters along a line when you use it.
 D:それは使うとモンスターをテレポートさせるビームを放つ。
 
 N:286:トラップ解除:銅メッキの
@@ -3068,7 +3071,7 @@ I:65:4:10
 W:20:0:10:700
 A:20/1
 P:0:1d1:0:0:0
-D:$It fires a beam destroys all traps on the line when you use it.
+D:$It fires a beam that destroys all traps along a line when you use it.
 D:それは使うとトラップを破壊するビームを放つ。
 
 N:287:サンダー・ボール:金メッキの
@@ -3310,7 +3313,7 @@ I:55:7:12
 W:20:0:50:800
 A:20/1
 P:0:1d2:0:0:0
-D:$It fires a line of light directed randomly for 5d3 times when you use it.
+D:$It fires 5d3 random lines of light when you use it.
 D:それは使うとランダムな方向への光線を5d3回放つ。
 
 N:309:スピード・モンスター:ユーカリの
@@ -3453,7 +3456,7 @@ I:55:0:10
 W:5:0:50:0
 A:5/1:50/1
 P:0:1d2:0:0:0
-D:$It darkens nearby area or current room and blinds you when you use it.
+D:$It darkens the nearby area or current room and blinds you when you use it.
 D:それは使うと自分の周囲もしくは部屋全体が暗闇に包まれ、盲目になる。
 
 N:323:抹殺:チークの
@@ -3507,7 +3510,7 @@ W:70:0:50:4500
 A:70/2
 P:0:1d2:0:0:0
 D:$It does 150 damage to all evil monsters in sight, gives temporary 
-D:$protection from lesser evil creature, cures poison, stuuned, cuts, removes 
+D:$protection from lesser evil creatures, cures poison, stuuned, cuts, removes 
 D:$fear and heals you 50 when you use it.
 D:それは使うと視界内の邪悪なモンスターに150のダメージを与え、
 D:一時的に弱い邪悪な者の攻撃を回避しやすくなる結界を張り、
@@ -3769,7 +3772,7 @@ I:66:3:60
 W:30:0:15:4000
 A:15/16:30/4
 P:0:1d1:0:0:0
-D:$It recalls you to the town, or back into the dungeon you have entered when 
+D:$It recalls you to the town or back into the dungeon you have entered when 
 D:$you zap it.
 D:それは振ると地上にいる時は行ったことのあるダンジョンの最深階へ、
 D:ダンジョンにいる時は地上へと移動する。
@@ -3872,7 +3875,7 @@ I:66:13:25
 W:45:0:15:1400
 A:23/8:45/2
 P:0:1d1:0:0:0
-D:$It fires a beam teleports all monsters on the line when you zap it.
+D:$It fires a beam that teleports all monsters along a line when you zap it.
 D:それは振るとモンスターをテレポートさせるビームを放つ。
 
 N:365:トラップ解除:ジルコンの
@@ -3882,7 +3885,7 @@ I:66:14:22
 W:35:0:15:2100
 A:18/4:35/1
 P:0:1d1:0:0:0
-D:$It fires a beam destroys all traps on the line when you zap it.
+D:$It fires a beam that destroys all traps along a line when you zap it.
 D:それは振るとトラップを破壊するビームを放つ。
 
 N:366:サンダー・ボール:亜鉛の
@@ -5800,8 +5803,8 @@ G:?:w
 I:70:43:0
 W:10:0:5:1000
 A:10/8
-D:$It increases the number you can study spells when you read. If you are the 
-D:$class can't study or don't need to study, it effects none.
+D:$It increases the number of spells you can study when read. If you are a
+D:$ class that can't study or don't need to study, it has no effect.
 D:それは読むと呪文を1つ学習できるようになる。
 D:学習できない、または学習する必要のない職業では何も起きない。
 
@@ -5873,8 +5876,8 @@ I:55:30:8
 W:35:0:50:800
 A:35/1
 P:0:1d2:0:0:0
-D:$It raises corpses and skeletons nearby you from dead and makes them your 
-D:$pet when you use it.
+D:$It raises nearby corpses and skeletons from the dead and makes them your
+D:$ pets when you use it.
 D:それは使うと自分の周囲の死体や骨を生き返らせてペットにする。
 
 N:609:石
@@ -6041,7 +6044,7 @@ W:65:0:10:4000
 A:65/3
 P:0:1d1:0:0:0
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD
-D:$It fires a bolt of meteor (damage: (15+level/3)d13) when you use it.
+D:$It fires a bolt of meteors (damage: (15+level/3)d13) when you use it.
 D:それは使うとダメージ(15+レベル/3)d13の隕石の矢を放つ。
 
 N:629:魔力の嵐:トネリコの
@@ -6239,7 +6242,7 @@ G:?:w
 I:70:54:0
 W:30:0:5:1000
 A:30/2
-D:$It summons a monster corresponds to your race as your pet when you read it.
+D:$It summons a monster that corresponds to your race as your pet when you read it.
 D:それは読むと自分の種族に対応したモンスター1体をペットとして召喚する。
 
 N:651:魔法の笛
@@ -6378,7 +6381,7 @@ G:?:w
 I:70:55:0
 W:20:0:5:100
 A:20/6
-D:$It creates one amuzing item when you read it.
+D:$It creates one amusing item when you read it.
 D:それは読むと誰の得なのかわからないものを1個作り出す。
 
 N:668:*誰得*:挽怒 那 務故
@@ -6387,7 +6390,7 @@ G:?:w
 I:70:56:0
 W:20:0:5:500
 A:60/8
-D:$It creates some amuzing item when you read it.
+D:$It creates some amusing item when you read it.
 D:それは読むと誰の得なのかわからないものを複数作り出す。
 
 N:669:オーブ

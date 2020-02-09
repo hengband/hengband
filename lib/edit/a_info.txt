@@ -135,8 +135,8 @@ P:0:1d1:0:0:0
 F:ACTIVATE | SEE_INVIS | HOLD_EXP | RES_CONF | RES_CHAOS | LITE_3 | 
 F:INSTA_ART | SPEED | WIS | INT
 U:JUDGE
-D:$This crimson jewelry which is chained with a gold chain is
-D:$ deeply related to creation of this universe.
+D:$This ruby pendant in a simple setting with a heavy gold chain is deeply
+D:$ related to the creation of this universe.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.3-10)
 D:金の鎖に取り付けられた、この宇宙の創世に深い関わりを持つ真紅の宝石。
 D:（R.ゼラズニイ、真世界アンバーシリーズ 3～10巻）
@@ -212,7 +212,7 @@ I:40:12:3
 W:70:70:3:75000
 F:STR | CON | INFRA | HIDE_TYPE |
 F:SEE_INVIS | FREE_ACT | REGEN | LITE | INSTA_ART
-D:$The Nauglamir; a carencet of gold set with a multitude of shining gems of 
+D:$The Nauglamir; a carcanet of gold set with a multitude of shining gems of 
 D:$Valinor, accenting a radiant Silmaril.  The sturdy spirits of Dwarvish 
 D:$craftsmen who labored long in mountain smithies lie within it still, and 
 D:$as gossamer it rests upon the bearer.
@@ -252,10 +252,10 @@ W:50:40:2:75000
 F:STR | INT | WIS | DEX | CON | CHR | STEALTH | HIDE_TYPE |
 F:RES_POIS | ACTIVATE | SEE_INVIS | SEARCH | WARNING | INSTA_ART
 U:HYPODYNAMIA_1
-D:$This bracelet has its own will, which was created by Marlin
-D:$ the prince of chaos. It is  invisible but it sometimes
-D:$ ripples to warn owner's dangers. It can morph to strangle
-D:$ enemy's neck, if owner commands to it.
+D:$This bracelet has its own will.  It was created by Merlin, a prince of Chaos
+D:$ and son of Corwin.  The bracelet is invisible, but it sometimes ripples or
+D:$ constricts to warn its owner of danger.  When commanded by its owner, it
+D:$ can morph to strangle an enemy's neck.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.6-10)
 D:混沌の王子マーリンがログルスから生み出した意思を持った腕輪だ。
 D:普段は目に見えないが脈動して危険を知らせてくれる。装備するものが
@@ -547,8 +547,8 @@ F:HOLD_EXP | RES_NETHER | RES_DARK | RES_FEAR |
 F:ACTIVATE
 U:CHOIR_SINGS
 D:$The shining armor of Lohengrin the son of Parsifal.
-D:$ If you wears it, the holy grail gives to you the devine protection
-D:$  from all evils. (W.R.Wagner, 'Parsifal')
+D:$ The Holy Grail gives divine protection from all evils to the wearer.
+D:$  (W.R.Wagner, 'Parsifal')
 D:聖杯守護の騎士パルジファルの息子、ローエングリンの輝く鎧だ。
 D:身に付ける者はあらゆる邪悪なものを退け聖杯の加護を得る。
 D:(ワーグナー、「パルジファル」)
@@ -627,7 +627,7 @@ P:12:1d2:3:4:20
 F:BLOWS | RES_SHARDS | HOLD_EXP | SLOW_DIGEST |
 F:SUST_STR | SUST_DEX | SUST_CON | SUST_INT | SUST_WIS | SUST_CHR |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD
-D:$The leather armor which has a power of Shiva the god of destruction.
+D:$The leather armor of Shiva, the god of destruction.
 D:ヒンズー教の最高神は創造の神ブラフマン、維持の神ヴィシュヌ、
 D:そして破壊神シヴァだ。これはその中でも最も強力なシヴァの力が宿った
 D:鎧だ。
@@ -692,9 +692,9 @@ I:34:4:0
 W:30:3:60:30000
 P:6:1d2:0:0:20
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | RES_LITE | RES_DARK | XTRA_H_RES
-D:$This shield emblazoned with a multitude of creatures not seen for ages 
-D:$once protected Celegorm, lord of Himlad; around it lies a mystic balance  
-D:$that contains the conflicts of the elements.
+D:$This shield, emblazoned with a multitude of creatures not seen for ages,
+D:$ once protected Celegorm, lord of Himlad; around it, a mystic balance lies
+D:$ containing the conflicts of the elements.
 D:いまでは見られなくなった数々の伝説の生き物の
 D:装飾が施されたこの盾は、かつてヒムラドの王ケレゴルムを
 D:守っていた。地水火風のエレメントのせめぎ合いを内包し、
@@ -734,7 +734,7 @@ I:32:2:5
 W:30:50:15:100000
 P:2:0d0:0:0:18
 F:INT | WIS | CHR | SUST_INT | SUST_WIS | SUST_CHR | RES_BLIND | IM_ELEC
-D:$This is the helm of Indra the god of thunderstorms.
+D:$This is the helm of Indra, the god of thunderstorms.
 D:雷神インドラの兜だ。
 
 # The Massive Iron Crown of Morgoth
@@ -881,18 +881,18 @@ F:SEE_INVIS | NO_MAGIC | ACTIVATE |
 F:RES_DISEN | RES_FEAR | FREE_ACT | RES_ACID | RES_COLD | RES_POIS |
 F:TELEPORT
 U:TERROR
-D:$This is terrible, scary, fearful, dreadful, bloodcurding, hair-rising
-D:$ frightening mask.
+D:$You run out of adjectives to describe the dread this mask inspires:
+D:$  terrifying, scary, creepy, bloodcurdling, hair-rising, frightening, ....
 D:なんとも恐ろしい、不気味で、おどろおどろしく、髪が逆立ち、血も凍り、
 D:ぞっとして鳥肌が立つような仮面だ。
 D:仮面の奥の瞳に睨まれれば、怖くて逃げ出さずにはいられない。
 
-# The Golden Crown of Gondor -> Amber
+# The Golden Crown of Gondor -> Jewel Encrusted Crown of Amber
 
 #JZ#
 N:42:真世界アンバーの
 E:of Amber
-I:33:11:3
+I:33:12:3
 W:40:40:30:125000
 P:0:1d1:0:0:15
 F:STR | WIS | CON | HIDE_TYPE | SPEED |
@@ -900,8 +900,9 @@ F:RES_COLD | RES_FIRE | RES_LITE | RES_BLIND | RES_ELEC | RES_CONF |
 F:RES_CHAOS | LITE | SEE_INVIS | REGEN | ACTIVATE
 F:XTRA_POWER | XTRA_H_RES
 U:CURE_700
-D:$The gold grown which is decorated with much jewerly is the symbol
-D:$ of the throne of Amber. Princes of Amber scrambled for it violently.
+D:$Wrought of silver with seven high points each topped by a gem, this crown
+D:$ is the symbol of the throne of Amber.  The Princes of Amber scrambled for
+D:$ it violently.
 D:アンバーの王位の象徴である、多数の宝石で飾られた金の王冠だ。
 D:これをめぐって骨肉の争いが王子たちの間で繰り広げられた。
 
@@ -1097,7 +1098,7 @@ W:10:20:25:15000
 P:2:1d1:0:0:15
 F:STR | RES_FIRE | MAGIC_MASTERY | ACTIVATE
 U:BO_FIRE_1
-D:$A firey set of gauntlets that can even shoot fire from the user's 
+D:$A fiery set of gauntlets that can even shoot fire from the user's 
 D:$hands. 
 D:シンダール語で「跳ねる炎の拳」の名を持つこの篭手は炎に
 D:包まれており、身に付ける者は火の球を撃ち出すことも出来る。
@@ -1112,6 +1113,8 @@ I:31:2:4
 W:10:40:25:43000
 P:2:1d1:0:0:15
 F:SUST_CON | CON | REGEN | RES_COLD | FREE_ACT
+D:$These gauntlets belonged to Prince Corwin of Amber and are imbued with
+D:$ his extraordinary toughness.
 D:並外れた強靭さを持つアンバーの王子コーウィンのガントレットだ。
 
 # The Set of Gauntlets 'Pauraegen'
@@ -1215,6 +1218,9 @@ P:2:1d1:0:0:15
 U:CURE_POISON
 F:DEX | HIDE_TYPE | CHR | SUST_CHR | ACTIVATE | FREE_ACT |
 F:RES_NETHER | RES_CHAOS | SUST_CON
+D:$Flora is away from Amber's palace most of the time and enjoys finding
+D:$ new boyfriends in the parallel worlds that are shadows of Amber.  Her
+D:$ boots are enchanted with magic to make the wearer more attractive.
 D:フローラはほとんどの時間アンバーの宮殿を離れていて、
 D:影の世界で新しいボーイフレンドを見つけては楽しんでいる。
 D:彼女のブーツには身に付けた者を魅力的に見せる魔法がかかっている。
@@ -1252,7 +1258,7 @@ I:30:2:4
 W:30:20:20:100000
 P:4:1d1:5:5:16
 F:SPEED | DEX | SUST_DEX | RES_NEXUS | FREE_ACT | LEVITATION
-D:$The boots has an agility of Shiva the god of destruction.
+D:$The boots have the agility of Shiva, the god of destruction.
 D:破壊神シヴァの力を持った革の靴だ。
 
 
@@ -1290,7 +1296,7 @@ P:0:2d4:10:15:5
 F:DEX | HIDE_TYPE | STEALTH | SEARCH | SLAY_HUMAN |
 F:SLAY_EVIL | SLAY_TROLL | SLAY_ORC | BRAND_POIS |
 F:FREE_ACT | RES_DARK | SUST_DEX | SEE_INVIS | SHOW_MODS | THROW
-D:$The dagger of Caine the leader of Amber fleets.
+D:$The dagger of Caine, the leader of Amber's fleets.
 D:アンバーの艦隊を指揮するケインのダガーだ。
 
 # The Dagger 'Narthanc'
@@ -1404,7 +1410,7 @@ F:RES_CHAOS | RES_NETHER | HOLD_EXP | RES_FEAR |
 F:RES_COLD | BRAND_COLD |
 F:SLAY_DEMON | SLAY_EVIL | SLAY_DRAGON | SLAY_UNDEAD |
 F:SLOW_DIGEST | SHOW_MODS | HIDE_TYPE | BLESSED | RIDING
-D:$The silver sable forged by moonlights, which Corwin the prince of
+D:$The is the silver sabre, forged by moonlight, which Corwin the prince of
 D:$ Amber wielded. It shows contrasts between silver and black like
 D:$ its owner does.
 D:アンバーの王子コーウィンが使っていた、月の光により
@@ -1455,9 +1461,9 @@ P:0:2d5:12:16:0
 F:SEARCH | BRAND_ELEC | SLAY_ORC | KILL_DRAGON | RES_FEAR |
 F:RES_ELEC | LITE | RES_FIRE | RES_POIS |
 F:SLOW_DIGEST | SHOW_MODS | RIDING
-D:$The sword of Sigurd which is alos called Balmung or Gram.
-D:$ He slashed the anvil of Mime's blacksmith and used to
-D:$ kill the dragon Fafnir.
+D:$The sword of Sigurd which is also called Balmung or Gram.
+D:$ With it, Sigurd cut the anvil at Mime's forge in half and slew Fafner,
+D:$ the dragon.
 D:「ノートゥングさ、その名は。ヴォータンがとねりこの幹
 D:に突き立てた剣だ。それを引き抜くことのでき
 D:た者だけが、わがものとしうるわけだ。」
@@ -1564,8 +1570,7 @@ P:0:4d6:-40:-60:-50
 F:SPEED | IM_FIRE | RES_FIRE | BRAND_FIRE | RES_DISEN | RES_FEAR |
 F:AGGRAVATE | CURSED | HEAVY_CURSE | SHOW_MODS | TY_CURSE | LITE
 F:RANDOM_CURSE2
-D:$The flame sword with which Surtr set fire all over the world
-D:$ at Ragnarok.
+D:$The flame sword with which Surtr set the world on fire at Ragnarok.
 D:北欧神話において炎の巨人スルトが世界に火を放った燃える剣だ。
 
 # The Cutlass 'Gondricam'
@@ -1636,7 +1641,7 @@ F:ESP_ORC | ESP_TROLL | ESP_GIANT
 U:BA_COLD_2
 D:$The weapon of Fingolfin, High King of the Noldor; it shines like a column 
 D:$of ice lit by light unquenchable.  Morgoth came but unwillingly to meet it 
-D:$of old; his lame foot will remind him of its might should be meet it again.
+D:$of old; his lame foot will remind him of its might should he meet it again.
 D:ノルドールの上級王フィンゴルフィンの武器。氷の柱の如く輝いている。
 D:かつてモルゴスは期せずしてこの剣に対峙し深い傷を
 D:刻み込まれた。彼はこの剣の力を再び思い知ることになるだろう。
@@ -1704,7 +1709,7 @@ F:DEX | CHR | STEALTH | HIDE_TYPE | SPEED | AGGRAVATE | VORPAL |
 F:SLAY_HUMAN | SLAY_TROLL | SLAY_ORC | SEE_INVIS | SHOW_MODS |
 F:ESP_ORC | ESP_TROLL | ESP_HUMAN
 D:$Take care! This sword will make you a murderer if you wield it.
-D:$ Do you hear cries of this sword that want more blood thirstily?
+D:$ Do you hear the bloodthirsty screams of this sword?
 D:持った者を殺戮マシーンに変える呪われた剣だ。あなたにはこの剣の
 D:血に飢えた叫びが聞こえるだろう。
 
@@ -1785,9 +1790,9 @@ W:20:8:80:35000
 P:0:1d7:3:7:0
 F:BLOWS |
 F:SLAY_ANIMAL | SLOW_DIGEST | REGEN | SHOW_MODS | SEE_INVIS | RES_DISEN
-D:$Merlin the prince of chaos hates carrying a heavy sword, so he invokes
-D:$ a power of chaos to take his sword from another dimension when he
-D:$ needs. This sword is also one of such things.
+D:$Merlin, a prince of chaos and Corwin's son, hates carrying a heavy sword.
+D:$  When he needs one, he invokes a power of chaos to summon a blade from some
+D:$ nearby parallel world.  This sword is one of those he summoned.
 D:$ (R.Zelazny, 'The Chronicles of Amber', vol.6-10)
 D:地球暮らしの長いマーリンは現代っ子らしく重く長い剣を持ち歩くのが嫌いで、
 D:必要な時カオスの力で剣を異世界から取り寄せる。この剣もそうした物の
@@ -1897,8 +1902,8 @@ P:0:2d5:10:12:10
 F:INT | HIDE_TYPE |
 F:BRAND_COLD | BRAND_FIRE | SLAY_DEMON | SLAY_TROLL | SLAY_GIANT |
 F:RES_FIRE | RES_COLD | SUST_INT | SLOW_DIGEST | SHOW_MODS | LITE
-D:$Within this long thrusting spear lie the spirits of frost giants and fire 
-D:$demons, who war forever, trapped by magely spells.  
+D:$Within this long thrusting spear, the spirits of frost giants and fire
+D:$ demons war forever, trapped by magely spells.
 D:この両手持ちの長槍の中には
 D:氷の巨人と炎の悪魔の二つの魂が魔法により
 D:封印されていて永遠に争っている。
@@ -1916,8 +1921,8 @@ F:SLAY_TROLL | SLAY_ORC | SLAY_GIANT |
 F:FREE_ACT | RES_FIRE | RES_ELEC | RES_LITE |
 F:SLOW_DIGEST | ACTIVATE | BLESSED | SHOW_MODS | LITE | RIDING
 U:BA_ELEC_2
-D:$The spear which Odin created from a branch of the world tree.
-D:$It is craved magical runes.
+D:$The spear which Odin created from a branch of the world tree.  Magical
+D:$ runes have been carved into the shaft.
 D:主神オーディンが世界樹の枝から作り上げた槍で、魔力を込めた
 D:ルーン文字が刻まれている。（北欧神話）
 
@@ -2417,9 +2422,9 @@ F:WIS | INFRA | HIDE_TYPE | BLESSED |
 F:BRAND_COLD | SLAY_ORC | RES_COLD | RES_LITE | LITE | REGEN |
 F:ACTIVATE | SHOW_MODS | XTRA_H_RES
 U:DRAIN_2
-D:$Wielded by the High Priest of Meneltarma, this great mace gleams coldly as 
-D:$though moonlit, and it can strike as mighty a blow spiritually as 
-D:$physically.
+D:$Wielded by the High Priest of Meneltarma, this great hammer gleams coldly
+D:$ as though moonlit, and it can strike as mighty a blow spiritually as
+D:$ physically.
 D:メネルタルマの高僧が使っていた大鎚で、月の光のように冷たく輝いている。
 D:その打撃は敵の肉体だけでなく精神をも打ち砕くことができる。
 
@@ -2433,6 +2438,8 @@ W:30:60:260:200000
 P:0:4d5:15:15:0
 F:BLOWS | VAMPIRIC | HOLD_EXP | SLAY_UNDEAD | SLAY_EVIL | SLAY_HUMAN |
 F:REGEN | RES_FEAR | RES_BLIND | SLOW_DIGEST | SHOW_MODS
+D:$This bloodthirsty blade, which has lopped countless heads, heals the body
+D:$ and safeguards the soul of the wielder.
 D:数え切れないほどの首を落としてきたこの血に飢えた刃は
 D:敵の血と魂を吸って手にする者の体を癒す。
 
@@ -2477,7 +2484,7 @@ W:50:25:110:100000
 P:0:0d0:10:14:0
 F:SPEED | RES_FIRE | XTRA_MIGHT | ACTIVATE | SHOW_MODS | XTRA_RES_OR_POWER
 U:BRAND_FIRE_BOLTS
-D:$Magic power of this crossbow of Brand the prince of Amber will enable
+D:$The magic power of this crossbow of Brand, the prince of Amber, will enable
 D:$ you to move faster.
 D:トランプの魔力を自分の物にし、新たな宇宙を創造しようとした
 D:アンバーの王子ブランドが使っていたクロスボウだ。
@@ -2506,10 +2513,10 @@ F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD | ACTIVATE |
 F:SLAY_EVIL | SLAY_ANIMAL | SLAY_DEMON | SLAY_DRAGON |
 F:SEE_INVIS | REGEN | BLESSED | LITE | SHOW_MODS
 U:ESCAPE
-D:$One of the three imperial spiritual artifacts of Japan.
-D:$Susanoo found this tsurugi at Izumo, then Yamato Takeru
-D:$got and used for conquesting Japan.
-D:$It guards its owner from many dangers by its spiritual power.
+D:$It is one of the three imperial spiritual artifacts of Japan.
+D:$  Susanoo found this tsurugi, a straight double-edged sword, at Izumo.
+D:$  Many years later, Yamato Takeru received it as a gift.
+D:$  The tsurugi's spiritual power guards its owner from many dangers.
 D:三種の神器の一つ。出雲の国で素戔嗚尊(すさのおのみこと)により
 D:見出され、後に日本武尊(やまとたけるのみこと)の剣となる。
 D:使う者を様々な危機から守る霊力が備わっている。
@@ -2661,6 +2668,10 @@ W:20:25:150:40000
 P:0:2d5:10:10:0
 F:STR | DEX | HIDE_TYPE | FORCE_WEAPON | KILL_EVIL
 F:SHOW_MODS | RIDING
+D:$This legendary weapon is said to have killed Zanaffer, the beast that
+D:$ destroyed the magic city of Sairaag.  As the wielder's will augments the
+D:$ powers of this blade of light, all evil creatures have reason to fear its
+D:$ power.
 D:かつて魔導都市サイラーグを破壊つくした魔獣、ザナッファー。
 D:それを滅ぼしたといわれるのが、この伝説の武器である。
 D:持つ者の、意思の力を刃と成して、魔族すらも両断する。
@@ -2689,8 +2700,8 @@ P:0:8d6:0:30:0
 F:STEALTH | INT | WIS | AGGRAVATE | CURSED | HEAVY_CURSE |
 F:SHOW_MODS | CHAOTIC | IMPACT | SPEED
 F:RANDOM_CURSE0
-D:$This is disruptive heave thing made by Micro$oft.
-D:$It will bring many troubles to its user.
+D:$This is a destructive heavy thing made by Micro$oft.
+D:$  It will bring many troubles to its user.
 D:マイクロンフトによって作られたもので、重くて破壊力がある。
 D:使用する者に災いをもたらす。
 
@@ -2701,8 +2712,8 @@ W:30:15:75:100000
 P:0:2d6:17:12:0
 F:DEX | BLOWS | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC | SLAY_DEMON |
 F:FREE_ACT | SEE_INVIS | SHOW_MODS | RES_DARK | RES_DISEN | SPEED
-D:$The silver light sabre of Polnareff's stand Silver Chariot.
-D:$It can pierce enemies rapidly.
+D:$The silver light sabre of Polnareff's stand, Silver Chariot.
+D:$  It can pierce enemies rapidly.
 D:ポルナレフのスタンド「シルバーチャリオッツ」が手にしていた
 D:軽量のサーベルだ。一瞬にして敵に無数の風穴をあけることがで
 D:きるはずだッ！
@@ -2718,8 +2729,8 @@ F:LEVITATION | SLOW_DIGEST | REGEN | SEARCH | LITE | WARNING |
 F:INSTA_ART | QUESTITEM | FULL_NAME
 U:RECHARGE_XTRA
 D:$Yaaaaaaaaay! Platinum card of Yendorian Express!!!
-D:$Wait a minute, you can not pay any more with this card.
-D:$You must think other way of using it.
+D:$  Wait a minute, you can not pay any more with this card.
+D:$  You must think of another way of using it.
 D:金色に光り輝くイェンダー印のプラチナカードだ。
 D:まるで億万長者になった気分がする。限度額まで使い込もう。
 
@@ -2755,9 +2766,10 @@ F:HIDE_TYPE | BLOWS | VORPAL | VAMPIRIC | SLAY_HUMAN |
 F:SHOW_MODS | SPEED | ACTIVATE | RES_DISEN | NO_TELE |
 F:DRAIN_EXP | AGGRAVATE | RES_DARK | RES_NETHER | TY_CURSE |
 U:MURAMASA
-D:$Muramasa the legendaly bracksmith forged this sword 'Muramasa'.
-D:$ It always wants more blood thirstily, although it already
-D:$ drained blood from many person.
+D:$"If you encounter a demon, you will cut the demon.  If you encounter a god
+D:$ you will cut the god."  Muramasa, the legendary swordsmith, forged this
+D:$ sword.  It always wants more blood, even though it has already drained the
+D:$ blood of many.
 D:「魔物に遭うては魔物を斬り、神に遭うては神を斬る。」
 D:伝説の刀匠村正が全身全霊を込めて鍛えたこの妖刀は
 D:数え切れない人間の血を啜ってきた。その刃は
@@ -2772,6 +2784,9 @@ F:STEALTH | SUST_STR | SUST_DEX | SUST_CON |
 F:SPEED | RES_FIRE | BRAND_FIRE |
 F:SLAY_ANIMAL | SLAY_DRAGON | RES_FEAR | FREE_ACT |
 F:REGEN | SHOW_MODS | HIDE_TYPE
+D:$This a powerful nunchaku with the spiritual power of a legendary fighter.
+D:$  In skilled hands, it can deliver blows as fast as someone fighting
+D:$ barehanded.
 D:伝説の格闘家の霊力が宿った強力なヌンチャクだ。
 D:拳法を操る者が手にすれば自らの体の一部のように
 D:操ることができ、素手の時と同じくらい素早い攻撃が
@@ -2787,6 +2802,7 @@ F:RES_CONF | RES_NETHER | RES_COLD | RES_POIS | RES_DARK | RES_FEAR |
 F:SEE_INVIS | ACTIVATE | DRAIN_EXP |
 F:SH_COLD | HOLD_EXP | LEVITATION | REGEN
 U:TERROR
+D:$It is the stone mask of Dio Brando that turns the wearer into a vampire.
 D:装備した者を吸血鬼に変えてしまうというディオの石仮面だ。
 
 N:147:飛行
@@ -2796,6 +2812,7 @@ W:60:60:10:60000
 P:0:1d1:0:0:0
 F:INT | CHR | SPEED | ACTIVATE | LEVITATION | HOLD_EXP | INSTA_ART | LITE_3 | 
 U:BA_MANA
+D:$This glowing blue gem allows the wielder to levitate.
 D:浮遊の力を与えてくれる青く仄光る宝石だ。
 
 N:148:『与一の弓』
@@ -2804,6 +2821,7 @@ I:19:13:4
 W:35:30:40:30000
 P:0:0d0:40:13:0
 F:DEX | HIDE_TYPE | SEE_INVIS | XTRA_MIGHT | SHOW_MODS
+D:$It is the bow of Nasu no Yoichi, known for making impossible shots.
 D:「与一鏑を取つて番ひ、能つ引いてひやうと放つ。小兵といふ条、
 D:十二束三伏、弓はつよし、鏑は浦響くほどに長鳴して、過たず扇の
 D:要ぎは一寸ばかり置いて、ひいふつとぞ射切つたる。」(平家物語)。
@@ -2825,6 +2843,7 @@ I:23:20:2
 W:30:25:120:80000
 P:0:10d4:17:21:0
 F:STR | DEX | VORPAL | TUNNEL | SHOW_MODS
+D:$It's a sharp Japanese sword said to be capable of cutting anything.
 D:鋼をも切り裂く、切れ味抜群の日本刀だ。
 
 N:151:八咫
@@ -2843,6 +2862,11 @@ W:40:20:400:98765
 P:0:3d6:5:23:5
 F:STR | CON | SLAY_EVIL | SLAY_UNDEAD | SLAY_ORC | SLAY_TROLL | RES_FEAR |
 F:FREE_ACT | REGEN | SHOW_MODS
+D:$Musashibo Benkei, sometimes said to be a demon, used his power to obtain
+D:$ this naginata.  With it, he won 999 swords from samurai in duels
+D:$ around Kyoto.  Trying to win an additional sword, Benkei fought Minamoto
+D:$ no Yoshitsune on Gojo Bridge and lost.  Benkei later became Yoshitsune's
+D:$ retainer.
 D:後に義経に仕えた怪僧・武蔵坊弁慶は、この大薙刀を得物に武力を振るい、
 D:五条大橋の上で999本の刀を狩った。
 
@@ -2913,6 +2937,8 @@ W:10:150:30:10000
 P:0:1d1:0:0:0
 F:ACTIVATE | INSTA_ART
 U:FISHING
+D:$Taikobo's daily routine was to fish with this fishing rod.  Eventually,
+D:$ Taikobo was himself caught by Zhou Wen Wang.
 D:太公望はこの釣り竿を用いて釣りを楽しむのが日課であったが、
 D:結局は彼自身が周の文王に釣られてしまったのであった。
 
@@ -2924,6 +2950,8 @@ W:60:150:130:100000
 P:0:4d5:-10:25:0
 F:VORPAL | VAMPIRIC | SLAY_EVIL | KILL_DEMON | ESP_DEMON |
 F:AGGRAVATE | LITE | CON 
+D:$As you handle this reddish gold blade, you have the strong urge to find
+D:$ and kill some demons.
 D:彼女は史上最強の破妖刀だ。
 D:朱金に輝く刀身で魔性の心臓をつらぬき、その命を食べつくす。
 
@@ -2935,9 +2963,9 @@ P:0:4d9:6:23:10
 F:STR | DEX | HIDE_TYPE | SEARCH | FREE_ACT | SLAY_HUMAN |
 F:SLAY_TROLL | SLAY_GIANT | SLAY_ANIMAL | SLAY_ORC | RES_FIRE | RES_COLD |
 F:RES_ELEC | RES_ACID | RES_FEAR | SHOW_MODS | RIDING
-D:$Because of very superb sharpness such as dragon flies are 
-D:$cut which perches on the tip of this spear, it is called
-D:$'Tonbo giri' which means 'dragon fry cutter'. 
+D:$Said to belong to Honda Tadakatsu, a leading general for Tokugawa Ieyasu,
+D:$ this spear got its name, 'Tonbo giri' or dragonfly cutter, because a
+D:$ dragonfly that tried to perch on the tip was cut in two.
 D:徳川四天王の１人本多忠勝の愛用の槍だ。
 D:その切れ味は穂先に止まった蜻蛉が切れて落ちるほどである。
 
@@ -2963,6 +2991,9 @@ F:BRAND_ELEC | SLAY_EVIL | SLAY_GIANT |
 F:RES_ELEC | RES_LITE | RES_DARK |
 F:LITE | SEE_INVIS | RES_BLIND | SHOW_MODS | RIDING
 U:BA_STAR
+D:$This is spear of the Celtic hero, Cuchulainn.  Carved from the bone of
+D:$ a sea dragon, it protects the sight of the wielder and can flash to dazzle
+D:$ an opponent.
 D:ケルトの英雄クーフーリンの、海竜の骨から削られた長槍だ。
 D:つねに目映く発せられるその閃光は敵の目をくらまし、
 D:逆に所有者の視力を守る。
@@ -3036,6 +3067,9 @@ W:25:5:15:808
 P:0:1d2:-3:-7:6
 F:SEARCH | ACTIVATE | SHOW_MODS | HIDE_TYPE
 U:AGGRAVATE
+D:$It is two wooden prisms joined by a thin rope.  Though a poor weapon,
+D:$ firefighters use such devices as percussion instruments to warn others of
+D:$ danger.
 D:角柱二本の互いの端が、細い縄で結ばれている。
 D:武器としては見るからに貧相だが、 防火をその任とする衛士たちが使った、
 D:由緒正しい武器だといわれている。
@@ -3047,6 +3081,11 @@ W:40:5:100:808
 P:0:1d7:-5:10:3
 F:STR | CHR | RES_FIRE | ACTIVATE | 
 U:HERO
+D:$It is a short staff with an attached flag.  The opposite end of the staff
+D:$ from the flag has a disk with the mark of a firefighting squad.  Staffs
+D:$ like this were used to rally firefighters to sites of fires in Edo period
+D:$ Japan.  The bearers, matoimachi, of such staffs were noted for their
+D:$ courage.
 D:消火作業にあたって、士気を鼓舞すべく振りたてられた杖だ。
 D:杖の先に隊のマーク入りの円盤があり、その下側から
 D:長い帯状の飾りが幾本ものびている。
@@ -3081,6 +3120,9 @@ W:45:40:666:66666
 P:0:25d4:-30:0:20
 F:SPEED | STEALTH | WIS | IMPACT | SHOW_MODS | HIDE_TYPE |
 F:CURSED | HEAVY_CURSE
+D:$It is a very heavy iron ball, likely too cumbersome to be effective as
+D:$ a weapon, with an attached chain and metal ring, ready to be fastened to
+D:$ an ankle or wrist.
 D:不信心者の足にくくりつけられ、その動きを阻害する。
 D:重いが武器としても使えない事はない。
 
@@ -3130,6 +3172,7 @@ W:50:30:130:0
 P:0:5d5:-50:-50:-5
 F:WIS | CHR | 
 F:TY_CURSE | AGGRAVATE | DRAIN_EXP | SHOW_MODS | THROW
+D:$"What's this!  Isn't it the strongest sword!?"  (Final Fantasy V)
 D:「なんだこれは！最強の剣じゃないのか！？」
 D:（FINAL FANTASY V）
 
@@ -3139,6 +3182,9 @@ I:21:1:3
 W:10:20:50:40000
 P:0:2d4:8:10:0
 F:STR | CON | RES_FEAR | SEE_INVIS | SLAY_EVIL | SLAY_UNDEAD
+D:$This is the donkey's jawbone that Samson used to defeat a Philistine Army.
+D:$  Lightweight but effective, this club's sacred power is especially deadly
+D:$ against evil foes.
 D:怪力サムソンがペルシア人兵士の包囲を撃ち破ったときに使っていた
 D:棍棒。骨でできているために軽く、その聖なる力は邪悪なモンスター
 D:を打ち払う。
@@ -3152,6 +3198,9 @@ F:BLOWS
 F:SLAY_UNDEAD | SLAY_DRAGON | SLAY_ANIMAL |
 F:RES_FIRE | RES_FEAR | BLESSED | 
 F:SLOW_DIGEST | SHOW_MODS
+D:$It is similar to the fabled Excalibur but is slightly smaller.  It also
+D:$ also happens to talk, calling itself "E.J." and admitting to a severe case
+D:$ of arachnophobia.
 D:かの宝剣エクスカリバーに似た作りの、少し小型の剣だ。
 D:自分のことを「E.J.」と呼び、ごくたまに話もする。
 D:蜘蛛と対峙すると、恐れのあまりプリンのようにぷるぷると震える。
@@ -3190,6 +3239,7 @@ F:SPEED | INT | WIS | SUST_INT | SUST_WIS | XTRA_SHOTS | XTRA_MIGHT |
 F:DEC_MANA |
 F:RES_DARK | RES_LITE | RES_DISEN | RES_BLIND | IM_COLD | SLOW_DIGEST |
 F:HIDE_TYPE | SHOW_MODS | QUESTITEM | INSTA_ART
+D:$It's a very ridiculous bow.
 D:すごくいいかげんな作りの弓だ。
 
 N:183:やる気のない
@@ -3300,6 +3350,8 @@ P:0:2d6:6:9:0
 F:DEX | CHR | HIDE_TYPE | RIDING |
 F:KILL_ANIMAL | ESP_ANIMAL | BRAND_FIRE | ACTIVATE
 U:CHARM_ANIMAL
+D:$This is the whip of a venerable beastmaster from a country circus.  The
+D:$ crack of this whip can shake any beast.
 D:某国サーカス団で使用された由緒正しい猛獣使いの証だ。
 D:このムチの音はどんな猛獣でも震え上がらせることができる。
 
@@ -3335,7 +3387,7 @@ W:20:4:130:20000
 P:0:2d2:6:10:0
 F:STR | BLOWS | HIDE_TYPE | 
 F:SLAY_ORC | SLAY_TROLL | RES_FIRE
-D:$A blade of Elendil that was broken by his fall as the battled Sauron upon
+D:$A blade of Elendil that was broken by his fall as he battled Sauron upon
 D:$ the steps of Barad-Dur.
 D:「金はすべて光るとは限らぬ、
 D:放浪する者すべてが、まよう者ではない。
@@ -3360,6 +3412,8 @@ W:60:60:320:200000
 P:0:4d5:20:20:5
 F:STR | DEX | CON | SLAY_EVIL | SLAY_HUMAN |
 F:VORPAL | SHOW_MODS
+D:$Guan Yu, who has a long, lush beard, knocked many great men to the ground
+D:$ with this blue dragon sword.
 D:豊かな髯を蓄えた義人・関羽はこの青龍刀で多くの豪傑を地に
 D:叩き伏せて来た。
 
@@ -3369,6 +3423,8 @@ I:21:16:6
 W:40:40:350:100000
 P:0:4d7:0:20:10
 F:STR | RES_FEAR
+D:$It is the heavy gold war club of Shuten-douji, sake lover and leader of the
+D:$ ogres on Mt. Oe.
 D:大江山の鬼の首領たる酒呑童子の重い金棒だ。
 
 N:195:『ゴールデンハンマー』
@@ -3392,6 +3448,8 @@ W:30:10:65:45000
 P:5:1d2:0:0:15
 F:STR | RES_ACID | RES_COLD | RES_FEAR |
 F:REFLECT | SUST_STR | 
+D:$Perseus evaded the snake-haired Medusa's petrifying gaze with this
+D:$ reflective shield in hand.
 D:蛇の髪を持つメドゥーサの石化の睨みも、この反射の盾の前には
 D:効果がなかった。
 
@@ -3418,6 +3476,7 @@ I:36:8:-10
 W:20:3:110:0
 P:8:1d1:-1:0:64
 F:AGGRAVATE | SUST_CHR | CHR
+D:$It's a rugged cuirass with a noticeable and offensive odor.
 D:なんとゴツゴツとした鎧だこと。
 
 N:201:『青龍の霊鱗』
@@ -3429,6 +3488,9 @@ F:RES_ACID | RES_FIRE | RES_COLD | RES_ELEC |
 F:RES_DARK | RES_CONF | RES_POIS |
 F:FREE_ACT | SEE_INVIS | ACTIVATE
 U:RESIST_ALL
+D:$This blue dragon scale armor has been blessed by the azure dragon that
+D:$ guards the east and the three other guardians, Byakko, Genbu, and Suzaku.
+D:$ Even a god would be envious of the protection this armor provides.
 D:玄武、白虎、朱雀とともに四獣と呼ばれる青龍の鱗鎧を
 D:身に纏えば、神の如き守護の力が得られる。
 
@@ -3442,6 +3504,9 @@ F:SLAY_EVIL | SLAY_DEMON | SLAY_UNDEAD |
 F:RES_ACID | RES_COLD | RES_BLIND | RES_CHAOS |
 F:LITE | ACTIVATE | BLESSED | SEE_INVIS | SHOW_MODS
 U:BA_WATER
+D:$From the bridge between heaven and earth, Izanagi and Izanami churned the
+D:$ sea with this jeweled weapon.  The first land sprung up from where drops
+D:$ of salty water fell from the weapon's tip.
 D:「是に天つ神、諸の命以ちて、伊邪那岐命、伊邪那美命、
 D:二柱の神に、『是の多陀用弊流国を修め理り固め成せ。』
 D:と詔りて、天の沼矛を賜ひて、言依さし賜ひき。故、二柱
@@ -3452,7 +3517,7 @@ D:是れ淤能碁呂島なり。」(古事記)。
 
 # モーロックの高僧の錆びた鎖かたびら
 N:203:モーロックの高僧の
-E:of The High Preist of Morlok
+E:of The High Priest of Moloch
 I:37:1:-2
 W:90:8:200:100000
 P:14:1d4:-5:0:-40
@@ -3460,6 +3525,9 @@ F:INT | WIS | CHR | HIDE_TYPE | RES_LITE | RES_DARK |
 F:RES_ACID | RES_ELEC | RES_FIRE | RES_COLD |
 F:RES_POIS | RES_CONF | RES_CHAOS | RES_NETHER |
 F:RES_NEXUS | AGGRAVATE | CURSED | HEAVY_CURSE | TY_CURSE
+D:$This badly rusted chain mail was once worn by a high priest who guarded a
+D:$ powerful magic amulet.  That priest's despair and the amulet's magic have
+D:$ left their mark in the mail.
 D:この赤々と錆びた今にも崩れ去りそうな鎖かたびらには、
 D:かつて愚かにも守護する魔除けを奪われ朽ち果てた、
 D:太古の高僧の怨念がこもっている。
@@ -3473,6 +3541,8 @@ P:4:0d0:0:0:0
 F:STR | CON | SUST_STR | SUST_CON |
 F:RES_FEAR | FREE_ACT | ACTIVATE
 U:SHIKOFUMI
+D:$It is the traditional garb for a Sumo wrestler.  Just touching it makes you
+D:$ feel stronger.
 D:遥か東の国のスモー戦士が身につける正装だ。
 D:その豪華な宝飾は力強さを感じさせる。
 
@@ -3483,6 +3553,7 @@ W:20:20:30:50000
 P:3:0d0:0:0:20
 F:RES_COLD | RES_ACID | RES_CHAOS | LEVITATION | ACTIVATE
 U:RESIST_COLD
+D:$This is the fur cloak of Mook, a red Yeti and Gachapin's friend.
 D:ガチャピンと対をなす赤い獣の毛皮のクロークだ。
 
 # 金属製ラメラー・アーマー『バテレン鎧』
@@ -3495,6 +3566,7 @@ W:45:5:340:80000
 P:23:1d6:5:5:17
 F:CHR | REFLECT |
 F:RES_FIRE | RES_CHAOS | LITE
+D:$It is the suit of shining western-style armor that Nobunaga Oda loved.
 D:織田信長の愛用した光り輝く西洋の鎧だ。
 
 # グレート・ソード『真魔剛竜剣』 (from ダイの大冒険)
@@ -3548,6 +3620,10 @@ W:20:15:150:40000
 P:6:1d1:-5:10:20
 F:INT | WIS | CHR | STEALTH | SPEED | RES_FIRE |
 F:SUST_STR | SUST_CON | SH_FIRE | REGEN | RES_FEAR
+D:$Since ancient times, some martial artists have trained with weighted sandals
+D:$ to build leg strength.  This is a pair of those, warm to the touch and
+D:$ with soles fashioned out of iron.  Wear them enough, you'll feel light as
+D:$ a feather when you take them off.
 D:古来より伝わる、男を磨くための靴だ。
 D:ふだん身に付けていれば、外したときに自分のからだが羽根のように
 D:軽く感じられるだろう。
@@ -3592,13 +3668,17 @@ D:この正視するもかなわぬ眩い炎のムチをひとたび手に取れ
 D:バルログの長ゴズモグは戦において負け知らずであった。
 
 N:213:天性寺聖地蔵尊の六環
-E:of The Bonze Octopus
+E:of The Bronze Octopus
 I:21:7:2
 W:35:40:70:125000
 P:0:1d7:8:8:8
 F:STR | WIS | BLOWS | TUNNEL | ACTIVATE | RES_ACID | RES_ELEC
 F:REGEN | FREE_ACT | BRAND_ELEC | BLESSED | XTRA_H_RES
 U:SUMMON_OCTOPUS
+D:$It is a walking stick bound with six rings of bronze.  According to legend,
+D:$ an incarnation of Jizo Daibosatsu carried this staff when he defended
+D:$ Kishiwada castle with the assistance of a horde of octopuses he had called
+D:$ from the sea.
 D:その昔、蛸を引き連れて岸和田の地を守るために戦かったという
 D:蛸法師こと地蔵大菩薩の化身が使っていた六環の錫杖だ。
 D:「…その時。一人の法師がどこからともなく現れて、何万という敵に飛びかかり、
@@ -3631,6 +3711,8 @@ F:STEALTH | SEARCH | HIDE_TYPE | SEE_INVIS |
 F:RES_DARK | ACTIVATE | LITE_M1 |
 F:INSTA_ART
 U:BA_DARK
+D:$It is a necklace decorated with jet-black jewels.  Wear it and feel yourself
+D:$ in the dark.
 D:漆黒の宝玉がつけられた頸飾りだ。
 D:身に付けると自分が暗闇の中にいるのを感じる。
 
@@ -3662,7 +3744,7 @@ U:DISP_CURSE_XTRA
 D:これを身につけたプレイヤーは呪いをはね返すことができる。
 
 N:218:地獄の
-E:of the Hell
+E:of Hell
 I:40:26:-2
 W:50:40:30:66666
 P:0:0d0:15:15:-5
@@ -3671,6 +3753,8 @@ F:RES_DARK | RES_NETHER |
 F:SEE_INVIS | AGGRAVATE | ESP_UNDEAD | ACTIVATE |
 F:INSTA_ART
 U:BA_DARK
+D:$It is one of the restraining collars used for the prisoners in Hell.  The
+D:$ spite of many prisoners is palpable when near the collar.
 D:地獄の囚人を拘束する首輪だ。多くの囚人の怨念が込められている。
 
 N:219:帯魔力ペンダント
@@ -3700,7 +3784,7 @@ W:20:15:30:50000
 P:0:2d1:15:17:0
 F:DEX | CHR | STEALTH |
 F:XTRA_MIGHT | HIDE_TYPE | SHOW_MODS | XTRA_H_RES
-D:$This is of Robin Hood who live in the deep forest.
+D:$It is the bow of Robin Hood, the bandit in Sherwood Forest.
 D:シャーウッドの森に住む義賊ロビン・フッドの弓だ。
 
 # from Slash'EM
@@ -3712,7 +3796,8 @@ P:0:2d1:15:17:0
 F:STR | INFRA | RES_FIRE | SH_FIRE |
 F:ACTIVATE | HIDE_TYPE | SHOW_MODS
 U:BRAND_FIRE_BOLTS
-D:$This crossbow gives flame energy to bolts which it fires.
+D:$This fiery-colored crossbow can cause the bolts it fires to burst into
+D:$ flame upon impact.
 D:この燃えるような色のクロスボウは、発射するボルトに炎の力を
 D:与えることができる。
 
@@ -3722,9 +3807,8 @@ I:19:23:4
 W:35:30:110:50000
 P:0:0d0:40:13:0
 F:DEX | HIDE_TYPE | SEE_INVIS | XTRA_MIGHT | SHOW_MODS
-D:$With this crossbow, Swiss hero Tell shot an apple exactly 
-D:$though it was on his son's head, and then he defeated evil 
-D:$magistrate Gessler.
+D:$With this crossbow, the Swiss hero, Tell, shot an apple from his son's
+D:$ head and then defeated the Gessler, the tyrannical magistrate.
 D:スイスの英雄ウィリアム・テルの使ったクロスボウだ。
 D:彼は我が子の頭の上のリンゴを正確に撃ち抜き、民衆を苦しめる
 D:悪代官ゲスラーを打ち破った。
@@ -3735,14 +3819,14 @@ I:18:1:0
 W:35:35:2:5000
 P:0:6d5:20:16:0
 F:KILL_HUMAN
-D:$It is said that this bolt sticked onto the heart of Gessler 
-D:$when Wilhelm Tell shot it.
+D:$It is said that Wilhelm Tell slew Gessler, the Austrian magistrate, with
+D:$ this bolt.
 D:かつてウィリアム・テルが撃ち放った1本のクロスボウの矢だ。
 D:悪代官ゲスラーの命を正確に奪ったという。
 
 #JX#
 N:225:アスクレピオスの
-E:of Aesculapius
+E:of Asclepius
 I:21:14:3
 W:40:45:160:300000
 P:0:2d11:15:15:5
@@ -3752,8 +3836,8 @@ F:VAMPIRIC | SLAY_ANIMAL | SLAY_DRAGON | SLAY_HUMAN |
 F:SLAY_ORC | SLAY_TROLL | SLAY_GIANT |
 F:RES_POIS | RES_CONF | RES_CHAOS |
 U:REST_ALL
-D:$This is the staff of Aesculapius, who is a greek god of 
-D:$the medicine.
+D:$This is the staff of Asclepius, a hero and god of medicine in Greek
+D:$ mythology.
 D:これは、医学の神アスクレピオスの奇跡の六尺棒だ。
 D:どんな怪我もたちまち癒してしまう。
 
@@ -3816,11 +3900,11 @@ D:大きな太刀を手にして多くの敵兵の命を奪いさった。その
 D:えに敵陣に突っ込みすぎたという。
 
 N:230:手品師の
-E:of Magician
+E:of a Magician
 I:23:1:0
 W:1:1:5:3000
 P:0:1d1:0:0:0
-D:$This dagger can not injure someone almostly.
+D:$This dull dagger has a very faint magic aura about it.
 D:このダガーは人を傷つけることはないだろう。
 
 N:231:暗殺者荊軻の
@@ -3920,6 +4004,7 @@ I:21:5:0
 W:45:18:250:2500
 P:0:4d6:15:15:0
 F:RIDING | WARNING | SLAY_EVIL | KILL_DEMON | ESP_DEMON
+D:$What, this useless sword again?  Oh!  Wait a minute ....
 D:なんだ、またこの役立たずの剣か。おや？ちょっと待てよ……
 
 # The Light Crossbow 'Wiizapper' (x3)
@@ -3931,9 +4016,8 @@ P:0:1d1:13:13:0
 F:INFRA | DEX | XTRA_SHOTS | LITE |
 F:SEE_INVIS | WARNING |
 F:HIDE_TYPE | SHOW_MODS
-D:$The white light crossbow that the fighter Link, wearing green clothes,
-D:$bought for training of shooting.'Enjoy shootings at the living room.'
-D:$(Nintendo)
+D:$Link, a warrior dressed in green, allegedly bought this white light crossbow
+D:$ for training.  "Enjoy shooting in the living room"  (Nintendo)
 D:緑の服の戦士リンクがボウガンのトレーニングのために購入した
 D:と言われる軽くて白いクロスボウだ。「リビングで射撃を楽しむ」
 D:(Nintendo)
@@ -3953,15 +4037,16 @@ D:この不気味に黒光るクロスボウはずっしりと重い。その一
 
 # The Heavy Crossbow of Guanzi (x4)
 N:241:管子の
+E:of Guan Zhong
 I:19:24:3
 W:40:20:200:99999
 P:0:4d1:10:15:0
 F:INT | WIS | SUST_INT | SUST_WIS | MAGIC_MASTERY | XTRA_SHOTS |
 F:RES_CONF | RES_NEXUS | FREE_ACT |
 F:HIDE_TYPE | SHOW_MODS
-D:$This is Guan Zhong's heavy crossbow for assassinating.
-D:$He took prime minister's post of Qi, although he failed to
-D:$take the life of the prince of Qi.
+D:$This is Guan Zhong's heavy crossbow.  Tutor to a prince of Qi, he
+D:$ attempted to use it to kill another prince of Qi but failed.  Spared by
+D:$ his target, he became the chancellor of Qi.
 D:斉の管仲が暗殺用に用いた重い弩だ。公子小白を射抜くことはできなかった
 D:が、後に斉の宰相の座を見事に射止めた。
 
@@ -4010,18 +4095,22 @@ D:この聖なる鞭は、錬金術師の知恵と乙女の代償によって生
 D:退魔の血族ベルモンド家代々の手で振るわれてきた。
 D:その力は邪悪な夜の一族に対する呪詛そのものであり、
 D:汚れた魂を過たず撃ち滅ぼすだろう。
-D:$This holy whip was generated with wise of a alchemist and a maiden's
-D:$sacrifice, wielded by Belmond family, the vampire hunters.
-D:$That power is indeed curse of evil household of night
-D:$and vanish the poisonous souls.
+D:$This holy whip was generated by an alchemist's wisdom and a maiden's
+D:$ sacrifice.  It has been wielded by generations of the Belmont family, the
+D:$ vampire hunters, and is the great bane of any with an unclean soul.
 
 N:245:運命のオーブ
 E:The Orb of Fate 
 I:39:10:3
 W:70:70:15:45000
 P:0:1d1:0:0:20
-F:WIS | CON | WARNING | ACTIVATE | FULL_NAME | LITE_3 |
+F:WIS | CON | WARNING | ACTIVATE | FULL_NAME | LITE_3 | INSTA_ART
 U:TELEPORT_LEVEL
+D:"You may take the Orb of Fate with you.  I have removed from it the power
+D: to foretell the future, for that power no mortal should have.  Its other
+D: abilities, however, you have at your disposal.  You must now begin in Tyr's
+D: name to search for the Amulet of Yendor.  May your steps be guided by Tyr,
+D: my child." (Norn, Nethack)
 D:「運命のオーブを持っていきなさい。わたしは運命のオーブから
 D:人間の手に触れてはならぬ未来を告げる力を取り除きました。
 D:しかしながら運命のオーブの他の力は，あなたの思い通りに
@@ -4040,6 +4129,9 @@ F:SUST_CHR | SUST_CON |
 F:RES_SOUND | RES_DISEN | REFLECT | FREE_ACT | ACTIVATE
 F:IGNORE_ACID | IGNORE_ELEC | IGNORE_FIRE | IGNORE_COLD | AGGRAVATE
 U:STRAIN_HASTE
+D:$A result of Steel Staff Ymir's research project, this swimsuit, powered by
+D:$ a hyper vibration crystal, provides much more protection than you might
+D:$ expect.
 D:ドワーフの姫、鋼鉄参謀ユーミルの研究の成果だ。
 D:超振動クリスタルが高い防御力をもたらしているらしい。
 

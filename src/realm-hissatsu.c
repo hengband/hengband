@@ -184,7 +184,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 	case 7:
 		if (name) return _("払い抜け", "Harainuke");
 		if (desc) return _("攻撃した後、反対側に抜ける。",
-			"Attacks a monster with your weapons normally, then dodges to one side.");
+			"In one action, attacks a monster with your weapons normally and then moves to the space beyond the monster if that space is not blocked.");
 
 		if (cast)
 		{
@@ -717,7 +717,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 	case 24:
 		if (name) return _("吸血鬼の牙", "Vampire's Fang");
 		if (desc) return _("攻撃した相手の体力を吸いとり、自分の体力を回復させる。生命を持たないモンスターには通じない。",
-			"Attacks with vampiric strikes which absorb HP from a monster and heal you. Has no effect to unliving monsters.");
+			"Attacks with vampiric strikes which absorb HP from a monster and heal you. Has no effect on unliving monsters.");
 
 		if (cast)
 		{
@@ -849,7 +849,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 
 	case 29:
 		if (name) return _("虎伏絶刀勢", "Kofuku-Zettousei");
-		if (desc) return _("強力な攻撃を行い、近くの場所にも効果が及ぶ。", "Performs a powerful attack which even effects nearby monsters.");
+		if (desc) return _("強力な攻撃を行い、近くの場所にも効果が及ぶ。", "Performs a powerful attack which even affects nearby monsters.");
 
 		if (cast)
 		{
@@ -902,7 +902,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 	case 30:
 		if (name) return _("慶雲鬼忍剣", "Keiun-Kininken");
 		if (desc) return _("自分もダメージをくらうが、相手に非常に大きなダメージを与える。アンデッドには特に効果がある。",
-			"Attacks a monster with extremely powerful damage. But you also takes some damage. Hurts an undead monster greatly.");
+			"Attacks a monster with extremely powerful damage, but you also take some damage. Hurts an undead monster greatly.");
 
 		if (cast)
 		{

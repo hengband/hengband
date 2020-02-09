@@ -3460,7 +3460,7 @@ void display_player(player_type *creature_ptr, int mode)
 #ifdef JP
 			sprintf(statmsg, "…あなたは勝利の後%sした。", streq(creature_ptr->died_from, "Seppuku") ? "切腹" : "引退");
 #else
-			sprintf(statmsg, "...You %s after winning.", streq(creature_ptr->died_from, "Seppuku") ? "did Seppuku" : "retired from the adventure");
+			sprintf(statmsg, "...You %s after winning.", streq(creature_ptr->died_from, "Seppuku") ? "committed seppuku" : "retired from the adventure");
 #endif
 		}
 		else if (!floor_ptr->dun_level)
@@ -4259,7 +4259,7 @@ static void dump_aux_virtues(player_type *creature_ptr, FILE *fff)
 		else fprintf(fff, "%s ???\n", stat_names[v_nr]);
 	}
 
-	fprintf(fff, _("\n属性 : %s\n", "\nYour alighnment : %s\n"), your_alignment(creature_ptr));
+	fprintf(fff, _("\n属性 : %s\n", "\nYour alignment : %s\n"), your_alignment(creature_ptr));
 	fprintf(fff, "\n");
 	dump_virtues(creature_ptr, fff);
 }
