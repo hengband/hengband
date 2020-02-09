@@ -2711,7 +2711,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 
 	floor_ptr->object_level = floor_ptr->base_level;
 	coin_type = 0;
-	bool visible = (m_ptr->ml && !player_ptr->image) || (r_ptr->flags1 & RF1_UNIQUE);
+	bool visible = (m_ptr->ml && !player_ptr->image) || ((r_ptr->flags1 & RF1_UNIQUE) != 0);
 	if (visible && (dump_item || dump_gold))
 	{
 		lore_treasure(player_ptr, m_idx, dump_item, dump_gold);

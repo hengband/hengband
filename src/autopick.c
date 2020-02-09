@@ -1930,7 +1930,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 		int idx = is_autopick(player_ptr, o_ptr);
 		auto_inscribe_item(player_ptr, o_ptr, idx);
 		bool is_auto_pickup = idx >= 0;
-		is_auto_pickup &= autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK);
+		is_auto_pickup &= (autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)) != 0;
 		if (!is_auto_pickup)
 		{
 			auto_destroy_item(player_ptr, o_ptr, idx);
@@ -3956,7 +3956,8 @@ static void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 		Term_erase(0, i + 1, tb->wid);
 	}
 
-	bool is_updated = tb->old_cy != tb->cy || (tb->dirty_flags & (DIRTY_ALL | DIRTY_NOT_FOUND | DIRTY_NO_SEARCH)) || tb->dirty_line == tb->cy;
+	bool is_dirty_diary = (tb->dirty_flags & (DIRTY_ALL | DIRTY_NOT_FOUND | DIRTY_NO_SEARCH)) != 0;
+	bool is_updated = tb->old_cy != tb->cy || is_dirty_diary || tb->dirty_line == tb->cy;
 	if (is_updated) return;
 
 	autopick_type an_entry, *entry = &an_entry;

@@ -26,6 +26,7 @@ doxygen/html/
 
 # Windows binary
 Hengband.exe
+Hengband.exe.lastcodeanalysissucceeded
 
 # game data files auto generated
 Hengband.INI

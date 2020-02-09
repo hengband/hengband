@@ -1021,7 +1021,7 @@ static bool cave_gen(player_type *player_ptr, concptr *why)
 
 	bool is_empty_or_dark = dun->empty_level;
 	is_empty_or_dark &= !one_in_(DARK_EMPTY) || (randint1(100) > floor_ptr->dun_level);
-	is_empty_or_dark &= !(dungeon_ptr->flags1 & DF1_DARKNESS);
+	is_empty_or_dark &= (dungeon_ptr->flags1 & DF1_DARKNESS) == 0;
 	if (!is_empty_or_dark) return TRUE;
 
 	/* Lite the floor_ptr->grid_array */

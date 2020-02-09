@@ -785,6 +785,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="cmd">

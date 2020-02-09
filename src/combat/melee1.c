@@ -1212,7 +1212,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
 	int bonus = attacker_ptr->to_h_m + (attacker_ptr->lev * 6 / 5);
 	int chance = (attacker_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
 
-	bool is_hit = !(r_ptr->flags2 & RF2_QUANTUM) || !randint0(2);
+	bool is_hit = ((r_ptr->flags2 & RF2_QUANTUM) == 0) || !randint0(2);
 	is_hit &= test_hit_norm(attacker_ptr, chance, r_ptr->ac, m_ptr->ml);
 	if (!is_hit)
 	{
