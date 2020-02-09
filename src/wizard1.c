@@ -517,14 +517,11 @@ static grouper group_artifact[] =
  * of textual names, where entry 'N' is assumed to be paired with
  * the flag whose value is "1L << N", but that requires hard-coding.
  */
-
-typedef struct flag_desc flag_desc;
-
-struct flag_desc
+typedef struct flag_desc
 {
 	const int flag;
 	concptr const desc;
-};
+} flag_desc;
 
 
 

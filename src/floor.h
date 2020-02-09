@@ -81,7 +81,7 @@
 #define REDRAW_MAX 2298
 
 
-typedef struct {
+typedef struct floor_type {
 	DUNGEON_IDX dungeon_idx;
 	grid_type *grid_array[MAX_HGT];
 	DEPTH dun_level;		/*!< 現在の実ダンジョン階層 base_level の参照元となる / Current dungeon level */

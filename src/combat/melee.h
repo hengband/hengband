@@ -128,8 +128,7 @@ extern const byte adj_dex_blow[];
 extern const byte blows_table[12][12];
 
 /* For Monk martial arts */
-typedef struct martial_arts martial_arts;
-struct martial_arts
+typedef struct martial_arts
 {
 	concptr desc;       /* A verbose attack description */
 	PLAYER_LEVEL min_level;  /* Minimum level to use */
@@ -137,15 +136,13 @@ struct martial_arts
 	int dd;         /* Damage dice */
 	int ds;         /* Damage sides */
 	int effect;     /* Special effects */
-};
+} martial_arts;
 
-typedef struct mbe_info_type mbe_info_type;
-
-struct mbe_info_type
+typedef struct mbe_info_type
 {
 	int power;        /* The attack "power" */
 	int explode_type; /* Explosion effect */
-};
+} mbe_info_type;
 
 extern const martial_arts ma_blows[MAX_MA];
 extern const int monk_ave_damage[PY_MAX_LEVEL + 1][3];

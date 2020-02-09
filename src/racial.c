@@ -225,14 +225,9 @@ static bool choose_kata(player_type *creature_ptr)
 
 
 /*!
- * @brief レイシャル・パワー情報のtypedef
- */
-typedef struct power_desc_type power_desc_type;
-
-/*!
  * @brief レイシャル・パワー情報の構造体定義
  */
-struct power_desc_type
+typedef struct power_desc_type
 {
 	GAME_TEXT name[MAX_NLEN];      //!<レイシャル名
 	PLAYER_LEVEL level;	//!<体得レベル
@@ -240,7 +235,7 @@ struct power_desc_type
 	int stat;
 	PERCENTAGE fail;
 	int number;
-};
+} power_desc_type;
 
 
 /*!

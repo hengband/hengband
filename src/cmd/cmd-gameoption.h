@@ -227,9 +227,7 @@ extern BIT_FLAGS window_mask[8];
  *	- Textual description
  */
 
-typedef struct option_type option_type;
-
-struct option_type
+ typedef struct option_type
 {
 	bool	*o_var;
 	byte	o_norm;
@@ -238,7 +236,7 @@ struct option_type
 	byte	o_bit;
 	concptr	o_text;
 	concptr	o_desc;
-};
+} option_type;
 
 extern const option_type option_info[];
 extern const option_type cheat_info[CHEAT_MAX];
