@@ -22689,12 +22689,12 @@ N:1125:赤鬼
 E:Red ogre
 G:O:R
 I:115:26d20:20:70:15
-W:36:2:0:580:0:0
+W:36:1:0:580:0:0
 B:CRUSH:HURT:10d4
 B:CRUSH:HURT:10d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
 F:DROP_CORPSE | DROP_SKELETON
-F:IM_FIRE | RES_NETH | NO_FEAR | NO_CONF | HURT_COLD | DROP_60
+F:IM_FIRE | RES_NETH | NO_FEAR | HURT_COLD | DROP_60
 S:1_IN_10
 S:SCARE | BLIND | CONF | HOLD
 S:BA_FIRE | BO_NETH | BO_PLAS | S_DEMON
@@ -22705,14 +22705,14 @@ D:それは罪人を殴りつけ、血の池で劫罰を与え続ける。
 
 N:1126:青鬼
 E:Blue ogre
-G:O:B
+G:O:b
 I:115:26d20:20:70:15
-W:36:2:0:580:0:0
+W:36:1:0:580:0:0
 B:SLASH:HURT:10d4
 B:SLASH:HURT:10d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
 F:DROP_CORPSE | DROP_SKELETON
-F:IM_COLD | RES_NETH | NO_FEAR | NO_CONF | HURT_FIRE | DROP_60
+F:IM_COLD | RES_NETH | NO_FEAR | HURT_FIRE | DROP_60
 S:1_IN_10
 S:SCARE | BLIND | CONF | HOLD
 S:BA_COLD | BO_NETH | BO_ICEE | S_DEMON
@@ -22730,7 +22730,7 @@ B:SLASH:HURT:10d4
 B:SLASH:HURT:10d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
 F:DROP_CORPSE | DROP_SKELETON
-F:IM_COLD | RES_NETH | NO_FEAR | NO_CONF | HURT_FIRE | DROP_60
+F:IM_FIRE | IM_COLD | RES_NETH | NO_FEAR | DROP_60
 S:1_IN_10
 S:SCARE | BLIND | CONF | HOLD
 S:BO_PLAS | BO_ICEE | BO_NETH | S_DEMON
@@ -22741,9 +22741,9 @@ D:それは罪人を斬りつけ、灼けた斧で劫罰を与え続ける。
 
 N:1128:首なし鬼
 E:Headless ogre
-G:O:u
-I:120:33d23:20:70:15
-W:38:2:0:660:0:0
+G:O:U
+I:120:33d23:20:75:15
+W:38:1:0:660:0:0
 B:SLASH:HURT:11d4
 B:CRUSH:HURT:11d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | UNDEAD | INVISIBLE
@@ -22761,13 +22761,13 @@ N:1129:金銀パールプレゼントの鬼
 E:Ogre gifting gold, silver and pearl
 G:O:y
 I:120:50d20:20:120:15
-W:40:5:0:700:0:0
+W:40:10:0:700:0:0
 B:CRUSH:HURT:11d4
 B:SLASH:HURT:11d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
 F:ONLY_GOLD | DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_4D2
 F:DROP_CORPSE | DROP_SKELETON
-F:RES_LITE | RES_NETH | NO_FEAR | NO_CONF | HURT_ROCK
+F:RES_LITE | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP | HURT_ROCK
 S:1_IN_8
 S:SCARE | BLIND | CONF | HOLD
 S:BR_LITE | BA_LITE | S_DEMON | CAUSE_2
@@ -22776,15 +22776,15 @@ D:おや、どこかで見たことがあるぞ？
 
 N:1130:冥界オーガ
 E:Styx ogre
-G:O:d
-I:120:40d20:20:70:15
+G:O:s
+I:120:40d20:20:80:15
 W:44:2:0:800:0:0
 B:CRUSH:SUPERHURT:10d4
 B:SLASH:SUPERHURT:10d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
 F:DROP_CORPSE | DROP_SKELETON | HURT_LITE
-F:IM_COLD | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP
-S:1_IN_9
+F:IM_FIRE | RES_DARK | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP
+S:1_IN_7
 S:SCARE | BLIND | CONF | HOLD
 S:BO_NETH | BR_NETH
 D:$It is a ogre who guards Styx following its masters.
@@ -22794,50 +22794,59 @@ D:それは時々賽の河原を見回って、積石塚を破壊して回る。
 
 N:1131:土の鬼
 E:Earth ogre
-G:O:r
-I:120:18d50:25:80:10
+G:O:u
+I:120:18d50:25:85:10
 W:45:2:0:900:0:0
 B:CRUSH:SUPERHURT:10d4
 B:CRUSH:SUPERHURT:10d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
-F:DROP_CORPSE | DROP_SKELETON | HURT_LITE | ESCORT
-F:IM_FIRE | RES_NETH | NO_FEAR | NO_CONF | DROP_90
-S:1_IN_5
+F:DROP_CORPSE | DROP_SKELETON | ESCORT
+F:IM_FIRE | RES_DARK | RES_NETH
+F:NO_FEAR | NO_CONF | NO_SLEEP | DROP_90
+S:1_IN_6
 S:SCARE | BLIND | CONF | HOLD
 S:BR_WALL | BA_NETH | BR_PLAS | S_DEMON
+D:$This ogre has earthy colored skin.
+D:$  It doesn't only punish sinners but also leads lower-class ogres.
 D:土気色の肌をした鬼だ。
 D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
 
 N:1132:水の鬼
 E:Water ogre
-G:O:b
-I:120:18d50:25:80:10
+G:O:B
+I:120:18d50:25:85:10
 W:45:2:0:900:0:0
 B:SLASH:SUPERHURT:10d4
 B:SLASH:SUPERHURT:10d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
-F:DROP_CORPSE | DROP_SKELETON | HURT_LITE | ESCORT
-F:IM_COLD | RES_NETH | NO_FEAR | NO_CONF | DROP_90 | CAN_SWIM
-S:1_IN_5
+F:DROP_CORPSE | DROP_SKELETON | ESCORT
+F:IM_COLD | RES_DARK | RES_NETH
+F:NO_FEAR | NO_CONF | NO_SLEEP | DROP_90 | CAN_SWIM
+S:1_IN_6
 S:SCARE | BLIND | CONF | HOLD
 S:BO_WATE | BA_WATE | BA_NETH | S_DEMON
+D:$This ogre has stagnant river colored skin.
+D:$  It doesn't only punish sinners but also leads lower-class ogres.
 D:淀んだ川の色の肌をした鬼だ。
 D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
 
 # 元は羅城門ともいったそうで、英語の発音はそれにならうこととした
+# In Japanese, both "Rashoumon" and "Rajoumon" are valid pronunciation
 N:1133:羅生門の鬼
 E:Ogre in Rajoumon
-G:O:b
-I:120:10d100:25:90:10
+G:O:v
+I:120:10d100:25:85:10
 W:46:2:0:1000:0:0
 B:SLASH:SUPERHURT:10d5
 B:SLASH:SUPERHURT:10d5
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
-F:DROP_CORPSE | DROP_SKELETON | HURT_LITE | ESCORT
-F:IM_FIRE | IM_COLD | IM_POIS | RES_NETH | NO_FEAR | NO_CONF | DROP_90
+F:DROP_CORPSE | DROP_SKELETON | ESCORT | DROP_90
+F:IM_FIRE | IM_COLD | RES_DARK | RES_NETH | NO_FEAR | NO_CONF
 S:1_IN_5
 S:SCARE | BLIND | CONF | HOLD
 S:BA_NUKE | BA_NETH | BR_GRAV | S_DEMON
+D:$It lives in Rajoumon.
+D:$  It doesn't only punish sinners but also leads lower-class ogres.
 D:羅生門に巣食う鬼だ。
 D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
 
@@ -22850,9 +22859,10 @@ B:SLASH:HURT:10d5
 B:SLASH:HURT:10d5
 B:CRUSH:SUPERHURT:40d1
 F:UNIQUE | FORCE_MAXHP
-F:ONLY_ITEM | DROP_GOOD | DROP_1D2 | ATTR_MULTI | ESCORT | ESCORTS
+F:ONLY_ITEM | DROP_GOOD | DROP_1D2 | DROP_GREAT
+F:ATTR_MULTI | ESCORT | ESCORTS
 F:IM_FIRE | IM_COLD | IM_ELEC | RES_NETH | RES_LITE | RES_DARK
-F:NO_FEAR | NO_CONF | NO_SLEEP
+F:NO_FEAR | NO_CONF | NO_SLEEP | CAN_SWIM
 S:1_IN_4
 S:BLIND | CONF | HOLD | SCARE
 S:BO_NETH | BR_NETH | BA_NETH | CAUSE_4 | S_KIN
@@ -22895,7 +22905,7 @@ B:BITE:HURT:6d2
 F:MALE | WILD_SWAMP | WILD_WASTE
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON
 F:ANIMAL | EVIL | DROP_90
-D:$The warrior of skaven mess around with the power of chaos and slaughter their prey from one end.
+D:$A warrior of skaven mess around with the power of chaos and slaughter their prey from one end.
 D:スケイヴン族の戦士は混沌の力をいたずらに振り回し、目についた獲物を片っ端から屠っていく。
 
 N:1137:殺人イタチ
@@ -22925,6 +22935,7 @@ D:$It is the head of weasel who works with wisdom.
 D:$  Your adventure will be terminated soon.
 D:悪知恵の働くイタチどもの頭領だ。あなたの冒険は間もなく打ち切られるだろう。
 
+# Beginning small letter "lain" is correct.
 N:1139:遍在する意識『岩倉玲音』
 E:lain, the Master of Wired
 G:p:u
