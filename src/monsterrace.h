@@ -9,16 +9,13 @@
  *	- Damage Dice
  *	- Damage Sides
  */
-
-typedef struct monster_blow monster_blow;
-
-struct monster_blow
+typedef struct monster_blow
 {
 	BLOW_METHOD method;
 	BLOW_EFFECT effect;
 	DICE_NUMBER d_dice;
 	DICE_SID d_side;
-};
+} monster_blow;
 
 extern MONRACE_IDX max_r_idx;
 

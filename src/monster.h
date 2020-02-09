@@ -34,14 +34,14 @@ extern MONSTER_IDX hack_m_idx_ii;
  * of objects (if any) being carried by the monster (see above).
  */
 
+typedef struct floor_type floor_type;
 typedef struct monster_type monster_type;
-
 
 struct monster_type
 {
 	MONRACE_IDX r_idx;		/* Monster race index 0 = dead. */
 	MONRACE_IDX ap_r_idx;	/* Monster race appearance index */
-	struct floor_type *current_floor_ptr;
+	floor_type *current_floor_ptr;
 
 	/* Sub-alignment flags for neutral monsters */
 	#define SUB_ALIGN_NEUTRAL 0x0000
