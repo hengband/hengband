@@ -428,9 +428,14 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
 		}
 	}
 
-	bool is_winner = wilderness[y][x].entrance;
-	is_winner &= !wilderness[y][x].town;
-	is_winner &= (current_world_ptr->total_winner || !(d_info[wilderness[y][x].entrance].flags1 & DF1_WINNER));
+	/*
+	 * 本来は '> 0'で良いと思われるがエンバグするのも怖いので'!= 0'と記載する
+	 * 問題なければ'> 0'へ置き換えること
+	 */
+	bool is_winner = wilderness[y][x].entrance != 0;
+	is_winner &= !wilderness[y][x].town != 0;
+	bool is_wild_winner = (d_info[wilderness[y][x].entrance].flags1 & DF1_WINNER) == 0;
+	is_winner &= ((current_world_ptr->total_winner != 0) || is_wild_winner);
 	if (!is_winner) return;
 
 	/* Hack -- Backup the RNG state */
