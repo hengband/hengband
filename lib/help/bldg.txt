@@ -4,11 +4,11 @@ The town is composed of both stores and buildings.
 
 Classical stores:
 Magic Shop: buy your wands, staffs, rings and amulets here.
-Alchemist: for all sorts of bubbling potions and scrolls.
-Weaponsmith: they deal in anything sharp and to the point.
-Armorer: to offer protection from the ravages of the dungeon.
+Alchemy Shop: for all sorts of bubbling potions and scrolls.
+Weaponsmith's Shop: they deal in anything sharp and to the point.
+Armoury: to offer protection from the ravages of the dungeon.
 General Store: food, torches, ammo, some necessities.
-Temple Trade: those items permitted to the pious in life.
+Temple: those items permitted to the pious in life.
 Black Market: the prices are usurious, but may have powerful items!
 Home: to store some of your precious treasures.
 

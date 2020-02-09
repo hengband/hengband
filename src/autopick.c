@@ -494,7 +494,7 @@ static GAME_TEXT MN_SEARCH[] = "Search";
 static GAME_TEXT MN_SEARCH_STR[] = "Search by string";
 static GAME_TEXT MN_SEARCH_FORW[] = "Search forward";
 static GAME_TEXT MN_SEARCH_BACK[] = "Search backward";
-static GAME_TEXT MN_SEARCH_OBJ[] = "Search by inventory list object";
+static GAME_TEXT MN_SEARCH_OBJ[] = "Search by inventory object";
 static GAME_TEXT MN_SEARCH_DESTROYED[] = "Search by destroyed object";
 
 static GAME_TEXT MN_INSERT[] = "Insert...";
@@ -2156,7 +2156,7 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 		fprintf(pref_fff, "%s\n", autoregister_header);
 
 		fprintf(pref_fff, "%s\n", _("# *警告!!* 以降の行は自動登録されたものです。",
-			"# *Warning!* The lines below will be deleated later."));
+			"# *Warning!* The lines below will be deleted later."));
 		fprintf(pref_fff, "%s\n", _("# 後で自動的に削除されますので、必要な行は上の方へ移動しておいてください。",
 			"# Keep it by cut & paste if you need these lines for future characters."));
 		player_ptr->autopick_autoregister = TRUE;
@@ -2612,7 +2612,7 @@ static void describe_autopick(char *buff, autopick_type *entry)
 	else if (IS_FLG(FLG_MISSILES))
 		body_str = "shots, arrows or crossbow bolts";
 	else if (IS_FLG(FLG_DEVICES))
-		body_str = "scrolls, wands, staves or rods";
+		body_str = "scrolls, wands, staffs or rods";
 	else if (IS_FLG(FLG_LIGHTS))
 		body_str = "light sources";
 	else if (IS_FLG(FLG_JUNKS))

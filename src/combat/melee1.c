@@ -2213,7 +2213,7 @@ bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_
 
 	if (d_info[attacker_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
 	{
-		msg_print(_("なぜか攻撃することができない。", "Something prevent you from attacking."));
+		msg_print(_("なぜか攻撃することができない。", "Something prevents you from attacking."));
 		return FALSE;
 	}
 
@@ -2400,7 +2400,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	if (target_ptr->special_defense & KATA_IAI)
 	{
-		msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, draw and cut in one motion before %s moved."), m_name);
+		msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, drew and cut in one motion before %s moved."), m_name);
 		if (py_attack(target_ptr, m_ptr->fy, m_ptr->fx, HISSATSU_IAI)) return TRUE;
 	}
 
@@ -3461,7 +3461,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						bool perm = one_in_(10);
 						if (dec_stat(target_ptr, A_CON, randint1(10), perm))
 						{
-							msg_print(_("病があなたを蝕んでいる気がする。", "You feel strange sickness."));
+							msg_print(_("病があなたを蝕んでいる気がする。", "You feel sickly."));
 							obvious = TRUE;
 						}
 					}
@@ -4069,7 +4069,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 		monster_desc(target_ptr, m_target_name, m_ptr, 0);
 
 		target_ptr->csp -= 7;
-		msg_format(_("%^sに反撃した！", "Your counterattacked to %s!"), m_target_name);
+		msg_format(_("%^sに反撃した！", "You counterattacked %s!"), m_target_name);
 		py_attack(target_ptr, m_ptr->fy, m_ptr->fx, HISSATSU_COUNTER);
 		fear = FALSE;
 		target_ptr->redraw |= (PR_MANA);

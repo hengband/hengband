@@ -9,7 +9,7 @@ pick up items automatically or to be prompted before picking up
 objects.
 
 Many objects found within the dungeon have special commands for their
-use. Wands must be 'a'imed, staves must be 'u'sed, scrolls must be
+use. Wands must be 'a'imed, staffs must be 'u'sed, scrolls must be
 'r'ead, and potions must be 'q'uaffed. You may, in general, not only
 use items in your pack, but also items on the ground, if you are
 standing on top of them.
@@ -202,7 +202,7 @@ the dying curse of an Amberite.
 ***** <ObjectFlavors>
 === Object Flavors ===
 
-Some objects (scrolls, potions, wands, rods and staves) are 'flavored
+Some objects (scrolls, potions, wands, rods and staffs) are 'flavored
 items'. This means that with each game they are given a random flavor.
 For example, the first time you find a Potion of Heroism it might be
 described as a 'Dark Blue Potion'.  Once you have identified it, the
@@ -303,7 +303,7 @@ pseudo-id ability to ascertain the quality of some items. For the most
 part you will need to identify them before you can ascertain how much
 use they will be to you. There are several methods of identifying items
 available to you. These include Scrolls of Identify and *Identify*,
-Staves and Rods of Perception, spells and prayers and services from
+Staffs and Rods of Perception, spells and prayers and services from
 town buildings among others.
 
 There is an important difference between 'identify'ing an object and
@@ -469,7 +469,7 @@ special meaning to inscriptions containing any text of the form "@#" or
 "@x#" or "!x" or "!*" (see command.txt#ObjectSelection [i]) .
 
 The game provides some "fake" inscriptions to help you keep track of
-your possessions. Wands and staves which are known to be empty will be
+your possessions. Wands and staffs which are known to be empty will be
 inscribed with "empty". Objects which have been tried at least once but
 haven't been identified yet will be inscribed with "tried". Cursed
 objects are inscribed with "cursed". Broken objects may be inscribed
@@ -783,15 +783,15 @@ Wands ('-')
     and most wands will require a target.
 
 Staffs ('_')
-    Staves are a flavored item and are made of various types of wood.
+    Staffs are a flavored item and are made of various types of wood.
     Like wands, they contain a limited number of charges and must be
-    recharged when empty. In general, staves have an area affect or
-    act on the player. Unlike wands, few staves may be used directly
-    for offense. Staves must be 'u'sed and do not require a target.
+    recharged when empty. In general, staffs have an area affect or
+    act on the player. Unlike wands, few staffs may be used directly
+    for offense. Staffs must be 'u'sed and do not require a target.
     
 Rods ('-')
-    Rods are similar to both wands and staves in that many magical
-    effects available from wands and staves are also available from
+    Rods are similar to both wands and staffs in that many magical
+    effects available from wands and staffs are also available from
     rods. The main difference is that a rod carries a single charge but
     over time will recharge itself. Typically, the better the rod, the
     longer it will take to recharge itself. This means you have an

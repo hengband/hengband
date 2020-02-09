@@ -1352,7 +1352,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			if (is_riding_mon && riding_pinch < 2)
 			{
 				msg_format(_("%sは傷の痛さの余りあなたの束縛から逃れようとしている。",
-					"%^s seems to be in so much pain and trying to escape from your restriction."), m_name);
+					"%^s seems to be in so much pain and tries to escape from your restriction."), m_name);
 				riding_pinch++;
 				disturb(target_ptr, TRUE, TRUE);
 			}

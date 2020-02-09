@@ -154,7 +154,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 	case 9:
 		if (name) return _("聖なる光球", "Holy Orb");
 		if (desc) return _("聖なる力をもつ宝珠を放つ。邪悪なモンスターに対して大きなダメージを与えるが、善良なモンスターには効果がない。",
-			"Fires a ball with holy power. Hurts evil monsters greatly, but doesn't effect good monsters.");
+			"Fires a ball with holy power. Hurts evil monsters greatly but doesn't affect good monsters.");
 
 		{
 			DICE_NUMBER dice = 3;
@@ -258,7 +258,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 	case 15:
 		if (name) return _("聖なる御言葉", "Holy Word");
 		if (desc) return _("視界内の邪悪な存在に大きなダメージを与え、体力を回復し、毒、恐怖、朦朧状態、負傷から全快する。",
-			"Damages all evil monsters in sight, heals HP somewhat, and completely cures fear, poisons, cuts, and being stunned.");
+			"Damages all evil monsters in sight, heals HP somewhat and completely cures fear, poisons, cuts and being stunned.");
 
 		{
 			int dam_sides = plev * 6;
@@ -311,7 +311,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 	case 18:
 		if (name) return _("聖なるオーラ", "Holy Aura");
 		if (desc) return _("一定時間、邪悪なモンスターを傷つける聖なるオーラを得る。",
-			"Gives aura of holy power which injures evil monsters which attacked you for a while.");
+			"Gives aura of holy power that injures evil monsters which attacked you for a while.");
 
 		{
 			int base = 20;
@@ -420,7 +420,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 
 	case 24:
 		if (name) return _("士気高揚", "Heroism");
-		if (desc) return _("一定時間、ヒーロー気分になる。", "Removes fear, and gives a bonus to hit and 10 more HP for a while.");
+		if (desc) return _("一定時間、ヒーロー気分になる。", "Removes fear. Gives a bonus to hit for a while. Heals you for 10 HP.");
 
 		{
 			int base = 25;
@@ -481,7 +481,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 	case 28:
 		if (name) return _("目には目を", "An Eye for an Eye");
 		if (desc) return _("一定時間、自分がダメージを受けたときに攻撃を行ったモンスターに対して同等のダメージを与える。",
-			"Gives special aura for a while. When you are attacked by a monster, the monster is injured with same amount of damage as you take.");
+			"Gives special aura for a while. When you are attacked by a monster, the monster is injured with same amount of damage as you took.");
 
 		{
 			int base = 10;
@@ -541,7 +541,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mod
 	case 31:
 		if (name) return _("聖戦", "Crusade");
 		if (desc) return _("視界内の善良なモンスターをペットにしようとし、ならなかった場合及び善良でないモンスターを恐怖させる。さらに多数の加速された騎士を召喚し、ヒーロー、祝福、加速、対邪悪結界を得る。",
-			"Attempts to charm all good monsters in sight and scares all non-charmed monsters.  Summons a great number of knights. Gives heroism, bless, speed and protection from evil to the caster.");
+			"Attempts to charm all good monsters in sight and scares all non-charmed monsters. Summons a great number of knights. Gives heroism, bless, speed and protection from evil to the caster.");
 
 		{
 			if (cast)

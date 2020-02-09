@@ -111,7 +111,7 @@ void self_knowledge(player_type *creature_ptr)
 	}
 	info[i++] = "";
 
-	sprintf(Dummy, _("現在の属性 : %s(%ld)", "Your alighnment : %s(%ld)"), your_alignment(creature_ptr), (long int)creature_ptr->align);
+	sprintf(Dummy, _("現在の属性 : %s(%ld)", "Your alignment : %s(%ld)"), your_alignment(creature_ptr), (long int)creature_ptr->align);
 	strcpy(buf[1], Dummy);
 	info[i++] = buf[1];
 	for (v_nr = 0; v_nr < 8; v_nr++)
@@ -221,7 +221,7 @@ void self_knowledge(player_type *creature_ptr)
 			break;
 		case RACE_HALF_TROLL:
 			if (plev > 9)
-				info[i++] = _("あなたは狂暴化することができる。(12 MP) ", "You enter berserk fury (cost 12).");
+				info[i++] = _("あなたは狂暴化することができる。(12 MP) ", "You can enter a berserk fury (cost 12).");
 			break;
 		case RACE_AMBERITE:
 			if (plev > 29)
@@ -233,7 +233,7 @@ void self_knowledge(player_type *creature_ptr)
 			break;
 		case RACE_BARBARIAN:
 			if (plev > 7)
-				info[i++] = _("あなたは狂暴化することができる。(10 MP) ", "You can enter berserk fury (cost 10).");
+				info[i++] = _("あなたは狂暴化することができる。(10 MP) ", "You can enter a berserk fury (cost 10).");
 
 			break;
 		case RACE_HALF_OGRE:
@@ -307,7 +307,7 @@ void self_knowledge(player_type *creature_ptr)
 			break;
 		case RACE_GOLEM:
 			if (plev > 19)
-				info[i++] = _("あなたは d20+30 ターンの間肌を石に変化させられる。(15 MP)", "You can current_world_ptr->game_turn your skin to stone, dur d20+30 (cost 15).");
+				info[i++] = _("あなたは d20+30 ターンの間肌を石に変化させられる。(15 MP)", "You can turn your skin to stone, dur d20+30 (cost 15).");
 			break;
 		case RACE_ZOMBIE:
 		case RACE_SKELETON:
@@ -372,7 +372,7 @@ void self_knowledge(player_type *creature_ptr)
 		if (plev > 39)
 		{
 			info[i++] = _("あなたはランダムな方向に対して数回攻撃することができる。(75 MP)",
-				"You can attack some random directions at a time (cost 75).");
+				"You can attack some random directions simultaneously (cost 75).");
 		}
 		break;
 	case CLASS_HIGH_MAGE:
@@ -397,20 +397,20 @@ void self_knowledge(player_type *creature_ptr)
 		{
 			if (plev > 41)
 			{
-				info[i++] = _("あなたは周りのすべてのモンスターを攻撃することができる。(40 MP)", "You can damages all monsters in sight (cost 40).");
+				info[i++] = _("あなたは周りのすべてのモンスターを攻撃することができる。(40 MP)", "You can damage all monsters in sight (cost 40).");
 			}
 		}
 		break;
 	case CLASS_ROGUE:
 		if (plev > 7)
 		{
-			info[i++] = _("あなたは攻撃して即座に逃げることができる。(12 MP)", "You can hit a monster and teleport at a time (cost 12).");
+			info[i++] = _("あなたは攻撃して即座に逃げることができる。(12 MP)", "You can hit a monster and teleport away simultaneously (cost 12).");
 		}
 		break;
 	case CLASS_RANGER:
 		if (plev > 14)
 		{
-			info[i++] = _("あなたは怪物を調査することができる。(20 MP)", "You can prove monsters (cost 20).");
+			info[i++] = _("あなたは怪物を調査することができる。(20 MP)", "You can probe monsters (cost 20).");
 		}
 		break;
 	case CLASS_PALADIN:
@@ -418,14 +418,14 @@ void self_knowledge(player_type *creature_ptr)
 		{
 			if (plev > 29)
 			{
-				info[i++] = _("あなたは聖なる槍を放つことができる。(30 MP)", "You can fires a holy spear (cost 30).");
+				info[i++] = _("あなたは聖なる槍を放つことができる。(30 MP)", "You can fire a holy spear (cost 30).");
 			}
 		}
 		else
 		{
 			if (plev > 29)
 			{
-				info[i++] = _("あなたは生命力を減少させる槍を放つことができる。(30 MP)", "You can fires a spear which drains vitality (cost 30).");
+				info[i++] = _("あなたは生命力を減少させる槍を放つことができる。(30 MP)", "You can fire a spear which drains vitality (cost 30).");
 			}
 		}
 		break;
@@ -450,7 +450,7 @@ void self_knowledge(player_type *creature_ptr)
 		}
 		if (plev > 29)
 		{
-			info[i++] = _("あなたは通常の2倍の攻撃を行うことができる。(30 MP)", "You can perform double attacks in a time (cost 30).");
+			info[i++] = _("あなたは通常の2倍の攻撃を行うことができる。(30 MP)", "You can perform two attacks at the same time (cost 30).");
 		}
 		break;
 	case CLASS_MINDCRAFTER:
@@ -488,7 +488,7 @@ void self_knowledge(player_type *creature_ptr)
 	case CLASS_RED_MAGE:
 		if (plev > 47)
 		{
-			info[i++] = _("あなたは1ターンに2回魔法を唱えることができる。(20 MP)", "You can cast two spells in one time (cost 20).");
+			info[i++] = _("あなたは1ターンに2回魔法を唱えることができる。(20 MP)", "You can cast two spells simultaneously (cost 20).");
 		}
 		break;
 	case CLASS_SAMURAI:
@@ -506,7 +506,7 @@ void self_knowledge(player_type *creature_ptr)
 	case CLASS_CAVALRY:
 		if (plev > 9)
 		{
-			info[i++] = _("あなたはモンスターに乗って無理矢理ペットにすることができる。", "You can ride on a hostile monster forcibly to current_world_ptr->game_turn it into pet.");
+			info[i++] = _("あなたはモンスターに乗って無理矢理ペットにすることができる。", "You can ride on a hostile monster to forcibly turn it into a pet.");
 		}
 		break;
 	case CLASS_BERSERKER:
@@ -522,7 +522,7 @@ void self_knowledge(player_type *creature_ptr)
 	case CLASS_NINJA:
 		if (plev > 19)
 		{
-			info[i++] = _("あなたは素早く移動することができる。", "You can walk extremery fast.");
+			info[i++] = _("あなたは素早く移動することができる。", "You can walk extremely fast.");
 		}
 		break;
 	}
@@ -560,7 +560,7 @@ void self_knowledge(player_type *creature_ptr)
 		if (creature_ptr->muta1 & MUT1_VAMPIRISM)
 		{
 			info[i++] = _("あなたは吸血鬼のように敵から生命力を吸収することができる。(ダメージ レベルX2)",
-				"You can drain life from a foe like a vampire (dam lvl * 2).");
+				"Like a vampire, you can drain life from a foe (dam lvl * 2).");
 		}
 		if (creature_ptr->muta1 & MUT1_SMELL_MET)
 		{
@@ -604,7 +604,7 @@ void self_knowledge(player_type *creature_ptr)
 		}
 		if (creature_ptr->muta1 & MUT1_MIDAS_TCH)
 		{
-			info[i++] = _("あなたは通常アイテムを金に変えることができる。", "You can current_world_ptr->game_turn ordinary items to gold.");
+			info[i++] = _("あなたは通常アイテムを金に変えることができる。", "You can turn ordinary items to gold.");
 		}
 		if (creature_ptr->muta1 & MUT1_GROW_MOLD)
 		{
@@ -672,7 +672,7 @@ void self_knowledge(player_type *creature_ptr)
 		}
 		if (creature_ptr->muta2 & MUT2_RTELEPORT)
 		{
-			info[i++] = _("あなたはランダムにテレポートする。", "You are teleporting randomly.");
+			info[i++] = _("あなたはランダムにテレポートする。", "You may randomly teleport.");
 		}
 		if (creature_ptr->muta2 & MUT2_ALCOHOL)
 		{
@@ -688,7 +688,7 @@ void self_knowledge(player_type *creature_ptr)
 		}
 		if (creature_ptr->muta2 & MUT2_PROD_MANA)
 		{
-			info[i++] = _("あなたは制御不能な魔法のエネルギーを発している。", "You are producing magical energy uncontrollably.");
+			info[i++] = _("あなたは制御不能な魔法のエネルギーを発している。", "You produce magical energy uncontrollably.");
 		}
 		if (creature_ptr->muta2 & MUT2_ATT_DEMON)
 		{
@@ -820,7 +820,7 @@ void self_knowledge(player_type *creature_ptr)
 		}
 		if (creature_ptr->muta3 & MUT3_ALBINO)
 		{
-			info[i++] = _("あなたはアルビノだ。(耐久-4)", "You are albino (-4 CON).");
+			info[i++] = _("あなたはアルビノだ。(耐久-4)", "You are an albino (-4 CON).");
 		}
 		if (creature_ptr->muta3 & MUT3_FLESH_ROT)
 		{
@@ -962,7 +962,7 @@ void self_knowledge(player_type *creature_ptr)
 	}
 	if (creature_ptr->cursed & TRC_DRAIN_EXP)
 	{
-		info[i++] = _("あなたは経験値を吸われている。", "You are drained.");
+		info[i++] = _("あなたは経験値を吸われている。", "You occasionally lose experience for no reason.");
 	}
 	if (creature_ptr->cursed & TRC_SLOW_REGEN)
 	{
@@ -1006,7 +1006,7 @@ void self_knowledge(player_type *creature_ptr)
 	}
 	if (creature_ptr->cursed & TRC_LOW_MAGIC)
 	{
-		info[i++] = _("あなたは魔法を失敗しやすい。", "You are subject to fail spellcasting.");
+		info[i++] = _("あなたは魔法を失敗しやすい。", "Your spells fail more frequently.");
 	}
 	if (creature_ptr->cursed & TRC_FAST_DIGEST)
 	{
@@ -1014,11 +1014,11 @@ void self_knowledge(player_type *creature_ptr)
 	}
 	if (creature_ptr->cursed & TRC_DRAIN_HP)
 	{
-		info[i++] = _("あなたは体力を吸われている。", "You are drained.");
+		info[i++] = _("あなたは体力を吸われている。", "You occasionally lose hit points for no reason.");
 	}
 	if (creature_ptr->cursed & TRC_DRAIN_MANA)
 	{
-		info[i++] = _("あなたは魔力を吸われている。", "You brain is drained.");
+		info[i++] = _("あなたは魔力を吸われている。", "You occasionally lose spell points for no reason.");
 	}
 	if (is_blessed(creature_ptr))
 	{
@@ -1192,7 +1192,7 @@ void self_knowledge(player_type *creature_ptr)
 	}
 	if (creature_ptr->tim_sh_touki)
 	{
-		info[i++] = _("あなたは闘気のオーラに包まれている。", "You are surrounded with a energy aura.");
+		info[i++] = _("あなたは闘気のオーラに包まれている。", "You are surrounded with an energy aura.");
 	}
 	if (creature_ptr->anti_magic)
 	{

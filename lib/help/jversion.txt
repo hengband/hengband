@@ -1743,7 +1743,7 @@ Official Angband Home Page で確認することができます。
     an underlying keyset
     refueling torches
     better monster memory
-    nicer targetting mode
+    nicer targeting mode
     object stacking
     the recall window
     the choice window

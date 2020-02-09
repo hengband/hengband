@@ -93,7 +93,7 @@ Prompt before exiting a quest level    [confirm_quest]
     you go up the stairs from such quest levels.
 
 ***** <target_pet>
-Allow targetting pets    [target_pet]
+Allow targeting pets    [target_pet]
     Normally, the program doesn't automatically choose pets as target
     in the targeting mode of attack spells. If this option is set, the
     program always chooses every monster in sight as target.

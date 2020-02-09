@@ -11,7 +11,7 @@ A. Scroll of Satisfy Hunger and Berserker's ability of Satisfy Hunger
    are obsoleted.  And races which previously relied on Satisfy Hunger
    have new sources of nutrition now; Android can quaff oil.  Balrogs
    can sacrifice human corpse using the 'E'at command.  Golems,
-   Skeletons, Zombies, and Spectres can absorb mana from staves and
+   Skeletons, Zombies, and Spectres can absorb mana from staffs and
    wands using the 'E'at command.  Ents can gain enough nutrition from
    potions.
 

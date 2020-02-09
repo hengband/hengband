@@ -1925,9 +1925,9 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 
 	monspell_message_base(target_ptr, m_idx, t_idx,
 		_("%^sが何かをつぶやいた。", "%^s mumbles."),
-		_("%^sは自分の傷に念を集中した。", format("%%^s concentrates on his wounds.", m_poss)),
-		_("%^sが自分の傷に集中した。", format("%%^s concentrates on his wounds.", m_poss)),
-		_("%^sは自分の傷に念を集中した。", format("%%^s concentrates on his wounds.", m_poss)),
+		_("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss)),
+		_("%^sが自分の傷に集中した。", format("%%^s concentrates on %s wounds.", m_poss)),
+		_("%^sは自分の傷に念を集中した。", format("%%^s concentrates on %s wounds.", m_poss)),
 		target_ptr->blind > 0, TARGET_TYPE);
 
 	m_ptr->hp += (rlev * 6);
@@ -1961,7 +1961,7 @@ void spell_RF6_HEAL(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_id
 	(void)set_monster_monfear(target_ptr, m_idx, 0);
 
 	if (see_monster(floor_ptr, m_idx))
-		msg_format(_("%^sは勇気を取り戻した。", "%^s recovers %s courage."), m_name);
+		msg_format(_("%^sは勇気を取り戻した。", format("%%^s recovers %s courage.", m_poss)), m_name);
 }
 
 

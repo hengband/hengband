@@ -27,7 +27,7 @@ bool always_repeat;	/* Repeat obvious commands */
 bool confirm_destroy;	/* Prompt for destruction of known worthless items */
 bool confirm_wear;	/* Confirm to wear/wield known cursed items */
 bool confirm_quest;	/* Prompt before exiting a quest level */
-bool target_pet;	/* Allow targetting pets */
+bool target_pet;	/* Allow targeting pets */
 bool easy_open;	/* Automatically open doors */
 bool easy_disarm;	/* Automatically disarm traps */
 bool easy_floor;	/* Display floor stacks in a list */
@@ -47,7 +47,7 @@ bool view_perma_grids;	/* Map remembers all perma-lit grids */
 bool view_torch_grids;	/* Map remembers all torch-lit grids */
 bool view_unsafe_grids;	/* Map marked by detect traps */
 bool view_reduce_view;	/* Reduce view-radius in town */
-bool fresh_before;	/* Flush output while continuous command */
+bool fresh_before;	/* Flush output while in repeated command */
 bool fresh_after;	/* Flush output after monster's move */
 bool fresh_message;	/* Flush output after every message */
 bool hilite_player;	/* Hilite the player with the cursor */
@@ -95,7 +95,7 @@ bool allow_debug_opts;	/* Allow use of debug/cheat options */
 bool find_ignore_stairs;	/* Run past stairs */
 bool find_ignore_doors;	/* Run through open doors */
 bool find_cut;	/* Run past known corners */
-bool check_abort;	/* Check for user abort while continuous command */
+bool check_abort;	/* Check for user abort while in repeated command */
 bool flush_failure;	/* Flush input on various failures */
 bool flush_disturb;	/* Flush input whenever disturbed */
 bool disturb_move;	/* Disturb whenever any monster moves */
@@ -263,7 +263,7 @@ const option_type option_info[] =
 	"confirm_quest",                _("クエストを諦めて階段で逃げる前に確認する", "Prompt before exiting a quest level") },
 
 	{ &target_pet,                  FALSE, OPT_PAGE_INPUT, 2, 5,
-	"target_pet",                   _("ペットをターゲットにする", "Allow targetting pets") },
+	"target_pet",                   _("ペットをターゲットにする", "Allow targeting pets") },
 
 	{ &easy_open,                   TRUE,  OPT_PAGE_INPUT, 5, 7,
 	"easy_open",                    _("自動的にドアを開ける", "Automatically open doors") },
@@ -316,7 +316,7 @@ const option_type option_info[] =
 	"view_reduce_view",             _("街では視野を狭くする", "Reduce view-radius in town") },
 
 	{ &fresh_before,                TRUE,  OPT_PAGE_MAPSCREEN, 1, 23,
-	"fresh_before",                 _("連続コマンド中に画面を再描画し続ける", "Flush output while continuous command") },
+	"fresh_before",                 _("連続コマンド中に画面を再描画し続ける", "Flush output while in repeated command") },
 
 	{ &fresh_after,                 FALSE, OPT_PAGE_MAPSCREEN, 1, 24,
 	"fresh_after",                  _("コマンド後に画面を常に再描画し続ける", "Flush output after monster's move") },
@@ -372,7 +372,7 @@ const option_type option_info[] =
 	"exp_need",                     _("次のレベルに必要な経験値を表示する", "Show the experience needed for next level") },
 
 	{ &ignore_unview,               FALSE, OPT_PAGE_TEXT, 2, 13,
-	"ignore_unview",                _("視界外のモンスターの行動を表示しない", "Ignore whenever any monster does") },
+	"ignore_unview",                _("視界外のモンスターの行動を表示しない", "Ignore out-of-sight monster behavior") },
 
 	{ &show_ammo_detail,            TRUE, OPT_PAGE_TEXT, 2, 14,
 	"show_ammo_detail",             _("矢弾のダメージの説明を表示する", "Show description of ammo damage") },
@@ -433,7 +433,7 @@ const option_type option_info[] =
 	"find_cut",                     _("曲り角を斜めに最短距離で通過する", "Run past known corners") },
 
 	{ &check_abort,                 TRUE,  OPT_PAGE_DISTURBANCE, 1, 18,
-	"check_abort",                  _("連続コマンドはキー入力で中断する", "Check for user abort while continuous command") },
+	"check_abort",                  _("連続コマンドはキー入力で中断する", "Check for user abort while in repeated command") },
 
 	{ &flush_failure,               TRUE,  OPT_PAGE_DISTURBANCE, 1, 20,
 	"flush_failure",                _("様々なミス発生時に入力をクリアする", "Flush input on various failures") },
@@ -640,7 +640,7 @@ const option_type cheat_info[CHEAT_MAX] =
 	},
 
 	{ &cheat_turn,	FALSE,	255,	0x81, 0x00,
-	"cheat_turn",	_("ゲームメッセージにターン表示を行う", "Put current_world_ptr->game_turn to game message.")
+	"cheat_turn",	_("ゲームメッセージにターン表示を行う", "Put turn in game messages.")
 	},
 
 	{ &cheat_sight,	FALSE,	255,	0x82, 0x00,

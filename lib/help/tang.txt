@@ -49,15 +49,15 @@ an absolutely ridiculous price. Any good item can show up in this store
 show up in other stores.
 
 
-Be sure to visit shops #1 and #2, the General Store and Armory,
+Be sure to visit shops #1 and #2, the General Store and Armoury,
 respectively. At the General Store, buy a cloak and a Brass Lantern,
-and a flask of oil or two. Sell your torches. At the Armory, buy some
+and a flask of oil or two. Sell your torches. At the Armoury, buy some
 of the light armor. Suggested: Hard Leather Boots, a Leather Cap,
 Leather Gloves. If a Small Leather Shield is on sale and you can afford
 it, buy it.
 
 This should have cleaned out your money. However, if it hasn't, it is
-strongly recommended that you go to the Alchemist's shop (#5) and
+strongly recommended that you go to the Alchemy Shop (#5) and
 purchase a scroll of Phase Door. If you get surrounded by monsters,
 read it, and you'll be teleported a short distance away.
 
@@ -170,7 +170,7 @@ damage, and magical bonuses to stats. It also tells you if the item is
 cursed. It tells you what a wand/rod/staff/potion/scroll/mushroom/etc.
 does, and this is very important. There are nasty potions deep in the
 dungeon that you *do not* want to drink! Sometimes, the descriptions of
-the items are a little obscure; things like Staves of Holiness and
+the items are a little obscure; things like Staffs of Holiness and
 Power, Mushrooms of Unhealth, and others. You may have to experiment a
 bit to determine their powers. 
 
@@ -275,7 +275,7 @@ you watch, helpless.
 
 Confusion and Blindness resistance are vital. If you have these, you
 can rely on scrolls of Teleportation to get you out of any situation.
-Before this, you need Staves of Teleportation which can be activated
+Before this, you need Staffs of Teleportation which can be activated
 when blinded or confused, although with a decent failure rate. Scrolls
 are fail-safe.
 
@@ -465,7 +465,7 @@ rundown on slays:
        (x5 for *Slay*) damage dice against the relevant monster type
 
 The brands ("of Melting", "of Burning", "of Freezing", "of Shocking",
-and "of Poisoning") all do x2 damage dice to those monsters not
+and "of Poisoning") all do x2.5 damage dice to those monsters not
 resistant to the relevant element. There is also a "(Vampiric)" brand
 which will suck life from your foes and heal you at the same time and
 a "(Chaotic)" brand which can cause some unexpected results when using
