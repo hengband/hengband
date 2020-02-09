@@ -22924,16 +22924,20 @@ D:それはふさふさのしっぽを持っているが、冒険者が撫でる
 N:1138:白き悪魔『ノロイ』
 E:Norowi, the White Devil
 G:r:w
-I:115:20d16:20:10:20
+I:115:20d16:25:35:10
 W:16:2:0:220:0:0
 B:BITE:HURT:7d3
 B:CRUSH:HURT:7d3
-F:EVIL | ESCORT | ESCORTS | MALE | UNIQUE | FORCE_MAXHP
+F:ANIMAL | EVIL | ESCORT | ESCORTS | MALE | UNIQUE | FORCE_MAXHP
 F:DROP_GOOD | DROP_60 | ONLY_ITEM | DROP_CORPSE | DROP_SKELETON
 S:1_IN_8 | CAUSE_2 | MISSILE | SCARE | S_KIN
 D:$It is the head of weasel who works with wisdom.
+D:$  He is obeying not only the weasels,
+D:$ but also the rats with a fearful intimidation.
 D:$  Your adventure will be terminated soon.
-D:悪知恵の働くイタチどもの頭領だ。あなたの冒険は間もなく打ち切られるだろう。
+D:悪知恵の働くイタチどもの頭領だ。
+D:イタチだけでなく、その恐怖を引き起こす威圧感でネズミ達をも従わせている。
+D:あなたの冒険は間もなく打ち切られるだろう。
 
 # Beginning small letter "lain" is correct.
 N:1139:遍在する意識『岩倉玲音』
