@@ -4020,7 +4020,7 @@ E:The Orb of Fate
 I:39:10:3
 W:70:70:15:45000
 P:0:1d1:0:0:20
-F:WIS | CON | WARNING | ACTIVATE | FULL_NAME | LITE_3 |
+F:WIS | CON | WARNING | ACTIVATE | FULL_NAME | LITE_3 | INSTA_ART
 U:TELEPORT_LEVEL
 D:「運命のオーブを持っていきなさい。わたしは運命のオーブから
 D:人間の手に触れてはならぬ未来を告げる力を取り除きました。
