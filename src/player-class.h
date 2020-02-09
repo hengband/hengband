@@ -1,6 +1,5 @@
 ﻿#pragma once
 #include "spells.h"
-#include "realm.h"
 
 /*
  * 職業ごとの選択可能な魔法領域現在の所 bitrh.c でのみ使用。
@@ -21,8 +20,6 @@
 #define CH_MUSIC        0x08000	/* This is 16th bit */
 #define CH_HISSATSU     0x10000
 #define CH_HEX          0x20000
-
-
 
  /*
   * Player class constants (hard-coded by save-files, arrays, etc)

@@ -77,16 +77,14 @@
 #endif
 
 
-  /*
-  * Sort-array element
-  */
-typedef struct tag_type tag_type;
-
-struct tag_type
+/*
+ * Sort-array element
+ */
+typedef struct tag_type
 {
 	int tag;
 	int index;
-};
+} tag_type;
 
 /*
  * An entry for the object/monster allocation functions
