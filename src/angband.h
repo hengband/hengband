@@ -21,7 +21,6 @@
  * First, include the low-level includes.  Be sure to edit "h-config.h"
  * to reflect any hardware, operating system, or compiler nuances.
  */
-#include "h-basic.h"
 
 
 /*
@@ -40,9 +39,6 @@
 #include "gamevalue.h"
 #include "cmd-gameoption.h"
 
-#include "geometry.h"
-#include "grid.h"
-#include "floor-save.h"
 #include "monster.h"
 #include "monsterrace.h"
 #include "object.h"

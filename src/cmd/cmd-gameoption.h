@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "h-type.h"
 
 /*** Option Definitions ***/
 

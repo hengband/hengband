@@ -10,7 +10,6 @@
  */
 
 #pragma once
-#include "floor.h"
 
 #define ALLOW_CAVERNS_AND_LAKES
 
