@@ -22480,6 +22480,7 @@ F:IM_COLD | WILD_SWAMP
 D:$It's a white kobold.  Wait, is that frost on its hands?
 D:それは単なる白いコボルドに見えるが、冷気の浴びせ方を覚えている。
 
+# Eric氏の翻訳、これはひどい(称賛の意)
 N:1113:サンダー・コボルド
 E:Electric kobold
 G:k:B
@@ -22570,7 +22571,7 @@ F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
 F:IM_ELEC | FRIENDS
 F:SELF_LITE_1
 D:$Electric sparks fly from the hands and mouth of this blue kobold.
-D:君は見たことがあるだろうか、あのエジソンの忌まわしい実験を！
+D:君は見たことがあるだろうか、あのヱヅソンの忌まわしい実験を！
 D:このコボルドはあれと同じことができる！
 
 N:1119:カルボラン・コボルド
@@ -22881,9 +22882,9 @@ B:SLASH:LOSE_ALL:6d8
 F:UNIQUE | FORCE_MAXHP | ONLY_ITEM | DROP_GOOD | DROP_GREAT | DROP_2D2
 F:DROP_CORPSE | DROP_SKELETON
 F:REGENERATE | ELDRITCH_HORROR | OPEN_DOOR | BASH_DOOR | MOVE_BODY
-F:HUMAN | MALE | FRIENDLY | SELF_DARK_2 | SMART | POWERFUL
-F:IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS | 
-F:NO_FEAR | NO_STUN | NO_CONF | NO_SLEEP
+F:HUMAN | MALE | SELF_DARK_2 | SMART | POWERFUL
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS
+F:NO_FEAR | NO_CONF | NO_SLEEP
 S:1_IN_2 | BA_NETH | BA_WATE | BA_DARK | BA_NUKE | BA_CHAO
 S:S_HI_UNDEAD | S_DEMON | DISPEL
 D:$Undoubtedly, it was this man who unleashed the cursed artifacts
@@ -22954,10 +22955,11 @@ F:ONLY_ITEM | DROP_GOOD | DROP_GREAT | DROP_3D2
 F:DROP_CORPSE | DROP_SKELETON
 F:SMART | REFLECTING | INVISIBLE | WEIRD_MIND | REGENERATE
 F:POWERFUL | ELDRITCH_HORROR | AURA_ELEC | PASS_WALL
-F:MOVE_BODY | TAKE_ITEM
-F:NO_FEAR | NO_CONF | NO_SLEEP | IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS
+F:MOVE_BODY | TAKE_ITEM | NO_FEAR | NO_CONF | NO_SLEEP | NO_STUN
+F:IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS
 F:RES_CHAO | RES_NEXU | RES_TIME | CAN_FLY | SELF_DARK_1
-S:1_IN_2 | DISPEL | BA_CHAO | BA_LITE | BA_DARK | BA_MANA | HAND_DOOM | BRAIN_SMASH
+S:1_IN_2
+S:DISPEL | BA_CHAO | BA_LITE | BA_DARK | BA_MANA | HAND_DOOM | BRAIN_SMASH
 S:SLOW | HASTE | HEAL | INVULNER | TPORT | WORLD | PSY_SPEAR
 D:$She recognizes you as a bug that appears to be
 D:$ a myriad of connected consciousness in the Wired.
