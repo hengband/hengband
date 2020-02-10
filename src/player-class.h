@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "spells.h"
+#include "player-status.h"
 
 /*
  * 職業ごとの選択可能な魔法領域現在の所 bitrh.c でのみ使用。
@@ -127,4 +128,4 @@ extern const player_class class_info[MAX_CLASS];
 
 extern const s32b realm_choices1[];
 extern const s32b realm_choices2[];
-extern const concptr player_title[MAX_CLASS][PY_MAX_LEVEL / 5];
+extern const concptr player_title[MAX_CLASS][10];

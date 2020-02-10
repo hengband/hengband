@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "feature.h"
 
 #define DUNGEON_FEAT_PROB_NUM 3
 

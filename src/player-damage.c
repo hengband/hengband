@@ -4,6 +4,7 @@
 #include "term.h"
 
 #include "avatar.h"
+#include "bldg.h"
 #include "cmd-dump.h"
 #include "realm-song.h"
 #include "floor.h"
@@ -17,6 +18,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-class.h"
+#include "player-race.h"
 #include "monster-spell.h"
 #include "world.h"
 #include "view-mainwindow.h"

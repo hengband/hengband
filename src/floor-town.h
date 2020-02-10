@@ -1,5 +1,8 @@
 ﻿#pragma once
-#include "store.h"
+
+struct store_type;
+typedef struct store_type store_type;
+
 
 /*
  * A structure describing a town with

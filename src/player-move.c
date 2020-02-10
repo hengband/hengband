@@ -155,6 +155,7 @@
 #include "player-move.h"
 #include "player-status.h"
 #include "player-effects.h"
+#include "player-race.h"
 #include "player-class.h"
 #include "player-inventory.h"
 #include "player-personality.h"

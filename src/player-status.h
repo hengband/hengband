@@ -1,6 +1,7 @@
 ﻿#pragma once 
-
-#include "floor.h"
+#include "bldg.h"
+struct floor_type;
+typedef struct floor_type floor_type;
 
 /*
  * Most of the "player" information goes here.

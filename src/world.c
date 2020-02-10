@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "world.h"
+#include "player-race.h"
 
 world_type world;
 world_type *current_world_ptr = &world;
