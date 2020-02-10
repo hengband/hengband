@@ -1,5 +1,4 @@
 ﻿#pragma once
-#include "grid.h"
 
 extern bool do_cmd_riding(player_type *creature_ptr, bool force);
 extern PERCENTAGE calculate_upkeep(player_type *creature_ptr);
