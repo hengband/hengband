@@ -10,7 +10,6 @@ extern bool stun_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL pl
 extern bool fear_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 extern bool poly_monster(player_type *caster_ptr, DIRECTION dir, int power);
 extern bool clone_monster(player_type *caster_ptr, DIRECTION dir);
-extern void stop_singing(player_type *creature_ptr);
 extern bool time_walk(player_type *creature_ptr);
 extern void roll_hitdice(player_type *creature_ptr, SPOP_FLAGS options);
 extern bool_hack life_stream(player_type *creature_ptr, bool_hack message, bool_hack virtue_change);

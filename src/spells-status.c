@@ -172,38 +172,6 @@ bool fear_monster(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 }
 
 
-/*!
-* @brief 歌の停止を処理する / Stop singing if the player is a Bard
-* @return なし
-*/
-void stop_singing(player_type *creature_ptr)
-{
-	if (creature_ptr->pclass != CLASS_BARD) return;
-
-	/* Are there interupted song? */
-	if (INTERUPTING_SONG_EFFECT(creature_ptr))
-	{
-		/* Forget interupted song */
-		INTERUPTING_SONG_EFFECT(creature_ptr) = MUSIC_NONE;
-		return;
-	}
-
-	/* The player is singing? */
-	if (!SINGING_SONG_EFFECT(creature_ptr)) return;
-
-	/* Hack -- if called from set_action(), avoid recursive loop */
-	if (creature_ptr->action == ACTION_SING) set_action(creature_ptr, ACTION_NONE);
-
-	/* Message text of each song or etc. */
-	exe_spell(creature_ptr, REALM_MUSIC, SINGING_SONG_ID(creature_ptr), SPELL_STOP);
-
-	SINGING_SONG_EFFECT(creature_ptr) = MUSIC_NONE;
-	SINGING_SONG_ID(creature_ptr) = 0;
-	creature_ptr->update |= (PU_BONUS);
-	creature_ptr->redraw |= (PR_STATUS);
-}
-
-
 bool time_walk(player_type *creature_ptr)
 {
 	if (creature_ptr->timewalk)

@@ -11,7 +11,6 @@
  */
 
 #include "angband.h"
-#include "util.h"
 #include "core.h"
 #include "term.h"
 
@@ -19,12 +18,8 @@
 #include "chest.h"
 #include "trap.h"
 #include "dungeon.h"
-#include "feature.h"
-#include "floor.h"
 #include "melee.h"
 #include "object-hook.h"
-#include "spells.h"
-#include "spells-summon.h"
 #include "spells-status.h"
 #include "monster.h"
 #include "monster-status.h"

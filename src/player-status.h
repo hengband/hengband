@@ -834,3 +834,5 @@ extern bool can_two_hands_wielding(player_type *creature_ptr);
 #define PY_REGEN_MNBASE         524     /* Min amount mana regen*2^16 */
 
 extern void cheat_death(player_type *creature_ptr);
+
+extern void stop_singing(player_type *creature_ptr);
