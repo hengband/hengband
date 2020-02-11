@@ -3828,18 +3828,6 @@ void cast_shuffle(player_type *caster_ptr)
 }
 
 
-/*!
- * @brief 口を使う継続的な処理を中断する
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-void stop_mouth(player_type *caster_ptr)
-{
-	if (music_singing_any(caster_ptr)) stop_singing(caster_ptr);
-	if (hex_spelling_any(caster_ptr)) stop_hex_spell_all(caster_ptr);
-}
-
-
 bool_hack vampirism(player_type *caster_ptr)
 {
 	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)

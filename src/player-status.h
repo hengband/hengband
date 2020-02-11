@@ -836,3 +836,4 @@ extern bool can_two_hands_wielding(player_type *creature_ptr);
 extern void cheat_death(player_type *creature_ptr);
 
 extern void stop_singing(player_type *creature_ptr);
+extern void stop_mouth(player_type *caster_ptr);
