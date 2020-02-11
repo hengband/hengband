@@ -40,20 +40,15 @@
  */
 
 #include "angband.h"
-#include "util.h"
 #include "cmd-dump.h"
 #include "term.h"
-#include "inet.h"
 #include "core.h"
 
 #include "autopick.h"
 
-#include "bldg.h"
+#include "inet.h"
 #include "birth.h"
-#include "cmd-pet.h"
-#include "cmd-spell.h"
 #include "dungeon.h"
-#include "feature.h"
 #include "world.h"
 #include "player-effects.h"
 #include "player-status.h"
@@ -69,16 +64,12 @@
 #include "object-hook.h"
 #include "monster.h"
 #include "monster-status.h"
-#include "floor.h"
 #include "view-mainwindow.h"
 #include "dungeon-file.h"
 #include "files.h"
-#include "player-class.h"
-#include "player-move.h"
 #include "spells.h"
 #include "objectkind.h"
 #include "floor-town.h"
-#include "realm.h"
 #include "view-mainwindow.h"
 
 #include "english.h"
@@ -2903,8 +2894,7 @@ void do_cmd_feeling(player_type *creature_ptr)
 	/* Display the feeling */
 	if (creature_ptr->muta3 & MUT3_GOOD_LUCK)
 		msg_print(do_cmd_feeling_text_lucky[creature_ptr->feeling]);
-	else if (creature_ptr->pseikaku == SEIKAKU_COMBAT ||
-		creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON)
+	else if (IS_ECHIZEN(creature_ptr))
 		msg_print(do_cmd_feeling_text_combat[creature_ptr->feeling]);
 	else
 		msg_print(do_cmd_feeling_text[creature_ptr->feeling]);

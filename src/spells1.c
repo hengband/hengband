@@ -43,8 +43,6 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "player-move.h"
-#include "realm-hex.h"
-#include "realm-song.h"
 #include "object-hook.h"
 #include "object-broken.h"
 #include "object-flavor.h"
@@ -54,6 +52,21 @@
 #include "feature.h"
 #include "view-mainwindow.h"
 #include "dungeon.h"
+
+#include "realm.h"
+#include "realm-arcane.h"
+#include "realm-chaos.h"
+#include "realm-craft.h"
+#include "realm-crusade.h"
+#include "realm-daemon.h"
+#include "realm-death.h"
+#include "realm-hex.h"
+#include "realm-hissatsu.h"
+#include "realm-life.h"
+#include "realm-nature.h"
+#include "realm-song.h"
+#include "realm-sorcery.h"
+#include "realm-trump.h"
 
 
 static int rakubadam_m; /*!< 振り落とされた際のダメージ量 */
@@ -192,6 +205,34 @@ const magic_type technic_info[NUM_TECHNIC][32] =
 };
 
 
+/*!
+ * @brief 魔法処理のメインルーチン
+ * @param realm 魔法領域のID
+ * @param spell 各領域の魔法ID
+ * @param mode 求める処理
+ * @return 各領域魔法に各種テキストを求めた場合は文字列参照ポインタ、そうでない場合はNULLポインタを返す。
+ */
+concptr exe_spell(player_type *caster_ptr, REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode)
+{
+	switch (realm)
+	{
+	case REALM_LIFE:     return do_life_spell(caster_ptr, spell, mode);
+	case REALM_SORCERY:  return do_sorcery_spell(caster_ptr, spell, mode);
+	case REALM_NATURE:   return do_nature_spell(caster_ptr, spell, mode);
+	case REALM_CHAOS:    return do_chaos_spell(caster_ptr, spell, mode);
+	case REALM_DEATH:    return do_death_spell(caster_ptr, spell, mode);
+	case REALM_TRUMP:    return do_trump_spell(caster_ptr, spell, mode);
+	case REALM_ARCANE:   return do_arcane_spell(caster_ptr, spell, mode);
+	case REALM_CRAFT:    return do_craft_spell(caster_ptr, spell, mode);
+	case REALM_DAEMON:   return do_daemon_spell(caster_ptr, spell, mode);
+	case REALM_CRUSADE:  return do_crusade_spell(caster_ptr, spell, mode);
+	case REALM_MUSIC:    return do_music_spell(caster_ptr, spell, mode);
+	case REALM_HISSATSU: return do_hissatsu_spell(caster_ptr, spell, mode);
+	case REALM_HEX:      return do_hex_spell(caster_ptr, spell, mode);
+	}
+
+	return NULL;
+}
 
 /*!
  * @brief 配置した鏡リストの次を取得する /

@@ -936,8 +936,3 @@ concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 
 	return "";
 }
-
-bool music_singing(player_type *caster_ptr, int music_songs)
-{
-	return (caster_ptr->pclass == CLASS_BARD) && (caster_ptr->magic_num1[0] == music_songs);
-}

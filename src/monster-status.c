@@ -1320,7 +1320,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 		else if (!m_ptr->ml)
 		{
 #ifdef JP
-			if ((target_ptr->pseikaku == SEIKAKU_COMBAT) || (target_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+			if (IS_ECHIZEN(target_ptr))
 				msg_format("せっかくだから%sを殺した。", m_name);
 			else
 				msg_format("%sを殺した。", m_name);
@@ -1346,7 +1346,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 			else
 			{
 #ifdef JP
-				if ((target_ptr->pseikaku == SEIKAKU_COMBAT) || (target_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+				if (IS_ECHIZEN(target_ptr))
 					msg_format("せっかくだから%sを倒した。", m_name);
 				else
 					msg_format("%sを倒した。", m_name);
@@ -1360,7 +1360,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 		else
 		{
 #ifdef JP
-			if ((target_ptr->pseikaku == SEIKAKU_COMBAT) || (target_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+			if (IS_ECHIZEN(target_ptr))
 				msg_format("せっかくだから%sを葬り去った。", m_name);
 			else
 				msg_format("%sを葬り去った。", m_name);

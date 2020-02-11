@@ -4,6 +4,7 @@
 #include "term.h"
 
 #include "avatar.h"
+#include "bldg.h"
 #include "cmd-dump.h"
 #include "realm-song.h"
 #include "floor.h"
@@ -17,6 +18,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-class.h"
+#include "player-race.h"
 #include "monster-spell.h"
 #include "world.h"
 #include "view-mainwindow.h"
@@ -89,7 +91,7 @@ void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
 #endif
 
 #ifdef JP
-		if ((player_ptr->pseikaku == SEIKAKU_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+		if (IS_ECHIZEN(player_ptr))
 			msg_print("やりやがったな！");
 		else if ((player_ptr->pseikaku == SEIKAKU_CHARGEMAN))
 		{

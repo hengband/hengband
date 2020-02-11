@@ -40,7 +40,6 @@
 #include "monsterrace.h"
 #include "creature.h"
 #include "targeting.h"
-#include "realm-song.h"
 #include "melee.h"
 
 #define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */

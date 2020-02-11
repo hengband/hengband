@@ -11,7 +11,6 @@
  */
 
 #include "angband.h"
-#include "util.h"
 #include "core.h"
 #include "term.h"
 
@@ -19,28 +18,19 @@
 #include "chest.h"
 #include "trap.h"
 #include "dungeon.h"
-#include "feature.h"
-#include "floor.h"
 #include "melee.h"
 #include "object-hook.h"
-#include "spells.h"
-#include "spells-summon.h"
-#include "spells-status.h"
-#include "monster.h"
 #include "monster-status.h"
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"
 #include "player-status.h"
 #include "realm-hex.h"
-#include "realm-song.h"
 #include "geometry.h"
 #include "wild.h"
 #include "grid.h"
-#include "feature.h"
 #include "player-move.h"
 #include "player-effects.h"
-#include "player-class.h"
 #include "player-personality.h"
 #include "player-inventory.h"
 #include "objectkind.h"
@@ -50,8 +40,6 @@
 #include "snipe.h"
 
 #include "cmd-basic.h"
-#include "cmd-item.h"
-#include "floor-save.h"
 #include "dungeon-file.h"
 #include "files.h"
 
@@ -213,7 +201,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 		if (!confirm_leave_level(creature_ptr, FALSE)) return;
 	
 		/* Success */
-		if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+		if (IS_ECHIZEN(creature_ptr))
 			msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 		else
 			msg_print(_("上の階に登った。", "You enter the up staircase."));
@@ -310,7 +298,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 	if (record_stair) exe_write_diary(creature_ptr, DIARY_STAIR, 0-up_num, _("階段を上った", "climbed up the stairs to"));
 
 	/* Success */
-	if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+	if (IS_ECHIZEN(creature_ptr))
 		msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 	else if (up_num == creature_ptr->current_floor_ptr->dun_level)
 		msg_print(_("地上に戻った。", "You go back to the surface."));
@@ -359,7 +347,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 		/* Confirm Leaving */
 		if(!confirm_leave_level(creature_ptr, TRUE)) return;
 		
-		if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+		if (IS_ECHIZEN(creature_ptr))
 			msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 		else
 			msg_print(_("下の階に降りた。", "You enter the down staircase."));
@@ -457,7 +445,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 		}
 		else
 		{
-			if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+			if (IS_ECHIZEN(creature_ptr))
 				msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 			else
 				msg_print(_("階段を下りて新たなる迷宮へと足を踏み入れた。", "You enter a maze of down staircases."));

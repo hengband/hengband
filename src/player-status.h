@@ -1,6 +1,7 @@
 ﻿#pragma once 
-
-#include "floor.h"
+#include "bldg.h"
+struct floor_type;
+typedef struct floor_type floor_type;
 
 /*
  * Most of the "player" information goes here.
@@ -801,6 +802,8 @@ extern const s32b player_exp_a[PY_MAX_LEVEL];
 #define IS_INVULN(C) (C->invuln || music_singing(C, MUSIC_INVULN))
 #define IS_HERO(C) (C->hero || music_singing(C, MUSIC_HERO) || music_singing(C, MUSIC_SHERO))
 
+#define IS_ECHIZEN(C) (((C)->pseikaku == SEIKAKU_COMBAT) || ((C)->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+
 #define P_PTR_KI (p_ptr->magic_num1[0])
 
 extern bool is_blessed(player_type *creature_ptr);
@@ -833,3 +836,14 @@ extern bool can_two_hands_wielding(player_type *creature_ptr);
 #define PY_REGEN_MNBASE         524     /* Min amount mana regen*2^16 */
 
 extern void cheat_death(player_type *creature_ptr);
+
+extern void stop_singing(player_type *creature_ptr);
+extern void stop_mouth(player_type *caster_ptr);
+extern PERCENTAGE calculate_upkeep(player_type *creature_ptr);
+extern bool music_singing(player_type *caster_ptr, int music_songs);
+
+#define SINGING_SONG_EFFECT(P_PTR) ((P_PTR)->magic_num1[0])
+#define INTERUPTING_SONG_EFFECT(P_PTR) ((P_PTR)->magic_num1[1])
+#define SINGING_COUNT(P_PTR) ((P_PTR)->magic_num1[2])
+#define SINGING_SONG_ID(P_PTR) ((P_PTR)->magic_num2[0])
+#define music_singing_any(CREATURE_PTR) (((CREATURE_PTR)->pclass == CLASS_BARD) && (CREATURE_PTR)->magic_num1[0])

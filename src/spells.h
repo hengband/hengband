@@ -1,6 +1,15 @@
 ﻿#pragma once
 #include "realm.h"
 
+#define SPELL_NAME   0
+#define SPELL_DESC   1
+#define SPELL_INFO   2
+#define SPELL_CAST   3
+#define SPELL_FAIL   4
+#define SPELL_STOP   5
+#define SPELL_CONT   6
+extern concptr exe_spell(player_type *caster_ptr, REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode);
+
 #define DETECT_RAD_DEFAULT 30
 #define DETECT_RAD_MAP     30
 #define DETECT_RAD_ALL     255
@@ -254,7 +263,6 @@ extern bool cast_wrath_of_the_god(player_type *caster_ptr, HIT_POINT dam, POSITI
 extern void cast_wonder(player_type *caster_ptr, DIRECTION dir);
 extern void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir);
 extern void cast_shuffle(player_type *caster_ptr);
-extern void stop_mouth(player_type *caster_ptr);
 extern bool_hack vampirism(player_type *caster_ptr);
 extern bool hit_and_away(player_type *caster_ptr);
 extern bool psychometry(player_type *caster_ptr);

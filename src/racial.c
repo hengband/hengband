@@ -21,7 +21,6 @@
 #include "cmd-pet.h"
 #include "melee.h"
 #include "object-hook.h"
-#include "realm-song.h"
 
 #include "mutation.h"
 #include "player-race.h"

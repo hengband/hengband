@@ -222,7 +222,7 @@ void spell_RF4_DISPEL(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_
 		dispel_player(target_ptr);
 		if (target_ptr->riding) dispel_monster_status(target_ptr, target_ptr->riding);
 
-		if ((target_ptr->pseikaku == SEIKAKU_COMBAT) || (target_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+		if (IS_ECHIZEN(target_ptr))
 			msg_print(_("やりやがったな！", ""));
 		else if ((target_ptr->pseikaku == SEIKAKU_CHARGEMAN))
 		{
@@ -2399,7 +2399,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 	{
-		if ((target_ptr->pseikaku == SEIKAKU_COMBAT) || (target_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+		if (IS_ECHIZEN(target_ptr))
 			msg_print(_("くっそ～", ""));
 		else if ((target_ptr->pseikaku == SEIKAKU_CHARGEMAN))
 		{

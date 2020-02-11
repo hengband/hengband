@@ -1,5 +1,6 @@
 ﻿#pragma once
-#include "bldg.h"
+
+#define MAX_BOUNTY 20
 
 typedef struct {
 

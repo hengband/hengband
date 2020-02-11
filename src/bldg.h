@@ -16,8 +16,6 @@
  */
 #define ARENA_DEFEATED_OLD_VER (-(MAX_SHORT)) /*<! 旧バージョンの闘技場敗北定義 */
 
-#define MAX_BOUNTY 20
-
 /*
  * A structure to describe a building.
  * From Kamband
@@ -99,22 +97,22 @@ extern MONRACE_IDX today_mon;
 #define BACT_BROKEN_WEAPON          47
 #define MAX_BACT                    48
 
- /*!
-  * @struct arena_type
-  * @brief 闘技場のモンスターエントリー構造体 / A structure type for arena entry
-  */
+extern MONRACE_IDX battle_mon[4];
+extern u32b mon_odds[4];
+extern int battle_odds;
+extern PRICE kakekin;
+extern int sel_monster;
+
+/*!
+ * @struct arena_type
+ * @brief 闘技場のモンスターエントリー構造体 / A structure type for arena entry
+ */
 typedef struct
 {
 	MONRACE_IDX r_idx; /*!< 闘技場のモンスター種族ID(0ならば表彰式) / Monster (0 means victory prizing) */
 	OBJECT_TYPE_VALUE tval;  /*!< モンスター打倒後に得られるアイテムの大カテゴリID / tval of prize (0 means no prize) */
 	OBJECT_SUBTYPE_VALUE sval;  /*!< モンスター打倒後に得られるアイテムの小カテゴリID / sval of prize */
 } arena_type;
-
-extern MONRACE_IDX battle_mon[4];
-extern u32b mon_odds[4];
-extern int battle_odds;
-extern PRICE kakekin;
-extern int sel_monster;
 
 extern const arena_type arena_info[MAX_ARENA_MONS + 2];
 extern void update_gambling_monsters(player_type *player_ptr);

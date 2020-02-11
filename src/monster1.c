@@ -2608,21 +2608,20 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 			if (!r_ptr->artifact_id[i]) break;
 			a_idx = r_ptr->artifact_id[i];
 			chance = r_ptr->artifact_percent[i];
-		}
-
-		if ((a_idx > 0) && ((randint0(100) < chance) || current_world_ptr->wizard))
-		{
-			artifact_type *a_ptr = &a_info[a_idx];
-			if (!a_ptr->cur_num)
+			if (randint0(100) < chance || current_world_ptr->wizard)
 			{
-				if (create_named_art(player_ptr, a_idx, y, x))
+				artifact_type *a_ptr = &a_info[a_idx];
+				if (!a_ptr->cur_num)
 				{
-					a_ptr->cur_num = 1;
-					if (current_world_ptr->character_dungeon) a_ptr->floor_id = player_ptr->floor_id;
-				}
-				else if (!preserve_mode)
-				{
-					a_ptr->cur_num = 1;
+					if (create_named_art(player_ptr, a_idx, y, x))
+					{
+						a_ptr->cur_num = 1;
+						if (current_world_ptr->character_dungeon) a_ptr->floor_id = player_ptr->floor_id;
+					}
+					else if (!preserve_mode)
+					{
+						a_ptr->cur_num = 1;
+					}
 				}
 			}
 		}
