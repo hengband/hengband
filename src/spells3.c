@@ -304,7 +304,7 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode
 
 	sound(SOUND_TELEPORT);
 #ifdef JP
-	if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+	if (IS_ECHIZEN(creature_ptr))
 		msg_format("『こっちだぁ、%s』", creature_ptr->name);
 #endif
 	(void)move_player_effect(creature_ptr, yy, xx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);

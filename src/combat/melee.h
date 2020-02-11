@@ -1,5 +1,5 @@
 ﻿
-typedef int COMBAT_OPTION_IDX; // py_attack(p_ptr, )用コンバットオプション型定義
+typedef int COMBAT_OPTION_IDX; // py_attack()用コンバットオプション型定義
 
 
 #ifdef JP

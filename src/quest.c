@@ -523,7 +523,7 @@ void do_cmd_quest(player_type *player_ptr)
 
 	msg_print(_("ここにはクエストへの入口があります。", "There is an entry of a quest."));
 	if (!get_check(_("クエストに入りますか？", "Do you enter? "))) return;
-	if ((player_ptr->pseikaku == SEIKAKU_COMBAT) || (player_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+	if (IS_ECHIZEN(player_ptr))
 		msg_print(_("『とにかく入ってみようぜぇ。』", ""));
 	else if (player_ptr->pseikaku == SEIKAKU_CHARGEMAN) msg_print("『全滅してやるぞ！』");
 

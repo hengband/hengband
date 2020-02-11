@@ -20,8 +20,6 @@
 #include "dungeon.h"
 #include "melee.h"
 #include "object-hook.h"
-#include "spells-status.h"
-#include "monster.h"
 #include "monster-status.h"
 #include "quest.h"
 #include "artifact.h"
@@ -208,7 +206,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 		if (!confirm_leave_level(creature_ptr, FALSE)) return;
 	
 		/* Success */
-		if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+		if (IS_ECHIZEN(creature_ptr))
 			msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 		else
 			msg_print(_("上の階に登った。", "You enter the up staircase."));
@@ -305,7 +303,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 	if (record_stair) exe_write_diary(creature_ptr, DIARY_STAIR, 0-up_num, _("階段を上った", "climbed up the stairs to"));
 
 	/* Success */
-	if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+	if (IS_ECHIZEN(creature_ptr))
 		msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 	else if (up_num == creature_ptr->current_floor_ptr->dun_level)
 		msg_print(_("地上に戻った。", "You go back to the surface."));
@@ -354,7 +352,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 		/* Confirm Leaving */
 		if(!confirm_leave_level(creature_ptr, TRUE)) return;
 		
-		if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+		if (IS_ECHIZEN(creature_ptr))
 			msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 		else
 			msg_print(_("下の階に降りた。", "You enter the down staircase."));
@@ -452,7 +450,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 		}
 		else
 		{
-			if ((creature_ptr->pseikaku == SEIKAKU_COMBAT) || (creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+			if (IS_ECHIZEN(creature_ptr))
 				msg_print(_("なんだこの階段は！", "What's this STAIRWAY!"));
 			else
 				msg_print(_("階段を下りて新たなる迷宮へと足を踏み入れた。", "You enter a maze of down staircases."));

@@ -2903,8 +2903,7 @@ void do_cmd_feeling(player_type *creature_ptr)
 	/* Display the feeling */
 	if (creature_ptr->muta3 & MUT3_GOOD_LUCK)
 		msg_print(do_cmd_feeling_text_lucky[creature_ptr->feeling]);
-	else if (creature_ptr->pseikaku == SEIKAKU_COMBAT ||
-		creature_ptr->inventory_list[INVEN_BOW].name1 == ART_CRIMSON)
+	else if (IS_ECHIZEN(creature_ptr))
 		msg_print(do_cmd_feeling_text_combat[creature_ptr->feeling]);
 	else
 		msg_print(do_cmd_feeling_text[creature_ptr->feeling]);
