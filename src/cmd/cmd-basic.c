@@ -30,10 +30,8 @@
 #include "geometry.h"
 #include "wild.h"
 #include "grid.h"
-#include "feature.h"
 #include "player-move.h"
 #include "player-effects.h"
-#include "player-class.h"
 #include "player-personality.h"
 #include "player-inventory.h"
 #include "objectkind.h"
@@ -43,8 +41,6 @@
 #include "snipe.h"
 
 #include "cmd-basic.h"
-#include "cmd-item.h"
-#include "floor-save.h"
 #include "dungeon-file.h"
 #include "files.h"
 
