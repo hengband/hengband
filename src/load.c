@@ -82,7 +82,6 @@
 #include "object-ego.h"
 #include "save.h"
 #include "japanese.h"
-#include "realm-song.h"
 #include "cmd-smith.h"
 
  /*

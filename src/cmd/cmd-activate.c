@@ -27,7 +27,6 @@
 #include "objectkind.h"
 #include "object-ego.h"
 #include "targeting.h"
-#include "realm-song.h"
 #include "world.h"
 
 /*!

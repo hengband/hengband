@@ -26,7 +26,6 @@
 #include "avatar.h"
 #include "player-status.h"
 #include "realm-hex.h"
-#include "realm-song.h"
 #include "geometry.h"
 #include "wild.h"
 #include "grid.h"

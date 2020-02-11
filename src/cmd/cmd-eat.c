@@ -23,8 +23,6 @@
 #include "player-inventory.h"
 #include "floor.h"
 #include "objectkind.h"
-#include "realm.h"
-#include "realm-song.h"
 #include "view-mainwindow.h"
 
  /*!

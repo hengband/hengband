@@ -31,7 +31,6 @@
 #include "files.h"
 #include "floor.h"
 #include "objectkind.h"
-#include "realm-song.h"
 #include "view-mainwindow.h"
 
 /*!
