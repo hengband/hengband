@@ -5474,3 +5474,8 @@ PERCENTAGE calculate_upkeep(player_type *creature_ptr)
 	else
 		return 0;
 }
+
+bool music_singing(player_type *caster_ptr, int music_songs)
+{
+	return (caster_ptr->pclass == CLASS_BARD) && (caster_ptr->magic_num1[0] == music_songs);
+}
