@@ -5416,3 +5416,61 @@ void stop_mouth(player_type *caster_ptr)
 	if (music_singing_any(caster_ptr)) stop_singing(caster_ptr);
 	if (hex_spelling_any(caster_ptr)) stop_hex_spell_all(caster_ptr);
 }
+
+
+/*!
+* @brief ペットの維持コスト計算
+* @return 維持コスト(%)
+*/
+PERCENTAGE calculate_upkeep(player_type *creature_ptr)
+{
+	MONSTER_IDX m_idx;
+	bool have_a_unique = FALSE;
+	DEPTH total_friend_levels = 0;
+
+	total_friends = 0;
+
+	for (m_idx = creature_ptr->current_floor_ptr->m_max - 1; m_idx >= 1; m_idx--)
+	{
+		monster_type *m_ptr;
+		monster_race *r_ptr;
+
+		m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
+		if (!monster_is_valid(m_ptr)) continue;
+		r_ptr = &r_info[m_ptr->r_idx];
+
+		if (is_pet(m_ptr))
+		{
+			total_friends++;
+			if (r_ptr->flags1 & RF1_UNIQUE)
+			{
+				if (creature_ptr->pclass == CLASS_CAVALRY)
+				{
+					if (creature_ptr->riding == m_idx)
+						total_friend_levels += (r_ptr->level + 5) * 2;
+					else if (!have_a_unique && (r_info[m_ptr->r_idx].flags7 & RF7_RIDING))
+						total_friend_levels += (r_ptr->level + 5) * 7 / 2;
+					else
+						total_friend_levels += (r_ptr->level + 5) * 10;
+					have_a_unique = TRUE;
+				}
+				else
+					total_friend_levels += (r_ptr->level + 5) * 10;
+			}
+			else
+				total_friend_levels += r_ptr->level;
+
+		}
+	}
+
+	if (total_friends)
+	{
+		int upkeep_factor;
+		upkeep_factor = (total_friend_levels - (creature_ptr->lev * 80 / (cp_ptr->pet_upkeep_div)));
+		if (upkeep_factor < 0) upkeep_factor = 0;
+		if (upkeep_factor > 1000) upkeep_factor = 1000;
+		return upkeep_factor;
+	}
+	else
+		return 0;
+}
