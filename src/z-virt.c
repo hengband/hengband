@@ -14,16 +14,6 @@
 #include "z-util.h"
 
 /*
- * Allow debugging messages to track memory usage.
- */
-#ifdef VERBOSE_RALLOC
-static long virt_make = 0;
-static long virt_kill = 0;
-static long virt_size = 0;
-#endif
-
-
-/*
  * Optional auxiliary "rnfree" function
  */
 vptr (*rnfree_aux)(vptr, huge) = NULL;
@@ -35,21 +25,6 @@ vptr rnfree(vptr p, huge len)
 {
 	/* Easy to free zero bytes */
 	if (len == 0) return (NULL);
-
-#ifdef VERBOSE_RALLOC
-
-	/* Decrease memory count */
-	virt_kill += len;
-
-	if (len > virt_size)
-	{
-		char buf[80];
-		sprintf(buf, "Kill (%ld): %ld - %ld = %ld.",
-			len, virt_make, virt_kill, virt_make - virt_kill);
-		plog(buf);
-	}
-
-#endif
 
 	/* Use the "aux" function */
 	if (rnfree_aux) return ((*rnfree_aux)(p, len));
@@ -177,5 +152,3 @@ errr string_free(concptr str)
 	/* Success */
 	return 0;
 }
-
-
