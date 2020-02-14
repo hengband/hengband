@@ -3619,7 +3619,7 @@ void spell_RF6_S_UNIQUE(player_type *target_ptr, POSITION y, POSITION x, MONSTER
 * @param m_idx 呪文を唱えるモンスターID
 * @return 攻撃呪文のダメージ、または召喚したモンスターの数を返す。その他の場合0。以降の処理を中断するなら-1を返す。
 */
-HIT_POINT monspell_to_player(int SPELL_NUM, player_type *target_ptr, POSITION y, POSITION x, MONSTER_IDX m_idx)
+HIT_POINT monspell_to_player(player_type *target_ptr, int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
 	switch (SPELL_NUM)
 	{
