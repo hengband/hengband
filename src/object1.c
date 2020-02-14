@@ -276,17 +276,6 @@ void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 		}
 	}
 
-
-#ifdef SPOIL_ARTIFACTS
-	/* Full knowledge for some artifacts */
-	if (object_is_artifact(o_ptr)) spoil = TRUE;
-#endif /* SPOIL_ARTIFACTS */
-
-#ifdef SPOIL_EGO_ITEMS
-	/* Full knowledge for some ego-items */
-	if (object_is_ego(o_ptr)) spoil = TRUE;
-#endif /* SPOIL_EGO_ITEMS */
-
 	/* Need full knowledge or spoilers */
 	if (spoil || (o_ptr->ident & IDENT_MENTAL))
 	{
