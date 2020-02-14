@@ -53,9 +53,7 @@
 # endif
 #endif
 
-#if !defined(__MWERKS__)
-# include <fcntl.h>
-#endif
+#include <fcntl.h>
 
 #ifdef SET_UID
 

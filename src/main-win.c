@@ -3971,14 +3971,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
 /*!
  * todo WNDCLASSに影響があるのでplayer_type*の追加は保留
  */
-#ifdef __MWERKS__
-LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
-	WPARAM wParam, LPARAM lParam);
-LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg,
-	WPARAM wParam, LPARAM lParam)
-#else /* __MWERKS__ */
 LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-#endif /* __MWERKS__ */
 {
 	PAINTSTRUCT ps;
 	HDC hdc;
@@ -4329,15 +4322,8 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 /*!
  * todo WNDCLASSに影響があるのでplayer_type*の追加は保留
  */
-#ifdef __MWERKS__
-LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
-	WPARAM wParam, LPARAM lParam);
 LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam)
-#else /* __MWERKS__ */
-LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
-	WPARAM wParam, LPARAM lParam)
-#endif /* __MWERKS__ */
 {
 	term_data *td;
 	PAINTSTRUCT ps;
@@ -4461,15 +4447,8 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 
 #define MOUSE_SENS 40
 
-#ifdef __MWERKS__
-LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
-	WPARAM wParam, LPARAM lParam);
 LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
 	WPARAM wParam, LPARAM lParam)
-#else /* __MWERKS__ */
-LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
-	WPARAM wParam, LPARAM lParam)
-#endif /* __MWERKS__ */
 {
 	static int iMouse = 0;
 	static WORD xMouse = 0;
