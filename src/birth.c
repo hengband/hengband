@@ -4311,11 +4311,6 @@ static bool player_birth_aux(player_type *creature_ptr)
 				/* Dump round */
 				put_str(format("%10ld", auto_round), 10, col + 20);
 
-#ifdef AUTOROLLER_DELAY
-				/* Delay 1/10 second */
-				if (flag) Term_xtra(TERM_XTRA_DELAY, 10);
-#endif
-
 				/* Make sure they see everything */
 				Term_fresh();
 
