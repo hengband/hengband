@@ -703,10 +703,6 @@ bool build_type7(player_type *player_ptr)
 	/* Find and reserve some space in the dungeon.  Get center of room. */
 	if (!find_space(player_ptr, &yval, &xval, abs(y), abs(x))) return FALSE;
 
-#ifdef FORCE_V_IDX
-	v_ptr = &v_info[2];
-#endif
-
 	msg_format_wizard(CHEAT_DUNGEON, _("小型Vault(%s)を生成しました。", "Lesser vault (%s)."), v_name + v_ptr->name);
 
 	/* Hack -- Build the vault */
@@ -790,10 +786,6 @@ bool build_type8(player_type *player_ptr)
 	*/
 	/* Find and reserve some space in the dungeon.  Get center of room. */
 	if (!find_space(player_ptr, &yval, &xval, (POSITION)(abs(y) + 2), (POSITION)(abs(x) + 2))) return FALSE;
-
-#ifdef FORCE_V_IDX
-	v_ptr = &v_info[76 + randint1(3)];
-#endif
 
 	msg_format_wizard(CHEAT_DUNGEON, _("大型固定Vault(%s)を生成しました。", "Greater vault (%s)."), v_name + v_ptr->name);
 
@@ -1297,10 +1289,6 @@ bool build_type17(player_type *player_ptr)
 
 	/* Find and reserve some space in the dungeon.  Get center of room. */
 	if (!find_space(player_ptr, &yval, &xval, abs(y), abs(x))) return FALSE;
-
-#ifdef FORCE_V_IDX
-	v_ptr = &v_info[2];
-#endif
 
 	msg_format_wizard(CHEAT_DUNGEON, _("特殊固定部屋(%s)を生成しました。", "Special Fix room (%s)."), v_name + v_ptr->name);
 
