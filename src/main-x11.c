@@ -1917,49 +1917,10 @@ static errr CheckEvent(bool wait)
 	XNextEvent(Metadpy->dpy, xev);
 
 #ifdef USE_XIM
-/* #define DEBUG_EVENT */
-#ifdef DEBUG_EVENT
-	{
-		printf("event: type=%d", xev->type);
-		switch(xev->type){
-		case KeyPress:
-			printf("(KeyPress), keycode=%X", xev->xkey.keycode);
-			break;
-		case FocusIn:
-			printf("(FocusIn)");
-			break;
-		case FocusOut:
-			printf("(FocusOut)");
-			break;
-		case ReparentNotify:
-			printf("(ReparentNotify)");
-			break;
-		case ConfigureNotify:
-			printf("(ConfigureNotify)");
-			break;
-		case MapNotify:
-			printf("(MapNotify)");
-			break;
-		case Expose:
-			printf("(Expose)");
-			break;
-		case ClientMessage:
-			printf("(ClientMessage)");
-			break;
-		}
-			
-	}
-#endif
 	if (XFilterEvent(xev, xev->xany.window)
-		/*XFilterEvent(xev, (data[0].win)->win)*/){
-#ifdef DEBUG_EVENT
-		printf(", [filtered by IM]\n");
-#endif
+	{
 		goto redo_checkevent;
 	}
-#ifdef DEBUG_EVENT
-	printf("\n");
-#endif
 #endif
 
 	/* Notice new keymaps */
