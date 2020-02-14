@@ -40,31 +40,31 @@ static FILE *fff = NULL;
  */
 static concptr attr_to_text(monster_race *r_ptr)
 {
-	if (r_ptr->flags1 & RF1_ATTR_CLEAR)    return "Clear";
-	if (r_ptr->flags1 & RF1_ATTR_MULTI)    return "Multi";
-	if (r_ptr->flags1 & RF1_ATTR_SEMIRAND) return "S.Rand";
+	if (r_ptr->flags1 & RF1_ATTR_CLEAR)    return _("透明な", "Clear");
+	if (r_ptr->flags1 & RF1_ATTR_MULTI)    return _("万色の", "Multi");
+	if (r_ptr->flags1 & RF1_ATTR_SEMIRAND) return _("準ランダムな", "S.Rand");
 
 	switch (r_ptr->d_attr)
 	{
-	case TERM_DARK:    return "xxx";
-	case TERM_WHITE:   return "White";
-	case TERM_SLATE:   return "Slate";
-	case TERM_ORANGE:  return "Orange";
-	case TERM_RED:     return "Red";
-	case TERM_GREEN:   return "Green";
-	case TERM_BLUE:    return "Blue";
-	case TERM_UMBER:   return "Umber";
-	case TERM_L_DARK:  return "L.Dark";
-	case TERM_L_WHITE: return "L.Slate";
-	case TERM_VIOLET:  return "Violet";
-	case TERM_YELLOW:  return "Yellow";
-	case TERM_L_RED:   return "L.Red";
-	case TERM_L_GREEN: return "L.Green";
-	case TERM_L_BLUE:  return "L.Blue";
-	case TERM_L_UMBER: return "L.Umber";
+	case TERM_DARK:    return _("黒い", "Dark");
+	case TERM_WHITE:   return _("白い", "White");
+	case TERM_SLATE:   return _("青灰色の", "Slate");
+	case TERM_ORANGE:  return _("オレンジの", "Orange");
+	case TERM_RED:     return _("赤い", "Red");
+	case TERM_GREEN:   return _("緑の", "Green");
+	case TERM_BLUE:    return _("青い", "Blue");
+	case TERM_UMBER:   return _("琥珀色の", "Umber");
+	case TERM_L_DARK:  return _("灰色の", "L.Dark");
+	case TERM_L_WHITE: return _("明るい青灰色の", "L.Slate");
+	case TERM_VIOLET:  return _("紫の", "Violet");
+	case TERM_YELLOW:  return _("黄色の", "Yellow");
+	case TERM_L_RED:   return _("明るい赤の", "L.Red");
+	case TERM_L_GREEN: return _("明るい緑の", "L.Green");
+	case TERM_L_BLUE:  return _("明るい青の", "L.Blue");
+	case TERM_L_UMBER: return _("明るい琥珀色の", "L.Umber");
 	}
 
-	return "Icky";
+	return _("変な色の", "Icky");
 }
 
 
