@@ -54,70 +54,38 @@
  */
 void reset_visuals(player_type *owner_ptr)
 {
-	int i, j;
-
-	/* Extract some info about terrain features */
-	for (i = 0; i < max_f_idx; i++)
+	for (int i = 0; i < max_f_idx; i++)
 	{
 		feature_type *f_ptr = &f_info[i];
-
-		/* Assume we will use the underlying values */
-		for (j = 0; j < F_LIT_MAX; j++)
+		for (int j = 0; j < F_LIT_MAX; j++)
 		{
 			f_ptr->x_attr[j] = f_ptr->d_attr[j];
 			f_ptr->x_char[j] = f_ptr->d_char[j];
 		}
 	}
 
-	/* Extract default attr/char code for objects */
-	for (i = 0; i < max_k_idx; i++)
+	for (int i = 0; i < max_k_idx; i++)
 	{
 		object_kind *k_ptr = &k_info[i];
-
-		/* Default attr/char */
 		k_ptr->x_attr = k_ptr->d_attr;
 		k_ptr->x_char = k_ptr->d_char;
 	}
 
-	/* Extract default attr/char code for monsters */
-	for (i = 0; i < max_r_idx; i++)
+	for (int i = 0; i < max_r_idx; i++)
 	{
 		monster_race *r_ptr = &r_info[i];
-
-		/* Default attr/char */
 		r_ptr->x_attr = r_ptr->d_attr;
 		r_ptr->x_char = r_ptr->d_char;
 	}
 
-	if (use_graphics)
-	{
-		char buf[1024];
-
-		/* Process "graf.prf" */
-		process_pref_file(owner_ptr, "graf.prf");
-
-		/* Access the "character" pref file */
-		sprintf(buf, "graf-%s.prf", owner_ptr->base_name);
-
-		/* Process "graf-<playername>.prf" */
-		process_pref_file(owner_ptr, buf);
-	}
-
-	/* Normal symbols */
-	else
-	{
-		char buf[1024];
-
-		/* Process "font.prf" */
-		process_pref_file(owner_ptr, "font.prf");
-
-		/* Access the "character" pref file */
-		sprintf(buf, "font-%s.prf", owner_ptr->base_name);
-
-		/* Process "font-<playername>.prf" */
-		process_pref_file(owner_ptr, buf);
-	}
+	char *pref_file = use_graphics ? "graf.prf" : "font.prf";
+	char *base_name = use_graphics ? "graf-%s.prf" : "font-%s.prf";
+	char buf[1024];
+	process_pref_file(owner_ptr, pref_file);
+	sprintf(buf, base_name, owner_ptr->base_name);
+	process_pref_file(owner_ptr, buf);
 }
+
 
 /*!
  * @brief オブジェクトのフラグ類を配列に与える
@@ -129,28 +97,29 @@ void reset_visuals(player_type *owner_ptr)
 void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
-	int i;
 
 	/* Base object */
-	for (i = 0; i < TR_FLAG_SIZE; i++)
+	for (int i = 0; i < TR_FLAG_SIZE; i++)
+	{
 		flgs[i] = k_ptr->flags[i];
+	}
 
-	/* Artifact */
 	if (object_is_fixed_artifact(o_ptr))
 	{
 		artifact_type *a_ptr = &a_info[o_ptr->name1];
-
-		for (i = 0; i < TR_FLAG_SIZE; i++)
+		for (int i = 0; i < TR_FLAG_SIZE; i++)
+		{
 			flgs[i] = a_ptr->flags[i];
+		}
 	}
 
-	/* Ego-item */
 	if (object_is_ego(o_ptr))
 	{
 		ego_item_type *e_ptr = &e_info[o_ptr->name2];
-
-		for (i = 0; i < TR_FLAG_SIZE; i++)
+		for (int i = 0; i < TR_FLAG_SIZE; i++)
+		{
 			flgs[i] |= e_ptr->flags[i];
+		}
 
 		if ((o_ptr->name2 == EGO_LITE_AURA_FIRE) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN))
 		{
@@ -168,13 +137,14 @@ void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 	}
 
 	/* Random artifact ! */
-	for (i = 0; i < TR_FLAG_SIZE; i++)
+	for (int i = 0; i < TR_FLAG_SIZE; i++)
+	{
 		flgs[i] |= o_ptr->art_flags[i];
+	}
 
 	if (object_is_smith(o_ptr))
 	{
 		int add = o_ptr->xtra3 - 1;
-
 		if (add < TR_FLAG_MAX)
 		{
 			add_flag(flgs, add);
@@ -228,6 +198,7 @@ void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 	}
 }
 
+
 /*!
  * @brief オブジェクトの明示されているフラグ類を取得する
  * Obtain the "flags" for an item which are known to the player
@@ -238,28 +209,29 @@ void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 {
 	bool spoil = FALSE;
-	int i;
-
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
-	for (i = 0; i < TR_FLAG_SIZE; i++)
+	for (int i = 0; i < TR_FLAG_SIZE; i++)
+	{
 		flgs[i] = 0;
+	}
 
 	if (!object_is_aware(o_ptr)) return;
 
 	/* Base object */
-	for (i = 0; i < TR_FLAG_SIZE; i++)
+	for (int i = 0; i < TR_FLAG_SIZE; i++)
+	{
 		flgs[i] = k_ptr->flags[i];
+	}
 
-	/* Must be identified */
 	if (!object_is_known(o_ptr)) return;
 
-	/* Ego-item (known basic flags) */
 	if (object_is_ego(o_ptr))
 	{
 		ego_item_type *e_ptr = &e_info[o_ptr->name2];
-
-		for (i = 0; i < TR_FLAG_SIZE; i++)
+		for (int i = 0; i < TR_FLAG_SIZE; i++)
+		{
 			flgs[i] |= e_ptr->flags[i];
+		}
 
 		if ((o_ptr->name2 == EGO_LITE_AURA_FIRE) && !o_ptr->xtra4 && (o_ptr->sval <= SV_LITE_LANTERN))
 		{
@@ -276,71 +248,72 @@ void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 		}
 	}
 
-	/* Need full knowledge or spoilers */
 	if (spoil || (o_ptr->ident & IDENT_MENTAL))
 	{
-		/* Artifact */
 		if (object_is_fixed_artifact(o_ptr))
 		{
 			artifact_type *a_ptr = &a_info[o_ptr->name1];
 
-			for (i = 0; i < TR_FLAG_SIZE; i++)
+			for (int i = 0; i < TR_FLAG_SIZE; i++)
+			{
 				flgs[i] = a_ptr->flags[i];
+			}
 		}
 
 		/* Random artifact ! */
-		for (i = 0; i < TR_FLAG_SIZE; i++)
+		for (int i = 0; i < TR_FLAG_SIZE; i++)
+		{
 			flgs[i] |= o_ptr->art_flags[i];
+		}
 	}
 
-	if (object_is_smith(o_ptr))
-	{
-		int add = o_ptr->xtra3 - 1;
+	if (!object_is_smith(o_ptr)) return;
 
-		if (add < TR_FLAG_MAX)
-		{
-			add_flag(flgs, add);
-		}
-		else if (add == ESSENCE_TMP_RES_ACID)
-		{
-			add_flag(flgs, TR_RES_ACID);
-		}
-		else if (add == ESSENCE_TMP_RES_ELEC)
-		{
-			add_flag(flgs, TR_RES_ELEC);
-		}
-		else if (add == ESSENCE_TMP_RES_FIRE)
-		{
-			add_flag(flgs, TR_RES_FIRE);
-		}
-		else if (add == ESSENCE_TMP_RES_COLD)
-		{
-			add_flag(flgs, TR_RES_COLD);
-		}
-		else if (add == ESSENCE_SH_FIRE)
-		{
-			add_flag(flgs, TR_RES_FIRE);
-			add_flag(flgs, TR_SH_FIRE);
-		}
-		else if (add == ESSENCE_SH_ELEC)
-		{
-			add_flag(flgs, TR_RES_ELEC);
-			add_flag(flgs, TR_SH_ELEC);
-		}
-		else if (add == ESSENCE_SH_COLD)
-		{
-			add_flag(flgs, TR_RES_COLD);
-			add_flag(flgs, TR_SH_COLD);
-		}
-		else if (add == ESSENCE_RESISTANCE)
-		{
-			add_flag(flgs, TR_RES_ACID);
-			add_flag(flgs, TR_RES_ELEC);
-			add_flag(flgs, TR_RES_FIRE);
-			add_flag(flgs, TR_RES_COLD);
-		}
+	int add = o_ptr->xtra3 - 1;
+	if (add < TR_FLAG_MAX)
+	{
+		add_flag(flgs, add);
+	}
+	else if (add == ESSENCE_TMP_RES_ACID)
+	{
+		add_flag(flgs, TR_RES_ACID);
+	}
+	else if (add == ESSENCE_TMP_RES_ELEC)
+	{
+		add_flag(flgs, TR_RES_ELEC);
+	}
+	else if (add == ESSENCE_TMP_RES_FIRE)
+	{
+		add_flag(flgs, TR_RES_FIRE);
+	}
+	else if (add == ESSENCE_TMP_RES_COLD)
+	{
+		add_flag(flgs, TR_RES_COLD);
+	}
+	else if (add == ESSENCE_SH_FIRE)
+	{
+		add_flag(flgs, TR_RES_FIRE);
+		add_flag(flgs, TR_SH_FIRE);
+	}
+	else if (add == ESSENCE_SH_ELEC)
+	{
+		add_flag(flgs, TR_RES_ELEC);
+		add_flag(flgs, TR_SH_ELEC);
+	}
+	else if (add == ESSENCE_SH_COLD)
+	{
+		add_flag(flgs, TR_RES_COLD);
+		add_flag(flgs, TR_SH_COLD);
+	}
+	else if (add == ESSENCE_RESISTANCE)
+	{
+		add_flag(flgs, TR_RES_ACID);
+		add_flag(flgs, TR_RES_ELEC);
+		add_flag(flgs, TR_RES_FIRE);
+		add_flag(flgs, TR_RES_COLD);
 	}
 }
+
 
 /*!
  * @brief オブジェクトの発動効果名称を返す（サブルーチン/ブレス）
@@ -351,25 +324,26 @@ static concptr item_activation_dragon_breath(object_type *o_ptr)
 {
 	static char desc[256];
 	BIT_FLAGS flgs[TR_FLAG_SIZE]; /* for resistance flags */
-	int i, n = 0;
+	int n = 0;
 
 	object_flags(o_ptr, flgs);
 	strcpy(desc, _("", "breath "));
 
-	for (i = 0; dragonbreath_info[i].flag != 0; i++)
+	for (int i = 0; dragonbreath_info[i].flag != 0; i++)
 	{
 		if (have_flag(flgs, dragonbreath_info[i].flag))
 		{
 			if (n > 0) strcat(desc, _("、", ", "));
+
 			strcat(desc, dragonbreath_info[i].name);
 			n++;
 		}
 	}
 
 	strcat(desc, _("のブレス(250)", ""));
-
 	return (desc);
 }
+
 
 /*!
  * @brief オブジェクトの発動効果名称を返す（サブルーチン/汎用）
@@ -379,16 +353,12 @@ static concptr item_activation_dragon_breath(object_type *o_ptr)
 static concptr item_activation_aux(object_type *o_ptr)
 {
 	static char activation_detail[256];
-	concptr desc;
 	char timeout[32];
-	int constant, dice;
 	const activation_type* const act_ptr = find_activation_info(o_ptr);
 
 	if (!act_ptr) return _("未定義", "something undefined");
 
-	desc = act_ptr->desc;
-
-	/* Overwrite description if it is special */
+	concptr desc = act_ptr->desc;
 	switch (act_ptr->index) {
 	case ACT_BR_FIRE:
 		if ((o_ptr->tval == TV_RING) && (o_ptr->sval == SV_RING_FLAMES))
@@ -428,8 +398,8 @@ static concptr item_activation_aux(object_type *o_ptr)
 	}
 
 	/* Timeout description */
-	constant = act_ptr->timeout.constant;
-	dice = act_ptr->timeout.dice;
+	int constant = act_ptr->timeout.constant;
+	int dice = act_ptr->timeout.dice;
 	if (constant == 0 && dice == 0) {
 		/* We can activate it every turn */
 		strcpy(timeout, _("いつでも", "every turn"));
@@ -455,7 +425,6 @@ static concptr item_activation_aux(object_type *o_ptr)
 			break;
 		}
 	} else {
-		/* Normal timeout activations */
 		char constant_str[16], dice_str[16];
 		sprintf(constant_str, "%d", constant);
 		sprintf(dice_str, "d%d", dice);
@@ -465,11 +434,10 @@ static concptr item_activation_aux(object_type *o_ptr)
 			(dice > 0) ? dice_str : "");
 	}
 
-	/* Build detail activate description */
 	sprintf(activation_detail, _("%s : %s", "%s %s"), desc, timeout);
-
 	return activation_detail;
 }
+
 
 /*!
  * @brief オブジェクトの発動効果名称を返す（メインルーチン） /
@@ -481,17 +449,13 @@ concptr item_activation(object_type *o_ptr)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
-
-	/* Require activation ability */
 	if (!(have_flag(flgs, TR_ACTIVATE))) return (_("なし", "nothing"));
 
-	/* Get an explain of an activation */
 	if (activation_index(o_ptr))
 	{
 		return item_activation_aux(o_ptr);
 	}
 
-	/* Special items */
 	if (o_ptr->tval == TV_WHISTLE)
 	{
 		return _("ペット呼び寄せ : 100+d100ターン毎", "call pet every 100+d100 turns");
@@ -516,36 +480,31 @@ concptr item_activation(object_type *o_ptr)
  */
 bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 {
-	int i = 0, j, k;
-
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-
 	char temp[70 * 20];
-	concptr            info[128];
+	concptr info[128];
 	GAME_TEXT o_name[MAX_NLEN];
-	int wid, hgt;
-	POSITION rad;
 	char desc[256];
 
 	int trivial_info = 0;
 	object_flags(o_ptr, flgs);
 
-	/* Extract the description */
+	roff_to_buf(o_ptr->name1 ? (a_text + a_info[o_ptr->name1].text) :
+		(k_text + k_info[o_ptr->k_idx].text),
+		77 - 15, temp, sizeof(temp));
+
+	int i = 0;
+	for (int j = 0; temp[j]; j += 1 + strlen(&temp[j]))
 	{
-		roff_to_buf(o_ptr->name1 ? (a_text + a_info[o_ptr->name1].text) :
-			    (k_text + k_info[o_ptr->k_idx].text),
-			    77 - 15, temp, sizeof(temp));
-		for (j = 0; temp[j]; j += 1 + strlen(&temp[j]))
-		{ info[i] = &temp[j]; i++;}
+		info[i] = &temp[j];
+		i++;
 	}
 
 	if (object_is_equipment(o_ptr))
 	{
-		/* Descriptions of a basic equipment is just a flavor */
 		trivial_info = i;
 	}
 
-	/* Mega-Hack -- describe activation */
 	if (have_flag(flgs, TR_ACTIVATE))
 	{
 		info[i++] = _("始動したときの効果...", "It can be activated for...");
@@ -553,13 +512,11 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 		info[i++] = _("...ただし装備していなければならない。", "...if it is being worn.");
 	}
 
-	/* Figurines, a hack */
 	if (o_ptr->tval == TV_FIGURINE)
 	{
 		info[i++] = _("それは投げた時ペットに変化する。", "It will transform into a pet when thrown.");
 	}
 
-	/* Figurines, a hack */
 	if (o_ptr->name1 == ART_STONEMASK)
 	{
 		info[i++] = _("それを装備した者は吸血鬼になる。", "It makes you turn into a vampire permanently.");
@@ -604,7 +561,6 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	if (o_ptr->tval == TV_STATUE)
 	{
 		monster_race *r_ptr = &r_info[o_ptr->pval];
-
 		if (o_ptr->pval == MON_BULLGATES)
 			info[i++] = _("それは部屋に飾ると恥ずかしい。", "It is shameful.");
 		else if ( r_ptr->flags2 & (RF2_ELDRITCH_HORROR))
@@ -613,11 +569,9 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 			info[i++] = _("それは部屋に飾ると楽しい。", "It is cheerful.");
 	}
 	
-	/* Hack -- describe lite's */
-	
 	if (o_ptr->name2 == EGO_LITE_DARKNESS) info[i++] = _("それは全く光らない。", "It provides no light.");
 	
-	rad = 0;
+	POSITION rad = 0;
 	if (have_flag(flgs, TR_LITE_1) && o_ptr->name2 != EGO_LITE_DARKNESS)  rad += 1;
 	if (have_flag(flgs, TR_LITE_2) && o_ptr->name2 != EGO_LITE_DARKNESS)  rad += 2;
 	if (have_flag(flgs, TR_LITE_3) && o_ptr->name2 != EGO_LITE_DARKNESS)  rad += 3;
@@ -638,14 +592,11 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	}
 	
 	if(rad != 0) info[i++] = desc;
-
-	
+		
 	if (o_ptr->name2 == EGO_LITE_LONG)
 	{
 		info[i++] = _("それは長いターン明かりを授ける。", "It provides light for much longer time.");
 	}
-
-	/* And then describe it fully */
 
 	if (have_flag(flgs, TR_RIDING))
 	{
@@ -654,30 +605,35 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 		else
 		{
 			info[i++] = _("それは乗馬中でも使いやすい。", "It is suitable for use while riding.");
-			/* This information is not important enough */
 			trivial_info++;
 		}
 	}
+
 	if (have_flag(flgs, TR_STR))
 	{
 		info[i++] = _("それは腕力に影響を及ぼす。", "It affects your strength.");
 	}
+
 	if (have_flag(flgs, TR_INT))
 	{
 		info[i++] = _("それは知能に影響を及ぼす。", "It affects your intelligence.");
 	}
+
 	if (have_flag(flgs, TR_WIS))
 	{
 		info[i++] = _("それは賢さに影響を及ぼす。", "It affects your wisdom.");
 	}
+
 	if (have_flag(flgs, TR_DEX))
 	{
 		info[i++] = _("それは器用さに影響を及ぼす。", "It affects your dexterity.");
 	}
+
 	if (have_flag(flgs, TR_CON))
 	{
 		info[i++] = _("それは耐久力に影響を及ぼす。", "It affects your constitution.");
 	}
+
 	if (have_flag(flgs, TR_CHR))
 	{
 		info[i++] = _("それは魅力に影響を及ぼす。", "It affects your charisma.");
@@ -686,28 +642,33 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	if (have_flag(flgs, TR_MAGIC_MASTERY))
 	{
 		info[i++] = _("それは魔法道具使用能力に影響を及ぼす。", "It affects your ability to use magic devices.");
-
 	}
+
 	if (have_flag(flgs, TR_STEALTH))
 	{
 		info[i++] = _("それは隠密行動能力に影響を及ぼす。", "It affects your stealth.");
 	}
+
 	if (have_flag(flgs, TR_SEARCH))
 	{
 		info[i++] = _("それは探索能力に影響を及ぼす。", "It affects your searching.");
 	}
+
 	if (have_flag(flgs, TR_INFRA))
 	{
 		info[i++] = _("それは赤外線視力に影響を及ぼす。", "It affects your infravision.");
 	}
+
 	if (have_flag(flgs, TR_TUNNEL))
 	{
 		info[i++] = _("それは採掘能力に影響を及ぼす。", "It affects your ability to tunnel.");
 	}
+
 	if (have_flag(flgs, TR_SPEED))
 	{
 		info[i++] = _("それはスピードに影響を及ぼす。", "It affects your speed.");
 	}
+
 	if (have_flag(flgs, TR_BLOWS))
 	{
 		info[i++] = _("それは打撃回数に影響を及ぼす。", "It affects your attack speed.");
@@ -717,14 +678,17 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それは酸によって大きなダメージを与える。", "It does extra damage from acid.");
 	}
+
 	if (have_flag(flgs, TR_BRAND_ELEC))
 	{
 		info[i++] = _("それは電撃によって大きなダメージを与える。", "It does extra damage from electricity.");
 	}
+
 	if (have_flag(flgs, TR_BRAND_FIRE))
 	{
 		info[i++] = _("それは火炎によって大きなダメージを与える。", "It does extra damage from fire.");
 	}
+
 	if (have_flag(flgs, TR_BRAND_COLD))
 	{
 		info[i++] = _("それは冷気によって大きなダメージを与える。", "It does extra damage from frost.");
@@ -768,6 +732,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それはオークにとっての天敵である。", "It is a great bane of orcs.");
 	}
+
 	if (have_flag(flgs, TR_SLAY_ORC))
 	{
 		info[i++] = _("それはオークに対して特に恐るべき力を発揮する。", "It is especially deadly against orcs.");
@@ -777,6 +742,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それはトロルにとっての天敵である。", "It is a great bane of trolls.");
 	}
+
 	if (have_flag(flgs, TR_SLAY_TROLL))
 	{
 		info[i++] = _("それはトロルに対して特に恐るべき力を発揮する。", "It is especially deadly against trolls.");
@@ -795,6 +761,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それはデーモンにとっての天敵である。", "It is a great bane of demons.");
 	}
+
 	if (have_flag(flgs, TR_SLAY_DEMON))
 	{
 		info[i++] = _("それはデーモンに対して聖なる力を発揮する。", "It strikes at demons with holy wrath.");
@@ -804,6 +771,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それはアンデッドにとっての天敵である。", "It is a great bane of undead.");
 	}
+
 	if (have_flag(flgs, TR_SLAY_UNDEAD))
 	{
 		info[i++] = _("それはアンデッドに対して聖なる力を発揮する。", "It strikes at undead with holy wrath.");
@@ -813,6 +781,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それは邪悪なる存在にとっての天敵である。", "It is a great bane of evil monsters.");
 	}
+
 	if (have_flag(flgs, TR_SLAY_EVIL))
 	{
 		info[i++] = _("それは邪悪なる存在に対して聖なる力で攻撃する。", "It fights against evil with holy fury.");
@@ -822,6 +791,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それは自然界の動物にとっての天敵である。", "It is a great bane of natural creatures.");
 	}
+
 	if (have_flag(flgs, TR_SLAY_ANIMAL))
 	{
 		info[i++] = _("それは自然界の動物に対して特に恐るべき力を発揮する。", "It is especially deadly against natural creatures.");
@@ -831,6 +801,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それは人間にとっての天敵である。", "It is a great bane of humans.");
 	}
+
 	if (have_flag(flgs, TR_SLAY_HUMAN))
 	{
 		info[i++] = _("それは人間に対して特に恐るべき力を発揮する。", "It is especially deadly against humans.");
@@ -840,30 +811,37 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それは使用者の魔力を使って攻撃する。", "It powerfully strikes at a monster using your mana.");
 	}
+
 	if (have_flag(flgs, TR_DEC_MANA))
 	{
 		info[i++] = _("それは魔力の消費を押さえる。", "It decreases your mana consumption.");
 	}
+
 	if (have_flag(flgs, TR_SUST_STR))
 	{
 		info[i++] = _("それはあなたの腕力を維持する。", "It sustains your strength.");
 	}
+
 	if (have_flag(flgs, TR_SUST_INT))
 	{
 		info[i++] = _("それはあなたの知能を維持する。", "It sustains your intelligence.");
 	}
+
 	if (have_flag(flgs, TR_SUST_WIS))
 	{
 		info[i++] = _("それはあなたの賢さを維持する。", "It sustains your wisdom.");
 	}
+
 	if (have_flag(flgs, TR_SUST_DEX))
 	{
 		info[i++] = _("それはあなたの器用さを維持する。", "It sustains your dexterity.");
 	}
+
 	if (have_flag(flgs, TR_SUST_CON))
 	{
 		info[i++] = _("それはあなたの耐久力を維持する。", "It sustains your constitution.");
 	}
+
 	if (have_flag(flgs, TR_SUST_CHR))
 	{
 		info[i++] = _("それはあなたの魅力を維持する。", "It sustains your charisma.");
@@ -873,14 +851,17 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それは酸に対する完全な免疫を授ける。", "It provides immunity to acid.");
 	}
+
 	if (have_flag(flgs, TR_IM_ELEC))
 	{
 		info[i++] = _("それは電撃に対する完全な免疫を授ける。", "It provides immunity to electricity.");
 	}
+
 	if (have_flag(flgs, TR_IM_FIRE))
 	{
 		info[i++] = _("それは火に対する完全な免疫を授ける。", "It provides immunity to fire.");
 	}
+
 	if (have_flag(flgs, TR_IM_COLD))
 	{
 		info[i++] = _("それは寒さに対する完全な免疫を授ける。", "It provides immunity to cold.");
@@ -895,30 +876,37 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それは麻痺に対する完全な免疫を授ける。", "It provides immunity to paralysis.");
 	}
+
 	if (have_flag(flgs, TR_HOLD_EXP))
 	{
 		info[i++] = _("それは経験値吸収に対する耐性を授ける。", "It provides resistance to experience draining.");
 	}
+
 	if (have_flag(flgs, TR_RES_FEAR))
 	{
 		info[i++] = _("それは恐怖への完全な耐性を授ける。", "It makes you completely fearless.");
 	}
+
 	if (have_flag(flgs, TR_RES_ACID))
 	{
 		info[i++] = _("それは酸への耐性を授ける。", "It provides resistance to acid.");
 	}
+
 	if (have_flag(flgs, TR_RES_ELEC))
 	{
 		info[i++] = _("それは電撃への耐性を授ける。", "It provides resistance to electricity.");
 	}
+
 	if (have_flag(flgs, TR_RES_FIRE))
 	{
 		info[i++] = _("それは火への耐性を授ける。", "It provides resistance to fire.");
 	}
+
 	if (have_flag(flgs, TR_RES_COLD))
 	{
 		info[i++] = _("それは寒さへの耐性を授ける。", "It provides resistance to cold.");
 	}
+
 	if (have_flag(flgs, TR_RES_POIS))
 	{
 		info[i++] = _("それは毒への耐性を授ける。", "It provides resistance to poison.");
@@ -928,6 +916,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それは閃光への耐性を授ける。", "It provides resistance to light.");
 	}
+
 	if (have_flag(flgs, TR_RES_DARK))
 	{
 		info[i++] = _("それは暗黒への耐性を授ける。", "It provides resistance to dark.");
@@ -937,14 +926,17 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それは盲目への耐性を授ける。", "It provides resistance to blindness.");
 	}
+
 	if (have_flag(flgs, TR_RES_CONF))
 	{
 		info[i++] = _("それは混乱への耐性を授ける。", "It provides resistance to confusion.");
 	}
+
 	if (have_flag(flgs, TR_RES_SOUND))
 	{
 		info[i++] = _("それは轟音への耐性を授ける。", "It provides resistance to sound.");
 	}
+
 	if (have_flag(flgs, TR_RES_SHARDS))
 	{
 		info[i++] = _("それは破片への耐性を授ける。", "It provides resistance to shards.");
@@ -954,14 +946,17 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それは地獄への耐性を授ける。", "It provides resistance to nether.");
 	}
+
 	if (have_flag(flgs, TR_RES_NEXUS))
 	{
 		info[i++] = _("それは因果混乱への耐性を授ける。", "It provides resistance to nexus.");
 	}
+
 	if (have_flag(flgs, TR_RES_CHAOS))
 	{
 		info[i++] = _("それはカオスへの耐性を授ける。", "It provides resistance to chaos.");
 	}
+
 	if (have_flag(flgs, TR_RES_DISEN))
 	{
 		info[i++] = _("それは劣化への耐性を授ける。", "It provides resistance to disenchantment.");
@@ -976,98 +971,122 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それは透明なモンスターを見ることを可能にする。", "It allows you to see invisible monsters.");
 	}
+
 	if (have_flag(flgs, TR_TELEPATHY))
 	{
 		info[i++] = _("それはテレパシー能力を授ける。", "It gives telepathic powers.");
 	}
+
 	if (have_flag(flgs, TR_ESP_ANIMAL))
 	{
 		info[i++] = _("それは自然界の生物を感知する。", "It senses natural creatures.");
 	}
+
 	if (have_flag(flgs, TR_ESP_UNDEAD))
 	{
 		info[i++] = _("それはアンデッドを感知する。", "It senses undead.");
 	}
+
 	if (have_flag(flgs, TR_ESP_DEMON))
 	{
 		info[i++] = _("それは悪魔を感知する。", "It senses demons.");
 	}
+
 	if (have_flag(flgs, TR_ESP_ORC))
 	{
 		info[i++] = _("それはオークを感知する。", "It senses orcs.");
 	}
+
 	if (have_flag(flgs, TR_ESP_TROLL))
 	{
 		info[i++] = _("それはトロルを感知する。", "It senses trolls.");
 	}
+
 	if (have_flag(flgs, TR_ESP_GIANT))
 	{
 		info[i++] = _("それは巨人を感知する。", "It senses giants.");
 	}
+
 	if (have_flag(flgs, TR_ESP_DRAGON))
 	{
 		info[i++] = _("それはドラゴンを感知する。", "It senses dragons.");
 	}
+
 	if (have_flag(flgs, TR_ESP_HUMAN))
 	{
 		info[i++] = _("それは人間を感知する。", "It senses humans.");
 	}
+
 	if (have_flag(flgs, TR_ESP_EVIL))
 	{
 		info[i++] = _("それは邪悪な存在を感知する。", "It senses evil creatures.");
 	}
+
 	if (have_flag(flgs, TR_ESP_GOOD))
 	{
 		info[i++] = _("それは善良な存在を感知する。", "It senses good creatures.");
 	}
+
 	if (have_flag(flgs, TR_ESP_NONLIVING))
 	{
 		info[i++] = _("それは活動する無生物体を感知する。", "It senses non-living creatures.");
 	}
+
 	if (have_flag(flgs, TR_ESP_UNIQUE))
 	{
 		info[i++] = _("それは特別な強敵を感知する。", "It senses unique monsters.");
 	}
+
 	if (have_flag(flgs, TR_SLOW_DIGEST))
 	{
 		info[i++] = _("それはあなたの新陳代謝を遅くする。", "It slows your metabolism.");
 	}
+
 	if (have_flag(flgs, TR_REGEN))
 	{
 		info[i++] = _("それは体力回復力を強化する。", "It speeds your regenerative powers.");
 	}
+
 	if (have_flag(flgs, TR_WARNING))
 	{
 		info[i++] = _("それは危険に対して警告を発する。", "It warns you of danger");
 	}
+
 	if (have_flag(flgs, TR_REFLECT))
 	{
 		info[i++] = _("それは矢の呪文を反射する。", "It reflects bolt spells.");
 	}
+
 	if (have_flag(flgs, TR_SH_FIRE))
 	{
 		info[i++] = _("それは炎のバリアを張る。", "It produces a fiery sheath.");
 	}
+
 	if (have_flag(flgs, TR_SH_ELEC))
 	{
 		info[i++] = _("それは電気のバリアを張る。", "It produces an electric sheath.");
 	}
+
 	if (have_flag(flgs, TR_SH_COLD))
 	{
 		info[i++] = _("それは冷気のバリアを張る。", "It produces a sheath of coldness.");
 	}
+
 	if (have_flag(flgs, TR_NO_MAGIC))
 	{
 		info[i++] = _("それは反魔法バリアを張る。", "It produces an anti-magic shell.");
 	}
+
 	if (have_flag(flgs, TR_NO_TELE))
 	{
 		info[i++] = _("それはテレポートを邪魔する。", "It prevents teleportation.");
 	}
+
 	if (have_flag(flgs, TR_XTRA_MIGHT))
 	{
 		info[i++] = _("それは矢／ボルト／弾をより強力に発射することができる。", "It fires missiles with extra might.");
 	}
+
 	if (have_flag(flgs, TR_XTRA_SHOTS))
 	{
 		info[i++] = _("それは矢／ボルト／弾を非常に早く発射することができる。", "It fires missiles excessively fast.");
@@ -1104,76 +1123,92 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 	{
 		info[i++] = _("それは太古の禍々しい怨念が宿っている。", "It carries an ancient foul curse.");
 	}
+
 	if ((have_flag(flgs, TR_AGGRAVATE)) || (o_ptr->curse_flags & TRC_AGGRAVATE))
 	{
 		info[i++] = _("それは付近のモンスターを怒らせる。", "It aggravates nearby creatures.");
 	}
+
 	if ((have_flag(flgs, TR_DRAIN_EXP)) || (o_ptr->curse_flags & TRC_DRAIN_EXP))
 	{
 		info[i++] = _("それは経験値を吸い取る。", "It drains experience.");
 	}
+
 	if (o_ptr->curse_flags & TRC_SLOW_REGEN)
 	{
 		info[i++] = _("それは回復力を弱める。", "It slows your regenerative powers.");
 	}
+
 	if ((o_ptr->curse_flags & TRC_ADD_L_CURSE) || have_flag(flgs, TR_ADD_L_CURSE))
 	{
 		info[i++] = _("それは弱い呪いを増やす。","It adds weak curses.");
 	}
+
 	if ((o_ptr->curse_flags & TRC_ADD_H_CURSE) || have_flag(flgs, TR_ADD_H_CURSE))
 	{
 		info[i++] = _("それは強力な呪いを増やす。","It adds heavy curses.");
 	}
+
 	if ((have_flag(flgs, TR_CALL_ANIMAL)) || (o_ptr->curse_flags & TRC_CALL_ANIMAL))
 	{
 		info[i++] = _("それは動物を呼び寄せる。", "It attracts animals.");
 	}
+
 	if ((have_flag(flgs, TR_CALL_DEMON)) || (o_ptr->curse_flags & TRC_CALL_DEMON))
 	{
 		info[i++] = _("それは悪魔を呼び寄せる。", "It attracts demons.");
 	}
+
 	if ((have_flag(flgs, TR_CALL_DRAGON)) || (o_ptr->curse_flags & TRC_CALL_DRAGON))
 	{
 		info[i++] = _("それはドラゴンを呼び寄せる。", "It attracts dragons.");
 	}
+
 	if ((have_flag(flgs, TR_CALL_UNDEAD)) || (o_ptr->curse_flags & TRC_CALL_UNDEAD))
 	{
 		info[i++] = _("それは死霊を呼び寄せる。", "It attracts undeads.");
 	}
+
 	if ((have_flag(flgs, TR_COWARDICE)) ||  (o_ptr->curse_flags & TRC_COWARDICE))
 	{
 		info[i++] = _("それは恐怖感を引き起こす。", "It makes you subject to cowardice.");
 	}
+
 	if ((have_flag(flgs, TR_TELEPORT)) || (o_ptr->curse_flags & TRC_TELEPORT))
 	{
 		info[i++] = _("それはランダムなテレポートを引き起こす。", "It induces random teleportation.");
 	}
+
 	if ((have_flag(flgs, TR_LOW_MELEE)) || o_ptr->curse_flags & TRC_LOW_MELEE)
 	{
 		info[i++] = _("それは攻撃を外しやすい。", "It causes you to miss blows.");
 	}
+
 	if ((have_flag(flgs, TR_LOW_AC)) || (o_ptr->curse_flags & TRC_LOW_AC))
 	{
 		info[i++] = _("それは攻撃を受けやすい。", "It helps your enemies' blows.");
 	}
+
 	if ((have_flag(flgs, TR_LOW_MAGIC)) || (o_ptr->curse_flags & TRC_LOW_MAGIC))
 	{
 		info[i++] = _("それは魔法を唱えにくくする。", "It encumbers you while spellcasting.");
 	}
+
 	if ((have_flag(flgs, TR_FAST_DIGEST)) || (o_ptr->curse_flags & TRC_FAST_DIGEST))
 	{
 		info[i++] = _("それはあなたの新陳代謝を速くする。", "It speeds your metabolism.");
 	}
+
 	if ((have_flag(flgs, TR_DRAIN_HP)) || (o_ptr->curse_flags & TRC_DRAIN_HP))
 	{
 		info[i++] = _("それはあなたの体力を吸い取る。", "It drains you.");
 	}
+
 	if ((have_flag(flgs, TR_DRAIN_MANA)) || (o_ptr->curse_flags & TRC_DRAIN_MANA))
 	{
 		info[i++] = _("それはあなたの魔力を吸い取る。", "It drains your mana.");
 	}
 
-	/* Describe about this kind of object instead of THIS fake object */
 	if (mode & SCROBJ_FAKE_OBJECT)
 	{
 		switch (o_ptr->tval)
@@ -1188,6 +1223,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 				info[i++] = _("それはひとつの低級なESPを授ける事がある。", "It may provide a low rank ESP.");
 				break;
 			}
+
 			break;
 
 		case TV_AMULET:
@@ -1201,6 +1237,7 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 				info[i++] = _("それは最大で３つまでの低級なESPを授ける。", "It provides up to three low rank ESPs.");
 				break;
 			}
+
 			break;
 		}
 	}
@@ -1218,14 +1255,17 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 		{
 			info[i++] = _("それは酸では傷つかない。", "It cannot be harmed by acid.");
 		}
+
 		if (have_flag(flgs, TR_IGNORE_ELEC))
 		{
 			info[i++] = _("それは電撃では傷つかない。", "It cannot be harmed by electricity.");
 		}
+
 		if (have_flag(flgs, TR_IGNORE_FIRE))
 		{
 			info[i++] = _("それは火炎では傷つかない。", "It cannot be harmed by fire.");
 		}
+
 		if (have_flag(flgs, TR_IGNORE_COLD))
 		{
 			info[i++] = _("それは冷気では傷つかない。", "It cannot be harmed by cold.");
@@ -1234,24 +1274,23 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 
 	if (mode & SCROBJ_FORCE_DETAIL) trivial_info = 0;
 
-	/* No relevant informations */
 	if (i <= trivial_info) return FALSE;
-	screen_save();
 
+	screen_save();
+	int wid, hgt;
 	Term_get_size(&wid, &hgt);
 
-	/* Display Item name */
 	if (!(mode & SCROBJ_FAKE_OBJECT))
 		object_desc(player_ptr, o_name, o_ptr, 0);
 	else
 		object_desc(player_ptr, o_name, o_ptr, (OD_NAME_ONLY | OD_STORE));
 
 	prt(o_name, 0, 0);
+	for (int k = 1; k < hgt; k++)
+	{
+		prt("", k, 13);
+	}
 
-	/* Erase the screen */
-	for (k = 1; k < hgt; k++) prt("", k, 13);
-
-	/* Label the information */
 	if ((o_ptr->tval == TV_STATUE) && (o_ptr->sval == SV_PHOTO))
 	{
 		monster_race *r_ptr = &r_info[o_ptr->pval];
@@ -1265,13 +1304,10 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 		prt(_("     アイテムの能力:", "     Item Attributes:"), 1, 15);
 	}
 
-	/* We will print on top of the map (column 13) */
-	for (k = 2, j = 0; j < i; j++)
+	int k = 2;
+	for (int j = 0; j < i; j++)
 	{
-		/* Show the info */
 		prt(info[j], k++, 15);
-
-		/* Every 20 entries (lines 2 to 21), start over */
 		if ((k == hgt - 2) && (j+1 < i))
 		{
 			prt(_("-- 続く --", "-- more --"), k, 15);
@@ -1280,16 +1316,11 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
 		}
 	}
 
-	/* Wait for it */
 	prt(_("[何かキーを押すとゲームに戻ります]", "[Press any key to continue]"), k, 15);
-
 	inkey();
 	screen_load();
-
-	/* Gave knowledge */
 	return TRUE;
 }
-
 
 
 /*!
@@ -1301,12 +1332,9 @@ bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS mode)
  */
 char index_to_label(int i)
 {
-	/* Indexes for "inven" are easy */
-	if (i < INVEN_RARM) return (I2A(i));
-
-	/* Indexes for "equip" are offset */
-	return (I2A(i - INVEN_RARM));
+	return (i < INVEN_RARM) ? (I2A(i)) : (I2A(i - INVEN_RARM));
 }
+
 
 /*!
  * @brief オブジェクトの該当装備部位IDを返す /
@@ -1316,7 +1344,6 @@ char index_to_label(int i)
  */
 s16b wield_slot(player_type *owner_ptr, object_type *o_ptr)
 {
-	/* Slot for equipment */
 	switch (o_ptr->tval)
 	{
 		case TV_DIGGING:
@@ -1328,7 +1355,6 @@ s16b wield_slot(player_type *owner_ptr, object_type *o_ptr)
 			if (owner_ptr->inventory_list[INVEN_LARM].k_idx) return (INVEN_RARM);
 			return (INVEN_LARM);
 		}
-
 		case TV_CAPTURE:
 		case TV_CARD:
 		case TV_SHIELD:
@@ -1337,64 +1363,53 @@ s16b wield_slot(player_type *owner_ptr, object_type *o_ptr)
 			if (owner_ptr->inventory_list[INVEN_RARM].k_idx) return (INVEN_LARM);
 			return (INVEN_RARM);
 		}
-
 		case TV_BOW:
 		{
 			return (INVEN_BOW);
 		}
-
 		case TV_RING:
 		{
-			/* Use the right hand first */
 			if (!owner_ptr->inventory_list[INVEN_RIGHT].k_idx) return (INVEN_RIGHT);
 
-			/* Use the left hand for swapping (by default) */
 			return (INVEN_LEFT);
 		}
-
 		case TV_AMULET:
 		case TV_WHISTLE:
 		{
 			return (INVEN_NECK);
 		}
-
 		case TV_LITE:
 		{
 			return (INVEN_LITE);
 		}
-
 		case TV_DRAG_ARMOR:
 		case TV_HARD_ARMOR:
 		case TV_SOFT_ARMOR:
 		{
 			return (INVEN_BODY);
 		}
-
 		case TV_CLOAK:
 		{
 			return (INVEN_OUTER);
 		}
-
 		case TV_CROWN:
 		case TV_HELM:
 		{
 			return (INVEN_HEAD);
 		}
-
 		case TV_GLOVES:
 		{
 			return (INVEN_HANDS);
 		}
-
 		case TV_BOOTS:
 		{
 			return (INVEN_FEET);
 		}
 	}
 
-	/* No slot available */
 	return -1;
 }
+
 
 /*!
  * @brief tval/sval指定のベースアイテムがプレイヤーの使用可能な魔法書かどうかを返す /
@@ -1415,5 +1430,6 @@ bool check_book_realm(player_type *owner_ptr, const OBJECT_TYPE_VALUE book_tval,
 		if (is_magic(tval2realm(book_tval)))
 			return ((book_tval == TV_ARCANE_BOOK) || (book_sval < 2));
 	}
+
 	return (REALM1_BOOK == book_tval || REALM2_BOOK == book_tval);
 }
