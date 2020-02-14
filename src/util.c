@@ -660,9 +660,6 @@ errr fd_chop(int fd, huge n)
 	n = n ? n : 0;
 	if (fd < 0) return -1;
 
-#if defined(NeXT)
-	ftruncate(fd, n);
-#endif
 	return 0;
 }
 

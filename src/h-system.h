@@ -24,19 +24,13 @@
 #include <wctype.h>
 #include <errno.h>
 #include <stddef.h>
-
-#if defined(NeXT)
-# include <libc.h>
-#else
 # include <stdlib.h>
-#endif /* NeXT */
 
 #ifdef SET_UID
 
 # include <sys/types.h>
 
-# if defined(Pyramid) || defined(NeXT) || \
-     defined(NCR3K) || defined(ibm032) || \
+# if defined(Pyramid) || defined(NCR3K) || defined(ibm032) || \
      defined(__osf__) || defined(ISC) || defined(linux)
 #  include <sys/time.h>
 # endif
@@ -59,7 +53,7 @@
 # endif
 #endif
 
-#if !defined(NeXT) && !defined(__MWERKS__)
+#if !defined(__MWERKS__)
 # include <fcntl.h>
 #endif
 
