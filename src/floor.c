@@ -10,7 +10,6 @@
 #include "world.h"
 #include "player-effects.h"
 #include "object.h"
-#include "object-hook.h"
 #include "artifact.h"
 #include "objectkind.h"
 #include "trap.h"
