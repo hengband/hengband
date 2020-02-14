@@ -490,15 +490,9 @@ errr top_twenty(player_type *current_player_ptr)
 	the_score.turns[9] = '\0';
 
 	time_t ct = time((time_t*)0);
-#ifdef HIGHSCORE_DATE_HACK
-	/* Save the date in a hacked up form (9 chars) */
-	(void)sprintf(the_score.day, "%-.6s %-.2s", ctime(&ct) + 4, ctime(&ct) + 22);
-#else
-	/* Save the date in standard form (8 chars) */
-/*	(void)strftime(the_score.day, 9, "%m/%d/%y", localtime(&ct)); */
+
 	/* Save the date in standard encoded form (9 chars) */
 	strftime(the_score.day, 10, "@%Y%m%d", localtime(&ct));
-#endif
 
 	/* Save the player name (15 chars) */
 	sprintf(the_score.who, "%-.15s", current_player_ptr->name);
