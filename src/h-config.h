@@ -77,20 +77,18 @@
  */
 #undef PATH_SEP
 #define PATH_SEP "/"
+
 #if defined(WINDOWS) || defined(WINNT)
 # undef PATH_SEP
 # define PATH_SEP "\\"
 #endif
+
 #if defined(OS2)
 # undef PATH_SEP
 # define PATH_SEP "\\"
 #endif
-#ifdef __GO32__
-# undef PATH_SEP
-# define PATH_SEP "/"
-#endif
 
-/*
+ /*
  * The Macintosh allows the use of a "file type" when creating a file
  */
 #if defined(MACH_O_CARBON)
