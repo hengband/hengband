@@ -2249,7 +2249,11 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 
 
 	/* No more details wanted */
-	if (mode & OD_NAME_ONLY) goto object_desc_done;
+	if (mode & OD_NAME_ONLY)
+	{
+		my_strcpy(buf, tmp_val, MAX_NLEN);
+		return;
+	}
 
 	/* Hack -- Chests must be described in detail */
 	if (o_ptr->tval == TV_CHEST)
@@ -2587,8 +2591,11 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 
 
 	/* No more details wanted */
-	if (mode & OD_NAME_AND_ENCHANT) goto object_desc_done;
-
+	if (mode & OD_NAME_AND_ENCHANT)
+	{
+		my_strcpy(buf, tmp_val, MAX_NLEN);
+		return;
+	}
 
 	if (known) /* Known item only */
 	{
@@ -2716,7 +2723,11 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 	}
 
 	/* No more details wanted */
-	if (mode & OD_OMIT_INSCRIPTION) goto object_desc_done;
+	if (mode & OD_OMIT_INSCRIPTION)
+	{
+		my_strcpy(buf, tmp_val, MAX_NLEN);
+		return;
+	}
 
 	/* Prepare real inscriptions in a buffer */
 	tmp_val2[0] = '\0';
@@ -2832,7 +2843,6 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 		t = object_desc_chr(t, c2);
 	}
 
-object_desc_done:
 	my_strcpy(buf, tmp_val, MAX_NLEN);
 }
 

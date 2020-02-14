@@ -32,7 +32,6 @@
 
 #if !defined(WINDOWS)
 
-
 /*
  * A hook for "quit()".
  *
@@ -238,6 +237,49 @@ static void change_path(concptr info)
 	}
 }
 
+static void display_usage(void)
+{
+	/* Dump usage information */
+	puts("Usage: angband [options] [-- subopts]");
+	puts("  -n       Start a new character");
+	puts("  -f       Request fiddle mode");
+	puts("  -w       Request wizard mode");
+	puts("  -b       Request BGM mode");
+	puts("  -v       Request sound mode");
+	puts("  -g       Request graphics mode");
+	puts("  -o       Request original keyset");
+	puts("  -r       Request rogue-like keyset");
+	puts("  -M       Request monochrome mode");
+	puts("  -s<num>  Show <num> high scores");
+	puts("  -u<who>  Use your <who> savefile");
+	puts("  -m<sys>  Force 'main-<sys>.c' usage");
+	puts("  -d<def>  Define a 'lib' dir sub-path");
+	puts("");
+
+#ifdef USE_X11
+	puts("  -mx11    To use X11");
+	puts("  --       Sub options");
+	puts("  -- -d    Set display name");
+	puts("  -- -o    Request old 8x8 tile graphics");
+	puts("  -- -a    Request Adam Bolt 16x16 tile graphics");
+	puts("  -- -b    Request Bigtile graphics mode");
+	puts("  -- -s    Turn off smoothscaling graphics");
+	puts("  -- -n#   Number of terms to use");
+	puts("");
+#endif /* USE_X11 */
+
+#ifdef USE_GCU
+	puts("  -mgcu    To use GCU (GNU Curses)");
+#endif /* USE_GCU */
+
+#ifdef USE_CAP
+	puts("  -mcap    To use CAP (\"Termcap\" calls)");
+#endif /* USE_CAP */
+
+	/* Actually abort the process */
+	quit(NULL);
+}
+
 
 /*
  * Simple "main" function for multiple platforms.
@@ -319,9 +361,14 @@ int main(int argc, char *argv[])
 	for (i = 1; args && (i < argc); i++)
 	{
 		/* Require proper options */
-		if (argv[i][0] != '-') goto usage;
+		if (argv[i][0] != '-')
+		{
+			display_usage();
+			continue;
+		}
 
 		/* Analyze option */
+		bool is_usage_needed = FALSE;
 		switch (argv[i][1])
 		{
 			case 'N':
@@ -330,35 +377,30 @@ int main(int argc, char *argv[])
 				new_game = TRUE;
 				break;
 			}
-
 			case 'F':
 			case 'f':
 			{
 				arg_fiddle = TRUE;
 				break;
 			}
-
 			case 'W':
 			case 'w':
 			{
 				arg_wizard = TRUE;
 				break;
 			}
-
 			case 'B':
 			case 'b':
 			{
 				arg_music = TRUE;
 				break;
 			}
-
 			case 'V':
 			case 'v':
 			{
 				arg_sound = TRUE;
 				break;
 			}
-
 			case 'G':
 			case 'g':
 			{
@@ -366,21 +408,18 @@ int main(int argc, char *argv[])
 				arg_graphics = GRAPHICS_ORIGINAL;
 				break;
 			}
-
 			case 'R':
 			case 'r':
 			{
 				arg_force_roguelike = TRUE;
 				break;
 			}
-
 			case 'O':
 			case 'o':
 			{
 				arg_force_original = TRUE;
 				break;
 			}
-
 			case 'S':
 			case 's':
 			{
@@ -388,40 +427,50 @@ int main(int argc, char *argv[])
 				if (show_score <= 0) show_score = 10;
 				break;
 			}
-
 			case 'u':
 			case 'U':
 			{
-				if (!argv[i][2]) goto usage;
+				if (!argv[i][2])
+				{
+					is_usage_needed = TRUE;
+					break;
+				}
+
 				strcpy(p_ptr->name, &argv[i][2]);
 				break;
 			}
-
 			case 'm':
 			{
-				if (!argv[i][2]) goto usage;
+				if (!argv[i][2])
+				{
+					is_usage_needed = TRUE;
+					break;
+				}
+
 				mstr = &argv[i][2];
 				break;
 			}
-
 			case 'M':
 			{
 				arg_monochrome = TRUE;
 				break;
 			}
-
 			case 'd':
 			case 'D':
 			{
 				change_path(&argv[i][2]);
 				break;
 			}
-
 #ifdef CHUUKEI
 			case 'p':
 			case 'P':
 			{
-				if (!argv[i][2]) goto usage;
+				if (!argv[i][2])
+				{
+					is_usage_needed = TRUE;
+					break;
+				}
+
 				chuukei_server = TRUE;
 				if (connect_chuukei_server(&argv[i][2]) < 0) chuukei_server = FALSE;
 				break;
@@ -430,20 +479,28 @@ int main(int argc, char *argv[])
 			case 'c':
 			case 'C':
 			{
-				if (!argv[i][2]) goto usage;
+				if (!argv[i][2])
+				{
+					is_usage_needed = TRUE;
+					break;
+				}
+
 				chuukei_client = TRUE;
 				connect_chuukei_server(&argv[i][2]);
 				break;
 			}
 #endif
-
 			case 'x':
 			{
-				if (!argv[i][2]) goto usage;
+				if (!argv[i][2])
+				{
+					is_usage_needed = TRUE;
+					break;
+				}
+
 				prepare_browse_movie(&argv[i][2]);
 				break;
-			}			
-
+			}
 			case '-':
 			{
 				argv[i] = argv[0];
@@ -452,51 +509,16 @@ int main(int argc, char *argv[])
 				args = FALSE;
 				break;
 			}
-
 			default:
-			usage:
 			{
-				/* Dump usage information */
-				puts("Usage: angband [options] [-- subopts]");
-				puts("  -n       Start a new character");
-				puts("  -f       Request fiddle mode");
-				puts("  -w       Request wizard mode");
-				puts("  -b       Request BGM mode");
-				puts("  -v       Request sound mode");
-				puts("  -g       Request graphics mode");
-				puts("  -o       Request original keyset");
-				puts("  -r       Request rogue-like keyset");
-				puts("  -M       Request monochrome mode");
-				puts("  -s<num>  Show <num> high scores");
-				puts("  -u<who>  Use your <who> savefile");
-				puts("  -m<sys>  Force 'main-<sys>.c' usage");
-				puts("  -d<def>  Define a 'lib' dir sub-path");
-				puts("");
-
-#ifdef USE_X11
-				puts("  -mx11    To use X11");
-				puts("  --       Sub options");
-				puts("  -- -d    Set display name");
-				puts("  -- -o    Request old 8x8 tile graphics");
-				puts("  -- -a    Request Adam Bolt 16x16 tile graphics");
-				puts("  -- -b    Request Bigtile graphics mode");
-				puts("  -- -s    Turn off smoothscaling graphics");
-				puts("  -- -n#   Number of terms to use");
-				puts("");
-#endif /* USE_X11 */
-
-#ifdef USE_GCU
-				puts("  -mgcu    To use GCU (GNU Curses)");
-#endif /* USE_GCU */
-
-#ifdef USE_CAP
-				puts("  -mcap    To use CAP (\"Termcap\" calls)");
-#endif /* USE_CAP */
-
-				/* Actually abort the process */
-				quit(NULL);
+				is_usage_needed = TRUE;
+				break;
 			}
 		}
+
+		if (!is_usage_needed) continue;
+
+		display_usage();
 	}
 
 	/* Hack -- Forget standard args */
@@ -597,6 +619,3 @@ int main(int argc, char *argv[])
 }
 
 #endif
-
-
-

@@ -1979,8 +1979,11 @@ void message_add(concptr str)
 		if (message__last == MESSAGE_MAX) message__last = 0;
 
 		message__ptr[x] = message__ptr[i];
-
-		goto end_of_message_add;
+		if (splitted2 != NULL)
+		{
+			message_add(splitted2);
+			return;
+		}
 	}
 
 	if (message__head + n + 1 >= MESSAGE_BUF)
@@ -2032,9 +2035,10 @@ void message_add(concptr str)
 	message__buf[message__head + i] = '\0';
 	message__head += n + 1;
 
-end_of_message_add:
 	if (splitted2 != NULL)
+	{
 		message_add(splitted2);
+	}
 }
 
 

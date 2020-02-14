@@ -56,6 +56,8 @@
  */
 #define MAXREAD  32768
 
+void global_free(DIBINIT *pInfo, INT_PTR *fh, BOOL unlock_needed);
+
 /*!
  * @brief 32KBのデータ読み取りを繰り返すことで、64KB以上のデータを一度に読み取るサブルーチン
  * Private routine to read more than 64K at a time Reads data in steps of 32k till all the data has been read.
@@ -217,7 +219,6 @@ static BOOL NEAR PASCAL MakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
  */
 BOOL ReadDIB(HWND hWnd, LPSTR lpFileName, DIBINIT *pInfo)
 {
-	unsigned fh;
 	LPBITMAPINFOHEADER lpbi;
 	OFSTRUCT of;
 	BITMAPFILEHEADER bf;
@@ -229,7 +230,7 @@ BOOL ReadDIB(HWND hWnd, LPSTR lpFileName, DIBINIT *pInfo)
 	BOOL bCoreHead = FALSE;
 
 	/* Open the file and get a handle to it's BITMAPINFO */
-	fh = OpenFile(lpFileName, &of, OF_READ);
+	INT_PTR fh = OpenFile(lpFileName, &of, OF_READ);
 	if (fh == -1)
 	{
 		wsprintf(str, "Can't open file '%s'", (LPSTR)lpFileName);
@@ -245,16 +246,14 @@ BOOL ReadDIB(HWND hWnd, LPSTR lpFileName, DIBINIT *pInfo)
 
 	lpbi = (LPBITMAPINFOHEADER)GlobalLock(pInfo->hDIB);
 
-	/* read the BITMAPFILEHEADER */
-	if (sizeof (bf) != _lread(fh, (LPSTR)&bf, sizeof(bf)))
-		goto ErrExit;
-
-	/* 'BM' */
-	if (bf.bfType != 0x4d42)
-		goto ErrExit;
-
-	if (sizeof(BITMAPCOREHEADER) != _lread(fh, (LPSTR)lpbi, sizeof(BITMAPCOREHEADER)))
-		goto ErrExit;
+	BOOL is_read_error = sizeof(bf) != _lread(fh, (LPSTR)&bf, sizeof(bf));
+	is_read_error |= bf.bfType != 0x4d42;
+	is_read_error |= sizeof(BITMAPCOREHEADER) != _lread(fh, (LPSTR)lpbi, sizeof(BITMAPCOREHEADER));
+	if (is_read_error)
+	{
+		global_free(pInfo, &fh, TRUE);
+		return result;
+	}
 
 	if (lpbi->biSize == sizeof(BITMAPCOREHEADER))
 	{
@@ -270,7 +269,10 @@ BOOL ReadDIB(HWND hWnd, LPSTR lpFileName, DIBINIT *pInfo)
 		/* get to the start of the header and read INFOHEADER */
 		_llseek(fh, sizeof(BITMAPFILEHEADER), SEEK_SET);
 		if (sizeof(BITMAPINFOHEADER) != _lread(fh, (LPSTR)lpbi, sizeof(BITMAPINFOHEADER)))
-			goto ErrExit;
+		{
+			global_free(pInfo, &fh, TRUE);
+			return result;
+		}
 	}
 
 	nNumColors = (WORD)lpbi->biClrUsed;
@@ -305,7 +307,10 @@ BOOL ReadDIB(HWND hWnd, LPSTR lpFileName, DIBINIT *pInfo)
 
 	/* can't resize buffer for loading */
 	if (!pInfo->hDIB)
-		goto ErrExit2;
+	{
+		global_free(pInfo, &fh, FALSE);
+		return result;
+	}
 
 	lpbi = (LPBITMAPINFOHEADER)GlobalLock(pInfo->hDIB);
 
@@ -351,7 +356,8 @@ BOOL ReadDIB(HWND hWnd, LPSTR lpFileName, DIBINIT *pInfo)
 					  &((HBITMAP)pInfo->hBitmap)))
 		{
 			ReleaseDC(hWnd,hDC);
-			goto ErrExit2;
+			global_free(pInfo, &fh, FALSE);
+			return result;
 		}
 		else
 		{
@@ -361,13 +367,22 @@ BOOL ReadDIB(HWND hWnd, LPSTR lpFileName, DIBINIT *pInfo)
 	}
 	else
 	{
-ErrExit:
 		GlobalUnlock(pInfo->hDIB);
-ErrExit2:
 		GlobalFree(pInfo->hDIB);
 	}
 
 	_lclose(fh);
-	return(result);
+	return result;
 }
 
+
+void global_free(DIBINIT *pInfo, INT_PTR *fh, BOOL unlock_needed)
+{
+	if (unlock_needed)
+	{
+		GlobalUnlock(pInfo->hDIB);
+	}
+
+	GlobalFree(pInfo->hDIB);
+	_lclose(*fh);
+}

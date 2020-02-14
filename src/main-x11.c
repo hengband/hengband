@@ -1900,27 +1900,25 @@ static errr CheckEvent(bool wait)
 	int i;
 
 #ifdef USE_XIM
- redo_checkevent:
+	do
+	{
 #endif
 
-	/* Do not wait unless requested */
-	if (!wait && !XPending(Metadpy->dpy)) return (1);
+		/* Do not wait unless requested */
+		if (!wait && !XPending(Metadpy->dpy)) return (1);
 
-	/*
-	 * Hack - redraw the selection, if needed.
-	 * This doesn't actually check that one of its squares was drawn to,
-	 * only that this may have happened.
-	 */
-	if (s_ptr->select && !s_ptr->drawn) mark_selection();
+		/*
+		 * Hack - redraw the selection, if needed.
+		 * This doesn't actually check that one of its squares was drawn to,
+		 * only that this may have happened.
+		 */
+		if (s_ptr->select && !s_ptr->drawn) mark_selection();
 
-	/* Load the Event */
-	XNextEvent(Metadpy->dpy, xev);
+		/* Load the Event */
+		XNextEvent(Metadpy->dpy, xev);
 
 #ifdef USE_XIM
-	if (XFilterEvent(xev, xev->xany.window)
-	{
-		goto redo_checkevent;
-	}
+	} while (XFilterEvent(xev, xev->xany.window)
 #endif
 
 	/* Notice new keymaps */

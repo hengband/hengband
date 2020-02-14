@@ -391,11 +391,10 @@ concptr make_screen_dump(player_type *creature_ptr)
  * todo メッセージは言語選択の関数マクロで何とかならんか？
  * @brief スコア転送処理のメインルーチン
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @return エラーコード
+ * @return 正常終了の時0、異常があったら1
  */
 errr report_score(player_type *creature_ptr)
 {
-	errr err = 0;
 #ifdef WINDOWS
 	WSADATA wsaData;
 	WORD wVersionRequested = (WORD)((1) | (1 << 8));
@@ -447,7 +446,10 @@ errr report_score(player_type *creature_ptr)
 	if (WSAStartup(wVersionRequested, &wsaData))
 	{
 		msg_print("Report: WSAStartup failed.");
-		goto report_end;
+#ifdef WINDOWS
+		WSACleanup();
+#endif
+		return 1;
 	}
 #endif
 
@@ -486,8 +488,10 @@ errr report_score(player_type *creature_ptr)
 			if (!get_check_strict("Try again? ", CHECK_NO_HISTORY))
 #endif
 			{
-				err = 1;
-				goto report_end;
+#ifdef WINDOWS
+				WSACleanup();
+#endif
+				return 1;
 			}
 
 			continue;
@@ -516,8 +520,10 @@ errr report_score(player_type *creature_ptr)
 			if (!get_check_strict("Try again? ", CHECK_NO_HISTORY))
 #endif
 			{
-				err = 1;
-				goto report_end;
+#ifdef WINDOWS
+				WSACleanup();
+#endif
+				return 1;
 			}
 
 			continue;
@@ -527,12 +533,10 @@ errr report_score(player_type *creature_ptr)
 		break;
 	}
 
-report_end:
 #ifdef WINDOWS
 	WSACleanup();
 #endif
 
-	return err;
+	return 0;
 }
-
 #endif /* WORLD_SCORE */
