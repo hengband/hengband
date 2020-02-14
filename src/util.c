@@ -658,9 +658,7 @@ errr fd_seek(int fd, huge n)
 errr fd_chop(int fd, huge n)
 {
 	n = n ? n : 0;
-	if (fd < 0) return -1;
-
-	return 0;
+	return fd >= 0 ? 0 : -1;
 }
 
 
