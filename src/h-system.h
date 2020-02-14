@@ -74,10 +74,6 @@
 
 #endif /* SET_UID */
 
-#ifdef __DJGPP__
-#include <unistd.h>
-#endif /* __DJGPP__ */
-
 #include <string.h>
 
 #include <stdarg.h>
