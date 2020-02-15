@@ -45,11 +45,12 @@ void awake_monster(player_type *target_ptr, MONSTER_IDX m_idx);
 bool process_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void vanish_nonunique(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
-void process_special(player_type *target_ptr, MONSTER_IDX m_idx);
-void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware);
 bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
 bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware);
 bool runaway_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon, bool see_m);
+void process_special(player_type *target_ptr, MONSTER_IDX m_idx);
+void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware);
+bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -1343,44 +1344,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	process_special(target_ptr, m_idx);
 	process_speak_sound(target_ptr, m_idx, oy, ox, aware);
-
-	/* Try to cast spell occasionally */
-	if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell)
-	{
-		bool counterattack = FALSE;
-
-		/* Give priority to counter attack? */
-		if (m_ptr->target_y)
-		{
-			MONSTER_IDX t_m_idx = target_ptr->current_floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
-
-			/* The monster must be an enemy, and projectable */
-			if (t_m_idx && are_enemies(target_ptr, m_ptr, &target_ptr->current_floor_ptr->m_list[t_m_idx]) &&
-				projectable(target_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
-			{
-				counterattack = TRUE;
-			}
-		}
-
-		if (!counterattack)
-		{
-			/* Attempt to cast a spell */
-			if (aware && make_attack_spell(m_idx, target_ptr)) return;
-
-			/*
-			 * Attempt to cast a spell at an enemy other than the player
-			 * (may slow the game a smidgeon, but I haven't noticed.)
-			 */
-			if (monst_spell_monst(target_ptr, m_idx)) return;
-		}
-		else
-		{
-			/* Attempt to do counter attack at first */
-			if (monst_spell_monst(target_ptr, m_idx)) return;
-
-			if (aware && make_attack_spell(m_idx, target_ptr)) return;
-		}
-	}
+	cast_spell(target_ptr, m_idx, aware);
 
 	/* Hack -- Assume no movement */
 	mm[0] = mm[1] = mm[2] = mm[3] = 0;
@@ -2352,7 +2316,7 @@ bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, P
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param mm 移動方向
  * @param m_idx モンスターID
- * @param aware 
+ * @param aware 起きていればTRUE
  * @return 移動先が存在すればTRUE
  */
 bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
@@ -2500,6 +2464,46 @@ bool runaway_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_
 	check_quest_completion(target_ptr, m_ptr);
 	delete_monster_idx(target_ptr, m_idx);
 	return TRUE;
+}
+
+
+/*!
+ * @brief モンスターに魔法を試行させる
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスターID
+ * @param aware 起きていればTRUE
+ * @return 魔法を唱えられなければ強制的にFALSE、その後モンスターが実際に魔法を唱えればTRUE
+ */
+bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	if ((r_ptr->freq_spell == 0) || !randint1(100) <= r_ptr->freq_spell)
+		return FALSE;
+
+	bool counterattack = FALSE;
+	if (m_ptr->target_y)
+	{
+		MONSTER_IDX t_m_idx = target_ptr->current_floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
+		if (t_m_idx && are_enemies(target_ptr, m_ptr, &target_ptr->current_floor_ptr->m_list[t_m_idx]) &&
+			projectable(target_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
+		{
+			counterattack = TRUE;
+		}
+	}
+
+	if (counterattack)
+	{
+		if (monst_spell_monst(target_ptr, m_idx)) return TRUE;
+		if (aware && make_attack_spell(m_idx, target_ptr)) return TRUE;
+	}
+	else
+	{
+		if (aware && make_attack_spell(m_idx, target_ptr)) return TRUE;
+		if (monst_spell_monst(target_ptr, m_idx)) return TRUE;
+	}
+
+	return FALSE;
 }
 
 
