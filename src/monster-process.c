@@ -44,8 +44,8 @@ bool process_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see
 void vanish_nonunique(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void process_special(player_type *target_ptr, MONSTER_IDX m_idx);
-bool multiply_monster(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
-void move_monster(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware);
+bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
+bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -1432,7 +1432,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	oy = m_ptr->fy;
 	ox = m_ptr->fx;
 
-	if (multiply_monster(target_ptr, m_idx, oy, ox)) return;
+	if (decide_monster_multiplication(target_ptr, m_idx, oy, ox)) return;
 
 	process_special(target_ptr, m_idx);
 
@@ -1523,7 +1523,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	mm[0] = mm[1] = mm[2] = mm[3] = 0;
 	mm[4] = mm[5] = mm[6] = mm[7] = 0;
 
-	move_monster(target_ptr, mm, m_idx, aware);
+	if (!decide_monster_movement_direction(target_ptr, mm, m_idx, aware)) return;
 
 	/* Assume nothing */
 	do_turn = FALSE;
@@ -2327,14 +2327,14 @@ void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
 
 
 /*!
- * @brief モンスターを分裂させる
+ * @brief モンスターを分裂させるかどうかを決定する (分裂もさせる)
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @param oy 分裂元モンスターのY座標
  * @param ox 分裂元モンスターのX座標
  * @return 実際に分裂したらTRUEを返す
  */
-bool multiply_monster(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox)
+bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -2370,112 +2370,89 @@ bool multiply_monster(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, P
 }
 
 
-void move_monster(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
+/*!
+ * @brief モンスターの移動パターンを決定する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param mm 移動方向
+ * @param m_idx モンスターID
+ * @param aware 
+ * @return 移動先が存在すればTRUE
+ */
+bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	/* Confused -- 100% random */
 	if (MON_CONFUSED(m_ptr) || !aware)
 	{
-		/* Try four "random" directions */
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+		return TRUE;
 	}
 
-	/* 75% random movement */
-	else if (((r_ptr->flags1 & (RF1_RAND_50 | RF1_RAND_25)) == (RF1_RAND_50 | RF1_RAND_25)) &&
-		(randint0(100) < 75))
+	if (((r_ptr->flags1 & (RF1_RAND_50 | RF1_RAND_25)) == (RF1_RAND_50 | RF1_RAND_25)) && (randint0(100) < 75))
 	{
-		/* Memorize flags */
 		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50 | RF1_RAND_25);
 
-		/* Try four "random" directions */
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+		return TRUE;
 	}
 
-	/* 50% random movement */
-	else if ((r_ptr->flags1 & RF1_RAND_50) &&
-		(randint0(100) < 50))
+	if ((r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 50))
 	{
-		/* Memorize flags */
 		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50);
 
-		/* Try four "random" directions */
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+		return TRUE;
 	}
 
-	/* 25% random movement */
-	else if ((r_ptr->flags1 & RF1_RAND_25) &&
-		(randint0(100) < 25))
-	{
-		/* Memorize flags */
+	 if ((r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 25))
+	 {
 		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= RF1_RAND_25;
 
-		/* Try four "random" directions */
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+		return TRUE;
+	 }
+
+	if ((r_ptr->flags1 & RF1_NEVER_MOVE) && (m_ptr->cdis > 1))
+	{
+		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+		return TRUE;
 	}
 
-	/* Can't reach player - find something else to hit */
-	else if ((r_ptr->flags1 & RF1_NEVER_MOVE) && (m_ptr->cdis > 1))
+	if (is_pet(m_ptr))
 	{
-		/* Try four "random" directions */
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-	}
-
-	/* Pets will follow the player */
-	else if (is_pet(m_ptr))
-	{
-		/* Are we trying to avoid the player? */
 		bool avoid = ((target_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - target_ptr->pet_follow_distance)));
-
-		/* Do we want to find the player? */
 		bool lonely = (!avoid && (m_ptr->cdis > target_ptr->pet_follow_distance));
-
-		/* Should we find the player if we can't find a monster? */
 		bool distant = (m_ptr->cdis > PET_SEEK_DIST);
-
-		/* by default, move randomly */
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-
-		/* Look for an enemy */
 		if (!get_enemy_dir(target_ptr, m_idx, mm))
 		{
-			/* Find the player if necessary */
 			if (avoid || lonely || distant)
 			{
-				/* Remember the leash length */
 				POSITION dis = target_ptr->pet_follow_distance;
-
-				/* Hack -- adjust follow distance temporarily */
 				if (target_ptr->pet_follow_distance > PET_SEEK_DIST)
 				{
 					target_ptr->pet_follow_distance = PET_SEEK_DIST;
 				}
 
-				/* Find the player */
 				(void)get_moves(target_ptr, m_idx, mm);
-
-				/* Restore the leash */
 				target_ptr->pet_follow_distance = (s16b)dis;
 			}
 		}
+
+		return TRUE;
 	}
 
-	/* Friendly monster movement */
-	else if (!is_hostile(m_ptr))
+	if (!is_hostile(m_ptr))
 	{
-		/* by default, move randomly */
 		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-
-		/* Look for an enemy */
 		get_enemy_dir(target_ptr, m_idx, mm);
+		return TRUE;
 	}
-	/* Normal movement */
-	else
-	{
-		/* Logical moves, may do nothing */
-		if (!get_moves(target_ptr, m_idx, mm)) return;
-	}
+
+	if (!get_moves(target_ptr, m_idx, mm)) return FALSE;
+
+	return TRUE;
 }
 
 
