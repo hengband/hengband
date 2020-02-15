@@ -40,13 +40,14 @@
 #include "files.h"
 #include "view-mainwindow.h"
 
+bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 bool process_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void vanish_nonunique(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void process_special(player_type *target_ptr, MONSTER_IDX m_idx);
 bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
 bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware);
-bool runaway_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool is_riding_mon, bool see_m);
+bool runaway_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon, bool see_m);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -1282,29 +1283,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (randint0(tmp) > (r_ptr->level + 20)) aware = FALSE;
 	}
 
-	/* Are there its parent? */
-	if (m_ptr->parent_m_idx && !target_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx)
-	{
-		/* Its parent have gone, it also goes away. */
-
-		if (see_m)
-		{
-			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(target_ptr, m_name, m_ptr, 0);
-			msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
-		}
-
-		if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
-		{
-			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
-			exe_write_diary(target_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name);
-		}
-
-		delete_monster_idx(target_ptr, m_idx);
-		return;
-	}
-
+	if (vanish_summoned_children(target_ptr, m_idx, see_m)) return;
 	if (process_quantum_effect(target_ptr,m_idx, see_m)) return;
 
 	if (m_ptr->r_idx == MON_SHURYUUDAN)
@@ -2149,6 +2128,38 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	}
 
 	if (m_ptr->ml) chg_virtue(target_ptr, V_COMPASSION, -1);
+}
+
+
+/*!
+ * @brief 召喚の親元が消滅した時、子供も消滅させる
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスターID
+ * @param see_m モンスターが視界内にいたらTRUE
+ * @return 召喚モンスターが消滅したらTRUE
+ */
+bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	if ((m_ptr->parent_m_idx == 0) || target_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx)
+		return FALSE;
+
+	if (see_m)
+	{
+		GAME_TEXT m_name[MAX_NLEN];
+		monster_desc(target_ptr, m_name, m_ptr, 0);
+		msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
+	}
+
+	if (record_named_pet && is_pet(m_ptr) && m_ptr->nickname)
+	{
+		GAME_TEXT m_name[MAX_NLEN];
+		monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_VISIBLE);
+		exe_write_diary(target_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_LOSE_PARENT, m_name);
+	}
+
+	delete_monster_idx(target_ptr, m_idx);
+	return TRUE;
 }
 
 
