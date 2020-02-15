@@ -46,6 +46,7 @@ bool process_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see
 void vanish_nonunique(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void process_special(player_type *target_ptr, MONSTER_IDX m_idx);
+void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware);
 bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
 bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware);
 bool runaway_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon, bool see_m);
@@ -1341,51 +1342,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (decide_monster_multiplication(target_ptr, m_idx, oy, ox)) return;
 
 	process_special(target_ptr, m_idx);
-
-	if (!target_ptr->phase_out)
-	{
-		/* Hack! "Cyber" monster makes noise... */
-		if (m_ptr->ap_r_idx == MON_CYBER &&
-			one_in_(CYBERNOISE) &&
-			!m_ptr->ml && (m_ptr->cdis <= MAX_SIGHT))
-		{
-			if (disturb_minor) disturb(target_ptr, FALSE, FALSE);
-			msg_print(_("重厚な足音が聞こえた。", "You hear heavy steps."));
-		}
-
-		/* Some monsters can speak */
-		if ((ap_r_ptr->flags2 & RF2_CAN_SPEAK) && aware &&
-			one_in_(SPEAK_CHANCE) &&
-			player_has_los_bold(target_ptr, oy, ox) &&
-			projectable(target_ptr, oy, ox, target_ptr->y, target_ptr->x))
-		{
-			GAME_TEXT m_name[MAX_NLEN];
-			char monmessage[1024];
-			concptr filename;
-
-			/* Acquire the monster name/poss */
-			if (m_ptr->ml)
-				monster_desc(target_ptr, m_name, m_ptr, 0);
-			else
-				strcpy(m_name, _("それ", "It"));
-
-			/* Select the file for monster quotes */
-			if (MON_MONFEAR(m_ptr))
-				filename = _("monfear_j.txt", "monfear.txt");
-			else if (is_pet(m_ptr))
-				filename = _("monpet_j.txt", "monpet.txt");
-			else if (is_friendly(m_ptr))
-				filename = _("monfrien_j.txt", "monfrien.txt");
-			else
-				filename = _("monspeak_j.txt", "monspeak.txt");
-			/* Get the monster line */
-			if (get_rnd_line(filename, m_ptr->ap_r_idx, monmessage) == 0)
-			{
-				/* Say something */
-				msg_format(_("%^s%s", "%^s %s"), m_name, monmessage);
-			}
-		}
-	}
+	process_speak_sound(target_ptr, m_idx, oy, ox, aware);
 
 	/* Try to cast spell occasionally */
 	if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell)
@@ -2289,6 +2246,60 @@ void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
 	}
 
 	if (count && is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags6 |= (RF6_SPECIAL);
+}
+
+
+/*!
+ * @brief モンスターを喋らせたり足音を立てたりする
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param 
+ * @param
+ * @param
+ * @param aware 起きていればTRUE
+ * @return なし
+ */
+void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
+{
+	if (target_ptr->phase_out) return;
+
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+	if (m_ptr->ap_r_idx == MON_CYBER &&
+		one_in_(CYBERNOISE) &&
+		!m_ptr->ml && (m_ptr->cdis <= MAX_SIGHT))
+	{
+		if (disturb_minor) disturb(target_ptr, FALSE, FALSE);
+		msg_print(_("重厚な足音が聞こえた。", "You hear heavy steps."));
+	}
+
+	if (((ap_r_ptr->flags2 & RF2_CAN_SPEAK) == 0) || !aware ||
+		!one_in_(SPEAK_CHANCE) ||
+		!player_has_los_bold(target_ptr, oy, ox) ||
+		!projectable(target_ptr, oy, ox, target_ptr->y, target_ptr->x))
+		return;
+
+	GAME_TEXT m_name[MAX_NLEN];
+	char monmessage[1024];
+	concptr filename;
+
+	if (m_ptr->ml)
+		monster_desc(target_ptr, m_name, m_ptr, 0);
+	else
+		strcpy(m_name, _("それ", "It"));
+
+	if (MON_MONFEAR(m_ptr))
+		filename = _("monfear_j.txt", "monfear.txt");
+	else if (is_pet(m_ptr))
+		filename = _("monpet_j.txt", "monpet.txt");
+	else if (is_friendly(m_ptr))
+		filename = _("monfrien_j.txt", "monfrien.txt");
+	else
+		filename = _("monspeak_j.txt", "monspeak.txt");
+
+	if (get_rnd_line(filename, m_ptr->ap_r_idx, monmessage) == 0)
+	{
+		msg_format(_("%^s%s", "%^s %s"), m_name, monmessage);
+	}
 }
 
 
