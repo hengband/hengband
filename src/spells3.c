@@ -217,6 +217,7 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
  * Teleport the player to a location up to "dis" grids away.
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param dis 基本移動距離
+ * @param is_quantum_effect 量子的効果 (反テレポ無効)によるテレポートアウェイならばTRUE
  * @param mode オプション
  * @return 実際にテレポート処理が行われたらtrue
  * @details
@@ -235,10 +236,10 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
  * of candidates has equal possibility to be choosen as a destination.
  * </pre>
  */
-bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
+bool teleport_player_aux(player_type *creature_ptr, POSITION dis, bool is_quantum_effect, BIT_FLAGS mode)
 {
 	if (creature_ptr->wild_mode) return FALSE;
-	if (creature_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
+	if (!is_quantum_effect && creature_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
 	{
 		msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
 		return FALSE;
@@ -321,7 +322,7 @@ bool teleport_player_aux(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode
  */
 void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
 {
-	if (!teleport_player_aux(creature_ptr, dis, mode)) return;
+	if (!teleport_player_aux(creature_ptr, dis, FALSE, mode)) return;
 
 	/* Monsters with teleport ability may follow the player */
 	POSITION oy = creature_ptr->y;
@@ -356,11 +357,12 @@ void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
  * @param m_idx アウェイを試みたモンスターID
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param dis テレポート距離
+ * @param is_quantum_effect 量子的効果によるテレポートアウェイならばTRUE
  * @return なし
  */
-void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION dis)
+void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION dis, bool is_quantum_effect)
 {
-	if (!teleport_player_aux(target_ptr, dis, TELEPORT_PASSIVE)) return;
+	if (!teleport_player_aux(target_ptr, dis, TELEPORT_PASSIVE, is_quantum_effect)) return;
 
 	/* Monsters with teleport ability may follow the player */
 	POSITION oy = target_ptr->y;
@@ -2914,7 +2916,7 @@ bool booze(player_type *creature_ptr)
 		ident = TRUE;
 		if (one_in_(3)) lose_all_info(creature_ptr);
 		else wiz_dark(creature_ptr);
-		(void)teleport_player_aux(creature_ptr, 100, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
+		(void)teleport_player_aux(creature_ptr, 100, FALSE, TELEPORT_NONMAGICAL | TELEPORT_PASSIVE);
 		wiz_dark(creature_ptr);
 		msg_print(_("知らない場所で目が醒めた。頭痛がする。", "You wake up somewhere with a sore head..."));
 		msg_print(_("何も思い出せない。どうやってここへ来たのかも分からない！", "You can't remember a thing or how you got here!"));

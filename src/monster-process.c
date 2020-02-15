@@ -1307,30 +1307,54 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (!randint0(2)) return;
 
 		/* Sometimes die */
-		if (!randint0((m_idx % 100) + 10) && !(r_ptr->flags1 & RF1_QUESTOR))
+		if (!randint0((m_idx % 100) + 10))
 		{
-			bool sad = FALSE;
-
-			if (is_pet(m_ptr) && !(m_ptr->ml)) sad = TRUE;
-
-			if (see_m)
+			if ((r_ptr->flags1 & RF1_UNIQUE) == 0)
 			{
-				GAME_TEXT m_name[MAX_NLEN];
-				monster_desc(target_ptr, m_name, m_ptr, 0);
+				if (!(r_ptr->flags1 & RF1_QUESTOR))
+				{
+					if (see_m)
+					{
+						GAME_TEXT m_name[MAX_NLEN];
+						monster_desc(target_ptr, m_name, m_ptr, 0);
+						msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
+					}
 
-				msg_format(_("%sは消え去った！", "%^s disappears!"), m_name);
+					monster_death(target_ptr, m_idx, FALSE);
+					delete_monster_idx(target_ptr, m_idx);
+					if (is_pet(m_ptr) && !(m_ptr->ml))
+					{
+						msg_print(_("少しの間悲しい気分になった。", "You feel sad for a moment."));
+					}
+
+					return;
+				}
 			}
-
-			/* Generate treasure, etc */
-			monster_death(target_ptr, m_idx, FALSE);
-
-			delete_monster_idx(target_ptr, m_idx);
-			if (sad)
+			else
 			{
-				msg_print(_("少しの間悲しい気分になった。", "You feel sad for a moment."));
-			}
+				if (see_m)
+				{
+					GAME_TEXT m_name[MAX_NLEN];
+					monster_desc(target_ptr, m_name, m_ptr, 0);
+					msg_format(_("%sは量子的効果を起こした！", "%^s produced a quantum effect!"), m_name);
+				}
+				else
+				{
+					msg_print(_("量子的効果が起こった！", "A quantum effect was produced!"));
+				}
 
-			return;
+				bool target = one_in_(2);
+				const int blink = 32 * 5 + 4;
+				if (target)
+				{
+					(void)monspell_to_monster(target_ptr, blink, m_ptr->fy, m_ptr->fx, m_idx, m_idx);
+
+				}
+				else
+				{
+					teleport_player_away(m_idx, target_ptr, 10, TRUE);
+				}
+			}
 		}
 	}
 

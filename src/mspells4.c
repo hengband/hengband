@@ -2408,7 +2408,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 		}
 
 		learn_spell(target_ptr, MS_TELE_AWAY);
-		teleport_player_away(m_idx, target_ptr, 100);
+		teleport_player_away(m_idx, target_ptr, 100, FALSE);
 		return;
 	}
 
@@ -2447,7 +2447,7 @@ void spell_RF6_TELE_AWAY(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 	}
 
 	if (t_idx == target_ptr->riding)
-		teleport_player_away(m_idx, target_ptr, MAX_SIGHT * 2 + 5);
+		teleport_player_away(m_idx, target_ptr, MAX_SIGHT * 2 + 5, FALSE);
 	else
 		teleport_away(target_ptr, t_idx, MAX_SIGHT * 2 + 5, TELEPORT_PASSIVE);
 	set_monster_csleep(target_ptr, t_idx, 0);
