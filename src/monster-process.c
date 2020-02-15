@@ -43,6 +43,9 @@
 bool process_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void vanish_nonunique(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
+void process_special(player_type *target_ptr, MONSTER_IDX m_idx);
+bool multiply_monster(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
+void move_monster(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -1214,19 +1217,18 @@ static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_p
  */
 void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-	monster_type    *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	monster_race    *r_ptr = &r_info[m_ptr->r_idx];
-	monster_race    *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 
 	int i, d;
 	POSITION oy, ox, ny, nx;
 
 	DIRECTION mm[8];
 
-	grid_type       *g_ptr;
-	feature_type    *f_ptr;
-
-	monster_type    *y_ptr;
+	grid_type *g_ptr;
+	feature_type *f_ptr;
+	monster_type *y_ptr;
 
 	bool do_turn;
 	bool do_move;
@@ -1430,69 +1432,9 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	oy = m_ptr->fy;
 	ox = m_ptr->fx;
 
-	/* Attempt to "multiply" if able and allowed */
-	if ((r_ptr->flags2 & RF2_MULTIPLY) && (target_ptr->current_floor_ptr->num_repro < MAX_REPRO))
-	{
-		int k;
-		POSITION y, x;
+	if (multiply_monster(target_ptr, m_idx, oy, ox)) return;
 
-		/* Count the adjacent monsters */
-		for (k = 0, y = oy - 1; y <= oy + 1; y++)
-		{
-			for (x = ox - 1; x <= ox + 1; x++)
-			{
-				/* Ignore locations off of edge */
-				if (!in_bounds2(target_ptr->current_floor_ptr, y, x)) continue;
-				if (target_ptr->current_floor_ptr->grid_array[y][x].m_idx) k++;
-			}
-		}
-
-		if (multiply_barrier(target_ptr, m_idx)) k = 8;
-
-		/* Hack -- multiply slower in crowded areas */
-		if ((k < 4) && (!k || !randint0(k * MON_MULT_ADJ)))
-		{
-			/* Try to multiply */
-			if (multiply_monster(target_ptr, m_idx, FALSE, (is_pet(m_ptr) ? PM_FORCE_PET : 0)))
-			{
-				/* Take note if visible */
-				if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(target_ptr, m_ptr))
-				{
-					r_ptr->r_flags2 |= (RF2_MULTIPLY);
-				}
-
-				/* Multiplying takes energy */
-				return;
-			}
-		}
-	}
-
-	if (r_ptr->a_ability_flags2 & RF6_SPECIAL)
-	{
-		/* Hack -- Ohmu scatters molds! */
-		if (m_ptr->r_idx == MON_OHMU)
-		{
-			if (!target_ptr->current_floor_ptr->inside_arena && !target_ptr->phase_out)
-			{
-				if (r_ptr->freq_spell && (randint1(100) <= r_ptr->freq_spell))
-				{
-					int k, count = 0;
-					DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-					BIT_FLAGS p_mode = is_pet(m_ptr) ? PM_FORCE_PET : 0L;
-
-					for (k = 0; k < A_MAX; k++)
-					{
-						if (summon_specific(target_ptr, m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_MOLD, (PM_ALLOW_GROUP | p_mode)))
-						{
-							if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml) count++;
-						}
-					}
-
-					if (count && is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags6 |= (RF6_SPECIAL);
-				}
-			}
-		}
-	}
+	process_special(target_ptr, m_idx);
 
 	if (!target_ptr->phase_out)
 	{
@@ -1581,108 +1523,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	mm[0] = mm[1] = mm[2] = mm[3] = 0;
 	mm[4] = mm[5] = mm[6] = mm[7] = 0;
 
-
-	/* Confused -- 100% random */
-	if (MON_CONFUSED(m_ptr) || !aware)
-	{
-		/* Try four "random" directions */
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-	}
-
-	/* 75% random movement */
-	else if (((r_ptr->flags1 & (RF1_RAND_50 | RF1_RAND_25)) == (RF1_RAND_50 | RF1_RAND_25)) &&
-		(randint0(100) < 75))
-	{
-		/* Memorize flags */
-		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50 | RF1_RAND_25);
-
-		/* Try four "random" directions */
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-	}
-
-	/* 50% random movement */
-	else if ((r_ptr->flags1 & RF1_RAND_50) &&
-		(randint0(100) < 50))
-	{
-		/* Memorize flags */
-		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50);
-
-		/* Try four "random" directions */
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-	}
-
-	/* 25% random movement */
-	else if ((r_ptr->flags1 & RF1_RAND_25) &&
-		(randint0(100) < 25))
-	{
-		/* Memorize flags */
-		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= RF1_RAND_25;
-
-		/* Try four "random" directions */
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-	}
-
-	/* Can't reach player - find something else to hit */
-	else if ((r_ptr->flags1 & RF1_NEVER_MOVE) && (m_ptr->cdis > 1))
-	{
-		/* Try four "random" directions */
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-	}
-
-	/* Pets will follow the player */
-	else if (is_pet(m_ptr))
-	{
-		/* Are we trying to avoid the player? */
-		bool avoid = ((target_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - target_ptr->pet_follow_distance)));
-
-		/* Do we want to find the player? */
-		bool lonely = (!avoid && (m_ptr->cdis > target_ptr->pet_follow_distance));
-
-		/* Should we find the player if we can't find a monster? */
-		bool distant = (m_ptr->cdis > PET_SEEK_DIST);
-
-		/* by default, move randomly */
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-
-		/* Look for an enemy */
-		if (!get_enemy_dir(target_ptr, m_idx, mm))
-		{
-			/* Find the player if necessary */
-			if (avoid || lonely || distant)
-			{
-				/* Remember the leash length */
-				POSITION dis = target_ptr->pet_follow_distance;
-
-				/* Hack -- adjust follow distance temporarily */
-				if (target_ptr->pet_follow_distance > PET_SEEK_DIST)
-				{
-					target_ptr->pet_follow_distance = PET_SEEK_DIST;
-				}
-
-				/* Find the player */
-				(void)get_moves(target_ptr, m_idx, mm);
-
-				/* Restore the leash */
-				target_ptr->pet_follow_distance = (s16b)dis;
-			}
-		}
-	}
-
-	/* Friendly monster movement */
-	else if (!is_hostile(m_ptr))
-	{
-		/* by default, move randomly */
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-
-		/* Look for an enemy */
-		get_enemy_dir(target_ptr, m_idx, mm);
-	}
-	/* Normal movement */
-	else
-	{
-		/* Logical moves, may do nothing */
-		if (!get_moves(target_ptr, m_idx, mm)) return;
-	}
+	move_monster(target_ptr, mm, m_idx, aware);
 
 	/* Assume nothing */
 	do_turn = FALSE;
@@ -2456,6 +2297,184 @@ void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see
 	else
 	{
 		teleport_player_away(m_idx, target_ptr, 10, TRUE);
+	}
+}
+
+
+void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	if ((r_ptr->a_ability_flags2 & RF6_SPECIAL) == 0) return;
+	if (m_ptr->r_idx != MON_OHMU) return;
+	if (target_ptr->current_floor_ptr->inside_arena || target_ptr->phase_out) return;
+	if ((r_ptr->freq_spell == 0) || !(randint1(100) <= r_ptr->freq_spell)) return;
+
+	int count = 0;
+	DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+	BIT_FLAGS p_mode = is_pet(m_ptr) ? PM_FORCE_PET : 0L;
+
+	for (int k = 0; k < A_MAX; k++)
+	{
+		if (summon_specific(target_ptr, m_idx, m_ptr->fy, m_ptr->fx, rlev, SUMMON_MOLD, (PM_ALLOW_GROUP | p_mode)))
+		{
+			if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml) count++;
+		}
+	}
+
+	if (count && is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags6 |= (RF6_SPECIAL);
+}
+
+
+/*!
+ * @brief モンスターを分裂させる
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスターID
+ * @param oy 分裂元モンスターのY座標
+ * @param ox 分裂元モンスターのX座標
+ * @return 実際に分裂したらTRUEを返す
+ */
+bool multiply_monster(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	if (((r_ptr->flags2 & RF2_MULTIPLY) == 0) && (target_ptr->current_floor_ptr->num_repro >= MAX_REPRO))
+		return FALSE;
+
+	int k = 0;
+	for (POSITION y = oy - 1; y <= oy + 1; y++)
+	{
+		for (POSITION x = ox - 1; x <= ox + 1; x++)
+		{
+			if (!in_bounds2(target_ptr->current_floor_ptr, y, x)) continue;
+			if (target_ptr->current_floor_ptr->grid_array[y][x].m_idx) k++;
+		}
+	}
+
+	if (multiply_barrier(target_ptr, m_idx)) k = 8;
+
+	if ((k < 4) && (!k || !randint0(k * MON_MULT_ADJ)))
+	{
+		if (multiply_monster(target_ptr, m_idx, FALSE, (is_pet(m_ptr) ? PM_FORCE_PET : 0)))
+		{
+			if (target_ptr->current_floor_ptr->m_list[hack_m_idx_ii].ml && is_original_ap_and_seen(target_ptr, m_ptr))
+			{
+				r_ptr->r_flags2 |= (RF2_MULTIPLY);
+			}
+
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+
+void move_monster(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+
+	/* Confused -- 100% random */
+	if (MON_CONFUSED(m_ptr) || !aware)
+	{
+		/* Try four "random" directions */
+		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+	}
+
+	/* 75% random movement */
+	else if (((r_ptr->flags1 & (RF1_RAND_50 | RF1_RAND_25)) == (RF1_RAND_50 | RF1_RAND_25)) &&
+		(randint0(100) < 75))
+	{
+		/* Memorize flags */
+		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50 | RF1_RAND_25);
+
+		/* Try four "random" directions */
+		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+	}
+
+	/* 50% random movement */
+	else if ((r_ptr->flags1 & RF1_RAND_50) &&
+		(randint0(100) < 50))
+	{
+		/* Memorize flags */
+		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50);
+
+		/* Try four "random" directions */
+		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+	}
+
+	/* 25% random movement */
+	else if ((r_ptr->flags1 & RF1_RAND_25) &&
+		(randint0(100) < 25))
+	{
+		/* Memorize flags */
+		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= RF1_RAND_25;
+
+		/* Try four "random" directions */
+		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+	}
+
+	/* Can't reach player - find something else to hit */
+	else if ((r_ptr->flags1 & RF1_NEVER_MOVE) && (m_ptr->cdis > 1))
+	{
+		/* Try four "random" directions */
+		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+	}
+
+	/* Pets will follow the player */
+	else if (is_pet(m_ptr))
+	{
+		/* Are we trying to avoid the player? */
+		bool avoid = ((target_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - target_ptr->pet_follow_distance)));
+
+		/* Do we want to find the player? */
+		bool lonely = (!avoid && (m_ptr->cdis > target_ptr->pet_follow_distance));
+
+		/* Should we find the player if we can't find a monster? */
+		bool distant = (m_ptr->cdis > PET_SEEK_DIST);
+
+		/* by default, move randomly */
+		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+
+		/* Look for an enemy */
+		if (!get_enemy_dir(target_ptr, m_idx, mm))
+		{
+			/* Find the player if necessary */
+			if (avoid || lonely || distant)
+			{
+				/* Remember the leash length */
+				POSITION dis = target_ptr->pet_follow_distance;
+
+				/* Hack -- adjust follow distance temporarily */
+				if (target_ptr->pet_follow_distance > PET_SEEK_DIST)
+				{
+					target_ptr->pet_follow_distance = PET_SEEK_DIST;
+				}
+
+				/* Find the player */
+				(void)get_moves(target_ptr, m_idx, mm);
+
+				/* Restore the leash */
+				target_ptr->pet_follow_distance = (s16b)dis;
+			}
+		}
+	}
+
+	/* Friendly monster movement */
+	else if (!is_hostile(m_ptr))
+	{
+		/* by default, move randomly */
+		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+
+		/* Look for an enemy */
+		get_enemy_dir(target_ptr, m_idx, mm);
+	}
+	/* Normal movement */
+	else
+	{
+		/* Logical moves, may do nothing */
+		if (!get_moves(target_ptr, m_idx, mm)) return;
 	}
 }
 
