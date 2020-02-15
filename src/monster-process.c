@@ -2375,7 +2375,7 @@ bool process_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if (!r_ptr->flags2 & RF2_QUANTUM) return FALSE;
+	if ((r_ptr->flags2 & RF2_QUANTUM) == 0) return FALSE;
 	if (!randint0(2)) return FALSE;
 	if (randint0((m_idx % 100) + 10)) return FALSE;
 
