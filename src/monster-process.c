@@ -40,6 +40,7 @@
 #include "files.h"
 #include "view-mainwindow.h"
 
+void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void awake_monster(player_type *target_ptr, MONSTER_IDX m_idx);
 void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
@@ -1227,60 +1228,29 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 
-	int i, d;
 	DIRECTION mm[8];
 
 	grid_type *g_ptr;
 	feature_type *f_ptr;
 	monster_type *y_ptr;
 
-	bool do_turn;
-	bool do_move;
-	bool do_view;
-	bool must_alter_to_move;
-
-	bool did_open_door;
-	bool did_bash_door;
-	bool did_take_item;
-	bool did_kill_item;
-	bool did_move_body;
-	bool did_pass_wall;
-	bool did_kill_wall;
-	bool can_cross;
-	bool aware = TRUE;
-
-	bool fear, dead;
 	bool is_riding_mon = (m_idx == target_ptr->riding);
 	bool see_m = is_seen(m_ptr);
 
-	if (is_riding_mon && !(r_ptr->flags7 & RF7_RIDING))
-	{
-		if (rakuba(target_ptr, 0, TRUE))
-		{
-#ifdef JP
-			msg_print("地面に落とされた。");
-#else
-			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(target_ptr, m_name, &target_ptr->current_floor_ptr->m_list[target_ptr->riding], 0);
-			msg_format("You have fallen from %s.", m_name);
-#endif
-		}
-	}
-
+	decide_drop_from_monster(target_ptr, m_idx, is_riding_mon);
 	if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && one_in_(13) && !MON_CSLEEP(m_ptr))
 	{
 		choose_new_monster(target_ptr, m_idx, FALSE, 0);
 		r_ptr = &r_info[m_ptr->r_idx];
 	}
 
-	/* Players hidden in shadow are almost imperceptable. -LM- */
+	bool aware = TRUE;
 	if (target_ptr->special_defense & NINJA_S_STEALTH)
 	{
 		int tmp = target_ptr->lev * 6 + (target_ptr->skill_stl + 10) * 4;
 		if (target_ptr->monlite) tmp /= 3;
 		if (target_ptr->cursed & TRC_AGGRAVATE) tmp /= 2;
 		if (r_ptr->level > (target_ptr->lev * target_ptr->lev / 20 + 10)) tmp /= 3;
-		/* Low-level monsters will find it difficult to locate the player. */
 		if (randint0(tmp) > (r_ptr->level + 20)) aware = FALSE;
 	}
 
@@ -1289,6 +1259,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	if (m_ptr->r_idx == MON_SHURYUUDAN)
 	{
+		bool fear, dead;
 		mon_take_hit_mon(target_ptr, m_idx, 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
 		if (dead) return;
 	}
@@ -1328,25 +1299,26 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (!decide_monster_movement_direction(target_ptr, mm, m_idx, aware)) return;
 
 	/* Assume nothing */
-	do_turn = FALSE;
-	do_move = FALSE;
-	do_view = FALSE;
-	must_alter_to_move = FALSE;
+	bool do_turn = FALSE;
+	bool do_move = FALSE;
+	bool do_view = FALSE;
+	bool must_alter_to_move = FALSE;
 
 	/* Assume nothing */
-	did_open_door = FALSE;
-	did_bash_door = FALSE;
-	did_take_item = FALSE;
-	did_kill_item = FALSE;
-	did_move_body = FALSE;
-	did_pass_wall = FALSE;
-	did_kill_wall = FALSE;
+	bool did_open_door = FALSE;
+	bool did_bash_door = FALSE;
+	bool did_take_item = FALSE;
+	bool did_kill_item = FALSE;
+	bool did_move_body = FALSE;
+	bool did_pass_wall = FALSE;
+	bool did_kill_wall = FALSE;
 
 	/* Take a zero-terminated array of "directions" */
+	int i;
 	for (i = 0; mm[i]; i++)
 	{
 		/* Get the direction */
-		d = mm[i];
+		int d = mm[i];
 
 		/* Hack -- allow "randomized" motion */
 		if (d == 5) d = ddd[randint0(8)];
@@ -1361,7 +1333,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		/* Access that grid */
 		g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
 		f_ptr = &f_info[g_ptr->feat];
-		can_cross = monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0);
+		bool can_cross = monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0);
 
 		/* Access that grid's contents */
 		y_ptr = &target_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
@@ -2004,6 +1976,32 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	}
 
 	if (m_ptr->ml) chg_virtue(target_ptr, V_COMPASSION, -1);
+}
+
+
+/*!
+ * @brief 死亡したモンスターが乗馬中のモンスターだった場合に落馬処理を行う
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスターID
+ * @param is_riding_mon 騎乗中であればTRUE
+ * @return なし
+ */
+void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	if (!is_riding_mon || ((r_ptr->flags7 & RF7_RIDING) != 0)) return;
+
+	if (rakuba(target_ptr, 0, TRUE))
+	{
+#ifdef JP
+		msg_print("地面に落とされた。");
+#else
+		GAME_TEXT m_name[MAX_NLEN];
+		monster_desc(target_ptr, m_name, &target_ptr->current_floor_ptr->m_list[target_ptr->riding], 0);
+		msg_format("You have fallen from %s.", m_name);
+#endif
+	}
 }
 
 
