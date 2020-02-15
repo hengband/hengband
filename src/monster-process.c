@@ -1227,8 +1227,6 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 
 	int i, d;
-	POSITION oy, ox, ny, nx;
-
 	DIRECTION mm[8];
 
 	grid_type *g_ptr;
@@ -1247,7 +1245,6 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	bool did_move_body;
 	bool did_pass_wall;
 	bool did_kill_wall;
-	bool gets_angry = FALSE;
 	bool can_cross;
 	bool aware = TRUE;
 
@@ -1312,6 +1309,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	}
 
 	/* No one wants to be your friend if you're aggravating */
+	bool gets_angry = FALSE;
 	if (is_friendly(m_ptr) && (target_ptr->cursed & TRC_AGGRAVATE))
 		gets_angry = TRUE;
 
@@ -1337,8 +1335,8 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	}
 
 	/* Get the origin */
-	oy = m_ptr->fy;
-	ox = m_ptr->fx;
+	POSITION oy = m_ptr->fy;
+	POSITION ox = m_ptr->fx;
 
 	if (decide_monster_multiplication(target_ptr, m_idx, oy, ox)) return;
 
@@ -1377,8 +1375,8 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (d == 5) d = ddd[randint0(8)];
 
 		/* Get the destination */
-		ny = oy + ddy[d];
-		nx = ox + ddx[d];
+		POSITION ny = oy + ddy[d];
+		POSITION nx = ox + ddx[d];
 
 		/* Ignore locations off of edge */
 		if (!in_bounds2(target_ptr->current_floor_ptr, ny, nx)) continue;
