@@ -42,6 +42,7 @@
 
 bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void awake_monster(player_type *target_ptr, MONSTER_IDX m_idx);
+void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 bool process_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void vanish_nonunique(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
@@ -1308,31 +1309,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		target_ptr->update |= (PU_BONUS);
 	}
 
-	/* No one wants to be your friend if you're aggravating */
-	bool gets_angry = FALSE;
-	if (is_friendly(m_ptr) && (target_ptr->cursed & TRC_AGGRAVATE))
-		gets_angry = TRUE;
-
-	/* Paranoia... no pet uniques outside wizard mode -- TY */
-	if (is_pet(m_ptr) && ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) &&
-		monster_has_hostile_align(target_ptr, NULL, 10, -10, r_ptr)) || (r_ptr->flagsr & RFR_RES_ALL)))
-	{
-		gets_angry = TRUE;
-	}
-
-	if (target_ptr->phase_out) gets_angry = FALSE;
-
-	if (gets_angry)
-	{
-		if (is_pet(m_ptr) || see_m)
-		{
-			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(target_ptr, m_name, m_ptr, is_pet(m_ptr) ? MD_ASSUME_VISIBLE : 0);
-			msg_format(_("%^sは突然敵にまわった！", "%^s suddenly becomes hostile!"), m_name);
-		}
-
-		set_hostile(target_ptr, m_ptr);
-	}
+	process_angar(target_ptr, m_idx, see_m);
 
 	/* Get the origin */
 	POSITION oy = m_ptr->fy;
@@ -2087,6 +2064,40 @@ void awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	{
 		r_ptr->r_wake++;
 	}
+}
+
+
+/*!
+ * @brief モンスターの怒り状態を判定する (起こっていたら敵に回す)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスターID
+ * @param see_m モンスターが視界内にいたらTRUE
+ * @return なし
+ */
+void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	bool gets_angry = FALSE;
+	if (is_friendly(m_ptr) && (target_ptr->cursed & TRC_AGGRAVATE))
+		gets_angry = TRUE;
+
+	if (is_pet(m_ptr) && ((((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_NAZGUL)) &&
+		monster_has_hostile_align(target_ptr, NULL, 10, -10, r_ptr)) || (r_ptr->flagsr & RFR_RES_ALL)))
+	{
+		gets_angry = TRUE;
+	}
+
+	if (target_ptr->phase_out || !gets_angry) return;
+
+	if (is_pet(m_ptr) || see_m)
+	{
+		GAME_TEXT m_name[MAX_NLEN];
+		monster_desc(target_ptr, m_name, m_ptr, is_pet(m_ptr) ? MD_ASSUME_VISIBLE : 0);
+		msg_format(_("%^sは突然敵にまわった！", "%^s suddenly becomes hostile!"), m_name);
+	}
+
+	set_hostile(target_ptr, m_ptr);
 }
 
 
