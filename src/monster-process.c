@@ -2195,6 +2195,11 @@ void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see
 }
 
 
+/*!
+ * @brief モンスター依存の特別な行動を取らせる
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスターID
+ */
 void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
@@ -2223,9 +2228,9 @@ void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
 /*!
  * @brief モンスターを喋らせたり足音を立てたりする
  * @param target_ptr プレーヤーへの参照ポインタ
- * @param 
- * @param
- * @param
+ * @param m_idx モンスターID
+ * @param oy モンスターが元々いたY座標
+ * @param ox モンスターが元々いたX座標
  * @param aware 起きていればTRUE
  * @return なし
  */
