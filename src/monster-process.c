@@ -41,6 +41,7 @@
 #include "view-mainwindow.h"
 
 bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
+void awake_monster(player_type *target_ptr, MONSTER_IDX m_idx);
 bool process_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void vanish_nonunique(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
@@ -1294,28 +1295,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	if (runaway_monster(target_ptr, m_idx, is_riding_mon, see_m)) return;
 
-	/* Handle "sleep" */
-	if (MON_CSLEEP(m_ptr))
-	{
-		/* Handle non-aggravation - Still sleeping */
-		if (!(target_ptr->cursed & TRC_AGGRAVATE)) return;
-
-		(void)set_monster_csleep(target_ptr, m_idx, 0);
-
-		/* Notice the "waking up" */
-		if (m_ptr->ml)
-		{
-			GAME_TEXT m_name[MAX_NLEN];
-			monster_desc(target_ptr, m_name, m_ptr, 0);
-			msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
-		}
-
-		/* Hack -- Count the wakings */
-		if (is_original_ap_and_seen(target_ptr, m_ptr) && (r_ptr->r_wake < MAX_UCHAR))
-		{
-			r_ptr->r_wake++;
-		}
-	}
+	awake_monster(target_ptr, m_idx);
 
 	/* Handle "stun" */
 	if (MON_STUNNED(m_ptr))
@@ -2160,6 +2140,34 @@ bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool s
 
 	delete_monster_idx(target_ptr, m_idx);
 	return TRUE;
+}
+
+
+/*!
+ * @brief 寝ているモンスターの起床を判定する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスターID
+ * @return なし
+ */
+void awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	if (!MON_CSLEEP(m_ptr)) return;
+	if (!(target_ptr->cursed & TRC_AGGRAVATE)) return;
+
+	(void)set_monster_csleep(target_ptr, m_idx, 0);
+	if (m_ptr->ml)
+	{
+		GAME_TEXT m_name[MAX_NLEN];
+		monster_desc(target_ptr, m_name, m_ptr, 0);
+		msg_format(_("%^sが目を覚ました。", "%^s wakes up."), m_name);
+	}
+
+	if (is_original_ap_and_seen(target_ptr, m_ptr) && (r_ptr->r_wake < MAX_UCHAR))
+	{
+		r_ptr->r_wake++;
+	}
 }
 
 
