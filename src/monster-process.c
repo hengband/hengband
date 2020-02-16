@@ -73,6 +73,8 @@ bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware);
 
 void process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx, bool can_cross);
 bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
+void process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
+bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -1175,55 +1177,8 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		process_wall(target_ptr, turn_flags_ptr, m_ptr, ny, nx, can_cross);
 		if (!process_door(target_ptr, turn_flags_ptr, m_ptr, ny, nx)) return;
 
-		if (turn_flags_ptr->do_move && is_glyph_grid(g_ptr) &&
-			!((r_ptr->flags1 & RF1_NEVER_BLOW) && player_bold(target_ptr, ny, nx)))
-		{
-			turn_flags_ptr->do_move = FALSE;
-			if (!is_pet(m_ptr) && (randint1(BREAK_GLYPH) < r_ptr->level))
-			{
-				if (g_ptr->info & CAVE_MARK)
-				{
-					msg_print(_("守りのルーンが壊れた！", "The rune of protection is broken!"));
-				}
-
-				g_ptr->info &= ~(CAVE_MARK);
-				g_ptr->info &= ~(CAVE_OBJECT);
-				g_ptr->mimic = 0;
-				turn_flags_ptr->do_move = TRUE;
-				note_spot(target_ptr, ny, nx);
-			}
-		}
-		else if (turn_flags_ptr->do_move && is_explosive_rune_grid(g_ptr) &&
-			!((r_ptr->flags1 & RF1_NEVER_BLOW) && player_bold(target_ptr, ny, nx)))
-		{
-			turn_flags_ptr->do_move = FALSE;
-			if (!is_pet(m_ptr))
-			{
-				if (randint1(BREAK_MINOR_GLYPH) > r_ptr->level)
-				{
-					if (g_ptr->info & CAVE_MARK)
-					{
-						msg_print(_("ルーンが爆発した！", "The rune explodes!"));
-						project(target_ptr, 0, 2, ny, nx, 2 * (target_ptr->lev + damroll(7, 7)), GF_MANA, (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
-					}
-				}
-				else
-				{
-					msg_print(_("爆発のルーンは解除された。", "An explosive rune was disarmed."));
-				}
-
-				g_ptr->info &= ~(CAVE_MARK);
-				g_ptr->info &= ~(CAVE_OBJECT);
-				g_ptr->mimic = 0;
-
-				note_spot(target_ptr, ny, nx);
-				lite_spot(target_ptr, ny, nx);
-
-				if (!monster_is_valid(m_ptr)) return;
-
-				turn_flags_ptr->do_move = TRUE;
-			}
-		}
+		process_protection_rune(target_ptr, turn_flags_ptr, m_ptr, ny, nx);
+		if (!process_explosive_rune(target_ptr, turn_flags_ptr, m_ptr, ny, nx)) return;
 
 		if (turn_flags_ptr->do_move && player_bold(target_ptr, ny, nx))
 		{
@@ -2219,6 +2174,88 @@ bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
 
 	f_ptr = &f_info[g_ptr->feat];
 	turn_flags_ptr->do_view = TRUE;
+	return TRUE;
+}
+
+
+/*!
+ * @brief 守りのルーンによるモンスターの移動制限を処理する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_ptr モンスターへの参照ポインタ
+ * @param ny モンスターのY座標
+ * @param nx モンスターのX座標
+ * @return なし
+ */
+void process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+{
+	grid_type *g_ptr;
+	g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	if (!turn_flags_ptr->do_move || !is_glyph_grid(g_ptr) ||
+		(((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(target_ptr, ny, nx)))
+		return;
+
+	turn_flags_ptr->do_move = FALSE;
+	if (is_pet(m_ptr) || (randint1(BREAK_GLYPH) >= r_ptr->level))
+		return;
+
+	if (g_ptr->info & CAVE_MARK)
+	{
+		msg_print(_("守りのルーンが壊れた！", "The rune of protection is broken!"));
+	}
+
+	g_ptr->info &= ~(CAVE_MARK);
+	g_ptr->info &= ~(CAVE_OBJECT);
+	g_ptr->mimic = 0;
+	turn_flags_ptr->do_move = TRUE;
+	note_spot(target_ptr, ny, nx);
+}
+
+
+/*!
+ * @brief 爆発ののルーンにを処理する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_ptr モンスターへの参照ポインタ
+ * @param ny モンスターのY座標
+ * @param nx モンスターのX座標
+ * @return モンスター情報が異常でない限りTRUE
+ */
+bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+{
+	grid_type *g_ptr;
+	g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	if (!turn_flags_ptr->do_move || !is_explosive_rune_grid(g_ptr) ||
+		(((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(target_ptr, ny, nx)))
+		return TRUE;
+
+	turn_flags_ptr->do_move = FALSE;
+	if (is_pet(m_ptr)) return TRUE;
+
+	if (randint1(BREAK_MINOR_GLYPH) > r_ptr->level)
+	{
+		if (g_ptr->info & CAVE_MARK)
+		{
+			msg_print(_("ルーンが爆発した！", "The rune explodes!"));
+			BIT_FLAGS project_flags = PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI;
+			project(target_ptr, 0, 2, ny, nx, 2 * (target_ptr->lev + damroll(7, 7)), GF_MANA, project_flags, -1);
+		}
+	}
+	else
+	{
+		msg_print(_("爆発のルーンは解除された。", "An explosive rune was disarmed."));
+	}
+
+	g_ptr->info &= ~(CAVE_MARK);
+	g_ptr->info &= ~(CAVE_OBJECT);
+	g_ptr->mimic = 0;
+
+	note_spot(target_ptr, ny, nx);
+	lite_spot(target_ptr, ny, nx);
+
+	if (!monster_is_valid(m_ptr)) return FALSE;
+
+	turn_flags_ptr->do_move = TRUE;
 	return TRUE;
 }
 
