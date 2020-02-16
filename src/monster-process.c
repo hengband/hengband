@@ -1100,10 +1100,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	DIRECTION mm[8];
-
 	turn_flags *turn_flags_ptr = init_turn_flags(target_ptr, m_idx);
-
 	bool see_m = is_seen(m_ptr);
 
 	decide_drop_from_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon);
@@ -1114,14 +1111,12 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	}
 
 	bool aware = process_stealth(target_ptr, m_idx);
-
 	if (vanish_summoned_children(target_ptr, m_idx, see_m)) return;
 	if (process_quantum_effect(target_ptr,m_idx, see_m)) return;
 	if (explode_monster(target_ptr, m_idx)) return;
 	if (runaway_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon, see_m)) return;
 
 	awake_monster(target_ptr, m_idx);
-
 	if (MON_STUNNED(m_ptr))
 	{
 		if (one_in_(2)) return;
@@ -1142,6 +1137,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	process_speak_sound(target_ptr, m_idx, oy, ox, aware);
 	if (cast_spell(target_ptr, m_idx, aware)) return;
 
+	DIRECTION mm[8];
 	mm[0] = mm[1] = mm[2] = mm[3] = 0;
 	mm[4] = mm[5] = mm[6] = mm[7] = 0;
 
