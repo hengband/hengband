@@ -2386,30 +2386,7 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
 		object_flags(o_ptr, flgs);
 		object_desc(target_ptr, o_name, o_ptr, 0);
 		monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_HIDDEN);
-
-		if (have_flag(flgs, TR_SLAY_DRAGON)) flg3 |= (RF3_DRAGON);
-		if (have_flag(flgs, TR_KILL_DRAGON)) flg3 |= (RF3_DRAGON);
-		if (have_flag(flgs, TR_SLAY_TROLL))  flg3 |= (RF3_TROLL);
-		if (have_flag(flgs, TR_KILL_TROLL))  flg3 |= (RF3_TROLL);
-		if (have_flag(flgs, TR_SLAY_GIANT))  flg3 |= (RF3_GIANT);
-		if (have_flag(flgs, TR_KILL_GIANT))  flg3 |= (RF3_GIANT);
-		if (have_flag(flgs, TR_SLAY_ORC))    flg3 |= (RF3_ORC);
-		if (have_flag(flgs, TR_KILL_ORC))    flg3 |= (RF3_ORC);
-		if (have_flag(flgs, TR_SLAY_DEMON))  flg3 |= (RF3_DEMON);
-		if (have_flag(flgs, TR_KILL_DEMON))  flg3 |= (RF3_DEMON);
-		if (have_flag(flgs, TR_SLAY_UNDEAD)) flg3 |= (RF3_UNDEAD);
-		if (have_flag(flgs, TR_KILL_UNDEAD)) flg3 |= (RF3_UNDEAD);
-		if (have_flag(flgs, TR_SLAY_ANIMAL)) flg3 |= (RF3_ANIMAL);
-		if (have_flag(flgs, TR_KILL_ANIMAL)) flg3 |= (RF3_ANIMAL);
-		if (have_flag(flgs, TR_SLAY_EVIL))   flg3 |= (RF3_EVIL);
-		if (have_flag(flgs, TR_KILL_EVIL))   flg3 |= (RF3_EVIL);
-		if (have_flag(flgs, TR_SLAY_HUMAN))  flg2 |= (RF2_HUMAN);
-		if (have_flag(flgs, TR_KILL_HUMAN))  flg2 |= (RF2_HUMAN);
-		if (have_flag(flgs, TR_BRAND_ACID))  flgr |= (RFR_IM_ACID);
-		if (have_flag(flgs, TR_BRAND_ELEC))  flgr |= (RFR_IM_ELEC);
-		if (have_flag(flgs, TR_BRAND_FIRE))  flgr |= (RFR_IM_FIRE);
-		if (have_flag(flgs, TR_BRAND_COLD))  flgr |= (RFR_IM_COLD);
-		if (have_flag(flgs, TR_BRAND_POIS))  flgr |= (RFR_IM_POIS);
+		update_object_flags(flgs, &flg2, &flg3, &flgr);
 
 		if (object_is_artifact(o_ptr) || (r_ptr->flags3 & flg3) || (r_ptr->flags2 & flg2) ||
 			((~(r_ptr->flagsr) & flgr) && !(r_ptr->flagsr & RFR_RES_ALL)))
@@ -2449,6 +2426,37 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
 			delete_object_idx(target_ptr, this_o_idx);
 		}
 	}
+}
+
+
+/*!
+ * @brief オブジェクトのフラグを更新する
+ */
+void update_object_flags(BIT_FLAGS *flgs, BIT_FLAGS *flg2, BIT_FLAGS *flg3, BIT_FLAGS *flgr)
+{
+	if (have_flag(flgs, TR_SLAY_DRAGON)) *flg3 |= (RF3_DRAGON);
+	if (have_flag(flgs, TR_KILL_DRAGON)) *flg3 |= (RF3_DRAGON);
+	if (have_flag(flgs, TR_SLAY_TROLL))  *flg3 |= (RF3_TROLL);
+	if (have_flag(flgs, TR_KILL_TROLL))  *flg3 |= (RF3_TROLL);
+	if (have_flag(flgs, TR_SLAY_GIANT))  *flg3 |= (RF3_GIANT);
+	if (have_flag(flgs, TR_KILL_GIANT))  *flg3 |= (RF3_GIANT);
+	if (have_flag(flgs, TR_SLAY_ORC))    *flg3 |= (RF3_ORC);
+	if (have_flag(flgs, TR_KILL_ORC))    *flg3 |= (RF3_ORC);
+	if (have_flag(flgs, TR_SLAY_DEMON))  *flg3 |= (RF3_DEMON);
+	if (have_flag(flgs, TR_KILL_DEMON))  *flg3 |= (RF3_DEMON);
+	if (have_flag(flgs, TR_SLAY_UNDEAD)) *flg3 |= (RF3_UNDEAD);
+	if (have_flag(flgs, TR_KILL_UNDEAD)) *flg3 |= (RF3_UNDEAD);
+	if (have_flag(flgs, TR_SLAY_ANIMAL)) *flg3 |= (RF3_ANIMAL);
+	if (have_flag(flgs, TR_KILL_ANIMAL)) *flg3 |= (RF3_ANIMAL);
+	if (have_flag(flgs, TR_SLAY_EVIL))   *flg3 |= (RF3_EVIL);
+	if (have_flag(flgs, TR_KILL_EVIL))   *flg3 |= (RF3_EVIL);
+	if (have_flag(flgs, TR_SLAY_HUMAN))  *flg2 |= (RF2_HUMAN);
+	if (have_flag(flgs, TR_KILL_HUMAN))  *flg2 |= (RF2_HUMAN);
+	if (have_flag(flgs, TR_BRAND_ACID))  *flgr |= (RFR_IM_ACID);
+	if (have_flag(flgs, TR_BRAND_ELEC))  *flgr |= (RFR_IM_ELEC);
+	if (have_flag(flgs, TR_BRAND_FIRE))  *flgr |= (RFR_IM_FIRE);
+	if (have_flag(flgs, TR_BRAND_COLD))  *flgr |= (RFR_IM_COLD);
+	if (have_flag(flgs, TR_BRAND_POIS))  *flgr |= (RFR_IM_POIS);
 }
 
 
