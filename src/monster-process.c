@@ -79,7 +79,8 @@ bool process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr
 bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 
 void exe_monster_attack_to_player(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx);
-bool process_monster_attack_to_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, grid_type *g_ptr, MONSTER_IDX m_idx, bool can_cross);
+bool process_monster_attack_to_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, grid_type *g_ptr, bool can_cross);
+bool exe_monster_attack_to_monster(player_type *target_ptr, MONSTER_IDX m_idx, grid_type *g_ptr);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -1192,7 +1193,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 
 		exe_monster_attack_to_player(target_ptr, turn_flags_ptr, m_idx, ny, nx);
-		if (process_monster_attack_to_monster(target_ptr, turn_flags_ptr, g_ptr, m_idx, can_cross)) return;
+		if (process_monster_attack_to_monster(target_ptr, turn_flags_ptr, m_idx, g_ptr, can_cross)) return;
 
 		if (turn_flags_ptr->is_riding_mon)
 		{
@@ -2291,12 +2292,12 @@ void exe_monster_attack_to_player(player_type *target_ptr, turn_flags *turn_flag
  * @brief モンスターからモンスターへの攻撃処理
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
- * @param g_ptr グリッドへの参照ポインタ
  * @param m_idx モンスターID
+ * @param g_ptr グリッドへの参照ポインタ
  * @param can_cross モンスターが地形を踏破できるならばTRUE
  * @return ターン消費が発生したらTRUE
  */
-bool process_monster_attack_to_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, grid_type *g_ptr, MONSTER_IDX m_idx, bool can_cross)
+bool process_monster_attack_to_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, grid_type *g_ptr, bool can_cross)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -2311,37 +2312,10 @@ bool process_monster_attack_to_monster(player_type *target_ptr, turn_flags *turn
 		can_cross && (g_ptr->m_idx != target_ptr->riding)) ||
 		are_enemies(target_ptr, m_ptr, y_ptr) || MON_CONFUSED(m_ptr))
 	{
-		if (!(r_ptr->flags1 & RF1_NEVER_BLOW))
-		{
-			if (r_ptr->flags2 & RF2_KILL_BODY)
-			{
-				if (is_original_ap_and_seen(target_ptr, m_ptr))
-				{
-					r_ptr->r_flags2 |= (RF2_KILL_BODY);
-				}
-			}
-
-			if (y_ptr->r_idx && (y_ptr->hp >= 0))
-			{
-				if (monst_attack_monst(target_ptr, m_idx, g_ptr->m_idx)) return TRUE;
-
-				if (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
-				{
-					if (MON_CONFUSED(m_ptr)) return TRUE;
-					if (r_ptr->flags2 & RF2_STUPID)
-					{
-						if (is_original_ap_and_seen(target_ptr, m_ptr))
-						{
-							r_ptr->r_flags2 |= (RF2_STUPID);
-						}
-
-						return TRUE;
-					}
-				}
-			}
-		}
+		return exe_monster_attack_to_monster(target_ptr, m_idx, g_ptr);
 	}
-	else if (((r_ptr->flags2 & RF2_MOVE_BODY) != 0) && ((r_ptr->flags1 & RF1_NEVER_MOVE) == 0) &&
+
+	if (((r_ptr->flags2 & RF2_MOVE_BODY) != 0) && ((r_ptr->flags1 & RF1_NEVER_MOVE) == 0) &&
 		(r_ptr->mexp > z_ptr->mexp) &&
 		can_cross && (g_ptr->m_idx != target_ptr->riding) &&
 		monster_can_cross_terrain(target_ptr, target_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0))
@@ -2352,6 +2326,36 @@ bool process_monster_attack_to_monster(player_type *target_ptr, turn_flags *turn
 	}
 
 	return FALSE;
+}
+
+
+/*!
+ * @brief モンスターからモンスターへの直接攻撃を実行する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスターID
+ * @param g_ptr グリッドへの参照ポインタ
+ */
+bool exe_monster_attack_to_monster(player_type *target_ptr, MONSTER_IDX m_idx, grid_type *g_ptr)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	monster_type *y_ptr;
+	y_ptr = &target_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+	if ((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) return FALSE;
+
+	if (((r_ptr->flags2 & RF2_KILL_BODY) == 0) && is_original_ap_and_seen(target_ptr, m_ptr))
+		r_ptr->r_flags2 |= (RF2_KILL_BODY);
+
+	if ((y_ptr->r_idx == 0) || (y_ptr->hp < 0)) return FALSE;
+	if (monst_attack_monst(target_ptr, m_idx, g_ptr->m_idx)) return TRUE;
+	if ((d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) == 0) return FALSE;
+	if (MON_CONFUSED(m_ptr)) return TRUE;
+	if ((r_ptr->flags2 & RF2_STUPID) == 0) return FALSE;
+
+	if (is_original_ap_and_seen(target_ptr, m_ptr))
+		r_ptr->r_flags2 |= (RF2_STUPID);
+
+	return TRUE;
 }
 
 
