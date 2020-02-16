@@ -90,6 +90,8 @@ bool update_riding_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, 
 
 void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx);
 
+void update_player_type(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_race *r_ptr);
+
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
   * Calculate the direction to the next enemy
@@ -1173,17 +1175,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 	}
 
-	if (turn_flags_ptr->do_view)
-	{
-		target_ptr->update |= (PU_FLOW);
-		target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-	}
-
-	if (turn_flags_ptr->do_move && ((r_ptr->flags7 & (RF7_SELF_LD_MASK | RF7_HAS_DARK_1 | RF7_HAS_DARK_2))
-		|| ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !target_ptr->phase_out)))
-	{
-		target_ptr->update |= (PU_MON_LITE);
-	}
+	update_player_type(target_ptr, turn_flags_ptr, r_ptr);
 
 	if (is_original_ap_and_seen(target_ptr, m_ptr))
 	{
@@ -2463,6 +2455,28 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
 
 			delete_object_idx(target_ptr, this_o_idx);
 		}
+	}
+}
+
+
+/*!
+ * @brief updateフィールドを更新する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
+ * @return なし
+ */
+void update_player_type(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_race *r_ptr)
+{
+	if (turn_flags_ptr->do_view)
+	{
+		target_ptr->update |= (PU_FLOW);
+		target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+	}
+
+	if (turn_flags_ptr->do_move && ((r_ptr->flags7 & (RF7_SELF_LD_MASK | RF7_HAS_DARK_1 | RF7_HAS_DARK_2))
+		|| ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !target_ptr->phase_out)))
+	{
+		target_ptr->update |= (PU_MON_LITE);
 	}
 }
 
