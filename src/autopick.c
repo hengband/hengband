@@ -1383,7 +1383,7 @@ static bool is_autopick_aux(player_type *player_ptr, object_type *o_ptr, autopic
 		return FALSE;
 
 	if (IS_FLG(FLG_STAR_IDENTIFIED) &&
-		(!object_is_known(o_ptr) || !(o_ptr->ident & IDENT_MENTAL)))
+		(!object_is_known(o_ptr) || !OBJECT_IS_FULL_KNOWN(o_ptr)))
 		return FALSE;
 
 	if (IS_FLG(FLG_BOOSTED))

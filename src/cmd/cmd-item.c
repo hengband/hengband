@@ -807,7 +807,7 @@ void do_cmd_observe(player_type *creature_ptr)
 	if (!o_ptr) return;
 
 	/* Require full knowledge */
-	if (!(o_ptr->ident & IDENT_MENTAL))
+	if (!OBJECT_IS_FULL_KNOWN(o_ptr))
 	{
 		msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));
 		return;

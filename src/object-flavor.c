@@ -1213,7 +1213,7 @@ static void get_inscription(char *buff, object_type *o_ptr)
 	char *ptr = buff;
 
 	/* Not fully identified */
-	if (!(o_ptr->ident & IDENT_MENTAL))
+	if (!OBJECT_IS_FULL_KNOWN(o_ptr))
 	{
 		/* Copy until end of line or '#' */
 		while (*insc)
@@ -2733,7 +2733,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 	tmp_val2[0] = '\0';
 
 	/* Auto abbreviation inscribe */
-	if ((abbrev_extra || abbrev_all) && (o_ptr->ident & IDENT_MENTAL))
+	if ((abbrev_extra || abbrev_all) && OBJECT_IS_FULL_KNOWN(o_ptr))
 	{
 		if (!o_ptr->inscription || !my_strchr(quark_str(o_ptr->inscription), '%'))
 		{

@@ -1196,7 +1196,7 @@ void object_absorb(object_type *o_ptr, object_type *j_ptr)
 		if (o_ptr->ident & IDENT_STORE) o_ptr->ident &= 0xEF;
 	}
 
-	if (j_ptr->ident & (IDENT_MENTAL)) o_ptr->ident |= (IDENT_MENTAL);
+	if (OBJECT_IS_FULL_KNOWN(j_ptr)) o_ptr->ident |= (IDENT_FULL_KNOWN);
 	if (j_ptr->inscription) o_ptr->inscription = j_ptr->inscription;
 	if (j_ptr->feeling) o_ptr->feeling = j_ptr->feeling;
 	if (o_ptr->discount < j_ptr->discount) o_ptr->discount = j_ptr->discount;
@@ -1317,7 +1317,7 @@ static void object_mention(player_type *owner_ptr, object_type *o_ptr)
 	object_aware(owner_ptr, o_ptr);
 	object_known(o_ptr);
 
-	o_ptr->ident |= (IDENT_MENTAL);
+	o_ptr->ident |= (IDENT_FULL_KNOWN);
 	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(owner_ptr, o_name, o_ptr, 0);
 	msg_format_wizard(CHEAT_OBJECT, _("%sを生成しました。", "%s was generated."), o_name);

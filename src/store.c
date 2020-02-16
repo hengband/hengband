@@ -2951,7 +2951,7 @@ static int store_carry(object_type *o_ptr)
 {
 	PRICE value = object_value(o_ptr);
 	if (value <= 0) return -1;
-	o_ptr->ident |= IDENT_MENTAL;
+	o_ptr->ident |= IDENT_FULL_KNOWN;
 	o_ptr->inscription = 0;
 	o_ptr->feeling = FEEL_NONE;
 	int slot;
@@ -4406,7 +4406,7 @@ static void store_sell(player_type *owner_ptr)
 		if (!get_check(format(_("本当に%sを寄贈しますか？", "Really give %s to the Museum? "), o2_name))) return;
 
 		identify_item(owner_ptr, q_ptr);
-		q_ptr->ident |= IDENT_MENTAL;
+		q_ptr->ident |= IDENT_FULL_KNOWN;
 
 		distribute_charges(o_ptr, q_ptr, amt);
 		msg_format(_("%sを置いた。(%c)", "You drop %s (%c)."), o_name, index_to_label(item));
@@ -4474,7 +4474,7 @@ static void store_examine(player_type *player_ptr)
 	item = item + store_top;
 	object_type *o_ptr;
 	o_ptr = &st_ptr->stock[item];
-	if (!(o_ptr->ident & IDENT_MENTAL))
+	if (!OBJECT_IS_FULL_KNOWN(o_ptr))
 	{
 		msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));
 		return;

@@ -2408,7 +2408,7 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
 	fprintf(fff, "%s\n", art_ptr->description);
 
 	/* unidentified */
-	if (!(o_ptr->ident & (IDENT_MENTAL)))
+	if (!OBJECT_IS_FULL_KNOWN(o_ptr))
 	{
 		fprintf(fff, _("%s不明\n", "%sUnknown\n"), INDENT1);
 	}

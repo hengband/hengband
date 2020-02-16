@@ -320,7 +320,7 @@ struct object_type
 #define IDENT_EMPTY     0x04    /* Item charges are known */
 #define IDENT_KNOWN     0x08    /* Item abilities are known */
 #define IDENT_STORE     0x10    /* Item is storebought !!!! */
-#define IDENT_MENTAL    0x20    /* Item information is known */
+#define IDENT_FULL_KNOWN    0x20    /* Item information is known */
 #define IDENT_BROKEN    0x80    /* Item is permanently worthless */
 	byte ident;			/* Special flags  */
 

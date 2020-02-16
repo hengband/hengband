@@ -248,7 +248,7 @@ void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 		}
 	}
 
-	if (spoil || (o_ptr->ident & IDENT_MENTAL))
+	if (spoil || OBJECT_IS_FULL_KNOWN(o_ptr))
 	{
 		if (object_is_fixed_artifact(o_ptr))
 		{

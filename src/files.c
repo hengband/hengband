@@ -1753,7 +1753,7 @@ static void display_player_various(player_type *creature_ptr)
 		object_flags_known(o_ptr, flgs);
 
 		basedam = calc_expect_crit(creature_ptr, o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], poison_needle);
-		if ((o_ptr->ident & IDENT_MENTAL) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
+		if (OBJECT_IS_FULL_KNOWN(o_ptr) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
 		{
 			/* vorpal blade */
 			basedam *= 5;

@@ -68,6 +68,8 @@ extern bool object_is_quest_target(object_type *o_ptr);
   */
 #define object_is_known(T) (((T)->ident & (IDENT_KNOWN)) || (k_info[(T)->k_idx].easy_know && k_info[(T)->k_idx].aware))
 
+#define OBJECT_IS_FULL_KNOWN(T) ((T)->ident & IDENT_FULL_KNOWN)
+
 #define OBJECT_IS_VALID(T) ((T)->k_idx != 0)
 
 #define OBJECT_IS_HELD_MONSTER(T) ((T)->held_m_idx != 0)
