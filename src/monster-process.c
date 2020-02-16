@@ -81,6 +81,7 @@ bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr,
 void exe_monster_attack_to_player(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx);
 bool process_monster_attack_to_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, grid_type *g_ptr, bool can_cross);
 bool exe_monster_attack_to_monster(player_type *target_ptr, MONSTER_IDX m_idx, grid_type *g_ptr);
+bool process_post_dig_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -1200,32 +1201,8 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			if (!target_ptr->riding_ryoute && !MON_MONFEAR(&target_ptr->current_floor_ptr->m_list[target_ptr->riding])) turn_flags_ptr->do_move = FALSE;
 		}
 
-		if (turn_flags_ptr->did_kill_wall && turn_flags_ptr->do_move)
-		{
-			if (one_in_(GRINDNOISE))
-			{
-				if (have_flag(f_ptr->flags, FF_GLASS))
-					msg_print(_("何かの砕ける音が聞こえる。", "There is a crashing sound."));
-				else
-					msg_print(_("ギシギシいう音が聞こえる。", "There is a grinding sound."));
-			}
-
-			cave_alter_feat(target_ptr, ny, nx, FF_HURT_DISI);
-
-			if (!monster_is_valid(m_ptr))
-			{
-				target_ptr->update |= (PU_FLOW);
-				target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-				if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_WALL);
-
-				return;
-			}
-
-			f_ptr = &f_info[g_ptr->feat];
-			turn_flags_ptr->do_view = TRUE;
-			turn_flags_ptr->do_turn = TRUE;
-		}
-
+		if (!process_post_dig_wall(target_ptr, turn_flags_ptr, m_ptr, ny, nx)) return;
+		
 		if (turn_flags_ptr->must_alter_to_move && (r_ptr->flags7 & RF7_AQUATIC))
 		{
 			if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0))
@@ -2047,7 +2024,7 @@ bool process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
  * @param nx モンスターのX座標
- * @return モンスターIDが異常でない限りTRUE
+ * @return モンスターが死亡した場合のみFALSE
  */
 bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
@@ -2201,7 +2178,7 @@ bool process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
  * @param nx モンスターのX座標
- * @return モンスター情報が異常でない限りTRUE
+ * @return モンスターが死亡した場合のみFALSE
  */
 bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
@@ -2355,6 +2332,50 @@ bool exe_monster_attack_to_monster(player_type *target_ptr, MONSTER_IDX m_idx, g
 	if (is_original_ap_and_seen(target_ptr, m_ptr))
 		r_ptr->r_flags2 |= (RF2_STUPID);
 
+	return TRUE;
+}
+
+
+/*!
+ * @brief モンスターが壁を掘った後続処理を実行する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @turn_flags_ptr ターン経過処理フラグへの参照ポインタ
+ * @param m_ptr モンスターへの参照ポインタ
+ * @param ny モンスターのY座標
+ * @param nx モンスターのX座標
+ * @return モンスターが死亡した場合のみFALSE
+ */
+bool process_post_dig_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+{
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	grid_type *g_ptr;
+	g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
+	feature_type *f_ptr;
+	f_ptr = &f_info[g_ptr->feat];
+	if (!turn_flags_ptr->did_kill_wall || !turn_flags_ptr->do_move) return TRUE;
+
+	if (one_in_(GRINDNOISE))
+	{
+		if (have_flag(f_ptr->flags, FF_GLASS))
+			msg_print(_("何かの砕ける音が聞こえる。", "There is a crashing sound."));
+		else
+			msg_print(_("ギシギシいう音が聞こえる。", "There is a grinding sound."));
+	}
+
+	cave_alter_feat(target_ptr, ny, nx, FF_HURT_DISI);
+
+	if (!monster_is_valid(m_ptr))
+	{
+		target_ptr->update |= (PU_FLOW);
+		target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_WALL);
+
+		return FALSE;
+	}
+
+	f_ptr = &f_info[g_ptr->feat];
+	turn_flags_ptr->do_view = TRUE;
+	turn_flags_ptr->do_turn = TRUE;
 	return TRUE;
 }
 
