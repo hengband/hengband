@@ -57,7 +57,7 @@ typedef struct {
 	bool did_kill_wall;
 } turn_flags;
 
-turn_flags *init_turn_flags(player_type *target_ptr, MONSTER_IDX m_idx);
+turn_flags *init_turn_flags(player_type *target_ptr, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr);
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);
@@ -94,6 +94,8 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
 
 void update_player_type(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_race *r_ptr);
 void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr);
+void update_object_flags(BIT_FLAGS *flgs, BIT_FLAGS *flg2, BIT_FLAGS *flg3, BIT_FLAGS *flgr);
+void monster_pickup_object(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, object_type *o_ptr, bool is_special_object, POSITION ny, POSITION nx, GAME_TEXT *m_name, GAME_TEXT *o_name, OBJECT_IDX this_o_idx);
 bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, bool aware, bool see_m);
 
  /*!
@@ -1100,7 +1102,8 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	turn_flags *turn_flags_ptr = init_turn_flags(target_ptr, m_idx);
+	turn_flags tmp_flags;
+	turn_flags *turn_flags_ptr = init_turn_flags(target_ptr, m_idx, &tmp_flags);
 	bool see_m = is_seen(m_ptr);
 
 	decide_drop_from_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon);
@@ -1176,10 +1179,8 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
  * @param m_idx モンスターID
  * @return 初期化済のターン経過フラグ
  */
-turn_flags *init_turn_flags(player_type *target_ptr, MONSTER_IDX m_idx)
+turn_flags *init_turn_flags(player_type *target_ptr, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr)
 {
-	turn_flags tmp_flags;
-	turn_flags *turn_flags_ptr = &tmp_flags;
 	turn_flags_ptr->is_riding_mon = (m_idx == target_ptr->riding);
 	turn_flags_ptr->do_turn = FALSE;
 	turn_flags_ptr->do_move = FALSE;
@@ -2358,7 +2359,7 @@ bool update_riding_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, 
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_idx モンスターID
  * @param ny 移動後の、モンスターのY座標
- * @param ox 移動後の、モンスターのX座標
+ * @param nx 移動後の、モンスターのX座標
  */
 void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx)
 {
@@ -2388,43 +2389,11 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
 		monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_HIDDEN);
 		update_object_flags(flgs, &flg2, &flg3, &flgr);
 
-		if (object_is_artifact(o_ptr) || (r_ptr->flags3 & flg3) || (r_ptr->flags2 & flg2) ||
-			((~(r_ptr->flagsr) & flgr) && !(r_ptr->flagsr & RFR_RES_ALL)))
-		{
-			if (turn_flags_ptr->do_take && (r_ptr->flags2 & RF2_STUPID))
-			{
-				turn_flags_ptr->did_take_item = TRUE;
-				if (m_ptr->ml && player_can_see_bold(target_ptr, ny, nx))
-				{
-					msg_format(_("%^sは%sを拾おうとしたが、だめだった。", "%^s tries to pick up %s, but fails."), m_name, o_name);
-				}
-			}
-		}
-		else if (turn_flags_ptr->do_take)
-		{
-			turn_flags_ptr->did_take_item = TRUE;
-			if (player_can_see_bold(target_ptr, ny, nx))
-			{
-				msg_format(_("%^sが%sを拾った。", "%^s picks up %s."), m_name, o_name);
-			}
-
-			excise_object_idx(target_ptr->current_floor_ptr, this_o_idx);
-			o_ptr->marked &= OM_TOUCHED;
-			o_ptr->iy = o_ptr->ix = 0;
-			o_ptr->held_m_idx = m_idx;
-			o_ptr->next_o_idx = m_ptr->hold_o_idx;
-			m_ptr->hold_o_idx = this_o_idx;
-		}
-		else if (!is_pet(m_ptr))
-		{
-			turn_flags_ptr->did_kill_item = TRUE;
-			if (player_has_los_bold(target_ptr, ny, nx))
-			{
-				msg_format(_("%^sが%sを破壊した。", "%^s destroys %s."), m_name, o_name);
-			}
-
-			delete_object_idx(target_ptr, this_o_idx);
-		}
+		bool is_special_object = object_is_artifact(o_ptr) ||
+			((r_ptr->flags3 & flg3) != 0) ||
+			((r_ptr->flags2 & flg2) != 0) ||
+			(((~(r_ptr->flagsr) & flgr) != 0) && !(r_ptr->flagsr & RFR_RES_ALL));
+		monster_pickup_object(target_ptr, turn_flags_ptr, m_idx, o_ptr, is_special_object, ny, nx, m_name, o_name, this_o_idx);
 	}
 }
 
@@ -2457,6 +2426,67 @@ void update_object_flags(BIT_FLAGS *flgs, BIT_FLAGS *flg2, BIT_FLAGS *flg3, BIT_
 	if (have_flag(flgs, TR_BRAND_FIRE))  *flgr |= (RFR_IM_FIRE);
 	if (have_flag(flgs, TR_BRAND_COLD))  *flgr |= (RFR_IM_COLD);
 	if (have_flag(flgs, TR_BRAND_POIS))  *flgr |= (RFR_IM_POIS);
+}
+
+
+/*!
+ * @brief モンスターがアイテムを拾うか壊す処理
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
+ * @param m_idx モンスターID
+ * @param o_ptr オブジェクトへの参照ポインタ
+ * @param is_special_object モンスターが拾えないアイテム (アーティファクト等)であればTRUE
+ * @param ny 移動後の、モンスターのY座標
+ * @param nx 移動後の、モンスターのX座標
+ * @param m_name モンスター名
+ * @param o_name アイテム名
+ * @param this_o_idx モンスターが乗ったオブジェクトID
+ * @return なし
+ */
+void monster_pickup_object(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, object_type *o_ptr, bool is_special_object, POSITION ny, POSITION nx, GAME_TEXT *m_name, GAME_TEXT *o_name, OBJECT_IDX this_o_idx)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	if (is_special_object)
+	{
+		if (turn_flags_ptr->do_take && (r_ptr->flags2 & RF2_STUPID))
+		{
+			turn_flags_ptr->did_take_item = TRUE;
+			if (m_ptr->ml && player_can_see_bold(target_ptr, ny, nx))
+			{
+				msg_format(_("%^sは%sを拾おうとしたが、だめだった。", "%^s tries to pick up %s, but fails."), m_name, o_name);
+			}
+		}
+
+		return;
+	}
+	
+	if (turn_flags_ptr->do_take)
+	{
+		turn_flags_ptr->did_take_item = TRUE;
+		if (player_can_see_bold(target_ptr, ny, nx))
+		{
+			msg_format(_("%^sが%sを拾った。", "%^s picks up %s."), m_name, o_name);
+		}
+
+		excise_object_idx(target_ptr->current_floor_ptr, this_o_idx);
+		o_ptr->marked &= OM_TOUCHED;
+		o_ptr->iy = o_ptr->ix = 0;
+		o_ptr->held_m_idx = m_idx;
+		o_ptr->next_o_idx = m_ptr->hold_o_idx;
+		m_ptr->hold_o_idx = this_o_idx;
+		return;
+	}
+	
+	if (is_pet(m_ptr)) return;
+
+	turn_flags_ptr->did_kill_item = TRUE;
+	if (player_has_los_bold(target_ptr, ny, nx))
+	{
+		msg_format(_("%^sが%sを破壊した。", "%^s destroys %s."), m_name, o_name);
+	}
+
+	delete_object_idx(target_ptr, this_o_idx);
 }
 
 
