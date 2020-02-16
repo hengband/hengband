@@ -1,6 +1,6 @@
 ﻿/*!
  * @file monster-process.c
- * @brief モンスターの特殊技能と移動処理/ Monster spells and movement
+ * @brief モンスターの特殊技能とターン経過処理 (移動等)/ Monster spells and movement for passaging a turn
  * @date 2014/01/17
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
@@ -67,7 +67,6 @@ static bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	monster_type *t_ptr;
 
 	POSITION x = 0, y = 0;
 	if (target_ptr->riding_t_m_idx && player_bold(target_ptr, m_ptr->fy, m_ptr->fx))
@@ -89,35 +88,32 @@ static bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 			start = randint1(floor_ptr->m_max - 1) + floor_ptr->m_max;
 			if (randint0(2)) plus = -1;
 		}
-		else start = floor_ptr->m_max + 1;
+		else
+		{
+			start = floor_ptr->m_max + 1;
+		}
 
-		/* Scan thru all monsters */
 		for (int i = start; ((i < start + floor_ptr->m_max) && (i > start - floor_ptr->m_max)); i += plus)
 		{
 			MONSTER_IDX dummy = (i % floor_ptr->m_max);
-
 			if (!dummy) continue;
 
 			MONSTER_IDX t_idx = dummy;
+			monster_type *t_ptr;
 			t_ptr = &floor_ptr->m_list[t_idx];
 
-			/* The monster itself isn't a target */
 			if (t_ptr == m_ptr) continue;
-
 			if (!monster_is_valid(t_ptr)) continue;
 
 			if (is_pet(m_ptr))
 			{
-				/* Hack -- only fight away from player */
 				if (target_ptr->pet_follow_distance < 0)
 				{
-					/* No fighting near player */
 					if (t_ptr->cdis <= (0 - target_ptr->pet_follow_distance))
 					{
 						continue;
 					}
 				}
-				/* Hack -- no fighting away from player */
 				else if ((m_ptr->cdis < t_ptr->cdis) && (t_ptr->cdis > target_ptr->pet_follow_distance))
 				{
 					continue;
@@ -126,10 +122,8 @@ static bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 				if (r_ptr->aaf < t_ptr->cdis) continue;
 			}
 
-			/* Monster must be 'an enemy' */
 			if (!are_enemies(target_ptr, m_ptr, t_ptr)) continue;
 
-			/* Monster must be projectable if we can't pass through walls */
 			if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) ||
 				((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding)))
 			{
@@ -140,7 +134,6 @@ static bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 				if (!projectable(target_ptr, m_ptr->fy, m_ptr->fx, t_ptr->fy, t_ptr->fx)) continue;
 			}
 
-			/* OK -- we've got a target */
 			y = t_ptr->fy;
 			x = t_ptr->fx;
 
@@ -150,60 +143,52 @@ static bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 		if (!x && !y) return FALSE;
 	}
 
-	/* Extract the direction */
 	x -= m_ptr->fx;
 	y -= m_ptr->fy;
 
-	/* North */
+	/* North, South, East, West, North-West, North-East, South-West, South-East */
 	if ((y < 0) && (x == 0))
 	{
 		mm[0] = 8;
 		mm[1] = 7;
 		mm[2] = 9;
 	}
-	/* South */
 	else if ((y > 0) && (x == 0))
 	{
 		mm[0] = 2;
 		mm[1] = 1;
 		mm[2] = 3;
 	}
-	/* East */
 	else if ((x > 0) && (y == 0))
 	{
 		mm[0] = 6;
 		mm[1] = 9;
 		mm[2] = 3;
 	}
-	/* West */
 	else if ((x < 0) && (y == 0))
 	{
 		mm[0] = 4;
 		mm[1] = 7;
 		mm[2] = 1;
 	}
-	/* North-West */
 	else if ((y < 0) && (x < 0))
 	{
 		mm[0] = 7;
 		mm[1] = 4;
 		mm[2] = 8;
 	}
-	/* North-East */
 	else if ((y < 0) && (x > 0))
 	{
 		mm[0] = 9;
 		mm[1] = 6;
 		mm[2] = 8;
 	}
-	/* South-West */
 	else if ((y > 0) && (x < 0))
 	{
 		mm[0] = 1;
 		mm[1] = 4;
 		mm[2] = 2;
 	}
-	/* South-East */
 	else if ((y > 0) && (x > 0))
 	{
 		mm[0] = 3;
@@ -236,52 +221,27 @@ static bool mon_will_run(player_type *target_ptr, MONSTER_IDX m_idx)
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	PLAYER_LEVEL p_lev;
-	DEPTH m_lev;
-	HIT_POINT p_chp, p_mhp;
-	HIT_POINT m_chp, m_mhp;
-	u32b p_val, m_val;
-
-	/* Friends can be commanded to avoid the player */
 	if (is_pet(m_ptr))
 	{
-		/* Are we trying to avoid the player? */
 		return ((target_ptr->pet_follow_distance < 0) &&
 			(m_ptr->cdis <= (0 - target_ptr->pet_follow_distance)));
 	}
 
-	/* Keep monsters from running too far away */
 	if (m_ptr->cdis > MAX_SIGHT + 5) return FALSE;
-
-	/* All "afraid" monsters will run away */
 	if (MON_MONFEAR(m_ptr)) return TRUE;
-
-	/* Nearby monsters will not become terrified */
 	if (m_ptr->cdis <= 5) return FALSE;
 
-	/* Examine player power (level) */
-	p_lev = target_ptr->lev;
-
-	/* Examine monster power (level plus morale) */
-	m_lev = r_ptr->level + (m_idx & 0x08) + 25;
-
-	/* Optimize extreme cases below */
+	PLAYER_LEVEL p_lev = target_ptr->lev;
+	DEPTH m_lev = r_ptr->level + (m_idx & 0x08) + 25;
 	if (m_lev > p_lev + 4) return FALSE;
 	if (m_lev + 4 <= p_lev) return TRUE;
 
-	/* Examine player health */
-	p_chp = target_ptr->chp;
-	p_mhp = target_ptr->mhp;
-
-	/* Examine monster health */
-	m_chp = m_ptr->hp;
-	m_mhp = m_ptr->maxhp;
-
-	/* Prepare to optimize the calculation */
-	p_val = (p_lev * p_mhp) + (p_chp << 2); /* div p_mhp */
-	m_val = (m_lev * m_mhp) + (m_chp << 2); /* div m_mhp */
-
-	/* Strong players scare strong monsters */
+	HIT_POINT p_chp = target_ptr->chp;
+	HIT_POINT p_mhp = target_ptr->mhp;
+	HIT_POINT m_chp = m_ptr->hp;
+	HIT_POINT m_mhp = m_ptr->maxhp;
+	u32b p_val = (p_lev * p_mhp) + (p_chp << 2);
+	u32b m_val = (m_lev * m_mhp) + (m_chp << 2);
 	if (p_val * m_mhp > m_val * p_mhp) return TRUE;
 
 	return FALSE;
@@ -303,62 +263,46 @@ static bool get_moves_aux2(player_type *target_ptr, MONSTER_IDX m_idx, POSITION 
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	/* Monster location */
 	POSITION y1 = m_ptr->fy;
 	POSITION x1 = m_ptr->fx;
 
-	/* Monster can already cast spell to player */
 	if (projectable(target_ptr, y1, x1, target_ptr->y, target_ptr->x)) return FALSE;
 
-	/* Set current grid cost */
 	int now_cost = floor_ptr->grid_array[y1][x1].cost;
 	if (now_cost == 0) now_cost = 999;
 
-	/* Can monster bash or open doors? */
 	bool can_open_door = FALSE;
 	if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR))
 	{
 		can_open_door = TRUE;
 	}
 
-	/* Check nearby grids, diagonals first */
 	int best = 999;
 	for (int i = 7; i >= 0; i--)
 	{
 		POSITION y = y1 + ddy_ddd[i];
 		POSITION x = x1 + ddx_ddd[i];
-
-		/* Ignore locations off of edge */
 		if (!in_bounds2(floor_ptr, y, x)) continue;
-
-		/* Simply move to player */
 		if (player_bold(target_ptr, y, x)) return FALSE;
 
 		grid_type *g_ptr;
 		g_ptr = &floor_ptr->grid_array[y][x];
-
 		int cost = g_ptr->cost;
-
-		/* Monster cannot kill or pass walls */
 		if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding))))
 		{
 			if (cost == 0) continue;
 			if (!can_open_door && is_closed_door(target_ptr, g_ptr->feat)) continue;
 		}
 
-		/* Hack -- for kill or pass wall monster.. */
 		if (cost == 0) cost = 998;
 
 		if (now_cost < cost) continue;
-
 		if (!projectable(target_ptr, y, x, target_ptr->y, target_ptr->x)) continue;
-
-		/* Accept louder sounds */
 		if (best < cost) continue;
-		best = cost;
 
-		(*yp) = y1 + ddy_ddd[i];
-		(*xp) = x1 + ddx_ddd[i];
+		best = cost;
+		*yp = y1 + ddy_ddd[i];
+		*xp = x1 + ddx_ddd[i];
 	}
 
 	if (best == 999) return FALSE;
@@ -402,94 +346,75 @@ static bool get_moves_aux(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
-	/* Can monster cast attack spell? */
 	if (r_ptr->flags4 & (RF4_ATTACK_MASK) ||
 		r_ptr->a_ability_flags1 & (RF5_ATTACK_MASK) ||
 		r_ptr->a_ability_flags2 & (RF6_ATTACK_MASK))
 	{
-		/* Can move spell castable grid? */
 		if (get_moves_aux2(target_ptr, m_idx, yp, xp)) return TRUE;
 	}
 
-	/* Monster can't flow */
 	if (no_flow) return FALSE;
-
-	/* Monster can go through rocks */
 	if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) return FALSE;
 	if ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding)) return FALSE;
 
-	/* Monster location */
 	POSITION y1 = m_ptr->fy;
 	POSITION x1 = m_ptr->fx;
-
-	/* Hack -- Player can see us, run towards him */
 	if (player_has_los_bold(target_ptr, y1, x1) && projectable(target_ptr, target_ptr->y, target_ptr->x, y1, x1)) return FALSE;
 
-	/* Monster grid */
 	g_ptr = &floor_ptr->grid_array[y1][x1];
 
-	/* If we can hear noises, advance towards them */
 	int best;
 	bool use_scent = FALSE;
 	if (g_ptr->cost)
 	{
 		best = 999;
 	}
-
-	/* Otherwise, try to follow a scent trail */
 	else if (g_ptr->when)
 	{
-		/* Too old smell */
 		if (floor_ptr->grid_array[target_ptr->y][target_ptr->x].when - g_ptr->when > 127) return FALSE;
 
 		use_scent = TRUE;
 		best = 0;
 	}
-
-	/* Otherwise, advance blindly */
 	else
 	{
 		return FALSE;
 	}
 
-	/* Check nearby grids, diagonals first */
 	for (int i = 7; i >= 0; i--)
 	{
 		POSITION y = y1 + ddy_ddd[i];
 		POSITION x = x1 + ddx_ddd[i];
 
-		/* Ignore locations off of edge */
 		if (!in_bounds2(floor_ptr, y, x)) continue;
 
 		g_ptr = &floor_ptr->grid_array[y][x];
-
-		/* We're following a scent trail */
 		if (use_scent)
 		{
 			int when = g_ptr->when;
-
-			/* Accept younger scent */
 			if (best > when) continue;
+
 			best = when;
 		}
-
-		/* We're using sound */
 		else
 		{
 			int cost;
-
 			if (r_ptr->flags2 & (RF2_BASH_DOOR | RF2_OPEN_DOOR))
+			{
 				cost = g_ptr->dist;
-			else cost = g_ptr->cost;
+			}
+			else
+			{
+				cost = g_ptr->cost;
+			}
 
-			/* Accept louder sounds */
 			if ((cost == 0) || (best < cost)) continue;
+
 			best = cost;
 		}
 
-		/* Hack -- Save the "twiddled" location */
-		(*yp) = target_ptr->y + 16 * ddy_ddd[i];
-		(*xp) = target_ptr->x + 16 * ddx_ddd[i];
+		*yp = target_ptr->y + 16 * ddy_ddd[i];
+		*xp = target_ptr->x + 16 * ddx_ddd[i];
 	}
 
 	if (best == 999 || best == 0) return FALSE;
@@ -514,53 +439,36 @@ static bool get_fear_moves_aux(floor_type *floor_ptr, MONSTER_IDX m_idx, POSITIO
 {
 	POSITION gy = 0, gx = 0;
 
-	/* Monster location */
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	POSITION fy = m_ptr->fy;
 	POSITION fx = m_ptr->fx;
 
-	/* Desired destination */
 	POSITION y1 = fy - (*yp);
 	POSITION x1 = fx - (*xp);
 
-	/* Check nearby grids, diagonals first */
 	int score = -1;
 	for (int i = 7; i >= 0; i--)
 	{
 		POSITION y = fy + ddy_ddd[i];
 		POSITION x = fx + ddx_ddd[i];
-
-		/* Ignore locations off of edge */
 		if (!in_bounds2(floor_ptr, y, x)) continue;
 
-		/* Calculate distance of this grid from our destination */
 		POSITION dis = distance(y, x, y1, x1);
-
-		/* Score this grid */
 		POSITION s = 5000 / (dis + 3) - 500 / (floor_ptr->grid_array[y][x].dist + 1);
-
-		/* No negative scores */
 		if (s < 0) s = 0;
 
-		/* Ignore lower scores */
 		if (s < score) continue;
 
-		/* Save the score and time */
 		score = s;
-
-		/* Save the location */
 		gy = y;
 		gx = x;
 	}
 
-	/* No legal move (?) */
 	if (score == -1) return FALSE;
 
-	/* Find deltas */
 	(*yp) = fy - gy;
 	(*xp) = fx - gx;
 
-	/* Success */
 	return TRUE;
 }
 
@@ -706,50 +614,38 @@ static bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp
 
 	POSITION gy = 0, gx = 0, gdis = 0;
 
-	/* Start with adjacent locations, spread further */
 	for (POSITION d = 1; d < 10; d++)
 	{
-		/* Get the lists of points with a distance d from (fx, fy) */
 		POSITION *y_offsets;
 		y_offsets = dist_offsets_y[d];
 
 		POSITION *x_offsets;
 		x_offsets = dist_offsets_x[d];
 
-		/* Check the locations */
 		for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0];
 			dx != 0 || dy != 0;
 			i++, dx = x_offsets[i], dy = y_offsets[i])
 		{
 			POSITION y = fy + dy;
 			POSITION x = fx + dx;
-
-			/* Skip illegal locations */
 			if (!in_bounds(floor_ptr, y, x)) continue;
 
 			grid_type *g_ptr;
 			g_ptr = &floor_ptr->grid_array[y][x];
 
-			/* Skip locations in a wall */
-			if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, &r_info[m_ptr->r_idx], (m_idx == target_ptr->riding) ? CEM_RIDING : 0)) continue;
+			BIT_FLAGS16 riding_mode = (m_idx == target_ptr->riding) ? CEM_RIDING : 0;
+			if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, &r_info[m_ptr->r_idx], riding_mode))
+				continue;
 
-			/* Check for "availability" (if monsters can flow) */
 			if (!(m_ptr->mflag2 & MFLAG2_NOFLOW))
 			{
-				/* Ignore grids very far from the player */
 				if (g_ptr->dist == 0) continue;
-
-				/* Ignore too-distant grids */
 				if (g_ptr->dist > floor_ptr->grid_array[fy][fx].dist + 2 * d) continue;
 			}
 
-			/* Check for absence of shot (more or less) */
 			if (projectable(target_ptr, target_ptr->y, target_ptr->x, y, x)) continue;
 
-			/* Calculate distance from player */
 			POSITION dis = distance(y, x, target_ptr->y, target_ptr->x);
-
-			/* Remember if further than previous */
 			if (dis <= gdis) continue;
 
 			gy = y;
@@ -757,12 +653,10 @@ static bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp
 			gdis = dis;
 		}
 
-		/* Check for success */
 		if (gdis <= 0) continue;
 
-		/* Good location */
-		(*yp) = fy - gy;
-		(*xp) = fx - gx;
+		*yp = fy - gy;
+		*xp = fx - gx;
 
 		return TRUE;
 	}
@@ -796,17 +690,14 @@ static bool find_hiding(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp
 
 	POSITION gy = 0, gx = 0, gdis = 999;
 
-	/* Start with adjacent locations, spread further */
 	for (POSITION d = 1; d < 10; d++)
 	{
-		/* Get the lists of points with a distance d from (fx, fy) */
 		POSITION *y_offsets;
 		y_offsets = dist_offsets_y[d];
 
 		POSITION *x_offsets;
 		x_offsets = dist_offsets_x[d];
 
-		/* Check the locations */
 		for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0];
 			dx != 0 || dy != 0;
 			i++, dx = x_offsets[i], dy = y_offsets[i])
@@ -814,20 +705,12 @@ static bool find_hiding(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp
 			POSITION y = fy + dy;
 			POSITION x = fx + dx;
 
-			/* Skip illegal locations */
 			if (!in_bounds(floor_ptr, y, x)) continue;
-
-			/* Skip occupied locations */
 			if (!monster_can_enter(target_ptr, y, x, r_ptr, 0)) continue;
-
-			/* Check for hidden, available grid */
 			if (projectable(target_ptr, target_ptr->y, target_ptr->x, y, x) && clean_shot(target_ptr, fy, fx, y, x, FALSE))
 				continue;
 
-			/* Calculate distance from player */
 			POSITION dis = distance(y, x, target_ptr->y, target_ptr->x);
-
-			/* Remember if closer than previous */
 			if (dis < gdis && dis >= 2)
 			{
 				gy = y;
@@ -867,21 +750,17 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 	bool done = FALSE;
 	bool will_run = mon_will_run(target_ptr, m_idx);
 	grid_type *g_ptr;
-	bool no_flow = ((m_ptr->mflag2 & MFLAG2_NOFLOW) && (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].cost > 2));
-	bool can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall));
+	bool no_flow = ((m_ptr->mflag2 & MFLAG2_NOFLOW) != 0) && (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].cost > 2);
+	bool can_pass_wall = ((r_ptr->flags2 & RF2_PASS_WALL) != 0) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall);
 
-	/* Counter attack to an enemy monster */
 	if (!will_run && m_ptr->target_y)
 	{
 		int t_m_idx = floor_ptr->grid_array[m_ptr->target_y][m_ptr->target_x].m_idx;
-
-		/* The monster must be an enemy, and in LOS */
-		if (t_m_idx &&
+		if ((t_m_idx > 0) &&
 			are_enemies(target_ptr, m_ptr, &floor_ptr->m_list[t_m_idx]) &&
 			los(target_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x) &&
 			projectable(target_ptr, m_ptr->fy, m_ptr->fx, m_ptr->target_y, m_ptr->target_x))
 		{
-			/* Extract the "pseudo-direction" */
 			y = m_ptr->fy - m_ptr->target_y;
 			x = m_ptr->fx - m_ptr->target_x;
 			done = TRUE;
@@ -893,17 +772,11 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 		((los(target_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x) && projectable(target_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x)) ||
 		(floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].dist < MAX_SIGHT / 2)))
 	{
-		/*
-		 * Animal packs try to get the player out of corridors
-		 * (...unless they can move through walls -- TY)
-		 */
 		if ((r_ptr->flags3 & RF3_ANIMAL) && !can_pass_wall &&
 			!(r_ptr->flags2 & RF2_KILL_WALL))
 		{
-			int i, room = 0;
-
-			/* Count room grids next to player */
-			for (i = 0; i < 8; i++)
+			int room = 0;
+			for (int i = 0; i < 8; i++)
 			{
 				int xx = target_ptr->x + ddx_ddd[i];
 				int yy = target_ptr->y + ddy_ddd[i];
@@ -911,81 +784,56 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 				if (!in_bounds2(floor_ptr, yy, xx)) continue;
 
 				g_ptr = &floor_ptr->grid_array[yy][xx];
-
-				/* Check grid */
 				if (monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, 0))
 				{
-					/* One more room grid */
 					room++;
 				}
 			}
+
 			if (floor_ptr->grid_array[target_ptr->y][target_ptr->x].info & CAVE_ROOM) room -= 2;
 			if (!r_ptr->flags4 && !r_ptr->a_ability_flags1 && !r_ptr->a_ability_flags2) room -= 2;
 
-			/* Not in a room and strong player */
 			if (room < (8 * (target_ptr->chp + target_ptr->csp)) /
 				(target_ptr->mhp + target_ptr->msp))
 			{
-				/* Find hiding place */
 				if (find_hiding(target_ptr, m_idx, &y, &x)) done = TRUE;
 			}
 		}
 
-		/* Monster groups try to surround the player */
 		if (!done && (floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].dist < 3))
 		{
-			int i;
-
-			/* Find an empty square near the player to fill */
-			for (i = 0; i < 8; i++)
+			for (int i = 0; i < 8; i++)
 			{
-				/* Pick squares near player (semi-randomly) */
 				y2 = target_ptr->y + ddy_ddd[(m_idx + i) & 7];
 				x2 = target_ptr->x + ddx_ddd[(m_idx + i) & 7];
-
-				/* Already there? */
 				if ((m_ptr->fy == y2) && (m_ptr->fx == x2))
 				{
-					/* Attack the player */
 					y2 = target_ptr->y;
 					x2 = target_ptr->x;
-
 					break;
 				}
 
 				if (!in_bounds2(floor_ptr, y2, x2)) continue;
-
-				/* Ignore filled grids */
 				if (!monster_can_enter(target_ptr, y2, x2, r_ptr, 0)) continue;
 
-				/* Try to fill this hole */
 				break;
 			}
 
-			/* Extract the new "pseudo-direction" */
 			y = m_ptr->fy - y2;
 			x = m_ptr->fx - x2;
-
 			done = TRUE;
 		}
 	}
 
 	if (!done)
 	{
-		/* Flow towards the player */
 		(void)get_moves_aux(target_ptr, m_idx, &y2, &x2, no_flow);
-
-		/* Extract the "pseudo-direction" */
 		y = m_ptr->fy - y2;
 		x = m_ptr->fx - x2;
-
-		/* Not done */
 	}
 
-	/* Apply fear if possible and necessary */
 	if (is_pet(m_ptr) && will_run)
 	{
-		/* XXX XXX Not very "smart" */
 		y = (-y), x = (-x);
 	}
 	else
@@ -994,46 +842,32 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 		{
 			int tmp_x = (-x);
 			int tmp_y = (-y);
-
-			/* Try to find safe place */
-			if (find_safety(target_ptr, m_idx, &y, &x))
+			if (find_safety(target_ptr, m_idx, &y, &x) && !no_flow)
 			{
-				/* Attempt to avoid the player */
-				if (!no_flow)
-				{
-					/* Adjust movement */
-					if (get_fear_moves_aux(target_ptr->current_floor_ptr, m_idx, &y, &x)) done = TRUE;
-				}
+				if (get_fear_moves_aux(target_ptr->current_floor_ptr, m_idx, &y, &x))
+					done = TRUE;
 			}
 
 			if (!done)
 			{
-				/* This is not a very "smart" method XXX XXX */
 				y = tmp_y;
 				x = tmp_x;
 			}
 		}
 	}
 
-
-	/* Check for no move */
 	if (!x && !y) return FALSE;
 
-
-	/* Extract the "absolute distances" */
 	ax = ABS(x);
 	ay = ABS(y);
 
-	/* Do something weird */
 	int move_val = 0;
 	if (y < 0) move_val += 8;
 	if (x > 0) move_val += 4;
 
-	/* Prevent the diamond maneuvre */
 	if (ay > (ax << 1)) move_val += 2;
 	else if (ax > (ay << 1)) move_val++;
 
-	/* Extract some directions */
 	switch (move_val)
 	{
 	case 0:
@@ -1178,7 +1012,6 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 		break;
 	}
 
-	/* Wants to move... */
 	return TRUE;
 }
 
@@ -1226,13 +1059,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
-
 	DIRECTION mm[8];
-
-	grid_type *g_ptr;
-	feature_type *f_ptr;
-	monster_type *y_ptr;
-
 	bool is_riding_mon = (m_idx == target_ptr->riding);
 	bool see_m = is_seen(m_ptr);
 
@@ -1267,10 +1094,8 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	awake_monster(target_ptr, m_idx);
 
-	/* Handle "stun" */
 	if (MON_STUNNED(m_ptr))
 	{
-		/* Sometimes skip move */
 		if (one_in_(2)) return;
 	}
 
@@ -1281,29 +1106,24 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	process_angar(target_ptr, m_idx, see_m);
 
-	/* Get the origin */
 	POSITION oy = m_ptr->fy;
 	POSITION ox = m_ptr->fx;
-
 	if (decide_monster_multiplication(target_ptr, m_idx, oy, ox)) return;
 
 	process_special(target_ptr, m_idx);
 	process_speak_sound(target_ptr, m_idx, oy, ox, aware);
 	cast_spell(target_ptr, m_idx, aware);
 
-	/* Hack -- Assume no movement */
 	mm[0] = mm[1] = mm[2] = mm[3] = 0;
 	mm[4] = mm[5] = mm[6] = mm[7] = 0;
 
 	if (!decide_monster_movement_direction(target_ptr, mm, m_idx, aware)) return;
 
-	/* Assume nothing */
 	bool do_turn = FALSE;
 	bool do_move = FALSE;
 	bool do_view = FALSE;
 	bool must_alter_to_move = FALSE;
 
-	/* Assume nothing */
 	bool did_open_door = FALSE;
 	bool did_bash_door = FALSE;
 	bool did_take_item = FALSE;
@@ -1312,118 +1132,78 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	bool did_pass_wall = FALSE;
 	bool did_kill_wall = FALSE;
 
-	/* Take a zero-terminated array of "directions" */
 	int i;
 	for (i = 0; mm[i]; i++)
 	{
-		/* Get the direction */
 		int d = mm[i];
-
-		/* Hack -- allow "randomized" motion */
 		if (d == 5) d = ddd[randint0(8)];
 
-		/* Get the destination */
 		POSITION ny = oy + ddy[d];
 		POSITION nx = ox + ddx[d];
-
-		/* Ignore locations off of edge */
 		if (!in_bounds2(target_ptr->current_floor_ptr, ny, nx)) continue;
 
-		/* Access that grid */
+		grid_type *g_ptr;
 		g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
+		feature_type *f_ptr;
 		f_ptr = &f_info[g_ptr->feat];
 		bool can_cross = monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0);
-
-		/* Access that grid's contents */
+		monster_type *y_ptr;
 		y_ptr = &target_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
-		/* Hack -- player 'in' wall */
 		if (player_bold(target_ptr, ny, nx))
 		{
 			do_move = TRUE;
 		}
-
-		/* Possibly a monster to attack */
-		else if (g_ptr->m_idx)
+		else if (g_ptr->m_idx > 0)
 		{
 			do_move = TRUE;
 		}
-
-		/* Monster destroys walls (and doors) */
 		else if ((r_ptr->flags2 & RF2_KILL_WALL) &&
 			(can_cross ? !have_flag(f_ptr->flags, FF_LOS) : !is_riding_mon) &&
 			have_flag(f_ptr->flags, FF_HURT_DISI) && !have_flag(f_ptr->flags, FF_PERMANENT) &&
 			check_hp_for_feat_destruction(f_ptr, m_ptr))
 		{
-			/* Eat through walls/doors/rubble */
 			do_move = TRUE;
 			if (!can_cross) must_alter_to_move = TRUE;
 
-			/* Monster destroyed a wall (later) */
 			did_kill_wall = TRUE;
 		}
-
-		/* Floor is open? */
 		else if (can_cross)
 		{
-			/* Go ahead and move */
 			do_move = TRUE;
-
-			/* Monster moves through walls (and doors) */
 			if ((r_ptr->flags2 & RF2_PASS_WALL) && (!is_riding_mon || target_ptr->pass_wall) &&
 				have_flag(f_ptr->flags, FF_CAN_PASS))
 			{
-				/* Monster went through a wall */
 				did_pass_wall = TRUE;
 			}
 		}
-
-		/* Handle doors and secret doors */
 		else if (is_closed_door(target_ptr, g_ptr->feat))
 		{
 			bool may_bash = TRUE;
-
-			/* Assume no move allowed */
 			do_move = FALSE;
-
-			/* Creature can open doors. */
 			if ((r_ptr->flags2 & RF2_OPEN_DOOR) && have_flag(f_ptr->flags, FF_OPEN) &&
 				(!is_pet(m_ptr) || (target_ptr->pet_extra_flags & PF_OPEN_DOORS)))
 			{
-				/* Closed doors */
 				if (!f_ptr->power)
 				{
-					/* The door is open */
 					did_open_door = TRUE;
-
-					/* Do not bash the door */
 					may_bash = FALSE;
-
 					do_turn = TRUE;
 				}
-
-				/* Locked doors (not jammed) */
 				else
 				{
-					/* Try to unlock it */
 					if (randint0(m_ptr->hp / 10) > f_ptr->power)
 					{
-						/* Unlock the door */
 						cave_alter_feat(target_ptr, ny, nx, FF_DISARM);
-
-						/* Do not bash the door */
 						may_bash = FALSE;
-
 						do_turn = TRUE;
 					}
 				}
 			}
 
-			/* Stuck doors -- attempt to bash them down if allowed */
 			if (may_bash && (r_ptr->flags2 & RF2_BASH_DOOR) && have_flag(f_ptr->flags, FF_BASH) &&
 				(!is_pet(m_ptr) || (target_ptr->pet_extra_flags & PF_OPEN_DOORS)))
 			{
-				/* Attempt to Bash */
 				if (check_hp_for_feat_destruction(f_ptr, m_ptr) && (randint0(m_ptr->hp / 10) > f_ptr->power))
 				{
 					if (have_flag(f_ptr->flags, FF_GLASS))
@@ -1431,28 +1211,20 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 					else
 						msg_print(_("ドアを叩き開ける音がした！", "You hear a door burst open!"));
 
-					/* Disturb (sometimes) */
 					if (disturb_minor) disturb(target_ptr, FALSE, FALSE);
 
-					/* The door was bashed open */
 					did_bash_door = TRUE;
-
-					/* Hack -- fall into doorway */
 					do_move = TRUE;
 					must_alter_to_move = TRUE;
 				}
 			}
 
-
-			/* Deal with doors in the way */
 			if (did_open_door || did_bash_door)
 			{
-				/* Break down the door */
 				if (did_bash_door && ((randint0(100) < 50) || (feat_state(target_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS)))
 				{
 					cave_alter_feat(target_ptr, ny, nx, FF_BASH);
-
-					if (!monster_is_valid(m_ptr)) /* Killed by shards of glass, etc. */
+					if (!monster_is_valid(m_ptr))
 					{
 						target_ptr->update |= (PU_FLOW);
 						target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -1461,62 +1233,42 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 						return;
 					}
 				}
-
-				/* Open the door */
 				else
 				{
 					cave_alter_feat(target_ptr, ny, nx, FF_OPEN);
 				}
 
 				f_ptr = &f_info[g_ptr->feat];
-
-				/* Handle viewable doors */
 				do_view = TRUE;
 			}
 		}
 
-		/* Hack -- check for Glyph of Warding */
 		if (do_move && is_glyph_grid(g_ptr) &&
 			!((r_ptr->flags1 & RF1_NEVER_BLOW) && player_bold(target_ptr, ny, nx)))
 		{
-			/* Assume no move allowed */
 			do_move = FALSE;
-
-			/* Break the ward */
 			if (!is_pet(m_ptr) && (randint1(BREAK_GLYPH) < r_ptr->level))
 			{
-				/* Describe observable breakage */
 				if (g_ptr->info & CAVE_MARK)
 				{
 					msg_print(_("守りのルーンが壊れた！", "The rune of protection is broken!"));
 				}
 
-				/* Forget the rune */
 				g_ptr->info &= ~(CAVE_MARK);
-
-				/* Break the rune */
 				g_ptr->info &= ~(CAVE_OBJECT);
 				g_ptr->mimic = 0;
-
-				/* Allow movement */
 				do_move = TRUE;
-
 				note_spot(target_ptr, ny, nx);
 			}
 		}
 		else if (do_move && is_explosive_rune_grid(g_ptr) &&
 			!((r_ptr->flags1 & RF1_NEVER_BLOW) && player_bold(target_ptr, ny, nx)))
 		{
-			/* Assume no move allowed */
 			do_move = FALSE;
-
-			/* Break the ward */
 			if (!is_pet(m_ptr))
 			{
-				/* Break the ward */
 				if (randint1(BREAK_MINOR_GLYPH) > r_ptr->level)
 				{
-					/* Describe observable breakage */
 					if (g_ptr->info & CAVE_MARK)
 					{
 						msg_print(_("ルーンが爆発した！", "The rune explodes!"));
@@ -1528,10 +1280,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 					msg_print(_("爆発のルーンは解除された。", "An explosive rune was disarmed."));
 				}
 
-				/* Forget the rune */
 				g_ptr->info &= ~(CAVE_MARK);
-
-				/* Break the rune */
 				g_ptr->info &= ~(CAVE_OBJECT);
 				g_ptr->mimic = 0;
 
@@ -1539,25 +1288,20 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				lite_spot(target_ptr, ny, nx);
 
 				if (!monster_is_valid(m_ptr)) return;
-				/* Allow movement */
+
 				do_move = TRUE;
 			}
 		}
 
-		/* The player is in the way */
 		if (do_move && player_bold(target_ptr, ny, nx))
 		{
-			/* Some monsters never attack */
 			if (r_ptr->flags1 & RF1_NEVER_BLOW)
 			{
-				/* Hack -- memorize lack of attacks */
 				if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_BLOW);
 
-				/* Do not move */
 				do_move = FALSE;
 			}
 
-			/* In anti-melee dungeon, stupid or confused monster takes useless turn */
 			if (do_move && (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE))
 			{
 				if (!MON_CONFUSED(m_ptr))
@@ -1570,32 +1314,21 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				}
 			}
 
-			/* The player is in the way.  Attack him. */
 			if (do_move)
 			{
 				if (!target_ptr->riding || one_in_(2))
 				{
-					/* Do the attack */
 					(void)make_attack_normal(target_ptr, m_idx);
-
-					/* Do not move */
 					do_move = FALSE;
-
-					/* Took a turn */
 					do_turn = TRUE;
 				}
 			}
 		}
 
-		/* A monster is in the way */
 		if (do_move && g_ptr->m_idx)
 		{
 			monster_race *z_ptr = &r_info[y_ptr->r_idx];
-
-			/* Assume no movement */
 			do_move = FALSE;
-
-			/* Attack 'enemies' */
 			if (((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW) &&
 				(r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level) &&
 				can_cross && (g_ptr->m_idx != target_ptr->riding)) ||
@@ -1608,16 +1341,14 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 						if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_BODY);
 					}
 
-					/* attack */
 					if (y_ptr->r_idx && (y_ptr->hp >= 0))
 					{
 						if (monst_attack_monst(target_ptr, m_idx, g_ptr->m_idx)) return;
 
-						/* In anti-melee dungeon, stupid or confused monster takes useless turn */
-						else if (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
+						if (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
 						{
 							if (MON_CONFUSED(m_ptr)) return;
-							else if (r_ptr->flags2 & RF2_STUPID)
+							if (r_ptr->flags2 & RF2_STUPID)
 							{
 								if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_STUPID);
 								return;
@@ -1626,23 +1357,14 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 					}
 				}
 			}
-
-			/* Push past weaker monsters (unless leaving a wall) */
 			else if ((r_ptr->flags2 & RF2_MOVE_BODY) && !(r_ptr->flags1 & RF1_NEVER_MOVE) &&
 				(r_ptr->mexp > z_ptr->mexp) &&
 				can_cross && (g_ptr->m_idx != target_ptr->riding) &&
 				monster_can_cross_terrain(target_ptr, target_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0))
 			{
-				/* Allow movement */
 				do_move = TRUE;
-
-				/* Monster pushed past another monster */
 				did_move_body = TRUE;
-
-				/* Wake up the moved monster */
 				(void)set_monster_csleep(target_ptr, g_ptr->m_idx, 0);
-
-				/* Message */
 			}
 		}
 
@@ -1663,7 +1385,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 			cave_alter_feat(target_ptr, ny, nx, FF_HURT_DISI);
 
-			if (!monster_is_valid(m_ptr)) /* Killed by shards of glass, etc. */
+			if (!monster_is_valid(m_ptr))
 			{
 				target_ptr->update |= (PU_FLOW);
 				target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
@@ -1673,8 +1395,6 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			}
 
 			f_ptr = &f_info[g_ptr->feat];
-
-			/* Note changes to viewable region */
 			do_view = TRUE;
 			do_turn = TRUE;
 		}
@@ -1683,42 +1403,30 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		{
 			if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0))
 			{
-				/* Assume no move allowed */
 				do_move = FALSE;
 			}
 		}
 
-		/*
-		 * Check if monster can cross terrain
-		 * This is checked after the normal attacks
-		 * to allow monsters to attack an enemy,
-		 * even if it can't enter the terrain.
-		 */
 		if (do_move && !can_cross && !did_kill_wall && !did_bash_door)
 		{
-			/* Assume no move allowed */
 			do_move = FALSE;
 		}
 
-		/* Some monsters never move */
 		if (do_move && (r_ptr->flags1 & RF1_NEVER_MOVE))
 		{
-			/* Hack -- memorize lack of moves */
 			if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_MOVE);
 
-			/* Do not move */
 			do_move = FALSE;
 		}
 
-		/* Creature has been allowed move */
 		if (!do_move)
 		{
 			if (do_turn) break;
+
 			continue;
 		}
 
 		do_turn = TRUE;
-
 		if (have_flag(f_ptr->flags, FF_TREE))
 		{
 			if (!(r_ptr->flags7 & RF7_CAN_FLY) && !(r_ptr->flags8 & RF8_WILD_WOOD))
@@ -1729,24 +1437,15 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 		if (!is_riding_mon)
 		{
-			/* Hack -- Update the old location */
 			target_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = g_ptr->m_idx;
-
-			/* Mega-Hack -- move the old monster, if any */
 			if (g_ptr->m_idx)
 			{
-				/* Move the old monster */
 				y_ptr->fy = oy;
 				y_ptr->fx = ox;
-
-				/* Update the old monster */
 				update_monster(target_ptr, g_ptr->m_idx, TRUE);
 			}
 
-			/* Hack -- Update the new location */
 			g_ptr->m_idx = m_idx;
-
-			/* Move the monster */
 			m_ptr->fy = ny;
 			m_ptr->fx = nx;
 			update_monster(target_ptr, m_idx, TRUE);
@@ -1756,11 +1455,9 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 		else
 		{
-			/* sound(SOUND_WALK); */
 			if (!move_player_effect(target_ptr, ny, nx, MPE_DONT_PICKUP)) break;
 		}
 
-		/* Possible disturb */
 		if (m_ptr->ml &&
 			(disturb_move ||
 			(disturb_near && (m_ptr->mflag & MFLAG_VIEW) && projectable(target_ptr, target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx)) ||
@@ -1770,22 +1467,22 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				disturb(target_ptr, FALSE, TRUE);
 		}
 
-		/* Take or Kill objects on the floor */
 		bool is_takable_or_killable = g_ptr->o_idx > 0;
 		is_takable_or_killable &= (r_ptr->flags2 & (RF2_TAKE_ITEM | RF2_KILL_ITEM)) != 0;
+
 		bool is_pickup_items = (target_ptr->pet_extra_flags & PF_PICKUP_ITEMS) != 0;
 		is_pickup_items &= (r_ptr->flags2 & RF2_TAKE_ITEM) != 0;
+
 		is_takable_or_killable &= !is_pet(m_ptr) || is_pickup_items;
 		if (!is_takable_or_killable)
 		{
 			if (do_turn) break;
+
 			continue;
 		}
 
 		OBJECT_IDX this_o_idx, next_o_idx;
-		bool do_take = (r_ptr->flags2 & RF2_TAKE_ITEM) ? TRUE : FALSE;
-
-		/* Scan all objects in the grid */
+		bool do_take = (r_ptr->flags2 & RF2_TAKE_ITEM) != 0;
 		for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			BIT_FLAGS flgs[TR_FLAG_SIZE], flg2 = 0L, flg3 = 0L, flgr = 0L;
@@ -1795,26 +1492,15 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 			if (do_take)
 			{
-				/* Skip gold */
-				if (o_ptr->tval == TV_GOLD) continue;
-
-				/*
-				 * Skip "real" corpses and statues, to avoid extreme
-				 * silliness like a novice rogue pockets full of statues
-				 * and corpses.
-				 */
-				if ((o_ptr->tval == TV_CORPSE) ||
-					(o_ptr->tval == TV_STATUE)) continue;
+				/* Skip gold, corpse and statue */
+				if (o_ptr->tval == TV_GOLD || (o_ptr->tval == TV_CORPSE) || (o_ptr->tval == TV_STATUE))
+					continue;
 			}
 
-			/* Extract some flags */
 			object_flags(o_ptr, flgs);
-
-			/* Acquire the object name */
 			object_desc(target_ptr, o_name, o_ptr, 0);
 			monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_HIDDEN);
 
-			/* React to objects that hurt the monster */
 			if (have_flag(flgs, TR_SLAY_DRAGON)) flg3 |= (RF3_DRAGON);
 			if (have_flag(flgs, TR_KILL_DRAGON)) flg3 |= (RF3_DRAGON);
 			if (have_flag(flgs, TR_SLAY_TROLL))  flg3 |= (RF3_TROLL);
@@ -1839,59 +1525,36 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			if (have_flag(flgs, TR_BRAND_COLD))  flgr |= (RFR_IM_COLD);
 			if (have_flag(flgs, TR_BRAND_POIS))  flgr |= (RFR_IM_POIS);
 
-			/* The object cannot be picked up by the monster */
 			if (object_is_artifact(o_ptr) || (r_ptr->flags3 & flg3) || (r_ptr->flags2 & flg2) ||
 				((~(r_ptr->flagsr) & flgr) && !(r_ptr->flagsr & RFR_RES_ALL)))
 			{
-				/* Only give a message for "take_item" */
 				if (do_take && (r_ptr->flags2 & RF2_STUPID))
 				{
 					did_take_item = TRUE;
-
-					/* Describe observable situations */
 					if (m_ptr->ml && player_can_see_bold(target_ptr, ny, nx))
 					{
 						msg_format(_("%^sは%sを拾おうとしたが、だめだった。", "%^s tries to pick up %s, but fails."), m_name, o_name);
 					}
 				}
 			}
-
-			/* Pick up the item */
 			else if (do_take)
 			{
 				did_take_item = TRUE;
-
-				/* Describe observable situations */
 				if (player_can_see_bold(target_ptr, ny, nx))
 				{
 					msg_format(_("%^sが%sを拾った。", "%^s picks up %s."), m_name, o_name);
 				}
 
-				/* Excise the object */
 				excise_object_idx(target_ptr->current_floor_ptr, this_o_idx);
-
-				/* Forget mark */
 				o_ptr->marked &= OM_TOUCHED;
-
-				/* Forget location */
 				o_ptr->iy = o_ptr->ix = 0;
-
-				/* Memorize monster */
 				o_ptr->held_m_idx = m_idx;
-
-				/* Build a stack */
 				o_ptr->next_o_idx = m_ptr->hold_o_idx;
-
-				/* Carry object */
 				m_ptr->hold_o_idx = this_o_idx;
 			}
-
-			/* Destroy the item if not a pet */
 			else if (!is_pet(m_ptr))
 			{
 				did_kill_item = TRUE;
-
-				/* Describe observable situations */
 				if (player_has_los_bold(target_ptr, ny, nx))
 				{
 					msg_format(_("%^sが%sを破壊した。", "%^s destroys %s."), m_name, o_name);
@@ -1911,62 +1574,41 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (target_ptr->no_flowed && i > 2 && m_ptr->target_y)
 		m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
 
-	/* If we haven't done anything, try casting a spell again */
 	if (!do_turn && !do_move && !MON_MONFEAR(m_ptr) && !is_riding_mon && aware)
 	{
-		/* Try to cast spell again */
 		if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell)
 		{
 			if (make_attack_spell(m_idx, target_ptr)) return;
 		}
 	}
 
-	/* Notice changes in view */
 	if (do_view)
 	{
 		target_ptr->update |= (PU_FLOW);
 		target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	}
 
-	/* Notice changes in view */
 	if (do_move && ((r_ptr->flags7 & (RF7_SELF_LD_MASK | RF7_HAS_DARK_1 | RF7_HAS_DARK_2))
 		|| ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !target_ptr->phase_out)))
 	{
 		target_ptr->update |= (PU_MON_LITE);
 	}
 
-	/* Learn things from observable monster */
 	if (is_original_ap_and_seen(target_ptr, m_ptr))
 	{
-		/* Monster opened a door */
 		if (did_open_door) r_ptr->r_flags2 |= (RF2_OPEN_DOOR);
-
-		/* Monster bashed a door */
 		if (did_bash_door) r_ptr->r_flags2 |= (RF2_BASH_DOOR);
-
-		/* Monster tried to pick something up */
 		if (did_take_item) r_ptr->r_flags2 |= (RF2_TAKE_ITEM);
-
-		/* Monster tried to crush something */
 		if (did_kill_item) r_ptr->r_flags2 |= (RF2_KILL_ITEM);
-
-		/* Monster pushed past another monster */
 		if (did_move_body) r_ptr->r_flags2 |= (RF2_MOVE_BODY);
-
-		/* Monster passed through a wall */
 		if (did_pass_wall) r_ptr->r_flags2 |= (RF2_PASS_WALL);
-
-		/* Monster destroyed a wall */
 		if (did_kill_wall) r_ptr->r_flags2 |= (RF2_KILL_WALL);
 	}
 
 	bool is_battle_determined = !do_turn && !do_move && MON_MONFEAR(m_ptr) && aware;
 	if (!is_battle_determined) return;
 
-	/* No longer afraid */
 	(void)set_monster_monfear(target_ptr, m_idx, 0);
-
-	/* Message if seen */
 	if (see_m)
 	{
 		GAME_TEXT m_name[MAX_NLEN];
@@ -2567,22 +2209,16 @@ void process_monsters(player_type *target_ptr)
 	byte old_r_blows2 = 0;
 	byte old_r_blows3 = 0;
 
-	/* Clear monster fighting indicator */
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	floor_ptr->monster_noise = FALSE;
 
-	/* Memorize old race */
 	MONRACE_IDX old_monster_race_idx = target_ptr->monster_race_idx;
-
-	/* Acquire knowledge */
 	byte old_r_cast_spell = 0;
 	if (target_ptr->monster_race_idx)
 	{
-		/* Acquire current monster */
 		monster_race *r_ptr;
 		r_ptr = &r_info[target_ptr->monster_race_idx];
 
-		/* Memorize flags */
 		old_r_flags1 = r_ptr->r_flags1;
 		old_r_flags2 = r_ptr->r_flags2;
 		old_r_flags3 = r_ptr->r_flags3;
@@ -2591,18 +2227,14 @@ void process_monsters(player_type *target_ptr)
 		old_r_flags6 = r_ptr->r_flags6;
 		old_r_flagsr = r_ptr->r_flagsr;
 
-		/* Memorize blows */
 		old_r_blows0 = r_ptr->r_blows[0];
 		old_r_blows1 = r_ptr->r_blows[1];
 		old_r_blows2 = r_ptr->r_blows[2];
 		old_r_blows3 = r_ptr->r_blows[3];
 
-		/* Memorize castings */
 		old_r_cast_spell = r_ptr->r_cast_spell;
 	}
 
-	/* Process the monsters (backwards) */
-	bool test;
 	for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--)
 	{
 		monster_type *m_ptr;
@@ -2610,115 +2242,78 @@ void process_monsters(player_type *target_ptr)
 		m_ptr = &floor_ptr->m_list[i];
 		r_ptr = &r_info[m_ptr->r_idx];
 
-		/* Handle "leaving" */
 		if (target_ptr->leaving) break;
-
-		/* Ignore "dead" monsters */
 		if (!monster_is_valid(m_ptr)) continue;
-
 		if (target_ptr->wild_mode) continue;
 
-
-		/* Handle "fresh" monsters */
 		if (m_ptr->mflag & MFLAG_BORN)
 		{
-			/* No longer "fresh" */
 			m_ptr->mflag &= ~(MFLAG_BORN);
-
-			/* Skip */
 			continue;
 		}
 
-		/* Hack -- Require proximity */
 		if (m_ptr->cdis >= AAF_LIMIT) continue;
 
 		POSITION fx = m_ptr->fx;
 		POSITION fy = m_ptr->fy;
-
-		/* Flow by smell is allowed */
 		if (!target_ptr->no_flowed)
 		{
 			m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
 		}
 
-		/* Assume no move */
-		test = FALSE;
-
-		/* Handle "sensing radius" */
+		bool test = FALSE;
 		if (m_ptr->cdis <= (is_pet(m_ptr) ? (r_ptr->aaf > MAX_SIGHT ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf))
 		{
-			/* We can "sense" the player */
 			test = TRUE;
 		}
-
-		/* Handle "sight" and "aggravation" */
 		else if ((m_ptr->cdis <= MAX_SIGHT || target_ptr->phase_out) &&
 			(player_has_los_bold(target_ptr, fy, fx) || (target_ptr->cursed & TRC_AGGRAVATE)))
 		{
-			/* We can "see" or "feel" the player */
+			test = TRUE;
+		}
+		else if (m_ptr->target_y)
+		{
 			test = TRUE;
 		}
 
-		else if (m_ptr->target_y) test = TRUE;
-
-		/* Do nothing */
 		if (!test) continue;
 
 		SPEED speed;
 		if (target_ptr->riding == i)
+		{
 			speed = target_ptr->pspeed;
+		}
 		else
 		{
 			speed = m_ptr->mspeed;
-
-			/* Monsters move quickly in Nightmare mode */
 			if (ironman_nightmare) speed += 5;
 
 			if (MON_FAST(m_ptr)) speed += 10;
 			if (MON_SLOW(m_ptr)) speed -= 10;
 		}
 
-		/* Give this monster some energy */
 		m_ptr->energy_need -= SPEED_TO_ENERGY(speed);
-
-		/* Not enough energy to move */
 		if (m_ptr->energy_need > 0) continue;
 
-		/* Use up "some" energy */
 		m_ptr->energy_need += ENERGY_NEED();
-
-		/* Save global index */
 		hack_m_idx = i;
-
-		/* Process the monster */
 		process_monster(target_ptr, i);
-
 		reset_target(m_ptr);
 
-		/* Give up flow_by_smell when it might useless */
 		if (target_ptr->no_flowed && one_in_(3))
 			m_ptr->mflag2 |= MFLAG2_NOFLOW;
 
-		/* Hack -- notice death or departure */
 		if (!target_ptr->playing || target_ptr->is_dead) break;
-
-		/* Notice leaving */
 		if (target_ptr->leaving) break;
 	}
 
-	/* Reset global index */
 	hack_m_idx = 0;
-
-
-	/* Tracking a monster race (the same one we were before) */
 	if (!target_ptr->monster_race_idx || (target_ptr->monster_race_idx != old_monster_race_idx))
 		return;
 
-	/* Acquire monster race */
 	monster_race *r_ptr;
 	r_ptr = &r_info[target_ptr->monster_race_idx];
 
-	/* Check for knowledge change */
 	if ((old_r_flags1 != r_ptr->r_flags1) ||
 		(old_r_flags2 != r_ptr->r_flags2) ||
 		(old_r_flags3 != r_ptr->r_flags3) ||
