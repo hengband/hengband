@@ -952,10 +952,6 @@ static errr Infofnt_prepare(XFontSet info)
 	else
 		ifnt->twid = ifnt->wid;
 
-#ifndef JP
-#endif
-
-	/* Success */
 	return (0);
 }
 

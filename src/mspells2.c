@@ -663,7 +663,8 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 	/* Get the monster name (or "it") */
 	monster_desc(target_ptr, m_name, m_ptr, 0x00);
 
-#ifndef JP
+#ifdef JP
+#else
 	/* Get the monster possessive ("his"/"her"/"its") */
 	monster_desc(target_ptr, m_poss, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
 #endif
