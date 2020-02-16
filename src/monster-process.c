@@ -40,6 +40,23 @@
 #include "files.h"
 #include "view-mainwindow.h"
 
+typedef struct {
+	bool is_riding_mon;
+	bool do_turn;
+	bool do_move;
+	bool do_view;
+	bool do_take;
+	bool must_alter_to_move;
+
+	bool did_open_door;
+	bool did_bash_door;
+	bool did_take_item;
+	bool did_kill_item;
+	bool did_move_body;
+	bool did_pass_wall;
+	bool did_kill_wall;
+} turn_flags;
+
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void awake_monster(player_type *target_ptr, MONSTER_IDX m_idx);
@@ -1060,10 +1077,25 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
 	DIRECTION mm[8];
-	bool is_riding_mon = (m_idx == target_ptr->riding);
+
+	turn_flags tmp_flags;
+	turn_flags *turn_flags_ptr = &tmp_flags;
+	turn_flags_ptr->is_riding_mon = (m_idx == target_ptr->riding);
+	turn_flags_ptr->do_turn = FALSE;
+	turn_flags_ptr->do_move = FALSE;
+	turn_flags_ptr->do_view = FALSE;
+	turn_flags_ptr->must_alter_to_move = FALSE;
+	turn_flags_ptr->did_open_door = FALSE;
+	turn_flags_ptr->did_bash_door = FALSE;
+	turn_flags_ptr->did_take_item = FALSE;
+	turn_flags_ptr->did_kill_item = FALSE;
+	turn_flags_ptr->did_move_body = FALSE;
+	turn_flags_ptr->did_pass_wall = FALSE;
+	turn_flags_ptr->did_kill_wall = FALSE;
+
 	bool see_m = is_seen(m_ptr);
 
-	decide_drop_from_monster(target_ptr, m_idx, is_riding_mon);
+	decide_drop_from_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon);
 	if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && one_in_(13) && !MON_CSLEEP(m_ptr))
 	{
 		choose_new_monster(target_ptr, m_idx, FALSE, 0);
@@ -1090,7 +1122,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (dead) return;
 	}
 
-	if (runaway_monster(target_ptr, m_idx, is_riding_mon, see_m)) return;
+	if (runaway_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon, see_m)) return;
 
 	awake_monster(target_ptr, m_idx);
 
@@ -1099,7 +1131,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (one_in_(2)) return;
 	}
 
-	if (is_riding_mon)
+	if (turn_flags_ptr->is_riding_mon)
 	{
 		target_ptr->update |= (PU_BONUS);
 	}
@@ -1119,19 +1151,6 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	if (!decide_monster_movement_direction(target_ptr, mm, m_idx, aware)) return;
 
-	bool do_turn = FALSE;
-	bool do_move = FALSE;
-	bool do_view = FALSE;
-	bool must_alter_to_move = FALSE;
-
-	bool did_open_door = FALSE;
-	bool did_bash_door = FALSE;
-	bool did_take_item = FALSE;
-	bool did_kill_item = FALSE;
-	bool did_move_body = FALSE;
-	bool did_pass_wall = FALSE;
-	bool did_kill_wall = FALSE;
-
 	int i;
 	for (i = 0; mm[i]; i++)
 	{
@@ -1146,49 +1165,49 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
 		feature_type *f_ptr;
 		f_ptr = &f_info[g_ptr->feat];
-		bool can_cross = monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0);
+		bool can_cross = monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0);
 		monster_type *y_ptr;
 		y_ptr = &target_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 		if (player_bold(target_ptr, ny, nx))
 		{
-			do_move = TRUE;
+			turn_flags_ptr->do_move = TRUE;
 		}
 		else if (g_ptr->m_idx > 0)
 		{
-			do_move = TRUE;
+			turn_flags_ptr->do_move = TRUE;
 		}
 		else if ((r_ptr->flags2 & RF2_KILL_WALL) &&
-			(can_cross ? !have_flag(f_ptr->flags, FF_LOS) : !is_riding_mon) &&
+			(can_cross ? !have_flag(f_ptr->flags, FF_LOS) : !turn_flags_ptr->is_riding_mon) &&
 			have_flag(f_ptr->flags, FF_HURT_DISI) && !have_flag(f_ptr->flags, FF_PERMANENT) &&
 			check_hp_for_feat_destruction(f_ptr, m_ptr))
 		{
-			do_move = TRUE;
-			if (!can_cross) must_alter_to_move = TRUE;
+			turn_flags_ptr->do_move = TRUE;
+			if (!can_cross) turn_flags_ptr->must_alter_to_move = TRUE;
 
-			did_kill_wall = TRUE;
+			turn_flags_ptr->did_kill_wall = TRUE;
 		}
 		else if (can_cross)
 		{
-			do_move = TRUE;
-			if ((r_ptr->flags2 & RF2_PASS_WALL) && (!is_riding_mon || target_ptr->pass_wall) &&
+			turn_flags_ptr->do_move = TRUE;
+			if ((r_ptr->flags2 & RF2_PASS_WALL) && (!turn_flags_ptr->is_riding_mon || target_ptr->pass_wall) &&
 				have_flag(f_ptr->flags, FF_CAN_PASS))
 			{
-				did_pass_wall = TRUE;
+				turn_flags_ptr->did_pass_wall = TRUE;
 			}
 		}
 		else if (is_closed_door(target_ptr, g_ptr->feat))
 		{
 			bool may_bash = TRUE;
-			do_move = FALSE;
+			turn_flags_ptr->do_move = FALSE;
 			if ((r_ptr->flags2 & RF2_OPEN_DOOR) && have_flag(f_ptr->flags, FF_OPEN) &&
 				(!is_pet(m_ptr) || (target_ptr->pet_extra_flags & PF_OPEN_DOORS)))
 			{
 				if (!f_ptr->power)
 				{
-					did_open_door = TRUE;
+					turn_flags_ptr->did_open_door = TRUE;
 					may_bash = FALSE;
-					do_turn = TRUE;
+					turn_flags_ptr->do_turn = TRUE;
 				}
 				else
 				{
@@ -1196,7 +1215,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 					{
 						cave_alter_feat(target_ptr, ny, nx, FF_DISARM);
 						may_bash = FALSE;
-						do_turn = TRUE;
+						turn_flags_ptr->do_turn = TRUE;
 					}
 				}
 			}
@@ -1213,15 +1232,15 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 					if (disturb_minor) disturb(target_ptr, FALSE, FALSE);
 
-					did_bash_door = TRUE;
-					do_move = TRUE;
-					must_alter_to_move = TRUE;
+					turn_flags_ptr->did_bash_door = TRUE;
+					turn_flags_ptr->do_move = TRUE;
+					turn_flags_ptr->must_alter_to_move = TRUE;
 				}
 			}
 
-			if (did_open_door || did_bash_door)
+			if (turn_flags_ptr->did_open_door || turn_flags_ptr->did_bash_door)
 			{
-				if (did_bash_door && ((randint0(100) < 50) || (feat_state(target_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS)))
+				if (turn_flags_ptr->did_bash_door && ((randint0(100) < 50) || (feat_state(target_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS)))
 				{
 					cave_alter_feat(target_ptr, ny, nx, FF_BASH);
 					if (!monster_is_valid(m_ptr))
@@ -1239,14 +1258,14 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				}
 
 				f_ptr = &f_info[g_ptr->feat];
-				do_view = TRUE;
+				turn_flags_ptr->do_view = TRUE;
 			}
 		}
 
-		if (do_move && is_glyph_grid(g_ptr) &&
+		if (turn_flags_ptr->do_move && is_glyph_grid(g_ptr) &&
 			!((r_ptr->flags1 & RF1_NEVER_BLOW) && player_bold(target_ptr, ny, nx)))
 		{
-			do_move = FALSE;
+			turn_flags_ptr->do_move = FALSE;
 			if (!is_pet(m_ptr) && (randint1(BREAK_GLYPH) < r_ptr->level))
 			{
 				if (g_ptr->info & CAVE_MARK)
@@ -1257,14 +1276,14 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				g_ptr->info &= ~(CAVE_MARK);
 				g_ptr->info &= ~(CAVE_OBJECT);
 				g_ptr->mimic = 0;
-				do_move = TRUE;
+				turn_flags_ptr->do_move = TRUE;
 				note_spot(target_ptr, ny, nx);
 			}
 		}
-		else if (do_move && is_explosive_rune_grid(g_ptr) &&
+		else if (turn_flags_ptr->do_move && is_explosive_rune_grid(g_ptr) &&
 			!((r_ptr->flags1 & RF1_NEVER_BLOW) && player_bold(target_ptr, ny, nx)))
 		{
-			do_move = FALSE;
+			turn_flags_ptr->do_move = FALSE;
 			if (!is_pet(m_ptr))
 			{
 				if (randint1(BREAK_MINOR_GLYPH) > r_ptr->level)
@@ -1289,24 +1308,24 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 				if (!monster_is_valid(m_ptr)) return;
 
-				do_move = TRUE;
+				turn_flags_ptr->do_move = TRUE;
 			}
 		}
 
-		if (do_move && player_bold(target_ptr, ny, nx))
+		if (turn_flags_ptr->do_move && player_bold(target_ptr, ny, nx))
 		{
 			if (r_ptr->flags1 & RF1_NEVER_BLOW)
 			{
 				if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_BLOW);
 
-				do_move = FALSE;
+				turn_flags_ptr->do_move = FALSE;
 			}
 
-			if (do_move && (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE))
+			if (turn_flags_ptr->do_move && (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE))
 			{
 				if (!MON_CONFUSED(m_ptr))
 				{
-					if (!(r_ptr->flags2 & RF2_STUPID)) do_move = FALSE;
+					if (!(r_ptr->flags2 & RF2_STUPID)) turn_flags_ptr->do_move = FALSE;
 					else
 					{
 						if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_STUPID);
@@ -1314,21 +1333,21 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				}
 			}
 
-			if (do_move)
+			if (turn_flags_ptr->do_move)
 			{
 				if (!target_ptr->riding || one_in_(2))
 				{
 					(void)make_attack_normal(target_ptr, m_idx);
-					do_move = FALSE;
-					do_turn = TRUE;
+					turn_flags_ptr->do_move = FALSE;
+					turn_flags_ptr->do_turn = TRUE;
 				}
 			}
 		}
 
-		if (do_move && g_ptr->m_idx)
+		if (turn_flags_ptr->do_move && g_ptr->m_idx)
 		{
 			monster_race *z_ptr = &r_info[y_ptr->r_idx];
-			do_move = FALSE;
+			turn_flags_ptr->do_move = FALSE;
 			if (((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW) &&
 				(r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level) &&
 				can_cross && (g_ptr->m_idx != target_ptr->riding)) ||
@@ -1362,18 +1381,18 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				can_cross && (g_ptr->m_idx != target_ptr->riding) &&
 				monster_can_cross_terrain(target_ptr, target_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0))
 			{
-				do_move = TRUE;
-				did_move_body = TRUE;
+				turn_flags_ptr->do_move = TRUE;
+				turn_flags_ptr->did_move_body = TRUE;
 				(void)set_monster_csleep(target_ptr, g_ptr->m_idx, 0);
 			}
 		}
 
-		if (is_riding_mon)
+		if (turn_flags_ptr->is_riding_mon)
 		{
-			if (!target_ptr->riding_ryoute && !MON_MONFEAR(&target_ptr->current_floor_ptr->m_list[target_ptr->riding])) do_move = FALSE;
+			if (!target_ptr->riding_ryoute && !MON_MONFEAR(&target_ptr->current_floor_ptr->m_list[target_ptr->riding])) turn_flags_ptr->do_move = FALSE;
 		}
 
-		if (did_kill_wall && do_move)
+		if (turn_flags_ptr->did_kill_wall && turn_flags_ptr->do_move)
 		{
 			if (one_in_(GRINDNOISE))
 			{
@@ -1395,38 +1414,38 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			}
 
 			f_ptr = &f_info[g_ptr->feat];
-			do_view = TRUE;
-			do_turn = TRUE;
+			turn_flags_ptr->do_view = TRUE;
+			turn_flags_ptr->do_turn = TRUE;
 		}
 
-		if (must_alter_to_move && (r_ptr->flags7 & RF7_AQUATIC))
+		if (turn_flags_ptr->must_alter_to_move && (r_ptr->flags7 & RF7_AQUATIC))
 		{
-			if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, is_riding_mon ? CEM_RIDING : 0))
+			if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0))
 			{
-				do_move = FALSE;
+				turn_flags_ptr->do_move = FALSE;
 			}
 		}
 
-		if (do_move && !can_cross && !did_kill_wall && !did_bash_door)
+		if (turn_flags_ptr->do_move && !can_cross && !turn_flags_ptr->did_kill_wall && !turn_flags_ptr->did_bash_door)
 		{
-			do_move = FALSE;
+			turn_flags_ptr->do_move = FALSE;
 		}
 
-		if (do_move && (r_ptr->flags1 & RF1_NEVER_MOVE))
+		if (turn_flags_ptr->do_move && (r_ptr->flags1 & RF1_NEVER_MOVE))
 		{
 			if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_MOVE);
 
-			do_move = FALSE;
+			turn_flags_ptr->do_move = FALSE;
 		}
 
-		if (!do_move)
+		if (!turn_flags_ptr->do_move)
 		{
-			if (do_turn) break;
+			if (turn_flags_ptr->do_turn) break;
 
 			continue;
 		}
 
-		do_turn = TRUE;
+		turn_flags_ptr->do_turn = TRUE;
 		if (have_flag(f_ptr->flags, FF_TREE))
 		{
 			if (!(r_ptr->flags7 & RF7_CAN_FLY) && !(r_ptr->flags8 & RF8_WILD_WOOD))
@@ -1435,7 +1454,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			}
 		}
 
-		if (!is_riding_mon)
+		if (!turn_flags_ptr->is_riding_mon)
 		{
 			target_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = g_ptr->m_idx;
 			if (g_ptr->m_idx)
@@ -1476,13 +1495,13 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		is_takable_or_killable &= !is_pet(m_ptr) || is_pickup_items;
 		if (!is_takable_or_killable)
 		{
-			if (do_turn) break;
+			if (turn_flags_ptr->do_turn) break;
 
 			continue;
 		}
 
 		OBJECT_IDX this_o_idx, next_o_idx;
-		bool do_take = (r_ptr->flags2 & RF2_TAKE_ITEM) != 0;
+		turn_flags_ptr->do_take = (r_ptr->flags2 & RF2_TAKE_ITEM) != 0;
 		for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
 		{
 			BIT_FLAGS flgs[TR_FLAG_SIZE], flg2 = 0L, flg3 = 0L, flgr = 0L;
@@ -1490,7 +1509,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			object_type *o_ptr = &target_ptr->current_floor_ptr->o_list[this_o_idx];
 			next_o_idx = o_ptr->next_o_idx;
 
-			if (do_take)
+			if (turn_flags_ptr->do_take)
 			{
 				/* Skip gold, corpse and statue */
 				if (o_ptr->tval == TV_GOLD || (o_ptr->tval == TV_CORPSE) || (o_ptr->tval == TV_STATUE))
@@ -1528,18 +1547,18 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			if (object_is_artifact(o_ptr) || (r_ptr->flags3 & flg3) || (r_ptr->flags2 & flg2) ||
 				((~(r_ptr->flagsr) & flgr) && !(r_ptr->flagsr & RFR_RES_ALL)))
 			{
-				if (do_take && (r_ptr->flags2 & RF2_STUPID))
+				if (turn_flags_ptr->do_take && (r_ptr->flags2 & RF2_STUPID))
 				{
-					did_take_item = TRUE;
+					turn_flags_ptr->did_take_item = TRUE;
 					if (m_ptr->ml && player_can_see_bold(target_ptr, ny, nx))
 					{
 						msg_format(_("%^sは%sを拾おうとしたが、だめだった。", "%^s tries to pick up %s, but fails."), m_name, o_name);
 					}
 				}
 			}
-			else if (do_take)
+			else if (turn_flags_ptr->do_take)
 			{
-				did_take_item = TRUE;
+				turn_flags_ptr->did_take_item = TRUE;
 				if (player_can_see_bold(target_ptr, ny, nx))
 				{
 					msg_format(_("%^sが%sを拾った。", "%^s picks up %s."), m_name, o_name);
@@ -1554,7 +1573,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			}
 			else if (!is_pet(m_ptr))
 			{
-				did_kill_item = TRUE;
+				turn_flags_ptr->did_kill_item = TRUE;
 				if (player_has_los_bold(target_ptr, ny, nx))
 				{
 					msg_format(_("%^sが%sを破壊した。", "%^s destroys %s."), m_name, o_name);
@@ -1564,7 +1583,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			}
 		}
 
-		if (do_turn) break;
+		if (turn_flags_ptr->do_turn) break;
 	}
 
 	/*
@@ -1574,7 +1593,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (target_ptr->no_flowed && i > 2 && m_ptr->target_y)
 		m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
 
-	if (!do_turn && !do_move && !MON_MONFEAR(m_ptr) && !is_riding_mon && aware)
+	if (!turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && !MON_MONFEAR(m_ptr) && !turn_flags_ptr->is_riding_mon && aware)
 	{
 		if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell)
 		{
@@ -1582,13 +1601,13 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 	}
 
-	if (do_view)
+	if (turn_flags_ptr->do_view)
 	{
 		target_ptr->update |= (PU_FLOW);
 		target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
 	}
 
-	if (do_move && ((r_ptr->flags7 & (RF7_SELF_LD_MASK | RF7_HAS_DARK_1 | RF7_HAS_DARK_2))
+	if (turn_flags_ptr->do_move && ((r_ptr->flags7 & (RF7_SELF_LD_MASK | RF7_HAS_DARK_1 | RF7_HAS_DARK_2))
 		|| ((r_ptr->flags7 & (RF7_HAS_LITE_1 | RF7_HAS_LITE_2)) && !target_ptr->phase_out)))
 	{
 		target_ptr->update |= (PU_MON_LITE);
@@ -1596,16 +1615,16 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	if (is_original_ap_and_seen(target_ptr, m_ptr))
 	{
-		if (did_open_door) r_ptr->r_flags2 |= (RF2_OPEN_DOOR);
-		if (did_bash_door) r_ptr->r_flags2 |= (RF2_BASH_DOOR);
-		if (did_take_item) r_ptr->r_flags2 |= (RF2_TAKE_ITEM);
-		if (did_kill_item) r_ptr->r_flags2 |= (RF2_KILL_ITEM);
-		if (did_move_body) r_ptr->r_flags2 |= (RF2_MOVE_BODY);
-		if (did_pass_wall) r_ptr->r_flags2 |= (RF2_PASS_WALL);
-		if (did_kill_wall) r_ptr->r_flags2 |= (RF2_KILL_WALL);
+		if (turn_flags_ptr->did_open_door) r_ptr->r_flags2 |= (RF2_OPEN_DOOR);
+		if (turn_flags_ptr->did_bash_door) r_ptr->r_flags2 |= (RF2_BASH_DOOR);
+		if (turn_flags_ptr->did_take_item) r_ptr->r_flags2 |= (RF2_TAKE_ITEM);
+		if (turn_flags_ptr->did_kill_item) r_ptr->r_flags2 |= (RF2_KILL_ITEM);
+		if (turn_flags_ptr->did_move_body) r_ptr->r_flags2 |= (RF2_MOVE_BODY);
+		if (turn_flags_ptr->did_pass_wall) r_ptr->r_flags2 |= (RF2_PASS_WALL);
+		if (turn_flags_ptr->did_kill_wall) r_ptr->r_flags2 |= (RF2_KILL_WALL);
 	}
 
-	bool is_battle_determined = !do_turn && !do_move && MON_MONFEAR(m_ptr) && aware;
+	bool is_battle_determined = !turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && MON_MONFEAR(m_ptr) && aware;
 	if (!is_battle_determined) return;
 
 	(void)set_monster_monfear(target_ptr, m_idx, 0);
