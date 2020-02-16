@@ -1201,7 +1201,7 @@ turn_flags *init_turn_flags(player_type *target_ptr, MONSTER_IDX m_idx, turn_fla
  * @brief 超隠密処理 (のはず todo)
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
- * @return モンスターがプレーヤーを感知していればFALSE？ (todo 要調査)
+ * @return 超隠密状態ならばTRUE
  */
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx)
 {
@@ -1487,7 +1487,7 @@ void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
  * @param m_idx モンスターID
  * @param oy モンスターが元々いたY座標
  * @param ox モンスターが元々いたX座標
- * @param aware 起きていればTRUE (のはず todo 要調査)
+ * @param aware 超隠密状態ならばTRUE
  * @return なし
  */
 void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
@@ -1584,7 +1584,7 @@ bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, P
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param mm 移動方向
  * @param m_idx モンスターID
- * @param aware 起きていればTRUE (のはず todo 要調査)
+ * @param aware 超隠密状態ならばTRUE
  * @return 移動先が存在すればTRUE
  */
 bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
@@ -1739,7 +1739,7 @@ bool runaway_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_
  * @brief モンスターに魔法を試行させる
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
- * @param aware 起きていればTRUE
+ * @param aware 超隠密状態ならばTRUE
  * @return 魔法を唱えられなければ強制的にFALSE、その後モンスターが実際に魔法を唱えればTRUE
  */
 bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware)
@@ -2539,7 +2539,7 @@ void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_p
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_idx モンスターID
- * @param aware 起きていればTRUE
+ * @param aware 超隠密状態ならばTRUE
  * @return モンスターが戦いを決意したらTRUE
  */
 bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, bool aware, bool see_m)
