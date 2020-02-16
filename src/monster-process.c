@@ -81,7 +81,9 @@ bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr,
 void exe_monster_attack_to_player(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx);
 bool process_monster_attack_to_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, grid_type *g_ptr, bool can_cross);
 bool exe_monster_attack_to_monster(player_type *target_ptr, MONSTER_IDX m_idx, grid_type *g_ptr);
+
 bool process_post_dig_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
+bool update_riding_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, POSITION ny, POSITION nx);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -1206,19 +1208,16 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		if (turn_flags_ptr->must_alter_to_move && (r_ptr->flags7 & RF7_AQUATIC))
 		{
 			if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0))
-			{
 				turn_flags_ptr->do_move = FALSE;
-			}
 		}
 
 		if (turn_flags_ptr->do_move && !can_cross && !turn_flags_ptr->did_kill_wall && !turn_flags_ptr->did_bash_door)
-		{
 			turn_flags_ptr->do_move = FALSE;
-		}
 
 		if (turn_flags_ptr->do_move && (r_ptr->flags1 & RF1_NEVER_MOVE))
 		{
-			if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_MOVE);
+			if (is_original_ap_and_seen(target_ptr, m_ptr))
+				r_ptr->r_flags1 |= (RF1_NEVER_MOVE);
 
 			turn_flags_ptr->do_move = FALSE;
 		}
@@ -1239,28 +1238,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			}
 		}
 
-		if (!turn_flags_ptr->is_riding_mon)
-		{
-			target_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = g_ptr->m_idx;
-			if (g_ptr->m_idx)
-			{
-				y_ptr->fy = oy;
-				y_ptr->fx = ox;
-				update_monster(target_ptr, g_ptr->m_idx, TRUE);
-			}
-
-			g_ptr->m_idx = m_idx;
-			m_ptr->fy = ny;
-			m_ptr->fx = nx;
-			update_monster(target_ptr, m_idx, TRUE);
-
-			lite_spot(target_ptr, oy, ox);
-			lite_spot(target_ptr, ny, nx);
-		}
-		else
-		{
-			if (!move_player_effect(target_ptr, ny, nx, MPE_DONT_PICKUP)) break;
-		}
+		if (!update_riding_monster(target_ptr, turn_flags_ptr, m_idx, oy, ox, ny, nx)) break;
 
 		if (m_ptr->ml &&
 			(disturb_move ||
@@ -2376,6 +2354,46 @@ bool process_post_dig_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, 
 	f_ptr = &f_info[g_ptr->feat];
 	turn_flags_ptr->do_view = TRUE;
 	turn_flags_ptr->do_turn = TRUE;
+	return TRUE;
+}
+
+
+/*!
+ * @brief 騎乗中のモンスター情報を更新する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
+ * @param m_idx モンスターID
+ * @param oy 移動前の、モンスターのY座標
+ * @param ox 移動前の、モンスターのX座標
+ * @param ny 移動後の、モンスターのY座標
+ * @param ox 移動後の、モンスターのX座標
+ * @return アイテム等に影響を及ぼしたらTRUE
+ */
+bool update_riding_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, POSITION ny, POSITION nx)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	grid_type *g_ptr;
+	g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
+	monster_type *y_ptr;
+	y_ptr = &target_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+	if (turn_flags_ptr->is_riding_mon)
+		return move_player_effect(target_ptr, ny, nx, MPE_DONT_PICKUP);
+
+	target_ptr->current_floor_ptr->grid_array[oy][ox].m_idx = g_ptr->m_idx;
+	if (g_ptr->m_idx)
+	{
+		y_ptr->fy = oy;
+		y_ptr->fx = ox;
+		update_monster(target_ptr, g_ptr->m_idx, TRUE);
+	}
+
+	g_ptr->m_idx = m_idx;
+	m_ptr->fy = ny;
+	m_ptr->fx = nx;
+	update_monster(target_ptr, m_idx, TRUE);
+
+	lite_spot(target_ptr, oy, ox);
+	lite_spot(target_ptr, ny, nx);
 	return TRUE;
 }
 
