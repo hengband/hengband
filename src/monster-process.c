@@ -65,6 +65,7 @@ void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 bool process_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void vanish_nonunique(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
+bool explode_monster(player_type *target_ptr, MONSTER_IDX m_idx);
 bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
 bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware);
 bool runaway_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon, bool see_m);
@@ -1123,13 +1124,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	if (vanish_summoned_children(target_ptr, m_idx, see_m)) return;
 	if (process_quantum_effect(target_ptr,m_idx, see_m)) return;
-
-	if (m_ptr->r_idx == MON_SHURYUUDAN)
-	{
-		bool fear, dead;
-		mon_take_hit_mon(target_ptr, m_idx, 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
-		if (dead) return;
-	}
+	if (explode_monster(target_ptr, m_idx)) return;
 
 	if (runaway_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon, see_m)) return;
 
@@ -1453,9 +1448,27 @@ void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see
 
 
 /*!
+ * @brief モンスターの爆発処理
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスターID
+ * @return 爆死したらTRUE
+ */
+bool explode_monster(player_type *target_ptr, MONSTER_IDX m_idx)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	if (m_ptr->r_idx != MON_SHURYUUDAN) return FALSE;
+
+	bool fear, dead;
+	mon_take_hit_mon(target_ptr, m_idx, 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
+	return dead;
+}
+
+
+/*!
  * @brief モンスター依存の特別な行動を取らせる
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
+ * @return なし
  */
 void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
 {
