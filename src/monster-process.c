@@ -85,6 +85,8 @@ bool exe_monster_attack_to_monster(player_type *target_ptr, MONSTER_IDX m_idx, g
 bool process_post_dig_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 bool update_riding_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, POSITION ny, POSITION nx);
 
+void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx);
+
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
   * Calculate the direction to the next enemy
@@ -1165,8 +1167,8 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	if (!decide_monster_movement_direction(target_ptr, mm, m_idx, aware)) return;
 
-	int i;
-	for (i = 0; mm[i]; i++)
+	int count = 0;
+	for (int i = 0; mm[i]; i++)
 	{
 		int d = mm[i];
 		if (d == 5) d = ddd[randint0(8)];
@@ -1177,11 +1179,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 		grid_type *g_ptr;
 		g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
-		feature_type *f_ptr;
-		f_ptr = &f_info[g_ptr->feat];
 		bool can_cross = monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0);
-		monster_type *y_ptr;
-		y_ptr = &target_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
 		if (!process_wall(target_ptr, turn_flags_ptr, m_ptr, ny, nx, can_cross))
 		{
@@ -1230,6 +1228,8 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 
 		turn_flags_ptr->do_turn = TRUE;
+		feature_type *f_ptr;
+		f_ptr = &f_info[g_ptr->feat];
 		if (have_flag(f_ptr->flags, FF_TREE))
 		{
 			if (!(r_ptr->flags7 & RF7_CAN_FLY) && !(r_ptr->flags8 & RF8_WILD_WOOD))
@@ -1263,97 +1263,18 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 			continue;
 		}
 
-		OBJECT_IDX this_o_idx, next_o_idx;
-		turn_flags_ptr->do_take = (r_ptr->flags2 & RF2_TAKE_ITEM) != 0;
-		for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
-		{
-			BIT_FLAGS flgs[TR_FLAG_SIZE], flg2 = 0L, flg3 = 0L, flgr = 0L;
-			GAME_TEXT m_name[MAX_NLEN], o_name[MAX_NLEN];
-			object_type *o_ptr = &target_ptr->current_floor_ptr->o_list[this_o_idx];
-			next_o_idx = o_ptr->next_o_idx;
-
-			if (turn_flags_ptr->do_take)
-			{
-				/* Skip gold, corpse and statue */
-				if (o_ptr->tval == TV_GOLD || (o_ptr->tval == TV_CORPSE) || (o_ptr->tval == TV_STATUE))
-					continue;
-			}
-
-			object_flags(o_ptr, flgs);
-			object_desc(target_ptr, o_name, o_ptr, 0);
-			monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_HIDDEN);
-
-			if (have_flag(flgs, TR_SLAY_DRAGON)) flg3 |= (RF3_DRAGON);
-			if (have_flag(flgs, TR_KILL_DRAGON)) flg3 |= (RF3_DRAGON);
-			if (have_flag(flgs, TR_SLAY_TROLL))  flg3 |= (RF3_TROLL);
-			if (have_flag(flgs, TR_KILL_TROLL))  flg3 |= (RF3_TROLL);
-			if (have_flag(flgs, TR_SLAY_GIANT))  flg3 |= (RF3_GIANT);
-			if (have_flag(flgs, TR_KILL_GIANT))  flg3 |= (RF3_GIANT);
-			if (have_flag(flgs, TR_SLAY_ORC))    flg3 |= (RF3_ORC);
-			if (have_flag(flgs, TR_KILL_ORC))    flg3 |= (RF3_ORC);
-			if (have_flag(flgs, TR_SLAY_DEMON))  flg3 |= (RF3_DEMON);
-			if (have_flag(flgs, TR_KILL_DEMON))  flg3 |= (RF3_DEMON);
-			if (have_flag(flgs, TR_SLAY_UNDEAD)) flg3 |= (RF3_UNDEAD);
-			if (have_flag(flgs, TR_KILL_UNDEAD)) flg3 |= (RF3_UNDEAD);
-			if (have_flag(flgs, TR_SLAY_ANIMAL)) flg3 |= (RF3_ANIMAL);
-			if (have_flag(flgs, TR_KILL_ANIMAL)) flg3 |= (RF3_ANIMAL);
-			if (have_flag(flgs, TR_SLAY_EVIL))   flg3 |= (RF3_EVIL);
-			if (have_flag(flgs, TR_KILL_EVIL))   flg3 |= (RF3_EVIL);
-			if (have_flag(flgs, TR_SLAY_HUMAN))  flg2 |= (RF2_HUMAN);
-			if (have_flag(flgs, TR_KILL_HUMAN))  flg2 |= (RF2_HUMAN);
-			if (have_flag(flgs, TR_BRAND_ACID))  flgr |= (RFR_IM_ACID);
-			if (have_flag(flgs, TR_BRAND_ELEC))  flgr |= (RFR_IM_ELEC);
-			if (have_flag(flgs, TR_BRAND_FIRE))  flgr |= (RFR_IM_FIRE);
-			if (have_flag(flgs, TR_BRAND_COLD))  flgr |= (RFR_IM_COLD);
-			if (have_flag(flgs, TR_BRAND_POIS))  flgr |= (RFR_IM_POIS);
-
-			if (object_is_artifact(o_ptr) || (r_ptr->flags3 & flg3) || (r_ptr->flags2 & flg2) ||
-				((~(r_ptr->flagsr) & flgr) && !(r_ptr->flagsr & RFR_RES_ALL)))
-			{
-				if (turn_flags_ptr->do_take && (r_ptr->flags2 & RF2_STUPID))
-				{
-					turn_flags_ptr->did_take_item = TRUE;
-					if (m_ptr->ml && player_can_see_bold(target_ptr, ny, nx))
-					{
-						msg_format(_("%^sは%sを拾おうとしたが、だめだった。", "%^s tries to pick up %s, but fails."), m_name, o_name);
-					}
-				}
-			}
-			else if (turn_flags_ptr->do_take)
-			{
-				turn_flags_ptr->did_take_item = TRUE;
-				if (player_can_see_bold(target_ptr, ny, nx))
-				{
-					msg_format(_("%^sが%sを拾った。", "%^s picks up %s."), m_name, o_name);
-				}
-
-				excise_object_idx(target_ptr->current_floor_ptr, this_o_idx);
-				o_ptr->marked &= OM_TOUCHED;
-				o_ptr->iy = o_ptr->ix = 0;
-				o_ptr->held_m_idx = m_idx;
-				o_ptr->next_o_idx = m_ptr->hold_o_idx;
-				m_ptr->hold_o_idx = this_o_idx;
-			}
-			else if (!is_pet(m_ptr))
-			{
-				turn_flags_ptr->did_kill_item = TRUE;
-				if (player_has_los_bold(target_ptr, ny, nx))
-				{
-					msg_format(_("%^sが%sを破壊した。", "%^s destroys %s."), m_name, o_name);
-				}
-
-				delete_object_idx(target_ptr, this_o_idx);
-			}
-		}
+		update_object_by_monster_movement(target_ptr, turn_flags_ptr, m_idx, ny, nx);
 
 		if (turn_flags_ptr->do_turn) break;
+
+		count++;
 	}
 
 	/*
 	 *  Forward movements failed, but now received LOS attack!
 	 *  Try to flow by smell.
 	 */
-	if (target_ptr->no_flowed && i > 2 && m_ptr->target_y)
+	if (target_ptr->no_flowed && count > 2 && m_ptr->target_y)
 		m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
 
 	if (!turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && !MON_MONFEAR(m_ptr) && !turn_flags_ptr->is_riding_mon && aware)
@@ -2395,6 +2316,106 @@ bool update_riding_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, 
 	lite_spot(target_ptr, oy, ox);
 	lite_spot(target_ptr, ny, nx);
 	return TRUE;
+}
+
+
+/*!
+ * @brief モンスターの移動に伴うオブジェクト処理 (アイテム破壊等)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
+ * @param m_idx モンスターID
+ * @param ny 移動後の、モンスターのY座標
+ * @param ox 移動後の、モンスターのX座標
+ */
+void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	grid_type *g_ptr;
+	g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
+
+	OBJECT_IDX this_o_idx, next_o_idx;
+	turn_flags_ptr->do_take = (r_ptr->flags2 & RF2_TAKE_ITEM) != 0;
+	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	{
+		BIT_FLAGS flgs[TR_FLAG_SIZE], flg2 = 0L, flg3 = 0L, flgr = 0L;
+		GAME_TEXT m_name[MAX_NLEN], o_name[MAX_NLEN];
+		object_type *o_ptr = &target_ptr->current_floor_ptr->o_list[this_o_idx];
+		next_o_idx = o_ptr->next_o_idx;
+
+		if (turn_flags_ptr->do_take)
+		{
+			/* Skip gold, corpse and statue */
+			if (o_ptr->tval == TV_GOLD || (o_ptr->tval == TV_CORPSE) || (o_ptr->tval == TV_STATUE))
+				continue;
+		}
+
+		object_flags(o_ptr, flgs);
+		object_desc(target_ptr, o_name, o_ptr, 0);
+		monster_desc(target_ptr, m_name, m_ptr, MD_INDEF_HIDDEN);
+
+		if (have_flag(flgs, TR_SLAY_DRAGON)) flg3 |= (RF3_DRAGON);
+		if (have_flag(flgs, TR_KILL_DRAGON)) flg3 |= (RF3_DRAGON);
+		if (have_flag(flgs, TR_SLAY_TROLL))  flg3 |= (RF3_TROLL);
+		if (have_flag(flgs, TR_KILL_TROLL))  flg3 |= (RF3_TROLL);
+		if (have_flag(flgs, TR_SLAY_GIANT))  flg3 |= (RF3_GIANT);
+		if (have_flag(flgs, TR_KILL_GIANT))  flg3 |= (RF3_GIANT);
+		if (have_flag(flgs, TR_SLAY_ORC))    flg3 |= (RF3_ORC);
+		if (have_flag(flgs, TR_KILL_ORC))    flg3 |= (RF3_ORC);
+		if (have_flag(flgs, TR_SLAY_DEMON))  flg3 |= (RF3_DEMON);
+		if (have_flag(flgs, TR_KILL_DEMON))  flg3 |= (RF3_DEMON);
+		if (have_flag(flgs, TR_SLAY_UNDEAD)) flg3 |= (RF3_UNDEAD);
+		if (have_flag(flgs, TR_KILL_UNDEAD)) flg3 |= (RF3_UNDEAD);
+		if (have_flag(flgs, TR_SLAY_ANIMAL)) flg3 |= (RF3_ANIMAL);
+		if (have_flag(flgs, TR_KILL_ANIMAL)) flg3 |= (RF3_ANIMAL);
+		if (have_flag(flgs, TR_SLAY_EVIL))   flg3 |= (RF3_EVIL);
+		if (have_flag(flgs, TR_KILL_EVIL))   flg3 |= (RF3_EVIL);
+		if (have_flag(flgs, TR_SLAY_HUMAN))  flg2 |= (RF2_HUMAN);
+		if (have_flag(flgs, TR_KILL_HUMAN))  flg2 |= (RF2_HUMAN);
+		if (have_flag(flgs, TR_BRAND_ACID))  flgr |= (RFR_IM_ACID);
+		if (have_flag(flgs, TR_BRAND_ELEC))  flgr |= (RFR_IM_ELEC);
+		if (have_flag(flgs, TR_BRAND_FIRE))  flgr |= (RFR_IM_FIRE);
+		if (have_flag(flgs, TR_BRAND_COLD))  flgr |= (RFR_IM_COLD);
+		if (have_flag(flgs, TR_BRAND_POIS))  flgr |= (RFR_IM_POIS);
+
+		if (object_is_artifact(o_ptr) || (r_ptr->flags3 & flg3) || (r_ptr->flags2 & flg2) ||
+			((~(r_ptr->flagsr) & flgr) && !(r_ptr->flagsr & RFR_RES_ALL)))
+		{
+			if (turn_flags_ptr->do_take && (r_ptr->flags2 & RF2_STUPID))
+			{
+				turn_flags_ptr->did_take_item = TRUE;
+				if (m_ptr->ml && player_can_see_bold(target_ptr, ny, nx))
+				{
+					msg_format(_("%^sは%sを拾おうとしたが、だめだった。", "%^s tries to pick up %s, but fails."), m_name, o_name);
+				}
+			}
+		}
+		else if (turn_flags_ptr->do_take)
+		{
+			turn_flags_ptr->did_take_item = TRUE;
+			if (player_can_see_bold(target_ptr, ny, nx))
+			{
+				msg_format(_("%^sが%sを拾った。", "%^s picks up %s."), m_name, o_name);
+			}
+
+			excise_object_idx(target_ptr->current_floor_ptr, this_o_idx);
+			o_ptr->marked &= OM_TOUCHED;
+			o_ptr->iy = o_ptr->ix = 0;
+			o_ptr->held_m_idx = m_idx;
+			o_ptr->next_o_idx = m_ptr->hold_o_idx;
+			m_ptr->hold_o_idx = this_o_idx;
+		}
+		else if (!is_pet(m_ptr))
+		{
+			turn_flags_ptr->did_kill_item = TRUE;
+			if (player_has_los_bold(target_ptr, ny, nx))
+			{
+				msg_format(_("%^sが%sを破壊した。", "%^s destroys %s."), m_name, o_name);
+			}
+
+			delete_object_idx(target_ptr, this_o_idx);
+		}
+	}
 }
 
 
