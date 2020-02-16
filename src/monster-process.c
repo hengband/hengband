@@ -57,6 +57,8 @@ typedef struct {
 	bool did_kill_wall;
 } turn_flags;
 
+turn_flags *init_turn_flags(player_type *target_ptr, MONSTER_IDX m_idx);
+
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);
 bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
@@ -92,6 +94,7 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
 
 void update_player_type(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_race *r_ptr);
 void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr);
+bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, bool aware, bool see_m);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -1099,20 +1102,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	DIRECTION mm[8];
 
-	turn_flags tmp_flags;
-	turn_flags *turn_flags_ptr = &tmp_flags;
-	turn_flags_ptr->is_riding_mon = (m_idx == target_ptr->riding);
-	turn_flags_ptr->do_turn = FALSE;
-	turn_flags_ptr->do_move = FALSE;
-	turn_flags_ptr->do_view = FALSE;
-	turn_flags_ptr->must_alter_to_move = FALSE;
-	turn_flags_ptr->did_open_door = FALSE;
-	turn_flags_ptr->did_bash_door = FALSE;
-	turn_flags_ptr->did_take_item = FALSE;
-	turn_flags_ptr->did_kill_item = FALSE;
-	turn_flags_ptr->did_move_body = FALSE;
-	turn_flags_ptr->did_pass_wall = FALSE;
-	turn_flags_ptr->did_kill_wall = FALSE;
+	turn_flags *turn_flags_ptr = init_turn_flags(target_ptr, m_idx);
 
 	bool see_m = is_seen(m_ptr);
 
@@ -1128,7 +1118,6 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (vanish_summoned_children(target_ptr, m_idx, see_m)) return;
 	if (process_quantum_effect(target_ptr,m_idx, see_m)) return;
 	if (explode_monster(target_ptr, m_idx)) return;
-
 	if (runaway_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon, see_m)) return;
 
 	awake_monster(target_ptr, m_idx);
@@ -1179,18 +1168,35 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	update_player_type(target_ptr, turn_flags_ptr, r_ptr);
 	update_monster_race_flags(target_ptr, turn_flags_ptr, m_ptr);
 
-	bool is_battle_determined = !turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && MON_MONFEAR(m_ptr) && aware;
-	if (!is_battle_determined) return;
-
-	(void)set_monster_monfear(target_ptr, m_idx, 0);
-	if (see_m)
-	{
-		GAME_TEXT m_name[MAX_NLEN];
-		monster_desc(target_ptr, m_name, m_ptr, 0);
-		msg_format(_("%^sは戦いを決意した！", "%^s turns to fight!"), m_name);
-	}
+	if (!process_monster_fear(target_ptr, turn_flags_ptr, m_idx, aware, see_m)) return;
 
 	if (m_ptr->ml) chg_virtue(target_ptr, V_COMPASSION, -1);
+}
+
+
+/*!
+ * @brief ターン経過フラグ構造体の初期化
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスターID
+ * @return 初期化済のターン経過フラグ
+ */
+turn_flags *init_turn_flags(player_type *target_ptr, MONSTER_IDX m_idx)
+{
+	turn_flags tmp_flags;
+	turn_flags *turn_flags_ptr = &tmp_flags;
+	turn_flags_ptr->is_riding_mon = (m_idx == target_ptr->riding);
+	turn_flags_ptr->do_turn = FALSE;
+	turn_flags_ptr->do_move = FALSE;
+	turn_flags_ptr->do_view = FALSE;
+	turn_flags_ptr->must_alter_to_move = FALSE;
+	turn_flags_ptr->did_open_door = FALSE;
+	turn_flags_ptr->did_bash_door = FALSE;
+	turn_flags_ptr->did_take_item = FALSE;
+	turn_flags_ptr->did_kill_item = FALSE;
+	turn_flags_ptr->did_move_body = FALSE;
+	turn_flags_ptr->did_pass_wall = FALSE;
+	turn_flags_ptr->did_kill_wall = FALSE;
+	return turn_flags_ptr;
 }
 
 
@@ -1484,7 +1490,7 @@ void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
  * @param m_idx モンスターID
  * @param oy モンスターが元々いたY座標
  * @param ox モンスターが元々いたX座標
- * @param aware 起きていればTRUE
+ * @param aware 起きていればTRUE (のはず todo 要調査)
  * @return なし
  */
 void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
@@ -1581,7 +1587,7 @@ bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, P
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param mm 移動方向
  * @param m_idx モンスターID
- * @param aware 起きていればTRUE
+ * @param aware 起きていればTRUE (のはず todo 要調査)
  * @return 移動先が存在すればTRUE
  */
 bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
@@ -2491,6 +2497,30 @@ void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_p
 	if (turn_flags_ptr->did_move_body) r_ptr->r_flags2 |= (RF2_MOVE_BODY);
 	if (turn_flags_ptr->did_pass_wall) r_ptr->r_flags2 |= (RF2_PASS_WALL);
 	if (turn_flags_ptr->did_kill_wall) r_ptr->r_flags2 |= (RF2_KILL_WALL);
+}
+
+
+/*!
+ * @brief モンスターの恐怖状態を処理する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
+ * @param m_idx モンスターID
+ * @param aware 起きていればTRUE
+ * @return モンスターが戦いを決意したらTRUE
+ */
+bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, bool aware, bool see_m)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	bool is_battle_determined = !turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && MON_MONFEAR(m_ptr) && aware;
+	if (!is_battle_determined) return FALSE;
+
+	(void)set_monster_monfear(target_ptr, m_idx, 0);
+	if (!see_m) return TRUE;
+
+	GAME_TEXT m_name[MAX_NLEN];
+	monster_desc(target_ptr, m_name, m_ptr, 0);
+	msg_format(_("%^sは戦いを決意した！", "%^s turns to fight!"), m_name);
+	return TRUE;
 }
 
 
