@@ -1982,8 +1982,9 @@ void message_add(concptr str)
 		if (splitted2 != NULL)
 		{
 			message_add(splitted2);
-			return;
 		}
+
+		return;
 	}
 
 	if (message__head + n + 1 >= MESSAGE_BUF)
