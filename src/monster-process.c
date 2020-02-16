@@ -91,6 +91,7 @@ bool update_riding_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, 
 void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx);
 
 void update_player_type(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_race *r_ptr);
+void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -1176,17 +1177,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	}
 
 	update_player_type(target_ptr, turn_flags_ptr, r_ptr);
-
-	if (is_original_ap_and_seen(target_ptr, m_ptr))
-	{
-		if (turn_flags_ptr->did_open_door) r_ptr->r_flags2 |= (RF2_OPEN_DOOR);
-		if (turn_flags_ptr->did_bash_door) r_ptr->r_flags2 |= (RF2_BASH_DOOR);
-		if (turn_flags_ptr->did_take_item) r_ptr->r_flags2 |= (RF2_TAKE_ITEM);
-		if (turn_flags_ptr->did_kill_item) r_ptr->r_flags2 |= (RF2_KILL_ITEM);
-		if (turn_flags_ptr->did_move_body) r_ptr->r_flags2 |= (RF2_MOVE_BODY);
-		if (turn_flags_ptr->did_pass_wall) r_ptr->r_flags2 |= (RF2_PASS_WALL);
-		if (turn_flags_ptr->did_kill_wall) r_ptr->r_flags2 |= (RF2_KILL_WALL);
-	}
+	update_monster_race_flags(target_ptr, turn_flags_ptr, m_ptr);
 
 	bool is_battle_determined = !turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && MON_MONFEAR(m_ptr) && aware;
 	if (!is_battle_determined) return;
@@ -2478,6 +2469,28 @@ void update_player_type(player_type *target_ptr, turn_flags *turn_flags_ptr, mon
 	{
 		target_ptr->update |= (PU_MON_LITE);
 	}
+}
+
+
+/*!
+ * @brief モンスターのフラグを更新する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
+ * @param m_ptr モンスターへの参照ポインタ
+ * @return なし
+ */
+void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr)
+{
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	if (!is_original_ap_and_seen(target_ptr, m_ptr)) return;
+
+	if (turn_flags_ptr->did_open_door) r_ptr->r_flags2 |= (RF2_OPEN_DOOR);
+	if (turn_flags_ptr->did_bash_door) r_ptr->r_flags2 |= (RF2_BASH_DOOR);
+	if (turn_flags_ptr->did_take_item) r_ptr->r_flags2 |= (RF2_TAKE_ITEM);
+	if (turn_flags_ptr->did_kill_item) r_ptr->r_flags2 |= (RF2_KILL_ITEM);
+	if (turn_flags_ptr->did_move_body) r_ptr->r_flags2 |= (RF2_MOVE_BODY);
+	if (turn_flags_ptr->did_pass_wall) r_ptr->r_flags2 |= (RF2_PASS_WALL);
+	if (turn_flags_ptr->did_kill_wall) r_ptr->r_flags2 |= (RF2_KILL_WALL);
 }
 
 
