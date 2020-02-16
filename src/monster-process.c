@@ -214,6 +214,7 @@ static bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 	return TRUE;
 }
 
+
 /*!
  * @brief モンスターがプレイヤーから逃走するかどうかを返す /
  * Returns whether a given monster will try to run from the player.
@@ -324,8 +325,6 @@ static bool get_moves_aux2(player_type *target_ptr, MONSTER_IDX m_idx, POSITION 
 	int best = 999;
 	for (int i = 7; i >= 0; i--)
 	{
-		int cost;
-
 		POSITION y = y1 + ddy_ddd[i];
 		POSITION x = x1 + ddx_ddd[i];
 
@@ -338,7 +337,7 @@ static bool get_moves_aux2(player_type *target_ptr, MONSTER_IDX m_idx, POSITION 
 		grid_type *g_ptr;
 		g_ptr = &floor_ptr->grid_array[y][x];
 
-		cost = g_ptr->cost;
+		int cost = g_ptr->cost;
 
 		/* Monster cannot kill or pass walls */
 		if (!(((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) || ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding))))
@@ -528,7 +527,6 @@ static bool get_fear_moves_aux(floor_type *floor_ptr, MONSTER_IDX m_idx, POSITIO
 	int score = -1;
 	for (int i = 7; i >= 0; i--)
 	{
-		POSITION dis, s;
 		POSITION y = fy + ddy_ddd[i];
 		POSITION x = fx + ddx_ddd[i];
 
@@ -536,10 +534,10 @@ static bool get_fear_moves_aux(floor_type *floor_ptr, MONSTER_IDX m_idx, POSITIO
 		if (!in_bounds2(floor_ptr, y, x)) continue;
 
 		/* Calculate distance of this grid from our destination */
-		dis = distance(y, x, y1, x1);
+		POSITION dis = distance(y, x, y1, x1);
 
 		/* Score this grid */
-		s = 5000 / (dis + 3) - 500 / (floor_ptr->grid_array[y][x].dist + 1);
+		POSITION s = 5000 / (dis + 3) - 500 / (floor_ptr->grid_array[y][x].dist + 1);
 
 		/* No negative scores */
 		if (s < 0) s = 0;
@@ -565,6 +563,7 @@ static bool get_fear_moves_aux(floor_type *floor_ptr, MONSTER_IDX m_idx, POSITIO
 	/* Success */
 	return TRUE;
 }
+
 
 /*
  * Hack -- Precompute a bunch of calls to distance() in find_safety() and
@@ -863,7 +862,6 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	POSITION y = 0, ay, x = 0, ax;
-	int move_val = 0;
 	POSITION y2 = target_ptr->y;
 	POSITION x2 = target_ptr->x;
 	bool done = FALSE;
@@ -1027,6 +1025,7 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 	ay = ABS(y);
 
 	/* Do something weird */
+	int move_val = 0;
 	if (y < 0) move_val += 8;
 	if (x > 0) move_val += 4;
 
