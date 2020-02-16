@@ -74,11 +74,12 @@ bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware);
 bool process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx, bool can_cross);
 bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 bool bash_normal_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
-void bash_glass_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, grid_type *g_ptr, feature_type *f_ptr, bool may_bash);
+void bash_glass_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, feature_type *f_ptr, bool may_bash);
 bool process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 
 void exe_monster_attack_to_player(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx);
+bool process_monster_attack_to_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, grid_type *g_ptr, MONSTER_IDX m_idx, bool can_cross);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -1191,49 +1192,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		}
 
 		exe_monster_attack_to_player(target_ptr, turn_flags_ptr, m_idx, ny, nx);
-
-		if (turn_flags_ptr->do_move && g_ptr->m_idx)
-		{
-			monster_race *z_ptr = &r_info[y_ptr->r_idx];
-			turn_flags_ptr->do_move = FALSE;
-			if (((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW) &&
-				(r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level) &&
-				can_cross && (g_ptr->m_idx != target_ptr->riding)) ||
-				are_enemies(target_ptr, m_ptr, y_ptr) || MON_CONFUSED(m_ptr))
-			{
-				if (!(r_ptr->flags1 & RF1_NEVER_BLOW))
-				{
-					if (r_ptr->flags2 & RF2_KILL_BODY)
-					{
-						if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_BODY);
-					}
-
-					if (y_ptr->r_idx && (y_ptr->hp >= 0))
-					{
-						if (monst_attack_monst(target_ptr, m_idx, g_ptr->m_idx)) return;
-
-						if (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
-						{
-							if (MON_CONFUSED(m_ptr)) return;
-							if (r_ptr->flags2 & RF2_STUPID)
-							{
-								if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_STUPID);
-								return;
-							}
-						}
-					}
-				}
-			}
-			else if ((r_ptr->flags2 & RF2_MOVE_BODY) && !(r_ptr->flags1 & RF1_NEVER_MOVE) &&
-				(r_ptr->mexp > z_ptr->mexp) &&
-				can_cross && (g_ptr->m_idx != target_ptr->riding) &&
-				monster_can_cross_terrain(target_ptr, target_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0))
-			{
-				turn_flags_ptr->do_move = TRUE;
-				turn_flags_ptr->did_move_body = TRUE;
-				(void)set_monster_csleep(target_ptr, g_ptr->m_idx, 0);
-			}
-		}
+		if (process_monster_attack_to_monster(target_ptr, turn_flags_ptr, g_ptr, m_idx, can_cross)) return;
 
 		if (turn_flags_ptr->is_riding_mon)
 		{
@@ -2099,7 +2058,7 @@ bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
 	feature_type *f_ptr;
 	f_ptr = &f_info[g_ptr->feat];
 	bool may_bash = bash_normal_door(target_ptr, turn_flags_ptr, m_ptr, ny, nx);
-	bash_glass_door(target_ptr, turn_flags_ptr, m_ptr, g_ptr, f_ptr, may_bash);
+	bash_glass_door(target_ptr, turn_flags_ptr, m_ptr, f_ptr, may_bash);
 
 	if (!turn_flags_ptr->did_open_door && !turn_flags_ptr->did_bash_door) return TRUE;
 
@@ -2175,7 +2134,7 @@ bool bash_normal_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monst
  * @param f_ptr 地形への参照ポインタ
  * @return なし
  */
-void bash_glass_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, grid_type *g_ptr, feature_type *f_ptr, bool may_bash)
+void bash_glass_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, feature_type *f_ptr, bool may_bash)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	if (!may_bash || ((r_ptr->flags2 & RF2_BASH_DOOR) == 0) || !have_flag(f_ptr->flags, FF_BASH) ||
@@ -2325,6 +2284,74 @@ void exe_monster_attack_to_player(player_type *target_ptr, turn_flags *turn_flag
 		turn_flags_ptr->do_move = FALSE;
 		turn_flags_ptr->do_turn = TRUE;
 	}
+}
+
+
+/*!
+ * @brief モンスターからモンスターへの攻撃処理
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
+ * @param g_ptr グリッドへの参照ポインタ
+ * @param m_idx モンスターID
+ * @param can_cross モンスターが地形を踏破できるならばTRUE
+ * @return ターン消費が発生したらTRUE
+ */
+bool process_monster_attack_to_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, grid_type *g_ptr, MONSTER_IDX m_idx, bool can_cross)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	monster_type *y_ptr;
+	y_ptr = &target_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
+	if (!turn_flags_ptr->do_move || (g_ptr->m_idx == 0)) return FALSE;
+
+	monster_race *z_ptr = &r_info[y_ptr->r_idx];
+	turn_flags_ptr->do_move = FALSE;
+	if ((((r_ptr->flags2 & RF2_KILL_BODY) != 0) && ((r_ptr->flags1 & RF1_NEVER_BLOW) == 0) &&
+		(r_ptr->mexp * r_ptr->level > z_ptr->mexp * z_ptr->level) &&
+		can_cross && (g_ptr->m_idx != target_ptr->riding)) ||
+		are_enemies(target_ptr, m_ptr, y_ptr) || MON_CONFUSED(m_ptr))
+	{
+		if (!(r_ptr->flags1 & RF1_NEVER_BLOW))
+		{
+			if (r_ptr->flags2 & RF2_KILL_BODY)
+			{
+				if (is_original_ap_and_seen(target_ptr, m_ptr))
+				{
+					r_ptr->r_flags2 |= (RF2_KILL_BODY);
+				}
+			}
+
+			if (y_ptr->r_idx && (y_ptr->hp >= 0))
+			{
+				if (monst_attack_monst(target_ptr, m_idx, g_ptr->m_idx)) return TRUE;
+
+				if (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
+				{
+					if (MON_CONFUSED(m_ptr)) return TRUE;
+					if (r_ptr->flags2 & RF2_STUPID)
+					{
+						if (is_original_ap_and_seen(target_ptr, m_ptr))
+						{
+							r_ptr->r_flags2 |= (RF2_STUPID);
+						}
+
+						return TRUE;
+					}
+				}
+			}
+		}
+	}
+	else if (((r_ptr->flags2 & RF2_MOVE_BODY) != 0) && ((r_ptr->flags1 & RF1_NEVER_MOVE) == 0) &&
+		(r_ptr->mexp > z_ptr->mexp) &&
+		can_cross && (g_ptr->m_idx != target_ptr->riding) &&
+		monster_can_cross_terrain(target_ptr, target_ptr->current_floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].feat, z_ptr, 0))
+	{
+		turn_flags_ptr->do_move = TRUE;
+		turn_flags_ptr->did_move_body = TRUE;
+		(void)set_monster_csleep(target_ptr, g_ptr->m_idx, 0);
+	}
+
+	return FALSE;
 }
 
 
