@@ -71,9 +71,9 @@ void process_special(player_type *target_ptr, MONSTER_IDX m_idx);
 void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware);
 bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware);
 
-void process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx, bool can_cross);
+bool process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx, bool can_cross);
 bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
-void process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
+bool process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 
  /*!
@@ -1174,11 +1174,17 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		monster_type *y_ptr;
 		y_ptr = &target_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 
-		process_wall(target_ptr, turn_flags_ptr, m_ptr, ny, nx, can_cross);
-		if (!process_door(target_ptr, turn_flags_ptr, m_ptr, ny, nx)) return;
+		if (!process_wall(target_ptr, turn_flags_ptr, m_ptr, ny, nx, can_cross))
+		{
+			if (!process_door(target_ptr, turn_flags_ptr, m_ptr, ny, nx))
+				return;
+		}
 
-		process_protection_rune(target_ptr, turn_flags_ptr, m_ptr, ny, nx);
-		if (!process_explosive_rune(target_ptr, turn_flags_ptr, m_ptr, ny, nx)) return;
+		if (!process_protection_rune(target_ptr, turn_flags_ptr, m_ptr, ny, nx))
+		{
+			if (!process_explosive_rune(target_ptr, turn_flags_ptr, m_ptr, ny, nx))
+				return;
+		}
 
 		if (turn_flags_ptr->do_move && player_bold(target_ptr, ny, nx))
 		{
@@ -2053,9 +2059,9 @@ bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware)
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
  * @param nx モンスターのX座標
- * @return モンスターIDが異常でない限りTRUE
+ * @return 透過も破壊もしなかった場合はFALSE、それ以外はTRUE
  */
-void process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx, bool can_cross)
+bool process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx, bool can_cross)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	grid_type *g_ptr;
@@ -2065,12 +2071,13 @@ void process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
 	if (player_bold(target_ptr, ny, nx))
 	{
 		turn_flags_ptr->do_move = TRUE;
-		return;
+		return TRUE;
 	}
+
 	if (g_ptr->m_idx > 0)
 	{
 		turn_flags_ptr->do_move = TRUE;
-		return;
+		return TRUE;
 	}
 	
 	if (((r_ptr->flags2 & RF2_KILL_WALL) != 0) &&
@@ -2082,10 +2089,10 @@ void process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
 		if (!can_cross) turn_flags_ptr->must_alter_to_move = TRUE;
 
 		turn_flags_ptr->did_kill_wall = TRUE;
-		return;
+		return TRUE;
 	}
 	
-	if (!can_cross) return;
+	if (!can_cross) return FALSE;
 
 	turn_flags_ptr->do_move = TRUE;
 	if (((r_ptr->flags2 & RF2_PASS_WALL) != 0) && (!turn_flags_ptr->is_riding_mon || target_ptr->pass_wall) &&
@@ -2093,6 +2100,8 @@ void process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
 	{
 		turn_flags_ptr->did_pass_wall = TRUE;
 	}
+
+	return TRUE;
 }
 
 
@@ -2184,20 +2193,20 @@ bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
  * @param nx モンスターのX座標
- * @return なし
+ * @return ルーンのある/なし
  */
-void process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+bool process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
 	grid_type *g_ptr;
 	g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	if (!turn_flags_ptr->do_move || !is_glyph_grid(g_ptr) ||
 		(((r_ptr->flags1 & RF1_NEVER_BLOW) != 0) && player_bold(target_ptr, ny, nx)))
-		return;
+		return FALSE;
 
 	turn_flags_ptr->do_move = FALSE;
 	if (is_pet(m_ptr) || (randint1(BREAK_GLYPH) >= r_ptr->level))
-		return;
+		return TRUE;
 
 	if (g_ptr->info & CAVE_MARK)
 	{
@@ -2209,11 +2218,12 @@ void process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr
 	g_ptr->mimic = 0;
 	turn_flags_ptr->do_move = TRUE;
 	note_spot(target_ptr, ny, nx);
+	return TRUE;
 }
 
 
 /*!
- * @brief 爆発ののルーンにを処理する
+ * @brief 爆発のルーンにを処理する
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
