@@ -58,6 +58,7 @@ typedef struct {
 } turn_flags;
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
+bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);
 bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void awake_monster(player_type *target_ptr, MONSTER_IDX m_idx);
 void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
@@ -1118,15 +1119,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		r_ptr = &r_info[m_ptr->r_idx];
 	}
 
-	bool aware = TRUE;
-	if (target_ptr->special_defense & NINJA_S_STEALTH)
-	{
-		int tmp = target_ptr->lev * 6 + (target_ptr->skill_stl + 10) * 4;
-		if (target_ptr->monlite) tmp /= 3;
-		if (target_ptr->cursed & TRC_AGGRAVATE) tmp /= 2;
-		if (r_ptr->level > (target_ptr->lev * target_ptr->lev / 20 + 10)) tmp /= 3;
-		if (randint0(tmp) > (r_ptr->level + 20)) aware = FALSE;
-	}
+	bool aware = process_stealth(target_ptr, m_idx);
 
 	if (vanish_summoned_children(target_ptr, m_idx, see_m)) return;
 	if (process_quantum_effect(target_ptr,m_idx, see_m)) return;
@@ -1220,6 +1213,26 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	}
 
 	if (m_ptr->ml) chg_virtue(target_ptr, V_COMPASSION, -1);
+}
+
+
+/*!
+ * @brief 超隠密処理 (のはず todo)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスターID
+ * @return モンスターがプレーヤーを感知していればFALSE？ (todo 要調査)
+ */
+bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx)
+{
+	if ((target_ptr->special_defense & NINJA_S_STEALTH) == 0) return TRUE;
+
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	int tmp = target_ptr->lev * 6 + (target_ptr->skill_stl + 10) * 4;
+	if (target_ptr->monlite) tmp /= 3;
+	if (target_ptr->cursed & TRC_AGGRAVATE) tmp /= 2;
+	if (r_ptr->level > (target_ptr->lev * target_ptr->lev / 20 + 10)) tmp /= 3;
+	return (randint0(tmp) <= (r_ptr->level + 20));
 }
 
 
