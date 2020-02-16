@@ -2015,7 +2015,7 @@ void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool i
 bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	if ((m_ptr->parent_m_idx == 0) || target_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx)
+	if ((m_ptr->parent_m_idx == 0) || (target_ptr->current_floor_ptr->m_list[m_ptr->parent_m_idx].r_idx > 0))
 		return FALSE;
 
 	if (see_m)
@@ -2291,7 +2291,7 @@ bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, P
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if (((r_ptr->flags2 & RF2_MULTIPLY) == 0) && (target_ptr->current_floor_ptr->num_repro >= MAX_REPRO))
+	if (((r_ptr->flags2 & RF2_MULTIPLY) == 0) || (target_ptr->current_floor_ptr->num_repro >= MAX_REPRO))
 		return FALSE;
 
 	int k = 0;
@@ -2490,7 +2490,7 @@ bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if ((r_ptr->freq_spell == 0) || !randint1(100) <= r_ptr->freq_spell)
+	if ((r_ptr->freq_spell == 0) || (randint1(100) > r_ptr->freq_spell))
 		return FALSE;
 
 	bool counterattack = FALSE;
