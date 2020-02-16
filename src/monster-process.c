@@ -1290,7 +1290,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	process_special(target_ptr, m_idx);
 	process_speak_sound(target_ptr, m_idx, oy, ox, aware);
-	cast_spell(target_ptr, m_idx, aware);
+	if (cast_spell(target_ptr, m_idx, aware)) return;
 
 	/* Hack -- Assume no movement */
 	mm[0] = mm[1] = mm[2] = mm[3] = 0;
