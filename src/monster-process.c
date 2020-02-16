@@ -73,6 +73,8 @@ bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware);
 
 bool process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx, bool can_cross);
 bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
+bool bash_normal_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
+void bash_glass_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, grid_type *g_ptr, feature_type *f_ptr, bool may_bash);
 bool process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 
@@ -2122,49 +2124,13 @@ bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
 
 	feature_type *f_ptr;
 	f_ptr = &f_info[g_ptr->feat];
-	bool may_bash = TRUE;
-	turn_flags_ptr->do_move = FALSE;
-	if (((r_ptr->flags2 & RF2_OPEN_DOOR) != 0) && have_flag(f_ptr->flags, FF_OPEN) &&
-		(!is_pet(m_ptr) || ((target_ptr->pet_extra_flags & PF_OPEN_DOORS) != 0)))
-	{
-		if (!f_ptr->power)
-		{
-			turn_flags_ptr->did_open_door = TRUE;
-			may_bash = FALSE;
-			turn_flags_ptr->do_turn = TRUE;
-		}
-		else
-		{
-			if (randint0(m_ptr->hp / 10) > f_ptr->power)
-			{
-				cave_alter_feat(target_ptr, ny, nx, FF_DISARM);
-				may_bash = FALSE;
-				turn_flags_ptr->do_turn = TRUE;
-			}
-		}
-	}
-
-	if (may_bash && ((r_ptr->flags2 & RF2_BASH_DOOR) != 0) && have_flag(f_ptr->flags, FF_BASH) &&
-		(!is_pet(m_ptr) || ((target_ptr->pet_extra_flags & PF_OPEN_DOORS) != 0)))
-	{
-		if (check_hp_for_feat_destruction(f_ptr, m_ptr) && (randint0(m_ptr->hp / 10) > f_ptr->power))
-		{
-			if (have_flag(f_ptr->flags, FF_GLASS))
-				msg_print(_("ガラスが砕ける音がした！", "You hear glass breaking!"));
-			else
-				msg_print(_("ドアを叩き開ける音がした！", "You hear a door burst open!"));
-
-			if (disturb_minor) disturb(target_ptr, FALSE, FALSE);
-
-			turn_flags_ptr->did_bash_door = TRUE;
-			turn_flags_ptr->do_move = TRUE;
-			turn_flags_ptr->must_alter_to_move = TRUE;
-		}
-	}
+	bool may_bash = bash_normal_door(target_ptr, turn_flags_ptr, m_ptr, ny, nx);
+	bash_glass_door(target_ptr, turn_flags_ptr, m_ptr, g_ptr, f_ptr, may_bash);
 
 	if (!turn_flags_ptr->did_open_door && !turn_flags_ptr->did_bash_door) return TRUE;
 
-	if (turn_flags_ptr->did_bash_door && ((randint0(100) < 50) || (feat_state(target_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS)))
+	if (turn_flags_ptr->did_bash_door && 
+		((randint0(100) < 50) || (feat_state(target_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS)))
 	{
 		cave_alter_feat(target_ptr, ny, nx, FF_BASH);
 		if (!monster_is_valid(m_ptr))
@@ -2184,6 +2150,75 @@ bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
 	f_ptr = &f_info[g_ptr->feat];
 	turn_flags_ptr->do_view = TRUE;
 	return TRUE;
+}
+
+
+/*!
+ * @brief モンスターが普通のドアを開ける処理
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_ptr モンスターへの参照ポインタ
+ * @param ny モンスターのY座標
+ * @param nx モンスターのX座標
+ * @return ここではドアを開けず、ガラスのドアを開ける可能性があるならTRUE
+ */
+bool bash_normal_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+{
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	grid_type *g_ptr;
+	g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
+	feature_type *f_ptr;
+	f_ptr = &f_info[g_ptr->feat];
+	turn_flags_ptr->do_move = FALSE;
+	if (((r_ptr->flags2 & RF2_OPEN_DOOR) == 0) || !have_flag(f_ptr->flags, FF_OPEN) ||
+		(is_pet(m_ptr) && ((target_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0)))
+		return TRUE;
+
+	if (f_ptr->power == 0)
+	{
+		turn_flags_ptr->did_open_door = TRUE;
+		turn_flags_ptr->do_turn = TRUE;
+		return FALSE;
+	}
+
+	if (randint0(m_ptr->hp / 10) > f_ptr->power)
+	{
+		cave_alter_feat(target_ptr, ny, nx, FF_DISARM);
+		turn_flags_ptr->do_turn = TRUE;
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
+
+/*!
+ * @brief モンスターがガラスのドアを開ける処理
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_ptr モンスターへの参照ポインタ
+ * @param ny モンスターのY座標
+ * @param nx モンスターのX座標
+ * @return なし
+ */
+void bash_glass_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, grid_type *g_ptr, feature_type *f_ptr, bool may_bash)
+{
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	if (!may_bash || ((r_ptr->flags2 & RF2_BASH_DOOR) == 0) || !have_flag(f_ptr->flags, FF_BASH) ||
+		(is_pet(m_ptr) && ((target_ptr->pet_extra_flags & PF_OPEN_DOORS) == 0)))
+		return;
+
+	if (!check_hp_for_feat_destruction(f_ptr, m_ptr) || (randint0(m_ptr->hp / 10) <= f_ptr->power))
+		return;
+
+	if (have_flag(f_ptr->flags, FF_GLASS))
+		msg_print(_("ガラスが砕ける音がした！", "You hear glass breaking!"));
+	else
+		msg_print(_("ドアを叩き開ける音がした！", "You hear a door burst open!"));
+
+	if (disturb_minor) disturb(target_ptr, FALSE, FALSE);
+
+	turn_flags_ptr->did_bash_door = TRUE;
+	turn_flags_ptr->do_move = TRUE;
+	turn_flags_ptr->must_alter_to_move = TRUE;
 }
 
 
