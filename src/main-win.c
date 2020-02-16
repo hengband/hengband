@@ -5440,7 +5440,7 @@ static void init_stuff(void)
 	validate_dir(path, TRUE);
 
 	/* Init the file paths */
-	init_file_paths(path);
+	init_file_paths(path, path);
 
 	/* Hack -- Validate the paths */
 	validate_dir(ANGBAND_DIR_APEX, FALSE);

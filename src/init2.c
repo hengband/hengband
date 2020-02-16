@@ -81,9 +81,9 @@ static void put_title(void);
  * try several base "path" values until a good one is found.
  * </pre>
  */
-void init_file_paths(char *path)
+void init_file_paths(char *libpath, char *varpath)
 {
-	char *tail;
+	char *libtail, *vartail;
 
 #ifdef PRIVATE_USER_PATH
 	char buf[1024];
@@ -111,52 +111,53 @@ void init_file_paths(char *path)
 	/*** Prepare the "path" ***/
 
 	/* Hack -- save the main directory */
-	ANGBAND_DIR = string_make(path);
+	ANGBAND_DIR = string_make(libpath);
 
-	/* Prepare to append to the Base Path */
-	tail = path + strlen(path);
+	/* Prepare to append to the Base Paths */
+	libtail = libpath + strlen(libpath);
+	vartail = varpath + strlen(varpath);
 
 	/*** Build the sub-directory names ***/
 
 	/* Build a path name */
-	strcpy(tail, "apex");
-	ANGBAND_DIR_APEX = string_make(path);
+	strcpy(vartail, "apex");
+	ANGBAND_DIR_APEX = string_make(varpath);
 
 	/* Build a path name */
-	strcpy(tail, "bone");
-	ANGBAND_DIR_BONE = string_make(path);
+	strcpy(vartail, "bone");
+	ANGBAND_DIR_BONE = string_make(varpath);
 
 	/* Build a path name */
-	strcpy(tail, "data");
-	ANGBAND_DIR_DATA = string_make(path);
+	strcpy(vartail, "data");
+	ANGBAND_DIR_DATA = string_make(varpath);
 
 	/* Build a path name */
-	strcpy(tail, "edit");
-	ANGBAND_DIR_EDIT = string_make(path);
+	strcpy(libtail, "edit");
+	ANGBAND_DIR_EDIT = string_make(libpath);
 
 	/* Build a path name */
-	strcpy(tail, "script");
-	ANGBAND_DIR_SCRIPT = string_make(path);
+	strcpy(libtail, "script");
+	ANGBAND_DIR_SCRIPT = string_make(libpath);
 
 	/* Build a path name */
-	strcpy(tail, "file");
-	ANGBAND_DIR_FILE = string_make(path);
+	strcpy(libtail, "file");
+	ANGBAND_DIR_FILE = string_make(libpath);
 
 	/* Build a path name */
-	strcpy(tail, "help");
-	ANGBAND_DIR_HELP = string_make(path);
+	strcpy(libtail, "help");
+	ANGBAND_DIR_HELP = string_make(libpath);
 
 	/* Build a path name */
-	strcpy(tail, "info");
-	ANGBAND_DIR_INFO = string_make(path);
+	strcpy(libtail, "info");
+	ANGBAND_DIR_INFO = string_make(libpath);
 
 	/* Build a path name */
-	strcpy(tail, "pref");
-	ANGBAND_DIR_PREF = string_make(path);
+	strcpy(libtail, "pref");
+	ANGBAND_DIR_PREF = string_make(libpath);
 
 	/* Build a path name */
-	strcpy(tail, "save");
-	ANGBAND_DIR_SAVE = string_make(path);
+	strcpy(vartail, "save");
+	ANGBAND_DIR_SAVE = string_make(varpath);
 
 #ifdef PRIVATE_USER_PATH
 
@@ -169,14 +170,14 @@ void init_file_paths(char *path)
 #else /* PRIVATE_USER_PATH */
 
 	/* Build a path name */
-	strcpy(tail, "user");
-	ANGBAND_DIR_USER = string_make(path);
+	strcpy(vartail, "user");
+	ANGBAND_DIR_USER = string_make(varpath);
 
 #endif /* PRIVATE_USER_PATH */
 
 	/* Build a path name */
-	strcpy(tail, "xtra");
-	ANGBAND_DIR_XTRA = string_make(path);
+	strcpy(libtail, "xtra");
+	ANGBAND_DIR_XTRA = string_make(libpath);
 
 
 #ifdef NeXT
@@ -209,8 +210,8 @@ void init_file_paths(char *path)
 			string_free(ANGBAND_DIR_DATA);
 
 			/* Build a new path name */
-			sprintf(tail, "data-%s", next);
-			ANGBAND_DIR_DATA = string_make(path);
+			sprintf(vartail, "data-%s", next);
+			ANGBAND_DIR_DATA = string_make(varpath);
 		}
 	}
 

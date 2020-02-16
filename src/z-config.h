@@ -308,8 +308,19 @@
  * actual location of the "lib" folder, for example, "/tmp/angband/lib/"
  * or "/usr/games/lib/angband/", or "/pkg/angband/lib".
  */
-#ifndef DEFAULT_PATH
-# define DEFAULT_PATH "./lib/"
+#ifndef DEFAULT_LIB_PATH
+# define DEFAULT_LIB_PATH "./lib/"
+#endif
+
+
+/*
+ * OPTION: Set the "default" path to the angband "var" directory.
+ *
+ * This is like DEFAULT_LIB_PATH, but is for files that will be
+ * modified after installation.
+ */
+#ifndef DEFAULT_VAR_PATH
+# define DEFAULT_VAR_PATH DEFAULT_LIB_PATH
 #endif
 
 
