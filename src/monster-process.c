@@ -78,6 +78,8 @@ void bash_glass_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monste
 bool process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 
+void exe_monster_attack(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx);
+
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
   * Calculate the direction to the next enemy
@@ -1188,37 +1190,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				return;
 		}
 
-		if (turn_flags_ptr->do_move && player_bold(target_ptr, ny, nx))
-		{
-			if (r_ptr->flags1 & RF1_NEVER_BLOW)
-			{
-				if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_NEVER_BLOW);
-
-				turn_flags_ptr->do_move = FALSE;
-			}
-
-			if (turn_flags_ptr->do_move && (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE))
-			{
-				if (!MON_CONFUSED(m_ptr))
-				{
-					if (!(r_ptr->flags2 & RF2_STUPID)) turn_flags_ptr->do_move = FALSE;
-					else
-					{
-						if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_STUPID);
-					}
-				}
-			}
-
-			if (turn_flags_ptr->do_move)
-			{
-				if (!target_ptr->riding || one_in_(2))
-				{
-					(void)make_attack_normal(target_ptr, m_idx);
-					turn_flags_ptr->do_move = FALSE;
-					turn_flags_ptr->do_turn = TRUE;
-				}
-			}
-		}
+		exe_monster_attack(target_ptr, turn_flags_ptr, m_idx, ny, nx);
 
 		if (turn_flags_ptr->do_move && g_ptr->m_idx)
 		{
@@ -2061,6 +2033,7 @@ bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware)
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
  * @param nx モンスターのX座標
+ * @param can_cross モンスターが地形を踏破できるならばTRUE
  * @return 透過も破壊もしなかった場合はFALSE、それ以外はTRUE
  */
 bool process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx, bool can_cross)
@@ -2110,6 +2083,7 @@ bool process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
 /*!
  * @brief モンスターによるドアの開放・破壊を行う
  * @param target_ptr プレーヤーへの参照ポインタ
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
  * @param nx モンスターのX座標
@@ -2156,6 +2130,7 @@ bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
 /*!
  * @brief モンスターが普通のドアを開ける処理
  * @param target_ptr プレーヤーへの参照ポインタ
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
  * @param nx モンスターのX座標
@@ -2194,9 +2169,10 @@ bool bash_normal_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monst
 /*!
  * @brief モンスターがガラスのドアを開ける処理
  * @param target_ptr プレーヤーへの参照ポインタ
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
- * @param ny モンスターのY座標
- * @param nx モンスターのX座標
+ * @param g_ptr グリッドへの参照ポインタ
+ * @param f_ptr 地形への参照ポインタ
  * @return なし
  */
 void bash_glass_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, grid_type *g_ptr, feature_type *f_ptr, bool may_bash)
@@ -2225,6 +2201,7 @@ void bash_glass_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monste
 /*!
  * @brief 守りのルーンによるモンスターの移動制限を処理する
  * @param target_ptr プレーヤーへの参照ポインタ
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
  * @param nx モンスターのX座標
@@ -2260,6 +2237,7 @@ bool process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr
 /*!
  * @brief 爆発のルーンにを処理する
  * @param target_ptr プレーヤーへの参照ポインタ
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
  * @param ny モンスターのY座標
  * @param nx モンスターのX座標
@@ -2302,6 +2280,51 @@ bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr,
 
 	turn_flags_ptr->do_move = TRUE;
 	return TRUE;
+}
+
+
+/*!
+ * @brief モンスターが移動した結果、そこにプレーヤーがいたら直接攻撃を行う
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
+ * @param m_idx モンスターID
+ * @param ny モンスターのY座標
+ * @param nx モンスターのX座標
+ * @return なし
+ * @details
+ * 反攻撃の洞窟など、直接攻撃ができない場所では処理をスキップする
+ */
+void exe_monster_attack(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	if (!turn_flags_ptr->do_move || !player_bold(target_ptr, ny, nx))
+		return;
+
+	if (r_ptr->flags1 & RF1_NEVER_BLOW)
+	{
+		if (is_original_ap_and_seen(target_ptr, m_ptr))
+			r_ptr->r_flags1 |= (RF1_NEVER_BLOW);
+
+		turn_flags_ptr->do_move = FALSE;
+	}
+
+	if (turn_flags_ptr->do_move && ((d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) != 0) && !MON_CONFUSED(m_ptr))
+	{
+		if (!(r_ptr->flags2 & RF2_STUPID))
+			turn_flags_ptr->do_move = FALSE;
+		else if (is_original_ap_and_seen(target_ptr, m_ptr))
+			r_ptr->r_flags2 |= (RF2_STUPID);
+	}
+
+	if (!turn_flags_ptr->do_move) return;
+
+	if (!target_ptr->riding || one_in_(2))
+	{
+		(void)make_attack_normal(target_ptr, m_idx);
+		turn_flags_ptr->do_move = FALSE;
+		turn_flags_ptr->do_turn = TRUE;
+	}
 }
 
 
