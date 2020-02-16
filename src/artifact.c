@@ -1903,7 +1903,7 @@ bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_
 		object_known(o_ptr);
 
 		/* Mark the item as fully known */
-		o_ptr->ident |= (IDENT_MENTAL);
+		o_ptr->ident |= (IDENT_FULL_KNOWN);
 
 		/* For being treated as random artifact in screen_object() */
 		o_ptr->art_name = quark_add("");

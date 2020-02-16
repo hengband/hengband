@@ -3206,7 +3206,7 @@ bool lose_all_info(player_type *creature_ptr)
 	{
 		object_type *o_ptr = &creature_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
-		if (o_ptr->ident & (IDENT_MENTAL)) continue;
+		if (OBJECT_IS_FULL_KNOWN(o_ptr)) continue;
 
 		o_ptr->feeling = FEEL_NONE;
 		o_ptr->ident &= ~(IDENT_EMPTY);

@@ -3441,7 +3441,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 		q_ptr = &forge;
 		object_prep(q_ptr, lookup_kind(TV_STATUE, SV_PHOTO));
 		q_ptr->pval = photo;
-		q_ptr->ident |= (IDENT_MENTAL);
+		q_ptr->ident |= (IDENT_FULL_KNOWN);
 		(void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
 	}
 

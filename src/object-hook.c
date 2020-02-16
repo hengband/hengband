@@ -386,7 +386,7 @@ bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
 */
 bool item_tester_hook_identify_fully(object_type *o_ptr)
 {
-	return (bool)(!object_is_known(o_ptr) || !(o_ptr->ident & IDENT_MENTAL));
+	return (bool)(!object_is_known(o_ptr) || !OBJECT_IS_FULL_KNOWN(o_ptr));
 }
 
 /*!

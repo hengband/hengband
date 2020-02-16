@@ -1490,7 +1490,7 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
 	if (o_ptr->ident & IDENT_KNOWN)
 		old_known = TRUE;
 
-	if (!(o_ptr->ident & (IDENT_MENTAL)))
+	if (!OBJECT_IS_FULL_KNOWN(o_ptr))
 	{
 		if (object_is_artifact(o_ptr) || one_in_(5))
 			chg_virtue(owner_ptr, V_KNOWLEDGE, 1);
@@ -1665,7 +1665,7 @@ bool identify_fully(player_type *caster_ptr, bool only_equip)
 
 	bool old_known = identify_item(caster_ptr, o_ptr);
 
-	o_ptr->ident |= (IDENT_MENTAL);
+	o_ptr->ident |= (IDENT_FULL_KNOWN);
 	handle_stuff(caster_ptr);
 
 	GAME_TEXT o_name[MAX_NLEN];

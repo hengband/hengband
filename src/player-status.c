@@ -2334,12 +2334,12 @@ void calc_bonuses(player_type *creature_ptr)
 				if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
 				{
 					creature_ptr->to_h[slot] -= 15;
-					if (o_ptr->ident & IDENT_MENTAL) creature_ptr->dis_to_h[slot] -= 15;
+					if (OBJECT_IS_FULL_KNOWN(o_ptr)) creature_ptr->dis_to_h[slot] -= 15;
 				}
 				else
 				{
 					creature_ptr->to_h[slot] -= 5;
-					if (o_ptr->ident & IDENT_MENTAL) creature_ptr->dis_to_h[slot] -= 5;
+					if (OBJECT_IS_FULL_KNOWN(o_ptr)) creature_ptr->dis_to_h[slot] -= 5;
 				}
 			}
 			else
@@ -2347,12 +2347,12 @@ void calc_bonuses(player_type *creature_ptr)
 				if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
 				{
 					creature_ptr->to_h_b -= 15;
-					if (o_ptr->ident & IDENT_MENTAL) creature_ptr->dis_to_h_b -= 15;
+					if (OBJECT_IS_FULL_KNOWN(o_ptr)) creature_ptr->dis_to_h_b -= 15;
 				}
 				else
 				{
 					creature_ptr->to_h_b -= 5;
-					if (o_ptr->ident & IDENT_MENTAL) creature_ptr->dis_to_h_b -= 5;
+					if (OBJECT_IS_FULL_KNOWN(o_ptr)) creature_ptr->dis_to_h_b -= 5;
 				}
 			}
 		}
@@ -2362,12 +2362,12 @@ void calc_bonuses(player_type *creature_ptr)
 			if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
 			{
 				creature_ptr->to_a -= 30;
-				if (o_ptr->ident & IDENT_MENTAL) creature_ptr->dis_to_a -= 30;
+				if (OBJECT_IS_FULL_KNOWN(o_ptr)) creature_ptr->dis_to_a -= 30;
 			}
 			else
 			{
 				creature_ptr->to_a -= 10;
-				if (o_ptr->ident & IDENT_MENTAL) creature_ptr->dis_to_a -= 10;
+				if (OBJECT_IS_FULL_KNOWN(o_ptr)) creature_ptr->dis_to_a -= 10;
 			}
 		}
 
