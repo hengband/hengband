@@ -78,7 +78,7 @@ void bash_glass_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monste
 bool process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx);
 
-void exe_monster_attack(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx);
+void exe_monster_attack_to_player(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -1190,7 +1190,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 				return;
 		}
 
-		exe_monster_attack(target_ptr, turn_flags_ptr, m_idx, ny, nx);
+		exe_monster_attack_to_player(target_ptr, turn_flags_ptr, m_idx, ny, nx);
 
 		if (turn_flags_ptr->do_move && g_ptr->m_idx)
 		{
@@ -2294,7 +2294,7 @@ bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr,
  * @details
  * 反攻撃の洞窟など、直接攻撃ができない場所では処理をスキップする
  */
-void exe_monster_attack(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx)
+void exe_monster_attack_to_player(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, POSITION ny, POSITION nx)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
