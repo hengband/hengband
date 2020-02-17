@@ -90,6 +90,7 @@ void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see
 bool explode_monster(player_type *target_ptr, MONSTER_IDX m_idx);
 bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
 bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware);
+bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx);
 bool runaway_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx);
 void escape_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, GAME_TEXT *m_name);
 void process_special(player_type *target_ptr, MONSTER_IDX m_idx);
@@ -1451,7 +1452,6 @@ void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see
 	if (target)
 	{
 		(void)monspell_to_monster(target_ptr, blink, m_ptr->fy, m_ptr->fx, m_idx, m_idx);
-
 	}
 	else
 	{
@@ -1655,29 +1655,7 @@ bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, M
 		return TRUE;
 	}
 
-	if (is_pet(m_ptr))
-	{
-		bool avoid = ((target_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - target_ptr->pet_follow_distance)));
-		bool lonely = (!avoid && (m_ptr->cdis > target_ptr->pet_follow_distance));
-		bool distant = (m_ptr->cdis > PET_SEEK_DIST);
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		if (!get_enemy_dir(target_ptr, m_idx, mm))
-		{
-			if (avoid || lonely || distant)
-			{
-				POSITION dis = target_ptr->pet_follow_distance;
-				if (target_ptr->pet_follow_distance > PET_SEEK_DIST)
-				{
-					target_ptr->pet_follow_distance = PET_SEEK_DIST;
-				}
-
-				(void)get_moves(target_ptr, m_idx, mm);
-				target_ptr->pet_follow_distance = (s16b)dis;
-			}
-		}
-
-		return TRUE;
-	}
+	if (decide_pet_movement_direction(target_ptr, mm, m_idx)) return TRUE;
 
 	if (!is_hostile(m_ptr))
 	{
@@ -1688,6 +1666,37 @@ bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, M
 
 	if (!get_moves(target_ptr, m_idx, mm)) return FALSE;
 
+	return TRUE;
+}
+
+
+/*!
+ * @brief ペットや友好的なモンスターがフロアから逃げる処理を行う
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param mm 移動方向
+ * @param m_idx モンスターID
+ * @return モンスターがペットであればTRUE
+ */
+bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx)
+{
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	if (!is_pet(m_ptr)) return FALSE;
+
+	bool avoid = ((target_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - target_ptr->pet_follow_distance)));
+	bool lonely = (!avoid && (m_ptr->cdis > target_ptr->pet_follow_distance));
+	bool distant = (m_ptr->cdis > PET_SEEK_DIST);
+	mm[0] = mm[1] = mm[2] = mm[3] = 5;
+	if (get_enemy_dir(target_ptr, m_idx, mm)) return TRUE;
+	if (!avoid && !lonely && !distant) return TRUE;
+
+	POSITION dis = target_ptr->pet_follow_distance;
+	if (target_ptr->pet_follow_distance > PET_SEEK_DIST)
+	{
+		target_ptr->pet_follow_distance = PET_SEEK_DIST;
+	}
+
+	(void)get_moves(target_ptr, m_idx, mm);
+	target_ptr->pet_follow_distance = (s16b)dis;
 	return TRUE;
 }
 
@@ -1930,7 +1939,6 @@ bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_pt
 		}
 
 		update_object_by_monster_movement(target_ptr, turn_flags_ptr, m_idx, ny, nx);
-
 		if (turn_flags_ptr->do_turn) break;
 
 		*count++;
