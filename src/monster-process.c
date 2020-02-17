@@ -120,6 +120,7 @@ void monster_pickup_object(player_type *target_ptr, turn_flags *turn_flags_ptr, 
 bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx);
 
 void save_old_race_flags(player_type *target_ptr, old_race_flags *old_race_flags_ptr);
+bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -2661,30 +2662,7 @@ void process_monsters(player_type *target_ptr)
 
 		if (m_ptr->cdis >= AAF_LIMIT) continue;
 
-		// todo この代入は有効活用されていないはず
-		POSITION fx = m_ptr->fx;
-		POSITION fy = m_ptr->fy;
-		if (!target_ptr->no_flowed)
-		{
-			m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
-		}
-
-		bool test = FALSE;
-		if (m_ptr->cdis <= (is_pet(m_ptr) ? (r_ptr->aaf > MAX_SIGHT ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf))
-		{
-			test = TRUE;
-		}
-		else if ((m_ptr->cdis <= MAX_SIGHT || target_ptr->phase_out) &&
-			(player_has_los_bold(target_ptr, fy, fx) || (target_ptr->cursed & TRC_AGGRAVATE)))
-		{
-			test = TRUE;
-		}
-		else if (m_ptr->target_y)
-		{
-			test = TRUE;
-		}
-
-		if (!test) continue;
+		if (!decide_process_continue(target_ptr, m_ptr)) continue;
 
 		SPEED speed;
 		if (target_ptr->riding == i)
@@ -2788,4 +2766,35 @@ void save_old_race_flags(player_type *target_ptr, old_race_flags *old_race_flags
 	old_race_flags_ptr->old_r_blows3 = r_ptr->r_blows[3];
 
 	old_race_flags_ptr->old_r_cast_spell = r_ptr->r_cast_spell;
+}
+
+
+/*!
+ * todo fy/fxへの代入は有効活用されていないはず
+ * @brief 後続のモンスター処理が必要かどうか判定する (要調査)
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_ptr モンスターへの参照ポインタ
+ */
+bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr)
+{
+	monster_race *r_ptr;
+	r_ptr = &r_info[m_ptr->r_idx];
+	POSITION fx = m_ptr->fx;
+	POSITION fy = m_ptr->fy;
+	if (!target_ptr->no_flowed)
+	{
+		m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
+	}
+
+	if (m_ptr->cdis <= (is_pet(m_ptr) ? (r_ptr->aaf > MAX_SIGHT ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf))
+		return TRUE;
+	
+	if ((m_ptr->cdis <= MAX_SIGHT || target_ptr->phase_out) &&
+		(player_has_los_bold(target_ptr, fy, fx) || (target_ptr->cursed & TRC_AGGRAVATE)))
+		return TRUE;
+	
+	if (m_ptr->target_y)
+		return TRUE;
+
+	return FALSE;
 }
