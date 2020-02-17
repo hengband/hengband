@@ -90,6 +90,7 @@ void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see
 bool explode_monster(player_type *target_ptr, MONSTER_IDX m_idx);
 bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
 bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware);
+bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_ptr);
 bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx);
 bool runaway_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx);
 void escape_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, GAME_TEXT *m_name);
@@ -1625,29 +1626,7 @@ bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, M
 		return TRUE;
 	}
 
-	if (((r_ptr->flags1 & (RF1_RAND_50 | RF1_RAND_25)) == (RF1_RAND_50 | RF1_RAND_25)) && (randint0(100) < 75))
-	{
-		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50 | RF1_RAND_25);
-
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		return TRUE;
-	}
-
-	if ((r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 50))
-	{
-		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50);
-
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		return TRUE;
-	}
-
-	 if ((r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 25))
-	 {
-		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= RF1_RAND_25;
-
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		return TRUE;
-	 }
+	if (random_walk(target_ptr, mm, m_ptr)) return TRUE;
 
 	if ((r_ptr->flags1 & RF1_NEVER_MOVE) && (m_ptr->cdis > 1))
 	{
@@ -1667,6 +1646,45 @@ bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, M
 	if (!get_moves(target_ptr, m_idx, mm)) return FALSE;
 
 	return TRUE;
+}
+
+
+/*!
+ * todo ↓のように書いたが、"5"とはもしかして「その場に留まる」という意味か？
+ * @brief 不規則歩行フラグを持つモンスターの移動方向をその確率に基づいて決定する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param mm 移動方向
+ * @param m_ptr モンスターへの参照ポインタ
+ * @return 不規則な方向へ歩くことになったらTRUE
+ */
+bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_ptr)
+{
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	if (((r_ptr->flags1 & (RF1_RAND_50 | RF1_RAND_25)) == (RF1_RAND_50 | RF1_RAND_25)) && (randint0(100) < 75))
+	{
+		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50 | RF1_RAND_25);
+
+		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+		return TRUE;
+	}
+
+	if ((r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 50))
+	{
+		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= RF1_RAND_50;
+
+		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+		return TRUE;
+	}
+
+	if ((r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 25))
+	{
+		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= RF1_RAND_25;
+
+		mm[0] = mm[1] = mm[2] = mm[3] = 5;
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 
