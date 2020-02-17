@@ -41,6 +41,8 @@
 #include "view-mainwindow.h"
 
 typedef struct {
+	bool see_m;
+	bool aware;
 	bool is_riding_mon;
 	bool do_turn;
 	bool do_move;
@@ -70,8 +72,8 @@ void produce_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see
 bool explode_monster(player_type *target_ptr, MONSTER_IDX m_idx);
 bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
 bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware);
-bool runaway_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon, bool see_m);
-void escape_monster(player_type *target_ptr, bool is_riding_mon, monster_type *m_ptr, GAME_TEXT *m_name, bool see_m);
+bool runaway_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx);
+void escape_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, GAME_TEXT *m_name);
 void process_special(player_type *target_ptr, MONSTER_IDX m_idx);
 void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware);
 bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware);
@@ -97,7 +99,7 @@ void update_player_type(player_type *target_ptr, turn_flags *turn_flags_ptr, mon
 void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr);
 void update_object_flags(BIT_FLAGS *flgs, BIT_FLAGS *flg2, BIT_FLAGS *flg3, BIT_FLAGS *flgr);
 void monster_pickup_object(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, object_type *o_ptr, bool is_special_object, POSITION ny, POSITION nx, GAME_TEXT *m_name, GAME_TEXT *o_name, OBJECT_IDX this_o_idx);
-bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, bool aware, bool see_m);
+bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -1105,7 +1107,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	turn_flags tmp_flags;
 	turn_flags *turn_flags_ptr = init_turn_flags(target_ptr, m_idx, &tmp_flags);
-	bool see_m = is_seen(m_ptr);
+	turn_flags_ptr->see_m = is_seen(m_ptr);
 
 	decide_drop_from_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon);
 	if ((m_ptr->mflag2 & MFLAG2_CHAMELEON) && one_in_(13) && !MON_CSLEEP(m_ptr))
@@ -1114,11 +1116,11 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		r_ptr = &r_info[m_ptr->r_idx];
 	}
 
-	bool aware = process_stealth(target_ptr, m_idx);
-	if (vanish_summoned_children(target_ptr, m_idx, see_m)) return;
-	if (process_quantum_effect(target_ptr,m_idx, see_m)) return;
+	turn_flags_ptr->aware = process_stealth(target_ptr, m_idx);
+	if (vanish_summoned_children(target_ptr, m_idx, turn_flags_ptr->see_m)) return;
+	if (process_quantum_effect(target_ptr,m_idx, turn_flags_ptr->see_m)) return;
 	if (explode_monster(target_ptr, m_idx)) return;
-	if (runaway_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon, see_m)) return;
+	if (runaway_monster(target_ptr, turn_flags_ptr, m_idx)) return;
 
 	awake_monster(target_ptr, m_idx);
 	if (MON_STUNNED(m_ptr))
@@ -1131,21 +1133,21 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 		target_ptr->update |= (PU_BONUS);
 	}
 
-	process_angar(target_ptr, m_idx, see_m);
+	process_angar(target_ptr, m_idx, turn_flags_ptr->see_m);
 
 	POSITION oy = m_ptr->fy;
 	POSITION ox = m_ptr->fx;
 	if (decide_monster_multiplication(target_ptr, m_idx, oy, ox)) return;
 
 	process_special(target_ptr, m_idx);
-	process_speak_sound(target_ptr, m_idx, oy, ox, aware);
-	if (cast_spell(target_ptr, m_idx, aware)) return;
+	process_speak_sound(target_ptr, m_idx, oy, ox, turn_flags_ptr->aware);
+	if (cast_spell(target_ptr, m_idx, turn_flags_ptr->aware)) return;
 
 	DIRECTION mm[8];
 	mm[0] = mm[1] = mm[2] = mm[3] = 0;
 	mm[4] = mm[5] = mm[6] = mm[7] = 0;
 
-	if (!decide_monster_movement_direction(target_ptr, mm, m_idx, aware)) return;
+	if (!decide_monster_movement_direction(target_ptr, mm, m_idx, turn_flags_ptr->aware)) return;
 
 	int count = 0;
 	if(!process_monster_movement(target_ptr, turn_flags_ptr, m_idx, mm, oy, ox, &count)) return;
@@ -1157,7 +1159,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (target_ptr->no_flowed && count > 2 && m_ptr->target_y)
 		m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
 
-	if (!turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && !MON_MONFEAR(m_ptr) && !turn_flags_ptr->is_riding_mon && aware)
+	if (!turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && !MON_MONFEAR(m_ptr) && !turn_flags_ptr->is_riding_mon && turn_flags_ptr->aware)
 	{
 		if (r_ptr->freq_spell && randint1(100) <= r_ptr->freq_spell)
 		{
@@ -1168,7 +1170,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	update_player_type(target_ptr, turn_flags_ptr, r_ptr);
 	update_monster_race_flags(target_ptr, turn_flags_ptr, m_ptr);
 
-	if (!process_monster_fear(target_ptr, turn_flags_ptr, m_idx, aware, see_m)) return;
+	if (!process_monster_fear(target_ptr, turn_flags_ptr, m_idx)) return;
 
 	if (m_ptr->ml) chg_virtue(target_ptr, V_COMPASSION, -1);
 }
@@ -1199,10 +1201,10 @@ turn_flags *init_turn_flags(player_type *target_ptr, MONSTER_IDX m_idx, turn_fla
 
 
 /*!
- * @brief 超隠密処理 (のはず todo)
+ * @brief 超隠密処理
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
- * @return 超隠密状態ならばTRUE
+ * @return モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  */
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx)
 {
@@ -1488,7 +1490,7 @@ void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
  * @param m_idx モンスターID
  * @param oy モンスターが元々いたY座標
  * @param ox モンスターが元々いたX座標
- * @param aware 超隠密状態ならばTRUE
+ * @param aware モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  * @return なし
  */
 void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
@@ -1585,7 +1587,7 @@ bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, P
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param mm 移動方向
  * @param m_idx モンスターID
- * @param aware 超隠密状態ならばTRUE
+ * @param aware モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  * @return 移動先が存在すればTRUE
  */
 bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
@@ -1674,7 +1676,7 @@ bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, M
  * @param see_m モンスターが視界内にいたらTRUE
  * @return モンスターがフロアから消えたらTRUE
  */
-bool runaway_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon, bool see_m)
+bool runaway_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -1688,14 +1690,14 @@ bool runaway_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_
 	if (m_ptr->hp >= m_ptr->maxhp / 3)
 	{
 		/* Reset the counter */
-		if (is_riding_mon) riding_pinch = 0;
+		if (turn_flags_ptr->is_riding_mon) riding_pinch = 0;
 		
 		return FALSE;
 	}
 
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_desc(target_ptr, m_name, m_ptr, 0);
-	if (is_riding_mon && riding_pinch < 2)
+	if (turn_flags_ptr->is_riding_mon && riding_pinch < 2)
 	{
 		msg_format(_("%sは傷の痛さの余りあなたの束縛から逃れようとしている。",
 			"%^s seems to be in so much pain and tries to escape from your restriction."), m_name);
@@ -1704,7 +1706,7 @@ bool runaway_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_
 		return FALSE;
 	}
 
-	escape_monster(target_ptr, is_riding_mon, m_ptr, m_name, see_m);
+	escape_monster(target_ptr, turn_flags_ptr, m_ptr, m_name);
 	check_quest_completion(target_ptr, m_ptr);
 	delete_monster_idx(target_ptr, m_idx);
 	return TRUE;
@@ -1720,10 +1722,10 @@ bool runaway_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_
  * @param see_m モンスターが視界内にいたらTRUE
  * @return なし
  */
-void escape_monster(player_type *target_ptr, bool is_riding_mon, monster_type *m_ptr, GAME_TEXT *m_name, bool see_m)
+void escape_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, GAME_TEXT *m_name)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if (is_riding_mon)
+	if (turn_flags_ptr->is_riding_mon)
 	{
 		msg_format(_("%sはあなたの束縛から脱出した。", "%^s succeeded to escape from your restriction!"), m_name);
 		if (rakuba(target_ptr, -1, FALSE))
@@ -1732,7 +1734,7 @@ void escape_monster(player_type *target_ptr, bool is_riding_mon, monster_type *m
 		}
 	}
 
-	if (see_m)
+	if (turn_flags_ptr->see_m)
 	{
 		if ((r_ptr->flags2 & RF2_CAN_SPEAK) && (m_ptr->r_idx != MON_GRIP) && (m_ptr->r_idx != MON_WOLF) && (m_ptr->r_idx != MON_FANG) &&
 			player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx) && projectable(target_ptr, m_ptr->fy, m_ptr->fx, target_ptr->y, target_ptr->x))
@@ -1744,7 +1746,7 @@ void escape_monster(player_type *target_ptr, bool is_riding_mon, monster_type *m
 		msg_format(_("%^sが消え去った。", "%^s disappears."), m_name);
 	}
 
-	if (is_riding_mon && rakuba(target_ptr, -1, FALSE))
+	if (turn_flags_ptr->is_riding_mon && rakuba(target_ptr, -1, FALSE))
 	{
 		msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
 	}
@@ -1755,7 +1757,7 @@ void escape_monster(player_type *target_ptr, bool is_riding_mon, monster_type *m
  * @brief モンスターに魔法を試行させる
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
- * @param aware 超隠密状態ならばTRUE
+ * @param aware モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  * @return 魔法を唱えられなければ強制的にFALSE、その後モンスターが実際に魔法を唱えればTRUE
  */
 bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware)
@@ -2555,17 +2557,17 @@ void update_monster_race_flags(player_type *target_ptr, turn_flags *turn_flags_p
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
  * @param m_idx モンスターID
- * @param aware 超隠密状態ならばTRUE
+ * @param aware モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  * @return モンスターが戦いを決意したらTRUE
  */
-bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, bool aware, bool see_m)
+bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	bool is_battle_determined = !turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && MON_MONFEAR(m_ptr) && aware;
+	bool is_battle_determined = !turn_flags_ptr->do_turn && !turn_flags_ptr->do_move && MON_MONFEAR(m_ptr) && turn_flags_ptr->aware;
 	if (!is_battle_determined) return FALSE;
 
 	(void)set_monster_monfear(target_ptr, m_idx, 0);
-	if (!see_m) return TRUE;
+	if (!turn_flags_ptr->see_m) return TRUE;
 
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_desc(target_ptr, m_name, m_ptr, 0);
