@@ -59,7 +59,25 @@ typedef struct {
 	bool did_kill_wall;
 } turn_flags;
 
+typedef struct {
+	BIT_FLAGS old_r_flags1;
+	BIT_FLAGS old_r_flags2;
+	BIT_FLAGS old_r_flags3;
+	BIT_FLAGS old_r_flags4;
+	BIT_FLAGS old_r_flags5;
+	BIT_FLAGS old_r_flags6;
+	BIT_FLAGS old_r_flagsr;
+
+	byte old_r_blows0;
+	byte old_r_blows1;
+	byte old_r_blows2;
+	byte old_r_blows3;
+
+	byte old_r_cast_spell;
+} old_race_flags;
+
 turn_flags *init_turn_flags(player_type *target_ptr, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr);
+old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr);
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);
@@ -1794,6 +1812,7 @@ bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware)
 
 
 /*!
+ * todo 少し長いが、これといってブロックとしてまとまった部分もないので暫定でこのままとする
  * @brief モンスターの移動に関するメインルーチン
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
@@ -2612,43 +2631,32 @@ bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, M
  */
 void process_monsters(player_type *target_ptr)
 {
-	BIT_FLAGS old_r_flags1 = 0L;
-	BIT_FLAGS old_r_flags2 = 0L;
-	BIT_FLAGS old_r_flags3 = 0L;
-	BIT_FLAGS old_r_flags4 = 0L;
-	BIT_FLAGS old_r_flags5 = 0L;
-	BIT_FLAGS old_r_flags6 = 0L;
-	BIT_FLAGS old_r_flagsr = 0L;
-
-	byte old_r_blows0 = 0;
-	byte old_r_blows1 = 0;
-	byte old_r_blows2 = 0;
-	byte old_r_blows3 = 0;
+	old_race_flags tmp_flags;
+	old_race_flags *old_race_flags_ptr = init_old_race_flags(&tmp_flags);
 
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	floor_ptr->monster_noise = FALSE;
 
 	MONRACE_IDX old_monster_race_idx = target_ptr->monster_race_idx;
-	byte old_r_cast_spell = 0;
 	if (target_ptr->monster_race_idx)
 	{
 		monster_race *r_ptr;
 		r_ptr = &r_info[target_ptr->monster_race_idx];
 
-		old_r_flags1 = r_ptr->r_flags1;
-		old_r_flags2 = r_ptr->r_flags2;
-		old_r_flags3 = r_ptr->r_flags3;
-		old_r_flags4 = r_ptr->r_flags4;
-		old_r_flags5 = r_ptr->r_flags5;
-		old_r_flags6 = r_ptr->r_flags6;
-		old_r_flagsr = r_ptr->r_flagsr;
+		old_race_flags_ptr->old_r_flags1 = r_ptr->r_flags1;
+		old_race_flags_ptr->old_r_flags2 = r_ptr->r_flags2;
+		old_race_flags_ptr->old_r_flags3 = r_ptr->r_flags3;
+		old_race_flags_ptr->old_r_flags4 = r_ptr->r_flags4;
+		old_race_flags_ptr->old_r_flags5 = r_ptr->r_flags5;
+		old_race_flags_ptr->old_r_flags6 = r_ptr->r_flags6;
+		old_race_flags_ptr->old_r_flagsr = r_ptr->r_flagsr;
 
-		old_r_blows0 = r_ptr->r_blows[0];
-		old_r_blows1 = r_ptr->r_blows[1];
-		old_r_blows2 = r_ptr->r_blows[2];
-		old_r_blows3 = r_ptr->r_blows[3];
+		old_race_flags_ptr->old_r_blows0 = r_ptr->r_blows[0];
+		old_race_flags_ptr->old_r_blows1 = r_ptr->r_blows[1];
+		old_race_flags_ptr->old_r_blows2 = r_ptr->r_blows[2];
+		old_race_flags_ptr->old_r_blows3 = r_ptr->r_blows[3];
 
-		old_r_cast_spell = r_ptr->r_cast_spell;
+		old_race_flags_ptr->old_r_cast_spell = r_ptr->r_cast_spell;
 	}
 
 	for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--)
@@ -2670,6 +2678,7 @@ void process_monsters(player_type *target_ptr)
 
 		if (m_ptr->cdis >= AAF_LIMIT) continue;
 
+		// todo この代入は有効活用されていないはず
 		POSITION fx = m_ptr->fx;
 		POSITION fy = m_ptr->fy;
 		if (!target_ptr->no_flowed)
@@ -2730,19 +2739,39 @@ void process_monsters(player_type *target_ptr)
 	monster_race *r_ptr;
 	r_ptr = &r_info[target_ptr->monster_race_idx];
 
-	if ((old_r_flags1 != r_ptr->r_flags1) ||
-		(old_r_flags2 != r_ptr->r_flags2) ||
-		(old_r_flags3 != r_ptr->r_flags3) ||
-		(old_r_flags4 != r_ptr->r_flags4) ||
-		(old_r_flags5 != r_ptr->r_flags5) ||
-		(old_r_flags6 != r_ptr->r_flags6) ||
-		(old_r_flagsr != r_ptr->r_flagsr) ||
-		(old_r_blows0 != r_ptr->r_blows[0]) ||
-		(old_r_blows1 != r_ptr->r_blows[1]) ||
-		(old_r_blows2 != r_ptr->r_blows[2]) ||
-		(old_r_blows3 != r_ptr->r_blows[3]) ||
-		(old_r_cast_spell != r_ptr->r_cast_spell))
+	if ((old_race_flags_ptr->old_r_flags1 != r_ptr->r_flags1) ||
+		(old_race_flags_ptr->old_r_flags2 != r_ptr->r_flags2) ||
+		(old_race_flags_ptr->old_r_flags3 != r_ptr->r_flags3) ||
+		(old_race_flags_ptr->old_r_flags4 != r_ptr->r_flags4) ||
+		(old_race_flags_ptr->old_r_flags5 != r_ptr->r_flags5) ||
+		(old_race_flags_ptr->old_r_flags6 != r_ptr->r_flags6) ||
+		(old_race_flags_ptr->old_r_flagsr != r_ptr->r_flagsr) ||
+		(old_race_flags_ptr->old_r_blows0 != r_ptr->r_blows[0]) ||
+		(old_race_flags_ptr->old_r_blows1 != r_ptr->r_blows[1]) ||
+		(old_race_flags_ptr->old_r_blows2 != r_ptr->r_blows[2]) ||
+		(old_race_flags_ptr->old_r_blows3 != r_ptr->r_blows[3]) ||
+		(old_race_flags_ptr->old_r_cast_spell != r_ptr->r_cast_spell))
 	{
 		target_ptr->window |= (PW_MONSTER);
 	}
+}
+
+
+old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr)
+{
+	old_race_flags_ptr->old_r_flags1 = 0L;
+	old_race_flags_ptr->old_r_flags2 = 0L;
+	old_race_flags_ptr->old_r_flags3 = 0L;
+	old_race_flags_ptr->old_r_flags4 = 0L;
+	old_race_flags_ptr->old_r_flags5 = 0L;
+	old_race_flags_ptr->old_r_flags6 = 0L;
+	old_race_flags_ptr->old_r_flagsr = 0L;
+
+	old_race_flags_ptr->old_r_blows0 = 0;
+	old_race_flags_ptr->old_r_blows1 = 0;
+	old_race_flags_ptr->old_r_blows2 = 0;
+	old_race_flags_ptr->old_r_blows3 = 0;
+
+	old_race_flags_ptr->old_r_cast_spell = 0;
+	return old_race_flags_ptr;
 }
