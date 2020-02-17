@@ -121,6 +121,7 @@ bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, M
 
 void save_old_race_flags(player_type *target_ptr, old_race_flags *old_race_flags_ptr);
 bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr);
+SPEED decide_monster_speed(player_type *target_ptr, monster_type *m_ptr, int monster_number);
 
  /*!
   * @brief モンスターが敵に接近するための方向を決める /
@@ -2661,22 +2662,9 @@ void process_monsters(player_type *target_ptr)
 		}
 
 		if (m_ptr->cdis >= AAF_LIMIT) continue;
-
 		if (!decide_process_continue(target_ptr, m_ptr)) continue;
 
-		SPEED speed;
-		if (target_ptr->riding == i)
-		{
-			speed = target_ptr->pspeed;
-		}
-		else
-		{
-			speed = m_ptr->mspeed;
-			if (ironman_nightmare) speed += 5;
-
-			if (MON_FAST(m_ptr)) speed += 10;
-			if (MON_SLOW(m_ptr)) speed -= 10;
-		}
+		SPEED speed = decide_monster_speed(target_ptr, m_ptr, i);
 
 		m_ptr->energy_need -= SPEED_TO_ENERGY(speed);
 		if (m_ptr->energy_need > 0) continue;
@@ -2774,6 +2762,7 @@ void save_old_race_flags(player_type *target_ptr, old_race_flags *old_race_flags
  * @brief 後続のモンスター処理が必要かどうか判定する (要調査)
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
+ * @return 後続処理が必要ならTRUE
  */
 bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr)
 {
@@ -2797,4 +2786,30 @@ bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr)
 		return TRUE;
 
 	return FALSE;
+}
+
+
+/*!
+ * @brief モンスターの加速値を決定する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_ptr モンスターへの参照ポインタ
+ * @param monster_number 走査中のモンスター番号
+ * return モンスターの加速値
+ */
+SPEED decide_monster_speed(player_type *target_ptr, monster_type *m_ptr, int monster_number)
+{
+	SPEED speed;
+	if (target_ptr->riding == monster_number)
+	{
+		speed = target_ptr->pspeed;
+		return speed;
+	}
+
+	speed = m_ptr->mspeed;
+	if (ironman_nightmare) speed += 5;
+
+	if (MON_FAST(m_ptr)) speed += 10;
+	if (MON_SLOW(m_ptr)) speed -= 10;
+
+	return speed;
 }
