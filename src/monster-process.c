@@ -120,6 +120,7 @@ void monster_pickup_object(player_type *target_ptr, turn_flags *turn_flags_ptr, 
 bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx);
 
 void save_old_race_flags(player_type *target_ptr, old_race_flags *old_race_flags_ptr);
+void sweep_monster_process(player_type *target_ptr);
 bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr);
 SPEED decide_monster_speed(player_type *target_ptr, monster_type *m_ptr, int monster_number);
 void update_player_window(player_type *target_ptr, old_race_flags *old_race_flags_ptr);
@@ -2644,42 +2645,7 @@ void process_monsters(player_type *target_ptr)
 
 	MONRACE_IDX old_monster_race_idx = target_ptr->monster_race_idx;
 	save_old_race_flags(target_ptr, old_race_flags_ptr);
-
-	for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--)
-	{
-		monster_type *m_ptr;
-		monster_race *r_ptr;
-		m_ptr = &floor_ptr->m_list[i];
-		r_ptr = &r_info[m_ptr->r_idx];
-
-		if (target_ptr->leaving) break;
-		if (!monster_is_valid(m_ptr)) continue;
-		if (target_ptr->wild_mode) continue;
-
-		if (m_ptr->mflag & MFLAG_BORN)
-		{
-			m_ptr->mflag &= ~(MFLAG_BORN);
-			continue;
-		}
-
-		if (m_ptr->cdis >= AAF_LIMIT) continue;
-		if (!decide_process_continue(target_ptr, m_ptr)) continue;
-
-		SPEED speed = decide_monster_speed(target_ptr, m_ptr, i);
-		m_ptr->energy_need -= SPEED_TO_ENERGY(speed);
-		if (m_ptr->energy_need > 0) continue;
-
-		m_ptr->energy_need += ENERGY_NEED();
-		hack_m_idx = i;
-		process_monster(target_ptr, i);
-		reset_target(m_ptr);
-
-		if (target_ptr->no_flowed && one_in_(3))
-			m_ptr->mflag2 |= MFLAG2_NOFLOW;
-
-		if (!target_ptr->playing || target_ptr->is_dead) break;
-		if (target_ptr->leaving) break;
-	}
+	sweep_monster_process(target_ptr);
 
 	hack_m_idx = 0;
 	if (!target_ptr->monster_race_idx || (target_ptr->monster_race_idx != old_monster_race_idx))
@@ -2739,6 +2705,51 @@ void save_old_race_flags(player_type *target_ptr, old_race_flags *old_race_flags
 	old_race_flags_ptr->old_r_blows3 = r_ptr->r_blows[3];
 
 	old_race_flags_ptr->old_r_cast_spell = r_ptr->r_cast_spell;
+}
+
+
+/*!
+ * @brief フロア内のモンスターについてターン終了時の処理を繰り返す
+ * @param target_ptr プレーヤーへの参照ポインタ
+ */
+void sweep_monster_process(player_type *target_ptr)
+{
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--)
+	{
+		monster_type *m_ptr;
+		monster_race *r_ptr;
+		m_ptr = &floor_ptr->m_list[i];
+		r_ptr = &r_info[m_ptr->r_idx];
+
+		if (target_ptr->leaving) return;
+		if (!monster_is_valid(m_ptr)) continue;
+		if (target_ptr->wild_mode) continue;
+
+		if (m_ptr->mflag & MFLAG_BORN)
+		{
+			m_ptr->mflag &= ~(MFLAG_BORN);
+			continue;
+		}
+
+		if (m_ptr->cdis >= AAF_LIMIT) continue;
+		if (!decide_process_continue(target_ptr, m_ptr)) continue;
+
+		SPEED speed = decide_monster_speed(target_ptr, m_ptr, i);
+		m_ptr->energy_need -= SPEED_TO_ENERGY(speed);
+		if (m_ptr->energy_need > 0) continue;
+
+		m_ptr->energy_need += ENERGY_NEED();
+		hack_m_idx = i;
+		process_monster(target_ptr, i);
+		reset_target(m_ptr);
+
+		if (target_ptr->no_flowed && one_in_(3))
+			m_ptr->mflag2 |= MFLAG2_NOFLOW;
+
+		if (!target_ptr->playing || target_ptr->is_dead) return;
+		if (target_ptr->leaving) return;
+	}
 }
 
 
