@@ -71,6 +71,7 @@ bool explode_monster(player_type *target_ptr, MONSTER_IDX m_idx);
 bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
 bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware);
 bool runaway_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon, bool see_m);
+void escape_monster(player_type *target_ptr, bool is_riding_mon, monster_type *m_ptr, GAME_TEXT *m_name, bool see_m);
 void process_special(player_type *target_ptr, MONSTER_IDX m_idx);
 void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware);
 bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware);
@@ -1703,6 +1704,25 @@ bool runaway_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_
 		return FALSE;
 	}
 
+	escape_monster(target_ptr, is_riding_mon, m_ptr, m_name, see_m);
+	check_quest_completion(target_ptr, m_ptr);
+	delete_monster_idx(target_ptr, m_idx);
+	return TRUE;
+}
+
+
+/*!
+ * @brief HPが1/3未満になった有効的なユニークモンスターの逃走処理を行う
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param is_riding_mon 騎乗状態ならばTRUE
+ * @param m_ptr モンスターへの参照ポインタ
+ * @param m_name モンスター名称
+ * @param see_m モンスターが視界内にいたらTRUE
+ * @return なし
+ */
+void escape_monster(player_type *target_ptr, bool is_riding_mon, monster_type *m_ptr, GAME_TEXT *m_name, bool see_m)
+{
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	if (is_riding_mon)
 	{
 		msg_format(_("%sはあなたの束縛から脱出した。", "%^s succeeded to escape from your restriction!"), m_name);
@@ -1728,10 +1748,6 @@ bool runaway_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_
 	{
 		msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
 	}
-
-	check_quest_completion(target_ptr, m_ptr);
-	delete_monster_idx(target_ptr, m_idx);
-	return TRUE;
 }
 
 
