@@ -81,6 +81,7 @@ old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr);
 
 bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm);
 void decide_enemy_approch_direction(player_type *target_ptr, MONSTER_IDX m_idx, int start, int plus, POSITION *y, POSITION *x);
+bool decide_pet_approch_direction(player_type *target_ptr, monster_type *m_ptr, monster_type *t_ptr);
 void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
@@ -209,23 +210,7 @@ void decide_enemy_approch_direction(player_type *target_ptr, MONSTER_IDX m_idx, 
 		if (t_ptr == m_ptr) continue;
 		if (!monster_is_valid(t_ptr)) continue;
 
-		if (is_pet(m_ptr))
-		{
-			if (target_ptr->pet_follow_distance < 0)
-			{
-				if (t_ptr->cdis <= (0 - target_ptr->pet_follow_distance))
-				{
-					continue;
-				}
-			}
-			else if ((m_ptr->cdis < t_ptr->cdis) && (t_ptr->cdis > target_ptr->pet_follow_distance))
-			{
-				continue;
-			}
-
-			if (r_ptr->aaf < t_ptr->cdis) continue;
-		}
-
+		if (decide_pet_approch_direction(target_ptr, m_ptr, t_ptr)) continue;
 		if (!are_enemies(target_ptr, m_ptr, t_ptr)) continue;
 
 		if (((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) ||
@@ -243,6 +228,35 @@ void decide_enemy_approch_direction(player_type *target_ptr, MONSTER_IDX m_idx, 
 
 		break;
 	}
+}
+
+
+/*!
+ * @brief ペットが敵に接近するための方向を決定する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_ptr 移動を試みているモンスターへの参照ポインタ
+ * @param t_ptr 移動先モンスターへの参照ポインタ
+ * @param plus モンスターIDの増減 (1/2 の確率で+1、1/2の確率で-1)
+ * @return ペットがモンスターに近づくならばTRUE
+ */
+bool decide_pet_approch_direction(player_type *target_ptr, monster_type *m_ptr, monster_type *t_ptr)
+{
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	if (!is_pet(m_ptr)) return FALSE;
+
+	if (target_ptr->pet_follow_distance < 0)
+	{
+		if (t_ptr->cdis <= (0 - target_ptr->pet_follow_distance))
+		{
+			return TRUE;
+		}
+	}
+	else if ((m_ptr->cdis < t_ptr->cdis) && (t_ptr->cdis > target_ptr->pet_follow_distance))
+	{
+		return TRUE;
+	}
+
+	return (r_ptr->aaf < t_ptr->cdis);
 }
 
 
