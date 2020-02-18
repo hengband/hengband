@@ -206,10 +206,8 @@ void decide_enemy_approch_direction(player_type *target_ptr, MONSTER_IDX m_idx, 
 		MONSTER_IDX t_idx = dummy;
 		monster_type *t_ptr;
 		t_ptr = &floor_ptr->m_list[t_idx];
-
 		if (t_ptr == m_ptr) continue;
 		if (!monster_is_valid(t_ptr)) continue;
-
 		if (decide_pet_approch_direction(target_ptr, m_ptr, t_ptr)) continue;
 		if (!are_enemies(target_ptr, m_ptr, t_ptr)) continue;
 
@@ -225,8 +223,7 @@ void decide_enemy_approch_direction(player_type *target_ptr, MONSTER_IDX m_idx, 
 
 		*y = t_ptr->fy;
 		*x = t_ptr->fx;
-
-		break;
+		return;
 	}
 }
 
@@ -260,6 +257,12 @@ bool decide_pet_approch_direction(player_type *target_ptr, monster_type *m_ptr, 
 }
 
 
+/*!
+ * @brief モンスターの移動方向を保存する
+ * @param mm 移動方向
+ * @param y 移動先Y座標
+ * @param x 移動先X座標
+ */
 void store_enemy_approch_direction(int *mm, POSITION y, POSITION x)
 {
 	/* North, South, East, West, North-West, North-East, South-West, South-East */
