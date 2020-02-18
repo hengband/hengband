@@ -80,6 +80,8 @@ turn_flags *init_turn_flags(player_type *target_ptr, MONSTER_IDX m_idx, turn_fla
 old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr);
 
 bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm);
+void decide_enemy_approch_direction(player_type *target_ptr, MONSTER_IDX m_idx, int start, int plus, POSITION *y, POSITION *x);
+void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);
@@ -175,56 +177,7 @@ bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 	x -= m_ptr->fx;
 	y -= m_ptr->fy;
 
-	/* North, South, East, West, North-West, North-East, South-West, South-East */
-	if ((y < 0) && (x == 0))
-	{
-		mm[0] = 8;
-		mm[1] = 7;
-		mm[2] = 9;
-	}
-	else if ((y > 0) && (x == 0))
-	{
-		mm[0] = 2;
-		mm[1] = 1;
-		mm[2] = 3;
-	}
-	else if ((x > 0) && (y == 0))
-	{
-		mm[0] = 6;
-		mm[1] = 9;
-		mm[2] = 3;
-	}
-	else if ((x < 0) && (y == 0))
-	{
-		mm[0] = 4;
-		mm[1] = 7;
-		mm[2] = 1;
-	}
-	else if ((y < 0) && (x < 0))
-	{
-		mm[0] = 7;
-		mm[1] = 4;
-		mm[2] = 8;
-	}
-	else if ((y < 0) && (x > 0))
-	{
-		mm[0] = 9;
-		mm[1] = 6;
-		mm[2] = 8;
-	}
-	else if ((y > 0) && (x < 0))
-	{
-		mm[0] = 1;
-		mm[1] = 4;
-		mm[2] = 2;
-	}
-	else if ((y > 0) && (x > 0))
-	{
-		mm[0] = 3;
-		mm[1] = 6;
-		mm[2] = 2;
-	}
-
+	store_enemy_approch_direction(mm, y, x);
 	return TRUE;
 }
 
@@ -289,6 +242,60 @@ void decide_enemy_approch_direction(player_type *target_ptr, MONSTER_IDX m_idx, 
 		*x = t_ptr->fx;
 
 		break;
+	}
+}
+
+
+void store_enemy_approch_direction(int *mm, POSITION y, POSITION x)
+{
+	/* North, South, East, West, North-West, North-East, South-West, South-East */
+	if ((y < 0) && (x == 0))
+	{
+		mm[0] = 8;
+		mm[1] = 7;
+		mm[2] = 9;
+	}
+	else if ((y > 0) && (x == 0))
+	{
+		mm[0] = 2;
+		mm[1] = 1;
+		mm[2] = 3;
+	}
+	else if ((x > 0) && (y == 0))
+	{
+		mm[0] = 6;
+		mm[1] = 9;
+		mm[2] = 3;
+	}
+	else if ((x < 0) && (y == 0))
+	{
+		mm[0] = 4;
+		mm[1] = 7;
+		mm[2] = 1;
+	}
+	else if ((y < 0) && (x < 0))
+	{
+		mm[0] = 7;
+		mm[1] = 4;
+		mm[2] = 8;
+	}
+	else if ((y < 0) && (x > 0))
+	{
+		mm[0] = 9;
+		mm[1] = 6;
+		mm[2] = 8;
+	}
+	else if ((y > 0) && (x < 0))
+	{
+		mm[0] = 1;
+		mm[1] = 4;
+		mm[2] = 2;
+	}
+	else if ((y > 0) && (x > 0))
+	{
+		mm[0] = 3;
+		mm[1] = 6;
+		mm[2] = 2;
 	}
 }
 
