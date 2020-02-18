@@ -34,7 +34,7 @@ hengband_SOURCES = \
 	mind.c mind.h \
 	\
 	monster.h monsterrace.c monsterrace.h \
-	monsterrace-hook.c monsterrace-hook.h monster-process.h \
+	monsterrace-hook.c monsterrace-hook.h monster-process.c monster-process.h \
 	monster-status.c monster-status.h monster1.c \
 	monster2.c mspells1.c mspells2.c mspells3.c mspells4.c monster-spell.h \
 	\
