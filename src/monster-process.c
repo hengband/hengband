@@ -84,6 +84,8 @@ void decide_enemy_approch_direction(player_type *target_ptr, MONSTER_IDX m_idx, 
 bool decide_pet_approch_direction(player_type *target_ptr, monster_type *m_ptr, monster_type *t_ptr);
 void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
 
+bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp);
+
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);
 bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
@@ -721,7 +723,7 @@ static POSITION *dist_offsets_x[10] =
  *\n
  * Return TRUE if a safe location is available.\n
  */
-static bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
+bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
