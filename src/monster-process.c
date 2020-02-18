@@ -76,6 +76,12 @@ typedef struct {
 	byte old_r_cast_spell;
 } old_race_flags;
 
+typedef struct {
+	POSITION gy;
+	POSITION gx;
+	POSITION gdis;
+} safe_coordinate;
+
 turn_flags *init_turn_flags(player_type *target_ptr, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr);
 old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr);
 
@@ -85,6 +91,7 @@ bool decide_pet_approch_direction(player_type *target_ptr, monster_type *m_ptr, 
 void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
 
 bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp);
+safe_coordinate sweep_coordinate(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *y_offsets, POSITION *x_offsets, int d);
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);
@@ -134,14 +141,14 @@ bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr);
 SPEED decide_monster_speed(player_type *target_ptr, monster_type *m_ptr, int monster_number);
 void update_player_window(player_type *target_ptr, old_race_flags *old_race_flags_ptr);
 
- /*!
-  * @brief モンスターが敵に接近するための方向を計算するメインルーチン
-  * Calculate the direction to the next enemy
-  * @param target_ptr プレーヤーへの参照ポインタ
-  * @param m_idx モンスターの参照ID
-  * @param mm 移動するべき方角IDを返す参照ポインタ
-  * @return 方向が確定した場合TRUE、接近する敵がそもそもいない場合FALSEを返す
-  */
+/*!
+ * @brief モンスターが敵に接近するための方向を計算するメインルーチン
+ * Calculate the direction to the next enemy
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスターの参照ID
+ * @param mm 移動するべき方角IDを返す参照ポインタ
+ * @return 方向が確定した場合TRUE、接近する敵がそもそもいない場合FALSEを返す
+ */
 bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 {
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
@@ -174,7 +181,7 @@ bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 
 		decide_enemy_approch_direction(target_ptr, m_idx, start, plus, &y, &x);
 
-		if ((x ==0) && (y == 0)) return FALSE;
+		if ((x == 0) && (y == 0)) return FALSE;
 	}
 
 	x -= m_ptr->fx;
@@ -725,14 +732,7 @@ static POSITION *dist_offsets_x[10] =
  */
 bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
-	floor_type *floor_ptr = target_ptr->current_floor_ptr;
-	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-
-	POSITION fy = m_ptr->fy;
-	POSITION fx = m_ptr->fx;
-
-	POSITION gy = 0, gx = 0, gdis = 0;
-
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	for (POSITION d = 1; d < 10; d++)
 	{
 		POSITION *y_offsets;
@@ -741,46 +741,68 @@ bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSIT
 		POSITION *x_offsets;
 		x_offsets = dist_offsets_x[d];
 
-		for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0];
-			dx != 0 || dy != 0;
-			i++, dx = x_offsets[i], dy = y_offsets[i])
-		{
-			POSITION y = fy + dy;
-			POSITION x = fx + dx;
-			if (!in_bounds(floor_ptr, y, x)) continue;
+		safe_coordinate candidate = sweep_coordinate(target_ptr, m_idx, y_offsets, x_offsets, d);
 
-			grid_type *g_ptr;
-			g_ptr = &floor_ptr->grid_array[y][x];
+		if (candidate.gdis <= 0) continue;
 
-			BIT_FLAGS16 riding_mode = (m_idx == target_ptr->riding) ? CEM_RIDING : 0;
-			if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, &r_info[m_ptr->r_idx], riding_mode))
-				continue;
-
-			if (!(m_ptr->mflag2 & MFLAG2_NOFLOW))
-			{
-				if (g_ptr->dist == 0) continue;
-				if (g_ptr->dist > floor_ptr->grid_array[fy][fx].dist + 2 * d) continue;
-			}
-
-			if (projectable(target_ptr, target_ptr->y, target_ptr->x, y, x)) continue;
-
-			POSITION dis = distance(y, x, target_ptr->y, target_ptr->x);
-			if (dis <= gdis) continue;
-
-			gy = y;
-			gx = x;
-			gdis = dis;
-		}
-
-		if (gdis <= 0) continue;
-
-		*yp = fy - gy;
-		*xp = fx - gx;
+		*yp = m_ptr->fy - candidate.gy;
+		*xp = m_ptr->fx - candidate.gx;
 
 		return TRUE;
 	}
 
 	return FALSE;
+}
+
+
+/*!
+ * @brief モンスターが逃げ込める地点を走査する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param m_idx モンスターID
+ * @param y_offsets
+ * @param x_offsets
+ * @param d モンスターがいる地点からの距離
+ */
+safe_coordinate sweep_coordinate(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *y_offsets, POSITION *x_offsets, int d)
+{
+	safe_coordinate candidate;
+	candidate.gy = 0;
+	candidate.gx = 0;
+	candidate.gdis = 0;
+	floor_type *floor_ptr = target_ptr->current_floor_ptr;
+	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+	for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0];
+		dx != 0 || dy != 0;
+		i++, dx = x_offsets[i], dy = y_offsets[i])
+	{
+		POSITION y = m_ptr->fy + dy;
+		POSITION x = m_ptr->fx + dx;
+		if (!in_bounds(floor_ptr, y, x)) continue;
+
+		grid_type *g_ptr;
+		g_ptr = &floor_ptr->grid_array[y][x];
+
+		BIT_FLAGS16 riding_mode = (m_idx == target_ptr->riding) ? CEM_RIDING : 0;
+		if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, &r_info[m_ptr->r_idx], riding_mode))
+			continue;
+
+		if (!(m_ptr->mflag2 & MFLAG2_NOFLOW))
+		{
+			if (g_ptr->dist == 0) continue;
+			if (g_ptr->dist > floor_ptr->grid_array[m_ptr->fy][m_ptr->fx].dist + 2 * d) continue;
+		}
+
+		if (projectable(target_ptr, target_ptr->y, target_ptr->x, y, x)) continue;
+
+		POSITION dis = distance(y, x, target_ptr->y, target_ptr->x);
+		if (dis <= candidate.gdis) continue;
+
+		candidate.gy = y;
+		candidate.gx = x;
+		candidate.gdis = dis;
+	}
+
+	return candidate;
 }
 
 
@@ -851,6 +873,7 @@ static bool find_hiding(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp
 
 
 /*!
+ * todo 分割したいが条件が多すぎて適切な関数名と詳細処理を追いきれない……
  * @brief モンスターの移動方向を返す /
  * Choose "logical" directions for monster movement
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -1190,7 +1213,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	turn_flags_ptr->aware = process_stealth(target_ptr, m_idx);
 	if (vanish_summoned_children(target_ptr, m_idx, turn_flags_ptr->see_m)) return;
-	if (process_quantum_effect(target_ptr,m_idx, turn_flags_ptr->see_m)) return;
+	if (process_quantum_effect(target_ptr, m_idx, turn_flags_ptr->see_m)) return;
 	if (explode_monster(target_ptr, m_idx)) return;
 	if (runaway_monster(target_ptr, turn_flags_ptr, m_idx)) return;
 
@@ -1222,7 +1245,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (!decide_monster_movement_direction(target_ptr, mm, m_idx, turn_flags_ptr->aware)) return;
 
 	int count = 0;
-	if(!process_monster_movement(target_ptr, turn_flags_ptr, m_idx, mm, oy, ox, &count)) return;
+	if (!process_monster_movement(target_ptr, turn_flags_ptr, m_idx, mm, oy, ox, &count)) return;
 
 	/*
 	 *  Forward movements failed, but now received LOS attack!
@@ -1434,7 +1457,7 @@ bool process_quantum_effect(player_type *target_ptr, MONSTER_IDX m_idx, bool see
 		vanish_nonunique(target_ptr, m_idx, see_m);
 		return TRUE;
 	}
-	
+
 	produce_quantum_effect(target_ptr, m_idx, see_m);
 	return FALSE;
 }
@@ -1788,7 +1811,7 @@ bool runaway_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTE
 	{
 		/* Reset the counter */
 		if (turn_flags_ptr->is_riding_mon) riding_pinch = 0;
-		
+
 		return FALSE;
 	}
 
@@ -2039,7 +2062,7 @@ bool process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
 		turn_flags_ptr->do_move = TRUE;
 		return TRUE;
 	}
-	
+
 	if (((r_ptr->flags2 & RF2_KILL_WALL) != 0) &&
 		(can_cross ? !have_flag(f_ptr->flags, FF_LOS) : !turn_flags_ptr->is_riding_mon) &&
 		have_flag(f_ptr->flags, FF_HURT_DISI) && !have_flag(f_ptr->flags, FF_PERMANENT) &&
@@ -2051,7 +2074,7 @@ bool process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
 		turn_flags_ptr->did_kill_wall = TRUE;
 		return TRUE;
 	}
-	
+
 	if (!can_cross) return FALSE;
 
 	turn_flags_ptr->do_move = TRUE;
@@ -2088,7 +2111,7 @@ bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
 
 	if (!turn_flags_ptr->did_open_door && !turn_flags_ptr->did_bash_door) return TRUE;
 
-	if (turn_flags_ptr->did_bash_door && 
+	if (turn_flags_ptr->did_bash_door &&
 		((randint0(100) < 50) || (feat_state(target_ptr, g_ptr->feat, FF_OPEN) == g_ptr->feat) || have_flag(f_ptr->flags, FF_GLASS)))
 	{
 		cave_alter_feat(target_ptr, ny, nx, FF_BASH);
@@ -2575,7 +2598,7 @@ void monster_pickup_object(player_type *target_ptr, turn_flags *turn_flags_ptr, 
 
 		return;
 	}
-	
+
 	if (turn_flags_ptr->do_take)
 	{
 		turn_flags_ptr->did_take_item = TRUE;
@@ -2592,7 +2615,7 @@ void monster_pickup_object(player_type *target_ptr, turn_flags *turn_flags_ptr, 
 		m_ptr->hold_o_idx = this_o_idx;
 		return;
 	}
-	
+
 	if (is_pet(m_ptr)) return;
 
 	turn_flags_ptr->did_kill_item = TRUE;
@@ -2845,11 +2868,11 @@ bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr)
 
 	if (m_ptr->cdis <= (is_pet(m_ptr) ? (r_ptr->aaf > MAX_SIGHT ? MAX_SIGHT : r_ptr->aaf) : r_ptr->aaf))
 		return TRUE;
-	
+
 	if ((m_ptr->cdis <= MAX_SIGHT || target_ptr->phase_out) &&
 		(player_has_los_bold(target_ptr, fy, fx) || (target_ptr->cursed & TRC_AGGRAVATE)))
 		return TRUE;
-	
+
 	if (m_ptr->target_y)
 		return TRUE;
 
