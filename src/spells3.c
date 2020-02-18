@@ -461,7 +461,7 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
 
 	bool is_followable = old_ml;
 	is_followable &= old_cdis <= MAX_SIGHT;
-	is_followable &= !(current_world_ptr->timewalk_m_idx > 0);
+	is_followable &= current_world_ptr->timewalk_m_idx == 0;
 	is_followable &= !tracer_ptr->phase_out;
 	is_followable &= los(tracer_ptr, tracer_ptr->y, tracer_ptr->x, oldfy, oldfx);
 	if (!is_followable) return;

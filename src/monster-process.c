@@ -79,6 +79,8 @@ typedef struct {
 turn_flags *init_turn_flags(player_type *target_ptr, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr);
 old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr);
 
+bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm);
+
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);
 bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
@@ -135,7 +137,7 @@ void update_player_window(player_type *target_ptr, old_race_flags *old_race_flag
   * @param mm 移動するべき方角IDを返す参照ポインタ
   * @return 方向が確定した場合TRUE、接近する敵がそもそもいない場合FALSEを返す
   */
-static bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
+bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm)
 {
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
