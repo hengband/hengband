@@ -441,6 +441,7 @@ static bool get_moves_aux2(player_type *target_ptr, MONSTER_IDX m_idx, POSITION 
 
 
 /*!
+ * todo まだ分割せず放置 (このままいくと3000行を超えかねない)
  * @brief モンスターがプレイヤーに向けて接近することが可能なマスを走査する /
  * Choose the "best" direction for "flowing"
  * @param m_idx モンスターの参照ID
@@ -2867,7 +2868,6 @@ void sweep_monster_process(player_type *target_ptr)
 
 
 /*!
- * todo fy/fxへの代入は有効活用されていないはず
  * @brief 後続のモンスター処理が必要かどうか判定する (要調査)
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_ptr モンスターへの参照ポインタ
@@ -2877,8 +2877,6 @@ bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr)
 {
 	monster_race *r_ptr;
 	r_ptr = &r_info[m_ptr->r_idx];
-	POSITION fx = m_ptr->fx;
-	POSITION fy = m_ptr->fy;
 	if (!target_ptr->no_flowed)
 	{
 		m_ptr->mflag2 &= ~MFLAG2_NOFLOW;
@@ -2888,7 +2886,7 @@ bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr)
 		return TRUE;
 
 	if ((m_ptr->cdis <= MAX_SIGHT || target_ptr->phase_out) &&
-		(player_has_los_bold(target_ptr, fy, fx) || (target_ptr->cursed & TRC_AGGRAVATE)))
+		(player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx) || (target_ptr->cursed & TRC_AGGRAVATE)))
 		return TRUE;
 
 	if (m_ptr->target_y)
