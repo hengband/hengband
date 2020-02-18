@@ -91,7 +91,9 @@ bool decide_pet_approch_direction(player_type *target_ptr, monster_type *m_ptr, 
 void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
 
 bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp);
-safe_coordinate sweep_coordinate(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *y_offsets, POSITION *x_offsets, int d);
+safe_coordinate sweep_safe_coordinate(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *y_offsets, POSITION *x_offsets, int d);
+
+bool find_hiding(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp);
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);
@@ -741,7 +743,7 @@ bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSIT
 		POSITION *x_offsets;
 		x_offsets = dist_offsets_x[d];
 
-		safe_coordinate candidate = sweep_coordinate(target_ptr, m_idx, y_offsets, x_offsets, d);
+		safe_coordinate candidate = sweep_safe_coordinate(target_ptr, m_idx, y_offsets, x_offsets, d);
 
 		if (candidate.gdis <= 0) continue;
 
@@ -763,7 +765,7 @@ bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSIT
  * @param x_offsets
  * @param d モンスターがいる地点からの距離
  */
-safe_coordinate sweep_coordinate(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *y_offsets, POSITION *x_offsets, int d)
+safe_coordinate sweep_safe_coordinate(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *y_offsets, POSITION *x_offsets, int d)
 {
 	safe_coordinate candidate;
 	candidate.gy = 0;
@@ -820,7 +822,7 @@ safe_coordinate sweep_coordinate(player_type *target_ptr, MONSTER_IDX m_idx, POS
  *\n
  * Return TRUE if a good location is available.\n
  */
-static bool find_hiding(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
+bool find_hiding(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
