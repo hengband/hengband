@@ -12,7 +12,7 @@ angband_files = \
 	chainswd.txt dead.txt \
 	death.txt elvish.txt error.txt mondeath.txt \
 	monfear.txt monfrien.txt monspeak.txt news.txt \
-	rumors.txt seppuku.txt silly.txt timefun.txt \
+	rumors.txt seppuku.txt silly.txt sname.txt timefun.txt \
 	timenorm.txt w_cursed.txt w_high.txt w_low.txt\
 	w_med.txt
 
