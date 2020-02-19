@@ -2047,7 +2047,7 @@ bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_pt
 		update_object_by_monster_movement(target_ptr, turn_flags_ptr, m_idx, ny, nx);
 		if (turn_flags_ptr->do_turn) break;
 
-		*count++;
+		(*count)++;
 	}
 
 	return TRUE;
