@@ -9,7 +9,6 @@
  * included in all such copies. \n
  * 2014 Deskull rearranged comment for Doxygen. \n
  */
-#pragma once
 
 #include "angband.h"
 #include "bldg.h"
