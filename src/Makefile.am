@@ -34,8 +34,8 @@ hengband_SOURCES = \
 	mind.c mind.h \
 	\
 	monster.h monsterrace.c monsterrace.h \
-	monsterrace-hook.c monsterrace-hook.h monster-process.c \
-	monster-process.h monster-status.c monster-status.h monster1.c \
+	monsterrace-hook.c monsterrace-hook.h monster-process.c monster-process.h \
+	monster-status.c monster-status.h monster1.c \
 	monster2.c mspells1.c mspells2.c mspells3.c mspells4.c monster-spell.h \
 	\
 	mutation.h mutation.c \
@@ -108,7 +108,10 @@ EXTRA_hengband_SOURCES = \
 	makefile.bcc makefile.std makefile.dos makefile.ibm \
 	readdib.c readdib.h wall.bmp
 
-COMPILE = ./gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+EXTRA_DIST = \
+	gcc-wrap
+
+COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat
 
 install-exec-hook:

@@ -1914,7 +1914,7 @@ static errr CheckEvent(bool wait)
 		XNextEvent(Metadpy->dpy, xev);
 
 #ifdef USE_XIM
-	} while (XFilterEvent(xev, xev->xany.window)
+	} while (XFilterEvent(xev, xev->xany.window));
 #endif
 
 	/* Notice new keymaps */
