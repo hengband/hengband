@@ -438,8 +438,8 @@ bool find_space(player_type *player_ptr, POSITION *y, POSITION *x, POSITION heig
 	/* Save the room location */
 	if (dun->cent_n < CENT_MAX)
 	{
-		dun->cent[dun->cent_n].y = (byte_hack)*y;
-		dun->cent[dun->cent_n].x = (byte_hack)*x;
+		dun->cent[dun->cent_n].y = (byte)*y;
+		dun->cent[dun->cent_n].x = (byte)*x;
 		dun->cent_n++;
 	}
 
@@ -899,8 +899,8 @@ static void cave_fill(player_type *player_ptr, POSITION y, POSITION x)
 					fill_data.info1, fill_data.info2, fill_data.info3))
 				{
 					/* Enqueue that entry */
-					tmp_pos.y[flow_tail] = (byte_hack)j;
-					tmp_pos.x[flow_tail] = (byte_hack)i;
+					tmp_pos.y[flow_tail] = (byte)j;
+					tmp_pos.x[flow_tail] = (byte)i;
 
 					/* Advance the queue */
 					if (++flow_tail == TEMP_MAX) flow_tail = 0;

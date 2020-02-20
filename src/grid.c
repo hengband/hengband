@@ -913,8 +913,8 @@ void update_flow(player_type *subject_ptr)
 		for (d = 0; d < 8; d++)
 		{
 			int old_head = flow_head;
-			byte_hack m = subject_ptr->current_floor_ptr->grid_array[ty][tx].cost + 1;
-			byte_hack n = subject_ptr->current_floor_ptr->grid_array[ty][tx].dist + 1;
+			byte m = subject_ptr->current_floor_ptr->grid_array[ty][tx].cost + 1;
+			byte n = subject_ptr->current_floor_ptr->grid_array[ty][tx].dist + 1;
 			grid_type *g_ptr;
 
 			/* Child location */

@@ -527,7 +527,7 @@ static void drain_essence(player_type *creature_ptr)
 	object_type *o_ptr;
 	concptr q, s;
 	POSITION iy, ix;
-	byte_hack marked;
+	byte marked;
 	ITEM_NUMBER number;
 	OBJECT_IDX next_o_idx;
 	WEIGHT weight;

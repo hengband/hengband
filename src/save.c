@@ -187,26 +187,26 @@ static void wr_item(object_type *o_ptr)
 	/*** Write only un-obvious elements ***/
 	wr_s16b(o_ptr->k_idx);
 
-	wr_byte((byte_hack)o_ptr->iy);
-	wr_byte((byte_hack)o_ptr->ix);
+	wr_byte((byte)o_ptr->iy);
+	wr_byte((byte)o_ptr->ix);
 
 	if (flags & SAVE_ITEM_PVAL) wr_s16b(o_ptr->pval);
 
 	if (flags & SAVE_ITEM_DISCOUNT) wr_byte(o_ptr->discount);
-	if (flags & SAVE_ITEM_NUMBER) wr_byte((byte_hack)o_ptr->number);
+	if (flags & SAVE_ITEM_NUMBER) wr_byte((byte)o_ptr->number);
 
 	wr_s16b((s16b)o_ptr->weight);
 
-	if (flags & SAVE_ITEM_NAME1) wr_byte((byte_hack)o_ptr->name1);
-	if (flags & SAVE_ITEM_NAME2) wr_byte((byte_hack)o_ptr->name2);
+	if (flags & SAVE_ITEM_NAME1) wr_byte((byte)o_ptr->name1);
+	if (flags & SAVE_ITEM_NAME2) wr_byte((byte)o_ptr->name2);
 	if (flags & SAVE_ITEM_TIMEOUT) wr_s16b(o_ptr->timeout);
 
 	if (flags & SAVE_ITEM_TO_H) wr_s16b(o_ptr->to_h);
 	if (flags & SAVE_ITEM_TO_D) wr_s16b((s16b)o_ptr->to_d);
 	if (flags & SAVE_ITEM_TO_A) wr_s16b(o_ptr->to_a);
 	if (flags & SAVE_ITEM_AC) wr_s16b(o_ptr->ac);
-	if (flags & SAVE_ITEM_DD) wr_byte((byte_hack)o_ptr->dd);
-	if (flags & SAVE_ITEM_DS) wr_byte((byte_hack)o_ptr->ds);
+	if (flags & SAVE_ITEM_DD) wr_byte((byte)o_ptr->dd);
+	if (flags & SAVE_ITEM_DS) wr_byte((byte)o_ptr->ds);
 
 	if (flags & SAVE_ITEM_IDENT) wr_byte(o_ptr->ident);
 
@@ -268,8 +268,8 @@ static void wr_monster(monster_type *m_ptr)
 
 	/*** Write only un-obvious elements ***/
 	wr_s16b(m_ptr->r_idx);
-	wr_byte((byte_hack)m_ptr->fy);
-	wr_byte((byte_hack)m_ptr->fx);
+	wr_byte((byte)m_ptr->fy);
+	wr_byte((byte)m_ptr->fx);
 	wr_s16b((s16b)m_ptr->hp);
 	wr_s16b((s16b)m_ptr->maxhp);
 	wr_s16b((s16b)m_ptr->max_maxhp);
@@ -349,8 +349,8 @@ static void wr_lore(MONRACE_IDX r_idx)
 	wr_byte(r_ptr->r_xtra2);
 
 	/* Count drops */
-	wr_byte((byte_hack)r_ptr->r_drop_gold);
-	wr_byte((byte_hack)r_ptr->r_drop_item);
+	wr_byte((byte)r_ptr->r_drop_gold);
+	wr_byte((byte)r_ptr->r_drop_item);
 
 	/* Count spells */
 	wr_byte(0); /* unused now */
@@ -372,7 +372,7 @@ static void wr_lore(MONRACE_IDX r_idx)
 	wr_u32b(r_ptr->r_flagsr);
 
 	/* Monster limit per level */
-	wr_byte((byte_hack)r_ptr->max_num);
+	wr_byte((byte)r_ptr->max_num);
 
 	/* Location in saved floor */
 	wr_s16b(r_ptr->floor_id);
@@ -549,11 +549,11 @@ static void wr_ghost(void)
 static void save_quick_start(void)
 {
 	wr_byte(previous_char.psex);
-	wr_byte((byte_hack)previous_char.prace);
-	wr_byte((byte_hack)previous_char.pclass);
-	wr_byte((byte_hack)previous_char.pseikaku);
-	wr_byte((byte_hack)previous_char.realm1);
-	wr_byte((byte_hack)previous_char.realm2);
+	wr_byte((byte)previous_char.prace);
+	wr_byte((byte)previous_char.pclass);
+	wr_byte((byte)previous_char.pseikaku);
+	wr_byte((byte)previous_char.realm1);
+	wr_byte((byte)previous_char.realm2);
 
 	wr_s16b(previous_char.age);
 	wr_s16b(previous_char.ht);
@@ -600,12 +600,12 @@ static void wr_extra(player_type *creature_ptr)
 	}
 
 	/* Race/Class/Gender/Spells */
-	wr_byte((byte_hack)creature_ptr->prace);
-	wr_byte((byte_hack)creature_ptr->pclass);
-	wr_byte((byte_hack)creature_ptr->pseikaku);
-	wr_byte((byte_hack)creature_ptr->psex);
-	wr_byte((byte_hack)creature_ptr->realm1);
-	wr_byte((byte_hack)creature_ptr->realm2);
+	wr_byte((byte)creature_ptr->prace);
+	wr_byte((byte)creature_ptr->pclass);
+	wr_byte((byte)creature_ptr->pseikaku);
+	wr_byte((byte)creature_ptr->psex);
+	wr_byte((byte)creature_ptr->realm1);
+	wr_byte((byte)creature_ptr->realm2);
 	wr_byte(0);
 
 	wr_byte((byte)creature_ptr->hitdie);
@@ -640,7 +640,7 @@ static void wr_extra(player_type *creature_ptr)
 	for (int i = 0; i < 108; i++) wr_s32b(creature_ptr->magic_num1[i]);
 	for (int i = 0; i < 108; i++) wr_byte(creature_ptr->magic_num2[i]);
 
-	wr_byte((byte_hack)creature_ptr->start_race);
+	wr_byte((byte)creature_ptr->start_race);
 	wr_s32b(creature_ptr->old_race1);
 	wr_s32b(creature_ptr->old_race2);
 	wr_s16b(creature_ptr->old_realm);
@@ -779,7 +779,7 @@ static void wr_extra(player_type *creature_ptr)
 	wr_byte(creature_ptr->knowledge);
 	wr_byte(creature_ptr->autopick_autoregister);
 	wr_byte(0);
-	wr_byte((byte_hack)creature_ptr->action);
+	wr_byte((byte)creature_ptr->action);
 	wr_byte(0);
 	wr_byte(preserve_mode);
 	wr_byte(creature_ptr->wait_report_score);
@@ -857,7 +857,7 @@ static void wr_saved_floor(player_type *player_ptr, saved_floor_type *sf_ptr)
 		/*** The saved floor ***/
 
 		wr_s16b(sf_ptr->floor_id);
-		wr_byte((byte_hack)sf_ptr->savefile_id);
+		wr_byte((byte)sf_ptr->savefile_id);
 		wr_s16b((s16b)sf_ptr->dun_level);
 		wr_s32b(sf_ptr->last_visit);
 		wr_u32b(sf_ptr->visit_mark);
@@ -1072,7 +1072,7 @@ static bool wr_dungeon(player_type *player_ptr)
 	wr_s16b(max_floor_id);
 
 	/* Current dungeon type */
-	wr_byte((byte_hack)player_ptr->dungeon_idx);
+	wr_byte((byte)player_ptr->dungeon_idx);
 
 
 	/*** No saved floor (On the surface etc.) ***/
@@ -1100,7 +1100,7 @@ static bool wr_dungeon(player_type *player_ptr)
 		saved_floor_type *sf_ptr = &saved_floors[i];
 
 		wr_s16b(sf_ptr->floor_id);
-		wr_byte((byte_hack)sf_ptr->savefile_id);
+		wr_byte((byte)sf_ptr->savefile_id);
 		wr_s16b((s16b)sf_ptr->dun_level);
 		wr_s32b(sf_ptr->last_visit);
 		wr_u32b(sf_ptr->visit_mark);
@@ -1271,7 +1271,7 @@ static bool wr_savefile_new(player_type *player_ptr)
 		/* (prevents problems with multi-level quests) */
 		wr_s16b((s16b)q_ptr->level);
 
-		wr_byte((byte_hack)q_ptr->complev);
+		wr_byte((byte)q_ptr->complev);
 		wr_u32b(q_ptr->comptime);
 
 		bool is_quest_running = q_ptr->status == QUEST_STATUS_TAKEN;
@@ -1284,8 +1284,8 @@ static bool wr_savefile_new(player_type *player_ptr)
 		wr_s16b(q_ptr->type);
 		wr_s16b(q_ptr->r_idx);
 		wr_s16b(q_ptr->k_idx);
-		wr_byte((byte_hack)q_ptr->flags);
-		wr_byte((byte_hack)q_ptr->dungeon);
+		wr_byte((byte)q_ptr->flags);
+		wr_byte((byte)q_ptr->dungeon);
 	}
 
 	/* Dump the position in the wilderness */
@@ -1342,7 +1342,7 @@ static bool wr_savefile_new(player_type *player_ptr)
 	/* Dump the ordered spells */
 	for (int i = 0; i < 64; i++)
 	{
-		wr_byte((byte_hack)player_ptr->spell_order[i]);
+		wr_byte((byte)player_ptr->spell_order[i]);
 	}
 
 	for (int i = 0; i < INVEN_TOTAL; i++)

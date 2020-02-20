@@ -599,7 +599,7 @@ static HWND hwndSaver;
  * 現在使用中のタイルID(0ならば未使用)
  * Flag set once "graphics" has been initialized
  */
-static byte_hack current_graphics_mode = 0;
+static byte current_graphics_mode = 0;
 
 /*
  * The global bitmap
@@ -1214,7 +1214,7 @@ static void load_prefs(void)
 	int i;
 
 	/* Extract the "arg_graphics" flag */
-	arg_graphics = (byte_hack)GetPrivateProfileInt("Angband", "Graphics", GRAPHICS_NONE, ini_file);
+	arg_graphics = (byte)GetPrivateProfileInt("Angband", "Graphics", GRAPHICS_NONE, ini_file);
 
 	/* Extract the "arg_bigtile" flag */
 	arg_bigtile = (GetPrivateProfileInt("Angband", "Bigtile", FALSE, ini_file) != 0);

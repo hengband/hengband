@@ -310,7 +310,7 @@ static void do_cmd_wiz_reset_class(player_type *creature_ptr)
 	if (tmp_int < 0 || tmp_int >= MAX_CLASS) return;
 
 	/* Save it */
-	creature_ptr->pclass = (byte_hack)tmp_int;
+	creature_ptr->pclass = (byte)tmp_int;
 
 	/* Redraw inscription */
 	creature_ptr->window |= (PW_PLAYER);
@@ -1113,7 +1113,7 @@ static void wiz_quantity_item(object_type *o_ptr)
 		if (tmp_int > 99) tmp_int = 99;
 
 		/* Accept modifications */
-		o_ptr->number = (byte_hack)tmp_int;
+		o_ptr->number = (byte)tmp_int;
 	}
 
 	if (o_ptr->tval == TV_ROD)

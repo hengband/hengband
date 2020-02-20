@@ -3475,7 +3475,7 @@ void display_map(player_type *player_ptr, int *cy, int *cx)
 			map_info(player_ptr, j, i, &ta, &tc, &ta, &tc);
 
 			/* Extract the priority */
-			tp = (byte_hack)feat_priority;
+			tp = (byte)feat_priority;
 
 			if (match_autopick != -1
 				&& (match_autopick_yx[y][x] == -1
@@ -3743,7 +3743,7 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
 {
 	int path_n;
 	u16b path_g[512];
-	byte_hack default_color = TERM_SLATE;
+	byte default_color = TERM_SLATE;
 
 	if (!display_path) return;
 	if (project_length == -1) return;

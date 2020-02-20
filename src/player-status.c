@@ -2950,7 +2950,7 @@ void calc_bonuses(player_type *creature_ptr)
 
 	if (o_ptr->k_idx)
 	{
-		creature_ptr->tval_ammo = (byte_hack)bow_tval_ammo(o_ptr);
+		creature_ptr->tval_ammo = (byte)bow_tval_ammo(o_ptr);
 		if (o_ptr->k_idx && !creature_ptr->heavy_shoot)
 		{
 			creature_ptr->num_fire = calc_num_fire(creature_ptr, o_ptr);

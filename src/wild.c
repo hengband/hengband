@@ -835,7 +835,7 @@ errr parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int x
 				w_letter[index].town = 0;
 			
 			if (num > 4)
-				w_letter[index].road = (byte_hack)atoi(zz[4]);
+				w_letter[index].road = (byte)atoi(zz[4]);
 			else
 				w_letter[index].road = 0;
 			
@@ -907,7 +907,7 @@ errr parse_line_wilderness(player_type *creature_ptr, char *buf, int xmin, int x
 	for (int i = 1; i < current_world_ptr->max_d_idx; i++)
 	{
 		if (!d_info[i].maxdepth) continue;
-		wilderness[d_info[i].dy][d_info[i].dx].entrance = (byte_hack)i;
+		wilderness[d_info[i].dy][d_info[i].dx].entrance = (byte)i;
 		if (!wilderness[d_info[i].dy][d_info[i].dx].town)
 		{
 			wilderness[d_info[i].dy][d_info[i].dx].level = d_info[i].mindepth;

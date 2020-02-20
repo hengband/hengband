@@ -366,7 +366,7 @@ static void rd_item_old(object_type *o_ptr)
 {
 	rd_s16b(&o_ptr->k_idx);
 
-	byte_hack tmp8u;
+	byte tmp8u;
 	rd_byte(&tmp8u);
 	o_ptr->iy = (POSITION)tmp8u;
 	rd_byte(&tmp8u);
@@ -615,7 +615,7 @@ static void rd_item(object_type *o_ptr)
 	rd_u32b(&flags);
 	rd_s16b(&o_ptr->k_idx);
 
-	byte_hack tmp8u;
+	byte tmp8u;
 	rd_byte(&tmp8u);
 	o_ptr->iy = (POSITION)tmp8u;
 	rd_byte(&tmp8u);
@@ -2887,7 +2887,7 @@ static errr rd_dungeon(player_type *player_ptr)
 	}
 
 	rd_s16b(&max_floor_id);
-	byte_hack tmp8u;
+	byte tmp8u;
 	rd_byte(&tmp8u);
 	player_ptr->dungeon_idx = (DUNGEON_IDX)tmp8u;
 	byte num;

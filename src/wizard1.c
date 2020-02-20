@@ -1535,7 +1535,7 @@ static bool make_fake_artifact(object_type *o_ptr, IDX name1)
 	object_prep(o_ptr, i);
 
 	/* Save the name */
-	o_ptr->name1 = (byte_hack)name1;
+	o_ptr->name1 = (byte)name1;
 
 	/* Extract the fields */
 	o_ptr->pval = a_ptr->pval;

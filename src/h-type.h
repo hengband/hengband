@@ -60,9 +60,6 @@ typedef int errr;
 #undef huge
 #define huge huge_hack /*!< WINDOWS環境で重複を避けるためのhuge_hack定義 / Hack -- prevent problems with WINDOWS */
 
-#undef byte
-#define byte byte_hack /*!< AMIGA環境で重複を避けるためのbyte_hack定義 / Hack -- prevent problems with AMIGA */
-
 #undef bool
 #define bool bool_hack /*!< C++環境で重複を避けるためのbool_hack定義 Hack -- prevent problems with C++ */
 

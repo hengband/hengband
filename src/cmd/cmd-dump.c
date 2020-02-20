@@ -3533,7 +3533,7 @@ void do_cmd_load_screen(void)
 			for (int i = 0; i < 16; i++)
 			{
 				/* Use attr matches */
-				if (hack[i] == buf[x]) a = (byte_hack)i;
+				if (hack[i] == buf[x]) a = (byte)i;
 			}
 
 			/* Put the attr/char */

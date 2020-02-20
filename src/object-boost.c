@@ -425,7 +425,7 @@ void one_activation(object_type *o_ptr)
 	}
 
 	/* A type was chosen... */
-	o_ptr->xtra2 = (byte_hack)type;
+	o_ptr->xtra2 = (byte)type;
 	add_flag(o_ptr->art_flags, TR_ACTIVATE);
 	o_ptr->timeout = 0;
 }

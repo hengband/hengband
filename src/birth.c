@@ -794,7 +794,7 @@ static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 	/* Clean up */
 	clear_from(10);
 
-	return (byte_hack)(picks[k]);
+	return (byte)(picks[k]);
 }
 
 
@@ -2636,7 +2636,7 @@ static bool get_player_race(player_type *creature_ptr)
 	}
 
 	/* Set race */
-	creature_ptr->prace = (byte_hack)k;
+	creature_ptr->prace = (byte)k;
 
 	rp_ptr = &race_info[creature_ptr->prace];
 
@@ -2808,7 +2808,7 @@ static bool get_player_class(player_type *creature_ptr)
 	}
 
 	/* Set class */
-	creature_ptr->pclass = (byte_hack)k;
+	creature_ptr->pclass = (byte)k;
 	cp_ptr = &class_info[creature_ptr->pclass];
 	mp_ptr = &m_info[creature_ptr->pclass];
 
@@ -4007,7 +4007,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 	}
 
 	/* Set sex */
-	creature_ptr->psex = (byte_hack)k;
+	creature_ptr->psex = (byte)k;
 	sp_ptr = &sex_info[creature_ptr->psex];
 
 	/* Display */
