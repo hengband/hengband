@@ -640,7 +640,7 @@ static errr Infowin_init_data(Window dad, int x, int y, int w, int h,
 	/* What happened here?  XXX XXX XXX */
 
 	/* If no parent given, depend on root */
-	if (dad == None)
+	if (dad == None) dad = Metadpy->root;
 
 	/* Create the Window XXX Error Check */
 	xid = XCreateSimpleWindow(Metadpy->dpy, dad, x, y, w, h, b, fg, bg);
