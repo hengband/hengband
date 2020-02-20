@@ -193,17 +193,17 @@ static term_data data[MAX_TERM_DATA];
  * Mega-Hack -- try to guess when "POSIX" is available.
  * If the user defines two of these, we will probably crash.
  */
-# if !defined(USE_TERMIO) && !defined(USE_TCHARS)
-#  if defined(_POSIX_VERSION)
-#   define USE_TPOSIX
+#if !defined(USE_TERMIO) && !defined(USE_TCHARS)
+# if defined(_POSIX_VERSION)
+#  define USE_TPOSIX
+# else
+#  if defined(linux)
+#   define USE_TERMIO
 #  else
-#   if defined(linux)
-#    define USE_TERMIO
-#   else
-#    define USE_TCHARS
-#   endif
+#   define USE_TCHARS
 #  endif
 # endif
+#endif
 
 /*
  * Hack -- Amiga uses "fake curses" and cannot do any of this stuff
@@ -1252,23 +1252,16 @@ errr init_gcu(int argc, char *argv[])
    if (can_fix_color)
    {
       /* Prepare the color pairs */
-      for (i = 1; i <= 63; i++)
-      {
-	 /* Reset the color */
-	 if (init_pair(i, (i - 1) % 8, (i - 1) / 8) == ERR)
-	 {
-	    quit("Color pair init failed");
-	 }
+	   for (i = 1; i <= 15; i++)
+	   {
+		   if (init_pair(i, i, 0) == ERR)
+		   {
+			   quit("Color pair init failed");
+		   }
 
-	/* Set up the colormap */
-	colortable[i - 1] = (COLOR_PAIR(i) | A_NORMAL);
-	colortable[i + 7] = (COLOR_PAIR(i) | A_BRIGHT);
-
-	/* XXX XXX XXX Take account of "gamma correction" */
-
-	/* Prepare the "Angband Colors" */
-	Term_xtra_gcu_react();
-      }
+		   colortable[i] = COLOR_PAIR(i);
+		   Term_xtra_gcu_react();
+	   }
    }
    /* Attempt to use colors */
    else if (can_use_color)
