@@ -382,15 +382,6 @@ static void hit_trap_slow(player_type *target_ptr)
 * @param turn_aux 状態異常の追加ターン量
 * @return なし
 */
-static void hit_trap_set_abnormal_status(concptr trap_message, bool resist, bool(*set_status)(IDX), IDX turn_aux)
-{
-	msg_print(trap_message);
-	if (!resist)
-	{
-		set_status(turn_aux);
-	}
-}
-
 static void hit_trap_set_abnormal_status_p(player_type *trapped_ptr, concptr trap_message, bool resist, bool(*set_status)(player_type *, IDX), IDX turn_aux)
 {
 	msg_print(trap_message);

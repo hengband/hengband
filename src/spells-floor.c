@@ -1046,9 +1046,6 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			/* Skip unaffected grids */
 			if (!map[16 + yy - cy][16 + xx - cx]) continue;
 
-			grid_type *g_ptr;
-			g_ptr = &floor_ptr->grid_array[yy][xx];
-
 			/* Destroy location (if valid) */
 			if (!cave_valid_bold(floor_ptr, yy, xx)) continue;
 

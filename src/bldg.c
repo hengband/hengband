@@ -1341,6 +1341,7 @@ static bool gamble_comm(player_type *player_ptr, int cmd)
 			else if ((roll3 == 2) || (roll3 == 3) || (roll3 == 12))
 				win = FALSE;
 			else
+			{
 				do
 				{
 					msg_print(_("なにかキーを押すともう一回振ります。", "Hit any key to roll again"));
@@ -1357,7 +1358,9 @@ static bool gamble_comm(player_type *player_ptr, int cmd)
 					else if (roll3 == 7)
 						win = FALSE;
 				} while ((win != TRUE) && (win != FALSE));
-				break;
+			}
+			
+			break;
 
 		case BACT_SPIN_WHEEL:  /* Spin the Wheel Game */
 			win = FALSE;

@@ -73,8 +73,8 @@ typedef struct debug_spell_command
 #define SPELL_MAX 2
 debug_spell_command debug_spell_commands_list[SPELL_MAX] =
 {
-	{ 2, "vanish dungeon", {.spell2 = vanish_dungeon} },
-	{ 3, "true healing", {.spell3 = true_healing} }
+	{ 2, "vanish dungeon", {.spell2 = { vanish_dungeon } } },
+	{ 3, "true healing", {.spell3 = { true_healing } } }
 };
 
 /*!

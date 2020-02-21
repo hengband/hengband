@@ -2408,7 +2408,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 	BIT_FLAGS flg = (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP);
 	bool is_first_curse = TRUE;
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
-	while (is_first_curse || one_in_(3) && !stop_ty)
+	while (is_first_curse || (one_in_(3) && !stop_ty))
 	{
 		is_first_curse = FALSE;
 		switch (randint1(34))
