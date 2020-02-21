@@ -2832,9 +2832,7 @@ void sweep_monster_process(player_type *target_ptr)
 	for (MONSTER_IDX i = floor_ptr->m_max - 1; i >= 1; i--)
 	{
 		monster_type *m_ptr;
-		monster_race *r_ptr;
 		m_ptr = &floor_ptr->m_list[i];
-		r_ptr = &r_info[m_ptr->r_idx];
 
 		if (target_ptr->leaving) return;
 		if (!monster_is_valid(m_ptr)) continue;
