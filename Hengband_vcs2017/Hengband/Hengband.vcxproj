@@ -188,6 +188,7 @@
     <ClCompile Include="..\..\src\geometry.c" />
     <ClCompile Include="..\..\src\history.c" />
     <ClCompile Include="..\..\src\init.c" />
+    <ClCompile Include="..\..\src\monster-dist-offsets.c" />
     <ClCompile Include="..\..\src\monster-process.c" />
     <ClCompile Include="..\..\src\monster-status.c" />
     <ClCompile Include="..\..\src\monsterrace-hook.c" />
@@ -312,6 +313,7 @@
     <ClInclude Include="..\..\src\combat\melee.h" />
     <ClInclude Include="..\..\src\combat\shoot.h" />
     <ClInclude Include="..\..\src\english.h" />
+    <ClInclude Include="..\..\src\monster-dist-offsets.h" />
     <ClInclude Include="..\..\src\object-flavor.h" />
     <ClInclude Include="..\..\src\player-inventory.h" />
     <ClInclude Include="japanese.h" />

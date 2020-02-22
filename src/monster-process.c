@@ -34,6 +34,7 @@
 #include "monster-status.h"
 #include "monster-spell.h"
 #include "monster-process.h"
+#include "monster-dist-offsets.h"
 #include "monsterrace-hook.h"
 #include "dungeon.h"
 #include "floor.h"
@@ -91,10 +92,10 @@ bool decide_pet_approch_direction(player_type *target_ptr, monster_type *m_ptr, 
 void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
 
 bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp);
-coordinate_candidate sweep_safe_coordinate(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *y_offsets, POSITION *x_offsets, int d);
+coordinate_candidate sweep_safe_coordinate(player_type *target_ptr, MONSTER_IDX m_idx, const POSITION *y_offsets, const POSITION *x_offsets, int d);
 
 bool find_hiding(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp);
-void sweep_hiding_candidate(player_type *target_ptr, monster_type *m_ptr, POSITION *y_offsets, POSITION *x_offsets, coordinate_candidate *candidate);
+void sweep_hiding_candidate(player_type *target_ptr, monster_type *m_ptr, const POSITION *y_offsets, const POSITION *x_offsets, coordinate_candidate *candidate);
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);
@@ -603,118 +604,6 @@ static bool get_fear_moves_aux(floor_type *floor_ptr, MONSTER_IDX m_idx, POSITIO
 }
 
 
-/*
- * Hack -- Precompute a bunch of calls to distance() in find_safety() and
- * find_hiding().
- *
- * The pair of arrays dist_offsets_y[n] and dist_offsets_x[n] contain the
- * offsets of all the locations with a distance of n from a central point,
- * with an offset of (0,0) indicating no more offsets at this distance.
- *
- * This is, of course, fairly unreadable, but it eliminates multiple loops
- * from the previous version.
- *
- * It is probably better to replace these arrays with code to compute
- * the relevant arrays, even if the storage is pre-allocated in hard
- * coded sizes.  At the very least, code should be included which is
- * able to generate and dump these arrays (ala "los()").
- *
- * Also, the storage needs could be halved by using bytes.
- *
- * These arrays could be combined into two big arrays, using sub-arrays
- * to hold the offsets and lengths of each portion of the sub-arrays, and
- * this could perhaps also be used somehow in the "look" code.
- */
-
-
-static POSITION d_off_y_0[] = { 0 };
-static POSITION d_off_x_0[] = { 0 };
-
-static POSITION d_off_y_1[] = { -1, -1, -1, 0, 0, 1, 1, 1, 0 };
-static POSITION d_off_x_1[] = { -1, 0, 1, -1, 1, -1, 0, 1, 0 };
-
-static POSITION d_off_y_2[] = { -1, -1, -2, -2, -2, 0, 0, 1, 1, 2, 2, 2, 0 };
-static POSITION d_off_x_2[] = { -2, 2, -1, 0, 1, -2, 2, -2, 2, -1, 0, 1, 0 };
-
-static POSITION d_off_y_3[] = { -1, -1, -2, -2, -3, -3, -3, 0, 0, 1, 1, 2, 2, 3, 3, 3, 0 };
-static POSITION d_off_x_3[] = { -3, 3, -2, 2, -1, 0, 1, -3, 3, -3, 3, -2, 2, -1, 0, 1, 0 };
-
-static POSITION d_off_y_4[] = { -1, -1, -2, -2, -3, -3, -3, -3, -4, -4, -4, 0, 0, 1, 1, 2, 2, 3, 3, 3, 3, 4, 4, 4, 0 };
-static POSITION d_off_x_4[] = { -4, 4, -3, 3, -2, -3, 2, 3, -1, 0, 1, -4, 4, -4, 4, -3, 3, -2, -3, 2, 3, -1, 0, 1, 0 };
-
-
-static POSITION d_off_y_5[] =
-{ -1, -1, -2, -2, -3, -3, -4, -4, -4, -4, -5, -5,
-  -5, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 4, 4, 5, 5,
-  5, 0 };
-
-static POSITION d_off_x_5[] =
-{ -5, 5, -4, 4, -4, 4, -2, -3, 2, 3, -1, 0, 1,
-  -5, 5, -5, 5, -4, 4, -4, 4, -2, -3, 2, 3, -1,
-  0, 1, 0 };
-
-
-static POSITION d_off_y_6[] =
-{ -1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -5, -5,
-  -6, -6, -6, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5,
-  5, 5, 6, 6, 6, 0 };
-
-static POSITION d_off_x_6[] =
-{ -6, 6, -5, 5, -5, 5, -4, 4, -2, -3, 2, 3, -1,
-  0, 1, -6, 6, -6, 6, -5, 5, -5, 5, -4, 4, -2,
-  -3, 2, 3, -1, 0, 1, 0 };
-
-
-static POSITION d_off_y_7[] =
-{ -1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -5, -5,
-  -6, -6, -6, -6, -7, -7, -7, 0, 0, 1, 1, 2, 2, 3,
-  3, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 0 };
-
-static POSITION d_off_x_7[] =
-{ -7, 7, -6, 6, -6, 6, -5, 5, -4, -5, 4, 5, -2,
-  -3, 2, 3, -1, 0, 1, -7, 7, -7, 7, -6, 6, -6,
-  6, -5, 5, -4, -5, 4, 5, -2, -3, 2, 3, -1, 0,
-  1, 0 };
-
-
-static POSITION d_off_y_8[] =
-{ -1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -6, -6,
-  -6, -6, -7, -7, -7, -7, -8, -8, -8, 0, 0, 1, 1,
-  2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7,
-  8, 8, 8, 0 };
-
-static POSITION d_off_x_8[] =
-{ -8, 8, -7, 7, -7, 7, -6, 6, -6, 6, -4, -5, 4,
-  5, -2, -3, 2, 3, -1, 0, 1, -8, 8, -8, 8, -7,
-  7, -7, 7, -6, 6, -6, 6, -4, -5, 4, 5, -2, -3,
-  2, 3, -1, 0, 1, 0 };
-
-
-static POSITION d_off_y_9[] =
-{ -1, -1, -2, -2, -3, -3, -4, -4, -5, -5, -6, -6,
-  -7, -7, -7, -7, -8, -8, -8, -8, -9, -9, -9, 0,
-  0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 7,
-  7, 8, 8, 8, 8, 9, 9, 9, 0 };
-
-static POSITION d_off_x_9[] =
-{ -9, 9, -8, 8, -8, 8, -7, 7, -7, 7, -6, 6, -4,
-  -5, 4, 5, -2, -3, 2, 3, -1, 0, 1, -9, 9, -9,
-  9, -8, 8, -8, 8, -7, 7, -7, 7, -6, 6, -4, -5,
-  4, 5, -2, -3, 2, 3, -1, 0, 1, 0 };
-
-
-static POSITION *dist_offsets_y[10] =
-{
-	d_off_y_0, d_off_y_1, d_off_y_2, d_off_y_3, d_off_y_4,
-	d_off_y_5, d_off_y_6, d_off_y_7, d_off_y_8, d_off_y_9
-};
-
-static POSITION *dist_offsets_x[10] =
-{
-	d_off_x_0, d_off_x_1, d_off_x_2, d_off_x_3, d_off_x_4,
-	d_off_x_5, d_off_x_6, d_off_x_7, d_off_x_8, d_off_x_9
-};
-
 coordinate_candidate init_coordinate_candidate(void)
 {
 	coordinate_candidate candidate;
@@ -748,10 +637,10 @@ bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSIT
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	for (POSITION d = 1; d < 10; d++)
 	{
-		POSITION *y_offsets;
+		const POSITION *y_offsets;
 		y_offsets = dist_offsets_y[d];
 
-		POSITION *x_offsets;
+		const POSITION *x_offsets;
 		x_offsets = dist_offsets_x[d];
 
 		coordinate_candidate candidate = sweep_safe_coordinate(target_ptr, m_idx, y_offsets, x_offsets, d);
@@ -777,7 +666,7 @@ bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSIT
  * @param d モンスターがいる地点からの距離
  * @return 逃げ込める地点の候補地
  */
-coordinate_candidate sweep_safe_coordinate(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *y_offsets, POSITION *x_offsets, int d)
+coordinate_candidate sweep_safe_coordinate(player_type *target_ptr, MONSTER_IDX m_idx, const POSITION *y_offsets, const POSITION *x_offsets, int d)
 {
 	coordinate_candidate candidate = init_coordinate_candidate();
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
@@ -839,10 +728,10 @@ bool find_hiding(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSIT
 
 	for (POSITION d = 1; d < 10; d++)
 	{
-		POSITION *y_offsets;
+		const POSITION *y_offsets;
 		y_offsets = dist_offsets_y[d];
 
-		POSITION *x_offsets;
+		const POSITION *x_offsets;
 		x_offsets = dist_offsets_x[d];
 
 		sweep_hiding_candidate(target_ptr, m_ptr, y_offsets, x_offsets, &candidate);
@@ -866,7 +755,7 @@ bool find_hiding(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSIT
  * @param candidate 隠れられる地点の候補地
  * @return なし
  */
-void sweep_hiding_candidate(player_type *target_ptr, monster_type *m_ptr, POSITION *y_offsets, POSITION *x_offsets, coordinate_candidate *candidate)
+void sweep_hiding_candidate(player_type *target_ptr, monster_type *m_ptr, const POSITION *y_offsets, const POSITION *x_offsets, coordinate_candidate *candidate)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	for (POSITION i = 0, dx = x_offsets[0], dy = y_offsets[0];

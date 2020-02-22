@@ -400,6 +400,9 @@
     <ClCompile Include="..\..\src\combat\shoot.c">
       <Filter>combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster-dist-offsets.c">
+      <Filter>monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -781,6 +784,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\combat\shoot.h">
       <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-dist-offsets.h">
+      <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

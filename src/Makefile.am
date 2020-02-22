@@ -34,9 +34,11 @@ hengband_SOURCES = \
 	mind.c mind.h \
 	\
 	monster.h monsterrace.c monsterrace.h \
-	monsterrace-hook.c monsterrace-hook.h monster-process.c monster-process.h \
-	monster-status.c monster-status.h monster1.c \
-	monster2.c mspells1.c mspells2.c mspells3.c mspells4.c monster-spell.h \
+	monsterrace-hook.c monsterrace-hook.h \
+	monster-dist-offsets.c monster-dist-offsets.h \
+	monster-process.c monster-process.h \
+	monster-status.c monster-status.h monster1.c monster2.c \
+	mspells1.c mspells2.c mspells3.c mspells4.c monster-spell.h \
 	\
 	mutation.h mutation.c \
 	\
@@ -49,10 +51,11 @@ hengband_SOURCES = \
 	patron.h patron.c \
 	\
 	creature.h creature.c \
-	player-move.c player-move.h player-damage.c player-damage.h player-status.c player-status.h \
-	player-effects.c player-effects.h player-skill.c player-skill.h player-class.c player-class.h \
-	player-race.c player-race.h player-personality.c player-personality.h player-sex.c player-sex.h \
-	player-inventory.c player-inventory.h \
+	player-move.c player-move.h player-damage.c player-damage.h \
+	player-status.c player-status.h player-effects.c player-effects.h \
+	player-skill.c player-skill.h player-class.c player-class.h \
+	player-race.c player-race.h player-personality.c player-personality.h \
+	player-sex.c player-sex.h player-inventory.c player-inventory.h \
 	\
 	quest.h quest.c\
 	\
@@ -65,8 +68,9 @@ hengband_SOURCES = \
 	realm-song.h realm-sorcery.c realm-sorcery.h realm-trump.c realm-trump.h \
 	report.c report.h rooms.c rooms-city.c rooms-city.h rooms-fractal.c rooms-fractal.h \
 	rooms.h rooms-normal.c rooms-normal.h rooms-pitnest.c rooms-pitnest.h \
-	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h rooms-vault.c \
-	rooms-vault.h save.c save.h scores.c scores.h selfinfo.c selfinfo.h \
+	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h \
+	rooms-vault.c rooms-vault.h \
+	save.c save.h scores.c scores.h selfinfo.c selfinfo.h \
 	snipe.c snipe.h \
 	\
 	rumor.h rumor.c \
