@@ -7,7 +7,7 @@
  * ‚¢‚­‚ç‘‚â‚µ‚Ä‚à‚æ‚¢‚ªAhorror_desc_evil ‚Æhorror_desc_neutral‚ÌŒÂ”‚Í“¯ˆê‚É‚·‚é‚±‚Æ
  */
 
-#include "h-type.h"
+#include "angband.h"
 #include "horror-descriptions.h"
 
 /*!
