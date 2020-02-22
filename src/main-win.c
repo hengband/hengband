@@ -3971,7 +3971,7 @@ static bool process_keydown(WPARAM wParam, LPARAM lParam)
 /*!
  * todo WNDCLASSに影響があるのでplayer_type*の追加は保留
  */
-LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	PAINTSTRUCT ps;
 	HDC hdc;
@@ -3992,10 +3992,10 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 	}
 	case WM_GETMINMAXINFO:
 	{
-		MINMAXINFO FAR *lpmmi;
+		MINMAXINFO *lpmmi;
 		RECT rc;
 
-		lpmmi = (MINMAXINFO FAR *)lParam;
+		lpmmi = (MINMAXINFO*)lParam;
 		if (!td) return 1;
 
 		rc.left = rc.top = 0;
@@ -4322,8 +4322,7 @@ LRESULT FAR PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lP
 /*!
  * todo WNDCLASSに影響があるのでplayer_type*の追加は保留
  */
-LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
-	WPARAM wParam, LPARAM lParam)
+LRESULT PASCAL AngbandListProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	term_data *td;
 	PAINTSTRUCT ps;
@@ -4343,10 +4342,10 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 	}
 	case WM_GETMINMAXINFO:
 	{
-		MINMAXINFO FAR *lpmmi;
+		MINMAXINFO *lpmmi;
 		RECT rc;
 
-		lpmmi = (MINMAXINFO FAR *)lParam;
+		lpmmi = (MINMAXINFO*)lParam;
 		if (!td) return 1;
 
 		rc.left = rc.top = 0;
@@ -4447,8 +4446,7 @@ LRESULT FAR PASCAL AngbandListProc(HWND hWnd, UINT uMsg,
 
 #define MOUSE_SENS 40
 
-LRESULT FAR PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg,
-	WPARAM wParam, LPARAM lParam)
+LRESULT PASCAL AngbandSaverProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	static int iMouse = 0;
 	static WORD xMouse = 0;
@@ -4694,8 +4692,7 @@ static bool is_already_running(void)
 /*!
  * @brief (Windows固有)Windowsアプリケーションとしてのエントリポイント
  */
-int FAR PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst,
-	LPSTR lpCmdLine, int nCmdShow)
+int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
 {
 	WNDCLASS wc;
 	HDC hdc;

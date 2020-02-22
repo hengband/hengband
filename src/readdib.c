@@ -68,7 +68,7 @@ void global_free(DIBINIT *pInfo, INT_PTR *fh, BOOL unlock_needed);
  * 取得できたデータ量をバイトで返す。0ならば何らかのエラー。
  * Returns number of bytes requested, or zero if something went wrong.
  */
-static DWORD PASCAL lread(int fh, VOID FAR *pv, DWORD ul)
+static DWORD PASCAL lread(int fh, void *pv, DWORD ul)
 {
 	DWORD ulT = ul;
 	BYTE huge *hp = pv;
@@ -96,7 +96,7 @@ static DWORD PASCAL lread(int fh, VOID FAR *pv, DWORD ul)
 static HPALETTE PASCAL NEAR MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 {
 	PLOGPALETTE npPal;
-	RGBQUAD FAR *lpRGB;
+	RGBQUAD *lpRGB;
 	HPALETTE hLogPal;
 	WORD i;
 
@@ -115,7 +115,7 @@ static HPALETTE PASCAL NEAR MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 		npPal->palNumEntries = (WORD)lpInfo->biClrUsed;
 
 		/* get pointer to the color table */
-		lpRGB = (RGBQUAD FAR *)((LPSTR)lpInfo + lpInfo->biSize);
+		lpRGB = (RGBQUAD*)((LPSTR)lpInfo + lpInfo->biSize);
 
 		/* copy colors from the color table to the LogPalette structure */
 		for (i = 0; i < (WORD)lpInfo->biClrUsed; i++, lpRGB++)
@@ -322,13 +322,13 @@ BOOL ReadDIB(HWND hWnd, LPSTR lpFileName, DIBINIT *pInfo)
 	else
 	{
 		signed int i;
-		RGBQUAD FAR *pQuad;
-		RGBTRIPLE FAR *pTriple;
+		RGBQUAD *pQuad;
+		RGBTRIPLE *pTriple;
 
 		_lread(fh, (LPSTR)(lpbi) + lpbi->biSize, nNumColors * sizeof(RGBTRIPLE));
 
-		pQuad = (RGBQUAD FAR *)((LPSTR)lpbi + lpbi->biSize);
-		pTriple = (RGBTRIPLE FAR *) pQuad;
+		pQuad = (RGBQUAD*)((LPSTR)lpbi + lpbi->biSize);
+		pTriple = (RGBTRIPLE*) pQuad;
 		for (i = nNumColors - 1; i >= 0; i--)
 		{
 			pQuad[i].rgbRed = pTriple[i].rgbtRed;
