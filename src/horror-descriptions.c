@@ -1,66 +1,127 @@
+/*!
+ * @file horror-descriptions.c
+ * @brief エルドリッチホラーの形容詞テーブル定義 / Definitions of adjectives on 
+ * @date 2020/02/21
+ * @author Hourier
+ */
+
 #include "h-type.h"
 #include "horror-descriptions.h"
 
 /*!
- * @var horror_desc
- * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ（通常時）
+ * @var horror_desc_common
+ * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ (正常時、邪悪・中立共通)
  */
-concptr horror_desc[MAX_SAN_HORROR] =
+concptr horror_desc_common[MAX_SAN_HORROR_COMMON] =
 {
 #ifdef JP
-	"忌まわしい",
 	"底知れぬ",
-	"ぞっとする",
 	"破滅的な",
-	"冒涜的な",
-
-	"いやな",
-	"恐ろしい",
-	"不潔な",
 	"容赦のない",
-	"おぞましい",
-
-	"地獄の",
-	"身の毛もよだつ",
-	"地獄の",
-	"忌まわしい",
 	"悪夢のような",
-
-	"嫌悪を感じる",
-	"罰当たりな",
-	"恐い",
-	"不浄な",
-	"言うもおぞましい",
+	"名前を口にできない",
 #else
-	"abominable",
 	"abysmal",
-	"appalling",
 	"baleful",
-	"blasphemous",
-
-	"disgusting",
-	"dreadful",
-	"filthy",
 	"grisly",
-	"hideous",
-
-	"hellish",
-	"horrible",
-	"infernal",
-	"loathsome",
 	"nightmarish",
-
-	"repulsive",
-	"sacrilegious",
-	"terrible",
-	"unclean",
 	"unspeakable",
 #endif
 };
 
 /*!
+ * @var horror_desc_evil
+ * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ (正常時、邪悪)
+ */
+concptr horror_desc_evil[MAX_SAN_HORROR_EVIL] =
+{
+#ifdef JP
+	"忌まわしい",
+	"ぞっとする",
+	"冒涜的な",
+	"いやな",
+	"恐ろしい",
+
+	"不潔な",
+	"おぞましい",
+	"非道なる",
+	"身の毛もよだつ",
+	"地獄の",
+
+	"むかむかする",
+	"嫌悪を感じる",
+	"罰当たりな",
+	"恐い",
+	"不浄な",
+#else
+	"abominable",
+	"appalling",
+	"blasphemous",
+	"disgusting",
+	"dreadful",
+
+	"filthy",
+	"hideous",
+	"hellish",
+	"horrible",
+	"infernal",
+
+	"loathsome",
+	"repulsive",
+	"sacrilegious",
+	"terrible",
+	"unclean",
+#endif
+};
+
+/*
+ * @var horror_desc_neutral
+ * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ (正常時、中立)
+ */
+concptr horror_desc_neutral[MAX_SAN_HORROR_NEUTRAL] =
+{
+#ifdef JP
+	"大いなる畏怖に包まれた",
+	"妖しげな笑みの",
+	"いるはずのない",
+	"吸い込まれそうな",
+	"五感を超越した",
+
+	"別次元に浮かび上がった",
+	"幻覚と見紛うような",
+	"ゆらゆらと揺らめいた",
+	"自らの実在を疑うほど圧倒的な",
+	"理解できない",
+
+	"サイケデリックな",
+	"生気が吸い取られるような",
+	"トリップ感に満ちた",
+	"頭が真っ白になるような",
+	"無限に加速した",
+#else
+	"causing great awe",
+	"laughing insanely",
+	"SHOULD NOT be there",
+	"about to be sucked",
+	"transcending senses",
+
+	"rising on the another dimension",
+	"hallucinating",
+	"swaying and swaying",
+	"overwhelming enough to doubt your own existence",
+	"unintelligible",
+
+	"psychedelic",
+	"spoiling your life",
+	"trippy",
+	"going blank",
+	"unlimitedly accelerated",
+#endif
+};
+
+/*!
  * @var funny_desc
- * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ(幻覚状態時)
+ * @brief ELDRITCH HORROR効果時のモンスターの形容メッセージ (幻覚状態時)
  */
 concptr funny_desc[MAX_SAN_FUNNY] =
 {

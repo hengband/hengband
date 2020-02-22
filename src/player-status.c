@@ -4520,7 +4520,7 @@ void wreck_the_pattern(player_type *creature_ptr)
 
 /*!
  * @brief ELDRITCH_HORRORによるプレイヤーの精神破壊処理
- * @param m_ptr ELDRITCH_HORRORを引き起こしたモンスターの参照ポインタ
+ * @param m_ptr ELDRITCH_HORRORを引き起こしたモンスターの参照ポインタ。薬・罠・魔法の影響ならNULL
  * @param necro 暗黒領域魔法の詠唱失敗によるものならばTRUEを返す
  * @return なし
  */
@@ -4574,7 +4574,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 		}
 
 		msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"),
-			horror_desc[randint0(MAX_SAN_HORROR)], m_name);
+			horror_desc_evil[randint0(MAX_SAN_HORROR_EVIL)], m_name);
 		r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
 		if (PRACE_IS_(creature_ptr, RACE_IMP) ||
 			PRACE_IS_(creature_ptr, RACE_DEMON) ||
@@ -4635,7 +4635,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 		}
 
 		msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"),
-			horror_desc[randint0(MAX_SAN_HORROR)], desc);
+			horror_desc_evil[randint0(MAX_SAN_HORROR_EVIL)], desc);
 
 		r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
 
@@ -4677,8 +4677,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 		&& saving_throw(creature_ptr->skill_sav - power)
 		&& saving_throw(creature_ptr->skill_sav - power)
 		&& saving_throw(creature_ptr->skill_sav - power)
-		&& saving_throw(creature_ptr->skill_sav - power)
-		)
+		&& saving_throw(creature_ptr->skill_sav - power))
 	{
 		return;
 	}
@@ -4686,6 +4685,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 	switch (randint1(22))
 	{
 	case 1:
+	{
 		if (!(creature_ptr->muta3 & MUT3_MORONIC))
 		{
 			if ((creature_ptr->stat_use[A_INT] < 4) && (creature_ptr->stat_use[A_WIS] < 4))
@@ -4702,10 +4702,14 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 				msg_print(_("あなたの脳は生体コンピュータではなくなった。", "Your brain is no longer a living computer."));
 				creature_ptr->muta3 &= ~(MUT3_HYPER_INT);
 			}
+
 			creature_ptr->muta3 |= MUT3_MORONIC;
 		}
+
 		break;
+	}
 	case 2:
+	{
 		if (!(creature_ptr->muta2 & MUT2_COWARDICE) && !creature_ptr->resist_fear)
 		{
 			msg_print(_("あなたはパラノイアになった！", "You become paranoid!"));
@@ -4717,21 +4721,29 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 
 			creature_ptr->muta2 |= MUT2_COWARDICE;
 		}
+
 		break;
+	}
 	case 3:
+	{
 		if (!(creature_ptr->muta2 & MUT2_HALLU) && !creature_ptr->resist_chaos)
 		{
 			msg_print(_("幻覚をひき起こす精神錯乱に陥った！", "You are afflicted by a hallucinatory insanity!"));
 			creature_ptr->muta2 |= MUT2_HALLU;
 		}
+
 		break;
+	}
 	case 4:
+	{
 		if (!(creature_ptr->muta2 & MUT2_BERS_RAGE) && !creature_ptr->resist_conf)
 		{
 			msg_print(_("激烈な感情の発作におそわれるようになった！", "You become subject to fits of berserk rage!"));
 			creature_ptr->muta2 |= MUT2_BERS_RAGE;
 		}
+
 		break;
+	}
 	case 5:
 	case 6:
 	case 7:
@@ -4740,6 +4752,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 	case 10:
 	case 11:
 	case 12:
+	{
 		if (!creature_ptr->resist_conf)
 		{
 			(void)set_confused(creature_ptr, creature_ptr->confused + randint0(4) + 4);
@@ -4753,9 +4766,11 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 		/* todo いつからかは不明だがreturnとbreakが同時に存在している。どちらがデッドコードか不明瞭なので保留 */
 		return;
 		break;
+	}
 	case 13:
 	case 14:
 	case 15:
+	{
 		if (!creature_ptr->resist_conf)
 		{
 			(void)set_confused(creature_ptr, creature_ptr->confused + randint0(4) + 4);
@@ -4780,19 +4795,24 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 		} while (randint0(100) > creature_ptr->skill_sav && one_in_(2));
 
 		break;
+	}
 	case 16:
 	case 17:
+	{
 		if (lose_all_info(creature_ptr))
 			msg_print(_("あまりの恐怖に全てのことを忘れてしまった！", "You forget everything in your utmost terror!"));
 		break;
+	}
 	case 18:
 	case 19:
 	case 20:
 	case 21:
 	case 22:
+	{
 		do_dec_stat(creature_ptr, A_INT);
 		do_dec_stat(creature_ptr, A_WIS);
 		break;
+	}
 	default:
 		break;
 	}
