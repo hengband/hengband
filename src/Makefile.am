@@ -52,6 +52,7 @@ hengband_SOURCES = \
 	\
 	creature.h creature.c \
 	player-move.c player-move.h player-damage.c player-damage.h \
+	horror-descriptions.c horror-descriptions.h \
 	player-status.c player-status.h player-effects.c player-effects.h \
 	player-skill.c player-skill.h player-class.c player-class.h \
 	player-race.c player-race.h player-personality.c player-personality.h \

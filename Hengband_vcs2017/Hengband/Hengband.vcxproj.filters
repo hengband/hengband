@@ -403,6 +403,9 @@
     <ClCompile Include="..\..\src\monster-dist-offsets.c">
       <Filter>monster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\horror-descriptions.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -787,6 +790,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster-dist-offsets.h">
       <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\horror-descriptions.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
