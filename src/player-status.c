@@ -4519,6 +4519,57 @@ void wreck_the_pattern(player_type *creature_ptr)
 
 
 /*!
+ * @brief エルドリッチホラーの形容詞種別を決める
+ * @param r_ptr モンスター情報への参照ポインタ
+ * @return 
+ */
+concptr decide_horror_message(monster_race *r_ptr)
+{
+	int horror_num = randint0(MAX_SAN_HORROR_SUM);
+	if (horror_num < MAX_SAN_HORROR_COMMON)
+	{
+		return horror_desc_common[horror_num];
+	}
+	
+	if ((r_ptr->flags3 & RF3_EVIL) != 0)
+	{
+		return horror_desc_evil[horror_num - MAX_SAN_HORROR_COMMON];
+	}
+
+	return horror_desc_neutral[horror_num - MAX_SAN_HORROR_COMMON];
+}
+
+
+/*!
+ * todo m_nameとdescで何が違うのかは良く分からない
+ * @brief エルドリッチホラー持ちのモンスターを見た時の反応 (モンスター名版)
+ * @param m_name モンスター名
+ * @param r_ptr モンスター情報への参照ポインタ
+ * @return なし
+ */
+void see_eldritch_horror(GAME_TEXT *m_name, monster_race *r_ptr)
+{
+	concptr horror_message = decide_horror_message(r_ptr);
+	msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message, m_name);
+	r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
+}
+
+
+/*!
+ * @brief エルドリッチホラー持ちのモンスターを見た時の反応 (モンスター名版)
+ * @param desc モンスター名 (エルドリッチホラー持ちの全モンスターからランダム…のはず)
+ * @param r_ptr モンスターへの参照ポインタ
+ * @return なし
+ */
+void feel_eldritch_horror(concptr desc, monster_race *r_ptr)
+{
+	concptr horror_message = decide_horror_message(r_ptr);
+	msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message, desc);
+	r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
+}
+
+
+/*!
  * @brief ELDRITCH_HORRORによるプレイヤーの精神破壊処理
  * @param m_ptr ELDRITCH_HORRORを引き起こしたモンスターの参照ポインタ。薬・罠・魔法の影響ならNULL
  * @param necro 暗黒領域魔法の詠唱失敗によるものならばTRUEを返す
@@ -4573,9 +4624,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 			return;
 		}
 
-		msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"),
-			horror_desc_evil[randint0(MAX_SAN_HORROR_EVIL)], m_name);
-		r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
+		see_eldritch_horror(m_name, r_ptr);
 		if (PRACE_IS_(creature_ptr, RACE_IMP) ||
 			PRACE_IS_(creature_ptr, RACE_DEMON) ||
 			(mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON) ||
@@ -4634,11 +4683,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 			return;
 		}
 
-		msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"),
-			horror_desc_evil[randint0(MAX_SAN_HORROR_EVIL)], desc);
-
-		r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
-
+		feel_eldritch_horror(desc, r_ptr);
 		if (!creature_ptr->mimic_form)
 		{
 			switch (creature_ptr->prace)

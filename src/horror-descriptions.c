@@ -3,6 +3,8 @@
  * @brief エルドリッチホラーの形容詞テーブル定義 / Definitions of adjectives on 
  * @date 2020/02/21
  * @author Hourier
+ * @deitals
+ * いくら増やしてもよいが、horror_desc_evil とhorror_desc_neutralの個数は同一にすること
  */
 
 #include "h-type.h"
@@ -101,8 +103,8 @@ concptr horror_desc_neutral[MAX_SAN_HORROR_NEUTRAL] =
 #else
 	"causing great awe",
 	"laughing insanely",
-	"SHOULD NOT be there",
-	"about to be sucked",
+	"existence, that SHOULD NOT be there, ",
+	"sucking",
 	"transcending senses",
 
 	"rising on the another dimension",
