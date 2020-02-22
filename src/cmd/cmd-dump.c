@@ -6439,7 +6439,7 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
 	strnfmt(playtime_str, sizeof(playtime_str), "%02d:%02d:%02d",
 		q_ptr->comptime / (60 * 60), (q_ptr->comptime / 60) % 60, q_ptr->comptime % 60);
 
-	if (is_fixed_quest_idx(q_idx) && q_ptr->r_idx)
+	if (is_fixed_quest_idx(q_idx) || (q_ptr->r_idx == 0))
 	{
 		/* Print the quest info */
 		sprintf(tmp_str,
