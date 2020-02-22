@@ -1,7 +1,5 @@
 ﻿#include "angband.h"
 #include "floor.h"
-#include "spells.h"
-
 
 /*!
  * キーパッドの方向を南から反時計回り順に列挙 / Global array for looping through the "keypad directions"
@@ -32,7 +30,6 @@ const POSITION ddx_ddd[9] =
  */
 const POSITION ddy_ddd[9] =
 { 1, -1, 0, 0, 1, 1, -1, -1, 0 };
-
 
 /*!
  * キーパッドの円環状方向配列 / Circular keypad direction array
@@ -92,6 +89,7 @@ POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2)
 	return d;
 }
 
+
 /*!
  * @brief プレイヤーから指定の座標がどの方角にあるかを返す /
  * Convert an adjacent location to a direction.
@@ -110,7 +108,6 @@ DIRECTION coords_to_dir(player_type *creature_ptr, POSITION y, POSITION x)
 
 	return d[dx + 1][dy + 1];
 }
-
 
 
 /*!
@@ -177,6 +174,7 @@ bool player_can_see_bold(player_type *creature_ptr, POSITION y, POSITION x)
 	return check_local_illumination(creature_ptr, y, x);
 }
 
+
 /*
  * Calculate "incremental motion". Used by project() and shoot().
  * Assumes that (*y,*x) lies on the path from (y1,x1) to (y2,x2).
@@ -194,7 +192,6 @@ void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POS
 
 	/* We are calculating the next location */
 	dist++;
-
 
 	/* Calculate the total distance along each axis */
 	dy = (y2 < y1) ? (y1 - y2) : (y2 - y1);
@@ -230,4 +227,3 @@ void mmove2(POSITION *y, POSITION *x, POSITION y1, POSITION x1, POSITION y2, POS
 		(*x) = (x2 < x1) ? (x1 - dist) : (x1 + dist);
 	}
 }
-
