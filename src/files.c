@@ -17,6 +17,7 @@
 #include "signal-handlers.h"
 #include "view/display-util.h"
 #include "view/status-first-page.h"
+#include "uid-checker.h"
 #include "util.h"
 #include "files.h"
 #include "core.h"
@@ -89,72 +90,6 @@ concptr ANGBAND_DIR_XTRA; //!< Various extra files (binary) These files are rare
  */
 char savefile[1024];
 char savefile_base[40];
-
- /*!
-  * @brief ファイルのドロップパーミッションチェック / Hack -- drop permissions
-  */
-void safe_setuid_drop(void)
-{
-
-#ifdef SET_UID
-# ifdef SAFE_SETUID
-#  ifdef SAFE_SETUID_POSIX
-
-	if (setuid(getuid()) != 0)
-	{
-		quit(_("setuid(): 正しく許可が取れません！", "setuid(): cannot set permissions correctly!"));
-	}
-	if (setgid(getgid()) != 0)
-	{
-		quit(_("setgid(): 正しく許可が取れません！", "setgid(): cannot set permissions correctly!"));
-	}
-#   else
-	if (setreuid(geteuid(), getuid()) != 0)
-	{
-		quit(_("setreuid(): 正しく許可が取れません！", "setreuid(): cannot set permissions correctly!"));
-	}
-	if (setregid(getegid(), getgid()) != 0)
-	{
-		quit(_("setregid(): 正しく許可が取れません！", "setregid(): cannot set permissions correctly!"));
-	}
-#  endif
-# endif
-#endif
-
-}
-
-
-/*!
- * @brief ファイルのグラブパーミッションチェック / Hack -- grab permissions
- */
-void safe_setuid_grab(void)
-{
-#ifdef SET_UID
-# ifdef SAFE_SETUID
-#  ifdef SAFE_SETUID_POSIX
-
-	if (setuid(p_ptr->player_egid) != 0)
-	{
-		quit(_("setuid(): 正しく許可が取れません！", "setuid(): cannot set permissions correctly!"));
-	}
-	if (setgid(p_ptr->player_egid) != 0)
-	{
-		quit(_("setgid(): 正しく許可が取れません！", "setgid(): cannot set permissions correctly!"));
-	}
-#  else
-	if (setreuid(geteuid(), getuid()) != 0)
-	{
-		quit(_("setreuid(): 正しく許可が取れません！", "setreuid(): cannot set permissions correctly!"));
-	}
-	if (setregid(getegid(), getgid()) != 0)
-	{
-		quit(_("setregid(): 正しく許可が取れません！", "setregid(): cannot set permissions correctly!"));
-	}
-#  endif /* SAFE_SETUID_POSIX */
-# endif /* SAFE_SETUID */
-#endif /* SET_UID */
-}
-
 
 /*!
  * @brief 各種データテキストをトークン単位に分解する / Extract the first few "tokens" from a buffer

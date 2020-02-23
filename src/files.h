@@ -19,9 +19,6 @@ extern concptr ANGBAND_DIR_SAVE;
 extern concptr ANGBAND_DIR_USER;
 extern concptr ANGBAND_DIR_XTRA;
 
-/* files.c */
-extern void safe_setuid_drop(void);
-extern void safe_setuid_grab(void);
 extern s16b tokenize(char *buf, s16b num, char **tokens, BIT_FLAGS mode);
 extern void display_player(player_type *creature_ptr, int mode);
 extern errr make_character_dump(player_type *creature_ptr, FILE *fff);

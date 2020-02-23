@@ -32,6 +32,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "uid-checker.h"
 #include "files.h"
 #include "core.h"
 #include "term.h"

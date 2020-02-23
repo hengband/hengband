@@ -22,6 +22,7 @@
 #include "player-class.h"
 #include "player-personality.h"
 #include "player-sex.h"
+#include "uid-checker.h"
 #include "files.h"
 #include "scores.h"
 #include "floor.h"

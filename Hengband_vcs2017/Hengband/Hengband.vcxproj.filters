@@ -415,6 +415,9 @@
     <ClCompile Include="..\..\src\view\display-util.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\uid-checker.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -811,6 +814,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-util.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\uid-checker.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

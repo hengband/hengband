@@ -83,6 +83,7 @@
 
 #include "view-mainwindow.h"
 #include "dungeon-file.h"
+#include "uid-checker.h"
 #include "files.h"
 #include "scores.h"
 #include "autopick.h"

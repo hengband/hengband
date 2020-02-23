@@ -10,6 +10,7 @@
 
 #include "angband.h"
 #include "core.h"
+#include "uid-checker.h"
 #include "files.h"
 #include "inet.h"
 #include "init.h"
