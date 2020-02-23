@@ -114,24 +114,94 @@ static concptr likert(int x, int y)
 
 
 /*!
+ * @brief キャラ基本情報及び技能値をメインウィンドウに表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param xthb 武器等を含めた最終命中率
+ * @param damage 打撃修正
+ * @param shots 射撃回数
+ * @param shot_frac 射撃速度
+ * @param display_player_one_line 1行表示用のコールバック関数
+ * @return なし
+ */
+static void display_first_page(player_type *creature_ptr, int xthb, int *damage, int shots, int shot_frac, void(*display_player_one_line)(int, concptr, TERM_COLOR))
+{
+	int xthn = creature_ptr->skill_thn + (creature_ptr->to_h_m * BTH_PLUS_ADJ);
+
+	int muta_att = 0;
+	if (creature_ptr->muta2 & MUT2_HORNS) muta_att++;
+	if (creature_ptr->muta2 & MUT2_SCOR_TAIL) muta_att++;
+	if (creature_ptr->muta2 & MUT2_BEAK) muta_att++;
+	if (creature_ptr->muta2 & MUT2_TRUNK) muta_att++;
+	if (creature_ptr->muta2 & MUT2_TENTACLES) muta_att++;
+
+	int blows1 = creature_ptr->migite ? creature_ptr->num_blow[0] : 0;
+	int blows2 = creature_ptr->hidarite ? creature_ptr->num_blow[1] : 0;
+	int xdis = creature_ptr->skill_dis;
+	int xdev = creature_ptr->skill_dev;
+	int xsav = creature_ptr->skill_sav;
+	int xstl = creature_ptr->skill_stl;
+	int	xsrh = creature_ptr->skill_srh;
+	int	xfos = creature_ptr->skill_fos;
+	int xdig = creature_ptr->skill_dig;
+
+	concptr desc = likert(xthn, 12);
+	(*display_player_one_line)(ENTRY_SKILL_FIGHT, desc, likert_color);
+
+	desc = likert(xthb, 12);
+	(*display_player_one_line)(ENTRY_SKILL_SHOOT, desc, likert_color);
+
+	desc = likert(xsav, 7);
+	(*display_player_one_line)(ENTRY_SKILL_SAVING, desc, likert_color);
+
+	desc = likert((xstl > 0) ? xstl : -1, 1);
+	(*display_player_one_line)(ENTRY_SKILL_STEALTH, desc, likert_color);
+
+	desc = likert(xfos, 6);
+	(*display_player_one_line)(ENTRY_SKILL_PERCEP, desc, likert_color);
+
+	desc = likert(xsrh, 6);
+	(*display_player_one_line)(ENTRY_SKILL_SEARCH, desc, likert_color);
+
+	desc = likert(xdis, 8);
+	(*display_player_one_line)(ENTRY_SKILL_DISARM, desc, likert_color);
+
+	desc = likert(xdev, 6);
+	(*display_player_one_line)(ENTRY_SKILL_DEVICE, desc, likert_color);
+
+	desc = likert(xdev, 6);
+	(*display_player_one_line)(ENTRY_SKILL_DEVICE, desc, likert_color);
+
+	desc = likert(xdig, 4);
+	(*display_player_one_line)(ENTRY_SKILL_DIG, desc, likert_color);
+
+	if (!muta_att)
+		(*display_player_one_line)(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_L_BLUE);
+	else
+		(*display_player_one_line)(ENTRY_BLOWS, format("%d+%d+%d", blows1, blows2, muta_att), TERM_L_BLUE);
+
+	(*display_player_one_line)(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_L_BLUE);
+
+	if ((damage[0] + damage[1]) == 0)
+		desc = "nil!";
+	else
+		desc = format("%d+%d", blows1 * damage[0] / 100, blows2 * damage[1] / 100);
+
+	(*display_player_one_line)(ENTRY_AVG_DMG, desc, TERM_L_BLUE);
+	(*display_player_one_line)(ENTRY_INFRA, format("%d feet", creature_ptr->see_infra * 10), TERM_WHITE);
+}
+
+
+/*!
  * @brief プレイヤーステータスの1ページ目各種詳細をまとめて表示する
  * Prints ratings on certain abilities
  * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param display_player_one_line 1行表示用のコールバック関数
  * @return なし
  * @details
  * This code is "imitated" elsewhere to "dump" a character sheet.
  */
 void display_player_various(player_type *creature_ptr, void(*display_player_one_line)(int, concptr, TERM_COLOR))
 {
-	int muta_att = 0;
-	if (creature_ptr->muta2 & MUT2_HORNS)     muta_att++;
-	if (creature_ptr->muta2 & MUT2_SCOR_TAIL) muta_att++;
-	if (creature_ptr->muta2 & MUT2_BEAK)      muta_att++;
-	if (creature_ptr->muta2 & MUT2_TRUNK)     muta_att++;
-	if (creature_ptr->muta2 & MUT2_TENTACLES) muta_att++;
-
-	int xthn = creature_ptr->skill_thn + (creature_ptr->to_h_m * BTH_PLUS_ADJ);
-
 	object_type *o_ptr;
 	o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
 	int tmp = creature_ptr->to_h_b + o_ptr->to_h;
@@ -208,6 +278,7 @@ void display_player_various(player_type *creature_ptr, void(*display_player_one_
 
 		basedam = ((o_ptr->dd + creature_ptr->to_dd[i]) * (o_ptr->ds + creature_ptr->to_ds[i] + 1)) * 50;
 		object_flags_known(o_ptr, flgs);
+
 		basedam = calc_expect_crit(creature_ptr, o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], poison_needle);
 		if (OBJECT_IS_FULL_KNOWN(o_ptr) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
 		{
@@ -224,64 +295,11 @@ void display_player_various(player_type *creature_ptr, void(*display_player_one_
 
 		if ((creature_ptr->pclass != CLASS_SAMURAI) && have_flag(flgs, TR_FORCE_WEAPON) && (creature_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
 			basedam = basedam * 7 / 2;
+
 		damage[i] += basedam;
 		if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) damage[i] = 1;
 		if (damage[i] < 0) damage[i] = 0;
 	}
 
-	int blows1 = creature_ptr->migite ? creature_ptr->num_blow[0] : 0;
-	int blows2 = creature_ptr->hidarite ? creature_ptr->num_blow[1] : 0;
-	int xdis = creature_ptr->skill_dis;
-	int xdev = creature_ptr->skill_dev;
-	int xsav = creature_ptr->skill_sav;
-	int xstl = creature_ptr->skill_stl;
-	int	xsrh = creature_ptr->skill_srh;
-	int	xfos = creature_ptr->skill_fos;
-	int xdig = creature_ptr->skill_dig;
-
-	concptr desc = likert(xthn, 12);
-	(*display_player_one_line)(ENTRY_SKILL_FIGHT, desc, likert_color);
-
-	desc = likert(xthb, 12);
-	(*display_player_one_line)(ENTRY_SKILL_SHOOT, desc, likert_color);
-
-	desc = likert(xsav, 7);
-	(*display_player_one_line)(ENTRY_SKILL_SAVING, desc, likert_color);
-
-	desc = likert((xstl > 0) ? xstl : -1, 1);
-	(*display_player_one_line)(ENTRY_SKILL_STEALTH, desc, likert_color);
-
-	desc = likert(xfos, 6);
-	(*display_player_one_line)(ENTRY_SKILL_PERCEP, desc, likert_color);
-
-	desc = likert(xsrh, 6);
-	(*display_player_one_line)(ENTRY_SKILL_SEARCH, desc, likert_color);
-
-	desc = likert(xdis, 8);
-	(*display_player_one_line)(ENTRY_SKILL_DISARM, desc, likert_color);
-
-	desc = likert(xdev, 6);
-	(*display_player_one_line)(ENTRY_SKILL_DEVICE, desc, likert_color);
-
-	desc = likert(xdev, 6);
-	(*display_player_one_line)(ENTRY_SKILL_DEVICE, desc, likert_color);
-
-	desc = likert(xdig, 4);
-	(*display_player_one_line)(ENTRY_SKILL_DIG, desc, likert_color);
-
-	if (!muta_att)
-		(*display_player_one_line)(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_L_BLUE);
-	else
-		(*display_player_one_line)(ENTRY_BLOWS, format("%d+%d+%d", blows1, blows2, muta_att), TERM_L_BLUE);
-
-	(*display_player_one_line)(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_L_BLUE);
-
-	if ((damage[0] + damage[1]) == 0)
-		desc = "nil!";
-	else
-		desc = format("%d+%d", blows1 * damage[0] / 100, blows2 * damage[1] / 100);
-
-	(*display_player_one_line)(ENTRY_AVG_DMG, desc, TERM_L_BLUE);
-
-	(*display_player_one_line)(ENTRY_INFRA, format("%d feet", creature_ptr->see_infra * 10), TERM_WHITE);
+	display_first_page(creature_ptr, xthb, damage, shots, shot_frac, display_player_one_line);
 }
