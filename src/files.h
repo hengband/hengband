@@ -19,8 +19,6 @@ extern concptr ANGBAND_DIR_SAVE;
 extern concptr ANGBAND_DIR_USER;
 extern concptr ANGBAND_DIR_XTRA;
 
-extern s16b signal_count;
-
 /* files.c */
 extern void safe_setuid_drop(void);
 extern void safe_setuid_grab(void);
@@ -41,9 +39,6 @@ extern void get_name(player_type *creature_ptr);
 extern void do_cmd_save_game(player_type *creature_ptr, int is_autosave);
 extern void do_cmd_save_and_exit(player_type *player_ptr);
 extern void exit_game_panic(player_type *creature_ptr);
-extern void signals_ignore_tstp(void);
-extern void signals_handle_tstp(void);
-extern void signals_init(void);
 extern errr get_rnd_line(concptr file_name, int entry, char *output);
 extern void print_tomb(player_type *dead_ptr);
 extern void show_info(player_type *creature_ptr);

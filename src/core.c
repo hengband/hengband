@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "signal-handlers.h"
 #include "util.h"
 #include "core.h"
 #include "inet.h"

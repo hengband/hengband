@@ -94,6 +94,7 @@
 */
 
 #include "angband.h"
+#include "signal-handlers.h"
 #include "util.h"
 #include "inet.h"
 #include "chuukei.h"

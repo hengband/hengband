@@ -406,6 +406,9 @@
     <ClCompile Include="..\..\src\horror-descriptions.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\signal-handlers.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -793,6 +796,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\horror-descriptions.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\signal-handlers.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
