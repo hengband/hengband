@@ -44,6 +44,40 @@ static void calc_shot_params(player_type *creature_ptr, object_type *o_ptr, int 
 
 
 /*!
+ * @brief 武器装備に制限のあるクラスで、直接攻撃のダメージを計算する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param hand 手 (利き手が0、反対の手が1…のはず)
+ * @param damage 最終的な直接攻撃のダメージ
+ * @param basedam 素手における直接攻撃のダメージ
+ * @param o_ptr 装備中の武器への参照ポインタ
+ * @return 利き手ならTRUE、反対の手ならFALSE
+ */
+static bool calc_weapon_damage_limit(player_type *creature_ptr, int hand, int *damage, int *basedam, object_type *o_ptr)
+{
+	PLAYER_LEVEL level = creature_ptr->lev;
+	if (hand > 0)
+	{
+		damage[hand] = 0;
+		return FALSE;
+	}
+
+	if (creature_ptr->pclass == CLASS_FORCETRAINER) level = MAX(1, level - 3);
+	if (creature_ptr->special_defense & KAMAE_BYAKKO)
+		*basedam = monk_ave_damage[level][1];
+	else if (creature_ptr->special_defense & (KAMAE_GENBU | KAMAE_SUZAKU))
+		*basedam = monk_ave_damage[level][2];
+	else
+		*basedam = monk_ave_damage[level][0];
+
+	damage[hand] += *basedam;
+	if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) damage[hand] = 1;
+	if (damage[hand] < 0) damage[hand] = 0;
+
+	return TRUE;
+}
+
+
+/*!
  * @brief 技能ランクの表示基準を定める
  * Returns a "rating" of x depending on y
  * @param x 技能値
@@ -247,24 +281,9 @@ void display_player_various(player_type *creature_ptr, void(*display_player_one_
 		damage[i] = creature_ptr->dis_to_d[i] * 100;
 		if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
 		{
-			PLAYER_LEVEL level = creature_ptr->lev;
-			if (i > 0)
-			{
-				damage[i] = 0;
+			if (!calc_weapon_damage_limit(creature_ptr, i, damage, &basedam, o_ptr))
 				break;
-			}
 
-			if (creature_ptr->pclass == CLASS_FORCETRAINER) level = MAX(1, level - 3);
-			if (creature_ptr->special_defense & KAMAE_BYAKKO)
-				basedam = monk_ave_damage[level][1];
-			else if (creature_ptr->special_defense & (KAMAE_GENBU | KAMAE_SUZAKU))
-				basedam = monk_ave_damage[level][2];
-			else
-				basedam = monk_ave_damage[level][0];
-
-			damage[i] += basedam;
-			if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) damage[i] = 1;
-			if (damage[i] < 0) damage[i] = 0;
 			continue;
 		}
 
