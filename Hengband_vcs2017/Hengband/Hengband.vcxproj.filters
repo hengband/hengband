@@ -409,6 +409,9 @@
     <ClCompile Include="..\..\src\signal-handlers.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\status-first-page.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -800,6 +803,9 @@
     <ClInclude Include="..\..\src\signal-handlers.h">
       <Filter>io</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\view\status-first-page.h">
+      <Filter>view</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -841,6 +847,9 @@
     </Filter>
     <Filter Include="locale">
       <UniqueIdentifier>{4bdec353-0cac-4e25-98f9-bcc55f2c0ec3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view">
+      <UniqueIdentifier>{95a48e4b-b55a-4e99-a3c6-e8badbd1b2cf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

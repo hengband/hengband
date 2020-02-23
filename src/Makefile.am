@@ -13,6 +13,7 @@ hengband_SOURCES = \
 	\
 	bldg.c bldg.h chest.c chest.h chuukei.c chuukei.h \
 	\
+	view/status-first-page.c view/status-first-page.h \
 	signal-handlers.c signal-handlers.h core.c core.h files.c files.h \
 	\
 	dungeon.c dungeon.h \

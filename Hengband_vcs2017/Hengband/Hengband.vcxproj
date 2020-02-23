@@ -278,6 +278,7 @@
     <ClCompile Include="..\..\src\spells1.c" />
     <ClCompile Include="..\..\src\spells2.c" />
     <ClCompile Include="..\..\src\spells3.c" />
+    <ClCompile Include="..\..\src\view\status-first-page.c" />
     <ClCompile Include="..\..\src\store.c" />
     <ClCompile Include="..\..\src\floor-streams.c" />
     <ClCompile Include="..\..\src\targeting.c" />
@@ -320,6 +321,7 @@
     <ClInclude Include="..\..\src\object-flavor.h" />
     <ClInclude Include="..\..\src\player-inventory.h" />
     <ClInclude Include="..\..\src\signal-handlers.h" />
+    <ClInclude Include="..\..\src\view\status-first-page.h" />
     <ClInclude Include="japanese.h" />
   </ItemGroup>
   <ItemGroup>
