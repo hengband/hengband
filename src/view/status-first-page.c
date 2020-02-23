@@ -6,7 +6,9 @@
  */
 
 #include "angband.h"
+#include "term.h"
 #include "status-first-page.h"
+#include "display-util.h"
 #include "artifact.h"
 #include "combat/melee.h"
 #include "combat/shoot.h"
@@ -290,7 +292,7 @@ static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
  * @param display_player_one_line 1行表示用のコールバック関数
  * @return なし
  */
-static void display_first_page(player_type *creature_ptr, int xthb, int *damage, int shots, int shot_frac, void(*display_player_one_line)(int, concptr, TERM_COLOR))
+static void display_first_page(player_type *creature_ptr, int xthb, int *damage, int shots, int shot_frac)
 {
 	int xthn = creature_ptr->skill_thn + (creature_ptr->to_h_m * BTH_PLUS_ADJ);
 
@@ -312,49 +314,49 @@ static void display_first_page(player_type *creature_ptr, int xthb, int *damage,
 	int xdig = creature_ptr->skill_dig;
 
 	concptr desc = likert(xthn, 12);
-	(*display_player_one_line)(ENTRY_SKILL_FIGHT, desc, likert_color);
+	display_player_one_line(ENTRY_SKILL_FIGHT, desc, likert_color);
 
 	desc = likert(xthb, 12);
-	(*display_player_one_line)(ENTRY_SKILL_SHOOT, desc, likert_color);
+	display_player_one_line(ENTRY_SKILL_SHOOT, desc, likert_color);
 
 	desc = likert(xsav, 7);
-	(*display_player_one_line)(ENTRY_SKILL_SAVING, desc, likert_color);
+	display_player_one_line(ENTRY_SKILL_SAVING, desc, likert_color);
 
 	desc = likert((xstl > 0) ? xstl : -1, 1);
-	(*display_player_one_line)(ENTRY_SKILL_STEALTH, desc, likert_color);
+	display_player_one_line(ENTRY_SKILL_STEALTH, desc, likert_color);
 
 	desc = likert(xfos, 6);
-	(*display_player_one_line)(ENTRY_SKILL_PERCEP, desc, likert_color);
+	display_player_one_line(ENTRY_SKILL_PERCEP, desc, likert_color);
 
 	desc = likert(xsrh, 6);
-	(*display_player_one_line)(ENTRY_SKILL_SEARCH, desc, likert_color);
+	display_player_one_line(ENTRY_SKILL_SEARCH, desc, likert_color);
 
 	desc = likert(xdis, 8);
-	(*display_player_one_line)(ENTRY_SKILL_DISARM, desc, likert_color);
+	display_player_one_line(ENTRY_SKILL_DISARM, desc, likert_color);
 
 	desc = likert(xdev, 6);
-	(*display_player_one_line)(ENTRY_SKILL_DEVICE, desc, likert_color);
+	display_player_one_line(ENTRY_SKILL_DEVICE, desc, likert_color);
 
 	desc = likert(xdev, 6);
-	(*display_player_one_line)(ENTRY_SKILL_DEVICE, desc, likert_color);
+	display_player_one_line(ENTRY_SKILL_DEVICE, desc, likert_color);
 
 	desc = likert(xdig, 4);
-	(*display_player_one_line)(ENTRY_SKILL_DIG, desc, likert_color);
+	display_player_one_line(ENTRY_SKILL_DIG, desc, likert_color);
 
 	if (!muta_att)
-		(*display_player_one_line)(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_L_BLUE);
+		display_player_one_line(ENTRY_BLOWS, format("%d+%d", blows1, blows2), TERM_L_BLUE);
 	else
-		(*display_player_one_line)(ENTRY_BLOWS, format("%d+%d+%d", blows1, blows2, muta_att), TERM_L_BLUE);
+		display_player_one_line(ENTRY_BLOWS, format("%d+%d+%d", blows1, blows2, muta_att), TERM_L_BLUE);
 
-	(*display_player_one_line)(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_L_BLUE);
+	display_player_one_line(ENTRY_SHOTS, format("%d.%02d", shots, shot_frac), TERM_L_BLUE);
 
 	if ((damage[0] + damage[1]) == 0)
 		desc = "nil!";
 	else
 		desc = format("%d+%d", blows1 * damage[0] / 100, blows2 * damage[1] / 100);
 
-	(*display_player_one_line)(ENTRY_AVG_DMG, desc, TERM_L_BLUE);
-	(*display_player_one_line)(ENTRY_INFRA, format("%d feet", creature_ptr->see_infra * 10), TERM_WHITE);
+	display_player_one_line(ENTRY_AVG_DMG, desc, TERM_L_BLUE);
+	display_player_one_line(ENTRY_INFRA, format("%d feet", creature_ptr->see_infra * 10), TERM_WHITE);
 }
 
 
@@ -367,7 +369,7 @@ static void display_first_page(player_type *creature_ptr, int xthb, int *damage,
  * @details
  * This code is "imitated" elsewhere to "dump" a character sheet.
  */
-void display_player_various(player_type *creature_ptr, void(*display_player_one_line)(int, concptr, TERM_COLOR))
+void display_player_various(player_type *creature_ptr)
 {
 	object_type *o_ptr;
 	o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
@@ -380,5 +382,5 @@ void display_player_various(player_type *creature_ptr, void(*display_player_one_
 	int damage[2];
 	int to_h[2];
 	calc_two_hands(creature_ptr, damage, to_h);
-	display_first_page(creature_ptr, xthb, damage, shots, shot_frac, display_player_one_line);
+	display_first_page(creature_ptr, xthb, damage, shots, shot_frac);
 }
