@@ -1,3 +1,10 @@
+/*!
+ * @file status-first-page.c
+ * @brief ƒLƒƒƒ‰Šî–{î•ñ‹y‚Ñ‹Z”\’l‚Ì•\¦
+ * @date 2020/02/23
+ * @author Hourier
+ */
+
 #include "angband.h"
 #include "status-first-page.h"
 #include "artifact.h"
@@ -23,11 +30,8 @@ static concptr likert(int x, int y)
 	if (y <= 0) y = 1;
 
 	if (show_actual_value)
-	{
 		sprintf(dummy, "%3d-", x);
-	}
 
-	/* Negative value */
 	if (x < 0)
 	{
 		likert_color = TERM_L_DARK;
@@ -39,60 +43,70 @@ static concptr likert(int x, int y)
 	{
 	case 0:
 	case 1:
+	{
 		likert_color = TERM_RED;
 		strcat(dummy, _("ˆ«‚¢", "Bad"));
 		break;
+
+	}
 	case 2:
+	{
 		likert_color = TERM_L_RED;
 		strcat(dummy, _("—ò‚é", "Poor"));
 		break;
-
+	}
 	case 3:
 	case 4:
+	{
 		likert_color = TERM_ORANGE;
 		strcat(dummy, _("•’Ê", "Fair"));
 		break;
-
+	}
 	case 5:
+	{
 		likert_color = TERM_YELLOW;
 		strcat(dummy, _("—Ç‚¢", "Good"));
 		break;
-
+	}
 	case 6:
+	{
 		likert_color = TERM_YELLOW;
 		strcat(dummy, _("‘å•Ï—Ç‚¢", "Very Good"));
 		break;
-
+	}
 	case 7:
 	case 8:
+	{
 		likert_color = TERM_L_GREEN;
 		strcat(dummy, _("‘ì‰z", "Excellent"));
 		break;
-
+	}
 	case 9:
 	case 10:
 	case 11:
 	case 12:
 	case 13:
+	{
 		likert_color = TERM_GREEN;
 		strcat(dummy, _("’´‰z", "Superb"));
 		break;
-
+	}
 	case 14:
 	case 15:
 	case 16:
 	case 17:
+	{
 		likert_color = TERM_BLUE;
 		strcat(dummy, _("‰p—Y“I", "Heroic"));
 		break;
-
+	}
 	default:
+	{
 		likert_color = TERM_VIOLET;
-		sprintf(dummy2, _("“`à“I[%d]", "Legendary[%d]"),
-			(int)((((x / y) - 17) * 5) / 2));
+		sprintf(dummy2, _("“`à“I[%d]", "Legendary[%d]"), (int)((((x / y) - 17) * 5) / 2));
 		strcat(dummy, dummy2);
-
 		break;
+	}
 	}
 
 	return dummy;
@@ -118,20 +132,15 @@ void display_player_various(player_type *creature_ptr, void(*display_player_one_
 
 	int xthn = creature_ptr->skill_thn + (creature_ptr->to_h_m * BTH_PLUS_ADJ);
 
-	/* Shooting Skill (with current bow and normal missile) */
 	object_type *o_ptr;
 	o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
 	int tmp = creature_ptr->to_h_b + o_ptr->to_h;
 	int	xthb = creature_ptr->skill_thb + (tmp * BTH_PLUS_ADJ);
-
-	/* If the player is wielding one? */
-	int	shots;
-	int shot_frac;
-	if (o_ptr->k_idx)
+	int	shots = 0;
+	int shot_frac = 0;
+	if (o_ptr->k_idx > 0)
 	{
 		ENERGY energy_fire = bow_energy(o_ptr->sval);
-
-		/* Calculate shots per round */
 		shots = creature_ptr->num_fire * 100;
 		shot_frac = (shots * 100 / energy_fire) % 100;
 		shots = shots / energy_fire;
@@ -141,35 +150,24 @@ void display_player_various(player_type *creature_ptr, void(*display_player_one_
 			shot_frac = 0;
 			if (creature_ptr->pclass == CLASS_ARCHER)
 			{
-				/* Extra shot at level 10 */
 				if (creature_ptr->lev >= 10) shots++;
-
-				/* Extra shot at level 30 */
 				if (creature_ptr->lev >= 30) shots++;
-
-				/* Extra shot at level 45 */
 				if (creature_ptr->lev >= 45) shots++;
 			}
 		}
-	}
-	else
-	{
-		shots = 0;
-		shot_frac = 0;
 	}
 
 	int damage[2];
 	int to_h[2];
 	int basedam;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	bool poison_needle;
 	for (int i = 0; i < 2; i++)
 	{
 		damage[i] = creature_ptr->dis_to_d[i] * 100;
 		if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
 		{
 			PLAYER_LEVEL level = creature_ptr->lev;
-			if (i)
+			if (i > 0)
 			{
 				damage[i] = 0;
 				break;
@@ -190,8 +188,6 @@ void display_player_various(player_type *creature_ptr, void(*display_player_one_
 		}
 
 		o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
-
-		/* Average damage per round */
 		if (o_ptr->k_idx == 0)
 		{
 			basedam = 0;
@@ -202,8 +198,7 @@ void display_player_various(player_type *creature_ptr, void(*display_player_one_
 		}
 
 		to_h[i] = 0;
-		poison_needle = FALSE;
-
+		bool poison_needle = FALSE;
 		if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) poison_needle = TRUE;
 		if (object_is_known(o_ptr))
 		{
@@ -213,7 +208,6 @@ void display_player_various(player_type *creature_ptr, void(*display_player_one_
 
 		basedam = ((o_ptr->dd + creature_ptr->to_dd[i]) * (o_ptr->ds + creature_ptr->to_ds[i] + 1)) * 50;
 		object_flags_known(o_ptr, flgs);
-
 		basedam = calc_expect_crit(creature_ptr, o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], poison_needle);
 		if (OBJECT_IS_FULL_KNOWN(o_ptr) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
 		{
@@ -237,9 +231,6 @@ void display_player_various(player_type *creature_ptr, void(*display_player_one_
 
 	int blows1 = creature_ptr->migite ? creature_ptr->num_blow[0] : 0;
 	int blows2 = creature_ptr->hidarite ? creature_ptr->num_blow[1] : 0;
-
-	/* Basic abilities */
-
 	int xdis = creature_ptr->skill_dis;
 	int xdev = creature_ptr->skill_dev;
 	int xsav = creature_ptr->skill_sav;
