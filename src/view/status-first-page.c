@@ -16,6 +16,34 @@
 static TERM_COLOR likert_color = TERM_WHITE;
 
 /*!
+ * @brief 
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param o_ptr 装備中の弓への参照ポインタ
+ * @param shots 射撃回数
+ * @param shot_frac 射撃速度
+ * @return なし
+ */
+static void calc_shot_params(player_type *creature_ptr, object_type *o_ptr, int *shots, int *shot_frac)
+{
+	if (o_ptr->k_idx == 0) return;
+
+	ENERGY energy_fire = bow_energy(o_ptr->sval);
+	*shots = creature_ptr->num_fire * 100;
+	*shot_frac = ((*shots) * 100 / energy_fire) % 100;
+	*shots = (*shots) / energy_fire;
+	if (o_ptr->name1 != ART_CRIMSON) return;
+
+	*shots = 1;
+	*shot_frac = 0;
+	if (creature_ptr->pclass != CLASS_ARCHER) return;
+
+	if (creature_ptr->lev >= 10) (*shots)++;
+	if (creature_ptr->lev >= 30) (*shots)++;
+	if (creature_ptr->lev >= 45) (*shots)++;
+}
+
+
+/*!
  * @brief 技能ランクの表示基準を定める
  * Returns a "rating" of x depending on y
  * @param x 技能値
@@ -208,31 +236,14 @@ void display_player_various(player_type *creature_ptr, void(*display_player_one_
 	int	xthb = creature_ptr->skill_thb + (tmp * BTH_PLUS_ADJ);
 	int	shots = 0;
 	int shot_frac = 0;
-	if (o_ptr->k_idx > 0)
-	{
-		ENERGY energy_fire = bow_energy(o_ptr->sval);
-		shots = creature_ptr->num_fire * 100;
-		shot_frac = (shots * 100 / energy_fire) % 100;
-		shots = shots / energy_fire;
-		if (o_ptr->name1 == ART_CRIMSON)
-		{
-			shots = 1;
-			shot_frac = 0;
-			if (creature_ptr->pclass == CLASS_ARCHER)
-			{
-				if (creature_ptr->lev >= 10) shots++;
-				if (creature_ptr->lev >= 30) shots++;
-				if (creature_ptr->lev >= 45) shots++;
-			}
-		}
-	}
+	calc_shot_params(creature_ptr, o_ptr, &shots, &shot_frac);
 
 	int damage[2];
 	int to_h[2];
-	int basedam;
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	for (int i = 0; i < 2; i++)
 	{
+		int basedam;
 		damage[i] = creature_ptr->dis_to_d[i] * 100;
 		if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
 		{
