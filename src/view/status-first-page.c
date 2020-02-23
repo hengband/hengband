@@ -233,6 +233,54 @@ static concptr likert(int x, int y)
 
 
 /*!
+ * @brief 弓＋両手の武器それぞれについてダメージを計算する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param damage 直接攻撃のダメージ
+ * @param to_h 命中補正
+ * @return なし
+ */
+static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
+{
+	object_type *o_ptr;
+	o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
+	for (int i = 0; i < 2; i++)
+	{
+		int basedam;
+		damage[i] = creature_ptr->dis_to_d[i] * 100;
+		if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
+		{
+			if (!calc_weapon_damage_limit(creature_ptr, i, damage, &basedam, o_ptr))
+				break;
+
+			continue;
+		}
+
+		o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
+		if (calc_weapon_one_hand(o_ptr, i, damage, &basedam)) continue;
+
+		to_h[i] = 0;
+		bool poison_needle = FALSE;
+		if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) poison_needle = TRUE;
+		if (object_is_known(o_ptr))
+		{
+			damage[i] += o_ptr->to_d * 100;
+			to_h[i] += o_ptr->to_h;
+		}
+
+		basedam = ((o_ptr->dd + creature_ptr->to_dd[i]) * (o_ptr->ds + creature_ptr->to_ds[i] + 1)) * 50;
+		object_flags_known(o_ptr, flgs);
+
+		basedam = calc_expect_crit(creature_ptr, o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], poison_needle);
+		basedam = strengthen_basedam(creature_ptr, o_ptr, basedam, flgs);
+		damage[i] += basedam;
+		if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) damage[i] = 1;
+		if (damage[i] < 0) damage[i] = 0;
+	}
+}
+
+
+/*!
  * @brief キャラ基本情報及び技能値をメインウィンドウに表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param xthb 武器等を含めた最終命中率
@@ -331,40 +379,6 @@ void display_player_various(player_type *creature_ptr, void(*display_player_one_
 
 	int damage[2];
 	int to_h[2];
-	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	for (int i = 0; i < 2; i++)
-	{
-		int basedam;
-		damage[i] = creature_ptr->dis_to_d[i] * 100;
-		if (((creature_ptr->pclass == CLASS_MONK) || (creature_ptr->pclass == CLASS_FORCETRAINER)) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
-		{
-			if (!calc_weapon_damage_limit(creature_ptr, i, damage, &basedam, o_ptr))
-				break;
-
-			continue;
-		}
-
-		o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
-		if (calc_weapon_one_hand(o_ptr, i, damage, &basedam)) continue;
-
-		to_h[i] = 0;
-		bool poison_needle = FALSE;
-		if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) poison_needle = TRUE;
-		if (object_is_known(o_ptr))
-		{
-			damage[i] += o_ptr->to_d * 100;
-			to_h[i] += o_ptr->to_h;
-		}
-
-		basedam = ((o_ptr->dd + creature_ptr->to_dd[i]) * (o_ptr->ds + creature_ptr->to_ds[i] + 1)) * 50;
-		object_flags_known(o_ptr, flgs);
-
-		basedam = calc_expect_crit(creature_ptr, o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], poison_needle);
-		basedam = strengthen_basedam(creature_ptr, o_ptr, basedam, flgs);
-		damage[i] += basedam;
-		if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) damage[i] = 1;
-		if (damage[i] < 0) damage[i] = 0;
-	}
-
+	calc_two_hands(creature_ptr, damage, to_h);
 	display_first_page(creature_ptr, xthb, damage, shots, shot_frac, display_player_one_line);
 }
