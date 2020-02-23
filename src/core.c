@@ -15,6 +15,7 @@
 #include "core.h"
 #include "inet.h"
 #include "term.h"
+#include "chuukei.h"
 
 #include "creature.h"
 

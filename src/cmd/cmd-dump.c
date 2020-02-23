@@ -43,6 +43,7 @@
 #include "cmd-dump.h"
 #include "term.h"
 #include "core.h"
+#include "chuukei.h"
 
 #include "autopick.h"
 
