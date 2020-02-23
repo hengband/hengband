@@ -102,6 +102,39 @@ static bool calc_weapon_one_hand(object_type *o_ptr, int hand, int *damage, int 
 
 
 /*!
+ * @brief ヴォーパル武器等によるダメージ強化
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param o_ptr 装備中の武器への参照ポインタ
+ * @param basedam 素手における直接攻撃のダメージ
+ * @param flgs オブジェクトフラグ群
+ * @return 強化後の素手ダメージ
+ */
+static int strengthen_basedam(player_type *creature_ptr, object_type *o_ptr, int basedam, BIT_FLAGS *flgs)
+{
+	if (OBJECT_IS_FULL_KNOWN(o_ptr) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
+	{
+		/* vorpal blade */
+		basedam *= 5;
+		basedam /= 3;
+	}
+	else if (have_flag(flgs, TR_VORPAL))
+	{
+		/* vorpal flag only */
+		basedam *= 11;
+		basedam /= 9;
+	}
+
+	// 理力
+	bool is_force = creature_ptr->pclass != CLASS_SAMURAI;
+	is_force &= have_flag(flgs, TR_FORCE_WEAPON);
+	is_force &= creature_ptr->csp > (o_ptr->dd * o_ptr->ds / 5);
+	if (is_force) basedam = basedam * 7 / 2;
+
+	return basedam;
+}
+
+
+/*!
  * @brief 技能ランクの表示基準を定める
  * Returns a "rating" of x depending on y
  * @param x 技能値
@@ -327,22 +360,7 @@ void display_player_various(player_type *creature_ptr, void(*display_player_one_
 		object_flags_known(o_ptr, flgs);
 
 		basedam = calc_expect_crit(creature_ptr, o_ptr->weight, to_h[i], basedam, creature_ptr->dis_to_h[i], poison_needle);
-		if (OBJECT_IS_FULL_KNOWN(o_ptr) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
-		{
-			/* vorpal blade */
-			basedam *= 5;
-			basedam /= 3;
-		}
-		else if (have_flag(flgs, TR_VORPAL))
-		{
-			/* vorpal flag only */
-			basedam *= 11;
-			basedam /= 9;
-		}
-
-		if ((creature_ptr->pclass != CLASS_SAMURAI) && have_flag(flgs, TR_FORCE_WEAPON) && (creature_ptr->csp > (o_ptr->dd * o_ptr->ds / 5)))
-			basedam = basedam * 7 / 2;
-
+		basedam = strengthen_basedam(creature_ptr, o_ptr, basedam, flgs);
 		damage[i] += basedam;
 		if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) damage[i] = 1;
 		if (damage[i] < 0) damage[i] = 0;
