@@ -404,13 +404,13 @@ void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), err
 	home_aware(creature_ptr);
 
 	creature_ptr->update |= (PU_BONUS);
-	handle_stuff(creature_ptr);
+	(*handle_stuff)(creature_ptr);
 	flush();
 	msg_erase();
 	
 	export_player_info(creature_ptr, file_character);
-	update_playtime();
-	display_player(creature_ptr, 0);
+	(*update_playtime)();
+	(*display_player)(creature_ptr, 0);
 	prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
 	if (inkey() == ESCAPE) return;
 	if (show_dead_player_items(creature_ptr)) return;
