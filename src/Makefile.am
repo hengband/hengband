@@ -111,6 +111,8 @@ EXTRA_hengband_SOURCES = \
 EXTRA_DIST = \
 	gcc-wrap
 
+CFLAGS += $(XFT_CFLAGS)
+LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat
 
