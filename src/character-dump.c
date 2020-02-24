@@ -175,7 +175,7 @@ static void dump_aux_class_special(player_type *creature_ptr, FILE *fff)
 {
 	bool is_special_class = creature_ptr->pclass == CLASS_MAGIC_EATER;
 	is_special_class |= creature_ptr->pclass == CLASS_SMITH;
-	is_special_class |= creature_ptr->pclass != CLASS_BLUE_MAGE;
+	is_special_class |= creature_ptr->pclass == CLASS_BLUE_MAGE;
 	if (!is_special_class) return;
 
 	if (creature_ptr->pclass == CLASS_MAGIC_EATER)
