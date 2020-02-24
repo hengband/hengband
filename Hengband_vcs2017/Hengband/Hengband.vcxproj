@@ -153,6 +153,7 @@
     <ClCompile Include="..\..\src\avatar.c" />
     <ClCompile Include="..\..\src\birth.c" />
     <ClCompile Include="..\..\src\bldg.c" />
+    <ClCompile Include="..\..\src\character-dump.c" />
     <ClCompile Include="..\..\src\chest.c" />
     <ClCompile Include="..\..\src\chuukei.c" />
     <ClCompile Include="..\..\src\cmd\cmd-activate.c" />
@@ -226,6 +227,7 @@
     <ClInclude Include="..\..\src\avatar.h" />
     <ClInclude Include="..\..\src\birth.h" />
     <ClInclude Include="..\..\src\bldg.h" />
+    <ClInclude Include="..\..\src\character-dump.h" />
     <ClInclude Include="..\..\src\chest.h" />
     <ClInclude Include="..\..\src\chuukei.h" />
     <ClCompile Include="..\..\src\player-move.c" />
