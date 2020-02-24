@@ -116,33 +116,23 @@ s16b tokenize(char *buf, s16b num, char **tokens, BIT_FLAGS mode)
 		char *t;
 		for (t = s; *t; t++)
 		{
-			/* Found a delimiter */
 			if ((*t == ':') || (*t == '/')) break;
 
-			/* Handle single quotes */
 			if ((mode & TOKENIZE_CHECKQUOTE) && (*t == '\''))
 			{
-				/* Advance */
 				t++;
-
-				/* Handle backslash */
 				if (*t == '\\') t++;
-
-				/* Require a character */
 				if (!*t) break;
 
-				/* Advance */
 				t++;
-
-				/* Hack -- Require a close quote */
 				if (*t != '\'') *t = '\'';
 			}
 
-			/* Handle back-slash */
 			if (*t == '\\') t++;
 		}
 
 		if (!*t) break;
+
 		*t++ = '\0';
 		tokens[i++] = s;
 		s = t;
@@ -328,16 +318,17 @@ errr process_pref_file_command(player_type *creature_ptr, char *buf)
 	char *zz[16];
 	switch (buf[0])
 	{
-		/* Mega-Hack -- read external player's history file */
-		/* Process "H:<history>" */
 	case 'H':
+	{
+		/* Process "H:<history>" */
 		add_history_from_pref_line(buf + 2);
 		return 0;
-
-		/* Process "R:<num>:<a>/<c>" -- attr/char for monster races */
+	}
 	case 'R':
 	{
-		if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) break;
+		/* Process "R:<num>:<a>/<c>" -- attr/char for monster races */
+		if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
+
 		monster_race *r_ptr;
 		int i = (huge)strtol(zz[0], NULL, 0);
 		TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
@@ -348,12 +339,11 @@ errr process_pref_file_command(player_type *creature_ptr, char *buf)
 		if (n2) r_ptr->x_char = n2;
 		return 0;
 	}
-
-	/* Process "K:<num>:<a>/<c>"  -- attr/char for object kinds */
 	case 'K':
 	{
-		if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) break;
-
+		/* Process "K:<num>:<a>/<c>"  -- attr/char for object kinds */
+		if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
+		
 		object_kind *k_ptr;
 		int i = (huge)strtol(zz[0], NULL, 0);
 		TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
@@ -364,13 +354,12 @@ errr process_pref_file_command(player_type *creature_ptr, char *buf)
 		if (n2) k_ptr->x_char = n2;
 		return 0;
 	}
-
-	/* Process "F:<num>:<a>/<c>" -- attr/char for terrain features */
-	/* "F:<num>:<a>/<c>" */
-	/* "F:<num>:<a>/<c>:LIT" */
-	/* "F:<num>:<a>/<c>:<la>/<lc>:<da>/<dc>" */
 	case 'F':
 	{
+		/* Process "F:<num>:<a>/<c>" -- attr/char for terrain features */
+		/* "F:<num>:<a>/<c>" */
+		/* "F:<num>:<a>/<c>:LIT" */
+		/* "F:<num>:<a>/<c>:<la>/<lc>:<da>/<dc>" */
 		feature_type *f_ptr;
 		int num = tokenize(buf + 2, F_LIT_MAX * 2 + 1, zz, TOKENIZE_CHECKQUOTE);
 
@@ -386,11 +375,11 @@ errr process_pref_file_command(player_type *creature_ptr, char *buf)
 		if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[F_LIT_STANDARD] = n1; /* Allow TERM_DARK text */
 		if (n2) f_ptr->x_char[F_LIT_STANDARD] = n2;
 
-		/* Mega-hack -- feat supports lighting */
 		switch (num)
 		{
-			/* No lighting support */
 		case 3:
+		{
+			/* No lighting support */
 			n1 = f_ptr->x_attr[F_LIT_STANDARD];
 			n2 = f_ptr->x_char[F_LIT_STANDARD];
 			for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
@@ -399,15 +388,17 @@ errr process_pref_file_command(player_type *creature_ptr, char *buf)
 				f_ptr->x_char[j] = n2;
 			}
 
-			break;
-
-			/* Use default lighting */
+			return 0;
+		}
 		case 4:
+		{
+			/* Use default lighting */
 			apply_default_feat_lighting(f_ptr->x_attr, f_ptr->x_char);
-			break;
-
-			/* Use desired lighting */
+			return 0;
+		}
 		case F_LIT_MAX * 2 + 1:
+		{
+			/* Use desired lighting */
 			for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
 			{
 				n1 = (TERM_COLOR)strtol(zz[j * 2 + 1], NULL, 0);
@@ -416,16 +407,16 @@ errr process_pref_file_command(player_type *creature_ptr, char *buf)
 				if (n2) f_ptr->x_char[j] = n2;
 			}
 
-			break;
+			return 0;
+		}
+		default:
+			return 0;
 		}
 	}
-
-	return 0;
-
-	/* Process "S:<num>:<a>/<c>" -- attr/char for special things */
 	case 'S':
 	{
-		if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) break;
+		/* Process "S:<num>:<a>/<c>" -- attr/char for special things */
+		if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 
 		int j = (byte)strtol(zz[0], NULL, 0);
 		TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
@@ -434,11 +425,10 @@ errr process_pref_file_command(player_type *creature_ptr, char *buf)
 		misc_to_char[j] = n2;
 		return 0;
 	}
-
-	/* Process "U:<tv>:<a>/<c>" -- attr/char for unaware items */
 	case 'U':
 	{
-		if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) break;
+		/* Process "U:<tv>:<a>/<c>" -- attr/char for unaware items */
+		if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 
 		int j = (huge)strtol(zz[0], NULL, 0);
 		TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
@@ -455,36 +445,33 @@ errr process_pref_file_command(player_type *creature_ptr, char *buf)
 
 		return 0;
 	}
-
-	/* Process "E:<tv>:<a>" -- attribute for inventory objects */
 	case 'E':
 	{
-		if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) break;
+		/* Process "E:<tv>:<a>" -- attribute for inventory objects */
+		if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return 1;
 
 		int j = (byte)strtol(zz[0], NULL, 0) % 128;
 		TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
 		if (n1) tval_to_attr[j] = n1;
 		return 0;
 	}
-
-	/* Process "A:<str>" -- save an "action" for later */
 	case 'A':
+	{
+		/* Process "A:<str>" -- save an "action" for later */
 		text_to_ascii(macro__buf, buf + 2);
 		return 0;
-
-		/* Process "P:<str>" -- normal macro */
+	}
 	case 'P':
 	{
+		/* Process "P:<str>" -- normal macro */
 		char tmp[1024];
-
 		text_to_ascii(tmp, buf + 2);
 		macro_add(tmp, macro__buf);
 		return 0;
 	}
-
-	/* Process "C:<str>" -- create keymap */
 	case 'C':
 	{
+		/* Process "C:<str>" -- create keymap */
 		if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return 1;
 
 		int mode = strtol(zz[0], NULL, 0);
@@ -493,19 +480,16 @@ errr process_pref_file_command(player_type *creature_ptr, char *buf)
 		char tmp[1024];
 		text_to_ascii(tmp, zz[1]);
 		if (!tmp[0] || tmp[1]) return 1;
+
 		int i = (byte)(tmp[0]);
-
 		string_free(keymap_act[mode][i]);
-
 		keymap_act[mode][i] = string_make(macro__buf);
-
 		return 0;
 	}
-
-	/* Process "V:<num>:<kv>:<rv>:<gv>:<bv>" -- visual info */
 	case 'V':
 	{
-		if (tokenize(buf + 2, 5, zz, TOKENIZE_CHECKQUOTE) != 5) break;
+		/* Process "V:<num>:<kv>:<rv>:<gv>:<bv>" -- visual info */
+		if (tokenize(buf + 2, 5, zz, TOKENIZE_CHECKQUOTE) != 5) return 1;
 
 		int i = (byte)strtol(zz[0], NULL, 0);
 		angband_color_table[i][0] = (byte)strtol(zz[1], NULL, 0);
@@ -514,12 +498,11 @@ errr process_pref_file_command(player_type *creature_ptr, char *buf)
 		angband_color_table[i][3] = (byte)strtol(zz[4], NULL, 0);
 		return 0;
 	}
-
-	/* Process "X:<str>" -- turn option off */
-	/* Process "Y:<str>" -- turn option on */
 	case 'X':
 	case 'Y':
 	{
+		/* Process "X:<str>" -- turn option off */
+		/* Process "Y:<str>" -- turn option on */
 		for (int i = 0; option_info[i].o_desc; i++)
 		{
 			bool is_option = option_info[i].o_var != NULL;
@@ -554,28 +537,28 @@ errr process_pref_file_command(player_type *creature_ptr, char *buf)
 		msg_print(NULL);
 		return 0;
 	}
-
-	/* Process "Z:<type>:<str>" -- set spell color */
 	case 'Z':
 	{
+		/* Process "Z:<type>:<str>" -- set spell color */
 		char *t = my_strchr(buf + 2, ':');
 		if (!t) return 1;
+
 		*(t++) = '\0';
 		for (int i = 0; gf_desc[i].name; i++)
 		{
 			if (!streq(gf_desc[i].name, buf + 2)) continue;
+
 			gf_color[gf_desc[i].num] = (TERM_COLOR)quark_add(t);
 			return 0;
 		}
 
-		break;
+		return 1;
 	}
-
-	/* Initialize macro trigger names and a template */
-	/* Process "T:<trigger>:<keycode>:<shift-keycode>" */
-	/* Process "T:<template>:<modifier chr>:<modifier name>:..." */
 	case 'T':
 	{
+		/* Initialize macro trigger names and a template */
+		/* Process "T:<trigger>:<keycode>:<shift-keycode>" */
+		/* Process "T:<template>:<modifier chr>:<modifier name>:..." */
 		int tok = tokenize(buf + 2, 2 + MAX_MACRO_MOD, zz, 0);
 
 		/* Process "T:<template>:<modifier chr>:<modifier name>:..." */
