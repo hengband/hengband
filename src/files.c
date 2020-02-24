@@ -3769,7 +3769,7 @@ static void dump_aux_home_museum(player_type *creature_ptr, FILE *fff)
  * @param fff ファイルポインタ
  * @return エラーコード
  */
-errr make_character_dump(player_type *creature_ptr, FILE *fff)
+errr make_character_dump(player_type *creature_ptr, FILE *fff, void(*update_playtime)(void))
 {
 #ifdef JP
 	fprintf(fff, "  [変愚蛮怒 %d.%d.%d キャラクタ情報]\n\n",
@@ -3778,7 +3778,7 @@ errr make_character_dump(player_type *creature_ptr, FILE *fff)
 	fprintf(fff, "  [Hengband %d.%d.%d Character Dump]\n\n",
 		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 #endif
-	update_playtime();
+	(*update_playtime)();
 
 	dump_aux_display_player(creature_ptr, fff);
 	dump_aux_last_message(creature_ptr, fff);
@@ -3838,7 +3838,11 @@ errr file_character(player_type *creature_ptr, concptr name)
 		return -1;
 	}
 
-	(void)make_character_dump(creature_ptr, fff);
+	/*
+	* todo view-mainwindow への依存があるが、file_character() 自体関数ポインタなのでよそから呼び出されるので何とかするのは辛い
+	* ついでに他の関数でもview(略) は参照されているので、簡単に除去することはできない…
+	*/
+	(void)make_character_dump(creature_ptr, fff, update_playtime);
 	my_fclose(fff);
 	msg_print(_("キャラクタ情報のファイルへの書き出しに成功しました。", "Character dump successful."));
 	msg_print(NULL);

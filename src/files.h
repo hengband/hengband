@@ -21,7 +21,7 @@ extern concptr ANGBAND_DIR_XTRA;
 
 extern s16b tokenize(char *buf, s16b num, char **tokens, BIT_FLAGS mode);
 extern void display_player(player_type *creature_ptr, int mode);
-extern errr make_character_dump(player_type *creature_ptr, FILE *fff);
+extern errr make_character_dump(player_type *creature_ptr, FILE *fff, void(*update_playtime)(void));
 extern errr file_character(player_type *creature_ptr, concptr name);
 extern errr process_pref_file_command(player_type *creature_ptr, char *buf);
 extern concptr process_pref_file_expr(player_type *creature_ptr, char **sp, char *fp);

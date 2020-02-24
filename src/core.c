@@ -4326,7 +4326,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
 		/* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
 		process_dungeon_file(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
-		success = send_world_score(player_ptr, TRUE);
+		success = send_world_score(player_ptr, TRUE, update_playtime);
 
 		if (!success && !get_check_strict(_("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY))
 		{
@@ -4703,7 +4703,7 @@ void close_game(player_type *player_ptr)
 
 		if (check_score(player_ptr))
 		{
-			if ((!send_world_score(player_ptr, do_send)))
+			if ((!send_world_score(player_ptr, do_send, update_playtime)))
 			{
 				if (get_check_strict(_("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "),
 					(CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
