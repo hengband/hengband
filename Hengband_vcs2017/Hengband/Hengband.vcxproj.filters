@@ -418,6 +418,9 @@
     <ClCompile Include="..\..\src\uid-checker.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\process-death.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -817,6 +820,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\uid-checker.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\process-death.h">
+      <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

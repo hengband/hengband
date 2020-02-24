@@ -37,8 +37,6 @@ extern void do_cmd_save_game(player_type *creature_ptr, int is_autosave);
 extern void do_cmd_save_and_exit(player_type *player_ptr);
 extern void exit_game_panic(player_type *creature_ptr);
 extern errr get_rnd_line(concptr file_name, int entry, char *output);
-extern void print_tomb(player_type *dead_ptr);
-extern void show_info(player_type *creature_ptr);
 
 #ifdef JP
 extern errr get_rnd_line_jonly(concptr file_name, int entry, char *output, int count);

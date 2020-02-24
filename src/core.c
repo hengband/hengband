@@ -84,6 +84,7 @@
 #include "view-mainwindow.h"
 #include "dungeon-file.h"
 #include "uid-checker.h"
+#include "view/process-death.h"
 #include "files.h"
 #include "scores.h"
 #include "autopick.h"
@@ -4697,7 +4698,7 @@ void close_game(player_type *player_ptr)
 		print_tomb(player_ptr);
 		flush();
 
-		show_info(player_ptr);
+		show_info(player_ptr, handle_stuff, file_character, update_playtime, display_player);
 		Term_clear();
 
 		if (check_score(player_ptr))
