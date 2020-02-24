@@ -329,6 +329,41 @@ static bool show_dead_player_items(player_type *creature_ptr)
 
 
 /*!
+ * @brief 我が家にあったアイテムを表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void show_dead_home_items(player_type *creature_ptr)
+{
+	for (int l = 1; l < max_towns; l++)
+	{
+		store_type *st_ptr;
+		st_ptr = &town_info[l].store[STORE_HOME];
+		if (st_ptr->stock_num == 0) continue;
+
+		for (int i = 0, k = 0; i < st_ptr->stock_num; k++)
+		{
+			Term_clear();
+			for (int j = 0; (j < 12) && (i < st_ptr->stock_num); j++, i++)
+			{
+				GAME_TEXT o_name[MAX_NLEN];
+				char tmp_val[80];
+				object_type *o_ptr;
+				o_ptr = &st_ptr->stock[i];
+				sprintf(tmp_val, "%c) ", I2A(j));
+				prt(tmp_val, j + 2, 4);
+				object_desc(creature_ptr, o_name, o_ptr, 0);
+				c_put_str(tval_to_attr[o_ptr->tval], o_name, j + 2, 7);
+			}
+
+			prt(format(_("我が家に置いてあったアイテム ( %d ページ): -続く-", "Your home contains (page %d): -more-"), k + 1), 0, 0);
+			if (inkey() == ESCAPE) return;
+		}
+	}
+}
+
+
+/*!
  * todo display_playerの引数は暫定。どのように設計し直すか少し考える
  * @brief 死亡、引退時の簡易ステータス表示
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -367,28 +402,5 @@ void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), err
 	if (inkey() == ESCAPE) return;
 	if (show_dead_player_items(creature_ptr)) return;
 
-	for (int l = 1; l < max_towns; l++)
-	{
-		store_type *st_ptr;
-		st_ptr = &town_info[l].store[STORE_HOME];
-		if (st_ptr->stock_num == 0) continue;
-		for (int i = 0, k = 0; i < st_ptr->stock_num; k++)
-		{
-			Term_clear();
-			for (int j = 0; (j < 12) && (i < st_ptr->stock_num); j++, i++)
-			{
-				GAME_TEXT o_name[MAX_NLEN];
-				char tmp_val[80];
-				object_type *o_ptr;
-				o_ptr = &st_ptr->stock[i];
-				sprintf(tmp_val, "%c) ", I2A(j));
-				prt(tmp_val, j + 2, 4);
-				object_desc(creature_ptr, o_name, o_ptr, 0);
-				c_put_str(tval_to_attr[o_ptr->tval], o_name, j + 2, 7);
-			}
-
-			prt(format(_("我が家に置いてあったアイテム ( %d ページ): -続く-", "Your home contains (page %d): -more-"), k + 1), 0, 0);
-			if (inkey() == ESCAPE) return;
-		}
-	}
+	show_dead_home_items(creature_ptr);
 }
