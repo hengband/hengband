@@ -15,6 +15,9 @@ hengband_SOURCES = \
 	\
 	view/process-death.c view/process-death.h \
 	view/status-first-page.c view/status-first-page.h \
+	player/permanent-resistance.c player/permanent-resistance.h \
+	player/temporary-resistance.c player/temporary-resistance.h \
+	view/display-util.c view/display-util.h \
 	signal-handlers.c signal-handlers.h core.c core.h files.c files.h \
 	\
 	dungeon.c dungeon.h \
