@@ -932,8 +932,6 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 			if (depth_count > 20) continue;
 
 			depth_count++;
-
-			/* Process that file if allowed */
 			switch (preftype)
 			{
 			case PREF_TYPE_AUTOPICK:
@@ -1298,7 +1296,7 @@ static void player_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]
 		if (creature_ptr->lev > 39)add_flag(flgs, TR_REFLECT);
 		break;
 	default:
-		break; /* Do nothing */
+		break;
 	}
 
 	/* Races */
@@ -1499,7 +1497,6 @@ static void player_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]
 			add_flag(flgs, TR_RES_NETHER);
 			add_flag(flgs, TR_RES_POIS);
 			add_flag(flgs, TR_SLOW_DIGEST);
-			/* XXX pass_wall */
 			if (creature_ptr->lev > 34)
 				add_flag(flgs, TR_TELEPATHY);
 			break;
@@ -1540,11 +1537,10 @@ static void player_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]
 			add_flag(flgs, TR_HOLD_EXP);
 			break;
 		default:
-			; /* Do nothing */
+			break;
 		}
 	}
 
-	/* Mutations */
 	if (creature_ptr->muta3)
 	{
 		if (creature_ptr->muta3 & MUT3_FLESH_ROT)
@@ -1927,7 +1923,6 @@ static void player_vuln_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_
 		(creature_ptr->mimic_form == MIMIC_VAMPIRE))
 		add_flag(flgs, TR_RES_LITE);
 }
-
 
 /*
  * A struct for storing misc. flags
@@ -2439,7 +2434,6 @@ static void display_player_misc_info(player_type *creature_ptr)
  */
 static void display_player_stat_info(player_type *creature_ptr)
 {
-	/* Print out the labels for the columns */
 	int stat_col = 22;
 	int row = 3;
 	c_put_str(TERM_WHITE, _("能力", "Stat"), row, stat_col + 1);
@@ -2448,7 +2442,6 @@ static void display_player_stat_info(player_type *creature_ptr)
 	c_put_str(TERM_L_GREEN, _("合計", "Actual"), row, stat_col + 28);
 	c_put_str(TERM_YELLOW, _("現在", "Current"), row, stat_col + 35);
 
-	/* Display the stats */
 	char buf[80];
 	for (int i = 0; i < A_MAX; i++)
 	{
@@ -2499,13 +2492,10 @@ static void display_player_stat_info(player_type *creature_ptr)
 		/* This is useful to see if you are maxed out */
 		cnv_stat(creature_ptr->stat_max[i], buf);
 		if (creature_ptr->stat_max[i] == creature_ptr->stat_max_max[i])
-		{
 			c_put_str(TERM_WHITE, "!", row + i + 1, _(stat_col + 6, stat_col + 4));
-		}
 
 		c_put_str(TERM_BLUE, buf, row + i + 1, stat_col + 13 - strlen(buf));
 
-		/* Race, class, and equipment modifiers */
 		(void)sprintf(buf, "%3d", r_adj);
 		c_put_str(TERM_L_BLUE, buf, row + i + 1, stat_col + 13);
 		(void)sprintf(buf, "%3d", (int)cp_ptr->c_adj[i]);
@@ -2515,11 +2505,9 @@ static void display_player_stat_info(player_type *creature_ptr)
 		(void)sprintf(buf, "%3d", (int)e_adj);
 		c_put_str(TERM_L_BLUE, buf, row + i + 1, stat_col + 22);
 
-		/* Actual maximal modified value */
 		cnv_stat(creature_ptr->stat_top[i], buf);
 		c_put_str(TERM_L_GREEN, buf, row + i + 1, stat_col + 26);
 
-		/* Only display stat_use if not maximal */
 		if (creature_ptr->stat_use[i] < creature_ptr->stat_top[i])
 		{
 			cnv_stat(creature_ptr->stat_use[i], buf);
@@ -2537,50 +2525,33 @@ static void display_player_stat_info(player_type *creature_ptr)
 		object_type *o_ptr;
 		o_ptr = &creature_ptr->inventory_list[i];
 		object_flags_known(o_ptr, flgs);
-
-		/* Initialize color based of sign of pval. */
 		for (int stat = 0; stat < A_MAX; stat++)
 		{
 			byte a = TERM_SLATE;
 			char c = '.';
-
-			/* Boost */
 			if (have_flag(flgs, stat))
 			{
-				/* Default */
 				c = '*';
 
-				/* Good */
 				if (o_ptr->pval > 0)
 				{
-					/* Good */
 					a = TERM_L_GREEN;
-
-					/* Label boost */
 					if (o_ptr->pval < 10) c = '0' + o_ptr->pval;
 				}
 
 				if (have_flag(flgs, stat + TR_SUST_STR))
 				{
-					/* Dark green for sustained stats */
 					a = TERM_GREEN;
 				}
 
-				/* Bad */
 				if (o_ptr->pval < 0)
 				{
-					/* Bad */
 					a = TERM_RED;
-
-					/* Label boost */
 					if (o_ptr->pval > -10) c = '0' - o_ptr->pval;
 				}
 			}
-
-			/* Sustain */
 			else if (have_flag(flgs, stat + TR_SUST_STR))
 			{
-				/* Dark green "s" */
 				a = TERM_GREEN;
 				c = 's';
 			}
@@ -2592,7 +2563,6 @@ static void display_player_stat_info(player_type *creature_ptr)
 	}
 
 	player_flags(creature_ptr, flgs);
-
 	for (int stat = 0; stat < A_MAX; stat++)
 	{
 		byte a = TERM_SLATE;
@@ -2637,12 +2607,9 @@ static void display_player_stat_info(player_type *creature_ptr)
 				if (creature_ptr->muta3 & MUT3_ILL_NORM) dummy = 0;
 			}
 
-			/* Boost */
-			if (dummy)
+			if (dummy != 0)
 			{
 				c = '*';
-
-				/* Good */
 				if (dummy > 0)
 				{
 					/* Good */
@@ -2652,13 +2619,9 @@ static void display_player_stat_info(player_type *creature_ptr)
 					if (dummy < 10) c = '0' + dummy;
 				}
 
-				/* Bad */
 				if (dummy < 0)
 				{
-					/* Bad */
 					a = TERM_RED;
-
-					/* Label boost */
 					if (dummy > -10) c = '0' - dummy;
 				}
 			}
@@ -2666,7 +2629,6 @@ static void display_player_stat_info(player_type *creature_ptr)
 
 		if (have_flag(flgs, stat + TR_SUST_STR))
 		{
-			/* Dark green "s" */
 			a = TERM_GREEN;
 			c = 's';
 		}
@@ -2766,43 +2728,20 @@ void display_player(player_type *creature_ptr, int mode)
 	char buf[80];
 	for (int i = 0; i < A_MAX; i++)
 	{
-		/* Special treatment of "injured" stats */
 		if (creature_ptr->stat_cur[i] < creature_ptr->stat_max[i])
 		{
-			int value;
-
-			/* Use lowercase stat name */
 			put_str(stat_names_reduced[i], 3 + i, 53);
-
-			/* Get the current stat */
-			value = creature_ptr->stat_use[i];
-
-			/* Obtain the current stat (modified) */
+			int value = creature_ptr->stat_use[i];
 			cnv_stat(value, buf);
-
-			/* Display the current stat (modified) */
 			c_put_str(TERM_YELLOW, buf, 3 + i, 60);
-
-			/* Acquire the max stat */
 			value = creature_ptr->stat_top[i];
-
-			/* Obtain the maximum stat (modified) */
 			cnv_stat(value, buf);
-
-			/* Display the maximum stat (modified) */
 			c_put_str(TERM_L_GREEN, buf, 3 + i, 67);
 		}
-
-		/* Normal treatment of "normal" stats */
 		else
 		{
-			/* Assume uppercase stat name */
 			put_str(stat_names[i], 3 + i, 53);
-
-			/* Obtain the current stat (modified) */
 			cnv_stat(creature_ptr->stat_use[i], buf);
-
-			/* Display the current stat (modified) */
 			c_put_str(TERM_L_GREEN, buf, 3 + i, 60);
 		}
 
@@ -2812,7 +2751,6 @@ void display_player(player_type *creature_ptr, int mode)
 		}
 	}
 
-	/* Display "history" info */
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	if (mode == 0)
 	{
@@ -2888,8 +2826,6 @@ void display_player(player_type *creature_ptr, int mode)
 			}
 
 			quest_text_line = 0;
-
-			/* Get the quest text */
 			init_flags = INIT_NAME_ONLY;
 			process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 			sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[floor_ptr->inside_quest].name);
@@ -3006,25 +2942,17 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 		int bracketcol = len + 1;
 		int endcol = len;
 		concptr ptr;
-
-		/* Search for a shower string in the line */
 		if (shower)
 		{
 			ptr = my_strstr(&lcstr[i], shower);
 			if (ptr) showercol = ptr - &lcstr[i];
 		}
 
-		/* Search for a color segment tag */
 		ptr = in_tag ? my_strchr(&str[i], in_tag) : my_strstr(&str[i], tag_str);
 		if (ptr) bracketcol = ptr - &str[i];
-
-		/* A color tag is found */
 		if (bracketcol < endcol) endcol = bracketcol;
-
-		/* The shower string is found before the color tag */
 		if (showercol < endcol) endcol = showercol;
 
-		/* Print a segment of the line */
 		Term_addstr(endcol, color, &str[i]);
 		cx += endcol;
 		i += endcol;
@@ -3032,8 +2960,6 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 		if (endcol == showercol)
 		{
 			int showerlen = strlen(shower);
-
-			/* Print the shower string in yellow */
 			Term_addstr(showerlen, TERM_YELLOW, &str[i]);
 			cx += showerlen;
 			i += showerlen;
@@ -3044,30 +2970,17 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 
 		if (in_tag)
 		{
-			/* Found the end of colored segment */
 			i++;
-
-			/* Now looking for an another tag_str */
 			in_tag = '\0';
-
-			/* Set back to the default color */
 			color = TERM_WHITE;
 			continue;
 		}
 
-		/* Found a tag_str, and get a tag color */
 		i += sizeof(tag_str) - 1;
-
-		/* Get tag color */
 		color = color_char_to_attr(str[i]);
-
-		/* Illegal color tag */
 		if (color == 255 || str[i + 1] == '\0')
 		{
-			/* Illegal color tag */
 			color = TERM_WHITE;
-
-			/* Print the broken tag as a string */
 			Term_addstr(-1, TERM_WHITE, tag_str);
 			cx += sizeof(tag_str) - 1;
 			continue;
@@ -3101,7 +3014,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
  */
 bool show_file(player_type *creature_ptr, bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode)
 {
-	int i, n, skey;
+	int i, skey;
 	int next = 0;
 	int size = 0;
 	int back = 0;
@@ -3119,9 +3032,9 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 	char buf[1024];
 	char hook[68][32];
 	bool reverse = (line < 0);
-	int wid, hgt, rows;
+	int wid, hgt;
 	Term_get_size(&wid, &hgt);
-	rows = hgt - 4;
+	int rows = hgt - 4;
 
 	strcpy(finder_str, "");
 	strcpy(shower_str, "");
@@ -3132,7 +3045,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 	}
 
 	strcpy(filename, name);
-	n = strlen(filename);
+	int n = strlen(filename);
 
 	for (i = 0; i < n; i++)
 	{
@@ -3475,9 +3388,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 	}
 
 	my_fclose(fff);
-	if (skey == 'q') return FALSE;
-
-	return TRUE;
+	return (skey != 'q');
 }
 
 
@@ -3569,8 +3480,7 @@ void process_player_name(player_type *creature_ptr, bool sf)
 #endif
 	if (!savefile_base[0] && savefile[0])
 	{
-		concptr s;
-		s = savefile;
+		concptr s = savefile;
 		while (TRUE)
 		{
 			concptr t;
@@ -3589,7 +3499,6 @@ void process_player_name(player_type *creature_ptr, bool sf)
 	if (sf)
 	{
 		char temp[128];
-
 		strcpy(savefile_base, creature_ptr->base_name);
 
 #ifdef SAVEFILE_USE_UID
@@ -3716,12 +3625,8 @@ void do_cmd_save_and_exit(player_type *creature_ptr)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
- * <pre>
  * This routine is called only in very rare situations, and only
  * by certain visual systems, when they experience fatal errors.
- * XXX XXX Hack -- clear the death flag when creating a HANGUP
- * save file so that player can see tombstone when restart.
- * </pre>
  */
 void exit_game_panic(player_type *creature_ptr)
 {
@@ -3970,54 +3875,31 @@ errr counts_write(player_type *creature_ptr, int where, u32b count)
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, _("z_info_j.raw", "z_info.raw"));
 
-	/* Grab permissions */
 	safe_setuid_grab();
-
 	int fd = fd_open(buf, O_RDWR);
-
-	/* Drop permissions */
 	safe_setuid_drop();
-
 	if (fd < 0)
 	{
-		/* File type is "DATA" */
 		FILE_TYPE(FILE_TYPE_DATA);
-
-		/* Grab permissions */
 		safe_setuid_grab();
-
-		/* Create a new high score file */
 		fd = fd_make(buf, 0644);
-
-		/* Drop permissions */
 		safe_setuid_drop();
 	}
 
-	/* Grab permissions */
 	safe_setuid_grab();
-
 	errr err = fd_lock(fd, F_WRLCK);
-
-	/* Drop permissions */
 	safe_setuid_drop();
-
 	if (err) return 1;
 
 	counts_seek(creature_ptr, fd, where, TRUE);
 	fd_write(fd, (char*)(&count), sizeof(u32b));
-
-	/* Grab permissions */
 	safe_setuid_grab();
-
 	err = fd_lock(fd, F_UNLCK);
-
-	/* Drop permissions */
 	safe_setuid_drop();
 
 	if (err) return 1;
 
 	(void)fd_close(fd);
-
 	return 0;
 }
 
