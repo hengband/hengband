@@ -1,10 +1,10 @@
 /*!
  * @file horror-descriptions.c
- * @brief ƒGƒ‹ƒhƒŠƒbƒ`ƒzƒ‰[‚ÌŒ`—eŽŒƒe[ƒuƒ‹’è‹` / Definitions of adjectives on 
+ * @brief ã‚¨ãƒ«ãƒ‰ãƒªãƒƒãƒãƒ›ãƒ©ãƒ¼ã®å½¢å®¹è©žãƒ†ãƒ¼ãƒ–ãƒ«å®šç¾© / Definitions of adjectives on 
  * @date 2020/02/21
  * @author Hourier
  * @deitals
- * ‚¢‚­‚ç‘‚â‚µ‚Ä‚à‚æ‚¢‚ªAhorror_desc_evil ‚Æhorror_desc_neutral‚ÌŒÂ”‚Í“¯ˆê‚É‚·‚é‚±‚Æ
+ * ã„ãã‚‰å¢—ã‚„ã—ã¦ã‚‚ã‚ˆã„ãŒã€horror_desc_evil ã¨horror_desc_neutralã®å€‹æ•°ã¯åŒä¸€ã«ã™ã‚‹ã“ã¨
  */
 
 #include "angband.h"
@@ -12,16 +12,16 @@
 
 /*!
  * @var horror_desc_common
- * @brief ELDRITCH HORRORŒø‰ÊŽž‚Ìƒ‚ƒ“ƒXƒ^[‚ÌŒ`—eƒƒbƒZ[ƒW (³íŽžAŽ×ˆ«E’†—§‹¤’Ê)
+ * @brief ELDRITCH HORRORåŠ¹æžœæ™‚ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å½¢å®¹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ (æ­£å¸¸æ™‚ã€é‚ªæ‚ªãƒ»ä¸­ç«‹å…±é€š)
  */
 concptr horror_desc_common[MAX_SAN_HORROR_COMMON] =
 {
 #ifdef JP
-	"’ê’m‚ê‚Ê",
-	"”j–Å“I‚È",
-	"—eŽÍ‚Ì‚È‚¢",
-	"ˆ«–²‚Ì‚æ‚¤‚È",
-	"–¼‘O‚ðŒû‚É‚Å‚«‚È‚¢",
+	"åº•çŸ¥ã‚Œã¬",
+	"ç ´æ»…çš„ãª",
+	"å®¹èµ¦ã®ãªã„",
+	"æ‚ªå¤¢ã®ã‚ˆã†ãª",
+	"åå‰ã‚’å£ã«ã§ããªã„",
 #else
 	"abysmal",
 	"baleful",
@@ -33,28 +33,28 @@ concptr horror_desc_common[MAX_SAN_HORROR_COMMON] =
 
 /*!
  * @var horror_desc_evil
- * @brief ELDRITCH HORRORŒø‰ÊŽž‚Ìƒ‚ƒ“ƒXƒ^[‚ÌŒ`—eƒƒbƒZ[ƒW (³íŽžAŽ×ˆ«)
+ * @brief ELDRITCH HORRORåŠ¹æžœæ™‚ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å½¢å®¹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ (æ­£å¸¸æ™‚ã€é‚ªæ‚ª)
  */
 concptr horror_desc_evil[MAX_SAN_HORROR_EVIL] =
 {
 #ifdef JP
-	"Šõ‚Ü‚í‚µ‚¢",
-	"‚¼‚Á‚Æ‚·‚é",
-	"–`“À“I‚È",
-	"‚¢‚â‚È",
-	"‹°‚ë‚µ‚¢",
+	"å¿Œã¾ã‚ã—ã„",
+	"ãžã£ã¨ã™ã‚‹",
+	"å†’æ¶œçš„ãª",
+	"ã„ã‚„ãª",
+	"æã‚ã—ã„",
 
-	"•sŒ‰‚È",
-	"‚¨‚¼‚Ü‚µ‚¢",
-	"”ñ“¹‚È‚é",
-	"g‚Ì–Ñ‚à‚æ‚¾‚Â",
-	"’n–‚Ì",
+	"ä¸æ½”ãª",
+	"ãŠãžã¾ã—ã„",
+	"éžé“ãªã‚‹",
+	"èº«ã®æ¯›ã‚‚ã‚ˆã ã¤",
+	"åœ°ç„ã®",
 
-	"‚Þ‚©‚Þ‚©‚·‚é",
-	"Œ™ˆ«‚ðŠ´‚¶‚é",
-	"”±“–‚½‚è‚È",
-	"‹°‚¢",
-	"•sò‚È",
+	"ã‚€ã‹ã‚€ã‹ã™ã‚‹",
+	"å«Œæ‚ªã‚’æ„Ÿã˜ã‚‹",
+	"ç½°å½“ãŸã‚Šãª",
+	"æã„",
+	"ä¸æµ„ãª",
 #else
 	"abominable",
 	"appalling",
@@ -78,28 +78,28 @@ concptr horror_desc_evil[MAX_SAN_HORROR_EVIL] =
 
 /*
  * @var horror_desc_neutral
- * @brief ELDRITCH HORRORŒø‰ÊŽž‚Ìƒ‚ƒ“ƒXƒ^[‚ÌŒ`—eƒƒbƒZ[ƒW (³íŽžA’†—§)
+ * @brief ELDRITCH HORRORåŠ¹æžœæ™‚ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å½¢å®¹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ (æ­£å¸¸æ™‚ã€ä¸­ç«‹)
  */
 concptr horror_desc_neutral[MAX_SAN_HORROR_NEUTRAL] =
 {
 #ifdef JP
-	"‘å‚¢‚È‚éˆØ•|‚É•ï‚Ü‚ê‚½",
-	"—d‚µ‚°‚ÈÎ‚Ý‚Ì",
-	"‚¢‚é‚Í‚¸‚Ì‚È‚¢",
-	"‹z‚¢ž‚Ü‚ê‚»‚¤‚È",
-	"ŒÜŠ´‚ð’´‰z‚µ‚½",
+	"å¤§ã„ãªã‚‹ç•æ€–ã«åŒ…ã¾ã‚ŒãŸ",
+	"å¦–ã—ã’ãªç¬‘ã¿ã®",
+	"ã„ã‚‹ã¯ãšã®ãªã„",
+	"å¸ã„è¾¼ã¾ã‚Œãã†ãª",
+	"äº”æ„Ÿã‚’è¶…è¶Šã—ãŸ",
 
-	"•ÊŽŸŒ³‚É•‚‚©‚Ñã‚ª‚Á‚½",
-	"Œ¶Šo‚ÆŒ©•´‚¤‚æ‚¤‚È",
-	"‚ä‚ç‚ä‚ç‚Æ—h‚ç‚ß‚¢‚½",
-	"Ž©‚ç‚ÌŽÀÝ‚ð‹^‚¤‚Ù‚Çˆ³“|“I‚È",
-	"—‰ð‚Å‚«‚È‚¢",
+	"åˆ¥æ¬¡å…ƒã«æµ®ã‹ã³ä¸ŠãŒã£ãŸ",
+	"å¹»è¦šã¨è¦‹ç´›ã†ã‚ˆã†ãª",
+	"ã‚†ã‚‰ã‚†ã‚‰ã¨æºã‚‰ã‚ã„ãŸ",
+	"è‡ªã‚‰ã®å®Ÿåœ¨ã‚’ç–‘ã†ã»ã©åœ§å€’çš„ãª",
+	"ç†è§£ã§ããªã„",
 
-	"ƒTƒCƒPƒfƒŠƒbƒN‚È",
-	"¶‹C‚ª‹z‚¢Žæ‚ç‚ê‚é‚æ‚¤‚È",
-	"ƒgƒŠƒbƒvŠ´‚É–ž‚¿‚½",
-	"“ª‚ª^‚Á”’‚É‚È‚é‚æ‚¤‚È",
-	"–³ŒÀ‚É‰Á‘¬‚µ‚½",
+	"ã‚µã‚¤ã‚±ãƒ‡ãƒªãƒƒã‚¯ãª",
+	"ç”Ÿæ°—ãŒå¸ã„å–ã‚‰ã‚Œã‚‹ã‚ˆã†ãª",
+	"ãƒˆãƒªãƒƒãƒ—æ„Ÿã«æº€ã¡ãŸ",
+	"é ­ãŒçœŸã£ç™½ã«ãªã‚‹ã‚ˆã†ãª",
+	"ç„¡é™ã«åŠ é€Ÿã—ãŸ",
 #else
 	"causing great awe",
 	"laughing insanely",
@@ -123,37 +123,37 @@ concptr horror_desc_neutral[MAX_SAN_HORROR_NEUTRAL] =
 
 /*!
  * @var funny_desc
- * @brief ELDRITCH HORRORŒø‰ÊŽž‚Ìƒ‚ƒ“ƒXƒ^[‚ÌŒ`—eƒƒbƒZ[ƒW (Œ¶Šoó‘ÔŽž)
+ * @brief ELDRITCH HORRORåŠ¹æžœæ™‚ã®ãƒ¢ãƒ³ã‚¹ã‚¿ãƒ¼ã®å½¢å®¹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ (å¹»è¦šçŠ¶æ…‹æ™‚)
  */
 concptr funny_desc[MAX_SAN_FUNNY] =
 {
 #ifdef JP
-	"ŠÔ”²‚¯‚È",
-	"ŠŠŒm‚È",
-	"‚Î‚©‚ç‚µ‚¢",
-	"–³–¡Š£‘‡‚È",
-	"”nŽ­‚°‚½",
+	"é–“æŠœã‘ãª",
+	"æ»‘ç¨½ãª",
+	"ã°ã‹ã‚‰ã—ã„",
+	"ç„¡å‘³ä¹¾ç‡¥ãª",
+	"é¦¬é¹¿ã’ãŸ",
 
-	"Î‚¦‚é",
-	"‚Î‚©‚Î‚©‚µ‚¢",
-	"‚Ô‚Á‚Æ‚ñ‚¾",
-	"‚¢‚©‚µ‚½",
-	"ƒ|ƒXƒgƒ‚ƒ_ƒ“‚È",
+	"ç¬‘ãˆã‚‹",
+	"ã°ã‹ã°ã‹ã—ã„",
+	"ã¶ã£ã¨ã‚“ã ",
+	"ã„ã‹ã—ãŸ",
+	"ãƒã‚¹ãƒˆãƒ¢ãƒ€ãƒ³ãª",
 
-	"ƒtƒ@ƒ“ƒ^ƒXƒeƒBƒbƒN‚È",
-	"ƒ_ƒ_ƒCƒYƒ€“I‚È",
-	"ƒLƒ…ƒrƒYƒ€“I‚È",
-	"‰F’ˆ“I‚È",
-	"‘ì‰z‚µ‚½",
+	"ãƒ•ã‚¡ãƒ³ã‚¿ã‚¹ãƒ†ã‚£ãƒƒã‚¯ãª",
+	"ãƒ€ãƒ€ã‚¤ã‚ºãƒ çš„ãª",
+	"ã‚­ãƒ¥ãƒ“ã‚ºãƒ çš„ãª",
+	"å®‡å®™çš„ãª",
+	"å“è¶Šã—ãŸ",
 
-	"—‰ð•s”\‚È",
-	"‚à‚Ì‚·‚²‚¢",
-	"‹Á‚­‚×‚«",
-	"M‚¶‚ç‚ê‚È‚¢",
-	"ƒJƒIƒeƒBƒbƒN‚È",
+	"ç†è§£ä¸èƒ½ãª",
+	"ã‚‚ã®ã™ã”ã„",
+	"é©šãã¹ã",
+	"ä¿¡ã˜ã‚‰ã‚Œãªã„",
+	"ã‚«ã‚ªãƒ†ã‚£ãƒƒã‚¯ãª",
 
-	"–ì«“I‚È",
-	"”ñíŽ¯‚È",
+	"é‡Žæ€§çš„ãª",
+	"éžå¸¸è­˜ãª",
 #else
 	"silly",
 	"hilarious",
@@ -186,16 +186,16 @@ concptr funny_desc[MAX_SAN_FUNNY] =
 
 /*!
  * @var funny_comments
- * @brief ELDRITCH HORRORŒø‰ÊŽž‚ÌŒ¶ŠoŽžŠÔ‰„’·‚ðŽ¦‚·ö—•\Œ»
+ * @brief ELDRITCH HORRORåŠ¹æžœæ™‚ã®å¹»è¦šæ™‚é–“å»¶é•·ã‚’ç¤ºã™éŒ¯ä¹±è¡¨ç¾
  */
 concptr funny_comments[MAX_SAN_COMMENT] =
 {
 #ifdef JP
-	  "Å‚‚¾‚ºI",
-	  "‚¤‚Ð‚å[I",
-	  "‚¢‚©‚·‚ºI",
-	  "‚·‚ñ‚Î‚ç‚µ‚¢I",
-	  "‚Ô‚Á‚Æ‚Ñ[I"
+	  "æœ€é«˜ã ãœï¼",
+	  "ã†ã²ã‚‡ãƒ¼ï¼",
+	  "ã„ã‹ã™ãœï¼",
+	  "ã™ã‚“ã°ã‚‰ã—ã„ï¼",
+	  "ã¶ã£ã¨ã³ãƒ¼ï¼"
   #else
 	  "Wow, cosmic, man!",
 	  "Rad!",

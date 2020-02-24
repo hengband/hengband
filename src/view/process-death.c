@@ -1,9 +1,9 @@
 /*!
- * @brief €–SEˆø‘ŞEØ• ‚Ì‰æ–Ê•\¦
+ * @brief æ­»äº¡ãƒ»å¼•é€€ãƒ»åˆ‡è…¹æ™‚ã®ç”»é¢è¡¨ç¤º
  * @date 2020/02/24
  * @author Hourier
  * @details
- * coreAfilesAview-mainwindow‚ÌQÆ‹Ö~BƒR[ƒ‹ƒoƒbƒN‚Å‘Î‰‚·‚é‚±‚Æ
+ * coreã€filesã€view-mainwindowã®å‚ç…§ç¦æ­¢ã€‚ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯ã§å¯¾å¿œã™ã‚‹ã“ã¨
  */
 
 #include "process-death.h"
@@ -19,9 +19,9 @@
 concptr ANGBAND_DIR_FILE; //!< Various extra files (ascii) These files may be portable between platforms
 
 /*!
- * @brief •æÎ‚Ì^‚ñ’†‚É•¶š—ñ‚ğ‘‚«‚Ş /
+ * @brief å¢“çŸ³ã®çœŸã‚“ä¸­ã«æ–‡å­—åˆ—ã‚’æ›¸ãè¾¼ã‚€ /
  * Centers a string within a GRAVE_LINE_WIDTH character string		-JWT-
- * @return ‚È‚µ
+ * @return ãªã—
  * @details
  */
 static void center_string(char *buf, concptr str)
@@ -39,10 +39,10 @@ bool(*tombstone_aux)(void) = NULL;
 
 
 /*!
- * @brief •æÎ‚ÌƒAƒXƒL[ƒA[ƒg•\¦ /
+ * @brief å¢“çŸ³ã®ã‚¢ã‚¹ã‚­ãƒ¼ã‚¢ãƒ¼ãƒˆè¡¨ç¤º /
  * Display a "tomb-stone"
- * @param creature_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return ‚È‚µ
+ * @param creature_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ãªã—
  */
 void print_tomb(player_type *dead_ptr)
 {
@@ -81,7 +81,7 @@ void print_tomb(player_type *dead_ptr)
 	if (current_world_ptr->total_winner || (dead_ptr->lev > PY_MAX_LEVEL))
 	{
 #ifdef JP
-		p = "ˆÌ‘å‚È‚éÒ";
+		p = "å‰å¤§ãªã‚‹è€…";
 #else
 		p = "Magnificent";
 #endif
@@ -107,31 +107,31 @@ void print_tomb(player_type *dead_ptr)
 	put_str(buf, 10, 11);
 
 	char tmp[160];
-	(void)sprintf(tmp, _("ƒŒƒxƒ‹: %d", "Level: %d"), (int)dead_ptr->lev);
+	(void)sprintf(tmp, _("ãƒ¬ãƒ™ãƒ«: %d", "Level: %d"), (int)dead_ptr->lev);
 	center_string(buf, tmp);
 	put_str(buf, 11, 11);
 
-	(void)sprintf(tmp, _("ŒoŒ±’l: %ld", "Exp: %ld"), (long)dead_ptr->exp);
+	(void)sprintf(tmp, _("çµŒé¨“å€¤: %ld", "Exp: %ld"), (long)dead_ptr->exp);
 	center_string(buf, tmp);
 	put_str(buf, 12, 11);
 
-	(void)sprintf(tmp, _("Š‹à: %ld", "AU: %ld"), (long)dead_ptr->au);
+	(void)sprintf(tmp, _("æ‰€æŒé‡‘: %ld", "AU: %ld"), (long)dead_ptr->au);
 	center_string(buf, tmp);
 	put_str(buf, 13, 11);
 
 #ifdef JP
-	/* •æ‚É‚ŞŒ¾—t‚ğƒIƒŠƒWƒiƒ‹‚æ‚è×‚©‚­•\¦ */
-	if (streq(dead_ptr->died_from, "“r’†I—¹"))
+	/* å¢“ã«åˆ»ã‚€è¨€è‘‰ã‚’ã‚ªãƒªã‚¸ãƒŠãƒ«ã‚ˆã‚Šç´°ã‹ãè¡¨ç¤º */
+	if (streq(dead_ptr->died_from, "é€”ä¸­çµ‚äº†"))
 	{
-		strcpy(tmp, "<©E>");
+		strcpy(tmp, "<è‡ªæ®º>");
 	}
 	else if (streq(dead_ptr->died_from, "ripe"))
 	{
-		strcpy(tmp, "ˆø‘ŞŒã‚É“Võ‚ğ‘S‚¤");
+		strcpy(tmp, "å¼•é€€å¾Œã«å¤©å¯¿ã‚’å…¨ã†");
 	}
 	else if (streq(dead_ptr->died_from, "Seppuku"))
 	{
-		strcpy(tmp, "Ÿ—˜‚ÌŒãAØ• ");
+		strcpy(tmp, "å‹åˆ©ã®å¾Œã€åˆ‡è…¹");
 	}
 	else
 	{
@@ -145,12 +145,12 @@ void print_tomb(player_type *dead_ptr)
 			if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
 			{
 				for (t = dummy + strlen(dummy) - 2; iskanji(*(t - 1)); t--) /* Loop */;
-				strcpy(t, "c");
+				strcpy(t, "â€¦");
 			}
-			else if (my_strstr(tmp, "w") && suffix(dummy, "x"))
+			else if (my_strstr(tmp, "ã€") && suffix(dummy, "ã€"))
 			{
 				char dummy2[80];
-				char *name_head = my_strstr(tmp, "w");
+				char *name_head = my_strstr(tmp, "ã€");
 				sprintf(dummy2, "%s%s", name_head, dummy);
 				if (strlen(dummy2) <= GRAVE_LINE_WIDTH)
 				{
@@ -158,10 +158,10 @@ void print_tomb(player_type *dead_ptr)
 					*name_head = '\0';
 				}
 			}
-			else if (my_strstr(tmp, "u") && suffix(dummy, "v"))
+			else if (my_strstr(tmp, "ã€Œ") && suffix(dummy, "ã€"))
 			{
 				char dummy2[80];
-				char *name_head = my_strstr(tmp, "u");
+				char *name_head = my_strstr(tmp, "ã€Œ");
 				sprintf(dummy2, "%s%s", name_head, dummy);
 				if (strlen(dummy2) <= GRAVE_LINE_WIDTH)
 				{
@@ -183,25 +183,25 @@ void print_tomb(player_type *dead_ptr)
 	{
 		if (dead_ptr->current_floor_ptr->dun_level == 0)
 		{
-			concptr field_name = dead_ptr->town_num ? "ŠX" : "r–ì";
-			if (streq(dead_ptr->died_from, "“r’†I—¹"))
+			concptr field_name = dead_ptr->town_num ? "è¡—" : "è’é‡";
+			if (streq(dead_ptr->died_from, "é€”ä¸­çµ‚äº†"))
 			{
-				sprintf(tmp, "%s‚Å€‚ñ‚¾", field_name);
+				sprintf(tmp, "%sã§æ­»ã‚“ã ", field_name);
 			}
 			else
 			{
-				sprintf(tmp, "‚É%s‚ÅE‚³‚ê‚½", field_name);
+				sprintf(tmp, "ã«%sã§æ®ºã•ã‚ŒãŸ", field_name);
 			}
 		}
 		else
 		{
-			if (streq(dead_ptr->died_from, "“r’†I—¹"))
+			if (streq(dead_ptr->died_from, "é€”ä¸­çµ‚äº†"))
 			{
-				sprintf(tmp, "’n‰º %d ŠK‚Å€‚ñ‚¾", (int)dead_ptr->current_floor_ptr->dun_level);
+				sprintf(tmp, "åœ°ä¸‹ %d éšã§æ­»ã‚“ã ", (int)dead_ptr->current_floor_ptr->dun_level);
 			}
 			else
 			{
-				sprintf(tmp, "‚É’n‰º %d ŠK‚ÅE‚³‚ê‚½", (int)dead_ptr->current_floor_ptr->dun_level);
+				sprintf(tmp, "ã«åœ°ä¸‹ %d éšã§æ®ºã•ã‚ŒãŸ", (int)dead_ptr->current_floor_ptr->dun_level);
 			}
 		}
 
@@ -235,19 +235,19 @@ void print_tomb(player_type *dead_ptr)
 	(void)sprintf(tmp, "%-.24s", ctime(&ct));
 	center_string(buf, tmp);
 	put_str(buf, 17, 11);
-	msg_format(_("‚³‚æ‚¤‚È‚çA%s!", "Goodbye, %s!"), dead_ptr->name);
+	msg_format(_("ã•ã‚ˆã†ãªã‚‰ã€%s!", "Goodbye, %s!"), dead_ptr->name);
 }
 
 
 /*!
- * todo handle_stuffAdisplay_player‚Ìˆø”‚Íb’èB‚Ç‚Ì‚æ‚¤‚ÉİŒv‚µ’¼‚·‚©­‚µl‚¦‚é
- * @brief €–SAˆø‘Ş‚ÌŠÈˆÕƒXƒe[ƒ^ƒX•\¦
- * @param creature_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param handle_stuff XVˆ—ƒ`ƒFƒbƒN‚Ö‚ÌƒR[ƒ‹ƒoƒbƒN
- * @param file_character ƒXƒe[ƒ^ƒXƒ_ƒ“ƒv‚Ö‚ÌƒR[ƒ‹ƒoƒbƒN
- * @param update_playtime ƒvƒŒƒCŠÔXVˆ—‚Ö‚ÌƒR[ƒ‹ƒoƒbƒN
- * @param display_player ƒXƒe[ƒ^ƒX•\¦‚Ö‚ÌƒR[ƒ‹ƒoƒbƒN
- * @return ‚È‚µ
+ * todo handle_stuffã€display_playerã®å¼•æ•°ã¯æš«å®šã€‚ã©ã®ã‚ˆã†ã«è¨­è¨ˆã—ç›´ã™ã‹å°‘ã—è€ƒãˆã‚‹
+ * @brief æ­»äº¡ã€å¼•é€€æ™‚ã®ç°¡æ˜“ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹è¡¨ç¤º
+ * @param creature_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param handle_stuff æ›´æ–°å‡¦ç†ãƒã‚§ãƒƒã‚¯ã¸ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+ * @param file_character ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ãƒ€ãƒ³ãƒ—ã¸ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+ * @param update_playtime ãƒ—ãƒ¬ã‚¤æ™‚é–“æ›´æ–°å‡¦ç†ã¸ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+ * @param display_player ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹è¡¨ç¤ºã¸ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯
+ * @return ãªã—
  */
 void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), errr(*file_character)(player_type*, concptr), void(*update_playtime)(void), void(*display_player)(player_type*, int))
 {
@@ -282,12 +282,12 @@ void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), err
 	handle_stuff(creature_ptr);
 	flush();
 	msg_erase();
-	prt(_("ƒLƒƒƒ‰ƒNƒ^[‚Ì‹L˜^‚ğƒtƒ@ƒCƒ‹‚É‘‚«o‚·‚±‚Æ‚ª‚Å‚«‚Ü‚·B", "You may now dump a character record to one or more files."), 21, 0);
-	prt(_("ƒŠƒ^[ƒ“ƒL[‚ÅƒLƒƒƒ‰ƒNƒ^[‚ğŒ©‚Ü‚·BESC‚Å’†’f‚µ‚Ü‚·B", "Then, hit RETURN to see the character, or ESC to abort."), 22, 0);
+	prt(_("ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã®è¨˜éŒ²ã‚’ãƒ•ã‚¡ã‚¤ãƒ«ã«æ›¸ãå‡ºã™ã“ã¨ãŒã§ãã¾ã™ã€‚", "You may now dump a character record to one or more files."), 21, 0);
+	prt(_("ãƒªã‚¿ãƒ¼ãƒ³ã‚­ãƒ¼ã§ã‚­ãƒ£ãƒ©ã‚¯ã‚¿ãƒ¼ã‚’è¦‹ã¾ã™ã€‚ESCã§ä¸­æ–­ã—ã¾ã™ã€‚", "Then, hit RETURN to see the character, or ESC to abort."), 22, 0);
 	while (TRUE)
 	{
 		char out_val[160];
-		put_str(_("ƒtƒ@ƒCƒ‹ƒl[ƒ€: ", "Filename: "), 23, 0);
+		put_str(_("ãƒ•ã‚¡ã‚¤ãƒ«ãƒãƒ¼ãƒ : ", "Filename: "), 23, 0);
 		strcpy(out_val, "");
 		if (!askfor(out_val, 60)) return;
 		if (!out_val[0]) break;
@@ -298,14 +298,14 @@ void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), err
 
 	update_playtime();
 	display_player(creature_ptr, 0);
-	prt(_("‰½‚©ƒL[‚ğ‰Ÿ‚·‚Æ‚³‚ç‚Éî•ñ‚ª‘±‚«‚Ü‚· (ESC‚Å’†’f): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
+	prt(_("ä½•ã‹ã‚­ãƒ¼ã‚’æŠ¼ã™ã¨ã•ã‚‰ã«æƒ…å ±ãŒç¶šãã¾ã™ (ESCã§ä¸­æ–­): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
 	if (inkey() == ESCAPE) return;
 
 	if (creature_ptr->equip_cnt)
 	{
 		Term_clear();
 		(void)show_equipment(creature_ptr, 0, USE_FULL, 0);
-		prt(_("‘•”õ‚µ‚Ä‚¢‚½ƒAƒCƒeƒ€: -‘±‚­-", "You are using: -more-"), 0, 0);
+		prt(_("è£…å‚™ã—ã¦ã„ãŸã‚¢ã‚¤ãƒ†ãƒ : -ç¶šã-", "You are using: -more-"), 0, 0);
 		if (inkey() == ESCAPE) return;
 	}
 
@@ -313,7 +313,7 @@ void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), err
 	{
 		Term_clear();
 		(void)show_inventory(creature_ptr, 0, USE_FULL, 0);
-		prt(_("‚Á‚Ä‚¢‚½ƒAƒCƒeƒ€: -‘±‚­-", "You are carrying: -more-"), 0, 0);
+		prt(_("æŒã£ã¦ã„ãŸã‚¢ã‚¤ãƒ†ãƒ : -ç¶šã-", "You are carrying: -more-"), 0, 0);
 
 		if (inkey() == ESCAPE) return;
 	}
@@ -336,7 +336,7 @@ void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), err
 				c_put_str(tval_to_attr[o_ptr->tval], o_name, j + 2, 7);
 			}
 
-			prt(format(_("‰ä‚ª‰Æ‚É’u‚¢‚Ä‚ ‚Á‚½ƒAƒCƒeƒ€ ( %d ƒy[ƒW): -‘±‚­-", "Your home contains (page %d): -more-"), k + 1), 0, 0);
+			prt(format(_("æˆ‘ãŒå®¶ã«ç½®ã„ã¦ã‚ã£ãŸã‚¢ã‚¤ãƒ†ãƒ  ( %d ãƒšãƒ¼ã‚¸): -ç¶šã-", "Your home contains (page %d): -more-"), k + 1), 0, 0);
 			if (inkey() == ESCAPE) return;
 		}
 	}

@@ -8,7 +8,7 @@
 #endif
 
 /*!
- * @brief ƒtƒ@ƒCƒ‹‚Ìƒhƒƒbƒvƒp[ƒ~ƒbƒVƒ‡ƒ“ƒ`ƒFƒbƒN / Hack -- drop permissions
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ã®ãƒ‰ãƒ­ãƒƒãƒ—ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯ / Hack -- drop permissions
  */
 void safe_setuid_drop(void)
 {
@@ -18,20 +18,20 @@ void safe_setuid_drop(void)
 
 	if (setuid(getuid()) != 0)
 	{
-		quit(_("setuid(): ³‚µ‚­‹–‰Â‚ªæ‚ê‚Ü‚¹‚ñI", "setuid(): cannot set permissions correctly!"));
+		quit(_("setuid(): æ­£ã—ãè¨±å¯ãŒå–ã‚Œã¾ã›ã‚“ï¼", "setuid(): cannot set permissions correctly!"));
 	}
 	if (setgid(getgid()) != 0)
 	{
-		quit(_("setgid(): ³‚µ‚­‹–‰Â‚ªæ‚ê‚Ü‚¹‚ñI", "setgid(): cannot set permissions correctly!"));
+		quit(_("setgid(): æ­£ã—ãè¨±å¯ãŒå–ã‚Œã¾ã›ã‚“ï¼", "setgid(): cannot set permissions correctly!"));
 	}
 #   else
 	if (setreuid(geteuid(), getuid()) != 0)
 	{
-		quit(_("setreuid(): ³‚µ‚­‹–‰Â‚ªæ‚ê‚Ü‚¹‚ñI", "setreuid(): cannot set permissions correctly!"));
+		quit(_("setreuid(): æ­£ã—ãè¨±å¯ãŒå–ã‚Œã¾ã›ã‚“ï¼", "setreuid(): cannot set permissions correctly!"));
 	}
 	if (setregid(getegid(), getgid()) != 0)
 	{
-		quit(_("setregid(): ³‚µ‚­‹–‰Â‚ªæ‚ê‚Ü‚¹‚ñI", "setregid(): cannot set permissions correctly!"));
+		quit(_("setregid(): æ­£ã—ãè¨±å¯ãŒå–ã‚Œã¾ã›ã‚“ï¼", "setregid(): cannot set permissions correctly!"));
 	}
 #  endif
 # endif
@@ -40,7 +40,7 @@ void safe_setuid_drop(void)
 
 
 /*!
- * @brief ƒtƒ@ƒCƒ‹‚ÌƒOƒ‰ƒuƒp[ƒ~ƒbƒVƒ‡ƒ“ƒ`ƒFƒbƒN / Hack -- grab permissions
+ * @brief ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚°ãƒ©ãƒ–ãƒ‘ãƒ¼ãƒŸãƒƒã‚·ãƒ§ãƒ³ãƒã‚§ãƒƒã‚¯ / Hack -- grab permissions
  */
 void safe_setuid_grab(void)
 {
@@ -50,20 +50,20 @@ void safe_setuid_grab(void)
 
 	if (setuid(p_ptr->player_egid) != 0)
 	{
-		quit(_("setuid(): ³‚µ‚­‹–‰Â‚ªæ‚ê‚Ü‚¹‚ñI", "setuid(): cannot set permissions correctly!"));
+		quit(_("setuid(): æ­£ã—ãè¨±å¯ãŒå–ã‚Œã¾ã›ã‚“ï¼", "setuid(): cannot set permissions correctly!"));
 	}
 	if (setgid(p_ptr->player_egid) != 0)
 	{
-		quit(_("setgid(): ³‚µ‚­‹–‰Â‚ªæ‚ê‚Ü‚¹‚ñI", "setgid(): cannot set permissions correctly!"));
+		quit(_("setgid(): æ­£ã—ãè¨±å¯ãŒå–ã‚Œã¾ã›ã‚“ï¼", "setgid(): cannot set permissions correctly!"));
 	}
 #  else
 	if (setreuid(geteuid(), getuid()) != 0)
 	{
-		quit(_("setreuid(): ³‚µ‚­‹–‰Â‚ªæ‚ê‚Ü‚¹‚ñI", "setreuid(): cannot set permissions correctly!"));
+		quit(_("setreuid(): æ­£ã—ãè¨±å¯ãŒå–ã‚Œã¾ã›ã‚“ï¼", "setreuid(): cannot set permissions correctly!"));
 	}
 	if (setregid(getegid(), getgid()) != 0)
 	{
-		quit(_("setregid(): ³‚µ‚­‹–‰Â‚ªæ‚ê‚Ü‚¹‚ñI", "setregid(): cannot set permissions correctly!"));
+		quit(_("setregid(): æ­£ã—ãè¨±å¯ãŒå–ã‚Œã¾ã›ã‚“ï¼", "setregid(): cannot set permissions correctly!"));
 	}
 #  endif
 # endif

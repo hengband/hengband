@@ -1,12 +1,12 @@
 #pragma once
 
-/* ELDRITCH_HORROR‚É‚æ‚ésanity blastˆ—‚ÉŠÖ‚·‚éƒƒbƒZ[ƒW‚ÌÅ‘å” / Number of entries in the sanity-blast descriptions */
-#define MAX_SAN_HORROR_SUM 20 /*!< ‹°‚ë‚µ‚¢‘ÎÛ‚ÌŒ`—e”(‡Œv) */
-#define MAX_SAN_HORROR_COMMON 5 /*!< ‹°‚ë‚µ‚¢‘ÎÛ‚ÌŒ`—e”(³íA×ˆ«E’†—§‹¤’Ê) */
-#define MAX_SAN_HORROR_EVIL 15 /*!< ‹°‚ë‚µ‚¢‘ÎÛ‚ÌŒ`—e”(³íA×ˆ«) */
-#define MAX_SAN_HORROR_NEUTRAL 15 /*!< ‹°‚ë‚µ‚¢‘ÎÛ‚ÌŒ`—e”(³íA’†—§) */
-#define MAX_SAN_FUNNY 22  /*!< ‹°‚ë‚µ‚¢‘ÎÛ‚ÌŒ`—e”(Œ¶Šo) */
-#define MAX_SAN_COMMENT 5 /*!< ‹°‚ë‚µ‚¢‘ÎÛ‚ğŒ©‚½‚Æ‚«‚Ìâ‹©ƒƒbƒZ[ƒW”(Œ¶Šo) */
+/* ELDRITCH_HORRORã«ã‚ˆã‚‹sanity blastå‡¦ç†ã«é–¢ã™ã‚‹ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸ã®æœ€å¤§æ•° / Number of entries in the sanity-blast descriptions */
+#define MAX_SAN_HORROR_SUM 20 /*!< æã‚ã—ã„å¯¾è±¡ã®å½¢å®¹æ•°(åˆè¨ˆ) */
+#define MAX_SAN_HORROR_COMMON 5 /*!< æã‚ã—ã„å¯¾è±¡ã®å½¢å®¹æ•°(æ­£å¸¸æ™‚ã€é‚ªæ‚ªãƒ»ä¸­ç«‹å…±é€š) */
+#define MAX_SAN_HORROR_EVIL 15 /*!< æã‚ã—ã„å¯¾è±¡ã®å½¢å®¹æ•°(æ­£å¸¸æ™‚ã€é‚ªæ‚ª) */
+#define MAX_SAN_HORROR_NEUTRAL 15 /*!< æã‚ã—ã„å¯¾è±¡ã®å½¢å®¹æ•°(æ­£å¸¸æ™‚ã€ä¸­ç«‹) */
+#define MAX_SAN_FUNNY 22  /*!< æã‚ã—ã„å¯¾è±¡ã®å½¢å®¹æ•°(å¹»è¦šæ™‚) */
+#define MAX_SAN_COMMENT 5 /*!< æã‚ã—ã„å¯¾è±¡ã‚’è¦‹ãŸã¨ãã®çµ¶å«ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸æ•°(å¹»è¦šæ™‚) */
 
 concptr horror_desc_common[MAX_SAN_HORROR_COMMON];
 concptr horror_desc_evil[MAX_SAN_HORROR_EVIL];

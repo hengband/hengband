@@ -1,6 +1,6 @@
 /*!
  * @file status-first-page.c
- * @brief ƒLƒƒƒ‰Šî–{î•ñ‹y‚Ñ‹Z”\’l‚Ì•\¦
+ * @brief ã‚­ãƒ£ãƒ©åŸºæœ¬æƒ…å ±åŠã³æŠ€èƒ½å€¤ã®è¡¨ç¤º
  * @date 2020/02/23
  * @author Hourier
  */
@@ -19,11 +19,11 @@ static TERM_COLOR likert_color = TERM_WHITE;
 
 /*!
  * @brief 
- * @param creature_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param o_ptr ‘•”õ’†‚Ì‹|‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param shots ËŒ‚‰ñ”
- * @param shot_frac ËŒ‚‘¬“x
- * @return ‚È‚µ
+ * @param creature_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param o_ptr è£…å‚™ä¸­ã®å¼“ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param shots å°„æ’ƒå›æ•°
+ * @param shot_frac å°„æ’ƒé€Ÿåº¦
+ * @return ãªã—
  */
 static void calc_shot_params(player_type *creature_ptr, object_type *o_ptr, int *shots, int *shot_frac)
 {
@@ -46,13 +46,13 @@ static void calc_shot_params(player_type *creature_ptr, object_type *o_ptr, int 
 
 
 /*!
- * @brief •Ší‘•”õ‚É§ŒÀ‚Ì‚ ‚éƒNƒ‰ƒX‚ÅA’¼ÚUŒ‚‚Ìƒ_ƒ[ƒW‚ğŒvZ‚·‚é
- * @param creature_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param hand è (—˜‚«è‚ª0A”½‘Î‚Ìè‚ª1c‚Ì‚Í‚¸)
- * @param damage ’¼ÚUŒ‚‚Ìƒ_ƒ[ƒW
- * @param basedam ‘fè‚É‚¨‚¯‚é’¼ÚUŒ‚‚Ìƒ_ƒ[ƒW
- * @param o_ptr ‘•”õ’†‚Ì•Ší‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return —˜‚«è‚È‚çTRUEA”½‘Î‚Ìè‚È‚çFALSE
+ * @brief æ­¦å™¨è£…å‚™ã«åˆ¶é™ã®ã‚ã‚‹ã‚¯ãƒ©ã‚¹ã§ã€ç›´æ¥æ”»æ’ƒã®ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¨ˆç®—ã™ã‚‹
+ * @param creature_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param hand æ‰‹ (åˆ©ãæ‰‹ãŒ0ã€åå¯¾ã®æ‰‹ãŒ1â€¦ã®ã¯ãš)
+ * @param damage ç›´æ¥æ”»æ’ƒã®ãƒ€ãƒ¡ãƒ¼ã‚¸
+ * @param basedam ç´ æ‰‹ã«ãŠã‘ã‚‹ç›´æ¥æ”»æ’ƒã®ãƒ€ãƒ¡ãƒ¼ã‚¸
+ * @param o_ptr è£…å‚™ä¸­ã®æ­¦å™¨ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return åˆ©ãæ‰‹ãªã‚‰TRUEã€åå¯¾ã®æ‰‹ãªã‚‰FALSE
  */
 static bool calc_weapon_damage_limit(player_type *creature_ptr, int hand, int *damage, int *basedam, object_type *o_ptr)
 {
@@ -80,12 +80,12 @@ static bool calc_weapon_damage_limit(player_type *creature_ptr, int hand, int *d
 
 
 /*!
- * @brief •Ğè‚ ‚½‚è‚Ìƒ_ƒ[ƒW—Ê‚ğŒvZ‚·‚é
- * @param o_ptr ‘•”õ’†‚Ì•Ší‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param hand è
- * @param damage ’¼ÚUŒ‚‚Ìƒ_ƒ[ƒW
- * @param basedam ‘fè‚É‚¨‚¯‚é’¼ÚUŒ‚‚Ìƒ_ƒ[ƒW
- * @return ‘fè‚È‚çFALSEA•Ší‚ğ‚Á‚Ä‚¢‚ê‚ÎTRUE
+ * @brief ç‰‡æ‰‹ã‚ãŸã‚Šã®ãƒ€ãƒ¡ãƒ¼ã‚¸é‡ã‚’è¨ˆç®—ã™ã‚‹
+ * @param o_ptr è£…å‚™ä¸­ã®æ­¦å™¨ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param hand æ‰‹
+ * @param damage ç›´æ¥æ”»æ’ƒã®ãƒ€ãƒ¡ãƒ¼ã‚¸
+ * @param basedam ç´ æ‰‹ã«ãŠã‘ã‚‹ç›´æ¥æ”»æ’ƒã®ãƒ€ãƒ¡ãƒ¼ã‚¸
+ * @return ç´ æ‰‹ãªã‚‰FALSEã€æ­¦å™¨ã‚’æŒã£ã¦ã„ã‚Œã°TRUE
  */
 static bool calc_weapon_one_hand(object_type *o_ptr, int hand, int *damage, int *basedam)
 {
@@ -104,12 +104,12 @@ static bool calc_weapon_one_hand(object_type *o_ptr, int hand, int *damage, int 
 
 
 /*!
- * @brief ƒ”ƒH[ƒpƒ‹•Ší“™‚É‚æ‚éƒ_ƒ[ƒW‹­‰»
- * @param creature_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param o_ptr ‘•”õ’†‚Ì•Ší‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param basedam ‘fè‚É‚¨‚¯‚é’¼ÚUŒ‚‚Ìƒ_ƒ[ƒW
- * @param flgs ƒIƒuƒWƒFƒNƒgƒtƒ‰ƒOŒQ
- * @return ‹­‰»Œã‚Ì‘fèƒ_ƒ[ƒW
+ * @brief ãƒ´ã‚©ãƒ¼ãƒ‘ãƒ«æ­¦å™¨ç­‰ã«ã‚ˆã‚‹ãƒ€ãƒ¡ãƒ¼ã‚¸å¼·åŒ–
+ * @param creature_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param o_ptr è£…å‚™ä¸­ã®æ­¦å™¨ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param basedam ç´ æ‰‹ã«ãŠã‘ã‚‹ç›´æ¥æ”»æ’ƒã®ãƒ€ãƒ¡ãƒ¼ã‚¸
+ * @param flgs ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆãƒ•ãƒ©ã‚°ç¾¤
+ * @return å¼·åŒ–å¾Œã®ç´ æ‰‹ãƒ€ãƒ¡ãƒ¼ã‚¸
  */
 static int strengthen_basedam(player_type *creature_ptr, object_type *o_ptr, int basedam, BIT_FLAGS *flgs)
 {
@@ -126,7 +126,7 @@ static int strengthen_basedam(player_type *creature_ptr, object_type *o_ptr, int
 		basedam /= 9;
 	}
 
-	// ——Í
+	// ç†åŠ›
 	bool is_force = creature_ptr->pclass != CLASS_SAMURAI;
 	is_force &= have_flag(flgs, TR_FORCE_WEAPON);
 	is_force &= creature_ptr->csp > (o_ptr->dd * o_ptr->ds / 5);
@@ -137,11 +137,11 @@ static int strengthen_basedam(player_type *creature_ptr, object_type *o_ptr, int
 
 
 /*!
- * @brief ‹Z”\ƒ‰ƒ“ƒN‚Ì•\¦Šî€‚ğ’è‚ß‚é
+ * @brief æŠ€èƒ½ãƒ©ãƒ³ã‚¯ã®è¡¨ç¤ºåŸºæº–ã‚’å®šã‚ã‚‹
  * Returns a "rating" of x depending on y
- * @param x ‹Z”\’l
- * @param y ‹Z”\’l‚É‘Î‚·‚éƒ‰ƒ“ƒNŠî€”ä
- * @return ‚È‚µ
+ * @param x æŠ€èƒ½å€¤
+ * @param y æŠ€èƒ½å€¤ã«å¯¾ã™ã‚‹ãƒ©ãƒ³ã‚¯åŸºæº–æ¯”
+ * @return ãªã—
  */
 static concptr likert(int x, int y)
 {
@@ -156,7 +156,7 @@ static concptr likert(int x, int y)
 	if (x < 0)
 	{
 		likert_color = TERM_L_DARK;
-		strcat(dummy, _("Å’á", "Very Bad"));
+		strcat(dummy, _("æœ€ä½", "Very Bad"));
 		return dummy;
 	}
 
@@ -166,40 +166,40 @@ static concptr likert(int x, int y)
 	case 1:
 	{
 		likert_color = TERM_RED;
-		strcat(dummy, _("ˆ«‚¢", "Bad"));
+		strcat(dummy, _("æ‚ªã„", "Bad"));
 		break;
 
 	}
 	case 2:
 	{
 		likert_color = TERM_L_RED;
-		strcat(dummy, _("—ò‚é", "Poor"));
+		strcat(dummy, _("åŠ£ã‚‹", "Poor"));
 		break;
 	}
 	case 3:
 	case 4:
 	{
 		likert_color = TERM_ORANGE;
-		strcat(dummy, _("•’Ê", "Fair"));
+		strcat(dummy, _("æ™®é€š", "Fair"));
 		break;
 	}
 	case 5:
 	{
 		likert_color = TERM_YELLOW;
-		strcat(dummy, _("—Ç‚¢", "Good"));
+		strcat(dummy, _("è‰¯ã„", "Good"));
 		break;
 	}
 	case 6:
 	{
 		likert_color = TERM_YELLOW;
-		strcat(dummy, _("‘å•Ï—Ç‚¢", "Very Good"));
+		strcat(dummy, _("å¤§å¤‰è‰¯ã„", "Very Good"));
 		break;
 	}
 	case 7:
 	case 8:
 	{
 		likert_color = TERM_L_GREEN;
-		strcat(dummy, _("‘ì‰z", "Excellent"));
+		strcat(dummy, _("å“è¶Š", "Excellent"));
 		break;
 	}
 	case 9:
@@ -209,7 +209,7 @@ static concptr likert(int x, int y)
 	case 13:
 	{
 		likert_color = TERM_GREEN;
-		strcat(dummy, _("’´‰z", "Superb"));
+		strcat(dummy, _("è¶…è¶Š", "Superb"));
 		break;
 	}
 	case 14:
@@ -218,13 +218,13 @@ static concptr likert(int x, int y)
 	case 17:
 	{
 		likert_color = TERM_BLUE;
-		strcat(dummy, _("‰p—Y“I", "Heroic"));
+		strcat(dummy, _("è‹±é›„çš„", "Heroic"));
 		break;
 	}
 	default:
 	{
 		likert_color = TERM_VIOLET;
-		sprintf(dummy2, _("“`à“I[%d]", "Legendary[%d]"), (int)((((x / y) - 17) * 5) / 2));
+		sprintf(dummy2, _("ä¼èª¬çš„[%d]", "Legendary[%d]"), (int)((((x / y) - 17) * 5) / 2));
 		strcat(dummy, dummy2);
 		break;
 	}
@@ -235,11 +235,11 @@ static concptr likert(int x, int y)
 
 
 /*!
- * @brief ‹|{—¼è‚Ì•Ší‚»‚ê‚¼‚ê‚É‚Â‚¢‚Äƒ_ƒ[ƒW‚ğŒvZ‚·‚é
- * @param creature_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param damage ’¼ÚUŒ‚‚Ìƒ_ƒ[ƒW
- * @param to_h –½’†•â³
- * @return ‚È‚µ
+ * @brief å¼“ï¼‹ä¸¡æ‰‹ã®æ­¦å™¨ãã‚Œãã‚Œã«ã¤ã„ã¦ãƒ€ãƒ¡ãƒ¼ã‚¸ã‚’è¨ˆç®—ã™ã‚‹
+ * @param creature_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param damage ç›´æ¥æ”»æ’ƒã®ãƒ€ãƒ¡ãƒ¼ã‚¸
+ * @param to_h å‘½ä¸­è£œæ­£
+ * @return ãªã—
  */
 static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
 {
@@ -283,14 +283,14 @@ static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
 
 
 /*!
- * @brief ƒLƒƒƒ‰Šî–{î•ñ‹y‚Ñ‹Z”\’l‚ğƒƒCƒ“ƒEƒBƒ“ƒhƒE‚É•\¦‚·‚é
- * @param creature_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param xthb •Ší“™‚ğŠÜ‚ß‚½ÅI–½’†—¦
- * @param damage ‘ÅŒ‚C³
- * @param shots ËŒ‚‰ñ”
- * @param shot_frac ËŒ‚‘¬“x
- * @param display_player_one_line 1s•\¦—p‚ÌƒR[ƒ‹ƒoƒbƒNŠÖ”
- * @return ‚È‚µ
+ * @brief ã‚­ãƒ£ãƒ©åŸºæœ¬æƒ…å ±åŠã³æŠ€èƒ½å€¤ã‚’ãƒ¡ã‚¤ãƒ³ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã«è¡¨ç¤ºã™ã‚‹
+ * @param creature_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param xthb æ­¦å™¨ç­‰ã‚’å«ã‚ãŸæœ€çµ‚å‘½ä¸­ç‡
+ * @param damage æ‰“æ’ƒä¿®æ­£
+ * @param shots å°„æ’ƒå›æ•°
+ * @param shot_frac å°„æ’ƒé€Ÿåº¦
+ * @param display_player_one_line 1è¡Œè¡¨ç¤ºç”¨ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
+ * @return ãªã—
  */
 static void display_first_page(player_type *creature_ptr, int xthb, int *damage, int shots, int shot_frac)
 {
@@ -361,11 +361,11 @@ static void display_first_page(player_type *creature_ptr, int xthb, int *damage,
 
 
 /*!
- * @brief ƒvƒŒƒCƒ„[ƒXƒe[ƒ^ƒX‚Ì1ƒy[ƒW–ÚŠeíÚ×‚ğ‚Ü‚Æ‚ß‚Ä•\¦‚·‚é
+ * @brief ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã®1ãƒšãƒ¼ã‚¸ç›®å„ç¨®è©³ç´°ã‚’ã¾ã¨ã‚ã¦è¡¨ç¤ºã™ã‚‹
  * Prints ratings on certain abilities
- * @param creature_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param display_player_one_line 1s•\¦—p‚ÌƒR[ƒ‹ƒoƒbƒNŠÖ”
- * @return ‚È‚µ
+ * @param creature_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param display_player_one_line 1è¡Œè¡¨ç¤ºç”¨ã®ã‚³ãƒ¼ãƒ«ãƒãƒƒã‚¯é–¢æ•°
+ * @return ãªã—
  * @details
  * This code is "imitated" elsewhere to "dump" a character sheet.
  */

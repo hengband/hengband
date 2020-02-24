@@ -1,6 +1,6 @@
 /*!
  * @file signal-handlers.c
- * @brief ƒVƒOƒiƒ‹ƒnƒ“ƒhƒ‰‚ÌŠÇ— / Controlling signal handlers
+ * @brief ã‚·ã‚°ãƒŠãƒ«ãƒãƒ³ãƒ‰ãƒ©ã®ç®¡ç† / Controlling signal handlers
  * @date 2020/02/23
  * @author Hourier
  */
@@ -20,9 +20,9 @@ s16b signal_count;		/* Hack -- Count interupts */
 #include <signal.h>
 
 /*!
- * @brief OS‚©‚ç‚ÌƒVƒOƒiƒ‹‚ğó‚¯‚ÄƒTƒXƒyƒ“ƒhó‘Ô‚É“ü‚é /
+ * @brief OSã‹ã‚‰ã®ã‚·ã‚°ãƒŠãƒ«ã‚’å—ã‘ã¦ã‚µã‚¹ãƒšãƒ³ãƒ‰çŠ¶æ…‹ã«å…¥ã‚‹ /
  * Handle signals -- suspend
- * @param sig ó‚¯æ‚Á‚½ƒVƒOƒiƒ‹
+ * @param sig å—ã‘å–ã£ãŸã‚·ã‚°ãƒŠãƒ«
  * @details
  * Actually suspend the game, and then resume cleanly
  */
@@ -42,10 +42,10 @@ static void handle_signal_suspend(int sig)
 
 
 /*!
- * todo ‚±‚±‚Éplayer_type‚ğ’Ç‰Á‚·‚é‚ÆŠÖ”ƒ|ƒCƒ“ƒ^ü‚è‚ÌûE‚ª‚Â‚©‚È‚­‚È‚é‚Ì‚Å•Û—¯
- * @brief OS‚©‚ç‚ÌƒVƒOƒiƒ‹‚ğó‚¯‚Ä’†’fAI—¹‚·‚é /
+ * todo ã“ã“ã«player_typeã‚’è¿½åŠ ã™ã‚‹ã¨é–¢æ•°ãƒã‚¤ãƒ³ã‚¿å‘¨ã‚Šã®åæ‹¾ãŒã¤ã‹ãªããªã‚‹ã®ã§ä¿ç•™
+ * @brief OSã‹ã‚‰ã®ã‚·ã‚°ãƒŠãƒ«ã‚’å—ã‘ã¦ä¸­æ–­ã€çµ‚äº†ã™ã‚‹ /
  * Handle signals -- simple (interrupt and quit)
- * @param sig ó‚¯æ‚Á‚½ƒVƒOƒiƒ‹
+ * @param sig å—ã‘å–ã£ãŸã‚·ã‚°ãƒŠãƒ«
  * @details
  * <pre>
  * This function was causing a *huge* number of problems, so it has
@@ -67,16 +67,16 @@ static void handle_signal_simple(int sig)
 	signal_count++;
 	if (p_ptr->is_dead)
 	{
-		(void)strcpy(p_ptr->died_from, _("‹­§I—¹", "Abortion"));
+		(void)strcpy(p_ptr->died_from, _("å¼·åˆ¶çµ‚äº†", "Abortion"));
 		forget_lite(p_ptr->current_floor_ptr);
 		forget_view(p_ptr->current_floor_ptr);
 		clear_mon_lite(p_ptr->current_floor_ptr);
 		close_game(p_ptr);
-		quit(_("‹­§I—¹", "interrupt"));
+		quit(_("å¼·åˆ¶çµ‚äº†", "interrupt"));
 	}
 	else if (signal_count >= 5)
 	{
-		(void)strcpy(p_ptr->died_from, _("‹­§I—¹’†", "Interrupting"));
+		(void)strcpy(p_ptr->died_from, _("å¼·åˆ¶çµ‚äº†ä¸­", "Interrupting"));
 		forget_lite(p_ptr->current_floor_ptr);
 		forget_view(p_ptr->current_floor_ptr);
 		clear_mon_lite(p_ptr->current_floor_ptr);
@@ -84,13 +84,13 @@ static void handle_signal_simple(int sig)
 		p_ptr->is_dead = TRUE;
 		p_ptr->leaving = TRUE;
 		close_game(p_ptr);
-		quit(_("‹­§I—¹", "interrupt"));
+		quit(_("å¼·åˆ¶çµ‚äº†", "interrupt"));
 	}
 	else if (signal_count >= 4)
 	{
 		Term_xtra(TERM_XTRA_NOISE, 0);
 		Term_erase(0, 0, 255);
-		Term_putstr(0, 0, -1, TERM_WHITE, _("n—¶‚Ìã‚Ì©EI", "Contemplating suicide!"));
+		Term_putstr(0, 0, -1, TERM_WHITE, _("ç†Ÿæ…®ã®ä¸Šã®è‡ªæ®ºï¼", "Contemplating suicide!"));
 		Term_fresh();
 	}
 	else if (signal_count >= 2)
@@ -103,11 +103,11 @@ static void handle_signal_simple(int sig)
 
 
 /*!
- * todo ‚±‚±‚Ép_ptr‚ğ’Ç‰Á‚·‚é‚ÆŠÖ”ƒ|ƒCƒ“ƒ^ü‚è‚ÌûE‚ª‚Â‚©‚È‚­‚È‚é‚Ì‚Å•Û—¯
- * @brief OS‚©‚ç‚ÌƒVƒOƒiƒ‹‚ğó‚¯‚Ä‹­§I—¹‚·‚é /
+ * todo ã“ã“ã«p_ptrã‚’è¿½åŠ ã™ã‚‹ã¨é–¢æ•°ãƒã‚¤ãƒ³ã‚¿å‘¨ã‚Šã®åæ‹¾ãŒã¤ã‹ãªããªã‚‹ã®ã§ä¿ç•™
+ * @brief OSã‹ã‚‰ã®ã‚·ã‚°ãƒŠãƒ«ã‚’å—ã‘ã¦å¼·åˆ¶çµ‚äº†ã™ã‚‹ /
  * Handle signal -- abort, kill, etc
- * @param sig ó‚¯æ‚Á‚½ƒVƒOƒiƒ‹
- * @return ‚È‚µ
+ * @param sig å—ã‘å–ã£ãŸã‚·ã‚°ãƒŠãƒ«
+ * @return ãªã—
  * @details
  * <pre>
  * This function was causing a *huge* number of problems, so it has
@@ -134,36 +134,36 @@ static void handle_signal_abort(int sig)
 
 	Term_erase(0, hgt - 1, 255);
 	Term_putstr(0, hgt - 1, -1, TERM_RED,
-		_("‹°‚ë‚µ‚¢ƒ\ƒtƒg‚ÌƒoƒO‚ª”ò‚Ñ‚©‚©‚Á‚Ä‚«‚½I", "A gruesome software bug LEAPS out at you!"));
+		_("æã‚ã—ã„ã‚½ãƒ•ãƒˆã®ãƒã‚°ãŒé£›ã³ã‹ã‹ã£ã¦ããŸï¼", "A gruesome software bug LEAPS out at you!"));
 
-	Term_putstr(45, hgt - 1, -1, TERM_RED, _("‹Ù‹}ƒZ[ƒu...", "Panic save..."));
+	Term_putstr(45, hgt - 1, -1, TERM_RED, _("ç·Šæ€¥ã‚»ãƒ¼ãƒ–...", "Panic save..."));
 
-	exe_write_diary(p_ptr, DIARY_GAMESTART, 0, _("----ƒQ[ƒ€ˆÙíI—¹----", "---- Panic Save and Abort Game ----"));
+	exe_write_diary(p_ptr, DIARY_GAMESTART, 0, _("----ã‚²ãƒ¼ãƒ ç•°å¸¸çµ‚äº†----", "---- Panic Save and Abort Game ----"));
 	Term_fresh();
 
 	p_ptr->panic_save = 1;
-	(void)strcpy(p_ptr->died_from, _("(‹Ù‹}ƒZ[ƒu)", "(panic save)"));
+	(void)strcpy(p_ptr->died_from, _("(ç·Šæ€¥ã‚»ãƒ¼ãƒ–)", "(panic save)"));
 
 	signals_ignore_tstp();
 
 	if (save_player(p_ptr))
 	{
-		Term_putstr(45, hgt - 1, -1, TERM_RED, _("‹Ù‹}ƒZ[ƒu¬Œ÷I", "Panic save succeeded!"));
+		Term_putstr(45, hgt - 1, -1, TERM_RED, _("ç·Šæ€¥ã‚»ãƒ¼ãƒ–æˆåŠŸï¼", "Panic save succeeded!"));
 	}
 	else
 	{
-		Term_putstr(45, hgt - 1, -1, TERM_RED, _("‹Ù‹}ƒZ[ƒu¸”sI", "Panic save failed!"));
+		Term_putstr(45, hgt - 1, -1, TERM_RED, _("ç·Šæ€¥ã‚»ãƒ¼ãƒ–å¤±æ•—ï¼", "Panic save failed!"));
 	}
 
 	Term_fresh();
-	quit(_("ƒ\ƒtƒg‚ÌƒoƒO", "software bug"));
+	quit(_("ã‚½ãƒ•ãƒˆã®ãƒã‚°", "software bug"));
 }
 
 
 /*!
- * @brief OS‚©‚ç‚ÌSIGTSTPƒVƒOƒiƒ‹‚ğ–³‹‚·‚éŠÖ” /
+ * @brief OSã‹ã‚‰ã®SIGTSTPã‚·ã‚°ãƒŠãƒ«ã‚’ç„¡è¦–ã™ã‚‹é–¢æ•° /
  * Ignore SIGTSTP signals (keyboard suspend)
- * @return ‚È‚µ
+ * @return ãªã—
  * @details
  */
 void signals_ignore_tstp(void)
@@ -175,9 +175,9 @@ void signals_ignore_tstp(void)
 
 
 /*!
- * @brief OS‚©‚ç‚ÌSIGTSTPƒVƒOƒiƒ‹ƒnƒ“ƒhƒ‰ /
+ * @brief OSã‹ã‚‰ã®SIGTSTPã‚·ã‚°ãƒŠãƒ«ãƒãƒ³ãƒ‰ãƒ© /
  * Handle SIGTSTP signals (keyboard suspend)
- * @return ‚È‚µ
+ * @return ãªã—
  * @details
  */
 void signals_handle_tstp(void)
@@ -189,9 +189,9 @@ void signals_handle_tstp(void)
 
 
 /*!
- * @brief OS‚©‚ç‚ÌƒVƒOƒiƒ‹ƒnƒ“ƒhƒ‹‚ğ‰Šú‰»‚·‚é /
+ * @brief OSã‹ã‚‰ã®ã‚·ã‚°ãƒŠãƒ«ãƒãƒ³ãƒ‰ãƒ«ã‚’åˆæœŸåŒ–ã™ã‚‹ /
  * Prepare to handle the relevant signals
- * @return ‚È‚µ
+ * @return ãªã—
  * @details
  */
 void signals_init(void)
@@ -272,7 +272,7 @@ void signals_init(void)
 #else
 
 /*!
- * @brief ƒ_ƒ~[ /
+ * @brief ãƒ€ãƒŸãƒ¼ /
  * Do nothing
  */
 void signals_ignore_tstp(void)
@@ -281,7 +281,7 @@ void signals_ignore_tstp(void)
 
 
 /*!
- * @brief ƒ_ƒ~[ /
+ * @brief ãƒ€ãƒŸãƒ¼ /
  * Do nothing
  */
 void signals_handle_tstp(void)
@@ -290,7 +290,7 @@ void signals_handle_tstp(void)
 
 
 /*!
- * @brief ƒ_ƒ~[ /
+ * @brief ãƒ€ãƒŸãƒ¼ /
  * Do nothing
  */
 void signals_init(void)
