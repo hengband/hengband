@@ -5,23 +5,15 @@
  * @author Hengband Team
  */
 
-#define _GNU_SOURCE /*!< 未使用*/
 #include "angband.h"
-#include "util.h"
 #include "core.h"
 #include "inet.h"
 #include "dungeon.h"
 
-#include "floor.h"
-#include "player-status.h"
-#include "player-class.h"
-#include "player-race.h"
 #include "player-personality.h"
 #include "files.h"
 #include "world.h"
-#include "realm.h"
 #include "term.h"
-#include "view-mainwindow.h"
 
 #ifdef WORLD_SCORE
 
