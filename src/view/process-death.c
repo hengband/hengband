@@ -33,7 +33,8 @@ static void center_string(char *buf, concptr str)
 /*!
  * @brief プレーヤーを殺したモンスターを表示する
  * @param dead_ptr プレーヤーへの参照ポインタ
- * @param buf 墓テンプレへのバッファ
+ * @param buf 墓テンプレ
+ * @param 
  * @return 追加の行数
  */
 static int show_killing_monster(player_type *dead_ptr, char *buf, char *tmp)
@@ -76,6 +77,48 @@ static int show_killing_monster(player_type *dead_ptr, char *buf, char *tmp)
 	center_string(buf, dummy);
 	put_str(buf, 15, 11);
 	return 1;
+}
+
+
+/*!
+ * @brief どこで死んだかを表示する (日本語版専用)
+ * @param dead_ptr プレーヤーへの参照ポインタ
+ * @param buf 墓テンプレ
+ * @param tmp 表示する文字列
+ * @param extra_line 追加の行数
+ * @return なし
+ */
+static void show_dead_place(player_type *dead_ptr, char *buf, char *tmp, int extra_line)
+{
+	if (streq(dead_ptr->died_from, "ripe") || streq(dead_ptr->died_from, "Seppuku"))
+		return;
+
+	if (dead_ptr->current_floor_ptr->dun_level == 0)
+	{
+		concptr field_name = dead_ptr->town_num ? "街" : "荒野";
+		if (streq(dead_ptr->died_from, "途中終了"))
+		{
+			sprintf(tmp, "%sで死んだ", field_name);
+		}
+		else
+		{
+			sprintf(tmp, "に%sで殺された", field_name);
+		}
+	}
+	else
+	{
+		if (streq(dead_ptr->died_from, "途中終了"))
+		{
+			sprintf(tmp, "地下 %d 階で死んだ", (int)dead_ptr->current_floor_ptr->dun_level);
+		}
+		else
+		{
+			sprintf(tmp, "に地下 %d 階で殺された", (int)dead_ptr->current_floor_ptr->dun_level);
+		}
+	}
+
+	center_string(buf, tmp);
+	put_str(buf, 15 + extra_line, 11);
 }
 
 
@@ -145,35 +188,7 @@ void print_tomb(player_type *dead_ptr, void(*read_dead_file)(char*, size_t))
 	center_string(buf, tmp);
 	put_str(buf, 14, 11);
 
-	if (!streq(dead_ptr->died_from, "ripe") && !streq(dead_ptr->died_from, "Seppuku"))
-	{
-		if (dead_ptr->current_floor_ptr->dun_level == 0)
-		{
-			concptr field_name = dead_ptr->town_num ? "街" : "荒野";
-			if (streq(dead_ptr->died_from, "途中終了"))
-			{
-				sprintf(tmp, "%sで死んだ", field_name);
-			}
-			else
-			{
-				sprintf(tmp, "に%sで殺された", field_name);
-			}
-		}
-		else
-		{
-			if (streq(dead_ptr->died_from, "途中終了"))
-			{
-				sprintf(tmp, "地下 %d 階で死んだ", (int)dead_ptr->current_floor_ptr->dun_level);
-			}
-			else
-			{
-				sprintf(tmp, "に地下 %d 階で殺された", (int)dead_ptr->current_floor_ptr->dun_level);
-			}
-		}
-
-		center_string(buf, tmp);
-		put_str(buf, 15 + extra_line, 11);
-	}
+	show_dead_place(dead_ptr, buf, tmp, extra_line);
 #else
 	(void)sprintf(tmp, "Killed on Level %d", dead_ptr->current_floor_ptr->dun_level);
 	center_string(buf, tmp);
