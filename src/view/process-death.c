@@ -258,16 +258,11 @@ void print_tomb(player_type *dead_ptr, void(*read_dead_file)(char*, size_t))
 
 
 /*!
- * todo handle_stuff、display_playerの引数は暫定。どのように設計し直すか少し考える
- * @brief 死亡、引退時の簡易ステータス表示
+ * @brief 死亡/引退/切腹時にインベントリ内のアイテムを*鑑定*する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @param handle_stuff 更新処理チェックへのコールバック
- * @param file_character ステータスダンプへのコールバック
- * @param update_playtime プレイ時間更新処理へのコールバック
- * @param display_player ステータス表示へのコールバック
  * @return なし
  */
-void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), errr(*file_character)(player_type*, concptr), void(*update_playtime)(void), void(*display_player)(player_type*, int))
+static void inventory_aware(player_type *creature_ptr)
 {
 	object_type *o_ptr;
 	for (int i = 0; i < INVEN_TOTAL; i++)
@@ -278,7 +273,17 @@ void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), err
 		object_aware(creature_ptr, o_ptr);
 		object_known(o_ptr);
 	}
+}
 
+
+/*!
+ * @brief 死亡/引退/切腹時に我が家のアイテムを*鑑定*する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void home_aware(player_type *creature_ptr)
+{
+	object_type *o_ptr;
 	store_type *st_ptr;
 	for (int i = 1; i < max_towns; i++)
 	{
@@ -292,6 +297,23 @@ void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), err
 			object_known(o_ptr);
 		}
 	}
+}
+
+
+/*!
+ * todo display_playerの引数は暫定。どのように設計し直すか少し考える
+ * @brief 死亡、引退時の簡易ステータス表示
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param handle_stuff 更新処理チェックへのコールバック
+ * @param file_character ステータスダンプへのコールバック
+ * @param update_playtime プレイ時間更新処理へのコールバック
+ * @param display_player ステータス表示へのコールバック
+ * @return なし
+ */
+void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), errr(*file_character)(player_type*, concptr), void(*update_playtime)(void), void(*display_player)(player_type*, int))
+{
+	inventory_aware(creature_ptr);
+	home_aware(creature_ptr);
 
 	creature_ptr->update |= (PU_BONUS);
 	handle_stuff(creature_ptr);
@@ -335,6 +357,7 @@ void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), err
 
 	for (int l = 1; l < max_towns; l++)
 	{
+		store_type *st_ptr;
 		st_ptr = &town_info[l].store[STORE_HOME];
 		if (st_ptr->stock_num == 0) continue;
 		for (int i = 0, k = 0; i < st_ptr->stock_num; k++)
@@ -344,6 +367,7 @@ void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), err
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 				char tmp_val[80];
+				object_type *o_ptr;
 				o_ptr = &st_ptr->stock[i];
 				sprintf(tmp_val, "%c) ", I2A(j));
 				prt(tmp_val, j + 2, 4);
