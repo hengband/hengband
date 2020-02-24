@@ -33,6 +33,56 @@ static void center_string(char *buf, concptr str)
 
 
 /*!
+ * @brief プレーヤーを殺したモンスターを表示する
+ * @param dead_ptr プレーヤーへの参照ポインタ
+ * @param buf 墓テンプレへのバッファ
+ * @return 追加の行数
+ */
+static int show_killing_monster(player_type *dead_ptr, char *buf)
+{
+	char tmp[160];
+	roff_to_buf(dead_ptr->died_from, GRAVE_LINE_WIDTH + 1, tmp, sizeof tmp);
+	char *t;
+	t = tmp + strlen(tmp) + 1;
+	if (!*t) return 0;
+
+	char dummy[80];
+	strcpy(dummy, t); /* 2nd line */
+	if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
+	{
+		for (t = dummy + strlen(dummy) - 2; iskanji(*(t - 1)); t--) /* Loop */;
+		strcpy(t, "…");
+	}
+	else if (my_strstr(tmp, "『") && suffix(dummy, "』"))
+	{
+		char dummy2[80];
+		char *name_head = my_strstr(tmp, "『");
+		sprintf(dummy2, "%s%s", name_head, dummy);
+		if (strlen(dummy2) <= GRAVE_LINE_WIDTH)
+		{
+			strcpy(dummy, dummy2);
+			*name_head = '\0';
+		}
+	}
+	else if (my_strstr(tmp, "「") && suffix(dummy, "」"))
+	{
+		char dummy2[80];
+		char *name_head = my_strstr(tmp, "「");
+		sprintf(dummy2, "%s%s", name_head, dummy);
+		if (strlen(dummy2) <= GRAVE_LINE_WIDTH)
+		{
+			strcpy(dummy, dummy2);
+			*name_head = '\0';
+		}
+	}
+
+	center_string(buf, dummy);
+	put_str(buf, 15, 11);
+	return 1;
+}
+
+
+/*!
  * @brief 墓石のアスキーアート表示 /
  * Display a "tomb-stone"
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -93,45 +143,7 @@ void print_tomb(player_type *dead_ptr, void(*read_dead_file)(char*))
 	}
 	else
 	{
-		roff_to_buf(dead_ptr->died_from, GRAVE_LINE_WIDTH + 1, tmp, sizeof tmp);
-		char *t;
-		t = tmp + strlen(tmp) + 1;
-		if (*t)
-		{
-			char dummy[80];
-			strcpy(dummy, t); /* 2nd line */
-			if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
-			{
-				for (t = dummy + strlen(dummy) - 2; iskanji(*(t - 1)); t--) /* Loop */;
-				strcpy(t, "…");
-			}
-			else if (my_strstr(tmp, "『") && suffix(dummy, "』"))
-			{
-				char dummy2[80];
-				char *name_head = my_strstr(tmp, "『");
-				sprintf(dummy2, "%s%s", name_head, dummy);
-				if (strlen(dummy2) <= GRAVE_LINE_WIDTH)
-				{
-					strcpy(dummy, dummy2);
-					*name_head = '\0';
-				}
-			}
-			else if (my_strstr(tmp, "「") && suffix(dummy, "」"))
-			{
-				char dummy2[80];
-				char *name_head = my_strstr(tmp, "「");
-				sprintf(dummy2, "%s%s", name_head, dummy);
-				if (strlen(dummy2) <= GRAVE_LINE_WIDTH)
-				{
-					strcpy(dummy, dummy2);
-					*name_head = '\0';
-				}
-			}
-
-			center_string(buf, dummy);
-			put_str(buf, 15, 11);
-			extra_line = 1;
-		}
+		extra_line = show_killing_monster(dead_ptr, buf);
 	}
 
 	center_string(buf, tmp);
