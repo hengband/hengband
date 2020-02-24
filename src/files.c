@@ -1007,22 +1007,14 @@ errr process_pref_file(player_type *creature_ptr, concptr name)
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, name);
 
-	/* Process the system pref file */
 	errr err1 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL);
-
-	/* Stop at parser errors, but not at non-existing file */
 	if (err1 > 0) return err1;
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
-
-	/* Process the user pref file */
 	errr err2 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL);
-
-	/* User file does not exist, but read system pref file */
 	if (err2 < 0 && !err1)
 		return -2;
 
-	/* Result of user file processing */
 	return err2;
 }
 
@@ -1040,7 +1032,6 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
 	HIT_POINT show_todam = creature_ptr->dis_to_d[hand];
 	object_type *o_ptr = &creature_ptr->inventory_list[INVEN_RARM + hand];
 
-	/* Hack -- add in weapon info if known */
 	if (object_is_known(o_ptr)) show_tohit += o_ptr->to_h;
 	if (object_is_known(o_ptr)) show_todam += o_ptr->to_d;
 
@@ -1049,7 +1040,6 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
 	char buf[160];
 	sprintf(buf, "(%+d,%+d)", (int)show_tohit, (int)show_todam);
 
-	/* Dump the bonuses to hit/dam */
 	if (!has_melee_weapon(creature_ptr, INVEN_RARM) && !has_melee_weapon(creature_ptr, INVEN_LARM))
 		display_player_one_line(ENTRY_BARE_HAND, buf, TERM_L_BLUE);
 	else if (creature_ptr->ryoute)
@@ -1069,7 +1059,6 @@ static void display_player_middle(player_type *creature_ptr)
 {
 	HIT_PROB show_tohit = creature_ptr->dis_to_h_b;
 	HIT_POINT show_todam = 0;
-
 	if (creature_ptr->migite)
 	{
 		display_player_melee_bonus(creature_ptr, 0, left_hander ? ENTRY_LEFT_HAND1 : ENTRY_RIGHT_HAND1);
@@ -1099,7 +1088,6 @@ static void display_player_middle(player_type *creature_ptr)
 		}
 	}
 
-	/* Apply weapon bonuses */
 	object_type *o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
 	if (object_is_known(o_ptr)) show_tohit += o_ptr->to_h;
 	if (object_is_known(o_ptr)) show_todam += o_ptr->to_d;
@@ -1111,29 +1099,20 @@ static void display_player_middle(player_type *creature_ptr)
 
 	show_tohit += creature_ptr->skill_thb / BTH_PLUS_ADJ;
 
-	/* Range attacks */
 	display_player_one_line(ENTRY_SHOOT_HIT_DAM, format("(%+d,%+d)", show_tohit, show_todam), TERM_L_BLUE);
-
 	int tmul = 0;
 	if (creature_ptr->inventory_list[INVEN_BOW].k_idx)
 	{
 		tmul = bow_tmul(creature_ptr->inventory_list[INVEN_BOW].sval);
-
-		/* Get extra "power" from "extra might" */
 		if (creature_ptr->xtra_might) tmul++;
 
 		tmul = tmul * (100 + (int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
 	}
 
-	/* shoot power */
 	display_player_one_line(ENTRY_SHOOT_POWER, format("x%d.%02d", tmul / 100, tmul % 100), TERM_L_BLUE);
-
-	/* Dump the armor class */
 	display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", creature_ptr->dis_ac, creature_ptr->dis_to_a), TERM_L_BLUE);
 
 	int i = creature_ptr->pspeed - 110;
-
-	/* Hack -- Visually "undo" the Search Mode Slowdown */
 	if (creature_ptr->action == ACTION_SEARCH) i += 10;
 
 	TERM_COLOR attr;
@@ -1194,29 +1173,18 @@ static void display_player_middle(player_type *creature_ptr)
 	}
 
 	display_player_one_line(ENTRY_SPEED, buf, attr);
-
-	/* Dump character level */
 	display_player_one_line(ENTRY_LEVEL, format("%d", creature_ptr->lev), TERM_L_GREEN);
 
-	/* Dump experience */
-	int e;
-	if (creature_ptr->prace == RACE_ANDROID) e = ENTRY_EXP_ANDR;
-	else e = ENTRY_CUR_EXP;
-
+	int e = (creature_ptr->prace == RACE_ANDROID) ? ENTRY_EXP_ANDR : ENTRY_CUR_EXP;
 	if (creature_ptr->exp >= creature_ptr->max_exp)
 		display_player_one_line(e, format("%ld", creature_ptr->exp), TERM_L_GREEN);
 	else
 		display_player_one_line(e, format("%ld", creature_ptr->exp), TERM_YELLOW);
 
-	/* Dump max experience */
-	if (creature_ptr->prace == RACE_ANDROID)
-		/* Nothing */;
-	else
+	if (creature_ptr->prace != RACE_ANDROID)
 		display_player_one_line(ENTRY_MAX_EXP, format("%ld", creature_ptr->max_exp), TERM_L_GREEN);
 
-	/* Dump exp to advance */
-	if (creature_ptr->prace == RACE_ANDROID) e = ENTRY_EXP_TO_ADV_ANDR;
-	else e = ENTRY_EXP_TO_ADV;
+	e = (creature_ptr->prace == RACE_ANDROID) ? ENTRY_EXP_TO_ADV_ANDR : ENTRY_EXP_TO_ADV;
 
 	if (creature_ptr->lev >= PY_MAX_LEVEL)
 		display_player_one_line(e, "*****", TERM_L_GREEN);
@@ -1225,18 +1193,18 @@ static void display_player_middle(player_type *creature_ptr)
 	else
 		display_player_one_line(e, format("%ld", (s32b)(player_exp[creature_ptr->lev - 1] * creature_ptr->expfact / 100L)), TERM_L_GREEN);
 
-	/* Dump gold */
 	display_player_one_line(ENTRY_GOLD, format("%ld", creature_ptr->au), TERM_L_GREEN);
 
-	/* Dump Day */
 	int day, hour, min;
 	extract_day_hour_min(creature_ptr, &day, &hour, &min);
 
-	if (day < MAX_DAYS) sprintf(buf, _("%d日目 %2d:%02d", "Day %d %2d:%02d"), day, hour, min);
-	else sprintf(buf, _("*****日目 %2d:%02d", "Day ***** %2d:%02d"), hour, min);
+	if (day < MAX_DAYS)
+		sprintf(buf, _("%d日目 %2d:%02d", "Day %d %2d:%02d"), day, hour, min);
+	else
+		sprintf(buf, _("*****日目 %2d:%02d", "Day ***** %2d:%02d"), hour, min);
+
 	display_player_one_line(ENTRY_DAY, buf, TERM_L_GREEN);
 
-	/* Dump hit point */
 	if (creature_ptr->chp >= creature_ptr->mhp)
 		display_player_one_line(ENTRY_HP, format("%4d/%4d", creature_ptr->chp, creature_ptr->mhp), TERM_L_GREEN);
 	else if (creature_ptr->chp > (creature_ptr->mhp * hitpoint_warn) / 10)
@@ -1244,7 +1212,6 @@ static void display_player_middle(player_type *creature_ptr)
 	else
 		display_player_one_line(ENTRY_HP, format("%4d/%4d", creature_ptr->chp, creature_ptr->mhp), TERM_RED);
 
-	/* Dump mana power */
 	if (creature_ptr->csp >= creature_ptr->msp)
 		display_player_one_line(ENTRY_SP, format("%4d/%4d", creature_ptr->csp, creature_ptr->msp), TERM_L_GREEN);
 	else if (creature_ptr->csp > (creature_ptr->msp * mana_warn) / 10)
@@ -1252,8 +1219,10 @@ static void display_player_middle(player_type *creature_ptr)
 	else
 		display_player_one_line(ENTRY_SP, format("%4d/%4d", creature_ptr->csp, creature_ptr->msp), TERM_RED);
 
-	/* Dump play time */
-	display_player_one_line(ENTRY_PLAY_TIME, format("%.2lu:%.2lu:%.2lu", current_world_ptr->play_time / (60 * 60), (current_world_ptr->play_time / 60) % 60, current_world_ptr->play_time % 60), TERM_L_GREEN);
+	u32b play_hour = current_world_ptr->play_time / (60 * 60);
+	u32b play_min = (current_world_ptr->play_time / 60) % 60;
+	u32b play_sec = current_world_ptr->play_time % 60;
+	display_player_one_line(ENTRY_PLAY_TIME, format("%.2lu:%.2lu:%.2lu", play_hour, play_min, play_sec), TERM_L_GREEN);
 }
 
 
