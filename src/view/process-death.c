@@ -121,6 +121,39 @@ static void show_dead_place(player_type *dead_ptr, char *buf, char *tomb_message
 	put_str(buf, 15 + extra_line, 11);
 }
 
+/*!
+ * @brief 墓に刻む言葉をオリジナルより細かく表示
+ * @param dead_ptr プレーヤーへの参照ポインタ
+ * @param buf 墓テンプレ
+ * @return なし
+ */
+void show_tomb_detail(player_type *dead_ptr, char *buf)
+{
+	char tomb_message[160];
+	int extra_line = 0;
+	if (streq(dead_ptr->died_from, "途中終了"))
+	{
+		strcpy(tomb_message, "<自殺>");
+	}
+	else if (streq(dead_ptr->died_from, "ripe"))
+	{
+		strcpy(tomb_message, "引退後に天寿を全う");
+	}
+	else if (streq(dead_ptr->died_from, "Seppuku"))
+	{
+		strcpy(tomb_message, "勝利の後、切腹");
+	}
+	else
+	{
+		extra_line = show_killing_monster(dead_ptr, buf, tomb_message, sizeof(tomb_message));
+	}
+
+	center_string(buf, tomb_message);
+	put_str(buf, 14, 11);
+
+	show_dead_place(dead_ptr, buf, tomb_message, extra_line);
+}
+
 
 /*!
  * @brief 墓石のアスキーアート表示 /
@@ -166,29 +199,7 @@ void print_tomb(player_type *dead_ptr, void(*read_dead_file)(char*, size_t))
 	put_str(buf, 13, 11);
 
 #ifdef JP
-	/* 墓に刻む言葉をオリジナルより細かく表示 */
-	int extra_line = 0;
-	if (streq(dead_ptr->died_from, "途中終了"))
-	{
-		strcpy(tomb_message, "<自殺>");
-	}
-	else if (streq(dead_ptr->died_from, "ripe"))
-	{
-		strcpy(tomb_message, "引退後に天寿を全う");
-	}
-	else if (streq(dead_ptr->died_from, "Seppuku"))
-	{
-		strcpy(tomb_message, "勝利の後、切腹");
-	}
-	else
-	{
-		extra_line = show_killing_monster(dead_ptr, buf, tomb_message, sizeof(tomb_message));
-	}
-
-	center_string(buf, tomb_message);
-	put_str(buf, 14, 11);
-
-	show_dead_place(dead_ptr, buf, tomb_message, extra_line);
+	show_tomb_detail(dead_ptr, buf);
 #else
 	(void)sprintf(tomb_message, "Killed on Level %d", dead_ptr->current_floor_ptr->dun_level);
 	center_string(buf, tomb_message);
