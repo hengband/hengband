@@ -364,6 +364,31 @@ static void show_dead_home_items(player_type *creature_ptr)
 
 
 /*!
+ * @brief キャラクタ情報をファイルに書き出す
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param file_character ステータスダンプへのコールバック
+ * @return なし
+ */
+static void export_player_info(player_type *creature_ptr, errr(*file_character)(player_type*, concptr))
+{
+	prt(_("キャラクターの記録をファイルに書き出すことができます。", "You may now dump a character record to one or more files."), 21, 0);
+	prt(_("リターンキーでキャラクターを見ます。ESCで中断します。", "Then, hit RETURN to see the character, or ESC to abort."), 22, 0);
+	while (TRUE)
+	{
+		char out_val[160];
+		put_str(_("ファイルネーム: ", "Filename: "), 23, 0);
+		strcpy(out_val, "");
+		if (!askfor(out_val, 60)) return;
+		if (!out_val[0]) break;
+
+		screen_save();
+		(void)(*file_character)(creature_ptr, out_val);
+		screen_load();
+	}
+}
+
+
+/*!
  * todo display_playerの引数は暫定。どのように設計し直すか少し考える
  * @brief 死亡、引退時の簡易ステータス表示
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -382,20 +407,8 @@ void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), err
 	handle_stuff(creature_ptr);
 	flush();
 	msg_erase();
-	prt(_("キャラクターの記録をファイルに書き出すことができます。", "You may now dump a character record to one or more files."), 21, 0);
-	prt(_("リターンキーでキャラクターを見ます。ESCで中断します。", "Then, hit RETURN to see the character, or ESC to abort."), 22, 0);
-	while (TRUE)
-	{
-		char out_val[160];
-		put_str(_("ファイルネーム: ", "Filename: "), 23, 0);
-		strcpy(out_val, "");
-		if (!askfor(out_val, 60)) return;
-		if (!out_val[0]) break;
-		screen_save();
-		(void)file_character(creature_ptr, out_val);
-		screen_load();
-	}
-
+	
+	export_player_info(creature_ptr, file_character);
 	update_playtime();
 	display_player(creature_ptr, 0);
 	prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
