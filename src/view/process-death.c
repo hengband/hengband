@@ -40,9 +40,6 @@ static void center_string(char *buf, concptr str)
  */
 void print_tomb(player_type *dead_ptr)
 {
-#ifdef JP
-	int extra_line = 0;
-#endif
 	Term_clear();
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
@@ -63,19 +60,9 @@ void print_tomb(player_type *dead_ptr)
 		my_fclose(fp);
 	}
 
-	concptr p;
-	if (current_world_ptr->total_winner || (dead_ptr->lev > PY_MAX_LEVEL))
-	{
-#ifdef JP
-		p = "偉大なる者";
-#else
-		p = "Magnificent";
-#endif
-	}
-	else
-	{
-		p = player_title[dead_ptr->pclass][(dead_ptr->lev - 1) / 5];
-	}
+	concptr p = (current_world_ptr->total_winner || (dead_ptr->lev > PY_MAX_LEVEL))
+		? _("偉大なる者", "Magnificant")
+		: player_title[dead_ptr->pclass][(dead_ptr->lev - 1) / 5];
 
 	center_string(buf, dead_ptr->name);
 	put_str(buf, 6, 11);
@@ -107,6 +94,7 @@ void print_tomb(player_type *dead_ptr)
 
 #ifdef JP
 	/* 墓に刻む言葉をオリジナルより細かく表示 */
+	int extra_line = 0;
 	if (streq(dead_ptr->died_from, "途中終了"))
 	{
 		strcpy(tmp, "<自殺>");
@@ -251,14 +239,11 @@ void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), err
 	for (int i = 1; i < max_towns; i++)
 	{
 		st_ptr = &town_info[i].store[STORE_HOME];
-
-		/* Hack -- Know everything in the home */
 		for (int j = 0; j < st_ptr->stock_num; j++)
 		{
 			o_ptr = &st_ptr->stock[j];
 			if (!o_ptr->k_idx) continue;
 
-			/* Aware and Known */
 			object_aware(creature_ptr, o_ptr);
 			object_known(o_ptr);
 		}
