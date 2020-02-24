@@ -16,8 +16,6 @@
 
 #define GRAVE_LINE_WIDTH 31
 
-concptr ANGBAND_DIR_FILE; //!< Various extra files (ascii) These files may be portable between platforms
-
 /*!
  * @brief 墓石の真ん中に文字列を書き込む /
  * Centers a string within a GRAVE_LINE_WIDTH character string		-JWT-
@@ -38,10 +36,9 @@ static void center_string(char *buf, concptr str)
  * @param buf 墓テンプレへのバッファ
  * @return 追加の行数
  */
-static int show_killing_monster(player_type *dead_ptr, char *buf)
+static int show_killing_monster(player_type *dead_ptr, char *buf, char *tmp)
 {
-	char tmp[160];
-	roff_to_buf(dead_ptr->died_from, GRAVE_LINE_WIDTH + 1, tmp, sizeof tmp);
+	roff_to_buf(dead_ptr->died_from, GRAVE_LINE_WIDTH + 1, tmp, sizeof(tmp));
 	char *t;
 	t = tmp + strlen(tmp) + 1;
 	if (!*t) return 0;
@@ -88,12 +85,11 @@ static int show_killing_monster(player_type *dead_ptr, char *buf)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void print_tomb(player_type *dead_ptr, void(*read_dead_file)(char*))
+void print_tomb(player_type *dead_ptr, void(*read_dead_file)(char*, size_t))
 {
 	Term_clear();
 	char buf[1024];
-	(*read_dead_file)(buf);
-
+	(*read_dead_file)(buf, sizeof(buf));
 	concptr p = (current_world_ptr->total_winner || (dead_ptr->lev > PY_MAX_LEVEL))
 		? _("偉大なる者", "Magnificant")
 		: player_title[dead_ptr->pclass][(dead_ptr->lev - 1) / 5];
@@ -143,7 +139,7 @@ void print_tomb(player_type *dead_ptr, void(*read_dead_file)(char*))
 	}
 	else
 	{
-		extra_line = show_killing_monster(dead_ptr, buf);
+		extra_line = show_killing_monster(dead_ptr, buf, tmp);
 	}
 
 	center_string(buf, tmp);

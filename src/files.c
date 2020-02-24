@@ -74,6 +74,7 @@ concptr ANGBAND_DIR_BONE; //!< Bone files for player ghosts (ascii) These files 
 concptr ANGBAND_DIR_DATA; //!< Binary image files for the "*_info" arrays (binary) These files are not portable between platforms
 concptr ANGBAND_DIR_EDIT; //!< Textual template files for the "*_info" arrays (ascii) These files are portable between platforms
 concptr ANGBAND_DIR_SCRIPT; //!< Script files These files are portable between platforms.
+concptr ANGBAND_DIR_FILE; //!< Various extra files (ascii) These files may be portable between platforms
 concptr ANGBAND_DIR_HELP; //!< Help files (normal) for the online help (ascii) These files are portable between platforms
 concptr ANGBAND_DIR_INFO; //!< Help files (spoilers) for the online help (ascii) These files are portable between platforms
 concptr ANGBAND_DIR_PREF; //!< Default user "preference" files (ascii) These files are rarely portable between platforms
@@ -4950,18 +4951,19 @@ errr counts_write(player_type *creature_ptr, int where, u32b count)
 /*!
  * @brief 墓のアスキーアートテンプレを読み込む
  * @param buf テンプレへのバッファ
+ * @param buf_size バッファの長さ
  * @return なし
  */
-void read_dead_file(char *buf)
+void read_dead_file(char *buf, size_t buf_size)
 {
-	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
+	path_build(buf, buf_size, ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
 
 	FILE *fp;
 	fp = my_fopen(buf, "r");
 	if (!fp) return;
 
 	int i = 0;
-	while (my_fgets(fp, buf, sizeof(buf)) == 0)
+	while (my_fgets(fp, buf, buf_size) == 0)
 	{
 		put_str(buf, i++, 0);
 	}
