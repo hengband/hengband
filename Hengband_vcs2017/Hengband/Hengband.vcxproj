@@ -213,6 +213,7 @@
     <ClCompile Include="..\..\src\player-sex.c" />
     <ClCompile Include="..\..\src\player-skill.c" />
     <ClCompile Include="..\..\src\player-status.c" />
+    <ClCompile Include="..\..\src\player\permanent-resistances.c" />
     <ClCompile Include="..\..\src\quest.c" />
     <ClCompile Include="..\..\src\realm-craft.c" />
     <ClCompile Include="..\..\src\realm-crusade.c" />
@@ -325,6 +326,7 @@
     <ClInclude Include="..\..\src\monster-dist-offsets.h" />
     <ClInclude Include="..\..\src\object-flavor.h" />
     <ClInclude Include="..\..\src\player-inventory.h" />
+    <ClInclude Include="..\..\src\player\permanent-resistances.h" />
     <ClInclude Include="..\..\src\signal-handlers.h" />
     <ClInclude Include="..\..\src\uid-checker.h" />
     <ClInclude Include="..\..\src\view\display-util.h" />

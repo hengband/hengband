@@ -424,6 +424,9 @@
     <ClCompile Include="..\..\src\character-dump.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\permanent-resistances.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -829,6 +832,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\character-dump.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\permanent-resistances.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
