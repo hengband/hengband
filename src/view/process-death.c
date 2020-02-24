@@ -301,6 +301,34 @@ static void home_aware(player_type *creature_ptr)
 
 
 /*!
+ * @brief プレーヤーの持ち物を表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return Escキーでゲームを終了する時TRUE
+ */
+static bool show_dead_player_items(player_type *creature_ptr)
+{
+	if (creature_ptr->equip_cnt)
+	{
+		Term_clear();
+		(void)show_equipment(creature_ptr, 0, USE_FULL, 0);
+		prt(_("装備していたアイテム: -続く-", "You are using: -more-"), 0, 0);
+		if (inkey() == ESCAPE) return TRUE;
+	}
+
+	if (creature_ptr->inven_cnt)
+	{
+		Term_clear();
+		(void)show_inventory(creature_ptr, 0, USE_FULL, 0);
+		prt(_("持っていたアイテム: -続く-", "You are carrying: -more-"), 0, 0);
+
+		if (inkey() == ESCAPE) return TRUE;
+	}
+
+	return FALSE;
+}
+
+
+/*!
  * todo display_playerの引数は暫定。どのように設計し直すか少し考える
  * @brief 死亡、引退時の簡易ステータス表示
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -337,23 +365,7 @@ void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), err
 	display_player(creature_ptr, 0);
 	prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
 	if (inkey() == ESCAPE) return;
-
-	if (creature_ptr->equip_cnt)
-	{
-		Term_clear();
-		(void)show_equipment(creature_ptr, 0, USE_FULL, 0);
-		prt(_("装備していたアイテム: -続く-", "You are using: -more-"), 0, 0);
-		if (inkey() == ESCAPE) return;
-	}
-
-	if (creature_ptr->inven_cnt)
-	{
-		Term_clear();
-		(void)show_inventory(creature_ptr, 0, USE_FULL, 0);
-		prt(_("持っていたアイテム: -続く-", "You are carrying: -more-"), 0, 0);
-
-		if (inkey() == ESCAPE) return;
-	}
+	if (show_dead_player_items(creature_ptr)) return;
 
 	for (int l = 1; l < max_towns; l++)
 	{
