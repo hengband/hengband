@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @brief 死亡・引退・切腹時の画面表示
  * @date 2020/02/24
  * @author Hourier
@@ -38,27 +38,11 @@ static void center_string(char *buf, concptr str)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void print_tomb(player_type *dead_ptr)
+void print_tomb(player_type *dead_ptr, void(*read_dead_file)(char*))
 {
 	Term_clear();
 	char buf[1024];
-	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
-
-	FILE *fp;
-	fp = my_fopen(buf, "r");
-
-	if (fp)
-	{
-		int i = 0;
-
-		/* Dump the file to the screen */
-		while (my_fgets(fp, buf, sizeof(buf)) == 0)
-		{
-			put_str(buf, i++, 0);
-		}
-
-		my_fclose(fp);
-	}
+	(*read_dead_file)(buf);
 
 	concptr p = (current_world_ptr->total_winner || (dead_ptr->lev > PY_MAX_LEVEL))
 		? _("偉大なる者", "Magnificant")
