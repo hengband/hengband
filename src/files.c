@@ -4945,3 +4945,26 @@ errr counts_write(player_type *creature_ptr, int where, u32b count)
 
 	return 0;
 }
+
+
+/*!
+ * @brief 墓のアスキーアートテンプレを読み込む
+ * @param buf テンプレへのバッファ
+ * @return なし
+ */
+void read_dead_file(char *buf)
+{
+	path_build(buf, sizeof(buf), ANGBAND_DIR_FILE, _("dead_j.txt", "dead.txt"));
+
+	FILE *fp;
+	fp = my_fopen(buf, "r");
+	if (!fp) return;
+
+	int i = 0;
+	while (my_fgets(fp, buf, sizeof(buf)) == 0)
+	{
+		put_str(buf, i++, 0);
+	}
+
+	my_fclose(fp);
+}

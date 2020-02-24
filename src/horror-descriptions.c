@@ -1,4 +1,4 @@
-/*!
+﻿/*!
  * @file horror-descriptions.c
  * @brief エルドリッチホラーの形容詞テーブル定義 / Definitions of adjectives on 
  * @date 2020/02/21

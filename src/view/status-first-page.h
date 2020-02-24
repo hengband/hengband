@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #define ENTRY_BARE_HAND 0
 #define ENTRY_TWO_HANDS 1

@@ -4695,7 +4695,7 @@ void close_game(player_type *player_ptr)
 		}
 		else do_send = FALSE;
 
-		print_tomb(player_ptr);
+		print_tomb(player_ptr, read_dead_file);
 		flush();
 
 		show_info(player_ptr, handle_stuff, file_character, update_playtime, display_player);

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "angband.h"
 extern s16b signal_count;

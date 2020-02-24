@@ -1,4 +1,4 @@
-#include "uid-checker.h"
+﻿#include "uid-checker.h"
 #ifdef SET_UID
 # ifdef SAFE_SETUID
 #  ifdef SAFE_SETUID_POSIX
