@@ -178,6 +178,40 @@ static void show_tomb_detail(player_type *dead_ptr, char *buf)
 
 	show_dead_place(dead_ptr, buf, tomb_message, extra_line);
 }
+#else
+
+
+/*!
+ * @brief Detailed display of words engraved on the tomb (English version only)
+ * @param dead_ptr reference pointer to the player
+ * @param buf template of the tomb
+ * @return nothing
+ */
+static void show_tomb_detail(player_type *dead_ptr, char *buf)
+{
+	char tomb_message[160];
+	(void)sprintf(tomb_message, "Killed on Level %d", dead_ptr->current_floor_ptr->dun_level);
+	center_string(buf, tomb_message);
+	put_str(buf, 14, 11);
+
+	roff_to_buf(format("by %s.", dead_ptr->died_from), GRAVE_LINE_WIDTH + 1, tomb_message, sizeof(tomb_message));
+	center_string(buf, tomb_message);
+	char *t;
+	put_str(buf, 15, 11);
+	t = tomb_message + strlen(tomb_message) + 1;
+	if (!*t) return;
+
+	char dummy[80];
+	strcpy(dummy, t); /* 2nd line */
+	if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
+	{
+		int dummy_len = strlen(dummy);
+		strcpy(dummy + MIN(dummy_len, GRAVE_LINE_WIDTH - 3), "...");
+	}
+
+	center_string(buf, dummy);
+	put_str(buf, 16, 11);
+}
 #endif
 
 
@@ -212,33 +246,7 @@ void print_tomb(player_type *dead_ptr, void(*read_dead_file)(char*, size_t))
 	put_str(buf, 10, 11);
 
 	show_basic_params(dead_ptr, buf);
-
-#ifdef JP
 	show_tomb_detail(dead_ptr, buf);
-#else
-	char tomb_message[160];
-	(void)sprintf(tomb_message, "Killed on Level %d", dead_ptr->current_floor_ptr->dun_level);
-	center_string(buf, tomb_message);
-	put_str(buf, 14, 11);
-
-	roff_to_buf(format("by %s.", dead_ptr->died_from), GRAVE_LINE_WIDTH + 1, tomb_message, sizeof tomb_message);
-	center_string(buf, tomb_message);
-	char *t;
-	put_str(buf, 15, 11);
-	t = tomb_message + strlen(tomb_message) + 1;
-	if (*t)
-	{
-		char dummy[80];
-		strcpy(dummy, t); /* 2nd line */
-		if (*(t + strlen(t) + 1)) /* Does 3rd line exist? */
-		{
-			int dummy_len = strlen(dummy);
-			strcpy(dummy + MIN(dummy_len, GRAVE_LINE_WIDTH - 3), "...");
-		}
-		center_string(buf, dummy);
-		put_str(buf, 16, 11);
-	}
-#endif
 
 	char current_time[80];
 	time_t ct = time((time_t*)0);
