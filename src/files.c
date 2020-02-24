@@ -39,7 +39,6 @@
 #include "patron.h"
 #include "monster-status.h"
 #include "object-hook.h"
-#include "realm-hex.h"
 #include "view-mainwindow.h"
 #include "dungeon-file.h"
 #include "objectkind.h"
