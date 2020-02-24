@@ -121,13 +121,37 @@ static void show_dead_place(player_type *dead_ptr, char *buf, char *tomb_message
 	put_str(buf, 15 + extra_line, 11);
 }
 
+
 /*!
- * @brief 墓に刻む言葉をオリジナルより細かく表示
+ * @brief 墓に基本情報を表示 (日本語版専用)
  * @param dead_ptr プレーヤーへの参照ポインタ
  * @param buf 墓テンプレ
  * @return なし
  */
-void show_tomb_detail(player_type *dead_ptr, char *buf)
+static void show_basic_params(player_type *dead_ptr, char *buf)
+{
+	char tomb_message[160];
+	(void)sprintf(tomb_message, _("レベル: %d", "Level: %d"), (int)dead_ptr->lev);
+	center_string(buf, tomb_message);
+	put_str(buf, 11, 11);
+
+	(void)sprintf(tomb_message, _("経験値: %ld", "Exp: %ld"), (long)dead_ptr->exp);
+	center_string(buf, tomb_message);
+	put_str(buf, 12, 11);
+
+	(void)sprintf(tomb_message, _("所持金: %ld", "AU: %ld"), (long)dead_ptr->au);
+	center_string(buf, tomb_message);
+	put_str(buf, 13, 11);
+}
+
+
+/*!
+ * @brief 墓に刻む言葉を細かく表示 (日本語版専用)
+ * @param dead_ptr プレーヤーへの参照ポインタ
+ * @param buf 墓テンプレ
+ * @return なし
+ */
+static void show_tomb_detail(player_type *dead_ptr, char *buf)
 {
 	char tomb_message[160];
 	int extra_line = 0;
@@ -185,22 +209,12 @@ void print_tomb(player_type *dead_ptr, void(*read_dead_file)(char*, size_t))
 	center_string(buf, cp_ptr->title);
 	put_str(buf, 10, 11);
 
-	char tomb_message[160];
-	(void)sprintf(tomb_message, _("レベル: %d", "Level: %d"), (int)dead_ptr->lev);
-	center_string(buf, tomb_message);
-	put_str(buf, 11, 11);
-
-	(void)sprintf(tomb_message, _("経験値: %ld", "Exp: %ld"), (long)dead_ptr->exp);
-	center_string(buf, tomb_message);
-	put_str(buf, 12, 11);
-
-	(void)sprintf(tomb_message, _("所持金: %ld", "AU: %ld"), (long)dead_ptr->au);
-	center_string(buf, tomb_message);
-	put_str(buf, 13, 11);
+	show_basic_params(dead_ptr, buf);
 
 #ifdef JP
 	show_tomb_detail(dead_ptr, buf);
 #else
+	char tomb_message[160];
 	(void)sprintf(tomb_message, "Killed on Level %d", dead_ptr->current_floor_ptr->dun_level);
 	center_string(buf, tomb_message);
 	put_str(buf, 14, 11);
@@ -223,9 +237,11 @@ void print_tomb(player_type *dead_ptr, void(*read_dead_file)(char*, size_t))
 		put_str(buf, 16, 11);
 	}
 #endif
+
+	char current_time[80];
 	time_t ct = time((time_t*)0);
-	(void)sprintf(tomb_message, "%-.24s", ctime(&ct));
-	center_string(buf, tomb_message);
+	(void)sprintf(current_time, "%-.24s", ctime(&ct));
+	center_string(buf, current_time);
 	put_str(buf, 17, 11);
 	msg_format(_("さようなら、%s!", "Goodbye, %s!"), dead_ptr->name);
 }
