@@ -31,7 +31,31 @@ static void center_string(char *buf, concptr str)
 
 
 /*!
- * @brief プレーヤーを殺したモンスターを表示する
+ * @brief 墓に基本情報を表示
+ * @param dead_ptr プレーヤーへの参照ポインタ
+ * @param buf 墓テンプレ
+ * @return なし
+ */
+static void show_basic_params(player_type *dead_ptr, char *buf)
+{
+	char tomb_message[160];
+	(void)sprintf(tomb_message, _("レベル: %d", "Level: %d"), (int)dead_ptr->lev);
+	center_string(buf, tomb_message);
+	put_str(buf, 11, 11);
+
+	(void)sprintf(tomb_message, _("経験値: %ld", "Exp: %ld"), (long)dead_ptr->exp);
+	center_string(buf, tomb_message);
+	put_str(buf, 12, 11);
+
+	(void)sprintf(tomb_message, _("所持金: %ld", "AU: %ld"), (long)dead_ptr->au);
+	center_string(buf, tomb_message);
+	put_str(buf, 13, 11);
+}
+
+
+#ifdef JP
+/*!
+ * @brief プレーヤーを殺したモンスターを表示する (日本語版専用)
  * @param dead_ptr プレーヤーへの参照ポインタ
  * @param buf 墓テンプレ
  * @param tomb_message 墓碑に刻む言葉
@@ -123,29 +147,6 @@ static void show_dead_place(player_type *dead_ptr, char *buf, char *tomb_message
 
 
 /*!
- * @brief 墓に基本情報を表示 (日本語版専用)
- * @param dead_ptr プレーヤーへの参照ポインタ
- * @param buf 墓テンプレ
- * @return なし
- */
-static void show_basic_params(player_type *dead_ptr, char *buf)
-{
-	char tomb_message[160];
-	(void)sprintf(tomb_message, _("レベル: %d", "Level: %d"), (int)dead_ptr->lev);
-	center_string(buf, tomb_message);
-	put_str(buf, 11, 11);
-
-	(void)sprintf(tomb_message, _("経験値: %ld", "Exp: %ld"), (long)dead_ptr->exp);
-	center_string(buf, tomb_message);
-	put_str(buf, 12, 11);
-
-	(void)sprintf(tomb_message, _("所持金: %ld", "AU: %ld"), (long)dead_ptr->au);
-	center_string(buf, tomb_message);
-	put_str(buf, 13, 11);
-}
-
-
-/*!
  * @brief 墓に刻む言葉を細かく表示 (日本語版専用)
  * @param dead_ptr プレーヤーへの参照ポインタ
  * @param buf 墓テンプレ
@@ -177,6 +178,7 @@ static void show_tomb_detail(player_type *dead_ptr, char *buf)
 
 	show_dead_place(dead_ptr, buf, tomb_message, extra_line);
 }
+#endif
 
 
 /*!
