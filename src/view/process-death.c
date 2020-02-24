@@ -32,12 +32,6 @@ static void center_string(char *buf, concptr str)
 }
 
 
-/*
- * Redefinable "print_tombstone" action
- */
-bool(*tombstone_aux)(void) = NULL;
-
-
 /*!
  * @brief 墓石のアスキーアート表示 /
  * Display a "tomb-stone"
@@ -46,14 +40,6 @@ bool(*tombstone_aux)(void) = NULL;
  */
 void print_tomb(player_type *dead_ptr)
 {
-	bool done = FALSE;
-	if (tombstone_aux)
-	{
-		done = (*tombstone_aux)();
-	}
-
-	if (done) return;
-
 #ifdef JP
 	int extra_line = 0;
 #endif
