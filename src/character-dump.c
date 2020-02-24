@@ -852,7 +852,7 @@ static void dump_aux_home_museum(player_type *creature_ptr, FILE *fff)
  * @param fff ファイルポインタ
  * @return エラーコード
  */
-errr make_character_dump(player_type *creature_ptr, FILE *fff, void(*update_playtime)(void), void(*display_player)(player_type*, int))
+void make_character_dump(player_type *creature_ptr, FILE *fff, void(*update_playtime)(void), void(*display_player)(player_type*, int))
 {
 #ifdef JP
 	fprintf(fff, "  [変愚蛮怒 %d.%d.%d キャラクタ情報]\n\n",
@@ -881,5 +881,4 @@ errr make_character_dump(player_type *creature_ptr, FILE *fff, void(*update_play
 	dump_aux_home_museum(creature_ptr, fff);
 
 	fprintf(fff, _("  [チェックサム: \"%s\"]\n\n", "  [Check Sum: \"%s\"]\n\n"), get_check_sum());
-	return 0;
 }

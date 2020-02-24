@@ -241,7 +241,7 @@ static errr make_dump(player_type *creature_ptr, BUF* dumpbuf, void(*update_play
 	}
 
 	/* 一旦一時ファイルを作る。通常のダンプ出力と共通化するため。 */
-	(void)make_character_dump(creature_ptr, fff, update_playtime, display_player);
+	make_character_dump(creature_ptr, fff, update_playtime, display_player);
 	my_fclose(fff);
 
 	/* Open for read */
