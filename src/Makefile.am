@@ -13,6 +13,7 @@ hengband_SOURCES = \
 	\
 	bldg.c bldg.h chest.c chest.h chuukei.c chuukei.h \
 	\
+	view/display-player.c view/display-player.h \
 	view/process-death.c view/process-death.h \
 	view/status-first-page.c view/status-first-page.h \
 	player/permanent-resistance.c player/permanent-resistance.h \

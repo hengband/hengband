@@ -1264,3 +1264,37 @@ void display_player(player_type *creature_ptr, int mode)
 		t += strlen(t) + 1;
 	}
 }
+
+
+/*!
+ * @brief プレイヤーの装備一覧をシンボルで並べる
+ * Equippy chars
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param y 表示するコンソールの行
+ * @param x 表示するコンソールの列
+ * @param mode オプション
+ * @return なし
+ */
+void display_player_equippy(player_type *creature_ptr, TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
+{
+	/* Weapon flags need only two column */
+	int max_i = (mode & DP_WP) ? INVEN_LARM + 1 : INVEN_TOTAL;
+
+	/* Dump equippy chars */
+	for (int i = INVEN_RARM; i < max_i; i++)
+	{
+		object_type *o_ptr;
+		o_ptr = &creature_ptr->inventory_list[i];
+
+		TERM_COLOR a = object_attr(o_ptr);
+		char c = object_char(o_ptr);
+
+		if (!equippy_chars || !o_ptr->k_idx)
+		{
+			c = ' ';
+			a = TERM_DARK;
+		}
+
+		Term_putch(x + i - INVEN_RARM, y, a, c);
+	}
+}
