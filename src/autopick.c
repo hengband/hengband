@@ -25,6 +25,7 @@
 #include "player-class.h"
 #include "player-race.h"
 #include "player-inventory.h"
+#include "view/display-player.h"
 #include "objectkind.h"
 #include "object-ego.h"
 #include "object-flavor.h"

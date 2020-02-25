@@ -28,6 +28,7 @@
 #include "store.h"
 #include "patron.h"
 #include "quest.h"
+#include "view/display-player.h"
 #include "player-class.h"
 #include "player-status.h"
 #include "player-personality.h"

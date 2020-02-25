@@ -430,6 +430,9 @@
     <ClCompile Include="..\..\src\player\temporary-resistances.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\display-player.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -841,6 +844,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\temporary-resistances.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-player.h">
+      <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

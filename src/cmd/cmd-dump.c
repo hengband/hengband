@@ -51,6 +51,7 @@
 #include "birth.h"
 #include "dungeon.h"
 #include "world.h"
+#include "view/display-player.h"
 #include "player-effects.h"
 #include "player-status.h"
 #include "player-skill.h"
