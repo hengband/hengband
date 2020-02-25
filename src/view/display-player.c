@@ -314,7 +314,7 @@ static void display_player_stat_info(player_type *creature_ptr)
  * Special display, part 1
  * @return なし
  */
-static void display_player_flag_info(player_type *creature_ptr)
+static void display_player_flag_info(player_type *creature_ptr, void(*display_player_equippy)(player_type*, TERM_LEN, TERM_LEN, BIT_FLAGS16))
 {
 	all_player_flags f;
 	player_flags(creature_ptr, f.player_flags);
@@ -327,7 +327,7 @@ static void display_player_flag_info(player_type *creature_ptr)
 	/*** Set 1 ***/
 	TERM_LEN row = 12;
 	TERM_LEN col = 1;
-	display_player_equippy(creature_ptr, row - 2, col + 8, 0);
+	(*display_player_equippy)(creature_ptr, row - 2, col + 8, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 8);
 
 #ifdef JP
@@ -365,7 +365,7 @@ static void display_player_flag_info(player_type *creature_ptr)
 	/*** Set 2 ***/
 	row = 12;
 	col = 26;
-	display_player_equippy(creature_ptr, row - 2, col + 8, 0);
+	(*display_player_equippy)(creature_ptr, row - 2, col + 8, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 8);
 
 #ifdef JP
@@ -395,7 +395,7 @@ static void display_player_flag_info(player_type *creature_ptr)
 	/*** Set 3 ***/
 	row = 12;
 	col = 51;
-	display_player_equippy(creature_ptr, row - 2, col + 12, 0);
+	(*display_player_equippy)(creature_ptr, row - 2, col + 12, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 12);
 
 #ifdef JP
@@ -430,7 +430,7 @@ static void display_player_flag_info(player_type *creature_ptr)
  * Special display, part 2
  * @return なし
  */
-static void display_player_other_flag_info(player_type *creature_ptr)
+static void display_player_other_flag_info(player_type *creature_ptr, void(*display_player_equippy)(player_type*, TERM_LEN, TERM_LEN, BIT_FLAGS16))
 {
 	/* Extract flags and store */
 	all_player_flags f;
@@ -444,7 +444,7 @@ static void display_player_other_flag_info(player_type *creature_ptr)
 	/*** Set 1 ***/
 	TERM_LEN row = 3;
 	TERM_LEN col = 1;
-	display_player_equippy(creature_ptr, row - 2, col + 12, DP_WP);
+	(*display_player_equippy)(creature_ptr, row - 2, col + 12, DP_WP);
 	c_put_str(TERM_WHITE, "ab@", row - 1, col + 12);
 
 #ifdef JP
@@ -510,7 +510,7 @@ static void display_player_other_flag_info(player_type *creature_ptr)
 	/*** Set 2 ***/
 	row = 3;
 	col = col + 12 + 7;
-	display_player_equippy(creature_ptr, row - 2, col + 13, 0);
+	(*display_player_equippy)(creature_ptr, row - 2, col + 13, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 13);
 
 #ifdef JP
@@ -558,7 +558,7 @@ static void display_player_other_flag_info(player_type *creature_ptr)
 	/*** Set 3 ***/
 	row = 3;
 	col = col + 12 + 17;
-	display_player_equippy(creature_ptr, row - 2, col + 14, 0);
+	(*display_player_equippy)(creature_ptr, row - 2, col + 14, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 14);
 
 #ifdef JP
@@ -840,13 +840,13 @@ void display_player(player_type *creature_ptr, int mode)
 	{
 		display_player_misc_info(creature_ptr);
 		display_player_stat_info(creature_ptr);
-		display_player_flag_info(creature_ptr);
+		display_player_flag_info(creature_ptr, display_player_equippy);
 		return;
 	}
 
 	if (mode == 3)
 	{
-		display_player_other_flag_info(creature_ptr);
+		display_player_other_flag_info(creature_ptr, display_player_equippy);
 		return;
 	}
 
