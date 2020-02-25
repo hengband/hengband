@@ -28,116 +28,7 @@
 #include "dungeon-file.h"
 #include "objectkind.h"
 #include "view/display-util.h"
-
-/*!
- * @brief プレイヤーの種族による免疫フラグを返す
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @param flgs フラグを保管する配列
- * @return なし
- * @todo
- * xtra1.c周りと多重実装になっているのを何とかする
- */
-static void player_immunity(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
-{
-	for (int i = 0; i < TR_FLAG_SIZE; i++)
-		flgs[i] = 0L;
-
-	if (PRACE_IS_(creature_ptr, RACE_SPECTRE))
-		add_flag(flgs, TR_RES_NETHER);
-	if (creature_ptr->mimic_form == MIMIC_VAMPIRE || PRACE_IS_(creature_ptr, RACE_VAMPIRE))
-		add_flag(flgs, TR_RES_DARK);
-	if (creature_ptr->mimic_form == MIMIC_DEMON_LORD)
-		add_flag(flgs, TR_RES_FIRE);
-	else if (PRACE_IS_(creature_ptr, RACE_YEEK) && creature_ptr->lev > 19)
-		add_flag(flgs, TR_RES_ACID);
-}
-
-
-/*!
- * @brief プレイヤーの一時的魔法効果による免疫フラグを返す
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @param flgs フラグを保管する配列
- * @return なし
- * @todo
- * xtra1.c周りと多重実装になっているのを何とかする
- */
-static void tim_player_immunity(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
-{
-	for (int i = 0; i < TR_FLAG_SIZE; i++)
-		flgs[i] = 0L;
-
-	if (creature_ptr->special_defense & DEFENSE_ACID)
-		add_flag(flgs, TR_RES_ACID);
-	if (creature_ptr->special_defense & DEFENSE_ELEC)
-		add_flag(flgs, TR_RES_ELEC);
-	if (creature_ptr->special_defense & DEFENSE_FIRE)
-		add_flag(flgs, TR_RES_FIRE);
-	if (creature_ptr->special_defense & DEFENSE_COLD)
-		add_flag(flgs, TR_RES_COLD);
-	if (creature_ptr->wraith_form)
-		add_flag(flgs, TR_RES_DARK);
-}
-
-
-/*!
- * @brief プレイヤーの装備による免疫フラグを返す
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @param flgs フラグを保管する配列
- * @return なし
- * @todo
- * xtra1.c周りと多重実装になっているのを何とかする
- */
-static void known_obj_immunity(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
-{
-	for (int i = 0; i < TR_FLAG_SIZE; i++)
-		flgs[i] = 0L;
-
-	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
-	{
-		u32b o_flgs[TR_FLAG_SIZE];
-		object_type *o_ptr;
-		o_ptr = &creature_ptr->inventory_list[i];
-		if (!o_ptr->k_idx) continue;
-
-		object_flags_known(o_ptr, o_flgs);
-		if (have_flag(o_flgs, TR_IM_ACID)) add_flag(flgs, TR_RES_ACID);
-		if (have_flag(o_flgs, TR_IM_ELEC)) add_flag(flgs, TR_RES_ELEC);
-		if (have_flag(o_flgs, TR_IM_FIRE)) add_flag(flgs, TR_RES_FIRE);
-		if (have_flag(o_flgs, TR_IM_COLD)) add_flag(flgs, TR_RES_COLD);
-	}
-}
-
-
-/*!
- * @brief プレイヤーの種族による弱点フラグを返す
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @param flgs フラグを保管する配列
- * @return なし
- * @todo
- * xtra1.c周りと多重実装になっているのを何とかする
- */
-static void player_vuln_flags(player_type *creature_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
-{
-	for (int i = 0; i < TR_FLAG_SIZE; i++)
-		flgs[i] = 0L;
-
-	if ((creature_ptr->muta3 & MUT3_VULN_ELEM) || (creature_ptr->special_defense & KATA_KOUKIJIN))
-	{
-		add_flag(flgs, TR_RES_ACID);
-		add_flag(flgs, TR_RES_ELEC);
-		add_flag(flgs, TR_RES_FIRE);
-		add_flag(flgs, TR_RES_COLD);
-	}
-
-	if (PRACE_IS_(creature_ptr, RACE_ANDROID))
-		add_flag(flgs, TR_RES_ELEC);
-	if (PRACE_IS_(creature_ptr, RACE_ENT))
-		add_flag(flgs, TR_RES_FIRE);
-	if (PRACE_IS_(creature_ptr, RACE_VAMPIRE) || PRACE_IS_(creature_ptr, RACE_S_FAIRY) ||
-		(creature_ptr->mimic_form == MIMIC_VAMPIRE))
-		add_flag(flgs, TR_RES_LITE);
-}
-
+#include "player/race-resistances.h"
 
 /*!
  * @brief プレイヤーの特性フラグ一種を表示するサブルーチン /
@@ -559,7 +450,7 @@ static void display_player_flag_info(player_type *creature_ptr)
 	player_immunity(creature_ptr, f.player_imm);
 	tim_player_immunity(creature_ptr, f.tim_player_imm);
 	known_obj_immunity(creature_ptr, f.known_obj_imm);
-	player_vuln_flags(creature_ptr, f.player_vuln);
+	player_vulnerability_flags(creature_ptr, f.player_vuln);
 
 	/*** Set 1 ***/
 	TERM_LEN row = 12;
@@ -676,7 +567,7 @@ static void display_player_other_flag_info(player_type *creature_ptr)
 	player_immunity(creature_ptr, f.player_imm);
 	tim_player_immunity(creature_ptr, f.tim_player_imm);
 	known_obj_immunity(creature_ptr, f.known_obj_imm);
-	player_vuln_flags(creature_ptr, f.player_vuln);
+	player_vulnerability_flags(creature_ptr, f.player_vuln);
 
 	/*** Set 1 ***/
 	TERM_LEN row = 3;

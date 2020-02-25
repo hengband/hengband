@@ -214,6 +214,7 @@
     <ClCompile Include="..\..\src\player-skill.c" />
     <ClCompile Include="..\..\src\player-status.c" />
     <ClCompile Include="..\..\src\player\permanent-resistances.c" />
+    <ClCompile Include="..\..\src\player\race-resistances.c" />
     <ClCompile Include="..\..\src\player\temporary-resistances.c" />
     <ClCompile Include="..\..\src\quest.c" />
     <ClCompile Include="..\..\src\realm-craft.c" />
@@ -329,6 +330,7 @@
     <ClInclude Include="..\..\src\object-flavor.h" />
     <ClInclude Include="..\..\src\player-inventory.h" />
     <ClInclude Include="..\..\src\player\permanent-resistances.h" />
+    <ClInclude Include="..\..\src\player\race-resistances.h" />
     <ClInclude Include="..\..\src\player\temporary-resistances.h" />
     <ClInclude Include="..\..\src\signal-handlers.h" />
     <ClInclude Include="..\..\src\uid-checker.h" />

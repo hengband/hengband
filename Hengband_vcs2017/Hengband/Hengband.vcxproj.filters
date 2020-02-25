@@ -433,6 +433,9 @@
     <ClCompile Include="..\..\src\view\display-player.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\race-resistances.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -847,6 +850,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-player.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\race-resistances.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
