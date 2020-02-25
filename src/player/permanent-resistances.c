@@ -2,6 +2,7 @@
 #include "player-personality.h"
 
 /*!
+ * todo 関数分割を実施すること
  * @brief プレイヤーの職業、種族に応じた耐性フラグを返す
  * Prints ratings on certain abilities
  * @param creature_ptr 参照元クリーチャーポインタ
