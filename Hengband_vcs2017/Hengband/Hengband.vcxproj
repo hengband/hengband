@@ -284,6 +284,7 @@
     <ClCompile Include="..\..\src\spells2.c" />
     <ClCompile Include="..\..\src\spells3.c" />
     <ClCompile Include="..\..\src\uid-checker.c" />
+    <ClCompile Include="..\..\src\view\display-characteristic.c" />
     <ClCompile Include="..\..\src\view\display-player.c" />
     <ClCompile Include="..\..\src\view\display-util.c" />
     <ClCompile Include="..\..\src\view\process-death.c" />
@@ -334,6 +335,7 @@
     <ClInclude Include="..\..\src\player\temporary-resistances.h" />
     <ClInclude Include="..\..\src\signal-handlers.h" />
     <ClInclude Include="..\..\src\uid-checker.h" />
+    <ClInclude Include="..\..\src\view\display-characteristic.h" />
     <ClInclude Include="..\..\src\view\display-player.h" />
     <ClInclude Include="..\..\src\view\display-util.h" />
     <ClInclude Include="..\..\src\view\process-death.h" />

@@ -436,6 +436,9 @@
     <ClCompile Include="..\..\src\player\race-resistances.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\display-characteristic.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -853,6 +856,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\race-resistances.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-characteristic.h">
+      <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
