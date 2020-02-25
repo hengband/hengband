@@ -337,6 +337,7 @@ extern  u32b _fcreator;
 
 extern const char hexsym[16];
 
+// todo ファイル処理関数・メッセージ処理関数・画面病が関数で最低限分割する.
 extern errr path_parse(char *buf, int max, concptr file);
 extern errr path_build(char *buf, int max, concptr path, concptr file);
 extern FILE *my_fopen(concptr file, concptr mode);

@@ -1267,6 +1267,7 @@ void display_player(player_type *creature_ptr, int mode)
 
 
 /*!
+ * todo y = 6、x = 0、mode = 0で固定。何とかする
  * @brief プレイヤーの装備一覧をシンボルで並べる
  * Equippy chars
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -1277,10 +1278,7 @@ void display_player(player_type *creature_ptr, int mode)
  */
 void display_player_equippy(player_type *creature_ptr, TERM_LEN y, TERM_LEN x, BIT_FLAGS16 mode)
 {
-	/* Weapon flags need only two column */
 	int max_i = (mode & DP_WP) ? INVEN_LARM + 1 : INVEN_TOTAL;
-
-	/* Dump equippy chars */
 	for (int i = INVEN_RARM; i < max_i; i++)
 	{
 		object_type *o_ptr;
