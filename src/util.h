@@ -76,6 +76,15 @@
 #define _(JAPANESE,ENGLISH) (ENGLISH)
 #endif
 
+/*
+ * Initialization flags
+ */
+#define INIT_NAME_ONLY          0x01
+#define INIT_SHOW_TEXT          0x02
+#define INIT_ASSIGN             0x04
+#define INIT_CREATE_DUNGEON     0x08
+#define INIT_ONLY_FEATURES      0x10
+#define INIT_ONLY_BUILDINGS     0x20
 
 /*
  * Sort-array element

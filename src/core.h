@@ -53,17 +53,6 @@ extern const concptr copyright[5];
 #define SPECIAL_KEY_STORE    253
 #define SPECIAL_KEY_QUIT     252
 
-/*
- * todo 双方向の依存性を招いている原因の一旦なので、いずれutil.h など他へ移す.
- * Initialization flags
- */
-#define INIT_NAME_ONLY          0x01
-#define INIT_SHOW_TEXT          0x02
-#define INIT_ASSIGN             0x04
-#define INIT_CREATE_DUNGEON     0x08
-#define INIT_ONLY_FEATURES      0x10
-#define INIT_ONLY_BUILDINGS     0x20
-
 // todo 双方向の依存性を招いている原因の一旦なので、いずれ抹殺する.
 extern int init_flags;
 
