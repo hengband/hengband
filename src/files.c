@@ -16,7 +16,6 @@
 #include "term.h"
 #include "signal-handlers.h"
 #include "view/display-player.h" // 暫定。後で消す
-#include "view/display-util.h"
 #include "uid-checker.h"
 #include "files.h"
 #include "core.h" // リファクタリングして後で消す

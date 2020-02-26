@@ -2,11 +2,6 @@
 
 #define TOKENIZE_CHECKQUOTE 0x01  /* Special handling of single quotes */
 
-/* Mode flags for displaying player flags */
-#define DP_CURSE   0x01
-#define DP_IMM     0x02
-#define DP_WP      0x08
-
 extern char savefile[1024];
 extern char savefile_base[40];
 
@@ -23,18 +18,6 @@ extern concptr ANGBAND_DIR_PREF;
 extern concptr ANGBAND_DIR_SAVE;
 extern concptr ANGBAND_DIR_USER;
 extern concptr ANGBAND_DIR_XTRA;
-
-/*
- * A struct for storing misc. flags
- */
-typedef struct {
-	BIT_FLAGS player_flags[TR_FLAG_SIZE];
-	BIT_FLAGS tim_player_flags[TR_FLAG_SIZE];
-	BIT_FLAGS player_imm[TR_FLAG_SIZE];
-	BIT_FLAGS tim_player_imm[TR_FLAG_SIZE];
-	BIT_FLAGS player_vuln[TR_FLAG_SIZE];
-	BIT_FLAGS known_obj_imm[TR_FLAG_SIZE];
-} all_player_flags;
 
 extern s16b tokenize(char *buf, s16b num, char **tokens, BIT_FLAGS mode);
 extern errr file_character(player_type *creature_ptr, concptr name);

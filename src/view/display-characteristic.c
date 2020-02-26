@@ -4,6 +4,15 @@
 #include "player/temporary-resistances.h"
 #include "player/race-resistances.h"
 
+typedef struct {
+	BIT_FLAGS player_flags[TR_FLAG_SIZE];
+	BIT_FLAGS tim_player_flags[TR_FLAG_SIZE];
+	BIT_FLAGS player_imm[TR_FLAG_SIZE];
+	BIT_FLAGS tim_player_imm[TR_FLAG_SIZE];
+	BIT_FLAGS player_vuln[TR_FLAG_SIZE];
+	BIT_FLAGS known_obj_imm[TR_FLAG_SIZE];
+} all_player_flags;
+
 /*!
  * @brief プレイヤーの特性フラグ一種を表示する
  * Helper function, see below
