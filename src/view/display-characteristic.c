@@ -143,12 +143,61 @@ static void display_one_characteristic_info(player_type *creature_ptr, TERM_LEN 
 
 
 /*!
+ * @brief プレーヤーの基本耐性を表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param display_player_equippy 表示へのコールバック
+ * @param f 特性フラグへの参照ポインタ
+ * @return なし
+ */
+static void display_basic_resistance_info(player_type *creature_ptr, void(*display_player_equippy)(player_type*, TERM_LEN, TERM_LEN, BIT_FLAGS16), all_player_flags *f)
+{
+	TERM_LEN row = 12;
+	TERM_LEN col = 1;
+	(*display_player_equippy)(creature_ptr, row - 2, col + 8, 0);
+	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 8);
+
+#ifdef JP
+	display_one_characteristic_info(creature_ptr, row + 0, col, "耐酸  :", TR_RES_ACID, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 0, col, "耐酸  :", TR_IM_ACID, f, DP_IMM);
+	display_one_characteristic_info(creature_ptr, row + 1, col, "耐電撃:", TR_RES_ELEC, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 1, col, "耐電撃:", TR_IM_ELEC, f, DP_IMM);
+	display_one_characteristic_info(creature_ptr, row + 2, col, "耐火炎:", TR_RES_FIRE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 2, col, "耐火炎:", TR_IM_FIRE, f, DP_IMM);
+	display_one_characteristic_info(creature_ptr, row + 3, col, "耐冷気:", TR_RES_COLD, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 3, col, "耐冷気:", TR_IM_COLD, f, DP_IMM);
+	display_one_characteristic_info(creature_ptr, row + 4, col, "耐毒  :", TR_RES_POIS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 5, col, "耐閃光:", TR_RES_LITE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 6, col, "耐暗黒:", TR_RES_DARK, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 7, col, "耐破片:", TR_RES_SHARDS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 8, col, "耐盲目:", TR_RES_BLIND, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 9, col, "耐混乱:", TR_RES_CONF, f, 0);
+#else
+	display_flag_aux(creature_ptr, row + 0, col, "Acid  :", TR_RES_ACID, f, 0);
+	display_flag_aux(creature_ptr, row + 0, col, "Acid  :", TR_IM_ACID, f, DP_IMM);
+	display_flag_aux(creature_ptr, row + 1, col, "Elec  :", TR_RES_ELEC, f, 0);
+	display_flag_aux(creature_ptr, row + 1, col, "Elec  :", TR_IM_ELEC, f, DP_IMM);
+	display_flag_aux(creature_ptr, row + 2, col, "Fire  :", TR_RES_FIRE, f, 0);
+	display_flag_aux(creature_ptr, row + 2, col, "Fire  :", TR_IM_FIRE, f, DP_IMM);
+	display_flag_aux(creature_ptr, row + 3, col, "Cold  :", TR_RES_COLD, f, 0);
+	display_flag_aux(creature_ptr, row + 3, col, "Cold  :", TR_IM_COLD, f, DP_IMM);
+	display_flag_aux(creature_ptr, row + 4, col, "Poison:", TR_RES_POIS, f, 0);
+	display_flag_aux(creature_ptr, row + 5, col, "Light :", TR_RES_LITE, f, 0);
+	display_flag_aux(creature_ptr, row + 6, col, "Dark  :", TR_RES_DARK, f, 0);
+	display_flag_aux(creature_ptr, row + 7, col, "Shard :", TR_RES_SHARDS, f, 0);
+	display_flag_aux(creature_ptr, row + 8, col, "Blind :", TR_RES_BLIND, f, 0);
+	display_flag_aux(creature_ptr, row + 9, col, "Conf  :", TR_RES_CONF, f, 0);
+#endif
+}
+
+
+/*!
  * @brief プレイヤーの特性フラグ一覧表示1
  * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param display_player_equippy 表示へのコールバック
  * Special display, part 1
  * @return なし
  */
-void display_player_flag_info(player_type *creature_ptr, void(*display_player_equippy)(player_type*, TERM_LEN, TERM_LEN, BIT_FLAGS16))
+void display_player_flag_info_1(player_type *creature_ptr, void(*display_player_equippy)(player_type*, TERM_LEN, TERM_LEN, BIT_FLAGS16))
 {
 	all_player_flags f;
 	player_flags(creature_ptr, f.player_flags);
@@ -158,47 +207,11 @@ void display_player_flag_info(player_type *creature_ptr, void(*display_player_eq
 	known_obj_immunity(creature_ptr, f.known_obj_imm);
 	player_vulnerability_flags(creature_ptr, f.player_vuln);
 
-	/*** Set 1 ***/
-	TERM_LEN row = 12;
-	TERM_LEN col = 1;
-	(*display_player_equippy)(creature_ptr, row - 2, col + 8, 0);
-	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 8);
-
-#ifdef JP
-	display_one_characteristic_info(creature_ptr, row + 0, col, "耐酸  :", TR_RES_ACID, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 0, col, "耐酸  :", TR_IM_ACID, &f, DP_IMM);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "耐電撃:", TR_RES_ELEC, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "耐電撃:", TR_IM_ELEC, &f, DP_IMM);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "耐火炎:", TR_RES_FIRE, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "耐火炎:", TR_IM_FIRE, &f, DP_IMM);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "耐冷気:", TR_RES_COLD, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "耐冷気:", TR_IM_COLD, &f, DP_IMM);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "耐毒  :", TR_RES_POIS, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "耐閃光:", TR_RES_LITE, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 6, col, "耐暗黒:", TR_RES_DARK, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 7, col, "耐破片:", TR_RES_SHARDS, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "耐盲目:", TR_RES_BLIND, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 9, col, "耐混乱:", TR_RES_CONF, &f, 0);
-#else
-	display_flag_aux(creature_ptr, row + 0, col, "Acid  :", TR_RES_ACID, &f, 0);
-	display_flag_aux(creature_ptr, row + 0, col, "Acid  :", TR_IM_ACID, &f, DP_IMM);
-	display_flag_aux(creature_ptr, row + 1, col, "Elec  :", TR_RES_ELEC, &f, 0);
-	display_flag_aux(creature_ptr, row + 1, col, "Elec  :", TR_IM_ELEC, &f, DP_IMM);
-	display_flag_aux(creature_ptr, row + 2, col, "Fire  :", TR_RES_FIRE, &f, 0);
-	display_flag_aux(creature_ptr, row + 2, col, "Fire  :", TR_IM_FIRE, &f, DP_IMM);
-	display_flag_aux(creature_ptr, row + 3, col, "Cold  :", TR_RES_COLD, &f, 0);
-	display_flag_aux(creature_ptr, row + 3, col, "Cold  :", TR_IM_COLD, &f, DP_IMM);
-	display_flag_aux(creature_ptr, row + 4, col, "Poison:", TR_RES_POIS, &f, 0);
-	display_flag_aux(creature_ptr, row + 5, col, "Light :", TR_RES_LITE, &f, 0);
-	display_flag_aux(creature_ptr, row + 6, col, "Dark  :", TR_RES_DARK, &f, 0);
-	display_flag_aux(creature_ptr, row + 7, col, "Shard :", TR_RES_SHARDS, &f, 0);
-	display_flag_aux(creature_ptr, row + 8, col, "Blind :", TR_RES_BLIND, &f, 0);
-	display_flag_aux(creature_ptr, row + 9, col, "Conf  :", TR_RES_CONF, &f, 0);
-#endif
+	display_basic_resistance_info(creature_ptr, display_player_equippy, &f);
 
 	/*** Set 2 ***/
-	row = 12;
-	col = 26;
+	TERM_LEN row = 12;
+	TERM_LEN col = 26;
 	(*display_player_equippy)(creature_ptr, row - 2, col + 8, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 8);
 

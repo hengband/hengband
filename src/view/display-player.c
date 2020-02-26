@@ -542,7 +542,7 @@ void display_player(player_type *creature_ptr, int mode)
 	{
 		display_player_misc_info(creature_ptr);
 		display_player_stat_info(creature_ptr);
-		display_player_flag_info(creature_ptr, display_player_equippy);
+		display_player_flag_info_1(creature_ptr, display_player_equippy);
 		return;
 	}
 
