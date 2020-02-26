@@ -8,7 +8,7 @@
  * @param flags 耐性フラグの配列
  * @return なし
  */
-void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+static void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
 	switch (creature_ptr->pclass)
 	{
@@ -130,7 +130,7 @@ void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @param flags 耐性フラグの配列
  * @return なし
  */
-void add_mimic_form_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+static void add_mimic_form_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
 	switch (creature_ptr->mimic_form)
 	{
@@ -183,7 +183,7 @@ void add_mimic_form_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @param flags 耐性フラグの配列
  * @return なし
  */
-void add_race_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+static void add_race_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
 	switch (creature_ptr->prace)
 	{
@@ -460,7 +460,7 @@ void add_race_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @param flags 耐性フラグの配列
  * @return なし
  */
-void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+static void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
 	if (creature_ptr->muta3 == 0) return;
 
@@ -497,7 +497,7 @@ void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @param flags 耐性フラグの配列
  * @return なし
  */
-void add_personality_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+static void add_personality_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
 	if (creature_ptr->pseikaku == SEIKAKU_SEXY)
 		add_flag(flags, TR_AGGRAVATE);
@@ -522,7 +522,7 @@ void add_personality_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  * @param flags 耐性フラグの配列
  * @return なし
  */
-void add_kata_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+static void add_kata_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
 	if (creature_ptr->special_defense & KATA_FUUJIN)
 		add_flag(flags, TR_REFLECT);
