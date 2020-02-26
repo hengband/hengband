@@ -333,6 +333,43 @@ void add_race_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 
 
 /*!
+ * @brief 突然変異による耐性を返す
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param flags 耐性フラグの配列
+ * @return なし
+ */
+void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+{
+	if (creature_ptr->muta3 == 0) return;
+
+	if (creature_ptr->muta3 & MUT3_FLESH_ROT)
+		remove_flag(flags, TR_REGEN);
+	if ((creature_ptr->muta3 & MUT3_XTRA_FAT) ||
+		(creature_ptr->muta3 & MUT3_XTRA_LEGS) ||
+		(creature_ptr->muta3 & MUT3_SHORT_LEG))
+		add_flag(flags, TR_SPEED);
+	if (creature_ptr->muta3  & MUT3_ELEC_TOUC)
+		add_flag(flags, TR_SH_ELEC);
+	if (creature_ptr->muta3 & MUT3_FIRE_BODY)
+	{
+		add_flag(flags, TR_SH_FIRE);
+		add_flag(flags, TR_LITE_1);
+	}
+
+	if (creature_ptr->muta3 & MUT3_WINGS)
+		add_flag(flags, TR_LEVITATION);
+	if (creature_ptr->muta3 & MUT3_FEARLESS)
+		add_flag(flags, TR_RES_FEAR);
+	if (creature_ptr->muta3 & MUT3_REGEN)
+		add_flag(flags, TR_REGEN);
+	if (creature_ptr->muta3 & MUT3_ESP)
+		add_flag(flags, TR_TELEPATHY);
+	if (creature_ptr->muta3 & MUT3_MOTION)
+		add_flag(flags, TR_FREE_ACT);
+}
+
+
+/*!
  * todo 関数分割を実施すること
  * @brief プレイヤーの職業、種族に応じた耐性フラグを返す
  * Prints ratings on certain abilities
@@ -467,34 +504,7 @@ void player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 		: add_race_flags;
 	(*race_flags_func)(creature_ptr, flags);
 
-	if (creature_ptr->muta3)
-	{
-		if (creature_ptr->muta3 & MUT3_FLESH_ROT)
-			remove_flag(flags, TR_REGEN);
-		if ((creature_ptr->muta3 & MUT3_XTRA_FAT) ||
-			(creature_ptr->muta3 & MUT3_XTRA_LEGS) ||
-			(creature_ptr->muta3 & MUT3_SHORT_LEG))
-			add_flag(flags, TR_SPEED);
-		if (creature_ptr->muta3  & MUT3_ELEC_TOUC)
-			add_flag(flags, TR_SH_ELEC);
-		if (creature_ptr->muta3 & MUT3_FIRE_BODY)
-		{
-			add_flag(flags, TR_SH_FIRE);
-			add_flag(flags, TR_LITE_1);
-		}
-
-		if (creature_ptr->muta3 & MUT3_WINGS)
-			add_flag(flags, TR_LEVITATION);
-		if (creature_ptr->muta3 & MUT3_FEARLESS)
-			add_flag(flags, TR_RES_FEAR);
-		if (creature_ptr->muta3 & MUT3_REGEN)
-			add_flag(flags, TR_REGEN);
-		if (creature_ptr->muta3 & MUT3_ESP)
-			add_flag(flags, TR_TELEPATHY);
-		if (creature_ptr->muta3 & MUT3_MOTION)
-			add_flag(flags, TR_FREE_ACT);
-	}
-
+	add_mutation_flags(creature_ptr, flags);
 	if (creature_ptr->pseikaku == SEIKAKU_SEXY)
 		add_flag(flags, TR_AGGRAVATE);
 	if (creature_ptr->pseikaku == SEIKAKU_CHARGEMAN)
