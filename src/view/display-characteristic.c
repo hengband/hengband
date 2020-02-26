@@ -384,6 +384,62 @@ static void display_esp_sustenance_info(player_type *creature_ptr, void(*display
 
 
 /*!
+ * @brief その他の特性フラグを表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param display_player_equippy 表示へのコールバック
+ * @param f 特性フラグへの参照ポインタ
+ * @return なし
+ */
+static void display_other_info(player_type *creature_ptr, void(*display_player_equippy)(player_type*, TERM_LEN, TERM_LEN, BIT_FLAGS16), all_player_flags *f)
+{
+	TERM_LEN row = 3;
+	TERM_LEN col = 20 + 12 + 17;
+	(*display_player_equippy)(creature_ptr, row - 2, col + 14, 0);
+	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 14);
+
+#ifdef JP
+	display_one_characteristic_info(creature_ptr, row + 0, col, "追加攻撃    :", TR_BLOWS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 1, col, "採掘        :", TR_TUNNEL, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 2, col, "赤外線視力  :", TR_INFRA, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 3, col, "魔法道具支配:", TR_MAGIC_MASTERY, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 4, col, "隠密        :", TR_STEALTH, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 5, col, "探索        :", TR_SEARCH, f, 0);
+
+	display_one_characteristic_info(creature_ptr, row + 7, col, "乗馬        :", TR_RIDING, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 8, col, "投擲        :", TR_THROW, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 9, col, "祝福        :", TR_BLESSED, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 10, col, "反テレポート:", TR_NO_TELE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 11, col, "反魔法      :", TR_NO_MAGIC, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 12, col, "消費魔力減少:", TR_DEC_MANA, f, 0);
+
+	display_one_characteristic_info(creature_ptr, row + 14, col, "経験値減少  :", TR_DRAIN_EXP, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 15, col, "乱テレポート:", TR_TELEPORT, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 16, col, "反感        :", TR_AGGRAVATE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 17, col, "太古の怨念  :", TR_TY_CURSE, f, 0);
+#else
+	display_flag_aux(creature_ptr, row + 0, col, "Add Blows   :", TR_BLOWS, f, 0);
+	display_flag_aux(creature_ptr, row + 1, col, "Add Tunnel  :", TR_TUNNEL, f, 0);
+	display_flag_aux(creature_ptr, row + 2, col, "Add Infra   :", TR_INFRA, f, 0);
+	display_flag_aux(creature_ptr, row + 3, col, "Add Device  :", TR_MAGIC_MASTERY, f, 0);
+	display_flag_aux(creature_ptr, row + 4, col, "Add Stealth :", TR_STEALTH, f, 0);
+	display_flag_aux(creature_ptr, row + 5, col, "Add Search  :", TR_SEARCH, f, 0);
+
+	display_flag_aux(creature_ptr, row + 7, col, "Riding      :", TR_RIDING, f, 0);
+	display_flag_aux(creature_ptr, row + 8, col, "Throw       :", TR_THROW, f, 0);
+	display_flag_aux(creature_ptr, row + 9, col, "Blessed     :", TR_BLESSED, f, 0);
+	display_flag_aux(creature_ptr, row + 10, col, "No Teleport :", TR_NO_TELE, f, 0);
+	display_flag_aux(creature_ptr, row + 11, col, "Anti Magic  :", TR_NO_MAGIC, f, 0);
+	display_flag_aux(creature_ptr, row + 12, col, "Econom. Mana:", TR_DEC_MANA, f, 0);
+
+	display_flag_aux(creature_ptr, row + 14, col, "Drain Exp   :", TR_DRAIN_EXP, f, 0);
+	display_flag_aux(creature_ptr, row + 15, col, "Rnd.Teleport:", TR_TELEPORT, f, 0);
+	display_flag_aux(creature_ptr, row + 16, col, "Aggravate   :", TR_AGGRAVATE, f, 0);
+	display_flag_aux(creature_ptr, row + 17, col, "TY Curse    :", TR_TY_CURSE, f, 0);
+#endif
+}
+
+
+/*!
  * @brief プレイヤーの特性フラグ一覧表示2
  * @param creature_ptr プレーヤーへの参照ポインタ
  * Special display, part 2
@@ -402,51 +458,5 @@ void display_player_flag_info_2(player_type *creature_ptr, void(*display_player_
 
 	display_slay_info(creature_ptr, display_player_equippy, &f);
 	display_esp_sustenance_info(creature_ptr, display_player_equippy, &f);
-
-	/*** Set 3 ***/
-	TERM_LEN row = 3;
-	TERM_LEN col = 20 + 12 + 17;
-	(*display_player_equippy)(creature_ptr, row - 2, col + 14, 0);
-	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 14);
-
-#ifdef JP
-	display_one_characteristic_info(creature_ptr, row + 0, col, "追加攻撃    :", TR_BLOWS, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "採掘        :", TR_TUNNEL, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "赤外線視力  :", TR_INFRA, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "魔法道具支配:", TR_MAGIC_MASTERY, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "隠密        :", TR_STEALTH, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "探索        :", TR_SEARCH, &f, 0);
-
-	display_one_characteristic_info(creature_ptr, row + 7, col, "乗馬        :", TR_RIDING, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "投擲        :", TR_THROW, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 9, col, "祝福        :", TR_BLESSED, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 10, col, "反テレポート:", TR_NO_TELE, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 11, col, "反魔法      :", TR_NO_MAGIC, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 12, col, "消費魔力減少:", TR_DEC_MANA, &f, 0);
-
-	display_one_characteristic_info(creature_ptr, row + 14, col, "経験値減少  :", TR_DRAIN_EXP, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 15, col, "乱テレポート:", TR_TELEPORT, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 16, col, "反感        :", TR_AGGRAVATE, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 17, col, "太古の怨念  :", TR_TY_CURSE, &f, 0);
-#else
-	display_flag_aux(creature_ptr, row + 0, col, "Add Blows   :", TR_BLOWS, &f, 0);
-	display_flag_aux(creature_ptr, row + 1, col, "Add Tunnel  :", TR_TUNNEL, &f, 0);
-	display_flag_aux(creature_ptr, row + 2, col, "Add Infra   :", TR_INFRA, &f, 0);
-	display_flag_aux(creature_ptr, row + 3, col, "Add Device  :", TR_MAGIC_MASTERY, &f, 0);
-	display_flag_aux(creature_ptr, row + 4, col, "Add Stealth :", TR_STEALTH, &f, 0);
-	display_flag_aux(creature_ptr, row + 5, col, "Add Search  :", TR_SEARCH, &f, 0);
-
-	display_flag_aux(creature_ptr, row + 7, col, "Riding      :", TR_RIDING, &f, 0);
-	display_flag_aux(creature_ptr, row + 8, col, "Throw       :", TR_THROW, &f, 0);
-	display_flag_aux(creature_ptr, row + 9, col, "Blessed     :", TR_BLESSED, &f, 0);
-	display_flag_aux(creature_ptr, row + 10, col, "No Teleport :", TR_NO_TELE, &f, 0);
-	display_flag_aux(creature_ptr, row + 11, col, "Anti Magic  :", TR_NO_MAGIC, &f, 0);
-	display_flag_aux(creature_ptr, row + 12, col, "Econom. Mana:", TR_DEC_MANA, &f, 0);
-
-	display_flag_aux(creature_ptr, row + 14, col, "Drain Exp   :", TR_DRAIN_EXP, &f, 0);
-	display_flag_aux(creature_ptr, row + 15, col, "Rnd.Teleport:", TR_TELEPORT, &f, 0);
-	display_flag_aux(creature_ptr, row + 16, col, "Aggravate   :", TR_AGGRAVATE, &f, 0);
-	display_flag_aux(creature_ptr, row + 17, col, "TY Curse    :", TR_TY_CURSE, &f, 0);
-#endif
-
+	display_other_info(creature_ptr, display_player_equippy, &f);
 }
