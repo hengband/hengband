@@ -287,7 +287,7 @@
     <ClCompile Include="..\..\src\view\display-characteristic.c" />
     <ClCompile Include="..\..\src\view\display-player.c" />
     <ClCompile Include="..\..\src\view\display-util.c" />
-    <ClCompile Include="..\..\src\view\process-death.c" />
+    <ClCompile Include="..\..\src\player\process-death.c" />
     <ClCompile Include="..\..\src\view\status-first-page.c" />
     <ClCompile Include="..\..\src\store.c" />
     <ClCompile Include="..\..\src\floor-streams.c" />
@@ -338,7 +338,7 @@
     <ClInclude Include="..\..\src\view\display-characteristic.h" />
     <ClInclude Include="..\..\src\view\display-player.h" />
     <ClInclude Include="..\..\src\view\display-util.h" />
-    <ClInclude Include="..\..\src\view\process-death.h" />
+    <ClInclude Include="..\..\src\player\process-death.h" />
     <ClInclude Include="..\..\src\view\status-first-page.h" />
     <ClInclude Include="japanese.h" />
   </ItemGroup>

@@ -418,9 +418,6 @@
     <ClCompile Include="..\..\src\uid-checker.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\process-death.c">
-      <Filter>view</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\character-dump.c">
       <Filter>io</Filter>
     </ClCompile>
@@ -438,6 +435,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\view\display-characteristic.c">
       <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\process-death.c">
+      <Filter>player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -839,9 +839,6 @@
     <ClInclude Include="..\..\src\uid-checker.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\view\process-death.h">
-      <Filter>view</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\character-dump.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -859,6 +856,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-characteristic.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\process-death.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

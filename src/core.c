@@ -85,7 +85,7 @@
 #include "view-mainwindow.h"
 #include "dungeon-file.h"
 #include "uid-checker.h"
-#include "view/process-death.h"
+#include "player/process-death.h"
 #include "files.h"
 #include "scores.h"
 #include "autopick.h"

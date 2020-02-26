@@ -411,7 +411,7 @@ void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), voi
 	
 	export_player_info(creature_ptr, display_player);
 	(*update_playtime)();
-	(*display_player)(creature_ptr, 0, display_player);
+	(*display_player)(creature_ptr, 0);
 	prt(_("何かキーを押すとさらに情報が続きます (ESCで中断): ", "Hit any key to see more information (ESC to abort): "), 23, 0);
 	if (inkey() == ESCAPE) return;
 	if (show_dead_player_items(creature_ptr)) return;
