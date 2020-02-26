@@ -3,7 +3,7 @@
 
 
 /*!
- * @brief 特定の種族に擬態中の耐性を返す
+ * @brief 特定の種族に擬態中の耐性フラグを返す
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
  * @return なし
@@ -56,7 +56,7 @@ void add_mimic_form_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 
 
 /*!
- * @brief 種族ベースの耐性を返す
+ * @brief 種族ベースの耐性フラグを返す
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
  * @return なし
@@ -333,7 +333,7 @@ void add_race_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 
 
 /*!
- * @brief 突然変異による耐性を返す
+ * @brief 突然変異による耐性フラグを返す
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
  * @return なし
@@ -370,7 +370,32 @@ void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 
 
 /*!
- * @brief 剣術家の型による耐性を返す
+ * @brief 性格による耐性フラグを返す
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param flags 耐性フラグの配列
+ * @return なし
+ */
+void add_personality_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+{
+	if (creature_ptr->pseikaku == SEIKAKU_SEXY)
+		add_flag(flags, TR_AGGRAVATE);
+	if (creature_ptr->pseikaku == SEIKAKU_CHARGEMAN)
+		add_flag(flags, TR_RES_CONF);
+
+	if (creature_ptr->pseikaku != SEIKAKU_MUNCHKIN) return;
+
+	add_flag(flags, TR_RES_BLIND);
+	add_flag(flags, TR_RES_CONF);
+	add_flag(flags, TR_HOLD_EXP);
+	if (creature_ptr->pclass != CLASS_NINJA)
+		add_flag(flags, TR_LITE_1);
+	if (creature_ptr->lev > 9)
+		add_flag(flags, TR_SPEED);
+}
+
+
+/*!
+ * @brief 剣術家の型による耐性フラグを返す
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
  * @return なし
@@ -566,20 +591,6 @@ void player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 	(*race_flags_func)(creature_ptr, flags);
 
 	add_mutation_flags(creature_ptr, flags);
-	if (creature_ptr->pseikaku == SEIKAKU_SEXY)
-		add_flag(flags, TR_AGGRAVATE);
-	if (creature_ptr->pseikaku == SEIKAKU_CHARGEMAN)
-		add_flag(flags, TR_RES_CONF);
-	if (creature_ptr->pseikaku == SEIKAKU_MUNCHKIN)
-	{
-		add_flag(flags, TR_RES_BLIND);
-		add_flag(flags, TR_RES_CONF);
-		add_flag(flags, TR_HOLD_EXP);
-		if (creature_ptr->pclass != CLASS_NINJA)
-			add_flag(flags, TR_LITE_1);
-		if (creature_ptr->lev > 9)
-			add_flag(flags, TR_SPEED);
-	}
-
+	add_personality_flags(creature_ptr, flags);
 	add_kata_flags(creature_ptr, flags);
 }
