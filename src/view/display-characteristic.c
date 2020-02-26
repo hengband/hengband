@@ -250,12 +250,88 @@ void display_player_flag_info(player_type *creature_ptr, void(*display_player_eq
 
 
 /*!
- * @brief プレイヤーの特性フラグ一覧表示2 /
+ * @brief スレイ系の特性フラグを表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param display_player_equippy 表示へのコールバック
+ * @param f 特性フラグへの参照ポインタ
+ * @return なし
+ */
+static void display_slay_info(player_type *creature_ptr, void(*display_player_equippy)(player_type*, TERM_LEN, TERM_LEN, BIT_FLAGS16), all_player_flags *f)
+{
+	TERM_LEN row = 3;
+	TERM_LEN col = 1;
+	(*display_player_equippy)(creature_ptr, row - 2, col + 12, DP_WP);
+	c_put_str(TERM_WHITE, "ab@", row - 1, col + 12);
+
+#ifdef JP
+	display_one_characteristic_info(creature_ptr, row + 0, col, "邪悪 倍打 :", TR_SLAY_EVIL, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 0, col, "邪悪 倍打 :", TR_KILL_EVIL, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 1, col, "不死 倍打 :", TR_SLAY_UNDEAD, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 1, col, "不死 倍打 :", TR_KILL_UNDEAD, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 2, col, "悪魔 倍打 :", TR_SLAY_DEMON, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 2, col, "悪魔 倍打 :", TR_KILL_DEMON, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 3, col, "龍 倍打   :", TR_SLAY_DRAGON, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 3, col, "龍 倍打   :", TR_KILL_DRAGON, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 4, col, "人間 倍打 :", TR_SLAY_HUMAN, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 4, col, "人間 倍打 :", TR_KILL_HUMAN, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 5, col, "動物 倍打 :", TR_SLAY_ANIMAL, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 5, col, "動物 倍打 :", TR_KILL_ANIMAL, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 6, col, "オーク倍打:", TR_SLAY_ORC, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 6, col, "オーク倍打:", TR_KILL_ORC, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 7, col, "トロル倍打:", TR_SLAY_TROLL, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 7, col, "トロル倍打:", TR_KILL_TROLL, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 8, col, "巨人 倍打 :", TR_SLAY_GIANT, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 8, col, "巨人 倍打 :", TR_KILL_GIANT, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 9, col, "溶解      :", TR_BRAND_ACID, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 10, col, "電撃      :", TR_BRAND_ELEC, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 11, col, "焼棄      :", TR_BRAND_FIRE, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 12, col, "凍結      :", TR_BRAND_COLD, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 13, col, "毒殺      :", TR_BRAND_POIS, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 14, col, "切れ味    :", TR_VORPAL, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 15, col, "地震      :", TR_IMPACT, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 16, col, "吸血      :", TR_VAMPIRIC, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 17, col, "カオス効果:", TR_CHAOTIC, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 18, col, "理力      :", TR_FORCE_WEAPON, f, DP_WP);
+#else
+	display_flag_aux(creature_ptr, row + 0, col, "Slay Evil :", TR_SLAY_EVIL, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 0, col, "Slay Evil :", TR_KILL_EVIL, f, (DP_WP | DP_IMM));
+	display_flag_aux(creature_ptr, row + 1, col, "Slay Und. :", TR_SLAY_UNDEAD, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 1, col, "Slay Und. :", TR_KILL_UNDEAD, f, (DP_WP | DP_IMM));
+	display_flag_aux(creature_ptr, row + 2, col, "Slay Demon:", TR_SLAY_DEMON, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 2, col, "Slay Demon:", TR_KILL_DEMON, f, (DP_WP | DP_IMM));
+	display_flag_aux(creature_ptr, row + 3, col, "Slay Drag.:", TR_SLAY_DRAGON, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 3, col, "Slay Drag.:", TR_KILL_DRAGON, f, (DP_WP | DP_IMM));
+	display_flag_aux(creature_ptr, row + 4, col, "Slay Human:", TR_SLAY_HUMAN, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 4, col, "Slay Human:", TR_KILL_HUMAN, f, (DP_WP | DP_IMM));
+	display_flag_aux(creature_ptr, row + 5, col, "Slay Anim.:", TR_SLAY_ANIMAL, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 5, col, "Slay Anim.:", TR_KILL_ANIMAL, f, (DP_WP | DP_IMM));
+	display_flag_aux(creature_ptr, row + 6, col, "Slay Orc  :", TR_SLAY_ORC, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 6, col, "Slay Orc  :", TR_KILL_ORC, f, (DP_WP | DP_IMM));
+	display_flag_aux(creature_ptr, row + 7, col, "Slay Troll:", TR_SLAY_TROLL, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 7, col, "Slay Troll:", TR_KILL_TROLL, f, (DP_WP | DP_IMM));
+	display_flag_aux(creature_ptr, row + 8, col, "Slay Giant:", TR_SLAY_GIANT, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 8, col, "Slay Giant:", TR_KILL_GIANT, f, (DP_WP | DP_IMM));
+	display_flag_aux(creature_ptr, row + 9, col, "Acid Brand:", TR_BRAND_ACID, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 10, col, "Elec Brand:", TR_BRAND_ELEC, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 11, col, "Fire Brand:", TR_BRAND_FIRE, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 12, col, "Cold Brand:", TR_BRAND_COLD, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 13, col, "Poison Brd:", TR_BRAND_POIS, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 14, col, "Sharpness :", TR_VORPAL, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 15, col, "Quake     :", TR_IMPACT, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 16, col, "Vampiric  :", TR_VAMPIRIC, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 17, col, "Chaotic   :", TR_CHAOTIC, f, DP_WP);
+	display_flag_aux(creature_ptr, row + 18, col, "Force Wep.:", TR_FORCE_WEAPON, f, DP_WP);
+#endif
+}
+
+
+/*!
+ * @brief プレイヤーの特性フラグ一覧表示2
  * @param creature_ptr プレーヤーへの参照ポインタ
  * Special display, part 2
  * @return なし
  */
-void display_player_other_flag_info(player_type *creature_ptr, void(*display_player_equippy)(player_type*, TERM_LEN, TERM_LEN, BIT_FLAGS16))
+void display_player_flag_info_2(player_type *creature_ptr, void(*display_player_equippy)(player_type*, TERM_LEN, TERM_LEN, BIT_FLAGS16))
 {
 	/* Extract flags and store */
 	all_player_flags f;
@@ -266,75 +342,11 @@ void display_player_other_flag_info(player_type *creature_ptr, void(*display_pla
 	known_obj_immunity(creature_ptr, f.known_obj_imm);
 	player_vulnerability_flags(creature_ptr, f.player_vuln);
 
-	/*** Set 1 ***/
-	TERM_LEN row = 3;
-	TERM_LEN col = 1;
-	(*display_player_equippy)(creature_ptr, row - 2, col + 12, DP_WP);
-	c_put_str(TERM_WHITE, "ab@", row - 1, col + 12);
-
-#ifdef JP
-	display_one_characteristic_info(creature_ptr, row + 0, col, "邪悪 倍打 :", TR_SLAY_EVIL, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 0, col, "邪悪 倍打 :", TR_KILL_EVIL, &f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 1, col, "不死 倍打 :", TR_SLAY_UNDEAD, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "不死 倍打 :", TR_KILL_UNDEAD, &f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 2, col, "悪魔 倍打 :", TR_SLAY_DEMON, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "悪魔 倍打 :", TR_KILL_DEMON, &f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 3, col, "龍 倍打   :", TR_SLAY_DRAGON, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "龍 倍打   :", TR_KILL_DRAGON, &f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 4, col, "人間 倍打 :", TR_SLAY_HUMAN, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "人間 倍打 :", TR_KILL_HUMAN, &f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 5, col, "動物 倍打 :", TR_SLAY_ANIMAL, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "動物 倍打 :", TR_KILL_ANIMAL, &f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 6, col, "オーク倍打:", TR_SLAY_ORC, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 6, col, "オーク倍打:", TR_KILL_ORC, &f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 7, col, "トロル倍打:", TR_SLAY_TROLL, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 7, col, "トロル倍打:", TR_KILL_TROLL, &f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 8, col, "巨人 倍打 :", TR_SLAY_GIANT, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "巨人 倍打 :", TR_KILL_GIANT, &f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 9, col, "溶解      :", TR_BRAND_ACID, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 10, col, "電撃      :", TR_BRAND_ELEC, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 11, col, "焼棄      :", TR_BRAND_FIRE, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 12, col, "凍結      :", TR_BRAND_COLD, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 13, col, "毒殺      :", TR_BRAND_POIS, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 14, col, "切れ味    :", TR_VORPAL, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 15, col, "地震      :", TR_IMPACT, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 16, col, "吸血      :", TR_VAMPIRIC, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 17, col, "カオス効果:", TR_CHAOTIC, &f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 18, col, "理力      :", TR_FORCE_WEAPON, &f, DP_WP);
-#else
-	display_flag_aux(creature_ptr, row + 0, col, "Slay Evil :", TR_SLAY_EVIL, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 0, col, "Slay Evil :", TR_KILL_EVIL, &f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 1, col, "Slay Und. :", TR_SLAY_UNDEAD, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 1, col, "Slay Und. :", TR_KILL_UNDEAD, &f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 2, col, "Slay Demon:", TR_SLAY_DEMON, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 2, col, "Slay Demon:", TR_KILL_DEMON, &f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 3, col, "Slay Drag.:", TR_SLAY_DRAGON, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 3, col, "Slay Drag.:", TR_KILL_DRAGON, &f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 4, col, "Slay Human:", TR_SLAY_HUMAN, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 4, col, "Slay Human:", TR_KILL_HUMAN, &f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 5, col, "Slay Anim.:", TR_SLAY_ANIMAL, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 5, col, "Slay Anim.:", TR_KILL_ANIMAL, &f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 6, col, "Slay Orc  :", TR_SLAY_ORC, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 6, col, "Slay Orc  :", TR_KILL_ORC, &f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 7, col, "Slay Troll:", TR_SLAY_TROLL, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 7, col, "Slay Troll:", TR_KILL_TROLL, &f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 8, col, "Slay Giant:", TR_SLAY_GIANT, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 8, col, "Slay Giant:", TR_KILL_GIANT, &f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 9, col, "Acid Brand:", TR_BRAND_ACID, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 10, col, "Elec Brand:", TR_BRAND_ELEC, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 11, col, "Fire Brand:", TR_BRAND_FIRE, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 12, col, "Cold Brand:", TR_BRAND_COLD, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 13, col, "Poison Brd:", TR_BRAND_POIS, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 14, col, "Sharpness :", TR_VORPAL, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 15, col, "Quake     :", TR_IMPACT, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 16, col, "Vampiric  :", TR_VAMPIRIC, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 17, col, "Chaotic   :", TR_CHAOTIC, &f, DP_WP);
-	display_flag_aux(creature_ptr, row + 18, col, "Force Wep.:", TR_FORCE_WEAPON, &f, DP_WP);
-#endif
+	display_slay_info(creature_ptr, display_player_equippy, &f);
 
 	/*** Set 2 ***/
-	row = 3;
-	col = col + 12 + 7;
+	TERM_LEN row = 3;
+	TERM_LEN col = col + 12 + 7;
 	(*display_player_equippy)(creature_ptr, row - 2, col + 13, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 13);
 

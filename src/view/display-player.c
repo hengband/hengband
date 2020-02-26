@@ -548,7 +548,7 @@ void display_player(player_type *creature_ptr, int mode)
 
 	if (mode == 3)
 	{
-		display_player_other_flag_info(creature_ptr, display_player_equippy);
+		display_player_flag_info_2(creature_ptr, display_player_equippy);
 		return;
 	}
 
