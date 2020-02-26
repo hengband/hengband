@@ -370,6 +370,67 @@ void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 
 
 /*!
+ * @brief 剣術家の型による耐性を返す
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param flags 耐性フラグの配列
+ * @return なし
+ */
+void add_kata_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+{
+	if (creature_ptr->special_defense & KATA_FUUJIN)
+		add_flag(flags, TR_REFLECT);
+	if (creature_ptr->special_defense & KAMAE_GENBU)
+		add_flag(flags, TR_REFLECT);
+	if (creature_ptr->special_defense & KAMAE_SUZAKU)
+		add_flag(flags, TR_LEVITATION);
+	if (creature_ptr->special_defense & KAMAE_SEIRYU)
+	{
+		add_flag(flags, TR_RES_FIRE);
+		add_flag(flags, TR_RES_COLD);
+		add_flag(flags, TR_RES_ACID);
+		add_flag(flags, TR_RES_ELEC);
+		add_flag(flags, TR_RES_POIS);
+		add_flag(flags, TR_LEVITATION);
+		add_flag(flags, TR_SH_FIRE);
+		add_flag(flags, TR_SH_ELEC);
+		add_flag(flags, TR_SH_COLD);
+	}
+
+	if (creature_ptr->special_defense & KATA_MUSOU == 0) return;
+
+	add_flag(flags, TR_RES_FEAR);
+	add_flag(flags, TR_RES_LITE);
+	add_flag(flags, TR_RES_DARK);
+	add_flag(flags, TR_RES_BLIND);
+	add_flag(flags, TR_RES_CONF);
+	add_flag(flags, TR_RES_SOUND);
+	add_flag(flags, TR_RES_SHARDS);
+	add_flag(flags, TR_RES_NETHER);
+	add_flag(flags, TR_RES_NEXUS);
+	add_flag(flags, TR_RES_CHAOS);
+	add_flag(flags, TR_RES_DISEN);
+	add_flag(flags, TR_REFLECT);
+	add_flag(flags, TR_HOLD_EXP);
+	add_flag(flags, TR_FREE_ACT);
+	add_flag(flags, TR_SH_FIRE);
+	add_flag(flags, TR_SH_ELEC);
+	add_flag(flags, TR_SH_COLD);
+	add_flag(flags, TR_LEVITATION);
+	add_flag(flags, TR_LITE_1);
+	add_flag(flags, TR_SEE_INVIS);
+	add_flag(flags, TR_TELEPATHY);
+	add_flag(flags, TR_SLOW_DIGEST);
+	add_flag(flags, TR_REGEN);
+	add_flag(flags, TR_SUST_STR);
+	add_flag(flags, TR_SUST_INT);
+	add_flag(flags, TR_SUST_WIS);
+	add_flag(flags, TR_SUST_DEX);
+	add_flag(flags, TR_SUST_CON);
+	add_flag(flags, TR_SUST_CHR);
+}
+
+
+/*!
  * todo 関数分割を実施すること
  * @brief プレイヤーの職業、種族に応じた耐性フラグを返す
  * Prints ratings on certain abilities
@@ -520,55 +581,5 @@ void player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 			add_flag(flags, TR_SPEED);
 	}
 
-	if (creature_ptr->special_defense & KATA_FUUJIN)
-		add_flag(flags, TR_REFLECT);
-	if (creature_ptr->special_defense & KAMAE_GENBU)
-		add_flag(flags, TR_REFLECT);
-	if (creature_ptr->special_defense & KAMAE_SUZAKU)
-		add_flag(flags, TR_LEVITATION);
-	if (creature_ptr->special_defense & KAMAE_SEIRYU)
-	{
-		add_flag(flags, TR_RES_FIRE);
-		add_flag(flags, TR_RES_COLD);
-		add_flag(flags, TR_RES_ACID);
-		add_flag(flags, TR_RES_ELEC);
-		add_flag(flags, TR_RES_POIS);
-		add_flag(flags, TR_LEVITATION);
-		add_flag(flags, TR_SH_FIRE);
-		add_flag(flags, TR_SH_ELEC);
-		add_flag(flags, TR_SH_COLD);
-	}
-
-	if (creature_ptr->special_defense & KATA_MUSOU)
-	{
-		add_flag(flags, TR_RES_FEAR);
-		add_flag(flags, TR_RES_LITE);
-		add_flag(flags, TR_RES_DARK);
-		add_flag(flags, TR_RES_BLIND);
-		add_flag(flags, TR_RES_CONF);
-		add_flag(flags, TR_RES_SOUND);
-		add_flag(flags, TR_RES_SHARDS);
-		add_flag(flags, TR_RES_NETHER);
-		add_flag(flags, TR_RES_NEXUS);
-		add_flag(flags, TR_RES_CHAOS);
-		add_flag(flags, TR_RES_DISEN);
-		add_flag(flags, TR_REFLECT);
-		add_flag(flags, TR_HOLD_EXP);
-		add_flag(flags, TR_FREE_ACT);
-		add_flag(flags, TR_SH_FIRE);
-		add_flag(flags, TR_SH_ELEC);
-		add_flag(flags, TR_SH_COLD);
-		add_flag(flags, TR_LEVITATION);
-		add_flag(flags, TR_LITE_1);
-		add_flag(flags, TR_SEE_INVIS);
-		add_flag(flags, TR_TELEPATHY);
-		add_flag(flags, TR_SLOW_DIGEST);
-		add_flag(flags, TR_REGEN);
-		add_flag(flags, TR_SUST_STR);
-		add_flag(flags, TR_SUST_INT);
-		add_flag(flags, TR_SUST_WIS);
-		add_flag(flags, TR_SUST_DEX);
-		add_flag(flags, TR_SUST_CON);
-		add_flag(flags, TR_SUST_CHR);
-	}
+	add_kata_flags(creature_ptr, flags);
 }
