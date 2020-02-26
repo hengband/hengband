@@ -51,7 +51,7 @@
 #include "save.h"
 #include "realm.h"
 #include "japanese.h"
-#include "view-mainwindow.h"
+#include "view-mainwindow.h" // 暫定。後で消す.
 
  /*
   * The last character rolled,
@@ -3670,7 +3670,7 @@ static void edit_history(player_type *creature_ptr)
 		creature_ptr->history[i][59] = '\0';
 	}
 
-	display_player(creature_ptr, 1);
+	display_player(creature_ptr, 1, map_name);
 #ifdef JP
 	c_put_str(TERM_L_GREEN, "(キャラクターの生い立ち - 編集モード)", 11, 20);
 	put_str("[ カーソルキーで移動、Enterで終了、Ctrl-Aでファイル読み込み ]", 17, 10);
@@ -4355,7 +4355,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 			creature_ptr->chp = creature_ptr->mhp;
 			creature_ptr->csp = creature_ptr->msp;
 
-			display_player(creature_ptr, mode);
+			display_player(creature_ptr, mode, map_name);
 
 			/* Prepare a prompt (must squeeze everything in) */
 			Term_gotoxy(2, 23);

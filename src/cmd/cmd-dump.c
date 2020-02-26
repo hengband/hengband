@@ -72,7 +72,7 @@
 #include "spells.h"
 #include "objectkind.h"
 #include "floor-town.h"
-#include "view-mainwindow.h"
+#include "view-mainwindow.h" // 暫定。後で消す
 
 #include "english.h"
 
@@ -1044,12 +1044,12 @@ void do_cmd_player_status(player_type *creature_ptr)
 	while (TRUE)
 	{
 		update_playtime();
-		display_player(creature_ptr, mode);
+		display_player(creature_ptr, mode, map_name);
 
 		if (mode == 4)
 		{
 			mode = 0;
-			display_player(creature_ptr, mode);
+			display_player(creature_ptr, mode, map_name);
 		}
 
 		/* Prompt */
@@ -1077,7 +1077,7 @@ void do_cmd_player_status(player_type *creature_ptr)
 			{
 				if (tmp[0] && (tmp[0] != ' '))
 				{
-					file_character(creature_ptr, tmp, display_player);
+					file_character(creature_ptr, tmp, display_player, map_name);
 				}
 			}
 		}

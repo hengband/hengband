@@ -1832,7 +1832,7 @@ static void fix_player(player_type *player_ptr)
 		Term_activate(angband_term[j]);
 
 		update_playtime();
-		display_player(player_ptr, 0);
+		display_player(player_ptr, 0, map_name);
 		Term_fresh();
 		Term_activate(old);
 	}

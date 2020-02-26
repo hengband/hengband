@@ -3,6 +3,8 @@
 extern concptr screen_dump;
 
 #ifdef WORLD_SCORE
-extern errr report_score(player_type *creature_ptr, void(*update_playtime)(void), void(*display_player)(player_type*, int));
+#include "files.h"
+
+extern errr report_score(player_type *creature_ptr, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name);
 extern concptr make_screen_dump(player_type *creature_ptr);
 #endif

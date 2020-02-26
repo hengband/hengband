@@ -40,7 +40,7 @@ extern int highscore_fd;
 extern void display_scores_aux(int from, int to, int note, high_score *score);
 extern void display_scores(int from, int to);
 extern void kingly(player_type *winner_ptr);
-extern bool send_world_score(player_type *current_player_ptr, bool do_send, void(*update_playtime)(void), void(*display_player)(player_type*, int));
+extern bool send_world_score(player_type *current_player_ptr, bool do_send, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name);
 extern errr top_twenty(player_type *current_player_ptr);
 extern errr predict_score(player_type *current_player_ptr);
 extern void race_legends(player_type *current_player_ptr);

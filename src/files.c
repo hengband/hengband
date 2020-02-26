@@ -995,7 +995,7 @@ errr process_pref_file(player_type *creature_ptr, concptr name)
  * Allow the "full" flag to dump additional info,
  * and trigger its usage from various places in the code.
  */
-errr file_character(player_type *creature_ptr, concptr name, display_player_pf display_player)
+errr file_character(player_type *creature_ptr, concptr name, display_player_pf display_player, map_name_pf map_name)
 {
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
@@ -1025,7 +1025,7 @@ errr file_character(player_type *creature_ptr, concptr name, display_player_pf d
 	* todo view-mainwindow への依存があるが、file_character() 自体関数ポインタなのでよそから呼び出されるので何とかするのは辛い
 	* ついでに他の関数でもview(略) は参照されているので、簡単に除去することはできない…
 	*/
-	make_character_dump(creature_ptr, fff, update_playtime, display_player);
+	make_character_dump(creature_ptr, fff, update_playtime, display_player, map_name);
 	my_fclose(fff);
 	msg_print(_("キャラクタ情報のファイルへの書き出しに成功しました。", "Character dump successful."));
 	msg_print(NULL);

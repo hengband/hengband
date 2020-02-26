@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief プレーヤー表示に関するあれこれ (整理中)
+ * @brief プレーヤーのステータス表示メインルーチン群
  * @date 2020/02/25
  * @author Hourier
  * @details
@@ -16,9 +16,7 @@
 #include "quest.h"
 #include "core.h" // 暫定。後で消す
 #include "player/permanent-resistances.h" // 暫定。後で消す
-#include "files.h"
 #include "mutation.h"
-#include "view-mainwindow.h" // 暫定。後で消す
 #include "player-skill.h"
 #include "player-effects.h"
 #include "realm-song.h"
@@ -529,7 +527,7 @@ static void display_player_middle(player_type *creature_ptr)
  * Mode 4 = mutations
  * </pre>
  */
-void display_player(player_type *creature_ptr, int mode)
+void display_player(player_type *creature_ptr, int mode, map_name_pf map_name)
 {
 	if ((creature_ptr->muta1 || creature_ptr->muta2 || creature_ptr->muta3) && display_mutations)
 		mode = (mode % 5);
@@ -657,7 +655,7 @@ void display_player(player_type *creature_ptr, int mode)
 		else if (!floor_ptr->dun_level)
 		{
 #ifdef JP
-			sprintf(statmsg, "…あなたは%sで%sに殺された。", map_name(creature_ptr), creature_ptr->died_from);
+			sprintf(statmsg, "…あなたは%sで%sに殺された。", (*map_name)(creature_ptr), creature_ptr->died_from);
 #else
 			sprintf(statmsg, "...You were killed by %s in %s.", creature_ptr->died_from, map_name(creature_ptr));
 #endif
@@ -679,7 +677,7 @@ void display_player(player_type *creature_ptr, int mode)
 		else
 		{
 #ifdef JP
-			sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", map_name(creature_ptr), (int)floor_ptr->dun_level, creature_ptr->died_from);
+			sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", (*map_name)(creature_ptr), (int)floor_ptr->dun_level, creature_ptr->died_from);
 #else
 			sprintf(statmsg, "...You were killed by %s on level %d of %s.", creature_ptr->died_from, floor_ptr->dun_level, map_name(creature_ptr));
 #endif

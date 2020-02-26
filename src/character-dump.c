@@ -23,12 +23,12 @@
  * @param fff ファイルポインタ
  * @return なし
  */
-static void dump_aux_display_player(player_type *creature_ptr, FILE *fff, void(*display_player)(player_type*, int))
+static void dump_aux_display_player(player_type *creature_ptr, FILE *fff, display_player_pf display_player, map_name_pf map_name)
 {
 	TERM_COLOR a;
 	char c;
 	char buf[1024];
-	display_player(creature_ptr, 0);
+	display_player(creature_ptr, 0, map_name);
 
 	for (TERM_LEN y = 1; y < 22; y++)
 	{
@@ -46,7 +46,7 @@ static void dump_aux_display_player(player_type *creature_ptr, FILE *fff, void(*
 		fprintf(fff, _("%s\n", "%s\n"), buf);
 	}
 
-	display_player(creature_ptr, 1);
+	display_player(creature_ptr, 1, map_name);
 	for (TERM_LEN y = 10; y < 19; y++)
 	{
 		TERM_LEN x;
@@ -64,7 +64,7 @@ static void dump_aux_display_player(player_type *creature_ptr, FILE *fff, void(*
 	}
 
 	fprintf(fff, "\n");
-	display_player(creature_ptr, 2);
+	display_player(creature_ptr, 2, map_name);
 	for (TERM_LEN y = 2; y < 22; y++)
 	{
 		TERM_LEN x;
@@ -85,7 +85,7 @@ static void dump_aux_display_player(player_type *creature_ptr, FILE *fff, void(*
 	}
 
 	fprintf(fff, "\n");
-	display_player(creature_ptr, 3);
+	display_player(creature_ptr, 3, map_name);
 	for (TERM_LEN y = 1; y < 22; y++)
 	{
 		TERM_LEN x;
@@ -852,7 +852,7 @@ static void dump_aux_home_museum(player_type *creature_ptr, FILE *fff)
  * @param fff ファイルポインタ
  * @return エラーコード
  */
-void make_character_dump(player_type *creature_ptr, FILE *fff, void(*update_playtime)(void), void(*display_player)(player_type*, int))
+void make_character_dump(player_type *creature_ptr, FILE *fff, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name)
 {
 #ifdef JP
 	fprintf(fff, "  [変愚蛮怒 %d.%d.%d キャラクタ情報]\n\n",
@@ -863,7 +863,7 @@ void make_character_dump(player_type *creature_ptr, FILE *fff, void(*update_play
 #endif
 	(*update_playtime)();
 
-	dump_aux_display_player(creature_ptr, fff, display_player);
+	dump_aux_display_player(creature_ptr, fff, display_player, map_name);
 	dump_aux_last_message(creature_ptr, fff);
 	dump_aux_options(fff);
 	dump_aux_recall(fff);
