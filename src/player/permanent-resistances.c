@@ -3,6 +3,128 @@
 
 
 /*!
+ * @brief プレーヤーの職業による耐性フラグを返す
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param flags 耐性フラグの配列
+ * @return なし
+ */
+void add_class_flags(player_type *creature_ptr, BIT_FLAGS *flags)
+{
+	switch (creature_ptr->pclass)
+	{
+	case CLASS_WARRIOR:
+	{
+		if (creature_ptr->lev > 29)
+			add_flag(flags, TR_RES_FEAR);
+		if (creature_ptr->lev > 44)
+			add_flag(flags, TR_REGEN);
+
+		break;
+	}
+	case CLASS_SAMURAI:
+	{
+		if (creature_ptr->lev > 29)
+			add_flag(flags, TR_RES_FEAR);
+
+		break;
+	}
+	case CLASS_PALADIN:
+	{
+		if (creature_ptr->lev > 39)
+			add_flag(flags, TR_RES_FEAR);
+
+		break;
+	}
+	case CLASS_CHAOS_WARRIOR:
+	{
+		if (creature_ptr->lev > 29)
+			add_flag(flags, TR_RES_CHAOS);
+		if (creature_ptr->lev > 39)
+			add_flag(flags, TR_RES_FEAR);
+
+		break;
+	}
+	case CLASS_MONK:
+	case CLASS_FORCETRAINER:
+	{
+		if ((creature_ptr->lev > 9) && !heavy_armor(creature_ptr))
+			add_flag(flags, TR_SPEED);
+		if ((creature_ptr->lev > 24) && !heavy_armor(creature_ptr))
+			add_flag(flags, TR_FREE_ACT);
+
+		break;
+	}
+	case CLASS_NINJA:
+	{
+		if (heavy_armor(creature_ptr))
+		{
+			add_flag(flags, TR_SPEED);
+		}
+		else
+		{
+			if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->migite) &&
+				(!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->hidarite))
+				add_flag(flags, TR_SPEED);
+			if (creature_ptr->lev > 24)
+				add_flag(flags, TR_FREE_ACT);
+		}
+
+		add_flag(flags, TR_SLOW_DIGEST);
+		add_flag(flags, TR_RES_FEAR);
+		if (creature_ptr->lev > 19)
+			add_flag(flags, TR_RES_POIS);
+		if (creature_ptr->lev > 24)
+			add_flag(flags, TR_SUST_DEX);
+		if (creature_ptr->lev > 29)
+			add_flag(flags, TR_SEE_INVIS);
+
+		break;
+	}
+	case CLASS_MINDCRAFTER:
+	{
+		if (creature_ptr->lev > 9)
+			add_flag(flags, TR_RES_FEAR);
+		if (creature_ptr->lev > 19)
+			add_flag(flags, TR_SUST_WIS);
+		if (creature_ptr->lev > 29)
+			add_flag(flags, TR_RES_CONF);
+		if (creature_ptr->lev > 39)
+			add_flag(flags, TR_TELEPATHY);
+
+		break;
+	}
+	case CLASS_BARD:
+	{
+		add_flag(flags, TR_RES_SOUND);
+		break;
+	}
+	case CLASS_BERSERKER:
+	{
+		add_flag(flags, TR_SUST_STR);
+		add_flag(flags, TR_SUST_DEX);
+		add_flag(flags, TR_SUST_CON);
+		add_flag(flags, TR_REGEN);
+		add_flag(flags, TR_FREE_ACT);
+		add_flag(flags, TR_SPEED);
+		if (creature_ptr->lev > 39)
+			add_flag(flags, TR_REFLECT);
+
+		break;
+	}
+	case CLASS_MIRROR_MASTER:
+	{
+		if (creature_ptr->lev > 39)
+			add_flag(flags, TR_REFLECT);
+
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+
+/*!
  * @brief 特定の種族に擬態中の耐性フラグを返す
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param flags 耐性フラグの配列
@@ -421,7 +543,7 @@ void add_kata_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 		add_flag(flags, TR_SH_COLD);
 	}
 
-	if (creature_ptr->special_defense & KATA_MUSOU == 0) return;
+	if ((creature_ptr->special_defense & KATA_MUSOU) == 0) return;
 
 	add_flag(flags, TR_RES_FEAR);
 	add_flag(flags, TR_RES_LITE);
@@ -456,14 +578,12 @@ void add_kata_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 
 
 /*!
- * todo 関数分割を実施すること
  * @brief プレイヤーの職業、種族に応じた耐性フラグを返す
  * Prints ratings on certain abilities
  * @param creature_ptr 参照元クリーチャーポインタ
  * @param flags フラグを保管する配列
  * @return なし
  * @details
- * 10行以上のコードは分割対象とする
  * Obtain the "flags" for the player as if he was an item
  * @todo
  * xtra1.c周りと多重実装になっているのを何とかする
@@ -473,118 +593,7 @@ void player_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 	for (int i = 0; i < TR_FLAG_SIZE; i++)
 		flags[i] = 0L;
 
-	switch (creature_ptr->pclass)
-	{
-	case CLASS_WARRIOR:
-	{
-		if (creature_ptr->lev > 29)
-			add_flag(flags, TR_RES_FEAR);
-		if (creature_ptr->lev > 44)
-			add_flag(flags, TR_REGEN);
-
-		break;
-	}
-	case CLASS_SAMURAI:
-	{
-		if (creature_ptr->lev > 29)
-			add_flag(flags, TR_RES_FEAR);
-
-		break;
-	}
-	case CLASS_PALADIN:
-	{
-		if (creature_ptr->lev > 39)
-			add_flag(flags, TR_RES_FEAR);
-
-		break;
-	}
-	case CLASS_CHAOS_WARRIOR:
-	{
-		if (creature_ptr->lev > 29)
-			add_flag(flags, TR_RES_CHAOS);
-		if (creature_ptr->lev > 39)
-			add_flag(flags, TR_RES_FEAR);
-
-		break;
-	}
-	case CLASS_MONK:
-	case CLASS_FORCETRAINER:
-	{
-		if ((creature_ptr->lev > 9) && !heavy_armor(creature_ptr))
-			add_flag(flags, TR_SPEED);
-		if ((creature_ptr->lev > 24) && !heavy_armor(creature_ptr))
-			add_flag(flags, TR_FREE_ACT);
-
-		break;
-	}
-	case CLASS_NINJA:
-	{
-		if (heavy_armor(creature_ptr))
-		{
-			add_flag(flags, TR_SPEED);
-		}
-		else
-		{
-			if ((!creature_ptr->inventory_list[INVEN_RARM].k_idx || creature_ptr->migite) &&
-				(!creature_ptr->inventory_list[INVEN_LARM].k_idx || creature_ptr->hidarite))
-				add_flag(flags, TR_SPEED);
-			if (creature_ptr->lev > 24)
-				add_flag(flags, TR_FREE_ACT);
-		}
-
-		add_flag(flags, TR_SLOW_DIGEST);
-		add_flag(flags, TR_RES_FEAR);
-		if (creature_ptr->lev > 19)
-			add_flag(flags, TR_RES_POIS);
-		if (creature_ptr->lev > 24)
-			add_flag(flags, TR_SUST_DEX);
-		if (creature_ptr->lev > 29)
-			add_flag(flags, TR_SEE_INVIS);
-
-		break;
-	}
-	case CLASS_MINDCRAFTER:
-	{
-		if (creature_ptr->lev > 9)
-			add_flag(flags, TR_RES_FEAR);
-		if (creature_ptr->lev > 19)
-			add_flag(flags, TR_SUST_WIS);
-		if (creature_ptr->lev > 29)
-			add_flag(flags, TR_RES_CONF);
-		if (creature_ptr->lev > 39)
-			add_flag(flags, TR_TELEPATHY);
-
-		break;
-	}
-	case CLASS_BARD:
-	{
-		add_flag(flags, TR_RES_SOUND);
-		break;
-	}
-	case CLASS_BERSERKER:
-	{
-		add_flag(flags, TR_SUST_STR);
-		add_flag(flags, TR_SUST_DEX);
-		add_flag(flags, TR_SUST_CON);
-		add_flag(flags, TR_REGEN);
-		add_flag(flags, TR_FREE_ACT);
-		add_flag(flags, TR_SPEED);
-		if (creature_ptr->lev > 39)
-			add_flag(flags, TR_REFLECT);
-
-		break;
-	}
-	case CLASS_MIRROR_MASTER:
-	{
-		if (creature_ptr->lev > 39)
-			add_flag(flags, TR_REFLECT);
-
-		break;
-	}
-	default:
-		break;
-	}
-
+	add_class_flags(creature_ptr, flags);
 	void(*race_flags_func)(player_type*, BIT_FLAGS*) = creature_ptr->mimic_form
 		? add_mimic_form_flags
 		: add_race_flags;
