@@ -191,6 +191,46 @@ static void display_basic_resistance_info(player_type *creature_ptr, void(*displ
 
 
 /*!
+ * @brief プレーヤーの上位耐性を表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param display_player_equippy 表示へのコールバック
+ * @param f 特性フラグへの参照ポインタ
+ * @return なし
+ */
+void display_advanced_resistance_info(player_type *creature_ptr, void(*display_player_equippy)(player_type*, TERM_LEN, TERM_LEN, BIT_FLAGS16), all_player_flags *f)
+{
+	TERM_LEN row = 12;
+	TERM_LEN col = 26;
+	(*display_player_equippy)(creature_ptr, row - 2, col + 8, 0);
+	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 8);
+
+#ifdef JP
+	display_one_characteristic_info(creature_ptr, row + 0, col, "耐轟音:", TR_RES_SOUND, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 1, col, "耐地獄:", TR_RES_NETHER, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 2, col, "耐因混:", TR_RES_NEXUS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 3, col, "耐カオ:", TR_RES_CHAOS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 4, col, "耐劣化:", TR_RES_DISEN, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 5, col, "耐恐怖:", TR_RES_FEAR, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 6, col, "反射  :", TR_REFLECT, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 7, col, "火炎オ:", TR_SH_FIRE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 8, col, "電気オ:", TR_SH_ELEC, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 9, col, "冷気オ:", TR_SH_COLD, f, 0);
+#else
+	display_flag_aux(creature_ptr, row + 0, col, "Sound :", TR_RES_SOUND, f, 0);
+	display_flag_aux(creature_ptr, row + 1, col, "Nether:", TR_RES_NETHER, f, 0);
+	display_flag_aux(creature_ptr, row + 2, col, "Nexus :", TR_RES_NEXUS, f, 0);
+	display_flag_aux(creature_ptr, row + 3, col, "Chaos :", TR_RES_CHAOS, f, 0);
+	display_flag_aux(creature_ptr, row + 4, col, "Disnch:", TR_RES_DISEN, f, 0);
+	display_flag_aux(creature_ptr, row + 5, col, "Fear  :", TR_RES_FEAR, f, 0);
+	display_flag_aux(creature_ptr, row + 6, col, "Reflct:", TR_REFLECT, f, 0);
+	display_flag_aux(creature_ptr, row + 7, col, "AuFire:", TR_SH_FIRE, f, 0);
+	display_flag_aux(creature_ptr, row + 8, col, "AuElec:", TR_SH_ELEC, f, 0);
+	display_flag_aux(creature_ptr, row + 9, col, "AuCold:", TR_SH_COLD, f, 0);
+#endif
+}
+
+
+/*!
  * @brief プレイヤーの特性フラグ一覧表示1
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param display_player_equippy 表示へのコールバック
@@ -208,40 +248,11 @@ void display_player_flag_info_1(player_type *creature_ptr, void(*display_player_
 	player_vulnerability_flags(creature_ptr, f.player_vuln);
 
 	display_basic_resistance_info(creature_ptr, display_player_equippy, &f);
-
-	/*** Set 2 ***/
-	TERM_LEN row = 12;
-	TERM_LEN col = 26;
-	(*display_player_equippy)(creature_ptr, row - 2, col + 8, 0);
-	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 8);
-
-#ifdef JP
-	display_one_characteristic_info(creature_ptr, row + 0, col, "耐轟音:", TR_RES_SOUND, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "耐地獄:", TR_RES_NETHER, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "耐因混:", TR_RES_NEXUS, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "耐カオ:", TR_RES_CHAOS, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "耐劣化:", TR_RES_DISEN, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "耐恐怖:", TR_RES_FEAR, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 6, col, "反射  :", TR_REFLECT, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 7, col, "火炎オ:", TR_SH_FIRE, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "電気オ:", TR_SH_ELEC, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 9, col, "冷気オ:", TR_SH_COLD, &f, 0);
-#else
-	display_flag_aux(creature_ptr, row + 0, col, "Sound :", TR_RES_SOUND, &f, 0);
-	display_flag_aux(creature_ptr, row + 1, col, "Nether:", TR_RES_NETHER, &f, 0);
-	display_flag_aux(creature_ptr, row + 2, col, "Nexus :", TR_RES_NEXUS, &f, 0);
-	display_flag_aux(creature_ptr, row + 3, col, "Chaos :", TR_RES_CHAOS, &f, 0);
-	display_flag_aux(creature_ptr, row + 4, col, "Disnch:", TR_RES_DISEN, &f, 0);
-	display_flag_aux(creature_ptr, row + 5, col, "Fear  :", TR_RES_FEAR, &f, 0);
-	display_flag_aux(creature_ptr, row + 6, col, "Reflct:", TR_REFLECT, &f, 0);
-	display_flag_aux(creature_ptr, row + 7, col, "AuFire:", TR_SH_FIRE, &f, 0);
-	display_flag_aux(creature_ptr, row + 8, col, "AuElec:", TR_SH_ELEC, &f, 0);
-	display_flag_aux(creature_ptr, row + 9, col, "AuCold:", TR_SH_COLD, &f, 0);
-#endif
-
+	display_advanced_resistance_info(creature_ptr, display_player_equippy, &f);
+	
 	/*** Set 3 ***/
-	row = 12;
-	col = 51;
+	TERM_LEN row = 12;
+	TERM_LEN col = 51;
 	(*display_player_equippy)(creature_ptr, row - 2, col + 12, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 12);
 
