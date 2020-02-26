@@ -4696,10 +4696,10 @@ void close_game(player_type *player_ptr)
 		}
 		else do_send = FALSE;
 
-		print_tomb(player_ptr, read_dead_file);
+		print_tomb(player_ptr);
 		flush();
 
-		show_info(player_ptr, handle_stuff, file_character, update_playtime, display_player);
+		show_info(player_ptr, handle_stuff, update_playtime, display_player);
 		Term_clear();
 
 		if (check_score(player_ptr))

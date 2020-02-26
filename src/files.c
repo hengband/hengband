@@ -15,7 +15,6 @@
 #include "angband.h"
 #include "term.h"
 #include "signal-handlers.h"
-#include "view/display-player.h" // 暫定。後で消す
 #include "uid-checker.h"
 #include "files.h"
 #include "core.h" // リファクタリングして後で消す
@@ -996,7 +995,7 @@ errr process_pref_file(player_type *creature_ptr, concptr name)
  * Allow the "full" flag to dump additional info,
  * and trigger its usage from various places in the code.
  */
-errr file_character(player_type *creature_ptr, concptr name)
+errr file_character(player_type *creature_ptr, concptr name, display_player_pf display_player)
 {
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);

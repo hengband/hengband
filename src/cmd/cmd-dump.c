@@ -1077,7 +1077,7 @@ void do_cmd_player_status(player_type *creature_ptr)
 			{
 				if (tmp[0] && (tmp[0] != ' '))
 				{
-					file_character(creature_ptr, tmp);
+					file_character(creature_ptr, tmp, display_player);
 				}
 			}
 		}
