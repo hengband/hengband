@@ -197,7 +197,7 @@ static void display_basic_resistance_info(player_type *creature_ptr, void(*displ
  * @param f 特性フラグへの参照ポインタ
  * @return なし
  */
-void display_advanced_resistance_info(player_type *creature_ptr, void(*display_player_equippy)(player_type*, TERM_LEN, TERM_LEN, BIT_FLAGS16), all_player_flags *f)
+static void display_advanced_resistance_info(player_type *creature_ptr, void(*display_player_equippy)(player_type*, TERM_LEN, TERM_LEN, BIT_FLAGS16), all_player_flags *f)
 {
 	TERM_LEN row = 12;
 	TERM_LEN col = 26;
@@ -231,6 +231,46 @@ void display_advanced_resistance_info(player_type *creature_ptr, void(*display_p
 
 
 /*!
+ * @brief プレーヤーのその他耐性を表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param display_player_equippy 表示へのコールバック
+ * @param f 特性フラグへの参照ポインタ
+ * @return なし
+ */
+static void display_other_resistance_info(player_type *creature_ptr, void(*display_player_equippy)(player_type*, TERM_LEN, TERM_LEN, BIT_FLAGS16), all_player_flags *f)
+{
+	TERM_LEN row = 12;
+	TERM_LEN col = 51;
+	(*display_player_equippy)(creature_ptr, row - 2, col + 12, 0);
+	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 12);
+
+#ifdef JP
+	display_one_characteristic_info(creature_ptr, row + 0, col, "加速      :", TR_SPEED, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 1, col, "耐麻痺    :", TR_FREE_ACT, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 2, col, "透明体視認:", TR_SEE_INVIS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 3, col, "経験値保持:", TR_HOLD_EXP, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 4, col, "警告      :", TR_WARNING, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 5, col, "遅消化    :", TR_SLOW_DIGEST, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 6, col, "急回復    :", TR_REGEN, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 7, col, "浮遊      :", TR_LEVITATION, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 8, col, "永遠光源  :", TR_LITE_1, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 9, col, "呪い      :", 0, f, DP_CURSE);
+#else
+	display_flag_aux(creature_ptr, row + 0, col, "Speed     :", TR_SPEED, f, 0);
+	display_flag_aux(creature_ptr, row + 1, col, "FreeAction:", TR_FREE_ACT, f, 0);
+	display_flag_aux(creature_ptr, row + 2, col, "SeeInvisi.:", TR_SEE_INVIS, f, 0);
+	display_flag_aux(creature_ptr, row + 3, col, "Hold Exp  :", TR_HOLD_EXP, f, 0);
+	display_flag_aux(creature_ptr, row + 4, col, "Warning   :", TR_WARNING, f, 0);
+	display_flag_aux(creature_ptr, row + 5, col, "SlowDigest:", TR_SLOW_DIGEST, f, 0);
+	display_flag_aux(creature_ptr, row + 6, col, "Regene.   :", TR_REGEN, f, 0);
+	display_flag_aux(creature_ptr, row + 7, col, "Levitation:", TR_LEVITATION, f, 0);
+	display_flag_aux(creature_ptr, row + 8, col, "Perm Lite :", TR_LITE_1, f, 0);
+	display_flag_aux(creature_ptr, row + 9, col, "Cursed    :", 0, f, DP_CURSE);
+#endif
+}
+
+
+/*!
  * @brief プレイヤーの特性フラグ一覧表示1
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param display_player_equippy 表示へのコールバック
@@ -249,36 +289,7 @@ void display_player_flag_info_1(player_type *creature_ptr, void(*display_player_
 
 	display_basic_resistance_info(creature_ptr, display_player_equippy, &f);
 	display_advanced_resistance_info(creature_ptr, display_player_equippy, &f);
-	
-	/*** Set 3 ***/
-	TERM_LEN row = 12;
-	TERM_LEN col = 51;
-	(*display_player_equippy)(creature_ptr, row - 2, col + 12, 0);
-	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 12);
-
-#ifdef JP
-	display_one_characteristic_info(creature_ptr, row + 0, col, "加速      :", TR_SPEED, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "耐麻痺    :", TR_FREE_ACT, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "透明体視認:", TR_SEE_INVIS, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "経験値保持:", TR_HOLD_EXP, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "警告      :", TR_WARNING, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "遅消化    :", TR_SLOW_DIGEST, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 6, col, "急回復    :", TR_REGEN, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 7, col, "浮遊      :", TR_LEVITATION, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "永遠光源  :", TR_LITE_1, &f, 0);
-	display_one_characteristic_info(creature_ptr, row + 9, col, "呪い      :", 0, &f, DP_CURSE);
-#else
-	display_flag_aux(creature_ptr, row + 0, col, "Speed     :", TR_SPEED, &f, 0);
-	display_flag_aux(creature_ptr, row + 1, col, "FreeAction:", TR_FREE_ACT, &f, 0);
-	display_flag_aux(creature_ptr, row + 2, col, "SeeInvisi.:", TR_SEE_INVIS, &f, 0);
-	display_flag_aux(creature_ptr, row + 3, col, "Hold Exp  :", TR_HOLD_EXP, &f, 0);
-	display_flag_aux(creature_ptr, row + 4, col, "Warning   :", TR_WARNING, &f, 0);
-	display_flag_aux(creature_ptr, row + 5, col, "SlowDigest:", TR_SLOW_DIGEST, &f, 0);
-	display_flag_aux(creature_ptr, row + 6, col, "Regene.   :", TR_REGEN, &f, 0);
-	display_flag_aux(creature_ptr, row + 7, col, "Levitation:", TR_LEVITATION, &f, 0);
-	display_flag_aux(creature_ptr, row + 8, col, "Perm Lite :", TR_LITE_1, &f, 0);
-	display_flag_aux(creature_ptr, row + 9, col, "Cursed    :", 0, &f, DP_CURSE);
-#endif
+	display_other_resistance_info(creature_ptr, display_player_equippy, &f);
 }
 
 
