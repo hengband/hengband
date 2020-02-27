@@ -439,6 +439,9 @@
     <ClCompile Include="..\..\src\player\process-death.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\gf-descriptions.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -859,6 +862,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\process-death.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\gf-descriptions.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

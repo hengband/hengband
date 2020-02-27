@@ -190,6 +190,7 @@
     <ClCompile Include="..\..\src\history.c" />
     <ClCompile Include="..\..\src\horror-descriptions.c" />
     <ClCompile Include="..\..\src\init.c" />
+    <ClCompile Include="..\..\src\io\gf-descriptions.c" />
     <ClCompile Include="..\..\src\monster-dist-offsets.c" />
     <ClCompile Include="..\..\src\monster-process.c" />
     <ClCompile Include="..\..\src\monster-status.c" />
@@ -327,6 +328,7 @@
     <ClInclude Include="..\..\src\combat\shoot.h" />
     <ClInclude Include="..\..\src\english.h" />
     <ClInclude Include="..\..\src\horror-descriptions.h" />
+    <ClInclude Include="..\..\src\io\gf-descriptions.h" />
     <ClInclude Include="..\..\src\monster-dist-offsets.h" />
     <ClInclude Include="..\..\src\object-flavor.h" />
     <ClInclude Include="..\..\src\player-inventory.h" />
