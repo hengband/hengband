@@ -192,6 +192,39 @@ static void display_basic_stat_value(player_type *creature_ptr, int stat_num, in
 
 
 /*!
+ * @brief 能力値を補正しつつ表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param row 行数
+ * @param stat_col 列数
+ * @return なし
+ */
+static void process_stats(player_type *creature_ptr, int row, int stat_col)
+{
+	char buf[80];
+	for (int i = 0; i < A_MAX; i++)
+	{
+		int r_adj = creature_ptr->mimic_form
+			? mimic_info[creature_ptr->mimic_form].r_adj[i]
+			: rp_ptr->r_adj[i];
+		int e_adj = calc_basic_stat(creature_ptr, i);
+		r_adj += compensate_special_race(creature_ptr, i);
+		e_adj -= r_adj;
+		e_adj -= cp_ptr->c_adj[i];
+		e_adj -= ap_ptr->a_adj[i];
+
+		display_basic_stat_name(creature_ptr, i, row, stat_col);
+		cnv_stat(creature_ptr->stat_max[i], buf);
+		if (creature_ptr->stat_max[i] == creature_ptr->stat_max_max[i])
+			c_put_str(TERM_WHITE, "!", row + i + 1, _(stat_col + 6, stat_col + 4));
+
+		c_put_str(TERM_BLUE, buf, row + i + 1, stat_col + 13 - strlen(buf));
+
+		display_basic_stat_value(creature_ptr, i, r_adj, e_adj, row, stat_col, buf);
+	}
+}
+
+
+/*!
  * @brief プレイヤーの特性フラグ一覧表示2b /
  * Special display, part 2b
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -216,44 +249,23 @@ static void display_player_stat_info(player_type *creature_ptr)
 	c_put_str(TERM_L_BLUE, _(" 種 職 性 装 ", "RacClaPerMod"), row, stat_col + 13);
 	c_put_str(TERM_L_GREEN, _("合計", "Actual"), row, stat_col + 28);
 	c_put_str(TERM_YELLOW, _("現在", "Current"), row, stat_col + 35);
-
-	char buf[80];
-	for (int i = 0; i < A_MAX; i++)
-	{
-		int r_adj = creature_ptr->mimic_form
-			? mimic_info[creature_ptr->mimic_form].r_adj[i]
-			: rp_ptr->r_adj[i];
-		int e_adj = calc_basic_stat(creature_ptr, i);
-		r_adj += compensate_special_race(creature_ptr, i);
-		e_adj -= r_adj;
-		e_adj -= cp_ptr->c_adj[i];
-		e_adj -= ap_ptr->a_adj[i];
-
-		display_basic_stat_name(creature_ptr, i, row, stat_col);
-		cnv_stat(creature_ptr->stat_max[i], buf);
-		if (creature_ptr->stat_max[i] == creature_ptr->stat_max_max[i])
-			c_put_str(TERM_WHITE, "!", row + i + 1, _(stat_col + 6, stat_col + 4));
-
-		c_put_str(TERM_BLUE, buf, row + i + 1, stat_col + 13 - strlen(buf));
-
-		display_basic_stat_value(creature_ptr, i, r_adj, e_adj, row, stat_col, buf);
-	}
+	process_stats(creature_ptr, row, stat_col);
 
 	int col = stat_col + 41;
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row, col);
 	c_put_str(TERM_L_GREEN, _("能力修正", "Modification"), row - 1, col);
 
-	BIT_FLAGS flgs[TR_FLAG_SIZE];
+	BIT_FLAGS flags[TR_FLAG_SIZE];
 	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
 	{
 		object_type *o_ptr;
 		o_ptr = &creature_ptr->inventory_list[i];
-		object_flags_known(o_ptr, flgs);
+		object_flags_known(o_ptr, flags);
 		for (int stat = 0; stat < A_MAX; stat++)
 		{
 			byte a = TERM_SLATE;
 			char c = '.';
-			if (have_flag(flgs, stat))
+			if (have_flag(flags, stat))
 			{
 				c = '*';
 
@@ -263,7 +275,7 @@ static void display_player_stat_info(player_type *creature_ptr)
 					if (o_ptr->pval < 10) c = '0' + o_ptr->pval;
 				}
 
-				if (have_flag(flgs, stat + TR_SUST_STR))
+				if (have_flag(flags, stat + TR_SUST_STR))
 				{
 					a = TERM_GREEN;
 				}
@@ -274,7 +286,7 @@ static void display_player_stat_info(player_type *creature_ptr)
 					if (o_ptr->pval > -10) c = '0' - o_ptr->pval;
 				}
 			}
-			else if (have_flag(flgs, stat + TR_SUST_STR))
+			else if (have_flag(flags, stat + TR_SUST_STR))
 			{
 				a = TERM_GREEN;
 				c = 's';
@@ -286,7 +298,7 @@ static void display_player_stat_info(player_type *creature_ptr)
 		col++;
 	}
 
-	player_flags(creature_ptr, flgs);
+	player_flags(creature_ptr, flags);
 	for (int stat = 0; stat < A_MAX; stat++)
 	{
 		byte a = TERM_SLATE;
@@ -351,7 +363,7 @@ static void display_player_stat_info(player_type *creature_ptr)
 			}
 		}
 
-		if (have_flag(flgs, stat + TR_SUST_STR))
+		if (have_flag(flags, stat + TR_SUST_STR))
 		{
 			a = TERM_GREEN;
 			c = 's';
