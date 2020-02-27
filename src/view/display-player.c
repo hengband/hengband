@@ -85,7 +85,7 @@ static void display_player_misc_info(player_type *creature_ptr)
 /*!
  * @brief プレーヤーのパラメータ基礎値 (腕力等)を18以下になるようにして返す
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @param stat_num パラメータ番号
+ * @param stat_num 能力値番号
  * @return 基礎値
  * @details 最大が18になるのはD&D由来
  */
@@ -111,7 +111,7 @@ static int calc_basic_stat(player_type *creature_ptr, int stat_num)
 /*!
  * @brief 特殊な種族の時、腕力等の基礎パラメータを変動させる
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @param stat_num パラメータ番号
+ * @param stat_num 能力値番号
  * @return 補正後の基礎パラメータ
  */
 static int compensate_special_race(player_type *creature_ptr, int stat_num)
@@ -141,7 +141,7 @@ static int compensate_special_race(player_type *creature_ptr, int stat_num)
 /*!
  * @brief 能力値名を(もし一時的減少なら'x'を付けて)表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @param stat_num パラメータ番号
+ * @param stat_num 能力値番号
  * @param row 行数
  * @param stat_col 列数
  * @return なし
@@ -158,7 +158,7 @@ static void display_basic_stat_name(player_type *creature_ptr, int stat_num, int
 /*!
  * @brief 能力値を、基本・種族補正・職業補正・性格補正・装備補正・合計・現在 (一時的減少のみ) の順で表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * @param stat_num パラメータ番号
+ * @param stat_num 能力値番号
  * @param r_adj 補正後の基礎パラメータ
  * @param e_adj 種族補正値
  * @param row 行数
@@ -225,6 +225,38 @@ static void process_stats(player_type *creature_ptr, int row, int stat_col)
 
 
 /*!
+ * @brief pval付きの装備に依るステータス補正を表示する
+ * @param c 補正後の表示記号
+ * @param a 表示色
+ * @param o_ptr 装備品への参照ポインタ
+ * @param stat 能力値番号
+ * @param flags 装備品に立っているフラグ
+ * @return なし
+ */
+static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr, int stat, BIT_FLAGS *flags)
+{
+	*c = '*';
+
+	if (o_ptr->pval > 0)
+	{
+		*a = TERM_L_GREEN;
+		if (o_ptr->pval < 10) *c = '0' + o_ptr->pval;
+	}
+
+	if (have_flag(flags, stat + TR_SUST_STR))
+	{
+		*a = TERM_GREEN;
+	}
+
+	if (o_ptr->pval < 0)
+	{
+		*a = TERM_RED;
+		if (o_ptr->pval > -10) *c = '0' - o_ptr->pval;
+	}
+}
+
+
+/*!
  * @brief プレイヤーの特性フラグ一覧表示2b /
  * Special display, part 2b
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -263,28 +295,11 @@ static void display_player_stat_info(player_type *creature_ptr)
 		object_flags_known(o_ptr, flags);
 		for (int stat = 0; stat < A_MAX; stat++)
 		{
-			byte a = TERM_SLATE;
+			TERM_COLOR a = TERM_SLATE;
 			char c = '.';
 			if (have_flag(flags, stat))
 			{
-				c = '*';
-
-				if (o_ptr->pval > 0)
-				{
-					a = TERM_L_GREEN;
-					if (o_ptr->pval < 10) c = '0' + o_ptr->pval;
-				}
-
-				if (have_flag(flags, stat + TR_SUST_STR))
-				{
-					a = TERM_GREEN;
-				}
-
-				if (o_ptr->pval < 0)
-				{
-					a = TERM_RED;
-					if (o_ptr->pval > -10) c = '0' - o_ptr->pval;
-				}
+				compensate_stat_by_weapon(&c, &a, o_ptr, stat, flags);
 			}
 			else if (have_flag(flags, stat + TR_SUST_STR))
 			{
