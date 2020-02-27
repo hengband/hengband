@@ -139,6 +139,59 @@ static int compensate_special_race(player_type *creature_ptr, int stat_num)
 
 
 /*!
+ * @brief 能力値名を(もし一時的減少なら'x'を付けて)表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param stat_num パラメータ番号
+ * @param row 行数
+ * @param stat_col 列数
+ * @return なし
+ */
+static void display_basic_stat_name(player_type *creature_ptr, int stat_num, int row, int stat_col)
+{
+	if (creature_ptr->stat_cur[stat_num] < creature_ptr->stat_max[stat_num])
+		c_put_str(TERM_WHITE, stat_names_reduced[stat_num], row + stat_num + 1, stat_col + 1);
+	else
+		c_put_str(TERM_WHITE, stat_names[stat_num], row + stat_num + 1, stat_col + 1);
+}
+
+
+/*!
+ * @brief 能力値を、基本・種族補正・職業補正・性格補正・装備補正・合計・現在 (一時的減少のみ) の順で表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param stat_num パラメータ番号
+ * @param r_adj 補正後の基礎パラメータ
+ * @param e_adj 種族補正値
+ * @param row 行数
+ * @param stat_col 列数
+ * @param buf 能力値の数値
+ * @return なし
+ */
+static void display_basic_stat_value(player_type *creature_ptr, int stat_num, int r_adj, int e_adj, int row, int stat_col, char *buf)
+{
+	(void)sprintf(buf, "%3d", r_adj);
+	c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 13);
+
+	(void)sprintf(buf, "%3d", (int)cp_ptr->c_adj[stat_num]);
+	c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 16);
+
+	(void)sprintf(buf, "%3d", (int)ap_ptr->a_adj[stat_num]);
+	c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 19);
+
+	(void)sprintf(buf, "%3d", (int)e_adj);
+	c_put_str(TERM_L_BLUE, buf, row + stat_num + 1, stat_col + 22);
+
+	cnv_stat(creature_ptr->stat_top[stat_num], buf);
+	c_put_str(TERM_L_GREEN, buf, row + stat_num + 1, stat_col + 26);
+
+	if (creature_ptr->stat_use[stat_num] < creature_ptr->stat_top[stat_num])
+	{
+		cnv_stat(creature_ptr->stat_use[stat_num], buf);
+		c_put_str(TERM_YELLOW, buf, row + stat_num + 1, stat_col + 33);
+	}
+}
+
+
+/*!
  * @brief プレイヤーの特性フラグ一覧表示2b /
  * Special display, part 2b
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -176,34 +229,14 @@ static void display_player_stat_info(player_type *creature_ptr)
 		e_adj -= cp_ptr->c_adj[i];
 		e_adj -= ap_ptr->a_adj[i];
 
-		if (creature_ptr->stat_cur[i] < creature_ptr->stat_max[i])
-			c_put_str(TERM_WHITE, stat_names_reduced[i], row + i + 1, stat_col + 1);
-		else
-			c_put_str(TERM_WHITE, stat_names[i], row + i + 1, stat_col + 1);
-
+		display_basic_stat_name(creature_ptr, i, row, stat_col);
 		cnv_stat(creature_ptr->stat_max[i], buf);
 		if (creature_ptr->stat_max[i] == creature_ptr->stat_max_max[i])
 			c_put_str(TERM_WHITE, "!", row + i + 1, _(stat_col + 6, stat_col + 4));
 
 		c_put_str(TERM_BLUE, buf, row + i + 1, stat_col + 13 - strlen(buf));
 
-		(void)sprintf(buf, "%3d", r_adj);
-		c_put_str(TERM_L_BLUE, buf, row + i + 1, stat_col + 13);
-		(void)sprintf(buf, "%3d", (int)cp_ptr->c_adj[i]);
-		c_put_str(TERM_L_BLUE, buf, row + i + 1, stat_col + 16);
-		(void)sprintf(buf, "%3d", (int)ap_ptr->a_adj[i]);
-		c_put_str(TERM_L_BLUE, buf, row + i + 1, stat_col + 19);
-		(void)sprintf(buf, "%3d", (int)e_adj);
-		c_put_str(TERM_L_BLUE, buf, row + i + 1, stat_col + 22);
-
-		cnv_stat(creature_ptr->stat_top[i], buf);
-		c_put_str(TERM_L_GREEN, buf, row + i + 1, stat_col + 26);
-
-		if (creature_ptr->stat_use[i] < creature_ptr->stat_top[i])
-		{
-			cnv_stat(creature_ptr->stat_use[i], buf);
-			c_put_str(TERM_YELLOW, buf, row + i + 1, stat_col + 33);
-		}
+		display_basic_stat_value(creature_ptr, i, r_adj, e_adj, row, stat_col, buf);
 	}
 
 	int col = stat_col + 41;
