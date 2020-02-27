@@ -294,67 +294,88 @@ static void display_equipments_compensation(player_type *creature_ptr, BIT_FLAGS
 
 
 /*!
- * @brief 突然変異 (と、つよしスペシャル)による能力値補正
+ * @brief 各能力値の補正
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param stat 能力値番号
+ * @return なし
+ */
+static int compensation_stat_by_mutation(player_type *creature_ptr, int stat)
+{
+	int compensation = 0;
+	if (stat == A_STR)
+	{
+		if (creature_ptr->muta3 & MUT3_HYPER_STR) compensation += 4;
+		if (creature_ptr->muta3 & MUT3_PUNY) compensation -= 4;
+		if (creature_ptr->tsuyoshi) compensation += 4;
+		return compensation;
+	}
+	
+	if (stat == A_WIS || stat == A_INT)
+	{
+		if (creature_ptr->muta3 & MUT3_HYPER_INT) compensation += 4;
+		if (creature_ptr->muta3 & MUT3_MORONIC) compensation -= 4;
+		return compensation;
+	}
+	
+	if (stat == A_DEX)
+	{
+		if (creature_ptr->muta3 & MUT3_IRON_SKIN) compensation -= 1;
+		if (creature_ptr->muta3 & MUT3_LIMBER) compensation += 3;
+		if (creature_ptr->muta3 & MUT3_ARTHRITIS) compensation -= 3;
+		return compensation;
+	}
+	
+	if (stat == A_CON)
+	{
+		if (creature_ptr->muta3 & MUT3_RESILIENT) compensation += 4;
+		if (creature_ptr->muta3 & MUT3_XTRA_FAT) compensation += 2;
+		if (creature_ptr->muta3 & MUT3_ALBINO) compensation -= 4;
+		if (creature_ptr->muta3 & MUT3_FLESH_ROT) compensation -= 2;
+		if (creature_ptr->tsuyoshi) compensation += 4;
+		return compensation;
+	}
+	
+	if (stat == A_CHR)
+	{
+		if (creature_ptr->muta3 & MUT3_SILLY_VOI) compensation -= 4;
+		if (creature_ptr->muta3 & MUT3_BLANK_FAC) compensation -= 1;
+		if (creature_ptr->muta3 & MUT3_FLESH_ROT) compensation -= 1;
+		if (creature_ptr->muta3 & MUT3_SCALES) compensation -= 1;
+		if (creature_ptr->muta3 & MUT3_WART_SKIN) compensation -= 2;
+		if (creature_ptr->muta3 & MUT3_ILL_NORM) compensation = 0;
+		return compensation;
+	}
+
+	return 0;
+}
+
+
+/*!
+ * @brief 突然変異 (と、つよしスペシャル)による能力値の補正有無で表示する記号を変える
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param stat 能力値番号
  * @param c 補正後の表示記号
  * @param a 表示色
  * @return なし
  */
-static void compensate_stat_by_mutation(player_type *creature_ptr, int stat, char *c, TERM_COLOR *a)
+static void change_display_by_mutation(player_type *creature_ptr, int stat, char *c, TERM_COLOR *a)
 {
 	if ((creature_ptr->muta3 != 0) && !creature_ptr->tsuyoshi) return;
 
-	int dummy = 0;
-
-	if (stat == A_STR)
-	{
-		if (creature_ptr->muta3 & MUT3_HYPER_STR) dummy += 4;
-		if (creature_ptr->muta3 & MUT3_PUNY) dummy -= 4;
-		if (creature_ptr->tsuyoshi) dummy += 4;
-	}
-	else if (stat == A_WIS || stat == A_INT)
-	{
-		if (creature_ptr->muta3 & MUT3_HYPER_INT) dummy += 4;
-		if (creature_ptr->muta3 & MUT3_MORONIC) dummy -= 4;
-	}
-	else if (stat == A_DEX)
-	{
-		if (creature_ptr->muta3 & MUT3_IRON_SKIN) dummy -= 1;
-		if (creature_ptr->muta3 & MUT3_LIMBER) dummy += 3;
-		if (creature_ptr->muta3 & MUT3_ARTHRITIS) dummy -= 3;
-	}
-	else if (stat == A_CON)
-	{
-		if (creature_ptr->muta3 & MUT3_RESILIENT) dummy += 4;
-		if (creature_ptr->muta3 & MUT3_XTRA_FAT) dummy += 2;
-		if (creature_ptr->muta3 & MUT3_ALBINO) dummy -= 4;
-		if (creature_ptr->muta3 & MUT3_FLESH_ROT) dummy -= 2;
-		if (creature_ptr->tsuyoshi) dummy += 4;
-	}
-	else if (stat == A_CHR)
-	{
-		if (creature_ptr->muta3 & MUT3_SILLY_VOI) dummy -= 4;
-		if (creature_ptr->muta3 & MUT3_BLANK_FAC) dummy -= 1;
-		if (creature_ptr->muta3 & MUT3_FLESH_ROT) dummy -= 1;
-		if (creature_ptr->muta3 & MUT3_SCALES) dummy -= 1;
-		if (creature_ptr->muta3 & MUT3_WART_SKIN) dummy -= 2;
-		if (creature_ptr->muta3 & MUT3_ILL_NORM) dummy = 0;
-	}
-
-	if (dummy == 0) return;
+	int compensation = compensation_stat_by_mutation(creature_ptr, stat);
+	if (compensation == 0) return;
 
 	*c = '*';
-	if (dummy > 0)
+	if (compensation > 0)
 	{
 		*a = TERM_L_GREEN;
-		if (dummy < 10) *c = '0' + dummy;
+		if (compensation < 10) *c = '0' + compensation;
 	}
 
-	if (dummy < 0)
+	if (compensation < 0)
 	{
 		*a = TERM_RED;
-		if (dummy > -10) *c = '0' - dummy;
+		if (compensation > -10) *c = '0' - compensation;
 	}
 }
 
