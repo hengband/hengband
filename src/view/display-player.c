@@ -83,6 +83,36 @@ static void display_player_misc_info(player_type *creature_ptr)
 
 
 /*!
+ * @brief 特殊な種族の時、腕力等の基礎パラメータを変動させる
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param stat_num パラメータ番号
+ * @return 補正後の基礎パラメータ
+ */
+static int compensate_special_race(player_type *creature_ptr, int stat_num)
+{
+	if (!PRACE_IS_(creature_ptr, RACE_ENT)) return;
+
+	int r_adj = 0;
+	switch (stat_num)
+	{
+	case A_STR:
+	case A_CON:
+		if (creature_ptr->lev > 25) r_adj++;
+		if (creature_ptr->lev > 40) r_adj++;
+		if (creature_ptr->lev > 45) r_adj++;
+		break;
+	case A_DEX:
+		if (creature_ptr->lev > 25) r_adj--;
+		if (creature_ptr->lev > 40) r_adj--;
+		if (creature_ptr->lev > 45) r_adj--;
+		break;
+	}
+
+	return r_adj;
+}
+
+
+/*!
  * @brief プレイヤーの特性フラグ一覧表示2b /
  * Special display, part 2b
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -127,24 +157,7 @@ static void display_player_stat_info(player_type *creature_ptr)
 		if ((creature_ptr->stat_max[i] > 18) && (creature_ptr->stat_top[i] <= 18))
 			e_adj = creature_ptr->stat_top[i] - (creature_ptr->stat_max[i] - 19) / 10 - 19;
 
-		if (PRACE_IS_(creature_ptr, RACE_ENT))
-		{
-			switch (i)
-			{
-			case A_STR:
-			case A_CON:
-				if (creature_ptr->lev > 25) r_adj++;
-				if (creature_ptr->lev > 40) r_adj++;
-				if (creature_ptr->lev > 45) r_adj++;
-				break;
-			case A_DEX:
-				if (creature_ptr->lev > 25) r_adj--;
-				if (creature_ptr->lev > 40) r_adj--;
-				if (creature_ptr->lev > 45) r_adj--;
-				break;
-			}
-		}
-
+		r_adj += compensate_special_race(creature_ptr, i);
 		e_adj -= r_adj;
 		e_adj -= cp_ptr->c_adj[i];
 		e_adj -= ap_ptr->a_adj[i];
