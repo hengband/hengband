@@ -381,6 +381,33 @@ static void change_display_by_mutation(player_type *creature_ptr, int stat, char
 
 
 /*!
+ * @brief 能力値を走査し、突然変異 (と、つよしスペシャル)で補正をかける必要があればかける
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param stat 能力値番号
+ * @param col 列数
+ * @param row 行数
+ * @return なし
+ */
+static void display_mutation_compensation(player_type *creature_ptr, BIT_FLAGS *flags, int row, int col)
+{
+	for (int stat = 0; stat < A_MAX; stat++)
+	{
+		byte a = TERM_SLATE;
+		char c = '.';
+		change_display_by_mutation(creature_ptr, stat, &c, &a);
+
+		if (have_flag(flags, stat + TR_SUST_STR))
+		{
+			a = TERM_GREEN;
+			c = 's';
+		}
+
+		Term_putch(col, row + stat + 1, a, c);
+	}
+}
+
+
+/*!
  * @brief プレイヤーの特性フラグ一覧表示2b /
  * Special display, part 2b
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -414,20 +441,7 @@ static void display_player_stat_info(player_type *creature_ptr)
 	BIT_FLAGS flags[TR_FLAG_SIZE];
 	display_equipments_compensation(creature_ptr,flags, row, &col);
 	player_flags(creature_ptr, flags);
-	for (int stat = 0; stat < A_MAX; stat++)
-	{
-		byte a = TERM_SLATE;
-		char c = '.';
-		compensate_stat(creature_ptr, stat, &c, &a);
-
-		if (have_flag(flags, stat + TR_SUST_STR))
-		{
-			a = TERM_GREEN;
-			c = 's';
-		}
-
-		Term_putch(col, row + stat + 1, a, c);
-	}
+	display_mutation_compensation(creature_ptr, flags, row, col);
 }
 
 
