@@ -442,6 +442,9 @@
     <ClCompile Include="..\..\src\io\gf-descriptions.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\display-player-stat-info.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -865,6 +868,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\gf-descriptions.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-player-stat-info.h">
+      <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
