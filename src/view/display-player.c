@@ -257,6 +257,43 @@ static void compensate_stat_by_weapon(char *c, TERM_COLOR *a, object_type *o_ptr
 
 
 /*!
+ * @brief 装備品を走査してpval付きのものをそれと分かるように表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param flags 装備品に立っているフラグ
+ * @param row 行数
+ * @param col 列数
+ * @return なし
+ */
+static void display_equipments_compensation(player_type *creature_ptr, BIT_FLAGS *flags, int row, int *col)
+{
+	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
+	{
+		object_type *o_ptr;
+		o_ptr = &creature_ptr->inventory_list[i];
+		object_flags_known(o_ptr, flags);
+		for (int stat = 0; stat < A_MAX; stat++)
+		{
+			TERM_COLOR a = TERM_SLATE;
+			char c = '.';
+			if (have_flag(flags, stat))
+			{
+				compensate_stat_by_weapon(&c, &a, o_ptr, stat, flags);
+			}
+			else if (have_flag(flags, stat + TR_SUST_STR))
+			{
+				a = TERM_GREEN;
+				c = 's';
+			}
+
+			Term_putch(*col, row + stat + 1, a, c);
+		}
+
+		(*col)++;
+	}
+}
+
+
+/*!
  * @brief プレイヤーの特性フラグ一覧表示2b /
  * Special display, part 2b
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -288,31 +325,7 @@ static void display_player_stat_info(player_type *creature_ptr)
 	c_put_str(TERM_L_GREEN, _("能力修正", "Modification"), row - 1, col);
 
 	BIT_FLAGS flags[TR_FLAG_SIZE];
-	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
-	{
-		object_type *o_ptr;
-		o_ptr = &creature_ptr->inventory_list[i];
-		object_flags_known(o_ptr, flags);
-		for (int stat = 0; stat < A_MAX; stat++)
-		{
-			TERM_COLOR a = TERM_SLATE;
-			char c = '.';
-			if (have_flag(flags, stat))
-			{
-				compensate_stat_by_weapon(&c, &a, o_ptr, stat, flags);
-			}
-			else if (have_flag(flags, stat + TR_SUST_STR))
-			{
-				a = TERM_GREEN;
-				c = 's';
-			}
-
-			Term_putch(col, row + stat + 1, a, c);
-		}
-
-		col++;
-	}
-
+	display_equipments_compensation(creature_ptr,flags, row, &col);
 	player_flags(creature_ptr, flags);
 	for (int stat = 0; stat < A_MAX; stat++)
 	{
