@@ -83,6 +83,32 @@ static void display_player_misc_info(player_type *creature_ptr)
 
 
 /*!
+ * @brief プレーヤーのパラメータ基礎値 (腕力等)を18以下になるようにして返す
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param stat_num パラメータ番号
+ * @return 基礎値
+ * @details 最大が18になるのはD&D由来
+ */
+static int calc_basic_stat(player_type *creature_ptr, int stat_num)
+{
+	int e_adj = 0;
+	if ((creature_ptr->stat_max[stat_num] > 18) && (creature_ptr->stat_top[stat_num] > 18))
+		e_adj = (creature_ptr->stat_top[stat_num] - creature_ptr->stat_max[stat_num]) / 10;
+
+	if ((creature_ptr->stat_max[stat_num] <= 18) && (creature_ptr->stat_top[stat_num] <= 18))
+		e_adj = creature_ptr->stat_top[stat_num] - creature_ptr->stat_max[stat_num];
+
+	if ((creature_ptr->stat_max[stat_num] <= 18) && (creature_ptr->stat_top[stat_num] > 18))
+		e_adj = (creature_ptr->stat_top[stat_num] - 18) / 10 - creature_ptr->stat_max[stat_num] + 18;
+
+	if ((creature_ptr->stat_max[stat_num] > 18) && (creature_ptr->stat_top[stat_num] <= 18))
+		e_adj = creature_ptr->stat_top[stat_num] - (creature_ptr->stat_max[stat_num] - 19) / 10 - 19;
+
+	return e_adj;
+}
+
+
+/*!
  * @brief 特殊な種族の時、腕力等の基礎パラメータを変動させる
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param stat_num パラメータ番号
@@ -141,22 +167,10 @@ static void display_player_stat_info(player_type *creature_ptr)
 	char buf[80];
 	for (int i = 0; i < A_MAX; i++)
 	{
-		int r_adj;
-		if (creature_ptr->mimic_form) r_adj = mimic_info[creature_ptr->mimic_form].r_adj[i];
-		else r_adj = rp_ptr->r_adj[i];
-
-		int e_adj = 0;
-
-		if ((creature_ptr->stat_max[i] > 18) && (creature_ptr->stat_top[i] > 18))
-			e_adj = (creature_ptr->stat_top[i] - creature_ptr->stat_max[i]) / 10;
-		if ((creature_ptr->stat_max[i] <= 18) && (creature_ptr->stat_top[i] <= 18))
-			e_adj = creature_ptr->stat_top[i] - creature_ptr->stat_max[i];
-		if ((creature_ptr->stat_max[i] <= 18) && (creature_ptr->stat_top[i] > 18))
-			e_adj = (creature_ptr->stat_top[i] - 18) / 10 - creature_ptr->stat_max[i] + 18;
-
-		if ((creature_ptr->stat_max[i] > 18) && (creature_ptr->stat_top[i] <= 18))
-			e_adj = creature_ptr->stat_top[i] - (creature_ptr->stat_max[i] - 19) / 10 - 19;
-
+		int r_adj = creature_ptr->mimic_form
+			? mimic_info[creature_ptr->mimic_form].r_adj[i]
+			: rp_ptr->r_adj[i];
+		int e_adj = calc_basic_stat(creature_ptr, i);
 		r_adj += compensate_special_race(creature_ptr, i);
 		e_adj -= r_adj;
 		e_adj -= cp_ptr->c_adj[i];
@@ -167,8 +181,6 @@ static void display_player_stat_info(player_type *creature_ptr)
 		else
 			c_put_str(TERM_WHITE, stat_names[i], row + i + 1, stat_col + 1);
 
-		/* Internal "natural" max value.  Maxes at 18/100 */
-		/* This is useful to see if you are maxed out */
 		cnv_stat(creature_ptr->stat_max[i], buf);
 		if (creature_ptr->stat_max[i] == creature_ptr->stat_max_max[i])
 			c_put_str(TERM_WHITE, "!", row + i + 1, _(stat_col + 6, stat_col + 4));
