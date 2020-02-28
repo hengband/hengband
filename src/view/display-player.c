@@ -231,6 +231,27 @@ static void decide_current_floor(player_type *creature_ptr, char *statmsg, map_n
 
 
 /*!
+ * @brief 今いる場所を表示する
+ * @param statmsg メッセージバッファ
+ * @return なし
+ */
+static void display_current_floor(char *statmsg)
+{
+	char temp[128];
+	roff_to_buf(statmsg, 60, temp, sizeof(temp));
+	char  *t;
+	t = temp;
+	for (int i = 0; i < 2; i++)
+	{
+		if (t[0] == 0) return;
+
+		put_str(t, i + 5 + 12, 10);
+		t += strlen(t) + 1;
+	}
+}
+
+
+/*!
  * @brief プレイヤーのステータス表示メイン処理
  * Display the character on the screen (various modes)
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -265,7 +286,6 @@ void display_player(player_type *creature_ptr, int mode, map_name_pf map_name)
 	display_phisique(creature_ptr);
 	display_player_stats(creature_ptr);
 
-	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	if (mode == 0)
 	{
 		display_player_middle(creature_ptr);
@@ -282,17 +302,7 @@ void display_player(player_type *creature_ptr, int mode, map_name_pf map_name)
 	decide_current_floor(creature_ptr, statmsg, map_name);
 	if (!*statmsg) return;
 
-	char temp[64 * 2];
-	roff_to_buf(statmsg, 60, temp, sizeof(temp));
-	char  *t;
-	t = temp;
-	for (int i = 0; i < 2; i++)
-	{
-		if (t[0] == 0) return;
-
-		put_str(t, i + 5 + 12, 10);
-		t += strlen(t) + 1;
-	}
+	display_current_floor(statmsg);
 }
 
 
