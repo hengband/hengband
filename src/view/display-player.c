@@ -294,6 +294,20 @@ static void display_playtime_in_game(player_type *creature_ptr)
 
 
 /*!
+ * @brief 現実世界におけるプレイ時間を表示する
+ * @param なし
+ * @param なし
+ */
+static void display_real_playtime(void)
+{
+	u32b play_hour = current_world_ptr->play_time / (60 * 60);
+	u32b play_min = (current_world_ptr->play_time / 60) % 60;
+	u32b play_sec = current_world_ptr->play_time % 60;
+	display_player_one_line(ENTRY_PLAY_TIME, format("%.2lu:%.2lu:%.2lu", play_hour, play_min, play_sec), TERM_L_GREEN);
+}
+
+
+/*!
  * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
  * @param creature_ptr プレーヤーへの参照ポインタ
  * Prints the following information on the screen.
@@ -318,11 +332,7 @@ static void display_player_middle(player_type *creature_ptr)
 	display_player_exp(creature_ptr);
 	display_player_one_line(ENTRY_GOLD, format("%ld", creature_ptr->au), TERM_L_GREEN);
 	display_playtime_in_game(creature_ptr);
-
-	u32b play_hour = current_world_ptr->play_time / (60 * 60);
-	u32b play_min = (current_world_ptr->play_time / 60) % 60;
-	u32b play_sec = current_world_ptr->play_time % 60;
-	display_player_one_line(ENTRY_PLAY_TIME, format("%.2lu:%.2lu:%.2lu", play_hour, play_min, play_sec), TERM_L_GREEN);
+	display_real_playtime();
 }
 
 
