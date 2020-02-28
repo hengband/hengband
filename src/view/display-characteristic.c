@@ -172,20 +172,20 @@ static void display_basic_resistance_info(player_type *creature_ptr, void(*displ
 	display_one_characteristic_info(creature_ptr, row + 8, col, "耐盲目:", TR_RES_BLIND, f, 0);
 	display_one_characteristic_info(creature_ptr, row + 9, col, "耐混乱:", TR_RES_CONF, f, 0);
 #else
-	display_flag_aux(creature_ptr, row + 0, col, "Acid  :", TR_RES_ACID, f, 0);
-	display_flag_aux(creature_ptr, row + 0, col, "Acid  :", TR_IM_ACID, f, DP_IMM);
-	display_flag_aux(creature_ptr, row + 1, col, "Elec  :", TR_RES_ELEC, f, 0);
-	display_flag_aux(creature_ptr, row + 1, col, "Elec  :", TR_IM_ELEC, f, DP_IMM);
-	display_flag_aux(creature_ptr, row + 2, col, "Fire  :", TR_RES_FIRE, f, 0);
-	display_flag_aux(creature_ptr, row + 2, col, "Fire  :", TR_IM_FIRE, f, DP_IMM);
-	display_flag_aux(creature_ptr, row + 3, col, "Cold  :", TR_RES_COLD, f, 0);
-	display_flag_aux(creature_ptr, row + 3, col, "Cold  :", TR_IM_COLD, f, DP_IMM);
-	display_flag_aux(creature_ptr, row + 4, col, "Poison:", TR_RES_POIS, f, 0);
-	display_flag_aux(creature_ptr, row + 5, col, "Light :", TR_RES_LITE, f, 0);
-	display_flag_aux(creature_ptr, row + 6, col, "Dark  :", TR_RES_DARK, f, 0);
-	display_flag_aux(creature_ptr, row + 7, col, "Shard :", TR_RES_SHARDS, f, 0);
-	display_flag_aux(creature_ptr, row + 8, col, "Blind :", TR_RES_BLIND, f, 0);
-	display_flag_aux(creature_ptr, row + 9, col, "Conf  :", TR_RES_CONF, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 0, col, "Acid  :", TR_RES_ACID, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 0, col, "Acid  :", TR_IM_ACID, f, DP_IMM);
+	display_one_characteristic_info(creature_ptr, row + 1, col, "Elec  :", TR_RES_ELEC, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 1, col, "Elec  :", TR_IM_ELEC, f, DP_IMM);
+	display_one_characteristic_info(creature_ptr, row + 2, col, "Fire  :", TR_RES_FIRE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 2, col, "Fire  :", TR_IM_FIRE, f, DP_IMM);
+	display_one_characteristic_info(creature_ptr, row + 3, col, "Cold  :", TR_RES_COLD, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 3, col, "Cold  :", TR_IM_COLD, f, DP_IMM);
+	display_one_characteristic_info(creature_ptr, row + 4, col, "Poison:", TR_RES_POIS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 5, col, "Light :", TR_RES_LITE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 6, col, "Dark  :", TR_RES_DARK, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 7, col, "Shard :", TR_RES_SHARDS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 8, col, "Blind :", TR_RES_BLIND, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 9, col, "Conf  :", TR_RES_CONF, f, 0);
 #endif
 }
 
@@ -216,16 +216,16 @@ static void display_advanced_resistance_info(player_type *creature_ptr, void(*di
 	display_one_characteristic_info(creature_ptr, row + 8, col, "電気オ:", TR_SH_ELEC, f, 0);
 	display_one_characteristic_info(creature_ptr, row + 9, col, "冷気オ:", TR_SH_COLD, f, 0);
 #else
-	display_flag_aux(creature_ptr, row + 0, col, "Sound :", TR_RES_SOUND, f, 0);
-	display_flag_aux(creature_ptr, row + 1, col, "Nether:", TR_RES_NETHER, f, 0);
-	display_flag_aux(creature_ptr, row + 2, col, "Nexus :", TR_RES_NEXUS, f, 0);
-	display_flag_aux(creature_ptr, row + 3, col, "Chaos :", TR_RES_CHAOS, f, 0);
-	display_flag_aux(creature_ptr, row + 4, col, "Disnch:", TR_RES_DISEN, f, 0);
-	display_flag_aux(creature_ptr, row + 5, col, "Fear  :", TR_RES_FEAR, f, 0);
-	display_flag_aux(creature_ptr, row + 6, col, "Reflct:", TR_REFLECT, f, 0);
-	display_flag_aux(creature_ptr, row + 7, col, "AuFire:", TR_SH_FIRE, f, 0);
-	display_flag_aux(creature_ptr, row + 8, col, "AuElec:", TR_SH_ELEC, f, 0);
-	display_flag_aux(creature_ptr, row + 9, col, "AuCold:", TR_SH_COLD, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 0, col, "Sound :", TR_RES_SOUND, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 1, col, "Nether:", TR_RES_NETHER, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 2, col, "Nexus :", TR_RES_NEXUS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 3, col, "Chaos :", TR_RES_CHAOS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 4, col, "Disnch:", TR_RES_DISEN, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 5, col, "Fear  :", TR_RES_FEAR, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 6, col, "Reflct:", TR_REFLECT, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 7, col, "AuFire:", TR_SH_FIRE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 8, col, "AuElec:", TR_SH_ELEC, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 9, col, "AuCold:", TR_SH_COLD, f, 0);
 #endif
 }
 
@@ -256,16 +256,16 @@ static void display_other_resistance_info(player_type *creature_ptr, void(*displ
 	display_one_characteristic_info(creature_ptr, row + 8, col, "永遠光源  :", TR_LITE_1, f, 0);
 	display_one_characteristic_info(creature_ptr, row + 9, col, "呪い      :", 0, f, DP_CURSE);
 #else
-	display_flag_aux(creature_ptr, row + 0, col, "Speed     :", TR_SPEED, f, 0);
-	display_flag_aux(creature_ptr, row + 1, col, "FreeAction:", TR_FREE_ACT, f, 0);
-	display_flag_aux(creature_ptr, row + 2, col, "SeeInvisi.:", TR_SEE_INVIS, f, 0);
-	display_flag_aux(creature_ptr, row + 3, col, "Hold Exp  :", TR_HOLD_EXP, f, 0);
-	display_flag_aux(creature_ptr, row + 4, col, "Warning   :", TR_WARNING, f, 0);
-	display_flag_aux(creature_ptr, row + 5, col, "SlowDigest:", TR_SLOW_DIGEST, f, 0);
-	display_flag_aux(creature_ptr, row + 6, col, "Regene.   :", TR_REGEN, f, 0);
-	display_flag_aux(creature_ptr, row + 7, col, "Levitation:", TR_LEVITATION, f, 0);
-	display_flag_aux(creature_ptr, row + 8, col, "Perm Lite :", TR_LITE_1, f, 0);
-	display_flag_aux(creature_ptr, row + 9, col, "Cursed    :", 0, f, DP_CURSE);
+	display_one_characteristic_info(creature_ptr, row + 0, col, "Speed     :", TR_SPEED, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 1, col, "FreeAction:", TR_FREE_ACT, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 2, col, "SeeInvisi.:", TR_SEE_INVIS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 3, col, "Hold Exp  :", TR_HOLD_EXP, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 4, col, "Warning   :", TR_WARNING, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 5, col, "SlowDigest:", TR_SLOW_DIGEST, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 6, col, "Regene.   :", TR_REGEN, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 7, col, "Levitation:", TR_LEVITATION, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 8, col, "Perm Lite :", TR_LITE_1, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 9, col, "Cursed    :", 0, f, DP_CURSE);
 #endif
 }
 
@@ -337,34 +337,34 @@ static void display_slay_info(player_type *creature_ptr, void(*display_player_eq
 	display_one_characteristic_info(creature_ptr, row + 17, col, "カオス効果:", TR_CHAOTIC, f, DP_WP);
 	display_one_characteristic_info(creature_ptr, row + 18, col, "理力      :", TR_FORCE_WEAPON, f, DP_WP);
 #else
-	display_flag_aux(creature_ptr, row + 0, col, "Slay Evil :", TR_SLAY_EVIL, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 0, col, "Slay Evil :", TR_KILL_EVIL, f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 1, col, "Slay Und. :", TR_SLAY_UNDEAD, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 1, col, "Slay Und. :", TR_KILL_UNDEAD, f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 2, col, "Slay Demon:", TR_SLAY_DEMON, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 2, col, "Slay Demon:", TR_KILL_DEMON, f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 3, col, "Slay Drag.:", TR_SLAY_DRAGON, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 3, col, "Slay Drag.:", TR_KILL_DRAGON, f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 4, col, "Slay Human:", TR_SLAY_HUMAN, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 4, col, "Slay Human:", TR_KILL_HUMAN, f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 5, col, "Slay Anim.:", TR_SLAY_ANIMAL, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 5, col, "Slay Anim.:", TR_KILL_ANIMAL, f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 6, col, "Slay Orc  :", TR_SLAY_ORC, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 6, col, "Slay Orc  :", TR_KILL_ORC, f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 7, col, "Slay Troll:", TR_SLAY_TROLL, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 7, col, "Slay Troll:", TR_KILL_TROLL, f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 8, col, "Slay Giant:", TR_SLAY_GIANT, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 8, col, "Slay Giant:", TR_KILL_GIANT, f, (DP_WP | DP_IMM));
-	display_flag_aux(creature_ptr, row + 9, col, "Acid Brand:", TR_BRAND_ACID, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 10, col, "Elec Brand:", TR_BRAND_ELEC, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 11, col, "Fire Brand:", TR_BRAND_FIRE, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 12, col, "Cold Brand:", TR_BRAND_COLD, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 13, col, "Poison Brd:", TR_BRAND_POIS, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 14, col, "Sharpness :", TR_VORPAL, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 15, col, "Quake     :", TR_IMPACT, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 16, col, "Vampiric  :", TR_VAMPIRIC, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 17, col, "Chaotic   :", TR_CHAOTIC, f, DP_WP);
-	display_flag_aux(creature_ptr, row + 18, col, "Force Wep.:", TR_FORCE_WEAPON, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 0, col, "Slay Evil :", TR_SLAY_EVIL, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 0, col, "Slay Evil :", TR_KILL_EVIL, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 1, col, "Slay Und. :", TR_SLAY_UNDEAD, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 1, col, "Slay Und. :", TR_KILL_UNDEAD, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 2, col, "Slay Demon:", TR_SLAY_DEMON, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 2, col, "Slay Demon:", TR_KILL_DEMON, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 3, col, "Slay Drag.:", TR_SLAY_DRAGON, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 3, col, "Slay Drag.:", TR_KILL_DRAGON, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 4, col, "Slay Human:", TR_SLAY_HUMAN, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 4, col, "Slay Human:", TR_KILL_HUMAN, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 5, col, "Slay Anim.:", TR_SLAY_ANIMAL, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 5, col, "Slay Anim.:", TR_KILL_ANIMAL, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 6, col, "Slay Orc  :", TR_SLAY_ORC, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 6, col, "Slay Orc  :", TR_KILL_ORC, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 7, col, "Slay Troll:", TR_SLAY_TROLL, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 7, col, "Slay Troll:", TR_KILL_TROLL, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 8, col, "Slay Giant:", TR_SLAY_GIANT, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 8, col, "Slay Giant:", TR_KILL_GIANT, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 9, col, "Acid Brand:", TR_BRAND_ACID, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 10, col, "Elec Brand:", TR_BRAND_ELEC, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 11, col, "Fire Brand:", TR_BRAND_FIRE, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 12, col, "Cold Brand:", TR_BRAND_COLD, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 13, col, "Poison Brd:", TR_BRAND_POIS, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 14, col, "Sharpness :", TR_VORPAL, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 15, col, "Quake     :", TR_IMPACT, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 16, col, "Vampiric  :", TR_VAMPIRIC, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 17, col, "Chaotic   :", TR_CHAOTIC, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 18, col, "Force Wep.:", TR_FORCE_WEAPON, f, DP_WP);
 #endif
 }
 
@@ -404,25 +404,25 @@ static void display_esp_sustenance_info(player_type *creature_ptr, void(*display
 	display_one_characteristic_info(creature_ptr, row + 17, col, "耐久維持   :", TR_SUST_CON, f, 0);
 	display_one_characteristic_info(creature_ptr, row + 18, col, "魅力維持   :", TR_SUST_CHR, f, 0);
 #else
-	display_flag_aux(creature_ptr, row + 0, col, "Telepathy  :", TR_TELEPATHY, f, 0);
-	display_flag_aux(creature_ptr, row + 1, col, "ESP Evil   :", TR_ESP_EVIL, f, 0);
-	display_flag_aux(creature_ptr, row + 2, col, "ESP Noliv. :", TR_ESP_NONLIVING, f, 0);
-	display_flag_aux(creature_ptr, row + 3, col, "ESP Good   :", TR_ESP_GOOD, f, 0);
-	display_flag_aux(creature_ptr, row + 4, col, "ESP Undead :", TR_ESP_UNDEAD, f, 0);
-	display_flag_aux(creature_ptr, row + 5, col, "ESP Demon  :", TR_ESP_DEMON, f, 0);
-	display_flag_aux(creature_ptr, row + 6, col, "ESP Dragon :", TR_ESP_DRAGON, f, 0);
-	display_flag_aux(creature_ptr, row + 7, col, "ESP Human  :", TR_ESP_HUMAN, f, 0);
-	display_flag_aux(creature_ptr, row + 8, col, "ESP Animal :", TR_ESP_ANIMAL, f, 0);
-	display_flag_aux(creature_ptr, row + 9, col, "ESP Orc    :", TR_ESP_ORC, f, 0);
-	display_flag_aux(creature_ptr, row + 10, col, "ESP Troll  :", TR_ESP_TROLL, f, 0);
-	display_flag_aux(creature_ptr, row + 11, col, "ESP Giant  :", TR_ESP_GIANT, f, 0);
-	display_flag_aux(creature_ptr, row + 12, col, "ESP Unique :", TR_ESP_UNIQUE, f, 0);
-	display_flag_aux(creature_ptr, row + 13, col, "Sust Str   :", TR_SUST_STR, f, 0);
-	display_flag_aux(creature_ptr, row + 14, col, "Sust Int   :", TR_SUST_INT, f, 0);
-	display_flag_aux(creature_ptr, row + 15, col, "Sust Wis   :", TR_SUST_WIS, f, 0);
-	display_flag_aux(creature_ptr, row + 16, col, "Sust Dex   :", TR_SUST_DEX, f, 0);
-	display_flag_aux(creature_ptr, row + 17, col, "Sust Con   :", TR_SUST_CON, f, 0);
-	display_flag_aux(creature_ptr, row + 18, col, "Sust Chr   :", TR_SUST_CHR, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 0, col, "Telepathy  :", TR_TELEPATHY, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 1, col, "ESP Evil   :", TR_ESP_EVIL, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 2, col, "ESP Noliv. :", TR_ESP_NONLIVING, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 3, col, "ESP Good   :", TR_ESP_GOOD, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 4, col, "ESP Undead :", TR_ESP_UNDEAD, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 5, col, "ESP Demon  :", TR_ESP_DEMON, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 6, col, "ESP Dragon :", TR_ESP_DRAGON, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 7, col, "ESP Human  :", TR_ESP_HUMAN, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 8, col, "ESP Animal :", TR_ESP_ANIMAL, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 9, col, "ESP Orc    :", TR_ESP_ORC, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 10, col, "ESP Troll  :", TR_ESP_TROLL, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 11, col, "ESP Giant  :", TR_ESP_GIANT, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 12, col, "ESP Unique :", TR_ESP_UNIQUE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 13, col, "Sust Str   :", TR_SUST_STR, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 14, col, "Sust Int   :", TR_SUST_INT, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 15, col, "Sust Wis   :", TR_SUST_WIS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 16, col, "Sust Dex   :", TR_SUST_DEX, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 17, col, "Sust Con   :", TR_SUST_CON, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 18, col, "Sust Chr   :", TR_SUST_CHR, f, 0);
 #endif
 }
 
@@ -461,24 +461,24 @@ static void display_other_info(player_type *creature_ptr, void(*display_player_e
 	display_one_characteristic_info(creature_ptr, row + 16, col, "反感        :", TR_AGGRAVATE, f, 0);
 	display_one_characteristic_info(creature_ptr, row + 17, col, "太古の怨念  :", TR_TY_CURSE, f, 0);
 #else
-	display_flag_aux(creature_ptr, row + 0, col, "Add Blows   :", TR_BLOWS, f, 0);
-	display_flag_aux(creature_ptr, row + 1, col, "Add Tunnel  :", TR_TUNNEL, f, 0);
-	display_flag_aux(creature_ptr, row + 2, col, "Add Infra   :", TR_INFRA, f, 0);
-	display_flag_aux(creature_ptr, row + 3, col, "Add Device  :", TR_MAGIC_MASTERY, f, 0);
-	display_flag_aux(creature_ptr, row + 4, col, "Add Stealth :", TR_STEALTH, f, 0);
-	display_flag_aux(creature_ptr, row + 5, col, "Add Search  :", TR_SEARCH, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 0, col, "Add Blows   :", TR_BLOWS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 1, col, "Add Tunnel  :", TR_TUNNEL, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 2, col, "Add Infra   :", TR_INFRA, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 3, col, "Add Device  :", TR_MAGIC_MASTERY, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 4, col, "Add Stealth :", TR_STEALTH, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 5, col, "Add Search  :", TR_SEARCH, f, 0);
 
-	display_flag_aux(creature_ptr, row + 7, col, "Riding      :", TR_RIDING, f, 0);
-	display_flag_aux(creature_ptr, row + 8, col, "Throw       :", TR_THROW, f, 0);
-	display_flag_aux(creature_ptr, row + 9, col, "Blessed     :", TR_BLESSED, f, 0);
-	display_flag_aux(creature_ptr, row + 10, col, "No Teleport :", TR_NO_TELE, f, 0);
-	display_flag_aux(creature_ptr, row + 11, col, "Anti Magic  :", TR_NO_MAGIC, f, 0);
-	display_flag_aux(creature_ptr, row + 12, col, "Econom. Mana:", TR_DEC_MANA, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 7, col, "Riding      :", TR_RIDING, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 8, col, "Throw       :", TR_THROW, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 9, col, "Blessed     :", TR_BLESSED, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 10, col, "No Teleport :", TR_NO_TELE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 11, col, "Anti Magic  :", TR_NO_MAGIC, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 12, col, "Econom. Mana:", TR_DEC_MANA, f, 0);
 
-	display_flag_aux(creature_ptr, row + 14, col, "Drain Exp   :", TR_DRAIN_EXP, f, 0);
-	display_flag_aux(creature_ptr, row + 15, col, "Rnd.Teleport:", TR_TELEPORT, f, 0);
-	display_flag_aux(creature_ptr, row + 16, col, "Aggravate   :", TR_AGGRAVATE, f, 0);
-	display_flag_aux(creature_ptr, row + 17, col, "TY Curse    :", TR_TY_CURSE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 14, col, "Drain Exp   :", TR_DRAIN_EXP, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 15, col, "Rnd.Teleport:", TR_TELEPORT, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 16, col, "Aggravate   :", TR_AGGRAVATE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 17, col, "TY Curse    :", TR_TY_CURSE, f, 0);
 #endif
 }
 
