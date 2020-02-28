@@ -286,6 +286,7 @@
     <ClCompile Include="..\..\src\spells3.c" />
     <ClCompile Include="..\..\src\uid-checker.c" />
     <ClCompile Include="..\..\src\view\display-characteristic.c" />
+    <ClCompile Include="..\..\src\view\display-player-middle.c" />
     <ClCompile Include="..\..\src\view\display-player-stat-info.c" />
     <ClCompile Include="..\..\src\view\display-player.c" />
     <ClCompile Include="..\..\src\view\display-util.c" />
@@ -340,6 +341,7 @@
     <ClInclude Include="..\..\src\signal-handlers.h" />
     <ClInclude Include="..\..\src\uid-checker.h" />
     <ClInclude Include="..\..\src\view\display-characteristic.h" />
+    <ClInclude Include="..\..\src\view\display-player-middle.h" />
     <ClInclude Include="..\..\src\view\display-player-stat-info.h" />
     <ClInclude Include="..\..\src\view\display-player.h" />
     <ClInclude Include="..\..\src\view\display-util.h" />

@@ -1,4 +1,4 @@
-﻿#include "display-player-stat-info.h"
+﻿#include "view/display-player-stat-info.h"
 #include "player-personality.h"
 #include "player-sex.h"
 #include "term.h"
