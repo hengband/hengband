@@ -25,6 +25,38 @@
 #include "view/display-player-middle.h"
 
 /*!
+ * @brief
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param mode ステータス表示モード
+ * @return どれかの処理をこなしたらTRUE、何もしなかったらFALSE
+ */
+static bool display_player_info(player_type *creature_ptr, int mode)
+{
+	if (mode == 2)
+	{
+		display_player_misc_info(creature_ptr);
+		display_player_stat_info(creature_ptr);
+		display_player_flag_info_1(creature_ptr, display_player_equippy);
+		return TRUE;
+	}
+
+	if (mode == 3)
+	{
+		display_player_flag_info_2(creature_ptr, display_player_equippy);
+		return TRUE;
+	}
+
+	if (mode == 4)
+	{
+		do_cmd_knowledge_mutations(creature_ptr);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+
+/*!
  * @brief プレイヤーのステータス表示メイン処理
  * Display the character on the screen (various modes)
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -48,31 +80,10 @@ void display_player(player_type *creature_ptr, int mode, map_name_pf map_name)
 		mode = (mode % 4);
 
 	clear_from(0);
-
-	if (mode == 2)
-	{
-		display_player_misc_info(creature_ptr);
-		display_player_stat_info(creature_ptr);
-		display_player_flag_info_1(creature_ptr, display_player_equippy);
-		return;
-	}
-
-	if (mode == 3)
-	{
-		display_player_flag_info_2(creature_ptr, display_player_equippy);
-		return;
-	}
-
-	if (mode == 4)
-	{
-		do_cmd_knowledge_mutations(creature_ptr);
-		return;
-	}
-
-	char tmp[64];
-	if ((mode != 0) && (mode != 1)) return;
+	if (display_player_info(creature_ptr, mode)) return;
 
 	/* Name, Sex, Race, Class */
+	char tmp[64];
 #ifdef JP
 	sprintf(tmp, "%s%s%s", ap_ptr->title, ap_ptr->no == 1 ? "の" : "", creature_ptr->name);
 #else
