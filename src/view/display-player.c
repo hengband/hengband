@@ -206,6 +206,29 @@ static bool search_death_cause(player_type *creature_ptr, char *statmsg, map_nam
 
 
 /*!
+ * @brief クエストフロアで生きている場合、クエスト名をバッファに詰める
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param statmsg メッセージバッファ
+ * @return クエスト内であればTRUE、いなければFALSE
+ */
+static bool decide_death_in_quest(player_type *creature_ptr, char *statmsg)
+{
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	if (!floor_ptr->inside_quest || !is_fixed_quest_idx(floor_ptr->inside_quest))
+		return FALSE;
+
+	for (int i = 0; i < 10; i++)
+		quest_text[i][0] = '\0';
+
+	quest_text_line = 0;
+	init_flags = INIT_NAME_ONLY;
+	process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+	sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[floor_ptr->inside_quest].name);
+	return TRUE;
+}
+
+
+/*!
  * @brief 現在いるフロアを、または死んでいたらどこでどう死んだかをバッファに詰める
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param statmsg メッセージバッファ
@@ -218,23 +241,13 @@ static void decide_current_floor(player_type *creature_ptr, char *statmsg, map_n
 	if (!current_world_ptr->character_dungeon) return;
 
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
-	if (!floor_ptr->dun_level)
+	if (floor_ptr->dun_level == 0)
 	{
 		sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(creature_ptr));
 		return;
 	}
 	
-	if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest))
-	{
-		for (int i = 0; i < 10; i++)
-			quest_text[i][0] = '\0';
-
-		quest_text_line = 0;
-		init_flags = INIT_NAME_ONLY;
-		process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
-		sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[floor_ptr->inside_quest].name);
-		return;
-	}
+	if (decide_death_in_quest(creature_ptr, statmsg)) return;
 
 #ifdef JP
 	sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(creature_ptr), (int)floor_ptr->dun_level);
@@ -245,7 +258,7 @@ static void decide_current_floor(player_type *creature_ptr, char *statmsg, map_n
 
 
 /*!
- * @brief 今いる場所を表示する
+ * @brief 今いる、または死亡した場所を表示する
  * @param statmsg メッセージバッファ
  * @return なし
  */
