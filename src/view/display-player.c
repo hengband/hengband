@@ -119,6 +119,26 @@ static void display_hit_damage(player_type *creature_ptr)
 
 
 /*!
+ * @brief 射撃武器倍率を表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void display_shoot_magnification(player_type *creature_ptr)
+{
+	int tmul = 0;
+	if (creature_ptr->inventory_list[INVEN_BOW].k_idx)
+	{
+		tmul = bow_tmul(creature_ptr->inventory_list[INVEN_BOW].sval);
+		if (creature_ptr->xtra_might) tmul++;
+
+		tmul = tmul * (100 + (int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
+	}
+
+	display_player_one_line(ENTRY_SHOOT_POWER, format("x%d.%02d", tmul / 100, tmul % 100), TERM_L_BLUE);
+}
+
+
+/*!
  * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
  * @param creature_ptr プレーヤーへの参照ポインタ
  * Prints the following information on the screen.
@@ -133,16 +153,7 @@ static void display_player_middle(player_type *creature_ptr)
 
 	display_left_hand(creature_ptr);
 	display_hit_damage(creature_ptr);
-	int tmul = 0;
-	if (creature_ptr->inventory_list[INVEN_BOW].k_idx)
-	{
-		tmul = bow_tmul(creature_ptr->inventory_list[INVEN_BOW].sval);
-		if (creature_ptr->xtra_might) tmul++;
-
-		tmul = tmul * (100 + (int)(adj_str_td[creature_ptr->stat_ind[A_STR]]) - 128);
-	}
-
-	display_player_one_line(ENTRY_SHOOT_POWER, format("x%d.%02d", tmul / 100, tmul % 100), TERM_L_BLUE);
+	display_shoot_magnification(creature_ptr);
 	display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", creature_ptr->dis_ac, creature_ptr->dis_to_a), TERM_L_BLUE);
 
 	int i = creature_ptr->pspeed - 110;
