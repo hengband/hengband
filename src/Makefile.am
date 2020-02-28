@@ -15,6 +15,7 @@ hengband_SOURCES = \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-player-stat-info.c view/display-player-stat-info.h \
+	view/display-player-misc-info.c view/display-player-misc-info.h \
 	view/display-player.c view/display-player.h \
 	view/status-first-page.c view/status-first-page.h \
 	view/display-util.c view/display-util.h \
