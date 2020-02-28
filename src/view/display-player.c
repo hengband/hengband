@@ -59,6 +59,42 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
 
 
 /*!
+ * @brief 右手に比べて左手の表示ルーチンが複雑なので分離
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void display_left_hand(player_type *creature_ptr)
+{
+	if (creature_ptr->hidarite)
+	{
+		display_player_melee_bonus(creature_ptr, 1, left_hander ? ENTRY_RIGHT_HAND2 : ENTRY_LEFT_HAND2);
+		return;
+	}
+	
+	if ((creature_ptr->pclass != CLASS_MONK) || ((empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM) == 0))
+		return;
+
+	if ((creature_ptr->special_defense & KAMAE_MASK) == 0)
+	{
+		display_player_one_line(ENTRY_POSTURE, _("構えなし", "none"), TERM_YELLOW);
+		return;
+	}
+
+	int kamae_num;
+	for (kamae_num = 0; kamae_num < MAX_KAMAE; kamae_num++)
+	{
+		if ((creature_ptr->special_defense >> kamae_num) & KAMAE_GENBU)
+			break;
+	}
+
+	if (kamae_num < MAX_KAMAE)
+	{
+		display_player_one_line(ENTRY_POSTURE, format(_("%sの構え", "%s form"), kamae_shurui[kamae_num].desc), TERM_YELLOW);
+	}
+}
+
+
+/*!
  * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
  * @param creature_ptr プレーヤーへの参照ポインタ
  * Prints the following information on the screen.
@@ -66,38 +102,15 @@ static void display_player_melee_bonus(player_type *creature_ptr, int hand, int 
  */
 static void display_player_middle(player_type *creature_ptr)
 {
-	HIT_PROB show_tohit = creature_ptr->dis_to_h_b;
-	HIT_POINT show_todam = 0;
 	if (creature_ptr->migite)
 	{
 		display_player_melee_bonus(creature_ptr, 0, left_hander ? ENTRY_LEFT_HAND1 : ENTRY_RIGHT_HAND1);
 	}
 
-	if (creature_ptr->hidarite)
-	{
-		display_player_melee_bonus(creature_ptr, 1, left_hander ? ENTRY_RIGHT_HAND2 : ENTRY_LEFT_HAND2);
-	}
-	else if ((creature_ptr->pclass == CLASS_MONK) && (empty_hands(creature_ptr, TRUE) & EMPTY_HAND_RARM))
-	{
-		int i;
-		if (creature_ptr->special_defense & KAMAE_MASK)
-		{
-			for (i = 0; i < MAX_KAMAE; i++)
-			{
-				if ((creature_ptr->special_defense >> i) & KAMAE_GENBU) break;
-			}
-			if (i < MAX_KAMAE)
-			{
-				display_player_one_line(ENTRY_POSTURE, format(_("%sの構え", "%s form"), kamae_shurui[i].desc), TERM_YELLOW);
-			}
-		}
-		else
-		{
-			display_player_one_line(ENTRY_POSTURE, _("構えなし", "none"), TERM_YELLOW);
-		}
-	}
-
+	display_left_hand(creature_ptr);
 	object_type *o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
+	HIT_PROB show_tohit = creature_ptr->dis_to_h_b;
+	HIT_POINT show_todam = 0;
 	if (object_is_known(o_ptr)) show_tohit += o_ptr->to_h;
 	if (object_is_known(o_ptr)) show_todam += o_ptr->to_d;
 
