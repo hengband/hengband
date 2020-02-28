@@ -57,6 +57,26 @@ static bool display_player_info(player_type *creature_ptr, int mode)
 
 
 /*!
+ * @brief 名前、性別、種族、職業を表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ */
+static void display_player_basic_info(player_type *creature_ptr)
+{
+	char tmp[64];
+#ifdef JP
+	sprintf(tmp, "%s%s%s", ap_ptr->title, ap_ptr->no == 1 ? "の" : "", creature_ptr->name);
+#else
+	sprintf(tmp, "%s %s", ap_ptr->title, creature_ptr->name);
+#endif
+
+	display_player_one_line(ENTRY_NAME, tmp, TERM_L_BLUE);
+	display_player_one_line(ENTRY_SEX, sp_ptr->title, TERM_L_BLUE);
+	display_player_one_line(ENTRY_RACE, (creature_ptr->mimic_form ? mimic_info[creature_ptr->mimic_form].title : rp_ptr->title), TERM_L_BLUE);
+	display_player_one_line(ENTRY_CLASS, cp_ptr->title, TERM_L_BLUE);
+}
+
+
+/*!
  * @brief プレイヤーのステータス表示メイン処理
  * Display the character on the screen (various modes)
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -82,19 +102,9 @@ void display_player(player_type *creature_ptr, int mode, map_name_pf map_name)
 	clear_from(0);
 	if (display_player_info(creature_ptr, mode)) return;
 
-	/* Name, Sex, Race, Class */
+	display_player_basic_info(creature_ptr);
+
 	char tmp[64];
-#ifdef JP
-	sprintf(tmp, "%s%s%s", ap_ptr->title, ap_ptr->no == 1 ? "の" : "", creature_ptr->name);
-#else
-	sprintf(tmp, "%s %s", ap_ptr->title, creature_ptr->name);
-#endif
-
-	display_player_one_line(ENTRY_NAME, tmp, TERM_L_BLUE);
-	display_player_one_line(ENTRY_SEX, sp_ptr->title, TERM_L_BLUE);
-	display_player_one_line(ENTRY_RACE, (creature_ptr->mimic_form ? mimic_info[creature_ptr->mimic_form].title : rp_ptr->title), TERM_L_BLUE);
-	display_player_one_line(ENTRY_CLASS, cp_ptr->title, TERM_L_BLUE);
-
 	if (creature_ptr->realm1)
 	{
 		if (creature_ptr->realm2)
