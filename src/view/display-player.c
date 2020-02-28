@@ -120,6 +120,38 @@ static void display_phisique(player_type *creature_ptr)
 
 
 /*!
+ * @brief 能力値を (減少していたら色を変えて)表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ */
+static void display_player_stats(player_type *creature_ptr)
+{
+	char buf[80];
+	for (int i = 0; i < A_MAX; i++)
+	{
+		if (creature_ptr->stat_cur[i] < creature_ptr->stat_max[i])
+		{
+			put_str(stat_names_reduced[i], 3 + i, 53);
+			int value = creature_ptr->stat_use[i];
+			cnv_stat(value, buf);
+			c_put_str(TERM_YELLOW, buf, 3 + i, 60);
+			value = creature_ptr->stat_top[i];
+			cnv_stat(value, buf);
+			c_put_str(TERM_L_GREEN, buf, 3 + i, 67);
+		}
+		else
+		{
+			put_str(stat_names[i], 3 + i, 53);
+			cnv_stat(creature_ptr->stat_use[i], buf);
+			c_put_str(TERM_L_GREEN, buf, 3 + i, 60);
+		}
+
+		if (creature_ptr->stat_max[i] == creature_ptr->stat_max_max[i])
+			c_put_str(TERM_WHITE, "!", 3 + i, _(58, 58 - 2));
+	}
+}
+
+
+/*!
  * @brief プレイヤーのステータス表示メイン処理
  * Display the character on the screen (various modes)
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -152,32 +184,7 @@ void display_player(player_type *creature_ptr, int mode, map_name_pf map_name)
 		display_player_one_line(ENTRY_PATRON, chaos_patrons[creature_ptr->chaos_patron], TERM_L_BLUE);
 
 	display_phisique(creature_ptr);
-
-	char buf[80];
-	for (int i = 0; i < A_MAX; i++)
-	{
-		if (creature_ptr->stat_cur[i] < creature_ptr->stat_max[i])
-		{
-			put_str(stat_names_reduced[i], 3 + i, 53);
-			int value = creature_ptr->stat_use[i];
-			cnv_stat(value, buf);
-			c_put_str(TERM_YELLOW, buf, 3 + i, 60);
-			value = creature_ptr->stat_top[i];
-			cnv_stat(value, buf);
-			c_put_str(TERM_L_GREEN, buf, 3 + i, 67);
-		}
-		else
-		{
-			put_str(stat_names[i], 3 + i, 53);
-			cnv_stat(creature_ptr->stat_use[i], buf);
-			c_put_str(TERM_L_GREEN, buf, 3 + i, 60);
-		}
-
-		if (creature_ptr->stat_max[i] == creature_ptr->stat_max_max[i])
-		{
-			c_put_str(TERM_WHITE, "!", 3 + i, _(58, 58 - 2));
-		}
-	}
+	display_player_stats(creature_ptr);
 
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	if (mode == 0)
