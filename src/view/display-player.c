@@ -139,6 +139,40 @@ static void display_shoot_magnification(player_type *creature_ptr)
 
 
 /*!
+ * @brief プレーヤーの速度から表示色を決める
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param base_speed プレーヤーの速度
+ */
+static TERM_COLOR decide_speed_color(player_type *creature_ptr, const int base_speed)
+{
+	TERM_COLOR attr;
+	if (base_speed > 0)
+	{
+		if (!creature_ptr->riding)
+			attr = TERM_L_GREEN;
+		else
+			attr = TERM_GREEN;
+	}
+	else if (base_speed == 0)
+	{
+		if (!creature_ptr->riding)
+			attr = TERM_L_BLUE;
+		else
+			attr = TERM_GREEN;
+	}
+	else
+	{
+		if (!creature_ptr->riding)
+			attr = TERM_L_UMBER;
+		else
+			attr = TERM_RED;
+	}
+
+	return attr;
+}
+
+
+/*!
  * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
  * @param creature_ptr プレーヤーへの参照ポインタ
  * Prints the following information on the screen.
@@ -156,31 +190,10 @@ static void display_player_middle(player_type *creature_ptr)
 	display_shoot_magnification(creature_ptr);
 	display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", creature_ptr->dis_ac, creature_ptr->dis_to_a), TERM_L_BLUE);
 
-	int i = creature_ptr->pspeed - 110;
-	if (creature_ptr->action == ACTION_SEARCH) i += 10;
+	int base_speed = creature_ptr->pspeed - 110;
+	if (creature_ptr->action == ACTION_SEARCH) base_speed += 10;
 
-	TERM_COLOR attr;
-	if (i > 0)
-	{
-		if (!creature_ptr->riding)
-			attr = TERM_L_GREEN;
-		else
-			attr = TERM_GREEN;
-	}
-	else if (i == 0)
-	{
-		if (!creature_ptr->riding)
-			attr = TERM_L_BLUE;
-		else
-			attr = TERM_GREEN;
-	}
-	else
-	{
-		if (!creature_ptr->riding)
-			attr = TERM_L_UMBER;
-		else
-			attr = TERM_RED;
-	}
+	TERM_COLOR attr = decide_speed_color(creature_ptr, base_speed);
 
 	int tmp_speed = 0;
 	if (!creature_ptr->riding)
@@ -199,9 +212,9 @@ static void display_player_middle(player_type *creature_ptr)
 	if (tmp_speed)
 	{
 		if (!creature_ptr->riding)
-			sprintf(buf, "(%+d%+d)", i - tmp_speed, tmp_speed);
+			sprintf(buf, "(%+d%+d)", base_speed - tmp_speed, tmp_speed);
 		else
-			sprintf(buf, _("乗馬中 (%+d%+d)", "Riding (%+d%+d)"), i - tmp_speed, tmp_speed);
+			sprintf(buf, _("乗馬中 (%+d%+d)", "Riding (%+d%+d)"), base_speed - tmp_speed, tmp_speed);
 
 		if (tmp_speed > 0)
 			attr = TERM_YELLOW;
@@ -211,9 +224,9 @@ static void display_player_middle(player_type *creature_ptr)
 	else
 	{
 		if (!creature_ptr->riding)
-			sprintf(buf, "(%+d)", i);
+			sprintf(buf, "(%+d)", base_speed);
 		else
-			sprintf(buf, _("乗馬中 (%+d)", "Riding (%+d)"), i);
+			sprintf(buf, _("乗馬中 (%+d)", "Riding (%+d)"), base_speed);
 	}
 
 	display_player_one_line(ENTRY_SPEED, buf, attr);
