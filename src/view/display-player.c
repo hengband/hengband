@@ -77,6 +77,25 @@ static void display_player_basic_info(player_type *creature_ptr)
 
 
 /*!
+ * @brief 魔法領域を表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void display_magic_realms(player_type *creature_ptr)
+{
+	if (creature_ptr->realm1 == 0) return;
+
+	char tmp[64];
+	if (creature_ptr->realm2)
+		sprintf(tmp, "%s, %s", realm_names[creature_ptr->realm1], realm_names[creature_ptr->realm2]);
+	else
+		strcpy(tmp, realm_names[creature_ptr->realm1]);
+
+	display_player_one_line(ENTRY_REALM, tmp, TERM_L_BLUE);
+}
+
+
+/*!
  * @brief プレイヤーのステータス表示メイン処理
  * Display the character on the screen (various modes)
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -103,16 +122,7 @@ void display_player(player_type *creature_ptr, int mode, map_name_pf map_name)
 	if (display_player_info(creature_ptr, mode)) return;
 
 	display_player_basic_info(creature_ptr);
-
-	char tmp[64];
-	if (creature_ptr->realm1)
-	{
-		if (creature_ptr->realm2)
-			sprintf(tmp, "%s, %s", realm_names[creature_ptr->realm1], realm_names[creature_ptr->realm2]);
-		else
-			strcpy(tmp, realm_names[creature_ptr->realm1]);
-		display_player_one_line(ENTRY_REALM, tmp, TERM_L_BLUE);
-	}
+	display_magic_realms(creature_ptr);
 
 	if ((creature_ptr->pclass == CLASS_CHAOS_WARRIOR) || (creature_ptr->muta2 & MUT2_CHAOS_GIFT))
 		display_player_one_line(ENTRY_PATRON, chaos_patrons[creature_ptr->chaos_patron], TERM_L_BLUE);
