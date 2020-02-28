@@ -95,19 +95,12 @@ static void display_left_hand(player_type *creature_ptr)
 
 
 /*!
- * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
+ * @brief 武器による命中率とダメージの補正を表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * Prints the following information on the screen.
  * @return なし
  */
-static void display_player_middle(player_type *creature_ptr)
+static void display_hit_damage(player_type *creature_ptr)
 {
-	if (creature_ptr->migite)
-	{
-		display_player_melee_bonus(creature_ptr, 0, left_hander ? ENTRY_LEFT_HAND1 : ENTRY_RIGHT_HAND1);
-	}
-
-	display_left_hand(creature_ptr);
 	object_type *o_ptr = &creature_ptr->inventory_list[INVEN_BOW];
 	HIT_PROB show_tohit = creature_ptr->dis_to_h_b;
 	HIT_POINT show_todam = 0;
@@ -122,6 +115,24 @@ static void display_player_middle(player_type *creature_ptr)
 	show_tohit += creature_ptr->skill_thb / BTH_PLUS_ADJ;
 
 	display_player_one_line(ENTRY_SHOOT_HIT_DAM, format("(%+d,%+d)", show_tohit, show_todam), TERM_L_BLUE);
+}
+
+
+/*!
+ * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * Prints the following information on the screen.
+ * @return なし
+ */
+static void display_player_middle(player_type *creature_ptr)
+{
+	if (creature_ptr->migite)
+	{
+		display_player_melee_bonus(creature_ptr, 0, left_hander ? ENTRY_LEFT_HAND1 : ENTRY_RIGHT_HAND1);
+	}
+
+	display_left_hand(creature_ptr);
+	display_hit_damage(creature_ptr);
 	int tmul = 0;
 	if (creature_ptr->inventory_list[INVEN_BOW].k_idx)
 	{
