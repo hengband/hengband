@@ -152,6 +152,85 @@ static void display_player_stats(player_type *creature_ptr)
 
 
 /*!
+ * @brief 現在いるフロアを、または死んでいたらどこでどう死んだかをバッファに詰める
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param statmsg メッセージバッファ
+ * @param map_name マップ名へのコールバック
+ * @return なし
+ */
+static void decide_current_floor(player_type *creature_ptr, char *statmsg, map_name_pf map_name)
+{
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	if (creature_ptr->is_dead)
+	{
+		if (current_world_ptr->total_winner)
+		{
+			sprintf(statmsg, _("…あなたは勝利の後%sした。", "...You %s after winning."),
+				streq(creature_ptr->died_from, "Seppuku") ? _("切腹", "committed seppuku") : _("引退", "retired from the adventure"));
+		}
+		else if (!floor_ptr->dun_level)
+		{
+#ifdef JP
+			sprintf(statmsg, "…あなたは%sで%sに殺された。", (*map_name)(creature_ptr), creature_ptr->died_from);
+#else
+			sprintf(statmsg, "...You were killed by %s in %s.", creature_ptr->died_from, map_name(creature_ptr));
+#endif
+		}
+		else if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest))
+		{
+			/* Get the quest text */
+			/* Bewere that INIT_ASSIGN resets the cur_num. */
+			init_flags = INIT_NAME_ONLY;
+			process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+#ifdef JP
+			sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[floor_ptr->inside_quest].name, creature_ptr->died_from);
+#else
+			sprintf(statmsg, "...You were killed by %s in the quest '%s'.", creature_ptr->died_from, quest[floor_ptr->inside_quest].name);
+#endif
+		}
+		else
+		{
+#ifdef JP
+			sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", (*map_name)(creature_ptr), (int)floor_ptr->dun_level, creature_ptr->died_from);
+#else
+			sprintf(statmsg, "...You were killed by %s on level %d of %s.", creature_ptr->died_from, floor_ptr->dun_level, map_name(creature_ptr));
+#endif
+		}
+
+		return;
+	}
+	
+	if (!current_world_ptr->character_dungeon) return;
+
+	if (!floor_ptr->dun_level)
+	{
+		sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(creature_ptr));
+		return;
+	}
+	
+	if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest))
+	{
+		/* Clear the text */
+		/* Must be done before doing INIT_SHOW_TEXT */
+		for (int i = 0; i < 10; i++)
+			quest_text[i][0] = '\0';
+
+		quest_text_line = 0;
+		init_flags = INIT_NAME_ONLY;
+		process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+		sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[floor_ptr->inside_quest].name);
+		return;
+	}
+
+#ifdef JP
+	sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(creature_ptr), (int)floor_ptr->dun_level);
+#else
+	sprintf(statmsg, "...Now, you are exploring level %d of %s.", (int)floor_ptr->dun_level, map_name(creature_ptr));
+#endif
+}
+
+
+/*!
  * @brief プレイヤーのステータス表示メイン処理
  * Display the character on the screen (various modes)
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -196,85 +275,11 @@ void display_player(player_type *creature_ptr, int mode, map_name_pf map_name)
 
 	char statmsg[1000];
 	put_str(_("(キャラクターの生い立ち)", "(Character Background)"), 11, 25);
-
 	for (int i = 0; i < 4; i++)
-	{
 		put_str(creature_ptr->history[i], i + 12, 10);
-	}
 
 	*statmsg = '\0';
-
-	if (creature_ptr->is_dead)
-	{
-		if (current_world_ptr->total_winner)
-		{
-#ifdef JP
-			sprintf(statmsg, "…あなたは勝利の後%sした。", streq(creature_ptr->died_from, "Seppuku") ? "切腹" : "引退");
-#else
-			sprintf(statmsg, "...You %s after winning.", streq(creature_ptr->died_from, "Seppuku") ? "committed seppuku" : "retired from the adventure");
-#endif
-		}
-		else if (!floor_ptr->dun_level)
-		{
-#ifdef JP
-			sprintf(statmsg, "…あなたは%sで%sに殺された。", (*map_name)(creature_ptr), creature_ptr->died_from);
-#else
-			sprintf(statmsg, "...You were killed by %s in %s.", creature_ptr->died_from, map_name(creature_ptr));
-#endif
-		}
-		else if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest))
-		{
-			/* Get the quest text */
-			/* Bewere that INIT_ASSIGN resets the cur_num. */
-			init_flags = INIT_NAME_ONLY;
-
-			process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
-
-#ifdef JP
-			sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[floor_ptr->inside_quest].name, creature_ptr->died_from);
-#else
-			sprintf(statmsg, "...You were killed by %s in the quest '%s'.", creature_ptr->died_from, quest[floor_ptr->inside_quest].name);
-#endif
-		}
-		else
-		{
-#ifdef JP
-			sprintf(statmsg, "…あなたは、%sの%d階で%sに殺された。", (*map_name)(creature_ptr), (int)floor_ptr->dun_level, creature_ptr->died_from);
-#else
-			sprintf(statmsg, "...You were killed by %s on level %d of %s.", creature_ptr->died_from, floor_ptr->dun_level, map_name(creature_ptr));
-#endif
-		}
-	}
-	else if (current_world_ptr->character_dungeon)
-	{
-		if (!floor_ptr->dun_level)
-		{
-			sprintf(statmsg, _("…あなたは現在、 %s にいる。", "...Now, you are in %s."), map_name(creature_ptr));
-		}
-		else if (floor_ptr->inside_quest && is_fixed_quest_idx(floor_ptr->inside_quest))
-		{
-			/* Clear the text */
-			/* Must be done before doing INIT_SHOW_TEXT */
-			for (int i = 0; i < 10; i++)
-			{
-				quest_text[i][0] = '\0';
-			}
-
-			quest_text_line = 0;
-			init_flags = INIT_NAME_ONLY;
-			process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
-			sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[floor_ptr->inside_quest].name);
-		}
-		else
-		{
-#ifdef JP
-			sprintf(statmsg, "…あなたは現在、 %s の %d 階で探索している。", map_name(creature_ptr), (int)floor_ptr->dun_level);
-#else
-			sprintf(statmsg, "...Now, you are exploring level %d of %s.", floor_ptr->dun_level, map_name(creature_ptr));
-#endif
-		}
-	}
-
+	decide_current_floor(creature_ptr, statmsg, map_name);
 	if (!*statmsg) return;
 
 	char temp[64 * 2];
