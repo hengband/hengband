@@ -173,6 +173,30 @@ static TERM_COLOR decide_speed_color(player_type *creature_ptr, const int base_s
 
 
 /*!
+ * @brief 何らかの効果による一時的な速度変化を計算する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return プレーヤーの速度
+ */
+static int calc_temporary_speed(player_type *creature_ptr)
+{
+	int tmp_speed = 0;
+	if (!creature_ptr->riding)
+	{
+		if (IS_FAST(creature_ptr)) tmp_speed += 10;
+		if (creature_ptr->slow) tmp_speed -= 10;
+		if (creature_ptr->lightspeed) tmp_speed = 99;
+	}
+	else
+	{
+		if (MON_FAST(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed += 10;
+		if (MON_SLOW(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed -= 10;
+	}
+
+	return tmp_speed;
+}
+
+
+/*!
  * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
  * @param creature_ptr プレーヤーへの参照ポインタ
  * Prints the following information on the screen.
@@ -194,19 +218,7 @@ static void display_player_middle(player_type *creature_ptr)
 	if (creature_ptr->action == ACTION_SEARCH) base_speed += 10;
 
 	TERM_COLOR attr = decide_speed_color(creature_ptr, base_speed);
-
-	int tmp_speed = 0;
-	if (!creature_ptr->riding)
-	{
-		if (IS_FAST(creature_ptr)) tmp_speed += 10;
-		if (creature_ptr->slow) tmp_speed -= 10;
-		if (creature_ptr->lightspeed) tmp_speed = 99;
-	}
-	else
-	{
-		if (MON_FAST(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed += 10;
-		if (MON_SLOW(&creature_ptr->current_floor_ptr->m_list[creature_ptr->riding])) tmp_speed -= 10;
-	}
+	int tmp_speed = calc_temporary_speed(creature_ptr);
 
 	char buf[160];
 	if (tmp_speed)
