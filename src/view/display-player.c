@@ -260,30 +260,12 @@ static void display_player_exp(player_type *creature_ptr)
 
 
 /*!
- * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
+ * @brief ゲーム内の経過時間を表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * Prints the following information on the screen.
  * @return なし
  */
-static void display_player_middle(player_type *creature_ptr)
+static void display_playtime_in_game(player_type *creature_ptr)
 {
-	if (creature_ptr->migite)
-		display_player_melee_bonus(creature_ptr, 0, left_hander ? ENTRY_LEFT_HAND1 : ENTRY_RIGHT_HAND1);
-
-	display_left_hand(creature_ptr);
-	display_hit_damage(creature_ptr);
-	display_shoot_magnification(creature_ptr);
-	display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", creature_ptr->dis_ac, creature_ptr->dis_to_a), TERM_L_BLUE);
-
-	int base_speed = creature_ptr->pspeed - 110;
-	if (creature_ptr->action == ACTION_SEARCH) base_speed += 10;
-
-	TERM_COLOR attr = decide_speed_color(creature_ptr, base_speed);
-	int tmp_speed = calc_temporary_speed(creature_ptr);
-	display_player_speed(creature_ptr, attr, base_speed, tmp_speed);
-	display_player_exp(creature_ptr);
-	display_player_one_line(ENTRY_GOLD, format("%ld", creature_ptr->au), TERM_L_GREEN);
-
 	int day, hour, min;
 	extract_day_hour_min(creature_ptr, &day, &hour, &min);
 
@@ -308,6 +290,34 @@ static void display_player_middle(player_type *creature_ptr)
 		display_player_one_line(ENTRY_SP, format("%4d/%4d", creature_ptr->csp, creature_ptr->msp), TERM_YELLOW);
 	else
 		display_player_one_line(ENTRY_SP, format("%4d/%4d", creature_ptr->csp, creature_ptr->msp), TERM_RED);
+}
+
+
+/*!
+ * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * Prints the following information on the screen.
+ * @return なし
+ */
+static void display_player_middle(player_type *creature_ptr)
+{
+	if (creature_ptr->migite)
+		display_player_melee_bonus(creature_ptr, 0, left_hander ? ENTRY_LEFT_HAND1 : ENTRY_RIGHT_HAND1);
+
+	display_left_hand(creature_ptr);
+	display_hit_damage(creature_ptr);
+	display_shoot_magnification(creature_ptr);
+	display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", creature_ptr->dis_ac, creature_ptr->dis_to_a), TERM_L_BLUE);
+
+	int base_speed = creature_ptr->pspeed - 110;
+	if (creature_ptr->action == ACTION_SEARCH) base_speed += 10;
+
+	TERM_COLOR attr = decide_speed_color(creature_ptr, base_speed);
+	int tmp_speed = calc_temporary_speed(creature_ptr);
+	display_player_speed(creature_ptr, attr, base_speed, tmp_speed);
+	display_player_exp(creature_ptr);
+	display_player_one_line(ENTRY_GOLD, format("%ld", creature_ptr->au), TERM_L_GREEN);
+	display_playtime_in_game(creature_ptr);
 
 	u32b play_hour = current_world_ptr->play_time / (60 * 60);
 	u32b play_min = (current_world_ptr->play_time / 60) % 60;
