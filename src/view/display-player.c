@@ -197,29 +197,15 @@ static int calc_temporary_speed(player_type *creature_ptr)
 
 
 /*!
- * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
+ * @brief プレーヤーの最終的な速度を表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
- * Prints the following information on the screen.
+ * @param attr 表示色
+ * @param base_speed プレーヤーの素の速度
+ * @param tmp_speed アイテム等で一時的に変化した速度量
  * @return なし
  */
-static void display_player_middle(player_type *creature_ptr)
+static void display_player_speed(player_type *creature_ptr, TERM_COLOR attr, int base_speed, int tmp_speed)
 {
-	if (creature_ptr->migite)
-	{
-		display_player_melee_bonus(creature_ptr, 0, left_hander ? ENTRY_LEFT_HAND1 : ENTRY_RIGHT_HAND1);
-	}
-
-	display_left_hand(creature_ptr);
-	display_hit_damage(creature_ptr);
-	display_shoot_magnification(creature_ptr);
-	display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", creature_ptr->dis_ac, creature_ptr->dis_to_a), TERM_L_BLUE);
-
-	int base_speed = creature_ptr->pspeed - 110;
-	if (creature_ptr->action == ACTION_SEARCH) base_speed += 10;
-
-	TERM_COLOR attr = decide_speed_color(creature_ptr, base_speed);
-	int tmp_speed = calc_temporary_speed(creature_ptr);
-
 	char buf[160];
 	if (tmp_speed)
 	{
@@ -243,7 +229,16 @@ static void display_player_middle(player_type *creature_ptr)
 
 	display_player_one_line(ENTRY_SPEED, buf, attr);
 	display_player_one_line(ENTRY_LEVEL, format("%d", creature_ptr->lev), TERM_L_GREEN);
+}
 
+
+/*!
+ * @brief プレーヤーの現在経験値・最大経験値・次のレベルまでに必要な経験値を表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void display_player_exp(player_type *creature_ptr)
+{
 	int e = (creature_ptr->prace == RACE_ANDROID) ? ENTRY_EXP_ANDR : ENTRY_CUR_EXP;
 	if (creature_ptr->exp >= creature_ptr->max_exp)
 		display_player_one_line(e, format("%ld", creature_ptr->exp), TERM_L_GREEN);
@@ -261,12 +256,38 @@ static void display_player_middle(player_type *creature_ptr)
 		display_player_one_line(e, format("%ld", (s32b)(player_exp_a[creature_ptr->lev - 1] * creature_ptr->expfact / 100L)), TERM_L_GREEN);
 	else
 		display_player_one_line(e, format("%ld", (s32b)(player_exp[creature_ptr->lev - 1] * creature_ptr->expfact / 100L)), TERM_L_GREEN);
+}
 
+
+/*!
+ * @brief プレイヤーステータス表示の中央部分を表示するサブルーチン
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * Prints the following information on the screen.
+ * @return なし
+ */
+static void display_player_middle(player_type *creature_ptr)
+{
+	if (creature_ptr->migite)
+		display_player_melee_bonus(creature_ptr, 0, left_hander ? ENTRY_LEFT_HAND1 : ENTRY_RIGHT_HAND1);
+
+	display_left_hand(creature_ptr);
+	display_hit_damage(creature_ptr);
+	display_shoot_magnification(creature_ptr);
+	display_player_one_line(ENTRY_BASE_AC, format("[%d,%+d]", creature_ptr->dis_ac, creature_ptr->dis_to_a), TERM_L_BLUE);
+
+	int base_speed = creature_ptr->pspeed - 110;
+	if (creature_ptr->action == ACTION_SEARCH) base_speed += 10;
+
+	TERM_COLOR attr = decide_speed_color(creature_ptr, base_speed);
+	int tmp_speed = calc_temporary_speed(creature_ptr);
+	display_player_speed(creature_ptr, attr, base_speed, tmp_speed);
+	display_player_exp(creature_ptr);
 	display_player_one_line(ENTRY_GOLD, format("%ld", creature_ptr->au), TERM_L_GREEN);
 
 	int day, hour, min;
 	extract_day_hour_min(creature_ptr, &day, &hour, &min);
 
+	char buf[160];
 	if (day < MAX_DAYS)
 		sprintf(buf, _("%d日目 %2d:%02d", "Day %d %2d:%02d"), day, hour, min);
 	else
