@@ -1,5 +1,4 @@
 ﻿/*!
- * todo もう少し関数分割する＋JPとENの表記を_()マクロでまとめる
  * @brief キャラクタの特性を表示する
  * @date 2020/02/25
  * @author Hourier
@@ -19,6 +18,44 @@ typedef struct {
 	BIT_FLAGS player_vuln[TR_FLAG_SIZE];
 	BIT_FLAGS known_obj_imm[TR_FLAG_SIZE];
 } all_player_flags;
+
+
+/*!
+ * @brief 呪われた装備の表示色を変更する
+ * @param mode 表示オプション
+ * @param row 行数
+ * @param col 列数
+ * @param flags 装備品へのフラグ群
+ * @param header_color 耐性等のパラメータ名 の色
+ * @param o_ptr 装備品への参照ポインタ
+ * @return 与えられた装備が呪われていればTRUE
+ */
+static bool decide_cursed_equipment_color(u16b mode, TERM_LEN row, TERM_LEN *col, BIT_FLAGS *flags, byte *header_color, object_type *o_ptr)
+{
+	if ((mode & DP_CURSE) == 0) return FALSE;
+
+	if (have_flag(flags, TR_ADD_L_CURSE) || have_flag(flags, TR_ADD_H_CURSE))
+	{
+		c_put_str(TERM_L_DARK, "+", row, *col);
+		*header_color = TERM_WHITE;
+	}
+
+	if (o_ptr->curse_flags & (TRC_CURSED | TRC_HEAVY_CURSE))
+	{
+		c_put_str(TERM_WHITE, "+", row, *col);
+		*header_color = TERM_WHITE;
+	}
+
+	if (o_ptr->curse_flags & TRC_PERMA_CURSE)
+	{
+		c_put_str(TERM_WHITE, "*", row, *col);
+		*header_color = TERM_WHITE;
+	}
+
+	(*col)++;
+	return TRUE;
+}
+
 
 /*!
  * @brief プレイヤーの特性フラグ一種を表示する
@@ -51,45 +88,23 @@ static void display_one_characteristic_info(player_type *creature_ptr, TERM_LEN 
 
 	for (int i = INVEN_RARM; i < max_i; i++)
 	{
-		BIT_FLAGS flgs[TR_FLAG_SIZE];
+		BIT_FLAGS flags[TR_FLAG_SIZE];
 		object_type *o_ptr;
 		o_ptr = &creature_ptr->inventory_list[i];
-		object_flags_known(o_ptr, flgs);
+		object_flags_known(o_ptr, flags);
 		if (!(mode & DP_IMM))
 			c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
 
-		if (mode & DP_CURSE)
-		{
-			if (have_flag(flgs, TR_ADD_L_CURSE) || have_flag(flgs, TR_ADD_H_CURSE))
-			{
-				c_put_str(TERM_L_DARK, "+", row, col);
-				header_color = TERM_WHITE;
-			}
-
-			if (o_ptr->curse_flags & (TRC_CURSED | TRC_HEAVY_CURSE))
-			{
-				c_put_str(TERM_WHITE, "+", row, col);
-				header_color = TERM_WHITE;
-			}
-
-			if (o_ptr->curse_flags & TRC_PERMA_CURSE)
-			{
-				c_put_str(TERM_WHITE, "*", row, col);
-				header_color = TERM_WHITE;
-			}
-
-			col++;
-			continue;
-		}
+		if (decide_cursed_equipment_color(mode, row, &col, flags, &header_color, o_ptr)) continue;
 
 		if (flag1 == TR_LITE_1)
 		{
-			if (HAVE_DARK_FLAG(flgs))
+			if (HAVE_DARK_FLAG(flags))
 			{
 				c_put_str(TERM_L_DARK, "+", row, col);
 				header_color = TERM_WHITE;
 			}
-			else if (HAVE_LITE_FLAG(flgs))
+			else if (HAVE_LITE_FLAG(flags))
 			{
 				c_put_str(TERM_WHITE, "+", row, col);
 				header_color = TERM_WHITE;
@@ -99,7 +114,7 @@ static void display_one_characteristic_info(player_type *creature_ptr, TERM_LEN 
 			continue;
 		}
 
-		if (have_flag(flgs, flag1))
+		if (have_flag(flags, flag1))
 		{
 			c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE),
 				(mode & DP_IMM) ? "*" : "+", row, col);
@@ -228,7 +243,7 @@ static void display_other_resistance_info(player_type *creature_ptr, void(*displ
 	display_one_characteristic_info(creature_ptr, row + 4, col, _("警告      :", "Warning   :"), TR_WARNING, f, 0);
 	display_one_characteristic_info(creature_ptr, row + 5, col, _("遅消化    :", "SlowDigest:"), TR_SLOW_DIGEST, f, 0);
 	display_one_characteristic_info(creature_ptr, row + 6, col, _("急回復    :", "Regene.   :"), TR_REGEN, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 7, col, _("浮遊      :" "Levitation:"), TR_LEVITATION, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 7, col, _("浮遊      :", "Levitation:"), TR_LEVITATION, f, 0);
 	display_one_characteristic_info(creature_ptr, row + 8, col, _("永遠光源  :", "Perm Lite :"), TR_LITE_1, f, 0);
 	display_one_characteristic_info(creature_ptr, row + 9, col, _("呪い      :", "Cursed    :"), 0, f, DP_CURSE);
 }
