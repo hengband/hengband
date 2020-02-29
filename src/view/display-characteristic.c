@@ -1,4 +1,11 @@
-﻿#include "display-characteristic.h"
+﻿/*!
+ * todo もう少し関数分割する＋JPとENの表記を_()マクロでまとめる
+ * @brief キャラクタの特性を表示する
+ * @date 2020/02/25
+ * @author Hourier
+ */
+
+#include "display-characteristic.h"
 #include "term.h"
 #include "player/permanent-resistances.h"
 #include "player/temporary-resistances.h"
@@ -156,37 +163,20 @@ static void display_basic_resistance_info(player_type *creature_ptr, void(*displ
 	(*display_player_equippy)(creature_ptr, row - 2, col + 8, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 8);
 
-#ifdef JP
-	display_one_characteristic_info(creature_ptr, row + 0, col, "耐酸  :", TR_RES_ACID, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 0, col, "耐酸  :", TR_IM_ACID, f, DP_IMM);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "耐電撃:", TR_RES_ELEC, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "耐電撃:", TR_IM_ELEC, f, DP_IMM);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "耐火炎:", TR_RES_FIRE, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "耐火炎:", TR_IM_FIRE, f, DP_IMM);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "耐冷気:", TR_RES_COLD, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "耐冷気:", TR_IM_COLD, f, DP_IMM);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "耐毒  :", TR_RES_POIS, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "耐閃光:", TR_RES_LITE, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 6, col, "耐暗黒:", TR_RES_DARK, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 7, col, "耐破片:", TR_RES_SHARDS, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "耐盲目:", TR_RES_BLIND, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 9, col, "耐混乱:", TR_RES_CONF, f, 0);
-#else
-	display_one_characteristic_info(creature_ptr, row + 0, col, "Acid  :", TR_RES_ACID, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 0, col, "Acid  :", TR_IM_ACID, f, DP_IMM);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "Elec  :", TR_RES_ELEC, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "Elec  :", TR_IM_ELEC, f, DP_IMM);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "Fire  :", TR_RES_FIRE, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "Fire  :", TR_IM_FIRE, f, DP_IMM);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "Cold  :", TR_RES_COLD, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "Cold  :", TR_IM_COLD, f, DP_IMM);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "Poison:", TR_RES_POIS, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "Light :", TR_RES_LITE, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 6, col, "Dark  :", TR_RES_DARK, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 7, col, "Shard :", TR_RES_SHARDS, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "Blind :", TR_RES_BLIND, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 9, col, "Conf  :", TR_RES_CONF, f, 0);
-#endif
+	display_one_characteristic_info(creature_ptr, row + 0, col, _("耐酸  :", "Acid  :"), TR_RES_ACID, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 0, col, _("耐酸  :", "Acid  :"), TR_IM_ACID, f, DP_IMM);
+	display_one_characteristic_info(creature_ptr, row + 1, col, _("耐電撃:", "Elec  :"), TR_RES_ELEC, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 1, col, _("耐電撃:", "Elec  :"), TR_IM_ELEC, f, DP_IMM);
+	display_one_characteristic_info(creature_ptr, row + 2, col, _("耐火炎:", "Fire  :"), TR_RES_FIRE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 2, col, _("耐火炎:", "Fire  :"), TR_IM_FIRE, f, DP_IMM);
+	display_one_characteristic_info(creature_ptr, row + 3, col, _("耐冷気:", "Cold  :"), TR_RES_COLD, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 3, col, _("耐冷気:", "Cold  :"), TR_IM_COLD, f, DP_IMM);
+	display_one_characteristic_info(creature_ptr, row + 4, col, _("耐毒  :", "Poison:"), TR_RES_POIS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 5, col, _("耐閃光:", "Light :"), TR_RES_LITE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 6, col, _("耐暗黒:", "Dark  :"), TR_RES_DARK, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 7, col, _("耐破片:", "Shard :"), TR_RES_SHARDS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 8, col, _("耐盲目:", "Blind :"), TR_RES_BLIND, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 9, col, _("耐混乱:", "Conf  :"), TR_RES_CONF, f, 0);
 }
 
 
@@ -204,29 +194,16 @@ static void display_advanced_resistance_info(player_type *creature_ptr, void(*di
 	(*display_player_equippy)(creature_ptr, row - 2, col + 8, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 8);
 
-#ifdef JP
-	display_one_characteristic_info(creature_ptr, row + 0, col, "耐轟音:", TR_RES_SOUND, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "耐地獄:", TR_RES_NETHER, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "耐因混:", TR_RES_NEXUS, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "耐カオ:", TR_RES_CHAOS, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "耐劣化:", TR_RES_DISEN, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "耐恐怖:", TR_RES_FEAR, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 6, col, "反射  :", TR_REFLECT, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 7, col, "火炎オ:", TR_SH_FIRE, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "電気オ:", TR_SH_ELEC, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 9, col, "冷気オ:", TR_SH_COLD, f, 0);
-#else
-	display_one_characteristic_info(creature_ptr, row + 0, col, "Sound :", TR_RES_SOUND, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "Nether:", TR_RES_NETHER, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "Nexus :", TR_RES_NEXUS, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "Chaos :", TR_RES_CHAOS, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "Disnch:", TR_RES_DISEN, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "Fear  :", TR_RES_FEAR, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 6, col, "Reflct:", TR_REFLECT, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 7, col, "AuFire:", TR_SH_FIRE, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "AuElec:", TR_SH_ELEC, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 9, col, "AuCold:", TR_SH_COLD, f, 0);
-#endif
+	display_one_characteristic_info(creature_ptr, row + 0, col, _("耐轟音:", "Sound :"), TR_RES_SOUND, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 1, col, _("耐地獄:", "Nether:"), TR_RES_NETHER, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 2, col, _("耐因混:", "Nexus :"), TR_RES_NEXUS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 3, col, _("耐カオ:", "Chaos :"), TR_RES_CHAOS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 4, col, _("耐劣化:", "Disnch:"), TR_RES_DISEN, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 5, col, _("耐恐怖:", "Fear  :"), TR_RES_FEAR, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 6, col, _("反射  :", "Reflct:"), TR_REFLECT, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 7, col, _("火炎オ:", "AuFire:"), TR_SH_FIRE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 8, col, _("電気オ:", "AuElec:"), TR_SH_ELEC, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 9, col, _("冷気オ:", "AuCold:"), TR_SH_COLD, f, 0);
 }
 
 
@@ -244,29 +221,16 @@ static void display_other_resistance_info(player_type *creature_ptr, void(*displ
 	(*display_player_equippy)(creature_ptr, row - 2, col + 12, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 12);
 
-#ifdef JP
-	display_one_characteristic_info(creature_ptr, row + 0, col, "加速      :", TR_SPEED, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "耐麻痺    :", TR_FREE_ACT, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "透明体視認:", TR_SEE_INVIS, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "経験値保持:", TR_HOLD_EXP, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "警告      :", TR_WARNING, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "遅消化    :", TR_SLOW_DIGEST, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 6, col, "急回復    :", TR_REGEN, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 7, col, "浮遊      :", TR_LEVITATION, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "永遠光源  :", TR_LITE_1, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 9, col, "呪い      :", 0, f, DP_CURSE);
-#else
-	display_one_characteristic_info(creature_ptr, row + 0, col, "Speed     :", TR_SPEED, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "FreeAction:", TR_FREE_ACT, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "SeeInvisi.:", TR_SEE_INVIS, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "Hold Exp  :", TR_HOLD_EXP, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "Warning   :", TR_WARNING, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "SlowDigest:", TR_SLOW_DIGEST, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 6, col, "Regene.   :", TR_REGEN, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 7, col, "Levitation:", TR_LEVITATION, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "Perm Lite :", TR_LITE_1, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 9, col, "Cursed    :", 0, f, DP_CURSE);
-#endif
+	display_one_characteristic_info(creature_ptr, row + 0, col, _("加速      :", "Speed     :"), TR_SPEED, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 1, col, _("耐麻痺    :", "FreeAction:"), TR_FREE_ACT, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 2, col, _("透明体視認:", "SeeInvisi.:"), TR_SEE_INVIS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 3, col, _("経験値保持:", "Hold Exp  :"), TR_HOLD_EXP, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 4, col, _("警告      :", "Warning   :"), TR_WARNING, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 5, col, _("遅消化    :", "SlowDigest:"), TR_SLOW_DIGEST, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 6, col, _("急回復    :", "Regene.   :"), TR_REGEN, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 7, col, _("浮遊      :" "Levitation:"), TR_LEVITATION, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 8, col, _("永遠光源  :", "Perm Lite :"), TR_LITE_1, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 9, col, _("呪い      :", "Cursed    :"), 0, f, DP_CURSE);
 }
 
 
@@ -307,65 +271,34 @@ static void display_slay_info(player_type *creature_ptr, void(*display_player_eq
 	(*display_player_equippy)(creature_ptr, row - 2, col + 12, DP_WP);
 	c_put_str(TERM_WHITE, "ab@", row - 1, col + 12);
 
-#ifdef JP
-	display_one_characteristic_info(creature_ptr, row + 0, col, "邪悪 倍打 :", TR_SLAY_EVIL, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 0, col, "邪悪 倍打 :", TR_KILL_EVIL, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 1, col, "不死 倍打 :", TR_SLAY_UNDEAD, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "不死 倍打 :", TR_KILL_UNDEAD, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 2, col, "悪魔 倍打 :", TR_SLAY_DEMON, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "悪魔 倍打 :", TR_KILL_DEMON, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 3, col, "龍 倍打   :", TR_SLAY_DRAGON, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "龍 倍打   :", TR_KILL_DRAGON, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 4, col, "人間 倍打 :", TR_SLAY_HUMAN, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "人間 倍打 :", TR_KILL_HUMAN, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 5, col, "動物 倍打 :", TR_SLAY_ANIMAL, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "動物 倍打 :", TR_KILL_ANIMAL, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 6, col, "オーク倍打:", TR_SLAY_ORC, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 6, col, "オーク倍打:", TR_KILL_ORC, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 7, col, "トロル倍打:", TR_SLAY_TROLL, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 7, col, "トロル倍打:", TR_KILL_TROLL, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 8, col, "巨人 倍打 :", TR_SLAY_GIANT, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "巨人 倍打 :", TR_KILL_GIANT, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 9, col, "溶解      :", TR_BRAND_ACID, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 10, col, "電撃      :", TR_BRAND_ELEC, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 11, col, "焼棄      :", TR_BRAND_FIRE, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 12, col, "凍結      :", TR_BRAND_COLD, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 13, col, "毒殺      :", TR_BRAND_POIS, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 14, col, "切れ味    :", TR_VORPAL, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 15, col, "地震      :", TR_IMPACT, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 16, col, "吸血      :", TR_VAMPIRIC, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 17, col, "カオス効果:", TR_CHAOTIC, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 18, col, "理力      :", TR_FORCE_WEAPON, f, DP_WP);
-#else
-	display_one_characteristic_info(creature_ptr, row + 0, col, "Slay Evil :", TR_SLAY_EVIL, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 0, col, "Slay Evil :", TR_KILL_EVIL, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 1, col, "Slay Und. :", TR_SLAY_UNDEAD, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "Slay Und. :", TR_KILL_UNDEAD, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 2, col, "Slay Demon:", TR_SLAY_DEMON, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "Slay Demon:", TR_KILL_DEMON, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 3, col, "Slay Drag.:", TR_SLAY_DRAGON, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "Slay Drag.:", TR_KILL_DRAGON, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 4, col, "Slay Human:", TR_SLAY_HUMAN, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "Slay Human:", TR_KILL_HUMAN, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 5, col, "Slay Anim.:", TR_SLAY_ANIMAL, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "Slay Anim.:", TR_KILL_ANIMAL, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 6, col, "Slay Orc  :", TR_SLAY_ORC, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 6, col, "Slay Orc  :", TR_KILL_ORC, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 7, col, "Slay Troll:", TR_SLAY_TROLL, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 7, col, "Slay Troll:", TR_KILL_TROLL, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 8, col, "Slay Giant:", TR_SLAY_GIANT, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "Slay Giant:", TR_KILL_GIANT, f, (DP_WP | DP_IMM));
-	display_one_characteristic_info(creature_ptr, row + 9, col, "Acid Brand:", TR_BRAND_ACID, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 10, col, "Elec Brand:", TR_BRAND_ELEC, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 11, col, "Fire Brand:", TR_BRAND_FIRE, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 12, col, "Cold Brand:", TR_BRAND_COLD, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 13, col, "Poison Brd:", TR_BRAND_POIS, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 14, col, "Sharpness :", TR_VORPAL, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 15, col, "Quake     :", TR_IMPACT, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 16, col, "Vampiric  :", TR_VAMPIRIC, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 17, col, "Chaotic   :", TR_CHAOTIC, f, DP_WP);
-	display_one_characteristic_info(creature_ptr, row + 18, col, "Force Wep.:", TR_FORCE_WEAPON, f, DP_WP);
-#endif
+	display_one_characteristic_info(creature_ptr, row + 0, col, _("邪悪 倍打 :", "Slay Evil :"), TR_SLAY_EVIL, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 0, col, _("邪悪 倍打 :", "Slay Evil :"), TR_KILL_EVIL, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 1, col, _("不死 倍打 :", "Slay Und. :"), TR_SLAY_UNDEAD, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 1, col, _("不死 倍打 :", "Slay Und. :"), TR_KILL_UNDEAD, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 2, col, _("悪魔 倍打 :", "Slay Demon:"), TR_SLAY_DEMON, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 2, col, _("悪魔 倍打 :", "Slay Demon:"), TR_KILL_DEMON, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 3, col, _("龍 倍打   :", "Slay Drag.:"), TR_SLAY_DRAGON, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 3, col, _("龍 倍打   :", "Slay Drag.:"), TR_KILL_DRAGON, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 4, col, _("人間 倍打 :", "Slay Human:"), TR_SLAY_HUMAN, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 4, col, _("人間 倍打 :", "Slay Human:"), TR_KILL_HUMAN, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 5, col, _("動物 倍打 :", "Slay Anim.:"), TR_SLAY_ANIMAL, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 5, col, _("動物 倍打 :", "Slay Anim.:"), TR_KILL_ANIMAL, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 6, col, _("オーク倍打:", "Slay Orc  :"), TR_SLAY_ORC, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 6, col, _("オーク倍打:", "Slay Orc  :"), TR_KILL_ORC, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 7, col, _("トロル倍打:", "Slay Troll:"), TR_SLAY_TROLL, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 7, col, _("トロル倍打:", "Slay Troll:"), TR_KILL_TROLL, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 8, col, _("巨人 倍打 :", "Slay Giant:"), TR_SLAY_GIANT, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 8, col, _("巨人 倍打 :", "Slay Giant:"), TR_KILL_GIANT, f, (DP_WP | DP_IMM));
+	display_one_characteristic_info(creature_ptr, row + 9, col, _("溶解      :", "Acid Brand:"), TR_BRAND_ACID, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 10, col, _("電撃      :", "Elec Brand:"), TR_BRAND_ELEC, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 11, col, _("焼棄      :", "Fire Brand:"), TR_BRAND_FIRE, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 12, col, _("凍結      :", "Cold Brand:"), TR_BRAND_COLD, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 13, col, _("毒殺      :", "Poison Brd:"), TR_BRAND_POIS, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 14, col, _("切れ味    :", "Sharpness :"), TR_VORPAL, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 15, col, _("地震      :", "Quake     :"), TR_IMPACT, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 16, col, _("吸血      :", "Vampiric  :"), TR_VAMPIRIC, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 17, col, _("カオス効果:", "Chaotic   :"), TR_CHAOTIC, f, DP_WP);
+	display_one_characteristic_info(creature_ptr, row + 18, col, _("理力      :", "Force Wep.:"), TR_FORCE_WEAPON, f, DP_WP);
 }
 
 
@@ -383,47 +316,25 @@ static void display_esp_sustenance_info(player_type *creature_ptr, void(*display
 	(*display_player_equippy)(creature_ptr, row - 2, col + 13, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 13);
 
-#ifdef JP
-	display_one_characteristic_info(creature_ptr, row + 0, col, "テレパシー :", TR_TELEPATHY, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "邪悪ESP    :", TR_ESP_EVIL, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "無生物ESP  :", TR_ESP_NONLIVING, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "善良ESP    :", TR_ESP_GOOD, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "不死ESP    :", TR_ESP_UNDEAD, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "悪魔ESP    :", TR_ESP_DEMON, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 6, col, "龍ESP      :", TR_ESP_DRAGON, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 7, col, "人間ESP    :", TR_ESP_HUMAN, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "動物ESP    :", TR_ESP_ANIMAL, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 9, col, "オークESP  :", TR_ESP_ORC, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 10, col, "トロルESP  :", TR_ESP_TROLL, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 11, col, "巨人ESP    :", TR_ESP_GIANT, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 12, col, "ユニークESP:", TR_ESP_UNIQUE, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 13, col, "腕力維持   :", TR_SUST_STR, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 14, col, "知力維持   :", TR_SUST_INT, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 15, col, "賢さ維持   :", TR_SUST_WIS, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 16, col, "器用維持   :", TR_SUST_DEX, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 17, col, "耐久維持   :", TR_SUST_CON, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 18, col, "魅力維持   :", TR_SUST_CHR, f, 0);
-#else
-	display_one_characteristic_info(creature_ptr, row + 0, col, "Telepathy  :", TR_TELEPATHY, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "ESP Evil   :", TR_ESP_EVIL, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "ESP Noliv. :", TR_ESP_NONLIVING, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "ESP Good   :", TR_ESP_GOOD, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "ESP Undead :", TR_ESP_UNDEAD, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "ESP Demon  :", TR_ESP_DEMON, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 6, col, "ESP Dragon :", TR_ESP_DRAGON, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 7, col, "ESP Human  :", TR_ESP_HUMAN, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "ESP Animal :", TR_ESP_ANIMAL, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 9, col, "ESP Orc    :", TR_ESP_ORC, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 10, col, "ESP Troll  :", TR_ESP_TROLL, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 11, col, "ESP Giant  :", TR_ESP_GIANT, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 12, col, "ESP Unique :", TR_ESP_UNIQUE, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 13, col, "Sust Str   :", TR_SUST_STR, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 14, col, "Sust Int   :", TR_SUST_INT, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 15, col, "Sust Wis   :", TR_SUST_WIS, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 16, col, "Sust Dex   :", TR_SUST_DEX, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 17, col, "Sust Con   :", TR_SUST_CON, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 18, col, "Sust Chr   :", TR_SUST_CHR, f, 0);
-#endif
+	display_one_characteristic_info(creature_ptr, row + 0, col, _("テレパシー :", "Telepathy  :"), TR_TELEPATHY, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 1, col, _("邪悪ESP    :", "ESP Evil   :"), TR_ESP_EVIL, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 2, col, _("無生物ESP  :", "ESP Noliv. :"), TR_ESP_NONLIVING, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 3, col, _("善良ESP    :", "ESP Good   :"), TR_ESP_GOOD, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 4, col, _("不死ESP    :", "ESP Undead :"), TR_ESP_UNDEAD, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 5, col, _("悪魔ESP    :", "ESP Demon  :"), TR_ESP_DEMON, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 6, col, _("龍ESP      :", "ESP Dragon :"), TR_ESP_DRAGON, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 7, col, _("人間ESP    :", "ESP Human  :"), TR_ESP_HUMAN, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 8, col, _("動物ESP    :", "ESP Animal :"), TR_ESP_ANIMAL, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 9, col, _("オークESP  :", "ESP Orc    :"), TR_ESP_ORC, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 10, col, _("トロルESP  :", "ESP Troll  :"), TR_ESP_TROLL, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 11, col, _("巨人ESP    :", "ESP Giant  :"), TR_ESP_GIANT, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 12, col, _("ユニークESP:", "ESP Unique :"), TR_ESP_UNIQUE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 13, col, _("腕力維持   :", "Sust Str   :"), TR_SUST_STR, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 14, col, _("知力維持   :", "Sust Int   :"), TR_SUST_INT, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 15, col, _("賢さ維持   :", "Sust Wis   :"), TR_SUST_WIS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 16, col, _("器用維持   :", "Sust Dex   :"), TR_SUST_DEX, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 17, col, _("耐久維持   :", "Sust Con   :"), TR_SUST_CON, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 18, col, _("魅力維持   :", "Sust Chr   :"), TR_SUST_CHR, f, 0);
 }
 
 
@@ -441,45 +352,24 @@ static void display_other_info(player_type *creature_ptr, void(*display_player_e
 	(*display_player_equippy)(creature_ptr, row - 2, col + 14, 0);
 	c_put_str(TERM_WHITE, "abcdefghijkl@", row - 1, col + 14);
 
-#ifdef JP
-	display_one_characteristic_info(creature_ptr, row + 0, col, "追加攻撃    :", TR_BLOWS, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "採掘        :", TR_TUNNEL, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "赤外線視力  :", TR_INFRA, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "魔法道具支配:", TR_MAGIC_MASTERY, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "隠密        :", TR_STEALTH, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "探索        :", TR_SEARCH, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 0, col, _("追加攻撃    :", "Add Blows   :"), TR_BLOWS, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 1, col, _("採掘        :", "Add Tunnel  :"), TR_TUNNEL, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 2, col, _("赤外線視力  :", "Add Infra   :"), TR_INFRA, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 3, col, _("魔法道具支配:", "Add Device  :"), TR_MAGIC_MASTERY, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 4, col, _("隠密        :", "Add Stealth :"), TR_STEALTH, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 5, col, _("探索        :", "Add Search  :"), TR_SEARCH, f, 0);
 
-	display_one_characteristic_info(creature_ptr, row + 7, col, "乗馬        :", TR_RIDING, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "投擲        :", TR_THROW, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 9, col, "祝福        :", TR_BLESSED, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 10, col, "反テレポート:", TR_NO_TELE, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 11, col, "反魔法      :", TR_NO_MAGIC, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 12, col, "消費魔力減少:", TR_DEC_MANA, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 7, col, _("乗馬        :", "Riding      :"), TR_RIDING, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 8, col, _("投擲        :", "Throw       :"), TR_THROW, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 9, col, _("祝福        :", "Blessed     :"), TR_BLESSED, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 10, col, _("反テレポート:", "No Teleport :"), TR_NO_TELE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 11, col, _("反魔法      :", "Anti Magic  :"), TR_NO_MAGIC, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 12, col, _("消費魔力減少:", "Econom. Mana:"), TR_DEC_MANA, f, 0);
 
-	display_one_characteristic_info(creature_ptr, row + 14, col, "経験値減少  :", TR_DRAIN_EXP, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 15, col, "乱テレポート:", TR_TELEPORT, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 16, col, "反感        :", TR_AGGRAVATE, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 17, col, "太古の怨念  :", TR_TY_CURSE, f, 0);
-#else
-	display_one_characteristic_info(creature_ptr, row + 0, col, "Add Blows   :", TR_BLOWS, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 1, col, "Add Tunnel  :", TR_TUNNEL, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 2, col, "Add Infra   :", TR_INFRA, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 3, col, "Add Device  :", TR_MAGIC_MASTERY, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 4, col, "Add Stealth :", TR_STEALTH, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 5, col, "Add Search  :", TR_SEARCH, f, 0);
-
-	display_one_characteristic_info(creature_ptr, row + 7, col, "Riding      :", TR_RIDING, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 8, col, "Throw       :", TR_THROW, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 9, col, "Blessed     :", TR_BLESSED, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 10, col, "No Teleport :", TR_NO_TELE, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 11, col, "Anti Magic  :", TR_NO_MAGIC, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 12, col, "Econom. Mana:", TR_DEC_MANA, f, 0);
-
-	display_one_characteristic_info(creature_ptr, row + 14, col, "Drain Exp   :", TR_DRAIN_EXP, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 15, col, "Rnd.Teleport:", TR_TELEPORT, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 16, col, "Aggravate   :", TR_AGGRAVATE, f, 0);
-	display_one_characteristic_info(creature_ptr, row + 17, col, "TY Curse    :", TR_TY_CURSE, f, 0);
-#endif
+	display_one_characteristic_info(creature_ptr, row + 14, col, _("経験値減少  :", "Drain Exp   :"), TR_DRAIN_EXP, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 15, col, _("乱テレポート:", "Rnd.Teleport:"), TR_TELEPORT, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 16, col, _("反感        :", "Aggravate   :"), TR_AGGRAVATE, f, 0);
+	display_one_characteristic_info(creature_ptr, row + 17, col, _("太古の怨念  :", "TY Curse    :"), TR_TY_CURSE, f, 0);
 }
 
 
