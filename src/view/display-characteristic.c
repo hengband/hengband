@@ -58,6 +58,34 @@ static bool decide_cursed_equipment_color(u16b mode, TERM_LEN row, TERM_LEN *col
 
 
 /*!
+ * @brief 装備品の光源範囲増加/減少で表示色を変える
+ * @param row 行数
+ * @param col 列数
+ * @param flag1 参照する特性ID
+ * @param flags 装備品へのフラグ群
+ * @param header_color 耐性等のパラメータ名 の色
+ */
+static bool descide_light_equipment_color(TERM_LEN row, TERM_LEN *col, int flag1, BIT_FLAGS *flags, byte *header_color)
+{
+	if (flag1 == TR_LITE_1) return FALSE;
+
+	if (HAVE_DARK_FLAG(flags))
+	{
+		c_put_str(TERM_L_DARK, "+", row, *col);
+		*header_color = TERM_WHITE;
+	}
+	else if (HAVE_LITE_FLAG(flags))
+	{
+		c_put_str(TERM_WHITE, "+", row, *col);
+		*header_color = TERM_WHITE;
+	}
+
+	(*col)++;
+	return TRUE;
+}
+
+
+/*!
  * @brief プレイヤーの特性フラグ一種を表示する
  * Helper function, see below
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -96,24 +124,7 @@ static void display_one_characteristic_info(player_type *creature_ptr, TERM_LEN 
 			c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
 
 		if (decide_cursed_equipment_color(mode, row, &col, flags, &header_color, o_ptr)) continue;
-
-		if (flag1 == TR_LITE_1)
-		{
-			if (HAVE_DARK_FLAG(flags))
-			{
-				c_put_str(TERM_L_DARK, "+", row, col);
-				header_color = TERM_WHITE;
-			}
-			else if (HAVE_LITE_FLAG(flags))
-			{
-				c_put_str(TERM_WHITE, "+", row, col);
-				header_color = TERM_WHITE;
-			}
-
-			col++;
-			continue;
-		}
-
+		if (decide_light_equipment_color(row, &col, flag1, flags, &header_color)) continue;
 		if (have_flag(flags, flag1))
 		{
 			c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE),
