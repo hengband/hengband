@@ -111,6 +111,39 @@ static void descide_vulnerability_color(u16b mode, TERM_LEN row, TERM_LEN *col, 
 
 
 /*!
+ * @brief 装備品を走査し、状況に応じて耐性等の表示色を変える
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param mode 表示オプション
+ * @param row 行数
+ * @param col 列数
+ * @param flag1 参照する特性ID
+ * @param header_color 耐性等のパラメータ名 の色
+ * @param vuln プレーヤーの弱点
+ * @return なし
+ * @details
+ * max_i changes only when weapon flags need only two column
+ */
+static void decide_colors(player_type *creature_ptr, u16b mode, TERM_LEN row, TERM_LEN *col, int flag1, byte *header_color, bool vuln)
+{
+	int max_i = (mode & DP_WP) ? INVEN_LARM + 1 : INVEN_TOTAL;
+	for (int i = INVEN_RARM; i < max_i; i++)
+	{
+		BIT_FLAGS flags[TR_FLAG_SIZE];
+		object_type *o_ptr;
+		o_ptr = &creature_ptr->inventory_list[i];
+		object_flags_known(o_ptr, flags);
+		if (!(mode & DP_IMM))
+			c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
+
+		if (decide_cursed_equipment_color(mode, row, col, flags, header_color, o_ptr)) continue;
+		if (decide_light_equipment_color(row, col, flag1, flags, header_color)) continue;
+
+		decide_vulnerability_color(mode, row, col, flag1, flags, header_color, vuln);
+	}
+}
+
+
+/*!
  * @brief プレイヤーの特性フラグ一種を表示する
  * Helper function, see below
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -129,29 +162,11 @@ static void display_one_characteristic_info(player_type *creature_ptr, TERM_LEN 
 
 	bool vuln = FALSE;
 	if (have_flag(f->player_vuln, flag1) &&
-		!(have_flag(f->known_obj_imm, flag1) ||
-			have_flag(f->player_imm, flag1) ||
-			have_flag(f->tim_player_imm, flag1)))
+		!(have_flag(f->known_obj_imm, flag1) || have_flag(f->player_imm, flag1) || have_flag(f->tim_player_imm, flag1)))
 		vuln = TRUE;
 
 	col += strlen(header) + 1;
-
-	/* Weapon flags need only two column */
-	int max_i = (mode & DP_WP) ? INVEN_LARM + 1 : INVEN_TOTAL;
-	for (int i = INVEN_RARM; i < max_i; i++)
-	{
-		BIT_FLAGS flags[TR_FLAG_SIZE];
-		object_type *o_ptr;
-		o_ptr = &creature_ptr->inventory_list[i];
-		object_flags_known(o_ptr, flags);
-		if (!(mode & DP_IMM))
-			c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
-
-		if (decide_cursed_equipment_color(mode, row, &col, flags, &header_color, o_ptr)) continue;
-		if (decide_light_equipment_color(row, &col, flag1, flags, &header_color)) continue;
-		decide_vulnerability_color(mode, row, &col, flag1, flags, &header_color, vuln);
-	}
-
+	decide_colors(creature_ptr, mode, row, &col, flag1, &header_color, vuln);
 	if (mode & DP_IMM)
 	{
 		if (header_color != TERM_L_DARK)
