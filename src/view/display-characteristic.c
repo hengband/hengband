@@ -64,6 +64,7 @@ static bool decide_cursed_equipment_color(u16b mode, TERM_LEN row, TERM_LEN *col
  * @param flag1 参照する特性ID
  * @param flags 装備品へのフラグ群
  * @param header_color 耐性等のパラメータ名 の色
+ * @return 装備品が光源範囲に影響を及ぼすならばTRUE、そうでないならFALSE
  */
 static bool descide_light_equipment_color(TERM_LEN row, TERM_LEN *col, int flag1, BIT_FLAGS *flags, byte *header_color)
 {
@@ -82,6 +83,30 @@ static bool descide_light_equipment_color(TERM_LEN row, TERM_LEN *col, int flag1
 
 	(*col)++;
 	return TRUE;
+}
+
+
+/*!
+ * @brief プレーヤーの弱点に応じて表示色を変える
+ * @param mode 表示オプション
+ * @param row 行数
+ * @param col 列数
+ * @param flag1 参照する特性ID
+ * @param flags 装備品へのフラグ群
+ * @param header_color 耐性等のパラメータ名 の色
+ * @param vuln プレーヤーの弱点
+ * @return なし
+ */
+static void descide_vulnerability_color(u16b mode, TERM_LEN row, TERM_LEN *col, int flag1, BIT_FLAGS *flags, byte *header_color, bool vuln)
+{
+	if (have_flag(flags, flag1))
+	{
+		c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE),
+			(mode & DP_IMM) ? "*" : "+", row, *col);
+		*header_color = TERM_WHITE;
+	}
+
+	(*col)++;
 }
 
 
@@ -113,7 +138,6 @@ static void display_one_characteristic_info(player_type *creature_ptr, TERM_LEN 
 
 	/* Weapon flags need only two column */
 	int max_i = (mode & DP_WP) ? INVEN_LARM + 1 : INVEN_TOTAL;
-
 	for (int i = INVEN_RARM; i < max_i; i++)
 	{
 		BIT_FLAGS flags[TR_FLAG_SIZE];
@@ -125,14 +149,7 @@ static void display_one_characteristic_info(player_type *creature_ptr, TERM_LEN 
 
 		if (decide_cursed_equipment_color(mode, row, &col, flags, &header_color, o_ptr)) continue;
 		if (decide_light_equipment_color(row, &col, flag1, flags, &header_color)) continue;
-		if (have_flag(flags, flag1))
-		{
-			c_put_str((byte)(vuln ? TERM_L_RED : TERM_WHITE),
-				(mode & DP_IMM) ? "*" : "+", row, col);
-			header_color = TERM_WHITE;
-		}
-
-		col++;
+		decide_vulnerability_color(mode, row, &col, flag1, flags, &header_color, vuln);
 	}
 
 	if (mode & DP_IMM)
