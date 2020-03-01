@@ -17,6 +17,7 @@
 #include "term.h"
 
 #include "core.h"
+#include "core/show-file.h"
 #include "cmd-dump.h"
 #include "cmd-magiceat.h"
 #include "floor.h"

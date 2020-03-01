@@ -466,6 +466,9 @@
     <ClCompile Include="..\..\src\cmd\cmd-save.c">
       <Filter>cmd</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\show-file.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -913,6 +916,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-save.h">
       <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\show-file.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,5 @@
 ﻿#include "cmd/cmd-help.h"
-#include "files.h"
+#include "core/show-file.h"
 
 /*!
  * @brief ヘルプを表示するコマンドのメインルーチン

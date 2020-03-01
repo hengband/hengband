@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-extern const concptr copyright[5];
-
 #define VERSION_NAME "Hengband" /*!< バリアント名称 / Name of the version/variant */
 
 /*!

@@ -33,6 +33,7 @@ hengband_SOURCES = \
 	io/exit-panic.c io/exit-panic.h \
 	signal-handlers.c signal-handlers.h uid-checker.c uid-checker.h \
 	character-dump.c character-dump.h core.c core.h files.c files.h \
+	core/show-file.c core/show-file.h \
 	\
 	dungeon.c dungeon.h \
 	floor.c floor.h floor-events.c floor-events.h \

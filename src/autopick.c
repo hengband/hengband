@@ -16,6 +16,7 @@
 #include "term.h"
 #include "autopick.h"
 #include "core.h"
+#include "core/show-file.h"
 #include "cmd/cmd-save.h"
 
 #include "mind.h"
@@ -37,7 +38,7 @@
 #include "world.h"
 #include "monster.h"
 #include "monsterrace.h"
-#include "view-mainwindow.h"
+#include "view-mainwindow.h" // 暫定。後で消す
 
 #define MAX_LINELEN 1024
 

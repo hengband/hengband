@@ -15,6 +15,7 @@
 #include "util.h"
 #include "bldg.h"
 #include "core.h"
+#include "core/show-file.h"
 #include "term.h"
 
 #include "object-ego.h"
