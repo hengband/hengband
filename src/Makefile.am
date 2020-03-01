@@ -25,6 +25,8 @@ hengband_SOURCES = \
 	player/race-resistances.c player/race-resistances.h \
 	player/permanent-resistances.c player/permanent-resistances.h \
 	player/temporary-resistances.c player/temporary-resistances.h \
+	\
+	io/gf-descriptions.c io/gf-descriptions.h \
 	signal-handlers.c signal-handlers.h uid-checker.c uid-checker.h \
 	character-dump.c character-dump.h core.c core.h files.c files.h \
 	\
@@ -124,10 +126,8 @@ hengband_SOURCES = \
 	combat/melee.h combat/melee1.c combat/shoot.c combat/shoot.h
 
 EXTRA_hengband_SOURCES = \
-	angband.ico angband.rc ang_eng.rc maid-x11.c main-mac.c main-win.c \
-	main-dos.c main-ibm.c \
-	makefile.bcc makefile.std makefile.dos makefile.ibm \
-	readdib.c readdib.h wall.bmp
+	angband.ico angband.rc ang_eng.rc maid-x11.c main-win.c \
+	makefile.bcc makefile.std readdib.c readdib.h wall.bmp
 
 EXTRA_DIST = \
 	gcc-wrap
