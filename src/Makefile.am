@@ -132,7 +132,7 @@ EXTRA_DIST = \
 	gcc-wrap
 
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat -Iio -Iplayer -Iview
 
 install-exec-hook:
 if SET_GID
