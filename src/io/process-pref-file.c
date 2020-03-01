@@ -1,4 +1,10 @@
-﻿#include "io/process-pref-file.h"
+﻿/*!
+ * @brief io/ ではなくcmd/ の方がいいかもしれない (do_cmd_process_pref_file() に改名)
+ * @date 2020/03/01
+ * @author Hourier
+ */
+
+#include "io/process-pref-file.h"
 #include "io/gf-descriptions.h"
 #include "io/tokenizer.h"
 #include "objectkind.h"
