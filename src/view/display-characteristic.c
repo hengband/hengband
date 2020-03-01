@@ -66,7 +66,7 @@ static bool decide_cursed_equipment_color(u16b mode, TERM_LEN row, TERM_LEN *col
  * @param header_color 耐性等のパラメータ名 の色
  * @return 装備品が光源範囲に影響を及ぼすならばTRUE、そうでないならFALSE
  */
-static bool descide_light_equipment_color(TERM_LEN row, TERM_LEN *col, int flag1, BIT_FLAGS *flags, byte *header_color)
+static bool decide_light_equipment_color(TERM_LEN row, TERM_LEN *col, int flag1, BIT_FLAGS *flags, byte *header_color)
 {
 	if (flag1 == TR_LITE_1) return FALSE;
 
@@ -97,7 +97,7 @@ static bool descide_light_equipment_color(TERM_LEN row, TERM_LEN *col, int flag1
  * @param vuln プレーヤーの弱点
  * @return なし
  */
-static void descide_vulnerability_color(u16b mode, TERM_LEN row, TERM_LEN *col, int flag1, BIT_FLAGS *flags, byte *header_color, bool vuln)
+static void decide_vulnerability_color(u16b mode, TERM_LEN row, TERM_LEN *col, int flag1, BIT_FLAGS *flags, byte *header_color, bool vuln)
 {
 	if (have_flag(flags, flag1))
 	{
@@ -133,7 +133,7 @@ static void decide_colors(player_type *creature_ptr, u16b mode, TERM_LEN row, TE
 		o_ptr = &creature_ptr->inventory_list[i];
 		object_flags_known(o_ptr, flags);
 		if (!(mode & DP_IMM))
-			c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
+			c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, *col);
 
 		if (decide_cursed_equipment_color(mode, row, col, flags, header_color, o_ptr)) continue;
 		if (decide_light_equipment_color(row, col, flag1, flags, header_color)) continue;
