@@ -68,6 +68,7 @@
 #include "monster-status.h"
 #include "view-mainwindow.h"
 #include "dungeon-file.h"
+#include "io/process-pref-file.h"
 #include "files.h"
 #include "spells.h"
 #include "objectkind.h"

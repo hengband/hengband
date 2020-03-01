@@ -20,9 +20,7 @@ extern concptr ANGBAND_DIR_XTRA;
 typedef concptr(*map_name_pf)(player_type*);
 typedef void(*display_player_pf)(player_type*, int, map_name_pf);
 
-extern s16b tokenize(char *buf, s16b num, char **tokens, BIT_FLAGS mode);
 extern errr file_character(player_type *creature_ptr, concptr name, display_player_pf display_player, map_name_pf map_name);
-extern errr process_pref_file_command(player_type *creature_ptr, char *buf);
 extern concptr process_pref_file_expr(player_type *creature_ptr, char **sp, char *fp);
 extern errr process_pref_file(player_type *creature_ptr, concptr name);
 extern errr process_autopick_file(player_type *creature_ptr, concptr name);
