@@ -16,16 +16,17 @@ hengband_SOURCES = \
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-player-stat-info.c view/display-player-stat-info.h \
 	view/display-player-misc-info.c view/display-player-misc-info.h \
-	view/display-player-middle-info.c view/display-player-middle-info.h \
+	view/display-player-middle.c view/display-player-middle.h \
 	view/display-player.c view/display-player.h \
 	view/status-first-page.c view/status-first-page.h \
 	view/display-util.c view/display-util.h \
 	\
 	player/process-death.c player/process-death.h \
 	player/race-resistances.c player/race-resistances.h \
-	player/permanent-resistance.c player/permanent-resistance.h \
-	player/temporary-resistance.c player/temporary-resistance.h \
-	signal-handlers.c signal-handlers.h core.c core.h files.c files.h \
+	player/permanent-resistances.c player/permanent-resistances.h \
+	player/temporary-resistances.c player/temporary-resistances.h \
+	signal-handlers.c signal-handlers.h uid-checker.c uid-checker.h \
+	character-dump.c character-dump.h core.c core.h files.c files.h \
 	\
 	dungeon.c dungeon.h \
 	floor.c floor.h floor-events.c floor-events.h \
