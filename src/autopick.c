@@ -18,6 +18,7 @@
 #include "core.h"
 #include "core/show-file.h"
 #include "cmd/cmd-save.h"
+#include "io/read-pref-file.h"
 
 #include "mind.h"
 

@@ -35,6 +35,7 @@
 #include "uid-checker.h"
 #include "files.h"
 #include "core.h"
+#include "io/read-pref-file.h"
 #include "term.h"
 
 #include "artifact.h"

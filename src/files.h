@@ -22,9 +22,6 @@ typedef void(*display_player_pf)(player_type*, int, map_name_pf);
 
 extern errr file_character(player_type *creature_ptr, concptr name, display_player_pf display_player, map_name_pf map_name);
 extern concptr process_pref_file_expr(player_type *creature_ptr, char **sp, char *fp);
-extern errr process_pref_file(player_type *creature_ptr, concptr name);
-extern errr process_autopick_file(player_type *creature_ptr, concptr name);
-extern errr process_histpref_file(player_type *creature_ptr, concptr name);
 extern errr get_rnd_line(concptr file_name, int entry, char *output);
 void read_dead_file(char* buf, size_t buf_size);
 

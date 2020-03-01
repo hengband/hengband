@@ -16,6 +16,7 @@
 #include "bldg.h"
 #include "core.h"
 #include "core/show-file.h"
+#include "io/read-pref-file.h"
 #include "term.h"
 
 #include "object-ego.h"
