@@ -976,21 +976,6 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 
 
 /*!
- * @brief ヘルプを表示するコマンドのメインルーチン
- * Peruse the On-Line-Help
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
- * @details
- */
-void do_cmd_help(player_type *creature_ptr)
-{
-	screen_save();
-	(void)show_file(creature_ptr, TRUE, _("jhelp.hlp", "help.hlp"), NULL, 0, 0);
-	screen_load();
-}
-
-
-/*!
  * @brief プレイヤーの名前をチェックして修正する
  * Process the player name.
  * @param player_ptr プレーヤーへの参照ポインタ

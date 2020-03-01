@@ -161,6 +161,7 @@
     <ClCompile Include="..\..\src\cmd\cmd-dump.c" />
     <ClCompile Include="..\..\src\cmd\cmd-eat.c" />
     <ClCompile Include="..\..\src\cmd\cmd-gameoption.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-help.c" />
     <ClCompile Include="..\..\src\cmd\cmd-hissatsu.c" />
     <ClCompile Include="..\..\src\cmd\cmd-item.c" />
     <ClCompile Include="..\..\src\cmd\cmd-magiceat.c" />
@@ -317,6 +318,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-dump.h" />
     <ClInclude Include="..\..\src\cmd\cmd-eat.h" />
     <ClInclude Include="..\..\src\cmd\cmd-gameoption.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-help.h" />
     <ClInclude Include="..\..\src\cmd\cmd-hissatsu.h" />
     <ClInclude Include="..\..\src\cmd\cmd-item.h" />
     <ClInclude Include="..\..\src\cmd\cmd-magiceat.h" />

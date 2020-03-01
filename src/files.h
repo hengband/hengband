@@ -26,7 +26,6 @@ extern errr process_pref_file(player_type *creature_ptr, concptr name);
 extern errr process_autopick_file(player_type *creature_ptr, concptr name);
 extern errr process_histpref_file(player_type *creature_ptr, concptr name);
 extern bool show_file(player_type *player_ptr, bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode);
-extern void do_cmd_help(player_type *creature_ptr);
 extern void process_player_name(player_type *creature_ptr, bool sf);
 extern void get_name(player_type *creature_ptr);
 extern void do_cmd_save_game(player_type *creature_ptr, int is_autosave);

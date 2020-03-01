@@ -457,6 +457,9 @@
     <ClCompile Include="..\..\src\io\process-pref-file.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-help.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -895,6 +898,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\process-pref-file.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-help.h">
+      <Filter>cmd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

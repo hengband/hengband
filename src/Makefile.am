@@ -117,7 +117,7 @@ hengband_SOURCES = \
 	\
 	cmd/cmd-activate.c cmd/cmd-activate.h cmd/cmd-basic.c cmd/cmd-basic.h \
 	cmd/cmd-dump.c cmd/cmd-dump.h cmd/cmd-eat.c cmd/cmd-eat.h \
-	cmd/cmd-gameoption.c cmd/cmd-gameoption.h \
+	cmd/cmd-gameoption.c cmd/cmd-gameoption.h cmd/cmd-help.c cmd/cmd-help.h \
 	cmd/cmd-hissatsu.c cmd/cmd-hissatsu.h cmd/cmd-item.c cmd/cmd-item.h \
 	cmd/cmd-magiceat.c cmd/cmd-magiceat.h cmd/cmd-mane.c cmd/cmd-mane.h \
 	cmd/cmd-pet.c cmd/cmd-pet.h cmd/cmd-quaff.c cmd/cmd-quaff.h \
