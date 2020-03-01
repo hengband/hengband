@@ -4,7 +4,7 @@
 
 #include "gf-descriptions.h"
 
-named_num gf_desc[MAX_NAMED_NUM] =
+const named_num gf_desc[MAX_NAMED_NUM] =
 {
 	{"GF_ELEC", 				GF_ELEC				},
 	{"GF_POIS", 				GF_POIS				},

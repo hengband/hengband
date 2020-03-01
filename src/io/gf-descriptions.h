@@ -10,4 +10,4 @@ typedef struct named_num
 	int num;			/* A number associated with it */
 } named_num;
 
-named_num gf_desc[MAX_NAMED_NUM];
+extern const named_num gf_desc[MAX_NAMED_NUM];
