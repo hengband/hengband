@@ -14,23 +14,14 @@
 
 #include "angband.h"
 #include "term.h"
-#include "signal-handlers.h"
 #include "uid-checker.h"
 #include "files.h"
 #include "core.h" // リファクタリングして後で消す
 
-#include "birth.h"
 #include "character-dump.h"
-#include "cmd-dump.h"
 #include "world.h"
-#include "player-move.h"
-#include "player-personality.h"
-#include "player-effects.h"
-#include "monster-status.h"
 #include "view-mainwindow.h"
-#include "objectkind.h"
 #include "autopick.h"
-#include "save.h"
 #include "io/tokenizer.h"
 #include "io/process-pref-file.h" // 暫定。依存性の向きがこれで良いか要確認.
 
@@ -972,64 +963,6 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 
 	my_fclose(fff);
 	return (skey != 'q');
-}
-
-
-/*!
- * @brief セーブするコマンドのメインルーチン
- * Save the game
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @param is_autosave オートセーブ中の処理ならばTRUE
- * @return なし
- * @details
- */
-void do_cmd_save_game(player_type *creature_ptr, int is_autosave)
-{
-	if (is_autosave)
-	{
-		msg_print(_("自動セーブ中", "Autosaving the game..."));
-	}
-	else
-	{
-		disturb(creature_ptr, TRUE, TRUE);
-	}
-
-	msg_print(NULL);
-	handle_stuff(creature_ptr);
-	prt(_("ゲームをセーブしています...", "Saving game..."), 0, 0);
-	Term_fresh();
-	(void)strcpy(creature_ptr->died_from, _("(セーブ)", "(saved)"));
-	signals_ignore_tstp();
-	if (save_player(creature_ptr))
-	{
-		prt(_("ゲームをセーブしています... 終了", "Saving game... done."), 0, 0);
-	}
-	else
-	{
-		prt(_("ゲームをセーブしています... 失敗！", "Saving game... failed!"), 0, 0);
-	}
-
-	signals_handle_tstp();
-	Term_fresh();
-	(void)strcpy(creature_ptr->died_from, _("(元気に生きている)", "(alive and well)"));
-	current_world_ptr->is_loading_now = FALSE;
-	update_creature(creature_ptr);
-	mproc_init(creature_ptr->current_floor_ptr);
-	current_world_ptr->is_loading_now = TRUE;
-}
-
-
-/*!
- * @brief セーブ後にゲーム中断フラグを立てる/
- * Save the game and exit
- * @return なし
- * @details
- */
-void do_cmd_save_and_exit(player_type *creature_ptr)
-{
-	creature_ptr->playing = FALSE;
-	creature_ptr->leaving = TRUE;
-	exe_write_diary(creature_ptr, DIARY_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
 }
 
 

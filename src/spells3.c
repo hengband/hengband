@@ -42,8 +42,9 @@
 #include "monster-process.h"
 #include "monster-status.h"
 #include "monster-spell.h"
-#include "cmd-spell.h"
-#include "cmd-dump.h"
+#include "cmd/cmd-save.h"
+#include "cmd/cmd-spell.h"
+#include "cmd/cmd-dump.h"
 #include "snipe.h"
 #include "floor-save.h"
 #include "files.h"
@@ -538,6 +539,7 @@ bool teleport_level_other(player_type *caster_ptr)
 
 
 /*!
+ * todo cmd-save.h への依存あり。コールバックで何とかしたい
  * @brief プレイヤー及びモンスターをレベルテレポートさせる /
  * Teleport the player one level up or down (random when legal)
  * @param creature_ptr プレーヤーへの参照ポインタ

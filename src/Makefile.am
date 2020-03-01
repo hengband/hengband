@@ -123,9 +123,10 @@ hengband_SOURCES = \
 	cmd/cmd-hissatsu.c cmd/cmd-hissatsu.h cmd/cmd-item.c cmd/cmd-item.h \
 	cmd/cmd-magiceat.c cmd/cmd-magiceat.h cmd/cmd-mane.c cmd/cmd-mane.h \
 	cmd/cmd-pet.c cmd/cmd-pet.h cmd/cmd-quaff.c cmd/cmd-quaff.h \
-	cmd/cmd-read.c cmd/cmd-read.h cmd/cmd-smith.c cmd/cmd-smith.h \
-	cmd/cmd-spell.c cmd/cmd-spell.h cmd/cmd-usestaff.c cmd/cmd-usestaff.h \
-	cmd/cmd-zaprod.c cmd/cmd-zaprod.h cmd/cmd-zapwand.c cmd/cmd-zapwand.h \
+	cmd/cmd-read.c cmd/cmd-read.h cmd/cmd-save.c cmd/cmd-save.h \
+	cmd/cmd-smith.c cmd/cmd-smith.h cmd/cmd-spell.c cmd/cmd-spell.h \
+	cmd/cmd-usestaff.c cmd/cmd-usestaff.h cmd/cmd-zaprod.c cmd/cmd-zaprod.h \
+	cmd/cmd-zapwand.c cmd/cmd-zapwand.h \
 	\
 	combat/melee.h combat/melee1.c combat/shoot.c combat/shoot.h
 

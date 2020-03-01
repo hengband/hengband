@@ -1,7 +1,8 @@
 ﻿#include "angband.h"
 #include "util.h"
 
-#include "cmd-dump.h"
+#include "cmd/cmd-dump.h"
+#include "cmd/cmd-save.h"
 #include "trap.h"
 #include "player-damage.h"
 #include "player-move.h"
@@ -327,6 +328,7 @@ static void hit_trap_pit(player_type *trapped_ptr, int trap_feat_type)
 	take_hit(trapped_ptr, DAMAGE_NOESCAPE, dam, trap_name, -1);
 }
 
+
 /*!
 * @brief ダーツ系トラップ（通常ダメージ）の判定とプレイヤーの被害処理
 * @return ダーツが命中した場合TRUEを返す
@@ -374,14 +376,15 @@ static void hit_trap_slow(player_type *target_ptr)
 	}
 }
 
+
 /*!
-* @brief ダーツ系トラップ（通常ダメージ＋状態異常）の判定とプレイヤーの被害処理
-* @param trap_message メッセージの補完文字列
-* @param resist 状態異常に抵抗する判定が出たならTRUE
-* @param set_status 状態異常を指定する関数ポインタ
-* @param turn_aux 状態異常の追加ターン量
-* @return なし
-*/
+ * @brief ダーツ系トラップ（通常ダメージ＋状態異常）の判定とプレイヤーの被害処理
+ * @param trap_message メッセージの補完文字列
+ * @param resist 状態異常に抵抗する判定が出たならTRUE
+ * @param set_status 状態異常を指定する関数ポインタ
+ * @param turn_aux 状態異常の追加ターン量
+ * @return なし
+ */
 static void hit_trap_set_abnormal_status_p(player_type *trapped_ptr, concptr trap_message, bool resist, bool(*set_status)(player_type *, IDX), IDX turn_aux)
 {
 	msg_print(trap_message);
@@ -391,12 +394,14 @@ static void hit_trap_set_abnormal_status_p(player_type *trapped_ptr, concptr tra
 	}
 }
 
+
 /*!
-* @brief プレイヤーへのトラップ作動処理メインルーチン /
-* Handle player hitting a real trap
-* @param break_trap 作動後のトラップ破壊が確定しているならばTRUE
-* @return なし
-*/
+ * todo cmd-save.h への依存あり。コールバックで何とかしたい
+ * @brief プレイヤーへのトラップ作動処理メインルーチン /
+ * Handle player hitting a real trap
+ * @param break_trap 作動後のトラップ破壊が確定しているならばTRUE
+ * @return なし
+ */
 void hit_trap(player_type *trapped_ptr, bool break_trap)
 {
 	int i, num, dam;
@@ -640,6 +645,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 				}
 			}
 		}
+
 		break;
 	}
 

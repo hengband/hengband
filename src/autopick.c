@@ -16,6 +16,7 @@
 #include "term.h"
 #include "autopick.h"
 #include "core.h"
+#include "cmd/cmd-save.h"
 
 #include "mind.h"
 

@@ -32,6 +32,7 @@
 #include "cmd/cmd-mane.h"
 #include "cmd/cmd-quaff.h"
 #include "cmd/cmd-read.h"
+#include "cmd/cmd-save.h"
 #include "cmd/cmd-smith.h"
 #include "cmd/cmd-usestaff.h"
 #include "cmd/cmd-zaprod.h"

@@ -169,6 +169,7 @@
     <ClCompile Include="..\..\src\cmd\cmd-pet.c" />
     <ClCompile Include="..\..\src\cmd\cmd-quaff.c" />
     <ClCompile Include="..\..\src\cmd\cmd-read.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-save.c" />
     <ClCompile Include="..\..\src\cmd\cmd-smith.c" />
     <ClCompile Include="..\..\src\cmd\cmd-spell.c" />
     <ClCompile Include="..\..\src\cmd\cmd-usestaff.c" />
@@ -327,6 +328,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-pet.h" />
     <ClInclude Include="..\..\src\cmd\cmd-quaff.h" />
     <ClInclude Include="..\..\src\cmd\cmd-read.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-save.h" />
     <ClInclude Include="..\..\src\cmd\cmd-smith.h" />
     <ClInclude Include="..\..\src\cmd\cmd-spell.h" />
     <ClInclude Include="..\..\src\cmd\cmd-usestaff.h" />
