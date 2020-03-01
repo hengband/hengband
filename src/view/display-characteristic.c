@@ -68,7 +68,7 @@ static bool decide_cursed_equipment_color(u16b mode, TERM_LEN row, TERM_LEN *col
  */
 static bool decide_light_equipment_color(TERM_LEN row, TERM_LEN *col, int flag1, BIT_FLAGS *flags, byte *header_color)
 {
-	if (flag1 == TR_LITE_1) return FALSE;
+	if (flag1 != TR_LITE_1) return FALSE;
 
 	if (HAVE_DARK_FLAG(flags))
 	{
