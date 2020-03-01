@@ -63,6 +63,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "view/display-player.h"
+#include "player/process-name.h"
 #include "player-move.h"
 #include "player-status.h"
 #include "player-class.h"

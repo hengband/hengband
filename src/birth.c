@@ -28,7 +28,8 @@
 #include "store.h"
 #include "patron.h"
 #include "quest.h"
-#include "view/display-player.h"
+#include "player/process-name.h"
+#include "view/display-player.h" // 暫定。後で消す.
 #include "player-class.h"
 #include "player-status.h"
 #include "player-personality.h"
