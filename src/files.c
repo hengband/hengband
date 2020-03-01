@@ -18,11 +18,7 @@
 #include "core.h" // 暫定。後で消す.
 
 #include "character-dump.h"
-#include "world.h"
 #include "view-mainwindow.h" // 暫定。後で消す.
-#include "io/process-pref-file.h" // 暫定。依存性の向きがこれで良いか要確認.
-#include "io/process-pref-file.h"
-#include "io/read-pref-file.h"
 
 concptr ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code
 concptr ANGBAND_DIR_APEX; //!< High score files (binary) These files may be portable between platforms
