@@ -389,7 +389,6 @@ static void export_player_info(player_type *creature_ptr, display_player_pf disp
 
 
 /*!
- * todo display_playerの引数は暫定。どのように設計し直すか少し考える
  * @brief 死亡、引退時の簡易ステータス表示
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param handle_stuff 更新処理チェックへのコールバック
