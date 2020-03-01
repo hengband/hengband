@@ -26,6 +26,7 @@
 #include "monster-status.h"
 #include "quest.h"
 #include "dungeon-file.h"
+#include "io/tokenizer.h"
 #include "files.h"
 #include "feature.h"
 #include "floor-town.h"

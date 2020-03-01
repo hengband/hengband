@@ -27,6 +27,7 @@ hengband_SOURCES = \
 	player/temporary-resistances.c player/temporary-resistances.h \
 	\
 	io/gf-descriptions.c io/gf-descriptions.h \
+	io/tokenizer.c io/tokenizer.h \
 	signal-handlers.c signal-handlers.h uid-checker.c uid-checker.h \
 	character-dump.c character-dump.h core.c core.h files.c files.h \
 	\

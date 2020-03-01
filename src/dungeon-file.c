@@ -35,6 +35,7 @@
 #include "util.h"
 #include "core.h"
 
+#include "io/tokenizer.h"
 #include "files.h"
 #include "dungeon-file.h"
 #include "rooms-vault.h"

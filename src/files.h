@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#define TOKENIZE_CHECKQUOTE 0x01  /* Special handling of single quotes */
-
 extern char savefile[1024];
 extern char savefile_base[40];
 
