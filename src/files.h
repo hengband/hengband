@@ -28,7 +28,6 @@ extern errr process_histpref_file(player_type *creature_ptr, concptr name);
 extern bool show_file(player_type *player_ptr, bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode);
 extern void do_cmd_save_game(player_type *creature_ptr, int is_autosave);
 extern void do_cmd_save_and_exit(player_type *player_ptr);
-extern void exit_game_panic(player_type *creature_ptr);
 extern errr get_rnd_line(concptr file_name, int entry, char *output);
 void read_dead_file(char* buf, size_t buf_size);
 
