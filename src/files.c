@@ -1026,40 +1026,30 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
  */
 bool show_file(player_type *creature_ptr, bool show_version, concptr name, concptr what, int line, BIT_FLAGS mode)
 {
-	int i, skey;
-	int next = 0;
-	int size = 0;
-	int back = 0;
-	bool menu = FALSE;
-	FILE *fff = NULL;
-	concptr find = NULL;
-	concptr tag = NULL;
-	char finder_str[81];
-	char shower_str[81];
-	char back_str[81];
-	concptr shower = NULL;
-	char filename[1024];
-	char caption[128];
-	char path[1024];
-	char buf[1024];
-	char hook[68][32];
-	bool reverse = (line < 0);
 	int wid, hgt;
 	Term_get_size(&wid, &hgt);
-	int rows = hgt - 4;
 
+	char finder_str[81];
 	strcpy(finder_str, "");
+
+	char shower_str[81];
 	strcpy(shower_str, "");
+
+	char caption[128];
 	strcpy(caption, "");
-	for (i = 0; i < 68; i++)
+
+	char hook[68][32];
+	for (int i = 0; i < 68; i++)
 	{
 		hook[i][0] = '\0';
 	}
 
+	char filename[1024];
 	strcpy(filename, name);
 	int n = strlen(filename);
 
-	for (i = 0; i < n; i++)
+	concptr tag = NULL;
+	for (int i = 0; i < n; i++)
 	{
 		if (filename[i] == '#')
 		{
@@ -1070,6 +1060,8 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 	}
 
 	name = filename;
+	FILE *fff = NULL;
+	char path[1024];
 	if (what)
 	{
 		strcpy(caption, what);
@@ -1095,7 +1087,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 	{
 		path_build(path, sizeof(path), ANGBAND_DIR, name);
 
-		for (i = 0; path[i]; i++)
+		for (int i = 0; path[i]; i++)
 			if ('\\' == path[i])
 				path[i] = PATH_SEP[0];
 
@@ -1111,6 +1103,13 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 		return TRUE;
 	}
 
+	int skey;
+	int next = 0;
+	int size = 0;
+	int back = 0;
+	bool menu = FALSE;
+	char buf[1024];
+	bool reverse = (line < 0);
 	while (TRUE)
 	{
 		char *str = buf;
@@ -1145,9 +1144,13 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 	}
 
 	size = next;
-	if (line == -1) line = ((size - 1) / rows)*rows;
+	int rows = hgt - 4;
+	if (line == -1)
+		line = ((size - 1) / rows)*rows;
+
 	Term_clear();
 
+	concptr find = NULL;
 	while (TRUE)
 	{
 		if (line >= size - rows)
@@ -1170,7 +1173,9 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 			next++;
 		}
 
-		for (i = 0; i < rows; )
+		int row_count = 0;
+		concptr shower = NULL;
+		for (int i = 0; i < rows; i++)
 		{
 			concptr str = buf;
 			if (!i) line = next;
@@ -1187,13 +1192,13 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 
 			find = NULL;
 			show_file_aux_line(str, i + 2, shower);
-			i++;
+			row_count++;
 		}
 
-		while (i < rows)
+		while (row_count < rows)
 		{
-			Term_erase(0, i + 2, 255);
-			i++;
+			Term_erase(0, row_count + 2, 255);
+			row_count++;
 		}
 
 		if (find)
@@ -1242,6 +1247,7 @@ bool show_file(player_type *creature_ptr, bool show_version, concptr name, concp
 		case '=':
 			prt(_("強調: ", "Show: "), hgt - 1, 0);
 
+			char back_str[81];
 			strcpy(back_str, shower_str);
 			if (askfor(shower_str, 80))
 			{
@@ -1438,7 +1444,12 @@ void process_player_name(player_type *creature_ptr, bool sf)
 	for (int i = 0; creature_ptr->name[i]; i++)
 	{
 #ifdef JP
-		if (iskanji(creature_ptr->name[i])) { i++; continue; }
+		if (iskanji(creature_ptr->name[i]))
+		{
+			i++;
+			continue;
+		}
+
 		if (iscntrl((unsigned char)creature_ptr->name[i]))
 #else
 		if (iscntrl(creature_ptr->name[i]))
@@ -1461,6 +1472,7 @@ void process_player_name(player_type *creature_ptr, bool sf)
 		if (iskanji(c)) {
 			if (k + 2 >= sizeof(creature_ptr->base_name) || !creature_ptr->name[i + 1])
 				break;
+
 			creature_ptr->base_name[k++] = c;
 			i++;
 			creature_ptr->base_name[k++] = creature_ptr->name[i];
