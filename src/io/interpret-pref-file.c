@@ -14,6 +14,30 @@
 #include "view-mainwindow.h" // 暫定。apply_default_feat_lighting()。後で消す.
 
 /*!
+ * @brief Rトークンの解釈 / Process "R:<num>:<a>/<c>" -- attr/char for monster races
+ * @param buf バッファ
+ * @param zz トークン保管文字列
+ * @return エラーコード
+ */
+static errr interpret_r_file(char *buf, char **zz)
+{
+	if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
+
+	monster_race *r_ptr;
+	int i = (int)strtol(zz[0], NULL, 0);
+	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
+	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
+	if (i >= max_r_idx) return 1;
+
+	r_ptr = &r_info[i];
+	if (n1 || (!(n2 & 0x80) && n2)) r_ptr->x_attr = n1; /* Allow TERM_DARK text */
+	if (n2) r_ptr->x_char = n2;
+
+	return 0;
+}
+
+
+/*!
  * @brief 設定ファイルの各行から各種テキスト情報を取得する /
  * Parse a sub-file of the "extra info" (format shown below)
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -51,18 +75,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 	}
 	case 'R':
 	{
-		/* Process "R:<num>:<a>/<c>" -- attr/char for monster races */
-		if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
-
-		monster_race *r_ptr;
-		int i = (int)strtol(zz[0], NULL, 0);
-		TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
-		SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
-		if (i >= max_r_idx) return 1;
-		r_ptr = &r_info[i];
-		if (n1 || (!(n2 & 0x80) && n2)) r_ptr->x_attr = n1; /* Allow TERM_DARK text */
-		if (n2) r_ptr->x_char = n2;
-		return 0;
+		return interpret_r_file(buf, zz);
 	}
 	case 'K':
 	{
@@ -329,7 +342,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 		/* Process "T:<trigger>:<keycode>:<shift-keycode>" */
 		if (tok < 2) return 0;
 
-		char buf_aux[1024];
+		char buf_aux[1024]; // todo TA勢から「少ない」とコメントがあったので増やす
 		char *t, *s;
 		if (max_macrotrigger >= MAX_MACRO_TRIG)
 		{
