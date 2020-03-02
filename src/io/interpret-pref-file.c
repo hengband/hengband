@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "io/process-pref-file.h"
+#include "io/interpret-pref-file.h"
 #include "io/gf-descriptions.h"
 #include "io/tokenizer.h"
 #include "objectkind.h"
@@ -67,7 +67,7 @@
  *   T:\<trigger\>:\<keycode\>:\<shift-keycode\>
  * </pre>
  */
-errr process_pref_file_command(player_type *creature_ptr, char *buf)
+errr interpret_pref_file(player_type *creature_ptr, char *buf)
 {
 	if (buf[1] != ':') return 1;
 
