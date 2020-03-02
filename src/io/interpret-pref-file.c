@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief io/ ではなくcmd/ の方がいいかもしれない (do_cmd_process_pref_file() に改名)
+ * @brief prefファイルの内容を解釈しメモリに展開する
  * @date 2020/03/01
  * @author Hourier
  */
@@ -34,37 +34,6 @@
  * Note that "monster zero" is used for the "player" attr/char, "object
  * zero" will be used for the "stack" attr/char, and "feature zero" is
  * used for the "nothing" attr/char.
- * Parse another file recursively, see below for details
- *   %:\<filename\>
- * Specify the attr/char values for "monsters" by race index
- *   R:\<num\>:\<a\>:\<c\>
- * Specify the attr/char values for "objects" by kind index
- *   K:\<num\>:\<a\>:\<c\>
- * Specify the attr/char values for "features" by feature index
- *   F:\<num\>:\<a\>:\<c\>
- * Specify the attr/char values for unaware "objects" by kind tval
- *   U:\<tv\>:\<a\>:\<c\>
- * Specify the attr/char values for inventory "objects" by kind tval
- *   E:\<tv\>:\<a\>:\<c\>
- * Define a macro action, given an encoded macro action
- *   A:\<str\>
- * Create a normal macro, given an encoded macro trigger
- *   P:\<str\>
- * Create a command macro, given an encoded macro trigger
- *   C:\<str\>
- * Create a keyset mapping
- *   S:\<key\>:\<key\>:\<dir\>
- * Turn an option off, given its name
- *   X:\<str\>
- * Turn an option on, given its name
- *   Y:\<str\>
- * Specify visual information, given an index, and some data
- *   V:\<num\>:\<kv\>:\<rv\>:\<gv\>:\<bv\>
- * Specify the set of colors to use when drawing a zapped spell
- *   Z:\<type\>:\<str\>
- * Specify a macro trigger template and macro trigger names.
- *   T:\<template\>:\<modifier chr\>:\<modifier name1\>:\<modifier name2\>:...
- *   T:\<trigger\>:\<keycode\>:\<shift-keycode\>
  * </pre>
  */
 errr interpret_pref_file(player_type *creature_ptr, char *buf)
@@ -86,7 +55,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 		if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 
 		monster_race *r_ptr;
-		int i = (huge)strtol(zz[0], NULL, 0);
+		int i = (int)strtol(zz[0], NULL, 0);
 		TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
 		SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 		if (i >= max_r_idx) return 1;
@@ -101,7 +70,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 		if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 		
 		object_kind *k_ptr;
-		int i = (huge)strtol(zz[0], NULL, 0);
+		int i = (int)strtol(zz[0], NULL, 0);
 		TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
 		SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 		if (i >= max_k_idx) return 1;
@@ -122,7 +91,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 		if ((num != 3) && (num != 4) && (num != F_LIT_MAX * 2 + 1)) return 1;
 		else if ((num == 4) && !streq(zz[3], "LIT")) return 1;
 
-		int i = (huge)strtol(zz[0], NULL, 0);
+		int i = (int)strtol(zz[0], NULL, 0);
 		if (i >= max_f_idx) return 1;
 		f_ptr = &f_info[i];
 
@@ -186,7 +155,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 		/* Process "U:<tv>:<a>/<c>" -- attr/char for unaware items */
 		if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 
-		int j = (huge)strtol(zz[0], NULL, 0);
+		int j = (int)strtol(zz[0], NULL, 0);
 		TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
 		SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 		for (int i = 1; i < max_k_idx; i++)
