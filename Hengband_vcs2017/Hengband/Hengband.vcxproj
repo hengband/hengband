@@ -194,7 +194,7 @@
     <ClCompile Include="..\..\src\horror-descriptions.c" />
     <ClCompile Include="..\..\src\init.c" />
     <ClCompile Include="..\..\src\io\gf-descriptions.c" />
-    <ClCompile Include="..\..\src\io\process-pref-file.c" />
+    <ClCompile Include="..\..\src\io\interpret-pref-file.c" />
     <ClCompile Include="..\..\src\io\read-pref-file.c" />
     <ClCompile Include="..\..\src\io\tokenizer.c" />
     <ClCompile Include="..\..\src\monster-dist-offsets.c" />
@@ -342,7 +342,7 @@
     <ClInclude Include="..\..\src\english.h" />
     <ClInclude Include="..\..\src\horror-descriptions.h" />
     <ClInclude Include="..\..\src\io\gf-descriptions.h" />
-    <ClInclude Include="..\..\src\io\process-pref-file.h" />
+    <ClInclude Include="..\..\src\io\interpret-pref-file.h" />
     <ClInclude Include="..\..\src\io\read-pref-file.h" />
     <ClInclude Include="..\..\src\io\tokenizer.h" />
     <ClInclude Include="..\..\src\monster-dist-offsets.h" />

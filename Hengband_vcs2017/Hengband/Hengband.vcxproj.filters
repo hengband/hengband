@@ -454,9 +454,6 @@
     <ClCompile Include="..\..\src\io\tokenizer.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\process-pref-file.c">
-      <Filter>io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd\cmd-help.c">
       <Filter>cmd</Filter>
     </ClCompile>
@@ -470,6 +467,9 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\io\read-pref-file.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\interpret-pref-file.c">
       <Filter>io</Filter>
     </ClCompile>
   </ItemGroup>
@@ -908,9 +908,6 @@
     <ClInclude Include="..\..\src\io\tokenizer.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\io\process-pref-file.h">
-      <Filter>io</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-help.h">
       <Filter>cmd</Filter>
     </ClInclude>
@@ -924,6 +921,9 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\read-pref-file.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\interpret-pref-file.h">
       <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>

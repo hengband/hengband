@@ -1,5 +1,5 @@
 ﻿#include "io/read-pref-file.h"
-#include "io/process-pref-file.h"
+#include "io/interpret-pref-file.h"
 #include "autopick.h"
 #include "files.h" // 暫定。コールバック化して後で消す.
 #include "world.h"
@@ -79,7 +79,7 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 			continue;
 		}
 
-		err = process_pref_file_command(creature_ptr, buf);
+		err = interpret_pref_file(creature_ptr, buf);
 		if (err != 0)
 		{
 			if (preftype != PREF_TYPE_AUTOPICK)

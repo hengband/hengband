@@ -71,7 +71,7 @@
 #include "monster-status.h"
 #include "view-mainwindow.h"
 #include "dungeon-file.h"
-#include "io/process-pref-file.h"
+#include "io/interpret-pref-file.h"
 #include "files.h"
 #include "spells.h"
 #include "objectkind.h"
@@ -1361,7 +1361,7 @@ void do_cmd_pref(player_type *creature_ptr)
 	if (!get_string(_("設定変更コマンド: ", "Pref: "), buf, 80)) return;
 
 	/* Process that pref command */
-	(void)process_pref_file_command(creature_ptr, buf);
+	(void)interpret_pref_file(creature_ptr, buf);
 }
 
 

@@ -29,7 +29,7 @@ hengband_SOURCES = \
 	\
 	io/gf-descriptions.c io/gf-descriptions.h \
 	io/tokenizer.c io/tokenizer.h \
-	io/process-pref-file.c io/process-pref-file.h \
+	io/interpret-pref-file.c io/interpret-pref-file.h \
 	io/read-pref-file.c io/read-pref-file.h \
 	io/exit-panic.c io/exit-panic.h \
 	signal-handlers.c signal-handlers.h uid-checker.c uid-checker.h \
