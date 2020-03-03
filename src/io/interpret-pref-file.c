@@ -62,6 +62,74 @@ static errr interpret_k_file(char *buf, char **zz)
 
 
 /*!
+ * @brief Kトークンの解釈 / Process "F:<num>:<a>/<c>" -- attr/char for terrain features
+ * @param buf バッファ
+ * @param zz トークン保管文字列
+ * @return エラーコード
+ * @details
+ * "F:<num>:<a>/<c>"
+ * "F:<num>:<a>/<c>:LIT"
+ * "F:<num>:<a>/<c>:<la>/<lc>:<da>/<dc>"
+ */
+static errr interpret_f_file(char*buf, char *zz)
+{
+	int num = tokenize(buf + 2, F_LIT_MAX * 2 + 1, zz, TOKENIZE_CHECKQUOTE);
+
+	if ((num != 3) && (num != 4) && (num != F_LIT_MAX * 2 + 1)) return 1;
+	else if ((num == 4) && !streq(zz[3], "LIT")) return 1;
+
+	int i = (int)strtol(zz[0], NULL, 0);
+	if (i >= max_f_idx) return 1;
+
+	feature_type *f_ptr;
+	f_ptr = &f_info[i];
+
+	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
+	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
+	if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[F_LIT_STANDARD] = n1; /* Allow TERM_DARK text */
+	if (n2) f_ptr->x_char[F_LIT_STANDARD] = n2;
+
+	switch (num)
+	{
+	case 3:
+	{
+		/* No lighting support */
+		n1 = f_ptr->x_attr[F_LIT_STANDARD];
+		n2 = f_ptr->x_char[F_LIT_STANDARD];
+		for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
+		{
+			f_ptr->x_attr[j] = n1;
+			f_ptr->x_char[j] = n2;
+		}
+
+		return 0;
+	}
+	case 4:
+	{
+		/* Use default lighting */
+		apply_default_feat_lighting(f_ptr->x_attr, f_ptr->x_char);
+		return 0;
+	}
+	case F_LIT_MAX * 2 + 1:
+	{
+		/* Use desired lighting */
+		for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
+		{
+			n1 = (TERM_COLOR)strtol(zz[j * 2 + 1], NULL, 0);
+			n2 = (SYMBOL_CODE)strtol(zz[j * 2 + 2], NULL, 0);
+			if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[j] = n1; /* Allow TERM_DARK text */
+			if (n2) f_ptr->x_char[j] = n2;
+		}
+
+		return 0;
+	}
+	default:
+		return 0;
+	}
+}
+
+
+/*!
  * @brief 設定ファイルの各行から各種テキスト情報を取得する /
  * Parse a sub-file of the "extra info" (format shown below)
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -107,62 +175,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 	}
 	case 'F':
 	{
-		/* Process "F:<num>:<a>/<c>" -- attr/char for terrain features */
-		/* "F:<num>:<a>/<c>" */
-		/* "F:<num>:<a>/<c>:LIT" */
-		/* "F:<num>:<a>/<c>:<la>/<lc>:<da>/<dc>" */
-		feature_type *f_ptr;
-		int num = tokenize(buf + 2, F_LIT_MAX * 2 + 1, zz, TOKENIZE_CHECKQUOTE);
-
-		if ((num != 3) && (num != 4) && (num != F_LIT_MAX * 2 + 1)) return 1;
-		else if ((num == 4) && !streq(zz[3], "LIT")) return 1;
-
-		int i = (int)strtol(zz[0], NULL, 0);
-		if (i >= max_f_idx) return 1;
-		f_ptr = &f_info[i];
-
-		TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
-		SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
-		if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[F_LIT_STANDARD] = n1; /* Allow TERM_DARK text */
-		if (n2) f_ptr->x_char[F_LIT_STANDARD] = n2;
-
-		switch (num)
-		{
-		case 3:
-		{
-			/* No lighting support */
-			n1 = f_ptr->x_attr[F_LIT_STANDARD];
-			n2 = f_ptr->x_char[F_LIT_STANDARD];
-			for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
-			{
-				f_ptr->x_attr[j] = n1;
-				f_ptr->x_char[j] = n2;
-			}
-
-			return 0;
-		}
-		case 4:
-		{
-			/* Use default lighting */
-			apply_default_feat_lighting(f_ptr->x_attr, f_ptr->x_char);
-			return 0;
-		}
-		case F_LIT_MAX * 2 + 1:
-		{
-			/* Use desired lighting */
-			for (int j = F_LIT_NS_BEGIN; j < F_LIT_MAX; j++)
-			{
-				n1 = (TERM_COLOR)strtol(zz[j * 2 + 1], NULL, 0);
-				n2 = (SYMBOL_CODE)strtol(zz[j * 2 + 2], NULL, 0);
-				if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[j] = n1; /* Allow TERM_DARK text */
-				if (n2) f_ptr->x_char[j] = n2;
-			}
-
-			return 0;
-		}
-		default:
-			return 0;
-		}
+		return interpret_f_file(buf, zz);
 	}
 	case 'S':
 	{
