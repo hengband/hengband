@@ -62,25 +62,14 @@ static errr interpret_k_file(char *buf, char **zz)
 
 
 /*!
- * @brief Kトークンの解釈 / Process "F:<num>:<a>/<c>" -- attr/char for terrain features
- * @param buf バッファ
+ * @brief トークン数によって地形の文字形と色を決定する
  * @param zz トークン保管文字列
+ * @param i 地形種別
+ * @param num トークン数
  * @return エラーコード
- * @details
- * "F:<num>:<a>/<c>"
- * "F:<num>:<a>/<c>:LIT"
- * "F:<num>:<a>/<c>:<la>/<lc>:<da>/<dc>"
  */
-static errr interpret_f_file(char*buf, char *zz)
+static errr decide_feature_type(char **zz, int i, int num)
 {
-	int num = tokenize(buf + 2, F_LIT_MAX * 2 + 1, zz, TOKENIZE_CHECKQUOTE);
-
-	if ((num != 3) && (num != 4) && (num != F_LIT_MAX * 2 + 1)) return 1;
-	else if ((num == 4) && !streq(zz[3], "LIT")) return 1;
-
-	int i = (int)strtol(zz[0], NULL, 0);
-	if (i >= max_f_idx) return 1;
-
 	feature_type *f_ptr;
 	f_ptr = &f_info[i];
 
@@ -126,6 +115,30 @@ static errr interpret_f_file(char*buf, char *zz)
 	default:
 		return 0;
 	}
+}
+
+
+/*!
+ * @brief Kトークンの解釈 / Process "F:<num>:<a>/<c>" -- attr/char for terrain features
+ * @param buf バッファ
+ * @param zz トークン保管文字列
+ * @return エラーコード
+ * @details
+ * "F:<num>:<a>/<c>"
+ * "F:<num>:<a>/<c>:LIT"
+ * "F:<num>:<a>/<c>:<la>/<lc>:<da>/<dc>"
+ */
+static errr interpret_f_file(char *buf, char **zz)
+{
+	int num = tokenize(buf + 2, F_LIT_MAX * 2 + 1, zz, TOKENIZE_CHECKQUOTE);
+
+	if ((num != 3) && (num != 4) && (num != F_LIT_MAX * 2 + 1)) return 1;
+	else if ((num == 4) && !streq(zz[3], "LIT")) return 1;
+
+	int i = (int)strtol(zz[0], NULL, 0);
+	if (i >= max_f_idx) return 1;
+
+	return decide_feature_type(zz, i, num);
 }
 
 
