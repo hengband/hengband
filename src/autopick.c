@@ -1204,7 +1204,7 @@ static void add_autopick_list(autopick_type *entry)
 /*
  *  Process line for auto picker/destroyer.
  */
-errr process_autopick_file_command(char *buf)
+void process_autopick_file_command(char *buf)
 {
 	autopick_type an_entry, *entry = &an_entry;
 	int i;
@@ -1222,7 +1222,8 @@ errr process_autopick_file_command(char *buf)
 	}
 
 	buf[i] = 0;
-	if (!autopick_new_entry(entry, buf, FALSE)) return 0;
+	if (!autopick_new_entry(entry, buf, FALSE)) return;
+
 	for (i = 0; i < max_autopick; i++)
 	{
 		if (!strcmp(entry->name, autopick_list[i].name)
@@ -1232,12 +1233,12 @@ errr process_autopick_file_command(char *buf)
 			&& entry->bonus == autopick_list[i].bonus)
 		{
 			autopick_free_entry(entry);
-			return 0;
+			return;
 		}
 	}
 
 	add_autopick_list(entry);
-	return 0;
+	return;
 }
 
 

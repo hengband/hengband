@@ -84,7 +84,9 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 		{
 			if (preftype != PREF_TYPE_AUTOPICK)
 				break;
-			err = process_autopick_file_command(buf);
+			
+			process_autopick_file_command(buf);
+			err = 0;
 		}
 	}
 
