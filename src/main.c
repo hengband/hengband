@@ -10,11 +10,14 @@
 
 #include "angband.h"
 #include "core.h"
+#include "uid-checker.h"
+#include "signal-handlers.h"
 #include "files.h"
 #include "inet.h"
 #include "init.h"
 #include "scores.h"
 #include "term.h"
+#include "chuukei.h"
 
 /*
  * Available graphic modes

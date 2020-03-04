@@ -406,6 +406,72 @@
     <ClCompile Include="..\..\src\horror-descriptions.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\signal-handlers.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\status-first-page.c">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\display-util.c">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\uid-checker.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\character-dump.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\permanent-resistances.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\temporary-resistances.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\display-player.c">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\race-resistances.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\display-characteristic.c">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\process-death.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\gf-descriptions.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\display-player-stat-info.c">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\display-player-misc-info.c">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\view\display-player-middle.c">
+      <Filter>view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\tokenizer.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-help.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\process-name.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-save.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\show-file.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\read-pref-file.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\interpret-pref-file.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -794,6 +860,72 @@
     <ClInclude Include="..\..\src\horror-descriptions.h">
       <Filter>player</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\signal-handlers.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\status-first-page.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-util.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\uid-checker.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\character-dump.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\permanent-resistances.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\temporary-resistances.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-player.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\race-resistances.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-characteristic.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\process-death.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\gf-descriptions.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-player-stat-info.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-player-misc-info.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\display-player-middle.h">
+      <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\tokenizer.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-help.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\process-name.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-save.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\show-file.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\read-pref-file.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\interpret-pref-file.h">
+      <Filter>io</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -835,6 +967,9 @@
     </Filter>
     <Filter Include="locale">
       <UniqueIdentifier>{4bdec353-0cac-4e25-98f9-bcc55f2c0ec3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="view">
+      <UniqueIdentifier>{95a48e4b-b55a-4e99-a3c6-e8badbd1b2cf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

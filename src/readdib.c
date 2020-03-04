@@ -24,7 +24,6 @@
 
 #include "readdib.h"
 
-
 /*
  * Extract the "WIN32" flag from the compiler
  */
@@ -35,21 +34,11 @@
 #endif
 
 /*
- * Make sure "huge" is legal 
- */
-#undef huge
-#ifdef WIN32
-#define huge
-#endif
-
-
-/*
  * Needed for lcc-win32
  */
 #ifndef SEEK_SET
 #define SEEK_SET 0
 #endif
-
 
 /*!
  * 一度にファイルから読み込むデータ量 / Number of bytes to be read during each read operation
@@ -59,6 +48,7 @@
 void global_free(DIBINIT *pInfo, INT_PTR *fh, BOOL unlock_needed);
 
 /*!
+ * todo コードが古すぎる。何とかしたい
  * @brief 32KBのデータ読み取りを繰り返すことで、64KB以上のデータを一度に読み取るサブルーチン
  * Private routine to read more than 64K at a time Reads data in steps of 32k till all the data has been read.
  * @param fh ファイルヘッダ
@@ -71,7 +61,7 @@ void global_free(DIBINIT *pInfo, INT_PTR *fh, BOOL unlock_needed);
 static DWORD PASCAL lread(int fh, void *pv, DWORD ul)
 {
 	DWORD ulT = ul;
-	BYTE huge *hp = pv;
+	BYTE *hp = pv;
 
 	while (ul > (DWORD)MAXREAD)
 	{
@@ -85,6 +75,7 @@ static DWORD PASCAL lread(int fh, void *pv, DWORD ul)
 	return ulT;
 }
 
+
 /*!
  * @brief BITMAPINFOHEADERを取得してカラーテーブルを基本としたパレットを作成する。
  * Given a BITMAPINFOHEADER, create a palette based on the color table.
@@ -93,7 +84,7 @@ static DWORD PASCAL lread(int fh, void *pv, DWORD ul)
  * パレットの参照を返す。NULLならばエラー。
  * Returns the handle of a palette, or zero if something went wrong.
  */
-static HPALETTE PASCAL NEAR MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
+static HPALETTE PASCAL MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 {
 	PLOGPALETTE npPal;
 	RGBQUAD *lpRGB;
@@ -158,8 +149,7 @@ static HPALETTE PASCAL NEAR MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
  * handles.  Caller is responsible for freeing objects) and FALSE on failure
  * (unable to create objects, both pointer are invalid).
  */
-static BOOL NEAR PASCAL MakeBitmapAndPalette(HDC hDC, HANDLE hDIB,
-					     HPALETTE * phPal, HBITMAP * phBitmap)
+static BOOL PASCAL MakeBitmapAndPalette(HDC hDC, HANDLE hDIB, HPALETTE * phPal, HBITMAP * phBitmap)
 {
 	LPBITMAPINFOHEADER lpInfo;
 	BOOL result = FALSE;

@@ -43,6 +43,9 @@
 #include "cmd-dump.h"
 #include "term.h"
 #include "core.h"
+#include "core/show-file.h"
+#include "io/read-pref-file.h"
+#include "chuukei.h"
 
 #include "autopick.h"
 
@@ -50,6 +53,8 @@
 #include "birth.h"
 #include "dungeon.h"
 #include "world.h"
+#include "view/display-player.h"
+#include "player/process-name.h"
 #include "player-effects.h"
 #include "player-status.h"
 #include "player-skill.h"
@@ -66,11 +71,12 @@
 #include "monster-status.h"
 #include "view-mainwindow.h"
 #include "dungeon-file.h"
+#include "io/interpret-pref-file.h"
 #include "files.h"
 #include "spells.h"
 #include "objectkind.h"
 #include "floor-town.h"
-#include "view-mainwindow.h"
+#include "view-mainwindow.h" // 暫定。後で消す
 
 #include "english.h"
 
@@ -838,7 +844,7 @@ static void display_diary(player_type *creature_ptr)
 #endif
 
 	/* Display the file contents */
-	show_file(creature_ptr, FALSE, buf, diary_title, -1, 0);
+	(void)show_file(creature_ptr, FALSE, buf, diary_title, -1, 0);
 }
 
 
@@ -1042,12 +1048,12 @@ void do_cmd_player_status(player_type *creature_ptr)
 	while (TRUE)
 	{
 		update_playtime();
-		display_player(creature_ptr, mode);
+		display_player(creature_ptr, mode, map_name);
 
 		if (mode == 4)
 		{
 			mode = 0;
-			display_player(creature_ptr, mode);
+			display_player(creature_ptr, mode, map_name);
 		}
 
 		/* Prompt */
@@ -1075,7 +1081,7 @@ void do_cmd_player_status(player_type *creature_ptr)
 			{
 				if (tmp[0] && (tmp[0] != ' '))
 				{
-					file_character(creature_ptr, tmp);
+					file_character(creature_ptr, tmp, display_player, map_name);
 				}
 			}
 		}
@@ -1355,7 +1361,7 @@ void do_cmd_pref(player_type *creature_ptr)
 	if (!get_string(_("設定変更コマンド: ", "Pref: "), buf, 80)) return;
 
 	/* Process that pref command */
-	(void)process_pref_file_command(creature_ptr, buf);
+	(void)interpret_pref_file(creature_ptr, buf);
 }
 
 
@@ -3727,7 +3733,7 @@ static void do_cmd_knowledge_inven(player_type *creature_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(creature_ptr, TRUE, file_name, _("*鑑定*済み武器/防具の耐性リスト", "Resistances of *identified* equipment"), 0, 0);
+	(void)show_file(creature_ptr, TRUE, file_name, _("*鑑定*済み武器/防具の耐性リスト", "Resistances of *identified* equipment"), 0, 0);
 	fd_kill(file_name);
 }
 
@@ -4190,7 +4196,7 @@ static void do_cmd_knowledge_artifacts(player_type *player_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(player_ptr, TRUE, file_name, _("既知の伝説のアイテム", "Artifacts Seen"), 0, 0);
+	(void)show_file(player_ptr, TRUE, file_name, _("既知の伝説のアイテム", "Artifacts Seen"), 0, 0);
 	fd_kill(file_name);
 }
 
@@ -4309,7 +4315,7 @@ static void do_cmd_knowledge_uniques(player_type *creature_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(creature_ptr, TRUE, file_name, _("まだ生きているユニーク・モンスター", "Alive Uniques"), 0, 0);
+	(void)show_file(creature_ptr, TRUE, file_name, _("まだ生きているユニーク・モンスター", "Alive Uniques"), 0, 0);
 	fd_kill(file_name);
 }
 
@@ -4359,7 +4365,7 @@ static void do_cmd_knowledge_weapon_exp(player_type *creature_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(creature_ptr, TRUE, file_name, _("武器の経験値", "Weapon Proficiency"), 0, 0);
+	(void)show_file(creature_ptr, TRUE, file_name, _("武器の経験値", "Weapon Proficiency"), 0, 0);
 	fd_kill(file_name);
 }
 
@@ -4446,7 +4452,7 @@ static void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(creature_ptr, TRUE, file_name, _("魔法の経験値", "Spell Proficiency"), 0, 0);
+	(void)show_file(creature_ptr, TRUE, file_name, _("魔法の経験値", "Spell Proficiency"), 0, 0);
 	fd_kill(file_name);
 }
 
@@ -4491,7 +4497,7 @@ static void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(creature_ptr, TRUE, file_name, _("技能の経験値", "Miscellaneous Proficiency"), 0, 0);
+	(void)show_file(creature_ptr, TRUE, file_name, _("技能の経験値", "Miscellaneous Proficiency"), 0, 0);
 	fd_kill(file_name);
 }
 
@@ -4547,7 +4553,7 @@ static void do_cmd_knowledge_pets(player_type *creature_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(creature_ptr, TRUE, file_name, _("現在のペット", "Current Pets"), 0, 0);
+	(void)show_file(creature_ptr, TRUE, file_name, _("現在のペット", "Current Pets"), 0, 0);
 	fd_kill(file_name);
 }
 
@@ -4692,7 +4698,7 @@ static void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(creature_ptr, TRUE, file_name, _("倒した敵の数", "Kill Count"), 0, 0);
+	(void)show_file(creature_ptr, TRUE, file_name, _("倒した敵の数", "Kill Count"), 0, 0);
 	fd_kill(file_name);
 }
 
@@ -6129,7 +6135,7 @@ static void do_cmd_knowledge_bounty(player_type *creature_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(creature_ptr, TRUE, file_name, _("賞金首の一覧", "Wanted monsters"), 0, 0);
+	(void)show_file(creature_ptr, TRUE, file_name, _("賞金首の一覧", "Wanted monsters"), 0, 0);
 	fd_kill(file_name);
 }
 
@@ -6154,7 +6160,7 @@ static void do_cmd_knowledge_virtues(player_type *creature_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(creature_ptr, TRUE, file_name, _("八つの徳", "Virtues"), 0, 0);
+	(void)show_file(creature_ptr, TRUE, file_name, _("八つの徳", "Virtues"), 0, 0);
 	fd_kill(file_name);
 }
 
@@ -6192,7 +6198,7 @@ static void do_cmd_knowledge_dungeon(player_type *creature_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(creature_ptr, TRUE, file_name, _("今までに入ったダンジョン", "Dungeon"), 0, 0);
+	(void)show_file(creature_ptr, TRUE, file_name, _("今までに入ったダンジョン", "Dungeon"), 0, 0);
 	fd_kill(file_name);
 }
 
@@ -6233,7 +6239,7 @@ static void do_cmd_knowledge_stat(player_type *creature_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(creature_ptr, TRUE, file_name, _("自分に関する情報", "HP-rate & Max stat"), 0, 0);
+	(void)show_file(creature_ptr, TRUE, file_name, _("自分に関する情報", "HP-rate & Max stat"), 0, 0);
 	fd_kill(file_name);
 }
 
@@ -6596,7 +6602,7 @@ static void do_cmd_knowledge_quests(player_type *creature_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(creature_ptr, TRUE, file_name, _("クエスト達成状況", "Quest status"), 0, 0);
+	(void)show_file(creature_ptr, TRUE, file_name, _("クエスト達成状況", "Quest status"), 0, 0);
 	fd_kill(file_name);
 
 	/* Free Memory */
@@ -6673,7 +6679,7 @@ static void do_cmd_knowledge_home(player_type *player_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(player_ptr, TRUE, file_name, _("我が家のアイテム", "Home Inventory"), 0, 0);
+	(void)show_file(player_ptr, TRUE, file_name, _("我が家のアイテム", "Home Inventory"), 0, 0);
 	fd_kill(file_name);
 }
 
@@ -6739,7 +6745,7 @@ static void do_cmd_knowledge_autopick(player_type *creature_ptr)
 	my_fclose(fff);
 
 	/* Display the file contents */
-	show_file(creature_ptr, TRUE, file_name, _("自動拾い/破壊 設定リスト", "Auto-picker/Destroyer"), 0, 0);
+	(void)show_file(creature_ptr, TRUE, file_name, _("自動拾い/破壊 設定リスト", "Auto-picker/Destroyer"), 0, 0);
 	fd_kill(file_name);
 }
 

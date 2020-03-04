@@ -94,10 +94,13 @@
 */
 
 #include "angband.h"
+#include "signal-handlers.h"
 #include "util.h"
 #include "inet.h"
+#include "chuukei.h"
 
-#include "cmd-dump.h"
+#include "cmd/cmd-dump.h"
+#include "cmd/cmd-save.h"
 #include "view-mainwindow.h"
 #include "floor.h"
 #include "floor-events.h"

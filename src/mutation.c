@@ -13,9 +13,10 @@
 
 #include "angband.h"
 #include "core.h"
+#include "core/show-file.h"
 #include "util.h"
 
-#include "cmd-dump.h"
+#include "cmd/cmd-dump.h"
 #include "mutation.h"
 
 #include "selfinfo.h"

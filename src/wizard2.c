@@ -15,7 +15,9 @@
 #include "term.h"
 
 #include "dungeon.h"
-#include "cmd-dump.h"
+#include "cmd/cmd-dump.h"
+#include "cmd/cmd-help.h"
+#include "cmd/cmd-save.h"
 #include "util.h"
 #include "birth.h"
 #include "selfinfo.h"

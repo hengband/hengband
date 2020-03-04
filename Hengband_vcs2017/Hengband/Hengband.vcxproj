@@ -153,6 +153,7 @@
     <ClCompile Include="..\..\src\avatar.c" />
     <ClCompile Include="..\..\src\birth.c" />
     <ClCompile Include="..\..\src\bldg.c" />
+    <ClCompile Include="..\..\src\character-dump.c" />
     <ClCompile Include="..\..\src\chest.c" />
     <ClCompile Include="..\..\src\chuukei.c" />
     <ClCompile Include="..\..\src\cmd\cmd-activate.c" />
@@ -160,6 +161,7 @@
     <ClCompile Include="..\..\src\cmd\cmd-dump.c" />
     <ClCompile Include="..\..\src\cmd\cmd-eat.c" />
     <ClCompile Include="..\..\src\cmd\cmd-gameoption.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-help.c" />
     <ClCompile Include="..\..\src\cmd\cmd-hissatsu.c" />
     <ClCompile Include="..\..\src\cmd\cmd-item.c" />
     <ClCompile Include="..\..\src\cmd\cmd-magiceat.c" />
@@ -167,6 +169,7 @@
     <ClCompile Include="..\..\src\cmd\cmd-pet.c" />
     <ClCompile Include="..\..\src\cmd\cmd-quaff.c" />
     <ClCompile Include="..\..\src\cmd\cmd-read.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-save.c" />
     <ClCompile Include="..\..\src\cmd\cmd-smith.c" />
     <ClCompile Include="..\..\src\cmd\cmd-spell.c" />
     <ClCompile Include="..\..\src\cmd\cmd-usestaff.c" />
@@ -175,6 +178,7 @@
     <ClCompile Include="..\..\src\combat\melee1.c" />
     <ClCompile Include="..\..\src\combat\shoot.c" />
     <ClCompile Include="..\..\src\core.c" />
+    <ClCompile Include="..\..\src\core\show-file.c" />
     <ClCompile Include="..\..\src\creature.c" />
     <ClCompile Include="..\..\src\dungeon-file.c" />
     <ClCompile Include="..\..\src\dungeon.c" />
@@ -189,6 +193,10 @@
     <ClCompile Include="..\..\src\history.c" />
     <ClCompile Include="..\..\src\horror-descriptions.c" />
     <ClCompile Include="..\..\src\init.c" />
+    <ClCompile Include="..\..\src\io\gf-descriptions.c" />
+    <ClCompile Include="..\..\src\io\interpret-pref-file.c" />
+    <ClCompile Include="..\..\src\io\read-pref-file.c" />
+    <ClCompile Include="..\..\src\io\tokenizer.c" />
     <ClCompile Include="..\..\src\monster-dist-offsets.c" />
     <ClCompile Include="..\..\src\monster-process.c" />
     <ClCompile Include="..\..\src\monster-status.c" />
@@ -212,6 +220,10 @@
     <ClCompile Include="..\..\src\player-sex.c" />
     <ClCompile Include="..\..\src\player-skill.c" />
     <ClCompile Include="..\..\src\player-status.c" />
+    <ClCompile Include="..\..\src\player\permanent-resistances.c" />
+    <ClCompile Include="..\..\src\player\process-name.c" />
+    <ClCompile Include="..\..\src\player\race-resistances.c" />
+    <ClCompile Include="..\..\src\player\temporary-resistances.c" />
     <ClCompile Include="..\..\src\quest.c" />
     <ClCompile Include="..\..\src\realm-craft.c" />
     <ClCompile Include="..\..\src\realm-crusade.c" />
@@ -226,6 +238,7 @@
     <ClInclude Include="..\..\src\avatar.h" />
     <ClInclude Include="..\..\src\birth.h" />
     <ClInclude Include="..\..\src\bldg.h" />
+    <ClInclude Include="..\..\src\character-dump.h" />
     <ClInclude Include="..\..\src\chest.h" />
     <ClInclude Include="..\..\src\chuukei.h" />
     <ClCompile Include="..\..\src\player-move.c" />
@@ -266,6 +279,7 @@
     <ClCompile Include="..\..\src\save.c" />
     <ClCompile Include="..\..\src\scores.c" />
     <ClCompile Include="..\..\src\selfinfo.c" />
+    <ClCompile Include="..\..\src\signal-handlers.c" />
     <ClCompile Include="..\..\src\snipe.c" />
     <ClCompile Include="..\..\src\sort.c" />
     <ClCompile Include="..\..\src\spells-diceroll.c" />
@@ -277,6 +291,15 @@
     <ClCompile Include="..\..\src\spells1.c" />
     <ClCompile Include="..\..\src\spells2.c" />
     <ClCompile Include="..\..\src\spells3.c" />
+    <ClCompile Include="..\..\src\uid-checker.c" />
+    <ClCompile Include="..\..\src\view\display-characteristic.c" />
+    <ClCompile Include="..\..\src\view\display-player-middle.c" />
+    <ClCompile Include="..\..\src\view\display-player-stat-info.c" />
+    <ClCompile Include="..\..\src\view\display-player.c" />
+    <ClCompile Include="..\..\src\view\display-util.c" />
+    <ClCompile Include="..\..\src\player\process-death.c" />
+    <ClCompile Include="..\..\src\view\display-player-misc-info.c" />
+    <ClCompile Include="..\..\src\view\status-first-page.c" />
     <ClCompile Include="..\..\src\store.c" />
     <ClCompile Include="..\..\src\floor-streams.c" />
     <ClCompile Include="..\..\src\targeting.c" />
@@ -299,6 +322,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-dump.h" />
     <ClInclude Include="..\..\src\cmd\cmd-eat.h" />
     <ClInclude Include="..\..\src\cmd\cmd-gameoption.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-help.h" />
     <ClInclude Include="..\..\src\cmd\cmd-hissatsu.h" />
     <ClInclude Include="..\..\src\cmd\cmd-item.h" />
     <ClInclude Include="..\..\src\cmd\cmd-magiceat.h" />
@@ -306,6 +330,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-pet.h" />
     <ClInclude Include="..\..\src\cmd\cmd-quaff.h" />
     <ClInclude Include="..\..\src\cmd\cmd-read.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-save.h" />
     <ClInclude Include="..\..\src\cmd\cmd-smith.h" />
     <ClInclude Include="..\..\src\cmd\cmd-spell.h" />
     <ClInclude Include="..\..\src\cmd\cmd-usestaff.h" />
@@ -313,11 +338,30 @@
     <ClInclude Include="..\..\src\cmd\cmd-zapwand.h" />
     <ClInclude Include="..\..\src\combat\melee.h" />
     <ClInclude Include="..\..\src\combat\shoot.h" />
+    <ClInclude Include="..\..\src\core\show-file.h" />
     <ClInclude Include="..\..\src\english.h" />
     <ClInclude Include="..\..\src\horror-descriptions.h" />
+    <ClInclude Include="..\..\src\io\gf-descriptions.h" />
+    <ClInclude Include="..\..\src\io\interpret-pref-file.h" />
+    <ClInclude Include="..\..\src\io\read-pref-file.h" />
+    <ClInclude Include="..\..\src\io\tokenizer.h" />
     <ClInclude Include="..\..\src\monster-dist-offsets.h" />
     <ClInclude Include="..\..\src\object-flavor.h" />
     <ClInclude Include="..\..\src\player-inventory.h" />
+    <ClInclude Include="..\..\src\player\permanent-resistances.h" />
+    <ClInclude Include="..\..\src\player\process-name.h" />
+    <ClInclude Include="..\..\src\player\race-resistances.h" />
+    <ClInclude Include="..\..\src\player\temporary-resistances.h" />
+    <ClInclude Include="..\..\src\signal-handlers.h" />
+    <ClInclude Include="..\..\src\uid-checker.h" />
+    <ClInclude Include="..\..\src\view\display-characteristic.h" />
+    <ClInclude Include="..\..\src\view\display-player-middle.h" />
+    <ClInclude Include="..\..\src\view\display-player-stat-info.h" />
+    <ClInclude Include="..\..\src\view\display-player.h" />
+    <ClInclude Include="..\..\src\view\display-util.h" />
+    <ClInclude Include="..\..\src\player\process-death.h" />
+    <ClInclude Include="..\..\src\view\display-player-misc-info.h" />
+    <ClInclude Include="..\..\src\view\status-first-page.h" />
     <ClInclude Include="japanese.h" />
   </ItemGroup>
   <ItemGroup>

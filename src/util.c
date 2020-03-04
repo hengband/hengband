@@ -11,6 +11,7 @@
  /* Purpose: Angband utilities -BEN- */
 
 #include "angband.h"
+#include "signal-handlers.h"
 #include "core.h"
 #include "term.h"
 #include "util.h"

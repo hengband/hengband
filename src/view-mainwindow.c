@@ -22,6 +22,7 @@
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "view/display-player.h"
 #include "player-status.h"
 #include "player-class.h"
 #include "player-race.h"
@@ -1831,7 +1832,7 @@ static void fix_player(player_type *player_ptr)
 		Term_activate(angband_term[j]);
 
 		update_playtime();
-		display_player(player_ptr, 0);
+		display_player(player_ptr, 0, map_name);
 		Term_fresh();
 		Term_activate(old);
 	}

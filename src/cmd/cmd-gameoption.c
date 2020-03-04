@@ -4,7 +4,8 @@
 #include "cmd-gameoption.h"
 #include "term.h"
 #include "view-mainwindow.h"
-#include "cmd-dump.h"
+#include "cmd/cmd-dump.h"
+#include "core/show-file.h"
 #include "files.h"
 
 #include "world.h"

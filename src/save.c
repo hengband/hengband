@@ -28,6 +28,7 @@
 #include "floor-events.h"
 #include "floor-save.h"
 #include "floor-town.h"
+#include "uid-checker.h"
 #include "files.h"
 #include "world.h"
 #include "objectkind.h"

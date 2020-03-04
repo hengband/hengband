@@ -27,7 +27,8 @@
 #include "spells-summon.h"
 #include "spells-status.h"
 
-#include "cmd-basic.h"
+#include "cmd/cmd-basic.h"
+#include "core/show-file.h"
 #include "files.h"
 #include "floor.h"
 #include "objectkind.h"

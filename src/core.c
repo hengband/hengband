@@ -11,30 +11,34 @@
  */
 
 #include "angband.h"
+#include "signal-handlers.h"
 #include "util.h"
 #include "core.h"
 #include "inet.h"
 #include "term.h"
+#include "chuukei.h"
 
 #include "creature.h"
 
 #include "birth.h"
 #include "bldg.h"
-#include "cmd-activate.h"
-#include "cmd-dump.h"
-#include "cmd-eat.h"
-#include "cmd-hissatsu.h"
-#include "cmd-item.h"
-#include "cmd-magiceat.h"
-#include "cmd-mane.h"
-#include "cmd-quaff.h"
-#include "cmd-read.h"
-#include "cmd-smith.h"
-#include "cmd-usestaff.h"
-#include "cmd-zaprod.h"
-#include "cmd-zapwand.h"
-#include "cmd-pet.h"
-#include "cmd-basic.h"
+#include "cmd/cmd-activate.h"
+#include "cmd/cmd-dump.h"
+#include "cmd/cmd-eat.h"
+#include "cmd/cmd-help.h"
+#include "cmd/cmd-hissatsu.h"
+#include "cmd/cmd-item.h"
+#include "cmd/cmd-magiceat.h"
+#include "cmd/cmd-mane.h"
+#include "cmd/cmd-quaff.h"
+#include "cmd/cmd-read.h"
+#include "cmd/cmd-save.h"
+#include "cmd/cmd-smith.h"
+#include "cmd/cmd-usestaff.h"
+#include "cmd/cmd-zaprod.h"
+#include "cmd/cmd-zapwand.h"
+#include "cmd/cmd-pet.h"
+#include "cmd/cmd-basic.h"
 #include "racial.h"
 #include "snipe.h"
 #include "dungeon.h"
@@ -59,6 +63,8 @@
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"
+#include "view/display-player.h"
+#include "player/process-name.h"
 #include "player-move.h"
 #include "player-status.h"
 #include "player-class.h"
@@ -81,6 +87,9 @@
 
 #include "view-mainwindow.h"
 #include "dungeon-file.h"
+#include "uid-checker.h"
+#include "player/process-death.h"
+#include "io/read-pref-file.h"
 #include "files.h"
 #include "scores.h"
 #include "autopick.h"
@@ -1062,48 +1071,51 @@ static object_type *choose_cursed_obj_name(player_type *player_ptr, BIT_FLAGS fl
 }
 
 
+/*!
+ * @brief 10ゲームターンが進行するごとにプレイヤーの空腹状態を飢餓方向に向かわせる
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
 static void process_world_aux_digestion(player_type *creature_ptr)
 {
-	if (!creature_ptr->phase_out)
+	if (creature_ptr->phase_out) return;
+
+	if (creature_ptr->food >= PY_FOOD_MAX)
 	{
-		if (creature_ptr->food >= PY_FOOD_MAX)
-		{
-			(void)set_food(creature_ptr, creature_ptr->food - 100);
-		}
-		else if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 5)))
-		{
-			int digestion = SPEED_TO_ENERGY(creature_ptr->pspeed);
-			if (creature_ptr->regenerate)
-				digestion += 20;
-			if (creature_ptr->special_defense & (KAMAE_MASK | KATA_MASK))
-				digestion += 20;
-			if (creature_ptr->cursed & TRC_FAST_DIGEST)
-				digestion += 30;
+		(void)set_food(creature_ptr, creature_ptr->food - 100);
+	}
+	else if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 5)))
+	{
+		int digestion = SPEED_TO_ENERGY(creature_ptr->pspeed);
+		if (creature_ptr->regenerate)
+			digestion += 20;
+		if (creature_ptr->special_defense & (KAMAE_MASK | KATA_MASK))
+			digestion += 20;
+		if (creature_ptr->cursed & TRC_FAST_DIGEST)
+			digestion += 30;
 
-			if (creature_ptr->slow_digest)
-				digestion -= 5;
+		if (creature_ptr->slow_digest)
+			digestion -= 5;
 
-			if (digestion < 1) digestion = 1;
-			if (digestion > 100) digestion = 100;
+		if (digestion < 1) digestion = 1;
+		if (digestion > 100) digestion = 100;
 
-			(void)set_food(creature_ptr, creature_ptr->food - digestion);
-		}
+		(void)set_food(creature_ptr, creature_ptr->food - digestion);
+	}
 
-		if ((creature_ptr->food < PY_FOOD_FAINT))
-		{
-			if (!creature_ptr->paralyzed && (randint0(100) < 10))
-			{
-				msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
-				disturb(creature_ptr, TRUE, TRUE);
-				(void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + 1 + randint0(5));
-			}
+	if ((creature_ptr->food >= PY_FOOD_FAINT)) return;
 
-			if (creature_ptr->food < PY_FOOD_STARVE)
-			{
-				HIT_POINT dam = (PY_FOOD_STARVE - creature_ptr->food) / 10;
-				if (!IS_INVULN(creature_ptr)) take_hit(creature_ptr, DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);
-			}
-		}
+	if (!creature_ptr->paralyzed && (randint0(100) < 10))
+	{
+		msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
+		disturb(creature_ptr, TRUE, TRUE);
+		(void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + 1 + randint0(5));
+	}
+
+	if (creature_ptr->food < PY_FOOD_STARVE)
+	{
+		HIT_POINT dam = (PY_FOOD_STARVE - creature_ptr->food) / 10;
+		if (!IS_INVULN(creature_ptr)) take_hit(creature_ptr, DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);
 	}
 }
 
@@ -4322,7 +4334,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
 		/* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
 		process_dungeon_file(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
-		success = send_world_score(player_ptr, TRUE);
+		success = send_world_score(player_ptr, TRUE, update_playtime, display_player, map_name);
 
 		if (!success && !get_check_strict(_("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY))
 		{
@@ -4694,12 +4706,12 @@ void close_game(player_type *player_ptr)
 		print_tomb(player_ptr);
 		flush();
 
-		show_info(player_ptr);
+		show_info(player_ptr, handle_stuff, update_playtime, display_player, map_name);
 		Term_clear();
 
 		if (check_score(player_ptr))
 		{
-			if ((!send_world_score(player_ptr, do_send)))
+			if ((!send_world_score(player_ptr, do_send, update_playtime, display_player, map_name)))
 			{
 				if (get_check_strict(_("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "),
 					(CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))

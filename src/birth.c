@@ -15,6 +15,8 @@
 #include "util.h"
 #include "bldg.h"
 #include "core.h"
+#include "core/show-file.h"
+#include "io/read-pref-file.h"
 #include "term.h"
 
 #include "object-ego.h"
@@ -28,6 +30,8 @@
 #include "store.h"
 #include "patron.h"
 #include "quest.h"
+#include "player/process-name.h"
+#include "view/display-player.h" // 暫定。後で消す.
 #include "player-class.h"
 #include "player-status.h"
 #include "player-personality.h"
@@ -39,8 +43,8 @@
 #include "cmd-pet.h"
 #include "dungeon-file.h"
 #include "floor-town.h"
-#include "files.h"
 #include "birth.h"
+#include "cmd/cmd-help.h"
 #include "player-race.h"
 #include "player-skill.h"
 #include "world.h"
@@ -50,7 +54,7 @@
 #include "save.h"
 #include "realm.h"
 #include "japanese.h"
-#include "view-mainwindow.h"
+#include "view-mainwindow.h" // 暫定。後で消す.
 
  /*
   * The last character rolled,
@@ -3669,7 +3673,7 @@ static void edit_history(player_type *creature_ptr)
 		creature_ptr->history[i][59] = '\0';
 	}
 
-	display_player(creature_ptr, 1);
+	display_player(creature_ptr, 1, map_name);
 #ifdef JP
 	c_put_str(TERM_L_GREEN, "(キャラクターの生い立ち - 編集モード)", 11, 20);
 	put_str("[ カーソルキーで移動、Enterで終了、Ctrl-Aでファイル読み込み ]", 17, 10);
@@ -4354,7 +4358,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 			creature_ptr->chp = creature_ptr->mhp;
 			creature_ptr->csp = creature_ptr->msp;
 
-			display_player(creature_ptr, mode);
+			display_player(creature_ptr, mode, map_name);
 
 			/* Prepare a prompt (must squeeze everything in) */
 			Term_gotoxy(2, 23);
