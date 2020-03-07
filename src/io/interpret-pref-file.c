@@ -69,12 +69,11 @@ static errr interpret_k_token(char *buf)
  * @param num トークン数
  * @return エラーコード
  */
-static errr decide_feature_type(int i, int num)
+static errr decide_feature_type(int i, int num, char **zz)
 {
 	feature_type *f_ptr;
 	f_ptr = &f_info[i];
 
-	char *zz[16];
 	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
 	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 	if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[F_LIT_STANDARD] = n1; /* Allow TERM_DARK text */
@@ -140,7 +139,7 @@ static errr interpret_f_token(char *buf)
 	int i = (int)strtol(zz[0], NULL, 0);
 	if (i >= max_f_idx) return 1;
 
-	return decide_feature_type(i, num);
+	return decide_feature_type(i, num, zz);
 }
 
 
