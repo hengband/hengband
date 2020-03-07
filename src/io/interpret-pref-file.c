@@ -206,6 +206,20 @@ static errr interpret_e_token(char *buf, char **zz)
 
 
 /*!
+ * @brief Pトークンの解釈 / Process "P:<str>" -- normal macro
+ * @param buf バッファ
+ * @return エラーコード
+ */
+static errr interpret_p_token(char *buf)
+{
+	char tmp[1024];
+	text_to_ascii(tmp, buf + 2);
+	macro_add(tmp, macro__buf);
+	return 0;
+}
+
+
+/*!
  * @brief Cトークンの解釈 / Process "C:<str>" -- create keymap
  * @param buf バッファ
  * @param zz トークン保管文字列
@@ -460,13 +474,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 		return 0;
 	}
 	case 'P':
-	{
-		/* Process "P:<str>" -- normal macro */
-		char tmp[1024];
-		text_to_ascii(tmp, buf + 2);
-		macro_add(tmp, macro__buf);
-		return 0;
-	}
+		return interpret_p_token(buf);
 	case 'C':
 		return interpret_c_token(buf, zz);
 	case 'V':
