@@ -189,6 +189,23 @@ static errr interpret_u_token(char *buf, char **zz)
 
 
 /*!
+ * @brief Eトークンの解釈 / Process "E:<tv>:<a>" -- attribute for inventory objects
+ * @param buf バッファ
+ * @param zz トークン保管文字列
+ * @return エラーコード
+ */
+static errr interpret_e_token(char *buf, char **zz)
+{
+	if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return 1;
+
+	int j = (byte)strtol(zz[0], NULL, 0) % 128;
+	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
+	if (n1) tval_to_attr[j] = n1;
+	return 0;
+}
+
+
+/*!
  * @brief Cトークンの解釈 / Process "C:<str>" -- create keymap
  * @param buf バッファ
  * @param zz トークン保管文字列
@@ -235,7 +252,6 @@ static errr interpret_v_token(char *buf, char **zz)
  * @brief X/Yトークンの解釈
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param buf バッファ
- * @param zz トークン保管文字列
  * @return エラーコード
  * @details
  * Process "X:<str>" -- turn option off
@@ -436,15 +452,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 	case 'U':
 		return interpret_u_token(buf, zz);
 	case 'E':
-	{
-		/* Process "E:<tv>:<a>" -- attribute for inventory objects */
-		if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return 1;
-
-		int j = (byte)strtol(zz[0], NULL, 0) % 128;
-		TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
-		if (n1) tval_to_attr[j] = n1;
-		return 0;
-	}
+		return interpret_e_token(buf, zz);
 	case 'A':
 	{
 		/* Process "A:<str>" -- save an "action" for later */
