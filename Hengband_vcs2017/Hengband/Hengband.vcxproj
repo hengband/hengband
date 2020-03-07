@@ -196,6 +196,7 @@
     <ClCompile Include="..\..\src\io\gf-descriptions.c" />
     <ClCompile Include="..\..\src\io\interpret-pref-file.c" />
     <ClCompile Include="..\..\src\io\read-pref-file.c" />
+    <ClCompile Include="..\..\src\io\special-class-dump.c" />
     <ClCompile Include="..\..\src\io\tokenizer.c" />
     <ClCompile Include="..\..\src\monster-dist-offsets.c" />
     <ClCompile Include="..\..\src\monster-process.c" />
@@ -345,6 +346,7 @@
     <ClInclude Include="..\..\src\io\gf-descriptions.h" />
     <ClInclude Include="..\..\src\io\interpret-pref-file.h" />
     <ClInclude Include="..\..\src\io\read-pref-file.h" />
+    <ClInclude Include="..\..\src\io\special-class-dump.h" />
     <ClInclude Include="..\..\src\io\tokenizer.h" />
     <ClInclude Include="..\..\src\monster-dist-offsets.h" />
     <ClInclude Include="..\..\src\monster\quantum-effect.h" />
