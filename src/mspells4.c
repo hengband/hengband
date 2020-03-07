@@ -2164,7 +2164,7 @@ HIT_POINT spell_RF6_SPECIAL_ROLENTO(player_type *target_ptr, POSITION y, POSITIO
 
 	for (k = 0; k < num; k++)
 	{
-		count += summon_named_creature(target_ptr, m_idx, y, x, MON_SHURYUUDAN, mode);
+		count += summon_named_creature(target_ptr, m_idx, y, x, MON_GRENADE, mode);
 	}
 	if (target_ptr->blind && count)
 	{

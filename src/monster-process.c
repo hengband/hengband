@@ -57,7 +57,7 @@ bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);
 bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 void awake_monster(player_type *target_ptr, MONSTER_IDX m_idx);
 void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
-bool explode_monster(player_type *target_ptr, MONSTER_IDX m_idx);
+bool explode_grenade(player_type *target_ptr, MONSTER_IDX m_idx);
 bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
 bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware);
 bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_ptr);
@@ -999,7 +999,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	turn_flags_ptr->aware = process_stealth(target_ptr, m_idx);
 	if (vanish_summoned_children(target_ptr, m_idx, turn_flags_ptr->see_m)) return;
 	if (process_quantum_effect(target_ptr, m_idx, turn_flags_ptr->see_m)) return;
-	if (explode_monster(target_ptr, m_idx)) return;
+	if (explode_grenade(target_ptr, m_idx)) return;
 	if (runaway_monster(target_ptr, turn_flags_ptr, m_idx)) return;
 
 	awake_monster(target_ptr, m_idx);
@@ -1197,15 +1197,15 @@ void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m)
 
 
 /*!
- * @brief モンスターの爆発処理
+ * @brief 手榴弾の爆発処理
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
  * @return 爆死したらTRUE
  */
-bool explode_monster(player_type *target_ptr, MONSTER_IDX m_idx)
+bool explode_grenade(player_type *target_ptr, MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	if (m_ptr->r_idx != MON_SHURYUUDAN) return FALSE;
+	if (m_ptr->r_idx != MON_GRENADE) return FALSE;
 
 	bool fear, dead;
 	mon_take_hit_mon(target_ptr, m_idx, 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
