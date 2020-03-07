@@ -13,6 +13,8 @@
 #include "term.h"
 #include "view-mainwindow.h" // 暫定。apply_default_feat_lighting()。後で消す.
 
+#define MAX_MACRO_CHARS 65536 // 1つのマクロキー押下で実行可能なコマンド最大数
+
 /*!
  * @brief Rトークンの解釈 / Process "R:<num>:<a>/<c>" -- attr/char for monster races
  * @param buf バッファ
@@ -387,7 +389,7 @@ static errr interpret_t_token(char *buf)
 	if (tok < 2)
 		return 0;
 
-	char buf_aux[1024]; // todo TA勢から「少ない」とコメントがあったので増やす
+	char buf_aux[MAX_MACRO_CHARS];
 	char *t, *s;
 	if (max_macrotrigger >= MAX_MACRO_TRIG)
 	{
