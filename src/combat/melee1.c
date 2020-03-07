@@ -4124,17 +4124,13 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	monster_race *tr_ptr = &r_info[t_ptr->r_idx];
 
-	ARMOUR_CLASS ap_cnt;
-	ARMOUR_CLASS ac;
-	DEPTH rlev;
 	int pt;
 	GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
-	char            temp[MAX_NLEN];
-	bool            blinked;
-	bool            explode = FALSE, touched = FALSE, fear = FALSE, dead = FALSE;
+	char temp[MAX_NLEN];
+	bool explode = FALSE, touched = FALSE, fear = FALSE, dead = FALSE;
 	POSITION y_saver = t_ptr->fy;
 	POSITION x_saver = t_ptr->fx;
-	int             effect_type;
+	int effect_type;
 
 	bool see_m = is_seen(m_ptr);
 	bool see_t = is_seen(t_ptr);
@@ -4144,25 +4140,21 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 	bool known = (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
 	bool do_silly_attack = (one_in_(2) && subject_ptr->image);
 
-	/* Cannot attack self */
 	if (m_idx == t_idx) return FALSE;
-
-	/* Not allowed to attack */
 	if (r_ptr->flags1 & RF1_NEVER_BLOW) return FALSE;
-
 	if (d_info[subject_ptr->dungeon_idx].flags1 & DF1_NO_MELEE) return FALSE;
 
 	/* Total armor */
-	ac = tr_ptr->ac;
+	ARMOUR_CLASS ac = tr_ptr->ac;
 
 	/* Extract the effective monster level */
-	rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+	DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
 	monster_desc(subject_ptr, m_name, m_ptr, 0);
 	monster_desc(subject_ptr, t_name, t_ptr, 0);
 
 	/* Assume no blink */
-	blinked = FALSE;
+	bool blinked = FALSE;
 
 	if (!see_either && known)
 	{
@@ -4172,7 +4164,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 	if (subject_ptr->riding && (m_idx == subject_ptr->riding)) disturb(subject_ptr, TRUE, TRUE);
 
 	/* Scan through all four blows */
-	for (ap_cnt = 0; ap_cnt < 4; ap_cnt++)
+	for (ARMOUR_CLASS ap_cnt = 0; ap_cnt < 4; ap_cnt++)
 	{
 		bool obvious = FALSE;
 
