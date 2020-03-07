@@ -202,6 +202,7 @@
     <ClCompile Include="..\..\src\monster-status.c" />
     <ClCompile Include="..\..\src\monsterrace-hook.c" />
     <ClCompile Include="..\..\src\monsterrace.c" />
+    <ClCompile Include="..\..\src\monster\quantum-effect.c" />
     <ClCompile Include="..\..\src\object-boost.c" />
     <ClCompile Include="..\..\src\object-curse.c" />
     <ClCompile Include="..\..\src\object-ego.c" />
@@ -346,6 +347,7 @@
     <ClInclude Include="..\..\src\io\read-pref-file.h" />
     <ClInclude Include="..\..\src\io\tokenizer.h" />
     <ClInclude Include="..\..\src\monster-dist-offsets.h" />
+    <ClInclude Include="..\..\src\monster\quantum-effect.h" />
     <ClInclude Include="..\..\src\object-flavor.h" />
     <ClInclude Include="..\..\src\player-inventory.h" />
     <ClInclude Include="..\..\src\player\permanent-resistances.h" />
