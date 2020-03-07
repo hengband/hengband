@@ -407,25 +407,15 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 		return 0;
 	}
 	case 'R':
-	{
 		return interpret_r_token(buf, zz);
-	}
 	case 'K':
-	{
 		return interpret_k_token(buf, zz);
-	}
 	case 'F':
-	{
 		return interpret_f_token(buf, zz);
-	}
 	case 'S':
-	{
 		return interpret_s_token(buf, zz);
-	}
 	case 'U':
-	{
 		return interpret_u_token(buf, zz);
-	}
 	case 'E':
 	{
 		/* Process "E:<tv>:<a>" -- attribute for inventory objects */
@@ -451,9 +441,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 		return 0;
 	}
 	case 'C':
-	{
 		return interpret_c_token(buf, zz);
-	}
 	case 'V':
 	{
 		/* Process "V:<num>:<kv>:<rv>:<gv>:<bv>" -- visual info */
@@ -468,18 +456,12 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 	}
 	case 'X':
 	case 'Y':
-	{
 		return interpret_xy_token(creature_ptr, buf);
-	}
 	case 'Z':
-	{
 		return interpret_z_token(buf);
-	}
 	case 'T':
-	{
 		return interpret_t_token(buf, zz);
+	default:
+		return 1;
 	}
-	}
-
-	return 1;
 }
