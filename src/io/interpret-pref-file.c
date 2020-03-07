@@ -213,6 +213,25 @@ static errr interpret_c_token(char *buf, char **zz)
 
 
 /*!
+ * @brief Vトークンの解釈 / Process "V:<num>:<kv>:<rv>:<gv>:<bv>" -- visual info
+ * @param buf バッファ
+ * @param zz トークン保管文字列
+ * @return エラーコード
+ */
+static errr interpret_v_token(char *buf, char **zz)
+{
+	if (tokenize(buf + 2, 5, zz, TOKENIZE_CHECKQUOTE) != 5) return 1;
+
+	int i = (byte)strtol(zz[0], NULL, 0);
+	angband_color_table[i][0] = (byte)strtol(zz[1], NULL, 0);
+	angband_color_table[i][1] = (byte)strtol(zz[2], NULL, 0);
+	angband_color_table[i][2] = (byte)strtol(zz[3], NULL, 0);
+	angband_color_table[i][3] = (byte)strtol(zz[4], NULL, 0);
+	return 0;
+}
+
+
+/*!
  * @brief X/Yトークンの解釈
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param buf バッファ
@@ -443,17 +462,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 	case 'C':
 		return interpret_c_token(buf, zz);
 	case 'V':
-	{
-		/* Process "V:<num>:<kv>:<rv>:<gv>:<bv>" -- visual info */
-		if (tokenize(buf + 2, 5, zz, TOKENIZE_CHECKQUOTE) != 5) return 1;
-
-		int i = (byte)strtol(zz[0], NULL, 0);
-		angband_color_table[i][0] = (byte)strtol(zz[1], NULL, 0);
-		angband_color_table[i][1] = (byte)strtol(zz[2], NULL, 0);
-		angband_color_table[i][2] = (byte)strtol(zz[3], NULL, 0);
-		angband_color_table[i][3] = (byte)strtol(zz[4], NULL, 0);
-		return 0;
-	}
+		return interpret_v_token(buf, zz);
 	case 'X':
 	case 'Y':
 		return interpret_xy_token(creature_ptr, buf);
