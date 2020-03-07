@@ -21,7 +21,7 @@
  * @param fff ファイルポインタ
  * @return なし
  */
-static void dump_aux_display_player(player_type *creature_ptr, FILE *fff, display_player_pf display_player, map_name_pf map_name)
+static void dump_aux_player_status(player_type *creature_ptr, FILE *fff, display_player_pf display_player, map_name_pf map_name)
 {
 	TERM_COLOR a;
 	char c;
@@ -640,16 +640,11 @@ static void dump_aux_home_museum(player_type *creature_ptr, FILE *fff)
  */
 void make_character_dump(player_type *creature_ptr, FILE *fff, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name)
 {
-#ifdef JP
-	fprintf(fff, "  [変愚蛮怒 %d.%d.%d キャラクタ情報]\n\n",
+	fprintf(fff, _("  [変愚蛮怒 %d.%d.%d キャラクタ情報]\n\n", "  [Hengband %d.%d.%d Character Dump]\n\n"),
 		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
-#else
-	fprintf(fff, "  [Hengband %d.%d.%d Character Dump]\n\n",
-		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
-#endif
 	(*update_playtime)();
 
-	dump_aux_display_player(creature_ptr, fff, display_player, map_name);
+	dump_aux_player_status(creature_ptr, fff, display_player, map_name);
 	dump_aux_last_message(creature_ptr, fff);
 	dump_aux_options(fff);
 	dump_aux_recall(fff);
