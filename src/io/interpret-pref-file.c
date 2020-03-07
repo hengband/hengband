@@ -175,7 +175,7 @@ static errr interpret_u_token(char *buf, char **zz)
  * @param zz トークン保管文字列
  * @return エラーコード
  */
-static errr interpret_c_token(char *buf, char *zz)
+static errr interpret_c_token(char *buf, char **zz)
 {
 	if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return 1;
 
@@ -203,7 +203,7 @@ static errr interpret_c_token(char *buf, char *zz)
  * Process "X:<str>" -- turn option off
  * Process "Y:<str>" -- turn option on
  */
-static errr interpret_xy_token(player_type *creature_ptr, char *buf, char **zz)
+static errr interpret_xy_token(player_type *creature_ptr, char *buf)
 {
 	for (int i = 0; option_info[i].o_desc; i++)
 	{
@@ -247,7 +247,7 @@ static errr interpret_xy_token(player_type *creature_ptr, char *buf, char **zz)
  * @param zz トークン保管文字列
  * @return エラーコード
  */
-static errr interpret_z_token(char *buf, char **zz)
+static errr interpret_z_token(char *buf)
 {
 	char *t = my_strchr(buf + 2, ':');
 	if (!t) return 1;
@@ -262,6 +262,92 @@ static errr interpret_z_token(char *buf, char **zz)
 	}
 
 	return 1;
+}
+
+
+/*!
+ * @brief Tトークンの解釈 / Initialize macro trigger names and a template
+ * @param buf バッファ
+ * @param zz トークン保管文字列
+ * @return エラーコード
+ * @details
+ * Process "T:<template>:<modifier chr>:<modifier name>:..." for 4 tokens
+ * Process "T:<trigger>:<keycode>:<shift-keycode>" for 3 tokens
+ */
+static errr interpret_t_token(char *buf, char **zz)
+{
+	int tok = tokenize(buf + 2, 2 + MAX_MACRO_MOD, zz, 0);
+	if (tok >= 4)
+	{
+		if (macro_template != NULL)
+		{
+			int macro_modifier_length = strlen(macro_modifier_chr);
+			string_free(macro_template);
+			macro_template = NULL;
+			string_free(macro_modifier_chr);
+			for (int i = 0; i < macro_modifier_length; i++)
+			{
+				string_free(macro_modifier_name[i]);
+			}
+
+			for (int i = 0; i < max_macrotrigger; i++)
+			{
+				string_free(macro_trigger_name[i]);
+				string_free(macro_trigger_keycode[0][i]);
+				string_free(macro_trigger_keycode[1][i]);
+			}
+
+			max_macrotrigger = 0;
+		}
+
+		if (*zz[0] == '\0') return 0;
+
+		int zz_length = strlen(zz[1]);
+		zz_length = MIN(MAX_MACRO_MOD, zz_length);
+		if (2 + zz_length != tok) return 1;
+
+		macro_template = string_make(zz[0]);
+		macro_modifier_chr = string_make(zz[1]);
+		for (int i = 0; i < zz_length; i++)
+		{
+			macro_modifier_name[i] = string_make(zz[2 + i]);
+		}
+
+		return 0;
+	}
+
+	if (tok < 2)
+		return 0;
+
+	char buf_aux[1024]; // todo TA勢から「少ない」とコメントがあったので増やす
+	char *t, *s;
+	if (max_macrotrigger >= MAX_MACRO_TRIG)
+	{
+		msg_print(_("マクロトリガーの設定が多すぎます!", "Too many macro triggers!"));
+		return 1;
+	}
+
+	int m = max_macrotrigger;
+	max_macrotrigger++;
+	t = buf_aux;
+	s = zz[0];
+	while (*s)
+	{
+		if ('\\' == *s) s++;
+		*t++ = *s++;
+	}
+
+	*t = '\0';
+	macro_trigger_name[m] = string_make(buf_aux);
+	macro_trigger_keycode[0][m] = string_make(zz[1]);
+	if (tok == 3)
+	{
+		macro_trigger_keycode[1][m] = string_make(zz[2]);
+		return 0;
+	}
+
+	macro_trigger_keycode[1][m] = string_make(zz[1]);
+	return 0;
 }
 
 
@@ -372,91 +458,15 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 	case 'X':
 	case 'Y':
 	{
-		return interpret_xy_token(creature_ptr, buf, zz);
+		return interpret_xy_token(creature_ptr, buf);
 	}
 	case 'Z':
 	{
-		return interpret_z_token(buf, zz);
+		return interpret_z_token(buf);
 	}
 	case 'T':
 	{
-		/* Initialize macro trigger names and a template */
-		/* Process "T:<trigger>:<keycode>:<shift-keycode>" */
-		/* Process "T:<template>:<modifier chr>:<modifier name>:..." */
-		int tok = tokenize(buf + 2, 2 + MAX_MACRO_MOD, zz, 0);
-
-		/* Process "T:<template>:<modifier chr>:<modifier name>:..." */
-		if (tok >= 4)
-		{
-			if (macro_template != NULL)
-			{
-				int macro_modifier_length = strlen(macro_modifier_chr);
-				string_free(macro_template);
-				macro_template = NULL;
-				string_free(macro_modifier_chr);
-				for (int i = 0; i < macro_modifier_length; i++)
-				{
-					string_free(macro_modifier_name[i]);
-				}
-
-				for (int i = 0; i < max_macrotrigger; i++)
-				{
-					string_free(macro_trigger_name[i]);
-					string_free(macro_trigger_keycode[0][i]);
-					string_free(macro_trigger_keycode[1][i]);
-				}
-
-				max_macrotrigger = 0;
-			}
-
-			if (*zz[0] == '\0') return 0;
-
-			int zz_length = strlen(zz[1]);
-			zz_length = MIN(MAX_MACRO_MOD, zz_length);
-			if (2 + zz_length != tok) return 1;
-
-			macro_template = string_make(zz[0]);
-			macro_modifier_chr = string_make(zz[1]);
-			for (int i = 0; i < zz_length; i++)
-			{
-				macro_modifier_name[i] = string_make(zz[2 + i]);
-			}
-
-			return 0;
-		}
-
-		/* Process "T:<trigger>:<keycode>:<shift-keycode>" */
-		if (tok < 2) return 0;
-
-		char buf_aux[1024]; // todo TA勢から「少ない」とコメントがあったので増やす
-		char *t, *s;
-		if (max_macrotrigger >= MAX_MACRO_TRIG)
-		{
-			msg_print(_("マクロトリガーの設定が多すぎます!", "Too many macro triggers!"));
-			return 1;
-		}
-
-		int m = max_macrotrigger;
-		max_macrotrigger++;
-		t = buf_aux;
-		s = zz[0];
-		while (*s)
-		{
-			if ('\\' == *s) s++;
-			*t++ = *s++;
-		}
-
-		*t = '\0';
-		macro_trigger_name[m] = string_make(buf_aux);
-		macro_trigger_keycode[0][m] = string_make(zz[1]);
-		if (tok == 3)
-		{
-			macro_trigger_keycode[1][m] = string_make(zz[2]);
-			return 0;
-		}
-
-		macro_trigger_keycode[1][m] = string_make(zz[1]);
-		return 0;
+		return interpret_t_token(buf, zz);
 	}
 	}
 
