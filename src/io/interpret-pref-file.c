@@ -143,6 +143,34 @@ static errr interpret_f_token(char *buf, char **zz)
 
 
 /*!
+ * @brief Uトークンの解釈 / Process "U:<tv>:<a>/<c>" -- attr/char for unaware items
+ * @param buf バッファ
+ * @param zz トークン保管文字列
+ * @return エラーコード
+ * @details
+ */
+static errr interpret_u_token(char *buf, char **zz)
+{
+	if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
+
+	int j = (int)strtol(zz[0], NULL, 0);
+	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
+	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
+	for (int i = 1; i < max_k_idx; i++)
+	{
+		object_kind *k_ptr = &k_info[i];
+		if (k_ptr->tval == j)
+		{
+			if (n1) k_ptr->d_attr = n1;
+			if (n2) k_ptr->d_char = n2;
+		}
+	}
+
+	return 0;
+}
+
+
+/*!
  * @brief 設定ファイルの各行から各種テキスト情報を取得する /
  * Parse a sub-file of the "extra info" (format shown below)
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -204,23 +232,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 	}
 	case 'U':
 	{
-		/* Process "U:<tv>:<a>/<c>" -- attr/char for unaware items */
-		if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
-
-		int j = (int)strtol(zz[0], NULL, 0);
-		TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
-		SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
-		for (int i = 1; i < max_k_idx; i++)
-		{
-			object_kind *k_ptr = &k_info[i];
-			if (k_ptr->tval == j)
-			{
-				if (n1) k_ptr->d_attr = n1;
-				if (n2) k_ptr->d_char = n2;
-			}
-		}
-
-		return 0;
+		return interpret_u_token(buf, zz);
 	}
 	case 'E':
 	{
