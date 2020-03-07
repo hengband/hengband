@@ -10,6 +10,12 @@
 #include "objectkind.h"
 #include "monster-spell.h"
 
+typedef struct {
+	BIT_FLAGS f4;
+	BIT_FLAGS f5;
+	BIT_FLAGS f6;
+} learnt_spell_table;
+
 /*!
  * @brief 魔力喰いを持つクラスの情報をダンプする
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -105,6 +111,45 @@ static void dump_smith(player_type *creature_ptr, FILE *fff)
 
 
 /*!
+ * @brief ダンプする情報に学習済魔法の種類を追加する
+ * @param p ダンプ用のバッファ
+ * @param col 行数
+ * @param spell_type 魔法の種類
+ * @param learnt_spell_ptr 学習済魔法のテーブル
+ * @return なし
+ */
+static void add_monster_spell_type(char p[][80], int col, int spell_type, learnt_spell_table *learnt_spell_ptr)
+{
+	learnt_spell_ptr->f4 = 0;
+	learnt_spell_ptr->f5 = 0;
+	learnt_spell_ptr->f6 = 0;
+	set_rf_masks(&learnt_spell_ptr->f4, &learnt_spell_ptr->f5, &learnt_spell_ptr->f6, spell_type);
+	switch (spell_type)
+	{
+	case MONSPELL_TYPE_BOLT:
+		strcat(p[col], _("\n     [ボルト型]\n", "\n     [Bolt  Type]\n"));
+		break;
+
+	case MONSPELL_TYPE_BALL:
+		strcat(p[col], _("\n     [ボール型]\n", "\n     [Ball  Type]\n"));
+		break;
+
+	case MONSPELL_TYPE_BREATH:
+		strcat(p[col], _("\n     [ブレス型]\n", "\n     [  Breath  ]\n"));
+		break;
+
+	case MONSPELL_TYPE_SUMMON:
+		strcat(p[col], _("\n     [召喚魔法]\n", "\n     [Summonning]\n"));
+		break;
+
+	case MONSPELL_TYPE_OTHER:
+		strcat(p[col], _("\n     [ その他 ]\n", "\n     [Other Type]\n"));
+		break;
+	}
+}
+
+
+/*!
  * @brief 青魔道士の学習済魔法をダンプする
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
@@ -122,48 +167,26 @@ static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
 	strcat(p[col], _("\n\n  [学習済みの青魔法]\n", "\n\n  [Learned Blue Magic]\n"));
 
 	int spellnum[MAX_MONSPELLS];
-	for (int magic_type = 1; magic_type < 6; magic_type++)
+	for (int spell_type = 1; spell_type < 6; spell_type++)
 	{
 		col++;
-		BIT_FLAGS f4 = 0, f5 = 0, f6 = 0;
-		set_rf_masks(&f4, &f5, &f6, magic_type);
-		switch (magic_type)
-		{
-		case MONSPELL_TYPE_BOLT:
-			strcat(p[col], _("\n     [ボルト型]\n", "\n     [Bolt  Type]\n"));
-			break;
-
-		case MONSPELL_TYPE_BALL:
-			strcat(p[col], _("\n     [ボール型]\n", "\n     [Ball  Type]\n"));
-			break;
-
-		case MONSPELL_TYPE_BREATH:
-			strcat(p[col], _("\n     [ブレス型]\n", "\n     [  Breath  ]\n"));
-			break;
-
-		case MONSPELL_TYPE_SUMMON:
-			strcat(p[col], _("\n     [召喚魔法]\n", "\n     [Summonning]\n"));
-			break;
-
-		case MONSPELL_TYPE_OTHER:
-			strcat(p[col], _("\n     [ その他 ]\n", "\n     [Other Type]\n"));
-			break;
-		}
+		learnt_spell_table learnt_magic;
+		add_monster_spell_type(p, col, spell_type, &learnt_magic);
 
 		int num = 0;
 		for (int i = 0; i < 32; i++)
 		{
-			if ((0x00000001 << i) & f4) spellnum[num++] = i;
+			if ((0x00000001 << i) & learnt_magic.f4) spellnum[num++] = i;
 		}
 
 		for (int i = 32; i < 64; i++)
 		{
-			if ((0x00000001 << (i - 32)) & f5) spellnum[num++] = i;
+			if ((0x00000001 << (i - 32)) & learnt_magic.f5) spellnum[num++] = i;
 		}
 
 		for (int i = 64; i < 96; i++)
 		{
-			if ((0x00000001 << (i - 64)) & f6) spellnum[num++] = i;
+			if ((0x00000001 << (i - 64)) & learnt_magic.f6) spellnum[num++] = i;
 		}
 
 		col++;
