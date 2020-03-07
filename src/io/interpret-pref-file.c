@@ -340,7 +340,7 @@ static errr interpret_z_token(char *buf)
  * @param zz トークン保管文字列
  * @return エラーコード
  */
-static errr decide_template_modifier(char **zz)
+static errr decide_template_modifier(int tok, char **zz)
 {
 	if (macro_template != NULL)
 	{
@@ -367,7 +367,7 @@ static errr decide_template_modifier(char **zz)
 
 	int zz_length = strlen(zz[1]);
 	zz_length = MIN(MAX_MACRO_MOD, zz_length);
-	if (2 + zz_length != 4) return 1;
+	if (2 + zz_length != tok) return 1;
 
 	macro_template = string_make(zz[0]);
 	macro_modifier_chr = string_make(zz[1]);
@@ -421,6 +421,7 @@ static errr interpret_macro_keycodes(int tok, char **zz)
 
 
 /*!
+ * todo 2.2.1r時点のコードからトークン数0～1の場合もエラーコード0だが、1であるべきでは？
  * @brief Tトークンの個数調査 (解釈はサブルーチンで) / Initialize macro trigger names and a template
  * @param buf バッファ
  * @return エラーコード
@@ -429,16 +430,10 @@ static errr interpret_t_token(char *buf)
 {
 	char *zz[16];
 	int tok = tokenize(buf + 2, 2 + MAX_MACRO_MOD, zz, 0);
-	switch (tok)
-	{
-	case 4:
-		return decide_template_modifier(zz);
-	case 2:
-	case 3:
-		return interpret_macro_keycodes(tok, zz);
-	default:
-		return 0;
-	}
+	if (tok >= 4) return decide_template_modifier(tok, zz);
+	if (tok < 2) return 0;
+
+	return interpret_macro_keycodes(tok, zz);
 }
 
 
