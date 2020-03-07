@@ -147,7 +147,6 @@ static errr interpret_f_token(char *buf, char **zz)
  * @param buf バッファ
  * @param zz トークン保管文字列
  * @return エラーコード
- * @details
  */
 static errr interpret_u_token(char *buf, char **zz)
 {
@@ -166,6 +165,30 @@ static errr interpret_u_token(char *buf, char **zz)
 		}
 	}
 
+	return 0;
+}
+
+
+/*!
+ * @brief Cトークンの解釈 / Process "C:<str>" -- create keymap
+ * @param buf バッファ
+ * @param zz トークン保管文字列
+ * @return エラーコード
+ */
+static errr interpret_c_token(char *buf, char *zz)
+{
+	if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return 1;
+
+	int mode = strtol(zz[0], NULL, 0);
+	if ((mode < 0) || (mode >= KEYMAP_MODES)) return 1;
+
+	char tmp[1024];
+	text_to_ascii(tmp, zz[1]);
+	if (!tmp[0] || tmp[1]) return 1;
+
+	int i = (byte)(tmp[0]);
+	string_free(keymap_act[mode][i]);
+	keymap_act[mode][i] = string_make(macro__buf);
 	return 0;
 }
 
@@ -260,20 +283,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 	}
 	case 'C':
 	{
-		/* Process "C:<str>" -- create keymap */
-		if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return 1;
-
-		int mode = strtol(zz[0], NULL, 0);
-		if ((mode < 0) || (mode >= KEYMAP_MODES)) return 1;
-
-		char tmp[1024];
-		text_to_ascii(tmp, zz[1]);
-		if (!tmp[0] || tmp[1]) return 1;
-
-		int i = (byte)(tmp[0]);
-		string_free(keymap_act[mode][i]);
-		keymap_act[mode][i] = string_make(macro__buf);
-		return 0;
+		return interpret_c_token(buf, zz);
 	}
 	case 'V':
 	{
