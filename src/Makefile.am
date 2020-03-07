@@ -58,8 +58,9 @@ hengband_SOURCES = \
 	mind.c mind.h \
 	\
 	monster.h monsterrace.c monsterrace.h \
-	monster/monster-util.c monster/monster-util.c \
-	monster/quantum-effect.c monster/quantum-effect.c \
+	monster/monster-util.c monster/monster-util.h \
+	monster/monster-object.c monster/monster-object.h \
+	monster/quantum-effect.c monster/quantum-effect.h \
 	monsterrace-hook.c monsterrace-hook.h \
 	monster-dist-offsets.c monster-dist-offsets.h \
 	monster-process.c monster-process.h \
