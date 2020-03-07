@@ -194,6 +194,54 @@ static errr interpret_c_token(char *buf, char *zz)
 
 
 /*!
+ * @brief X/Yトークンの解釈
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param buf バッファ
+ * @param zz トークン保管文字列
+ * @return エラーコード
+ * @details
+ * Process "X:<str>" -- turn option off
+ * Process "Y:<str>" -- turn option on
+ */
+static errr interpret_xy_token(player_type *creature_ptr, char *buf, char **zz)
+{
+	for (int i = 0; option_info[i].o_desc; i++)
+	{
+		bool is_option = option_info[i].o_var != NULL;
+		is_option &= option_info[i].o_text != NULL;
+		is_option &= streq(option_info[i].o_text, buf + 2);
+		if (!is_option) continue;
+
+		int os = option_info[i].o_set;
+		int ob = option_info[i].o_bit;
+
+		if ((creature_ptr->playing || current_world_ptr->character_xtra) &&
+			(OPT_PAGE_BIRTH == option_info[i].o_page) && !current_world_ptr->wizard)
+		{
+			msg_format(_("初期オプションは変更できません! '%s'", "Birth options can not changed! '%s'"), buf);
+			msg_print(NULL);
+			return 0;
+		}
+
+		if (buf[0] == 'X')
+		{
+			option_flag[os] &= ~(1L << ob);
+			(*option_info[i].o_var) = FALSE;
+			return 0;
+		}
+
+		option_flag[os] |= (1L << ob);
+		(*option_info[i].o_var) = TRUE;
+		return 0;
+	}
+
+	msg_format(_("オプションの名前が正しくありません： %s", "Ignored invalid option: %s"), buf);
+	msg_print(NULL);
+	return 0;
+}
+
+
+/*!
  * @brief 設定ファイルの各行から各種テキスト情報を取得する /
  * Parse a sub-file of the "extra info" (format shown below)
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -300,41 +348,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 	case 'X':
 	case 'Y':
 	{
-		/* Process "X:<str>" -- turn option off */
-		/* Process "Y:<str>" -- turn option on */
-		for (int i = 0; option_info[i].o_desc; i++)
-		{
-			bool is_option = option_info[i].o_var != NULL;
-			is_option &= option_info[i].o_text != NULL;
-			is_option &= streq(option_info[i].o_text, buf + 2);
-			if (!is_option) continue;
-
-			int os = option_info[i].o_set;
-			int ob = option_info[i].o_bit;
-
-			if ((creature_ptr->playing || current_world_ptr->character_xtra) &&
-				(OPT_PAGE_BIRTH == option_info[i].o_page) && !current_world_ptr->wizard)
-			{
-				msg_format(_("初期オプションは変更できません! '%s'", "Birth options can not changed! '%s'"), buf);
-				msg_print(NULL);
-				return 0;
-			}
-
-			if (buf[0] == 'X')
-			{
-				option_flag[os] &= ~(1L << ob);
-				(*option_info[i].o_var) = FALSE;
-				return 0;
-			}
-
-			option_flag[os] |= (1L << ob);
-			(*option_info[i].o_var) = TRUE;
-			return 0;
-		}
-
-		msg_format(_("オプションの名前が正しくありません： %s", "Ignored invalid option: %s"), buf);
-		msg_print(NULL);
-		return 0;
+		return interpret_xy_token(creature_ptr, buf, zz);
 	}
 	case 'Z':
 	{
