@@ -478,6 +478,9 @@
     <ClCompile Include="..\..\src\io\special-class-dump.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\player-status-dump.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -936,6 +939,9 @@
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\special-class-dump.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\player-status-dump.h">
       <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
