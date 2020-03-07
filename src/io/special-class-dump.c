@@ -16,7 +16,7 @@
  * @param fff ファイルポインタ
  * @return なし
  */
-void dump_magic_eater(player_type *creature_ptr, FILE *fff)
+static void dump_magic_eater(player_type *creature_ptr, FILE *fff)
 {
 	char s[EATER_EXT][MAX_NLEN];
 	fprintf(fff, _("\n\n  [取り込んだ魔法道具]\n", "\n\n  [Magic devices eaten]\n"));
@@ -73,6 +73,38 @@ void dump_magic_eater(player_type *creature_ptr, FILE *fff)
 
 
 /*!
+ * @brief 鍛冶師としての情報をダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param fff ファイルポインタ
+ * @return なし
+ */
+static void dump_smith(player_type *creature_ptr, FILE *fff)
+{
+	int i, id[250], n = 0, row;
+	fprintf(fff, _("\n\n  [手に入れたエッセンス]\n\n", "\n\n  [Get Essence]\n\n"));
+	fprintf(fff, _("エッセンス   個数     エッセンス   個数     エッセンス   個数",
+		"Essence      Num      Essence      Num      Essence      Num "));
+	for (i = 0; essence_name[i]; i++)
+	{
+		if (!essence_name[i][0]) continue;
+		id[n] = i;
+		n++;
+	}
+
+	row = n / 3 + 1;
+	for (i = 0; i < row; i++)
+	{
+		fprintf(fff, "\n");
+		fprintf(fff, "%-11s %5d     ", essence_name[id[i]], (int)creature_ptr->magic_num1[id[i]]);
+		if (i + row < n) fprintf(fff, "%-11s %5d     ", essence_name[id[i + row]], (int)creature_ptr->magic_num1[id[i + row]]);
+		if (i + row * 2 < n) fprintf(fff, "%-11s %5d", essence_name[id[i + row * 2]], (int)creature_ptr->magic_num1[id[i + row * 2]]);
+	}
+
+	fputs("\n", fff);
+}
+
+
+/*!
  * todo ここはenum/switchで扱いたい
  * @brief プレイヤーの職業能力情報をファイルにダンプする
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -94,29 +126,7 @@ void dump_aux_class_special(player_type *creature_ptr, FILE *fff)
 
 	if (creature_ptr->pclass == CLASS_SMITH)
 	{
-		int i, id[250], n = 0, row;
-
-		fprintf(fff, _("\n\n  [手に入れたエッセンス]\n\n", "\n\n  [Get Essence]\n\n"));
-		fprintf(fff, _("エッセンス   個数     エッセンス   個数     エッセンス   個数",
-			"Essence      Num      Essence      Num      Essence      Num "));
-		for (i = 0; essence_name[i]; i++)
-		{
-			if (!essence_name[i][0]) continue;
-			id[n] = i;
-			n++;
-		}
-
-		row = n / 3 + 1;
-
-		for (i = 0; i < row; i++)
-		{
-			fprintf(fff, "\n");
-			fprintf(fff, "%-11s %5d     ", essence_name[id[i]], (int)creature_ptr->magic_num1[id[i]]);
-			if (i + row < n) fprintf(fff, "%-11s %5d     ", essence_name[id[i + row]], (int)creature_ptr->magic_num1[id[i + row]]);
-			if (i + row * 2 < n) fprintf(fff, "%-11s %5d", essence_name[id[i + row * 2]], (int)creature_ptr->magic_num1[id[i + row * 2]]);
-		}
-
-		fputs("\n", fff);
+		dump_smith(creature_ptr, fff);
 		return;
 	}
 
