@@ -1,10 +1,7 @@
 ﻿/*!
- * @brief monster-processのための構造体群初期化処理と共通性の極めて高い処理
+ * @brief モンスターが移動した結果、床のアイテムに重なった時の処理
  * @date 2020/03/07
  * @author Hourier
- * @details
- * 概ね、player_type 構造体が引数でない場合はここへ移動させることを検討しても良い
- * 引数に入っていたらここには移動させないこと
  */
 
 #include "monster/monster-object.h"
@@ -120,9 +117,9 @@ void update_object_by_monster_movement(player_type *target_ptr, turn_flags *turn
 	grid_type *g_ptr;
 	g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
 
-	OBJECT_IDX this_o_idx, next_o_idx;
 	turn_flags_ptr->do_take = (r_ptr->flags2 & RF2_TAKE_ITEM) != 0;
-	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	OBJECT_IDX next_o_idx;
+	for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx > 0; this_o_idx = next_o_idx)
 	{
 		BIT_FLAGS flgs[TR_FLAG_SIZE], flg2 = 0L, flg3 = 0L, flgr = 0L;
 		GAME_TEXT m_name[MAX_NLEN], o_name[MAX_NLEN];

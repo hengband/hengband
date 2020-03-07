@@ -130,3 +130,33 @@ void store_enemy_approch_direction(int *mm, POSITION y, POSITION x)
 		mm[2] = 2;
 	}
 }
+
+
+/*!
+ * @brief 古いモンスター情報の保存
+ * @param monster_race_idx モンスターID
+ * @param old_race_flags_ptr モンスターフラグへの参照ポインタ
+ * @return なし
+ */
+void save_old_race_flags(MONRACE_IDX monster_race_idx, old_race_flags *old_race_flags_ptr)
+{
+	if (monster_race_idx == 0) return;
+
+	monster_race *r_ptr;
+	r_ptr = &r_info[monster_race_idx];
+
+	old_race_flags_ptr->old_r_flags1 = r_ptr->r_flags1;
+	old_race_flags_ptr->old_r_flags2 = r_ptr->r_flags2;
+	old_race_flags_ptr->old_r_flags3 = r_ptr->r_flags3;
+	old_race_flags_ptr->old_r_flags4 = r_ptr->r_flags4;
+	old_race_flags_ptr->old_r_flags5 = r_ptr->r_flags5;
+	old_race_flags_ptr->old_r_flags6 = r_ptr->r_flags6;
+	old_race_flags_ptr->old_r_flagsr = r_ptr->r_flagsr;
+
+	old_race_flags_ptr->old_r_blows0 = r_ptr->r_blows[0];
+	old_race_flags_ptr->old_r_blows1 = r_ptr->r_blows[1];
+	old_race_flags_ptr->old_r_blows2 = r_ptr->r_blows[2];
+	old_race_flags_ptr->old_r_blows3 = r_ptr->r_blows[3];
+
+	old_race_flags_ptr->old_r_cast_spell = r_ptr->r_cast_spell;
+}
