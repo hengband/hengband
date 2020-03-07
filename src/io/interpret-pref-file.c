@@ -19,7 +19,7 @@
  * @param zz トークン保管文字列
  * @return エラーコード
  */
-static errr interpret_r_file(char *buf, char **zz)
+static errr interpret_r_token(char *buf, char **zz)
 {
 	if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 
@@ -43,7 +43,7 @@ static errr interpret_r_file(char *buf, char **zz)
  * @param zz トークン保管文字列
  * @return エラーコード
  */
-static errr interpret_k_file(char *buf, char **zz)
+static errr interpret_k_token(char *buf, char **zz)
 {
 	if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 
@@ -119,7 +119,7 @@ static errr decide_feature_type(char **zz, int i, int num)
 
 
 /*!
- * @brief Kトークンの解釈 / Process "F:<num>:<a>/<c>" -- attr/char for terrain features
+ * @brief Fトークンの解釈 / Process "F:<num>:<a>/<c>" -- attr/char for terrain features
  * @param buf バッファ
  * @param zz トークン保管文字列
  * @return エラーコード
@@ -128,7 +128,7 @@ static errr decide_feature_type(char **zz, int i, int num)
  * "F:<num>:<a>/<c>:LIT"
  * "F:<num>:<a>/<c>:<la>/<lc>:<da>/<dc>"
  */
-static errr interpret_f_file(char *buf, char **zz)
+static errr interpret_f_token(char *buf, char **zz)
 {
 	int num = tokenize(buf + 2, F_LIT_MAX * 2 + 1, zz, TOKENIZE_CHECKQUOTE);
 
@@ -180,15 +180,15 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 	}
 	case 'R':
 	{
-		return interpret_r_file(buf, zz);
+		return interpret_r_token(buf, zz);
 	}
 	case 'K':
 	{
-		return interpret_k_file(buf, zz);
+		return interpret_k_token(buf, zz);
 	}
 	case 'F':
 	{
-		return interpret_f_file(buf, zz);
+		return interpret_f_token(buf, zz);
 	}
 	case 'S':
 	{
