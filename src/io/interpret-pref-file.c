@@ -16,11 +16,11 @@
 /*!
  * @brief Rトークンの解釈 / Process "R:<num>:<a>/<c>" -- attr/char for monster races
  * @param buf バッファ
- * @param zz トークン保管文字列
  * @return エラーコード
  */
-static errr interpret_r_token(char *buf, char **zz)
+static errr interpret_r_token(char *buf)
 {
+	char *zz[16];
 	if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 
 	monster_race *r_ptr;
@@ -40,11 +40,11 @@ static errr interpret_r_token(char *buf, char **zz)
 /*!
  * @brief Kトークンの解釈 / Process "K:<num>:<a>/<c>"  -- attr/char for object kinds
  * @param buf バッファ
- * @param zz トークン保管文字列
  * @return エラーコード
  */
-static errr interpret_k_token(char *buf, char **zz)
+static errr interpret_k_token(char *buf)
 {
+	char *zz[16];
 	if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 
 	object_kind *k_ptr;
@@ -63,16 +63,16 @@ static errr interpret_k_token(char *buf, char **zz)
 
 /*!
  * @brief トークン数によって地形の文字形と色を決定する
- * @param zz トークン保管文字列
  * @param i 地形種別
  * @param num トークン数
  * @return エラーコード
  */
-static errr decide_feature_type(char **zz, int i, int num)
+static errr decide_feature_type(int i, int num)
 {
 	feature_type *f_ptr;
 	f_ptr = &f_info[i];
 
+	char *zz[16];
 	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
 	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
 	if (n1 || (!(n2 & 0x80) && n2)) f_ptr->x_attr[F_LIT_STANDARD] = n1; /* Allow TERM_DARK text */
@@ -121,15 +121,15 @@ static errr decide_feature_type(char **zz, int i, int num)
 /*!
  * @brief Fトークンの解釈 / Process "F:<num>:<a>/<c>" -- attr/char for terrain features
  * @param buf バッファ
- * @param zz トークン保管文字列
  * @return エラーコード
  * @details
  * "F:<num>:<a>/<c>"
  * "F:<num>:<a>/<c>:LIT"
  * "F:<num>:<a>/<c>:<la>/<lc>:<da>/<dc>"
  */
-static errr interpret_f_token(char *buf, char **zz)
+static errr interpret_f_token(char *buf)
 {
+	char *zz[16];
 	int num = tokenize(buf + 2, F_LIT_MAX * 2 + 1, zz, TOKENIZE_CHECKQUOTE);
 
 	if ((num != 3) && (num != 4) && (num != F_LIT_MAX * 2 + 1)) return 1;
@@ -145,11 +145,11 @@ static errr interpret_f_token(char *buf, char **zz)
 /*!
  * @brief Fトークンの解釈 / Process "S:<num>:<a>/<c>" -- attr/char for special things
  * @param buf バッファ
- * @param zz トークン保管文字列
  * @return エラーコード
  */
-static errr interpret_s_token(char *buf, char **zz)
+static errr interpret_s_token(char *buf)
 {
+	char *zz[16];
 	if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 
 	int j = (byte)strtol(zz[0], NULL, 0);
@@ -164,11 +164,11 @@ static errr interpret_s_token(char *buf, char **zz)
 /*!
  * @brief Uトークンの解釈 / Process "U:<tv>:<a>/<c>" -- attr/char for unaware items
  * @param buf バッファ
- * @param zz トークン保管文字列
  * @return エラーコード
  */
-static errr interpret_u_token(char *buf, char **zz)
+static errr interpret_u_token(char *buf)
 {
+	char *zz[16];
 	if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
 
 	int j = (int)strtol(zz[0], NULL, 0);
@@ -191,11 +191,11 @@ static errr interpret_u_token(char *buf, char **zz)
 /*!
  * @brief Eトークンの解釈 / Process "E:<tv>:<a>" -- attribute for inventory objects
  * @param buf バッファ
- * @param zz トークン保管文字列
  * @return エラーコード
  */
-static errr interpret_e_token(char *buf, char **zz)
+static errr interpret_e_token(char *buf)
 {
+	char *zz[16];
 	if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return 1;
 
 	int j = (byte)strtol(zz[0], NULL, 0) % 128;
@@ -222,11 +222,11 @@ static errr interpret_p_token(char *buf)
 /*!
  * @brief Cトークンの解釈 / Process "C:<str>" -- create keymap
  * @param buf バッファ
- * @param zz トークン保管文字列
  * @return エラーコード
  */
-static errr interpret_c_token(char *buf, char **zz)
+static errr interpret_c_token(char *buf)
 {
+	char *zz[16];
 	if (tokenize(buf + 2, 2, zz, TOKENIZE_CHECKQUOTE) != 2) return 1;
 
 	int mode = strtol(zz[0], NULL, 0);
@@ -246,11 +246,11 @@ static errr interpret_c_token(char *buf, char **zz)
 /*!
  * @brief Vトークンの解釈 / Process "V:<num>:<kv>:<rv>:<gv>:<bv>" -- visual info
  * @param buf バッファ
- * @param zz トークン保管文字列
  * @return エラーコード
  */
-static errr interpret_v_token(char *buf, char **zz)
+static errr interpret_v_token(char *buf)
 {
+	char *zz[16];
 	if (tokenize(buf + 2, 5, zz, TOKENIZE_CHECKQUOTE) != 5) return 1;
 
 	int i = (byte)strtol(zz[0], NULL, 0);
@@ -336,14 +336,14 @@ static errr interpret_z_token(char *buf)
 /*!
  * @brief Tトークンの解釈 / Initialize macro trigger names and a template
  * @param buf バッファ
- * @param zz トークン保管文字列
  * @return エラーコード
  * @details
  * Process "T:<template>:<modifier chr>:<modifier name>:..." for 4 tokens
  * Process "T:<trigger>:<keycode>:<shift-keycode>" for 3 tokens
  */
-static errr interpret_t_token(char *buf, char **zz)
+static errr interpret_t_token(char *buf)
 {
+	char *zz[16];
 	int tok = tokenize(buf + 2, 2 + MAX_MACRO_MOD, zz, 0);
 	if (tok >= 4)
 	{
@@ -446,7 +446,6 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 {
 	if (buf[1] != ':') return 1;
 
-	char *zz[16];
 	switch (buf[0])
 	{
 	case 'H':
@@ -456,17 +455,17 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 		return 0;
 	}
 	case 'R':
-		return interpret_r_token(buf, zz);
+		return interpret_r_token(buf);
 	case 'K':
-		return interpret_k_token(buf, zz);
+		return interpret_k_token(buf);
 	case 'F':
-		return interpret_f_token(buf, zz);
+		return interpret_f_token(buf);
 	case 'S':
-		return interpret_s_token(buf, zz);
+		return interpret_s_token(buf);
 	case 'U':
-		return interpret_u_token(buf, zz);
+		return interpret_u_token(buf);
 	case 'E':
-		return interpret_e_token(buf, zz);
+		return interpret_e_token(buf);
 	case 'A':
 	{
 		/* Process "A:<str>" -- save an "action" for later */
@@ -476,16 +475,16 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 	case 'P':
 		return interpret_p_token(buf);
 	case 'C':
-		return interpret_c_token(buf, zz);
+		return interpret_c_token(buf);
 	case 'V':
-		return interpret_v_token(buf, zz);
+		return interpret_v_token(buf);
 	case 'X':
 	case 'Y':
 		return interpret_xy_token(creature_ptr, buf);
 	case 'Z':
 		return interpret_z_token(buf);
 	case 'T':
-		return interpret_t_token(buf, zz);
+		return interpret_t_token(buf);
 	default:
 		return 1;
 	}
