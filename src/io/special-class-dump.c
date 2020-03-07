@@ -219,7 +219,6 @@ static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
 
 
 /*!
- * todo ここはenum/switchで扱いたい
  * @brief プレイヤーの職業能力情報をファイルにダンプする
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
@@ -227,22 +226,24 @@ static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
  */
 void dump_aux_class_special(player_type *creature_ptr, FILE *fff)
 {
-	bool is_special_class = creature_ptr->pclass == CLASS_MAGIC_EATER;
-	is_special_class |= creature_ptr->pclass == CLASS_SMITH;
-	is_special_class |= creature_ptr->pclass == CLASS_BLUE_MAGE;
-	if (!is_special_class) return;
-
-	if (creature_ptr->pclass == CLASS_MAGIC_EATER)
+	switch (creature_ptr->pclass)
+	{
+	case CLASS_MAGIC_EATER:
 	{
 		dump_magic_eater(creature_ptr, fff);
 		return;
 	}
-
-	if (creature_ptr->pclass == CLASS_SMITH)
+	case CLASS_SMITH:
 	{
 		dump_smith(creature_ptr, fff);
 		return;
 	}
-
-	dump_blue_mage(creature_ptr, fff);
+	case CLASS_BLUE_MAGE:
+	{
+		dump_blue_mage(creature_ptr, fff);
+		return;
+	}
+	default:
+		return;
+	}
 }
