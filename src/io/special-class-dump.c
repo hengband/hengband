@@ -112,25 +112,22 @@ static void dump_smith(player_type *creature_ptr, FILE *fff)
  */
 static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
 {
-	int l1 = 0;
-	int l2 = 0;
-	int spellnum[MAX_MONSPELLS];
-	BIT_FLAGS f4 = 0, f5 = 0, f6 = 0;
 	char p[60][80];
-	int col = 0;
-	bool pcol = FALSE;
-
 	for (int i = 0; i < 60; i++)
 	{
 		p[i][0] = '\0';
 	}
 
+	int col = 0;
 	strcat(p[col], _("\n\n  [学習済みの青魔法]\n", "\n\n  [Learned Blue Magic]\n"));
-	for (int j = 1; j < 6; j++)
+
+	int spellnum[MAX_MONSPELLS];
+	for (int magic_type = 1; magic_type < 6; magic_type++)
 	{
 		col++;
-		set_rf_masks(&f4, &f5, &f6, j);
-		switch (j)
+		BIT_FLAGS f4 = 0, f5 = 0, f6 = 0;
+		set_rf_masks(&f4, &f5, &f6, magic_type);
+		switch (magic_type)
 		{
 		case MONSPELL_TYPE_BOLT:
 			strcat(p[col], _("\n     [ボルト型]\n", "\n     [Bolt  Type]\n"));
@@ -170,7 +167,7 @@ static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
 		}
 
 		col++;
-		pcol = FALSE;
+		bool pcol = FALSE;
 		strcat(p[col], "       ");
 
 		for (int i = 0; i < num; i++)
@@ -178,9 +175,8 @@ static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
 			if (creature_ptr->magic_num2[spellnum[i]] == 0) continue;
 
 			pcol = TRUE;
-			/* Dump blue magic */
-			l1 = strlen(p[col]);
-			l2 = strlen(monster_powers_short[spellnum[i]]);
+			int l1 = strlen(p[col]);
+			int l2 = strlen(monster_powers_short[spellnum[i]]);
 			if ((l1 + l2) >= 75)
 			{
 				strcat(p[col], "\n");
