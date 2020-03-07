@@ -11,6 +11,68 @@
 #include "monster-spell.h"
 
 /*!
+ * @brief 魔力喰いを持つクラスの情報をダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param fff ファイルポインタ
+ * @return なし
+ */
+void dump_magic_eater(player_type *creature_ptr, FILE *fff)
+{
+	char s[EATER_EXT][MAX_NLEN];
+	fprintf(fff, _("\n\n  [取り込んだ魔法道具]\n", "\n\n  [Magic devices eaten]\n"));
+
+	for (int ext = 0; ext < 3; ext++)
+	{
+		OBJECT_TYPE_VALUE tval = 0;
+		switch (ext)
+		{
+		case 0:
+			tval = TV_STAFF;
+			fprintf(fff, _("\n[杖]\n", "\n[Staffs]\n"));
+			break;
+		case 1:
+			tval = TV_WAND;
+			fprintf(fff, _("\n[魔法棒]\n", "\n[Wands]\n"));
+			break;
+		case 2:
+			tval = TV_ROD;
+			fprintf(fff, _("\n[ロッド]\n", "\n[Rods]\n"));
+			break;
+		}
+
+		int eat_num = 0;
+		for (OBJECT_SUBTYPE_VALUE i = 0; i < EATER_EXT; i++)
+		{
+			int idx = EATER_EXT * ext + i;
+			int magic_num = creature_ptr->magic_num2[idx];
+			if (!magic_num) continue;
+
+			KIND_OBJECT_IDX k_idx = lookup_kind(tval, i);
+			if (!k_idx) continue;
+			sprintf(s[eat_num], "%23s (%2d)", (k_name + k_info[k_idx].name), magic_num);
+			eat_num++;
+		}
+
+		if (eat_num <= 0)
+		{
+			fputs(_("  (なし)\n", "  (none)\n"), fff);
+			continue;
+		}
+
+		OBJECT_SUBTYPE_VALUE i;
+		for (i = 0; i < eat_num; i++)
+		{
+			fputs(s[i], fff);
+			if (i % 3 < 2) fputs("    ", fff);
+			else fputs("\n", fff);
+		}
+
+		if (i % 3 > 0) fputs("\n", fff);
+	}
+}
+
+
+/*!
  * todo ここはenum/switchで扱いたい
  * @brief プレイヤーの職業能力情報をファイルにダンプする
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -26,62 +88,7 @@ void dump_aux_class_special(player_type *creature_ptr, FILE *fff)
 
 	if (creature_ptr->pclass == CLASS_MAGIC_EATER)
 	{
-		char s[EATER_EXT][MAX_NLEN];
-		OBJECT_TYPE_VALUE tval = 0;
-		fprintf(fff, _("\n\n  [取り込んだ魔法道具]\n", "\n\n  [Magic devices eaten]\n"));
-
-		for (int ext = 0; ext < 3; ext++)
-		{
-			int eat_num = 0;
-
-			/* Dump an extent name */
-			switch (ext)
-			{
-			case 0:
-				tval = TV_STAFF;
-				fprintf(fff, _("\n[杖]\n", "\n[Staffs]\n"));
-				break;
-			case 1:
-				tval = TV_WAND;
-				fprintf(fff, _("\n[魔法棒]\n", "\n[Wands]\n"));
-				break;
-			case 2:
-				tval = TV_ROD;
-				fprintf(fff, _("\n[ロッド]\n", "\n[Rods]\n"));
-				break;
-			}
-
-			/* Get magic device names that were eaten */
-			for (OBJECT_SUBTYPE_VALUE i = 0; i < EATER_EXT; i++)
-			{
-				int idx = EATER_EXT * ext + i;
-				int magic_num = creature_ptr->magic_num2[idx];
-				if (!magic_num) continue;
-
-				KIND_OBJECT_IDX k_idx = lookup_kind(tval, i);
-				if (!k_idx) continue;
-				sprintf(s[eat_num], "%23s (%2d)", (k_name + k_info[k_idx].name), magic_num);
-				eat_num++;
-			}
-
-			/* Dump magic devices in this extent */
-			if (eat_num <= 0)
-			{
-				fputs(_("  (なし)\n", "  (none)\n"), fff);
-				continue;
-			}
-
-			OBJECT_SUBTYPE_VALUE i;
-			for (i = 0; i < eat_num; i++)
-			{
-				fputs(s[i], fff);
-				if (i % 3 < 2) fputs("    ", fff);
-				else fputs("\n", fff);
-			}
-
-			if (i % 3 > 0) fputs("\n", fff);
-		}
-
+		dump_magic_eater(creature_ptr, fff);
 		return;
 	}
 
