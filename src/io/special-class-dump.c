@@ -73,7 +73,7 @@ static void dump_magic_eater(player_type *creature_ptr, FILE *fff)
 
 
 /*!
- * @brief 鍛冶師としての情報をダンプする
+ * @brief 鍛冶師のエッセンス情報をダンプする
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return なし
@@ -105,32 +105,13 @@ static void dump_smith(player_type *creature_ptr, FILE *fff)
 
 
 /*!
- * todo ここはenum/switchで扱いたい
- * @brief プレイヤーの職業能力情報をファイルにダンプする
+ * @brief 青魔道士の学習済魔法をダンプする
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff ファイルポインタ
  * @return なし
  */
-void dump_aux_class_special(player_type *creature_ptr, FILE *fff)
+static void dump_blue_mage(player_type *creature_ptr, FILE *fff)
 {
-	bool is_special_class = creature_ptr->pclass == CLASS_MAGIC_EATER;
-	is_special_class |= creature_ptr->pclass == CLASS_SMITH;
-	is_special_class |= creature_ptr->pclass == CLASS_BLUE_MAGE;
-	if (!is_special_class) return;
-
-	if (creature_ptr->pclass == CLASS_MAGIC_EATER)
-	{
-		dump_magic_eater(creature_ptr, fff);
-		return;
-	}
-
-	if (creature_ptr->pclass == CLASS_SMITH)
-	{
-		dump_smith(creature_ptr, fff);
-		return;
-	}
-
-	// Blue mage
 	int l1 = 0;
 	int l2 = 0;
 	int spellnum[MAX_MONSPELLS];
@@ -145,7 +126,6 @@ void dump_aux_class_special(player_type *creature_ptr, FILE *fff)
 	}
 
 	strcat(p[col], _("\n\n  [学習済みの青魔法]\n", "\n\n  [Learned Blue Magic]\n"));
-
 	for (int j = 1; j < 6; j++)
 	{
 		col++;
@@ -235,4 +215,34 @@ void dump_aux_class_special(player_type *creature_ptr, FILE *fff)
 	{
 		fputs(p[i], fff);
 	}
+}
+
+
+/*!
+ * todo ここはenum/switchで扱いたい
+ * @brief プレイヤーの職業能力情報をファイルにダンプする
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param fff ファイルポインタ
+ * @return なし
+ */
+void dump_aux_class_special(player_type *creature_ptr, FILE *fff)
+{
+	bool is_special_class = creature_ptr->pclass == CLASS_MAGIC_EATER;
+	is_special_class |= creature_ptr->pclass == CLASS_SMITH;
+	is_special_class |= creature_ptr->pclass == CLASS_BLUE_MAGE;
+	if (!is_special_class) return;
+
+	if (creature_ptr->pclass == CLASS_MAGIC_EATER)
+	{
+		dump_magic_eater(creature_ptr, fff);
+		return;
+	}
+
+	if (creature_ptr->pclass == CLASS_SMITH)
+	{
+		dump_smith(creature_ptr, fff);
+		return;
+	}
+
+	dump_blue_mage(creature_ptr, fff);
 }
