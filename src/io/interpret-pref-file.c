@@ -242,6 +242,30 @@ static errr interpret_xy_token(player_type *creature_ptr, char *buf, char **zz)
 
 
 /*!
+ * @brief Zトークンの解釈 / Process "Z:<type>:<str>" -- set spell color
+ * @param buf バッファ
+ * @param zz トークン保管文字列
+ * @return エラーコード
+ */
+static errr interpret_z_token(char *buf, char **zz)
+{
+	char *t = my_strchr(buf + 2, ':');
+	if (!t) return 1;
+
+	*(t++) = '\0';
+	for (int i = 0; i < MAX_NAMED_NUM; i++)
+	{
+		if (!streq(gf_desc[i].name, buf + 2)) continue;
+
+		gf_color[gf_desc[i].num] = (TERM_COLOR)quark_add(t);
+		return 0;
+	}
+
+	return 1;
+}
+
+
+/*!
  * @brief 設定ファイルの各行から各種テキスト情報を取得する /
  * Parse a sub-file of the "extra info" (format shown below)
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -352,20 +376,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 	}
 	case 'Z':
 	{
-		/* Process "Z:<type>:<str>" -- set spell color */
-		char *t = my_strchr(buf + 2, ':');
-		if (!t) return 1;
-
-		*(t++) = '\0';
-		for (int i = 0; i < MAX_NAMED_NUM; i++)
-		{
-			if (!streq(gf_desc[i].name, buf + 2)) continue;
-
-			gf_color[gf_desc[i].num] = (TERM_COLOR)quark_add(t);
-			return 0;
-		}
-
-		return 1;
+		return interpret_z_token(buf, zz);
 	}
 	case 'T':
 	{
