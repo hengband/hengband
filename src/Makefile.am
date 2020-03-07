@@ -58,6 +58,7 @@ hengband_SOURCES = \
 	mind.c mind.h \
 	\
 	monster.h monsterrace.c monsterrace.h \
+	monster/monster-util.c monster/monster-util.c \
 	monster/quantum-effect.c monster/quantum-effect.c \
 	monsterrace-hook.c monsterrace-hook.h \
 	monster-dist-offsets.c monster-dist-offsets.h \
@@ -145,7 +146,7 @@ EXTRA_DIST = \
 CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat -Iio -Iplayer -Iview
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat -Icore -Iio -Imonster -Iplayer -Iview
 
 install-exec-hook:
 if SET_GID

@@ -15,6 +15,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "monster/monster-util.h"
 #include "monster/quantum-effect.h"
 
 #include "cmd-dump.h"
@@ -42,55 +43,9 @@
 #include "files.h"
 #include "view-mainwindow.h"
 
-typedef struct {
-	bool see_m;
-	bool aware;
-	bool is_riding_mon;
-	bool do_turn;
-	bool do_move;
-	bool do_view;
-	bool do_take;
-	bool must_alter_to_move;
-
-	bool did_open_door;
-	bool did_bash_door;
-	bool did_take_item;
-	bool did_kill_item;
-	bool did_move_body;
-	bool did_pass_wall;
-	bool did_kill_wall;
-} turn_flags;
-
-typedef struct {
-	BIT_FLAGS old_r_flags1;
-	BIT_FLAGS old_r_flags2;
-	BIT_FLAGS old_r_flags3;
-	BIT_FLAGS old_r_flags4;
-	BIT_FLAGS old_r_flags5;
-	BIT_FLAGS old_r_flags6;
-	BIT_FLAGS old_r_flagsr;
-
-	byte old_r_blows0;
-	byte old_r_blows1;
-	byte old_r_blows2;
-	byte old_r_blows3;
-
-	byte old_r_cast_spell;
-} old_race_flags;
-
-typedef struct {
-	POSITION gy;
-	POSITION gx;
-	POSITION gdis;
-} coordinate_candidate;
-
-turn_flags *init_turn_flags(player_type *target_ptr, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr);
-old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr);
-
 bool get_enemy_dir(player_type *target_ptr, MONSTER_IDX m_idx, int *mm);
 void decide_enemy_approch_direction(player_type *target_ptr, MONSTER_IDX m_idx, int start, int plus, POSITION *y, POSITION *x);
 bool decide_pet_approch_direction(player_type *target_ptr, monster_type *m_ptr, monster_type *t_ptr);
-void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
 
 bool find_safety(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp);
 coordinate_candidate sweep_safe_coordinate(player_type *target_ptr, MONSTER_IDX m_idx, const POSITION *y_offsets, const POSITION *x_offsets, int d);
@@ -265,66 +220,6 @@ bool decide_pet_approch_direction(player_type *target_ptr, monster_type *m_ptr, 
 	}
 
 	return (r_ptr->aaf < t_ptr->cdis);
-}
-
-
-/*!
- * @brief モンスターの移動方向を保存する
- * @param mm 移動方向
- * @param y 移動先Y座標
- * @param x 移動先X座標
- */
-void store_enemy_approch_direction(int *mm, POSITION y, POSITION x)
-{
-	/* North, South, East, West, North-West, North-East, South-West, South-East */
-	if ((y < 0) && (x == 0))
-	{
-		mm[0] = 8;
-		mm[1] = 7;
-		mm[2] = 9;
-	}
-	else if ((y > 0) && (x == 0))
-	{
-		mm[0] = 2;
-		mm[1] = 1;
-		mm[2] = 3;
-	}
-	else if ((x > 0) && (y == 0))
-	{
-		mm[0] = 6;
-		mm[1] = 9;
-		mm[2] = 3;
-	}
-	else if ((x < 0) && (y == 0))
-	{
-		mm[0] = 4;
-		mm[1] = 7;
-		mm[2] = 1;
-	}
-	else if ((y < 0) && (x < 0))
-	{
-		mm[0] = 7;
-		mm[1] = 4;
-		mm[2] = 8;
-	}
-	else if ((y < 0) && (x > 0))
-	{
-		mm[0] = 9;
-		mm[1] = 6;
-		mm[2] = 8;
-	}
-	else if ((y > 0) && (x < 0))
-	{
-		mm[0] = 1;
-		mm[1] = 4;
-		mm[2] = 2;
-	}
-	else if ((y > 0) && (x > 0))
-	{
-		mm[0] = 3;
-		mm[1] = 6;
-		mm[2] = 2;
-	}
 }
 
 
@@ -601,15 +496,6 @@ static bool get_fear_moves_aux(floor_type *floor_ptr, MONSTER_IDX m_idx, POSITIO
 	return TRUE;
 }
 
-
-coordinate_candidate init_coordinate_candidate(void)
-{
-	coordinate_candidate candidate;
-	candidate.gy = 0;
-	candidate.gx = 0;
-	candidate.gdis = 0;
-	return candidate;
-}
 
 /*!
  * @brief モンスターが逃げ込める安全な地点を返す /
@@ -1107,7 +993,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	turn_flags tmp_flags;
-	turn_flags *turn_flags_ptr = init_turn_flags(target_ptr, m_idx, &tmp_flags);
+	turn_flags *turn_flags_ptr = init_turn_flags(target_ptr->riding, m_idx, &tmp_flags);
 	turn_flags_ptr->see_m = is_seen(m_ptr);
 
 	decide_drop_from_monster(target_ptr, m_idx, turn_flags_ptr->is_riding_mon);
@@ -1174,30 +1060,6 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (!process_monster_fear(target_ptr, turn_flags_ptr, m_idx)) return;
 
 	if (m_ptr->ml) chg_virtue(target_ptr, V_COMPASSION, -1);
-}
-
-
-/*!
- * @brief ターン経過フラグ構造体の初期化
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param m_idx モンスターID
- * @return 初期化済のターン経過フラグ
- */
-turn_flags *init_turn_flags(player_type *target_ptr, MONSTER_IDX m_idx, turn_flags *turn_flags_ptr)
-{
-	turn_flags_ptr->is_riding_mon = (m_idx == target_ptr->riding);
-	turn_flags_ptr->do_turn = FALSE;
-	turn_flags_ptr->do_move = FALSE;
-	turn_flags_ptr->do_view = FALSE;
-	turn_flags_ptr->must_alter_to_move = FALSE;
-	turn_flags_ptr->did_open_door = FALSE;
-	turn_flags_ptr->did_bash_door = FALSE;
-	turn_flags_ptr->did_take_item = FALSE;
-	turn_flags_ptr->did_kill_item = FALSE;
-	turn_flags_ptr->did_move_body = FALSE;
-	turn_flags_ptr->did_pass_wall = FALSE;
-	turn_flags_ptr->did_kill_wall = FALSE;
-	return turn_flags_ptr;
 }
 
 
@@ -2558,29 +2420,6 @@ void process_monsters(player_type *target_ptr)
 		return;
 
 	update_player_window(target_ptr, old_race_flags_ptr);
-}
-
-
-/*!
- * @brief old_race_flags_ptr の初期化
- */
-old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr)
-{
-	old_race_flags_ptr->old_r_flags1 = 0L;
-	old_race_flags_ptr->old_r_flags2 = 0L;
-	old_race_flags_ptr->old_r_flags3 = 0L;
-	old_race_flags_ptr->old_r_flags4 = 0L;
-	old_race_flags_ptr->old_r_flags5 = 0L;
-	old_race_flags_ptr->old_r_flags6 = 0L;
-	old_race_flags_ptr->old_r_flagsr = 0L;
-
-	old_race_flags_ptr->old_r_blows0 = 0;
-	old_race_flags_ptr->old_r_blows1 = 0;
-	old_race_flags_ptr->old_r_blows2 = 0;
-	old_race_flags_ptr->old_r_blows3 = 0;
-
-	old_race_flags_ptr->old_r_cast_spell = 0;
-	return old_race_flags_ptr;
 }
 
 

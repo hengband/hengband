@@ -481,6 +481,9 @@
     <ClCompile Include="..\..\src\io\player-status-dump.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-util.c">
+      <Filter>monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -943,6 +946,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\player-status-dump.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-util.h">
+      <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
