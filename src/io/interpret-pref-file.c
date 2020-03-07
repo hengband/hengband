@@ -143,6 +143,25 @@ static errr interpret_f_token(char *buf, char **zz)
 
 
 /*!
+ * @brief Fトークンの解釈 / Process "S:<num>:<a>/<c>" -- attr/char for special things
+ * @param buf バッファ
+ * @param zz トークン保管文字列
+ * @return エラーコード
+ */
+static errr interpret_s_token(char *buf, char **zz)
+{
+	if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
+
+	int j = (byte)strtol(zz[0], NULL, 0);
+	TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
+	SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
+	misc_to_attr[j] = n1;
+	misc_to_char[j] = n2;
+	return 0;
+}
+
+
+/*!
  * @brief Uトークンの解釈 / Process "U:<tv>:<a>/<c>" -- attr/char for unaware items
  * @param buf バッファ
  * @param zz トークン保管文字列
@@ -401,15 +420,7 @@ errr interpret_pref_file(player_type *creature_ptr, char *buf)
 	}
 	case 'S':
 	{
-		/* Process "S:<num>:<a>/<c>" -- attr/char for special things */
-		if (tokenize(buf + 2, 3, zz, TOKENIZE_CHECKQUOTE) != 3) return 1;
-
-		int j = (byte)strtol(zz[0], NULL, 0);
-		TERM_COLOR n1 = (TERM_COLOR)strtol(zz[1], NULL, 0);
-		SYMBOL_CODE n2 = (SYMBOL_CODE)strtol(zz[2], NULL, 0);
-		misc_to_attr[j] = n1;
-		misc_to_char[j] = n2;
-		return 0;
+		return interpret_s_token(buf, zz);
 	}
 	case 'U':
 	{
