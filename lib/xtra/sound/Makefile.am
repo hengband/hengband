@@ -1,7 +1,6 @@
 ## Makefile.am -- Process this file with automake to process Makefile.in
 
 EXTRA_DIST = \
-	music.cfg \
 	sound.cfg \
 	$(sound_files)
 
