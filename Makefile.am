@@ -5,6 +5,7 @@ AUTOMAKE_OPTIONS = foreign
 EXTRA_DIST = \
 	autopick.txt \
 	autopick_eng.txt \
+	bootstrap \
 	readme.txt \
 	readme_angband \
 	readme_eng.txt \
