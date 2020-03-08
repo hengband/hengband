@@ -16,6 +16,69 @@
 bool write_level;
 
 /*!
+ * @brief ペットに関する日記を追加する
+ * @param fff 日記ファイル
+ * @param num 日記へ追加する内容番号
+ * @param note 日記内容のIDに応じた文字列参照ポインタ
+ * @return なし
+ */
+static void write_diary_pet(FILE *fff, int num, concptr note)
+{
+	switch (num)
+	{
+	case RECORD_NAMED_PET_NAME:
+		fprintf(fff, _("%sを旅の友にすることに決めた。\n", "decided to travel together with %s.\n"), note);
+		break;
+	case RECORD_NAMED_PET_UNNAME:
+		fprintf(fff, _("%sの名前を消した。\n", "unnamed %s.\n"), note);
+		break;
+	case RECORD_NAMED_PET_DISMISS:
+		fprintf(fff, _("%sを解放した。\n", "dismissed %s.\n"), note);
+		break;
+	case RECORD_NAMED_PET_DEATH:
+		fprintf(fff, _("%sが死んでしまった。\n", "%s died.\n"), note);
+		break;
+	case RECORD_NAMED_PET_MOVED:
+		fprintf(fff, _("%sをおいて別のマップへ移動した。\n", "moved to another map leaving %s behind.\n"), note);
+		break;
+	case RECORD_NAMED_PET_LOST_SIGHT:
+		fprintf(fff, _("%sとはぐれてしまった。\n", "lost sight of %s.\n"), note);
+		break;
+	case RECORD_NAMED_PET_DESTROY:
+		fprintf(fff, _("%sが*破壊*によって消え去った。\n", "%s was killed by *destruction*.\n"), note);
+		break;
+	case RECORD_NAMED_PET_EARTHQUAKE:
+		fprintf(fff, _("%sが岩石に押し潰された。\n", "%s was crushed by falling rocks.\n"), note);
+		break;
+	case RECORD_NAMED_PET_GENOCIDE:
+		fprintf(fff, _("%sが抹殺によって消え去った。\n", "%s was a victim of genocide.\n"), note);
+		break;
+	case RECORD_NAMED_PET_WIZ_ZAP:
+		fprintf(fff, _("%sがデバッグコマンドによって消え去った。\n", "%s was removed by debug command.\n"), note);
+		break;
+	case RECORD_NAMED_PET_TELE_LEVEL:
+		fprintf(fff, _("%sがテレポート・レベルによって消え去った。\n", "%s was lost after teleporting a level.\n"), note);
+		break;
+	case RECORD_NAMED_PET_BLAST:
+		fprintf(fff, _("%sを爆破した。\n", "blasted %s.\n"), note);
+		break;
+	case RECORD_NAMED_PET_HEAL_LEPER:
+		fprintf(fff, _("%sの病気が治り旅から外れた。\n", "%s was healed and left.\n"), note);
+		break;
+	case RECORD_NAMED_PET_COMPACT:
+		fprintf(fff, _("%sがモンスター情報圧縮によって消え去った。\n", "%s was lost when the monster list was pruned.\n"), note);
+		break;
+	case RECORD_NAMED_PET_LOSE_PARENT:
+		fprintf(fff, _("%sの召喚者が既にいないため消え去った。\n", "%s disappeared because its summoner left.\n"), note);
+		break;
+	default:
+		fprintf(fff, "\n");
+		break;
+	}
+}
+
+
+/*!
  * @brief 日記にメッセージを追加する /
  * Take note to the diary.
  * @param type 日記内容のID
@@ -281,58 +344,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	case DIARY_NAMED_PET:
 	{
 		fprintf(fff, " %2d:%02d %20s ", hour, min, note_level);
-		switch (num)
-		{
-		case RECORD_NAMED_PET_NAME:
-			fprintf(fff, _("%sを旅の友にすることに決めた。\n", "decided to travel together with %s.\n"), note);
-			break;
-		case RECORD_NAMED_PET_UNNAME:
-			fprintf(fff, _("%sの名前を消した。\n", "unnamed %s.\n"), note);
-			break;
-		case RECORD_NAMED_PET_DISMISS:
-			fprintf(fff, _("%sを解放した。\n", "dismissed %s.\n"), note);
-			break;
-		case RECORD_NAMED_PET_DEATH:
-			fprintf(fff, _("%sが死んでしまった。\n", "%s died.\n"), note);
-			break;
-		case RECORD_NAMED_PET_MOVED:
-			fprintf(fff, _("%sをおいて別のマップへ移動した。\n", "moved to another map leaving %s behind.\n"), note);
-			break;
-		case RECORD_NAMED_PET_LOST_SIGHT:
-			fprintf(fff, _("%sとはぐれてしまった。\n", "lost sight of %s.\n"), note);
-			break;
-		case RECORD_NAMED_PET_DESTROY:
-			fprintf(fff, _("%sが*破壊*によって消え去った。\n", "%s was killed by *destruction*.\n"), note);
-			break;
-		case RECORD_NAMED_PET_EARTHQUAKE:
-			fprintf(fff, _("%sが岩石に押し潰された。\n", "%s was crushed by falling rocks.\n"), note);
-			break;
-		case RECORD_NAMED_PET_GENOCIDE:
-			fprintf(fff, _("%sが抹殺によって消え去った。\n", "%s was a victim of genocide.\n"), note);
-			break;
-		case RECORD_NAMED_PET_WIZ_ZAP:
-			fprintf(fff, _("%sがデバッグコマンドによって消え去った。\n", "%s was removed by debug command.\n"), note);
-			break;
-		case RECORD_NAMED_PET_TELE_LEVEL:
-			fprintf(fff, _("%sがテレポート・レベルによって消え去った。\n", "%s was lost after teleporting a level.\n"), note);
-			break;
-		case RECORD_NAMED_PET_BLAST:
-			fprintf(fff, _("%sを爆破した。\n", "blasted %s.\n"), note);
-			break;
-		case RECORD_NAMED_PET_HEAL_LEPER:
-			fprintf(fff, _("%sの病気が治り旅から外れた。\n", "%s was healed and left.\n"), note);
-			break;
-		case RECORD_NAMED_PET_COMPACT:
-			fprintf(fff, _("%sがモンスター情報圧縮によって消え去った。\n", "%s was lost when the monster list was pruned.\n"), note);
-			break;
-		case RECORD_NAMED_PET_LOSE_PARENT:
-			fprintf(fff, _("%sの召喚者が既にいないため消え去った。\n", "%s disappeared because its summoner left.\n"), note);
-			break;
-		default:
-			fprintf(fff, "\n");
-			break;
-		}
-
+		write_diary_pet(fff, num, note);
 		break;
 	}
 	case DIARY_WIZARD_LOG:
