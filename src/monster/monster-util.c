@@ -160,3 +160,32 @@ void save_old_race_flags(MONRACE_IDX monster_race_idx, old_race_flags *old_race_
 
 	old_race_flags_ptr->old_r_cast_spell = r_ptr->r_cast_spell;
 }
+
+
+/*!
+ * @brief モンスターフラグの更新に基づき、モンスター表示を更新する
+ * @param monster_race_idx モンスターID
+ * @param window ウィンドウフラグ
+ * @param old_race_flags_ptr モンスターフラグへの参照ポインタ
+ * @return なし
+ */
+void update_player_window(MONRACE_IDX monster_race_idx, BIT_FLAGS *window, old_race_flags *old_race_flags_ptr)
+{
+	monster_race *r_ptr;
+	r_ptr = &r_info[monster_race_idx];
+	if ((old_race_flags_ptr->old_r_flags1 != r_ptr->r_flags1) ||
+		(old_race_flags_ptr->old_r_flags2 != r_ptr->r_flags2) ||
+		(old_race_flags_ptr->old_r_flags3 != r_ptr->r_flags3) ||
+		(old_race_flags_ptr->old_r_flags4 != r_ptr->r_flags4) ||
+		(old_race_flags_ptr->old_r_flags5 != r_ptr->r_flags5) ||
+		(old_race_flags_ptr->old_r_flags6 != r_ptr->r_flags6) ||
+		(old_race_flags_ptr->old_r_flagsr != r_ptr->r_flagsr) ||
+		(old_race_flags_ptr->old_r_blows0 != r_ptr->r_blows[0]) ||
+		(old_race_flags_ptr->old_r_blows1 != r_ptr->r_blows[1]) ||
+		(old_race_flags_ptr->old_r_blows2 != r_ptr->r_blows[2]) ||
+		(old_race_flags_ptr->old_r_blows3 != r_ptr->r_blows[3]) ||
+		(old_race_flags_ptr->old_r_cast_spell != r_ptr->r_cast_spell))
+	{
+		*window |= (PW_MONSTER);
+	}
+}
