@@ -420,30 +420,17 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		type == DIARY_RAND_QUEST_F ||
 		type == DIARY_TO_QUEST)
 	{
-		QUEST_IDX old_quest;
-
-		old_quest = creature_ptr->current_floor_ptr->inside_quest;
+		QUEST_IDX old_quest = creature_ptr->current_floor_ptr->inside_quest;
 		creature_ptr->current_floor_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
-
-		/* Get the quest text */
 		init_flags = INIT_NAME_ONLY;
-
 		process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
-
-		/* Reset the old quest number */
 		creature_ptr->current_floor_ptr->inside_quest = old_quest;
 	}
 
-	/* different filne name to avoid mixing */
 	sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
-
-	/* File type is "TEXT" */
 	FILE_TYPE(FILE_TYPE_TEXT);
-
 	fff = my_fopen(buf, "a");
-
-	/* Failure */
 	if (!fff)
 	{
 		msg_format(_("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporarily."), buf);
@@ -453,7 +440,6 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	}
 
 	q_idx = quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level);
-
 	if (write_level)
 	{
 		if (creature_ptr->current_floor_ptr->inside_arena)
@@ -492,6 +478,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		}
 		else
 			fprintf(fff, " %2d:%02d %20s %s\n", hour, min, note_level, note);
+
 		break;
 	}
 	case DIARY_ART:
@@ -512,6 +499,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	case DIARY_FIX_QUEST_C:
 	{
 		if (quest[num].flags & QUEST_FLAG_SILENT) break;
+
 		fprintf(fff, _(" %2d:%02d %20s クエスト「%s」を達成した。\n",
 			" %2d:%02d %20s completed quest '%s'.\n"), hour, min, note_level, quest[num].name);
 		break;
@@ -519,6 +507,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	case DIARY_FIX_QUEST_F:
 	{
 		if (quest[num].flags & QUEST_FLAG_SILENT) break;
+
 		fprintf(fff, _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n",
 			" %2d:%02d %20s run away from quest '%s'.\n"), hour, min, note_level, quest[num].name);
 		break;
@@ -557,17 +546,12 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	}
 	case DIARY_STAIR:
 	{
-		concptr to;
-		if (q_idx && (is_fixed_quest_idx(q_idx)
-			&& !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
-		{
-			to = _("地上", "the surface");
-		}
-		else
-		{
-			if (!(creature_ptr->current_floor_ptr->dun_level + num)) to = _("地上", "the surface");
-			else to = format(_("%d階", "level %d"), creature_ptr->current_floor_ptr->dun_level + num);
-		}
+		concptr to = q_idx && (is_fixed_quest_idx(q_idx)
+			&& !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT)))
+			? _("地上", "the surface")
+			: !(creature_ptr->current_floor_ptr->dun_level + num)
+			? _("地上", "the surface")
+			: format(_("%d階", "level %d"), creature_ptr->current_floor_ptr->dun_level + num);
 		fprintf(fff, _(" %2d:%02d %20s %sへ%s。\n", " %2d:%02d %20s %s %s.\n"), hour, min, note_level, _(to, note), _(note, to));
 		break;
 	}
@@ -579,11 +563,13 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 				_((int)max_dlv[creature_ptr->dungeon_idx], d_name + d_info[creature_ptr->dungeon_idx].name));
 		else
 			fprintf(fff, _(" %2d:%02d %20s 帰還を使って地上へと戻った。\n", " %2d:%02d %20s recalled from dungeon to surface.\n"), hour, min, note_level);
+
 		break;
 	}
 	case DIARY_TO_QUEST:
 	{
 		if (quest[num].flags & QUEST_FLAG_SILENT) break;
+
 		fprintf(fff, _(" %2d:%02d %20s クエスト「%s」へと突入した。\n", " %2d:%02d %20s entered the quest '%s'.\n"),
 			hour, min, note_level, quest[num].name);
 		break;
@@ -613,6 +599,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 				hour, min, note_level, _(n, note), _("", n), _(note, get_ordinal_number_suffix(n)));
 			break;
 		}
+
 		fprintf(fff, _(" %2d:%02d %20s 闘技場の%d%s回戦(%s)に勝利した。\n", " %2d:%02d %20s won the %d%s fight (%s).\n"),
 			hour, min, note_level, num, _("", get_ordinal_number_suffix(num)), note);
 
@@ -622,6 +609,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 				"                 won all fights to become a Champion.\n"));
 			do_level = FALSE;
 		}
+
 		break;
 	}
 	case DIARY_FOUND:
@@ -631,24 +619,18 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	}
 	case DIARY_WIZ_TELE:
 	{
-		concptr to;
-		if (!creature_ptr->current_floor_ptr->dun_level)
-			to = _("地上", "the surface");
-		else
-			to = format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_name + d_info[creature_ptr->dungeon_idx].name);
-
+		concptr to = !creature_ptr->current_floor_ptr->dun_level
+			? _("地上", "the surface")
+			: format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_name + d_info[creature_ptr->dungeon_idx].name);
 		fprintf(fff, _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n",
 			" %2d:%02d %20s wizard-teleport to %s.\n"), hour, min, note_level, to);
 		break;
 	}
 	case DIARY_PAT_TELE:
 	{
-		concptr to;
-		if (!creature_ptr->current_floor_ptr->dun_level)
-			to = _("地上", "the surface");
-		else
-			to = format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_name + d_info[creature_ptr->dungeon_idx].name);
-
+		concptr to = !creature_ptr->current_floor_ptr->dun_level
+			? _("地上", "the surface")
+			: format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_name + d_info[creature_ptr->dungeon_idx].name);
 		fprintf(fff, _(" %2d:%02d %20s %sへとパターンの力で移動した。\n",
 			" %2d:%02d %20s used Pattern to teleport to %s.\n"), hour, min, note_level, to);
 		break;
@@ -663,11 +645,10 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		time_t ct = time((time_t*)0);
 		do_level = FALSE;
 		if (num)
-		{
 			fprintf(fff, "%s %s", note, ctime(&ct));
-		}
 		else
 			fprintf(fff, " %2d:%02d %20s %s %s", hour, min, note_level, note, ctime(&ct));
+
 		break;
 	}
 	case DIARY_NAMED_PET:
@@ -720,24 +701,21 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		case RECORD_NAMED_PET_LOSE_PARENT:
 			fprintf(fff, _("%sの召喚者が既にいないため消え去った。\n", "%s disappeared because its summoner left.\n"), note);
 			break;
-
 		default:
 			fprintf(fff, "\n");
 			break;
 		}
+
 		break;
 	}
-
 	case DIARY_WIZARD_LOG:
 		fprintf(fff, "%s\n", note);
 		break;
-
 	default:
 		break;
 	}
 
 	my_fclose(fff);
-
 	if (do_level) write_level = FALSE;
 
 	return 0;
