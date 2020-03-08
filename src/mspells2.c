@@ -697,7 +697,7 @@ bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx)
 
 	can_remember = is_original_ap_and_seen(target_ptr, m_ptr);
 
-	dam = monspell_to_monster(target_ptr, thrown_spell, y, x, m_idx, target_idx);
+	dam = monspell_to_monster(target_ptr, thrown_spell, y, x, m_idx, target_idx, FALSE);
 	if (dam < 0) return FALSE;
 
 	bool is_special_magic = m_ptr->ml;

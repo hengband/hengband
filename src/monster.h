@@ -35,9 +35,7 @@ extern MONSTER_IDX hack_m_idx_ii;
  */
 
 typedef struct floor_type floor_type;
-typedef struct monster_type monster_type;
-
-struct monster_type
+typedef struct
 {
 	MONRACE_IDX r_idx;		/* Monster race index 0 = dead. */
 	MONRACE_IDX ap_r_idx;	/* Monster race appearance index */
@@ -128,13 +126,11 @@ struct monster_type
 #define SM_IMM_MANA             0x80000000 /*!< モンスターの学習フラグ: プレイヤーにMPがない */
 
 	MONSTER_IDX parent_m_idx;
-};
+} monster_type;
 
 #define MON_BEGGAR        12
 #define MON_LEPER         13
-#define MON_BLACK_MARKET  14
 #define MON_LION_HEART    19
-#define MON_GHB           39
 #define MON_NOV_PRIEST    45
 #define MON_GRIP          53
 #define MON_WOLF          54
@@ -143,13 +139,10 @@ struct monster_type
 #define MON_PIRANHA       70
 #define MON_COPPER_COINS  85
 #define MON_NOV_PALADIN   97
-#define MON_GREEN_G       100
 #define MON_NOV_PRIEST_G  109
 #define MON_SILVER_COINS  117
 #define MON_D_ELF         122
 #define MON_MANES         128
-#define MON_LOST_SOUL     133
-#define MON_ROBIN_HOOD    138
 #define MON_NOV_PALADIN_G 147
 #define MON_PHANTOM_W     152
 #define MON_WOUNDED_BEAR  159
@@ -157,98 +150,41 @@ struct monster_type
 #define MON_D_ELF_WARRIOR 182
 #define MON_BLUE_HORROR   189
 #define MON_GOLD_COINS    195
-#define MON_VORPAL_BUNNY  205
 #define MON_MASTER_YEEK   224
 #define MON_PRIEST        225
 #define MON_D_ELF_PRIEST  226
-#define MON_TIGER         230
 #define MON_MITHRIL_COINS 239
-#define MON_DRUID         241
 #define MON_PINK_HORROR   242
-#define MON_HILL_GIANT    255
-#define MON_WERERAT       270
-#define MON_UMBER_HULK    283
-#define MON_ORC_CAPTAIN   285
-#define MON_BERSERKER     293
 #define MON_IMP           296
-#define MON_SHAGRAT       314
-#define MON_GORBAG        315
-#define MON_STONE_GIANT   321
 #define MON_LIZARD_KING   332
 #define MON_WYVERN        334
 #define MON_SABRE_TIGER   339
 #define MON_D_ELF_LORD    348
-#define MON_FIRE_VOR      354
-#define MON_WATER_VOR     355
 #define MON_ARCH_VILE     357
-#define MON_COLD_VOR      358
-#define MON_ENERGY_VOR    359
-#define MON_IRON_GOLEM    367
 #define MON_JADE_MONK     370
 #define MON_D_ELF_WARLOCK 375
-#define MON_HAGEN         383
 #define MON_MENELDOR      384
 #define MON_PHANTOM_B     385
-#define MON_C_CRAWLER     395
-#define MON_XICLOTLAN     396
 #define MON_D_ELF_DRUID   400
-#define MON_TROLL_PRIEST  403
 #define MON_GWAIHIR       410
-#define MON_ANGEL         417
 #define MON_ADAMANT_COINS 423
 #define MON_COLBRAN       435
-#define MON_SPIRIT_NAGA   436
-#define MON_GACHAPIN      441
-#define MON_BASILISK      453
-#define MON_ARCHANGEL     456
 #define MON_MITHRIL_GOLEM 464
 #define MON_THORONDOR     468
-#define MON_SHADOW_DRAKE  471
-#define MON_GHOST         477
-#define MON_OGRE_SHAMAN   479
 #define MON_GHOUL_KING    483
 #define MON_NINJA         485
 #define MON_BICLOPS       490
 #define MON_IVORY_MONK    492
-#define MON_LOG_MASTER    498
-#define MON_ETHER_DRAKE   504
 #define MON_GOEMON        505
-#define MON_CHERUB        511
 #define MON_WATER_ELEM    512
-#define MON_JURT          517
-#define MON_LICH          518
 #define MON_BLOODLETTER   523
-#define MON_HALFLING_S    539
-#define MON_GRAV_HOUND    540
-#define MON_REVENANT      555
 #define MON_RAAL          557
-#define MON_COLOSSUS      558
 #define MON_NIGHTBLADE    564
-#define MON_ELDER_THING   569
-#define MON_CRYPT_THING   577
-#define MON_NEXUS_VOR     587
-#define MON_PLASMA_VOR    588
-#define MON_TIME_VOR      589
-#define MON_M_MH_DRAGON   593
-#define MON_MANDOR        598
-#define MON_SHIM_VOR      600
-#define MON_SERAPH        605
 #define MON_BARON_HELL    609
-#define MON_KAVLAX        616
-#define MON_ETTIN         621
-#define MON_VAMPIRE_LORD  623
-#define MON_JUBJUB        640
 #define MON_G_C_DRAKE     646
-#define MON_CLUB_DEMON    648
 #define MON_F_ANGEL       652
 #define MON_D_ELF_SORC    657
-#define MON_MASTER_LICH   658
-#define MON_RINALDO       660
-#define MON_ARCHON        661
-#define MON_UND_BEHOLDER  664
 #define MON_IRON_LICH     666
-#define MON_JACK_SHADOWS  670
-#define MON_LLOIGOR       682
 #define MON_DREADMASTER   690
 #define MON_DROLEM        691
 #define MON_DAWN          693
@@ -260,89 +196,37 @@ struct monster_type
 #define MON_S_TYRANNO     705
 #define MON_FAFNER        712
 #define MON_G_BALROG      720
-#define MON_TIME_HOUND    725
-#define MON_PLASMA_HOUND  726
 #define MON_BULLGATES     732
-#define MON_SANTACLAUS    733
 #define MON_LORD_CHAOS    737
-#define MON_TINDALOS      739
-#define MON_DEMILICH      742
-#define MON_NIGHTCRAWLER  744
-#define MON_CHAOS_VOR     751
-#define MON_AETHER_VOR    752
-#define MON_FUNDIN        762
-#define MON_DWORKIN       763
 #define MON_NIGHTWALKER   768
-#define MON_RAPHAEL       769
-#define MON_SARUMAN       771
-#define MON_GANDALF       772
-#define MON_BRAND         773
 #define MON_SHADOWLORD    774
-#define MON_ARCHLICH      776
 #define MON_JABBERWOCK    778
-#define MON_CHAOS_HOUND   779
 #define MON_ULT_BEHOLDER  781
 #define MON_SHAMBLER      786
-#define MON_BLEYS         789
-#define MON_FIONA         791
-#define MON_SKY_DRAKE     793
-#define MON_JULIAN        794
 #define MON_BLACK_REAVER  798
-#define MON_CAINE         799
-#define MON_GERARD        807
-#define MON_UNGOLIANT     808
-#define MON_ATLACH_NACHA  809
-#define MON_Y_GOLONAC     810
-#define MON_AETHER_HOUND  811
-#define MON_WARP_DEMON    812
-#define MON_ERIC          813
 #define MON_UNMAKER       815
 #define MON_CYBER         816
-#define MON_KLING         819
-#define MON_CORWIN        820
 #define MON_ANGMAR        825
-#define MON_CANTORAS      830
-#define MON_GODZILLA      832
-#define MON_SPAWN_CTH     836
-#define MON_SURTUR        837
-#define MON_TARRASQUE     838
-#define MON_LUNGORTHIN    839
-#define MON_CYBER_KING    843
 #define MON_WYRM_POWER    847
-#define MON_NODENS        849
 #define MON_JORMUNGAND    854
-#define MON_DESTROYER     855
-#define MON_GOTHMOG       856
-#define MON_G_CTHULHU     857
 #define MON_SAURON        858
 #define MON_UNICORN_ORD   859
 #define MON_OBERON        860
 #define MON_MORGOTH       861
 #define MON_SERPENT       862
 #define MON_ONE_RING      864
-#define MON_CAAWS         866
-#define MON_CULVERIN      867
 #define MON_EBONY_MONK    870
 #define MON_HAGURE        871
-#define MON_OROCHI        872
-#define MON_ECHIZEN       873
-#define MON_SPECT_WYRM    874
 #define MON_DIO           878
 #define MON_OHMU          879
 #define MON_WONG          880
 #define MON_ZOMBI_SERPENT 883
 #define MON_D_ELF_SHADE   886
-#define MON_MANA_HOUND    887
-#define MON_VENOM_WYRM    890
 #define MON_TROLL_KING    894
-#define MON_BAZOOKER      896
-#define MON_SHARD_VOR     897
 #define MON_ELF_LORD      900
-#define MON_MASTER_MYS    916
 #define MON_G_MASTER_MYS  917
 #define MON_IE            921
 #define MON_TSUCHINOKO    926
-#define MON_GCWADL        929
 #define MON_LOCKE_CLONE   930
 #define MON_CALDARM       931
 #define MON_BANORLUPART   932
@@ -350,10 +234,7 @@ struct monster_type
 #define MON_LUPART        934
 #define MON_KENSHIROU     936
 #define MON_W_KNIGHT      938
-#define MON_PLANETAR      942
-#define MON_SOLAR         943
 #define MON_BIKETAL       945
-#define MON_RICH          948
 #define MON_IKETA         949
 #define MON_B_DEATH_SWORD 953
 #define MON_YASE_HORSE    955
@@ -361,22 +242,14 @@ struct monster_type
 #define MON_BOTEI         963
 #define MON_KAGE          964
 #define MON_JAIAN         967
-#define MON_BELD          973
-#define MON_THAT_BAT      975
-#define MON_SHUTEN        979
 #define MON_FENGHUANG     988
-#define MON_KIRIN         989
-#define MON_BAHAMUT       1000
 #define MON_SUKE          1001
 #define MON_KAKU          1002
-#define MON_GHOST_Q       1003
-#define MON_PIP           1004
 #define MON_A_GOLD        1010
 #define MON_A_SILVER      1011
 #define MON_ROLENTO       1013
 #define MON_RAOU          1018
-#define MON_SHURYUUDAN    1023
-#define MON_WAHHA         1031
+#define MON_GRENADE       1023
 #define MON_DEBBY         1032
 #define MON_KNI_TEMPLAR   1037
 #define MON_PALADIN       1038
@@ -394,8 +267,6 @@ struct monster_type
 #define MON_JIZOTAKO      1065
 #define MON_TANUKI        1067
 #define MON_ALIEN_JURAL   1082
-#define MON_HATOPOPPO     1083
-#define MON_KOGAN         1096
 
 /*
  * Bit flags for the place_monster_???() (etc)

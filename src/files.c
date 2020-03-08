@@ -16,9 +16,7 @@
 #include "uid-checker.h"
 #include "files.h"
 #include "core.h" // 暫定。後で消す.
-
 #include "character-dump.h"
-#include "view-mainwindow.h" // 暫定。後で消す.
 
 concptr ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code
 concptr ANGBAND_DIR_APEX; //!< High score files (binary) These files may be portable between platforms
@@ -298,7 +296,7 @@ concptr process_pref_file_expr(player_type *creature_ptr, char **sp, char *fp)
  * Allow the "full" flag to dump additional info,
  * and trigger its usage from various places in the code.
  */
-errr file_character(player_type *creature_ptr, concptr name, display_player_pf display_player, map_name_pf map_name)
+errr file_character(player_type *creature_ptr, concptr name, update_playtime_pf update_playtime, display_player_pf display_player, map_name_pf map_name)
 {
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);

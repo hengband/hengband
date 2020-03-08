@@ -30,6 +30,8 @@ hengband_SOURCES = \
 	io/gf-descriptions.c io/gf-descriptions.h \
 	io/tokenizer.c io/tokenizer.h \
 	io/interpret-pref-file.c io/interpret-pref-file.h \
+	io/player-status-dump.c io/player-status-dump.h \
+	io/special-class-dump.c io/special-class-dump.h \
 	io/read-pref-file.c io/read-pref-file.h \
 	io/exit-panic.c io/exit-panic.h \
 	signal-handlers.c signal-handlers.h uid-checker.c uid-checker.h \
@@ -56,6 +58,16 @@ hengband_SOURCES = \
 	mind.c mind.h \
 	\
 	monster.h monsterrace.c monsterrace.h \
+	monster/monster-util.c monster/monster-util.h \
+	monster/monster-direction.c monster/monster-direction.h \
+	monster/monster-attack.c monster/monster-attack.h \
+	monster/monster-move.c monster/monster-move.h \
+	monster/monster-object.c monster/monster-object.h \
+	monster/monster-runaway.c monster/monster-runaway.h \
+	monster/monster-safety-hiding.c monster/monster-safety-hiding.h \
+	monster/monster-sweep-grid.c monster/monster-sweep-grid.h \
+	monster/monster-update.c monster/monster-update.h \
+	monster/quantum-effect.c monster/quantum-effect.h \
 	monsterrace-hook.c monsterrace-hook.h \
 	monster-dist-offsets.c monster-dist-offsets.h \
 	monster-process.c monster-process.h \
@@ -142,7 +154,7 @@ EXTRA_DIST = \
 CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat -Iio -Iplayer -Iview
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat -Icore -Iio -Imonster -Iplayer -Iview
 
 install-exec-hook:
 if SET_GID

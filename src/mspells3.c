@@ -1803,6 +1803,7 @@ void learn_spell(player_type *learner_ptr, int monspell)
 
 
 /*!
+ * todo f4, f5, f6を構造体にまとめ直す
  * @brief モンスター特殊能力のフラグ配列から特定条件の魔法だけを抜き出す処理
  * Extract monster spells mask for the given mode
  * @param f4 モンスター特殊能力の4番目のフラグ配列

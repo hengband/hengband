@@ -472,6 +472,42 @@
     <ClCompile Include="..\..\src\io\interpret-pref-file.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster\quantum-effect.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\special-class-dump.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\player-status-dump.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-util.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-object.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-attack.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-move.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-update.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-safety-hiding.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-direction.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-runaway.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-sweep-grid.c">
+      <Filter>monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -925,6 +961,42 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\interpret-pref-file.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\quantum-effect.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\special-class-dump.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\player-status-dump.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-util.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-object.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-attack.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-move.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-update.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-safety-hiding.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-direction.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-runaway.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-sweep-grid.h">
+      <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
