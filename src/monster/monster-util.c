@@ -132,6 +132,13 @@ void store_enemy_approch_direction(int *mm, POSITION y, POSITION x)
 }
 
 
+/*!
+ * @brief get_moves() における移動の方向を保存する
+ * @param mm 移動方向
+ * @param y 移動先Y座標
+ * @param x 移動先X座標
+ * @return なし
+ */
 void store_moves_val(int *mm, int y, int x)
 {
 	POSITION ax = ABS(x);
@@ -147,6 +154,7 @@ void store_moves_val(int *mm, int y, int x)
 	switch (move_val)
 	{
 	case 0:
+	{
 		mm[0] = 9;
 		if (ay > ax)
 		{
@@ -162,9 +170,12 @@ void store_moves_val(int *mm, int y, int x)
 			mm[3] = 3;
 			mm[4] = 7;
 		}
+
 		break;
+	}
 	case 1:
 	case 9:
+	{
 		mm[0] = 6;
 		if (y < 0)
 		{
@@ -180,9 +191,12 @@ void store_moves_val(int *mm, int y, int x)
 			mm[3] = 8;
 			mm[4] = 2;
 		}
+
 		break;
+	}
 	case 2:
 	case 6:
+	{
 		mm[0] = 8;
 		if (x < 0)
 		{
@@ -198,8 +212,11 @@ void store_moves_val(int *mm, int y, int x)
 			mm[3] = 4;
 			mm[4] = 6;
 		}
+
 		break;
+	}
 	case 4:
+	{
 		mm[0] = 7;
 		if (ay > ax)
 		{
@@ -215,9 +232,12 @@ void store_moves_val(int *mm, int y, int x)
 			mm[3] = 1;
 			mm[4] = 9;
 		}
+
 		break;
+	}
 	case 5:
 	case 13:
+	{
 		mm[0] = 4;
 		if (y < 0)
 		{
@@ -233,8 +253,11 @@ void store_moves_val(int *mm, int y, int x)
 			mm[3] = 8;
 			mm[4] = 2;
 		}
+
 		break;
+	}
 	case 8:
+	{
 		mm[0] = 3;
 		if (ay > ax)
 		{
@@ -250,9 +273,12 @@ void store_moves_val(int *mm, int y, int x)
 			mm[3] = 9;
 			mm[4] = 1;
 		}
+	
 		break;
+	}
 	case 10:
 	case 14:
+	{
 		mm[0] = 2;
 		if (x < 0)
 		{
@@ -268,8 +294,11 @@ void store_moves_val(int *mm, int y, int x)
 			mm[3] = 4;
 			mm[4] = 6;
 		}
+
 		break;
+	}
 	case 12:
+	{
 		mm[0] = 1;
 		if (ay > ax)
 		{
@@ -285,7 +314,9 @@ void store_moves_val(int *mm, int y, int x)
 			mm[3] = 7;
 			mm[4] = 3;
 		}
+
 		break;
+	}
 	}
 }
 
