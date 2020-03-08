@@ -5,7 +5,11 @@
  */
 
 #include "monster/monster-move.h"
+#include "monster/monster-attack.h"
+#include "monster/monster-object.h"
+#include "monster/monster-update.h"
 #include "cmd/cmd-pet.h"
+#include "creature.h"
 #include "monster-status.h"
 #include "player-move.h"
 
@@ -26,7 +30,7 @@ static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_p
   * @param can_cross モンスターが地形を踏破できるならばTRUE
   * @return 透過も破壊もしなかった場合はFALSE、それ以外はTRUE
   */
-bool process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx, bool can_cross)
+static bool process_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx, bool can_cross)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	grid_type *g_ptr;
@@ -150,7 +154,7 @@ static void bash_glass_door(player_type *target_ptr, turn_flags *turn_flags_ptr,
  * @param nx モンスターのX座標
  * @return モンスターが死亡した場合のみFALSE
  */
-bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+static bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	grid_type *g_ptr;
@@ -189,50 +193,6 @@ bool process_door(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_t
 
 
 /*!
- * @brief モンスターが壁を掘った後続処理を実行する
- * @param target_ptr プレーヤーへの参照ポインタ
- * @turn_flags_ptr ターン経過処理フラグへの参照ポインタ
- * @param m_ptr モンスターへの参照ポインタ
- * @param ny モンスターのY座標
- * @param nx モンスターのX座標
- * @return モンスターが死亡した場合のみFALSE
- */
-bool process_post_dig_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
-{
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	grid_type *g_ptr;
-	g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
-	feature_type *f_ptr;
-	f_ptr = &f_info[g_ptr->feat];
-	if (!turn_flags_ptr->did_kill_wall || !turn_flags_ptr->do_move) return TRUE;
-
-	if (one_in_(GRINDNOISE))
-	{
-		if (have_flag(f_ptr->flags, FF_GLASS))
-			msg_print(_("何かの砕ける音が聞こえる。", "There is a crashing sound."));
-		else
-			msg_print(_("ギシギシいう音が聞こえる。", "There is a grinding sound."));
-	}
-
-	cave_alter_feat(target_ptr, ny, nx, FF_HURT_DISI);
-
-	if (!monster_is_valid(m_ptr))
-	{
-		target_ptr->update |= (PU_FLOW);
-		target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_WALL);
-
-		return FALSE;
-	}
-
-	f_ptr = &f_info[g_ptr->feat];
-	turn_flags_ptr->do_view = TRUE;
-	turn_flags_ptr->do_turn = TRUE;
-	return TRUE;
-}
-
-
-/*!
  * @brief 守りのルーンによるモンスターの移動制限を処理する
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
@@ -241,7 +201,7 @@ bool process_post_dig_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, 
  * @param nx モンスターのX座標
  * @return ルーンのある/なし
  */
-bool process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+static bool process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
 	grid_type *g_ptr;
 	g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
@@ -277,7 +237,7 @@ bool process_protection_rune(player_type *target_ptr, turn_flags *turn_flags_ptr
  * @param nx モンスターのX座標
  * @return モンスターが死亡した場合のみFALSE
  */
-bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+static bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
 {
 	grid_type *g_ptr;
 	g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
@@ -313,5 +273,171 @@ bool process_explosive_rune(player_type *target_ptr, turn_flags *turn_flags_ptr,
 	if (!monster_is_valid(m_ptr)) return FALSE;
 
 	turn_flags_ptr->do_move = TRUE;
+	return TRUE;
+}
+
+
+/*!
+ * @brief モンスターが壁を掘った後続処理を実行する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @turn_flags_ptr ターン経過処理フラグへの参照ポインタ
+ * @param m_ptr モンスターへの参照ポインタ
+ * @param ny モンスターのY座標
+ * @param nx モンスターのX座標
+ * @return モンスターが死亡した場合のみFALSE
+ */
+static bool process_post_dig_wall(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, POSITION ny, POSITION nx)
+{
+	monster_race *r_ptr = &r_info[m_ptr->r_idx];
+	grid_type *g_ptr;
+	g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
+	feature_type *f_ptr;
+	f_ptr = &f_info[g_ptr->feat];
+	if (!turn_flags_ptr->did_kill_wall || !turn_flags_ptr->do_move) return TRUE;
+
+	if (one_in_(GRINDNOISE))
+	{
+		if (have_flag(f_ptr->flags, FF_GLASS))
+			msg_print(_("何かの砕ける音が聞こえる。", "There is a crashing sound."));
+		else
+			msg_print(_("ギシギシいう音が聞こえる。", "There is a grinding sound."));
+	}
+
+	cave_alter_feat(target_ptr, ny, nx, FF_HURT_DISI);
+
+	if (!monster_is_valid(m_ptr))
+	{
+		target_ptr->update |= (PU_FLOW);
+		target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags2 |= (RF2_KILL_WALL);
+
+		return FALSE;
+	}
+
+	f_ptr = &f_info[g_ptr->feat];
+	turn_flags_ptr->do_view = TRUE;
+	turn_flags_ptr->do_turn = TRUE;
+	return TRUE;
+}
+
+
+/*!
+ * todo 少し長いが、これといってブロックとしてまとまった部分もないので暫定でこのままとする
+ * @brief モンスターの移動に関するメインルーチン
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param turn_flags_ptr ターン経過処理フラグへの参照ポインタ
+ * @param m_idx モンスターID
+ * @param mm モンスターの移動方向
+ * @param oy 移動前の、モンスターのY座標
+ * @param ox 移動前の、モンスターのX座標
+ * @param count 移動回数 (のはず todo)
+ * @return 移動が阻害される何か (ドア等)があったらFALSE
+ */
+bool process_monster_movement(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx, DIRECTION *mm, POSITION oy, POSITION ox, int *count)
+{
+	for (int i = 0; mm[i]; i++)
+	{
+		int d = mm[i];
+		if (d == 5) d = ddd[randint0(8)];
+
+		POSITION ny = oy + ddy[d];
+		POSITION nx = ox + ddx[d];
+		if (!in_bounds2(target_ptr->current_floor_ptr, ny, nx)) continue;
+
+		grid_type *g_ptr;
+		g_ptr = &target_ptr->current_floor_ptr->grid_array[ny][nx];
+		monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
+		monster_race *r_ptr = &r_info[m_ptr->r_idx];
+		bool can_cross = monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0);
+
+		if (!process_wall(target_ptr, turn_flags_ptr, m_ptr, ny, nx, can_cross))
+		{
+			if (!process_door(target_ptr, turn_flags_ptr, m_ptr, ny, nx))
+				return FALSE;
+		}
+
+		if (!process_protection_rune(target_ptr, turn_flags_ptr, m_ptr, ny, nx))
+		{
+			if (!process_explosive_rune(target_ptr, turn_flags_ptr, m_ptr, ny, nx))
+				return FALSE;
+		}
+
+		exe_monster_attack_to_player(target_ptr, turn_flags_ptr, m_idx, ny, nx);
+		if (process_monster_attack_to_monster(target_ptr, turn_flags_ptr, m_idx, g_ptr, can_cross)) return FALSE;
+
+		if (turn_flags_ptr->is_riding_mon)
+		{
+			if (!target_ptr->riding_ryoute && !MON_MONFEAR(&target_ptr->current_floor_ptr->m_list[target_ptr->riding])) turn_flags_ptr->do_move = FALSE;
+		}
+
+		if (!process_post_dig_wall(target_ptr, turn_flags_ptr, m_ptr, ny, nx)) return FALSE;
+
+		if (turn_flags_ptr->must_alter_to_move && (r_ptr->flags7 & RF7_AQUATIC))
+		{
+			if (!monster_can_cross_terrain(target_ptr, g_ptr->feat, r_ptr, turn_flags_ptr->is_riding_mon ? CEM_RIDING : 0))
+				turn_flags_ptr->do_move = FALSE;
+		}
+
+		if (turn_flags_ptr->do_move && !can_cross && !turn_flags_ptr->did_kill_wall && !turn_flags_ptr->did_bash_door)
+			turn_flags_ptr->do_move = FALSE;
+
+		if (turn_flags_ptr->do_move && (r_ptr->flags1 & RF1_NEVER_MOVE))
+		{
+			if (is_original_ap_and_seen(target_ptr, m_ptr))
+				r_ptr->r_flags1 |= (RF1_NEVER_MOVE);
+
+			turn_flags_ptr->do_move = FALSE;
+		}
+
+		if (!turn_flags_ptr->do_move)
+		{
+			if (turn_flags_ptr->do_turn) break;
+
+			continue;
+		}
+
+		turn_flags_ptr->do_turn = TRUE;
+		feature_type *f_ptr;
+		f_ptr = &f_info[g_ptr->feat];
+		if (have_flag(f_ptr->flags, FF_TREE))
+		{
+			if (!(r_ptr->flags7 & RF7_CAN_FLY) && !(r_ptr->flags8 & RF8_WILD_WOOD))
+			{
+				m_ptr->energy_need += ENERGY_NEED();
+			}
+		}
+
+		if (!update_riding_monster(target_ptr, turn_flags_ptr, m_idx, oy, ox, ny, nx)) break;
+
+		monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
+		if (m_ptr->ml &&
+			(disturb_move ||
+			(disturb_near && (m_ptr->mflag & MFLAG_VIEW) && projectable(target_ptr, target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx)) ||
+				(disturb_high && ap_r_ptr->r_tkills && ap_r_ptr->level >= target_ptr->lev)))
+		{
+			if (is_hostile(m_ptr))
+				disturb(target_ptr, FALSE, TRUE);
+		}
+
+		bool is_takable_or_killable = g_ptr->o_idx > 0;
+		is_takable_or_killable &= (r_ptr->flags2 & (RF2_TAKE_ITEM | RF2_KILL_ITEM)) != 0;
+
+		bool is_pickup_items = (target_ptr->pet_extra_flags & PF_PICKUP_ITEMS) != 0;
+		is_pickup_items &= (r_ptr->flags2 & RF2_TAKE_ITEM) != 0;
+
+		is_takable_or_killable &= !is_pet(m_ptr) || is_pickup_items;
+		if (!is_takable_or_killable)
+		{
+			if (turn_flags_ptr->do_turn) break;
+
+			continue;
+		}
+
+		update_object_by_monster_movement(target_ptr, turn_flags_ptr, m_idx, ny, nx);
+		if (turn_flags_ptr->do_turn) break;
+
+		(*count)++;
+	}
+
 	return TRUE;
 }
