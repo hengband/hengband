@@ -208,6 +208,7 @@
     <ClCompile Include="..\..\src\monster\monster-direction.c" />
     <ClCompile Include="..\..\src\monster\monster-move.c" />
     <ClCompile Include="..\..\src\monster\monster-object.c" />
+    <ClCompile Include="..\..\src\monster\monster-runaway.c" />
     <ClCompile Include="..\..\src\monster\monster-safety-hiding.c" />
     <ClCompile Include="..\..\src\monster\monster-update.c" />
     <ClCompile Include="..\..\src\monster\monster-util.c" />
@@ -362,6 +363,7 @@
     <ClInclude Include="..\..\src\monster\monster-direction.h" />
     <ClInclude Include="..\..\src\monster\monster-move.h" />
     <ClInclude Include="..\..\src\monster\monster-object.h" />
+    <ClInclude Include="..\..\src\monster\monster-runaway.h" />
     <ClInclude Include="..\..\src\monster\monster-safety-hiding.h" />
     <ClInclude Include="..\..\src\monster\monster-update.h" />
     <ClInclude Include="..\..\src\monster\monster-util.h" />
