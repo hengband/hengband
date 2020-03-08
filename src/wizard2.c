@@ -15,6 +15,7 @@
 #include "term.h"
 
 #include "dungeon.h"
+#include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-help.h"
 #include "cmd/cmd-save.h"

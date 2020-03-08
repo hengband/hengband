@@ -508,6 +508,9 @@
     <ClCompile Include="..\..\src\monster\monster-sweep-grid.c">
       <Filter>monster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\write-diary.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -997,6 +1000,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-sweep-grid.h">
       <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\write-diary.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

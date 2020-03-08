@@ -15,7 +15,8 @@
 #include "artifact.h"
 #include "feature.h"
 #include "world.h"
-#include "cmd-dump.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
 #include "english.h"
 #include "view-mainwindow.h"
 

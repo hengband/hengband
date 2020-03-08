@@ -9,9 +9,10 @@
 #include "angband.h"
 #include "core.h"
 #include "util.h"
-#include "cmd-spell.h"
+#include "cmd/cmd-spell.h"
 
-#include "cmd-dump.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
 #include "selfinfo.h"
 #include "spells.h"
 #include "spells-summon.h"

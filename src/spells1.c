@@ -15,8 +15,9 @@
 #include "core.h"
 #include "util.h"
 
-#include "cmd-pet.h"
-#include "cmd-dump.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-pet.h"
+#include "cmd/cmd-dump.h"
 #include "floor.h"
 #include "trap.h"
 #include "autopick.h"

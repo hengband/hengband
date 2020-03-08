@@ -18,8 +18,9 @@
 
 #include "core.h"
 #include "core/show-file.h"
-#include "cmd-dump.h"
-#include "cmd-magiceat.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
+#include "cmd/cmd-magiceat.h"
 #include "floor.h"
 #include "floor-events.h"
 #include "floor-save.h"

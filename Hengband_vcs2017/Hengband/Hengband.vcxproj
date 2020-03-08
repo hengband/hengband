@@ -199,6 +199,7 @@
     <ClCompile Include="..\..\src\io\read-pref-file.c" />
     <ClCompile Include="..\..\src\io\special-class-dump.c" />
     <ClCompile Include="..\..\src\io\tokenizer.c" />
+    <ClCompile Include="..\..\src\io\write-diary.c" />
     <ClCompile Include="..\..\src\monster-dist-offsets.c" />
     <ClCompile Include="..\..\src\monster-process.c" />
     <ClCompile Include="..\..\src\monster-status.c" />
@@ -359,6 +360,7 @@
     <ClInclude Include="..\..\src\io\read-pref-file.h" />
     <ClInclude Include="..\..\src\io\special-class-dump.h" />
     <ClInclude Include="..\..\src\io\tokenizer.h" />
+    <ClInclude Include="..\..\src\io\write-diary.h" />
     <ClInclude Include="..\..\src\monster-dist-offsets.h" />
     <ClInclude Include="..\..\src\monster\monster-attack.h" />
     <ClInclude Include="..\..\src\monster\monster-direction.h" />

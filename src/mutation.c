@@ -16,6 +16,7 @@
 #include "core/show-file.h"
 #include "util.h"
 
+#include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "mutation.h"
 

@@ -22,8 +22,9 @@
 #include "monster/monster-update.h"
 #include "monster/quantum-effect.h"
 
-#include "cmd-dump.h"
-#include "cmd-pet.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
+#include "cmd/cmd-pet.h"
 #include "creature.h"
 #include "melee.h"
 #include "spells-summon.h"

@@ -22,6 +22,7 @@
 
 #include "birth.h"
 #include "bldg.h"
+#include "io/write-diary.h"
 #include "cmd/cmd-activate.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-eat.h"

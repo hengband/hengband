@@ -2,7 +2,8 @@
 #include "core.h"
 #include "util.h"
 
-#include "cmd-dump.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
 #include "floor.h"
 #include "grid.h"
 #include "melee.h"

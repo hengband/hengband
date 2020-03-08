@@ -10,8 +10,9 @@
 #include "object-flavor.h"
 #include "object-hook.h"
 
-#include "cmd-basic.h"
-#include "cmd-dump.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-basic.h"
+#include "cmd/cmd-dump.h"
 
 #include "floor-events.h"
 #include "floor-save.h"

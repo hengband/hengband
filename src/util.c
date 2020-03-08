@@ -21,7 +21,8 @@
 #include "quest.h"
 #include "floor.h"
 #include "world.h"
-#include "cmd-dump.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
 #include "japanese.h"
 #include "player-class.h"
 
