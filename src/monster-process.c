@@ -52,9 +52,6 @@ void awake_monster(player_type *target_ptr, MONSTER_IDX m_idx);
 void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 bool explode_grenade(player_type *target_ptr, MONSTER_IDX m_idx);
 bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
-bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware);
-bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_ptr);
-bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx);
 bool runaway_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx);
 void escape_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, monster_type *m_ptr, GAME_TEXT *m_name);
 void process_special(player_type *target_ptr, MONSTER_IDX m_idx);
@@ -550,7 +547,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	mm[0] = mm[1] = mm[2] = mm[3] = 0;
 	mm[4] = mm[5] = mm[6] = mm[7] = 0;
 
-	if (!decide_monster_movement_direction(target_ptr, mm, m_idx, turn_flags_ptr->aware)) return;
+	if (!decide_monster_movement_direction(target_ptr, mm, m_idx, turn_flags_ptr->aware, get_moves)) return;
 
 	int count = 0;
 	if (!process_monster_movement(target_ptr, turn_flags_ptr, m_idx, mm, oy, ox, &count)) return;
@@ -862,118 +859,6 @@ bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, P
 	}
 
 	return FALSE;
-}
-
-
-/*!
- * @brief モンスターの移動パターンを決定する
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param mm 移動方向
- * @param m_idx モンスターID
- * @param aware モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
- * @return 移動先が存在すればTRUE
- */
-bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
-{
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-	if (MON_CONFUSED(m_ptr) || !aware)
-	{
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		return TRUE;
-	}
-
-	if (random_walk(target_ptr, mm, m_ptr)) return TRUE;
-
-	if ((r_ptr->flags1 & RF1_NEVER_MOVE) && (m_ptr->cdis > 1))
-	{
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		return TRUE;
-	}
-
-	if (decide_pet_movement_direction(target_ptr, mm, m_idx)) return TRUE;
-
-	if (!is_hostile(m_ptr))
-	{
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		get_enemy_dir(target_ptr, m_idx, mm);
-		return TRUE;
-	}
-
-	if (!get_moves(target_ptr, m_idx, mm)) return FALSE;
-
-	return TRUE;
-}
-
-
-/*!
- * todo ↓のように書いたが、"5"とはもしかして「その場に留まる」という意味か？
- * @brief 不規則歩行フラグを持つモンスターの移動方向をその確率に基づいて決定する
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param mm 移動方向
- * @param m_ptr モンスターへの参照ポインタ
- * @return 不規則な方向へ歩くことになったらTRUE
- */
-bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_ptr)
-{
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if (((r_ptr->flags1 & (RF1_RAND_50 | RF1_RAND_25)) == (RF1_RAND_50 | RF1_RAND_25)) && (randint0(100) < 75))
-	{
-		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= (RF1_RAND_50 | RF1_RAND_25);
-
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		return TRUE;
-	}
-
-	if ((r_ptr->flags1 & RF1_RAND_50) && (randint0(100) < 50))
-	{
-		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= RF1_RAND_50;
-
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		return TRUE;
-	}
-
-	if ((r_ptr->flags1 & RF1_RAND_25) && (randint0(100) < 25))
-	{
-		if (is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags1 |= RF1_RAND_25;
-
-		mm[0] = mm[1] = mm[2] = mm[3] = 5;
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-
-/*!
- * @brief ペットや友好的なモンスターがフロアから逃げる処理を行う
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param mm 移動方向
- * @param m_idx モンスターID
- * @return モンスターがペットであればTRUE
- */
-bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx)
-{
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	if (!is_pet(m_ptr)) return FALSE;
-
-	bool avoid = ((target_ptr->pet_follow_distance < 0) && (m_ptr->cdis <= (0 - target_ptr->pet_follow_distance)));
-	bool lonely = (!avoid && (m_ptr->cdis > target_ptr->pet_follow_distance));
-	bool distant = (m_ptr->cdis > PET_SEEK_DIST);
-	mm[0] = mm[1] = mm[2] = mm[3] = 5;
-	if (get_enemy_dir(target_ptr, m_idx, mm)) return TRUE;
-	if (!avoid && !lonely && !distant) return TRUE;
-
-	POSITION dis = target_ptr->pet_follow_distance;
-	if (target_ptr->pet_follow_distance > PET_SEEK_DIST)
-	{
-		target_ptr->pet_follow_distance = PET_SEEK_DIST;
-	}
-
-	(void)get_moves(target_ptr, m_idx, mm);
-	target_ptr->pet_follow_distance = (s16b)dis;
-	return TRUE;
 }
 
 
