@@ -9,6 +9,8 @@
 #include "quest.h"
 #include "files.h"
 #include "dungeon.h"
+#include "dungeon-file.h"
+#include "world.h"
 
 // todo *抹殺* したい…
 bool write_level;
@@ -23,20 +25,12 @@ bool write_level;
  */
 errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 {
-	int day, hour, min;
-	FILE *fff = NULL;
-	GAME_TEXT file_name[MAX_NLEN];
-	char buf[1024];
-	concptr note_level = "";
-	bool do_level = TRUE;
-	char note_level_buf[40];
-	QUEST_IDX q_idx;
-
 	static bool disable_diary = FALSE;
 
+	int day, hour, min;
 	extract_day_hour_min(creature_ptr, &day, &hour, &min);
 
-	if (disable_diary) return(-1);
+	if (disable_diary) return -1;
 
 	if (type == DIARY_FIX_QUEST_C ||
 		type == DIARY_FIX_QUEST_F ||
@@ -51,9 +45,12 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		creature_ptr->current_floor_ptr->inside_quest = old_quest;
 	}
 
+	GAME_TEXT file_name[MAX_NLEN];
 	sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
+	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 	FILE_TYPE(FILE_TYPE_TEXT);
+	FILE *fff = NULL;
 	fff = my_fopen(buf, "a");
 	if (!fff)
 	{
@@ -63,7 +60,8 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		return -1;
 	}
 
-	q_idx = quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level);
+	QUEST_IDX q_idx = quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level);
+	concptr note_level = "";
 	if (write_level)
 	{
 		if (creature_ptr->current_floor_ptr->inside_arena)
@@ -75,6 +73,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 			note_level = _("クエスト:", "Quest:");
 		else
 		{
+			char note_level_buf[40];
 #ifdef JP
 			sprintf(note_level_buf, "%d階(%s):", (int)creature_ptr->current_floor_ptr->dun_level, d_name + d_info[creature_ptr->dungeon_idx].name);
 #else
@@ -84,12 +83,16 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		}
 	}
 
+	bool do_level = TRUE;
 	switch (type)
 	{
 	case DIARY_DIALY:
 	{
-		if (day < MAX_DAYS) fprintf(fff, _("%d日目\n", "Day %d\n"), day);
-		else fputs(_("*****日目\n", "Day *****\n"), fff);
+		if (day < MAX_DAYS)
+			fprintf(fff, _("%d日目\n", "Day %d\n"), day);
+		else
+			fputs(_("*****日目\n", "Day *****\n"), fff);
+
 		do_level = FALSE;
 		break;
 	}
