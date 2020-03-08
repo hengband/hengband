@@ -5,6 +5,7 @@
  */
 
 #include "monster/monster-direction.h"
+#include "monster/monster-sweep-grid.h"
 #include "monster/monster-util.h"
 #include "monster-status.h"
 #include "cmd/cmd-pet.h"
@@ -180,7 +181,7 @@ static bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_
  * @param m_idx モンスターID
  * @return モンスターがペットであればTRUE
  */
-static bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, get_moves_pf get_movable_grid)
+static bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	if (!is_pet(m_ptr)) return FALSE;
@@ -212,7 +213,7 @@ static bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm
  * @param aware モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  * @return 移動先が存在すればTRUE
  */
-bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware, get_moves_pf get_movable_grid)
+bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -231,7 +232,7 @@ bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, M
 		return TRUE;
 	}
 
-	if (decide_pet_movement_direction(target_ptr, mm, m_idx, get_movable_grid)) return TRUE;
+	if (decide_pet_movement_direction(target_ptr, mm, m_idx)) return TRUE;
 
 	if (!is_hostile(m_ptr))
 	{
