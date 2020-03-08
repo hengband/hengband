@@ -132,6 +132,164 @@ void store_enemy_approch_direction(int *mm, POSITION y, POSITION x)
 }
 
 
+void store_moves_val(int *mm, int y, int x)
+{
+	POSITION ax = ABS(x);
+	POSITION ay = ABS(y);
+
+	int move_val = 0;
+	if (y < 0) move_val += 8;
+	if (x > 0) move_val += 4;
+
+	if (ay > (ax << 1)) move_val += 2;
+	else if (ax > (ay << 1)) move_val++;
+
+	switch (move_val)
+	{
+	case 0:
+		mm[0] = 9;
+		if (ay > ax)
+		{
+			mm[1] = 8;
+			mm[2] = 6;
+			mm[3] = 7;
+			mm[4] = 3;
+		}
+		else
+		{
+			mm[1] = 6;
+			mm[2] = 8;
+			mm[3] = 3;
+			mm[4] = 7;
+		}
+		break;
+	case 1:
+	case 9:
+		mm[0] = 6;
+		if (y < 0)
+		{
+			mm[1] = 3;
+			mm[2] = 9;
+			mm[3] = 2;
+			mm[4] = 8;
+		}
+		else
+		{
+			mm[1] = 9;
+			mm[2] = 3;
+			mm[3] = 8;
+			mm[4] = 2;
+		}
+		break;
+	case 2:
+	case 6:
+		mm[0] = 8;
+		if (x < 0)
+		{
+			mm[1] = 9;
+			mm[2] = 7;
+			mm[3] = 6;
+			mm[4] = 4;
+		}
+		else
+		{
+			mm[1] = 7;
+			mm[2] = 9;
+			mm[3] = 4;
+			mm[4] = 6;
+		}
+		break;
+	case 4:
+		mm[0] = 7;
+		if (ay > ax)
+		{
+			mm[1] = 8;
+			mm[2] = 4;
+			mm[3] = 9;
+			mm[4] = 1;
+		}
+		else
+		{
+			mm[1] = 4;
+			mm[2] = 8;
+			mm[3] = 1;
+			mm[4] = 9;
+		}
+		break;
+	case 5:
+	case 13:
+		mm[0] = 4;
+		if (y < 0)
+		{
+			mm[1] = 1;
+			mm[2] = 7;
+			mm[3] = 2;
+			mm[4] = 8;
+		}
+		else
+		{
+			mm[1] = 7;
+			mm[2] = 1;
+			mm[3] = 8;
+			mm[4] = 2;
+		}
+		break;
+	case 8:
+		mm[0] = 3;
+		if (ay > ax)
+		{
+			mm[1] = 2;
+			mm[2] = 6;
+			mm[3] = 1;
+			mm[4] = 9;
+		}
+		else
+		{
+			mm[1] = 6;
+			mm[2] = 2;
+			mm[3] = 9;
+			mm[4] = 1;
+		}
+		break;
+	case 10:
+	case 14:
+		mm[0] = 2;
+		if (x < 0)
+		{
+			mm[1] = 3;
+			mm[2] = 1;
+			mm[3] = 6;
+			mm[4] = 4;
+		}
+		else
+		{
+			mm[1] = 1;
+			mm[2] = 3;
+			mm[3] = 4;
+			mm[4] = 6;
+		}
+		break;
+	case 12:
+		mm[0] = 1;
+		if (ay > ax)
+		{
+			mm[1] = 2;
+			mm[2] = 4;
+			mm[3] = 3;
+			mm[4] = 7;
+		}
+		else
+		{
+			mm[1] = 4;
+			mm[2] = 2;
+			mm[3] = 7;
+			mm[4] = 3;
+		}
+		break;
+	}
+}
+
+
 /*!
  * @brief 古いモンスター情報の保存
  * @param monster_race_idx モンスターID

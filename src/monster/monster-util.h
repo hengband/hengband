@@ -53,6 +53,7 @@ old_race_flags *init_old_race_flags(old_race_flags *old_race_flags_ptr);
 coordinate_candidate init_coordinate_candidate(void);
 
 void store_enemy_approch_direction(int *mm, POSITION y, POSITION x);
+void store_moves_val(int *mm, int y, int x);
 void save_old_race_flags(MONRACE_IDX monster_race_idx, old_race_flags *old_race_flags_ptr);
 SPEED decide_monster_speed(monster_type *m_ptr);
 void update_player_window(MONRACE_IDX monster_race_idx, BIT_FLAGS *window, old_race_flags *old_race_flags_ptr);
