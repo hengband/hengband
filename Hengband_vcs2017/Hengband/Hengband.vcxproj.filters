@@ -493,6 +493,9 @@
     <ClCompile Include="..\..\src\monster\monster-move.c">
       <Filter>monster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-update.c">
+      <Filter>monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -966,6 +969,9 @@
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-move.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-update.h">
       <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>
