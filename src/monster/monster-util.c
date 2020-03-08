@@ -163,6 +163,23 @@ void save_old_race_flags(MONRACE_IDX monster_race_idx, old_race_flags *old_race_
 
 
 /*!
+ * @brief モンスターの加速値を決定する
+ * @param m_ptr モンスターへの参照ポインタ
+ * return モンスターの加速値
+ */
+SPEED decide_monster_speed(monster_type *m_ptr)
+{
+	SPEED speed = m_ptr->mspeed;
+	if (ironman_nightmare) speed += 5;
+
+	if (MON_FAST(m_ptr)) speed += 10;
+	if (MON_SLOW(m_ptr)) speed -= 10;
+
+	return speed;
+}
+
+
+/*!
  * @brief モンスターフラグの更新に基づき、モンスター表示を更新する
  * @param monster_race_idx モンスターID
  * @param window ウィンドウフラグ

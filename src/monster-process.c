@@ -86,7 +86,6 @@ bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, M
 
 void sweep_monster_process(player_type *target_ptr);
 bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr);
-SPEED decide_monster_speed(player_type *target_ptr, monster_type *m_ptr, int monster_number);
 
 /*!
  * @brief モンスターが敵に接近するための方向を計算するメインルーチン
@@ -2184,7 +2183,7 @@ void sweep_monster_process(player_type *target_ptr)
 		if (m_ptr->cdis >= AAF_LIMIT) continue;
 		if (!decide_process_continue(target_ptr, m_ptr)) continue;
 
-		SPEED speed = decide_monster_speed(target_ptr, m_ptr, i);
+		SPEED speed = (target_ptr->riding == i) ? target_ptr->pspeed : decide_monster_speed(m_ptr);
 		m_ptr->energy_need -= SPEED_TO_ENERGY(speed);
 		if (m_ptr->energy_need > 0) continue;
 
@@ -2228,30 +2227,4 @@ bool decide_process_continue(player_type *target_ptr, monster_type *m_ptr)
 		return TRUE;
 
 	return FALSE;
-}
-
-
-/*!
- * @brief モンスターの加速値を決定する
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param m_ptr モンスターへの参照ポインタ
- * @param monster_number 走査中のモンスター番号
- * return モンスターの加速値
- */
-SPEED decide_monster_speed(player_type *target_ptr, monster_type *m_ptr, int monster_number)
-{
-	SPEED speed;
-	if (target_ptr->riding == monster_number)
-	{
-		speed = target_ptr->pspeed;
-		return speed;
-	}
-
-	speed = m_ptr->mspeed;
-	if (ironman_nightmare) speed += 5;
-
-	if (MON_FAST(m_ptr)) speed += 10;
-	if (MON_SLOW(m_ptr)) speed -= 10;
-
-	return speed;
 }
