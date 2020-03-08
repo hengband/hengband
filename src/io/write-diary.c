@@ -16,6 +16,30 @@
 bool write_level;
 
 /*!
+ * todo files.c に移すことも検討する？
+ * @brief 日記ファイルを開く
+ * @param fff ファイルへのポインタ
+ * @param disable_diary 日記への追加を無効化する場合TRUE
+ * @return ファイルがあったらTRUE、なかったらFALSE
+ */
+static bool open_diary_file(FILE *fff, bool *disable_diary)
+{
+	GAME_TEXT file_name[MAX_NLEN];
+	sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
+	char buf[1024];
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
+	FILE_TYPE(FILE_TYPE_TEXT);
+	fff = my_fopen(buf, "a");
+	if (fff) return TRUE;
+
+	msg_format(_("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporarily."), buf);
+	msg_format(NULL);
+	*disable_diary = TRUE;
+	return FALSE;
+}
+
+
+/*!
  * @brief ペットに関する日記を追加する
  * @param fff 日記ファイル
  * @param num 日記へ追加する内容番号
@@ -108,20 +132,8 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		creature_ptr->current_floor_ptr->inside_quest = old_quest;
 	}
 
-	GAME_TEXT file_name[MAX_NLEN];
-	sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
-	char buf[1024];
-	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
-	FILE_TYPE(FILE_TYPE_TEXT);
 	FILE *fff = NULL;
-	fff = my_fopen(buf, "a");
-	if (!fff)
-	{
-		msg_format(_("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporarily."), buf);
-		msg_format(NULL);
-		disable_diary = TRUE;
-		return -1;
-	}
+	if (!open_diary_file(fff, &disable_diary)) return -1;
 
 	QUEST_IDX q_idx = quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level);
 	concptr note_level = "";
