@@ -2225,35 +2225,10 @@ static void process_world_aux_mutation(player_type *creature_ptr)
 
 	if ((creature_ptr->muta2 & MUT2_DISARM) && one_in_(10000))
 	{
-		INVENTORY_IDX slot = 0;
-		object_type *o_ptr = NULL;
-
 		disturb(creature_ptr, FALSE, TRUE);
 		msg_print(_("足がもつれて転んだ！", "You trip over your own feet!"));
 		take_hit(creature_ptr, DAMAGE_NOESCAPE, randint1(creature_ptr->wt / 6), _("転倒", "tripping"), -1);
-
-		msg_print(NULL);
-		if (has_melee_weapon(creature_ptr, INVEN_RARM))
-		{
-			slot = INVEN_RARM;
-			o_ptr = &creature_ptr->inventory_list[INVEN_RARM];
-
-			if (has_melee_weapon(creature_ptr, INVEN_LARM) && one_in_(2))
-			{
-				o_ptr = &creature_ptr->inventory_list[INVEN_LARM];
-				slot = INVEN_LARM;
-			}
-		}
-		else if (has_melee_weapon(creature_ptr, INVEN_LARM))
-		{
-			o_ptr = &creature_ptr->inventory_list[INVEN_LARM];
-			slot = INVEN_LARM;
-		}
-		if (slot && !object_is_cursed(o_ptr))
-		{
-			msg_print(_("武器を落としてしまった！", "You drop your weapon!"));
-			drop_from_inventory(creature_ptr, slot, 1);
-		}
+		drop_weapons(creature_ptr);
 	}
 }
 
