@@ -517,6 +517,9 @@
     <ClCompile Include="..\..\src\cmd\monster-group-table.c">
       <Filter>cmd</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd\diary-subtitle-table.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1014,6 +1017,9 @@
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\monster-group-table.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\diary-subtitle-table.h">
       <Filter>cmd</Filter>
     </ClInclude>
   </ItemGroup>
