@@ -78,6 +78,7 @@
 #include "objectkind.h"
 #include "floor-town.h"
 #include "cmd/feeling-table.h"
+#include "cmd/monster-group-table.h"
 #include "view-mainwindow.h" // 暫定。後で消す
 
 #include "english.h"
@@ -299,6 +300,7 @@ concptr get_ordinal_number_suffix(int num)
 #define MAX_SUBTITLE (sizeof(subtitle)/sizeof(subtitle[0]))
 
 /*!
+ * todo テーブルを分離できないか？
  * @brief 日記のタイトル表記と内容出力 /
  * @return なし
  * @details
@@ -1782,208 +1784,6 @@ void do_cmd_feeling(player_type *creature_ptr)
 	else
 		msg_print(do_cmd_feeling_text[creature_ptr->feeling]);
 }
-
-
-/*
- * Description of each monster group.
- */
-static concptr monster_group_text[] =
-{
-#ifdef JP
-	"ユニーク",	/* "Uniques" */
-	"乗馬可能なモンスター",	/* "Riding" */
-	"賞金首", /* "Wanted */
-	"アンバーの王族", /* "Amberite" */
-	"アリ",
-	"コウモリ",
-	"ムカデ",
-	"ドラゴン",
-	"目玉",
-	"ネコ",
-	"ゴーレム",
-	"標準人間型生物",
-	"ベトベト",
-	"ゼリー",
-	"コボルド",
-	"水棲生物",
-	"モルド",
-	"ナーガ",
-	"オーク",
-	"人間",
-	"四足獣",
-	"ネズミ",
-	"スケルトン",
-	"デーモン",
-	"ボルテックス",
-	"イモムシ/大群",
-	/* "unused", */
-	"イーク",
-	"ゾンビ/ミイラ",
-	"天使",
-	"鳥",
-	"犬",
-	/* "古代ドラゴン/ワイアーム", */
-	"エレメンタル",
-	"トンボ",
-	"ゴースト",
-	"雑種",
-	"昆虫",
-	"ヘビ",
-	"キラー・ビートル",
-	"リッチ",
-	"多首の爬虫類",
-	"謎の生物",
-	"オーガ",
-	"巨大人間型生物",
-	"クイルスルグ",
-	"爬虫類/両生類",
-	"蜘蛛/サソリ/ダニ",
-	"トロル",
-	/* "上級デーモン", */
-	"バンパイア",
-	"ワイト/レイス/等",
-	"ゾーン/ザレン/等",
-	"イエティ",
-	"ハウンド",
-	"ミミック",
-	"壁/植物/気体",
-	"おばけキノコ",
-	"球体",
-	"プレイヤー",
-#else
-	"Uniques",
-	"Ridable monsters",
-	"Wanted monsters",
-	"Amberite",
-	"Ant",
-	"Bat",
-	"Centipede",
-	"Dragon",
-	"Floating Eye",
-	"Feline",
-	"Golem",
-	"Hobbit/Elf/Dwarf",
-	"Icky Thing",
-	"Jelly",
-	"Kobold",
-	"Aquatic monster",
-	"Mold",
-	"Naga",
-	"Orc",
-	"Person/Human",
-	"Quadruped",
-	"Rodent",
-	"Skeleton",
-	"Demon",
-	"Vortex",
-	"Worm/Worm-Mass",
-	/* "unused", */
-	"Yeek",
-	"Zombie/Mummy",
-	"Angel",
-	"Bird",
-	"Canine",
-	/* "Ancient Dragon/Wyrm", */
-	"Elemental",
-	"Dragon Fly",
-	"Ghost",
-	"Hybrid",
-	"Insect",
-	"Snake",
-	"Killer Beetle",
-	"Lich",
-	"Multi-Headed Reptile",
-	"Mystery Living",
-	"Ogre",
-	"Giant Humanoid",
-	"Quylthulg",
-	"Reptile/Amphibian",
-	"Spider/Scorpion/Tick",
-	"Troll",
-	/* "Major Demon", */
-	"Vampire",
-	"Wight/Wraith/etc",
-	"Xorn/Xaren/etc",
-	"Yeti",
-	"Zephyr Hound",
-	"Mimic",
-	"Wall/Plant/Gas",
-	"Mushroom patch",
-	"Ball",
-	"Player",
-#endif
-	NULL
-};
-
-
-/*
- * Symbols of monsters in each group. Note the "Uniques" group
- * is handled differently.
- */
-static concptr monster_group_char[] =
-{
-	(char *)-1L,
-	(char *)-2L,
-	(char *)-3L,
-	(char *)-4L,
-	"a",
-	"b",
-	"c",
-	"dD",
-	"e",
-	"f",
-	"g",
-	"h",
-	"i",
-	"j",
-	"k",
-	"l",
-	"m",
-	"n",
-	"o",
-	"pt",
-	"q",
-	"r",
-	"s",
-	"uU",
-	"v",
-	"w",
-	/* "x", */
-	"y",
-	"z",
-	"A",
-	"B",
-	"C",
-	/* "D", */
-	"E",
-	"F",
-	"G",
-	"H",
-	"I",
-	"J",
-	"K",
-	"L",
-	"M",
-	"N",
-	"O",
-	"P",
-	"Q",
-	"R",
-	"S",
-	"T",
-	/* "U", */
-	"V",
-	"W",
-	"X",
-	"Y",
-	"Z",
-	"!$&()+./=>?[\\]`{|~",
-	"#%",
-	",",
-	"*",
-	"@",
-	NULL
-};
 
 
 /*
