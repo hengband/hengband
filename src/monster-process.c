@@ -35,7 +35,6 @@
 #include "monster-status.h"
 #include "monster-spell.h"
 #include "monster-process.h"
-#include "files.h"
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);
@@ -45,7 +44,6 @@ void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 bool explode_grenade(player_type *target_ptr, MONSTER_IDX m_idx);
 bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
 void process_special(player_type *target_ptr, MONSTER_IDX m_idx);
-void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware);
 bool cast_spell(player_type *target_ptr, MONSTER_IDX m_idx, bool aware);
 
 bool process_monster_fear(player_type *target_ptr, turn_flags *turn_flags_ptr, MONSTER_IDX m_idx);
@@ -343,60 +341,6 @@ void process_special(player_type *target_ptr, MONSTER_IDX m_idx)
 	}
 
 	if (count && is_original_ap_and_seen(target_ptr, m_ptr)) r_ptr->r_flags6 |= (RF6_SPECIAL);
-}
-
-
-/*!
- * @brief モンスターを喋らせたり足音を立てたりする
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param m_idx モンスターID
- * @param oy モンスターが元々いたY座標
- * @param ox モンスターが元々いたX座標
- * @param aware モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
- * @return なし
- */
-void process_speak_sound(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox, bool aware)
-{
-	if (target_ptr->phase_out) return;
-
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	monster_race *ap_r_ptr = &r_info[m_ptr->ap_r_idx];
-	if (m_ptr->ap_r_idx == MON_CYBER &&
-		one_in_(CYBERNOISE) &&
-		!m_ptr->ml && (m_ptr->cdis <= MAX_SIGHT))
-	{
-		if (disturb_minor) disturb(target_ptr, FALSE, FALSE);
-		msg_print(_("重厚な足音が聞こえた。", "You hear heavy steps."));
-	}
-
-	if (((ap_r_ptr->flags2 & RF2_CAN_SPEAK) == 0) || !aware ||
-		!one_in_(SPEAK_CHANCE) ||
-		!player_has_los_bold(target_ptr, oy, ox) ||
-		!projectable(target_ptr, oy, ox, target_ptr->y, target_ptr->x))
-		return;
-
-	GAME_TEXT m_name[MAX_NLEN];
-	char monmessage[1024];
-	concptr filename;
-
-	if (m_ptr->ml)
-		monster_desc(target_ptr, m_name, m_ptr, 0);
-	else
-		strcpy(m_name, _("それ", "It"));
-
-	if (MON_MONFEAR(m_ptr))
-		filename = _("monfear_j.txt", "monfear.txt");
-	else if (is_pet(m_ptr))
-		filename = _("monpet_j.txt", "monpet.txt");
-	else if (is_friendly(m_ptr))
-		filename = _("monfrien_j.txt", "monfrien.txt");
-	else
-		filename = _("monspeak_j.txt", "monspeak.txt");
-
-	if (get_rnd_line(filename, m_ptr->ap_r_idx, monmessage) == 0)
-	{
-		msg_format(_("%^s%s", "%^s %s"), m_name, monmessage);
-	}
 }
 
 
