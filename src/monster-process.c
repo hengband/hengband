@@ -120,7 +120,7 @@ static bool mon_will_run(player_type *target_ptr, MONSTER_IDX m_idx)
  * @param xp 適したマスのX座標を返す参照ポインタ
  * @return 有効なマスがあった場合TRUEを返す
  */
-static bool get_moves_aux2(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
+static bool sweep_ranged_attack_grid(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -181,7 +181,7 @@ static bool get_moves_aux2(player_type *target_ptr, MONSTER_IDX m_idx, POSITION 
  * @param yp 移動先のマスのY座標を返す参照ポインタ
  * @param xp 移動先のマスのX座標を返す参照ポインタ
  * @param no_flow モンスターにFLOWフラグが経っていない状態でTRUE
- * @return 有効なマスがあった場合TRUEを返す
+ * @return なし
  * @details
  * Note that ghosts and rock-eaters are never allowed to "flow",\n
  * since they should move directly towards the player.\n
@@ -202,7 +202,7 @@ static bool get_moves_aux2(player_type *target_ptr, MONSTER_IDX m_idx, POSITION 
  * being close enough to chase directly.  I have no idea what will\n
  * happen if you combine "smell" with low "aaf" values.\n
  */
-static bool get_moves_aux(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no_flow)
+static void sweep_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp, bool no_flow)
 {
 	grid_type *g_ptr;
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
@@ -213,16 +213,16 @@ static bool get_moves_aux(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *
 		r_ptr->a_ability_flags1 & (RF5_ATTACK_MASK) ||
 		r_ptr->a_ability_flags2 & (RF6_ATTACK_MASK))
 	{
-		if (get_moves_aux2(target_ptr, m_idx, yp, xp)) return TRUE;
+		if (sweep_ranged_attack_grid(target_ptr, m_idx, yp, xp)) return;
 	}
 
-	if (no_flow) return FALSE;
-	if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) return FALSE;
-	if ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding)) return FALSE;
+	if (no_flow) return;
+	if ((r_ptr->flags2 & RF2_PASS_WALL) && ((m_idx != target_ptr->riding) || target_ptr->pass_wall)) return;
+	if ((r_ptr->flags2 & RF2_KILL_WALL) && (m_idx != target_ptr->riding)) return;
 
 	POSITION y1 = m_ptr->fy;
 	POSITION x1 = m_ptr->fx;
-	if (player_has_los_bold(target_ptr, y1, x1) && projectable(target_ptr, target_ptr->y, target_ptr->x, y1, x1)) return FALSE;
+	if (player_has_los_bold(target_ptr, y1, x1) && projectable(target_ptr, target_ptr->y, target_ptr->x, y1, x1)) return;
 
 	g_ptr = &floor_ptr->grid_array[y1][x1];
 
@@ -234,14 +234,14 @@ static bool get_moves_aux(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *
 	}
 	else if (g_ptr->when)
 	{
-		if (floor_ptr->grid_array[target_ptr->y][target_ptr->x].when - g_ptr->when > 127) return FALSE;
+		if (floor_ptr->grid_array[target_ptr->y][target_ptr->x].when - g_ptr->when > 127) return;
 
 		use_scent = TRUE;
 		best = 0;
 	}
 	else
 	{
-		return FALSE;
+		return;
 	}
 
 	for (int i = 7; i >= 0; i--)
@@ -279,10 +279,6 @@ static bool get_moves_aux(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *
 		*yp = target_ptr->y + 16 * ddy_ddd[i];
 		*xp = target_ptr->x + 16 * ddx_ddd[i];
 	}
-
-	if (best == 999 || best == 0) return FALSE;
-
-	return TRUE;
 }
 
 
@@ -298,7 +294,7 @@ static bool get_moves_aux(player_type *target_ptr, MONSTER_IDX m_idx, POSITION *
  * but instead of heading directly for it, the monster should "swerve"\n
  * around the player so that he has a smaller chance of getting hit.\n
  */
-static bool get_fear_moves_aux(floor_type *floor_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
+static bool sweep_runnable_away_grid(floor_type *floor_ptr, MONSTER_IDX m_idx, POSITION *yp, POSITION *xp)
 {
 	POSITION gy = 0, gx = 0;
 
@@ -345,7 +341,7 @@ static bool get_fear_moves_aux(floor_type *floor_ptr, MONSTER_IDX m_idx, POSITIO
  * @param mm 移動方向を返す方向IDの参照ポインタ
  * @return 有効方向があった場合TRUEを返す
  */
-static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
+static bool get_movable_grid(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 {
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -433,7 +429,7 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 
 	if (!done)
 	{
-		(void)get_moves_aux(target_ptr, m_idx, &y2, &x2, no_flow);
+		sweep_movable_grid(target_ptr, m_idx, &y2, &x2, no_flow);
 		y = m_ptr->fy - y2;
 		x = m_ptr->fx - x2;
 	}
@@ -450,7 +446,7 @@ static bool get_moves(player_type *target_ptr, MONSTER_IDX m_idx, DIRECTION *mm)
 			int tmp_y = (-y);
 			if (find_safety(target_ptr, m_idx, &y, &x) && !no_flow)
 			{
-				if (get_fear_moves_aux(target_ptr->current_floor_ptr, m_idx, &y, &x))
+				if (sweep_runnable_away_grid(target_ptr->current_floor_ptr, m_idx, &y, &x))
 					done = TRUE;
 			}
 
@@ -545,7 +541,7 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	mm[0] = mm[1] = mm[2] = mm[3] = 0;
 	mm[4] = mm[5] = mm[6] = mm[7] = 0;
 
-	if (!decide_monster_movement_direction(target_ptr, mm, m_idx, turn_flags_ptr->aware, get_moves)) return;
+	if (!decide_monster_movement_direction(target_ptr, mm, m_idx, turn_flags_ptr->aware, get_movable_grid)) return;
 
 	int count = 0;
 	if (!process_monster_movement(target_ptr, turn_flags_ptr, m_idx, mm, oy, ox, &count)) return;

@@ -180,7 +180,7 @@ static bool random_walk(player_type *target_ptr, DIRECTION *mm, monster_type *m_
  * @param m_idx モンスターID
  * @return モンスターがペットであればTRUE
  */
-static bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, get_moves_pf get_moves)
+static bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, get_moves_pf get_movable_grid)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	if (!is_pet(m_ptr)) return FALSE;
@@ -198,7 +198,7 @@ static bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm
 		target_ptr->pet_follow_distance = PET_SEEK_DIST;
 	}
 
-	(void)get_moves(target_ptr, m_idx, mm);
+	(void)get_movable_grid(target_ptr, m_idx, mm);
 	target_ptr->pet_follow_distance = (s16b)dis;
 	return TRUE;
 }
@@ -212,7 +212,7 @@ static bool decide_pet_movement_direction(player_type *target_ptr, DIRECTION *mm
  * @param aware モンスターがプレーヤーに気付いているならばTRUE、超隠密状態ならばFALSE
  * @return 移動先が存在すればTRUE
  */
-bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware, get_moves_pf get_moves)
+bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, MONSTER_IDX m_idx, bool aware, get_moves_pf get_movable_grid)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
@@ -231,7 +231,7 @@ bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, M
 		return TRUE;
 	}
 
-	if (decide_pet_movement_direction(target_ptr, mm, m_idx, get_moves)) return TRUE;
+	if (decide_pet_movement_direction(target_ptr, mm, m_idx, get_movable_grid)) return TRUE;
 
 	if (!is_hostile(m_ptr))
 	{
@@ -240,7 +240,7 @@ bool decide_monster_movement_direction(player_type *target_ptr, DIRECTION *mm, M
 		return TRUE;
 	}
 
-	if (!get_moves(target_ptr, m_idx, mm)) return FALSE;
+	if (!get_movable_grid(target_ptr, m_idx, mm)) return FALSE;
 
 	return TRUE;
 }
