@@ -22,20 +22,52 @@ bool write_level;
  * @param disable_diary 日記への追加を無効化する場合TRUE
  * @return ファイルがあったらTRUE、なかったらFALSE
  */
-static bool open_diary_file(FILE *fff, bool *disable_diary)
+static bool open_diary_file(FILE **fff, bool *disable_diary)
 {
 	GAME_TEXT file_name[MAX_NLEN];
 	sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
 	FILE_TYPE(FILE_TYPE_TEXT);
-	fff = my_fopen(buf, "a");
-	if (fff) return TRUE;
+	*fff = my_fopen(buf, "a");
+	if (*fff) return TRUE;
 
 	msg_format(_("%s を開くことができませんでした。プレイ記録を一時停止します。", "Failed to open %s. Play-Record is disabled temporarily."), buf);
 	msg_format(NULL);
 	*disable_diary = TRUE;
 	return FALSE;
+}
+
+
+/*!
+ * @brief フロア情報を日記に追加する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return クエストID
+ */
+static QUEST_IDX write_floor(player_type *creature_ptr, concptr *note_level)
+{
+	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
+	QUEST_IDX q_idx = quest_number(creature_ptr, floor_ptr->dun_level);
+	if (!write_level) return q_idx;
+
+	if (floor_ptr->inside_arena)
+		*note_level = _("アリーナ:", "Arane:");
+	else if (!floor_ptr->dun_level)
+		*note_level = _("地上:", "Surface:");
+	else if (q_idx && (is_fixed_quest_idx(q_idx) && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
+		*note_level = _("クエスト:", "Quest:");
+	else
+	{
+		char note_level_buf[40];
+#ifdef JP
+		sprintf(note_level_buf, "%d階(%s):", (int)floor_ptr->dun_level, d_name + d_info[creature_ptr->dungeon_idx].name);
+#else
+		sprintf(note_level_buf, "%s L%d:", d_name + d_info[creature_ptr->dungeon_idx].name, (int)floor_ptr->dun_level);
+#endif
+		*note_level = note_level_buf;
+	}
+
+	return q_idx;
 }
 
 
@@ -133,30 +165,10 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	}
 
 	FILE *fff = NULL;
-	if (!open_diary_file(fff, &disable_diary)) return -1;
+	if (!open_diary_file(&fff, &disable_diary)) return -1;
 
-	QUEST_IDX q_idx = quest_number(creature_ptr, creature_ptr->current_floor_ptr->dun_level);
 	concptr note_level = "";
-	if (write_level)
-	{
-		if (creature_ptr->current_floor_ptr->inside_arena)
-			note_level = _("アリーナ:", "Arane:");
-		else if (!creature_ptr->current_floor_ptr->dun_level)
-			note_level = _("地上:", "Surface:");
-		else if (q_idx && (is_fixed_quest_idx(q_idx)
-			&& !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
-			note_level = _("クエスト:", "Quest:");
-		else
-		{
-			char note_level_buf[40];
-#ifdef JP
-			sprintf(note_level_buf, "%d階(%s):", (int)creature_ptr->current_floor_ptr->dun_level, d_name + d_info[creature_ptr->dungeon_idx].name);
-#else
-			sprintf(note_level_buf, "%s L%d:", d_name + d_info[creature_ptr->dungeon_idx].name, (int)creature_ptr->current_floor_ptr->dun_level);
-#endif
-			note_level = note_level_buf;
-		}
-	}
+	QUEST_IDX q_idx = write_floor(creature_ptr, &note_level);
 
 	bool do_level = TRUE;
 	switch (type)
