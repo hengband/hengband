@@ -178,6 +178,7 @@
     <ClCompile Include="..\..\src\cmd\diary-subtitle-table.c" />
     <ClCompile Include="..\..\src\cmd\feeling-table.c" />
     <ClCompile Include="..\..\src\cmd\monster-group-table.c" />
+    <ClCompile Include="..\..\src\cmd\object-group-table.c" />
     <ClCompile Include="..\..\src\combat\melee1.c" />
     <ClCompile Include="..\..\src\combat\shoot.c" />
     <ClCompile Include="..\..\src\core.c" />
@@ -355,6 +356,7 @@
     <ClInclude Include="..\..\src\cmd\diary-subtitle-table.h" />
     <ClInclude Include="..\..\src\cmd\feeling-table.h" />
     <ClInclude Include="..\..\src\cmd\monster-group-table.h" />
+    <ClInclude Include="..\..\src\cmd\object-group-table.h" />
     <ClInclude Include="..\..\src\combat\melee.h" />
     <ClInclude Include="..\..\src\combat\shoot.h" />
     <ClInclude Include="..\..\src\core\show-file.h" />

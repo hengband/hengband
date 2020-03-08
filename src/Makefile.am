@@ -134,6 +134,7 @@ hengband_SOURCES = \
 	cmd/feeling-table.c cmd/feeling-table.h \
 	cmd/monster-group-table.c cmd/monster-group-table.h \
 	cmd/diary-subtitle-table.c cmd/diary-subtitle-table.h \
+	cmd/object-group-table.c cmd/object-group-table.h \
 	cmd/cmd-activate.c cmd/cmd-activate.h cmd/cmd-basic.c cmd/cmd-basic.h \
 	cmd/cmd-dump.c cmd/cmd-dump.h cmd/cmd-eat.c cmd/cmd-eat.h \
 	cmd/cmd-gameoption.c cmd/cmd-gameoption.h cmd/cmd-help.c cmd/cmd-help.h \
