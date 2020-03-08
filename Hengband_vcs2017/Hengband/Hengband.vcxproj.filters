@@ -487,6 +487,9 @@
     <ClCompile Include="..\..\src\monster\monster-object.c">
       <Filter>monster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-attack.c">
+      <Filter>monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -954,6 +957,9 @@
       <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-object.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-attack.h">
       <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>

@@ -204,6 +204,7 @@
     <ClCompile Include="..\..\src\monster-status.c" />
     <ClCompile Include="..\..\src\monsterrace-hook.c" />
     <ClCompile Include="..\..\src\monsterrace.c" />
+    <ClCompile Include="..\..\src\monster\monster-attack.c" />
     <ClCompile Include="..\..\src\monster\monster-object.c" />
     <ClCompile Include="..\..\src\monster\monster-util.c" />
     <ClCompile Include="..\..\src\monster\quantum-effect.c" />
@@ -353,6 +354,7 @@
     <ClInclude Include="..\..\src\io\special-class-dump.h" />
     <ClInclude Include="..\..\src\io\tokenizer.h" />
     <ClInclude Include="..\..\src\monster-dist-offsets.h" />
+    <ClInclude Include="..\..\src\monster\monster-attack.h" />
     <ClInclude Include="..\..\src\monster\monster-object.h" />
     <ClInclude Include="..\..\src\monster\monster-util.h" />
     <ClInclude Include="..\..\src\monster\quantum-effect.h" />

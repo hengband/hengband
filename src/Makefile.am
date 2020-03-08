@@ -59,6 +59,7 @@ hengband_SOURCES = \
 	\
 	monster.h monsterrace.c monsterrace.h \
 	monster/monster-util.c monster/monster-util.h \
+	monster/monster-attack.c monster/monster-attack.h \
 	monster/monster-object.c monster/monster-object.h \
 	monster/quantum-effect.c monster/quantum-effect.h \
 	monsterrace-hook.c monsterrace-hook.h \
