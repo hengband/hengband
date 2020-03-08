@@ -803,7 +803,7 @@ void do_cmd_study(player_type *caster_ptr)
 
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), item_tester_tval);
 
-	item_tester_tval = NULL;
+	item_tester_tval = 0;
 	if (!o_ptr) return;
 
 	/* Access the item's sval */
