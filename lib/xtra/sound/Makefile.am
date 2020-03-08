@@ -5,7 +5,7 @@ EXTRA_DIST = \
 	$(sound_files)
 
 sound_files = \
-	se_maoudamashii_voice_monster01.wav
+	se_maoudamashii_voice_monster01.wav \
 	apple1-r.wav \
 	decision25r.wav \
 	drop1.wav \
