@@ -59,6 +59,7 @@ hengband_SOURCES = \
 	\
 	monster.h monsterrace.c monsterrace.h \
 	monster/monster-util.c monster/monster-util.h \
+	monster/monster-direction.c monster/monster-direction.h \
 	monster/monster-attack.c monster/monster-attack.h \
 	monster/monster-move.c monster/monster-move.h \
 	monster/monster-object.c monster/monster-object.h \

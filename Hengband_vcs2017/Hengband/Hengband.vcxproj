@@ -205,6 +205,7 @@
     <ClCompile Include="..\..\src\monsterrace-hook.c" />
     <ClCompile Include="..\..\src\monsterrace.c" />
     <ClCompile Include="..\..\src\monster\monster-attack.c" />
+    <ClCompile Include="..\..\src\monster\monster-direction.c" />
     <ClCompile Include="..\..\src\monster\monster-move.c" />
     <ClCompile Include="..\..\src\monster\monster-object.c" />
     <ClCompile Include="..\..\src\monster\monster-safety-hiding.c" />
@@ -358,6 +359,7 @@
     <ClInclude Include="..\..\src\io\tokenizer.h" />
     <ClInclude Include="..\..\src\monster-dist-offsets.h" />
     <ClInclude Include="..\..\src\monster\monster-attack.h" />
+    <ClInclude Include="..\..\src\monster\monster-direction.h" />
     <ClInclude Include="..\..\src\monster\monster-move.h" />
     <ClInclude Include="..\..\src\monster\monster-object.h" />
     <ClInclude Include="..\..\src\monster\monster-safety-hiding.h" />
