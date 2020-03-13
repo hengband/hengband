@@ -101,7 +101,8 @@
 #include "core.h"
 #include "bldg.h"
 
-#include "cmd-dump.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
 #include "grid.h"
 #include "rooms.h"
 #include "dungeon.h"

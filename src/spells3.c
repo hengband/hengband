@@ -42,6 +42,7 @@
 #include "monster-process.h"
 #include "monster-status.h"
 #include "monster-spell.h"
+#include "io/write-diary.h"
 #include "cmd/cmd-save.h"
 #include "cmd/cmd-spell.h"
 #include "cmd/cmd-dump.h"

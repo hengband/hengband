@@ -14,7 +14,8 @@
 #include "util.h"
 #include "term.h"
 
-#include "cmd-dump.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
 #include "bldg.h"
 #include "cmd-pet.h"
 #include "floor.h"

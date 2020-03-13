@@ -14,7 +14,8 @@
 #include "util.h"
 #include "core.h"
 
-#include "cmd-dump.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
 #include "cmd-pet.h"
 #include "dungeon.h"
 #include "floor.h"

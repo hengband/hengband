@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "util.h"
 
+#include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-save.h"
 #include "trap.h"

@@ -1,7 +1,8 @@
 ﻿#include "angband.h"
 
 #include "autopick.h"
-#include "cmd-gameoption.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-gameoption.h"
 #include "term.h"
 #include "view-mainwindow.h"
 #include "cmd/cmd-dump.h"
