@@ -2102,7 +2102,7 @@ static bool monster_hook_tanuki(MONRACE_IDX r_idx)
 static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
 {
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	if ((generate_mode | PM_JURAL) && !(generate_mode & (PM_MULTIPLY | PM_KAGE)))
+	if ((generate_mode & PM_JURAL) && !(generate_mode & (PM_MULTIPLY | PM_KAGE)))
 	{
 		return MON_ALIEN_JURAL;
 	}
