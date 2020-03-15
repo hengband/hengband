@@ -34,6 +34,7 @@ hengband_SOURCES = \
 	io/special-class-dump.c io/special-class-dump.h \
 	io/read-pref-file.c io/read-pref-file.h \
 	io/exit-panic.c io/exit-panic.h \
+	io/write-diary.c io/write-diary.h \
 	signal-handlers.c signal-handlers.h uid-checker.c uid-checker.h \
 	character-dump.c character-dump.h core.c core.h files.c files.h \
 	core/show-file.c core/show-file.h \
