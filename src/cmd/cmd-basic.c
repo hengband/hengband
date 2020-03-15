@@ -14,7 +14,9 @@
 #include "core.h"
 #include "term.h"
 
-#include "cmd-dump.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
+#include "cmd/cmd-save.h"
 #include "chest.h"
 #include "trap.h"
 #include "dungeon.h"

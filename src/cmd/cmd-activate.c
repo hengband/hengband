@@ -8,8 +8,9 @@
 
 #include "angband.h"
 
-#include "cmd-activate.h"
-#include "cmd-basic.h"
+#include "cmd/cmd-activate.h"
+#include "cmd/cmd-basic.h"
+#include "cmd/cmd-save.h"
 #include "object-hook.h"
 #include "sort.h"
 #include "artifact.h"

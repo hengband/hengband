@@ -5,23 +5,15 @@
  * @author Hengband Team
  */
 
-#define _GNU_SOURCE /*!< 未使用*/
 #include "angband.h"
-#include "util.h"
 #include "core.h"
 #include "inet.h"
 #include "dungeon.h"
 
-#include "floor.h"
-#include "player-status.h"
-#include "player-class.h"
-#include "player-race.h"
 #include "player-personality.h"
-#include "files.h"
+#include "character-dump.h"
 #include "world.h"
-#include "realm.h"
 #include "term.h"
-#include "view-mainwindow.h"
 
 #ifdef WORLD_SCORE
 
@@ -228,7 +220,7 @@ static bool http_post(int sd, concptr url, BUF *buf)
  * @param dumpbuf 伝送内容バッファ
  * @return エラーコード
  */
-static errr make_dump(player_type *creature_ptr, BUF* dumpbuf)
+static errr make_dump(player_type *creature_ptr, BUF* dumpbuf, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name)
 {
 	char		buf[1024];
 	FILE *fff;
@@ -248,7 +240,7 @@ static errr make_dump(player_type *creature_ptr, BUF* dumpbuf)
 	}
 
 	/* 一旦一時ファイルを作る。通常のダンプ出力と共通化するため。 */
-	(void)make_character_dump(creature_ptr, fff);
+	make_character_dump(creature_ptr, fff, update_playtime, display_player, map_name);
 	my_fclose(fff);
 
 	/* Open for read */
@@ -393,7 +385,7 @@ concptr make_screen_dump(player_type *creature_ptr)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return 正常終了の時0、異常があったら1
  */
-errr report_score(player_type *creature_ptr)
+errr report_score(player_type *creature_ptr, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name)
 {
 #ifdef WINDOWS
 	WSADATA wsaData;
@@ -434,7 +426,7 @@ errr report_score(player_type *creature_ptr)
 	buf_sprintf(score, "killer: %s\n", creature_ptr->died_from);
 	buf_sprintf(score, "-----charcter dump-----\n");
 
-	make_dump(creature_ptr, score);
+	make_dump(creature_ptr, score, update_playtime, display_player, map_name);
 
 	if (screen_dump)
 	{

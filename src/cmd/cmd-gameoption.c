@@ -1,10 +1,12 @@
 ﻿#include "angband.h"
 
 #include "autopick.h"
-#include "cmd-gameoption.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-gameoption.h"
 #include "term.h"
 #include "view-mainwindow.h"
-#include "cmd-dump.h"
+#include "cmd/cmd-dump.h"
+#include "core/show-file.h"
 #include "files.h"
 
 #include "world.h"

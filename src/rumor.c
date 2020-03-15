@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "util.h"
 
+#include "io/tokenizer.h"
 #include "files.h"
 #include "object-flavor.h"
 #include "artifact.h"

@@ -9,9 +9,10 @@
 #include "angband.h"
 #include "core.h"
 #include "util.h"
-#include "cmd-spell.h"
+#include "cmd/cmd-spell.h"
 
-#include "cmd-dump.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
 #include "selfinfo.h"
 #include "spells.h"
 #include "spells-summon.h"
@@ -802,6 +803,8 @@ void do_cmd_study(player_type *caster_ptr)
 	s = _("読める本がない。", "You have no books that you can read.");
 
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), item_tester_tval);
+
+	item_tester_tval = 0;
 	if (!o_ptr) return;
 
 	/* Access the item's sval */

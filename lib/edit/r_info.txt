@@ -2270,7 +2270,7 @@ S:SHOOT | HEAL | TRAPS
 A:221:1:5
 V:75
 D:$The legendary archer steals from the rich (you qualify).
-D:この伝説の射手は金持ち（あなたは合格）から金を盗む
+D:この伝説の射手は金持ち（あなたは合格）から金を盗む。
 
 #JZ#
 N:139:ナーグリング
@@ -22604,7 +22604,7 @@ F:DROP_1D2
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE
 F:EVIL | IM_POIS | EAT_POISONOUS | CAN_SWIM
 D:$Be aware!
-D:$This kobold's poison can change a tough guy to a frail kid!
+D:$  This kobold's poison can change a tough guy to a frail kid!
 D:気をつけろ！
 D:やつの毒は大の大人を無力な子供に変えてしまう！
 
@@ -22622,7 +22622,7 @@ F:EVIL | IM_POIS | EAT_POISONOUS
 F:ESCORT | ESCORTS | RES_SOUN | CAN_FLY
 F:NO_CONF
 D:$"Hey Nobita, I regret to say, but the capacity of this dungeon is 3."
-D:$However, there are clearly more than three money mongers around him!
+D:$  However, there are clearly more than three money mongers around him!
 D:「悪いなのび太、このダンジョンは3人用なんだ」
 D:しかし、彼に群がる金の亡者は明らかに3人よりも多い！
 
@@ -22637,11 +22637,12 @@ B:HIT:FIRE:8d4
 F:MALE | 
 F:FORCE_MAXHP | FRIENDS | DROP_60 | 
 F:OPEN_DOOR | BASH_DOOR | DROP_SKELETON | DROP_CORPSE | EAT_POISONOUS |
-F:EVIL | ORC | IM_POIS | RES_DARK | IM_FIRE | RES_CHAO | DEMON | WILD_VOLCANO | AURA_FIRE
+F:EVIL | ORC | IM_POIS | RES_DARK | IM_FIRE | RES_CHAO
+F:DEMON | WILD_VOLCANO | AURA_FIRE
 S:1_IN_8
 S:SHOOT |  BO_FIRE |
-D:$Cloaked in black flame, this orc must be the descendant of a demon.  Such
-D:$ creatures are often seen among the foulest orcs.
+D:$Cloaked in black flame, this orc must be the descendant of a demon.
+D:$  Such creatures are often seen among the foulest orcs.
 D:このオークの体にはデーモンの血が流れており、そこから来る暗黒の炎をまとっている。
 D:この不浄な結合は、暗き風習を持つ生き物の中でしばしば育まれる。
 
@@ -22662,8 +22663,10 @@ S:1_IN_5 | S_KIN | SHOOT | BO_ELEC
 D:$The leader of this family, worried about the death of his homeland
 D:$ after the death of Isshin Ashina,
 D:$ seeks to obtain it without regard to any monstrous power.
-D:$  Therefore, it will also be inevitable that he sought them and went to Angband.
-D:葦名一心亡き後の故国の存亡を憂うこの一門の将は、いかなる異形の力をも顧みず手に入れようとする。
+D:$  Therefore, it will also be inevitable that
+D:$ he sought them and went to Angband.
+D:葦名一心亡き後の故国の存亡を憂うこの一門の将は、
+D:いかなる異形の力をも顧みず手に入れようとする。
 D:ゆえにそれらを求め鉄獄に至ったこともまた必然であるだろう。
 
 N:1124:撲殺の天使
@@ -22888,7 +22891,8 @@ F:NO_FEAR | NO_CONF | NO_SLEEP
 S:1_IN_2 | BA_NETH | BA_WATE | BA_DARK | BA_NUKE | BA_CHAO
 S:S_HI_UNDEAD | S_DEMON | DISPEL
 D:$Undoubtedly, it was this man who unleashed the cursed artifacts
-D:$ and called upon the great old ones who came from the outside world and settled in Llouis.
+D:$ and called upon the great old ones who came from the outside world
+D:$ and settled in Llouis.
 D:$  It is told that his book, Necronomicon, namely stargate to the abyss,
 D:$ is still slept somewhere in the land.
 D:呪われしアーティファクトを世に解き放ち、
@@ -22906,8 +22910,10 @@ B:BITE:HURT:6d2
 F:MALE | WILD_SWAMP | WILD_WASTE
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON
 F:ANIMAL | EVIL | DROP_90
-D:$A warrior of skaven mess around with the power of chaos and slaughter their prey from one end.
-D:スケイヴン族の戦士は混沌の力をいたずらに振り回し、目についた獲物を片っ端から屠っていく。
+D:$A warrior of skaven mess around with the power of chaos
+D:$ and slaughter their prey from one end.
+D:スケイヴン族の戦士は混沌の力をいたずらに振り回し、
+D:目についた獲物を片っ端から屠っていく。
 
 N:1137:殺人イタチ
 E:Killer weasel
@@ -22945,11 +22951,11 @@ N:1139:遍在する意識『岩倉玲音』
 E:lain, the Master of Wired
 G:p:u
 I:135:130d50:60:100:5
-W:80:3:0:30000:0:0
-B:TOUCH:UN_BONUS:5d6
-B:TOUCH:UN_BONUS:5d6
-B:TOUCH:UN_BONUS:5d6
-B:TOUCH:UN_BONUS:5d6
+W:80:3:0:45000:0:0
+B:TOUCH:LOSE_ALL:8d7
+B:TOUCH:UN_BONUS:8d7
+B:TOUCH:UN_POWER:8d7
+B:TOUCH:TIME:8d7
 F:QUANTUM | UNIQUE | FEMALE | ATTR_CLEAR | FORCE_MAXHP | RAND_25
 F:ONLY_ITEM | DROP_GOOD | DROP_GREAT | DROP_3D2
 F:DROP_CORPSE | DROP_SKELETON
@@ -22966,3 +22972,22 @@ D:$She recognizes you as a bug that appears to be
 D:$ a myriad of connected consciousness in the Wired.
 D:あなたは、相互に結合している無数の意識達に表れたちっぽけなバグだと
 D:認識されている。
+
+N:1140:ウェンディゴ
+E:Wendigo
+G:Y:v
+I:120:30d19:30:55:10
+W:30:3:0:500:0:0
+B:BITE:LOSE_WIS:3d4
+B:CLAW:COLD:3d4
+B:TOUCH:TERRIFY:3d4
+B:WAIL:CONFUSE:3d4
+F:ONLY_GOLD | DROP_2D2 | 
+F:COLD_BLOOD | OPEN_DOOR | BASH_DOOR | CAN_FLY | WEIRD_MIND | ELDRITCH_HORROR
+F:EVIL | DEMON | IM_COLD | IM_POIS | RES_NETH | NO_CONF | NO_SLEEP | HURT_FIRE
+S:1_IN_6 | 
+S:MIND_BLAST
+D:$It looks like a skinny large humanoid.
+D:$  Folklore has it that those who commit cannibalism are brought to cognate
+D:それは痩せこけた巨人の姿をしていて、人食いの罪を犯した者を
+D:同族にすると言われている。

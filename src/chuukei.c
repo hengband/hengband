@@ -8,6 +8,7 @@
 
 #include "angband.h"
 
+#include "signal-handlers.h"
 #include "files.h"
 #include "util.h"
 #include "term.h"
@@ -15,6 +16,7 @@
 #include "inet.h"
 #include "japanese.h"
 #include "term.h"
+#include "chuukei.h"
 
 #include <stdio.h>
 #include <stdarg.h>

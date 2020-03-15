@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "core.h"
+#include "io/read-pref-file.h"
 #include "util.h"
 
 #include "artifact.h"

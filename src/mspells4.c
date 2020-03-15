@@ -1992,9 +1992,10 @@ void spell_RF6_INVULNER(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_IDX 
 * @brief RF6_BLINKの処理。ショート・テレポート。 /
 * @param target_ptr プレーヤーへの参照ポインタ
 * @param m_idx 呪文を唱えるモンスターID
+* @param is_quantum_effect 量子的効果によるショート・テレポートの場合時TRUE
 * @param TARGET_TYPE プレイヤーを対象とする場合MONSTER_TO_PLAYER、モンスターを対象とする場合MONSTER_TO_MONSTER
 */
-void spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE)
+void spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE, bool is_quantum_effect)
 {
 	GAME_TEXT m_name[MAX_NLEN];
 	monster_name(target_ptr, m_idx, m_name);
@@ -2003,7 +2004,7 @@ void spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE
 		disturb(target_ptr, TRUE, TRUE);
 
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
-	if (teleport_barrier(target_ptr, m_idx))
+	if (!is_quantum_effect && teleport_barrier(target_ptr, m_idx))
 	{
 		if (see_monster(floor_ptr, m_idx))
 			msg_format(_("魔法のバリアが%^sのテレポートを邪魔した。",
@@ -2163,7 +2164,7 @@ HIT_POINT spell_RF6_SPECIAL_ROLENTO(player_type *target_ptr, POSITION y, POSITIO
 
 	for (k = 0; k < num; k++)
 	{
-		count += summon_named_creature(target_ptr, m_idx, y, x, MON_SHURYUUDAN, mode);
+		count += summon_named_creature(target_ptr, m_idx, y, x, MON_GRENADE, mode);
 	}
 	if (target_ptr->blind && count)
 	{
@@ -3691,7 +3692,7 @@ HIT_POINT monspell_to_player(player_type *target_ptr, int SPELL_NUM, POSITION y,
 	case RF6_SPELL_START + 1:  return spell_RF6_HAND_DOOM(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER); /* RF6_HAND_DOOM */
 	case RF6_SPELL_START + 2:  spell_RF6_HEAL(target_ptr, m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF6_HEAL */
 	case RF6_SPELL_START + 3:  spell_RF6_INVULNER(target_ptr, m_idx, 0, MONSTER_TO_PLAYER); break;	/* RF6_INVULNER */
-	case RF6_SPELL_START + 4:  spell_RF6_BLINK(target_ptr, m_idx, MONSTER_TO_PLAYER); break;   /* RF6_BLINK */
+	case RF6_SPELL_START + 4:  spell_RF6_BLINK(target_ptr, m_idx, MONSTER_TO_PLAYER, FALSE); break;   /* RF6_BLINK */
 	case RF6_SPELL_START + 5:  spell_RF6_TPORT(target_ptr, m_idx, MONSTER_TO_PLAYER); break;   /* RF6_TPORT */
 	case RF6_SPELL_START + 6:  return spell_RF6_WORLD(target_ptr, m_idx); break;	/* RF6_WORLD */
 	case RF6_SPELL_START + 7:  return spell_RF6_SPECIAL(target_ptr, y, x, m_idx, 0, MONSTER_TO_PLAYER);   /* RF6_SPECIAL */
@@ -3734,9 +3735,10 @@ HIT_POINT monspell_to_player(player_type *target_ptr, int SPELL_NUM, POSITION y,
 * @param x 対象の地点のx座標
 * @param m_idx 呪文を唱えるモンスターID
 * @param t_idx 呪文を受けるモンスターID。プレイヤーの場合はdummyで0とする。
+* @param is_special_spell 特殊な行動である時TRUE
 * @return 攻撃呪文のダメージ、または召喚したモンスターの数を返す。その他の場合0。以降の処理を中断するなら-1を返す。
 */
-HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
+HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, bool is_special_spell)
 {
 	switch (SPELL_NUM)
 	{
@@ -3808,7 +3810,7 @@ HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y
 	case RF6_SPELL_START + 1:  return spell_RF6_HAND_DOOM(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER); /* RF6_HAND_DOOM */
 	case RF6_SPELL_START + 2:  spell_RF6_HEAL(target_ptr, m_idx, t_idx, MONSTER_TO_MONSTER); break;	/* RF6_HEAL */
 	case RF6_SPELL_START + 3:  spell_RF6_INVULNER(target_ptr, m_idx, t_idx, MONSTER_TO_MONSTER); break;	/* RF6_INVULNER */
-	case RF6_SPELL_START + 4:  spell_RF6_BLINK(target_ptr, m_idx, MONSTER_TO_MONSTER); break;   /* RF6_BLINK */
+	case RF6_SPELL_START + 4:  spell_RF6_BLINK(target_ptr, m_idx, MONSTER_TO_MONSTER, is_special_spell); break;   /* RF6_BLINK */
 	case RF6_SPELL_START + 5:  spell_RF6_TPORT(target_ptr, m_idx, MONSTER_TO_MONSTER); break;   /* RF6_TPORT */
 	case RF6_SPELL_START + 6:  return -1; break;	/* RF6_WORLD */
 	case RF6_SPELL_START + 7:  return spell_RF6_SPECIAL(target_ptr, y, x, m_idx, t_idx, MONSTER_TO_MONSTER);   /* RF6_SPECIAL */

@@ -18,8 +18,9 @@
 
 #include "object.h"
 
-#include "cmd-dump.h"
-#include "cmd-spell.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
+#include "cmd/cmd-spell.h"
 #include "spells.h"
 #include "dungeon.h"
 #include "floor.h"

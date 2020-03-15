@@ -1,6 +1,4 @@
-#pragma once
-
-#include "term.h"
+﻿#pragma once
 
 #define ENTRY_BARE_HAND 0
 #define ENTRY_TWO_HANDS 1
@@ -52,4 +50,4 @@
 #define ENTRY_EXP_ANDR 43
 #define ENTRY_EXP_TO_ADV_ANDR 44
 
-void display_player_various(player_type *creature_ptr, void(*display_player_one_line)(int, concptr, TERM_COLOR));
+void display_player_various(player_type *creature_ptr);

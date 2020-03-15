@@ -15,7 +15,10 @@
 #include "term.h"
 
 #include "dungeon.h"
-#include "cmd-dump.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
+#include "cmd/cmd-help.h"
+#include "cmd/cmd-save.h"
 #include "util.h"
 #include "birth.h"
 #include "selfinfo.h"
@@ -70,11 +73,12 @@ typedef struct debug_spell_command
 	spell_functions command_function;
 } debug_spell_command;
 
-#define SPELL_MAX 2
+#define SPELL_MAX 3
 debug_spell_command debug_spell_commands_list[SPELL_MAX] =
 {
 	{ 2, "vanish dungeon", {.spell2 = { vanish_dungeon } } },
-	{ 3, "true healing", {.spell3 = { true_healing } } }
+	{ 3, "true healing", {.spell3 = { true_healing } } },
+	{ 2, "drop weapons", {.spell2 = { drop_weapons } } }
 };
 
 /*!
@@ -86,7 +90,7 @@ static bool do_cmd_debug_spell(player_type *creature_ptr)
 	char tmp_val[50] = "\0";
 	int tmp_int;
 
-	if (!get_string("SPELL:", tmp_val, 32)) return FALSE;
+	if (!get_string("SPELL: ", tmp_val, 32)) return FALSE;
 
 	for (int i = 0; i < SPELL_MAX; i++)
 	{
@@ -96,17 +100,21 @@ static bool do_cmd_debug_spell(player_type *creature_ptr)
 		{
 		case 2:
 			(*(debug_spell_commands_list[i].command_function.spell2.spell_function))(creature_ptr);
+			return TRUE;
 			break;
 		case 3:
 			tmp_val[0] = '\0';
 			if (!get_string("POWER:", tmp_val, 32)) return FALSE;
 			tmp_int = atoi(tmp_val);
 			(*(debug_spell_commands_list[i].command_function.spell3.spell_function))(creature_ptr, tmp_int);
+			return TRUE;
 			break;
 		default:
 			break;
 		}
 	}
+
+	msg_format("Command not found.");
 
 	return FALSE;
 }

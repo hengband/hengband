@@ -5,7 +5,8 @@
 
 #include "avatar.h"
 #include "bldg.h"
-#include "cmd-dump.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
 #include "realm-song.h"
 #include "floor.h"
 #include "artifact.h"

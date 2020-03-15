@@ -157,6 +157,7 @@
  */
 
 #include "angband.h"
+#include "io/exit-panic.h"
 #include "files.h"
 #include "term.h"
 

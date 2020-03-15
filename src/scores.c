@@ -22,11 +22,13 @@
 #include "player-class.h"
 #include "player-personality.h"
 #include "player-sex.h"
+#include "uid-checker.h"
 #include "files.h"
 #include "scores.h"
 #include "floor.h"
 #include "world.h"
-#include "cmd-dump.h"
+#include "io/write-diary.h"
+#include "cmd/cmd-dump.h"
 #include "report.h"
 #include "japanese.h"
 
@@ -428,7 +430,7 @@ void display_scores(int from, int to)
  * @param do_send 実際に転送ア処置を行うか否か
  * @return 転送が成功したらTRUEを返す
  */
-bool send_world_score(player_type *current_player_ptr, bool do_send)
+bool send_world_score(player_type *current_player_ptr, bool do_send, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name)
 {
 #ifdef WORLD_SCORE
 	if (send_score && do_send)
@@ -448,7 +450,7 @@ bool send_world_score(player_type *current_player_ptr, bool do_send)
 		prt(_("送信中．．", "Sending..."), 0, 0);
 		Term_fresh();
 		screen_save();
-		err = report_score(current_player_ptr);
+		err = report_score(current_player_ptr, update_playtime, display_player, map_name);
 		screen_load();
 		if (err) return FALSE;
 
