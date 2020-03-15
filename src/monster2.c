@@ -989,7 +989,7 @@ errr get_mon_num_prep(player_type *player_ptr, monsterrace_hook_type monster_hoo
  * Note that if no monsters are "appropriate", then this function will
  * fail, and return zero, but this should *almost* never happen.
  */
-MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level)
+MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level, BIT_FLAGS option)
 {
 	int delay = mysqrt(level * 10000L) + 400L;
 	int reinforcement_possibility = MAX(NASTY_MON_MAX, NASTY_MON_BASE - ((current_world_ptr->dungeon_turn / (TURNS_PER_TICK * 5000L) - delay / 10)));
@@ -1003,7 +1003,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level)
 		level += 3;
 	}
 
-	if (!player_ptr->phase_out && !(d_info[player_ptr->dungeon_idx].flags1 & DF1_BEGINNER))
+	if (!(option & GMN_ARENA) && !(d_info[player_ptr->dungeon_idx].flags1 & DF1_BEGINNER))
 	{
 		if (ironman_nightmare && !randint0(reinforcement_possibility))
 		{
@@ -1032,7 +1032,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level)
 		MONRACE_IDX r_idx = table[i].index;
 		monster_race *r_ptr;
 		r_ptr = &r_info[r_idx];
-		if (!player_ptr->phase_out && !chameleon_change_m_idx)
+		if (!(option & GMN_ARENA) && !chameleon_change_m_idx)
 		{
 			if (((r_ptr->flags1 & (RF1_UNIQUE)) ||
 				(r_ptr->flags7 & (RF7_NAZGUL))) &&
@@ -2007,7 +2007,7 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
 
 		if (d_info[player_ptr->dungeon_idx].flags1 & DF1_CHAMELEON) level += 2 + randint1(3);
 
-		r_idx = get_mon_num(player_ptr, level);
+		r_idx = get_mon_num(player_ptr, level, 0);
 		r_ptr = &r_info[r_idx];
 
 		chameleon_change_m_idx = 0;
@@ -2116,7 +2116,7 @@ static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_i
 	DEPTH min = MIN(floor_ptr->base_level - 5, 50);
 	while (--attempts)
 	{
-		MONRACE_IDX ap_r_idx = get_mon_num(player_ptr, floor_ptr->base_level + 10);
+		MONRACE_IDX ap_r_idx = get_mon_num(player_ptr, floor_ptr->base_level + 10, 0);
 		if (r_info[ap_r_idx].level >= min) return ap_r_idx;
 	}
 
@@ -2711,7 +2711,7 @@ bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POS
 		if (!is_cave_empty_bold2(player_ptr, ny, nx)) continue;
 
 		get_mon_num_prep(player_ptr, place_monster_can_escort, get_monster_hook2(player_ptr, ny, nx));
-		z = get_mon_num(player_ptr, r_ptr->level);
+		z = get_mon_num(player_ptr, r_ptr->level, 0);
 		if (!z) break;
 
 		(void)place_monster_one(player_ptr, place_monster_m_idx, ny, nx, z, mode);
@@ -2738,7 +2738,7 @@ bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mo
 {
 	MONRACE_IDX r_idx;
 	get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
-	r_idx = get_mon_num(player_ptr, player_ptr->current_floor_ptr->monster_level);
+	r_idx = get_mon_num(player_ptr, player_ptr->current_floor_ptr->monster_level, 0);
 	if (!r_idx) return FALSE;
 
 	if ((one_in_(5) || (player_ptr->current_floor_ptr->base_level == 0)) &&
@@ -2770,7 +2770,7 @@ bool alloc_horde(player_type *player_ptr, POSITION y, POSITION x)
 	monster_race *r_ptr = NULL;
 	while (--attempts)
 	{
-		r_idx = get_mon_num(player_ptr, floor_ptr->monster_level);
+		r_idx = get_mon_num(player_ptr, floor_ptr->monster_level, 0);
 		if (!r_idx) return FALSE;
 
 		r_ptr = &r_info[r_idx];
@@ -2996,7 +2996,7 @@ bool summon_specific(player_type *player_ptr, MONSTER_IDX who, POSITION y1, POSI
 	summon_unique_okay = (mode & PM_ALLOW_UNIQUE) ? TRUE : FALSE;
 	get_mon_num_prep(player_ptr, summon_specific_okay, get_monster_hook2(player_ptr, y, x));
 
-	MONRACE_IDX r_idx = get_mon_num(player_ptr, (floor_ptr->dun_level + lev) / 2 + 5);
+	MONRACE_IDX r_idx = get_mon_num(player_ptr, (floor_ptr->dun_level + lev) / 2 + 5, 0);
 	if (!r_idx)
 	{
 		summon_specific_type = 0;

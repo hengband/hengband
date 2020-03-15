@@ -1542,7 +1542,6 @@ void update_gambling_monsters(player_type *player_ptr)
 	int mon_level;
 	int power[4];
 	bool tekitou;
-	bool old_inside_battle = player_ptr->phase_out;
 
 	for (i = 0; i < current_world_ptr->max_d_idx; i++)
 	{
@@ -1573,9 +1572,7 @@ void update_gambling_monsters(player_type *player_ptr)
 			while (TRUE)
 			{
 				get_mon_num_prep(player_ptr, monster_can_entry_arena, NULL);
-				player_ptr->phase_out = TRUE;
-				r_idx = get_mon_num(player_ptr, mon_level);
-				player_ptr->phase_out = old_inside_battle;
+				r_idx = get_mon_num(player_ptr, mon_level, GMN_ARENA);
 				if (!r_idx) continue;
 
 				if ((r_info[r_idx].flags1 & RF1_UNIQUE) || (r_info[r_idx].flags7 & RF7_UNIQUE2))
@@ -2253,14 +2250,14 @@ static void castle_quest(player_type *player_ptr)
 
 	if (q_ptr->r_idx == 0)
 	{
-		q_ptr->r_idx = get_mon_num(player_ptr, q_ptr->level + 4 + randint1(6));
+		q_ptr->r_idx = get_mon_num(player_ptr, q_ptr->level + 4 + randint1(6), 0);
 	}
 
 	monster_race *r_ptr;
 	r_ptr = &r_info[q_ptr->r_idx];
 	while ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->rarity != 1))
 	{
-		q_ptr->r_idx = get_mon_num(player_ptr, q_ptr->level) + 4 + randint1(6);
+		q_ptr->r_idx = get_mon_num(player_ptr, q_ptr->level + 4 + randint1(6), 0);
 		r_ptr = &r_info[q_ptr->r_idx];
 	}
 
@@ -4015,7 +4012,6 @@ void do_cmd_bldg(player_type *player_ptr)
  */
 void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 {
-	bool old_inside_battle = player_ptr->phase_out;
 	int max_dl = 3, i;
 	if (!conv_old)
 	{
@@ -4030,12 +4026,11 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 		max_dl = MAX(max_dlv[DUNGEON_ANGBAND], 3);
 	}
 
-	player_ptr->phase_out = TRUE;
 	get_mon_num_prep(player_ptr, NULL, NULL);
 
 	while (TRUE)
 	{
-		today_mon = get_mon_num(player_ptr, max_dl);
+		today_mon = get_mon_num(player_ptr, max_dl, GMN_ARENA);
 		monster_race *r_ptr;
 		r_ptr = &r_info[today_mon];
 
@@ -4047,9 +4042,6 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 		if (r_ptr->rarity > 10) continue;
 		break;
 	}
-
-	player_ptr->today_mon = 0;
-	player_ptr->phase_out = old_inside_battle;
 }
 
 
@@ -4065,7 +4057,7 @@ void determine_bounty_uniques(player_type *player_ptr)
 	{
 		while (TRUE)
 		{
-			current_world_ptr->bounty_r_idx[i] = get_mon_num(player_ptr, MAX_DEPTH - 1);
+			current_world_ptr->bounty_r_idx[i] = get_mon_num(player_ptr, MAX_DEPTH - 1, GMN_ARENA);
 			monster_race *r_ptr;
 			r_ptr = &r_info[current_world_ptr->bounty_r_idx[i]];
 

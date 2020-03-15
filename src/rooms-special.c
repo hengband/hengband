@@ -86,7 +86,7 @@ bool build_type15(player_type *player_ptr)
 		/* Place fixed lite berathers */
 		for (dir1 = 4; dir1 < 8; dir1++)
 		{
-			MONRACE_IDX r_idx = get_mon_num(player_ptr, floor_ptr->dun_level);
+			MONRACE_IDX r_idx = get_mon_num(player_ptr, floor_ptr->dun_level, 0);
 
 			y = yval + 2 * ddy_ddd[dir1];
 			x = xval + 2 * ddx_ddd[dir1];
@@ -150,7 +150,7 @@ bool build_type15(player_type *player_ptr)
 		g_ptr->feat = feat_glass_wall;
 		get_mon_num_prep(player_ptr, vault_aux_lite, NULL);
 
-		r_idx = get_mon_num(player_ptr, floor_ptr->dun_level);
+		r_idx = get_mon_num(player_ptr, floor_ptr->dun_level, 0);
 		if (r_idx) place_monster_aux(player_ptr, 0, yval, xval, r_idx, 0L);
 
 		/* Walls around the breather */
@@ -217,7 +217,7 @@ bool build_type15(player_type *player_ptr)
 		/* Place shard berathers */
 		for (dir1 = 4; dir1 < 8; dir1++)
 		{
-			MONRACE_IDX r_idx = get_mon_num(player_ptr, floor_ptr->dun_level);
+			MONRACE_IDX r_idx = get_mon_num(player_ptr, floor_ptr->dun_level, 0);
 
 			y = yval + ddy_ddd[dir1];
 			x = xval + ddx_ddd[dir1];

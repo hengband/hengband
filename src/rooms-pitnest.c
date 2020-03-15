@@ -319,7 +319,7 @@ bool build_type5(player_type *player_ptr)
 		while (attempts--)
 		{
 			/* Get a (hard) monster type */
-			r_idx = get_mon_num(player_ptr, floor_ptr->dun_level + 11);
+			r_idx = get_mon_num(player_ptr, floor_ptr->dun_level + 11, 0);
 			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
@@ -529,7 +529,7 @@ bool build_type6(player_type *player_ptr)
 		while (attempts--)
 		{
 			/* Get a (hard) monster type */
-			r_idx = get_mon_num(player_ptr, floor_ptr->dun_level + 11);
+			r_idx = get_mon_num(player_ptr, floor_ptr->dun_level + 11, 0);
 			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */
@@ -839,7 +839,7 @@ bool build_type13(player_type *player_ptr)
 		while (attempts--)
 		{
 			/* Get a (hard) monster type */
-			r_idx = get_mon_num(player_ptr, floor_ptr->dun_level + 0);
+			r_idx = get_mon_num(player_ptr, floor_ptr->dun_level + 0, 0);
 			r_ptr = &r_info[r_idx];
 
 			/* Decline incorrect alignment */

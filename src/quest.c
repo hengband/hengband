@@ -55,7 +55,7 @@ void determine_random_questor(player_type *player_ptr, quest_type *q_ptr)
 		 * Random monster 5 - 10 levels out of depth
 		 * (depending on level)
 		 */
-		r_idx = get_mon_num(player_ptr, q_ptr->level + 5 + randint1(q_ptr->level / 10));
+		r_idx = get_mon_num(player_ptr, q_ptr->level + 5 + randint1(q_ptr->level / 10), GMN_ARENA);
 		monster_race *r_ptr;
 		r_ptr = &r_info[r_idx];
 
