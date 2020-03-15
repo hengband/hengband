@@ -4015,6 +4015,7 @@ void do_cmd_bldg(player_type *player_ptr)
  */
 void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 {
+	bool old_inside_battle = player_ptr->phase_out;
 	int max_dl = 3, i;
 	if (!conv_old)
 	{
@@ -4048,7 +4049,6 @@ void determine_daily_bounty(player_type *player_ptr, bool conv_old)
 	}
 
 	player_ptr->today_mon = 0;
-	bool old_inside_battle = player_ptr->phase_out;
 	player_ptr->phase_out = old_inside_battle;
 }
 
