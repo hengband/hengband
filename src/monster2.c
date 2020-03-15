@@ -2102,10 +2102,9 @@ static bool monster_hook_tanuki(MONRACE_IDX r_idx)
 static MONRACE_IDX initial_r_appearance(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS generate_mode)
 {
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	if (player_ptr->pseikaku == SEIKAKU_CHARGEMAN && !(generate_mode & (PM_MULTIPLY | PM_KAGE)))
+	if ((generate_mode | PM_JURAL) && !(generate_mode & (PM_MULTIPLY | PM_KAGE)))
 	{
-		if ((one_in_(5) || (floor_ptr->base_level == 0)) &&
-				!(r_info[r_idx].flags1 & RF1_UNIQUE) && my_strchr("hkoptuyAHLOPTUVY", r_info[r_idx].d_char)) return MON_ALIEN_JURAL;
+		return MON_ALIEN_JURAL;
 	}
 
 	if (!(r_info[r_idx].flags7 & RF7_TANUKI))
@@ -2741,6 +2740,12 @@ bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mo
 	get_mon_num_prep(player_ptr, get_monster_hook(player_ptr), get_monster_hook2(player_ptr, y, x));
 	r_idx = get_mon_num(player_ptr, player_ptr->current_floor_ptr->monster_level);
 	if (!r_idx) return FALSE;
+
+	if ((one_in_(5) || (player_ptr->current_floor_ptr->base_level == 0)) &&
+		!(r_info[r_idx].flags1 & RF1_UNIQUE) && my_strchr("hkoptuyAHLOPTUVY", r_info[r_idx].d_char))
+	{
+		mode |= PM_JURAL;
+	}
 
 	if (place_monster_aux(player_ptr, 0, y, x, r_idx, mode)) return TRUE;
 

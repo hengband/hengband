@@ -282,6 +282,7 @@ typedef struct
 #define PM_HASTE          0x00000100    /*!< モンスター生成フラグ: 加速状態で生成する */
 #define PM_KAGE           0x00000200    /*!< モンスター生成フラグ: 必ずあやしい影として生成する */
 #define PM_MULTIPLY       0x00000400    /*!< モンスター生成フラグ: 増殖処理時として生成する */
+#define PM_JURAL          0x00000800    /*!< モンスター生成フラグ: ジュラル星人として誤認生成する */
 
 extern bool place_monster_aux(player_type *player_ptr, MONSTER_IDX who, POSITION y, POSITION x, MONRACE_IDX r_idx, BIT_FLAGS mode);
 extern bool place_monster(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
