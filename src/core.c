@@ -31,6 +31,7 @@
 #include "cmd/cmd-item.h"
 #include "cmd/cmd-magiceat.h"
 #include "cmd/cmd-mane.h"
+#include "cmd/cmd-macro.h"
 #include "cmd/cmd-quaff.h"
 #include "cmd/cmd-read.h"
 #include "cmd/cmd-save.h"

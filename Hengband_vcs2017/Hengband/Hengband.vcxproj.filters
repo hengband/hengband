@@ -523,6 +523,9 @@
     <ClCompile Include="..\..\src\cmd\object-group-table.c">
       <Filter>cmd</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-macro.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1026,6 +1029,9 @@
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\object-group-table.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-macro.h">
       <Filter>cmd</Filter>
     </ClInclude>
   </ItemGroup>

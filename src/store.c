@@ -21,6 +21,7 @@
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-help.h"
 #include "cmd/cmd-item.h"
+#include "cmd/cmd-macro.h"
 #include "cmd/cmd-smith.h"
 #include "cmd/cmd-zapwand.h"
 #include "cmd/cmd-magiceat.h"
