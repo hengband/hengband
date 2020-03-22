@@ -641,7 +641,7 @@ static void do_cmd_knowledge_inven(player_type *creature_ptr)
 {
 	FILE *fff;
 	GAME_TEXT file_name[1024];
-	store_type  *st_ptr;
+	store_type *store_ptr;
 	OBJECT_TYPE_VALUE tval;
 	int j = 0;
 
@@ -676,11 +676,11 @@ static void do_cmd_knowledge_inven(player_type *creature_ptr)
 			do_cmd_knowledge_inven_aux(creature_ptr, fff, &creature_ptr->inventory_list[i], &j, tval, where);
 		}
 
-		st_ptr = &town_info[1].store[STORE_HOME];
+		store_ptr = &town_info[1].store[STORE_HOME];
 		strcpy(where, _("家", "H "));
-		for (int i = 0; i < st_ptr->stock_num; i++)
+		for (int i = 0; i < store_ptr->stock_num; i++)
 		{
-			do_cmd_knowledge_inven_aux(creature_ptr, fff, &st_ptr->stock[i], &j, tval, where);
+			do_cmd_knowledge_inven_aux(creature_ptr, fff, &store_ptr->stock[i], &j, tval, where);
 		}
 	}
 
@@ -3155,10 +3155,10 @@ static void do_cmd_knowledge_home(player_type *player_ptr)
 		return;
 	}
 
-	store_type *st_ptr;
-	st_ptr = &town_info[1].store[STORE_HOME];
+	store_type *store_ptr;
+	store_ptr = &town_info[1].store[STORE_HOME];
 
-	if (st_ptr->stock_num)
+	if (store_ptr->stock_num)
 	{
 #ifdef JP
 		TERM_LEN x = 1;
@@ -3166,11 +3166,11 @@ static void do_cmd_knowledge_home(player_type *player_ptr)
 		fprintf(fff, _("  [ 我が家のアイテム ]\n", "  [Home Inventory]\n"));
 		concptr	paren = ")";
 		GAME_TEXT o_name[MAX_NLEN];
-		for (int i = 0; i < st_ptr->stock_num; i++)
+		for (int i = 0; i < store_ptr->stock_num; i++)
 		{
 #ifdef JP
 			if ((i % 12) == 0) fprintf(fff, "\n ( %d ページ )\n", x++);
-			object_desc(player_ptr, o_name, &st_ptr->stock[i], 0);
+			object_desc(player_ptr, o_name, &store_ptr->stock[i], 0);
 			if (strlen(o_name) <= 80 - 3)
 			{
 				fprintf(fff, "%c%s %s\n", I2A(i % 12), paren, o_name);
@@ -3187,7 +3187,7 @@ static void do_cmd_knowledge_home(player_type *player_ptr)
 				fprintf(fff, "   %.77s\n", o_name + n);
 			}
 #else
-			object_desc(player_ptr, o_name, &st_ptr->stock[i], 0);
+			object_desc(player_ptr, o_name, &store_ptr->stock[i], 0);
 			fprintf(fff, "%c%s %s\n", I2A(i % 12), paren, o_name);
 #endif
 		}

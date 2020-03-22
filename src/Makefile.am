@@ -14,6 +14,7 @@ hengband_SOURCES = \
 	market/poker.c market/poker.h market/store-owners.c market/store-owners.h \
 	market/store-owner-comments.c market/store-owner-comments.h \
 	market/articles-on-sale.c market/articles-on-sale.h \
+	market/black-market.c market/black-market.h \
 	market/say-comments.c market/say-comments.h \
 	market/store-util.c market/store-util.h \
 	market/gold-magnification-table.c market/gold-magnification-table.h \

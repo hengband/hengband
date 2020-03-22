@@ -4629,18 +4629,18 @@ void prevent_turn_overflow(player_type *player_ptr)
 	{
 		for (int j = 0; j < MAX_STORES; j++)
 		{
-			store_type *st_ptr = &town_info[i].store[j];
+			store_type *store_ptr = &town_info[i].store[j];
 
-			if (st_ptr->last_visit > -10L * TURNS_PER_TICK * STORE_TICKS)
+			if (store_ptr->last_visit > -10L * TURNS_PER_TICK * STORE_TICKS)
 			{
-				st_ptr->last_visit -= rollback_turns;
-				if (st_ptr->last_visit < -10L * TURNS_PER_TICK * STORE_TICKS) st_ptr->last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
+				store_ptr->last_visit -= rollback_turns;
+				if (store_ptr->last_visit < -10L * TURNS_PER_TICK * STORE_TICKS) store_ptr->last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
 			}
 
-			if (st_ptr->store_open)
+			if (store_ptr->store_open)
 			{
-				st_ptr->store_open -= rollback_turns;
-				if (st_ptr->store_open < 1) st_ptr->store_open = 1;
+				store_ptr->store_open -= rollback_turns;
+				if (store_ptr->store_open < 1) store_ptr->store_open = 1;
 			}
 		}
 	}

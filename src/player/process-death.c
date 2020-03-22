@@ -285,13 +285,13 @@ static void inventory_aware(player_type *creature_ptr)
 static void home_aware(player_type *creature_ptr)
 {
 	object_type *o_ptr;
-	store_type *st_ptr;
+	store_type *store_ptr;
 	for (int i = 1; i < max_towns; i++)
 	{
-		st_ptr = &town_info[i].store[STORE_HOME];
-		for (int j = 0; j < st_ptr->stock_num; j++)
+		store_ptr = &town_info[i].store[STORE_HOME];
+		for (int j = 0; j < store_ptr->stock_num; j++)
 		{
-			o_ptr = &st_ptr->stock[j];
+			o_ptr = &store_ptr->stock[j];
 			if (!o_ptr->k_idx) continue;
 
 			object_aware(creature_ptr, o_ptr);
@@ -338,19 +338,19 @@ static void show_dead_home_items(player_type *creature_ptr)
 {
 	for (int l = 1; l < max_towns; l++)
 	{
-		store_type *st_ptr;
-		st_ptr = &town_info[l].store[STORE_HOME];
-		if (st_ptr->stock_num == 0) continue;
+		store_type *store_ptr;
+		store_ptr = &town_info[l].store[STORE_HOME];
+		if (store_ptr->stock_num == 0) continue;
 
-		for (int i = 0, k = 0; i < st_ptr->stock_num; k++)
+		for (int i = 0, k = 0; i < store_ptr->stock_num; k++)
 		{
 			Term_clear();
-			for (int j = 0; (j < 12) && (i < st_ptr->stock_num); j++, i++)
+			for (int j = 0; (j < 12) && (i < store_ptr->stock_num); j++, i++)
 			{
 				GAME_TEXT o_name[MAX_NLEN];
 				char tmp_val[80];
 				object_type *o_ptr;
-				o_ptr = &st_ptr->stock[i];
+				o_ptr = &store_ptr->stock[i];
 				sprintf(tmp_val, "%c) ", I2A(j));
 				prt(tmp_val, j + 2, 4);
 				object_desc(creature_ptr, o_name, o_ptr, 0);

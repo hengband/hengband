@@ -27,7 +27,6 @@
 #include "floor-town.h"
 #include "files.h"
 
-
  /*
   * The spoiler file being created
   */
@@ -2474,7 +2473,7 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
 {
 	int i, j;
 
-	store_type  *st_ptr;
+	store_type  *store_ptr;
 	object_type *q_ptr;
 
 	char buf[1024];
@@ -2511,18 +2510,18 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
 		}
 
 		/* random artifacts in home */
-		st_ptr = &town_info[1].store[STORE_HOME];
-		for (i = 0; i < st_ptr->stock_num; i++)
+		store_ptr = &town_info[1].store[STORE_HOME];
+		for (i = 0; i < store_ptr->stock_num; i++)
 		{
-			q_ptr = &st_ptr->stock[i];
+			q_ptr = &store_ptr->stock[i];
 			spoil_random_artifact_aux(creature_ptr, q_ptr, j);
 		}
 
 		/* random artifacts in museum */
-		st_ptr = &town_info[1].store[STORE_MUSEUM];
-		for (i = 0; i < st_ptr->stock_num; i++)
+		store_ptr = &town_info[1].store[STORE_MUSEUM];
+		for (i = 0; i < store_ptr->stock_num; i++)
 		{
-			q_ptr = &st_ptr->stock[i];
+			q_ptr = &store_ptr->stock[i];
 			spoil_random_artifact_aux(creature_ptr, q_ptr, j);
 		}
 	}

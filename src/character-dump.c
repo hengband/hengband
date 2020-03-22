@@ -498,38 +498,38 @@ static void dump_aux_equipment_inventory(player_type *creature_ptr, FILE *fff)
  */
 static void dump_aux_home_museum(player_type *creature_ptr, FILE *fff)
 {
-	store_type  *st_ptr;
-	st_ptr = &town_info[1].store[STORE_HOME];
+	store_type  *store_ptr;
+	store_ptr = &town_info[1].store[STORE_HOME];
 
 	GAME_TEXT o_name[MAX_NLEN];
-	if (st_ptr->stock_num)
+	if (store_ptr->stock_num)
 	{
 		fprintf(fff, _("  [我が家のアイテム]\n", "  [Home Inventory]\n"));
 
 		TERM_LEN x = 1;
-		for (int i = 0; i < st_ptr->stock_num; i++)
+		for (int i = 0; i < store_ptr->stock_num; i++)
 		{
 			if ((i % 12) == 0)
 				fprintf(fff, _("\n ( %d ページ )\n", "\n ( page %d )\n"), x++);
-			object_desc(creature_ptr, o_name, &st_ptr->stock[i], 0);
+			object_desc(creature_ptr, o_name, &store_ptr->stock[i], 0);
 			fprintf(fff, "%c) %s\n", I2A(i % 12), o_name);
 		}
 
 		fprintf(fff, "\n\n");
 	}
 
-	st_ptr = &town_info[1].store[STORE_MUSEUM];
+	store_ptr = &town_info[1].store[STORE_MUSEUM];
 
-	if (st_ptr->stock_num == 0) return;
+	if (store_ptr->stock_num == 0) return;
 
 	fprintf(fff, _("  [博物館のアイテム]\n", "  [Museum]\n"));
 
 	TERM_LEN x = 1;
-	for (int i = 0; i < st_ptr->stock_num; i++)
+	for (int i = 0; i < store_ptr->stock_num; i++)
 	{
 #ifdef JP
 		if ((i % 12) == 0) fprintf(fff, "\n ( %d ページ )\n", x++);
-		object_desc(creature_ptr, o_name, &st_ptr->stock[i], 0);
+		object_desc(creature_ptr, o_name, &store_ptr->stock[i], 0);
 		fprintf(fff, "%c) %s\n", I2A(i % 12), o_name);
 #else
 		if ((i % 12) == 0) fprintf(fff, "\n ( page %d )\n", x++);

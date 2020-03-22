@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-extern int cur_store_num;
-
 void say_comment_1(player_type *player_ptr);
 void say_comment_2(PRICE value, int annoyed);
 void say_comment_3(PRICE value, int annoyed);

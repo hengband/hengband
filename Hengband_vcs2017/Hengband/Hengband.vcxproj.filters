@@ -559,6 +559,9 @@
     <ClCompile Include="..\..\src\market\gold-magnification-table.c">
       <Filter>market</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\market\black-market.c">
+      <Filter>market</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1098,6 +1101,9 @@
       <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\market\gold-magnification-table.h">
+      <Filter>market</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\black-market.h">
       <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>

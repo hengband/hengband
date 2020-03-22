@@ -6,7 +6,6 @@
 #include "rumor.h"
 
 #define RUMOR_CHANCE 8
-int cur_store_num = 0;
 
 /*!
  * @brief 取引成功時の店主のメッセージ処理 /
