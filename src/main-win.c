@@ -404,16 +404,9 @@ const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 
 #define MoveTo(H,X,Y) MoveToEx(H, X, Y, NULL)
 
- /*
-  * Silliness for Windows 95
-  */
-#ifndef WS_EX_TOOLWINDOW
-# define WS_EX_TOOLWINDOW 0
-#endif
-
-  /*
-   * Foreground color bits (hard-coded by DOS)
-   */
+/*
+ * Foreground color bits
+ */
 #define VID_BLACK	0x00
 #define VID_BLUE	0x01
 #define VID_GREEN	0x02
@@ -423,36 +416,13 @@ const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
 #define VID_YELLOW	0x06
 #define VID_WHITE	0x07
 
-   /*
-	* Bright text (hard-coded by DOS)
-	*/
+/*
+ * Bright text
+ */
 #define VID_BRIGHT	0x08
 
-	/*
-	 * Background color bits (hard-coded by DOS)
-	 */
-#define VUD_BLACK	0x00
-#define VUD_BLUE	0x10
-#define VUD_GREEN	0x20
-#define VUD_CYAN	0x30
-#define VUD_RED		0x40
-#define VUD_MAGENTA	0x50
-#define VUD_YELLOW	0x60
-#define VUD_WHITE	0x70
-
-	 /*
-	  * Blinking text (hard-coded by DOS)
-	  */
-#define VUD_BRIGHT	0x80
-
-
-	  /*
-	   * Forward declare
-	   */
-typedef struct _term_data term_data;
-
 /*!
- * @struct _term_data
+ * @struct term_data
  * @brief ターム情報構造体 / Extra "term" data
  * @details
  * <p>
@@ -472,7 +442,7 @@ typedef struct _term_data term_data;
  * as attempting to represent the name of a font.
  * </p>
  */
-struct _term_data
+typedef struct
 {
 	term t;
 	concptr s;
@@ -512,8 +482,7 @@ struct _term_data
 	LOGFONT lf;
 
 	bool posfix;
-
-};
+} term_data;
 
 #define MAX_TERM_DATA 8	//!< Maximum number of windows 
 
@@ -659,7 +628,6 @@ static bool paint_rect = FALSE;
 static TERM_LEN mousex = 0, mousey = 0;
 static TERM_LEN oldx, oldy;
 
-
 /*!
  * @brief The "simple" color values
  * @details
@@ -686,7 +654,6 @@ static BYTE win_pal[256] =
 	VID_BLUE | VID_BRIGHT,		/* Light Blue */
 	VID_YELLOW					/* Light Umber XXX */
 };
-
 
 /*
  * Hack -- define which keys are "special"
@@ -732,7 +699,6 @@ static byte ignore_key_list[] = {
 
 static bool is_already_running(void);
 
-
 /* bg */
 static void delete_bg(void)
 {
@@ -742,6 +708,7 @@ static void delete_bg(void)
 		hBG = NULL;
 	}
 }
+
 
 static int init_bg(void)
 {
@@ -759,6 +726,7 @@ static int init_bg(void)
 	use_bg = 1;
 	return 1;
 }
+
 
 static void DrawBG(HDC hdc, RECT *r)
 {
@@ -2983,7 +2951,6 @@ static void init_windows(void)
 }
 
 
-
 /*
  * Prepare the menus
  */
@@ -4677,7 +4644,6 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
 		ANGBAND_KEYBOARD = "0";
 	else
 	{
-		/* todo PC-98のサポートは打ち切ったので削除したい */
 		switch (GetKeyboardType(1))
 		{
 		case 0x0D01: case 0x0D02:
