@@ -11,6 +11,7 @@ hengband_SOURCES = \
 	\
 	avatar.h avatar.c birth.c birth.h \
 	\
+	market/poker.c market/poker.h \
 	bldg.c bldg.h chest.c chest.h chuukei.c chuukei.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
@@ -162,7 +163,7 @@ EXTRA_DIST = \
 CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat -Icore -Iio -Imonster -Iplayer -Iview
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat -Icore -Iio -Imarket -Imonster -Iplayer -Iview
 
 install-exec-hook:
 if SET_GID
