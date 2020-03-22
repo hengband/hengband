@@ -344,6 +344,7 @@ static void display_kaeruka(int hoge, int kaeruka[])
 
 
 /*!
+ * todo _() でまとめる
  * @brief ポーカーの手札を表示する
  * @param なし
  * @return なし

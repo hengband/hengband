@@ -1,21 +1,7 @@
 ﻿#pragma once
 
-/*
- * A store owner
- */
-typedef struct owner_type owner_type;
-
-struct owner_type
-{
-	concptr owner_name;	/* Name */
-	PRICE max_cost;		/* Purse limit */
-	byte max_inflate;	/* Inflation (max) */
-	byte min_inflate;	/* Inflation (min) */
-	byte haggle_per;	/* Haggle unit */
-	byte insult_max;	/* Insult limit */
-	byte owner_race;	/* Owner race */
-};
-
+#include "angband.h"
+#include "market/store-owners.h"
 
 /*
  * A store, with an owner, various state flags, a current stock
@@ -61,9 +47,6 @@ struct store_type
 #define STORE_HOME      7 /*!< 店舗の種類: 我が家 */
 #define STORE_BOOK      8 /*!< 店舗の種類: 書店 */
 #define STORE_MUSEUM    9 /*!< 店舗の種類: 博物館 */
-#define MAX_STORES      10 /*!< store.c用の店舗の種類最大数 / Total number of stores (see "store.c", etc) */
-
-#define MAX_OWNERS      32 /*!< 各店舗毎の店主定義最大数 / Total number of owners per store (see "store.c", etc) */
 
  /*
   * Store constants
@@ -84,5 +67,4 @@ extern void store_shuffle(player_type *player_ptr, int which);
 extern void store_maint(player_type *player_ptr, int town_num, int store_num);
 extern void store_init(int town_num, int store_num);
 
-extern const owner_type owners[MAX_STORES][MAX_OWNERS];
 extern byte store_table[MAX_STORES][STORE_CHOICES][2];

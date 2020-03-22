@@ -11,7 +11,7 @@ hengband_SOURCES = \
 	\
 	avatar.h avatar.c birth.c birth.h \
 	\
-	market/poker.c market/poker.h \
+	market/poker.c market/poker.h market/store-owners.c market/store-owners.h \
 	bldg.c bldg.h chest.c chest.h chuukei.c chuukei.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \

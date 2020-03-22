@@ -541,6 +541,9 @@
     <ClCompile Include="..\..\src\market\poker.c">
       <Filter>market</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\market\store-owners.c">
+      <Filter>market</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1062,6 +1065,9 @@
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\market\poker.h">
+      <Filter>market</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\store-owners.h">
       <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>
