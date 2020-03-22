@@ -32,10 +32,6 @@
 * </p>
 *
 * <p>
-* <del>See also "main-dos.c" and "main-ibm.c".</del>
-* </p>
-*
-* <p>
 * The "lib/user/pref-win.prf" file contains keymaps, macro definitions,
 * and/or color redefinitions.
 * </p>
@@ -1351,18 +1347,15 @@ static bool init_graphics(void)
 
 
 /*
- * todo 戻り値は常にtrueなのでvoidに変更する
  * Initialize music
  */
-static bool init_music(void)
+static void init_music(void)
 {
 	if (!can_use_music)
 	{
 		load_music_prefs();
 		can_use_music = TRUE;
 	}
-
-	return (can_use_music);
 }
 
 /*
@@ -1376,18 +1369,15 @@ static void stop_music(void)
 
 
 /*
- * todo 戻り値は常にtrueなのでvoidに変更する
  * Initialize sound
  */
-static bool init_sound(void)
+static void init_sound(void)
 {
 	if (!can_use_sound)
 	{
 		load_sound_prefs();
 		can_use_sound = TRUE;
 	}
-
-	return (can_use_sound);
 }
 
 
@@ -1561,27 +1551,16 @@ static errr term_xtra_win_react(player_type *player_ptr)
 
 	if (use_sound != arg_sound)
 	{
-		if (arg_sound && !init_sound())
-		{
-			plog(_("サウンドを初期化できません！", "Cannot initialize sound!"));
-			arg_sound = FALSE;
-		}
-
+		init_sound();
 		use_sound = arg_sound;
 	}
 
 	if (use_music != arg_music)
 	{
-		if (arg_music && !init_music())
-		{
-			plog(_("BGMを初期化できません！", "Cannot initialize BGM!"));
-			arg_music = FALSE;
-		}
-
+		init_music();
 		use_music = arg_music;
 		if (!arg_music) stop_music();
 		else select_floor_music(player_ptr);
-
 	}
 
 	if (use_graphics != arg_graphics)
