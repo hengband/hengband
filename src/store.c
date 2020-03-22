@@ -92,11 +92,7 @@ static void say_comment_1(player_type *player_ptr)
 
 	if (one_in_(RUMOR_CHANCE))
 	{
-#ifdef JP
-		msg_print("店主は耳うちした:");
-#else
-		msg_print("The shopkeeper whispers something into your ear:");
-#endif
+		msg_print(_("店主は耳うちした:", "The shopkeeper whispers something into your ear:"));
 		display_rumor(player_ptr, TRUE);
 	}
 }
@@ -111,8 +107,7 @@ static void say_comment_1(player_type *player_ptr)
  */
 static void say_comment_2(PRICE value, int annoyed)
 {
-	/* Prepare a string to insert */
-	char	tmp_val[80];
+	char tmp_val[80];
 	sprintf(tmp_val, "%ld", (long)value);
 
 	if (annoyed > 0)
@@ -155,7 +150,6 @@ static void say_comment_3(PRICE value, int annoyed)
 	else
 	{
 #ifdef JP
-		/* ブラックマーケットの時は別のメッセージを出す */
 		if (cur_store_num == STORE_BLACK)
 		{
 			msg_format(comment_3b_B[randint0(MAX_COMMENT_3B)], tmp_val);
@@ -231,79 +225,6 @@ static void say_comment_6(void)
 {
 	msg_print(comment_6[randint0(MAX_COMMENT_6)]);
 }
-
-#define MAX_COMMENT_7A	4
-
-static concptr comment_7a[MAX_COMMENT_7A] =
-{
-#ifdef JP
-	"うわああぁぁ！",
-	"なんてこった！",
-	"誰かがむせび泣く声が聞こえる...。",
-	"店主が悔しげにわめいている！"
-#else
-	"Arrgghh!",
-	"You bastard!",
-	"You hear someone sobbing...",
-	"The shopkeeper howls in agony!"
-#endif
-
-};
-
-#define MAX_COMMENT_7B	4
-
-static concptr comment_7b[MAX_COMMENT_7B] =
-{
-#ifdef JP
-	"くそう！",
-	"この悪魔め！",
-	"店主が恨めしそうに見ている。",
-	"店主が睨んでいる。"
-#else
-	"Damn!",
-	"You fiend!",
-	"The shopkeeper curses at you.",
-	"The shopkeeper glares at you."
-#endif
-
-};
-
-#define MAX_COMMENT_7C	4
-
-static concptr comment_7c[MAX_COMMENT_7C] =
-{
-#ifdef JP
-	"すばらしい！",
-	"君が天使に見えるよ！",
-	"店主がクスクス笑っている。",
-	"店主が大声で笑っている。"
-#else
-	"Cool!",
-	"You've made my day!",
-	"The shopkeeper giggles.",
-	"The shopkeeper laughs loudly."
-#endif
-
-};
-
-#define MAX_COMMENT_7D	4
-
-static concptr comment_7d[MAX_COMMENT_7D] =
-{
-#ifdef JP
-	"やっほぅ！",
-	"こんなおいしい思いをしたら、真面目に働けなくなるなぁ。",
-	"店主は嬉しくて跳ね回っている。",
-	"店主は満面に笑みをたたえている。"
-#else
-	"Yipee!",
-	"I think I'll retire!",
-	"The shopkeeper jumps for joy.",
-	"The shopkeeper smiles gleefully."
-#endif
-
-};
-
 
 /*!
  * @brief 店主が交渉を終えた際の反応を返す処理 /

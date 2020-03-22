@@ -21,7 +21,6 @@ concptr comment_1[MAX_COMMENT_1] =
 	"Done!",
 	"Taken!"
 #endif
-
 };
 
 #ifdef JP
@@ -45,7 +44,6 @@ concptr comment_2a[MAX_COMMENT_2A] =
 	"You try my patience.  %s is final.",
 	"My patience grows thin.  %s is final."
 #endif
-
 };
 
 concptr comment_2b[MAX_COMMENT_2B] =
@@ -137,7 +135,6 @@ concptr comment_3b[MAX_COMMENT_3B] =
 	"%s gold pieces and be thankful for it!",
 	"%s gold pieces and not a copper more!"
 #endif
-
 };
 
 #ifdef JP
@@ -171,7 +168,6 @@ concptr comment_4a[MAX_COMMENT_4A] =
 	"That does it!  You shall waste my time no more!",
 	"This is getting nowhere!  I'm going to Londis!"
 #endif
-
 };
 
 #ifdef JP
@@ -258,5 +254,67 @@ concptr comment_6[MAX_COMMENT_6] =
 	"I'm sorry, I missed that.",
 	"I'm sorry, what was that?",
 	"Sorry, what was that again?"
+#endif
+};
+
+concptr comment_7a[MAX_COMMENT_7A] =
+{
+#ifdef JP
+	"うわああぁぁ！",
+	"なんてこった！",
+	"誰かがむせび泣く声が聞こえる...。",
+	"店主が悔しげにわめいている！"
+#else
+	"Arrgghh!",
+	"You bastard!",
+	"You hear someone sobbing...",
+	"The shopkeeper howls in agony!"
+#endif
+
+};
+
+concptr comment_7b[MAX_COMMENT_7B] =
+{
+#ifdef JP
+	"くそう！",
+	"この悪魔め！",
+	"店主が恨めしそうに見ている。",
+	"店主が睨んでいる。"
+#else
+	"Damn!",
+	"You fiend!",
+	"The shopkeeper curses at you.",
+	"The shopkeeper glares at you."
+#endif
+
+};
+
+concptr comment_7c[MAX_COMMENT_7C] =
+{
+#ifdef JP
+	"すばらしい！",
+	"君が天使に見えるよ！",
+	"店主がクスクス笑っている。",
+	"店主が大声で笑っている。"
+#else
+	"Cool!",
+	"You've made my day!",
+	"The shopkeeper giggles.",
+	"The shopkeeper laughs loudly."
+#endif
+};
+
+concptr comment_7d[MAX_COMMENT_7D] =
+{
+#ifdef JP
+	"やっほぅ！",
+	"こんなおいしい思いをしたら、真面目に働けなくなるなぁ。",
+	"店主は嬉しくて跳ね回っている。",
+	"店主は満面に笑みをたたえている。"
+#else
+	"Yipee!",
+	"I think I'll retire!",
+	"The shopkeeper jumps for joy.",
+	"The shopkeeper smiles gleefully."
 #endif
 };

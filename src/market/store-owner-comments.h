@@ -9,6 +9,10 @@
 #define MAX_COMMENT_4B	4
 #define MAX_COMMENT_5	8
 #define MAX_COMMENT_6	4
+#define MAX_COMMENT_7A	4
+#define MAX_COMMENT_7B	4
+#define MAX_COMMENT_7C	4
+#define MAX_COMMENT_7D	4
 
 extern concptr comment_1[MAX_COMMENT_1];
 extern concptr comment_1_B[MAX_COMMENT_1];
@@ -25,3 +29,7 @@ extern concptr comment_4b_B[MAX_COMMENT_4B];
 extern concptr comment_5[MAX_COMMENT_5];
 extern concptr comment_5_B[MAX_COMMENT_5];
 extern concptr comment_6[MAX_COMMENT_6];
+extern concptr comment_7a[MAX_COMMENT_7A];
+extern concptr comment_7b[MAX_COMMENT_7B];
+extern concptr comment_7c[MAX_COMMENT_7C];
+extern concptr comment_7d[MAX_COMMENT_7D];
