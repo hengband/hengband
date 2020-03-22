@@ -12,25 +12,16 @@
  * @details
  * <pre>
  * A set of functions to maintain automatic dumps of various kinds.
- * -Mogami-
- * remove_auto_dump(orig_file, mark)
- *     Remove the old automatic dump of type "mark".
- * auto_dump_printf(fmt, ...)
- *     Dump a formatted string using fprintf().
- * open_auto_dump(buf, mark)
- *     Open a file, remove old dump, and add new header.
- * close_auto_dump(void)
- *     Add a footer, and close the file.
- *    The dump commands of original Angband simply add new lines to
+ * The dump commands of original Angband simply add new lines to
  * existing files; these files will become bigger and bigger unless
  * an user deletes some or all of these files by hand at some
  * point.
- *     These three functions automatically delete old dumped lines
+ * These three functions automatically delete old dumped lines
  * before adding new ones.  Since there are various kinds of automatic
  * dumps in a single file, we add a header and a footer with a type
  * name for every automatic dump, and kill old lines only when the
  * lines have the correct type of header and footer.
- *     We need to be quite paranoid about correctness; the user might
+ * We need to be quite paranoid about correctness; the user might
  * (mistakenly) edit the file by hand, and see all their work come
  * to nothing on the next auto dump otherwise.  The current code only
  * detects changes by noting inconsistencies between the actual number
@@ -72,6 +63,7 @@
 #include "monster-status.h"
 #include "view-mainwindow.h"
 #include "dungeon-file.h"
+#include "io/read-pref-file.h"
 #include "io/interpret-pref-file.h"
 #include "files.h"
 #include "spells.h"
@@ -84,15 +76,6 @@
 #include "view-mainwindow.h" // 暫定。後で消す
 
 #include "english.h"
-
-// Mark strings for auto dump
-static char auto_dump_header[] = "# vvvvvvv== %s ==vvvvvvv";
-static char auto_dump_footer[] = "# ^^^^^^^== %s ==^^^^^^^";
-
-// Variables for auto dump
-static FILE *auto_dump_stream;
-static concptr auto_dump_mark;
-static int auto_dump_line_num;
 
 static void do_cmd_knowledge_monsters(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_r_idx);
 static void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_k_idx);
@@ -107,173 +90,6 @@ static SYMBOL_CODE char_idx_feat[F_LIT_MAX];
 
 // Encode the screen colors
 static char hack[17] = "dwsorgbuDWvyRGBU";
-
-/*!
- * @brief prf出力内容を消去する /
- * Remove old lines automatically generated before.
- * @param orig_file 消去を行うファイル名
- */
-static void remove_auto_dump(concptr orig_file)
-{
-	char header_mark_str[80];
-	char footer_mark_str[80];
-	sprintf(header_mark_str, auto_dump_header, auto_dump_mark);
-	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
-	size_t mark_len = strlen(footer_mark_str);
-	FILE *orig_fff;
-	orig_fff = my_fopen(orig_file, "r");
-	if (!orig_fff) return;
-
-	char tmp_file[1024];
-	FILE *tmp_fff;
-	tmp_fff = my_fopen_temp(tmp_file, 1024);
-	if (!tmp_fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), tmp_file);
-		msg_print(NULL);
-		return;
-	}
-
-	char buf[1024];
-	bool between_mark = FALSE;
-	bool changed = FALSE;
-	int line_num = 0;
-	long header_location = 0;
-	while (TRUE)
-	{
-		if (my_fgets(orig_fff, buf, sizeof(buf)))
-		{
-			if (between_mark)
-			{
-				fseek(orig_fff, header_location, SEEK_SET);
-				between_mark = FALSE;
-				continue;
-			}
-			else
-			{
-				break;
-			}
-		}
-
-		if (!between_mark)
-		{
-			if (!strcmp(buf, header_mark_str))
-			{
-				header_location = ftell(orig_fff);
-				line_num = 0;
-				between_mark = TRUE;
-				changed = TRUE;
-			}
-			else
-			{
-				fprintf(tmp_fff, "%s\n", buf);
-			}
-
-			continue;
-		}
-
-		if (!strncmp(buf, footer_mark_str, mark_len))
-		{
-			int tmp;
-			if (!sscanf(buf + mark_len, " (%d)", &tmp)
-				|| tmp != line_num)
-			{
-				fseek(orig_fff, header_location, SEEK_SET);
-			}
-
-			between_mark = FALSE;
-			continue;
-		}
-
-		line_num++;
-	}
-
-	my_fclose(orig_fff);
-	my_fclose(tmp_fff);
-
-	if (changed)
-	{
-		tmp_fff = my_fopen(tmp_file, "r");
-		orig_fff = my_fopen(orig_file, "w");
-		while (!my_fgets(tmp_fff, buf, sizeof(buf)))
-			fprintf(orig_fff, "%s\n", buf);
-
-		my_fclose(orig_fff);
-		my_fclose(tmp_fff);
-	}
-
-	fd_kill(tmp_file);
-}
-
-
-/*!
- * @brief prfファイルのフォーマットに従った内容を出力する /
- * Dump a formatted line, using "vstrnfmt()".
- * @param fmt 出力内容
- */
-static void auto_dump_printf(concptr fmt, ...)
-{
-	va_list vp;
-	char buf[1024];
-	va_start(vp, fmt);
-	(void)vstrnfmt(buf, sizeof(buf), fmt, vp);
-	va_end(vp);
-	for (concptr p = buf; *p; p++)
-	{
-		if (*p == '\n') auto_dump_line_num++;
-	}
-
-	fprintf(auto_dump_stream, "%s", buf);
-}
-
-
-/*!
- * @brief prfファイルをファイルオープンする /
- * Open file to append auto dump.
- * @param buf ファイル名
- * @param mark 出力するヘッダマーク
- * @return ファイルポインタを取得できたらTRUEを返す
- */
-static bool open_auto_dump(concptr buf, concptr mark)
-{
-	char header_mark_str[80];
-	auto_dump_mark = mark;
-	sprintf(header_mark_str, auto_dump_header, auto_dump_mark);
-	remove_auto_dump(buf);
-	auto_dump_stream = my_fopen(buf, "a");
-	if (!auto_dump_stream)
-	{
-		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
-		msg_print(NULL);
-		return FALSE;
-	}
-
-	fprintf(auto_dump_stream, "%s\n", header_mark_str);
-	auto_dump_line_num = 0;
-	auto_dump_printf(_("# *警告!!* 以降の行は自動生成されたものです。\n",
-		"# *Warning!*  The lines below are an automatic dump.\n"));
-	auto_dump_printf(_("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
-		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
-	return TRUE;
-}
-
-/*!
- * @brief prfファイルをファイルクローズする /
- * Append foot part and close auto dump.
- * @return なし
- */
-static void close_auto_dump(void)
-{
-	char footer_mark_str[80];
-	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
-	auto_dump_printf(_("# *警告!!* 以降の行は自動生成されたものです。\n",
-		"# *Warning!*  The lines below are an automatic dump.\n"));
-	auto_dump_printf(_("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
-		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
-	fprintf(auto_dump_stream, "%s (%d)\n", footer_mark_str, auto_dump_line_num);
-	my_fclose(auto_dump_stream);
-}
-
 
 #ifdef JP
 #else
