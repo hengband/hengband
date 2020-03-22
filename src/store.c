@@ -18,6 +18,7 @@
 #include "floor.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-basic.h"
+#include "cmd/cmd-diary.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-help.h"
 #include "cmd/cmd-item.h"

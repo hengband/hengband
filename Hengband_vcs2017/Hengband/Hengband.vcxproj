@@ -158,6 +158,7 @@
     <ClCompile Include="..\..\src\chuukei.c" />
     <ClCompile Include="..\..\src\cmd\cmd-activate.c" />
     <ClCompile Include="..\..\src\cmd\cmd-basic.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-diary.c" />
     <ClCompile Include="..\..\src\cmd\cmd-dump.c" />
     <ClCompile Include="..\..\src\cmd\cmd-eat.c" />
     <ClCompile Include="..\..\src\cmd\cmd-gameoption.c" />
@@ -337,6 +338,7 @@
     <ClCompile Include="..\..\src\z-virt.c" />
     <ClInclude Include="..\..\src\cmd\cmd-activate.h" />
     <ClInclude Include="..\..\src\cmd\cmd-basic.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-diary.h" />
     <ClInclude Include="..\..\src\cmd\cmd-dump.h" />
     <ClInclude Include="..\..\src\cmd\cmd-eat.h" />
     <ClInclude Include="..\..\src\cmd\cmd-gameoption.h" />
