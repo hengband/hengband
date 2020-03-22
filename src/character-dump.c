@@ -16,6 +16,7 @@
 #include "io/player-status-dump.h"
 #include "io/write-diary.h"
 #include "avatar.h"
+#include "market/store-util.h"
 
 /*!
  * @brief プレイヤーのペット情報をファイルにダンプする

@@ -65,6 +65,7 @@
 #include "mind.h"
 #include "world.h"
 #include "mutation.h"
+#include "market/store-util.h"
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"

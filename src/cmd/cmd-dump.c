@@ -64,6 +64,7 @@
 #include "cmd/feeling-table.h"
 #include "cmd/monster-group-table.h"
 #include "cmd/object-group-table.h"
+#include "market/store-util.h"
 #include "view-mainwindow.h" // 暫定。後で消す
 #include "english.h"
 

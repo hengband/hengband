@@ -54,6 +54,7 @@
 #include "trap.h"
 #include "mutation.h"
 #include "monster.h"
+#include "market/store-util.h"
 #include "quest.h"
 #include "store.h"
 #include "artifact.h"

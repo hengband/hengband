@@ -60,6 +60,7 @@
 #include "rooms-vault.h"
 #include "world.h"
 #include "market/articles-on-sale.h"
+#include "market/store-util.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
