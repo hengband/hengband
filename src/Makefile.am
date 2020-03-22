@@ -13,6 +13,7 @@ hengband_SOURCES = \
 	\
 	market/poker.c market/poker.h market/store-owners.c market/store-owners.h \
 	market/store-owner-comments.c store-owner-comments.h \
+	market/articles-on-sale.c market/articles-on-sale.h \
 	store.c store.h bldg.c bldg.h chest.c chest.h chuukei.c chuukei.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \

@@ -59,6 +59,7 @@
 #include "object-ego.h"
 #include "rooms-vault.h"
 #include "world.h"
+#include "market/articles-on-sale.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>

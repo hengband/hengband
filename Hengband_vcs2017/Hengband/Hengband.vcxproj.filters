@@ -547,6 +547,9 @@
     <ClCompile Include="..\..\src\market\store-owner-comments.c">
       <Filter>market</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\market\articles-on-sale.c">
+      <Filter>market</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1074,6 +1077,9 @@
       <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\market\store-owner-comments.h">
+      <Filter>market</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\articles-on-sale.h">
       <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>

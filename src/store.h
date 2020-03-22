@@ -52,7 +52,6 @@ struct store_type
   * Store constants
   */
 #define STORE_INVEN_MAX 24              /* Max number of discrete objs in inven */
-#define STORE_CHOICES   48              /* Number of items to choose stock from */
 #define STORE_OBJ_LEVEL 5               /* Magic Level for normal stores */
 #define STORE_TURNOVER  9               /* Normal shop turnover, per day */
 #define STORE_MIN_KEEP  6               /* Min slots to "always" keep full */
@@ -66,5 +65,3 @@ extern void do_cmd_store(player_type *player_ptr);
 extern void store_shuffle(player_type *player_ptr, int which);
 extern void store_maint(player_type *player_ptr, int town_num, int store_num);
 extern void store_init(int town_num, int store_num);
-
-extern byte store_table[MAX_STORES][STORE_CHOICES][2];
