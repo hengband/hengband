@@ -708,16 +708,7 @@ void do_cmd_macros(player_type *creature_ptr)
 {
 	char tmp[1024];
 	char buf[1024];
-	BIT_FLAGS mode;
-	if (rogue_like_commands)
-	{
-		mode = KEYMAP_MODE_ROGUE;
-	}
-	else
-	{
-		mode = KEYMAP_MODE_ORIG;
-	}
-
+	BIT_FLAGS mode = rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG;
 	FILE_TYPE(FILE_TYPE_TEXT);
 	screen_save();
 	while (TRUE)
