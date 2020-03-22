@@ -43,6 +43,7 @@
 #include "cmd/cmd-zapwand.h"
 #include "cmd/cmd-pet.h"
 #include "cmd/cmd-basic.h"
+#include "cmd/cmd-visuals.h"
 #include "racial.h"
 #include "snipe.h"
 #include "dungeon.h"

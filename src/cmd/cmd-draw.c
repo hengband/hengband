@@ -4,6 +4,9 @@
 #include "files.h"
 #include "term.h"
 #include "view-mainwindow.h" // 暫定。後で消す.
+#include "player-effects.h"
+#include "view/display-player.h" // 暫定。後で消す.
+#include "player/process-name.h"
 
 /*!
  * @brief 画面を再描画するコマンドのメインルーチン

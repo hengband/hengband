@@ -176,6 +176,7 @@
     <ClCompile Include="..\..\src\cmd\cmd-smith.c" />
     <ClCompile Include="..\..\src\cmd\cmd-spell.c" />
     <ClCompile Include="..\..\src\cmd\cmd-usestaff.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-visuals.c" />
     <ClCompile Include="..\..\src\cmd\cmd-zaprod.c" />
     <ClCompile Include="..\..\src\cmd\cmd-zapwand.c" />
     <ClCompile Include="..\..\src\cmd\diary-subtitle-table.c" />
@@ -358,6 +359,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-smith.h" />
     <ClInclude Include="..\..\src\cmd\cmd-spell.h" />
     <ClInclude Include="..\..\src\cmd\cmd-usestaff.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-visuals.h" />
     <ClInclude Include="..\..\src\cmd\cmd-zaprod.h" />
     <ClInclude Include="..\..\src\cmd\cmd-zapwand.h" />
     <ClInclude Include="..\..\src\cmd\diary-subtitle-table.h" />

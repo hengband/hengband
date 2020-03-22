@@ -25,6 +25,7 @@
 #include "cmd/cmd-item.h"
 #include "cmd/cmd-macro.h"
 #include "cmd/cmd-smith.h"
+#include "cmd/cmd-visuals.h"
 #include "cmd/cmd-zapwand.h"
 #include "cmd/cmd-magiceat.h"
 #include "spells.h"
