@@ -3,21 +3,6 @@
 
 /*!
  * todo _() でまとめる
- * @brief 闘技場のモンスターID及び報酬アイテムテーブル /
- * Store owners (exactly four "possible" owners per store, chosen randomly)
- * @details
- * <pre>
- * { name, purse, max greed, min greed, haggle_per, tolerance, race, unused }
- *
- * Lifted extra shopkeepers from CthAngband (don't you just love open source
- * development? ;-)). Since this gave less than 32 unique names for some
- * shops, those have their first x names copied to reach 32.
- *
- * For the weapon and armour shops, several owners have a limit of 5k.
- *
- * I want to do 50k owners, but the purse is currently s16b. Perhaps
- * we should just store 1/10th of the purse?
- * </pre>
  */
 const owner_type owners[MAX_STORES][MAX_OWNERS] =
 {

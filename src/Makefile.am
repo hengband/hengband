@@ -12,7 +12,8 @@ hengband_SOURCES = \
 	avatar.h avatar.c birth.c birth.h \
 	\
 	market/poker.c market/poker.h market/store-owners.c market/store-owners.h \
-	bldg.c bldg.h chest.c chest.h chuukei.c chuukei.h \
+	market/store-owner-comments.c store-owner-comments.h \
+	store.c store.h bldg.c bldg.h chest.c chest.h chuukei.c chuukei.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-player-stat-info.c view/display-player-stat-info.h \
@@ -123,8 +124,7 @@ hengband_SOURCES = \
 	spells-summon.c spells-summon.h \
 	spells-world.c spells-world.h \
 	\
-	sort.c sort.h \
-	store.h store.c term.c term.h trap.c trap.h util.c util.h \
+	sort.c sort.h term.c term.h trap.c trap.h util.c util.h \
 	wild.h wild.c wizard1.c wizard2.c \
 	warning.c warning.h world.c world.h \
 	\

@@ -210,6 +210,7 @@
     <ClCompile Include="..\..\src\io\tokenizer.c" />
     <ClCompile Include="..\..\src\io\write-diary.c" />
     <ClCompile Include="..\..\src\market\poker.c" />
+    <ClCompile Include="..\..\src\market\store-owner-comments.c" />
     <ClCompile Include="..\..\src\market\store-owners.c" />
     <ClCompile Include="..\..\src\monster-dist-offsets.c" />
     <ClCompile Include="..\..\src\monster-process.c" />
@@ -382,6 +383,7 @@
     <ClInclude Include="..\..\src\io\tokenizer.h" />
     <ClInclude Include="..\..\src\io\write-diary.h" />
     <ClInclude Include="..\..\src\market\poker.h" />
+    <ClInclude Include="..\..\src\market\store-owner-comments.h" />
     <ClInclude Include="..\..\src\market\store-owners.h" />
     <ClInclude Include="..\..\src\monster-dist-offsets.h" />
     <ClInclude Include="..\..\src\monster\monster-attack.h" />
