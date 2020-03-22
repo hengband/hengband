@@ -123,15 +123,6 @@
 #include "dungeon.h"
 
 /*
- * Extract the "WIN32" flag from the compiler
- */
-#if defined(__WIN32__) || defined(__WINNT__) || defined(__NT__)
-# ifndef WIN32
-#  define WIN32
-# endif
-#endif
-
-/*
  * Available graphic modes
  */
 #define GRAPHICS_NONE       0
@@ -294,6 +285,8 @@
 #define MMNOMMIO         /* Multimedia file I/O support */
 #define MMNOMMSYSTEM     /* General MMSYSTEM functions */
 
+#define INVALID_FILE_NAME (DWORD)0xFFFFFFFF
+
 /*
  * Standard sound names
  */
@@ -409,23 +402,7 @@ const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
  */
 #include "readdib.h"
 
- /*
-  * Hack -- Fake declarations from "dos.h"
-  */
-#ifdef WIN32
-#define INVALID_FILE_NAME (DWORD)0xFFFFFFFF
-#else /* WIN32 */
-#define FA_LABEL    0x08        /* Volume label */
-#define FA_DIREC    0x10        /* Directory */
-unsigned _cdecl _dos_getfileattr(concptr, unsigned *);
-#endif /* WIN32 */
-
-/*
- * Silliness in WIN32 drawing routine
- */
-#ifdef WIN32
-# define MoveTo(H,X,Y) MoveToEx(H, X, Y, NULL)
-#endif /* WIN32 */
+#define MoveTo(H,X,Y) MoveToEx(H, X, Y, NULL)
 
  /*
   * Silliness for Windows 95
@@ -825,21 +802,10 @@ static void DrawBG(HDC hdc, RECT *r)
 static bool check_file(concptr s)
 {
 	char path[1024];
-
-#ifdef WIN32
-
 	DWORD attrib;
-
-#else /* WIN32 */
-
-	unsigned int attrib;
-
-#endif /* WIN32 */
 
 	/* Copy it */
 	strcpy(path, s);
-
-#ifdef WIN32
 
 	/* Examine */
 	attrib = GetFileAttributes(path);
@@ -849,19 +815,6 @@ static bool check_file(concptr s)
 
 	/* Prohibit directory */
 	if (attrib & FILE_ATTRIBUTE_DIRECTORY) return FALSE;
-
-#else /* WIN32 */
-
-	/* Examine and verify */
-	if (_dos_getfileattr(path, &attrib)) return FALSE;
-
-	/* Prohibit something */
-	if (attrib & FA_LABEL) return FALSE;
-
-	/* Prohibit directory */
-	if (attrib & FA_DIREC) return FALSE;
-
-#endif /* WIN32 */
 
 	/* Success */
 	return TRUE;
@@ -876,16 +829,7 @@ static bool check_dir(concptr s)
 	int i;
 
 	char path[1024];
-
-#ifdef WIN32
-
 	DWORD attrib;
-
-#else /* WIN32 */
-
-	unsigned int attrib;
-
-#endif /* WIN32 */
 
 	/* Copy it */
 	strcpy(path, s);
@@ -896,8 +840,6 @@ static bool check_dir(concptr s)
 	/* Remove trailing backslash */
 	if (i && (path[i - 1] == '\\')) path[--i] = '\0';
 
-#ifdef WIN32
-
 	/* Examine */
 	attrib = GetFileAttributes(path);
 
@@ -906,19 +848,6 @@ static bool check_dir(concptr s)
 
 	/* Require directory */
 	if (!(attrib & FILE_ATTRIBUTE_DIRECTORY)) return FALSE;
-
-#else /* WIN32 */
-
-	/* Examine and verify */
-	if (_dos_getfileattr(path, &attrib)) return FALSE;
-
-	/* Prohibit something */
-	if (attrib & FA_LABEL) return FALSE;
-
-	/* Require directory */
-	if (!(attrib & FA_DIREC)) return FALSE;
-
-#endif /* WIN32 */
 
 	/* Success */
 	return TRUE;
@@ -2152,17 +2081,8 @@ static errr term_xtra_win_sound(int v)
 	/* Build the path */
 	path_build(buf, 1024, ANGBAND_DIR_XTRA_SOUND, sound_file[v][Rand_external(i)]);
 
-#ifdef WIN32
-
 	/* Play the sound, catch errors */
 	return (PlaySound(buf, 0, SND_FILENAME | SND_ASYNC));
-
-#else /* WIN32 */
-
-	/* Play the sound, catch errors */
-	return (sndPlaySound(buf, SND_ASYNC));
-
-#endif /* WIN32 */
 }
 
 /*
@@ -2230,8 +2150,6 @@ static errr term_xtra_win_music(int n, int v)
 	current_music_type = n;
 	current_music_id = v;
 
-#ifdef WIN32
-
 	mop.lpstrDeviceType = mci_device_type;
 	mop.lpstrElementName = buf;
 	mciSendCommand(mop.wDeviceID, MCI_STOP, 0, 0);
@@ -2240,8 +2158,6 @@ static errr term_xtra_win_music(int n, int v)
 	mciSendCommand(mop.wDeviceID, MCI_SEEK, MCI_SEEK_TO_START, 0);
 	mciSendCommand(mop.wDeviceID, MCI_PLAY, MCI_NOTIFY, (DWORD)&mop);
 	return 0;
-
-#endif /* WIN32 */
 }
 
 
@@ -2250,32 +2166,8 @@ static errr term_xtra_win_music(int n, int v)
  */
 static int term_xtra_win_delay(int v)
 {
-
-#ifdef WIN32
-
 	/* Sleep */
 	Sleep(v);
-
-#else /* WIN32 */
-
-	DWORD t;
-	MSG msg;
-
-	/* Final count */
-	t = GetTickCount() + v;
-
-	/* Wait for it */
-	while (GetTickCount() < t)
-	{
-		/* Handle messages */
-		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-	}
-
-#endif /* WIN32 */
 
 	/* Success */
 	return 0;
