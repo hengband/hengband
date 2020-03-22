@@ -1,9 +1,5 @@
 ﻿#pragma once
 
-#ifdef JP
-#else
-extern concptr get_ordinal_number_suffix(int num);
-#endif
 extern void do_cmd_diary(player_type *creature_ptr);
 extern void do_cmd_redraw(player_type *creature_ptr);
 extern void do_cmd_player_status(player_type *creature_ptr);

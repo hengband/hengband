@@ -14,6 +14,7 @@
 #include "cmd/cmd-dump.h"
 #include "io/special-class-dump.h"
 #include "io/player-status-dump.h"
+#include "io/write-diary.h"
 #include "avatar.h"
 
 /*!
