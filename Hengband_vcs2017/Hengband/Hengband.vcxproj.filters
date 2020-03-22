@@ -529,6 +529,9 @@
     <ClCompile Include="..\..\src\cmd\cmd-diary.c">
       <Filter>cmd</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-draw.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1038,6 +1041,9 @@
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-diary.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-draw.h">
       <Filter>cmd</Filter>
     </ClInclude>
   </ItemGroup>
