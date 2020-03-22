@@ -115,22 +115,17 @@ static char hack[17] = "dwsorgbuDWvyRGBU";
  */
 static void remove_auto_dump(concptr orig_file)
 {
-	FILE *tmp_fff, *orig_fff;
-	char tmp_file[1024];
-	char buf[1024];
-	bool between_mark = FALSE;
-	bool changed = FALSE;
-	int line_num = 0;
-	long header_location = 0;
 	char header_mark_str[80];
 	char footer_mark_str[80];
-
 	sprintf(header_mark_str, auto_dump_header, auto_dump_mark);
 	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
 	size_t mark_len = strlen(footer_mark_str);
+	FILE *orig_fff;
 	orig_fff = my_fopen(orig_file, "r");
 	if (!orig_fff) return;
 
+	char tmp_file[1024];
+	FILE *tmp_fff;
 	tmp_fff = my_fopen_temp(tmp_file, 1024);
 	if (!tmp_fff)
 	{
@@ -139,6 +134,11 @@ static void remove_auto_dump(concptr orig_file)
 		return;
 	}
 
+	char buf[1024];
+	bool between_mark = FALSE;
+	bool changed = FALSE;
+	int line_num = 0;
+	long header_location = 0;
 	while (TRUE)
 	{
 		if (my_fgets(orig_fff, buf, sizeof(buf)))
