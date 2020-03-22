@@ -33,6 +33,7 @@
 #include "angband.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-dump.h"
+#include "cmd/lighting-level-table.h"
 #include "term.h"
 #include "core.h" // 暫定。後で消す.
 #include "core/show-file.h"
@@ -110,17 +111,6 @@ void do_cmd_reload_autopick(player_type *creature_ptr)
 
 	autopick_load_pref(creature_ptr, TRUE);
 }
-
-
-/*!
- * @brief キャラクタ色の明暗表現
- */
-static concptr lighting_level_str[F_LIT_MAX] =
-{
-	_("標準色", "standard"),
-	_("明色", "brightly lit"),
-	_("暗色", "darkened"),
-};
 
 
 /*!
