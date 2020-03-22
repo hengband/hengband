@@ -568,13 +568,13 @@ void do_cmd_reload_autopick(player_type *creature_ptr)
  * @param fname ファイル名
  * @return なし
  */
-static errr macro_dump(concptr fname)
+static void macro_dump(concptr fname)
 {
 	static concptr mark = "Macro Dump";
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 	FILE_TYPE(FILE_TYPE_TEXT);
-	if (!open_auto_dump(buf, mark)) return -1;
+	if (!open_auto_dump(buf, mark)) return;
 
 	auto_dump_printf(_("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
 	for (int i = 0; i < macro__num; i++)
@@ -587,7 +587,6 @@ static errr macro_dump(concptr fname)
 	}
 
 	close_auto_dump();
-	return 0;
 }
 
 
@@ -766,7 +765,7 @@ void do_cmd_macros(player_type *creature_ptr)
 			sprintf(tmp, "%s.prf", creature_ptr->base_name);
 			if (!askfor(tmp, 80)) continue;
 
-			(void)macro_dump(tmp);
+			macro_dump(tmp);
 			msg_print(_("マクロを追加しました。", "Appended macros."));
 		}
 		else if (i == '3')
