@@ -1177,14 +1177,8 @@ static void display_entry(player_type *player_ptr, int pos)
 		if (show_weights)
 		{
 			WEIGHT wgt = o_ptr->weight;
-#ifdef JP
-			sprintf(out_val, "%3d.%1d kg", lbtokg1(wgt), lbtokg2(wgt));
-			put_str(out_val, i + 6, 67);
-#else
-			(void)sprintf(out_val, "%3d.%d lb", wgt / 10, wgt % 10);
-			put_str(out_val, i + 6, 68);
-#endif
-
+			sprintf(out_val, _("%3d.%1d kg", "%3d.%d lb"), _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
+			put_str(out_val, i + 6, _(67, 68));
 		}
 
 		return;
@@ -1201,25 +1195,15 @@ static void display_entry(player_type *player_ptr, int pos)
 	if (show_weights)
 	{
 		int wgt = o_ptr->weight;
-#ifdef JP
-		sprintf(out_val, "%3d.%1d", lbtokg1(wgt), lbtokg2(wgt));
-		put_str(out_val, i + 6, 60);
-#else
-		(void)sprintf(out_val, "%3d.%d", wgt / 10, wgt % 10);
-		put_str(out_val, i + 6, 61);
-#endif
-
+		sprintf(out_val, "%3d.%1d", _(lbtokg1(wgt), wgt / 10), _(lbtokg2(wgt), wgt % 10));
+		put_str(out_val, i + 6, _(60, 61));
 	}
 
 	s32b x;
 	if (o_ptr->ident & (IDENT_FIXED))
 	{
 		x = price_item(player_ptr, o_ptr, ot_ptr->min_inflate, FALSE);
-#ifdef JP
-		(void)sprintf(out_val, "%9ld固", (long)x);
-#else
-		(void)sprintf(out_val, "%9ld F", (long)x);
-#endif
+		(void)sprintf(out_val, _("%9ld固", "%9ld F"), (long)x);
 		put_str(out_val, i + 6, 68);
 		return;
 	}
@@ -1261,12 +1245,7 @@ static void display_store_inventory(player_type *player_ptr)
 	for (int i = k; i < store_bottom + 1; i++)
 		prt("", i + 6, 0);
 
-#ifdef JP
-	put_str("          ", 5, 20);
-#else
-	put_str("        ", 5, 22);
-#endif
-
+	put_str(_("          ", "        "), 5, _(20, 22));
 	if (st_ptr->stock_num > store_bottom)
 	{
 		prt(_("-続く-", "-more-"), k + 6, 3);
@@ -1277,11 +1256,8 @@ static void display_store_inventory(player_type *player_ptr)
 	{
 		k = st_ptr->stock_size;
 		if (cur_store_num == STORE_HOME && !powerup_home) k /= 10;
-#ifdef JP
-		put_str(format("アイテム数:  %4d/%4d", st_ptr->stock_num, k), 19 + xtra_stock, 27);
-#else
-		put_str(format("Objects:  %4d/%4d", st_ptr->stock_num, k), 19 + xtra_stock, 30);
-#endif
+
+		put_str(format(_("アイテム数:  %4d/%4d", "Objects:  %4d/%4d"), st_ptr->stock_num, k), 19 + xtra_stock, _(27, 30));
 	}
 }
 
@@ -1915,7 +1891,8 @@ static void store_purchase(player_type *player_ptr)
 	char out_val[160];
 #ifdef JP
 	/* ブラックマーケットの時は別のメッセージ */
-	switch (cur_store_num) {
+	switch (cur_store_num)
+	{
 	case 7:
 		sprintf(out_val, "どのアイテムを取りますか? ");
 		break;
@@ -2390,8 +2367,6 @@ static void store_examine(player_type *player_ptr)
 
 	if (!screen_object(player_ptr, o_ptr, SCROBJ_FORCE_DETAIL))
 		msg_print(_("特に変わったところはないようだ。", "You see nothing special."));
-
-	return;
 }
 
 
