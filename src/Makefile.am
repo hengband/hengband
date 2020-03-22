@@ -16,6 +16,7 @@ hengband_SOURCES = \
 	market/articles-on-sale.c market/articles-on-sale.h \
 	market/say-comments.c market/say-comments.h \
 	market/store-util.c market/store-util.h \
+	market/gold-magnification-table.c market/gold-magnification-table.h \
 	store.c store.h bldg.c bldg.h chest.c chest.h chuukei.c chuukei.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
