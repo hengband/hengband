@@ -51,7 +51,7 @@ static QUEST_IDX write_floor(player_type *creature_ptr, concptr *note_level)
 	if (!write_level) return q_idx;
 
 	if (floor_ptr->inside_arena)
-		*note_level = _("アリーナ:", "Arane:");
+		*note_level = _("アリーナ:", "Arena:");
 	else if (!floor_ptr->dun_level)
 		*note_level = _("地上:", "Surface:");
 	else if (q_idx && (is_fixed_quest_idx(q_idx) && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
