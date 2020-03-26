@@ -4,6 +4,7 @@
 
 #include "creature.h"
 #include "io/write-diary.h"
+#include "cmd/cmd-draw.h"
 #include "cmd/cmd-dump.h"
 #include "dungeon.h"
 #include "floor.h"

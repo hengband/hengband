@@ -11,7 +11,14 @@ hengband_SOURCES = \
 	\
 	avatar.h avatar.c birth.c birth.h \
 	\
-	bldg.c bldg.h chest.c chest.h chuukei.c chuukei.h \
+	market/poker.c market/poker.h market/store-owners.c market/store-owners.h \
+	market/store-owner-comments.c market/store-owner-comments.h \
+	market/articles-on-sale.c market/articles-on-sale.h \
+	market/black-market.c market/black-market.h \
+	market/say-comments.c market/say-comments.h \
+	market/store-util.c market/store-util.h \
+	market/gold-magnification-table.c market/gold-magnification-table.h \
+	store.c store.h bldg.c bldg.h chest.c chest.h chuukei.c chuukei.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-player-stat-info.c view/display-player-stat-info.h \
@@ -122,8 +129,7 @@ hengband_SOURCES = \
 	spells-summon.c spells-summon.h \
 	spells-world.c spells-world.h \
 	\
-	sort.c sort.h \
-	store.h store.c term.c term.h trap.c trap.h util.c util.h \
+	sort.c sort.h term.c term.h trap.c trap.h util.c util.h \
 	wild.h wild.c wizard1.c wizard2.c \
 	warning.c warning.h world.c world.h \
 	\
@@ -137,15 +143,18 @@ hengband_SOURCES = \
 	cmd/diary-subtitle-table.c cmd/diary-subtitle-table.h \
 	cmd/object-group-table.c cmd/object-group-table.h \
 	cmd/cmd-activate.c cmd/cmd-activate.h cmd/cmd-basic.c cmd/cmd-basic.h \
-	cmd/cmd-dump.c cmd/cmd-dump.h cmd/cmd-eat.c cmd/cmd-eat.h \
+	cmd/cmd-diary.c cmd/cmd-diary.h cmd/cmd-dump.c cmd/cmd-dump.h \
+	cmd/cmd-draw.c cmd/cmd-draw.h cmd/cmd-eat.c cmd/cmd-eat.h \
 	cmd/cmd-gameoption.c cmd/cmd-gameoption.h cmd/cmd-help.c cmd/cmd-help.h \
 	cmd/cmd-hissatsu.c cmd/cmd-hissatsu.h cmd/cmd-item.c cmd/cmd-item.h \
+	cmd/lighting-level-table.c cmd/lighting-level-table.h \
 	cmd/cmd-magiceat.c cmd/cmd-magiceat.h cmd/cmd-mane.c cmd/cmd-mane.h \
-	cmd/cmd-pet.c cmd/cmd-pet.h cmd/cmd-quaff.c cmd/cmd-quaff.h \
-	cmd/cmd-read.c cmd/cmd-read.h cmd/cmd-save.c cmd/cmd-save.h \
-	cmd/cmd-smith.c cmd/cmd-smith.h cmd/cmd-spell.c cmd/cmd-spell.h \
-	cmd/cmd-usestaff.c cmd/cmd-usestaff.h cmd/cmd-zaprod.c cmd/cmd-zaprod.h \
-	cmd/cmd-zapwand.c cmd/cmd-zapwand.h \
+	cmd/cmd-macro.c cmd/cmd-macro.h cmd/cmd-pet.c cmd/cmd-pet.h \
+	cmd/cmd-quaff.c cmd/cmd-quaff.h cmd/cmd-read.c cmd/cmd-read.h \
+	cmd/cmd-save.c cmd/cmd-save.h cmd/cmd-smith.c cmd/cmd-smith.h \
+	cmd/cmd-spell.c cmd/cmd-spell.h cmd/cmd-visuals.c cmd/cmd-visuals.h \
+	cmd/cmd-usestaff.c cmd/cmd-usestaff.h \
+	cmd/cmd-zaprod.c cmd/cmd-zaprod.h cmd/cmd-zapwand.c cmd/cmd-zapwand.h \
 	\
 	combat/melee.h combat/melee1.c combat/shoot.c combat/shoot.h
 
@@ -159,7 +168,7 @@ EXTRA_DIST = \
 CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat -Icore -Iio -Imonster -Iplayer -Iview
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat -Icore -Iio -Imarket -Imonster -Iplayer -Iview
 
 install-exec-hook:
 if SET_GID

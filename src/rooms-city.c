@@ -8,8 +8,7 @@
 #include "rooms-city.h"
 #include "store.h"
 #include "wild.h"
-
-
+#include "market/store-util.h"
 
 /*
 * Precalculate buildings' location of underground arcade

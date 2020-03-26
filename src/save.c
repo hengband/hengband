@@ -23,6 +23,7 @@
 #include "dungeon.h"
 #include "quest.h"
 #include "store.h"
+#include "market/store-util.h"
 #include "wild.h"
 #include "floor.h"
 #include "floor-events.h"
@@ -402,34 +403,34 @@ static void wr_xtra(KIND_OBJECT_IDX k_idx)
 
 /*!
  * @brief セーブデータに店舗情報を書き込む / Write a "store" record
- * @param st_ptr 店舗情報の参照ポインタ
+ * @param store_ptr 店舗情報の参照ポインタ
  * @return なし
  */
-static void wr_store(store_type *st_ptr)
+static void wr_store(store_type *store_ptr)
 {
 	/* Save the "open" counter */
-	wr_u32b(st_ptr->store_open);
+	wr_u32b(store_ptr->store_open);
 
 	/* Save the "insults" */
-	wr_s16b(st_ptr->insult_cur);
+	wr_s16b(store_ptr->insult_cur);
 
 	/* Save the current owner */
-	wr_byte(st_ptr->owner);
+	wr_byte(store_ptr->owner);
 
 	/* Save the stock size */
-	wr_s16b(st_ptr->stock_num);
+	wr_s16b(store_ptr->stock_num);
 
 	/* Save the "haggle" info */
-	wr_s16b(st_ptr->good_buy);
-	wr_s16b(st_ptr->bad_buy);
+	wr_s16b(store_ptr->good_buy);
+	wr_s16b(store_ptr->bad_buy);
 
-	wr_s32b(st_ptr->last_visit);
+	wr_s32b(store_ptr->last_visit);
 
 	/* Save the stock */
-	for (int j = 0; j < st_ptr->stock_num; j++)
+	for (int j = 0; j < store_ptr->stock_num; j++)
 	{
 		/* Save each item in stock */
-		wr_item(&st_ptr->stock[j]);
+		wr_item(&store_ptr->stock[j]);
 	}
 }
 

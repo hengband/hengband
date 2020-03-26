@@ -24,6 +24,8 @@
 #include "bldg.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-activate.h"
+#include "cmd/cmd-diary.h"
+#include "cmd/cmd-draw.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-eat.h"
 #include "cmd/cmd-help.h"
@@ -31,6 +33,7 @@
 #include "cmd/cmd-item.h"
 #include "cmd/cmd-magiceat.h"
 #include "cmd/cmd-mane.h"
+#include "cmd/cmd-macro.h"
 #include "cmd/cmd-quaff.h"
 #include "cmd/cmd-read.h"
 #include "cmd/cmd-save.h"
@@ -40,6 +43,7 @@
 #include "cmd/cmd-zapwand.h"
 #include "cmd/cmd-pet.h"
 #include "cmd/cmd-basic.h"
+#include "cmd/cmd-visuals.h"
 #include "racial.h"
 #include "snipe.h"
 #include "dungeon.h"
@@ -61,6 +65,7 @@
 #include "mind.h"
 #include "world.h"
 #include "mutation.h"
+#include "market/store-util.h"
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"
@@ -4624,18 +4629,18 @@ void prevent_turn_overflow(player_type *player_ptr)
 	{
 		for (int j = 0; j < MAX_STORES; j++)
 		{
-			store_type *st_ptr = &town_info[i].store[j];
+			store_type *store_ptr = &town_info[i].store[j];
 
-			if (st_ptr->last_visit > -10L * TURNS_PER_TICK * STORE_TICKS)
+			if (store_ptr->last_visit > -10L * TURNS_PER_TICK * STORE_TICKS)
 			{
-				st_ptr->last_visit -= rollback_turns;
-				if (st_ptr->last_visit < -10L * TURNS_PER_TICK * STORE_TICKS) st_ptr->last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
+				store_ptr->last_visit -= rollback_turns;
+				if (store_ptr->last_visit < -10L * TURNS_PER_TICK * STORE_TICKS) store_ptr->last_visit = -10L * TURNS_PER_TICK * STORE_TICKS;
 			}
 
-			if (st_ptr->store_open)
+			if (store_ptr->store_open)
 			{
-				st_ptr->store_open -= rollback_turns;
-				if (st_ptr->store_open < 1) st_ptr->store_open = 1;
+				store_ptr->store_open -= rollback_turns;
+				if (store_ptr->store_open < 1) store_ptr->store_open = 1;
 			}
 		}
 	}

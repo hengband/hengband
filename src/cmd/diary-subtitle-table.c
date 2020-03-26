@@ -11,6 +11,8 @@ concptr subtitle[MAX_SUBTITLE] = {
 #ifdef JP
 	"最強の肉体を求めて",
 	"人生それははかない",
+	"勝てば秩序、負ければ混沌",
+	"溺れる者は藁をも掴む",
 	"明日に向かって",
 	"棚からぼたもち",
 	"あとの祭り",
@@ -38,6 +40,7 @@ concptr subtitle[MAX_SUBTITLE] = {
 	"無限地獄",
 	"神に喧嘩を売る者",
 	"未知の世界へ",
+	"時は金なり",
 	"最高の頭脳を求めて"
 #else
 	"Quest of The World's Toughest Body",

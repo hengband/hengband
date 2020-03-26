@@ -59,6 +59,8 @@
 #include "object-ego.h"
 #include "rooms-vault.h"
 #include "world.h"
+#include "market/articles-on-sale.h"
+#include "market/store-util.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -762,7 +764,7 @@ static errr init_towns(void)
 		for (int j = 0; j < MAX_STORES; j++)
 		{
 			/* Access the store */
-			store_type *st_ptr = &town_info[i].store[j];
+			store_type *store_ptr = &town_info[i].store[j];
 
 			if ((i > 1) && (j == STORE_MUSEUM || j == STORE_HOME)) continue;
 
@@ -774,28 +776,28 @@ static errr init_towns(void)
 			 */
 			if (j == STORE_HOME)
 			{
-				st_ptr->stock_size = (STORE_INVEN_MAX * 10);
+				store_ptr->stock_size = (STORE_INVEN_MAX * 10);
 			}
 			else if (j == STORE_MUSEUM)
 			{
-				st_ptr->stock_size = (STORE_INVEN_MAX * 50);
+				store_ptr->stock_size = (STORE_INVEN_MAX * 50);
 			}
 			else
 			{
-				st_ptr->stock_size = STORE_INVEN_MAX;
+				store_ptr->stock_size = STORE_INVEN_MAX;
 			}
 
 			/* Allocate the stock */
-			C_MAKE(st_ptr->stock, st_ptr->stock_size, object_type);
+			C_MAKE(store_ptr->stock, store_ptr->stock_size, object_type);
 
 			/* No table for the black market or home */
 			if ((j == STORE_BLACK) || (j == STORE_HOME) || (j == STORE_MUSEUM)) continue;
 
 			/* Assume full table */
-			st_ptr->table_size = STORE_CHOICES;
+			store_ptr->table_size = STORE_CHOICES;
 
 			/* Allocate the stock */
-			C_MAKE(st_ptr->table, st_ptr->table_size, s16b);
+			C_MAKE(store_ptr->table, store_ptr->table_size, s16b);
 
 			/* Scan the choices */
 			for (int k = 0; k < STORE_CHOICES; k++)
@@ -819,7 +821,7 @@ static errr init_towns(void)
 				if (k_idx == max_k_idx) continue;
 
 				/* Add that item index to the table */
-				st_ptr->table[st_ptr->table_num++] = k_idx;
+				store_ptr->table[store_ptr->table_num++] = k_idx;
 			}
 		}
 	}

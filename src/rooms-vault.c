@@ -13,6 +13,7 @@
 #include "dungeon.h"
 #include "geometry.h"
 #include "wild.h"
+#include "market/store-util.h"
 
 /*
  * The vault generation arrays
