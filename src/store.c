@@ -1783,7 +1783,8 @@ static void store_process_command(player_type *client_ptr)
 		if (st_ptr->stock_num <= store_bottom) {
 			msg_print(_("これで全部です。", "Entire inventory is shown."));
 		}
-		else {
+		else
+		{
 			store_top -= store_bottom;
 			if (store_top < 0)
 				store_top = ((st_ptr->stock_num - 1) / store_bottom) * store_bottom;
