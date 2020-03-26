@@ -93,7 +93,7 @@ static void Rand_seed(u32b seed, u32b* state)
  */
 static u32b Rand_Xoshiro128starstar(u32b *state)
 {
-	const u32b result = u32b_rotl(state[0] * 5, 7) * 9;
+	const u32b result = u32b_rotl(state[1] * 5, 7) * 9;
 
 	const u32b t = state[1] << 9;
 
