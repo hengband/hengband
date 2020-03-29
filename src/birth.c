@@ -4606,7 +4606,7 @@ void player_birth(player_type *creature_ptr)
 
 	if (creature_ptr->realm1)
 	{
-		sprintf(buf, _("                            魔法の領域に%s%sを選択した。", "                            chose %s%s realm."), realm_names[creature_ptr->realm1], creature_ptr->realm2 ? format("と%s", realm_names[creature_ptr->realm2]) : "");
+		sprintf(buf, _("                            魔法の領域に%s%sを選択した。", "                            chose %s%s."), realm_names[creature_ptr->realm1], creature_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[creature_ptr->realm2]) : _("", " realm"));
 		exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
 	}
 
