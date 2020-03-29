@@ -703,8 +703,6 @@ static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 		if (cs != os)
 		{
 			c_put_str(TERM_WHITE, cur, 12 + (os / 5), 2 + 15 * (os % 5));
-			put_str("                                   ", 3, 40);
-			put_str("                                   ", 4, 40);
 
 			if (cs == n)
 			{
@@ -714,14 +712,9 @@ static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 			{
 				sprintf(cur, "%c%c %s", sym[cs], p2, realm_names[picks[cs]]);
 				sprintf(buf, "%s", realm_names[picks[cs]]);
-#ifdef JP
 				c_put_str(TERM_L_BLUE, buf, 3, 40);
-				put_str("の特徴", 3, 40 + strlen(buf));
-#else
-				c_put_str(TERM_L_BLUE, realm_names[picks[cs]], 3, 40);
-				put_str(": Characteristic", 3, 40 + strlen(realm_names[picks[cs]]));
-#endif
-				put_str(realm_subinfo[technic2magic(picks[cs]) - 1], 4, 40);
+				prt(_("の特徴", ": Characteristic"), 3, 40 + strlen(buf));
+				prt(realm_subinfo[technic2magic(picks[cs]) - 1], 4, 40);
 			}
 			c_put_str(TERM_YELLOW, cur, 12 + (cs / 5), 2 + 15 * (cs % 5));
 			os = cs;
