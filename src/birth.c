@@ -4595,7 +4595,7 @@ void player_birth(player_type *creature_ptr)
 	exe_write_diary(creature_ptr, DIARY_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "------- Started New Game -------"));
 	exe_write_diary(creature_ptr, DIARY_DIALY, 0, NULL);
 
-	sprintf(buf, _("                            性別に%sを選択した。", "                            chose %s personality."), sex_info[creature_ptr->psex].title);
+	sprintf(buf, _("                            性別に%sを選択した。", "                            chose %s gender."), sex_info[creature_ptr->psex].title);
 	exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
 
 	sprintf(buf, _("                            種族に%sを選択した。", "                            chose %s race."), race_info[creature_ptr->prace].title);
@@ -4610,7 +4610,7 @@ void player_birth(player_type *creature_ptr)
 		exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
 	}
 
-	sprintf(buf, _("                            性格に%sを選択した。", "                            chose %s."), seikaku_info[creature_ptr->pseikaku].title);
+	sprintf(buf, _("                            性格に%sを選択した。", "                            chose %s personality."), seikaku_info[creature_ptr->pseikaku].title);
 	exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
 
 	/* Init the shops */
