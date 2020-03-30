@@ -22739,7 +22739,7 @@ S:1_IN_10
 S:SCARE | BLIND | CONF | HOLD
 S:BO_PLAS | BO_ICEE | BO_NETH | S_DEMON
 D:$This ogre is the one of the weakest residents in hell.
-D:$  It slahes sinners and gives punishment to them by its heated axe.
+D:$  It slashes sinners and gives punishment to them with its heated axe.
 D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
 D:それは罪人を斬りつけ、灼けた斧で劫罰を与え続ける。
 
