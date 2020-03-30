@@ -22871,7 +22871,7 @@ F:NO_FEAR | NO_CONF | NO_SLEEP | CAN_SWIM
 S:1_IN_4
 S:BLIND | CONF | HOLD | SCARE
 S:BO_NETH | BR_NETH | BA_NETH | CAUSE_4 | S_KIN
-D:$Be honest with him. Otherwise he will send you to hell straight.
+D:$Be honest with him. Otherwise, he will send you straight to hell.
 D:彼の前では正直でいることだ。さもなくば地獄へ一直線だろう。
 
 N:1135:狂気を紡ぎしもの『アブドゥル・アルハザード』
