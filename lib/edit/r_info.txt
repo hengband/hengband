@@ -22792,7 +22792,8 @@ S:1_IN_7
 S:SCARE | BLIND | CONF | HOLD
 S:BO_NETH | BR_NETH
 D:$It is an ogre who guards Styx following its masters.
-D:$  It destorys cairn piled up by children having died before parents.
+D:$  It destroys the cairns piled up for children who have died before
+D:$ their parents.
 D:奪衣婆と懸衣翁に仕え、三途の川に佇む鬼だ。
 D:それは時々賽の河原を見回って、積石塚を破壊して回る。
 
