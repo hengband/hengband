@@ -22702,7 +22702,7 @@ F:IM_FIRE | RES_NETH | NO_FEAR | HURT_COLD | DROP_60
 S:1_IN_10
 S:SCARE | BLIND | CONF | HOLD
 S:BA_FIRE | BO_NETH | BO_PLAS | S_DEMON
-D:$This ogre is the one of the weakest resitents in the hell.
+D:$This ogre is the one of the weakest residents in hell.
 D:$  It hits sinners and gives punishment to them in the blood pond.
 D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
 D:それは罪人を殴りつけ、血の池で劫罰を与え続ける。
@@ -22720,7 +22720,7 @@ F:IM_COLD | RES_NETH | NO_FEAR | HURT_FIRE | DROP_60
 S:1_IN_10
 S:SCARE | BLIND | CONF | HOLD
 S:BA_COLD | BO_NETH | BO_ICEE | S_DEMON
-D:$This ogre is the one of the weakest resitents in the hell.
+D:$This ogre is the one of the weakest residents in hell.
 D:$  It hashes sinners and gives punishment to them on the mountain of needles.
 D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
 D:それは罪人を斬りつけ、針の山で劫罰を与え続ける。
@@ -22738,7 +22738,7 @@ F:IM_FIRE | IM_COLD | RES_NETH | NO_FEAR | DROP_60
 S:1_IN_10
 S:SCARE | BLIND | CONF | HOLD
 S:BO_PLAS | BO_ICEE | BO_NETH | S_DEMON
-D:$This ogre is the one of the weakest resitents in the hell.
+D:$This ogre is the one of the weakest residents in hell.
 D:$  It slahes sinners and gives punishment to them by its heated axe.
 D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
 D:それは罪人を斬りつけ、灼けた斧で劫罰を与え続ける。
