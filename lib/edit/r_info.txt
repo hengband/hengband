@@ -22894,8 +22894,8 @@ S:S_HI_UNDEAD | S_DEMON | DISPEL
 D:$Undoubtedly, it was this man who unleashed the cursed artifacts
 D:$ and called upon the great old ones who came from the outside world
 D:$ and settled in Llouis.
-D:$  It is told that his book, Necronomicon, namely stargate to the abyss,
-D:$ is still slept somewhere in the land.
+D:$  It is said that his book, Necronomicon, namely stargate to the abyss,
+D:$ still sleeps somewhere in the land.
 D:呪われしアーティファクトを世に解き放ち、
 D:外界より来たりてルルイエに住み着いた旧支配者達を呼び寄せたのは、
 D:紛れもなくこの男である。
