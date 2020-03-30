@@ -22812,7 +22812,7 @@ S:1_IN_6
 S:SCARE | BLIND | CONF | HOLD
 S:BR_WALL | BA_NETH | BR_PLAS | S_DEMON
 D:$This ogre has earthy colored skin.
-D:$  It doesn't only punish sinners but also leads lower-class ogres.
+D:$  Besides punishing sinners, it also leads lower-class ogres.
 D:土気色の肌をした鬼だ。
 D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
 
@@ -22831,7 +22831,7 @@ S:1_IN_6
 S:SCARE | BLIND | CONF | HOLD
 S:BO_WATE | BA_WATE | BA_NETH | S_DEMON
 D:$This ogre has stagnant river colored skin.
-D:$  It doesn't only punish sinners but also leads lower-class ogres.
+D:$  Besides punishing sinners, it also leads lower-class ogres.
 D:淀んだ川の色の肌をした鬼だ。
 D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
 
@@ -22851,7 +22851,7 @@ S:1_IN_5
 S:SCARE | BLIND | CONF | HOLD
 S:BA_NUKE | BA_NETH | BR_GRAV | S_DEMON
 D:$It lives in Rajoumon.
-D:$  It doesn't only punish sinners but also leads lower-class ogres.
+D:$  Besides punishing sinners, it also leads lower-class ogres.
 D:羅生門に巣食う鬼だ。
 D:それは罪人を処罰すると同時に、下級の鬼達を統率している。
 
