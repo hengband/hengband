@@ -2870,7 +2870,7 @@ void do_cmd_suicide(player_type *creature_ptr)
 
 	if (!current_world_ptr->total_winner)
 	{
-		exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 0, _("ダンジョンの探索に絶望して自殺した。", "give up all hope to commit suicide."));
+		exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 0, _("ダンジョンの探索に絶望して自殺した。", "gave up all hope to commit suicide."));
 		exe_write_diary(creature_ptr, DIARY_GAMESTART, 1, _("-------- ゲームオーバー --------", "--------   Game  Over   --------"));
 		exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, "\n\n\n\n");
 	}

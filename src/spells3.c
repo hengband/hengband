@@ -724,7 +724,7 @@ bool recall_player(player_type *creature_ptr, TIME_EFFECT turns)
 		{
 			max_dlv[creature_ptr->dungeon_idx] = creature_ptr->current_floor_ptr->dun_level;
 			if (record_maxdepth)
-				exe_write_diary(creature_ptr, DIARY_TRUMP, creature_ptr->dungeon_idx, _("帰還のときに", "when recall from dungeon"));
+				exe_write_diary(creature_ptr, DIARY_TRUMP, creature_ptr->dungeon_idx, _("帰還のときに", "when recalled from dungeon"));
 		}
 
 	}

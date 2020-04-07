@@ -444,7 +444,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 			if (autosave_l && (trapped_ptr->chp >= 0))
 				do_cmd_save_game(trapped_ptr, TRUE);
 
-			exe_write_diary(trapped_ptr, DIARY_DESCRIPTION, 0, _("落とし戸に落ちた", "You have fallen through a trap door!"));
+			exe_write_diary(trapped_ptr, DIARY_DESCRIPTION, 0, _("落とし戸に落ちた", "fell through a trap door!"));
 			prepare_change_floor_mode(trapped_ptr, CFM_SAVE_FLOORS | CFM_DOWN | CFM_RAND_PLACE | CFM_RAND_CONNECT);
 			trapped_ptr->leaving = TRUE;
 		}
