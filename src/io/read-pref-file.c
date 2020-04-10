@@ -301,7 +301,7 @@ static void remove_auto_dump(concptr orig_file)
  * Dump a formatted line, using "vstrnfmt()".
  * @param fmt 出力内容
  */
-void auto_dump_printf(concptr fmt, ...)
+void auto_dump_printf(FILE *auto_dump_stream, concptr fmt, ...)
 {
 	va_list vp;
 	char buf[1024];
@@ -324,7 +324,7 @@ void auto_dump_printf(concptr fmt, ...)
  * @param mark 出力するヘッダマーク
  * @return ファイルポインタを取得できたらTRUEを返す
  */
-bool open_auto_dump(concptr buf, concptr mark)
+bool open_auto_dump(FILE *auto_dump_stream, concptr buf, concptr mark)
 {
 	char header_mark_str[80];
 	auto_dump_mark = mark;
@@ -340,9 +340,9 @@ bool open_auto_dump(concptr buf, concptr mark)
 
 	fprintf(auto_dump_stream, "%s\n", header_mark_str);
 	auto_dump_line_num = 0;
-	auto_dump_printf(_("# *警告!!* 以降の行は自動生成されたものです。\n",
+	auto_dump_printf(auto_dump_stream, _("# *警告!!* 以降の行は自動生成されたものです。\n",
 		"# *Warning!*  The lines below are an automatic dump.\n"));
-	auto_dump_printf(_("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
+	auto_dump_printf(auto_dump_stream, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
 		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
 	return TRUE;
 }
@@ -352,13 +352,13 @@ bool open_auto_dump(concptr buf, concptr mark)
  * Append foot part and close auto dump.
  * @return なし
  */
-void close_auto_dump(void)
+void close_auto_dump(FILE *auto_dump_stream)
 {
 	char footer_mark_str[80];
 	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
-	auto_dump_printf(_("# *警告!!* 以降の行は自動生成されたものです。\n",
+	auto_dump_printf(auto_dump_stream, _("# *警告!!* 以降の行は自動生成されたものです。\n",
 		"# *Warning!*  The lines below are an automatic dump.\n"));
-	auto_dump_printf(_("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
+	auto_dump_printf(auto_dump_stream, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
 		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
 	fprintf(auto_dump_stream, "%s (%d)\n", footer_mark_str, auto_dump_line_num);
 	my_fclose(auto_dump_stream);

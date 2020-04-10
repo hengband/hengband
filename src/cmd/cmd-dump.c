@@ -69,6 +69,7 @@
 #include "english.h"
 
 #include "diary-subtitle-table.h"
+#include "io/write-diary.h"
 
 // Clipboard variables for copy&paste in visual mode
 static TERM_COLOR attr_idx = 0;
@@ -81,10 +82,8 @@ static SYMBOL_CODE char_idx_feat[F_LIT_MAX];
 static char hack[17] = "dwsorgbuDWvyRGBU";
 
 /*!
-<<<<<<< HEAD
  * @brief prefファイルを選択して処理する /
  * Ask for a "user pref line" and process it
-=======
  * @brief prf出力内容を消去する /
  * Remove old lines automatically generated before.
  * @param orig_file 消去を行うファイル名
@@ -181,28 +180,6 @@ static void remove_auto_dump(concptr orig_file)
 	fd_kill(tmp_file);
 }
 
-
-/*!
- * @brief prfファイルのフォーマットに従った内容を出力する /
- * Dump a formatted line, using "vstrnfmt()".
- * @param fmt 出力内容
- */
-static void auto_dump_printf(concptr fmt, ...)
-{
-	va_list vp;
-	char buf[1024];
-	va_start(vp, fmt);
-	(void)vstrnfmt(buf, sizeof(buf), fmt, vp);
-	va_end(vp);
-	for (concptr p = buf; *p; p++)
-	{
-		if (*p == '\n') auto_dump_line_num++;
-	}
-
-	fprintf(auto_dump_stream, "%s", buf);
-}
-
-
 /*!
  * @brief prfファイルをファイルオープンする /
  * Open file to append auto dump.
@@ -210,7 +187,7 @@ static void auto_dump_printf(concptr fmt, ...)
  * @param mark 出力するヘッダマーク
  * @return ファイルポインタを取得できたらTRUEを返す
  */
-static bool open_auto_dump(concptr buf, concptr mark)
+static bool open_auto_dump(FILE *auto_dump_stream, concptr buf, concptr mark)
 {
 	char header_mark_str[80];
 	auto_dump_mark = mark;
@@ -226,9 +203,9 @@ static bool open_auto_dump(concptr buf, concptr mark)
 
 	fprintf(auto_dump_stream, "%s\n", header_mark_str);
 	auto_dump_line_num = 0;
-	auto_dump_printf(_("# *警告!!* 以降の行は自動生成されたものです。\n",
+	auto_dump_printf(auto_dump_stream, _("# *警告!!* 以降の行は自動生成されたものです。\n",
 		"# *Warning!*  The lines below are an automatic dump.\n"));
-	auto_dump_printf(_("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
+	auto_dump_printf(auto_dump_stream, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
 		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
 	return TRUE;
 }
@@ -238,13 +215,13 @@ static bool open_auto_dump(concptr buf, concptr mark)
  * Append foot part and close auto dump.
  * @return なし
  */
-static void close_auto_dump(void)
+static void close_auto_dump(FILE *auto_dump_stream)
 {
 	char footer_mark_str[80];
 	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
-	auto_dump_printf(_("# *警告!!* 以降の行は自動生成されたものです。\n",
+	auto_dump_printf(auto_dump_stream, _("# *警告!!* 以降の行は自動生成されたものです。\n",
 		"# *Warning!*  The lines below are an automatic dump.\n"));
-	auto_dump_printf(_("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
+	auto_dump_printf(auto_dump_stream, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
 		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
 	fprintf(auto_dump_stream, "%s (%d)\n", footer_mark_str, auto_dump_line_num);
 	my_fclose(auto_dump_stream);
@@ -464,6 +441,7 @@ void do_cmd_colors(player_type *creature_ptr)
 	int i;
 	char tmp[160];
 	char buf[1024];
+	FILE *auto_dump_stream;
 	FILE_TYPE(FILE_TYPE_TEXT);
 	screen_save();
 	while (TRUE)
@@ -497,9 +475,9 @@ void do_cmd_colors(player_type *creature_ptr)
 			if (!askfor(tmp, 70)) continue;
 
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
-			if (!open_auto_dump(buf, mark)) continue;
+			if (!open_auto_dump(auto_dump_stream, buf, mark)) continue;
 
-			auto_dump_printf(_("\n# カラーの設定\n\n", "\n# Color redefinitions\n\n"));
+			auto_dump_printf(auto_dump_stream, _("\n# カラーの設定\n\n", "\n# Color redefinitions\n\n"));
 			for (i = 0; i < 256; i++)
 			{
 				int kv = angband_color_table[i][0];
@@ -512,12 +490,12 @@ void do_cmd_colors(player_type *creature_ptr)
 
 				if (i < 16) name = color_names[i];
 
-				auto_dump_printf(_("# カラー '%s'\n", "# Color '%s'\n"), name);
-				auto_dump_printf("V:%d:0x%02X:0x%02X:0x%02X:0x%02X\n\n",
+				auto_dump_printf(auto_dump_stream, _("# カラー '%s'\n", "# Color '%s'\n"), name);
+				auto_dump_printf(auto_dump_stream, "V:%d:0x%02X:0x%02X:0x%02X:0x%02X\n\n",
 					i, kv, rv, gv, bv);
 			}
 
-			close_auto_dump();
+			close_auto_dump(auto_dump_stream);
 			msg_print(_("カラーの設定をファイルに書き出しました。", "Dumped color redefinitions."));
 		}
 		else if (i == '3')
