@@ -431,7 +431,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 	}
 
 	creature_ptr->window |= (PW_INVEN | PW_EQUIP | PW_PLAYER);
-	creature_ptr->window |= inventory_flags;
+	creature_ptr->update |= inventory_flags;
 
 	/* Use a single charge */
 	o_ptr->pval--;
