@@ -3379,19 +3379,8 @@ LRESULT PASCAL AngbandWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam
 	{
 		if (!game_in_progress || !current_world_ptr->character_generated)
 		{
-<<<<<<< HEAD
 			quit(NULL);
 			return 0;
-=======
-			msg_flag = FALSE;
-			if (p_ptr->chp < 0) p_ptr->is_dead = FALSE;
-			exe_write_diary(p_ptr, DIARY_GAMESTART, 0, _("----ゲーム中断----", "--- Saved and Exited Game ---"));
-
-			p_ptr->panic_save = 1;
-			signals_ignore_tstp();
-			(void)strcpy(p_ptr->died_from, _("(緊急セーブ)", "(panic save)"));
-			(void)save_player(p_ptr);
->>>>>>> aed56f4e1a8c71b3fc97b2fa5265f3c13efc2da1
 		}
 
 		msg_flag = FALSE;
