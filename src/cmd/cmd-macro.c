@@ -28,7 +28,7 @@ static void macro_dump(FILE *auto_dump_stream, concptr fname)
 		auto_dump_printf(auto_dump_stream, "\n");
 	}
 
-	close_auto_dump(auto_dump_stream);
+	close_auto_dump(auto_dump_stream, mark);
 }
 
 
@@ -131,7 +131,7 @@ static errr keymap_dump(concptr fname)
 		auto_dump_printf(auto_dump_stream, "C:%d:%s\n", mode, key);
 	}
 
-	close_auto_dump(auto_dump_stream);
+	close_auto_dump(auto_dump_stream, mark);
 	return 0;
 }
 

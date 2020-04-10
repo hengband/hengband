@@ -26,11 +26,12 @@
 #define PREF_TYPE_AUTOPICK 1
 #define PREF_TYPE_HISTPREF 2
 
+char auto_dump_header[] = "# vvvvvvv== %s ==vvvvvvv";
+char auto_dump_footer[] = "# ^^^^^^^== %s ==^^^^^^^";
+
 // Mark strings for auto dump
 
 // Variables for auto dump
-static FILE *auto_dump_stream;
-static concptr auto_dump_mark;
 static int auto_dump_line_num;
 
 /*!
@@ -201,7 +202,7 @@ errr process_histpref_file(player_type *creature_ptr, concptr name)
  * Remove old lines automatically generated before.
  * @param orig_file 消去を行うファイル名
  */
-static void remove_auto_dump(concptr orig_file)
+static void remove_auto_dump(concptr orig_file, concptr auto_dump_mark)
 {
 	char header_mark_str[80];
 	char footer_mark_str[80];
@@ -325,9 +326,9 @@ void auto_dump_printf(FILE *auto_dump_stream, concptr fmt, ...)
 bool open_auto_dump(FILE *auto_dump_stream, concptr buf, concptr mark)
 {
 	char header_mark_str[80];
-	auto_dump_mark = mark;
+	concptr auto_dump_mark = mark;
 	sprintf(header_mark_str, auto_dump_header, auto_dump_mark);
-	remove_auto_dump(buf);
+	remove_auto_dump(buf, mark);
 	auto_dump_stream = my_fopen(buf, "a");
 	if (!auto_dump_stream)
 	{
@@ -350,7 +351,7 @@ bool open_auto_dump(FILE *auto_dump_stream, concptr buf, concptr mark)
  * Append foot part and close auto dump.
  * @return なし
  */
-void close_auto_dump(FILE *auto_dump_stream)
+void close_auto_dump(FILE *auto_dump_stream, concptr auto_dump_mark)
 {
 	char footer_mark_str[80];
 	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);

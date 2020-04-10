@@ -89,7 +89,7 @@ static char hack[17] = "dwsorgbuDWvyRGBU";
  * Remove old lines automatically generated before.
  * @param orig_file 消去を行うファイル名
  */
-static void remove_auto_dump(concptr orig_file)
+static void remove_auto_dump(concptr orig_file, concptr auto_dump_mark)
 {
 	FILE *tmp_fff, *orig_fff;
 	char tmp_file[1024];
@@ -303,61 +303,8 @@ static void do_cmd_erase_diary(void)
 
 
 /*!
- * @brief 日記コマンド
- * @param crerature_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-void do_cmd_diary(player_type *creature_ptr)
-{
-	FILE_TYPE(FILE_TYPE_TEXT);
-	screen_save();
-	int i;
-	while (TRUE)
-	{
-		Term_clear();
-		prt(_("[ 記録の設定 ]", "[ Play Record ]"), 2, 0);
-		prt(_("(1) 記録を見る", "(1) Display your record"), 4, 5);
-		prt(_("(2) 文章を記録する", "(2) Add record"), 5, 5);
-		prt(_("(3) 直前に入手又は鑑定したものを記録する", "(3) Record the last item you got or identified"), 6, 5);
-		prt(_("(4) 記録を消去する", "(4) Delete your record"), 7, 5);
-		prt(_("(R) プレイ動画を記録する/中止する", "(R) Record playing movie / or stop it"), 9, 5);
-		prt(_("コマンド:", "Command: "), 18, 0);
-		i = inkey();
-		if (i == ESCAPE) break;
-
-		switch (i)
-		{
-		case '1':
-			display_diary(creature_ptr);
-			break;
-		case '2':
-			add_diary_note(creature_ptr);
-			break;
-		case '3':
-			do_cmd_last_get(creature_ptr);
-			break;
-		case '4':
-			do_cmd_erase_diary();
-			break;
-		case 'r': case 'R':
-			screen_load();
-			prepare_movie_hooks();
-			return;
-		default:
-			bell();
-		}
-
-		msg_erase();
-	}
-
-	screen_load();
-}
-
-
-/*!
  * @brief 画面を再描画するコマンドのメインルーチン
  * Hack -- redraw the screen
->>>>>>> aed56f4e1a8c71b3fc97b2fa5265f3c13efc2da1
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
@@ -449,7 +396,7 @@ void do_cmd_colors(player_type *creature_ptr)
 					i, kv, rv, gv, bv);
 			}
 
-			close_auto_dump(auto_dump_stream);
+			close_auto_dump(auto_dump_stream, mark);
 			msg_print(_("カラーの設定をファイルに書き出しました。", "Dumped color redefinitions."));
 		}
 		else if (i == '3')
