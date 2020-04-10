@@ -180,53 +180,6 @@ static void remove_auto_dump(concptr orig_file)
 	fd_kill(tmp_file);
 }
 
-/*!
- * @brief prfファイルをファイルオープンする /
- * Open file to append auto dump.
- * @param buf ファイル名
- * @param mark 出力するヘッダマーク
- * @return ファイルポインタを取得できたらTRUEを返す
- */
-static bool open_auto_dump(FILE *auto_dump_stream, concptr buf, concptr mark)
-{
-	char header_mark_str[80];
-	auto_dump_mark = mark;
-	sprintf(header_mark_str, auto_dump_header, auto_dump_mark);
-	remove_auto_dump(buf);
-	auto_dump_stream = my_fopen(buf, "a");
-	if (!auto_dump_stream)
-	{
-		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
-		msg_print(NULL);
-		return FALSE;
-	}
-
-	fprintf(auto_dump_stream, "%s\n", header_mark_str);
-	auto_dump_line_num = 0;
-	auto_dump_printf(auto_dump_stream, _("# *警告!!* 以降の行は自動生成されたものです。\n",
-		"# *Warning!*  The lines below are an automatic dump.\n"));
-	auto_dump_printf(auto_dump_stream, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
-		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
-	return TRUE;
-}
-
-/*!
- * @brief prfファイルをファイルクローズする /
- * Append foot part and close auto dump.
- * @return なし
- */
-static void close_auto_dump(FILE *auto_dump_stream)
-{
-	char footer_mark_str[80];
-	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
-	auto_dump_printf(auto_dump_stream, _("# *警告!!* 以降の行は自動生成されたものです。\n",
-		"# *Warning!*  The lines below are an automatic dump.\n"));
-	auto_dump_printf(auto_dump_stream, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
-		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
-	fprintf(auto_dump_stream, "%s (%d)\n", footer_mark_str, auto_dump_line_num);
-	my_fclose(auto_dump_stream);
-}
-
 
 #ifdef JP
 #else
