@@ -68,6 +68,8 @@
 #include "view-mainwindow.h" // 暫定。後で消す
 #include "english.h"
 
+#include "diary-subtitle-table.h"
+
 // Clipboard variables for copy&paste in visual mode
 static TERM_COLOR attr_idx = 0;
 static SYMBOL_CODE char_idx = 0;
