@@ -70,6 +70,7 @@
 
 #include "diary-subtitle-table.h"
 #include "io/write-diary.h"
+#include "chuukei.h"
 
 // Clipboard variables for copy&paste in visual mode
 static TERM_COLOR attr_idx = 0;
