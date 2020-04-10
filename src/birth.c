@@ -703,8 +703,6 @@ static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 		if (cs != os)
 		{
 			c_put_str(TERM_WHITE, cur, 12 + (os / 5), 2 + 15 * (os % 5));
-			put_str("                                   ", 3, 40);
-			put_str("                                   ", 4, 40);
 
 			if (cs == n)
 			{
@@ -714,14 +712,9 @@ static byte choose_realm(player_type *creature_ptr, s32b choices, int *count)
 			{
 				sprintf(cur, "%c%c %s", sym[cs], p2, realm_names[picks[cs]]);
 				sprintf(buf, "%s", realm_names[picks[cs]]);
-#ifdef JP
 				c_put_str(TERM_L_BLUE, buf, 3, 40);
-				put_str("の特徴", 3, 40 + strlen(buf));
-#else
-				c_put_str(TERM_L_BLUE, realm_names[picks[cs]], 3, 40);
-				put_str(": Characteristic", 3, 40 + strlen(realm_names[picks[cs]]));
-#endif
-				put_str(realm_subinfo[technic2magic(picks[cs]) - 1], 4, 40);
+				prt(_("の特徴", ": Characteristic"), 3, 40 + strlen(buf));
+				prt(realm_subinfo[technic2magic(picks[cs]) - 1], 4, 40);
 			}
 			c_put_str(TERM_YELLOW, cur, 12 + (cs / 5), 2 + 15 * (cs % 5));
 			os = cs;
@@ -4592,25 +4585,25 @@ void player_birth(player_type *creature_ptr)
 	message_add(" ");
 	message_add("  ");
 
-	exe_write_diary(creature_ptr, DIARY_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "-------- Start New Game --------"));
+	exe_write_diary(creature_ptr, DIARY_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "------- Started New Game -------"));
 	exe_write_diary(creature_ptr, DIARY_DIALY, 0, NULL);
 
-	sprintf(buf, _("                            性別に%sを選択した。", "                            choose %s personality."), sex_info[creature_ptr->psex].title);
+	sprintf(buf, _("                            性別に%sを選択した。", "                            chose %s gender."), sex_info[creature_ptr->psex].title);
 	exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
 
-	sprintf(buf, _("                            種族に%sを選択した。", "                            choose %s race."), race_info[creature_ptr->prace].title);
+	sprintf(buf, _("                            種族に%sを選択した。", "                            chose %s race."), race_info[creature_ptr->prace].title);
 	exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
 
-	sprintf(buf, _("                            職業に%sを選択した。", "                            choose %s class."), class_info[creature_ptr->pclass].title);
+	sprintf(buf, _("                            職業に%sを選択した。", "                            chose %s class."), class_info[creature_ptr->pclass].title);
 	exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
 
 	if (creature_ptr->realm1)
 	{
-		sprintf(buf, _("                            魔法の領域に%s%sを選択した。", "                            choose %s%s realm."), realm_names[creature_ptr->realm1], creature_ptr->realm2 ? format("と%s", realm_names[creature_ptr->realm2]) : "");
+		sprintf(buf, _("                            魔法の領域に%s%sを選択した。", "                            chose %s%s."), realm_names[creature_ptr->realm1], creature_ptr->realm2 ? format(_("と%s", " and %s realms"), realm_names[creature_ptr->realm2]) : _("", " realm"));
 		exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
 	}
 
-	sprintf(buf, _("                            性格に%sを選択した。", "                            choose %s."), seikaku_info[creature_ptr->pseikaku].title);
+	sprintf(buf, _("                            性格に%sを選択した。", "                            chose %s personality."), seikaku_info[creature_ptr->pseikaku].title);
 	exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
 
 	/* Init the shops */
