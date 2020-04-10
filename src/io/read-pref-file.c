@@ -27,8 +27,6 @@
 #define PREF_TYPE_HISTPREF 2
 
 // Mark strings for auto dump
-static char auto_dump_header[] = "# vvvvvvv== %s ==vvvvvvv";
-static char auto_dump_footer[] = "# ^^^^^^^== %s ==^^^^^^^";
 
 // Variables for auto dump
 static FILE *auto_dump_stream;
