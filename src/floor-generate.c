@@ -721,70 +721,14 @@ static bool cave_gen(player_type *player_ptr, concptr *why)
 			}
 		}
 
-		/* Destroy the level if necessary */
-		if (dun->destroyed) destroy_level(player_ptr);
-
-		/* Hack -- Add some rivers */
-		if (one_in_(3) && (randint1(floor_ptr->dun_level) > 5))
+		if (dun->destroyed)
 		{
-			FEAT_IDX feat1 = 0, feat2 = 0;
+			destroy_level(player_ptr);
+		}
 
-			/* Choose water mainly */
-			if ((randint1(MAX_DEPTH * 2) - 1 > floor_ptr->dun_level) && (dungeon_ptr->flags1 & DF1_WATER_RIVER))
-			{
-				feat1 = feat_deep_water;
-				feat2 = feat_shallow_water;
-			}
-			else /* others */
-			{
-				FEAT_IDX select_deep_feat[10];
-				FEAT_IDX select_shallow_feat[10];
-				int select_id_max = 0, selected;
-
-				if (dungeon_ptr->flags1 & DF1_LAVA_RIVER)
-				{
-					select_deep_feat[select_id_max] = feat_deep_lava;
-					select_shallow_feat[select_id_max] = feat_shallow_lava;
-					select_id_max++;
-				}
-				if (dungeon_ptr->flags1 & DF1_POISONOUS_RIVER)
-				{
-					select_deep_feat[select_id_max] = feat_deep_poisonous_puddle;
-					select_shallow_feat[select_id_max] = feat_shallow_poisonous_puddle;
-					select_id_max++;
-				}
-				if (dungeon_ptr->flags1 & DF1_ACID_RIVER)
-				{
-					select_deep_feat[select_id_max] = feat_deep_acid_puddle;
-					select_shallow_feat[select_id_max] = feat_shallow_acid_puddle;
-					select_id_max++;
-				}
-
-				if (select_id_max > 0)
-				{
-					selected = randint0(select_id_max);
-					feat1 = select_deep_feat[selected];
-					feat2 = select_shallow_feat[selected];
-				}
-				else
-				{
-					feat1 = feat_deep_water;
-					feat2 = feat_shallow_water;
-				}
-			}
-
-			if (feat1)
-			{
-				feature_type *f_ptr = &f_info[feat1];
-
-				/* Only add river if matches lake type or if have no lake at all */
-				if (((dun->laketype == LAKE_T_LAVA) && have_flag(f_ptr->flags, FF_LAVA)) ||
-				    ((dun->laketype == LAKE_T_WATER) && have_flag(f_ptr->flags, FF_WATER)) ||
-				     !dun->laketype)
-				{
-					add_river(floor_ptr, feat1, feat2);
-				}
-			}
+		if (HAS_RIVER_FLAG(dungeon_ptr) && one_in_(3) && (randint1(floor_ptr->dun_level) > 5))
+		{
+			add_river(floor_ptr);
 		}
 
 		/* Hack -- Scramble the room order */
