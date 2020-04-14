@@ -1368,7 +1368,7 @@ void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type 
 	}
 	case gb_solid:
 	{
-		set_cave_feat(floor_ptr, y, x, feat_permanent);
+		set_cave_feat(floor_ptr, y, x, feat_wall_inner);
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		add_cave_info(floor_ptr, y, x, CAVE_SOLID);
 		break;
