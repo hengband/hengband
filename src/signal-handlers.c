@@ -139,7 +139,7 @@ static void handle_signal_abort(int sig)
 
 	Term_putstr(45, hgt - 1, -1, TERM_RED, _("緊急セーブ...", "Panic save..."));
 
-	exe_write_diary(p_ptr, DIARY_GAMESTART, 0, _("----ゲーム異常終了----", "---- Panic Save and Abort Game ----"));
+	exe_write_diary(p_ptr, DIARY_GAMESTART, 0, _("----ゲーム異常終了----", "-- Tried Panic Save and Aborted Game --"));
 	Term_fresh();
 
 	p_ptr->panic_save = 1;

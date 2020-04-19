@@ -547,7 +547,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 			if (winning_seppuku)
 			{
-				exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 0, _("勝利の後切腹した。", "did Seppuku after the winning."));
+				exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 0, _("勝利の後切腹した。", "committed seppuku after the winning."));
 			}
 			else
 			{
@@ -702,7 +702,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 			if (creature_ptr->image && damage_type == DAMAGE_ATTACK)
 				hit_from = _("何か", "something");
 
-			sprintf(tmp, _("%sによってピンチに陥った。", "A critical situation because of %s."), hit_from);
+			sprintf(tmp, _("%sによってピンチに陥った。", "was in a critical situation because of %s."), hit_from);
 			exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 0, tmp);
 		}
 

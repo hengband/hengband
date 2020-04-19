@@ -379,10 +379,12 @@ errr get_rnd_line(concptr file_name, int entry, char *output)
 		{
 			if (test == entry) break;
 		}
-
-		msg_format("Error in line %d of %s!", line_num, file_name);
-		my_fclose(fp);
-		return -1;
+		else
+		{
+			msg_format("Error in line %d of %s!", line_num, file_name);
+			my_fclose(fp);
+			return -1;
+		}
 	}
 
 	int counter;

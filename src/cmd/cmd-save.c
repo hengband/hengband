@@ -63,5 +63,5 @@ void do_cmd_save_and_exit(player_type *creature_ptr)
 {
 	creature_ptr->playing = FALSE;
 	creature_ptr->leaving = TRUE;
-	exe_write_diary(creature_ptr, DIARY_GAMESTART, 0, _("----ゲーム中断----", "---- Save and Exit Game ----"));
+	exe_write_diary(creature_ptr, DIARY_GAMESTART, 0, _("----ゲーム中断----", "--- Saved and Exited Game ---"));
 }

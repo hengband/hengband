@@ -173,6 +173,8 @@ extern floor_type floor_info;
 
 #define DF1_LAKE_MASK (DF1_LAKE_WATER | DF1_LAKE_LAVA | DF1_LAKE_RUBBLE | DF1_LAKE_TREE | DF1_LAKE_POISONOUS | DF1_LAKE_ACID)
 
+#define HAS_RIVER_FLAG(D_PTR) ((D_PTR)->flags1 & (DF1_WATER_RIVER | DF1_LAVA_RIVER | DF1_ACID_RIVER | DF1_POISONOUS_RIVER))
+
 /*
  * Determines if a map location is fully inside the outer walls
  */

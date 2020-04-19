@@ -10,25 +10,26 @@
  * @param fname ファイル名
  * @return なし
  */
-static void macro_dump(concptr fname)
+static void macro_dump(FILE **fpp, concptr fname)
 {
 	static concptr mark = "Macro Dump";
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 	FILE_TYPE(FILE_TYPE_TEXT);
-	if (!open_auto_dump(buf, mark)) return;
+	if (!open_auto_dump(fpp, buf, mark)) return;
 
-	auto_dump_printf(_("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
+	auto_dump_printf(*fpp, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
+
 	for (int i = 0; i < macro__num; i++)
 	{
 		ascii_to_text(buf, macro__act[i]);
-		auto_dump_printf("A:%s\n", buf);
+		auto_dump_printf(*fpp, "A:%s\n", buf);
 		ascii_to_text(buf, macro__pat[i]);
-		auto_dump_printf("P:%s\n", buf);
-		auto_dump_printf("\n");
+		auto_dump_printf(*fpp, "P:%s\n", buf);
+		auto_dump_printf(*fpp, "\n");
 	}
 
-	close_auto_dump();
+	close_auto_dump(fpp, mark);
 }
 
 
@@ -98,6 +99,7 @@ static void do_cmd_macro_aux_keymap(char *buf)
  */
 static errr keymap_dump(concptr fname)
 {
+	FILE *auto_dump_stream;
 	static concptr mark = "Keymap Dump";
 	char key[1024];
 	char buf[1024];
@@ -113,9 +115,9 @@ static errr keymap_dump(concptr fname)
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 	FILE_TYPE(FILE_TYPE_TEXT);
-	if (!open_auto_dump(buf, mark)) return -1;
+	if (!open_auto_dump(&auto_dump_stream, buf, mark)) return -1;
 
-	auto_dump_printf(_("\n# 自動キー配置セーブ\n\n", "\n# Automatic keymap dump\n\n"));
+	auto_dump_printf(auto_dump_stream, _("\n# 自動キー配置セーブ\n\n", "\n# Automatic keymap dump\n\n"));
 	for (int i = 0; i < 256; i++)
 	{
 		concptr act;
@@ -126,11 +128,11 @@ static errr keymap_dump(concptr fname)
 		buf[1] = '\0';
 		ascii_to_text(key, buf);
 		ascii_to_text(buf, act);
-		auto_dump_printf("A:%s\n", buf);
-		auto_dump_printf("C:%d:%s\n", mode, key);
+		auto_dump_printf(auto_dump_stream, "A:%s\n", buf);
+		auto_dump_printf(auto_dump_stream, "C:%d:%s\n", mode, key);
 	}
 
-	close_auto_dump();
+	close_auto_dump(&auto_dump_stream, mark);
 	return 0;
 }
 
@@ -150,6 +152,7 @@ void do_cmd_macros(player_type *creature_ptr)
 {
 	char tmp[1024];
 	char buf[1024];
+	FILE *auto_dump_stream;
 	BIT_FLAGS mode = rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG;
 	FILE_TYPE(FILE_TYPE_TEXT);
 	screen_save();
@@ -198,7 +201,7 @@ void do_cmd_macros(player_type *creature_ptr)
 			sprintf(tmp, "%s.prf", creature_ptr->base_name);
 			if (!askfor(tmp, 80)) continue;
 
-			macro_dump(tmp);
+			macro_dump(&auto_dump_stream, tmp);
 			msg_print(_("マクロを追加しました。", "Appended macros."));
 		}
 		else if (i == '3')

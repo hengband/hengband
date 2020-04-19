@@ -2921,7 +2921,7 @@ static bool enter_wizard_mode(player_type *player_ptr)
 			return FALSE;
 		}
 
-		exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("ウィザードモードに突入してスコアを残せなくなった。", "give up recording score to enter wizard mode."));
+		exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("ウィザードモードに突入してスコアを残せなくなった。", "gave up recording score to enter wizard mode."));
 		current_world_ptr->noscore |= 0x0002;
 	}
 
@@ -2953,7 +2953,7 @@ static bool enter_debug_mode(player_type *player_ptr)
 			return FALSE;
 		}
 
-		exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("デバッグモードに突入してスコアを残せなくなった。", "give up sending score to use debug commands."));
+		exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, _("デバッグモードに突入してスコアを残せなくなった。", "gave up sending score to use debug commands."));
 		current_world_ptr->noscore |= 0x0008;
 	}
 
@@ -4387,7 +4387,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		write_level = FALSE;
 		exe_write_diary(player_ptr, DIARY_GAMESTART, 1,
 			_("                            ----ゲーム再開----",
-				"                            ---- Restart Game ----"));
+				"                            --- Restarted Game ---"));
 
 		/*
 		 * todo もう2.2.Xなので互換性は打ち切ってもいいのでは？
@@ -4481,7 +4481,7 @@ void play_game(player_type *player_ptr, bool new_game)
 	if (new_game)
 	{
 		char buf[80];
-		sprintf(buf, _("%sに降り立った。", "You are standing in the %s."), map_name(player_ptr));
+		sprintf(buf, _("%sに降り立った。", "arrived in %s."), map_name(player_ptr));
 		exe_write_diary(player_ptr, DIARY_DESCRIPTION, 0, buf);
 	}
 

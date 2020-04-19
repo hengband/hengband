@@ -14,7 +14,7 @@
 
 /* Externs */
 
-extern void add_river(floor_type *floor_ptr, FEAT_IDX feat1, FEAT_IDX feat2);
+extern void add_river(floor_type *floor_ptr);
 extern void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance);
 extern void place_trees(player_type *player_ptr, POSITION x, POSITION y);
 extern void destroy_level(player_type *player_ptr);

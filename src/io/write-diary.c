@@ -76,7 +76,7 @@ static QUEST_IDX write_floor(player_type *creature_ptr, concptr *note_level)
 	if (!write_level) return q_idx;
 
 	if (floor_ptr->inside_arena)
-		*note_level = _("アリーナ:", "Arane:");
+		*note_level = _("アリーナ:", "Arena:");
 	else if (!floor_ptr->dun_level)
 		*note_level = _("地上:", "Surface:");
 	else if (q_idx && (is_fixed_quest_idx(q_idx) && !((q_idx == QUEST_OBERON) || (q_idx == QUEST_SERPENT))))
@@ -248,7 +248,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		if (quest[num].flags & QUEST_FLAG_SILENT) break;
 
 		fprintf(fff, _(" %2d:%02d %20s クエスト「%s」から命からがら逃げ帰った。\n",
-			" %2d:%02d %20s run away from quest '%s'.\n"), hour, min, note_level, quest[num].name);
+			" %2d:%02d %20s ran away from quest '%s'.\n"), hour, min, note_level, quest[num].name);
 		break;
 	}
 	case DIARY_RAND_QUEST_C:
@@ -315,7 +315,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	}
 	case DIARY_TELEPORT_LEVEL:
 	{
-		fprintf(fff, _(" %2d:%02d %20s レベル・テレポートで脱出した。\n", " %2d:%02d %20s Got out using teleport level.\n"),
+		fprintf(fff, _(" %2d:%02d %20s レベル・テレポートで脱出した。\n", " %2d:%02d %20s got out using teleport level.\n"),
 			hour, min, note_level);
 		break;
 	}
@@ -362,7 +362,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 			? _("地上", "the surface")
 			: format(_("%d階(%s)", "level %d of %s"), creature_ptr->current_floor_ptr->dun_level, d_name + d_info[creature_ptr->dungeon_idx].name);
 		fprintf(fff, _(" %2d:%02d %20s %sへとウィザード・テレポートで移動した。\n",
-			" %2d:%02d %20s wizard-teleport to %s.\n"), hour, min, note_level, to);
+			" %2d:%02d %20s wizard-teleported to %s.\n"), hour, min, note_level, to);
 		break;
 	}
 	case DIARY_PAT_TELE:

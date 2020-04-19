@@ -68,6 +68,10 @@
 #include "view-mainwindow.h" // 暫定。後で消す
 #include "english.h"
 
+#include "diary-subtitle-table.h"
+#include "io/write-diary.h"
+#include "chuukei.h"
+
 // Clipboard variables for copy&paste in visual mode
 static TERM_COLOR attr_idx = 0;
 static SYMBOL_CODE char_idx = 0;
@@ -81,6 +85,226 @@ static char hack[17] = "dwsorgbuDWvyRGBU";
 /*!
  * @brief prefファイルを選択して処理する /
  * Ask for a "user pref line" and process it
+ * @brief prf出力内容を消去する /
+ * Remove old lines automatically generated before.
+ * @param orig_file 消去を行うファイル名
+ */
+static void remove_auto_dump(concptr orig_file, concptr auto_dump_mark)
+{
+	FILE *tmp_fff, *orig_fff;
+	char tmp_file[1024];
+	char buf[1024];
+	bool between_mark = FALSE;
+	bool changed = FALSE;
+	int line_num = 0;
+	long header_location = 0;
+	char header_mark_str[80];
+	char footer_mark_str[80];
+
+	sprintf(header_mark_str, auto_dump_header, auto_dump_mark);
+	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
+	size_t mark_len = strlen(footer_mark_str);
+	orig_fff = my_fopen(orig_file, "r");
+	if (!orig_fff) return;
+
+	tmp_fff = my_fopen_temp(tmp_file, 1024);
+	if (!tmp_fff)
+	{
+		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), tmp_file);
+		msg_print(NULL);
+		return;
+	}
+
+	while (TRUE)
+	{
+		if (my_fgets(orig_fff, buf, sizeof(buf)))
+		{
+			if (between_mark)
+			{
+				fseek(orig_fff, header_location, SEEK_SET);
+				between_mark = FALSE;
+				continue;
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		if (!between_mark)
+		{
+			if (!strcmp(buf, header_mark_str))
+			{
+				header_location = ftell(orig_fff);
+				line_num = 0;
+				between_mark = TRUE;
+				changed = TRUE;
+			}
+			else
+			{
+				fprintf(tmp_fff, "%s\n", buf);
+			}
+
+			continue;
+		}
+
+		if (!strncmp(buf, footer_mark_str, mark_len))
+		{
+			int tmp;
+			if (!sscanf(buf + mark_len, " (%d)", &tmp)
+				|| tmp != line_num)
+			{
+				fseek(orig_fff, header_location, SEEK_SET);
+			}
+
+			between_mark = FALSE;
+			continue;
+		}
+
+		line_num++;
+	}
+
+	my_fclose(orig_fff);
+	my_fclose(tmp_fff);
+
+	if (changed)
+	{
+		tmp_fff = my_fopen(tmp_file, "r");
+		orig_fff = my_fopen(orig_file, "w");
+		while (!my_fgets(tmp_fff, buf, sizeof(buf)))
+			fprintf(orig_fff, "%s\n", buf);
+
+		my_fclose(orig_fff);
+		my_fclose(tmp_fff);
+	}
+
+	fd_kill(tmp_file);
+}
+
+
+#ifdef JP
+#else
+/*!
+ * @brief Return suffix of ordinal number
+ * @param num number
+ * @return pointer of suffix string.
+ */
+concptr get_ordinal_number_suffix(int num)
+{
+	num = ABS(num) % 100;
+	switch (num % 10)
+	{
+	case 1:
+		return (num == 11) ? "th" : "st";
+	case 2:
+		return (num == 12) ? "th" : "nd";
+	case 3:
+		return (num == 13) ? "th" : "rd";
+	default:
+		return "th";
+	}
+}
+#endif
+
+
+/*!
+ * @brief 日記のタイトル表記と内容出力
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void display_diary(player_type *creature_ptr)
+{
+	char diary_title[256];
+	GAME_TEXT file_name[MAX_NLEN];
+	char buf[1024];
+	char tmp[80];
+	sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
+
+	if (creature_ptr->pclass == CLASS_WARRIOR || creature_ptr->pclass == CLASS_MONK || creature_ptr->pclass == CLASS_SAMURAI || creature_ptr->pclass == CLASS_BERSERKER)
+		strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 1)]);
+	else if (IS_WIZARD_CLASS(creature_ptr))
+		strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 1) + 1]);
+	else strcpy(tmp, subtitle[randint0(MAX_SUBTITLE - 2) + 1]);
+
+#ifdef JP
+	sprintf(diary_title, "「%s%s%sの伝説 -%s-」", ap_ptr->title, ap_ptr->no ? "の" : "", creature_ptr->name, tmp);
+#else
+	sprintf(diary_title, "Legend of %s %s '%s'", ap_ptr->title, creature_ptr->name, tmp);
+#endif
+
+	(void)show_file(creature_ptr, FALSE, buf, diary_title, -1, 0);
+}
+
+
+/*!
+ * @brief 日記に任意の内容を表記するコマンドのメインルーチン /
+ * @return なし
+ */
+static void add_diary_note(player_type *creature_ptr)
+{
+	char tmp[80] = "\0";
+	char bunshou[80] = "\0";
+	if (get_string(_("内容: ", "diary note: "), tmp, 79))
+	{
+		strcpy(bunshou, tmp);
+		exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 0, bunshou);
+	}
+}
+
+/*!
+ * @brief 最後に取得したアイテムの情報を日記に追加するメインルーチン /
+ * @return なし
+ */
+static void do_cmd_last_get(player_type *creaute_ptr)
+{
+	if (record_o_name[0] == '\0') return;
+
+	char buf[256];
+	sprintf(buf, _("%sの入手を記録します。", "Do you really want to record getting %s? "), record_o_name);
+	if (!get_check(buf)) return;
+
+	GAME_TURN turn_tmp = current_world_ptr->game_turn;
+	current_world_ptr->game_turn = record_turn;
+	sprintf(buf, _("%sを手に入れた。", "discovered %s."), record_o_name);
+	exe_write_diary(creaute_ptr, DIARY_DESCRIPTION, 0, buf);
+	current_world_ptr->game_turn = turn_tmp;
+}
+
+
+/*!
+ * @brief ファイル中の全日記記録を消去する /
+ * @return なし
+ */
+static void do_cmd_erase_diary(void)
+{
+	GAME_TEXT file_name[MAX_NLEN];
+	char buf[256];
+	FILE *fff = NULL;
+
+	if (!get_check(_("本当に記録を消去しますか？", "Do you really want to delete all your record? "))) return;
+	sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
+	fd_kill(buf);
+
+	fff = my_fopen(buf, "w");
+	if (fff)
+	{
+		my_fclose(fff);
+		msg_format(_("記録を消去しました。", "deleted record."));
+	}
+	else
+	{
+		msg_format(_("%s の消去に失敗しました。", "failed to delete %s."), buf);
+	}
+
+	msg_print(NULL);
+}
+
+
+/*!
+ * @brief 画面を再描画するコマンドのメインルーチン
+ * Hack -- redraw the screen
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  * @details
@@ -118,6 +342,7 @@ void do_cmd_colors(player_type *creature_ptr)
 	int i;
 	char tmp[160];
 	char buf[1024];
+	FILE *auto_dump_stream;
 	FILE_TYPE(FILE_TYPE_TEXT);
 	screen_save();
 	while (TRUE)
@@ -151,9 +376,9 @@ void do_cmd_colors(player_type *creature_ptr)
 			if (!askfor(tmp, 70)) continue;
 
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
-			if (!open_auto_dump(buf, mark)) continue;
+			if (!open_auto_dump(&auto_dump_stream, buf, mark)) continue;
 
-			auto_dump_printf(_("\n# カラーの設定\n\n", "\n# Color redefinitions\n\n"));
+			auto_dump_printf(auto_dump_stream, _("\n# カラーの設定\n\n", "\n# Color redefinitions\n\n"));
 			for (i = 0; i < 256; i++)
 			{
 				int kv = angband_color_table[i][0];
@@ -166,12 +391,12 @@ void do_cmd_colors(player_type *creature_ptr)
 
 				if (i < 16) name = color_names[i];
 
-				auto_dump_printf(_("# カラー '%s'\n", "# Color '%s'\n"), name);
-				auto_dump_printf("V:%d:0x%02X:0x%02X:0x%02X:0x%02X\n\n",
+				auto_dump_printf(auto_dump_stream, _("# カラー '%s'\n", "# Color '%s'\n"), name);
+				auto_dump_printf(auto_dump_stream, "V:%d:0x%02X:0x%02X:0x%02X:0x%02X\n\n",
 					i, kv, rv, gv, bv);
 			}
 
-			close_auto_dump();
+			close_auto_dump(&auto_dump_stream, mark);
 			msg_print(_("カラーの設定をファイルに書き出しました。", "Dumped color redefinitions."));
 		}
 		else if (i == '3')
