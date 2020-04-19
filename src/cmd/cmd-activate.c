@@ -850,8 +850,8 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	{
 		msg_format(_("あなたは%sに敵を締め殺すよう命じた。", "You order the %s to strangle your opponent."), name);
 		if (!get_aim_dir(user_ptr, &dir)) return FALSE;
-		if (hypodynamic_bolt(user_ptr, dir, 100))
-			break;
+		hypodynamic_bolt(user_ptr, dir, 100);
+		break;
 	}
 
 	case ACT_HYPODYNAMIA_2:
