@@ -13,7 +13,7 @@
 #include "angband.h"
 #include "signal-handlers.h"
 #include "core.h"
-#include "term.h"
+#include "gameterm.h"
 #include "util.h"
 #include "files.h"
 #include "monsterrace-hook.h"

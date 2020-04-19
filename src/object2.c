@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * @file object2.c
  * @brief オブジェクトの実装 / Object code, part 2
  * @date 2014/01/11
@@ -14,7 +14,7 @@
 #include "angband.h"
 #include "util.h"
 #include "world.h"
-#include "term.h"
+#include "gameterm.h"
 
 #include "object.h"
 

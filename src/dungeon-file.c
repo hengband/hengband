@@ -60,7 +60,7 @@
 #include "trap.h"
 #include "artifact.h"
 #include "cmd-activate.h"
-#include "term.h"
+#include "gameterm.h"
 #include "wild.h"
 #include "view-mainwindow.h"
 #include "player-class.h"

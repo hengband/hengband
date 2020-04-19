@@ -35,7 +35,7 @@
 #include "cmd/cmd-dump.h"
 #include "cmd/lighting-level-table.h"
 #include "cmd/cmd-visuals.h"
-#include "term.h"
+#include "gameterm.h"
 #include "core.h" // 暫定。後で消す.
 #include "core/show-file.h"
 #include "io/read-pref-file.h"

@@ -13,7 +13,7 @@
 #include "angband.h"
 #include "util.h"
 #include "autopick.h"
-#include "term.h"
+#include "gameterm.h"
 
 #include "bldg.h"
 #include "core.h"

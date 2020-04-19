@@ -12,7 +12,7 @@
 
 #include "angband.h"
 #include "signal-handlers.h"
-#include "term.h"
+#include "gameterm.h"
 #include "util.h"
 #include "core.h"
 

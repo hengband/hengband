@@ -15,7 +15,7 @@
 #include "core.h"
 #include "util.h"
 #include "autopick.h"
-#include "term.h"
+#include "gameterm.h"
 
 #include "selfinfo.h"
 #include "cmd-activate.h"

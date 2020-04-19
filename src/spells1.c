@@ -48,7 +48,7 @@
 #include "object-broken.h"
 #include "object-flavor.h"
 #include "quest.h"
-#include "term.h"
+#include "gameterm.h"
 #include "grid.h"
 #include "feature.h"
 #include "view-mainwindow.h"

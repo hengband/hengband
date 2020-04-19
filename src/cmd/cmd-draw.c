@@ -2,7 +2,7 @@
 #include "core.h" // 暫定。後で消す.
 #include "cmd/cmd-draw.h"
 #include "files.h"
-#include "term.h"
+#include "gameterm.h"
 #include "view-mainwindow.h" // 暫定。後で消す.
 #include "player-effects.h"
 #include "view/display-player.h" // 暫定。後で消す.

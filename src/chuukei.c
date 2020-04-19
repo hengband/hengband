@@ -11,12 +11,11 @@
 #include "signal-handlers.h"
 #include "files.h"
 #include "util.h"
-#include "term.h"
+#include "gameterm.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-draw.h"
 #include "inet.h"
 #include "japanese.h"
-#include "term.h"
 #include "chuukei.h"
 
 #include <stdio.h>

@@ -96,7 +96,7 @@
 #include "angband.h"
 #include "core.h"
 #include "files.h"
-#include "term.h"
+#include "gameterm.h"
 
 
 /*

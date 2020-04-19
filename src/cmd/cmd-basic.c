@@ -12,7 +12,7 @@
 
 #include "angband.h"
 #include "core.h"
-#include "term.h"
+#include "gameterm.h"
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"

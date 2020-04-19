@@ -13,7 +13,7 @@
 #include "angband.h"
 #include "util.h"
 #include "core.h"
-#include "term.h"
+#include "gameterm.h"
 #include "targeting.h"
 
 #include "bldg.h"

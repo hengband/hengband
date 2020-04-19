@@ -7,7 +7,7 @@
 #include "save.h"
 #include "world.h"
 #include "monster-status.h" // 違和感。要調査.
-#include "term.h"
+#include "gameterm.h"
 
 /*!
  * @brief セーブするコマンドのメインルーチン

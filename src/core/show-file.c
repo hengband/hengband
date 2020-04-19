@@ -1,7 +1,7 @@
 ﻿#include "core/show-file.h"
 #include "files.h"
 #include "core.h" // 暫定。後で消す.
-#include "term.h"
+#include "gameterm.h"
 
 /*!
  * @param 表示とそれ以外を分割する

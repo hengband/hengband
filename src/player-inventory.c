@@ -3,7 +3,7 @@
 #include "util.h"
 #include "player-inventory.h"
 
-#include "term.h"
+#include "gameterm.h"
 #include "object.h"
 #include "objectkind.h"
 #include "object-flavor.h"

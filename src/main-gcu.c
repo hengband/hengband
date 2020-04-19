@@ -159,7 +159,7 @@
 #include "angband.h"
 #include "io/exit-panic.h"
 #include "files.h"
-#include "term.h"
+#include "gameterm.h"
 
 #ifdef USE_GCU
 

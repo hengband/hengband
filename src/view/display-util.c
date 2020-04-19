@@ -1,5 +1,5 @@
 ﻿#include "display-util.h"
-#include "term.h"
+#include "gameterm.h"
 
 static struct
 {

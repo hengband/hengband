@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "util.h"
-#include "term.h"
+#include "gameterm.h"
 
 #include "object-flavor.h"
 #include "object-hook.h"

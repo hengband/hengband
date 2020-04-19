@@ -54,7 +54,7 @@
 
 #include "angband.h"
 #include "util.h"
-#include "term.h"
+#include "gameterm.h"
 
 #include "cmd-basic.h"
 #include "cmd-usestaff.h"

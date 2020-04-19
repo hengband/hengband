@@ -3,7 +3,7 @@
 #include "cmd-gameoption.h"
 #include "files.h"
 #include "io/read-pref-file.h"
-#include "term.h"
+#include "gameterm.h"
 
 /*!
  * @brief マクロ情報をprefファイルに保存する /

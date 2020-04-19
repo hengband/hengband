@@ -1,7 +1,7 @@
 ﻿#include "view/display-player-stat-info.h"
 #include "player-personality.h"
 #include "player-sex.h"
-#include "term.h"
+#include "gameterm.h"
 
 /*!
  * @brief プレイヤーの特性フラグ一覧表示2a /
