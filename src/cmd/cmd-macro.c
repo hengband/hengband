@@ -10,25 +10,26 @@
  * @param fname ファイル名
  * @return なし
  */
-static void macro_dump(FILE *auto_dump_stream, concptr fname)
+static void macro_dump(FILE **fpp, concptr fname)
 {
 	static concptr mark = "Macro Dump";
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 	FILE_TYPE(FILE_TYPE_TEXT);
-	if (!open_auto_dump(auto_dump_stream, buf, mark)) return;
+	if (!open_auto_dump(fpp, buf, mark)) return;
 
-	auto_dump_printf(auto_dump_stream, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
+	auto_dump_printf(*fpp, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
+
 	for (int i = 0; i < macro__num; i++)
 	{
 		ascii_to_text(buf, macro__act[i]);
-		auto_dump_printf(auto_dump_stream, "A:%s\n", buf);
+		auto_dump_printf(*fpp, "A:%s\n", buf);
 		ascii_to_text(buf, macro__pat[i]);
-		auto_dump_printf(auto_dump_stream, "P:%s\n", buf);
-		auto_dump_printf(auto_dump_stream, "\n");
+		auto_dump_printf(*fpp, "P:%s\n", buf);
+		auto_dump_printf(*fpp, "\n");
 	}
 
-	close_auto_dump(auto_dump_stream, mark);
+	close_auto_dump(fpp, mark);
 }
 
 
@@ -114,7 +115,7 @@ static errr keymap_dump(concptr fname)
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 	FILE_TYPE(FILE_TYPE_TEXT);
-	if (!open_auto_dump(auto_dump_stream, buf, mark)) return -1;
+	if (!open_auto_dump(&auto_dump_stream, buf, mark)) return -1;
 
 	auto_dump_printf(auto_dump_stream, _("\n# 自動キー配置セーブ\n\n", "\n# Automatic keymap dump\n\n"));
 	for (int i = 0; i < 256; i++)
@@ -131,7 +132,7 @@ static errr keymap_dump(concptr fname)
 		auto_dump_printf(auto_dump_stream, "C:%d:%s\n", mode, key);
 	}
 
-	close_auto_dump(auto_dump_stream, mark);
+	close_auto_dump(&auto_dump_stream, mark);
 	return 0;
 }
 
@@ -200,7 +201,7 @@ void do_cmd_macros(player_type *creature_ptr)
 			sprintf(tmp, "%s.prf", creature_ptr->base_name);
 			if (!askfor(tmp, 80)) continue;
 
-			macro_dump(auto_dump_stream, tmp);
+			macro_dump(&auto_dump_stream, tmp);
 			msg_print(_("マクロを追加しました。", "Appended macros."));
 		}
 		else if (i == '3')

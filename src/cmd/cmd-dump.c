@@ -376,7 +376,7 @@ void do_cmd_colors(player_type *creature_ptr)
 			if (!askfor(tmp, 70)) continue;
 
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
-			if (!open_auto_dump(auto_dump_stream, buf, mark)) continue;
+			if (!open_auto_dump(&auto_dump_stream, buf, mark)) continue;
 
 			auto_dump_printf(auto_dump_stream, _("\n# カラーの設定\n\n", "\n# Color redefinitions\n\n"));
 			for (i = 0; i < 256; i++)
@@ -396,7 +396,7 @@ void do_cmd_colors(player_type *creature_ptr)
 					i, kv, rv, gv, bv);
 			}
 
-			close_auto_dump(auto_dump_stream, mark);
+			close_auto_dump(&auto_dump_stream, mark);
 			msg_print(_("カラーの設定をファイルに書き出しました。", "Dumped color redefinitions."));
 		}
 		else if (i == '3')

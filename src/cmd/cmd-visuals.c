@@ -104,7 +104,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 			if (!askfor(tmp, 70)) continue;
 
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
-			if (!open_auto_dump(auto_dump_stream, buf, mark)) continue;
+			if (!open_auto_dump(&auto_dump_stream, buf, mark)) continue;
 
 			auto_dump_printf(auto_dump_stream, _("\n# モンスターの[色/文字]の設定\n\n", "\n# Monster attr/char definitions\n\n"));
 			for (i = 0; i < max_r_idx; i++)
@@ -117,7 +117,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 					(byte)(r_ptr->x_attr), (byte)(r_ptr->x_char));
 			}
 
-			close_auto_dump(auto_dump_stream, mark);
+			close_auto_dump(&auto_dump_stream, mark);
 			msg_print(_("モンスターの[色/文字]をファイルに書き出しました。", "Dumped monster attr/chars."));
 			break;
 		}
@@ -130,7 +130,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 			if (!askfor(tmp, 70)) continue;
 
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
-			if (!open_auto_dump(auto_dump_stream, buf, mark)) continue;
+			if (!open_auto_dump(&auto_dump_stream, buf, mark)) continue;
 
 			auto_dump_printf(auto_dump_stream, _("\n# アイテムの[色/文字]の設定\n\n", "\n# Object attr/char definitions\n\n"));
 			for (KIND_OBJECT_IDX k_idx = 0; k_idx < max_k_idx; k_idx++)
@@ -155,7 +155,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 					(byte)(k_ptr->x_attr), (byte)(k_ptr->x_char));
 			}
 
-			close_auto_dump(auto_dump_stream, mark);
+			close_auto_dump(&auto_dump_stream, mark);
 			msg_print(_("アイテムの[色/文字]をファイルに書き出しました。", "Dumped object attr/chars."));
 			break;
 		}
@@ -168,7 +168,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 			if (!askfor(tmp, 70)) continue;
 
 			path_build(buf, sizeof(buf), ANGBAND_DIR_USER, tmp);
-			if (!open_auto_dump(auto_dump_stream, buf, mark)) continue;
+			if (!open_auto_dump(&auto_dump_stream, buf, mark)) continue;
 
 			auto_dump_printf(auto_dump_stream, _("\n# 地形の[色/文字]の設定\n\n", "\n# Feature attr/char definitions\n\n"));
 			for (i = 0; i < max_f_idx; i++)
@@ -184,7 +184,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 					(byte)(f_ptr->x_attr[F_LIT_DARK]), (byte)(f_ptr->x_char[F_LIT_DARK]));
 			}
 
-			close_auto_dump(auto_dump_stream, mark);
+			close_auto_dump(&auto_dump_stream, mark);
 			msg_print(_("地形の[色/文字]をファイルに書き出しました。", "Dumped feature attr/chars."));
 			break;
 		}

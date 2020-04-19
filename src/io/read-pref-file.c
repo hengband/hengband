@@ -323,25 +323,25 @@ void auto_dump_printf(FILE *auto_dump_stream, concptr fmt, ...)
  * @param mark 出力するヘッダマーク
  * @return ファイルポインタを取得できたらTRUEを返す
  */
-bool open_auto_dump(FILE *auto_dump_stream, concptr buf, concptr mark)
+bool open_auto_dump(FILE **fpp, concptr buf, concptr mark)
 {
 	char header_mark_str[80];
 	concptr auto_dump_mark = mark;
 	sprintf(header_mark_str, auto_dump_header, auto_dump_mark);
 	remove_auto_dump(buf, mark);
-	auto_dump_stream = my_fopen(buf, "a");
-	if (!auto_dump_stream)
+	*fpp = my_fopen(buf, "a");
+	if (!fpp)
 	{
 		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
 		msg_print(NULL);
 		return FALSE;
 	}
 
-	fprintf(auto_dump_stream, "%s\n", header_mark_str);
+	fprintf(*fpp, "%s\n", header_mark_str);
 	auto_dump_line_num = 0;
-	auto_dump_printf(auto_dump_stream, _("# *警告!!* 以降の行は自動生成されたものです。\n",
+	auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n",
 		"# *Warning!*  The lines below are an automatic dump.\n"));
-	auto_dump_printf(auto_dump_stream, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
+	auto_dump_printf(*fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
 		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
 	return TRUE;
 }
@@ -351,14 +351,14 @@ bool open_auto_dump(FILE *auto_dump_stream, concptr buf, concptr mark)
  * Append foot part and close auto dump.
  * @return なし
  */
-void close_auto_dump(FILE *auto_dump_stream, concptr auto_dump_mark)
+void close_auto_dump(FILE **fpp, concptr auto_dump_mark)
 {
 	char footer_mark_str[80];
 	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
-	auto_dump_printf(auto_dump_stream, _("# *警告!!* 以降の行は自動生成されたものです。\n",
+	auto_dump_printf(*fpp, _("# *警告!!* 以降の行は自動生成されたものです。\n",
 		"# *Warning!*  The lines below are an automatic dump.\n"));
-	auto_dump_printf(auto_dump_stream, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
+	auto_dump_printf(*fpp, _("# *警告!!* 後で自動的に削除されるので編集しないでください。\n",
 		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
-	fprintf(auto_dump_stream, "%s (%d)\n", footer_mark_str, auto_dump_line_num);
-	my_fclose(auto_dump_stream);
+	fprintf(*fpp, "%s (%d)\n", footer_mark_str, auto_dump_line_num);
+	my_fclose(*fpp);
 }
