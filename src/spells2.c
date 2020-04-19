@@ -3101,6 +3101,7 @@ void wild_magic(player_type *caster_ptr, int spell)
 		break;
 	case 16: case 17:
 		wall_breaker(caster_ptr);
+		break;
 	case 18:
 		sleep_monsters_touch(caster_ptr);
 		break;
