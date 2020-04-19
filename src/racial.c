@@ -399,6 +399,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			if (retval) creature_ptr->energy_use = 10;
 			return (retval);
 		}
+			/* Fall through */
 		case CLASS_MAGE:
 		/* case CLASS_HIGH_MAGE: */
 		case CLASS_SORCERER:
@@ -878,6 +879,7 @@ void do_cmd_racial_power(player_type *creature_ptr)
 			power_desc[num++].number = -3;
 			break;
 		}
+		/* Fall through */
 	case CLASS_MAGE:
 		/* case CLASS_HIGH_MAGE: */
 	case CLASS_SORCERER:

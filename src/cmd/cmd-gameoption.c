@@ -954,9 +954,8 @@ static void do_cmd_options_win(void)
 			{
 				window_flag[x] &= ~(1L << i);
 			}
-
-			/* Fall through */
 		}
+			/* Fall through */
 
 		case 'y':
 		case 'Y':

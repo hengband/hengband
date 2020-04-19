@@ -1183,6 +1183,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 				y = creature_ptr->y;
 				x = creature_ptr->x;
 			}
+				/* Fall through */
 
 			case 'o':
 			{

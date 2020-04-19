@@ -3280,6 +3280,7 @@ static byte get_string_for_search(player_type *player_ptr, object_type **o_handl
 
 		case KTRL('r'):
 			back = TRUE;
+			/* Fall through */
 
 		case '\n':
 		case '\r':
@@ -3317,6 +3318,7 @@ static byte get_string_for_search(player_type *player_ptr, object_type **o_handl
 
 			pos = i;
 		}
+			/* Fall through */
 
 		case 0x7F:
 		case KTRL('d'):

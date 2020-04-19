@@ -377,6 +377,7 @@ void self_knowledge(player_type *creature_ptr)
 		break;
 	case CLASS_HIGH_MAGE:
 		if (creature_ptr->realm1 == REALM_HEX) break;
+		/* Fall through */
 	case CLASS_MAGE:
 	case CLASS_SORCERER:
 		if (plev > 24)

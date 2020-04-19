@@ -2801,6 +2801,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						break;
 					}
 				}
+					/* Fall through */
 				case RBE_HURT: /* AC軽減あり / Player armor reduces total damage */
 				{
 					obvious = TRUE;

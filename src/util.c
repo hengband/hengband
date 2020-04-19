@@ -2622,6 +2622,7 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
 
 			pos = i;
 		}
+			/* Fall through */
 
 		case 0x7F:
 		case KTRL('d'):

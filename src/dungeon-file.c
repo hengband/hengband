@@ -2808,11 +2808,11 @@ static errr parse_line_feature(floor_type *floor_ptr, char *buf)
 	letter[index].special = 0;
 	letter[index].random = RANDOM_NONE;
 
-	/* Fall through */
 	switch (num)
 	{
 	case 9:
 		letter[index].special = (s16b)atoi(zz[8]);
+		/* Fall through */
 	case 8:
 		if ((zz[7][0] == '*') && !zz[7][1])
 		{
@@ -2823,6 +2823,7 @@ static errr parse_line_feature(floor_type *floor_ptr, char *buf)
 			letter[index].trap = f_tag_to_index(zz[7]);
 			if (letter[index].trap < 0) return PARSE_ERROR_UNDEFINED_TERRAIN_TAG;
 		}
+		/* Fall through */
 	case 7:
 		if (zz[6][0] == '*')
 		{
@@ -2840,6 +2841,7 @@ static errr parse_line_feature(floor_type *floor_ptr, char *buf)
 		{
 			letter[index].artifact = (ARTIFACT_IDX)atoi(zz[6]);
 		}
+		/* Fall through */
 	case 6:
 		if (zz[5][0] == '*')
 		{
@@ -2850,6 +2852,7 @@ static errr parse_line_feature(floor_type *floor_ptr, char *buf)
 		{
 			letter[index].ego = (EGO_IDX)atoi(zz[5]);
 		}
+		/* Fall through */
 	case 5:
 		if (zz[4][0] == '*')
 		{
@@ -2875,6 +2878,7 @@ static errr parse_line_feature(floor_type *floor_ptr, char *buf)
 		{
 			letter[index].object = (IDX)atoi(zz[4]);
 		}
+		/* Fall through */
 	case 4:
 		if (zz[3][0] == '*')
 		{
@@ -2890,8 +2894,10 @@ static errr parse_line_feature(floor_type *floor_ptr, char *buf)
 		{
 			letter[index].monster = (IDX)atoi(zz[3]);
 		}
+		/* Fall through */
 	case 3:
 		letter[index].cave_info = atoi(zz[2]);
+		/* Fall through */
 	case 2:
 		if ((zz[1][0] == '*') && !zz[1][1])
 		{
