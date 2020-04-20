@@ -3246,60 +3246,32 @@ void do_cmd_knowledge(player_type *creature_ptr)
 		Term_clear();
 		prt(format(_("%d/2 ページ", "page %d/2"), (p + 1)), 2, 65);
 		prt(_("現在の知識を確認する", "Display current knowledge"), 3, 0);
+		if (p == 0)
+		{
+			prt(_("(1) 既知の伝説のアイテム                 の一覧", "(1) Display known artifacts"), 6, 5);
+			prt(_("(2) 既知のアイテム                       の一覧", "(2) Display known objects"), 7, 5);
+			prt(_("(3) 既知の生きているユニーク・モンスター の一覧", "(3) Display remaining uniques"), 8, 5);
+			prt(_("(4) 既知のモンスター                     の一覧", "(4) Display known monster"), 9, 5);
+			prt(_("(5) 倒した敵の数                         の一覧", "(5) Display kill count"), 10, 5);
+			if (!vanilla_town) prt(_("(6) 賞金首                               の一覧", "(6) Display wanted monsters"), 11, 5);
+			prt(_("(7) 現在のペット                         の一覧", "(7) Display current pets"), 12, 5);
+			prt(_("(8) 我が家のアイテム                     の一覧", "(8) Display home inventory"), 13, 5);
+			prt(_("(9) *鑑定*済み装備の耐性                 の一覧", "(9) Display *identified* equip."), 14, 5);
+			prt(_("(0) 地形の表示文字/タイル                の一覧", "(0) Display terrain symbols."), 15, 5);
+		}
+		else
+		{
+			prt(_("(a) 自分に関する情報                     の一覧", "(a) Display about yourself"), 6, 5);
+			prt(_("(b) 突然変異                             の一覧", "(b) Display mutations"), 7, 5);
+			prt(_("(c) 武器の経験値                         の一覧", "(c) Display weapon proficiency"), 8, 5);
+			prt(_("(d) 魔法の経験値                         の一覧", "(d) Display spell proficiency"), 9, 5);
+			prt(_("(e) 技能の経験値                         の一覧", "(e) Display misc. proficiency"), 10, 5);
+			prt(_("(f) プレイヤーの徳                       の一覧", "(f) Display virtues"), 11, 5);
+			prt(_("(g) 入ったダンジョン                     の一覧", "(g) Display dungeons"), 12, 5);
+			prt(_("(h) 実行中のクエスト                     の一覧", "(h) Display current quests"), 13, 5);
+			prt(_("(i) 現在の自動拾い/破壊設定              の一覧", "(i) Display auto pick/destroy"), 14, 5);
+		}
 
-#ifdef JP
-		if (p == 0)
-		{
-			prt("(1) 既知の伝説のアイテム                 の一覧", 6, 5);
-			prt("(2) 既知のアイテム                       の一覧", 7, 5);
-			prt("(3) 既知の生きているユニーク・モンスター の一覧", 8, 5);
-			prt("(4) 既知のモンスター                     の一覧", 9, 5);
-			prt("(5) 倒した敵の数                         の一覧", 10, 5);
-			if (!vanilla_town) prt("(6) 賞金首                               の一覧", 11, 5);
-			prt("(7) 現在のペット                         の一覧", 12, 5);
-			prt("(8) 我が家のアイテム                     の一覧", 13, 5);
-			prt("(9) *鑑定*済み装備の耐性                 の一覧", 14, 5);
-			prt("(0) 地形の表示文字/タイル                の一覧", 15, 5);
-		}
-		else
-		{
-			prt("(a) 自分に関する情報                     の一覧", 6, 5);
-			prt("(b) 突然変異                             の一覧", 7, 5);
-			prt("(c) 武器の経験値                         の一覧", 8, 5);
-			prt("(d) 魔法の経験値                         の一覧", 9, 5);
-			prt("(e) 技能の経験値                         の一覧", 10, 5);
-			prt("(f) プレイヤーの徳                       の一覧", 11, 5);
-			prt("(g) 入ったダンジョン                     の一覧", 12, 5);
-			prt("(h) 実行中のクエスト                     の一覧", 13, 5);
-			prt("(i) 現在の自動拾い/破壊設定              の一覧", 14, 5);
-		}
-#else
-		if (p == 0)
-		{
-			prt("(1) Display known artifacts", 6, 5);
-			prt("(2) Display known objects", 7, 5);
-			prt("(3) Display remaining uniques", 8, 5);
-			prt("(4) Display known monster", 9, 5);
-			prt("(5) Display kill count", 10, 5);
-			if (!vanilla_town) prt("(6) Display wanted monsters", 11, 5);
-			prt("(7) Display current pets", 12, 5);
-			prt("(8) Display home inventory", 13, 5);
-			prt("(9) Display *identified* equip.", 14, 5);
-			prt("(0) Display terrain symbols.", 15, 5);
-		}
-		else
-		{
-			prt("(a) Display about yourself", 6, 5);
-			prt("(b) Display mutations", 7, 5);
-			prt("(c) Display weapon proficiency", 8, 5);
-			prt("(d) Display spell proficiency", 9, 5);
-			prt("(e) Display misc. proficiency", 10, 5);
-			prt("(f) Display virtues", 11, 5);
-			prt("(g) Display dungeons", 12, 5);
-			prt("(h) Display current quests", 13, 5);
-			prt("(i) Display auto pick/destroy", 14, 5);
-		}
-#endif
 		prt(_("-続く-", "-more-"), 17, 8);
 		prt(_("ESC) 抜ける", "ESC) Exit menu"), 21, 1);
 		prt(_("SPACE) 次ページ", "SPACE) Next page"), 21, 30);
