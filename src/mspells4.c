@@ -177,9 +177,6 @@ void simple_monspell_message(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER
  */
 void spell_RF4_SHRIEK(MONSTER_IDX m_idx, player_type *target_ptr, MONSTER_IDX t_idx, int TARGET_TYPE)
 {
-	// temporary unused
-	(target_ptr);
-
 	simple_monspell_message(target_ptr, m_idx, t_idx,
 		_("%^sがかん高い金切り声をあげた。", "%^s makes a high pitched shriek."),
 		_("%^sが%sに向かって叫んだ。", "%^s shrieks at %s."),

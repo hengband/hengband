@@ -3766,10 +3766,10 @@ void print_path(player_type *player_ptr, POSITION y, POSITION x)
 		if (panel_contains(ny, nx))
 		{
 			TERM_COLOR a = default_color;
-			char c;
+			SYMBOL_CODE c;
 
 			TERM_COLOR ta = default_color;
-			char tc = '*';
+			SYMBOL_CODE tc = '*';
 
 			if (g_ptr->m_idx && floor_ptr->m_list[g_ptr->m_idx].ml)
 			{

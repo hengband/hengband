@@ -1040,7 +1040,8 @@ static errr Term_text_gcu(int x, int y, int n, byte a, concptr s)
 #endif
 
    /* Obtain a copy of the text */
-   for (i = 0; i < n; i++) text[i] = s[i];    text[n] = 0;
+   for (i = 0; i < n; i++) text[i] = s[i];
+   text[n] = 0;
 
    /* Move the cursor and dump the string */
    wmove(td->win, y, x);
@@ -1333,5 +1334,3 @@ errr init_gcu(int argc, char *argv[])
 
 
 #endif /* USE_GCU */
-
-

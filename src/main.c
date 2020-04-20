@@ -17,6 +17,7 @@
 #include "init.h"
 #include "scores.h"
 #include "gameterm.h"
+#include "player/process-name.h"
 #include "chuukei.h"
 
 /*

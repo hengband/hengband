@@ -57,7 +57,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 		cx += endcol;
 		i += endcol;
 
-		if (endcol == showercol)
+		if (shower && endcol == showercol)
 		{
 			int showerlen = strlen(shower);
 			Term_addstr(showerlen, TERM_YELLOW, &str[i]);
