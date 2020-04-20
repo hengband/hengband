@@ -19,7 +19,7 @@
 #include "market/black-market.h"
 #include "core.h"
 #include "util.h"
-#include "term.h"
+#include "gameterm.h"
 
 #include "floor.h"
 #include "io/write-diary.h"

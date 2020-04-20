@@ -7,7 +7,7 @@
  */
 
 #include "display-player-stat-info.h"
-#include "term.h"
+#include "gameterm.h"
 #include "player-personality.h"
 #include "player/permanent-resistances.h"
 

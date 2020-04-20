@@ -3,7 +3,7 @@
 #include "player-personality.h"
 #include "files.h"
 #include "world.h"
-#include "term.h"
+#include "gameterm.h"
 
 /*!
  * @brief プレイヤーの名前をチェックして修正する
@@ -50,7 +50,7 @@ void process_player_name(player_type *creature_ptr, bool sf)
 
 #ifdef JP
 		if (iskanji(c)) {
-			if (k + 2 >= sizeof(creature_ptr->base_name) || !creature_ptr->name[i + 1])
+			if (k + 2 >= (int)sizeof(creature_ptr->base_name) || !creature_ptr->name[i + 1])
 				break;
 
 			creature_ptr->base_name[k++] = c;

@@ -1,7 +1,7 @@
 ﻿#include "core/show-file.h"
 #include "files.h"
 #include "core.h" // 暫定。後で消す.
-#include "term.h"
+#include "gameterm.h"
 
 /*!
  * @param 表示とそれ以外を分割する
@@ -57,7 +57,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 		cx += endcol;
 		i += endcol;
 
-		if (endcol == showercol)
+		if (shower && endcol == showercol)
 		{
 			int showerlen = strlen(shower);
 			Term_addstr(showerlen, TERM_YELLOW, &str[i]);

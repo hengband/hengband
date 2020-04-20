@@ -3,7 +3,7 @@
 #include "autopick.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-gameoption.h"
-#include "term.h"
+#include "gameterm.h"
 #include "view-mainwindow.h"
 #include "cmd/cmd-dump.h"
 #include "core/show-file.h"
@@ -954,9 +954,8 @@ static void do_cmd_options_win(void)
 			{
 				window_flag[x] &= ~(1L << i);
 			}
-
-			/* Fall through */
 		}
+			/* Fall through */
 
 		case 'y':
 		case 'Y':

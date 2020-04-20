@@ -48,7 +48,7 @@
 #include "object-broken.h"
 #include "object-flavor.h"
 #include "quest.h"
-#include "term.h"
+#include "gameterm.h"
 #include "grid.h"
 #include "feature.h"
 #include "view-mainwindow.h"
@@ -1967,6 +1967,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 				break;
 			}
 		}
+			/* Fall through */
 		case GF_OLD_HEAL:
 		{
 			if (seen) obvious = TRUE;

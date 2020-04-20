@@ -3,7 +3,7 @@
 #include "util.h"
 #include "player-inventory.h"
 
-#include "term.h"
+#include "gameterm.h"
 #include "object.h"
 #include "objectkind.h"
 #include "object-flavor.h"
@@ -1425,9 +1425,8 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				done = TRUE;
 				break;
 			}
-
-			/* Fall through */
 		}
+			/* Fall through */
 
 		default:
 		{
@@ -2655,9 +2654,8 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				done = TRUE;
 				break;
 			}
-
-			/* Fall through */
 		}
+			/* Fall through */
 
 		default:
 		{

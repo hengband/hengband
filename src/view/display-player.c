@@ -8,7 +8,7 @@
 
 #include "display-player.h"
 #include "player-personality.h"
-#include "term.h"
+#include "gameterm.h"
 #include "status-first-page.h"
 #include "player-sex.h"
 #include "patron.h"

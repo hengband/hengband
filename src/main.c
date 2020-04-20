@@ -16,7 +16,8 @@
 #include "inet.h"
 #include "init.h"
 #include "scores.h"
-#include "term.h"
+#include "gameterm.h"
+#include "player/process-name.h"
 #include "chuukei.h"
 
 /*

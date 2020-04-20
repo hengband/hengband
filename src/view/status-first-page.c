@@ -6,7 +6,7 @@
  */
 
 #include "angband.h"
-#include "term.h"
+#include "gameterm.h"
 #include "status-first-page.h"
 #include "display-util.h"
 #include "artifact.h"

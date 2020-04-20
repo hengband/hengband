@@ -2421,6 +2421,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 				earthquake(target_ptr, target_ptr->y, target_ptr->x, 5 + randint0(10), 0);
 				if (!one_in_(6)) break;
 			}
+			/* Fall through */
 		case 30: case 31:
 			if (!(*count))
 			{
@@ -2430,6 +2431,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 				take_hit(target_ptr, DAMAGE_NOESCAPE, dam, _("純粋な魔力の解放", "released pure mana"), -1);
 				if (!one_in_(6)) break;
 			}
+			/* Fall through */
 		case 32: case 33:
 			if (!(*count))
 			{
@@ -2438,6 +2440,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 				if (randint0(13)) (*count) += activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, FALSE);
 				if (!one_in_(6)) break;
 			}
+			/* Fall through */
 		case 34:
 			msg_print(_("エネルギーのうねりを感じた！", "You feel a surge of energy!"));
 			wall_breaker(target_ptr);
@@ -2448,19 +2451,24 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 			}
 
 			if (!one_in_(6)) break;
+			/* Fall through */
 		case 1: case 2: case 3: case 16: case 17:
 			aggravate_monsters(target_ptr, 0);
 			if (!one_in_(6)) break;
+			/* Fall through */
 		case 4: case 5: case 6:
 			(*count) += activate_hi_summon(target_ptr, target_ptr->y, target_ptr->x, FALSE);
 			if (!one_in_(6)) break;
+			/* Fall through */
 		case 7: case 8: case 9: case 18:
 			(*count) += summon_specific(target_ptr, 0, target_ptr->y, target_ptr->x, floor_ptr->dun_level, 0, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET));
 			if (!one_in_(6)) break;
+			/* Fall through */
 		case 10: case 11: case 12:
 			msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away..."));
 			lose_exp(target_ptr, target_ptr->exp / 16);
 			if (!one_in_(6)) break;
+			/* Fall through */
 		case 13: case 14: case 15: case 19: case 20:
 		{
 			bool is_statue = stop_ty;
@@ -2478,13 +2486,16 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 
 			if (!one_in_(6)) break;
 		}
+			/* Fall through */
 		case 21: case 22: case 23:
 			(void)do_dec_stat(target_ptr, randint0(6));
 			if (!one_in_(6)) break;
+			/* Fall through */
 		case 24:
 			msg_print(_("ほえ？私は誰？ここで何してる？", "Huh? Who am I? What am I doing here?"));
 			lose_all_info(target_ptr);
 			if (!one_in_(6)) break;
+			/* Fall through */
 		case 25:
 			if ((floor_ptr->dun_level > 65) && !stop_ty)
 			{
@@ -2494,6 +2505,7 @@ bool activate_ty_curse(player_type *target_ptr, bool stop_ty, int *count)
 			}
 
 			if (!one_in_(6)) break;
+			/* Fall through */
 		default:
 			for (int i = 0; i < A_MAX; i++)
 			{
@@ -3089,6 +3101,7 @@ void wild_magic(player_type *caster_ptr, int spell)
 		break;
 	case 16: case 17:
 		wall_breaker(caster_ptr);
+		break;
 	case 18:
 		sleep_monsters_touch(caster_ptr);
 		break;

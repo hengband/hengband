@@ -108,7 +108,7 @@
 #include "files.h"
 #include "core.h"
 #include "world.h"
-#include "term.h"
+#include "gameterm.h"
 
 #ifdef WINDOWS
 #include <windows.h>

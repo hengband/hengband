@@ -560,6 +560,7 @@ char *object_desc_kosuu(char *t, object_type *o_ptr)
 			break;
 		}
 	}
+		/* Fall through */
 	default:
 	{
 		if (o_ptr->number < 10)

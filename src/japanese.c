@@ -393,7 +393,8 @@ bool iskanji2(concptr s, int x)
 static bool is_ascii_str(concptr str)
 {
 	for (;*str; str++) {
-		if (!(0x00 < *str && *str <= 0x7f))
+		int ch = *str;
+		if (!(0x00 < ch && ch <= 0x7f))
 			return FALSE;
 	}
 	return TRUE;
@@ -449,7 +450,7 @@ static void ms_to_jis_unicode(char* str)
 
 		if ((*p & 0xe0) == 0xc0) subseq_num = 1;
 		if ((*p & 0xf0) == 0xe0) {
-			int i;
+			size_t i;
 			for (i = 0; i < sizeof(ms_to_jis_unicode_conv) / sizeof(ms_to_jis_unicode_conv[0]); ++ i) {
 				const struct ms_to_jis_unicode_conv_t *c = &ms_to_jis_unicode_conv[i];
 				if (memcmp(p, c->from, 3) == 0) {

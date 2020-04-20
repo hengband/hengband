@@ -13,7 +13,7 @@
 #include "angband.h"
 #include "signal-handlers.h"
 #include "core.h"
-#include "term.h"
+#include "gameterm.h"
 #include "util.h"
 #include "files.h"
 #include "monsterrace-hook.h"
@@ -2622,6 +2622,7 @@ bool askfor_aux(char *buf, int len, bool numpad_cursor)
 
 			pos = i;
 		}
+			/* Fall through */
 
 		case 0x7F:
 		case KTRL('d'):
