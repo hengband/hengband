@@ -1595,8 +1595,8 @@ static void display_visual_list(int col, int row, int height, int width, TERM_CO
 				(!use_graphics && ic > 0x7f))
 				continue;
 
-			TERM_COLOR a = ia;
-			SYMBOL_CODE c = ic;
+			TERM_COLOR a = (TERM_COLOR)ia;
+			SYMBOL_CODE c = (SYMBOL_CODE)ic;
 			if (c & 0x80) a |= 0x80;
 
 			Term_queue_bigchar(x, y, a, c, 0, 0);
