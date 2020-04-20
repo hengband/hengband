@@ -14,32 +14,46 @@ static concptr inven_res_label = _(
 #define HAS_FLAG_STR _("＋", "+ ")
 #define NO_FLAG_STR  _("・", ". ")
 
-// todo: 普通の関数に直す
-#define print_im_or_res_flag(IM, RES) \
-{ \
-	fputs(have_flag(flgs, (IM)) ? IM_FLAG_STR : \
-	      (have_flag(flgs, (RES)) ? HAS_FLAG_STR : NO_FLAG_STR), fff); \
-}
 
-
-// todo: 普通の関数に直す
-#define print_flag(TR) \
-{ \
-	fputs(have_flag(flgs, (TR)) ? HAS_FLAG_STR : NO_FLAG_STR, fff); \
+/*!
+ * @brief 4元素耐性を表示する
+ * @param immunity 4元素耐性の種類 (二重？)
+ * @param resistance 4元素耐性
+ * @param flags 耐性配列へのポインタ
+ * @param fff 一時ファイルへのポインタ
+ * @return なし
+ */
+static void print_im_or_res_flag(int immunity, int resistance, BIT_FLAGS *flags, FILE *fff)
+{
+	fputs(have_flag(flags, immunity) ? IM_FLAG_STR :
+	      (have_flag(flags, resistance) ? HAS_FLAG_STR : NO_FLAG_STR), fff);
 }
 
 
 /*!
- * @brief 
- * @param creature_ptr
- * @param fff
- * @param o_ptr
- * @param j
- * @param tval
- * @param where
+ * @brief 4元素以外の耐性を表示する
+ * @param tr 耐性
+ * @param flags 耐性配列へのポインタ
+ * @param fff 一時ファイルへのポインタ
  * @return なし
  */
-void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff, object_type *o_ptr, int *j, OBJECT_TYPE_VALUE tval, char *where)
+static void print_flag(int tr, BIT_FLAGS *flags, FILE *fff)
+{
+	fputs(have_flag(flags, tr) ? HAS_FLAG_STR : NO_FLAG_STR, fff);
+}
+
+
+/*!
+ * @brief アイテム1つ当たりの耐性を表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param fff 一時ファイルへの参照ポインタ
+ * @param o_ptr アイテムへの参照ポインタ
+ * @param j アイテム番号(？)への参照ポインタ
+ * @param tval アイテム主分類番号
+ * @param where アイテムの場所 (手持ち、家等) を示す文字列への参照ポインタ
+ * @return なし
+ */
+static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff, object_type *o_ptr, int *j, OBJECT_TYPE_VALUE tval, char *where)
 {
 	if (o_ptr->k_idx == 0) return;
 	if (o_ptr->tval != tval) return;
@@ -91,32 +105,32 @@ void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff, object
 		BIT_FLAGS flgs[TR_FLAG_SIZE];
 		object_flags_known(o_ptr, flgs);
 
-		print_im_or_res_flag(TR_IM_ACID, TR_RES_ACID);
-		print_im_or_res_flag(TR_IM_ELEC, TR_RES_ELEC);
-		print_im_or_res_flag(TR_IM_FIRE, TR_RES_FIRE);
-		print_im_or_res_flag(TR_IM_COLD, TR_RES_COLD);
-		print_flag(TR_RES_POIS);
-		print_flag(TR_RES_LITE);
-		print_flag(TR_RES_DARK);
-		print_flag(TR_RES_SHARDS);
-		print_flag(TR_RES_SOUND);
-		print_flag(TR_RES_NETHER);
-		print_flag(TR_RES_NEXUS);
-		print_flag(TR_RES_CHAOS);
-		print_flag(TR_RES_DISEN);
+		print_im_or_res_flag(TR_IM_ACID, TR_RES_ACID, flgs, fff);
+		print_im_or_res_flag(TR_IM_ELEC, TR_RES_ELEC, flgs, fff);
+		print_im_or_res_flag(TR_IM_FIRE, TR_RES_FIRE, flgs, fff);
+		print_im_or_res_flag(TR_IM_COLD, TR_RES_COLD, flgs, fff);
+		print_flag(TR_RES_POIS, flgs, fff);
+		print_flag(TR_RES_LITE, flgs, fff);
+		print_flag(TR_RES_DARK, flgs, fff);
+		print_flag(TR_RES_SHARDS, flgs, fff);
+		print_flag(TR_RES_SOUND, flgs, fff);
+		print_flag(TR_RES_NETHER, flgs, fff);
+		print_flag(TR_RES_NEXUS, flgs, fff);
+		print_flag(TR_RES_CHAOS, flgs, fff);
+		print_flag(TR_RES_DISEN, flgs, fff);
 
 		fputs(" ", fff);
 
-		print_flag(TR_RES_BLIND);
-		print_flag(TR_RES_FEAR);
-		print_flag(TR_RES_CONF);
-		print_flag(TR_FREE_ACT);
-		print_flag(TR_SEE_INVIS);
-		print_flag(TR_HOLD_EXP);
-		print_flag(TR_TELEPATHY);
-		print_flag(TR_SLOW_DIGEST);
-		print_flag(TR_REGEN);
-		print_flag(TR_LEVITATION);
+		print_flag(TR_RES_BLIND, flgs, fff);
+		print_flag(TR_RES_FEAR, flgs, fff);
+		print_flag(TR_RES_CONF, flgs, fff);
+		print_flag(TR_FREE_ACT, flgs, fff);
+		print_flag(TR_SEE_INVIS, flgs, fff);
+		print_flag(TR_HOLD_EXP, flgs, fff);
+		print_flag(TR_TELEPATHY, flgs, fff);
+		print_flag(TR_SLOW_DIGEST, flgs, fff);
+		print_flag(TR_REGEN, flgs, fff);
+		print_flag(TR_LEVITATION, flgs, fff);
 
 		fputc('\n', fff);
 	}
