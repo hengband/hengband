@@ -44,6 +44,27 @@ static void print_flag(int tr, BIT_FLAGS *flags, FILE *fff)
 
 
 /*!
+ * @brief 特殊なアイテムかどうかを調べる
+ * @param o_ptr アイテムへの参照ポインタ
+ * @param tval アイテム主分類番号
+ * @return 特殊なアイテムならTRUE
+ */
+static bool determine_spcial_item_type(object_type *o_ptr, OBJECT_TYPE_VALUE tval)
+{
+	bool is_special_item_type = (object_is_wearable(o_ptr) && object_is_ego(o_ptr))
+		|| ((tval == TV_AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
+		|| ((tval == TV_RING) && (o_ptr->sval == SV_RING_LORDLY))
+		|| ((tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))
+		|| ((tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM))
+		|| ((tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
+		|| ((tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE))
+		|| object_is_artifact(o_ptr);
+
+	return is_special_item_type;
+}
+
+
+/*!
  * @brief アイテム1つ当たりの耐性を表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff 一時ファイルへの参照ポインタ
@@ -58,19 +79,7 @@ static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff,
 	if (o_ptr->k_idx == 0) return;
 	if (o_ptr->tval != tval) return;
 	if (!object_is_known(o_ptr)) return;
-
-	bool is_special_item_type = (object_is_wearable(o_ptr) && object_is_ego(o_ptr))
-		|| ((tval == TV_AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
-		|| ((tval == TV_RING) && (o_ptr->sval == SV_RING_LORDLY))
-		|| ((tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD))
-		|| ((tval == TV_HELM) && (o_ptr->sval == SV_DRAGON_HELM))
-		|| ((tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES))
-		|| ((tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE))
-		|| object_is_artifact(o_ptr);
-	if (!is_special_item_type)
-	{
-		return;
-	}
+	if (!determine_spcial_item_type(o_ptr, tval)) return;
 
 	int i = 0;
 	GAME_TEXT o_name[MAX_NLEN];
