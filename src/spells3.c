@@ -39,6 +39,7 @@
 #include "spells.h"
 #include "spells-floor.h"
 #include "grid.h"
+#include "market/building-util.h"
 #include "monster-process.h"
 #include "monster-status.h"
 #include "monster-spell.h"

@@ -565,6 +565,9 @@
     <ClCompile Include="..\..\src\cmd\cmd-inventory.c">
       <Filter>cmd</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\market\building-util.c">
+      <Filter>market</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1111,6 +1114,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-inventory.h">
       <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\building-util.h">
+      <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
