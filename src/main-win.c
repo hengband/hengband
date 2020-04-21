@@ -225,42 +225,11 @@
 #define IDM_HELP_CONTENTS       901
 
 /*
- * Exclude parts of WINDOWS.H that are not needed
- */
-#define NOCOMM            /* Comm driver APIs and definitions */
-#define NOLOGERROR        /* LogError() and related definitions */
-#define NOPROFILER        /* Profiler APIs */
-#define NOLFILEIO         /* _l* file I/O routines */
-#define NOOPENFILE        /* OpenFile and related definitions */
-#define NORESOURCE        /* Resource management */
-#define NOATOM            /* Atom management */
-#define NOLANGUAGE        /* Character test routines */
-#define NOLSTRING         /* lstr* string management routines */
-#define NODBCS            /* Double-byte character set routines */
-#define NOKEYBOARDINFO    /* Keyboard driver routines */
-#define NOCOLOR           /* COLOR_* color values */
-#define NODRAWTEXT        /* DrawText() and related definitions */
-#define NOSCALABLEFONT    /* Truetype scalable font support */
-#define NOMETAFILE        /* Metafile support */
-#define NOSYSTEMPARAMSINFO /* SystemParametersInfo() and SPI_* definitions */
-#define NODEFERWINDOWPOS  /* DeferWindowPos and related definitions */
-#define NOKEYSTATES       /* MK_* message key state flags */
-#define NOWH              /* SetWindowsHook and related WH_* definitions */
-#define NOCLIPBOARD       /* Clipboard APIs and definitions */
-#define NOICONS           /* IDI_* icon IDs */
-#define NOMDI             /* MDI support */
-#define NOHELP            /* Help support */
-
-/* Not defined since it breaks Borland C++ 5.5 */
-/* #define NOCTLMGR */    /* Control management and controls */
-
-/*
  * Exclude parts of WINDOWS.H that are not needed (Win32)
  */
 #define WIN32_LEAN_AND_MEAN
 #define NONLS             /* All NLS defines and routines */
 #define NOSERVICE         /* All Service Controller routines, SERVICE_ equates, etc. */
-#define NOKANJI           /* Kanji support stuff. */
 #define NOMCX             /* Modem Configuration Extensions */
 
 /*
@@ -279,7 +248,6 @@
 #define MMNOJOY          /* Joystick support */
 #define MMNOMCI          /* MCI support */
 #define MMNOMMIO         /* Multimedia file I/O support */
-#define MMNOMMSYSTEM     /* General MMSYSTEM functions */
 
 #define INVALID_FILE_NAME (DWORD)0xFFFFFFFF
 #define MOUSE_SENS 40
