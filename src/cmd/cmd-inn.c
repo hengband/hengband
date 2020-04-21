@@ -27,6 +27,22 @@ static bool buy_food(player_type *customer_ptr)
 
 
 /*!
+ * @brief 健康体しか宿屋に泊めない処理
+ * @param customer_ptr プレーヤーへの参照ポインタ
+ * @return 毒でも切り傷でもないならTRUE、そうでないならFALSE
+ */
+static bool is_healthy_stay(player_type *customer_ptr)
+{
+	if (!customer_ptr->poisoned && !customer_ptr->cut) return TRUE;
+
+	msg_print(_("あなたに必要なのは部屋ではなく、治療者です。", "You need a healer, not a room."));
+	msg_print(NULL);
+	msg_print(_("すみません、でもうちで誰かに死なれちゃ困りますんで。", "Sorry, but don't want anyone dying in here."));
+	return FALSE;
+}
+
+
+/*!
  * @brief 宿屋を利用する
  * @param customer_ptr プレーヤーへの参照ポインタ
  * @param cmd 宿屋の利用施設ID
@@ -47,13 +63,7 @@ bool inn_comm(player_type *customer_ptr, int cmd)
 		return buy_food(customer_ptr);
 	case BACT_REST: /* Rest for the night */
 	{
-		if ((customer_ptr->poisoned) || (customer_ptr->cut))
-		{
-			msg_print(_("あなたに必要なのは部屋ではなく、治療者です。", "You need a healer, not a room."));
-			msg_print(NULL);
-			msg_print(_("すみません、でもうちで誰かに死なれちゃ困りますんで。", "Sorry, but don't want anyone dying in here."));
-			break;
-		}
+		if (!is_healthy_stay(customer_ptr)) return FALSE;
 
 		s32b oldturn = current_world_ptr->game_turn;
 		int prev_day, prev_hour, prev_min;
