@@ -46,6 +46,7 @@ static bool is_healthy_stay(player_type *customer_ptr)
  * @brief 宿屋に泊まったことを日記に残す
  * @param customer_ptr プレーヤーへの参照ポインタ
  * @param prev_hour 宿屋に入った直後の時刻の時刻
+ * @return なし
  */
 static void stay_inn(player_type *customer_ptr, int prev_hour)
 {
@@ -62,6 +63,26 @@ static void stay_inn(player_type *customer_ptr, int prev_hour)
 
 	concptr stay_message_jp = is_player_undead ? "夜が明けるまで宿屋で過ごした" : "宿屋に泊まった";
 	exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _(stay_message_jp, "stayed overnight at the inn."));
+}
+
+
+/*!
+ * @brief 宿泊によってゲーム内ターンを経過させる
+ * @param なし
+ * @return なし
+ */
+static void pass_game_turn_by_stay(void)
+{
+	s32b oldturn = current_world_ptr->game_turn;
+	current_world_ptr->game_turn =
+		(current_world_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) *
+		(TURNS_PER_TICK * TOWN_DAWN / 2);
+	if (current_world_ptr->dungeon_turn >= current_world_ptr->dungeon_turn_limit)
+		return;
+
+	current_world_ptr->dungeon_turn += MIN((current_world_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
+	if (current_world_ptr->dungeon_turn > current_world_ptr->dungeon_turn_limit)
+		current_world_ptr->dungeon_turn = current_world_ptr->dungeon_turn_limit;
 }
 
 
@@ -88,21 +109,16 @@ bool inn_comm(player_type *customer_ptr, int cmd)
 	{
 		if (!is_healthy_stay(customer_ptr)) return FALSE;
 
-		s32b oldturn = current_world_ptr->game_turn;
 		int prev_day, prev_hour, prev_min;
 		extract_day_hour_min(customer_ptr, &prev_day, &prev_hour, &prev_min);
 		stay_inn(customer_ptr, prev_hour);
 
-		current_world_ptr->game_turn = (current_world_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
-		if (current_world_ptr->dungeon_turn < current_world_ptr->dungeon_turn_limit)
-		{
-			current_world_ptr->dungeon_turn += MIN((current_world_ptr->game_turn - oldturn), TURNS_PER_TICK * 250) * INN_DUNGEON_TURN_ADJ;
-			if (current_world_ptr->dungeon_turn > current_world_ptr->dungeon_turn_limit) current_world_ptr->dungeon_turn = current_world_ptr->dungeon_turn_limit;
-		}
-
+		pass_game_turn_by_stay();
 		prevent_turn_overflow(customer_ptr);
 
-		if ((prev_hour >= 18) && (prev_hour <= 23)) exe_write_diary(customer_ptr, DIARY_DIALY, 0, NULL);
+		if ((prev_hour >= 18) && (prev_hour <= 23))
+			exe_write_diary(customer_ptr, DIARY_DIALY, 0, NULL);
+
 		customer_ptr->chp = customer_ptr->mhp;
 
 		if (ironman_nightmare)
