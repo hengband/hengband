@@ -75,7 +75,7 @@
 #include "files.h"
 #include "player-skill.h"
 #include "player-class.h"
-#include "player-race.h"
+#include "player/race-info-table.h"
 #include "player-personality.h"
 #include "player-sex.h"
 #include "birth.h"

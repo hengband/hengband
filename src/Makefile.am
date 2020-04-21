@@ -33,9 +33,11 @@ hengband_SOURCES = \
 	view/display-util.c view/display-util.h \
 	\
 	player/process-death.c player/process-death.h \
+	player/race-info-table.c player/race-info-table.h\
 	player/race-resistances.c player/race-resistances.h \
 	player/permanent-resistances.c player/permanent-resistances.h \
 	player/temporary-resistances.c player/temporary-resistances.h \
+
 	player/process-name.c player/process-name.h \
 	\
 	io/gf-descriptions.c io/gf-descriptions.h \

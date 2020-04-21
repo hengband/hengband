@@ -39,7 +39,7 @@
 #include "player-class.h"
 #include "player-move.h"
 #include "player-effects.h"
-#include "player-race.h"
+#include "player/race-info-table.h"
 #include "player-class.h"
 #include "player-personality.h"
 #include "player-sex.h"

@@ -18,6 +18,7 @@
 #include "avatar.h"
 #include "market/store-util.h"
 #include "market/arena-info-table.h"
+#include "player/race-info-table.h"
 
 /*!
  * @brief プレイヤーのペット情報をファイルにダンプする

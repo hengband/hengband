@@ -48,7 +48,7 @@
 #include "snipe.h"
 #include "files.h"
 #include "player-effects.h"
-#include "player-race.h"
+#include "player/race-info-table.h"
 #include "mind.h"
 #include "world.h"
 #include "objectkind.h"

@@ -17,7 +17,7 @@
 #include "core.h"
 
 #include "dungeon.h"
-#include "player-race.h"
+#include "player/race-info-table.h"
 #include "player-status.h"
 #include "player-class.h"
 #include "player-personality.h"
