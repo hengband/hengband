@@ -177,7 +177,7 @@ static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff,
 /*!
  * @brief 9行おきにラベルを追加する
  * @param label_number 現在の行数
- * @param fff ファイルへの参照ポインタ
+ * @param fff 一時ファイルへの参照ポインタ
  * @return なし
  */
 static void add_res_label(int *label_number, FILE *fff)
@@ -188,6 +188,26 @@ static void add_res_label(int *label_number, FILE *fff)
 		*label_number = 0;
 		fprintf(fff, "%s\n", inven_res_label);
 	}
+}
+
+
+/*!
+ * @brief 9行ごとに行数をリセットする
+ * @param label_number 現在の行数
+ * @param fff 一時ファイルへの参照ポインタ
+ * @return なし
+ */
+static void reset_label_number(int *label_number, FILE *fff)
+{
+	if (*label_number == 0) return;
+
+	for (; *label_number < 9; (*label_number)++)
+	{
+		fputc('\n', fff);
+	}
+
+	*label_number = 0;
+	fprintf(fff, "%s\n", inven_res_label);
 }
 
 
@@ -287,17 +307,7 @@ void do_cmd_knowledge_inventory(player_type *creature_ptr)
 	int label_number = 0;
 	for (OBJECT_TYPE_VALUE tval = TV_WEARABLE_BEGIN; tval <= TV_WEARABLE_END; tval++)
 	{
-		if (label_number != 0)
-		{
-			for (; label_number < 9; label_number++)
-			{
-				fputc('\n', fff);
-			}
-
-			label_number = 0;
-			fprintf(fff, "%s\n", inven_res_label);
-		}
-
+		reset_label_number(&label_number, fff);
 		show_wearing_equipment_resistances(creature_ptr, tval, &label_number, fff);
 		show_holding_equipment_resistances(creature_ptr, tval, &label_number, fff);
 		show_home_equipment_resistances(creature_ptr, tval, &label_number, fff);
