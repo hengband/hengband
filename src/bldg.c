@@ -1,15 +1,15 @@
 ﻿/*!
-	@file bldg.c
-	@brief 町の施設処理 / Building commands
-	@date 2013/12/23
-	@author
-	Created by Ken Wigle for Kangband - a variant of Angband 2.8.3\n
-	-KMW-\n
-	\n
-	Rewritten for Kangband 2.8.3i using Kamband's version of\n
-	bldg.c as written by Ivan Tkatchev\n
-	\n
-	Changed for ZAngband by Robert Ruehlmann\n
+ @file bldg.c
+ @brief 町の施設処理 / Building commands
+ @date 2013/12/23
+ @author
+ Created by Ken Wigle for Kangband - a variant of Angband 2.8.3
+ -KMW-
+ 
+ Rewritten for Kangband 2.8.3i using Kamband's version of
+ bldg.c as written by Ivan Tkatchev
+ 
+ Changed for ZAngband by Robert Ruehlmann
 */
 
 #include "angband.h"
@@ -64,6 +64,7 @@
 
 #include "market/poker.h"
 #include "market/building-util.h"
+#include "view/display-fruit.h"
 
 /*
  * todo MAX_BLDGが定義されていない旨のエラーが出る……がコンパイルには成功する
@@ -425,92 +426,6 @@ static void arena_comm(player_type *player_ptr, int cmd)
 		/* Peruse the arena help file */
 		(void)show_file(player_ptr, TRUE, _("arena_j.txt", "arena.txt"), NULL, 0, 0);
 		screen_load();
-		break;
-	}
-}
-
-
-/*!
- * @brief カジノのスロットシンボルを表示する / display fruit for dice slots
- * @param row シンボルを表示する行の上端
- * @param col シンボルを表示する行の左端
- * @param fruit 表示するシンボルID
- * @return なし
- */
-static void display_fruit(int row, int col, int fruit)
-{
-	switch (fruit)
-	{
-	case 0: /* lemon */
-		c_put_str(TERM_YELLOW, "   ####.", row, col);
-		c_put_str(TERM_YELLOW, "  #    #", row + 1, col);
-		c_put_str(TERM_YELLOW, " #     #", row + 2, col);
-		c_put_str(TERM_YELLOW, "#      #", row + 3, col);
-		c_put_str(TERM_YELLOW, "#      #", row + 4, col);
-		c_put_str(TERM_YELLOW, "#     # ", row + 5, col);
-		c_put_str(TERM_YELLOW, "#    #  ", row + 6, col);
-		c_put_str(TERM_YELLOW, ".####   ", row + 7, col);
-		prt(_(" レモン ",
-			" Lemon  "), row + 8, col);
-		break;
-	case 1: /* orange */
-		c_put_str(TERM_ORANGE, "   ##   ", row, col);
-		c_put_str(TERM_ORANGE, "  #..#  ", row + 1, col);
-		c_put_str(TERM_ORANGE, " #....# ", row + 2, col);
-		c_put_str(TERM_ORANGE, "#......#", row + 3, col);
-		c_put_str(TERM_ORANGE, "#......#", row + 4, col);
-		c_put_str(TERM_ORANGE, " #....# ", row + 5, col);
-		c_put_str(TERM_ORANGE, "  #..#  ", row + 6, col);
-		c_put_str(TERM_ORANGE, "   ##   ", row + 7, col);
-		prt(_("オレンジ",
-			" Orange "), row + 8, col);
-		break;
-	case 2: /* sword */
-		c_put_str(TERM_SLATE, _("   Λ   ", "   /\\   "), row, col);
-		c_put_str(TERM_SLATE, _("   ||   ", "   ##   "), row + 1, col);
-		c_put_str(TERM_SLATE, _("   ||   ", "   ##   "), row + 2, col);
-		c_put_str(TERM_SLATE, _("   ||   ", "   ##   "), row + 3, col);
-		c_put_str(TERM_SLATE, _("   ||   ", "   ##   "), row + 4, col);
-		c_put_str(TERM_SLATE, _("   ||   ", "   ##   "), row + 5, col);
-		c_put_str(TERM_UMBER, _(" |=亜=| ", " ###### "), row + 6, col);
-		c_put_str(TERM_UMBER, _("   目   ", "   ##   "), row + 7, col);
-		prt(_("   剣   ", " Sword  "), row + 8, col);
-		break;
-	case 3: /* shield */
-		c_put_str(TERM_SLATE, " ###### ", row, col);
-		c_put_str(TERM_SLATE, "#      #", row + 1, col);
-		c_put_str(TERM_SLATE, "# ++++ #", row + 2, col);
-		c_put_str(TERM_SLATE, "# +==+ #", row + 3, col);
-		c_put_str(TERM_SLATE, "#  ++  #", row + 4, col);
-		c_put_str(TERM_SLATE, " #    # ", row + 5, col);
-		c_put_str(TERM_SLATE, "  #  #  ", row + 6, col);
-		c_put_str(TERM_SLATE, "   ##   ", row + 7, col);
-		prt(_("   盾   ",
-			" Shield "), row + 8, col);
-		break;
-	case 4: /* plum */
-		c_put_str(TERM_VIOLET, "   ##   ", row, col);
-		c_put_str(TERM_VIOLET, " ###### ", row + 1, col);
-		c_put_str(TERM_VIOLET, "########", row + 2, col);
-		c_put_str(TERM_VIOLET, "########", row + 3, col);
-		c_put_str(TERM_VIOLET, "########", row + 4, col);
-		c_put_str(TERM_VIOLET, " ###### ", row + 5, col);
-		c_put_str(TERM_VIOLET, "  ####  ", row + 6, col);
-		c_put_str(TERM_VIOLET, "   ##   ", row + 7, col);
-		prt(_(" プラム ",
-			"  Plum  "), row + 8, col);
-		break;
-	case 5: /* cherry */
-		c_put_str(TERM_RED, "      ##", row, col);
-		c_put_str(TERM_RED, "   ###  ", row + 1, col);
-		c_put_str(TERM_RED, "  #..#  ", row + 2, col);
-		c_put_str(TERM_RED, "  #..#  ", row + 3, col);
-		c_put_str(TERM_RED, " ###### ", row + 4, col);
-		c_put_str(TERM_RED, "#..##..#", row + 5, col);
-		c_put_str(TERM_RED, "#..##..#", row + 6, col);
-		c_put_str(TERM_RED, " ##  ## ", row + 7, col);
-		prt(_("チェリー",
-			" Cherry "), row + 8, col);
 		break;
 	}
 }

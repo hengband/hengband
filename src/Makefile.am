@@ -22,6 +22,7 @@ hengband_SOURCES = \
 	store.c store.h bldg.c bldg.h chest.c chest.h chuukei.c chuukei.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
+	view/display-fruit.c view/display-fruit.h \
 	view/display-player-stat-info.c view/display-player-stat-info.h \
 	view/display-player-misc-info.c view/display-player-misc-info.h \
 	view/display-player-middle.c view/display-player-middle.h \
