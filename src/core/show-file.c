@@ -4,7 +4,7 @@
 #include "term.h"
 
 /*!
- * @param 表示とそれ以外を分割する
+ * todo 表示とそれ以外を分割する
  * @brief ファイル内容の一行をコンソールに出力する
  * Display single line of on-line help file
  * @param str 出力する文字列
@@ -96,7 +96,7 @@ static void show_file_aux_line(concptr str, int cy, concptr shower)
 
 
 /*!
- * @param 表示とそれ以外を分割する
+ * todo 表示とそれ以外を分割する
  * @brief ファイル内容をコンソールに出力する
  * Recursive file perusal.
  * @param creature_ptr プレーヤーへの参照ポインタ
