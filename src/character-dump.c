@@ -17,6 +17,7 @@
 #include "io/write-diary.h"
 #include "avatar.h"
 #include "market/store-util.h"
+#include "market/arena_info_table.h"
 
 /*!
  * @brief プレイヤーのペット情報をファイルにダンプする

@@ -7,6 +7,7 @@
 #include "bldg.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
+#include "market/arena_info_table.h"
 #include "realm-song.h"
 #include "floor.h"
 #include "artifact.h"

@@ -210,6 +210,7 @@
     <ClCompile Include="..\..\src\io\special-class-dump.c" />
     <ClCompile Include="..\..\src\io\tokenizer.c" />
     <ClCompile Include="..\..\src\io\write-diary.c" />
+    <ClCompile Include="..\..\src\market\arena_info_table.c" />
     <ClCompile Include="..\..\src\market\articles-on-sale.c" />
     <ClCompile Include="..\..\src\market\black-market.c" />
     <ClCompile Include="..\..\src\market\building-util.c" />
@@ -391,6 +392,7 @@
     <ClInclude Include="..\..\src\io\special-class-dump.h" />
     <ClInclude Include="..\..\src\io\tokenizer.h" />
     <ClInclude Include="..\..\src\io\write-diary.h" />
+    <ClInclude Include="..\..\src\market\arena_info_table.h" />
     <ClInclude Include="..\..\src\market\articles-on-sale.h" />
     <ClInclude Include="..\..\src\market\black-market.h" />
     <ClInclude Include="..\..\src\market\building-util.h" />

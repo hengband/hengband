@@ -65,6 +65,7 @@
 #include "mind.h"
 #include "world.h"
 #include "mutation.h"
+#include "market/arena_info_table.h"
 #include "market/store-util.h"
 #include "quest.h"
 #include "artifact.h"

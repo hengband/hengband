@@ -571,6 +571,9 @@
     <ClCompile Include="..\..\src\view\display-fruit.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\market\arena_info_table.c">
+      <Filter>market</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1123,6 +1126,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-fruit.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\arena_info_table.h">
+      <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

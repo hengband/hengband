@@ -45,6 +45,8 @@
 #include "objectkind.h"
 #include "targeting.h"
 
+#include "market/arena_info_table.h"
+
  /*
   * Not using graphical tiles for this feature?
   */
