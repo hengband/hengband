@@ -8,32 +8,43 @@
 #include "rumor.h"
 
 /*!
- * @brief 宿屋の利用サブルーチン
- * @details inn commands\n
- * Note that resting for the night was a perfect way to avoid player\n
- * ghosts in the town *if* you could only make it to the inn in time (-:\n
- * Now that the ghosts are temporarily disabled in 2.8.X, this function\n
- * will not be that useful.  I will keep it in the hopes the player\n
- * ghost code does become a reality again. Does help to avoid filthy urchins.\n
- * Resting at night is also a quick way to restock stores -KMW-\n
+ * @brief 宿屋で食事を摂る
+ * @param customer_ptr プレーヤーへの参照ポインタ
+ * @return 満腹ならFALSE、そうでないならTRUE
+ */
+static bool buy_food(player_type *customer_ptr)
+{
+	if (customer_ptr->food >= PY_FOOD_FULL)
+	{
+		msg_print(_("今は満腹だ。", "You are full now."));
+		return FALSE;
+	}
+
+	msg_print(_("バーテンはいくらかの食べ物とビールをくれた。", "The barkeep gives you some gruel and a beer."));
+	(void)set_food(customer_ptr, PY_FOOD_MAX - 1);
+	return TRUE;
+}
+
+
+/*!
+ * @brief 宿屋を利用する
+ * @param customer_ptr プレーヤーへの参照ポインタ
  * @param cmd 宿屋の利用施設ID
- * @return 施設の利用が実際に行われたか否か。
+ * @return 施設の利用が実際に行われたらTRUE
+ * @details inn commands
+ * Note that resting for the night was a perfect way to avoid player
+ * ghosts in the town *if* you could only make it to the inn in time (-:
+ * Now that the ghosts are temporarily disabled in 2.8.X, this function
+ * will not be that useful.  I will keep it in the hopes the player
+ * ghost code does become a reality again. Does help to avoid filthy urchins.
+ * Resting at night is also a quick way to restock stores -KMW-
  */
 bool inn_comm(player_type *customer_ptr, int cmd)
 {
 	switch (cmd)
 	{
-	case BACT_FOOD: /* Buy food & drink */
-		if (customer_ptr->food >= PY_FOOD_FULL)
-		{
-			msg_print(_("今は満腹だ。", "You are full now."));
-			return FALSE;
-		}
-
-		msg_print(_("バーテンはいくらかの食べ物とビールをくれた。", "The barkeep gives you some gruel and a beer."));
-		(void)set_food(customer_ptr, PY_FOOD_MAX - 1);
-		break;
-
+	case BACT_FOOD:
+		return buy_food(customer_ptr);
 	case BACT_REST: /* Rest for the night */
 	{
 		if ((customer_ptr->poisoned) || (customer_ptr->cut))
