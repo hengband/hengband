@@ -104,7 +104,7 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "grid.h"
-#include "market/arena_info_table.h"
+#include "market/arena-info-table.h"
 #include "rooms.h"
 #include "dungeon.h"
 #include "floor.h"

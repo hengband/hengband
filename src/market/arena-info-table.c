@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "arena_info_table.h"
+#include "arena-info-table.h"
 
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル

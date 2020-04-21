@@ -11,7 +11,7 @@
 #include "dungeon.h"
 #include "dungeon-file.h"
 #include "world.h"
-#include "market/arena_info_table.h"
+#include "market/arena-info-table.h"
 
 // todo *抹殺* したい…
 bool write_level;

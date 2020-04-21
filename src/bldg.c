@@ -64,7 +64,7 @@
 
 #include "market/poker.h"
 #include "market/building-util.h"
-#include "market/arena_info_table.h"
+#include "market/arena-info-table.h"
 #include "market/play-gamble.h"
 #include "view/display-fruit.h"
 

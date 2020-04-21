@@ -38,7 +38,7 @@
 #include "view-mainwindow.h"
 #include "player-class.h"
 #include "english.h"
-#include "market/arena_info_table.h"
+#include "market/arena-info-table.h"
 
  /*
   * Pronoun arrays, by gender.

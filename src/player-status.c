@@ -44,7 +44,7 @@
 #include "cmd-magiceat.h"
 
 #include "horror-descriptions.h"
-#include "market/arena_info_table.h"
+#include "market/arena-info-table.h"
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats

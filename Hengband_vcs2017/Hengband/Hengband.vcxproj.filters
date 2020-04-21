@@ -571,10 +571,10 @@
     <ClCompile Include="..\..\src\view\display-fruit.c">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\arena_info_table.c">
+    <ClCompile Include="..\..\src\market\play-gamble.c">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\play-gamble.c">
+    <ClCompile Include="..\..\src\market\arena-info-table.c">
       <Filter>market</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1130,10 +1130,10 @@
     <ClInclude Include="..\..\src\view\display-fruit.h">
       <Filter>view</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\market\arena_info_table.h">
+    <ClInclude Include="..\..\src\market\play-gamble.h">
       <Filter>market</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\market\play-gamble.h">
+    <ClInclude Include="..\..\src\market\arena-info-table.h">
       <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>
