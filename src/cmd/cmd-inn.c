@@ -125,6 +125,29 @@ static void back_to_health(player_type *customer_ptr)
 
 
 /*!
+ * @brief 魔力喰いの残り回数回復(本当？ 要調査)
+ * @param customer_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void charge_magic_eating_energy(player_type *customer_ptr)
+{
+	if (customer_ptr->pclass != CLASS_MAGIC_EATER)
+		return;
+
+	int i;
+	for (i = 0; i < 72; i++)
+	{
+		customer_ptr->magic_num1[i] = customer_ptr->magic_num2[i] * EATER_CHARGE;
+	}
+
+	for (; i < 108; i++)
+	{
+		customer_ptr->magic_num1[i] = 0;
+	}
+}
+
+
+/*!
  * todo 悪夢を見る前後に全回復しているが、何か意図がある？
  * @brief 宿屋を利用する
  * @param customer_ptr プレーヤーへの参照ポインタ
@@ -162,19 +185,7 @@ bool inn_comm(player_type *customer_ptr, int cmd)
 		if (have_a_nightmare(customer_ptr)) return TRUE;
 
 		back_to_health(customer_ptr);
-		if (customer_ptr->pclass == CLASS_MAGIC_EATER)
-		{
-			int i;
-			for (i = 0; i < 72; i++)
-			{
-				customer_ptr->magic_num1[i] = customer_ptr->magic_num2[i] * EATER_CHARGE;
-			}
-
-			for (; i < 108; i++)
-			{
-				customer_ptr->magic_num1[i] = 0;
-			}
-		}
+		charge_magic_eating_energy(customer_ptr);
 
 		if ((prev_hour >= 6) && (prev_hour <= 17))
 		{
