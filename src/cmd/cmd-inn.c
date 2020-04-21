@@ -48,7 +48,7 @@ static bool is_healthy_stay(player_type *customer_ptr)
  * @param prev_hour 宿屋に入った直後のゲーム内時刻
  * @return なし
  */
-static void stay_inn(player_type *customer_ptr, int prev_hour)
+static void write_diary_stay_inn(player_type *customer_ptr, int prev_hour)
 {
 	bool is_player_undead = PRACE_IS_(customer_ptr, RACE_SKELETON) ||
 		PRACE_IS_(customer_ptr, RACE_ZOMBIE) ||
@@ -192,7 +192,7 @@ bool inn_comm(player_type *customer_ptr, int cmd)
 
 		int prev_day, prev_hour, prev_min;
 		extract_day_hour_min(customer_ptr, &prev_day, &prev_hour, &prev_min);
-		stay_inn(customer_ptr, prev_hour);
+		write_diary_stay_inn(customer_ptr, prev_hour);
 
 		pass_game_turn_by_stay();
 		prevent_turn_overflow(customer_ptr);
