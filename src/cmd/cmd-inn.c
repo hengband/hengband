@@ -110,6 +110,21 @@ static bool have_a_nightmare(player_type *customer_ptr)
 
 
 /*!
+ * @brief 体調を元に戻す
+ * @param customer_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void back_to_health(player_type *customer_ptr)
+{
+	set_blind(customer_ptr, 0);
+	set_confused(customer_ptr, 0);
+	customer_ptr->stun = 0;
+	customer_ptr->chp = customer_ptr->mhp;
+	customer_ptr->csp = customer_ptr->msp;
+}
+
+
+/*!
  * todo 悪夢を見る前後に全回復しているが、何か意図がある？
  * @brief 宿屋を利用する
  * @param customer_ptr プレーヤーへの参照ポインタ
@@ -146,11 +161,7 @@ bool inn_comm(player_type *customer_ptr, int cmd)
 		customer_ptr->chp = customer_ptr->mhp;
 		if (have_a_nightmare(customer_ptr)) return TRUE;
 
-		set_blind(customer_ptr, 0);
-		set_confused(customer_ptr, 0);
-		customer_ptr->stun = 0;
-		customer_ptr->chp = customer_ptr->mhp;
-		customer_ptr->csp = customer_ptr->msp;
+		back_to_health(customer_ptr);
 		if (customer_ptr->pclass == CLASS_MAGIC_EATER)
 		{
 			int i;
