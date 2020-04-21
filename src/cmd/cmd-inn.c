@@ -43,6 +43,29 @@ static bool is_healthy_stay(player_type *customer_ptr)
 
 
 /*!
+ * @brief 宿屋に泊まったことを日記に残す
+ * @param customer_ptr プレーヤーへの参照ポインタ
+ * @param prev_hour 宿屋に入った直後の時刻の時刻
+ */
+static void stay_inn(player_type *customer_ptr, int prev_hour)
+{
+	bool is_player_undead = PRACE_IS_(customer_ptr, RACE_SKELETON) ||
+		PRACE_IS_(customer_ptr, RACE_ZOMBIE) ||
+		PRACE_IS_(customer_ptr, RACE_VAMPIRE) ||
+		PRACE_IS_(customer_ptr, RACE_SPECTRE);
+	if ((prev_hour >= 6) && (prev_hour < 18))
+	{
+		concptr stay_message_jp = is_player_undead ? "宿屋に泊まった" : "日が暮れるまで宿屋で過ごした";
+		exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _(stay_message_jp, "stayed during the day at the inn."));
+		return;
+	}
+
+	concptr stay_message_jp = is_player_undead ? "夜が明けるまで宿屋で過ごした" : "宿屋に泊まった";
+	exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _(stay_message_jp, "stayed overnight at the inn."));
+}
+
+
+/*!
  * @brief 宿屋を利用する
  * @param customer_ptr プレーヤーへの参照ポインタ
  * @param cmd 宿屋の利用施設ID
@@ -67,22 +90,8 @@ bool inn_comm(player_type *customer_ptr, int cmd)
 
 		s32b oldturn = current_world_ptr->game_turn;
 		int prev_day, prev_hour, prev_min;
-
 		extract_day_hour_min(customer_ptr, &prev_day, &prev_hour, &prev_min);
-		bool is_player_undead = PRACE_IS_(customer_ptr, RACE_SKELETON) ||
-			PRACE_IS_(customer_ptr, RACE_ZOMBIE) ||
-			PRACE_IS_(customer_ptr, RACE_VAMPIRE) ||
-			PRACE_IS_(customer_ptr, RACE_SPECTRE);
-		if ((prev_hour >= 6) && (prev_hour < 18))
-		{
-			concptr stay_message_jp = is_player_undead ? "宿屋に泊まった" : "日が暮れるまで宿屋で過ごした";
-			exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _(stay_message_jp, "stayed during the day at the inn."));
-		}
-		else
-		{
-			concptr stay_message_jp = is_player_undead ? "夜が明けるまで宿屋で過ごした" : "宿屋に泊まった";
-			exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _(stay_message_jp, "stayed overnight at the inn."));
-		}
+		stay_inn(customer_ptr, prev_hour);
 
 		current_world_ptr->game_turn = (current_world_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
 		if (current_world_ptr->dungeon_turn < current_world_ptr->dungeon_turn_limit)
