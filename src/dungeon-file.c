@@ -48,7 +48,7 @@
 #include "player-race.h"
 #include "dungeon.h"
 #include "floor.h"
-#include "bldg.h"
+#include "market/building.h"
 #include "world.h"
 #include "rooms-vault.h"
 #include "objectkind.h"

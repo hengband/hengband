@@ -22,7 +22,7 @@
 #include "artifact.h"
 #include "cmd-dump.h"
 #include "floor.h"
-#include "bldg.h"
+#include "market/building.h"
 #include "birth.h"
 #include "grid.h"
 #include "mutation.h"

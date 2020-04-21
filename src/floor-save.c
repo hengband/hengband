@@ -11,7 +11,7 @@
  */
 
 #include "angband.h"
-#include "bldg.h"
+#include "market/building.h"
 #include "core.h"
 #include "load.h"
 #include "util.h"

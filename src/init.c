@@ -39,7 +39,7 @@
 #include "term.h"
 
 #include "artifact.h"
-#include "bldg.h"
+#include "market/building.h"
 #include "init.h"
 #include "quest.h"
 #include "trap.h"

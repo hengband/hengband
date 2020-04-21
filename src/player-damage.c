@@ -4,7 +4,7 @@
 #include "term.h"
 
 #include "avatar.h"
-#include "bldg.h"
+#include "market/building.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "market/arena-info-table.h"

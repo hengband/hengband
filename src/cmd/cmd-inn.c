@@ -167,6 +167,36 @@ static void display_stay_result(player_type *customer_ptr, int prev_hour)
 
 
 /*!
+ * @brief 宿屋への宿泊実行処理
+ * @param customer_ptr プレーヤーへの参照ポインタ
+ * @return 泊まれたらTRUE
+ */
+static bool stay_inn(player_type *customer_ptr)
+{
+	if (!is_healthy_stay(customer_ptr)) return FALSE;
+
+	int prev_day, prev_hour, prev_min;
+	extract_day_hour_min(customer_ptr, &prev_day, &prev_hour, &prev_min);
+	write_diary_stay_inn(customer_ptr, prev_hour);
+
+	pass_game_turn_by_stay();
+	prevent_turn_overflow(customer_ptr);
+
+	if ((prev_hour >= 18) && (prev_hour <= 23))
+		exe_write_diary(customer_ptr, DIARY_DIALY, 0, NULL);
+
+	customer_ptr->chp = customer_ptr->mhp;
+	if (have_a_nightmare(customer_ptr)) return TRUE;
+
+	back_to_health(customer_ptr);
+	charge_magic_eating_energy(customer_ptr);
+
+	display_stay_result(customer_ptr, prev_hour);
+	return TRUE;
+}
+
+
+/*!
  * todo 悪夢を見る前後に全回復しているが、何か意図がある？
  * @brief 宿屋を利用する
  * @param customer_ptr プレーヤーへの参照ポインタ
@@ -186,30 +216,9 @@ bool inn_comm(player_type *customer_ptr, int cmd)
 	{
 	case BACT_FOOD:
 		return buy_food(customer_ptr);
-	case BACT_REST: /* Rest for the night */
-	{
-		if (!is_healthy_stay(customer_ptr)) return FALSE;
-
-		int prev_day, prev_hour, prev_min;
-		extract_day_hour_min(customer_ptr, &prev_day, &prev_hour, &prev_min);
-		write_diary_stay_inn(customer_ptr, prev_hour);
-
-		pass_game_turn_by_stay();
-		prevent_turn_overflow(customer_ptr);
-
-		if ((prev_hour >= 18) && (prev_hour <= 23))
-			exe_write_diary(customer_ptr, DIARY_DIALY, 0, NULL);
-
-		customer_ptr->chp = customer_ptr->mhp;
-		if (have_a_nightmare(customer_ptr)) return TRUE;
-
-		back_to_health(customer_ptr);
-		charge_magic_eating_energy(customer_ptr);
-
-		display_stay_result(customer_ptr);
-		return TRUE;
-	}
-	case BACT_RUMORS: /* Listen for rumors */
+	case BACT_REST:
+		return stay_inn(customer_ptr);
+	case BACT_RUMORS:
 		display_rumor(customer_ptr, TRUE);
 		return TRUE;
 	default:

@@ -16,7 +16,7 @@
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "bldg.h"
+#include "market/building.h"
 #include "cmd-pet.h"
 #include "floor.h"
 #include "objectkind-hook.h"

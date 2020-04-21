@@ -35,7 +35,7 @@
 #include "objectkind.h"
 #include "monsterrace.h"
 #include "birth.h"
-#include "bldg.h"
+#include "market/building.h"
 #include "view-mainwindow.h"
 
  /*

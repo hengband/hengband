@@ -1,5 +1,5 @@
 ﻿#pragma once 
-#include "bldg.h"
+#include "market/building.h"
 struct floor_type;
 typedef struct floor_type floor_type;
 

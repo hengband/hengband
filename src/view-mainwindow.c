@@ -15,7 +15,7 @@
 #include "autopick.h"
 #include "term.h"
 
-#include "bldg.h"
+#include "market/building.h"
 #include "core.h"
 #include "files.h"
 #include "world.h"

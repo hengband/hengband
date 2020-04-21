@@ -1,15 +1,15 @@
 ﻿/*!
- @file bldg.c
- @brief 町の施設処理 / Building commands
- @date 2013/12/23
- @author
- Created by Ken Wigle for Kangband - a variant of Angband 2.8.3
- -KMW-
- 
- Rewritten for Kangband 2.8.3i using Kamband's version of
- bldg.c as written by Ivan Tkatchev
- 
- Changed for ZAngband by Robert Ruehlmann
+ * @file building.c
+ * @brief 町の施設処理 / Building commands
+ * @date 2013/12/23
+ * @author
+ * Created by Ken Wigle for Kangband - a variant of Angband 2.8.3
+ * -KMW-
+ * 
+ * Rewritten for Kangband 2.8.3i using Kamband's version of
+ * building.c as written by Ivan Tkatchev
+ * 
+ * Changed for ZAngband by Robert Ruehlmann
 */
 
 #include "angband.h"
@@ -36,7 +36,7 @@
 #include "sort.h"
 
 #include "avatar.h"
-#include "bldg.h"
+#include "market/building.h"
 #include "dungeon.h"
 #include "mutation.h"
 #include "quest.h"
@@ -269,9 +269,6 @@ static void show_building(player_type *player_ptr, building_type* bldg)
  */
 static void arena_comm(player_type *player_ptr, int cmd)
 {
-	monster_race    *r_ptr;
-	concptr            name;
-
 	switch (cmd)
 	{
 	case BACT_ARENA:
@@ -344,6 +341,7 @@ static void arena_comm(player_type *player_ptr, int cmd)
 		player_ptr->leave_bldg = TRUE;
 		break;
 	case BACT_POSTER:
+	{
 		if (player_ptr->arena_number == MAX_ARENA_MONS)
 		{
 			msg_print(_("あなたは勝利者だ。 アリーナでのセレモニーに参加しなさい。",
@@ -357,14 +355,16 @@ static void arena_comm(player_type *player_ptr, int cmd)
 			break;
 		}
 
+		monster_race *r_ptr;
 		r_ptr = &r_info[arena_info[player_ptr->arena_number].r_idx];
-		name = (r_name + r_ptr->name);
+		concptr name = (r_name + r_ptr->name);
 		msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), name);
 
 		player_ptr->monster_race_idx = arena_info[player_ptr->arena_number].r_idx;
 		player_ptr->window |= (PW_MONSTER);
 		handle_stuff(player_ptr);
 		break;
+	}
 	case BACT_ARENA_RULES:
 		screen_save();
 

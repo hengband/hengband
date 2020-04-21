@@ -13,7 +13,7 @@
 
 #include "angband.h"
 #include "util.h"
-#include "bldg.h"
+#include "market/building.h"
 #include "core.h"
 #include "core/show-file.h"
 #include "io/read-pref-file.h"

@@ -12,7 +12,7 @@
  */
 
 #include "angband.h"
-#include "bldg.h"
+#include "market/building.h"
 #include "core.h"
 #include "term.h"
 #include "util.h"

@@ -16,7 +16,7 @@
 #include "term.h"
 #include "targeting.h"
 
-#include "bldg.h"
+#include "market/building.h"
 #include "cmd-pet.h"
 #include "dungeon-file.h"
 #include "object-curse.h"

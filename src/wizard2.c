@@ -50,7 +50,7 @@
 #include "dungeon-file.h"
 #include "files.h"
 #include "monster-spell.h"
-#include "bldg.h"
+#include "market/building.h"
 #include "objectkind.h"
 #include "targeting.h"
 #include "view-mainwindow.h"

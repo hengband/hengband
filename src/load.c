@@ -45,7 +45,7 @@
 #include "core.h"
 
 #include "load.h"
-#include "bldg.h"
+#include "market/building.h"
 #include "report.h"
 
 #include "dungeon.h"
