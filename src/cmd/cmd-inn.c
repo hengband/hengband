@@ -45,7 +45,7 @@ static bool is_healthy_stay(player_type *customer_ptr)
 /*!
  * @brief 宿屋に泊まったことを日記に残す
  * @param customer_ptr プレーヤーへの参照ポインタ
- * @param prev_hour 宿屋に入った直後の時刻の時刻
+ * @param prev_hour 宿屋に入った直後のゲーム内時刻
  * @return なし
  */
 static void stay_inn(player_type *customer_ptr, int prev_hour)
@@ -148,6 +148,25 @@ static void charge_magic_eating_energy(player_type *customer_ptr)
 
 
 /*!
+ * @brief リフレッシュ結果を画面に表示する
+ * @param customer_ptr プレーヤーへの参照ポインタ
+ * @param prev_hour 宿屋に入った直後のゲーム内時刻
+ */
+static void display_stay_result(player_type *customer_ptr, int prev_hour)
+{
+	if ((prev_hour >= 6) && (prev_hour < 18))
+	{
+		msg_print(_("あなたはリフレッシュして目覚め、夕方を迎えた。", "You awake refreshed for the evening."));
+		exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("夕方を迎えた。", "awoke refreshed."));
+		return;
+	}
+
+	msg_print(_("あなたはリフレッシュして目覚め、新たな日を迎えた。", "You awake refreshed for the new day."));
+	exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("すがすがしい朝を迎えた。", "awoke refreshed."));
+}
+
+
+/*!
  * todo 悪夢を見る前後に全回復しているが、何か意図がある？
  * @brief 宿屋を利用する
  * @param customer_ptr プレーヤーへの参照ポインタ
@@ -187,23 +206,14 @@ bool inn_comm(player_type *customer_ptr, int cmd)
 		back_to_health(customer_ptr);
 		charge_magic_eating_energy(customer_ptr);
 
-		if ((prev_hour >= 6) && (prev_hour <= 17))
-		{
-			msg_print(_("あなたはリフレッシュして目覚め、夕方を迎えた。", "You awake refreshed for the evening."));
-			exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("夕方を迎えた。", "awoke refreshed."));
-			break;
-		}
-
-		msg_print(_("あなたはリフレッシュして目覚め、新たな日を迎えた。", "You awake refreshed for the new day."));
-		exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("すがすがしい朝を迎えた。", "awoke refreshed."));
-		break;
+		display_stay_result(customer_ptr);
+		return TRUE;
 	}
 	case BACT_RUMORS: /* Listen for rumors */
-	{
 		display_rumor(customer_ptr, TRUE);
-		break;
+		return TRUE;
+	default:
+		// todo リファクタリング前のコードもTRUEだった、FALSEにすべきでは.
+		return TRUE;
 	}
-	}
-
-	return TRUE;
 }
