@@ -1,7 +1,7 @@
 ﻿#include "angband.h"
 #include "util.h"
 
-#include "term.h"
+#include "gameterm.h"
 #include "spells.h"
 #include "core.h"
 

@@ -1,7 +1,7 @@
 ﻿#include "angband.h"
 #include "core.h"
 #include "util.h"
-#include "term.h"
+#include "gameterm.h"
 
 #include "monster.h"
 #include "monster-status.h"

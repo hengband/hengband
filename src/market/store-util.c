@@ -427,11 +427,13 @@ bool store_will_buy(object_type *o_ptr)
 				if (my_strchr("?!", r_ptr->d_char)) break;
 			}
 		}
+			/* Fall through */
 		case TV_POLEARM:
 		case TV_SWORD:
 		{
 			if (is_blessed_item(o_ptr)) break;
 		}
+			/* Fall through */
 		default:
 			return FALSE;
 		}

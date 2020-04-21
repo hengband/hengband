@@ -569,7 +569,7 @@ static MULTIPLY mult_slaying(player_type *player_ptr, MULTIPLY mult, const BIT_F
 	};
 
 	monster_race* r_ptr = &r_info[m_ptr->r_idx];
-	for (int i = 0; i < sizeof(slay_table) / sizeof(slay_table[0]); ++i)
+	for (size_t i = 0; i < sizeof(slay_table) / sizeof(slay_table[0]); ++i)
 	{
 		const struct slay_table_t* p = &slay_table[i];
 
@@ -612,7 +612,7 @@ static MULTIPLY mult_brand(player_type *player_ptr, MULTIPLY mult, const BIT_FLA
 	};
 
 	monster_race* r_ptr = &r_info[m_ptr->r_idx];
-	for (int i = 0; i < sizeof(brand_table) / sizeof(brand_table[0]); ++i)
+	for (size_t i = 0; i < sizeof(brand_table) / sizeof(brand_table[0]); ++i)
 	{
 		const struct brand_table_t* p = &brand_table[i];
 
@@ -2801,6 +2801,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						break;
 					}
 				}
+					/* Fall through */
 				case RBE_HURT: /* AC軽減あり / Player armor reduces total damage */
 				{
 					obvious = TRUE;

@@ -36,7 +36,7 @@
 #include "cmd/cmd-inventory.h"
 #include "cmd/lighting-level-table.h"
 #include "cmd/cmd-visuals.h"
-#include "term.h"
+#include "gameterm.h"
 #include "core.h" // 暫定。後で消す.
 #include "core/show-file.h"
 #include "io/read-pref-file.h"
@@ -206,7 +206,6 @@ concptr get_ordinal_number_suffix(int num)
 	}
 }
 #endif
-
 
 /*!
  * @brief 画面を再描画するコマンドのメインルーチン
@@ -1590,14 +1589,14 @@ static void display_visual_list(int col, int row, int height, int width, TERM_CO
 			TERM_LEN y = row + i;
 			if (use_bigtile) x += j;
 
-			TERM_COLOR ia = attr_top + i;
-			SYMBOL_CODE ic = char_left + j;
+			int ia = attr_top + i;
+			int ic = char_left + j;
 			if (ia > 0x7f || ic > 0xff || ic < ' ' ||
 				(!use_graphics && ic > 0x7f))
 				continue;
 
-			TERM_COLOR a = ia;
-			SYMBOL_CODE c = ic;
+			TERM_COLOR a = (TERM_COLOR)ia;
+			SYMBOL_CODE c = (SYMBOL_CODE)ic;
 			if (c & 0x80) a |= 0x80;
 
 			Term_queue_bigchar(x, y, a, c, 0, 0);
@@ -1723,7 +1722,7 @@ static bool visual_mode_command(char ch, bool *visual_list_ptr,
 			if ((a == 0) && (ddy[d] < 0)) d = 0;
 			if ((c == 0) && (ddx[d] < 0)) d = 0;
 			if ((a == 0x7f) && (ddy[d] > 0)) d = 0;
-			if ((c == 0xff) && (ddx[d] > 0)) d = 0;
+			if (((byte)c == 0xff) && (ddx[d] > 0)) d = 0;
 
 			a += (TERM_COLOR)ddy[d];
 			c += (SYMBOL_CODE)ddx[d];

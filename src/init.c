@@ -36,7 +36,7 @@
 #include "files.h"
 #include "core.h"
 #include "io/read-pref-file.h"
-#include "term.h"
+#include "gameterm.h"
 
 #include "artifact.h"
 #include "market/building.h"

@@ -74,7 +74,7 @@ static amuse_type amuse_info[] =
 	{ TV_SWORD, SV_BROKEN_SWORD, 5, AMS_NOTHING },
 	{ TV_SCROLL, SV_SCROLL_AMUSEMENT, 10, AMS_NOTHING },
 
-	{ 0, 0, 0 }
+	{ 0, 0, 0, 0 }
 };
 
 /*!

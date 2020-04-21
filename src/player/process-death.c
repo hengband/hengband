@@ -13,7 +13,7 @@
 #include "object-flavor.h"
 #include "market/store-util.h"
 #include "store.h"
-#include "term.h"
+#include "gameterm.h"
 
 #define GRAVE_LINE_WIDTH 31
 

@@ -265,7 +265,7 @@
     <ClCompile Include="..\..\src\view-mainwindow.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\term.c">
+    <ClCompile Include="..\..\src\gameterm.c">
       <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\wild.c">
@@ -833,7 +833,7 @@
     <ClInclude Include="..\..\src\view-mainwindow.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\term.h">
+    <ClInclude Include="..\..\src\gameterm.h">
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\wild.h">

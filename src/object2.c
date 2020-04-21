@@ -14,7 +14,7 @@
 #include "angband.h"
 #include "util.h"
 #include "world.h"
-#include "term.h"
+#include "gameterm.h"
 
 #include "object.h"
 
@@ -1110,6 +1110,7 @@ int object_similar_part(object_type *o_ptr, object_type *j_ptr)
 	{
 		if (!object_is_known(o_ptr) || !object_is_known(j_ptr)) return 0;
 	}
+		/* Fall through */
 	case TV_BOLT:
 	case TV_ARROW:
 	case TV_SHOT:

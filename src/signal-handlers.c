@@ -9,7 +9,7 @@
 #include "core.h"
 #include "save.h"
 #include "world.h"
-#include "term.h"
+#include "gameterm.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "floor-events.h"

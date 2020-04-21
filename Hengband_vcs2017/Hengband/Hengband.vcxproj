@@ -341,7 +341,7 @@
     <ClCompile Include="..\..\src\store.c" />
     <ClCompile Include="..\..\src\floor-streams.c" />
     <ClCompile Include="..\..\src\targeting.c" />
-    <ClCompile Include="..\..\src\term.c" />
+    <ClCompile Include="..\..\src\gameterm.c" />
     <ClCompile Include="..\..\src\trap.c" />
     <ClCompile Include="..\..\src\util.c" />
     <ClCompile Include="..\..\src\view-mainwindow.c" />
@@ -533,7 +533,7 @@
     <ClInclude Include="..\..\src\spells.h" />
     <ClInclude Include="..\..\src\store.h" />
     <ClInclude Include="..\..\src\targeting.h" />
-    <ClInclude Include="..\..\src\term.h" />
+    <ClInclude Include="..\..\src\gameterm.h" />
     <ClInclude Include="..\..\src\trap.h" />
     <ClInclude Include="..\..\src\util.h" />
     <ClInclude Include="..\..\src\view-mainwindow.h" />

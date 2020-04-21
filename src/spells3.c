@@ -14,7 +14,7 @@
 #include "angband.h"
 #include "market/building.h"
 #include "core.h"
-#include "term.h"
+#include "gameterm.h"
 #include "util.h"
 #include "object-ego.h"
 
@@ -2959,6 +2959,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 				earthquake(caster_ptr, m_ptr->fy, m_ptr->fx, 4 + randint0(4), 0);
 				if (!one_in_(6)) break;
 			}
+			/* Fall through */
 		case 3: case 4: case 5: case 6:
 			if (!count)
 			{
@@ -2968,6 +2969,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 				project(caster_ptr, 0, 8, m_ptr->fy, m_ptr->fx, extra_dam, GF_MANA, curse_flg, -1);
 				if (!one_in_(6)) break;
 			}
+			/* Fall through */
 		case 7: case 8:
 			if (!count)
 			{
@@ -2977,16 +2979,20 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 				if (one_in_(13)) count += activate_hi_summon(caster_ptr, m_ptr->fy, m_ptr->fx, TRUE);
 				if (!one_in_(6)) break;
 			}
+			/* Fall through */
 		case 9: case 10: case 11:
 			msg_print(_("エネルギーのうねりを感じた！", "You feel a surge of energy!"));
 			project(caster_ptr, 0, 7, m_ptr->fy, m_ptr->fx, 50, GF_DISINTEGRATE, curse_flg, -1);
 			if (!one_in_(6)) break;
+			/* Fall through */
 		case 12: case 13: case 14: case 15: case 16:
 			aggravate_monsters(caster_ptr, 0);
 			if (!one_in_(6)) break;
+			/* Fall through */
 		case 17: case 18:
 			count += activate_hi_summon(caster_ptr, m_ptr->fy, m_ptr->fx, TRUE);
 			if (!one_in_(6)) break;
+			/* Fall through */
 		case 19: case 20: case 21: case 22:
 		{
 			bool pet = !one_in_(3);
@@ -2998,6 +3004,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 			count += summon_specific(caster_ptr, (pet ? -1 : 0), caster_ptr->y, caster_ptr->x, (pet ? caster_ptr->lev * 2 / 3 + randint1(caster_ptr->lev / 2) : caster_ptr->current_floor_ptr->dun_level), 0, mode);
 			if (!one_in_(6)) break;
 		}
+			/* Fall through */
 		case 23: case 24: case 25:
 			if (caster_ptr->hold_exp && (randint0(100) < 75)) break;
 			msg_print(_("経験値が体から吸い取られた気がする！", "You feel your experience draining away..."));
@@ -3005,6 +3012,7 @@ void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx)
 			if (caster_ptr->hold_exp) lose_exp(caster_ptr, caster_ptr->exp / 160);
 			else lose_exp(caster_ptr, caster_ptr->exp / 16);
 			if (!one_in_(6)) break;
+			/* Fall through */
 		case 26: case 27: case 28:
 		{
 			if (one_in_(13))

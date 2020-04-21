@@ -17,7 +17,7 @@
 #include "core.h"
 #include "core/show-file.h"
 #include "io/read-pref-file.h"
-#include "term.h"
+#include "gameterm.h"
 
 #include "object-ego.h"
 #include "artifact.h"
@@ -3147,6 +3147,7 @@ static bool get_stat_limits(player_type *creature_ptr)
 		switch (c) {
 		case 'Q':
 			birth_quit();
+			break;
 		case 'S':
 			return FALSE;
 		case ESCAPE:
@@ -3385,6 +3386,7 @@ static bool get_chara_limits(player_type *creature_ptr)
 		switch (c) {
 		case 'Q':
 			birth_quit();
+			break;
 		case 'S':
 			return FALSE;
 		case ESCAPE:
