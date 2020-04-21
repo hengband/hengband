@@ -934,10 +934,20 @@ static bool inn_comm(player_type *customer_ptr, int cmd)
 		int prev_day, prev_hour, prev_min;
 
 		extract_day_hour_min(customer_ptr, &prev_day, &prev_hour, &prev_min);
-		if ((prev_hour >= 6) && (prev_hour <= 17))
-			exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("宿屋に泊まった。", "stayed during the day at the inn."));
+		bool is_player_undead = PRACE_IS_(customer_ptr, RACE_SKELETON) ||
+			PRACE_IS_(customer_ptr, RACE_ZOMBIE) ||
+			PRACE_IS_(customer_ptr, RACE_VAMPIRE) ||
+			PRACE_IS_(customer_ptr, RACE_SPECTRE);
+		if ((prev_hour >= 6) && (prev_hour < 18))
+		{
+			concptr stay_message_jp = is_player_undead ? "宿屋に泊まった" : "日が暮れるまで宿屋で過ごした";
+			exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _(stay_message_jp, "stayed during the day at the inn."));
+		}
 		else
-			exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("宿屋に泊まった。", "stayed overnight at the inn."));
+		{
+			concptr stay_message_jp = is_player_undead ? "夜が明けるまで宿屋で過ごした" : "宿屋に泊まった";
+			exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _(stay_message_jp, "stayed overnight at the inn."));
+		}
 
 		current_world_ptr->game_turn = (current_world_ptr->game_turn / (TURNS_PER_TICK * TOWN_DAWN / 2) + 1) * (TURNS_PER_TICK * TOWN_DAWN / 2);
 		if (current_world_ptr->dungeon_turn < current_world_ptr->dungeon_turn_limit)
