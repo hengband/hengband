@@ -1,4 +1,10 @@
-﻿#include "cmd/cmd-inventory.h"
+﻿/*
+ * @brief 装備の耐性を表示する
+ * @date 2020/04/20
+ * @author Hourier
+ */
+
+#include "cmd/cmd-inventory.h"
 #include "object-flavor.h"
 #include "market/store-util.h"
 #include "floor-town.h"
@@ -82,6 +88,49 @@ static bool check_item_knowledge(object_type *o_ptr, OBJECT_TYPE_VALUE tval)
 
 
 /*!
+ * todo ここの関数から表示用の関数に移したい
+ * @brief 鑑定済アイテムの耐性を表示する
+ * @param o_ptr アイテムへの参照ポインタ
+ * @param fff 一時ファイルへの参照ポインタ
+ * @return なし
+ */
+static void display_identified_resistances_flag(object_type *o_ptr, FILE *fff)
+{
+	BIT_FLAGS flags[TR_FLAG_SIZE];
+	object_flags_known(o_ptr, flags);
+
+	print_im_or_res_flag(TR_IM_ACID, TR_RES_ACID, flags, fff);
+	print_im_or_res_flag(TR_IM_ELEC, TR_RES_ELEC, flags, fff);
+	print_im_or_res_flag(TR_IM_FIRE, TR_RES_FIRE, flags, fff);
+	print_im_or_res_flag(TR_IM_COLD, TR_RES_COLD, flags, fff);
+	print_flag(TR_RES_POIS, flags, fff);
+	print_flag(TR_RES_LITE, flags, fff);
+	print_flag(TR_RES_DARK, flags, fff);
+	print_flag(TR_RES_SHARDS, flags, fff);
+	print_flag(TR_RES_SOUND, flags, fff);
+	print_flag(TR_RES_NETHER, flags, fff);
+	print_flag(TR_RES_NEXUS, flags, fff);
+	print_flag(TR_RES_CHAOS, flags, fff);
+	print_flag(TR_RES_DISEN, flags, fff);
+
+	fputs(" ", fff);
+
+	print_flag(TR_RES_BLIND, flags, fff);
+	print_flag(TR_RES_FEAR, flags, fff);
+	print_flag(TR_RES_CONF, flags, fff);
+	print_flag(TR_FREE_ACT, flags, fff);
+	print_flag(TR_SEE_INVIS, flags, fff);
+	print_flag(TR_HOLD_EXP, flags, fff);
+	print_flag(TR_TELEPATHY, flags, fff);
+	print_flag(TR_SLOW_DIGEST, flags, fff);
+	print_flag(TR_REGEN, flags, fff);
+	print_flag(TR_LEVITATION, flags, fff);
+
+	fputc('\n', fff);
+}
+
+
+/*!
  * @brief アイテム1つ当たりの耐性を表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff 一時ファイルへの参照ポインタ
@@ -120,38 +169,8 @@ static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff,
 			"-------unknown------------ -------unknown------\n"), fff);
 		return;
 	}
-	
-	BIT_FLAGS flgs[TR_FLAG_SIZE];
-	object_flags_known(o_ptr, flgs);
 
-	print_im_or_res_flag(TR_IM_ACID, TR_RES_ACID, flgs, fff);
-	print_im_or_res_flag(TR_IM_ELEC, TR_RES_ELEC, flgs, fff);
-	print_im_or_res_flag(TR_IM_FIRE, TR_RES_FIRE, flgs, fff);
-	print_im_or_res_flag(TR_IM_COLD, TR_RES_COLD, flgs, fff);
-	print_flag(TR_RES_POIS, flgs, fff);
-	print_flag(TR_RES_LITE, flgs, fff);
-	print_flag(TR_RES_DARK, flgs, fff);
-	print_flag(TR_RES_SHARDS, flgs, fff);
-	print_flag(TR_RES_SOUND, flgs, fff);
-	print_flag(TR_RES_NETHER, flgs, fff);
-	print_flag(TR_RES_NEXUS, flgs, fff);
-	print_flag(TR_RES_CHAOS, flgs, fff);
-	print_flag(TR_RES_DISEN, flgs, fff);
-
-	fputs(" ", fff);
-
-	print_flag(TR_RES_BLIND, flgs, fff);
-	print_flag(TR_RES_FEAR, flgs, fff);
-	print_flag(TR_RES_CONF, flgs, fff);
-	print_flag(TR_FREE_ACT, flgs, fff);
-	print_flag(TR_SEE_INVIS, flgs, fff);
-	print_flag(TR_HOLD_EXP, flgs, fff);
-	print_flag(TR_TELEPATHY, flgs, fff);
-	print_flag(TR_SLOW_DIGEST, flgs, fff);
-	print_flag(TR_REGEN, flgs, fff);
-	print_flag(TR_LEVITATION, flgs, fff);
-
-	fputc('\n', fff);
+	display_identified_items_resistances();
 }
 
 
