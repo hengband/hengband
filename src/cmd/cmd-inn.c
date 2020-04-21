@@ -42,6 +42,16 @@ static bool is_healthy_stay(player_type *customer_ptr)
 }
 
 
+static bool is_player_undead(player_type *customer_ptr)
+{
+	bool is_player_undead = PRACE_IS_(customer_ptr, RACE_SKELETON) ||
+		PRACE_IS_(customer_ptr, RACE_ZOMBIE) ||
+		PRACE_IS_(customer_ptr, RACE_VAMPIRE) ||
+		PRACE_IS_(customer_ptr, RACE_SPECTRE);
+	return is_player_undead;
+}
+
+
 /*!
  * @brief 宿屋に泊まったことを日記に残す
  * @param customer_ptr プレーヤーへの参照ポインタ
@@ -50,18 +60,14 @@ static bool is_healthy_stay(player_type *customer_ptr)
  */
 static void write_diary_stay_inn(player_type *customer_ptr, int prev_hour)
 {
-	bool is_player_undead = PRACE_IS_(customer_ptr, RACE_SKELETON) ||
-		PRACE_IS_(customer_ptr, RACE_ZOMBIE) ||
-		PRACE_IS_(customer_ptr, RACE_VAMPIRE) ||
-		PRACE_IS_(customer_ptr, RACE_SPECTRE);
 	if ((prev_hour >= 6) && (prev_hour < 18))
 	{
-		concptr stay_message_jp = is_player_undead ? "宿屋に泊まった" : "日が暮れるまで宿屋で過ごした";
+		concptr stay_message_jp = is_player_undead(customer_ptr) ? "宿屋に泊まった。" : "日が暮れるまで宿屋で過ごした。";
 		exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _(stay_message_jp, "stayed during the day at the inn."));
 		return;
 	}
 
-	concptr stay_message_jp = is_player_undead ? "夜が明けるまで宿屋で過ごした" : "宿屋に泊まった";
+	concptr stay_message_jp = is_player_undead(customer_ptr) ? "夜が明けるまで宿屋で過ごした。" : "宿屋に泊まった。";
 	exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _(stay_message_jp, "stayed overnight at the inn."));
 }
 
@@ -156,13 +162,17 @@ static void display_stay_result(player_type *customer_ptr, int prev_hour)
 {
 	if ((prev_hour >= 6) && (prev_hour < 18))
 	{
-		msg_print(_("あなたはリフレッシュして目覚め、夕方を迎えた。", "You awake refreshed for the evening."));
-		exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("夕方を迎えた。", "awoke refreshed."));
+		char refresh_message_jp[50];
+		sprintf(refresh_message_jp, "%s%s%s", "あなたはリフレッシュして目覚め、", is_player_undead(customer_ptr) ? "夜" : "夕方", "を迎えた。");
+		msg_print(_(refresh_message_jp, "You awake refreshed for the evening."));
+		concptr awake_message_jp = is_player_undead(customer_ptr) ? "すがすがしい夜を迎えた。" : "夕方を迎えた。";
+		exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _(awake_message_jp, "awoke refreshed."));
 		return;
 	}
 
 	msg_print(_("あなたはリフレッシュして目覚め、新たな日を迎えた。", "You awake refreshed for the new day."));
-	exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("すがすがしい朝を迎えた。", "awoke refreshed."));
+	concptr awake_message_jp = is_player_undead(customer_ptr) ? "すがすがしい朝を迎えた。" : "朝を迎えた。";
+	exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _(awake_message_jp, "awoke refreshed."));
 }
 
 
