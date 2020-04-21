@@ -583,6 +583,9 @@
     <ClCompile Include="..\..\src\player\mimic-info-table.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-inn.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1147,6 +1150,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\mimic-info-table.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-inn.h">
+      <Filter>cmd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

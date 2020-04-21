@@ -165,6 +165,7 @@
     <ClCompile Include="..\..\src\cmd\cmd-gameoption.c" />
     <ClCompile Include="..\..\src\cmd\cmd-help.c" />
     <ClCompile Include="..\..\src\cmd\cmd-hissatsu.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-inn.c" />
     <ClCompile Include="..\..\src\cmd\cmd-inventory.c" />
     <ClCompile Include="..\..\src\cmd\cmd-item.c" />
     <ClCompile Include="..\..\src\cmd\cmd-macro.c" />
@@ -363,6 +364,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-gameoption.h" />
     <ClInclude Include="..\..\src\cmd\cmd-help.h" />
     <ClInclude Include="..\..\src\cmd\cmd-hissatsu.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-inn.h" />
     <ClInclude Include="..\..\src\cmd\cmd-inventory.h" />
     <ClInclude Include="..\..\src\cmd\cmd-item.h" />
     <ClInclude Include="..\..\src\cmd\cmd-macro.h" />
