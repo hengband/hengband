@@ -818,12 +818,6 @@ static void do_cmd_save_screen_html(void)
 
 
 /*
- * Redefinable "save_screen" action
- */
-void(*screendump_aux)(void) = NULL;
-
-
-/*
  * Save a screen dump to a file
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
@@ -865,10 +859,6 @@ void do_cmd_save_screen(player_type *creature_ptr)
 	{
 		do_cmd_save_screen_html();
 		do_cmd_redraw(creature_ptr);
-	}
-	else if (screendump_aux)
-	{
-		(*screendump_aux)();
 	}
 	else
 	{
