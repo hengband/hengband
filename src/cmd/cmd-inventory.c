@@ -170,7 +170,7 @@ static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff,
 		return;
 	}
 
-	display_identified_items_resistances();
+	display_identified_resistances_flag(o_ptr, fff);
 }
 
 
@@ -191,6 +191,80 @@ static void add_res_label(int *label_number, FILE *fff)
 }
 
 
+/*!
+ * 装備中のアイテムについて、耐性を表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param tval アイテム主分類番号
+ * @param label_number 現在の行数
+ * @param fff ファイルへの参照ポインタ
+ * @return なし
+ */
+static void show_wearing_equipment_resistances(player_type *creature_ptr, OBJECT_TYPE_VALUE tval, int *label_number, FILE *fff)
+{
+	char where[32];
+	strcpy(where, _("装", "E "));
+	for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
+	{
+		object_type *o_ptr = &creature_ptr->inventory_list[i];
+		if (!check_item_knowledge(o_ptr, tval))
+			continue;
+
+		do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, where);
+		add_res_label(label_number, fff);
+	}
+}
+
+
+/*!
+ * 手持ち中のアイテムについて、耐性を表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param tval アイテム主分類番号
+ * @param label_number 現在の行数
+ * @param fff ファイルへの参照ポインタ
+ * @return なし
+ */
+static void show_holding_equipment_resistances(player_type *creature_ptr, OBJECT_TYPE_VALUE tval, int *label_number, FILE *fff)
+{
+	char where[32];
+	strcpy(where, _("持", "I "));
+	for (int i = 0; i < INVEN_PACK; i++)
+	{
+		object_type *o_ptr = &creature_ptr->inventory_list[i];
+		if (!check_item_knowledge(o_ptr, tval))
+			continue;
+
+		do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, where);
+		add_res_label(label_number, fff);
+	}
+}
+
+
+/*!
+ * 我が家のアイテムについて、耐性を表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param tval アイテム主分類番号
+ * @param label_number 現在の行数
+ * @param fff ファイルへの参照ポインタ
+ * @return なし
+ */
+static void show_home_equipment_resistances(player_type *creature_ptr, OBJECT_TYPE_VALUE tval, int *label_number, FILE *fff)
+{
+	store_type *store_ptr;
+	store_ptr = &town_info[1].store[STORE_HOME];
+	char where[32];
+	strcpy(where, _("家", "H "));
+	for (int i = 0; i < store_ptr->stock_num; i++)
+	{
+		object_type *o_ptr = &store_ptr->stock[i];
+		if (!check_item_knowledge(o_ptr, tval))
+			continue;
+
+		do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, where);
+		add_res_label(label_number, fff);
+	}
+}
+
+
 /*
  * @brief Display *ID* ed weapons/armors's resistances
  * @param creature_ptr プレーヤーへの参照ポインタ
@@ -201,7 +275,6 @@ void do_cmd_knowledge_inventory(player_type *creature_ptr)
 	FILE *fff;
 	GAME_TEXT file_name[1024];
 
-	char where[32];
 	fff = my_fopen_temp(file_name, 1024);
 	if (!fff)
 	{
@@ -225,40 +298,9 @@ void do_cmd_knowledge_inventory(player_type *creature_ptr)
 			fprintf(fff, "%s\n", inven_res_label);
 		}
 
-		strcpy(where, _("装", "E "));
-		for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
-		{
-			object_type *o_ptr = &creature_ptr->inventory_list[i];
-			if (!check_item_knowledge(o_ptr, tval))
-				continue;
-
-			do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, where);
-			add_res_label(&label_number, fff);
-		}
-
-		strcpy(where, _("持", "I "));
-		for (int i = 0; i < INVEN_PACK; i++)
-		{
-			object_type *o_ptr = &creature_ptr->inventory_list[i];
-			if (!check_item_knowledge(o_ptr, tval))
-				continue;
-
-			do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, where);
-			add_res_label(&label_number, fff);
-		}
-
-		store_type *store_ptr;
-		store_ptr = &town_info[1].store[STORE_HOME];
-		strcpy(where, _("家", "H "));
-		for (int i = 0; i < store_ptr->stock_num; i++)
-		{
-			object_type *o_ptr = &store_ptr->stock[i];
-			if (!check_item_knowledge(o_ptr, tval))
-				continue;
-
-			do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, where);
-			add_res_label(&label_number, fff);
-		}
+		show_wearing_equipment_resistances(creature_ptr, tval, &label_number, fff);
+		show_holding_equipment_resistances(creature_ptr, tval, &label_number, fff);
+		show_home_equipment_resistances(creature_ptr, tval, &label_number, fff);
 	}
 
 	my_fclose(fff);
