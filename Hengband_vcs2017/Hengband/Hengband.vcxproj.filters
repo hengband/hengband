@@ -574,6 +574,9 @@
     <ClCompile Include="..\..\src\market\arena_info_table.c">
       <Filter>market</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\market\play-gamble.c">
+      <Filter>market</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1128,6 +1131,9 @@
       <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\market\arena_info_table.h">
+      <Filter>market</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\play-gamble.h">
       <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>

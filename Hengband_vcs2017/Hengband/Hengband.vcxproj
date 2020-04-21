@@ -215,6 +215,7 @@
     <ClCompile Include="..\..\src\market\black-market.c" />
     <ClCompile Include="..\..\src\market\building-util.c" />
     <ClCompile Include="..\..\src\market\gold-magnification-table.c" />
+    <ClCompile Include="..\..\src\market\play-gamble.c" />
     <ClCompile Include="..\..\src\market\poker.c" />
     <ClCompile Include="..\..\src\market\say-comments.c" />
     <ClCompile Include="..\..\src\market\store-owner-comments.c" />
@@ -397,6 +398,7 @@
     <ClInclude Include="..\..\src\market\black-market.h" />
     <ClInclude Include="..\..\src\market\building-util.h" />
     <ClInclude Include="..\..\src\market\gold-magnification-table.h" />
+    <ClInclude Include="..\..\src\market\play-gamble.h" />
     <ClInclude Include="..\..\src\market\poker.h" />
     <ClInclude Include="..\..\src\market\say-comments.h" />
     <ClInclude Include="..\..\src\market\store-owner-comments.h" />
