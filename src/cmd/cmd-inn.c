@@ -87,6 +87,30 @@ static void pass_game_turn_by_stay(void)
 
 
 /*!
+ * @brief 悪夢モードなら悪夢を見せる
+ * @param customer_ptr プレーヤーへの参照ポインタ
+ * @return 悪夢モードならばTRUE
+ */
+static bool have_a_nightmare(player_type *customer_ptr)
+{
+	if (!ironman_nightmare) return FALSE;
+
+	msg_print(_("眠りに就くと恐ろしい光景が心をよぎった。", "Horrible visions flit through your mind as you sleep."));
+
+	while (TRUE)
+	{
+		sanity_blast(customer_ptr, NULL, FALSE);
+		if (!one_in_(3)) break;
+	}
+
+	msg_print(_("あなたは絶叫して目を覚ました。", "You awake screaming."));
+	exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("悪夢にうなされてよく眠れなかった。", "had a nightmare."));
+	return TRUE;
+}
+
+
+/*!
+ * todo 悪夢を見る前後に全回復しているが、何か意図がある？
  * @brief 宿屋を利用する
  * @param customer_ptr プレーヤーへの参照ポインタ
  * @param cmd 宿屋の利用施設ID
@@ -120,21 +144,7 @@ bool inn_comm(player_type *customer_ptr, int cmd)
 			exe_write_diary(customer_ptr, DIARY_DIALY, 0, NULL);
 
 		customer_ptr->chp = customer_ptr->mhp;
-
-		if (ironman_nightmare)
-		{
-			msg_print(_("眠りに就くと恐ろしい光景が心をよぎった。", "Horrible visions flit through your mind as you sleep."));
-
-			while (TRUE)
-			{
-				sanity_blast(customer_ptr, NULL, FALSE);
-				if (!one_in_(3)) break;
-			}
-
-			msg_print(_("あなたは絶叫して目を覚ました。", "You awake screaming."));
-			exe_write_diary(customer_ptr, DIARY_DESCRIPTION, 0, _("悪夢にうなされてよく眠れなかった。", "had a nightmare."));
-			break;
-		}
+		if (have_a_nightmare(customer_ptr)) return TRUE;
 
 		set_blind(customer_ptr, 0);
 		set_confused(customer_ptr, 0);
