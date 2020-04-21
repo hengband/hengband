@@ -86,11 +86,10 @@ static bool check_item_knowledge(object_type *o_ptr, OBJECT_TYPE_VALUE tval)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff 一時ファイルへの参照ポインタ
  * @param o_ptr アイテムへの参照ポインタ
- * @param j アイテム番号(？)への参照ポインタ
  * @param where アイテムの場所 (手持ち、家等) を示す文字列への参照ポインタ
  * @return なし
  */
-static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff, object_type *o_ptr, int *j, char *where)
+static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff, object_type *o_ptr, char *where)
 {
 	int i = 0;
 	GAME_TEXT o_name[MAX_NLEN];
@@ -119,46 +118,55 @@ static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff,
 	{
 		fputs(_("-------不明--------------- -------不明---------\n",
 			"-------unknown------------ -------unknown------\n"), fff);
+		return;
 	}
-	else
+	
+	BIT_FLAGS flgs[TR_FLAG_SIZE];
+	object_flags_known(o_ptr, flgs);
+
+	print_im_or_res_flag(TR_IM_ACID, TR_RES_ACID, flgs, fff);
+	print_im_or_res_flag(TR_IM_ELEC, TR_RES_ELEC, flgs, fff);
+	print_im_or_res_flag(TR_IM_FIRE, TR_RES_FIRE, flgs, fff);
+	print_im_or_res_flag(TR_IM_COLD, TR_RES_COLD, flgs, fff);
+	print_flag(TR_RES_POIS, flgs, fff);
+	print_flag(TR_RES_LITE, flgs, fff);
+	print_flag(TR_RES_DARK, flgs, fff);
+	print_flag(TR_RES_SHARDS, flgs, fff);
+	print_flag(TR_RES_SOUND, flgs, fff);
+	print_flag(TR_RES_NETHER, flgs, fff);
+	print_flag(TR_RES_NEXUS, flgs, fff);
+	print_flag(TR_RES_CHAOS, flgs, fff);
+	print_flag(TR_RES_DISEN, flgs, fff);
+
+	fputs(" ", fff);
+
+	print_flag(TR_RES_BLIND, flgs, fff);
+	print_flag(TR_RES_FEAR, flgs, fff);
+	print_flag(TR_RES_CONF, flgs, fff);
+	print_flag(TR_FREE_ACT, flgs, fff);
+	print_flag(TR_SEE_INVIS, flgs, fff);
+	print_flag(TR_HOLD_EXP, flgs, fff);
+	print_flag(TR_TELEPATHY, flgs, fff);
+	print_flag(TR_SLOW_DIGEST, flgs, fff);
+	print_flag(TR_REGEN, flgs, fff);
+	print_flag(TR_LEVITATION, flgs, fff);
+
+	fputc('\n', fff);
+}
+
+
+/*!
+ * @brief 9行おきにラベルを追加する
+ * @param label_number 現在の行数
+ * @param fff ファイルへの参照ポインタ
+ * @return なし
+ */
+static void add_res_label(int *label_number, FILE *fff)
+{
+	(*label_number)++;
+	if (*label_number == 9)
 	{
-		BIT_FLAGS flgs[TR_FLAG_SIZE];
-		object_flags_known(o_ptr, flgs);
-
-		print_im_or_res_flag(TR_IM_ACID, TR_RES_ACID, flgs, fff);
-		print_im_or_res_flag(TR_IM_ELEC, TR_RES_ELEC, flgs, fff);
-		print_im_or_res_flag(TR_IM_FIRE, TR_RES_FIRE, flgs, fff);
-		print_im_or_res_flag(TR_IM_COLD, TR_RES_COLD, flgs, fff);
-		print_flag(TR_RES_POIS, flgs, fff);
-		print_flag(TR_RES_LITE, flgs, fff);
-		print_flag(TR_RES_DARK, flgs, fff);
-		print_flag(TR_RES_SHARDS, flgs, fff);
-		print_flag(TR_RES_SOUND, flgs, fff);
-		print_flag(TR_RES_NETHER, flgs, fff);
-		print_flag(TR_RES_NEXUS, flgs, fff);
-		print_flag(TR_RES_CHAOS, flgs, fff);
-		print_flag(TR_RES_DISEN, flgs, fff);
-
-		fputs(" ", fff);
-
-		print_flag(TR_RES_BLIND, flgs, fff);
-		print_flag(TR_RES_FEAR, flgs, fff);
-		print_flag(TR_RES_CONF, flgs, fff);
-		print_flag(TR_FREE_ACT, flgs, fff);
-		print_flag(TR_SEE_INVIS, flgs, fff);
-		print_flag(TR_HOLD_EXP, flgs, fff);
-		print_flag(TR_TELEPATHY, flgs, fff);
-		print_flag(TR_SLOW_DIGEST, flgs, fff);
-		print_flag(TR_REGEN, flgs, fff);
-		print_flag(TR_LEVITATION, flgs, fff);
-
-		fputc('\n', fff);
-	}
-
-	(*j)++;
-	if (*j == 9)
-	{
-		*j = 0;
+		*label_number = 0;
 		fprintf(fff, "%s\n", inven_res_label);
 	}
 }
@@ -184,17 +192,17 @@ void do_cmd_knowledge_inventory(player_type *creature_ptr)
 	}
 
 	fprintf(fff, "%s\n", inven_res_label);
-	int j = 0;
+	int label_number = 0;
 	for (OBJECT_TYPE_VALUE tval = TV_WEARABLE_BEGIN; tval <= TV_WEARABLE_END; tval++)
 	{
-		if (j != 0)
+		if (label_number != 0)
 		{
-			for (; j < 9; j++)
+			for (; label_number < 9; label_number++)
 			{
 				fputc('\n', fff);
 			}
 
-			j = 0;
+			label_number = 0;
 			fprintf(fff, "%s\n", inven_res_label);
 		}
 
@@ -205,7 +213,8 @@ void do_cmd_knowledge_inventory(player_type *creature_ptr)
 			if (!check_item_knowledge(o_ptr, tval))
 				continue;
 
-			do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, &j, where);
+			do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, where);
+			add_res_label(&label_number, fff);
 		}
 
 		strcpy(where, _("持", "I "));
@@ -215,7 +224,8 @@ void do_cmd_knowledge_inventory(player_type *creature_ptr)
 			if (!check_item_knowledge(o_ptr, tval))
 				continue;
 
-			do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, &j, where);
+			do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, where);
+			add_res_label(&label_number, fff);
 		}
 
 		store_type *store_ptr;
@@ -227,7 +237,8 @@ void do_cmd_knowledge_inventory(player_type *creature_ptr)
 			if (!check_item_knowledge(o_ptr, tval))
 				continue;
 
-			do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, &j, where);
+			do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, where);
+			add_res_label(&label_number, fff);
 		}
 	}
 
