@@ -65,22 +65,33 @@ static bool determine_spcial_item_type(object_type *o_ptr, OBJECT_TYPE_VALUE tva
 
 
 /*!
+ * @brief アイテムに耐性の表示をする必要があるかを判定する
+ * @param o_ptr アイテムへの参照ポインタ
+ * @param tval アイテム主分類番号
+ * @return 必要があるならTRUE
+ */
+static bool check_item_knowledge(object_type *o_ptr, OBJECT_TYPE_VALUE tval)
+{
+	if (o_ptr->k_idx == 0) return FALSE;
+	if (o_ptr->tval != tval) return FALSE;
+	if (!object_is_known(o_ptr)) return FALSE;
+	if (!determine_spcial_item_type(o_ptr, tval)) return FALSE;
+
+	return TRUE;
+}
+
+
+/*!
  * @brief アイテム1つ当たりの耐性を表示する
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param fff 一時ファイルへの参照ポインタ
  * @param o_ptr アイテムへの参照ポインタ
  * @param j アイテム番号(？)への参照ポインタ
- * @param tval アイテム主分類番号
  * @param where アイテムの場所 (手持ち、家等) を示す文字列への参照ポインタ
  * @return なし
  */
-static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff, object_type *o_ptr, int *j, OBJECT_TYPE_VALUE tval, char *where)
+static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff, object_type *o_ptr, int *j, char *where)
 {
-	if (o_ptr->k_idx == 0) return;
-	if (o_ptr->tval != tval) return;
-	if (!object_is_known(o_ptr)) return;
-	if (!determine_spcial_item_type(o_ptr, tval)) return;
-
 	int i = 0;
 	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(creature_ptr, o_name, o_ptr, OD_NAME_ONLY);
@@ -190,13 +201,21 @@ void do_cmd_knowledge_inventory(player_type *creature_ptr)
 		strcpy(where, _("装", "E "));
 		for (int i = INVEN_RARM; i < INVEN_TOTAL; i++)
 		{
-			do_cmd_knowledge_inventory_aux(creature_ptr, fff, &creature_ptr->inventory_list[i], &j, tval, where);
+			object_type *o_ptr = &creature_ptr->inventory_list[i];
+			if (!check_item_knowledge(o_ptr, tval))
+				continue;
+
+			do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, &j, where);
 		}
 
 		strcpy(where, _("持", "I "));
 		for (int i = 0; i < INVEN_PACK; i++)
 		{
-			do_cmd_knowledge_inventory_aux(creature_ptr, fff, &creature_ptr->inventory_list[i], &j, tval, where);
+			object_type *o_ptr = &creature_ptr->inventory_list[i];
+			if (!check_item_knowledge(o_ptr, tval))
+				continue;
+
+			do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, &j, where);
 		}
 
 		store_type *store_ptr;
@@ -204,7 +223,11 @@ void do_cmd_knowledge_inventory(player_type *creature_ptr)
 		strcpy(where, _("家", "H "));
 		for (int i = 0; i < store_ptr->stock_num; i++)
 		{
-			do_cmd_knowledge_inventory_aux(creature_ptr, fff, &store_ptr->stock[i], &j, tval, where);
+			object_type *o_ptr = &store_ptr->stock[i];
+			if (!check_item_knowledge(o_ptr, tval))
+				continue;
+
+			do_cmd_knowledge_inventory_aux(creature_ptr, fff, o_ptr, &j, where);
 		}
 	}
 
