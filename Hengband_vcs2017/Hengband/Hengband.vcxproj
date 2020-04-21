@@ -254,6 +254,7 @@
     <ClCompile Include="..\..\src\player-sex.c" />
     <ClCompile Include="..\..\src\player-skill.c" />
     <ClCompile Include="..\..\src\player-status.c" />
+    <ClCompile Include="..\..\src\player\mimic-info-table.c" />
     <ClCompile Include="..\..\src\player\permanent-resistances.c" />
     <ClCompile Include="..\..\src\player\process-name.c" />
     <ClCompile Include="..\..\src\player\race-info-table.c" />
@@ -418,6 +419,7 @@
     <ClInclude Include="..\..\src\monster\quantum-effect.h" />
     <ClInclude Include="..\..\src\object-flavor.h" />
     <ClInclude Include="..\..\src\player-inventory.h" />
+    <ClInclude Include="..\..\src\player\mimic-info-table.h" />
     <ClInclude Include="..\..\src\player\permanent-resistances.h" />
     <ClInclude Include="..\..\src\player\process-name.h" />
     <ClInclude Include="..\..\src\player\race-info-table.h" />

@@ -32,13 +32,13 @@ hengband_SOURCES = \
 	view/status-first-page.c view/status-first-page.h \
 	view/display-util.c view/display-util.h \
 	\
+	player/mimic-info-table.c player/mimic-info-table.h \
 	player/process-death.c player/process-death.h \
+	player/process-name.c player/process-name.h \
 	player/race-info-table.c player/race-info-table.h\
 	player/race-resistances.c player/race-resistances.h \
 	player/permanent-resistances.c player/permanent-resistances.h \
 	player/temporary-resistances.c player/temporary-resistances.h \
-
-	player/process-name.c player/process-name.h \
 	\
 	io/gf-descriptions.c io/gf-descriptions.h \
 	io/tokenizer.c io/tokenizer.h \

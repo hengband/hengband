@@ -19,7 +19,7 @@
 #include "player-effects.h"
 #include "player-status.h"
 #include "player-damage.h"
-#include "player-race.h"
+#include "player/mimic-info-table.h"
 #include "player-inventory.h"
 #include "realm-hex.h"
 #include "spells-floor.h"

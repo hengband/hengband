@@ -24,7 +24,7 @@
 #include "object-curse.h"
 #include "player-damage.h"
 #include "player-effects.h"
-#include "player-race.h"
+#include "player/mimic-info-table.h"
 #include "player-class.h"
 
 #include "monster.h"

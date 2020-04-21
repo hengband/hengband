@@ -9,6 +9,7 @@
 #include "player-effects.h"
 #include "player-skill.h"
 #include "player/race-info-table.h"
+#include "player/mimic-info-table.h"
 #include "player-class.h"
 #include "player-personality.h"
 #include "player-damage.h"

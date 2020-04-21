@@ -7,6 +7,7 @@
  */
 
 #include "display-player.h"
+#include "player/mimic-info-table.h"
 #include "player-personality.h"
 #include "term.h"
 #include "status-first-page.h"

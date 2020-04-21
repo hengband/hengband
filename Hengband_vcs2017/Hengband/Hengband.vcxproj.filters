@@ -580,6 +580,9 @@
     <ClCompile Include="..\..\src\player\race-info-table.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\mimic-info-table.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1140,6 +1143,9 @@
       <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player\race-info-table.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\mimic-info-table.h">
       <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>

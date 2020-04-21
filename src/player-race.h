@@ -105,6 +105,4 @@ struct player_race
 
 extern const player_race *rp_ptr;
 
-extern const player_race mimic_info[];
-
 SYMBOL_CODE get_summon_symbol_from_player(player_type *p_ptr);

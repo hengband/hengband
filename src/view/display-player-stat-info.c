@@ -6,7 +6,9 @@
  * ここにこれ以上関数を引っ越してくるのは禁止。何ならここから更に分割していく
  */
 
+#include "angband.h"
 #include "display-player-stat-info.h"
+#include "player/mimic-info-table.h"
 #include "term.h"
 #include "player-personality.h"
 #include "player/permanent-resistances.h"

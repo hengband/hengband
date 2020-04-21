@@ -18,7 +18,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-damage.h"
-#include "player-race.h"
+#include "player/mimic-info-table.h"
 #include "player-class.h"
 #include "player-inventory.h"
 #include "floor.h"
