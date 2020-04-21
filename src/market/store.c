@@ -35,7 +35,7 @@
 #include "cmd/cmd-zapwand.h"
 #include "cmd/cmd-magiceat.h"
 #include "spells.h"
-#include "store.h"
+#include "market/store.h"
 #include "avatar.h"
 #include "cmd-spell.h"
 #include "rumor.h"

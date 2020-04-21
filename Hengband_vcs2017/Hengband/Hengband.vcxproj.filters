@@ -208,9 +208,6 @@
     <ClCompile Include="..\..\src\grid.c">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\store.c">
-      <Filter>market</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\rumor.c">
       <Filter>market</Filter>
     </ClCompile>
@@ -586,6 +583,9 @@
     <ClCompile Include="..\..\src\market\building.c">
       <Filter>market</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\market\store.c">
+      <Filter>market</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -772,9 +772,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\grid.h">
       <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\store.h">
-      <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\rumor.h">
       <Filter>market</Filter>
@@ -1152,6 +1149,9 @@
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\market\building.h">
+      <Filter>market</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\store.h">
       <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>

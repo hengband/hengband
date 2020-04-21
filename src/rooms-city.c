@@ -6,7 +6,7 @@
 #include "floor-generate.h"
 #include "rooms.h"
 #include "rooms-city.h"
-#include "store.h"
+#include "market/store.h"
 #include "wild.h"
 #include "market/store-util.h"
 

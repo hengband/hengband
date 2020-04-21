@@ -5,7 +5,7 @@
 #include "floor-generate.h"
 #include "grid.h"
 #include "rooms.h"
-#include "store.h"
+#include "market/store.h"
 #include "trap.h"
 #include "monster.h"
 #include "feature.h"

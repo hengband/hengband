@@ -338,7 +338,7 @@
     <ClCompile Include="..\..\src\player\process-death.c" />
     <ClCompile Include="..\..\src\view\display-player-misc-info.c" />
     <ClCompile Include="..\..\src\view\status-first-page.c" />
-    <ClCompile Include="..\..\src\store.c" />
+    <ClCompile Include="..\..\src\market\store.c" />
     <ClCompile Include="..\..\src\floor-streams.c" />
     <ClCompile Include="..\..\src\targeting.c" />
     <ClCompile Include="..\..\src\gameterm.c" />
@@ -531,7 +531,7 @@
     <ClInclude Include="..\..\src\floor-streams.h" />
     <ClInclude Include="..\..\src\spells-world.h" />
     <ClInclude Include="..\..\src\spells.h" />
-    <ClInclude Include="..\..\src\store.h" />
+    <ClInclude Include="..\..\src\market\store.h" />
     <ClInclude Include="..\..\src\targeting.h" />
     <ClInclude Include="..\..\src\gameterm.h" />
     <ClInclude Include="..\..\src\trap.h" />

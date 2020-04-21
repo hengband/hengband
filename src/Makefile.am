@@ -12,6 +12,7 @@ hengband_SOURCES = \
 	avatar.h avatar.c birth.c birth.h \
 	\
 	market/arena-info-table.c market/arena-info-table.h \
+	market/building.c market/building.h \
 	market/building-util.c market/building-util.h \
 	market/play-gamble.c market/play-gamble.h \
 	market/poker.c market/poker.h market/store-owners.c market/store-owners.h \
@@ -21,7 +22,8 @@ hengband_SOURCES = \
 	market/say-comments.c market/say-comments.h \
 	market/store-util.c market/store-util.h \
 	market/gold-magnification-table.c market/gold-magnification-table.h \
-	store.c store.h building.c building.h chest.c chest.h chuukei.c chuukei.h \
+	market/store.c market/store.h \
+	chest.c chest.h chuukei.c chuukei.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \

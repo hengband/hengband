@@ -28,7 +28,7 @@
 #include "history.h"
 #include "monster.h"
 #include "monsterrace-hook.h"
-#include "store.h"
+#include "market/store.h"
 #include "patron.h"
 #include "quest.h"
 #include "player/process-name.h"

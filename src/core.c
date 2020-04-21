@@ -55,7 +55,7 @@
 #include "object-ego.h"
 #include "object-curse.h"
 #include "object-flavor.h"
-#include "store.h"
+#include "market/store.h"
 #include "spells.h"
 #include "spells-summon.h"
 #include "spells-object.h"

@@ -53,7 +53,7 @@
 #include "sort.h"
 #include "mutation.h"
 #include "quest.h"
-#include "store.h"
+#include "market/store.h"
 #include "artifact.h"
 #include "avatar.h"
 #include "object-flavor.h"

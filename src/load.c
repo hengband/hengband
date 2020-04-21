@@ -56,7 +56,7 @@
 #include "monster.h"
 #include "market/store-util.h"
 #include "quest.h"
-#include "store.h"
+#include "market/store.h"
 #include "artifact.h"
 #include "avatar.h"
 #include "spells-status.h"

@@ -3,7 +3,7 @@
 #include "world.h"
 #include "floor-town.h"
 #include "dungeon.h"
-#include "store.h"
+#include "market/store.h"
 #include "cmd/cmd-pet.h"
 #include "monster-status.h"
 #include "sort.h"

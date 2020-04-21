@@ -17,7 +17,7 @@
 #include "core.h"
 #include "artifact.h"
 #include "sort.h"
-#include "store.h"
+#include "market/store.h"
 #include "market/store-util.h"
 #include "monster.h"
 #include "object-flavor.h"

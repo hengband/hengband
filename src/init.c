@@ -44,7 +44,7 @@
 #include "quest.h"
 #include "trap.h"
 #include "rooms.h"
-#include "store.h"
+#include "market/store.h"
 #include "wild.h"
 #include "dungeon-file.h"
 #include "files.h"

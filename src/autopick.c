@@ -22,7 +22,7 @@
 
 #include "mind.h"
 
-#include "store.h"
+#include "market/store.h"
 #include "player-status.h"
 #include "player-move.h"
 #include "player-class.h"

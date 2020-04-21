@@ -22,7 +22,7 @@
 #include "sort.h"
 #include "dungeon.h"
 #include "quest.h"
-#include "store.h"
+#include "market/store.h"
 #include "market/store-util.h"
 #include "wild.h"
 #include "floor.h"
