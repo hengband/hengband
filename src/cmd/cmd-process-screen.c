@@ -14,25 +14,41 @@
 // Encode the screen colors
 static char hack[17] = "dwsorgbuDWvyRGBU";
 
+static concptr tags[4] = { "HEADER_START:", "HEADER_END:", "FOOTER_START:", "FOOTER_END:", };
+static concptr html_head[3] = { "<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n", "<pre>", 0, };
+static concptr html_foot[3] = { "</pre>\n", "</body>\n</html>\n", 0, };
+
+/*!
+ * todo io/ 以下に移したいところだが、このファイルの行数も大したことがないので一旦保留
+ * @brief 一時ファイルを読み込み、ファイルに書き出す
+ * @param fff ファイルへの参照ポインタ
+ * @param tempfff 一時ファイルへの参照ポインタ
+ * @param buf バッファ
+ * @param buf_size バッファサイズ
+ */
+static void read_temporary_file(FILE *fff, FILE *tmpfff, char buf[], size_t buf_size)
+{
+	bool is_first_line = TRUE;
+	while (!my_fgets(tmpfff, buf, buf_size))
+	{
+		if (is_first_line)
+		{
+			if (strncmp(buf, tags[0], strlen(tags[0])) == 0)
+				is_first_line = FALSE;
+
+			continue;
+		}
+
+		if (strncmp(buf, tags[1], strlen(tags[1])) == 0)
+			break;
+
+		fprintf(fff, "%s\n", buf);
+	}
+}
+
+
 void do_cmd_save_screen_html_aux(char *filename, int message)
 {
-	concptr tags[4] = {
-		"HEADER_START:",
-		"HEADER_END:",
-		"FOOTER_START:",
-		"FOOTER_END:",
-	};
-	concptr html_head[] = {
-		"<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
-		"<pre>",
-		0,
-	};
-	concptr html_foot[] = {
-		"</pre>\n",
-		"</body>\n</html>\n",
-		0,
-	};
-
 	TERM_LEN wid, hgt;
 	Term_get_size(&wid, &hgt);
 	FILE_TYPE(FILE_TYPE_TEXT);
@@ -62,21 +78,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	}
 	else
 	{
-		bool is_first_line = TRUE;
-		while (!my_fgets(tmpfff, buf, sizeof(buf)))
-		{
-			if (is_first_line)
-			{
-				if (strncmp(buf, tags[0], strlen(tags[0])) == 0)
-					is_first_line = FALSE;
-			}
-			else
-			{
-				if (strncmp(buf, tags[1], strlen(tags[1])) == 0)
-					break;
-				fprintf(fff, "%s\n", buf);
-			}
-		}
+		read_temporary_file(fff, tmpfff, buf, sizeof(buf));
 	}
 
 	for (TERM_LEN y = 0; y < hgt; y++)
