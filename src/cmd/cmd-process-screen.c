@@ -288,6 +288,7 @@ static bool update_use_graphics(player_type *creature_ptr, void(*handle_stuff)(p
 /*
  * Save a screen dump to a file
  * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param handle_stuff 画面更新用の関数ポインタ
  * @return なし
  */
 void do_cmd_save_screen(player_type *creature_ptr, void(*handle_stuff)(player_type*))
@@ -320,29 +321,9 @@ void do_cmd_save_screen(player_type *creature_ptr, void(*handle_stuff)(player_ty
 }
 
 
-/*
- * @brief Load a screen dump from a file
- */
-void do_cmd_load_screen(void)
+static bool draw_white_characters(char buf[], FILE *fff, int wid, int hgt)
 {
-	TERM_COLOR a = 0;
-	SYMBOL_CODE c = ' ';
 	bool okay = TRUE;
-	FILE *fff;
-	char buf[1024];
-	TERM_LEN wid, hgt;
-	Term_get_size(&wid, &hgt);
-	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
-	fff = my_fopen(buf, "r");
-	if (!fff)
-	{
-		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
-		msg_print(NULL);
-		return;
-	}
-
-	screen_save();
-	Term_clear();
 	for (TERM_LEN y = 0; okay; y++)
 	{
 		if (!fgets(buf, 1024, fff)) okay = FALSE;
@@ -358,6 +339,34 @@ void do_cmd_load_screen(void)
 		}
 	}
 
+	return okay;
+}
+
+
+/*
+ * @brief Load a screen dump from a file
+ */
+void do_cmd_load_screen(void)
+{
+	FILE *fff;
+	char buf[1024];
+	TERM_LEN wid, hgt;
+	Term_get_size(&wid, &hgt);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
+	fff = my_fopen(buf, "r");
+	if (!fff)
+	{
+		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
+		msg_print(NULL);
+		return;
+	}
+
+	screen_save();
+	Term_clear();
+	bool okay = draw_white_characters(buf, fff, wid, hgt);
+
+	TERM_COLOR a = TERM_DARK;
+	SYMBOL_CODE c = ' ';
 	for (TERM_LEN y = 0; okay; y++)
 	{
 		if (!fgets(buf, 1024, fff)) okay = FALSE;
