@@ -8,7 +8,7 @@
 #include "avatar.h"
 #include "market/building.h"
 #include "io/write-diary.h"
-#include "cmd/cmd-dump.h"
+#include "cmd/cmd-process-screen.h"
 #include "market/arena-info-table.h"
 #include "realm-song.h"
 #include "floor.h"

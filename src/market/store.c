@@ -32,6 +32,7 @@
 #include "cmd/cmd-help.h"
 #include "cmd/cmd-item.h"
 #include "cmd/cmd-macro.h"
+#include "cmd/cmd-process-screen.h"
 #include "cmd/cmd-smith.h"
 #include "cmd/cmd-visuals.h"
 #include "cmd/cmd-zapwand.h"

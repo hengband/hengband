@@ -29,6 +29,7 @@
 #include "cmd/cmd-diary.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-dump.h"
+#include "cmd/cmd-process-screen.h"
 #include "cmd/cmd-eat.h"
 #include "cmd/cmd-help.h"
 #include "cmd/cmd-hissatsu.h"
