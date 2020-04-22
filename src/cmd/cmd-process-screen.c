@@ -49,6 +49,51 @@ static void read_temporary_file(FILE *fff, FILE *tmpfff, char buf[], size_t buf_
 }
 
 
+/*!
+ * @brief 記念撮影を1行ダンプする
+ * @param wid 幅
+ * @param y 現在の行位置
+ * @param fff 記念撮影ファイルへの参照ポインタ
+ * @return なし
+ */
+static void screen_dump_one_line(int wid, int y, FILE *fff)
+{
+	TERM_COLOR a = 0, old_a = 0;
+	char c = ' ';
+	for (TERM_LEN x = 0; x < wid - 1; x++)
+	{
+		concptr cc = NULL;
+		(void)(Term_what(x, y, &a, &c));
+		switch (c)
+		{
+		case '&': cc = "&amp;"; break;
+		case '<': cc = "&lt;"; break;
+		case '>': cc = "&gt;"; break;
+#ifdef WINDOWS
+		case 0x1f: c = '.'; break;
+		case 0x7f: c = (a == 0x09) ? '%' : '#'; break;
+#endif
+		}
+
+		a = a & 0x0F;
+		if ((y == 0 && x == 0) || a != old_a)
+		{
+			int rv = angband_color_table[a][1];
+			int gv = angband_color_table[a][2];
+			int bv = angband_color_table[a][3];
+			fprintf(fff, "%s<font color=\"#%02x%02x%02x\">",
+				((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
+			old_a = a;
+		}
+
+		if (cc)
+			fprintf(fff, "%s", cc);
+		else
+			fprintf(fff, "%c", c);
+	}
+}
+
+
 void do_cmd_save_screen_html_aux(char *filename, int message)
 {
 	TERM_LEN wid, hgt;
@@ -85,41 +130,10 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 
 	for (TERM_LEN y = 0; y < hgt; y++)
 	{
-		if (y != 0) fprintf(fff, "\n");
-
-		TERM_COLOR a = 0, old_a = 0;
-		char c = ' ';
-		for (TERM_LEN x = 0; x < wid - 1; x++)
-		{
-			concptr cc = NULL;
-			(void)(Term_what(x, y, &a, &c));
-			switch (c)
-			{
-			case '&': cc = "&amp;"; break;
-			case '<': cc = "&lt;"; break;
-			case '>': cc = "&gt;"; break;
-#ifdef WINDOWS
-			case 0x1f: c = '.'; break;
-			case 0x7f: c = (a == 0x09) ? '%' : '#'; break;
-#endif
-			}
-
-			a = a & 0x0F;
-			if ((y == 0 && x == 0) || a != old_a)
-			{
-				int rv = angband_color_table[a][1];
-				int gv = angband_color_table[a][2];
-				int bv = angband_color_table[a][3];
-				fprintf(fff, "%s<font color=\"#%02x%02x%02x\">",
-					((y == 0 && x == 0) ? "" : "</font>"), rv, gv, bv);
-				old_a = a;
-			}
-
-			if (cc)
-				fprintf(fff, "%s", cc);
-			else
-				fprintf(fff, "%c", c);
-		}
+		if (y != 0)
+			fprintf(fff, "\n");
+		
+		screen_dump_one_line(wid, y, fff);
 	}
 
 	fprintf(fff, "</font>");
