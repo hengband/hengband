@@ -113,6 +113,23 @@ static void screen_dump_lines(int wid, int hgt, FILE *fff)
 }
 
 
+/*!
+ * @brief ファイルへ書き込めない場合にエラーを表示する
+ * @param fff ダンプファイルへの参照ポインタ
+ * @param buf バッファ
+ * @return ファイルへ書き込めるならTRUE、書き込めないならFALSE
+ */
+static bool check_screen_html_can_open(FILE *fff, char *filename, int message)
+{
+	if (fff) return TRUE;
+	if (message == 0) return FALSE;
+
+	msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename);
+	msg_print(NULL);
+	return FALSE;
+}
+
+
 void do_cmd_save_screen_html_aux(char *filename, int message)
 {
 	TERM_LEN wid, hgt;
@@ -120,16 +137,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	FILE_TYPE(FILE_TYPE_TEXT);
 	FILE *fff;
 	fff = my_fopen(filename, "w");
-	if (!fff)
-	{
-		if (message)
-		{
-			msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), filename);
-			msg_print(NULL);
-		}
-
-		return;
-	}
+	if (!check_screen_html_can_open) return;
 
 	if (message) screen_save();
 
