@@ -586,6 +586,9 @@
     <ClCompile Include="..\..\src\market\store.c">
       <Filter>market</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main\sound-definitions-table.c">
+      <Filter>main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1154,6 +1157,9 @@
     <ClInclude Include="..\..\src\market\store.h">
       <Filter>market</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\main\sound-definitions-table.h">
+      <Filter>main</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1198,6 +1204,9 @@
     </Filter>
     <Filter Include="view">
       <UniqueIdentifier>{95a48e4b-b55a-4e99-a3c6-e8badbd1b2cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main">
+      <UniqueIdentifier>{e8e836da-e12b-42cc-9c09-17432cb83432}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

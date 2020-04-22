@@ -265,11 +265,6 @@ extern concptr keymap_act[KEYMAP_MODES][256];
 #define SOUND_GLASS     65 /*!< A glass feature was crashed */
 #define SOUND_REFLECT   66 /*!< A bolt was reflected */
 
- /*
-  * Mega-Hack -- maximum known sounds
-  */
-#define SOUND_MAX 67 /*!< 効果音定義の最大数 */
-
   /*!
    * @brief 銘情報の最大数 / Maximum number of "quarks" (see "io.c")
    * @note

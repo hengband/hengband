@@ -157,6 +157,7 @@
  */
 
 #include "angband.h"
+#include "main/sound-definitions-table.h"
 #include "io/exit-panic.h"
 #include "files.h"
 #include "gameterm.h"
@@ -260,80 +261,6 @@ static term_data data[MAX_TERM_DATA];
  */
 /* #define nonl() */
 /* #define nl() */
-
- /*
-  * Standard sound names
-  */
-static const concptr angband_sound_name[SOUND_MAX] =
-{
-	"dummy",
-	"hit",
-	"miss",
-	"flee",
-	"drop",
-	"kill",
-	"level",
-	"death",
-	"study",
-	"teleport",
-	"shoot",
-	"quaff",
-	"zap",
-	"walk",
-	"tpother",
-	"hitwall",
-	"eat",
-	"store1",
-	"store2",
-	"store3",
-	"store4",
-	"dig",
-	"opendoor",
-	"shutdoor",
-	"tplevel",
-	"scroll",
-	"buy",
-	"sell",
-	"warn",
-	"rocket",
-	"n_kill",
-	"u_kill",
-	"quest",
-	"heal",
-	"x_heal",
-	"bite",
-	"claw",
-	"m_spell",
-	"summon",
-	"breath",
-	"ball",
-	"m_heal",
-	"atkspell",
-	"evil",
-	"touch",
-	"sting",
-	"crush",
-	"slime",
-	"wail",
-	"winner",
-	"fire",
-	"acid",
-	"elec",
-	"cold",
-	"illegal",
-	"fail",
-	"wakeup",
-	"invuln",
-	"fall",
-	"pain",
-	"destitem",
-	"moan",
-	"show",
-	"unused",
-	"explode",
-	"glass",
-	"reflect",
-};
 
 static concptr ANGBAND_DIR_XTRA_SOUND;
 
