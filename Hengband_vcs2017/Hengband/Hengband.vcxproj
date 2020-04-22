@@ -152,7 +152,7 @@
     <ClCompile Include="..\..\src\autopick.c" />
     <ClCompile Include="..\..\src\avatar.c" />
     <ClCompile Include="..\..\src\birth.c" />
-    <ClCompile Include="..\..\src\cmd\cmd-sprocess-screen.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-process-screen.c" />
     <ClCompile Include="..\..\src\main\music-definitions-table.c" />
     <ClCompile Include="..\..\src\main\sound-definitions-table.c" />
     <ClCompile Include="..\..\src\market\building.c" />

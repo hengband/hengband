@@ -592,7 +592,7 @@
     <ClCompile Include="..\..\src\main\music-definitions-table.c">
       <Filter>main</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-sprocess-screen.c">
+    <ClCompile Include="..\..\src\cmd\cmd-process-screen.c">
       <Filter>cmd</Filter>
     </ClCompile>
   </ItemGroup>

@@ -567,7 +567,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 			if (get_check_strict(_("画面を保存しますか？", "Dump the screen? "), CHECK_NO_HISTORY))
 			{
-				do_cmd_save_screen(creature_ptr);
+				do_cmd_save_screen(creature_ptr, handle_stuff);
 			}
 
 			flush();

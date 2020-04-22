@@ -8,7 +8,6 @@
 #include "angband.h"
 #include "cmd/cmd-process-screen.h"
 #include "cmd/cmd-draw.h"
-#include "core.h" // 暫定、後で消す.
 #include "files.h"
 #include "gameterm.h"
 
@@ -182,7 +181,7 @@ static void do_cmd_save_screen_html(void)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void do_cmd_save_screen(player_type *creature_ptr)
+void do_cmd_save_screen(player_type *creature_ptr, void(*handle_stuff)(player_type*))
 {
 	prt(_("記念撮影しますか？ [(y)es/(h)tml/(n)o] ", "Save screen dump? [(y)es/(h)tml/(n)o] "), 0, 0);
 	bool html_dump = FALSE;
@@ -212,7 +211,7 @@ void do_cmd_save_screen(player_type *creature_ptr)
 		use_graphics = FALSE;
 		reset_visuals(creature_ptr);
 		creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
-		handle_stuff(creature_ptr);
+		(*handle_stuff)(creature_ptr);
 	}
 
 	if (html_dump)

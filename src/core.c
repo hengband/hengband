@@ -3516,7 +3516,7 @@ static void process_command(player_type *creature_ptr)
 	}
 	case ')':
 	{
-		do_cmd_save_screen(creature_ptr);
+		do_cmd_save_screen(creature_ptr, handle_stuff);
 		break;
 	}
 	case ']':

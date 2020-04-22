@@ -2017,7 +2017,7 @@ static void store_process_command(player_type *client_ptr)
 	}
 	case ')':
 	{
-		do_cmd_save_screen(client_ptr);
+		do_cmd_save_screen(client_ptr, handle_stuff);
 		break;
 	}
 	default:
