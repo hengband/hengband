@@ -177,31 +177,50 @@ static void do_cmd_save_screen_html(void)
 
 
 /*!
- * @brief HTMLで記念撮影するかを問い合わせる
- * @param なし
- * @return HTMLでダンプするならTRUE
+ * @brief 記念撮影の方式を問い合わせる
+ * @param html_dump HTMLダンプするか否か
+ * @return ダンプするならTRUE、キャンセルならFALSE
  */
-static bool ask_html_dump(void)
+static bool ask_html_dump(bool *html_dump)
 {
 	while (TRUE)
 	{
 		char c = inkey();
 		if (c == 'Y' || c == 'y')
 		{
-			return FALSE;
-		}
-		else if (c == 'H' || c == 'h')
-		{
+			*html_dump = FALSE;
 			return TRUE;
 		}
-		else
+		
+		if (c == 'H' || c == 'h')
 		{
-			prt("", 0, 0);
-			return FALSE;
+			*html_dump = TRUE;
+			return TRUE;
 		}
+
+		prt("", 0, 0);
+		return FALSE;
 	}
 
 	// コンパイル警告対応.
+	return FALSE;
+}
+
+
+/*!
+ * @brief 記念撮影のためにグラフィック使用をOFFにする
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param handle_stuff 画面更新用の関数ポインタ
+ * @return 記念撮影直前のグラフィックオプション
+ */
+static bool update_use_graphics(player_type *creature_ptr, void(*handle_stuff)(player_type*))
+{
+	if (!use_graphics) return TRUE;
+
+	use_graphics = FALSE;
+	reset_visuals(creature_ptr);
+	creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
+	(*handle_stuff)(creature_ptr);
 	return FALSE;
 }
 
@@ -214,19 +233,13 @@ static bool ask_html_dump(void)
 void do_cmd_save_screen(player_type *creature_ptr, void(*handle_stuff)(player_type*))
 {
 	prt(_("記念撮影しますか？ [(y)es/(h)tml/(n)o] ", "Save screen dump? [(y)es/(h)tml/(n)o] "), 0, 0);
-	bool html_dump = ask_html_dump();
+	bool html_dump;
+	if (!ask_html_dump(&html_dump)) return;
 
 	int wid, hgt;
 	Term_get_size(&wid, &hgt);
 
-	bool old_use_graphics = use_graphics;
-	if (old_use_graphics)
-	{
-		use_graphics = FALSE;
-		reset_visuals(creature_ptr);
-		creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
-		(*handle_stuff)(creature_ptr);
-	}
+	bool old_use_graphics = update_use_graphics(creature_ptr, handle_stuff);
 
 	if (html_dump)
 	{
