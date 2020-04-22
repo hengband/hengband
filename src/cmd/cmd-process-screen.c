@@ -226,6 +226,22 @@ static bool ask_html_dump(bool *html_dump)
 
 
 /*!
+ * @brief ファイルへ書き込めない場合にエラーを表示する
+ * @param fff ダンプファイルへの参照ポインタ
+ * @param buf バッファ
+ * @return ファイルへ書き込めるならTRUE、書き込めないならFALSE
+ */
+static bool check_screen_text_can_open(FILE *fff, char buf[])
+{
+	if (fff) return TRUE;
+
+	msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
+	msg_print(NULL);
+	return FALSE;
+}
+
+
+/*!
  * todo どこかバグっていて、(恐らく初期化されていない)変な文字列まで出力される
  * @brief テキスト方式で記念撮影する
  * @param wid 幅
@@ -241,12 +257,7 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
 	FILE_TYPE(FILE_TYPE_TEXT);
 	fff = my_fopen(buf, "w");
-	if (!fff)
-	{
-		msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
-		msg_print(NULL);
-		return FALSE;
-	}
+	if (!check_screen_text_can_open(fff, buf)) return FALSE;
 
 	screen_save();
 	for (TERM_LEN y = 0; y < hgt; y++)
