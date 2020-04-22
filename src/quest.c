@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "util.h"
+#include "main/music-definitions-table.h"
 
 #include "core.h"
 #include "dungeon.h"

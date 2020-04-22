@@ -19,6 +19,7 @@
 #include "market/black-market.h"
 #include "core.h"
 #include "util.h"
+#include "main/music-definitions-table.h"
 #include "gameterm.h"
 
 #include "floor.h"

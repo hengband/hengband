@@ -589,6 +589,9 @@
     <ClCompile Include="..\..\src\main\sound-definitions-table.c">
       <Filter>main</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main\music-definitions-table.c">
+      <Filter>main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1158,6 +1161,9 @@
       <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main\sound-definitions-table.h">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\music-definitions-table.h">
       <Filter>main</Filter>
     </ClInclude>
   </ItemGroup>

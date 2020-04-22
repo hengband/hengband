@@ -92,6 +92,7 @@
 #include "angband.h"
 #include "signal-handlers.h"
 #include "main/sound-definitions-table.h"
+#include "main/music-definitions-table.h"
 #include "util.h"
 #include "inet.h"
 #include "chuukei.h"
@@ -252,34 +253,6 @@
 
 #define INVALID_FILE_NAME (DWORD)0xFFFFFFFF
 #define MOUSE_SENS 40
-
-/*
- * Standard music names
- */
-const concptr angband_music_basic_name[MUSIC_BASIC_MAX] =
-{
-	"default",
-	"gameover",
-	"exit",
-	"town",
-	"field1",
-	"field2",
-	"field3",
-	"dun_low",
-	"dun_med",
-	"dun_high",
-	"feel1",
-	"feel2",
-	"winner",
-	"build",
-	"wild",
-	"quest",
-	"arena",
-	"battle",
-	"quest_clear",
-	"final_quest_clear",
-	"ambush",
-};
 
 /*
  * Include some more files. Note: the Cygnus Cygwin compiler

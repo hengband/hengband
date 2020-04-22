@@ -11,6 +11,7 @@ hengband_SOURCES = \
 	\
 	avatar.h avatar.c birth.c birth.h \
 	\
+	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
 	market/arena-info-table.c market/arena-info-table.h \
 	market/building.c market/building.h \
@@ -170,7 +171,7 @@ hengband_SOURCES = \
 
 EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc maid-x11.c main-win.c \
-	makefile.bcc makefile.std readdib.c readdib.h wall.bmp
+	makefile.bcc makefile.std readdib.c readdib.h wall.bmp \
 
 EXTRA_DIST = \
 	gcc-wrap

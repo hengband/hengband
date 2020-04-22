@@ -152,6 +152,7 @@
     <ClCompile Include="..\..\src\autopick.c" />
     <ClCompile Include="..\..\src\avatar.c" />
     <ClCompile Include="..\..\src\birth.c" />
+    <ClCompile Include="..\..\src\main\music-definitions-table.c" />
     <ClCompile Include="..\..\src\main\sound-definitions-table.c" />
     <ClCompile Include="..\..\src\market\building.c" />
     <ClCompile Include="..\..\src\character-dump.c" />
@@ -275,6 +276,7 @@
     <ClInclude Include="..\..\src\autopick.h" />
     <ClInclude Include="..\..\src\avatar.h" />
     <ClInclude Include="..\..\src\birth.h" />
+    <ClInclude Include="..\..\src\main\music-definitions-table.h" />
     <ClInclude Include="..\..\src\main\sound-definitions-table.h" />
     <ClInclude Include="..\..\src\market\building.h" />
     <ClInclude Include="..\..\src\character-dump.h" />
