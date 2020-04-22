@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "core.h"
 #include "util.h"
+#include "main/sound-definitions-table.h"
 
 #include "floor.h"
 #include "grid.h"

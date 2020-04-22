@@ -7,6 +7,7 @@
 */
 
 #include "angband.h"
+#include "main/sound-definitions-table.h"
 
 #include "cmd/cmd-activate.h"
 #include "cmd/cmd-basic.h"

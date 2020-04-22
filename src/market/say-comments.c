@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "say-comments.h"
+#include "main/sound-definitions-table.h"
 #include "market/store-owner-comments.h"
 #include "market/store-util.h"
 #include "avatar.h"

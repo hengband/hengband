@@ -20,6 +20,7 @@
 #include "core.h"
 #include "util.h"
 #include "main/music-definitions-table.h"
+#include "main/sound-definitions-table.h"
 #include "gameterm.h"
 
 #include "floor.h"

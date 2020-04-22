@@ -7,6 +7,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "main/sound-definitions-table.h"
 
 #include "floor.h"
 #include "grid.h"

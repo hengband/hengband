@@ -1,6 +1,7 @@
 ﻿#include "angband.h"
 #include "core.h"
 #include "util.h"
+#include "main/sound-definitions-table.h"
 
 #include "creature.h"
 #include "io/write-diary.h"

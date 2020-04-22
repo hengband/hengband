@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "util.h"
+#include "main/sound-definitions-table.h"
 
 #include "avatar.h"
 #include "spells.h"

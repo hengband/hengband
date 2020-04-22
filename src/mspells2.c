@@ -13,6 +13,7 @@
 
 #include "angband.h"
 #include "util.h"
+#include "main/sound-definitions-table.h"
 
 #include "cmd-pet.h"
 #include "floor.h"

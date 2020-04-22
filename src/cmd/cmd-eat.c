@@ -8,6 +8,7 @@
 
 
 #include "angband.h"
+#include "main/sound-definitions-table.h"
 #include "util.h"
 
 #include "object-flavor.h"

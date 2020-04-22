@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "util.h"
+#include "main/sound-definitions-table.h"
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"

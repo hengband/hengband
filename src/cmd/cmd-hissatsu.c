@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "core.h"
 #include "util.h"
+#include "main/sound-definitions-table.h"
 
 #include "monsterrace-hook.h"
 #include "player-status.h"

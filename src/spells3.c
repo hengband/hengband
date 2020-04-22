@@ -16,6 +16,7 @@
 #include "core.h"
 #include "gameterm.h"
 #include "util.h"
+#include "main/sound-definitions-table.h"
 #include "object-ego.h"
 
 #include "creature.h"

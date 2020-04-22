@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "util.h"
 #include "main/music-definitions-table.h"
+#include "main/sound-definitions-table.h"
 #include "market/building.h"
 #include "core.h"
 #include "core/show-file.h"

@@ -14,6 +14,7 @@
 #include "signal-handlers.h"
 #include "util.h"
 #include "main/music-definitions-table.h"
+#include "main/sound-definitions-table.h"
 #include "core.h"
 #include "inet.h"
 #include "gameterm.h"
