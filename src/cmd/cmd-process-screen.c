@@ -130,6 +130,26 @@ static bool check_screen_html_can_open(FILE *fff, char *filename, int message)
 }
 
 
+/*!
+ * @brief HTMLヘッダを書き込む
+ * @param tmpfff 一時ファイルへの参照ポインタ
+ * @param fff 記念撮影ファイルへの参照ポインタ
+ * @param buf バッファ
+ * @param buf_size バッファサイズ
+ */
+static void write_html_header(FILE *tmpfff, FILE *fff, char buf[], size_t buf_size)
+{
+	if (tmpfff)
+	{
+		read_temporary_file(fff, tmpfff, buf, buf_size, 0);
+		return;
+	}
+
+	for (int i = 0; html_head[i]; i++)
+		fputs(html_head[i], fff);
+}
+
+
 void do_cmd_save_screen_html_aux(char *filename, int message)
 {
 	TERM_LEN wid, hgt;
@@ -145,16 +165,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "htmldump.prf");
 	FILE *tmpfff;
 	tmpfff = my_fopen(buf, "r");
-	if (!tmpfff)
-	{
-		for (int i = 0; html_head[i]; i++)
-			fputs(html_head[i], fff);
-	}
-	else
-	{
-		read_temporary_file(fff, tmpfff, buf, sizeof(buf), 0);
-	}
-
+	write_html_header(tmpfff, fff, buf, sizeof(buf));
 	screen_dump_lines(wid, hgt, fff);
 
 	fprintf(fff, "</font>");
