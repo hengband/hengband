@@ -208,6 +208,66 @@ static bool ask_html_dump(bool *html_dump)
 
 
 /*!
+ * todo どこかバグっていて、(恐らく初期化されていない)変な文字列まで出力される
+ * @brief テキスト方式で記念撮影する
+ * @param wid 幅
+ * @param hgt 高さ
+ * @return 記念撮影に成功したらTRUE、ファイルが開けなかったらFALSE
+ */
+static bool do_cmd_save_screen_text(int wid, int hgt)
+{
+	TERM_COLOR a = 0;
+	SYMBOL_CODE c = ' ';
+	FILE *fff;
+	char buf[1024];
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
+	FILE_TYPE(FILE_TYPE_TEXT);
+	fff = my_fopen(buf, "w");
+	if (!fff)
+	{
+		msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
+		msg_print(NULL);
+		return FALSE;
+	}
+
+	screen_save();
+	for (TERM_LEN y = 0; y < hgt; y++)
+	{
+		TERM_LEN x;
+		for (x = 0; x < wid - 1; x++)
+		{
+			(void)(Term_what(x, y, &a, &c));
+			buf[x] = c;
+		}
+
+		buf[x] = '\0';
+		fprintf(fff, "%s\n", buf);
+	}
+
+	fprintf(fff, "\n");
+	for (TERM_LEN y = 0; y < hgt; y++)
+	{
+		TERM_LEN x;
+		for (x = 0; x < wid - 1; x++)
+		{
+			(void)(Term_what(x, y, &a, &c));
+			buf[x] = hack[a & 0x0F];
+		}
+
+		buf[x] = '\0';
+		fprintf(fff, "%s\n", buf);
+	}
+
+	fprintf(fff, "\n");
+	my_fclose(fff);
+	msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
+	msg_print(NULL);
+	screen_load();
+	return TRUE;
+}
+
+
+/*!
  * @brief 記念撮影のためにグラフィック使用をOFFにする
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param handle_stuff 画面更新用の関数ポインタ
@@ -246,54 +306,9 @@ void do_cmd_save_screen(player_type *creature_ptr, void(*handle_stuff)(player_ty
 		do_cmd_save_screen_html();
 		do_cmd_redraw(creature_ptr);
 	}
-	else
+	else if (!do_cmd_save_screen_text(wid, hgt))
 	{
-		TERM_LEN y, x;
-		TERM_COLOR a = 0;
-		SYMBOL_CODE c = ' ';
-		FILE *fff;
-		char buf[1024];
-		path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
-		FILE_TYPE(FILE_TYPE_TEXT);
-		fff = my_fopen(buf, "w");
-		if (!fff)
-		{
-			msg_format(_("ファイル %s を開けませんでした。", "Failed to open file %s."), buf);
-			msg_print(NULL);
-			return;
-		}
-
-		screen_save();
-		for (y = 0; y < hgt; y++)
-		{
-			for (x = 0; x < wid - 1; x++)
-			{
-				(void)(Term_what(x, y, &a, &c));
-				buf[x] = c;
-			}
-
-			buf[x] = '\0';
-			fprintf(fff, "%s\n", buf);
-		}
-
-		fprintf(fff, "\n");
-		for (y = 0; y < hgt; y++)
-		{
-			for (x = 0; x < wid - 1; x++)
-			{
-				(void)(Term_what(x, y, &a, &c));
-				buf[x] = hack[a & 0x0F];
-			}
-
-			buf[x] = '\0';
-			fprintf(fff, "%s\n", buf);
-		}
-
-		fprintf(fff, "\n");
-		my_fclose(fff);
-		msg_print(_("画面(記念撮影)をファイルに書き出しました。", "Screen dump saved."));
-		msg_print(NULL);
-		screen_load();
+		return;
 	}
 
 	if (!old_use_graphics) return;
