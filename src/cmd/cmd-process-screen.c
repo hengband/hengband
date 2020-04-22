@@ -159,8 +159,10 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 }
 
 
-/*
- * Hack -- save a screen dump to a file
+/*!
+ * @brief HTML方式で記念撮影する / Save a screen dump to a file
+ * @param なし
+ * @return なし
  */
 static void do_cmd_save_screen_html(void)
 {
@@ -321,6 +323,14 @@ void do_cmd_save_screen(player_type *creature_ptr, void(*handle_stuff)(player_ty
 }
 
 
+/*!
+ * @brief 白文字だけ画面に描画する (todo 目的は不明瞭)
+ * @param buf 描画用バッファ
+ * @param fff 記念撮影ファイルへの参照ポインタ
+ * @param wid 幅
+ * @param hgt 高さ
+ * @return ファイルが読み込めなくなったらFALSEで抜ける
+ */
 static bool draw_white_characters(char buf[], FILE *fff, int wid, int hgt)
 {
 	bool okay = TRUE;
@@ -343,28 +353,17 @@ static bool draw_white_characters(char buf[], FILE *fff, int wid, int hgt)
 }
 
 
-/*
- * @brief Load a screen dump from a file
+/*!
+ * @brief 白以外の文字を画面に描画する (todo 目的は不明瞭)
+ * @param buf 描画用バッファ
+ * @param fff 記念撮影ファイルへの参照ポインタ
+ * @param wid 幅
+ * @param hgt 高さ
+ * @param 白文字が途中で読み込めなくなっていたらTRUE
+ * @return なし
  */
-void do_cmd_load_screen(void)
+static void draw_colored_characters(char buf[], FILE *fff, int wid, int hgt, bool okay)
 {
-	FILE *fff;
-	char buf[1024];
-	TERM_LEN wid, hgt;
-	Term_get_size(&wid, &hgt);
-	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
-	fff = my_fopen(buf, "r");
-	if (!fff)
-	{
-		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
-		msg_print(NULL);
-		return;
-	}
-
-	screen_save();
-	Term_clear();
-	bool okay = draw_white_characters(buf, fff, wid, hgt);
-
 	TERM_COLOR a = TERM_DARK;
 	SYMBOL_CODE c = ' ';
 	for (TERM_LEN y = 0; okay; y++)
@@ -387,6 +386,33 @@ void do_cmd_load_screen(void)
 			Term_draw(x, y, a, c);
 		}
 	}
+}
+
+
+/*
+ * @brief Load a screen dump from a file
+ * @param なし
+ * @return なし
+ */
+void do_cmd_load_screen(void)
+{
+	FILE *fff;
+	char buf[1024];
+	TERM_LEN wid, hgt;
+	Term_get_size(&wid, &hgt);
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
+	fff = my_fopen(buf, "r");
+	if (!fff)
+	{
+		msg_format(_("%s を開くことができませんでした。", "Failed to open %s."), buf);
+		msg_print(NULL);
+		return;
+	}
+
+	screen_save();
+	Term_clear();
+	bool okay = draw_white_characters(buf, fff, wid, hgt);
+	draw_colored_characters(buf, fff, wid, hgt, okay);
 
 	my_fclose(fff);
 	prt(_("ファイルに書き出された画面(記念撮影)をロードしました。", "Screen dump loaded."), 0, 0);
