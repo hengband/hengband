@@ -94,6 +94,25 @@ static void screen_dump_one_line(int wid, int y, FILE *fff)
 }
 
 
+/*!
+ * @brief 記念撮影を行方向にスイープする
+ * @param wid 幅
+ * @param hgt 高さ
+ * @param fff 記念撮影ファイルへの参照ポインタ
+ * @return なし
+ */
+static void screen_dump_lines(int wid, int hgt, FILE *fff)
+{
+	for (TERM_LEN y = 0; y < hgt; y++)
+	{
+		if (y != 0)
+			fprintf(fff, "\n");
+
+		screen_dump_one_line(wid, y, fff);
+	}
+}
+
+
 void do_cmd_save_screen_html_aux(char *filename, int message)
 {
 	TERM_LEN wid, hgt;
@@ -128,13 +147,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 		read_temporary_file(fff, tmpfff, buf, sizeof(buf), 0);
 	}
 
-	for (TERM_LEN y = 0; y < hgt; y++)
-	{
-		if (y != 0)
-			fprintf(fff, "\n");
-		
-		screen_dump_one_line(wid, y, fff);
-	}
+	screen_dump_lines(wid, hgt, fff);
 
 	fprintf(fff, "</font>");
 	if (!tmpfff)
