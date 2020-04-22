@@ -25,21 +25,23 @@ static concptr html_foot[3] = { "</pre>\n", "</body>\n</html>\n", 0, };
  * @param tempfff 一時ファイルへの参照ポインタ
  * @param buf バッファ
  * @param buf_size バッファサイズ
+ * @param num_tag タグ番号
  */
-static void read_temporary_file(FILE *fff, FILE *tmpfff, char buf[], size_t buf_size)
+static void read_temporary_file(FILE *fff, FILE *tmpfff, char buf[], size_t buf_size, int num_tag)
 {
 	bool is_first_line = TRUE;
+	int next_tag = num_tag + 1;
 	while (!my_fgets(tmpfff, buf, buf_size))
 	{
 		if (is_first_line)
 		{
-			if (strncmp(buf, tags[0], strlen(tags[0])) == 0)
+			if (strncmp(buf, tags[num_tag], strlen(tags[num_tag])) == 0)
 				is_first_line = FALSE;
 
 			continue;
 		}
 
-		if (strncmp(buf, tags[1], strlen(tags[1])) == 0)
+		if (strncmp(buf, tags[next_tag], strlen(tags[next_tag])) == 0)
 			break;
 
 		fprintf(fff, "%s\n", buf);
@@ -78,7 +80,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	}
 	else
 	{
-		read_temporary_file(fff, tmpfff, buf, sizeof(buf));
+		read_temporary_file(fff, tmpfff, buf, sizeof(buf), 0);
 	}
 
 	for (TERM_LEN y = 0; y < hgt; y++)
@@ -129,22 +131,7 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	else
 	{
 		rewind(tmpfff);
-		bool is_first_line = TRUE;
-		while (!my_fgets(tmpfff, buf, sizeof(buf)))
-		{
-			if (is_first_line)
-			{
-				if (strncmp(buf, tags[2], strlen(tags[2])) == 0)
-					is_first_line = FALSE;
-			}
-			else
-			{
-				if (strncmp(buf, tags[3], strlen(tags[3])) == 0)
-					break;
-				fprintf(fff, "%s\n", buf);
-			}
-		}
-
+		read_temporary_file(fff, tmpfff, buf, sizeof(buf), 2);
 		my_fclose(tmpfff);
 	}
 
@@ -316,7 +303,7 @@ void do_cmd_save_screen(player_type *creature_ptr, void(*handle_stuff)(player_ty
 		return;
 	}
 
-	if (!old_use_graphics) return;
+	if (old_use_graphics) return;
 
 	use_graphics = TRUE;
 	reset_visuals(creature_ptr);
