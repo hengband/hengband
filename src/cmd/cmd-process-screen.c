@@ -150,24 +150,15 @@ static void write_html_header(FILE *tmpfff, FILE *fff, char buf[], size_t buf_si
 }
 
 
-void do_cmd_save_screen_html_aux(char *filename, int message)
+/*!
+ * @brief HTMLフッタを書き込む
+ * @param tmpfff 一時ファイルへの参照ポインタ
+ * @param fff 記念撮影ファイルへの参照ポインタ
+ * @param buf バッファ
+ * @param buf_size バッファサイズ
+ */
+static void write_html_footer(FILE *tmpfff, FILE *fff, char buf[], size_t buf_size)
 {
-	TERM_LEN wid, hgt;
-	Term_get_size(&wid, &hgt);
-	FILE_TYPE(FILE_TYPE_TEXT);
-	FILE *fff;
-	fff = my_fopen(filename, "w");
-	if (!check_screen_html_can_open) return;
-
-	if (message) screen_save();
-
-	char buf[2048];
-	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "htmldump.prf");
-	FILE *tmpfff;
-	tmpfff = my_fopen(buf, "r");
-	write_html_header(tmpfff, fff, buf, sizeof(buf));
-	screen_dump_lines(wid, hgt, fff);
-
 	fprintf(fff, "</font>");
 	if (!tmpfff)
 	{
@@ -177,11 +168,32 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 	else
 	{
 		rewind(tmpfff);
-		read_temporary_file(fff, tmpfff, buf, sizeof(buf), 2);
+		read_temporary_file(fff, tmpfff, buf, buf_size, 2);
 		my_fclose(tmpfff);
 	}
 
 	fprintf(fff, "\n");
+}
+
+
+void do_cmd_save_screen_html_aux(char *filename, int message)
+{
+	TERM_LEN wid, hgt;
+	Term_get_size(&wid, &hgt);
+	FILE_TYPE(FILE_TYPE_TEXT);
+	FILE *fff;
+	fff = my_fopen(filename, "w");
+	if (!check_screen_html_can_open(fff, filename, message)) return;
+
+	if (message) screen_save();
+
+	char buf[2048];
+	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "htmldump.prf");
+	FILE *tmpfff;
+	tmpfff = my_fopen(buf, "r");
+	write_html_header(tmpfff, fff, buf, sizeof(buf));
+	screen_dump_lines(wid, hgt, fff);
+	write_html_footer(tmpfff, fff, buf, sizeof(buf));
 	my_fclose(fff);
 	if (message)
 	{
