@@ -9,7 +9,7 @@
 #include "market/store-util.h"
 #include "floor-town.h"
 #include "object-hook.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "core/show-file.h"
 
 static concptr inven_res_label = _(

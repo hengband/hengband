@@ -6,7 +6,7 @@
 #include "grid.h"
 #include "quest.h"
 #include "artifact.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "object-flavor.h"
 #include "object-hook.h"
 

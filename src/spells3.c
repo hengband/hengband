@@ -58,7 +58,7 @@
 #include "mind.h"
 #include "wild.h"
 #include "world.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "autopick.h"
 #include "targeting.h"
 

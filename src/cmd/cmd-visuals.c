@@ -3,7 +3,7 @@
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-dump.h" // 暫定。後で消す.
 #include "files.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "object-flavor.h"
 #include "gameterm.h"
 #include "cmd/lighting-level-table.h"

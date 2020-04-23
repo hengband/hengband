@@ -23,7 +23,7 @@
 #include "shoot.h"
 #include "snipe.h"
 #include "view-mainwindow.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "targeting.h"
 
 /*!

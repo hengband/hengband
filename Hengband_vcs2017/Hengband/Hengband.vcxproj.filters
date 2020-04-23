@@ -232,9 +232,6 @@
     <ClCompile Include="..\..\src\player-class.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\objectkind.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monsterrace.c">
       <Filter>monster</Filter>
     </ClCompile>
@@ -607,6 +604,9 @@
     <ClCompile Include="..\..\src\knowledge\knowledge-experiences.c">
       <Filter>knowledge</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\object-kind.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -814,9 +814,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-class.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\objectkind.h">
-      <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monsterrace.h">
       <Filter>monster</Filter>
@@ -1195,6 +1192,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\knowledge\knowledge-experiences.h">
       <Filter>knowledge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-kind.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

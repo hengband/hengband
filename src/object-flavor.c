@@ -18,7 +18,7 @@
 #include "player-status.h"
 #include "player-class.h"
 #include "shoot.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "object-hook.h"
 #include "object-flavor.h"
 #include "trap.h"

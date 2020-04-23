@@ -32,7 +32,7 @@
 #include "core/show-file.h"
 #include "files.h"
 #include "floor.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "view-mainwindow.h"
 
 /*!

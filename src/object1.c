@@ -19,7 +19,7 @@
 #include "artifact.h"
 #include "floor.h"
 #include "cmd-activate.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "object-ego.h"
 #include "object-flavor.h"
 #include "object-hook.h"

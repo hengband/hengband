@@ -3,7 +3,7 @@
 #include "cmd/dump-util.h"
 #include "core/show-file.h"
 #include "object-flavor.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "player-skill.h"
 
 /*

@@ -172,7 +172,7 @@
 #include "cmd-basic.h"
 #include "view-mainwindow.h"
 #include "world.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "autopick.h"
 #include "targeting.h"
 

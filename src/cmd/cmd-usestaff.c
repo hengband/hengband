@@ -15,7 +15,7 @@
 #include "object-hook.h"
 #include "cmd-basic.h"
 #include "floor.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "view-mainwindow.h"
 
 

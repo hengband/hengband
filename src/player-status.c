@@ -34,7 +34,7 @@
 #include "cmd/cmd-pet.h"
 #include "cmd/cmd-spell.h"
 #include "dungeon.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "monsterrace.h"
 #include "autopick.h"
 #include "io/write-diary.h"

@@ -43,7 +43,7 @@
 #include "floor.h"
 #include "floor-town.h"
 #include "feature.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "targeting.h"
 
 #include "market/arena-info-table.h"

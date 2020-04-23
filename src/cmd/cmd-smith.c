@@ -8,7 +8,7 @@
 #include "player-status.h"
 #include "cmd-basic.h"
 #include "cmd-smith.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "autopick.h"
 #include "view-mainwindow.h"
 #include "player-inventory.h"

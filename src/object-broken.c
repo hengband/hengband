@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "spells.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "snipe.h"
 
 /*!

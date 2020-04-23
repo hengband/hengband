@@ -32,7 +32,7 @@
 #include "uid-checker.h"
 #include "files.h"
 #include "world.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "monsterrace.h"
 #include "birth.h"
 #include "market/building.h"

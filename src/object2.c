@@ -26,7 +26,7 @@
 #include "dungeon.h"
 #include "floor.h"
 #include "grid.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "object-boost.h"
 #include "object-ego.h"
 #include "object-flavor.h"

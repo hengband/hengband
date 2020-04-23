@@ -7,7 +7,7 @@
 #include "io/interpret-pref-file.h"
 #include "io/gf-descriptions.h"
 #include "io/tokenizer.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "birth.h"
 #include "world.h"
 #include "gameterm.h"

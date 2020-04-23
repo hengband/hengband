@@ -12,7 +12,7 @@
 #include "player-move.h"
 #include "world.h"
 #include "player-effects.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "object-ego.h"
 #include "cmd-dump.h"
 #include "view-mainwindow.h"

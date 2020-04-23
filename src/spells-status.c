@@ -13,7 +13,7 @@
 #include "monster.h"
 #include "cmd-spell.h"
 #include "player-effects.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "targeting.h"
 #include "realm-song.h"
 #include "view-mainwindow.h"

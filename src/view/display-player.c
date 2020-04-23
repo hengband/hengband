@@ -18,7 +18,7 @@
 #include "core.h" // 暫定。後で消す
 #include "mutation.h"
 #include "dungeon-file.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "view/display-util.h"
 #include "view/display-characteristic.h"
 #include "view/display-player-stat-info.h"

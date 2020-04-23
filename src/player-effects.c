@@ -49,7 +49,7 @@
 #include "files.h"
 #include "monster-spell.h"
 #include "world.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "autopick.h"
 #include "save.h"
 #include "report.h"

@@ -51,7 +51,7 @@
 #include "files.h"
 #include "monster-spell.h"
 #include "market/building.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "targeting.h"
 #include "view-mainwindow.h"
 #include "world.h"

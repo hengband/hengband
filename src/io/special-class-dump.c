@@ -7,7 +7,7 @@
 #include "angband.h"
 #include "special-class-dump.h"
 #include "cmd/cmd-magiceat.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "monster-spell.h"
 
 typedef struct {

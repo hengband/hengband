@@ -66,7 +66,7 @@
 #include "player-status.h"
 #include "spells.h"
 #include "player-class.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "targeting.h"
 
 /*!

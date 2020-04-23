@@ -54,7 +54,7 @@
 #include "player/race-info-table.h"
 #include "mind.h"
 #include "world.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "autopick.h"
 #include "floor-town.h"
 #include "japanese.h"

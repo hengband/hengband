@@ -29,7 +29,7 @@
 #include "player-race.h"
 #include "player-inventory.h"
 #include "view/display-player.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "object-ego.h"
 #include "object-flavor.h"
 #include "object-hook.h"

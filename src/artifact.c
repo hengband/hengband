@@ -20,7 +20,7 @@
 #include "floor.h"
 #include "cmd-activate.h"
 #include "object.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "object-boost.h"
 #include "object-curse.h"
 #include "object-ego.h"

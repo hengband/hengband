@@ -5,7 +5,7 @@
 
 #include "gameterm.h"
 #include "object.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "floor.h"

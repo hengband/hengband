@@ -51,7 +51,7 @@
 #include "market/building.h"
 #include "world.h"
 #include "rooms-vault.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "object-ego.h"
 #include "monsterrace.h"
 #include "floor-town.h"

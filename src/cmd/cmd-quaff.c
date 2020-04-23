@@ -27,7 +27,7 @@
 #include "object-broken.h"
 #include "cmd-basic.h"
 #include "floor.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "view-mainwindow.h"
 #include "player-class.h"
 

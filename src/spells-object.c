@@ -18,7 +18,7 @@
 #include "player-effects.h"
 #include "player-class.h"
 #include "player-inventory.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "autopick.h"
 #include "targeting.h"
 #include "view-mainwindow.h"

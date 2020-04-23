@@ -66,7 +66,7 @@
 #include "object-hook.h"
 #include "monster-status.h"
 #include "dungeon-file.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "floor-town.h"
 #include "cmd/feeling-table.h"
 #include "cmd/monster-group-table.h"

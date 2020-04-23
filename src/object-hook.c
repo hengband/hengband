@@ -10,7 +10,7 @@
 #include "player/mimic-info-table.h"
 #include "quest.h"
 #include "world.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "view-mainwindow.h"
 
 /*!

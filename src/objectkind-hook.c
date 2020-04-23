@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "objectkind-hook.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 
 /*!
  * @brief オブジェクトがクロークかどうかを判定する /

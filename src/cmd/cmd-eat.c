@@ -23,7 +23,7 @@
 #include "player-class.h"
 #include "player-inventory.h"
 #include "floor.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "view-mainwindow.h"
 
  /*!

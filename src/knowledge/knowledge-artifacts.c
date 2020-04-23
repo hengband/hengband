@@ -5,7 +5,7 @@
 #include "sort.h"
 #include "object-flavor.h"
 #include "object-hook.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "core/show-file.h"
 
 /*

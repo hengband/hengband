@@ -80,7 +80,7 @@
 #include "player-sex.h"
 #include "birth.h"
 #include "world.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "object-ego.h"
 #include "save.h"
 #include "japanese.h"

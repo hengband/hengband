@@ -25,7 +25,7 @@
 #include "floor-events.h"
 #include "floor-save.h"
 #include "autopick.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "object-boost.h"
 #include "object-flavor.h"
 #include "object-hook.h"

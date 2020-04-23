@@ -55,7 +55,7 @@
 #include "rooms-vault.h"
 #include "player-skill.h"
 #include "player-class.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "object-ego.h"
 #include "rooms-vault.h"
 #include "world.h"

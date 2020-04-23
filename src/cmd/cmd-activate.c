@@ -26,7 +26,7 @@
 #include "player-inventory.h"
 #include "monster-status.h"
 #include "files.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "object-ego.h"
 #include "targeting.h"
 #include "world.h"

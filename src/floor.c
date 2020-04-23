@@ -11,7 +11,7 @@
 #include "player-effects.h"
 #include "object.h"
 #include "artifact.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "trap.h"
 
 /*

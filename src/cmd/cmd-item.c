@@ -43,7 +43,7 @@
 #include "monster.h"
 #include "view-mainwindow.h"
 #include "spells.h"
-#include "objectkind.h"
+#include "object/object-kind.h"
 #include "autopick.h"
 #include "targeting.h"
 #include "snipe.h"
