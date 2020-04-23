@@ -83,8 +83,6 @@
  */
 static void remove_auto_dump(concptr orig_file, concptr auto_dump_mark)
 {
-	FILE *tmp_fff, *orig_fff;
-	char tmp_file[1024];
 	char buf[1024];
 	bool between_mark = FALSE;
 	bool changed = FALSE;
@@ -96,16 +94,14 @@ static void remove_auto_dump(concptr orig_file, concptr auto_dump_mark)
 	sprintf(header_mark_str, auto_dump_header, auto_dump_mark);
 	sprintf(footer_mark_str, auto_dump_footer, auto_dump_mark);
 	size_t mark_len = strlen(footer_mark_str);
+
+	FILE *orig_fff;
 	orig_fff = my_fopen(orig_file, "r");
 	if (!orig_fff) return;
 
-	tmp_fff = my_fopen_temp(tmp_file, 1024);
-	if (!tmp_fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), tmp_file);
-		msg_print(NULL);
-		return;
-	}
+	FILE *tmp_fff = NULL;
+	char tmp_file[FILE_NAME_SIZE];
+	if (!open_temporary_file(&tmp_fff, tmp_file)) return;
 
 	while (TRUE)
 	{
@@ -546,16 +542,6 @@ static KIND_OBJECT_IDX collect_objects(int grp_cur, KIND_OBJECT_IDX object_idx[]
 
 
 /*
- * Description of each feature group.
- */
-static concptr feature_group_text[] =
-{
-	"terrains",
-	NULL
-};
-
-
-/*
  * Build a list of feature indexes in the given group. Return the number
  * of features in the group.
  *
@@ -588,15 +574,9 @@ static FEAT_IDX collect_features(FEAT_IDX *feat_idx, BIT_FLAGS8 mode)
  */
 static void do_cmd_knowledge_artifacts(player_type *player_ptr)
 {
-	FILE *fff;
-	GAME_TEXT file_name[1024];
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	GAME_TEXT file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	ARTIFACT_IDX *who;
 	C_MAKE(who, max_a_idx, ARTIFACT_IDX);
@@ -686,7 +666,6 @@ static void do_cmd_knowledge_uniques(player_type *creature_ptr)
 {
 	u16b why = 2;
 	IDX *who;
-	GAME_TEXT file_name[1024];
 	int n_alive[10];
 	int n_alive_surface = 0;
 	int n_alive_over100 = 0;
@@ -695,14 +674,9 @@ static void do_cmd_knowledge_uniques(player_type *creature_ptr)
 	for (IDX i = 0; i < 10; i++)
 		n_alive[i] = 0;
 
-	FILE *fff;
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	GAME_TEXT file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	C_MAKE(who, max_r_idx, MONRACE_IDX);
 	int n = 0;
@@ -779,15 +753,9 @@ static void do_cmd_knowledge_uniques(player_type *creature_ptr)
  */
 static void do_cmd_knowledge_weapon_exp(player_type *creature_ptr)
 {
-	FILE *fff;
-	GAME_TEXT file_name[1024];
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	GAME_TEXT file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	for (int i = 0; i < 5; i++)
 	{
@@ -828,15 +796,9 @@ static void do_cmd_knowledge_weapon_exp(player_type *creature_ptr)
  */
 static void do_cmd_knowledge_spell_exp(player_type *creature_ptr)
 {
-	FILE *fff;
-	GAME_TEXT file_name[1024];
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	GAME_TEXT file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	if (creature_ptr->realm1 != REALM_NONE)
 	{
@@ -920,15 +882,9 @@ static void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
 		_("盾              ", "Shield          ")
 	};
 
-	FILE *fff;
-	char file_name[1024];
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	char file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	for (int i = 0; i < GINOU_TEMPMAX; i++)
 	{
@@ -955,15 +911,9 @@ static void do_cmd_knowledge_skill_exp(player_type *creature_ptr)
  */
 static void do_cmd_knowledge_pets(player_type *creature_ptr)
 {
-	GAME_TEXT file_name[1024];
-	FILE *fff;
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	GAME_TEXT file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	monster_type *m_ptr;
 	GAME_TEXT pet_name[MAX_NLEN];
@@ -1004,15 +954,9 @@ static void do_cmd_knowledge_pets(player_type *creature_ptr)
  */
 static void do_cmd_knowledge_kill_count(player_type *creature_ptr)
 {
-	FILE *fff;
-	GAME_TEXT file_name[1024];
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	GAME_TEXT file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	MONRACE_IDX *who;
 	C_MAKE(who, max_r_idx, MONRACE_IDX);
@@ -1900,6 +1844,7 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
 	FEAT_IDX *feat_idx;
 	C_MAKE(feat_idx, max_f_idx, FEAT_IDX);
 
+	concptr feature_group_text[] = { "terrains", NULL };
 	int len;
 	int max = 0;
 	int grp_cnt = 0;
@@ -2168,15 +2113,9 @@ void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f
  */
 static void do_cmd_knowledge_bounty(player_type *creature_ptr)
 {
-	FILE *fff;
-	GAME_TEXT file_name[1024];
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	GAME_TEXT file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	fprintf(fff, _("今日のターゲット : %s\n", "Today's target : %s\n"),
 		(creature_ptr->today_mon ? r_name + r_info[creature_ptr->today_mon].name : _("不明", "unknown")));
@@ -2209,15 +2148,9 @@ static void do_cmd_knowledge_bounty(player_type *creature_ptr)
  */
 static void do_cmd_knowledge_virtues(player_type *creature_ptr)
 {
-	FILE *fff;
-	GAME_TEXT file_name[1024];
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	GAME_TEXT file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	fprintf(fff, _("現在の属性 : %s\n\n", "Your alignment : %s\n\n"), your_alignment(creature_ptr));
 	dump_virtues(creature_ptr, fff);
@@ -2231,15 +2164,9 @@ static void do_cmd_knowledge_virtues(player_type *creature_ptr)
  */
 static void do_cmd_knowledge_dungeon(player_type *creature_ptr)
 {
-	FILE *fff;
-	GAME_TEXT file_name[1024];
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	GAME_TEXT file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	for (int i = 1; i < current_world_ptr->max_d_idx; i++)
 	{
@@ -2268,15 +2195,9 @@ static void do_cmd_knowledge_dungeon(player_type *creature_ptr)
 */
 static void do_cmd_knowledge_stat(player_type *creature_ptr)
 {
-	FILE *fff;
-	GAME_TEXT file_name[1024];
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	GAME_TEXT file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	int percent = (int)(((long)creature_ptr->player_hp[PY_MAX_LEVEL - 1] * 200L) /
 		(2 * creature_ptr->hitdie +
@@ -2590,15 +2511,9 @@ static void do_cmd_knowledge_quests_wiz_random(FILE *fff)
  */
 static void do_cmd_knowledge_quests(player_type *creature_ptr)
 {
-	FILE *fff;
-	GAME_TEXT file_name[1024];
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	GAME_TEXT file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	IDX *quest_num;
 	C_MAKE(quest_num, max_q_idx, QUEST_IDX);
@@ -2636,16 +2551,9 @@ static void do_cmd_knowledge_home(player_type *player_ptr)
 {
 	process_dungeon_file(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 
-	/* Open a new file */
-	FILE *fff;
-	GAME_TEXT file_name[1024];
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	GAME_TEXT file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	store_type *store_ptr;
 	store_ptr = &town_info[1].store[STORE_HOME];
@@ -2698,16 +2606,9 @@ static void do_cmd_knowledge_home(player_type *player_ptr)
  */
 static void do_cmd_knowledge_autopick(player_type *creature_ptr)
 {
-	/* Open a new file */
-	FILE *fff;
-	GAME_TEXT file_name[1024];
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	GAME_TEXT file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	if (!max_autopick)
 	{

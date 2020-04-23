@@ -125,6 +125,22 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 		return TRUE;
 	}
 	}
+}
 
+
+/*!
+ * @brief ダンプ用の一時ファイルを開く
+ * @param fff 一時ファイルへの参照ポインタ
+ * @param file_name ファイル名
+ * @return ファイルを開けたらTRUE、開けなかったらFALSE
+ * @details 
+ */
+bool open_temporary_file(FILE **fff, char *file_name)
+{
+	*fff = my_fopen_temp(file_name, FILE_NAME_SIZE);
+	if (*fff != NULL) return TRUE;
+
+	msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
+	msg_print(NULL);
 	return FALSE;
 }
