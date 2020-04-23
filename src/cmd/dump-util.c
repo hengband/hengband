@@ -32,46 +32,35 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 	switch (ch)
 	{
 	case ESCAPE:
-		if (*visual_list_ptr)
-		{
-			*cur_attr_ptr = attr_old;
-			*cur_char_ptr = char_old;
-			*visual_list_ptr = FALSE;
+	{
+		if (!*visual_list_ptr) return FALSE;
 
-			return TRUE;
-		}
-
-		break;
-
+		*cur_attr_ptr = attr_old;
+		*cur_char_ptr = char_old;
+		*visual_list_ptr = FALSE;
+		return TRUE;
+	}
 	case '\n':
 	case '\r':
-		if (*visual_list_ptr)
-		{
-			*visual_list_ptr = FALSE;
-			*need_redraw = TRUE;
+	{
+		if (!*visual_list_ptr) return FALSE;
 
-			return TRUE;
-		}
-
-		break;
-
+		*visual_list_ptr = FALSE;
+		*need_redraw = TRUE;
+		return TRUE;
+	}
 	case 'V':
 	case 'v':
-		if (!*visual_list_ptr)
-		{
-			*visual_list_ptr = TRUE;
+	{
+		if (*visual_list_ptr) return FALSE;
 
-			*attr_top_ptr = MAX(0, (*cur_attr_ptr & 0x7f) - 5);
-			*char_left_ptr = MAX(0, *cur_char_ptr - 10);
-
-			attr_old = *cur_attr_ptr;
-			char_old = *cur_char_ptr;
-
-			return TRUE;
-		}
-
-		break;
-
+		*visual_list_ptr = TRUE;
+		*attr_top_ptr = MAX(0, (*cur_attr_ptr & 0x7f) - 5);
+		*char_left_ptr = MAX(0, *cur_char_ptr - 10);
+		attr_old = *cur_attr_ptr;
+		char_old = *cur_char_ptr;
+		return TRUE;
+	}
 	case 'C':
 	case 'c':
 	{
@@ -82,12 +71,12 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 			attr_idx_feat[i] = 0;
 			char_idx_feat[i] = 0;
 		}
+
+		return TRUE;
 	}
-
-	return TRUE;
-
 	case 'P':
 	case 'p':
+	{
 		if (attr_idx || (!(char_idx & 0x80) && char_idx))
 		{
 			*cur_attr_ptr = attr_idx;
@@ -104,37 +93,37 @@ bool visual_mode_command(char ch, bool *visual_list_ptr,
 		}
 
 		return TRUE;
-
+	}
 	default:
-		if (*visual_list_ptr)
-		{
-			int eff_width;
-			int d = get_keymap_dir(ch);
-			TERM_COLOR a = (*cur_attr_ptr & 0x7f);
-			SYMBOL_CODE c = *cur_char_ptr;
+	{
+		if (!*visual_list_ptr) return FALSE;
 
-			if (use_bigtile) eff_width = width / 2;
-			else eff_width = width;
+		int eff_width;
+		int d = get_keymap_dir(ch);
+		TERM_COLOR a = (*cur_attr_ptr & 0x7f);
+		SYMBOL_CODE c = *cur_char_ptr;
 
-			if ((a == 0) && (ddy[d] < 0)) d = 0;
-			if ((c == 0) && (ddx[d] < 0)) d = 0;
-			if ((a == 0x7f) && (ddy[d] > 0)) d = 0;
-			if (((byte)c == 0xff) && (ddx[d] > 0)) d = 0;
+		if (use_bigtile) eff_width = width / 2;
+		else eff_width = width;
 
-			a += (TERM_COLOR)ddy[d];
-			c += (SYMBOL_CODE)ddx[d];
-			if (c & 0x80) a |= 0x80;
+		if ((a == 0) && (ddy[d] < 0)) d = 0;
+		if ((c == 0) && (ddx[d] < 0)) d = 0;
+		if ((a == 0x7f) && (ddy[d] > 0)) d = 0;
+		if (((byte)c == 0xff) && (ddx[d] > 0)) d = 0;
 
-			*cur_attr_ptr = a;
-			*cur_char_ptr = c;
-			if ((ddx[d] < 0) && *char_left_ptr > MAX(0, (int)c - 10)) (*char_left_ptr)--;
-			if ((ddx[d] > 0) && *char_left_ptr + eff_width < MIN(0xff, (int)c + 10)) (*char_left_ptr)++;
-			if ((ddy[d] < 0) && *attr_top_ptr > MAX(0, (int)(a & 0x7f) - 4)) (*attr_top_ptr)--;
-			if ((ddy[d] > 0) && *attr_top_ptr + height < MIN(0x7f, (a & 0x7f) + 4)) (*attr_top_ptr)++;
-			return TRUE;
-		}
+		a += (TERM_COLOR)ddy[d];
+		c += (SYMBOL_CODE)ddx[d];
+		if (c & 0x80) a |= 0x80;
 
-		break;
+		*cur_attr_ptr = a;
+		*cur_char_ptr = c;
+		if ((ddx[d] < 0) && *char_left_ptr > MAX(0, (int)c - 10)) (*char_left_ptr)--;
+		if ((ddx[d] > 0) && *char_left_ptr + eff_width < MIN(0xff, (int)c + 10)) (*char_left_ptr)++;
+		if ((ddy[d] < 0) && *attr_top_ptr > MAX(0, (int)(a & 0x7f) - 4)) (*attr_top_ptr)--;
+		if ((ddy[d] > 0) && *attr_top_ptr + height < MIN(0x7f, (a & 0x7f) + 4)) (*attr_top_ptr)++;
+
+		return TRUE;
+	}
 	}
 
 	return FALSE;
