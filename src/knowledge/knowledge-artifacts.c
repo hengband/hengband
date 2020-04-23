@@ -1,4 +1,10 @@
-﻿#include "angband.h"
+﻿/*!
+ * @brief 既知のアーティファクトを表示する
+ * @date 2020/04/23
+ * @author Hourier
+ */
+
+#include "angband.h"
 #include "knowledge-artifacts.h"
 #include "cmd/dump-util.h"
 #include "artifact.h"

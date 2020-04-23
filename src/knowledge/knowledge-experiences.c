@@ -1,4 +1,10 @@
-﻿#include "angband.h"
+﻿/*!
+ * @brief 技能の経験を表示する
+ * @date 2020/04/23
+ * @author Hourier
+ */
+
+#include "angband.h"
 #include "knowledge-experiences.h"
 #include "cmd/dump-util.h"
 #include "core/show-file.h"

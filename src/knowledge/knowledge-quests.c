@@ -1,4 +1,10 @@
-﻿#include "angband.h"
+﻿/*!
+ * @brief 既知のクエストを表示する
+ * @date 2020/04/23
+ * @author Hourier
+ */
+
+#include "angband.h"
 #include "knowledge-quests.h"
 #include "cmd/dump-util.h"
 #include "quest.h"
