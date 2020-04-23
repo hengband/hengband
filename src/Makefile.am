@@ -149,6 +149,7 @@ hengband_SOURCES = \
 	z-virt.c z-virt.h \
 	\
 	knowledge/knowledge-artifacts.c knowledge/knowledge-artifacts.h \
+	knowledge/knowledge-uniques.c knowledge/knowledge-uniques.h \
 	\
 	cmd/dump-util.c cmd/dump-util.h cmd/feeling-table.c cmd/feeling-table.h \
 	cmd/monster-group-table.c cmd/monster-group-table.h \

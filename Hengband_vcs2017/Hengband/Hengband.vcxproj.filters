@@ -601,6 +601,9 @@
     <ClCompile Include="..\..\src\knowledge\knowledge-artifacts.c">
       <Filter>knowledge</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\knowledge\knowledge-uniques.c">
+      <Filter>knowledge</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1182,6 +1185,9 @@
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\knowledge\knowledge-artifacts.h">
+      <Filter>knowledge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\knowledge\knowledge-uniques.h">
       <Filter>knowledge</Filter>
     </ClInclude>
   </ItemGroup>
