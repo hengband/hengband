@@ -595,6 +595,9 @@
     <ClCompile Include="..\..\src\cmd\cmd-process-screen.c">
       <Filter>cmd</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd\dump-util.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1170,6 +1173,9 @@
       <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-process-screen.h">
+      <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\dump-util.h">
       <Filter>cmd</Filter>
     </ClInclude>
   </ItemGroup>

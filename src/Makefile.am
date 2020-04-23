@@ -148,7 +148,7 @@ hengband_SOURCES = \
 	z-form.c z-form.h z-rand.c z-rand.h z-term.c z-term.h z-util.c z-util.h \
 	z-virt.c z-virt.h \
 	\
-	cmd/feeling-table.c cmd/feeling-table.h \
+	cmd/dump-util.c cmd/dump-util.h cmd/feeling-table.c cmd/feeling-table.h \
 	cmd/monster-group-table.c cmd/monster-group-table.h \
 	cmd/diary-subtitle-table.c cmd/diary-subtitle-table.h \
 	cmd/object-group-table.c cmd/object-group-table.h \
