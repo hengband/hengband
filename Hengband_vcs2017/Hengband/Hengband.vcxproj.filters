@@ -598,6 +598,9 @@
     <ClCompile Include="..\..\src\cmd\dump-util.c">
       <Filter>cmd</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\knowledge\knowledge-artifacts.c">
+      <Filter>knowledge</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1178,6 +1181,9 @@
     <ClInclude Include="..\..\src\cmd\dump-util.h">
       <Filter>cmd</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\knowledge\knowledge-artifacts.h">
+      <Filter>knowledge</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1225,6 +1231,9 @@
     </Filter>
     <Filter Include="main">
       <UniqueIdentifier>{e8e836da-e12b-42cc-9c09-17432cb83432}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="knowledge">
+      <UniqueIdentifier>{0e8eb37a-0944-4897-a2fd-e6097df5e5f8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -154,6 +154,7 @@
     <ClCompile Include="..\..\src\birth.c" />
     <ClCompile Include="..\..\src\cmd\cmd-process-screen.c" />
     <ClCompile Include="..\..\src\cmd\dump-util.c" />
+    <ClCompile Include="..\..\src\knowledge\knowledge-artifacts.c" />
     <ClCompile Include="..\..\src\main\music-definitions-table.c" />
     <ClCompile Include="..\..\src\main\sound-definitions-table.c" />
     <ClCompile Include="..\..\src\market\building.c" />
@@ -280,6 +281,7 @@
     <ClInclude Include="..\..\src\birth.h" />
     <ClInclude Include="..\..\src\cmd\cmd-process-screen.h" />
     <ClInclude Include="..\..\src\cmd\dump-util.h" />
+    <ClInclude Include="..\..\src\knowledge\knowledge-artifacts.h" />
     <ClInclude Include="..\..\src\main\music-definitions-table.h" />
     <ClInclude Include="..\..\src\main\sound-definitions-table.h" />
     <ClInclude Include="..\..\src\market\building.h" />

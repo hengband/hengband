@@ -148,6 +148,8 @@ hengband_SOURCES = \
 	z-form.c z-form.h z-rand.c z-rand.h z-term.c z-term.h z-util.c z-util.h \
 	z-virt.c z-virt.h \
 	\
+	knowledge/knowledge-artifacts.c knowledge/knowledge-artifacts.h \
+	\
 	cmd/dump-util.c cmd/dump-util.h cmd/feeling-table.c cmd/feeling-table.h \
 	cmd/monster-group-table.c cmd/monster-group-table.h \
 	cmd/diary-subtitle-table.c cmd/diary-subtitle-table.h \
@@ -180,7 +182,7 @@ EXTRA_DIST = \
 CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat -Icore -Iio -Imarket -Imonster -Iplayer -Iview
+	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -Icmd -Icombat -Icore -Iio -Iknowledge -Imarket -Imonster -Iplayer -Iview
 
 install-exec-hook:
 if SET_GID
