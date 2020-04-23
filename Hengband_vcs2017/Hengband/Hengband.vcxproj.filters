@@ -607,6 +607,9 @@
     <ClCompile Include="..\..\src\object\object-kind-hook.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\knowledge\knowledge-quests.c">
+      <Filter>knowledge</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1195,6 +1198,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-kind-hook.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\knowledge\knowledge-quests.h">
+      <Filter>knowledge</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

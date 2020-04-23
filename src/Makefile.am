@@ -152,6 +152,7 @@ hengband_SOURCES = \
 	knowledge/knowledge-artifacts.c knowledge/knowledge-artifacts.h \
 	knowledge/knowledge-experiences.c knowledge/knowledge-experiences.h \
 	knowledge/knowledge-uniques.c knowledge/knowledge-uniques.h \
+	knowledge/knowledge-quests.c knowledge/knowledge-quests.h \
 	\
 	cmd/dump-util.c cmd/dump-util.h cmd/feeling-table.c cmd/feeling-table.h \
 	cmd/monster-group-table.c cmd/monster-group-table.h \
