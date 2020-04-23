@@ -157,6 +157,7 @@
     <ClCompile Include="..\..\src\knowledge\knowledge-artifacts.c" />
     <ClCompile Include="..\..\src\knowledge\knowledge-experiences.c" />
     <ClCompile Include="..\..\src\knowledge\knowledge-quests.c" />
+    <ClCompile Include="..\..\src\knowledge\knowledge-self.c" />
     <ClCompile Include="..\..\src\knowledge\knowledge-uniques.c" />
     <ClCompile Include="..\..\src\main\music-definitions-table.c" />
     <ClCompile Include="..\..\src\main\sound-definitions-table.c" />
@@ -287,6 +288,7 @@
     <ClInclude Include="..\..\src\knowledge\knowledge-artifacts.h" />
     <ClInclude Include="..\..\src\knowledge\knowledge-experiences.h" />
     <ClInclude Include="..\..\src\knowledge\knowledge-quests.h" />
+    <ClInclude Include="..\..\src\knowledge\knowledge-self.h" />
     <ClInclude Include="..\..\src\knowledge\knowledge-uniques.h" />
     <ClInclude Include="..\..\src\main\music-definitions-table.h" />
     <ClInclude Include="..\..\src\main\sound-definitions-table.h" />

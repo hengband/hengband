@@ -610,6 +610,9 @@
     <ClCompile Include="..\..\src\knowledge\knowledge-quests.c">
       <Filter>knowledge</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\knowledge\knowledge-self.c">
+      <Filter>knowledge</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1200,6 +1203,9 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\knowledge\knowledge-quests.h">
+      <Filter>knowledge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\knowledge\knowledge-self.h">
       <Filter>knowledge</Filter>
     </ClInclude>
   </ItemGroup>
