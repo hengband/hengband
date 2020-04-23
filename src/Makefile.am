@@ -97,7 +97,8 @@ hengband_SOURCES = \
 	object-boost.c object-boost.h \
 	object-curse.c object-curse.h object-broken.c object-broken.h \
 	object-hook.c object-hook.h object1.c object2.c object.h \
-	objectkind.c objectkind.h objectkind-hook.c objectkind-hook.h \
+	object/object-kind.c object/object-kind.h \
+	object/object-kind-hook.c object/object-kind-hook.h \
 	object-flavor.c object-flavor.h object-ego.c object-ego.h \
 	\
 	patron.h patron.c \

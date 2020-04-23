@@ -6,7 +6,7 @@
 #include "rooms.h"
 #include "monster.h"
 #include "monsterrace-hook.h"
-#include "objectkind-hook.h"
+#include "object/object-kind-hook.h"
 #include "feature.h"
 #include "floor.h"
 #include "dungeon.h"

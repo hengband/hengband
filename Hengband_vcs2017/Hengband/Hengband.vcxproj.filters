@@ -84,9 +84,6 @@
     <ClCompile Include="..\..\src\object-hook.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\objectkind-hook.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mutation.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -607,6 +604,9 @@
     <ClCompile Include="..\..\src\object\object-kind.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\object-kind-hook.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -681,9 +681,6 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-hook.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\objectkind-hook.h">
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mutation.h">
@@ -1194,6 +1191,9 @@
       <Filter>knowledge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-kind.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-kind-hook.h">
       <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>

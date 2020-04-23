@@ -32,7 +32,7 @@
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "object-curse.h"
-#include "objectkind-hook.h"
+#include "object/object-kind-hook.h"
 #include "artifact.h"
 #include "feature.h"
 #include "player-status.h"

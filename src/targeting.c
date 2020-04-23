@@ -23,7 +23,7 @@
 #include "object-flavor.h"
 #include "monster.h"
 #include "monsterrace-hook.h"
-#include "objectkind-hook.h"
+#include "object/object-kind-hook.h"
 #include "sort.h"
 #include "spells-summon.h"
 #include "grid.h"

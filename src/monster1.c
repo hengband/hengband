@@ -20,7 +20,7 @@
 #include "market/building.h"
 #include "cmd-pet.h"
 #include "floor.h"
-#include "objectkind-hook.h"
+#include "object/object-kind-hook.h"
 #include "player-personality.h"
 #include "monster.h"
 #include "monster-spell.h"

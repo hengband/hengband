@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "objectkind-hook.h"
+#include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 
 /*!

@@ -9,7 +9,7 @@
 #include "object-curse.h"
 #include "object-flavor.h"
 #include "monsterrace-hook.h"
-#include "objectkind-hook.h"
+#include "object/object-kind-hook.h"
 #include "mutation.h"
 #include "artifact.h"
 #include "player-status.h"
