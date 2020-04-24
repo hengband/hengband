@@ -52,6 +52,7 @@ hengband_SOURCES = \
 	io/read-pref-file.c io/read-pref-file.h \
 	io/exit-panic.c io/exit-panic.h \
 	io/write-diary.c io/write-diary.h \
+	io/mutations-dump.c io/mutations-dump.h \
 	signal-handlers.c signal-handlers.h uid-checker.c uid-checker.h \
 	character-dump.c character-dump.h core.c core.h files.c files.h \
 	core/show-file.c core/show-file.h \
@@ -152,8 +153,10 @@ hengband_SOURCES = \
 	knowledge/knowledge-autopick.c knowledge/knowledge-autopick.h \
 	knowledge/knowledge-experiences.c knowledge/knowledge-experiences.h \
 	knowledge/knowledge-features.c knowledge/knowledge-features.h \
+	knowledge/knowledge-inventory.c knowledge/knowledge-inventory.h \
 	knowledge/knowledge-items.c knowledge/knowledge-items.h \
 	knowledge/knowledge-monsters.c knowledge/knowledge-monsters.h \
+	knowledge/knowledge-mutations.c knowledge/knowledge-mutations.h \
 	knowledge/knowledge-uniques.c knowledge/knowledge-uniques.h \
 	knowledge/knowledge-self.c knowledge/knowledge-self.h \
 	knowledge/knowledge-quests.c knowledge/knowledge-quests.h \
@@ -167,8 +170,7 @@ hengband_SOURCES = \
 	cmd/cmd-draw.c cmd/cmd-draw.h cmd/cmd-eat.c cmd/cmd-eat.h \
 	cmd/cmd-gameoption.c cmd/cmd-gameoption.h cmd/cmd-help.c cmd/cmd-help.h \
 	cmd/cmd-hissatsu.c cmd/cmd-hissatsu.h cmd/cmd-inn.c cmd/cmd-inn.h \
-	cmd/cmd-inventory.c cmd/cmd-inventory.h cmd/cmd-item.c cmd/cmd-item.h \
-	cmd/cmd-knowledge.c cmd/cmd-knowledge.h \
+	cmd/cmd-item.c cmd/cmd-item.h cmd/cmd-knowledge.c cmd/cmd-knowledge.h \
 	cmd/lighting-level-table.c cmd/lighting-level-table.h \
 	cmd/cmd-magiceat.c cmd/cmd-magiceat.h cmd/cmd-mane.c cmd/cmd-mane.h \
 	cmd/cmd-macro.c cmd/cmd-macro.h cmd/cmd-pet.c cmd/cmd-pet.h \

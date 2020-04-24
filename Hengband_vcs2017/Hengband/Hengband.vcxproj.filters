@@ -625,6 +625,12 @@
     <ClCompile Include="..\..\src\knowledge\knowledge-inventory.c">
       <Filter>knowledge</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\mutations-dump.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\knowledge\knowledge-mutations.c">
+      <Filter>knowledge</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1230,6 +1236,12 @@
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\knowledge\knowledge-inventory.h">
+      <Filter>knowledge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\mutations-dump.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\knowledge\knowledge-mutations.h">
       <Filter>knowledge</Filter>
     </ClInclude>
   </ItemGroup>

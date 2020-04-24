@@ -16,7 +16,7 @@
 #include "world.h"
 #include "quest.h"
 #include "core.h" // 暫定。後で消す
-#include "mutation.h"
+#include "knowledge/knowledge-mutations.h"
 #include "dungeon-file.h"
 #include "object/object-kind.h"
 #include "view/display-util.h"

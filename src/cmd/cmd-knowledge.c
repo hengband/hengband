@@ -1,16 +1,16 @@
 ﻿#include "angband.h"
 #include "cmd/cmd-knowledge.h"
+#include "cmd/cmd-draw.h"
 #include "knowledge/knowledge-autopick.h"
 #include "knowledge/knowledge-experiences.h"
 #include "knowledge/knowledge-features.h"
+#include "knowledge/knowledge-inventory.h"
 #include "knowledge/knowledge-items.h"
+#include "knowledge/knowledge-mutations.h"
 #include "knowledge/knowledge-monsters.h"
 #include "knowledge/knowledge-quests.h"
 #include "knowledge/knowledge-self.h"
 #include "knowledge/knowledge-uniques.h"
-#include "knowledge/knowledge-inventory.h"
-#include "mutation.h" // 暫定、後で移す.
-#include "cmd/cmd-draw.h"
 
 /*
  * Interact with "knowledge"
