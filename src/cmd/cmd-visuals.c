@@ -1,7 +1,7 @@
 ﻿#include "angband.h"
 #include "cmd/cmd-visuals.h"
 #include "cmd/cmd-draw.h"
-#include "cmd/cmd-dump.h" // 暫定。後で消す.
+#include "knowledge/knowledge-features.h"
 #include "knowledge/knowledge-items.h"
 #include "knowledge/knowledge-monsters.h"
 #include "files.h"

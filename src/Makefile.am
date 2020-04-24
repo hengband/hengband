@@ -151,6 +151,7 @@ hengband_SOURCES = \
 	\
 	knowledge/knowledge-items.c knowledge/knowledge-items.h \
 	knowledge/knowledge-experiences.c knowledge/knowledge-experiences.h \
+	knowledge/knowledge-features.c knowledge/knowledge-features.h \
 	knowledge/knowledge-monsters.c knowledge/knowledge-monsters.h \
 	knowledge/knowledge-uniques.c knowledge/knowledge-uniques.h \
 	knowledge/knowledge-self.c knowledge/knowledge-self.h \
