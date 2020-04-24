@@ -2,6 +2,7 @@
 #include "cmd/cmd-visuals.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-dump.h" // 暫定。後で消す.
+#include "knowledge/knowledge-monsters.h"
 #include "files.h"
 #include "object/object-kind.h"
 #include "object-flavor.h"

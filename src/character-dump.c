@@ -11,7 +11,7 @@
 #include "init.h"
 #include "mutation.h"
 #include "object-flavor.h"
-#include "cmd/cmd-dump.h"
+#include "knowledge/knowledge-quests.h"
 #include "io/special-class-dump.h"
 #include "io/player-status-dump.h"
 #include "io/write-diary.h"
