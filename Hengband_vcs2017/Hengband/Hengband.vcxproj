@@ -286,6 +286,7 @@
     <ClCompile Include="..\..\src\realm-song.c" />
     <ClCompile Include="..\..\src\realm-sorcery.c" />
     <ClInclude Include="..\..\src\artifact.h" />
+    <ClInclude Include="..\..\src\autopick\autopick-commands-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-editor-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-flags-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-keys-table.h" />
