@@ -13,6 +13,8 @@ hengband_SOURCES = \
 	autopick/autopick-commands-table.h autopick/autopick-dirty-flags.h \
 	autopick/autopick-editor-table.h autopick/autopick-flags-table.h \
 	autopick/autopick-key-flag-process.h autopick/autopick-key-table.h \
+	autopick/autopick-menu-data-table.c autopick/autopick-menu-data-table.h \
+	autopick/autopick-util.c autopick/autopick-util.h \
 	\
 	avatar.h avatar.c birth.c birth.h \
 	\
