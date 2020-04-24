@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "util.h"
 #include "autopick/autopick-key-table.h"
+#include "autopick/autopick-editor-table.h"
 #include "gameterm.h"
 #include "autopick/autopick.h"
 #include "core.h"
@@ -42,55 +43,62 @@
 #include "monsterrace.h"
 #include "view-mainwindow.h" // 暫定。後で消す
 
-static GAME_TEXT KEY_ALL[] = _("すべての", "all");
-static GAME_TEXT KEY_UNAWARE[] = _("未判明の", "unaware");
-static GAME_TEXT KEY_UNIDENTIFIED[] = _("未鑑定の", "unidentified");
-static GAME_TEXT KEY_IDENTIFIED[] = _("鑑定済みの", "identified");
-static GAME_TEXT KEY_STAR_IDENTIFIED[] = _("*鑑定*済みの", "*identified*");
-static GAME_TEXT KEY_COLLECTING[] = _("収集中の", "collecting");
-static GAME_TEXT KEY_ARTIFACT[] = _("アーティファクト", "artifact");
-static GAME_TEXT KEY_EGO[] = _("エゴ", "ego");
-static GAME_TEXT KEY_GOOD[] = _("上質の", "good");
-static GAME_TEXT KEY_NAMELESS[] = _("無銘の", "nameless");
-static GAME_TEXT KEY_AVERAGE[] = _("並の", "average");
-static GAME_TEXT KEY_WORTHLESS[] = _("無価値の", "worthless");
-static GAME_TEXT KEY_RARE[] = _("レアな", "rare");
-static GAME_TEXT KEY_COMMON[] = _("ありふれた", "common");
-static GAME_TEXT KEY_BOOSTED[] = _("ダイス目の違う", "dice boosted");
-static GAME_TEXT KEY_MORE_THAN[] = _("ダイス目", "more than");
-static GAME_TEXT KEY_DICE[] = _("以上の", "dice");
-static GAME_TEXT KEY_MORE_BONUS[] = _("修正値", "more bonus than");
-static GAME_TEXT KEY_MORE_BONUS2[] = _("以上の", "");
-static GAME_TEXT KEY_WANTED[] = _("賞金首の", "wanted");
-static GAME_TEXT KEY_UNIQUE[] = _("ユニーク・モンスターの", "unique monster's");
-static GAME_TEXT KEY_HUMAN[] = _("人間の", "human");
-static GAME_TEXT KEY_UNREADABLE[] = _("読めない", "unreadable");
-static GAME_TEXT KEY_REALM1[] = _("第一領域の", "first realm's");
-static GAME_TEXT KEY_REALM2[] = _("第二領域の", "second realm's");
-static GAME_TEXT KEY_FIRST[] = _("1冊目の", "first");
-static GAME_TEXT KEY_SECOND[] = _("2冊目の", "second");
-static GAME_TEXT KEY_THIRD[] = _("3冊目の", "third");
-static GAME_TEXT KEY_FOURTH[] = _("4冊目の", "fourth");
-static GAME_TEXT KEY_ITEMS[] = _("アイテム", "items");
-static GAME_TEXT KEY_WEAPONS[] = _("武器", "weapons");
-static GAME_TEXT KEY_FAVORITE_WEAPONS[] = _("得意武器", "favorite weapons");
-static GAME_TEXT KEY_ARMORS[] = _("防具", "armors");
-static GAME_TEXT KEY_MISSILES[] = _("矢", "missiles");
-static GAME_TEXT KEY_DEVICES[] = _("魔法アイテム", "magical devices");
-static GAME_TEXT KEY_LIGHTS[] = _("光源", "lights");
-static GAME_TEXT KEY_JUNKS[] = _("がらくた", "junks");
-static GAME_TEXT KEY_CORPSES[] = _("死体や骨", "corpses or skeletons");
-static GAME_TEXT KEY_SPELLBOOKS[] = _("魔法書", "spellbooks");
-static GAME_TEXT KEY_HAFTED[] = _("鈍器", "hafted weapons");
-static GAME_TEXT KEY_SHIELDS[] = _("盾", "shields");
-static GAME_TEXT KEY_BOWS[] = _("弓", "bows");
-static GAME_TEXT KEY_RINGS[] = _("指輪", "rings");
-static GAME_TEXT KEY_AMULETS[] = _("アミュレット", "amulets");
-static GAME_TEXT KEY_SUITS[] = _("鎧", "suits");
-static GAME_TEXT KEY_CLOAKS[] = _("クローク", "cloaks");
-static GAME_TEXT KEY_HELMS[] = _("兜", "helms");
-static GAME_TEXT KEY_GLOVES[] = _("籠手", "gloves");
-static GAME_TEXT KEY_BOOTS[] = _("靴", "boots");
+#define MAX_LINELEN 1024
+
+/*
+ * Macros for Keywords
+ */
+#define FLG_ALL					0
+#define FLG_UNAWARE				1
+#define FLG_UNIDENTIFIED		2
+#define FLG_IDENTIFIED			3
+#define FLG_STAR_IDENTIFIED		4
+#define FLG_COLLECTING			5
+#define FLG_ARTIFACT			6
+#define FLG_EGO					7
+#define FLG_GOOD				10
+#define FLG_NAMELESS			11
+#define FLG_AVERAGE				12
+#define FLG_WORTHLESS			13
+#define FLG_RARE				14
+#define FLG_COMMON				15
+#define FLG_BOOSTED				16
+#define FLG_MORE_DICE			17
+#define FLG_MORE_BONUS			18
+#define FLG_WANTED				19
+#define FLG_UNIQUE				20
+#define FLG_HUMAN				21
+#define FLG_UNREADABLE			22
+#define FLG_REALM1				23
+#define FLG_REALM2				24
+#define FLG_FIRST				25
+#define FLG_SECOND				26
+#define FLG_THIRD				27
+#define FLG_FOURTH				28
+
+#define FLG_ITEMS				30
+#define FLG_WEAPONS				31
+#define FLG_FAVORITE_WEAPONS	32
+#define FLG_ARMORS				33
+#define FLG_MISSILES			34
+#define FLG_DEVICES				35
+#define FLG_LIGHTS				36
+#define FLG_JUNKS				37
+#define FLG_CORPSES				38
+#define FLG_SPELLBOOKS			39
+#define FLG_HAFTED				40
+#define FLG_SHIELDS				41
+#define FLG_BOWS				42
+#define FLG_RINGS				43
+#define FLG_AMULETS				44
+#define FLG_SUITS				45
+#define FLG_CLOAKS				46
+#define FLG_HELMS				47
+#define FLG_GLOVES				48
+#define FLG_BOOTS				49
+
+#define FLG_NOUN_BEGIN	FLG_ITEMS
+#define FLG_NOUN_END	FLG_BOOTS
 
 #define MAX_AUTOPICK_DEFAULT 200
 
@@ -283,75 +291,6 @@ typedef struct {
 #define EC_KK_HELMS	       79
 #define EC_KK_GLOVES	       80
 #define EC_KK_BOOTS	       81
-
-static GAME_TEXT MN_QUIT[] = _("セーブ無しで終了", "Quit without save");
-static GAME_TEXT MN_SAVEQUIT[] = _("セーブして終了", "Save & Quit");
-static GAME_TEXT MN_REVERT[] = _("全ての変更を破棄", "Revert all changes");
-static GAME_TEXT MN_HELP[] = _("ヘルプ", "Help");
-
-static GAME_TEXT MN_MOVE[] = _("カーソル移動", "Move cursor");
-static GAME_TEXT MN_LEFT[] = _("左          (←矢印キー)", "Left     (Left Arrow key)");
-static GAME_TEXT MN_DOWN[] = _("下          (↓矢印キー)", "Down     (Down Arrow key)");
-static GAME_TEXT MN_UP[] = _("上          (↑矢印キー)", "Up       (Up Arrow key)");
-static GAME_TEXT MN_RIGHT[] = _("右          (→矢印キー)", "Right    (Right Arrow key)");
-static GAME_TEXT MN_BOL[] = _("行の先頭", "Beggining of line");
-static GAME_TEXT MN_EOL[] = _("行の終端", "End of line");
-static GAME_TEXT MN_PGUP[] = _("上のページ  (PageUpキー)", "Page up  (PageUp key)");
-static GAME_TEXT MN_PGDOWN[] = _("下のページ  (PageDownキー)", "Page down(PageDown key)");
-static GAME_TEXT MN_TOP[] = _("1行目へ移動 (Homeキー)", "Top      (Home key)");
-static GAME_TEXT MN_BOTTOM[] = _("最下行へ移動(Endキー)", "Bottom   (End key)");
-
-static GAME_TEXT MN_EDIT[] = _("編集", "Edit");
-static GAME_TEXT MN_CUT[] = _("カット", "Cut");
-static GAME_TEXT MN_COPY[] = _("コピー", "Copy");
-static GAME_TEXT MN_PASTE[] = _("ペースト", "Paste");
-static GAME_TEXT MN_BLOCK[] = _("選択範囲の指定", "Select block");
-static GAME_TEXT MN_KILL_LINE[] = _("行の残りを削除", "Kill rest of line");
-static GAME_TEXT MN_DELETE_CHAR[] = _("1文字削除", "Delete character");
-static GAME_TEXT MN_BACKSPACE[] = _("バックスペース", "Backspace");
-static GAME_TEXT MN_RETURN[] = _("改行", "Return");
-
-static GAME_TEXT MN_SEARCH[] = _("検索", "Search");
-static GAME_TEXT MN_SEARCH_STR[] = _("文字列で検索", "Search by string");
-static GAME_TEXT MN_SEARCH_FORW[] = _("前方へ再検索", "Search foward");
-static GAME_TEXT MN_SEARCH_BACK[] = _("後方へ再検索", "Search backward");
-static GAME_TEXT MN_SEARCH_OBJ[] = _("アイテムを選択して検索", "Search by inventory object");
-static GAME_TEXT MN_SEARCH_DESTROYED[] = _("自動破壊されたアイテムで検索", "Search by destroyed object");
-
-static GAME_TEXT MN_INSERT[] = _("色々挿入", "Insert...");
-static GAME_TEXT MN_INSERT_OBJECT[] = _("選択したアイテムの名前を挿入", "Insert name of choosen object");
-static GAME_TEXT MN_INSERT_DESTROYED[] = _("自動破壊されたアイテムの名前を挿入", "Insert name of destroyed object");
-static GAME_TEXT MN_INSERT_BLOCK[] = _("条件分岐ブロックの例を挿入", "Insert conditional block");
-static GAME_TEXT MN_INSERT_MACRO[] = _("マクロ定義を挿入", "Insert a macro definition");
-static GAME_TEXT MN_INSERT_KEYMAP[] = _("キーマップ定義を挿入", "Insert a keymap definition");
-
-static GAME_TEXT MN_COMMAND_LETTER[] = _("拾い/破壊/放置の選択", "Command letter");
-static GAME_TEXT MN_CL_AUTOPICK[] = _("「 」 (自動拾い)", "' ' (Auto pick)");
-static GAME_TEXT MN_CL_DESTROY[] = _("「!」 (自動破壊)", "'!' (Auto destroy)");
-static GAME_TEXT MN_CL_LEAVE[] = _("「~」 (放置)", "'~' (Leave it on the floor)");
-static GAME_TEXT MN_CL_QUERY[] = _("「;」 (確認して拾う)", "';' (Query to pick up)");
-static GAME_TEXT MN_CL_NO_DISP[] = _("「(」 (マップコマンドで表示しない)", "'(' (No display on the large map)");
-
-static GAME_TEXT MN_ADJECTIVE_GEN[] = _("形容詞(一般)の選択", "Adjective (general)");
-static GAME_TEXT MN_RARE[] = _("レアな (装備)", "rare (equipment)");
-static GAME_TEXT MN_COMMON[] = _("ありふれた (装備)", "common (equipment)");
-
-static GAME_TEXT MN_ADJECTIVE_SPECIAL[] = _("形容詞(特殊)の選択", "Adjective (special)");
-static GAME_TEXT MN_BOOSTED[] = _("ダイス目の違う (武器)", "dice boosted (weapons)");
-static GAME_TEXT MN_MORE_DICE[] = _("ダイス目 # 以上の (武器)", "more than # dice (weapons)");
-static GAME_TEXT MN_MORE_BONUS[] = _("修正値 # 以上の (指輪等)", "more bonus than # (rings etc.)");
-static GAME_TEXT MN_WANTED[] = _("賞金首の (死体)", "wanted (corpse)");
-static GAME_TEXT MN_UNIQUE[] = _("ユニーク・モンスターの (死体)", "unique (corpse)");
-static GAME_TEXT MN_HUMAN[] = _("人間の (死体)", "human (corpse)");
-static GAME_TEXT MN_UNREADABLE[] = _("読めない (魔法書)", "unreadable (spellbooks)");
-static GAME_TEXT MN_REALM1[] = _("第一領域の (魔法書)", "realm1 (spellbooks)");
-static GAME_TEXT MN_REALM2[] = _("第二領域の (魔法書)", "realm2 (spellbooks)");
-static GAME_TEXT MN_FIRST[] = _("1冊目の (魔法書)", "first (spellbooks)");
-static GAME_TEXT MN_SECOND[] = _("2冊目の (魔法書)", "second (spellbooks)");
-static GAME_TEXT MN_THIRD[] = _("3冊目の (魔法書)", "third (spellbooks)");
-static GAME_TEXT MN_FOURTH[] = _("4冊目の (魔法書)", "fourth (spellbooks)");
-
-static GAME_TEXT MN_NOUN[] = _("名詞の選択", "Keywords (noun)");
 
 typedef struct {
 	concptr name;
