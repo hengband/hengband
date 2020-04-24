@@ -4,13 +4,15 @@
  * @author Hourier
  */
 
+#include "angband.h"
 #include "knowledge/knowledge-inventory.h"
+#include "cmd/dump-util.h"
+#include "core/show-file.h"
 #include "object-flavor.h"
 #include "market/store-util.h"
 #include "floor-town.h"
 #include "object-hook.h"
 #include "object/object-kind.h"
-#include "core/show-file.h"
 
 static concptr inven_res_label = _(
 	"                               酸電火冷毒光闇破轟獄因沌劣 盲怖乱痺透命感消復浮",
@@ -292,16 +294,9 @@ static void show_home_equipment_resistances(player_type *creature_ptr, OBJECT_TY
  */
 void do_cmd_knowledge_inventory(player_type *creature_ptr)
 {
-	FILE *fff;
-	GAME_TEXT file_name[1024];
-
-	fff = my_fopen_temp(file_name, 1024);
-	if (!fff)
-	{
-		msg_format(_("一時ファイル %s を作成できませんでした。", "Failed to create temporary file %s."), file_name);
-		msg_print(NULL);
-		return;
-	}
+	FILE *fff = NULL;
+	GAME_TEXT file_name[FILE_NAME_SIZE];
+	if (!open_temporary_file(&fff, file_name)) return;
 
 	fprintf(fff, "%s\n", inven_res_label);
 	int label_number = 0;

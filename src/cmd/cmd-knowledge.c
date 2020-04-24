@@ -8,7 +8,7 @@
 #include "knowledge/knowledge-quests.h"
 #include "knowledge/knowledge-self.h"
 #include "knowledge/knowledge-uniques.h"
-#include "knowledge/knowledge-inventory.h" // 暫定、後で移す.
+#include "knowledge/knowledge-inventory.h"
 #include "mutation.h" // 暫定、後で移す.
 #include "cmd/cmd-draw.h"
 
