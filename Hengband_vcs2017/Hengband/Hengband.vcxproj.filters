@@ -1256,6 +1256,9 @@
     <ClInclude Include="..\..\src\autopick\autopick-commands-table.h">
       <Filter>autopick</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\autopick\autopick-dirty-flags.h">
+      <Filter>autopick</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

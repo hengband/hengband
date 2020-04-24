@@ -14,6 +14,7 @@
 #include "angband.h"
 #include "util.h"
 #include "autopick/autopick-commands-table.h"
+#include "autopick/autopick-dirty-flags.h"
 #include "autopick/autopick-editor-table.h"
 #include "autopick/autopick-flags-table.h"
 #include "autopick/autopick-keys-table.h"
@@ -64,18 +65,6 @@
 
 #define QUIT_WITHOUT_SAVE 1
 #define QUIT_AND_SAVE     2
-
-/*
- * Dirty flag for text editor
- */
-#define DIRTY_ALL           0x0001
-#define DIRTY_MODE          0x0004
-#define DIRTY_SCREEN        0x0008
-#define DIRTY_NOT_FOUND     0x0010
-#define DIRTY_NO_SEARCH     0x0020
-#define DIRTY_EXPRESSION    0x0040
-#define DIRTY_SKIP_INACTIVE 0x0080
-#define DIRTY_INACTIVE      0x0100
 
 #define DESCRIPT_HGT 3
 
