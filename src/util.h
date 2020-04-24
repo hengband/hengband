@@ -166,35 +166,35 @@ extern s16b command_new;
 
 extern concptr keymap_act[KEYMAP_MODES][256];
 
-  /*!
-   * @brief 銘情報の最大数 / Maximum number of "quarks" (see "io.c")
-   * @note
-   * Default: assume at most 512 different inscriptions are used<br>
-   * Was 512... 256 quarks added for random artifacts<br>
-   */
+/*!
+ * @brief 銘情報の最大数 / Maximum number of "quarks" (see "io.c")
+ * @note
+ * Default: assume at most 512 different inscriptions are used<br>
+ * Was 512... 256 quarks added for random artifacts<br>
+ */
 #define QUARK_MAX       768
 
-   /*
-	* OPTION: Maximum number of messages to remember (see "io.c")
-	* Default: assume maximal memorization of 2048 total messages
-	*/
+/*
+ * OPTION: Maximum number of messages to remember (see "io.c")
+ * Default: assume maximal memorization of 2048 total messages
+ */
 #define MESSAGE_MAX  81920
 
-	/*
-	 * OPTION: Maximum space for the message text buffer (see "io.c")
-	 * Default: assume that each of the 2048 messages is repeated an
-	 * average of three times, and has an average length of 48
-	 */
+/*
+ * OPTION: Maximum space for the message text buffer (see "io.c")
+ * Default: assume that each of the 2048 messages is repeated an
+ * average of three times, and has an average length of 48
+ */
 #define MESSAGE_BUF 655360
 
-	 /*
-	  * Hack -- The main "screen"
-	  */
+/*
+ * Hack -- The main "screen"
+ */
 #define term_screen     (angband_term[0])
 
-	  /*
-	   * Hack -- conditional (or "bizarre") externs
-	   */
+/*
+ * Hack -- conditional (or "bizarre") externs
+ */
 
 #ifdef SET_UID
 extern void user_name(char *buf, int id);
