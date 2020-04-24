@@ -181,7 +181,7 @@ hengband_SOURCES = \
 	cmd/cmd-usestaff.c cmd/cmd-usestaff.h \
 	cmd/cmd-zaprod.c cmd/cmd-zaprod.h cmd/cmd-zapwand.c cmd/cmd-zapwand.h \
 	\
-	combat/melee.h combat/melee1.c combat/shoot.c combat/shoot.h
+	combat/melee.h combat/melee.c combat/shoot.c combat/shoot.h
 
 EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc maid-x11.c main-win.c \

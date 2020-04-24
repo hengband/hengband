@@ -382,9 +382,6 @@
     <ClCompile Include="..\..\src\cmd\cmd-zapwand.c">
       <Filter>cmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\melee1.c">
-      <Filter>combat</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\combat\shoot.c">
       <Filter>combat</Filter>
     </ClCompile>
@@ -630,6 +627,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\knowledge\knowledge-mutations.c">
       <Filter>knowledge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\combat\melee.c">
+      <Filter>combat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
