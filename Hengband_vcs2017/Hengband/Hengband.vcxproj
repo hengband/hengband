@@ -290,6 +290,7 @@
     <ClInclude Include="..\..\src\autopick\autopick-dirty-flags.h" />
     <ClInclude Include="..\..\src\autopick\autopick-editor-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-flags-table.h" />
+    <ClInclude Include="..\..\src\autopick\autopick-key-flag-process.h" />
     <ClInclude Include="..\..\src\autopick\autopick-keys-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick.h" />
     <ClInclude Include="..\..\src\avatar.h" />
