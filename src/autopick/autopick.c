@@ -13,7 +13,7 @@
 
 #include "angband.h"
 #include "util.h"
-#include "autopick/autopick-key-table.h"
+#include "autopick/autopick-keys-table.h"
 #include "autopick/autopick-editor-table.h"
 #include "gameterm.h"
 #include "autopick/autopick.h"
