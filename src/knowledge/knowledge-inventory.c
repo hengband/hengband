@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "cmd/cmd-inventory.h"
+#include "knowledge/knowledge-inventory.h"
 #include "object-flavor.h"
 #include "market/store-util.h"
 #include "floor-town.h"
