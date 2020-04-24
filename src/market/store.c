@@ -56,7 +56,7 @@
 #include "mind.h"
 #include "world.h"
 #include "object/object-kind.h"
-#include "autopick.h"
+#include "autopick/autopick.h"
 #include "floor-town.h"
 #include "japanese.h"
 #include "view-mainwindow.h"

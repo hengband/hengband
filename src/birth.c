@@ -53,7 +53,7 @@
 #include "world.h"
 #include "object/object-kind.h"
 #include "monsterrace.h"
-#include "autopick.h"
+#include "autopick/autopick.h"
 #include "save.h"
 #include "realm.h"
 #include "japanese.h"

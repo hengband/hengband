@@ -149,7 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\artifact.c" />
-    <ClCompile Include="..\..\src\autopick.c" />
+    <ClCompile Include="..\..\src\autopick\autopick.c" />
     <ClCompile Include="..\..\src\avatar.c" />
     <ClCompile Include="..\..\src\birth.c" />
     <ClCompile Include="..\..\src\cmd\cmd-knowledge.c" />
@@ -286,7 +286,7 @@
     <ClCompile Include="..\..\src\realm-song.c" />
     <ClCompile Include="..\..\src\realm-sorcery.c" />
     <ClInclude Include="..\..\src\artifact.h" />
-    <ClInclude Include="..\..\src\autopick.h" />
+    <ClInclude Include="..\..\src\autopick\autopick.h" />
     <ClInclude Include="..\..\src\avatar.h" />
     <ClInclude Include="..\..\src\birth.h" />
     <ClInclude Include="..\..\src\cmd\cmd-knowledge.h" />

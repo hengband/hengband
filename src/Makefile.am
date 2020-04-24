@@ -7,7 +7,9 @@ bin_PROGRAMS = hengband
 hengband_SOURCES = \
 	artifact.c artifact.h \
 	\
-	angband.h autopick.c autopick.h\
+	angband.h\
+	\
+	autopick/autopick.c autopick/autopick.h \
 	\
 	avatar.h avatar.c birth.c birth.h \
 	\
@@ -194,7 +196,8 @@ CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-	-Icmd -Icombat -Icore -Iio -Iknowledge -Imarket -Imonster -Iobject -Iplayer -Iview
+	-Iautopick -Icmd -Icombat -Icore -Iio -Iknowledge -Imarket -Imonster \
+	-Iobject -Iplayer -Iview
 
 install-exec-hook:
 if SET_GID

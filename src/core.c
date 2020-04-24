@@ -105,7 +105,7 @@
 #include "io/read-pref-file.h"
 #include "files.h"
 #include "scores.h"
-#include "autopick.h"
+#include "autopick/autopick.h"
 #include "save.h"
 #include "realm.h"
 #include "realm-song.h"

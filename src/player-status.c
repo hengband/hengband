@@ -36,7 +36,7 @@
 #include "dungeon.h"
 #include "object/object-kind.h"
 #include "monsterrace.h"
-#include "autopick.h"
+#include "autopick/autopick.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "melee.h"

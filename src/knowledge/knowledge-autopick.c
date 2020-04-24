@@ -8,7 +8,7 @@
 #include "knowledge-autopick.h"
 #include "cmd/dump-util.h"
 #include "core/show-file.h"
-#include "autopick.h"
+#include "autopick/autopick.h"
 
  /*!
   * @brief 自動拾い設定ファイルをロードするコマンドのメインルーチン /

@@ -30,7 +30,7 @@
 #include "cmd-basic.h"
 #include "view-mainwindow.h"
 #include "floor.h"
-#include "autopick.h"
+#include "autopick/autopick.h"
 #include "japanese.h"
 
  /*!

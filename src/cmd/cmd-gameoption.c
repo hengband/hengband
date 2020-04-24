@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 
-#include "autopick.h"
+#include "autopick/autopick.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-gameoption.h"
 #include "gameterm.h"

@@ -108,9 +108,6 @@
     <ClCompile Include="..\..\src\artifact.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\chest.c">
       <Filter>object</Filter>
     </ClCompile>
@@ -631,6 +628,9 @@
     <ClCompile Include="..\..\src\combat\melee.c">
       <Filter>combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\autopick\autopick.c">
+      <Filter>autopick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -838,9 +838,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monsterrace.h">
       <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\autopick.h">
-      <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-ego.h">
       <Filter>object</Filter>
@@ -1244,6 +1241,9 @@
     <ClInclude Include="..\..\src\knowledge\knowledge-mutations.h">
       <Filter>knowledge</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\autopick\autopick.h">
+      <Filter>autopick</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1294,6 +1294,9 @@
     </Filter>
     <Filter Include="knowledge">
       <UniqueIdentifier>{0e8eb37a-0944-4897-a2fd-e6097df5e5f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="autopick">
+      <UniqueIdentifier>{7f5cb078-a335-428e-a2db-27ee6263155b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

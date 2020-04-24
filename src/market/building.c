@@ -24,7 +24,7 @@
 #include "floor.h"
 #include "floor-events.h"
 #include "floor-save.h"
-#include "autopick.h"
+#include "autopick/autopick.h"
 #include "object/object-kind.h"
 #include "object-boost.h"
 #include "object-flavor.h"
@@ -59,7 +59,7 @@
 #include "shoot.h"
 #include "view-mainwindow.h"
 #include "monsterrace.h"
-#include "autopick.h"
+#include "autopick/autopick.h"
 
 #include "market/poker.h"
 #include "market/building-util.h"

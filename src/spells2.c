@@ -38,7 +38,7 @@
 #include "spells-floor.h"
 #include "spells-diceroll.h"
 #include "realm-hex.h"
-#include "autopick.h"
+#include "autopick/autopick.h"
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "monster-status.h"

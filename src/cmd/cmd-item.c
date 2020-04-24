@@ -15,7 +15,7 @@
 #include "core.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
-#include "autopick.h"
+#include "autopick/autopick.h"
 #include "gameterm.h"
 
 #include "selfinfo.h"
@@ -44,7 +44,7 @@
 #include "view-mainwindow.h"
 #include "spells.h"
 #include "object/object-kind.h"
-#include "autopick.h"
+#include "autopick/autopick.h"
 #include "targeting.h"
 #include "snipe.h"
 #include "player-race.h"

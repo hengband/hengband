@@ -1,5 +1,5 @@
 ﻿#include "player/process-name.h"
-#include "autopick.h"
+#include "autopick/autopick.h"
 #include "player-personality.h"
 #include "files.h"
 #include "world.h"

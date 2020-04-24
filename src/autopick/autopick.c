@@ -14,7 +14,7 @@
 #include "angband.h"
 #include "util.h"
 #include "gameterm.h"
-#include "autopick.h"
+#include "autopick/autopick.h"
 #include "core.h"
 #include "core/show-file.h"
 #include "cmd/cmd-save.h"
