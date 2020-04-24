@@ -22991,3 +22991,134 @@ D:$It looks like a skinny large humanoid.
 D:$  Folklore has it that those who commit cannibalism are brought to cognate
 D:それは痩せこけた巨人の姿をしていて、人食いの罪を犯した者を
 D:同族にすると言われている。
+
+N:1141:年経た風のエレメンタル
+E:Elder air elemental
+G:E:B
+I:125:95d20:12:60:50
+W:43:2:0:5000:0:0
+B:CLAW:HURT:5d10
+B:HIT:CONFUSE:2d10
+B:CLAW:HURT:5d10
+F:FORCE_SLEEP | RAND_25 | 
+F:COLD_BLOOD | CAN_FLY | NONLIVING |
+F:KILL_BODY | KILL_ITEM | BASH_DOOR |
+F:EVIL | IM_ACID | IM_FIRE | IM_COLD | IM_ELEC | IM_POIS | 
+F:NO_CONF | NO_SLEEP | NO_FEAR | POWERFUL | RIDING | RES_TELE
+S:1_IN_8 | 
+S:BA_ELEC | BR_SOUN | S_DRAGON
+R:241:4d5
+R:379:1d3
+R:526:1d3
+R:560:1d2
+R:1113:4d5
+R:1117:4d5
+D:$It is a too huge towering tornado of winds that looks vaguely like dragons or other winged beast
+D:$ This violent wind enjoying, dragons comes.
+D:それはあまりにも高くそびえ立つような風の竜巻で、漠然とドラゴンか他の翼ある魔獣に見える。
+D:風の暴威を楽しんでドラゴンがやってくる。
+
+N:1142:年経たマグマのエレメンタル
+E:Elder magma elemental
+G:E:o
+I:115:100d20:10:70:90
+W:45:2:0:4500:0:0
+B:HIT:FIRE:5d7
+B:BITE:HURT:6d6
+B:HIT:FIRE:5d7
+F:FORCE_SLEEP |
+F:AURA_FIRE | WILD_VOLCANO |
+F:KILL_ITEM | KILL_BODY | PASS_WALL |
+F:EVIL | IM_FIRE | IM_ELEC | NONLIVING |
+F:IM_POIS | 
+F:NO_CONF | NO_SLEEP | NO_FEAR | POWERFUL | RES_TELE
+S:1_IN_7 | 
+S:BO_PLAS | BA_FIRE | BR_POIS
+R:584:1d3
+R:884:4d10
+R:899:4d5
+R:1098:1d2
+R:1111:4d5
+R:1131:1d3
+D:$It is a too huge towering glowing form of molten hate.that looks vaguely like spiders or other arthropod that live in lava cave.
+D:$ Molten mineral give off toxic gas.
+D:それはあまりにも高くそびえ立つような光を発する憎悪が溶けてできたような塊で、漠然と溶岩洞窟に生息する蜘蛛か他の虫のように見える。
+D:溶けた鉱物が有毒ガスを噴出している。
+
+N:1143:年経た火のエレメンタル
+E:Elder fire elemental
+G:E:r
+I:120:135d20:12:70:50
+W:44:2:0:6000:0:0
+B:HIT:FIRE:4d10
+B:HIT:FIRE:4d10
+B:SLASH:FIRE:5d12
+F:FORCE_SLEEP | RAND_25 | SELF_LITE_2 |
+F:CAN_FLY | WILD_VOLCANO |
+F:KILL_ITEM | KILL_BODY | BASH_DOOR | AURA_FIRE |
+F:EVIL | IM_FIRE | IM_POIS | NONLIVING | HURT_COLD |
+F:NO_CONF | NO_SLEEP | NO_FEAR | POWERFUL | RES_TELE
+S:1_IN_5 | 
+S:BA_FIRE | S_DEMON | BR_FIRE
+R:264:4d5
+R:1111:4d5
+R:1116:4d5
+R:510:1d3
+R:589:1d2
+D:$It is a too huge towering inferno of flames that looks vaguely like Balrog or other demons.
+D:$ This flame of destruction respecting, demons comes.
+D:それはあまりにも高くそびえ立つような火炎地獄で、漠然とバルログか他のデーモンのように見える。
+D:その破壊の炎を慕ってデーモンがやってくる。
+
+N:1144:年経た氷のエレメンタル
+E:Elder ice elemental
+G:E:w
+I:120:125d20:10:70:90
+W:43:2:0:3500:0:0
+B:BITE:COLD:3d10
+B:CLAW:HURT:5d10
+B:BITE:COLD:3d10
+F:FORCE_SLEEP | POWERFUL
+F:COLD_BLOOD | AURA_COLD |
+F:KILL_ITEM | KILL_BODY | BASH_DOOR |
+F:EVIL | IM_COLD | IM_ELEC | CAN_SWIM | HURT_FIRE |
+F:IM_POIS | NONLIVING |
+F:NO_CONF | NO_SLEEP | NO_FEAR | RES_TELE
+S:1_IN_5 | 
+S:BO_ICEE | BA_COLD | BR_COLD
+R:343:1d2
+R:379:4d5
+R:549:1d2
+R:570:1d3
+R:1112:4d5
+R:1117:4d5
+D:$It is a too huge towering glacier of ice that looks vaguely like Animals in cold regions.
+D:それはあまりにも高くそびえ立つような氷河で、漠然と寒冷地の動物のように見える。
+
+N:1145:年経た汚物エレメンタル
+E:Elder ooze elemental
+G:E:U
+I:120:118d20:10:100:90
+W:45:3:0:3600:0:0
+B:TOUCH:ACID:1d12
+B:TOUCH:ACID:1d12
+B:TOUCH:ACID:1d12
+B:BITE:POISON:1d12
+F:FORCE_SLEEP | POWERFUL
+F:COLD_BLOOD | WILD_SHORE | WILD_SWAMP |
+F:KILL_ITEM | KILL_BODY | BASH_DOOR |
+F:EVIL | IM_ACID | IM_FIRE | CAN_SWIM | NONLIVING |
+F:IM_COLD | IM_ELEC | IM_POIS | 
+F:NO_CONF | NO_SLEEP | NO_FEAR | RES_TELE
+S:1_IN_5 | 
+S:BR_ACID | BA_ACID
+R:509:4d6
+R:545:1d3
+R:592:1d2
+R:1115:4d6
+R:1131:1d3
+R:1132:1d3
+D:$It is a too huge towering mass of filth that looks vaguely like Hydras, crocodilians or frogs.
+D:それはあまりにも高くそびえ立つような汚物の塊で、漠然とヒドラやワニやカエルのように見える。
+
+
