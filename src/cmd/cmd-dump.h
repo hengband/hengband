@@ -19,5 +19,4 @@ extern void do_cmd_spoilers(player_type *creature_ptr);
 extern void spoil_random_artifact(player_type *creature_ptr, concptr fname);
 
 /* 暫定。後で移す. */
-void do_cmd_knowledge_objects(player_type *creature_ptr, bool *need_redraw, bool visual_only, IDX direct_k_idx);
 void do_cmd_knowledge_features(bool *need_redraw, bool visual_only, IDX direct_f_idx, IDX *lighting_level);
