@@ -5,7 +5,7 @@
  */
 
 #include "angband.h"
-#include "knowledge-artifacts.h"
+#include "knowledge-items.h"
 #include "cmd/dump-util.h"
 #include "sort.h"
 #include "core/show-file.h"

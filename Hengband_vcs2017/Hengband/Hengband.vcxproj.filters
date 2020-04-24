@@ -592,9 +592,6 @@
     <ClCompile Include="..\..\src\cmd\dump-util.c">
       <Filter>cmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\knowledge\knowledge-artifacts.c">
-      <Filter>knowledge</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\knowledge\knowledge-uniques.c">
       <Filter>knowledge</Filter>
     </ClCompile>
@@ -614,6 +611,9 @@
       <Filter>knowledge</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\knowledge\knowledge-monsters.c">
+      <Filter>knowledge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\knowledge\knowledge-items.c">
       <Filter>knowledge</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1190,9 +1190,6 @@
     <ClInclude Include="..\..\src\cmd\dump-util.h">
       <Filter>cmd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\knowledge\knowledge-artifacts.h">
-      <Filter>knowledge</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\knowledge\knowledge-uniques.h">
       <Filter>knowledge</Filter>
     </ClInclude>
@@ -1212,6 +1209,9 @@
       <Filter>knowledge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\knowledge\knowledge-monsters.h">
+      <Filter>knowledge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\knowledge\knowledge-items.h">
       <Filter>knowledge</Filter>
     </ClInclude>
   </ItemGroup>

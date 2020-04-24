@@ -43,7 +43,7 @@
 #include "io/read-pref-file.h"
 #include "io/interpret-pref-file.h"
 
-#include "knowledge/knowledge-artifacts.h"
+#include "knowledge/knowledge-items.h"
 #include "knowledge/knowledge-experiences.h"
 #include "knowledge/knowledge-monsters.h"
 #include "knowledge/knowledge-quests.h"
