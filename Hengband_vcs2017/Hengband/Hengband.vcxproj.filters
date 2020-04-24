@@ -619,6 +619,9 @@
     <ClCompile Include="..\..\src\knowledge\knowledge-features.c">
       <Filter>knowledge</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\knowledge\knowledge-autopick.c">
+      <Filter>knowledge</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1218,6 +1221,9 @@
       <Filter>knowledge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\knowledge\knowledge-features.h">
+      <Filter>knowledge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\knowledge\knowledge-autopick.h">
       <Filter>knowledge</Filter>
     </ClInclude>
   </ItemGroup>

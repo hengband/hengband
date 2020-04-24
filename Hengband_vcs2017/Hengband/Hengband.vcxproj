@@ -154,6 +154,7 @@
     <ClCompile Include="..\..\src\birth.c" />
     <ClCompile Include="..\..\src\cmd\cmd-process-screen.c" />
     <ClCompile Include="..\..\src\cmd\dump-util.c" />
+    <ClCompile Include="..\..\src\knowledge\knowledge-autopick.c" />
     <ClCompile Include="..\..\src\knowledge\knowledge-features.c" />
     <ClCompile Include="..\..\src\knowledge\knowledge-items.c" />
     <ClCompile Include="..\..\src\knowledge\knowledge-experiences.c" />
@@ -287,6 +288,7 @@
     <ClInclude Include="..\..\src\birth.h" />
     <ClInclude Include="..\..\src\cmd\cmd-process-screen.h" />
     <ClInclude Include="..\..\src\cmd\dump-util.h" />
+    <ClInclude Include="..\..\src\knowledge\knowledge-autopick.h" />
     <ClInclude Include="..\..\src\knowledge\knowledge-features.h" />
     <ClInclude Include="..\..\src\knowledge\knowledge-items.h" />
     <ClInclude Include="..\..\src\knowledge\knowledge-experiences.h" />

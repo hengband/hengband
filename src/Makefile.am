@@ -149,9 +149,10 @@ hengband_SOURCES = \
 	z-form.c z-form.h z-rand.c z-rand.h z-term.c z-term.h z-util.c z-util.h \
 	z-virt.c z-virt.h \
 	\
-	knowledge/knowledge-items.c knowledge/knowledge-items.h \
+	knowledge/knowledge-autopick.c knowledge/knowledge-autopick.h \
 	knowledge/knowledge-experiences.c knowledge/knowledge-experiences.h \
 	knowledge/knowledge-features.c knowledge/knowledge-features.h \
+	knowledge/knowledge-items.c knowledge/knowledge-items.h \
 	knowledge/knowledge-monsters.c knowledge/knowledge-monsters.h \
 	knowledge/knowledge-uniques.c knowledge/knowledge-uniques.h \
 	knowledge/knowledge-self.c knowledge/knowledge-self.h \

@@ -34,44 +34,34 @@
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-inventory.h"
-#include "cmd/lighting-level-table.h"
 #include "cmd/cmd-visuals.h"
 #include "cmd/dump-util.h"
 #include "gameterm.h"
 #include "core.h" // 暫定。後で消す.
-#include "core/show-file.h"
 #include "io/read-pref-file.h"
 #include "io/interpret-pref-file.h"
 
-#include "knowledge/knowledge-items.h"
+#include "knowledge/knowledge-autopick.h"
 #include "knowledge/knowledge-experiences.h"
 #include "knowledge/knowledge-features.h"
+#include "knowledge/knowledge-items.h"
 #include "knowledge/knowledge-monsters.h"
 #include "knowledge/knowledge-quests.h"
 #include "knowledge/knowledge-self.h"
 #include "knowledge/knowledge-uniques.h"
 
-#include "autopick.h"
-#include "dungeon.h"
 #include "world.h"
 #include "view/display-player.h" // 暫定。後で消す.
 #include "player-personality.h"
-#include "sort.h"
 #include "mutation.h"
 #include "quest.h"
 #include "market/store.h"
 #include "artifact.h"
-#include "object-flavor.h"
-#include "object/object-kind.h"
 #include "floor-town.h"
 #include "cmd/feeling-table.h"
-#include "cmd/object-group-table.h"
 #include "market/store-util.h"
-#include "view-mainwindow.h" // 暫定。後で消す
 #include "english.h"
 
-#include "diary-subtitle-table.h"
-#include "io/write-diary.h"
 #include "chuukei.h"
 
 /*!
@@ -209,20 +199,6 @@ void do_cmd_pref(player_type *creature_ptr)
 	if (!get_string(_("設定変更コマンド: ", "Pref: "), buf, 80)) return;
 
 	(void)interpret_pref_file(creature_ptr, buf);
-}
-
-
-/*!
- * @brief 自動拾い設定ファイルをロードするコマンドのメインルーチン /
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-void do_cmd_reload_autopick(player_type *creature_ptr)
-{
-	if (!get_check(_("自動拾い設定ファイルをロードしますか? ", "Reload auto-pick preference file? ")))
-		return;
-
-	autopick_load_pref(creature_ptr, TRUE);
 }
 
 
@@ -413,64 +389,6 @@ void do_cmd_feeling(player_type *creature_ptr)
 		msg_print(do_cmd_feeling_text_combat[creature_ptr->feeling]);
 	else
 		msg_print(do_cmd_feeling_text[creature_ptr->feeling]);
-}
-
-
-/*
- * Check the status of "autopick"
- */
-static void do_cmd_knowledge_autopick(player_type *creature_ptr)
-{
-	FILE *fff = NULL;
-	GAME_TEXT file_name[FILE_NAME_SIZE];
-	if (!open_temporary_file(&fff, file_name)) return;
-
-	if (!max_autopick)
-	{
-		fprintf(fff, _("自動破壊/拾いには何も登録されていません。", "No preference for auto picker/destroyer."));
-	}
-	else
-	{
-		fprintf(fff, _("   自動拾い/破壊には現在 %d行登録されています。\n\n",
-			"   There are %d registered lines for auto picker/destroyer.\n\n"), max_autopick);
-	}
-
-	for (int k = 0; k < max_autopick; k++)
-	{
-		concptr tmp;
-		byte act = autopick_list[k].action;
-		if (act & DONT_AUTOPICK)
-		{
-			tmp = _("放置", "Leave");
-		}
-		else if (act & DO_AUTODESTROY)
-		{
-			tmp = _("破壊", "Destroy");
-		}
-		else if (act & DO_AUTOPICK)
-		{
-			tmp = _("拾う", "Pickup");
-		}
-		else
-		{
-			tmp = _("確認", "Query");
-		}
-
-		if (act & DO_DISPLAY)
-			fprintf(fff, "%11s", format("[%s]", tmp));
-		else
-			fprintf(fff, "%11s", format("(%s)", tmp));
-
-		tmp = autopick_line_from_entry(&autopick_list[k]);
-		fprintf(fff, " %s", tmp);
-		string_free(tmp);
-		fprintf(fff, "\n");
-	}
-
-	my_fclose(fff);
-
-	(void)show_file(creature_ptr, TRUE, file_name, _("自動拾い/破壊 設定リスト", "Auto-picker/Destroyer"), 0, 0);
-	fd_kill(file_name);
 }
 
 

@@ -58,6 +58,7 @@
 #include "object-ego.h"
 #include "object-curse.h"
 #include "object-flavor.h"
+#include "knowledge/knowledge-autopick.h"
 #include "market/store.h"
 #include "spells.h"
 #include "spells-summon.h"
