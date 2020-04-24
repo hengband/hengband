@@ -168,6 +168,7 @@ hengband_SOURCES = \
 	cmd/cmd-gameoption.c cmd/cmd-gameoption.h cmd/cmd-help.c cmd/cmd-help.h \
 	cmd/cmd-hissatsu.c cmd/cmd-hissatsu.h cmd/cmd-inn.c cmd/cmd-inn.h \
 	cmd/cmd-inventory.c cmd/cmd-inventory.h cmd/cmd-item.c cmd/cmd-item.h \
+	cmd/cmd-knowledge.c cmd/cmd-knowledge.h \
 	cmd/lighting-level-table.c cmd/lighting-level-table.h \
 	cmd/cmd-magiceat.c cmd/cmd-magiceat.h cmd/cmd-mane.c cmd/cmd-mane.h \
 	cmd/cmd-macro.c cmd/cmd-macro.h cmd/cmd-pet.c cmd/cmd-pet.h \

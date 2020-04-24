@@ -5,7 +5,6 @@ extern void do_cmd_colors(player_type *creature_ptr);
 extern void do_cmd_note(void);
 extern void do_cmd_version(void);
 extern void do_cmd_feeling(player_type *creature_ptr);
-extern void do_cmd_knowledge(player_type *creature_ptr);
 extern void do_cmd_time(player_type *creature_ptr);
 
 /*

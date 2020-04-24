@@ -34,6 +34,7 @@
 #include "cmd/cmd-help.h"
 #include "cmd/cmd-hissatsu.h"
 #include "cmd/cmd-item.h"
+#include "cmd/cmd-knowledge.h"
 #include "cmd/cmd-magiceat.h"
 #include "cmd/cmd-mane.h"
 #include "cmd/cmd-macro.h"

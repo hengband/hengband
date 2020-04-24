@@ -29,6 +29,7 @@
 #include "cmd/cmd-diary.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-dump.h"
+#include "cmd/cmd-knowledge.h"
 #include "cmd/cmd-help.h"
 #include "cmd/cmd-item.h"
 #include "cmd/cmd-macro.h"

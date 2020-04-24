@@ -622,6 +622,9 @@
     <ClCompile Include="..\..\src\knowledge\knowledge-autopick.c">
       <Filter>knowledge</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-knowledge.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1225,6 +1228,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\knowledge\knowledge-autopick.h">
       <Filter>knowledge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-knowledge.h">
+      <Filter>cmd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
