@@ -59,6 +59,7 @@
 #include "object-curse.h"
 #include "object-flavor.h"
 #include "knowledge/knowledge-autopick.h"
+#include "knowledge/knowledge-quests.h"
 #include "market/store.h"
 #include "spells.h"
 #include "spells-summon.h"
