@@ -10,6 +10,7 @@ hengband_SOURCES = \
 	angband.h\
 	\
 	autopick/autopick.c autopick/autopick.h \
+	autopick/autopick-util.c autopick/autopick-util.h \
 	\
 	avatar.h avatar.c birth.c birth.h \
 	\
