@@ -50,30 +50,6 @@
 
 #include "chuukei.h"
 
-#ifdef JP
-#else
-/*!
- * @brief Return suffix of ordinal number
- * @param num number
- * @return pointer of suffix string.
- */
-concptr get_ordinal_number_suffix(int num)
-{
-	num = ABS(num) % 100;
-	switch (num % 10)
-	{
-	case 1:
-		return (num == 11) ? "th" : "st";
-	case 2:
-		return (num == 12) ? "th" : "nd";
-	case 3:
-		return (num == 13) ? "th" : "rd";
-	default:
-		return "th";
-	}
-}
-#endif
-
 /*!
  * @brief 画面を再描画するコマンドのメインルーチン
  * Hack -- redraw the screen
