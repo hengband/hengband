@@ -1638,69 +1638,8 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		break;
 	}
 	case 12:
-	{
-		monster_type *m_ptr;
-		MONSTER_IDX m_idx;
-		GAME_TEXT m_name[MAX_NLEN];
-		int i;
-		int path_n;
-		u16b path_g[512];
-		POSITION ty, tx;
-
-		if (!target_set(caster_ptr, TARGET_KILL)) return FALSE;
-		m_idx = floor_ptr->grid_array[target_row][target_col].m_idx;
-		if (!m_idx) break;
-		if (m_idx == caster_ptr->riding) break;
-		if (!player_has_los_bold(caster_ptr, target_row, target_col)) break;
-		if (!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, target_row, target_col)) break;
-		m_ptr = &floor_ptr->m_list[m_idx];
-		monster_desc(caster_ptr, m_name, m_ptr, 0);
-		msg_format(_("%sを引き戻した。", "You pull back %s."), m_name);
-		path_n = project_path(caster_ptr, path_g, MAX_RANGE, target_row, target_col, caster_ptr->y, caster_ptr->x, 0);
-		ty = target_row, tx = target_col;
-		for (i = 1; i < path_n; i++)
-		{
-			POSITION ny = GRID_Y(path_g[i]);
-			POSITION nx = GRID_X(path_g[i]);
-			grid_type *g_ptr = &floor_ptr->grid_array[ny][nx];
-
-			if (in_bounds(floor_ptr, ny, nx) && is_cave_empty_bold(caster_ptr, ny, nx) &&
-			    !(g_ptr->info & CAVE_OBJECT) &&
-				!pattern_tile(floor_ptr, ny, nx))
-			{
-				ty = ny;
-				tx = nx;
-			}
-		}
-		/* Update the old location */
-		floor_ptr->grid_array[target_row][target_col].m_idx = 0;
-
-		/* Update the new location */
-		floor_ptr->grid_array[ty][tx].m_idx = m_idx;
-
-		/* Move the monster */
-		m_ptr->fy = ty;
-		m_ptr->fx = tx;
-
-		/* Wake the monster up */
-		(void)set_monster_csleep(caster_ptr, m_idx, 0);
-
-		update_monster(caster_ptr, m_idx, TRUE);
-		lite_spot(caster_ptr, target_row, target_col);
-		lite_spot(caster_ptr, ty, tx);
-
-		if (r_info[m_ptr->r_idx].flags7 & (RF7_LITE_MASK | RF7_DARK_MASK))
-			caster_ptr->update |= (PU_MON_LITE);
-
-		if (m_ptr->ml)
-		{
-			/* Auto-Recall if possible and visible */
-			if (!caster_ptr->image) monster_race_track(caster_ptr, m_ptr->ap_r_idx);
-			health_track(caster_ptr, m_idx);
-		}
-
+		(void)fetch_monster(caster_ptr);
 		break;
-	}
 	case 13:
 		if (!get_aim_dir(caster_ptr, &dir)) return FALSE;
 		fire_ball(caster_ptr, GF_OLD_CONF, dir, plev*3, 3);

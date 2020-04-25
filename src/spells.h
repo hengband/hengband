@@ -330,6 +330,7 @@ extern bool mirror_tunnel(player_type *caster_ptr);
 extern void massacre(player_type *caster_ptr);
 extern bool eat_rock(player_type *caster_ptr);
 extern bool shock_power(player_type *caster_ptr);
+extern bool fetch_monster(player_type *caster_ptr);
 extern bool booze(player_type *creature_ptr);
 extern bool detonation(player_type *creature_ptr);
 extern void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx);
