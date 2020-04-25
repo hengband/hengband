@@ -396,7 +396,7 @@
     <ClCompile Include="..\..\src\gameterm.c" />
     <ClCompile Include="..\..\src\trap.c" />
     <ClCompile Include="..\..\src\util.c" />
-    <ClCompile Include="..\..\src\view-mainwindow.c" />
+    <ClCompile Include="..\..\src\view\view-mainwindow.c" />
     <ClCompile Include="..\..\src\warning.c" />
     <ClCompile Include="..\..\src\wild.c" />
     <ClCompile Include="..\..\src\wizard1.c" />
@@ -589,7 +589,7 @@
     <ClInclude Include="..\..\src\gameterm.h" />
     <ClInclude Include="..\..\src\trap.h" />
     <ClInclude Include="..\..\src\util.h" />
-    <ClInclude Include="..\..\src\view-mainwindow.h" />
+    <ClInclude Include="..\..\src\view\view-mainwindow.h" />
     <ClInclude Include="..\..\src\warning.h" />
     <ClInclude Include="..\..\src\wild.h" />
     <ClInclude Include="..\..\src\world.h" />

@@ -247,9 +247,6 @@
     <ClCompile Include="..\..\src\history.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view-mainwindow.c">
-      <Filter>io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\gameterm.c">
       <Filter>io</Filter>
     </ClCompile>
@@ -655,6 +652,9 @@
     <ClCompile Include="..\..\src\io\uid-checker.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\view\view-mainwindow.c">
+      <Filter>view</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -883,9 +883,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\history.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\view-mainwindow.h">
-      <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\gameterm.h">
       <Filter>io</Filter>
@@ -1312,6 +1309,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\uid-checker.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\view\view-mainwindow.h">
+      <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
