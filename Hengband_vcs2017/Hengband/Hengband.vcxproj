@@ -152,6 +152,7 @@
     <ClCompile Include="..\..\src\autopick\autopick-adder.c" />
     <ClCompile Include="..\..\src\autopick\autopick-describer.c" />
     <ClCompile Include="..\..\src\autopick\autopick-destroyer.c" />
+    <ClCompile Include="..\..\src\autopick\autopick-drawer.c" />
     <ClCompile Include="..\..\src\autopick\autopick-entry.c" />
     <ClCompile Include="..\..\src\autopick\autopick-finder.c" />
     <ClCompile Include="..\..\src\autopick\autopick-initializer.c" />
@@ -303,6 +304,7 @@
     <ClInclude Include="..\..\src\autopick\autopick-describer.h" />
     <ClInclude Include="..\..\src\autopick\autopick-destroyer.h" />
     <ClInclude Include="..\..\src\autopick\autopick-dirty-flags.h" />
+    <ClInclude Include="..\..\src\autopick\autopick-drawer.h" />
     <ClInclude Include="..\..\src\autopick\autopick-editor-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-entry.h" />
     <ClInclude Include="..\..\src\autopick\autopick-finder.h" />
