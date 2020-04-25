@@ -28,6 +28,7 @@
 #include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-adder.h"
+#include "autopick/autopick-pref-processor.h"
 #include "gameterm.h"
 #include "autopick/autopick.h"
 #include "core.h"
@@ -56,47 +57,7 @@
 #include "view/display-main-window.h" // 暫定。後で消す.
 
 /*
- *  Process line for auto picker/destroyer.
- */
-void process_autopick_file_command(char *buf)
-{
-	autopick_type an_entry, *entry = &an_entry;
-	int i;
-	for (i = 0; buf[i]; i++)
-	{
-#ifdef JP
-		if (iskanji(buf[i]))
-		{
-			i++;
-			continue;
-		}
-#endif
-		if (iswspace(buf[i]) && buf[i] != ' ')
-			break;
-	}
-
-	buf[i] = 0;
-	if (!autopick_new_entry(entry, buf, FALSE)) return;
-
-	for (i = 0; i < max_autopick; i++)
-	{
-		if (!strcmp(entry->name, autopick_list[i].name)
-			&& entry->flag[0] == autopick_list[i].flag[0]
-			&& entry->flag[1] == autopick_list[i].flag[1]
-			&& entry->dice == autopick_list[i].dice
-			&& entry->bonus == autopick_list[i].bonus)
-		{
-			autopick_free_entry(entry);
-			return;
-		}
-	}
-
-	add_autopick_list(entry);
-}
-
-
-/*
- *  Auto inscription
+ * Auto inscription
  */
 static void auto_inscribe_item(player_type *player_ptr, object_type *o_ptr, int idx)
 {
