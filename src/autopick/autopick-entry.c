@@ -453,3 +453,131 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
 	str_tolower(name_str);
 	entry->name = string_make(name_str);
 }
+
+
+/*
+ * Reconstruct preference line from entry
+ */
+concptr autopick_line_from_entry(autopick_type *entry)
+{
+	char buf[MAX_LINELEN];
+	*buf = '\0';
+	if (!(entry->action & DO_DISPLAY)) strcat(buf, "(");
+	if (entry->action & DO_QUERY_AUTOPICK) strcat(buf, ";");
+	if (entry->action & DO_AUTODESTROY) strcat(buf, "!");
+	if (entry->action & DONT_AUTOPICK) strcat(buf, "~");
+
+	char *ptr;
+	ptr = buf;
+	if (IS_FLG(FLG_ALL)) ADD_KEY(KEY_ALL);
+	if (IS_FLG(FLG_COLLECTING)) ADD_KEY(KEY_COLLECTING);
+	if (IS_FLG(FLG_UNAWARE)) ADD_KEY(KEY_UNAWARE);
+	if (IS_FLG(FLG_UNIDENTIFIED)) ADD_KEY(KEY_UNIDENTIFIED);
+	if (IS_FLG(FLG_IDENTIFIED)) ADD_KEY(KEY_IDENTIFIED);
+	if (IS_FLG(FLG_STAR_IDENTIFIED)) ADD_KEY(KEY_STAR_IDENTIFIED);
+	if (IS_FLG(FLG_BOOSTED)) ADD_KEY(KEY_BOOSTED);
+
+	if (IS_FLG(FLG_MORE_DICE))
+	{
+		ADD_KEY(KEY_MORE_THAN);
+		strcat(ptr, format("%d", entry->dice));
+		ADD_KEY(KEY_DICE);
+	}
+
+	if (IS_FLG(FLG_MORE_BONUS))
+	{
+		ADD_KEY(KEY_MORE_BONUS);
+		strcat(ptr, format("%d", entry->bonus));
+		ADD_KEY(KEY_MORE_BONUS2);
+	}
+
+	if (IS_FLG(FLG_UNREADABLE)) ADD_KEY(KEY_UNREADABLE);
+	if (IS_FLG(FLG_REALM1)) ADD_KEY(KEY_REALM1);
+	if (IS_FLG(FLG_REALM2)) ADD_KEY(KEY_REALM2);
+	if (IS_FLG(FLG_FIRST)) ADD_KEY(KEY_FIRST);
+	if (IS_FLG(FLG_SECOND)) ADD_KEY(KEY_SECOND);
+	if (IS_FLG(FLG_THIRD)) ADD_KEY(KEY_THIRD);
+	if (IS_FLG(FLG_FOURTH)) ADD_KEY(KEY_FOURTH);
+	if (IS_FLG(FLG_WANTED)) ADD_KEY(KEY_WANTED);
+	if (IS_FLG(FLG_UNIQUE)) ADD_KEY(KEY_UNIQUE);
+	if (IS_FLG(FLG_HUMAN)) ADD_KEY(KEY_HUMAN);
+	if (IS_FLG(FLG_WORTHLESS)) ADD_KEY(KEY_WORTHLESS);
+	if (IS_FLG(FLG_GOOD)) ADD_KEY(KEY_GOOD);
+	if (IS_FLG(FLG_NAMELESS)) ADD_KEY(KEY_NAMELESS);
+	if (IS_FLG(FLG_AVERAGE)) ADD_KEY(KEY_AVERAGE);
+	if (IS_FLG(FLG_RARE)) ADD_KEY(KEY_RARE);
+	if (IS_FLG(FLG_COMMON)) ADD_KEY(KEY_COMMON);
+	if (IS_FLG(FLG_EGO)) ADD_KEY(KEY_EGO);
+
+	if (IS_FLG(FLG_ARTIFACT)) ADD_KEY(KEY_ARTIFACT);
+
+	bool sepa_flag = TRUE;
+	if (IS_FLG(FLG_ITEMS)) ADD_KEY2(KEY_ITEMS);
+	else if (IS_FLG(FLG_WEAPONS)) ADD_KEY2(KEY_WEAPONS);
+	else if (IS_FLG(FLG_FAVORITE_WEAPONS)) ADD_KEY2(KEY_FAVORITE_WEAPONS);
+	else if (IS_FLG(FLG_ARMORS)) ADD_KEY2(KEY_ARMORS);
+	else if (IS_FLG(FLG_MISSILES)) ADD_KEY2(KEY_MISSILES);
+	else if (IS_FLG(FLG_DEVICES)) ADD_KEY2(KEY_DEVICES);
+	else if (IS_FLG(FLG_LIGHTS)) ADD_KEY2(KEY_LIGHTS);
+	else if (IS_FLG(FLG_JUNKS)) ADD_KEY2(KEY_JUNKS);
+	else if (IS_FLG(FLG_CORPSES)) ADD_KEY2(KEY_CORPSES);
+	else if (IS_FLG(FLG_SPELLBOOKS)) ADD_KEY2(KEY_SPELLBOOKS);
+	else if (IS_FLG(FLG_HAFTED)) ADD_KEY2(KEY_HAFTED);
+	else if (IS_FLG(FLG_SHIELDS)) ADD_KEY2(KEY_SHIELDS);
+	else if (IS_FLG(FLG_BOWS)) ADD_KEY2(KEY_BOWS);
+	else if (IS_FLG(FLG_RINGS)) ADD_KEY2(KEY_RINGS);
+	else if (IS_FLG(FLG_AMULETS)) ADD_KEY2(KEY_AMULETS);
+	else if (IS_FLG(FLG_SUITS)) ADD_KEY2(KEY_SUITS);
+	else if (IS_FLG(FLG_CLOAKS)) ADD_KEY2(KEY_CLOAKS);
+	else if (IS_FLG(FLG_HELMS)) ADD_KEY2(KEY_HELMS);
+	else if (IS_FLG(FLG_GLOVES)) ADD_KEY2(KEY_GLOVES);
+	else if (IS_FLG(FLG_BOOTS)) ADD_KEY2(KEY_BOOTS);
+	else if (!IS_FLG(FLG_ARTIFACT))
+		sepa_flag = FALSE;
+
+	if (entry->name && entry->name[0])
+	{
+		if (sepa_flag) strcat(buf, ":");
+
+		int i = strlen(buf);
+		int j = 0;
+		while (entry->name[j] && i < MAX_LINELEN - 2 - 1)
+		{
+#ifdef JP
+			if (iskanji(entry->name[j]))
+				buf[i++] = entry->name[j++];
+#endif
+			buf[i++] = entry->name[j++];
+		}
+		buf[i] = '\0';
+	}
+
+	if (!entry->insc) return string_make(buf);
+
+	int i, j = 0;
+	strcat(buf, "#");
+	i = strlen(buf);
+
+	while (entry->insc[j] && i < MAX_LINELEN - 2)
+	{
+#ifdef JP
+		if (iskanji(entry->insc[j]))
+			buf[i++] = entry->insc[j++];
+#endif
+		buf[i++] = entry->insc[j++];
+	}
+
+	buf[i] = '\0';
+	return string_make(buf);
+}
+
+
+/*
+ * Reconstruct preference line from entry and kill entry
+ */
+concptr autopick_line_from_entry_kill(autopick_type *entry)
+{
+	concptr ptr = autopick_line_from_entry(entry);
+	autopick_free_entry(entry);
+	return ptr;
+}

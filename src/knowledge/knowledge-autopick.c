@@ -9,6 +9,7 @@
 #include "cmd/dump-util.h"
 #include "core/show-file.h"
 #include "autopick/autopick.h"
+#include "autopick/autopick-entry.h"
 #include "autopick/autopick-methods-table.h"
 
  /*!
