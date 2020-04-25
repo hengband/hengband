@@ -59,3 +59,18 @@ int get_com_id(char key)
 
 	return 0;
 }
+
+
+/*
+ * Auto inscription
+ */
+void auto_inscribe_item(player_type *player_ptr, object_type *o_ptr, int idx)
+{
+	if (idx < 0 || !autopick_list[idx].insc) return;
+
+	if (!o_ptr->inscription)
+		o_ptr->inscription = quark_add(autopick_list[idx].insc);
+
+	player_ptr->window |= (PW_EQUIP | PW_INVEN);
+	player_ptr->update |= (PU_BONUS);
+}

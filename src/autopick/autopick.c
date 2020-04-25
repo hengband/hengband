@@ -49,21 +49,6 @@
 #include "view/display-main-window.h" // 暫定。後で消す.
 
 /*
- * Auto inscription
- */
-static void auto_inscribe_item(player_type *player_ptr, object_type *o_ptr, int idx)
-{
-	if (idx < 0 || !autopick_list[idx].insc) return;
-
-	if (!o_ptr->inscription)
-		o_ptr->inscription = quark_add(autopick_list[idx].insc);
-
-	player_ptr->window |= (PW_EQUIP | PW_INVEN);
-	player_ptr->update |= (PU_BONUS);
-}
-
-
-/*
  *  Auto-destroy marked item
  */
 static void autopick_delayed_alter_aux(player_type *player_ptr, INVENTORY_IDX item)
