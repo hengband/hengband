@@ -59,18 +59,6 @@
 static object_type autopick_last_destroyed_object;
 
 /*
- * A function to delete entry
- */
-static void autopick_free_entry(autopick_type *entry)
-{
-	string_free(entry->name);
-	string_free(entry->insc);
-	entry->name = NULL;
-	entry->insc = NULL;
-}
-
-
-/*
  * Initialize the autopick
  */
 static void init_autopick(void)
