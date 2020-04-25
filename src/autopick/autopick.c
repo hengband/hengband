@@ -125,10 +125,15 @@ void process_autopick_file_command(char *buf)
 
 
 /*
+ * @brief 与えられたアイテムが自動拾いのリストに登録されているかどうかを検索する
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @o_ptr アイテムへの参照ポインタ
+ * @return 自動拾いのリストに登録されていたらその登録番号、なかったら-1
+ * @details
  * A function for Auto-picker/destroyer
  * Examine whether the object matches to the list of keywords or not.
  */
-int is_autopick(player_type *player_ptr, object_type *o_ptr)
+int find_autopick_list(player_type *player_ptr, object_type *o_ptr)
 {
 	GAME_TEXT o_name[MAX_NLEN];
 	if (o_ptr->tval == TV_GOLD) return -1;
@@ -222,7 +227,7 @@ void autopick_alter_item(player_type *player_ptr, INVENTORY_IDX item, bool destr
 {
 	object_type *o_ptr;
 	o_ptr = REF_ITEM(player_ptr, player_ptr->current_floor_ptr, item);
-	int idx = is_autopick(player_ptr, o_ptr);
+	int idx = find_autopick_list(player_ptr, o_ptr);
 	auto_inscribe_item(player_ptr, o_ptr, idx);
 	if (destroy && item <= INVEN_PACK)
 		auto_destroy_item(player_ptr, o_ptr, idx);
@@ -239,7 +244,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 	{
 		object_type *o_ptr = &player_ptr->current_floor_ptr->o_list[this_o_idx];
 		next_o_idx = o_ptr->next_o_idx;
-		int idx = is_autopick(player_ptr, o_ptr);
+		int idx = find_autopick_list(player_ptr, o_ptr);
 		auto_inscribe_item(player_ptr, o_ptr, idx);
 		bool is_auto_pickup = idx >= 0;
 		is_auto_pickup &= (autopick_list[idx].action & (DO_AUTOPICK | DO_QUERY_AUTOPICK)) != 0;
@@ -389,7 +394,7 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 	char pref_file[1024];
 	FILE *pref_fff;
 	autopick_type an_entry, *entry = &an_entry;
-	int match_autopick = is_autopick(player_ptr, o_ptr);
+	int match_autopick = find_autopick_list(player_ptr, o_ptr);
 	if (match_autopick != -1)
 	{
 		concptr what;
@@ -558,8 +563,9 @@ static void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)
  */
 static void toggle_command_letter(text_body_type *tb, byte flg)
 {
-	autopick_type an_entry, *entry = &an_entry;
-	int by1, by2, y;
+	autopick_type an_entry;
+	autopick_type *entry = &an_entry;
+	int by1, by2;
 	bool add = TRUE;
 	bool fixed = FALSE;
 	if (tb->mark)
@@ -572,7 +578,7 @@ static void toggle_command_letter(text_body_type *tb, byte flg)
 		by1 = by2 = tb->cy;
 	}
 
-	for (y = by1; y <= by2; y++)
+	for (int y = by1; y <= by2; y++)
 	{
 		int wid = 0;
 
@@ -799,13 +805,11 @@ static byte get_string_for_search(player_type *player_ptr, object_type **o_handl
 	while (TRUE)
 	{
 		bool back = FALSE;
-		int skey;
-
 		Term_erase(col, 0, 255);
 		Term_putstr(col, 0, -1, color, buf);
 		Term_gotoxy(col + pos, 0);
 
-		skey = inkey_special(TRUE);
+		int skey = inkey_special(TRUE);
 		switch (skey)
 		{
 		case SKEY_LEFT:
@@ -1110,12 +1114,10 @@ static int do_command_menu(int level, int start)
 	byte menu_key = 0;
 	for (int i = start; menu_data[i].level >= level; i++)
 	{
-		int len;
-
 		/* Ignore lower level sub menus */
 		if (menu_data[i].level > level) continue;
 
-		len = strlen(menu_data[i].name);
+		int len = strlen(menu_data[i].name);
 		if (len > max_len) max_len = len;
 
 		menu_id_list[menu_key] = i;
@@ -1142,10 +1144,6 @@ static int do_command_menu(int level, int start)
 
 	while (TRUE)
 	{
-		int com_id;
-		char key;
-		int menu_id;
-
 		if (redraw)
 		{
 			int row1 = row0 + 1;
@@ -1185,10 +1183,11 @@ static int do_command_menu(int level, int start)
 		}
 
 		prt(format(_("(a-%c) コマンド:", "(a-%c) Command:"), menu_key + 'a' - 1), 0, 0);
-		key = inkey();
+		char key = inkey();
 
 		if (key == ESCAPE) return 0;
 
+		int com_id;
 		bool is_alphabet = key >= 'a' && key <= 'z';
 		if (!is_alphabet)
 		{
@@ -1201,7 +1200,7 @@ static int do_command_menu(int level, int start)
 			continue;
 		}
 
-		menu_id = menu_id_list[key - 'a'];
+		int menu_id = menu_id_list[key - 'a'];
 
 		if (menu_id < 0) continue;
 
