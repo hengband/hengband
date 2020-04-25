@@ -266,16 +266,9 @@ static const char autoregister_header[] = "?:$AUTOREGISTER";
  */
 static bool clear_auto_register(player_type *player_ptr)
 {
-	char tmp_file[1024];
 	char pref_file[1024];
-	char buf[1024];
-	FILE *pref_fff;
-	FILE *tmp_fff;
-	int num = 0;
-	bool autoregister = FALSE;
-	bool okay = TRUE;
-
 	path_build(pref_file, sizeof(pref_file), ANGBAND_DIR_USER, pickpref_filename(player_ptr, PT_WITH_PNAME));
+	FILE *pref_fff;
 	pref_fff = my_fopen(pref_file, "r");
 
 	if (!pref_fff)
@@ -289,6 +282,8 @@ static bool clear_auto_register(player_type *player_ptr)
 		return TRUE;
 	}
 
+	char tmp_file[1024];
+	FILE *tmp_fff;
 	tmp_fff = my_fopen_temp(tmp_file, sizeof(tmp_file));
 	if (!tmp_fff)
 	{
@@ -298,6 +293,9 @@ static bool clear_auto_register(player_type *player_ptr)
 		return FALSE;
 	}
 
+	bool autoregister = FALSE;
+	int num = 0;
+	char buf[1024];
 	while (TRUE)
 	{
 		if (my_fgets(pref_fff, buf, sizeof(buf))) break;
@@ -321,6 +319,7 @@ static bool clear_auto_register(player_type *player_ptr)
 	my_fclose(pref_fff);
 	my_fclose(tmp_fff);
 
+	bool okay = TRUE;
 	if (num)
 	{
 		msg_format(_("以前のキャラクター用の自動設定(%d行)が残っています。",
