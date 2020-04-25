@@ -676,7 +676,7 @@
     <ClCompile Include="..\..\src\autopick\autopick-searcher.c">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-inserter.c">
+    <ClCompile Include="..\..\src\autopick\autopick-inserter-killer.c">
       <Filter>autopick</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1358,7 +1358,7 @@
     <ClInclude Include="..\..\src\autopick\autopick-searcher.h">
       <Filter>autopick</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\autopick\autopick-inserter.h">
+    <ClInclude Include="..\..\src\autopick\autopick-inserter-killer.h">
       <Filter>autopick</Filter>
     </ClInclude>
   </ItemGroup>

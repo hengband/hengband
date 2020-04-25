@@ -31,7 +31,7 @@
 #include "autopick/autopick-pref-processor.h"
 #include "autopick/autopick-drawer.h"
 #include "autopick/autopick-searcher.h"
-#include "autopick/autopick-inserter.h"
+#include "autopick/autopick-inserter-killer.h"
 #include "gameterm.h"
 #include "autopick/autopick.h"
 #include "core.h"

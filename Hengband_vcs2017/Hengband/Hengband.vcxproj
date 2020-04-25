@@ -156,7 +156,7 @@
     <ClCompile Include="..\..\src\autopick\autopick-entry.c" />
     <ClCompile Include="..\..\src\autopick\autopick-finder.c" />
     <ClCompile Include="..\..\src\autopick\autopick-initializer.c" />
-    <ClCompile Include="..\..\src\autopick\autopick-inserter.c" />
+    <ClCompile Include="..\..\src\autopick\autopick-inserter-killer.c" />
     <ClCompile Include="..\..\src\autopick\autopick-matcher.c" />
     <ClCompile Include="..\..\src\autopick\autopick-menu-data-table.c" />
     <ClCompile Include="..\..\src\autopick\autopick-pref-processor.c" />
@@ -312,7 +312,7 @@
     <ClInclude Include="..\..\src\autopick\autopick-finder.h" />
     <ClInclude Include="..\..\src\autopick\autopick-flags-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-initializer.h" />
-    <ClInclude Include="..\..\src\autopick\autopick-inserter.h" />
+    <ClInclude Include="..\..\src\autopick\autopick-inserter-killer.h" />
     <ClInclude Include="..\..\src\autopick\autopick-key-flag-process.h" />
     <ClInclude Include="..\..\src\autopick\autopick-keys-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-matcher.h" />
