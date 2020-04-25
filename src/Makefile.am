@@ -14,7 +14,8 @@ hengband_SOURCES = \
 	autopick/autopick-editor-table.h autopick/autopick-flags-table.h \
 	autopick/autopick-key-flag-process.h autopick/autopick-key-table.h \
 	autopick/autopick-menu-data-table.c autopick/autopick-menu-data-table.h \
-	autopick/autopick-methods-table.h autopick/autopick-util.h \
+	autopick/autopick-methods-table.h \
+	autopick/autopick-util.c autopick/autopick-util.h \
 	autopick/autopick-entry.c autopick/autopick-entry.h \
 	\
 	avatar.h avatar.c birth.c birth.h \
@@ -52,6 +53,7 @@ hengband_SOURCES = \
 	player/permanent-resistances.c player/permanent-resistances.h \
 	player/temporary-resistances.c player/temporary-resistances.h \
 	\
+	io/dump-remover.c io/dump-remover.h \
 	io/gf-descriptions.c io/gf-descriptions.h \
 	io/tokenizer.c io/tokenizer.h \
 	io/interpret-pref-file.c io/interpret-pref-file.h \

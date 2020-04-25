@@ -151,12 +151,14 @@
     <ClCompile Include="..\..\src\artifact.c" />
     <ClCompile Include="..\..\src\autopick\autopick-entry.c" />
     <ClCompile Include="..\..\src\autopick\autopick-menu-data-table.c" />
+    <ClCompile Include="..\..\src\autopick\autopick-util.c" />
     <ClCompile Include="..\..\src\autopick\autopick.c" />
     <ClCompile Include="..\..\src\avatar.c" />
     <ClCompile Include="..\..\src\birth.c" />
     <ClCompile Include="..\..\src\cmd\cmd-knowledge.c" />
     <ClCompile Include="..\..\src\cmd\cmd-process-screen.c" />
     <ClCompile Include="..\..\src\cmd\dump-util.c" />
+    <ClCompile Include="..\..\src\io\dump-remover.c" />
     <ClCompile Include="..\..\src\io\mutations-dump.c" />
     <ClCompile Include="..\..\src\knowledge\knowledge-autopick.c" />
     <ClCompile Include="..\..\src\knowledge\knowledge-features.c" />
@@ -304,6 +306,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-knowledge.h" />
     <ClInclude Include="..\..\src\cmd\cmd-process-screen.h" />
     <ClInclude Include="..\..\src\cmd\dump-util.h" />
+    <ClInclude Include="..\..\src\io\dump-remover.h" />
     <ClInclude Include="..\..\src\io\mutations-dump.h" />
     <ClInclude Include="..\..\src\knowledge\knowledge-autopick.h" />
     <ClInclude Include="..\..\src\knowledge\knowledge-features.h" />

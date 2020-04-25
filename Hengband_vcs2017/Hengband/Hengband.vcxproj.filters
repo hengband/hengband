@@ -637,6 +637,12 @@
     <ClCompile Include="..\..\src\autopick\autopick-entry.c">
       <Filter>autopick</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\autopick\autopick-util.c">
+      <Filter>autopick</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\dump-remover.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1279,6 +1285,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\autopick\autopick-entry.h">
       <Filter>autopick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\dump-remover.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
