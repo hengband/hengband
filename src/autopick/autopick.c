@@ -833,44 +833,6 @@ static void copy_text_to_yank(text_body_type *tb)
 
 
 /*
- * Kill segment of a line
- */
-static void kill_line_segment(text_body_type *tb, int y, int x0, int x1, bool whole)
-{
-	concptr s = tb->lines_list[y];
-	if (whole && x0 == 0 && s[x1] == '\0' && tb->lines_list[y + 1])
-	{
-		string_free(tb->lines_list[y]);
-
-		int i;
-		for (i = y; tb->lines_list[i + 1]; i++)
-			tb->lines_list[i] = tb->lines_list[i + 1];
-		tb->lines_list[i] = NULL;
-
-		tb->dirty_flags |= DIRTY_EXPRESSION;
-
-		return;
-	}
-
-	if (x0 == x1) return;
-
-	char buf[MAX_LINELEN];
-	char *d = buf;
-	for (int x = 0; x < x0; x++)
-		*(d++) = s[x];
-
-	for (int x = x1; s[x]; x++)
-		*(d++) = s[x];
-
-	*d = '\0';
-	string_free(tb->lines_list[y]);
-	tb->lines_list[y] = string_make(buf);
-	check_expression_line(tb, y);
-	tb->changed = TRUE;
-}
-
-
-/*
  * Execute a single editor command
  */
 static bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
