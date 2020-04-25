@@ -9,6 +9,7 @@
 #include "object/object-kind.h"
 #include "object-flavor.h"
 #include "object-hook.h"
+#include "player-inventory.h"
 
 #ifdef JP
 static char kanji_colon[] = "：";
@@ -580,4 +581,20 @@ concptr autopick_line_from_entry_kill(autopick_type *entry)
 	concptr ptr = autopick_line_from_entry(entry);
 	autopick_free_entry(entry);
 	return ptr;
+}
+
+
+/*
+ * Choose an item and get auto-picker entry from it.
+ */
+bool entry_from_choosed_object(player_type *player_ptr, autopick_type *entry)
+{
+	concptr q = _("どのアイテムを登録しますか? ", "Enter which item? ");
+	concptr s = _("アイテムを持っていない。", "You have nothing to enter.");
+	object_type *o_ptr;
+	o_ptr = choose_object(player_ptr, NULL, q, s, USE_INVEN | USE_FLOOR | USE_EQUIP, 0);
+	if (!o_ptr) return FALSE;
+
+	autopick_entry_from_object(player_ptr, entry, o_ptr);
+	return TRUE;
 }
