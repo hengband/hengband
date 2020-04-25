@@ -18,7 +18,6 @@
 #include "io/dump-remover.h"
 #include "io/read-pref-file.h"
 #include "io/interpret-pref-file.h"
-#include "autopick/autopick.h"
 #include "files.h" // 暫定。コールバック化して後で消す.
 #include "world.h"
 

@@ -12,8 +12,9 @@
 
 #include "angband.h"
 #include "util.h"
-#include "autopick/autopick.h"
+#include "autopick/autopick-finder.h"
 #include "autopick/autopick-methods-table.h"
+#include "autopick/autopick-util.h"
 #include "gameterm.h"
 
 #include "market/building.h"

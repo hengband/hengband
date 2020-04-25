@@ -15,7 +15,6 @@
 #include "core.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
-#include "autopick/autopick.h"
 #include "gameterm.h"
 
 #include "selfinfo.h"
