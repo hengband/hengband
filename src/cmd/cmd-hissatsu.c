@@ -23,7 +23,7 @@
 
 #include "cmd-basic.h"
 #include "cmd-spell.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
 #define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)
 

@@ -34,7 +34,7 @@
 #include "player-move.h"
 #include "player-status.h"
 #include "monster-status.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "feature.h"
 #include "quest.h"
 #include "dungeon.h"

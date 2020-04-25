@@ -18,7 +18,7 @@
 #include "util.h"
 #include "files.h"
 #include "monsterrace-hook.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "quest.h"
 #include "floor.h"
 #include "world.h"

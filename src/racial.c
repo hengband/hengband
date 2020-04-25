@@ -34,7 +34,7 @@
 #include "cmd-spell.h"
 #include "realm-hex.h"
 #include "targeting.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "player-class.h"
 
 /*!

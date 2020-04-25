@@ -36,7 +36,7 @@
 #include "world.h"
 #include "melee.h"
 #include "japanese.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "player-class.h"
 #include "english.h"
 #include "market/arena-info-table.h"

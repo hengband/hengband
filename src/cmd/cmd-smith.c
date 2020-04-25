@@ -10,7 +10,7 @@
 #include "cmd-smith.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "player-inventory.h"
 
 

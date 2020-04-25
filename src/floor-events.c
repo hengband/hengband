@@ -15,7 +15,7 @@
 #include "object/object-kind.h"
 #include "object-ego.h"
 #include "cmd-dump.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
 static bool mon_invis;
 static POSITION mon_fy, mon_fx;

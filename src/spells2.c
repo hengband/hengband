@@ -53,7 +53,7 @@
 #include "dungeon.h"
 #include "floor-events.h"
 #include "feature.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "object/object-kind.h"
 #include "monsterrace.h"
 #include "targeting.h"

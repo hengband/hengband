@@ -31,7 +31,7 @@
 #include "player-effects.h"
 #include "player-inventory.h"
 #include "monster.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
 #include "spells.h"
 #include "realm-hex.h"

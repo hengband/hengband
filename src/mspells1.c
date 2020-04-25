@@ -54,7 +54,7 @@
 #include "spells.h"
 #include "world.h"
 #include "realm-song.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "player-race.h"
 #include "player-class.h"
 

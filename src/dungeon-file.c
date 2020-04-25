@@ -62,7 +62,7 @@
 #include "cmd-activate.h"
 #include "gameterm.h"
 #include "wild.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "player-class.h"
 
 #include "init.h"

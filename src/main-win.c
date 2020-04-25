@@ -100,7 +100,7 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-process-screen.h"
 #include "cmd/cmd-save.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "floor.h"
 #include "floor-events.h"
 #include "init.h"

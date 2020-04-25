@@ -43,7 +43,7 @@
 #include "monster.h"
 #include "monsterrace-hook.h"
 #include "object-ego.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
  /*
   * todo この説明長すぎ。何とかしたい

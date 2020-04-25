@@ -36,7 +36,7 @@
 #include "monsterrace.h"
 #include "birth.h"
 #include "market/building.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
  /*
   * Some "local" parameters, used to help write savefiles

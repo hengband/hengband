@@ -4,7 +4,7 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-gameoption.h"
 #include "gameterm.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "cmd/cmd-dump.h"
 #include "core/show-file.h"
 #include "files.h"

@@ -17,7 +17,7 @@
 #include "world.h"
 #include "gameterm.h"
 #include "core.h" // 暫定、後で消す.
-#include "view-mainwindow.h" // 暫定、後で消す.
+#include "view/display-main-window.h" // 暫定、後で消す.
 
 /*
  * todo okay = 既知のアーティファクト？ と思われるが確証がない

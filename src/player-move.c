@@ -170,7 +170,7 @@
 #include "object-flavor.h"
 #include "spells.h"
 #include "cmd-basic.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "world.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"

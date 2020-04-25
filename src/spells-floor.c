@@ -20,7 +20,7 @@
 #include "player-effects.h"
 #include "player-move.h"
 #include "feature.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
 #include "monster-status.h"
 

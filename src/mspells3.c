@@ -28,7 +28,7 @@
 #include "cmd-basic.h"
 #include "player-effects.h"
 #include "targeting.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
  /*!
   * @brief モンスター魔法をプレイヤーが使用する場合の換算レベル

@@ -12,7 +12,7 @@
 #include "world.h"
 #include "cmd/lighting-level-table.h"
 #include "dungeon.h"
-#include "view-mainwindow.h" // 暫定、後で消す.
+#include "view/display-main-window.h" // 暫定、後で消す.
 
  /*
   * Build a list of feature indexes in the given group. Return the number

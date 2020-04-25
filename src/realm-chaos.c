@@ -11,7 +11,7 @@
 #include "spells-diceroll.h"
 #include "spells.h"
 #include "targeting.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
 /*!
 * @brief カオス領域魔法の各処理を行う

@@ -11,7 +11,7 @@
 #include "floor.h"
 #include "player-move.h"
 
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
 bool select_ring_slot;
 

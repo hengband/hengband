@@ -57,7 +57,7 @@
 #include "save.h"
 #include "realm.h"
 #include "japanese.h"
-#include "view-mainwindow.h" // 暫定。後で消す.
+#include "view/display-main-window.h" // 暫定。後で消す.
 
  /*
   * The last character rolled,

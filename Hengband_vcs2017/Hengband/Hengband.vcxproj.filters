@@ -652,7 +652,7 @@
     <ClCompile Include="..\..\src\io\uid-checker.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\view\view-mainwindow.c">
+    <ClCompile Include="..\..\src\view\display-main-window.c">
       <Filter>view</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1310,7 +1310,7 @@
     <ClInclude Include="..\..\src\io\uid-checker.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\view\view-mainwindow.h">
+    <ClInclude Include="..\..\src\view\display-main-window.h">
       <Filter>view</Filter>
     </ClInclude>
   </ItemGroup>

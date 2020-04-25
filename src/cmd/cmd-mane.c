@@ -28,7 +28,7 @@
 #include "player-effects.h"
 #include "cmd-basic.h"
 #include "targeting.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
 static int damage;
 

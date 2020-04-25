@@ -10,7 +10,7 @@
 #include "player-class.h"
 #include "player-effects.h"
 #include "targeting.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
 /*!
 * @brief 歌の開始を処理する / Start singing if the player is a Bard

@@ -16,7 +16,7 @@
 #include "cmd-basic.h"
 #include "floor.h"
 #include "object/object-kind.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
 
 /*!

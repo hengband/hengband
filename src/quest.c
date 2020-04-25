@@ -19,7 +19,7 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "english.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
 quest_type *quest; /*!< Quest info */
 QUEST_IDX max_q_idx; /*!< Maximum number of quests */

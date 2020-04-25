@@ -19,7 +19,7 @@
 #include "monster-status.h"
 #include "cmd-pet.h"
 #include "cmd-basic.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "targeting.h"
 #include "world.h"
 

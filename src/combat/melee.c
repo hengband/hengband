@@ -42,7 +42,7 @@
 #include "player/mimic-info-table.h"
 #include "player-class.h"
 #include "player-personality.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "world.h"
 #include "spells-floor.h"
 

@@ -25,7 +25,7 @@
 #include "player-race.h"
 #include "monster-spell.h"
 #include "world.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "quest.h"
 #include "report.h"
 #include "wild.h"

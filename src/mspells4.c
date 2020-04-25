@@ -25,7 +25,7 @@
 #include "melee.h"
 #include "player-effects.h"
 #include "world.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
  /*!
  * @brief モンスター2体がプレイヤーの近くに居るかの判定 /

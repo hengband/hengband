@@ -53,7 +53,7 @@
 #include "market/building.h"
 #include "object/object-kind.h"
 #include "targeting.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "world.h"
 
 #define NUM_O_SET 8

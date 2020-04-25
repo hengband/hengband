@@ -30,7 +30,7 @@
 #include "files.h"
 #include "grid.h"
 #include "monster.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "player-class.h"
 #include "player-personality.h"
 #include "world.h"

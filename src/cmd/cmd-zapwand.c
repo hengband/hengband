@@ -14,7 +14,7 @@
 #include "cmd-basic.h"
 #include "floor.h"
 #include "targeting.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
 /*!
 * @brief 魔法棒の効果を発動する

@@ -98,7 +98,7 @@
 #include "player-skill.h"
 #include "player-inventory.h"
 
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "dungeon-file.h"
 #include "io/uid-checker.h"
 #include "player/process-death.h"

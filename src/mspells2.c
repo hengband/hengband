@@ -28,7 +28,7 @@
 #include "spells.h"
 #include "dungeon.h"
 #include "world.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
  /*!
   * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /

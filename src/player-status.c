@@ -41,7 +41,7 @@
 #include "cmd/cmd-dump.h"
 #include "melee.h"
 #include "world.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "files.h"
 #include "cmd-magiceat.h"
 

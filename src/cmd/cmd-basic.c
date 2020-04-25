@@ -47,7 +47,7 @@
 #include "dungeon-file.h"
 #include "files.h"
 
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "targeting.h"
 #include "world.h"
 

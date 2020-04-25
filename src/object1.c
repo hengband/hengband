@@ -31,7 +31,7 @@
 #include "gameterm.h"
 #include "cmd-smith.h"
 #include "snipe.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
 #if defined(MACH_O_CARBON)
 #ifdef verify

@@ -3,7 +3,7 @@
 #include "cmd/cmd-draw.h"
 #include "files.h"
 #include "gameterm.h"
-#include "view-mainwindow.h" // 暫定。後で消す.
+#include "view/display-main-window.h" // 暫定。後で消す.
 #include "player-effects.h"
 #include "view/display-player.h" // 暫定。後で消す.
 #include "player/process-name.h"

@@ -23,7 +23,7 @@
 #include "files.h"
 #include "player-effects.h"
 #include "player-personality.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "world.h"
 #include "report.h"
 #include "melee.h"

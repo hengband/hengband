@@ -18,7 +18,7 @@
 #include "spells.h"
 #include "grid.h"
 #include "targeting.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "spells-floor.h"
 #include "world.h"
 

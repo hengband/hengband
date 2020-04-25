@@ -54,7 +54,7 @@
 #include "save.h"
 #include "report.h"
 
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
  /*!
   * @brief 修行僧の構え能力テーブル

@@ -57,7 +57,7 @@
 #include "player-inventory.h"
 #include "scores.h"
 #include "shoot.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "monsterrace.h"
 #include "autopick/autopick.h"
 

@@ -52,7 +52,7 @@
 #include "gameterm.h"
 #include "grid.h"
 #include "feature.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "dungeon.h"
 
 #include "realm.h"

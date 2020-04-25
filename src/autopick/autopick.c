@@ -50,7 +50,7 @@
 #include "world.h"
 #include "monster.h"
 #include "monsterrace.h"
-#include "view-mainwindow.h" // 暫定。後で消す
+#include "view/display-main-window.h" // 暫定。後で消す
 
 /*
  * Automatically destroy an item if it is to be destroyed

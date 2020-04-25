@@ -32,7 +32,7 @@
 #include "floor-town.h"
 #include "realm.h"
 
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
 #define MAX_FEAT_IN_TERRAIN 18
 

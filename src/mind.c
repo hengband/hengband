@@ -38,7 +38,7 @@
 #include "monster-status.h"
 #include "player-effects.h"
 #include "player-damage.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 #include "targeting.h"
 #include "realm-song.h"
 

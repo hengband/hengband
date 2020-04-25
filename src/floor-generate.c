@@ -126,7 +126,7 @@
 #include "spells.h"
 
 #include "world.h"
-#include "view-mainwindow.h"
+#include "view/display-main-window.h"
 
 int dun_tun_rnd; 
 int dun_tun_chg;
