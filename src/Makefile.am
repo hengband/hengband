@@ -17,6 +17,7 @@ hengband_SOURCES = \
 	autopick/autopick-methods-table.h \
 	autopick/autopick-util.c autopick/autopick-util.h \
 	autopick/autopick-entry.c autopick/autopick-entry.h \
+	autopick/autopick-initializer.c autopick/autopick-initializer.h \
 	\
 	avatar.h avatar.c birth.c birth.h \
 	\

@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\artifact.c" />
     <ClCompile Include="..\..\src\autopick\autopick-entry.c" />
+    <ClCompile Include="..\..\src\autopick\autopick-initializer.c" />
     <ClCompile Include="..\..\src\autopick\autopick-menu-data-table.c" />
     <ClCompile Include="..\..\src\autopick\autopick-util.c" />
     <ClCompile Include="..\..\src\autopick\autopick.c" />
@@ -295,6 +296,7 @@
     <ClInclude Include="..\..\src\autopick\autopick-editor-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-entry.h" />
     <ClInclude Include="..\..\src\autopick\autopick-flags-table.h" />
+    <ClInclude Include="..\..\src\autopick\autopick-initializer.h" />
     <ClInclude Include="..\..\src\autopick\autopick-key-flag-process.h" />
     <ClInclude Include="..\..\src\autopick\autopick-keys-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-menu-data-table.h" />
