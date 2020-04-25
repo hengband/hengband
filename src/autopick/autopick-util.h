@@ -87,5 +87,6 @@ typedef struct {
 extern int max_autopick;
 extern int max_max_autopick;
 extern autopick_type *autopick_list;
+extern object_type autopick_last_destroyed_object;
 
 void autopick_free_entry(autopick_type *entry);

@@ -655,6 +655,9 @@
     <ClCompile Include="..\..\src\view\display-main-window.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\autopick\autopick-destroyer.c">
+      <Filter>autopick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1312,6 +1315,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-main-window.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\autopick\autopick-destroyer.h">
+      <Filter>autopick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,6 +20,7 @@ hengband_SOURCES = \
 	autopick/autopick-initializer.c autopick/autopick-initializer.h \
 	autopick/autopick-matcher.c autopick/autopick-matcher.h \
 	autopick-describer.c autopick-describer.h \
+	autopick-destroyer.c autopick-destroyer.h \
 	\
 	avatar.h avatar.c birth.c birth.h \
 	\
