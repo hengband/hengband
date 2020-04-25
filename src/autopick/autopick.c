@@ -19,6 +19,7 @@
 #include "autopick/autopick-flags-table.h"
 #include "autopick/autopick-key-flag-process.h"
 #include "autopick/autopick-menu-data-table.h"
+#include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-keys-table.h"
 #include "gameterm.h"
 #include "autopick/autopick.h"

@@ -294,6 +294,7 @@
     <ClInclude Include="..\..\src\autopick\autopick-key-flag-process.h" />
     <ClInclude Include="..\..\src\autopick\autopick-keys-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-menu-data-table.h" />
+    <ClInclude Include="..\..\src\autopick\autopick-methods-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-util.h" />
     <ClInclude Include="..\..\src\autopick\autopick.h" />
     <ClInclude Include="..\..\src\avatar.h" />
