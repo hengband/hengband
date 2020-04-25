@@ -242,34 +242,27 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
 {
 	/* Assume that object name is to be added */
 	bool name = TRUE;
-
-#ifdef JP
-	/* エゴ銘が邪魔かもしれないので、デフォルトで「^」は付けない */
-	bool bol_mark = FALSE;
-#else
-	/* We can always use the ^ mark in English */
-	bool bol_mark = TRUE;
-#endif
-
 	GAME_TEXT name_str[MAX_NLEN];
-
 	name_str[0] = '\0';
 	entry->insc = string_make(quark_str(o_ptr->inscription));
 	entry->action = DO_AUTOPICK | DO_DISPLAY;
 	entry->flag[0] = entry->flag[1] = 0L;
 	entry->dice = 0;
 
+	// エゴ銘が邪魔かもしれないので、デフォルトで「^」は付けない.
+	// We can always use the ^ mark in English.
+	bool is_hat_added = _(FALSE, TRUE);
 	if (!object_is_aware(o_ptr))
 	{
 		ADD_FLG(FLG_UNAWARE);
-		bol_mark = TRUE;
+		is_hat_added = TRUE;
 	}
 	else if (!object_is_known(o_ptr))
 	{
 		if (!(o_ptr->ident & IDENT_SENSE))
 		{
 			ADD_FLG(FLG_UNIDENTIFIED);
-			bol_mark = TRUE;
+			is_hat_added = TRUE;
 		}
 		else
 		{
@@ -278,14 +271,14 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
 			case FEEL_AVERAGE:
 			case FEEL_GOOD:
 				ADD_FLG(FLG_NAMELESS);
-				bol_mark = TRUE;
+				is_hat_added = TRUE;
 				break;
 
 			case FEEL_BROKEN:
 			case FEEL_CURSED:
 				ADD_FLG(FLG_NAMELESS);
 				ADD_FLG(FLG_WORTHLESS);
-				bol_mark = TRUE;
+				is_hat_added = TRUE;
 				break;
 
 			case FEEL_TERRIBLE:
@@ -337,9 +330,8 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
 			if (object_is_equipment(o_ptr))
 				ADD_FLG(FLG_NAMELESS);
 
-			bol_mark = TRUE;
+			is_hat_added = TRUE;
 		}
-
 	}
 
 	if (object_is_melee_weapon(o_ptr))
@@ -450,7 +442,7 @@ void autopick_entry_from_object(player_type *player_ptr, autopick_type *entry, o
 	 * If necessary, add a '^' which indicates the
 	 * beginning of line.
 	 */
-	sprintf(name_str, "%s%s", bol_mark ? "^" : "", o_name);
+	sprintf(name_str, "%s%s", is_hat_added ? "^" : "", o_name);
 	str_tolower(name_str);
 	entry->name = string_make(name_str);
 }
