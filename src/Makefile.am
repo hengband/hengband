@@ -66,7 +66,7 @@ hengband_SOURCES = \
 	io/exit-panic.c io/exit-panic.h \
 	io/write-diary.c io/write-diary.h \
 	io/mutations-dump.c io/mutations-dump.h \
-	signal-handlers.c signal-handlers.h uid-checker.c uid-checker.h \
+	io/signal-handlers.c io/signal-handlers.h uid-checker.c uid-checker.h \
 	character-dump.c character-dump.h core.c core.h files.c files.h \
 	core/show-file.c core/show-file.h \
 	\

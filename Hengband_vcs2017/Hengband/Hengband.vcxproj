@@ -368,7 +368,7 @@
     <ClCompile Include="..\..\src\save.c" />
     <ClCompile Include="..\..\src\scores.c" />
     <ClCompile Include="..\..\src\selfinfo.c" />
-    <ClCompile Include="..\..\src\signal-handlers.c" />
+    <ClCompile Include="..\..\src\io\signal-handlers.c" />
     <ClCompile Include="..\..\src\snipe.c" />
     <ClCompile Include="..\..\src\sort.c" />
     <ClCompile Include="..\..\src\spells-diceroll.c" />
@@ -480,7 +480,7 @@
     <ClInclude Include="..\..\src\player\race-resistances.h" />
     <ClInclude Include="..\..\src\player\temporary-resistances.h" />
     <ClInclude Include="..\..\src\room\pit-nest-kinds-table.h" />
-    <ClInclude Include="..\..\src\signal-handlers.h" />
+    <ClInclude Include="..\..\src\io\signal-handlers.h" />
     <ClInclude Include="..\..\src\uid-checker.h" />
     <ClInclude Include="..\..\src\view\display-characteristic.h" />
     <ClInclude Include="..\..\src\view\display-fruit.h" />
