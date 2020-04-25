@@ -391,9 +391,6 @@
     <ClCompile Include="..\..\src\view\display-util.c">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\uid-checker.c">
-      <Filter>io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\character-dump.c">
       <Filter>io</Filter>
     </ClCompile>
@@ -653,6 +650,9 @@
       <Filter>room</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\io\signal-handlers.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\uid-checker.c">
       <Filter>io</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1031,9 +1031,6 @@
     <ClInclude Include="..\..\src\view\display-util.h">
       <Filter>view</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\uid-checker.h">
-      <Filter>io</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\character-dump.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -1311,6 +1308,9 @@
       <Filter>room</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\signal-handlers.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\uid-checker.h">
       <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
