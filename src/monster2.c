@@ -1008,7 +1008,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level, BIT_FLAGS option)
 
 	/* +1 per day after the base date */
 	/* base dates : day5(1F), day18(10F,0F), day34(30F), day53(60F), day69(90F) */
-	over_days = MAX(0, dungeon_turn / (TURNS_PER_TICK * 10000L) - delay / 20);
+	over_days = MAX(0, current_world_ptr->dungeon_turn / (TURNS_PER_TICK * 10000L) - delay / 20);
 
 	/* starts from 1/25, reaches 1/3 after 44days from a level dependent base date */
 	pls_kakuritu = MAX(NASTY_MON_MAX, NASTY_MON_BASE - over_days / 2);
@@ -1043,16 +1043,14 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level, BIT_FLAGS option)
 		}
 	}
 
-	long total = 0L;
+	total = 0L;
 
 	/* Process probabilities */
-	alloc_entry *table = alloc_race_table;
-	for (int i = 0; i < alloc_race_size; i++)
+	for (i = 0; i < alloc_race_size; i++)
 	{
 		if (table[i].level > level) break;
 		table[i].prob3 = 0;
-		MONRACE_IDX r_idx = table[i].index;
-		monster_race *r_ptr;
+		r_idx = table[i].index;
 		r_ptr = &r_info[r_idx];
 		if (!(option & GMN_ARENA) && !chameleon_change_m_idx)
 		{
@@ -1082,21 +1080,21 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level, BIT_FLAGS option)
 
 	if (total <= 0) return 0;
 
-	long value = randint0(total);
+	value = randint0(total);
 	int found_count = 0;
-	for (int i = 0; i < alloc_race_size; i++)
+	for (i = 0; i < alloc_race_size; i++)
 	{
 		if (value < table[i].prob3) break;
 		value = value - table[i].prob3;
 		found_count++;
 	}
 
-	int p = randint0(100);
+	p = randint0(100);
 
 	/* Try for a "harder" monster once (50%) or twice (10%) */
 	if (p < 60)
 	{
-		int j = found_count;
+		j = found_count;
 		value = randint0(total);
 		for (found_count = 0; found_count < alloc_race_size; found_count++)
 		{
@@ -1112,7 +1110,7 @@ MONRACE_IDX get_mon_num(player_type *player_ptr, DEPTH level, BIT_FLAGS option)
 	/* Try for a "harder" monster twice (10%) */
 	if (p < 10)
 	{
-		int j = found_count;
+		j = found_count;
 		value = randint0(total);
 		for (found_count = 0; found_count < alloc_race_size; found_count++)
 		{
