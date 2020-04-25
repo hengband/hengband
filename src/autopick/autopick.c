@@ -169,7 +169,6 @@ void process_autopick_file_command(char *buf)
 	}
 
 	add_autopick_list(entry);
-	return;
 }
 
 

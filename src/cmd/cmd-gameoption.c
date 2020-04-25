@@ -666,51 +666,32 @@ const option_type autosave_info[2] =
 
 #define OPT_NUM 15
 
-static struct opts
+typedef struct
 {
 	char key;
 	concptr name;
 	int row;
-}
-option_fields[OPT_NUM] =
+} opts;
+
+opts option_fields[OPT_NUM] =
 {
-#ifdef JP
-	{ '1', "    キー入力     オプション", 3 },
-	{ '2', "   マップ画面    オプション", 4 },
-	{ '3', "  テキスト表示   オプション", 5 },
-	{ '4', "  ゲームプレイ   オプション", 6 },
-	{ '5', "  行動中止関係   オプション", 7 },
-	{ '6', "  簡易自動破壊   オプション", 8 },
-	{ 'r', "   プレイ記録    オプション", 9 },
+	{ '1', _("    キー入力     オプション", "Input Options"), 3 },
+	{ '2', _("   マップ画面    オプション", "Map Screen Options"), 4 },
+	{ '3', _("  テキスト表示   オプション", "Text Display Options"), 5 },
+	{ '4', _("  ゲームプレイ   オプション", "Game-Play Options"), 6 },
+	{ '5', _("  行動中止関係   オプション", "Disturbance Options"), 7 },
+	{ '6', _("  簡易自動破壊   オプション", "Easy Auto-Destroyer Options"), 8 },
+	{ 'r', _("   プレイ記録    オプション", "Play record Options"), 9 },
 
-	{ 'p', "自動拾いエディタ", 11 },
-	{ 'd', " 基本ウェイト量 ", 12 },
-	{ 'h', "低ヒットポイント", 13 },
-	{ 'm', "  低魔力色閾値  ", 14 },
-	{ 'a', "   自動セーブ    オプション", 15 },
-	{ 'w', "ウインドウフラグ", 16 },
+	{ 'p', _("自動拾いエディタ", "Auto-picker/destroyer editor"), 11 },
+	{ 'd', _(" 基本ウェイト量 ", "Base Delay Factor"), 12 },
+	{ 'h', _("低ヒットポイント", "Hitpoint Warning"), 13 },
+	{ 'm', _("  低魔力色閾値  ", "Mana Color Threshold"), 14 },
+	{ 'a', _("   自動セーブ    オプション", "Autosave Options"), 15 },
+	{ 'w', _("ウインドウフラグ", "Window Flags"), 16 },
 
-	{ 'b', "      初期       オプション (参照のみ)", 18 },
-	{ 'c', "      詐欺       オプション", 19 },
-#else
-	{ '1', "Input Options", 3 },
-	{ '2', "Map Screen Options", 4 },
-	{ '3', "Text Display Options", 5 },
-	{ '4', "Game-Play Options", 6 },
-	{ '5', "Disturbance Options", 7 },
-	{ '6', "Easy Auto-Destroyer Options", 8 },
-	{ 'r', "Play record Options", 9 },
-
-	{ 'p', "Auto-picker/destroyer editor", 11 },
-	{ 'd', "Base Delay Factor", 12 },
-	{ 'h', "Hitpoint Warning", 13 },
-	{ 'm', "Mana Color Threshold", 14 },
-	{ 'a', "Autosave Options", 15 },
-	{ 'w', "Window Flags", 16 },
-
-	{ 'b', "Birth Options (Browse Only)", 18 },
-	{ 'c', "Cheat Options", 19 },
-#endif
+	{ 'b', _("      初期       オプション (参照のみ)", "Birth Options (Browse Only)"), 18 },
+	{ 'c', _("      詐欺       オプション", "Cheat Options"), 19 },
 };
 
 /*!
@@ -1608,4 +1589,3 @@ void do_cmd_options_aux(int page, concptr info)
 		}
 	}
 }
-
