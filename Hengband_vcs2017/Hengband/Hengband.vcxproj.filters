@@ -676,6 +676,9 @@
     <ClCompile Include="..\..\src\autopick\autopick-searcher.c">
       <Filter>autopick</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\autopick\autopick-inserter.c">
+      <Filter>autopick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1353,6 +1356,9 @@
       <Filter>autopick</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\autopick\autopick-searcher.h">
+      <Filter>autopick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\autopick\autopick-inserter.h">
       <Filter>autopick</Filter>
     </ClInclude>
   </ItemGroup>
