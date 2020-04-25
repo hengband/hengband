@@ -26,3 +26,18 @@ void autopick_free_entry(autopick_type *entry)
 	entry->name = NULL;
 	entry->insc = NULL;
 }
+
+
+/*
+ * Free memory of lines_list.
+ */
+void free_text_lines(concptr *lines_list)
+{
+	for (int lines = 0; lines_list[lines]; lines++)
+	{
+		string_free(lines_list[lines]);
+	}
+
+	/* free list of pointers */
+	C_KILL(lines_list, MAX_LINES, concptr);
+}

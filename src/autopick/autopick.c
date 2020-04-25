@@ -666,21 +666,6 @@ static bool write_text_lines(concptr filename, concptr *lines_list)
 
 
 /*
- * Free memory of lines_list.
- */
-static void free_text_lines(concptr *lines_list)
-{
-	for (int lines = 0; lines_list[lines]; lines++)
-	{
-		string_free(lines_list[lines]);
-	}
-
-	/* free list of pointers */
-	C_KILL(lines_list, MAX_LINES, concptr);
-}
-
-
-/*
  * Delete or insert string
  */
 static void toggle_keyword(text_body_type *tb, BIT_FLAGS flg)

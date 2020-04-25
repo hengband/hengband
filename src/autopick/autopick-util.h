@@ -1,14 +1,12 @@
 ﻿#pragma once
 
 #define MAX_LINELEN 1024
-
 #define MAX_AUTOPICK_DEFAULT 200
+#define MAX_YANK MAX_LINELEN
+#define MAX_LINES 3000
 
 #define PT_DEFAULT 0
 #define PT_WITH_PNAME 1
-
-#define MAX_YANK MAX_LINELEN
-#define MAX_LINES 3000
 
 #define MARK_MARK     0x01
 #define MARK_BY_SHIFT 0x02
@@ -90,3 +88,4 @@ extern autopick_type *autopick_list;
 extern object_type autopick_last_destroyed_object;
 
 void autopick_free_entry(autopick_type *entry);
+void free_text_lines(concptr *lines_list);
