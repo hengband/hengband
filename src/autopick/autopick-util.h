@@ -80,3 +80,10 @@ typedef struct {
 	int key;
 	int com_id;
 } command_menu_type;
+
+/*
+ *  List for auto-picker/destroyer entries
+ */
+extern int max_autopick;
+extern int max_max_autopick;
+extern autopick_type *autopick_list;

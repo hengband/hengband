@@ -2,13 +2,6 @@
 
 #include "autopick/autopick-util.h"
 
-/*
- *  List for auto-picker/destroyer entries
- */
-extern int max_autopick;
-extern int max_max_autopick;
-extern autopick_type *autopick_list;
-
 extern void autopick_load_pref(player_type *player_ptr, bool disp_mes);
 extern void process_autopick_file_command(char *buf);
 extern concptr autopick_line_from_entry(autopick_type *entry);
