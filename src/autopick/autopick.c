@@ -1349,7 +1349,6 @@ static void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 
 	for (i = 0; i < tb->hgt; i++)
 	{
-		int j;
 		int leftcol = 0;
 		concptr msg;
 		byte color;
@@ -1361,7 +1360,7 @@ static void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 		msg = tb->lines_list[y];
 		if (!msg) break;
 
-		for (j = 0; *msg; msg++, j++)
+		for (int j = 0; *msg; msg++, j++)
 		{
 			if (j == tb->left) break;
 #ifdef JP
@@ -2443,7 +2442,6 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 {
 	static int cx_save = 0;
 	static int cy_save = 0;
-	text_body_type text_body, *tb = &text_body;
 	autopick_type an_entry, *entry = &an_entry;
 	char buf[MAX_LINELEN];
 	int i;
@@ -2451,6 +2449,8 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	static s32b old_autosave_turn = 0L;
 	byte quit = 0;
 
+	text_body_type text_body;
+	text_body_type *tb = &text_body;
 	tb->changed = FALSE;
 	tb->cx = cx_save;
 	tb->cy = cy_save;
