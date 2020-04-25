@@ -652,6 +652,9 @@
     <ClCompile Include="..\..\src\autopick\autopick-describer.c">
       <Filter>autopick</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\room\pit-nest-kinds-table.c">
+      <Filter>rooms</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1307,6 +1310,9 @@
     <ClInclude Include="..\..\src\autopick\autopick-describer.h">
       <Filter>autopick</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\room\pit-nest-kinds-table.h">
+      <Filter>rooms</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1360,6 +1366,9 @@
     </Filter>
     <Filter Include="autopick">
       <UniqueIdentifier>{7f5cb078-a335-428e-a2db-27ee6263155b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="rooms">
+      <UniqueIdentifier>{318835ed-a803-4459-921e-f6afc5411baa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

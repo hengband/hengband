@@ -135,11 +135,12 @@ hengband_SOURCES = \
 	realm-hex.c realm-hex.h realm-hissatsu.c realm-hissatsu.h \
 	realm-life.c realm-life.h realm-nature.c realm-nature.h realm-song.c \
 	realm-song.h realm-sorcery.c realm-sorcery.h realm-trump.c realm-trump.h \
-	report.c report.h rooms.c rooms-city.c rooms-city.h \
-	rooms-fractal.c rooms-fractal.h \
+	report.c report.h \
+	rooms.c rooms-city.c rooms-city.h rooms-fractal.c rooms-fractal.h \
 	rooms.h rooms-normal.c rooms-normal.h rooms-pitnest.c rooms-pitnest.h \
 	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h \
 	rooms-vault.c rooms-vault.h \
+	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
 	save.c save.h scores.c scores.h selfinfo.c selfinfo.h \
 	snipe.c snipe.h \
 	\
@@ -208,7 +209,7 @@ LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Icmd -Icombat -Icore -Iio -Iknowledge -Imarket -Imonster \
-	-Iobject -Iplayer -Iview
+	-Iobject -Iplayer -Iroom -Iview
 
 install-exec-hook:
 if SET_GID

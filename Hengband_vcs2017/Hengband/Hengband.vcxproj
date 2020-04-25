@@ -363,6 +363,7 @@
     <ClCompile Include="..\..\src\rooms-trap.c" />
     <ClCompile Include="..\..\src\rooms-vault.c" />
     <ClCompile Include="..\..\src\rooms.c" />
+    <ClCompile Include="..\..\src\room\pit-nest-kinds-table.c" />
     <ClCompile Include="..\..\src\rumor.c" />
     <ClCompile Include="..\..\src\save.c" />
     <ClCompile Include="..\..\src\scores.c" />
@@ -478,6 +479,7 @@
     <ClInclude Include="..\..\src\player\race-info-table.h" />
     <ClInclude Include="..\..\src\player\race-resistances.h" />
     <ClInclude Include="..\..\src\player\temporary-resistances.h" />
+    <ClInclude Include="..\..\src\room\pit-nest-kinds-table.h" />
     <ClInclude Include="..\..\src\signal-handlers.h" />
     <ClInclude Include="..\..\src\uid-checker.h" />
     <ClInclude Include="..\..\src\view\display-characteristic.h" />

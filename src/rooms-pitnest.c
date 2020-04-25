@@ -11,48 +11,7 @@
 #include "floor.h"
 #include "feature.h"
 #include "dungeon.h"
-
-
-
-#define NUM_NEST_MON_TYPE 64 /*!<nestの種別数 */
-
-/*! pit/nest型情報のtypedef */
-typedef struct vault_aux_type vault_aux_type;
-
-/*! pit/nest型情報の構造体定義 */
-struct vault_aux_type
-{
-	concptr name;
-	bool(*hook_func)(MONRACE_IDX r_idx);
-	void(*prep_func)(player_type *player_ptr);
-	DEPTH level;
-	int chance;
-};
-
-/*! nestのID定義 /  Nest types code */
-#define NEST_TYPE_CLONE        0
-#define NEST_TYPE_JELLY        1
-#define NEST_TYPE_SYMBOL_GOOD  2
-#define NEST_TYPE_SYMBOL_EVIL  3
-#define NEST_TYPE_MIMIC        4
-#define NEST_TYPE_LOVECRAFTIAN 5
-#define NEST_TYPE_KENNEL       6
-#define NEST_TYPE_ANIMAL       7
-#define NEST_TYPE_CHAPEL       8
-#define NEST_TYPE_UNDEAD       9
-
-/*! pitのID定義 / Pit types code */
-#define PIT_TYPE_ORC           0
-#define PIT_TYPE_TROLL         1
-#define PIT_TYPE_GIANT         2
-#define PIT_TYPE_LOVECRAFTIAN  3
-#define PIT_TYPE_SYMBOL_GOOD   4
-#define PIT_TYPE_SYMBOL_EVIL   5
-#define PIT_TYPE_CHAPEL        6
-#define PIT_TYPE_DRAGON        7
-#define PIT_TYPE_DEMON         8
-#define PIT_TYPE_DARK_ELF      9
-
+#include "room/pit-nest-kinds-table.h"
 
 /*!
 * @brief ダンジョン毎に指定されたピット配列を基準にランダムなpit/nestタイプを決める
@@ -106,6 +65,7 @@ static int pick_vault_type(floor_type *floor_ptr, vault_aux_type *l_ptr, BIT_FLA
 
 	return n_ptr->name ? count : -1;
 }
+
 
 /*!
 * @brief デバッグ時に生成されたpit/nestの型を出力する処理
@@ -162,6 +122,7 @@ static concptr pit_subtype_string(int type, bool nest)
 	return inner_buf;
 }
 
+
 /*
 *! @brief nestのモンスターリストをソートするための関数 /
 *  Comp function for sorting nest monster information
@@ -203,6 +164,7 @@ static bool ang_sort_comp_nest_mon_info(vptr u, vptr v, int a, int b)
 	return w1 <= w2;
 }
 
+
 /*!
 * @brief nestのモンスターリストをスワップするための関数 /
 * Swap function for sorting nest monster information
@@ -225,42 +187,6 @@ static void ang_sort_swap_nest_mon_info(vptr u, vptr v, int a, int b)
 	nest_mon_info[a] = nest_mon_info[b];
 	nest_mon_info[b] = holder;
 }
-
-
-
-/*!nest情報テーブル*/
-static vault_aux_type nest_types[] =
-{
-	{ _("クローン", "clone"),      vault_aux_clone,    vault_prep_clone,   5, 3 },
-	{ _("ゼリー", "jelly"),        vault_aux_jelly,    NULL,               5, 6 },
-	{ _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 25, 2 },
-	{ _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 25, 2 },
-	{ _("ミミック", "mimic"),      vault_aux_mimic,    NULL,              30, 4 },
-	{ _("狂気", "lovecraftian"),   vault_aux_cthulhu,  NULL,              70, 2 },
-	{ _("犬小屋", "kennel"),       vault_aux_kennel,   NULL,              45, 4 },
-	{ _("動物園", "animal"),       vault_aux_animal,   NULL,              35, 5 },
-	{ _("教会", "chapel"),         vault_aux_chapel_g, NULL,              75, 4 },
-	{ _("アンデッド", "undead"),   vault_aux_undead,   NULL,              75, 5 },
-	{ NULL,           NULL,               NULL,               0, 0 },
-};
-
-/*!pit情報テーブル*/
-static vault_aux_type pit_types[] =
-{
-	{ _("オーク", "orc"),            vault_aux_orc,      NULL,               5, 6 },
-	{ _("トロル", "troll"),          vault_aux_troll,    NULL,              20, 6 },
-	{ _("巨人", "giant"),    vault_aux_giant,    NULL,              50, 6 },
-	{ _("狂気", "lovecraftian"),     vault_aux_cthulhu,  NULL,              80, 2 },
-	{ _("シンボル(善)", "symbol good"), vault_aux_symbol_g, vault_prep_symbol, 70, 1 },
-	{ _("シンボル(悪)", "symbol evil"), vault_aux_symbol_e, vault_prep_symbol, 70, 1 },
-	{ _("教会", "chapel"),           vault_aux_chapel_g, NULL,              65, 2 },
-	{ _("ドラゴン", "dragon"),       vault_aux_dragon,   vault_prep_dragon, 70, 6 },
-	{ _("デーモン", "demon"),        vault_aux_demon,    NULL,              80, 6 },
-	{ _("ダークエルフ", "dark elf"), vault_aux_dark_elf, NULL,              45, 4 },
-	{ NULL,           NULL,               NULL,               0, 0 },
-};
-
-
 
 
 /*!
@@ -708,7 +634,6 @@ bool build_type6(player_type *player_ptr)
 }
 
 
-
 /*
 * todo vault_monster_okay() をmonsterrace-hook以外から呼んでいるのはここだけなので、何とかしたい
 * Helper function for "trapped monster pit"
@@ -773,35 +698,6 @@ static bool vault_aux_trapped_pit(MONRACE_IDX r_idx)
 */
 bool build_type13(player_type *player_ptr)
 {
-	static int placing[][3] = {
-		{ -2, -9, 0 },{ -2, -8, 0 },{ -3, -7, 0 },{ -3, -6, 0 },
-		{ +2, -9, 0 },{ +2, -8, 0 },{ +3, -7, 0 },{ +3, -6, 0 },
-		{ -2, +9, 0 },{ -2, +8, 0 },{ -3, +7, 0 },{ -3, +6, 0 },
-		{ +2, +9, 0 },{ +2, +8, 0 },{ +3, +7, 0 },{ +3, +6, 0 },
-		{ -2, -7, 1 },{ -3, -5, 1 },{ -3, -4, 1 },
-		{ +2, -7, 1 },{ +3, -5, 1 },{ +3, -4, 1 },
-		{ -2, +7, 1 },{ -3, +5, 1 },{ -3, +4, 1 },
-		{ +2, +7, 1 },{ +3, +5, 1 },{ +3, +4, 1 },
-		{ -2, -6, 2 },{ -2, -5, 2 },{ -3, -3, 2 },
-		{ +2, -6, 2 },{ +2, -5, 2 },{ +3, -3, 2 },
-		{ -2, +6, 2 },{ -2, +5, 2 },{ -3, +3, 2 },
-		{ +2, +6, 2 },{ +2, +5, 2 },{ +3, +3, 2 },
-		{ -2, -4, 3 },{ -3, -2, 3 },
-		{ +2, -4, 3 },{ +3, -2, 3 },
-		{ -2, +4, 3 },{ -3, +2, 3 },
-		{ +2, +4, 3 },{ +3, +2, 3 },
-		{ -2, -3, 4 },{ -3, -1, 4 },
-		{ +2, -3, 4 },{ +3, -1, 4 },
-		{ -2, +3, 4 },{ -3, +1, 4 },
-		{ +2, +3, 4 },{ +3, +1, 4 },
-		{ -2, -2, 5 },{ -3, 0, 5 },{ -2, +2, 5 },
-		{ +2, -2, 5 },{ +3, 0, 5 },{ +2, +2, 5 },
-		{ -2, -1, 6 },{ -2, +1, 6 },
-		{ +2, -1, 6 },{ +2, +1, 6 },
-		{ -2, 0, 7 },{ +2, 0, 7 },
-		{ 0, 0, -1 }
-	};
-
 	POSITION y, x, y1, x1, y2, x2, xval, yval;
 	int i, j;
 
@@ -1008,4 +904,3 @@ bool build_type13(player_type *player_ptr)
 
 	return TRUE;
 }
-
