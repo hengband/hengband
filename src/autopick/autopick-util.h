@@ -89,3 +89,4 @@ extern object_type autopick_last_destroyed_object;
 
 void autopick_free_entry(autopick_type *entry);
 void free_text_lines(concptr *lines_list);
+int get_com_id(char key);

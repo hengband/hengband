@@ -1096,23 +1096,6 @@ static void search_for_string(text_body_type *tb, concptr search_str, bool forwa
 
 
 /*
- * Find a command by 'key'.
- */
-static int get_com_id(char key)
-{
-	for (int i = 0; menu_data[i].name; i++)
-	{
-		if (menu_data[i].key == key)
-		{
-			return menu_data[i].com_id;
-		}
-	}
-
-	return 0;
-}
-
-
-/*
  * Display the menu, and get a command
  */
 static int do_command_menu(int level, int start)

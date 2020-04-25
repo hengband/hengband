@@ -1,5 +1,6 @@
 ﻿#include "angband.h"
 #include "autopick/autopick-util.h"
+#include "autopick/autopick-menu-data-table.h"
 
 /*
  * 自動拾い/破壊設定のリストに関する変数 / List for auto-picker/destroyer entries
@@ -40,4 +41,21 @@ void free_text_lines(concptr *lines_list)
 
 	/* free list of pointers */
 	C_KILL(lines_list, MAX_LINES, concptr);
+}
+
+
+/*
+ * Find a command by 'key'.
+ */
+int get_com_id(char key)
+{
+	for (int i = 0; menu_data[i].name; i++)
+	{
+		if (menu_data[i].key == key)
+		{
+			return menu_data[i].com_id;
+		}
+	}
+
+	return 0;
 }
