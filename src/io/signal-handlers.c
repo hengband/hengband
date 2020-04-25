@@ -5,7 +5,7 @@
  * @author Hourier
  */
 
-#include "signal-handlers.h"
+#include "io/signal-handlers.h"
 #include "core.h"
 #include "save.h"
 #include "world.h"

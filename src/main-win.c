@@ -90,7 +90,7 @@
 */
 
 #include "angband.h"
-#include "signal-handlers.h"
+#include "io/signal-handlers.h"
 #include "main/sound-definitions-table.h"
 #include "main/music-definitions-table.h"
 #include "util.h"

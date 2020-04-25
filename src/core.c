@@ -11,7 +11,7 @@
  */
 
 #include "angband.h"
-#include "signal-handlers.h"
+#include "io/signal-handlers.h"
 #include "util.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"

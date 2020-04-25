@@ -11,7 +11,7 @@
  */
 
 #include "angband.h"
-#include "signal-handlers.h"
+#include "io/signal-handlers.h"
 #include "gameterm.h"
 #include "util.h"
 #include "core.h"

@@ -8,7 +8,7 @@
 
 #include "angband.h"
 
-#include "signal-handlers.h"
+#include "io/signal-handlers.h"
 #include "files.h"
 #include "util.h"
 #include "gameterm.h"
