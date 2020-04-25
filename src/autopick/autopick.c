@@ -27,6 +27,7 @@
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick-finder.h"
+#include "autopick/autopick-adder.h"
 #include "gameterm.h"
 #include "autopick/autopick.h"
 #include "core.h"

@@ -87,26 +87,6 @@ static concptr *read_text_lines(concptr filename)
 
 
 /*
- * Add one line to autopick_list[]
- */
-void add_autopick_list(autopick_type *entry)
-{
-	if (max_autopick >= max_max_autopick)
-	{
-		int old_max_max_autopick = max_max_autopick;
-		autopick_type *old_autopick_list = autopick_list;
-		max_max_autopick += MAX_AUTOPICK_DEFAULT;
-		C_MAKE(autopick_list, max_max_autopick, autopick_type);
-		(void)C_COPY(autopick_list, old_autopick_list, old_max_max_autopick, autopick_type);
-		C_KILL(old_autopick_list, old_max_max_autopick, autopick_type);
-	}
-
-	autopick_list[max_autopick] = *entry;
-	max_autopick++;
-}
-
-
-/*
  * Copy the default autopick file to the user directory
  */
 static void prepare_default_pickpref(player_type *player_ptr)
