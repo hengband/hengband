@@ -54,37 +54,6 @@
 #include "view/display-main-window.h" // 暫定。後で消す.
 
 /*
- * Load an autopick preference file
- */
-void autopick_load_pref(player_type *player_ptr, bool disp_mes)
-{
-	GAME_TEXT buf[80];
-	init_autopick();
-	my_strcpy(buf, pickpref_filename(player_ptr, PT_WITH_PNAME), sizeof(buf));
-	errr err = process_autopick_file(player_ptr, buf);
-	if (err == 0 && disp_mes)
-	{
-		msg_format(_("%sを読み込みました。", "Loaded '%s'."), buf);
-	}
-
-	if (err < 0)
-	{
-		my_strcpy(buf, pickpref_filename(player_ptr, PT_DEFAULT), sizeof(buf));
-		err = process_autopick_file(player_ptr, buf);
-		if (err == 0 && disp_mes)
-		{
-			msg_format(_("%sを読み込みました。", "Loaded '%s'."), buf);
-		}
-	}
-
-	if (err && disp_mes)
-	{
-		msg_print(_("自動拾い設定ファイルの読み込みに失敗しました。", "Failed to reload autopick preference."));
-	}
-}
-
-
-/*
  *  Process line for auto picker/destroyer.
  */
 void process_autopick_file_command(char *buf)

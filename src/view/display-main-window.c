@@ -3105,7 +3105,7 @@ void map_info(player_type *player_ptr, POSITION y, POSITION x, TERM_COLOR *ap, S
 		{
 			byte act;
 
-			match_autopick = is_autopick(player_ptr, o_ptr);
+			match_autopick = find_autopick_list(player_ptr, o_ptr);
 			if (match_autopick == -1)
 				continue;
 

@@ -106,6 +106,7 @@
 #include "files.h"
 #include "scores.h"
 #include "autopick/autopick.h"
+#include "autopick/autopick-reader-writer.h"
 #include "save.h"
 #include "realm.h"
 #include "realm-song.h"

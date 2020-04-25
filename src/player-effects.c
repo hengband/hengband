@@ -50,7 +50,7 @@
 #include "monster-spell.h"
 #include "world.h"
 #include "object/object-kind.h"
-#include "autopick/autopick.h"
+#include "autopick/autopick-reader-writer.h"
 #include "save.h"
 #include "report.h"
 
