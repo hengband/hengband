@@ -1,27 +1,29 @@
-﻿#include "angband.h"
+﻿/*!
+ * todo 1つ300行近い関数なので後ほど要分割
+ * @brief 自動拾いの記述
+ * @date 2020/04/25
+ * @author Hourier
+ */
+
+#include "angband.h"
 #include "autopick/autopick-util.h"
 #include "autopick/autopick-describer.h"
 #include "autopick/autopick-key-flag-process.h"
 #include "autopick/autopick-flags-table.h"
 #include "autopick/autopick-methods-table.h"
 
-/*
- * Describe which kind of object is Auto-picked/destroyed
- */
-void describe_autopick(char *buff, autopick_type *entry)
+#if JP
+static void describe_autpick_jp(char *buff, autopick_type *entry)
 {
 	concptr str = entry->name;
 	byte act = entry->action;
 	concptr insc = entry->insc;
 	int i;
-
 	bool top = FALSE;
-
-#ifdef JP
-	concptr before_str[100], body_str;
+	concptr before_str[100];
 	int before_n = 0;
 
-	body_str = "アイテム";
+	concptr body_str = "アイテム";
 	if (IS_FLG(FLG_COLLECTING))
 		before_str[before_n++] = "収集中で既に持っているスロットにまとめられる";
 
@@ -272,12 +274,15 @@ void describe_autopick(char *buff, autopick_type *entry)
 	}
 	else
 		strcat(buff, "全体マップには表示しない。");
+}
+#else
 
-#else /* JP */
 
-	concptr before_str[20], after_str[20], which_str[20], whose_str[20], body_str;
+void describe_autopick_en(char *buff, autopick_type *entry)
+{
+	concptr before_str[20], after_str[20], which_str[20], whose_str[20];
 	int before_n = 0, after_n = 0, which_n = 0, whose_n = 0;
-	body_str = "items";
+	concptr body_str = "items";
 	if (IS_FLG(FLG_COLLECTING))
 		which_str[which_n++] = "can be absorbed into an existing inventory list slot";
 
@@ -570,5 +575,18 @@ void describe_autopick(char *buff, autopick_type *entry)
 	}
 	else
 		strcat(buff, " Not displayed in the full map.");
+}
+#endif
+
+
+/*
+ * Describe which kind of object is Auto-picked/destroyed
+ */
+void describe_autopick(char *buff, autopick_type *entry)
+{
+#ifdef JP
+	describe_autpick_jp(buff, entry);
+#else /* JP */
+	describe_autopick_en(buff, entry);
 #endif /* JP */
 }
