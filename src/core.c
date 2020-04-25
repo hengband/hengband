@@ -100,7 +100,7 @@
 
 #include "view-mainwindow.h"
 #include "dungeon-file.h"
-#include "uid-checker.h"
+#include "io/uid-checker.h"
 #include "player/process-death.h"
 #include "io/read-pref-file.h"
 #include "files.h"

@@ -33,7 +33,7 @@
 #include "object-hook.h"
 #include "cmd-pet.h"
 #include "cmd-basic.h"
-#include "uid-checker.h"
+#include "io/uid-checker.h"
 #include "files.h"
 #include "player-effects.h"
 #include "player-class.h"

@@ -13,7 +13,7 @@
  */
 
 #include "angband.h"
-#include "uid-checker.h"
+#include "io/uid-checker.h"
 #include "files.h"
 #include "core.h" // 暫定。後で消す.
 #include "character-dump.h"

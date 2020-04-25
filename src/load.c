@@ -71,7 +71,7 @@
 
 #include "cmd-pet.h"
 #include "dungeon-file.h"
-#include "uid-checker.h"
+#include "io/uid-checker.h"
 #include "files.h"
 #include "player-skill.h"
 #include "player-class.h"
