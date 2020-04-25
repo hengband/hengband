@@ -358,7 +358,7 @@
     <ClCompile Include="..\..\src\rooms-city.c" />
     <ClCompile Include="..\..\src\rooms-fractal.c" />
     <ClCompile Include="..\..\src\rooms-normal.c" />
-    <ClCompile Include="..\..\src\rooms-pitnest.c" />
+    <ClCompile Include="..\..\src\room\rooms-pit-nest.c" />
     <ClCompile Include="..\..\src\rooms-special.c" />
     <ClCompile Include="..\..\src\rooms-trap.c" />
     <ClCompile Include="..\..\src\rooms-vault.c" />
@@ -565,7 +565,7 @@
     <ClInclude Include="..\..\src\rooms-city.h" />
     <ClInclude Include="..\..\src\rooms-fractal.h" />
     <ClInclude Include="..\..\src\rooms-normal.h" />
-    <ClInclude Include="..\..\src\rooms-pitnest.h" />
+    <ClInclude Include="..\..\src\room\rooms-pit-nest.h" />
     <ClInclude Include="..\..\src\rooms-special.h" />
     <ClInclude Include="..\..\src\rooms-trap.h" />
     <ClInclude Include="..\..\src\rooms-vault.h" />

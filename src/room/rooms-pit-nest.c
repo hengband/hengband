@@ -4,7 +4,7 @@
 #include "grid.h"
 #include "floor-generate.h"
 #include "rooms.h"
-#include "rooms-pitnest.h"
+#include "room/rooms-pit-nest.h"
 #include "monster.h"
 #include "monsterrace-hook.h"
 #include "sort.h"

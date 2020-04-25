@@ -57,9 +57,6 @@
     <ClCompile Include="..\..\src\rooms-normal.c">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\rooms-pitnest.c">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\rooms-special.c">
       <Filter>floor</Filter>
     </ClCompile>
@@ -653,7 +650,10 @@
       <Filter>autopick</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\room\pit-nest-kinds-table.c">
-      <Filter>rooms</Filter>
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-pit-nest.c">
+      <Filter>room</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -708,9 +708,6 @@
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\rooms-normal.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\rooms-pitnest.h">
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\rooms-special.h">
@@ -1311,7 +1308,10 @@
       <Filter>autopick</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\room\pit-nest-kinds-table.h">
-      <Filter>rooms</Filter>
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-pit-nest.h">
+      <Filter>room</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1367,7 +1367,7 @@
     <Filter Include="autopick">
       <UniqueIdentifier>{7f5cb078-a335-428e-a2db-27ee6263155b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="rooms">
+    <Filter Include="room">
       <UniqueIdentifier>{318835ed-a803-4459-921e-f6afc5411baa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

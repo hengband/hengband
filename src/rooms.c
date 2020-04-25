@@ -49,7 +49,7 @@
 #include "rooms-city.h"
 #include "rooms-fractal.h"
 #include "rooms-normal.h"
-#include "rooms-pitnest.h"
+#include "room/rooms-pit-nest.h"
 #include "rooms-special.h"
 #include "rooms-trap.h"
 #include "rooms-vault.h"

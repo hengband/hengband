@@ -137,9 +137,10 @@ hengband_SOURCES = \
 	realm-song.h realm-sorcery.c realm-sorcery.h realm-trump.c realm-trump.h \
 	report.c report.h \
 	rooms.c rooms-city.c rooms-city.h rooms-fractal.c rooms-fractal.h \
-	rooms.h rooms-normal.c rooms-normal.h rooms-pitnest.c rooms-pitnest.h \
+	rooms.h rooms-normal.c rooms-normal.h \
 	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h \
 	rooms-vault.c rooms-vault.h \
+	room/rooms-pit-nest.c room/rooms-pit-nest.h \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
 	save.c save.h scores.c scores.h selfinfo.c selfinfo.h \
 	snipe.c snipe.h \
