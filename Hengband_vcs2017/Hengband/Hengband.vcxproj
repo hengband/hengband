@@ -149,6 +149,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\artifact.c" />
+    <ClCompile Include="..\..\src\autopick\autopick-describer.c" />
     <ClCompile Include="..\..\src\autopick\autopick-entry.c" />
     <ClCompile Include="..\..\src\autopick\autopick-initializer.c" />
     <ClCompile Include="..\..\src\autopick\autopick-matcher.c" />
@@ -293,6 +294,7 @@
     <ClCompile Include="..\..\src\realm-sorcery.c" />
     <ClInclude Include="..\..\src\artifact.h" />
     <ClInclude Include="..\..\src\autopick\autopick-commands-table.h" />
+    <ClInclude Include="..\..\src\autopick\autopick-describer.h" />
     <ClInclude Include="..\..\src\autopick\autopick-dirty-flags.h" />
     <ClInclude Include="..\..\src\autopick\autopick-editor-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-entry.h" />
