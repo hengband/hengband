@@ -150,6 +150,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\artifact.c" />
     <ClCompile Include="..\..\src\autopick\autopick-adder.c" />
+    <ClCompile Include="..\..\src\autopick\autopick-command-menu.c" />
     <ClCompile Include="..\..\src\autopick\autopick-describer.c" />
     <ClCompile Include="..\..\src\autopick\autopick-destroyer.c" />
     <ClCompile Include="..\..\src\autopick\autopick-drawer.c" />
@@ -303,6 +304,7 @@
     <ClCompile Include="..\..\src\realm-sorcery.c" />
     <ClInclude Include="..\..\src\artifact.h" />
     <ClInclude Include="..\..\src\autopick\autopick-adder.h" />
+    <ClInclude Include="..\..\src\autopick\autopick-command-menu.h" />
     <ClInclude Include="..\..\src\autopick\autopick-commands-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-describer.h" />
     <ClInclude Include="..\..\src\autopick\autopick-destroyer.h" />
