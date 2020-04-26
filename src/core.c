@@ -26,6 +26,7 @@
 #include "market/building.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-activate.h"
+#include "cmd/cmd-autopick.h"
 #include "cmd/cmd-diary.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-dump.h"

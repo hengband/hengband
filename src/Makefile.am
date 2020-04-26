@@ -189,6 +189,7 @@ hengband_SOURCES = \
 	knowledge/knowledge-self.c knowledge/knowledge-self.h \
 	knowledge/knowledge-quests.c knowledge/knowledge-quests.h \
 	\
+	cmd/cmd-autopick.c cmd/cmd-autopick.c \
 	cmd/dump-util.c cmd/dump-util.h cmd/feeling-table.c cmd/feeling-table.h \
 	cmd/monster-group-table.c cmd/monster-group-table.h \
 	cmd/diary-subtitle-table.c cmd/diary-subtitle-table.h \

@@ -3,6 +3,7 @@
 #include "autopick/autopick.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-gameoption.h"
+#include "cmd/cmd-autopick.h"
 #include "gameterm.h"
 #include "view/display-main-window.h"
 #include "cmd/cmd-dump.h"

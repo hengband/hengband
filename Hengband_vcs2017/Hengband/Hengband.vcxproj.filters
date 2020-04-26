@@ -691,6 +691,9 @@
     <ClCompile Include="..\..\src\autopick\autopick-editor-command.c">
       <Filter>autopick</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-autopick.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1384,6 +1387,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\autopick\autopick-editor-command.h">
       <Filter>autopick</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-autopick.h">
+      <Filter>cmd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
