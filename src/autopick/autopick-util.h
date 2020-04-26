@@ -15,8 +15,6 @@
 #define LSTAT_EXPRESSION    0x02
 #define LSTAT_AUTOREGISTER  0x04
 
-#define DESCRIPT_HGT 3
-
 /*!
  * @struct autopick_type
  * @brief 自動拾い/破壊設定データの構造体 / A structure type for entry of auto-picker/destroyer

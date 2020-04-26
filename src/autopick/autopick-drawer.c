@@ -12,6 +12,7 @@
 #include "gameterm.h"
 #include "files.h"
 
+#define DESCRIPT_HGT 3
 
 static void process_dirty_expression(player_type *player_ptr, text_body_type *tb)
 {
