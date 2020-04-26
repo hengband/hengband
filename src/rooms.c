@@ -139,14 +139,14 @@ void build_small_room(player_type *player_ptr, POSITION x0, POSITION y0)
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (y = y0 - 1; y <= y0 + 1; y++)
 	{
-		place_bold(player_ptr, y, x0 - 1, gb_inner);
-		place_bold(player_ptr, y, x0 + 1, gb_inner);
+		place_bold(player_ptr, y, x0 - 1, GB_INNER);
+		place_bold(player_ptr, y, x0 + 1, GB_INNER);
 	}
 
 	for (x = x0 - 1; x <= x0 + 1; x++)
 	{
-		place_bold(player_ptr, y0 - 1, x, gb_inner);
-		place_bold(player_ptr, y0 + 1, x, gb_inner);
+		place_bold(player_ptr, y0 - 1, x, GB_INNER);
+		place_bold(player_ptr, y0 + 1, x, GB_INNER);
 	}
 
 	/* Place a secret door on one side */
@@ -162,7 +162,7 @@ void build_small_room(player_type *player_ptr, POSITION x0, POSITION y0)
 	floor_ptr->grid_array[y0][x0].mimic = 0;
 
 	/* Add inner open space */
-	place_bold(player_ptr, y0, x0, gb_floor);
+	place_bold(player_ptr, y0, x0, GB_FLOOR);
 }
 
 /*!
@@ -832,7 +832,7 @@ static bool hack_isnt_wall(player_type *player_ptr, POSITION y, POSITION x, int 
 		/* if greater than cutoff then is a wall */
 		else
 		{
-			place_bold(player_ptr, y, x, gb_outer);
+			place_bold(player_ptr, y, x, GB_OUTER);
 			return FALSE;
 		}
 	}
@@ -971,7 +971,7 @@ bool generate_fracave(player_type *player_ptr, POSITION y0, POSITION x0, POSITIO
 		{
 			for (y = 0; y <= ysize; ++y)
 			{
-				place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, gb_extra);
+				place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, GB_EXTRA);
 				floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
 			}
 		}
@@ -989,30 +989,30 @@ bool generate_fracave(player_type *player_ptr, POSITION y0, POSITION x0, POSITIO
 		if ((floor_ptr->grid_array[0 + y0 - yhsize][i + x0 - xhsize].info & CAVE_ICKY) && (room))
 		{
 			/* Next to a 'filled' region? - set to be room walls */
-			place_bold(player_ptr, y0 + 0 - yhsize, x0 + i - xhsize, gb_outer);
+			place_bold(player_ptr, y0 + 0 - yhsize, x0 + i - xhsize, GB_OUTER);
 			if (light) floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info |= (CAVE_GLOW);
 			floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info |= (CAVE_ROOM);
-			place_bold(player_ptr, y0 + 0 - yhsize, x0 + i - xhsize, gb_outer);
+			place_bold(player_ptr, y0 + 0 - yhsize, x0 + i - xhsize, GB_OUTER);
 		}
 		else
 		{
 			/* set to be normal granite */
-			place_bold(player_ptr, y0 + 0 - yhsize, x0 + i - xhsize, gb_extra);
+			place_bold(player_ptr, y0 + 0 - yhsize, x0 + i - xhsize, GB_EXTRA);
 		}
 
 		/* bottom boundary */
 		if ((floor_ptr->grid_array[ysize + y0 - yhsize][i + x0 - xhsize].info & CAVE_ICKY) && (room))
 		{
 			/* Next to a 'filled' region? - set to be room walls */
-			place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, gb_outer);
+			place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, GB_OUTER);
 			if (light) floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info |= (CAVE_GLOW);
 			floor_ptr->grid_array[y0 + ysize - yhsize][x0 + i - xhsize].info |= (CAVE_ROOM);
-			place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, gb_outer);
+			place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, GB_OUTER);
 		}
 		else
 		{
 			/* set to be normal granite */
-			place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, gb_extra);
+			place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, GB_EXTRA);
 		}
 
 		/* clear the icky flag-don't need it any more */
@@ -1027,29 +1027,29 @@ bool generate_fracave(player_type *player_ptr, POSITION y0, POSITION x0, POSITIO
 		if ((floor_ptr->grid_array[i + y0 - yhsize][0 + x0 - xhsize].info & CAVE_ICKY) && room)
 		{
 			/* room boundary */
-			place_bold(player_ptr, y0 + i - yhsize, x0 + 0 - xhsize, gb_outer);
+			place_bold(player_ptr, y0 + i - yhsize, x0 + 0 - xhsize, GB_OUTER);
 			if (light) floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info |= (CAVE_GLOW);
 			floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info |= (CAVE_ROOM);
-			place_bold(player_ptr, y0 + i - yhsize, x0 + 0 - xhsize, gb_outer);
+			place_bold(player_ptr, y0 + i - yhsize, x0 + 0 - xhsize, GB_OUTER);
 		}
 		else
 		{
 			/* outside room */
-			place_bold(player_ptr, y0 + i - yhsize, x0 + 0 - xhsize, gb_extra);
+			place_bold(player_ptr, y0 + i - yhsize, x0 + 0 - xhsize, GB_EXTRA);
 		}
 		/* right boundary */
 		if ((floor_ptr->grid_array[i + y0 - yhsize][xsize + x0 - xhsize].info & CAVE_ICKY) && room)
 		{
 			/* room boundary */
-			place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, gb_outer);
+			place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, GB_OUTER);
 			if (light) floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info |= (CAVE_GLOW);
 			floor_ptr->grid_array[y0 + i - yhsize][x0 + xsize - xhsize].info |= (CAVE_ROOM);
-			place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, gb_outer);
+			place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, GB_OUTER);
 		}
 		else
 		{
 			/* outside room */
-			place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, gb_extra);
+			place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, GB_EXTRA);
 		}
 
 		/* clear icky flag -done with it */
@@ -1086,14 +1086,14 @@ bool generate_fracave(player_type *player_ptr, POSITION y0, POSITION x0, POSITIO
 				else
 				{
 
-					place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, gb_extra);
+					place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, GB_EXTRA);
 					floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ROOM);
 				}
 			}
 			else
 			{
 				/* Clear the unconnected regions */
-				place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, gb_extra);
+				place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, GB_EXTRA);
 				floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
 			}
 		}
@@ -1244,7 +1244,7 @@ bool generate_lake(player_type *player_ptr, POSITION y0, POSITION x0, POSITION x
 		{
 			for (y = 0; y <= ysize; ++y)
 			{
-				place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, gb_floor);
+				place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, GB_FLOOR);
 				floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY);
 			}
 		}
@@ -1254,8 +1254,8 @@ bool generate_lake(player_type *player_ptr, POSITION y0, POSITION x0, POSITION x
 	/* Do boundarys- set to normal granite */
 	for (i = 0; i <= xsize; ++i)
 	{
-		place_bold(player_ptr, y0 + 0 - yhsize, x0 + i - xhsize, gb_extra);
-		place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, gb_extra);
+		place_bold(player_ptr, y0 + 0 - yhsize, x0 + i - xhsize, GB_EXTRA);
+		place_bold(player_ptr, y0 + ysize - yhsize, x0 + i - xhsize, GB_EXTRA);
 
 		/* clear the icky flag-don't need it any more */
 		floor_ptr->grid_array[y0 + 0 - yhsize][x0 + i - xhsize].info &= ~(CAVE_ICKY);
@@ -1266,8 +1266,8 @@ bool generate_lake(player_type *player_ptr, POSITION y0, POSITION x0, POSITION x
 
 	for (i = 1; i < ysize; ++i)
 	{
-		place_bold(player_ptr, y0 + i - yhsize, x0 + 0 - xhsize, gb_extra);
-		place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, gb_extra);
+		place_bold(player_ptr, y0 + i - yhsize, x0 + 0 - xhsize, GB_EXTRA);
+		place_bold(player_ptr, y0 + i - yhsize, x0 + xsize - xhsize, GB_EXTRA);
 
 		/* clear icky flag -done with it */
 		floor_ptr->grid_array[y0 + i - yhsize][x0 + 0 - xhsize].info &= ~(CAVE_ICKY);
@@ -1283,7 +1283,7 @@ bool generate_lake(player_type *player_ptr, POSITION y0, POSITION x0, POSITION x
 			/* Fill unconnected regions with granite */
 			if ((!(floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info & CAVE_ICKY)) ||
 				is_outer_bold(floor_ptr, y0 + y - yhsize, x0 + x - xhsize))
-				place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, gb_extra);
+				place_bold(player_ptr, y0 + y - yhsize, x0 + x - xhsize, GB_EXTRA);
 
 			/* turn off icky flag (no longer needed.) */
 			floor_ptr->grid_array[y0 + y - yhsize][x0 + x - xhsize].info &= ~(CAVE_ICKY | CAVE_ROOM);
@@ -1528,18 +1528,18 @@ void build_room(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y1, 
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	for (i = 0; i <= xsize; i++)
 	{
-		place_bold(player_ptr, y1, x1 + i, gb_outer_noperm);
+		place_bold(player_ptr, y1, x1 + i, GB_OUTER_NOPERM);
 		floor_ptr->grid_array[y1][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
-		place_bold(player_ptr, y2, x1 + i, gb_outer_noperm);
+		place_bold(player_ptr, y2, x1 + i, GB_OUTER_NOPERM);
 		floor_ptr->grid_array[y2][x1 + i].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
 	/* Left and right boundaries */
 	for (i = 1; i < ysize; i++)
 	{
-		place_bold(player_ptr, y1 + i, x1, gb_outer_noperm);
+		place_bold(player_ptr, y1 + i, x1, GB_OUTER_NOPERM);
 		floor_ptr->grid_array[y1 + i][x1].info |= (CAVE_ROOM | CAVE_ICKY);
-		place_bold(player_ptr, y1 + i, x2, gb_outer_noperm);
+		place_bold(player_ptr, y1 + i, x2, GB_OUTER_NOPERM);
 		floor_ptr->grid_array[y1 + i][x2].info |= (CAVE_ROOM | CAVE_ICKY);
 	}
 
@@ -1551,7 +1551,7 @@ void build_room(player_type *player_ptr, POSITION x1, POSITION x2, POSITION y1, 
 			if (is_extra_bold(floor_ptr, y1 + y, x1 + x))
 			{
 				/* clear the untouched region */
-				place_bold(player_ptr, y1 + y, x1 + x, gb_floor);
+				place_bold(player_ptr, y1 + y, x1 + x, GB_FLOOR);
 				floor_ptr->grid_array[y1 + y][x1 + x].info |= (CAVE_ROOM | CAVE_ICKY);
 			}
 			else
@@ -1595,7 +1595,7 @@ void r_visit(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POS
 	visited[node] = 1;
 	x = 2 * (node % m) + x1;
 	y = 2 * (node / m) + y1;
-	place_bold(player_ptr, y, x, gb_floor);
+	place_bold(player_ptr, y, x, GB_FLOOR);
 
 	/* setup order of adjacent node visits */
 	if (one_in_(3))
@@ -1635,7 +1635,7 @@ void r_visit(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POS
 			/* (0,+) - check for bottom boundary */
 			if ((node / m < n - 1) && (visited[node + m] == 0))
 			{
-				place_bold(player_ptr, y + 1, x, gb_floor);
+				place_bold(player_ptr, y + 1, x, GB_FLOOR);
 				r_visit(player_ptr, y1, x1, y2, x2, node + m, dir, visited);
 			}
 			break;
@@ -1643,7 +1643,7 @@ void r_visit(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POS
 			/* (0,-) - check for top boundary */
 			if ((node / m > 0) && (visited[node - m] == 0))
 			{
-				place_bold(player_ptr, y - 1, x, gb_floor);
+				place_bold(player_ptr, y - 1, x, GB_FLOOR);
 				r_visit(player_ptr, y1, x1, y2, x2, node - m, dir, visited);
 			}
 			break;
@@ -1651,7 +1651,7 @@ void r_visit(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POS
 			/* (+,0) - check for right boundary */
 			if ((node % m < m - 1) && (visited[node + 1] == 0))
 			{
-				place_bold(player_ptr, y, x + 1, gb_floor);
+				place_bold(player_ptr, y, x + 1, GB_FLOOR);
 				r_visit(player_ptr, y1, x1, y2, x2, node + 1, dir, visited);
 			}
 			break;
@@ -1659,7 +1659,7 @@ void r_visit(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POS
 			/* (-,0) - check for left boundary */
 			if ((node % m > 0) && (visited[node - 1] == 0))
 			{
-				place_bold(player_ptr, y, x - 1, gb_floor);
+				place_bold(player_ptr, y, x - 1, GB_FLOOR);
 				r_visit(player_ptr, y1, x1, y2, x2, node - 1, dir, visited);
 			}
 		} /* end switch */
@@ -1700,15 +1700,15 @@ void build_maze_vault(player_type *player_ptr, POSITION x0, POSITION y0, POSITIO
 			if (is_vault) g_ptr->info |= CAVE_ICKY;
 			if ((x == x1 - 1) || (x == x2 + 1) || (y == y1 - 1) || (y == y2 + 1))
 			{
-				place_grid(player_ptr, g_ptr, gb_outer);
+				place_grid(player_ptr, g_ptr, GB_OUTER);
 			}
 			else if (!is_vault)
 			{
-				place_grid(player_ptr, g_ptr, gb_extra);
+				place_grid(player_ptr, g_ptr, GB_EXTRA);
 			}
 			else
 			{
-				place_grid(player_ptr, g_ptr, gb_inner);
+				place_grid(player_ptr, g_ptr, GB_INNER);
 			}
 			if (light) g_ptr->info |= (CAVE_GLOW);
 		}
@@ -1787,15 +1787,15 @@ void build_recursive_room(player_type *player_ptr, POSITION x1, POSITION y1, POS
 		/* top and bottom */
 		for (x = x1; x <= x2; x++)
 		{
-			place_bold(player_ptr, y1, x, gb_outer);
-			place_bold(player_ptr, y2, x, gb_outer);
+			place_bold(player_ptr, y1, x, GB_OUTER);
+			place_bold(player_ptr, y2, x, GB_OUTER);
 		}
 
 		/* left and right */
 		for (y = y1 + 1; y < y2; y++)
 		{
-			place_bold(player_ptr, y, x1, gb_outer);
-			place_bold(player_ptr, y, x2, gb_outer);
+			place_bold(player_ptr, y, x1, GB_OUTER);
+			place_bold(player_ptr, y, x2, GB_OUTER);
 		}
 
 		/* Make a couple of entrances */
@@ -1803,15 +1803,15 @@ void build_recursive_room(player_type *player_ptr, POSITION x1, POSITION y1, POS
 		{
 			/* left and right */
 			y = randint1(ysize) + y1;
-			place_bold(player_ptr, y, x1, gb_floor);
-			place_bold(player_ptr, y, x2, gb_floor);
+			place_bold(player_ptr, y, x1, GB_FLOOR);
+			place_bold(player_ptr, y, x2, GB_FLOOR);
 		}
 		else
 		{
 			/* top and bottom */
 			x = randint1(xsize) + x1;
-			place_bold(player_ptr, y1, x, gb_floor);
-			place_bold(player_ptr, y2, x, gb_floor);
+			place_bold(player_ptr, y1, x, GB_FLOOR);
+			place_bold(player_ptr, y2, x, GB_FLOOR);
 		}
 
 		/* Select size of keep */
@@ -1850,7 +1850,7 @@ void build_recursive_room(player_type *player_ptr, POSITION x1, POSITION y1, POS
 			{
 				for (x = x1; x < x2; x++)
 				{
-					place_bold(player_ptr, y, x, gb_inner);
+					place_bold(player_ptr, y, x, GB_INNER);
 				}
 			}
 
@@ -1862,15 +1862,15 @@ void build_recursive_room(player_type *player_ptr, POSITION x1, POSITION y1, POS
 		/* top and bottom */
 		for (x = x1 + 1; x <= x2 - 1; x++)
 		{
-			place_bold(player_ptr, y1 + 1, x, gb_inner);
-			place_bold(player_ptr, y2 - 1, x, gb_inner);
+			place_bold(player_ptr, y1 + 1, x, GB_INNER);
+			place_bold(player_ptr, y2 - 1, x, GB_INNER);
 		}
 
 		/* left and right */
 		for (y = y1 + 1; y <= y2 - 1; y++)
 		{
-			place_bold(player_ptr, y, x1 + 1, gb_inner);
-			place_bold(player_ptr, y, x2 - 1, gb_inner);
+			place_bold(player_ptr, y, x1 + 1, GB_INNER);
+			place_bold(player_ptr, y, x2 - 1, GB_INNER);
 		}
 
 		/* Make a door */
@@ -1879,12 +1879,12 @@ void build_recursive_room(player_type *player_ptr, POSITION x1, POSITION y1, POS
 		if (one_in_(2))
 		{
 			/* left */
-			place_bold(player_ptr, y, x1 + 1, gb_floor);
+			place_bold(player_ptr, y, x1 + 1, GB_FLOOR);
 		}
 		else
 		{
 			/* right */
-			place_bold(player_ptr, y, x2 - 1, gb_floor);
+			place_bold(player_ptr, y, x2 - 1, GB_FLOOR);
 		}
 
 		/* Build the room */
@@ -1901,7 +1901,7 @@ void build_recursive_room(player_type *player_ptr, POSITION x1, POSITION y1, POS
 			{
 				for (x = x1; x < x2; x++)
 				{
-					place_bold(player_ptr, y, x, gb_inner);
+					place_bold(player_ptr, y, x, GB_INNER);
 				}
 			}
 			return;
@@ -1922,7 +1922,7 @@ void build_recursive_room(player_type *player_ptr, POSITION x1, POSITION y1, POS
 			{
 				for (x = x1; x < x2; x++)
 				{
-					place_bold(player_ptr, y, x, gb_inner);
+					place_bold(player_ptr, y, x, GB_INNER);
 				}
 			}
 			return;
@@ -1979,7 +1979,7 @@ void add_outer_wall(player_type *player_ptr, POSITION x, POSITION y, int light, 
 	else if (is_extra_bold(floor_ptr, y, x))
 	{
 		/* Set bounding walls */
-		place_bold(player_ptr, y, x, gb_outer);
+		place_bold(player_ptr, y, x, GB_OUTER);
 		if (light) g_ptr->info |= CAVE_GLOW;
 	}
 	else if (permanent_wall(f_ptr))
@@ -2031,7 +2031,7 @@ void generate_room_floor(player_type *player_ptr, POSITION y1, POSITION x1, POSI
 		{
 			/* Point to grid */
 			g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
-			place_grid(player_ptr, g_ptr, gb_floor);
+			place_grid(player_ptr, g_ptr, GB_FLOOR);
 			g_ptr->info |= (CAVE_ROOM);
 			if (light) g_ptr->info |= (CAVE_GLOW);
 		}
@@ -2047,7 +2047,7 @@ void generate_fill_perm_bold(player_type *player_ptr, POSITION y1, POSITION x1, 
 		for (x = x1; x <= x2; x++)
 		{
 			/* Point to grid */
-			place_bold(player_ptr, y, x, gb_inner_perm);
+			place_bold(player_ptr, y, x, GB_INNER_PERM);
 		}
 	}
 }

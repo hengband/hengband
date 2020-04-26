@@ -281,7 +281,7 @@ bool build_type5(player_type *player_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_grid(player_ptr, g_ptr, gb_floor);
+			place_grid(player_ptr, g_ptr, GB_FLOOR);
 			g_ptr->info |= (CAVE_ROOM);
 		}
 	}
@@ -290,16 +290,16 @@ bool build_type5(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_grid(player_ptr, g_ptr, gb_outer);
+		place_grid(player_ptr, g_ptr, GB_OUTER);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_grid(player_ptr, g_ptr, gb_outer);
+		place_grid(player_ptr, g_ptr, GB_OUTER);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_grid(player_ptr, g_ptr, gb_outer);
+		place_grid(player_ptr, g_ptr, GB_OUTER);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_grid(player_ptr, g_ptr, gb_outer);
+		place_grid(player_ptr, g_ptr, GB_OUTER);
 	}
 
 
@@ -313,17 +313,17 @@ bool build_type5(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_grid(player_ptr, g_ptr, gb_inner);
+		place_grid(player_ptr, g_ptr, GB_INNER);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_grid(player_ptr, g_ptr, gb_inner);
+		place_grid(player_ptr, g_ptr, GB_INNER);
 	}
 
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_grid(player_ptr, g_ptr, gb_inner);
+		place_grid(player_ptr, g_ptr, GB_INNER);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_grid(player_ptr, g_ptr, gb_inner);
+		place_grid(player_ptr, g_ptr, GB_INNER);
 	}
 	for (y = y1; y <= y2; y++)
 	{
@@ -490,7 +490,7 @@ bool build_type6(player_type *player_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_grid(player_ptr, g_ptr, gb_floor);
+			place_grid(player_ptr, g_ptr, GB_FLOOR);
 			g_ptr->info |= (CAVE_ROOM);
 		}
 	}
@@ -499,16 +499,16 @@ bool build_type6(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_grid(player_ptr, g_ptr, gb_outer);
+		place_grid(player_ptr, g_ptr, GB_OUTER);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_grid(player_ptr, g_ptr, gb_outer);
+		place_grid(player_ptr, g_ptr, GB_OUTER);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_grid(player_ptr, g_ptr, gb_outer);
+		place_grid(player_ptr, g_ptr, GB_OUTER);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_grid(player_ptr, g_ptr, gb_outer);
+		place_grid(player_ptr, g_ptr, GB_OUTER);
 	}
 
 	/* Advance to the center room */
@@ -521,16 +521,16 @@ bool build_type6(player_type *player_ptr)
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_grid(player_ptr, g_ptr, gb_inner);
+		place_grid(player_ptr, g_ptr, GB_INNER);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_grid(player_ptr, g_ptr, gb_inner);
+		place_grid(player_ptr, g_ptr, GB_INNER);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_grid(player_ptr, g_ptr, gb_inner);
+		place_grid(player_ptr, g_ptr, GB_INNER);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_grid(player_ptr, g_ptr, gb_inner);
+		place_grid(player_ptr, g_ptr, GB_INNER);
 	}
 	for (y = y1; y <= y2; y++)
 	{
@@ -770,7 +770,7 @@ bool build_type13(player_type *player_ptr)
 		for (x = x1 - 1; x <= x2 + 1; x++)
 		{
 			g_ptr = &floor_ptr->grid_array[y][x];
-			place_grid(player_ptr, g_ptr, gb_inner);
+			place_grid(player_ptr, g_ptr, GB_INNER);
 			g_ptr->info |= (CAVE_ROOM);
 		}
 	}
@@ -779,11 +779,11 @@ bool build_type13(player_type *player_ptr)
 	for (x = x1 + 3; x <= x2 - 3; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[yval - 2][x];
-		place_grid(player_ptr, g_ptr, gb_floor);
+		place_grid(player_ptr, g_ptr, GB_FLOOR);
 		add_cave_info(floor_ptr, yval - 2, x, CAVE_ICKY);
 
 		g_ptr = &floor_ptr->grid_array[yval + 2][x];
-		place_grid(player_ptr, g_ptr, gb_floor);
+		place_grid(player_ptr, g_ptr, GB_FLOOR);
 		add_cave_info(floor_ptr, yval + 2, x, CAVE_ICKY);
 	}
 
@@ -791,11 +791,11 @@ bool build_type13(player_type *player_ptr)
 	for (x = x1 + 5; x <= x2 - 5; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[yval - 3][x];
-		place_grid(player_ptr, g_ptr, gb_floor);
+		place_grid(player_ptr, g_ptr, GB_FLOOR);
 		add_cave_info(floor_ptr, yval - 3, x, CAVE_ICKY);
 
 		g_ptr = &floor_ptr->grid_array[yval + 3][x];
-		place_grid(player_ptr, g_ptr, gb_floor);
+		place_grid(player_ptr, g_ptr, GB_FLOOR);
 		add_cave_info(floor_ptr, yval + 3, x, CAVE_ICKY);
 	}
 
@@ -803,27 +803,27 @@ bool build_type13(player_type *player_ptr)
 	for (x = x1; x <= x2; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[yval][x];
-		place_grid(player_ptr, g_ptr, gb_floor);
+		place_grid(player_ptr, g_ptr, GB_FLOOR);
 		g_ptr = &floor_ptr->grid_array[y1][x];
-		place_grid(player_ptr, g_ptr, gb_floor);
+		place_grid(player_ptr, g_ptr, GB_FLOOR);
 		g_ptr = &floor_ptr->grid_array[y2][x];
-		place_grid(player_ptr, g_ptr, gb_floor);
+		place_grid(player_ptr, g_ptr, GB_FLOOR);
 	}
 
 	/* Place the outer walls */
 	for (y = y1 - 1; y <= y2 + 1; y++)
 	{
 		g_ptr = &floor_ptr->grid_array[y][x1 - 1];
-		place_grid(player_ptr, g_ptr, gb_outer);
+		place_grid(player_ptr, g_ptr, GB_OUTER);
 		g_ptr = &floor_ptr->grid_array[y][x2 + 1];
-		place_grid(player_ptr, g_ptr, gb_outer);
+		place_grid(player_ptr, g_ptr, GB_OUTER);
 	}
 	for (x = x1 - 1; x <= x2 + 1; x++)
 	{
 		g_ptr = &floor_ptr->grid_array[y1 - 1][x];
-		place_grid(player_ptr, g_ptr, gb_outer);
+		place_grid(player_ptr, g_ptr, GB_OUTER);
 		g_ptr = &floor_ptr->grid_array[y2 + 1][x];
-		place_grid(player_ptr, g_ptr, gb_outer);
+		place_grid(player_ptr, g_ptr, GB_OUTER);
 	}
 
 	/* Random corridor */
@@ -831,26 +831,26 @@ bool build_type13(player_type *player_ptr)
 	{
 		for (y = y1; y <= yval; y++)
 		{
-			place_bold(player_ptr, y, x2, gb_floor);
-			place_bold(player_ptr, y, x1 - 1, gb_solid);
+			place_bold(player_ptr, y, x2, GB_FLOOR);
+			place_bold(player_ptr, y, x1 - 1, GB_SOLID);
 		}
 		for (y = yval; y <= y2 + 1; y++)
 		{
-			place_bold(player_ptr, y, x1, gb_floor);
-			place_bold(player_ptr, y, x2 + 1, gb_solid);
+			place_bold(player_ptr, y, x1, GB_FLOOR);
+			place_bold(player_ptr, y, x2 + 1, GB_SOLID);
 		}
 	}
 	else
 	{
 		for (y = yval; y <= y2 + 1; y++)
 		{
-			place_bold(player_ptr, y, x1, gb_floor);
-			place_bold(player_ptr, y, x2 + 1, gb_solid);
+			place_bold(player_ptr, y, x1, GB_FLOOR);
+			place_bold(player_ptr, y, x2 + 1, GB_SOLID);
 		}
 		for (y = y1; y <= yval; y++)
 		{
-			place_bold(player_ptr, y, x2, gb_floor);
-			place_bold(player_ptr, y, x1 - 1, gb_solid);
+			place_bold(player_ptr, y, x2, GB_FLOOR);
+			place_bold(player_ptr, y, x1 - 1, GB_SOLID);
 		}
 	}
 

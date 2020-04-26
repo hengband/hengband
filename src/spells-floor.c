@@ -606,7 +606,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 			if (t < 20)
 			{
 				/* Create granite wall */
-				place_grid(caster_ptr, g_ptr, gb_extra);
+				place_grid(caster_ptr, g_ptr, GB_EXTRA);
 			}
 			else if (t < 70)
 			{
@@ -621,7 +621,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 			else
 			{
 				/* Create floor */
-				place_grid(caster_ptr, g_ptr, gb_floor);
+				place_grid(caster_ptr, g_ptr, GB_FLOOR);
 			}
 
 			/* Clear garbage of hidden trap or door */

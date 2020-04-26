@@ -89,7 +89,7 @@ void place_locked_door(player_type *player_ptr, POSITION y, POSITION x)
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_bold(player_ptr, y, x, gb_floor);
+		place_bold(player_ptr, y, x, GB_FLOOR);
 		return;
 	}
 
@@ -112,7 +112,7 @@ void place_secret_door(player_type *player_ptr, POSITION y, POSITION x, int type
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_bold(player_ptr, y, x, gb_floor);
+		place_bold(player_ptr, y, x, GB_FLOOR);
 		return;
 	}
 
@@ -248,8 +248,8 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
 		(is_outer_bold(floor_ptr, y, x - 1) && is_outer_bold(floor_ptr, y, x + 1)))
 	{
 		place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
-		place_bold(player_ptr, y, x - 1, gb_solid);
-		place_bold(player_ptr, y, x + 1, gb_solid);
+		place_bold(player_ptr, y, x - 1, GB_SOLID);
+		place_bold(player_ptr, y, x + 1, GB_SOLID);
 	}
 
 	/* look at:
@@ -264,8 +264,8 @@ void add_door(player_type *player_ptr, POSITION x, POSITION y)
 		is_floor_bold(floor_ptr, y, x - 1) && is_floor_bold(floor_ptr, y, x + 1))
 	{
 		place_secret_door(player_ptr, y, x, DOOR_DEFAULT);
-		place_bold(player_ptr, y - 1, x, gb_solid);
-		place_bold(player_ptr, y + 1, x, gb_solid);
+		place_bold(player_ptr, y - 1, x, GB_SOLID);
+		place_bold(player_ptr, y + 1, x, GB_SOLID);
 	}
 }
 
@@ -700,7 +700,7 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_bold(player_ptr, y, x, gb_floor);
+		place_bold(player_ptr, y, x, GB_FLOOR);
 		return;
 	}
 
@@ -752,7 +752,7 @@ void place_random_door(player_type *player_ptr, POSITION y, POSITION x, bool roo
 	}
 	else
 	{
-		place_bold(player_ptr, y, x, gb_floor);
+		place_bold(player_ptr, y, x, GB_FLOOR);
 	}
 
 	delete_monster(player_ptr, y, x);
@@ -822,7 +822,7 @@ void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	if (d_info[floor_ptr->dungeon_idx].flags1 & DF1_NO_DOORS)
 	{
-		place_bold(player_ptr, y, x, gb_floor);
+		place_bold(player_ptr, y, x, GB_FLOOR);
 		return;
 	}
 
@@ -844,7 +844,7 @@ void place_closed_door(player_type *player_ptr, POSITION y, POSITION x, int type
 
 	if (feat == feat_none)
 	{
-		place_bold(player_ptr, y, x, gb_floor);
+		place_bold(player_ptr, y, x, GB_FLOOR);
 		return;
 	}
 
@@ -1362,7 +1362,7 @@ void set_floor(player_type *player_ptr, POSITION x, POSITION y)
 	}
 
 	if (is_extra_bold(floor_ptr, y, x))
-		place_bold(player_ptr, y, x, gb_floor);
+		place_bold(player_ptr, y, x, GB_FLOOR);
 }
 
 

@@ -256,7 +256,7 @@ void place_bound_perm_wall(player_type *player_ptr, grid_type *g_ptr)
 	}
 
 	/* Add "solid" perma-wall */
-	place_grid(player_ptr, g_ptr, gb_solid_perm);
+	place_grid(player_ptr, g_ptr, GB_SOLID_PERM);
 }
 
 /*!
@@ -1216,47 +1216,47 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
 {
 	switch (gb_type)
 	{
-	case gb_floor:
+	case GB_FLOOR:
 	{
 		g_ptr->feat = feat_ground_type[randint0(100)];
 		g_ptr->info &= ~(CAVE_MASK);
 		g_ptr->info |= CAVE_FLOOR;
 		break;
 	}
-	case gb_extra:
+	case GB_EXTRA:
 	{
 		g_ptr->feat = feat_wall_type[randint0(100)];
 		g_ptr->info &= ~(CAVE_MASK);
 		g_ptr->info |= CAVE_EXTRA;
 		break;
 	}
-	case gb_extra_perm:
+	case GB_EXTRA_PERM:
 	{
 		// No such grid
 		return;
 	}
-	case gb_inner:
+	case GB_INNER:
 	{
 		g_ptr->feat = feat_wall_inner;
 		g_ptr->info &= ~(CAVE_MASK);
 		g_ptr->info |= CAVE_INNER;
 		break;
 	}
-	case gb_inner_perm:
+	case GB_INNER_PERM:
 	{
 		g_ptr->feat = feat_permanent;
 		g_ptr->info &= ~(CAVE_MASK);
 		g_ptr->info |= CAVE_INNER;
 		break;
 	}
-	case gb_outer:
+	case GB_OUTER:
 	{
 		g_ptr->feat = feat_wall_outer;
 		g_ptr->info &= ~(CAVE_MASK);
 		g_ptr->info |= CAVE_OUTER;
 		break;
 	}
-	case gb_outer_noperm:
+	case GB_OUTER_NOPERM:
 	{
 		feature_type *f_ptr = &f_info[feat_wall_outer];
 		if (permanent_wall(f_ptr))
@@ -1272,19 +1272,19 @@ void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type gb_typ
 		g_ptr->info |= (CAVE_OUTER | CAVE_VAULT);
 		break;
 	}
-	case gb_solid:
+	case GB_SOLID:
 	{
 		// No such grid
 		return;
 	}
-	case gb_solid_perm:
+	case GB_SOLID_PERM:
 	{
 		g_ptr->feat = feat_permanent;
 		g_ptr->info &= ~(CAVE_MASK);
 		g_ptr->info |= CAVE_SOLID;
 		break;
 	}
-	case gb_solid_noperm:
+	case GB_SOLID_NOPERM:
 	{
 		// No such grid
 		return;
@@ -1315,49 +1315,49 @@ void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type 
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	switch (gb_type)
 	{
-	case gb_floor:
+	case GB_FLOOR:
 	{
 		set_cave_feat(floor_ptr, y, x, feat_ground_type[randint0(100)]);
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		add_cave_info(floor_ptr, y, x, CAVE_FLOOR);
 		break;
 	}
-	case gb_extra:
+	case GB_EXTRA:
 	{
 		set_cave_feat(floor_ptr, y, x, feat_wall_type[randint0(100)]);
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		add_cave_info(floor_ptr, y, x, CAVE_EXTRA);
 		break;
 	}
-	case gb_extra_perm:
+	case GB_EXTRA_PERM:
 	{
 		set_cave_feat(floor_ptr, y, x, feat_permanent);
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		add_cave_info(floor_ptr, y, x, CAVE_EXTRA);
 		break;
 	}
-	case gb_inner:
+	case GB_INNER:
 	{
 		set_cave_feat(floor_ptr, y, x, feat_wall_inner);
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		add_cave_info(floor_ptr, y, x, CAVE_INNER);
 		break;
 	}
-	case gb_inner_perm:
+	case GB_INNER_PERM:
 	{
 		set_cave_feat(floor_ptr, y, x, feat_permanent);
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		add_cave_info(floor_ptr, y, x, CAVE_INNER);
 		break;
 	}
-	case gb_outer:
+	case GB_OUTER:
 	{
 		set_cave_feat(floor_ptr, y, x, feat_wall_outer);
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		add_cave_info(floor_ptr, y, x, CAVE_OUTER);
 		break;
 	}
-	case gb_outer_noperm:
+	case GB_OUTER_NOPERM:
 	{
 		feature_type *_f_ptr = &f_info[feat_wall_outer];
 		if (permanent_wall(_f_ptr)) set_cave_feat(floor_ptr, y, x, (s16b)feat_state(player_ptr, feat_wall_outer, FF_UNPERM));
@@ -1366,14 +1366,14 @@ void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type 
 		add_cave_info(floor_ptr, y, x, (CAVE_OUTER | CAVE_VAULT));
 		break;
 	}
-	case gb_solid:
+	case GB_SOLID:
 	{
 		set_cave_feat(floor_ptr, y, x, feat_wall_inner);
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		add_cave_info(floor_ptr, y, x, CAVE_SOLID);
 		break;
 	}
-	case gb_solid_perm:
+	case GB_SOLID_PERM:
 	{
 		feature_type *f_ptr = &f_info[feat_wall_solid];
 		if ((floor_ptr->grid_array[y][x].info & CAVE_VAULT) && permanent_wall(f_ptr))
