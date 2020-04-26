@@ -1,5 +1,5 @@
 ﻿/*!
- * todo これ単体で600行を超えているので要分割
+ * todo これ単体で750行を超えているので要分割
  * @brief 自動拾いエディタ画面でキーを押した時の挙動一式
  * @date 2020/04/26
  * @author Hourier
@@ -29,6 +29,7 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 	switch (com_id)
 	{
 	case EC_QUIT:
+	{
 		if (tb->changed)
 		{
 			if (!get_check(_("全ての変更を破棄してから終了します。よろしいですか？ ",
@@ -36,11 +37,11 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 		}
 
 		return QUIT_WITHOUT_SAVE;
-
+	}
 	case EC_SAVEQUIT:
 		return QUIT_AND_SAVE;
-
 	case EC_REVERT:
+	{
 		if (!get_check(_("全ての変更を破棄して元の状態に戻します。よろしいですか？ ",
 			"Discard all changes and revert to original file. Are you sure? "))) break;
 
@@ -49,17 +50,17 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 		tb->dirty_flags |= DIRTY_ALL | DIRTY_MODE | DIRTY_EXPRESSION;
 		tb->cx = tb->cy = 0;
 		tb->mark = 0;
-
 		tb->changed = FALSE;
 		break;
-
+	}
 	case EC_HELP:
+	{
 		(void)show_file(player_ptr, TRUE, _("jeditor.txt", "editor.txt"), NULL, 0, 0);
 		tb->dirty_flags |= DIRTY_SCREEN;
-
 		break;
-
+	}
 	case EC_RETURN:
+	{
 		if (tb->mark)
 		{
 			tb->mark = 0;
@@ -69,10 +70,9 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 		insert_return_code(tb);
 		tb->cy++;
 		tb->cx = 0;
-
 		tb->dirty_flags |= DIRTY_ALL;
 		break;
-
+	}
 	case EC_LEFT:
 	{
 		if (0 < tb->cx)
@@ -108,6 +108,7 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 		break;
 	}
 	case EC_DOWN:
+	{
 		if (!tb->lines_list[tb->cy + 1])
 		{
 			if (!add_empty_line(tb)) break;
@@ -115,11 +116,10 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 
 		tb->cy++;
 		break;
-
+	}
 	case EC_UP:
 		if (tb->cy > 0) tb->cy--;
 		break;
-
 	case EC_RIGHT:
 	{
 #ifdef JP
@@ -144,18 +144,17 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 	case EC_BOL:
 		tb->cx = 0;
 		break;
-
 	case EC_EOL:
 		tb->cx = strlen(tb->lines_list[tb->cy]);
 		break;
-
 	case EC_PGUP:
 		while (0 < tb->cy && tb->upper <= tb->cy)
 			tb->cy--;
+
 		while (0 < tb->upper && tb->cy + 1 < tb->upper + tb->hgt)
 			tb->upper--;
-		break;
 
+		break;
 	case EC_PGDOWN:
 		while (tb->cy < tb->upper + tb->hgt)
 		{
@@ -169,11 +168,9 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 
 		tb->upper = tb->cy;
 		break;
-
 	case EC_TOP:
 		tb->cy = 0;
 		break;
-
 	case EC_BOTTOM:
 		while (TRUE)
 		{
@@ -187,7 +184,6 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 
 		tb->cx = 0;
 		break;
-
 	case EC_CUT:
 	{
 		copy_text_to_yank(tb);
@@ -223,6 +219,7 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 		break;
 	}
 	case EC_COPY:
+	{
 		copy_text_to_yank(tb);
 
 		/*
@@ -255,7 +252,7 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 		}
 
 		break;
-
+	}
 	case EC_PASTE:
 	{
 		chain_str_type *chain = tb->yank;
@@ -480,6 +477,7 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 
 		if (search_dir == 1) do_editor_command(player_ptr, tb, EC_SEARCH_FORW);
 		else do_editor_command(player_ptr, tb, EC_SEARCH_BACK);
+
 		break;
 	}
 	case EC_SEARCH_FORW:
@@ -499,6 +497,7 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 		break;
 
 	case EC_SEARCH_BACK:
+	{
 		if (tb->search_o_ptr)
 		{
 			search_for_object(player_ptr, tb, tb->search_o_ptr, FALSE);
@@ -513,16 +512,18 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 
 		tb->dirty_flags |= DIRTY_NO_SEARCH;
 		break;
-
+	}
 	case EC_SEARCH_OBJ:
+	{
 		tb->dirty_flags |= DIRTY_SCREEN;
 
 		if (!get_object_for_search(player_ptr, &tb->search_o_ptr, &tb->search_str)) break;
 
 		do_editor_command(player_ptr, tb, EC_SEARCH_FORW);
 		break;
-
+	}
 	case EC_SEARCH_DESTROYED:
+	{
 		if (!get_destroyed_object_for_search(player_ptr, &tb->search_o_ptr, &tb->search_str))
 		{
 			tb->dirty_flags |= DIRTY_NO_SEARCH;
@@ -531,7 +532,7 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 
 		do_editor_command(player_ptr, tb, EC_SEARCH_FORW);
 		break;
-
+	}
 	case EC_INSERT_OBJECT:
 	{
 		autopick_type an_entry, *entry = &an_entry;
@@ -549,6 +550,7 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 		break;
 	}
 	case EC_INSERT_DESTROYED:
+	{
 		if (!tb->last_destroyed) break;
 
 		tb->cx = 0;
@@ -558,7 +560,7 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 		tb->dirty_flags |= DIRTY_ALL;
 		tb->changed = TRUE;
 		break;
-
+	}
 	case EC_INSERT_BLOCK:
 	{
 		char expression[80];
@@ -581,8 +583,8 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 		tb->changed = TRUE;
 		break;
 	}
-
 	case EC_INSERT_MACRO:
+	{
 		draw_text_editor(player_ptr, tb);
 		Term_erase(0, tb->cy - tb->upper + 1, tb->wid);
 		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW, _("P:<トリガーキー>: ", "P:<Trigger key>: "));
@@ -592,8 +594,9 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 		tb->dirty_flags |= DIRTY_ALL;
 		tb->changed = TRUE;
 		break;
-
+	}
 	case EC_INSERT_KEYMAP:
+	{
 		draw_text_editor(player_ptr, tb);
 		Term_erase(0, tb->cy - tb->upper + 1, tb->wid);
 		Term_putstr(0, tb->cy - tb->upper + 1, tb->wid - 1, TERM_YELLOW,
@@ -605,50 +608,133 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 		tb->dirty_flags |= DIRTY_ALL;
 		tb->changed = TRUE;
 		break;
-
-	case EC_CL_AUTOPICK: toggle_command_letter(tb, DO_AUTOPICK); break;
-	case EC_CL_DESTROY: toggle_command_letter(tb, DO_AUTODESTROY); break;
-	case EC_CL_LEAVE: toggle_command_letter(tb, DONT_AUTOPICK); break;
-	case EC_CL_QUERY: toggle_command_letter(tb, DO_QUERY_AUTOPICK); break;
-	case EC_CL_NO_DISP: toggle_command_letter(tb, DO_DISPLAY); break;
-
-	case EC_IK_UNAWARE: toggle_keyword(tb, FLG_UNAWARE); break;
-	case EC_IK_UNIDENTIFIED: toggle_keyword(tb, FLG_UNIDENTIFIED); break;
-	case EC_IK_IDENTIFIED: toggle_keyword(tb, FLG_IDENTIFIED); break;
-	case EC_IK_STAR_IDENTIFIED: toggle_keyword(tb, FLG_STAR_IDENTIFIED); break;
-	case EC_KK_WEAPONS: toggle_keyword(tb, FLG_WEAPONS); break;
-	case EC_KK_FAVORITE_WEAPONS: toggle_keyword(tb, FLG_FAVORITE_WEAPONS); break;
-	case EC_KK_ARMORS: toggle_keyword(tb, FLG_ARMORS); break;
-	case EC_KK_MISSILES: toggle_keyword(tb, FLG_MISSILES); break;
-	case EC_KK_DEVICES: toggle_keyword(tb, FLG_DEVICES); break;
-	case EC_KK_LIGHTS: toggle_keyword(tb, FLG_LIGHTS); break;
-	case EC_KK_JUNKS: toggle_keyword(tb, FLG_JUNKS); break;
-	case EC_KK_CORPSES: toggle_keyword(tb, FLG_CORPSES); break;
-	case EC_KK_SPELLBOOKS: toggle_keyword(tb, FLG_SPELLBOOKS); break;
-	case EC_KK_SHIELDS: toggle_keyword(tb, FLG_SHIELDS); break;
-	case EC_KK_BOWS: toggle_keyword(tb, FLG_BOWS); break;
-	case EC_KK_RINGS: toggle_keyword(tb, FLG_RINGS); break;
-	case EC_KK_AMULETS: toggle_keyword(tb, FLG_AMULETS); break;
-	case EC_KK_SUITS: toggle_keyword(tb, FLG_SUITS); break;
-	case EC_KK_CLOAKS: toggle_keyword(tb, FLG_CLOAKS); break;
-	case EC_KK_HELMS: toggle_keyword(tb, FLG_HELMS); break;
-	case EC_KK_GLOVES: toggle_keyword(tb, FLG_GLOVES); break;
-	case EC_KK_BOOTS: toggle_keyword(tb, FLG_BOOTS); break;
-	case EC_OK_COLLECTING: toggle_keyword(tb, FLG_COLLECTING); break;
-	case EC_OK_BOOSTED: toggle_keyword(tb, FLG_BOOSTED); break;
-	case EC_OK_MORE_DICE: toggle_keyword(tb, FLG_MORE_DICE); break;
-	case EC_OK_MORE_BONUS: toggle_keyword(tb, FLG_MORE_BONUS); break;
-	case EC_OK_WORTHLESS: toggle_keyword(tb, FLG_WORTHLESS); break;
-	case EC_OK_ARTIFACT: toggle_keyword(tb, FLG_ARTIFACT); break;
-	case EC_OK_EGO: toggle_keyword(tb, FLG_EGO); break;
-	case EC_OK_GOOD: toggle_keyword(tb, FLG_GOOD); break;
-	case EC_OK_NAMELESS: toggle_keyword(tb, FLG_NAMELESS); break;
-	case EC_OK_AVERAGE: toggle_keyword(tb, FLG_AVERAGE); break;
-	case EC_OK_RARE: toggle_keyword(tb, FLG_RARE); break;
-	case EC_OK_COMMON: toggle_keyword(tb, FLG_COMMON); break;
-	case EC_OK_WANTED: toggle_keyword(tb, FLG_WANTED); break;
-	case EC_OK_UNIQUE: toggle_keyword(tb, FLG_UNIQUE); break;
-	case EC_OK_HUMAN: toggle_keyword(tb, FLG_HUMAN); break;
+	}
+	case EC_CL_AUTOPICK:
+		toggle_command_letter(tb, DO_AUTOPICK);
+		break;
+	case EC_CL_DESTROY:
+		toggle_command_letter(tb, DO_AUTODESTROY);
+		break;
+	case EC_CL_LEAVE:
+		toggle_command_letter(tb, DONT_AUTOPICK);
+		break;
+	case EC_CL_QUERY:
+		toggle_command_letter(tb, DO_QUERY_AUTOPICK);
+		break;
+	case EC_CL_NO_DISP:
+		toggle_command_letter(tb, DO_DISPLAY);
+		break;
+	case EC_IK_UNAWARE:
+		toggle_keyword(tb, FLG_UNAWARE);
+		break;
+	case EC_IK_UNIDENTIFIED:
+		toggle_keyword(tb, FLG_UNIDENTIFIED);
+		break;
+	case EC_IK_IDENTIFIED:
+		toggle_keyword(tb, FLG_IDENTIFIED);
+		break;
+	case EC_IK_STAR_IDENTIFIED:
+		toggle_keyword(tb, FLG_STAR_IDENTIFIED);
+		break;
+	case EC_KK_WEAPONS:
+		toggle_keyword(tb, FLG_WEAPONS);
+		break;
+	case EC_KK_FAVORITE_WEAPONS:
+		toggle_keyword(tb, FLG_FAVORITE_WEAPONS);
+		break;
+	case EC_KK_ARMORS:
+		toggle_keyword(tb, FLG_ARMORS);
+		break;
+	case EC_KK_MISSILES:
+		toggle_keyword(tb, FLG_MISSILES);
+		break;
+	case EC_KK_DEVICES:
+		toggle_keyword(tb, FLG_DEVICES);
+		break;
+	case EC_KK_LIGHTS:
+		toggle_keyword(tb, FLG_LIGHTS);
+		break;
+	case EC_KK_JUNKS:
+		toggle_keyword(tb, FLG_JUNKS);
+		break;
+	case EC_KK_CORPSES:
+		toggle_keyword(tb, FLG_CORPSES);
+		break;
+	case EC_KK_SPELLBOOKS:
+		toggle_keyword(tb, FLG_SPELLBOOKS);
+		break;
+	case EC_KK_SHIELDS:
+		toggle_keyword(tb, FLG_SHIELDS);
+		break;
+	case EC_KK_BOWS:
+		toggle_keyword(tb, FLG_BOWS);
+		break;
+	case EC_KK_RINGS:
+		toggle_keyword(tb, FLG_RINGS);
+		break;
+	case EC_KK_AMULETS:
+		toggle_keyword(tb, FLG_AMULETS);
+		break;
+	case EC_KK_SUITS:
+		toggle_keyword(tb, FLG_SUITS);
+		break;
+	case EC_KK_CLOAKS:
+		toggle_keyword(tb, FLG_CLOAKS);
+		break;
+	case EC_KK_HELMS:
+		toggle_keyword(tb, FLG_HELMS);
+		break;
+	case EC_KK_GLOVES:
+		toggle_keyword(tb, FLG_GLOVES);
+		break;
+	case EC_KK_BOOTS:
+		toggle_keyword(tb, FLG_BOOTS);
+		break;
+	case EC_OK_COLLECTING:
+		toggle_keyword(tb, FLG_COLLECTING);
+		break;
+	case EC_OK_BOOSTED:
+		toggle_keyword(tb, FLG_BOOSTED);
+		break;
+	case EC_OK_MORE_DICE:
+		toggle_keyword(tb, FLG_MORE_DICE);
+		break;
+	case EC_OK_MORE_BONUS:
+		toggle_keyword(tb, FLG_MORE_BONUS);
+		break;
+	case EC_OK_WORTHLESS:
+		toggle_keyword(tb, FLG_WORTHLESS);
+		break;
+	case EC_OK_ARTIFACT:
+		toggle_keyword(tb, FLG_ARTIFACT);
+		break;
+	case EC_OK_EGO:
+		toggle_keyword(tb, FLG_EGO);
+		break;
+	case EC_OK_GOOD:
+		toggle_keyword(tb, FLG_GOOD);
+		break;
+	case EC_OK_NAMELESS:
+		toggle_keyword(tb, FLG_NAMELESS);
+		break;
+	case EC_OK_AVERAGE:
+		toggle_keyword(tb, FLG_AVERAGE);
+		break;
+	case EC_OK_RARE:
+		toggle_keyword(tb, FLG_RARE);
+		break;
+	case EC_OK_COMMON:
+		toggle_keyword(tb, FLG_COMMON);
+		break;
+	case EC_OK_WANTED:
+		toggle_keyword(tb, FLG_WANTED);
+		break;
+	case EC_OK_UNIQUE:
+		toggle_keyword(tb, FLG_UNIQUE);
+		break;
+	case EC_OK_HUMAN:
+		toggle_keyword(tb, FLG_HUMAN);
+		break;
 	case EC_OK_UNREADABLE:
 		toggle_keyword(tb, FLG_UNREADABLE);
 		add_keyword(tb, FLG_SPELLBOOKS);
