@@ -22,9 +22,14 @@
 #include "core/show-file.h"
 
 /*
- * Execute a single editor command
+ * @brief
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param tb 自動拾いの構文
+ * @param com_id エディタ内で打ったコマンド
+ * @return 
+ * @details Execute a single editor command
  */
-bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
+byte do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 {
 	switch (com_id)
 	{
@@ -766,5 +771,5 @@ bool do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 	}
 
 	tb->old_com_id = com_id;
-	return FALSE;
+	return QUIT;
 }

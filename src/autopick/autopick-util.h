@@ -15,6 +15,7 @@
 #define LSTAT_EXPRESSION    0x02
 #define LSTAT_AUTOREGISTER  0x04
 
+#define QUIT 0
 #define QUIT_WITHOUT_SAVE 1
 #define QUIT_AND_SAVE     2
 
