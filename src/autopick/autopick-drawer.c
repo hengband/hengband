@@ -194,7 +194,7 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 
 	bool is_dirty_diary = (tb->dirty_flags & (DIRTY_ALL | DIRTY_NOT_FOUND | DIRTY_NO_SEARCH)) != 0;
 	bool is_updated = tb->old_cy != tb->cy || is_dirty_diary || tb->dirty_line == tb->cy;
-	if (is_updated) return;
+	if (!is_updated) return;
 
 	autopick_type an_entry, *entry = &an_entry;
 	concptr str1 = NULL, str2 = NULL;
