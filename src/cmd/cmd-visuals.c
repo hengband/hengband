@@ -66,7 +66,7 @@ static void print_visuals_menu(concptr choice_msg)
 /*
  * Interact with "visuals"
  */
-void do_cmd_visuals(player_type *creature_ptr)
+void do_cmd_visuals(player_type *creature_ptr, void(*process_autopick_file_command)(char*))
 {
 	FILE *auto_dump_stream;
 	char tmp[160];
@@ -93,7 +93,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 			sprintf(tmp, "%s.prf", creature_ptr->base_name);
 			if (!askfor(tmp, 70)) continue;
 
-			(void)process_pref_file(creature_ptr, tmp);
+			(void)process_pref_file(creature_ptr, tmp, process_autopick_file_command);
 			need_redraw = TRUE;
 			break;
 		}
@@ -436,7 +436,7 @@ void do_cmd_visuals(player_type *creature_ptr)
 		}
 		case 'R':
 		case 'r':
-			reset_visuals(creature_ptr);
+			reset_visuals(creature_ptr, process_autopick_file_command);
 			msg_print(_("画面上の[色/文字]を初期値にリセットしました。", "Visual attr/char tables reset."));
 			need_redraw = TRUE;
 			break;

@@ -12,6 +12,7 @@
 #include "autopick/autopick-editor-command.h"
 #include "autopick/autopick-editor-util.h"
 #include "autopick/autopick-inserter-killer.h"
+#include "autopick/autopick-pref-processor.h"
 #include "io/read-pref-file.h"
 #include "world.h"
 #include "view/display-main-window.h" // 暫定。後で消す.
@@ -203,7 +204,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	string_free(tb->last_destroyed);
 	kill_yank_chain(tb);
 
-	process_autopick_file(player_ptr, buf);
+	process_autopick_file(player_ptr, buf, process_autopick_file_command);
 	current_world_ptr->start_time = (u32b)time(NULL);
 	cx_save = tb->cx;
 	cy_save = tb->cy;

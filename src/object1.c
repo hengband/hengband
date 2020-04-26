@@ -53,7 +53,7 @@
  *\n
  * The "prefs" parameter is no longer meaningful.  \n
  */
-void reset_visuals(player_type *owner_ptr)
+void reset_visuals(player_type *owner_ptr, void(*process_autopick_file_command)(char*))
 {
 	for (int i = 0; i < max_f_idx; i++)
 	{
@@ -82,9 +82,9 @@ void reset_visuals(player_type *owner_ptr)
 	char *pref_file = use_graphics ? "graf.prf" : "font.prf";
 	char *base_name = use_graphics ? "graf-%s.prf" : "font-%s.prf";
 	char buf[1024];
-	process_pref_file(owner_ptr, pref_file);
+	process_pref_file(owner_ptr, pref_file, process_autopick_file_command);
 	sprintf(buf, base_name, owner_ptr->base_name);
-	process_pref_file(owner_ptr, buf);
+	process_pref_file(owner_ptr, buf, process_autopick_file_command);
 }
 
 

@@ -5,6 +5,7 @@
 
 #include "creature.h"
 #include "io/write-diary.h"
+#include "autopick/autopick-pref-processor.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-dump.h"
 #include "dungeon.h"
@@ -1192,7 +1193,7 @@ bool mon_take_hit(player_type *target_ptr, MONSTER_IDX m_idx, HIT_POINT dam, boo
 #ifdef WORLD_SCORE
 			if (m_ptr->r_idx == MON_SERPENT)
 			{
-				screen_dump = make_screen_dump(target_ptr);
+				screen_dump = make_screen_dump(target_ptr, process_autopick_file_command);
 			}
 #endif
 		}

@@ -71,7 +71,7 @@ void do_cmd_pref(player_type *creature_ptr)
 /*
  * Interact with "colors"
  */
-void do_cmd_colors(player_type *creature_ptr)
+void do_cmd_colors(player_type *creature_ptr, void(*process_autopick_file_command)(char*))
 {
 	int i;
 	char tmp[160];
@@ -97,7 +97,7 @@ void do_cmd_colors(player_type *creature_ptr)
 			sprintf(tmp, "%s.prf", creature_ptr->base_name);
 			if (!askfor(tmp, 70)) continue;
 
-			(void)process_pref_file(creature_ptr, tmp);
+			(void)process_pref_file(creature_ptr, tmp, process_autopick_file_command);
 			Term_xtra(TERM_XTRA_REACT, 0);
 			Term_redraw();
 		}

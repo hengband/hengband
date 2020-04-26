@@ -57,6 +57,7 @@
 #include "world.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
+#include "autopick/autopick-pref-processor.h"
 #include "floor-town.h"
 #include "japanese.h"
 #include "view/display-main-window.h"
@@ -1950,21 +1951,21 @@ static void store_process_command(player_type *client_ptr)
 	case '@':
 	{
 		client_ptr->town_num = old_town_num;
-		do_cmd_macros(client_ptr);
+		do_cmd_macros(client_ptr, process_autopick_file_command);
 		client_ptr->town_num = inner_town_num;
 		break;
 	}
 	case '%':
 	{
 		client_ptr->town_num = old_town_num;
-		do_cmd_visuals(client_ptr);
+		do_cmd_visuals(client_ptr, process_autopick_file_command);
 		client_ptr->town_num = inner_town_num;
 		break;
 	}
 	case '&':
 	{
 		client_ptr->town_num = old_town_num;
-		do_cmd_colors(client_ptr);
+		do_cmd_colors(client_ptr, process_autopick_file_command);
 		client_ptr->town_num = inner_town_num;
 		break;
 	}
@@ -2018,7 +2019,7 @@ static void store_process_command(player_type *client_ptr)
 	}
 	case ')':
 	{
-		do_cmd_save_screen(client_ptr, handle_stuff);
+		do_cmd_save_screen(client_ptr, handle_stuff, process_autopick_file_command);
 		break;
 	}
 	default:

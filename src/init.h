@@ -128,6 +128,6 @@ extern header g_head;
 
 extern s16b f_tag_to_index(concptr str);
 extern s16b f_tag_to_index_in_init(concptr str);
-extern void init_angband(player_type *player_ptr);
+extern void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(char*));
 extern concptr get_check_sum(void);
 extern void init_file_paths(char *path);

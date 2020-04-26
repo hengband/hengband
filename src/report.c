@@ -262,7 +262,7 @@ static errr make_dump(player_type *creature_ptr, BUF* dumpbuf, void(*update_play
  * @brief スクリーンダンプを作成する/ Make screen dump to buffer
  * @return 作成したスクリーンダンプの参照ポインタ
  */
-concptr make_screen_dump(player_type *creature_ptr)
+concptr make_screen_dump(player_type *creature_ptr, void(*process_autopick_file_command)(char*))
 {
 	static concptr html_head[] = {
 		"<html>\n<body text=\"#ffffff\" bgcolor=\"#000000\">\n",
@@ -290,7 +290,7 @@ concptr make_screen_dump(player_type *creature_ptr)
 		msg_print(NULL);
 
 		use_graphics = FALSE;
-		reset_visuals(creature_ptr);
+		reset_visuals(creature_ptr, process_autopick_file_command);
 
 		creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 		handle_stuff(creature_ptr);
@@ -371,7 +371,7 @@ concptr make_screen_dump(player_type *creature_ptr)
 	if (!old_use_graphics) return ret;
 
 	use_graphics = TRUE;
-	reset_visuals(creature_ptr);
+	reset_visuals(creature_ptr, process_autopick_file_command);
 
 	creature_ptr->redraw |= (PR_WIPE | PR_BASIC | PR_EXTRA | PR_MAP | PR_EQUIPPY);
 	handle_stuff(creature_ptr);

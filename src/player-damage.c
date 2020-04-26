@@ -8,6 +8,7 @@
 #include "avatar.h"
 #include "market/building.h"
 #include "io/write-diary.h"
+#include "autopick/autopick-pref-processor.h"
 #include "cmd/cmd-process-screen.h"
 #include "market/arena-info-table.h"
 #include "realm-song.h"
@@ -513,7 +514,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 #ifdef WORLD_SCORE
 			/* Make screen dump */
-			screen_dump = make_screen_dump(creature_ptr);
+			screen_dump = make_screen_dump(creature_ptr, process_autopick_file_command);
 #endif
 
 			/* Note cause of death */
@@ -567,7 +568,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 			if (get_check_strict(_("画面を保存しますか？", "Dump the screen? "), CHECK_NO_HISTORY))
 			{
-				do_cmd_save_screen(creature_ptr, handle_stuff);
+				do_cmd_save_screen(creature_ptr, handle_stuff, process_autopick_file_command);
 			}
 
 			flush();
@@ -664,7 +665,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 					flush();
 #ifdef WORLD_SCORE
 					/* Make screen dump */
-					screen_dump = make_screen_dump(creature_ptr);
+					screen_dump = make_screen_dump(creature_ptr, process_autopick_file_command);
 #endif
 
 					/* Wait a key press */

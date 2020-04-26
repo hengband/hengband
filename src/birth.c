@@ -3554,7 +3554,7 @@ void add_history_from_pref_line(concptr t)
  * @brief 生い立ちメッセージをファイルからロードする。
  * @return なし
  */
-static bool do_cmd_histpref(player_type *creature_ptr)
+static bool do_cmd_histpref(player_type *creature_ptr, void(*process_autopick_file_command)(char*))
 {
 	char buf[80];
 	errr err;
@@ -3574,7 +3574,7 @@ static bool do_cmd_histpref(player_type *creature_ptr)
 #else
 	sprintf(buf, "histpref-%s.prf", creature_ptr->base_name);
 #endif
-	err = process_histpref_file(creature_ptr, buf);
+	err = process_histpref_file(creature_ptr, buf, process_autopick_file_command);
 
 	/* Process 'hist????.prf' if 'hist????-<name>.prf' doesn't exist */
 	if (0 > err)
@@ -3584,7 +3584,7 @@ static bool do_cmd_histpref(player_type *creature_ptr)
 #else
 		strcpy(buf, "histpref.prf");
 #endif
-		err = process_histpref_file(creature_ptr, buf);
+		err = process_histpref_file(creature_ptr, buf, process_autopick_file_command);
 	}
 
 	if (err)
@@ -3651,7 +3651,7 @@ static bool do_cmd_histpref(player_type *creature_ptr)
  * @brief 生い立ちメッセージを編集する。/Character background edit-mode
  * @return なし
  */
-static void edit_history(player_type *creature_ptr)
+static void edit_history(player_type *creature_ptr, void(*process_autopick_file_command)(char*))
 {
 	char old_history[4][60];
 	TERM_LEN y = 0, x = 0;
@@ -3780,7 +3780,7 @@ static void edit_history(player_type *creature_ptr)
 		}
 		else if (c == KTRL('A'))
 		{
-			if (do_cmd_histpref(creature_ptr))
+			if (do_cmd_histpref(creature_ptr, process_autopick_file_command))
 			{
 #ifdef JP
 				if ((x > 0) && (iskanji2(creature_ptr->history[y], x - 1))) x--;
@@ -3861,7 +3861,7 @@ static void edit_history(player_type *creature_ptr)
  * expensive CPU wise.  And it cuts down on player stupidity.
  * @return なし
  */
-static bool player_birth_aux(player_type *creature_ptr)
+static bool player_birth_aux(player_type *creature_ptr, void(*process_autopick_file_command)(char*))
 {
 	int i, k, n, cs, os;
 
@@ -4439,7 +4439,7 @@ static bool player_birth_aux(player_type *creature_ptr)
 	process_player_name(creature_ptr, current_world_ptr->creating_savefile);
 
 	/*** Edit character background ***/
-	edit_history(creature_ptr);
+	edit_history(creature_ptr, process_autopick_file_command);
 
 	/*** Finish up ***/
 
@@ -4552,7 +4552,7 @@ static bool ask_quick_start(player_type *creature_ptr)
  * fields, so we must be sure to clear them first.
  * @return なし
  */
-void player_birth(player_type *creature_ptr)
+void player_birth(player_type *creature_ptr, void(*process_autopick_file_command)(char*))
 {
 	int i, j;
 	char buf[80];
@@ -4575,7 +4575,7 @@ void player_birth(player_type *creature_ptr)
 		while (TRUE)
 		{
 			/* Roll up a new character */
-			if (player_birth_aux(creature_ptr)) break;
+			if (player_birth_aux(creature_ptr, process_autopick_file_command)) break;
 
 			/* Wipe the player */
 			player_wipe_without_name(creature_ptr);

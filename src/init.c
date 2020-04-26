@@ -1433,7 +1433,7 @@ static void init_angband_aux(concptr why)
  * if needed, in the first (?) pass through "TERM_XTRA_REACT".
  * </pre>
  */
-void init_angband(player_type *player_ptr)
+void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(char*))
 {
 	/*** Verify the "news" file ***/
 	char buf[1024];
@@ -1606,13 +1606,13 @@ void init_angband(player_type *player_ptr)
 	strcpy(buf, "pref.prf");
 
 	/* Process that file */
-	process_pref_file(player_ptr, buf);
+	process_pref_file(player_ptr, buf, process_autopick_file_command);
 
 	/* Access the "basic" system pref file */
 	sprintf(buf, "pref-%s.prf", ANGBAND_SYS);
 
 	/* Process that file */
-	process_pref_file(player_ptr, buf);
+	process_pref_file(player_ptr, buf, process_autopick_file_command);
 
 	note(_("[初期化終了]", "[Initialization complete]"));
 }

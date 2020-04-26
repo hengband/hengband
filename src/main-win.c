@@ -98,6 +98,7 @@
 #include "chuukei.h"
 
 #include "io/write-diary.h"
+#include "autopick/autopick-pref-processor.h"
 #include "cmd/cmd-process-screen.h"
 #include "cmd/cmd-save.h"
 #include "view/display-main-window.h"
@@ -1440,7 +1441,7 @@ static errr term_xtra_win_react(player_type *player_ptr)
 		}
 
 		use_graphics = arg_graphics;
-		reset_visuals(player_ptr);
+		reset_visuals(player_ptr, process_autopick_file_command);
 	}
 
 	for (int i = 0; i < MAX_TERM_DATA; i++)
@@ -3853,7 +3854,7 @@ int PASCAL WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nC
 
 	signals_init();
 	Term_activate(term_screen);
-	init_angband(p_ptr);
+	init_angband(p_ptr, process_autopick_file_command);
 	initialized = TRUE;
 #ifdef CHUUKEI
 	if (lpCmdLine[0] == '-') {

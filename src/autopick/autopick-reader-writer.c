@@ -1,6 +1,7 @@
 #include "angband.h"
 #include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick-initializer.h"
+#include "autopick/autopick-pref-processor.h"
 #include "files.h"
 #include "io/read-pref-file.h"
 
@@ -12,7 +13,7 @@ void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 	GAME_TEXT buf[80];
 	init_autopick();
 	my_strcpy(buf, pickpref_filename(player_ptr, PT_WITH_PNAME), sizeof(buf));
-	errr err = process_autopick_file(player_ptr, buf);
+	errr err = process_autopick_file(player_ptr, buf, process_autopick_file_command);
 	if (err == 0 && disp_mes)
 	{
 		msg_format(_("%sÇì«Ç›çûÇ›Ç‹ÇµÇΩÅB", "Loaded '%s'."), buf);
@@ -21,7 +22,7 @@ void autopick_load_pref(player_type *player_ptr, bool disp_mes)
 	if (err < 0)
 	{
 		my_strcpy(buf, pickpref_filename(player_ptr, PT_DEFAULT), sizeof(buf));
-		err = process_autopick_file(player_ptr, buf);
+		err = process_autopick_file(player_ptr, buf, process_autopick_file_command);
 		if (err == 0 && disp_mes)
 		{
 			msg_format(_("%sÇì«Ç›çûÇ›Ç‹ÇµÇΩÅB", "Loaded '%s'."), buf);

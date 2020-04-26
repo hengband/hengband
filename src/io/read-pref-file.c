@@ -44,7 +44,7 @@ static int auto_dump_line_num;
  * @param preftype prefファイルのタイプ
  * @return エラーコード
  */
-static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int preftype)
+static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int preftype, void(*process_autopick_file_command)(char*))
 {
 	FILE *fp;
 	fp = my_fopen(name, "r");
@@ -91,13 +91,13 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 			switch (preftype)
 			{
 			case PREF_TYPE_AUTOPICK:
-				(void)process_autopick_file(creature_ptr, buf + 2);
+				(void)process_autopick_file(creature_ptr, buf + 2, process_autopick_file_command);
 				break;
 			case PREF_TYPE_HISTPREF:
-				(void)process_histpref_file(creature_ptr, buf + 2);
+				(void)process_histpref_file(creature_ptr, buf + 2, process_autopick_file_command);
 				break;
 			default:
-				(void)process_pref_file(creature_ptr, buf + 2);
+				(void)process_pref_file(creature_ptr, buf + 2, process_autopick_file_command);
 				break;
 			}
 
@@ -111,7 +111,7 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
 			if (preftype != PREF_TYPE_AUTOPICK)
 				break;
 			
-			process_autopick_file_command(buf);
+			(*process_autopick_file_command)(buf);
 			err = 0;
 		}
 	}
@@ -144,16 +144,16 @@ static errr process_pref_file_aux(player_type *creature_ptr, concptr name, int p
  * allow conditional evaluation and filename inclusion.
  * </pre>
  */
-errr process_pref_file(player_type *creature_ptr, concptr name)
+errr process_pref_file(player_type *creature_ptr, concptr name, void(*process_autopick_file_command)(char*))
 {
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_PREF, name);
 
-	errr err1 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL);
+	errr err1 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL, process_autopick_file_command);
 	if (err1 > 0) return err1;
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
-	errr err2 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL);
+	errr err2 = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_NORMAL, process_autopick_file_command);
 	if (err2 < 0 && !err1)
 		return -2;
 
@@ -167,11 +167,11 @@ errr process_pref_file(player_type *creature_ptr, concptr name)
  * @param name ファイル名
  * @details
  */
-errr process_autopick_file(player_type *creature_ptr, concptr name)
+errr process_autopick_file(player_type *creature_ptr, concptr name, void(*process_autopick_file_command)(char*))
 {
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
-	errr err = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_AUTOPICK);
+	errr err = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_AUTOPICK, process_autopick_file_command);
 	return err;
 }
 
@@ -184,7 +184,7 @@ errr process_autopick_file(player_type *creature_ptr, concptr name)
  * @return エラーコード
  * @details
  */
-errr process_histpref_file(player_type *creature_ptr, concptr name)
+errr process_histpref_file(player_type *creature_ptr, concptr name, void(*process_autopick_file_command)(char*))
 {
 	bool old_character_xtra = current_world_ptr->character_xtra;
 	char buf[1024];
@@ -192,7 +192,7 @@ errr process_histpref_file(player_type *creature_ptr, concptr name)
 
 	/* Hack -- prevent modification birth options in this file */
 	current_world_ptr->character_xtra = TRUE;
-	errr err = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_HISTPREF);
+	errr err = process_pref_file_aux(creature_ptr, buf, PREF_TYPE_HISTPREF, process_autopick_file_command);
 	current_world_ptr->character_xtra = old_character_xtra;
 	return err;
 }

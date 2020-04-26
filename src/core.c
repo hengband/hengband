@@ -107,6 +107,7 @@
 #include "files.h"
 #include "scores.h"
 #include "autopick/autopick.h"
+#include "autopick/autopick-pref-processor.h"
 #include "autopick/autopick-reader-writer.h"
 #include "save.h"
 #include "realm.h"
@@ -3425,18 +3426,18 @@ static void process_command(player_type *creature_ptr)
 	}
 	case '@':
 	{
-		do_cmd_macros(creature_ptr);
+		do_cmd_macros(creature_ptr, process_autopick_file_command);
 		break;
 	}
 	case '%':
 	{
-		do_cmd_visuals(creature_ptr);
+		do_cmd_visuals(creature_ptr, process_autopick_file_command);
 		do_cmd_redraw(creature_ptr);
 		break;
 	}
 	case '&':
 	{
-		do_cmd_colors(creature_ptr);
+		do_cmd_colors(creature_ptr, process_autopick_file_command);
 		do_cmd_redraw(creature_ptr);
 		break;
 	}
@@ -3521,7 +3522,7 @@ static void process_command(player_type *creature_ptr)
 	}
 	case ')':
 	{
-		do_cmd_save_screen(creature_ptr, handle_stuff);
+		do_cmd_save_screen(creature_ptr, handle_stuff, process_autopick_file_command);
 		break;
 	}
 	case ']':
@@ -4227,25 +4228,25 @@ static void load_all_pref_files(player_type *player_ptr)
 {
 	char buf[1024];
 	sprintf(buf, "user.prf");
-	process_pref_file(player_ptr, buf);
+	process_pref_file(player_ptr, buf, process_autopick_file_command);
 	sprintf(buf, "user-%s.prf", ANGBAND_SYS);
-	process_pref_file(player_ptr, buf);
+	process_pref_file(player_ptr, buf, process_autopick_file_command);
 	sprintf(buf, "%s.prf", rp_ptr->title);
-	process_pref_file(player_ptr, buf);
+	process_pref_file(player_ptr, buf, process_autopick_file_command);
 	sprintf(buf, "%s.prf", cp_ptr->title);
-	process_pref_file(player_ptr, buf);
+	process_pref_file(player_ptr, buf, process_autopick_file_command);
 	sprintf(buf, "%s.prf", player_ptr->base_name);
-	process_pref_file(player_ptr, buf);
+	process_pref_file(player_ptr, buf, process_autopick_file_command);
 	if (player_ptr->realm1 != REALM_NONE)
 	{
 		sprintf(buf, "%s.prf", realm_names[player_ptr->realm1]);
-		process_pref_file(player_ptr, buf);
+		process_pref_file(player_ptr, buf, process_autopick_file_command);
 	}
 
 	if (player_ptr->realm2 != REALM_NONE)
 	{
 		sprintf(buf, "%s.prf", realm_names[player_ptr->realm2]);
-		process_pref_file(player_ptr, buf);
+		process_pref_file(player_ptr, buf, process_autopick_file_command);
 	}
 
 	autopick_load_pref(player_ptr, FALSE);
@@ -4268,7 +4269,7 @@ void play_game(player_type *player_ptr, bool new_game)
 #ifdef CHUUKEI
 	if (chuukei_client)
 	{
-		reset_visuals();
+		reset_visuals(player_ptr, process_autopick_file_command);
 		browse_chuukei();
 		return;
 	}
@@ -4281,7 +4282,7 @@ void play_game(player_type *player_ptr, bool new_game)
 
 	if (browsing_movie)
 	{
-		reset_visuals(player_ptr);
+		reset_visuals(player_ptr, process_autopick_file_command);
 		browse_movie();
 		return;
 	}
@@ -4383,7 +4384,7 @@ void play_game(player_type *player_ptr, bool new_game)
 		current_world_ptr->seed_flavor = randint0(0x10000000);
 		current_world_ptr->seed_town = randint0(0x10000000);
 
-		player_birth(player_ptr);
+		player_birth(player_ptr, process_autopick_file_command);
 		counts_write(player_ptr, 2, 0);
 		player_ptr->count = 0;
 		load = FALSE;
@@ -4495,7 +4496,7 @@ void play_game(player_type *player_ptr, bool new_game)
 	}
 
 	player_ptr->playing = TRUE;
-	reset_visuals(player_ptr);
+	reset_visuals(player_ptr, process_autopick_file_command);
 	load_all_pref_files(player_ptr);
 	if (new_game)
 	{
