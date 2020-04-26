@@ -1,4 +1,10 @@
-﻿#include "angband.h"
+﻿/*!
+ * todo 1関数100行以上ある、後で関数を分割すること
+ * @brief 自動拾いエディタのコマンドを受け付ける
+ * @date 2020/04/26
+ * @author Hourier
+ */
+#include "angband.h"
 #include "autopick/autopick-command-menu.h"
 #include "autopick/autopick-util.h"
 #include "autopick/autopick-menu-data-table.h"
@@ -10,12 +16,7 @@
 int do_command_menu(int level, int start)
 {
 	int max_len = 0;
-	int col0 = 5 + level * 7;
-	int row0 = 1 + level * 3;
 	int menu_id_list[26];
-	bool redraw = TRUE;
-	char linestr[MAX_LINELEN];
-
 	byte menu_key = 0;
 	for (int i = start; menu_data[i].level >= level; i++)
 	{
@@ -37,7 +38,7 @@ int do_command_menu(int level, int start)
 
 	int max_menu_wid = max_len + 3 + 3;
 
-	/* Prepare box line */
+	char linestr[MAX_LINELEN];
 	linestr[0] = '\0';
 	strcat(linestr, "+");
 	for (int i = 0; i < max_menu_wid + 2; i++)
@@ -46,11 +47,13 @@ int do_command_menu(int level, int start)
 	}
 
 	strcat(linestr, "+");
-
+	bool redraw = TRUE;
 	while (TRUE)
 	{
 		if (redraw)
 		{
+			int col0 = 5 + level * 7;
+			int row0 = 1 + level * 3;
 			int row1 = row0 + 1;
 			Term_putstr(col0, row0, -1, TERM_WHITE, linestr);
 
