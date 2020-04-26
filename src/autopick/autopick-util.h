@@ -72,13 +72,6 @@ typedef struct {
 	bool changed;
 } text_body_type;
 
-typedef struct {
-	concptr name;
-	int level;
-	int key;
-	int com_id;
-} command_menu_type;
-
 /*
  *  List for auto-picker/destroyer entries
  */
