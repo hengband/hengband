@@ -4,11 +4,65 @@
  * @date 2020/04/26
  * @author Hourier
  */
+
 #include "angband.h"
 #include "autopick/autopick-command-menu.h"
 #include "autopick/autopick-util.h"
 #include "autopick/autopick-menu-data-table.h"
 #include "gameterm.h"
+
+/*!
+ * @brief 自動拾いエディタの画面を再描画する
+ * @param redraw 再描画が必要ならTRUE
+ * @param level command_menu_type 構造体におけるメニュー (詳細不明)
+ * @param start
+ * @param linestr
+ * @param menu_key 自動拾いエディタのメニューで入力したキー
+ * @param max_len
+ * @return なし
+ */
+static void redraw_edit_command_menu(bool *redraw, int level, int start, char *linestr, byte *menu_key, int max_len)
+{
+	if (!*redraw) return;
+
+	int col0 = 5 + level * 7;
+	int row0 = 1 + level * 3;
+	int row1 = row0 + 1;
+	Term_putstr(col0, row0, -1, TERM_WHITE, linestr);
+
+	*menu_key = 0;
+	for (int i = start; menu_data[i].level >= level; i++)
+	{
+		char com_key_str[3];
+		concptr str;
+		if (menu_data[i].level > level) continue;
+
+		if (menu_data[i].com_id == -1)
+		{
+			strcpy(com_key_str, _("▼", ">"));
+		}
+		else if (menu_data[i].key != -1)
+		{
+			com_key_str[0] = '^';
+			com_key_str[1] = menu_data[i].key + '@';
+			com_key_str[2] = '\0';
+		}
+		else
+		{
+			com_key_str[0] = '\0';
+		}
+
+		str = format("| %c) %-*s %2s | ", *menu_key + 'a', max_len, menu_data[i].name, com_key_str);
+
+		Term_putstr(col0, row1++, -1, TERM_WHITE, str);
+
+		(*menu_key)++;
+	}
+
+	Term_putstr(col0, row1, -1, TERM_WHITE, linestr);
+	*redraw = FALSE;
+}
+
 
 /*
  * Display the menu, and get a command
@@ -50,49 +104,9 @@ int do_command_menu(int level, int start)
 	bool redraw = TRUE;
 	while (TRUE)
 	{
-		if (redraw)
-		{
-			int col0 = 5 + level * 7;
-			int row0 = 1 + level * 3;
-			int row1 = row0 + 1;
-			Term_putstr(col0, row0, -1, TERM_WHITE, linestr);
-
-			menu_key = 0;
-			for (int i = start; menu_data[i].level >= level; i++)
-			{
-				char com_key_str[3];
-				concptr str;
-				if (menu_data[i].level > level) continue;
-
-				if (menu_data[i].com_id == -1)
-				{
-					strcpy(com_key_str, _("▼", ">"));
-				}
-				else if (menu_data[i].key != -1)
-				{
-					com_key_str[0] = '^';
-					com_key_str[1] = menu_data[i].key + '@';
-					com_key_str[2] = '\0';
-				}
-				else
-				{
-					com_key_str[0] = '\0';
-				}
-
-				str = format("| %c) %-*s %2s | ", menu_key + 'a', max_len, menu_data[i].name, com_key_str);
-
-				Term_putstr(col0, row1++, -1, TERM_WHITE, str);
-
-				menu_key++;
-			}
-
-			Term_putstr(col0, row1, -1, TERM_WHITE, linestr);
-			redraw = FALSE;
-		}
-
+		redraw_edit_command_menu(&redraw, level, start, linestr, &menu_key, max_len);
 		prt(format(_("(a-%c) コマンド:", "(a-%c) Command:"), menu_key + 'a' - 1), 0, 0);
 		char key = inkey();
-
 		if (key == ESCAPE) return 0;
 
 		int com_id;
@@ -109,15 +123,12 @@ int do_command_menu(int level, int start)
 		}
 
 		int menu_id = menu_id_list[key - 'a'];
-
 		if (menu_id < 0) continue;
 
 		com_id = menu_data[menu_id].com_id;
-
 		if (com_id == -1)
 		{
 			com_id = do_command_menu(level + 1, menu_id + 1);
-
 			if (com_id) return com_id;
 			else redraw = TRUE;
 		}
