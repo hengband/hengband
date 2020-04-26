@@ -105,9 +105,10 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 	{
 		char buf[MAX_LINELEN];
 		int sepa_length = tb->wid;
-		for (int i = 0; i < sepa_length; i++)
-			buf[i] = '-';
-		buf[sepa_length] = '\0';
+		int j = 0;
+		for (; j < sepa_length; j++)
+			buf[j] = '-';
+		buf[j] = '\0';
 		Term_putstr(0, tb->hgt + 1, sepa_length, TERM_WHITE, buf);
 	}
 
@@ -120,8 +121,8 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 		by2 = MAX(tb->my, tb->cy);
 	}
 
-	int erase_height = 0;
-	for (int i = 0; i < tb->hgt; i++)
+	int i;
+	for (i = 0; i < tb->hgt; i++)
 	{
 		int leftcol = 0;
 		concptr msg;
@@ -184,11 +185,9 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 			if (x0 < bx2) Term_addstr(bx2 - bx1, TERM_YELLOW, msg + (bx1 - x0));
 			Term_addstr(-1, color, msg + (bx2 - x0));
 		}
-
-		erase_height++;
 	}
 
-	for (int i = erase_height; i < tb->hgt; i++)
+	for (; i < tb->hgt; i++)
 	{
 		Term_erase(0, i + 1, tb->wid);
 	}
@@ -199,9 +198,9 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 
 	autopick_type an_entry, *entry = &an_entry;
 	concptr str1 = NULL, str2 = NULL;
-	for (int i = 0; i < DESCRIPT_HGT; i++)
+	for (int j = 0; j < DESCRIPT_HGT; j++)
 	{
-		Term_erase(0, tb->hgt + 2 + i, tb->wid);
+		Term_erase(0, tb->hgt + 2 + j, tb->wid);
 	}
 
 	if (tb->dirty_flags & DIRTY_NOT_FOUND)
@@ -290,13 +289,13 @@ void draw_text_editor(player_type *player_ptr, text_body_type *tb)
 
 		roff_to_buf(buf, 81, temp, sizeof(temp));
 		t = temp;
-		for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 3; j++)
 		{
 			if (t[0] == 0)
 				break;
 			else
 			{
-				prt(t, tb->hgt + 1 + 1 + i, 0);
+				prt(t, tb->hgt + 1 + 1 + j, 0);
 				t += strlen(t) + 1;
 			}
 		}
