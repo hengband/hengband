@@ -26,7 +26,6 @@ hengband_SOURCES = \
 	autopick/autopick-adder.c autopick/autopick-adder.h \
 	autopick/autopick-pref-processor.c autopick/autopick-pref-processor.h \
 	autopick/autopick-drawer.c autopick/autopick-drawer.h \
-	autopick/autopick-searcher.c autopick/autopick-searcher.h \
 	autopick/autopick-inserter-killer.c autopick/autopick-inserter-killer.h \
 	autopick/autopick-registry.c autopick/autopick-registry.h \
 	autopick/autopick-command-menu.c autopick/autopick-command-menu.h \

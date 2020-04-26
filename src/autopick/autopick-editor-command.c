@@ -15,7 +15,7 @@
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick-inserter-killer.h"
-#include "autopick/autopick-searcher.h"
+#include "autopick/autopick-finder.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-drawer.h"
 #include "gameterm.h"
