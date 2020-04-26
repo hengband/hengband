@@ -139,7 +139,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	}
 
 	screen_save();
-	while (quit != APE_QUIT)
+	while (quit == APE_QUIT)
 	{
 		int com_id = 0;
 		draw_text_editor(player_ptr, tb);
