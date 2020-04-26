@@ -84,3 +84,4 @@ void autopick_free_entry(autopick_type *entry);
 void free_text_lines(concptr *lines_list);
 int get_com_id(char key);
 void auto_inscribe_item(player_type *player_ptr, object_type *o_ptr, int idx);
+void add_autopick_list(autopick_type *entry);

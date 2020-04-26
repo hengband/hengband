@@ -11,7 +11,6 @@
 #include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-finder.h"
-#include "autopick/autopick-adder.h"
 #include "object-hook.h"
 #include "object/object-kind.h"
 #include "object-flavor.h"

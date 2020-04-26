@@ -625,9 +625,6 @@
     <ClCompile Include="..\..\src\autopick\autopick-entry.c">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-util.c">
-      <Filter>autopick</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\io\dump-remover.c">
       <Filter>io</Filter>
     </ClCompile>
@@ -664,9 +661,6 @@
     <ClCompile Include="..\..\src\autopick\autopick-finder.c">
       <Filter>autopick</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\autopick\autopick-adder.c">
-      <Filter>autopick</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\autopick\autopick-pref-processor.c">
       <Filter>autopick</Filter>
     </ClCompile>
@@ -690,6 +684,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\cmd\cmd-autopick.c">
       <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\autopick\autopick-util.c">
+      <Filter>autopick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1356,9 +1353,6 @@
       <Filter>autopick</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\autopick\autopick-finder.h">
-      <Filter>autopick</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\autopick\autopick-adder.h">
       <Filter>autopick</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\autopick\autopick-pref-processor.h">

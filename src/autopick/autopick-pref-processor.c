@@ -1,7 +1,6 @@
 ﻿#include "angband.h"
 #include "autopick/autopick-pref-processor.h"
 #include "autopick/autopick-util.h"
-#include "autopick/autopick-adder.h"
 #include "autopick/autopick-entry.h"
 
 /*
