@@ -1,7 +1,8 @@
 ﻿#pragma once
 
 /*! APE means AutoPickEditor*/
-typedef enum {
+typedef enum
+{
 	APE_QUIT = 0,
 	APE_QUIT_WITHOUT_SAVE = 1,
 	APE_QUIT_AND_SAVE = 2
