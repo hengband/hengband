@@ -10,7 +10,6 @@
  * are included in all such copies.  Other copyrights may also apply.
  */
 
-
 #include "angband.h"
 #include "core.h"
 #include "util.h"
@@ -44,6 +43,7 @@
 #include "spells.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
+#include "autopick/autopick-registry.h"
 #include "targeting.h"
 #include "snipe.h"
 #include "player-race.h"

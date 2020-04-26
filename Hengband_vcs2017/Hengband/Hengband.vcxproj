@@ -161,6 +161,7 @@
     <ClCompile Include="..\..\src\autopick\autopick-menu-data-table.c" />
     <ClCompile Include="..\..\src\autopick\autopick-pref-processor.c" />
     <ClCompile Include="..\..\src\autopick\autopick-reader-writer.c" />
+    <ClCompile Include="..\..\src\autopick\autopick-registry.c" />
     <ClCompile Include="..\..\src\autopick\autopick-searcher.c" />
     <ClCompile Include="..\..\src\autopick\autopick-util.c" />
     <ClCompile Include="..\..\src\autopick\autopick.c" />
@@ -320,6 +321,7 @@
     <ClInclude Include="..\..\src\autopick\autopick-methods-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-pref-processor.h" />
     <ClInclude Include="..\..\src\autopick\autopick-reader-writer.h" />
+    <ClInclude Include="..\..\src\autopick\autopick-registry.h" />
     <ClInclude Include="..\..\src\autopick\autopick-searcher.h" />
     <ClInclude Include="..\..\src\autopick\autopick-util.h" />
     <ClInclude Include="..\..\src\autopick\autopick.h" />
