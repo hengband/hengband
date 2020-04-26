@@ -87,7 +87,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	int i;
 	int key = -1;
 	static s32b old_autosave_turn = 0L;
-	byte quit = 0;
+	ape_quittance quit = APE_QUIT;
 
 	text_body_type text_body;
 	text_body_type *tb = &text_body;
@@ -139,7 +139,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	}
 
 	screen_save();
-	while (!quit)
+	while (quit != APE_QUIT)
 	{
 		int com_id = 0;
 		draw_text_editor(player_ptr, tb);
@@ -196,7 +196,7 @@ void do_cmd_edit_autopick(player_type *player_ptr)
 	screen_load();
 	strcpy(buf, pickpref_filename(player_ptr, tb->filename_mode));
 
-	if (quit == QUIT_AND_SAVE)
+	if (quit == APE_QUIT_AND_SAVE)
 		write_text_lines(buf, tb->lines_list);
 
 	free_text_lines(tb->lines_list);

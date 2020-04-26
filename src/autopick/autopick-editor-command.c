@@ -29,7 +29,7 @@
  * @return 
  * @details Execute a single editor command
  */
-byte do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
+ape_quittance do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 {
 	switch (com_id)
 	{
@@ -41,10 +41,10 @@ byte do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 				"Discard all changes and quit. Are you sure? "))) break;
 		}
 
-		return QUIT_WITHOUT_SAVE;
+		return APE_QUIT_WITHOUT_SAVE;
 	}
 	case EC_SAVEQUIT:
-		return QUIT_AND_SAVE;
+		return APE_QUIT_AND_SAVE;
 	case EC_REVERT:
 	{
 		if (!get_check(_("全ての変更を破棄して元の状態に戻します。よろしいですか？ ",
@@ -771,5 +771,5 @@ byte do_editor_command(player_type *player_ptr, text_body_type *tb, int com_id)
 	}
 
 	tb->old_com_id = com_id;
-	return QUIT;
+	return APE_QUIT;
 }

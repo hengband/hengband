@@ -15,7 +15,7 @@
 
 static void process_dirty_expression(player_type *player_ptr, text_body_type *tb)
 {
-	if (tb->dirty_flags & DIRTY_EXPRESSION == 0) return;
+	if ((tb->dirty_flags & DIRTY_EXPRESSION) == 0) return;
 
 	byte state = 0;
 	for (int y = 0; tb->lines_list[y]; y++)
