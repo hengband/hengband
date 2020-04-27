@@ -1545,8 +1545,6 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 	DIRECTION dir;
 	PLAYER_LEVEL plev = caster_ptr->lev;
 
-	/* spell code */
-	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	switch (spell)
 	{
 	case 0:
