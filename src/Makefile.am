@@ -158,6 +158,9 @@ hengband_SOURCES = \
 	\
 	rumor.h rumor.c \
 	\
+	effect/effect-feature.c effect/effect-feature.h \
+	effect/effect-item.c effect/effect-item.h \
+	\
 	spells.h \
 	spells1.c spells2.c spells3.c \
 	spells-diceroll.c spells-diceroll.h \

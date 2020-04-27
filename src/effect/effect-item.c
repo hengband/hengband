@@ -33,7 +33,7 @@
  * We return "TRUE" if the effect of the projection is "obvious".
  * </pre>
  */
-bool project_o(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
+bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
 	grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 

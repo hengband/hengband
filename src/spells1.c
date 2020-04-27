@@ -4308,7 +4308,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				}
 			}
 
-			if (project_o(caster_ptr, 0, 0, y, x, dam, GF_SEEKER))notice = TRUE;
+			if (affect_item(caster_ptr, 0, 0, y, x, dam, GF_SEEKER))notice = TRUE;
 			if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
 				continue;
 
@@ -4412,7 +4412,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				}
 			}
 
-			if (project_o(caster_ptr, 0, 0, y, x, dam, GF_SUPER_RAY))notice = TRUE;
+			if (affect_item(caster_ptr, 0, 0, y, x, dam, GF_SUPER_RAY))notice = TRUE;
 			if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT))
 			{
 				if (second_step)continue;
@@ -4691,11 +4691,11 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			if (breath)
 			{
 				int d = dist_to_line(y, x, y1, x1, by, bx);
-				if (project_o(caster_ptr, who, d, y, x, dam, typ)) notice = TRUE;
+				if (affect_item(caster_ptr, who, d, y, x, dam, typ)) notice = TRUE;
 			}
 			else
 			{
-				if (project_o(caster_ptr, who, dist, y, x, dam, typ)) notice = TRUE;
+				if (affect_item(caster_ptr, who, dist, y, x, dam, typ)) notice = TRUE;
 			}
 		}
 	}
@@ -5069,7 +5069,7 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 			{
 				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
 				{
-					(void)project_o(caster_ptr, 0, 0, y, x, dam, GF_MANA);
+					(void)affect_item(caster_ptr, 0, 0, y, x, dam, GF_MANA);
 				}
 			}
 		}
