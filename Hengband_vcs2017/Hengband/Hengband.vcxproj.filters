@@ -688,6 +688,9 @@
     <ClCompile Include="..\..\src\autopick\autopick-util.c">
       <Filter>autopick</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\effect\effect-feature.c">
+      <Filter>effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1379,6 +1382,9 @@
     <ClInclude Include="..\..\src\cmd\cmd-autopick.h">
       <Filter>cmd</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\effect\effect-feature.h">
+      <Filter>effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1435,6 +1441,9 @@
     </Filter>
     <Filter Include="room">
       <UniqueIdentifier>{318835ed-a803-4459-921e-f6afc5411baa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="effect">
+      <UniqueIdentifier>{ed8a9f97-b54e-4204-9076-f32f646f3762}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
