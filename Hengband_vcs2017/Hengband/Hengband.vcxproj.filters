@@ -691,6 +691,9 @@
     <ClCompile Include="..\..\src\effect\effect-feature.c">
       <Filter>effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\effect\effect-item.c">
+      <Filter>effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1383,6 +1386,9 @@
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\effect\effect-feature.h">
+      <Filter>effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\effect\effect-item.h">
       <Filter>effect</Filter>
     </ClInclude>
   </ItemGroup>
