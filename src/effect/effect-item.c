@@ -15,52 +15,21 @@
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
  * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
- * @details
- * <pre>
- * We are called from "project()" to "damage" objects
- *
- * We are called both for "beam" effects and "ball" effects.
- *
- * Perhaps we should only SOMETIMES damage things on the ground.
- *
- * The "r" parameter is the "distance from ground zero".
- *
- * Note that we determine if the player can "see" anything that happens
- * by taking into account: blindness, line-of-sight, and illumination.
- *
- * We also "see" grids which are "memorized", probably a hack
- *
- * We return "TRUE" if the effect of the projection is "obvious".
- * </pre>
  */
 bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ)
 {
 	grid_type *g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 
-	OBJECT_IDX this_o_idx, next_o_idx = 0;
-
-	bool obvious = FALSE;
+	bool is_item_affected = FALSE;
 	bool known = player_has_los_bold(caster_ptr, y, x);
-
-	BIT_FLAGS flgs[TR_FLAG_SIZE];
-
-	GAME_TEXT o_name[MAX_NLEN];
-
-	KIND_OBJECT_IDX k_idx = 0;
-	bool is_potion = FALSE;
-
-
 	who = who ? who : 0;
 	dam = (dam + r) / (r + 1);
-
-	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
+	OBJECT_IDX next_o_idx = 0;
+	for (OBJECT_IDX this_o_idx = g_ptr->o_idx; this_o_idx != 0; this_o_idx = next_o_idx)
 	{
 		object_type *o_ptr = &caster_ptr->current_floor_ptr->o_list[this_o_idx];
-
-		bool is_art = FALSE;
 		bool ignore = FALSE;
 		bool do_kill = FALSE;
-
 		concptr note_kill = NULL;
 
 #ifdef JP
@@ -68,9 +37,9 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 		bool plural = (o_ptr->number > 1);
 #endif
 		next_o_idx = o_ptr->next_o_idx;
+		BIT_FLAGS flgs[TR_FLAG_SIZE];
 		object_flags(o_ptr, flgs);
-		if (object_is_artifact(o_ptr)) is_art = TRUE;
-
+		bool is_artifact = object_is_artifact(o_ptr);
 		switch (typ)
 		{
 		case GF_ACID:
@@ -81,6 +50,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 				note_kill = _("融けてしまった！", (plural ? " melt!" : " melts!"));
 				if (have_flag(flgs, TR_IGNORE_ACID)) ignore = TRUE;
 			}
+
 			break;
 		}
 		case GF_ELEC:
@@ -91,6 +61,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 				note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
 				if (have_flag(flgs, TR_IGNORE_ELEC)) ignore = TRUE;
 			}
+
 			break;
 		}
 		case GF_FIRE:
@@ -101,6 +72,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 				note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
 				if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
 			}
+
 			break;
 		}
 		case GF_COLD:
@@ -111,6 +83,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 				do_kill = TRUE;
 				if (have_flag(flgs, TR_IGNORE_COLD)) ignore = TRUE;
 			}
+
 			break;
 		}
 		case GF_PLASMA:
@@ -121,6 +94,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 				note_kill = _("燃えてしまった！", (plural ? " burn up!" : " burns up!"));
 				if (have_flag(flgs, TR_IGNORE_FIRE)) ignore = TRUE;
 			}
+
 			if (hates_elec(o_ptr))
 			{
 				ignore = FALSE;
@@ -128,6 +102,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 				note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
 				if (have_flag(flgs, TR_IGNORE_ELEC)) ignore = TRUE;
 			}
+
 			break;
 		}
 		case GF_METEOR:
@@ -192,6 +167,7 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 				do_kill = TRUE;
 				note_kill = _("壊れてしまった！", (plural ? " are destroyed!" : " is destroyed!"));
 			}
+
 			break;
 		}
 		case GF_IDENTIFY:
@@ -203,97 +179,83 @@ bool affect_item(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION 
 		case GF_KILL_TRAP:
 		case GF_KILL_DOOR:
 		{
-			if (o_ptr->tval == TV_CHEST)
+			if (o_ptr->tval != TV_CHEST) break;
+			if (o_ptr->pval <= 0) break;
+
+			o_ptr->pval = (0 - o_ptr->pval);
+			object_known(o_ptr);
+			if (known && (o_ptr->marked & OM_FOUND))
 			{
-				if (o_ptr->pval > 0)
-				{
-					o_ptr->pval = (0 - o_ptr->pval);
-					object_known(o_ptr);
-					if (known && (o_ptr->marked & OM_FOUND))
-					{
-						msg_print(_("カチッと音がした！", "Click!"));
-						obvious = TRUE;
-					}
-				}
+				msg_print(_("カチッと音がした！", "Click!"));
+				is_item_affected = TRUE;
 			}
 
 			break;
 		}
 		case GF_ANIM_DEAD:
 		{
-			if (o_ptr->tval == TV_CORPSE)
+			if (o_ptr->tval != TV_CORPSE) break;
+
+			BIT_FLAGS mode = 0L;
+			if (!who || is_pet(&caster_ptr->current_floor_ptr->m_list[who]))
+				mode |= PM_FORCE_PET;
+
+			for (int i = 0; i < o_ptr->number; i++)
 			{
-				int i;
-				BIT_FLAGS mode = 0L;
-
-				if (!who || is_pet(&caster_ptr->current_floor_ptr->m_list[who]))
-					mode |= PM_FORCE_PET;
-
-				for (i = 0; i < o_ptr->number; i++)
+				if (((o_ptr->sval == SV_CORPSE) && (randint1(100) > 80)) || 
+					((o_ptr->sval == SV_SKELETON) && (randint1(100) > 60)))
 				{
-					if (((o_ptr->sval == SV_CORPSE) && (randint1(100) > 80)) ||
-						((o_ptr->sval == SV_SKELETON) && (randint1(100) > 60)))
-					{
-						if (!note_kill)
-						{
-							note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
-						}
-						continue;
-					}
-					else if (summon_named_creature(caster_ptr, who, y, x, o_ptr->pval, mode))
-					{
-						note_kill = _("生き返った。", " revived.");
-					}
-					else if (!note_kill)
+					if (!note_kill)
 					{
 						note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
 					}
-				}
 
-				do_kill = TRUE;
-				obvious = TRUE;
+					continue;
+				}
+				else if (summon_named_creature(caster_ptr, who, y, x, o_ptr->pval, mode))
+				{
+					note_kill = _("生き返った。", " revived.");
+				}
+				else if (!note_kill)
+				{
+					note_kill = _("灰になった。", (plural ? " become dust." : " becomes dust."));
+				}
 			}
 
+			do_kill = TRUE;
+			is_item_affected = TRUE;
 			break;
 		}
 		}
 
-		if (do_kill)
+		if (!do_kill) continue;
+
+		GAME_TEXT o_name[MAX_NLEN];
+		if (known && (o_ptr->marked & OM_FOUND))
+		{
+			is_item_affected = TRUE;
+			object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+		}
+
+		if ((is_artifact || ignore))
 		{
 			if (known && (o_ptr->marked & OM_FOUND))
-			{
-				obvious = TRUE;
-				object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-			}
+				msg_format(_("%sは影響を受けない！", (plural ? "The %s are unaffected!" : "The %s is unaffected!")), o_name);
 
-			if (is_art || ignore)
-			{
-				if (known && (o_ptr->marked & OM_FOUND))
-				{
-					msg_format(_("%sは影響を受けない！",
-						(plural ? "The %s are unaffected!" : "The %s is unaffected!")), o_name);
-				}
-			}
-			else
-			{
-				if (known && (o_ptr->marked & OM_FOUND) && note_kill)
-				{
-					msg_format(_("%sは%s", "The %s%s"), o_name, note_kill);
-				}
-
-				k_idx = o_ptr->k_idx;
-				is_potion = object_is_potion(o_ptr);
-				delete_object_idx(caster_ptr, this_o_idx);
-
-				if (is_potion)
-				{
-					(void)potion_smash_effect(caster_ptr, who, y, x, k_idx);
-				}
-
-				lite_spot(caster_ptr, y, x);
-			}
+			continue;
 		}
+
+		if (known && (o_ptr->marked & OM_FOUND) && note_kill)
+			msg_format(_("%sは%s", "The %s%s"), o_name, note_kill);
+
+		KIND_OBJECT_IDX k_idx = o_ptr->k_idx;
+		bool is_potion = object_is_potion(o_ptr);
+		delete_object_idx(caster_ptr, this_o_idx);
+		if (is_potion)
+			(void)potion_smash_effect(caster_ptr, who, y, x, k_idx);
+
+		lite_spot(caster_ptr, y, x);
 	}
 
-	return obvious;
+	return is_item_affected;
 }
