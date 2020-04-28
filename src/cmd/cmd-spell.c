@@ -627,6 +627,9 @@ void do_cmd_browse(player_type *caster_ptr)
 	s = _("読める本がない。", "You have no books that you can read.");
 
 	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (caster_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), item_tester_tval);
+
+	item_tester_tval = 0;
+	item_tester_hook = NULL;
 	if (!o_ptr)
 	{
 		if (item == INVEN_FORCE) /* the_force */
