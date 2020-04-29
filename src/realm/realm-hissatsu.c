@@ -22,6 +22,7 @@
 #include "spells-floor.h"
 #include "world.h"
 #include "effect/spells-effect-util.h"
+#include "spell/spells-util.h"
 
 /*!
 * @brief 剣術の各処理を行う

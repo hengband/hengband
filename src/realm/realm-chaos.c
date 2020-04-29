@@ -12,6 +12,7 @@
 #include "spells.h"
 #include "targeting.h"
 #include "view/display-main-window.h"
+#include "realm/realm-chaos.h"
 
 /*!
 * @brief カオス領域魔法の各処理を行う

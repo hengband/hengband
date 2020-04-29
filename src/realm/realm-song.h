@@ -30,4 +30,6 @@
 
 #define MUSIC_DETECT            101
 
-extern concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode);
+#include "spell/spells-util.h"
+
+concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode);

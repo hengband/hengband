@@ -10,6 +10,7 @@
 #include "player-class.h"
 #include "targeting.h"
 #include "effect/spells-effect-util.h"
+#include "realm/realm-trump.h"
 
 /*!
 * @brief トランプ領域魔法の各処理を行う

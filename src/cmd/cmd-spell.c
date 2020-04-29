@@ -33,6 +33,8 @@
 #include "floor.h"
 #include "autopick/autopick-reader-writer.h"
 #include "japanese.h"
+#include "spell/spells-util.h"
+#include "spell/spells-execution.h"
 
  /*!
   * 魔法領域フラグ管理テーブル /

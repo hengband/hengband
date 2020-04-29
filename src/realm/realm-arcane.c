@@ -13,6 +13,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "targeting.h"
+#include "realm/realm-arcane.h"
 
 /*!
 * @brief 秘術領域魔法の各処理を行う

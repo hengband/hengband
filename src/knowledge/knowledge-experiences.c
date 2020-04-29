@@ -12,6 +12,8 @@
 #include "object/object-kind.h"
 #include "player-skill.h"
 #include "spell/technic-info-table.h"
+#include "spell/spells-util.h"
+#include "spell/spells-execution.h"
 
 /*
  * Display weapon-exp

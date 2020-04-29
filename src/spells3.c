@@ -63,6 +63,8 @@
 #include "autopick/autopick.h"
 #include "targeting.h"
 #include "effect/spells-effect-util.h"
+#include "spell/spells-util.h"
+#include "spell/spells-execution.h"
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */
 #define MAX_TRIES 100

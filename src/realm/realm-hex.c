@@ -37,6 +37,8 @@
 #include "realm/realm-song.h"
 #include "view/display-main-window.h"
 #include "world.h"
+#include "realm/realm-hex.h"
+#include "spell/spells-execution.h"
 
 #define MAX_KEEP 4 /*!<呪術の最大詠唱数 */
 

@@ -1,5 +1,4 @@
-﻿
-#include "angband.h"
+﻿#include "angband.h"
 #include "util.h"
 
 #include "player-class.h"
@@ -14,6 +13,7 @@
 #include "player-race.h"
 #include "player-damage.h"
 #include "targeting.h"
+#include "realm/realm-daemon.h"
 
 /*!
 * @brief 悪魔領域魔法の各処理を行う

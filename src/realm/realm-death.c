@@ -12,6 +12,7 @@
 #include "player-class.h"
 #include "player-damage.h"
 #include "player-race.h"
+#include "realm/realm-death.h"
 
 /*!
 * @brief 暗黒領域魔法の各処理を行う

@@ -113,6 +113,8 @@
 #include "realm/realm.h"
 #include "realm/realm-song.h"
 #include "targeting.h"
+#include "spell/spells-util.h"
+#include "spell/spells-execution.h"
 
  /*!
   * コピーライト情報 /

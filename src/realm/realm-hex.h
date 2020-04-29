@@ -1,8 +1,6 @@
 ﻿#pragma once
 
-/*!
- * @file realm/realm-hex.h
- */
+#include "spell/spells-util.h"
 
 #define hex_spelling_any(CREATURE_PTR) \
 	(((CREATURE_PTR)->realm1 == REALM_HEX) && ((CREATURE_PTR)->magic_num1[0]))

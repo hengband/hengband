@@ -24,9 +24,10 @@
 #include "cmd-basic.h"
 #include "cmd-spell.h"
 #include "view/display-main-window.h"
+#include "spell/spells-util.h"
+#include "spell/spells-execution.h"
 
 #define TECHNIC_HISSATSU (REALM_HISSATSU - MIN_TECHNIC)
-
 
 /*!
  * @brief 使用可能な剣術を選択する /

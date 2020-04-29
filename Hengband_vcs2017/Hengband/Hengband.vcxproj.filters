@@ -700,6 +700,9 @@
     <ClCompile Include="..\..\src\spell\technic-info-table.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-execution.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1401,6 +1404,12 @@
       <Filter>effect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\technic-info-table.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-execution.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-util.h">
       <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>
