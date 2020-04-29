@@ -148,7 +148,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	/* Prevents problems with chain reactions of exploding monsters */
 	if (effect_monster_ptr->m_ptr->hp < 0) return FALSE;
 
-	dam = (dam + r) / (r + 1);
+	dam = (dam + effect_monster_ptr->r) / (effect_monster_ptr->r + 1);
 
 	/* Get the monster name (BEFORE polymorphing) */
 	monster_desc(caster_ptr, effect_monster_ptr->m_name, effect_monster_ptr->m_ptr, 0);
@@ -364,7 +364,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			else
 			{
 				effect_monster_ptr->do_poly = TRUE;
-				effect_monster_ptr->do_conf = (5 + randint1(11) + r) / (r + 1);
+				effect_monster_ptr->do_conf = (5 + randint1(11) + effect_monster_ptr->r) / (effect_monster_ptr->r + 1);
 			}
 
 			break;
@@ -403,7 +403,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_SOUN);
 			}
 			else
-				effect_monster_ptr->do_stun = (10 + randint1(15) + r) / (r + 1);
+				effect_monster_ptr->do_stun = (10 + randint1(15) + effect_monster_ptr->r) / (effect_monster_ptr->r + 1);
 
 			break;
 		}
@@ -417,7 +417,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
 			}
 			else
-				effect_monster_ptr->do_conf = (10 + randint1(15) + r) / (r + 1);
+				effect_monster_ptr->do_conf = (10 + randint1(15) + effect_monster_ptr->r) / (effect_monster_ptr->r + 1);
 
 			break;
 		}
@@ -455,7 +455,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_WALL);
 			}
 			else
-				effect_monster_ptr->do_stun = (randint1(15) + r) / (r + 1);
+				effect_monster_ptr->do_stun = (randint1(15) + effect_monster_ptr->r) / (effect_monster_ptr->r + 1);
 
 			break;
 		}
@@ -874,7 +874,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_ICE:
 		{
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
-			effect_monster_ptr->do_stun = (randint1(15) + 1) / (r + 1);
+			effect_monster_ptr->do_stun = (randint1(15) + 1) / (effect_monster_ptr->r + 1);
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_IM_COLD)
 			{
 				effect_monster_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
