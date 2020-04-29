@@ -2263,6 +2263,38 @@ static void process_monster_last_moment(player_type *caster_ptr, effect_monster_
 
 
 /*!
+ * @brief 朦朧値を蓄積させる
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @param stun_damage 朦朧値
+ * @return なし
+ */
+static void pile_monster_stun(player_type *caster_ptr, effect_monster_type *em_ptr, int *stun_damage)
+{
+	if ((em_ptr->do_stun == 0) ||
+		(em_ptr->r_ptr->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)) ||
+		(em_ptr->r_ptr->flags3 & RF3_NO_STUN))
+		return *stun_damage;
+
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (MON_STUNNED(em_ptr->m_ptr))
+	{
+		em_ptr->note = _("はひどくもうろうとした。", " is more dazed.");
+		*stun_damage = MON_STUNNED(em_ptr->m_ptr) + (em_ptr->do_stun / 2);
+	}
+	else
+	{
+		em_ptr->note = _("はもうろうとした。", " is dazed.");
+		*stun_damage = em_ptr->do_stun;
+	}
+
+	(void)set_monster_stunned(caster_ptr, em_ptr->g_ptr->m_idx, *stun_damage);
+	em_ptr->get_angry = TRUE;
+}
+
+
+/*!
  * @brief 汎用的なビーム/ボルト/ボール系によるモンスターへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
@@ -2311,9 +2343,9 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		if (!(em_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(caster_ptr, V_HONOUR, -1);
 	}
 
-	int tmp = em_ptr->dam;
+	int tmp_damage = em_ptr->dam;
 	em_ptr->dam = mon_damage_mod(caster_ptr, em_ptr->m_ptr, em_ptr->dam, (bool)(em_ptr->effect_type == GF_PSY_SPEAR));
-	if ((tmp > 0) && (em_ptr->dam == 0)) em_ptr->note = _("はダメージを受けていない。", " is unharmed.");
+	if ((tmp_damage > 0) && (em_ptr->dam == 0)) em_ptr->note = _("はダメージを受けていない。", " is unharmed.");
 
 	if (em_ptr->dam > em_ptr->m_ptr->hp)
 	{
@@ -2321,27 +2353,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	}
 	else
 	{
-		if (em_ptr->do_stun &&
-			!(em_ptr->r_ptr->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)) &&
-			!(em_ptr->r_ptr->flags3 & RF3_NO_STUN))
-		{
-			if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-			if (MON_STUNNED(em_ptr->m_ptr))
-			{
-				em_ptr->note = _("はひどくもうろうとした。", " is more dazed.");
-				tmp = MON_STUNNED(em_ptr->m_ptr) + (em_ptr->do_stun / 2);
-			}
-			else
-			{
-				em_ptr->note = _("はもうろうとした。", " is dazed.");
-				tmp = em_ptr->do_stun;
-			}
-
-			(void)set_monster_stunned(caster_ptr, em_ptr->g_ptr->m_idx, tmp);
-			em_ptr->get_angry = TRUE;
-		}
-
+		pile_monster_stun(caster_ptr, em_ptr, &tmp_damage);
 		if (em_ptr->do_conf &&
 			!(em_ptr->r_ptr->flags3 & RF3_NO_CONF) &&
 			!(em_ptr->r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
@@ -2351,15 +2363,15 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (MON_CONFUSED(em_ptr->m_ptr))
 			{
 				em_ptr->note = _("はさらに混乱したようだ。", " looks more confused.");
-				tmp = MON_CONFUSED(em_ptr->m_ptr) + (em_ptr->do_conf / 2);
+				tmp_damage = MON_CONFUSED(em_ptr->m_ptr) + (em_ptr->do_conf / 2);
 			}
 			else
 			{
 				em_ptr->note = _("は混乱したようだ。", " looks confused.");
-				tmp = em_ptr->do_conf;
+				tmp_damage = em_ptr->do_conf;
 			}
 
-			(void)set_monster_confused(caster_ptr, em_ptr->g_ptr->m_idx, tmp);
+			(void)set_monster_confused(caster_ptr, em_ptr->g_ptr->m_idx, tmp_damage);
 			em_ptr->get_angry = TRUE;
 		}
 
