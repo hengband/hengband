@@ -2352,6 +2352,30 @@ static void process_monster_weakening(player_type *caster_ptr, effect_monster_ty
 
 
 /*!
+ * @brief モンスターを変身させる
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void process_monster_polymorph(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (!em_ptr->do_polymorph || (randint1(90) <= em_ptr->r_ptr->level))
+		return;
+
+	if (polymorph_monster(caster_ptr, em_ptr->y, em_ptr->x))
+	{
+		if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+		em_ptr->note = _("が変身した！", " changes!");
+		em_ptr->dam = 0;
+	}
+
+	em_ptr->m_ptr = &caster_ptr->current_floor_ptr->m_list[em_ptr->g_ptr->m_idx];
+	em_ptr->r_ptr = &r_info[em_ptr->m_ptr->r_idx];
+}
+
+
+/*!
  * @brief 汎用的なビーム/ボルト/ボール系によるモンスターへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
@@ -2366,7 +2390,6 @@ static void process_monster_weakening(player_type *caster_ptr, effect_monster_ty
  */
 bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
 {
-	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	effect_monster_type tmp_effect;
 	effect_monster_type *em_ptr = &tmp_effect;
 	initialize_effect_monster(caster_ptr, em_ptr, who, r, y, x, dam, effect_type, flag, see_s_msg);
@@ -2413,19 +2436,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		pile_monster_stun(caster_ptr, em_ptr, &tmp_damage);
 		pile_monster_conf(caster_ptr, em_ptr, &tmp_damage);
 		process_monster_weakening(caster_ptr, em_ptr, &tmp_damage);
-		if (em_ptr->do_polymorph && (randint1(90) > em_ptr->r_ptr->level))
-		{
-			if (polymorph_monster(caster_ptr, em_ptr->y, em_ptr->x))
-			{
-				if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-				em_ptr->note = _("が変身した！", " changes!");
-				em_ptr->dam = 0;
-			}
-
-			em_ptr->m_ptr = &floor_ptr->m_list[em_ptr->g_ptr->m_idx];
-			em_ptr->r_ptr = &r_info[em_ptr->m_ptr->r_idx];
-		}
+		process_monster_polymorph(caster_ptr, em_ptr);
 
 		if (em_ptr->do_dist)
 		{
@@ -2440,7 +2451,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 			em_ptr->y = em_ptr->m_ptr->fy;
 			em_ptr->x = em_ptr->m_ptr->fx;
-			em_ptr->g_ptr = &floor_ptr->grid_array[em_ptr->y][em_ptr->x];
+			em_ptr->g_ptr = &caster_ptr->current_floor_ptr->grid_array[em_ptr->y][em_ptr->x];
 		}
 
 		if (em_ptr->do_fear)
