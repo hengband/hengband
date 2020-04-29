@@ -2121,6 +2121,30 @@ static gf_switch_result process_monster_perfect_resistance(player_type *caster_p
 
 
 /*!
+ * @brief ペットの死亡を処理する
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void process_pet_death(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	bool sad = is_pet(em_ptr->m_ptr) && !(em_ptr->m_ptr->ml);
+	if (em_ptr->known && em_ptr->note)
+	{
+		monster_desc(caster_ptr, em_ptr->m_name, em_ptr->m_ptr, MD_TRUE_NAME);
+		if (em_ptr->see_s_msg) msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
+		else caster_ptr->current_floor_ptr->monster_noise = TRUE;
+	}
+
+	if (em_ptr->who > 0) monster_gain_exp(caster_ptr, em_ptr->who, em_ptr->m_ptr->r_idx);
+
+	monster_death(caster_ptr, em_ptr->g_ptr->m_idx, FALSE);
+	delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
+	if (sad) msg_print(_("少し悲しい気分がした。", "You feel sad for a moment."));
+}
+
+
+/*!
  * @brief モンスターの死に際処理 (魔力吸収を除く)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -2131,7 +2155,6 @@ static void process_monster_last_moment(player_type *caster_ptr, effect_monster_
 	if (em_ptr->effect_type == GF_DRAIN_MANA) return;
 
 	/* If another monster did the damage, hurt the monster by hand */
-	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	if (em_ptr->who > 0)
 	{
 		if (caster_ptr->health_who == em_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
@@ -2141,19 +2164,7 @@ static void process_monster_last_moment(player_type *caster_ptr, effect_monster_
 		em_ptr->m_ptr->hp -= em_ptr->dam;
 		if (em_ptr->m_ptr->hp < 0)
 		{
-			bool sad = is_pet(em_ptr->m_ptr) && !(em_ptr->m_ptr->ml);
-			if (em_ptr->known && em_ptr->note)
-			{
-				monster_desc(caster_ptr, em_ptr->m_name, em_ptr->m_ptr, MD_TRUE_NAME);
-				if (em_ptr->see_s_msg) msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
-				else floor_ptr->monster_noise = TRUE;
-			}
-
-			if (em_ptr->who > 0) monster_gain_exp(caster_ptr, em_ptr->who, em_ptr->m_ptr->r_idx);
-
-			monster_death(caster_ptr, em_ptr->g_ptr->m_idx, FALSE);
-			delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
-			if (sad) msg_print(_("少し悲しい気分がした。", "You feel sad for a moment."));
+			process_pet_death(caster_ptr, em_ptr);
 		}
 		else
 		{
@@ -2165,7 +2176,7 @@ static void process_monster_last_moment(player_type *caster_ptr, effect_monster_
 			}
 			else
 			{
-				floor_ptr->monster_noise = TRUE;
+				caster_ptr->current_floor_ptr->monster_noise = TRUE;
 			}
 
 			if (em_ptr->do_sleep) (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
