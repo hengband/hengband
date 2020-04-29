@@ -147,7 +147,7 @@ static gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_m
 			em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
 			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_IM_POIS);
 		}
-		else if (one_in_(3)) em_ptr->do_poly = TRUE;
+		else if (one_in_(3)) em_ptr->do_polymorph = TRUE;
 		break;
 	}
 	case GF_HELL_FIRE:
@@ -258,7 +258,7 @@ static gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_m
 		}
 		else
 		{
-			em_ptr->do_poly = TRUE;
+			em_ptr->do_polymorph = TRUE;
 			em_ptr->do_conf = (5 + randint1(11) + em_ptr->r) / (em_ptr->r + 1);
 		}
 
@@ -835,7 +835,7 @@ static gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_m
 	case GF_OLD_POLY:
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		em_ptr->do_poly = TRUE;
+		em_ptr->do_polymorph = TRUE;
 
 		/* Powerful monsters can resist */
 		if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
@@ -843,7 +843,7 @@ static gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_m
 			(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
 		{
 			em_ptr->note = _("には効果がなかった。", " is unaffected.");
-			em_ptr->do_poly = FALSE;
+			em_ptr->do_polymorph = FALSE;
 			em_ptr->obvious = FALSE;
 		}
 
@@ -2261,7 +2261,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || 
 		(em_ptr->r_ptr->flags1 & RF1_QUESTOR) || 
 		(caster_ptr->riding && (em_ptr->g_ptr->m_idx == caster_ptr->riding)))
-		em_ptr->do_poly = FALSE;
+		em_ptr->do_polymorph = FALSE;
 
 	if (((em_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (em_ptr->r_ptr->flags7 & RF7_NAZGUL)) &&
 		!caster_ptr->phase_out &&
@@ -2343,7 +2343,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			em_ptr->get_angry = TRUE;
 		}
 
-		if (em_ptr->do_poly && (randint1(90) > em_ptr->r_ptr->level))
+		if (em_ptr->do_polymorph && (randint1(90) > em_ptr->r_ptr->level))
 		{
 			if (polymorph_monster(caster_ptr, em_ptr->y, em_ptr->x))
 			{

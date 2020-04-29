@@ -14,7 +14,7 @@ typedef struct
 	bool known;
 	bool skipped;
 	bool get_angry;
-	bool do_poly;
+	bool do_polymorph;
 	int do_dist;
 	int do_conf;
 	int do_stun;

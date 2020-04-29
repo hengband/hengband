@@ -63,7 +63,7 @@ void initialize_effect_monster(player_type *caster_ptr, effect_monster_type *em_
 	em_ptr->known = ((em_ptr->m_ptr->cdis <= MAX_SIGHT) || caster_ptr->phase_out);
 	em_ptr->skipped = FALSE;
 	em_ptr->get_angry = FALSE;
-	em_ptr->do_poly = FALSE;
+	em_ptr->do_polymorph = FALSE;
 	em_ptr->do_dist = 0;
 	em_ptr->do_conf = 0;
 	em_ptr->do_stun = 0;
