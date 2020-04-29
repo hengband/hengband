@@ -2327,6 +2327,31 @@ static void pile_monster_conf(player_type *caster_ptr, effect_monster_type *em_p
 
 
 /*!
+ * @brief モンスターを衰弱させる
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void process_monster_weakening(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->do_time == 0) return;
+
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (em_ptr->do_time >= em_ptr->m_ptr->maxhp) em_ptr->do_time = em_ptr->m_ptr->maxhp - 1;
+
+	if (em_ptr->do_time)
+	{
+		em_ptr->note = _("は弱くなったようだ。", " seems weakened.");
+		em_ptr->m_ptr->maxhp -= em_ptr->do_time;
+		if ((em_ptr->m_ptr->hp - em_ptr->dam) > em_ptr->m_ptr->maxhp) em_ptr->dam = em_ptr->m_ptr->hp - em_ptr->m_ptr->maxhp;
+	}
+
+	em_ptr->get_angry = TRUE;
+}
+
+
+/*!
  * @brief 汎用的なビーム/ボルト/ボール系によるモンスターへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
@@ -2387,22 +2412,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	{
 		pile_monster_stun(caster_ptr, em_ptr, &tmp_damage);
 		pile_monster_conf(caster_ptr, em_ptr, &tmp_damage);
-		if (em_ptr->do_time)
-		{
-			if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-			if (em_ptr->do_time >= em_ptr->m_ptr->maxhp) em_ptr->do_time = em_ptr->m_ptr->maxhp - 1;
-
-			if (em_ptr->do_time)
-			{
-				em_ptr->note = _("は弱くなったようだ。", " seems weakened.");
-				em_ptr->m_ptr->maxhp -= em_ptr->do_time;
-				if ((em_ptr->m_ptr->hp - em_ptr->dam) > em_ptr->m_ptr->maxhp) em_ptr->dam = em_ptr->m_ptr->hp - em_ptr->m_ptr->maxhp;
-			}
-
-			em_ptr->get_angry = TRUE;
-		}
-
+		process_monster_weakening(caster_ptr, em_ptr, &tmp_damage);
 		if (em_ptr->do_polymorph && (randint1(90) > em_ptr->r_ptr->level))
 		{
 			if (polymorph_monster(caster_ptr, em_ptr->y, em_ptr->x))
