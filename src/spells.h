@@ -321,4 +321,3 @@ extern void blood_curse_to_enemy(player_type *caster_ptr, MONSTER_IDX m_idx);
 extern bool fire_crimson(player_type *shooter_ptr);
 extern bool tele_town(player_type *caster_ptr);
 extern bool is_teleport_level_ineffective(player_type *caster_ptr, MONSTER_IDX idx);
-extern int project_length;
