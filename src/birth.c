@@ -40,7 +40,7 @@
 #include "player-personality.h"
 #include "player-sex.h"
 #include "player/race-info-table.h"
-#include "spells.h"
+#include "spell/spells-util.h"
 #include "spells-status.h"
 #include "wild.h"
 #include "floor.h"

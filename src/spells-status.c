@@ -200,7 +200,7 @@ bool time_walk(player_type *creature_ptr)
  * @param options スペル共通オプション
  * @return なし
  */
-void roll_hitdice(player_type *creature_ptr, SPOP_FLAGS options)
+void roll_hitdice(player_type *creature_ptr, spell_operation options)
 {
 	HIT_POINT min_value = creature_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (creature_ptr->hitdie + 1)) * 3 / 8;
 	HIT_POINT max_value = creature_ptr->hitdie + ((PY_MAX_LEVEL + 2) * (creature_ptr->hitdie + 1)) * 5 / 8;
@@ -251,7 +251,7 @@ void roll_hitdice(player_type *creature_ptr, SPOP_FLAGS options)
 }
 
 
-bool_hack life_stream(player_type *creature_ptr, bool_hack message, bool_hack virtue_change)
+bool life_stream(player_type *creature_ptr, bool message, bool virtue_change)
 {
 	if (virtue_change)
 	{
@@ -280,9 +280,9 @@ bool_hack life_stream(player_type *creature_ptr, bool_hack message, bool_hack vi
 }
 
 
-bool_hack heroism(player_type *creature_ptr, int base)
+bool heroism(player_type *creature_ptr, int base)
 {
-	bool_hack ident = FALSE;
+	bool ident = FALSE;
 	if (set_afraid(creature_ptr, 0)) ident = TRUE;
 	if (set_hero(creature_ptr, creature_ptr->hero + randint1(base) + base, FALSE)) ident = TRUE;
 	if (hp_player(creature_ptr, 10)) ident = TRUE;
@@ -290,9 +290,9 @@ bool_hack heroism(player_type *creature_ptr, int base)
 }
 
 
-bool_hack berserk(player_type *creature_ptr, int base)
+bool berserk(player_type *creature_ptr, int base)
 {
-	bool_hack ident = FALSE;
+	bool ident = FALSE;
 	if (set_afraid(creature_ptr, 0)) ident = TRUE;
 	if (set_shero(creature_ptr, creature_ptr->shero + randint1(base) + base, FALSE)) ident = TRUE;
 	if (hp_player(creature_ptr, 30)) ident = TRUE;
@@ -300,9 +300,9 @@ bool_hack berserk(player_type *creature_ptr, int base)
 }
 
 
-bool_hack cure_light_wounds(player_type *creature_ptr, DICE_NUMBER dice, DICE_SID sides)
+bool cure_light_wounds(player_type *creature_ptr, DICE_NUMBER dice, DICE_SID sides)
 {
-	bool_hack ident = FALSE;
+	bool ident = FALSE;
 	if (hp_player(creature_ptr, damroll(dice, sides))) ident = TRUE;
 	if (set_blind(creature_ptr, 0)) ident = TRUE;
 	if (set_cut(creature_ptr,creature_ptr->cut - 10)) ident = TRUE;
@@ -311,9 +311,9 @@ bool_hack cure_light_wounds(player_type *creature_ptr, DICE_NUMBER dice, DICE_SI
 }
 
 
-bool_hack cure_serious_wounds(player_type *creature_ptr, DICE_NUMBER dice, DICE_SID sides)
+bool cure_serious_wounds(player_type *creature_ptr, DICE_NUMBER dice, DICE_SID sides)
 {
-	bool_hack ident = FALSE;
+	bool ident = FALSE;
 	if (hp_player(creature_ptr, damroll(dice, sides))) ident = TRUE;
 	if (set_blind(creature_ptr, 0)) ident = TRUE;
 	if (set_confused(creature_ptr, 0)) ident = TRUE;
@@ -323,9 +323,9 @@ bool_hack cure_serious_wounds(player_type *creature_ptr, DICE_NUMBER dice, DICE_
 }
 
 
-bool_hack cure_critical_wounds(player_type *creature_ptr, HIT_POINT pow)
+bool cure_critical_wounds(player_type *creature_ptr, HIT_POINT pow)
 {
-	bool_hack ident = FALSE;
+	bool ident = FALSE;
 	if (hp_player(creature_ptr, pow)) ident = TRUE;
 	if (set_blind(creature_ptr, 0)) ident = TRUE;
 	if (set_confused(creature_ptr, 0)) ident = TRUE;
@@ -337,9 +337,9 @@ bool_hack cure_critical_wounds(player_type *creature_ptr, HIT_POINT pow)
 }
 
 
-bool_hack true_healing(player_type *creature_ptr, HIT_POINT pow)
+bool true_healing(player_type *creature_ptr, HIT_POINT pow)
 {
-	bool_hack ident = FALSE;
+	bool ident = FALSE;
 	if (hp_player(creature_ptr, pow)) ident = TRUE;
 	if (set_blind(creature_ptr, 0)) ident = TRUE;
 	if (set_confused(creature_ptr, 0)) ident = TRUE;
@@ -351,7 +351,7 @@ bool_hack true_healing(player_type *creature_ptr, HIT_POINT pow)
 }
 
 
-bool_hack restore_mana(player_type *creature_ptr, bool_hack magic_eater)
+bool restore_mana(player_type *creature_ptr, bool magic_eater)
 {
 	if (creature_ptr->pclass == CLASS_MAGIC_EATER && magic_eater)
 	{

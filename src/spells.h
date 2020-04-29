@@ -5,10 +5,6 @@
 #define DETECT_RAD_MAP     30
 #define DETECT_RAD_ALL     255
 
-#define SPOP_DISPLAY_MES    0x0001 // !< スペル処理オプション … メッセージを表示する
-#define SPOP_NO_UPDATE      0x0002 // !< スペル処理オプション … ステータス更新を解決後行う
-#define SPOP_DEBUG          0x8000 // !< スペル処理オプション … デバッグ処理あり
-
 /* spells1.c */
 extern bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void breath_shape(player_type *caster_ptr, u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, EFFECT_ID typ);

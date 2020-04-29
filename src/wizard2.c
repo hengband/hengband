@@ -33,7 +33,7 @@
 #include "player-class.h"
 #include "player-inventory.h"
 
-#include "spells.h"
+#include "spell/spells-util.h"
 #include "spells-object.h"
 #include "spells-summon.h"
 #include "spells-status.h"
