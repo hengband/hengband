@@ -2164,6 +2164,32 @@ static void process_monster_sleep(player_type *caster_ptr, effect_monster_type *
 
 
 /*!
+ * @brief 不潔な病人の治療処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return 大賞モンスターが不潔な病人だった場合はTRUE、それ以外はFALSE
+ */
+static bool heal_leaper(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->heal_leper) return FALSE;
+
+	if (em_ptr->seen_msg)
+		msg_print(_("不潔な病人は病気が治った！", "The Mangy looking leper is healed!"));
+
+	if (record_named_pet && is_pet(em_ptr->m_ptr) && em_ptr->m_ptr->nickname)
+	{
+		char m2_name[MAX_NLEN];
+		monster_desc(caster_ptr, m2_name, em_ptr->m_ptr, MD_INDEF_VISIBLE);
+		exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
+	}
+
+	delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
+	return TRUE;
+}
+
+
+/*!
+ * todo 睡眠処理があるので、死に際とは言えない。適切な関数名に要修正
  * @brief モンスターの死に際処理 (魔力吸収を除く)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -2187,21 +2213,7 @@ static void process_monster_last_moment(player_type *caster_ptr, effect_monster_
 		return;
 	}
 
-	if (em_ptr->heal_leper)
-	{
-		if (em_ptr->seen_msg)
-			msg_print(_("不潔な病人は病気が治った！", "The Mangy looking leper is healed!"));
-
-		if (record_named_pet && is_pet(em_ptr->m_ptr) && em_ptr->m_ptr->nickname)
-		{
-			char m2_name[MAX_NLEN];
-			monster_desc(caster_ptr, m2_name, em_ptr->m_ptr, MD_INDEF_VISIBLE);
-			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
-		}
-
-		delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
-		return;
-	}
+	if (heal_leaper(caster_ptr, em_ptr)) return;
 
 	/* If the player did it, give him experience, check fear */
 	bool fear = FALSE;
