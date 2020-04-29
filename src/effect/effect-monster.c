@@ -2425,6 +2425,13 @@ static void process_monster_teleport(player_type *caster_ptr, effect_monster_typ
 }
 
 
+/*!
+ * @brief モンスターの異常状態を処理する
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @parama tmp_damage 朦朧/混乱値
+ * @return なし
+ */
 static void process_monster_bad_status(player_type *caster_ptr, effect_monster_type *em_ptr, int *tmp_damage)
 {
 	pile_monster_stun(caster_ptr, em_ptr, tmp_damage);
@@ -2436,6 +2443,22 @@ static void process_monster_bad_status(player_type *caster_ptr, effect_monster_t
 
 	(void)set_monster_monfear(caster_ptr, em_ptr->g_ptr->m_idx, MON_MONFEAR(em_ptr->m_ptr) + em_ptr->do_fear);
 	em_ptr->get_angry = TRUE;
+}
+
+
+/*!
+ * @brief モンスター闘技場にいる場合の画面更新処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void update_phase_out_stat(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (!caster_ptr->phase_out) return;
+
+	caster_ptr->health_who = em_ptr->g_ptr->m_idx;
+	caster_ptr->redraw |= (PR_HEALTH);
+	handle_stuff(caster_ptr);
 }
 
 
@@ -2484,13 +2507,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	if ((em_ptr->effect_type == GF_BLOOD_CURSE) && one_in_(4))
 		blood_curse_to_enemy(caster_ptr, em_ptr->who);
 
-	if (caster_ptr->phase_out)
-	{
-		caster_ptr->health_who = em_ptr->g_ptr->m_idx;
-		caster_ptr->redraw |= (PR_HEALTH);
-		handle_stuff(caster_ptr);
-	}
-
+	update_phase_out_stat();
 	if (em_ptr->m_ptr->r_idx) update_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE);
 
 	lite_spot(caster_ptr, em_ptr->y, em_ptr->x);
