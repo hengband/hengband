@@ -2189,6 +2189,38 @@ static bool heal_leaper(player_type *caster_ptr, effect_monster_type *em_ptr)
 
 
 /*!
+ * @brief モンスターの恐慌処理 / If the player did it, give him experience, check fear
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return モンスターが死んだらTRUE、生きていたらFALSE
+ */
+static bool process_monster_fear(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	bool fear = FALSE;
+	if (mon_take_hit(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, &fear, em_ptr->note_dies))
+		return TRUE;
+
+	if (em_ptr->do_sleep) anger_monster(caster_ptr, em_ptr->m_ptr);
+
+	if (em_ptr->note && em_ptr->seen_msg)
+		msg_format(_("%s%s", "%^s%s"), em_ptr->m_name, em_ptr->note);
+	else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear))
+		message_pain(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
+
+	if (((em_ptr->dam > 0) || em_ptr->get_angry) && !em_ptr->do_sleep)
+		anger_monster(caster_ptr, em_ptr->m_ptr);
+
+	if ((fear || em_ptr->do_fear) && em_ptr->seen)
+	{
+		sound(SOUND_FLEE);
+		msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), em_ptr->m_name);
+	}
+
+	return FALSE;
+}
+
+
+/*!
  * todo 睡眠処理があるので、死に際とは言えない。適切な関数名に要修正
  * @brief モンスターの死に際処理 (魔力吸収を除く)
  * @param caster_ptr プレーヤーへの参照ポインタ
@@ -2214,27 +2246,7 @@ static void process_monster_last_moment(player_type *caster_ptr, effect_monster_
 	}
 
 	if (heal_leaper(caster_ptr, em_ptr)) return;
-
-	/* If the player did it, give him experience, check fear */
-	bool fear = FALSE;
-	if (mon_take_hit(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, &fear, em_ptr->note_dies))
-		return;
-
-	if (em_ptr->do_sleep) anger_monster(caster_ptr, em_ptr->m_ptr);
-
-	if (em_ptr->note && em_ptr->seen_msg)
-		msg_format(_("%s%s", "%^s%s"), em_ptr->m_name, em_ptr->note);
-	else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear))
-		message_pain(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
-
-	if (((em_ptr->dam > 0) || em_ptr->get_angry) && !em_ptr->do_sleep)
-		anger_monster(caster_ptr, em_ptr->m_ptr);
-
-	if ((fear || em_ptr->do_fear) && em_ptr->seen)
-	{
-		sound(SOUND_FLEE);
-		msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), em_ptr->m_name);
-	}
+	if (process_monster_fear(caster_ptr, em_ptr)) return;
 
 	if (em_ptr->do_sleep) (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
 }
