@@ -122,8 +122,8 @@ void initialize_effect_monster(player_type *caster_ptr, effect_monster *effect_m
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
  * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
- * @param y 目標Y座標 / Target y location (or location to travel "towards")
- * @param x 目標X座標 / Target x location (or location to travel "towards")
+ * @param y 目標y座標 / Target y location (or location to travel "towards")
+ * @param x 目標x座標 / Target x location (or location to travel "towards")
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
  * @param effect_type 効果属性 / Type of damage to apply to monsters (and objects)
  * @param flag 効果フラグ
@@ -141,14 +141,19 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 	/* Never affect projector */
 	if (effect_monster_ptr->who && (effect_monster_ptr->g_ptr->m_idx == effect_monster_ptr->who)) return FALSE;
-	if ((effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding) && !effect_monster_ptr->who && !(effect_type == GF_OLD_HEAL) && !(effect_type == GF_OLD_SPEED) && !(effect_type == GF_STAR_HEAL)) return FALSE;
+	if ((effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding) &&
+		!effect_monster_ptr->who &&
+		!(effect_monster_ptr->effect_type == GF_OLD_HEAL) &&
+		!(effect_monster_ptr->effect_type == GF_OLD_SPEED) &&
+		!(effect_monster_ptr->effect_type == GF_STAR_HEAL))
+		return FALSE;
 	if (sukekaku && ((effect_monster_ptr->m_ptr->r_idx == MON_SUKE) || (effect_monster_ptr->m_ptr->r_idx == MON_KAKU))) return FALSE;
 
 	/* Don't affect already death monsters */
 	/* Prevents problems with chain reactions of exploding monsters */
 	if (effect_monster_ptr->m_ptr->hp < 0) return FALSE;
 
-	dam = (dam + effect_monster_ptr->r) / (effect_monster_ptr->r + 1);
+	effect_monster_ptr->dam = (effect_monster_ptr->dam + effect_monster_ptr->r) / (effect_monster_ptr->r + 1);
 
 	/* Get the monster name (BEFORE polymorphing) */
 	monster_desc(caster_ptr, effect_monster_ptr->m_name, effect_monster_ptr->m_ptr, 0);
@@ -159,17 +164,17 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	if (caster_ptr->riding && (effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding)) disturb(caster_ptr, TRUE, TRUE);
 
 	if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_ALL &&
-		effect_type != GF_OLD_CLONE && effect_type != GF_STAR_HEAL && effect_type != GF_OLD_HEAL
-		&& effect_type != GF_OLD_SPEED && effect_type != GF_CAPTURE && effect_type != GF_PHOTO)
+		effect_monster_ptr->effect_type != GF_OLD_CLONE && effect_monster_ptr->effect_type != GF_STAR_HEAL && effect_monster_ptr->effect_type != GF_OLD_HEAL
+		&& effect_monster_ptr->effect_type != GF_OLD_SPEED && effect_monster_ptr->effect_type != GF_CAPTURE && effect_monster_ptr->effect_type != GF_PHOTO)
 	{
 		effect_monster_ptr->note = _("には完全な耐性がある！", " is immune.");
-		dam = 0;
+		effect_monster_ptr->dam = 0;
 		if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_ALL);
-		if (effect_type == GF_LITE_WEAK || effect_type == GF_KILL_WALL) effect_monster_ptr->skipped = TRUE;
+		if (effect_monster_ptr->effect_type == GF_LITE_WEAK || effect_monster_ptr->effect_type == GF_KILL_WALL) effect_monster_ptr->skipped = TRUE;
 	}
 	else
 	{
-		switch (effect_type)
+		switch (effect_monster_ptr->effect_type)
 		{
 		case GF_MISSILE:
 		{
@@ -182,7 +187,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_IM_ACID)
 			{
 				effect_monster_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
-				dam /= 9;
+				effect_monster_ptr->dam /= 9;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_IM_ACID);
 			}
 			break;
@@ -193,7 +198,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_IM_ELEC)
 			{
 				effect_monster_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
-				dam /= 9;
+				effect_monster_ptr->dam /= 9;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_IM_ELEC);
 			}
 			break;
@@ -204,13 +209,13 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_IM_FIRE)
 			{
 				effect_monster_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
-				dam /= 9;
+				effect_monster_ptr->dam /= 9;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_IM_FIRE);
 			}
 			else if (effect_monster_ptr->r_ptr->flags3 & (RF3_HURT_FIRE))
 			{
 				effect_monster_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
-				dam *= 2;
+				effect_monster_ptr->dam *= 2;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_HURT_FIRE);
 			}
 			break;
@@ -221,13 +226,13 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_IM_COLD)
 			{
 				effect_monster_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
-				dam /= 9;
+				effect_monster_ptr->dam /= 9;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_IM_COLD);
 			}
 			else if (effect_monster_ptr->r_ptr->flags3 & (RF3_HURT_COLD))
 			{
 				effect_monster_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
-				dam *= 2;
+				effect_monster_ptr->dam *= 2;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_HURT_COLD);
 			}
 			break;
@@ -238,7 +243,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_IM_POIS)
 			{
 				effect_monster_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
-				dam /= 9;
+				effect_monster_ptr->dam /= 9;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_IM_POIS);
 			}
 			break;
@@ -249,7 +254,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_IM_POIS)
 			{
 				effect_monster_ptr->note = _("には耐性がある。", " resists.");
-				dam *= 3; dam /= randint1(6) + 6;
+				effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_IM_POIS);
 			}
 			else if (one_in_(3)) effect_monster_ptr->do_poly = TRUE;
@@ -261,7 +266,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flags3 & RF3_GOOD)
 			{
 				effect_monster_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
-				dam *= 2;
+				effect_monster_ptr->dam *= 2;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_GOOD);
 			}
 			break;
@@ -271,14 +276,14 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 			if (effect_monster_ptr->r_ptr->flags3 & RF3_EVIL)
 			{
-				dam *= 2;
+				effect_monster_ptr->dam *= 2;
 				effect_monster_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= RF3_EVIL;
 			}
 			else
 			{
 				effect_monster_ptr->note = _("には耐性がある。", " resists.");
-				dam *= 3; dam /= randint1(6) + 6;
+				effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 			}
 			break;
 		}
@@ -293,7 +298,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_PLAS)
 			{
 				effect_monster_ptr->note = _("には耐性がある。", " resists.");
-				dam *= 3; dam /= randint1(6) + 6;
+				effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_PLAS);
 			}
 
@@ -307,20 +312,20 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				if (effect_monster_ptr->r_ptr->flags3 & RF3_UNDEAD)
 				{
 					effect_monster_ptr->note = _("には完全な耐性がある！", " is immune.");
-					dam = 0;
+					effect_monster_ptr->dam = 0;
 					if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
 				}
 				else
 				{
 					effect_monster_ptr->note = _("には耐性がある。", " resists.");
-					dam *= 3; dam /= randint1(6) + 6;
+					effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 				}
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_NETH);
 			}
 			else if (effect_monster_ptr->r_ptr->flags3 & RF3_EVIL)
 			{
 				effect_monster_ptr->note = _("はいくらか耐性を示した。", " resists somewhat.");
-				dam /= 2;
+				effect_monster_ptr->dam /= 2;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
 			}
 
@@ -334,12 +339,12 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				if ((effect_monster_ptr->m_ptr->r_idx == MON_WATER_ELEM) || (effect_monster_ptr->m_ptr->r_idx == MON_UNMAKER))
 				{
 					effect_monster_ptr->note = _("には完全な耐性がある！", " is immune.");
-					dam = 0;
+					effect_monster_ptr->dam = 0;
 				}
 				else
 				{
 					effect_monster_ptr->note = _("には耐性がある。", " resists.");
-					dam *= 3; dam /= randint1(6) + 6;
+					effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 				}
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_WATE);
 			}
@@ -352,13 +357,13 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_CHAO)
 			{
 				effect_monster_ptr->note = _("には耐性がある。", " resists.");
-				dam *= 3; dam /= randint1(6) + 6;
+				effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_CHAO);
 			}
 			else if ((effect_monster_ptr->r_ptr->flags3 & RF3_DEMON) && one_in_(3))
 			{
 				effect_monster_ptr->note = _("はいくらか耐性を示した。", " resists somewhat.");
-				dam *= 3; dam /= randint1(6) + 6;
+				effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_DEMON);
 			}
 			else
@@ -375,7 +380,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_SHAR)
 			{
 				effect_monster_ptr->note = _("には耐性がある。", " resists.");
-				dam *= 3; dam /= randint1(6) + 6;
+				effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_SHAR);
 			}
 
@@ -387,7 +392,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_SHAR)
 			{
 				effect_monster_ptr->note = _("はいくらか耐性を示した。", " resists somewhat.");
-				dam /= 2;
+				effect_monster_ptr->dam /= 2;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_SHAR);
 			}
 
@@ -399,7 +404,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_SOUN)
 			{
 				effect_monster_ptr->note = _("には耐性がある。", " resists.");
-				dam *= 2; dam /= randint1(6) + 6;
+				effect_monster_ptr->dam *= 2; effect_monster_ptr->dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_SOUN);
 			}
 			else
@@ -413,7 +418,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flags3 & RF3_NO_CONF)
 			{
 				effect_monster_ptr->note = _("には耐性がある。", " resists.");
-				dam *= 3; dam /= randint1(6) + 6;
+				effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
 			}
 			else
@@ -427,7 +432,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_DISE)
 			{
 				effect_monster_ptr->note = _("には耐性がある。", " resists.");
-				dam *= 3; dam /= randint1(6) + 6;
+				effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_DISE);
 			}
 
@@ -439,7 +444,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_NEXU)
 			{
 				effect_monster_ptr->note = _("には耐性がある。", " resists.");
-				dam *= 3; dam /= randint1(6) + 6;
+				effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_NEXU);
 			}
 
@@ -451,7 +456,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_WALL)
 			{
 				effect_monster_ptr->note = _("には耐性がある。", " resists.");
-				dam *= 3; dam /= randint1(6) + 6;
+				effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_WALL);
 			}
 			else
@@ -465,14 +470,14 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_INER)
 			{
 				effect_monster_ptr->note = _("には耐性がある。", " resists.");
-				dam *= 3; dam /= randint1(6) + 6;
+				effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_INER);
 			}
 			else
 			{
 				/* Powerful monsters can resist */
 				if ((effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
-					(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+					(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 				{
 					effect_monster_ptr->obvious = FALSE;
 				}
@@ -494,11 +499,11 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_TIME)
 			{
 				effect_monster_ptr->note = _("には耐性がある。", " resists.");
-				dam *= 3; dam /= randint1(6) + 6;
+				effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_TIME);
 			}
 			else
-				effect_monster_ptr->do_time = (dam + 1) / 2;
+				effect_monster_ptr->do_time = (effect_monster_ptr->dam + 1) / 2;
 
 			break;
 		}
@@ -531,7 +536,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_GRAV)
 			{
 				effect_monster_ptr->note = _("には耐性がある！", " resists!");
-				dam *= 3; dam /= randint1(6) + 6;
+				effect_monster_ptr->dam *= 3; effect_monster_ptr->dam /= randint1(6) + 6;
 				effect_monster_ptr->do_dist = 0;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_GRAV);
 			}
@@ -540,7 +545,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				/* 1. slowness */
 				/* Powerful monsters can resist */
 				if ((effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
-					(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+					(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 				{
 					effect_monster_ptr->obvious = FALSE;
 				}
@@ -554,11 +559,11 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				}
 
 				/* 2. stun */
-				effect_monster_ptr->do_stun = damroll((effect_monster_ptr->caster_lev / 20) + 3, (dam)) + 1;
+				effect_monster_ptr->do_stun = damroll((effect_monster_ptr->caster_lev / 20) + 3, (effect_monster_ptr->dam)) + 1;
 
 				/* Attempt a saving throw */
 				if ((effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
-					(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+					(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 				{
 					/* Resist */
 					effect_monster_ptr->do_stun = 0;
@@ -585,7 +590,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_HURT_ROCK);
 				effect_monster_ptr->note = _("の皮膚がただれた！", " loses some skin!");
 				effect_monster_ptr->note_dies = _("は蒸発した！", " evaporates!");
-				dam *= 2;
+				effect_monster_ptr->dam *= 2;
 			}
 
 			break;
@@ -603,17 +608,17 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 			if (effect_monster_ptr->r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 				effect_monster_ptr->note = _("には完全な耐性がある！", " is immune.");
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
 
 			}
 			else if ((effect_monster_ptr->r_ptr->flags2 & (RF2_STUPID | RF2_WEIRD_MIND)) ||
 				(effect_monster_ptr->r_ptr->flags3 & RF3_ANIMAL) ||
-				(effect_monster_ptr->r_ptr->level > randint1(3 * dam)))
+				(effect_monster_ptr->r_ptr->level > randint1(3 * effect_monster_ptr->dam)))
 			{
 				effect_monster_ptr->note = _("には耐性がある！", " resists!");
-				dam /= 3;
+				effect_monster_ptr->dam /= 3;
 
 				/*
 				 * Powerful demons & undead can turn a mindcrafter's
@@ -636,53 +641,53 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 					{
 						/* Injure +/- confusion */
 						monster_desc(caster_ptr, effect_monster_ptr->killer, effect_monster_ptr->m_ptr, MD_WRONGDOER_NAME);
-						take_hit(caster_ptr, DAMAGE_ATTACK, dam, effect_monster_ptr->killer, -1);  /* has already been /3 */
+						take_hit(caster_ptr, DAMAGE_ATTACK, effect_monster_ptr->dam, effect_monster_ptr->killer, -1);  /* has already been /3 */
 						if (one_in_(4) && !CHECK_MULTISHADOW(caster_ptr))
 						{
 							switch (randint1(4))
 							{
 							case 1:
-								set_confused(caster_ptr, caster_ptr->confused + 3 + randint1(dam));
+								set_confused(caster_ptr, caster_ptr->confused + 3 + randint1(effect_monster_ptr->dam));
 								break;
 							case 2:
-								set_stun(caster_ptr, caster_ptr->stun + randint1(dam));
+								set_stun(caster_ptr, caster_ptr->stun + randint1(effect_monster_ptr->dam));
 								break;
 							case 3:
 							{
 								if (effect_monster_ptr->r_ptr->flags3 & RF3_NO_FEAR)
 									effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 								else
-									set_afraid(caster_ptr, caster_ptr->afraid + 3 + randint1(dam));
+									set_afraid(caster_ptr, caster_ptr->afraid + 3 + randint1(effect_monster_ptr->dam));
 								break;
 							}
 							default:
 								if (!caster_ptr->free_act)
-									(void)set_paralyzed(caster_ptr, caster_ptr->paralyzed + randint1(dam));
+									(void)set_paralyzed(caster_ptr, caster_ptr->paralyzed + randint1(effect_monster_ptr->dam));
 								break;
 							}
 						}
 					}
 
-					dam = 0;
+					effect_monster_ptr->dam = 0;
 				}
 			}
 
-			if ((dam > 0) && one_in_(4))
+			if ((effect_monster_ptr->dam > 0) && one_in_(4))
 			{
 				switch (randint1(4))
 				{
 				case 1:
-					effect_monster_ptr->do_conf = 3 + randint1(dam);
+					effect_monster_ptr->do_conf = 3 + randint1(effect_monster_ptr->dam);
 					break;
 				case 2:
-					effect_monster_ptr->do_stun = 3 + randint1(dam);
+					effect_monster_ptr->do_stun = 3 + randint1(effect_monster_ptr->dam);
 					break;
 				case 3:
-					effect_monster_ptr->do_fear = 3 + randint1(dam);
+					effect_monster_ptr->do_fear = 3 + randint1(effect_monster_ptr->dam);
 					break;
 				default:
 					effect_monster_ptr->note = _("は眠り込んでしまった！", " falls asleep!");
-					effect_monster_ptr->do_sleep = 3 + randint1(dam);
+					effect_monster_ptr->do_sleep = 3 + randint1(effect_monster_ptr->dam);
 					break;
 				}
 			}
@@ -695,15 +700,15 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 			if (effect_monster_ptr->r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 				effect_monster_ptr->note = _("には完全な耐性がある！", " is immune.");
 			}
 			else if ((effect_monster_ptr->r_ptr->flags2 & (RF2_STUPID | RF2_WEIRD_MIND)) ||
 				(effect_monster_ptr->r_ptr->flags3 & RF3_ANIMAL) ||
-				(effect_monster_ptr->r_ptr->level > randint1(3 * dam)))
+				(effect_monster_ptr->r_ptr->level > randint1(3 * effect_monster_ptr->dam)))
 			{
 				effect_monster_ptr->note = _("には耐性がある！", " resists!");
-				dam /= 3;
+				effect_monster_ptr->dam /= 3;
 
 				/*
 				 * Powerful demons & undead can turn a mindcrafter's
@@ -727,20 +732,20 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 						if (!CHECK_MULTISHADOW(caster_ptr))
 						{
 							msg_print(_("超能力パワーを吸いとられた！", "Your psychic energy is drained!"));
-							caster_ptr->csp -= damroll(5, dam) / 2;
+							caster_ptr->csp -= damroll(5, effect_monster_ptr->dam) / 2;
 							if (caster_ptr->csp < 0) caster_ptr->csp = 0;
 							caster_ptr->redraw |= PR_MANA;
 							caster_ptr->window |= (PW_SPELL);
 						}
-						take_hit(caster_ptr, DAMAGE_ATTACK, dam, effect_monster_ptr->killer, -1);  /* has already been /3 */
+						take_hit(caster_ptr, DAMAGE_ATTACK, effect_monster_ptr->dam, effect_monster_ptr->killer, -1);  /* has already been /3 */
 					}
 
-					dam = 0;
+					effect_monster_ptr->dam = 0;
 				}
 			}
-			else if (dam > 0)
+			else if (effect_monster_ptr->dam > 0)
 			{
-				int b = damroll(5, dam) / 4;
+				int b = damroll(5, effect_monster_ptr->dam) / 4;
 				concptr str = (caster_ptr->pclass == CLASS_MINDCRAFTER) ? _("超能力パワー", "psychic energy") : _("魔力", "mana");
 				concptr msg = _("あなたは%sの苦痛を%sに変換した！",
 					(effect_monster_ptr->seen ? "You convert %s's pain into %s!" :
@@ -765,9 +770,9 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				else effect_monster_ptr->do_dist = 7;
 			}
 
-			effect_monster_ptr->do_stun = damroll((effect_monster_ptr->caster_lev / 20) + 3, dam) + 1;
+			effect_monster_ptr->do_stun = damroll((effect_monster_ptr->caster_lev / 20) + 3, effect_monster_ptr->dam) + 1;
 			if ((effect_monster_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
-				(effect_monster_ptr->r_ptr->level > 5 + randint1(dam)))
+				(effect_monster_ptr->r_ptr->level > 5 + randint1(effect_monster_ptr->dam)))
 			{
 				effect_monster_ptr->do_stun = 0;
 				effect_monster_ptr->obvious = FALSE;
@@ -791,7 +796,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 			if ((effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) ||
 				(effect_monster_ptr->r_ptr->flags3 & RF3_NO_CONF) ||
-				(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 			{
 				if (effect_monster_ptr->r_ptr->flags3 & RF3_NO_CONF)
 				{
@@ -824,17 +829,17 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 						switch (randint1(4))
 						{
 						case 1:
-							set_stun(caster_ptr, caster_ptr->stun + dam / 2);
+							set_stun(caster_ptr, caster_ptr->stun + effect_monster_ptr->dam / 2);
 							break;
 						case 2:
-							set_confused(caster_ptr, caster_ptr->confused + dam / 2);
+							set_confused(caster_ptr, caster_ptr->confused + effect_monster_ptr->dam / 2);
 							break;
 						default:
 						{
 							if (effect_monster_ptr->r_ptr->flags3 & RF3_NO_FEAR)
 								effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 							else
-								set_afraid(caster_ptr, caster_ptr->afraid + dam);
+								set_afraid(caster_ptr, caster_ptr->afraid + effect_monster_ptr->dam);
 						}
 						}
 					}
@@ -847,7 +852,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			}
 			else
 			{
-				if (!common_saving_throw_charm(caster_ptr, dam, effect_monster_ptr->m_ptr))
+				if (!common_saving_throw_charm(caster_ptr, effect_monster_ptr->dam, effect_monster_ptr->m_ptr))
 				{
 					effect_monster_ptr->note = _("があなたに隷属した。", " is in your thrall!");
 					set_pet(caster_ptr, effect_monster_ptr->m_ptr);
@@ -857,18 +862,18 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 					switch (randint1(4))
 					{
 					case 1:
-						effect_monster_ptr->do_stun = dam / 2;
+						effect_monster_ptr->do_stun = effect_monster_ptr->dam / 2;
 						break;
 					case 2:
-						effect_monster_ptr->do_conf = dam / 2;
+						effect_monster_ptr->do_conf = effect_monster_ptr->dam / 2;
 						break;
 					default:
-						effect_monster_ptr->do_fear = dam;
+						effect_monster_ptr->do_fear = effect_monster_ptr->dam;
 					}
 				}
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_ICE:
@@ -878,13 +883,13 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_IM_COLD)
 			{
 				effect_monster_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
-				dam /= 9;
+				effect_monster_ptr->dam /= 9;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_IM_COLD);
 			}
 			else if (effect_monster_ptr->r_ptr->flags3 & (RF3_HURT_COLD))
 			{
 				effect_monster_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
-				dam *= 2;
+				effect_monster_ptr->dam *= 2;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_HURT_COLD);
 			}
 
@@ -903,10 +908,10 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				}
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 				effect_monster_ptr->obvious = FALSE;
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 			else
-				effect_monster_ptr->do_time = (dam + 7) / 8;
+				effect_monster_ptr->do_time = (effect_monster_ptr->dam + 7) / 8;
 
 			break;
 		}
@@ -923,7 +928,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				}
 				effect_monster_ptr->note = _("には完全な耐性がある！", " is immune.");
 				effect_monster_ptr->obvious = FALSE;
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 			else if (((effect_monster_ptr->r_ptr->flags1 & RF1_UNIQUE) &&
 				(randint1(888) != 666)) ||
@@ -932,7 +937,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			{
 				effect_monster_ptr->note = _("には耐性がある！", " resists!");
 				effect_monster_ptr->obvious = FALSE;
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 
 			break;
@@ -945,14 +950,14 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			/* Powerful monsters can resist */
 			if ((effect_monster_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
 				(effect_monster_ptr->r_ptr->flags1 & RF1_QUESTOR) ||
-				(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 				effect_monster_ptr->do_poly = FALSE;
 				effect_monster_ptr->obvious = FALSE;
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_OLD_CLONE:
@@ -972,7 +977,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				}
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_STAR_HEAL:
@@ -987,7 +992,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				effect_monster_ptr->m_ptr->maxhp = effect_monster_ptr->m_ptr->max_maxhp;
 			}
 
-			if (!dam)
+			if (!effect_monster_ptr->dam)
 			{
 				if (caster_ptr->health_who == effect_monster_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
 				if (caster_ptr->riding == effect_monster_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
@@ -1017,7 +1022,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				(void)set_monster_monfear(caster_ptr, effect_monster_ptr->g_ptr->m_idx, 0);
 			}
 
-			if (effect_monster_ptr->m_ptr->hp < 30000) effect_monster_ptr->m_ptr->hp += dam;
+			if (effect_monster_ptr->m_ptr->hp < 30000) effect_monster_ptr->m_ptr->hp += effect_monster_ptr->dam;
 			if (effect_monster_ptr->m_ptr->hp > effect_monster_ptr->m_ptr->maxhp) effect_monster_ptr->m_ptr->hp = effect_monster_ptr->m_ptr->maxhp;
 
 			if (!effect_monster_ptr->who)
@@ -1052,7 +1057,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 			effect_monster_ptr->note = _("は体力を回復したようだ。", " looks healthier.");
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_OLD_SPEED:
@@ -1072,7 +1077,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 					chg_virtue(caster_ptr, V_HONOUR, 1);
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_OLD_SLOW:
@@ -1081,7 +1086,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 			/* Powerful monsters can resist */
 			if ((effect_monster_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
-				(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 				effect_monster_ptr->obvious = FALSE;
@@ -1094,7 +1099,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				}
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_OLD_SLEEP:
@@ -1103,7 +1108,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 			if ((effect_monster_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
 				(effect_monster_ptr->r_ptr->flags3 & RF3_NO_SLEEP) ||
-				(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 			{
 				if (effect_monster_ptr->r_ptr->flags3 & RF3_NO_SLEEP)
 				{
@@ -1119,7 +1124,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				effect_monster_ptr->do_sleep = 500;
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_STASIS_EVIL:
@@ -1128,7 +1133,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 			if ((effect_monster_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
 				!(effect_monster_ptr->r_ptr->flags3 & RF3_EVIL) ||
-				(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 				effect_monster_ptr->obvious = FALSE;
@@ -1139,7 +1144,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				effect_monster_ptr->do_sleep = 500;
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_STASIS:
@@ -1147,7 +1152,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 
 			if ((effect_monster_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
-				(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 				effect_monster_ptr->obvious = FALSE;
@@ -1158,7 +1163,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				effect_monster_ptr->do_sleep = 500;
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_CHARM:
@@ -1167,18 +1172,18 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			vir = virtue_number(caster_ptr, V_HARMONY);
 			if (vir)
 			{
-				dam += caster_ptr->virtues[vir - 1] / 10;
+				effect_monster_ptr->dam += caster_ptr->virtues[vir - 1] / 10;
 			}
 
 			vir = virtue_number(caster_ptr, V_INDIVIDUALISM);
 			if (vir)
 			{
-				dam -= caster_ptr->virtues[vir - 1] / 20;
+				effect_monster_ptr->dam -= caster_ptr->virtues[vir - 1] / 20;
 			}
 
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 
-			if (common_saving_throw_charm(caster_ptr, dam, effect_monster_ptr->m_ptr))
+			if (common_saving_throw_charm(caster_ptr, effect_monster_ptr->dam, effect_monster_ptr->m_ptr))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 				effect_monster_ptr->obvious = FALSE;
@@ -1200,7 +1205,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 					chg_virtue(caster_ptr, V_NATURE, 1);
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_CONTROL_UNDEAD:
@@ -1211,16 +1216,16 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			vir = virtue_number(caster_ptr, V_UNLIFE);
 			if (vir)
 			{
-				dam += caster_ptr->virtues[vir - 1] / 10;
+				effect_monster_ptr->dam += caster_ptr->virtues[vir - 1] / 10;
 			}
 
 			vir = virtue_number(caster_ptr, V_INDIVIDUALISM);
 			if (vir)
 			{
-				dam -= caster_ptr->virtues[vir - 1] / 20;
+				effect_monster_ptr->dam -= caster_ptr->virtues[vir - 1] / 20;
 			}
 
-			if (common_saving_throw_control(caster_ptr, dam, effect_monster_ptr->m_ptr) ||
+			if (common_saving_throw_control(caster_ptr, effect_monster_ptr->dam, effect_monster_ptr->m_ptr) ||
 				!(effect_monster_ptr->r_ptr->flags3 & RF3_UNDEAD))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
@@ -1238,7 +1243,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				set_pet(caster_ptr, effect_monster_ptr->m_ptr);
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_CONTROL_DEMON:
@@ -1249,16 +1254,16 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			vir = virtue_number(caster_ptr, V_UNLIFE);
 			if (vir)
 			{
-				dam += caster_ptr->virtues[vir - 1] / 10;
+				effect_monster_ptr->dam += caster_ptr->virtues[vir - 1] / 10;
 			}
 
 			vir = virtue_number(caster_ptr, V_INDIVIDUALISM);
 			if (vir)
 			{
-				dam -= caster_ptr->virtues[vir - 1] / 20;
+				effect_monster_ptr->dam -= caster_ptr->virtues[vir - 1] / 20;
 			}
 
-			if (common_saving_throw_control(caster_ptr, dam, effect_monster_ptr->m_ptr) ||
+			if (common_saving_throw_control(caster_ptr, effect_monster_ptr->dam, effect_monster_ptr->m_ptr) ||
 				!(effect_monster_ptr->r_ptr->flags3 & RF3_DEMON))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
@@ -1276,7 +1281,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				set_pet(caster_ptr, effect_monster_ptr->m_ptr);
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_CONTROL_ANIMAL:
@@ -1287,16 +1292,16 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			vir = virtue_number(caster_ptr, V_NATURE);
 			if (vir)
 			{
-				dam += caster_ptr->virtues[vir - 1] / 10;
+				effect_monster_ptr->dam += caster_ptr->virtues[vir - 1] / 10;
 			}
 
 			vir = virtue_number(caster_ptr, V_INDIVIDUALISM);
 			if (vir)
 			{
-				dam -= caster_ptr->virtues[vir - 1] / 20;
+				effect_monster_ptr->dam -= caster_ptr->virtues[vir - 1] / 20;
 			}
 
-			if (common_saving_throw_control(caster_ptr, dam, effect_monster_ptr->m_ptr) ||
+			if (common_saving_throw_control(caster_ptr, effect_monster_ptr->dam, effect_monster_ptr->m_ptr) ||
 				!(effect_monster_ptr->r_ptr->flags3 & RF3_ANIMAL))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
@@ -1316,7 +1321,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 					chg_virtue(caster_ptr, V_NATURE, 1);
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_CHARM_LIVING:
@@ -1329,18 +1334,18 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			vir = virtue_number(caster_ptr, V_UNLIFE);
 			if (vir)
 			{
-				dam -= caster_ptr->virtues[vir - 1] / 10;
+				effect_monster_ptr->dam -= caster_ptr->virtues[vir - 1] / 10;
 			}
 
 			vir = virtue_number(caster_ptr, V_INDIVIDUALISM);
 			if (vir)
 			{
-				dam -= caster_ptr->virtues[vir - 1] / 20;
+				effect_monster_ptr->dam -= caster_ptr->virtues[vir - 1] / 20;
 			}
 
 			msg_format(_("%sを見つめた。", "You stare into %s."), effect_monster_ptr->m_name);
 
-			if (common_saving_throw_charm(caster_ptr, dam, effect_monster_ptr->m_ptr) ||
+			if (common_saving_throw_charm(caster_ptr, effect_monster_ptr->dam, effect_monster_ptr->m_ptr) ||
 				!monster_living(effect_monster_ptr->m_ptr->r_idx))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
@@ -1360,17 +1365,17 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 					chg_virtue(caster_ptr, V_NATURE, 1);
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_OLD_CONF:
 		{
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 
-			effect_monster_ptr->do_conf = damroll(3, (dam / 2)) + 1;
+			effect_monster_ptr->do_conf = damroll(3, (effect_monster_ptr->dam / 2)) + 1;
 			if ((effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
 				(effect_monster_ptr->r_ptr->flags3 & (RF3_NO_CONF)) ||
-				(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 			{
 				if (effect_monster_ptr->r_ptr->flags3 & (RF3_NO_CONF))
 				{
@@ -1382,28 +1387,28 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				effect_monster_ptr->obvious = FALSE;
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_STUN:
 		{
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 
-			effect_monster_ptr->do_stun = damroll((effect_monster_ptr->caster_lev / 20) + 3, (dam)) + 1;
+			effect_monster_ptr->do_stun = damroll((effect_monster_ptr->caster_lev / 20) + 3, (effect_monster_ptr->dam)) + 1;
 			if ((effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
-				(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 			{
 				effect_monster_ptr->do_stun = 0;
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 				effect_monster_ptr->obvious = FALSE;
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_LITE_WEAK:
 		{
-			if (!dam)
+			if (!effect_monster_ptr->dam)
 			{
 				effect_monster_ptr->skipped = TRUE;
 				break;
@@ -1420,7 +1425,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			}
 			else
 			{
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 
 			break;
@@ -1432,7 +1437,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_LITE)
 			{
 				effect_monster_ptr->note = _("には耐性がある！", " resists!");
-				dam *= 2; dam /= (randint1(6) + 6);
+				effect_monster_ptr->dam *= 2; effect_monster_ptr->dam /= (randint1(6) + 6);
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_LITE);
 			}
 			else if (effect_monster_ptr->r_ptr->flags3 & (RF3_HURT_LITE))
@@ -1440,7 +1445,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_HURT_LITE);
 				effect_monster_ptr->note = _("は光に身をすくめた！", " cringes from the light!");
 				effect_monster_ptr->note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
-				dam *= 2;
+				effect_monster_ptr->dam *= 2;
 			}
 			break;
 		}
@@ -1451,7 +1456,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_DARK)
 			{
 				effect_monster_ptr->note = _("には耐性がある！", " resists!");
-				dam *= 2; dam /= (randint1(6) + 6);
+				effect_monster_ptr->dam *= 2; effect_monster_ptr->dam /= (randint1(6) + 6);
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_DARK);
 			}
 
@@ -1470,7 +1475,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			}
 			else
 			{
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 
 			break;
@@ -1501,7 +1506,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				{
 					if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 					if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
-					effect_monster_ptr->do_dist = dam;
+					effect_monster_ptr->do_dist = effect_monster_ptr->dam;
 				}
 			}
 			else
@@ -1509,7 +1514,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				effect_monster_ptr->skipped = TRUE;
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_AWAY_EVIL:
@@ -1538,7 +1543,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				{
 					if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 					if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
-					effect_monster_ptr->do_dist = dam;
+					effect_monster_ptr->do_dist = effect_monster_ptr->dam;
 				}
 			}
 			else
@@ -1546,7 +1551,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				effect_monster_ptr->skipped = TRUE;
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_AWAY_ALL:
@@ -1572,10 +1577,10 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			{
 				if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 
-				effect_monster_ptr->do_dist = dam;
+				effect_monster_ptr->do_dist = effect_monster_ptr->dam;
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_TURN_UNDEAD:
@@ -1586,8 +1591,8 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
 
-				effect_monster_ptr->do_fear = damroll(3, (dam / 2)) + 1;
-				if (effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
+				effect_monster_ptr->do_fear = damroll(3, (effect_monster_ptr->dam / 2)) + 1;
+				if (effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10)
 				{
 					effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 					effect_monster_ptr->obvious = FALSE;
@@ -1599,7 +1604,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				effect_monster_ptr->skipped = TRUE;
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_TURN_EVIL:
@@ -1610,8 +1615,8 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
 
-				effect_monster_ptr->do_fear = damroll(3, (dam / 2)) + 1;
-				if (effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10)
+				effect_monster_ptr->do_fear = damroll(3, (effect_monster_ptr->dam / 2)) + 1;
+				if (effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10)
 				{
 					effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 					effect_monster_ptr->obvious = FALSE;
@@ -1623,24 +1628,24 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				effect_monster_ptr->skipped = TRUE;
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_TURN_ALL:
 		{
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 
-			effect_monster_ptr->do_fear = damroll(3, (dam / 2)) + 1;
+			effect_monster_ptr->do_fear = damroll(3, (effect_monster_ptr->dam / 2)) + 1;
 			if ((effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
 				(effect_monster_ptr->r_ptr->flags3 & (RF3_NO_FEAR)) ||
-				(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+				(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 				effect_monster_ptr->obvious = FALSE;
 				effect_monster_ptr->do_fear = 0;
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_DISP_UNDEAD:
@@ -1649,7 +1654,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			{
 				if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 
-				/* Learn about effect_type */
+				/* Learn about effect_monster_ptr->effect_type */
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
 
 				effect_monster_ptr->note = _("は身震いした。", " shudders.");
@@ -1658,7 +1663,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			else
 			{
 				effect_monster_ptr->skipped = TRUE;
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 
 			break;
@@ -1677,7 +1682,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			else
 			{
 				effect_monster_ptr->skipped = TRUE;
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 
 			break;
@@ -1696,7 +1701,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			else
 			{
 				effect_monster_ptr->skipped = TRUE;
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 
 			break;
@@ -1713,7 +1718,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			else
 			{
 				effect_monster_ptr->skipped = TRUE;
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 
 			break;
@@ -1732,7 +1737,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			else
 			{
 				effect_monster_ptr->skipped = TRUE;
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 
 			break;
@@ -1753,12 +1758,12 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				{
 					if (effect_monster_ptr->m_caster_ptr->hp < effect_monster_ptr->m_caster_ptr->maxhp)
 					{
-						effect_monster_ptr->m_caster_ptr->hp += dam;
+						effect_monster_ptr->m_caster_ptr->hp += effect_monster_ptr->dam;
 						if (effect_monster_ptr->m_caster_ptr->hp > effect_monster_ptr->m_caster_ptr->maxhp) effect_monster_ptr->m_caster_ptr->hp = effect_monster_ptr->m_caster_ptr->maxhp;
 						if (caster_ptr->health_who == effect_monster_ptr->who) caster_ptr->redraw |= (PR_HEALTH);
 						if (caster_ptr->riding == effect_monster_ptr->who) caster_ptr->redraw |= (PR_UHEALTH);
 
-						if (see_s_msg)
+						if (effect_monster_ptr->see_s_msg)
 						{
 							monster_desc(caster_ptr, effect_monster_ptr->killer, effect_monster_ptr->m_caster_ptr, 0);
 							msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), effect_monster_ptr->killer);
@@ -1768,15 +1773,15 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				else
 				{
 					msg_format(_("%sから精神エネルギーを吸いとった。", "You draw psychic energy from %s."), effect_monster_ptr->m_name);
-					(void)hp_player(caster_ptr, dam);
+					(void)hp_player(caster_ptr, effect_monster_ptr->dam);
 				}
 			}
 			else
 			{
-				if (see_s_msg) msg_format(_("%sには効果がなかった。", "%s is unaffected."), effect_monster_ptr->m_name);
+				if (effect_monster_ptr->see_s_msg) msg_format(_("%sには効果がなかった。", "%s is unaffected."), effect_monster_ptr->m_name);
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_MIND_BLAST:
@@ -1794,19 +1799,19 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				}
 
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 			else if (effect_monster_ptr->r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
 				effect_monster_ptr->note = _("には完全な耐性がある！", " is immune.");
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 			else if (effect_monster_ptr->r_ptr->flags2 & RF2_WEIRD_MIND)
 			{
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
 				effect_monster_ptr->note = _("には耐性がある。", " resists.");
-				dam /= 3;
+				effect_monster_ptr->dam /= 3;
 			}
 			else
 			{
@@ -1834,19 +1839,19 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				}
 
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 			else if (effect_monster_ptr->r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
 				effect_monster_ptr->note = _("には完全な耐性がある！", " is immune.");
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 			else if (effect_monster_ptr->r_ptr->flags2 & RF2_WEIRD_MIND)
 			{
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags2 |= (RF2_WEIRD_MIND);
 				effect_monster_ptr->note = _("には耐性がある！", " resists!");
-				dam /= 3;
+				effect_monster_ptr->dam /= 3;
 			}
 			else
 			{
@@ -1874,7 +1879,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (randint0(100 + (effect_monster_ptr->caster_lev / 2)) < (effect_monster_ptr->r_ptr->level + 35))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 
 			break;
@@ -1887,7 +1892,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (randint0(100 + (effect_monster_ptr->caster_lev / 2)) < (effect_monster_ptr->r_ptr->level + 35))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 
 			break;
@@ -1900,7 +1905,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (randint0(100 + (effect_monster_ptr->caster_lev / 2)) < (effect_monster_ptr->r_ptr->level + 35))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 
 			break;
@@ -1915,7 +1920,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if ((randint0(100 + (effect_monster_ptr->caster_lev / 2)) < (effect_monster_ptr->r_ptr->level + 35)) && ((effect_monster_ptr->who <= 0) || (effect_monster_ptr->m_caster_ptr->r_idx != MON_KENSHIROU)))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 			break;
 		}
@@ -1925,22 +1930,22 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flags1 & RF1_UNIQUE)
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 			else
 			{
-				if ((effect_monster_ptr->who > 0) ? ((effect_monster_ptr->caster_lev + randint1(dam)) > (effect_monster_ptr->r_ptr->level + 10 + randint1(20))) :
-					(((effect_monster_ptr->caster_lev / 2) + randint1(dam)) > (effect_monster_ptr->r_ptr->level + randint1(200))))
+				if ((effect_monster_ptr->who > 0) ? ((effect_monster_ptr->caster_lev + randint1(effect_monster_ptr->dam)) > (effect_monster_ptr->r_ptr->level + 10 + randint1(20))) :
+					(((effect_monster_ptr->caster_lev / 2) + randint1(effect_monster_ptr->dam)) > (effect_monster_ptr->r_ptr->level + randint1(200))))
 				{
-					dam = ((40 + randint1(20)) * effect_monster_ptr->m_ptr->hp) / 100;
+					effect_monster_ptr->dam = ((40 + randint1(20)) * effect_monster_ptr->m_ptr->hp) / 100;
 
-					if (effect_monster_ptr->m_ptr->hp < dam) dam = effect_monster_ptr->m_ptr->hp - 1;
+					if (effect_monster_ptr->m_ptr->hp < effect_monster_ptr->dam) effect_monster_ptr->dam = effect_monster_ptr->m_ptr->hp - 1;
 				}
 				else
 				{
 					/* todo 乱数で破滅のを弾いた結果が「耐性を持っている」ことになるのはおかしい */
 					effect_monster_ptr->note = _("は耐性を持っている！", "resists!");
-					dam = 0;
+					effect_monster_ptr->dam = 0;
 				}
 			}
 
@@ -1999,7 +2004,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		}
 		case GF_ATTACK:
 		{
-			return py_attack(caster_ptr, y, x, dam);
+			return py_attack(caster_ptr, effect_monster_ptr->y, effect_monster_ptr->x, effect_monster_ptr->dam);
 		}
 		case GF_ENGETSU:
 		{
@@ -2010,7 +2015,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->r_ptr->flags2 & RF2_EMPTY_MIND)
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 				effect_monster_ptr->skipped = TRUE;
 				if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
 				break;
@@ -2018,7 +2023,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (MON_CSLEEP(effect_monster_ptr->m_ptr))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 				effect_monster_ptr->skipped = TRUE;
 				break;
 			}
@@ -2031,7 +2036,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect == 1)
 			{
 				if ((effect_monster_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
-					(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+					(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 				{
 					effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 					effect_monster_ptr->obvious = FALSE;
@@ -2046,9 +2051,9 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			}
 			else if (effect == 2)
 			{
-				effect_monster_ptr->do_stun = damroll((caster_ptr->lev / 10) + 3, (dam)) + 1;
+				effect_monster_ptr->do_stun = damroll((caster_ptr->lev / 10) + 3, (effect_monster_ptr->dam)) + 1;
 				if ((effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
-					(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+					(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 				{
 					effect_monster_ptr->do_stun = 0;
 					effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
@@ -2059,7 +2064,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			{
 				if ((effect_monster_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
 					(effect_monster_ptr->r_ptr->flags3 & RF3_NO_SLEEP) ||
-					(effect_monster_ptr->r_ptr->level > randint1((dam - 10) < 1 ? 1 : (dam - 10)) + 10))
+					(effect_monster_ptr->r_ptr->level > randint1((effect_monster_ptr->dam - 10) < 1 ? 1 : (effect_monster_ptr->dam - 10)) + 10))
 				{
 					if (effect_monster_ptr->r_ptr->flags3 & RF3_NO_SLEEP)
 					{
@@ -2082,13 +2087,13 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_GENOCIDE:
 		{
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
-			if (genocide_aux(caster_ptr, effect_monster_ptr->g_ptr->m_idx, dam, !effect_monster_ptr->who, (effect_monster_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
+			if (genocide_aux(caster_ptr, effect_monster_ptr->g_ptr->m_idx, effect_monster_ptr->dam, !effect_monster_ptr->who, (effect_monster_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
 			{
 				if (effect_monster_ptr->seen_msg) msg_format(_("%sは消滅した！", "%^s disappeared!"), effect_monster_ptr->m_name);
 				chg_virtue(caster_ptr, V_VITALITY, -1);
@@ -2114,7 +2119,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			}
 			else
 			{
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 
 			effect_monster_ptr->photo = effect_monster_ptr->m_ptr->r_idx;
@@ -2132,8 +2137,8 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 			if ((effect_monster_ptr->r_ptr->flags3 & (RF3_GOOD)) && !floor_ptr->inside_arena)
 			{
-				if (effect_monster_ptr->r_ptr->flags3 & (RF3_NO_CONF)) dam -= 50;
-				if (dam < 1) dam = 1;
+				if (effect_monster_ptr->r_ptr->flags3 & (RF3_NO_CONF)) effect_monster_ptr->dam -= 50;
+				if (effect_monster_ptr->dam < 1) effect_monster_ptr->dam = 1;
 
 				if (is_pet(effect_monster_ptr->m_ptr))
 				{
@@ -2145,7 +2150,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 					(effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
 					(effect_monster_ptr->m_ptr->mflag2 & MFLAG2_NOPET) ||
 					(caster_ptr->cursed & TRC_AGGRAVATE) ||
-					((effect_monster_ptr->r_ptr->level + 10) > randint1(dam)))
+					((effect_monster_ptr->r_ptr->level + 10) > randint1(effect_monster_ptr->dam)))
 				{
 					if (one_in_(4)) effect_monster_ptr->m_ptr->mflag2 |= MFLAG2_NOPET;
 				}
@@ -2170,24 +2175,24 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 					effect_monster_ptr->r_ptr->r_flags3 |= (RF3_NO_FEAR);
 			}
 
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		case GF_WOUNDS:
 		{
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 
-			if (randint0(100 + dam) < (effect_monster_ptr->r_ptr->level + 50))
+			if (randint0(100 + effect_monster_ptr->dam) < (effect_monster_ptr->r_ptr->level + 50))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 			break;
 		}
 		default:
 		{
 			effect_monster_ptr->skipped = TRUE;
-			dam = 0;
+			effect_monster_ptr->dam = 0;
 			break;
 		}
 		}
@@ -2202,7 +2207,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 	if (((effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (effect_monster_ptr->r_ptr->flags7 & RF7_NAZGUL)) && !caster_ptr->phase_out)
 	{
-		if (effect_monster_ptr->who && (dam > effect_monster_ptr->m_ptr->hp)) dam = effect_monster_ptr->m_ptr->hp;
+		if (effect_monster_ptr->who && (effect_monster_ptr->dam > effect_monster_ptr->m_ptr->hp)) effect_monster_ptr->dam = effect_monster_ptr->m_ptr->hp;
 	}
 
 	if (!effect_monster_ptr->who && effect_monster_ptr->slept)
@@ -2211,11 +2216,11 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		if (!(effect_monster_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(caster_ptr, V_HONOUR, -1);
 	}
 
-	int tmp = dam;
-	dam = mon_damage_mod(caster_ptr, effect_monster_ptr->m_ptr, dam, (bool)(effect_type == GF_PSY_SPEAR));
-	if ((tmp > 0) && (dam == 0)) effect_monster_ptr->note = _("はダメージを受けていない。", " is unharmed.");
+	int tmp = effect_monster_ptr->dam;
+	effect_monster_ptr->dam = mon_damage_mod(caster_ptr, effect_monster_ptr->m_ptr, effect_monster_ptr->dam, (bool)(effect_monster_ptr->effect_type == GF_PSY_SPEAR));
+	if ((tmp > 0) && (effect_monster_ptr->dam == 0)) effect_monster_ptr->note = _("はダメージを受けていない。", " is unharmed.");
 
-	if (dam > effect_monster_ptr->m_ptr->hp)
+	if (effect_monster_ptr->dam > effect_monster_ptr->m_ptr->hp)
 	{
 		effect_monster_ptr->note = effect_monster_ptr->note_dies;
 	}
@@ -2273,7 +2278,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			{
 				effect_monster_ptr->note = _("は弱くなったようだ。", " seems weakened.");
 				effect_monster_ptr->m_ptr->maxhp -= effect_monster_ptr->do_time;
-				if ((effect_monster_ptr->m_ptr->hp - dam) > effect_monster_ptr->m_ptr->maxhp) dam = effect_monster_ptr->m_ptr->hp - effect_monster_ptr->m_ptr->maxhp;
+				if ((effect_monster_ptr->m_ptr->hp - effect_monster_ptr->dam) > effect_monster_ptr->m_ptr->maxhp) effect_monster_ptr->dam = effect_monster_ptr->m_ptr->hp - effect_monster_ptr->m_ptr->maxhp;
 			}
 
 			effect_monster_ptr->get_angry = TRUE;
@@ -2281,12 +2286,12 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 		if (effect_monster_ptr->do_poly && (randint1(90) > effect_monster_ptr->r_ptr->level))
 		{
-			if (polymorph_monster(caster_ptr, y, x))
+			if (polymorph_monster(caster_ptr, effect_monster_ptr->y, effect_monster_ptr->x))
 			{
 				if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 
 				effect_monster_ptr->note = _("が変身した！", " changes!");
-				dam = 0;
+				effect_monster_ptr->dam = 0;
 			}
 
 			effect_monster_ptr->m_ptr = &floor_ptr->m_list[effect_monster_ptr->g_ptr->m_idx];
@@ -2304,9 +2309,9 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			teleport_away(caster_ptr, effect_monster_ptr->g_ptr->m_idx, effect_monster_ptr->do_dist,
 				(!effect_monster_ptr->who ? TELEPORT_DEC_VALOUR : 0L) | TELEPORT_PASSIVE);
 
-			y = effect_monster_ptr->m_ptr->fy;
-			x = effect_monster_ptr->m_ptr->fx;
-			effect_monster_ptr->g_ptr = &floor_ptr->grid_array[y][x];
+			effect_monster_ptr->y = effect_monster_ptr->m_ptr->fy;
+			effect_monster_ptr->x = effect_monster_ptr->m_ptr->fx;
+			effect_monster_ptr->g_ptr = &floor_ptr->grid_array[effect_monster_ptr->y][effect_monster_ptr->x];
 		}
 
 		if (effect_monster_ptr->do_fear)
@@ -2316,7 +2321,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		}
 	}
 
-	if (effect_type == GF_DRAIN_MANA)
+	if (effect_monster_ptr->effect_type == GF_DRAIN_MANA)
 	{
 		/* Drain mana does nothing */
 	}
@@ -2328,7 +2333,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		if (caster_ptr->riding == effect_monster_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
 
 		(void)set_monster_csleep(caster_ptr, effect_monster_ptr->g_ptr->m_idx, 0);
-		effect_monster_ptr->m_ptr->hp -= dam;
+		effect_monster_ptr->m_ptr->hp -= effect_monster_ptr->dam;
 		if (effect_monster_ptr->m_ptr->hp < 0)
 		{
 			bool sad = FALSE;
@@ -2339,7 +2344,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->known && effect_monster_ptr->note)
 			{
 				monster_desc(caster_ptr, effect_monster_ptr->m_name, effect_monster_ptr->m_ptr, MD_TRUE_NAME);
-				if (see_s_msg)
+				if (effect_monster_ptr->see_s_msg)
 				{
 					msg_format("%^s%s", effect_monster_ptr->m_name, effect_monster_ptr->note);
 				}
@@ -2362,9 +2367,9 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		{
 			if (effect_monster_ptr->note && effect_monster_ptr->seen_msg)
 				msg_format("%^s%s", effect_monster_ptr->m_name, effect_monster_ptr->note);
-			else if (see_s_msg)
+			else if (effect_monster_ptr->see_s_msg)
 			{
-				message_pain(caster_ptr, effect_monster_ptr->g_ptr->m_idx, dam);
+				message_pain(caster_ptr, effect_monster_ptr->g_ptr->m_idx, effect_monster_ptr->dam);
 			}
 			else
 			{
@@ -2394,7 +2399,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	else
 	{
 		bool fear = FALSE;
-		if (mon_take_hit(caster_ptr, effect_monster_ptr->g_ptr->m_idx, dam, &fear, effect_monster_ptr->note_dies))
+		if (mon_take_hit(caster_ptr, effect_monster_ptr->g_ptr->m_idx, effect_monster_ptr->dam, &fear, effect_monster_ptr->note_dies))
 		{
 			/* Dead monster */
 		}
@@ -2404,12 +2409,12 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 			if (effect_monster_ptr->note && effect_monster_ptr->seen_msg)
 				msg_format(_("%s%s", "%^s%s"), effect_monster_ptr->m_name, effect_monster_ptr->note);
-			else if (effect_monster_ptr->known && (dam || !effect_monster_ptr->do_fear))
+			else if (effect_monster_ptr->known && (effect_monster_ptr->dam || !effect_monster_ptr->do_fear))
 			{
-				message_pain(caster_ptr, effect_monster_ptr->g_ptr->m_idx, dam);
+				message_pain(caster_ptr, effect_monster_ptr->g_ptr->m_idx, effect_monster_ptr->dam);
 			}
 
-			if (((dam > 0) || effect_monster_ptr->get_angry) && !effect_monster_ptr->do_sleep)
+			if (((effect_monster_ptr->dam > 0) || effect_monster_ptr->get_angry) && !effect_monster_ptr->do_sleep)
 				anger_monster(caster_ptr, effect_monster_ptr->m_ptr);
 
 			if ((fear || effect_monster_ptr->do_fear) && effect_monster_ptr->seen)
@@ -2422,7 +2427,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		}
 	}
 
-	if ((effect_type == GF_BLOOD_CURSE) && one_in_(4))
+	if ((effect_monster_ptr->effect_type == GF_BLOOD_CURSE) && one_in_(4))
 	{
 		blood_curse_to_enemy(caster_ptr, effect_monster_ptr->who);
 	}
@@ -2436,17 +2441,17 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 	if (effect_monster_ptr->m_ptr->r_idx) update_monster(caster_ptr, effect_monster_ptr->g_ptr->m_idx, FALSE);
 
-	lite_spot(caster_ptr, y, x);
+	lite_spot(caster_ptr, effect_monster_ptr->y, effect_monster_ptr->x);
 	if ((caster_ptr->monster_race_idx == effect_monster_ptr->m_ptr->r_idx) && (effect_monster_ptr->seen || !effect_monster_ptr->m_ptr->r_idx))
 	{
 		caster_ptr->window |= (PW_MONSTER);
 	}
 
-	if ((dam > 0) && !is_pet(effect_monster_ptr->m_ptr) && !is_friendly(effect_monster_ptr->m_ptr))
+	if ((effect_monster_ptr->dam > 0) && !is_pet(effect_monster_ptr->m_ptr) && !is_friendly(effect_monster_ptr->m_ptr))
 	{
 		if (!effect_monster_ptr->who)
 		{
-			if (!(flag & PROJECT_NO_HANGEKI))
+			if (!(effect_monster_ptr->flag & PROJECT_NO_HANGEKI))
 			{
 				set_target(effect_monster_ptr->m_ptr, monster_target_y, monster_target_x);
 			}
@@ -2457,10 +2462,10 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		}
 	}
 
-	if (caster_ptr->riding && (caster_ptr->riding == effect_monster_ptr->g_ptr->m_idx) && (dam > 0))
+	if (caster_ptr->riding && (caster_ptr->riding == effect_monster_ptr->g_ptr->m_idx) && (effect_monster_ptr->dam > 0))
 	{
-		if (effect_monster_ptr->m_ptr->hp > effect_monster_ptr->m_ptr->maxhp / 3) dam = (dam + 1) / 2;
-		rakubadam_m = (dam > 200) ? 200 : dam;
+		if (effect_monster_ptr->m_ptr->hp > effect_monster_ptr->m_ptr->maxhp / 3) effect_monster_ptr->dam = (effect_monster_ptr->dam + 1) / 2;
+		rakubadam_m = (effect_monster_ptr->dam > 200) ? 200 : effect_monster_ptr->dam;
 	}
 
 	if (effect_monster_ptr->photo)
@@ -2475,7 +2480,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	}
 
 	project_m_n++;
-	project_m_x = x;
-	project_m_y = y;
+	project_m_x = effect_monster_ptr->x;
+	project_m_y = effect_monster_ptr->y;
 	return (effect_monster_ptr->obvious);
 }
