@@ -139,13 +139,20 @@ hengband_SOURCES = \
 	quest.h quest.c\
 	\
 	racial.c racial.h \
-	realm.c realm.h \
-	realm-arcane.c realm-arcane.h realm-chaos.c realm-chaos.h \
-	realm-craft.c realm-craft.h realm-crusade.c realm-crusade.h \
-	realm-daemon.c realm-daemon.h realm-death.c realm-death.h \
-	realm-hex.c realm-hex.h realm-hissatsu.c realm-hissatsu.h \
-	realm-life.c realm-life.h realm-nature.c realm-nature.h realm-song.c \
-	realm-song.h realm-sorcery.c realm-sorcery.h realm-trump.c realm-trump.h \
+	realm/realm.c realm/realm.h \
+	realm/realm-arcane.c realm/realm-arcane.h \
+	realm/realm-chaos.c realm/realm-chaos.h \
+	realm/realm-craft.c realm/realm-craft.h \
+	realm/realm-crusade.c realm/realm-crusade.h \
+	realm/realm-daemon.c realm/realm-daemon.h \
+	realm/realm-death.c realm/realm-death.h \
+	realm/realm-hex.c realm/realm-hex.h 
+	realm/realm-hissatsu.c realm/realm-hissatsu.h \
+	realm/realm-life.c realm/realm-life.h 
+	realm/realm-nature.c realm/realm-nature.h realm/realm-song.c \
+	realm/realm-song.h realm/realm-sorcery.c \
+	realm/realm-sorcery.h realm/realm-trump.c realm/realm-trump.h \
+	\
 	report.c report.h \
 	rooms.c rooms-city.c rooms-city.h rooms-fractal.c rooms-fractal.h \
 	rooms.h rooms-normal.c rooms-normal.h \

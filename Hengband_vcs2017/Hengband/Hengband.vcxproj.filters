@@ -142,45 +142,6 @@
     <ClCompile Include="..\..\src\player-effects.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm-arcane.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\realm-chaos.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\realm-craft.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\realm-crusade.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\realm-daemon.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\realm-death.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\realm-hex.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\realm-hissatsu.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\realm-life.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\realm-nature.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\realm-song.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\realm-sorcery.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\realm-trump.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mspells4.c">
       <Filter>spell</Filter>
     </ClCompile>
@@ -300,9 +261,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\targeting.c">
       <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\realm.c">
-      <Filter>spell</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\creature.c">
       <Filter>creature</Filter>
@@ -697,6 +655,48 @@
     <ClCompile Include="..\..\src\spell\spells-common.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm.c">
+      <Filter>realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-arcane.c">
+      <Filter>realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-chaos.c">
+      <Filter>realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-craft.c">
+      <Filter>realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-crusade.c">
+      <Filter>realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-daemon.c">
+      <Filter>realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-death.c">
+      <Filter>realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-hex.c">
+      <Filter>realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-hissatsu.c">
+      <Filter>realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-life.c">
+      <Filter>realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-nature.c">
+      <Filter>realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-song.c">
+      <Filter>realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-sorcery.c">
+      <Filter>realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-trump.c">
+      <Filter>realm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -830,45 +830,6 @@
     <ClInclude Include="..\..\src\player-effects.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\realm-arcane.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm-chaos.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm-craft.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm-crusade.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm-daemon.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm-death.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm-hex.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm-hissatsu.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm-life.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm-nature.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm-song.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm-sorcery.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm-trump.h">
-      <Filter>spell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-spell.h">
       <Filter>spell</Filter>
     </ClInclude>
@@ -973,9 +934,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\snipe.h">
       <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm.h">
-      <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\targeting.h">
       <Filter>io</Filter>
@@ -1397,6 +1355,48 @@
     <ClInclude Include="..\..\src\spell\spells-common.h">
       <Filter>spell</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-arcane.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-chaos.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-craft.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-crusade.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-daemon.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-death.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-hex.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-hissatsu.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-life.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-nature.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-song.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-sorcery.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-trump.h">
+      <Filter>realm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1456,6 +1456,9 @@
     </Filter>
     <Filter Include="spell">
       <UniqueIdentifier>{4e443fe1-9ff8-4786-b43f-7e4d106760dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="realm">
+      <UniqueIdentifier>{c4ce5c0c-f907-4e62-abc1-5d9dbe7f1abf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
