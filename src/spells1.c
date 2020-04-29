@@ -273,8 +273,6 @@ void breath_shape(player_type *caster_ptr, u16b *path_g, int dist, int *pgrids, 
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	while (bdis <= mdis)
 	{
-		POSITION x, y;
-
 		if ((0 < dist) && (path_n < dist))
 		{
 			POSITION ny = GRID_Y(path_g[path_n]);
@@ -292,9 +290,9 @@ void breath_shape(player_type *caster_ptr, u16b *path_g, int dist, int *pgrids, 
 		/* Travel from center outward */
 		for (cdis = 0; cdis <= brad; cdis++)
 		{
-			for (y = by - cdis; y <= by + cdis; y++)
+			for (POSITION y = by - cdis; y <= by + cdis; y++)
 			{
-				for (x = bx - cdis; x <= bx + cdis; x++)
+				for (POSITION x = bx - cdis; x <= bx + cdis; x++)
 				{
 					if (!in_bounds(floor_ptr, y, x)) continue;
 					if (distance(y1, x1, y, x) != bdis) continue;
@@ -1140,7 +1138,6 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 {
 	POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
 	int mirror_num = 0;	/* 鏡の数 */
-	POSITION x, y;
 	int msec = delay_factor * delay_factor*delay_factor;
 
 	/* 三角形の頂点 */
@@ -1151,9 +1148,9 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 	monster_target_y = caster_ptr->y;
 	monster_target_x = caster_ptr->x;
 
-	for (x = 0; x < caster_ptr->current_floor_ptr->width; x++)
+	for (POSITION x = 0; x < caster_ptr->current_floor_ptr->width; x++)
 	{
-		for (y = 0; y < caster_ptr->current_floor_ptr->height; y++)
+		for (POSITION y = 0; y < caster_ptr->current_floor_ptr->height; y++)
 		{
 			if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]) &&
 				distance(caster_ptr->y, caster_ptr->x, y, x) <= MAX_RANGE &&
@@ -1182,8 +1179,8 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam)
 	point_y[2] = caster_ptr->y;
 	point_x[2] = caster_ptr->x;
 
-	x = point_x[0] + point_x[1] + point_x[2];
-	y = point_y[0] + point_y[1] + point_y[2];
+	POSITION x = point_x[0] + point_x[1] + point_x[2];
+	POSITION y = point_y[0] + point_y[1] + point_y[2];
 
 	POSITION centersign = (point_x[0] * 3 - x)*(point_y[1] * 3 - y)
 		- (point_y[0] * 3 - y)*(point_x[1] * 3 - x);
