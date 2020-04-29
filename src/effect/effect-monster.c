@@ -2092,6 +2092,22 @@ static gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_m
 
 
 /*!
+ * @brief 魔法の効果やモンスター種別(MAKE/FEMALE/なし)に応じて表示するメッセージを変更する
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void decide_spell_result_description(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	em_ptr->dam = (em_ptr->dam + em_ptr->r) / (em_ptr->r + 1);
+	monster_desc(caster_ptr, em_ptr->m_name, em_ptr->m_ptr, 0);
+	monster_desc(caster_ptr, em_ptr->m_poss, em_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
+	if (caster_ptr->riding && (em_ptr->g_ptr->m_idx == caster_ptr->riding))
+		disturb(caster_ptr, TRUE, TRUE);
+}
+
+
+/*!
  * @brief 完全な耐性を持っていたら、モンスターへの効果処理をスキップする
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -2160,6 +2176,25 @@ static void process_monster_sleep(player_type *caster_ptr, effect_monster_type *
 		caster_ptr->current_floor_ptr->monster_noise = TRUE;
 
 	if (em_ptr->do_sleep) (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
+}
+
+
+/*!
+ * @brief モンスターへのダメージに応じたメッセージを表示させ、異常状態を与える
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void process_monster_bad_stat_damage(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	int tmp_damage = em_ptr->dam;
+	em_ptr->dam = mon_damage_mod(caster_ptr, em_ptr->m_ptr, em_ptr->dam, (bool)(em_ptr->effect_type == GF_PSY_SPEAR));
+	if ((tmp_damage > 0) && (em_ptr->dam == 0)) em_ptr->note = _("はダメージを受けていない。", " is unharmed.");
+
+	if (em_ptr->dam > em_ptr->m_ptr->hp)
+		em_ptr->note = em_ptr->note_dies;
+	else
+		process_monster_bad_status(caster_ptr, em_ptr, &tmp_damage);
 }
 
 
@@ -2563,27 +2598,14 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	initialize_effect_monster(caster_ptr, em_ptr, who, r, y, x, dam, effect_type, flag, see_s_msg);
 	if (!is_never_effect(caster_ptr, em_ptr)) return FALSE;
 
-	em_ptr->dam = (em_ptr->dam + em_ptr->r) / (em_ptr->r + 1);
-	monster_desc(caster_ptr, em_ptr->m_name, em_ptr->m_ptr, 0);
-	monster_desc(caster_ptr, em_ptr->m_poss, em_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
-	if (caster_ptr->riding && (em_ptr->g_ptr->m_idx == caster_ptr->riding))
-		disturb(caster_ptr, TRUE, TRUE);
-
+	decide_spell_result_description(caster_ptr, em_ptr);
 	gf_switch_result result = process_monster_perfect_resistance(caster_ptr, em_ptr);
 	if (result != GF_SWITCH_CONTINUE) return (bool)result;
 
 	if (em_ptr->skipped) return FALSE;
 
 	process_spell_result(caster_ptr, em_ptr);
-	int tmp_damage = em_ptr->dam;
-	em_ptr->dam = mon_damage_mod(caster_ptr, em_ptr->m_ptr, em_ptr->dam, (bool)(em_ptr->effect_type == GF_PSY_SPEAR));
-	if ((tmp_damage > 0) && (em_ptr->dam == 0)) em_ptr->note = _("はダメージを受けていない。", " is unharmed.");
-
-	if (em_ptr->dam > em_ptr->m_ptr->hp)
-		em_ptr->note = em_ptr->note_dies;
-	else
-		process_monster_bad_status(caster_ptr, em_ptr, &tmp_damage);
-
+	process_monster_bad_stat_damage(caster_ptr, em_ptr);
 	process_monster_last_moment(caster_ptr, em_ptr);
 	if ((em_ptr->effect_type == GF_BLOOD_CURSE) && one_in_(4))
 		blood_curse_to_enemy(caster_ptr, em_ptr->who);
