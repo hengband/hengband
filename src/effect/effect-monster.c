@@ -64,7 +64,7 @@ typedef struct
 } effect_monster;
 
 
-void substitute_effect_monster(effect_monster *effect_monster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
+static void substitute_effect_monster(effect_monster *effect_monster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
 {
 	effect_monster_ptr->who = who;
 	effect_monster_ptr->r = r;
@@ -86,12 +86,14 @@ void substitute_effect_monster(effect_monster *effect_monster_ptr, MONSTER_IDX w
  * @param 目標x座標
  * @return なし
  */
-void initialize_effect_monster(player_type *caster_ptr, effect_monster *effect_monster_ptr, MONSTER_IDX who, POSITION y, POSITION x)
+void initialize_effect_monster(player_type *caster_ptr, effect_monster *effect_monster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
 {
+	substitute_effect_monster(effect_monster_ptr, who, r, y, x, dam, effect_type, flag, see_s_msg);
+
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-	effect_monster_ptr->g_ptr = &floor_ptr->grid_array[y][x];
+	effect_monster_ptr->g_ptr = &floor_ptr->grid_array[effect_monster_ptr->y][effect_monster_ptr->x];
 	effect_monster_ptr->m_ptr = &floor_ptr->m_list[effect_monster_ptr->g_ptr->m_idx];
-	effect_monster_ptr->m_caster_ptr = (who > 0) ? &floor_ptr->m_list[who] : NULL;
+	effect_monster_ptr->m_caster_ptr = (effect_monster_ptr->who > 0) ? &floor_ptr->m_list[effect_monster_ptr->who] : NULL;
 	effect_monster_ptr->r_ptr = &r_info[effect_monster_ptr->m_ptr->r_idx];
 	effect_monster_ptr->seen = effect_monster_ptr->m_ptr->ml;
 	effect_monster_ptr->seen_msg = is_seen(effect_monster_ptr->m_ptr);
@@ -111,7 +113,7 @@ void initialize_effect_monster(player_type *caster_ptr, effect_monster *effect_m
 	effect_monster_ptr->photo = 0;
 	effect_monster_ptr->note = NULL;
 	effect_monster_ptr->note_dies = extract_note_dies(real_r_idx(effect_monster_ptr->m_ptr));
-	effect_monster_ptr->caster_lev = (who > 0) ? r_info[effect_monster_ptr->m_caster_ptr->r_idx].level : (caster_ptr->lev * 2);
+	effect_monster_ptr->caster_lev = (effect_monster_ptr->who > 0) ? r_info[effect_monster_ptr->m_caster_ptr->r_idx].level : (caster_ptr->lev * 2);
 }
 
 
@@ -133,14 +135,13 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	effect_monster tmp_effect;
 	effect_monster *effect_monster_ptr = &tmp_effect;
-	substitute_effect_monster(effect_monster_ptr, who, r, y, x, dam, effect_type, flag, see_s_msg);
-	initialize_effect_monster(caster_ptr, effect_monster_ptr, who, y, x);
+	initialize_effect_monster(caster_ptr, effect_monster_ptr, who, r, y, x, dam, effect_type, flag, see_s_msg);
 
 	if (!effect_monster_ptr->g_ptr->m_idx) return FALSE;
 
 	/* Never affect projector */
-	if (who && (effect_monster_ptr->g_ptr->m_idx == who)) return FALSE;
-	if ((effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding) && !who && !(effect_type == GF_OLD_HEAL) && !(effect_type == GF_OLD_SPEED) && !(effect_type == GF_STAR_HEAL)) return FALSE;
+	if (effect_monster_ptr->who && (effect_monster_ptr->g_ptr->m_idx == effect_monster_ptr->who)) return FALSE;
+	if ((effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding) && !effect_monster_ptr->who && !(effect_type == GF_OLD_HEAL) && !(effect_type == GF_OLD_SPEED) && !(effect_type == GF_STAR_HEAL)) return FALSE;
 	if (sukekaku && ((effect_monster_ptr->m_ptr->r_idx == MON_SUKE) || (effect_monster_ptr->m_ptr->r_idx == MON_KAKU))) return FALSE;
 
 	/* Don't affect already death monsters */
@@ -1019,7 +1020,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->m_ptr->hp < 30000) effect_monster_ptr->m_ptr->hp += dam;
 			if (effect_monster_ptr->m_ptr->hp > effect_monster_ptr->m_ptr->maxhp) effect_monster_ptr->m_ptr->hp = effect_monster_ptr->m_ptr->maxhp;
 
-			if (!who)
+			if (!effect_monster_ptr->who)
 			{
 				chg_virtue(caster_ptr, V_VITALITY, 1);
 
@@ -1043,7 +1044,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->m_ptr->r_idx == MON_LEPER)
 			{
 				effect_monster_ptr->heal_leper = TRUE;
-				if (!who) chg_virtue(caster_ptr, V_COMPASSION, 5);
+				if (!effect_monster_ptr->who) chg_virtue(caster_ptr, V_COMPASSION, 5);
 			}
 
 			if (caster_ptr->health_who == effect_monster_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
@@ -1063,7 +1064,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				effect_monster_ptr->note = _("の動きが速くなった。", " starts moving faster.");
 			}
 
-			if (!who)
+			if (!effect_monster_ptr->who)
 			{
 				if (effect_monster_ptr->r_ptr->flags1 & RF1_UNIQUE)
 					chg_virtue(caster_ptr, V_INDIVIDUALISM, 1);
@@ -1748,14 +1749,14 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
 			if ((effect_monster_ptr->r_ptr->flags4 & ~(RF4_NOMAGIC_MASK)) || (effect_monster_ptr->r_ptr->a_ability_flags1 & ~(RF5_NOMAGIC_MASK)) || (effect_monster_ptr->r_ptr->a_ability_flags2 & ~(RF6_NOMAGIC_MASK)))
 			{
-				if (who > 0)
+				if (effect_monster_ptr->who > 0)
 				{
 					if (effect_monster_ptr->m_caster_ptr->hp < effect_monster_ptr->m_caster_ptr->maxhp)
 					{
 						effect_monster_ptr->m_caster_ptr->hp += dam;
 						if (effect_monster_ptr->m_caster_ptr->hp > effect_monster_ptr->m_caster_ptr->maxhp) effect_monster_ptr->m_caster_ptr->hp = effect_monster_ptr->m_caster_ptr->maxhp;
-						if (caster_ptr->health_who == who) caster_ptr->redraw |= (PR_HEALTH);
-						if (caster_ptr->riding == who) caster_ptr->redraw |= (PR_UHEALTH);
+						if (caster_ptr->health_who == effect_monster_ptr->who) caster_ptr->redraw |= (PR_HEALTH);
+						if (caster_ptr->riding == effect_monster_ptr->who) caster_ptr->redraw |= (PR_UHEALTH);
 
 						if (see_s_msg)
 						{
@@ -1781,7 +1782,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_MIND_BLAST:
 		{
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
-			if (!who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), effect_monster_ptr->m_name);
+			if (!effect_monster_ptr->who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), effect_monster_ptr->m_name);
 
 			if ((effect_monster_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
 				(effect_monster_ptr->r_ptr->flags3 & RF3_NO_CONF) ||
@@ -1812,7 +1813,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				effect_monster_ptr->note = _("は精神攻撃を食らった。", " is blasted by psionic energy.");
 				effect_monster_ptr->note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
 
-				if (who > 0) effect_monster_ptr->do_conf = randint0(4) + 4;
+				if (effect_monster_ptr->who > 0) effect_monster_ptr->do_conf = randint0(4) + 4;
 				else effect_monster_ptr->do_conf = randint0(8) + 8;
 			}
 
@@ -1821,7 +1822,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_BRAIN_SMASH:
 		{
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
-			if (!who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), effect_monster_ptr->m_name);
+			if (!effect_monster_ptr->who) msg_format(_("%sをじっと睨んだ。", "You gaze intently at %s."), effect_monster_ptr->m_name);
 
 			if ((effect_monster_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
 				(effect_monster_ptr->r_ptr->flags3 & RF3_NO_CONF) ||
@@ -1851,7 +1852,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			{
 				effect_monster_ptr->note = _("は精神攻撃を食らった。", " is blasted by psionic energy.");
 				effect_monster_ptr->note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
-				if (who > 0)
+				if (effect_monster_ptr->who > 0)
 				{
 					effect_monster_ptr->do_conf = randint0(4) + 4;
 					effect_monster_ptr->do_stun = randint0(4) + 4;
@@ -1869,7 +1870,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_CAUSE_1:
 		{
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
-			if (!who) msg_format(_("%sを指差して呪いをかけた。", "You point at %s and curse."), effect_monster_ptr->m_name);
+			if (!effect_monster_ptr->who) msg_format(_("%sを指差して呪いをかけた。", "You point at %s and curse."), effect_monster_ptr->m_name);
 			if (randint0(100 + (effect_monster_ptr->caster_lev / 2)) < (effect_monster_ptr->r_ptr->level + 35))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
@@ -1881,7 +1882,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_CAUSE_2:
 		{
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
-			if (!who) msg_format(_("%sを指差して恐ろしげに呪いをかけた。", "You point at %s and curse horribly."), effect_monster_ptr->m_name);
+			if (!effect_monster_ptr->who) msg_format(_("%sを指差して恐ろしげに呪いをかけた。", "You point at %s and curse horribly."), effect_monster_ptr->m_name);
 
 			if (randint0(100 + (effect_monster_ptr->caster_lev / 2)) < (effect_monster_ptr->r_ptr->level + 35))
 			{
@@ -1894,7 +1895,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_CAUSE_3:
 		{
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
-			if (!who) msg_format(_("%sを指差し、恐ろしげに呪文を唱えた！", "You point at %s, incanting terribly!"), effect_monster_ptr->m_name);
+			if (!effect_monster_ptr->who) msg_format(_("%sを指差し、恐ろしげに呪文を唱えた！", "You point at %s, incanting terribly!"), effect_monster_ptr->m_name);
 
 			if (randint0(100 + (effect_monster_ptr->caster_lev / 2)) < (effect_monster_ptr->r_ptr->level + 35))
 			{
@@ -1907,11 +1908,11 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_CAUSE_4:
 		{
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
-			if (!who)
+			if (!effect_monster_ptr->who)
 				msg_format(_("%sの秘孔を突いて、「お前は既に死んでいる」と叫んだ。",
 					"You point at %s, screaming the word, 'DIE!'."), effect_monster_ptr->m_name);
 
-			if ((randint0(100 + (effect_monster_ptr->caster_lev / 2)) < (effect_monster_ptr->r_ptr->level + 35)) && ((who <= 0) || (effect_monster_ptr->m_caster_ptr->r_idx != MON_KENSHIROU)))
+			if ((randint0(100 + (effect_monster_ptr->caster_lev / 2)) < (effect_monster_ptr->r_ptr->level + 35)) && ((effect_monster_ptr->who <= 0) || (effect_monster_ptr->m_caster_ptr->r_idx != MON_KENSHIROU)))
 			{
 				effect_monster_ptr->note = _("には効果がなかった。", " is unaffected.");
 				dam = 0;
@@ -1928,7 +1929,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 			}
 			else
 			{
-				if ((who > 0) ? ((effect_monster_ptr->caster_lev + randint1(dam)) > (effect_monster_ptr->r_ptr->level + 10 + randint1(20))) :
+				if ((effect_monster_ptr->who > 0) ? ((effect_monster_ptr->caster_lev + randint1(dam)) > (effect_monster_ptr->r_ptr->level + 10 + randint1(20))) :
 					(((effect_monster_ptr->caster_lev / 2) + randint1(dam)) > (effect_monster_ptr->r_ptr->level + randint1(200))))
 				{
 					dam = ((40 + randint1(20)) * effect_monster_ptr->m_ptr->hp) / 100;
@@ -2087,7 +2088,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		case GF_GENOCIDE:
 		{
 			if (effect_monster_ptr->seen) effect_monster_ptr->obvious = TRUE;
-			if (genocide_aux(caster_ptr, effect_monster_ptr->g_ptr->m_idx, dam, !who, (effect_monster_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
+			if (genocide_aux(caster_ptr, effect_monster_ptr->g_ptr->m_idx, dam, !effect_monster_ptr->who, (effect_monster_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
 			{
 				if (effect_monster_ptr->seen_msg) msg_format(_("%sは消滅した！", "%^s disappeared!"), effect_monster_ptr->m_name);
 				chg_virtue(caster_ptr, V_VITALITY, -1);
@@ -2099,7 +2100,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		}
 		case GF_PHOTO:
 		{
-			if (!who)
+			if (!effect_monster_ptr->who)
 				msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), effect_monster_ptr->m_name);
 
 			if (effect_monster_ptr->r_ptr->flags3 & (RF3_HURT_LITE))
@@ -2201,10 +2202,10 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 	if (((effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (effect_monster_ptr->r_ptr->flags7 & RF7_NAZGUL)) && !caster_ptr->phase_out)
 	{
-		if (who && (dam > effect_monster_ptr->m_ptr->hp)) dam = effect_monster_ptr->m_ptr->hp;
+		if (effect_monster_ptr->who && (dam > effect_monster_ptr->m_ptr->hp)) dam = effect_monster_ptr->m_ptr->hp;
 	}
 
-	if (!who && effect_monster_ptr->slept)
+	if (!effect_monster_ptr->who && effect_monster_ptr->slept)
 	{
 		if (!(effect_monster_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(caster_ptr, V_COMPASSION, -1);
 		if (!(effect_monster_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(caster_ptr, V_HONOUR, -1);
@@ -2298,10 +2299,10 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 			effect_monster_ptr->note = _("が消え去った！", " disappears!");
 
-			if (!who) chg_virtue(caster_ptr, V_VALOUR, -1);
+			if (!effect_monster_ptr->who) chg_virtue(caster_ptr, V_VALOUR, -1);
 
 			teleport_away(caster_ptr, effect_monster_ptr->g_ptr->m_idx, effect_monster_ptr->do_dist,
-				(!who ? TELEPORT_DEC_VALOUR : 0L) | TELEPORT_PASSIVE);
+				(!effect_monster_ptr->who ? TELEPORT_DEC_VALOUR : 0L) | TELEPORT_PASSIVE);
 
 			y = effect_monster_ptr->m_ptr->fy;
 			x = effect_monster_ptr->m_ptr->fx;
@@ -2321,7 +2322,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	}
 
 	/* If another monster did the damage, hurt the monster by hand */
-	else if (who)
+	else if (effect_monster_ptr->who)
 	{
 		if (caster_ptr->health_who == effect_monster_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
 		if (caster_ptr->riding == effect_monster_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
@@ -2348,7 +2349,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 				}
 			}
 
-			if (who > 0) monster_gain_exp(caster_ptr, who, effect_monster_ptr->m_ptr->r_idx);
+			if (effect_monster_ptr->who > 0) monster_gain_exp(caster_ptr, effect_monster_ptr->who, effect_monster_ptr->m_ptr->r_idx);
 
 			monster_death(caster_ptr, effect_monster_ptr->g_ptr->m_idx, FALSE);
 			delete_monster_idx(caster_ptr, effect_monster_ptr->g_ptr->m_idx);
@@ -2423,7 +2424,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 	if ((effect_type == GF_BLOOD_CURSE) && one_in_(4))
 	{
-		blood_curse_to_enemy(caster_ptr, who);
+		blood_curse_to_enemy(caster_ptr, effect_monster_ptr->who);
 	}
 
 	if (caster_ptr->phase_out)
@@ -2443,14 +2444,14 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 	if ((dam > 0) && !is_pet(effect_monster_ptr->m_ptr) && !is_friendly(effect_monster_ptr->m_ptr))
 	{
-		if (!who)
+		if (!effect_monster_ptr->who)
 		{
 			if (!(flag & PROJECT_NO_HANGEKI))
 			{
 				set_target(effect_monster_ptr->m_ptr, monster_target_y, monster_target_x);
 			}
 		}
-		else if ((who > 0) && is_pet(effect_monster_ptr->m_caster_ptr) && !player_bold(caster_ptr, effect_monster_ptr->m_ptr->target_y, effect_monster_ptr->m_ptr->target_x))
+		else if ((effect_monster_ptr->who > 0) && is_pet(effect_monster_ptr->m_caster_ptr) && !player_bold(caster_ptr, effect_monster_ptr->m_ptr->target_y, effect_monster_ptr->m_ptr->target_x))
 		{
 			set_target(effect_monster_ptr->m_ptr, effect_monster_ptr->m_caster_ptr->fy, effect_monster_ptr->m_caster_ptr->fx);
 		}
