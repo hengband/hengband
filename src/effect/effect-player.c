@@ -38,15 +38,10 @@
  */
 bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flag, int monspell)
 {
-	int k = 0;
 	DEPTH rlev = 0;
-	bool obvious = TRUE;
-	bool blind = (target_ptr->blind ? TRUE : FALSE);
-	bool fuzzy = FALSE;
 	monster_type *m_ptr = NULL;
 	GAME_TEXT m_name[MAX_NLEN];
 	char killer[80];
-	concptr act = NULL;
 	int get_damage = 0;
 	if (!player_bold(target_ptr, y, x)) return FALSE;
 
@@ -64,7 +59,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		int max_attempts = 10;
 		sound(SOUND_REFLECT);
 
-		if (blind)
+		if (target_ptr->blind)
 			msg_print(_("何かが跳ね返った！", "Something bounces!"));
 		else if (target_ptr->special_defense & KATA_FUUJIN)
 			msg_print(_("風の如く武器を振るって弾き返した！", "The attack bounces!"));
@@ -100,8 +95,6 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	if (dam > 1600) dam = 1600;
 
 	dam = (dam + r) / (r + 1);
-	if (blind) fuzzy = TRUE;
-
 	if (who > 0)
 	{
 		m_ptr = &target_ptr->current_floor_ptr->m_list[who];
@@ -132,28 +125,28 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	{
 	case GF_ACID:
 	{
-		if (fuzzy) msg_print(_("酸で攻撃された！", "You are hit by acid!"));
+		if (target_ptr->blind) msg_print(_("酸で攻撃された！", "You are hit by acid!"));
 
 		get_damage = acid_dam(target_ptr, dam, killer, monspell, FALSE);
 		break;
 	}
 	case GF_FIRE:
 	{
-		if (fuzzy) msg_print(_("火炎で攻撃された！", "You are hit by fire!"));
+		if (target_ptr->blind) msg_print(_("火炎で攻撃された！", "You are hit by fire!"));
 
 		get_damage = fire_dam(target_ptr, dam, killer, monspell, FALSE);
 		break;
 	}
 	case GF_COLD:
 	{
-		if (fuzzy) msg_print(_("冷気で攻撃された！", "You are hit by cold!"));
+		if (target_ptr->blind) msg_print(_("冷気で攻撃された！", "You are hit by cold!"));
 
 		get_damage = cold_dam(target_ptr, dam, killer, monspell, FALSE);
 		break;
 	}
 	case GF_ELEC:
 	{
-		if (fuzzy) msg_print(_("電撃で攻撃された！", "You are hit by lightning!"));
+		if (target_ptr->blind) msg_print(_("電撃で攻撃された！", "You are hit by lightning!"));
 
 		get_damage = elec_dam(target_ptr, dam, killer, monspell, FALSE);
 		break;
@@ -161,7 +154,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	case GF_POIS:
 	{
 		bool double_resist = is_oppose_pois(target_ptr);
-		if (fuzzy) msg_print(_("毒で攻撃された！", "You are hit by poison!"));
+		if (target_ptr->blind) msg_print(_("毒で攻撃された！", "You are hit by poison!"));
 
 		if (target_ptr->resist_pois) dam = (dam + 2) / 3;
 		if (double_resist) dam = (dam + 2) / 3;
@@ -181,7 +174,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	case GF_NUKE:
 	{
 		bool double_resist = is_oppose_pois(target_ptr);
-		if (fuzzy) msg_print(_("放射能で攻撃された！", "You are hit by radiation!"));
+		if (target_ptr->blind) msg_print(_("放射能で攻撃された！", "You are hit by radiation!"));
 
 		if (target_ptr->resist_pois) dam = (2 * dam + 2) / 5;
 		if (double_resist) dam = (2 * dam + 2) / 5;
@@ -209,13 +202,13 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_MISSILE:
 	{
-		if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
+		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
 	case GF_HOLY_FIRE:
 	{
-		if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
+		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 		if (target_ptr->align > 10)
 			dam /= 2;
 		else if (target_ptr->align < -10)
@@ -225,7 +218,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_HELL_FIRE:
 	{
-		if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
+		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 		if (target_ptr->align > 10)
 			dam *= 2;
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
@@ -233,7 +226,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_ARROW:
 	{
-		if (fuzzy)
+		if (target_ptr->blind)
 		{
 			msg_print(_("何か鋭いもので攻撃された！", "You are hit by something sharp!"));
 		}
@@ -248,7 +241,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_PLASMA:
 	{
-		if (fuzzy) msg_print(_("何かとても熱いもので攻撃された！", "You are hit by something *HOT*!"));
+		if (target_ptr->blind) msg_print(_("何かとても熱いもので攻撃された！", "You are hit by something *HOT*!"));
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 
 		if (!target_ptr->resist_sound && !CHECK_MULTISHADOW(target_ptr))
@@ -266,7 +259,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_NETHER:
 	{
-		if (fuzzy) msg_print(_("地獄の力で攻撃された！", "You are hit by nether forces!"));
+		if (target_ptr->blind) msg_print(_("地獄の力で攻撃された！", "You are hit by nether forces!"));
 		if (target_ptr->resist_neth)
 		{
 			if (!PRACE_IS_(target_ptr, RACE_SPECTRE))
@@ -291,7 +284,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_WATER:
 	{
-		if (fuzzy) msg_print(_("何か湿ったもので攻撃された！", "You are hit by something wet!"));
+		if (target_ptr->blind) msg_print(_("何か湿ったもので攻撃された！", "You are hit by something wet!"));
 		if (CHECK_MULTISHADOW(target_ptr))
 		{
 			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
@@ -319,7 +312,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_CHAOS:
 	{
-		if (fuzzy) msg_print(_("無秩序の波動で攻撃された！", "You are hit by a wave of anarchy!"));
+		if (target_ptr->blind) msg_print(_("無秩序の波動で攻撃された！", "You are hit by a wave of anarchy!"));
 		if (target_ptr->resist_chaos)
 		{
 			dam *= 6; dam /= (randint1(4) + 7);
@@ -360,7 +353,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_SHARDS:
 	{
-		if (fuzzy) msg_print(_("何か鋭いもので攻撃された！", "You are hit by something sharp!"));
+		if (target_ptr->blind) msg_print(_("何か鋭いもので攻撃された！", "You are hit by something sharp!"));
 		if (target_ptr->resist_shard)
 		{
 			dam *= 6; dam /= (randint1(4) + 7);
@@ -380,7 +373,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_SOUND:
 	{
-		if (fuzzy) msg_print(_("轟音で攻撃された！", "You are hit by a loud noise!"));
+		if (target_ptr->blind) msg_print(_("轟音で攻撃された！", "You are hit by a loud noise!"));
 		if (target_ptr->resist_sound)
 		{
 			dam *= 5; dam /= (randint1(4) + 7);
@@ -401,7 +394,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_CONFUSION:
 	{
-		if (fuzzy) msg_print(_("何か混乱するもので攻撃された！", "You are hit by something puzzling!"));
+		if (target_ptr->blind) msg_print(_("何か混乱するもので攻撃された！", "You are hit by something puzzling!"));
 		if (target_ptr->resist_conf)
 		{
 			dam *= 5; dam /= (randint1(4) + 7);
@@ -415,7 +408,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_DISENCHANT:
 	{
-		if (fuzzy) msg_print(_("何かさえないもので攻撃された！", "You are hit by something static!"));
+		if (target_ptr->blind) msg_print(_("何かさえないもので攻撃された！", "You are hit by something static!"));
 		if (target_ptr->resist_disen)
 		{
 			dam *= 6; dam /= (randint1(4) + 7);
@@ -429,7 +422,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_NEXUS:
 	{
-		if (fuzzy) msg_print(_("何か奇妙なもので攻撃された！", "You are hit by something strange!"));
+		if (target_ptr->blind) msg_print(_("何か奇妙なもので攻撃された！", "You are hit by something strange!"));
 		if (target_ptr->resist_nexus)
 		{
 			dam *= 6; dam /= (randint1(4) + 7);
@@ -444,7 +437,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_FORCE:
 	{
-		if (fuzzy) msg_print(_("運動エネルギーで攻撃された！", "You are hit by kinetic force!"));
+		if (target_ptr->blind) msg_print(_("運動エネルギーで攻撃された！", "You are hit by kinetic force!"));
 		if (!target_ptr->resist_sound && !CHECK_MULTISHADOW(target_ptr))
 		{
 			(void)set_stun(target_ptr, target_ptr->stun + randint1(20));
@@ -455,7 +448,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_ROCKET:
 	{
-		if (fuzzy) msg_print(_("爆発があった！", "There is an explosion!"));
+		if (target_ptr->blind) msg_print(_("爆発があった！", "There is an explosion!"));
 		if (!target_ptr->resist_sound && !CHECK_MULTISHADOW(target_ptr))
 		{
 			(void)set_stun(target_ptr, target_ptr->stun + randint1(20));
@@ -480,7 +473,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_INERTIAL:
 	{
-		if (fuzzy) msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
+		if (target_ptr->blind) msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
 		if (!CHECK_MULTISHADOW(target_ptr)) (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
 
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
@@ -488,12 +481,12 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_LITE:
 	{
-		if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
+		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 		if (target_ptr->resist_lite)
 		{
 			dam *= 4; dam /= (randint1(4) + 7);
 		}
-		else if (!blind && !target_ptr->resist_blind && !CHECK_MULTISHADOW(target_ptr))
+		else if (!target_ptr->blind && !target_ptr->resist_blind && !CHECK_MULTISHADOW(target_ptr))
 		{
 			(void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
 		}
@@ -525,14 +518,14 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_DARK:
 	{
-		if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
+		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 		if (target_ptr->resist_dark)
 		{
 			dam *= 4; dam /= (randint1(4) + 7);
 
 			if (PRACE_IS_(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form) dam = 0;
 		}
-		else if (!blind && !target_ptr->resist_blind && !CHECK_MULTISHADOW(target_ptr))
+		else if (!target_ptr->blind && !target_ptr->resist_blind && !CHECK_MULTISHADOW(target_ptr))
 		{
 			(void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
 		}
@@ -542,7 +535,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_TIME:
 	{
-		if (fuzzy) msg_print(_("過去からの衝撃に攻撃された！", "You are hit by a blast from the past!"));
+		if (target_ptr->blind) msg_print(_("過去からの衝撃に攻撃された！", "You are hit by a blast from the past!"));
 
 		if (target_ptr->resist_time)
 		{
@@ -578,6 +571,8 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		case 8:
 		case 9:
 		{
+			int k = 0;
+			concptr act = NULL;
 			switch (randint1(6))
 			{
 			case 1: k = A_STR; act = _("強く", "strong"); break;
@@ -598,7 +593,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		case 10:
 		{
 			msg_print(_("あなたは以前ほど力強くなくなってしまった...。", "You're not as powerful as you used to be..."));
-			for (k = 0; k < A_MAX; k++)
+			for (int k = 0; k < A_MAX; k++)
 			{
 				target_ptr->stat_cur[k] = (target_ptr->stat_cur[k] * 7) / 8;
 				if (target_ptr->stat_cur[k] < 3) target_ptr->stat_cur[k] = 3;
@@ -614,7 +609,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_GRAVITY:
 	{
-		if (fuzzy) msg_print(_("何か重いもので攻撃された！", "You are hit by something heavy!"));
+		if (target_ptr->blind) msg_print(_("何か重いもので攻撃された！", "You are hit by something heavy!"));
 		msg_print(_("周辺の重力がゆがんだ。", "Gravity warps around you."));
 
 		if (!CHECK_MULTISHADOW(target_ptr))
@@ -644,14 +639,14 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_DISINTEGRATE:
 	{
-		if (fuzzy) msg_print(_("純粋なエネルギーで攻撃された！", "You are hit by pure energy!"));
+		if (target_ptr->blind) msg_print(_("純粋なエネルギーで攻撃された！", "You are hit by pure energy!"));
 
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
 	case GF_OLD_HEAL:
 	{
-		if (fuzzy) msg_print(_("何らかの攻撃によって気分がよくなった。", "You are hit by something invigorating!"));
+		if (target_ptr->blind) msg_print(_("何らかの攻撃によって気分がよくなった。", "You are hit by something invigorating!"));
 
 		(void)hp_player(target_ptr, dam);
 		dam = 0;
@@ -659,21 +654,21 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_OLD_SPEED:
 	{
-		if (fuzzy) msg_print(_("何かで攻撃された！", "You are hit by something!"));
+		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 		(void)set_fast(target_ptr, target_ptr->fast + randint1(5), FALSE);
 		dam = 0;
 		break;
 	}
 	case GF_OLD_SLOW:
 	{
-		if (fuzzy) msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
+		if (target_ptr->blind) msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
 		(void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
 		break;
 	}
 	case GF_OLD_SLEEP:
 	{
 		if (target_ptr->free_act)  break;
-		if (fuzzy) msg_print(_("眠ってしまった！", "You fall asleep!"));
+		if (target_ptr->blind) msg_print(_("眠ってしまった！", "You fall asleep!"));
 
 		if (ironman_nightmare)
 		{
@@ -690,21 +685,21 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	case GF_SEEKER:
 	case GF_SUPER_RAY:
 	{
-		if (fuzzy) msg_print(_("魔法のオーラで攻撃された！", "You are hit by an aura of magic!"));
+		if (target_ptr->blind) msg_print(_("魔法のオーラで攻撃された！", "You are hit by an aura of magic!"));
 
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		break;
 	}
 	case GF_PSY_SPEAR:
 	{
-		if (fuzzy) msg_print(_("エネルギーの塊で攻撃された！", "You are hit by an energy!"));
+		if (target_ptr->blind) msg_print(_("エネルギーの塊で攻撃された！", "You are hit by an energy!"));
 
 		get_damage = take_hit(target_ptr, DAMAGE_FORCE, dam, killer, monspell);
 		break;
 	}
 	case GF_METEOR:
 	{
-		if (fuzzy) msg_print(_("何かが空からあなたの頭上に落ちてきた！", "Something falls from the sky on you!"));
+		if (target_ptr->blind) msg_print(_("何かが空からあなたの頭上に落ちてきた！", "Something falls from the sky on you!"));
 
 		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
 		if (!target_ptr->resist_shard || one_in_(13))
@@ -717,7 +712,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_ICE:
 	{
-		if (fuzzy) msg_print(_("何か鋭く冷たいもので攻撃された！", "You are hit by something sharp and cold!"));
+		if (target_ptr->blind) msg_print(_("何か鋭く冷たいもので攻撃された！", "You are hit by something sharp and cold!"));
 
 		get_damage = cold_dam(target_ptr, dam, killer, monspell, FALSE);
 		if (CHECK_MULTISHADOW(target_ptr)) break;
@@ -741,7 +736,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_DEATH_RAY:
 	{
-		if (fuzzy) msg_print(_("何か非常に冷たいもので攻撃された！", "You are hit by something extremely cold!"));
+		if (target_ptr->blind) msg_print(_("何か非常に冷たいもので攻撃された！", "You are hit by something extremely cold!"));
 
 		if (target_ptr->mimic_form)
 		{
@@ -1026,5 +1021,5 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		(void)kawarimi(target_ptr, FALSE);
 	}
 
-	return (obvious);
+	return TRUE;
 }
