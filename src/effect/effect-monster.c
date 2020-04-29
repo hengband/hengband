@@ -2164,6 +2164,28 @@ static void process_monster_sleep(player_type *caster_ptr, effect_monster_type *
 
 
 /*!
+ * @brief モンスターの被ダメージを処理する / If another monster did the damage, hurt the monster by hand
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return モンスターIDがプレーヤー自身だった場合FALSE、モンスターだった場合TRUE
+ */
+static bool process_monster_damage(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->who <= 0) return FALSE;
+
+	if (caster_ptr->health_who == em_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
+	if (caster_ptr->riding == em_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
+
+	(void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, 0);
+	em_ptr->m_ptr->hp -= em_ptr->dam;
+	if (em_ptr->m_ptr->hp < 0) process_pet_death(caster_ptr, em_ptr);
+	else process_monster_sleep(caster_ptr, em_ptr);
+
+	return TRUE;
+}
+
+
+/*!
  * @brief 不潔な病人の治療処理
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -2171,7 +2193,7 @@ static void process_monster_sleep(player_type *caster_ptr, effect_monster_type *
  */
 static bool heal_leaper(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	if (em_ptr->heal_leper) return FALSE;
+	if (!em_ptr->heal_leper) return FALSE;
 
 	if (em_ptr->seen_msg)
 		msg_print(_("不潔な病人は病気が治った！", "The Mangy looking leper is healed!"));
@@ -2200,7 +2222,8 @@ static bool process_monster_fear(player_type *caster_ptr, effect_monster_type *e
 	if (mon_take_hit(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, &fear, em_ptr->note_dies))
 		return TRUE;
 
-	if (em_ptr->do_sleep) anger_monster(caster_ptr, em_ptr->m_ptr);
+	if (em_ptr->do_sleep)
+		anger_monster(caster_ptr, em_ptr->m_ptr);
 
 	if (em_ptr->note && em_ptr->seen_msg)
 		msg_format(_("%s%s", "%^s%s"), em_ptr->m_name, em_ptr->note);
@@ -2231,20 +2254,7 @@ static void process_monster_last_moment(player_type *caster_ptr, effect_monster_
 {
 	if (em_ptr->effect_type == GF_DRAIN_MANA) return;
 
-	/* If another monster did the damage, hurt the monster by hand */
-	if (em_ptr->who > 0)
-	{
-		if (caster_ptr->health_who == em_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
-		if (caster_ptr->riding == em_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
-
-		(void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, 0);
-		em_ptr->m_ptr->hp -= em_ptr->dam;
-		if (em_ptr->m_ptr->hp < 0) process_pet_death(caster_ptr, em_ptr);
-		else process_monster_sleep(caster_ptr, em_ptr);
-
-		return;
-	}
-
+	if (process_monster_damage(caster_ptr, em_ptr)) return;
 	if (heal_leaper(caster_ptr, em_ptr)) return;
 	if (process_monster_fear(caster_ptr, em_ptr)) return;
 
