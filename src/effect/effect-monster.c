@@ -2489,6 +2489,24 @@ static void process_spell_result_pet(player_type *caster_ptr, effect_monster_typ
 
 
 /*!
+ * @brief 魔法効果が騎乗モンスターに及んだ時の処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void process_spell_result_riding(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (!caster_ptr->riding || (caster_ptr->riding != em_ptr->g_ptr->m_idx) || (em_ptr->dam <= 0))
+		return;
+
+	if (em_ptr->m_ptr->hp > (em_ptr->m_ptr->maxhp / 3))
+		em_ptr->dam = (em_ptr->dam + 1) / 2;
+
+	rakubadam_m = (em_ptr->dam > 200) ? 200 : em_ptr->dam;
+}
+
+
+/*!
  * @brief 汎用的なビーム/ボルト/ボール系によるモンスターへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
@@ -2541,14 +2559,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		caster_ptr->window |= (PW_MONSTER);
 
 	process_spell_result_pet(caster_ptr, em_ptr);
-	if (caster_ptr->riding && (caster_ptr->riding == em_ptr->g_ptr->m_idx) && (em_ptr->dam > 0))
-	{
-		if (em_ptr->m_ptr->hp > (em_ptr->m_ptr->maxhp / 3))
-			em_ptr->dam = (em_ptr->dam + 1) / 2;
-
-		rakubadam_m = (em_ptr->dam > 200) ? 200 : em_ptr->dam;
-	}
-
+	process_spell_result_riding(caster_ptr, em_ptr);
 	if (em_ptr->photo)
 	{
 		object_type *q_ptr;
