@@ -167,6 +167,7 @@ hengband_SOURCES = \
 	\
 	effect/effect-feature.c effect/effect-feature.h \
 	effect/effect-item.c effect/effect-item.h \
+	effect/spells-effect-util.c effect/spells-effect-util.h \
 	\
 	spell/spells-common.c spell/spells-common.h \
 	spells.h \

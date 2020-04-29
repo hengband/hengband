@@ -66,19 +66,7 @@
 
 #include "effect/effect-feature.h"
 #include "effect/effect-item.h"
-
-
-static int rakubadam_m; /*!< 振り落とされた際のダメージ量 */
-static int rakubadam_p; /*!< 落馬した際のダメージ量 */
-bool sukekaku;
-
-int project_length = 0; /*!< 投射の射程距離 */
-
-int cap_mon;
-int cap_mspeed;
-HIT_POINT cap_hp;
-HIT_POINT cap_maxhp;
-STR_OFFSET cap_nickname;
+#include "effect/spells-effect-util.h"
 
 /*!
  * @brief 魔法処理のメインルーチン
@@ -146,13 +134,6 @@ static void next_mirror(player_type *creature_ptr, POSITION* next_y, POSITION* n
 	*next_x = curx + randint0(5) - 2;
 	return;
 }
-
-
-static int project_m_n; /*!< 魔法効果範囲内にいるモンスターの数 */
-static POSITION project_m_x; /*!< 処理中のモンスターX座標 */
-static POSITION project_m_y; /*!< 処理中のモンスターY座標 */
-static POSITION monster_target_x; /*!< モンスターの攻撃目標X座標 */
-static POSITION monster_target_y; /*!< モンスターの攻撃目標Y座標 */
 
 
 /*!

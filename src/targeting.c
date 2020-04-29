@@ -38,8 +38,8 @@
 #include "feature.h"
 #include "quest.h"
 #include "dungeon.h"
-#include "spells.h"
 #include "world.h"
+#include "effect/spells-effect-util.h"
 
  /*!
   * @brief コンソール上におけるマップ表示の左上位置を返す /

@@ -59,6 +59,7 @@
 #include "targeting.h"
 #include "realm/realm-song.h"
 #include "english.h"
+#include "effect/spells-effect-util.h"
 
  /*!
   * @brief プレイヤー周辺の地形を感知する

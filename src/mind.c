@@ -23,7 +23,6 @@
 
 #include "floor.h"
 #include "melee.h"
-#include "spells.h"
 #include "spells-summon.h"
 #include "avatar.h"
 #include "player-move.h"
@@ -41,6 +40,7 @@
 #include "view/display-main-window.h"
 #include "targeting.h"
 #include "realm/realm-song.h"
+#include "effect/spells-effect-util.h"
 
 /*! 特殊技能の一覧テーブル */
 mind_power const mind_powers[5] =

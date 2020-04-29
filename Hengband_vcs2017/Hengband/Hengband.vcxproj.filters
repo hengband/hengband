@@ -697,6 +697,9 @@
     <ClCompile Include="..\..\src\realm\realm-trump.c">
       <Filter>realm</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\effect\spells-effect-util.c">
+      <Filter>effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1396,6 +1399,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-trump.h">
       <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\effect\spells-effect-util.h">
+      <Filter>effect</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

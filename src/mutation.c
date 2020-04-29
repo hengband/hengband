@@ -31,12 +31,12 @@
 #include "spells-status.h"
 #include "spells-floor.h"
 #include "object-hook.h"
-#include "spells.h"
 #include "cmd-basic.h"
 #include "files.h"
 #include "floor.h"
 #include "targeting.h"
 #include "player-race.h"
+#include "effect/spells-effect-util.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える

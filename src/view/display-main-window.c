@@ -34,7 +34,6 @@
 #include "monster.h"
 #include "view/display-main-window.h"
 
-#include "spells.h"
 #include "realm/realm-hex.h"
 #include "realm/realm-song.h"
 
@@ -49,6 +48,7 @@
 #include "targeting.h"
 
 #include "market/arena-info-table.h"
+#include "effect/spells-effect-util.h"
 
  /*
   * Not using graphical tiles for this feature?

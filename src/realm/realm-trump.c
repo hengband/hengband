@@ -3,14 +3,13 @@
 
 #include "cmd-spell.h"
 #include "mutation.h"
-#include "spells.h"
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "spells-object.h"
 #include "player-effects.h"
 #include "player-class.h"
 #include "targeting.h"
-
+#include "effect/spells-effect-util.h"
 
 /*!
 * @brief トランプ領域魔法の各処理を行う

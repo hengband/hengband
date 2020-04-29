@@ -2,7 +2,6 @@
 #include "util.h"
 
 #include "cmd-spell.h"
-#include "spells.h"
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "spells-object.h"
@@ -13,7 +12,7 @@
 #include "player-effects.h"
 #include "player-damage.h"
 #include "targeting.h"
-
+#include "effect/spells-effect-util.h"
 
 /*!
 * @brief 自然領域魔法の各処理を行う

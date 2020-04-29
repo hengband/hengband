@@ -30,6 +30,7 @@
 #include "object-ego.h"
 #include "targeting.h"
 #include "world.h"
+#include "effect/spells-effect-util.h"
 
 /*!
  * @brief 装備耐性に準じたブレス効果の選択テーブル /

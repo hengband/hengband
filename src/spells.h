@@ -126,13 +126,6 @@ extern concptr exe_spell(player_type *caster_ptr, REALM_IDX realm, SPELL_IDX spe
 
 #define MAX_GF         117
 
-extern int cap_mon;
-extern int cap_mspeed;
-extern HIT_POINT cap_hp;
-extern HIT_POINT cap_maxhp;
-extern STR_OFFSET cap_nickname;
-extern bool sukekaku;
-
 /* spells1.c */
 extern bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void breath_shape(player_type *caster_ptr, u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, EFFECT_ID typ);
@@ -142,7 +135,6 @@ extern POSITION dist_to_line(POSITION y, POSITION x, POSITION y1, POSITION x1, P
 #define PROJECT_WHO_GLASS_SHARDS -2 /*!< 魔法効果の自然発生要因: 破壊されたガラス地形の破片 */
 extern bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, int monspell);
 
-extern int project_length;
 extern bool binding_field(player_type *caster_ptr, HIT_POINT dam);
 extern void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam);
 extern concptr spell_category_name(OBJECT_TYPE_VALUE tval);

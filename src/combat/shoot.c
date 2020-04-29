@@ -17,7 +17,6 @@
 #include "object-broken.h"
 #include "floor.h"
 #include "grid.h"
-#include "spells.h"
 #include "object-flavor.h"
 
 #include "shoot.h"
@@ -25,6 +24,7 @@
 #include "view/display-main-window.h"
 #include "object/object-kind.h"
 #include "targeting.h"
+#include "effect/spells-effect-util.h"
 
 /*!
  * @brief 矢弾を射撃した際のスレイ倍率をかけた結果を返す /
