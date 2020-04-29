@@ -2263,6 +2263,32 @@ static void process_monster_last_moment(player_type *caster_ptr, effect_monster_
 
 
 /*!
+ * @brief 魔法の効果による汎用処理 (変身の有無、現在HPの減算、徳の変化)
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void process_spell_result(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
+		(em_ptr->r_ptr->flags1 & RF1_QUESTOR) ||
+		(caster_ptr->riding && (em_ptr->g_ptr->m_idx == caster_ptr->riding)))
+		em_ptr->do_polymorph = FALSE;
+
+	if (((em_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (em_ptr->r_ptr->flags7 & RF7_NAZGUL)) &&
+		!caster_ptr->phase_out &&
+		(em_ptr->who > 0) &&
+		(em_ptr->dam > em_ptr->m_ptr->hp))
+		em_ptr->dam = em_ptr->m_ptr->hp;
+
+	if ((em_ptr->who > 0) || !em_ptr->slept) return;
+
+	if (!(em_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(caster_ptr, V_COMPASSION, -1);
+	if (!(em_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(caster_ptr, V_HONOUR, -1);
+}
+
+
+/*!
  * @brief モンスターの朦朧値を蓄積させる
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -2274,7 +2300,7 @@ static void pile_monster_stun(player_type *caster_ptr, effect_monster_type *em_p
 	if ((em_ptr->do_stun == 0) ||
 		(em_ptr->r_ptr->flagsr & (RFR_RES_SOUN | RFR_RES_WALL)) ||
 		(em_ptr->r_ptr->flags3 & RF3_NO_STUN))
-		return *stun_damage;
+		return;
 
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 
@@ -2328,11 +2354,10 @@ static void pile_monster_conf(player_type *caster_ptr, effect_monster_type *em_p
 
 /*!
  * @brief モンスターを衰弱させる
- * @param caster_ptr プレーヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return なし
  */
-static void process_monster_weakening(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void process_monster_weakening(effect_monster_type *em_ptr)
 {
 	if (em_ptr->do_time == 0) return;
 
@@ -2400,6 +2425,20 @@ static void process_monster_teleport(player_type *caster_ptr, effect_monster_typ
 }
 
 
+static void process_monster_bad_status(player_type *caster_ptr, effect_monster_type *em_ptr, int *tmp_damage)
+{
+	pile_monster_stun(caster_ptr, em_ptr, tmp_damage);
+	pile_monster_conf(caster_ptr, em_ptr, tmp_damage);
+	process_monster_weakening(em_ptr);
+	process_monster_polymorph(caster_ptr, em_ptr);
+	process_monster_teleport(caster_ptr, em_ptr);
+	if (em_ptr->do_fear == 0) return;
+
+	(void)set_monster_monfear(caster_ptr, em_ptr->g_ptr->m_idx, MON_MONFEAR(em_ptr->m_ptr) + em_ptr->do_fear);
+	em_ptr->get_angry = TRUE;
+}
+
+
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系によるモンスターへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
  * @param caster_ptr プレーヤーへの参照ポインタ
@@ -2431,50 +2470,19 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 	if (em_ptr->skipped) return FALSE;
 
-	if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) || 
-		(em_ptr->r_ptr->flags1 & RF1_QUESTOR) || 
-		(caster_ptr->riding && (em_ptr->g_ptr->m_idx == caster_ptr->riding)))
-		em_ptr->do_polymorph = FALSE;
-
-	if (((em_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (em_ptr->r_ptr->flags7 & RF7_NAZGUL)) &&
-		!caster_ptr->phase_out &&
-		em_ptr->who &&
-		(em_ptr->dam > em_ptr->m_ptr->hp))
-			em_ptr->dam = em_ptr->m_ptr->hp;
-
-	if (!em_ptr->who && em_ptr->slept)
-	{
-		if (!(em_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(caster_ptr, V_COMPASSION, -1);
-		if (!(em_ptr->r_ptr->flags3 & RF3_EVIL) || one_in_(5)) chg_virtue(caster_ptr, V_HONOUR, -1);
-	}
-
+	process_spell_result(caster_ptr, em_ptr);
 	int tmp_damage = em_ptr->dam;
 	em_ptr->dam = mon_damage_mod(caster_ptr, em_ptr->m_ptr, em_ptr->dam, (bool)(em_ptr->effect_type == GF_PSY_SPEAR));
 	if ((tmp_damage > 0) && (em_ptr->dam == 0)) em_ptr->note = _("はダメージを受けていない。", " is unharmed.");
 
 	if (em_ptr->dam > em_ptr->m_ptr->hp)
-	{
 		em_ptr->note = em_ptr->note_dies;
-	}
 	else
-	{
-		pile_monster_stun(caster_ptr, em_ptr, &tmp_damage);
-		pile_monster_conf(caster_ptr, em_ptr, &tmp_damage);
-		process_monster_weakening(caster_ptr, em_ptr, &tmp_damage);
-		process_monster_polymorph(caster_ptr, em_ptr);
-		process_monster_teleport(caster_ptr, em_ptr);
-		if (em_ptr->do_fear)
-		{
-			(void)set_monster_monfear(caster_ptr, em_ptr->g_ptr->m_idx, MON_MONFEAR(em_ptr->m_ptr) + em_ptr->do_fear);
-			em_ptr->get_angry = TRUE;
-		}
-	}
+		process_monster_bad_status(caster_ptr, em_ptr, &tmp_damage);
 
 	process_monster_last_moment(caster_ptr, em_ptr);
 	if ((em_ptr->effect_type == GF_BLOOD_CURSE) && one_in_(4))
-	{
 		blood_curse_to_enemy(caster_ptr, em_ptr->who);
-	}
 
 	if (caster_ptr->phase_out)
 	{
@@ -2487,9 +2495,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 	lite_spot(caster_ptr, em_ptr->y, em_ptr->x);
 	if ((caster_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !em_ptr->m_ptr->r_idx))
-	{
 		caster_ptr->window |= (PW_MONSTER);
-	}
 
 	if ((em_ptr->dam > 0) && !is_pet(em_ptr->m_ptr) && !is_friendly(em_ptr->m_ptr))
 	{
