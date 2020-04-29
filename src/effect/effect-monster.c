@@ -26,6 +26,29 @@
 #include "effect/effect-monster-util.h"
 
 /*!
+ * @brief ビーム/ボルト/ボール系魔法によるモンスターへの効果があるかないかを判定する
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param effect_monster_ptr モンスター効果構造体への参照ポインタ
+ * @return 効果が何もないならFALSE、何かあるならTRUE
+ */
+static bool is_never_effect(player_type *caster_ptr, effect_monster *effect_monster_ptr)
+{
+	if (!effect_monster_ptr->g_ptr->m_idx) return FALSE;
+	if (effect_monster_ptr->who && (effect_monster_ptr->g_ptr->m_idx == effect_monster_ptr->who)) return FALSE;
+	if ((effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding) &&
+		!effect_monster_ptr->who &&
+		!(effect_monster_ptr->effect_type == GF_OLD_HEAL) &&
+		!(effect_monster_ptr->effect_type == GF_OLD_SPEED) &&
+		!(effect_monster_ptr->effect_type == GF_STAR_HEAL))
+		return FALSE;
+	if (sukekaku && ((effect_monster_ptr->m_ptr->r_idx == MON_SUKE) || (effect_monster_ptr->m_ptr->r_idx == MON_KAKU))) return FALSE;
+	if (effect_monster_ptr->m_ptr->hp < 0) return FALSE;
+
+	return TRUE;
+}
+
+
+/*!
  * @brief 汎用的なビーム/ボルト/ボール系によるモンスターへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
@@ -44,32 +67,13 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	effect_monster tmp_effect;
 	effect_monster *effect_monster_ptr = &tmp_effect;
 	initialize_effect_monster(caster_ptr, effect_monster_ptr, who, r, y, x, dam, effect_type, flag, see_s_msg);
-
-	if (!effect_monster_ptr->g_ptr->m_idx) return FALSE;
-
-	/* Never affect projector */
-	if (effect_monster_ptr->who && (effect_monster_ptr->g_ptr->m_idx == effect_monster_ptr->who)) return FALSE;
-	if ((effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding) &&
-		!effect_monster_ptr->who &&
-		!(effect_monster_ptr->effect_type == GF_OLD_HEAL) &&
-		!(effect_monster_ptr->effect_type == GF_OLD_SPEED) &&
-		!(effect_monster_ptr->effect_type == GF_STAR_HEAL))
-		return FALSE;
-	if (sukekaku && ((effect_monster_ptr->m_ptr->r_idx == MON_SUKE) || (effect_monster_ptr->m_ptr->r_idx == MON_KAKU))) return FALSE;
-
-	/* Don't affect already death monsters */
-	/* Prevents problems with chain reactions of exploding monsters */
-	if (effect_monster_ptr->m_ptr->hp < 0) return FALSE;
+	if (!is_never_effect(caster_ptr, effect_monster_ptr)) return FALSE;
 
 	effect_monster_ptr->dam = (effect_monster_ptr->dam + effect_monster_ptr->r) / (effect_monster_ptr->r + 1);
-
-	/* Get the monster name (BEFORE polymorphing) */
 	monster_desc(caster_ptr, effect_monster_ptr->m_name, effect_monster_ptr->m_ptr, 0);
-
-	/* Get the monster possessive ("his"/"her"/"its") */
 	monster_desc(caster_ptr, effect_monster_ptr->m_poss, effect_monster_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE);
-
-	if (caster_ptr->riding && (effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding)) disturb(caster_ptr, TRUE, TRUE);
+	if (caster_ptr->riding && (effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding))
+		disturb(caster_ptr, TRUE, TRUE);
 
 	if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_ALL &&
 		effect_monster_ptr->effect_type != GF_OLD_CLONE && effect_monster_ptr->effect_type != GF_STAR_HEAL && effect_monster_ptr->effect_type != GF_OLD_HEAL
