@@ -39,7 +39,7 @@
 #include "avatar.h"
 #include "spells.h"
 #include "spells-floor.h"
-#include "spell/spells-common.h"
+#include "spell/technic-info-table.h"
 #include "grid.h"
 #include "market/building-util.h"
 #include "monster-process.h"

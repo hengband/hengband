@@ -63,7 +63,7 @@
 #include "knowledge/knowledge-autopick.h"
 #include "knowledge/knowledge-quests.h"
 #include "market/store.h"
-#include "spell/spells-common.h"
+#include "spell/technic-info-table.h"
 #include "spells-summon.h"
 #include "spells-object.h"
 #include "spells-status.h"

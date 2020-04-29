@@ -19,7 +19,7 @@
 #include "feature.h"
 #include "artifact.h"
 #include "avatar.h"
-#include "spell/spells-common.h"
+#include "spell/technic-info-table.h"
 #include "spells-status.h"
 #include "object.h"
 #include "object-hook.h"

@@ -15,7 +15,7 @@
 #include "player-effects.h"
 #include "player-damage.h"
 #include "feature.h"
-#include "spell/spells-common.h"
+#include "spell/technic-info-table.h"
 #include "grid.h"
 #include "targeting.h"
 #include "view/display-main-window.h"

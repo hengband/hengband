@@ -169,7 +169,7 @@ hengband_SOURCES = \
 	effect/effect-item.c effect/effect-item.h \
 	effect/spells-effect-util.c effect/spells-effect-util.h \
 	\
-	spell/spells-common.c spell/spells-common.h \
+	spell/technic-info-table.c spell/technic-info-table.h \
 	spells.h \
 	spells1.c spells2.c spells3.c \
 	spells-diceroll.c spells-diceroll.h \

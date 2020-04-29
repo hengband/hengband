@@ -1,5 +1,5 @@
 #include "angband.h"
-#include "spell/spells-common.h"
+#include "spell/technic-info-table.h"
 
 /*!
  * @brief 歌、剣術、呪術領域情報テーブル

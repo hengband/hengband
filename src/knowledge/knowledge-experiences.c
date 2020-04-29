@@ -11,7 +11,7 @@
 #include "object-flavor.h"
 #include "object/object-kind.h"
 #include "player-skill.h"
-#include "spell/spells-common.h"
+#include "spell/technic-info-table.h"
 
 /*
  * Display weapon-exp

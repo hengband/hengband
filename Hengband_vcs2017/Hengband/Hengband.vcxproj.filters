@@ -652,9 +652,6 @@
     <ClCompile Include="..\..\src\effect\effect-item.c">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-common.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\realm\realm.c">
       <Filter>realm</Filter>
     </ClCompile>
@@ -699,6 +696,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\effect\spells-effect-util.c">
       <Filter>effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\technic-info-table.c">
+      <Filter>spell</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1355,9 +1355,6 @@
     <ClInclude Include="..\..\src\effect\effect-item.h">
       <Filter>effect</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-common.h">
-      <Filter>spell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\realm\realm.h">
       <Filter>realm</Filter>
     </ClInclude>
@@ -1402,6 +1399,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\effect\spells-effect-util.h">
       <Filter>effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\technic-info-table.h">
+      <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
