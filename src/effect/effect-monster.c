@@ -2507,6 +2507,26 @@ static void process_spell_result_riding(player_type *caster_ptr, effect_monster_
 
 
 /*!
+ * @brief 写真を撮った時の処理 (閃光か弱閃光ダメージ？)
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void process_spell_result_photo(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->photo == 0) return;
+
+	object_type *q_ptr;
+	object_type forge;
+	q_ptr = &forge;
+	object_prep(q_ptr, lookup_kind(TV_STATUE, SV_PHOTO));
+	q_ptr->pval = em_ptr->photo;
+	q_ptr->ident |= (IDENT_FULL_KNOWN);
+	(void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
+}
+
+
+/*!
  * @brief 汎用的なビーム/ボルト/ボール系によるモンスターへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
@@ -2560,19 +2580,9 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 	process_spell_result_pet(caster_ptr, em_ptr);
 	process_spell_result_riding(caster_ptr, em_ptr);
-	if (em_ptr->photo)
-	{
-		object_type *q_ptr;
-		object_type forge;
-		q_ptr = &forge;
-		object_prep(q_ptr, lookup_kind(TV_STATUE, SV_PHOTO));
-		q_ptr->pval = em_ptr->photo;
-		q_ptr->ident |= (IDENT_FULL_KNOWN);
-		(void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
-	}
-
+	process_spell_result_photo(caster_ptr, em_ptr);
 	project_m_n++;
 	project_m_x = em_ptr->x;
 	project_m_y = em_ptr->y;
-	return (em_ptr->obvious);
+	return em_ptr->obvious;
 }
