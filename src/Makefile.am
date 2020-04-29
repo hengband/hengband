@@ -161,6 +161,7 @@ hengband_SOURCES = \
 	effect/effect-feature.c effect/effect-feature.h \
 	effect/effect-item.c effect/effect-item.h \
 	\
+	spell/spells-common.c spell/spells-common.h \
 	spells.h \
 	spells1.c spells2.c spells3.c \
 	spells-diceroll.c spells-diceroll.h \
@@ -225,7 +226,7 @@ LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Icmd -Icombat -Icore -Ieffect -Iio -Iknowledge -Imarket \
-	-Imonster -Iobject -Iplayer -Iroom -Iview
+	-Imonster -Iobject -Iplayer -Iroom -Ispell -Iview
 
 install-exec-hook:
 if SET_GID

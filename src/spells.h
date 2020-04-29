@@ -126,28 +126,12 @@ extern concptr exe_spell(player_type *caster_ptr, REALM_IDX realm, SPELL_IDX spe
 
 #define MAX_GF         117
 
-/*
- * The "name" of spell 'N' is stored as spell_names[X][N],
- * where X is 0 for mage-spells and 1 for priest-spells.
- */
-typedef struct magic_type magic_type;
-
-struct magic_type
-{
-	PLAYER_LEVEL slevel;	/* Required level (to learn) */
-	MANA_POINT smana;		/* Required mana (to cast) */
-	PERCENTAGE sfail;		/* Minimum chance of failure */
-	EXP sexp;				/* Encoded experience bonus */
-};
-
 extern int cap_mon;
 extern int cap_mspeed;
 extern HIT_POINT cap_hp;
 extern HIT_POINT cap_maxhp;
 extern STR_OFFSET cap_nickname;
 extern bool sukekaku;
-
-extern const magic_type technic_info[NUM_TECHNIC][32];
 
 /* spells1.c */
 extern bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);

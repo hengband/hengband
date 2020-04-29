@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "spells.h"
+#include "spell/spells-common.h"
 #include "player-status.h"
 
 /*

@@ -15,6 +15,7 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "selfinfo.h"
+#include "spell/spells-common.h"
 #include "spells.h"
 #include "spells-summon.h"
 #include "realm-hex.h"

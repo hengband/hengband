@@ -25,7 +25,7 @@
 #include "object-hook.h"
 #include "object-curse.h"
 #include "spells-status.h"
-#include "spells.h"
+#include "spell/spells-common.h"
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-skill.h"

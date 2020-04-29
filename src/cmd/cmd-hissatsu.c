@@ -19,7 +19,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-inventory.h"
-#include "spells.h"
+#include "spell/spells-common.h"
 
 #include "cmd-basic.h"
 #include "cmd-spell.h"
