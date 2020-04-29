@@ -2180,25 +2180,6 @@ static void process_monster_sleep(player_type *caster_ptr, effect_monster_type *
 
 
 /*!
- * @brief モンスターへのダメージに応じたメッセージを表示させ、異常状態を与える
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @param em_ptr モンスター効果構造体への参照ポインタ
- * @return なし
- */
-static void process_monster_bad_stat_damage(player_type *caster_ptr, effect_monster_type *em_ptr)
-{
-	int tmp_damage = em_ptr->dam;
-	em_ptr->dam = mon_damage_mod(caster_ptr, em_ptr->m_ptr, em_ptr->dam, (bool)(em_ptr->effect_type == GF_PSY_SPEAR));
-	if ((tmp_damage > 0) && (em_ptr->dam == 0)) em_ptr->note = _("はダメージを受けていない。", " is unharmed.");
-
-	if (em_ptr->dam > em_ptr->m_ptr->hp)
-		em_ptr->note = em_ptr->note_dies;
-	else
-		process_monster_bad_status(caster_ptr, em_ptr, &tmp_damage);
-}
-
-
-/*!
  * @brief モンスターの被ダメージを処理する / If another monster did the damage, hurt the monster by hand
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -2482,6 +2463,41 @@ static void process_monster_bad_status(player_type *caster_ptr, effect_monster_t
 
 
 /*!
+ * @brief モンスターへのダメージに応じたメッセージを表示させ、異常状態を与える
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void process_monster_bad_stat_damage(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	int tmp_damage = em_ptr->dam;
+	em_ptr->dam = mon_damage_mod(caster_ptr, em_ptr->m_ptr, em_ptr->dam, (bool)(em_ptr->effect_type == GF_PSY_SPEAR));
+	if ((tmp_damage > 0) && (em_ptr->dam == 0)) em_ptr->note = _("はダメージを受けていない。", " is unharmed.");
+
+	if (em_ptr->dam > em_ptr->m_ptr->hp)
+		em_ptr->note = em_ptr->note_dies;
+	else
+		process_monster_bad_status(caster_ptr, em_ptr, &tmp_damage);
+}
+
+/*!
+ * todo 関数名が微妙、もっと適切な関数名が欲しい
+ * @brief モンスターへの影響全般を処理する
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void process_spell(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	process_spell_result(caster_ptr, em_ptr);
+	process_monster_bad_stat_damage(caster_ptr, em_ptr);
+	process_monster_last_moment(caster_ptr, em_ptr);
+	if ((em_ptr->effect_type == GF_BLOOD_CURSE) && one_in_(4))
+		blood_curse_to_enemy(caster_ptr, em_ptr->who);
+}
+
+
+/*!
  * @brief モンスター闘技場にいる場合の画面更新処理
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -2542,10 +2558,11 @@ static void postprocess_spell_riding(player_type *caster_ptr, effect_monster_typ
 
 
 /*!
- * @brief 写真を撮った時の処理 (閃光か弱閃光ダメージ？)
+ * @brief 写真を撮った時の処理
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return なし
+ * @details 写真のフラッシュは弱閃光属性
  */
 static void postprocess_spell_photo(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
@@ -2604,14 +2621,10 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 	if (em_ptr->skipped) return FALSE;
 
-	process_spell_result(caster_ptr, em_ptr);
-	process_monster_bad_stat_damage(caster_ptr, em_ptr);
-	process_monster_last_moment(caster_ptr, em_ptr);
-	if ((em_ptr->effect_type == GF_BLOOD_CURSE) && one_in_(4))
-		blood_curse_to_enemy(caster_ptr, em_ptr->who);
-
+	process_spell(caster_ptr, em_ptr);
 	update_phase_out_stat(caster_ptr, em_ptr);
-	if (em_ptr->m_ptr->r_idx) update_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE);
+	if (em_ptr->m_ptr->r_idx)
+		update_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE);
 
 	lite_spot(caster_ptr, em_ptr->y, em_ptr->x);
 	if ((caster_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !em_ptr->m_ptr->r_idx))
