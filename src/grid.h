@@ -14,6 +14,7 @@
  * included in all such copies.
  */
 
+#include "spell/spells-util.h"
 
  /*
   * A single "grid" in a Cave
@@ -199,8 +200,8 @@ extern void remove_mirror(player_type *caster_ptr, POSITION y, POSITION x);
 extern bool is_open(player_type *player_ptr, FEAT_IDX feat);
 extern bool check_local_illumination(player_type *creature_ptr, POSITION y, POSITION x);
 
-extern bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode);
-extern bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode);
+extern bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode);
+extern bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION x, teleport_flags mode);
 
 typedef enum
 {

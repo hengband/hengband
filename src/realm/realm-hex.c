@@ -1040,12 +1040,12 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 
 			if (flag && randint0(plev * plev / 2))
 			{
-				teleport_player_to(caster_ptr, y, x, 0L);
+				teleport_player_to(caster_ptr, y, x, TELEPORT_SPONTANEOUS);
 			}
 			else
 			{
 				msg_print(_("おっと！", "Oops!"));
-				teleport_player(caster_ptr, 30, 0L);
+				teleport_player(caster_ptr, 30, TELEPORT_SPONTANEOUS);
 			}
 
 			add = FALSE;

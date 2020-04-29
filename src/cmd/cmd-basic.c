@@ -2267,7 +2267,7 @@ void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
 	/* Sniper actions after some shootings */
 	if (snipe_type == SP_AWAY)
 	{
-		teleport_player(creature_ptr, 10 + (creature_ptr->concent * 2), 0L);
+		teleport_player(creature_ptr, 10 + (creature_ptr->concent * 2), TELEPORT_SPONTANEOUS);
 	}
 
 	if (snipe_type == SP_FINAL)

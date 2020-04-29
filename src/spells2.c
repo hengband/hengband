@@ -2862,7 +2862,7 @@ bool kawarimi(player_type *caster_ptr, bool success)
 	POSITION y = caster_ptr->y;
 	POSITION x = caster_ptr->x;
 
-	teleport_player(caster_ptr, 10 + randint1(90), 0L);
+	teleport_player(caster_ptr, 10 + randint1(90), TELEPORT_SPONTANEOUS);
 	object_wipe(q_ptr);
 	object_prep(q_ptr, lookup_kind(TV_STATUE, SV_WOODEN_STATUE));
 
@@ -3909,7 +3909,7 @@ bool hit_and_away(player_type *caster_ptr)
 		if (randint0(caster_ptr->skill_dis) < 7)
 			msg_print(_("うまく逃げられなかった。", "You failed to run away."));
 		else
-			teleport_player(caster_ptr, 30, 0L);
+			teleport_player(caster_ptr, 30, TELEPORT_SPONTANEOUS);
 		return TRUE;
 	}
 

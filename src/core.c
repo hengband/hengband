@@ -572,7 +572,7 @@ static void pattern_teleport(player_type *creature_ptr)
 	}
 	else if (get_check(_("通常テレポート？", "Normal teleport? ")))
 	{
-		teleport_player(creature_ptr, 200, 0L);
+		teleport_player(creature_ptr, 200, TELEPORT_SPONTANEOUS);
 		return;
 	}
 	else
@@ -2294,7 +2294,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			if (get_check_strict(_("テレポートしますか？", "Teleport? "), CHECK_OKAY_CANCEL))
 			{
 				disturb(creature_ptr, FALSE, TRUE);
-				teleport_player(creature_ptr, 50, 0L);
+				teleport_player(creature_ptr, 50, TELEPORT_SPONTANEOUS);
 			}
 			else
 			{

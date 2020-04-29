@@ -1,10 +1,6 @@
 ﻿#pragma once
 #include "realm/realm.h"
 
-#define DETECT_RAD_DEFAULT 30
-#define DETECT_RAD_MAP     30
-#define DETECT_RAD_ALL     255
-
 /* spells1.c */
 extern bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void breath_shape(player_type *caster_ptr, u16b *path_g, int dist, int *pgrids, POSITION *gx, POSITION *gy, POSITION *gm, POSITION *pgm_rad, POSITION rad, POSITION y1, POSITION x1, POSITION y2, POSITION x2, EFFECT_ID typ);
@@ -137,20 +133,13 @@ extern bool clear_mind(player_type *creature_ptr);
 extern bool concentration(player_type *creature_ptr);
 extern bool vanish_dungeon(player_type *caster_ptr);
 
-/*
- * Bit flags for teleportation
- */
-#define TELEPORT_NONMAGICAL 0x00000001
-#define TELEPORT_PASSIVE    0x00000002
-#define TELEPORT_DEC_VALOUR 0x00000004
-
 /* spells3.c */
-extern bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode);
-extern void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode);
-extern bool teleport_player_aux(player_type *creature_ptr, POSITION dis, bool is_quantum_effect, BIT_FLAGS mode);
+extern bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, teleport_flags mode);
+extern void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, teleport_flags mode);
+extern bool teleport_player_aux(player_type *creature_ptr, POSITION dis, bool is_quantum_effect, teleport_flags mode);
 extern void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode);
 extern void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION dis, bool is_quantum_effect);
-extern void teleport_player_to(player_type *creature_ptr, POSITION ny, POSITION nx, BIT_FLAGS mode);
+extern void teleport_player_to(player_type *creature_ptr, POSITION ny, POSITION nx, teleport_flags mode);
 extern void teleport_away_followable(player_type *creature_ptr, MONSTER_IDX m_idx);
 extern bool teleport_level_other(player_type *caster_ptr);
 extern void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx);

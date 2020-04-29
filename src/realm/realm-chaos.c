@@ -186,7 +186,7 @@ concptr do_chaos_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode
 
 			if (cast)
 			{
-				teleport_player(caster_ptr, range, 0L);
+				teleport_player(caster_ptr, range, TELEPORT_SPONTANEOUS);
 			}
 		}
 		break;

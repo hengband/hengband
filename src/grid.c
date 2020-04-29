@@ -34,7 +34,6 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "player-class.h"
-#include "spells.h"
 #include "view/display-main-window.h"
 #include "realm/realm-song.h"
 
@@ -1103,7 +1102,7 @@ bool is_explosive_rune_grid(grid_type *g_ptr)
 * @param mode オプション
 * @return テレポート先として妥当ならばtrue
 */
-bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, BIT_FLAGS mode)
+bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode)
 {
 	monster_type *m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
 	grid_type    *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
@@ -1135,7 +1134,7 @@ bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, 
 * @param mode オプション
 * @return テレポート先として妥当ならばtrue
 */
-bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION x, BIT_FLAGS mode)
+bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION x, teleport_flags mode)
 {
 	grid_type    *g_ptr = &player_ptr->current_floor_ptr->grid_array[y][x];
 	feature_type *f_ptr = &f_info[g_ptr->feat];

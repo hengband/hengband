@@ -2013,7 +2013,7 @@ void spell_RF6_BLINK(player_type *target_ptr, MONSTER_IDX m_idx, int TARGET_TYPE
 	if (see_monster(floor_ptr, m_idx))
 		msg_format(_("%^sが瞬時に消えた。", "%^s blinks away."), m_name);
 
-	teleport_away(target_ptr, m_idx, 10, 0L);
+	teleport_away(target_ptr, m_idx, 10, TELEPORT_SPONTANEOUS);
 
 	if (TARGET_TYPE == MONSTER_TO_PLAYER)
 		target_ptr->update |= (PU_MONSTERS);
@@ -2079,7 +2079,6 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_i
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
 	HIT_POINT dummy_hp, dummy_maxhp;
-	MONSTER_IDX k;
 	POSITION dummy_y = m_ptr->fy;
 	POSITION dummy_x = m_ptr->fx;
 	BIT_FLAGS mode = 0L;
@@ -2112,7 +2111,7 @@ HIT_POINT spell_RF6_SPECIAL_BANORLUPART(player_type *target_ptr, MONSTER_IDX m_i
 		if (!r_info[MON_BANOR].cur_num || !r_info[MON_LUPART].cur_num)
 			return -1;
 
-		for (k = 1; k < floor_ptr->m_max; k++)
+		for (MONSTER_IDX k = 1; k < floor_ptr->m_max; k++)
 		{
 			if (floor_ptr->m_list[k].r_idx == MON_BANOR || floor_ptr->m_list[k].r_idx == MON_LUPART)
 			{

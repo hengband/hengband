@@ -1077,11 +1077,11 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		break;
 	case 2:
 		/* Minor displace */
-		teleport_player(caster_ptr, 10, 0L);
+		teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
 		break;
 	case 3:
 		/* Major displace */
-		teleport_player(caster_ptr, plev * 5, 0L);
+		teleport_player(caster_ptr, plev * 5, TELEPORT_SPONTANEOUS);
 		break;
 	case 4:
 		/* Domination */
@@ -1357,7 +1357,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		break;
 		/* warped mirror */
 	case 3:
-		teleport_player(caster_ptr, 10, 0L);
+		teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
 		break;
 		/* mirror of light */
 	case 4:
@@ -1365,7 +1365,7 @@ static bool cast_mirror_spell(player_type *caster_ptr, int spell)
 		break;
 		/* mirror of wandering */
 	case 5:
-		teleport_player(caster_ptr, plev * 5, 0L);
+		teleport_player(caster_ptr, plev * 5, TELEPORT_SPONTANEOUS);
 		break;
 		/* robe of dust */
 	case 6:
@@ -1570,7 +1570,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		break;
 	case 2:
 	{
-		teleport_player(caster_ptr, 10, 0L);
+		teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
 		break;
 	}
 	case 3:
@@ -1585,7 +1585,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 	}
 	case 4:
 	{
-		teleport_player(caster_ptr, caster_ptr->lev * 5, 0L);
+		teleport_player(caster_ptr, caster_ptr->lev * 5, TELEPORT_SPONTANEOUS);
 		break;
 	}
 	case 5:
@@ -1606,7 +1606,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		break;
 	case 9:
 		fire_ball(caster_ptr, GF_FIRE, 0, 50+plev, plev/10+2);
-		teleport_player(caster_ptr, 30, 0L);
+		teleport_player(caster_ptr, 30, TELEPORT_SPONTANEOUS);
 		set_oppose_fire(caster_ptr, (TIME_EFFECT)plev, FALSE);
 		break;
 	case 10:
@@ -1665,7 +1665,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		fire_ball(caster_ptr, GF_POIS, 0, 75+plev*2/3, plev/5+2);
 		fire_ball(caster_ptr, GF_HYPODYNAMIA, 0, 75+plev*2/3, plev/5+2);
 		fire_ball(caster_ptr, GF_CONFUSION, 0, 75+plev*2/3, plev/5+2);
-		teleport_player(caster_ptr, 30, 0L);
+		teleport_player(caster_ptr, 30, TELEPORT_SPONTANEOUS);
 		break;
 	case 18:
 	{

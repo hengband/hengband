@@ -1533,7 +1533,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 	case ACT_TELEPORT:
 	{
 		msg_print(_("周りの空間が歪んでいる...", "It twists space around you..."));
-		teleport_player(user_ptr, 100, 0L);
+		teleport_player(user_ptr, 100, TELEPORT_SPONTANEOUS);
 		break;
 	}
 
@@ -1603,10 +1603,10 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		switch (randint1(13))
 		{
 		case 1: case 2: case 3: case 4: case 5:
-			teleport_player(user_ptr, 10, 0L);
+			teleport_player(user_ptr, 10, TELEPORT_SPONTANEOUS);
 			break;
 		case 6: case 7: case 8: case 9: case 10:
-			teleport_player(user_ptr, 222, 0L);
+			teleport_player(user_ptr, 222, TELEPORT_SPONTANEOUS);
 			break;
 		case 11: case 12:
 			(void)stair_creation(user_ptr);
@@ -1659,7 +1659,7 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 
 	case ACT_PHASE_DOOR:
 	{
-		teleport_player(user_ptr, 10, 0L);
+		teleport_player(user_ptr, 10, TELEPORT_SPONTANEOUS);
 		break;
 	}
 

@@ -58,7 +58,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
 			if (cast)
 			{
-				teleport_player(caster_ptr, range, 0L);
+				teleport_player(caster_ptr, range, TELEPORT_SPONTANEOUS);
 			}
 		}
 		break;
@@ -128,7 +128,7 @@ concptr do_sorcery_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 
 			if (cast)
 			{
-				teleport_player(caster_ptr, range, 0L);
+				teleport_player(caster_ptr, range, TELEPORT_SPONTANEOUS);
 			}
 		}
 		break;

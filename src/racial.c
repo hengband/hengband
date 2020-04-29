@@ -657,7 +657,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 
 		case RACE_GNOME:
 			msg_print(_("パッ！", "Blink!"));
-			teleport_player(creature_ptr, 10, 0L);
+			teleport_player(creature_ptr, 10, TELEPORT_SPONTANEOUS);
 			break;
 
 		case RACE_HALF_ORC:

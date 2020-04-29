@@ -1850,7 +1850,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 		/* Phase Door */
 	case 'p':
-		teleport_player(creature_ptr, 10, 0L);
+		teleport_player(creature_ptr, 10, TELEPORT_SPONTANEOUS);
 		break;
 
 		/* Take a Quests */
@@ -1921,7 +1921,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 		/* Teleport */
 	case 't':
-		teleport_player(creature_ptr, 100, 0L);
+		teleport_player(creature_ptr, 100, TELEPORT_SPONTANEOUS);
 		break;
 
 		/* Game Time Setting */

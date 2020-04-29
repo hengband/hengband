@@ -3838,7 +3838,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 					if (is_mirror_grid(&floor_ptr->grid_array[target_ptr->y][target_ptr->x]))
 					{
-						teleport_player(target_ptr, 10, 0L);
+						teleport_player(target_ptr, 10, TELEPORT_SPONTANEOUS);
 					}
 				}
 
@@ -4088,7 +4088,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 		else
 		{
 			msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
-			teleport_away(target_ptr, m_idx, MAX_SIGHT * 2 + 5, 0L);
+			teleport_away(target_ptr, m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
 		}
 	}
 
@@ -4719,7 +4719,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 			subject_ptr->current_floor_ptr->monster_noise = TRUE;
 		}
 
-		teleport_away(subject_ptr, m_idx, MAX_SIGHT * 2 + 5, 0L);
+		teleport_away(subject_ptr, m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
 	}
 
 	return TRUE;

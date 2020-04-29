@@ -803,7 +803,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
 
 			if (!tgt_pt(caster_ptr, &x, &y)) return NULL;
 
-			if (!cave_player_teleportable_bold(caster_ptr, y, x, 0L) ||
+			if (!cave_player_teleportable_bold(caster_ptr, y, x, TELEPORT_SPONTANEOUS) ||
 				(distance(y, x, caster_ptr->y, caster_ptr->x) > MAX_SIGHT / 2) ||
 				!projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
 			{
@@ -816,7 +816,7 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type m
 				break;
 			}
 			project(caster_ptr, 0, 0, y, x, HISSATSU_ISSEN, GF_ATTACK, PROJECT_BEAM | PROJECT_KILL, -1);
-			teleport_player_to(caster_ptr, y, x, 0L);
+			teleport_player_to(caster_ptr, y, x, TELEPORT_SPONTANEOUS);
 		}
 		break;
 

@@ -102,7 +102,7 @@ concptr do_crusade_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mo
 		{
 			POSITION range = 25 + plev / 2;
 			if (info) return info_range(range);
-			if (cast) teleport_player(caster_ptr, range, 0L);
+			if (cast) teleport_player(caster_ptr, range, TELEPORT_SPONTANEOUS);
 		}
 		break;
 
