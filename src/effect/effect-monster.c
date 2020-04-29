@@ -2263,7 +2263,7 @@ static void process_monster_last_moment(player_type *caster_ptr, effect_monster_
 
 
 /*!
- * @brief 朦朧値を蓄積させる
+ * @brief モンスターの朦朧値を蓄積させる
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @param stun_damage 朦朧値
@@ -2290,6 +2290,38 @@ static void pile_monster_stun(player_type *caster_ptr, effect_monster_type *em_p
 	}
 
 	(void)set_monster_stunned(caster_ptr, em_ptr->g_ptr->m_idx, *stun_damage);
+	em_ptr->get_angry = TRUE;
+}
+
+
+/*!
+ * @brief モンスターの混乱値を蓄積させる
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @param stun_damage 混乱値
+ * @return なし
+ */
+static void pile_monster_conf(player_type *caster_ptr, effect_monster_type *em_ptr, int *conf_damage)
+{
+	if ((em_ptr->do_conf == 0) ||
+		(em_ptr->r_ptr->flags3 & RF3_NO_CONF) ||
+		(em_ptr->r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
+		return;
+
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (MON_CONFUSED(em_ptr->m_ptr))
+	{
+		em_ptr->note = _("はさらに混乱したようだ。", " looks more confused.");
+		*conf_damage = MON_CONFUSED(em_ptr->m_ptr) + (em_ptr->do_conf / 2);
+	}
+	else
+	{
+		em_ptr->note = _("は混乱したようだ。", " looks confused.");
+		*conf_damage = em_ptr->do_conf;
+	}
+
+	(void)set_monster_confused(caster_ptr, em_ptr->g_ptr->m_idx, *conf_damage);
 	em_ptr->get_angry = TRUE;
 }
 
@@ -2354,27 +2386,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	else
 	{
 		pile_monster_stun(caster_ptr, em_ptr, &tmp_damage);
-		if (em_ptr->do_conf &&
-			!(em_ptr->r_ptr->flags3 & RF3_NO_CONF) &&
-			!(em_ptr->r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK))
-		{
-			if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-			if (MON_CONFUSED(em_ptr->m_ptr))
-			{
-				em_ptr->note = _("はさらに混乱したようだ。", " looks more confused.");
-				tmp_damage = MON_CONFUSED(em_ptr->m_ptr) + (em_ptr->do_conf / 2);
-			}
-			else
-			{
-				em_ptr->note = _("は混乱したようだ。", " looks confused.");
-				tmp_damage = em_ptr->do_conf;
-			}
-
-			(void)set_monster_confused(caster_ptr, em_ptr->g_ptr->m_idx, tmp_damage);
-			em_ptr->get_angry = TRUE;
-		}
-
+		pile_monster_conf(caster_ptr, em_ptr, &tmp_damage);
 		if (em_ptr->do_time)
 		{
 			if (em_ptr->seen) em_ptr->obvious = TRUE;
