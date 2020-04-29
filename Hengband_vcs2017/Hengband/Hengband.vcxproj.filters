@@ -712,6 +712,9 @@
     <ClCompile Include="..\..\src\effect\effect-monster-util.c">
       <Filter>effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\effect\effect-monster-switcher.c">
+      <Filter>effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1428,6 +1431,9 @@
       <Filter>effect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\effect\effect-monster-util.h">
+      <Filter>effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\effect\effect-monster-switcher.h">
       <Filter>effect</Filter>
     </ClInclude>
   </ItemGroup>
