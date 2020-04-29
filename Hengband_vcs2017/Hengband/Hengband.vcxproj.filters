@@ -706,6 +706,9 @@
     <ClCompile Include="..\..\src\effect\effect-player.c">
       <Filter>effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\effect\effect-monster.c">
+      <Filter>effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1416,6 +1419,9 @@
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\effect\effect-player.h">
+      <Filter>effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\effect\effect-monster.h">
       <Filter>effect</Filter>
     </ClInclude>
   </ItemGroup>
