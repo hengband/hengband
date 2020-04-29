@@ -2092,6 +2092,35 @@ static gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_m
 
 
 /*!
+ * @brief 完全な耐性を持っていたら、モンスターへの効果処理をスキップする
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param effect_monster_ptr モンスター効果構造体への参照ポインタ
+ * @return 完全耐性ならCONTINUE、そうでないなら効果処理の結果
+ */
+static gf_switch_result process_monster_perfect_resistance(player_type *caster_ptr, effect_monster *effect_monster_ptr)
+{
+	if (((effect_monster_ptr->r_ptr->flagsr & RFR_RES_ALL) == 0) ||
+		effect_monster_ptr->effect_type == GF_OLD_CLONE ||
+		effect_monster_ptr->effect_type == GF_STAR_HEAL ||
+		effect_monster_ptr->effect_type == GF_OLD_HEAL ||
+		effect_monster_ptr->effect_type == GF_OLD_SPEED ||
+		effect_monster_ptr->effect_type == GF_CAPTURE ||
+		effect_monster_ptr->effect_type == GF_PHOTO)
+		return switch_effects_monster(caster_ptr, effect_monster_ptr);
+
+	effect_monster_ptr->note = _("には完全な耐性がある！", " is immune.");
+	effect_monster_ptr->dam = 0;
+	if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr))
+		effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_ALL);
+
+	if (effect_monster_ptr->effect_type == GF_LITE_WEAK || effect_monster_ptr->effect_type == GF_KILL_WALL)
+		effect_monster_ptr->skipped = TRUE;
+
+	return GF_SWITCH_CONTINUE;
+}
+
+
+/*!
  * @brief 汎用的なビーム/ボルト/ボール系によるモンスターへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
@@ -2118,20 +2147,8 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	if (caster_ptr->riding && (effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding))
 		disturb(caster_ptr, TRUE, TRUE);
 
-	if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_ALL &&
-		effect_monster_ptr->effect_type != GF_OLD_CLONE && effect_monster_ptr->effect_type != GF_STAR_HEAL && effect_monster_ptr->effect_type != GF_OLD_HEAL
-		&& effect_monster_ptr->effect_type != GF_OLD_SPEED && effect_monster_ptr->effect_type != GF_CAPTURE && effect_monster_ptr->effect_type != GF_PHOTO)
-	{
-		effect_monster_ptr->note = _("には完全な耐性がある！", " is immune.");
-		effect_monster_ptr->dam = 0;
-		if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_ALL);
-		if (effect_monster_ptr->effect_type == GF_LITE_WEAK || effect_monster_ptr->effect_type == GF_KILL_WALL) effect_monster_ptr->skipped = TRUE;
-	}
-	else
-	{
-		gf_switch_result result = switch_effects_monster(caster_ptr, effect_monster_ptr);
-		if (result != GF_SWITCH_CONTINUE) return (bool)result;
-	}
+	gf_switch_result result = process_monster_perfect_resistance(caster_ptr, effect_monster_ptr);
+	if (result != GF_SWITCH_CONTINUE) return (bool)result;
 
 	if (effect_monster_ptr->skipped) return FALSE;
 
@@ -2142,7 +2159,8 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 	if (((effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (effect_monster_ptr->r_ptr->flags7 & RF7_NAZGUL)) && !caster_ptr->phase_out)
 	{
-		if (effect_monster_ptr->who && (effect_monster_ptr->dam > effect_monster_ptr->m_ptr->hp)) effect_monster_ptr->dam = effect_monster_ptr->m_ptr->hp;
+		if (effect_monster_ptr->who && (effect_monster_ptr->dam > effect_monster_ptr->m_ptr->hp))
+			effect_monster_ptr->dam = effect_monster_ptr->m_ptr->hp;
 	}
 
 	if (!effect_monster_ptr->who && effect_monster_ptr->slept)
