@@ -2128,14 +2128,11 @@ static gf_switch_result process_monster_perfect_resistance(player_type *caster_p
  */
 static void process_monster_last_moment(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-	if (em_ptr->effect_type == GF_DRAIN_MANA)
-	{
-		/* Drain mana does nothing */
-	}
+	if (em_ptr->effect_type == GF_DRAIN_MANA) return;
 
 	/* If another monster did the damage, hurt the monster by hand */
-	else if (em_ptr->who)
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+	if (em_ptr->who > 0)
 	{
 		if (caster_ptr->health_who == em_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
 		if (caster_ptr->riding == em_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
@@ -2144,32 +2141,19 @@ static void process_monster_last_moment(player_type *caster_ptr, effect_monster_
 		em_ptr->m_ptr->hp -= em_ptr->dam;
 		if (em_ptr->m_ptr->hp < 0)
 		{
-			bool sad = FALSE;
-
-			if (is_pet(em_ptr->m_ptr) && !(em_ptr->m_ptr->ml))
-				sad = TRUE;
-
+			bool sad = is_pet(em_ptr->m_ptr) && !(em_ptr->m_ptr->ml);
 			if (em_ptr->known && em_ptr->note)
 			{
 				monster_desc(caster_ptr, em_ptr->m_name, em_ptr->m_ptr, MD_TRUE_NAME);
-				if (em_ptr->see_s_msg)
-				{
-					msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
-				}
-				else
-				{
-					floor_ptr->monster_noise = TRUE;
-				}
+				if (em_ptr->see_s_msg) msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
+				else floor_ptr->monster_noise = TRUE;
 			}
 
 			if (em_ptr->who > 0) monster_gain_exp(caster_ptr, em_ptr->who, em_ptr->m_ptr->r_idx);
 
 			monster_death(caster_ptr, em_ptr->g_ptr->m_idx, FALSE);
 			delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
-			if (sad)
-			{
-				msg_print(_("少し悲しい気分がした。", "You feel sad for a moment."));
-			}
+			if (sad) msg_print(_("少し悲しい気分がした。", "You feel sad for a moment."));
 		}
 		else
 		{
@@ -2186,8 +2170,11 @@ static void process_monster_last_moment(player_type *caster_ptr, effect_monster_
 
 			if (em_ptr->do_sleep) (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
 		}
+
+		return;
 	}
-	else if (em_ptr->heal_leper)
+
+	if (em_ptr->heal_leper)
 	{
 		if (em_ptr->seen_msg)
 			msg_print(_("不潔な病人は病気が治った！", "The Mangy looking leper is healed!"));
@@ -2195,45 +2182,36 @@ static void process_monster_last_moment(player_type *caster_ptr, effect_monster_
 		if (record_named_pet && is_pet(em_ptr->m_ptr) && em_ptr->m_ptr->nickname)
 		{
 			char m2_name[MAX_NLEN];
-
 			monster_desc(caster_ptr, m2_name, em_ptr->m_ptr, MD_INDEF_VISIBLE);
 			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
 		}
 
 		delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
+		return;
 	}
 
 	/* If the player did it, give him experience, check fear */
-	else
+	bool fear = FALSE;
+	if (mon_take_hit(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, &fear, em_ptr->note_dies))
+		return;
+
+	if (em_ptr->do_sleep) anger_monster(caster_ptr, em_ptr->m_ptr);
+
+	if (em_ptr->note && em_ptr->seen_msg)
+		msg_format(_("%s%s", "%^s%s"), em_ptr->m_name, em_ptr->note);
+	else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear))
+		message_pain(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
+
+	if (((em_ptr->dam > 0) || em_ptr->get_angry) && !em_ptr->do_sleep)
+		anger_monster(caster_ptr, em_ptr->m_ptr);
+
+	if ((fear || em_ptr->do_fear) && em_ptr->seen)
 	{
-		bool fear = FALSE;
-		if (mon_take_hit(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, &fear, em_ptr->note_dies))
-		{
-			/* Dead monster */
-		}
-		else
-		{
-			if (em_ptr->do_sleep) anger_monster(caster_ptr, em_ptr->m_ptr);
-
-			if (em_ptr->note && em_ptr->seen_msg)
-				msg_format(_("%s%s", "%^s%s"), em_ptr->m_name, em_ptr->note);
-			else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear))
-			{
-				message_pain(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
-			}
-
-			if (((em_ptr->dam > 0) || em_ptr->get_angry) && !em_ptr->do_sleep)
-				anger_monster(caster_ptr, em_ptr->m_ptr);
-
-			if ((fear || em_ptr->do_fear) && em_ptr->seen)
-			{
-				sound(SOUND_FLEE);
-				msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), em_ptr->m_name);
-			}
-
-			if (em_ptr->do_sleep) (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
-		}
+		sound(SOUND_FLEE);
+		msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), em_ptr->m_name);
 	}
+
+	if (em_ptr->do_sleep) (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
 }
 
 
