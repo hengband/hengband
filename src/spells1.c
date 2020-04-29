@@ -55,13 +55,10 @@
 static void next_mirror(player_type *creature_ptr, POSITION* next_y, POSITION* next_x, POSITION cury, POSITION curx)
 {
 	POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
-	int mirror_num = 0;			  /* 鏡の数 */
-	POSITION x, y;
-	int num;
-
-	for (x = 0; x < creature_ptr->current_floor_ptr->width; x++)
+	int mirror_num = 0;	/* 鏡の数 */
+	for (POSITION x = 0; x < creature_ptr->current_floor_ptr->width; x++)
 	{
-		for (y = 0; y < creature_ptr->current_floor_ptr->height; y++)
+		for (POSITION y = 0; y < creature_ptr->current_floor_ptr->height; y++)
 		{
 			if (is_mirror_grid(&creature_ptr->current_floor_ptr->grid_array[y][x])) {
 				mirror_y[mirror_num] = y;
@@ -70,16 +67,17 @@ static void next_mirror(player_type *creature_ptr, POSITION* next_y, POSITION* n
 			}
 		}
 	}
+
 	if (mirror_num)
 	{
-		num = randint0(mirror_num);
+		int num = randint0(mirror_num);
 		*next_y = mirror_y[num];
 		*next_x = mirror_x[num];
 		return;
 	}
+
 	*next_y = cury + randint0(5) - 2;
 	*next_x = curx + randint0(5) - 2;
-	return;
 }
 
 
