@@ -2121,6 +2121,123 @@ static gf_switch_result process_monster_perfect_resistance(player_type *caster_p
 
 
 /*!
+ * @brief モンスターの死に際処理 (魔力吸収を除く)
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void process_monster_last_moment(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+	if (em_ptr->effect_type == GF_DRAIN_MANA)
+	{
+		/* Drain mana does nothing */
+	}
+
+	/* If another monster did the damage, hurt the monster by hand */
+	else if (em_ptr->who)
+	{
+		if (caster_ptr->health_who == em_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
+		if (caster_ptr->riding == em_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
+
+		(void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, 0);
+		em_ptr->m_ptr->hp -= em_ptr->dam;
+		if (em_ptr->m_ptr->hp < 0)
+		{
+			bool sad = FALSE;
+
+			if (is_pet(em_ptr->m_ptr) && !(em_ptr->m_ptr->ml))
+				sad = TRUE;
+
+			if (em_ptr->known && em_ptr->note)
+			{
+				monster_desc(caster_ptr, em_ptr->m_name, em_ptr->m_ptr, MD_TRUE_NAME);
+				if (em_ptr->see_s_msg)
+				{
+					msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
+				}
+				else
+				{
+					floor_ptr->monster_noise = TRUE;
+				}
+			}
+
+			if (em_ptr->who > 0) monster_gain_exp(caster_ptr, em_ptr->who, em_ptr->m_ptr->r_idx);
+
+			monster_death(caster_ptr, em_ptr->g_ptr->m_idx, FALSE);
+			delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
+			if (sad)
+			{
+				msg_print(_("少し悲しい気分がした。", "You feel sad for a moment."));
+			}
+		}
+		else
+		{
+			if (em_ptr->note && em_ptr->seen_msg)
+				msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
+			else if (em_ptr->see_s_msg)
+			{
+				message_pain(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
+			}
+			else
+			{
+				floor_ptr->monster_noise = TRUE;
+			}
+
+			if (em_ptr->do_sleep) (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
+		}
+	}
+	else if (em_ptr->heal_leper)
+	{
+		if (em_ptr->seen_msg)
+			msg_print(_("不潔な病人は病気が治った！", "The Mangy looking leper is healed!"));
+
+		if (record_named_pet && is_pet(em_ptr->m_ptr) && em_ptr->m_ptr->nickname)
+		{
+			char m2_name[MAX_NLEN];
+
+			monster_desc(caster_ptr, m2_name, em_ptr->m_ptr, MD_INDEF_VISIBLE);
+			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
+		}
+
+		delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
+	}
+
+	/* If the player did it, give him experience, check fear */
+	else
+	{
+		bool fear = FALSE;
+		if (mon_take_hit(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, &fear, em_ptr->note_dies))
+		{
+			/* Dead monster */
+		}
+		else
+		{
+			if (em_ptr->do_sleep) anger_monster(caster_ptr, em_ptr->m_ptr);
+
+			if (em_ptr->note && em_ptr->seen_msg)
+				msg_format(_("%s%s", "%^s%s"), em_ptr->m_name, em_ptr->note);
+			else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear))
+			{
+				message_pain(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
+			}
+
+			if (((em_ptr->dam > 0) || em_ptr->get_angry) && !em_ptr->do_sleep)
+				anger_monster(caster_ptr, em_ptr->m_ptr);
+
+			if ((fear || em_ptr->do_fear) && em_ptr->seen)
+			{
+				sound(SOUND_FLEE);
+				msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), em_ptr->m_name);
+			}
+
+			if (em_ptr->do_sleep) (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
+		}
+	}
+}
+
+
+/*!
  * @brief 汎用的なビーム/ボルト/ボール系によるモンスターへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
@@ -2274,112 +2391,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		}
 	}
 
-	if (em_ptr->effect_type == GF_DRAIN_MANA)
-	{
-		/* Drain mana does nothing */
-	}
-
-	/* If another monster did the damage, hurt the monster by hand */
-	else if (em_ptr->who)
-	{
-		if (caster_ptr->health_who == em_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_HEALTH);
-		if (caster_ptr->riding == em_ptr->g_ptr->m_idx) caster_ptr->redraw |= (PR_UHEALTH);
-
-		(void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, 0);
-		em_ptr->m_ptr->hp -= em_ptr->dam;
-		if (em_ptr->m_ptr->hp < 0)
-		{
-			bool sad = FALSE;
-
-			if (is_pet(em_ptr->m_ptr) && !(em_ptr->m_ptr->ml))
-				sad = TRUE;
-
-			if (em_ptr->known && em_ptr->note)
-			{
-				monster_desc(caster_ptr, em_ptr->m_name, em_ptr->m_ptr, MD_TRUE_NAME);
-				if (em_ptr->see_s_msg)
-				{
-					msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
-				}
-				else
-				{
-					floor_ptr->monster_noise = TRUE;
-				}
-			}
-
-			if (em_ptr->who > 0) monster_gain_exp(caster_ptr, em_ptr->who, em_ptr->m_ptr->r_idx);
-
-			monster_death(caster_ptr, em_ptr->g_ptr->m_idx, FALSE);
-			delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
-			if (sad)
-			{
-				msg_print(_("少し悲しい気分がした。", "You feel sad for a moment."));
-			}
-		}
-		else
-		{
-			if (em_ptr->note && em_ptr->seen_msg)
-				msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
-			else if (em_ptr->see_s_msg)
-			{
-				message_pain(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
-			}
-			else
-			{
-				floor_ptr->monster_noise = TRUE;
-			}
-
-			if (em_ptr->do_sleep) (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
-		}
-	}
-	else if (em_ptr->heal_leper)
-	{
-		if (em_ptr->seen_msg)
-			msg_print(_("不潔な病人は病気が治った！", "The Mangy looking leper is healed!"));
-
-		if (record_named_pet && is_pet(em_ptr->m_ptr) && em_ptr->m_ptr->nickname)
-		{
-			char m2_name[MAX_NLEN];
-
-			monster_desc(caster_ptr, m2_name, em_ptr->m_ptr, MD_INDEF_VISIBLE);
-			exe_write_diary(caster_ptr, DIARY_NAMED_PET, RECORD_NAMED_PET_HEAL_LEPER, m2_name);
-		}
-
-		delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
-	}
-
-	/* If the player did it, give him experience, check fear */
-	else
-	{
-		bool fear = FALSE;
-		if (mon_take_hit(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, &fear, em_ptr->note_dies))
-		{
-			/* Dead monster */
-		}
-		else
-		{
-			if (em_ptr->do_sleep) anger_monster(caster_ptr, em_ptr->m_ptr);
-
-			if (em_ptr->note && em_ptr->seen_msg)
-				msg_format(_("%s%s", "%^s%s"), em_ptr->m_name, em_ptr->note);
-			else if (em_ptr->known && (em_ptr->dam || !em_ptr->do_fear))
-			{
-				message_pain(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
-			}
-
-			if (((em_ptr->dam > 0) || em_ptr->get_angry) && !em_ptr->do_sleep)
-				anger_monster(caster_ptr, em_ptr->m_ptr);
-
-			if ((fear || em_ptr->do_fear) && em_ptr->seen)
-			{
-				sound(SOUND_FLEE);
-				msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), em_ptr->m_name);
-			}
-
-			if (em_ptr->do_sleep) (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
-		}
-	}
-
+	process_monster_last_moment(caster_ptr, em_ptr);
 	if ((em_ptr->effect_type == GF_BLOOD_CURSE) && one_in_(4))
 	{
 		blood_curse_to_enemy(caster_ptr, em_ptr->who);
