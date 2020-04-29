@@ -2468,7 +2468,7 @@ static void update_phase_out_stat(player_type *caster_ptr, effect_monster_type *
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return なし
  */
-static void process_spell_result_pet(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void postprocess_spell_pet(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if ((em_ptr->dam <= 0) || is_pet(em_ptr->m_ptr) || is_friendly(em_ptr->m_ptr))
 		return;
@@ -2494,7 +2494,7 @@ static void process_spell_result_pet(player_type *caster_ptr, effect_monster_typ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return なし
  */
-static void process_spell_result_riding(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void postprocess_spell_riding(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (!caster_ptr->riding || (caster_ptr->riding != em_ptr->g_ptr->m_idx) || (em_ptr->dam <= 0))
 		return;
@@ -2512,7 +2512,7 @@ static void process_spell_result_riding(player_type *caster_ptr, effect_monster_
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return なし
  */
-static void process_spell_result_photo(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void postprocess_spell_photo(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->photo == 0) return;
 
@@ -2523,6 +2523,23 @@ static void process_spell_result_photo(player_type *caster_ptr, effect_monster_t
 	q_ptr->pval = em_ptr->photo;
 	q_ptr->ident |= (IDENT_FULL_KNOWN);
 	(void)drop_near(caster_ptr, q_ptr, -1, caster_ptr->y, caster_ptr->x);
+}
+
+
+/*!
+ * @brief モンスター効果の後処理 (ペット関係、グローバル変数更新)
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void postprocess_spell(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	postprocess_spell_pet(caster_ptr, em_ptr);
+	postprocess_spell_riding(caster_ptr, em_ptr);
+	postprocess_spell_photo(caster_ptr, em_ptr);
+	project_m_n++;
+	project_m_x = em_ptr->x;
+	project_m_y = em_ptr->y;
 }
 
 
@@ -2578,11 +2595,6 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	if ((caster_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !em_ptr->m_ptr->r_idx))
 		caster_ptr->window |= (PW_MONSTER);
 
-	process_spell_result_pet(caster_ptr, em_ptr);
-	process_spell_result_riding(caster_ptr, em_ptr);
-	process_spell_result_photo(caster_ptr, em_ptr);
-	project_m_n++;
-	project_m_x = em_ptr->x;
-	project_m_y = em_ptr->y;
+	postprocess_spell(caster_ptr, em_ptr);
 	return em_ptr->obvious;
 }
