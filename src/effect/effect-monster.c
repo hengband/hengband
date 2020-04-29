@@ -2145,6 +2145,25 @@ static void process_pet_death(player_type *caster_ptr, effect_monster_type *em_p
 
 
 /*!
+ * @brief モンスターの睡眠を処理する
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void process_monster_sleep(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->note && em_ptr->seen_msg)
+		msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
+	else if (em_ptr->see_s_msg)
+		message_pain(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
+	else
+		caster_ptr->current_floor_ptr->monster_noise = TRUE;
+
+	if (em_ptr->do_sleep) (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
+}
+
+
+/*!
  * @brief モンスターの死に際処理 (魔力吸収を除く)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -2162,25 +2181,8 @@ static void process_monster_last_moment(player_type *caster_ptr, effect_monster_
 
 		(void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, 0);
 		em_ptr->m_ptr->hp -= em_ptr->dam;
-		if (em_ptr->m_ptr->hp < 0)
-		{
-			process_pet_death(caster_ptr, em_ptr);
-		}
-		else
-		{
-			if (em_ptr->note && em_ptr->seen_msg)
-				msg_format("%^s%s", em_ptr->m_name, em_ptr->note);
-			else if (em_ptr->see_s_msg)
-			{
-				message_pain(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam);
-			}
-			else
-			{
-				caster_ptr->current_floor_ptr->monster_noise = TRUE;
-			}
-
-			if (em_ptr->do_sleep) (void)set_monster_csleep(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_sleep);
-		}
+		if (em_ptr->m_ptr->hp < 0) process_pet_death(caster_ptr, em_ptr);
+		else process_monster_sleep(caster_ptr, em_ptr);
 
 		return;
 	}
