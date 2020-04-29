@@ -100,12 +100,12 @@ void initialize_effect_monster(player_type *caster_ptr, effect_monster *effect_m
  * @param y 目標Y座標 / Target y location (or location to travel "towards")
  * @param x 目標X座標 / Target x location (or location to travel "towards")
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
- * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
+ * @param type 効果属性 / Type of damage to apply to monsters (and objects)
  * @param flag 効果フラグ
  * @param see_s_msg TRUEならばメッセージを表示する
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
  */
-bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flag, bool see_s_msg)
+bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID type, BIT_FLAGS flag, bool see_s_msg)
 {
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	effect_monster tmp_effect;
@@ -116,7 +116,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 	/* Never affect projector */
 	if (who && (effect_monster_ptr->g_ptr->m_idx == who)) return FALSE;
-	if ((effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding) && !who && !(typ == GF_OLD_HEAL) && !(typ == GF_OLD_SPEED) && !(typ == GF_STAR_HEAL)) return FALSE;
+	if ((effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding) && !who && !(type == GF_OLD_HEAL) && !(type == GF_OLD_SPEED) && !(type == GF_STAR_HEAL)) return FALSE;
 	if (sukekaku && ((effect_monster_ptr->m_ptr->r_idx == MON_SUKE) || (effect_monster_ptr->m_ptr->r_idx == MON_KAKU))) return FALSE;
 
 	/* Don't affect already death monsters */
@@ -134,17 +134,17 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	if (caster_ptr->riding && (effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding)) disturb(caster_ptr, TRUE, TRUE);
 
 	if (effect_monster_ptr->r_ptr->flagsr & RFR_RES_ALL &&
-		typ != GF_OLD_CLONE && typ != GF_STAR_HEAL && typ != GF_OLD_HEAL
-		&& typ != GF_OLD_SPEED && typ != GF_CAPTURE && typ != GF_PHOTO)
+		type != GF_OLD_CLONE && type != GF_STAR_HEAL && type != GF_OLD_HEAL
+		&& type != GF_OLD_SPEED && type != GF_CAPTURE && type != GF_PHOTO)
 	{
 		effect_monster_ptr->note = _("には完全な耐性がある！", " is immune.");
 		dam = 0;
 		if (is_original_ap_and_seen(caster_ptr, effect_monster_ptr->m_ptr)) effect_monster_ptr->r_ptr->r_flagsr |= (RFR_RES_ALL);
-		if (typ == GF_LITE_WEAK || typ == GF_KILL_WALL) effect_monster_ptr->skipped = TRUE;
+		if (type == GF_LITE_WEAK || type == GF_KILL_WALL) effect_monster_ptr->skipped = TRUE;
 	}
 	else
 	{
-		switch (typ)
+		switch (type)
 		{
 		case GF_MISSILE:
 		{
@@ -2187,7 +2187,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	}
 
 	int tmp = dam;
-	dam = mon_damage_mod(caster_ptr, effect_monster_ptr->m_ptr, dam, (bool)(typ == GF_PSY_SPEAR));
+	dam = mon_damage_mod(caster_ptr, effect_monster_ptr->m_ptr, dam, (bool)(type == GF_PSY_SPEAR));
 	if ((tmp > 0) && (dam == 0)) effect_monster_ptr->note = _("はダメージを受けていない。", " is unharmed.");
 
 	if (dam > effect_monster_ptr->m_ptr->hp)
@@ -2291,7 +2291,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		}
 	}
 
-	if (typ == GF_DRAIN_MANA)
+	if (type == GF_DRAIN_MANA)
 	{
 		/* Drain mana does nothing */
 	}
@@ -2397,7 +2397,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		}
 	}
 
-	if ((typ == GF_BLOOD_CURSE) && one_in_(4))
+	if ((type == GF_BLOOD_CURSE) && one_in_(4))
 	{
 		blood_curse_to_enemy(caster_ptr, who);
 	}
