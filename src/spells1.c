@@ -102,67 +102,11 @@ static void next_mirror(player_type *creature_ptr, POSITION* next_y, POSITION* n
  * @param x 目標X座標 / Target x location (or location to travel "towards")
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
  * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
- * @param flg 効果フラグ
+ * @param flag 効果フラグ
  * @param see_s_msg TRUEならばメッセージを表示する
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
- * @details
- * <pre>
- * This routine takes a "source monster" (by index) which is mostly used to
- * determine if the player is causing the damage, and a "radius" (see below),
- * which is used to decrease the power of explosions with distance, and a
- * location, via integers which are modified by certain types of attacks
- * (polymorph and teleport being the obvious ones), a default damage, which
- * is modified as needed based on various properties, and finally a "damage
- * type" (see below).
- * </pre>
- * <pre>
- * Note that this routine can handle "no damage" attacks (like teleport) by
- * taking a "zero" damage, and can even take "parameters" to attacks (like
- * confuse) by accepting a "damage", using it to calculate the effect, and
- * then setting the damage to zero.  Note that the "damage" parameter is
- * divided by the radius, so monsters not at the "epicenter" will not take
- * as much damage (or whatever)...
- * </pre>
- * <pre>
- * Note that "polymorph" is dangerous, since a failure in "place_monster()"'
- * may result in a dereference of an invalid pointer.
- * </pre>
- * <pre>
- * Various messages are produced, and damage is applied.
- * </pre>
- * <pre>
- * Just "casting" a substance (i.e. plasma) does not make you immune, you must
- * actually be "made" of that substance, or "breathe" big balls of it.
- * We assume that "Plasma" monsters, and "Plasma" breathers, are immune
- * to plasma.
- * We assume "Nether" is an evil, necromantic force, so it doesn't hurt undead,
- * and hurts evil less.  If can breath nether, then it resists it as well.
- * </pre>
- * <pre>
- * Damage reductions use the following formulas:
- *   Note that "dam = dam * 6 / (randint1(6) + 6);"
- *	 gives avg damage of .655, ranging from .858 to .500
- *   Note that "dam = dam * 5 / (randint1(6) + 6);"
- *	 gives avg damage of .544, ranging from .714 to .417
- *   Note that "dam = dam * 4 / (randint1(6) + 6);"
- *	 gives avg damage of .444, ranging from .556 to .333
- *   Note that "dam = dam * 3 / (randint1(6) + 6);"
- *	 gives avg damage of .327, ranging from .427 to .250
- *   Note that "dam = dam * 2 / (randint1(6) + 6);"
- *	 gives something simple.
- * </pre>
- * <pre>
- * In this function, "result" messages are postponed until the end, where
- * the "note" string is appended to the monster name, if not NULL.  So,
- * to make a spell have "no effect" just set "note" to NULL.  You should
- * also set "notice" to FALSE, or the player will learn what the spell does.
- * </pre>
- * <pre>
- * We attempt to return "TRUE" if the player saw anything "useful" happen.
- * "flg" was added.
- * </pre>
  */
-static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, bool see_s_msg)
+static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flag, bool see_s_msg)
 {
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -2505,7 +2449,7 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
 	{
 		if (!who)
 		{
-			if (!(flg & PROJECT_NO_HANGEKI))
+			if (!(flag & PROJECT_NO_HANGEKI))
 			{
 				set_target(m_ptr, monster_target_y, monster_target_x);
 			}
@@ -2549,22 +2493,11 @@ static bool project_m(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSI
  * @param x 目標X座標 / Target x location (or location to travel "towards")
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
  * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
- * @param flg 効果フラグ
+ * @param flag 効果フラグ
  * @param monspell 効果元のモンスター魔法ID
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
- * @details
- * Handle a beam/bolt/ball causing damage to the player.
- * This routine takes a "source monster" (by index), a "distance", a default
- * "damage", and a "damage type".  See "project_m()" above.
- * If "rad" is non-zero, then the blast was centered elsewhere, and the damage
- * is reduced (see "project_m()" above).  This can happen if a monster breathes
- * at the player and hits a wall instead.
- * NOTE (Zangband): 'Bolt' attacks can be reflected back, so we need
- * to know if this is actually a ball or a bolt spell
- * We return "TRUE" if any "obvious" effects were observed.  XXX XXX Actually,
- * we just assume that the effects were obvious, for historical reasons.
  */
-static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, int monspell)
+static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flag, int monspell)
 {
 	int k = 0;
 	DEPTH rlev = 0;
@@ -2586,7 +2519,7 @@ static bool project_p(MONSTER_IDX who, player_type *target_ptr, concptr who_name
 	if (!who) return FALSE;
 	if (who == target_ptr->riding) return FALSE;
 
-	if ((target_ptr->reflect || ((target_ptr->special_defense & KATA_FUUJIN) && !target_ptr->blind)) && (flg & PROJECT_REFLECTABLE) && !one_in_(10))
+	if ((target_ptr->reflect || ((target_ptr->special_defense & KATA_FUUJIN) && !target_ptr->blind)) && (flag & PROJECT_REFLECTABLE) && !one_in_(10))
 	{
 		POSITION t_y, t_x;
 		int max_attempts = 10;
@@ -3835,141 +3768,11 @@ void breath_shape(player_type *caster_ptr, u16b *path_g, int dist, int *pgrids, 
  * @param x 目標X座標 / Target x location (or location to travel "towards")
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
  * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
- * @param flg 効果フラグ / Extra bit flags (see PROJECT_xxxx)
+ * @param flag 効果フラグ / Extra bit flags (see PROJECT_xxxx)
  * @param monspell 効果元のモンスター魔法ID
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
- * @details
- * <pre>
- * Allows a monster (or player) to project a beam/bolt/ball of a given kind
- * towards a given location (optionally passing over the heads of interposing
- * monsters), and have it do a given amount of damage to the monsters (and
- * optionally objects) within the given radius of the final location.
- *
- * A "bolt" travels from source to target and affects only the target grid.
- * A "beam" travels from source to target, affecting all grids passed through.
- * A "ball" travels from source to the target, exploding at the target, and
- *   affecting everything within the given radius of the target location.
- *
- * Traditionally, a "bolt" does not affect anything on the ground, and does
- * not pass over the heads of interposing monsters, much like a traditional
- * missile, and will "stop" abruptly at the "target" even if no monster is
- * positioned there, while a "ball", on the other hand, passes over the heads
- * of monsters between the source and target, and affects everything except
- * the source monster which lies within the final radius, while a "beam"
- * affects every monster between the source and target, except for the casting
- * monster (or player), and rarely affects things on the ground.
- *
- * Two special flags allow us to use this function in special ways, the
- * "PROJECT_HIDE" flag allows us to perform "invisible" projections, while
- * the "PROJECT_JUMP" flag allows us to affect a specific grid, without
- * actually projecting from the source monster (or player).
- *
- * The player will only get "experience" for monsters killed by himself
- * Unique monsters can only be destroyed by attacks from the player
- *
- * Only 256 grids can be affected per projection, limiting the effective
- * "radius" of standard ball attacks to nine units (diameter nineteen).
- *
- * One can project in a given "direction" by combining PROJECT_THRU with small
- * offsets to the initial location (see "line_spell()"), or by calculating
- * "virtual targets" far away from the player.
- *
- * One can also use PROJECT_THRU to send a beam/bolt along an angled path,
- * continuing until it actually hits somethings (useful for "stone to mud").
- *
- * Bolts and Beams explode INSIDE walls, so that they can destroy doors.
- *
- * Balls must explode BEFORE hitting walls, or they would affect monsters
- * on both sides of a wall.  Some bug reports indicate that this is still
- * happening in 2.7.8 for Windows, though it appears to be impossible.
- *
- * We "pre-calculate" the blast area only in part for efficiency.
- * More importantly, this lets us do "explosions" from the "inside" out.
- * This results in a more logical distribution of "blast" treasure.
- * It also produces a better (in my opinion) animation of the explosion.
- * It could be (but is not) used to have the treasure dropped by monsters
- * in the middle of the explosion fall "outwards", and then be damaged by
- * the blast as it spreads outwards towards the treasure drop location.
- *
- * Walls and doors are included in the blast area, so that they can be
- * "burned" or "melted" in later versions.
- *
- * This algorithm is intended to maximize simplicity, not necessarily
- * efficiency, since this function is not a bottleneck in the code.
- *
- * We apply the blast effect from ground zero outwards, in several passes,
- * first affecting features, then objects, then monsters, then the player.
- * This allows walls to be removed before checking the object or monster
- * in the wall, and protects objects which are dropped by monsters killed
- * in the blast, and allows the player to see all affects before he is
- * killed or teleported away.  The semantics of this method are open to
- * various interpretations, but they seem to work well in practice.
- *
- * We process the blast area from ground-zero outwards to allow for better
- * distribution of treasure dropped by monsters, and because it provides a
- * pleasing visual effect at low cost.
- *
- * Note that the damage done by "ball" explosions decreases with distance.
- * This decrease is rapid, grids at radius "dist" take "1/dist" damage.
- *
- * Notice the "napalm" effect of "beam" weapons.  First they "project" to
- * the target, and then the damage "flows" along this beam of destruction.
- * The damage at every grid is the same as at the "center" of a "ball"
- * explosion, since the "beam" grids are treated as if they ARE at the
- * center of a "ball" explosion.
- *
- * Currently, specifying "beam" plus "ball" means that locations which are
- * covered by the initial "beam", and also covered by the final "ball", except
- * for the final grid (the epicenter of the ball), will be "hit twice", once
- * by the initial beam, and once by the exploding ball.  For the grid right
- * next to the epicenter, this results in 150% damage being done.  The center
- * does not have this problem, for the same reason the final grid in a "beam"
- * plus "bolt" does not -- it is explicitly removed.  Simply removing "beam"
- * grids which are covered by the "ball" will NOT work, as then they will
- * receive LESS damage than they should.  Do not combine "beam" with "ball".
- *
- * The array "gy[],gx[]" with current size "grids" is used to hold the
- * collected locations of all grids in the "blast area" plus "beam path".
- *
- * Note the rather complex usage of the "gm[]" array.  First, gm[0] is always
- * zero.  Second, for N>1, gm[N] is always the index (in gy[],gx[]) of the
- * first blast grid (see above) with radius "N" from the blast center.  Note
- * that only the first gm[1] grids in the blast area thus take full damage.
- * Also, note that gm[rad+1] is always equal to "grids", which is the total
- * number of blast grids.
- *
- * Note that once the projection is complete, (y2,x2) holds the final location
- * of bolts/beams, and the "epicenter" of balls.
- *
- * Note also that "rad" specifies the "inclusive" radius of projection blast,
- * so that a "rad" of "one" actually covers 5 or 9 grids, depending on the
- * implementation of the "distance" function.  Also, a bolt can be properly
- * viewed as a "ball" with a "rad" of "zero".
- *
- * Note that if no "target" is reached before the beam/bolt/ball travels the
- * maximum distance allowed (MAX_RANGE), no "blast" will be induced.  This
- * may be relevant even for bolts, since they have a "1x1" mini-blast.
- *
- * Note that for consistency, we "pretend" that the bolt actually takes "time"
- * to move from point A to point B, even if the player cannot see part of the
- * projection path.  Note that in general, the player will *always* see part
- * of the path, since it either starts at the player or ends on the player.
- *
- * Hack -- we assume that every "projection" is "self-illuminating".
- *
- * Hack -- when only a single monster is affected, we automatically track
- * (and recall) that monster, unless "PROJECT_JUMP" is used.
- *
- * Note that all projections now "explode" at their final destination, even
- * if they were being projected at a more distant destination.  This means
- * that "ball" spells will *always* explode.
- *
- * Note that we must call "handle_stuff()" after affecting terrain features
- * in the blast radius, in case the "illumination" of the grid was changed,
- * and "update_view()" and "update_monsters()" need to be called.
- * </pre>
  */
-bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flg, int monspell)
+bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flag, int monspell)
 {
 	int i, t, dist;
 	POSITION y1, x1;
@@ -3999,11 +3802,11 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	monster_target_y = caster_ptr->y;
 	monster_target_x = caster_ptr->x;
 
-	if (flg & (PROJECT_JUMP))
+	if (flag & (PROJECT_JUMP))
 	{
 		x1 = x;
 		y1 = y;
-		flg &= ~(PROJECT_JUMP);
+		flag &= ~(PROJECT_JUMP);
 		jump = TRUE;
 	}
 	else if (who <= 0)
@@ -4028,11 +3831,11 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	y2 = y;
 	x2 = x;
 
-	if (flg & (PROJECT_THRU))
+	if (flag & (PROJECT_THRU))
 	{
 		if ((x1 == x2) && (y1 == y2))
 		{
-			flg &= ~(PROJECT_THRU);
+			flag &= ~(PROJECT_THRU);
 		}
 	}
 
@@ -4040,8 +3843,8 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	{
 		rad = 0 - rad;
 		breath = TRUE;
-		if (flg & PROJECT_HIDE) old_hide = TRUE;
-		flg |= PROJECT_HIDE;
+		if (flag & PROJECT_HIDE) old_hide = TRUE;
+		flag |= PROJECT_HIDE;
 	}
 
 	for (dist = 0; dist < 32; dist++) gm[dist] = 0;
@@ -4049,7 +3852,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	y = y1;
 	x = x1;
 	dist = 0;
-	if (flg & (PROJECT_BEAM))
+	if (flag & (PROJECT_BEAM))
 	{
 		gy[grids] = y;
 		gx[grids] = x;
@@ -4060,16 +3863,16 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	{
 	case GF_LITE:
 	case GF_LITE_WEAK:
-		if (breath || (flg & PROJECT_BEAM)) flg |= (PROJECT_LOS);
+		if (breath || (flag & PROJECT_BEAM)) flag |= (PROJECT_LOS);
 		break;
 	case GF_DISINTEGRATE:
-		flg |= (PROJECT_GRID);
-		if (breath || (flg & PROJECT_BEAM)) flg |= (PROJECT_DISI);
+		flag |= (PROJECT_GRID);
+		if (breath || (flag & PROJECT_BEAM)) flag |= (PROJECT_DISI);
 		break;
 	}
 
 	/* Calculate the projection path */
-	path_n = project_path(caster_ptr, path_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, flg);
+	path_n = project_path(caster_ptr, path_g, (project_length ? project_length : MAX_RANGE), y1, x1, y2, x2, flag);
 	handle_stuff(caster_ptr);
 
 	if (typ == GF_SEEKER)
@@ -4091,7 +3894,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			gx[grids] = x;
 			grids++;
 
-			if (!blind && !(flg & (PROJECT_HIDE)))
+			if (!blind && !(flag & (PROJECT_HIDE)))
 			{
 				if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x))
 				{
@@ -4104,7 +3907,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					Term_xtra(TERM_XTRA_DELAY, msec);
 					lite_spot(caster_ptr, y, x);
 					Term_fresh();
-					if (flg & (PROJECT_BEAM))
+					if (flag & (PROJECT_BEAM))
 					{
 						p = bolt_pict(y, x, y, x, typ);
 						a = PICT_A(p);
@@ -4128,12 +3931,12 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			monster_target_x = x;
 			remove_mirror(caster_ptr, y, x);
 			next_mirror(caster_ptr, &oy, &ox, y, x);
-			path_n = i + project_path(caster_ptr, &(path_g[i + 1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flg);
+			path_n = i + project_path(caster_ptr, &(path_g[i + 1]), (project_length ? project_length : MAX_RANGE), y, x, oy, ox, flag);
 			for (j = last_i; j <= i; j++)
 			{
 				y = GRID_Y(path_g[j]);
 				x = GRID_X(path_g[j]);
-				if (project_m(caster_ptr, 0, 0, y, x, dam, GF_SEEKER, flg, TRUE)) notice = TRUE;
+				if (project_m(caster_ptr, 0, 0, y, x, dam, GF_SEEKER, flag, TRUE)) notice = TRUE;
 				if (!who && (project_m_n == 1) && !jump && (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0))
 				{
 					monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
@@ -4155,7 +3958,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			POSITION py, px;
 			py = GRID_Y(path_g[i]);
 			px = GRID_X(path_g[i]);
-			if (project_m(caster_ptr, 0, 0, py, px, dam, GF_SEEKER, flg, TRUE))
+			if (project_m(caster_ptr, 0, 0, py, px, dam, GF_SEEKER, flag, TRUE))
 				notice = TRUE;
 			if (!who && (project_m_n == 1) && !jump) {
 				if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0)
@@ -4208,7 +4011,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					Term_xtra(TERM_XTRA_DELAY, msec);
 					lite_spot(caster_ptr, y, x);
 					Term_fresh();
-					if (flg & (PROJECT_BEAM))
+					if (flag & (PROJECT_BEAM))
 					{
 						p = bolt_pict(y, x, y, x, typ);
 						a = PICT_A(p);
@@ -4245,14 +4048,14 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 				path_n = i;
 				second_step = i + 1;
-				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x - 1, flg);
-				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x, flg);
-				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x + 1, flg);
-				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x - 1, flg);
-				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x + 1, flg);
-				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x - 1, flg);
-				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x, flg);
-				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x + 1, flg);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x - 1, flag);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x, flag);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y - 1, x + 1, flag);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x - 1, flag);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y, x + 1, flag);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x - 1, flag);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x, flag);
+				path_n += project_path(caster_ptr, &(path_g[path_n + 1]), (project_length ? project_length : MAX_RANGE), y, x, y + 1, x + 1, flag);
 			}
 		}
 
@@ -4260,7 +4063,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		{
 			POSITION py = GRID_Y(path_g[i]);
 			POSITION px = GRID_X(path_g[i]);
-			(void)project_m(caster_ptr, 0, 0, py, px, dam, GF_SUPER_RAY, flg, TRUE);
+			(void)project_m(caster_ptr, 0, 0, py, px, dam, GF_SUPER_RAY, flag, TRUE);
 			if (!who && (project_m_n == 1) && !jump) {
 				if (caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx > 0) {
 					monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[project_m_y][project_m_x].m_idx];
@@ -4285,11 +4088,11 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		POSITION ox = x;
 		POSITION ny = GRID_Y(path_g[i]);
 		POSITION nx = GRID_X(path_g[i]);
-		if (flg & PROJECT_DISI)
+		if (flag & PROJECT_DISI)
 		{
 			if (cave_stop_disintegration(caster_ptr->current_floor_ptr, ny, nx) && (rad > 0)) break;
 		}
-		else if (flg & PROJECT_LOS)
+		else if (flag & PROJECT_LOS)
 		{
 			if (!cave_los_bold(caster_ptr->current_floor_ptr, ny, nx) && (rad > 0)) break;
 		}
@@ -4300,14 +4103,14 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 		y = ny;
 		x = nx;
-		if (flg & (PROJECT_BEAM))
+		if (flag & (PROJECT_BEAM))
 		{
 			gy[grids] = y;
 			gx[grids] = x;
 			grids++;
 		}
 
-		if (!blind && !(flg & (PROJECT_HIDE | PROJECT_FAST)))
+		if (!blind && !(flag & (PROJECT_HIDE | PROJECT_FAST)))
 		{
 			if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x))
 			{
@@ -4323,7 +4126,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				Term_xtra(TERM_XTRA_DELAY, msec);
 				lite_spot(caster_ptr, y, x);
 				Term_fresh();
-				if (flg & (PROJECT_BEAM))
+				if (flag & (PROJECT_BEAM))
 				{
 					p = bolt_pict(y, x, y, x, typ);
 					a = PICT_A(p);
@@ -4349,7 +4152,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		gm_rad = rad;
 		if (!old_hide)
 		{
-			flg &= ~(PROJECT_HIDE);
+			flag &= ~(PROJECT_HIDE);
 		}
 	}
 
@@ -4362,7 +4165,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	/* If we found a "target", explode there */
 	if (dist <= MAX_RANGE)
 	{
-		if ((flg & (PROJECT_BEAM)) && (grids > 0)) grids--;
+		if ((flag & (PROJECT_BEAM)) && (grids > 0)) grids--;
 
 		/*
 		 * Create a conical breath attack
@@ -4375,7 +4178,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		 */
 		if (breath)
 		{
-			flg &= ~(PROJECT_HIDE);
+			flag &= ~(PROJECT_HIDE);
 			breath_shape(caster_ptr, path_g, dist, &grids, gx, gy, gm, &gm_rad, rad, y1, x1, by, bx, typ);
 		}
 		else
@@ -4416,7 +4219,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 	if (!grids) return FALSE;
 
-	if (!blind && !(flg & (PROJECT_HIDE)))
+	if (!blind && !(flag & (PROJECT_HIDE)))
 	{
 		for (t = 0; t <= gm_rad; t++)
 		{
@@ -4464,13 +4267,13 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 	update_creature(caster_ptr);
 
-	if (flg & PROJECT_KILL)
+	if (flag & PROJECT_KILL)
 	{
 		see_s_msg = (who > 0) ? is_seen(&caster_ptr->current_floor_ptr->m_list[who]) :
 			(!who ? TRUE : (player_can_see_bold(caster_ptr, y1, x1) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y1, x1)));
 	}
 
-	if (flg & (PROJECT_GRID))
+	if (flag & (PROJECT_GRID))
 	{
 		dist = 0;
 		for (i = 0; i < grids; i++)
@@ -4491,7 +4294,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 	}
 
 	update_creature(caster_ptr);
-	if (flg & (PROJECT_ITEM))
+	if (flag & (PROJECT_ITEM))
 	{
 		dist = 0;
 		for (i = 0; i < grids; i++)
@@ -4512,7 +4315,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		}
 	}
 
-	if (flg & (PROJECT_KILL))
+	if (flag & (PROJECT_KILL))
 	{
 		project_m_n = 0;
 		project_m_x = 0;
@@ -4529,8 +4332,8 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 			{
 				monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[caster_ptr->current_floor_ptr->grid_array[y][x].m_idx];
 				monster_race *ref_ptr = &r_info[m_ptr->r_idx];
-				if ((flg & PROJECT_REFLECTABLE) && caster_ptr->current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) &&
-					((caster_ptr->current_floor_ptr->grid_array[y][x].m_idx != caster_ptr->riding) || !(flg & PROJECT_PLAYER)) &&
+				if ((flag & PROJECT_REFLECTABLE) && caster_ptr->current_floor_ptr->grid_array[y][x].m_idx && (ref_ptr->flags2 & RF2_REFLECTING) &&
+					((caster_ptr->current_floor_ptr->grid_array[y][x].m_idx != caster_ptr->riding) || !(flag & PROJECT_PLAYER)) &&
 					(!who || dist_hack > 1) && !one_in_(10))
 				{
 					POSITION t_y, t_x;
@@ -4561,10 +4364,10 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 					if (is_original_ap_and_seen(caster_ptr, m_ptr)) ref_ptr->r_flags2 |= RF2_REFLECTING;
 
-					if (player_bold(caster_ptr, y, x) || one_in_(2)) flg &= ~(PROJECT_PLAYER);
-					else flg |= PROJECT_PLAYER;
+					if (player_bold(caster_ptr, y, x) || one_in_(2)) flag &= ~(PROJECT_PLAYER);
+					else flag |= PROJECT_PLAYER;
 
-					project(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].m_idx, 0, t_y, t_x, dam, typ, flg, monspell);
+					project(caster_ptr, caster_ptr->current_floor_ptr->grid_array[y][x].m_idx, 0, t_y, t_x, dam, typ, flag, monspell);
 					continue;
 				}
 			}
@@ -4581,9 +4384,9 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 			if (caster_ptr->riding && player_bold(caster_ptr, y, x))
 			{
-				if (flg & PROJECT_PLAYER)
+				if (flag & PROJECT_PLAYER)
 				{
-					if (flg & (PROJECT_BEAM | PROJECT_REFLECTABLE | PROJECT_AIMED))
+					if (flag & (PROJECT_BEAM | PROJECT_REFLECTABLE | PROJECT_AIMED))
 					{
 						/*
 						 * A beam or bolt is well aimed
@@ -4606,7 +4409,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				 * This grid is the original target.
 				 * Or aimed on your horse.
 				 */
-				else if (((y == y2) && (x == x2)) || (flg & PROJECT_AIMED))
+				else if (((y == y2) && (x == x2)) || (flag & PROJECT_AIMED))
 				{
 					/* Hit the mount with full damage */
 				}
@@ -4621,7 +4424,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				  * A beam or bolt will hit either
 				  * player or mount.  Choose randomly.
 				  */
-				else if (flg & (PROJECT_BEAM | PROJECT_REFLECTABLE))
+				else if (flag & (PROJECT_BEAM | PROJECT_REFLECTABLE))
 				{
 					if (one_in_(2))
 					{
@@ -4629,7 +4432,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 					}
 					else
 					{
-						flg |= PROJECT_PLAYER;
+						flag |= PROJECT_PLAYER;
 						continue;
 					}
 				}
@@ -4645,7 +4448,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				}
 			}
 
-			if (project_m(caster_ptr, who, effective_dist, y, x, dam, typ, flg, see_s_msg)) notice = TRUE;
+			if (project_m(caster_ptr, who, effective_dist, y, x, dam, typ, flag, see_s_msg)) notice = TRUE;
 		}
 
 		/* Player affected one monster (without "jumping") */
@@ -4666,7 +4469,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 		}
 	}
 
-	if (flg & (PROJECT_KILL))
+	if (flag & (PROJECT_KILL))
 	{
 		dist = 0;
 		for (i = 0; i < grids; i++)
@@ -4690,7 +4493,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
 			if (caster_ptr->riding)
 			{
-				if (flg & PROJECT_PLAYER)
+				if (flag & PROJECT_PLAYER)
 				{
 					/* Hit the player with full damage */
 				}
@@ -4706,7 +4509,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				 *
 				 * Or aimed on your horse.
 				 */
-				else if (flg & (PROJECT_BEAM | PROJECT_REFLECTABLE | PROJECT_AIMED))
+				else if (flag & (PROJECT_BEAM | PROJECT_REFLECTABLE | PROJECT_AIMED))
 				{
 					/*
 					 * A beam or bolt is well aimed
@@ -4725,7 +4528,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				}
 			}
 
-			if (project_p(who, caster_ptr, who_name, effective_dist, y, x, dam, typ, flg, monspell)) notice = TRUE;
+			if (project_p(who, caster_ptr, who_name, effective_dist, y, x, dam, typ, flag, monspell)) notice = TRUE;
 		}
 	}
 
