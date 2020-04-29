@@ -37,6 +37,6 @@ typedef struct
 	EFFECT_ID effect_type;
 	BIT_FLAGS flag;
 	bool see_s_msg;
-} effect_monster;
+} effect_monster_type;
 
-void initialize_effect_monster(player_type *caster_ptr, effect_monster *effect_monster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg);
+void initialize_effect_monster(player_type *caster_ptr, effect_monster_type *em_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg);
