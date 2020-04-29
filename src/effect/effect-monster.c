@@ -2376,6 +2376,31 @@ static void process_monster_polymorph(player_type *caster_ptr, effect_monster_ty
 
 
 /*!
+ * @brief モンスターをテレポートさせる
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void process_monster_teleport(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->do_dist == 0) return;
+
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	em_ptr->note = _("が消え去った！", " disappears!");
+
+	if (!em_ptr->who) chg_virtue(caster_ptr, V_VALOUR, -1);
+
+	teleport_away(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_dist,
+		(!em_ptr->who ? TELEPORT_DEC_VALOUR : 0L) | TELEPORT_PASSIVE);
+
+	em_ptr->y = em_ptr->m_ptr->fy;
+	em_ptr->x = em_ptr->m_ptr->fx;
+	em_ptr->g_ptr = &caster_ptr->current_floor_ptr->grid_array[em_ptr->y][em_ptr->x];
+}
+
+
+/*!
  * @brief 汎用的なビーム/ボルト/ボール系によるモンスターへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
@@ -2437,23 +2462,7 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 		pile_monster_conf(caster_ptr, em_ptr, &tmp_damage);
 		process_monster_weakening(caster_ptr, em_ptr, &tmp_damage);
 		process_monster_polymorph(caster_ptr, em_ptr);
-
-		if (em_ptr->do_dist)
-		{
-			if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-			em_ptr->note = _("が消え去った！", " disappears!");
-
-			if (!em_ptr->who) chg_virtue(caster_ptr, V_VALOUR, -1);
-
-			teleport_away(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->do_dist,
-				(!em_ptr->who ? TELEPORT_DEC_VALOUR : 0L) | TELEPORT_PASSIVE);
-
-			em_ptr->y = em_ptr->m_ptr->fy;
-			em_ptr->x = em_ptr->m_ptr->fx;
-			em_ptr->g_ptr = &caster_ptr->current_floor_ptr->grid_array[em_ptr->y][em_ptr->x];
-		}
-
+		process_monster_teleport(caster_ptr, em_ptr);
 		if (em_ptr->do_fear)
 		{
 			(void)set_monster_monfear(caster_ptr, em_ptr->g_ptr->m_idx, MON_MONFEAR(em_ptr->m_ptr) + em_ptr->do_fear);
