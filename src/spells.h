@@ -1,14 +1,18 @@
 ﻿#pragma once
 #include "realm/realm.h"
 
-#define SPELL_NAME   0
-#define SPELL_DESC   1
-#define SPELL_INFO   2
-#define SPELL_CAST   3
-#define SPELL_FAIL   4
-#define SPELL_STOP   5
-#define SPELL_CONT   6
-extern concptr exe_spell(player_type *caster_ptr, REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode);
+typedef enum
+{
+	SPELL_NAME = 0,
+	SPELL_DESC = 1,
+	SPELL_INFO = 2,
+	SPELL_CAST = 3,
+	SPELL_FAIL = 4,
+	SPELL_STOP = 5,
+	SPELL_CONT = 6
+} spell_type;
+
+concptr exe_spell(player_type *caster_ptr, REALM_IDX realm, SPELL_IDX spell, spell_type mode);
 
 #define DETECT_RAD_DEFAULT 30
 #define DETECT_RAD_MAP     30

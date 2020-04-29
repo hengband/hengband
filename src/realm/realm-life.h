@@ -1,1 +1,3 @@
-﻿extern concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode);
+﻿#pragma once
+
+concptr do_life_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode);

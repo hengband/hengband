@@ -75,7 +75,7 @@
  * @param mode 求める処理
  * @return 各領域魔法に各種テキストを求めた場合は文字列参照ポインタ、そうでない場合はNULLポインタを返す。
  */
-concptr exe_spell(player_type *caster_ptr, REALM_IDX realm, SPELL_IDX spell, BIT_FLAGS mode)
+concptr exe_spell(player_type *caster_ptr, REALM_IDX realm, SPELL_IDX spell, spell_type mode)
 {
 	switch (realm)
 	{
@@ -96,6 +96,7 @@ concptr exe_spell(player_type *caster_ptr, REALM_IDX realm, SPELL_IDX spell, BIT
 
 	return NULL;
 }
+
 
 /*!
  * @brief 配置した鏡リストの次を取得する /

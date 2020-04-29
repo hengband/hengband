@@ -1,4 +1,6 @@
-﻿/*!
+﻿#pragma once
+
+/*!
  * @file realm/realm-hex.h
  */
 
@@ -56,5 +58,5 @@ extern void revenge_store(player_type *caster_ptr, HIT_POINT dam);
 extern bool teleport_barrier(player_type *caster_ptr, MONSTER_IDX m_idx);
 extern bool magic_barrier(player_type *target_ptr, MONSTER_IDX m_idx);
 extern bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx);
-extern concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode);
+concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode);
 extern bool hex_spelling(player_type *caster_type, int hex);

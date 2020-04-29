@@ -42,7 +42,7 @@ static void start_singing(player_type *caster_ptr, SPELL_IDX spell, MAGIC_NUM1 s
 * @param mode 処理内容 (SPELL_NAME / SPELL_DESC / SPELL_INFO / SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP)
 * @return SPELL_NAME / SPELL_DESC / SPELL_INFO 時には文字列ポインタを返す。SPELL_CAST / SPELL_FAIL / SPELL_CONT / SPELL_STOP 時はNULL文字列を返す。
 */
-concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
+concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 {
 	bool name = (mode == SPELL_NAME) ? TRUE : FALSE;
 	bool desc = (mode == SPELL_DESC) ? TRUE : FALSE;

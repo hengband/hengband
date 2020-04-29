@@ -1,4 +1,5 @@
-﻿
+﻿#pragma once
+
 /*
  * Music songs
  */
@@ -29,4 +30,4 @@
 
 #define MUSIC_DETECT            101
 
-extern concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode);
+extern concptr do_music_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode);

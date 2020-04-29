@@ -1,3 +1,3 @@
 ﻿#pragma once
 
-extern concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode);
+concptr do_trump_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode);
