@@ -2152,16 +2152,16 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 
 	if (effect_monster_ptr->skipped) return FALSE;
 
-	if (effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE)) effect_monster_ptr->do_poly = FALSE;
-	if (effect_monster_ptr->r_ptr->flags1 & RF1_QUESTOR) effect_monster_ptr->do_poly = FALSE;
-	if (caster_ptr->riding && (effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding))
+	if ((effect_monster_ptr->r_ptr->flags1 & RF1_UNIQUE) || 
+		(effect_monster_ptr->r_ptr->flags1 & RF1_QUESTOR) || 
+		(caster_ptr->riding && (effect_monster_ptr->g_ptr->m_idx == caster_ptr->riding)))
 		effect_monster_ptr->do_poly = FALSE;
 
-	if (((effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (effect_monster_ptr->r_ptr->flags7 & RF7_NAZGUL)) && !caster_ptr->phase_out)
-	{
-		if (effect_monster_ptr->who && (effect_monster_ptr->dam > effect_monster_ptr->m_ptr->hp))
+	if (((effect_monster_ptr->r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (effect_monster_ptr->r_ptr->flags7 & RF7_NAZGUL)) &&
+		!caster_ptr->phase_out &&
+		effect_monster_ptr->who &&
+		(effect_monster_ptr->dam > effect_monster_ptr->m_ptr->hp))
 			effect_monster_ptr->dam = effect_monster_ptr->m_ptr->hp;
-	}
 
 	if (!effect_monster_ptr->who && effect_monster_ptr->slept)
 	{
