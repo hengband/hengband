@@ -6,6 +6,7 @@
 #include "trap.h"
 #include "player-effects.h"
 #include "world.h"
+#include "spell/spells-type.h"
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系による地形効果処理 / We are called from "project()" to "damage" terrain features

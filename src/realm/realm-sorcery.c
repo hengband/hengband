@@ -5,7 +5,7 @@
 #include "selfinfo.h"
 #include "avatar.h"
 
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "spells-status.h"
 #include "spells-floor.h"
 #include "player-effects.h"

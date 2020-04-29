@@ -8,6 +8,7 @@
 #include "floor.h"
 #include "targeting.h"
 #include "realm/realm-life.h"
+#include "spell/spells-type.h"
 
 /*!
 * @brief 生命領域魔法の各処理を行う

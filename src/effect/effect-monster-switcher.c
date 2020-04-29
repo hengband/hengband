@@ -19,6 +19,7 @@
 #include "monsterrace-hook.h"
 #include "combat/melee.h"
 #include "cmd/cmd-pet.h" // 暫定、後で消すかも.
+#include "spell/spells-type.h"
 
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする

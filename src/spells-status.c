@@ -9,7 +9,7 @@
 #include "player-status.h"
 #include "player-class.h"
 #include "spells-status.h"
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "monster.h"
 #include "cmd-spell.h"
 #include "player-effects.h"

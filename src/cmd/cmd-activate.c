@@ -31,6 +31,7 @@
 #include "targeting.h"
 #include "world.h"
 #include "effect/spells-effect-util.h"
+#include "spell/spells-type.h"
 
 /*!
  * @brief 装備耐性に準じたブレス効果の選択テーブル /

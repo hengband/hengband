@@ -17,7 +17,7 @@
 #include "feature.h"
 #include "player-status.h"
 #include "grid.h"
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "floor.h"
 #include "floor-save.h"
 #include "init.h"

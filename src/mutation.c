@@ -37,6 +37,7 @@
 #include "targeting.h"
 #include "player-race.h"
 #include "effect/spells-effect-util.h"
+#include "spell/spells-type.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える

@@ -21,6 +21,7 @@
 #include "monster-spell.h"
 #include "mutation.h"
 #include "object-curse.h"
+#include "spell/spells-type.h"
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系によるプレイヤーへの効果処理 / Helper function for "project()" below.

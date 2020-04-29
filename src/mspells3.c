@@ -24,7 +24,7 @@
 #include "player-status.h"
 #include "monster-spell.h"
 #include "monster-status.h"
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "cmd-basic.h"
 #include "player-effects.h"
 #include "targeting.h"

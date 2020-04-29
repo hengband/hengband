@@ -41,6 +41,7 @@
 #include "targeting.h"
 #include "realm/realm-song.h"
 #include "effect/spells-effect-util.h"
+#include "spell/spells-type.h"
 
 /*! 特殊技能の一覧テーブル */
 mind_power const mind_powers[5] =

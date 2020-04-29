@@ -2,7 +2,6 @@
 #include "util.h"
 
 #include "gameterm.h"
-#include "spells.h"
 #include "core.h"
 
 

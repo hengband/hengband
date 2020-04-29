@@ -33,6 +33,7 @@
 #include "floor.h"
 #include "dungeon.h"
 #include "spells.h"
+#include "spell/spells-type.h"
 #include "files.h"
 #include "player-move.h"
 #include "player-effects.h"

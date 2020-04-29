@@ -4,7 +4,7 @@
 #include "world.h"
 #include "cmd-spell.h"
 #include "floor.h"
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "spells-object.h"
 #include "spells-summon.h"
 #include "spells-status.h"

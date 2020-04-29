@@ -1,7 +1,7 @@
 ﻿#include "angband.h"
-#include "spells.h"
 #include "object/object-kind.h"
 #include "snipe.h"
+#include "spell/spells-type.h"
 
 /*!
 * @brief アイテムが酸で破損するかどうかを判定する

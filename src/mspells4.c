@@ -21,7 +21,7 @@
 #include "player-move.h"
 #include "monster-spell.h"
 #include "monster-status.h"
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "melee.h"
 #include "player-effects.h"
 #include "world.h"

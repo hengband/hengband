@@ -22,7 +22,6 @@
 #include "rumor.h"
 #include "realm/realm-hex.h"
 
-#include "spells.h"
 #include "spells-object.h"
 #include "spells-floor.h"
 #include "spells-summon.h"
@@ -34,6 +33,7 @@
 #include "floor.h"
 #include "object/object-kind.h"
 #include "view/display-main-window.h"
+#include "spell/spells-type.h"
 
 /*!
  * @brief 巻物を読むコマンドのサブルーチン

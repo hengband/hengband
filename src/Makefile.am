@@ -175,7 +175,7 @@ hengband_SOURCES = \
 	\
 	spell/technic-info-table.c spell/technic-info-table.h \
 	spell/spells-execution.c spell/spells-execution.h \
-	spell/spells-util.h \
+	spell/spells-util.h spell/spells-type.h \
 	spells.h \
 	spells1.c spells2.c spells3.c \
 	spells-diceroll.c spells-diceroll.h \

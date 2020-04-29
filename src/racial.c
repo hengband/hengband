@@ -36,6 +36,7 @@
 #include "view/display-main-window.h"
 #include "player-class.h"
 #include "effect/spells-effect-util.h"
+#include "spell/spells-type.h"
 
 /*!
  * @brief 修行僧の構え設定処理

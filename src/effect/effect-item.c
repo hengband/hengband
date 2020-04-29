@@ -4,6 +4,7 @@
 #include "object-hook.h"
 #include "object-broken.h"
 #include "autopick/autopick.h"
+#include "spell/spells-type.h"
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系によるアイテムオブジェクトへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.

@@ -168,7 +168,7 @@
 #include "monster-status.h"
 #include "object-hook.h"
 #include "object-flavor.h"
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "cmd-basic.h"
 #include "view/display-main-window.h"
 #include "world.h"

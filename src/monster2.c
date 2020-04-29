@@ -24,7 +24,7 @@
 #include "monsterrace-hook.h"
 #include "monster-status.h"
 #include "monster.h"
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "spells-summon.h"
 #include "quest.h"
 #include "grid.h"

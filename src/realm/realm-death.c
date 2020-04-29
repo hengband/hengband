@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "cmd-spell.h"
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "spells-object.h"

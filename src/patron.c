@@ -18,7 +18,7 @@
 #include "player-class.h"
 #include "player-damage.h"
 
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "spells-summon.h"
 #include "spells-object.h"
 #include "spells-status.h"

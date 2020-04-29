@@ -17,7 +17,6 @@
 
 #include "floor.h"
 #include "grid.h"
-#include "spells.h"
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "monster-status.h"
@@ -29,6 +28,7 @@
 #include "cmd-basic.h"
 #include "targeting.h"
 #include "view/display-main-window.h"
+#include "spell/spells-type.h"
 
 static int damage;
 
