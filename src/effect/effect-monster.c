@@ -2463,6 +2463,32 @@ static void update_phase_out_stat(player_type *caster_ptr, effect_monster_type *
 
 
 /*!
+ * @brief 魔法効果がペットに及んだ時の処理
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr モンスター効果構造体への参照ポインタ
+ * @return なし
+ */
+static void process_spell_result_pet(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if ((em_ptr->dam <= 0) || is_pet(em_ptr->m_ptr) || is_friendly(em_ptr->m_ptr))
+		return;
+
+	if (em_ptr->who == 0)
+	{
+		if (!(em_ptr->flag & PROJECT_NO_HANGEKI))
+			set_target(em_ptr->m_ptr, monster_target_y, monster_target_x);
+
+		return;
+	}
+
+	if ((em_ptr->who > 0) && 
+		is_pet(em_ptr->m_caster_ptr) && 
+		!player_bold(caster_ptr, em_ptr->m_ptr->target_y, em_ptr->m_ptr->target_x))
+		set_target(em_ptr->m_ptr, em_ptr->m_caster_ptr->fy, em_ptr->m_caster_ptr->fx);
+}
+
+
+/*!
  * @brief 汎用的なビーム/ボルト/ボール系によるモンスターへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source" monster (zero for "player")
@@ -2507,31 +2533,19 @@ bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITI
 	if ((em_ptr->effect_type == GF_BLOOD_CURSE) && one_in_(4))
 		blood_curse_to_enemy(caster_ptr, em_ptr->who);
 
-	update_phase_out_stat();
+	update_phase_out_stat(caster_ptr, em_ptr);
 	if (em_ptr->m_ptr->r_idx) update_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE);
 
 	lite_spot(caster_ptr, em_ptr->y, em_ptr->x);
 	if ((caster_ptr->monster_race_idx == em_ptr->m_ptr->r_idx) && (em_ptr->seen || !em_ptr->m_ptr->r_idx))
 		caster_ptr->window |= (PW_MONSTER);
 
-	if ((em_ptr->dam > 0) && !is_pet(em_ptr->m_ptr) && !is_friendly(em_ptr->m_ptr))
-	{
-		if (!em_ptr->who)
-		{
-			if (!(em_ptr->flag & PROJECT_NO_HANGEKI))
-			{
-				set_target(em_ptr->m_ptr, monster_target_y, monster_target_x);
-			}
-		}
-		else if ((em_ptr->who > 0) && is_pet(em_ptr->m_caster_ptr) && !player_bold(caster_ptr, em_ptr->m_ptr->target_y, em_ptr->m_ptr->target_x))
-		{
-			set_target(em_ptr->m_ptr, em_ptr->m_caster_ptr->fy, em_ptr->m_caster_ptr->fx);
-		}
-	}
-
+	process_spell_result_pet(caster_ptr, em_ptr);
 	if (caster_ptr->riding && (caster_ptr->riding == em_ptr->g_ptr->m_idx) && (em_ptr->dam > 0))
 	{
-		if (em_ptr->m_ptr->hp > em_ptr->m_ptr->maxhp / 3) em_ptr->dam = (em_ptr->dam + 1) / 2;
+		if (em_ptr->m_ptr->hp > (em_ptr->m_ptr->maxhp / 3))
+			em_ptr->dam = (em_ptr->dam + 1) / 2;
+
 		rakubadam_m = (em_ptr->dam > 200) ? 200 : em_ptr->dam;
 	}
 
