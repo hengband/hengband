@@ -144,7 +144,7 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
-#include "realm-song.h"
+#include "realm/realm-song.h"
 #include "autopick/autopick.h"
 #include "dungeon.h"
 #include "floor.h"

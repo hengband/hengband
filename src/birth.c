@@ -55,7 +55,7 @@
 #include "monsterrace.h"
 #include "autopick/autopick.h"
 #include "save.h"
-#include "realm.h"
+#include "realm/realm.h"
 #include "japanese.h"
 #include "view/display-main-window.h" // 暫定。後で消す.
 

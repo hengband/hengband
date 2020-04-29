@@ -15,7 +15,7 @@
 #include "player-effects.h"
 #include "object/object-kind.h"
 #include "targeting.h"
-#include "realm-song.h"
+#include "realm/realm-song.h"
 #include "view/display-main-window.h"
 
 /*!

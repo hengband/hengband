@@ -30,11 +30,11 @@
 #include "player-effects.h"
 #include "player-skill.h"
 #include "player-inventory.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "grid.h"
 #include "monsterrace.h"
 #include "targeting.h"
-#include "realm-song.h"
+#include "realm/realm-song.h"
 #include "view/display-main-window.h"
 #include "world.h"
 

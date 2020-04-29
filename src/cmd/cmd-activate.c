@@ -21,7 +21,7 @@
 #include "spells-object.h"
 #include "spells-floor.h"
 #include "player-effects.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "player-damage.h"
 #include "player-inventory.h"
 #include "monster-status.h"

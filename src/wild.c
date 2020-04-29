@@ -19,7 +19,7 @@
 #include "wild.h"
 #include "world.h"
 #include "monster.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "player-status.h"
 #include "player-effects.h"
 #include "grid.h"
@@ -30,7 +30,7 @@
 #include "files.h"
 #include "feature.h"
 #include "floor-town.h"
-#include "realm.h"
+#include "realm/realm.h"
 
 #include "view/display-main-window.h"
 

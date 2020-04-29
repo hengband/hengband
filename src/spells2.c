@@ -37,7 +37,7 @@
 #include "spells-status.h"
 #include "spells-floor.h"
 #include "spells-diceroll.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "autopick/autopick.h"
 #include "object-flavor.h"
 #include "object-hook.h"
@@ -57,7 +57,7 @@
 #include "object/object-kind.h"
 #include "monsterrace.h"
 #include "targeting.h"
-#include "realm-song.h"
+#include "realm/realm-song.h"
 #include "english.h"
 
  /*!

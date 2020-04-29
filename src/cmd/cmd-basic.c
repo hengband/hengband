@@ -29,7 +29,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "player-status.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "geometry.h"
 #include "wild.h"
 #include "grid.h"

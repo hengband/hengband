@@ -55,7 +55,7 @@
 #include "object-ego.h"
 #include "monsterrace.h"
 #include "floor-town.h"
-#include "realm.h"
+#include "realm/realm.h"
 
 #include "trap.h"
 #include "artifact.h"

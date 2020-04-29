@@ -20,7 +20,7 @@
 #include "player-effects.h"
 #include "player-inventory.h"
 #include "rumor.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 
 #include "spells.h"
 #include "spells-object.h"

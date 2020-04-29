@@ -11,7 +11,7 @@
 #include "autopick/autopick-pref-processor.h"
 #include "cmd/cmd-process-screen.h"
 #include "market/arena-info-table.h"
-#include "realm-song.h"
+#include "realm/realm-song.h"
 #include "floor.h"
 #include "artifact.h"
 #include "object-flavor.h"

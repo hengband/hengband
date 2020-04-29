@@ -22,7 +22,7 @@
 #include "player-damage.h"
 #include "player/mimic-info-table.h"
 #include "player-inventory.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "spells-floor.h"
 #include "object-broken.h"
 #include "cmd-basic.h"

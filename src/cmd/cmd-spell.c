@@ -18,7 +18,7 @@
 #include "spell/spells-common.h"
 #include "spells.h"
 #include "spells-summon.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "mind.h"
 #include "avatar.h"
 #include "player-damage.h"

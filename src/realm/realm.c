@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "realm.h"
+#include "realm/realm.h"
 
 #ifdef JP
 /*!

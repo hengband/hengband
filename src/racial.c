@@ -32,7 +32,7 @@
 #include "spells-floor.h"
 #include "spells.h"
 #include "cmd-spell.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "targeting.h"
 #include "view/display-main-window.h"
 #include "player-class.h"

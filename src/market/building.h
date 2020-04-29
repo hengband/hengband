@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "realm.h"
+#include "realm/realm.h"
 #include "player-race.h"
 #include "player/race-info-table.h"
 #include "player-class.h"

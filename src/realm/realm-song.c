@@ -1,7 +1,7 @@
 ﻿#include "angband.h"
 #include "util.h"
 
-#include "realm-song.h"
+#include "realm/realm-song.h"
 
 #include "cmd-spell.h"
 #include "spells.h"

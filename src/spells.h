@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "realm.h"
+#include "realm/realm.h"
 
 #define SPELL_NAME   0
 #define SPELL_DESC   1

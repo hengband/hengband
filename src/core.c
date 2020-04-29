@@ -87,7 +87,7 @@
 #include "player-damage.h"
 #include "player-effects.h"
 #include "cmd-spell.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "object/object-kind.h"
 #include "object-hook.h"
 #include "wild.h"
@@ -110,8 +110,8 @@
 #include "autopick/autopick-pref-processor.h"
 #include "autopick/autopick-reader-writer.h"
 #include "save.h"
-#include "realm.h"
-#include "realm-song.h"
+#include "realm/realm.h"
+#include "realm/realm-song.h"
 #include "targeting.h"
 
  /*!

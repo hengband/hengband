@@ -35,8 +35,8 @@
 #include "view/display-main-window.h"
 
 #include "spells.h"
-#include "realm-hex.h"
-#include "realm-song.h"
+#include "realm/realm-hex.h"
+#include "realm/realm-song.h"
 
 #include "object-flavor.h"
 
