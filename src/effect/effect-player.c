@@ -23,6 +23,46 @@
 #include "object-curse.h"
 #include "spell/spells-type.h"
 
+typedef struct
+{
+	DEPTH rlev; // モンスターのレベル (但し0のモンスターは1になる).
+	monster_type *m_ptr;
+	char killer[80];
+	GAME_TEXT m_name[MAX_NLEN];
+	int get_damage;
+
+	MONSTER_IDX who;
+	POSITION y;
+	POSITION x;
+	HIT_POINT dam;
+	int monspell;
+} effect_player_type;
+
+
+/*!
+ * @brief effect_player_type構造体を初期化する
+ * @param ep_ptr 初期化前の構造体
+ * @param who 魔法を唱えたモンスター (0ならプレーヤー自身)
+ * @param y 目標Y座標
+ * @param x 目標X座標
+ * @param dam 基本威力
+ * @param monspell 
+ * @return 初期化後の構造体ポインタ
+ */
+static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, MONSTER_IDX who, POSITION y, POSITION x, HIT_POINT dam, int monspell)
+{
+	ep_ptr->rlev = 0;
+	ep_ptr->m_ptr = NULL;
+	ep_ptr->get_damage = 0;
+	ep_ptr->who = who;
+	ep_ptr->y = y;
+	ep_ptr->x = x;
+	ep_ptr->dam = dam;
+	ep_ptr->monspell = monspell;
+	return ep_ptr;
+}
+
+
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系によるプレイヤーへの効果処理 / Helper function for "project()" below.
  * @param who 魔法を発動したモンスター(0ならばプレイヤー、負値ならば自然発生) / Index of "source" monster (zero for "player")
@@ -38,6 +78,8 @@
  */
 bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flag, int monspell)
 {
+	effect_player_type tmp_effect;
+	effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, y, x, dam, monspell);
 	DEPTH rlev = 0;
 	monster_type *m_ptr = NULL;
 	GAME_TEXT m_name[MAX_NLEN];
@@ -98,7 +140,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	if (who > 0)
 	{
 		m_ptr = &target_ptr->current_floor_ptr->m_list[who];
-		rlev = (((&r_info[m_ptr->r_idx])->level >= 1) ? (&r_info[m_ptr->r_idx])->level : 1);
+		rlev = (&r_info[m_ptr->r_idx])->level >= 1 ? (&r_info[m_ptr->r_idx])->level : 1;
 		monster_desc(target_ptr, m_name, m_ptr, 0);
 		strcpy(killer, who_name);
 	}
