@@ -154,6 +154,41 @@ static ep_check_result check_continue_player_effect(player_type *target_ptr, eff
 
 
 /*!
+ * @brief 魔法を発したモンスター名を記述する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param ep_ptr プレーヤー効果構造体への参照ポインタ
+ * @param who_name モンスター名
+ * @return なし
+ */
+static void describe_effect_source(player_type *target_ptr, effect_player_type *ep_ptr, concptr who_name)
+{
+	if (ep_ptr->who > 0)
+	{
+		ep_ptr->m_ptr = &target_ptr->current_floor_ptr->m_list[ep_ptr->who];
+		ep_ptr->rlev = (&r_info[ep_ptr->m_ptr->r_idx])->level >= 1 ? (&r_info[ep_ptr->m_ptr->r_idx])->level : 1;
+		monster_desc(target_ptr, ep_ptr->m_name, ep_ptr->m_ptr, 0);
+		strcpy(ep_ptr->killer, who_name);
+		return;
+	}
+
+	switch (ep_ptr->who)
+	{
+	case PROJECT_WHO_UNCTRL_POWER:
+		strcpy(ep_ptr->killer, _("制御できない力の氾流", "uncontrollable power storm"));
+		break;
+	case PROJECT_WHO_GLASS_SHARDS:
+		strcpy(ep_ptr->killer, _("ガラスの破片", "shards of glass"));
+		break;
+	default:
+		strcpy(ep_ptr->killer, _("罠", "a trap"));
+		break;
+	}
+
+	strcpy(ep_ptr->m_name, ep_ptr->killer);
+}
+
+
+/*!
  * @brief 汎用的なビーム/ボルト/ボール系によるプレイヤーへの効果処理 / Helper function for "project()" below.
  * @param who 魔法を発動したモンスター(0ならばプレイヤー、負値ならば自然発生) / Index of "source" monster (zero for "player")
  * @param who_name 効果を起こしたモンスターの名前
@@ -169,37 +204,14 @@ static ep_check_result check_continue_player_effect(player_type *target_ptr, eff
 bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, int monspell)
 {
 	effect_player_type tmp_effect;
-	effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, effect_type, monspell);
+	effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, effect_type, flag, monspell);
 	ep_check_result check_result = check_continue_player_effect(target_ptr, ep_ptr, y, x);
 	if (check_result != EP_CHECK_CONTINUE) return check_result;
 
 	if (ep_ptr->dam > 1600) ep_ptr->dam = 1600;
 
 	ep_ptr->dam = (ep_ptr->dam + r) / (r + 1);
-	if (ep_ptr->who > 0)
-	{
-		ep_ptr->m_ptr = &target_ptr->current_floor_ptr->m_list[ep_ptr->who];
-		ep_ptr->rlev = (&r_info[ep_ptr->m_ptr->r_idx])->level >= 1 ? (&r_info[ep_ptr->m_ptr->r_idx])->level : 1;
-		monster_desc(target_ptr, ep_ptr->m_name, ep_ptr->m_ptr, 0);
-		strcpy(ep_ptr->killer, who_name);
-	}
-	else
-	{
-		switch (ep_ptr->who)
-		{
-		case PROJECT_WHO_UNCTRL_POWER:
-			strcpy(ep_ptr->killer, _("制御できない力の氾流", "uncontrollable power storm"));
-			break;
-		case PROJECT_WHO_GLASS_SHARDS:
-			strcpy(ep_ptr->killer, _("ガラスの破片", "shards of glass"));
-			break;
-		default:
-			strcpy(ep_ptr->killer, _("罠", "a trap"));
-			break;
-		}
-
-		strcpy(ep_ptr->m_name, ep_ptr->killer);
-	}
+	describe_effect_source(target_ptr, ep_ptr, who_name);
 
 	switch (effect_type)
 	{
