@@ -32,8 +32,6 @@ typedef struct
 	int get_damage;
 
 	MONSTER_IDX who;
-	POSITION y;
-	POSITION x;
 	HIT_POINT dam;
 	int monspell;
 } effect_player_type;
@@ -43,20 +41,16 @@ typedef struct
  * @brief effect_player_type構造体を初期化する
  * @param ep_ptr 初期化前の構造体
  * @param who 魔法を唱えたモンスター (0ならプレーヤー自身)
- * @param y 目標Y座標
- * @param x 目標X座標
  * @param dam 基本威力
  * @param monspell 
  * @return 初期化後の構造体ポインタ
  */
-static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, MONSTER_IDX who, POSITION y, POSITION x, HIT_POINT dam, int monspell)
+static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, MONSTER_IDX who, HIT_POINT dam, int monspell)
 {
 	ep_ptr->rlev = 0;
 	ep_ptr->m_ptr = NULL;
 	ep_ptr->get_damage = 0;
 	ep_ptr->who = who;
-	ep_ptr->y = y;
-	ep_ptr->x = x;
 	ep_ptr->dam = dam;
 	ep_ptr->monspell = monspell;
 	return ep_ptr;
@@ -79,21 +73,16 @@ static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, 
 bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flag, int monspell)
 {
 	effect_player_type tmp_effect;
-	effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, y, x, dam, monspell);
-	DEPTH rlev = 0;
-	monster_type *m_ptr = NULL;
-	GAME_TEXT m_name[MAX_NLEN];
-	char killer[80];
-	int get_damage = 0;
+	effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, monspell);
 	if (!player_bold(target_ptr, y, x)) return FALSE;
 
-	if ((target_ptr->special_defense & NINJA_KAWARIMI) && dam && (randint0(55) < (target_ptr->lev * 3 / 5 + 20)) && who && (who != target_ptr->riding))
+	if ((target_ptr->special_defense & NINJA_KAWARIMI) && ep_ptr->dam && (randint0(55) < (target_ptr->lev * 3 / 5 + 20)) && ep_ptr->who && (ep_ptr->who != target_ptr->riding))
 	{
 		if (kawarimi(target_ptr, TRUE)) return FALSE;
 	}
 
-	if (!who) return FALSE;
-	if (who == target_ptr->riding) return FALSE;
+	if (!ep_ptr->who) return FALSE;
+	if (ep_ptr->who == target_ptr->riding) return FALSE;
 
 	if ((target_ptr->reflect || ((target_ptr->special_defense & KATA_FUUJIN) && !target_ptr->blind)) && (flag & PROJECT_REFLECTABLE) && !one_in_(10))
 	{
@@ -108,19 +97,19 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		else
 			msg_print(_("攻撃が跳ね返った！", "The attack bounces!"));
 
-		if (who > 0)
+		if (ep_ptr->who > 0)
 		{
 			do
 			{
-				t_y = target_ptr->current_floor_ptr->m_list[who].fy - 1 + randint1(3);
-				t_x = target_ptr->current_floor_ptr->m_list[who].fx - 1 + randint1(3);
+				t_y = target_ptr->current_floor_ptr->m_list[ep_ptr->who].fy - 1 + randint1(3);
+				t_x = target_ptr->current_floor_ptr->m_list[ep_ptr->who].fx - 1 + randint1(3);
 				max_attempts--;
 			} while (max_attempts && in_bounds2u(target_ptr->current_floor_ptr, t_y, t_x) && !projectable(target_ptr, target_ptr->y, target_ptr->x, t_y, t_x));
 
 			if (max_attempts < 1)
 			{
-				t_y = target_ptr->current_floor_ptr->m_list[who].fy;
-				t_x = target_ptr->current_floor_ptr->m_list[who].fx;
+				t_y = target_ptr->current_floor_ptr->m_list[ep_ptr->who].fy;
+				t_x = target_ptr->current_floor_ptr->m_list[ep_ptr->who].fx;
 			}
 		}
 		else
@@ -129,38 +118,38 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 			t_x = target_ptr->x - 1 + randint1(3);
 		}
 
-		project(target_ptr, 0, 0, t_y, t_x, dam, typ, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), monspell);
+		project(target_ptr, 0, 0, t_y, t_x, ep_ptr->dam, typ, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), ep_ptr->monspell);
 		disturb(target_ptr, TRUE, TRUE);
 		return TRUE;
 	}
 
-	if (dam > 1600) dam = 1600;
+	if (ep_ptr->dam > 1600) ep_ptr->dam = 1600;
 
-	dam = (dam + r) / (r + 1);
-	if (who > 0)
+	ep_ptr->dam = (ep_ptr->dam + r) / (r + 1);
+	if (ep_ptr->who > 0)
 	{
-		m_ptr = &target_ptr->current_floor_ptr->m_list[who];
-		rlev = (&r_info[m_ptr->r_idx])->level >= 1 ? (&r_info[m_ptr->r_idx])->level : 1;
-		monster_desc(target_ptr, m_name, m_ptr, 0);
-		strcpy(killer, who_name);
+		ep_ptr->m_ptr = &target_ptr->current_floor_ptr->m_list[ep_ptr->who];
+		ep_ptr->rlev = (&r_info[ep_ptr->m_ptr->r_idx])->level >= 1 ? (&r_info[ep_ptr->m_ptr->r_idx])->level : 1;
+		monster_desc(target_ptr, ep_ptr->m_name, ep_ptr->m_ptr, 0);
+		strcpy(ep_ptr->killer, who_name);
 	}
 	else
 	{
-		switch (who)
+		switch (ep_ptr->who)
 		{
 		case PROJECT_WHO_UNCTRL_POWER:
-			strcpy(killer, _("制御できない力の氾流", "uncontrollable power storm"));
+			strcpy(ep_ptr->killer, _("制御できない力の氾流", "uncontrollable power storm"));
 			break;
 
 		case PROJECT_WHO_GLASS_SHARDS:
-			strcpy(killer, _("ガラスの破片", "shards of glass"));
+			strcpy(ep_ptr->killer, _("ガラスの破片", "shards of glass"));
 			break;
 
 		default:
-			strcpy(killer, _("罠", "a trap"));
+			strcpy(ep_ptr->killer, _("罠", "a trap"));
 			break;
 		}
-		strcpy(m_name, killer);
+		strcpy(ep_ptr->m_name, ep_ptr->killer);
 	}
 
 	switch (typ)
@@ -169,28 +158,28 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	{
 		if (target_ptr->blind) msg_print(_("酸で攻撃された！", "You are hit by acid!"));
 
-		get_damage = acid_dam(target_ptr, dam, killer, monspell, FALSE);
+		ep_ptr->get_damage = acid_dam(target_ptr, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell, FALSE);
 		break;
 	}
 	case GF_FIRE:
 	{
 		if (target_ptr->blind) msg_print(_("火炎で攻撃された！", "You are hit by fire!"));
 
-		get_damage = fire_dam(target_ptr, dam, killer, monspell, FALSE);
+		ep_ptr->get_damage = fire_dam(target_ptr, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell, FALSE);
 		break;
 	}
 	case GF_COLD:
 	{
 		if (target_ptr->blind) msg_print(_("冷気で攻撃された！", "You are hit by cold!"));
 
-		get_damage = cold_dam(target_ptr, dam, killer, monspell, FALSE);
+		ep_ptr->get_damage = cold_dam(target_ptr, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell, FALSE);
 		break;
 	}
 	case GF_ELEC:
 	{
 		if (target_ptr->blind) msg_print(_("電撃で攻撃された！", "You are hit by lightning!"));
 
-		get_damage = elec_dam(target_ptr, dam, killer, monspell, FALSE);
+		ep_ptr->get_damage = elec_dam(target_ptr, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell, FALSE);
 		break;
 	}
 	case GF_POIS:
@@ -198,18 +187,18 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		bool double_resist = is_oppose_pois(target_ptr);
 		if (target_ptr->blind) msg_print(_("毒で攻撃された！", "You are hit by poison!"));
 
-		if (target_ptr->resist_pois) dam = (dam + 2) / 3;
-		if (double_resist) dam = (dam + 2) / 3;
+		if (target_ptr->resist_pois) ep_ptr->dam = (ep_ptr->dam + 2) / 3;
+		if (double_resist) ep_ptr->dam = (ep_ptr->dam + 2) / 3;
 
 		if ((!(double_resist || target_ptr->resist_pois)) && one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			do_dec_stat(target_ptr, A_CON);
 		}
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 
 		if (!(double_resist || target_ptr->resist_pois) && !CHECK_MULTISHADOW(target_ptr))
-			set_poisoned(target_ptr, target_ptr->poisoned + randint0(dam) + 10);
+			set_poisoned(target_ptr, target_ptr->poisoned + randint0(ep_ptr->dam) + 10);
 
 		break;
 	}
@@ -218,13 +207,13 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		bool double_resist = is_oppose_pois(target_ptr);
 		if (target_ptr->blind) msg_print(_("放射能で攻撃された！", "You are hit by radiation!"));
 
-		if (target_ptr->resist_pois) dam = (2 * dam + 2) / 5;
-		if (double_resist) dam = (2 * dam + 2) / 5;
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		if (target_ptr->resist_pois) ep_ptr->dam = (2 * ep_ptr->dam + 2) / 5;
+		if (double_resist) ep_ptr->dam = (2 * ep_ptr->dam + 2) / 5;
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		if ((double_resist || target_ptr->resist_pois) || CHECK_MULTISHADOW(target_ptr))
 			break;
 
-		set_poisoned(target_ptr, target_ptr->poisoned + randint0(dam) + 10);
+		set_poisoned(target_ptr, target_ptr->poisoned + randint0(ep_ptr->dam) + 10);
 
 		if (one_in_(5)) /* 6 */
 		{
@@ -245,25 +234,25 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	case GF_MISSILE:
 	{
 		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_HOLY_FIRE:
 	{
 		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 		if (target_ptr->align > 10)
-			dam /= 2;
+			ep_ptr->dam /= 2;
 		else if (target_ptr->align < -10)
-			dam *= 2;
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+			ep_ptr->dam *= 2;
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_HELL_FIRE:
 	{
 		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 		if (target_ptr->align > 10)
-			dam *= 2;
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+			ep_ptr->dam *= 2;
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_ARROW:
@@ -278,17 +267,17 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 			break;
 		}
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_PLASMA:
 	{
 		if (target_ptr->blind) msg_print(_("何かとても熱いもので攻撃された！", "You are hit by something *HOT*!"));
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 
 		if (!target_ptr->resist_sound && !CHECK_MULTISHADOW(target_ptr))
 		{
-			int plus_stun = (randint1((dam > 40) ? 35 : (dam * 3 / 4 + 5)));
+			int plus_stun = (randint1((ep_ptr->dam > 40) ? 35 : (ep_ptr->dam * 3 / 4 + 5)));
 			(void)set_stun(target_ptr, target_ptr->stun + plus_stun);
 		}
 
@@ -306,7 +295,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		{
 			if (!PRACE_IS_(target_ptr, RACE_SPECTRE))
 			{
-				dam *= 6; dam /= (randint1(4) + 7);
+				ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
 			}
 		}
 		else if (!CHECK_MULTISHADOW(target_ptr)) drain_exp(target_ptr, 200 + (target_ptr->exp / 100), 200 + (target_ptr->exp / 1000), 75);
@@ -314,12 +303,12 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		if (PRACE_IS_(target_ptr, RACE_SPECTRE) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("気分がよくなった。", "You feel invigorated!"));
-			hp_player(target_ptr, dam / 4);
-			learn_spell(target_ptr, monspell);
+			hp_player(target_ptr, ep_ptr->dam / 4);
+			learn_spell(target_ptr, ep_ptr->monspell);
 		}
 		else
 		{
-			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		}
 
 		break;
@@ -329,7 +318,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		if (target_ptr->blind) msg_print(_("何か湿ったもので攻撃された！", "You are hit by something wet!"));
 		if (CHECK_MULTISHADOW(target_ptr))
 		{
-			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 			break;
 		}
 
@@ -347,9 +336,9 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 			inventory_damage(target_ptr, set_cold_destroy, 3);
 		}
 
-		if (target_ptr->resist_water) get_damage /= 4;
+		if (target_ptr->resist_water) ep_ptr->get_damage /= 4;
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_CHAOS:
@@ -357,12 +346,12 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		if (target_ptr->blind) msg_print(_("無秩序の波動で攻撃された！", "You are hit by a wave of anarchy!"));
 		if (target_ptr->resist_chaos)
 		{
-			dam *= 6; dam /= (randint1(4) + 7);
+			ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
 		}
 
 		if (CHECK_MULTISHADOW(target_ptr))
 		{
-			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 			break;
 		}
 
@@ -390,7 +379,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 			inventory_damage(target_ptr, set_fire_destroy, 2);
 		}
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_SHARDS:
@@ -398,11 +387,11 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		if (target_ptr->blind) msg_print(_("何か鋭いもので攻撃された！", "You are hit by something sharp!"));
 		if (target_ptr->resist_shard)
 		{
-			dam *= 6; dam /= (randint1(4) + 7);
+			ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
 		}
 		else if (!CHECK_MULTISHADOW(target_ptr))
 		{
-			(void)set_cut(target_ptr, target_ptr->cut + dam);
+			(void)set_cut(target_ptr, target_ptr->cut + ep_ptr->dam);
 		}
 
 		if (!target_ptr->resist_shard || one_in_(13))
@@ -410,7 +399,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 			inventory_damage(target_ptr, set_cold_destroy, 2);
 		}
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_SOUND:
@@ -418,11 +407,11 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		if (target_ptr->blind) msg_print(_("轟音で攻撃された！", "You are hit by a loud noise!"));
 		if (target_ptr->resist_sound)
 		{
-			dam *= 5; dam /= (randint1(4) + 7);
+			ep_ptr->dam *= 5; ep_ptr->dam /= (randint1(4) + 7);
 		}
 		else if (!CHECK_MULTISHADOW(target_ptr))
 		{
-			int plus_stun = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
+			int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
 			(void)set_stun(target_ptr, target_ptr->stun + plus_stun);
 		}
 
@@ -431,7 +420,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 			inventory_damage(target_ptr, set_cold_destroy, 2);
 		}
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_CONFUSION:
@@ -439,13 +428,13 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		if (target_ptr->blind) msg_print(_("何か混乱するもので攻撃された！", "You are hit by something puzzling!"));
 		if (target_ptr->resist_conf)
 		{
-			dam *= 5; dam /= (randint1(4) + 7);
+			ep_ptr->dam *= 5; ep_ptr->dam /= (randint1(4) + 7);
 		}
 		else if (!CHECK_MULTISHADOW(target_ptr))
 		{
 			(void)set_confused(target_ptr, target_ptr->confused + randint1(20) + 10);
 		}
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_DISENCHANT:
@@ -453,13 +442,13 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		if (target_ptr->blind) msg_print(_("何かさえないもので攻撃された！", "You are hit by something static!"));
 		if (target_ptr->resist_disen)
 		{
-			dam *= 6; dam /= (randint1(4) + 7);
+			ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
 		}
 		else if (!CHECK_MULTISHADOW(target_ptr))
 		{
 			(void)apply_disenchant(target_ptr, 0);
 		}
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_NEXUS:
@@ -467,14 +456,14 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		if (target_ptr->blind) msg_print(_("何か奇妙なもので攻撃された！", "You are hit by something strange!"));
 		if (target_ptr->resist_nexus)
 		{
-			dam *= 6; dam /= (randint1(4) + 7);
+			ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
 		}
 		else if (!CHECK_MULTISHADOW(target_ptr))
 		{
-			apply_nexus(m_ptr, target_ptr);
+			apply_nexus(ep_ptr->m_ptr, target_ptr);
 		}
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_FORCE:
@@ -485,7 +474,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 			(void)set_stun(target_ptr, target_ptr->stun + randint1(20));
 		}
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_ROCKET:
@@ -498,11 +487,11 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 
 		if (target_ptr->resist_shard)
 		{
-			dam /= 2;
+			ep_ptr->dam /= 2;
 		}
 		else if (!CHECK_MULTISHADOW(target_ptr))
 		{
-			(void)set_cut(target_ptr, target_ptr->cut + (dam / 2));
+			(void)set_cut(target_ptr, target_ptr->cut + (ep_ptr->dam / 2));
 		}
 
 		if (!target_ptr->resist_shard || one_in_(12))
@@ -510,7 +499,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 			inventory_damage(target_ptr, set_cold_destroy, 3);
 		}
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_INERTIAL:
@@ -518,7 +507,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		if (target_ptr->blind) msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
 		if (!CHECK_MULTISHADOW(target_ptr)) (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_LITE:
@@ -526,7 +515,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 		if (target_ptr->resist_lite)
 		{
-			dam *= 4; dam /= (randint1(4) + 7);
+			ep_ptr->dam *= 4; ep_ptr->dam /= (randint1(4) + 7);
 		}
 		else if (!target_ptr->blind && !target_ptr->resist_blind && !CHECK_MULTISHADOW(target_ptr))
 		{
@@ -536,15 +525,15 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		if (PRACE_IS_(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE))
 		{
 			if (!CHECK_MULTISHADOW(target_ptr)) msg_print(_("光で肉体が焦がされた！", "The light scorches your flesh!"));
-			dam *= 2;
+			ep_ptr->dam *= 2;
 		}
 		else if (PRACE_IS_(target_ptr, RACE_S_FAIRY))
 		{
-			dam = dam * 4 / 3;
+			ep_ptr->dam = ep_ptr->dam * 4 / 3;
 		}
 
-		if (target_ptr->wraith_form) dam *= 2;
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		if (target_ptr->wraith_form) ep_ptr->dam *= 2;
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 
 		if (!target_ptr->wraith_form || CHECK_MULTISHADOW(target_ptr))
 			break;
@@ -563,16 +552,16 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 		if (target_ptr->resist_dark)
 		{
-			dam *= 4; dam /= (randint1(4) + 7);
+			ep_ptr->dam *= 4; ep_ptr->dam /= (randint1(4) + 7);
 
-			if (PRACE_IS_(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form) dam = 0;
+			if (PRACE_IS_(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form) ep_ptr->dam = 0;
 		}
 		else if (!target_ptr->blind && !target_ptr->resist_blind && !CHECK_MULTISHADOW(target_ptr))
 		{
 			(void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
 		}
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_TIME:
@@ -581,16 +570,16 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 
 		if (target_ptr->resist_time)
 		{
-			dam *= 4;
-			dam /= (randint1(4) + 7);
+			ep_ptr->dam *= 4;
+			ep_ptr->dam /= (randint1(4) + 7);
 			msg_print(_("時間が通り過ぎていく気がする。", "You feel as if time is passing you by."));
-			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 			break;
 		}
 
 		if (CHECK_MULTISHADOW(target_ptr))
 		{
-			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 			break;
 		}
 
@@ -646,7 +635,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		}
 		}
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_GRAVITY:
@@ -661,14 +650,14 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 				(void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
 			if (!(target_ptr->resist_sound || target_ptr->levitation))
 			{
-				int plus_stun = (randint1((dam > 90) ? 35 : (dam / 3 + 5)));
+				int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
 				(void)set_stun(target_ptr, target_ptr->stun + plus_stun);
 			}
 		}
 
 		if (target_ptr->levitation)
 		{
-			dam = (dam * 2) / 3;
+			ep_ptr->dam = (ep_ptr->dam * 2) / 3;
 		}
 
 		if (!target_ptr->levitation || one_in_(13))
@@ -676,29 +665,29 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 			inventory_damage(target_ptr, set_cold_destroy, 2);
 		}
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_DISINTEGRATE:
 	{
 		if (target_ptr->blind) msg_print(_("純粋なエネルギーで攻撃された！", "You are hit by pure energy!"));
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_OLD_HEAL:
 	{
 		if (target_ptr->blind) msg_print(_("何らかの攻撃によって気分がよくなった。", "You are hit by something invigorating!"));
 
-		(void)hp_player(target_ptr, dam);
-		dam = 0;
+		(void)hp_player(target_ptr, ep_ptr->dam);
+		ep_ptr->dam = 0;
 		break;
 	}
 	case GF_OLD_SPEED:
 	{
 		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 		(void)set_fast(target_ptr, target_ptr->fast + randint1(5), FALSE);
-		dam = 0;
+		ep_ptr->dam = 0;
 		break;
 	}
 	case GF_OLD_SLOW:
@@ -719,8 +708,8 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 			sanity_blast(target_ptr, NULL, FALSE);
 		}
 
-		set_paralyzed(target_ptr, target_ptr->paralyzed + dam);
-		dam = 0;
+		set_paralyzed(target_ptr, target_ptr->paralyzed + ep_ptr->dam);
+		ep_ptr->dam = 0;
 		break;
 	}
 	case GF_MANA:
@@ -729,21 +718,21 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	{
 		if (target_ptr->blind) msg_print(_("魔法のオーラで攻撃された！", "You are hit by an aura of magic!"));
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_PSY_SPEAR:
 	{
 		if (target_ptr->blind) msg_print(_("エネルギーの塊で攻撃された！", "You are hit by an energy!"));
 
-		get_damage = take_hit(target_ptr, DAMAGE_FORCE, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_FORCE, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_METEOR:
 	{
 		if (target_ptr->blind) msg_print(_("何かが空からあなたの頭上に落ちてきた！", "Something falls from the sky on you!"));
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		if (!target_ptr->resist_shard || one_in_(13))
 		{
 			if (!target_ptr->immune_fire) inventory_damage(target_ptr, set_fire_destroy, 2);
@@ -756,7 +745,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	{
 		if (target_ptr->blind) msg_print(_("何か鋭く冷たいもので攻撃された！", "You are hit by something sharp and cold!"));
 
-		get_damage = cold_dam(target_ptr, dam, killer, monspell, FALSE);
+		ep_ptr->get_damage = cold_dam(target_ptr, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell, FALSE);
 		if (CHECK_MULTISHADOW(target_ptr)) break;
 
 		if (!target_ptr->resist_shard)
@@ -783,7 +772,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		if (target_ptr->mimic_form)
 		{
 			if (!(mimic_info[target_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))
-				get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+				ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 
 			break;
 		}
@@ -797,12 +786,12 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		case RACE_DEMON:
 		case RACE_SPECTRE:
 		{
-			dam = 0;
+			ep_ptr->dam = 0;
 			break;
 		}
 		default:
 		{
-			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 			break;
 		}
 		}
@@ -814,68 +803,68 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		if (CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("攻撃は幻影に命中し、あなたには届かなかった。", "The attack hits Shadow, but you are unharmed!"));
-			dam = 0;
+			ep_ptr->dam = 0;
 			break;
 		}
 
 		if (target_ptr->csp == 0)
 		{
-			dam = 0;
+			ep_ptr->dam = 0;
 			break;
 		}
 
-		if (who > 0)
-			msg_format(_("%^sに精神エネルギーを吸い取られてしまった！", "%^s draws psychic energy from you!"), m_name);
+		if (ep_ptr->who > 0)
+			msg_format(_("%^sに精神エネルギーを吸い取られてしまった！", "%^s draws psychic energy from you!"), ep_ptr->m_name);
 		else
 			msg_print(_("精神エネルギーを吸い取られてしまった！", "Your psychic energy is drawn!"));
 
-		if (dam >= target_ptr->csp)
+		if (ep_ptr->dam >= target_ptr->csp)
 		{
-			dam = target_ptr->csp;
+			ep_ptr->dam = target_ptr->csp;
 			target_ptr->csp = 0;
 			target_ptr->csp_frac = 0;
 		}
 		else
 		{
-			target_ptr->csp -= dam;
+			target_ptr->csp -= ep_ptr->dam;
 		}
 
-		learn_spell(target_ptr, monspell);
+		learn_spell(target_ptr, ep_ptr->monspell);
 		target_ptr->redraw |= (PR_MANA);
 		target_ptr->window |= (PW_PLAYER | PW_SPELL);
 
-		if ((who <= 0) || (m_ptr->hp >= m_ptr->maxhp))
+		if ((ep_ptr->who <= 0) || (ep_ptr->m_ptr->hp >= ep_ptr->m_ptr->maxhp))
 		{
-			dam = 0;
+			ep_ptr->dam = 0;
 			break;
 		}
 
-		m_ptr->hp += dam;
-		if (m_ptr->hp > m_ptr->maxhp) m_ptr->hp = m_ptr->maxhp;
+		ep_ptr->m_ptr->hp += ep_ptr->dam;
+		if (ep_ptr->m_ptr->hp > ep_ptr->m_ptr->maxhp) ep_ptr->m_ptr->hp = ep_ptr->m_ptr->maxhp;
 
-		if (target_ptr->health_who == who) target_ptr->redraw |= (PR_HEALTH);
-		if (target_ptr->riding == who) target_ptr->redraw |= (PR_UHEALTH);
+		if (target_ptr->health_who == ep_ptr->who) target_ptr->redraw |= (PR_HEALTH);
+		if (target_ptr->riding == ep_ptr->who) target_ptr->redraw |= (PR_UHEALTH);
 
-		if (m_ptr->ml)
+		if (ep_ptr->m_ptr->ml)
 		{
-			msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), m_name);
+			msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), ep_ptr->m_name);
 		}
 
-		dam = 0;
+		ep_ptr->dam = 0;
 		break;
 	}
 	case GF_MIND_BLAST:
 	{
-		if ((randint0(100 + rlev / 2) < MAX(5, target_ptr->skill_sav)) && !CHECK_MULTISHADOW(target_ptr))
+		if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, target_ptr->skill_sav)) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(target_ptr, monspell);
+			learn_spell(target_ptr, ep_ptr->monspell);
 			break;
 		}
 
 		if (CHECK_MULTISHADOW(target_ptr))
 		{
-			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 			break;
 		}
 
@@ -898,15 +887,15 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		}
 
 		target_ptr->redraw |= PR_MANA;
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		break;
 	}
 	case GF_BRAIN_SMASH:
 	{
-		if ((randint0(100 + rlev / 2) < MAX(5, target_ptr->skill_sav)) && !CHECK_MULTISHADOW(target_ptr))
+		if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, target_ptr->skill_sav)) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(target_ptr, monspell);
+			learn_spell(target_ptr, ep_ptr->monspell);
 			break;
 		}
 
@@ -923,7 +912,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 			target_ptr->redraw |= PR_MANA;
 		}
 
-		get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		if (CHECK_MULTISHADOW(target_ptr)) break;
 
 		if (!target_ptr->resist_blind)
@@ -943,9 +932,9 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 
 		(void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
 
-		while (randint0(100 + rlev / 2) > (MAX(5, target_ptr->skill_sav)))
+		while (randint0(100 + ep_ptr->rlev / 2) > (MAX(5, target_ptr->skill_sav)))
 			(void)do_dec_stat(target_ptr, A_INT);
-		while (randint0(100 + rlev / 2) > (MAX(5, target_ptr->skill_sav)))
+		while (randint0(100 + ep_ptr->rlev / 2) > (MAX(5, target_ptr->skill_sav)))
 			(void)do_dec_stat(target_ptr, A_WIS);
 
 		if (!target_ptr->resist_chaos)
@@ -957,56 +946,56 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_CAUSE_1:
 	{
-		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
+		if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(target_ptr, monspell);
+			learn_spell(target_ptr, ep_ptr->monspell);
 		}
 		else
 		{
 			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(target_ptr, 15, 0);
-			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		}
 		break;
 	}
 	case GF_CAUSE_2:
 	{
-		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
+		if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(target_ptr, monspell);
+			learn_spell(target_ptr, ep_ptr->monspell);
 		}
 		else
 		{
-			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(target_ptr, 25, MIN(rlev / 2 - 15, 5));
-			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(target_ptr, 25, MIN(ep_ptr->rlev / 2 - 15, 5));
+			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		}
 		break;
 	}
 	case GF_CAUSE_3:
 	{
-		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
+		if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(target_ptr, monspell);
+			learn_spell(target_ptr, ep_ptr->monspell);
 		}
 		else
 		{
-			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(target_ptr, 33, MIN(rlev / 2 - 15, 15));
-			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(target_ptr, 33, MIN(ep_ptr->rlev / 2 - 15, 15));
+			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 		}
 		break;
 	}
 	case GF_CAUSE_4:
 	{
-		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !(m_ptr->r_idx == MON_KENSHIROU) && !CHECK_MULTISHADOW(target_ptr))
+		if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !(ep_ptr->m_ptr->r_idx == MON_KENSHIROU) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("しかし秘孔を跳ね返した！", "You resist the effects!"));
-			learn_spell(target_ptr, monspell);
+			learn_spell(target_ptr, ep_ptr->monspell);
 		}
 		else
 		{
-			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, killer, monspell);
+			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 			if (!CHECK_MULTISHADOW(target_ptr)) (void)set_cut(target_ptr, target_ptr->cut + damroll(10, 10));
 		}
 
@@ -1014,10 +1003,10 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	case GF_HAND_DOOM:
 	{
-		if ((randint0(100 + rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
+		if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
 		{
 			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(target_ptr, monspell);
+			learn_spell(target_ptr, ep_ptr->monspell);
 		}
 		else
 		{
@@ -1027,7 +1016,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 				curse_equipment(target_ptr, 40, 20);
 			}
 
-			get_damage = take_hit(target_ptr, DAMAGE_ATTACK, dam, m_name, monspell);
+			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->m_name, ep_ptr->monspell);
 
 			if (target_ptr->chp < 1) target_ptr->chp = 1;
 		}
@@ -1036,29 +1025,29 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	}
 	default:
 	{
-		dam = 0;
+		ep_ptr->dam = 0;
 		break;
 	}
 	}
 
-	revenge_store(target_ptr, get_damage);
+	revenge_store(target_ptr, ep_ptr->get_damage);
 	if ((target_ptr->tim_eyeeye || hex_spelling(target_ptr, HEX_EYE_FOR_EYE))
-		&& (get_damage > 0) && !target_ptr->is_dead && (who > 0))
+		&& (ep_ptr->get_damage > 0) && !target_ptr->is_dead && (ep_ptr->who > 0))
 	{
 		GAME_TEXT m_name_self[80];
-		monster_desc(target_ptr, m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-		msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), m_name, m_name_self);
-		project(target_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
+		monster_desc(target_ptr, m_name_self, ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+		msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), ep_ptr->m_name, m_name_self);
+		project(target_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, GF_MISSILE, PROJECT_KILL, -1);
 		if (target_ptr->tim_eyeeye) set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
 	}
 
-	if (target_ptr->riding && dam > 0)
+	if (target_ptr->riding && ep_ptr->dam > 0)
 	{
-		rakubadam_p = (dam > 200) ? 200 : dam;
+		rakubadam_p = (ep_ptr->dam > 200) ? 200 : ep_ptr->dam;
 	}
 
 	disturb(target_ptr, TRUE, TRUE);
-	if ((target_ptr->special_defense & NINJA_KAWARIMI) && dam && who && (who != target_ptr->riding))
+	if ((target_ptr->special_defense & NINJA_KAWARIMI) && ep_ptr->dam && ep_ptr->who && (ep_ptr->who != target_ptr->riding))
 	{
 		(void)kawarimi(target_ptr, FALSE);
 	}
