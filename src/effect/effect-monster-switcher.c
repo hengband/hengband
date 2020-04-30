@@ -160,14 +160,14 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	switch (em_ptr->effect_type)
 	{
+	case GF_PSY_SPEAR:
 	case GF_MISSILE:
 	case GF_ARROW:
 	case GF_MANA:
-	case GF_SEEKER:
-	case GF_SUPER_RAY:
-	case GF_PSY_SPEAR:
 	case GF_METEOR:
 	case GF_BLOOD_CURSE:
+	case GF_SEEKER:
+	case GF_SUPER_RAY:
 		effect_monster_void(em_ptr);
 		break;
 	case GF_ACID:
