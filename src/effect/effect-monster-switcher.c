@@ -21,6 +21,84 @@
 #include "cmd/cmd-pet.h" // 暫定、後で消すかも.
 #include "spell/spells-type.h"
 
+static void effect_monster_acid(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if ((em_ptr->r_ptr->flagsr & RFR_IM_ACID) == 0) return;
+
+	em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
+	em_ptr->dam /= 9;
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flagsr |= (RFR_IM_ACID);
+}
+
+
+static void effect_monster_elec(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if ((em_ptr->r_ptr->flagsr & RFR_IM_ELEC) == 0) return;
+
+	em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
+	em_ptr->dam /= 9;
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flagsr |= (RFR_IM_ELEC);
+}
+
+
+static void effect_monster_fire(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if (em_ptr->r_ptr->flagsr & RFR_IM_FIRE)
+	{
+		em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
+		em_ptr->dam /= 9;
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+			em_ptr->r_ptr->r_flagsr |= (RFR_IM_FIRE);
+
+		return;
+	}
+	
+	if ((em_ptr->r_ptr->flags3 & (RF3_HURT_FIRE)) == 0) return;
+
+	em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
+	em_ptr->dam *= 2;
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flags3 |= (RF3_HURT_FIRE);
+}
+
+
+static void effect_monster_cold(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if (em_ptr->r_ptr->flagsr & RFR_IM_COLD)
+	{
+		em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
+		em_ptr->dam /= 9;
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+			em_ptr->r_ptr->r_flagsr |= (RFR_IM_COLD);
+
+		return;
+	}
+	
+	if ((em_ptr->r_ptr->flags3 & (RF3_HURT_COLD)) == 0) return;
+
+	em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
+	em_ptr->dam *= 2;
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_HURT_COLD);
+}
+
+
+static void effect_monster_pois(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if ((em_ptr->r_ptr->flagsr & RFR_IM_POIS) == 0) return;
+
+	em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
+	em_ptr->dam /= 9;
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_IM_POIS);
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -34,73 +112,32 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_MISSILE:
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
+
 		break;
 	}
 	case GF_ACID:
 	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_IM_ACID)
-		{
-			em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
-			em_ptr->dam /= 9;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_IM_ACID);
-		}
+		effect_monster_acid(caster_ptr, em_ptr);
 		break;
 	}
 	case GF_ELEC:
 	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_IM_ELEC)
-		{
-			em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
-			em_ptr->dam /= 9;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_IM_ELEC);
-		}
+		effect_monster_elec(caster_ptr, em_ptr);
 		break;
 	}
 	case GF_FIRE:
 	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_IM_FIRE)
-		{
-			em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
-			em_ptr->dam /= 9;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_IM_FIRE);
-		}
-		else if (em_ptr->r_ptr->flags3 & (RF3_HURT_FIRE))
-		{
-			em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
-			em_ptr->dam *= 2;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_HURT_FIRE);
-		}
+		effect_monster_fire(caster_ptr, em_ptr);
 		break;
 	}
 	case GF_COLD:
 	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_IM_COLD)
-		{
-			em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
-			em_ptr->dam /= 9;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_IM_COLD);
-		}
-		else if (em_ptr->r_ptr->flags3 & (RF3_HURT_COLD))
-		{
-			em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
-			em_ptr->dam *= 2;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_HURT_COLD);
-		}
+		effect_monster_cold(caster_ptr, em_ptr);
 		break;
 	}
 	case GF_POIS:
 	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_IM_POIS)
-		{
-			em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
-			em_ptr->dam /= 9;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_IM_POIS);
-		}
+		effect_monster_pois(caster_ptr, em_ptr);
 		break;
 	}
 	case GF_NUKE:
