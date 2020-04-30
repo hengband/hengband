@@ -189,31 +189,14 @@ static void describe_effect_source(player_type *target_ptr, effect_player_type *
 
 
 /*!
- * @brief 汎用的なビーム/ボルト/ボール系によるプレイヤーへの効果処理 / Helper function for "project()" below.
- * @param who 魔法を発動したモンスター(0ならばプレイヤー、負値ならば自然発生) / Index of "source" monster (zero for "player")
- * @param who_name 効果を起こしたモンスターの名前
- * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
- * @param y 目標Y座標 / Target y location (or location to travel "towards")
- * @param x 目標X座標 / Target x location (or location to travel "towards")
- * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
- * @param effect_type 効果属性 / Type of damage to apply to monsters (and objects)
- * @param flag 効果フラグ
- * @param monspell 効果元のモンスター魔法ID
- * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
+ * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param em_ptr プレーヤー効果構造体への参照ポインタ
+ * @return なし
  */
-bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, int monspell)
+void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 {
-	effect_player_type tmp_effect;
-	effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, effect_type, flag, monspell);
-	ep_check_result check_result = check_continue_player_effect(target_ptr, ep_ptr, y, x);
-	if (check_result != EP_CHECK_CONTINUE) return check_result;
-
-	if (ep_ptr->dam > 1600) ep_ptr->dam = 1600;
-
-	ep_ptr->dam = (ep_ptr->dam + r) / (r + 1);
-	describe_effect_source(target_ptr, ep_ptr, who_name);
-
-	switch (effect_type)
+	switch (ep_ptr->effect_type)
 	{
 	case GF_ACID:
 	{
@@ -1090,6 +1073,34 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		break;
 	}
 	}
+}
+
+
+/*!
+ * @brief 汎用的なビーム/ボルト/ボール系によるプレイヤーへの効果処理 / Helper function for "project()" below.
+ * @param who 魔法を発動したモンスター(0ならばプレイヤー、負値ならば自然発生) / Index of "source" monster (zero for "player")
+ * @param who_name 効果を起こしたモンスターの名前
+ * @param r 効果半径(ビーム/ボルト = 0 / ボール = 1以上) / Radius of explosion (0 = beam/bolt, 1 to 9 = ball)
+ * @param y 目標Y座標 / Target y location (or location to travel "towards")
+ * @param x 目標X座標 / Target x location (or location to travel "towards")
+ * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
+ * @param effect_type 効果属性 / Type of damage to apply to monsters (and objects)
+ * @param flag 効果フラグ
+ * @param monspell 効果元のモンスター魔法ID
+ * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
+ */
+bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, int monspell)
+{
+	effect_player_type tmp_effect;
+	effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, effect_type, flag, monspell);
+	ep_check_result check_result = check_continue_player_effect(target_ptr, ep_ptr, y, x);
+	if (check_result != EP_CHECK_CONTINUE) return check_result;
+
+	if (ep_ptr->dam > 1600) ep_ptr->dam = 1600;
+
+	ep_ptr->dam = (ep_ptr->dam + r) / (r + 1);
+	describe_effect_source(target_ptr, ep_ptr, who_name);
+	switch_effects_player(target_ptr, ep_ptr);
 
 	revenge_store(target_ptr, ep_ptr->get_damage);
 	if ((target_ptr->tim_eyeeye || hex_spelling(target_ptr, HEX_EYE_FOR_EYE))
