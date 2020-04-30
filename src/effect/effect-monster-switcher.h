@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum
+typedef enum gf_switch_result
 {
 	GF_SWITCH_FALSE = 0,
 	GF_SWITCH_TRUE = 1,

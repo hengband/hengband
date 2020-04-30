@@ -34,19 +34,28 @@ typedef struct
 	MONSTER_IDX who;
 	HIT_POINT dam;
 	EFFECT_ID effect_type;
+	BIT_FLAGS flag;
 	int monspell;
 } effect_player_type;
 
+typedef enum effect_player_check_result
+{
+	EP_CHECK_FALSE = 0,
+	EP_CHECK_TRUE = 1,
+	EP_CHECK_CONTINUE = 2,
+} ep_check_result;
 
 /*!
  * @brief effect_player_type構造体を初期化する
  * @param ep_ptr 初期化前の構造体
  * @param who 魔法を唱えたモンスター (0ならプレーヤー自身)
  * @param dam 基本威力
- * @param monspell 
+ * @param effect_type 効果属性
+ * @param flag 効果フラグ
+ * @param monspell 効果元のモンスター魔法ID
  * @return 初期化後の構造体ポインタ
  */
-static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, MONSTER_IDX who, HIT_POINT dam, EFFECT_ID effect_type, int monspell)
+static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, MONSTER_IDX who, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, int monspell)
 {
 	ep_ptr->rlev = 0;
 	ep_ptr->m_ptr = NULL;
@@ -54,6 +63,7 @@ static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, 
 	ep_ptr->who = who;
 	ep_ptr->dam = dam;
 	ep_ptr->effect_type = effect_type;
+	ep_ptr->flag = flag;
 	ep_ptr->monspell = monspell;
 	return ep_ptr;
 }
@@ -63,13 +73,12 @@ static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, 
  * @brief ボルト魔法を反射する
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param ep_ptr プレーヤー効果構造体への参照ポインタ
- * @param flag 遠隔攻撃特性
  * @return 当たったらFALSE、反射したらTRUE
  */
-static bool process_bolt_reflection(player_type *target_ptr, effect_player_type *ep_ptr, BIT_FLAGS flag)
+static bool process_bolt_reflection(player_type *target_ptr, effect_player_type *ep_ptr)
 {
 	bool can_bolt_hit = target_ptr->reflect || (((target_ptr->special_defense & KATA_FUUJIN) != 0) && !target_ptr->blind);
-	can_bolt_hit &= (flag & PROJECT_REFLECTABLE) != 0;
+	can_bolt_hit &= (ep_ptr->flag & PROJECT_REFLECTABLE) != 0;
 	can_bolt_hit &= !one_in_(10);
 	if (!can_bolt_hit) return FALSE;
 
@@ -114,6 +123,37 @@ static bool process_bolt_reflection(player_type *target_ptr, effect_player_type 
 
 
 /*!
+ * @brief 反射・忍者の変わり身などでそもそも当たらない状況を判定する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param ep_ptr プレーヤー効果構造体への参照ポインタ
+ * @param y 目標Y座標
+ * @param x 目標X座標
+ * @return 当たらなかったらFALSE、反射したらTRUE、当たったらCONTINUE
+ */
+static ep_check_result check_continue_player_effect(player_type *target_ptr, effect_player_type *ep_ptr, POSITION y, POSITION x)
+{
+	if (!player_bold(target_ptr, y, x))
+		return EP_CHECK_FALSE;
+
+	if (((target_ptr->special_defense & NINJA_KAWARIMI) != 0) &&
+		(ep_ptr->dam > 0) &&
+		(randint0(55) < (target_ptr->lev * 3 / 5 + 20)) &&
+		(ep_ptr->who > 0) &&
+		(ep_ptr->who != target_ptr->riding) &&
+		kawarimi(target_ptr, TRUE))
+		return EP_CHECK_FALSE;
+
+	if ((ep_ptr->who == 0) || (ep_ptr->who == target_ptr->riding))
+		return EP_CHECK_FALSE;
+
+	if (process_bolt_reflection(target_ptr, ep_ptr, ep_ptr->flag))
+		return EP_CHECK_TRUE;
+
+	return EP_CHECK_CONTINUE;
+}
+
+
+/*!
  * @brief 汎用的なビーム/ボルト/ボール系によるプレイヤーへの効果処理 / Helper function for "project()" below.
  * @param who 魔法を発動したモンスター(0ならばプレイヤー、負値ならば自然発生) / Index of "source" monster (zero for "player")
  * @param who_name 効果を起こしたモンスターの名前
@@ -130,17 +170,8 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 {
 	effect_player_type tmp_effect;
 	effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, effect_type, monspell);
-	if (!player_bold(target_ptr, y, x)) return FALSE;
-
-	if ((target_ptr->special_defense & NINJA_KAWARIMI) && ep_ptr->dam && (randint0(55) < (target_ptr->lev * 3 / 5 + 20)) && ep_ptr->who && (ep_ptr->who != target_ptr->riding))
-	{
-		if (kawarimi(target_ptr, TRUE)) return FALSE;
-	}
-
-	if (!ep_ptr->who) return FALSE;
-	if (ep_ptr->who == target_ptr->riding) return FALSE;
-
-	if (process_bolt_reflection(target_ptr, ep_ptr, flag)) return TRUE;
+	ep_check_result check_result = check_continue_player_effect(target_ptr, ep_ptr, y, x);
+	if (check_result != EP_CHECK_CONTINUE) return check_result;
 
 	if (ep_ptr->dam > 1600) ep_ptr->dam = 1600;
 
