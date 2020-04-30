@@ -528,7 +528,7 @@ static void postprocess_spell_photo(player_type *caster_ptr, effect_monster_type
 
 
 /*!
- * @brief モンスター効果の後処理 (ペット関係、グローバル変数更新)
+ * @brief モンスター効果の後処理 (ペット関係、記念撮影、グローバル変数更新)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param em_ptr モンスター効果構造体への参照ポインタ
  * @return なし
@@ -560,8 +560,7 @@ static void postprocess_spell(player_type *caster_ptr, effect_monster_type *em_p
 bool affect_monster(player_type *caster_ptr, MONSTER_IDX who, POSITION r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, bool see_s_msg)
 {
 	effect_monster_type tmp_effect;
-	effect_monster_type *em_ptr = &tmp_effect;
-	initialize_effect_monster(caster_ptr, em_ptr, who, r, y, x, dam, effect_type, flag, see_s_msg);
+	effect_monster_type *em_ptr = initialize_effect_monster(caster_ptr, &tmp_effect, who, r, y, x, dam, effect_type, flag, see_s_msg);
 	if (!is_never_effect(caster_ptr, em_ptr)) return FALSE;
 
 	decide_spell_result_description(caster_ptr, em_ptr);
