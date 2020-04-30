@@ -21,6 +21,11 @@
 #include "cmd/cmd-pet.h" // 暫定、後で消すかも.
 #include "spell/spells-type.h"
 
+static void effect_monster_void(effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+}
+
 static void effect_monster_acid(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
@@ -99,6 +104,52 @@ static void effect_monster_pois(player_type *caster_ptr, effect_monster_type *em
 }
 
 
+static void effect_monster_nuke(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if (em_ptr->r_ptr->flagsr & RFR_IM_POIS)
+	{
+		em_ptr->note = _("には耐性がある。", " resists.");
+		em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+			em_ptr->r_ptr->r_flagsr |= (RFR_IM_POIS);
+
+		return;
+	}
+	
+	if (one_in_(3)) em_ptr->do_polymorph = TRUE;
+}
+
+
+static void effect_monster_hell_file(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if ((em_ptr->r_ptr->flags3 & RF3_GOOD) == 0) return;
+
+	em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
+	em_ptr->dam *= 2;
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flags3 |= RF3_GOOD;
+}
+
+
+static void effect_monster_holy_fire(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if ((em_ptr->r_ptr->flags3 & RF3_EVIL) == 0)
+	{
+		em_ptr->note = _("には耐性がある。", " resists.");
+		em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
+		return;
+	}
+
+	em_ptr->dam *= 2;
+	em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flags3 |= RF3_EVIL;
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -110,80 +161,39 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	switch (em_ptr->effect_type)
 	{
 	case GF_MISSILE:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-
+	case GF_ARROW:
+	case GF_MANA:
+	case GF_SEEKER:
+	case GF_SUPER_RAY:
+	case GF_PSY_SPEAR:
+	case GF_METEOR:
+	case GF_BLOOD_CURSE:
+		effect_monster_void(em_ptr);
 		break;
-	}
 	case GF_ACID:
-	{
 		effect_monster_acid(caster_ptr, em_ptr);
 		break;
-	}
 	case GF_ELEC:
-	{
 		effect_monster_elec(caster_ptr, em_ptr);
 		break;
-	}
 	case GF_FIRE:
-	{
 		effect_monster_fire(caster_ptr, em_ptr);
 		break;
-	}
 	case GF_COLD:
-	{
 		effect_monster_cold(caster_ptr, em_ptr);
 		break;
-	}
 	case GF_POIS:
-	{
 		effect_monster_pois(caster_ptr, em_ptr);
 		break;
-	}
 	case GF_NUKE:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_IM_POIS)
-		{
-			em_ptr->note = _("には耐性がある。", " resists.");
-			em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_IM_POIS);
-		}
-		else if (one_in_(3)) em_ptr->do_polymorph = TRUE;
+		effect_monster_nuke(caster_ptr, em_ptr);
 		break;
-	}
 	case GF_HELL_FIRE:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flags3 & RF3_GOOD)
-		{
-			em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
-			em_ptr->dam *= 2;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_GOOD);
-		}
+		effect_monster_hell_fire(caster_ptr, em_ptr);
 		break;
-	}
 	case GF_HOLY_FIRE:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flags3 & RF3_EVIL)
-		{
-			em_ptr->dam *= 2;
-			em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= RF3_EVIL;
-		}
-		else
-		{
-			em_ptr->note = _("には耐性がある。", " resists.");
-			em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
-		}
+		effect_monster_holy_fire(caster_ptr, em_ptr);
 		break;
-	}
-	case GF_ARROW:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		break;
-	}
 	case GF_PLASMA:
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
@@ -467,13 +477,6 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 
 		break;
 	}
-	case GF_MANA:
-	case GF_SEEKER:
-	case GF_SUPER_RAY:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		break;
-	}
 	case GF_DISINTEGRATE:
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
@@ -670,16 +673,6 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 			em_ptr->obvious = FALSE;
 		}
 
-		break;
-	}
-	case GF_PSY_SPEAR:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		break;
-	}
-	case GF_METEOR:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
 		break;
 	}
 	case GF_DOMINATION:
@@ -1060,8 +1053,7 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	}
 	case GF_CHARM:
 	{
-		int vir;
-		vir = virtue_number(caster_ptr, V_HARMONY);
+		int vir = virtue_number(caster_ptr, V_HARMONY);
 		if (vir)
 		{
 			em_ptr->dam += caster_ptr->virtues[vir - 1] / 10;
@@ -1102,10 +1094,9 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	}
 	case GF_CONTROL_UNDEAD:
 	{
-		int vir;
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
 
-		vir = virtue_number(caster_ptr, V_UNLIFE);
+		int vir = virtue_number(caster_ptr, V_UNLIFE);
 		if (vir)
 		{
 			em_ptr->dam += caster_ptr->virtues[vir - 1] / 10;
@@ -1178,10 +1169,9 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	}
 	case GF_CONTROL_ANIMAL:
 	{
-		int vir;
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
 
-		vir = virtue_number(caster_ptr, V_NATURE);
+		int vir = virtue_number(caster_ptr, V_NATURE);
 		if (vir)
 		{
 			em_ptr->dam += caster_ptr->virtues[vir - 1] / 10;
@@ -1218,9 +1208,7 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	}
 	case GF_CHARM_LIVING:
 	{
-		int vir;
-
-		vir = virtue_number(caster_ptr, V_UNLIFE);
+		int vir = virtue_number(caster_ptr, V_UNLIFE);
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
 
 		vir = virtue_number(caster_ptr, V_UNLIFE);
@@ -2015,11 +2003,6 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 		}
 
 		em_ptr->photo = em_ptr->m_ptr->r_idx;
-		break;
-	}
-	case GF_BLOOD_CURSE:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
 		break;
 	}
 	case GF_CRUSADE:
