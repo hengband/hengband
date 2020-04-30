@@ -1765,7 +1765,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 		/* View item info */
 	case 'f':
-		identify_fully(creature_ptr, FALSE);
+		identify_fully(creature_ptr, FALSE, 0);
 		break;
 
 		/* Create desired feature */
@@ -1790,7 +1790,7 @@ void do_cmd_debug(player_type *creature_ptr)
 
 		/* Identify */
 	case 'i':
-		(void)ident_spell(creature_ptr, FALSE);
+		(void)ident_spell(creature_ptr, FALSE, 0);
 		break;
 
 		/* Go up or down in the dungeon */

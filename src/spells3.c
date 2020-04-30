@@ -1532,7 +1532,7 @@ bool identify_item(player_type *owner_ptr, object_type *o_ptr)
  * This routine does *not* automatically combine objects.
  * Returns TRUE if something was identified, else FALSE.
  */
-bool ident_spell(player_type *caster_ptr, bool only_equip)
+bool ident_spell(player_type *caster_ptr, bool only_equip, OBJECT_TYPE_VALUE item_tester_tval)
 {
 	if (only_equip)
 		item_tester_hook = item_tester_hook_identify_weapon_armour;
@@ -1639,7 +1639,7 @@ bool mundane_spell(player_type *owner_ptr, bool only_equip)
  * Fully "identify" an object in the inventory -BEN-
  * This routine returns TRUE if an item was identified.
  */
-bool identify_fully(player_type *caster_ptr, bool only_equip)
+bool identify_fully(player_type *caster_ptr, bool only_equip, OBJECT_TYPE_VALUE item_tester_tval)
 {
 	if (only_equip)
 		item_tester_hook = item_tester_hook_identify_fully_weapon_armour;

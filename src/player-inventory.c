@@ -227,7 +227,7 @@ void toggle_inventory_equipment(player_type *owner_ptr)
  * @param i 選択アイテムID
  * @return 正規のIDならばTRUEを返す。
  */
-bool get_item_okay(player_type *owner_ptr, OBJECT_IDX i)
+bool get_item_okay(player_type *owner_ptr, OBJECT_IDX i, OBJECT_TYPE_VALUE item_tester_tval)
 {
 	/* Illegal items */
 	if ((i < 0) || (i >= INVEN_TOTAL)) return FALSE;
@@ -256,7 +256,7 @@ bool can_get_item(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
 			return TRUE;
 
 	OBJECT_IDX floor_list[23];
-	ITEM_NUMBER floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03);
+	ITEM_NUMBER floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
 	return floor_num != 0;
 }
 
@@ -921,7 +921,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				/* Look up the tag and validate the item */
 				if (!get_tag(owner_ptr, &k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */;
 				else if ((k < INVEN_RARM) ? !inven : !equip) /* Reject */;
-				else if (!get_item_okay(owner_ptr, k)) /* Reject */;
+				else if (!get_item_okay(owner_ptr, k, tval)) /* Reject */;
 				else
 				{
 					/* Accept that choice */
@@ -940,7 +940,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			}
 
 			/* Verify the item */
-			else if (get_item_okay(owner_ptr, *cp))
+			else if (get_item_okay(owner_ptr, *cp, tval))
 			{
 				/* Forget restrictions */
 				tval = 0;
@@ -971,8 +971,8 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			if (item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_inven++;
 	}
 
-	while ((i1 <= i2) && (!get_item_okay(owner_ptr, i1))) i1++;
-	while ((i1 <= i2) && (!get_item_okay(owner_ptr, i2))) i2--;
+	while ((i1 <= i2) && (!get_item_okay(owner_ptr, i1, tval))) i1++;
+	while ((i1 <= i2) && (!get_item_okay(owner_ptr, i2, tval))) i2--;
 
 
 	/* Full equipment */
@@ -989,8 +989,8 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 	}
 
 	/* Restrict equipment indexes */
-	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e1))) e1++;
-	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e2))) e2--;
+	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e1, tval))) e1++;
+	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e2, tval))) e2--;
 
 	if (equip && owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
 	{
@@ -1247,7 +1247,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 				else
 				{
 					/* Validate the item */
-					if (!get_item_okay(owner_ptr, get_item_label))
+					if (!get_item_okay(owner_ptr, get_item_label, tval))
 					{
 						bell();
 						break;
@@ -1396,7 +1396,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			}
 
 			/* Validate the item */
-			if (!get_item_okay(owner_ptr, k))
+			if (!get_item_okay(owner_ptr, k, tval))
 			{
 				bell();
 				break;
@@ -1446,7 +1446,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			}
 
 			/* Validate the item */
-			else if (!get_item_okay(owner_ptr, k))
+			else if (!get_item_okay(owner_ptr, k, tval))
 			{
 				not_found = TRUE;
 			}
@@ -1481,7 +1481,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 			}
 
 			/* Validate the item */
-			if (!get_item_okay(owner_ptr, k))
+			if (!get_item_okay(owner_ptr, k, tval))
 			{
 				bell();
 				break;
@@ -1578,7 +1578,7 @@ object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, c
  *		mode & 0x02 -- Marked items only
  *		mode & 0x04 -- Stop after first
  */
-ITEM_NUMBER scan_floor(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode)
+ITEM_NUMBER scan_floor(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, OBJECT_TYPE_VALUE item_tester_tval)
 {
 	/* Sanity */
 	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
@@ -1623,7 +1623,7 @@ ITEM_NUMBER scan_floor(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, PO
  * @return 選択したアイテムの添え字
  * @details
  */
-COMMAND_CODE show_floor(player_type *owner_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width)
+COMMAND_CODE show_floor(player_type *owner_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, OBJECT_TYPE_VALUE item_tester_tval)
 {
 	COMMAND_CODE i, m;
 	int j, k, l;
@@ -1651,7 +1651,7 @@ COMMAND_CODE show_floor(player_type *owner_ptr, int target_item, POSITION y, POS
 	int len = MAX((*min_width), 20);
 
 	/* Scan for objects in the grid, using item_tester_okay() */
-	floor_num = scan_floor(owner_ptr, floor_list, y, x, 0x03);
+	floor_num = scan_floor(owner_ptr, floor_list, y, x, 0x03, item_tester_tval);
 
 	/* Display the floor objects */
 	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
@@ -1811,7 +1811,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			if (prev_tag && command_cmd)
 			{
 				/* Scan all objects in the grid */
-				floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03);
+				floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
 
 				/* Look up the tag */
 				if (get_tag_floor(owner_ptr->current_floor_ptr, &k, prev_tag, floor_list, floor_num))
@@ -1852,7 +1852,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				/* Look up the tag and validate the item */
 				if (!get_tag(owner_ptr, &k, prev_tag, (*cp >= INVEN_RARM) ? USE_EQUIP : USE_INVEN, tval)) /* Reject */;
 				else if ((k < INVEN_RARM) ? !inven : !equip) /* Reject */;
-				else if (!get_item_okay(owner_ptr, k)) /* Reject */;
+				else if (!get_item_okay(owner_ptr, k, tval)) /* Reject */;
 				else
 				{
 					/* Accept that choice */
@@ -1871,7 +1871,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			}
 
 			/* Verify the item */
-			else if (get_item_okay(owner_ptr, *cp))
+			else if (get_item_okay(owner_ptr, *cp, tval))
 			{
 				/* Forget restrictions */
 				tval = 0;
@@ -1903,8 +1903,8 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			if (item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], tval) || (mode & USE_FULL)) max_inven++;
 	}
 
-	while ((i1 <= i2) && (!get_item_okay(owner_ptr, i1))) i1++;
-	while ((i1 <= i2) && (!get_item_okay(owner_ptr, i2))) i2--;
+	while ((i1 <= i2) && (!get_item_okay(owner_ptr, i1, tval))) i1++;
+	while ((i1 <= i2) && (!get_item_okay(owner_ptr, i2, tval))) i2--;
 
 
 	/* Full equipment */
@@ -1921,8 +1921,8 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 	}
 
 	/* Restrict equipment indexes */
-	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e1))) e1++;
-	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e2))) e2--;
+	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e1, tval))) e1++;
+	while ((e1 <= e2) && (!get_item_okay(owner_ptr, e2, tval))) e2--;
 
 	if (equip && owner_ptr->ryoute && !(mode & IGNORE_BOTHHAND_SLOT))
 	{
@@ -1940,7 +1940,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 	if (floor)
 	{
 		/* Scan all objects in the grid */
-		floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03);
+		floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
 	}
 
 	if (i1 <= i2) allow_inven = TRUE;
@@ -2069,7 +2069,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			n2 = I2A(k - floor_top);
 
 			/* Redraw if needed */
-			if (command_see) get_item_label = show_floor(owner_ptr, menu_line, owner_ptr->y, owner_ptr->x, &min_width);
+			if (command_see) get_item_label = show_floor(owner_ptr, menu_line, owner_ptr->y, owner_ptr->x, &min_width, tval);
 		}
 
 		if (command_wrk == (USE_INVEN))
@@ -2382,7 +2382,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				else
 				{
 					/* Validate the item */
-					if (!get_item_okay(owner_ptr, get_item_label))
+					if (!get_item_okay(owner_ptr, get_item_label, tval))
 					{
 						bell();
 						break;
@@ -2478,7 +2478,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			owner_ptr->current_floor_ptr->o_list[i].next_o_idx = o_idx;
 
 			/* Re-scan floor list */
-			floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03);
+			floor_num = scan_floor(owner_ptr, floor_list, owner_ptr->y, owner_ptr->x, 0x03, tval);
 
 			/* Hack -- Fix screen */
 			if (command_see)
@@ -2610,7 +2610,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				}
 
 				/* Validate the item */
-				if (!get_item_okay(owner_ptr, k))
+				if (!get_item_okay(owner_ptr, k, tval))
 				{
 					bell();
 					break;
@@ -2678,7 +2678,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 				}
 
 				/* Validate the item */
-				else if (!get_item_okay(owner_ptr, k))
+				else if (!get_item_okay(owner_ptr, k, tval))
 				{
 					not_found = TRUE;
 				}
@@ -2746,7 +2746,7 @@ bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concp
 			}
 
 			/* Validate the item */
-			if ((command_wrk != USE_FLOOR) && !get_item_okay(owner_ptr, k))
+			if ((command_wrk != USE_FLOOR) && !get_item_okay(owner_ptr, k, tval))
 			{
 				bell();
 				break;

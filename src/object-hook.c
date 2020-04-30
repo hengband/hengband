@@ -964,12 +964,6 @@ bool object_is_quest_target(object_type *o_ptr)
  */
 bool(*item_tester_hook)(object_type*);
 
-/*
- * Here is a "pseudo-hook" used during calls to "get_item()" and
- * "show_inven()" and "show_equip()", and the choice window routines.
- */
-OBJECT_TYPE_VALUE item_tester_tval;
-
 /*!
  * @brief アイテムがitem_tester_hookグローバル関数ポインタの条件を満たしているかを返す汎用関数
  * Check an item against the item tester info

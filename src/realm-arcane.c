@@ -353,7 +353,7 @@ concptr do_arcane_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode
 		{
 			if (cast)
 			{
-				if (!ident_spell(caster_ptr, FALSE)) return NULL;
+				if (!ident_spell(caster_ptr, FALSE, 0)) return NULL;
 			}
 		}
 		break;

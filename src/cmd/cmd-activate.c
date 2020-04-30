@@ -1455,20 +1455,20 @@ bool activate_artifact(player_type *user_ptr, object_type *o_ptr)
 		msg_print(_("明るく輝いている...", "It glows brightly..."));
 		detect_all(user_ptr, DETECT_RAD_DEFAULT);
 		probing(user_ptr);
-		identify_fully(user_ptr, FALSE);
+		identify_fully(user_ptr, FALSE, 0);
 		break;
 	}
 
 	case ACT_ID_FULL:
 	{
 		msg_print(_("黄色く輝いている...", "It glows yellow..."));
-		identify_fully(user_ptr, FALSE);
+		identify_fully(user_ptr, FALSE, 0);
 		break;
 	}
 
 	case ACT_ID_PLAIN:
 	{
-		if (!ident_spell(user_ptr, FALSE)) return FALSE;
+		if (!ident_spell(user_ptr, FALSE, 0)) return FALSE;
 		break;
 	}
 

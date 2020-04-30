@@ -764,7 +764,7 @@ void brand_bolts(player_type *caster_ptr)
 
 bool perilous_secrets(player_type *user_ptr)
 {
-	if (!ident_spell(user_ptr, FALSE)) return FALSE;
+	if (!ident_spell(user_ptr, FALSE, 0)) return FALSE;
 
 	if (mp_ptr->spell_book)
 	{
@@ -1038,15 +1038,12 @@ bool bless_weapon(player_type *caster_ptr)
  */
 bool pulish_shield(player_type *caster_ptr)
 {
-	/* Assume enchant weapon */
-	item_tester_tval = TV_SHIELD;
-
 	concptr q = _("どの盾を磨きますか？", "Pulish which weapon? ");
 	concptr s = _("磨く盾がありません。", "You have weapon to pulish.");
 
 	OBJECT_IDX item;
 	object_type *o_ptr;
-	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), 0);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_EQUIP | USE_INVEN | USE_FLOOR | IGNORE_BOTHHAND_SLOT), TV_SHIELD);
 	if (!o_ptr) return FALSE;
 
 	GAME_TEXT o_name[MAX_NLEN];

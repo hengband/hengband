@@ -1846,7 +1846,7 @@ static int repair_broken_weapon(player_type *player_ptr, PRICE bcost)
  * @param to_ac ＡＣをアップさせる量
  * @return 実際に行ったらTRUE
  */
-static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, HIT_POINT to_dam, ARMOUR_CLASS to_ac)
+static bool enchant_item(player_type *player_ptr, PRICE cost, HIT_PROB to_hit, HIT_POINT to_dam, ARMOUR_CLASS to_ac, OBJECT_TYPE_VALUE item_tester_tval)
 {
 	clear_bldg(4, 18);
 	int maxenchant = (player_ptr->lev / 5);
@@ -2449,7 +2449,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		/* Do nothing */
 		break;
 	case BACT_RESEARCH_ITEM:
-		paid = identify_fully(player_ptr, FALSE);
+		paid = identify_fully(player_ptr, FALSE, 0);
 		break;
 	case BACT_TOWN_HISTORY:
 		town_history(player_ptr);
@@ -2492,11 +2492,11 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		break;
 	case BACT_ENCHANT_WEAPON:
 		item_tester_hook = object_allow_enchant_melee_weapon;
-		enchant_item(player_ptr, bcost, 1, 1, 0);
+		enchant_item(player_ptr, bcost, 1, 1, 0, 0);
 		break;
 	case BACT_ENCHANT_ARMOR:
 		item_tester_hook = object_is_armour;
-		enchant_item(player_ptr, bcost, 0, 0, 1);
+		enchant_item(player_ptr, bcost, 0, 0, 1, 0);
 		break;
 	case BACT_RECHARGE:
 		building_recharge(player_ptr);
@@ -2511,7 +2511,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		paid = TRUE;
 		break;
 	case BACT_IDENT_ONE:
-		paid = ident_spell(player_ptr, FALSE);
+		paid = ident_spell(player_ptr, FALSE, 0);
 		break;
 	case BACT_LEARN:
 		do_cmd_study(player_ptr);
@@ -2524,11 +2524,10 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		break;
 	case BACT_ENCHANT_ARROWS:
 		item_tester_hook = item_tester_hook_ammo;
-		enchant_item(player_ptr, bcost, 1, 1, 0);
+		enchant_item(player_ptr, bcost, 1, 1, 0, 0);
 		break;
 	case BACT_ENCHANT_BOW:
-		item_tester_tval = TV_BOW;
-		enchant_item(player_ptr, bcost, 1, 1, 0);
+		enchant_item(player_ptr, bcost, 1, 1, 0, TV_BOW);
 		break;
 
 	case BACT_RECALL:

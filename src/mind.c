@@ -1116,7 +1116,7 @@ static bool cast_mindcrafter_spell(player_type *caster_ptr, int spell)
 		if (plev < 25)
 			return psychometry(caster_ptr);
 		else
-			return ident_spell(caster_ptr, FALSE);
+			return ident_spell(caster_ptr, FALSE, 0);
 	case 8:
 		/* Mindwave */
 		msg_print(_("精神を捻じ曲げる波動を発生させた！", "Mind-warping forces emanate from your brain!"));
@@ -1599,7 +1599,7 @@ static bool cast_ninja_spell(player_type *caster_ptr, int spell)
 		break;
 	}
 	case 7:
-		return ident_spell(caster_ptr, FALSE);
+		return ident_spell(caster_ptr, FALSE, 0);
 	case 8:
 		set_tim_levitation(caster_ptr, randint1(20) + 20, FALSE);
 		break;

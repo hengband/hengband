@@ -597,6 +597,7 @@ void do_cmd_browse(player_type *caster_ptr)
 	object_type *o_ptr;
 
 	concptr q, s;
+	OBJECT_TYPE_VALUE tval = 0;
 
 	/* Warriors are illiterate */
 	if (!(caster_ptr->realm1 || caster_ptr->realm2) && (caster_ptr->pclass != CLASS_SORCERER) && (caster_ptr->pclass != CLASS_RED_MAGE))
@@ -620,15 +621,14 @@ void do_cmd_browse(player_type *caster_ptr)
 	}
 
 	/* Restrict choices to "useful" books */
-	if (caster_ptr->realm2 == REALM_NONE) item_tester_tval = mp_ptr->spell_book;
+	if (caster_ptr->realm2 == REALM_NONE) tval = mp_ptr->spell_book;
 	else item_tester_hook = item_tester_learn_spell;
 
 	q = _("どの本を読みますか? ", "Browse which book? ");
 	s = _("読める本がない。", "You have no books that you can read.");
 
-	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (caster_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), item_tester_tval);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR | (caster_ptr->pclass == CLASS_FORCETRAINER ? USE_FORCE : 0)), tval);
 
-	item_tester_tval = 0;
 	item_tester_hook = NULL;
 	if (!o_ptr)
 	{
@@ -763,6 +763,8 @@ void do_cmd_study(player_type *caster_ptr)
 	concptr p = spell_category_name(mp_ptr->spell_book);
 	object_type *o_ptr;
 	concptr q, s;
+	OBJECT_TYPE_VALUE tval = 0;
+
 
 	if (!caster_ptr->realm1)
 	{
@@ -800,15 +802,14 @@ void do_cmd_study(player_type *caster_ptr)
 
 
 	/* Restrict choices to "useful" books */
-	if (caster_ptr->realm2 == REALM_NONE) item_tester_tval = mp_ptr->spell_book;
+	if (caster_ptr->realm2 == REALM_NONE) tval = mp_ptr->spell_book;
 	else item_tester_hook = item_tester_learn_spell;
 
 	q = _("どの本から学びますか? ", "Study which book? ");
 	s = _("読める本がない。", "You have no books that you can read.");
 
-	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), item_tester_tval);
+	o_ptr = choose_object(caster_ptr, &item, q, s, (USE_INVEN | USE_FLOOR), tval);
 
-	item_tester_tval = 0;
 	if (!o_ptr) return;
 
 	/* Access the item's sval */

@@ -542,11 +542,11 @@ concptr do_death_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mode)
 			{
 				if (randint1(50) > plev)
 				{
-					if (!ident_spell(caster_ptr, FALSE)) return NULL;
+					if (!ident_spell(caster_ptr, FALSE, 0)) return NULL;
 				}
 				else
 				{
-					if (!identify_fully(caster_ptr, FALSE)) return NULL;
+					if (!identify_fully(caster_ptr, FALSE, 0)) return NULL;
 				}
 			}
 		}

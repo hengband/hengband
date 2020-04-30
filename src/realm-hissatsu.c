@@ -348,11 +348,11 @@ concptr do_hissatsu_spell(player_type *caster_ptr, SPELL_IDX spell, BIT_FLAGS mo
 		{
 			if (plev > 44)
 			{
-				if (!identify_fully(caster_ptr, TRUE)) return NULL;
+				if (!identify_fully(caster_ptr, TRUE, 0)) return NULL;
 			}
 			else
 			{
-				if (!ident_spell(caster_ptr, TRUE)) return NULL;
+				if (!ident_spell(caster_ptr, TRUE, 0)) return NULL;
 			}
 		}
 		break;
