@@ -33,6 +33,7 @@ typedef struct
 
 	MONSTER_IDX who;
 	HIT_POINT dam;
+	EFFECT_ID effect_type;
 	int monspell;
 } effect_player_type;
 
@@ -45,15 +46,70 @@ typedef struct
  * @param monspell 
  * @return 初期化後の構造体ポインタ
  */
-static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, MONSTER_IDX who, HIT_POINT dam, int monspell)
+static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, MONSTER_IDX who, HIT_POINT dam, EFFECT_ID effect_type, int monspell)
 {
 	ep_ptr->rlev = 0;
 	ep_ptr->m_ptr = NULL;
 	ep_ptr->get_damage = 0;
 	ep_ptr->who = who;
 	ep_ptr->dam = dam;
+	ep_ptr->effect_type = effect_type;
 	ep_ptr->monspell = monspell;
 	return ep_ptr;
+}
+
+
+/*!
+ * @brief ボルト魔法を反射する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @param ep_ptr プレーヤー効果構造体への参照ポインタ
+ * @param flag 遠隔攻撃特性
+ * @return 当たったらFALSE、反射したらTRUE
+ */
+static bool process_bolt_reflection(player_type *target_ptr, effect_player_type *ep_ptr, BIT_FLAGS flag)
+{
+	bool can_bolt_hit = target_ptr->reflect || (((target_ptr->special_defense & KATA_FUUJIN) != 0) && !target_ptr->blind);
+	can_bolt_hit &= (flag & PROJECT_REFLECTABLE) != 0;
+	can_bolt_hit &= !one_in_(10);
+	if (!can_bolt_hit) return FALSE;
+
+	POSITION t_y, t_x;
+	int max_attempts = 10;
+	sound(SOUND_REFLECT);
+
+	if (target_ptr->blind)
+		msg_print(_("何かが跳ね返った！", "Something bounces!"));
+	else if (target_ptr->special_defense & KATA_FUUJIN)
+		msg_print(_("風の如く武器を振るって弾き返した！", "The attack bounces!"));
+	else
+		msg_print(_("攻撃が跳ね返った！", "The attack bounces!"));
+
+	if (ep_ptr->who > 0)
+	{
+		floor_type *floor_ptr = target_ptr->current_floor_ptr;
+		monster_type m_type = floor_ptr->m_list[ep_ptr->who];
+		do
+		{
+			t_y = m_type.fy - 1 + randint1(3);
+			t_x = m_type.fx - 1 + randint1(3);
+			max_attempts--;
+		} while (max_attempts && in_bounds2u(floor_ptr, t_y, t_x) && !projectable(target_ptr, target_ptr->y, target_ptr->x, t_y, t_x));
+
+		if (max_attempts < 1)
+		{
+			t_y = m_type.fy;
+			t_x = m_type.fx;
+		}
+	}
+	else
+	{
+		t_y = target_ptr->y - 1 + randint1(3);
+		t_x = target_ptr->x - 1 + randint1(3);
+	}
+
+	project(target_ptr, 0, 0, t_y, t_x, ep_ptr->dam, ep_ptr->effect_type, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), ep_ptr->monspell);
+	disturb(target_ptr, TRUE, TRUE);
+	return TRUE;
 }
 
 
@@ -65,15 +121,15 @@ static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, 
  * @param y 目標Y座標 / Target y location (or location to travel "towards")
  * @param x 目標X座標 / Target x location (or location to travel "towards")
  * @param dam 基本威力 / Base damage roll to apply to affected monsters (or player)
- * @param typ 効果属性 / Type of damage to apply to monsters (and objects)
+ * @param effect_type 効果属性 / Type of damage to apply to monsters (and objects)
  * @param flag 効果フラグ
  * @param monspell 効果元のモンスター魔法ID
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
  */
-bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flag, int monspell)
+bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, int monspell)
 {
 	effect_player_type tmp_effect;
-	effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, monspell);
+	effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, effect_type, monspell);
 	if (!player_bold(target_ptr, y, x)) return FALSE;
 
 	if ((target_ptr->special_defense & NINJA_KAWARIMI) && ep_ptr->dam && (randint0(55) < (target_ptr->lev * 3 / 5 + 20)) && ep_ptr->who && (ep_ptr->who != target_ptr->riding))
@@ -84,46 +140,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 	if (!ep_ptr->who) return FALSE;
 	if (ep_ptr->who == target_ptr->riding) return FALSE;
 
-	if ((target_ptr->reflect || ((target_ptr->special_defense & KATA_FUUJIN) && !target_ptr->blind)) && (flag & PROJECT_REFLECTABLE) && !one_in_(10))
-	{
-		POSITION t_y, t_x;
-		int max_attempts = 10;
-		sound(SOUND_REFLECT);
-
-		if (target_ptr->blind)
-			msg_print(_("何かが跳ね返った！", "Something bounces!"));
-		else if (target_ptr->special_defense & KATA_FUUJIN)
-			msg_print(_("風の如く武器を振るって弾き返した！", "The attack bounces!"));
-		else
-			msg_print(_("攻撃が跳ね返った！", "The attack bounces!"));
-
-		if (ep_ptr->who > 0)
-		{
-			floor_type *floor_ptr = target_ptr->current_floor_ptr;
-			monster_type m_type = floor_ptr->m_list[ep_ptr->who];
-			do
-			{
-				t_y = m_type.fy - 1 + randint1(3);
-				t_x = m_type.fx - 1 + randint1(3);
-				max_attempts--;
-			} while (max_attempts && in_bounds2u(floor_ptr, t_y, t_x) && !projectable(target_ptr, target_ptr->y, target_ptr->x, t_y, t_x));
-
-			if (max_attempts < 1)
-			{
-				t_y = m_type.fy;
-				t_x = m_type.fx;
-			}
-		}
-		else
-		{
-			t_y = target_ptr->y - 1 + randint1(3);
-			t_x = target_ptr->x - 1 + randint1(3);
-		}
-
-		project(target_ptr, 0, 0, t_y, t_x, ep_ptr->dam, typ, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), ep_ptr->monspell);
-		disturb(target_ptr, TRUE, TRUE);
-		return TRUE;
-	}
+	if (process_bolt_reflection(target_ptr, ep_ptr, flag)) return TRUE;
 
 	if (ep_ptr->dam > 1600) ep_ptr->dam = 1600;
 
@@ -142,19 +159,18 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		case PROJECT_WHO_UNCTRL_POWER:
 			strcpy(ep_ptr->killer, _("制御できない力の氾流", "uncontrollable power storm"));
 			break;
-
 		case PROJECT_WHO_GLASS_SHARDS:
 			strcpy(ep_ptr->killer, _("ガラスの破片", "shards of glass"));
 			break;
-
 		default:
 			strcpy(ep_ptr->killer, _("罠", "a trap"));
 			break;
 		}
+
 		strcpy(ep_ptr->m_name, ep_ptr->killer);
 	}
 
-	switch (typ)
+	switch (effect_type)
 	{
 	case GF_ACID:
 	{
