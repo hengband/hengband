@@ -1,0 +1,16 @@
+﻿#pragma once
+
+typedef struct
+{
+	DEPTH rlev; // モンスターのレベル (但し0のモンスターは1になる).
+	monster_type *m_ptr;
+	char killer[80];
+	GAME_TEXT m_name[MAX_NLEN];
+	int get_damage;
+
+	MONSTER_IDX who;
+	HIT_POINT dam;
+	EFFECT_ID effect_type;
+	BIT_FLAGS flag;
+	int monspell;
+} effect_player_type;

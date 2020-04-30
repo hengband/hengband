@@ -1439,6 +1439,9 @@
     <ClInclude Include="..\..\src\spell\spells-type.h">
       <Filter>spell</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\effect\effect-player-util.h">
+      <Filter>effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

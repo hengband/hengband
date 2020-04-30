@@ -348,6 +348,7 @@
     <ClInclude Include="..\..\src\effect\effect-monster-switcher.h" />
     <ClInclude Include="..\..\src\effect\effect-monster-util.h" />
     <ClInclude Include="..\..\src\effect\effect-monster.h" />
+    <ClInclude Include="..\..\src\effect\effect-player-util.h" />
     <ClInclude Include="..\..\src\effect\effect-player.h" />
     <ClInclude Include="..\..\src\effect\spells-effect-util.h" />
     <ClInclude Include="..\..\src\io\dump-remover.h" />

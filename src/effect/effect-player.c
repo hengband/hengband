@@ -6,6 +6,7 @@
  */
 
 #include "angband.h"
+#include "effect/effect-player-util.h"
 #include "effect/effect-player.h"
 #include "main/sound-definitions-table.h"
 #include "player-damage.h"
@@ -22,21 +23,6 @@
 #include "mutation.h"
 #include "object-curse.h"
 #include "spell/spells-type.h"
-
-typedef struct
-{
-	DEPTH rlev; // モンスターのレベル (但し0のモンスターは1になる).
-	monster_type *m_ptr;
-	char killer[80];
-	GAME_TEXT m_name[MAX_NLEN];
-	int get_damage;
-
-	MONSTER_IDX who;
-	HIT_POINT dam;
-	EFFECT_ID effect_type;
-	BIT_FLAGS flag;
-	int monspell;
-} effect_player_type;
 
 typedef enum effect_player_check_result
 {
@@ -146,7 +132,7 @@ static ep_check_result check_continue_player_effect(player_type *target_ptr, eff
 	if ((ep_ptr->who == 0) || (ep_ptr->who == target_ptr->riding))
 		return EP_CHECK_FALSE;
 
-	if (process_bolt_reflection(target_ptr, ep_ptr, ep_ptr->flag))
+	if (process_bolt_reflection(target_ptr, ep_ptr))
 		return EP_CHECK_TRUE;
 
 	return EP_CHECK_CONTINUE;

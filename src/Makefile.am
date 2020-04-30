@@ -172,6 +172,7 @@ hengband_SOURCES = \
 	effect/effect-monster.c effect/effect-monster.h \
 	effect/effect-monster-util.c effect/effect-monster-util.h \
 	effect/effect-monster-switcher.c effect/effect-monster-switcher.h \
+	effect/effect-player-util.h \
 	\
 	spell/technic-info-table.c spell/technic-info-table.h \
 	spell/spells-execution.c spell/spells-execution.h \
