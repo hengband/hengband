@@ -99,17 +99,19 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 
 		if (ep_ptr->who > 0)
 		{
+			floor_type *floor_ptr = target_ptr->current_floor_ptr;
+			monster_type m_type = floor_ptr->m_list[ep_ptr->who];
 			do
 			{
-				t_y = target_ptr->current_floor_ptr->m_list[ep_ptr->who].fy - 1 + randint1(3);
-				t_x = target_ptr->current_floor_ptr->m_list[ep_ptr->who].fx - 1 + randint1(3);
+				t_y = m_type.fy - 1 + randint1(3);
+				t_x = m_type.fx - 1 + randint1(3);
 				max_attempts--;
-			} while (max_attempts && in_bounds2u(target_ptr->current_floor_ptr, t_y, t_x) && !projectable(target_ptr, target_ptr->y, target_ptr->x, t_y, t_x));
+			} while (max_attempts && in_bounds2u(floor_ptr, t_y, t_x) && !projectable(target_ptr, target_ptr->y, target_ptr->x, t_y, t_x));
 
 			if (max_attempts < 1)
 			{
-				t_y = target_ptr->current_floor_ptr->m_list[ep_ptr->who].fy;
-				t_x = target_ptr->current_floor_ptr->m_list[ep_ptr->who].fx;
+				t_y = m_type.fy;
+				t_x = m_type.fx;
 			}
 		}
 		else
