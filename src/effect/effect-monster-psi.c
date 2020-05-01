@@ -3,6 +3,7 @@
 #include "effect/effect-monster-psi.h"
 #include "player-damage.h"
 #include "world.h"
+#include "player-effects.h"
 
 static bool effect_monster_psi_empty_mind(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
