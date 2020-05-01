@@ -505,6 +505,21 @@ static gf_switch_result effect_monster_gravity(player_type *caster_ptr, effect_m
 }
 
 
+static gf_switch_result effect_monster_disintegration(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if ((em_ptr->r_ptr->flags3 & RF3_HURT_ROCK) == 0) return GF_SWITCH_CONTINUE;
+
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flags3 |= (RF3_HURT_ROCK);
+
+	em_ptr->note = _("の皮膚がただれた！", " loses some skin!");
+	em_ptr->note_dies = _("は蒸発した！", " evaporates!");
+	em_ptr->dam *= 2;
+	return GF_SWITCH_CONTINUE;
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -569,18 +584,7 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_GRAVITY:
 		return effect_monster_gravity(caster_ptr, em_ptr);
 	case GF_DISINTEGRATE:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flags3 & RF3_HURT_ROCK)
-		{
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_HURT_ROCK);
-			em_ptr->note = _("の皮膚がただれた！", " loses some skin!");
-			em_ptr->note_dies = _("は蒸発した！", " evaporates!");
-			em_ptr->dam *= 2;
-		}
-
-		break;
-	}
+		return effect_monster_disintegration(caster_ptr, em_ptr);
 	case GF_PSI:
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
