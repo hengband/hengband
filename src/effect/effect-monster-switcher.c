@@ -31,7 +31,7 @@ static gf_switch_result effect_monster_void(effect_monster_type *em_ptr)
 static gf_switch_result effect_monster_acid(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
-	if ((em_ptr->r_ptr->flagsr & RFR_IM_ACID) == 0) return;
+	if ((em_ptr->r_ptr->flagsr & RFR_IM_ACID) == 0) return GF_SWITCH_CONTINUE;
 
 	em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
 	em_ptr->dam /= 9;
@@ -45,7 +45,7 @@ static gf_switch_result effect_monster_acid(player_type *caster_ptr, effect_mons
 static gf_switch_result effect_monster_elec(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
-	if ((em_ptr->r_ptr->flagsr & RFR_IM_ELEC) == 0) return;
+	if ((em_ptr->r_ptr->flagsr & RFR_IM_ELEC) == 0) return GF_SWITCH_CONTINUE;
 
 	em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
 	em_ptr->dam /= 9;
@@ -66,10 +66,10 @@ static gf_switch_result effect_monster_fire(player_type *caster_ptr, effect_mons
 		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
 			em_ptr->r_ptr->r_flagsr |= (RFR_IM_FIRE);
 
-		return;
+		return GF_SWITCH_CONTINUE;
 	}
 	
-	if ((em_ptr->r_ptr->flags3 & (RF3_HURT_FIRE)) == 0) return;
+	if ((em_ptr->r_ptr->flags3 & (RF3_HURT_FIRE)) == 0) return GF_SWITCH_CONTINUE;
 
 	em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
 	em_ptr->dam *= 2;
@@ -90,10 +90,10 @@ static gf_switch_result effect_monster_cold(player_type *caster_ptr, effect_mons
 		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
 			em_ptr->r_ptr->r_flagsr |= (RFR_IM_COLD);
 
-		return;
+		return GF_SWITCH_CONTINUE;
 	}
 	
-	if ((em_ptr->r_ptr->flags3 & (RF3_HURT_COLD)) == 0) return;
+	if ((em_ptr->r_ptr->flags3 & (RF3_HURT_COLD)) == 0) return GF_SWITCH_CONTINUE;
 
 	em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
 	em_ptr->dam *= 2;
@@ -107,7 +107,7 @@ static gf_switch_result effect_monster_cold(player_type *caster_ptr, effect_mons
 static gf_switch_result effect_monster_pois(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
-	if ((em_ptr->r_ptr->flagsr & RFR_IM_POIS) == 0) return;
+	if ((em_ptr->r_ptr->flagsr & RFR_IM_POIS) == 0) return GF_SWITCH_CONTINUE;
 
 	em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
 	em_ptr->dam /= 9;
@@ -128,7 +128,7 @@ static gf_switch_result effect_monster_nuke(player_type *caster_ptr, effect_mons
 		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
 			em_ptr->r_ptr->r_flagsr |= (RFR_IM_POIS);
 
-		return;
+		return GF_SWITCH_CONTINUE;
 	}
 	
 	if (one_in_(3)) em_ptr->do_polymorph = TRUE;
@@ -140,7 +140,7 @@ static gf_switch_result effect_monster_nuke(player_type *caster_ptr, effect_mons
 static gf_switch_result effect_monster_hell_file(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
-	if ((em_ptr->r_ptr->flags3 & RF3_GOOD) == 0) return;
+	if ((em_ptr->r_ptr->flags3 & RF3_GOOD) == 0) return GF_SWITCH_CONTINUE;
 
 	em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
 	em_ptr->dam *= 2;
@@ -158,13 +158,27 @@ static gf_switch_result effect_monster_holy_fire(player_type *caster_ptr, effect
 	{
 		em_ptr->note = _("には耐性がある。", " resists.");
 		em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
-		return;
+		return GF_SWITCH_CONTINUE;
 	}
 
 	em_ptr->dam *= 2;
 	em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
 	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
 		em_ptr->r_ptr->r_flags3 |= RF3_EVIL;
+
+	return GF_SWITCH_CONTINUE;
+}
+
+
+static gf_switch_result effect_monster_plasma(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if ((em_ptr->r_ptr->flagsr & RFR_RES_PLAS) == 0) return GF_SWITCH_CONTINUE;
+
+	em_ptr->note = _("には耐性がある。", " resists.");
+	em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flagsr |= (RFR_RES_PLAS);
 
 	return GF_SWITCH_CONTINUE;
 }
@@ -206,17 +220,7 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_HOLY_FIRE:
 		return effect_monster_holy_fire(caster_ptr, em_ptr);
 	case GF_PLASMA:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_RES_PLAS)
-		{
-			em_ptr->note = _("には耐性がある。", " resists.");
-			em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_RES_PLAS);
-		}
-
-		break;
-	}
+		return effect_monster_plasma(caster_ptr, em_ptr);
 	case GF_NETHER:
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
