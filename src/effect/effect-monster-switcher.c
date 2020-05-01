@@ -48,7 +48,7 @@ static bool effect_monster_psi_weird_mind(effect_monster_type *em_ptr)
 }
 
 
-static bool effect_monster_psi_demon(player_type *caster_ptr, effect_monster_type *em_ptr)
+static bool effect_monster_psi_corrupted(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	bool is_powerful = ((em_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) != 0) &&
 		(em_ptr->r_ptr->level > caster_ptr->lev / 2) &&
@@ -96,7 +96,7 @@ static void effect_monster_psi_resist(player_type *caster_ptr, effect_monster_ty
 {
 	if (effect_monster_psi_empty_mind(caster_ptr, em_ptr)) return;
 	if (effect_monster_psi_weird_mind(em_ptr)) return;
-	if (!effect_monster_psi_demon(caster_ptr, em_ptr)) return;
+	if (!effect_monster_psi_corrupted(caster_ptr, em_ptr)) return;
 
 	if ((randint0(100 + em_ptr->r_ptr->level / 2) < caster_ptr->skill_sav) && !CHECK_MULTISHADOW(caster_ptr))
 	{
@@ -161,20 +161,28 @@ gf_switch_result effect_monster_psi(player_type *caster_ptr, effect_monster_type
 }
 
 
-// Powerful demons & undead can turn a mindcrafter's attacks back on them.
-static void effect_monster_psi_drain_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
+static bool effect_monster_psi_drain_corrupted(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	em_ptr->note = _("には耐性がある！", " resists!");
-	em_ptr->dam /= 3;
 	bool is_corrupted = ((em_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) != 0) &&
 		(em_ptr->r_ptr->level > caster_ptr->lev / 2) &&
 		(one_in_(2));
-	if (!is_corrupted) return;
+	if (!is_corrupted) return FALSE;
 
 	em_ptr->note = NULL;
 	msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！",
 		(em_ptr->seen ? "%^s's corrupted mind backlashes your attack!" :
 			"%^ss corrupted mind backlashes your attack!")), em_ptr->m_name);
+	return TRUE;
+}
+
+
+// Powerful demons & undead can turn a mindcrafter's attacks back on them.
+static void effect_monster_psi_drain_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	em_ptr->note = _("には耐性がある！", " resists!");
+	em_ptr->dam /= 3;
+	if (effect_monster_psi_drain_corrupted(caster_ptr, em_ptr)) return;
+
 	if ((randint0(100 + em_ptr->r_ptr->level / 2) < caster_ptr->skill_sav) && !CHECK_MULTISHADOW(caster_ptr))
 	{
 		msg_print(_("あなたは効力を跳ね返した！", "You resist the effects!"));
@@ -185,7 +193,7 @@ static void effect_monster_psi_drain_resist(player_type *caster_ptr, effect_mons
 	monster_desc(caster_ptr, em_ptr->killer, em_ptr->m_ptr, MD_WRONGDOER_NAME);
 	if (CHECK_MULTISHADOW(caster_ptr))
 	{
-		take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer, -1);  /* has already been /3 */
+		take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer, -1);
 		em_ptr->dam = 0;
 		return;
 	}
@@ -196,7 +204,7 @@ static void effect_monster_psi_drain_resist(player_type *caster_ptr, effect_mons
 
 	caster_ptr->redraw |= PR_MANA;
 	caster_ptr->window |= (PW_SPELL);
-	take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer, -1);  /* has already been /3 */
+	take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer, -1);
 	em_ptr->dam = 0;
 }
 
@@ -237,6 +245,7 @@ gf_switch_result effect_monster_psi_drain(player_type *caster_ptr, effect_monste
 	}
 
 	em_ptr->note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
+	return GF_SWITCH_CONTINUE;
 }
 
 
