@@ -384,6 +384,52 @@ static gf_switch_result effect_monster_force(player_type *caster_ptr, effect_mon
 }
 
 
+// Powerful monsters can resists and normal monsters slow down.
+static gf_switch_result effect_monster_inertial(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if (em_ptr->r_ptr->flagsr & RFR_RES_INER)
+	{
+		em_ptr->note = _("には耐性がある。", " resists.");
+		em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+			em_ptr->r_ptr->r_flagsr |= (RFR_RES_INER);
+
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
+		(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
+	{
+		em_ptr->obvious = FALSE;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, MON_SLOW(em_ptr->m_ptr) + 50))
+		em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
+
+	return GF_SWITCH_CONTINUE;
+}
+
+
+static gf_switch_result effect_monster_tim(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if ((em_ptr->r_ptr->flagsr & RFR_RES_TIME) == 0)
+	{
+		em_ptr->do_time = (em_ptr->dam + 1) / 2;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	em_ptr->note = _("には耐性がある。", " resists.");
+	em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flagsr |= (RFR_RES_TIME);
+
+	return GF_SWITCH_CONTINUE;
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -442,48 +488,9 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_FORCE:
 		return effect_monster_force(caster_ptr, em_ptr);
 	case GF_INERTIAL:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_RES_INER)
-		{
-			em_ptr->note = _("には耐性がある。", " resists.");
-			em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_RES_INER);
-		}
-		else
-		{
-			/* Powerful monsters can resist */
-			if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
-				(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
-			{
-				em_ptr->obvious = FALSE;
-			}
-			/* Normal monsters slow down */
-			else
-			{
-				if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, MON_SLOW(em_ptr->m_ptr) + 50))
-				{
-					em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
-				}
-			}
-		}
-
-		break;
-	}
+		return effect_monster_inertial(caster_ptr, em_ptr);
 	case GF_TIME:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_RES_TIME)
-		{
-			em_ptr->note = _("には耐性がある。", " resists.");
-			em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_RES_TIME);
-		}
-		else
-			em_ptr->do_time = (em_ptr->dam + 1) / 2;
-
-		break;
-	}
+		return effect_monster_time(caster_ptr, em_ptr);
 	case GF_GRAVITY:
 	{
 		bool resist_tele = FALSE;
