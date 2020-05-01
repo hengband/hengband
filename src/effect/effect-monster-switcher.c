@@ -183,30 +183,36 @@ static gf_switch_result effect_monster_plasma(player_type *caster_ptr, effect_mo
 	return GF_SWITCH_CONTINUE;
 }
 
+
+static bool effect_monster_nether_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if ((em_ptr->r_ptr->flagsr & RFR_RES_NETH) == 0) return FALSE;
+
+	if (em_ptr->r_ptr->flags3 & RF3_UNDEAD)
+	{
+		em_ptr->note = _("には完全な耐性がある！", " is immune.");
+		em_ptr->dam = 0;
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+			em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
+	}
+	else
+	{
+		em_ptr->note = _("には耐性がある。", " resists.");
+		em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
+	}
+
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flagsr |= (RFR_RES_NETH);
+
+	return TRUE;
+}
+
+
 static gf_switch_result effect_monster_nether(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
-	if (em_ptr->r_ptr->flagsr & RFR_RES_NETH)
-	{
-		if (em_ptr->r_ptr->flags3 & RF3_UNDEAD)
-		{
-			em_ptr->note = _("には完全な耐性がある！", " is immune.");
-			em_ptr->dam = 0;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
-				em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
-		}
-		else
-		{
-			em_ptr->note = _("には耐性がある。", " resists.");
-			em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
-		}
-
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
-			em_ptr->r_ptr->r_flagsr |= (RFR_RES_NETH);
-
-		return GF_SWITCH_CONTINUE;
-	}
 	
+	if (effect_monster_nether_resist(caster_ptr, em_ptr)) return GF_SWITCH_CONTINUE;
 	if ((em_ptr->r_ptr->flags3 & RF3_EVIL) == 0) return GF_SWITCH_CONTINUE;
 
 	em_ptr->note = _("はいくらか耐性を示した。", " resists somewhat.");
