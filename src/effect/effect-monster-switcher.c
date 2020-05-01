@@ -23,30 +23,6 @@
 #include "effect/effect-monster-psi.h"
 #include "effect/effect-monster-domination.h"
 
-gf_switch_result effect_monster_icee_bolt(player_type *caster_ptr, effect_monster_type *em_ptr)
-{
-	if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-	em_ptr->do_stun = (randint1(15) + 1) / (em_ptr->r + 1);
-	if (em_ptr->r_ptr->flagsr & RFR_IM_COLD)
-	{
-		em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
-		em_ptr->dam /= 9;
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
-			em_ptr->r_ptr->r_flagsr |= (RFR_IM_COLD);
-	}
-	else if (em_ptr->r_ptr->flags3 & (RF3_HURT_COLD))
-	{
-		em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
-		em_ptr->dam *= 2;
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
-			em_ptr->r_ptr->r_flags3 |= (RF3_HURT_COLD);
-	}
-
-	return GF_SWITCH_CONTINUE;
-}
-
-
 gf_switch_result effect_monster_hypodynamia(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;

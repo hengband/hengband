@@ -24,3 +24,4 @@ gf_switch_result effect_monster_inertial(player_type *caster_ptr, effect_monster
 gf_switch_result effect_monster_time(player_type *caster_ptr, effect_monster_type *em_ptr);
 gf_switch_result effect_monster_gravity(player_type *caster_ptr, effect_monster_type *em_ptr);
 gf_switch_result effect_monster_disintegration(player_type *caster_ptr, effect_monster_type *em_ptr);
+gf_switch_result effect_monster_icee_bolt(player_type *caster_ptr, effect_monster_type *em_ptr);
