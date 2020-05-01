@@ -302,6 +302,88 @@ static gf_switch_result effect_monster_rocket(player_type *caster_ptr, effect_mo
 }
 
 
+static gf_switch_result effect_monster_sound(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if ((em_ptr->r_ptr->flagsr & RFR_RES_SOUN) == 0)
+	{
+		em_ptr->do_stun = (10 + randint1(15) + em_ptr->r) / (em_ptr->r + 1);
+		return GF_SWITCH_CONTINUE;
+	}
+
+	em_ptr->note = _("には耐性がある。", " resists.");
+	em_ptr->dam *= 2; em_ptr->dam /= randint1(6) + 6;
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flagsr |= (RFR_RES_SOUN);
+
+	return GF_SWITCH_CONTINUE;
+}
+
+
+static gf_switch_result effect_monster_confusion(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if ((em_ptr->r_ptr->flags3 & RF3_NO_CONF) == 0)
+	{
+		em_ptr->do_conf = (10 + randint1(15) + em_ptr->r) / (em_ptr->r + 1);
+		return GF_SWITCH_CONTINUE;
+	}
+	
+	em_ptr->note = _("には耐性がある。", " resists.");
+	em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
+		
+	return GF_SWITCH_CONTINUE;
+}
+
+
+static gf_switch_result effect_monster_disenchant(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if ((em_ptr->r_ptr->flagsr & RFR_RES_DISE) == 0) return GF_SWITCH_CONTINUE;
+
+	em_ptr->note = _("には耐性がある。", " resists.");
+	em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flagsr |= (RFR_RES_DISE);
+
+	return GF_SWITCH_CONTINUE;
+}
+
+
+static gf_switch_result effect_monster_nexus(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if ((em_ptr->r_ptr->flagsr & RFR_RES_NEXU) == 0) return GF_SWITCH_CONTINUE;
+
+	em_ptr->note = _("には耐性がある。", " resists.");
+	em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flagsr |= (RFR_RES_NEXU);
+
+	return GF_SWITCH_CONTINUE;
+}
+
+
+static gf_switch_result effect_monster_force(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if ((em_ptr->r_ptr->flagsr & RFR_RES_WALL) == 0)
+	{
+		em_ptr->do_stun = (randint1(15) + em_ptr->r) / (em_ptr->r + 1);
+		return GF_SWITCH_CONTINUE;
+	}
+
+	em_ptr->note = _("には耐性がある。", " resists.");
+	em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flagsr |= (RFR_RES_WALL);
+
+	return GF_SWITCH_CONTINUE;
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -350,71 +432,15 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_ROCKET:
 		return effect_monster_rocket(caster_ptr, em_ptr);
 	case GF_SOUND:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_RES_SOUN)
-		{
-			em_ptr->note = _("には耐性がある。", " resists.");
-			em_ptr->dam *= 2; em_ptr->dam /= randint1(6) + 6;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_RES_SOUN);
-		}
-		else
-			em_ptr->do_stun = (10 + randint1(15) + em_ptr->r) / (em_ptr->r + 1);
-
-		break;
-	}
+		return effect_monster_sound(caster_ptr, em_ptr);
 	case GF_CONFUSION:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flags3 & RF3_NO_CONF)
-		{
-			em_ptr->note = _("には耐性がある。", " resists.");
-			em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
-		}
-		else
-			em_ptr->do_conf = (10 + randint1(15) + em_ptr->r) / (em_ptr->r + 1);
-
-		break;
-	}
+		return effect_monster_confusion(caster_ptr, em_ptr);
 	case GF_DISENCHANT:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_RES_DISE)
-		{
-			em_ptr->note = _("には耐性がある。", " resists.");
-			em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_RES_DISE);
-		}
-
-		break;
-	}
+		return effect_monster_disenchant(caster_ptr, em_ptr);
 	case GF_NEXUS:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_RES_NEXU)
-		{
-			em_ptr->note = _("には耐性がある。", " resists.");
-			em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_RES_NEXU);
-		}
-
-		break;
-	}
+		return effect_monster_nexus(caster_ptr, em_ptr);
 	case GF_FORCE:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_RES_WALL)
-		{
-			em_ptr->note = _("には耐性がある。", " resists.");
-			em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_RES_WALL);
-		}
-		else
-			em_ptr->do_stun = (randint1(15) + em_ptr->r) / (em_ptr->r + 1);
-
-		break;
-	}
+		return effect_monster_force(caster_ptr, em_ptr);
 	case GF_INERTIAL:
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
