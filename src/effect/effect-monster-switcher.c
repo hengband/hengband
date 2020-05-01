@@ -43,6 +43,27 @@ gf_switch_result effect_monster_telekinesis(player_type *caster_ptr, effect_mons
 }
 
 
+static void effect_monster_domination_corrupted_addition(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	switch (randint1(4))
+	{
+	case 1:
+		set_stun(caster_ptr, caster_ptr->stun + em_ptr->dam / 2);
+		break;
+	case 2:
+		set_confused(caster_ptr, caster_ptr->confused + em_ptr->dam / 2);
+		break;
+	default:
+	{
+		if (em_ptr->r_ptr->flags3 & RF3_NO_FEAR)
+			em_ptr->note = _("には効果がなかった。", " is unaffected.");
+		else
+			set_afraid(caster_ptr, caster_ptr->afraid + em_ptr->dam);
+	}
+	}
+}
+
+
 // Powerful demons & undead can turn a mindcrafter's attacks back on them.
 static void effect_monster_domination_corrupted(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
@@ -66,21 +87,22 @@ static void effect_monster_domination_corrupted(player_type *caster_ptr, effect_
 		return;
 	}
 
+	effect_monster_domination_corrupted_addition(caster_ptr, em_ptr);
+}
+
+
+static void effect_monster_domination_addition(effect_monster_type *em_ptr)
+{
 	switch (randint1(4))
 	{
 	case 1:
-		set_stun(caster_ptr, caster_ptr->stun + em_ptr->dam / 2);
+		em_ptr->do_stun = em_ptr->dam / 2;
 		break;
 	case 2:
-		set_confused(caster_ptr, caster_ptr->confused + em_ptr->dam / 2);
+		em_ptr->do_conf = em_ptr->dam / 2;
 		break;
 	default:
-	{
-		if (em_ptr->r_ptr->flags3 & RF3_NO_FEAR)
-			em_ptr->note = _("には効果がなかった。", " is unaffected.");
-		else
-			set_afraid(caster_ptr, caster_ptr->afraid + em_ptr->dam);
-	}
+		em_ptr->do_fear = em_ptr->dam;
 	}
 }
 
@@ -112,18 +134,7 @@ gf_switch_result effect_monster_domination(player_type *caster_ptr, effect_monst
 		return GF_SWITCH_CONTINUE;
 	}
 
-	switch (randint1(4))
-	{
-	case 1:
-		em_ptr->do_stun = em_ptr->dam / 2;
-		break;
-	case 2:
-		em_ptr->do_conf = em_ptr->dam / 2;
-		break;
-	default:
-		em_ptr->do_fear = em_ptr->dam;
-	}
-
+	effect_monster_domination_addition(em_ptr);
 	em_ptr->dam = 0;
 	return GF_SWITCH_CONTINUE;
 }
