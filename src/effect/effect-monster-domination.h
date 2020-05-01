@@ -1,0 +1,3 @@
+#pragma once
+
+gf_switch_result effect_monster_domination(player_type *caster_ptr, effect_monster_type *em_ptr);
