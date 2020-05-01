@@ -140,6 +140,86 @@ gf_switch_result effect_monster_domination(player_type *caster_ptr, effect_monst
 }
 
 
+gf_switch_result effect_monster_icee_bolt(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	em_ptr->do_stun = (randint1(15) + 1) / (em_ptr->r + 1);
+	if (em_ptr->r_ptr->flagsr & RFR_IM_COLD)
+	{
+		em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
+		em_ptr->dam /= 9;
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+			em_ptr->r_ptr->r_flagsr |= (RFR_IM_COLD);
+	}
+	else if (em_ptr->r_ptr->flags3 & (RF3_HURT_COLD))
+	{
+		em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
+		em_ptr->dam *= 2;
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+			em_ptr->r_ptr->r_flags3 |= (RF3_HURT_COLD);
+	}
+
+	return GF_SWITCH_CONTINUE;
+}
+
+
+gf_switch_result effect_monster_hypodynamia(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if (monster_living(em_ptr->m_ptr->r_idx))
+	{
+		em_ptr->do_time = (em_ptr->dam + 7) / 8;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+	{
+		if (em_ptr->r_ptr->flags3 & RF3_DEMON) em_ptr->r_ptr->r_flags3 |= (RF3_DEMON);
+		if (em_ptr->r_ptr->flags3 & RF3_UNDEAD) em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
+		if (em_ptr->r_ptr->flags3 & RF3_NONLIVING) em_ptr->r_ptr->r_flags3 |= (RF3_NONLIVING);
+	}
+
+	em_ptr->note = _("には効果がなかった。", " is unaffected.");
+	em_ptr->obvious = FALSE;
+	em_ptr->dam = 0;
+	return GF_SWITCH_CONTINUE;
+}
+
+
+gf_switch_result effect_monster_death_ray(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (!monster_living(em_ptr->m_ptr->r_idx))
+	{
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		{
+			if (em_ptr->r_ptr->flags3 & RF3_DEMON) em_ptr->r_ptr->r_flags3 |= (RF3_DEMON);
+			if (em_ptr->r_ptr->flags3 & RF3_UNDEAD) em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
+			if (em_ptr->r_ptr->flags3 & RF3_NONLIVING) em_ptr->r_ptr->r_flags3 |= (RF3_NONLIVING);
+		}
+
+		em_ptr->note = _("には完全な耐性がある！", " is immune.");
+		em_ptr->obvious = FALSE;
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (((em_ptr->r_ptr->flags1 & RF1_UNIQUE) &&
+		(randint1(888) != 666)) ||
+		(((em_ptr->r_ptr->level + randint1(20)) > randint1((em_ptr->caster_lev / 2) + randint1(10))) &&
+			randint1(100) != 66))
+	{
+		em_ptr->note = _("には耐性がある！", " resists!");
+		em_ptr->obvious = FALSE;
+		em_ptr->dam = 0;
+	}
+
+	return GF_SWITCH_CONTINUE;
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -214,71 +294,11 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_DOMINATION:
 		return effect_monster_domination(caster_ptr, em_ptr);
 	case GF_ICE:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		em_ptr->do_stun = (randint1(15) + 1) / (em_ptr->r + 1);
-		if (em_ptr->r_ptr->flagsr & RFR_IM_COLD)
-		{
-			em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
-			em_ptr->dam /= 9;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_IM_COLD);
-		}
-		else if (em_ptr->r_ptr->flags3 & (RF3_HURT_COLD))
-		{
-			em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
-			em_ptr->dam *= 2;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_HURT_COLD);
-		}
-
-		break;
-	}
+		return effect_monster_icee_bolt(caster_ptr, em_ptr);
 	case GF_HYPODYNAMIA:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (!monster_living(em_ptr->m_ptr->r_idx))
-		{
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
-			{
-				if (em_ptr->r_ptr->flags3 & RF3_DEMON) em_ptr->r_ptr->r_flags3 |= (RF3_DEMON);
-				if (em_ptr->r_ptr->flags3 & RF3_UNDEAD) em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
-				if (em_ptr->r_ptr->flags3 & RF3_NONLIVING) em_ptr->r_ptr->r_flags3 |= (RF3_NONLIVING);
-			}
-			em_ptr->note = _("には効果がなかった。", " is unaffected.");
-			em_ptr->obvious = FALSE;
-			em_ptr->dam = 0;
-		}
-		else
-			em_ptr->do_time = (em_ptr->dam + 7) / 8;
-
-		break;
-	}
+		return effect_monster_hypodynamia(caster_ptr, em_ptr);
 	case GF_DEATH_RAY:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (!monster_living(em_ptr->m_ptr->r_idx))
-		{
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
-			{
-				if (em_ptr->r_ptr->flags3 & RF3_DEMON) em_ptr->r_ptr->r_flags3 |= (RF3_DEMON);
-				if (em_ptr->r_ptr->flags3 & RF3_UNDEAD) em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
-				if (em_ptr->r_ptr->flags3 & RF3_NONLIVING) em_ptr->r_ptr->r_flags3 |= (RF3_NONLIVING);
-			}
-			em_ptr->note = _("には完全な耐性がある！", " is immune.");
-			em_ptr->obvious = FALSE;
-			em_ptr->dam = 0;
-		}
-		else if (((em_ptr->r_ptr->flags1 & RF1_UNIQUE) &&
-			(randint1(888) != 666)) ||
-			(((em_ptr->r_ptr->level + randint1(20)) > randint1((em_ptr->caster_lev / 2) + randint1(10))) &&
-				randint1(100) != 66))
-		{
-			em_ptr->note = _("には耐性がある！", " resists!");
-			em_ptr->obvious = FALSE;
-			em_ptr->dam = 0;
-		}
-
-		break;
-	}
+		return effect_monster_death_ray(caster_ptr, em_ptr);
 	case GF_OLD_POLY:
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
