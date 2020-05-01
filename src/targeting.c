@@ -1491,7 +1491,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 	creature_ptr->window |= (PW_OVERHEAD);
 	handle_stuff(creature_ptr);
 
-	return target_who > 0;
+	return target_who != 0;
 }
 
 
