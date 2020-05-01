@@ -53,10 +53,8 @@ gf_switch_result effect_monster_domination(player_type *caster_ptr, effect_monst
 		(em_ptr->r_ptr->flags3 & RF3_NO_CONF) ||
 		(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
 	{
-		if (em_ptr->r_ptr->flags3 & RF3_NO_CONF)
-		{
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
-		}
+		if (((em_ptr->r_ptr->flags3 & RF3_NO_CONF) != 0) && is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+			em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
 
 		em_ptr->do_conf = 0;
 
@@ -104,28 +102,29 @@ gf_switch_result effect_monster_domination(player_type *caster_ptr, effect_monst
 			em_ptr->note = _("には効果がなかった。", " is unaffected.");
 			em_ptr->obvious = FALSE;
 		}
+
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
 	}
-	else
+
+	if (!common_saving_throw_charm(caster_ptr, em_ptr->dam, em_ptr->m_ptr))
 	{
-		if (!common_saving_throw_charm(caster_ptr, em_ptr->dam, em_ptr->m_ptr))
-		{
-			em_ptr->note = _("があなたに隷属した。", " is in your thrall!");
-			set_pet(caster_ptr, em_ptr->m_ptr);
-		}
-		else
-		{
-			switch (randint1(4))
-			{
-			case 1:
-				em_ptr->do_stun = em_ptr->dam / 2;
-				break;
-			case 2:
-				em_ptr->do_conf = em_ptr->dam / 2;
-				break;
-			default:
-				em_ptr->do_fear = em_ptr->dam;
-			}
-		}
+		em_ptr->note = _("があなたに隷属した。", " is in your thrall!");
+		set_pet(caster_ptr, em_ptr->m_ptr);
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	switch (randint1(4))
+	{
+	case 1:
+		em_ptr->do_stun = em_ptr->dam / 2;
+		break;
+	case 2:
+		em_ptr->do_conf = em_ptr->dam / 2;
+		break;
+	default:
+		em_ptr->do_fear = em_ptr->dam;
 	}
 
 	em_ptr->dam = 0;
