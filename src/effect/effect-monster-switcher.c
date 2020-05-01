@@ -97,6 +97,29 @@ static void effect_monster_psi_resist(player_type *caster_ptr, effect_monster_ty
 }
 
 
+static void effect_monster_psi_addition(effect_monster_type *em_ptr)
+{
+	if ((em_ptr->dam <= 0) || !one_in_(4)) return;
+
+	switch (randint1(4))
+	{
+	case 1:
+		em_ptr->do_conf = 3 + randint1(em_ptr->dam);
+		break;
+	case 2:
+		em_ptr->do_stun = 3 + randint1(em_ptr->dam);
+		break;
+	case 3:
+		em_ptr->do_fear = 3 + randint1(em_ptr->dam);
+		break;
+	default:
+		em_ptr->note = _("は眠り込んでしまった！", " falls asleep!");
+		em_ptr->do_sleep = 3 + randint1(em_ptr->dam);
+		break;
+	}
+}
+
+
 gf_switch_result effect_monster_psi(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
@@ -104,31 +127,13 @@ gf_switch_result effect_monster_psi(player_type *caster_ptr, effect_monster_type
 	{
 		if (em_ptr->seen_msg)
 			msg_format(_("%sはあなたが見えないので影響されない！", "%^s can't see you, and isn't affected!"), em_ptr->m_name);
+
 		em_ptr->skipped = TRUE;
 		return GF_SWITCH_CONTINUE;
 	}
 
-	effect_monster_psi_resist();
-	if ((em_ptr->dam > 0) && one_in_(4))
-	{
-		switch (randint1(4))
-		{
-		case 1:
-			em_ptr->do_conf = 3 + randint1(em_ptr->dam);
-			break;
-		case 2:
-			em_ptr->do_stun = 3 + randint1(em_ptr->dam);
-			break;
-		case 3:
-			em_ptr->do_fear = 3 + randint1(em_ptr->dam);
-			break;
-		default:
-			em_ptr->note = _("は眠り込んでしまった！", " falls asleep!");
-			em_ptr->do_sleep = 3 + randint1(em_ptr->dam);
-			break;
-		}
-	}
-
+	effect_monster_psi_resist(caster_ptr, em_ptr);
+	effect_monster_psi_addition(em_ptr);
 	em_ptr->note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
 	return GF_SWITCH_CONTINUE;
 }
