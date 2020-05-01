@@ -229,3 +229,24 @@ gf_switch_result effect_monster_psi_drain(player_type *caster_ptr, effect_monste
 	em_ptr->note_dies = _("の精神は崩壊し、肉体は抜け殻となった。", " collapses, a mindless husk.");
 	return GF_SWITCH_CONTINUE;
 }
+
+
+gf_switch_result effect_monster_telekinesis(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if (one_in_(4))
+	{
+		if (caster_ptr->riding && (em_ptr->g_ptr->m_idx == caster_ptr->riding)) em_ptr->do_dist = 0;
+		else em_ptr->do_dist = 7;
+	}
+
+	em_ptr->do_stun = damroll((em_ptr->caster_lev / 20) + 3, em_ptr->dam) + 1;
+	if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
+		(em_ptr->r_ptr->level > 5 + randint1(em_ptr->dam)))
+	{
+		em_ptr->do_stun = 0;
+		em_ptr->obvious = FALSE;
+	}
+
+	return GF_SWITCH_CONTINUE;
+}
