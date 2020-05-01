@@ -22,53 +22,49 @@
 #include "spell/spells-type.h"
 #include "effect/effect-monster-resist-hurt.h"
 
-// Powerful demons & undead can turn a mindcrafter's attacks back on them.
-static void effect_monster_psi_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
+static bool effect_monster_psi_empty_mind(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	if (em_ptr->r_ptr->flags2 & RF2_EMPTY_MIND)
-	{
-		em_ptr->dam = 0;
-		em_ptr->note = _("には完全な耐性がある！", " is immune.");
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
-			em_ptr->r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+	if ((em_ptr->r_ptr->flags2 & RF2_EMPTY_MIND) == 0) return FALSE;
 
-		return;
-	}
-	
+	em_ptr->dam = 0;
+	em_ptr->note = _("には完全な耐性がある！", " is immune.");
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+
+	return TRUE;
+}
+
+
+static bool effect_monster_psi_weird_mind(effect_monster_type *em_ptr)
+{
 	bool has_resistance = ((em_ptr->r_ptr->flags2 & (RF2_STUPID | RF2_WEIRD_MIND)) != 0) ||
-		((em_ptr->r_ptr->flags3 & RF3_ANIMAL) != 0 )||
+		((em_ptr->r_ptr->flags3 & RF3_ANIMAL) != 0) ||
 		(em_ptr->r_ptr->level > randint1(3 * em_ptr->dam));
-	if (!has_resistance) return;
+	if (!has_resistance) return FALSE;
 
 	em_ptr->note = _("には耐性がある！", " resists!");
 	em_ptr->dam /= 3;
+	return TRUE;
+}
 
+
+static bool effect_monster_psi_demon(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
 	bool is_powerful = ((em_ptr->r_ptr->flags3 & (RF3_UNDEAD | RF3_DEMON)) != 0) &&
 		(em_ptr->r_ptr->level > caster_ptr->lev / 2) &&
 		one_in_(2);
-	if (!is_powerful) return;
+	if (!is_powerful) return FALSE;
 
 	em_ptr->note = NULL;
 	msg_format(_("%^sの堕落した精神は攻撃を跳ね返した！",
 		(em_ptr->seen ? "%^s's corrupted mind backlashes your attack!" :
 			"%^ss corrupted mind backlashes your attack!")), em_ptr->m_name);
+	return TRUE;
+}
 
-	if ((randint0(100 + em_ptr->r_ptr->level / 2) < caster_ptr->skill_sav) && !CHECK_MULTISHADOW(caster_ptr))
-	{
-		msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-		em_ptr->dam = 0;
-		return;
-	}
 
-	/* Injure +/- confusion */
-	monster_desc(caster_ptr, em_ptr->killer, em_ptr->m_ptr, MD_WRONGDOER_NAME);
-	take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer, -1);
-	if (!one_in_(4) || CHECK_MULTISHADOW(caster_ptr))
-	{
-		em_ptr->dam = 0;
-		return;
-	}
-
+static void effect_monster_psi_resist_addition(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
 	switch (randint1(4))
 	{
 	case 1:
@@ -92,7 +88,33 @@ static void effect_monster_psi_resist(player_type *caster_ptr, effect_monster_ty
 
 		break;
 	}
+}
 
+
+// Powerful demons & undead can turn a mindcrafter's attacks back on them.
+static void effect_monster_psi_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (effect_monster_psi_empty_mind(caster_ptr, em_ptr)) return;
+	if (effect_monster_psi_weird_mind(em_ptr)) return;
+	if (!effect_monster_psi_demon(caster_ptr, em_ptr)) return;
+
+	if ((randint0(100 + em_ptr->r_ptr->level / 2) < caster_ptr->skill_sav) && !CHECK_MULTISHADOW(caster_ptr))
+	{
+		msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+		em_ptr->dam = 0;
+		return;
+	}
+
+	/* Injure +/- confusion */
+	monster_desc(caster_ptr, em_ptr->killer, em_ptr->m_ptr, MD_WRONGDOER_NAME);
+	take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer, -1);
+	if (!one_in_(4) || CHECK_MULTISHADOW(caster_ptr))
+	{
+		em_ptr->dam = 0;
+		return;
+	}
+
+	effect_monster_psi_resist_addition(caster_ptr, em_ptr);
 	em_ptr->dam = 0;
 }
 
