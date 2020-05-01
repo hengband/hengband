@@ -183,6 +183,40 @@ static gf_switch_result effect_monster_plasma(player_type *caster_ptr, effect_mo
 	return GF_SWITCH_CONTINUE;
 }
 
+static gf_switch_result effect_monster_nether(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if (em_ptr->r_ptr->flagsr & RFR_RES_NETH)
+	{
+		if (em_ptr->r_ptr->flags3 & RF3_UNDEAD)
+		{
+			em_ptr->note = _("には完全な耐性がある！", " is immune.");
+			em_ptr->dam = 0;
+			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+				em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
+		}
+		else
+		{
+			em_ptr->note = _("には耐性がある。", " resists.");
+			em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
+		}
+
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+			em_ptr->r_ptr->r_flagsr |= (RFR_RES_NETH);
+
+		return GF_SWITCH_CONTINUE;
+	}
+	
+	if ((em_ptr->r_ptr->flags3 & RF3_EVIL) == 0) return GF_SWITCH_CONTINUE;
+
+	em_ptr->note = _("はいくらか耐性を示した。", " resists somewhat.");
+	em_ptr->dam /= 2;
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
+
+	return GF_SWITCH_CONTINUE;
+}
+
 
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
@@ -222,32 +256,7 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_PLASMA:
 		return effect_monster_plasma(caster_ptr, em_ptr);
 	case GF_NETHER:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_RES_NETH)
-		{
-			if (em_ptr->r_ptr->flags3 & RF3_UNDEAD)
-			{
-				em_ptr->note = _("には完全な耐性がある！", " is immune.");
-				em_ptr->dam = 0;
-				if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
-			}
-			else
-			{
-				em_ptr->note = _("には耐性がある。", " resists.");
-				em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
-			}
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_RES_NETH);
-		}
-		else if (em_ptr->r_ptr->flags3 & RF3_EVIL)
-		{
-			em_ptr->note = _("はいくらか耐性を示した。", " resists somewhat.");
-			em_ptr->dam /= 2;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
-		}
-
-		break;
-	}
+		return effect_monster_nether(caster_ptr, em_ptr);
 	case GF_WATER:
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
