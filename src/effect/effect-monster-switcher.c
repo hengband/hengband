@@ -1485,8 +1485,7 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 			}
 			else
 			{
-				/* todo 乱数で破滅のを弾いた結果が「耐性を持っている」ことになるのはおかしい */
-				em_ptr->note = _("は耐性を持っている！", "resists!");
+				em_ptr->note = _("は破滅の手に耐え切った！", "resists!");
 				em_ptr->dam = 0;
 			}
 		}
