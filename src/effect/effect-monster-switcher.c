@@ -21,12 +21,14 @@
 #include "cmd/cmd-pet.h" // 暫定、後で消すかも.
 #include "spell/spells-type.h"
 
-static void effect_monster_void(effect_monster_type *em_ptr)
+static gf_switch_result effect_monster_void(effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	return GF_SWITCH_CONTINUE;
 }
 
-static void effect_monster_acid(player_type *caster_ptr, effect_monster_type *em_ptr)
+static gf_switch_result effect_monster_acid(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if ((em_ptr->r_ptr->flagsr & RFR_IM_ACID) == 0) return;
@@ -35,10 +37,12 @@ static void effect_monster_acid(player_type *caster_ptr, effect_monster_type *em
 	em_ptr->dam /= 9;
 	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
 		em_ptr->r_ptr->r_flagsr |= (RFR_IM_ACID);
+
+	return GF_SWITCH_CONTINUE;
 }
 
 
-static void effect_monster_elec(player_type *caster_ptr, effect_monster_type *em_ptr)
+static gf_switch_result effect_monster_elec(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if ((em_ptr->r_ptr->flagsr & RFR_IM_ELEC) == 0) return;
@@ -47,10 +51,12 @@ static void effect_monster_elec(player_type *caster_ptr, effect_monster_type *em
 	em_ptr->dam /= 9;
 	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
 		em_ptr->r_ptr->r_flagsr |= (RFR_IM_ELEC);
+
+	return GF_SWITCH_CONTINUE;
 }
 
 
-static void effect_monster_fire(player_type *caster_ptr, effect_monster_type *em_ptr)
+static gf_switch_result effect_monster_fire(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if (em_ptr->r_ptr->flagsr & RFR_IM_FIRE)
@@ -69,10 +75,12 @@ static void effect_monster_fire(player_type *caster_ptr, effect_monster_type *em
 	em_ptr->dam *= 2;
 	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
 		em_ptr->r_ptr->r_flags3 |= (RF3_HURT_FIRE);
+
+	return GF_SWITCH_CONTINUE;
 }
 
 
-static void effect_monster_cold(player_type *caster_ptr, effect_monster_type *em_ptr)
+static gf_switch_result effect_monster_cold(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if (em_ptr->r_ptr->flagsr & RFR_IM_COLD)
@@ -89,22 +97,28 @@ static void effect_monster_cold(player_type *caster_ptr, effect_monster_type *em
 
 	em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
 	em_ptr->dam *= 2;
-	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_HURT_COLD);
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flags3 |= (RF3_HURT_COLD);
+
+	return GF_SWITCH_CONTINUE;
 }
 
 
-static void effect_monster_pois(player_type *caster_ptr, effect_monster_type *em_ptr)
+static gf_switch_result effect_monster_pois(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if ((em_ptr->r_ptr->flagsr & RFR_IM_POIS) == 0) return;
 
 	em_ptr->note = _("にはかなり耐性がある！", " resists a lot.");
 	em_ptr->dam /= 9;
-	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_IM_POIS);
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flagsr |= (RFR_IM_POIS);
+
+	return GF_SWITCH_CONTINUE;
 }
 
 
-static void effect_monster_nuke(player_type *caster_ptr, effect_monster_type *em_ptr)
+static gf_switch_result effect_monster_nuke(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if (em_ptr->r_ptr->flagsr & RFR_IM_POIS)
@@ -118,10 +132,12 @@ static void effect_monster_nuke(player_type *caster_ptr, effect_monster_type *em
 	}
 	
 	if (one_in_(3)) em_ptr->do_polymorph = TRUE;
+
+	return GF_SWITCH_CONTINUE;
 }
 
 
-static void effect_monster_hell_file(player_type *caster_ptr, effect_monster_type *em_ptr)
+static gf_switch_result effect_monster_hell_file(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if ((em_ptr->r_ptr->flags3 & RF3_GOOD) == 0) return;
@@ -130,10 +146,12 @@ static void effect_monster_hell_file(player_type *caster_ptr, effect_monster_typ
 	em_ptr->dam *= 2;
 	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
 		em_ptr->r_ptr->r_flags3 |= RF3_GOOD;
+
+	return GF_SWITCH_CONTINUE;
 }
 
 
-static void effect_monster_holy_fire(player_type *caster_ptr, effect_monster_type *em_ptr)
+static gf_switch_result effect_monster_holy_fire(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
 	if ((em_ptr->r_ptr->flags3 & RF3_EVIL) == 0)
@@ -147,6 +165,8 @@ static void effect_monster_holy_fire(player_type *caster_ptr, effect_monster_typ
 	em_ptr->note = _("はひどい痛手をうけた。", " is hit hard.");
 	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
 		em_ptr->r_ptr->r_flags3 |= RF3_EVIL;
+
+	return GF_SWITCH_CONTINUE;
 }
 
 
@@ -168,32 +188,23 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_BLOOD_CURSE:
 	case GF_SEEKER:
 	case GF_SUPER_RAY:
-		effect_monster_void(em_ptr);
-		break;
+		return effect_monster_void(em_ptr);
 	case GF_ACID:
-		effect_monster_acid(caster_ptr, em_ptr);
-		break;
+		return effect_monster_acid(caster_ptr, em_ptr);
 	case GF_ELEC:
-		effect_monster_elec(caster_ptr, em_ptr);
-		break;
+		return effect_monster_elec(caster_ptr, em_ptr);
 	case GF_FIRE:
-		effect_monster_fire(caster_ptr, em_ptr);
-		break;
+		return effect_monster_fire(caster_ptr, em_ptr);
 	case GF_COLD:
-		effect_monster_cold(caster_ptr, em_ptr);
-		break;
+		return effect_monster_cold(caster_ptr, em_ptr);
 	case GF_POIS:
-		effect_monster_pois(caster_ptr, em_ptr);
-		break;
+		return effect_monster_pois(caster_ptr, em_ptr);
 	case GF_NUKE:
-		effect_monster_nuke(caster_ptr, em_ptr);
-		break;
+		return effect_monster_nuke(caster_ptr, em_ptr);
 	case GF_HELL_FIRE:
-		effect_monster_hell_fire(caster_ptr, em_ptr);
-		break;
+		return effect_monster_hell_fire(caster_ptr, em_ptr);
 	case GF_HOLY_FIRE:
-		effect_monster_holy_fire(caster_ptr, em_ptr);
-		break;
+		return effect_monster_holy_fire(caster_ptr, em_ptr);
 	case GF_PLASMA:
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
