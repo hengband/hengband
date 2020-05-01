@@ -430,30 +430,62 @@ static gf_switch_result effect_monster_tim(player_type *caster_ptr, effect_monst
 }
 
 
-static gf_switch_result effect_monster_gravity(player_type *caster_ptr, effect_monster_type *em_ptr)
+static bool effect_monster_gravity_resist_teleport(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	bool resist_tele = FALSE;
 
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
-	if (em_ptr->r_ptr->flagsr & RFR_RES_TELE)
+	if ((em_ptr->r_ptr->flagsr & RFR_RES_TELE) == 0) return FALSE;
+
+	if (em_ptr->r_ptr->flags1 & (RF1_UNIQUE))
 	{
-		if (em_ptr->r_ptr->flags1 & (RF1_UNIQUE))
-		{
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
-			em_ptr->note = _("には効果がなかった。", " is unaffected!");
-			resist_tele = TRUE;
-		}
-		else if (em_ptr->r_ptr->level > randint1(100))
-		{
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
-			em_ptr->note = _("には耐性がある！", " resists!");
-			resist_tele = TRUE;
-		}
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+			em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
+
+		em_ptr->note = _("には効果がなかった。", " is unaffected!");
+		return TRUE;
 	}
 
-	if (!resist_tele) em_ptr->do_dist = 10;
-	else em_ptr->do_dist = 0;
+	if (em_ptr->r_ptr->level <= randint1(100)) return FALSE;
 
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
+
+	em_ptr->note = _("には耐性がある！", " resists!");
+	return TRUE;
+}
+
+
+static void effect_monster_gravity_slow(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
+		(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
+		em_ptr->obvious = FALSE;
+
+	if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, MON_SLOW(em_ptr->m_ptr) + 50))
+		em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
+}
+
+
+static void effect_monster_gravity_stun(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	em_ptr->do_stun = damroll((em_ptr->caster_lev / 20) + 3, (em_ptr->dam)) + 1;
+	if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
+		(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
+	{
+		em_ptr->do_stun = 0;
+		em_ptr->note = _("には効果がなかった。", " is unaffected!");
+		em_ptr->obvious = FALSE;
+	}
+}
+
+
+/*
+ * Powerful monsters can resist and normal monsters slow down
+ * Furthermore, this magic can make non-unique monsters slow/stun.
+ */
+static gf_switch_result effect_monster_gravity(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	em_ptr->do_dist = effect_monster_gravity_resist_teleport(caster_ptr, em_ptr) ? 0 : 10;
 	if (caster_ptr->riding && (em_ptr->g_ptr->m_idx == caster_ptr->riding)) em_ptr->do_dist = 0;
 
 	if (em_ptr->r_ptr->flagsr & RFR_RES_GRAV)
@@ -461,41 +493,15 @@ static gf_switch_result effect_monster_gravity(player_type *caster_ptr, effect_m
 		em_ptr->note = _("には耐性がある！", " resists!");
 		em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
 		em_ptr->do_dist = 0;
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_RES_GRAV);
-	}
-	else
-	{
-		/* 1. slowness */
-		/* Powerful monsters can resist */
-		if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
-			(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
-		{
-			em_ptr->obvious = FALSE;
-		}
-		/* Normal monsters slow down */
-		else
-		{
-			if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, MON_SLOW(em_ptr->m_ptr) + 50))
-			{
-				em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
-			}
-		}
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+			em_ptr->r_ptr->r_flagsr |= (RFR_RES_GRAV);
 
-		/* 2. stun */
-		em_ptr->do_stun = damroll((em_ptr->caster_lev / 20) + 3, (em_ptr->dam)) + 1;
-
-		/* Attempt a saving throw */
-		if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
-			(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
-		{
-			/* Resist */
-			em_ptr->do_stun = 0;
-			/* No em_ptr->obvious effect */
-			em_ptr->note = _("には効果がなかった。", " is unaffected!");
-			em_ptr->obvious = FALSE;
-		}
+		return GF_SWITCH_CONTINUE;
 	}
 
+	effect_monster_gravity_slow(caster_ptr, em_ptr);
+	effect_monster_gravity_stun(caster_ptr, em_ptr);
+	return GF_SWITCH_CONTINUE;
 }
 
 
