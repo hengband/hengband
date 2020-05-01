@@ -224,6 +224,29 @@ static gf_switch_result effect_monster_nether(player_type *caster_ptr, effect_mo
 }
 
 
+static gf_switch_result effect_monster_water(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if ((em_ptr->r_ptr->flagsr & RFR_RES_WATE) == 0) return GF_SWITCH_CONTINUE;
+
+	if ((em_ptr->m_ptr->r_idx == MON_WATER_ELEM) || (em_ptr->m_ptr->r_idx == MON_UNMAKER))
+	{
+		em_ptr->note = _("には完全な耐性がある！", " is immune.");
+		em_ptr->dam = 0;
+	}
+	else
+	{
+		em_ptr->note = _("には耐性がある。", " resists.");
+		em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
+	}
+
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flagsr |= (RFR_RES_WATE);
+
+	return GF_SWITCH_CONTINUE;
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -264,25 +287,7 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_NETHER:
 		return effect_monster_nether(caster_ptr, em_ptr);
 	case GF_WATER:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flagsr & RFR_RES_WATE)
-		{
-			if ((em_ptr->m_ptr->r_idx == MON_WATER_ELEM) || (em_ptr->m_ptr->r_idx == MON_UNMAKER))
-			{
-				em_ptr->note = _("には完全な耐性がある！", " is immune.");
-				em_ptr->dam = 0;
-			}
-			else
-			{
-				em_ptr->note = _("には耐性がある。", " resists.");
-				em_ptr->dam *= 3; em_ptr->dam /= randint1(6) + 6;
-			}
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= (RFR_RES_WATE);
-		}
-
-		break;
-	}
+		return effect_monster_water(caster_ptr, em_ptr);
 	case GF_CHAOS:
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
