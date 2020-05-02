@@ -733,6 +733,9 @@
     <ClCompile Include="..\..\src\effect\effect-monster-charm.c">
       <Filter>effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\effect\effect-monster-lite-dark.c">
+      <Filter>effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1476,6 +1479,9 @@
       <Filter>effect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\effect\effect-monster-charm.h">
+      <Filter>effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\effect\effect-monster-lite-dark.h">
       <Filter>effect</Filter>
     </ClInclude>
   </ItemGroup>
