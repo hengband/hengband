@@ -228,6 +228,77 @@ gf_switch_result effect_monster_old_heal(player_type *caster_ptr, effect_monster
 }
 
 
+gf_switch_result effect_monster_old_speed(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, MON_FAST(em_ptr->m_ptr) + 100))
+	{
+		em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
+	}
+
+	if (!em_ptr->who)
+	{
+		if (em_ptr->r_ptr->flags1 & RF1_UNIQUE)
+			chg_virtue(caster_ptr, V_INDIVIDUALISM, 1);
+		if (is_friendly(em_ptr->m_ptr))
+			chg_virtue(caster_ptr, V_HONOUR, 1);
+	}
+
+	em_ptr->dam = 0;
+	return GF_SWITCH_CONTINUE;
+}
+
+
+gf_switch_result effect_monster_old_slow(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	/* Powerful monsters can resist */
+	if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
+		(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
+	{
+		em_ptr->note = _("には効果がなかった。", " is unaffected.");
+		em_ptr->obvious = FALSE;
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, MON_SLOW(em_ptr->m_ptr) + 50))
+		em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
+
+	em_ptr->dam = 0;
+	return GF_SWITCH_CONTINUE;
+}
+
+
+gf_switch_result effect_monster_old_sleep(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
+		(em_ptr->r_ptr->flags3 & RF3_NO_SLEEP) ||
+		(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
+	{
+		if (em_ptr->r_ptr->flags3 & RF3_NO_SLEEP)
+		{
+			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_NO_SLEEP);
+		}
+
+		em_ptr->note = _("には効果がなかった。", " is unaffected.");
+		em_ptr->obvious = FALSE;
+	}
+	else
+	{
+		em_ptr->note = _("は眠り込んでしまった！", " falls asleep!");
+		em_ptr->do_sleep = 500;
+	}
+
+	em_ptr->dam = 0;
+	return GF_SWITCH_CONTINUE;
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -318,72 +389,11 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_OLD_HEAL:
 		return effect_monster_old_heal(caster_ptr, em_ptr);
 	case GF_OLD_SPEED:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-		if (set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, MON_FAST(em_ptr->m_ptr) + 100))
-		{
-			em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
-		}
-
-		if (!em_ptr->who)
-		{
-			if (em_ptr->r_ptr->flags1 & RF1_UNIQUE)
-				chg_virtue(caster_ptr, V_INDIVIDUALISM, 1);
-			if (is_friendly(em_ptr->m_ptr))
-				chg_virtue(caster_ptr, V_HONOUR, 1);
-		}
-
-		em_ptr->dam = 0;
-		break;
-	}
+		return effect_monster_old_speed(caster_ptr, em_ptr);
 	case GF_OLD_SLOW:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-		/* Powerful monsters can resist */
-		if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
-			(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
-		{
-			em_ptr->note = _("には効果がなかった。", " is unaffected.");
-			em_ptr->obvious = FALSE;
-		}
-		else
-		{
-			if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, MON_SLOW(em_ptr->m_ptr) + 50))
-			{
-				em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
-			}
-		}
-
-		em_ptr->dam = 0;
-		break;
-	}
+		return effect_monster_old_slow(caster_ptr, em_ptr);
 	case GF_OLD_SLEEP:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-		if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
-			(em_ptr->r_ptr->flags3 & RF3_NO_SLEEP) ||
-			(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
-		{
-			if (em_ptr->r_ptr->flags3 & RF3_NO_SLEEP)
-			{
-				if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_NO_SLEEP);
-			}
-
-			em_ptr->note = _("には効果がなかった。", " is unaffected.");
-			em_ptr->obvious = FALSE;
-		}
-		else
-		{
-			em_ptr->note = _("は眠り込んでしまった！", " falls asleep!");
-			em_ptr->do_sleep = 500;
-		}
-
-		em_ptr->dam = 0;
-		break;
-	}
+		return effect_monster_old_sleep(caster_ptr, em_ptr);
 	case GF_STASIS_EVIL:
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
