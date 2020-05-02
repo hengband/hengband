@@ -255,8 +255,10 @@ gf_switch_result effect_monster_capture(player_type *caster_ptr, effect_monster_
 	{
 		msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), em_ptr->m_name);
 		em_ptr->skipped = TRUE;
+		return GF_SWITCH_CONTINUE;
 	}
-	else if (em_ptr->m_ptr->hp < randint0(nokori_hp))
+	
+	if (em_ptr->m_ptr->hp < randint0(nokori_hp))
 	{
 		if (em_ptr->m_ptr->mflag2 & MFLAG2_CHAMELEON) choose_new_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE, MON_CHAMELEON);
 		msg_format(_("%sを捕えた！", "You capture %^s!"), em_ptr->m_name);
@@ -274,15 +276,11 @@ gf_switch_result effect_monster_capture(player_type *caster_ptr, effect_monster_
 		}
 
 		delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
-
 		return GF_SWITCH_TRUE;
 	}
-	else
-	{
-		msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), em_ptr->m_name);
-		em_ptr->skipped = TRUE;
-	}
 
+	msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), em_ptr->m_name);
+	em_ptr->skipped = TRUE;
 	return GF_SWITCH_CONTINUE;
 }
 
