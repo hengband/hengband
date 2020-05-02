@@ -123,22 +123,8 @@ gf_switch_result effect_monster_stasis(player_type *caster_ptr, effect_monster_t
 }
 
 
-gf_switch_result effect_monster_charm(player_type *caster_ptr, effect_monster_type *em_ptr)
+static void effect_monster_charm_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	int vir = virtue_number(caster_ptr, V_HARMONY);
-	if (vir)
-	{
-		em_ptr->dam += caster_ptr->virtues[vir - 1] / 10;
-	}
-
-	vir = virtue_number(caster_ptr, V_INDIVIDUALISM);
-	if (vir)
-	{
-		em_ptr->dam -= caster_ptr->virtues[vir - 1] / 20;
-	}
-
-	if (em_ptr->seen) em_ptr->obvious = TRUE;
-
 	if (common_saving_throw_charm(caster_ptr, em_ptr->dam, em_ptr->m_ptr))
 	{
 		em_ptr->note = _("には効果がなかった。", " is unaffected.");
@@ -160,7 +146,26 @@ gf_switch_result effect_monster_charm(player_type *caster_ptr, effect_monster_ty
 		if (em_ptr->r_ptr->flags3 & RF3_ANIMAL)
 			chg_virtue(caster_ptr, V_NATURE, 1);
 	}
+}
 
+
+gf_switch_result effect_monster_charm(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	int vir = virtue_number(caster_ptr, V_HARMONY);
+	if (vir)
+	{
+		em_ptr->dam += caster_ptr->virtues[vir - 1] / 10;
+	}
+
+	vir = virtue_number(caster_ptr, V_INDIVIDUALISM);
+	if (vir)
+	{
+		em_ptr->dam -= caster_ptr->virtues[vir - 1] / 20;
+	}
+
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	effect_monster_charm_resist(caster_ptr, em_ptr);
 	em_ptr->dam = 0;
 	return GF_SWITCH_CONTINUE;
 }
