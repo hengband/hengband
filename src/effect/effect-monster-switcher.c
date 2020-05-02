@@ -205,6 +205,88 @@ gf_switch_result effect_monster_curse_4(effect_monster_type *em_ptr)
 }
 
 
+gf_switch_result effect_monster_hand_doom(effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (em_ptr->r_ptr->flags1 & RF1_UNIQUE)
+	{
+		em_ptr->note = _("には効果がなかった。", " is unaffected.");
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if ((em_ptr->who > 0) ? ((em_ptr->caster_lev + randint1(em_ptr->dam)) > (em_ptr->r_ptr->level + 10 + randint1(20))) :
+		(((em_ptr->caster_lev / 2) + randint1(em_ptr->dam)) > (em_ptr->r_ptr->level + randint1(200))))
+	{
+		em_ptr->dam = ((40 + randint1(20)) * em_ptr->m_ptr->hp) / 100;
+		if (em_ptr->m_ptr->hp < em_ptr->dam)
+			em_ptr->dam = em_ptr->m_ptr->hp - 1;
+	}
+	else
+	{
+		em_ptr->note = _("は破滅の手に耐え切った！", "resists!");
+		em_ptr->dam = 0;
+	}
+
+	return GF_SWITCH_CONTINUE;
+}
+
+
+gf_switch_result effect_monster_capture(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+	int nokori_hp;
+	if ((floor_ptr->inside_quest && (quest[floor_ptr->inside_quest].type == QUEST_TYPE_KILL_ALL) && !is_pet(em_ptr->m_ptr)) ||
+		(em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->flags7 & (RF7_NAZGUL)) || (em_ptr->r_ptr->flags7 & (RF7_UNIQUE2)) || (em_ptr->r_ptr->flags1 & RF1_QUESTOR) || em_ptr->m_ptr->parent_m_idx)
+	{
+		msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);
+		em_ptr->skipped = TRUE;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (is_pet(em_ptr->m_ptr)) nokori_hp = em_ptr->m_ptr->maxhp * 4L;
+	else if ((caster_ptr->pclass == CLASS_BEASTMASTER) && monster_living(em_ptr->m_ptr->r_idx))
+		nokori_hp = em_ptr->m_ptr->maxhp * 3 / 10;
+	else
+		nokori_hp = em_ptr->m_ptr->maxhp * 3 / 20;
+
+	if (em_ptr->m_ptr->hp >= nokori_hp)
+	{
+		msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), em_ptr->m_name);
+		em_ptr->skipped = TRUE;
+	}
+	else if (em_ptr->m_ptr->hp < randint0(nokori_hp))
+	{
+		if (em_ptr->m_ptr->mflag2 & MFLAG2_CHAMELEON) choose_new_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE, MON_CHAMELEON);
+		msg_format(_("%sを捕えた！", "You capture %^s!"), em_ptr->m_name);
+		cap_mon = em_ptr->m_ptr->r_idx;
+		cap_mspeed = em_ptr->m_ptr->mspeed;
+		cap_hp = em_ptr->m_ptr->hp;
+		cap_maxhp = em_ptr->m_ptr->max_maxhp;
+		cap_nickname = em_ptr->m_ptr->nickname;
+		if (em_ptr->g_ptr->m_idx == caster_ptr->riding)
+		{
+			if (rakuba(caster_ptr, -1, FALSE))
+			{
+				msg_format(_("地面に落とされた。", "You have fallen from %s."), em_ptr->m_name);
+			}
+		}
+
+		delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
+
+		return GF_SWITCH_TRUE;
+	}
+	else
+	{
+		msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), em_ptr->m_name);
+		em_ptr->skipped = TRUE;
+	}
+
+	return GF_SWITCH_CONTINUE;
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -365,86 +447,11 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_CAUSE_4:
 		return effect_monster_curse_4(em_ptr);
 	case GF_HAND_DOOM:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flags1 & RF1_UNIQUE)
-		{
-			em_ptr->note = _("には効果がなかった。", " is unaffected.");
-			em_ptr->dam = 0;
-		}
-		else
-		{
-			if ((em_ptr->who > 0) ? ((em_ptr->caster_lev + randint1(em_ptr->dam)) > (em_ptr->r_ptr->level + 10 + randint1(20))) :
-				(((em_ptr->caster_lev / 2) + randint1(em_ptr->dam)) > (em_ptr->r_ptr->level + randint1(200))))
-			{
-				em_ptr->dam = ((40 + randint1(20)) * em_ptr->m_ptr->hp) / 100;
-
-				if (em_ptr->m_ptr->hp < em_ptr->dam) em_ptr->dam = em_ptr->m_ptr->hp - 1;
-			}
-			else
-			{
-				em_ptr->note = _("は破滅の手に耐え切った！", "resists!");
-				em_ptr->dam = 0;
-			}
-		}
-
-		break;
-	}
+		return effect_monster_hand_doom(em_ptr);
 	case GF_CAPTURE:
-	{
-		int nokori_hp;
-		if ((floor_ptr->inside_quest && (quest[floor_ptr->inside_quest].type == QUEST_TYPE_KILL_ALL) && !is_pet(em_ptr->m_ptr)) ||
-			(em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->flags7 & (RF7_NAZGUL)) || (em_ptr->r_ptr->flags7 & (RF7_UNIQUE2)) || (em_ptr->r_ptr->flags1 & RF1_QUESTOR) || em_ptr->m_ptr->parent_m_idx)
-		{
-			msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);
-			em_ptr->skipped = TRUE;
-			break;
-		}
-
-		if (is_pet(em_ptr->m_ptr)) nokori_hp = em_ptr->m_ptr->maxhp * 4L;
-		else if ((caster_ptr->pclass == CLASS_BEASTMASTER) && monster_living(em_ptr->m_ptr->r_idx))
-			nokori_hp = em_ptr->m_ptr->maxhp * 3 / 10;
-		else
-			nokori_hp = em_ptr->m_ptr->maxhp * 3 / 20;
-
-		if (em_ptr->m_ptr->hp >= nokori_hp)
-		{
-			msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), em_ptr->m_name);
-			em_ptr->skipped = TRUE;
-		}
-		else if (em_ptr->m_ptr->hp < randint0(nokori_hp))
-		{
-			if (em_ptr->m_ptr->mflag2 & MFLAG2_CHAMELEON) choose_new_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE, MON_CHAMELEON);
-			msg_format(_("%sを捕えた！", "You capture %^s!"), em_ptr->m_name);
-			cap_mon = em_ptr->m_ptr->r_idx;
-			cap_mspeed = em_ptr->m_ptr->mspeed;
-			cap_hp = em_ptr->m_ptr->hp;
-			cap_maxhp = em_ptr->m_ptr->max_maxhp;
-			cap_nickname = em_ptr->m_ptr->nickname;
-			if (em_ptr->g_ptr->m_idx == caster_ptr->riding)
-			{
-				if (rakuba(caster_ptr, -1, FALSE))
-				{
-					msg_format(_("地面に落とされた。", "You have fallen from %s."), em_ptr->m_name);
-				}
-			}
-
-			delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
-
-			return GF_SWITCH_TRUE;
-		}
-		else
-		{
-			msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), em_ptr->m_name);
-			em_ptr->skipped = TRUE;
-		}
-
-		break;
-	}
+		return effect_monster_capture(caster_ptr, em_ptr);
 	case GF_ATTACK:
-	{
 		return (gf_switch_result)py_attack(caster_ptr, em_ptr->y, em_ptr->x, em_ptr->dam);
-	}
 	case GF_ENGETSU:
 	{
 		int effect = 0;
