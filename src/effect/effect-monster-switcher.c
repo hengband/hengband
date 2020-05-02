@@ -125,6 +125,24 @@ gf_switch_result effect_monster_stun(effect_monster_type *em_ptr)
 }
 
 
+gf_switch_result effect_monster_kill_wall(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if ((em_ptr->r_ptr->flags3 & (RF3_HURT_ROCK)) == 0)
+	{
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_HURT_ROCK);
+
+	em_ptr->note = _("の皮膚がただれた！", " loses some skin!");
+	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
+	return GF_SWITCH_CONTINUE;
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -245,23 +263,7 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_DARK:
 		return effect_monster_dark(caster_ptr, em_ptr);
 	case GF_KILL_WALL:
-	{
-		if (em_ptr->r_ptr->flags3 & (RF3_HURT_ROCK))
-		{
-			if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_HURT_ROCK);
-
-			em_ptr->note = _("の皮膚がただれた！", " loses some skin!");
-			em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-		}
-		else
-		{
-			em_ptr->dam = 0;
-		}
-
-		break;
-	}
+		return effect_monster_kill_undead(caster_ptr, em_ptr);
 	case GF_AWAY_UNDEAD:
 	{
 		if (em_ptr->r_ptr->flags3 & (RF3_UNDEAD))
