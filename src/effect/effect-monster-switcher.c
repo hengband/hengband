@@ -288,6 +288,93 @@ gf_switch_result effect_monster_capture(player_type *caster_ptr, effect_monster_
 }
 
 
+gf_switch_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	int effect = 0;
+	bool done = TRUE;
+
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if (em_ptr->r_ptr->flags2 & RF2_EMPTY_MIND)
+	{
+		em_ptr->note = _("には効果がなかった。", " is unaffected.");
+		em_ptr->dam = 0;
+		em_ptr->skipped = TRUE;
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (MON_CSLEEP(em_ptr->m_ptr))
+	{
+		em_ptr->note = _("には効果がなかった。", " is unaffected.");
+		em_ptr->dam = 0;
+		em_ptr->skipped = TRUE;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (one_in_(5)) effect = 1;
+	else if (one_in_(4)) effect = 2;
+	else if (one_in_(3)) effect = 3;
+	else done = FALSE;
+
+	if (effect == 1)
+	{
+		if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
+			(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
+		{
+			em_ptr->note = _("には効果がなかった。", " is unaffected.");
+			em_ptr->obvious = FALSE;
+		}
+		else
+		{
+			if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, MON_SLOW(em_ptr->m_ptr) + 50))
+			{
+				em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
+			}
+		}
+	}
+	else if (effect == 2)
+	{
+		em_ptr->do_stun = damroll((caster_ptr->lev / 10) + 3, (em_ptr->dam)) + 1;
+		if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
+			(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
+		{
+			em_ptr->do_stun = 0;
+			em_ptr->note = _("には効果がなかった。", " is unaffected.");
+			em_ptr->obvious = FALSE;
+		}
+	}
+	else if (effect == 3)
+	{
+		if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
+			(em_ptr->r_ptr->flags3 & RF3_NO_SLEEP) ||
+			(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
+		{
+			if (em_ptr->r_ptr->flags3 & RF3_NO_SLEEP)
+			{
+				if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_NO_SLEEP);
+			}
+
+			em_ptr->note = _("には効果がなかった。", " is unaffected.");
+			em_ptr->obvious = FALSE;
+		}
+		else
+		{
+			/* Go to sleep (much) later */
+			em_ptr->note = _("は眠り込んでしまった！", " falls asleep!");
+			em_ptr->do_sleep = 500;
+		}
+	}
+
+	if (!done)
+	{
+		em_ptr->note = _("には効果がなかった。", " is unaffected.");
+	}
+
+	em_ptr->dam = 0;
+	return GF_SWITCH_CONTINUE;
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -454,89 +541,7 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_ATTACK:
 		return (gf_switch_result)py_attack(caster_ptr, em_ptr->y, em_ptr->x, em_ptr->dam);
 	case GF_ENGETSU:
-	{
-		int effect = 0;
-		bool done = TRUE;
-
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (em_ptr->r_ptr->flags2 & RF2_EMPTY_MIND)
-		{
-			em_ptr->note = _("には効果がなかった。", " is unaffected.");
-			em_ptr->dam = 0;
-			em_ptr->skipped = TRUE;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags2 |= (RF2_EMPTY_MIND);
-			break;
-		}
-		if (MON_CSLEEP(em_ptr->m_ptr))
-		{
-			em_ptr->note = _("には効果がなかった。", " is unaffected.");
-			em_ptr->dam = 0;
-			em_ptr->skipped = TRUE;
-			break;
-		}
-
-		if (one_in_(5)) effect = 1;
-		else if (one_in_(4)) effect = 2;
-		else if (one_in_(3)) effect = 3;
-		else done = FALSE;
-
-		if (effect == 1)
-		{
-			if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
-				(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
-			{
-				em_ptr->note = _("には効果がなかった。", " is unaffected.");
-				em_ptr->obvious = FALSE;
-			}
-			else
-			{
-				if (set_monster_slow(caster_ptr, em_ptr->g_ptr->m_idx, MON_SLOW(em_ptr->m_ptr) + 50))
-				{
-					em_ptr->note = _("の動きが遅くなった。", " starts moving slower.");
-				}
-			}
-		}
-		else if (effect == 2)
-		{
-			em_ptr->do_stun = damroll((caster_ptr->lev / 10) + 3, (em_ptr->dam)) + 1;
-			if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
-				(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
-			{
-				em_ptr->do_stun = 0;
-				em_ptr->note = _("には効果がなかった。", " is unaffected.");
-				em_ptr->obvious = FALSE;
-			}
-		}
-		else if (effect == 3)
-		{
-			if ((em_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
-				(em_ptr->r_ptr->flags3 & RF3_NO_SLEEP) ||
-				(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
-			{
-				if (em_ptr->r_ptr->flags3 & RF3_NO_SLEEP)
-				{
-					if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_NO_SLEEP);
-				}
-
-				em_ptr->note = _("には効果がなかった。", " is unaffected.");
-				em_ptr->obvious = FALSE;
-			}
-			else
-			{
-				/* Go to sleep (much) later */
-				em_ptr->note = _("は眠り込んでしまった！", " falls asleep!");
-				em_ptr->do_sleep = 500;
-			}
-		}
-
-		if (!done)
-		{
-			em_ptr->note = _("には効果がなかった。", " is unaffected.");
-		}
-
-		em_ptr->dam = 0;
-		break;
-	}
+		return effect_monster_engetsu(caster_ptr, em_ptr);
 	case GF_GENOCIDE:
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
