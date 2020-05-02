@@ -233,10 +233,31 @@ gf_switch_result effect_monster_hand_doom(effect_monster_type *em_ptr)
 }
 
 
+static bool effect_monster_check_capturability(player_type *caster_ptr, effect_monster_type *em_ptr, int capturable_hp)
+{
+	if (em_ptr->m_ptr->hp >= randint0(capturable_hp)) return FALSE;
+
+	if (em_ptr->m_ptr->mflag2 & MFLAG2_CHAMELEON)
+		choose_new_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE, MON_CHAMELEON);
+
+	msg_format(_("%sを捕えた！", "You capture %^s!"), em_ptr->m_name);
+	cap_mon = em_ptr->m_ptr->r_idx;
+	cap_mspeed = em_ptr->m_ptr->mspeed;
+	cap_hp = em_ptr->m_ptr->hp;
+	cap_maxhp = em_ptr->m_ptr->max_maxhp;
+	cap_nickname = em_ptr->m_ptr->nickname;
+	if ((em_ptr->g_ptr->m_idx == caster_ptr->riding) && rakuba(caster_ptr, -1, FALSE))
+		msg_format(_("地面に落とされた。", "You have fallen from %s."), em_ptr->m_name);
+
+	delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
+	return TRUE;
+}
+
+
 gf_switch_result effect_monster_capture(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
-	int nokori_hp;
+	int capturable_hp;
 	if ((floor_ptr->inside_quest && (quest[floor_ptr->inside_quest].type == QUEST_TYPE_KILL_ALL) && !is_pet(em_ptr->m_ptr)) ||
 		(em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->flags7 & (RF7_NAZGUL)) || (em_ptr->r_ptr->flags7 & (RF7_UNIQUE2)) || (em_ptr->r_ptr->flags1 & RF1_QUESTOR) || em_ptr->m_ptr->parent_m_idx)
 	{
@@ -245,39 +266,21 @@ gf_switch_result effect_monster_capture(player_type *caster_ptr, effect_monster_
 		return GF_SWITCH_CONTINUE;
 	}
 
-	if (is_pet(em_ptr->m_ptr)) nokori_hp = em_ptr->m_ptr->maxhp * 4L;
+	if (is_pet(em_ptr->m_ptr)) capturable_hp = em_ptr->m_ptr->maxhp * 4L;
 	else if ((caster_ptr->pclass == CLASS_BEASTMASTER) && monster_living(em_ptr->m_ptr->r_idx))
-		nokori_hp = em_ptr->m_ptr->maxhp * 3 / 10;
+		capturable_hp = em_ptr->m_ptr->maxhp * 3 / 10;
 	else
-		nokori_hp = em_ptr->m_ptr->maxhp * 3 / 20;
+		capturable_hp = em_ptr->m_ptr->maxhp * 3 / 20;
 
-	if (em_ptr->m_ptr->hp >= nokori_hp)
+	if (em_ptr->m_ptr->hp >= capturable_hp)
 	{
 		msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), em_ptr->m_name);
 		em_ptr->skipped = TRUE;
 		return GF_SWITCH_CONTINUE;
 	}
 	
-	if (em_ptr->m_ptr->hp < randint0(nokori_hp))
-	{
-		if (em_ptr->m_ptr->mflag2 & MFLAG2_CHAMELEON) choose_new_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE, MON_CHAMELEON);
-		msg_format(_("%sを捕えた！", "You capture %^s!"), em_ptr->m_name);
-		cap_mon = em_ptr->m_ptr->r_idx;
-		cap_mspeed = em_ptr->m_ptr->mspeed;
-		cap_hp = em_ptr->m_ptr->hp;
-		cap_maxhp = em_ptr->m_ptr->max_maxhp;
-		cap_nickname = em_ptr->m_ptr->nickname;
-		if (em_ptr->g_ptr->m_idx == caster_ptr->riding)
-		{
-			if (rakuba(caster_ptr, -1, FALSE))
-			{
-				msg_format(_("地面に落とされた。", "You have fallen from %s."), em_ptr->m_name);
-			}
-		}
-
-		delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
+	if (effect_monster_check_capturability(caster_ptr, em_ptr, capturable_hp))
 		return GF_SWITCH_TRUE;
-	}
 
 	msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), em_ptr->m_name);
 	em_ptr->skipped = TRUE;
