@@ -143,38 +143,45 @@ gf_switch_result effect_monster_kill_wall(player_type *caster_ptr, effect_monste
 }
 
 
+static bool effect_monster_away_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if ((em_ptr->r_ptr->flagsr & RFR_RES_TELE) == 0) return FALSE;
+
+	if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->flagsr & RFR_RES_ALL))
+	{
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
+		em_ptr->note = _("には効果がなかった。", " is unaffected.");
+		return TRUE;
+	}
+	
+	if (em_ptr->r_ptr->level > randint1(100))
+	{
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
+		em_ptr->note = _("には耐性がある！", " resists!");
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+
 gf_switch_result effect_monster_away_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	if (em_ptr->r_ptr->flags3 & (RF3_UNDEAD))
-	{
-		bool resists_tele = FALSE;
-
-		if (em_ptr->r_ptr->flagsr & RFR_RES_TELE)
-		{
-			if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->flagsr & RFR_RES_ALL))
-			{
-				if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
-				em_ptr->note = _("には効果がなかった。", " is unaffected.");
-				resists_tele = TRUE;
-			}
-			else if (em_ptr->r_ptr->level > randint1(100))
-			{
-				if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
-				em_ptr->note = _("には耐性がある！", " resists!");
-				resists_tele = TRUE;
-			}
-		}
-
-		if (!resists_tele)
-		{
-			if (em_ptr->seen) em_ptr->obvious = TRUE;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
-			em_ptr->do_dist = em_ptr->dam;
-		}
-	}
-	else
+	if ((em_ptr->r_ptr->flags3 & (RF3_UNDEAD)) == 0)
 	{
 		em_ptr->skipped = TRUE;
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	bool resists_tele = effect_monster_away_resist(caster_ptr, em_ptr);
+	if (!resists_tele)
+	{
+		if (em_ptr->seen) em_ptr->obvious = TRUE;
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+			em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
+
+		em_ptr->do_dist = em_ptr->dam;
 	}
 
 	em_ptr->dam = 0;
@@ -184,36 +191,21 @@ gf_switch_result effect_monster_away_undead(player_type *caster_ptr, effect_mons
 
 gf_switch_result effect_monster_away_evil(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	if (em_ptr->r_ptr->flags3 & (RF3_EVIL))
-	{
-		bool resists_tele = FALSE;
-
-		if (em_ptr->r_ptr->flagsr & RFR_RES_TELE)
-		{
-			if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->flagsr & RFR_RES_ALL))
-			{
-				if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
-				em_ptr->note = _("には効果がなかった。", " is unaffected.");
-				resists_tele = TRUE;
-			}
-			else if (em_ptr->r_ptr->level > randint1(100))
-			{
-				if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
-				em_ptr->note = _("には耐性がある！", " resists!");
-				resists_tele = TRUE;
-			}
-		}
-
-		if (!resists_tele)
-		{
-			if (em_ptr->seen) em_ptr->obvious = TRUE;
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
-			em_ptr->do_dist = em_ptr->dam;
-		}
-	}
-	else
+	if ((em_ptr->r_ptr->flags3 & (RF3_EVIL)) == 0)
 	{
 		em_ptr->skipped = TRUE;
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	bool resists_tele = effect_monster_away_resist(caster_ptr, em_ptr);
+	if (!resists_tele)
+	{
+		if (em_ptr->seen) em_ptr->obvious = TRUE;
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+			em_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
+
+		em_ptr->do_dist = em_ptr->dam;
 	}
 
 	em_ptr->dam = 0;
@@ -223,23 +215,7 @@ gf_switch_result effect_monster_away_evil(player_type *caster_ptr, effect_monste
 
 gf_switch_result effect_monster_away_all(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	bool resists_tele = FALSE;
-	if (em_ptr->r_ptr->flagsr & RFR_RES_TELE)
-	{
-		if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->flagsr & RFR_RES_ALL))
-		{
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
-			em_ptr->note = _("には効果がなかった。", " is unaffected.");
-			resists_tele = TRUE;
-		}
-		else if (em_ptr->r_ptr->level > randint1(100))
-		{
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flagsr |= RFR_RES_TELE;
-			em_ptr->note = _("には耐性がある！", " resists!");
-			resists_tele = TRUE;
-		}
-	}
-
+	bool resists_tele = effect_monster_away_resist(caster_ptr, em_ptr);
 	if (!resists_tele)
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
