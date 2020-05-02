@@ -475,7 +475,7 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 	}
 	else if (speed < 110)
 	{
-		if (speed < 90) hook_c_roff(TERM_GREEN, _("信じ難いほどゆっくりと", " incredibly" slowly));
+		if (speed < 90) hook_c_roff(TERM_GREEN, _("信じ難いほどゆっくりと", " incredibly slowly"));
 		else if (speed < 95) hook_c_roff(TERM_L_GREEN, _("非常にゆっくりと", " very slowly"));
 		else if (speed < 100) hook_c_roff(TERM_BLUE, _("かなりゆっくりと", " fairly slowly"));
 		else if (speed < 105) hook_c_roff(TERM_L_BLUE, _("ややゆっくりと", " somewhat slowly"));
