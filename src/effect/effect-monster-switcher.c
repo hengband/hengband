@@ -147,39 +147,46 @@ gf_switch_result effect_monster_kill_wall(player_type *caster_ptr, effect_monste
 gf_switch_result effect_monster_drain_mana(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
-	if ((em_ptr->r_ptr->flags4 & ~(RF4_NOMAGIC_MASK)) || (em_ptr->r_ptr->a_ability_flags1 & ~(RF5_NOMAGIC_MASK)) || (em_ptr->r_ptr->a_ability_flags2 & ~(RF6_NOMAGIC_MASK)))
-	{
-		if (em_ptr->who > 0)
-		{
-			if (em_ptr->m_caster_ptr->hp < em_ptr->m_caster_ptr->maxhp)
-			{
-				em_ptr->m_caster_ptr->hp += em_ptr->dam;
-				if (em_ptr->m_caster_ptr->hp > em_ptr->m_caster_ptr->maxhp)
-					em_ptr->m_caster_ptr->hp = em_ptr->m_caster_ptr->maxhp;
-
-				if (caster_ptr->health_who == em_ptr->who)
-					caster_ptr->redraw |= (PR_HEALTH);
-
-				if (caster_ptr->riding == em_ptr->who)
-					caster_ptr->redraw |= (PR_UHEALTH);
-
-				if (em_ptr->see_s_msg)
-				{
-					monster_desc(caster_ptr, em_ptr->killer, em_ptr->m_caster_ptr, 0);
-					msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), em_ptr->killer);
-				}
-			}
-		}
-		else
-		{
-			msg_format(_("%sから精神エネルギーを吸いとった。", "You draw psychic energy from %s."), em_ptr->m_name);
-			(void)hp_player(caster_ptr, em_ptr->dam);
-		}
-	}
-	else
+	bool has_mana = ((em_ptr->r_ptr->flags4 & ~(RF4_NOMAGIC_MASK))) != 0;
+	has_mana |= ((em_ptr->r_ptr->a_ability_flags1 & ~(RF5_NOMAGIC_MASK))) != 0;
+	has_mana |= ((em_ptr->r_ptr->a_ability_flags2 & ~(RF6_NOMAGIC_MASK))) != 0;
+	if (!has_mana)
 	{
 		if (em_ptr->see_s_msg)
 			msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);
+
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (em_ptr->who <= 0)
+	{
+		msg_format(_("%sから精神エネルギーを吸いとった。", "You draw psychic energy from %s."), em_ptr->m_name);
+		(void)hp_player(caster_ptr, em_ptr->dam);
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (em_ptr->m_caster_ptr->hp >= em_ptr->m_caster_ptr->maxhp)
+	{
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	em_ptr->m_caster_ptr->hp += em_ptr->dam;
+	if (em_ptr->m_caster_ptr->hp > em_ptr->m_caster_ptr->maxhp)
+		em_ptr->m_caster_ptr->hp = em_ptr->m_caster_ptr->maxhp;
+
+	if (caster_ptr->health_who == em_ptr->who)
+		caster_ptr->redraw |= (PR_HEALTH);
+
+	if (caster_ptr->riding == em_ptr->who)
+		caster_ptr->redraw |= (PR_UHEALTH);
+
+	if (em_ptr->see_s_msg)
+	{
+		monster_desc(caster_ptr, em_ptr->killer, em_ptr->m_caster_ptr, 0);
+		msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), em_ptr->killer);
 	}
 
 	em_ptr->dam = 0;
