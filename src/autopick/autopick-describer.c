@@ -590,7 +590,7 @@ void describe_autopick(char *buff, autopick_type *entry)
 	describer.body_str = _("アイテム", "items");
 #ifdef JP
 	describe_autpick_jp(buff, entry, &describer);
-#else /* JP */
+#else
 	describe_autopick_en(buff, entry, &describer);
-#endif /* JP */
+#endif
 }
