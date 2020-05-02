@@ -230,23 +230,23 @@ gf_switch_result effect_monster_away_all(player_type *caster_ptr, effect_monster
 
 gf_switch_result effect_monster_turn_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	if (em_ptr->r_ptr->flags3 & (RF3_UNDEAD))
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
-
-		em_ptr->do_fear = damroll(3, (em_ptr->dam / 2)) + 1;
-		if (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)
-		{
-			em_ptr->note = _("には効果がなかった。", " is unaffected.");
-			em_ptr->obvious = FALSE;
-			em_ptr->do_fear = 0;
-		}
-	}
-	else
+	if ((em_ptr->r_ptr->flags3 & (RF3_UNDEAD)) == 0)
 	{
 		em_ptr->skipped = TRUE;
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
+
+	em_ptr->do_fear = damroll(3, (em_ptr->dam / 2)) + 1;
+	if (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)
+	{
+		em_ptr->note = _("には効果がなかった。", " is unaffected.");
+		em_ptr->obvious = FALSE;
+		em_ptr->do_fear = 0;
 	}
 
 	em_ptr->dam = 0;
@@ -256,23 +256,23 @@ gf_switch_result effect_monster_turn_undead(player_type *caster_ptr, effect_mons
 
 gf_switch_result effect_monster_turn_evil(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	if (em_ptr->r_ptr->flags3 & (RF3_EVIL))
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
-
-		em_ptr->do_fear = damroll(3, (em_ptr->dam / 2)) + 1;
-		if (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)
-		{
-			em_ptr->note = _("には効果がなかった。", " is unaffected.");
-			em_ptr->obvious = FALSE;
-			em_ptr->do_fear = 0;
-		}
-	}
-	else
+	if ((em_ptr->r_ptr->flags3 & (RF3_EVIL)) == 0)
 	{
 		em_ptr->skipped = TRUE;
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
+
+	em_ptr->do_fear = damroll(3, (em_ptr->dam / 2)) + 1;
+	if (em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10)
+	{
+		em_ptr->note = _("には効果がなかった。", " is unaffected.");
+		em_ptr->obvious = FALSE;
+		em_ptr->do_fear = 0;
 	}
 
 	em_ptr->dam = 0;
@@ -301,104 +301,94 @@ gf_switch_result effect_monster_turn_all(effect_monster_type *em_ptr)
 
 gf_switch_result effect_monster_disp_undead(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	if (em_ptr->r_ptr->flags3 & (RF3_UNDEAD))
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-		/* Learn about em_ptr->effect_type */
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
-
-		em_ptr->note = _("は身震いした。", " shudders.");
-		em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-	}
-	else
+	if ((em_ptr->r_ptr->flags3 & (RF3_UNDEAD)) == 0)
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
 	}
 
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flags3 |= (RF3_UNDEAD);
+
+	em_ptr->note = _("は身震いした。", " shudders.");
+	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
 	return GF_SWITCH_CONTINUE;
 }
 
 
 gf_switch_result effect_monster_disp_evil(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	if (em_ptr->r_ptr->flags3 & (RF3_EVIL))
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
-
-		em_ptr->note = _("は身震いした。", " shudders.");
-		em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-	}
-	else
+	if ((em_ptr->r_ptr->flags3 & (RF3_EVIL)) == 0)
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
 	}
 
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_EVIL);
+
+	em_ptr->note = _("は身震いした。", " shudders.");
+	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
 	return GF_SWITCH_CONTINUE;
 }
 
 
 gf_switch_result effect_monster_disp_good(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	if (em_ptr->r_ptr->flags3 & (RF3_GOOD))
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_GOOD);
-
-		em_ptr->note = _("は身震いした。", " shudders.");
-		em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-	}
-	else
+	if ((em_ptr->r_ptr->flags3 & (RF3_GOOD)) == 0)
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
 	}
 
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_GOOD);
+
+	em_ptr->note = _("は身震いした。", " shudders.");
+	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
 	return GF_SWITCH_CONTINUE;
 }
 
 
 gf_switch_result effect_monster_disp_living(effect_monster_type *em_ptr)
 {
-	if (monster_living(em_ptr->m_ptr->r_idx))
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-		em_ptr->note = _("は身震いした。", " shudders.");
-		em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-	}
-	else
+	if (!monster_living(em_ptr->m_ptr->r_idx))
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
 	}
 
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	em_ptr->note = _("は身震いした。", " shudders.");
+	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
 	return GF_SWITCH_CONTINUE;
 }
 
 
 gf_switch_result effect_monster_disp_demon(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	if (em_ptr->r_ptr->flags3 & (RF3_DEMON))
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_DEMON);
-
-		em_ptr->note = _("は身震いした。", " shudders.");
-		em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
-	}
-	else
+	if ((em_ptr->r_ptr->flags3 & (RF3_DEMON)) == 0)
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
 	}
 
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_DEMON);
+
+	em_ptr->note = _("は身震いした。", " shudders.");
+	em_ptr->note_dies = _("はドロドロに溶けた！", " dissolves!");
 	return GF_SWITCH_CONTINUE;
 }
 
