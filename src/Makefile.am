@@ -175,6 +175,7 @@ hengband_SOURCES = \
 	effect/effect-monster-psi.c effect/effect-monster-psi.h \
 	effect/effect-monster-domination.c effect/effect-monster-domination.h \
 	effect/effect-monster-oldies.c effect/effect-monster-oldies.h \
+	effect/effect-monster-charm.c effect/effect-monster-charm.h \
 	effect/effect-monster-switcher.c effect/effect-monster-switcher.h \
 	effect/effect-player-util.h \
 	effect/effect-player-switcher.c effect/effect-player-switcher.h \

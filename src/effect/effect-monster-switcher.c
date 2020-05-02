@@ -106,6 +106,49 @@ gf_switch_result effect_monster_stasis(effect_monster_type *em_ptr, bool to_evil
 }
 
 
+gf_switch_result effect_monster_stun(effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	em_ptr->do_stun = damroll((em_ptr->caster_lev / 20) + 3, (em_ptr->dam)) + 1;
+	if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
+		(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
+	{
+		em_ptr->do_stun = 0;
+		em_ptr->note = _("には効果がなかった。", " is unaffected.");
+		em_ptr->obvious = FALSE;
+	}
+
+	em_ptr->dam = 0;
+	return GF_SWITCH_CONTINUE;
+}
+
+
+gf_switch_result effect_monster_lite_weak(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (!em_ptr->dam)
+	{
+		em_ptr->skipped = TRUE;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if ((em_ptr->r_ptr->flags3 & RF3_HURT_LITE) == 0)
+	{
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flags3 |= (RF3_HURT_LITE);
+
+	em_ptr->note = _("は光に身をすくめた！", " cringes from the light!");
+	em_ptr->note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
+	return GF_SWITCH_CONTINUE;
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -218,45 +261,9 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_OLD_CONF:
 		return effect_monster_old_conf(caster_ptr, em_ptr);
 	case GF_STUN:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-		em_ptr->do_stun = damroll((em_ptr->caster_lev / 20) + 3, (em_ptr->dam)) + 1;
-		if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
-			(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
-		{
-			em_ptr->do_stun = 0;
-			em_ptr->note = _("には効果がなかった。", " is unaffected.");
-			em_ptr->obvious = FALSE;
-		}
-
-		em_ptr->dam = 0;
-		break;
-	}
+		return effect_monster_stun(em_ptr);
 	case GF_LITE_WEAK:
-	{
-		if (!em_ptr->dam)
-		{
-			em_ptr->skipped = TRUE;
-			break;
-		}
-
-		if (em_ptr->r_ptr->flags3 & (RF3_HURT_LITE))
-		{
-			if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_HURT_LITE);
-
-			em_ptr->note = _("は光に身をすくめた！", " cringes from the light!");
-			em_ptr->note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
-		}
-		else
-		{
-			em_ptr->dam = 0;
-		}
-
-		break;
-	}
+		return effect_monster_lite_weak(caster_ptr, em_ptr);
 	case GF_LITE:
 	{
 		if (em_ptr->seen) em_ptr->obvious = TRUE;
