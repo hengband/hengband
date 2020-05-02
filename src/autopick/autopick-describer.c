@@ -280,6 +280,10 @@ static void describe_autpick_jp(char *buff, autopick_type *entry)
 
 void describe_autopick_en(char *buff, autopick_type *entry)
 {
+	concptr str = entry->name;
+	byte act = entry->action;
+	concptr insc = entry->insc;
+	bool top = FALSE;
 	concptr before_str[20], after_str[20], which_str[20], whose_str[20];
 	int before_n = 0, after_n = 0, which_n = 0, whose_n = 0;
 	concptr body_str = "items";
@@ -514,21 +518,22 @@ void describe_autopick_en(char *buff, autopick_type *entry)
 
 	if (!before_n)
 		strcat(buff, "all ");
-	else for (i = 0; i < before_n && before_str[i]; i++)
-	{
-		strcat(buff, before_str[i]);
-		strcat(buff, " ");
-	}
+	else
+		for (int i = 0; i < before_n && before_str[i]; i++)
+		{
+			strcat(buff, before_str[i]);
+			strcat(buff, " ");
+		}
 
 	strcat(buff, body_str);
 
-	for (i = 0; i < after_n && after_str[i]; i++)
+	for (int i = 0; i < after_n && after_str[i]; i++)
 	{
 		strcat(buff, " ");
 		strcat(buff, after_str[i]);
 	}
 
-	for (i = 0; i < whose_n && whose_str[i]; i++)
+	for (int i = 0; i < whose_n && whose_str[i]; i++)
 	{
 		if (i == 0)
 			strcat(buff, " whose ");
@@ -547,7 +552,7 @@ void describe_autopick_en(char *buff, autopick_type *entry)
 	if (whose_n && which_n)
 		strcat(buff, ", and ");
 
-	for (i = 0; i < which_n && which_str[i]; i++)
+	for (int i = 0; i < which_n && which_str[i]; i++)
 	{
 		if (i == 0)
 			strcat(buff, " which ");
