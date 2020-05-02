@@ -178,6 +178,7 @@ hengband_SOURCES = \
 	effect/effect-monster-charm.c effect/effect-monster-charm.h \
 	effect/effect-monster-lite-dark.c effect/effect-monster-lite-dark.h \
 	effect/effect-monster-evil.c effect/effect-monster-evil.h \
+	effect/effect-monster-spirit.c effect/effect-monster-spirit.h \
 	effect/effect-monster-switcher.c effect/effect-monster-switcher.h \
 	effect/effect-player-util.h \
 	effect/effect-player-switcher.c effect/effect-player-switcher.h \
