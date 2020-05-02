@@ -174,6 +174,7 @@
     <ClCompile Include="..\..\src\cmd\dump-util.c" />
     <ClCompile Include="..\..\src\effect\effect-feature.c" />
     <ClCompile Include="..\..\src\effect\effect-item.c" />
+    <ClCompile Include="..\..\src\effect\effect-monster-charm.c" />
     <ClCompile Include="..\..\src\effect\effect-monster-domination.c" />
     <ClCompile Include="..\..\src\effect\effect-monster-oldies.c" />
     <ClCompile Include="..\..\src\effect\effect-monster-psi.c" />
@@ -350,6 +351,7 @@
     <ClInclude Include="..\..\src\cmd\dump-util.h" />
     <ClInclude Include="..\..\src\effect\effect-feature.h" />
     <ClInclude Include="..\..\src\effect\effect-item.h" />
+    <ClInclude Include="..\..\src\effect\effect-monster-charm.h" />
     <ClInclude Include="..\..\src\effect\effect-monster-domination.h" />
     <ClInclude Include="..\..\src\effect\effect-monster-oldies.h" />
     <ClInclude Include="..\..\src\effect\effect-monster-psi.h" />

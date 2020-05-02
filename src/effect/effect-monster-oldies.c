@@ -222,3 +222,27 @@ gf_switch_result effect_monster_old_sleep(player_type *caster_ptr, effect_monste
 	em_ptr->dam = 0;
 	return GF_SWITCH_CONTINUE;
 }
+
+
+gf_switch_result effect_monster_old_conf(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	em_ptr->do_conf = damroll(3, (em_ptr->dam / 2)) + 1;
+	if ((em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
+		(em_ptr->r_ptr->flags3 & (RF3_NO_CONF)) ||
+		(em_ptr->r_ptr->level > randint1((em_ptr->dam - 10) < 1 ? 1 : (em_ptr->dam - 10)) + 10))
+	{
+		if (em_ptr->r_ptr->flags3 & (RF3_NO_CONF))
+		{
+			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_NO_CONF);
+		}
+
+		em_ptr->do_conf = 0;
+		em_ptr->note = _("には効果がなかった。", " is unaffected.");
+		em_ptr->obvious = FALSE;
+	}
+
+	em_ptr->dam = 0;
+	return GF_SWITCH_CONTINUE;
+}
