@@ -99,3 +99,60 @@ gf_switch_result effect_monster_domination(player_type *caster_ptr, effect_monst
 	em_ptr->dam = 0;
 	return GF_SWITCH_CONTINUE;
 }
+
+
+static bool effect_monster_crusade_domination(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (((em_ptr->r_ptr->flags3 & RF3_GOOD) == 0) || caster_ptr->current_floor_ptr->inside_arena)
+		return FALSE;
+
+	if (em_ptr->r_ptr->flags3 & RF3_NO_CONF) em_ptr->dam -= 50;
+	if (em_ptr->dam < 1) em_ptr->dam = 1;
+
+	if (is_pet(em_ptr->m_ptr))
+	{
+		em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
+		(void)set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, MON_FAST(em_ptr->m_ptr) + 100);
+		return TRUE;
+	}
+
+	if ((em_ptr->r_ptr->flags1 & RF1_QUESTOR) ||
+		(em_ptr->r_ptr->flags1 & RF1_UNIQUE) ||
+		(em_ptr->m_ptr->mflag2 & MFLAG2_NOPET) ||
+		(caster_ptr->cursed & TRC_AGGRAVATE) ||
+		((em_ptr->r_ptr->level + 10) > randint1(em_ptr->dam)))
+	{
+		if (one_in_(4))
+			em_ptr->m_ptr->mflag2 |= MFLAG2_NOPET;
+
+		return FALSE;
+	}
+
+	em_ptr->note = _("を支配した。", " is tamed!");
+	set_pet(caster_ptr, em_ptr->m_ptr);
+	(void)set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, MON_FAST(em_ptr->m_ptr) + 100);
+	if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flags3 |= RF3_GOOD;
+
+	return TRUE;
+}
+
+
+gf_switch_result effect_monster_crusade(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	bool success = effect_monster_crusade_domination(caster_ptr, em_ptr);
+	if (success)
+	{
+		em_ptr->dam = 0;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if ((em_ptr->r_ptr->flags3 & RF3_NO_FEAR) == 0)
+		em_ptr->do_fear = randint1(90) + 10;
+	else if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+		em_ptr->r_ptr->r_flags3 |= RF3_NO_FEAR;
+
+	em_ptr->dam = 0;
+	return GF_SWITCH_CONTINUE;
+}
