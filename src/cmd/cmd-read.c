@@ -20,9 +20,8 @@
 #include "player-effects.h"
 #include "player-inventory.h"
 #include "rumor.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 
-#include "spells.h"
 #include "spells-object.h"
 #include "spells-floor.h"
 #include "spells-summon.h"
@@ -34,6 +33,7 @@
 #include "floor.h"
 #include "object/object-kind.h"
 #include "view/display-main-window.h"
+#include "spell/spells-type.h"
 
 /*!
  * @brief 巻物を読むコマンドのサブルーチン
@@ -169,14 +169,14 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 
 		case SV_SCROLL_PHASE_DOOR:
 		{
-			teleport_player(creature_ptr, 10, 0L);
+			teleport_player(creature_ptr, 10, TELEPORT_SPONTANEOUS);
 			ident = TRUE;
 			break;
 		}
 
 		case SV_SCROLL_TELEPORT:
 		{
-			teleport_player(creature_ptr, 100, 0L);
+			teleport_player(creature_ptr, 100, TELEPORT_SPONTANEOUS);
 			ident = TRUE;
 			break;
 		}

@@ -3,7 +3,7 @@
 #include "view/display-util.h"
 #include "player-effects.h"
 #include "player-skill.h"
-#include "realm-song.h"
+#include "realm/realm-song.h"
 #include "world.h"
 #include "object/object-kind.h"
 #include "object-hook.h"

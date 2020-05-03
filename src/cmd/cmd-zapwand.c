@@ -3,7 +3,7 @@
 #include "main/sound-definitions-table.h"
 
 #include "avatar.h"
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "spells-status.h"
 #include "player-status.h"
 #include "player-effects.h"

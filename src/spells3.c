@@ -39,6 +39,7 @@
 #include "avatar.h"
 #include "spells.h"
 #include "spells-floor.h"
+#include "spell/technic-info-table.h"
 #include "grid.h"
 #include "market/building-util.h"
 #include "monster-process.h"
@@ -61,6 +62,9 @@
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
 #include "targeting.h"
+#include "effect/spells-effect-util.h"
+#include "spell/spells-util.h"
+#include "spell/spells-execution.h"
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */
 #define MAX_TRIES 100
@@ -81,7 +85,7 @@ static bool redraw_player(player_type *caster_ptr);
  * Attempt to move the monster at least "dis/2" grids away.
  * But allow variation to prevent infinite loops.
  */
-bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT_FLAGS mode)
+bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, teleport_flags mode)
 {
 	monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 	if (!monster_is_valid(m_ptr)) return FALSE;
@@ -158,7 +162,7 @@ bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, BIT
  * @param mode オプション
  * @return なし
  */
-void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, BIT_FLAGS mode)
+void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, teleport_flags mode)
 {
 	monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[m_idx];
 	if(!m_ptr->r_idx) return;
@@ -240,7 +244,7 @@ void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty
  * of candidates has equal possibility to be choosen as a destination.
  * </pre>
  */
-bool teleport_player_aux(player_type *creature_ptr, POSITION dis, bool is_quantum_effect, BIT_FLAGS mode)
+bool teleport_player_aux(player_type *creature_ptr, POSITION dis, bool is_quantum_effect, teleport_flags mode)
 {
 	if (creature_ptr->wild_mode) return FALSE;
 	if (!is_quantum_effect && creature_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
@@ -349,7 +353,7 @@ void teleport_player(player_type *creature_ptr, POSITION dis, BIT_FLAGS mode)
 			is_resistible &= MON_CSLEEP(m_ptr) == 0;
 			if (is_resistible)
 			{
-				teleport_monster_to(creature_ptr, tmp_m_idx, creature_ptr->y, creature_ptr->x, r_ptr->level, 0L);
+				teleport_monster_to(creature_ptr, tmp_m_idx, creature_ptr->y, creature_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
 			}
 		}
 	}
@@ -392,7 +396,7 @@ void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION d
 			is_resistible &= MON_CSLEEP(m_ptr) == 0;
 			if (is_resistible)
 			{
-				teleport_monster_to(target_ptr, tmp_m_idx, target_ptr->y, target_ptr->x, r_ptr->level, 0L);
+				teleport_monster_to(target_ptr, tmp_m_idx, target_ptr->y, target_ptr->x, r_ptr->level, TELEPORT_SPONTANEOUS);
 			}
 		}
 	}
@@ -413,7 +417,7 @@ void teleport_player_away(MONSTER_IDX m_idx, player_type *target_ptr, POSITION d
  * This function allows teleporting into vaults (!)
  * </pre>
  */
-void teleport_player_to(player_type *creature_ptr, POSITION ny, POSITION nx, BIT_FLAGS mode)
+void teleport_player_to(player_type *creature_ptr, POSITION ny, POSITION nx, teleport_flags mode)
 {
 	if (creature_ptr->anti_tele && !(mode & TELEPORT_NONMAGICAL))
 	{
@@ -461,7 +465,7 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
 	bool old_ml = m_ptr->ml;
 	POSITION old_cdis = m_ptr->cdis;
 
-	teleport_away(tracer_ptr, m_idx, MAX_SIGHT * 2 + 5, 0L);
+	teleport_away(tracer_ptr, m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
 
 	bool is_followable = old_ml;
 	is_followable &= old_cdis <= MAX_SIGHT;
@@ -504,7 +508,7 @@ void teleport_away_followable(player_type *tracer_ptr, MONSTER_IDX m_idx)
 	}
 	else
 	{
-		teleport_player_to(tracer_ptr, m_ptr->fy, m_ptr->fx, 0L);
+		teleport_player_to(tracer_ptr, m_ptr->fy, m_ptr->fx, TELEPORT_SPONTANEOUS);
 	}
 
 	tracer_ptr->energy_need += ENERGY_NEED();
@@ -2503,7 +2507,7 @@ static bool dimension_door_aux(player_type *caster_ptr, POSITION x, POSITION y)
 
 	caster_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
 
-	if (!cave_player_teleportable_bold(caster_ptr, y, x, 0L) ||
+	if (!cave_player_teleportable_bold(caster_ptr, y, x, TELEPORT_SPONTANEOUS) ||
 	    (distance(y, x, caster_ptr->y, caster_ptr->x) > plev / 2 + 10) ||
 	    (!randint0(plev / 10 + 10)))
 	{
@@ -2512,7 +2516,7 @@ static bool dimension_door_aux(player_type *caster_ptr, POSITION x, POSITION y)
 		return FALSE;
 	}
 
-	teleport_player_to(caster_ptr, y, x, 0L);
+	teleport_player_to(caster_ptr, y, x, TELEPORT_SPONTANEOUS);
 	return TRUE;
 }
 

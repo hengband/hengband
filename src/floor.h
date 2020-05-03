@@ -347,7 +347,6 @@ extern void place_random_stairs(player_type *player_ptr, POSITION y, POSITION x)
 
 extern bool los(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern bool projectable(player_type *player_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
-extern int project_length;
 
 extern void vault_monsters(player_type *player_ptr, POSITION y1, POSITION x1, int num);
 extern bool cave_valid_bold(floor_type *floor_ptr, POSITION y, POSITION x);

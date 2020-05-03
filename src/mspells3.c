@@ -24,7 +24,7 @@
 #include "player-status.h"
 #include "monster-spell.h"
 #include "monster-status.h"
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "cmd-basic.h"
 #include "player-effects.h"
 #include "targeting.h"
@@ -1301,10 +1301,10 @@ static bool cast_learned_spell(player_type *caster_ptr, int spell, bool success)
 		(void)set_invuln(caster_ptr, randint1(4) + 4, FALSE);
 		break;
 	case MS_BLINK:
-		teleport_player(caster_ptr, 10, 0L);
+		teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
 		break;
 	case MS_TELEPORT:
-		teleport_player(caster_ptr, plev * 5, 0L);
+		teleport_player(caster_ptr, plev * 5, TELEPORT_SPONTANEOUS);
 		break;
 	case MS_WORLD:
 		(void)time_walk(caster_ptr);

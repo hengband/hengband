@@ -30,12 +30,13 @@
 #include "spells-status.h"
 #include "spells-object.h"
 #include "spells-floor.h"
-#include "spells.h"
 #include "cmd-spell.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "targeting.h"
 #include "view/display-main-window.h"
 #include "player-class.h"
+#include "effect/spells-effect-util.h"
+#include "spell/spells-type.h"
 
 /*!
  * @brief 修行僧の構え設定処理
@@ -656,7 +657,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 
 		case RACE_GNOME:
 			msg_print(_("パッ！", "Blink!"));
-			teleport_player(creature_ptr, 10, 0L);
+			teleport_player(creature_ptr, 10, TELEPORT_SPONTANEOUS);
 			break;
 
 		case RACE_HALF_ORC:

@@ -13,6 +13,7 @@
 #include "artifact.h"
 #include "object/object-kind.h"
 #include "trap.h"
+#include "effect/spells-effect-util.h"
 
 /*
  * The array of floor [MAX_WID][MAX_HGT].

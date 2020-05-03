@@ -83,10 +83,9 @@ extern const byte adj_chr_chm[];
 extern const concptr stat_names[6];
 extern const concptr stat_names_reduced[6];
 
-typedef struct player_type player_type;
 struct floor_type;
 
-struct player_type
+typedef struct player_type
 {
 	int player_uid;
 	int player_euid;
@@ -761,8 +760,8 @@ struct player_type
 	POSITION x;	/* Player location in dungeon */
 	GAME_TEXT name[32]; /*!< 現在のプレイヤー名 / Current player's character name */
 	char base_name[32]; /*!< Stripped version of "player_name" */
+} player_type;
 
-};
 extern player_type *p_ptr;
 
 extern concptr your_alignment(player_type *creature_ptr);

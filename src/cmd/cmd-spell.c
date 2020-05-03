@@ -15,9 +15,10 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "selfinfo.h"
+#include "spell/technic-info-table.h"
 #include "spells.h"
 #include "spells-summon.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "mind.h"
 #include "avatar.h"
 #include "player-damage.h"
@@ -32,6 +33,8 @@
 #include "floor.h"
 #include "autopick/autopick-reader-writer.h"
 #include "japanese.h"
+#include "spell/spells-util.h"
+#include "spell/spells-execution.h"
 
  /*!
   * 魔法領域フラグ管理テーブル /

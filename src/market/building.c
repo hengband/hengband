@@ -46,7 +46,7 @@
 #include "spells.h"
 #include "spells-object.h"
 #include "spells-status.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "dungeon-file.h"
 
 #include "files.h"

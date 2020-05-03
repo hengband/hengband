@@ -9,7 +9,7 @@
 #include "player-inventory.h"
 #include "object/object-kind.h"
 #include "object-hook.h"
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "spells-status.h"
 #include "spells-floor.h"
 #include "cmd-basic.h"

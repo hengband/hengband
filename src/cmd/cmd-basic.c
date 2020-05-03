@@ -29,7 +29,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "player-status.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "geometry.h"
 #include "wild.h"
 #include "grid.h"
@@ -50,6 +50,7 @@
 #include "view/display-main-window.h"
 #include "targeting.h"
 #include "world.h"
+#include "effect/spells-effect-util.h"
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理
@@ -2266,7 +2267,7 @@ void do_cmd_fire(player_type *creature_ptr, SPELL_IDX snipe_type)
 	/* Sniper actions after some shootings */
 	if (snipe_type == SP_AWAY)
 	{
-		teleport_player(creature_ptr, 10 + (creature_ptr->concent * 2), 0L);
+		teleport_player(creature_ptr, 10 + (creature_ptr->concent * 2), TELEPORT_SPONTANEOUS);
 	}
 
 	if (snipe_type == SP_FINAL)

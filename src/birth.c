@@ -40,7 +40,7 @@
 #include "player-personality.h"
 #include "player-sex.h"
 #include "player/race-info-table.h"
-#include "spells.h"
+#include "spell/spells-util.h"
 #include "spells-status.h"
 #include "wild.h"
 #include "floor.h"
@@ -55,7 +55,7 @@
 #include "monsterrace.h"
 #include "autopick/autopick.h"
 #include "save.h"
-#include "realm.h"
+#include "realm/realm.h"
 #include "japanese.h"
 #include "view/display-main-window.h" // 暫定。後で消す.
 

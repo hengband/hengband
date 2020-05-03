@@ -63,7 +63,7 @@
 #include "knowledge/knowledge-autopick.h"
 #include "knowledge/knowledge-quests.h"
 #include "market/store.h"
-#include "spells.h"
+#include "spell/technic-info-table.h"
 #include "spells-summon.h"
 #include "spells-object.h"
 #include "spells-status.h"
@@ -87,7 +87,7 @@
 #include "player-damage.h"
 #include "player-effects.h"
 #include "cmd-spell.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "object/object-kind.h"
 #include "object-hook.h"
 #include "wild.h"
@@ -110,9 +110,11 @@
 #include "autopick/autopick-pref-processor.h"
 #include "autopick/autopick-reader-writer.h"
 #include "save.h"
-#include "realm.h"
-#include "realm-song.h"
+#include "realm/realm.h"
+#include "realm/realm-song.h"
 #include "targeting.h"
+#include "spell/spells-util.h"
+#include "spell/spells-execution.h"
 
  /*!
   * コピーライト情報 /
@@ -570,7 +572,7 @@ static void pattern_teleport(player_type *creature_ptr)
 	}
 	else if (get_check(_("通常テレポート？", "Normal teleport? ")))
 	{
-		teleport_player(creature_ptr, 200, 0L);
+		teleport_player(creature_ptr, 200, TELEPORT_SPONTANEOUS);
 		return;
 	}
 	else
@@ -2292,7 +2294,7 @@ static void process_world_aux_curse(player_type *creature_ptr)
 			if (get_check_strict(_("テレポートしますか？", "Teleport? "), CHECK_OKAY_CANCEL))
 			{
 				disturb(creature_ptr, FALSE, TRUE);
-				teleport_player(creature_ptr, 50, 0L);
+				teleport_player(creature_ptr, 50, TELEPORT_SPONTANEOUS);
 			}
 			else
 			{

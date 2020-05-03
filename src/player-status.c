@@ -19,7 +19,7 @@
 #include "feature.h"
 #include "artifact.h"
 #include "avatar.h"
-#include "spells.h"
+#include "spell/technic-info-table.h"
 #include "spells-status.h"
 #include "object.h"
 #include "object-hook.h"
@@ -29,8 +29,8 @@
 #include "monsterrace-hook.h"
 #include "mutation.h"
 #include "patron.h"
-#include "realm-hex.h"
-#include "realm-song.h"
+#include "realm/realm-hex.h"
+#include "realm/realm-song.h"
 #include "cmd/cmd-pet.h"
 #include "cmd/cmd-spell.h"
 #include "dungeon.h"
@@ -48,6 +48,8 @@
 
 #include "horror-descriptions.h"
 #include "market/arena-info-table.h"
+#include "spell/spells-util.h"
+#include "spell/spells-execution.h"
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats

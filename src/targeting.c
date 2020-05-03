@@ -38,8 +38,8 @@
 #include "feature.h"
 #include "quest.h"
 #include "dungeon.h"
-#include "spells.h"
 #include "world.h"
+#include "effect/spells-effect-util.h"
 
  /*!
   * @brief コンソール上におけるマップ表示の左上位置を返す /
@@ -1491,7 +1491,7 @@ bool target_set(player_type *creature_ptr, BIT_FLAGS mode)
 	creature_ptr->window |= (PW_OVERHEAD);
 	handle_stuff(creature_ptr);
 
-	return target_who > 0;
+	return target_who != 0;
 }
 
 

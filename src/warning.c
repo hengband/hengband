@@ -10,7 +10,7 @@
 #include "player-status.h"
 #include "monster.h"
 #include "monster-spell.h"
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "object-flavor.h"
 #include "dungeon.h"
 #include "player/mimic-info-table.h"

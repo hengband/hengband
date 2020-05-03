@@ -29,7 +29,7 @@
 #include "melee.h"
 #include "spells-summon.h"
 #include "avatar.h"
-#include "realm-hex.h"
+#include "realm/realm-hex.h"
 #include "feature.h"
 #include "grid.h"
 #include "player-move.h"

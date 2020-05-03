@@ -144,7 +144,7 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
-#include "realm-song.h"
+#include "realm/realm-song.h"
 #include "autopick/autopick.h"
 #include "dungeon.h"
 #include "floor.h"
@@ -168,7 +168,7 @@
 #include "monster-status.h"
 #include "object-hook.h"
 #include "object-flavor.h"
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "cmd-basic.h"
 #include "view/display-main-window.h"
 #include "world.h"

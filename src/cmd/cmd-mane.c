@@ -17,7 +17,6 @@
 
 #include "floor.h"
 #include "grid.h"
-#include "spells.h"
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "monster-status.h"
@@ -29,6 +28,7 @@
 #include "cmd-basic.h"
 #include "targeting.h"
 #include "view/display-main-window.h"
+#include "spell/spells-type.h"
 
 static int damage;
 
@@ -665,10 +665,10 @@ static bool use_mane(player_type *caster_ptr, int spell)
 		(void)set_invuln(caster_ptr, randint1(7) + 7, FALSE);
 		break;
 	case MS_BLINK:
-		teleport_player(caster_ptr, 10, 0L);
+		teleport_player(caster_ptr, 10, TELEPORT_SPONTANEOUS);
 		break;
 	case MS_TELEPORT:
-		teleport_player(caster_ptr, plev * 5, 0L);
+		teleport_player(caster_ptr, plev * 5, TELEPORT_SPONTANEOUS);
 		break;
 	case MS_WORLD:
 		(void)time_walk(caster_ptr);

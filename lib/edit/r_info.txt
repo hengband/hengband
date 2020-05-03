@@ -22674,13 +22674,13 @@ E:Dokuro, the Bludgeoning Angel
 G:A:B
 I:115:30d30:30:60:10
 W:30:2:0:1300:0:0
-B:SLASH:SUPERHURT:15d1
-B:HIT:SUPERHURT:15d1
-B:CRAWL:SUPERHURT:15d1
-B:STING:SUPERHURT:15d1
+B:SLASH:SUPERHURT:18d1
+B:HIT:SUPERHURT:18d1
+B:CRAWL:SUPERHURT:18d1
+B:STING:SUPERHURT:18d1
 F:UNIQUE | FORCE_MAXHP | GOOD | FEMALE | ANGEL
 F:IM_FIRE | RES_LITE
-F:BASH_DOOR | NO_SLEEP | NO_CONF
+F:BASH_DOOR | NO_SLEEP | NO_CONF | NO_FEAR
 F:DROP_GOOD | DROP_GREAT | ONLY_ITEM | DROP_1D2
 S:1_IN_5
 S:ANIM_DEAD | BA_LITE | CAUSE_3 | CONF | HOLD | BLIND | SHRIEK | BLINK
@@ -23012,7 +23012,7 @@ R:379:1d3
 R:526:1d3
 R:560:1d2
 R:1113:4d5
-R:1117:4d5
+R:1118:4d5
 D:$It is a too huge towering tornado of winds that looks vaguely like dragons or other winged beast
 D:$ This violent wind enjoying, dragons comes.
 D:それはあまりにも高くそびえ立つような風の竜巻で、漠然とドラゴンか他の翼ある魔獣に見える。
@@ -23120,5 +23120,3 @@ R:1131:1d3
 R:1132:1d3
 D:$It is a too huge towering mass of filth that looks vaguely like Hydras, crocodilians or frogs.
 D:それはあまりにも高くそびえ立つような汚物の塊で、漠然とヒドラやワニやカエルのように見える。
-
-

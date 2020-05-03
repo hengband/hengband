@@ -2,7 +2,7 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
-#include "spells.h"
+#include "spell/spells-type.h"
 #include "spells-summon.h"
 #include "floor.h"
 #include "trap.h"

@@ -22,6 +22,7 @@
 #include "view/display-main-window.h"
 #include "targeting.h"
 #include "world.h"
+#include "effect/spells-effect-util.h"
 
 int total_friends = 0;
 

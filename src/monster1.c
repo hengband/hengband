@@ -463,20 +463,23 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 
 	if (speed > 110)
 	{
-		if (speed > 139) hook_c_roff(TERM_RED, _("信じ難いほど", " incredibly"));
-		else if (speed > 134) hook_c_roff(TERM_ORANGE, _("猛烈に", " extremely"));
-		else if (speed > 129) hook_c_roff(TERM_ORANGE, _("非常に", " very"));
-		else if (speed > 124) hook_c_roff(TERM_UMBER, _("かなり", " fairly"));
-		else if (speed < 120) hook_c_roff(TERM_L_UMBER, _("やや", " somewhat"));
-		hook_c_roff(TERM_L_RED, _("素早く", " quickly"));
+		if (speed >= 150) hook_c_roff(TERM_VIOLET, _("信じ難いほど素早く", " incredibly quickly"));
+		else if (speed >= 145) hook_c_roff(TERM_RED, _("音速並に素早く", " sonic-boomingly quickly"));
+		else if (speed >= 140) hook_c_roff(TERM_RED, _("悪夢的に素早く", " nightmare quickly"));
+		else if (speed >= 135) hook_c_roff(TERM_ORANGE, _("猛烈に素早く", " extremely quickly"));
+		else if (speed >= 130) hook_c_roff(TERM_ORANGE, _("非常に素早く", " very quickly"));
+		else if (speed >= 125) hook_c_roff(TERM_UMBER, _("かなり素早く", " fairly quickly"));
+		else if (speed >= 120) hook_c_roff(TERM_UMBER, _("素早く", " quickly"));
+		else if (speed >= 115) hook_c_roff(TERM_L_UMBER, _("やや素早く", " somewhat quickly"));
+		else hook_c_roff(TERM_L_WHITE, _("わずかに素早く", " slightly quickly"));
 	}
 	else if (speed < 110)
 	{
-		if (speed < 90) hook_c_roff(TERM_L_GREEN, _("信じ難いほど", " incredibly"));
-		else if (speed < 95) hook_c_roff(TERM_BLUE, _("非常に", " very"));
-		else if (speed < 100) hook_c_roff(TERM_BLUE, _("かなり", " fairly"));
-		else if (speed > 104) hook_c_roff(TERM_GREEN, _("やや", " somewhat"));
-		hook_c_roff(TERM_L_BLUE, _("ゆっくりと", " slowly"));
+		if (speed < 90) hook_c_roff(TERM_GREEN, _("信じ難いほどゆっくりと", " incredibly slowly"));
+		else if (speed < 95) hook_c_roff(TERM_L_GREEN, _("非常にゆっくりと", " very slowly"));
+		else if (speed < 100) hook_c_roff(TERM_BLUE, _("かなりゆっくりと", " fairly slowly"));
+		else if (speed < 105) hook_c_roff(TERM_L_BLUE, _("ややゆっくりと", " somewhat slowly"));
+		else hook_c_roff(TERM_L_WHITE, _("わずかにゆっくりと", " slightly slowly"));
 	}
 	else
 	{

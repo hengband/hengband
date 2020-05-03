@@ -139,13 +139,20 @@ hengband_SOURCES = \
 	quest.h quest.c\
 	\
 	racial.c racial.h \
-	realm.c realm.h \
-	realm-arcane.c realm-arcane.h realm-chaos.c realm-chaos.h \
-	realm-craft.c realm-craft.h realm-crusade.c realm-crusade.h \
-	realm-daemon.c realm-daemon.h realm-death.c realm-death.h \
-	realm-hex.c realm-hex.h realm-hissatsu.c realm-hissatsu.h \
-	realm-life.c realm-life.h realm-nature.c realm-nature.h realm-song.c \
-	realm-song.h realm-sorcery.c realm-sorcery.h realm-trump.c realm-trump.h \
+	realm/realm.c realm/realm.h \
+	realm/realm-arcane.c realm/realm-arcane.h \
+	realm/realm-chaos.c realm/realm-chaos.h \
+	realm/realm-craft.c realm/realm-craft.h \
+	realm/realm-crusade.c realm/realm-crusade.h \
+	realm/realm-daemon.c realm/realm-daemon.h \
+	realm/realm-death.c realm/realm-death.h \
+	realm/realm-hex.c realm/realm-hex.h 
+	realm/realm-hissatsu.c realm/realm-hissatsu.h \
+	realm/realm-life.c realm/realm-life.h 
+	realm/realm-nature.c realm/realm-nature.h realm/realm-song.c \
+	realm/realm-song.h realm/realm-sorcery.c \
+	realm/realm-sorcery.h realm/realm-trump.c realm/realm-trump.h \
+	\
 	report.c report.h \
 	rooms.c rooms-city.c rooms-city.h rooms-fractal.c rooms-fractal.h \
 	rooms.h rooms-normal.c rooms-normal.h \
@@ -160,7 +167,25 @@ hengband_SOURCES = \
 	\
 	effect/effect-feature.c effect/effect-feature.h \
 	effect/effect-item.c effect/effect-item.h \
+	effect/spells-effect-util.c effect/spells-effect-util.h \
+	effect/effect-player.c effect/effect-player.h \
+	effect/effect-monster.c effect/effect-monster.h \
+	effect/effect-monster-util.c effect/effect-monster-util.h \
+	effect/effect-monster-resist-hurt.c effect/effect-monster-resist-hurt.h \
+	effect/effect-monster-psi.c effect/effect-monster-psi.h \
+	effect/effect-monster-domination.c effect/effect-monster-domination.h \
+	effect/effect-monster-oldies.c effect/effect-monster-oldies.h \
+	effect/effect-monster-charm.c effect/effect-monster-charm.h \
+	effect/effect-monster-lite-dark.c effect/effect-monster-lite-dark.h \
+	effect/effect-monster-evil.c effect/effect-monster-evil.h \
+	effect/effect-monster-spirit.c effect/effect-monster-spirit.h \
+	effect/effect-monster-switcher.c effect/effect-monster-switcher.h \
+	effect/effect-player-util.h \
+	effect/effect-player-switcher.c effect/effect-player-switcher.h \
 	\
+	spell/technic-info-table.c spell/technic-info-table.h \
+	spell/spells-execution.c spell/spells-execution.h \
+	spell/spells-util.h spell/spells-type.h \
 	spells.h \
 	spells1.c spells2.c spells3.c \
 	spells-diceroll.c spells-diceroll.h \
@@ -225,7 +250,7 @@ LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Icmd -Icombat -Icore -Ieffect -Iio -Iknowledge -Imarket \
-	-Imonster -Iobject -Iplayer -Iroom -Iview
+	-Imonster -Iobject -Iplayer -Irealm -Iroom -Ispell -Iview
 
 install-exec-hook:
 if SET_GID

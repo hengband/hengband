@@ -15,7 +15,7 @@
 
 #include "angband.h"
 #include "avatar.h"
-#include "realm.h"
+#include "realm/realm.h"
 #include "player-race.h"
 #include "player-class.h"
 

@@ -31,12 +31,13 @@
 #include "spells-status.h"
 #include "spells-floor.h"
 #include "object-hook.h"
-#include "spells.h"
 #include "cmd-basic.h"
 #include "files.h"
 #include "floor.h"
 #include "targeting.h"
 #include "player-race.h"
+#include "effect/spells-effect-util.h"
+#include "spell/spells-type.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える
@@ -1603,7 +1604,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 
 		case MUT1_VTELEPORT:
 			msg_print(_("集中している...", "You concentrate..."));
-			teleport_player(creature_ptr, 10 + 4 * lvl, 0L);
+			teleport_player(creature_ptr, 10 + 4 * lvl, TELEPORT_SPONTANEOUS);
 			break;
 
 		case MUT1_MIND_BLST:
@@ -1632,7 +1633,7 @@ bool exe_mutation_power(player_type *creature_ptr, int power)
 			break;
 
 		case MUT1_BLINK:
-			teleport_player(creature_ptr, 10, 0L);
+			teleport_player(creature_ptr, 10, TELEPORT_SPONTANEOUS);
 			break;
 
 		case MUT1_EAT_ROCK:
