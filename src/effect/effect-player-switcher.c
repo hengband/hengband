@@ -73,6 +73,7 @@ void effect_player_nuke(player_type *target_ptr, effect_player_type *ep_ptr)
 void effect_player_missile(player_type *target_ptr, effect_player_type *ep_ptr)
 {
 	if (target_ptr->blind) msg_print(_("‰½‚©‚ÅUŒ‚‚³‚ê‚½I", "You are hit by something!"));
+
 	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 }
 
@@ -80,6 +81,7 @@ void effect_player_missile(player_type *target_ptr, effect_player_type *ep_ptr)
 void effect_player_holy_file(player_type *target_ptr, effect_player_type *ep_ptr)
 {
 	if (target_ptr->blind) msg_print(_("‰½‚©‚ÅUŒ‚‚³‚ê‚½I", "You are hit by something!"));
+
 	if (target_ptr->align > 10)
 		ep_ptr->dam /= 2;
 	else if (target_ptr->align < -10)
@@ -92,10 +94,70 @@ void effect_player_holy_file(player_type *target_ptr, effect_player_type *ep_ptr
 void effect_player_hell_fire(player_type *target_ptr, effect_player_type *ep_ptr)
 {
 	if (target_ptr->blind) msg_print(_("‰½‚©‚ÅUŒ‚‚³‚ê‚½I", "You are hit by something!"));
+
 	if (target_ptr->align > 10)
 		ep_ptr->dam *= 2;
 
 	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
+void effect_player_arrow(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind)
+	{
+		msg_print(_("‰½‚©‰s‚¢‚à‚Ì‚ÅUŒ‚‚³‚ê‚½I", "You are hit by something sharp!"));
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+		return;
+	}
+	
+	if ((target_ptr->inventory_list[INVEN_RARM].name1 == ART_ZANTETSU) || (target_ptr->inventory_list[INVEN_LARM].name1 == ART_ZANTETSU))
+	{
+		msg_print(_("–î‚ğa‚èÌ‚Ä‚½I", "You cut down the arrow!"));
+		return;
+	}
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
+void effect_player_plasma(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("‰½‚©‚Æ‚Ä‚à”M‚¢‚à‚Ì‚ÅUŒ‚‚³‚ê‚½I", "You are hit by something *HOT*!"));
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+
+	if (!target_ptr->resist_sound && !CHECK_MULTISHADOW(target_ptr))
+	{
+		int plus_stun = (randint1((ep_ptr->dam > 40) ? 35 : (ep_ptr->dam * 3 / 4 + 5)));
+		(void)set_stun(target_ptr, target_ptr->stun + plus_stun);
+	}
+
+	if (!(target_ptr->resist_fire || is_oppose_fire(target_ptr) || target_ptr->immune_fire))
+		inventory_damage(target_ptr, set_acid_destroy, 3);
+}
+
+
+void effect_player_nether(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("’n–‚Ì—Í‚ÅUŒ‚‚³‚ê‚½I", "You are hit by nether forces!"));
+
+	if (target_ptr->resist_neth)
+	{
+		if (!PRACE_IS_(target_ptr, RACE_SPECTRE))
+			ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
+	}
+	else if (!CHECK_MULTISHADOW(target_ptr)) drain_exp(target_ptr, 200 + (target_ptr->exp / 100), 200 + (target_ptr->exp / 1000), 75);
+
+	if (!PRACE_IS_(target_ptr, RACE_SPECTRE) || CHECK_MULTISHADOW(target_ptr))
+	{
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+		return;
+	}
+
+	msg_print(_("‹C•ª‚ª‚æ‚­‚È‚Á‚½B", "You feel invigorated!"));
+	hp_player(target_ptr, ep_ptr->dam / 4);
+	learn_spell(target_ptr, ep_ptr->monspell);
 }
 
 
@@ -136,63 +198,11 @@ void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 	case GF_HELL_FIRE:
 		effect_plyaer_hell_fire(target_ptr, ep_ptr);
 	case GF_ARROW:
-	{
-		if (target_ptr->blind)
-		{
-			msg_print(_("‰½‚©‰s‚¢‚à‚Ì‚ÅUŒ‚‚³‚ê‚½I", "You are hit by something sharp!"));
-		}
-		else if ((target_ptr->inventory_list[INVEN_RARM].name1 == ART_ZANTETSU) || (target_ptr->inventory_list[INVEN_LARM].name1 == ART_ZANTETSU))
-		{
-			msg_print(_("–î‚ğa‚èÌ‚Ä‚½I", "You cut down the arrow!"));
-			break;
-		}
-
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_arrow(target_ptr, ep_ptr);
 	case GF_PLASMA:
-	{
-		if (target_ptr->blind) msg_print(_("‰½‚©‚Æ‚Ä‚à”M‚¢‚à‚Ì‚ÅUŒ‚‚³‚ê‚½I", "You are hit by something *HOT*!"));
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-
-		if (!target_ptr->resist_sound && !CHECK_MULTISHADOW(target_ptr))
-		{
-			int plus_stun = (randint1((ep_ptr->dam > 40) ? 35 : (ep_ptr->dam * 3 / 4 + 5)));
-			(void)set_stun(target_ptr, target_ptr->stun + plus_stun);
-		}
-
-		if (!(target_ptr->resist_fire || is_oppose_fire(target_ptr) || target_ptr->immune_fire))
-		{
-			inventory_damage(target_ptr, set_acid_destroy, 3);
-		}
-
-		break;
-	}
+		effect_player_plasma(target_ptr, ep_ptr);
 	case GF_NETHER:
-	{
-		if (target_ptr->blind) msg_print(_("’n–‚Ì—Í‚ÅUŒ‚‚³‚ê‚½I", "You are hit by nether forces!"));
-		if (target_ptr->resist_neth)
-		{
-			if (!PRACE_IS_(target_ptr, RACE_SPECTRE))
-			{
-				ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
-			}
-		}
-		else if (!CHECK_MULTISHADOW(target_ptr)) drain_exp(target_ptr, 200 + (target_ptr->exp / 100), 200 + (target_ptr->exp / 1000), 75);
-
-		if (PRACE_IS_(target_ptr, RACE_SPECTRE) && !CHECK_MULTISHADOW(target_ptr))
-		{
-			msg_print(_("‹C•ª‚ª‚æ‚­‚È‚Á‚½B", "You feel invigorated!"));
-			hp_player(target_ptr, ep_ptr->dam / 4);
-			learn_spell(target_ptr, ep_ptr->monspell);
-		}
-		else
-		{
-			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		}
-
-		break;
-	}
+		effect_player_nether(target_ptr, ep_ptr);
 	case GF_WATER:
 	{
 		if (target_ptr->blind) msg_print(_("‰½‚©¼‚Á‚½‚à‚Ì‚ÅUŒ‚‚³‚ê‚½I", "You are hit by something wet!"));
