@@ -12,7 +12,6 @@
 #include "player-damage.h"
 #include "avatar.h"
 #include "monster-status.h"
-#include "player-effects.h"
 #include "monsterrace-hook.h"
 #include "combat/melee.h"
 #include "spell/spells-type.h"
