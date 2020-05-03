@@ -173,7 +173,7 @@ gf_switch_result effect_monster_hand_doom(effect_monster_type *em_ptr)
 }
 
 
-static bool effect_monster_check_capturability(player_type *caster_ptr, effect_monster_type *em_ptr, int capturable_hp)
+static bool effect_monster_capture_attemption(player_type *caster_ptr, effect_monster_type *em_ptr, int capturable_hp)
 {
 	if (em_ptr->m_ptr->hp >= randint0(capturable_hp)) return FALSE;
 
@@ -219,7 +219,7 @@ gf_switch_result effect_monster_capture(player_type *caster_ptr, effect_monster_
 		return GF_SWITCH_CONTINUE;
 	}
 	
-	if (effect_monster_check_capturability(caster_ptr, em_ptr, capturable_hp))
+	if (effect_monster_capture_attemption(caster_ptr, em_ptr, capturable_hp))
 		return GF_SWITCH_TRUE;
 
 	msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), em_ptr->m_name);
