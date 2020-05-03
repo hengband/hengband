@@ -70,6 +70,35 @@ void effect_player_nuke(player_type *target_ptr, effect_player_type *ep_ptr)
 }
 
 
+void effect_player_missile(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
+void effect_player_holy_file(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
+	if (target_ptr->align > 10)
+		ep_ptr->dam /= 2;
+	else if (target_ptr->align < -10)
+		ep_ptr->dam *= 2;
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
+void effect_player_hell_fire(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
+	if (target_ptr->align > 10)
+		ep_ptr->dam *= 2;
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -99,29 +128,13 @@ void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 		effect_player_nuke(target_ptr, ep_ptr);
 		return;
 	case GF_MISSILE:
-	{
-		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_missile(target_ptr, ep_ptr);
+		return;
 	case GF_HOLY_FIRE:
-	{
-		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
-		if (target_ptr->align > 10)
-			ep_ptr->dam /= 2;
-		else if (target_ptr->align < -10)
-			ep_ptr->dam *= 2;
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_holy_file(target_ptr, ep_ptr);
+		return;
 	case GF_HELL_FIRE:
-	{
-		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
-		if (target_ptr->align > 10)
-			ep_ptr->dam *= 2;
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_plyaer_hell_fire(target_ptr, ep_ptr);
 	case GF_ARROW:
 	{
 		if (target_ptr->blind)

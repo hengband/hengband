@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef struct
+typedef struct effect_player_type
 {
 	DEPTH rlev; // モンスターのレベル (但し0のモンスターは1になる).
 	monster_type *m_ptr;
