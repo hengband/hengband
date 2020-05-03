@@ -497,6 +497,37 @@ void effect_player_time(player_type *target_ptr, effect_player_type *ep_ptr)
 }
 
 
+void effect_player_gravity(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("何か重いもので攻撃された！", "You are hit by something heavy!"));
+	msg_print(_("周辺の重力がゆがんだ。", "Gravity warps around you."));
+
+	if (!CHECK_MULTISHADOW(target_ptr))
+	{
+		teleport_player(target_ptr, 5, TELEPORT_PASSIVE);
+		if (!target_ptr->levitation)
+			(void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
+		if (!(target_ptr->resist_sound || target_ptr->levitation))
+		{
+			int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
+			(void)set_stun(target_ptr, target_ptr->stun + plus_stun);
+		}
+	}
+
+	if (target_ptr->levitation)
+	{
+		ep_ptr->dam = (ep_ptr->dam * 2) / 3;
+	}
+
+	if (!target_ptr->levitation || one_in_(13))
+	{
+		inventory_damage(target_ptr, set_cold_destroy, 2);
+	}
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -581,36 +612,10 @@ void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 		return;
 	case GF_TIME:
 		effect_player_time(target_ptr, ep_ptr);
+		return;
 	case GF_GRAVITY:
-	{
-		if (target_ptr->blind) msg_print(_("何か重いもので攻撃された！", "You are hit by something heavy!"));
-		msg_print(_("周辺の重力がゆがんだ。", "Gravity warps around you."));
-
-		if (!CHECK_MULTISHADOW(target_ptr))
-		{
-			teleport_player(target_ptr, 5, TELEPORT_PASSIVE);
-			if (!target_ptr->levitation)
-				(void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
-			if (!(target_ptr->resist_sound || target_ptr->levitation))
-			{
-				int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
-				(void)set_stun(target_ptr, target_ptr->stun + plus_stun);
-			}
-		}
-
-		if (target_ptr->levitation)
-		{
-			ep_ptr->dam = (ep_ptr->dam * 2) / 3;
-		}
-
-		if (!target_ptr->levitation || one_in_(13))
-		{
-			inventory_damage(target_ptr, set_cold_destroy, 2);
-		}
-
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_gravity(target_ptr, ep_ptr);
+		return;
 	case GF_DISINTEGRATE:
 	{
 		if (target_ptr->blind) msg_print(_("純粋なエネルギーで攻撃された！", "You are hit by pure energy!"));
