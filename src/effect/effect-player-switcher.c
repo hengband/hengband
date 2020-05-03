@@ -13,6 +13,16 @@
 #include "mutation.h"
 #include "object-curse.h"
 
+// 毒を除く4元素.
+void effect_player_elements(player_type *target_ptr, effect_player_type *ep_ptr, concptr attack_message,
+	HIT_POINT(*damage_func)(player_type*, HIT_POINT, concptr, int, bool))
+{
+	if (target_ptr->blind) msg_print(attack_message);
+
+	ep_ptr->get_damage = (*damage_func)(target_ptr, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell, FALSE);
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -24,33 +34,17 @@ void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 	switch (ep_ptr->effect_type)
 	{
 	case GF_ACID:
-	{
-		if (target_ptr->blind) msg_print(_("酸で攻撃された！", "You are hit by acid!"));
-
-		ep_ptr->get_damage = acid_dam(target_ptr, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell, FALSE);
-		break;
-	}
+		effect_player_elements(target_ptr, ep_ptr, _("酸で攻撃された！", "You are hit by acid!"), acid_dam);
+		return;
 	case GF_FIRE:
-	{
-		if (target_ptr->blind) msg_print(_("火炎で攻撃された！", "You are hit by fire!"));
-
-		ep_ptr->get_damage = fire_dam(target_ptr, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell, FALSE);
-		break;
-	}
+		effect_player_elements(target_ptr, ep_ptr, _("火炎で攻撃された！", "You are hit by fire!"), fire_dam);
+		return;
 	case GF_COLD:
-	{
-		if (target_ptr->blind) msg_print(_("冷気で攻撃された！", "You are hit by cold!"));
-
-		ep_ptr->get_damage = cold_dam(target_ptr, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell, FALSE);
-		break;
-	}
+		effect_player_elements(target_ptr, ep_ptr, _("冷気で攻撃された！", "You are hit by cold!"), cold_dam);
+		return;
 	case GF_ELEC:
-	{
-		if (target_ptr->blind) msg_print(_("電撃で攻撃された！", "You are hit by lightning!"));
-
-		ep_ptr->get_damage = elec_dam(target_ptr, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell, FALSE);
-		break;
-	}
+		effect_player_elements(target_ptr, ep_ptr, _("電撃で攻撃された！", "You are hit by lightning!"), elec_dam);
+		return;
 	case GF_POIS:
 	{
 		bool double_resist = is_oppose_pois(target_ptr);
