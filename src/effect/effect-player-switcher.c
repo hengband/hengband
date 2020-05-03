@@ -78,7 +78,7 @@ void effect_player_missile(player_type *target_ptr, effect_player_type *ep_ptr)
 }
 
 
-void effect_player_holy_file(player_type *target_ptr, effect_player_type *ep_ptr)
+void effect_player_holy_fire(player_type *target_ptr, effect_player_type *ep_ptr)
 {
 	if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
 
@@ -161,6 +161,116 @@ void effect_player_nether(player_type *target_ptr, effect_player_type *ep_ptr)
 }
 
 
+void effect_player_water(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("何か湿ったもので攻撃された！", "You are hit by something wet!"));
+	if (CHECK_MULTISHADOW(target_ptr))
+	{
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+		return;
+	}
+
+	if (!target_ptr->resist_sound && !target_ptr->resist_water)
+	{
+		set_stun(target_ptr, target_ptr->stun + randint1(40));
+	}
+	if (!target_ptr->resist_conf && !target_ptr->resist_water)
+	{
+		set_confused(target_ptr, target_ptr->confused + randint1(5) + 5);
+	}
+
+	if (one_in_(5) && !target_ptr->resist_water)
+	{
+		inventory_damage(target_ptr, set_cold_destroy, 3);
+	}
+
+	if (target_ptr->resist_water) ep_ptr->get_damage /= 4;
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
+void effect_player_chaos(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("無秩序の波動で攻撃された！", "You are hit by a wave of anarchy!"));
+	if (target_ptr->resist_chaos)
+	{
+		ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
+	}
+
+	if (CHECK_MULTISHADOW(target_ptr))
+	{
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+		return;
+	}
+
+	if (!target_ptr->resist_conf)
+	{
+		(void)set_confused(target_ptr, target_ptr->confused + randint0(20) + 10);
+	}
+	if (!target_ptr->resist_chaos)
+	{
+		(void)set_image(target_ptr, target_ptr->image + randint1(10));
+		if (one_in_(3))
+		{
+			msg_print(_("あなたの身体はカオスの力で捻じ曲げられた！", "Your body is twisted by chaos!"));
+			(void)gain_mutation(target_ptr, 0);
+		}
+	}
+	if (!target_ptr->resist_neth && !target_ptr->resist_chaos)
+	{
+		drain_exp(target_ptr, 5000 + (target_ptr->exp / 100), 500 + (target_ptr->exp / 1000), 75);
+	}
+
+	if (!target_ptr->resist_chaos || one_in_(9))
+	{
+		inventory_damage(target_ptr, set_elec_destroy, 2);
+		inventory_damage(target_ptr, set_fire_destroy, 2);
+	}
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
+void effect_player_shards(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("何か鋭いもので攻撃された！", "You are hit by something sharp!"));
+	if (target_ptr->resist_shard)
+	{
+		ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
+	}
+	else if (!CHECK_MULTISHADOW(target_ptr))
+	{
+		(void)set_cut(target_ptr, target_ptr->cut + ep_ptr->dam);
+	}
+
+	if (!target_ptr->resist_shard || one_in_(13))
+		inventory_damage(target_ptr, set_cold_destroy, 2);
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
+void effect_player_sound(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("轟音で攻撃された！", "You are hit by a loud noise!"));
+	if (target_ptr->resist_sound)
+	{
+		ep_ptr->dam *= 5; ep_ptr->dam /= (randint1(4) + 7);
+	}
+	else if (!CHECK_MULTISHADOW(target_ptr))
+	{
+		int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
+		(void)set_stun(target_ptr, target_ptr->stun + plus_stun);
+	}
+
+	if (!target_ptr->resist_sound || one_in_(13))
+		inventory_damage(target_ptr, set_cold_destroy, 2);
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -193,126 +303,32 @@ void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 		effect_player_missile(target_ptr, ep_ptr);
 		return;
 	case GF_HOLY_FIRE:
-		effect_player_holy_file(target_ptr, ep_ptr);
+		effect_player_holy_fire(target_ptr, ep_ptr);
 		return;
 	case GF_HELL_FIRE:
-		effect_plyaer_hell_fire(target_ptr, ep_ptr);
+		effect_player_hell_fire(target_ptr, ep_ptr);
+		return;
 	case GF_ARROW:
 		effect_player_arrow(target_ptr, ep_ptr);
+		return;
 	case GF_PLASMA:
 		effect_player_plasma(target_ptr, ep_ptr);
+		return;
 	case GF_NETHER:
 		effect_player_nether(target_ptr, ep_ptr);
+		return;
 	case GF_WATER:
-	{
-		if (target_ptr->blind) msg_print(_("何か湿ったもので攻撃された！", "You are hit by something wet!"));
-		if (CHECK_MULTISHADOW(target_ptr))
-		{
-			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-			break;
-		}
-
-		if (!target_ptr->resist_sound && !target_ptr->resist_water)
-		{
-			set_stun(target_ptr, target_ptr->stun + randint1(40));
-		}
-		if (!target_ptr->resist_conf && !target_ptr->resist_water)
-		{
-			set_confused(target_ptr, target_ptr->confused + randint1(5) + 5);
-		}
-
-		if (one_in_(5) && !target_ptr->resist_water)
-		{
-			inventory_damage(target_ptr, set_cold_destroy, 3);
-		}
-
-		if (target_ptr->resist_water) ep_ptr->get_damage /= 4;
-
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_water(target_ptr, ep_ptr);
+		return;
 	case GF_CHAOS:
-	{
-		if (target_ptr->blind) msg_print(_("無秩序の波動で攻撃された！", "You are hit by a wave of anarchy!"));
-		if (target_ptr->resist_chaos)
-		{
-			ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
-		}
-
-		if (CHECK_MULTISHADOW(target_ptr))
-		{
-			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-			break;
-		}
-
-		if (!target_ptr->resist_conf)
-		{
-			(void)set_confused(target_ptr, target_ptr->confused + randint0(20) + 10);
-		}
-		if (!target_ptr->resist_chaos)
-		{
-			(void)set_image(target_ptr, target_ptr->image + randint1(10));
-			if (one_in_(3))
-			{
-				msg_print(_("あなたの身体はカオスの力で捻じ曲げられた！", "Your body is twisted by chaos!"));
-				(void)gain_mutation(target_ptr, 0);
-			}
-		}
-		if (!target_ptr->resist_neth && !target_ptr->resist_chaos)
-		{
-			drain_exp(target_ptr, 5000 + (target_ptr->exp / 100), 500 + (target_ptr->exp / 1000), 75);
-		}
-
-		if (!target_ptr->resist_chaos || one_in_(9))
-		{
-			inventory_damage(target_ptr, set_elec_destroy, 2);
-			inventory_damage(target_ptr, set_fire_destroy, 2);
-		}
-
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_chaos(target_ptr, ep_ptr);
+		return;
 	case GF_SHARDS:
-	{
-		if (target_ptr->blind) msg_print(_("何か鋭いもので攻撃された！", "You are hit by something sharp!"));
-		if (target_ptr->resist_shard)
-		{
-			ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
-		}
-		else if (!CHECK_MULTISHADOW(target_ptr))
-		{
-			(void)set_cut(target_ptr, target_ptr->cut + ep_ptr->dam);
-		}
-
-		if (!target_ptr->resist_shard || one_in_(13))
-		{
-			inventory_damage(target_ptr, set_cold_destroy, 2);
-		}
-
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_shards(target_ptr, ep_ptr);
+		return;
 	case GF_SOUND:
-	{
-		if (target_ptr->blind) msg_print(_("轟音で攻撃された！", "You are hit by a loud noise!"));
-		if (target_ptr->resist_sound)
-		{
-			ep_ptr->dam *= 5; ep_ptr->dam /= (randint1(4) + 7);
-		}
-		else if (!CHECK_MULTISHADOW(target_ptr))
-		{
-			int plus_stun = (randint1((ep_ptr->dam > 90) ? 35 : (ep_ptr->dam / 3 + 5)));
-			(void)set_stun(target_ptr, target_ptr->stun + plus_stun);
-		}
-
-		if (!target_ptr->resist_sound || one_in_(13))
-		{
-			inventory_damage(target_ptr, set_cold_destroy, 2);
-		}
-
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_sound(target_ptr, ep_ptr);
+		return;
 	case GF_CONFUSION:
 	{
 		if (target_ptr->blind) msg_print(_("何か混乱するもので攻撃された！", "You are hit by something puzzling!"));
