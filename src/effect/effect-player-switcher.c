@@ -443,7 +443,7 @@ static void effect_player_time_one_disability(player_type *target_ptr)
 }
 
 
-static void effect_player_time_alll_disabilities(player_type *target_ptr)
+static void effect_player_time_all_disabilities(player_type *target_ptr)
 {
 	msg_print(_("‚ ‚È‚½‚ÍˆÈ‘O‚Ù‚Ç—Í‹­‚­‚È‚­‚È‚Á‚Ä‚µ‚Ü‚Á‚½...B", "You're not as powerful as you used to be..."));
 	for (int k = 0; k < A_MAX; k++)
