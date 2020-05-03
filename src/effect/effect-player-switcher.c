@@ -421,6 +421,71 @@ void effect_player_dark(player_type *target_ptr, effect_player_type *ep_ptr)
 }
 
 
+static void effect_player_time_one_disability(player_type *target_ptr)
+{
+	int k = 0;
+	concptr act = NULL;
+	switch (randint1(6))
+	{
+	case 1: k = A_STR; act = _("強く", "strong"); break;
+	case 2: k = A_INT; act = _("聡明で", "bright"); break;
+	case 3: k = A_WIS; act = _("賢明で", "wise"); break;
+	case 4: k = A_DEX; act = _("器用で", "agile"); break;
+	case 5: k = A_CON; act = _("健康で", "hale"); break;
+	case 6: k = A_CHR; act = _("美しく", "beautiful"); break;
+	}
+
+	msg_format(_("あなたは以前ほど%sなくなってしまった...。", "You're not as %s as you used to be..."), act);
+	target_ptr->stat_cur[k] = (target_ptr->stat_cur[k] * 3) / 4;
+	if (target_ptr->stat_cur[k] < 3) target_ptr->stat_cur[k] = 3;
+
+	target_ptr->update |= (PU_BONUS);
+}
+
+
+static void effect_player_time_alll_disabilities(player_type *target_ptr)
+{
+	msg_print(_("あなたは以前ほど力強くなくなってしまった...。", "You're not as powerful as you used to be..."));
+	for (int k = 0; k < A_MAX; k++)
+	{
+		target_ptr->stat_cur[k] = (target_ptr->stat_cur[k] * 7) / 8;
+		if (target_ptr->stat_cur[k] < 3)
+			target_ptr->stat_cur[k] = 3;
+	}
+
+	target_ptr->update |= (PU_BONUS);
+}
+
+
+static void effect_player_time_addition(player_type *target_ptr)
+{
+	switch (randint1(10))
+	{
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+	{
+		if (target_ptr->prace == RACE_ANDROID) break;
+
+		msg_print(_("人生が逆戻りした気がする。", "You feel like a chunk of the past has been ripped away."));
+		lose_exp(target_ptr, 100 + (target_ptr->exp / 100) * MON_DRAIN_LIFE);
+		break;
+	}
+	case 6:
+	case 7:
+	case 8:
+	case 9:
+		effect_player_time_one_disability(target_ptr);
+		break;
+	case 10:
+		effect_player_time_all_disabilities(target_ptr);
+		break;
+	}
+}
+
+
 void effect_player_time(player_type *target_ptr, effect_player_type *ep_ptr)
 {
 	if (target_ptr->blind) msg_print(_("過去からの衝撃に攻撃された！", "You are hit by a blast from the past!"));
@@ -440,59 +505,7 @@ void effect_player_time(player_type *target_ptr, effect_player_type *ep_ptr)
 		return;
 	}
 
-	switch (randint1(10))
-	{
-	case 1:
-	case 2:
-	case 3:
-	case 4:
-	case 5:
-	{
-		if (target_ptr->prace == RACE_ANDROID) break;
-
-		msg_print(_("人生が逆戻りした気がする。", "You feel like a chunk of the past has been ripped away."));
-		lose_exp(target_ptr, 100 + (target_ptr->exp / 100) * MON_DRAIN_LIFE);
-		break;
-	}
-	case 6:
-	case 7:
-	case 8:
-	case 9:
-	{
-		int k = 0;
-		concptr act = NULL;
-		switch (randint1(6))
-		{
-		case 1: k = A_STR; act = _("強く", "strong"); break;
-		case 2: k = A_INT; act = _("聡明で", "bright"); break;
-		case 3: k = A_WIS; act = _("賢明で", "wise"); break;
-		case 4: k = A_DEX; act = _("器用で", "agile"); break;
-		case 5: k = A_CON; act = _("健康で", "hale"); break;
-		case 6: k = A_CHR; act = _("美しく", "beautiful"); break;
-		}
-
-		msg_format(_("あなたは以前ほど%sなくなってしまった...。", "You're not as %s as you used to be..."), act);
-		target_ptr->stat_cur[k] = (target_ptr->stat_cur[k] * 3) / 4;
-		if (target_ptr->stat_cur[k] < 3) target_ptr->stat_cur[k] = 3;
-
-		target_ptr->update |= (PU_BONUS);
-		break;
-	}
-	case 10:
-	{
-		msg_print(_("あなたは以前ほど力強くなくなってしまった...。", "You're not as powerful as you used to be..."));
-		for (int k = 0; k < A_MAX; k++)
-		{
-			target_ptr->stat_cur[k] = (target_ptr->stat_cur[k] * 7) / 8;
-			if (target_ptr->stat_cur[k] < 3)
-				target_ptr->stat_cur[k] = 3;
-		}
-
-		target_ptr->update |= (PU_BONUS);
-		break;
-	}
-	}
-
+	effect_player_time_addition(target_ptr);
 	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
 }
 
