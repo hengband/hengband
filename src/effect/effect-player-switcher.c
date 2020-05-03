@@ -356,6 +356,147 @@ void effect_player_rocket(player_type *target_ptr, effect_player_type *ep_ptr)
 }
 
 
+void effect_player_inertial(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
+	if (!CHECK_MULTISHADOW(target_ptr)) (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
+void effect_player_lite(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
+	if (target_ptr->resist_lite)
+	{
+		ep_ptr->dam *= 4; ep_ptr->dam /= (randint1(4) + 7);
+	}
+	else if (!target_ptr->blind && !target_ptr->resist_blind && !CHECK_MULTISHADOW(target_ptr))
+	{
+		(void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
+	}
+
+	if (PRACE_IS_(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE))
+	{
+		if (!CHECK_MULTISHADOW(target_ptr)) msg_print(_("光で肉体が焦がされた！", "The light scorches your flesh!"));
+		ep_ptr->dam *= 2;
+	}
+	else if (PRACE_IS_(target_ptr, RACE_S_FAIRY))
+	{
+		ep_ptr->dam = ep_ptr->dam * 4 / 3;
+	}
+
+	if (target_ptr->wraith_form) ep_ptr->dam *= 2;
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+
+	if (!target_ptr->wraith_form || CHECK_MULTISHADOW(target_ptr))
+		return;
+
+	target_ptr->wraith_form = 0;
+	msg_print(_("閃光のため非物質的な影の存在でいられなくなった。",
+		"The light forces you out of your incorporeal shadow form."));
+
+	target_ptr->redraw |= (PR_MAP | PR_STATUS);
+	target_ptr->update |= (PU_MONSTERS);
+	target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
+}
+
+
+void effect_player_dark(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
+	if (target_ptr->resist_dark)
+	{
+		ep_ptr->dam *= 4; ep_ptr->dam /= (randint1(4) + 7);
+
+		if (PRACE_IS_(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form) ep_ptr->dam = 0;
+	}
+	else if (!target_ptr->blind && !target_ptr->resist_blind && !CHECK_MULTISHADOW(target_ptr))
+	{
+		(void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
+	}
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
+void effect_player_time(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("過去からの衝撃に攻撃された！", "You are hit by a blast from the past!"));
+
+	if (target_ptr->resist_time)
+	{
+		ep_ptr->dam *= 4;
+		ep_ptr->dam /= (randint1(4) + 7);
+		msg_print(_("時間が通り過ぎていく気がする。", "You feel as if time is passing you by."));
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+		return;
+	}
+
+	if (CHECK_MULTISHADOW(target_ptr))
+	{
+		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+		return;
+	}
+
+	switch (randint1(10))
+	{
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+	case 5:
+	{
+		if (target_ptr->prace == RACE_ANDROID) break;
+
+		msg_print(_("人生が逆戻りした気がする。", "You feel like a chunk of the past has been ripped away."));
+		lose_exp(target_ptr, 100 + (target_ptr->exp / 100) * MON_DRAIN_LIFE);
+		break;
+	}
+	case 6:
+	case 7:
+	case 8:
+	case 9:
+	{
+		int k = 0;
+		concptr act = NULL;
+		switch (randint1(6))
+		{
+		case 1: k = A_STR; act = _("強く", "strong"); break;
+		case 2: k = A_INT; act = _("聡明で", "bright"); break;
+		case 3: k = A_WIS; act = _("賢明で", "wise"); break;
+		case 4: k = A_DEX; act = _("器用で", "agile"); break;
+		case 5: k = A_CON; act = _("健康で", "hale"); break;
+		case 6: k = A_CHR; act = _("美しく", "beautiful"); break;
+		}
+
+		msg_format(_("あなたは以前ほど%sなくなってしまった...。", "You're not as %s as you used to be..."), act);
+		target_ptr->stat_cur[k] = (target_ptr->stat_cur[k] * 3) / 4;
+		if (target_ptr->stat_cur[k] < 3) target_ptr->stat_cur[k] = 3;
+
+		target_ptr->update |= (PU_BONUS);
+		break;
+	}
+	case 10:
+	{
+		msg_print(_("あなたは以前ほど力強くなくなってしまった...。", "You're not as powerful as you used to be..."));
+		for (int k = 0; k < A_MAX; k++)
+		{
+			target_ptr->stat_cur[k] = (target_ptr->stat_cur[k] * 7) / 8;
+			if (target_ptr->stat_cur[k] < 3)
+				target_ptr->stat_cur[k] = 3;
+		}
+
+		target_ptr->update |= (PU_BONUS);
+		break;
+	}
+	}
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -428,142 +569,18 @@ void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 		return;
 	case GF_ROCKET:
 		effect_player_rocket(target_ptr, ep_ptr);
+		return;
 	case GF_INERTIAL:
-	{
-		if (target_ptr->blind) msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
-		if (!CHECK_MULTISHADOW(target_ptr)) (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
-
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_inertial(target_ptr, ep_ptr);
+		return;
 	case GF_LITE:
-	{
-		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
-		if (target_ptr->resist_lite)
-		{
-			ep_ptr->dam *= 4; ep_ptr->dam /= (randint1(4) + 7);
-		}
-		else if (!target_ptr->blind && !target_ptr->resist_blind && !CHECK_MULTISHADOW(target_ptr))
-		{
-			(void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
-		}
-
-		if (PRACE_IS_(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE))
-		{
-			if (!CHECK_MULTISHADOW(target_ptr)) msg_print(_("光で肉体が焦がされた！", "The light scorches your flesh!"));
-			ep_ptr->dam *= 2;
-		}
-		else if (PRACE_IS_(target_ptr, RACE_S_FAIRY))
-		{
-			ep_ptr->dam = ep_ptr->dam * 4 / 3;
-		}
-
-		if (target_ptr->wraith_form) ep_ptr->dam *= 2;
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-
-		if (!target_ptr->wraith_form || CHECK_MULTISHADOW(target_ptr))
-			break;
-
-		target_ptr->wraith_form = 0;
-		msg_print(_("閃光のため非物質的な影の存在でいられなくなった。",
-			"The light forces you out of your incorporeal shadow form."));
-
-		target_ptr->redraw |= (PR_MAP | PR_STATUS);
-		target_ptr->update |= (PU_MONSTERS);
-		target_ptr->window |= (PW_OVERHEAD | PW_DUNGEON);
-		break;
-	}
+		effect_player_lite(target_ptr, ep_ptr);
+		return;
 	case GF_DARK:
-	{
-		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
-		if (target_ptr->resist_dark)
-		{
-			ep_ptr->dam *= 4; ep_ptr->dam /= (randint1(4) + 7);
-
-			if (PRACE_IS_(target_ptr, RACE_VAMPIRE) || (target_ptr->mimic_form == MIMIC_VAMPIRE) || target_ptr->wraith_form) ep_ptr->dam = 0;
-		}
-		else if (!target_ptr->blind && !target_ptr->resist_blind && !CHECK_MULTISHADOW(target_ptr))
-		{
-			(void)set_blind(target_ptr, target_ptr->blind + randint1(5) + 2);
-		}
-
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_dark(target_ptr, ep_ptr);
+		return;
 	case GF_TIME:
-	{
-		if (target_ptr->blind) msg_print(_("過去からの衝撃に攻撃された！", "You are hit by a blast from the past!"));
-
-		if (target_ptr->resist_time)
-		{
-			ep_ptr->dam *= 4;
-			ep_ptr->dam /= (randint1(4) + 7);
-			msg_print(_("時間が通り過ぎていく気がする。", "You feel as if time is passing you by."));
-			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-			break;
-		}
-
-		if (CHECK_MULTISHADOW(target_ptr))
-		{
-			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-			break;
-		}
-
-		switch (randint1(10))
-		{
-		case 1:
-		case 2:
-		case 3:
-		case 4:
-		case 5:
-		{
-			if (target_ptr->prace == RACE_ANDROID) break;
-
-			msg_print(_("人生が逆戻りした気がする。", "You feel like a chunk of the past has been ripped away."));
-			lose_exp(target_ptr, 100 + (target_ptr->exp / 100) * MON_DRAIN_LIFE);
-			break;
-		}
-		case 6:
-		case 7:
-		case 8:
-		case 9:
-		{
-			int k = 0;
-			concptr act = NULL;
-			switch (randint1(6))
-			{
-			case 1: k = A_STR; act = _("強く", "strong"); break;
-			case 2: k = A_INT; act = _("聡明で", "bright"); break;
-			case 3: k = A_WIS; act = _("賢明で", "wise"); break;
-			case 4: k = A_DEX; act = _("器用で", "agile"); break;
-			case 5: k = A_CON; act = _("健康で", "hale"); break;
-			case 6: k = A_CHR; act = _("美しく", "beautiful"); break;
-			}
-
-			msg_format(_("あなたは以前ほど%sなくなってしまった...。", "You're not as %s as you used to be..."), act);
-			target_ptr->stat_cur[k] = (target_ptr->stat_cur[k] * 3) / 4;
-			if (target_ptr->stat_cur[k] < 3) target_ptr->stat_cur[k] = 3;
-
-			target_ptr->update |= (PU_BONUS);
-			break;
-		}
-		case 10:
-		{
-			msg_print(_("あなたは以前ほど力強くなくなってしまった...。", "You're not as powerful as you used to be..."));
-			for (int k = 0; k < A_MAX; k++)
-			{
-				target_ptr->stat_cur[k] = (target_ptr->stat_cur[k] * 7) / 8;
-				if (target_ptr->stat_cur[k] < 3) target_ptr->stat_cur[k] = 3;
-			}
-
-			target_ptr->update |= (PU_BONUS);
-			break;
-		}
-		}
-
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_time(target_ptr, ep_ptr);
 	case GF_GRAVITY:
 	{
 		if (target_ptr->blind) msg_print(_("何か重いもので攻撃された！", "You are hit by something heavy!"));
