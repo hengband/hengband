@@ -271,6 +271,91 @@ void effect_player_sound(player_type *target_ptr, effect_player_type *ep_ptr)
 }
 
 
+void effect_player_confusion(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("何か混乱するもので攻撃された！", "You are hit by something puzzling!"));
+	if (target_ptr->resist_conf)
+	{
+		ep_ptr->dam *= 5; ep_ptr->dam /= (randint1(4) + 7);
+	}
+	else if (!CHECK_MULTISHADOW(target_ptr))
+	{
+		(void)set_confused(target_ptr, target_ptr->confused + randint1(20) + 10);
+	}
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
+void effect_player_disenchant(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("何かさえないもので攻撃された！", "You are hit by something static!"));
+	if (target_ptr->resist_disen)
+	{
+		ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
+	}
+	else if (!CHECK_MULTISHADOW(target_ptr))
+	{
+		(void)apply_disenchant(target_ptr, 0);
+	}
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
+void effect_player_nexus(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("何か奇妙なもので攻撃された！", "You are hit by something strange!"));
+	if (target_ptr->resist_nexus)
+	{
+		ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
+	}
+	else if (!CHECK_MULTISHADOW(target_ptr))
+	{
+		apply_nexus(ep_ptr->m_ptr, target_ptr);
+	}
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+void effect_player_force(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("運動エネルギーで攻撃された！", "You are hit by kinetic force!"));
+	if (!target_ptr->resist_sound && !CHECK_MULTISHADOW(target_ptr))
+	{
+		(void)set_stun(target_ptr, target_ptr->stun + randint1(20));
+	}
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
+void effect_player_rocket(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	if (target_ptr->blind) msg_print(_("爆発があった！", "There is an explosion!"));
+	if (!target_ptr->resist_sound && !CHECK_MULTISHADOW(target_ptr))
+	{
+		(void)set_stun(target_ptr, target_ptr->stun + randint1(20));
+	}
+
+	if (target_ptr->resist_shard)
+	{
+		ep_ptr->dam /= 2;
+	}
+	else if (!CHECK_MULTISHADOW(target_ptr))
+	{
+		(void)set_cut(target_ptr, target_ptr->cut + (ep_ptr->dam / 2));
+	}
+
+	if (!target_ptr->resist_shard || one_in_(12))
+	{
+		inventory_damage(target_ptr, set_cold_destroy, 3);
+	}
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -330,84 +415,19 @@ void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 		effect_player_sound(target_ptr, ep_ptr);
 		return;
 	case GF_CONFUSION:
-	{
-		if (target_ptr->blind) msg_print(_("何か混乱するもので攻撃された！", "You are hit by something puzzling!"));
-		if (target_ptr->resist_conf)
-		{
-			ep_ptr->dam *= 5; ep_ptr->dam /= (randint1(4) + 7);
-		}
-		else if (!CHECK_MULTISHADOW(target_ptr))
-		{
-			(void)set_confused(target_ptr, target_ptr->confused + randint1(20) + 10);
-		}
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_confusion(target_ptr, ep_ptr);
+		return;
 	case GF_DISENCHANT:
-	{
-		if (target_ptr->blind) msg_print(_("何かさえないもので攻撃された！", "You are hit by something static!"));
-		if (target_ptr->resist_disen)
-		{
-			ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
-		}
-		else if (!CHECK_MULTISHADOW(target_ptr))
-		{
-			(void)apply_disenchant(target_ptr, 0);
-		}
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_disenchant(target_ptr, ep_ptr);
+		return;
 	case GF_NEXUS:
-	{
-		if (target_ptr->blind) msg_print(_("何か奇妙なもので攻撃された！", "You are hit by something strange!"));
-		if (target_ptr->resist_nexus)
-		{
-			ep_ptr->dam *= 6; ep_ptr->dam /= (randint1(4) + 7);
-		}
-		else if (!CHECK_MULTISHADOW(target_ptr))
-		{
-			apply_nexus(ep_ptr->m_ptr, target_ptr);
-		}
-
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_nexus(target_ptr, ep_ptr);
+		return;
 	case GF_FORCE:
-	{
-		if (target_ptr->blind) msg_print(_("運動エネルギーで攻撃された！", "You are hit by kinetic force!"));
-		if (!target_ptr->resist_sound && !CHECK_MULTISHADOW(target_ptr))
-		{
-			(void)set_stun(target_ptr, target_ptr->stun + randint1(20));
-		}
-
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_force(target_ptr, ep_ptr);
+		return;
 	case GF_ROCKET:
-	{
-		if (target_ptr->blind) msg_print(_("爆発があった！", "There is an explosion!"));
-		if (!target_ptr->resist_sound && !CHECK_MULTISHADOW(target_ptr))
-		{
-			(void)set_stun(target_ptr, target_ptr->stun + randint1(20));
-		}
-
-		if (target_ptr->resist_shard)
-		{
-			ep_ptr->dam /= 2;
-		}
-		else if (!CHECK_MULTISHADOW(target_ptr))
-		{
-			(void)set_cut(target_ptr, target_ptr->cut + (ep_ptr->dam / 2));
-		}
-
-		if (!target_ptr->resist_shard || one_in_(12))
-		{
-			inventory_damage(target_ptr, set_cold_destroy, 3);
-		}
-
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_rocket(target_ptr, ep_ptr);
 	case GF_INERTIAL:
 	{
 		if (target_ptr->blind) msg_print(_("何か遅いもので攻撃された！", "You are hit by something slow!"));
