@@ -3,6 +3,11 @@
 #include "effect/effect-monster-domination.h"
 #include "player-effects.h"
 #include "spells-diceroll.h"
+#include "monster-status.h"
+#include "effect/spells-effect-util.h"
+#include "cmd/cmd-pet.h" // 暫定、後で消すかも.
+#include "quest.h"
+#include "monsterrace-hook.h"
 
 static void effect_monster_domination_corrupted_addition(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
@@ -154,5 +159,60 @@ gf_switch_result effect_monster_crusade(player_type *caster_ptr, effect_monster_
 		em_ptr->r_ptr->r_flags3 |= RF3_NO_FEAR;
 
 	em_ptr->dam = 0;
+	return GF_SWITCH_CONTINUE;
+}
+
+
+static bool effect_monster_capture_attemption(player_type *caster_ptr, effect_monster_type *em_ptr, int capturable_hp)
+{
+	if (em_ptr->m_ptr->hp >= randint0(capturable_hp)) return FALSE;
+
+	if (em_ptr->m_ptr->mflag2 & MFLAG2_CHAMELEON)
+		choose_new_monster(caster_ptr, em_ptr->g_ptr->m_idx, FALSE, MON_CHAMELEON);
+
+	msg_format(_("%sを捕えた！", "You capture %^s!"), em_ptr->m_name);
+	cap_mon = em_ptr->m_ptr->r_idx;
+	cap_mspeed = em_ptr->m_ptr->mspeed;
+	cap_hp = em_ptr->m_ptr->hp;
+	cap_maxhp = em_ptr->m_ptr->max_maxhp;
+	cap_nickname = em_ptr->m_ptr->nickname;
+	if ((em_ptr->g_ptr->m_idx == caster_ptr->riding) && rakuba(caster_ptr, -1, FALSE))
+		msg_format(_("地面に落とされた。", "You have fallen from %s."), em_ptr->m_name);
+
+	delete_monster_idx(caster_ptr, em_ptr->g_ptr->m_idx);
+	return TRUE;
+}
+
+
+gf_switch_result effect_monster_capture(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
+	int capturable_hp;
+	if ((floor_ptr->inside_quest && (quest[floor_ptr->inside_quest].type == QUEST_TYPE_KILL_ALL) && !is_pet(em_ptr->m_ptr)) ||
+		(em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) || (em_ptr->r_ptr->flags7 & (RF7_NAZGUL)) || (em_ptr->r_ptr->flags7 & (RF7_UNIQUE2)) || (em_ptr->r_ptr->flags1 & RF1_QUESTOR) || em_ptr->m_ptr->parent_m_idx)
+	{
+		msg_format(_("%sには効果がなかった。", "%s is unaffected."), em_ptr->m_name);
+		em_ptr->skipped = TRUE;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (is_pet(em_ptr->m_ptr)) capturable_hp = em_ptr->m_ptr->maxhp * 4L;
+	else if ((caster_ptr->pclass == CLASS_BEASTMASTER) && monster_living(em_ptr->m_ptr->r_idx))
+		capturable_hp = em_ptr->m_ptr->maxhp * 3 / 10;
+	else
+		capturable_hp = em_ptr->m_ptr->maxhp * 3 / 20;
+
+	if (em_ptr->m_ptr->hp >= capturable_hp)
+	{
+		msg_format(_("もっと弱らせないと。", "You need to weaken %s more."), em_ptr->m_name);
+		em_ptr->skipped = TRUE;
+		return GF_SWITCH_CONTINUE;
+	}
+
+	if (effect_monster_capture_attemption(caster_ptr, em_ptr, capturable_hp))
+		return GF_SWITCH_TRUE;
+
+	msg_format(_("うまく捕まえられなかった。", "You failed to capture %s."), em_ptr->m_name);
+	em_ptr->skipped = TRUE;
 	return GF_SWITCH_CONTINUE;
 }
