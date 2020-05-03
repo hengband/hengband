@@ -23,6 +23,53 @@ void effect_player_elements(player_type *target_ptr, effect_player_type *ep_ptr,
 }
 
 
+void effect_player_poison(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	bool double_resist = is_oppose_pois(target_ptr);
+	if (target_ptr->blind) msg_print(_("毒で攻撃された！", "You are hit by poison!"));
+
+	if (target_ptr->resist_pois) ep_ptr->dam = (ep_ptr->dam + 2) / 3;
+	if (double_resist) ep_ptr->dam = (ep_ptr->dam + 2) / 3;
+
+	if ((!(double_resist || target_ptr->resist_pois)) && one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW(target_ptr))
+	{
+		do_dec_stat(target_ptr, A_CON);
+	}
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+
+	if (!(double_resist || target_ptr->resist_pois) && !CHECK_MULTISHADOW(target_ptr))
+		set_poisoned(target_ptr, target_ptr->poisoned + randint0(ep_ptr->dam) + 10);
+}
+
+
+void effect_player_nuke(player_type *target_ptr, effect_player_type *ep_ptr)
+{
+	bool double_resist = is_oppose_pois(target_ptr);
+	if (target_ptr->blind) msg_print(_("放射能で攻撃された！", "You are hit by radiation!"));
+
+	if (target_ptr->resist_pois) ep_ptr->dam = (2 * ep_ptr->dam + 2) / 5;
+	if (double_resist) ep_ptr->dam = (2 * ep_ptr->dam + 2) / 5;
+
+	ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
+	if ((double_resist || target_ptr->resist_pois) || CHECK_MULTISHADOW(target_ptr))
+		return;
+
+	set_poisoned(target_ptr, target_ptr->poisoned + randint0(ep_ptr->dam) + 10);
+	if (one_in_(5)) /* 6 */
+	{
+		msg_print(_("奇形的な変身を遂げた！", "You undergo a freakish metamorphosis!"));
+		if (one_in_(4)) /* 4 */
+			do_poly_self(target_ptr);
+		else
+			status_shuffle(target_ptr);
+	}
+
+	if (one_in_(6))
+		inventory_damage(target_ptr, set_acid_destroy, 2);
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -46,54 +93,11 @@ void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 		effect_player_elements(target_ptr, ep_ptr, _("電撃で攻撃された！", "You are hit by lightning!"), elec_dam);
 		return;
 	case GF_POIS:
-	{
-		bool double_resist = is_oppose_pois(target_ptr);
-		if (target_ptr->blind) msg_print(_("毒で攻撃された！", "You are hit by poison!"));
-
-		if (target_ptr->resist_pois) ep_ptr->dam = (ep_ptr->dam + 2) / 3;
-		if (double_resist) ep_ptr->dam = (ep_ptr->dam + 2) / 3;
-
-		if ((!(double_resist || target_ptr->resist_pois)) && one_in_(HURT_CHANCE) && !CHECK_MULTISHADOW(target_ptr))
-		{
-			do_dec_stat(target_ptr, A_CON);
-		}
-
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-
-		if (!(double_resist || target_ptr->resist_pois) && !CHECK_MULTISHADOW(target_ptr))
-			set_poisoned(target_ptr, target_ptr->poisoned + randint0(ep_ptr->dam) + 10);
-
-		break;
-	}
+		effect_player_poison(target_ptr, ep_ptr);
+		return;
 	case GF_NUKE:
-	{
-		bool double_resist = is_oppose_pois(target_ptr);
-		if (target_ptr->blind) msg_print(_("放射能で攻撃された！", "You are hit by radiation!"));
-
-		if (target_ptr->resist_pois) ep_ptr->dam = (2 * ep_ptr->dam + 2) / 5;
-		if (double_resist) ep_ptr->dam = (2 * ep_ptr->dam + 2) / 5;
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		if ((double_resist || target_ptr->resist_pois) || CHECK_MULTISHADOW(target_ptr))
-			break;
-
-		set_poisoned(target_ptr, target_ptr->poisoned + randint0(ep_ptr->dam) + 10);
-
-		if (one_in_(5)) /* 6 */
-		{
-			msg_print(_("奇形的な変身を遂げた！", "You undergo a freakish metamorphosis!"));
-			if (one_in_(4)) /* 4 */
-				do_poly_self(target_ptr);
-			else
-				status_shuffle(target_ptr);
-		}
-
-		if (one_in_(6))
-		{
-			inventory_damage(target_ptr, set_acid_destroy, 2);
-		}
-
-		break;
-	}
+		effect_player_nuke(target_ptr, ep_ptr);
+		return;
 	case GF_MISSILE:
 	{
 		if (target_ptr->blind) msg_print(_("何かで攻撃された！", "You are hit by something!"));
