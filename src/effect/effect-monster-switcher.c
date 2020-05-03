@@ -375,6 +375,109 @@ gf_switch_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_
 }
 
 
+gf_switch_result effect_monster_genocide(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+	if (genocide_aux(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
+	{
+		if (em_ptr->seen_msg) msg_format(_("%sは消滅した！", "%^s disappeared!"), em_ptr->m_name);
+		chg_virtue(caster_ptr, V_VITALITY, -1);
+		return GF_SWITCH_TRUE;
+	}
+
+	em_ptr->skipped = TRUE;
+	return GF_SWITCH_CONTINUE;
+}
+
+
+gf_switch_result effect_monster_photo(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	if (!em_ptr->who)
+		msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), em_ptr->m_name);
+
+	if (em_ptr->r_ptr->flags3 & (RF3_HURT_LITE))
+	{
+		if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+		if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_HURT_LITE);
+
+		em_ptr->note = _("は光に身をすくめた！", " cringes from the light!");
+		em_ptr->note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
+	}
+	else
+	{
+		em_ptr->dam = 0;
+	}
+
+	em_ptr->photo = em_ptr->m_ptr->r_idx;
+	return GF_SWITCH_CONTINUE;
+}
+
+
+gf_switch_result effect_monster_crusade(player_type *caster_ptr, effect_monster_type *em_ptr)
+{
+	bool success = FALSE;
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if ((em_ptr->r_ptr->flags3 & (RF3_GOOD)) && !caster_ptr->current_floor_ptr->inside_arena)
+	{
+		if (em_ptr->r_ptr->flags3 & (RF3_NO_CONF)) em_ptr->dam -= 50;
+		if (em_ptr->dam < 1) em_ptr->dam = 1;
+
+		if (is_pet(em_ptr->m_ptr))
+		{
+			em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
+			(void)set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, MON_FAST(em_ptr->m_ptr) + 100);
+			success = TRUE;
+		}
+		else if ((em_ptr->r_ptr->flags1 & (RF1_QUESTOR)) ||
+			(em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
+			(em_ptr->m_ptr->mflag2 & MFLAG2_NOPET) ||
+			(caster_ptr->cursed & TRC_AGGRAVATE) ||
+			((em_ptr->r_ptr->level + 10) > randint1(em_ptr->dam)))
+		{
+			if (one_in_(4)) em_ptr->m_ptr->mflag2 |= MFLAG2_NOPET;
+		}
+		else
+		{
+			em_ptr->note = _("を支配した。", " is tamed!");
+			set_pet(caster_ptr, em_ptr->m_ptr);
+			(void)set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, MON_FAST(em_ptr->m_ptr) + 100);
+
+			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_GOOD);
+			success = TRUE;
+		}
+	}
+
+	if (!success)
+	{
+		if (!(em_ptr->r_ptr->flags3 & RF3_NO_FEAR))
+		{
+			em_ptr->do_fear = randint1(90) + 10;
+		}
+		else if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
+			em_ptr->r_ptr->r_flags3 |= (RF3_NO_FEAR);
+	}
+
+	em_ptr->dam = 0;
+	return GF_SWITCH_CONTINUE;
+}
+
+
+gf_switch_result effect_monster_wounds(effect_monster_type *em_ptr)
+{
+	if (em_ptr->seen) em_ptr->obvious = TRUE;
+
+	if (randint0(100 + em_ptr->dam) < (em_ptr->r_ptr->level + 50))
+	{
+		em_ptr->note = _("には効果がなかった。", " is unaffected.");
+		em_ptr->dam = 0;
+	}
+
+	return GF_SWITCH_CONTINUE;
+}
+
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param em_ptr モンスター効果構造体への参照ポインタ
@@ -382,7 +485,6 @@ gf_switch_result effect_monster_engetsu(player_type *caster_ptr, effect_monster_
  */
 gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
-	floor_type *floor_ptr = caster_ptr->current_floor_ptr;
 	switch (em_ptr->effect_type)
 	{
 	case GF_PSY_SPEAR:
@@ -543,106 +645,18 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_ENGETSU:
 		return effect_monster_engetsu(caster_ptr, em_ptr);
 	case GF_GENOCIDE:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-		if (genocide_aux(caster_ptr, em_ptr->g_ptr->m_idx, em_ptr->dam, !em_ptr->who, (em_ptr->r_ptr->level + 1) / 2, _("モンスター消滅", "Genocide One")))
-		{
-			if (em_ptr->seen_msg) msg_format(_("%sは消滅した！", "%^s disappeared!"), em_ptr->m_name);
-			chg_virtue(caster_ptr, V_VITALITY, -1);
-			return GF_SWITCH_TRUE;
-		}
-
-		em_ptr->skipped = TRUE;
-		break;
-	}
+		return effect_monster_genocide(caster_ptr, em_ptr);
 	case GF_PHOTO:
-	{
-		if (!em_ptr->who)
-			msg_format(_("%sを写真に撮った。", "You take a photograph of %s."), em_ptr->m_name);
-
-		if (em_ptr->r_ptr->flags3 & (RF3_HURT_LITE))
-		{
-			if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-			if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_HURT_LITE);
-
-			em_ptr->note = _("は光に身をすくめた！", " cringes from the light!");
-			em_ptr->note_dies = _("は光を受けてしぼんでしまった！", " shrivels away in the light!");
-		}
-		else
-		{
-			em_ptr->dam = 0;
-		}
-
-		em_ptr->photo = em_ptr->m_ptr->r_idx;
-		break;
-	}
+		return effect_monster_photo(caster_ptr, em_ptr);
 	case GF_CRUSADE:
-	{
-		bool success = FALSE;
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-		if ((em_ptr->r_ptr->flags3 & (RF3_GOOD)) && !floor_ptr->inside_arena)
-		{
-			if (em_ptr->r_ptr->flags3 & (RF3_NO_CONF)) em_ptr->dam -= 50;
-			if (em_ptr->dam < 1) em_ptr->dam = 1;
-
-			if (is_pet(em_ptr->m_ptr))
-			{
-				em_ptr->note = _("の動きが速くなった。", " starts moving faster.");
-				(void)set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, MON_FAST(em_ptr->m_ptr) + 100);
-				success = TRUE;
-			}
-			else if ((em_ptr->r_ptr->flags1 & (RF1_QUESTOR)) ||
-				(em_ptr->r_ptr->flags1 & (RF1_UNIQUE)) ||
-				(em_ptr->m_ptr->mflag2 & MFLAG2_NOPET) ||
-				(caster_ptr->cursed & TRC_AGGRAVATE) ||
-				((em_ptr->r_ptr->level + 10) > randint1(em_ptr->dam)))
-			{
-				if (one_in_(4)) em_ptr->m_ptr->mflag2 |= MFLAG2_NOPET;
-			}
-			else
-			{
-				em_ptr->note = _("を支配した。", " is tamed!");
-				set_pet(caster_ptr, em_ptr->m_ptr);
-				(void)set_monster_fast(caster_ptr, em_ptr->g_ptr->m_idx, MON_FAST(em_ptr->m_ptr) + 100);
-
-				if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr)) em_ptr->r_ptr->r_flags3 |= (RF3_GOOD);
-				success = TRUE;
-			}
-		}
-
-		if (!success)
-		{
-			if (!(em_ptr->r_ptr->flags3 & RF3_NO_FEAR))
-			{
-				em_ptr->do_fear = randint1(90) + 10;
-			}
-			else if (is_original_ap_and_seen(caster_ptr, em_ptr->m_ptr))
-				em_ptr->r_ptr->r_flags3 |= (RF3_NO_FEAR);
-		}
-
-		em_ptr->dam = 0;
-		break;
-	}
+		return effect_monster_crusade(caster_ptr, em_ptr);
 	case GF_WOUNDS:
-	{
-		if (em_ptr->seen) em_ptr->obvious = TRUE;
-
-		if (randint0(100 + em_ptr->dam) < (em_ptr->r_ptr->level + 50))
-		{
-			em_ptr->note = _("には効果がなかった。", " is unaffected.");
-			em_ptr->dam = 0;
-		}
-		break;
-	}
+		return effect_monster_wounds(em_ptr);
 	default:
 	{
 		em_ptr->skipped = TRUE;
 		em_ptr->dam = 0;
-		break;
+		return GF_SWITCH_CONTINUE;
 	}
 	}
-
-	return GF_SWITCH_CONTINUE;
 }
