@@ -9,11 +9,11 @@
 #include "spells-floor.h"
 #include "spells-object.h"
 #include "spells-diceroll.h"
-#include "spells.h"
 #include "targeting.h"
 #include "view/display-main-window.h"
 #include "realm/realm-chaos.h"
 #include "spell/spells-type.h"
+#include "spell/process-effect.h"
 
 /*!
 * @brief カオス領域魔法の各処理を行う

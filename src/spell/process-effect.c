@@ -10,7 +10,6 @@
 #include "main/sound-definitions-table.h"
 #include "spell/process-effect.h"
 #include "spell/spells-type.h"
-#include "spells.h"
 #include "view/display-main-window.h" // 暫定、後で消すかも.
 
 /*!

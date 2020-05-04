@@ -25,6 +25,7 @@
 #include "object/object-kind.h"
 #include "targeting.h"
 #include "effect/spells-effect-util.h"
+#include "spell/process-effect.h"
 
 /*!
  * @brief 矢弾を射撃した際のスレイ倍率をかけた結果を返す /

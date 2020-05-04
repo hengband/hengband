@@ -61,6 +61,7 @@
 #include "english.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells-type.h"
+#include "spell/process-effect.h"
 
  /*!
   * @brief プレイヤー周辺の地形を感知する
