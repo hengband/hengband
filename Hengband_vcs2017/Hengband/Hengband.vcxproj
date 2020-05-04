@@ -107,6 +107,10 @@
       <ShowProgress>LinkVerbose</ShowProgress>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='English-Debug|Win32'">
     <ClCompile>
