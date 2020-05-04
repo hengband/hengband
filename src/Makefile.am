@@ -182,6 +182,7 @@ hengband_SOURCES = \
 	effect/effect-monster-switcher.c effect/effect-monster-switcher.h \
 	effect/effect-player-util.h \
 	effect/effect-player-resist-hurt.c effect/effect-player-resist-hurt.h \
+	effect/effect-player-oldies.c effect/effect-player-oldies.h \
 	effect/effect-player-switcher.c effect/effect-player-switcher.h \
 	\
 	spell/technic-info-table.c spell/technic-info-table.h \

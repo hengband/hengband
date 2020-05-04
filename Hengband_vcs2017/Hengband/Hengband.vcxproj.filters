@@ -748,6 +748,9 @@
     <ClCompile Include="..\..\src\effect\effect-player-resist-hurt.c">
       <Filter>effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\effect\effect-player-oldies.c">
+      <Filter>effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1506,6 +1509,9 @@
       <Filter>effect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\effect\effect-player-resist-hurt.h">
+      <Filter>effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\effect\effect-player-oldies.h">
       <Filter>effect</Filter>
     </ClInclude>
   </ItemGroup>
