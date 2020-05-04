@@ -923,7 +923,7 @@ void leave_floor(player_type *creature_ptr)
 	}
 
 	/* Extract current floor info or NULL */
-	sf_ptr = get_sf_ptr(tmp_floor_idx);
+	sf_ptr = get_sf_ptr(creature_ptr->floor_id);
 
 	/* Choose random stairs */
 	if ((creature_ptr->change_floor_mode & CFM_RAND_CONNECT) && tmp_floor_idx)
@@ -1013,7 +1013,7 @@ void leave_floor(player_type *creature_ptr)
 	}
 
 	/* No current floor -- Left/Enter dungeon etc... */
-	if (!tmp_floor_idx)
+	if (!creature_ptr->floor_id)
 	{
 		/* No longer need to save current floor */
 		return;
