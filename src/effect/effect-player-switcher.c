@@ -243,6 +243,84 @@ void effect_player_brain_smash(player_type *target_ptr,
   }
 }
 
+void effect_player_curse_1(player_type *target_ptr,
+                           effect_player_type *ep_ptr) {
+  if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) &&
+      !CHECK_MULTISHADOW(target_ptr)) {
+    msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+    learn_spell(target_ptr, ep_ptr->monspell);
+  } else {
+    if (!CHECK_MULTISHADOW(target_ptr))
+      curse_equipment(target_ptr, 15, 0);
+    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam,
+                                  ep_ptr->killer, ep_ptr->monspell);
+  }
+}
+
+void effect_player_curse_2(player_type *target_ptr,
+                           effect_player_type *ep_ptr) {
+  if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) &&
+      !CHECK_MULTISHADOW(target_ptr)) {
+    msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+    learn_spell(target_ptr, ep_ptr->monspell);
+  } else {
+    if (!CHECK_MULTISHADOW(target_ptr))
+      curse_equipment(target_ptr, 25, MIN(ep_ptr->rlev / 2 - 15, 5));
+    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam,
+                                  ep_ptr->killer, ep_ptr->monspell);
+  }
+}
+
+void effect_player_curse_3(player_type *target_ptr,
+                           effect_player_type *ep_ptr) {
+  if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) &&
+      !CHECK_MULTISHADOW(target_ptr)) {
+    msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+    learn_spell(target_ptr, ep_ptr->monspell);
+  } else {
+    if (!CHECK_MULTISHADOW(target_ptr))
+      curse_equipment(target_ptr, 33, MIN(ep_ptr->rlev / 2 - 15, 15));
+    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam,
+                                  ep_ptr->killer, ep_ptr->monspell);
+  }
+}
+
+void effect_player_curse_4(player_type *target_ptr,
+                           effect_player_type *ep_ptr) {
+  if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) &&
+      !(ep_ptr->m_ptr->r_idx == MON_KENSHIROU) &&
+      !CHECK_MULTISHADOW(target_ptr)) {
+    msg_print(_("しかし秘孔を跳ね返した！", "You resist the effects!"));
+    learn_spell(target_ptr, ep_ptr->monspell);
+  } else {
+    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam,
+                                  ep_ptr->killer, ep_ptr->monspell);
+    if (!CHECK_MULTISHADOW(target_ptr))
+      (void)set_cut(target_ptr, target_ptr->cut + damroll(10, 10));
+  }
+}
+
+void effect_player_hand_doom(player_type *target_ptr,
+                             effect_player_type *ep_ptr) {
+  if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) &&
+      !CHECK_MULTISHADOW(target_ptr)) {
+    msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+    learn_spell(target_ptr, ep_ptr->monspell);
+  } else {
+    if (!CHECK_MULTISHADOW(target_ptr)) {
+      msg_print(_("あなたは命が薄まっていくように感じた！",
+                  "You feel your life fade away!"));
+      curse_equipment(target_ptr, 40, 20);
+    }
+
+    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam,
+                                  ep_ptr->m_name, ep_ptr->monspell);
+
+    if (target_ptr->chp < 1)
+      target_ptr->chp = 1;
+  }
+}
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -373,88 +451,24 @@ void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 		effect_player_brain_smash(target_ptr, ep_ptr);
 		return;
 	case GF_CAUSE_1:
-	{
-		if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
-		{
-			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(target_ptr, ep_ptr->monspell);
-		}
-		else
-		{
-			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(target_ptr, 15, 0);
-			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		}
-		break;
-	}
+		effect_player_curse_1(target_ptr, ep_ptr);
+		return;
 	case GF_CAUSE_2:
-	{
-		if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
-		{
-			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(target_ptr, ep_ptr->monspell);
-		}
-		else
-		{
-			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(target_ptr, 25, MIN(ep_ptr->rlev / 2 - 15, 5));
-			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		}
-		break;
-	}
+		effect_player_curse_2(target_ptr, ep_ptr);
+		return;
 	case GF_CAUSE_3:
-	{
-		if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
-		{
-			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(target_ptr, ep_ptr->monspell);
-		}
-		else
-		{
-			if (!CHECK_MULTISHADOW(target_ptr)) curse_equipment(target_ptr, 33, MIN(ep_ptr->rlev / 2 - 15, 15));
-			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		}
-		break;
-	}
+		effect_player_curse_3(target_ptr, ep_ptr);
+		return;
 	case GF_CAUSE_4:
-	{
-		if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !(ep_ptr->m_ptr->r_idx == MON_KENSHIROU) && !CHECK_MULTISHADOW(target_ptr))
-		{
-			msg_print(_("しかし秘孔を跳ね返した！", "You resist the effects!"));
-			learn_spell(target_ptr, ep_ptr->monspell);
-		}
-		else
-		{
-			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-			if (!CHECK_MULTISHADOW(target_ptr)) (void)set_cut(target_ptr, target_ptr->cut + damroll(10, 10));
-		}
-
-		break;
-	}
+		effect_player_curse_4(target_ptr, ep_ptr);
+		return;
 	case GF_HAND_DOOM:
-	{
-		if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
-		{
-			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(target_ptr, ep_ptr->monspell);
-		}
-		else
-		{
-			if (!CHECK_MULTISHADOW(target_ptr))
-			{
-				msg_print(_("あなたは命が薄まっていくように感じた！", "You feel your life fade away!"));
-				curse_equipment(target_ptr, 40, 20);
-			}
-
-			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->m_name, ep_ptr->monspell);
-
-			if (target_ptr->chp < 1) target_ptr->chp = 1;
-		}
-
-		break;
-	}
+		effect_player_hand_doom(target_ptr, ep_ptr);
+		return;
 	default:
 	{
 		ep_ptr->dam = 0;
-		break;
+		return;
 	}
 	}
 }
