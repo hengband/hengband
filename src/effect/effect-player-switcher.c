@@ -101,6 +101,62 @@ void effect_player_death_ray(player_type *target_ptr,
   }
 }
 
+void effect_player_drain_mana(player_type *target_ptr,
+                              effect_player_type *ep_ptr) {
+  if (CHECK_MULTISHADOW(target_ptr)) {
+    msg_print(_("攻撃は幻影に命中し、あなたには届かなかった。",
+                "The attack hits Shadow, but you are unharmed!"));
+    ep_ptr->dam = 0;
+    return;
+  }
+
+  if (target_ptr->csp == 0) {
+    ep_ptr->dam = 0;
+    return;
+  }
+
+  if (ep_ptr->who > 0)
+    msg_format(_("%^sに精神エネルギーを吸い取られてしまった！",
+                 "%^s draws psychic energy from you!"),
+               ep_ptr->m_name);
+  else
+    msg_print(_("精神エネルギーを吸い取られてしまった！",
+                "Your psychic energy is drawn!"));
+
+  if (ep_ptr->dam >= target_ptr->csp) {
+    ep_ptr->dam = target_ptr->csp;
+    target_ptr->csp = 0;
+    target_ptr->csp_frac = 0;
+  } else {
+    target_ptr->csp -= ep_ptr->dam;
+  }
+
+  learn_spell(target_ptr, ep_ptr->monspell);
+  target_ptr->redraw |= (PR_MANA);
+  target_ptr->window |= (PW_PLAYER | PW_SPELL);
+
+  if ((ep_ptr->who <= 0) || (ep_ptr->m_ptr->hp >= ep_ptr->m_ptr->maxhp)) {
+    ep_ptr->dam = 0;
+    return;
+  }
+
+  ep_ptr->m_ptr->hp += ep_ptr->dam;
+  if (ep_ptr->m_ptr->hp > ep_ptr->m_ptr->maxhp)
+    ep_ptr->m_ptr->hp = ep_ptr->m_ptr->maxhp;
+
+  if (target_ptr->health_who == ep_ptr->who)
+    target_ptr->redraw |= (PR_HEALTH);
+  if (target_ptr->riding == ep_ptr->who)
+    target_ptr->redraw |= (PR_UHEALTH);
+
+  if (ep_ptr->m_ptr->ml) {
+    msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."),
+               ep_ptr->m_name);
+  }
+
+  ep_ptr->dam = 0;
+}
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -222,60 +278,8 @@ void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 		effect_player_death_ray(target_ptr, ep_ptr);
 		return;
 	case GF_DRAIN_MANA:
-	{
-		if (CHECK_MULTISHADOW(target_ptr))
-		{
-			msg_print(_("攻撃は幻影に命中し、あなたには届かなかった。", "The attack hits Shadow, but you are unharmed!"));
-			ep_ptr->dam = 0;
-			break;
-		}
-
-		if (target_ptr->csp == 0)
-		{
-			ep_ptr->dam = 0;
-			break;
-		}
-
-		if (ep_ptr->who > 0)
-			msg_format(_("%^sに精神エネルギーを吸い取られてしまった！", "%^s draws psychic energy from you!"), ep_ptr->m_name);
-		else
-			msg_print(_("精神エネルギーを吸い取られてしまった！", "Your psychic energy is drawn!"));
-
-		if (ep_ptr->dam >= target_ptr->csp)
-		{
-			ep_ptr->dam = target_ptr->csp;
-			target_ptr->csp = 0;
-			target_ptr->csp_frac = 0;
-		}
-		else
-		{
-			target_ptr->csp -= ep_ptr->dam;
-		}
-
-		learn_spell(target_ptr, ep_ptr->monspell);
-		target_ptr->redraw |= (PR_MANA);
-		target_ptr->window |= (PW_PLAYER | PW_SPELL);
-
-		if ((ep_ptr->who <= 0) || (ep_ptr->m_ptr->hp >= ep_ptr->m_ptr->maxhp))
-		{
-			ep_ptr->dam = 0;
-			break;
-		}
-
-		ep_ptr->m_ptr->hp += ep_ptr->dam;
-		if (ep_ptr->m_ptr->hp > ep_ptr->m_ptr->maxhp) ep_ptr->m_ptr->hp = ep_ptr->m_ptr->maxhp;
-
-		if (target_ptr->health_who == ep_ptr->who) target_ptr->redraw |= (PR_HEALTH);
-		if (target_ptr->riding == ep_ptr->who) target_ptr->redraw |= (PR_UHEALTH);
-
-		if (ep_ptr->m_ptr->ml)
-		{
-			msg_format(_("%^sは気分が良さそうだ。", "%^s appears healthier."), ep_ptr->m_name);
-		}
-
-		ep_ptr->dam = 0;
-		break;
-	}
+		effect_player_drain_mana(target_ptr, ep_ptr);
+		return;
 	case GF_MIND_BLAST:
 	{
 		if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, target_ptr->skill_sav)) && !CHECK_MULTISHADOW(target_ptr))
