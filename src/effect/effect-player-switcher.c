@@ -101,6 +101,7 @@ void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 		return;
 	case GF_DISINTEGRATE:
 		effect_player_disintegration(target_ptr, ep_ptr);
+		return;
 	case GF_OLD_HEAL:
 	{
 		if (target_ptr->blind) msg_print(_("‰½‚ç‚©‚ÌUŒ‚‚É‚æ‚Á‚Ä‹C•ª‚ª‚æ‚­‚È‚Á‚½B", "You are hit by something invigorating!"));
