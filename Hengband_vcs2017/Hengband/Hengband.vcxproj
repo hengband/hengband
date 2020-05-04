@@ -190,6 +190,7 @@
     <ClCompile Include="..\..\src\effect\effect-monster-switcher.c" />
     <ClCompile Include="..\..\src\effect\effect-monster-util.c" />
     <ClCompile Include="..\..\src\effect\effect-monster.c" />
+    <ClCompile Include="..\..\src\effect\effect-player-curse.c" />
     <ClCompile Include="..\..\src\effect\effect-player-oldies.c" />
     <ClCompile Include="..\..\src\effect\effect-player-resist-hurt.c" />
     <ClCompile Include="..\..\src\effect\effect-player-switcher.c" />
@@ -373,6 +374,7 @@
     <ClInclude Include="..\..\src\effect\effect-monster-switcher.h" />
     <ClInclude Include="..\..\src\effect\effect-monster-util.h" />
     <ClInclude Include="..\..\src\effect\effect-monster.h" />
+    <ClInclude Include="..\..\src\effect\effect-player-curse.h" />
     <ClInclude Include="..\..\src\effect\effect-player-oldies.h" />
     <ClInclude Include="..\..\src\effect\effect-player-resist-hurt.h" />
     <ClInclude Include="..\..\src\effect\effect-player-switcher.h" />
