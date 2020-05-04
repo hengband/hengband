@@ -1100,7 +1100,7 @@ bool project(player_type *caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 				}
 			}
 
-			if (affect_player(who, caster_ptr, who_name, effective_dist, y, x, dam, typ, flag, monspell)) notice = TRUE;
+			if (affect_player(who, caster_ptr, who_name, effective_dist, y, x, dam, typ, flag, monspell, project)) notice = TRUE;
 		}
 	}
 
