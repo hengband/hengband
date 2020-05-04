@@ -184,6 +184,7 @@ hengband_SOURCES = \
 	effect/effect-player-resist-hurt.c effect/effect-player-resist-hurt.h \
 	effect/effect-player-oldies.c effect/effect-player-oldies.h \
 	effect/effect-player-curse.c effect/effect-player-curse.h \
+	effect/effect-player-spirit.c effect/effect-player-spirit.h \
 	effect/effect-player-switcher.c effect/effect-player-switcher.h \
 	\
 	spell/technic-info-table.c spell/technic-info-table.h \

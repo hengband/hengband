@@ -754,6 +754,9 @@
     <ClCompile Include="..\..\src\effect\effect-player-curse.c">
       <Filter>effect</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\effect\effect-player-spirit.c">
+      <Filter>effect</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1518,6 +1521,9 @@
       <Filter>effect</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\effect\effect-player-curse.h">
+      <Filter>effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\effect\effect-player-spirit.h">
       <Filter>effect</Filter>
     </ClInclude>
   </ItemGroup>
