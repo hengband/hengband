@@ -157,6 +157,92 @@ void effect_player_drain_mana(player_type *target_ptr,
   ep_ptr->dam = 0;
 }
 
+void effect_player_mind_blast(player_type *target_ptr,
+                              effect_player_type *ep_ptr) {
+  if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, target_ptr->skill_sav)) &&
+      !CHECK_MULTISHADOW(target_ptr)) {
+    msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+    learn_spell(target_ptr, ep_ptr->monspell);
+    return;
+  }
+
+  if (CHECK_MULTISHADOW(target_ptr)) {
+    ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam,
+                                  ep_ptr->killer, ep_ptr->monspell);
+    return;
+  }
+
+  msg_print(_("霊的エネルギーで精神が攻撃された。",
+              "Your mind is blasted by psionic energy."));
+  if (!target_ptr->resist_conf) {
+    (void)set_confused(target_ptr, target_ptr->confused + randint0(4) + 4);
+  }
+
+  if (!target_ptr->resist_chaos && one_in_(3)) {
+    (void)set_image(target_ptr, target_ptr->image + randint0(250) + 150);
+  }
+
+  target_ptr->csp -= 50;
+  if (target_ptr->csp < 0) {
+    target_ptr->csp = 0;
+    target_ptr->csp_frac = 0;
+  }
+
+  target_ptr->redraw |= PR_MANA;
+  ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam,
+                                ep_ptr->killer, ep_ptr->monspell);
+}
+
+void effect_player_brain_smash(player_type *target_ptr,
+                               effect_player_type *ep_ptr) {
+  if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, target_ptr->skill_sav)) &&
+      !CHECK_MULTISHADOW(target_ptr)) {
+    msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+    learn_spell(target_ptr, ep_ptr->monspell);
+    return;
+  }
+
+  if (!CHECK_MULTISHADOW(target_ptr)) {
+    msg_print(_("霊的エネルギーで精神が攻撃された。",
+                "Your mind is blasted by psionic energy."));
+
+    target_ptr->csp -= 100;
+    if (target_ptr->csp < 0) {
+      target_ptr->csp = 0;
+      target_ptr->csp_frac = 0;
+    }
+    target_ptr->redraw |= PR_MANA;
+  }
+
+  ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam,
+                                ep_ptr->killer, ep_ptr->monspell);
+  if (CHECK_MULTISHADOW(target_ptr))
+    return;
+
+  if (!target_ptr->resist_blind) {
+    (void)set_blind(target_ptr, target_ptr->blind + 8 + randint0(8));
+  }
+
+  if (!target_ptr->resist_conf) {
+    (void)set_confused(target_ptr, target_ptr->confused + randint0(4) + 4);
+  }
+
+  if (!target_ptr->free_act) {
+    (void)set_paralyzed(target_ptr, target_ptr->paralyzed + randint0(4) + 4);
+  }
+
+  (void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
+
+  while (randint0(100 + ep_ptr->rlev / 2) > (MAX(5, target_ptr->skill_sav)))
+    (void)do_dec_stat(target_ptr, A_INT);
+  while (randint0(100 + ep_ptr->rlev / 2) > (MAX(5, target_ptr->skill_sav)))
+    (void)do_dec_stat(target_ptr, A_WIS);
+
+  if (!target_ptr->resist_chaos) {
+    (void)set_image(target_ptr, target_ptr->image + randint0(250) + 150);
+  }
+}
+
 /*!
  * @brief 魔法の効果によって様々なメッセーを出力したり与えるダメージの増減を行ったりする
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -281,96 +367,11 @@ void switch_effects_player(player_type *target_ptr, effect_player_type *ep_ptr)
 		effect_player_drain_mana(target_ptr, ep_ptr);
 		return;
 	case GF_MIND_BLAST:
-	{
-		if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, target_ptr->skill_sav)) && !CHECK_MULTISHADOW(target_ptr))
-		{
-			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(target_ptr, ep_ptr->monspell);
-			break;
-		}
-
-		if (CHECK_MULTISHADOW(target_ptr))
-		{
-			ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-			break;
-		}
-
-		msg_print(_("霊的エネルギーで精神が攻撃された。", "Your mind is blasted by psionic energy."));
-		if (!target_ptr->resist_conf)
-		{
-			(void)set_confused(target_ptr, target_ptr->confused + randint0(4) + 4);
-		}
-
-		if (!target_ptr->resist_chaos && one_in_(3))
-		{
-			(void)set_image(target_ptr, target_ptr->image + randint0(250) + 150);
-		}
-
-		target_ptr->csp -= 50;
-		if (target_ptr->csp < 0)
-		{
-			target_ptr->csp = 0;
-			target_ptr->csp_frac = 0;
-		}
-
-		target_ptr->redraw |= PR_MANA;
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		break;
-	}
+		effect_player_mind_blast(target_ptr, ep_ptr);
+		return;
 	case GF_BRAIN_SMASH:
-	{
-		if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, target_ptr->skill_sav)) && !CHECK_MULTISHADOW(target_ptr))
-		{
-			msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-			learn_spell(target_ptr, ep_ptr->monspell);
-			break;
-		}
-
-		if (!CHECK_MULTISHADOW(target_ptr))
-		{
-			msg_print(_("霊的エネルギーで精神が攻撃された。", "Your mind is blasted by psionic energy."));
-
-			target_ptr->csp -= 100;
-			if (target_ptr->csp < 0)
-			{
-				target_ptr->csp = 0;
-				target_ptr->csp_frac = 0;
-			}
-			target_ptr->redraw |= PR_MANA;
-		}
-
-		ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam, ep_ptr->killer, ep_ptr->monspell);
-		if (CHECK_MULTISHADOW(target_ptr)) break;
-
-		if (!target_ptr->resist_blind)
-		{
-			(void)set_blind(target_ptr, target_ptr->blind + 8 + randint0(8));
-		}
-
-		if (!target_ptr->resist_conf)
-		{
-			(void)set_confused(target_ptr, target_ptr->confused + randint0(4) + 4);
-		}
-
-		if (!target_ptr->free_act)
-		{
-			(void)set_paralyzed(target_ptr, target_ptr->paralyzed + randint0(4) + 4);
-		}
-
-		(void)set_slow(target_ptr, target_ptr->slow + randint0(4) + 4, FALSE);
-
-		while (randint0(100 + ep_ptr->rlev / 2) > (MAX(5, target_ptr->skill_sav)))
-			(void)do_dec_stat(target_ptr, A_INT);
-		while (randint0(100 + ep_ptr->rlev / 2) > (MAX(5, target_ptr->skill_sav)))
-			(void)do_dec_stat(target_ptr, A_WIS);
-
-		if (!target_ptr->resist_chaos)
-		{
-			(void)set_image(target_ptr, target_ptr->image + randint0(250) + 150);
-		}
-
-		break;
-	}
+		effect_player_brain_smash(target_ptr, ep_ptr);
+		return;
 	case GF_CAUSE_1:
 	{
 		if ((randint0(100 + ep_ptr->rlev / 2) < target_ptr->skill_sav) && !CHECK_MULTISHADOW(target_ptr))
