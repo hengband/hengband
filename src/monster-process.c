@@ -40,7 +40,7 @@
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);
 bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
-void awake_monster(player_type *target_ptr, MONSTER_IDX m_idx);
+bool awake_monster(player_type *target_ptr, MONSTER_IDX m_idx);
 void process_angar(player_type *target_ptr, MONSTER_IDX m_idx, bool see_m);
 bool explode_grenade(player_type *target_ptr, MONSTER_IDX m_idx);
 bool decide_monster_multiplication(player_type *target_ptr, MONSTER_IDX m_idx, POSITION oy, POSITION ox);
@@ -102,8 +102,8 @@ void process_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (process_quantum_effect(target_ptr, m_idx, turn_flags_ptr->see_m)) return;
 	if (explode_grenade(target_ptr, m_idx)) return;
 	if (runaway_monster(target_ptr, turn_flags_ptr, m_idx)) return;
+	if (!awake_monster(target_ptr, m_idx)) return;
 
-	awake_monster(target_ptr, m_idx);
 	if (MON_STUNNED(m_ptr))
 	{
 		if (one_in_(2)) return;
@@ -239,14 +239,14 @@ bool vanish_summoned_children(player_type *target_ptr, MONSTER_IDX m_idx, bool s
  * @brief 寝ているモンスターの起床を判定する
  * @param target_ptr プレーヤーへの参照ポインタ
  * @param m_idx モンスターID
- * @return なし
+ * @return 寝たままならFALSE、起きているor起きたらTRUE
  */
-void awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
+bool awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 {
 	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if (!MON_CSLEEP(m_ptr)) return;
-	if (!(target_ptr->cursed & TRC_AGGRAVATE)) return;
+	if (!MON_CSLEEP(m_ptr)) return TRUE;
+	if (!(target_ptr->cursed & TRC_AGGRAVATE)) return FALSE;
 
 	(void)set_monster_csleep(target_ptr, m_idx, 0);
 	if (m_ptr->ml)
@@ -260,6 +260,8 @@ void awake_monster(player_type *target_ptr, MONSTER_IDX m_idx)
 	{
 		r_ptr->r_wake++;
 	}
+
+	return TRUE;
 }
 
 

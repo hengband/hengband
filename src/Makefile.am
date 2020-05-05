@@ -181,11 +181,16 @@ hengband_SOURCES = \
 	effect/effect-monster-spirit.c effect/effect-monster-spirit.h \
 	effect/effect-monster-switcher.c effect/effect-monster-switcher.h \
 	effect/effect-player-util.h \
+	effect/effect-player-resist-hurt.c effect/effect-player-resist-hurt.h \
+	effect/effect-player-oldies.c effect/effect-player-oldies.h \
+	effect/effect-player-curse.c effect/effect-player-curse.h \
+	effect/effect-player-spirit.c effect/effect-player-spirit.h \
 	effect/effect-player-switcher.c effect/effect-player-switcher.h \
 	\
 	spell/technic-info-table.c spell/technic-info-table.h \
 	spell/spells-execution.c spell/spells-execution.h \
 	spell/spells-util.h spell/spells-type.h \
+	spell/process-effect.h spell/process-effect.h \
 	spells.h \
 	spells1.c spells2.c spells3.c \
 	spells-diceroll.c spells-diceroll.h \

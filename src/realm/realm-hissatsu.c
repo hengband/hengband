@@ -24,6 +24,7 @@
 #include "effect/spells-effect-util.h"
 #include "spell/spells-util.h"
 #include "spell/spells-type.h"
+#include "spell/process-effect.h"
 
 /*!
 * @brief 剣術の各処理を行う

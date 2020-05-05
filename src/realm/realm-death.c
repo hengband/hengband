@@ -13,6 +13,7 @@
 #include "player-damage.h"
 #include "player-race.h"
 #include "realm/realm-death.h"
+#include "spell/process-effect.h"
 
 /*!
 * @brief 暗黒領域魔法の各処理を行う

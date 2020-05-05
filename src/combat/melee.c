@@ -32,7 +32,7 @@
 #include "dungeon.h"
 #include "floor.h"
 #include "dungeon.h"
-#include "spells.h"
+#include "spell/process-effect.h"
 #include "spell/spells-type.h"
 #include "files.h"
 #include "player-move.h"

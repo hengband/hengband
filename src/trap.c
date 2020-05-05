@@ -24,6 +24,7 @@
 #include "files.h"
 #include "dungeon.h"
 #include "world.h"
+#include "spell/process-effect.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 

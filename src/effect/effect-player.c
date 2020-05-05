@@ -53,8 +53,8 @@ static effect_player_type *initialize_effect_player(effect_player_type *ep_ptr, 
  * @param ep_ptr プレーヤー効果構造体への参照ポインタ
  * @return 当たったらFALSE、反射したらTRUE
  */
-static bool process_bolt_reflection(player_type *target_ptr, effect_player_type *ep_ptr)
-{
+static bool process_bolt_reflection(player_type *target_ptr,
+                                    effect_player_type *ep_ptr, project_func project) {
 	bool can_bolt_hit = target_ptr->reflect || (((target_ptr->special_defense & KATA_FUUJIN) != 0) && !target_ptr->blind);
 	can_bolt_hit &= (ep_ptr->flag & PROJECT_REFLECTABLE) != 0;
 	can_bolt_hit &= !one_in_(10);
@@ -94,7 +94,7 @@ static bool process_bolt_reflection(player_type *target_ptr, effect_player_type 
 		t_x = target_ptr->x - 1 + randint1(3);
 	}
 
-	project(target_ptr, 0, 0, t_y, t_x, ep_ptr->dam, ep_ptr->effect_type, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), ep_ptr->monspell);
+	(*project)(target_ptr, 0, 0, t_y, t_x, ep_ptr->dam, ep_ptr->effect_type, (PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE), ep_ptr->monspell);
 	disturb(target_ptr, TRUE, TRUE);
 	return TRUE;
 }
@@ -108,8 +108,10 @@ static bool process_bolt_reflection(player_type *target_ptr, effect_player_type 
  * @param x 目標X座標
  * @return 当たらなかったらFALSE、反射したらTRUE、当たったらCONTINUE
  */
-static ep_check_result check_continue_player_effect(player_type *target_ptr, effect_player_type *ep_ptr, POSITION y, POSITION x)
-{
+static ep_check_result check_continue_player_effect(player_type *target_ptr,
+                                                    effect_player_type *ep_ptr,
+                                                    POSITION y, POSITION x,
+                                                    project_func project) {
 	if (!player_bold(target_ptr, y, x))
 		return EP_CHECK_FALSE;
 
@@ -124,7 +126,7 @@ static ep_check_result check_continue_player_effect(player_type *target_ptr, eff
 	if ((ep_ptr->who == 0) || (ep_ptr->who == target_ptr->riding))
 		return EP_CHECK_FALSE;
 
-	if (process_bolt_reflection(target_ptr, ep_ptr))
+	if (process_bolt_reflection(target_ptr, ep_ptr, project))
 		return EP_CHECK_TRUE;
 
 	return EP_CHECK_CONTINUE;
@@ -179,11 +181,13 @@ static void describe_effect_source(player_type *target_ptr, effect_player_type *
  * @param monspell 効果元のモンスター魔法ID
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the projection were observed, else FALSE
  */
-bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, int r, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID effect_type, BIT_FLAGS flag, int monspell)
-{
+bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name,
+                   int r, POSITION y, POSITION x, HIT_POINT dam,
+                   EFFECT_ID effect_type, BIT_FLAGS flag, int monspell,
+                   project_func project) {
 	effect_player_type tmp_effect;
 	effect_player_type *ep_ptr = initialize_effect_player(&tmp_effect, who, dam, effect_type, flag, monspell);
-	ep_check_result check_result = check_continue_player_effect(target_ptr, ep_ptr, y, x);
+	ep_check_result check_result = check_continue_player_effect(target_ptr, ep_ptr, y, x, project);
 	if (check_result != EP_CHECK_CONTINUE) return check_result;
 
 	if (ep_ptr->dam > 1600) ep_ptr->dam = 1600;
@@ -199,7 +203,7 @@ bool affect_player(MONSTER_IDX who, player_type *target_ptr, concptr who_name, i
 		GAME_TEXT m_name_self[80];
 		monster_desc(target_ptr, m_name_self, ep_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
 		msg_format(_("攻撃が%s自身を傷つけた！", "The attack of %s has wounded %s!"), ep_ptr->m_name, m_name_self);
-		project(target_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, GF_MISSILE, PROJECT_KILL, -1);
+		(*project)(target_ptr, 0, 0, ep_ptr->m_ptr->fy, ep_ptr->m_ptr->fx, ep_ptr->get_damage, GF_MISSILE, PROJECT_KILL, -1);
 		if (target_ptr->tim_eyeeye) set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
 	}
 

@@ -14,6 +14,7 @@
 #include "monster-status.h"
 #include "player-move.h"
 #include "spell/spells-type.h"
+#include "spell/process-effect.h"
 
 static bool check_hp_for_feat_destruction(feature_type *f_ptr, monster_type *m_ptr)
 {

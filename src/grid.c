@@ -36,6 +36,7 @@
 #include "player-class.h"
 #include "view/display-main-window.h"
 #include "realm/realm-song.h"
+#include "spell/process-effect.h"
 
 #define MONSTER_FLOW_DEPTH 32 /*!< 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る) / OPTION: Maximum flow depth when using "MONSTER_FLOW" */
 

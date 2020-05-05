@@ -190,6 +190,10 @@
     <ClCompile Include="..\..\src\effect\effect-monster-switcher.c" />
     <ClCompile Include="..\..\src\effect\effect-monster-util.c" />
     <ClCompile Include="..\..\src\effect\effect-monster.c" />
+    <ClCompile Include="..\..\src\effect\effect-player-curse.c" />
+    <ClCompile Include="..\..\src\effect\effect-player-oldies.c" />
+    <ClCompile Include="..\..\src\effect\effect-player-resist-hurt.c" />
+    <ClCompile Include="..\..\src\effect\effect-player-spirit.c" />
     <ClCompile Include="..\..\src\effect\effect-player-switcher.c" />
     <ClCompile Include="..\..\src\effect\effect-player.c" />
     <ClCompile Include="..\..\src\effect\spells-effect-util.c" />
@@ -324,6 +328,7 @@
     <ClCompile Include="..\..\src\realm\realm-nature.c" />
     <ClCompile Include="..\..\src\realm\realm-song.c" />
     <ClCompile Include="..\..\src\realm\realm-sorcery.c" />
+    <ClCompile Include="..\..\src\spell\process-effect.c" />
     <ClCompile Include="..\..\src\spell\spells-execution.c" />
     <ClCompile Include="..\..\src\spell\technic-info-table.c" />
     <ClInclude Include="..\..\src\artifact.h" />
@@ -371,6 +376,10 @@
     <ClInclude Include="..\..\src\effect\effect-monster-switcher.h" />
     <ClInclude Include="..\..\src\effect\effect-monster-util.h" />
     <ClInclude Include="..\..\src\effect\effect-monster.h" />
+    <ClInclude Include="..\..\src\effect\effect-player-curse.h" />
+    <ClInclude Include="..\..\src\effect\effect-player-oldies.h" />
+    <ClInclude Include="..\..\src\effect\effect-player-resist-hurt.h" />
+    <ClInclude Include="..\..\src\effect\effect-player-spirit.h" />
     <ClInclude Include="..\..\src\effect\effect-player-switcher.h" />
     <ClInclude Include="..\..\src\effect\effect-player-util.h" />
     <ClInclude Include="..\..\src\effect\effect-player.h" />
@@ -545,6 +554,7 @@
     <ClInclude Include="..\..\src\room\pit-nest-kinds-table.h" />
     <ClInclude Include="..\..\src\io\signal-handlers.h" />
     <ClInclude Include="..\..\src\io\uid-checker.h" />
+    <ClInclude Include="..\..\src\spell\process-effect.h" />
     <ClInclude Include="..\..\src\spell\spells-type.h" />
     <ClInclude Include="..\..\src\spell\spells-util.h" />
     <ClInclude Include="..\..\src\spell\spells-execution.h" />

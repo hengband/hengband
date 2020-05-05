@@ -31,7 +31,6 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "wild.h"
-#include "spells.h"
 #include "dungeon.h"
 #include "world.h"
 #include "melee.h"
@@ -40,6 +39,7 @@
 #include "player-class.h"
 #include "english.h"
 #include "market/arena-info-table.h"
+#include "spell/process-effect.h"
 
  /*
   * Pronoun arrays, by gender.

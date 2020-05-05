@@ -13,13 +13,7 @@
 #define STORE_BOOK      8 /*!< 店舗の種類: 書店 */
 #define STORE_MUSEUM    9 /*!< 店舗の種類: 博物館 */
 
-/*
- * A store, with an owner, various state flags, a current stock
- * of items, and a table of items that are often purchased.
- */
-typedef struct store_type store_type;
-
-struct store_type
+typedef struct store_type
 {
 	byte type;				/* Store type */
 
@@ -42,7 +36,7 @@ struct store_type
 	s16b stock_num;			/* Stock -- Number of entries */
 	s16b stock_size;		/* Stock -- Total Size of Array */
 	object_type *stock;		/* Stock -- Actual stock items */
-};
+} store_type;
 
 extern int cur_store_num;
 extern store_type *st_ptr;

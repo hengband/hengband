@@ -175,6 +175,7 @@
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
 #include "targeting.h"
+#include "spell/process-effect.h"
 
 travel_type travel;
 
