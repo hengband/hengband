@@ -26,6 +26,7 @@
 #include "effect/effect-feature.h"
 #include "effect/effect-item.h"
 #include "effect/effect-monster.h"
+#include "effect/effect-characteristics.h"
 
 /*
  * Find the distance from (x, y) to a line.

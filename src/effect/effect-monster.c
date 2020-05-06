@@ -16,6 +16,7 @@
 #include "monster-status.h"
 #include "avatar.h"
 #include "spell/spells-type.h"
+#include "effect/effect-characteristics.h"
 
 /*!
  * @brief ビーム/ボルト/ボール系魔法によるモンスターへの効果があるかないかを判定する

@@ -1532,6 +1532,9 @@
     <ClInclude Include="..\..\src\spell\process-effect.h">
       <Filter>spell</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\effect\effect-characteristics.h">
+      <Filter>effect</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

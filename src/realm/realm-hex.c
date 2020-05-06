@@ -18,7 +18,7 @@
 #include "angband.h"
 #include "util.h"
 
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "cmd-spell.h"
 #include "cmd-quaff.h"
 #include "object-flavor.h"

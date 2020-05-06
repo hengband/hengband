@@ -22,7 +22,7 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-pet.h"
 #include "cmd/cmd-dump.h"
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "grid.h"
 #include "trap.h"
 #include "monsterrace-hook.h"

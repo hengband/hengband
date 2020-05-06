@@ -16,6 +16,7 @@
 #include "realm/realm-nature.h"
 #include "spell/spells-type.h"
 #include "spell/process-effect.h"
+#include "effect/effect-characteristics.h"
 
 /*!
 * @brief 自然領域魔法の各処理を行う

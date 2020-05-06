@@ -16,7 +16,7 @@
 #include "main/sound-definitions-table.h"
 
 #include "cmd-pet.h"
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "grid.h"
 #include "quest.h"
 #include "realm/realm-hex.h"

@@ -30,7 +30,7 @@
 #include "object-hook.h"
 #include "grid.h"
 #include "dungeon.h"
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "dungeon.h"
 #include "spell/process-effect.h"
 #include "spell/spells-type.h"

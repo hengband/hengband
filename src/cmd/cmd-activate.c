@@ -33,6 +33,7 @@
 #include "effect/spells-effect-util.h"
 #include "spell/spells-type.h"
 #include "spell/process-effect.h"
+#include "effect/effect-characteristics.h"
 
 /*!
  * @brief 装備耐性に準じたブレス効果の選択テーブル /

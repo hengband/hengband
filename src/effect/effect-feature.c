@@ -8,6 +8,7 @@
 #include "world.h"
 #include "spell/spells-type.h"
 #include "spell/process-effect.h" // 暫定、後で消す.
+#include "effect/effect-characteristics.h"
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系による地形効果処理 / We are called from "project()" to "damage" terrain features

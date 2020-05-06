@@ -41,7 +41,7 @@
 #include "angband.h"
 #include "util.h"
 
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "dungeon.h"
 #include "grid.h"
 #include "object-curse.h"

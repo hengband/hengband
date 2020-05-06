@@ -9,7 +9,7 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "grid.h"
 #include "spells-summon.h"
 #include "artifact.h"

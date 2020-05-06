@@ -21,7 +21,7 @@
 
 #include "mind.h"
 
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "melee.h"
 #include "spells-summon.h"
 #include "avatar.h"

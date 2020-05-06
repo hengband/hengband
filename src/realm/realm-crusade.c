@@ -3,7 +3,7 @@
 
 #include "world.h"
 #include "cmd-spell.h"
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "spell/spells-type.h"
 #include "spells-object.h"
 #include "spells-summon.h"

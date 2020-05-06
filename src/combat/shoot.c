@@ -15,7 +15,7 @@
 #include "player-personality.h"
 #include "object-hook.h"
 #include "object-broken.h"
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "grid.h"
 #include "object-flavor.h"
 

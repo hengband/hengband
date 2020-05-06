@@ -4,7 +4,7 @@
 
 #include "cmd-magiceat.h"
 #include "avatar.h"
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "object-flavor.h"
 #include "player-status.h"
 #include "player-class.h"

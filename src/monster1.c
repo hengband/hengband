@@ -19,7 +19,7 @@
 #include "cmd/cmd-dump.h"
 #include "market/building.h"
 #include "cmd-pet.h"
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "object/object-kind-hook.h"
 #include "player-personality.h"
 #include "monster.h"

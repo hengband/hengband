@@ -15,6 +15,7 @@
 #include "player-move.h"
 #include "spell/spells-type.h"
 #include "player-effects.h"
+#include "effect/effect-characteristics.h"
 
 typedef enum effect_player_check_result
 {

@@ -19,7 +19,7 @@
 #include "cmd/cmd-dump.h"
 #include "cmd-pet.h"
 #include "dungeon.h"
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "object-flavor.h"
 #include "monsterrace-hook.h"
 #include "monster-status.h"

@@ -11,6 +11,7 @@
 #include "main/sound-definitions-table.h"
 #include "spell/spells-type.h"
 #include "view/display-main-window.h" // 暫定、後で消すかも.
+#include "effect/effect-characteristics.h"
 
 /*!
  * @brief 配置した鏡リストの次を取得する /
