@@ -48,6 +48,7 @@ static void next_mirror(player_type* creature_ptr, POSITION* next_y, POSITION* n
 
 /*!
  * todo 似たような処理が山ほど並んでいる、何とかならないものか
+ * todo 引数にそのまま再代入していてカオスすぎる。直すのは簡単ではない
  * @brief 汎用的なビーム/ボルト/ボール系処理のルーチン Generic
  * "beam"/"bolt"/"ball" projection routine.
  * @param who 魔法を発動したモンスター(0ならばプレイヤー) / Index of "source"
