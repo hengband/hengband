@@ -1544,6 +1544,9 @@
     <ClInclude Include="..\..\src\core\angband-version.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\core\special-internal-keys.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

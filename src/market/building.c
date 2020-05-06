@@ -17,9 +17,10 @@
 #include "main/music-definitions-table.h"
 #include "gameterm.h"
 
-#include "core.h"
+#include "core.h" // 暫定、init_flags のため。後で消すかも.
 #include "core/stuff-handler.h"
 #include "core/show-file.h"
+#include "core/special-internal-keys.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-inn.h"
 #include "floor.h"

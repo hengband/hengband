@@ -112,6 +112,7 @@
 #include "core.h"
 #include "core/angband-version.h"
 #include "core/stuff-handler.h"
+#include "core/special-internal-keys.h"
 #include "world.h"
 #include "gameterm.h"
 

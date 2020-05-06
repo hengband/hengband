@@ -1,14 +1,6 @@
 ﻿#pragma once
 
 /*
- * Special internal key
- */
-#define SPECIAL_KEY_QUEST    255
-#define SPECIAL_KEY_BUILDING 254
-#define SPECIAL_KEY_STORE    253
-#define SPECIAL_KEY_QUIT     252
-
-/*
  * todo 双方向の依存性を招いている原因の一端なので、いずれ抹殺する
  * 但しget_aim_dir() に入れ込む必要がありとてつもない分量の変更が入る
  * 後ほど実施する

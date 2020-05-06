@@ -363,6 +363,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-knowledge.h" />
     <ClInclude Include="..\..\src\cmd\cmd-process-screen.h" />
     <ClInclude Include="..\..\src\cmd\dump-util.h" />
+    <ClInclude Include="..\..\src\core\special-internal-keys.h" />
     <ClInclude Include="..\..\src\core\stuff-handler.h" />
     <ClInclude Include="..\..\src\core\angband-version.h" />
     <ClInclude Include="..\..\src\effect\effect-characteristics.h" />
