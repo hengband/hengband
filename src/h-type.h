@@ -44,7 +44,6 @@
 /*** Special 4 letter names for some standard types ***/
 typedef void *vptr;       /*!< void型ポインタ定義 / A standard pointer (to "void" because ANSI C says so) */
 typedef const char *concptr; /*!< 文字列定数用ポインタ定義 / A simple pointer (to unmodifiable strings) */
-typedef double real;      /*!< doubleをreal型として定義 / Since float's are silly, hard code real numbers as doubles */
 
 /*!
  * @brief エラーコードの定義 / Error codes for function return values
@@ -244,21 +243,9 @@ typedef byte FF_FLAGS_IDX;   /*!< 地形特性ID */
 typedef s16b FEAT_PRIORITY; /*!< 地形の縮小表示優先順位 */
 
 /*** Pointers to all the basic types defined above ***/
-typedef real *real_ptr;
-typedef errr *errr_ptr;
 typedef char *char_ptr;
 typedef byte *byte_ptr;
-typedef bool *bool_ptr;
 typedef sint *sint_ptr;
-typedef uint *uint_ptr;
-typedef long *long_ptr;
-typedef huge *huge_ptr;
-typedef s16b *s16b_ptr;
-typedef u16b *u16b_ptr;
-typedef s32b *s32b_ptr;
-typedef u32b *u32b_ptr;
-typedef vptr *vptr_ptr;
-typedef concptr *cptr_ptr;
 
 /*** Pointers to Functions of special types (for various purposes) ***/
 /* A generic function takes a user data and a special data */
