@@ -1,7 +1,6 @@
 ﻿#pragma once
 
-typedef struct
-{
+typedef struct effect_monster_type {
 	grid_type *g_ptr;
 	monster_type *m_ptr;
 	monster_type *m_caster_ptr;
