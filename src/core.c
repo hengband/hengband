@@ -16,6 +16,7 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "core.h"
+#include "core/angband-version.h"
 #include "core/stuff-handler.h"
 #include "inet.h"
 #include "gameterm.h"

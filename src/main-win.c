@@ -110,6 +110,7 @@
 #include "quest.h"
 #include "files.h"
 #include "core.h"
+#include "core/angband-version.h"
 #include "core/stuff-handler.h"
 #include "world.h"
 #include "gameterm.h"

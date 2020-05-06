@@ -6,7 +6,8 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core.h" // 暫定、turn_real() の移設後に消す.
+#include "core/angband-version.h"
 #include "core/stuff-handler.h"
 #include "inet.h"
 #include "dungeon.h"

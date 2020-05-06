@@ -14,7 +14,8 @@
 #include "io/signal-handlers.h"
 #include "gameterm.h"
 #include "util.h"
-#include "core.h"
+#include "core.h" // 暫定、turn_real() の移設後に消す.
+#include "core/angband-version.h"
 
 #include "dungeon.h"
 #include "player/race-info-table.h"

@@ -19,6 +19,8 @@
 #include "gameterm.h"
 #include "player/process-name.h"
 #include "chuukei.h"
+#include "autopick/autopick-pref-processor.h"
+#include "core/angband-version.h"
 
 /*
  * Available graphic modes
@@ -607,7 +609,7 @@ int main(int argc, char *argv[])
 	signals_init();
 
 	/* Initialize */
-	init_angband(p_ptr);
+	init_angband(p_ptr, process_autopick_file_command);
 
 	/* Wait for response */
 	pause_line(23);

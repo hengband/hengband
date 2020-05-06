@@ -1,6 +1,6 @@
 ﻿#include "core/show-file.h"
 #include "files.h"
-#include "core.h" // 暫定。後で消す.
+#include "core/angband-version.h"
 #include "gameterm.h"
 
 /*!

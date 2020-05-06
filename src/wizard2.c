@@ -11,7 +11,7 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/angband-version.h"
 #include "core/stuff-handler.h"
 #include "gameterm.h"
 

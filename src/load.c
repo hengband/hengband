@@ -42,7 +42,8 @@
 
 #include "angband.h"
 #include "util.h"
-#include "core.h"
+#include "core.h" // 暫定、init_flags の扱いを決めた上で消す.
+#include "core/angband-version.h"
 
 #include "load.h"
 #include "market/building.h"

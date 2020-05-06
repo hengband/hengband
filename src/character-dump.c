@@ -1,5 +1,5 @@
 ﻿#include "character-dump.h"
-#include "core.h"
+#include "core/angband-version.h"
 #include "world.h"
 #include "floor-town.h"
 #include "dungeon.h"
