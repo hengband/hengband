@@ -176,6 +176,7 @@
     <ClCompile Include="..\..\src\cmd\cmd-knowledge.c" />
     <ClCompile Include="..\..\src\cmd\cmd-process-screen.c" />
     <ClCompile Include="..\..\src\cmd\dump-util.c" />
+    <ClCompile Include="..\..\src\core\stuff-handler.c" />
     <ClCompile Include="..\..\src\effect\effect-feature.c" />
     <ClCompile Include="..\..\src\effect\effect-item.c" />
     <ClCompile Include="..\..\src\effect\effect-monster-charm.c" />
@@ -362,6 +363,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-knowledge.h" />
     <ClInclude Include="..\..\src\cmd\cmd-process-screen.h" />
     <ClInclude Include="..\..\src\cmd\dump-util.h" />
+    <ClInclude Include="..\..\src\core\stuff-handler.h" />
     <ClInclude Include="..\..\src\effect\effect-characteristics.h" />
     <ClInclude Include="..\..\src\effect\effect-feature.h" />
     <ClInclude Include="..\..\src\effect\effect-item.h" />

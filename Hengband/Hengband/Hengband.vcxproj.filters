@@ -760,6 +760,9 @@
     <ClCompile Include="..\..\src\spell\process-effect.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\stuff-handler.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1534,6 +1537,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\effect\effect-characteristics.h">
       <Filter>effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\stuff-handler.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

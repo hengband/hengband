@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "util.h"
 
 #include "cmd-spell.h"

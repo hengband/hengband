@@ -17,7 +17,7 @@
 #include "market/gold-magnification-table.h"
 #include "market/store-util.h"
 #include "market/black-market.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "util.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"

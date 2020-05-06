@@ -14,6 +14,7 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "core.h"
+#include "core/stuff-handler.h"
 #include "gameterm.h"
 
 #include "io/write-diary.h"

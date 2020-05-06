@@ -16,7 +16,7 @@
 #include "gameterm.h"
 #include "english.h"
 
-#include "core.h" // 暫定、後で消す.
+#include "core/stuff-handler.h"
 #include "view/display-main-window.h" // 暫定、後で消す.
 
  /*

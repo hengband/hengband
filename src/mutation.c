@@ -12,7 +12,7 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "core/show-file.h"
 #include "util.h"
 

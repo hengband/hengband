@@ -14,7 +14,7 @@
 
 #include "angband.h"
 #include "gameterm.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "util.h"
 
 #include "creature.h"

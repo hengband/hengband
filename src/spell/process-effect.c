@@ -2,7 +2,7 @@
 #include "effect/spells-effect-util.h"
 #include "spell/process-effect.h"
 #include "cmd-pet.h" // 暫定、後で消すかも.
-#include "core.h" // 暫定、後で消す.
+#include "core/stuff-handler.h"
 #include "effect/effect-feature.h"
 #include "effect/effect-item.h"
 #include "effect/effect-monster.h"

@@ -7,6 +7,7 @@
 
 #include "angband.h"
 #include "core.h"
+#include "core/stuff-handler.h"
 #include "inet.h"
 #include "dungeon.h"
 

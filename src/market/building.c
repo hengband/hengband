@@ -18,6 +18,7 @@
 #include "gameterm.h"
 
 #include "core.h"
+#include "core/stuff-handler.h"
 #include "core/show-file.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-inn.h"

@@ -14,6 +14,7 @@
 #include "main/music-definitions-table.h"
 #include "io/signal-handlers.h"
 #include "core.h"
+#include "core/stuff-handler.h"
 #include "gameterm.h"
 #include "util.h"
 #include "files.h"

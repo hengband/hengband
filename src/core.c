@@ -16,6 +16,7 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "core.h"
+#include "core/stuff-handler.h"
 #include "inet.h"
 #include "gameterm.h"
 #include "chuukei.h"
@@ -4734,19 +4735,6 @@ void close_game(player_type *player_ptr)
 	highscore_fd = -1;
 	clear_saved_floor_files(player_ptr);
 	signals_handle_tstp();
-}
-
-
-/*!
- * @brief 全更新処理をチェックして処理していく
- * Handle "player_ptr->update" and "player_ptr->redraw" and "player_ptr->window"
- * @return なし
- */
-void handle_stuff(player_type *player_ptr)
-{
-	if (player_ptr->update) update_creature(player_ptr);
-	if (player_ptr->redraw) redraw_stuff(player_ptr);
-	if (player_ptr->window) window_stuff(player_ptr);
 }
 
 

@@ -13,6 +13,7 @@
 #include "angband.h"
 #include "util.h"
 #include "core.h"
+#include "core/stuff-handler.h"
 #include "gameterm.h"
 #include "targeting.h"
 

@@ -12,6 +12,7 @@
 
 #include "angband.h"
 #include "core.h"
+#include "core/stuff-handler.h"
 #include "gameterm.h"
 
 #include "dungeon.h"

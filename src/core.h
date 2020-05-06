@@ -76,5 +76,4 @@ extern s32b turn_real(player_type *player_ptr, s32b hoge);
 extern void prevent_turn_overflow(player_type *player_ptr);
 extern void close_game(player_type *player_ptr);
 
-extern void handle_stuff(player_type *player_ptr);
 extern void update_output(player_type *player_ptr);

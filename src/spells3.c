@@ -13,7 +13,7 @@
 
 #include "angband.h"
 #include "market/building.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "gameterm.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"

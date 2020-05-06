@@ -7,7 +7,7 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
 #include "cmd/cmd-spell.h"

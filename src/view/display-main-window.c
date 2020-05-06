@@ -19,6 +19,7 @@
 
 #include "market/building.h"
 #include "core.h"
+#include "core/stuff-handler.h"
 #include "files.h"
 #include "world.h"
 #include "quest.h"
