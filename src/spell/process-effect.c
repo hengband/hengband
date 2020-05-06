@@ -20,8 +20,7 @@
  * @param cury 現在の鏡のy座標
  * @param curx 現在の鏡のx座標
  */
-static void next_mirror(player_type* creature_ptr, POSITION* next_y,
-    POSITION* next_x, POSITION cury, POSITION curx)
+static void next_mirror(player_type* creature_ptr, POSITION* next_y, POSITION* next_x, POSITION cury, POSITION curx)
 {
     POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
     int mirror_num = 0; /* 鏡の数 */
@@ -64,16 +63,15 @@ static void next_mirror(player_type* creature_ptr, POSITION* next_y,
  * @return 何か一つでも効力があればTRUEを返す / TRUE if any "effects" of the
  * projection were observed, else FALSE
  */
-bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
-    POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flag,
-    int monspell)
+bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y, POSITION x, HIT_POINT dam, EFFECT_ID typ, BIT_FLAGS flag, int monspell)
 {
-    int i, t, dist;
+    int dist;
     POSITION y1, x1;
     POSITION y2, x2;
-    POSITION by, bx;
-    int dist_hack = 0;
-    POSITION y_saver, x_saver; /* For reflecting monsters */
+
+    /* For reflecting monsters */
+    POSITION y_saver;
+    POSITION x_saver;
     int msec = delay_factor * delay_factor * delay_factor;
     bool notice = FALSE;
     bool visual = FALSE;
@@ -84,7 +82,8 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
     int path_n = 0;
     u16b path_g[512];
     int grids = 0;
-    POSITION gx[1024], gy[1024];
+    POSITION gx[1024];    
+    POSITION gy[1024];
     POSITION gm[32];
     POSITION gm_rad = rad;
     bool jump = FALSE;
@@ -169,7 +168,7 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
         project_m_n = 0;
         project_m_x = 0;
         project_m_y = 0;
-        for (i = 0; i < path_n; ++i) {
+        for (int i = 0; i < path_n; ++i) {
             POSITION oy = y;
             POSITION ox = x;
             POSITION ny = GRID_Y(path_g[i]);
@@ -234,7 +233,7 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
             last_i = i;
         }
 
-        for (i = last_i; i < path_n; i++) {
+        for (int i = last_i; i < path_n; i++) {
             POSITION py, px;
             py = GRID_Y(path_g[i]);
             px = GRID_X(path_g[i]);
@@ -264,7 +263,7 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
         project_m_n = 0;
         project_m_x = 0;
         project_m_y = 0;
-        for (i = 0; i < path_n; ++i) {
+        for (int i = 0; i < path_n; ++i) {
             POSITION oy = y;
             POSITION ox = x;
             POSITION ny = GRID_Y(path_g[i]);
@@ -349,7 +348,7 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
             }
         }
 
-        for (i = 0; i < path_n; i++) {
+        for (int i = 0; i < path_n; i++) {
             POSITION py = GRID_Y(path_g[i]);
             POSITION px = GRID_X(path_g[i]);
             (void)affect_monster(caster_ptr, 0, 0, py, px, dam, GF_SUPER_RAY, flag,
@@ -374,11 +373,12 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
         return notice;
     }
 
-    for (i = 0; i < path_n; ++i) {
+    int k;
+    for (k = 0; k < path_n; ++k) {
         POSITION oy = y;
         POSITION ox = x;
-        POSITION ny = GRID_Y(path_g[i]);
-        POSITION nx = GRID_X(path_g[i]);
+        POSITION ny = GRID_Y(path_g[k]);
+        POSITION nx = GRID_X(path_g[k]);
         if (flag & PROJECT_DISI) {
             if (cave_stop_disintegration(caster_ptr->current_floor_ptr, ny, nx) && (rad > 0))
                 break;
@@ -427,9 +427,9 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
         }
     }
 
-    path_n = i;
-    by = y;
-    bx = x;
+    path_n = k;
+    POSITION by = y;
+    POSITION bx = x;
     if (breath && !path_n) {
         breath = FALSE;
         gm_rad = rad;
@@ -441,7 +441,7 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
     gm[0] = 0;
     gm[1] = grids;
     dist = path_n;
-    dist_hack = dist;
+    int dist_hack = dist;
     project_length = 0;
 
     /* If we found a "target", explode there */
@@ -501,8 +501,8 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
         return FALSE;
 
     if (!blind && !(flag & (PROJECT_HIDE))) {
-        for (t = 0; t <= gm_rad; t++) {
-            for (i = gm[t]; i < gm[t + 1]; i++) {
+        for (int t = 0; t <= gm_rad; t++) {
+            for (int i = gm[t]; i < gm[t + 1]; i++) {
                 y = gy[i];
                 x = gx[i];
                 if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x)) {
@@ -525,7 +525,7 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
         }
 
         if (drawn) {
-            for (i = 0; i < grids; i++) {
+            for (int i = 0; i < grids; i++) {
                 y = gy[i];
                 x = gx[i];
                 if (panel_contains(y, x) && player_has_los_bold(caster_ptr, y, x)) {
@@ -549,7 +549,7 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
     if (flag & (PROJECT_GRID)) {
         dist = 0;
-        for (i = 0; i < grids; i++) {
+        for (int i = 0; i < grids; i++) {
             if (gm[dist + 1] == i)
                 dist++;
             y = gy[i];
@@ -568,7 +568,7 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
     update_creature(caster_ptr);
     if (flag & (PROJECT_ITEM)) {
         dist = 0;
-        for (i = 0; i < grids; i++) {
+        for (int i = 0; i < grids; i++) {
             if (gm[dist + 1] == i)
                 dist++;
 
@@ -590,7 +590,7 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
         project_m_x = 0;
         project_m_y = 0;
         dist = 0;
-        for (i = 0; i < grids; i++) {
+        for (int i = 0; i < grids; i++) {
             int effective_dist;
             if (gm[dist + 1] == i)
                 dist++;
@@ -732,7 +732,7 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
 
     if (flag & (PROJECT_KILL)) {
         dist = 0;
-        for (i = 0; i < grids; i++) {
+        for (int i = 0; i < grids; i++) {
             int effective_dist;
             if (gm[dist + 1] == i)
                 dist++;
