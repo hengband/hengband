@@ -251,7 +251,7 @@ hengband_SOURCES = \
 
 EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc maid-x11.c main-win.c \
-	makefile.bcc makefile.std readdib.c readdib.h wall.bmp \
+	makefile.bcc makefile.std readdib.c readdib.h wall.bmp
 
 EXTRA_DIST = \
 	gcc-wrap
@@ -260,7 +260,7 @@ CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-	-Iautopick -Icmd -Icombat -Icore -Ieffect -Iio -Iknowledge -Imarket \
+	-Iautopick -Ibirth -Icmd -Icombat -Icore -Ieffect -Iio -Iknowledge -Imarket \
 	-Imonster -Iobject -Iplayer -Irealm -Iroom -Ispell -Iview
 
 install-exec-hook:
