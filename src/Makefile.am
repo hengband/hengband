@@ -12,15 +12,15 @@ hengband_SOURCES = \
 	autopick/autopick.c autopick/autopick.h \
 	autopick/autopick-commands-table.h autopick/autopick-dirty-flags.h \
 	autopick/autopick-editor-table.h autopick/autopick-flags-table.h \
-	autopick/autopick-key-flag-process.h autopick/autopick-key-table.h \
+	autopick/autopick-key-flag-process.h autopick/autopick-keys-table.h \
 	autopick/autopick-menu-data-table.c autopick/autopick-menu-data-table.h \
 	autopick/autopick-methods-table.h \
 	autopick/autopick-util.c autopick/autopick-util.h \
 	autopick/autopick-entry.c autopick/autopick-entry.h \
 	autopick/autopick-initializer.c autopick/autopick-initializer.h \
 	autopick/autopick-matcher.c autopick/autopick-matcher.h \
-	autopick-describer.c autopick-describer.h \
-	autopick-destroyer.c autopick-destroyer.h \
+	autopick/autopick-describer.c autopick/autopick-describer.h \
+	autopick/autopick-destroyer.c autopick/autopick-destroyer.h \
 	autopick/autopick-reader-writer.c autopick/autopick-reader-writer.h \
 	autopick/autopick-finder.c autopick/autopick-finder.h \
 	autopick/autopick-pref-processor.c autopick/autopick-pref-processor.h \
@@ -28,8 +28,8 @@ hengband_SOURCES = \
 	autopick/autopick-inserter-killer.c autopick/autopick-inserter-killer.h \
 	autopick/autopick-registry.c autopick/autopick-registry.h \
 	autopick/autopick-command-menu.c autopick/autopick-command-menu.h \
-	autopick-editor-util.c autopick-editor-util.h \
-	autopick-editor-command.c autopick-editor-command.h \
+	autopick/autopick-editor-util.c autopick/autopick-editor-util.h \
+	autopick/autopick-editor-command.c autopick/autopick-editor-command.h \
 	\
 	avatar.h avatar.c \
 	\
