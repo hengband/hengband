@@ -90,9 +90,6 @@
     <ClCompile Include="..\..\src\avatar.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\artifact.c">
       <Filter>object</Filter>
     </ClCompile>
@@ -766,6 +763,9 @@
     <ClCompile Include="..\..\src\birth\birth-explanations-table.c">
       <Filter>birth</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\birth\birth.c">
+      <Filter>birth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -907,9 +907,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\rumor.h">
       <Filter>market</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\birth.h">
-      <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind.h">
       <Filter>spell</Filter>
@@ -1557,6 +1554,9 @@
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\birth\birth-explanations-table.h">
+      <Filter>birth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\birth\birth.h">
       <Filter>birth</Filter>
     </ClInclude>
   </ItemGroup>

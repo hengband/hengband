@@ -34,7 +34,7 @@ hengband_SOURCES = \
 	avatar.h avatar.c \
 	\
 	birth/bitrh-explanations-table.c birth/bitrh-explanations-table.h \
-	birth.c birth.h \
+	birth/birth.c birth/birth.h \
 	\
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
