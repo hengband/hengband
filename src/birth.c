@@ -84,68 +84,6 @@ birther previous_char;
   /* 選択可能な職業の最大数 */
 #define MAX_CLASS_CHOICE     MAX_CLASS
 
-/*! 性格の解説メッセージテーブル */
-static concptr seikaku_jouhou[MAX_SEIKAKU] =
-{
-#ifdef JP
-"ふつうは、特に特筆するべき部分がない性格です。あらゆる技能を平均的にこなします。",
-
-"ちからじまんは、肉体的な能力や技能が上昇します。しかし、魔法に関係する能力や技能は劣り、戦士よりのステータスを持ちます。",
-
-"きれものは、肉体的な能力は下がりますが、知能や魔法に関係する技能は上昇し、メイジよりのステータスを持ちます。",
-
-"しあわせものは、神を信仰する能力が高くなります。肉体的には平均的な能力を持ち、プリーストに近いステータスとなります。",
-
-"すばしっこいは、どのスキルも比較的うまくこなしますが、肉体的な能力は低くなります。",
-
-"いのちしらずは、戦闘力、魔法能力の両方が上昇しますが、魔法防御、ＨＰといった能力は悪くなります。",
-
-"好きな食べ物は焼きビーフン。抑えてはいるが、冒険心旺盛な一匹狼。正義感、勇気とも平均以上だがカッとしやすい所もある。計画的人生より行き当たりばったりの人生を選んでしまうタイプで、異性の扱いは苦手。",
-
-"なまけものは、あらゆるスキルが低く、何をやってもうまくいきません。",
-
-"セクシーギャルは、あらゆるスキルをうまくこなすことができます。しかし、その人をなめた性格は全てのモンスターを怒らせることになるでしょう。この性格は女性しか選ぶことができません。",
-
-"ラッキーマンは、能力値はなまけものに匹敵するくらい低いにもかかわらず、どんなことをしてもなぜかうまくいってしまいます。この性格は男性しか選ぶことができません。",
-
-"がまんづよいは、じっくりと物事にとりくむ慎重な性格で、他の性格に比べて高い耐久力を得ることができます。しかし、自分から行動するのは苦手で、多くの技能は低くなってしまいます。",
-
-"いかさまは、初心者の練習用の性格です。あらゆる能力が高くなっています。この性格を使えば勝利者になることは容易ですが、勝利しても全く自慢になりません。",
-
-"チャージマンは「こんなところ」に連れて行かれても仕方のない可愛そうなお友達なんＤＡ。腕っ節やタフさはマンモス並みに強いのだけれど知能面はまるで駄目なのが分かるだろう？この性格は最初から気が狂っているので、混乱したり幻覚を見る心配がないのです。",
-
-#else
-
-"\"Ordinary\" is a personality with no special skills or talents, with unmodified stats and skills.",
-
-"\"Mighty\" raises your physical stats and skills, but reduces stats and skills which influence magic.  It makes your stats suitable for a warrior.  Also it directly influences your hit-points and spell fail rate.",
-
-"\"Shrewd\" reduces your physical stats, and raises your intelligence and magical skills.  It makes your stats suitable for a mage.  Also it directly influences your hit-points and spell fail rate.",
-
-"\"Pious\" deepens your faith in your God.  It makes your physical ability average, and your stats suitable for priest.",
-
-"\"Nimble\" improves most skills except for melee combat.",
-
-"\"Fearless\" raises both your melee and magical ability.  Stats such as magic defense and constitution are reduced.  Also it has a direct bad influence on your hit-points.",
-
-"\"Combat\" gives you comparatively high melee and shooting abilities, and average constitution.  Other skills such as stealth, magic defence, and magical devices are weakened.  All \"Combat\" people have great respect for the legendary \"Combat Echizen\".\n\
-(See \"Death Crimson\" / Ecole Software Corp.)",
-
-"A \"Lazy\" person has no good stats and can do no action well.  Also it has a direct bad influence on your spell fail rate.",
-
-"\"Sexy\" rises all of your abilities, but your haughty attitude will aggravate all monsters.  Only females can choose this personality.",
-
-"A \"Lucky\" man has poor stats, equivalent to a \"Lazy\" person.  Mysteriously, however, he can do all things well.  Only males can choose this personality.",
-
-"A \"Patient\" person does things carefully.  Patient people have high constitution, and high resilience, but poor abilities in most other skills.  Also it directly influences your hit-points.",
-
-"\"Munchkin\" is a personality for beginners.  It raises all your stats and skills.  With this personality, you can win the game easily, but gain little honor in doing so.",
-
-"\"ChargeMan\" is a crazy killer.  You are strong and tough but have poor intelligence.  Since you're already insane, confusion and hallucinations do not affect you.",
-
-#endif
-};
-
 /*! 魔法領域の詳細解説メッセージテーブル */
 static concptr realm_jouhou[VALID_REALM] =
 {
@@ -3815,7 +3753,7 @@ static bool player_birth_aux(player_type *creature_ptr, void(*process_autopick_f
 		if (!get_player_seikaku(creature_ptr)) return FALSE;
 
 		clear_from(10);
-		roff_to_buf(seikaku_jouhou[creature_ptr->pseikaku], 74, temp, sizeof(temp));
+		roff_to_buf(personality_explanations[creature_ptr->pseikaku], 74, temp, sizeof(temp));
 		t = temp;
 
 		for (i = 0; i < A_MAX; i++)
@@ -4388,7 +4326,7 @@ void dump_yourself(player_type *creature_ptr, FILE *fff)
 		fprintf(fff, "%s\n", t);
 		t += strlen(t) + 1;
 	}
-	roff_to_buf(seikaku_jouhou[creature_ptr->pseikaku], 78, temp, sizeof(temp));
+	roff_to_buf(personality_explanations[creature_ptr->pseikaku], 78, temp, sizeof(temp));
 	fprintf(fff, "\n");
 	fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), seikaku_info[creature_ptr->pseikaku].title);
 
