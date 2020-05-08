@@ -84,41 +84,6 @@ birther previous_char;
   /* 選択可能な職業の最大数 */
 #define MAX_CLASS_CHOICE     MAX_CLASS
 
-/*! 魔法領域の簡易解説メッセージテーブル */
-static concptr realm_subinfo[VALID_REALM] =
-{
-#ifdef JP
-"感知と防御と回復に優れています",
-"攻撃はできませんが非常に便利です",
-"感知と防御に優れています",
-"破壊的な攻撃に優れています",
-"生命のある敵への攻撃に優れています",
-"召喚とテレポートに優れています",
-"やや弱いながらも非常に便利です",
-"直接戦闘の補助に優れています",
-"攻撃と防御の両面に優れています",
-"邪悪な怪物に対する攻撃に優れています",
-"様々な魔法効果を持った歌を歌います",
-"打撃攻撃に特殊能力を付加します",
-"敵を邪魔しつつ復讐を狙います"
-#else
-"Good at detection and healing.",
-"Utility and protective spells.",
-"Good at detection and defence.",
-"Offensive and destructive.",
-"Ruins living creatures.",
-"Good at summoning and teleportation.",
-"Very useful but not as potent.",
-"Support for melee fighting.",
-"Good at both offence and defence.",
-"Destroys evil creatures.",
-"Songs with magical effects.",
-"Special attacks on melee.",
-"Good at obstacle and revenge."
-#endif
-};
-
-
 /*! オートローラの能力値的要求水準 / Autoroll limit */
 static s16b stat_limit[6];
 

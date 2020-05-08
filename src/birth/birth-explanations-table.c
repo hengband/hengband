@@ -288,6 +288,23 @@ concptr realm_explanations[VALID_REALM] = {
     _("武芸の書は、様々な戦闘の技について書かれています。この本は技を覚えるときに読む必要がありますが、一度覚えた技は使うのに本を持つ必要はありません。技を使うときには必ず武器を装備していなければいけません。",
         "The books of Kenjutsu describe various combat techniques.  When learning new techniques, you are required to carry the books, but once you memorize them, you don't have to carry them.  When using a technique, wielding a weapon is required."),
 
-    _("呪術は忌むべき領域です。複数の呪いの言葉を歌のように紡ぎながら詠唱します。多くの呪文は詠唱し続けることによって効果が持続されます。呪文には相手の行動を束縛するもの、ダメージを与えるもの、攻撃に対して反撃するものが多くあります。"
+    _("呪術は忌むべき領域です。複数の呪いの言葉を歌のように紡ぎながら詠唱します。多くの呪文は詠唱し続けることによって効果が持続されます。呪文には相手の行動を束縛するもの、ダメージを与えるもの、攻撃に対して反撃するものが多くあります。",
       "Hex is an unsavory realm, like the death and demon realms.  Some of the spells can act continuously by stringing together curses like a song.  Spells may obstruct monsters' actions, deal damage to monsters in sight, or return damage to monsters who have damaged the caster."),
+};
+
+/*! 魔法領域の簡易解説メッセージテーブル */
+concptr realm_subinfo[VALID_REALM] = {
+    _("感知と防御と回復に優れています", "Good at detection and healing."),
+    _("攻撃はできませんが非常に便利です", "Utility and protective spells."),
+    _("感知と防御に優れています", "Good at detection and defence."),
+    _("破壊的な攻撃に優れています", "Offensive and destructive."),
+    _("生命のある敵への攻撃に優れています", "Ruins living creatures."),
+    _("召喚とテレポートに優れています", "Good at summoning and teleportation."),
+    _("やや弱いながらも非常に便利です", "Very useful but not as potent."),
+    _("直接戦闘の補助に優れています", "Support for melee fighting."),
+    _("攻撃と防御の両面に優れています", "Good at both offence and defence."),
+    _("邪悪な怪物に対する攻撃に優れています", "Destroys evil creatures."),
+    _("様々な魔法効果を持った歌を歌います", "Songs with magical effects."),
+    _("打撃攻撃に特殊能力を付加します", "Special attacks on melee."),
+    _("敵を邪魔しつつ復讐を狙います", "Good at obstacle and revenge."),
 };
