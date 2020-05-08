@@ -118,6 +118,7 @@
 #include "targeting.h"
 #include "spell/spells-util.h"
 #include "spell/spells-execution.h"
+#include "spell/spells2.h"
 
  /*!
   * コピーライト情報 /

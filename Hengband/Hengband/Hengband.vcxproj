@@ -563,6 +563,7 @@
     <ClInclude Include="..\..\src\spell\spells-type.h" />
     <ClInclude Include="..\..\src\spell\spells-util.h" />
     <ClInclude Include="..\..\src\spell\spells-execution.h" />
+    <ClInclude Include="..\..\src\spell\spells2.h" />
     <ClInclude Include="..\..\src\spell\technic-info-table.h" />
     <ClInclude Include="..\..\src\view\display-characteristic.h" />
     <ClInclude Include="..\..\src\view\display-fruit.h" />

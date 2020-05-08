@@ -1547,6 +1547,9 @@
     <ClInclude Include="..\..\src\spell\spells1.h">
       <Filter>spell</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells2.h">
+      <Filter>spell</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

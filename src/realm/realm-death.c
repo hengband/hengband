@@ -15,6 +15,7 @@
 #include "realm/realm-death.h"
 #include "spell/process-effect.h"
 #include "effect/effect-characteristics.h"
+#include "spell/spells2.h"
 
 /*!
 * @brief 暗黒領域魔法の各処理を行う

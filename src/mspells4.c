@@ -27,6 +27,7 @@
 #include "world.h"
 #include "view/display-main-window.h" // 暫定、後で消したい.
 #include "spell/process-effect.h"
+#include "spell/spells2.h"
 
  /*!
  * @brief モンスター2体がプレイヤーの近くに居るかの判定 /

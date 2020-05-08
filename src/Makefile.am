@@ -194,8 +194,8 @@ hengband_SOURCES = \
 	spell/spells-execution.c spell/spells-execution.h \
 	spell/spells-util.h spell/spells-type.h \
 	spell/process-effect.h spell/process-effect.h \
-	spell/spells1.h \
-	spell/spells1.c spell/spells2.c spell/spells3.c \
+	spell/spells1.c spell/spells1.h spell/spells2.c spell/spells2.h \
+	spell/spells3.c \
 	spells-diceroll.c spells-diceroll.h \
 	spells-floor.c spells-floor.h \
 	spells-object.c spells-object.h \

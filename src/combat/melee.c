@@ -46,6 +46,7 @@
 #include "view/display-main-window.h"
 #include "world.h"
 #include "spells-floor.h"
+#include "spell/spells2.h"
 
 #define BLOW_EFFECT_TYPE_NONE  0
 #define BLOW_EFFECT_TYPE_FEAR  1

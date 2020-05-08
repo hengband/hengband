@@ -15,6 +15,7 @@
 #include "targeting.h"
 #include "realm/realm-crusade.h"
 #include "spell/process-effect.h"
+#include "spell/spells2.h"
 
 /*!
 * @brief 破邪領域魔法の各処理を行う

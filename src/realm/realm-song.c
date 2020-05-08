@@ -12,6 +12,7 @@
 #include "realm/realm-song.h"
 #include "spell/process-effect.h"
 #include "effect/effect-characteristics.h"
+#include "spell/spells2.h"
 
 /*!
 * @brief 歌の開始を処理する / Start singing if the player is a Bard

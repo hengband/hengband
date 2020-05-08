@@ -38,6 +38,7 @@
 #include "player-race.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells-type.h"
+#include "spell/spells2.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える

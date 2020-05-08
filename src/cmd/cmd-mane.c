@@ -29,6 +29,7 @@
 #include "targeting.h"
 #include "view/display-main-window.h"
 #include "spell/spells-type.h"
+#include "spell/spells2.h"
 
 static int damage;
 
