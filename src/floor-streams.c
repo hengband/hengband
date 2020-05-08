@@ -28,7 +28,7 @@
 #include "feature.h"
 #include "object-flavor.h"
 #include "object-hook.h"
-#include "spells.h"
+#include "spell/spells1.h"
 #include "spells-floor.h"
 #include "rooms.h"
 

@@ -15,7 +15,7 @@
 #include "monster-status.h"
 #include "monster-spell.h"
 #include "monster-process.h"
-#include "spells.h"
+#include "spell/spells1.h"
 #include "spells-summon.h"
 #include "monsterrace-hook.h"
 #include "object-curse.h"

@@ -454,9 +454,9 @@
     <ClCompile Include="..\..\src\spells-status.c" />
     <ClCompile Include="..\..\src\spells-summon.c" />
     <ClCompile Include="..\..\src\spells-world.c" />
-    <ClCompile Include="..\..\src\spells1.c" />
-    <ClCompile Include="..\..\src\spells2.c" />
-    <ClCompile Include="..\..\src\spells3.c" />
+    <ClCompile Include="..\..\src\spell\spells1.c" />
+    <ClCompile Include="..\..\src\spell\spells2.c" />
+    <ClCompile Include="..\..\src\spell\spells3.c" />
     <ClCompile Include="..\..\src\io\uid-checker.c" />
     <ClCompile Include="..\..\src\view\display-characteristic.c" />
     <ClCompile Include="..\..\src\view\display-fruit.c" />
@@ -665,7 +665,7 @@
     <ClInclude Include="..\..\src\spells-summon.h" />
     <ClInclude Include="..\..\src\floor-streams.h" />
     <ClInclude Include="..\..\src\spells-world.h" />
-    <ClInclude Include="..\..\src\spells.h" />
+    <ClInclude Include="..\..\src\spell\spells1.h" />
     <ClInclude Include="..\..\src\market\store.h" />
     <ClInclude Include="..\..\src\targeting.h" />
     <ClInclude Include="..\..\src\gameterm.h" />

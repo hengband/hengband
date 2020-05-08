@@ -39,7 +39,7 @@
 #include "player-class.h"
 #include "player-personality.h"
 #include "world.h"
-#include "spells.h"
+#include "spell/spells1.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "save.h"

@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "spells.h"
+#include "spell/spells1.h"
 #include "spell/technic-info-table.h"
 #include "player-status.h"
 

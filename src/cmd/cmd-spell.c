@@ -16,7 +16,7 @@
 #include "cmd/cmd-dump.h"
 #include "selfinfo.h"
 #include "spell/technic-info-table.h"
-#include "spells.h"
+#include "spell/spells1.h"
 #include "spells-summon.h"
 #include "realm/realm-hex.h"
 #include "mind.h"

@@ -15,7 +15,7 @@
 #include "object-hook.h"
 #include "mutation.h"
 #include "avatar.h"
-#include "spells.h"
+#include "spell/spells1.h"
 #include "spells-status.h"
 #include "player-effects.h"
 #include "player-status.h"

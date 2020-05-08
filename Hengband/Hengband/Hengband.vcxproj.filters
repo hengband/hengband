@@ -6,15 +6,6 @@
     <ClCompile Include="..\..\src\z-form.c" />
     <ClCompile Include="..\..\src\z-term.c" />
     <ClCompile Include="..\..\src\warning.c" />
-    <ClCompile Include="..\..\src\spells1.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spells2.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spells3.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spells-diceroll.c">
       <Filter>spell</Filter>
     </ClCompile>
@@ -763,6 +754,15 @@
     <ClCompile Include="..\..\src\core\stuff-handler.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells2.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells3.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells1.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -776,9 +776,6 @@
     <ClInclude Include="..\..\src\z-form.h" />
     <ClInclude Include="..\..\src\z-term.h" />
     <ClInclude Include="..\..\src\warning.h" />
-    <ClInclude Include="..\..\src\spells.h">
-      <Filter>spell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\spells-diceroll.h">
       <Filter>spell</Filter>
     </ClInclude>
@@ -1546,6 +1543,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\special-internal-keys.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells1.h">
+      <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

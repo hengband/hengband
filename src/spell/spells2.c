@@ -29,7 +29,7 @@
 #include "monsterrace-hook.h"
 #include "melee.h"
 #include "world.h"
-#include "spells.h"
+#include "spell/spells1.h"
 #include "spells-summon.h"
 #include "mutation.h"
 #include "quest.h"

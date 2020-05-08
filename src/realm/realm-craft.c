@@ -3,7 +3,7 @@
 
 #include "cmd-spell.h"
 #include "selfinfo.h"
-#include "spells.h"
+#include "spell/spells1.h"
 #include "spells-object.h"
 #include "spells-summon.h"
 #include "spells-status.h"

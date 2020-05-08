@@ -123,7 +123,7 @@
 #include "dungeon-file.h"
 #include "init.h"
 #include "feature.h"
-#include "spells.h"
+#include "spell/spells1.h"
 
 #include "world.h"
 #include "view/display-main-window.h"

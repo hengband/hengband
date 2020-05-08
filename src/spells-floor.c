@@ -24,7 +24,7 @@
 
 #include "monster-status.h"
 
-#include "spells.h"
+#include "spell/spells1.h"
 #include "spells-floor.h"
 
 /*

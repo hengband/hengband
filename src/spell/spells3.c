@@ -37,7 +37,7 @@
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"
-#include "spells.h"
+#include "spell/spells1.h"
 #include "spells-floor.h"
 #include "spell/technic-info-table.h"
 #include "grid.h"

@@ -22,7 +22,7 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-spell.h"
-#include "spells.h"
+#include "spell/spells1.h"
 #include "dungeon.h"
 #include "floor.h"
 #include "grid.h"

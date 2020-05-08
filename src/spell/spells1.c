@@ -19,7 +19,7 @@
 #include "cmd/cmd-dump.h"
 #include "player-class.h"
 #include "monster.h"
-#include "spells.h"
+#include "spell/spells1.h"
 #include "gameterm.h"
 #include "view/display-main-window.h"
 #include "effect/spells-effect-util.h"
