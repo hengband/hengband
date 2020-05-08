@@ -3,6 +3,7 @@
 #include "spells-status.h"
 #include "spells-floor.h"
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 #include "player-status.h"
 #include "player-effects.h"
 #include "floor.h"

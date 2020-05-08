@@ -38,6 +38,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 #include "spells-floor.h"
 #include "spell/technic-info-table.h"
 #include "grid.h"

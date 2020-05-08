@@ -11,6 +11,7 @@
 #include "player-status.h"
 #include "player-effects.h"
 #include "realm/realm-craft.h"
+#include "spell/spells3.h"
 
 /*!
 * @brief 匠領域魔法の各処理を行う

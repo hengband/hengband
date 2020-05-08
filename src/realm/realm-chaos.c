@@ -16,6 +16,7 @@
 #include "spell/process-effect.h"
 #include "effect/effect-characteristics.h"
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 
 /*!
 * @brief カオス領域魔法の各処理を行う

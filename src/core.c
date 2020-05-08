@@ -119,6 +119,7 @@
 #include "spell/spells-util.h"
 #include "spell/spells-execution.h"
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 
  /*!
   * コピーライト情報 /

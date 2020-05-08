@@ -5,6 +5,7 @@
 #include "avatar.h"
 
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 #include "spells-floor.h"
 #include "spells-object.h"
 #include "spells-summon.h"

@@ -52,6 +52,7 @@
 #include "targeting.h"
 #include "world.h"
 #include "effect/spells-effect-util.h"
+#include "spell/spells3.h"
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理

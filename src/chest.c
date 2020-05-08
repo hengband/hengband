@@ -12,6 +12,7 @@
 #include "player-effects.h"
 #include "grid.h"
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 
 /*!
 * @brief 箱からアイテムを引き出す /

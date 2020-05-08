@@ -38,6 +38,7 @@
 #include "effect/spells-effect-util.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 
 /*!
  * @brief 修行僧の構え設定処理

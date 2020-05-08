@@ -39,6 +39,7 @@
 #include "effect/spells-effect-util.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える

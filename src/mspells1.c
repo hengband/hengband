@@ -58,6 +58,7 @@
 #include "player-race.h"
 #include "player-class.h"
 #include "spell/process-effect.h"
+#include "spell/spells3.h"
 
 #define DO_SPELL_NONE    0
 #define DO_SPELL_BR_LITE 1

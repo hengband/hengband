@@ -50,6 +50,7 @@
 
 #include "market/arena-info-table.h"
 #include "effect/spells-effect-util.h"
+#include "spell/spells3.h"
 
  /*
   * Not using graphical tiles for this feature?

@@ -16,6 +16,7 @@
 #include "mutation.h"
 #include "avatar.h"
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 #include "spells-status.h"
 #include "player-effects.h"
 #include "player-status.h"

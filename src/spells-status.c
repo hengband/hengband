@@ -18,6 +18,7 @@
 #include "realm/realm-song.h"
 #include "view/display-main-window.h"
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 
 /*!
  * @brief モンスター回復処理

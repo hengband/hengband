@@ -30,6 +30,7 @@
 #include "targeting.h"
 #include "view/display-main-window.h"
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 
  /*!
   * @brief モンスター魔法をプレイヤーが使用する場合の換算レベル

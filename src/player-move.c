@@ -177,6 +177,7 @@
 #include "autopick/autopick.h"
 #include "targeting.h"
 #include "spell/process-effect.h"
+#include "spell/spells3.h"
 
 travel_type travel;
 

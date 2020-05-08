@@ -47,6 +47,7 @@
 #include "world.h"
 #include "spells-floor.h"
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 
 #define BLOW_EFFECT_TYPE_NONE  0
 #define BLOW_EFFECT_TYPE_FEAR  1

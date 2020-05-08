@@ -30,6 +30,7 @@
 #include "view/display-main-window.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 
 static int damage;
 

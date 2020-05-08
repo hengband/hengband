@@ -26,6 +26,7 @@
 #include "world.h"
 #include "spell/process-effect.h"
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 

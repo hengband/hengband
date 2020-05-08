@@ -13,6 +13,7 @@
 #include "realm/realm-trump.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
+#include "spell/spells3.h"
 
 /*!
 * @brief トランプ領域魔法の各処理を行う

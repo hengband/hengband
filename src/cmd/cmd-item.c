@@ -40,7 +40,7 @@
 #include "player-personality.h"
 #include "monster.h"
 #include "view/display-main-window.h"
-#include "spell/spells1.h"
+#include "spell/spells3.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
 #include "autopick/autopick-registry.h"

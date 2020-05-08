@@ -9,6 +9,7 @@
 #include "mutation.h"
 #include "monster-spell.h"
 #include "spells-status.h"
+#include "spell/spells3.h"
 
 // 毒を除く4元素.
 void effect_player_elements(player_type *target_ptr, effect_player_type *ep_ptr,
