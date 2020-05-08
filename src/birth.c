@@ -84,65 +84,6 @@ birther previous_char;
   /* 選択可能な職業の最大数 */
 #define MAX_CLASS_CHOICE     MAX_CLASS
 
-/*! 魔法領域の詳細解説メッセージテーブル */
-static concptr realm_jouhou[VALID_REALM] =
-{
-#ifdef JP
-"生命は回復能力に優れた魔法です。治療や防御、感知魔法が多く含まれていますが、攻撃呪文もわずかに持っています。特に高レベルの呪文にはアンデッドを塵に帰す力をあると言われています。",
-
-"仙術は「meta」領域であり、感知や鑑定、さらに退却用の呪文や自身の能力を高める呪文などの便利な呪文が含まれています。しかし、直接攻撃用の呪文は持っていません。",
-
-"自然の魔法は使用者を元素のマスターにします。これには防御、探知、治療と攻撃呪文が含まれています。また、生命以外の領域で最高の治療呪文もこの領域にあります。",
-
-"カオスの魔法は制御が困難で、予測のできない魔法もあります。カオスは非常に非元素的であり、カオスの呪文は想像できる最も恐るべき破壊兵器です。この呪文を唱えるものはカオスの尖兵に対し、敵や自分自身さえも変異させるよう要求します。",
-
-"黒魔術である暗黒の魔法ほど邪悪なカテゴリーはありません。これらの呪文は比較的学ぶのが困難ですが、高レベルになると術者に生物とアンデッドを自由に操る能力を与えます。残念なことに、もっとも強力な呪文はその触媒として術者自身の血を必要とし、詠唱中にしばしば術者を傷つけます。",
-
-"トランプの魔法はテレポート系の呪文で精選されたものを持っており、その出入り口は他の生物を召喚するためにも使えるため、召喚呪文から選りすぐられたものも同様に持っています。しかし、この魔法によって全ての怪物が別の場所へ呼ばれるのを理解するわけではなく、もし召喚呪文に失敗するとその生物は敵となります。",
-
-"秘術の魔法は、全ての領域から有用な呪文だけを取り入れようとした多用途領域です。必要な「道具」的呪文を持っていても高レベルの強力な呪文は持っていません。結果として、全ての呪文書は街で買い求めることができます。また、他の領域に存在する同様な呪文の方がより低レベル、低コストで唱えることができます。",
-
-"匠の魔法は、自分や道具を強化するための魔法が含まれています。魔法によって自分自身の戦闘力を非常に高めることができますが、相手を直接攻撃するような呪文は含まれていません。",
-
-"悪魔の魔法は暗黒と同様非常に邪悪なカテゴリーです。様々な攻撃魔法に優れ、また悪魔のごとき知覚能力を得ることができます。高レベルの呪文は悪魔を自在に操り、自分自身の肉体をも悪魔化させることができます。",
-
-"破邪は「正義」の魔法です。直接敵を傷つける魔法が多く含まれ、特に邪悪な敵に対する力は恐るべきものがあります。しかし、善良な敵にはあまり効果がありません。",
-
-"歌集は、歌によって効果を発揮する魔法です。魔法と同様、使った時に効果のあるものと、歌い続けることによって持続して効果を発揮するものがあります。後者の場合は、MPの続く限り効果を発揮することができますが、同時に歌える歌は1つだけという制限もあります。",
-
-"武芸の書は、様々な戦闘の技について書かれています。この本は技を覚えるときに読む必要がありますが、一度覚えた技は使うのに本を持つ必要はありません。技を使うときには必ず武器を装備していなければいけません。",
-
-"呪術は忌むべき領域です。複数の呪いの言葉を歌のように紡ぎながら詠唱します。多くの呪文は詠唱し続けることによって効果が持続されます。呪文には相手の行動を束縛するもの、ダメージを与えるもの、攻撃に対して反撃するものが多くあります。"
-#else
-
-"Life magic is very good for healing; it relies mostly on healing, protection and detection spells.  Also life magic has a few attack spells as well.  It's said that some high level spells of life magic can disintegrate Undead monsters into ash.",
-
-"Sorcery is a `meta` realm, including enchantment and general spells.  It provides superb protection spells, spells to enhance your odds in combat and, most importantly, a vast selection of spells for gathering information.  However, Sorcery has one weakness: it has no spells to deal direct damage to your enemies.",
-
-"Nature magic makes you a master of the elements; it provides protection, detection, curing and attack spells.  Nature also has a spell of Herbal Healing, which is the only powerful healing spell outside the realm of Life magic.",
-
-"There are few types of magic more unpredictable and difficult to control than Chaos magic.  Chaos is the very element of unmaking, and the Chaos spells are the most terrible weapons of destruction imaginable.  The caster can also call on the primal forces of Chaos to induce mutations in his/her opponents and even him/herself.",
-
-"There is no fouler nor more evil category of spells than the necromantic spells of Death Magic.  These spells are relatively hard to learn, but at higher levels the spells give the caster power over living and the (un)dead, but the most powerful spells need his / her own blood as the focus, often hurting the caster in the process of casting.",
-
-"Trump magic has, indeed, an admirable selection of teleportation spells.  Since the Trump gateways can also be used to summon other creatures, Trump magic has an equally impressive selection of summoning spells.  However, not all monsters appreciate being drawn to another place by Trump user.",
-
-"Arcane magic is a general purpose realm of magic.  It attempts to encompass all 'useful' spells from all realms.  This is the downside of Arcane magic: while Arcane does have all the necessary 'tool' spells for a dungeon delver, it has no ultra-powerful high level spells.  As a consequence, all Arcane spellbooks can be bought in town.  It should also be noted that the 'specialized' realms usually offer the same spell at a lower level and cost.",
-
-"Craft magic can strengthen the caster or his or her equipment.  These spells can greatly improve the caster's fighting ability.  Using them against opponents directly is not possible.",
-
-"Demon is a very evil realm, same as Death.  It provides various attack spells and devilish detection spells.  At higher levels, Demon magic provides the ability to dominate demons and to polymorph yourself into a demon.",
-
-"Crusade is a magic of 'Justice'.  It includes damage spells, which are greatly effective against foul and evil monsters, but have poor effects against good monsters.",
-
-"Music magic works through the caster singing songs.  There are two types of songs; one which shows effects instantly and another which shows effects continuously until SP runs out.  The latter type has a limit:  only one song can be sung at a time.",
-
-"The books of Kendo describe various combat techniques.  When learning new techniques, you are required to carry the books, but once you memorize them, you don't have to carry them.  When using a technique, wielding a weapon is required.",
-
-"Hex is an unsavory realm, like the death and demon realms.  Some of the spells can act continuously by stringing together curses like a song.  Spells may obstruct monsters' actions, deal damage to monsters in sight, or return damage to monsters who have damaged the caster."
-#endif
-};
-
 /*! 魔法領域の簡易解説メッセージテーブル */
 static concptr realm_subinfo[VALID_REALM] =
 {
@@ -484,7 +425,7 @@ static bool get_player_realms(player_type *creature_ptr)
 		put_str("                                   ", 4, 40);
 		put_str("                                   ", 5, 40);
 
-		roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm1) - 1], 74, temp, sizeof(temp));
+		roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm1) - 1], 74, temp, sizeof(temp));
 		t = temp;
 		for (i = 0; i < 10; i++)
 		{
@@ -533,7 +474,7 @@ static bool get_player_realms(player_type *creature_ptr)
 			put_str("                                   ", 4, 40);
 			put_str("                                   ", 5, 40);
 
-			roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm2) - 1], 74, temp, sizeof(temp));
+			roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm2) - 1], 74, temp, sizeof(temp));
 			t = temp;
 			for (i = 0; i < A_MAX; i++)
 			{
@@ -4341,7 +4282,7 @@ void dump_yourself(player_type *creature_ptr, FILE *fff)
 	fprintf(fff, "\n");
 	if (creature_ptr->realm1)
 	{
-		roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm1) - 1], 78, temp, sizeof(temp));
+		roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm1) - 1], 78, temp, sizeof(temp));
 		fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm1]);
 
 		t = temp;
@@ -4356,7 +4297,7 @@ void dump_yourself(player_type *creature_ptr, FILE *fff)
 	fprintf(fff, "\n");
 	if (creature_ptr->realm2)
 	{
-		roff_to_buf(realm_jouhou[technic2magic(creature_ptr->realm2) - 1], 78, temp, sizeof(temp));
+		roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm2) - 1], 78, temp, sizeof(temp));
 		fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm2]);
 
 		t = temp;
