@@ -31,7 +31,10 @@ hengband_SOURCES = \
 	autopick-editor-util.c autopick-editor-util.h \
 	autopick-editor-command.c autopick-editor-command.h \
 	\
-	avatar.h avatar.c birth.c birth.h \
+	avatar.h avatar.c \
+	\
+	birth/bitrh-explanations-table.c birth/bitrh-explanations-table.h \
+	birth.c birth.h \
 	\
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \

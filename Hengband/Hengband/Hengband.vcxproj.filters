@@ -763,6 +763,9 @@
     <ClCompile Include="..\..\src\spell\spells1.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\birth\birth-explanations-table.c">
+      <Filter>birth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1553,6 +1556,9 @@
     <ClInclude Include="..\..\src\spell\spells3.h">
       <Filter>spell</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\birth\birth-explanations-table.h">
+      <Filter>birth</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1615,6 +1621,9 @@
     </Filter>
     <Filter Include="realm">
       <UniqueIdentifier>{c4ce5c0c-f907-4e62-abc1-5d9dbe7f1abf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="birth">
+      <UniqueIdentifier>{c2383613-69b3-4973-bb9b-6fce783afa1d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
