@@ -79,7 +79,7 @@
 #include "player/race-info-table.h"
 #include "player-personality.h"
 #include "player-sex.h"
-#include "birth.h"
+#include "birth/birth.h"
 #include "world.h"
 #include "object/object-kind.h"
 #include "object-ego.h"

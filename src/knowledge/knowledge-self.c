@@ -8,7 +8,7 @@
 #include "knowledge-self.h"
 #include "cmd/dump-util.h"
 #include "avatar.h"
-#include "birth.h"
+#include "birth/birth.h"
 #include "core/show-file.h"
 #include "dungeon-file.h"
 #include "world.h"

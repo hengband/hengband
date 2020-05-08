@@ -10,7 +10,7 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
-#include "birth.h"
+#include "birth/birth.h"
 #include "selfinfo.h"
 #include "object-hook.h"
 #include "mutation.h"

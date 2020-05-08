@@ -23,7 +23,7 @@
 #include "cmd-dump.h"
 #include "floor.h"
 #include "market/building.h"
-#include "birth.h"
+#include "birth/birth.h"
 #include "grid.h"
 #include "mutation.h"
 #include "quest.h"

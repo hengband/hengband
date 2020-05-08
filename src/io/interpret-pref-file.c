@@ -8,7 +8,7 @@
 #include "io/gf-descriptions.h"
 #include "io/tokenizer.h"
 #include "object/object-kind.h"
-#include "birth.h"
+#include "birth/birth.h"
 #include "world.h"
 #include "gameterm.h"
 #include "view/display-main-window.h" // 暫定。apply_default_feat_lighting()。後で消す.

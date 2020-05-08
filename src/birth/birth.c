@@ -24,7 +24,7 @@
 #include "artifact.h"
 #include "autopick/autopick.h"
 #include "avatar.h"
-#include "birth.h"
+#include "birth/birth.h"
 #include "birth/birth-explanations-table.h"
 #include "cmd-pet.h"
 #include "cmd/cmd-dump.h"

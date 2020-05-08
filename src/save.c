@@ -34,7 +34,7 @@
 #include "world.h"
 #include "object/object-kind.h"
 #include "monsterrace.h"
-#include "birth.h"
+#include "birth/birth.h"
 #include "market/building.h"
 #include "view/display-main-window.h"
 

@@ -22,7 +22,7 @@
 #include "cmd/cmd-help.h"
 #include "cmd/cmd-save.h"
 #include "util.h"
-#include "birth.h"
+#include "birth/birth.h"
 #include "selfinfo.h"
 #include "patron.h"
 #include "mutation.h"
