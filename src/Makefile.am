@@ -142,6 +142,7 @@ hengband_SOURCES = \
 	\
 	inventory/simple-appraiser.c inventory/simple-appraiser.h \
 	inventory/inventory-curse.c inventory/inventory-curse.h \
+	inventory/recharge-processor.c inventory/recharge-processor.h \
 	\
 	patron.h patron.c \
 	\

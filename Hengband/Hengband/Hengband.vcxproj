@@ -207,6 +207,7 @@
     <ClCompile Include="..\..\src\effect\spells-effect-util.c" />
     <ClCompile Include="..\..\src\floor\pattern-walk.c" />
     <ClCompile Include="..\..\src\inventory\inventory-curse.c" />
+    <ClCompile Include="..\..\src\inventory\recharge-processor.c" />
     <ClCompile Include="..\..\src\inventory\simple-appraiser.c" />
     <ClCompile Include="..\..\src\io\dump-remover.c" />
     <ClCompile Include="..\..\src\io\mutations-dump.c" />
@@ -410,6 +411,7 @@
     <ClInclude Include="..\..\src\effect\spells-effect-util.h" />
     <ClInclude Include="..\..\src\floor\pattern-walk.h" />
     <ClInclude Include="..\..\src\inventory\inventory-curse.h" />
+    <ClInclude Include="..\..\src\inventory\recharge-processor.h" />
     <ClInclude Include="..\..\src\inventory\simple-appraiser.h" />
     <ClInclude Include="..\..\src\io\dump-remover.h" />
     <ClInclude Include="..\..\src\io\mutations-dump.h" />

@@ -799,6 +799,9 @@
     <ClCompile Include="..\..\src\inventory\inventory-curse.c">
       <Filter>inventory</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\inventory\recharge-processor.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1623,6 +1626,9 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\inventory\inventory-curse.h">
+      <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\recharge-processor.h">
       <Filter>inventory</Filter>
     </ClInclude>
   </ItemGroup>
