@@ -135,6 +135,8 @@ hengband_SOURCES = \
 	object/object-kind-hook.c object/object-kind-hook.h \
 	object-flavor.c object-flavor.h object-ego.c object-ego.h \
 	\
+	inventory/simple-appraiser.c inventory/simple-appraiser.h \
+	\
 	patron.h patron.c \
 	\
 	creature.h creature.c \
@@ -264,8 +266,9 @@ CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-	-Iautopick -Ibirth -Icmd -Icombat -Icore -Ieffect -Ifloor -Iio -Iknowledge \
-	-Imarket -Imonster -Iobject -Iplayer -Irealm -Iroom -Ispell -Iview
+	-Iautopick -Ibirth -Icmd -Icombat -Icore -Ieffect -Ifloor -Iinventory -Iio \
+	-Iknowledge -Imarket -Imonster -Iobject -Iplayer -Irealm -Iroom -Ispell \
+	-Iview
 
 install-exec-hook:
 if SET_GID

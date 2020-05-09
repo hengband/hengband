@@ -778,6 +778,9 @@
     <ClCompile Include="..\..\src\core\turn-compensator.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\inventory\simple-appraiser.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1583,6 +1586,9 @@
     <ClInclude Include="..\..\src\core\turn-compensator.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\inventory\simple-appraiser.h">
+      <Filter>inventory</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1648,6 +1654,9 @@
     </Filter>
     <Filter Include="birth">
       <UniqueIdentifier>{c2383613-69b3-4973-bb9b-6fce783afa1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inventory">
+      <UniqueIdentifier>{060db85f-39b1-48fd-8b5f-7409eb6209b2}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
