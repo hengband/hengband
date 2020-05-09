@@ -304,6 +304,7 @@
     <ClCompile Include="..\..\src\monster\monster-update.c" />
     <ClCompile Include="..\..\src\monster\monster-util.c" />
     <ClCompile Include="..\..\src\monster\quantum-effect.c" />
+    <ClCompile Include="..\..\src\mutation\mutation-processor.c" />
     <ClCompile Include="..\..\src\object-boost.c" />
     <ClCompile Include="..\..\src\object-curse.c" />
     <ClCompile Include="..\..\src\object-ego.c" />
@@ -312,6 +313,7 @@
     <ClCompile Include="..\..\src\object\object-kind.c" />
     <ClCompile Include="..\..\src\object\object-kind-hook.c" />
     <ClCompile Include="..\..\src\object-broken.c" />
+    <ClCompile Include="..\..\src\object\warning-lite.c" />
     <ClCompile Include="..\..\src\patron.c" />
     <ClCompile Include="..\..\src\player-class.c" />
     <ClCompile Include="..\..\src\player-damage.c" />
@@ -564,7 +566,9 @@
     <ClInclude Include="..\..\src\monster\monster-update.h" />
     <ClInclude Include="..\..\src\monster\monster-util.h" />
     <ClInclude Include="..\..\src\monster\quantum-effect.h" />
+    <ClInclude Include="..\..\src\mutation\mutation-processor.h" />
     <ClInclude Include="..\..\src\object-flavor.h" />
+    <ClInclude Include="..\..\src\object\warning-lite.h" />
     <ClInclude Include="..\..\src\player-inventory.h" />
     <ClInclude Include="..\..\src\player\mimic-info-table.h" />
     <ClInclude Include="..\..\src\player\permanent-resistances.h" />

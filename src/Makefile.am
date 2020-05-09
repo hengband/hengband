@@ -129,12 +129,14 @@ hengband_SOURCES = \
 	mspells1.c mspells2.c mspells3.c mspells4.c monster-spell.h \
 	\
 	mutation/mutation.c mutation/mutation.h \
+	mutation/mutation-processor.c mutation/mutation-processor.h \
 	\
 	object-boost.c object-boost.h \
 	object-curse.c object-curse.h object-broken.c object-broken.h \
 	object-hook.c object-hook.h object1.c object2.c object.h \
 	object/object-kind.c object/object-kind.h \
 	object/object-kind-hook.c object/object-kind-hook.h \
+	object/lite-processor.c object/lite-processor.h \
 	object-flavor.c object-flavor.h object-ego.c object-ego.h \
 	\
 	inventory/simple-appraiser.c inventory/simple-appraiser.h \

@@ -787,6 +787,12 @@
     <ClCompile Include="..\..\src\mutation\mutation.c">
       <Filter>mutation</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mutation\mutation-processor.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\warning-lite.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1600,6 +1606,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mutation\mutation.h">
       <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation-processor.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\warning-lite.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
