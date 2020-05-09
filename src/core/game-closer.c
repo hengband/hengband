@@ -1,16 +1,16 @@
 ﻿#include "angband.h"
 #include "core/game-closer.h"
-#include "view/display-main-window.h"
-#include "view/display-player.h"
-#include "world.h"
-#include "scores.h"
+#include "cmd/cmd-save.h"
 #include "core/stuff-handler.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"
 #include "main/music-definitions-table.h"
-#include "save.h"
 #include "player/process-death.h"
-#include "cmd/cmd-save.h"
+#include "save.h"
+#include "scores.h"
+#include "view/display-main-window.h"
+#include "view/display-player.h"
+#include "world.h"
 
 static void clear_floor(player_type* player_ptr)
 {
@@ -18,6 +18,21 @@ static void clear_floor(player_type* player_ptr)
     highscore_fd = -1;
     clear_saved_floor_files(player_ptr);
     signals_handle_tstp();
+}
+
+static void send_world_score_on_closing(player_type* player_ptr, bool do_send)
+{
+    if (send_world_score(player_ptr, do_send, update_playtime, display_player, map_name))
+        return;
+
+    if (!get_check_strict(_("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "),
+            (CHECK_NO_ESCAPE | CHECK_NO_HISTORY)))
+        return;
+
+    player_ptr->wait_report_score = TRUE;
+    player_ptr->is_dead = FALSE;
+    if (!save_player(player_ptr))
+        msg_print(_("セーブ失敗！", "death save failed!"));
 }
 
 /*!
@@ -74,16 +89,7 @@ void close_game(player_type* player_ptr)
     Term_clear();
 
     if (check_score(player_ptr)) {
-        if ((!send_world_score(player_ptr, do_send, update_playtime, display_player, map_name))) {
-            if (get_check_strict(_("後でスコアを登録するために待機しますか？", "Stand by for later score registration? "),
-                    (CHECK_NO_ESCAPE | CHECK_NO_HISTORY))) {
-                player_ptr->wait_report_score = TRUE;
-                player_ptr->is_dead = FALSE;
-                if (!save_player(player_ptr))
-                    msg_print(_("セーブ失敗！", "death save failed!"));
-            }
-        }
-
+        send_world_score_on_closing(player_ptr, do_send);
         if (!player_ptr->wait_report_score)
             (void)top_twenty(player_ptr);
     } else if (highscore_fd >= 0) {
