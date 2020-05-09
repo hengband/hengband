@@ -201,6 +201,7 @@
     <ClCompile Include="..\..\src\effect\effect-player-switcher.c" />
     <ClCompile Include="..\..\src\effect\effect-player.c" />
     <ClCompile Include="..\..\src\effect\spells-effect-util.c" />
+    <ClCompile Include="..\..\src\floor\pattern-walk.c" />
     <ClCompile Include="..\..\src\io\dump-remover.c" />
     <ClCompile Include="..\..\src\io\mutations-dump.c" />
     <ClCompile Include="..\..\src\knowledge\knowledge-autopick.c" />
@@ -395,6 +396,7 @@
     <ClInclude Include="..\..\src\effect\effect-player-util.h" />
     <ClInclude Include="..\..\src\effect\effect-player.h" />
     <ClInclude Include="..\..\src\effect\spells-effect-util.h" />
+    <ClInclude Include="..\..\src\floor\pattern-walk.h" />
     <ClInclude Include="..\..\src\io\dump-remover.h" />
     <ClInclude Include="..\..\src\io\mutations-dump.h" />
     <ClInclude Include="..\..\src\knowledge\knowledge-autopick.h" />

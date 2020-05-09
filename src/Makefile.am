@@ -93,6 +93,7 @@ hengband_SOURCES = \
 	floor-generate.c floor-generate.h \
 	floor-save.h floor-save.c floor-town.h floor-town.c \
 	floor-streams.c floor-streams.h \
+	floor/pattern-walk.c floor/pattern-walk.h \
 	\
 	feature.c feature.h \
 	geometry.c geometry.h \
@@ -262,8 +263,8 @@ CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-	-Iautopick -Ibirth -Icmd -Icombat -Icore -Ieffect -Iio -Iknowledge -Imarket \
-	-Imonster -Iobject -Iplayer -Irealm -Iroom -Ispell -Iview
+	-Iautopick -Ibirth -Icmd -Icombat -Icore -Ieffect -Ifloor -Iio -Iknowledge \
+	-Imarket -Imonster -Iobject -Iplayer -Irealm -Iroom -Ispell -Iview
 
 install-exec-hook:
 if SET_GID
