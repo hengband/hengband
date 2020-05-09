@@ -12,6 +12,14 @@
 #include "player/process-death.h"
 #include "cmd/cmd-save.h"
 
+static void clear_floor(player_type* player_ptr)
+{
+    (void)fd_close(highscore_fd);
+    highscore_fd = -1;
+    clear_saved_floor_files(player_ptr);
+    signals_handle_tstp();
+}
+
 /*!
  * @brief ゲーム終了処理 /
  * Close up the current game (player may or may not be dead)
@@ -78,8 +86,5 @@ void close_game(player_type* player_ptr)
             predict_score(player_ptr);
     }
 
-    (void)fd_close(highscore_fd);
-    highscore_fd = -1;
-    clear_saved_floor_files(player_ptr);
-    signals_handle_tstp();
+    clear_floor(player_ptr);
 }
