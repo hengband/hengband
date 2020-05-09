@@ -793,6 +793,9 @@
     <ClCompile Include="..\..\src\object\lite-processor.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\magic-effects-timeout-reducer.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1612,6 +1615,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object\lite-processor.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\magic-effects-timeout-reducer.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

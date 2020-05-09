@@ -90,6 +90,7 @@ hengband_SOURCES = \
 	core/turn-compensator.c core/turn-compensator.h \
 	core/hp-mp-generator.c core/hp-mp-generator.h \
 	core/hp-mp-processor.c core/hp-mp-processor.h \
+	core/magic-effects-timeout-reducer.c core/magic-effects-timeout-reducer.h \
 	\
 	dungeon.c dungeon.h \
 	floor.c floor.h floor-events.c floor-events.h \

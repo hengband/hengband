@@ -180,6 +180,7 @@
     <ClCompile Include="..\..\src\core\game-closer.c" />
     <ClCompile Include="..\..\src\core\hp-mp-processor.c" />
     <ClCompile Include="..\..\src\core\hp-mp-regenerator.c" />
+    <ClCompile Include="..\..\src\core\magic-effects-timeout-reducer.c" />
     <ClCompile Include="..\..\src\core\output-updater.c" />
     <ClCompile Include="..\..\src\core\stuff-handler.c" />
     <ClCompile Include="..\..\src\core\turn-compensator.c" />
@@ -377,6 +378,7 @@
     <ClInclude Include="..\..\src\core\game-closer.h" />
     <ClInclude Include="..\..\src\core\hp-mp-processor.h" />
     <ClInclude Include="..\..\src\core\hp-mp-regenerator.h" />
+    <ClInclude Include="..\..\src\core\magic-effects-timeout-reducer.h" />
     <ClInclude Include="..\..\src\core\output-updater.h" />
     <ClInclude Include="..\..\src\core\special-internal-keys.h" />
     <ClInclude Include="..\..\src\core\stuff-handler.h" />
