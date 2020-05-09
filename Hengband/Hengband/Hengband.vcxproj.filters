@@ -781,6 +781,9 @@
     <ClCompile Include="..\..\src\inventory\simple-appraiser.c">
       <Filter>inventory</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\hp-mp-regenerator.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1588,6 +1591,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\inventory\simple-appraiser.h">
       <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\hp-mp-regenerator.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

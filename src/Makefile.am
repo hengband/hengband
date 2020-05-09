@@ -88,6 +88,7 @@ hengband_SOURCES = \
 	core/output-updater.c core/output-updater.h \
 	core/game-closer.c core/game-closer.h \
 	core/turn-compensator.c core/turn-compensator.h \
+	core/hp-mp-generator.c core/hp-mp-generator.h \
 	\
 	dungeon.c dungeon.h \
 	floor.c floor.h floor-events.c floor-events.h \
