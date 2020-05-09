@@ -178,6 +178,7 @@
     <ClCompile Include="..\..\src\cmd\cmd-process-screen.c" />
     <ClCompile Include="..\..\src\cmd\dump-util.c" />
     <ClCompile Include="..\..\src\core\game-closer.c" />
+    <ClCompile Include="..\..\src\core\hp-mp-processor.c" />
     <ClCompile Include="..\..\src\core\hp-mp-regenerator.c" />
     <ClCompile Include="..\..\src\core\output-updater.c" />
     <ClCompile Include="..\..\src\core\stuff-handler.c" />
@@ -372,6 +373,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-process-screen.h" />
     <ClInclude Include="..\..\src\cmd\dump-util.h" />
     <ClInclude Include="..\..\src\core\game-closer.h" />
+    <ClInclude Include="..\..\src\core\hp-mp-processor.h" />
     <ClInclude Include="..\..\src\core\hp-mp-regenerator.h" />
     <ClInclude Include="..\..\src\core\output-updater.h" />
     <ClInclude Include="..\..\src\core\special-internal-keys.h" />

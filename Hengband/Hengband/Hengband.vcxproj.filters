@@ -784,6 +784,9 @@
     <ClCompile Include="..\..\src\core\hp-mp-regenerator.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\hp-mp-processor.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1593,6 +1596,9 @@
       <Filter>inventory</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\hp-mp-regenerator.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\hp-mp-processor.h">
       <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
