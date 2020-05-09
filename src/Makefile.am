@@ -86,6 +86,7 @@ hengband_SOURCES = \
 	core/stuff-handler.c core/stuff-handler.h \
 	core/angband-version.h core/special-internal-keys.h \
 	core/output-updater.c core/output-updater.h \
+	core/game-closer.c core/game-closer.h \
 	\
 	dungeon.c dungeon.h \
 	floor.c floor.h floor-events.c floor-events.h \

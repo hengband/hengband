@@ -7,6 +7,7 @@
 
 #include "io/signal-handlers.h"
 #include "core.h"
+#include "core/game-closer.h"
 #include "save.h"
 #include "world.h"
 #include "gameterm.h"

@@ -769,6 +769,9 @@
     <ClCompile Include="..\..\src\core\output-updater.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\game-closer.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1563,6 +1566,9 @@
       <Filter>birth</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\output-updater.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\game-closer.h">
       <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
