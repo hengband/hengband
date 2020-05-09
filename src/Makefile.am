@@ -87,6 +87,7 @@ hengband_SOURCES = \
 	core/angband-version.h core/special-internal-keys.h \
 	core/output-updater.c core/output-updater.h \
 	core/game-closer.c core/game-closer.h \
+	core/turn-compensator.c core/turn-compensator.h \
 	\
 	dungeon.c dungeon.h \
 	floor.c floor.h floor-events.c floor-events.h \

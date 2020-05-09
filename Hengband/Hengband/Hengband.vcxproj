@@ -180,6 +180,7 @@
     <ClCompile Include="..\..\src\core\game-closer.c" />
     <ClCompile Include="..\..\src\core\output-updater.c" />
     <ClCompile Include="..\..\src\core\stuff-handler.c" />
+    <ClCompile Include="..\..\src\core\turn-compensator.c" />
     <ClCompile Include="..\..\src\effect\effect-feature.c" />
     <ClCompile Include="..\..\src\effect\effect-item.c" />
     <ClCompile Include="..\..\src\effect\effect-monster-charm.c" />
@@ -373,6 +374,7 @@
     <ClInclude Include="..\..\src\core\special-internal-keys.h" />
     <ClInclude Include="..\..\src\core\stuff-handler.h" />
     <ClInclude Include="..\..\src\core\angband-version.h" />
+    <ClInclude Include="..\..\src\core\turn-compensator.h" />
     <ClInclude Include="..\..\src\effect\effect-characteristics.h" />
     <ClInclude Include="..\..\src\effect\effect-feature.h" />
     <ClInclude Include="..\..\src\effect\effect-item.h" />
