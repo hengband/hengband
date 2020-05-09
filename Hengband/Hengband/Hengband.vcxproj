@@ -177,6 +177,7 @@
     <ClCompile Include="..\..\src\cmd\cmd-knowledge.c" />
     <ClCompile Include="..\..\src\cmd\cmd-process-screen.c" />
     <ClCompile Include="..\..\src\cmd\dump-util.c" />
+    <ClCompile Include="..\..\src\core\output-updater.c" />
     <ClCompile Include="..\..\src\core\stuff-handler.c" />
     <ClCompile Include="..\..\src\effect\effect-feature.c" />
     <ClCompile Include="..\..\src\effect\effect-item.c" />
@@ -365,6 +366,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-knowledge.h" />
     <ClInclude Include="..\..\src\cmd\cmd-process-screen.h" />
     <ClInclude Include="..\..\src\cmd\dump-util.h" />
+    <ClInclude Include="..\..\src\core\output-updater.h" />
     <ClInclude Include="..\..\src\core\special-internal-keys.h" />
     <ClInclude Include="..\..\src\core\stuff-handler.h" />
     <ClInclude Include="..\..\src\core\angband-version.h" />

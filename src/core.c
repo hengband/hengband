@@ -120,6 +120,7 @@
 #include "spell/spells-execution.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
+#include "core/output-updater.h"
 
  /*!
   * コピーライト情報 /
@@ -4739,11 +4740,4 @@ void close_game(player_type *player_ptr)
 	highscore_fd = -1;
 	clear_saved_floor_files(player_ptr);
 	signals_handle_tstp();
-}
-
-
-void update_output(player_type *player_ptr)
-{
-	if (player_ptr->redraw) redraw_stuff(player_ptr);
-	if (player_ptr->window) window_stuff(player_ptr);
 }
