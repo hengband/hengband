@@ -31,6 +31,68 @@ static bool is_specific_curse(BIT_FLAGS flag)
         (flag == TRC_SLOW_REGEN);
 }
 
+static void choise_cursed_item(BIT_FLAGS flag, object_type *o_ptr, int *choices, int *number, int item_num)
+{
+    if (!is_specific_curse(flag))
+        return;
+
+    u32b cf = 0L;
+    BIT_FLAGS flgs[TR_FLAG_SIZE];
+    object_flags(o_ptr, flgs);
+    switch (flag) {
+    case TRC_ADD_L_CURSE:
+        cf = TR_ADD_L_CURSE;
+        break;
+    case TRC_ADD_H_CURSE:
+        cf = TR_ADD_H_CURSE;
+        break;
+    case TRC_DRAIN_HP:
+        cf = TR_DRAIN_HP;
+        break;
+    case TRC_DRAIN_MANA:
+        cf = TR_DRAIN_MANA;
+        break;
+    case TRC_CALL_ANIMAL:
+        cf = TR_CALL_ANIMAL;
+        break;
+    case TRC_CALL_DEMON:
+        cf = TR_CALL_DEMON;
+        break;
+    case TRC_CALL_DRAGON:
+        cf = TR_CALL_DRAGON;
+        break;
+    case TRC_CALL_UNDEAD:
+        cf = TR_CALL_UNDEAD;
+        break;
+    case TRC_COWARDICE:
+        cf = TR_COWARDICE;
+        break;
+    case TRC_LOW_MELEE:
+        cf = TR_LOW_MELEE;
+        break;
+    case TRC_LOW_AC:
+        cf = TR_LOW_AC;
+        break;
+    case TRC_LOW_MAGIC:
+        cf = TR_LOW_MAGIC;
+        break;
+    case TRC_FAST_DIGEST:
+        cf = TR_FAST_DIGEST;
+        break;
+    case TRC_SLOW_REGEN:
+        cf = TR_SLOW_REGEN;
+        break;
+    default:
+        break;
+    }
+
+    if (!have_flag(flgs, cf))
+        return;
+
+    choices[*number] = item_num;
+    (*number)++;
+}
+
 /*!
  * @brief 現在呪いを保持している装備品を一つランダムに探し出す / Choose one of items that have cursed flag
  * @param flag 探し出したい呪いフラグ配列
@@ -52,62 +114,7 @@ object_type *choose_cursed_obj_name(player_type* player_ptr, BIT_FLAGS flag)
             continue;
         } 
         
-        if (is_specific_curse(flag)) {
-            u32b cf = 0L;
-            BIT_FLAGS flgs[TR_FLAG_SIZE];
-            object_flags(o_ptr, flgs);
-            switch (flag) {
-            case TRC_ADD_L_CURSE:
-                cf = TR_ADD_L_CURSE;
-                break;
-            case TRC_ADD_H_CURSE:
-                cf = TR_ADD_H_CURSE;
-                break;
-            case TRC_DRAIN_HP:
-                cf = TR_DRAIN_HP;
-                break;
-            case TRC_DRAIN_MANA:
-                cf = TR_DRAIN_MANA;
-                break;
-            case TRC_CALL_ANIMAL:
-                cf = TR_CALL_ANIMAL;
-                break;
-            case TRC_CALL_DEMON:
-                cf = TR_CALL_DEMON;
-                break;
-            case TRC_CALL_DRAGON:
-                cf = TR_CALL_DRAGON;
-                break;
-            case TRC_CALL_UNDEAD:
-                cf = TR_CALL_UNDEAD;
-                break;
-            case TRC_COWARDICE:
-                cf = TR_COWARDICE;
-                break;
-            case TRC_LOW_MELEE:
-                cf = TR_LOW_MELEE;
-                break;
-            case TRC_LOW_AC:
-                cf = TR_LOW_AC;
-                break;
-            case TRC_LOW_MAGIC:
-                cf = TR_LOW_MAGIC;
-                break;
-            case TRC_FAST_DIGEST:
-                cf = TR_FAST_DIGEST;
-                break;
-            case TRC_SLOW_REGEN:
-                cf = TR_SLOW_REGEN;
-                break;
-            default:
-                break;
-            }
-
-            if (have_flag(flgs, cf)) {
-                choices[number] = i;
-                number++;
-            }
-        }
+        choise_cursed_item(flag, o_ptr, choices, &number, i);
     }
 
     return &player_ptr->inventory_list[choices[randint0(number)]];
