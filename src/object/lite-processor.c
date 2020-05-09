@@ -10,7 +10,7 @@
  * / Handle burning fuel every 10 game turns
  * @return なし
  */
-void process_world_aux_light(player_type* creature_ptr)
+void reduce_lite_life(player_type* creature_ptr)
 {
     object_type* o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
     if (o_ptr->tval == TV_LITE) {
