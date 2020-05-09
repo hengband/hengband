@@ -6,7 +6,7 @@
 #include "object-broken.h"
 #include "artifact.h"
 #include "player-effects.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 #include "monster-spell.h"
 #include "spells-status.h"
 #include "spell/spells3.h"

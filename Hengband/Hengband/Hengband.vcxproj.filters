@@ -72,9 +72,6 @@
     <ClCompile Include="..\..\src\object-hook.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\patron.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -787,6 +784,9 @@
     <ClCompile Include="..\..\src\core\hp-mp-processor.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mutation\mutation.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -856,9 +856,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-hook.h">
       <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mutation.h">
-      <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\patron.h">
       <Filter>player</Filter>
@@ -1601,6 +1598,9 @@
     <ClInclude Include="..\..\src\core\hp-mp-processor.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1669,6 +1669,9 @@
     </Filter>
     <Filter Include="inventory">
       <UniqueIdentifier>{060db85f-39b1-48fd-8b5f-7409eb6209b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mutation">
+      <UniqueIdentifier>{0e652835-2887-4970-9fa2-4ba77974e921}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

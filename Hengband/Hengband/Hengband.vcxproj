@@ -436,7 +436,7 @@
     <ClCompile Include="..\..\src\mspells2.c" />
     <ClCompile Include="..\..\src\mspells3.c" />
     <ClCompile Include="..\..\src\mspells4.c" />
-    <ClCompile Include="..\..\src\mutation.c" />
+    <ClCompile Include="..\..\src\mutation\mutation.c" />
     <ClCompile Include="..\..\src\object1.c" />
     <ClCompile Include="..\..\src\object2.c" />
     <ClCompile Include="..\..\src\racial.c" />
@@ -625,7 +625,7 @@
     <ClInclude Include="..\..\src\monster.h" />
     <ClInclude Include="..\..\src\monsterrace-hook.h" />
     <ClInclude Include="..\..\src\monsterrace.h" />
-    <ClInclude Include="..\..\src\mutation.h" />
+    <ClInclude Include="..\..\src\mutation\mutation.h" />
     <ClInclude Include="..\..\src\object-boost.h" />
     <ClInclude Include="..\..\src\object-curse.h" />
     <ClInclude Include="..\..\src\object-ego.h" />

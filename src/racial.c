@@ -22,7 +22,7 @@
 #include "melee.h"
 #include "object-hook.h"
 
-#include "mutation.h"
+#include "mutation/mutation.h"
 #include "player-race.h"
 #include "player-effects.h"
 #include "player-status.h"

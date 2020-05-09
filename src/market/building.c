@@ -41,7 +41,7 @@
 #include "avatar.h"
 #include "market/building.h"
 #include "dungeon.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 #include "quest.h"
 #include "artifact.h"
 #include "cmd-spell.h"

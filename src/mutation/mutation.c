@@ -18,7 +18,7 @@
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 
 #include "selfinfo.h"
 #include "spells-summon.h"

@@ -25,7 +25,7 @@
 #include "birth/birth.h"
 #include "selfinfo.h"
 #include "patron.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 #include "quest.h"
 #include "artifact.h"
 #include "player-status.h"

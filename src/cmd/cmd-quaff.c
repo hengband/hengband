@@ -13,7 +13,7 @@
 #include "birth/birth.h"
 #include "selfinfo.h"
 #include "object-hook.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 #include "avatar.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"

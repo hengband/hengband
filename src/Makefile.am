@@ -128,7 +128,7 @@ hengband_SOURCES = \
 	monster-status.c monster-status.h monster1.c monster2.c \
 	mspells1.c mspells2.c mspells3.c mspells4.c monster-spell.h \
 	\
-	mutation.h mutation.c \
+	mutation/mutation.c mutation/mutation.h \
 	\
 	object-boost.c object-boost.h \
 	object-curse.c object-curse.h object-broken.c object-broken.h \

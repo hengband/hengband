@@ -71,7 +71,7 @@
 #include "monster-spell.h"
 #include "mind.h"
 #include "world.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 #include "market/arena-info-table.h"
 #include "market/store-util.h"
 #include "quest.h"

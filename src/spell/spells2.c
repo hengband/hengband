@@ -32,7 +32,7 @@
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "spells-summon.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 #include "quest.h"
 #include "avatar.h"
 

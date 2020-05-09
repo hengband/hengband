@@ -25,7 +25,7 @@
 #include "market/building.h"
 #include "birth/birth.h"
 #include "grid.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 #include "quest.h"
 #include "avatar.h"
 #include "spells-status.h"

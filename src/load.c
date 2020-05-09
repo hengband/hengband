@@ -53,7 +53,7 @@
 #include "feature.h"
 #include "floor-generate.h"
 #include "trap.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 #include "monster.h"
 #include "market/store-util.h"
 #include "quest.h"
