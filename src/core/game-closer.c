@@ -35,6 +35,21 @@ static void send_world_score_on_closing(player_type* player_ptr, bool do_send)
         msg_print(_("セーブ失敗！", "death save failed!"));
 }
 
+static bool check_death(player_type* player_ptr)
+{
+    if (player_ptr->is_dead)
+        return TRUE;
+
+    do_cmd_save_game(player_ptr, FALSE);
+    prt(_("リターンキーか ESC キーを押して下さい。", "Press Return (or Escape)."), 0, 40);
+    play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_EXIT);
+    if (inkey() != ESCAPE)
+        predict_score(player_ptr);
+
+    clear_floor(player_ptr);
+    return FALSE;
+}
+
 /*!
  * @brief ゲーム終了処理 /
  * Close up the current game (player may or may not be dead)
@@ -47,31 +62,21 @@ static void send_world_score_on_closing(player_type* player_ptr, bool do_send)
  */
 void close_game(player_type* player_ptr)
 {
-    char buf[1024];
     bool do_send = TRUE;
     handle_stuff(player_ptr);
-
     msg_print(NULL);
     flush();
-
     signals_ignore_tstp();
 
     current_world_ptr->character_icky = TRUE;
+    char buf[1024];
     path_build(buf, sizeof(buf), ANGBAND_DIR_APEX, "scores.raw");
     safe_setuid_grab();
     highscore_fd = fd_open(buf, O_RDWR);
     safe_setuid_drop();
 
-    if (!player_ptr->is_dead) {
-        do_cmd_save_game(player_ptr, FALSE);
-        prt(_("リターンキーか ESC キーを押して下さい。", "Press Return (or Escape)."), 0, 40);
-        play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_EXIT);
-        if (inkey() != ESCAPE)
-            predict_score(player_ptr);
-
-        clear_floor(player_ptr);
+    if (!check_death(player_ptr))
         return;
-    }
 
     if (current_world_ptr->total_winner)
         kingly(player_ptr);
@@ -84,10 +89,8 @@ void close_game(player_type* player_ptr)
 
     print_tomb(player_ptr);
     flush();
-
     show_info(player_ptr, handle_stuff, update_playtime, display_player, map_name);
     Term_clear();
-
     if (check_score(player_ptr)) {
         send_world_score_on_closing(player_ptr, do_send);
         if (!player_ptr->wait_report_score)
