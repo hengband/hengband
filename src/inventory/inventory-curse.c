@@ -13,13 +13,31 @@
 #include "player-effects.h"
 #include "object/object-kind.h"
 
+static bool is_specific_curse(BIT_FLAGS flag)
+{
+    return (flag == TRC_ADD_L_CURSE) ||
+        (flag == TRC_ADD_H_CURSE) ||
+        (flag == TRC_DRAIN_HP) ||
+        (flag == TRC_DRAIN_MANA) ||
+        (flag == TRC_CALL_ANIMAL) ||
+        (flag == TRC_CALL_DEMON) ||
+        (flag == TRC_CALL_DRAGON) ||
+        (flag == TRC_CALL_UNDEAD) ||
+        (flag == TRC_COWARDICE) ||
+        (flag == TRC_LOW_MELEE) ||
+        (flag == TRC_LOW_AC) ||
+        (flag == TRC_LOW_MAGIC) ||
+        (flag == TRC_FAST_DIGEST) ||
+        (flag == TRC_SLOW_REGEN);
+}
+
 /*!
  * @brief 現在呪いを保持している装備品を一つランダムに探し出す / Choose one of items that have cursed flag
  * @param flag 探し出したい呪いフラグ配列
  * @return 該当の呪いが一つでもあった場合にランダムに選ばれた装備品のオブジェクト構造体参照ポインタを返す。\n
  * 呪いがない場合NULLを返す。
  */
-object_type* choose_cursed_obj_name(player_type* player_ptr, BIT_FLAGS flag)
+object_type *choose_cursed_obj_name(player_type* player_ptr, BIT_FLAGS flag)
 {
     int choices[INVEN_TOTAL - INVEN_RARM];
     int number = 0;
@@ -31,13 +49,10 @@ object_type* choose_cursed_obj_name(player_type* player_ptr, BIT_FLAGS flag)
         if (o_ptr->curse_flags & flag) {
             choices[number] = i;
             number++;
-        } else if ((flag == TRC_ADD_L_CURSE) || (flag == TRC_ADD_H_CURSE) ||
-            (flag == TRC_DRAIN_HP) || (flag == TRC_DRAIN_MANA) ||
-            (flag == TRC_CALL_ANIMAL) || (flag == TRC_CALL_DEMON) ||
-            (flag == TRC_CALL_DRAGON) || (flag == TRC_CALL_UNDEAD) ||
-            (flag == TRC_COWARDICE) || (flag == TRC_LOW_MELEE) ||
-            (flag == TRC_LOW_AC) || (flag == TRC_LOW_MAGIC) ||
-            (flag == TRC_FAST_DIGEST) || (flag == TRC_SLOW_REGEN)) {
+            continue;
+        } 
+        
+        if (is_specific_curse(flag)) {
             u32b cf = 0L;
             BIT_FLAGS flgs[TR_FLAG_SIZE];
             object_flags(o_ptr, flgs);
