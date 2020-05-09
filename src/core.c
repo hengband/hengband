@@ -1018,7 +1018,7 @@ static void process_world(player_type *player_ptr)
 
 	process_world_aux_digestion(player_ptr);
 	process_player_hp_mp(player_ptr);
-	process_world_aux_timeout(player_ptr);
+	reduce_magic_effects_timeout(player_ptr);
 	reduce_lite_life(player_ptr);
 	process_world_aux_mutation(player_ptr);
 	process_world_aux_curse(player_ptr);

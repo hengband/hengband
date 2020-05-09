@@ -7,7 +7,7 @@
  * / Handle timeout every 10 game turns
  * @return なし
  */
-void process_world_aux_timeout(player_type* creature_ptr)
+void reduce_magic_effects_timeout(player_type* creature_ptr)
 {
     const int dec_count = (easy_band ? 2 : 1);
     if (creature_ptr->tim_mimic) {
