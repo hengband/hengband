@@ -1,4 +1,4 @@
-#include "angband.h"
+ï»¿#include "angband.h"
 #include "inventory/simple-appraiser.h"
 #include "object-flavor.h"
 #include "avatar.h"
@@ -9,11 +9,11 @@
 #include "autopick/autopick.h"
 
 /*!
- * @brief ‹[—ŠÓ’è‚ğÀÛ‚És‚¢”»’è‚ğ”½‰f‚·‚é
- * @param slot ‹[—ŠÓ’è‚ğs‚¤ƒvƒŒƒCƒ„[‚ÌŠƒŠƒXƒgID
- * @param creature_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param heavy d“x‚Ì‹[—ŠÓ’è‚ğs‚¤‚È‚ç‚ÎTRUE
- * @return ‚È‚µ
+ * @brief æ“¬ä¼¼é‘‘å®šã‚’å®Ÿéš›ã«è¡Œã„åˆ¤å®šã‚’åæ˜ ã™ã‚‹
+ * @param slot æ“¬ä¼¼é‘‘å®šã‚’è¡Œã†ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã®æ‰€æŒãƒªã‚¹ãƒˆID
+ * @param creature_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param heavy é‡åº¦ã®æ“¬ä¼¼é‘‘å®šã‚’è¡Œã†ãªã‚‰ã°TRUE
+ * @return ãªã—
  */
 static void sense_inventory_aux(player_type* creature_ptr, INVENTORY_IDX slot, bool heavy)
 {
@@ -74,7 +74,7 @@ static void sense_inventory_aux(player_type* creature_ptr, INVENTORY_IDX slot, b
     object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (slot >= INVEN_RARM) {
 #ifdef JP
-        msg_format("%s%s(%c)‚Í%s‚Æ‚¢‚¤Š´‚¶‚ª‚·‚é...",
+        msg_format("%s%s(%c)ã¯%sã¨ã„ã†æ„Ÿã˜ãŒã™ã‚‹...",
             describe_use(creature_ptr, slot), o_name, index_to_label(slot), game_inscriptions[feel]);
 #else
         msg_format("You feel the %s (%c) you are %s %s %s...",
@@ -85,7 +85,7 @@ static void sense_inventory_aux(player_type* creature_ptr, INVENTORY_IDX slot, b
 
     } else {
 #ifdef JP
-        msg_format("ƒUƒbƒN‚Ì’†‚Ì%s(%c)‚Í%s‚Æ‚¢‚¤Š´‚¶‚ª‚·‚é...",
+        msg_format("ã‚¶ãƒƒã‚¯ã®ä¸­ã®%s(%c)ã¯%sã¨ã„ã†æ„Ÿã˜ãŒã™ã‚‹...",
             o_name, index_to_label(slot), game_inscriptions[feel]);
 #else
         msg_format("You feel the %s (%c) in your pack %s %s...",
@@ -104,8 +104,8 @@ static void sense_inventory_aux(player_type* creature_ptr, INVENTORY_IDX slot, b
 }
 
 /*!
- * @brief 1ƒvƒŒƒCƒ„[ƒ^[ƒ“–ˆ‚É•ŠíA–h‹ï‚Ì‹[—ŠÓ’è‚ªs‚í‚ê‚é‚©‚ğ”»’è‚·‚éB
- * @return ‚È‚µ
+ * @brief 1ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¿ãƒ¼ãƒ³æ¯ã«æ­¦å™¨ã€é˜²å…·ã®æ“¬ä¼¼é‘‘å®šãŒè¡Œã‚ã‚Œã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚
+ * @return ãªã—
  * @details
  * Sense the inventory\n
  *\n
@@ -279,8 +279,8 @@ void sense_inventory1(player_type* creature_ptr)
 }
 
 /*!
- * @brief 1ƒvƒŒƒCƒ„[ƒ^[ƒ“–ˆ‚É•ŠíA–h‹ïˆÈŠO‚Ì‹[—ŠÓ’è‚ªs‚í‚ê‚é‚©‚ğ”»’è‚·‚éB
- * @return ‚È‚µ
+ * @brief 1ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã‚¿ãƒ¼ãƒ³æ¯ã«æ­¦å™¨ã€é˜²å…·ä»¥å¤–ã®æ“¬ä¼¼é‘‘å®šãŒè¡Œã‚ã‚Œã‚‹ã‹ã‚’åˆ¤å®šã™ã‚‹ã€‚
+ * @return ãªã—
  */
 void sense_inventory2(player_type* creature_ptr)
 {
