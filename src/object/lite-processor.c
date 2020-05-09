@@ -1,9 +1,9 @@
 ﻿#include "angband.h"
 #include "object/lite-processor.h"
 #include "object-ego.h"
-#include "world.h"
-#include "player-move.h"
 #include "object-hook.h"
+#include "player-move.h"
+#include "world.h"
 
 /*!
  * @brief 10ゲームターンが進行する毎に光源の寿命を減らす処理
@@ -13,17 +13,19 @@
 void reduce_lite_life(player_type* creature_ptr)
 {
     object_type* o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
-    if (o_ptr->tval == TV_LITE) {
-        if (!(object_is_fixed_artifact(o_ptr) || o_ptr->sval == SV_LITE_FEANOR) && (o_ptr->xtra4 > 0)) {
-            if (o_ptr->name2 == EGO_LITE_LONG) {
-                if (current_world_ptr->game_turn % (TURNS_PER_TICK * 2))
-                    o_ptr->xtra4--;
-            } else
-                o_ptr->xtra4--;
+    if (o_ptr->tval != TV_LITE)
+        return;
 
-            notice_lite_change(creature_ptr, o_ptr);
-        }
-    }
+    if (object_is_fixed_artifact(o_ptr) || (o_ptr->sval == SV_LITE_FEANOR) || (o_ptr->xtra4 <= 0))
+        return;
+
+    if (o_ptr->name2 == EGO_LITE_LONG) {
+        if (current_world_ptr->game_turn % (TURNS_PER_TICK * 2))
+            o_ptr->xtra4--;
+    } else
+        o_ptr->xtra4--;
+
+    notice_lite_change(creature_ptr, o_ptr);
 }
 
 /*!
