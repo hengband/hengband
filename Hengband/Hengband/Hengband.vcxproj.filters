@@ -796,6 +796,9 @@
     <ClCompile Include="..\..\src\core\magic-effects-timeout-reducer.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\inventory\inventory-curse.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1618,6 +1621,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\magic-effects-timeout-reducer.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\inventory-curse.h">
+      <Filter>inventory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

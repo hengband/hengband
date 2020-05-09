@@ -141,6 +141,7 @@ hengband_SOURCES = \
 	object-flavor.c object-flavor.h object-ego.c object-ego.h \
 	\
 	inventory/simple-appraiser.c inventory/simple-appraiser.h \
+	inventory/inventory-curse.c inventory/inventory-curse.h \
 	\
 	patron.h patron.c \
 	\
