@@ -15,7 +15,7 @@
  *  / Handle timed damage and regeneration every 10 game turns
  * @return なし
  */
-void process_world_aux_hp_and_sp(player_type* creature_ptr)
+void process_player_hp_mp(player_type* creature_ptr)
 {
     feature_type* f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
     bool cave_no_regen = FALSE;
