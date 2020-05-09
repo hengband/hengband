@@ -313,7 +313,7 @@
     <ClCompile Include="..\..\src\object\object-kind.c" />
     <ClCompile Include="..\..\src\object\object-kind-hook.c" />
     <ClCompile Include="..\..\src\object-broken.c" />
-    <ClCompile Include="..\..\src\object\warning-lite.c" />
+    <ClCompile Include="..\..\src\object\lite-processor.c" />
     <ClCompile Include="..\..\src\patron.c" />
     <ClCompile Include="..\..\src\player-class.c" />
     <ClCompile Include="..\..\src\player-damage.c" />
@@ -568,7 +568,7 @@
     <ClInclude Include="..\..\src\monster\quantum-effect.h" />
     <ClInclude Include="..\..\src\mutation\mutation-processor.h" />
     <ClInclude Include="..\..\src\object-flavor.h" />
-    <ClInclude Include="..\..\src\object\warning-lite.h" />
+    <ClInclude Include="..\..\src\object\lite-processor.h" />
     <ClInclude Include="..\..\src\player-inventory.h" />
     <ClInclude Include="..\..\src\player\mimic-info-table.h" />
     <ClInclude Include="..\..\src\player\permanent-resistances.h" />

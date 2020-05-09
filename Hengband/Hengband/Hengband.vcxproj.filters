@@ -790,7 +790,7 @@
     <ClCompile Include="..\..\src\mutation\mutation-processor.c">
       <Filter>mutation</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\warning-lite.c">
+    <ClCompile Include="..\..\src\object\lite-processor.c">
       <Filter>object</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1610,7 +1610,7 @@
     <ClInclude Include="..\..\src\mutation\mutation-processor.h">
       <Filter>mutation</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\warning-lite.h">
+    <ClInclude Include="..\..\src\object\lite-processor.h">
       <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
