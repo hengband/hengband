@@ -120,47 +120,57 @@ object_type *choose_cursed_obj_name(player_type* player_ptr, BIT_FLAGS flag)
     return &player_ptr->inventory_list[choices[randint0(number)]];
 }
 
+/*!
+ * @brief 呪われているかトランプエゴ等による装備品由来のテレポートを実行する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+static void curse_teleport(player_type* creature_ptr)
+{
+    if (((creature_ptr->cursed & TRC_TELEPORT_SELF) == 0) || !one_in_(200))
+        return;
+
+    GAME_TEXT o_name[MAX_NLEN];
+    object_type* o_ptr;
+    int i_keep = 0, count = 0;
+    for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
+        BIT_FLAGS flgs[TR_FLAG_SIZE];
+        o_ptr = &creature_ptr->inventory_list[i];
+        if (!o_ptr->k_idx)
+            continue;
+
+        object_flags(o_ptr, flgs);
+
+        if (!have_flag(flgs, TR_TELEPORT))
+            continue;
+
+        if (o_ptr->inscription && my_strchr(quark_str(o_ptr->inscription), '.'))
+            continue;
+
+        count++;
+        if (one_in_(count))
+            i_keep = i;
+    }
+
+    o_ptr = &creature_ptr->inventory_list[i_keep];
+    object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    msg_format(_("%sがテレポートの能力を発動させようとしている。", "Your %s is activating teleportation."), o_name);
+    if (get_check_strict(_("テレポートしますか？", "Teleport? "), CHECK_OKAY_CANCEL)) {
+        disturb(creature_ptr, FALSE, TRUE);
+        teleport_player(creature_ptr, 50, TELEPORT_SPONTANEOUS);
+    } else {
+        msg_format(_("%sに{.}(ピリオド)と銘を刻むと発動を抑制できます。",
+                       "You can inscribe {.} on your %s to disable random teleportation. "), o_name);
+        disturb(creature_ptr, TRUE, TRUE);
+    }
+}
+
 static void occur_curse_effect(player_type *creature_ptr)
 {
     if (((creature_ptr->cursed & TRC_P_FLAG_MASK) == 0) || creature_ptr->phase_out || creature_ptr->wild_mode)
         return;
 
-    if ((creature_ptr->cursed & TRC_TELEPORT_SELF) && one_in_(200)) {
-        GAME_TEXT o_name[MAX_NLEN];
-        object_type* o_ptr;
-        int i_keep = 0, count = 0;
-        for (int i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-            BIT_FLAGS flgs[TR_FLAG_SIZE];
-            o_ptr = &creature_ptr->inventory_list[i];
-            if (!o_ptr->k_idx)
-                continue;
-
-            object_flags(o_ptr, flgs);
-
-            if (have_flag(flgs, TR_TELEPORT)) {
-                /* {.} will stop random teleportation. */
-                if (!o_ptr->inscription || !my_strchr(quark_str(o_ptr->inscription), '.')) {
-                    count++;
-                    if (one_in_(count))
-                        i_keep = i;
-                }
-            }
-        }
-
-        o_ptr = &creature_ptr->inventory_list[i_keep];
-        object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        msg_format(_("%sがテレポートの能力を発動させようとしている。", "Your %s is activating teleportation."), o_name);
-        if (get_check_strict(_("テレポートしますか？", "Teleport? "), CHECK_OKAY_CANCEL)) {
-            disturb(creature_ptr, FALSE, TRUE);
-            teleport_player(creature_ptr, 50, TELEPORT_SPONTANEOUS);
-        } else {
-            msg_format(_("%sに{.}(ピリオド)と銘を刻むと発動を抑制できます。",
-                           "You can inscribe {.} on your %s to disable random teleportation. "),
-                o_name);
-            disturb(creature_ptr, TRUE, TRUE);
-        }
-    }
-
+    curse_teleport(creature_ptr);
     if ((creature_ptr->cursed & TRC_CHAINSWORD) && one_in_(CHAINSWORD_NOISE)) {
         char noise[1024];
         if (!get_rnd_line(_("chainswd_j.txt", "chainswd.txt"), 0, noise))
