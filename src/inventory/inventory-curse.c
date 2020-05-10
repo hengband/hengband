@@ -237,8 +237,9 @@ static void curse_call_monster(player_type *creature_ptr)
 {
     const int call_type = PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET;
     const int obj_desc_type = OD_OMIT_PREFIX | OD_NAME_ONLY;
+    floor_type* floor_ptr = creature_ptr->current_floor_ptr;
     if ((creature_ptr->cursed & TRC_CALL_ANIMAL) && one_in_(2500)) {
-        if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_ANIMAL, call_type)) {
+        if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, floor_ptr->dun_level, SUMMON_ANIMAL, call_type)) {
             GAME_TEXT o_name[MAX_NLEN];
             object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_ANIMAL), obj_desc_type);
             msg_format(_("%sが動物を引き寄せた！", "Your %s has attracted an animal!"), o_name);
@@ -247,7 +248,7 @@ static void curse_call_monster(player_type *creature_ptr)
     }
 
     if ((creature_ptr->cursed & TRC_CALL_DEMON) && one_in_(1111)) {
-        if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DEMON, call_type)) {
+        if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, floor_ptr->dun_level, SUMMON_DEMON, call_type)) {
             GAME_TEXT o_name[MAX_NLEN];
             object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DEMON), obj_desc_type);
             msg_format(_("%sが悪魔を引き寄せた！", "Your %s has attracted a demon!"), o_name);
@@ -256,7 +257,7 @@ static void curse_call_monster(player_type *creature_ptr)
     }
 
     if ((creature_ptr->cursed & TRC_CALL_DRAGON) && one_in_(800)) {
-        if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_DRAGON, call_type)) {
+        if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, floor_ptr->dun_level, SUMMON_DRAGON, call_type)) {
             GAME_TEXT o_name[MAX_NLEN];
             object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_DRAGON), obj_desc_type);
             msg_format(_("%sがドラゴンを引き寄せた！", "Your %s has attracted an dragon!"), o_name);
@@ -265,7 +266,7 @@ static void curse_call_monster(player_type *creature_ptr)
     }
 
     if ((creature_ptr->cursed & TRC_CALL_UNDEAD) && one_in_(1111)) {
-        if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_UNDEAD, call_type)) {
+        if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, floor_ptr->dun_level, SUMMON_UNDEAD, call_type)) {
             GAME_TEXT o_name[MAX_NLEN];
             object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_CALL_UNDEAD), obj_desc_type);
             msg_format(_("%sが死霊を引き寄せた！", "Your %s has attracted an undead!"), o_name);
