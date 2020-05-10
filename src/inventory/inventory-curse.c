@@ -179,6 +179,22 @@ static void occur_chainsword_effect(player_type* creature_ptr)
     disturb(creature_ptr, FALSE, FALSE);
 }
 
+static void curse_drain_exp(player_type *creature_ptr)
+{
+    if ((creature_ptr->prace == RACE_ANDROID) || ((creature_ptr->cursed & TRC_DRAIN_EXP) == 0) || !one_in_(4))
+        return;
+
+    creature_ptr->exp -= (creature_ptr->lev + 1) / 2;
+    if (creature_ptr->exp < 0)
+        creature_ptr->exp = 0;
+
+    creature_ptr->max_exp -= (creature_ptr->lev + 1) / 2;
+    if (creature_ptr->max_exp < 0)
+        creature_ptr->max_exp = 0;
+
+    check_experience(creature_ptr);
+}
+
 static void occur_curse_effects(player_type *creature_ptr)
 {
     if (((creature_ptr->cursed & TRC_P_FLAG_MASK) == 0) || creature_ptr->phase_out || creature_ptr->wild_mode)
@@ -191,16 +207,7 @@ static void occur_curse_effects(player_type *creature_ptr)
         (void)activate_ty_curse(creature_ptr, FALSE, &count);
     }
 
-    if ((creature_ptr->prace != RACE_ANDROID) && (creature_ptr->cursed & TRC_DRAIN_EXP) && one_in_(4)) {
-        creature_ptr->exp -= (creature_ptr->lev + 1) / 2;
-        if (creature_ptr->exp < 0)
-            creature_ptr->exp = 0;
-        creature_ptr->max_exp -= (creature_ptr->lev + 1) / 2;
-        if (creature_ptr->max_exp < 0)
-            creature_ptr->max_exp = 0;
-        check_experience(creature_ptr);
-    }
-
+    curse_drain_exp(creature_ptr);
     if ((creature_ptr->cursed & TRC_ADD_L_CURSE) && one_in_(2000)) {
         object_type* o_ptr;
         o_ptr = choose_cursed_obj_name(creature_ptr, TRC_ADD_L_CURSE);
