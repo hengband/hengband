@@ -805,6 +805,9 @@
     <ClCompile Include="..\..\src\io\input-key-processor.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\inventory\pack-overflow.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1642,6 +1645,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\input-key-processor.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\pack-overflow.h">
+      <Filter>inventory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -84,6 +84,7 @@
 #include "inventory/inventory-curse.h"
 #include "inventory/recharge-processor.h"
 #include "io/input-key-processor.h"
+#include "inventory/pack-overflow.h"
 
 #include "cmd/cmd-save.h"
 #include "cmd/cmd-dump.h"
@@ -601,32 +602,6 @@ static void process_world(player_type *player_ptr)
 
 
 /*!
- * @brief アイテムの所持種類数が超えた場合にアイテムを床に落とす処理 / Hack -- Pack Overflow
- * @return なし
- */
-static void pack_overflow(player_type *owner_ptr)
-{
-	if (owner_ptr->inventory_list[INVEN_PACK].k_idx == 0) return;
-
-	GAME_TEXT o_name[MAX_NLEN];
-	object_type *o_ptr;
-	update_creature(owner_ptr);
-	if (!owner_ptr->inventory_list[INVEN_PACK].k_idx) return;
-
-	o_ptr = &owner_ptr->inventory_list[INVEN_PACK];
-	disturb(owner_ptr, FALSE, TRUE);
-	msg_print(_("ザックからアイテムがあふれた！", "Your pack overflows!"));
-
-	object_desc(owner_ptr, o_name, o_ptr, 0);
-	msg_format(_("%s(%c)を落とした。", "You drop %s (%c)."), o_name, index_to_label(INVEN_PACK));
-	(void)drop_near(owner_ptr, o_ptr, 0, owner_ptr->y, owner_ptr->x);
-
-	vary_item(owner_ptr, INVEN_PACK, -255);
-	handle_stuff(owner_ptr);
-}
-
-
-/*!
  * @brief プレイヤーの行動エネルギーが充填される（＝プレイヤーのターンが回る）毎に行われる処理  / process the effects per 100 energy at player speed.
  * @return なし
  */
@@ -1054,6 +1029,8 @@ static void process_player(player_type *creature_ptr)
 
 
 /*!
+ * process_player()、process_world() をcore.c から移設するのが先.
+ * process_upkeep_with_speed() はこの関数と同じところでOK
  * @brief 現在プレイヤーがいるダンジョンの全体処理 / Interact with the current dungeon level.
  * @return なし
  * @details

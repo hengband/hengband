@@ -100,6 +100,7 @@ hengband_SOURCES = \
 	floor-save.h floor-save.c floor-town.h floor-town.c \
 	floor-streams.c floor-streams.h \
 	floor/pattern-walk.c floor/pattern-walk.h \
+	floor/dungeon-processor.c floor/dungeon-processor.h \
 	\
 	feature.c feature.h \
 	geometry.c geometry.h \
@@ -145,6 +146,7 @@ hengband_SOURCES = \
 	inventory/simple-appraiser.c inventory/simple-appraiser.h \
 	inventory/inventory-curse.c inventory/inventory-curse.h \
 	inventory/recharge-processor.c inventory/recharge-processor.h \
+	inventory/pack-overflow.c inventory/pack-overflow.h \
 	\
 	patron.h patron.c \
 	\
