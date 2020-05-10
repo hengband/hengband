@@ -229,12 +229,6 @@
     <ClCompile Include="..\..\src\z-rand.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wizard2.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\wizard1.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\report.c">
       <Filter>io</Filter>
     </ClCompile>
@@ -801,6 +795,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\inventory\recharge-processor.c">
       <Filter>inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\wizard-spoiler.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\wizard-special-process.c">
+      <Filter>wizard</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1631,6 +1631,12 @@
     <ClInclude Include="..\..\src\inventory\recharge-processor.h">
       <Filter>inventory</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\wizard\wizard-spoiler.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\wizard-special-process.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1702,6 +1708,9 @@
     </Filter>
     <Filter Include="mutation">
       <UniqueIdentifier>{0e652835-2887-4970-9fa2-4ba77974e921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="wizard">
+      <UniqueIdentifier>{22328846-3669-435a-9731-f0998a1c3dfa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

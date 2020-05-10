@@ -115,6 +115,8 @@
 #include "core/magic-effects-timeout-reducer.h"
 #include "inventory/inventory-curse.h"
 #include "inventory/recharge-processor.h"
+#include "wizard/wizard-spoiler.h"
+#include "wizard/wizard-special-process.h"
 
  /*!
   * コピーライト情報 /
@@ -691,12 +693,6 @@ static bool enter_debug_mode(player_type *player_ptr)
 
 	return TRUE;
 }
-
-/*
- * todo これが多重インクルード問題の原因 (の1つ)かもしれない、wizard2.cに同名の関数が存在する
- * Hack -- Declare the Debug Routines
- */
-extern void do_cmd_debug(player_type *creature_ptr);
 
 /*!
  * @brief プレイヤーから受けた入力コマンドの分岐処理。

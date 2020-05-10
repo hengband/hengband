@@ -11,6 +11,8 @@
  */
 
 #include "angband.h"
+#include "wizard/wizard-special-process.h"
+#include "wizard/wizard-spoiler.h"
 #include "core/angband-version.h"
 #include "core/stuff-handler.h"
 #include "gameterm.h"
@@ -61,8 +63,6 @@
 
 #define NUM_O_SET 8
 #define NUM_O_BIT 32
-
-extern void do_cmd_debug(player_type *creature_ptr);
 
 typedef union spell_functions {
 	struct debug_spell_type1 { bool(*spell_function)(player_type *, floor_type *); } spell1;

@@ -11,6 +11,7 @@
  */
 
 #include "angband.h"
+#include "wizard/wizard-spoiler.h"
 #include "util.h"
 #include "gameterm.h"
 

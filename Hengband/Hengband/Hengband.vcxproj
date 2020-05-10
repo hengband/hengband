@@ -500,8 +500,8 @@
     <ClCompile Include="..\..\src\view\display-main-window.c" />
     <ClCompile Include="..\..\src\warning.c" />
     <ClCompile Include="..\..\src\wild.c" />
-    <ClCompile Include="..\..\src\wizard1.c" />
-    <ClCompile Include="..\..\src\wizard2.c" />
+    <ClCompile Include="..\..\src\wizard\wizard-spoiler.c" />
+    <ClCompile Include="..\..\src\wizard\wizard-special-process.c" />
     <ClCompile Include="..\..\src\world.c" />
     <ClCompile Include="..\..\src\z-form.c" />
     <ClCompile Include="..\..\src\z-rand.c" />
@@ -601,6 +601,8 @@
     <ClInclude Include="..\..\src\player\process-death.h" />
     <ClInclude Include="..\..\src\view\display-player-misc-info.h" />
     <ClInclude Include="..\..\src\view\status-first-page.h" />
+    <ClInclude Include="..\..\src\wizard\wizard-special-process.h" />
+    <ClInclude Include="..\..\src\wizard\wizard-spoiler.h" />
     <ClInclude Include="japanese.h" />
   </ItemGroup>
   <ItemGroup>
