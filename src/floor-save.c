@@ -43,6 +43,7 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "save.h"
+#include "core/player-processor.h"
 
 #include "view/display-main-window.h"
 

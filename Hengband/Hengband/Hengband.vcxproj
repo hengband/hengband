@@ -177,6 +177,7 @@
     <ClCompile Include="..\..\src\cmd\cmd-knowledge.c" />
     <ClCompile Include="..\..\src\cmd\cmd-process-screen.c" />
     <ClCompile Include="..\..\src\cmd\dump-util.c" />
+    <ClCompile Include="..\..\src\core\player-processor.c" />
     <ClCompile Include="..\..\src\inventory\pack-overflow.c" />
     <ClCompile Include="..\..\src\io\input-key-processor.c" />
     <ClCompile Include="..\..\src\core\game-closer.c" />
@@ -344,6 +345,7 @@
     <ClCompile Include="..\..\src\realm\realm-nature.c" />
     <ClCompile Include="..\..\src\realm\realm-song.c" />
     <ClCompile Include="..\..\src\realm\realm-sorcery.c" />
+    <ClCompile Include="..\..\src\spell\music-checker.c" />
     <ClCompile Include="..\..\src\spell\process-effect.c" />
     <ClCompile Include="..\..\src\spell\spells-execution.c" />
     <ClCompile Include="..\..\src\spell\technic-info-table.c" />
@@ -379,6 +381,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-knowledge.h" />
     <ClInclude Include="..\..\src\cmd\cmd-process-screen.h" />
     <ClInclude Include="..\..\src\cmd\dump-util.h" />
+    <ClInclude Include="..\..\src\core\player-processor.h" />
     <ClInclude Include="..\..\src\inventory\pack-overflow.h" />
     <ClInclude Include="..\..\src\io\input-key-processor.h" />
     <ClInclude Include="..\..\src\core\game-closer.h" />
@@ -589,6 +592,7 @@
     <ClInclude Include="..\..\src\room\pit-nest-kinds-table.h" />
     <ClInclude Include="..\..\src\io\signal-handlers.h" />
     <ClInclude Include="..\..\src\io\uid-checker.h" />
+    <ClInclude Include="..\..\src\spell\music-checker.h" />
     <ClInclude Include="..\..\src\spell\process-effect.h" />
     <ClInclude Include="..\..\src\spell\spells-type.h" />
     <ClInclude Include="..\..\src\spell\spells-util.h" />

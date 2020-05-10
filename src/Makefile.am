@@ -93,6 +93,7 @@ hengband_SOURCES = \
 	core/hp-mp-generator.c core/hp-mp-generator.h \
 	core/hp-mp-processor.c core/hp-mp-processor.h \
 	core/magic-effects-timeout-reducer.c core/magic-effects-timeout-reducer.h \
+	core/player-processor.c core/player-processor.h \
 	\
 	dungeon.c dungeon.h \
 	floor.c floor.h floor-events.c floor-events.h \
@@ -216,6 +217,7 @@ hengband_SOURCES = \
 	spell/process-effect.h spell/process-effect.h \
 	spell/spells1.c spell/spells1.h spell/spells2.c spell/spells2.h \
 	spell/spells3.c spell/spells3.h \
+	spell/music-checker.c spell/music-checker.h \
 	spells-diceroll.c spells-diceroll.h \
 	spells-floor.c spells-floor.h \
 	spells-object.c spells-object.h \

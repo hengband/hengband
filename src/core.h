@@ -14,9 +14,4 @@ extern concptr ANGBAND_SYS;
 extern concptr ANGBAND_KEYBOARD;
 extern concptr ANGBAND_GRAF;
 
-extern bool can_save;
-
-extern bool repair_monsters;
-extern bool repair_objects;
-
 extern void play_game(player_type *player_ptr, bool new_game);

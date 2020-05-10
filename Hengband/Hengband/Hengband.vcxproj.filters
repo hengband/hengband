@@ -808,6 +808,12 @@
     <ClCompile Include="..\..\src\inventory\pack-overflow.c">
       <Filter>inventory</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\player-processor.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\music-checker.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1648,6 +1654,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\inventory\pack-overflow.h">
       <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\player-processor.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\music-checker.h">
+      <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
