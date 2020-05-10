@@ -28,6 +28,7 @@
 #include "japanese.h"
 #include "player-class.h"
 #include "core/output-updater.h"
+#include "io/input-key-processor.h"
 
 /*!
  * 10進数から16進数への変換テーブル /

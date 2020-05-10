@@ -802,6 +802,9 @@
     <ClCompile Include="..\..\src\wizard\wizard-special-process.c">
       <Filter>wizard</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\input-key-processor.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1636,6 +1639,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\wizard\wizard-special-process.h">
       <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\input-key-processor.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

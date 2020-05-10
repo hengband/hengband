@@ -15,7 +15,6 @@ extern concptr ANGBAND_KEYBOARD;
 extern concptr ANGBAND_GRAF;
 
 extern bool can_save;
-extern COMMAND_CODE now_message;
 
 extern bool repair_monsters;
 extern bool repair_objects;

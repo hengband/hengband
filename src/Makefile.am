@@ -81,6 +81,8 @@ hengband_SOURCES = \
 	io/mutations-dump.c io/mutations-dump.h \
 	io/signal-handlers.c io/signal-handlers.h \
 	io/uid-checker.c io/uid-checker.h \
+	io/input-key-processor.c io/input-key-processor.h \
+	\
 	character-dump.c character-dump.h core.c core.h files.c files.h \
 	core/show-file.c core/show-file.h \
 	core/stuff-handler.c core/stuff-handler.h \
@@ -220,8 +222,7 @@ hengband_SOURCES = \
 	spells-world.c spells-world.h \
 	\
 	sort.c sort.h gameterm.c gameterm.h trap.c trap.h util.c util.h \
-	wild.h wild.c wizard1.c wizard2.c \
-	warning.c warning.h world.c world.h \
+	wild.h wild.c warning.c warning.h world.c world.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\
@@ -278,7 +279,7 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icombat -Icore -Ieffect -Ifloor -Iinventory -Iio \
 	-Iknowledge -Imarket -Imonster -Iobject -Iplayer -Irealm -Iroom -Ispell \
-	-Iview
+	-Iview -Iwizard
 
 install-exec-hook:
 if SET_GID
