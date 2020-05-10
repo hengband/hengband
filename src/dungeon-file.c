@@ -49,7 +49,7 @@
 #include "dungeon.h"
 #include "floor.h"
 #include "market/building.h"
-#include "world.h"
+#include "world/world.h"
 #include "rooms-vault.h"
 #include "object/object-kind.h"
 #include "object-ego.h"

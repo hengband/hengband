@@ -24,7 +24,7 @@
 #include "spell/spells-type.h"
 #include "melee.h"
 #include "player-effects.h"
-#include "world.h"
+#include "world/world.h"
 #include "view/display-main-window.h" // 暫定、後で消したい.
 #include "spell/process-effect.h"
 #include "spell/spells2.h"

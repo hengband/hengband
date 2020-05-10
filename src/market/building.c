@@ -35,7 +35,7 @@
 #include "monsterrace-hook.h"
 #include "melee.h"
 #include "wild.h"
-#include "world.h"
+#include "world/world.h"
 #include "sort.h"
 
 #include "avatar.h"

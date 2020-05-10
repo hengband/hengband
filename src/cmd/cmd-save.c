@@ -5,7 +5,7 @@
 #include "player-move.h"
 #include "core/stuff-handler.h"
 #include "save.h"
-#include "world.h"
+#include "world/world.h"
 #include "monster-status.h" // 違和感。要調査.
 #include "gameterm.h"
 

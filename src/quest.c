@@ -15,7 +15,7 @@
 #include "player-personality.h"
 #include "artifact.h"
 #include "feature.h"
-#include "world.h"
+#include "world/world.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "english.h"

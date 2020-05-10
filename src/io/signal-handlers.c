@@ -9,7 +9,7 @@
 #include "core.h"
 #include "core/game-closer.h"
 #include "save.h"
-#include "world.h"
+#include "world/world.h"
 #include "gameterm.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"

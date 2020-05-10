@@ -10,7 +10,7 @@
 #include "scores.h"
 #include "view/display-main-window.h"
 #include "view/display-player.h"
-#include "world.h"
+#include "world/world.h"
 
 static void clear_floor(player_type* player_ptr)
 {

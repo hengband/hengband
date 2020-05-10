@@ -52,7 +52,7 @@
 #include "monster.h"
 #include "monster-spell.h"
 #include "spell/spells-type.h"
-#include "world.h"
+#include "world/world.h"
 #include "realm/realm-song.h"
 #include "view/display-main-window.h"
 #include "player-race.h"

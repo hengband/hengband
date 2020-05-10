@@ -7,7 +7,7 @@
 
 #include "angband.h"
 #include "io/input-key-processor.h"
-#include "world.h"
+#include "world/world.h"
 #include "core/special-internal-keys.h"
 #include "dungeon.h"
 #include "snipe.h"

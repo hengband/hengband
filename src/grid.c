@@ -19,7 +19,7 @@
 #include "util.h"
 #include "gameterm.h"
 
-#include "world.h"
+#include "world/world.h"
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "dungeon.h"

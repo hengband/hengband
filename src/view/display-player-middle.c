@@ -4,7 +4,7 @@
 #include "player-effects.h"
 #include "player-skill.h"
 #include "realm/realm-song.h"
-#include "world.h"
+#include "world/world.h"
 #include "object/object-kind.h"
 #include "object-hook.h"
 #include "shoot.h"

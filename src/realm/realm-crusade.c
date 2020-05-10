@@ -1,7 +1,7 @@
 ﻿#include "angband.h"
 #include "util.h"
 
-#include "world.h"
+#include "world/world.h"
 #include "cmd-spell.h"
 #include "effect/effect-characteristics.h"
 #include "spell/spells-type.h"

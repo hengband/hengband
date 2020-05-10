@@ -11,7 +11,7 @@
 #include "birth/birth.h"
 #include "core/show-file.h"
 #include "dungeon-file.h"
-#include "world.h"
+#include "world/world.h"
 #include "market/store-util.h"
 #include "floor-town.h"
 #include "object-flavor.h"

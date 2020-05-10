@@ -227,7 +227,7 @@ hengband_SOURCES = \
 	spells-world.c spells-world.h \
 	\
 	sort.c sort.h gameterm.c gameterm.h trap.c trap.h util.c util.h \
-	wild.h wild.c warning.c warning.h world.c world.h \
+	wild.h wild.c warning.c warning.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\
@@ -271,6 +271,7 @@ hengband_SOURCES = \
 	wizard/wizard-spoiler.c wizard/wizard-spoiler.h\
 	wizard/wizard-special-process.c wizard/wizard-special-process.h \
 	\
+	world/world.c world/world.h \
 	world/world-movement-processor.c world/world-movement-processor.h \
 	world/world-turn-processor.c world/world-turn-processor.h \
 

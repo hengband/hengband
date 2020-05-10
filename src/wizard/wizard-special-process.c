@@ -57,7 +57,7 @@
 #include "object/object-kind.h"
 #include "targeting.h"
 #include "view/display-main-window.h"
-#include "world.h"
+#include "world/world.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 

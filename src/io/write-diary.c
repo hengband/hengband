@@ -10,7 +10,7 @@
 #include "files.h"
 #include "dungeon.h"
 #include "dungeon-file.h"
-#include "world.h"
+#include "world/world.h"
 #include "market/arena-info-table.h"
 
 // todo *抹殺* したい…

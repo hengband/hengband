@@ -31,7 +31,7 @@
 #include "floor-town.h"
 #include "io/uid-checker.h"
 #include "files.h"
-#include "world.h"
+#include "world/world.h"
 #include "object/object-kind.h"
 #include "monsterrace.h"
 #include "birth/birth.h"

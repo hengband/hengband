@@ -114,7 +114,7 @@
 #include "core/stuff-handler.h"
 #include "core/special-internal-keys.h"
 #include "core/player-processor.h"
-#include "world.h"
+#include "world/world.h"
 #include "gameterm.h"
 
 #ifdef WINDOWS

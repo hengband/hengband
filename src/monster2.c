@@ -38,7 +38,7 @@
 #include "monster-spell.h"
 #include "files.h"
 #include "view/display-main-window.h"
-#include "world.h"
+#include "world/world.h"
 #include "monsterrace.h"
 #include "creature.h"
 #include "targeting.h"

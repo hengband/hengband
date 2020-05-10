@@ -27,7 +27,7 @@
 #include "files.h"
 #include "scores.h"
 #include "floor.h"
-#include "world.h"
+#include "world/world.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "report.h"

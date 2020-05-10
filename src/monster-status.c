@@ -25,7 +25,7 @@
 #include "player-effects.h"
 #include "player-personality.h"
 #include "view/display-main-window.h"
-#include "world.h"
+#include "world/world.h"
 #include "report.h"
 #include "melee.h"
 

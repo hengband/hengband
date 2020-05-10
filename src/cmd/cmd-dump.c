@@ -39,7 +39,7 @@
 #include "io/read-pref-file.h"
 #include "io/interpret-pref-file.h"
 
-#include "world.h"
+#include "world/world.h"
 #include "view/display-player.h" // 暫定。後で消す.
 #include "player-personality.h"
 #include "quest.h"

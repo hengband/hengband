@@ -59,7 +59,7 @@
 #include "view/display-main-window.h"
 #include "mind.h"
 #include "wild.h"
-#include "world.h"
+#include "world/world.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
 #include "targeting.h"

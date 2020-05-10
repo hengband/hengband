@@ -2,7 +2,7 @@
 #include "cmd/cmd-inn.h"
 #include "cmd/cmd-magiceat.h"
 #include "io/write-diary.h"
-#include "world.h"
+#include "world/world.h"
 #include "player-effects.h"
 #include "core/turn-compensator.h"
 #include "rumor.h"

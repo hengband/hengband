@@ -33,7 +33,7 @@
 #include "view/display-main-window.h"
 #include "player-class.h"
 #include "player-personality.h"
-#include "world.h"
+#include "world/world.h"
 
  /*
   * The artifact arrays

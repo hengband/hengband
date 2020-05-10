@@ -7,7 +7,7 @@
  */
 
 #include "exit-panic.h"
-#include "world.h"
+#include "world/world.h"
 #include "player-move.h"
 #include "signal-handlers.h"
 #include "save.h"

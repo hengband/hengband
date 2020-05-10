@@ -50,7 +50,7 @@
 
 #include "view/display-main-window.h"
 #include "targeting.h"
-#include "world.h"
+#include "world/world.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells3.h"
 #include "core/output-updater.h"

@@ -196,12 +196,6 @@
     <ClCompile Include="..\..\src\gameterm.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wild.c">
-      <Filter>floor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\world.c">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\quest.c">
       <Filter>market</Filter>
     </ClCompile>
@@ -823,6 +817,12 @@
     <ClCompile Include="..\..\src\world\world-turn-processor.c">
       <Filter>world</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\wild.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\world\world.c">
+      <Filter>world</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1006,12 +1006,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\gameterm.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\wild.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\world.h">
-      <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\quest.h">
       <Filter>market</Filter>
@@ -1677,6 +1671,12 @@
       <Filter>world</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\world\world-turn-processor.h">
+      <Filter>world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wild.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\world\world.h">
       <Filter>world</Filter>
     </ClInclude>
   </ItemGroup>

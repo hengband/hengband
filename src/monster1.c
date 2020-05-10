@@ -32,7 +32,7 @@
 #include "avatar.h"
 #include "wild.h"
 #include "dungeon.h"
-#include "world.h"
+#include "world/world.h"
 #include "melee.h"
 #include "japanese.h"
 #include "view/display-main-window.h"

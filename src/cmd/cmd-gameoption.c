@@ -10,7 +10,7 @@
 #include "core/show-file.h"
 #include "files.h"
 
-#include "world.h"
+#include "world/world.h"
 
 /*
  * Software options (set via the '=' command).

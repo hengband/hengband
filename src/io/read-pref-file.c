@@ -20,7 +20,7 @@
 #include "io/interpret-pref-file.h"
 #include "autopick/autopick-pref-processor.h"
 #include "files.h" // 暫定。コールバック化して後で消す.
-#include "world.h"
+#include "world/world.h"
 
 // todo コールバック関数に変更するので、いずれ消す.
 #define PREF_TYPE_NORMAL   0

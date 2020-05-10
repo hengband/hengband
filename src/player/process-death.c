@@ -7,7 +7,7 @@
  */
 
 #include "process-death.h"
-#include "world.h"
+#include "world/world.h"
 #include "floor-town.h"
 #include "player-inventory.h"
 #include "object-flavor.h"

@@ -22,7 +22,7 @@
 #include "view/display-main-window.h"
 #include "quest.h"
 #include "floor.h"
-#include "world.h"
+#include "world/world.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "japanese.h"

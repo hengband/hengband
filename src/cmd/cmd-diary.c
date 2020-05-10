@@ -6,7 +6,7 @@
 #include "cmd/diary-subtitle-table.h"
 #include "player-personality.h"
 #include "io/write-diary.h"
-#include "world.h"
+#include "world/world.h"
 
 /*!
  * @brief 日記のタイトル表記と内容出力

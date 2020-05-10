@@ -125,7 +125,7 @@
 #include "feature.h"
 #include "spell/spells1.h"
 
-#include "world.h"
+#include "world/world.h"
 #include "view/display-main-window.h"
 
 int dun_tun_rnd; 

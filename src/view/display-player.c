@@ -13,7 +13,7 @@
 #include "status-first-page.h"
 #include "player-sex.h"
 #include "patron.h"
-#include "world.h"
+#include "world/world.h"
 #include "quest.h"
 #include "core.h" // 暫定。後で消す
 #include "knowledge/knowledge-mutations.h"

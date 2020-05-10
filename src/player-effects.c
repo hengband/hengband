@@ -48,7 +48,7 @@
 #include "snipe.h"
 #include "files.h"
 #include "monster-spell.h"
-#include "world.h"
+#include "world/world.h"
 #include "object/object-kind.h"
 #include "autopick/autopick-reader-writer.h"
 #include "save.h"

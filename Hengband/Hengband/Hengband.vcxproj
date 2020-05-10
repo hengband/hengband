@@ -511,7 +511,7 @@
     <ClCompile Include="..\..\src\wild.c" />
     <ClCompile Include="..\..\src\wizard\wizard-spoiler.c" />
     <ClCompile Include="..\..\src\wizard\wizard-special-process.c" />
-    <ClCompile Include="..\..\src\world.c" />
+    <ClCompile Include="..\..\src\world\world.c" />
     <ClCompile Include="..\..\src\world\world-movement-processor.c" />
     <ClCompile Include="..\..\src\world\world-turn-processor.c" />
     <ClCompile Include="..\..\src\z-form.c" />
@@ -718,7 +718,7 @@
     <ClInclude Include="..\..\src\view\display-main-window.h" />
     <ClInclude Include="..\..\src\warning.h" />
     <ClInclude Include="..\..\src\wild.h" />
-    <ClInclude Include="..\..\src\world.h" />
+    <ClInclude Include="..\..\src\world\world.h" />
     <ClInclude Include="..\..\src\z-form.h" />
     <ClInclude Include="..\..\src\z-rand.h" />
     <ClInclude Include="..\..\src\z-term.h" />

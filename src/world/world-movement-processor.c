@@ -4,7 +4,7 @@
 #include "io/write-diary.h"
 #include "dungeon.h"
 #include "quest.h"
-#include "world.h"
+#include "world/world.h"
 #include "cmd/cmd-save.h"
 #include "player-move.h"
 #include "view/display-main-window.h"

@@ -4,7 +4,7 @@
 #include "player-damage.h"
 #include "object-flavor.h"
 #include "object-ego.h"
-#include "world.h"
+#include "world/world.h"
 #include "player-effects.h"
 #include "floor/pattern-walk.h"
 #include "core/hp-mp-regenerator.h"

@@ -36,7 +36,7 @@
 #include "targeting.h"
 #include "realm/realm-song.h"
 #include "view/display-main-window.h"
-#include "world.h"
+#include "world/world.h"
 #include "realm/realm-hex.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-type.h"

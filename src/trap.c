@@ -23,7 +23,7 @@
 #include "init.h"
 #include "files.h"
 #include "dungeon.h"
-#include "world.h"
+#include "world/world.h"
 #include "spell/process-effect.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"

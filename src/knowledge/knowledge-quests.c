@@ -14,7 +14,7 @@
 #include "dungeon.h"
 #include "dungeon-file.h"
 #include "sort.h"
-#include "world.h"
+#include "world/world.h"
 #include "core/show-file.h"
 #include "english.h"
 

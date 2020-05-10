@@ -7,7 +7,7 @@
 #include "rooms.h"
 #include "quest.h"
 #include "object-hook.h"
-#include "world.h"
+#include "world/world.h"
 #include "player-effects.h"
 #include "object.h"
 #include "artifact.h"

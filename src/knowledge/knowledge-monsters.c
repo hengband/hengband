@@ -11,7 +11,7 @@
 #include "sort.h"
 #include "cmd/monster-group-table.h"
 #include "monster-status.h"
-#include "world.h"
+#include "world/world.h"
 #include "core/show-file.h"
 #include "gameterm.h"
 #include "english.h"

@@ -32,7 +32,7 @@
 #include "market/store.h"
 #include "spell/technic-info-table.h"
 #include "spells-status.h"
-#include "world.h"
+#include "world/world.h"
 #include "market/arena-info-table.h"
 #include "market/store-util.h"
 #include "quest.h"

@@ -59,7 +59,7 @@
 #include "object/object-kind.h"
 #include "object-ego.h"
 #include "rooms-vault.h"
-#include "world.h"
+#include "world/world.h"
 #include "market/articles-on-sale.h"
 #include "market/store-util.h"
 

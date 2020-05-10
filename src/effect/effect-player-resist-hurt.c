@@ -2,7 +2,7 @@
 #include "effect/effect-player-util.h"
 #include "effect/effect-player-resist-hurt.h"
 #include "player-damage.h"
-#include "world.h"
+#include "world/world.h"
 #include "object-broken.h"
 #include "artifact.h"
 #include "player-effects.h"

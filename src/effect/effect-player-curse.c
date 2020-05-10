@@ -2,7 +2,7 @@
 #include "effect/effect-player-util.h"
 #include "effect/effect-player-curse.h"
 #include "player-damage.h"
-#include "world.h"
+#include "world/world.h"
 #include "monster-spell.h"
 #include "object-curse.h"
 #include "player-effects.h"

@@ -41,7 +41,7 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "melee.h"
-#include "world.h"
+#include "world/world.h"
 #include "view/display-main-window.h"
 #include "files.h"
 #include "cmd-magiceat.h"

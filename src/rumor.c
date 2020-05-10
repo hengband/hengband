@@ -9,7 +9,7 @@
 #include "monsterrace.h"
 #include "floor-town.h"
 #include "wild.h"
-#include "world.h"
+#include "world/world.h"
 
 /*
  * Display a rumor and apply its effects

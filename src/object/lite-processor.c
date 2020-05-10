@@ -3,7 +3,7 @@
 #include "object-ego.h"
 #include "object-hook.h"
 #include "player-move.h"
-#include "world.h"
+#include "world/world.h"
 
 /*!
  * @brief 10ゲームターンが進行する毎に光源の寿命を減らす処理

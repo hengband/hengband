@@ -14,7 +14,7 @@
 #include "autopick/autopick-inserter-killer.h"
 #include "autopick/autopick-pref-processor.h"
 #include "io/read-pref-file.h"
-#include "world.h"
+#include "world/world.h"
 #include "view/display-main-window.h" // 暫定。後で消す.
 
 /*

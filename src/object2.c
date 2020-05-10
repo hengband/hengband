@@ -14,7 +14,7 @@
 #include "angband.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
-#include "world.h"
+#include "world/world.h"
 #include "gameterm.h"
 
 #include "object.h"

@@ -21,7 +21,7 @@
 #include "core.h"
 #include "core/stuff-handler.h"
 #include "files.h"
-#include "world.h"
+#include "world/world.h"
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"

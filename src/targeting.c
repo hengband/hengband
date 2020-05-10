@@ -39,7 +39,7 @@
 #include "feature.h"
 #include "quest.h"
 #include "dungeon.h"
-#include "world.h"
+#include "world/world.h"
 #include "effect/spells-effect-util.h"
 
  /*!

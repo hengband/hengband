@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "player/digestion-processor.h"
-#include "world.h"
+#include "world/world.h"
 #include "realm/realm-song.h"
 #include "player-damage.h"
 #include "player-effects.h"
