@@ -1,3 +1,4 @@
 ﻿#pragma once
 
-void process_world_aux_movement(player_type* creature_ptr);
+void execute_recall(player_type* creature_ptr);
+void execute_floor_reset(player_type* creature_ptr);

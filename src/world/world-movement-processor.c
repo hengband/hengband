@@ -10,13 +10,12 @@
 #include "view/display-main-window.h"
 
 /*!
- * todo 帰還と現実変容の関数を分けること
- * @brief 10ゲームターンが進行するごとに帰還や現実変容などの残り時間カウントダウンと発動を処理する。
+ * @brief 10ゲームターンが進行するごとに帰還の残り時間カウントダウンと発動を処理する。
  * / Handle involuntary movement once every 10 game turns
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void process_world_aux_movement(player_type* creature_ptr)
+void execute_recall(player_type* creature_ptr)
 {
     floor_type* floor_ptr = creature_ptr->current_floor_ptr;
     if (creature_ptr->word_recall) {
@@ -98,7 +97,17 @@ void process_world_aux_movement(player_type* creature_ptr)
             sound(SOUND_TPLEVEL);
         }
     }
+}
 
+/*!
+ * @brief 10ゲームターンが進行するごとにフロア・リセット/現実変容の残り時間カウントダウンと発動を処理する。
+ * / Handle involuntary movement once every 10 game turns
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ */
+void execute_floor_reset(player_type* creature_ptr)
+{
+    floor_type* floor_ptr = creature_ptr->current_floor_ptr;
     if (creature_ptr->alter_reality) {
         if (autosave_l && (creature_ptr->alter_reality == 1) && !creature_ptr->phase_out)
             do_cmd_save_game(creature_ptr, TRUE);

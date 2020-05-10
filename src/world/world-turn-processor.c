@@ -213,5 +213,6 @@ void process_world(player_type* player_ptr)
     recharge_magic_items(player_ptr);
     sense_inventory1(player_ptr);
     sense_inventory2(player_ptr);
-    process_world_aux_movement(player_ptr);
+    execute_recall(player_ptr);
+    execute_floor_reset(player_ptr);
 }
