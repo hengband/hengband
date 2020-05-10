@@ -713,16 +713,10 @@ static void process_command(player_type *creature_ptr)
 	{
 	case ESCAPE:
 	case ' ':
-	{
-		/* Ignore */
-		break;
-	}
 	case '\r':
 	case '\n':
 	{
-		/* todo 嘘。returnしていない
-		 * Ignore return
-		 */
+		/* Ignore */
 		break;
 	}
 	case KTRL('W'):
@@ -737,9 +731,9 @@ static void process_command(player_type *creature_ptr)
 			current_world_ptr->wizard = TRUE;
 			msg_print(_("ウィザードモード突入。", "Wizard mode on."));
 		}
+
 		creature_ptr->update |= (PU_MONSTERS);
 		creature_ptr->redraw |= (PR_TITLE);
-
 		break;
 	}
 	case KTRL('A'):
@@ -748,21 +742,28 @@ static void process_command(player_type *creature_ptr)
 		{
 			do_cmd_debug(creature_ptr);
 		}
+
 		break;
 	}
 	case 'w':
 	{
-		if (!creature_ptr->wild_mode) do_cmd_wield(creature_ptr);
+		if (!creature_ptr->wild_mode)
+			do_cmd_wield(creature_ptr);
+
 		break;
 	}
 	case 't':
 	{
-		if (!creature_ptr->wild_mode) do_cmd_takeoff(creature_ptr);
+		if (!creature_ptr->wild_mode)
+			do_cmd_takeoff(creature_ptr);
+
 		break;
 	}
 	case 'd':
 	{
-		if (!creature_ptr->wild_mode) do_cmd_drop(creature_ptr);
+		if (!creature_ptr->wild_mode)
+			do_cmd_drop(creature_ptr);
+
 		break;
 	}
 	case 'k':
@@ -793,12 +794,16 @@ static void process_command(player_type *creature_ptr)
 	}
 	case '+':
 	{
-		if (!creature_ptr->wild_mode) do_cmd_alter(creature_ptr);
+		if (!creature_ptr->wild_mode)
+			do_cmd_alter(creature_ptr);
+
 		break;
 	}
 	case 'T':
 	{
-		if (!creature_ptr->wild_mode) do_cmd_tunnel(creature_ptr);
+		if (!creature_ptr->wild_mode)
+			do_cmd_tunnel(creature_ptr);
+
 		break;
 	}
 	case ';':
@@ -813,7 +818,9 @@ static void process_command(player_type *creature_ptr)
 	}
 	case '.':
 	{
-		if (!creature_ptr->wild_mode) do_cmd_run(creature_ptr);
+		if (!creature_ptr->wild_mode)
+			do_cmd_run(creature_ptr);
+
 		break;
 	}
 	case ',':
@@ -838,8 +845,11 @@ static void process_command(player_type *creature_ptr)
 	}
 	case 'S':
 	{
-		if (creature_ptr->action == ACTION_SEARCH) set_action(creature_ptr, ACTION_NONE);
-		else set_action(creature_ptr, ACTION_SEARCH);
+		if (creature_ptr->action == ACTION_SEARCH)
+			set_action(creature_ptr, ACTION_NONE);
+		else
+			set_action(creature_ptr, ACTION_SEARCH);
+
 		break;
 	}
 	case SPECIAL_KEY_STORE:
@@ -888,6 +898,7 @@ static void process_command(player_type *creature_ptr)
 			change_wild_mode(creature_ptr, FALSE);
 		else
 			do_cmd_go_down(creature_ptr);
+
 		break;
 	}
 	case 'o':
@@ -925,6 +936,7 @@ static void process_command(player_type *creature_ptr)
 			import_magic_device(creature_ptr);
 		else
 			do_cmd_study(creature_ptr);
+
 		break;
 	}
 	case 'b':
@@ -932,15 +944,17 @@ static void process_command(player_type *creature_ptr)
 		if ((creature_ptr->pclass == CLASS_MINDCRAFTER) ||
 			(creature_ptr->pclass == CLASS_BERSERKER) ||
 			(creature_ptr->pclass == CLASS_NINJA) ||
-			(creature_ptr->pclass == CLASS_MIRROR_MASTER)
-			) do_cmd_mind_browse(creature_ptr);
+			(creature_ptr->pclass == CLASS_MIRROR_MASTER))
+			do_cmd_mind_browse(creature_ptr);
 		else if (creature_ptr->pclass == CLASS_SMITH)
 			do_cmd_kaji(creature_ptr, TRUE);
 		else if (creature_ptr->pclass == CLASS_MAGIC_EATER)
 			do_cmd_magic_eater(creature_ptr, TRUE, FALSE);
 		else if (creature_ptr->pclass == CLASS_SNIPER)
 			do_cmd_snipe_browse(creature_ptr);
-		else do_cmd_browse(creature_ptr);
+		else
+			do_cmd_browse(creature_ptr);
+
 		break;
 	}
 	case 'm':
@@ -1062,6 +1076,7 @@ static void process_command(player_type *creature_ptr)
 		{
 			do_cmd_zap_rod(creature_ptr);
 		}
+
 		break;
 	}
 	case 'q':
@@ -1080,6 +1095,7 @@ static void process_command(player_type *creature_ptr)
 			do_cmd_use(creature_ptr);
 		else
 			do_cmd_use_staff(creature_ptr);
+
 		break;
 	}
 	case 'U':
@@ -1260,6 +1276,7 @@ static void process_command(player_type *creature_ptr)
 		{
 			set_action(creature_ptr, ACTION_NONE);
 		}
+
 		break;
 	}
 	default:
