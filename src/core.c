@@ -50,7 +50,6 @@
 #include "io/read-pref-file.h"
 #include "scores.h"
 #include "autopick/autopick-pref-processor.h"
-#include "autopick/autopick-reader-writer.h"
 #include "save.h"
 #include "realm/realm.h"
 #include "targeting.h"
@@ -87,43 +86,6 @@ concptr ANGBAND_GRAF = "ascii";
  * Flags for initialization
  */
 int init_flags;
-
-/*!
- * @brief 全ユーザプロファイルをロードする / Load some "user pref files"
- * @paaram player_ptr プレーヤーへの参照ポインタ
- * @return なし
- * @note
- * Modified by Arcum Dagsson to support
- * separate macro files for different realms.
- */
-static void load_all_pref_files(player_type *player_ptr)
-{
-	char buf[1024];
-	sprintf(buf, "user.prf");
-	process_pref_file(player_ptr, buf, process_autopick_file_command);
-	sprintf(buf, "user-%s.prf", ANGBAND_SYS);
-	process_pref_file(player_ptr, buf, process_autopick_file_command);
-	sprintf(buf, "%s.prf", rp_ptr->title);
-	process_pref_file(player_ptr, buf, process_autopick_file_command);
-	sprintf(buf, "%s.prf", cp_ptr->title);
-	process_pref_file(player_ptr, buf, process_autopick_file_command);
-	sprintf(buf, "%s.prf", player_ptr->base_name);
-	process_pref_file(player_ptr, buf, process_autopick_file_command);
-	if (player_ptr->realm1 != REALM_NONE)
-	{
-		sprintf(buf, "%s.prf", realm_names[player_ptr->realm1]);
-		process_pref_file(player_ptr, buf, process_autopick_file_command);
-	}
-
-	if (player_ptr->realm2 != REALM_NONE)
-	{
-		sprintf(buf, "%s.prf", realm_names[player_ptr->realm2]);
-		process_pref_file(player_ptr, buf, process_autopick_file_command);
-	}
-
-	autopick_load_pref(player_ptr, FALSE);
-}
-
 
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game
