@@ -817,6 +817,9 @@
     <ClCompile Include="..\..\src\player\digestion-processor.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\world\world-movement-processor.c">
+      <Filter>world</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1667,6 +1670,9 @@
     <ClInclude Include="..\..\src\player\digestion-processor.h">
       <Filter>player</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\world\world-movement-processor.h">
+      <Filter>world</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1741,6 +1747,9 @@
     </Filter>
     <Filter Include="wizard">
       <UniqueIdentifier>{22328846-3669-435a-9731-f0998a1c3dfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="world">
+      <UniqueIdentifier>{cbd4a56f-0cd0-47a4-96be-a0a4d85ad7d1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

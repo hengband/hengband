@@ -512,6 +512,7 @@
     <ClCompile Include="..\..\src\wizard\wizard-spoiler.c" />
     <ClCompile Include="..\..\src\wizard\wizard-special-process.c" />
     <ClCompile Include="..\..\src\world.c" />
+    <ClCompile Include="..\..\src\world\world-movement-processor.c" />
     <ClCompile Include="..\..\src\z-form.c" />
     <ClCompile Include="..\..\src\z-rand.c" />
     <ClCompile Include="..\..\src\z-term.c" />
@@ -613,6 +614,7 @@
     <ClInclude Include="..\..\src\view\status-first-page.h" />
     <ClInclude Include="..\..\src\wizard\wizard-special-process.h" />
     <ClInclude Include="..\..\src\wizard\wizard-spoiler.h" />
+    <ClInclude Include="..\..\src\world\world-movement-processor.h" />
     <ClInclude Include="japanese.h" />
   </ItemGroup>
   <ItemGroup>

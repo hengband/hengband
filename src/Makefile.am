@@ -269,7 +269,9 @@ hengband_SOURCES = \
 	combat/melee.h combat/melee.c combat/shoot.c combat/shoot.h \
 	\
 	wizard/wizard-spoiler.c wizard/wizard-spoiler.h\
-	wizard/wizard-special-process.c wizard/wizard-special-process.h
+	wizard/wizard-special-process.c wizard/wizard-special-process.h \
+	\
+	world/world-movement-processor.c world/world-movement-processor.h \
 
 EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc maid-x11.c main-win.c \
@@ -284,7 +286,7 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icombat -Icore -Ieffect -Ifloor -Iinventory -Iio \
 	-Iknowledge -Imarket -Imonster -Iobject -Iplayer -Irealm -Iroom -Ispell \
-	-Iview -Iwizard
+	-Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID
