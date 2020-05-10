@@ -22,7 +22,7 @@
 #include "floor-save.h"
 #include "init.h"
 #include "files.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "world/world.h"
 #include "spell/process-effect.h"
 #include "spell/spells2.h"

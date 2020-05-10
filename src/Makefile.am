@@ -96,13 +96,15 @@ hengband_SOURCES = \
 	core/magic-effects-timeout-reducer.c core/magic-effects-timeout-reducer.h \
 	core/player-processor.c core/player-processor.h \
 	\
-	dungeon.c dungeon.h \
+	dungeon/dungeon.c dungeon/dungeon.h \
+	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \
+	dungeon/dungeon-file.c dungeon/dungeon-file.h \
+	\
 	floor.c floor.h floor-events.c floor-events.h \
 	floor-generate.c floor-generate.h \
 	floor-save.h floor-save.c floor-town.h floor-town.c \
 	floor-streams.c floor-streams.h \
 	floor/pattern-walk.c floor/pattern-walk.h \
-	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \
 	\
 	feature.c feature.h \
 	geometry.c geometry.h \
@@ -113,7 +115,6 @@ hengband_SOURCES = \
 	h-system.h h-type.h inet.c inet.h init.c init.h \
 	japanese.c japanese.h english.c english.h \
 	load.c load.h \
-	dungeon-file.c dungeon-file.h \
 	main.c main-x11.c main-gcu.c \
 	mind.c mind.h \
 	\

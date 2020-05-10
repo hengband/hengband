@@ -1,7 +1,7 @@
 ﻿#include "angband.h"
 #include "world/world-turn-processor.h"
 #include "world/world.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "market/store.h"
 #include "market/store-util.h"
 #include "io/write-diary.h"

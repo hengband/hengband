@@ -4,7 +4,7 @@
 
 #include "cmd-spell.h"
 #include "cmd-basic.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "melee.h"
 #include "monsterrace-hook.h"

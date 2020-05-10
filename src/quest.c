@@ -3,7 +3,7 @@
 #include "main/music-definitions-table.h"
 
 #include "core.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "floor.h"
 #include "floor-save.h"
 #include "floor-events.h"

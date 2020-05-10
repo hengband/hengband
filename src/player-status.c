@@ -33,7 +33,7 @@
 #include "realm/realm-song.h"
 #include "cmd/cmd-pet.h"
 #include "cmd/cmd-spell.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "object/object-kind.h"
 #include "monsterrace.h"
 #include "autopick/autopick.h"

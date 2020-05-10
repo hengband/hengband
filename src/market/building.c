@@ -40,7 +40,7 @@
 
 #include "avatar.h"
 #include "market/building.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "mutation/mutation.h"
 #include "quest.h"
 #include "artifact.h"
@@ -49,7 +49,7 @@
 #include "spells-object.h"
 #include "spells-status.h"
 #include "realm/realm-hex.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon-file.h"
 
 #include "files.h"
 #include "player-status.h"

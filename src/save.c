@@ -20,7 +20,7 @@
 #include "core/angband-version.h"
 #include "artifact.h"
 #include "sort.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "quest.h"
 #include "market/store.h"
 #include "market/store-util.h"

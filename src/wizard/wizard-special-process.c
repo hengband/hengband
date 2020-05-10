@@ -17,7 +17,7 @@
 #include "core/stuff-handler.h"
 #include "gameterm.h"
 
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-dump.h"
@@ -50,7 +50,7 @@
 #include "floor.h"
 #include "floor-save.h"
 #include "grid.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon-file.h"
 #include "files.h"
 #include "monster-spell.h"
 #include "market/building.h"

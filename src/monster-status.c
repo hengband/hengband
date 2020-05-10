@@ -8,7 +8,7 @@
 #include "autopick/autopick-pref-processor.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-dump.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "floor.h"
 #include "grid.h"
 #include "monster.h"

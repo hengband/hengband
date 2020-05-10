@@ -18,7 +18,7 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "cmd-pet.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "object-flavor.h"
 #include "monsterrace-hook.h"

@@ -52,7 +52,7 @@
 #include "player-damage.h"
 #include "player-inventory.h"
 
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "floor-events.h"
 #include "feature.h"
 #include "view/display-main-window.h"

@@ -17,7 +17,7 @@
 #include "util.h"
 
 #include "artifact.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "floor.h"
 #include "floor-save.h"
 #include "floor-events.h"

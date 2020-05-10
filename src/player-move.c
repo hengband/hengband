@@ -147,7 +147,7 @@
 
 #include "realm/realm-song.h"
 #include "autopick/autopick.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "melee.h"
 #include "grid.h"

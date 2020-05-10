@@ -114,9 +114,6 @@
     <ClCompile Include="..\..\src\object-boost.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\dungeon-file.c">
-      <Filter>io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\init.c" />
     <ClCompile Include="..\..\src\files.c">
       <Filter>io</Filter>
@@ -161,9 +158,6 @@
       <Filter>player</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\floor.c">
-      <Filter>floor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\dungeon.c">
       <Filter>floor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player-class.c">
@@ -826,6 +820,12 @@
     <ClCompile Include="..\..\src\dungeon\dungeon-processor.c">
       <Filter>dungeon</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\dungeon\dungeon.c">
+      <Filter>dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dungeon\dungeon-file.c">
+      <Filter>dungeon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -941,9 +941,6 @@
     <ClInclude Include="..\..\src\monster-process.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\dungeon-file.h">
-      <Filter>io</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\files.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -973,9 +970,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-skill.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\dungeon.h">
-      <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-class.h">
       <Filter>player</Filter>
@@ -1683,6 +1677,12 @@
       <Filter>world</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\dungeon\dungeon-processor.h">
+      <Filter>dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dungeon\dungeon.h">
+      <Filter>dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dungeon\dungeon-file.h">
       <Filter>dungeon</Filter>
     </ClInclude>
   </ItemGroup>

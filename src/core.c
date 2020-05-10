@@ -46,7 +46,7 @@
 #include "player-skill.h"
 
 #include "view/display-main-window.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon-file.h"
 #include "io/read-pref-file.h"
 #include "scores.h"
 #include "autopick/autopick-pref-processor.h"

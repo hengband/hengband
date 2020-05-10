@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "world/world.h"
 
 /*

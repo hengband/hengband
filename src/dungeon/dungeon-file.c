@@ -37,7 +37,7 @@
 
 #include "io/tokenizer.h"
 #include "files.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon-file.h"
 #include "rooms-vault.h"
 #include "feature.h"
 #include "grid.h"
@@ -46,7 +46,7 @@
 #include "files.h"
 #include "player-skill.h"
 #include "player-race.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "floor.h"
 #include "market/building.h"
 #include "world/world.h"

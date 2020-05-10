@@ -11,8 +11,8 @@
 #include "core.h" // 暫定、init_flagsのため。後で消すかも.
 #include "artifact.h"
 #include "object-flavor.h"
-#include "dungeon.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon.h"
+#include "dungeon/dungeon-file.h"
 #include "sort.h"
 #include "world/world.h"
 #include "core/show-file.h"

@@ -10,7 +10,7 @@
 #include "avatar.h"
 #include "birth/birth.h"
 #include "core/show-file.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon-file.h"
 #include "world/world.h"
 #include "market/store-util.h"
 #include "floor-town.h"

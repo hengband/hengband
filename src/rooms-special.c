@@ -9,7 +9,7 @@
 #include "object/object-kind-hook.h"
 #include "feature.h"
 #include "floor.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 
 
 /*!

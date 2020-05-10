@@ -2,7 +2,7 @@
 #include "world/world-movement-processor.h"
 #include "main/sound-definitions-table.h"
 #include "io/write-diary.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "quest.h"
 #include "world/world.h"
 #include "cmd/cmd-save.h"

@@ -42,7 +42,7 @@
 #include "util.h"
 
 #include "effect/effect-characteristics.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "grid.h"
 #include "object-curse.h"
 #include "quest.h"

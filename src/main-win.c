@@ -123,7 +123,7 @@
 #include <locale.h>
 #include "z-term.h"
 #include "save.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 
 /*
  * Available graphic modes

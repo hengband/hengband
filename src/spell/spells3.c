@@ -21,7 +21,7 @@
 
 #include "creature.h"
 
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor-town.h"
 #include "object-boost.h"

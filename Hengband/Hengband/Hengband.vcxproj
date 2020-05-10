@@ -266,8 +266,8 @@
     <ClCompile Include="..\..\src\core.c" />
     <ClCompile Include="..\..\src\core\show-file.c" />
     <ClCompile Include="..\..\src\creature.c" />
-    <ClCompile Include="..\..\src\dungeon-file.c" />
-    <ClCompile Include="..\..\src\dungeon.c" />
+    <ClCompile Include="..\..\src\dungeon\dungeon-file.c" />
+    <ClCompile Include="..\..\src\dungeon\dungeon.c" />
     <ClCompile Include="..\..\src\english.c" />
     <ClCompile Include="..\..\src\feature.c" />
     <ClCompile Include="..\..\src\floor-events.c" />
@@ -625,8 +625,8 @@
     <ClInclude Include="..\..\src\angband.h" />
     <ClInclude Include="..\..\src\core.h" />
     <ClInclude Include="..\..\src\creature.h" />
-    <ClInclude Include="..\..\src\dungeon-file.h" />
-    <ClInclude Include="..\..\src\dungeon.h" />
+    <ClInclude Include="..\..\src\dungeon\dungeon-file.h" />
+    <ClInclude Include="..\..\src\dungeon\dungeon.h" />
     <ClInclude Include="..\..\src\feature.h" />
     <ClInclude Include="..\..\src\files.h" />
     <ClInclude Include="..\..\src\floor-events.h" />

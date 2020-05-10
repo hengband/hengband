@@ -14,7 +14,7 @@
 #include "util.h"
 #include "core.h"
 
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "floor.h"
 #include "wild.h"
 #include "world/world.h"
@@ -25,7 +25,7 @@
 #include "grid.h"
 #include "monster-status.h"
 #include "quest.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon-file.h"
 #include "io/tokenizer.h"
 #include "files.h"
 #include "feature.h"

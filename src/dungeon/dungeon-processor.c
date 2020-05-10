@@ -4,7 +4,7 @@
 #include "targeting.h"
 #include "core/player-processor.h"
 #include "quest.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "io/write-diary.h"
 #include "realm/realm-song.h"
 #include "core/hp-mp-regenerator.h"

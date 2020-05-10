@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "floor/pattern-walk.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "io/write-diary.h"
 #include "player-move.h"
 #include "player-effects.h"

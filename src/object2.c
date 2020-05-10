@@ -23,7 +23,7 @@
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-spell.h"
 #include "spell/spells3.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "floor.h"
 #include "grid.h"
 #include "object/object-kind.h"

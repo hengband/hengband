@@ -10,7 +10,7 @@
 #include "sort.h"
 #include "floor.h"
 #include "feature.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "room/pit-nest-kinds-table.h"
 
 /*!

@@ -2,7 +2,7 @@
 #include "core/angband-version.h"
 #include "world/world.h"
 #include "floor-town.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "market/store.h"
 #include "cmd/cmd-pet.h"
 #include "monster-status.h"

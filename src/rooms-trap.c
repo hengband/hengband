@@ -6,7 +6,7 @@
 #include "rooms.h"
 #include "floor.h"
 #include "feature.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 
 /*!
 * @brief タイプ14の部屋…特殊トラップ部屋の生成 / Type 14 -- trapped rooms

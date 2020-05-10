@@ -41,7 +41,7 @@
 #include "object-flavor.h"
 
 #include "grid.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor-town.h"
 #include "feature.h"

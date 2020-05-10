@@ -3,7 +3,7 @@
 #include "floor-save.h"
 #include "floor-generate.h"
 #include "grid.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "rooms.h"
 #include "quest.h"
 #include "object-hook.h"

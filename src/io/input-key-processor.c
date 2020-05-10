@@ -9,7 +9,7 @@
 #include "io/input-key-processor.h"
 #include "world/world.h"
 #include "core/special-internal-keys.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "snipe.h"
 #include "autopick/autopick-pref-processor.h"
 #include "market/store-util.h"

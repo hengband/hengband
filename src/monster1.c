@@ -31,7 +31,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "wild.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "world/world.h"
 #include "melee.h"
 #include "japanese.h"

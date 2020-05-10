@@ -22,7 +22,7 @@
 #include "cmd/cmd-save.h"
 #include "chest.h"
 #include "trap.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "melee.h"
 #include "object-hook.h"
 #include "monster-status.h"
@@ -45,7 +45,7 @@
 #include "snipe.h"
 
 #include "cmd-basic.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon-file.h"
 #include "files.h"
 
 #include "view/display-main-window.h"

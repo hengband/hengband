@@ -8,8 +8,8 @@
 #include "core.h"
 #include "quest.h"
 #include "files.h"
-#include "dungeon.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon.h"
+#include "dungeon/dungeon-file.h"
 #include "world/world.h"
 #include "market/arena-info-table.h"
 
