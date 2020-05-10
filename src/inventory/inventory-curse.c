@@ -195,6 +195,44 @@ static void curse_drain_exp(player_type *creature_ptr)
     check_experience(creature_ptr);
 }
 
+static void multiply_low_curse(player_type* creature_ptr)
+{
+    if (((creature_ptr->cursed & TRC_ADD_L_CURSE) == 0) || !one_in_(2000))
+        return;
+
+    object_type* o_ptr;
+    o_ptr = choose_cursed_obj_name(creature_ptr, TRC_ADD_L_CURSE);
+    BIT_FLAGS new_curse = get_curse(0, o_ptr);
+    if ((o_ptr->curse_flags & new_curse))
+        return;
+
+    GAME_TEXT o_name[MAX_NLEN];
+    object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    o_ptr->curse_flags |= new_curse;
+    msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
+    o_ptr->feeling = FEEL_NONE;
+    creature_ptr->update |= (PU_BONUS);
+}
+
+static void multiply_high_curse(player_type* creature_ptr)
+{
+    if (((creature_ptr->cursed & TRC_ADD_H_CURSE) == 0) || !one_in_(2000))
+        return;
+
+    object_type* o_ptr;
+    o_ptr = choose_cursed_obj_name(creature_ptr, TRC_ADD_H_CURSE);
+    BIT_FLAGS new_curse = get_curse(1, o_ptr);
+    if ((o_ptr->curse_flags & new_curse))
+        return;
+
+    GAME_TEXT o_name[MAX_NLEN];
+    object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    o_ptr->curse_flags |= new_curse;
+    msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
+    o_ptr->feeling = FEEL_NONE;
+    creature_ptr->update |= (PU_BONUS);
+}
+
 static void occur_curse_effects(player_type *creature_ptr)
 {
     if (((creature_ptr->cursed & TRC_P_FLAG_MASK) == 0) || creature_ptr->phase_out || creature_ptr->wild_mode)
@@ -208,37 +246,8 @@ static void occur_curse_effects(player_type *creature_ptr)
     }
 
     curse_drain_exp(creature_ptr);
-    if ((creature_ptr->cursed & TRC_ADD_L_CURSE) && one_in_(2000)) {
-        object_type* o_ptr;
-        o_ptr = choose_cursed_obj_name(creature_ptr, TRC_ADD_L_CURSE);
-        BIT_FLAGS new_curse = get_curse(0, o_ptr);
-        if (!(o_ptr->curse_flags & new_curse)) {
-            GAME_TEXT o_name[MAX_NLEN];
-            object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-            o_ptr->curse_flags |= new_curse;
-            msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
-            o_ptr->feeling = FEEL_NONE;
-            creature_ptr->update |= (PU_BONUS);
-        }
-    }
-
-    if ((creature_ptr->cursed & TRC_ADD_H_CURSE) && one_in_(2000)) {
-        object_type* o_ptr;
-        o_ptr = choose_cursed_obj_name(creature_ptr, TRC_ADD_H_CURSE);
-        BIT_FLAGS new_curse = get_curse(1, o_ptr);
-        if (!(o_ptr->curse_flags & new_curse)) {
-            GAME_TEXT o_name[MAX_NLEN];
-
-            object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-
-            o_ptr->curse_flags |= new_curse;
-            msg_format(_("悪意に満ちた黒いオーラが%sをとりまいた...", "There is a malignant black aura surrounding your %s..."), o_name);
-            o_ptr->feeling = FEEL_NONE;
-
-            creature_ptr->update |= (PU_BONUS);
-        }
-    }
-
+    multiply_low_curse(creature_ptr);
+    multiply_high_curse(creature_ptr);
     if ((creature_ptr->cursed & TRC_CALL_ANIMAL) && one_in_(2500)) {
         if (summon_specific(creature_ptr, 0, creature_ptr->y, creature_ptr->x, creature_ptr->current_floor_ptr->dun_level, SUMMON_ANIMAL, (PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET))) {
             GAME_TEXT o_name[MAX_NLEN];
