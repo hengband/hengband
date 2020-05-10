@@ -125,7 +125,7 @@ object_type *choose_cursed_obj_name(player_type* player_ptr, BIT_FLAGS flag)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void curse_teleport(player_type* creature_ptr)
+static void curse_teleport(player_type *creature_ptr)
 {
     if (((creature_ptr->cursed & TRC_TELEPORT_SELF) == 0) || !one_in_(200))
         return;
@@ -168,7 +168,7 @@ static void curse_teleport(player_type* creature_ptr)
 /*!
  * @details 元々呪い効果の発揮ルーチン中にいたので、整合性保持のためここに置いておく
  */
-static void occur_chainsword_effect(player_type* creature_ptr)
+static void occur_chainsword_effect(player_type *creature_ptr)
 {
     if (((creature_ptr->cursed & TRC_CHAINSWORD) == 0) || !one_in_(CHAINSWORD_NOISE))
         return;
@@ -195,7 +195,7 @@ static void curse_drain_exp(player_type *creature_ptr)
     check_experience(creature_ptr);
 }
 
-static void multiply_low_curse(player_type* creature_ptr)
+static void multiply_low_curse(player_type *creature_ptr)
 {
     if (((creature_ptr->cursed & TRC_ADD_L_CURSE) == 0) || !one_in_(2000))
         return;
@@ -214,7 +214,7 @@ static void multiply_low_curse(player_type* creature_ptr)
     creature_ptr->update |= (PU_BONUS);
 }
 
-static void multiply_high_curse(player_type* creature_ptr)
+static void multiply_high_curse(player_type *creature_ptr)
 {
     if (((creature_ptr->cursed & TRC_ADD_H_CURSE) == 0) || !one_in_(2000))
         return;
@@ -233,7 +233,7 @@ static void multiply_high_curse(player_type* creature_ptr)
     creature_ptr->update |= (PU_BONUS);
 }
 
-static void curse_call_monster(player_type* creature_ptr)
+static void curse_call_monster(player_type *creature_ptr)
 {
     const int call_type = PM_ALLOW_GROUP | PM_ALLOW_UNIQUE | PM_NO_PET;
     const int obj_desc_type = OD_OMIT_PREFIX | OD_NAME_ONLY;
@@ -274,6 +274,19 @@ static void curse_call_monster(player_type* creature_ptr)
     }
 }
 
+static void curse_cowardice(player_type *creature_ptr)
+{
+    if (((creature_ptr->cursed & TRC_COWARDICE) == 0) || !one_in_(1500))
+        return;
+
+    if (creature_ptr->resist_fear)
+        return;
+
+    disturb(creature_ptr, FALSE, TRUE);
+    msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
+    set_afraid(creature_ptr, creature_ptr->afraid + 13 + randint1(26));
+}
+
 static void occur_curse_effects(player_type *creature_ptr)
 {
     if (((creature_ptr->cursed & TRC_P_FLAG_MASK) == 0) || creature_ptr->phase_out || creature_ptr->wild_mode)
@@ -290,14 +303,7 @@ static void occur_curse_effects(player_type *creature_ptr)
     multiply_low_curse(creature_ptr);
     multiply_high_curse(creature_ptr);
     curse_call_monster(creature_ptr);
-    if ((creature_ptr->cursed & TRC_COWARDICE) && one_in_(1500)) {
-        if (!creature_ptr->resist_fear) {
-            disturb(creature_ptr, FALSE, TRUE);
-            msg_print(_("とても暗い... とても恐い！", "It's so dark... so scary!"));
-            set_afraid(creature_ptr, creature_ptr->afraid + 13 + randint1(26));
-        }
-    }
-
+    curse_cowardice(creature_ptr);
     if ((creature_ptr->cursed & TRC_TELEPORT) && one_in_(200) && !creature_ptr->anti_tele) {
         disturb(creature_ptr, FALSE, TRUE);
         teleport_player(creature_ptr, 40, TELEPORT_PASSIVE);
@@ -330,7 +336,7 @@ static void occur_curse_effects(player_type *creature_ptr)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void execute_cursed_items_effect(player_type* creature_ptr)
+void execute_cursed_items_effect(player_type *creature_ptr)
 {
     occur_curse_effects(creature_ptr);
     if (!one_in_(999) || creature_ptr->anti_magic)
