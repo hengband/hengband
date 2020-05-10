@@ -621,7 +621,7 @@ static void process_world(player_type *player_ptr)
 	reduce_magic_effects_timeout(player_ptr);
 	reduce_lite_life(player_ptr);
 	process_world_aux_mutation(player_ptr);
-	process_world_aux_curse(player_ptr);
+	execute_cursed_items_effect(player_ptr);
 	recharge_magic_items(player_ptr);
 	sense_inventory1(player_ptr);
 	sense_inventory2(player_ptr);
