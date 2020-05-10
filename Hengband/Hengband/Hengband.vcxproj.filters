@@ -823,6 +823,9 @@
     <ClCompile Include="..\..\src\world\world.c">
       <Filter>world</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\dungeon\dungeon-processor.c">
+      <Filter>dungeon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1679,6 +1682,9 @@
     <ClInclude Include="..\..\src\world\world.h">
       <Filter>world</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\dungeon\dungeon-processor.h">
+      <Filter>dungeon</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1756,6 +1762,9 @@
     </Filter>
     <Filter Include="world">
       <UniqueIdentifier>{cbd4a56f-0cd0-47a4-96be-a0a4d85ad7d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dungeon">
+      <UniqueIdentifier>{b37a544f-cca2-4c1f-b069-f109a6b6b119}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

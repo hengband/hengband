@@ -102,7 +102,7 @@ hengband_SOURCES = \
 	floor-save.h floor-save.c floor-town.h floor-town.c \
 	floor-streams.c floor-streams.h \
 	floor/pattern-walk.c floor/pattern-walk.h \
-	floor/dungeon-processor.c floor/dungeon-processor.h \
+	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \
 	\
 	feature.c feature.h \
 	geometry.c geometry.h \
@@ -286,9 +286,9 @@ CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-	-Iautopick -Ibirth -Icmd -Icombat -Icore -Ieffect -Ifloor -Iinventory -Iio \
-	-Iknowledge -Imarket -Imonster -Iobject -Iplayer -Irealm -Iroom -Ispell \
-	-Iview -Iwizard -Iworld
+	-Iautopick -Ibirth -Icmd -Icombat -Icore -Idungeon -Ieffect -Ifloor \
+	-Iinventory -Iio -Iknowledge -Imarket -Imonster -Iobject -Iplayer -Irealm \
+	-Iroom -Ispell -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID
