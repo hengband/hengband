@@ -89,7 +89,7 @@ void close_game(player_type* player_ptr)
 
     print_tomb(player_ptr);
     flush();
-    show_info(player_ptr, handle_stuff, update_playtime, display_player, map_name);
+    show_info(player_ptr, update_playtime, display_player, map_name);
     Term_clear();
     if (check_score(player_ptr)) {
         send_world_score_on_closing(player_ptr, do_send);
