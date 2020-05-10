@@ -21,7 +21,6 @@
 #include "chuukei.h"
 
 #include "creature.h"
-
 #include "birth/birth.h"
 #include "market/building.h"
 #include "io/write-diary.h"
@@ -44,7 +43,6 @@
 #include "player-class.h"
 #include "player-race.h"
 #include "player-personality.h"
-#include "player-damage.h"
 #include "player-effects.h"
 #include "wild.h"
 #include "monster-process.h"
@@ -76,6 +74,7 @@
 #include "inventory/recharge-processor.h"
 #include "io/input-key-processor.h"
 #include "core/player-processor.h"
+#include "player/digestion-processor.h"
 
 #include "cmd/cmd-save.h"
 #include "cmd/cmd-dump.h"
@@ -110,55 +109,6 @@ concptr ANGBAND_GRAF = "ascii";
  * Flags for initialization
  */
 int init_flags;
-
-/*!
- * @brief 10ゲームターンが進行するごとにプレイヤーの腹を減らす
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-static void process_world_aux_digestion(player_type *creature_ptr)
-{
-	if (creature_ptr->phase_out) return;
-
-	if (creature_ptr->food >= PY_FOOD_MAX)
-	{
-		(void)set_food(creature_ptr, creature_ptr->food - 100);
-	}
-	else if (!(current_world_ptr->game_turn % (TURNS_PER_TICK * 5)))
-	{
-		int digestion = SPEED_TO_ENERGY(creature_ptr->pspeed);
-		if (creature_ptr->regenerate)
-			digestion += 20;
-		if (creature_ptr->special_defense & (KAMAE_MASK | KATA_MASK))
-			digestion += 20;
-		if (creature_ptr->cursed & TRC_FAST_DIGEST)
-			digestion += 30;
-
-		if (creature_ptr->slow_digest)
-			digestion -= 5;
-
-		if (digestion < 1) digestion = 1;
-		if (digestion > 100) digestion = 100;
-
-		(void)set_food(creature_ptr, creature_ptr->food - digestion);
-	}
-
-	if ((creature_ptr->food >= PY_FOOD_FAINT)) return;
-
-	if (!creature_ptr->paralyzed && (randint0(100) < 10))
-	{
-		msg_print(_("あまりにも空腹で気絶してしまった。", "You faint from the lack of food."));
-		disturb(creature_ptr, TRUE, TRUE);
-		(void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + 1 + randint0(5));
-	}
-
-	if (creature_ptr->food < PY_FOOD_STARVE)
-	{
-		HIT_POINT dam = (PY_FOOD_STARVE - creature_ptr->food) / 10;
-		if (!IS_INVULN(creature_ptr)) take_hit(creature_ptr, DAMAGE_LOSELIFE, dam, _("空腹", "starvation"), -1);
-	}
-}
-
 
 /*!
  * @brief 10ゲームターンが進行するごとに帰還や現実変容などの残り時間カウントダウンと発動を処理する。
@@ -510,7 +460,7 @@ static void process_world(player_type *player_ptr)
 		}
 	}
 
-	process_world_aux_digestion(player_ptr);
+	starve_player(player_ptr);
 	process_player_hp_mp(player_ptr);
 	reduce_magic_effects_timeout(player_ptr);
 	reduce_lite_life(player_ptr);

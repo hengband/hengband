@@ -68,6 +68,7 @@ hengband_SOURCES = \
 	player/race-resistances.c player/race-resistances.h \
 	player/permanent-resistances.c player/permanent-resistances.h \
 	player/temporary-resistances.c player/temporary-resistances.h \
+	player/digestion-processor.c player/digestion-processor.h \
 	\
 	io/dump-remover.c io/dump-remover.h \
 	io/gf-descriptions.c io/gf-descriptions.h \

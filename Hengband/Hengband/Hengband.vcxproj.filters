@@ -814,6 +814,9 @@
     <ClCompile Include="..\..\src\spell\music-checker.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\digestion-processor.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1660,6 +1663,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell\music-checker.h">
       <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\digestion-processor.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
