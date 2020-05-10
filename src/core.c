@@ -81,8 +81,8 @@
 
 
  /*!
-  * コピーライト情報 /
-  * Hack -- Link a copyright message into the executable
+  * todo どこからも呼ばれていない。main関数辺りに移設するか、そもそもコメントでいいと思われる
+  * コピーライト情報 / Link a copyright message into the executable
   */
 const concptr copyright[5] =
 {
