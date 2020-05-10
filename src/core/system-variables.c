@@ -21,16 +21,6 @@ const concptr copyright[5] =
 };
 
 concptr ANGBAND_SYS = "xxx";
-
-#ifdef JP
-concptr ANGBAND_KEYBOARD = "JAPAN";
-#else
-concptr ANGBAND_KEYBOARD = "0";
-#endif
-
+concptr ANGBAND_KEYBOARD = _("JAPAN", "0");
 concptr ANGBAND_GRAF = "ascii";
-
-/*
- * Flags for initialization
- */
 int init_flags;
