@@ -820,6 +820,9 @@
     <ClCompile Include="..\..\src\world\world-movement-processor.c">
       <Filter>world</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\world\world-turn-processor.c">
+      <Filter>world</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1671,6 +1674,9 @@
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\world\world-movement-processor.h">
+      <Filter>world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\world\world-turn-processor.h">
       <Filter>world</Filter>
     </ClInclude>
   </ItemGroup>
