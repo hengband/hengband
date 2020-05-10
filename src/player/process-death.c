@@ -399,7 +399,7 @@ static void export_player_info(player_type *creature_ptr, update_playtime_pf upd
  * @param display_player ステータス表示へのコールバック
  * @return なし
  */
-void show_info(player_type *creature_ptr, update_playtime_pf update_playtime, display_player_pf display_player, map_name_pf map_name)
+void show_death_info(player_type *creature_ptr, update_playtime_pf update_playtime, display_player_pf display_player, map_name_pf map_name)
 {
 	inventory_aware(creature_ptr);
 	home_aware(creature_ptr);
