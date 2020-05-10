@@ -121,7 +121,7 @@ object_type *choose_cursed_obj_name(player_type* player_ptr, BIT_FLAGS flag)
 }
 
 /*!
- * @brief 呪われているかトランプエゴ等による装備品由来のテレポートを実行する
+ * @brief 呪われている、トランプエゴ等による装備品由来のテレポートを実行する
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
@@ -165,25 +165,33 @@ static void curse_teleport(player_type* creature_ptr)
     }
 }
 
-static void occur_curse_effect(player_type *creature_ptr)
+/*!
+ * @details 元々呪い効果の発揮ルーチン中にいたので、整合性保持のためここに置いておく
+ */
+static void occur_chainsword_effect(player_type* creature_ptr)
+{
+    if (((creature_ptr->cursed & TRC_CHAINSWORD) == 0) || !one_in_(CHAINSWORD_NOISE))
+        return;
+
+    char noise[1024];
+    if (!get_rnd_line(_("chainswd_j.txt", "chainswd.txt"), 0, noise))
+        msg_print(noise);
+    disturb(creature_ptr, FALSE, FALSE);
+}
+
+static void occur_curse_effects(player_type *creature_ptr)
 {
     if (((creature_ptr->cursed & TRC_P_FLAG_MASK) == 0) || creature_ptr->phase_out || creature_ptr->wild_mode)
         return;
 
     curse_teleport(creature_ptr);
-    if ((creature_ptr->cursed & TRC_CHAINSWORD) && one_in_(CHAINSWORD_NOISE)) {
-        char noise[1024];
-        if (!get_rnd_line(_("chainswd_j.txt", "chainswd.txt"), 0, noise))
-            msg_print(noise);
-        disturb(creature_ptr, FALSE, FALSE);
-    }
-
+    occur_chainsword_effect(creature_ptr);
     if ((creature_ptr->cursed & TRC_TY_CURSE) && one_in_(TY_CURSE_CHANCE)) {
         int count = 0;
         (void)activate_ty_curse(creature_ptr, FALSE, &count);
     }
 
-    if (creature_ptr->prace != RACE_ANDROID && ((creature_ptr->cursed & TRC_DRAIN_EXP) && one_in_(4))) {
+    if ((creature_ptr->prace != RACE_ANDROID) && (creature_ptr->cursed & TRC_DRAIN_EXP) && one_in_(4)) {
         creature_ptr->exp -= (creature_ptr->lev + 1) / 2;
         if (creature_ptr->exp < 0)
             creature_ptr->exp = 0;
@@ -299,11 +307,12 @@ static void occur_curse_effect(player_type *creature_ptr)
 /*!
  * @brief 10ゲームターンが進行するごとに装備効果の発動判定を行う処理
  * / Handle curse effects once every 10 game turns
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void execute_cursed_items_effect(player_type* creature_ptr)
 {
-    occur_curse_effect(creature_ptr);
+    occur_curse_effects(creature_ptr);
     if (!one_in_(999) || creature_ptr->anti_magic)
         return;
 
