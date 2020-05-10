@@ -287,6 +287,34 @@ static void curse_cowardice(player_type *creature_ptr)
     set_afraid(creature_ptr, creature_ptr->afraid + 13 + randint1(26));
 }
 
+static void curse_drain_hp(player_type *creature_ptr)
+{
+    if (((creature_ptr->cursed & TRC_DRAIN_HP) == 0) || !one_in_(666))
+        return;
+
+    GAME_TEXT o_name[MAX_NLEN];
+    object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    msg_format(_("%sはあなたの体力を吸収した！", "Your %s drains HP from you!"), o_name);
+    take_hit(creature_ptr, DAMAGE_LOSELIFE, MIN(creature_ptr->lev * 2, 100), o_name, -1);
+}
+
+static void curse_drain_mp(player_type *creature_ptr)
+{
+    if (((creature_ptr->cursed & TRC_DRAIN_MANA) == 0) || (creature_ptr->csp == 0) || !one_in_(666))
+        return;
+
+    GAME_TEXT o_name[MAX_NLEN];
+    object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    msg_format(_("%sはあなたの魔力を吸収した！", "Your %s drains mana from you!"), o_name);
+    creature_ptr->csp -= MIN(creature_ptr->lev, 50);
+    if (creature_ptr->csp < 0) {
+        creature_ptr->csp = 0;
+        creature_ptr->csp_frac = 0;
+    }
+
+    creature_ptr->redraw |= PR_MANA;
+}
+
 static void occur_curse_effects(player_type *creature_ptr)
 {
     if (((creature_ptr->cursed & TRC_P_FLAG_MASK) == 0) || creature_ptr->phase_out || creature_ptr->wild_mode)
@@ -309,25 +337,8 @@ static void occur_curse_effects(player_type *creature_ptr)
         teleport_player(creature_ptr, 40, TELEPORT_PASSIVE);
     }
 
-    if ((creature_ptr->cursed & TRC_DRAIN_HP) && one_in_(666)) {
-        GAME_TEXT o_name[MAX_NLEN];
-        object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_HP), (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        msg_format(_("%sはあなたの体力を吸収した！", "Your %s drains HP from you!"), o_name);
-        take_hit(creature_ptr, DAMAGE_LOSELIFE, MIN(creature_ptr->lev * 2, 100), o_name, -1);
-    }
-
-    if ((creature_ptr->cursed & TRC_DRAIN_MANA) && creature_ptr->csp && one_in_(666)) {
-        GAME_TEXT o_name[MAX_NLEN];
-        object_desc(creature_ptr, o_name, choose_cursed_obj_name(creature_ptr, TRC_DRAIN_MANA), (OD_OMIT_PREFIX | OD_NAME_ONLY));
-        msg_format(_("%sはあなたの魔力を吸収した！", "Your %s drains mana from you!"), o_name);
-        creature_ptr->csp -= MIN(creature_ptr->lev, 50);
-        if (creature_ptr->csp < 0) {
-            creature_ptr->csp = 0;
-            creature_ptr->csp_frac = 0;
-        }
-
-        creature_ptr->redraw |= PR_MANA;
-    }
+    curse_drain_hp(creature_ptr);
+    curse_drain_mp(creature_ptr);
 }
 
 /*!
