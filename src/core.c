@@ -93,8 +93,6 @@ const concptr copyright[5] =
 	"are included in all such copies."
 };
 
-static bool repair_objects;
-
 concptr ANGBAND_SYS = "xxx";
 
 #ifdef JP
@@ -506,7 +504,6 @@ static void dungeon(player_type *player_ptr, bool load_game)
 	player_ptr->ambush_flag = FALSE;
 	health_track(player_ptr, 0);
 	repair_monsters = TRUE;
-	repair_objects = TRUE;
 
 	disturb(player_ptr, TRUE, TRUE);
 	int quest_num = quest_num = quest_number(player_ptr, floor_ptr->dun_level);
