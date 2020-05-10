@@ -2019,7 +2019,7 @@ static void store_process_command(player_type *client_ptr)
 	}
 	case ')':
 	{
-		do_cmd_save_screen(client_ptr, handle_stuff, process_autopick_file_command);
+		do_cmd_save_screen(client_ptr, process_autopick_file_command);
 		break;
 	}
 	default:

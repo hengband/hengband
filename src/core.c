@@ -1240,7 +1240,7 @@ static void process_command(player_type *creature_ptr)
 	}
 	case ')':
 	{
-		do_cmd_save_screen(creature_ptr, handle_stuff, process_autopick_file_command);
+		do_cmd_save_screen(creature_ptr, process_autopick_file_command);
 		break;
 	}
 	case ']':
