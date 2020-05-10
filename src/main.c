@@ -21,6 +21,7 @@
 #include "chuukei.h"
 #include "autopick/autopick-pref-processor.h"
 #include "core/angband-version.h"
+#include "core/game-play.h"
 
 /*
  * Available graphic modes

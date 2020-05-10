@@ -110,6 +110,7 @@
 #include "quest.h"
 #include "files.h"
 #include "core.h"
+#include "core/game-play.h"
 #include "core/angband-version.h"
 #include "core/stuff-handler.h"
 #include "core/special-internal-keys.h"

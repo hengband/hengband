@@ -826,6 +826,9 @@
     <ClCompile Include="..\..\src\dungeon\dungeon-file.c">
       <Filter>dungeon</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\game-play.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -1684,6 +1687,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\dungeon\dungeon-file.h">
       <Filter>dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\game-play.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

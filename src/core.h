@@ -14,4 +14,3 @@ extern concptr ANGBAND_SYS;
 extern concptr ANGBAND_KEYBOARD;
 extern concptr ANGBAND_GRAF;
 
-extern void play_game(player_type *player_ptr, bool new_game);

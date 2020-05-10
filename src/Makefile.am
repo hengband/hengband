@@ -85,6 +85,7 @@ hengband_SOURCES = \
 	io/input-key-processor.c io/input-key-processor.h \
 	\
 	character-dump.c character-dump.h core.c core.h files.c files.h \
+	core/game-play.c core/game-play.h \
 	core/show-file.c core/show-file.h \
 	core/stuff-handler.c core/stuff-handler.h \
 	core/angband-version.h core/special-internal-keys.h \
