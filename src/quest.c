@@ -2,7 +2,7 @@
 #include "util.h"
 #include "main/music-definitions-table.h"
 
-#include "core.h"
+#include "core/system-variables.h"
 #include "dungeon/dungeon.h"
 #include "floor.h"
 #include "floor-save.h"

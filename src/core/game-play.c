@@ -56,7 +56,7 @@
 #include "scores.h"
 #include "targeting.h"
 #include "view/display-main-window.h"
-#include "core.h"
+#include "core/system-variables.h"
 
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game

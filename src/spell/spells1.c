@@ -12,7 +12,7 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/system-variables.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
 #include "cmd/cmd-pet.h"

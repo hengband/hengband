@@ -18,7 +18,7 @@
 #include "gameterm.h"
 
 #include "market/building.h"
-#include "core.h"
+#include "core/system-variables.h"
 #include "core/stuff-handler.h"
 #include "files.h"
 #include "world/world.h"

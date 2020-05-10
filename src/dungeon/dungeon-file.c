@@ -33,7 +33,7 @@
 
 #include "angband.h"
 #include "util.h"
-#include "core.h"
+#include "core/system-variables.h"
 
 #include "io/tokenizer.h"
 #include "files.h"

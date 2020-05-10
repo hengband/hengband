@@ -12,7 +12,7 @@
 
 #include "angband.h"
 #include "market/building.h"
-#include "core.h"
+#include "core/system-variables.h"
 #include "load.h"
 #include "util.h"
 

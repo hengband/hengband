@@ -12,7 +12,7 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/system-variables.h"
 #include "io/read-pref-file.h"
 #include "util.h"
 

@@ -13,7 +13,7 @@
 #include "angband.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
-#include "core.h"
+#include "core/system-variables.h"
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"

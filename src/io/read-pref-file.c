@@ -21,7 +21,7 @@
 #include "autopick/autopick-pref-processor.h"
 #include "files.h" // 暫定。コールバック化して後で消す.
 #include "world/world.h"
-#include "core.h"
+#include "core/system-variables.h"
 #include "autopick/autopick-reader-writer.h"
 
 // todo コールバック関数に変更するので、いずれ消す.

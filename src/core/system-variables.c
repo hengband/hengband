@@ -5,7 +5,7 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/system-variables.h"
 
  /*!
   * todo どこからも呼ばれていない。main関数辺りに移設するか、そもそもコメントでいいと思われる

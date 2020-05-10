@@ -9,7 +9,7 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/system-variables.h"
 #include "uid-checker.h"
 #include "signal-handlers.h"
 #include "files.h"

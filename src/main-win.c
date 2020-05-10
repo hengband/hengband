@@ -109,7 +109,7 @@
 #include "scores.h"
 #include "quest.h"
 #include "files.h"
-#include "core.h"
+#include "core/system-variables.h"
 #include "core/game-play.h"
 #include "core/angband-version.h"
 #include "core/stuff-handler.h"

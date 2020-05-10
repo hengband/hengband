@@ -181,9 +181,6 @@
     <ClCompile Include="..\..\src\player-sex.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core.c">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\history.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -829,6 +826,9 @@
     <ClCompile Include="..\..\src\core\game-play.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\system-variables.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -994,9 +994,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-sex.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\core.h">
-      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\angband.h">
       <Filter>core</Filter>
@@ -1689,6 +1686,9 @@
       <Filter>dungeon</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\game-play.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\system-variables.h">
       <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>

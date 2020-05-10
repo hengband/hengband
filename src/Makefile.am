@@ -84,7 +84,8 @@ hengband_SOURCES = \
 	io/uid-checker.c io/uid-checker.h \
 	io/input-key-processor.c io/input-key-processor.h \
 	\
-	character-dump.c character-dump.h core.c core.h files.c files.h \
+	character-dump.c character-dump.h files.c files.h \
+	core/system-variables.c core/system-variables.h \
 	core/game-play.c core/game-play.h \
 	core/show-file.c core/show-file.h \
 	core/stuff-handler.c core/stuff-handler.h \

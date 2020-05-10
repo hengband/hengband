@@ -98,7 +98,7 @@
 
 #include "angband.h"
 #include "util.h"
-#include "core.h"
+#include "core/system-variables.h"
 #include "market/building.h"
 
 #include "io/write-diary.h"

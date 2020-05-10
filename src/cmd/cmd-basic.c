@@ -13,7 +13,7 @@
 #include "angband.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
-#include "core.h"
+#include "core/system-variables.h"
 #include "core/stuff-handler.h"
 #include "gameterm.h"
 
