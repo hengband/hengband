@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
-#include "dungeon.h"
-#include "world.h"
+#include "dungeon/dungeon.h"
+#include "world/world.h"
 
 /*
  * The dungeon arrays

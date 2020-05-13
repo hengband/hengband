@@ -20,7 +20,7 @@
 
 #include "artifact.h"
 #include "floor-generate.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "floor.h"
 #include "floor-streams.h"
 #include "grid.h"
@@ -28,7 +28,7 @@
 #include "feature.h"
 #include "object-flavor.h"
 #include "object-hook.h"
-#include "spells.h"
+#include "spell/spells1.h"
 #include "spells-floor.h"
 #include "rooms.h"
 

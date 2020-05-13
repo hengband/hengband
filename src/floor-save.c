@@ -12,12 +12,12 @@
 
 #include "angband.h"
 #include "market/building.h"
-#include "core.h"
+#include "core/system-variables.h"
 #include "load.h"
 #include "util.h"
 
 #include "artifact.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "floor.h"
 #include "floor-save.h"
 #include "floor-events.h"
@@ -38,11 +38,12 @@
 #include "player-effects.h"
 #include "player-class.h"
 #include "player-personality.h"
-#include "world.h"
-#include "spells.h"
+#include "world/world.h"
+#include "spell/spells2.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "save.h"
+#include "core/player-processor.h"
 
 #include "view/display-main-window.h"
 

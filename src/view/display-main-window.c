@@ -18,9 +18,10 @@
 #include "gameterm.h"
 
 #include "market/building.h"
-#include "core.h"
+#include "core/system-variables.h"
+#include "core/stuff-handler.h"
 #include "files.h"
-#include "world.h"
+#include "world/world.h"
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"
@@ -40,8 +41,8 @@
 #include "object-flavor.h"
 
 #include "grid.h"
-#include "dungeon.h"
-#include "floor.h"
+#include "dungeon/dungeon.h"
+#include "effect/effect-characteristics.h"
 #include "floor-town.h"
 #include "feature.h"
 #include "object/object-kind.h"
@@ -49,6 +50,9 @@
 
 #include "market/arena-info-table.h"
 #include "effect/spells-effect-util.h"
+#include "spell/spells3.h"
+#include "io/input-key-processor.h"
+#include "core/player-processor.h"
 
  /*
   * Not using graphical tiles for this feature?

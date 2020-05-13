@@ -6,15 +6,6 @@
     <ClCompile Include="..\..\src\z-form.c" />
     <ClCompile Include="..\..\src\z-term.c" />
     <ClCompile Include="..\..\src\warning.c" />
-    <ClCompile Include="..\..\src\spells1.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spells2.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spells3.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spells-diceroll.c">
       <Filter>spell</Filter>
     </ClCompile>
@@ -81,9 +72,6 @@
     <ClCompile Include="..\..\src\object-hook.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mutation.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\patron.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -97,9 +85,6 @@
       <Filter>player</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\avatar.c">
-      <Filter>player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\birth.c">
       <Filter>player</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\artifact.c">
@@ -128,9 +113,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\object-boost.c">
       <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\dungeon-file.c">
-      <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\init.c" />
     <ClCompile Include="..\..\src\files.c">
@@ -178,9 +160,6 @@
     <ClCompile Include="..\..\src\floor.c">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\dungeon.c">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\player-class.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -202,20 +181,11 @@
     <ClCompile Include="..\..\src\player-sex.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core.c">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\history.c">
       <Filter>player</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\gameterm.c">
       <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\wild.c">
-      <Filter>floor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\world.c">
-      <Filter>floor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\quest.c">
       <Filter>market</Filter>
@@ -243,12 +213,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\z-rand.c">
       <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\wizard2.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\wizard1.c">
-      <Filter>cmd</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\report.c">
       <Filter>io</Filter>
@@ -760,6 +724,111 @@
     <ClCompile Include="..\..\src\spell\process-effect.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\stuff-handler.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells2.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells3.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells1.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\birth\birth-explanations-table.c">
+      <Filter>birth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\birth\birth.c">
+      <Filter>birth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\output-updater.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\game-closer.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\pattern-walk.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\turn-compensator.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\inventory\simple-appraiser.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\hp-mp-regenerator.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\hp-mp-processor.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mutation\mutation.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mutation\mutation-processor.c">
+      <Filter>mutation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\lite-processor.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\magic-effects-timeout-reducer.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\inventory\inventory-curse.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\inventory\recharge-processor.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\wizard-spoiler.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wizard\wizard-special-process.c">
+      <Filter>wizard</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\input-key-processor.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\inventory\pack-overflow.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\player-processor.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\music-checker.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\digestion-processor.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\world\world-movement-processor.c">
+      <Filter>world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\world\world-turn-processor.c">
+      <Filter>world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\wild.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\world\world.c">
+      <Filter>world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dungeon\dungeon-processor.c">
+      <Filter>dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dungeon\dungeon.c">
+      <Filter>dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\dungeon\dungeon-file.c">
+      <Filter>dungeon</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\game-play.c">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\core\system-variables.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -773,9 +842,6 @@
     <ClInclude Include="..\..\src\z-form.h" />
     <ClInclude Include="..\..\src\z-term.h" />
     <ClInclude Include="..\..\src\warning.h" />
-    <ClInclude Include="..\..\src\spells.h">
-      <Filter>spell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\spells-diceroll.h">
       <Filter>spell</Filter>
     </ClInclude>
@@ -833,9 +899,6 @@
     <ClInclude Include="..\..\src\object-hook.h">
       <Filter>object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mutation.h">
-      <Filter>player</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\patron.h">
       <Filter>player</Filter>
     </ClInclude>
@@ -881,9 +944,6 @@
     <ClInclude Include="..\..\src\monster-process.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\dungeon-file.h">
-      <Filter>io</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\files.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -905,9 +965,6 @@
     <ClInclude Include="..\..\src\rumor.h">
       <Filter>market</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\birth.h">
-      <Filter>player</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mind.h">
       <Filter>spell</Filter>
     </ClInclude>
@@ -916,9 +973,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player-skill.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\dungeon.h">
-      <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-class.h">
       <Filter>player</Filter>
@@ -941,9 +995,6 @@
     <ClInclude Include="..\..\src\player-sex.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\angband.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -952,12 +1003,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\gameterm.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\wild.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\world.h">
-      <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\quest.h">
       <Filter>market</Filter>
@@ -1532,6 +1577,120 @@
     <ClInclude Include="..\..\src\spell\process-effect.h">
       <Filter>spell</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\effect\effect-characteristics.h">
+      <Filter>effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\stuff-handler.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\angband-version.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\special-internal-keys.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells1.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells2.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells3.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\birth\birth-explanations-table.h">
+      <Filter>birth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\birth\birth.h">
+      <Filter>birth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\output-updater.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\game-closer.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\pattern-walk.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\turn-compensator.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\simple-appraiser.h">
+      <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\hp-mp-regenerator.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\hp-mp-processor.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mutation\mutation-processor.h">
+      <Filter>mutation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\lite-processor.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\magic-effects-timeout-reducer.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\inventory-curse.h">
+      <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\recharge-processor.h">
+      <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\wizard-spoiler.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wizard\wizard-special-process.h">
+      <Filter>wizard</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\input-key-processor.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\pack-overflow.h">
+      <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\player-processor.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\music-checker.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\digestion-processor.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\world\world-movement-processor.h">
+      <Filter>world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\world\world-turn-processor.h">
+      <Filter>world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\wild.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\world\world.h">
+      <Filter>world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dungeon\dungeon-processor.h">
+      <Filter>dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dungeon\dungeon.h">
+      <Filter>dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\dungeon\dungeon-file.h">
+      <Filter>dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\game-play.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\system-variables.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1594,6 +1753,24 @@
     </Filter>
     <Filter Include="realm">
       <UniqueIdentifier>{c4ce5c0c-f907-4e62-abc1-5d9dbe7f1abf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="birth">
+      <UniqueIdentifier>{c2383613-69b3-4973-bb9b-6fce783afa1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="inventory">
+      <UniqueIdentifier>{060db85f-39b1-48fd-8b5f-7409eb6209b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mutation">
+      <UniqueIdentifier>{0e652835-2887-4970-9fa2-4ba77974e921}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="wizard">
+      <UniqueIdentifier>{22328846-3669-435a-9731-f0998a1c3dfa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="world">
+      <UniqueIdentifier>{cbd4a56f-0cd0-47a4-96be-a0a4d85ad7d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="dungeon">
+      <UniqueIdentifier>{b37a544f-cca2-4c1f-b069-f109a6b6b119}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

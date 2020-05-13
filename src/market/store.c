@@ -17,7 +17,7 @@
 #include "market/gold-magnification-table.h"
 #include "market/store-util.h"
 #include "market/black-market.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "util.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
@@ -38,7 +38,7 @@
 #include "cmd/cmd-visuals.h"
 #include "cmd/cmd-zapwand.h"
 #include "cmd/cmd-magiceat.h"
-#include "spells.h"
+#include "spell/spells3.h"
 #include "market/store.h"
 #include "avatar.h"
 #include "cmd-spell.h"
@@ -54,7 +54,7 @@
 #include "player-effects.h"
 #include "player/race-info-table.h"
 #include "mind.h"
-#include "world.h"
+#include "world/world.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
 #include "autopick/autopick-pref-processor.h"
@@ -2019,7 +2019,7 @@ static void store_process_command(player_type *client_ptr)
 	}
 	case ')':
 	{
-		do_cmd_save_screen(client_ptr, handle_stuff, process_autopick_file_command);
+		do_cmd_save_screen(client_ptr, process_autopick_file_command);
 		break;
 	}
 	default:

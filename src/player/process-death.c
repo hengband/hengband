@@ -7,13 +7,14 @@
  */
 
 #include "process-death.h"
-#include "world.h"
+#include "world/world.h"
 #include "floor-town.h"
 #include "player-inventory.h"
 #include "object-flavor.h"
 #include "market/store-util.h"
 #include "market/store.h"
 #include "gameterm.h"
+#include "core/stuff-handler.h"
 
 #define GRAVE_LINE_WIDTH 31
 
@@ -398,13 +399,13 @@ static void export_player_info(player_type *creature_ptr, update_playtime_pf upd
  * @param display_player ステータス表示へのコールバック
  * @return なし
  */
-void show_info(player_type *creature_ptr, void(*handle_stuff)(player_type*), update_playtime_pf update_playtime, display_player_pf display_player, map_name_pf map_name)
+void show_death_info(player_type *creature_ptr, update_playtime_pf update_playtime, display_player_pf display_player, map_name_pf map_name)
 {
 	inventory_aware(creature_ptr);
 	home_aware(creature_ptr);
 
 	creature_ptr->update |= (PU_BONUS);
-	(*handle_stuff)(creature_ptr);
+	handle_stuff(creature_ptr);
 	flush();
 	msg_erase();
 	

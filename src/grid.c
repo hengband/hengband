@@ -19,10 +19,10 @@
 #include "util.h"
 #include "gameterm.h"
 
-#include "world.h"
+#include "world/world.h"
 #include "object-flavor.h"
 #include "object-hook.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "floor-generate.h"
 #include "grid.h"
 #include "trap.h"
@@ -37,6 +37,7 @@
 #include "view/display-main-window.h"
 #include "realm/realm-song.h"
 #include "spell/process-effect.h"
+#include "effect/effect-characteristics.h"
 
 #define MONSTER_FLOW_DEPTH 32 /*!< 敵のプレイヤーに対する移動道のりの最大値(この値以上は処理を打ち切る) / OPTION: Maximum flow depth when using "MONSTER_FLOW" */
 

@@ -109,8 +109,13 @@
 #include "scores.h"
 #include "quest.h"
 #include "files.h"
-#include "core.h"
-#include "world.h"
+#include "core/system-variables.h"
+#include "core/game-play.h"
+#include "core/angband-version.h"
+#include "core/stuff-handler.h"
+#include "core/special-internal-keys.h"
+#include "core/player-processor.h"
+#include "world/world.h"
 #include "gameterm.h"
 
 #ifdef WINDOWS
@@ -119,7 +124,7 @@
 #include <locale.h>
 #include "z-term.h"
 #include "save.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 
 /*
  * Available graphic modes

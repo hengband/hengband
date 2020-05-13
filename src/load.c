@@ -42,17 +42,18 @@
 
 #include "angband.h"
 #include "util.h"
-#include "core.h"
+#include "core/system-variables.h" // 暫定、init_flags の扱いを決めた上で消す.
+#include "core/angband-version.h"
 
 #include "load.h"
 #include "market/building.h"
 #include "report.h"
 
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "feature.h"
 #include "floor-generate.h"
 #include "trap.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 #include "monster.h"
 #include "market/store-util.h"
 #include "quest.h"
@@ -70,7 +71,7 @@
 #include "grid.h"
 
 #include "cmd-pet.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon-file.h"
 #include "io/uid-checker.h"
 #include "files.h"
 #include "player-skill.h"
@@ -78,8 +79,8 @@
 #include "player/race-info-table.h"
 #include "player-personality.h"
 #include "player-sex.h"
-#include "birth.h"
-#include "world.h"
+#include "birth/birth.h"
+#include "world/world.h"
 #include "object/object-kind.h"
 #include "object-ego.h"
 #include "save.h"

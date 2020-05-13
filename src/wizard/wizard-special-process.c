@@ -11,20 +11,23 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "wizard/wizard-special-process.h"
+#include "wizard/wizard-spoiler.h"
+#include "core/angband-version.h"
+#include "core/stuff-handler.h"
 #include "gameterm.h"
 
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-draw.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-help.h"
 #include "cmd/cmd-save.h"
 #include "util.h"
-#include "birth.h"
+#include "birth/birth.h"
 #include "selfinfo.h"
 #include "patron.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 #include "quest.h"
 #include "artifact.h"
 #include "player-status.h"
@@ -47,19 +50,19 @@
 #include "floor.h"
 #include "floor-save.h"
 #include "grid.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon-file.h"
 #include "files.h"
 #include "monster-spell.h"
 #include "market/building.h"
 #include "object/object-kind.h"
 #include "targeting.h"
 #include "view/display-main-window.h"
-#include "world.h"
+#include "world/world.h"
+#include "spell/spells2.h"
+#include "spell/spells3.h"
 
 #define NUM_O_SET 8
 #define NUM_O_BIT 32
-
-extern void do_cmd_debug(player_type *creature_ptr);
 
 typedef union spell_functions {
 	struct debug_spell_type1 { bool(*spell_function)(player_type *, floor_type *); } spell1;

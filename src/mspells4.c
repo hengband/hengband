@@ -9,7 +9,7 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "grid.h"
 #include "spells-summon.h"
 #include "artifact.h"
@@ -24,9 +24,11 @@
 #include "spell/spells-type.h"
 #include "melee.h"
 #include "player-effects.h"
-#include "world.h"
+#include "world/world.h"
 #include "view/display-main-window.h" // 暫定、後で消したい.
 #include "spell/process-effect.h"
+#include "spell/spells2.h"
+#include "spell/spells3.h"
 
  /*!
  * @brief モンスター2体がプレイヤーの近くに居るかの判定 /

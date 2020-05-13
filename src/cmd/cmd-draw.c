@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "core.h" // 暫定。後で消す.
+#include "core/stuff-handler.h"
 #include "cmd/cmd-draw.h"
 #include "files.h"
 #include "gameterm.h"

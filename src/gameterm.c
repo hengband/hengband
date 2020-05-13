@@ -2,7 +2,7 @@
 #include "util.h"
 
 #include "gameterm.h"
-#include "core.h"
+#include "core/system-variables.h"
 
 
 /*

@@ -14,6 +14,7 @@
 #include "player-damage.h"
 #include "targeting.h"
 #include "realm/realm-daemon.h"
+#include "spell/spells2.h"
 
 /*!
 * @brief 悪魔領域魔法の各処理を行う

@@ -1,5 +1,5 @@
-/*!
- * @brief ©“®”j‰ó‚ÌÀs
+ï»¿/*!
+ * @brief è‡ªå‹•ç ´å£Šã®å®Ÿè¡Œ
  * @date 2020/04/25
  * @author Hourier
  */
@@ -15,10 +15,10 @@
 
 
 /*!
- * @brief ƒNƒ‰ƒXˆË‘¶‚ÌƒAƒCƒeƒ€”j‰ó‚ğ’²‚×‚é
- * @param player_ptr ƒvƒŒ[ƒ„[‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @param o_ptr ƒAƒCƒeƒ€‚Ö‚ÌQÆƒ|ƒCƒ“ƒ^
- * @return “Á•Ê‚ÈƒNƒ‰ƒXA‚©‚Â‚»‚ÌƒNƒ‰ƒX“Á—L‚ÌƒAƒCƒeƒ€‚Å‚ ‚ê‚ÎFALSEA‚»‚êˆÈŠO‚ÍTRUE
+ * @brief ã‚¯ãƒ©ã‚¹ä¾å­˜ã®ã‚¢ã‚¤ãƒ†ãƒ ç ´å£Šã‚’èª¿ã¹ã‚‹
+ * @param player_ptr ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @param o_ptr ã‚¢ã‚¤ãƒ†ãƒ ã¸ã®å‚ç…§ãƒã‚¤ãƒ³ã‚¿
+ * @return ç‰¹åˆ¥ãªã‚¯ãƒ©ã‚¹ã€ã‹ã¤ãã®ã‚¯ãƒ©ã‚¹ç‰¹æœ‰ã®ã‚¢ã‚¤ãƒ†ãƒ ã§ã‚ã‚Œã°FALSEã€ãã‚Œä»¥å¤–ã¯TRUE
  */
 static bool is_leave_special_item(player_type *player_ptr, object_type *o_ptr)
 {
@@ -111,7 +111,7 @@ void auto_destroy_item(player_type *player_ptr, object_type *o_ptr, int autopick
 	{
 		GAME_TEXT o_name[MAX_NLEN];
 		object_desc(player_ptr, o_name, o_ptr, 0);
-		msg_format(_("%s‚Í”j‰ó•s”\‚¾B", "You cannot auto-destroy %s."), o_name);
+		msg_format(_("%sã¯ç ´å£Šä¸èƒ½ã ã€‚", "You cannot auto-destroy %s."), o_name);
 		return;
 	}
 

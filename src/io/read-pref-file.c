@@ -20,7 +20,9 @@
 #include "io/interpret-pref-file.h"
 #include "autopick/autopick-pref-processor.h"
 #include "files.h" // 暫定。コールバック化して後で消す.
-#include "world.h"
+#include "world/world.h"
+#include "core/system-variables.h"
+#include "autopick/autopick-reader-writer.h"
 
 // todo コールバック関数に変更するので、いずれ消す.
 #define PREF_TYPE_NORMAL   0
@@ -264,4 +266,38 @@ void close_auto_dump(FILE **fpp, concptr auto_dump_mark)
 		"# Don't edit them; changes will be deleted and replaced automatically.\n"));
 	fprintf(*fpp, "%s (%d)\n", footer_mark_str, auto_dump_line_num);
 	my_fclose(*fpp);
+}
+
+/*!
+ * @brief 全ユーザプロファイルをロードする / Load some "user pref files"
+ * @paaram player_ptr プレーヤーへの参照ポインタ
+ * @return なし
+ * @note
+ * Modified by Arcum Dagsson to support
+ * separate macro files for different realms.
+ */
+void load_all_pref_files(player_type* player_ptr)
+{
+    char buf[1024];
+    sprintf(buf, "user.prf");
+    process_pref_file(player_ptr, buf, process_autopick_file_command);
+    sprintf(buf, "user-%s.prf", ANGBAND_SYS);
+    process_pref_file(player_ptr, buf, process_autopick_file_command);
+    sprintf(buf, "%s.prf", rp_ptr->title);
+    process_pref_file(player_ptr, buf, process_autopick_file_command);
+    sprintf(buf, "%s.prf", cp_ptr->title);
+    process_pref_file(player_ptr, buf, process_autopick_file_command);
+    sprintf(buf, "%s.prf", player_ptr->base_name);
+    process_pref_file(player_ptr, buf, process_autopick_file_command);
+    if (player_ptr->realm1 != REALM_NONE) {
+        sprintf(buf, "%s.prf", realm_names[player_ptr->realm1]);
+        process_pref_file(player_ptr, buf, process_autopick_file_command);
+    }
+
+    if (player_ptr->realm2 != REALM_NONE) {
+        sprintf(buf, "%s.prf", realm_names[player_ptr->realm2]);
+        process_pref_file(player_ptr, buf, process_autopick_file_command);
+    }
+
+    autopick_load_pref(player_ptr, FALSE);
 }

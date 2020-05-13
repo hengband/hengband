@@ -6,13 +6,15 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/turn-compensator.h"
+#include "core/angband-version.h"
+#include "core/stuff-handler.h"
 #include "inet.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 
 #include "player-personality.h"
 #include "character-dump.h"
-#include "world.h"
+#include "world/world.h"
 #include "gameterm.h"
 
 #ifdef WORLD_SCORE

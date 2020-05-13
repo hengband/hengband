@@ -16,7 +16,7 @@
 #include "main/sound-definitions-table.h"
 
 #include "cmd-pet.h"
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "grid.h"
 #include "quest.h"
 #include "realm/realm-hex.h"
@@ -26,9 +26,10 @@
 #include "monster-status.h"
 #include "monster-spell.h"
 #include "spell/spells-type.h"
-#include "dungeon.h"
-#include "world.h"
+#include "dungeon/dungeon.h"
+#include "world/world.h"
 #include "view/display-main-window.h"
+#include "spell/spells3.h"
 
  /*!
   * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /

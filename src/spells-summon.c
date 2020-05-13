@@ -6,6 +6,7 @@
 #include "monster-status.h"
 #include "floor.h"
 #include "effect/spells-effect-util.h"
+#include "spell/spells2.h"
 
 /*!
 * @brief トランプ魔法独自の召喚処理を行う / Handle summoning and failure of trump spells

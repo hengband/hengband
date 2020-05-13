@@ -29,10 +29,13 @@
 #include "object/object-kind.h"
 #include "object-ego.h"
 #include "targeting.h"
-#include "world.h"
+#include "world/world.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells-type.h"
 #include "spell/process-effect.h"
+#include "effect/effect-characteristics.h"
+#include "spell/spells2.h"
+#include "spell/spells3.h"
 
 /*!
  * @brief 装備耐性に準じたブレス効果の選択テーブル /

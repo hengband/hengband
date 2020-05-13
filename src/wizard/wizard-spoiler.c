@@ -11,10 +11,11 @@
  */
 
 #include "angband.h"
+#include "wizard/wizard-spoiler.h"
 #include "util.h"
 #include "gameterm.h"
 
-#include "core.h"
+#include "core/angband-version.h"
 #include "artifact.h"
 #include "sort.h"
 #include "market/store.h"

@@ -3,7 +3,7 @@
 #include "trap.h"
 
 #include "floor.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "rooms.h"
 
 

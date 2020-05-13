@@ -1,7 +1,7 @@
 ﻿#include "angband.h"
 #include "util.h"
 
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "floor.h"
 #include "floor-events.h"
 #include "grid.h"
@@ -10,7 +10,7 @@
 #include "quest.h"
 #include "object-hook.h"
 #include "player-move.h"
-#include "world.h"
+#include "world/world.h"
 #include "player-effects.h"
 #include "object/object-kind.h"
 #include "object-ego.h"

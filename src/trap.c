@@ -18,13 +18,15 @@
 #include "player-status.h"
 #include "grid.h"
 #include "spell/spells-type.h"
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "floor-save.h"
 #include "init.h"
 #include "files.h"
-#include "dungeon.h"
-#include "world.h"
+#include "dungeon/dungeon.h"
+#include "world/world.h"
 #include "spell/process-effect.h"
+#include "spell/spells2.h"
+#include "spell/spells3.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 

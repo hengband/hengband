@@ -13,7 +13,8 @@
 #include "angband.h"
 #include "main/music-definitions-table.h"
 #include "io/signal-handlers.h"
-#include "core.h"
+#include "core/system-variables.h"
+#include "core/stuff-handler.h"
 #include "gameterm.h"
 #include "util.h"
 #include "files.h"
@@ -21,11 +22,13 @@
 #include "view/display-main-window.h"
 #include "quest.h"
 #include "floor.h"
-#include "world.h"
+#include "world/world.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "japanese.h"
 #include "player-class.h"
+#include "core/output-updater.h"
+#include "io/input-key-processor.h"
 
 /*!
  * 10進数から16進数への変換テーブル /

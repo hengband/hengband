@@ -13,7 +13,8 @@
 #include "angband.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
-#include "core.h"
+#include "core/system-variables.h"
+#include "core/stuff-handler.h"
 #include "gameterm.h"
 
 #include "io/write-diary.h"
@@ -21,7 +22,7 @@
 #include "cmd/cmd-save.h"
 #include "chest.h"
 #include "trap.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "melee.h"
 #include "object-hook.h"
 #include "monster-status.h"
@@ -44,13 +45,15 @@
 #include "snipe.h"
 
 #include "cmd-basic.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon-file.h"
 #include "files.h"
 
 #include "view/display-main-window.h"
 #include "targeting.h"
-#include "world.h"
+#include "world/world.h"
 #include "effect/spells-effect-util.h"
+#include "spell/spells3.h"
+#include "core/output-updater.h"
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理

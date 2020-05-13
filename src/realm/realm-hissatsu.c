@@ -1,11 +1,11 @@
 ﻿#include "angband.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "util.h"
 
 #include "cmd-spell.h"
 #include "cmd-basic.h"
-#include "dungeon.h"
-#include "floor.h"
+#include "dungeon/dungeon.h"
+#include "effect/effect-characteristics.h"
 #include "melee.h"
 #include "monsterrace-hook.h"
 #include "artifact.h"
@@ -20,11 +20,13 @@
 #include "targeting.h"
 #include "view/display-main-window.h"
 #include "spells-floor.h"
-#include "world.h"
+#include "world/world.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells-util.h"
 #include "spell/spells-type.h"
 #include "spell/process-effect.h"
+#include "spell/spells2.h"
+#include "spell/spells3.h"
 
 /*!
 * @brief 剣術の各処理を行う

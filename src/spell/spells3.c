@@ -13,7 +13,7 @@
 
 #include "angband.h"
 #include "market/building.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "gameterm.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
@@ -21,8 +21,8 @@
 
 #include "creature.h"
 
-#include "dungeon.h"
-#include "floor.h"
+#include "dungeon/dungeon.h"
+#include "effect/effect-characteristics.h"
 #include "floor-town.h"
 #include "object-boost.h"
 #include "object-flavor.h"
@@ -37,7 +37,8 @@
 #include "quest.h"
 #include "artifact.h"
 #include "avatar.h"
-#include "spells.h"
+#include "spell/spells2.h"
+#include "spell/spells3.h"
 #include "spells-floor.h"
 #include "spell/technic-info-table.h"
 #include "grid.h"
@@ -58,7 +59,7 @@
 #include "view/display-main-window.h"
 #include "mind.h"
 #include "wild.h"
-#include "world.h"
+#include "world/world.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
 #include "targeting.h"

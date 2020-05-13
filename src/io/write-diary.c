@@ -5,12 +5,12 @@
  */
 
 #include "io/write-diary.h"
-#include "core.h"
+#include "core/system-variables.h"
 #include "quest.h"
 #include "files.h"
-#include "dungeon.h"
-#include "dungeon-file.h"
-#include "world.h"
+#include "dungeon/dungeon.h"
+#include "dungeon/dungeon-file.h"
+#include "world/world.h"
 #include "market/arena-info-table.h"
 
 // todo *抹殺* したい…

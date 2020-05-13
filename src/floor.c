@@ -3,17 +3,18 @@
 #include "floor-save.h"
 #include "floor-generate.h"
 #include "grid.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "rooms.h"
 #include "quest.h"
 #include "object-hook.h"
-#include "world.h"
+#include "world/world.h"
 #include "player-effects.h"
 #include "object.h"
 #include "artifact.h"
 #include "object/object-kind.h"
 #include "trap.h"
 #include "effect/spells-effect-util.h"
+#include "effect/effect-characteristics.h"
 
 /*
  * The array of floor [MAX_WID][MAX_HGT].

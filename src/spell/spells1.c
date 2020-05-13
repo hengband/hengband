@@ -12,20 +12,21 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/system-variables.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
 #include "cmd/cmd-pet.h"
 #include "cmd/cmd-dump.h"
 #include "player-class.h"
 #include "monster.h"
-#include "spells.h"
+#include "spell/spells1.h"
 #include "gameterm.h"
 #include "view/display-main-window.h"
 #include "effect/spells-effect-util.h"
 #include "effect/effect-feature.h"
 #include "effect/effect-item.h"
 #include "effect/effect-monster.h"
+#include "effect/effect-characteristics.h"
 
 /*
  * Find the distance from (x, y) to a line.

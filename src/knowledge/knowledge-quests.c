@@ -8,13 +8,13 @@
 #include "knowledge-quests.h"
 #include "cmd/dump-util.h"
 #include "quest.h"
-#include "core.h" // init_flagsのため。後で消すかも.
+#include "core/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
 #include "artifact.h"
 #include "object-flavor.h"
-#include "dungeon.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon.h"
+#include "dungeon/dungeon-file.h"
 #include "sort.h"
-#include "world.h"
+#include "world/world.h"
 #include "core/show-file.h"
 #include "english.h"
 

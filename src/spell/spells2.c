@@ -12,7 +12,8 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/system-variables.h"
+#include "core/stuff-handler.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
@@ -22,15 +23,16 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-pet.h"
 #include "cmd/cmd-dump.h"
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "grid.h"
 #include "trap.h"
 #include "monsterrace-hook.h"
 #include "melee.h"
-#include "world.h"
-#include "spells.h"
+#include "world/world.h"
+#include "spell/spells2.h"
+#include "spell/spells3.h"
 #include "spells-summon.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 #include "quest.h"
 #include "avatar.h"
 
@@ -50,7 +52,7 @@
 #include "player-damage.h"
 #include "player-inventory.h"
 
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "floor-events.h"
 #include "feature.h"
 #include "view/display-main-window.h"
@@ -62,6 +64,7 @@
 #include "effect/spells-effect-util.h"
 #include "spell/spells-type.h"
 #include "spell/process-effect.h"
+#include "core/player-processor.h"
 
  /*!
   * @brief プレイヤー周辺の地形を感知する

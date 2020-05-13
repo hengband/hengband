@@ -4,7 +4,7 @@
 #include "monster-spell.h"
 #include "player-damage.h"
 #include "player-effects.h"
-#include "world.h"
+#include "world/world.h"
 
 void effect_player_drain_mana(player_type *target_ptr,
                               effect_player_type *ep_ptr) {

@@ -11,7 +11,7 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
 #include "gameterm.h"
@@ -40,7 +40,7 @@
 #include "player-personality.h"
 #include "monster.h"
 #include "view/display-main-window.h"
-#include "spells.h"
+#include "spell/spells3.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
 #include "autopick/autopick-registry.h"

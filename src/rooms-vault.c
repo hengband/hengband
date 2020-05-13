@@ -10,7 +10,7 @@
 #include "monster.h"
 #include "feature.h"
 #include "floor.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "geometry.h"
 #include "wild.h"
 #include "market/store-util.h"

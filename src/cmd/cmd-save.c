@@ -3,9 +3,9 @@
 #include "cmd/cmd-save.h"
 #include "cmd/cmd-dump.h"
 #include "player-move.h"
-#include "core.h" // 暫定。後で消す.
+#include "core/stuff-handler.h"
 #include "save.h"
-#include "world.h"
+#include "world/world.h"
 #include "monster-status.h" // 違和感。要調査.
 #include "gameterm.h"
 

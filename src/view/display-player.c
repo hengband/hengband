@@ -13,11 +13,11 @@
 #include "status-first-page.h"
 #include "player-sex.h"
 #include "patron.h"
-#include "world.h"
+#include "world/world.h"
 #include "quest.h"
-#include "core.h" // 暫定。後で消す
+#include "core/system-variables.h" // 暫定。後で消す
 #include "knowledge/knowledge-mutations.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon-file.h"
 #include "object/object-kind.h"
 #include "view/display-util.h"
 #include "view/display-characteristic.h"

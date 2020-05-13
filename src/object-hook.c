@@ -9,7 +9,7 @@
 #include "player-skill.h"
 #include "player/mimic-info-table.h"
 #include "quest.h"
-#include "world.h"
+#include "world/world.h"
 #include "object/object-kind.h"
 #include "view/display-main-window.h"
 

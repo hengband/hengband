@@ -2,7 +2,7 @@
 #include "autopick/autopick-reader-writer.h"
 #include "player-personality.h"
 #include "files.h"
-#include "world.h"
+#include "world/world.h"
 #include "gameterm.h"
 
 /*!

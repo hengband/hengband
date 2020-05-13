@@ -18,7 +18,7 @@
 #include "angband.h"
 #include "util.h"
 
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "cmd-spell.h"
 #include "cmd-quaff.h"
 #include "object-flavor.h"
@@ -36,11 +36,13 @@
 #include "targeting.h"
 #include "realm/realm-song.h"
 #include "view/display-main-window.h"
-#include "world.h"
+#include "world/world.h"
 #include "realm/realm-hex.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-type.h"
 #include "spell/process-effect.h"
+#include "spell/spells2.h"
+#include "spell/spells3.h"
 
 #define MAX_KEEP 4 /*!<呪術の最大詠唱数 */
 

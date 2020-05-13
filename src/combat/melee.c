@@ -12,7 +12,7 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
@@ -29,9 +29,9 @@
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "grid.h"
-#include "dungeon.h"
-#include "floor.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
+#include "effect/effect-characteristics.h"
+#include "dungeon/dungeon.h"
 #include "spell/process-effect.h"
 #include "spell/spells-type.h"
 #include "files.h"
@@ -44,8 +44,10 @@
 #include "player-class.h"
 #include "player-personality.h"
 #include "view/display-main-window.h"
-#include "world.h"
+#include "world/world.h"
 #include "spells-floor.h"
+#include "spell/spells2.h"
+#include "spell/spells3.h"
 
 #define BLOW_EFFECT_TYPE_NONE  0
 #define BLOW_EFFECT_TYPE_FEAR  1

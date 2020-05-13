@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "util.h"
 
 #include "io/write-diary.h"
@@ -21,7 +21,7 @@
 #include "cmd-basic.h"
 #include "view/display-main-window.h"
 #include "targeting.h"
-#include "world.h"
+#include "world/world.h"
 #include "effect/spells-effect-util.h"
 
 int total_friends = 0;

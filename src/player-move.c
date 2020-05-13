@@ -140,14 +140,15 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/stuff-handler.h"
+#include "core/special-internal-keys.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
 #include "realm/realm-song.h"
 #include "autopick/autopick.h"
-#include "dungeon.h"
-#include "floor.h"
+#include "dungeon/dungeon.h"
+#include "effect/effect-characteristics.h"
 #include "melee.h"
 #include "grid.h"
 #include "trap.h"
@@ -171,11 +172,12 @@
 #include "spell/spells-type.h"
 #include "cmd-basic.h"
 #include "view/display-main-window.h"
-#include "world.h"
+#include "world/world.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
 #include "targeting.h"
 #include "spell/process-effect.h"
+#include "spell/spells3.h"
 
 travel_type travel;
 

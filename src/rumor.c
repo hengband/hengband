@@ -5,11 +5,11 @@
 #include "files.h"
 #include "object-flavor.h"
 #include "artifact.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "monsterrace.h"
 #include "floor-town.h"
 #include "wild.h"
-#include "world.h"
+#include "world/world.h"
 
 /*
  * Display a rumor and apply its effects

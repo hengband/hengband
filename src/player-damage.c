@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "util.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
@@ -25,7 +25,7 @@
 #include "player-class.h"
 #include "player-race.h"
 #include "monster-spell.h"
-#include "world.h"
+#include "world/world.h"
 #include "view/display-main-window.h"
 #include "quest.h"
 #include "report.h"
@@ -568,7 +568,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 
 			if (get_check_strict(_("画面を保存しますか？", "Dump the screen? "), CHECK_NO_HISTORY))
 			{
-				do_cmd_save_screen(creature_ptr, handle_stuff, process_autopick_file_command);
+				do_cmd_save_screen(creature_ptr, process_autopick_file_command);
 			}
 
 			flush();

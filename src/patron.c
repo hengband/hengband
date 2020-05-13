@@ -10,7 +10,7 @@
 #include "object-flavor.h"
 #include "monsterrace-hook.h"
 #include "object/object-kind-hook.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 #include "artifact.h"
 #include "player-status.h"
 #include "player-effects.h"
@@ -24,6 +24,7 @@
 #include "spells-status.h"
 #include "spells-floor.h"
 #include "floor.h"
+#include "spell/spells2.h"
 
 #ifdef JP
 /*!

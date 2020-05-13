@@ -15,6 +15,7 @@
 #include "monsterrace-hook.h"
 #include "combat/melee.h"
 #include "spell/spells-type.h"
+#include "spell/spells2.h"
 #include "effect/effect-monster-resist-hurt.h"
 #include "effect/effect-monster-psi.h"
 #include "effect/effect-monster-domination.h"

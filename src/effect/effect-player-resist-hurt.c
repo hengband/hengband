@@ -2,13 +2,14 @@
 #include "effect/effect-player-util.h"
 #include "effect/effect-player-resist-hurt.h"
 #include "player-damage.h"
-#include "world.h"
+#include "world/world.h"
 #include "object-broken.h"
 #include "artifact.h"
 #include "player-effects.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 #include "monster-spell.h"
 #include "spells-status.h"
+#include "spell/spells3.h"
 
 // 毒を除く4元素.
 void effect_player_elements(player_type *target_ptr, effect_player_type *ep_ptr,

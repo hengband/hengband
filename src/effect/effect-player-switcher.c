@@ -12,7 +12,7 @@
 #include "player-effects.h"
 #include "player/mimic-info-table.h"
 #include "spell/spells-type.h"
-#include "world.h"
+#include "world/world.h"
 
 void effect_player_mana(player_type *target_ptr, effect_player_type *ep_ptr) {
   if (target_ptr->blind)

@@ -4,7 +4,8 @@
 #include "cmd-spell.h"
 #include "avatar.h"
 
-#include "spells.h"
+#include "spell/spells2.h"
+#include "spell/spells3.h"
 #include "spells-floor.h"
 #include "spells-object.h"
 #include "spells-summon.h"

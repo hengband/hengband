@@ -41,8 +41,8 @@
 #include "angband.h"
 #include "util.h"
 
-#include "floor.h"
-#include "dungeon.h"
+#include "effect/effect-characteristics.h"
+#include "dungeon/dungeon.h"
 #include "grid.h"
 #include "object-curse.h"
 #include "quest.h"
@@ -52,12 +52,13 @@
 #include "monster.h"
 #include "monster-spell.h"
 #include "spell/spells-type.h"
-#include "world.h"
+#include "world/world.h"
 #include "realm/realm-song.h"
 #include "view/display-main-window.h"
 #include "player-race.h"
 #include "player-class.h"
 #include "spell/process-effect.h"
+#include "spell/spells3.h"
 
 #define DO_SPELL_NONE    0
 #define DO_SPELL_BR_LITE 1

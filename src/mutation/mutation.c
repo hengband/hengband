@@ -12,13 +12,13 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "core/show-file.h"
 #include "util.h"
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "mutation.h"
+#include "mutation/mutation.h"
 
 #include "selfinfo.h"
 #include "spells-summon.h"
@@ -38,6 +38,8 @@
 #include "player-race.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells-type.h"
+#include "spell/spells2.h"
+#include "spell/spells3.h"
 
 /*!
  * @brief プレイヤーに突然変異を与える

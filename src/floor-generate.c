@@ -98,7 +98,7 @@
 
 #include "angband.h"
 #include "util.h"
-#include "core.h"
+#include "core/system-variables.h"
 #include "market/building.h"
 
 #include "io/write-diary.h"
@@ -106,7 +106,7 @@
 #include "grid.h"
 #include "market/arena-info-table.h"
 #include "rooms.h"
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "floor.h"
 #include "floor-save.h"
 #include "floor-streams.h"
@@ -120,12 +120,12 @@
 #include "player-status.h"
 #include "wild.h"
 #include "monster-status.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon-file.h"
 #include "init.h"
 #include "feature.h"
-#include "spells.h"
+#include "spell/spells1.h"
 
-#include "world.h"
+#include "world/world.h"
 #include "view/display-main-window.h"
 
 int dun_tun_rnd; 

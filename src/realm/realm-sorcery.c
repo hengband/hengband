@@ -11,6 +11,8 @@
 #include "player-effects.h"
 #include "targeting.h"
 #include "realm/realm-sorcery.h"
+#include "spell/spells2.h"
+#include "spell/spells3.h"
 
 /*!
 * @brief 仙術領域魔法の各処理を行う

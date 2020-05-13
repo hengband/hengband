@@ -12,13 +12,14 @@
 
 #include "angband.h"
 #include "util.h"
-#include "core.h"
+#include "core/system-variables.h"
+#include "core/stuff-handler.h"
 #include "gameterm.h"
 #include "targeting.h"
 
 #include "market/building.h"
 #include "cmd-pet.h"
-#include "dungeon-file.h"
+#include "dungeon/dungeon-file.h"
 #include "object-curse.h"
 #include "object-flavor.h"
 #include "monster.h"
@@ -37,8 +38,8 @@
 #include "view/display-main-window.h"
 #include "feature.h"
 #include "quest.h"
-#include "dungeon.h"
-#include "world.h"
+#include "dungeon/dungeon.h"
+#include "world/world.h"
 #include "effect/spells-effect-util.h"
 
  /*!

@@ -13,13 +13,13 @@
 #include "angband.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
-#include "core.h"
+#include "core/system-variables.h"
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "cmd-pet.h"
-#include "dungeon.h"
-#include "floor.h"
+#include "dungeon/dungeon.h"
+#include "effect/effect-characteristics.h"
 #include "object-flavor.h"
 #include "monsterrace-hook.h"
 #include "monster-status.h"
@@ -38,12 +38,13 @@
 #include "monster-spell.h"
 #include "files.h"
 #include "view/display-main-window.h"
-#include "world.h"
+#include "world/world.h"
 #include "monsterrace.h"
 #include "creature.h"
 #include "targeting.h"
 #include "melee.h"
 #include "spell/process-effect.h"
+#include "core/player-processor.h"
 
 #define HORDE_NOGOOD 0x01 /*!< (未実装フラグ)HORDE生成でGOODなモンスターの生成を禁止する？ */
 #define HORDE_NOEVIL 0x02 /*!< (未実装フラグ)HORDE生成でEVILなモンスターの生成を禁止する？ */

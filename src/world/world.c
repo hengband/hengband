@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "world.h"
+#include "world/world.h"
 #include "player-race.h"
 
 world_type world;

@@ -15,6 +15,8 @@
 #include "floor.h"
 #include "targeting.h"
 #include "view/display-main-window.h"
+#include "spell/spells2.h"
+#include "spell/spells3.h"
 
 /*!
 * @brief 魔法棒の効果を発動する

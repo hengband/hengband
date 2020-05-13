@@ -34,12 +34,12 @@
 #include "cmd/cmd-dump.h"
 #include "cmd/dump-util.h"
 #include "gameterm.h"
-#include "core.h" // 暫定。後で消す.
+#include "core/angband-version.h"
 #include "io/dump-remover.h"
 #include "io/read-pref-file.h"
 #include "io/interpret-pref-file.h"
 
-#include "world.h"
+#include "world/world.h"
 #include "view/display-player.h" // 暫定。後で消す.
 #include "player-personality.h"
 #include "quest.h"

@@ -1,7 +1,7 @@
 ﻿#include "angband.h"
 #include "util.h"
 
-#include "dungeon.h"
+#include "dungeon/dungeon.h"
 #include "floor.h"
 #include "grid.h"
 #include "quest.h"
@@ -24,7 +24,7 @@
 
 #include "monster-status.h"
 
-#include "spells.h"
+#include "spell/spells3.h"
 #include "spells-floor.h"
 
 /*

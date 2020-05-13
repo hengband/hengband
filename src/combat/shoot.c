@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
 #include "gameterm.h"
@@ -15,7 +15,7 @@
 #include "player-personality.h"
 #include "object-hook.h"
 #include "object-broken.h"
-#include "floor.h"
+#include "effect/effect-characteristics.h"
 #include "grid.h"
 #include "object-flavor.h"
 

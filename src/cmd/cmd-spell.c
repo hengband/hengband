@@ -7,7 +7,7 @@
  */
 
 #include "angband.h"
-#include "core.h"
+#include "core/stuff-handler.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
 #include "cmd/cmd-spell.h"
@@ -16,7 +16,8 @@
 #include "cmd/cmd-dump.h"
 #include "selfinfo.h"
 #include "spell/technic-info-table.h"
-#include "spells.h"
+#include "spell/spells2.h"
+#include "spell/spells3.h"
 #include "spells-summon.h"
 #include "realm/realm-hex.h"
 #include "mind.h"
