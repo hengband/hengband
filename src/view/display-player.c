@@ -12,7 +12,7 @@
 #include "term/gameterm.h"
 #include "status-first-page.h"
 #include "player/player-sex.h"
-#include "patron.h"
+#include "player/patron.h"
 #include "world/world.h"
 #include "quest.h"
 #include "system/system-variables.h" // 暫定。後で消す

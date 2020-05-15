@@ -323,7 +323,7 @@
     <ClCompile Include="..\..\src\object\object-kind-hook.c" />
     <ClCompile Include="..\..\src\object\object-broken.c" />
     <ClCompile Include="..\..\src\object\lite-processor.c" />
-    <ClCompile Include="..\..\src\patron.c" />
+    <ClCompile Include="..\..\src\player\patron.c" />
     <ClCompile Include="..\..\src\player\player-class.c" />
     <ClCompile Include="..\..\src\player\player-damage.c" />
     <ClCompile Include="..\..\src\player\player-effects.c" />
@@ -664,7 +664,7 @@
     <ClInclude Include="..\..\src\object\object.h" />
     <ClInclude Include="..\..\src\object\object-kind-hook.h" />
     <ClInclude Include="..\..\src\object\object-kind.h" />
-    <ClInclude Include="..\..\src\patron.h" />
+    <ClInclude Include="..\..\src\player\patron.h" />
     <ClInclude Include="..\..\src\player\player-class.h" />
     <ClInclude Include="..\..\src\player\player-damage.h" />
     <ClInclude Include="..\..\src\player\player-effects.h" />

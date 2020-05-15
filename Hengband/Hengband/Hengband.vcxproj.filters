@@ -4,9 +4,6 @@
     <ClCompile Include="..\..\src\main-win.c" />
     <ClCompile Include="..\..\src\readdib.c" />
     <ClCompile Include="..\..\src\warning.c" />
-    <ClCompile Include="..\..\src\patron.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\init.c" />
     <ClCompile Include="..\..\src\chuukei.c">
       <Filter>io</Filter>
@@ -833,14 +830,14 @@
     <ClCompile Include="..\..\src\floor\geometry.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\patron.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\init.h" />
     <ClInclude Include="..\..\src\readdib.h" />
     <ClInclude Include="..\..\src\warning.h" />
-    <ClInclude Include="..\..\src\patron.h">
-      <Filter>player</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\chuukei.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -1710,6 +1707,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\gamevalue.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\patron.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

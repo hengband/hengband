@@ -63,7 +63,7 @@
 #include "spell/spells-status.h"
 #include "object/object-hook.h"
 #include "floor/wild.h"
-#include "patron.h"
+#include "player/patron.h"
 
 #include "floor/floor.h"
 #include "floor/floor-save.h"

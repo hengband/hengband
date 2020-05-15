@@ -42,7 +42,7 @@
 #include "monster/monster-race.h"
 #include "object/object-ego.h"
 #include "object/object-kind.h"
-#include "patron.h"
+#include "player/patron.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
 #include "player/player-sex.h"

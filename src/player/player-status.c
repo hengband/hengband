@@ -28,7 +28,7 @@
 #include "monster/monster-status.h"
 #include "monster/monsterrace-hook.h"
 #include "mutation/mutation.h"
-#include "patron.h"
+#include "player/patron.h"
 #include "realm/realm-hex.h"
 #include "realm/realm-song.h"
 #include "cmd/cmd-pet.h"

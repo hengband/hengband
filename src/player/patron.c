@@ -1,10 +1,9 @@
-﻿
-#include "system/angband.h"
+﻿#include "system/angband.h"
 #include "util.h"
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "patron.h"
+#include "player/patron.h"
 #include "cmd-pet.h"
 #include "object/object-curse.h"
 #include "object/object-flavor.h"
