@@ -6,7 +6,7 @@
 #include "realm/realm-song.h"
 #include "world/world.h"
 #include "object/object-kind.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "shoot.h"
 #include "gameterm.h"
 

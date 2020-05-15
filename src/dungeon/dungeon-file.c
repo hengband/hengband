@@ -52,7 +52,7 @@
 #include "world/world.h"
 #include "rooms-vault.h"
 #include "object/object-kind.h"
-#include "object-ego.h"
+#include "object/object-ego.h"
 #include "monsterrace.h"
 #include "floor/floor-town.h"
 #include "realm/realm.h"

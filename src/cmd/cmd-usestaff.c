@@ -13,7 +13,7 @@
 #include "spell/spells3.h"
 #include "spells-status.h"
 #include "spells-floor.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "cmd-basic.h"
 #include "floor/floor.h"
 #include "object/object-kind.h"

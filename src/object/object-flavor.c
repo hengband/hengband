@@ -19,14 +19,14 @@
 #include "player-class.h"
 #include "shoot.h"
 #include "object/object-kind.h"
-#include "object-hook.h"
-#include "object-flavor.h"
+#include "object/object-hook.h"
+#include "object/object-flavor.h"
 #include "trap.h"
 #include "snipe.h"
 #include "files.h"
 #include "world/world.h"
 #include "monsterrace.h"
-#include "object-ego.h"
+#include "object/object-ego.h"
 #include "japanese.h"
 
  /*!

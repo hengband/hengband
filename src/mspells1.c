@@ -44,7 +44,7 @@
 #include "effect/effect-characteristics.h"
 #include "dungeon/dungeon.h"
 #include "grid.h"
-#include "object-curse.h"
+#include "object/object-curse.h"
 #include "quest.h"
 #include "realm/realm-hex.h"
 #include "player-move.h"

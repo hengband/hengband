@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "market/store-util.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "object/object-kind.h"
 
 int cur_store_num = 0;

@@ -12,7 +12,7 @@
 #include "spells-floor.h"
 #include "targeting.h"
 #include "market/store.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "mutation/mutation.h"
 #include "realm/realm-hex.h"
 #include "monster-status.h"

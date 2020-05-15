@@ -12,7 +12,7 @@
 
 #include "birth/birth.h"
 #include "selfinfo.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "mutation/mutation.h"
 #include "avatar.h"
 #include "spell/spells2.h"
@@ -25,7 +25,7 @@
 #include "player-inventory.h"
 #include "realm/realm-hex.h"
 #include "spells-floor.h"
-#include "object-broken.h"
+#include "object/object-broken.h"
 #include "cmd-basic.h"
 #include "floor/floor.h"
 #include "object/object-kind.h"

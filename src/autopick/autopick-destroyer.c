@@ -7,10 +7,10 @@
 #include "autopick/autopick-util.h"
 #include "autopick-methods-table.h"
 #include "autopick/autopick-destroyer.h"
-#include "object-ego.h"
-#include "object-hook.h"
+#include "object/object-ego.h"
+#include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 #include "player-move.h"
 
 

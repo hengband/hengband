@@ -6,7 +6,7 @@
 
 #include "angband.h"
 #include "object-group-table.h"
-#include "object.h"
+#include "object/object.h"
 
 /*
  * todo キャプチャー・ボールではなくモンスター・ボールでは？

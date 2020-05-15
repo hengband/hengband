@@ -61,7 +61,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "spells-status.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "wild.h"
 #include "patron.h"
 
@@ -82,7 +82,7 @@
 #include "birth/birth.h"
 #include "world/world.h"
 #include "object/object-kind.h"
-#include "object-ego.h"
+#include "object/object-ego.h"
 #include "save.h"
 #include "japanese.h"
 #include "cmd-smith.h"

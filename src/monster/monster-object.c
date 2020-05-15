@@ -5,8 +5,8 @@
  */
 
 #include "monster/monster-object.h"
-#include "object-flavor.h"
-#include "object-hook.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
 
  /*!
   * @brief オブジェクトのフラグを更新する

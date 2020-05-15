@@ -10,7 +10,7 @@
 #include "quest.h"
 #include "init.h"
 #include "io/mutations-dump.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 #include "knowledge/knowledge-quests.h"
 #include "io/special-class-dump.h"
 #include "io/player-status-dump.h"

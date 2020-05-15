@@ -38,7 +38,7 @@
 #include "realm/realm-hex.h"
 #include "realm/realm-song.h"
 
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 
 #include "grid.h"
 #include "dungeon/dungeon.h"

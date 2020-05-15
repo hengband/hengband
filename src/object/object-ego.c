@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "object-ego.h"
+#include "object/object-ego.h"
 
 /*
  * The ego-item arrays

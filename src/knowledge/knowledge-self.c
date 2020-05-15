@@ -14,7 +14,7 @@
 #include "world/world.h"
 #include "market/store-util.h"
 #include "floor/floor-town.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 
 /*
  * List virtues & status

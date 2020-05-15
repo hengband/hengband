@@ -4,10 +4,10 @@
 #include "player-inventory.h"
 
 #include "gameterm.h"
-#include "object.h"
+#include "object/object.h"
 #include "object/object-kind.h"
-#include "object-flavor.h"
-#include "object-hook.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
 #include "floor/floor.h"
 #include "player-move.h"
 

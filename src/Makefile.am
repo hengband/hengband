@@ -140,13 +140,16 @@ hengband_SOURCES = \
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
 	\
-	object-boost.c object-boost.h \
-	object-curse.c object-curse.h object-broken.c object-broken.h \
-	object-hook.c object-hook.h object1.c object2.c object.h \
+	object/object-boost.c object/object-boost.h \
+	object/object-curse.c object/object-curse.h \
+	object/object-broken.c object/object-broken.h \
+	object/object-hook.c object/object-hook.h \
+	object/object1.c object/object2.c object/object.h \
 	object/object-kind.c object/object-kind.h \
 	object/object-kind-hook.c object/object-kind-hook.h \
 	object/lite-processor.c object/lite-processor.h \
-	object-flavor.c object-flavor.h object-ego.c object-ego.h \
+	object/object-flavor.c object/object-flavor.h \
+	object/object-ego.c object/object-ego.h \
 	\
 	inventory/simple-appraiser.c inventory/simple-appraiser.h \
 	inventory/inventory-curse.c inventory/inventory-curse.h \

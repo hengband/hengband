@@ -20,8 +20,8 @@
 #include "gameterm.h"
 
 #include "world/world.h"
-#include "object-flavor.h"
-#include "object-hook.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-generate.h"
 #include "grid.h"

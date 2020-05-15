@@ -57,7 +57,7 @@
 #include "player-skill.h"
 #include "player-class.h"
 #include "object/object-kind.h"
-#include "object-ego.h"
+#include "object/object-ego.h"
 #include "rooms-vault.h"
 #include "world/world.h"
 #include "market/articles-on-sale.h"

@@ -8,7 +8,7 @@
 #include "knowledge-experiences.h"
 #include "cmd/dump-util.h"
 #include "core/show-file.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 #include "object/object-kind.h"
 #include "player-skill.h"
 #include "spell/technic-info-table.h"

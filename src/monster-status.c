@@ -18,7 +18,7 @@
 #include "spell/spells2.h"
 #include "spells-summon.h"
 #include "monsterrace-hook.h"
-#include "object-curse.h"
+#include "object/object-curse.h"
 #include "artifact.h"
 #include "avatar.h"
 #include "files.h"

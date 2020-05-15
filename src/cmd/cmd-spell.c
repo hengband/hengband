@@ -28,7 +28,7 @@
 #include "player-skill.h"
 #include "player-class.h"
 #include "player-inventory.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "cmd-basic.h"
 #include "view/display-main-window.h"
 #include "floor/floor.h"

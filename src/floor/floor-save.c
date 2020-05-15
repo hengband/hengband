@@ -30,7 +30,7 @@
 #include "wild.h"
 #include "spells-floor.h"
 #include "monster-status.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "cmd-pet.h"
 #include "cmd-basic.h"
 #include "io/uid-checker.h"

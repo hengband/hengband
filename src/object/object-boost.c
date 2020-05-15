@@ -1,7 +1,7 @@
 ﻿#include "angband.h"
 #include "floor/floor.h"
-#include "object-boost.h"
-#include "object-boost.h"
+#include "object/object-boost.h"
+#include "object/object-boost.h"
 #include "cmd-activate.h"
 
 /*!

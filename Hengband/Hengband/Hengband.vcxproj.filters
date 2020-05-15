@@ -45,21 +45,6 @@
     <ClCompile Include="..\..\src\rooms-vault.c">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object1.c">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object2.c">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object-broken.c">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object-curse.c">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object-hook.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\patron.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -98,9 +83,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\monster-status.c">
       <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object-boost.c">
-      <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\init.c" />
     <ClCompile Include="..\..\src\files.c">
@@ -150,9 +132,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\monsterrace.c">
       <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object-ego.c">
-      <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player-race.c">
       <Filter>player</Filter>
@@ -219,9 +198,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\english.c">
       <Filter>locale</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object-flavor.c">
-      <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player-inventory.c">
       <Filter>player</Filter>
@@ -829,6 +805,30 @@
     <ClCompile Include="..\..\src\floor\floor-town.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\object1.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\object2.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\object-boost.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\object-broken.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\object-curse.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\object-ego.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\object-flavor.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\object-hook.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -881,15 +881,6 @@
     <ClInclude Include="..\..\src\rooms-vault.h">
       <Filter>floor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-broken.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object-curse.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object-hook.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\patron.h">
       <Filter>player</Filter>
     </ClInclude>
@@ -923,9 +914,6 @@
     <ClInclude Include="..\..\src\monster-status.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object-boost.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-process.h">
       <Filter>monster</Filter>
     </ClInclude>
@@ -953,9 +941,6 @@
     <ClInclude Include="..\..\src\mind.h">
       <Filter>spell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\player-skill.h">
       <Filter>player</Filter>
     </ClInclude>
@@ -964,9 +949,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monsterrace.h">
       <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object-ego.h">
-      <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-race.h">
       <Filter>player</Filter>
@@ -1042,9 +1024,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\english.h">
       <Filter>locale</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object-flavor.h">
-      <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-inventory.h">
       <Filter>player</Filter>
@@ -1690,6 +1669,27 @@
     </ClInclude>
     <ClInclude Include="..\..\src\floor\floor-town.h">
       <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-boost.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-broken.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-curse.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-ego.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-flavor.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-hook.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

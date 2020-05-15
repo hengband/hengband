@@ -10,7 +10,7 @@
 #include "quest.h"
 #include "core/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
 #include "artifact.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/dungeon-file.h"
 #include "sort.h"

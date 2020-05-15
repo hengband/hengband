@@ -6,7 +6,7 @@
 #include "knowledge/knowledge-monsters.h"
 #include "files.h"
 #include "object/object-kind.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 #include "gameterm.h"
 #include "cmd/lighting-level-table.h"
 #include "io/read-pref-file.h"

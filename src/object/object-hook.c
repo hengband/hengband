@@ -2,7 +2,7 @@
 #include "angband.h"
 #include "util.h"
 
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "monster.h"
 #include "artifact.h"
 #include "player-class.h"

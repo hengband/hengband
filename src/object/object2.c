@@ -17,7 +17,7 @@
 #include "world/world.h"
 #include "gameterm.h"
 
-#include "object.h"
+#include "object/object.h"
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
@@ -27,11 +27,11 @@
 #include "floor/floor.h"
 #include "grid.h"
 #include "object/object-kind.h"
-#include "object-boost.h"
-#include "object-ego.h"
-#include "object-flavor.h"
-#include "object-hook.h"
-#include "object-curse.h"
+#include "object/object-boost.h"
+#include "object/object-ego.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
+#include "object/object-curse.h"
 #include "object/object-kind-hook.h"
 #include "artifact.h"
 #include "feature.h"
@@ -42,7 +42,7 @@
 #include "player-personality.h"
 #include "monster.h"
 #include "monsterrace-hook.h"
-#include "object-ego.h"
+#include "object/object-ego.h"
 #include "view/display-main-window.h"
 
  /*

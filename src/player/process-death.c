@@ -10,7 +10,7 @@
 #include "world/world.h"
 #include "floor/floor-town.h"
 #include "player-inventory.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 #include "market/store-util.h"
 #include "market/store.h"
 #include "gameterm.h"

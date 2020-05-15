@@ -31,7 +31,7 @@
 #include "market/building.h"
 #include "market/store-util.h"
 #include "market/store.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 #include "player-class.h"
 #include "player-effects.h"
 #include "player-personality.h"

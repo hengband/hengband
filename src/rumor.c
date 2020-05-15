@@ -3,7 +3,7 @@
 
 #include "io/tokenizer.h"
 #include "files.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 #include "artifact.h"
 #include "dungeon/dungeon.h"
 #include "monsterrace.h"

@@ -8,10 +8,10 @@
 #include "knowledge/knowledge-inventory.h"
 #include "cmd/dump-util.h"
 #include "core/show-file.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 #include "market/store-util.h"
 #include "floor/floor-town.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "object/object-kind.h"
 
 static concptr inven_res_label = _(

@@ -11,7 +11,7 @@
 #include "monster.h"
 #include "monster-spell.h"
 #include "spell/spells-type.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 #include "dungeon/dungeon.h"
 #include "player/mimic-info-table.h"
 #include "player-class.h"

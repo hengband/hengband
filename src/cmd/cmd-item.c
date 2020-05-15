@@ -27,9 +27,9 @@
 #include "cmd-pet.h"
 #include "cmd-basic.h"
 
-#include "object-flavor.h"
-#include "object-hook.h"
-#include "object-ego.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
+#include "object/object-ego.h"
 #include "sort.h"
 #include "quest.h"
 #include "artifact.h"

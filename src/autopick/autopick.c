@@ -19,7 +19,7 @@
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick.h"
 #include "player-move.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 
 /*
  *  Auto-destroy marked item

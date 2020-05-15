@@ -5,7 +5,7 @@
 #include "cmd-magiceat.h"
 #include "avatar.h"
 #include "effect/effect-characteristics.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 #include "player-status.h"
 #include "player-class.h"
 #include "spells-status.h"

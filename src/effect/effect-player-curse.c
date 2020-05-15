@@ -4,7 +4,7 @@
 #include "player-damage.h"
 #include "world/world.h"
 #include "monster-spell.h"
-#include "object-curse.h"
+#include "object/object-curse.h"
 #include "player-effects.h"
 
 void effect_player_curse_1(player_type *target_ptr,

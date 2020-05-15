@@ -40,7 +40,7 @@
 #include "monster.h"
 #include "monsterrace-hook.h"
 #include "monsterrace.h"
-#include "object-ego.h"
+#include "object/object-ego.h"
 #include "object/object-kind.h"
 #include "patron.h"
 #include "player-class.h"

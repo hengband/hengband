@@ -1,8 +1,8 @@
 ﻿#include "angband.h"
 #include "util.h"
 
-#include "object-flavor.h"
-#include "object-hook.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
 
 /*!
  * @brief アイテムに付加される可能性のある呪いを指定する。

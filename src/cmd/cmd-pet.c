@@ -14,7 +14,7 @@
 #include "player-skill.h"
 #include "player-class.h"
 #include "player-damage.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "monster.h"
 #include "monster-status.h"
 #include "cmd-pet.h"

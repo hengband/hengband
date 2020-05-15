@@ -5,10 +5,10 @@
 #include "autopick/autopick-keys-table.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-key-flag-process.h"
-#include "object-ego.h"
+#include "object/object-ego.h"
 #include "object/object-kind.h"
-#include "object-flavor.h"
-#include "object-hook.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
 #include "player-inventory.h"
 
 #ifdef JP

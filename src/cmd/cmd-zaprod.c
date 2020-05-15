@@ -8,7 +8,7 @@
 #include "player-class.h"
 #include "player-inventory.h"
 #include "object/object-kind.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "spell/spells-type.h"
 #include "spells-status.h"
 #include "spells-floor.h"

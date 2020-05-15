@@ -10,7 +10,7 @@
 #include "player-class.h"
 #include "player-inventory.h"
 #include "object/object-kind.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "cmd-basic.h"
 #include "floor/floor.h"
 #include "targeting.h"

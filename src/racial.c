@@ -20,7 +20,7 @@
 #include "cmd-zapwand.h"
 #include "cmd-pet.h"
 #include "melee.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 
 #include "mutation/mutation.h"
 #include "player-race.h"

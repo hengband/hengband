@@ -11,8 +11,8 @@
 #include "main/sound-definitions-table.h"
 #include "util.h"
 
-#include "object-flavor.h"
-#include "object-hook.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
 #include "avatar.h"
 #include "spells-status.h"
 #include "realm/realm-hex.h"

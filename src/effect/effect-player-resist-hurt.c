@@ -3,7 +3,7 @@
 #include "effect/effect-player-resist-hurt.h"
 #include "player-damage.h"
 #include "world/world.h"
-#include "object-broken.h"
+#include "object/object-broken.h"
 #include "artifact.h"
 #include "player-effects.h"
 #include "mutation/mutation.h"

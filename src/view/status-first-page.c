@@ -12,7 +12,7 @@
 #include "artifact.h"
 #include "combat/melee.h"
 #include "combat/shoot.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "object/object-kind.h"
 
 static TERM_COLOR likert_color = TERM_WHITE;

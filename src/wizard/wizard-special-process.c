@@ -43,8 +43,8 @@
 #include "spells-world.h"
 #include "spells-floor.h"
 
-#include "object-flavor.h"
-#include "object-hook.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
 #include "monster-status.h"
 
 #include "floor/floor.h"

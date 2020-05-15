@@ -7,8 +7,8 @@
 #include "quest.h"
 #include "artifact.h"
 #include "object/object-kind.h"
-#include "object-flavor.h"
-#include "object-hook.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
 
 #include "io/write-diary.h"
 #include "cmd/cmd-basic.h"

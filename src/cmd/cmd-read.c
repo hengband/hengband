@@ -10,8 +10,8 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
-#include "object-flavor.h"
-#include "object-hook.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
 #include "artifact.h"
 #include "avatar.h"
 #include "player-status.h"
