@@ -30,7 +30,7 @@
 #include "object/object-hook.h"
 #include "spell/spells1.h"
 #include "spells-floor.h"
-#include "rooms.h"
+#include "room/rooms.h"
 
 
 /*!

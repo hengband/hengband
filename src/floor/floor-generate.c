@@ -105,7 +105,7 @@
 #include "cmd/cmd-dump.h"
 #include "grid.h"
 #include "market/arena-info-table.h"
-#include "rooms.h"
+#include "room/rooms.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "floor/floor-save.h"

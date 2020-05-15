@@ -1,10 +1,10 @@
 ﻿#include "angband.h"
 #include "util.h"
-#include "rooms-vault.h"
+#include "room/rooms-vault.h"
 
 #include "floor/floor-generate.h"
 #include "grid.h"
-#include "rooms.h"
+#include "room/rooms.h"
 #include "market/store.h"
 #include "trap.h"
 #include "monster.h"

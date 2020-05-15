@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "effect/effect-feature.h"
-#include "rooms.h"
+#include "room/rooms.h"
 #include "dungeon/dungeon.h"
 #include "main/sound-definitions-table.h"
 #include "trap.h"

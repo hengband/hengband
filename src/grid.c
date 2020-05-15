@@ -26,7 +26,7 @@
 #include "floor/floor-generate.h"
 #include "grid.h"
 #include "trap.h"
-#include "rooms.h"
+#include "room/rooms.h"
 #include "monster.h"
 #include "quest.h"
 #include "feature.h"

@@ -3,7 +3,7 @@
 
 #include "grid.h"
 #include "floor/floor-generate.h"
-#include "rooms.h"
+#include "room/rooms.h"
 #include "floor/floor.h"
 #include "feature.h"
 #include "dungeon/dungeon.h"

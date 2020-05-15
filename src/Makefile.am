@@ -184,12 +184,16 @@ hengband_SOURCES = \
 	realm/realm-sorcery.h realm/realm-trump.c realm/realm-trump.h \
 	\
 	report.c report.h \
-	rooms.c rooms-city.c rooms-city.h rooms-fractal.c rooms-fractal.h \
-	rooms.h rooms-normal.c rooms-normal.h \
-	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h \
-	rooms-vault.c rooms-vault.h \
+	\
+	room/rooms.c room/rooms.h room/rooms-city.c room/rooms-city.h \
+	room/rooms-fractal.c room/rooms-fractal.h \
+	room/rooms-normal.c room/rooms-normal.h \
+	room/rooms-special.c room/rooms-special.h \
+	room/rooms-trap.c room/rooms-trap.h \
+	room/rooms-vault.c room/rooms-vault.h \
 	room/rooms-pit-nest.c room/rooms-pit-nest.h \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
+	\
 	save.c save.h scores.c scores.h selfinfo.c selfinfo.h \
 	snipe.c snipe.h \
 	\

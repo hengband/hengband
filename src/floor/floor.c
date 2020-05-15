@@ -4,7 +4,7 @@
 #include "floor/floor-generate.h"
 #include "grid.h"
 #include "dungeon/dungeon.h"
-#include "rooms.h"
+#include "room/rooms.h"
 #include "quest.h"
 #include "object/object-hook.h"
 #include "world/world.h"

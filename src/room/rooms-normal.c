@@ -4,7 +4,7 @@
 
 #include "floor/floor.h"
 #include "dungeon/dungeon.h"
-#include "rooms.h"
+#include "room/rooms.h"
 
 
 /*!

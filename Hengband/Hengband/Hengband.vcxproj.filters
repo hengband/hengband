@@ -24,27 +24,6 @@
     <ClCompile Include="..\..\src\spells-world.c">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\rooms.c">
-      <Filter>floor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\rooms-city.c">
-      <Filter>floor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\rooms-fractal.c">
-      <Filter>floor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\rooms-normal.c">
-      <Filter>floor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\rooms-special.c">
-      <Filter>floor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\rooms-trap.c">
-      <Filter>floor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\rooms-vault.c">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\patron.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -520,9 +499,6 @@
     <ClCompile Include="..\..\src\room\pit-nest-kinds-table.c">
       <Filter>room</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\room\rooms-pit-nest.c">
-      <Filter>room</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\io\signal-handlers.c">
       <Filter>io</Filter>
     </ClCompile>
@@ -829,6 +805,30 @@
     <ClCompile Include="..\..\src\object\object-hook.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-city.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-fractal.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-normal.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-special.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-trap.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-vault.c">
+      <Filter>room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\room\rooms-pit-nest.c">
+      <Filter>room</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -859,27 +859,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spells-world.h">
       <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\rooms.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\rooms-city.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\rooms-fractal.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\rooms-normal.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\rooms-special.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\rooms-trap.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\rooms-vault.h">
-      <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\patron.h">
       <Filter>player</Filter>
@@ -1370,9 +1349,6 @@
     <ClInclude Include="..\..\src\room\pit-nest-kinds-table.h">
       <Filter>room</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\room\rooms-pit-nest.h">
-      <Filter>room</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\io\signal-handlers.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -1690,6 +1666,30 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-hook.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-city.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-fractal.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-normal.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\room\rooms-pit-nest.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-special.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-trap.h">
+      <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\room\rooms-vault.h">
+      <Filter>room</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

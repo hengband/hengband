@@ -3,7 +3,7 @@
 
 #include "grid.h"
 #include "floor/floor-generate.h"
-#include "rooms.h"
+#include "room/rooms.h"
 #include "monster.h"
 #include "monsterrace-hook.h"
 #include "object/object-kind-hook.h"

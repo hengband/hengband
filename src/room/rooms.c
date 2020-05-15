@@ -44,15 +44,15 @@
 #include "floor/floor-generate.h"
 #include "dungeon/dungeon.h"
 #include "grid.h"
-#include "rooms.h"
+#include "room/rooms.h"
 
-#include "rooms-city.h"
-#include "rooms-fractal.h"
-#include "rooms-normal.h"
+#include "room/rooms-city.h"
+#include "room/rooms-fractal.h"
+#include "room/rooms-normal.h"
 #include "room/rooms-pit-nest.h"
-#include "rooms-special.h"
-#include "rooms-trap.h"
-#include "rooms-vault.h"
+#include "room/rooms-special.h"
+#include "room/rooms-trap.h"
+#include "room/rooms-vault.h"
 
 #include "trap.h"
 
