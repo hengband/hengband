@@ -1,9 +1,9 @@
 ﻿#include "angband.h"
 #include "grid.h"
-#include "floor-generate.h"
+#include "floor/floor-generate.h"
 #include "rooms.h"
 #include "rooms-normal.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "dungeon/dungeon.h"
 
 /*!

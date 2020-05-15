@@ -1,7 +1,7 @@
 ﻿#include "character-dump.h"
 #include "core/angband-version.h"
 #include "world/world.h"
-#include "floor-town.h"
+#include "floor/floor-town.h"
 #include "dungeon/dungeon.h"
 #include "market/store.h"
 #include "cmd/cmd-pet.h"

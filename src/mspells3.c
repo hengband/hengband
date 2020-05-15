@@ -15,7 +15,7 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
-#include "floor.h"
+#include "floor/floor.h"
 #include "grid.h"
 #include "spells-summon.h"
 #include "avatar.h"

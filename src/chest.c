@@ -4,7 +4,7 @@
 
 #include "spell/spells-type.h"
 #include "spells-summon.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "trap.h"
 #include "player-status.h"
 #include "player-damage.h"

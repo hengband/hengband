@@ -27,7 +27,7 @@
 #include "spells-floor.h"
 #include "object-broken.h"
 #include "cmd-basic.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "object/object-kind.h"
 #include "view/display-main-window.h"
 #include "player-class.h"

@@ -44,7 +44,7 @@
 #include "player-personality.h"
 #include "quest.h"
 #include "artifact.h"
-#include "floor-town.h"
+#include "floor/floor-town.h"
 #include "cmd/feeling-table.h"
 #include "english.h"
 

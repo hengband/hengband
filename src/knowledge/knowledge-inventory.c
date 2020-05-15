@@ -10,7 +10,7 @@
 #include "core/show-file.h"
 #include "object-flavor.h"
 #include "market/store-util.h"
-#include "floor-town.h"
+#include "floor/floor-town.h"
 #include "object-hook.h"
 #include "object/object-kind.h"
 

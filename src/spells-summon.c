@@ -4,7 +4,7 @@
 #include "spells-summon.h"
 #include "player-inventory.h"
 #include "monster-status.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells2.h"
 

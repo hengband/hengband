@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "sort.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "quest.h"
 #include "artifact.h"
 #include "monsterrace.h"

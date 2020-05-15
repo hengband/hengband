@@ -30,7 +30,7 @@
 #include "cmd/cmd-basic.h"
 #include "core/show-file.h"
 #include "files.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "object/object-kind.h"
 #include "view/display-main-window.h"
 #include "spell/spells-type.h"

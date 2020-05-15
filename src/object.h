@@ -422,7 +422,7 @@ extern int bow_tval_ammo(object_type *o_ptr);
 /*!
 * todo ここに置くとコンパイルは通る (このファイルの冒頭やobject2.cでincludeするとコンパイルエラー)、しかし圧倒的にダメなので要調整
 */
-#include "floor.h"
+#include "floor/floor.h"
 
 /* object2.c */
 extern void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx);

@@ -2,7 +2,7 @@
 #include "util.h"
 
 #include "dungeon/dungeon.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "grid.h"
 #include "quest.h"
 #include "artifact.h"
@@ -14,8 +14,8 @@
 #include "cmd/cmd-basic.h"
 #include "cmd/cmd-dump.h"
 
-#include "floor-events.h"
-#include "floor-save.h"
+#include "floor/floor-events.h"
+#include "floor/floor-save.h"
 #include "player-damage.h"
 #include "player-effects.h"
 #include "player-move.h"

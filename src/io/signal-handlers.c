@@ -13,7 +13,7 @@
 #include "gameterm.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "floor-events.h"
+#include "floor/floor-events.h"
 
 s16b signal_count;		/* Hack -- Count interupts */
 

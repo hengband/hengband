@@ -8,7 +8,7 @@
 #include "object/object-kind.h"
 #include "object-flavor.h"
 #include "object-hook.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "player-move.h"
 
 #include "view/display-main-window.h"

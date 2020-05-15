@@ -17,7 +17,7 @@
 #include "cmd-smith.h"
 
 #include "avatar.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "cmd-activate.h"
 #include "object.h"
 #include "object/object-kind.h"

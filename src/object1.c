@@ -17,7 +17,7 @@
 #include "util.h"
 
 #include "artifact.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "cmd-activate.h"
 #include "object/object-kind.h"
 #include "object-ego.h"

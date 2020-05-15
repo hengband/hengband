@@ -2,7 +2,7 @@
 #include "grid.h"
 #include "trap.h"
 
-#include "floor.h"
+#include "floor/floor.h"
 #include "dungeon/dungeon.h"
 #include "rooms.h"
 

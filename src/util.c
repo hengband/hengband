@@ -21,7 +21,7 @@
 #include "monsterrace-hook.h"
 #include "view/display-main-window.h"
 #include "quest.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "world/world.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"

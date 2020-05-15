@@ -4,7 +4,7 @@
 #include "monsterrace-hook.h"
 #include "monster.h"
 #include "monster-spell.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "dungeon/dungeon.h"
 #include "monsterrace.h"
 #include "melee.h"

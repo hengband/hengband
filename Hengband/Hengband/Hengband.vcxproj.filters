@@ -24,18 +24,6 @@
     <ClCompile Include="..\..\src\spells-world.c">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor-events.c">
-      <Filter>floor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\floor-generate.c">
-      <Filter>floor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\floor-save.c">
-      <Filter>floor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\floor-streams.c">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\rooms.c">
       <Filter>floor</Filter>
     </ClCompile>
@@ -157,9 +145,6 @@
     <ClCompile Include="..\..\src\player-skill.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\floor.c">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\player-class.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -168,9 +153,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\object-ego.c">
       <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\floor-town.c">
-      <Filter>floor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\player-race.c">
       <Filter>player</Filter>
@@ -829,6 +811,24 @@
     <ClCompile Include="..\..\src\core\system-variables.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor\floor.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\floor-events.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\floor-generate.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\floor-save.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\floor-streams.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\floor-town.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -859,15 +859,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spells-world.h">
       <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\floor.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\floor-events.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\floor-streams.h">
-      <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\rooms.h">
       <Filter>floor</Filter>
@@ -935,12 +926,6 @@
     <ClInclude Include="..\..\src\object-boost.h">
       <Filter>object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\floor-save.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\floor-generate.h">
-      <Filter>floor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-process.h">
       <Filter>monster</Filter>
     </ClInclude>
@@ -982,9 +967,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-ego.h">
       <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\floor-town.h">
-      <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\player-race.h">
       <Filter>player</Filter>
@@ -1690,6 +1672,24 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\system-variables.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-events.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-generate.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-save.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-streams.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-town.h">
+      <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

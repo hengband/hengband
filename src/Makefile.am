@@ -102,10 +102,10 @@ hengband_SOURCES = \
 	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \
 	dungeon/dungeon-file.c dungeon/dungeon-file.h \
 	\
-	floor.c floor.h floor-events.c floor-events.h \
-	floor-generate.c floor-generate.h \
-	floor-save.h floor-save.c floor-town.h floor-town.c \
-	floor-streams.c floor-streams.h \
+	floor/floor.c floor/floor.h floor/floor-events.c floor/floor-events.h \
+	floor/floor-generate.c floor/floor-generate.h \
+	floor/floor-save.h floor/floor-save.c floor/floor-town.h floor/floor-town.c \
+	floor/floor-streams.c floor/floor-streams.h \
 	floor/pattern-walk.c floor/pattern-walk.h \
 	\
 	feature.c feature.h \

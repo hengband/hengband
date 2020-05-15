@@ -5,7 +5,7 @@
 #include "artifact.h"
 #include "player-move.h"
 #include "feature.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "warning.h"
 #include "player-status.h"
 #include "monster.h"

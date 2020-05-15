@@ -19,7 +19,7 @@
 #include "grid.h"
 #include "spell/spells-type.h"
 #include "effect/effect-characteristics.h"
-#include "floor-save.h"
+#include "floor/floor-save.h"
 #include "init.h"
 #include "files.h"
 #include "dungeon/dungeon.h"

@@ -12,7 +12,7 @@
 #include "object/object-kind.h"
 #include "object-hook.h"
 #include "cmd-basic.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "targeting.h"
 #include "view/display-main-window.h"
 #include "spell/spells2.h"

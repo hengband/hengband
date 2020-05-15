@@ -6,7 +6,7 @@
 #include "spell/spells3.h"
 #include "player-status.h"
 #include "player-effects.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "targeting.h"
 #include "realm/realm-life.h"
 #include "spell/spells-type.h"

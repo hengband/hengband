@@ -40,8 +40,8 @@
 #include "util.h"
 
 #include "feature.h"
-#include "floor.h"
-#include "floor-generate.h"
+#include "floor/floor.h"
+#include "floor/floor-generate.h"
 #include "dungeon/dungeon.h"
 #include "grid.h"
 #include "rooms.h"

@@ -51,7 +51,7 @@
 
 #include "dungeon/dungeon.h"
 #include "feature.h"
-#include "floor-generate.h"
+#include "floor/floor-generate.h"
 #include "trap.h"
 #include "mutation/mutation.h"
 #include "monster.h"
@@ -65,9 +65,9 @@
 #include "wild.h"
 #include "patron.h"
 
-#include "floor.h"
-#include "floor-save.h"
-#include "floor-town.h"
+#include "floor/floor.h"
+#include "floor/floor-save.h"
+#include "floor/floor-town.h"
 #include "grid.h"
 
 #include "cmd-pet.h"

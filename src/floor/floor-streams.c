@@ -19,10 +19,10 @@
 #include "util.h"
 
 #include "artifact.h"
-#include "floor-generate.h"
+#include "floor/floor-generate.h"
 #include "dungeon/dungeon.h"
-#include "floor.h"
-#include "floor-streams.h"
+#include "floor/floor.h"
+#include "floor/floor-streams.h"
 #include "grid.h"
 #include "monster.h"
 #include "feature.h"

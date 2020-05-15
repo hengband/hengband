@@ -13,7 +13,7 @@
 #include "dungeon/dungeon-file.h"
 #include "world/world.h"
 #include "market/store-util.h"
-#include "floor-town.h"
+#include "floor/floor-town.h"
 #include "object-flavor.h"
 
 /*

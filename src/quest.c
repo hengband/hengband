@@ -4,9 +4,9 @@
 
 #include "core/system-variables.h"
 #include "dungeon/dungeon.h"
-#include "floor.h"
-#include "floor-save.h"
-#include "floor-events.h"
+#include "floor/floor.h"
+#include "floor/floor-save.h"
+#include "floor/floor-events.h"
 #include "grid.h"
 #include "quest.h"
 #include "monsterrace-hook.h"

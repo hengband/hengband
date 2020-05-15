@@ -21,7 +21,7 @@
 
 #include "artifact.h"
 #include "cmd-dump.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "market/building.h"
 #include "birth/birth.h"
 #include "grid.h"

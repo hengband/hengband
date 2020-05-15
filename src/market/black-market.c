@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "floor-town.h"
+#include "floor/floor-town.h"
 #include "object-hook.h"
 #include "market/black-market.h"
 #include "market/store-owners.h"

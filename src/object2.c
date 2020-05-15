@@ -24,7 +24,7 @@
 #include "cmd/cmd-spell.h"
 #include "spell/spells3.h"
 #include "dungeon/dungeon.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "grid.h"
 #include "object/object-kind.h"
 #include "object-boost.h"

@@ -4,7 +4,7 @@
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "grid.h"
 #include "melee.h"
 #include "sort.h"

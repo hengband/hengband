@@ -26,7 +26,7 @@
 #include "io/uid-checker.h"
 #include "files.h"
 #include "scores.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "world/world.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"

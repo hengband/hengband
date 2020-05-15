@@ -23,7 +23,7 @@
 
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
-#include "floor-town.h"
+#include "floor/floor-town.h"
 #include "object-boost.h"
 #include "object-flavor.h"
 #include "object-hook.h"
@@ -51,7 +51,7 @@
 #include "cmd/cmd-spell.h"
 #include "cmd/cmd-dump.h"
 #include "snipe.h"
-#include "floor-save.h"
+#include "floor/floor-save.h"
 #include "files.h"
 #include "player-effects.h"
 #include "player-skill.h"

@@ -22,7 +22,7 @@
 #include "player/mimic-info-table.h"
 #include "player-class.h"
 #include "player-inventory.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "object/object-kind.h"
 #include "view/display-main-window.h"
 

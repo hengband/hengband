@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "floor-town.h"
+#include "floor/floor-town.h"
 
 /*
  * Maximum number of towns

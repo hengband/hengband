@@ -25,7 +25,7 @@
 #include "object-hook.h"
 #include "object-ego.h"
 #include "object/object-kind.h"
-#include "floor-town.h"
+#include "floor/floor-town.h"
 #include "files.h"
 
  /*

@@ -5,7 +5,7 @@
 #include "market/store.h"
 #include "market/store-util.h"
 #include "io/write-diary.h"
-#include "floor-events.h"
+#include "floor/floor-events.h"
 #include "core/hp-mp-regenerator.h"
 #include "cmd/cmd-save.h"
 #include "monster-status.h"

@@ -15,7 +15,7 @@
 #include "core/system-variables.h"
 
 #include "dungeon/dungeon.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "wild.h"
 #include "world/world.h"
 #include "monster.h"
@@ -29,7 +29,7 @@
 #include "io/tokenizer.h"
 #include "files.h"
 #include "feature.h"
-#include "floor-town.h"
+#include "floor/floor-town.h"
 #include "realm/realm.h"
 
 #include "view/display-main-window.h"

@@ -2,13 +2,13 @@
 #include "util.h"
 
 #include "grid.h"
-#include "floor-generate.h"
+#include "floor/floor-generate.h"
 #include "rooms.h"
 #include "monster.h"
 #include "monsterrace-hook.h"
 #include "object/object-kind-hook.h"
 #include "feature.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "dungeon/dungeon.h"
 
 

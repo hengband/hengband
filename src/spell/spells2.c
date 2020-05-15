@@ -53,7 +53,7 @@
 #include "player-inventory.h"
 
 #include "dungeon/dungeon.h"
-#include "floor-events.h"
+#include "floor/floor-events.h"
 #include "feature.h"
 #include "view/display-main-window.h"
 #include "object/object-kind.h"

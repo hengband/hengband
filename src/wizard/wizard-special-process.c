@@ -47,8 +47,8 @@
 #include "object-hook.h"
 #include "monster-status.h"
 
-#include "floor.h"
-#include "floor-save.h"
+#include "floor/floor.h"
+#include "floor/floor-save.h"
 #include "grid.h"
 #include "dungeon/dungeon-file.h"
 #include "files.h"

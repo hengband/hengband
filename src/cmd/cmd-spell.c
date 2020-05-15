@@ -31,7 +31,7 @@
 #include "object-hook.h"
 #include "cmd-basic.h"
 #include "view/display-main-window.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "autopick/autopick-reader-writer.h"
 #include "japanese.h"
 #include "spell/spells-util.h"

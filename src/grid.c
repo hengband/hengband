@@ -23,7 +23,7 @@
 #include "object-flavor.h"
 #include "object-hook.h"
 #include "dungeon/dungeon.h"
-#include "floor-generate.h"
+#include "floor/floor-generate.h"
 #include "grid.h"
 #include "trap.h"
 #include "rooms.h"

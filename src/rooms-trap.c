@@ -2,9 +2,9 @@
 #include "util.h"
 
 #include "grid.h"
-#include "floor-generate.h"
+#include "floor/floor-generate.h"
 #include "rooms.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "feature.h"
 #include "dungeon/dungeon.h"
 

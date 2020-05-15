@@ -23,7 +23,7 @@
 #include "spells-object.h"
 #include "spells-status.h"
 #include "spells-floor.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "spell/spells2.h"
 
 #ifdef JP

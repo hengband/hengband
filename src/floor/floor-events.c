@@ -2,8 +2,8 @@
 #include "util.h"
 
 #include "dungeon/dungeon.h"
-#include "floor.h"
-#include "floor-events.h"
+#include "floor/floor.h"
+#include "floor/floor-events.h"
 #include "grid.h"
 #include "monster.h"
 #include "monster-status.h"

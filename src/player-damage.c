@@ -12,7 +12,7 @@
 #include "cmd/cmd-process-screen.h"
 #include "market/arena-info-table.h"
 #include "realm/realm-song.h"
-#include "floor.h"
+#include "floor/floor.h"
 #include "artifact.h"
 #include "object-flavor.h"
 #include "object-hook.h"
