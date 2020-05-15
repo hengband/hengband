@@ -1,4 +1,5 @@
 ﻿#include "system/angband.h"
+#include "market/rumor.h"
 #include "util.h"
 
 #include "io/tokenizer.h"

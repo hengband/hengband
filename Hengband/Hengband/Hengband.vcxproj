@@ -478,7 +478,7 @@
     <ClCompile Include="..\..\src\room\rooms-vault.c" />
     <ClCompile Include="..\..\src\room\rooms.c" />
     <ClCompile Include="..\..\src\room\pit-nest-kinds-table.c" />
-    <ClCompile Include="..\..\src\rumor.c" />
+    <ClCompile Include="..\..\src\market\rumor.c" />
     <ClCompile Include="..\..\src\io\save.c" />
     <ClCompile Include="..\..\src\scores.c" />
     <ClCompile Include="..\..\src\selfinfo.c" />
@@ -700,7 +700,7 @@
     <ClInclude Include="..\..\src\room\rooms-trap.h" />
     <ClInclude Include="..\..\src\room\rooms-vault.h" />
     <ClInclude Include="..\..\src\room\rooms.h" />
-    <ClInclude Include="..\..\src\rumor.h" />
+    <ClInclude Include="..\..\src\market\umor.h" />
     <ClInclude Include="..\..\src\io\save.h" />
     <ClInclude Include="..\..\src\scores.h" />
     <ClInclude Include="..\..\src\selfinfo.h" />

@@ -4,7 +4,7 @@
 #include "market/store-owner-comments.h"
 #include "market/store-util.h"
 #include "player/avatar.h"
-#include "rumor.h"
+#include "market/rumor.h"
 
 #define RUMOR_CHANCE 8
 

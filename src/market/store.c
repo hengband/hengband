@@ -42,7 +42,7 @@
 #include "market/store.h"
 #include "player/avatar.h"
 #include "cmd-spell.h"
-#include "rumor.h"
+#include "market/rumor.h"
 #include "player/player-status.h"
 #include "player/player-class.h"
 #include "inventory/player-inventory.h"

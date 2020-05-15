@@ -5,7 +5,7 @@
 #include "world/world.h"
 #include "player/player-effects.h"
 #include "core/turn-compensator.h"
-#include "rumor.h"
+#include "market/rumor.h"
 
 /*!
  * @brief 宿屋で食事を摂る

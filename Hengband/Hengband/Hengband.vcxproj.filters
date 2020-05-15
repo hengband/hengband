@@ -14,9 +14,6 @@
     <ClCompile Include="..\..\src\geometry.c">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\rumor.c">
-      <Filter>market</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mind.c">
       <Filter>spell</Filter>
     </ClCompile>
@@ -833,6 +830,9 @@
     <ClCompile Include="..\..\src\monster\monster-race.c">
       <Filter>monster</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\market\rumor.c">
+      <Filter>market</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -847,9 +847,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\geometry.h">
       <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\rumor.h">
-      <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind.h">
       <Filter>spell</Filter>
@@ -1708,6 +1705,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-race.h">
       <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\umor.h">
+      <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

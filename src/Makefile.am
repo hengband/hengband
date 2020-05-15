@@ -47,7 +47,8 @@ hengband_SOURCES = \
 	market/say-comments.c market/say-comments.h \
 	market/store-util.c market/store-util.h \
 	market/gold-magnification-table.c market/gold-magnification-table.h \
-	market/store.c market/store.h \
+	market/store.c market/store.h market/rumor.c market/rumor.h \
+\
 	chuukei.c chuukei.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
@@ -202,8 +203,6 @@ hengband_SOURCES = \
 	\
 	save.c save.h scores.c scores.h selfinfo.c selfinfo.h \
 	snipe.c snipe.h \
-	\
-	rumor.h rumor.c \
 	\
 	effect/effect-feature.c effect/effect-feature.h \
 	effect/effect-item.c effect/effect-item.h \
