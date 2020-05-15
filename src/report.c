@@ -13,7 +13,7 @@
 #include "dungeon/dungeon.h"
 
 #include "player/player-personality.h"
-#include "character-dump.h"
+#include "io/character-dump.h"
 #include "world/world.h"
 #include "gameterm.h"
 

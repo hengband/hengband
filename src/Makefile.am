@@ -31,8 +31,6 @@ hengband_SOURCES = \
 	autopick/autopick-editor-util.c autopick/autopick-editor-util.h \
 	autopick/autopick-editor-command.c autopick/autopick-editor-command.h \
 	\
-	avatar.h avatar.c \
-	\
 	birth/bitrh-explanations-table.c birth/bitrh-explanations-table.h \
 	birth/birth.c birth/birth.h \
 	\
@@ -61,6 +59,7 @@ hengband_SOURCES = \
 	view/status-first-page.c view/status-first-page.h \
 	view/display-util.c view/display-util.h \
 	\
+	player/avatar.h player/avatar.c \
 	player/mimic-info-table.c player/mimic-info-table.h \
 	player/process-death.c player/process-death.h \
 	player/process-name.c player/process-name.h \
@@ -70,6 +69,7 @@ hengband_SOURCES = \
 	player/temporary-resistances.c player/temporary-resistances.h \
 	player/digestion-processor.c player/digestion-processor.h \
 	\
+	io/character-dump.c io/character-dump.h \
 	io/dump-remover.c io/dump-remover.h \
 	io/gf-descriptions.c io/gf-descriptions.h \
 	io/tokenizer.c io/tokenizer.h \
@@ -84,7 +84,7 @@ hengband_SOURCES = \
 	io/uid-checker.c io/uid-checker.h \
 	io/input-key-processor.c io/input-key-processor.h \
 	\
-	character-dump.c character-dump.h files.c files.h \
+	files.c files.h \
 	core/game-play.c core/game-play.h \
 	core/show-file.c core/show-file.h \
 	core/stuff-handler.c core/stuff-handler.h \

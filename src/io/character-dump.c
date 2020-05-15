@@ -1,4 +1,4 @@
-﻿#include "character-dump.h"
+﻿#include "io/character-dump.h"
 #include "core/angband-version.h"
 #include "world/world.h"
 #include "floor/floor-town.h"
