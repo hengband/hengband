@@ -35,7 +35,7 @@
 #include "io/uid-checker.h"
 #include "io/files.h"
 #include "system/system-variables.h"
-#include "core/angband-version.h"
+#include "system/angband-version.h"
 #include "io/read-pref-file.h"
 #include "term/gameterm.h"
 

@@ -17,7 +17,7 @@
 #include "io/load.h"
 #include "io/report.h"
 
-#include "core/angband-version.h"
+#include "system/angband-version.h"
 #include "object/artifact.h"
 #include "sort.h"
 #include "dungeon/dungeon.h"

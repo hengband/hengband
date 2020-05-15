@@ -15,7 +15,7 @@
 #include "term/gameterm.h"
 #include "util.h"
 #include "core/turn-compensator.h"
-#include "core/angband-version.h"
+#include "system/angband-version.h"
 
 #include "dungeon/dungeon.h"
 #include "player/race-info-table.h"

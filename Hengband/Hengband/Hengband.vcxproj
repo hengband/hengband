@@ -397,7 +397,7 @@
     <ClInclude Include="..\..\src\core\output-updater.h" />
     <ClInclude Include="..\..\src\core\special-internal-keys.h" />
     <ClInclude Include="..\..\src\core\stuff-handler.h" />
-    <ClInclude Include="..\..\src\core\angband-version.h" />
+    <ClInclude Include="..\..\src\system\angband-version.h" />
     <ClInclude Include="..\..\src\core\turn-compensator.h" />
     <ClInclude Include="..\..\src\effect\effect-characteristics.h" />
     <ClInclude Include="..\..\src\effect\effect-feature.h" />

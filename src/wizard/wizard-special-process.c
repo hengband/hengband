@@ -13,7 +13,7 @@
 #include "system/angband.h"
 #include "wizard/wizard-special-process.h"
 #include "wizard/wizard-spoiler.h"
-#include "core/angband-version.h"
+#include "system/angband-version.h"
 #include "core/stuff-handler.h"
 #include "term/gameterm.h"
 

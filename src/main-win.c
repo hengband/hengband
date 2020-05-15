@@ -111,7 +111,7 @@
 #include "io/files.h"
 #include "system/system-variables.h"
 #include "core/game-play.h"
-#include "core/angband-version.h"
+#include "system/angband-version.h"
 #include "core/stuff-handler.h"
 #include "core/special-internal-keys.h"
 #include "core/player-processor.h"

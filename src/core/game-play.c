@@ -14,7 +14,7 @@
 #include "core/game-play.h"
 #include "io/signal-handlers.h"
 #include "util.h"
-#include "core/angband-version.h"
+#include "system/angband-version.h"
 #include "core/stuff-handler.h"
 #include "inet.h"
 #include "term/gameterm.h"

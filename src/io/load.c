@@ -43,7 +43,7 @@
 #include "system/angband.h"
 #include "util.h"
 #include "system/system-variables.h" // 暫定、init_flags の扱いを決めた上で消す.
-#include "core/angband-version.h"
+#include "system/angband-version.h"
 
 #include "io/load.h"
 #include "market/building.h"

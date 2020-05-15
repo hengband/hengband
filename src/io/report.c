@@ -8,7 +8,7 @@
 #include "system/angband.h"
 #include "io/report.h"
 #include "core/turn-compensator.h"
-#include "core/angband-version.h"
+#include "system/angband-version.h"
 #include "core/stuff-handler.h"
 #include "inet.h"
 #include "dungeon/dungeon.h"

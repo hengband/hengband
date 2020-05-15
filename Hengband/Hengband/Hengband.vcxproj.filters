@@ -1382,9 +1382,6 @@
     <ClInclude Include="..\..\src\core\stuff-handler.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core\angband-version.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\core\special-internal-keys.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -1708,6 +1705,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\floor\geometry.h">
       <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\angband-version.h">
+      <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
