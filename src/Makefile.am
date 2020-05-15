@@ -109,6 +109,8 @@ hengband_SOURCES = \
 	floor/floor-streams.c floor/floor-streams.h \
 	floor/pattern-walk.c floor/pattern-walk.h \
 	\
+	locale/japanese.c locale/japanese.h locale/english.c locale/english.h \
+	\
 	feature.c feature.h \
 	geometry.c geometry.h \
 	\
@@ -116,7 +118,6 @@ hengband_SOURCES = \
 	grid.c grid.h\
 	history.h history.c \
 	inet.c inet.h init.c init.h \
-	japanese.c japanese.h english.c english.h \
 	load.c load.h \
 	main.c main-x11.c main-gcu.c \
 	mind.c mind.h \
@@ -301,7 +302,7 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icombat -Icore -Idungeon -Ieffect -Ifloor \
 	-Iinventory -Iio -Iknowledge -Imarket -Imonster -Iobject -Iplayer -Irealm \
-	-Iroom -Ispell -Iview -Iwizard -Iworld
+	-Iroom -Ispell -Isystem -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

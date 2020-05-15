@@ -35,7 +35,7 @@
 #include "floor/floor.h"
 #include "history.h"
 #include "io/write-diary.h"
-#include "japanese.h"
+#include "locale/japanese.h"
 #include "market/store.h"
 #include "monster/monster.h"
 #include "monster/monsterrace-hook.h"

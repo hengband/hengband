@@ -84,7 +84,7 @@
 #include "object/object-kind.h"
 #include "object/object-ego.h"
 #include "save.h"
-#include "japanese.h"
+#include "locale/japanese.h"
 #include "cmd-smith.h"
 
  /*

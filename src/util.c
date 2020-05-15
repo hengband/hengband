@@ -25,7 +25,7 @@
 #include "world/world.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "japanese.h"
+#include "locale/japanese.h"
 #include "player/player-class.h"
 #include "core/output-updater.h"
 #include "io/input-key-processor.h"

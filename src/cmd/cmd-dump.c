@@ -46,7 +46,7 @@
 #include "artifact.h"
 #include "floor/floor-town.h"
 #include "cmd/feeling-table.h"
-#include "english.h"
+#include "locale/english.h"
 
 #include "chuukei.h"
 

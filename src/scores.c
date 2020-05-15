@@ -31,7 +31,7 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "report.h"
-#include "japanese.h"
+#include "locale/japanese.h"
 
  /*
   * The "highscore" file descriptor, if available.

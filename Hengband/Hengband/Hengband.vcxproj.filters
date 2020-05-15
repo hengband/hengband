@@ -97,12 +97,6 @@
     <ClCompile Include="..\..\src\inet.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\japanese.c">
-      <Filter>locale</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\english.c">
-      <Filter>locale</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd\cmd-activate.c">
       <Filter>cmd</Filter>
     </ClCompile>
@@ -829,6 +823,12 @@
     <ClCompile Include="..\..\src\spell\mspells4.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\locale\english.c">
+      <Filter>locale</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\locale\japanese.c">
+      <Filter>locale</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -926,12 +926,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\inet.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="japanese.h">
-      <Filter>locale</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\english.h">
-      <Filter>locale</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
       <Filter>cmd</Filter>
@@ -1700,6 +1694,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell\monster-spell.h">
       <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\locele\japanese.h">
+      <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\locele\english.h">
+      <Filter>locale</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

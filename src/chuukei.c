@@ -15,7 +15,7 @@
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-draw.h"
 #include "inet.h"
-#include "japanese.h"
+#include "locale/japanese.h"
 #include "chuukei.h"
 
 #include <stdio.h>

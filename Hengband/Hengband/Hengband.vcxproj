@@ -269,7 +269,7 @@
     <ClCompile Include="..\..\src\creature.c" />
     <ClCompile Include="..\..\src\dungeon\dungeon-file.c" />
     <ClCompile Include="..\..\src\dungeon\dungeon.c" />
-    <ClCompile Include="..\..\src\english.c" />
+    <ClCompile Include="..\..\src\locale\english.c" />
     <ClCompile Include="..\..\src\feature.c" />
     <ClCompile Include="..\..\src\floor\floor-events.c" />
     <ClCompile Include="..\..\src\floor\floor-generate.c" />
@@ -447,7 +447,7 @@
     <ClCompile Include="..\..\src\files.c" />
     <ClCompile Include="..\..\src\grid.c" />
     <ClCompile Include="..\..\src\inet.c" />
-    <ClCompile Include="..\..\src\japanese.c" />
+    <ClCompile Include="..\..\src\locale\japanese.c" />
     <ClCompile Include="..\..\src\load.c" />
     <ClCompile Include="..\..\src\main-win.c" />
     <ClCompile Include="..\..\src\mind.c" />
@@ -556,7 +556,7 @@
     <ClInclude Include="..\..\src\combat\melee.h" />
     <ClInclude Include="..\..\src\combat\shoot.h" />
     <ClInclude Include="..\..\src\core\show-file.h" />
-    <ClInclude Include="..\..\src\english.h" />
+    <ClInclude Include="..\src\locele\english.h" />
     <ClInclude Include="..\..\src\horror-descriptions.h" />
     <ClInclude Include="..\..\src\io\gf-descriptions.h" />
     <ClInclude Include="..\..\src\io\interpret-pref-file.h" />
@@ -621,7 +621,7 @@
     <ClInclude Include="..\..\src\wizard\wizard-spoiler.h" />
     <ClInclude Include="..\..\src\world\world-movement-processor.h" />
     <ClInclude Include="..\..\src\world\world-turn-processor.h" />
-    <ClInclude Include="japanese.h" />
+    <ClInclude Include="..\src\locele\japanese.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\system\angband.h" />

@@ -59,7 +59,7 @@
 #include "autopick/autopick.h"
 #include "autopick/autopick-pref-processor.h"
 #include "floor/floor-town.h"
-#include "japanese.h"
+#include "locale/japanese.h"
 #include "view/display-main-window.h"
 #include "wild.h"
 

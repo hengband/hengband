@@ -18,7 +18,7 @@
 #include "world/world.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "english.h"
+#include "locale/english.h"
 #include "view/display-main-window.h"
 
 quest_type *quest; /*!< Quest info */

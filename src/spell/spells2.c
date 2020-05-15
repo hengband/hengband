@@ -60,7 +60,7 @@
 #include "monster/monsterrace.h"
 #include "targeting.h"
 #include "realm/realm-song.h"
-#include "english.h"
+#include "locale/english.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells-type.h"
 #include "spell/process-effect.h"

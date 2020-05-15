@@ -33,7 +33,7 @@
 #include "view/display-main-window.h"
 #include "floor/floor.h"
 #include "autopick/autopick-reader-writer.h"
-#include "japanese.h"
+#include "locale/japanese.h"
 #include "spell/spells-util.h"
 #include "spell/spells-execution.h"
 

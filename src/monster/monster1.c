@@ -34,10 +34,10 @@
 #include "dungeon/dungeon.h"
 #include "world/world.h"
 #include "melee.h"
-#include "japanese.h"
+#include "locale/japanese.h"
 #include "view/display-main-window.h"
 #include "player/player-class.h"
-#include "english.h"
+#include "locale/english.h"
 #include "market/arena-info-table.h"
 #include "spell/process-effect.h"
 

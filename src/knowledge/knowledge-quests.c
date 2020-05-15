@@ -16,7 +16,7 @@
 #include "sort.h"
 #include "world/world.h"
 #include "core/show-file.h"
-#include "english.h"
+#include "locale/english.h"
 
  /*
   * Check on the status of an active quest

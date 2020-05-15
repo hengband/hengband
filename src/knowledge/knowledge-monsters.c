@@ -14,7 +14,7 @@
 #include "world/world.h"
 #include "core/show-file.h"
 #include "gameterm.h"
-#include "english.h"
+#include "locale/english.h"
 
 #include "core/stuff-handler.h"
 #include "view/display-main-window.h" // 暫定、後で消す.
