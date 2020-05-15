@@ -23,7 +23,7 @@
 #include "files.h"
 #include "world/world.h"
 #include "quest.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "avatar.h"
 #include "view/display-player.h"
 #include "player/player-status.h"

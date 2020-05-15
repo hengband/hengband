@@ -19,7 +19,7 @@
 #include "spell/spells-summon.h"
 #include "monster/monsterrace-hook.h"
 #include "object/object-curse.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "avatar.h"
 #include "files.h"
 #include "player/player-effects.h"

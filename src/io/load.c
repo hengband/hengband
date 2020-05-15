@@ -58,7 +58,7 @@
 #include "market/store-util.h"
 #include "quest.h"
 #include "market/store.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "avatar.h"
 #include "spell/spells-status.h"
 #include "object/object-hook.h"

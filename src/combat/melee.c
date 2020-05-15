@@ -16,7 +16,7 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
-#include "artifact.h"
+#include "object/artifact.h"
 #include "cmd-pet.h"
 #include "monster/monsterrace-hook.h"
 #include "melee.h"

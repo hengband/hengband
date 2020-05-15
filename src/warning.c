@@ -2,7 +2,7 @@
 #include "system/angband.h"
 #include "util.h"
 
-#include "artifact.h"
+#include "object/artifact.h"
 #include "player/player-move.h"
 #include "feature.h"
 #include "floor/floor.h"

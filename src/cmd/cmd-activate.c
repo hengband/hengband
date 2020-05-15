@@ -14,7 +14,7 @@
 #include "cmd/cmd-save.h"
 #include "object/object-hook.h"
 #include "sort.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "avatar.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-status.h"

@@ -19,7 +19,7 @@
 
 #include "creature.h"
 
-#include "artifact.h"
+#include "object/artifact.h"
 #include "cmd-dump.h"
 #include "floor/floor.h"
 #include "market/building.h"

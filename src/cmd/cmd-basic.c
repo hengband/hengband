@@ -27,7 +27,7 @@
 #include "object/object-hook.h"
 #include "monster/monster-status.h"
 #include "quest.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "avatar.h"
 #include "player/player-status.h"
 #include "realm/realm-hex.h"

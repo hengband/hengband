@@ -16,7 +16,7 @@
 #include "gameterm.h"
 
 #include "core/angband-version.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "sort.h"
 #include "market/store.h"
 #include "market/store-util.h"

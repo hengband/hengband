@@ -16,7 +16,7 @@
 #include "io/read-pref-file.h"
 #include "util.h"
 
-#include "artifact.h"
+#include "object/artifact.h"
 #include "floor/floor.h"
 #include "cmd-activate.h"
 #include "object/object-kind.h"

@@ -8,7 +8,7 @@
 #include "spell/spells3.h"
 #include "files.h"
 #include "object/object-curse.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "object/object-hook.h"
 #include "player/player-effects.h"
 #include "object/object-kind.h"

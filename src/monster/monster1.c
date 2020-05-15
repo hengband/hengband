@@ -28,7 +28,7 @@
 #include "spell/spells-summon.h"
 #include "patron.h"
 #include "quest.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "avatar.h"
 #include "wild.h"
 #include "dungeon/dungeon.h"

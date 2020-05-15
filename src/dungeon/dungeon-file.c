@@ -58,7 +58,7 @@
 #include "realm/realm.h"
 
 #include "trap.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "cmd-activate.h"
 #include "gameterm.h"
 #include "wild.h"

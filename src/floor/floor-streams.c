@@ -18,7 +18,7 @@
 #include "system/angband.h"
 #include "util.h"
 
-#include "artifact.h"
+#include "object/artifact.h"
 #include "floor/floor-generate.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"

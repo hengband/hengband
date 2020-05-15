@@ -5,8 +5,6 @@ AUTOMAKE_OPTIONS = foreign subdir-objects
 bin_PROGRAMS = hengband
 
 hengband_SOURCES = \
-	artifact.c artifact.h \
-	\
 	system/angband.h system/h-basic.h system/h-config.h \
 	system/h-define.h system/h-system.h system/h-type.h \
 	system/system-variables.c system/system-variables.h \
@@ -144,6 +142,7 @@ hengband_SOURCES = \
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
 	\
+	object/artifact.c object/artifact.h \
 	object/object-boost.c object/object-boost.h \
 	object/object-curse.c object/object-curse.h \
 	object/object-broken.c object/object-broken.h \

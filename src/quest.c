@@ -13,7 +13,7 @@
 #include "monster/monster.h"
 #include "player/player-status.h"
 #include "player/player-personality.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "feature.h"
 #include "world/world.h"
 #include "io/write-diary.h"

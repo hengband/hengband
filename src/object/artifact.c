@@ -13,7 +13,7 @@
 #include "system/angband.h"
 #include "util.h"
 
-#include "artifact.h"
+#include "object/artifact.h"
 #include "cmd-smith.h"
 
 #include "avatar.h"

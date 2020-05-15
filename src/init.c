@@ -39,7 +39,7 @@
 #include "io/read-pref-file.h"
 #include "gameterm.h"
 
-#include "artifact.h"
+#include "object/artifact.h"
 #include "market/building.h"
 #include "init.h"
 #include "quest.h"

@@ -8,7 +8,7 @@
 #include "effect/effect-characteristics.h"
 #include "melee.h"
 #include "monster/monsterrace-hook.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "monster/monster.h"
 #include "player/player-move.h"
 #include "player/player-status.h"

@@ -11,7 +11,7 @@
 #include "monster/monsterrace-hook.h"
 #include "object/object-kind-hook.h"
 #include "mutation/mutation.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"
 #include "player/player-race.h"

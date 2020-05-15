@@ -10,7 +10,7 @@
 #include "world/world.h"
 #include "player/player-effects.h"
 #include "object/object.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "object/object-kind.h"
 #include "trap.h"
 #include "effect/spells-effect-util.h"

@@ -35,7 +35,7 @@
 #include "player-inventory.h"
 #include "spell/spells-summon.h"
 #include "quest.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "avatar.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"

@@ -14,7 +14,7 @@
 #include "util.h"
 
 #include "cmd-smith.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "player/player-status.h"
 #include "player/player-class.h"
 #include "shoot.h"

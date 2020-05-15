@@ -43,7 +43,7 @@
 #include "dungeon/dungeon.h"
 #include "mutation/mutation.h"
 #include "quest.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "cmd-spell.h"
 #include "spell/spells3.h"
 #include "spell/spells-object.h"

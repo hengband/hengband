@@ -12,7 +12,7 @@
 #include "effect/effect-characteristics.h"
 #include "grid.h"
 #include "spells-summon.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "player/player-status.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"

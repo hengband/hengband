@@ -4,7 +4,7 @@
 #include "io/tokenizer.h"
 #include "files.h"
 #include "object/object-flavor.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "dungeon/dungeon.h"
 #include "monster/monsterrace.h"
 #include "floor/floor-town.h"

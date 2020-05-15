@@ -9,7 +9,7 @@
 #include "gameterm.h"
 #include "status-first-page.h"
 #include "display-util.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "combat/melee.h"
 #include "combat/shoot.h"
 #include "object/object-hook.h"

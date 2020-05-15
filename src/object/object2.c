@@ -33,7 +33,7 @@
 #include "object/object-hook.h"
 #include "object/object-curse.h"
 #include "object/object-kind-hook.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "feature.h"
 #include "player/player-status.h"
 #include "player/player-move.h"

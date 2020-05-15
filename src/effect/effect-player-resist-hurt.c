@@ -4,7 +4,7 @@
 #include "player/player-damage.h"
 #include "world/world.h"
 #include "object/object-broken.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "player/player-effects.h"
 #include "mutation/mutation.h"
 #include "spell/monster-spell.h"

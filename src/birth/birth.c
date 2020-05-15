@@ -21,7 +21,7 @@
 #include "market/building.h"
 #include "util.h"
 
-#include "artifact.h"
+#include "object/artifact.h"
 #include "autopick/autopick.h"
 #include "avatar.h"
 #include "birth/birth.h"

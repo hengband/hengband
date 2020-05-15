@@ -29,7 +29,7 @@
 #include "patron.h"
 #include "mutation/mutation.h"
 #include "quest.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"
 #include "player/player-skill.h"

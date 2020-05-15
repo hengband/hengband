@@ -4,7 +4,7 @@
 
 #include "object/object-hook.h"
 #include "monster/monster.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "player/player-class.h"
 #include "player/player-skill.h"
 #include "player/mimic-info-table.h"

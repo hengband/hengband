@@ -7,7 +7,7 @@
 #include "system/angband.h"
 #include "knowledge-items.h"
 #include "cmd/dump-util.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "sort.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

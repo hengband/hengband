@@ -32,7 +32,7 @@
 #include "object/object-ego.h"
 #include "sort.h"
 #include "quest.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "avatar.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"

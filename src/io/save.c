@@ -18,7 +18,7 @@
 #include "report.h"
 
 #include "core/angband-version.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "sort.h"
 #include "dungeon/dungeon.h"
 #include "quest.h"

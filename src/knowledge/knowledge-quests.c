@@ -9,7 +9,7 @@
 #include "cmd/dump-util.h"
 #include "quest.h"
 #include "system/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
-#include "artifact.h"
+#include "object/artifact.h"
 #include "object/object-flavor.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/dungeon-file.h"

@@ -19,7 +19,7 @@
 
 #include "creature.h"
 
-#include "artifact.h"
+#include "object/artifact.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-pet.h"
 #include "cmd/cmd-dump.h"

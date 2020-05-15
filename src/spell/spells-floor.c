@@ -5,7 +5,7 @@
 #include "floor/floor.h"
 #include "grid.h"
 #include "quest.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
