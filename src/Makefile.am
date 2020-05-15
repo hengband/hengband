@@ -34,6 +34,7 @@ hengband_SOURCES = \
 	\
 	birth/bitrh-explanations-table.c birth/bitrh-explanations-table.h \
 	birth/birth.c birth/birth.h \
+	birth/history.c birth/history.h \
 	\
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
@@ -117,7 +118,6 @@ hengband_SOURCES = \
 	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
 	geometry.c geometry.h \
 	\
-	history.h history.c \
 	inet.c inet.h init.c init.h \
 	load.c load.h \
 	main.c main-x11.c main-gcu.c \

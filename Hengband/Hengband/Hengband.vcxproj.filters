@@ -8,9 +8,6 @@
     <ClCompile Include="..\..\src\chuukei.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\history.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\quest.c">
       <Filter>market</Filter>
     </ClCompile>
@@ -833,6 +830,9 @@
     <ClCompile Include="..\..\src\mind\mind.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\birtth\history.c">
+      <Filter>birth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\init.h" />
@@ -840,9 +840,6 @@
     <ClInclude Include="..\..\src\warning.h" />
     <ClInclude Include="..\..\src\chuukei.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\history.h">
-      <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\quest.h">
       <Filter>market</Filter>
@@ -1710,6 +1707,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\mind.h">
       <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\birtth\history.h">
+      <Filter>birth</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

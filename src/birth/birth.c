@@ -33,7 +33,7 @@
 #include "dungeon/dungeon.h"
 #include "floor/floor-town.h"
 #include "floor/floor.h"
-#include "history.h"
+#include "birth/history.h"
 #include "io/write-diary.h"
 #include "locale/japanese.h"
 #include "market/store.h"

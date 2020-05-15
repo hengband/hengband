@@ -277,7 +277,7 @@
     <ClCompile Include="..\..\src\floor\floor-town.c" />
     <ClCompile Include="..\..\src\floor\floor.c" />
     <ClCompile Include="..\..\src\floor\geometry.c" />
-    <ClCompile Include="..\..\src\history.c" />
+    <ClCompile Include="..\..\src\birtth\history.c" />
     <ClCompile Include="..\..\src\monster\horror-descriptions.c" />
     <ClCompile Include="..\..\src\init.c" />
     <ClCompile Include="..\..\src\io\gf-descriptions.c" />
@@ -644,7 +644,7 @@
     <ClInclude Include="..\..\src\system\h-define.h" />
     <ClInclude Include="..\..\src\system\h-system.h" />
     <ClInclude Include="..\..\src\system\h-type.h" />
-    <ClInclude Include="..\..\src\history.h" />
+    <ClInclude Include="..\..\src\birtth\history.h" />
     <ClInclude Include="..\..\src\inet.h" />
     <ClInclude Include="..\..\src\init.h" />
     <ClInclude Include="..\..\src\io\load.h" />

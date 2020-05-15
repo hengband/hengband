@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "history.h"
+#include "birth/history.h"
 
 
 /*!
