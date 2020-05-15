@@ -52,7 +52,7 @@
 #include "player/race-info-table.h"
 #include "quest.h"
 #include "realm/realm.h"
-#include "save.h"
+#include "io/save.h"
 #include "spell/spells-util.h"
 #include "spell/spells-status.h"
 #include "view/display-main-window.h" // 暫定。後で消す.

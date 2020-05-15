@@ -13,8 +13,8 @@
 
 #include "system/angband.h"
 #include "util.h"
-#include "save.h"
-#include "load.h"
+#include "io/save.h"
+#include "io/load.h"
 #include "report.h"
 
 #include "core/angband-version.h"

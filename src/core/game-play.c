@@ -52,7 +52,7 @@
 #include "io/input-key-processor.h"
 #include "io/read-pref-file.h"
 #include "realm/realm.h"
-#include "save.h"
+#include "io/save.h"
 #include "scores.h"
 #include "targeting.h"
 #include "view/display-main-window.h"

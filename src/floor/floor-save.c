@@ -13,7 +13,7 @@
 #include "system/angband.h"
 #include "market/building.h"
 #include "system/system-variables.h"
-#include "load.h"
+#include "io/load.h"
 #include "util.h"
 
 #include "artifact.h"
@@ -42,7 +42,7 @@
 #include "spell/spells2.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "save.h"
+#include "io/save.h"
 #include "core/player-processor.h"
 
 #include "view/display-main-window.h"

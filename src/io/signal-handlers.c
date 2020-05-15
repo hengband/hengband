@@ -8,7 +8,7 @@
 #include "io/signal-handlers.h"
 #include "system/system-variables.h"
 #include "core/game-closer.h"
-#include "save.h"
+#include "io/save.h"
 #include "world/world.h"
 #include "gameterm.h"
 #include "io/write-diary.h"

@@ -45,7 +45,7 @@
 #include "system/system-variables.h" // 暫定、init_flags の扱いを決めた上で消す.
 #include "core/angband-version.h"
 
-#include "load.h"
+#include "io/load.h"
 #include "market/building.h"
 #include "report.h"
 
@@ -83,7 +83,7 @@
 #include "world/world.h"
 #include "object/object-kind.h"
 #include "object/object-ego.h"
-#include "save.h"
+#include "io/save.h"
 #include "locale/japanese.h"
 #include "cmd-smith.h"
 

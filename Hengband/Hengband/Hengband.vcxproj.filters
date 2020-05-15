@@ -37,12 +37,6 @@
     <ClCompile Include="..\..\src\rumor.c">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\load.c">
-      <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\save.c">
-      <Filter>io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mind.c">
       <Filter>spell</Filter>
     </ClCompile>
@@ -829,6 +823,12 @@
     <ClCompile Include="..\..\src\locale\japanese.c">
       <Filter>locale</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\save.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\load.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -902,12 +902,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\z-rand.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\save.h">
-      <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\load.h">
-      <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\racial.h">
       <Filter>cmd</Filter>
@@ -1700,6 +1694,12 @@
     </ClInclude>
     <ClInclude Include="..\src\locele\english.h">
       <Filter>locale</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\save.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\load.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

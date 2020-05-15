@@ -123,7 +123,7 @@
 #include <direct.h>
 #include <locale.h>
 #include "z-term.h"
-#include "save.h"
+#include "io/save.h"
 #include "dungeon/dungeon.h"
 
 /*

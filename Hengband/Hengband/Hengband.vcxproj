@@ -448,7 +448,7 @@
     <ClCompile Include="..\..\src\grid.c" />
     <ClCompile Include="..\..\src\inet.c" />
     <ClCompile Include="..\..\src\locale\japanese.c" />
-    <ClCompile Include="..\..\src\load.c" />
+    <ClCompile Include="..\..\src\io\load.c" />
     <ClCompile Include="..\..\src\main-win.c" />
     <ClCompile Include="..\..\src\mind.c" />
     <ClCompile Include="..\..\src\monster\monster1.c" />
@@ -479,7 +479,7 @@
     <ClCompile Include="..\..\src\room\rooms.c" />
     <ClCompile Include="..\..\src\room\pit-nest-kinds-table.c" />
     <ClCompile Include="..\..\src\rumor.c" />
-    <ClCompile Include="..\..\src\save.c" />
+    <ClCompile Include="..\..\src\io\save.c" />
     <ClCompile Include="..\..\src\scores.c" />
     <ClCompile Include="..\..\src\selfinfo.c" />
     <ClCompile Include="..\..\src\io\signal-handlers.c" />
@@ -647,7 +647,7 @@
     <ClInclude Include="..\..\src\history.h" />
     <ClInclude Include="..\..\src\inet.h" />
     <ClInclude Include="..\..\src\init.h" />
-    <ClInclude Include="..\..\src\load.h" />
+    <ClInclude Include="..\..\src\io\load.h" />
     <ClInclude Include="..\..\src\mind.h" />
     <ClInclude Include="..\..\src\monster\monster-process.h" />
     <ClInclude Include="..\..\src\spell\monster-spell.h" />
@@ -701,7 +701,7 @@
     <ClInclude Include="..\..\src\room\rooms-vault.h" />
     <ClInclude Include="..\..\src\room\rooms.h" />
     <ClInclude Include="..\..\src\rumor.h" />
-    <ClInclude Include="..\..\src\save.h" />
+    <ClInclude Include="..\..\src\io\save.h" />
     <ClInclude Include="..\..\src\scores.h" />
     <ClInclude Include="..\..\src\selfinfo.h" />
     <ClInclude Include="..\..\src\snipe.h" />

@@ -6,7 +6,7 @@
 #include "io/uid-checker.h"
 #include "main/music-definitions-table.h"
 #include "player/process-death.h"
-#include "save.h"
+#include "io/save.h"
 #include "scores.h"
 #include "view/display-main-window.h"
 #include "view/display-player.h"
