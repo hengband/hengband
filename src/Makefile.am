@@ -138,6 +138,7 @@ hengband_SOURCES = \
 	monster/monster1.c monster/monster2.c \
 	monster/mspells1.c monster/mspells2.c monster/mspells3.c monster/mspells4.c \
 	monster/monster-spell.h \
+	monster/horror-descriptions.c monster/horror-descriptions.h \
 	\
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
@@ -164,7 +165,6 @@ hengband_SOURCES = \
 	\
 	creature.h creature.c \
 	player/player-move.c player/player-move.h player/player-damage.c player/player-damage.h \
-	horror-descriptions.c horror-descriptions.h \
 	player/player-status.c player/player-status.h player/player-effects.c player/player-effects.h \
 	player/player-skill.c player/player-skill.h player/player-class.c player/player-class.h \
 	player/player-race.c player/player-race.h player/player-personality.c player/player-personality.h \

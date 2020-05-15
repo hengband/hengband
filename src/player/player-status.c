@@ -46,7 +46,7 @@
 #include "files.h"
 #include "cmd-magiceat.h"
 
-#include "horror-descriptions.h"
+#include "monster/horror-descriptions.h"
 #include "market/arena-info-table.h"
 #include "spell/spells-util.h"
 #include "spell/spells-execution.h"

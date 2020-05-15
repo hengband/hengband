@@ -8,7 +8,7 @@
  */
 
 #include "system/angband.h"
-#include "horror-descriptions.h"
+#include "monster/horror-descriptions.h"
 
 /*!
  * @var horror_desc_common
