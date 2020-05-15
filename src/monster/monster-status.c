@@ -21,7 +21,7 @@
 #include "object/object-curse.h"
 #include "object/artifact.h"
 #include "player/avatar.h"
-#include "files.h"
+#include "io/files.h"
 #include "player/player-effects.h"
 #include "player/player-personality.h"
 #include "view/display-main-window.h"

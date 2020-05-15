@@ -2,7 +2,7 @@
 
 #include "system/angband.h"
 #include "util.h"
-#include "files.h"
+#include "io/files.h"
 #include "inet.h"
 
 

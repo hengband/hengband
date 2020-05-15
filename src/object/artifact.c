@@ -27,7 +27,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "spell/spells-object.h"
-#include "files.h"
+#include "io/files.h"
 #include "grid/grid.h"
 #include "monster/monster.h"
 #include "view/display-main-window.h"

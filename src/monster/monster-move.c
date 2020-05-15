@@ -10,7 +10,7 @@
 #include "monster/monster-update.h"
 #include "cmd/cmd-pet.h"
 #include "creature.h"
-#include "files.h"
+#include "io/files.h"
 #include "monster/monster-status.h"
 #include "player/player-move.h"
 #include "spell/spells-type.h"

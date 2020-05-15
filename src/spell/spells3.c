@@ -52,7 +52,7 @@
 #include "cmd/cmd-dump.h"
 #include "snipe.h"
 #include "floor/floor-save.h"
-#include "files.h"
+#include "io/files.h"
 #include "player/player-effects.h"
 #include "player/player-skill.h"
 #include "player/player-personality.h"

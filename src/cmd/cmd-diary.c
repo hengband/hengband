@@ -2,7 +2,7 @@
 #include "cmd/cmd-diary.h"
 #include "chuukei.h"
 #include "core/show-file.h"
-#include "files.h"
+#include "io/files.h"
 #include "cmd/diary-subtitle-table.h"
 #include "player/player-personality.h"
 #include "io/write-diary.h"

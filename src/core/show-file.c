@@ -1,5 +1,5 @@
 ﻿#include "core/show-file.h"
-#include "files.h"
+#include "io/files.h"
 #include "core/angband-version.h"
 #include "gameterm.h"
 

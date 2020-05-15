@@ -23,7 +23,7 @@
 #include "object/object-flavor.h"
 #include "grid/trap.h"
 #include "snipe.h"
-#include "files.h"
+#include "io/files.h"
 #include "world/world.h"
 #include "monster/monsterrace.h"
 #include "object/object-ego.h"

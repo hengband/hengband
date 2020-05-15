@@ -43,7 +43,7 @@
 #include "melee.h"
 #include "world/world.h"
 #include "view/display-main-window.h"
-#include "files.h"
+#include "io/files.h"
 #include "cmd-magiceat.h"
 
 #include "monster/horror-descriptions.h"

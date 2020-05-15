@@ -10,7 +10,7 @@
 #include "autopick/autopick-describer.h"
 #include "autopick/autopick-entry.h"
 #include "gameterm.h"
-#include "files.h"
+#include "io/files.h"
 
 #define DESCRIPT_HGT 3
 

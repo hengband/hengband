@@ -20,7 +20,7 @@
 #include "market/building.h"
 #include "system/system-variables.h"
 #include "core/stuff-handler.h"
-#include "files.h"
+#include "io/files.h"
 #include "world/world.h"
 #include "quest.h"
 #include "object/artifact.h"

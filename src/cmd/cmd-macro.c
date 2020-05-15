@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "cmd-macro.h"
 #include "cmd-gameoption.h"
-#include "files.h"
+#include "io/files.h"
 #include "io/read-pref-file.h"
 #include "gameterm.h"
 

@@ -6,7 +6,7 @@
 #include "player/player-move.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
-#include "files.h"
+#include "io/files.h"
 #include "object/object-curse.h"
 #include "object/artifact.h"
 #include "object/object-hook.h"

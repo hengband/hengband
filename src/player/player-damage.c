@@ -31,7 +31,7 @@
 #include "report.h"
 #include "wild.h"
 #include "io/save.h"
-#include "files.h"
+#include "io/files.h"
 
 /*!
  * @brief アイテムを指定確率で破損させる /

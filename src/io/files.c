@@ -14,7 +14,7 @@
 
 #include "system/angband.h"
 #include "io/uid-checker.h"
-#include "files.h"
+#include "io/files.h"
 #include "system/system-variables.h" // 暫定。後で消す.
 #include "io/character-dump.h"
 

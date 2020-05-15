@@ -51,7 +51,7 @@
 #include "realm/realm-hex.h"
 #include "dungeon/dungeon-file.h"
 
-#include "files.h"
+#include "io/files.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"
 #include "player/player-class.h"

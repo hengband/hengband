@@ -19,7 +19,7 @@
 #include "io/read-pref-file.h"
 #include "io/interpret-pref-file.h"
 #include "autopick/autopick-pref-processor.h"
-#include "files.h" // 暫定。コールバック化して後で消す.
+#include "io/files.h" // 暫定。コールバック化して後で消す.
 #include "world/world.h"
 #include "system/system-variables.h"
 #include "autopick/autopick-reader-writer.h"

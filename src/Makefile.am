@@ -71,6 +71,7 @@ hengband_SOURCES = \
 	\
 	io/character-dump.c io/character-dump.h \
 	io/dump-remover.c io/dump-remover.h \
+	io/files.c io/files.h \
 	io/gf-descriptions.c io/gf-descriptions.h \
 	io/tokenizer.c io/tokenizer.h \
 	io/interpret-pref-file.c io/interpret-pref-file.h \
@@ -84,7 +85,6 @@ hengband_SOURCES = \
 	io/uid-checker.c io/uid-checker.h \
 	io/input-key-processor.c io/input-key-processor.h \
 	\
-	files.c files.h \
 	core/game-play.c core/game-play.h \
 	core/show-file.c core/show-file.h \
 	core/stuff-handler.c core/stuff-handler.h \

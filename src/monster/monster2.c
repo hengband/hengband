@@ -36,7 +36,7 @@
 #include "wild.h"
 #include "warning.h"
 #include "spell/monster-spell.h"
-#include "files.h"
+#include "io/files.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 #include "monster/monsterrace.h"

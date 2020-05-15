@@ -8,7 +8,7 @@
 #include "system/angband.h"
 #include "cmd/cmd-process-screen.h"
 #include "cmd/cmd-draw.h"
-#include "files.h"
+#include "io/files.h"
 #include "gameterm.h"
 #include "core/stuff-handler.h"
 

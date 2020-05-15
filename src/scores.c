@@ -24,7 +24,7 @@
 #include "player/player-personality.h"
 #include "player/player-sex.h"
 #include "io/uid-checker.h"
-#include "files.h"
+#include "io/files.h"
 #include "scores.h"
 #include "floor/floor.h"
 #include "world/world.h"

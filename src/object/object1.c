@@ -27,7 +27,7 @@
 #include "player/player-class.h"
 #include "inventory/player-inventory.h"
 #include "monster/monster.h"
-#include "files.h"
+#include "io/files.h"
 #include "gameterm.h"
 #include "cmd-smith.h"
 #include "snipe.h"

@@ -25,7 +25,7 @@
 #include "player/player-damage.h"
 #include "inventory/player-inventory.h"
 #include "monster/monster-status.h"
-#include "files.h"
+#include "io/files.h"
 #include "object/object-kind.h"
 #include "object/object-ego.h"
 #include "targeting.h"
