@@ -32,7 +32,7 @@
 #include "player/player-status.h"
 #include "realm/realm-hex.h"
 #include "geometry.h"
-#include "wild.h"
+#include "floor/wild.h"
 #include "grid/grid.h"
 #include "player/player-move.h"
 #include "player/player-effects.h"

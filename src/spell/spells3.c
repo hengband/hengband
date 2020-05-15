@@ -58,7 +58,7 @@
 #include "player/player-personality.h"
 #include "view/display-main-window.h"
 #include "mind.h"
-#include "wild.h"
+#include "floor/wild.h"
 #include "world/world.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"

@@ -27,7 +27,7 @@
 #include "grid/grid.h"
 #include "monster/monster.h"
 #include "quest.h"
-#include "wild.h"
+#include "floor/wild.h"
 #include "spell/spells-floor.h"
 #include "monster/monster-status.h"
 #include "object/object-hook.h"

@@ -30,7 +30,7 @@
 #include "quest.h"
 #include "object/artifact.h"
 #include "player/avatar.h"
-#include "wild.h"
+#include "floor/wild.h"
 #include "dungeon/dungeon.h"
 #include "world/world.h"
 #include "melee.h"

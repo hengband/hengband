@@ -10,7 +10,7 @@
 #include "cmd/cmd-save.h"
 #include "monster/monster-status.h"
 #include "player/player-move.h"
-#include "wild.h"
+#include "floor/wild.h"
 #include "player/digestion-processor.h"
 #include "core/hp-mp-processor.h"
 #include "core/magic-effects-timeout-reducer.h"

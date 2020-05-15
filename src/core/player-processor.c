@@ -16,7 +16,7 @@
 #include "realm/realm-hex.h"
 #include "spell/music-checker.h"
 #include "monster/monsterrace-hook.h"
-#include "wild.h"
+#include "floor/wild.h"
 
 bool load = TRUE;
 bool can_save = FALSE;

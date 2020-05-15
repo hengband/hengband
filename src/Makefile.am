@@ -106,6 +106,7 @@ hengband_SOURCES = \
 	floor/floor-save.h floor/floor-save.c floor/floor-town.h floor/floor-town.c \
 	floor/floor-streams.c floor/floor-streams.h \
 	floor/pattern-walk.c floor/pattern-walk.h \
+	floor/wild.h floor/wild.c \
 	\
 	locale/japanese.c locale/japanese.h locale/english.c locale/english.h \
 	\
@@ -242,7 +243,7 @@ hengband_SOURCES = \
 	spells-world.c spells-world.h \
 	\
 	sort.c sort.h util.c util.h \
-	wild.h wild.c warning.c warning.h \
+	warning.c warning.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\

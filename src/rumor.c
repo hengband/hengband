@@ -8,7 +8,7 @@
 #include "dungeon/dungeon.h"
 #include "monster/monsterrace.h"
 #include "floor/floor-town.h"
-#include "wild.h"
+#include "floor/wild.h"
 #include "world/world.h"
 
 /*

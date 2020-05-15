@@ -608,9 +608,6 @@
     <ClCompile Include="..\..\src\world\world-turn-processor.c">
       <Filter>world</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\wild.c">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\world\world.c">
       <Filter>world</Filter>
     </ClCompile>
@@ -832,6 +829,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\term\z-virt.c">
       <Filter>term</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\wild.c">
+      <Filter>floor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1481,9 +1481,6 @@
     <ClInclude Include="..\..\src\world\world-turn-processor.h">
       <Filter>world</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\wild.h">
-      <Filter>floor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\world\world.h">
       <Filter>world</Filter>
     </ClInclude>
@@ -1708,6 +1705,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\term\z-virt.h">
       <Filter>term</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\wild.h">
+      <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

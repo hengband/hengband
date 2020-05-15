@@ -118,7 +118,7 @@
 #include "monster/monster.h"
 #include "quest.h"
 #include "player/player-status.h"
-#include "wild.h"
+#include "floor/wild.h"
 #include "monster/monster-status.h"
 #include "dungeon/dungeon-file.h"
 #include "init.h"

@@ -46,7 +46,7 @@
 #include "grid/trap.h"
 #include "room/rooms.h"
 #include "market/store.h"
-#include "wild.h"
+#include "floor/wild.h"
 #include "dungeon/dungeon-file.h"
 #include "io/files.h"
 #include "grid/feature.h"

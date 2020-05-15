@@ -16,7 +16,7 @@
 
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
-#include "wild.h"
+#include "floor/wild.h"
 #include "world/world.h"
 #include "monster/monster.h"
 #include "realm/realm-hex.h"

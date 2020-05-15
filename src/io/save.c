@@ -24,7 +24,7 @@
 #include "quest.h"
 #include "market/store.h"
 #include "market/store-util.h"
-#include "wild.h"
+#include "floor/wild.h"
 #include "floor/floor.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h"

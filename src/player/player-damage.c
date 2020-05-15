@@ -29,7 +29,7 @@
 #include "view/display-main-window.h"
 #include "quest.h"
 #include "report.h"
-#include "wild.h"
+#include "floor/wild.h"
 #include "io/save.h"
 #include "io/files.h"
 

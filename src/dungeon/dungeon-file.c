@@ -61,7 +61,7 @@
 #include "object/artifact.h"
 #include "cmd-activate.h"
 #include "term/gameterm.h"
-#include "wild.h"
+#include "floor/wild.h"
 #include "view/display-main-window.h"
 #include "player/player-class.h"
 

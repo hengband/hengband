@@ -57,7 +57,7 @@
 #include "spell/spells-status.h"
 #include "view/display-main-window.h" // 暫定。後で消す.
 #include "view/display-player.h" // 暫定。後で消す.
-#include "wild.h"
+#include "floor/wild.h"
 #include "world/world.h"
 
 /*

@@ -41,7 +41,7 @@
 #include "spell/technic-info-table.h"
 #include "spell/spells-status.h"
 #include "view/display-player.h"
-#include "wild.h"
+#include "floor/wild.h"
 #include "world/world.h"
 #include "autopick/autopick-pref-processor.h"
 #include "core/game-closer.h"
