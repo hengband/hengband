@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 
 #include "autopick/autopick.h"
 #include "io/write-diary.h"

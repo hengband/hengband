@@ -10,10 +10,10 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"

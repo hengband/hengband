@@ -11,7 +11,7 @@
  * </pre>
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 #include "save.h"
 #include "load.h"

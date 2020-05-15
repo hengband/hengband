@@ -10,7 +10,7 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-methods-table.h"
@@ -18,7 +18,7 @@
 #include "gameterm.h"
 
 #include "market/building.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 #include "core/stuff-handler.h"
 #include "files.h"
 #include "world/world.h"

@@ -1,8 +1,8 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "util.h"
 
 #include "gameterm.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 
 
 /*

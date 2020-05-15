@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "display-fruit.h"
 #include "gameterm.h"
 

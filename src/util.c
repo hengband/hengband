@@ -10,10 +10,10 @@
 
  /* Purpose: Angband utilities -BEN- */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "main/music-definitions-table.h"
 #include "io/signal-handlers.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 #include "core/stuff-handler.h"
 #include "gameterm.h"
 #include "util.h"

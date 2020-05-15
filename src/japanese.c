@@ -4,7 +4,7 @@
  *  @date 2014/07/07
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 #include "japanese.h"
 

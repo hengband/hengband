@@ -5,7 +5,7 @@
  * @author Habu
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
 

@@ -1,4 +1,4 @@
-#include "angband.h"
+#include "system/angband.h"
 #include "monster/monster-dist-offsets.h"
 
 /*

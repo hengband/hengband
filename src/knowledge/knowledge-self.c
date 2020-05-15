@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "knowledge-self.h"
 #include "cmd/dump-util.h"
 #include "avatar.h"

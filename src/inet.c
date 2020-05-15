@@ -1,6 +1,6 @@
 ﻿/* File: inet.c */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 #include "files.h"
 #include "inet.h"

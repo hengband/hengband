@@ -5,7 +5,7 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "io/input-key-processor.h"
 #include "world/world.h"
 #include "core/special-internal-keys.h"

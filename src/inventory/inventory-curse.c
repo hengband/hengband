@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "inventory/inventory-curse.h"
 #include "object/object-flavor.h"
 #include "spells-summon.h"

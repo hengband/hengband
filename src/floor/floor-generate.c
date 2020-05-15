@@ -96,9 +96,9 @@
  * way from granite.  \n
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 #include "market/building.h"
 
 #include "io/write-diary.h"

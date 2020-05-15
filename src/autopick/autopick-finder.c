@@ -5,7 +5,7 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-dirty-flags.h"
 #include "autopick/autopick-entry.h"

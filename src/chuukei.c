@@ -6,7 +6,7 @@
     2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "angband.h"
+#include "system/angband.h"
 
 #include "io/signal-handlers.h"
 #include "files.h"

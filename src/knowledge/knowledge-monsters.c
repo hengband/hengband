@@ -5,7 +5,7 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "knowledge/knowledge-monsters.h"
 #include "cmd/dump-util.h"
 #include "sort.h"

@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "play-gamble.h"
 #include "gameterm.h"
 #include "avatar.h"

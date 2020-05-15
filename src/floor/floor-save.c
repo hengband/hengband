@@ -10,9 +10,9 @@
  * 2014 Deskull rearranged comment for Doxygen. \n
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "market/building.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 #include "load.h"
 #include "util.h"
 

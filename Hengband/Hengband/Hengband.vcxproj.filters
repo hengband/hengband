@@ -709,9 +709,6 @@
     <ClCompile Include="..\..\src\core\game-play.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\core\system-variables.c">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\floor\floor.c">
       <Filter>floor</Filter>
     </ClCompile>
@@ -829,14 +826,12 @@
     <ClCompile Include="..\..\src\player-inventory.c">
       <Filter>inventory</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\system\system-variables.c">
+      <Filter>system</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
-    <ClInclude Include="..\..\src\h-basic.h" />
-    <ClInclude Include="..\..\src\h-config.h" />
-    <ClInclude Include="..\..\src\h-define.h" />
-    <ClInclude Include="..\..\src\h-system.h" />
-    <ClInclude Include="..\..\src\h-type.h" />
     <ClInclude Include="..\..\src\init.h" />
     <ClInclude Include="..\..\src\readdib.h" />
     <ClInclude Include="..\..\src\z-form.h" />
@@ -895,9 +890,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind.h">
       <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\angband.h">
-      <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\history.h">
       <Filter>player</Filter>
@@ -1577,9 +1569,6 @@
     <ClInclude Include="..\..\src\core\game-play.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\core\system-variables.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\floor\floor.h">
       <Filter>floor</Filter>
     </ClInclude>
@@ -1691,6 +1680,27 @@
     <ClInclude Include="..\..\src\player-inventory.h">
       <Filter>inventory</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\system\angband.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\h-basic.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\h-config.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\h-define.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\h-system.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\h-type.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\system-variables.h">
+      <Filter>system</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1771,6 +1781,9 @@
     </Filter>
     <Filter Include="dungeon">
       <UniqueIdentifier>{b37a544f-cca2-4c1f-b069-f109a6b6b119}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="system">
+      <UniqueIdentifier>{12dd43b2-8ba5-4fc4-8d11-1901ec804390}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

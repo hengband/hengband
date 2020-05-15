@@ -11,7 +11,7 @@
 #ifndef INCLUDED_Z_TERM_H
 #define INCLUDED_Z_TERM_H
 
-#include "h-basic.h"
+#include "system/h-basic.h"
 
 typedef struct term_win term_win;
  /*!

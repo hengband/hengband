@@ -4,7 +4,7 @@
  * @author Hourier
  */
  
-#include "angband.h"
+#include "system/angband.h"
 #include "autopick/autopick-registry.h"
 #include "autopick/autopick-util.h"
 #include "autopick/autopick-methods-table.h"

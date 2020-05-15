@@ -3,7 +3,7 @@
  * @date 2020/04/25
  * @author Hourier
  */
-#include "angband.h"
+#include "system/angband.h"
 #include "autopick/autopick-util.h"
 #include "autopick-methods-table.h"
 #include "autopick/autopick-destroyer.h"

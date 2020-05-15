@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "knowledge-experiences.h"
 #include "cmd/dump-util.h"
 #include "core/show-file.h"

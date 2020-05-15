@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "cmd-macro.h"
 #include "cmd-gameoption.h"
 #include "files.h"

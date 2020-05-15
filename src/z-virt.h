@@ -11,7 +11,7 @@
 #ifndef INCLUDED_Z_VIRT_H
 #define INCLUDED_Z_VIRT_H
 
-#include "h-basic.h"
+#include "system/h-basic.h"
 
 /*
  * Memory management routines.

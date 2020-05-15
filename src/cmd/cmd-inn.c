@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "cmd/cmd-inn.h"
 #include "cmd/cmd-magiceat.h"
 #include "io/write-diary.h"

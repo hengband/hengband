@@ -15,7 +15,7 @@
  * 2013 Deskull Doxygen向けのコメント整理\n
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 #include "gameterm.h"
 

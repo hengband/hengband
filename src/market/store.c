@@ -10,7 +10,7 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "market/say-comments.h"
 #include "market/store-owners.h"
 #include "market/store-util.h"

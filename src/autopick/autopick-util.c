@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "autopick/autopick-util.h"
 #include "autopick/autopick-menu-data-table.h"
 

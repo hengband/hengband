@@ -14,14 +14,14 @@
  *     Add a footer, and close the file.
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "io/dump-remover.h"
 #include "io/read-pref-file.h"
 #include "io/interpret-pref-file.h"
 #include "autopick/autopick-pref-processor.h"
 #include "files.h" // 暫定。コールバック化して後で消す.
 #include "world/world.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 #include "autopick/autopick-reader-writer.h"
 
 // todo コールバック関数に変更するので、いずれ消す.

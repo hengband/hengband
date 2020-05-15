@@ -11,7 +11,7 @@
  * 2014 Deskull rearranged comment for Doxygen.\n
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "core/stuff-handler.h"
 #include "core/show-file.h"
 #include "util.h"

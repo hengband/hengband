@@ -11,7 +11,7 @@
  * </pre>
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "market/building.h"
 #include "core/stuff-handler.h"
 #include "gameterm.h"

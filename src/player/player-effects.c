@@ -12,7 +12,7 @@
  * 2013 Deskull rearranged comment for Doxygen.\n
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "gameterm.h"
 #include "core/stuff-handler.h"
 #include "util.h"

@@ -31,9 +31,9 @@
  * </pre>
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 
 #include "io/tokenizer.h"
 #include "files.h"

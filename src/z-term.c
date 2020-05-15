@@ -9,7 +9,7 @@
  */
 
  /* Purpose: a generic, efficient, terminal window package -BEN- */
-#include "angband.h"
+#include "system/angband.h"
 
 #include "gameterm.h"
 #include "z-term.h"

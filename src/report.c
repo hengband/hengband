@@ -5,7 +5,7 @@
  * @author Hengband Team
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "core/turn-compensator.h"
 #include "core/angband-version.h"
 #include "core/stuff-handler.h"

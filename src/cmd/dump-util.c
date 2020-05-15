@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "feature.h"
 #include "dump-util.h"
 #include "gameterm.h"

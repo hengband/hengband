@@ -4,8 +4,8 @@
  * @date 2013/12/31
  */
 
-#include "angband.h"
-#include "core/system-variables.h"
+#include "system/angband.h"
+#include "system/system-variables.h"
 
  /*!
   * todo どこからも呼ばれていない。main関数辺りに移設するか、そもそもコメントでいいと思われる

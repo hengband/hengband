@@ -10,10 +10,10 @@
  * are included in all such copies.  Other copyrights may also apply.
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 #include "core/stuff-handler.h"
 #include "gameterm.h"
 

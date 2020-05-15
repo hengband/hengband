@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "effect/effect-monster.h"
 #include "spells-effect-util.h"
 #include "io/write-diary.h"

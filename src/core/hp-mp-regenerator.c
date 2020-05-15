@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "core/hp-mp-regenerator.h"
 #include "cmd/cmd-magiceat.h"
 #include "monster/monster-status.h"

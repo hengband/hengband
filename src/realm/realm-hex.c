@@ -15,7 +15,7 @@
  * 2: Turn count for revenge\n
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 
 #include "effect/effect-characteristics.h"

@@ -1,5 +1,5 @@
 ﻿
-#include "angband.h"
+#include "system/angband.h"
 #include "player/player-class.h"
 
 /*

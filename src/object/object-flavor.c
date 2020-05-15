@@ -10,7 +10,7 @@
  * are included in all such copies.  Other copyrights may also apply.\n
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 
 #include "cmd-smith.h"

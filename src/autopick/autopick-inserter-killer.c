@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "autopick/autopick-util.h"
 #include "autopick/autopick-inserter-killer.h"
 #include "autopick/autopick-dirty-flags.h"

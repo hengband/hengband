@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "core/magic-effects-timeout-reducer.h"
 #include "player/player-effects.h"
 

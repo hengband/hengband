@@ -10,9 +10,9 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 #include "core/stuff-handler.h"
 #include "gameterm.h"
 #include "targeting.h"

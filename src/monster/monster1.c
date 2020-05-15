@@ -10,7 +10,7 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 #include "main/music-definitions-table.h"
 #include "gameterm.h"

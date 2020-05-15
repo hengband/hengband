@@ -30,7 +30,7 @@
  * </pre>
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/dump-util.h"
 #include "gameterm.h"

@@ -7,7 +7,7 @@
  * 引数に入っていたらここには移動させないこと
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "monster-util.h"
 
  /*!

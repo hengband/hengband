@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "angband.h"
+#include "system/angband.h"
 #include "files.h"
 
 void display_player(player_type *creature_ptr, int mode, map_name_pf map_name);

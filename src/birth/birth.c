@@ -11,8 +11,8 @@
  * 2013 Deskull Doxygen向けのコメント整理\n
  */
 
-#include "angband.h"
-#include "core/system-variables.h"
+#include "system/angband.h"
+#include "system/system-variables.h"
 #include "core/show-file.h"
 #include "gameterm.h"
 #include "io/read-pref-file.h"

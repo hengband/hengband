@@ -139,7 +139,7 @@
  * </pre>
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "core/stuff-handler.h"
 #include "core/special-internal-keys.h"
 #include "util.h"

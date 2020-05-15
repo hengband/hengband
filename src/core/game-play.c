@@ -10,7 +10,7 @@
  * 2013 Deskull rearranged comment for Doxygen.
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "core/game-play.h"
 #include "io/signal-handlers.h"
 #include "util.h"
@@ -56,7 +56,7 @@
 #include "scores.h"
 #include "targeting.h"
 #include "view/display-main-window.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 
 /*!
  * @brief 1ゲームプレイの主要ルーチン / Actually play a game

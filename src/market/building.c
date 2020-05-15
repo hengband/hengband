@@ -12,12 +12,12 @@
  * Changed for ZAngband by Robert Ruehlmann
 */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 #include "main/music-definitions-table.h"
 #include "gameterm.h"
 
-#include "core/system-variables.h" // 暫定、init_flags のため。後で消すかも.
+#include "system/system-variables.h" // 暫定、init_flags のため。後で消すかも.
 #include "core/stuff-handler.h"
 #include "core/show-file.h"
 #include "core/special-internal-keys.h"

@@ -13,7 +13,7 @@
  * to improve the general quality of the AI (version 0.1.1).
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 #include "monster/monster-direction.h"
 #include "monster/monster-move.h"

@@ -10,7 +10,7 @@
  * 2013 Deskull rearranged comment for Doxygen.
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "wizard/wizard-spoiler.h"
 #include "util.h"
 #include "gameterm.h"

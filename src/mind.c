@@ -14,7 +14,7 @@
  * 特殊技能を揃えて実装している。
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "core/stuff-handler.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"

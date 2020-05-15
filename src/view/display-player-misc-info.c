@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "view/display-player-stat-info.h"
 #include "player/mimic-info-table.h"
 #include "player/player-personality.h"

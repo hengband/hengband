@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-#include "angband.h"
+#include "system/angband.h"
 
 errr interpret_pref_file(player_type *creature_ptr, char *buf);

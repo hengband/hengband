@@ -1,5 +1,5 @@
 ﻿
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 
 #include "object/object-hook.h"

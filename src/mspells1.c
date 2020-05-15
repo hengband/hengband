@@ -38,7 +38,7 @@
  * Both of them have the same effect on the "choose spell" routine.\n
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 
 #include "effect/effect-characteristics.h"

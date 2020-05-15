@@ -1,6 +1,6 @@
 #pragma once
 
-#include "angband.h"
+#include "system/angband.h"
 #include "files.h"
 
 void print_tomb(player_type *dead_ptr);

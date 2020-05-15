@@ -89,7 +89,7 @@
 * </p>
 */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "io/signal-handlers.h"
 #include "main/sound-definitions-table.h"
 #include "main/music-definitions-table.h"
@@ -109,7 +109,7 @@
 #include "scores.h"
 #include "quest.h"
 #include "files.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 #include "core/game-play.h"
 #include "core/angband-version.h"
 #include "core/stuff-handler.h"

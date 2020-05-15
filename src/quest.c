@@ -1,8 +1,8 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "util.h"
 #include "main/music-definitions-table.h"
 
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "floor/floor-save.h"

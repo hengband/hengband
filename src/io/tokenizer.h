@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "angband.h"
+#include "system/angband.h"
 
 #define TOKENIZE_CHECKQUOTE 0x01  /* Special handling of single quotes */
 

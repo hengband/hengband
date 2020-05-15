@@ -7,7 +7,7 @@
  * いくら増やしてもよいが、horror_desc_evil とhorror_desc_neutralの個数は同一にすること
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "horror-descriptions.h"
 
 /*!

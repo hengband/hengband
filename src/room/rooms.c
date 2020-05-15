@@ -36,7 +36,7 @@
  * None of the pits/nests are allowed to include "unique" monsters.\n
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 
 #include "feature.h"

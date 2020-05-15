@@ -6,7 +6,7 @@
  * 2014 Deskull rearranged comment for Doxygen.\n
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "core/stuff-handler.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"

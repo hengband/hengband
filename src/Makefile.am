@@ -7,7 +7,9 @@ bin_PROGRAMS = hengband
 hengband_SOURCES = \
 	artifact.c artifact.h \
 	\
-	angband.h\
+	system/angband.h system/h-basic.h system/h-config.h \
+	system/h-define.h system/h-system.h system/h-type.h \
+	system/system-variables.c system/system-variables.h \
 	\
 	autopick/autopick.c autopick/autopick.h \
 	autopick/autopick-commands-table.h autopick/autopick-dirty-flags.h \
@@ -85,7 +87,6 @@ hengband_SOURCES = \
 	io/input-key-processor.c io/input-key-processor.h \
 	\
 	character-dump.c character-dump.h files.c files.h \
-	core/system-variables.c core/system-variables.h \
 	core/game-play.c core/game-play.h \
 	core/show-file.c core/show-file.h \
 	core/stuff-handler.c core/stuff-handler.h \
@@ -112,9 +113,9 @@ hengband_SOURCES = \
 	geometry.c geometry.h \
 	\
 	gamevalue.h \
-	grid.c grid.h h-basic.h h-config.h h-define.h \
+	grid.c grid.h\
 	history.h history.c \
-	h-system.h h-type.h inet.c inet.h init.c init.h \
+	inet.c inet.h init.c init.h \
 	japanese.c japanese.h english.c english.h \
 	load.c load.h \
 	main.c main-x11.c main-gcu.c \
@@ -285,7 +286,7 @@ hengband_SOURCES = \
 	\
 	world/world.c world/world.h \
 	world/world-movement-processor.c world/world-movement-processor.h \
-	world/world-turn-processor.c world/world-turn-processor.h \
+	world/world-turn-processor.c world/world-turn-processor.h
 
 EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc maid-x11.c main-win.c \

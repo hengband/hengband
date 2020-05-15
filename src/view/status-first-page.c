@@ -5,7 +5,7 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "gameterm.h"
 #include "status-first-page.h"
 #include "display-util.h"

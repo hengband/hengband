@@ -30,11 +30,11 @@
  * </pre>
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 #include "io/uid-checker.h"
 #include "files.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 #include "core/angband-version.h"
 #include "io/read-pref-file.h"
 #include "gameterm.h"

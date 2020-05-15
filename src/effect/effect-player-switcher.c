@@ -1,4 +1,4 @@
-#include "angband.h"
+#include "system/angband.h"
 #include "effect-player-util.h"
 #include "effect/effect-player-curse.h"
 #include "effect/effect-player-switcher.h"

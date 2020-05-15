@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "main/sound-definitions-table.h"
 
 const concptr angband_sound_name[SOUND_MAX] =

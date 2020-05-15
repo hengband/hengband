@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "cmd/lighting-level-table.h"
 #include "feature.h"
 

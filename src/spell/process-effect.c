@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "effect/spells-effect-util.h"
 #include "spell/process-effect.h"
 #include "cmd-pet.h" // 暫定、後で消すかも.

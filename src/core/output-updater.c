@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "core/output-updater.h"
 #include "view/display-main-window.h"
 

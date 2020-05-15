@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "object/lite-processor.h"
 #include "object/object-ego.h"
 #include "object/object-hook.h"

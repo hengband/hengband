@@ -12,10 +12,10 @@
  * </pre>
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "io/uid-checker.h"
 #include "files.h"
-#include "core/system-variables.h" // 暫定。後で消す.
+#include "system/system-variables.h" // 暫定。後で消す.
 #include "character-dump.h"
 
 concptr ANGBAND_DIR; //!< Path name: The main "lib" directory This variable is not actually used anywhere in the code

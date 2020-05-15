@@ -11,8 +11,8 @@
  * </pre>
  */
 
-#include "angband.h"
-#include "core/system-variables.h"
+#include "system/angband.h"
+#include "system/system-variables.h"
 #include "core/stuff-handler.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"

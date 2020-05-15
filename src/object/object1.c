@@ -11,8 +11,8 @@
  * 2014 Deskull rearranged comment for Doxygen.\n
  */
 
-#include "angband.h"
-#include "core/system-variables.h"
+#include "system/angband.h"
+#include "system/system-variables.h"
 #include "io/read-pref-file.h"
 #include "util.h"
 

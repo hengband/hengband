@@ -15,7 +15,7 @@
 #include "patron.h"
 #include "world/world.h"
 #include "quest.h"
-#include "core/system-variables.h" // 暫定。後で消す
+#include "system/system-variables.h" // 暫定。後で消す
 #include "knowledge/knowledge-mutations.h"
 #include "dungeon/dungeon-file.h"
 #include "object/object-kind.h"

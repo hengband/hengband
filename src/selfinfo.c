@@ -14,7 +14,7 @@
  * spell2s.cから分離
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 
 #include "player/player-status.h"

@@ -15,16 +15,16 @@
 #endif /* HAVE_CONFIG_H */
 
 /* System Configuration */
-#include "h-config.h"
+#include "system/h-config.h"
 
 /* System includes/externs */
-#include "h-system.h"
+#include "system/h-system.h"
 
 /* Basic types */
-#include "h-type.h"
+#include "system/h-type.h"
 
 /* Basic constants and macros */
-#include "h-define.h"
+#include "system/h-define.h"
 
 /* ゲーム調整値はこちらに */
 #include "gamevalue.h"

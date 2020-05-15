@@ -5,7 +5,7 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "effect/effect-player-util.h"
 #include "effect/effect-player.h"
 #include "effect/effect-player-switcher.h"

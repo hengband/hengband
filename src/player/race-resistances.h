@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "angband.h"
+#include "system/angband.h"
 
 void player_immunity(player_type *creature_ptr, BIT_FLAGS *flags);
 void tim_player_immunity(player_type *creature_ptr, BIT_FLAGS *flags);

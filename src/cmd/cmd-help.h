@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-#include "angband.h"
+#include "system/angband.h"
 
 void do_cmd_help(player_type *creature_ptr);

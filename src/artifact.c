@@ -10,7 +10,7 @@
  * 2013 Deskull rearranged comment for Doxygen.
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "util.h"
 
 #include "artifact.h"
