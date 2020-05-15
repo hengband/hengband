@@ -19,7 +19,7 @@
 #include "main/sound-definitions-table.h"
 #include "object/object-ego.h"
 
-#include "creature.h"
+#include "monster/creature.h"
 
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"

@@ -3,7 +3,7 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
-#include "creature.h"
+#include "monster/creature.h"
 #include "io/write-diary.h"
 #include "autopick/autopick-pref-processor.h"
 #include "cmd/cmd-draw.h"

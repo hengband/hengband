@@ -17,7 +17,7 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
-#include "creature.h"
+#include "monster/creature.h"
 
 #include "object/artifact.h"
 #include "io/write-diary.h"

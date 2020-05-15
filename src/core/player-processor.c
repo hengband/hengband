@@ -7,7 +7,7 @@
 #include "spell/spells2.h" // 相互依存している。後でどうするか検討する.
 #include "monster/monster-status.h"
 #include "view/display-main-window.h"
-#include "creature.h"
+#include "monster/creature.h"
 #include "player/player-effects.h"
 #include "core/stuff-handler.h"
 #include "inventory/pack-overflow.h"

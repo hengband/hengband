@@ -4,7 +4,7 @@
 #include "realm/realm-song.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
-#include "creature.h"
+#include "monster/creature.h"
 #include "player/player-move.h"
 
 /*!

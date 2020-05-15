@@ -17,7 +17,7 @@
 #include "core/stuff-handler.h"
 #include "util.h"
 
-#include "creature.h"
+#include "monster/creature.h"
 
 #include "object/artifact.h"
 #include "cmd-dump.h"

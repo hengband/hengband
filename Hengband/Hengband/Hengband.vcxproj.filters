@@ -50,9 +50,6 @@
     <ClCompile Include="..\..\src\targeting.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\creature.c">
-      <Filter>creature</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\inet.c">
       <Filter>io</Filter>
     </ClCompile>
@@ -833,6 +830,9 @@
     <ClCompile Include="..\..\src\floor\wild.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster\creature.c">
+      <Filter>monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -883,9 +883,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\report.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\creature.h">
-      <Filter>creature</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\inet.h">
       <Filter>io</Filter>
@@ -1709,6 +1706,9 @@
     <ClInclude Include="..\..\src\floor\wild.h">
       <Filter>floor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster\creature.h">
+      <Filter>monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1741,9 +1741,6 @@
     </Filter>
     <Filter Include="core">
       <UniqueIdentifier>{cbc72021-c88c-4625-b89b-ef126e300cf8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="creature">
-      <UniqueIdentifier>{60e19cec-2b2f-46e7-9de6-e441c26fb1b3}</UniqueIdentifier>
     </Filter>
     <Filter Include="locale">
       <UniqueIdentifier>{4bdec353-0cac-4e25-98f9-bcc55f2c0ec3}</UniqueIdentifier>

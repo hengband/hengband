@@ -20,7 +20,7 @@
 #include "term/gameterm.h"
 #include "chuukei.h"
 #include "birth/birth.h"
-#include "creature.h"
+#include "monster/creature.h"
 #include "grid/feature.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h"

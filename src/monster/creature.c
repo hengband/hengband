@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "creature.h"
+#include "monster/creature.h"
 
 /*!
  * @brief 加速値による実質速度修正倍率テーブル /

@@ -40,7 +40,7 @@
 #include "view/display-main-window.h"
 #include "world/world.h"
 #include "monster/monsterrace.h"
-#include "creature.h"
+#include "monster/creature.h"
 #include "targeting.h"
 #include "melee.h"
 #include "spell/process-effect.h"
