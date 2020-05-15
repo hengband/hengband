@@ -8,7 +8,7 @@
 #include "monster/monster-status.h"
 #include "spell/monster-spell.h"
 #include "object/artifact.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "player/player-status.h"
 #include "player/player-skill.h"
 #include "player/player-class.h"

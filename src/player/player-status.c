@@ -18,7 +18,7 @@
 #include "floor/floor-events.h"
 #include "grid/feature.h"
 #include "object/artifact.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "spell/technic-info-table.h"
 #include "spell/spells-status.h"
 #include "object/object.h"

@@ -18,7 +18,7 @@
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "spells-summon.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "spells-status.h"
 #include "cmd-spell.h"
 #include "player/player-status.h"

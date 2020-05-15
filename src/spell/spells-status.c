@@ -3,7 +3,7 @@
 #include "util.h"
 
 #include "cmd-magiceat.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "effect/effect-characteristics.h"
 #include "object/object-flavor.h"
 #include "player/player-status.h"

@@ -13,7 +13,7 @@
 
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "spell/spells-status.h"
 #include "realm/realm-hex.h"
 #include "player/player-status.h"

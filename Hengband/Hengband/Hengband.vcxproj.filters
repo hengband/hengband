@@ -9,9 +9,6 @@
     <ClCompile Include="..\..\src\patron.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\avatar.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\init.c" />
     <ClCompile Include="..\..\src\files.c">
       <Filter>io</Filter>
@@ -829,6 +826,9 @@
     <ClCompile Include="..\..\src\grid\feature.c">
       <Filter>grid</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\avatar.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -838,9 +838,6 @@
     <ClInclude Include="..\..\src\z-term.h" />
     <ClInclude Include="..\..\src\warning.h" />
     <ClInclude Include="..\..\src\patron.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\avatar.h">
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\files.h">
@@ -1700,6 +1697,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\grid\trap.h">
       <Filter>grid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\avatar.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

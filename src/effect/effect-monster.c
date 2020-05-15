@@ -14,7 +14,7 @@
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-switcher.h"
 #include "monster/monster-status.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "spell/spells-type.h"
 #include "effect/effect-characteristics.h"
 #include "spell/spells3.h"

@@ -38,7 +38,7 @@
 #include "world/world.h"
 #include "sort.h"
 
-#include "avatar.h"
+#include "player/avatar.h"
 #include "market/building.h"
 #include "dungeon/dungeon.h"
 #include "mutation/mutation.h"

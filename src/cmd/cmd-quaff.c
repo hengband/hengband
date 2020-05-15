@@ -14,7 +14,7 @@
 #include "selfinfo.h"
 #include "object/object-hook.h"
 #include "mutation/mutation.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "spell/spells-status.h"

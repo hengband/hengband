@@ -28,7 +28,7 @@
 #include "monster/monster-status.h"
 #include "quest.h"
 #include "object/artifact.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "player/player-status.h"
 #include "realm/realm-hex.h"
 #include "geometry.h"

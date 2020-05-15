@@ -24,7 +24,7 @@
 #include "world/world.h"
 #include "quest.h"
 #include "object/artifact.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "view/display-player.h"
 #include "player/player-status.h"
 #include "player/player-class.h"

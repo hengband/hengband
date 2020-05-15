@@ -5,7 +5,7 @@
 #include "main/sound-definitions-table.h"
 #include "gameterm.h"
 
-#include "avatar.h"
+#include "player/avatar.h"
 #include "market/building.h"
 #include "io/write-diary.h"
 #include "autopick/autopick-pref-processor.h"

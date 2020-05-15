@@ -2,7 +2,7 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
-#include "avatar.h"
+#include "player/avatar.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"
 #include "player/player-class.h"

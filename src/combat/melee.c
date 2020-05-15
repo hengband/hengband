@@ -23,7 +23,7 @@
 #include "monster/monster.h"
 #include "monster/monster-status.h"
 #include "spell/monster-spell.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "realm/realm-hex.h"
 #include "realm/realm-song.h"
 #include "object/object-flavor.h"

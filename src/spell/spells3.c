@@ -36,7 +36,7 @@
 #include "spell/spells-summon.h"
 #include "quest.h"
 #include "object/artifact.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "spell/spells-floor.h"

@@ -21,7 +21,7 @@
 #include "spell/spells-summon.h"
 #include "realm/realm-hex.h"
 #include "mind.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"

@@ -23,7 +23,7 @@
 
 #include "object/artifact.h"
 #include "autopick/autopick.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "birth/birth.h"
 #include "birth/birth-explanations-table.h"
 #include "cmd-pet.h"

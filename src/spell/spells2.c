@@ -34,7 +34,7 @@
 #include "spell/spells-summon.h"
 #include "mutation/mutation.h"
 #include "quest.h"
-#include "avatar.h"
+#include "player/avatar.h"
 
 #include "spell/spells-status.h"
 #include "spell/spells-floor.h"

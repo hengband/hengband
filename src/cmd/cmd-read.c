@@ -13,7 +13,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/artifact.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "player/player-status.h"
 #include "player/player-damage.h"
 #include "player/player-class.h"

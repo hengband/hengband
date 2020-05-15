@@ -40,7 +40,7 @@
 #include "cmd/cmd-magiceat.h"
 #include "spell/spells3.h"
 #include "market/store.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "cmd-spell.h"
 #include "rumor.h"
 #include "player/player-status.h"

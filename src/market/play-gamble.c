@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "play-gamble.h"
 #include "gameterm.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "core/show-file.h"
 #include "market/building-util.h"
 #include "market/poker.h"

@@ -24,7 +24,7 @@
 #include "effect/effect-characteristics.h"
 #include "melee.h"
 #include "spell/spells-summon.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "player/player-class.h"

@@ -15,7 +15,7 @@
 #include "io/special-class-dump.h"
 #include "io/player-status-dump.h"
 #include "io/write-diary.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "market/store-util.h"
 #include "market/arena-info-table.h"
 #include "player/race-info-table.h"

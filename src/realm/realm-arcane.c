@@ -2,7 +2,7 @@
 #include "util.h"
 
 #include "cmd-spell.h"
-#include "avatar.h"
+#include "player/avatar.h"
 
 #include "spell/spells2.h"
 #include "spell/spells3.h"

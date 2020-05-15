@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-charm.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "spell/spells-diceroll.h"
 #include "monster/monsterrace-hook.h"
 

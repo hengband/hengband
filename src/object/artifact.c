@@ -16,7 +16,7 @@
 #include "object/artifact.h"
 #include "cmd-smith.h"
 
-#include "avatar.h"
+#include "player/avatar.h"
 #include "floor/floor.h"
 #include "cmd-activate.h"
 #include "object/object.h"

@@ -20,7 +20,7 @@
 #include "monster/monsterrace-hook.h"
 #include "object/object-curse.h"
 #include "object/artifact.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "files.h"
 #include "player/player-effects.h"
 #include "player/player-personality.h"

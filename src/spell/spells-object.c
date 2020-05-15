@@ -14,7 +14,7 @@
 #include "object/object-ego.h"
 #include "player/player-damage.h"
 #include "player/player-status.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "player/player-effects.h"
 #include "player/player-class.h"
 #include "player-inventory.h"

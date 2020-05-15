@@ -10,7 +10,7 @@
 #include "effect-monster-util.h"
 #include "effect/effect-monster-switcher.h"
 #include "player/player-damage.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "monster/monster-status.h"
 #include "monster/monsterrace-hook.h"
 #include "combat/melee.h"

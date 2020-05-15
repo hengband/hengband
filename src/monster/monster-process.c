@@ -28,7 +28,7 @@
 #include "creature.h"
 #include "melee.h"
 #include "spell/spells-summon.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "realm/realm-hex.h"
 #include "grid/feature.h"
 #include "grid/grid.h"

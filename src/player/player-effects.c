@@ -27,7 +27,7 @@
 #include "grid/grid.h"
 #include "mutation/mutation.h"
 #include "quest.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "spell/spells-status.h"
 #include "realm/realm-song.h"
 #include "realm/realm-hex.h"

@@ -33,7 +33,7 @@
 #include "sort.h"
 #include "quest.h"
 #include "object/artifact.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"
 #include "player/player-class.h"

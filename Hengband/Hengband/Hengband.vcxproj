@@ -170,7 +170,7 @@
     <ClCompile Include="..\..\src\autopick\autopick-registry.c" />
     <ClCompile Include="..\..\src\autopick\autopick-util.c" />
     <ClCompile Include="..\..\src\autopick\autopick.c" />
-    <ClCompile Include="..\..\src\avatar.c" />
+    <ClCompile Include="..\..\src\player\avatar.c" />
     <ClCompile Include="..\..\src\birth\birth.c" />
     <ClCompile Include="..\..\src\birth\birth-explanations-table.c" />
     <ClCompile Include="..\..\src\cmd\cmd-autopick.c" />
@@ -377,7 +377,7 @@
     <ClInclude Include="..\..\src\autopick\autopick-registry.h" />
     <ClInclude Include="..\..\src\autopick\autopick-util.h" />
     <ClInclude Include="..\..\src\autopick\autopick.h" />
-    <ClInclude Include="..\..\src\avatar.h" />
+    <ClInclude Include="..\..\src\player\avatar.h" />
     <ClInclude Include="..\..\src\birth\birth.h" />
     <ClInclude Include="..\..\src\birth\birth-explanations-table.h" />
     <ClInclude Include="..\..\src\cmd\cmd-autopick.h" />

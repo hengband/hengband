@@ -6,7 +6,7 @@
 #include "spell/spells-status.h"
 #include "spell/spells-object.h"
 #include "spell/spells-diceroll.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "spell/spells-floor.h"
 #include "player/player-race.h"
 #include "player/player-effects.h"

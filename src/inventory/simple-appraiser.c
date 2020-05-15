@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "inventory/simple-appraiser.h"
 #include "object/object-flavor.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "player/player-move.h"

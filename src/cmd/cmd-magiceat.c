@@ -62,7 +62,7 @@
 #include "cmd-zaprod.h"
 #include "cmd-zapwand.h"
 #include "cmd-magiceat.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "player/player-status.h"
 #include "spell/spells3.h"
 #include "player/player-class.h"

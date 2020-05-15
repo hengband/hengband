@@ -3,7 +3,7 @@
 
 #include "cmd-spell.h"
 #include "selfinfo.h"
-#include "avatar.h"
+#include "player/avatar.h"
 
 #include "spell/spells-type.h"
 #include "spell/spells-status.h"

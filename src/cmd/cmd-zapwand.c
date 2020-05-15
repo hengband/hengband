@@ -2,7 +2,7 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
-#include "avatar.h"
+#include "player/avatar.h"
 #include "spell/spells-type.h"
 #include "spell/spells-status.h"
 #include "player/player-status.h"
