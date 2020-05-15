@@ -20,7 +20,7 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-save.h"
-#include "chest.h"
+#include "object/chest.h"
 #include "trap.h"
 #include "dungeon/dungeon.h"
 #include "melee.h"

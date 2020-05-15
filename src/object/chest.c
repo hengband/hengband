@@ -1,4 +1,5 @@
 ﻿#include "system/angband.h"
+#include "object/chest.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
 

@@ -12,9 +12,6 @@
     <ClCompile Include="..\..\src\avatar.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\chest.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\feature.c">
       <Filter>floor</Filter>
     </ClCompile>
@@ -829,6 +826,9 @@
     <ClCompile Include="..\..\src\object\artifact.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\chest.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -842,9 +842,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\avatar.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\chest.h">
-      <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\feature.h">
       <Filter>floor</Filter>
@@ -1699,6 +1696,9 @@
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\artifact.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\chest.h">
       <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>

@@ -50,7 +50,7 @@ hengband_SOURCES = \
 	market/store-util.c market/store-util.h \
 	market/gold-magnification-table.c market/gold-magnification-table.h \
 	market/store.c market/store.h \
-	chest.c chest.h chuukei.c chuukei.h \
+	chuukei.c chuukei.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \
@@ -144,6 +144,7 @@ hengband_SOURCES = \
 	\
 	object/artifact.c object/artifact.h \
 	object/object-boost.c object/object-boost.h \
+	object/chest.c object/chest.h \
 	object/object-curse.c object/object-curse.h \
 	object/object-broken.c object/object-broken.h \
 	object/object-hook.c object/object-hook.h \
