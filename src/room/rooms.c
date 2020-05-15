@@ -39,11 +39,11 @@
 #include "system/angband.h"
 #include "util.h"
 
-#include "feature.h"
+#include "grid/feature.h"
 #include "floor/floor.h"
 #include "floor/floor-generate.h"
 #include "dungeon/dungeon.h"
-#include "grid.h"
+#include "grid/grid.h"
 #include "room/rooms.h"
 
 #include "room/rooms-city.h"
@@ -54,7 +54,7 @@
 #include "room/rooms-trap.h"
 #include "room/rooms-vault.h"
 
-#include "trap.h"
+#include "grid/trap.h"
 
 #include "monster/monster.h"
 

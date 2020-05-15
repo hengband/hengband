@@ -3,7 +3,7 @@
 #include "room/rooms.h"
 #include "dungeon/dungeon.h"
 #include "main/sound-definitions-table.h"
-#include "trap.h"
+#include "grid/trap.h"
 #include "player/player-effects.h"
 #include "world/world.h"
 #include "spell/spells-type.h"

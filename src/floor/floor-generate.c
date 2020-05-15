@@ -103,7 +103,7 @@
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "grid.h"
+#include "grid/grid.h"
 #include "market/arena-info-table.h"
 #include "room/rooms.h"
 #include "dungeon/dungeon.h"
@@ -113,8 +113,8 @@
 #include "floor/floor-generate.h"
 #include "floor/floor-events.h"
 #include "floor/floor-generate.h"
-#include "feature.h"
-#include "trap.h"
+#include "grid/feature.h"
+#include "grid/trap.h"
 #include "monster/monster.h"
 #include "quest.h"
 #include "player/player-status.h"
@@ -122,7 +122,7 @@
 #include "monster/monster-status.h"
 #include "dungeon/dungeon-file.h"
 #include "init.h"
-#include "feature.h"
+#include "grid/feature.h"
 #include "spell/spells1.h"
 
 #include "world/world.h"

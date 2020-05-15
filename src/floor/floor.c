@@ -2,7 +2,7 @@
 #include "floor/floor.h"
 #include "floor/floor-save.h"
 #include "floor/floor-generate.h"
-#include "grid.h"
+#include "grid/grid.h"
 #include "dungeon/dungeon.h"
 #include "room/rooms.h"
 #include "quest.h"
@@ -12,7 +12,7 @@
 #include "object/object.h"
 #include "object/artifact.h"
 #include "object/object-kind.h"
-#include "trap.h"
+#include "grid/trap.h"
 #include "effect/spells-effect-util.h"
 #include "effect/effect-characteristics.h"
 

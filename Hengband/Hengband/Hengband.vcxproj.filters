@@ -12,9 +12,6 @@
     <ClCompile Include="..\..\src\avatar.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\feature.c">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\init.c" />
     <ClCompile Include="..\..\src\files.c">
       <Filter>io</Filter>
@@ -23,9 +20,6 @@
       <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\geometry.c">
-      <Filter>floor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\grid.c">
       <Filter>floor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\rumor.c">
@@ -54,9 +48,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\scores.c">
       <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\trap.c">
-      <Filter>floor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\z-util.c">
       <Filter>core</Filter>
@@ -829,6 +820,15 @@
     <ClCompile Include="..\..\src\object\chest.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\grid\grid.c">
+      <Filter>grid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\grid\trap.c">
+      <Filter>grid</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\grid\feature.c">
+      <Filter>grid</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -843,9 +843,6 @@
     <ClInclude Include="..\..\src\avatar.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\feature.h">
-      <Filter>floor</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\files.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -853,9 +850,6 @@
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\geometry.h">
-      <Filter>floor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\grid.h">
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\rumor.h">
@@ -884,9 +878,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\scores.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\trap.h">
-      <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\z-util.h">
       <Filter>core</Filter>
@@ -1701,6 +1692,15 @@
     <ClInclude Include="..\..\src\object\chest.h">
       <Filter>object</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\grid\feature.h">
+      <Filter>grid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\grid\grid.h">
+      <Filter>grid</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\grid\trap.h">
+      <Filter>grid</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1784,6 +1784,9 @@
     </Filter>
     <Filter Include="system">
       <UniqueIdentifier>{12dd43b2-8ba5-4fc4-8d11-1901ec804390}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="grid">
+      <UniqueIdentifier>{93b0c1d1-0841-44fe-8503-d6729d290350}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

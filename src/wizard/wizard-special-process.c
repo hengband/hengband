@@ -49,7 +49,7 @@
 
 #include "floor/floor.h"
 #include "floor/floor-save.h"
-#include "grid.h"
+#include "grid/grid.h"
 #include "dungeon/dungeon-file.h"
 #include "files.h"
 #include "spell/monster-spell.h"

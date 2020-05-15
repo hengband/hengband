@@ -50,9 +50,9 @@
 #include "report.h"
 
 #include "dungeon/dungeon.h"
-#include "feature.h"
+#include "grid/feature.h"
 #include "floor/floor-generate.h"
-#include "trap.h"
+#include "grid/trap.h"
 #include "mutation/mutation.h"
 #include "monster/monster.h"
 #include "market/store-util.h"
@@ -68,7 +68,7 @@
 #include "floor/floor.h"
 #include "floor/floor-save.h"
 #include "floor/floor-town.h"
-#include "grid.h"
+#include "grid/grid.h"
 
 #include "cmd-pet.h"
 #include "dungeon/dungeon-file.h"

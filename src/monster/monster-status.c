@@ -10,7 +10,7 @@
 #include "cmd/cmd-dump.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
-#include "grid.h"
+#include "grid/grid.h"
 #include "monster/monster.h"
 #include "monster/monster-status.h"
 #include "spell/monster-spell.h"

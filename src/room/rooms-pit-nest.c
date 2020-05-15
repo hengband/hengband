@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "util.h"
 
-#include "grid.h"
+#include "grid/grid.h"
 #include "floor/floor-generate.h"
 #include "rooms.h"
 #include "room/rooms-pit-nest.h"
@@ -9,7 +9,7 @@
 #include "monster/monsterrace-hook.h"
 #include "sort.h"
 #include "floor/floor.h"
-#include "feature.h"
+#include "grid/feature.h"
 #include "dungeon/dungeon.h"
 #include "room/pit-nest-kinds-table.h"
 

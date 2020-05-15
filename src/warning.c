@@ -4,7 +4,7 @@
 
 #include "object/artifact.h"
 #include "player/player-move.h"
-#include "feature.h"
+#include "grid/feature.h"
 #include "floor/floor.h"
 #include "warning.h"
 #include "player/player-status.h"

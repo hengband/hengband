@@ -10,7 +10,7 @@
 #include "main/sound-definitions-table.h"
 
 #include "effect/effect-characteristics.h"
-#include "grid.h"
+#include "grid/grid.h"
 #include "spells-summon.h"
 #include "object/artifact.h"
 #include "player/player-status.h"

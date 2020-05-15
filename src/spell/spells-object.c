@@ -5,7 +5,7 @@
 #include "cmd-basic.h"
 #include "object/artifact.h"
 #include "floor/floor.h"
-#include "grid.h"
+#include "grid/grid.h"
 #include "spell/spells3.h"
 #include "spell/spells-object.h"
 #include "object/object-boost.h"

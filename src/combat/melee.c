@@ -28,7 +28,7 @@
 #include "realm/realm-song.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "grid.h"
+#include "grid/grid.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "dungeon/dungeon.h"

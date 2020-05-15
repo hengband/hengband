@@ -41,7 +41,7 @@
 #include "spell/spells3.h"
 #include "spell/spells-floor.h"
 #include "spell/technic-info-table.h"
-#include "grid.h"
+#include "grid/grid.h"
 #include "market/building-util.h"
 #include "monster/monster-process.h"
 #include "monster/monster-status.h"

@@ -21,7 +21,7 @@
 #include "object/object-kind.h"
 #include "object/object-hook.h"
 #include "object/object-flavor.h"
-#include "trap.h"
+#include "grid/trap.h"
 #include "snipe.h"
 #include "files.h"
 #include "world/world.h"

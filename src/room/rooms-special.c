@@ -1,13 +1,13 @@
 ﻿#include "system/angband.h"
 #include "util.h"
 
-#include "grid.h"
+#include "grid/grid.h"
 #include "floor/floor-generate.h"
 #include "room/rooms.h"
 #include "monster/monster.h"
 #include "monster/monsterrace-hook.h"
 #include "object/object-kind-hook.h"
-#include "feature.h"
+#include "grid/feature.h"
 #include "floor/floor.h"
 #include "dungeon/dungeon.h"
 

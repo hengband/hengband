@@ -16,7 +16,7 @@
 #include "object/object-hook.h"
 #include "object/object-broken.h"
 #include "effect/effect-characteristics.h"
-#include "grid.h"
+#include "grid/grid.h"
 #include "object/object-flavor.h"
 
 #include "shoot.h"

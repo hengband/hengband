@@ -3,7 +3,7 @@
 
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
-#include "grid.h"
+#include "grid/grid.h"
 #include "quest.h"
 #include "object/artifact.h"
 #include "object/object-kind.h"
@@ -19,7 +19,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
-#include "feature.h"
+#include "grid/feature.h"
 #include "view/display-main-window.h"
 
 #include "monster/monster-status.h"

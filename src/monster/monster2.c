@@ -27,7 +27,7 @@
 #include "spell/spells-type.h"
 #include "spell/spells-summon.h"
 #include "quest.h"
-#include "grid.h"
+#include "grid/grid.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "player/player-race.h"

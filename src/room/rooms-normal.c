@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
-#include "grid.h"
-#include "trap.h"
+#include "grid/grid.h"
+#include "grid/trap.h"
 
 #include "floor/floor.h"
 #include "dungeon/dungeon.h"

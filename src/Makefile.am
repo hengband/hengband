@@ -109,11 +109,11 @@ hengband_SOURCES = \
 	\
 	locale/japanese.c locale/japanese.h locale/english.c locale/english.h \
 	\
-	feature.c feature.h \
+	grid/feature.c grid/feature.h \
+	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
 	geometry.c geometry.h \
 	\
 	gamevalue.h \
-	grid.c grid.h\
 	history.h history.c \
 	inet.c inet.h init.c init.h \
 	load.c load.h \
@@ -240,7 +240,7 @@ hengband_SOURCES = \
 	spells-summon.c spells-summon.h \
 	spells-world.c spells-world.h \
 	\
-	sort.c sort.h gameterm.c gameterm.h trap.c trap.h util.c util.h \
+	sort.c sort.h gameterm.c gameterm.h util.c util.h \
 	wild.h wild.c warning.c warning.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \

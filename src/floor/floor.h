@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "feature.h"
-#include "grid.h"
+#include "grid/feature.h"
+#include "grid/grid.h"
 #include "object/object.h"
 #include "floor/floor-save.h"
 

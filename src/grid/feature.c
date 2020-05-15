@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "feature.h"
+#include "grid/feature.h"
 
 /*** Terrain feature variables ***/
 

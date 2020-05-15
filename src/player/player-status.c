@@ -16,7 +16,7 @@
 #include "player/player-damage.h"
 #include "floor/floor.h"
 #include "floor/floor-events.h"
-#include "feature.h"
+#include "grid/feature.h"
 #include "object/artifact.h"
 #include "avatar.h"
 #include "spell/technic-info-table.h"

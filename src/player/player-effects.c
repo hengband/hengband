@@ -24,7 +24,7 @@
 #include "floor/floor.h"
 #include "market/building.h"
 #include "birth/birth.h"
-#include "grid.h"
+#include "grid/grid.h"
 #include "mutation/mutation.h"
 #include "quest.h"
 #include "avatar.h"

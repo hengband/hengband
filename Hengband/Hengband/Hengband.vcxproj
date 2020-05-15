@@ -270,7 +270,7 @@
     <ClCompile Include="..\..\src\dungeon\dungeon-file.c" />
     <ClCompile Include="..\..\src\dungeon\dungeon.c" />
     <ClCompile Include="..\..\src\locale\english.c" />
-    <ClCompile Include="..\..\src\feature.c" />
+    <ClCompile Include="..\..\src\grid\feature.c" />
     <ClCompile Include="..\..\src\floor\floor-events.c" />
     <ClCompile Include="..\..\src\floor\floor-generate.c" />
     <ClCompile Include="..\..\src\floor\floor-save.c" />
@@ -445,7 +445,7 @@
     <ClInclude Include="..\..\src\chuukei.h" />
     <ClCompile Include="..\..\src\player\player-move.c" />
     <ClCompile Include="..\..\src\files.c" />
-    <ClCompile Include="..\..\src\grid.c" />
+    <ClCompile Include="..\..\src\grid\grid.c" />
     <ClCompile Include="..\..\src\inet.c" />
     <ClCompile Include="..\..\src\locale\japanese.c" />
     <ClCompile Include="..\..\src\io\load.c" />
@@ -508,7 +508,7 @@
     <ClCompile Include="..\..\src\floor\floor-streams.c" />
     <ClCompile Include="..\..\src\targeting.c" />
     <ClCompile Include="..\..\src\gameterm.c" />
-    <ClCompile Include="..\..\src\trap.c" />
+    <ClCompile Include="..\..\src\grid\trap.c" />
     <ClCompile Include="..\..\src\util.c" />
     <ClCompile Include="..\..\src\view\display-main-window.c" />
     <ClCompile Include="..\..\src\warning.c" />
@@ -629,7 +629,7 @@
     <ClInclude Include="..\..\src\creature.h" />
     <ClInclude Include="..\..\src\dungeon\dungeon-file.h" />
     <ClInclude Include="..\..\src\dungeon\dungeon.h" />
-    <ClInclude Include="..\..\src\feature.h" />
+    <ClInclude Include="..\..\src\grid\feature.h" />
     <ClInclude Include="..\..\src\files.h" />
     <ClInclude Include="..\..\src\floor\floor-events.h" />
     <ClInclude Include="..\..\src\floor\floor-generate.h" />
@@ -638,7 +638,7 @@
     <ClInclude Include="..\..\src\floor\floor.h" />
     <ClInclude Include="..\..\src\gamevalue.h" />
     <ClInclude Include="..\..\src\geometry.h" />
-    <ClInclude Include="..\..\src\grid.h" />
+    <ClInclude Include="..\..\src\grid\grid.h" />
     <ClInclude Include="..\..\src\system\h-basic.h" />
     <ClInclude Include="..\..\src\system\h-config.h" />
     <ClInclude Include="..\..\src\system\h-define.h" />
@@ -717,7 +717,7 @@
     <ClInclude Include="..\..\src\market\store.h" />
     <ClInclude Include="..\..\src\targeting.h" />
     <ClInclude Include="..\..\src\gameterm.h" />
-    <ClInclude Include="..\..\src\trap.h" />
+    <ClInclude Include="..\..\src\grid\trap.h" />
     <ClInclude Include="..\..\src\util.h" />
     <ClInclude Include="..\..\src\view\display-main-window.h" />
     <ClInclude Include="..\..\src\warning.h" />

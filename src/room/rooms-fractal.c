@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "grid.h"
+#include "grid/grid.h"
 #include "floor/floor-generate.h"
 #include "room/rooms.h"
 #include "room/rooms-normal.h"
