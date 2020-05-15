@@ -18,7 +18,7 @@
 #include "spell/technic-info-table.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
-#include "spells-summon.h"
+#include "spell/spells-summon.h"
 #include "realm/realm-hex.h"
 #include "mind.h"
 #include "avatar.h"

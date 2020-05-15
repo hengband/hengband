@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "util.h"
 
-#include "spells-summon.h"
+#include "spell/spells-summon.h"
 #include "player-inventory.h"
 #include "monster/monster-status.h"
 #include "floor/floor.h"

@@ -39,7 +39,7 @@
 #include "player/player-skill.h"
 #include "player/process-name.h"
 #include "spell/technic-info-table.h"
-#include "spells-status.h"
+#include "spell/spells-status.h"
 #include "view/display-player.h"
 #include "wild.h"
 #include "world/world.h"

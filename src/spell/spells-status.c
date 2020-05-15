@@ -8,7 +8,7 @@
 #include "object/object-flavor.h"
 #include "player/player-status.h"
 #include "player/player-class.h"
-#include "spells-status.h"
+#include "spell/spells-status.h"
 #include "spell/spells-type.h"
 #include "monster/monster.h"
 #include "cmd-spell.h"

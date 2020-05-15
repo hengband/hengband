@@ -19,7 +19,7 @@
 #include "player/player-damage.h"
 #include "realm/realm-hex.h"
 #include "player/player-move.h"
-#include "monster-spell.h"
+#include "spell/monster-spell.h"
 #include "monster/monster-status.h"
 #include "spell/spells-type.h"
 #include "melee.h"

@@ -11,7 +11,7 @@
 #include "player/player-effects.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
-#include "spells-summon.h"
+#include "spell/spells-summon.h"
 #include "quest.h"
 #include "artifact.h"
 #include "feature.h"

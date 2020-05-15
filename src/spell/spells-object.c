@@ -7,7 +7,7 @@
 #include "floor/floor.h"
 #include "grid.h"
 #include "spell/spells3.h"
-#include "spells-object.h"
+#include "spell/spells-object.h"
 #include "object/object-boost.h"
 #include "object/object-hook.h"
 #include "object/object-flavor.h"

@@ -46,8 +46,8 @@
 #include "artifact.h"
 #include "cmd-spell.h"
 #include "spell/spells3.h"
-#include "spells-object.h"
-#include "spells-status.h"
+#include "spell/spells-object.h"
+#include "spell/spells-status.h"
 #include "realm/realm-hex.h"
 #include "dungeon/dungeon-file.h"
 

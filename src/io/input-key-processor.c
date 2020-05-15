@@ -20,9 +20,9 @@
 #include "market/store.h" // do_cmd_store() がある。後で移設する.
 #include "quest.h" // do_cmd_quest() がある。後で移設する.
 #include "wild.h"
-#include "spells-object.h"
+#include "spell/spells-object.h"
 #include "mind.h" // do_cmd_mind_browse() がある。後で移設する.
-#include "monster-spell.h" // do_cmd_cast_learned() がある。後で移設する.
+#include "spell/monster-spell.h" // do_cmd_cast_learned() がある。後で移設する.
 #include "racial.h" // do_cmd_racial_power() がある。ファイル名変更？.
 #include "view/display-main-window.h"
 #include "knowledge/knowledge-autopick.h"

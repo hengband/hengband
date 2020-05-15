@@ -22,7 +22,7 @@
 #include "melee.h"
 #include "monster/monster.h"
 #include "monster/monster-status.h"
-#include "monster-spell.h"
+#include "spell/monster-spell.h"
 #include "avatar.h"
 #include "realm/realm-hex.h"
 #include "realm/realm-song.h"
@@ -45,7 +45,7 @@
 #include "player/player-personality.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
-#include "spells-floor.h"
+#include "spell/spells-floor.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 

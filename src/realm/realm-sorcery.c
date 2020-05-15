@@ -6,8 +6,8 @@
 #include "avatar.h"
 
 #include "spell/spells-type.h"
-#include "spells-status.h"
-#include "spells-floor.h"
+#include "spell/spells-status.h"
+#include "spell/spells-floor.h"
 #include "player/player-effects.h"
 #include "targeting.h"
 #include "realm/realm-sorcery.h"

@@ -14,7 +14,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "avatar.h"
-#include "spells-status.h"
+#include "spell/spells-status.h"
 #include "realm/realm-hex.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"

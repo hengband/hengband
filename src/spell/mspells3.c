@@ -22,7 +22,7 @@
 #include "spells-status.h"
 #include "cmd-spell.h"
 #include "player/player-status.h"
-#include "monster-spell.h"
+#include "spell/monster-spell.h"
 #include "monster/monster-status.h"
 #include "spell/spells-type.h"
 #include "cmd-basic.h"

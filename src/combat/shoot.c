@@ -6,7 +6,7 @@
 
 #include "monster/monster.h"
 #include "monster/monster-status.h"
-#include "monster-spell.h"
+#include "spell/monster-spell.h"
 #include "artifact.h"
 #include "avatar.h"
 #include "player/player-status.h"

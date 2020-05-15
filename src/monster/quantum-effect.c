@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "quantum-effect.h"
-#include "monster-spell.h"
+#include "spell/monster-spell.h"
 #include "spell/spells3.h"
 
 /*!

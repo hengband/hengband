@@ -20,7 +20,7 @@
 #include "artifact.h"
 #include "avatar.h"
 #include "spell/technic-info-table.h"
-#include "spells-status.h"
+#include "spell/spells-status.h"
 #include "object/object.h"
 #include "object/object-hook.h"
 #include "object/object-ego.h"

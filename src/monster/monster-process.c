@@ -27,14 +27,14 @@
 #include "cmd/cmd-pet.h"
 #include "creature.h"
 #include "melee.h"
-#include "spells-summon.h"
+#include "spell/spells-summon.h"
 #include "avatar.h"
 #include "realm/realm-hex.h"
 #include "feature.h"
 #include "grid.h"
 #include "player/player-move.h"
 #include "monster/monster-status.h"
-#include "monster-spell.h"
+#include "spell/monster-spell.h"
 #include "monster/monster-process.h"
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);

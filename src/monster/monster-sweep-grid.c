@@ -6,7 +6,7 @@
 
 #include "monster/monster-sweep-grid.h"
 #include "monster/monster-safety-hiding.h"
-#include "monster-spell.h"
+#include "spell/monster-spell.h"
 
  /*!
   * @brief モンスターがプレイヤーから逃走するかどうかを返す /

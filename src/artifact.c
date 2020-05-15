@@ -26,7 +26,7 @@
 #include "object/object-ego.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "spells-object.h"
+#include "spell/spells-object.h"
 #include "files.h"
 #include "grid.h"
 #include "monster/monster.h"

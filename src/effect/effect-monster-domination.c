@@ -2,7 +2,7 @@
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-domination.h"
 #include "player/player-effects.h"
-#include "spells-diceroll.h"
+#include "spell/spells-diceroll.h"
 #include "monster/monster-status.h"
 #include "effect/spells-effect-util.h"
 #include "cmd/cmd-pet.h" // 暫定、後で消すかも.

@@ -24,7 +24,7 @@
 #include "player/player-class.h"
 #include "monster/monster.h"
 #include "monster/monster-status.h"
-#include "monster-spell.h"
+#include "spell/monster-spell.h"
 #include "spell/spells-type.h"
 #include "dungeon/dungeon.h"
 #include "world/world.h"

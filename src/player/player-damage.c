@@ -24,7 +24,7 @@
 #include "player/player-effects.h"
 #include "player/player-class.h"
 #include "player/player-race.h"
-#include "monster-spell.h"
+#include "spell/monster-spell.h"
 #include "world/world.h"
 #include "view/display-main-window.h"
 #include "quest.h"

@@ -19,7 +19,7 @@
 #include "grid.h"
 #include "targeting.h"
 #include "view/display-main-window.h"
-#include "spells-floor.h"
+#include "spell/spells-floor.h"
 #include "world/world.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells-util.h"

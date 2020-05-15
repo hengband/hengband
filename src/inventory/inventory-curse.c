@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "inventory/inventory-curse.h"
 #include "object/object-flavor.h"
-#include "spells-summon.h"
+#include "spell/spells-summon.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "spell/spells2.h"

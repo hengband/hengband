@@ -60,7 +60,7 @@
 #include "market/store.h"
 #include "artifact.h"
 #include "avatar.h"
-#include "spells-status.h"
+#include "spell/spells-status.h"
 #include "object/object-hook.h"
 #include "wild.h"
 #include "patron.h"

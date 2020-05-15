@@ -25,7 +25,7 @@
 #include "monster/monster-status.h"
 
 #include "spell/spells3.h"
-#include "spells-floor.h"
+#include "spell/spells-floor.h"
 
 /*
  * Light up the dungeon using "clairvoyance"

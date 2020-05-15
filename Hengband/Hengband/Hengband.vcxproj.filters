@@ -6,24 +6,6 @@
     <ClCompile Include="..\..\src\z-form.c" />
     <ClCompile Include="..\..\src\z-term.c" />
     <ClCompile Include="..\..\src\warning.c" />
-    <ClCompile Include="..\..\src\spells-diceroll.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spells-floor.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spells-object.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spells-status.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spells-summon.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spells-world.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\patron.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -45,18 +27,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\chuukei.c">
       <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mspells4.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mspells1.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mspells2.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mspells3.c">
-      <Filter>spell</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\geometry.c">
       <Filter>floor</Filter>
@@ -829,6 +799,36 @@
     <ClCompile Include="..\..\src\system\system-variables.c">
       <Filter>system</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-diceroll.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-floor.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-object.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-status.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-summon.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-world.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\mspells1.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\mspells2.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\mspells3.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\mspells4.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -837,24 +837,6 @@
     <ClInclude Include="..\..\src\z-form.h" />
     <ClInclude Include="..\..\src\z-term.h" />
     <ClInclude Include="..\..\src\warning.h" />
-    <ClInclude Include="..\..\src\spells-diceroll.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spells-floor.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spells-object.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spells-status.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spells-summon.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spells-world.h">
-      <Filter>spell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\patron.h">
       <Filter>player</Filter>
     </ClInclude>
@@ -875,9 +857,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\chuukei.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-spell.h">
-      <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\geometry.h">
       <Filter>floor</Filter>
@@ -1700,6 +1679,27 @@
     </ClInclude>
     <ClInclude Include="..\..\src\system\system-variables.h">
       <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-diceroll.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-floor.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-object.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-status.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-summon.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-world.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\monster-spell.h">
+      <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,7 +4,7 @@
 
 #include "avatar.h"
 #include "spell/spells-type.h"
-#include "spells-status.h"
+#include "spell/spells-status.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"
 #include "player/player-class.h"

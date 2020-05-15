@@ -7,8 +7,8 @@
 #include "artifact.h"
 #include "player/player-effects.h"
 #include "mutation/mutation.h"
-#include "monster-spell.h"
-#include "spells-status.h"
+#include "spell/monster-spell.h"
+#include "spell/spells-status.h"
 #include "spell/spells3.h"
 
 // 毒を除く4元素.

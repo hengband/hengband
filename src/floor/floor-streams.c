@@ -29,7 +29,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "spell/spells1.h"
-#include "spells-floor.h"
+#include "spell/spells-floor.h"
 #include "room/rooms.h"
 
 

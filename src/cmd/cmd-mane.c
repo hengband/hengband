@@ -17,10 +17,10 @@
 
 #include "floor/floor.h"
 #include "grid.h"
-#include "spells-summon.h"
-#include "spells-status.h"
+#include "spell/spells-summon.h"
+#include "spell/spells-status.h"
 #include "monster/monster-status.h"
-#include "monster-spell.h"
+#include "spell/monster-spell.h"
 #include "monster/monster-process.h"
 #include "cmd-spell.h"
 #include "player/player-status.h"

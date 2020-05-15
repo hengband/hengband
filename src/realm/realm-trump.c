@@ -3,9 +3,9 @@
 
 #include "cmd-spell.h"
 #include "mutation/mutation.h"
-#include "spells-summon.h"
-#include "spells-status.h"
-#include "spells-object.h"
+#include "spell/spells-summon.h"
+#include "spell/spells-status.h"
+#include "spell/spells-object.h"
 #include "player/player-effects.h"
 #include "player/player-class.h"
 #include "targeting.h"

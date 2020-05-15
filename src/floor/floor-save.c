@@ -28,7 +28,7 @@
 #include "monster/monster.h"
 #include "quest.h"
 #include "wild.h"
-#include "spells-floor.h"
+#include "spell/spells-floor.h"
 #include "monster/monster-status.h"
 #include "object/object-hook.h"
 #include "cmd-pet.h"

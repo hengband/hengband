@@ -24,7 +24,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-curse.h"
-#include "spells-status.h"
+#include "spell/spells-status.h"
 #include "spell/technic-info-table.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"

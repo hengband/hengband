@@ -54,7 +54,7 @@
 #include "realm/realm.h"
 #include "save.h"
 #include "spell/spells-util.h"
-#include "spells-status.h"
+#include "spell/spells-status.h"
 #include "view/display-main-window.h" // 暫定。後で消す.
 #include "view/display-player.h" // 暫定。後で消す.
 #include "wild.h"

@@ -19,10 +19,10 @@
 #include "player/player-damage.h"
 
 #include "spell/spells-type.h"
-#include "spells-summon.h"
-#include "spells-object.h"
-#include "spells-status.h"
-#include "spells-floor.h"
+#include "spell/spells-summon.h"
+#include "spell/spells-object.h"
+#include "spell/spells-status.h"
+#include "spell/spells-floor.h"
 #include "floor/floor.h"
 #include "spell/spells2.h"
 
