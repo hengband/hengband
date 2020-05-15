@@ -52,7 +52,7 @@
 #include "object/object-kind.h"
 #include "autopick/autopick-reader-writer.h"
 #include "io/save.h"
-#include "report.h"
+#include "io/report.h"
 
 #include "view/display-main-window.h"
 

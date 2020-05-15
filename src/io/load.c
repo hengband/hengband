@@ -47,7 +47,7 @@
 
 #include "io/load.h"
 #include "market/building.h"
-#include "report.h"
+#include "io/report.h"
 
 #include "dungeon/dungeon.h"
 #include "grid/feature.h"

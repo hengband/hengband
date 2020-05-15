@@ -15,7 +15,7 @@
 #include "util.h"
 #include "io/save.h"
 #include "io/load.h"
-#include "report.h"
+#include "io/report.h"
 
 #include "core/angband-version.h"
 #include "object/artifact.h"

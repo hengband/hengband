@@ -26,7 +26,7 @@
 #include "player/player-personality.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
-#include "report.h"
+#include "io/report.h"
 #include "melee.h"
 
 

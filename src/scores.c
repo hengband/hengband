@@ -30,7 +30,7 @@
 #include "world/world.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "report.h"
+#include "io/report.h"
 #include "locale/japanese.h"
 
  /*

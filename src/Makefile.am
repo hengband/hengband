@@ -82,6 +82,7 @@ hengband_SOURCES = \
 	io/exit-panic.c io/exit-panic.h \
 	io/write-diary.c io/write-diary.h \
 	io/mutations-dump.c io/mutations-dump.h \
+	io/report.c io/report.h \
 	io/signal-handlers.c io/signal-handlers.h \
 	io/uid-checker.c io/uid-checker.h \
 	io/input-key-processor.c io/input-key-processor.h \
@@ -189,8 +190,6 @@ hengband_SOURCES = \
 	realm/realm-nature.c realm/realm-nature.h realm/realm-song.c \
 	realm/realm-song.h realm/realm-sorcery.c \
 	realm/realm-sorcery.h realm/realm-trump.c realm/realm-trump.h \
-	\
-	report.c report.h \
 	\
 	room/rooms.c room/rooms.h room/rooms-city.c room/rooms-city.h \
 	room/rooms-fractal.c room/rooms-fractal.h \
