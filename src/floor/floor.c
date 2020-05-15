@@ -8,7 +8,7 @@
 #include "quest.h"
 #include "object/object-hook.h"
 #include "world/world.h"
-#include "player-effects.h"
+#include "player/player-effects.h"
 #include "object/object.h"
 #include "artifact.h"
 #include "object/object-kind.h"

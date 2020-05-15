@@ -16,8 +16,8 @@
 #include "main/sound-definitions-table.h"
 
 #include "monsterrace-hook.h"
-#include "player-status.h"
-#include "player-effects.h"
+#include "player/player-status.h"
+#include "player/player-effects.h"
 #include "player-inventory.h"
 #include "spell/technic-info-table.h"
 

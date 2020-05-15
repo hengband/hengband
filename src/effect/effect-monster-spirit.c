@@ -3,7 +3,7 @@
 #include "effect/effect-monster-spirit.h"
 #include "monster-spell.h"
 #include "monster-status.h"
-#include "player-effects.h"
+#include "player/player-effects.h"
 
 gf_switch_result effect_monster_drain_mana(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

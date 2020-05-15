@@ -3,7 +3,7 @@
 #include "cmd/cmd-magiceat.h"
 #include "io/write-diary.h"
 #include "world/world.h"
-#include "player-effects.h"
+#include "player/player-effects.h"
 #include "core/turn-compensator.h"
 #include "rumor.h"
 

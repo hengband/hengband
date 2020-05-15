@@ -18,7 +18,7 @@
 #include "autopick/autopick-destroyer.h"
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick.h"
-#include "player-move.h"
+#include "player/player-move.h"
 #include "object/object-flavor.h"
 
 /*

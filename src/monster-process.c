@@ -32,7 +32,7 @@
 #include "realm/realm-hex.h"
 #include "feature.h"
 #include "grid.h"
-#include "player-move.h"
+#include "player/player-move.h"
 #include "monster-status.h"
 #include "monster-spell.h"
 #include "monster-process.h"

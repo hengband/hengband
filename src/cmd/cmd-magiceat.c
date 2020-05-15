@@ -63,9 +63,9 @@
 #include "cmd-zapwand.h"
 #include "cmd-magiceat.h"
 #include "avatar.h"
-#include "player-status.h"
+#include "player/player-status.h"
 #include "spell/spells3.h"
-#include "player-class.h"
+#include "player/player-class.h"
 #include "object/object-kind.h"
 #include "targeting.h"
 

@@ -18,9 +18,9 @@
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "spells-status.h"
-#include "player-effects.h"
-#include "player-status.h"
-#include "player-damage.h"
+#include "player/player-effects.h"
+#include "player/player-status.h"
+#include "player/player-damage.h"
 #include "player/mimic-info-table.h"
 #include "player-inventory.h"
 #include "realm/realm-hex.h"
@@ -30,7 +30,7 @@
 #include "floor/floor.h"
 #include "object/object-kind.h"
 #include "view/display-main-window.h"
-#include "player-class.h"
+#include "player/player-class.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /

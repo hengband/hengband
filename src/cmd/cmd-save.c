@@ -2,7 +2,7 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-save.h"
 #include "cmd/cmd-dump.h"
-#include "player-move.h"
+#include "player/player-move.h"
 #include "core/stuff-handler.h"
 #include "save.h"
 #include "world/world.h"

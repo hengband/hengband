@@ -12,7 +12,7 @@
 #include "creature.h"
 #include "files.h"
 #include "monster-status.h"
-#include "player-move.h"
+#include "player/player-move.h"
 #include "spell/spells-type.h"
 #include "spell/process-effect.h"
 #include "effect/effect-characteristics.h"

@@ -4,7 +4,7 @@
 #include "avatar.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "player-move.h"
+#include "player/player-move.h"
 #include "player-inventory.h"
 #include "autopick/autopick.h"
 

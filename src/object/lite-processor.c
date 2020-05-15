@@ -2,7 +2,7 @@
 #include "object/lite-processor.h"
 #include "object/object-ego.h"
 #include "object/object-hook.h"
-#include "player-move.h"
+#include "player/player-move.h"
 #include "world/world.h"
 
 /*!

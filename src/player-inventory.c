@@ -9,7 +9,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "floor/floor.h"
-#include "player-move.h"
+#include "player/player-move.h"
 
 #include "view/display-main-window.h"
 

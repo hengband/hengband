@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "player-personality.h"
+#include "player/player-personality.h"
 
 
 /*!

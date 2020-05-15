@@ -1,9 +1,9 @@
 ﻿#include "angband.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-psi.h"
-#include "player-damage.h"
+#include "player/player-damage.h"
 #include "world/world.h"
-#include "player-effects.h"
+#include "player/player-effects.h"
 
 static bool effect_monster_psi_empty_mind(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

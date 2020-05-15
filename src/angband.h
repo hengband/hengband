@@ -42,7 +42,7 @@
 #include "monster.h"
 #include "monsterrace.h"
 #include "object/object.h"
-#include "player-status.h"
+#include "player/player-status.h"
 
 
 /***** Some copyright messages follow below *****/

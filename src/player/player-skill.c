@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "player-skill.h"
+#include "player/player-skill.h"
 
 /*
  * The skill table

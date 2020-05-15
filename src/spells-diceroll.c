@@ -4,7 +4,7 @@
 
 #include "monster.h"
 #include "monsterrace-hook.h"
-#include "player-class.h"
+#include "player/player-class.h"
 #include "mutation/mutation.h"
 #include "room/rooms.h"
 

@@ -8,7 +8,7 @@
 #include "spell/spells-type.h"
 #include "spells-status.h"
 #include "spells-floor.h"
-#include "player-effects.h"
+#include "player/player-effects.h"
 #include "targeting.h"
 #include "realm/realm-sorcery.h"
 #include "spell/spells2.h"

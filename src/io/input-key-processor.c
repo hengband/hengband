@@ -16,7 +16,7 @@
 #include "main/sound-definitions-table.h"
 #include "io/write-diary.h"
 #include "player-inventory.h"
-#include "player-effects.h"
+#include "player/player-effects.h"
 #include "market/store.h" // do_cmd_store() がある。後で移設する.
 #include "quest.h" // do_cmd_quest() がある。後で移設する.
 #include "wild.h"
@@ -28,7 +28,7 @@
 #include "knowledge/knowledge-autopick.h"
 #include "knowledge/knowledge-quests.h"
 #include "chuukei.h"
-#include "player-move.h" // do_cmd_travel() がある。後で移設する.
+#include "player/player-move.h" // do_cmd_travel() がある。後で移設する.
 #include "files.h"
 
 #include "cmd/cmd-activate.h"

@@ -6,7 +6,7 @@
 #include "quest.h"
 #include "world/world.h"
 #include "cmd/cmd-save.h"
-#include "player-move.h"
+#include "player/player-move.h"
 #include "view/display-main-window.h"
 
 /*!

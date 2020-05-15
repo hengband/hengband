@@ -2,15 +2,15 @@
 #include "inventory/inventory-curse.h"
 #include "object/object-flavor.h"
 #include "spells-summon.h"
-#include "player-damage.h"
-#include "player-move.h"
+#include "player/player-damage.h"
+#include "player/player-move.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "files.h"
 #include "object/object-curse.h"
 #include "artifact.h"
 #include "object/object-hook.h"
-#include "player-effects.h"
+#include "player/player-effects.h"
 #include "object/object-kind.h"
 
 static bool is_specific_curse(BIT_FLAGS flag)

@@ -1,7 +1,7 @@
 ﻿#include "angband.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-domination.h"
-#include "player-effects.h"
+#include "player/player-effects.h"
 #include "spells-diceroll.h"
 #include "monster-status.h"
 #include "effect/spells-effect-util.h"

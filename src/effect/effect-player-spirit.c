@@ -2,8 +2,8 @@
 #include "effect/effect-player-util.h"
 #include "effect/effect-player-spirit.h"
 #include "monster-spell.h"
-#include "player-damage.h"
-#include "player-effects.h"
+#include "player/player-damage.h"
+#include "player/player-effects.h"
 #include "world/world.h"
 
 void effect_player_drain_mana(player_type *target_ptr,

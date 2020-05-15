@@ -9,7 +9,7 @@
 #include "spells-effect-util.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
-#include "player-move.h"
+#include "player/player-move.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-switcher.h"

@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "player-race.h"
+#include "player/player-race.h"
 
 const player_race *rp_ptr;
 

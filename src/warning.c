@@ -3,18 +3,18 @@
 #include "util.h"
 
 #include "artifact.h"
-#include "player-move.h"
+#include "player/player-move.h"
 #include "feature.h"
 #include "floor/floor.h"
 #include "warning.h"
-#include "player-status.h"
+#include "player/player-status.h"
 #include "monster.h"
 #include "monster-spell.h"
 #include "spell/spells-type.h"
 #include "object/object-flavor.h"
 #include "dungeon/dungeon.h"
 #include "player/mimic-info-table.h"
-#include "player-class.h"
+#include "player/player-class.h"
 #include "melee.h"
 
 /*!

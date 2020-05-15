@@ -44,8 +44,8 @@
 #include "quest.h"
 #include "monster.h"
 #include "files.h"
-#include "player-skill.h"
-#include "player-race.h"
+#include "player/player-skill.h"
+#include "player/player-race.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "market/building.h"
@@ -63,7 +63,7 @@
 #include "gameterm.h"
 #include "wild.h"
 #include "view/display-main-window.h"
-#include "player-class.h"
+#include "player/player-class.h"
 
 #include "init.h"
 

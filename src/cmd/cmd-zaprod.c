@@ -3,9 +3,9 @@
 #include "main/sound-definitions-table.h"
 
 #include "avatar.h"
-#include "player-status.h"
-#include "player-effects.h"
-#include "player-class.h"
+#include "player/player-status.h"
+#include "player/player-effects.h"
+#include "player/player-class.h"
 #include "player-inventory.h"
 #include "object/object-kind.h"
 #include "object/object-hook.h"

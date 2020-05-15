@@ -12,7 +12,7 @@
 #include "main/sound-definitions-table.h"
 #include "gameterm.h"
 
-#include "player-status.h"
+#include "player/player-status.h"
 #include "cmd-basic.h"
 #include "snipe.h"
 #include "monsterrace.h"

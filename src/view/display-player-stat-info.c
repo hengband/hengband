@@ -10,7 +10,7 @@
 #include "display-player-stat-info.h"
 #include "player/mimic-info-table.h"
 #include "gameterm.h"
-#include "player-personality.h"
+#include "player/player-personality.h"
 #include "player/permanent-resistances.h"
 
 /*!

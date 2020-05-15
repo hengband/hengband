@@ -8,8 +8,8 @@
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "mutation/mutation.h"
-#include "player-status.h"
-#include "player-effects.h"
+#include "player/player-status.h"
+#include "player/player-effects.h"
 #include "realm/realm-craft.h"
 #include "spell/spells3.h"
 

@@ -1,6 +1,6 @@
 ﻿
 #include "angband.h"
-#include "player-class.h"
+#include "player/player-class.h"
 
 /*
  * The magic info

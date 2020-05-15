@@ -9,7 +9,7 @@
 #include "core/hp-mp-regenerator.h"
 #include "cmd/cmd-save.h"
 #include "monster-status.h"
-#include "player-move.h"
+#include "player/player-move.h"
 #include "wild.h"
 #include "player/digestion-processor.h"
 #include "core/hp-mp-processor.h"

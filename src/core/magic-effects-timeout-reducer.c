@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "core/magic-effects-timeout-reducer.h"
-#include "player-effects.h"
+#include "player/player-effects.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとに魔法効果の残りターンを減らしていく処理

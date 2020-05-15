@@ -8,10 +8,10 @@
 
 #include "display-player.h"
 #include "player/mimic-info-table.h"
-#include "player-personality.h"
+#include "player/player-personality.h"
 #include "gameterm.h"
 #include "status-first-page.h"
-#include "player-sex.h"
+#include "player/player-sex.h"
 #include "patron.h"
 #include "world/world.h"
 #include "quest.h"

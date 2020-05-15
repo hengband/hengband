@@ -11,7 +11,7 @@
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
-#include "player-move.h"
+#include "player/player-move.h"
 
 
 /*!

@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "inventory/pack-overflow.h"
-#include "player-move.h"
+#include "player/player-move.h"
 #include "object/object-flavor.h"
 #include "core/stuff-handler.h"
 

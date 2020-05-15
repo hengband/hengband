@@ -27,15 +27,6 @@
     <ClCompile Include="..\..\src\patron.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-damage.c">
-      <Filter>player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\player-move.c">
-      <Filter>player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\player-status.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\avatar.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -70,9 +61,6 @@
     <ClCompile Include="..\..\src\chuukei.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-effects.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mspells4.c">
       <Filter>spell</Filter>
     </ClCompile>
@@ -103,23 +91,8 @@
     <ClCompile Include="..\..\src\mind.c">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\player-skill.c">
-      <Filter>player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\player-class.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monsterrace.c">
       <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\player-race.c">
-      <Filter>player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\player-personality.c">
-      <Filter>player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\player-sex.c">
-      <Filter>player</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\history.c">
       <Filter>player</Filter>
@@ -829,6 +802,33 @@
     <ClCompile Include="..\..\src\room\rooms-pit-nest.c">
       <Filter>room</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\player-class.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\player-damage.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\player-effects.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\player-move.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\player-personality.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\player-race.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\player-sex.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\player-skill.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player\player-status.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -863,15 +863,6 @@
     <ClInclude Include="..\..\src\patron.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-damage.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player-move.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player-status.h">
-      <Filter>player</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\avatar.h">
       <Filter>player</Filter>
     </ClInclude>
@@ -902,9 +893,6 @@
     <ClInclude Include="..\..\src\chuukei.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-effects.h">
-      <Filter>player</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster-spell.h">
       <Filter>spell</Filter>
     </ClInclude>
@@ -920,23 +908,8 @@
     <ClInclude Include="..\..\src\mind.h">
       <Filter>spell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\player-skill.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player-class.h">
-      <Filter>player</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monsterrace.h">
       <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player-race.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player-personality.h">
-      <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\player-sex.h">
-      <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\angband.h">
       <Filter>core</Filter>
@@ -1690,6 +1663,33 @@
     </ClInclude>
     <ClInclude Include="..\..\src\room\rooms-vault.h">
       <Filter>room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-class.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-damage.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-effects.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-move.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-personality.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-race.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-sex.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-skill.h">
+      <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\player-status.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

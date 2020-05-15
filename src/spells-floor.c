@@ -16,9 +16,9 @@
 
 #include "floor/floor-events.h"
 #include "floor/floor-save.h"
-#include "player-damage.h"
-#include "player-effects.h"
-#include "player-move.h"
+#include "player/player-damage.h"
+#include "player/player-effects.h"
+#include "player/player-move.h"
 #include "feature.h"
 #include "view/display-main-window.h"
 

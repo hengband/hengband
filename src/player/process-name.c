@@ -1,6 +1,6 @@
 ﻿#include "player/process-name.h"
 #include "autopick/autopick-reader-writer.h"
-#include "player-personality.h"
+#include "player/player-personality.h"
 #include "files.h"
 #include "world/world.h"
 #include "gameterm.h"

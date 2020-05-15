@@ -15,8 +15,8 @@
 
 #include "cmd-smith.h"
 #include "artifact.h"
-#include "player-status.h"
-#include "player-class.h"
+#include "player/player-status.h"
+#include "player/player-class.h"
 #include "shoot.h"
 #include "object/object-kind.h"
 #include "object/object-hook.h"

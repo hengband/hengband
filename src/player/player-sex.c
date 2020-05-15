@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "player-sex.h"
+#include "player/player-sex.h"
 
 /*
  * Pointer to the player tables

@@ -4,7 +4,7 @@
 #include "dungeon/dungeon.h"
 #include "main/sound-definitions-table.h"
 #include "trap.h"
-#include "player-effects.h"
+#include "player/player-effects.h"
 #include "world/world.h"
 #include "spell/spells-type.h"
 #include "spell/process-effect.h" // 暫定、後で消す.

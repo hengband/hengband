@@ -117,7 +117,7 @@
 #include "trap.h"
 #include "monster.h"
 #include "quest.h"
-#include "player-status.h"
+#include "player/player-status.h"
 #include "wild.h"
 #include "monster-status.h"
 #include "dungeon/dungeon-file.h"

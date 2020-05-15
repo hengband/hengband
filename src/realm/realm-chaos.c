@@ -2,8 +2,8 @@
 #include "util.h"
 
 #include "cmd-spell.h"
-#include "player-class.h"
-#include "player-effects.h"
+#include "player/player-class.h"
+#include "player/player-effects.h"
 #include "spells-summon.h"
 #include "spells-status.h"
 #include "spells-floor.h"

@@ -31,8 +31,8 @@
 #include "grid.h"
 #include "monster.h"
 #include "view/display-main-window.h"
-#include "player-class.h"
-#include "player-personality.h"
+#include "player/player-class.h"
+#include "player/player-personality.h"
 #include "world/world.h"
 
  /*

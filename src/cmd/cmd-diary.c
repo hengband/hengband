@@ -4,7 +4,7 @@
 #include "core/show-file.h"
 #include "files.h"
 #include "cmd/diary-subtitle-table.h"
-#include "player-personality.h"
+#include "player/player-personality.h"
 #include "io/write-diary.h"
 #include "world/world.h"
 

@@ -9,7 +9,7 @@
 #include "angband.h"
 #include "effect-monster-util.h"
 #include "effect/effect-monster-switcher.h"
-#include "player-damage.h"
+#include "player/player-damage.h"
 #include "avatar.h"
 #include "monster-status.h"
 #include "monsterrace-hook.h"
