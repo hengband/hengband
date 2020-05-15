@@ -636,7 +636,7 @@
     <ClInclude Include="..\..\src\floor\floor-save.h" />
     <ClInclude Include="..\..\src\floor\floor-town.h" />
     <ClInclude Include="..\..\src\floor\floor.h" />
-    <ClInclude Include="..\..\src\gamevalue.h" />
+    <ClInclude Include="..\..\src\system\gamevalue.h" />
     <ClInclude Include="..\..\src\floor\geometry.h" />
     <ClInclude Include="..\..\src\grid\grid.h" />
     <ClInclude Include="..\..\src\system\h-basic.h" />

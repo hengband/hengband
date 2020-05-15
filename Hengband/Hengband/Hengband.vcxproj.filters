@@ -835,7 +835,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\gamevalue.h" />
     <ClInclude Include="..\..\src\init.h" />
     <ClInclude Include="..\..\src\readdib.h" />
     <ClInclude Include="..\..\src\warning.h" />
@@ -1707,6 +1706,9 @@
       <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\system\angband-version.h">
+      <Filter>system</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\system\gamevalue.h">
       <Filter>system</Filter>
     </ClInclude>
   </ItemGroup>

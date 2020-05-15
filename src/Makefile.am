@@ -8,6 +8,7 @@ hengband_SOURCES = \
 	system/angband.h system/h-basic.h system/h-config.h \
 	system/h-define.h system/h-system.h system/h-type.h \
 	system/system-variables.c system/system-variables.h \
+	system/gamevalue.h \
 	\
 	autopick/autopick.c autopick/autopick.h \
 	autopick/autopick-commands-table.h autopick/autopick-dirty-flags.h \
@@ -116,7 +117,6 @@ hengband_SOURCES = \
 	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
 	geometry.c geometry.h \
 	\
-	gamevalue.h \
 	history.h history.c \
 	inet.c inet.h init.c init.h \
 	load.c load.h \

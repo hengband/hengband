@@ -36,7 +36,7 @@
 /*
  * Include the "Angband" configuration header
  */
-#include "gamevalue.h"
+#include "system/gamevalue.h"
 #include "cmd-gameoption.h"
 
 #include "monster/monster.h"

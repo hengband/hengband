@@ -27,7 +27,7 @@
 #include "system/h-define.h"
 
 /* ゲーム調整値はこちらに */
-#include "gamevalue.h"
+#include "system/gamevalue.h"
 
 #endif
 
