@@ -241,13 +241,10 @@ hengband_SOURCES = \
 	spells-summon.c spells-summon.h \
 	spells-world.c spells-world.h \
 	\
-	sort.c sort.h gameterm.c gameterm.h util.c util.h \
+	sort.c sort.h util.c util.h \
 	wild.h wild.c warning.c warning.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
-	\
-	z-form.c z-form.h z-rand.c z-rand.h z-term.c z-term.h z-util.c z-util.h \
-	z-virt.c z-virt.h \
 	\
 	knowledge/knowledge-autopick.c knowledge/knowledge-autopick.h \
 	knowledge/knowledge-experiences.c knowledge/knowledge-experiences.h \
@@ -282,6 +279,12 @@ hengband_SOURCES = \
 	cmd/cmd-zaprod.c cmd/cmd-zaprod.h cmd/cmd-zapwand.c cmd/cmd-zapwand.h \
 	\
 	combat/melee.h combat/melee.c combat/shoot.c combat/shoot.h \
+	\
+	term/gameterm.c term/gameterm.h \
+	term/z-form.c term/z-form.h term/z-rand.c term/z-rand.h \
+	term/z-term.c term/z-term.h term/z-util.c term/z-util.h \
+	term/z-virt.c term/z-virt.h \
+	\
 	\
 	wizard/wizard-spoiler.c wizard/wizard-spoiler.h\
 	wizard/wizard-special-process.c wizard/wizard-special-process.h \

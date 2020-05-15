@@ -33,7 +33,7 @@
 #include "system/angband.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/dump-util.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "core/angband-version.h"
 #include "io/dump-remover.h"
 #include "io/read-pref-file.h"

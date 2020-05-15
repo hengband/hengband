@@ -9,7 +9,7 @@
 #include "autopick/autopick-command-menu.h"
 #include "autopick/autopick-util.h"
 #include "autopick/autopick-menu-data-table.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 /*!
  * @brief 自動拾いエディタの画面を再描画する

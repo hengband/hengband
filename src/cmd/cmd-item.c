@@ -14,7 +14,7 @@
 #include "core/stuff-handler.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 #include "selfinfo.h"
 #include "cmd-activate.h"

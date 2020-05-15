@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "grid/feature.h"
 #include "dump-util.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 TERM_COLOR attr_idx = 0;
 SYMBOL_CODE char_idx = 0;

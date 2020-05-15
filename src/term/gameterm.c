@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "util.h"
 
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "system/system-variables.h"
 
 

@@ -14,7 +14,7 @@
 #include "system/angband.h"
 #include "market/building.h"
 #include "core/stuff-handler.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
 #include "object/object-ego.h"

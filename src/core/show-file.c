@@ -1,7 +1,7 @@
 ﻿#include "core/show-file.h"
 #include "io/files.h"
 #include "core/angband-version.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 /*!
  * todo 表示とそれ以外を分割する

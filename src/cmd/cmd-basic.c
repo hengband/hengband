@@ -15,7 +15,7 @@
 #include "main/sound-definitions-table.h"
 #include "system/system-variables.h"
 #include "core/stuff-handler.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"

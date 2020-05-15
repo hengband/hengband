@@ -55,7 +55,7 @@
 #include "system/angband.h"
 #include "util.h"
 #include "main/sound-definitions-table.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 #include "cmd-basic.h"
 #include "cmd-usestaff.h"

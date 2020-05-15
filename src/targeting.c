@@ -14,7 +14,7 @@
 #include "util.h"
 #include "system/system-variables.h"
 #include "core/stuff-handler.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "targeting.h"
 
 #include "market/building.h"

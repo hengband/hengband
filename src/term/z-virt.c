@@ -10,8 +10,8 @@
 
 /* Purpose: Memory management routines -BEN- */
 
-#include "z-virt.h"
-#include "z-util.h"
+#include "term/z-virt.h"
+#include "term/z-util.h"
 
 /*
  * Optional auxiliary "rnfree" function

@@ -9,7 +9,7 @@
 #include "display-player.h"
 #include "player/mimic-info-table.h"
 #include "player/player-personality.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "status-first-page.h"
 #include "player/player-sex.h"
 #include "patron.h"

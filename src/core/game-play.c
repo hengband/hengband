@@ -17,7 +17,7 @@
 #include "core/angband-version.h"
 #include "core/stuff-handler.h"
 #include "inet.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "chuukei.h"
 #include "birth/birth.h"
 #include "creature.h"

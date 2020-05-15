@@ -15,7 +15,7 @@
 #include "core/show-file.h"
 #include "cmd/object-group-table.h"
 #include "world/world.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "core/stuff-handler.h"
 #include "view/display-main-window.h" // 暫定、後で消す.
 

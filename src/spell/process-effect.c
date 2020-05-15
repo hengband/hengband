@@ -7,7 +7,7 @@
 #include "effect/effect-item.h"
 #include "effect/effect-monster.h"
 #include "effect/effect-player.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "main/sound-definitions-table.h"
 #include "spell/spells-type.h"
 #include "view/display-main-window.h" // 暫定、後で消すかも.

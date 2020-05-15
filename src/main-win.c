@@ -116,13 +116,13 @@
 #include "core/special-internal-keys.h"
 #include "core/player-processor.h"
 #include "world/world.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 #ifdef WINDOWS
 #include <windows.h>
 #include <direct.h>
 #include <locale.h>
-#include "z-term.h"
+#include "term/z-term.h"
 #include "io/save.h"
 #include "dungeon/dungeon.h"
 

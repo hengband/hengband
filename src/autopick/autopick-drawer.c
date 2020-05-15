@@ -9,7 +9,7 @@
 #include "autopick/autopick-dirty-flags.h"
 #include "autopick/autopick-describer.h"
 #include "autopick/autopick-entry.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "io/files.h"
 
 #define DESCRIPT_HGT 3

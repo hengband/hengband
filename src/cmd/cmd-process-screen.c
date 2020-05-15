@@ -9,7 +9,7 @@
 #include "cmd/cmd-process-screen.h"
 #include "cmd/cmd-draw.h"
 #include "io/files.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "core/stuff-handler.h"
 
 // Encode the screen colors

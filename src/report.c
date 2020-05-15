@@ -15,7 +15,7 @@
 #include "player/player-personality.h"
 #include "io/character-dump.h"
 #include "world/world.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 #ifdef WORLD_SCORE
 

@@ -3,7 +3,7 @@
 #include "player/mimic-info-table.h"
 #include "player/player-personality.h"
 #include "player/player-sex.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 /*!
  * @brief プレイヤーの特性フラグ一覧表示2a /

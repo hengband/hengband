@@ -37,7 +37,7 @@
 #include "system/system-variables.h"
 #include "core/angband-version.h"
 #include "io/read-pref-file.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 #include "object/artifact.h"
 #include "market/building.h"

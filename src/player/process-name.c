@@ -3,7 +3,7 @@
 #include "player/player-personality.h"
 #include "io/files.h"
 #include "world/world.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 /*!
  * @brief プレイヤーの名前をチェックして修正する

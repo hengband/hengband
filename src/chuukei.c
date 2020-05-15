@@ -11,7 +11,7 @@
 #include "io/signal-handlers.h"
 #include "io/files.h"
 #include "util.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-draw.h"
 #include "inet.h"

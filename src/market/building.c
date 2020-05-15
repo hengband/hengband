@@ -15,7 +15,7 @@
 #include "system/angband.h"
 #include "util.h"
 #include "main/music-definitions-table.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 #include "system/system-variables.h" // 暫定、init_flags のため。後で消すかも.
 #include "core/stuff-handler.h"

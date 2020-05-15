@@ -10,7 +10,7 @@
 
 /* Purpose: Low level utilities -BEN- */
 
-#include "z-util.h"
+#include "term/z-util.h"
 
 
 /*

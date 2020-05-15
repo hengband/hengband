@@ -15,7 +15,7 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 #include "world/world.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 #include "object/object.h"
 

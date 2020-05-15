@@ -10,7 +10,7 @@
 #include "core/game-closer.h"
 #include "io/save.h"
 #include "world/world.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "floor/floor-events.h"

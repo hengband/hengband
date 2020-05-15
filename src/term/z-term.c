@@ -11,10 +11,10 @@
  /* Purpose: a generic, efficient, terminal window package -BEN- */
 #include "system/angband.h"
 
-#include "gameterm.h"
-#include "z-term.h"
+#include "term/gameterm.h"
+#include "term/z-term.h"
 
-#include "z-virt.h"
+#include "term/z-virt.h"
 
 /* Special flags in the attr data */
 #define AF_BIGTILE2 0xf0

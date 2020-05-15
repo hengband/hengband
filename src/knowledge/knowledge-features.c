@@ -8,7 +8,7 @@
 #include "knowledge/knowledge-features.h"
 #include "cmd/dump-util.h"
 #include "core/show-file.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "world/world.h"
 #include "cmd/lighting-level-table.h"
 #include "dungeon/dungeon.h"

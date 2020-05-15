@@ -15,7 +15,7 @@
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 #include "market/building.h"
 #include "system/system-variables.h"

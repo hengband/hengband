@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "play-gamble.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "player/avatar.h"
 #include "core/show-file.h"
 #include "market/building-util.h"

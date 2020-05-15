@@ -18,7 +18,7 @@
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-drawer.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "core/show-file.h"
 
 /*

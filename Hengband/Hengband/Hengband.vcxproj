@@ -507,7 +507,7 @@
     <ClCompile Include="..\..\src\market\store.c" />
     <ClCompile Include="..\..\src\floor\floor-streams.c" />
     <ClCompile Include="..\..\src\targeting.c" />
-    <ClCompile Include="..\..\src\gameterm.c" />
+    <ClCompile Include="..\..\src\term\gameterm.c" />
     <ClCompile Include="..\..\src\grid\trap.c" />
     <ClCompile Include="..\..\src\util.c" />
     <ClCompile Include="..\..\src\view\display-main-window.c" />
@@ -518,11 +518,11 @@
     <ClCompile Include="..\..\src\world\world.c" />
     <ClCompile Include="..\..\src\world\world-movement-processor.c" />
     <ClCompile Include="..\..\src\world\world-turn-processor.c" />
-    <ClCompile Include="..\..\src\z-form.c" />
-    <ClCompile Include="..\..\src\z-rand.c" />
-    <ClCompile Include="..\..\src\z-term.c" />
-    <ClCompile Include="..\..\src\z-util.c" />
-    <ClCompile Include="..\..\src\z-virt.c" />
+    <ClCompile Include="..\..\src\term\z-form.c" />
+    <ClCompile Include="..\..\src\term\z-rand.c" />
+    <ClCompile Include="..\..\src\term\z-term.c" />
+    <ClCompile Include="..\..\src\term\z-util.c" />
+    <ClCompile Include="..\..\src\term\z-virt.c" />
     <ClInclude Include="..\..\src\cmd\cmd-activate.h" />
     <ClInclude Include="..\..\src\cmd\cmd-basic.h" />
     <ClInclude Include="..\..\src\cmd\cmd-diary.h" />
@@ -716,18 +716,18 @@
     <ClInclude Include="..\..\src\spell\spells1.h" />
     <ClInclude Include="..\..\src\market\store.h" />
     <ClInclude Include="..\..\src\targeting.h" />
-    <ClInclude Include="..\..\src\gameterm.h" />
+    <ClInclude Include="..\..\src\term\gameterm.h" />
     <ClInclude Include="..\..\src\grid\trap.h" />
     <ClInclude Include="..\..\src\util.h" />
     <ClInclude Include="..\..\src\view\display-main-window.h" />
     <ClInclude Include="..\..\src\warning.h" />
     <ClInclude Include="..\..\src\wild.h" />
     <ClInclude Include="..\..\src\world\world.h" />
-    <ClInclude Include="..\..\src\z-form.h" />
-    <ClInclude Include="..\..\src\z-rand.h" />
-    <ClInclude Include="..\..\src\z-term.h" />
-    <ClInclude Include="..\..\src\z-util.h" />
-    <ClInclude Include="..\..\src\z-virt.h" />
+    <ClInclude Include="..\..\src\term\z-form.h" />
+    <ClInclude Include="..\..\src\term\z-rand.h" />
+    <ClInclude Include="..\..\src\term\z-term.h" />
+    <ClInclude Include="..\..\src\term\z-util.h" />
+    <ClInclude Include="..\..\src\term\z-virt.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\..\src\angband.rc" />

@@ -5,7 +5,7 @@
  */
 
 #include "display-characteristic.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "player/permanent-resistances.h"
 #include "player/temporary-resistances.h"
 #include "player/race-resistances.h"

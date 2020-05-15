@@ -14,7 +14,7 @@
 #include "system/angband.h"
 #include "system/system-variables.h"
 #include "core/show-file.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "io/read-pref-file.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"

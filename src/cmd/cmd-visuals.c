@@ -7,7 +7,7 @@
 #include "io/files.h"
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "cmd/lighting-level-table.h"
 #include "io/read-pref-file.h"
 #include "view/display-main-window.h" // 暫定。後で消す.

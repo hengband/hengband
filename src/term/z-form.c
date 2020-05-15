@@ -10,9 +10,9 @@
 
 /* Purpose: Low level text formatting -BEN- */
 
-#include "z-form.h"
-#include "z-util.h"
-#include "z-virt.h"
+#include "term/z-form.h"
+#include "term/z-util.h"
+#include "term/z-virt.h"
 
 
 /*

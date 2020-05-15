@@ -8,7 +8,7 @@
 #include "object/object-kind.h"
 #include "object/object-hook.h"
 #include "shoot.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 /*!
  * @brief プレイヤーの打撃能力修正を表示する

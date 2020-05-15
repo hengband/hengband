@@ -13,7 +13,7 @@
 #include "monster/monster-status.h"
 #include "world/world.h"
 #include "core/show-file.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "locale/english.h"
 
 #include "core/stuff-handler.h"

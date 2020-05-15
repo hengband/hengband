@@ -26,11 +26,11 @@
 /*
  * Then, include the header files for the low-level code
  */
-#include "z-util.h"
-#include "z-virt.h"
-#include "z-form.h"
-#include "z-rand.h"
-#include "z-term.h"
+#include "term/z-util.h"
+#include "term/z-virt.h"
+#include "term/z-form.h"
+#include "term/z-rand.h"
+#include "term/z-term.h"
 
 
 /*

@@ -20,7 +20,7 @@
 #include "player/player-class.h"
 #include "monster/monster.h"
 #include "spell/spells1.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "view/display-main-window.h"
 #include "effect/spells-effect-util.h"
 #include "effect/effect-feature.h"

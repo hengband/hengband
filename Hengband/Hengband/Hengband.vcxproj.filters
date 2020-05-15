@@ -3,8 +3,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\main-win.c" />
     <ClCompile Include="..\..\src\readdib.c" />
-    <ClCompile Include="..\..\src\z-form.c" />
-    <ClCompile Include="..\..\src\z-term.c" />
     <ClCompile Include="..\..\src\warning.c" />
     <ClCompile Include="..\..\src\patron.c">
       <Filter>player</Filter>
@@ -25,9 +23,6 @@
     <ClCompile Include="..\..\src\history.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\gameterm.c">
-      <Filter>io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\quest.c">
       <Filter>market</Filter>
     </ClCompile>
@@ -41,15 +36,6 @@
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\scores.c">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\z-util.c">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\z-virt.c">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\z-rand.c">
       <Filter>core</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\report.c">
@@ -829,13 +815,29 @@
     <ClCompile Include="..\..\src\io\files.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\term\gameterm.c">
+      <Filter>term</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\term\z-form.c">
+      <Filter>term</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\term\z-rand.c">
+      <Filter>term</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\term\z-term.c">
+      <Filter>term</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\term\z-util.c">
+      <Filter>term</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\term\z-virt.c">
+      <Filter>term</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
     <ClInclude Include="..\..\src\init.h" />
     <ClInclude Include="..\..\src\readdib.h" />
-    <ClInclude Include="..\..\src\z-form.h" />
-    <ClInclude Include="..\..\src\z-term.h" />
     <ClInclude Include="..\..\src\warning.h" />
     <ClInclude Include="..\..\src\patron.h">
       <Filter>player</Filter>
@@ -855,9 +857,6 @@
     <ClInclude Include="..\..\src\history.h">
       <Filter>player</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\gameterm.h">
-      <Filter>io</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\quest.h">
       <Filter>market</Filter>
     </ClInclude>
@@ -871,15 +870,6 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\scores.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\z-util.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\z-virt.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\z-rand.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\racial.h">
@@ -1701,6 +1691,24 @@
     <ClInclude Include="..\..\src\io\files.h">
       <Filter>io</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\term\gameterm.h">
+      <Filter>term</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\term\z-form.h">
+      <Filter>term</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\term\z-rand.h">
+      <Filter>term</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\term\z-term.h">
+      <Filter>term</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\term\z-util.h">
+      <Filter>term</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\term\z-virt.h">
+      <Filter>term</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1787,6 +1795,9 @@
     </Filter>
     <Filter Include="grid">
       <UniqueIdentifier>{93b0c1d1-0841-44fe-8503-d6729d290350}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="term">
+      <UniqueIdentifier>{ad847f1c-b291-4640-93d2-21895fbee308}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

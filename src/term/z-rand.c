@@ -15,7 +15,7 @@
 #include <Windows.h>
 #endif
 
-#include "z-rand.h"
+#include "term/z-rand.h"
 
 
 

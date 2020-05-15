@@ -15,7 +15,7 @@
 #include "wizard/wizard-spoiler.h"
 #include "core/angband-version.h"
 #include "core/stuff-handler.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 #include "dungeon/dungeon.h"
 #include "io/write-diary.h"
