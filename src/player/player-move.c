@@ -175,7 +175,7 @@
 #include "world/world.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "spell/process-effect.h"
 #include "spell/spells3.h"
 

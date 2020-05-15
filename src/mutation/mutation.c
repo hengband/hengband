@@ -34,7 +34,7 @@
 #include "cmd-basic.h"
 #include "io/files.h"
 #include "floor/floor.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "player/player-race.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells-type.h"

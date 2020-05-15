@@ -14,7 +14,7 @@
 #include "spell/spells-floor.h"
 #include "cmd-basic.h"
 #include "floor/floor.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "view/display-main-window.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"

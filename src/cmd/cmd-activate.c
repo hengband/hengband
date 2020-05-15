@@ -28,7 +28,7 @@
 #include "io/files.h"
 #include "object/object-kind.h"
 #include "object/object-ego.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "world/world.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells-type.h"

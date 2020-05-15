@@ -12,7 +12,7 @@
 #include "spell/spells-diceroll.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "realm/realm-crusade.h"
 #include "spell/process-effect.h"
 #include "spell/spells2.h"

@@ -54,7 +54,7 @@
 #include "realm/realm.h"
 #include "io/save.h"
 #include "scores.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "view/display-main-window.h"
 #include "system/system-variables.h"
 

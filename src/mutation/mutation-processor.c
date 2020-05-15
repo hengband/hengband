@@ -10,7 +10,7 @@
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "spell/spells-floor.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "market/store.h"
 #include "object/object-hook.h"
 #include "mutation/mutation.h"

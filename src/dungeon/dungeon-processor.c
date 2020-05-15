@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "dungeon/dungeon-processor.h"
 #include "world/world.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "core/player-processor.h"
 #include "quest.h"
 #include "dungeon/dungeon.h"

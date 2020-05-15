@@ -20,7 +20,7 @@
 #include "cmd-pet.h"
 #include "cmd-basic.h"
 #include "view/display-main-window.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "world/world.h"
 #include "effect/spells-effect-util.h"
 

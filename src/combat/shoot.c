@@ -23,7 +23,7 @@
 #include "snipe.h"
 #include "view/display-main-window.h"
 #include "object/object-kind.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "effect/spells-effect-util.h"
 #include "spell/process-effect.h"
 

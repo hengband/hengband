@@ -58,7 +58,7 @@
 #include "view/display-main-window.h"
 #include "object/object-kind.h"
 #include "monster/monster-race.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "realm/realm-song.h"
 #include "locale/english.h"
 #include "effect/spells-effect-util.h"

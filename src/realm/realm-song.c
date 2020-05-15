@@ -7,7 +7,7 @@
 #include "spell/spells-floor.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "view/display-main-window.h"
 #include "realm/realm-song.h"
 #include "spell/process-effect.h"

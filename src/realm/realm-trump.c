@@ -8,7 +8,7 @@
 #include "spell/spells-object.h"
 #include "player/player-effects.h"
 #include "player/player-class.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "effect/spells-effect-util.h"
 #include "realm/realm-trump.h"
 #include "spell/spells-type.h"

@@ -62,7 +62,7 @@
 #include "world/world.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells-util.h"
 #include "spell/spells-execution.h"

@@ -33,7 +33,7 @@
 #include "realm/realm-hex.h"
 #include "grid/grid.h"
 #include "monster/monster-race.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "realm/realm-song.h"
 #include "view/display-main-window.h"
 #include "world/world.h"

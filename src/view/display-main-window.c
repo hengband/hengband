@@ -46,7 +46,7 @@
 #include "floor/floor-town.h"
 #include "grid/feature.h"
 #include "object/object-kind.h"
-#include "targeting.h"
+#include "io/targeting.h"
 
 #include "market/arena-info-table.h"
 #include "effect/spells-effect-util.h"

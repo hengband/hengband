@@ -41,7 +41,7 @@
 #include "world/world.h"
 #include "monster/monster-race.h"
 #include "monster/creature.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "melee.h"
 #include "spell/process-effect.h"
 #include "core/player-processor.h"

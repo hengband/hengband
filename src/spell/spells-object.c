@@ -20,7 +20,7 @@
 #include "inventory/player-inventory.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "view/display-main-window.h"
 
 

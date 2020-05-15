@@ -17,7 +17,7 @@
 #include "grid/feature.h"
 #include "spell/technic-info-table.h"
 #include "grid/grid.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "view/display-main-window.h"
 #include "spell/spells-floor.h"
 #include "world/world.h"

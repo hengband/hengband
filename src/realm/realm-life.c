@@ -7,7 +7,7 @@
 #include "player/player-status.h"
 #include "player/player-effects.h"
 #include "floor/floor.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "realm/realm-life.h"
 #include "spell/spells-type.h"
 

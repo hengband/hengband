@@ -13,7 +13,7 @@
 #include "spell/spells-diceroll.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "realm/realm-arcane.h"
 #include "spell/spells-type.h"
 

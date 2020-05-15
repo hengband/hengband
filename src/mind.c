@@ -38,7 +38,7 @@
 #include "player/player-effects.h"
 #include "player/player-damage.h"
 #include "view/display-main-window.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "realm/realm-song.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells-type.h"

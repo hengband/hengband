@@ -9,7 +9,7 @@
 #include "spell/spells-floor.h"
 #include "spell/spells-object.h"
 #include "spell/spells-diceroll.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "view/display-main-window.h"
 #include "realm/realm-chaos.h"
 #include "spell/spells-type.h"

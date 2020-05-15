@@ -44,7 +44,7 @@
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
 #include "autopick/autopick-registry.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "snipe.h"
 #include "player/player-race.h"
 #include "view/display-main-window.h"

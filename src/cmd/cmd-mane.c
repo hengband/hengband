@@ -26,7 +26,7 @@
 #include "player/player-status.h"
 #include "player/player-effects.h"
 #include "cmd-basic.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "view/display-main-window.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"

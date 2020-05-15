@@ -11,7 +11,7 @@
 #include "player/player-race.h"
 #include "player/player-effects.h"
 #include "player/player-damage.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "effect/spells-effect-util.h"
 #include "realm/realm-nature.h"
 #include "spell/spells-type.h"

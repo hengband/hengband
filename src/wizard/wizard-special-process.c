@@ -55,7 +55,7 @@
 #include "spell/monster-spell.h"
 #include "market/building.h"
 #include "object/object-kind.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 #include "spell/spells2.h"

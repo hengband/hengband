@@ -8,7 +8,7 @@
 #include "player/avatar.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-race.h"

@@ -49,7 +49,7 @@
 #include "io/files.h"
 
 #include "view/display-main-window.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "world/world.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells3.h"

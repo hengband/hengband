@@ -27,7 +27,7 @@
 #include "spell/spells-type.h"
 #include "cmd-basic.h"
 #include "player/player-effects.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "view/display-main-window.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
