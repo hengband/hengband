@@ -37,7 +37,7 @@
 #include "player/player-move.h"
 #include "player/player-effects.h"
 #include "player/player-personality.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "object/object-kind.h"
 #include "object/object-broken.h"
 #include "object/object-flavor.h"

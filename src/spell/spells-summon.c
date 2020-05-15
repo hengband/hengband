@@ -2,7 +2,7 @@
 #include "util.h"
 
 #include "spell/spells-summon.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "monster/monster-status.h"
 #include "floor/floor.h"
 #include "effect/spells-effect-util.h"

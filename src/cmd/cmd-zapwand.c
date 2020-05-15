@@ -8,7 +8,7 @@
 #include "player/player-status.h"
 #include "player/player-effects.h"
 #include "player/player-class.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "object/object-kind.h"
 #include "object/object-hook.h"
 #include "cmd-basic.h"

@@ -159,7 +159,7 @@
 #include "player/player-effects.h"
 #include "player/player-race.h"
 #include "player/player-class.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "player/player-personality.h"
 #include "spell/spells-floor.h"
 #include "grid/feature.h"

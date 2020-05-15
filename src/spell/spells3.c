@@ -32,7 +32,7 @@
 #include "player/player-status.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "spell/spells-summon.h"
 #include "quest.h"
 #include "object/artifact.h"

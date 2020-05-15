@@ -11,7 +11,7 @@
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
 #include "view/display-main-window.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 
 
 

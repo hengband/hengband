@@ -27,7 +27,7 @@
 #include "player/player-effects.h"
 #include "player/player-skill.h"
 #include "player/player-class.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "object/object-hook.h"
 #include "cmd-basic.h"
 #include "view/display-main-window.h"

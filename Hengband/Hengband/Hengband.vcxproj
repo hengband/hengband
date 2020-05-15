@@ -327,7 +327,7 @@
     <ClCompile Include="..\..\src\player\player-class.c" />
     <ClCompile Include="..\..\src\player\player-damage.c" />
     <ClCompile Include="..\..\src\player\player-effects.c" />
-    <ClCompile Include="..\..\src\player-inventory.c" />
+    <ClCompile Include="..\..\src\inventory\player-inventory.c" />
     <ClCompile Include="..\..\src\player\player-personality.c" />
     <ClCompile Include="..\..\src\player\player-race.c" />
     <ClCompile Include="..\..\src\player\player-sex.c" />
@@ -590,7 +590,7 @@
     <ClInclude Include="..\..\src\mutation\mutation-processor.h" />
     <ClInclude Include="..\..\src\object\object-flavor.h" />
     <ClInclude Include="..\..\src\object\lite-processor.h" />
-    <ClInclude Include="..\..\src\player-inventory.h" />
+    <ClInclude Include="..\..\src\inventory\player-inventory.h" />
     <ClInclude Include="..\..\src\player\mimic-info-table.h" />
     <ClInclude Include="..\..\src\player\permanent-resistances.h" />
     <ClInclude Include="..\..\src\player\process-name.h" />

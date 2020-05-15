@@ -5,7 +5,7 @@
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "player/player-move.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "autopick/autopick.h"
 
 /*!

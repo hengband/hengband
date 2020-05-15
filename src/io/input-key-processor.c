@@ -15,7 +15,7 @@
 #include "market/store-util.h"
 #include "main/sound-definitions-table.h"
 #include "io/write-diary.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "player/player-effects.h"
 #include "market/store.h" // do_cmd_store() がある。後で移設する.
 #include "quest.h" // do_cmd_quest() がある。後で移設する.

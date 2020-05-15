@@ -21,7 +21,7 @@
 #include "player/player-damage.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "floor/floor.h"
 #include "object/object-kind.h"
 #include "view/display-main-window.h"

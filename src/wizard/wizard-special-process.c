@@ -34,7 +34,7 @@
 #include "player/player-effects.h"
 #include "player/player-skill.h"
 #include "player/player-class.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 
 #include "spell/spells-util.h"
 #include "spell/spells-object.h"

@@ -23,7 +23,7 @@
 #include "player/player-effects.h"
 #include "realm/realm-hex.h"
 #include "player/player-damage.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "monster/monster-status.h"
 #include "files.h"
 #include "object/object-kind.h"

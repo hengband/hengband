@@ -160,6 +160,7 @@ hengband_SOURCES = \
 	inventory/inventory-curse.c inventory/inventory-curse.h \
 	inventory/recharge-processor.c inventory/recharge-processor.h \
 	inventory/pack-overflow.c inventory/pack-overflow.h \
+	inventory/player-inventory.c inventory/player-inventory.h \
 	\
 	patron.h patron.c \
 	\
@@ -168,7 +169,7 @@ hengband_SOURCES = \
 	player/player-status.c player/player-status.h player/player-effects.c player/player-effects.h \
 	player/player-skill.c player/player-skill.h player/player-class.c player/player-class.h \
 	player/player-race.c player/player-race.h player/player-personality.c player/player-personality.h \
-	player/player-sex.c player/player-sex.h player/player-inventory.c player/player-inventory.h \
+	player/player-sex.c player/player-sex.h \
 	\
 	quest.h quest.c\
 	\

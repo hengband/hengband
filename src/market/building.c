@@ -56,7 +56,7 @@
 #include "player/player-effects.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "scores.h"
 #include "shoot.h"
 #include "view/display-main-window.h"

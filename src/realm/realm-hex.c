@@ -29,7 +29,7 @@
 #include "player/player-status.h"
 #include "player/player-effects.h"
 #include "player/player-skill.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "realm/realm-hex.h"
 #include "grid/grid.h"
 #include "monster/monsterrace.h"

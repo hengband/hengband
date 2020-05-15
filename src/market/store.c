@@ -45,7 +45,7 @@
 #include "rumor.h"
 #include "player/player-status.h"
 #include "player/player-class.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "floor/floor-events.h"

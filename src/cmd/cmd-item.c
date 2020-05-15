@@ -48,7 +48,7 @@
 #include "snipe.h"
 #include "player/player-race.h"
 #include "view/display-main-window.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 
 /*!
  * @brief 持ち物一覧を表示するコマンドのメインルーチン / Display inventory_list

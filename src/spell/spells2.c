@@ -50,7 +50,7 @@
 #include "player/player-skill.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 
 #include "dungeon/dungeon.h"
 #include "floor/floor-events.h"

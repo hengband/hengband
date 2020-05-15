@@ -25,7 +25,7 @@
 #include "object/object-hook.h"
 #include "player/player-move.h"
 #include "player/player-class.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "monster/monster.h"
 #include "files.h"
 #include "gameterm.h"

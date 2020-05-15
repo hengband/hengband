@@ -17,7 +17,7 @@
 #include "player/avatar.h"
 #include "player/player-effects.h"
 #include "player/player-class.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
 #include "targeting.h"

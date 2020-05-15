@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "core/stuff-handler.h"
 #include "util.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 
 #include "gameterm.h"
 #include "object/object.h"

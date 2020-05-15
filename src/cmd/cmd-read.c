@@ -18,7 +18,7 @@
 #include "player/player-damage.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "rumor.h"
 #include "realm/realm-hex.h"
 

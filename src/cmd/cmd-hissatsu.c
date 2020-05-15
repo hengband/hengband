@@ -18,7 +18,7 @@
 #include "monster/monsterrace-hook.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 #include "spell/technic-info-table.h"
 
 #include "cmd-basic.h"

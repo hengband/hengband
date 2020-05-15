@@ -9,7 +9,7 @@
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 
 #ifdef JP
 static char kanji_colon[] = "：";
