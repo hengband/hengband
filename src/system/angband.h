@@ -40,7 +40,7 @@
 #include "cmd-gameoption.h"
 
 #include "monster/monster.h"
-#include "monster/monsterrace.h"
+#include "monster/monster-race.h"
 #include "object/object.h"
 #include "player/player-status.h"
 

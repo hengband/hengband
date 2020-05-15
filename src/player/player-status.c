@@ -35,7 +35,7 @@
 #include "cmd/cmd-spell.h"
 #include "dungeon/dungeon.h"
 #include "object/object-kind.h"
-#include "monster/monsterrace.h"
+#include "monster/monster-race.h"
 #include "autopick/autopick.h"
 #include "autopick/autopick-reader-writer.h"
 #include "io/write-diary.h"

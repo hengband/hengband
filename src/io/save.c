@@ -33,7 +33,7 @@
 #include "io/files.h"
 #include "world/world.h"
 #include "object/object-kind.h"
-#include "monster/monsterrace.h"
+#include "monster/monster-race.h"
 #include "birth/birth.h"
 #include "market/building.h"
 #include "view/display-main-window.h"

@@ -121,7 +121,7 @@ hengband_SOURCES = \
 	main.c main-x11.c main-gcu.c \
 	mind.c mind.h \
 	\
-	monster/monster.h monster/monsterrace.c monster/monsterrace.h \
+	monster/monster.h monster/monster-race.c monster/monster-race.h \
 	monster/monster-util.c monster/monster-util.h \
 	monster/monster-direction.c monster/monster-direction.h \
 	monster/monster-attack.c monster/monster-attack.h \

@@ -60,7 +60,7 @@
 #include "scores.h"
 #include "shoot.h"
 #include "view/display-main-window.h"
-#include "monster/monsterrace.h"
+#include "monster/monster-race.h"
 #include "autopick/autopick.h"
 
 #include "market/poker.h"

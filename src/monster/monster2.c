@@ -39,7 +39,7 @@
 #include "io/files.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
-#include "monster/monsterrace.h"
+#include "monster/monster-race.h"
 #include "monster/creature.h"
 #include "targeting.h"
 #include "melee.h"

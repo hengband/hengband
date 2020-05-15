@@ -53,7 +53,7 @@
 #include "room/rooms-vault.h"
 #include "object/object-kind.h"
 #include "object/object-ego.h"
-#include "monster/monsterrace.h"
+#include "monster/monster-race.h"
 #include "floor/floor-town.h"
 #include "realm/realm.h"
 

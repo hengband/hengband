@@ -39,7 +39,7 @@
 #include "market/store.h"
 #include "monster/monster.h"
 #include "monster/monsterrace-hook.h"
-#include "monster/monsterrace.h"
+#include "monster/monster-race.h"
 #include "object/object-ego.h"
 #include "object/object-kind.h"
 #include "patron.h"

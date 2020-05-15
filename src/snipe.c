@@ -15,7 +15,7 @@
 #include "player/player-status.h"
 #include "cmd-basic.h"
 #include "snipe.h"
-#include "monster/monsterrace.h"
+#include "monster/monster-race.h"
 #include "view/display-main-window.h"
 
 #define MAX_SNIPE_POWERS 16

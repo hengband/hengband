@@ -6,7 +6,7 @@
 #include "spell/monster-spell.h"
 #include "floor/floor.h"
 #include "dungeon/dungeon.h"
-#include "monster/monsterrace.h"
+#include "monster/monster-race.h"
 #include "melee.h"
 
 /*! 通常pit生成時のモンスターの構成条件ID / Race index for "monster pit (clone)" */

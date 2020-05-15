@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "monster/monsterrace.h"
+#include "monster/monster-race.h"
 
 typedef bool(*monsterrace_hook_type)(MONRACE_IDX r_idx);
 
