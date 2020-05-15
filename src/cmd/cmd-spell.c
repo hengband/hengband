@@ -20,7 +20,7 @@
 #include "spell/spells3.h"
 #include "spell/spells-summon.h"
 #include "realm/realm-hex.h"
-#include "mind.h"
+#include "mind/mind.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-status.h"

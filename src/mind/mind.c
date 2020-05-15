@@ -19,7 +19,7 @@
 #include "util.h"
 #include "main/sound-definitions-table.h"
 
-#include "mind.h"
+#include "mind/mind.h"
 
 #include "effect/effect-characteristics.h"
 #include "melee.h"

@@ -57,7 +57,7 @@
 #include "player/player-skill.h"
 #include "player/player-personality.h"
 #include "view/display-main-window.h"
-#include "mind.h"
+#include "mind/mind.h"
 #include "floor/wild.h"
 #include "world/world.h"
 #include "object/object-kind.h"

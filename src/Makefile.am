@@ -121,7 +121,8 @@ hengband_SOURCES = \
 	inet.c inet.h init.c init.h \
 	load.c load.h \
 	main.c main-x11.c main-gcu.c \
-	mind.c mind.h \
+	\
+	mind/mind.c mind/mind.h \
 	\
 	monster/monster.h monster/monster-race.c monster/monster-race.h \
 	monster/monster-util.c monster/monster-util.h \
@@ -304,8 +305,8 @@ LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icombat -Icore -Idungeon -Ieffect -Ifloor \
-	-Iinventory -Iio -Iknowledge -Imarket -Imonster -Iobject -Iplayer -Irealm \
-	-Iroom -Ispell -Isystem -Iview -Iwizard -Iworld
+	-Igrid -Iinventory -Iio -Iknowledge -Imarket -Imind -Imonster -Iobject \
+	-Iplayer -Irealm -Iroom -Ispell -Isystem -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

@@ -53,7 +53,7 @@
 #include "io/files.h"
 #include "player/player-effects.h"
 #include "player/race-info-table.h"
-#include "mind.h"
+#include "mind/mind.h"
 #include "world/world.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"

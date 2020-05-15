@@ -8,9 +8,6 @@
     <ClCompile Include="..\..\src\chuukei.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\history.c">
       <Filter>player</Filter>
     </ClCompile>
@@ -34,9 +31,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\snipe.c">
       <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\targeting.c">
-      <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\inet.c">
       <Filter>io</Filter>
@@ -833,6 +827,12 @@
     <ClCompile Include="..\..\src\player\patron.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\targeting.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\init.h" />
@@ -840,9 +840,6 @@
     <ClInclude Include="..\..\src\warning.h" />
     <ClInclude Include="..\..\src\chuukei.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind.h">
-      <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\history.h">
       <Filter>player</Filter>
@@ -867,9 +864,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\snipe.h">
       <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\targeting.h">
-      <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\inet.h">
       <Filter>io</Filter>
@@ -1711,6 +1705,12 @@
     <ClInclude Include="..\..\src\player\patron.h">
       <Filter>player</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\io\targeting.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind.h">
+      <Filter>mind</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -1797,6 +1797,9 @@
     </Filter>
     <Filter Include="term">
       <UniqueIdentifier>{ad847f1c-b291-4640-93d2-21895fbee308}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mind">
+      <UniqueIdentifier>{235e3199-b059-4a3c-a053-dd8604c8e9fd}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

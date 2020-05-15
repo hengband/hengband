@@ -450,7 +450,7 @@
     <ClCompile Include="..\..\src\locale\japanese.c" />
     <ClCompile Include="..\..\src\io\load.c" />
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\mind.c" />
+    <ClCompile Include="..\..\src\mind\mind.c" />
     <ClCompile Include="..\..\src\monster\monster1.c" />
     <ClCompile Include="..\..\src\monster\monster2.c" />
     <ClCompile Include="..\..\src\spell\mspells1.c" />
@@ -506,7 +506,7 @@
     <ClCompile Include="..\..\src\view\status-first-page.c" />
     <ClCompile Include="..\..\src\market\store.c" />
     <ClCompile Include="..\..\src\floor\floor-streams.c" />
-    <ClCompile Include="..\..\src\targeting.c" />
+    <ClCompile Include="..\..\src\io\targeting.c" />
     <ClCompile Include="..\..\src\term\gameterm.c" />
     <ClCompile Include="..\..\src\grid\trap.c" />
     <ClCompile Include="..\..\src\util.c" />
@@ -648,7 +648,7 @@
     <ClInclude Include="..\..\src\inet.h" />
     <ClInclude Include="..\..\src\init.h" />
     <ClInclude Include="..\..\src\io\load.h" />
-    <ClInclude Include="..\..\src\mind.h" />
+    <ClInclude Include="..\..\src\mind\mind.h" />
     <ClInclude Include="..\..\src\monster\monster-process.h" />
     <ClInclude Include="..\..\src\spell\monster-spell.h" />
     <ClInclude Include="..\..\src\monster\monster-status.h" />
@@ -715,7 +715,7 @@
     <ClInclude Include="..\..\src\spell\spells-world.h" />
     <ClInclude Include="..\..\src\spell\spells1.h" />
     <ClInclude Include="..\..\src\market\store.h" />
-    <ClInclude Include="..\..\src\targeting.h" />
+    <ClInclude Include="..\..\src\io\targeting.h" />
     <ClInclude Include="..\..\src\term\gameterm.h" />
     <ClInclude Include="..\..\src\grid\trap.h" />
     <ClInclude Include="..\..\src\util.h" />
