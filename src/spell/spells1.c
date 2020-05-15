@@ -18,7 +18,7 @@
 #include "cmd/cmd-pet.h"
 #include "cmd/cmd-dump.h"
 #include "player/player-class.h"
-#include "monster.h"
+#include "monster/monster.h"
 #include "spell/spells1.h"
 #include "gameterm.h"
 #include "view/display-main-window.h"

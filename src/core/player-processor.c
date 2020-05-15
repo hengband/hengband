@@ -5,7 +5,7 @@
 #include "core/special-internal-keys.h"
 #include "mutation/mutation.h"
 #include "spell/spells2.h" // 相互依存している。後でどうするか検討する.
-#include "monster-status.h"
+#include "monster/monster-status.h"
 #include "view/display-main-window.h"
 #include "creature.h"
 #include "player/player-effects.h"
@@ -15,7 +15,7 @@
 #include "snipe.h"
 #include "realm/realm-hex.h"
 #include "spell/music-checker.h"
-#include "monsterrace-hook.h"
+#include "monster/monsterrace-hook.h"
 #include "wild.h"
 
 bool load = TRUE;

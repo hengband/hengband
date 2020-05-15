@@ -44,7 +44,7 @@
 #include "player/player-personality.h"
 #include "player/player-sex.h"
 #include "player/player-damage.h"
-#include "monster-status.h"
+#include "monster/monster-status.h"
 #include "snipe.h"
 #include "files.h"
 #include "monster-spell.h"

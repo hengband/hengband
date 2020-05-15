@@ -20,7 +20,7 @@
 #include "realm/realm-hex.h"
 #include "player/player-move.h"
 #include "monster-spell.h"
-#include "monster-status.h"
+#include "monster/monster-status.h"
 #include "spell/spells-type.h"
 #include "melee.h"
 #include "player/player-effects.h"

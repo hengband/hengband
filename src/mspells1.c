@@ -49,7 +49,7 @@
 #include "realm/realm-hex.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
-#include "monster.h"
+#include "monster/monster.h"
 #include "monster-spell.h"
 #include "spell/spells-type.h"
 #include "world/world.h"

@@ -13,8 +13,8 @@
 #include "core/stuff-handler.h"
 #include "cmd/cmd-dump.h"
 #include "player/player-effects.h"
-#include "monster-process.h"
-#include "monster-status.h"
+#include "monster/monster-process.h"
+#include "monster/monster-status.h"
 #include "world/world-turn-processor.h"
 #include "core/turn-compensator.h"
 

@@ -5,7 +5,7 @@
  */
 
 #include "monster/monster-attack.h"
-#include "monster-status.h"
+#include "monster/monster-status.h"
 #include "dungeon/dungeon.h"
 #include "combat/melee.h" // 暫定。後で引っ越し.
 

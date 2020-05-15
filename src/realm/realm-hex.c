@@ -32,7 +32,7 @@
 #include "player-inventory.h"
 #include "realm/realm-hex.h"
 #include "grid.h"
-#include "monsterrace.h"
+#include "monster/monsterrace.h"
 #include "targeting.h"
 #include "realm/realm-song.h"
 #include "view/display-main-window.h"

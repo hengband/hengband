@@ -7,7 +7,7 @@
 #include "monster/monster-direction.h"
 #include "monster/monster-sweep-grid.h"
 #include "monster/monster-util.h"
-#include "monster-status.h"
+#include "monster/monster-status.h"
 #include "cmd/cmd-pet.h"
 
 /*!

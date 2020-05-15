@@ -56,7 +56,7 @@
 
 #include "trap.h"
 
-#include "monster.h"
+#include "monster/monster.h"
 
 
  /*!

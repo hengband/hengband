@@ -24,7 +24,7 @@
 #include "realm/realm-hex.h"
 #include "player/player-damage.h"
 #include "player-inventory.h"
-#include "monster-status.h"
+#include "monster/monster-status.h"
 #include "files.h"
 #include "object/object-kind.h"
 #include "object/object-ego.h"

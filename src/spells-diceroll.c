@@ -2,8 +2,8 @@
 
 #include "spells-diceroll.h"
 
-#include "monster.h"
-#include "monsterrace-hook.h"
+#include "monster/monster.h"
+#include "monster/monsterrace-hook.h"
 #include "player/player-class.h"
 #include "mutation/mutation.h"
 #include "room/rooms.h"

@@ -25,7 +25,7 @@
 #include "snipe.h"
 #include "files.h"
 #include "world/world.h"
-#include "monsterrace.h"
+#include "monster/monsterrace.h"
 #include "object/object-ego.h"
 #include "japanese.h"
 

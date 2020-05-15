@@ -39,21 +39,6 @@
     <ClCompile Include="..\..\src\feature.c">
       <Filter>floor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster1.c">
-      <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster2.c">
-      <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster-process.c">
-      <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monsterrace-hook.c">
-      <Filter>monster</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster-status.c">
-      <Filter>monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\init.c" />
     <ClCompile Include="..\..\src\files.c">
       <Filter>io</Filter>
@@ -90,9 +75,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\mind.c">
       <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monsterrace.c">
-      <Filter>monster</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\history.c">
       <Filter>player</Filter>
@@ -207,9 +189,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\combat\shoot.c">
       <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\monster-dist-offsets.c">
-      <Filter>monster</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\horror-descriptions.c">
       <Filter>player</Filter>
@@ -829,6 +808,27 @@
     <ClCompile Include="..\..\src\player\player-status.c">
       <Filter>player</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster1.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster2.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-dist-offsets.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-process.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monsterrace.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monsterrace-hook.c">
+      <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-status.c">
+      <Filter>monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -875,18 +875,6 @@
     <ClInclude Include="..\..\src\feature.h">
       <Filter>floor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monsterrace-hook.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-status.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-process.h">
-      <Filter>monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\files.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -907,9 +895,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind.h">
       <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monsterrace.h">
-      <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\angband.h">
       <Filter>core</Filter>
@@ -1036,9 +1021,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\combat\shoot.h">
       <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\monster-dist-offsets.h">
-      <Filter>monster</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\horror-descriptions.h">
       <Filter>player</Filter>
@@ -1690,6 +1672,24 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-status.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-dist-offsets.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-process.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monsterrace.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monsterrace-hook.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-status.h">
+      <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -40,8 +40,8 @@
 #include "player/player-effects.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
-#include "monster.h"
-#include "monsterrace-hook.h"
+#include "monster/monster.h"
+#include "monster/monsterrace-hook.h"
 #include "object/object-ego.h"
 #include "view/display-main-window.h"
 

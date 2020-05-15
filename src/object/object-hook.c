@@ -3,7 +3,7 @@
 #include "util.h"
 
 #include "object/object-hook.h"
-#include "monster.h"
+#include "monster/monster.h"
 #include "artifact.h"
 #include "player/player-class.h"
 #include "player/player-skill.h"

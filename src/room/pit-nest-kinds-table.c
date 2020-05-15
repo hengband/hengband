@@ -1,6 +1,6 @@
 ﻿#include "angband.h"
 #include "room/pit-nest-kinds-table.h"
-#include "monsterrace-hook.h"
+#include "monster/monsterrace-hook.h"
 
 /*!nest情報テーブル*/
 vault_aux_type nest_types[MAX_PIT_NEST_KINDS] =

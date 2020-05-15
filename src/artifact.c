@@ -29,7 +29,7 @@
 #include "spells-object.h"
 #include "files.h"
 #include "grid.h"
-#include "monster.h"
+#include "monster/monster.h"
 #include "view/display-main-window.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"

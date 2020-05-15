@@ -4,8 +4,8 @@
 #include "main/sound-definitions-table.h"
 #include "gameterm.h"
 
-#include "monster.h"
-#include "monster-status.h"
+#include "monster/monster.h"
+#include "monster/monster-status.h"
 #include "monster-spell.h"
 #include "artifact.h"
 #include "avatar.h"

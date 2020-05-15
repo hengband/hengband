@@ -54,7 +54,7 @@
 #include "floor/floor-generate.h"
 #include "trap.h"
 #include "mutation/mutation.h"
-#include "monster.h"
+#include "monster/monster.h"
 #include "market/store-util.h"
 #include "quest.h"
 #include "market/store.h"

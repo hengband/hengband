@@ -5,7 +5,7 @@
 #include "dungeon/dungeon.h"
 #include "market/store.h"
 #include "cmd/cmd-pet.h"
-#include "monster-status.h"
+#include "monster/monster-status.h"
 #include "sort.h"
 #include "quest.h"
 #include "init.h"

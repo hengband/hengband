@@ -45,7 +45,7 @@
 
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "monster-status.h"
+#include "monster/monster-status.h"
 
 #include "floor/floor.h"
 #include "floor/floor-save.h"

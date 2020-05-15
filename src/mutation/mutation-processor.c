@@ -15,7 +15,7 @@
 #include "object/object-hook.h"
 #include "mutation/mutation.h"
 #include "realm/realm-hex.h"
-#include "monster-status.h"
+#include "monster/monster-status.h"
 #include "object/lite-processor.h"
 
 /*!

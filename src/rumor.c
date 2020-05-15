@@ -6,7 +6,7 @@
 #include "object/object-flavor.h"
 #include "artifact.h"
 #include "dungeon/dungeon.h"
-#include "monsterrace.h"
+#include "monster/monsterrace.h"
 #include "floor/floor-town.h"
 #include "wild.h"
 #include "world/world.h"

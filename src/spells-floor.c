@@ -22,7 +22,7 @@
 #include "feature.h"
 #include "view/display-main-window.h"
 
-#include "monster-status.h"
+#include "monster/monster-status.h"
 
 #include "spell/spells3.h"
 #include "spells-floor.h"

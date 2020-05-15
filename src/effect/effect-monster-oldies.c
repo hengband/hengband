@@ -2,7 +2,7 @@
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-oldies.h"
 #include "avatar.h"
-#include "monster-status.h"
+#include "monster/monster-status.h"
 
 // Powerful monsters can resist.
 gf_switch_result effect_monster_old_poly(effect_monster_type *em_ptr)

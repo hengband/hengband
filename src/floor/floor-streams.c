@@ -24,7 +24,7 @@
 #include "floor/floor.h"
 #include "floor/floor-streams.h"
 #include "grid.h"
-#include "monster.h"
+#include "monster/monster.h"
 #include "feature.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

@@ -8,7 +8,7 @@
 #include "floor/floor.h"
 #include "warning.h"
 #include "player/player-status.h"
-#include "monster.h"
+#include "monster/monster.h"
 #include "monster-spell.h"
 #include "spell/spells-type.h"
 #include "object/object-flavor.h"

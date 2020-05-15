@@ -33,9 +33,9 @@
 #include "feature.h"
 #include "grid.h"
 #include "player/player-move.h"
-#include "monster-status.h"
+#include "monster/monster-status.h"
 #include "monster-spell.h"
-#include "monster-process.h"
+#include "monster/monster-process.h"
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);

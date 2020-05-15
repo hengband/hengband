@@ -20,7 +20,7 @@
 #include "sort.h"
 #include "market/store.h"
 #include "market/store-util.h"
-#include "monster.h"
+#include "monster/monster.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-ego.h"

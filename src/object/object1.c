@@ -26,7 +26,7 @@
 #include "player/player-move.h"
 #include "player/player-class.h"
 #include "player-inventory.h"
-#include "monster.h"
+#include "monster/monster.h"
 #include "files.h"
 #include "gameterm.h"
 #include "cmd-smith.h"

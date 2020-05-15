@@ -3,11 +3,11 @@
 #include "effect/effect-monster-domination.h"
 #include "player/player-effects.h"
 #include "spells-diceroll.h"
-#include "monster-status.h"
+#include "monster/monster-status.h"
 #include "effect/spells-effect-util.h"
 #include "cmd/cmd-pet.h" // 暫定、後で消すかも.
 #include "quest.h"
-#include "monsterrace-hook.h"
+#include "monster/monsterrace-hook.h"
 
 static void effect_monster_domination_corrupted_addition(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

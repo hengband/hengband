@@ -7,7 +7,7 @@
 #include "room/rooms.h"
 #include "market/store.h"
 #include "trap.h"
-#include "monster.h"
+#include "monster/monster.h"
 #include "feature.h"
 #include "floor/floor.h"
 #include "dungeon/dungeon.h"

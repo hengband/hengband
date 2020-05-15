@@ -11,7 +11,7 @@
 #include "cmd/cmd-pet.h"
 #include "creature.h"
 #include "files.h"
-#include "monster-status.h"
+#include "monster/monster-status.h"
 #include "player/player-move.h"
 #include "spell/spells-type.h"
 #include "spell/process-effect.h"

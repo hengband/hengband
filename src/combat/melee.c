@@ -18,10 +18,10 @@
 
 #include "artifact.h"
 #include "cmd-pet.h"
-#include "monsterrace-hook.h"
+#include "monster/monsterrace-hook.h"
 #include "melee.h"
-#include "monster.h"
-#include "monster-status.h"
+#include "monster/monster.h"
+#include "monster/monster-status.h"
 #include "monster-spell.h"
 #include "avatar.h"
 #include "realm/realm-hex.h"

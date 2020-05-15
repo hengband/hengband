@@ -10,7 +10,7 @@
 #include "cmd/dump-util.h"
 #include "sort.h"
 #include "cmd/monster-group-table.h"
-#include "monster-status.h"
+#include "monster/monster-status.h"
 #include "world/world.h"
 #include "core/show-file.h"
 #include "gameterm.h"

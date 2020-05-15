@@ -34,7 +34,7 @@
 #include "feature.h"
 #include "grid.h"
 #include "cmd-basic.h"
-#include "monster-status.h"
+#include "monster/monster-status.h"
 #include "player/player-effects.h"
 #include "player/player-damage.h"
 #include "view/display-main-window.h"

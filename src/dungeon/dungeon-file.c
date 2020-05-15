@@ -42,7 +42,7 @@
 #include "feature.h"
 #include "grid.h"
 #include "quest.h"
-#include "monster.h"
+#include "monster/monster.h"
 #include "files.h"
 #include "player/player-skill.h"
 #include "player/player-race.h"
@@ -53,7 +53,7 @@
 #include "room/rooms-vault.h"
 #include "object/object-kind.h"
 #include "object/object-ego.h"
-#include "monsterrace.h"
+#include "monster/monsterrace.h"
 #include "floor/floor-town.h"
 #include "realm/realm.h"
 

@@ -120,7 +120,7 @@ hengband_SOURCES = \
 	main.c main-x11.c main-gcu.c \
 	mind.c mind.h \
 	\
-	monster.h monsterrace.c monsterrace.h \
+	monster/monster.h monster/monsterrace.c monster/monsterrace.h \
 	monster/monster-util.c monster/monster-util.h \
 	monster/monster-direction.c monster/monster-direction.h \
 	monster/monster-attack.c monster/monster-attack.h \
@@ -131,11 +131,13 @@ hengband_SOURCES = \
 	monster/monster-sweep-grid.c monster/monster-sweep-grid.h \
 	monster/monster-update.c monster/monster-update.h \
 	monster/quantum-effect.c monster/quantum-effect.h \
-	monsterrace-hook.c monsterrace-hook.h \
-	monster-dist-offsets.c monster-dist-offsets.h \
-	monster-process.c monster-process.h \
-	monster-status.c monster-status.h monster1.c monster2.c \
-	mspells1.c mspells2.c mspells3.c mspells4.c monster-spell.h \
+	monster/monsterrace-hook.c monster/monsterrace-hook.h \
+	monster/monster-dist-offsets.c monster/monster-dist-offsets.h \
+	monster/monster-process.c monster/monster-process.h \
+	monster/monster-status.c monster/monster-status.h \
+	monster/monster1.c monster/monster2.c \
+	monster/mspells1.c monster/mspells2.c monster/mspells3.c monster/mspells4.c \
+	monster/monster-spell.h \
 	\
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
@@ -159,12 +161,12 @@ hengband_SOURCES = \
 	patron.h patron.c \
 	\
 	creature.h creature.c \
-	player-move.c player-move.h player-damage.c player-damage.h \
+	player/player-move.c player/player-move.h player/player-damage.c player/player-damage.h \
 	horror-descriptions.c horror-descriptions.h \
-	player-status.c player-status.h player-effects.c player-effects.h \
-	player-skill.c player-skill.h player-class.c player-class.h \
-	player-race.c player-race.h player-personality.c player-personality.h \
-	player-sex.c player-sex.h player-inventory.c player-inventory.h \
+	player/player-status.c player/player-status.h player/player-effects.c player/player-effects.h \
+	player/player-skill.c player/player-skill.h player/player-class.c player/player-class.h \
+	player/player-race.c player/player-race.h player/player-personality.c player/player-personality.h \
+	player/player-sex.c player/player-sex.h player/player-inventory.c player/player-inventory.h \
 	\
 	quest.h quest.c\
 	\

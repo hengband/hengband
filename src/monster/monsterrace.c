@@ -1,5 +1,5 @@
 ﻿#include "angband.h"
-#include "monsterrace.h"
+#include "monster/monsterrace.h"
 #include "util.h"
 
 extern monster_race *r_info;

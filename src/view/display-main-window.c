@@ -32,7 +32,7 @@
 #include "player/mimic-info-table.h"
 #include "player/player-effects.h"
 #include "player-inventory.h"
-#include "monster.h"
+#include "monster/monster.h"
 #include "view/display-main-window.h"
 
 #include "realm/realm-hex.h"

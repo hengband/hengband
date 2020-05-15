@@ -1,12 +1,12 @@
 ﻿#include "angband.h"
 #include "util.h"
 
-#include "monsterrace-hook.h"
-#include "monster.h"
+#include "monster/monsterrace-hook.h"
+#include "monster/monster.h"
 #include "monster-spell.h"
 #include "floor/floor.h"
 #include "dungeon/dungeon.h"
-#include "monsterrace.h"
+#include "monster/monsterrace.h"
 #include "melee.h"
 
 /*! 通常pit生成時のモンスターの構成条件ID / Race index for "monster pit (clone)" */
