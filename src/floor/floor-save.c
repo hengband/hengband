@@ -23,7 +23,7 @@
 #include "floor/floor-events.h"
 #include "floor/floor-generate.h"
 #include "grid/feature.h"
-#include "geometry.h"
+#include "floor/geometry.h"
 #include "grid/grid.h"
 #include "monster/monster.h"
 #include "quest.h"

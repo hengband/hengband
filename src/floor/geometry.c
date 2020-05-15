@@ -1,5 +1,6 @@
 ﻿#include "system/angband.h"
 #include "floor/floor.h"
+#include "floor/geometry.h"
 
 /*!
  * キーパッドの方向を南から反時計回り順に列挙 / Global array for looping through the "keypad directions"

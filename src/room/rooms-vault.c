@@ -11,7 +11,7 @@
 #include "grid/feature.h"
 #include "floor/floor.h"
 #include "dungeon/dungeon.h"
-#include "geometry.h"
+#include "floor/geometry.h"
 #include "floor/wild.h"
 #include "market/store-util.h"
 

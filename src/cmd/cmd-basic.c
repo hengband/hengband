@@ -31,7 +31,7 @@
 #include "player/avatar.h"
 #include "player/player-status.h"
 #include "realm/realm-hex.h"
-#include "geometry.h"
+#include "floor/geometry.h"
 #include "floor/wild.h"
 #include "grid/grid.h"
 #include "player/player-move.h"

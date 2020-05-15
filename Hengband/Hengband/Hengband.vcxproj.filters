@@ -11,9 +11,6 @@
     <ClCompile Include="..\..\src\chuukei.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\geometry.c">
-      <Filter>floor</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mind.c">
       <Filter>spell</Filter>
     </ClCompile>
@@ -34,9 +31,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\scores.c">
       <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\report.c">
-      <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\racial.c">
       <Filter>cmd</Filter>
@@ -833,6 +827,12 @@
     <ClCompile Include="..\..\src\market\rumor.c">
       <Filter>market</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\report.c">
+      <Filter>io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\geometry.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\gamevalue.h" />
@@ -844,9 +844,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\chuukei.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\geometry.h">
-      <Filter>floor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind.h">
       <Filter>spell</Filter>
@@ -876,9 +873,6 @@
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\targeting.h">
-      <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\report.h">
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\inet.h">
@@ -1708,6 +1702,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\market\umor.h">
       <Filter>market</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\report.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\geometry.h">
+      <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
