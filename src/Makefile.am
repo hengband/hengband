@@ -38,6 +38,8 @@ hengband_SOURCES = \
 	\
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
+	main/init.c main/init.h \
+	\
 	market/arena-info-table.c market/arena-info-table.h \
 	market/building.c market/building.h \
 	market/building-util.c market/building-util.h \
@@ -120,7 +122,7 @@ hengband_SOURCES = \
 	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
 	geometry.c geometry.h \
 	\
-	inet.c inet.h init.c init.h \
+	inet.c inet.h \
 	main.c main-x11.c main-gcu.c \
 	\
 	mind/mind.c mind/mind.h \
@@ -300,7 +302,7 @@ hengband_SOURCES = \
 
 EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc maid-x11.c main-win.c \
-	makefile.bcc makefile.std readdib.c readdib.h wall.bmp
+	makefile.bcc makefile.std term/readdib.c term/readdib.h wall.bmp
 
 EXTRA_DIST = \
 	gcc-wrap
@@ -311,7 +313,8 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icombat -Icore -Idungeon -Ieffect -Ifloor \
 	-Igrid -Iinventory -Iio -Iknowledge -Imarket -Imind -Imonster -Imutation \
-	-Iobject -Iplayer -Irealm -Iroom -Ispell -Isystem -Iview -Iwizard -Iworld
+	-Iobject -Iplayer -Irealm -Iroom -Ispell -Isystem -Iterm -Iview -Iwizard \
+	-Iworld
 
 install-exec-hook:
 if SET_GID

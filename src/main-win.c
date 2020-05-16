@@ -271,7 +271,7 @@
 /*
  * Include the support for loading bitmaps
  */
-#include "readdib.h"
+#include "term/readdib.h"
 
 #define MoveTo(H,X,Y) MoveToEx(H, X, Y, NULL)
 

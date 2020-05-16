@@ -22,7 +22,7 @@
 
 #include <windows.h>
 
-#include "readdib.h"
+#include "term/readdib.h"
 
 /*
  * Needed for lcc-win32
