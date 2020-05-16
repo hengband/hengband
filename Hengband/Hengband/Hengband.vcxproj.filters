@@ -839,6 +839,9 @@
     <ClCompile Include="..\..\src\util\util.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-detection.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1722,6 +1725,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\util\util.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-detection.h">
+      <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -245,6 +245,7 @@ hengband_SOURCES = \
 	spell/spells-status.c spell/spells-status.h \
 	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-world.c spell/spells-world.h \
+	spell/spells-detection.c spell/spells-detection.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\

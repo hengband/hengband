@@ -18,6 +18,7 @@
 #include "view/display-main-window.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
+#include "spell/spells-detection.h"
 
 /*!
  * @brief ロッドの効果を発動する

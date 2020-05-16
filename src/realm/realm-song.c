@@ -14,6 +14,7 @@
 #include "effect/effect-characteristics.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
+#include "spell/spells-detection.h"
 
 /*!
 * @brief 歌の開始を処理する / Start singing if the player is a Bard

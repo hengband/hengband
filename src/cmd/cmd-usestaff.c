@@ -18,7 +18,7 @@
 #include "floor/floor.h"
 #include "object/object-kind.h"
 #include "view/display-main-window.h"
-
+#include "spell/spells-detection.h"
 
 /*!
 * @brief 杖の効果を発動する

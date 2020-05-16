@@ -17,6 +17,7 @@
 #include "spell/process-effect.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
+#include "spell/spells-detection.h"
 
 /*!
 * @brief 破邪領域魔法の各処理を行う

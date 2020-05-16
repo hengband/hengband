@@ -15,7 +15,6 @@
 #include "object/object-hook.h"
 #include "mutation/mutation.h"
 #include "player/avatar.h"
-#include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "spell/spells-status.h"
 #include "player/player-effects.h"
@@ -31,6 +30,7 @@
 #include "object/object-kind.h"
 #include "view/display-main-window.h"
 #include "player/player-class.h"
+#include "spell/spells-detection.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /

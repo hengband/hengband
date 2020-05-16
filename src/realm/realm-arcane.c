@@ -16,6 +16,7 @@
 #include "io/targeting.h"
 #include "realm/realm-arcane.h"
 #include "spell/spells-type.h"
+#include "spell/spells-detection.h"
 
 /*!
 * @brief 秘術領域魔法の各処理を行う

@@ -60,6 +60,7 @@
 #include "world/world.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
+#include "spell/spells-detection.h"
 
 #define NUM_O_SET 8
 #define NUM_O_BIT 32
