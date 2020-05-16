@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-spirit.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "monster/monster-status.h"
 #include "player/player-effects.h"
 

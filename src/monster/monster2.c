@@ -35,7 +35,7 @@
 #include "player/player-personality.h"
 #include "floor/wild.h"
 #include "object/warning.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "io/files.h"
 #include "view/display-main-window.h"
 #include "world/world.h"

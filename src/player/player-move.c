@@ -165,7 +165,7 @@
 #include "grid/feature.h"
 #include "object/warning.h"
 #include "monster/monster.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "monster/monster-status.h"
 #include "object/object-hook.h"
 #include "object/object-flavor.h"

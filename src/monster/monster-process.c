@@ -34,7 +34,7 @@
 #include "grid/grid.h"
 #include "player/player-move.h"
 #include "monster/monster-status.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "monster/monster-process.h"
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);

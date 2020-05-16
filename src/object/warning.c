@@ -9,15 +9,15 @@
 #include "object/warning.h"
 #include "player/player-status.h"
 #include "monster/monster.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "spell/spells-type.h"
 #include "object/object-flavor.h"
 #include "dungeon/dungeon.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "melee.h"
-#include "spell/mspell-type.h"
-#include "spell/mspell-damage-calculator.h"
+#include "mspell/mspell-type.h"
+#include "mspell/mspell-damage-calculator.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /

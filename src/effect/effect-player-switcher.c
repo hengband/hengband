@@ -5,7 +5,7 @@
 #include "effect/effect-player-oldies.h"
 #include "effect/effect-player-resist-hurt.h"
 #include "effect/effect-player-spirit.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "object/object-broken.h"
 #include "object/object-curse.h"
 #include "player/player-damage.h"

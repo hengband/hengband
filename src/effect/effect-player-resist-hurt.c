@@ -7,7 +7,7 @@
 #include "object/artifact.h"
 #include "player/player-effects.h"
 #include "mutation/mutation.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "spell/spells-status.h"
 #include "spell/spells3.h"
 

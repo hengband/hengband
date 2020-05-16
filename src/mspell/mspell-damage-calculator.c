@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
-#include "spell/mspell-type.h"
-#include "spell/mspell-damage-calculator.h"
-#include "spell/monster-spell.h"
+#include "mspell/mspell-type.h"
+#include "mspell/mspell-damage-calculator.h"
+#include "mspell/monster-spell.h"
 #include "monster/monster-status.h"
 
 /*!

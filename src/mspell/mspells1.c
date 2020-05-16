@@ -50,7 +50,7 @@
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "monster/monster.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "spell/spells-type.h"
 #include "world/world.h"
 #include "realm/realm-song.h"
@@ -59,7 +59,7 @@
 #include "player/player-class.h"
 #include "spell/process-effect.h"
 #include "spell/spells3.h"
-#include "spell/mspell-learn-checker.h"
+#include "mspell/mspell-learn-checker.h"
 
 #define DO_SPELL_NONE    0
 #define DO_SPELL_BR_LITE 1

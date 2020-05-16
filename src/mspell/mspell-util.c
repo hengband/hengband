@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
-#include "spell/mspell-util.h"
-#include "spell/monster-spell.h"
+#include "mspell/mspell-util.h"
+#include "mspell/monster-spell.h"
 #include "player/player-move.h"
 
 /*!

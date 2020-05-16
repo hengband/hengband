@@ -47,7 +47,7 @@
 #include "monster/monster-status.h"
 #include "combat/snipe.h"
 #include "io/files.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "world/world.h"
 #include "object/object-kind.h"
 #include "autopick/autopick-reader-writer.h"

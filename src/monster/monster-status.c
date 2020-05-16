@@ -13,7 +13,7 @@
 #include "grid/grid.h"
 #include "monster/monster.h"
 #include "monster/monster-status.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "monster/monster-process.h"
 #include "spell/spells2.h"
 #include "spell/spells-summon.h"

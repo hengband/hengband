@@ -3,7 +3,7 @@
 
 #include "monster/monsterrace-hook.h"
 #include "monster/monster.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "floor/floor.h"
 #include "dungeon/dungeon.h"
 #include "monster/monster-race.h"

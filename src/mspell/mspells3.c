@@ -17,12 +17,12 @@
 
 #include "floor/floor.h"
 #include "grid/grid.h"
-#include "spells-summon.h"
+#include "spell/spells-summon.h"
 #include "player/avatar.h"
-#include "spells-status.h"
+#include "spell/spells-status.h"
 #include "cmd-spell.h"
 #include "player/player-status.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "monster/monster-status.h"
 #include "spell/spells-type.h"
 #include "cmd-basic.h"
@@ -31,8 +31,8 @@
 #include "view/display-main-window.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
-#include "spell/mspell-type.h"
-#include "spell/mspell-damage-calculator.h"
+#include "mspell/mspell-type.h"
+#include "mspell/mspell-damage-calculator.h"
 
  /*!
   * @brief モンスター魔法をプレイヤーが使用する場合の換算レベル

@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "effect/effect-player-util.h"
 #include "effect/effect-player-spirit.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "world/world.h"

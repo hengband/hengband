@@ -1,10 +1,10 @@
 ﻿#include "system/angband.h"
-#include "spell/mspell-ball.h"
-#include "spell/mspell-type.h"
-#include "spell/monster-spell.h"
+#include "mspell/mspell-ball.h"
+#include "mspell/mspell-type.h"
+#include "mspell/monster-spell.h"
 #include "spell/spells-type.h"
-#include "spell/mspell-util.h"
-#include "spell/mspell-damage-calculator.h"
+#include "mspell/mspell-util.h"
+#include "mspell/mspell-damage-calculator.h"
 #include "monster/monster-status.h"
 
 /*!

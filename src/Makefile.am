@@ -145,7 +145,6 @@ hengband_SOURCES = \
 	monster/monster-process.c monster/monster-process.h \
 	monster/monster-status.c monster/monster-status.h \
 	monster/monster1.c monster/monster2.c \
-	monster/monster-spell.h \
 	monster/horror-descriptions.c monster/horror-descriptions.h \
 	\
 	mutation/mutation.c mutation/mutation.h \
@@ -246,16 +245,18 @@ hengband_SOURCES = \
 	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-world.c spell/spells-world.h \
 	spell/spells-detection.c spell/spells-detection.h \
-	spell/mspells1.c spell/mspells2.c spell/mspells3.c spell/mspells4.c \
-	spell/mspell-summon.c spell/mspell-summon.h \
-	spell/mspell-util.c spell/mspell-util.h \
-	spell/mspell-curse.c spell/mspell-curse.h \
-	spell/mspell-type.h \
-	spell/mspell-damage-calculator.c spell/mspell-damage-calculator.h \
-	spell/mspell-learn-checker.c spell/mspell-learn-checker.h \
-	spell/mspell-breath.c spell/mspell-breath.h \
-	spell/mspell-ball.c spell/mspell-ball.h \
-	spell/mspell-bolt.c spell/mspell-bolt.h \
+	\
+	mspell/monster-spell.h \
+	mspell/mspells1.c mspell/mspells2.c mspell/mspells3.c mspell/mspells4.c \
+	mspell/mspell-summon.c mspell/mspell-summon.h \
+	mspell/mspell-util.c mspell/mspell-util.h \
+	mspell/mspell-curse.c mspell/mspell-curse.h \
+	mspell/mspell-type.h \
+	mspell/mspell-damage-calculator.c mspell/mspell-damage-calculator.h \
+	mspell/mspell-learn-checker.c mspell/mspell-learn-checker.h \
+	mspell/mspell-breath.c mspell/mspell-breath.h \
+	mspell/mspell-ball.c mspell/mspell-ball.h \
+	mspell/mspell-bolt.c mspell/mspell-bolt.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\
@@ -322,9 +323,9 @@ LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icombat -Icore -Idungeon -Ieffect -Ifloor \
-	-Igrid -Iinventory -Iio -Iknowledge -Imarket -Imind -Imonster -Imutation \
-	-Iobject -Iplayer -Irealm -Iroom -Ispell -Isystem -Iterm -Iutil -Iview \
-	-Iwizard -Iworld
+	-Igrid -Iinventory -Iio -Iknowledge -Imarket -Imind -Imonster -Imspell \
+	-Imutation -Iobject -Iplayer -Irealm -Iroom -Ispell -Isystem -Iterm -Iutil \
+	-Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

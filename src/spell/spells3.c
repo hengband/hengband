@@ -45,7 +45,7 @@
 #include "market/building-util.h"
 #include "monster/monster-process.h"
 #include "monster/monster-status.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-save.h"
 #include "cmd/cmd-spell.h"

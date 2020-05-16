@@ -20,7 +20,7 @@
 #include "spell/spells-summon.h"
 #include "spell/spells-status.h"
 #include "monster/monster-status.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "monster/monster-process.h"
 #include "cmd-spell.h"
 #include "player/player-status.h"
@@ -31,7 +31,7 @@
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
-#include "spell/mspell-type.h"
+#include "mspell/mspell-type.h"
 
 static int damage;
 

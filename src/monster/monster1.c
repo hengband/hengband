@@ -23,7 +23,7 @@
 #include "object/object-kind-hook.h"
 #include "player/player-personality.h"
 #include "monster/monster.h"
-#include "spell/monster-spell.h"
+#include "mspell/monster-spell.h"
 #include "monster/monsterrace-hook.h"
 #include "spell/spells-summon.h"
 #include "player/patron.h"
@@ -40,8 +40,8 @@
 #include "locale/english.h"
 #include "market/arena-info-table.h"
 #include "spell/process-effect.h"
-#include "spell/mspell-type.h"
-#include "spell/mspell-damage-calculator.h"
+#include "mspell/mspell-type.h"
+#include "mspell/mspell-damage-calculator.h"
 
  /*
   * Pronoun arrays, by gender.

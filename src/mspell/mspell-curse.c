@@ -1,11 +1,11 @@
 ﻿#include "system/angband.h"
-#include "spell/mspell-curse.h"
-#include "spell/monster-spell.h"
+#include "mspell/mspell-curse.h"
+#include "mspell/monster-spell.h"
 #include "spell/spells-type.h"
-#include "spell/mspell-util.h"
+#include "mspell/mspell-util.h"
 #include "player/player-move.h"
-#include "spell/mspell-type.h"
-#include "spell/mspell-damage-calculator.h"
+#include "mspell/mspell-type.h"
+#include "mspell/mspell-damage-calculator.h"
 
 /*!
  * @brief RF5_CAUSE_*のメッセージ処理関数 /
