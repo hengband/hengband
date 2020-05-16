@@ -272,6 +272,7 @@
     <ClCompile Include="..\..\src\spell\mspell-learn-checker.c" />
     <ClCompile Include="..\..\src\spell\mspell-summon.c" />
     <ClCompile Include="..\..\src\spell\mspell-util.c" />
+    <ClCompile Include="..\..\src\spell\mspell-ball.c" />
     <ClCompile Include="..\..\src\spell\spells-detection.c" />
     <ClCompile Include="..\..\src\system\system-variables.c" />
     <ClCompile Include="..\..\src\core\show-file.c" />
@@ -415,6 +416,7 @@
     <ClInclude Include="..\..\src\spell\mspell-summon.h" />
     <ClInclude Include="..\..\src\spell\mspell-type.h" />
     <ClInclude Include="..\..\src\spell\mspell-util.h" />
+    <ClInclude Include="..\..\src\spell\mspell-ball.h" />
     <ClInclude Include="..\..\src\spell\spells-detection.h" />
     <ClInclude Include="..\..\src\system\angband-version.h" />
     <ClInclude Include="..\..\src\core\turn-compensator.h" />
