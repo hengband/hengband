@@ -163,7 +163,7 @@
 #include "player/player-personality.h"
 #include "spell/spells-floor.h"
 #include "grid/feature.h"
-#include "warning.h"
+#include "object/warning.h"
 #include "monster/monster.h"
 #include "spell/monster-spell.h"
 #include "monster/monster-status.h"

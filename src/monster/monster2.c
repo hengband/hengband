@@ -34,7 +34,7 @@
 #include "player/player-class.h"
 #include "player/player-personality.h"
 #include "floor/wild.h"
-#include "warning.h"
+#include "object/warning.h"
 #include "spell/monster-spell.h"
 #include "io/files.h"
 #include "view/display-main-window.h"

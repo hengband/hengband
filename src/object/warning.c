@@ -6,7 +6,7 @@
 #include "player/player-move.h"
 #include "grid/feature.h"
 #include "floor/floor.h"
-#include "warning.h"
+#include "object/warning.h"
 #include "player/player-status.h"
 #include "monster/monster.h"
 #include "spell/monster-spell.h"

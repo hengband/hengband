@@ -163,6 +163,7 @@ hengband_SOURCES = \
 	object/lite-processor.c object/lite-processor.h \
 	object/object-flavor.c object/object-flavor.h \
 	object/object-ego.c object/object-ego.h \
+	object/warning.c object/warning.h \
 	\
 	inventory/simple-appraiser.c inventory/simple-appraiser.h \
 	inventory/inventory-curse.c inventory/inventory-curse.h \
@@ -240,15 +241,14 @@ hengband_SOURCES = \
 	spell/spells1.c spell/spells1.h spell/spells2.c spell/spells2.h \
 	spell/spells3.c spell/spells3.h \
 	spell/music-checker.c spell/music-checker.h \
-	spells-diceroll.c spells-diceroll.h \
-	spells-floor.c spells-floor.h \
-	spells-object.c spells-object.h \
-	spells-status.c spells-status.h \
-	spells-summon.c spells-summon.h \
-	spells-world.c spells-world.h \
+	spells-diceroll.c spell/spells-diceroll.h \
+	spell/spells-floor.c spell/spells-floor.h \
+	spell/spells-object.c spell/spells-object.h \
+	spell/spells-status.c spell/spells-status.h \
+	spell/spells-summon.c spell/spells-summon.h \
+	spell/spells-world.c spell/spells-world.h \
 	\
 	sort.c sort.h util.c util.h \
-	warning.c warning.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\

@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\warning.c" />
     <ClCompile Include="..\..\src\chuukei.c">
       <Filter>io</Filter>
     </ClCompile>
@@ -837,9 +836,11 @@
     <ClCompile Include="..\..\src\term\readdib.c">
       <Filter>term</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\warning.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\warning.h" />
     <ClInclude Include="..\..\src\chuukei.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -1718,6 +1719,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\term\readdib.h">
       <Filter>term</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\warning.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
