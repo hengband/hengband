@@ -104,7 +104,7 @@
 #include "view/display-main-window.h"
 #include "floor/floor.h"
 #include "floor/floor-events.h"
-#include "init.h"
+#include "main/init.h"
 #include "io/files.h"
 #include "scores.h"
 #include "quest.h"

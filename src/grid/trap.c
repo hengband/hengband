@@ -20,7 +20,7 @@
 #include "spell/spells-type.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor-save.h"
-#include "init.h"
+#include "main/init.h"
 #include "io/files.h"
 #include "dungeon/dungeon.h"
 #include "world/world.h"

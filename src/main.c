@@ -9,18 +9,18 @@
  */
 
 #include "angband.h"
-#include "core/system-variables.h"
-#include "uid-checker.h"
-#include "signal-handlers.h"
+#include "system/system-variables.h"
+#include "io/uid-checker.h"
+#include "io/signal-handlers.h"
 #include "io/files.h"
 #include "inet.h"
-#include "init.h"
+#include "main/init.h"
 #include "scores.h"
 #include "term/gameterm.h"
 #include "player/process-name.h"
 #include "chuukei.h"
 #include "autopick/autopick-pref-processor.h"
-#include "core/angband-version.h"
+#include "system/angband-version.h"
 #include "core/game-play.h"
 
 /*

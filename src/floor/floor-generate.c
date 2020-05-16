@@ -121,7 +121,7 @@
 #include "floor/wild.h"
 #include "monster/monster-status.h"
 #include "dungeon/dungeon-file.h"
-#include "init.h"
+#include "main/init.h"
 #include "grid/feature.h"
 #include "spell/spells1.h"
 

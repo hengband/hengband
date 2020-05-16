@@ -279,7 +279,7 @@
     <ClCompile Include="..\..\src\floor\geometry.c" />
     <ClCompile Include="..\..\src\birth\history.c" />
     <ClCompile Include="..\..\src\monster\horror-descriptions.c" />
-    <ClCompile Include="..\..\src\init.c" />
+    <ClCompile Include="..\..\src\main\init.c" />
     <ClCompile Include="..\..\src\io\gf-descriptions.c" />
     <ClCompile Include="..\..\src\io\interpret-pref-file.c" />
     <ClCompile Include="..\..\src\io\player-status-dump.c" />
@@ -646,7 +646,7 @@
     <ClInclude Include="..\..\src\system\h-type.h" />
     <ClInclude Include="..\..\src\birtth\history.h" />
     <ClInclude Include="..\..\src\inet.h" />
-    <ClInclude Include="..\..\src\init.h" />
+    <ClInclude Include="..\..\src\main\init.h" />
     <ClInclude Include="..\..\src\io\load.h" />
     <ClInclude Include="..\..\src\mind\mind.h" />
     <ClInclude Include="..\..\src\monster\monster-process.h" />

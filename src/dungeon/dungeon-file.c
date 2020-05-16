@@ -65,7 +65,7 @@
 #include "view/display-main-window.h"
 #include "player/player-class.h"
 
-#include "init.h"
+#include "main/init.h"
 
 dungeon_grid letter[255];
 

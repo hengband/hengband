@@ -8,7 +8,7 @@
 #include "monster/monster-status.h"
 #include "sort.h"
 #include "quest.h"
-#include "init.h"
+#include "main/init.h"
 #include "io/mutations-dump.h"
 #include "object/object-flavor.h"
 #include "knowledge/knowledge-quests.h"

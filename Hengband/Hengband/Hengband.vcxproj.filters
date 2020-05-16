@@ -4,7 +4,6 @@
     <ClCompile Include="..\..\src\main-win.c" />
     <ClCompile Include="..\..\src\readdib.c" />
     <ClCompile Include="..\..\src\warning.c" />
-    <ClCompile Include="..\..\src\init.c" />
     <ClCompile Include="..\..\src\chuukei.c">
       <Filter>io</Filter>
     </ClCompile>
@@ -833,9 +832,11 @@
     <ClCompile Include="..\..\src\combat\snipe.c">
       <Filter>combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\main\init.c">
+      <Filter>main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\init.h" />
     <ClInclude Include="..\..\src\readdib.h" />
     <ClInclude Include="..\..\src\warning.h" />
     <ClInclude Include="..\..\src\chuukei.h">
@@ -1710,6 +1711,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\combat\snipe.h">
       <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\main\init.h">
+      <Filter>main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
