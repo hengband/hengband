@@ -17,6 +17,7 @@
 #include "player/player-class.h"
 #include "melee.h"
 #include "spell/mspell-type.h"
+#include "spell/mspell-damage-calculator.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /

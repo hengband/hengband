@@ -5,6 +5,7 @@
 #include "spell/mspell-util.h"
 #include "player/player-move.h"
 #include "spell/mspell-type.h"
+#include "spell/mspell-damage-calculator.h"
 
 /*!
  * @brief RF5_CAUSE_*のメッセージ処理関数 /

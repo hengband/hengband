@@ -32,6 +32,7 @@
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "spell/mspell-type.h"
+#include "spell/mspell-damage-calculator.h"
 
  /*!
   * @brief モンスター魔法をプレイヤーが使用する場合の換算レベル

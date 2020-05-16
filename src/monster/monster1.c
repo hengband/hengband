@@ -41,6 +41,7 @@
 #include "market/arena-info-table.h"
 #include "spell/process-effect.h"
 #include "spell/mspell-type.h"
+#include "spell/mspell-damage-calculator.h"
 
  /*
   * Pronoun arrays, by gender.
