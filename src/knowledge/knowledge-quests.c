@@ -13,7 +13,7 @@
 #include "object/object-flavor.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/dungeon-file.h"
-#include "sort.h"
+#include "core/sort.h"
 #include "world/world.h"
 #include "core/show-file.h"
 #include "locale/english.h"

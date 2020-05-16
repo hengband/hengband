@@ -13,7 +13,7 @@
 #include "cmd/cmd-basic.h"
 #include "cmd/cmd-save.h"
 #include "object/object-hook.h"
-#include "sort.h"
+#include "core/sort.h"
 #include "object/artifact.h"
 #include "player/avatar.h"
 #include "spell/spells-summon.h"

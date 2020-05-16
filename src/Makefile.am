@@ -105,7 +105,7 @@ hengband_SOURCES = \
 	core/magic-effects-timeout-reducer.c core/magic-effects-timeout-reducer.h \
 	core/player-processor.c core/player-processor.h \
 	core/scores.c core/scores.h \
-	\
+	core/sort.c core/sort.h \
 	dungeon/dungeon.c dungeon/dungeon.h \
 	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \
 	dungeon/dungeon-file.c dungeon/dungeon-file.h \
@@ -246,7 +246,7 @@ hengband_SOURCES = \
 	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-world.c spell/spells-world.h \
 	\
-	sort.c sort.h util.c util.h \
+	util.c util.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\

@@ -6,7 +6,7 @@
 #include "market/store.h"
 #include "cmd/cmd-pet.h"
 #include "monster/monster-status.h"
-#include "sort.h"
+#include "core/sort.h"
 #include "dungeon/quest.h"
 #include "main/init.h"
 #include "io/mutations-dump.h"

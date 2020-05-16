@@ -17,7 +17,7 @@
 
 #include "system/angband-version.h"
 #include "object/artifact.h"
-#include "sort.h"
+#include "core/sort.h"
 #include "market/store.h"
 #include "market/store-util.h"
 #include "monster/monster.h"

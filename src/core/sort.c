@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "sort.h"
+#include "core/sort.h"
 #include "floor/floor.h"
 #include "dungeon/quest.h"
 #include "object/artifact.h"

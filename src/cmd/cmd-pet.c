@@ -7,7 +7,7 @@
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "melee.h"
-#include "sort.h"
+#include "core/sort.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"

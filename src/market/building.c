@@ -36,7 +36,7 @@
 #include "melee.h"
 #include "floor/wild.h"
 #include "world/world.h"
-#include "sort.h"
+#include "core/sort.h"
 
 #include "player/avatar.h"
 #include "market/building.h"

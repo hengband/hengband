@@ -484,7 +484,7 @@
     <ClCompile Include="..\..\src\player\selfinfo.c" />
     <ClCompile Include="..\..\src\io\signal-handlers.c" />
     <ClCompile Include="..\..\src\combat\snipe.c" />
-    <ClCompile Include="..\..\src\sort.c" />
+    <ClCompile Include="..\..\src\core\sort.c" />
     <ClCompile Include="..\..\src\spell\spells-diceroll.c" />
     <ClCompile Include="..\..\src\spell\spells-floor.c" />
     <ClCompile Include="..\..\src\spell\spells-object.c" />
@@ -705,7 +705,7 @@
     <ClInclude Include="..\..\src\core\scores.h" />
     <ClInclude Include="..\..\src\player\selfinfo.h" />
     <ClInclude Include="..\..\src\combat\snipe.h" />
-    <ClInclude Include="..\..\src\sort.h" />
+    <ClInclude Include="..\..\src\core\sort.h" />
     <ClInclude Include="..\..\src\spell\spells-diceroll.h" />
     <ClInclude Include="..\..\src\spell\spells-floor.h" />
     <ClInclude Include="..\..\src\spell\spells-object.h" />

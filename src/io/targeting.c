@@ -25,7 +25,7 @@
 #include "monster/monster.h"
 #include "monster/monsterrace-hook.h"
 #include "object/object-kind-hook.h"
-#include "sort.h"
+#include "core/sort.h"
 #include "spell/spells-summon.h"
 #include "grid/grid.h"
 #include "floor/floor.h"

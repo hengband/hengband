@@ -8,7 +8,7 @@
 #include "knowledge-items.h"
 #include "cmd/dump-util.h"
 #include "object/artifact.h"
-#include "sort.h"
+#include "core/sort.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"

@@ -8,7 +8,7 @@
 #include "system/angband.h"
 #include "knowledge/knowledge-monsters.h"
 #include "cmd/dump-util.h"
-#include "sort.h"
+#include "core/sort.h"
 #include "cmd/monster-group-table.h"
 #include "monster/monster-status.h"
 #include "world/world.h"
