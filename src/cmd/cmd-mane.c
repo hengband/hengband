@@ -31,6 +31,7 @@
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
+#include "spell/mspell-type.h"
 
 static int damage;
 

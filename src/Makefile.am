@@ -250,6 +250,7 @@ hengband_SOURCES = \
 	spell/mspell-summon.c spell/mspell-summon.h \
 	spell/mspell-util.c spell/mspell-util.h \
 	spell/mspell-curse.c spell/mspell-curse.h \
+	spell/mspell-type.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\

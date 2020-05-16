@@ -30,6 +30,7 @@
 #include "spell/mspell-summon.h"
 #include "spell/mspell-util.h"
 #include "spell/mspell-curse.h"
+#include "spell/mspell-type.h"
 
 /*!
 * @brief モンスターの唱えた呪文を青魔法で学習できるか判定する /

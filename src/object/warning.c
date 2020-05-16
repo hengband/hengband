@@ -16,6 +16,7 @@
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "melee.h"
+#include "spell/mspell-type.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /

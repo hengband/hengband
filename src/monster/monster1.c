@@ -40,6 +40,7 @@
 #include "locale/english.h"
 #include "market/arena-info-table.h"
 #include "spell/process-effect.h"
+#include "spell/mspell-type.h"
 
  /*
   * Pronoun arrays, by gender.
