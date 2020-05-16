@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\util.c">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd\cmd-activate.c">
       <Filter>cmd</Filter>
     </ClCompile>
@@ -839,11 +836,11 @@
     <ClCompile Include="..\..\src\core\sort.c">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\util\util.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\util.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
       <Filter>cmd</Filter>
     </ClInclude>
@@ -1721,6 +1718,9 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\sort.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\util.h">
       <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>

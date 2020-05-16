@@ -41,7 +41,7 @@
  */
 
 #include "system/angband.h"
-#include "util.h"
+#include "util/util.h"
 #include "system/system-variables.h" // 暫定、init_flags の扱いを決めた上で消す.
 #include "system/angband-version.h"
 

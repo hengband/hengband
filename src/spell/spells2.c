@@ -14,7 +14,7 @@
 #include "system/angband.h"
 #include "system/system-variables.h"
 #include "core/stuff-handler.h"
-#include "util.h"
+#include "util/util.h"
 #include "main/sound-definitions-table.h"
 
 #include "monster/creature.h"

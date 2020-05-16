@@ -16,7 +16,7 @@
 
 #include "system/angband.h"
 #include "player/selfinfo.h"
-#include "util.h"
+#include "util/util.h"
 
 #include "player/player-status.h"
 #include "player/player-race.h"

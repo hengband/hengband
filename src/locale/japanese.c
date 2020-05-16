@@ -5,7 +5,7 @@
  */
 
 #include "system/angband.h"
-#include "util.h"
+#include "util/util.h"
 #include "japanese.h"
 
 #ifdef JP

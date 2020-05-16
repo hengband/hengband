@@ -14,7 +14,7 @@
 #include "market/building.h"
 #include "system/system-variables.h"
 #include "io/load.h"
-#include "util.h"
+#include "util/util.h"
 
 #include "object/artifact.h"
 #include "dungeon/dungeon.h"

@@ -39,7 +39,7 @@
  */
 
 #include "system/angband.h"
-#include "util.h"
+#include "util/util.h"
 
 #include "effect/effect-characteristics.h"
 #include "dungeon/dungeon.h"

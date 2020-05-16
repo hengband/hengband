@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "util.h"
+#include "util/util.h"
 
 /*
  * Monster blow structure

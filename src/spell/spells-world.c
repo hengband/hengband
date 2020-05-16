@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "spell/spells-world.h"
-#include "util.h"
+#include "util/util.h"
 #include "world/world.h"
 
 /*!

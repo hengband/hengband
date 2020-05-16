@@ -19,7 +19,7 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "market/building.h"
-#include "util.h"
+#include "util/util.h"
 
 #include "object/artifact.h"
 #include "autopick/autopick.h"

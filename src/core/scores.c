@@ -13,7 +13,7 @@
 #include "system/angband.h"
 #include "io/signal-handlers.h"
 #include "term/gameterm.h"
-#include "util.h"
+#include "util/util.h"
 #include "core/turn-compensator.h"
 #include "system/angband-version.h"
 

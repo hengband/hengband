@@ -37,7 +37,7 @@
  */
 
 #include "system/angband.h"
-#include "util.h"
+#include "util/util.h"
 
 #include "grid/feature.h"
 #include "floor/floor.h"

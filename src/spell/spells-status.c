@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "core/stuff-handler.h"
-#include "util.h"
+#include "util/util.h"
 
 #include "cmd-magiceat.h"
 #include "player/avatar.h"

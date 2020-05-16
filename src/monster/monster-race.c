@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "monster/monster-race.h"
-#include "util.h"
+#include "util/util.h"
 
 extern monster_race *r_info;
 extern char *r_name;

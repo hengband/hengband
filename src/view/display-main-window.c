@@ -11,7 +11,7 @@
  */
 
 #include "system/angband.h"
-#include "util.h"
+#include "util/util.h"
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"

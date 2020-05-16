@@ -246,8 +246,6 @@ hengband_SOURCES = \
 	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-world.c spell/spells-world.h \
 	\
-	util.c util.h \
-	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\
 	knowledge/knowledge-autopick.c knowledge/knowledge-autopick.h \
@@ -290,6 +288,7 @@ hengband_SOURCES = \
 	term/z-term.c term/z-term.h term/z-util.c term/z-util.h \
 	term/z-virt.c term/z-virt.h \
 	\
+	util/util.c util/util.h \
 	\
 	wizard/wizard-spoiler.c wizard/wizard-spoiler.h\
 	wizard/wizard-special-process.c wizard/wizard-special-process.h \
@@ -311,8 +310,8 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icombat -Icore -Idungeon -Ieffect -Ifloor \
 	-Igrid -Iinventory -Iio -Iknowledge -Imarket -Imind -Imonster -Imutation \
-	-Iobject -Iplayer -Irealm -Iroom -Ispell -Isystem -Iterm -Iview -Iwizard \
-	-Iworld
+	-Iobject -Iplayer -Irealm -Iroom -Ispell -Isystem -Iterm -Iutil -Iview \
+	-Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

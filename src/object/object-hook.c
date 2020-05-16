@@ -1,6 +1,6 @@
 ﻿
 #include "system/angband.h"
-#include "util.h"
+#include "util/util.h"
 
 #include "object/object-hook.h"
 #include "monster/monster.h"

@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "object/chest.h"
-#include "util.h"
+#include "util/util.h"
 #include "main/sound-definitions-table.h"
 
 #include "spell/spells-type.h"

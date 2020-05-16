@@ -53,7 +53,7 @@
  */
 
 #include "system/angband.h"
-#include "util.h"
+#include "util/util.h"
 #include "main/sound-definitions-table.h"
 #include "term/gameterm.h"
 

@@ -509,7 +509,7 @@
     <ClCompile Include="..\..\src\io\targeting.c" />
     <ClCompile Include="..\..\src\term\gameterm.c" />
     <ClCompile Include="..\..\src\grid\trap.c" />
-    <ClCompile Include="..\..\src\util.c" />
+    <ClCompile Include="..\..\src\util\util.c" />
     <ClCompile Include="..\..\src\view\display-main-window.c" />
     <ClCompile Include="..\..\src\object\warning.c" />
     <ClCompile Include="..\..\src\floor\wild.c" />
@@ -718,7 +718,7 @@
     <ClInclude Include="..\..\src\io\targeting.h" />
     <ClInclude Include="..\..\src\term\gameterm.h" />
     <ClInclude Include="..\..\src\grid\trap.h" />
-    <ClInclude Include="..\..\src\util.h" />
+    <ClInclude Include="..\..\src\util\util.h" />
     <ClInclude Include="..\..\src\view\display-main-window.h" />
     <ClInclude Include="..\..\src\object\warning.h" />
     <ClInclude Include="..\..\src\floor\wild.h" />

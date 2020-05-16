@@ -13,7 +13,7 @@
 #include "system/angband.h"
 #include "core/game-play.h"
 #include "io/signal-handlers.h"
-#include "util.h"
+#include "util/util.h"
 #include "system/angband-version.h"
 #include "core/stuff-handler.h"
 #include "io/inet.h"

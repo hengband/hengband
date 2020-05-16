@@ -142,7 +142,7 @@
 #include "system/angband.h"
 #include "core/stuff-handler.h"
 #include "core/special-internal-keys.h"
-#include "util.h"
+#include "util/util.h"
 #include "main/sound-definitions-table.h"
 
 #include "realm/realm-song.h"

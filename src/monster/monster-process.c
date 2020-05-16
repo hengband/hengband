@@ -14,7 +14,7 @@
  */
 
 #include "system/angband.h"
-#include "util.h"
+#include "util/util.h"
 #include "monster/monster-direction.h"
 #include "monster/monster-move.h"
 #include "monster/monster-runaway.h"

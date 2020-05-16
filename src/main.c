@@ -15,7 +15,7 @@
 #include "io/files.h"
 #include "io/inet.h"
 #include "main/init.h"
-#include "scores.h"
+#include "core/scores.h"
 #include "term/gameterm.h"
 #include "player/process-name.h"
 #include "io/chuukei.h"

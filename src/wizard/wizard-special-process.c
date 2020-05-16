@@ -23,7 +23,7 @@
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-help.h"
 #include "cmd/cmd-save.h"
-#include "util.h"
+#include "util/util.h"
 #include "birth/birth.h"
 #include "player/selfinfo.h"
 #include "player/patron.h"

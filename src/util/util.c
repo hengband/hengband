@@ -16,7 +16,7 @@
 #include "system/system-variables.h"
 #include "core/stuff-handler.h"
 #include "term/gameterm.h"
-#include "util.h"
+#include "util/util.h"
 #include "io/files.h"
 #include "monster/monsterrace-hook.h"
 #include "view/display-main-window.h"

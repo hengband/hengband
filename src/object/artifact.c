@@ -11,7 +11,7 @@
  */
 
 #include "system/angband.h"
-#include "util.h"
+#include "util/util.h"
 
 #include "object/artifact.h"
 #include "cmd-smith.h"

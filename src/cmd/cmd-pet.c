@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "core/stuff-handler.h"
-#include "util.h"
+#include "util/util.h"
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"

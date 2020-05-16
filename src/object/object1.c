@@ -14,7 +14,7 @@
 #include "system/angband.h"
 #include "system/system-variables.h"
 #include "io/read-pref-file.h"
-#include "util.h"
+#include "util/util.h"
 
 #include "object/artifact.h"
 #include "floor/floor.h"

@@ -16,7 +16,7 @@
  */
 
 #include "system/angband.h"
-#include "util.h"
+#include "util/util.h"
 #include "term/gameterm.h"
 
 #include "world/world.h"

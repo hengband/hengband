@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "util.h"
+#include "util/util.h"
 
 #include "cmd-spell.h"
 #include "mutation/mutation.h"

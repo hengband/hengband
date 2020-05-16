@@ -12,7 +12,7 @@
  */
 
 #include "system/angband.h"
-#include "util.h"
+#include "util/util.h"
 #include "io/save.h"
 #include "io/load.h"
 #include "io/report.h"

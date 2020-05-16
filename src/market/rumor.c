@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "market/rumor.h"
-#include "util.h"
+#include "util/util.h"
 
 #include "io/tokenizer.h"
 #include "io/files.h"

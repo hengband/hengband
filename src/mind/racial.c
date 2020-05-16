@@ -13,7 +13,7 @@
 #include "system/angband.h"
 #include "mind/racial.h"
 #include "core/stuff-handler.h"
-#include "util.h"
+#include "util/util.h"
 
 #include "cmd-basic.h"
 #include "cmd-magiceat.h"

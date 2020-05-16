@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "util.h"
+#include "util/util.h"
 
 #include "spell/spells-summon.h"
 #include "inventory/player-inventory.h"
