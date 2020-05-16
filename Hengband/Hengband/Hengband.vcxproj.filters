@@ -845,6 +845,12 @@
     <ClCompile Include="..\..\src\mind\racial-samurai.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\mspell-summon.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\mspell-util.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1734,6 +1740,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\racial-samurai.h">
       <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\mspell-summon.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\mspell-util.h">
+      <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

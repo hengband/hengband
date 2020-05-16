@@ -145,7 +145,6 @@ hengband_SOURCES = \
 	monster/monster-process.c monster/monster-process.h \
 	monster/monster-status.c monster/monster-status.h \
 	monster/monster1.c monster/monster2.c \
-	monster/mspells1.c monster/mspells2.c monster/mspells3.c monster/mspells4.c \
 	monster/monster-spell.h \
 	monster/horror-descriptions.c monster/horror-descriptions.h \
 	\
@@ -247,6 +246,9 @@ hengband_SOURCES = \
 	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-world.c spell/spells-world.h \
 	spell/spells-detection.c spell/spells-detection.h \
+	spell/mspells1.c spell/mspells2.c spell/mspells3.c spell/mspells4.c \
+	spell/mspell-summon.c spell/mspell-summon.h \
+	spell/mspell-util.c spell/mspell-util.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\
