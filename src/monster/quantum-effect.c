@@ -2,6 +2,7 @@
 #include "quantum-effect.h"
 #include "mspell/monster-spell.h"
 #include "spell/spells3.h"
+#include "mspell/assign-monster-spell.h"
 
 /*!
  * @brief ユニークでない量子生物を消滅させる

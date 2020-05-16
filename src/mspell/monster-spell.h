@@ -227,7 +227,3 @@ extern bool monst_spell_monst(player_type *target_ptr, MONSTER_IDX m_idx);
 extern bool do_cmd_cast_learned(player_type *caster_ptr);
 extern void learn_spell(player_type *learner_ptr, int monspell);
 extern void set_rf_masks(BIT_FLAGS *f4, BIT_FLAGS *f5, BIT_FLAGS *f6, BIT_FLAGS mode);
-
-/* mspells4.c */
-extern HIT_POINT monspell_to_player(player_type* target_ptr, monster_spell_type ms_type, POSITION y, POSITION x, MONSTER_IDX m_idx);
-extern HIT_POINT monspell_to_monster(player_type* target_ptr, monster_spell_type ms_type, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, bool is_special_spell);

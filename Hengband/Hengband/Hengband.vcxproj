@@ -369,6 +369,7 @@
     <ClCompile Include="..\..\src\spell\technic-info-table.c" />
     <ClInclude Include="..\..\src\cmd\cmd-menu-content-table.h" />
     <ClInclude Include="..\..\src\mind\racial-samurai.h" />
+    <ClInclude Include="..\..\src\mspell\assign-monster-spell.h" />
     <ClInclude Include="..\..\src\mspell\mspell-floor.h" />
     <ClInclude Include="..\..\src\mspell\mspell-particularity.h" />
     <ClInclude Include="..\..\src\mspell\mspell-special.h" />
@@ -487,7 +488,7 @@
     <ClCompile Include="..\..\src\mspell\mspells1.c" />
     <ClCompile Include="..\..\src\mspell\mspells2.c" />
     <ClCompile Include="..\..\src\mspell\mspells3.c" />
-    <ClCompile Include="..\..\src\mspell\mspells4.c" />
+    <ClCompile Include="..\..\src\mspell\assign-monster-spell.c" />
     <ClCompile Include="..\..\src\mutation\mutation.c" />
     <ClCompile Include="..\..\src\object\object1.c" />
     <ClCompile Include="..\..\src\object\object2.c" />

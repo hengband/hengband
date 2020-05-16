@@ -1,15 +1,16 @@
 ﻿/*!
- * @file mspells4.c
- * @brief スペル実行処理 / Spell launch
+ * @brief モンスターのスペル振り分け処理 / Spell launch by a monster
  * @date 2014/07/14
  * @author Habu
  */
 
 #include "system/angband.h"
+#include "mspell/mspell-util.h"
+#include "mspell/mspell-type.h"
+#include "mspell/assign-monster-spell.h"
 #include "mspell/monster-spell.h"
 #include "spell/spells-type.h"
 #include "mspell/mspell-summon.h"
-#include "mspell/mspell-util.h"
 #include "mspell/mspell-curse.h"
 #include "mspell/mspell-breath.h"
 #include "mspell/mspell-ball.h"

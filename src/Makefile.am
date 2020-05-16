@@ -247,7 +247,8 @@ hengband_SOURCES = \
 	spell/spells-detection.c spell/spells-detection.h \
 	\
 	mspell/monster-spell.h \
-	mspell/mspells1.c mspell/mspells2.c mspell/mspells3.c mspell/mspells4.c \
+	mspell/mspells1.c mspell/mspells2.c mspell/mspells3.c \
+	mspell/assign-monster-spell.c mspell/assign-monster-spell.h \
 	mspell/mspell-summon.c mspell/mspell-summon.h \
 	mspell/mspell-util.c mspell/mspell-util.h \
 	mspell/mspell-curse.c mspell/mspell-curse.h \

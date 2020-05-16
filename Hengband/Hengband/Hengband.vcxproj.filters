@@ -860,9 +860,6 @@
     <ClCompile Include="..\..\src\mspell\mspells3.c">
       <Filter>mspell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mspell\mspells4.c">
-      <Filter>mspell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mspell\mspell-ball.c">
       <Filter>mspell</Filter>
     </ClCompile>
@@ -882,6 +879,9 @@
       <Filter>mspell</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mspell\mspell-particularity.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mspell\assign-monster-spell.c">
       <Filter>mspell</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1814,6 +1814,9 @@
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-particularity.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\assign-monster-spell.h">
       <Filter>mspell</Filter>
     </ClInclude>
   </ItemGroup>

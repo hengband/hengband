@@ -60,6 +60,7 @@
 #include "spell/process-effect.h"
 #include "spell/spells3.h"
 #include "mspell/mspell-learn-checker.h"
+#include "mspell/assign-monster-spell.h"
 
 #define DO_SPELL_NONE    0
 #define DO_SPELL_BR_LITE 1
