@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\mind\racial-samurai.c" />
     <ClCompile Include="..\..\src\object\artifact.c" />
     <ClCompile Include="..\..\src\autopick\autopick-command-menu.c" />
     <ClCompile Include="..\..\src\autopick\autopick-describer.c" />
@@ -353,6 +354,7 @@
     <ClCompile Include="..\..\src\spell\process-effect.c" />
     <ClCompile Include="..\..\src\spell\spells-execution.c" />
     <ClCompile Include="..\..\src\spell\technic-info-table.c" />
+    <ClInclude Include="..\..\src\mind\racial-samurai.h" />
     <ClInclude Include="..\..\src\object\artifact.h" />
     <ClInclude Include="..\..\src\autopick\autopick-command-menu.h" />
     <ClInclude Include="..\..\src\autopick\autopick-commands-table.h" />

@@ -127,6 +127,7 @@ hengband_SOURCES = \
 	\
 	mind/mind.c mind/mind.h \
 	mind/racial.c mind/racial.h \
+	mind/racial-samurai.c mind/racial-samurai.h \
 	\
 	monster/monster.h monster/monster-race.c monster/monster-race.h \
 	monster/monster-util.c monster/monster-util.h \
