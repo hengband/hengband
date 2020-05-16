@@ -854,6 +854,9 @@
     <ClCompile Include="..\..\src\cmd\cmd-menu-content-table.c">
       <Filter>cmd</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\mspell-curse.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1752,6 +1755,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-menu-content-table.h">
       <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\mspell-curse.h">
+      <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

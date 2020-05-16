@@ -266,6 +266,7 @@
     <ClCompile Include="..\..\src\cmd\object-group-table.c" />
     <ClCompile Include="..\..\src\combat\melee.c" />
     <ClCompile Include="..\..\src\combat\shoot.c" />
+    <ClCompile Include="..\..\src\spell\mspell-curse.c" />
     <ClCompile Include="..\..\src\spell\mspell-summon.c" />
     <ClCompile Include="..\..\src\spell\mspell-util.c" />
     <ClCompile Include="..\..\src\spell\spells-detection.c" />
@@ -404,6 +405,7 @@
     <ClInclude Include="..\..\src\core\output-updater.h" />
     <ClInclude Include="..\..\src\core\special-internal-keys.h" />
     <ClInclude Include="..\..\src\core\stuff-handler.h" />
+    <ClInclude Include="..\..\src\spell\mspell-curse.h" />
     <ClInclude Include="..\..\src\spell\mspell-summon.h" />
     <ClInclude Include="..\..\src\spell\mspell-util.h" />
     <ClInclude Include="..\..\src\spell\spells-detection.h" />
