@@ -129,6 +129,7 @@ hengband_SOURCES = \
 	mind/racial.c mind/racial.h \
 	mind/racial-samurai.c mind/racial-samurai.h \
 	\
+	monster/creature.h monster/creature.c \
 	monster/monster.h monster/monster-race.c monster/monster-race.h \
 	monster/monster-util.c monster/monster-util.h \
 	monster/monster-direction.c monster/monster-direction.h \
@@ -172,7 +173,6 @@ hengband_SOURCES = \
 	\
 	patron.h patron.c \
 	\
-	creature.h creature.c \
 	player/player-move.c player/player-move.h \
 	player/player-damage.c player/player-damage.h \
 	player/player-status.c player/player-status.h \
