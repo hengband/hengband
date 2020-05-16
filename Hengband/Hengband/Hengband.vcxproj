@@ -155,6 +155,7 @@
     <ClCompile Include="..\..\src\cmd\cmd-menu-content-table.c" />
     <ClCompile Include="..\..\src\mind\racial-samurai.c" />
     <ClCompile Include="..\..\src\mspell\mspell-floor.c" />
+    <ClCompile Include="..\..\src\mspell\mspell-particularity.c" />
     <ClCompile Include="..\..\src\mspell\mspell-special.c" />
     <ClCompile Include="..\..\src\mspell\mspell-status.c" />
     <ClCompile Include="..\..\src\object\artifact.c" />
@@ -369,6 +370,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-menu-content-table.h" />
     <ClInclude Include="..\..\src\mind\racial-samurai.h" />
     <ClInclude Include="..\..\src\mspell\mspell-floor.h" />
+    <ClInclude Include="..\..\src\mspell\mspell-particularity.h" />
     <ClInclude Include="..\..\src\mspell\mspell-special.h" />
     <ClInclude Include="..\..\src\mspell\mspell-status.h" />
     <ClInclude Include="..\..\src\object\artifact.h" />
