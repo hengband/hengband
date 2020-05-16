@@ -11,6 +11,7 @@
  */
 
 #include "system/angband.h"
+#include "mind/racial.h"
 #include "core/stuff-handler.h"
 #include "util.h"
 

@@ -20,9 +20,6 @@
     <ClCompile Include="..\..\src\scores.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\racial.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\snipe.c">
       <Filter>cmd</Filter>
     </ClCompile>
@@ -833,6 +830,9 @@
     <ClCompile Include="..\..\src\birth\history.c">
       <Filter>birth</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\racial.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\init.h" />
@@ -852,9 +852,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\scores.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\racial.h">
-      <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\snipe.h">
       <Filter>cmd</Filter>
@@ -1710,6 +1707,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\selfinfo.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\racial.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

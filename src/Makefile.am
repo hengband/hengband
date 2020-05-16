@@ -309,8 +309,8 @@ LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icombat -Icore -Idungeon -Ieffect -Ifloor \
-	-Igrid -Iinventory -Iio -Iknowledge -Imarket -Imind -Imonster -Iobject \
-	-Iplayer -Irealm -Iroom -Ispell -Isystem -Iview -Iwizard -Iworld
+	-Igrid -Iinventory -Iio -Iknowledge -Imarket -Imind -Imonster -Imutation \
+	-Iobject -Iplayer -Irealm -Iroom -Ispell -Isystem -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

@@ -460,7 +460,7 @@
     <ClCompile Include="..\..\src\mutation\mutation.c" />
     <ClCompile Include="..\..\src\object\object1.c" />
     <ClCompile Include="..\..\src\object\object2.c" />
-    <ClCompile Include="..\..\src\racial.c" />
+    <ClCompile Include="..\..\src\mind\racial.c" />
     <ClCompile Include="..\..\src\readdib.c" />
     <ClCompile Include="..\..\src\realm\realm-arcane.c" />
     <ClCompile Include="..\..\src\realm\realm-chaos.c" />
@@ -675,7 +675,7 @@
     <ClInclude Include="..\..\src\player\player-skill.h" />
     <ClInclude Include="..\..\src\player\player-status.h" />
     <ClInclude Include="..\..\src\quest.h" />
-    <ClInclude Include="..\..\src\racial.h" />
+    <ClInclude Include="..\..\src\mind\racial.h" />
     <ClInclude Include="..\..\src\readdib.h" />
     <ClInclude Include="..\..\src\realm\realm-arcane.h" />
     <ClInclude Include="..\..\src\realm\realm-chaos.h" />
