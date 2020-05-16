@@ -14,7 +14,7 @@
 #include "term/gameterm.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-draw.h"
-#include "inet.h"
+#include "io/inet.h"
 #include "locale/japanese.h"
 #include "chuukei.h"
 

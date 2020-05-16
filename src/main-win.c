@@ -94,7 +94,7 @@
 #include "main/sound-definitions-table.h"
 #include "main/music-definitions-table.h"
 #include "util.h"
-#include "inet.h"
+#include "io/inet.h"
 #include "chuukei.h"
 
 #include "io/write-diary.h"

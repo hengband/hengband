@@ -10,7 +10,7 @@
 #include "core/turn-compensator.h"
 #include "system/angband-version.h"
 #include "core/stuff-handler.h"
-#include "inet.h"
+#include "io/inet.h"
 #include "dungeon/dungeon.h"
 
 #include "player/player-personality.h"

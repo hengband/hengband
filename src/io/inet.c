@@ -3,7 +3,7 @@
 #include "system/angband.h"
 #include "util.h"
 #include "io/files.h"
-#include "inet.h"
+#include "io/inet.h"
 
 
 #ifdef WORLD_SCORE

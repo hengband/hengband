@@ -156,11 +156,11 @@
  * XXX XXX XXX Consider the use of "savetty()" and "resetty()".
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "main/sound-definitions-table.h"
 #include "io/exit-panic.h"
-#include "files.h"
-#include "gameterm.h"
+#include "io/files.h"
+#include "term/gameterm.h"
 
 #ifdef USE_GCU
 

@@ -52,7 +52,7 @@ hengband_SOURCES = \
 	market/store-util.c market/store-util.h \
 	market/gold-magnification-table.c market/gold-magnification-table.h \
 	market/store.c market/store.h market/rumor.c market/rumor.h \
-\
+	\
 	chuukei.c chuukei.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
@@ -92,6 +92,7 @@ hengband_SOURCES = \
 	io/input-key-processor.c io/input-key-processor.h \
 	io/load.c io/load.h \
 	io/save.c io/save.h \
+	io/inet.c io/inet.h \
 	\
 	core/game-play.c core/game-play.h \
 	core/show-file.c core/show-file.h \
@@ -122,7 +123,6 @@ hengband_SOURCES = \
 	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
 	geometry.c geometry.h \
 	\
-	inet.c inet.h \
 	main.c main-x11.c main-gcu.c \
 	\
 	mind/mind.c mind/mind.h \

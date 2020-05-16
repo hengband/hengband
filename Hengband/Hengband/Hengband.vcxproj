@@ -446,7 +446,7 @@
     <ClCompile Include="..\..\src\player\player-move.c" />
     <ClCompile Include="..\..\src\io\files.c" />
     <ClCompile Include="..\..\src\grid\grid.c" />
-    <ClCompile Include="..\..\src\inet.c" />
+    <ClCompile Include="..\..\src\io\inet.c" />
     <ClCompile Include="..\..\src\locale\japanese.c" />
     <ClCompile Include="..\..\src\io\load.c" />
     <ClCompile Include="..\..\src\main-win.c" />
@@ -645,7 +645,7 @@
     <ClInclude Include="..\..\src\system\h-system.h" />
     <ClInclude Include="..\..\src\system\h-type.h" />
     <ClInclude Include="..\..\src\birtth\history.h" />
-    <ClInclude Include="..\..\src\inet.h" />
+    <ClInclude Include="..\..\src\io\inet.h" />
     <ClInclude Include="..\..\src\main\init.h" />
     <ClInclude Include="..\..\src\io\load.h" />
     <ClInclude Include="..\..\src\mind\mind.h" />

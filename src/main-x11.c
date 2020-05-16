@@ -93,7 +93,7 @@
  */
 
 
-#include "angband.h"
+#include "system/angband.h"
 #include "main/sound-definitions-table.h"
 #include "core/system-variables.h"
 #include "io/files.h"

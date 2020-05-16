@@ -8,12 +8,12 @@
  * are included in all such copies.
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "system/system-variables.h"
 #include "io/uid-checker.h"
 #include "io/signal-handlers.h"
 #include "io/files.h"
-#include "inet.h"
+#include "io/inet.h"
 #include "main/init.h"
 #include "scores.h"
 #include "term/gameterm.h"
