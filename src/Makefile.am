@@ -259,6 +259,7 @@ hengband_SOURCES = \
 	mspell/mspell-bolt.c mspell/mspell-bolt.h \
 	mspell/mspell-floor.c mspell/mspell-floor.h \
 	mspell/mspell-status.c mspell/mspell-status.h \
+	mspell/mspell-special.c mspell/mspell-special.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\

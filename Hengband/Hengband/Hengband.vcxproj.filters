@@ -878,6 +878,9 @@
     <ClCompile Include="..\..\src\mspell\mspell-status.c">
       <Filter>mspell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mspell\mspell-special.c">
+      <Filter>mspell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1802,6 +1805,9 @@
       <Filter>mspell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\mspell-status.h">
+      <Filter>mspell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mspell\mspell-special.h">
       <Filter>mspell</Filter>
     </ClInclude>
   </ItemGroup>
