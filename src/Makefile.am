@@ -104,6 +104,7 @@ hengband_SOURCES = \
 	core/hp-mp-processor.c core/hp-mp-processor.h \
 	core/magic-effects-timeout-reducer.c core/magic-effects-timeout-reducer.h \
 	core/player-processor.c core/player-processor.h \
+	core/scores.c core/scores.h \
 	\
 	dungeon/dungeon.c dungeon/dungeon.h \
 	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \
@@ -207,8 +208,6 @@ hengband_SOURCES = \
 	room/rooms-vault.c room/rooms-vault.h \
 	room/rooms-pit-nest.c room/rooms-pit-nest.h \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
-	\
-	scores.c scores.h \
 	\
 	effect/effect-feature.c effect/effect-feature.h \
 	effect/effect-item.c effect/effect-item.h \

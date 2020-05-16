@@ -53,7 +53,7 @@
 #include "io/read-pref-file.h"
 #include "realm/realm.h"
 #include "io/save.h"
-#include "scores.h"
+#include "core/scores.h"
 #include "io/targeting.h"
 #include "view/display-main-window.h"
 #include "system/system-variables.h"

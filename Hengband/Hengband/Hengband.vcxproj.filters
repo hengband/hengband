@@ -8,9 +8,6 @@
     <ClCompile Include="..\..\src\sort.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\scores.c">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd\cmd-activate.c">
       <Filter>cmd</Filter>
     </ClCompile>
@@ -839,15 +836,15 @@
     <ClCompile Include="..\..\src\dungeon\quest.c">
       <Filter>dungeon</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\core\scores.c">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\util.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\sort.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\scores.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1722,6 +1719,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\dungeon\quest.h">
       <Filter>dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\core\scores.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

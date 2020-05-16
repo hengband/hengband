@@ -57,7 +57,7 @@
 #include "player/player-class.h"
 #include "player/player-personality.h"
 #include "inventory/player-inventory.h"
-#include "scores.h"
+#include "core/scores.h"
 #include "shoot.h"
 #include "view/display-main-window.h"
 #include "monster/monster-race.h"

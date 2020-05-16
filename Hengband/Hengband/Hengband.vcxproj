@@ -480,7 +480,7 @@
     <ClCompile Include="..\..\src\room\pit-nest-kinds-table.c" />
     <ClCompile Include="..\..\src\market\rumor.c" />
     <ClCompile Include="..\..\src\io\save.c" />
-    <ClCompile Include="..\..\src\scores.c" />
+    <ClCompile Include="..\..\src\core\scores.c" />
     <ClCompile Include="..\..\src\player\selfinfo.c" />
     <ClCompile Include="..\..\src\io\signal-handlers.c" />
     <ClCompile Include="..\..\src\combat\snipe.c" />
@@ -702,7 +702,7 @@
     <ClInclude Include="..\..\src\room\rooms.h" />
     <ClInclude Include="..\..\src\market\umor.h" />
     <ClInclude Include="..\..\src\io\save.h" />
-    <ClInclude Include="..\..\src\scores.h" />
+    <ClInclude Include="..\..\src\core\scores.h" />
     <ClInclude Include="..\..\src\player\selfinfo.h" />
     <ClInclude Include="..\..\src\combat\snipe.h" />
     <ClInclude Include="..\..\src\sort.h" />
