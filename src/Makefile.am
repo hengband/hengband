@@ -255,6 +255,7 @@ hengband_SOURCES = \
 	spell/mspell-learn-checker.c spell/mspell-learn-checker.h \
 	spell/mspell-breath.c spell/mspell-breath.h \
 	spell/mspell-ball.c spell/mspell-ball.h \
+	spell/mspell-bolt.c spell/mspell-bolt.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\

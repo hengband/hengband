@@ -869,6 +869,9 @@
     <ClCompile Include="..\..\src\spell\mspell-ball.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\mspell-bolt.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1784,6 +1787,9 @@
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\mspell-ball.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\mspell-bolt.h">
       <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>
