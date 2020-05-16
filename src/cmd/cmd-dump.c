@@ -48,7 +48,7 @@
 #include "cmd/feeling-table.h"
 #include "locale/english.h"
 
-#include "chuukei.h"
+#include "io/chuukei.h"
 
 /*!
  * @brief 画面を再描画するコマンドのメインルーチン

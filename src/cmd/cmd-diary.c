@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "cmd/cmd-diary.h"
-#include "chuukei.h"
+#include "io/chuukei.h"
 #include "core/show-file.h"
 #include "io/files.h"
 #include "cmd/diary-subtitle-table.h"

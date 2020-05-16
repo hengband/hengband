@@ -18,7 +18,7 @@
 #include "core/stuff-handler.h"
 #include "io/inet.h"
 #include "term/gameterm.h"
-#include "chuukei.h"
+#include "io/chuukei.h"
 #include "birth/birth.h"
 #include "monster/creature.h"
 #include "grid/feature.h"

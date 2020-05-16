@@ -16,7 +16,7 @@
 #include "cmd/cmd-draw.h"
 #include "io/inet.h"
 #include "locale/japanese.h"
-#include "chuukei.h"
+#include "io/chuukei.h"
 
 #include <stdio.h>
 #include <stdarg.h>

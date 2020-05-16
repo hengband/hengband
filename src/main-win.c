@@ -95,7 +95,7 @@
 #include "main/music-definitions-table.h"
 #include "util.h"
 #include "io/inet.h"
-#include "chuukei.h"
+#include "io/chuukei.h"
 
 #include "io/write-diary.h"
 #include "autopick/autopick-pref-processor.h"

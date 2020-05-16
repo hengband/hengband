@@ -18,7 +18,7 @@
 #include "scores.h"
 #include "term/gameterm.h"
 #include "player/process-name.h"
-#include "chuukei.h"
+#include "io/chuukei.h"
 #include "autopick/autopick-pref-processor.h"
 #include "system/angband-version.h"
 #include "core/game-play.h"

@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\chuukei.c">
-      <Filter>io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\quest.c">
       <Filter>market</Filter>
     </ClCompile>
@@ -839,11 +836,11 @@
     <ClCompile Include="..\..\src\io\inet.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\chuukei.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\chuukei.h">
-      <Filter>io</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\quest.h">
       <Filter>market</Filter>
     </ClInclude>
@@ -1721,6 +1718,9 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\inet.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\chuukei.h">
       <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>

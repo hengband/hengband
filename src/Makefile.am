@@ -53,8 +53,6 @@ hengband_SOURCES = \
 	market/gold-magnification-table.c market/gold-magnification-table.h \
 	market/store.c market/store.h market/rumor.c market/rumor.h \
 	\
-	chuukei.c chuukei.h \
-	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \
 	view/display-player-stat-info.c view/display-player-stat-info.h \
@@ -93,6 +91,7 @@ hengband_SOURCES = \
 	io/load.c io/load.h \
 	io/save.c io/save.h \
 	io/inet.c io/inet.h \
+	io/chuukei.c io/chuukei.h \
 	\
 	core/game-play.c core/game-play.h \
 	core/show-file.c core/show-file.h \

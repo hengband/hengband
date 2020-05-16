@@ -27,7 +27,7 @@
 #include "view/display-main-window.h"
 #include "knowledge/knowledge-autopick.h"
 #include "knowledge/knowledge-quests.h"
-#include "chuukei.h"
+#include "io/chuukei.h"
 #include "player/player-move.h" // do_cmd_travel() がある。後で移設する.
 #include "io/files.h"
 

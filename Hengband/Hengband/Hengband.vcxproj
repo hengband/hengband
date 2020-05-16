@@ -231,7 +231,7 @@
     <ClCompile Include="..\..\src\market\building.c" />
     <ClCompile Include="..\..\src\io\character-dump.c" />
     <ClCompile Include="..\..\src\object\chest.c" />
-    <ClCompile Include="..\..\src\chuukei.c" />
+    <ClCompile Include="..\..\src\io\chuukei.c" />
     <ClCompile Include="..\..\src\cmd\cmd-activate.c" />
     <ClCompile Include="..\..\src\cmd\cmd-basic.c" />
     <ClCompile Include="..\..\src\cmd\cmd-diary.c" />
@@ -442,7 +442,7 @@
     <ClInclude Include="..\..\src\market\building.h" />
     <ClInclude Include="..\..\src\io\character-dump.h" />
     <ClInclude Include="..\..\src\object\chest.h" />
-    <ClInclude Include="..\..\src\chuukei.h" />
+    <ClInclude Include="..\..\src\io\chuukei.h" />
     <ClCompile Include="..\..\src\player\player-move.c" />
     <ClCompile Include="..\..\src\io\files.c" />
     <ClCompile Include="..\..\src\grid\grid.c" />
