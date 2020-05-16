@@ -1,3 +1,3 @@
 ﻿#pragma once
 
-bool concentration(player_type* creature_ptr);
+void concentration(player_type* creature_ptr);
