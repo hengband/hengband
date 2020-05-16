@@ -20,7 +20,7 @@
 #include "object/object-flavor.h"
 
 #include "shoot.h"
-#include "snipe.h"
+#include "combat/snipe.h"
 #include "view/display-main-window.h"
 #include "object/object-kind.h"
 #include "io/targeting.h"

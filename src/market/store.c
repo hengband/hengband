@@ -49,7 +49,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "floor/floor-events.h"
-#include "snipe.h"
+#include "combat/snipe.h"
 #include "io/files.h"
 #include "player/player-effects.h"
 #include "player/race-info-table.h"

@@ -30,7 +30,7 @@
 #include "io/files.h"
 #include "term/gameterm.h"
 #include "cmd-smith.h"
-#include "snipe.h"
+#include "combat/snipe.h"
 #include "view/display-main-window.h"
 
 #if defined(MACH_O_CARBON)

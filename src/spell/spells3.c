@@ -50,7 +50,7 @@
 #include "cmd/cmd-save.h"
 #include "cmd/cmd-spell.h"
 #include "cmd/cmd-dump.h"
-#include "snipe.h"
+#include "combat/snipe.h"
 #include "floor/floor-save.h"
 #include "io/files.h"
 #include "player/player-effects.h"

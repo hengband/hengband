@@ -42,7 +42,7 @@
 #include "object/object-broken.h"
 #include "object/object-flavor.h"
 #include "shoot.h"
-#include "snipe.h"
+#include "combat/snipe.h"
 
 #include "cmd-basic.h"
 #include "dungeon/dungeon-file.h"

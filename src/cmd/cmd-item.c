@@ -45,7 +45,7 @@
 #include "autopick/autopick.h"
 #include "autopick/autopick-registry.h"
 #include "io/targeting.h"
-#include "snipe.h"
+#include "combat/snipe.h"
 #include "player/player-race.h"
 #include "view/display-main-window.h"
 #include "inventory/player-inventory.h"

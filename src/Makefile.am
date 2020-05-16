@@ -88,6 +88,8 @@ hengband_SOURCES = \
 	io/signal-handlers.c io/signal-handlers.h \
 	io/uid-checker.c io/uid-checker.h \
 	io/input-key-processor.c io/input-key-processor.h \
+	io/load.c io/load.h \
+	io/save.c io/save.h \
 	\
 	core/game-play.c core/game-play.h \
 	core/show-file.c core/show-file.h \
@@ -119,10 +121,10 @@ hengband_SOURCES = \
 	geometry.c geometry.h \
 	\
 	inet.c inet.h init.c init.h \
-	load.c load.h \
 	main.c main-x11.c main-gcu.c \
 	\
 	mind/mind.c mind/mind.h \
+	mind/racial.c mind/racial.h \
 	\
 	monster/monster.h monster/monster-race.c monster/monster-race.h \
 	monster/monster-util.c monster/monster-util.h \
@@ -181,7 +183,6 @@ hengband_SOURCES = \
 	\
 	quest.h quest.c\
 	\
-	racial.c racial.h \
 	realm/realm.c realm/realm.h \
 	realm/realm-arcane.c realm/realm-arcane.h \
 	realm/realm-chaos.c realm/realm-chaos.h \
@@ -205,8 +206,7 @@ hengband_SOURCES = \
 	room/rooms-pit-nest.c room/rooms-pit-nest.h \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
 	\
-	save.c save.h scores.c scores.h \
-	snipe.c snipe.h \
+	scores.c scores.h \
 	\
 	effect/effect-feature.c effect/effect-feature.h \
 	effect/effect-item.c effect/effect-item.h \
@@ -283,6 +283,7 @@ hengband_SOURCES = \
 	cmd/cmd-zaprod.c cmd/cmd-zaprod.h cmd/cmd-zapwand.c cmd/cmd-zapwand.h \
 	\
 	combat/melee.h combat/melee.c combat/shoot.c combat/shoot.h \
+	combat/snipe.c combat/snipe.h \
 	\
 	term/gameterm.c term/gameterm.h \
 	term/z-form.c term/z-form.h term/z-rand.c term/z-rand.h \

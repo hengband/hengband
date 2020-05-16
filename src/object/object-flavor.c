@@ -22,7 +22,7 @@
 #include "object/object-hook.h"
 #include "object/object-flavor.h"
 #include "grid/trap.h"
-#include "snipe.h"
+#include "combat/snipe.h"
 #include "io/files.h"
 #include "world/world.h"
 #include "monster/monster-race.h"

@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "object/object-kind.h"
-#include "snipe.h"
+#include "combat/snipe.h"
 #include "spell/spells-type.h"
 #include "spell/process-effect.h"
 #include "effect/effect-characteristics.h"

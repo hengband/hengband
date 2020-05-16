@@ -12,7 +12,7 @@
 #include "core/stuff-handler.h"
 #include "inventory/pack-overflow.h"
 #include "io/input-key-processor.h"
-#include "snipe.h"
+#include "combat/snipe.h"
 #include "realm/realm-hex.h"
 #include "spell/music-checker.h"
 #include "monster/monsterrace-hook.h"
