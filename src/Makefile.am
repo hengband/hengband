@@ -257,6 +257,8 @@ hengband_SOURCES = \
 	mspell/mspell-breath.c mspell/mspell-breath.h \
 	mspell/mspell-ball.c mspell/mspell-ball.h \
 	mspell/mspell-bolt.c mspell/mspell-bolt.h \
+	mspell/mspell-floor.c mspell/mspell-floor.h \
+	mspell/mspell-status.c mspell/mspell-status.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\
