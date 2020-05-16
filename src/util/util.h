@@ -319,9 +319,6 @@ extern void roff_to_buf(concptr str, int wlen, char *tbuf, size_t bufsize);
 
 extern void tag_sort(tag_type elements[], int number);
 
-extern byte gamma_table[256];
-extern void build_gamma_table(int gamma);
-
 extern size_t my_strcpy(char *buf, concptr src, size_t bufsize);
 extern size_t my_strcat(char *buf, concptr src, size_t bufsize);
 extern char *my_strstr(concptr haystack, concptr needle);

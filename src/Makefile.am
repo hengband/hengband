@@ -304,6 +304,7 @@ hengband_SOURCES = \
 
 EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc maid-x11.c main-win.c \
+	main/x11-gamma-builder.c main/x11-gamma-builder.h \
 	makefile.bcc makefile.std term/readdib.c term/readdib.h wall.bmp
 
 EXTRA_DIST = \
