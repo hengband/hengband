@@ -183,13 +183,13 @@ void dice_to_string(int base_damage, int dice_num, int dice_side, int dice_mult,
 * @param tmp 返すメッセージを格納する配列
 * @return なし
 */
-void set_damage(player_type *player_ptr, MONRACE_IDX r_idx, int SPELL_NUM, char* msg, char* tmp)
+void set_damage(player_type* player_ptr, MONRACE_IDX r_idx, monster_spell_type ms_type, char* msg, char* tmp)
 {
-	int base_damage = monspell_race_damage(player_ptr, SPELL_NUM, r_idx, BASE_DAM);
-	int dice_num = monspell_race_damage(player_ptr, SPELL_NUM, r_idx, DICE_NUM);
-	int dice_side = monspell_race_damage(player_ptr, SPELL_NUM, r_idx, DICE_SIDE);
-	int dice_mult = monspell_race_damage(player_ptr, SPELL_NUM, r_idx, DICE_MULT);
-	int dice_div = monspell_race_damage(player_ptr, SPELL_NUM, r_idx, DICE_DIV);
+    int base_damage = monspell_race_damage(player_ptr, ms_type, r_idx, BASE_DAM);
+    int dice_num = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_NUM);
+    int dice_side = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_SIDE);
+    int dice_mult = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_MULT);
+    int dice_div = monspell_race_damage(player_ptr, ms_type, r_idx, DICE_DIV);
 	char dmg_str[80], dice_str[80];
 	dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div, dmg_str);
 	sprintf(dice_str, "(%s)", dmg_str);

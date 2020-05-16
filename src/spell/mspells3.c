@@ -301,13 +301,13 @@ const concptr monster_powers_short[MAX_MONSPELLS] = {
 * @param tmp 返すメッセージを格納する配列
 * @return なし
 */
-void set_bluemage_damage(player_type *learner_type, int SPELL_NUM, PLAYER_LEVEL plev, concptr msg, char* tmp)
+void set_bluemage_damage(player_type *learner_type, monster_spell_type ms_type, PLAYER_LEVEL plev, concptr msg, char* tmp)
 {
-    int base_damage = monspell_bluemage_damage(learner_type, SPELL_NUM, plev, BASE_DAM);
-    int dice_num = monspell_bluemage_damage(learner_type, SPELL_NUM, plev, DICE_NUM);
-    int dice_side = monspell_bluemage_damage(learner_type, SPELL_NUM, plev, DICE_SIDE);
-    int dice_mult = monspell_bluemage_damage(learner_type, SPELL_NUM, plev, DICE_MULT);
-    int dice_div = monspell_bluemage_damage(learner_type, SPELL_NUM, plev, DICE_DIV);
+    int base_damage = monspell_bluemage_damage(learner_type, ms_type, plev, BASE_DAM);
+    int dice_num = monspell_bluemage_damage(learner_type, ms_type, plev, DICE_NUM);
+    int dice_side = monspell_bluemage_damage(learner_type, ms_type, plev, DICE_SIDE);
+    int dice_mult = monspell_bluemage_damage(learner_type, ms_type, plev, DICE_MULT);
+    int dice_div = monspell_bluemage_damage(learner_type, ms_type, plev, DICE_DIV);
     char dmg_str[80];
     dice_to_string(base_damage, dice_num, dice_side, dice_mult, dice_div, dmg_str);
     sprintf(tmp, " %s %s", msg, dmg_str);

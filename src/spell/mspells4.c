@@ -2427,9 +2427,9 @@ void spell_RF6_RAISE_DEAD(player_type *target_ptr, MONSTER_IDX m_idx, MONSTER_ID
 * @param m_idx 呪文を唱えるモンスターID
 * @return 攻撃呪文のダメージ、または召喚したモンスターの数を返す。その他の場合0。以降の処理を中断するなら-1を返す。
 */
-HIT_POINT monspell_to_player(player_type *target_ptr, int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx)
+HIT_POINT monspell_to_player(player_type* target_ptr, monster_spell_type ms_type, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
-	switch (SPELL_NUM)
+    switch (ms_type)
 	{
 	case RF4_SPELL_START + 0:   spell_RF4_SHRIEK(m_idx, target_ptr, 0, MONSTER_TO_PLAYER); break;	/* RF4_SHRIEK */
 	case RF4_SPELL_START + 1:   break;   /* RF4_XXX1 */
@@ -2545,9 +2545,9 @@ HIT_POINT monspell_to_player(player_type *target_ptr, int SPELL_NUM, POSITION y,
 * @param is_special_spell 特殊な行動である時TRUE
 * @return 攻撃呪文のダメージ、または召喚したモンスターの数を返す。その他の場合0。以降の処理を中断するなら-1を返す。
 */
-HIT_POINT monspell_to_monster(player_type *target_ptr, int SPELL_NUM, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, bool is_special_spell)
+HIT_POINT monspell_to_monster(player_type* target_ptr, monster_spell_type ms_type, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, bool is_special_spell)
 {
-	switch (SPELL_NUM)
+    switch (ms_type)
 	{
 	case RF4_SPELL_START + 0:   spell_RF4_SHRIEK(m_idx, target_ptr, t_idx, MONSTER_TO_MONSTER); break;   /* RF4_SHRIEK */
 	case RF4_SPELL_START + 1:   return -1;   /* RF4_XXX1 */
@@ -2693,11 +2693,11 @@ HIT_POINT monspell_damage_roll(HIT_POINT dam, int dice_num, int dice_side, int m
 * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
 * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
 */
-HIT_POINT monspell_damage_base(player_type *target_ptr, int SPELL_NUM, int hp, int rlev, bool powerful, int shoot_dd, int shoot_ds, int shoot_base, int TYPE)
+HIT_POINT monspell_damage_base(player_type *target_ptr, monster_spell_type ms_type, int hp, int rlev, bool powerful, int shoot_dd, int shoot_ds, int shoot_base, int TYPE)
 {
 	HIT_POINT dam = 0, dice_num = 0, dice_side = 0, mult = 1, div = 1;
 
-	switch (SPELL_NUM)
+	switch (ms_type)
 	{
 	case MS_SHRIEK: return -1;
 	case MS_XXX1: return -1;
@@ -3014,7 +3014,7 @@ HIT_POINT monspell_damage_base(player_type *target_ptr, int SPELL_NUM, int hp, i
 * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
 * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
 */
-HIT_POINT monspell_damage(player_type *target_ptr, int SPELL_NUM, MONSTER_IDX m_idx, int TYPE)
+HIT_POINT monspell_damage(player_type *target_ptr, monster_spell_type ms_type, MONSTER_IDX m_idx, int TYPE)
 {
 	floor_type *floor_ptr = target_ptr->current_floor_ptr;
 	monster_type *m_ptr = &floor_ptr->m_list[m_idx];
@@ -3025,7 +3025,7 @@ HIT_POINT monspell_damage(player_type *target_ptr, int SPELL_NUM, MONSTER_IDX m_
 	int shoot_ds = r_ptr->blow[0].d_side;
 
 	hp = (TYPE == DAM_ROLL) ? m_ptr->hp : m_ptr->max_maxhp;
-	return monspell_damage_base(target_ptr, SPELL_NUM, hp, rlev, monster_is_powerful(floor_ptr, m_idx), shoot_dd, shoot_ds, 0, TYPE);
+        return monspell_damage_base(target_ptr, ms_type, hp, rlev, monster_is_powerful(floor_ptr, m_idx), shoot_dd, shoot_ds, 0, TYPE);
 }
 
 
@@ -3037,7 +3037,7 @@ HIT_POINT monspell_damage(player_type *target_ptr, int SPELL_NUM, MONSTER_IDX m_
 * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
 * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
 */
-HIT_POINT monspell_race_damage(player_type *target_ptr, int SPELL_NUM, MONRACE_IDX r_idx, int TYPE)
+HIT_POINT monspell_race_damage(player_type *target_ptr, monster_spell_type ms_type, MONRACE_IDX r_idx, int TYPE)
 {
 	monster_race	*r_ptr = &r_info[r_idx];
 	int rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
@@ -3046,7 +3046,7 @@ HIT_POINT monspell_race_damage(player_type *target_ptr, int SPELL_NUM, MONRACE_I
 	int shoot_dd = r_ptr->blow[0].d_dice;
 	int shoot_ds = r_ptr->blow[0].d_side;
 
-	return monspell_damage_base(target_ptr, SPELL_NUM, MIN(30000, hp), rlev, powerful, shoot_dd, shoot_ds, 0, TYPE);
+	return monspell_damage_base(target_ptr, ms_type, MIN(30000, hp), rlev, powerful, shoot_dd, shoot_ds, 0, TYPE);
 }
 
 
@@ -3058,7 +3058,7 @@ HIT_POINT monspell_race_damage(player_type *target_ptr, int SPELL_NUM, MONRACE_I
 * @param TYPE  DAM_MAXで最大値を返し、DAM_MINで最小値を返す。DAM_ROLLはダイスを振って値を決定する。
 * @return 攻撃呪文のダメージを返す。攻撃呪文以外は-1を返す。
 */
-HIT_POINT monspell_bluemage_damage(player_type *target_ptr, int SPELL_NUM, PLAYER_LEVEL plev, int TYPE)
+HIT_POINT monspell_bluemage_damage(player_type *target_ptr, monster_spell_type ms_type, PLAYER_LEVEL plev, int TYPE)
 {
 	int hp = target_ptr->chp;
 	int shoot_dd = 1, shoot_ds = 1, shoot_base = 0;
@@ -3074,5 +3074,5 @@ HIT_POINT monspell_bluemage_damage(player_type *target_ptr, int SPELL_NUM, PLAYE
 		shoot_base = o_ptr->to_d;
 	}
 
-	return monspell_damage_base(target_ptr, SPELL_NUM, hp, plev * 2, FALSE, shoot_dd, shoot_ds, shoot_base, TYPE);
+	return monspell_damage_base(target_ptr, ms_type, hp, plev * 2, FALSE, shoot_dd, shoot_ds, shoot_base, TYPE);
 }

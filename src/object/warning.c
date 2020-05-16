@@ -300,10 +300,10 @@ static void spell_damcalc(player_type *target_ptr, monster_type *m_ptr, EFFECT_I
 * @param max 算出した最大ダメージを返すポインタ
 * @return なし
 */
-void spell_damcalc_by_spellnum(player_type *creature_ptr, int spell_num, EFFECT_ID typ, MONSTER_IDX m_idx, int *max)
+void spell_damcalc_by_spellnum(player_type *creature_ptr, monster_spell_type ms_type, EFFECT_ID typ, MONSTER_IDX m_idx, int *max)
 {
 	monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[m_idx];
-	HIT_POINT dam = monspell_damage(creature_ptr, spell_num, m_idx, DAM_MAX);
+	HIT_POINT dam = monspell_damage(creature_ptr, ms_type, m_idx, DAM_MAX);
 	spell_damcalc(creature_ptr, m_ptr, typ, dam, max);
 }
 
