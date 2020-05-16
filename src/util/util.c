@@ -2955,27 +2955,26 @@ typedef struct
 	bool fin;
 } menu_naiyou;
 
-#ifdef JP
 menu_naiyou menu_info[10][10] =
 {
 	{
-		{"魔法/特殊能力", 1, FALSE},
-		{"行動", 2, FALSE},
-		{"道具(使用)", 3, FALSE},
-		{"道具(その他)", 4, FALSE},
-		{"装備", 5, FALSE},
-		{"扉/箱", 6, FALSE},
-		{"情報", 7, FALSE},
-		{"設定", 8, FALSE},
-		{"その他", 9, FALSE},
+		{_("魔法/特殊能力", "Magic/Special"), 1, FALSE},
+		{_("行動", "Action"), 2, FALSE},
+		{_("道具(使用)", "Items(use)"), 3, FALSE},
+		{_("道具(その他)", "Items(other)"), 4, FALSE},
+		{_("装備", "Equip"), 5, FALSE},
+		{_("扉/箱", "Door/Box"), 6, FALSE},
+		{_("情報", "Information"), 7, FALSE},
+		{_("設定", "Options"), 8, FALSE},
+		{_("その他", "Other commands"), 9, FALSE},
 		{"", 0, FALSE},
 	},
 
 	{
-		{"使う(m)", 'm', TRUE},
-		{"調べる(b/P)", 'b', TRUE},
-		{"覚える(G)", 'G', TRUE},
-		{"特殊能力を使う(U/O)", 'U', TRUE},
+		{_("使う(m)", "Use(m)"), 'm', TRUE},
+		{_("調べる(b/P)", "See tips(b/P)"), 'b', TRUE},
+		{_("覚える(G)", "Study(G)"), 'G', TRUE},
+		{_("特殊能力を使う(U/O)", "Special abilities(U/O)"), 'U', TRUE},
 		{"", 0, FALSE},
 		{"", 0, FALSE},
 		{"", 0, FALSE},
@@ -2985,62 +2984,49 @@ menu_naiyou menu_info[10][10] =
 	},
 
 	{
-		{"休息する(R)", 'R', TRUE},
-		{"トラップ解除(D)", 'D', TRUE},
-		{"探す(s)", 's', TRUE},
-		{"周りを調べる(l/x)", 'l', TRUE},
-		{"ターゲット指定(*)", '*', TRUE},
-		{"穴を掘る(T/^t)", 'T', TRUE},
-		{"階段を上る(<)", '<', TRUE},
-		{"階段を下りる(>)", '>', TRUE},
-		{"ペットに命令する(p)", 'p', TRUE},
-		{"探索モードのON/OFF(S/#)", 'S', TRUE}
+		{_("休息する(R)", "Rest(R)"), 'R', TRUE},
+		{_("トラップ解除(D)", "Disarm a trap(D)"), 'D', TRUE},
+		{_("探す(s)", "Search(s)"), 's', TRUE},
+		{_("周りを調べる(l/x)", "Look(l/x)"), 'l', TRUE},
+		{_("ターゲット指定(*)", "Target(*)"), '*', TRUE},
+		{_("穴を掘る(T/^t)", "Dig(T/^t)"), 'T', TRUE},
+		{_("階段を上る(<)", "Go up stairs(<)"), '<', TRUE},
+		{_("階段を下りる(>)", "Go down stairs(>)"), '>', TRUE},
+		{_("ペットに命令する(p)", "Command pets(p)"), 'p', TRUE},
+		{_("探索モードのON/OFF(S/#)", "Search mode ON/OFF(S/#)"), 'S', TRUE}
 	},
 
 	{
-		{"読む(r)", 'r', TRUE},
-		{"飲む(q)", 'q', TRUE},
-		{"杖を使う(u/Z)", 'u', TRUE},
-		{"魔法棒で狙う(a/z)", 'a', TRUE},
-		{"ロッドを振る(z/a)", 'z', TRUE},
-		{"始動する(A)", 'A', TRUE},
-		{"食べる(E)", 'E', TRUE},
-		{"飛び道具で撃つ(f/t)", 'f', TRUE},
-		{"投げる(v)", 'v', TRUE},
+		{_("読む(r)", "Read a scroll(r)"), 'r', TRUE},
+        {_("飲む(q)", "Drink a potion(q)"), 'q', TRUE },
+		{_("杖を使う(u/Z)", "Use a staff(u/Z)"), 'u', TRUE},
+		{_("魔法棒で狙う(a/z)", "Aim a wand(a/z)"), 'a', TRUE},
+		{_("ロッドを振る(z/a)", "Zap a rod(z/a)"), 'z', TRUE},
+		{_("始動する(A)", "Activate an equipment(A)"), 'A', TRUE},
+		{_("食べる(E)", "Eat(E)"), 'E', TRUE},
+		{_("飛び道具で撃つ(f/t)", "Fire missile weapon(f/t)"), 'f', TRUE},
+		{_("投げる(v)", "Throw an item(v)"), 'v', TRUE},
 		{"", 0, FALSE}
 	},
 
 	{
-		{"拾う(g)", 'g', TRUE},
-		{"落とす(d)", 'd', TRUE},
-		{"壊す(k/^d)", 'k', TRUE},
-		{"銘を刻む({)", '{', TRUE},
-		{"銘を消す(})", '}', TRUE},
-		{"調査(I)", 'I', TRUE},
-		{"アイテム一覧(i)", 'i', TRUE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE}
-	},
-
-	{
-		{"装備する(w)", 'w', TRUE},
-		{"装備を外す(t/T)", 't', TRUE},
-		{"燃料を補給(F)", 'F', TRUE},
-		{"装備一覧(e)", 'e', TRUE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
+		{_("拾う(g)", "Get items(g)"), 'g', TRUE},
+		{_("落とす(d)", "Drop an item(d)"), 'd', TRUE},
+		{_("壊す(k/^d)", "Destroy an item(k/^d)"), 'k', TRUE},
+		{_("銘を刻む({)", "Inscribe an item({)"), '{', TRUE},
+		{_("銘を消す(})", "Uninscribe an item(})"), '}', TRUE},
+		{_("調査(I)", "Uninscribe an item(})"), 'I', TRUE},
+		{_("アイテム一覧(i)", "Inventory list(i)"), 'i', TRUE},
 		{"", 0, FALSE},
 		{"", 0, FALSE},
 		{"", 0, FALSE}
 	},
 
 	{
-		{"開ける(o)", 'o', TRUE},
-		{"閉じる(c)", 'c', TRUE},
-		{"体当たりする(B/f)", 'B', TRUE},
-		{"くさびを打つ(j/S)", 'j', TRUE},
+		{_("装備する(w)", "Wear(w)"), 'w', TRUE},
+		{_("装備を外す(t/T)", "Take off(t/T)"), 't', TRUE},
+		{_("燃料を補給(F)", "Refuel(F)"), 'F', TRUE},
+		{_("装備一覧(e)", "Equipment list(e)"), 'e', TRUE},
 		{"", 0, FALSE},
 		{"", 0, FALSE},
 		{"", 0, FALSE},
@@ -3050,65 +3036,10 @@ menu_naiyou menu_info[10][10] =
 	},
 
 	{
-		{"ダンジョンの全体図(M)", 'M', TRUE},
-		{"位置を確認(L/W)", 'L', TRUE},
-		{"階の雰囲気(^f)", KTRL('F'), TRUE},
-		{"ステータス(C)", 'C', TRUE},
-		{"文字の説明(/)", '/', TRUE},
-		{"メッセージ履歴(^p)", KTRL('P'), TRUE},
-		{"現在の時刻(^t/')", KTRL('T'), TRUE},
-		{"現在の知識(~)", '~', TRUE},
-		{"プレイ記録(|)", '|', TRUE},
-		{"", 0, FALSE}
-	},
-
-	{
-		{"オプション(=)", '=', TRUE},
-		{"マクロ(@)", '@', TRUE},
-		{"画面表示(%)", '%', TRUE},
-		{"カラー(&)", '&', TRUE},
-		{"設定変更コマンド(\")", '\"', TRUE},
-		{"自動拾いをロード($)", '$', TRUE},
-		{"システム(!)", '!', TRUE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE}
-	},
-
-	{
-		{"セーブ&中断(^x)", KTRL('X'), TRUE},
-		{"セーブ(^s)", KTRL('S'), TRUE},
-		{"ヘルプ(?)", '?', TRUE},
-		{"再描画(^r)", KTRL('R'), TRUE},
-		{"メモ(:)", ':', TRUE},
-		{"記念撮影())", ')', TRUE},
-		{"記念撮影の表示(()", '(', TRUE},
-		{"バージョン情報(V)", 'V', TRUE},
-		{"引退する(Q)", 'Q', TRUE},
-		{"", 0, FALSE}
-	},
-};
-#else
-menu_naiyou menu_info[10][10] =
-{
-	{
-		{"Magic/Special", 1, FALSE},
-		{"Action", 2, FALSE},
-		{"Items(use)", 3, FALSE},
-		{"Items(other)", 4, FALSE},
-		{"Equip", 5, FALSE},
-		{"Door/Box", 6, FALSE},
-		{"Information", 7, FALSE},
-		{"Options", 8, FALSE},
-		{"Other commands", 9, FALSE},
-		{"", 0, FALSE},
-	},
-
-	{
-		{"Use(m)", 'm', TRUE},
-		{"See tips(b/P)", 'b', TRUE},
-		{"Study(G)", 'G', TRUE},
-		{"Special abilities(U/O)", 'U', TRUE},
+		{_("開ける(o)", "Open(o)"), 'o', TRUE},
+		{_("閉じる(c)", "Close(c)"), 'c', TRUE},
+		{_("体当たりする(B/f)", "Bash a door(B/f)"), 'B', TRUE},
+		{_("くさびを打つ(j/S)", "Jam a door(j/S)"), 'j', TRUE},
 		{"", 0, FALSE},
 		{"", 0, FALSE},
 		{"", 0, FALSE},
@@ -3118,110 +3049,44 @@ menu_naiyou menu_info[10][10] =
 	},
 
 	{
-		{"Rest(R)", 'R', TRUE},
-		{"Disarm a trap(D)", 'D', TRUE},
-		{"Search(s)", 's', TRUE},
-		{"Look(l/x)", 'l', TRUE},
-		{"Target(*)", '*', TRUE},
-		{"Dig(T/^t)", 'T', TRUE},
-		{"Go up stairs(<)", '<', TRUE},
-		{"Go down stairs(>)", '>', TRUE},
-		{"Command pets(p)", 'p', TRUE},
-		{"Search mode ON/OFF(S/#)", 'S', TRUE}
-	},
-
-	{
-		{"Read a scroll(r)", 'r', TRUE},
-		{"Drink a potion(q)", 'q', TRUE},
-		{"Use a staff(u/Z)", 'u', TRUE},
-		{"Aim a wand(a/z)", 'a', TRUE},
-		{"Zap a rod(z/a)", 'z', TRUE},
-		{"Activate an equipment(A)", 'A', TRUE},
-		{"Eat(E)", 'E', TRUE},
-		{"Fire missile weapon(f/t)", 'f', TRUE},
-		{"Throw an item(v)", 'v', TRUE},
+		{_("ダンジョンの全体図(M)", "Full map(M)"), 'M', TRUE},
+		{_("位置を確認(L/W)", "Map(L/W)"), 'L', TRUE},
+		{_("階の雰囲気(^f)", "Level feeling(^f)"), KTRL('F'), TRUE},
+		{_("ステータス(C)", "Character status(C)"), 'C', TRUE},
+		{_("文字の説明(/)", "Identify symbol(/)"), '/', TRUE},
+		{_("メッセージ履歴(^p)", "Show prev messages(^p)"), KTRL('P'), TRUE},
+		{_("現在の時刻(^t/')", "Current time(^t/')"), KTRL('T'), TRUE},
+		{_("現在の知識(~)", "Various information(~)"), '~', TRUE},
+		{_("プレイ記録(|)", "Play record menu(|)"), '|', TRUE},
 		{"", 0, FALSE}
 	},
 
 	{
-		{"Get items(g)", 'g', TRUE},
-		{"Drop an item(d)", 'd', TRUE},
-		{"Destroy an item(k/^d)", 'k', TRUE},
-		{"Inscribe an item({)", '{', TRUE},
-		{"Uninscribe an item(})", '}', TRUE},
-		{"Info about an item(I)", 'I', TRUE},
-		{"Inventory list(i)", 'i', TRUE},
+		{_("オプション(=)", "Set options(=)"), '=', TRUE},
+		{_("マクロ(@)", "Interact with macros(@)"), '@', TRUE},
+		{_("画面表示(%)", "Interact w/ visuals(%)"), '%', TRUE},
+		{_("カラー(&)", "Interact with colors(&)"), '&', TRUE},
+		{_("設定変更コマンド(\")", "Enter a user pref(\")"), '\"', TRUE},
+		{_("自動拾いをロード($)", "Reload auto-pick pref($)"), '$', TRUE},
+		{_("システム(!)", "System(!)"), '!', TRUE},
 		{"", 0, FALSE},
 		{"", 0, FALSE},
 		{"", 0, FALSE}
 	},
 
 	{
-		{"Wear(w)", 'w', TRUE},
-		{"Take off(t/T)", 't', TRUE},
-		{"Refuel(F)", 'F', TRUE},
-		{"Equipment list(e)", 'e', TRUE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE}
-	},
-
-	{
-		{"Open(o)", 'o', TRUE},
-		{"Close(c)", 'c', TRUE},
-		{"Bash a door(B/f)", 'B', TRUE},
-		{"Jam a door(j/S)", 'j', TRUE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE}
-	},
-
-	{
-		{"Full map(M)", 'M', TRUE},
-		{"Map(L/W)", 'L', TRUE},
-		{"Level feeling(^f)", KTRL('F'), TRUE},
-		{"Character status(C)", 'C', TRUE},
-		{"Identify symbol(/)", '/', TRUE},
-		{"Show prev messages(^p)", KTRL('P'), TRUE},
-		{"Current time(^t/')", KTRL('T'), TRUE},
-		{"Various information(~)", '~', TRUE},
-		{"Play record menu(|)", '|', TRUE},
-		{"", 0, FALSE}
-	},
-
-	{
-		{"Set options(=)", '=', TRUE},
-		{"Interact with macros(@)", '@', TRUE},
-		{"Interact w/ visuals(%)", '%', TRUE},
-		{"Interact with colors(&)", '&', TRUE},
-		{"Enter a user pref(\")", '\"', TRUE},
-		{"Reload auto-pick pref($)", '$', TRUE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE},
-		{"", 0, FALSE}
-	},
-
-	{
-		{"Save and quit(^x)", KTRL('X'), TRUE},
-		{"Save(^s)", KTRL('S'), TRUE},
-		{"Help(obsoleted)(?)", '?', TRUE},
-		{"Redraw(^r)", KTRL('R'), TRUE},
-		{"Take note(:)", ':', TRUE},
-		{"Dump screen dump(()", ')', TRUE},
-		{"Load screen dump())", '(', TRUE},
-		{"Version info(V)", 'V', TRUE},
-		{"Quit(Q)", 'Q', TRUE},
+		{_("セーブ&中断(^x)", "Save and quit(^x)"), KTRL('X'), TRUE},
+		{_("セーブ(^s)", "Save(^s)"), KTRL('S'), TRUE},
+		{_("ヘルプ(?)", "Help(obsoleted)(?)"), '?', TRUE},
+		{_("再描画(^r)", "Redraw(^r)"), KTRL('R'), TRUE},
+		{_("メモ(:)", "Take note(:)"), ':', TRUE},
+		{_("記念撮影())", "Dump screen dump(()"), ')', TRUE},
+		{_("記念撮影の表示(()", "Load screen dump())"), '(', TRUE},
+		{_("バージョン情報(V)", "Version info(V)"), 'V', TRUE},
+		{_("引退する(Q)", "Quit(Q)"), 'Q', TRUE},
 		{"", 0, FALSE}
 	},
 };
-#endif
 
 typedef struct
 {
