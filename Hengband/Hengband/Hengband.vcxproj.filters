@@ -860,6 +860,9 @@
     <ClCompile Include="..\..\src\spell\mspell-damage-calculator.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\mspell-learn-checker.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1766,6 +1769,9 @@
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\mspell-damage-calculator.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\mspell-learn-checker.h">
       <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>

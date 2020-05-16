@@ -21,9 +21,8 @@
 #include "spell/monster-spell.h"
 #include "monster/monster-status.h"
 #include "spell/spells-type.h"
-#include "melee.h"
+#include "combat/melee.h"
 #include "player/player-effects.h"
-#include "world/world.h"
 #include "spell/process-effect.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
@@ -32,23 +31,6 @@
 #include "spell/mspell-curse.h"
 #include "spell/mspell-type.h"
 #include "spell/mspell-damage-calculator.h"
-
-/*!
-* @brief モンスターの唱えた呪文を青魔法で学習できるか判定する /
-* @param target_ptr プレーヤーへの参照ポインタ
-* @param m_idx モンスターID
-* @return プレイヤーが青魔法で学習できるならTRUE、そうでなければFALSEを返す。
-*/
-bool spell_learnable(player_type *target_ptr, MONSTER_IDX m_idx)
-{
-	monster_type *m_ptr = &target_ptr->current_floor_ptr->m_list[m_idx];
-	/* Extract the "see-able-ness" */
-	bool seen = (!target_ptr->blind && m_ptr->ml);
-
-	bool maneable = player_has_los_bold(target_ptr, m_ptr->fy, m_ptr->fx);
-	return (seen && maneable && !current_world_ptr->timewalk_m_idx);
-}
-
 
 /*!
  * @brief RF4_SHRIEKの処理。叫び。 /

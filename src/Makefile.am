@@ -252,6 +252,7 @@ hengband_SOURCES = \
 	spell/mspell-curse.c spell/mspell-curse.h \
 	spell/mspell-type.h \
 	spell/mspell-damage-calculator.c spell/mspell-damage-calculator.h \
+	spell/mspell-learn-checker.c spell/mspell-learn-checker.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
 	\
