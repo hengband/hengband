@@ -116,12 +116,12 @@ hengband_SOURCES = \
 	floor/floor-streams.c floor/floor-streams.h \
 	floor/pattern-walk.c floor/pattern-walk.h \
 	floor/wild.h floor/wild.c \
+	floor/geometry.c floor/geometry.h \
 	\
 	locale/japanese.c locale/japanese.h locale/english.c locale/english.h \
 	\
 	grid/feature.c grid/feature.h \
 	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
-	geometry.c geometry.h \
 	\
 	main.c main-x11.c main-gcu.c \
 	\
