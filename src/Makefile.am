@@ -283,6 +283,7 @@ hengband_SOURCES = \
 	cmd/cmd-spell.c cmd/cmd-spell.h cmd/cmd-visuals.c cmd/cmd-visuals.h \
 	cmd/cmd-usestaff.c cmd/cmd-usestaff.h \
 	cmd/cmd-zaprod.c cmd/cmd-zaprod.h cmd/cmd-zapwand.c cmd/cmd-zapwand.h \
+	cmd/cmd-menu-content-table.c cmd/cmd-menu-content-table.h \
 	\
 	combat/melee.h combat/melee.c combat/shoot.c combat/shoot.h \
 	combat/snipe.c combat/snipe.h \
