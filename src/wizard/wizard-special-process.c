@@ -25,7 +25,7 @@
 #include "cmd/cmd-save.h"
 #include "util.h"
 #include "birth/birth.h"
-#include "selfinfo.h"
+#include "player/selfinfo.h"
 #include "player/patron.h"
 #include "mutation/mutation.h"
 #include "quest.h"

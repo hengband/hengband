@@ -20,7 +20,7 @@
 #include "cmd/cmd-dump.h"
 #include "mutation/mutation.h"
 
-#include "selfinfo.h"
+#include "player/selfinfo.h"
 #include "spell/spells-summon.h"
 #include "player/avatar.h"
 #include "player/player-status.h"

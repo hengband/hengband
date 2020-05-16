@@ -15,6 +15,7 @@
  */
 
 #include "system/angband.h"
+#include "player/selfinfo.h"
 #include "util.h"
 
 #include "player/player-status.h"

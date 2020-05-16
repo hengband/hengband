@@ -2,7 +2,7 @@
 #include "util.h"
 
 #include "cmd-spell.h"
-#include "selfinfo.h"
+#include "player/selfinfo.h"
 #include "player/avatar.h"
 
 #include "spell/spells-type.h"

@@ -11,9 +11,6 @@
     <ClCompile Include="..\..\src\quest.c">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\selfinfo.c">
-      <Filter>player</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\util.c">
       <Filter>core</Filter>
     </ClCompile>
@@ -830,7 +827,10 @@
     <ClCompile Include="..\..\src\mind\mind.c">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birtth\history.c">
+    <ClCompile Include="..\..\src\player\selfinfo.c">
+      <Filter>player</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\birth\history.c">
       <Filter>birth</Filter>
     </ClCompile>
   </ItemGroup>
@@ -843,9 +843,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\quest.h">
       <Filter>market</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\selfinfo.h">
-      <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\util.h">
       <Filter>core</Filter>
@@ -1710,6 +1707,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\birtth\history.h">
       <Filter>birth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\selfinfo.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

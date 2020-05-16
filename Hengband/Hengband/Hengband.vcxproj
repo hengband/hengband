@@ -277,7 +277,7 @@
     <ClCompile Include="..\..\src\floor\floor-town.c" />
     <ClCompile Include="..\..\src\floor\floor.c" />
     <ClCompile Include="..\..\src\floor\geometry.c" />
-    <ClCompile Include="..\..\src\birtth\history.c" />
+    <ClCompile Include="..\..\src\birth\history.c" />
     <ClCompile Include="..\..\src\monster\horror-descriptions.c" />
     <ClCompile Include="..\..\src\init.c" />
     <ClCompile Include="..\..\src\io\gf-descriptions.c" />
@@ -481,7 +481,7 @@
     <ClCompile Include="..\..\src\market\rumor.c" />
     <ClCompile Include="..\..\src\io\save.c" />
     <ClCompile Include="..\..\src\scores.c" />
-    <ClCompile Include="..\..\src\selfinfo.c" />
+    <ClCompile Include="..\..\src\player\selfinfo.c" />
     <ClCompile Include="..\..\src\io\signal-handlers.c" />
     <ClCompile Include="..\..\src\snipe.c" />
     <ClCompile Include="..\..\src\sort.c" />
@@ -703,7 +703,7 @@
     <ClInclude Include="..\..\src\market\umor.h" />
     <ClInclude Include="..\..\src\io\save.h" />
     <ClInclude Include="..\..\src\scores.h" />
-    <ClInclude Include="..\..\src\selfinfo.h" />
+    <ClInclude Include="..\..\src\player\selfinfo.h" />
     <ClInclude Include="..\..\src\snipe.h" />
     <ClInclude Include="..\..\src\sort.h" />
     <ClInclude Include="..\..\src\spell\spells-diceroll.h" />

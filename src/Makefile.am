@@ -169,11 +169,15 @@ hengband_SOURCES = \
 	patron.h patron.c \
 	\
 	creature.h creature.c \
-	player/player-move.c player/player-move.h player/player-damage.c player/player-damage.h \
-	player/player-status.c player/player-status.h player/player-effects.c player/player-effects.h \
-	player/player-skill.c player/player-skill.h player/player-class.c player/player-class.h \
-	player/player-race.c player/player-race.h player/player-personality.c player/player-personality.h \
-	player/player-sex.c player/player-sex.h \
+	player/player-move.c player/player-move.h \
+	player/player-damage.c player/player-damage.h \
+	player/player-status.c player/player-status.h \
+	player/player-effects.c player/player-effects.h \
+	player/player-skill.c player/player-skill.h \
+	player/player-class.c player/player-class.h \
+	player/player-race.c player/player-race.h \
+	player/player-personality.c player/player-personality.h \
+	player/player-sex.c player/player-sex.h player/selfinfo.c player/selfinfo.h \
 	\
 	quest.h quest.c\
 	\
@@ -201,7 +205,7 @@ hengband_SOURCES = \
 	room/rooms-pit-nest.c room/rooms-pit-nest.h \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
 	\
-	save.c save.h scores.c scores.h selfinfo.c selfinfo.h \
+	save.c save.h scores.c scores.h \
 	snipe.c snipe.h \
 	\
 	effect/effect-feature.c effect/effect-feature.h \

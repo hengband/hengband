@@ -16,7 +16,7 @@
 #include "main/sound-definitions-table.h"
 #include "term/gameterm.h"
 
-#include "selfinfo.h"
+#include "player/selfinfo.h"
 #include "cmd-activate.h"
 #include "cmd-eat.h"
 #include "cmd-quaff.h"

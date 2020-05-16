@@ -11,7 +11,7 @@
 #include "main/sound-definitions-table.h"
 
 #include "birth/birth.h"
-#include "selfinfo.h"
+#include "player/selfinfo.h"
 #include "object/object-hook.h"
 #include "mutation/mutation.h"
 #include "player/avatar.h"

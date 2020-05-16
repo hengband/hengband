@@ -14,7 +14,7 @@
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "selfinfo.h"
+#include "player/selfinfo.h"
 #include "spell/technic-info-table.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
