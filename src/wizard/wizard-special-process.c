@@ -28,7 +28,7 @@
 #include "player/selfinfo.h"
 #include "player/patron.h"
 #include "mutation/mutation.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "object/artifact.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"

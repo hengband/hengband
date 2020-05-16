@@ -7,7 +7,7 @@
 #include "grid/grid.h"
 #include "monster/monster.h"
 #include "monster/monster-status.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "object/object-hook.h"
 #include "player/player-move.h"
 #include "world/world.h"

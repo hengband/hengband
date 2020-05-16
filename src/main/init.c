@@ -42,7 +42,7 @@
 #include "object/artifact.h"
 #include "market/building.h"
 #include "main/init.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "grid/trap.h"
 #include "room/rooms.h"
 #include "market/store.h"

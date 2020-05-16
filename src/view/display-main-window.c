@@ -22,7 +22,7 @@
 #include "core/stuff-handler.h"
 #include "io/files.h"
 #include "world/world.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "object/artifact.h"
 #include "player/avatar.h"
 #include "view/display-player.h"

@@ -18,7 +18,7 @@
 #include "inventory/player-inventory.h"
 #include "player/player-effects.h"
 #include "market/store.h" // do_cmd_store() がある。後で移設する.
-#include "quest.h" // do_cmd_quest() がある。後で移設する.
+#include "dungeon/quest.h" // do_cmd_quest() がある。後で移設する.
 #include "floor/wild.h"
 #include "spell/spells-object.h"
 #include "mind/mind.h" // do_cmd_mind_browse() がある。後で移設する.

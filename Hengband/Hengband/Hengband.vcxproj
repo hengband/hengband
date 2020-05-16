@@ -339,7 +339,7 @@
     <ClCompile Include="..\..\src\player\race-info-table.c" />
     <ClCompile Include="..\..\src\player\race-resistances.c" />
     <ClCompile Include="..\..\src\player\temporary-resistances.c" />
-    <ClCompile Include="..\..\src\quest.c" />
+    <ClCompile Include="..\..\src\dungeon\quest.c" />
     <ClCompile Include="..\..\src\realm\realm-craft.c" />
     <ClCompile Include="..\..\src\realm\realm-crusade.c" />
     <ClCompile Include="..\..\src\realm\realm-daemon.c" />
@@ -674,7 +674,7 @@
     <ClInclude Include="..\..\src\player\player-sex.h" />
     <ClInclude Include="..\..\src\player\player-skill.h" />
     <ClInclude Include="..\..\src\player\player-status.h" />
-    <ClInclude Include="..\..\src\quest.h" />
+    <ClInclude Include="..\..\src\dungeon\quest.h" />
     <ClInclude Include="..\..\src\mind\racial.h" />
     <ClInclude Include="..\..\src\term\readdib.h" />
     <ClInclude Include="..\..\src\realm\realm-arcane.h" />

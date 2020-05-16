@@ -26,7 +26,7 @@
 #include "monster/monster.h"
 #include "spell/spells-type.h"
 #include "spell/spells-summon.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "grid/grid.h"
 #include "player/player-move.h"
 #include "player/player-status.h"

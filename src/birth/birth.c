@@ -50,7 +50,7 @@
 #include "player/player-status.h"
 #include "player/process-name.h"
 #include "player/race-info-table.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "realm/realm.h"
 #include "io/save.h"
 #include "spell/spells-util.h"

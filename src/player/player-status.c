@@ -4,7 +4,7 @@
 #include "main/sound-definitions-table.h"
 
 #include "market/building.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"

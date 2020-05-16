@@ -18,7 +18,7 @@
 #include "cmd-pet.h"
 #include "effect/effect-characteristics.h"
 #include "grid/grid.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "realm/realm-hex.h"
 #include "player/player-move.h"
 #include "player/player-class.h"

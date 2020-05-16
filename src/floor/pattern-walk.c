@@ -9,7 +9,7 @@
 #include "realm/realm-song.h"
 #include "spell/spells3.h"
 #include "cmd/cmd-save.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 
 /*!
  * @brief パターン終点到達時のテレポート処理を行う

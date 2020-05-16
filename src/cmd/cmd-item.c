@@ -31,7 +31,7 @@
 #include "object/object-hook.h"
 #include "object/object-ego.h"
 #include "sort.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "object/artifact.h"
 #include "player/avatar.h"
 #include "player/player-status.h"

@@ -3,7 +3,7 @@
 #include "main/sound-definitions-table.h"
 #include "io/write-diary.h"
 #include "dungeon/dungeon.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "world/world.h"
 #include "cmd/cmd-save.h"
 #include "player/player-move.h"

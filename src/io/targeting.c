@@ -37,7 +37,7 @@
 #include "monster/monster-status.h"
 #include "view/display-main-window.h"
 #include "grid/feature.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "dungeon/dungeon.h"
 #include "world/world.h"
 #include "effect/spells-effect-util.h"

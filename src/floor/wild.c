@@ -24,7 +24,7 @@
 #include "player/player-effects.h"
 #include "grid/grid.h"
 #include "monster/monster-status.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "dungeon/dungeon-file.h"
 #include "io/tokenizer.h"
 #include "io/files.h"

@@ -56,7 +56,7 @@
 #include "mutation/mutation.h"
 #include "monster/monster.h"
 #include "market/store-util.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "market/store.h"
 #include "object/artifact.h"
 #include "player/avatar.h"

@@ -34,7 +34,7 @@
 #include "player/player-damage.h"
 #include "inventory/player-inventory.h"
 #include "spell/spells-summon.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "object/artifact.h"
 #include "player/avatar.h"
 #include "spell/spells2.h"

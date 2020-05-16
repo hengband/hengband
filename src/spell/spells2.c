@@ -33,7 +33,7 @@
 #include "spell/spells3.h"
 #include "spell/spells-summon.h"
 #include "mutation/mutation.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "player/avatar.h"
 
 #include "spell/spells-status.h"

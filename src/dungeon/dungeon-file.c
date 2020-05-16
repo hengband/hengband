@@ -41,7 +41,7 @@
 #include "room/rooms-vault.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "monster/monster.h"
 #include "io/files.h"
 #include "player/player-skill.h"

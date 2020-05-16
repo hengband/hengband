@@ -27,7 +27,7 @@
 #include "spell/monster-spell.h"
 #include "world/world.h"
 #include "view/display-main-window.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "io/report.h"
 #include "floor/wild.h"
 #include "io/save.h"

@@ -42,7 +42,7 @@
 #include "market/building.h"
 #include "dungeon/dungeon.h"
 #include "mutation/mutation.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "object/artifact.h"
 #include "cmd-spell.h"
 #include "spell/spells3.h"

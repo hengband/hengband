@@ -116,7 +116,7 @@
 #include "grid/feature.h"
 #include "grid/trap.h"
 #include "monster/monster.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "player/player-status.h"
 #include "floor/wild.h"
 #include "monster/monster-status.h"

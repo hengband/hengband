@@ -8,7 +8,7 @@
 #include "player/player-class.h"
 #include "player/player-skill.h"
 #include "player/mimic-info-table.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "world/world.h"
 #include "object/object-kind.h"
 #include "view/display-main-window.h"

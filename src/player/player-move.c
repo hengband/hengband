@@ -152,7 +152,7 @@
 #include "melee.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "object/artifact.h"
 #include "player/player-move.h"
 #include "player/player-status.h"

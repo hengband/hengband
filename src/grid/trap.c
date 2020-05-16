@@ -12,7 +12,7 @@
 #include "player/player-class.h"
 #include "player/player-personality.h"
 #include "spell/spells-summon.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "object/artifact.h"
 #include "grid/feature.h"
 #include "player/player-status.h"

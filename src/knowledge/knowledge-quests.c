@@ -7,7 +7,7 @@
 #include "system/angband.h"
 #include "knowledge-quests.h"
 #include "cmd/dump-util.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "system/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
 #include "object/artifact.h"
 #include "object/object-flavor.h"

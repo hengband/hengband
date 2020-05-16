@@ -21,7 +21,7 @@
 #include "object/artifact.h"
 #include "sort.h"
 #include "dungeon/dungeon.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "market/store.h"
 #include "market/store-util.h"
 #include "floor/wild.h"

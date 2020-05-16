@@ -28,7 +28,7 @@
 #include "grid/trap.h"
 #include "room/rooms.h"
 #include "monster/monster.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "grid/feature.h"
 #include "monster/monster-status.h"
 #include "player/player-status.h"

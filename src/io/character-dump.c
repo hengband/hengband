@@ -7,7 +7,7 @@
 #include "cmd/cmd-pet.h"
 #include "monster/monster-status.h"
 #include "sort.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "main/init.h"
 #include "io/mutations-dump.h"
 #include "object/object-flavor.h"

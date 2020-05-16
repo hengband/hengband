@@ -8,7 +8,7 @@
 #include "floor/floor-save.h"
 #include "floor/floor-events.h"
 #include "grid/grid.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "monster/monsterrace-hook.h"
 #include "monster/monster.h"
 #include "player/player-status.h"

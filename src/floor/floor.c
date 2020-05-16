@@ -5,7 +5,7 @@
 #include "grid/grid.h"
 #include "dungeon/dungeon.h"
 #include "room/rooms.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "object/object-hook.h"
 #include "world/world.h"
 #include "player/player-effects.h"

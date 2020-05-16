@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "sort.h"
 #include "floor/floor.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "object/artifact.h"
 #include "monster/monster-race.h"
 

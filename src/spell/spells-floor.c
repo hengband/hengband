@@ -4,7 +4,7 @@
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "object/artifact.h"
 #include "object/object-kind.h"
 #include "object/object-flavor.h"

@@ -3,7 +3,7 @@
 #include "world/world.h"
 #include "io/targeting.h"
 #include "core/player-processor.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "dungeon/dungeon.h"
 #include "io/write-diary.h"
 #include "realm/realm-song.h"

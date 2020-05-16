@@ -26,7 +26,7 @@
 #include "melee.h"
 #include "object/object-hook.h"
 #include "monster/monster-status.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "object/artifact.h"
 #include "player/avatar.h"
 #include "player/player-status.h"

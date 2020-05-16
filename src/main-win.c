@@ -107,7 +107,7 @@
 #include "main/init.h"
 #include "io/files.h"
 #include "scores.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "io/files.h"
 #include "system/system-variables.h"
 #include "core/game-play.h"

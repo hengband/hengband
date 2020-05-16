@@ -27,7 +27,7 @@
 #include "monster/monsterrace-hook.h"
 #include "spell/spells-summon.h"
 #include "player/patron.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "object/artifact.h"
 #include "player/avatar.h"
 #include "floor/wild.h"

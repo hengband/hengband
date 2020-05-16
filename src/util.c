@@ -20,7 +20,7 @@
 #include "io/files.h"
 #include "monster/monsterrace-hook.h"
 #include "view/display-main-window.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "world/world.h"
 #include "io/write-diary.h"

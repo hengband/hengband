@@ -26,7 +26,7 @@
 #include "birth/birth.h"
 #include "grid/grid.h"
 #include "mutation/mutation.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 #include "player/avatar.h"
 #include "spell/spells-status.h"
 #include "realm/realm-song.h"
