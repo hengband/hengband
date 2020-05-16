@@ -2949,34 +2949,6 @@ void pause_line(int row)
  */
 static char request_command_buffer[256];
 
-typedef struct
-{
-	concptr name;
-	byte window;
-	byte number;
-	byte jouken;
-	byte jouken_naiyou;
-} special_menu_naiyou;
-
-#define MENU_CLASS 1
-#define MENU_WILD 2
-
-special_menu_naiyou special_menu_info[] =
-{
-	{_("超能力/特殊能力", "MindCraft/Special"), 0, 0, MENU_CLASS, CLASS_MINDCRAFTER},
-	{_("ものまね/特殊能力", "Imitation/Special"), 0, 0, MENU_CLASS, CLASS_IMITATOR},
-	{_("歌/特殊能力", "Song/Special"), 0, 0, MENU_CLASS, CLASS_BARD},
-	{_("必殺技/特殊能力", "Technique/Special"), 0, 0, MENU_CLASS, CLASS_SAMURAI},
-	{_("練気術/魔法/特殊能力", "Mind/Magic/Special"), 0, 0, MENU_CLASS, CLASS_FORCETRAINER},
-	{_("技/特殊能力", "BrutalPower/Special"), 0, 0, MENU_CLASS, CLASS_BERSERKER},
-	{_("技術/特殊能力", "Technique/Special"), 0, 0, MENU_CLASS, CLASS_SMITH},
-	{_("鏡魔法/特殊能力", "MirrorMagic/Special"), 0, 0, MENU_CLASS, CLASS_MIRROR_MASTER},
-	{_("忍術/特殊能力", "Ninjutsu/Special"), 0, 0, MENU_CLASS, CLASS_NINJA},
-	{_("広域マップ(<)", "Enter global map(<)"), 2, 6, MENU_WILD, FALSE},
-	{_("通常マップ(>)", "Enter local map(>)"), 2, 7, MENU_WILD, TRUE},
-	{"", 0, 0, 0, 0},
-};
-
 static char inkey_from_menu(player_type *player_ptr)
 {
 	char cmd;
