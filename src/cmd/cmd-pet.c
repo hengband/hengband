@@ -86,7 +86,7 @@ void do_cmd_pet_dismiss(player_type *creature_ptr)
 	MONSTER_IDX *who;
 	u16b dummy_why;
 	int max_pet = 0;
-	bool_hack cu, cv;
+	bool cu, cv;
 
 	cu = Term->scr->cu;
 	cv = Term->scr->cv;

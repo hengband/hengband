@@ -3810,7 +3810,7 @@ bool choose_ele_immune(player_type *creature_ptr, TIME_EFFECT immune_turn)
 	return TRUE;
 }
 
-bool_hack drop_weapons(player_type *creature_ptr)
+bool drop_weapons(player_type *creature_ptr)
 {
 	INVENTORY_IDX slot = 0;
 	object_type *o_ptr = NULL;

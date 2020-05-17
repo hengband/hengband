@@ -84,7 +84,7 @@ bool cast_wrath_of_the_god(player_type* caster_ptr, HIT_POINT dam, POSITION rad)
 void cast_wonder(player_type* caster_ptr, DIRECTION dir);
 void cast_invoke_spirits(player_type* caster_ptr, DIRECTION dir);
 void cast_shuffle(player_type* caster_ptr);
-bool_hack vampirism(player_type* caster_ptr);
+bool vampirism(player_type* caster_ptr);
 bool hit_and_away(player_type* caster_ptr);
 bool psychometry(player_type* caster_ptr);
 bool draconian_breath(player_type* creature_ptr);

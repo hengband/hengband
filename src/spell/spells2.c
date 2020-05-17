@@ -542,8 +542,8 @@ bool mass_genocide_undead(player_type *caster_ptr, int power, bool player_cast)
  */
 bool probing(player_type *caster_ptr)
 {
-	bool_hack cu = Term->scr->cu;
-	bool_hack cv = Term->scr->cv;
+	bool cu = Term->scr->cu;
+	bool cv = Term->scr->cv;
 	Term->scr->cu = 0;
 	Term->scr->cv = 1;
 
@@ -3193,7 +3193,7 @@ void cast_shuffle(player_type *caster_ptr)
 }
 
 
-bool_hack vampirism(player_type *caster_ptr)
+bool vampirism(player_type *caster_ptr)
 {
 	if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
 	{

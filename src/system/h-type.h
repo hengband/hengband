@@ -53,9 +53,6 @@ typedef const char *concptr; /*!< 文字列定数用ポインタ定義 / A simpl
  */
 typedef int errr;
 
-#undef bool
-#define bool bool_hack /*!< C++環境で重複を避けるためのbool_hack定義 Hack -- prevent problems with C++ */
-
 #define MAX_UCHAR       255 /*!< Maximum value storable in a "byte" (hard-coded) */
 #define MAX_SHORT       32767    /*!< Maximum value storable in a "s16b" (hard-coded) */
 

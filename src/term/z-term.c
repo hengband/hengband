@@ -1790,7 +1790,7 @@ errr Term_set_cursor(int v)
 	if (Term->scr->cv == v) return 1;
 
 	/* Change */
-	Term->scr->cv = (bool_hack)v;
+	Term->scr->cv = (bool)v;
 
 	/* Success */
 	return 0;
