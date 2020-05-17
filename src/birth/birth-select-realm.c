@@ -139,6 +139,27 @@ static void analyze_realms(player_type *creature_ptr, s32b choices, birth_realm_
     }
 }
 
+static void move_birth_realm_cursor(birth_realm_type *birth_realm_ptr)
+{
+    if (birth_realm_ptr->cs == birth_realm_ptr->os)
+        return;
+
+    c_put_str(TERM_WHITE, birth_realm_ptr->cur, 12 + (birth_realm_ptr->os / 5), 2 + 15 * (birth_realm_ptr->os % 5));
+
+    if (birth_realm_ptr->cs == birth_realm_ptr->n) {
+        sprintf(birth_realm_ptr->cur, "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
+    } else {
+        sprintf(birth_realm_ptr->cur, "%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->cs], birth_realm_ptr->p2, realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
+        sprintf(birth_realm_ptr->buf, "%s", realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
+        c_put_str(TERM_L_BLUE, birth_realm_ptr->buf, 3, 40);
+        prt(_("の特徴", ": Characteristic"), 3, 40 + strlen(birth_realm_ptr->buf));
+        prt(realm_subinfo[technic2magic(birth_realm_ptr->picks[birth_realm_ptr->cs]) - 1], 4, 40);
+    }
+
+    c_put_str(TERM_YELLOW, birth_realm_ptr->cur, 12 + (birth_realm_ptr->cs / 5), 2 + 15 * (birth_realm_ptr->cs % 5));
+    birth_realm_ptr->os = birth_realm_ptr->cs;
+}
+
 /*!
  * @brief プレイヤーの魔法領域を選択する / Choose from one of the available magical realms
  * @param choices 選択可能な魔法領域のビット配列
@@ -165,27 +186,13 @@ static byte select_realm(player_type* creature_ptr, s32b choices, int* count)
     /* Get a realm */
     birth_realm_ptr->os = birth_realm_ptr->n;
     while (TRUE) {
-        /* Move Cursol */
-        if (birth_realm_ptr->cs != birth_realm_ptr->os) {
-            c_put_str(TERM_WHITE, birth_realm_ptr->cur, 12 + (birth_realm_ptr->os / 5), 2 + 15 * (birth_realm_ptr->os % 5));
-
-            if (birth_realm_ptr->cs == birth_realm_ptr->n) {
-                sprintf(birth_realm_ptr->cur, "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
-            } else {
-                sprintf(birth_realm_ptr->cur, "%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->cs], birth_realm_ptr->p2, realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
-                sprintf(birth_realm_ptr->buf, "%s", realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
-                c_put_str(TERM_L_BLUE, birth_realm_ptr->buf, 3, 40);
-                prt(_("の特徴", ": Characteristic"), 3, 40 + strlen(birth_realm_ptr->buf));
-                prt(realm_subinfo[technic2magic(birth_realm_ptr->picks[birth_realm_ptr->cs]) - 1], 4, 40);
-            }
-            c_put_str(TERM_YELLOW, birth_realm_ptr->cur, 12 + (birth_realm_ptr->cs / 5), 2 + 15 * (birth_realm_ptr->cs % 5));
-            birth_realm_ptr->os = birth_realm_ptr->cs;
-        }
-
+        move_birth_realm_cursor(birth_realm_ptr);
         if (birth_realm_ptr->k >= 0)
             break;
 
-        sprintf(birth_realm_ptr->buf, _("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "), birth_realm_ptr->sym[0], birth_realm_ptr->sym[birth_realm_ptr->n - 1]);
+        sprintf(birth_realm_ptr->buf, _("領域を選んで下さい(%c-%c) ('='初期オプション設定): ",
+            "Choose a realm (%c-%c) ('=' for options): "),
+            birth_realm_ptr->sym[0], birth_realm_ptr->sym[birth_realm_ptr->n - 1]);
 
         put_str(birth_realm_ptr->buf, 10, 10);
         char c = inkey();
