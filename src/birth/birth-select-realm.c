@@ -186,6 +186,19 @@ static void interpret_realm_select_key(birth_realm_type *birth_realm_ptr, char c
     }
 }
 
+static void birth_help_option(player_type* creature_ptr, char c)
+{
+    if (c == '?') {
+        show_help(creature_ptr, _("jmagic.txt#MagicRealms", "magic.txt#MagicRealms"));
+    } else if (c == '=') {
+        screen_save();
+        do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth option((*)s effect score)"));
+
+        screen_load();
+    } else if (c != '2' && c != '4' && c != '6' && c != '8')
+        bell();
+}
+
 /*!
  * @brief プレイヤーの魔法領域を選択する / Choose from one of the available magical realms
  * @param choices 選択可能な魔法領域のビット配列
@@ -254,15 +267,7 @@ static byte select_realm(player_type* creature_ptr, s32b choices, int* count)
         } else
             birth_realm_ptr->k = -1;
 
-        if (c == '?') {
-            show_help(creature_ptr, _("jmagic.txt#MagicRealms", "magic.txt#MagicRealms"));
-        } else if (c == '=') {
-            screen_save();
-            do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth option((*)s effect score)"));
-
-            screen_load();
-        } else if (c != '2' && c != '4' && c != '6' && c != '8')
-            bell();
+        birth_help_option(creature_ptr, c);
     }
 
     clear_from(10);
