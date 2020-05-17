@@ -280,6 +280,24 @@ static byte select_realm(player_type* creature_ptr, s32b choices, int* count)
 }
 
 /*!
+ * @brief 選んだ魔法領域で本当に良いか問い合わせる
+ * @param count 魔法領域の数
+ * @return 選んだ魔法領域で良ければTRUE、再選択ならばFALSE
+ */
+static bool check_realm_selection(int count)
+{
+    if (count < 2) {
+        prt(_("何かキーを押してください", "Hit any key."), 0, 0);
+        (void)inkey();
+        prt("", 0, 0);
+        return TRUE;
+    } else if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+        return TRUE;
+
+    return FALSE;
+}
+
+/*!
  * @brief 選択した魔法領域の解説を表示する / Choose the magical realms
  * @return ユーザが魔法領域の確定を選んだらTRUEを返す。
  */
@@ -320,12 +338,7 @@ bool get_player_realms(player_type* creature_ptr)
             }
         }
 
-        if (count < 2) {
-            prt(_("何かキーを押してください", "Hit any key."), 0, 0);
-            (void)inkey();
-            prt("", 0, 0);
-            break;
-        } else if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+        if (check_realm_selection(count))
             break;
     }
 
@@ -366,12 +379,7 @@ bool get_player_realms(player_type* creature_ptr)
             }
         }
 
-        if (count < 2) {
-            prt(_("何かキーを押してください", "Hit any key."), 0, 0);
-            (void)inkey();
-            prt("", 0, 0);
-            break;
-        } else if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+        if (check_realm_selection(count))
             break;
     }
 
