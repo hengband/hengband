@@ -34,9 +34,9 @@
 #include "world/world.h"
 #include "object/object-kind.h"
 #include "monster/monster-race.h"
-#include "birth/birth.h"
 #include "market/building.h"
 #include "view/display-main-window.h"
+#include "birth/quick-start.h"
 
  /*
   * Some "local" parameters, used to help write savefiles

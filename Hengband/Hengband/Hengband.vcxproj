@@ -154,6 +154,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\src\birth\birth-select-realm.c" />
     <ClCompile Include="..\..\src\birth\birth-util.c" />
+    <ClCompile Include="..\..\src\birth\quick-start.c" />
     <ClCompile Include="..\..\src\cmd\cmd-menu-content-table.c" />
     <ClCompile Include="..\..\src\mind\racial-samurai.c" />
     <ClCompile Include="..\..\src\mspell\mspell-floor.c" />
@@ -371,6 +372,7 @@
     <ClCompile Include="..\..\src\spell\technic-info-table.c" />
     <ClInclude Include="..\..\src\birth\birth-select-realm.h" />
     <ClInclude Include="..\..\src\birth\birth-util.h" />
+    <ClInclude Include="..\..\src\birth\quick-start.h" />
     <ClInclude Include="..\..\src\cmd\cmd-menu-content-table.h" />
     <ClInclude Include="..\..\src\mind\racial-samurai.h" />
     <ClInclude Include="..\..\src\mspell\assign-monster-spell.h" />

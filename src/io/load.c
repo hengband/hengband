@@ -79,13 +79,13 @@
 #include "player/race-info-table.h"
 #include "player/player-personality.h"
 #include "player/player-sex.h"
-#include "birth/birth.h"
 #include "world/world.h"
 #include "object/object-kind.h"
 #include "object/object-ego.h"
 #include "io/save.h"
 #include "locale/japanese.h"
 #include "cmd-smith.h"
+#include "birth/quick-start.h"
 
  /*
   * Maximum number of tries for selection of a proper quest monster
