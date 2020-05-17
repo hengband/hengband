@@ -100,36 +100,38 @@ static birth_realm_type* initialize_birth_realm_type(birth_realm_type *birth_rea
     return birth_realm_ptr;
 }
 
+static void impose_first_realm(player_type *creature_ptr, s32b choices)
+{
+    if (creature_ptr->realm2 == 255)
+        return;
+
+    if (creature_ptr->pclass != CLASS_PRIEST)
+        return;
+
+    if (is_good_realm(creature_ptr->realm1)) {
+        choices &= ~(CH_DEATH | CH_DAEMON);
+    } else {
+        choices &= ~(CH_LIFE | CH_CRUSADE);
+    }
+}
+
 /*!
  * @brief プレイヤーの魔法領域を選択する / Choose from one of the available magical realms
  * @param choices 選択可能な魔法領域のビット配列
  * @param count 選択可能な魔法領域を返すポインタ群。
  * @return 選択した魔法領域のID
+ * @details 領域数が0 (戦士等)or 1 (観光客等)なら自動での値を返す
  */
 static byte select_realm(player_type* creature_ptr, s32b choices, int* count)
 {
     byte auto_select = count_realm_selection(choices, count);
     clear_from(10);
-
-    /* Auto-select the realm */
     if ((*count) < 2)
         return auto_select;
 
-    /* Constraint to the 1st realm */
-    if (creature_ptr->realm2 != 255) {
-        if (creature_ptr->pclass == CLASS_PRIEST) {
-            if (is_good_realm(creature_ptr->realm1)) {
-                choices &= ~(CH_DEATH | CH_DAEMON);
-            } else {
-                choices &= ~(CH_LIFE | CH_CRUSADE);
-            }
-        }
-    }
-
-    /* Extra info */
+    impose_first_realm(creature_ptr, choices);
     put_str(_("注意：魔法の領域の選択によりあなたが習得する呪文のタイプが決まります。",
-                "Note: The realm of magic will determine which spells you can learn."),
-        23, 5);
+                "Note: The realm of magic will determine which spells you can learn."), 23, 5);
 
     birth_realm_type tmp_birth_realm;
     birth_realm_type *birth_realm_ptr = initialize_birth_realm_type(&tmp_birth_realm);
