@@ -285,54 +285,55 @@ bool get_player_realms(player_type* creature_ptr)
 
     /* Select the second realm */
     creature_ptr->realm2 = REALM_NONE;
-    if (creature_ptr->realm1) {
-        /* Print the realm */
-        put_str(_("魔法        :", "Magic       :"), 6, 1);
-        c_put_str(TERM_L_BLUE, realm_names[creature_ptr->realm1], 6, 15);
+    if (creature_ptr->realm1 == REALM_NONE)
+        return TRUE;
 
-        /* Select the second realm */
-        while (TRUE) {
-            char temp[80 * 8];
-            concptr t;
+    /* Print the realm */
+    put_str(_("魔法        :", "Magic       :"), 6, 1);
+    c_put_str(TERM_L_BLUE, realm_names[creature_ptr->realm1], 6, 15);
 
-            int count = 0;
-            creature_ptr->realm2 = select_realm(creature_ptr, realm_choices2[creature_ptr->pclass], &count);
+    /* Select the second realm */
+    while (TRUE) {
+        char temp[80 * 8];
+        concptr t;
 
-            if (255 == creature_ptr->realm2)
-                return FALSE;
-            if (!creature_ptr->realm2)
+        int count = 0;
+        creature_ptr->realm2 = select_realm(creature_ptr, realm_choices2[creature_ptr->pclass], &count);
+
+        if (255 == creature_ptr->realm2)
+            return FALSE;
+        if (!creature_ptr->realm2)
+            break;
+
+        /* Clean up*/
+        clear_from(10);
+        put_str("                                   ", 3, 40);
+        put_str("                                   ", 4, 40);
+        put_str("                                   ", 5, 40);
+
+        roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm2) - 1], 74, temp, sizeof(temp));
+        t = temp;
+        for (int i = 0; i < A_MAX; i++) {
+            if (t[0] == 0)
                 break;
-
-            /* Clean up*/
-            clear_from(10);
-            put_str("                                   ", 3, 40);
-            put_str("                                   ", 4, 40);
-            put_str("                                   ", 5, 40);
-
-            roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm2) - 1], 74, temp, sizeof(temp));
-            t = temp;
-            for (int i = 0; i < A_MAX; i++) {
-                if (t[0] == 0)
-                    break;
-                else {
-                    prt(t, 12 + i, 3);
-                    t += strlen(t) + 1;
-                }
+            else {
+                prt(t, 12 + i, 3);
+                t += strlen(t) + 1;
             }
-
-            if (count < 2) {
-                prt(_("何かキーを押してください", "Hit any key."), 0, 0);
-                (void)inkey();
-                prt("", 0, 0);
-                break;
-            } else if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
-                break;
         }
 
-        if (creature_ptr->realm2) {
-            /* Print the realm */
-            c_put_str(TERM_L_BLUE, format("%s, %s", realm_names[creature_ptr->realm1], realm_names[creature_ptr->realm2]), 6, 15);
-        }
+        if (count < 2) {
+            prt(_("何かキーを押してください", "Hit any key."), 0, 0);
+            (void)inkey();
+            prt("", 0, 0);
+            break;
+        } else if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+            break;
+    }
+
+    if (creature_ptr->realm2) {
+        /* Print the realm */
+        c_put_str(TERM_L_BLUE, format("%s, %s", realm_names[creature_ptr->realm1], realm_names[creature_ptr->realm2]), 6, 15);
     }
 
     return TRUE;
