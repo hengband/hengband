@@ -149,7 +149,10 @@ static void move_birth_realm_cursor(birth_realm_type *birth_realm_ptr)
     if (birth_realm_ptr->cs == birth_realm_ptr->n) {
         sprintf(birth_realm_ptr->cur, "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
     } else {
-        sprintf(birth_realm_ptr->cur, "%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->cs], birth_realm_ptr->p2, realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
+        sprintf(birth_realm_ptr->cur, "%c%c %s",
+            birth_realm_ptr->sym[birth_realm_ptr->cs],
+            birth_realm_ptr->p2,
+            realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
         sprintf(birth_realm_ptr->buf, "%s", realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
         c_put_str(TERM_L_BLUE, birth_realm_ptr->buf, 3, 40);
         prt(_("の特徴", ": Characteristic"), 3, 40 + strlen(birth_realm_ptr->buf));
@@ -199,30 +202,8 @@ static void birth_help_option(player_type* creature_ptr, char c)
         bell();
 }
 
-/*!
- * @brief プレイヤーの魔法領域を選択する / Choose from one of the available magical realms
- * @param choices 選択可能な魔法領域のビット配列
- * @param count 選択可能な魔法領域を返すポインタ群。
- * @return 選択した魔法領域のID
- * @details 領域数が0 (戦士等)or 1 (観光客等)なら自動での値を返す
- */
-static byte select_realm(player_type* creature_ptr, s32b choices, int* count)
+static void get_a_realm(player_type* creature_ptr, birth_realm_type* birth_realm_ptr)
 {
-    byte auto_select = count_realm_selection(choices, count);
-    clear_from(10);
-    if ((*count) < 2)
-        return auto_select;
-
-    impose_first_realm(creature_ptr, choices);
-    put_str(_("注意：魔法の領域の選択によりあなたが習得する呪文のタイプが決まります。",
-                "Note: The realm of magic will determine which spells you can learn."), 23, 5);
-
-    birth_realm_type tmp_birth_realm;
-    birth_realm_type *birth_realm_ptr = initialize_birth_realm_type(&tmp_birth_realm);
-    analyze_realms(creature_ptr, choices, birth_realm_ptr);
-    sprintf(birth_realm_ptr->cur, "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
-
-    /* Get a realm */
     birth_realm_ptr->os = birth_realm_ptr->n;
     while (TRUE) {
         move_birth_realm_cursor(birth_realm_ptr);
@@ -269,7 +250,31 @@ static byte select_realm(player_type* creature_ptr, s32b choices, int* count)
 
         birth_help_option(creature_ptr, c);
     }
+}
 
+/*!
+ * @brief プレイヤーの魔法領域を選択する / Choose from one of the available magical realms
+ * @param choices 選択可能な魔法領域のビット配列
+ * @param count 選択可能な魔法領域を返すポインタ群。
+ * @return 選択した魔法領域のID
+ * @details 領域数が0 (戦士等)or 1 (観光客等)なら自動での値を返す
+ */
+static byte select_realm(player_type* creature_ptr, s32b choices, int* count)
+{
+    byte auto_select = count_realm_selection(choices, count);
+    clear_from(10);
+    if ((*count) < 2)
+        return auto_select;
+
+    impose_first_realm(creature_ptr, choices);
+    put_str(_("注意：魔法の領域の選択によりあなたが習得する呪文のタイプが決まります。",
+                "Note: The realm of magic will determine which spells you can learn."), 23, 5);
+
+    birth_realm_type tmp_birth_realm;
+    birth_realm_type *birth_realm_ptr = initialize_birth_realm_type(&tmp_birth_realm);
+    analyze_realms(creature_ptr, choices, birth_realm_ptr);
+    sprintf(birth_realm_ptr->cur, "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
+    get_a_realm(creature_ptr, birth_realm_ptr);
     clear_from(10);
     return (byte)(birth_realm_ptr->picks[birth_realm_ptr->k]);
 }
