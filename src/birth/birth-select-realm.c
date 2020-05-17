@@ -202,7 +202,7 @@ static void birth_help_option(player_type* creature_ptr, char c)
         bell();
 }
 
-static void get_a_realm(player_type* creature_ptr, birth_realm_type* birth_realm_ptr)
+static bool get_a_realm(player_type* creature_ptr, birth_realm_type* birth_realm_ptr)
 {
     birth_realm_ptr->os = birth_realm_ptr->n;
     while (TRUE) {
@@ -218,7 +218,7 @@ static void get_a_realm(player_type* creature_ptr, birth_realm_type* birth_realm
         char c = inkey();
         interpret_realm_select_key(birth_realm_ptr, c);
         if (c == 'S')
-            return 255;
+            return TRUE;
 
         if (c == ' ' || c == '\r' || c == '\n') {
             if (birth_realm_ptr->cs == birth_realm_ptr->n) {
@@ -250,6 +250,8 @@ static void get_a_realm(player_type* creature_ptr, birth_realm_type* birth_realm
 
         birth_help_option(creature_ptr, c);
     }
+
+    return FALSE;
 }
 
 /*!
@@ -274,9 +276,19 @@ static byte select_realm(player_type* creature_ptr, s32b choices, int* count)
     birth_realm_type *birth_realm_ptr = initialize_birth_realm_type(&tmp_birth_realm);
     analyze_realms(creature_ptr, choices, birth_realm_ptr);
     sprintf(birth_realm_ptr->cur, "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
-    get_a_realm(creature_ptr, birth_realm_ptr);
+    if (get_a_realm(creature_ptr, birth_realm_ptr))
+        return 255;
+
     clear_from(10);
     return (byte)(birth_realm_ptr->picks[birth_realm_ptr->k]);
+}
+
+static void cleanup_realm_selection_window(void)
+{
+    clear_from(10);
+    put_str("                                   ", 3, 40);
+    put_str("                                   ", 4, 40);
+    put_str("                                   ", 5, 40);
 }
 
 /*!
@@ -316,17 +328,12 @@ bool get_player_realms(player_type* creature_ptr)
         int count = 0;
         creature_ptr->realm1 = select_realm(creature_ptr, realm_choices1[creature_ptr->pclass], &count);
 
-        if (255 == creature_ptr->realm1)
+        if (creature_ptr->realm1 == 255)
             return FALSE;
         if (!creature_ptr->realm1)
             break;
 
-        /* Clean up*/
-        clear_from(10);
-        put_str("                                   ", 3, 40);
-        put_str("                                   ", 4, 40);
-        put_str("                                   ", 5, 40);
-
+        cleanup_realm_selection_window();
         roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm1) - 1], 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < 10; i++) {
@@ -357,17 +364,12 @@ bool get_player_realms(player_type* creature_ptr)
         int count = 0;
         creature_ptr->realm2 = select_realm(creature_ptr, realm_choices2[creature_ptr->pclass], &count);
 
-        if (255 == creature_ptr->realm2)
+        if (creature_ptr->realm2 == 255)
             return FALSE;
         if (!creature_ptr->realm2)
             break;
 
-        /* Clean up*/
-        clear_from(10);
-        put_str("                                   ", 3, 40);
-        put_str("                                   ", 4, 40);
-        put_str("                                   ", 5, 40);
-
+        cleanup_realm_selection_window();
         roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm2) - 1], 74, temp, sizeof(temp));
         concptr t = temp;
         for (int i = 0; i < A_MAX; i++) {
