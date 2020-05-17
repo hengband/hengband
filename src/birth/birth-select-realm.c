@@ -115,6 +115,30 @@ static void impose_first_realm(player_type *creature_ptr, s32b choices)
     }
 }
 
+static void analyze_realms(player_type *creature_ptr, s32b choices, birth_realm_type *birth_realm_ptr)
+{
+    for (int i = 0; i < 32; i++) {
+        if ((choices & (1L << i)) == 0)
+            continue;
+
+        if (creature_ptr->realm1 == i + 1) {
+            if (creature_ptr->realm2 == 255)
+                birth_realm_ptr->cs = birth_realm_ptr->n;
+            else
+                continue;
+        }
+
+        if (creature_ptr->realm2 == i + 1)
+            birth_realm_ptr->cs = birth_realm_ptr->n;
+
+        birth_realm_ptr->sym[birth_realm_ptr->n] = I2A(birth_realm_ptr->n);
+
+        sprintf(birth_realm_ptr->buf, "%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->n], birth_realm_ptr->p2, realm_names[i + 1]);
+        put_str(birth_realm_ptr->buf, 12 + (birth_realm_ptr->n / 5), 2 + 15 * (birth_realm_ptr->n % 5));
+        birth_realm_ptr->picks[birth_realm_ptr->n++] = i + 1;
+    }
+}
+
 /*!
  * @brief プレイヤーの魔法領域を選択する / Choose from one of the available magical realms
  * @param choices 選択可能な魔法領域のビット配列
@@ -135,26 +159,7 @@ static byte select_realm(player_type* creature_ptr, s32b choices, int* count)
 
     birth_realm_type tmp_birth_realm;
     birth_realm_type *birth_realm_ptr = initialize_birth_realm_type(&tmp_birth_realm);
-    for (int i = 0; i < 32; i++) {
-        /* Analize realms */
-        if (choices & (1L << i)) {
-            if (creature_ptr->realm1 == i + 1) {
-                if (creature_ptr->realm2 == 255)
-                    birth_realm_ptr->cs = birth_realm_ptr->n;
-                else
-                    continue;
-            }
-            if (creature_ptr->realm2 == i + 1)
-                birth_realm_ptr->cs = birth_realm_ptr->n;
-
-            birth_realm_ptr->sym[birth_realm_ptr->n] = I2A(birth_realm_ptr->n);
-
-            sprintf(birth_realm_ptr->buf, "%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->n], birth_realm_ptr->p2, realm_names[i + 1]);
-            put_str(birth_realm_ptr->buf, 12 + (birth_realm_ptr->n / 5), 2 + 15 * (birth_realm_ptr->n % 5));
-            birth_realm_ptr->picks[birth_realm_ptr->n++] = i + 1;
-        }
-    }
-
+    analyze_realms(creature_ptr, choices, birth_realm_ptr);
     sprintf(birth_realm_ptr->cur, "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
 
     /* Get a realm */
