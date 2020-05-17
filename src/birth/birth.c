@@ -109,9 +109,6 @@ static s32b auto_round;
  */
 static void save_prev_data(player_type* creature_ptr, birther* birther_ptr)
 {
-    int i;
-
-    /* Save the data */
     birther_ptr->psex = creature_ptr->psex;
     birther_ptr->prace = creature_ptr->prace;
     birther_ptr->pclass = creature_ptr->pclass;
@@ -124,26 +121,21 @@ static void save_prev_data(player_type* creature_ptr, birther* birther_ptr)
     birther_ptr->sc = creature_ptr->sc;
     birther_ptr->au = creature_ptr->au;
 
-    /* Save the stats */
-    for (i = 0; i < A_MAX; i++) {
+    for (int i = 0; i < A_MAX; i++) {
         birther_ptr->stat_max[i] = creature_ptr->stat_max[i];
         birther_ptr->stat_max_max[i] = creature_ptr->stat_max_max[i];
     }
 
-    /* Save the hp */
-    for (i = 0; i < PY_MAX_LEVEL; i++) {
+    for (int i = 0; i < PY_MAX_LEVEL; i++) {
         birther_ptr->player_hp[i] = creature_ptr->player_hp[i];
     }
 
     birther_ptr->chaos_patron = creature_ptr->chaos_patron;
-
-    /* Save the virtues */
-    for (i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         birther_ptr->vir_types[i] = creature_ptr->vir_types[i];
     }
 
-    /* Save the history */
-    for (i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         strcpy(birther_ptr->history[i], creature_ptr->history[i]);
     }
 }
@@ -155,17 +147,10 @@ static void save_prev_data(player_type* creature_ptr, birther* birther_ptr)
  */
 static void load_prev_data(player_type* creature_ptr, bool swap)
 {
-    int i;
-
     birther temp;
-
-    /*** Save the current data ***/
     if (swap)
         save_prev_data(creature_ptr, &temp);
 
-    /*** Load the previous data ***/
-
-    /* Load the data */
     creature_ptr->psex = previous_char.psex;
     creature_ptr->prace = previous_char.prace;
     creature_ptr->pclass = previous_char.pclass;
@@ -178,31 +163,26 @@ static void load_prev_data(player_type* creature_ptr, bool swap)
     creature_ptr->sc = previous_char.sc;
     creature_ptr->au = previous_char.au;
 
-    /* Load the stats */
-    for (i = 0; i < A_MAX; i++) {
+    for (int i = 0; i < A_MAX; i++) {
         creature_ptr->stat_cur[i] = creature_ptr->stat_max[i] = previous_char.stat_max[i];
         creature_ptr->stat_max_max[i] = previous_char.stat_max_max[i];
     }
 
-    /* Load the hp */
-    for (i = 0; i < PY_MAX_LEVEL; i++) {
+    for (int i = 0; i < PY_MAX_LEVEL; i++) {
         creature_ptr->player_hp[i] = previous_char.player_hp[i];
     }
+
     creature_ptr->mhp = creature_ptr->player_hp[0];
     creature_ptr->chp = creature_ptr->player_hp[0];
-
     creature_ptr->chaos_patron = previous_char.chaos_patron;
-
-    for (i = 0; i < 8; i++) {
+    for (int i = 0; i < 8; i++) {
         creature_ptr->vir_types[i] = previous_char.vir_types[i];
     }
 
-    /* Load the history */
-    for (i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         strcpy(creature_ptr->history[i], previous_char.history[i]);
     }
 
-    /*** Save the previous data ***/
     if (swap) {
         (void)COPY(&previous_char, &temp, birther);
     }
