@@ -160,6 +160,32 @@ static void move_birth_realm_cursor(birth_realm_type *birth_realm_ptr)
     birth_realm_ptr->os = birth_realm_ptr->cs;
 }
 
+static void interpret_realm_select_key(birth_realm_type *birth_realm_ptr, char c)
+{
+    if (c == 'Q')
+        birth_quit();
+
+    if (c == '8') {
+        if (birth_realm_ptr->cs >= 5)
+            birth_realm_ptr->cs -= 5;
+    }
+
+    if (c == '4') {
+        if (birth_realm_ptr->cs > 0)
+            birth_realm_ptr->cs--;
+    }
+
+    if (c == '6') {
+        if (birth_realm_ptr->cs < birth_realm_ptr->n)
+            birth_realm_ptr->cs++;
+    }
+
+    if (c == '2') {
+        if ((birth_realm_ptr->cs + 5) <= birth_realm_ptr->n)
+            birth_realm_ptr->cs += 5;
+    }
+}
+
 /*!
  * @brief プレイヤーの魔法領域を選択する / Choose from one of the available magical realms
  * @param choices 選択可能な魔法領域のビット配列
@@ -196,9 +222,7 @@ static byte select_realm(player_type* creature_ptr, s32b choices, int* count)
 
         put_str(birth_realm_ptr->buf, 10, 10);
         char c = inkey();
-        if (c == 'Q')
-            birth_quit();
-
+        interpret_realm_select_key(birth_realm_ptr, c);
         if (c == 'S')
             return 255;
 
@@ -215,26 +239,6 @@ static byte select_realm(player_type* creature_ptr, s32b choices, int* count)
         if (c == '*') {
             birth_realm_ptr->k = randint0(birth_realm_ptr->n);
             break;
-        }
-
-        if (c == '8') {
-            if (birth_realm_ptr->cs >= 5)
-                birth_realm_ptr->cs -= 5;
-        }
-
-        if (c == '4') {
-            if (birth_realm_ptr->cs > 0)
-                birth_realm_ptr->cs--;
-        }
-
-        if (c == '6') {
-            if (birth_realm_ptr->cs < birth_realm_ptr->n)
-                birth_realm_ptr->cs++;
-        }
-
-        if (c == '2') {
-            if ((birth_realm_ptr->cs + 5) <= birth_realm_ptr->n)
-                birth_realm_ptr->cs += 5;
         }
 
         birth_realm_ptr->k = (islower(c) ? A2I(c) : -1);
