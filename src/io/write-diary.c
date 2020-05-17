@@ -5,9 +5,9 @@
  */
 
 #include "io/write-diary.h"
-#include "core/system-variables.h"
-#include "quest.h"
-#include "files.h"
+#include "system/system-variables.h"
+#include "dungeon/quest.h"
+#include "io/files.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/dungeon-file.h"
 #include "world/world.h"

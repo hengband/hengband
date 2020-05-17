@@ -1,7 +1,7 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "effect/effect-player-util.h"
 #include "effect/effect-player-oldies.h"
-#include "player-effects.h"
+#include "player/player-effects.h"
 
 void effect_player_old_heal(player_type *target_ptr,
                             effect_player_type *ep_ptr) {

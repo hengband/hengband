@@ -89,41 +89,41 @@
 * </p>
 */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "io/signal-handlers.h"
 #include "main/sound-definitions-table.h"
 #include "main/music-definitions-table.h"
-#include "util.h"
-#include "inet.h"
-#include "chuukei.h"
+#include "util/util.h"
+#include "io/inet.h"
+#include "io/chuukei.h"
 
 #include "io/write-diary.h"
 #include "autopick/autopick-pref-processor.h"
 #include "cmd/cmd-process-screen.h"
 #include "cmd/cmd-save.h"
 #include "view/display-main-window.h"
-#include "floor.h"
-#include "floor-events.h"
-#include "init.h"
-#include "files.h"
-#include "scores.h"
-#include "quest.h"
-#include "files.h"
-#include "core/system-variables.h"
+#include "floor/floor.h"
+#include "floor/floor-events.h"
+#include "main/init.h"
+#include "io/files.h"
+#include "core/scores.h"
+#include "dungeon/quest.h"
+#include "io/files.h"
+#include "system/system-variables.h"
 #include "core/game-play.h"
-#include "core/angband-version.h"
+#include "system/angband-version.h"
 #include "core/stuff-handler.h"
 #include "core/special-internal-keys.h"
 #include "core/player-processor.h"
 #include "world/world.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 #ifdef WINDOWS
 #include <windows.h>
 #include <direct.h>
 #include <locale.h>
-#include "z-term.h"
-#include "save.h"
+#include "term/z-term.h"
+#include "io/save.h"
 #include "dungeon/dungeon.h"
 
 /*
@@ -271,7 +271,7 @@
 /*
  * Include the support for loading bitmaps
  */
-#include "readdib.h"
+#include "term/readdib.h"
 
 #define MoveTo(H,X,Y) MoveToEx(H, X, Y, NULL)
 

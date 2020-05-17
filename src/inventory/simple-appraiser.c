@@ -1,11 +1,11 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "inventory/simple-appraiser.h"
-#include "object-flavor.h"
-#include "avatar.h"
-#include "object-hook.h"
+#include "object/object-flavor.h"
+#include "player/avatar.h"
+#include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "player-move.h"
-#include "player-inventory.h"
+#include "player/player-move.h"
+#include "inventory/player-inventory.h"
 #include "autopick/autopick.h"
 
 /*!

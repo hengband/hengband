@@ -1,19 +1,20 @@
-﻿#include "angband.h"
-#include "util.h"
+﻿#include "system/angband.h"
+#include "util/util.h"
 
 #include "cmd-spell.h"
 #include "spell/spells-type.h"
-#include "spells-status.h"
-#include "spells-floor.h"
-#include "player-class.h"
-#include "player-effects.h"
-#include "targeting.h"
+#include "spell/spells-status.h"
+#include "spell/spells-floor.h"
+#include "player/player-class.h"
+#include "player/player-effects.h"
+#include "io/targeting.h"
 #include "view/display-main-window.h"
 #include "realm/realm-song.h"
 #include "spell/process-effect.h"
 #include "effect/effect-characteristics.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
+#include "spell/spells-detection.h"
 
 /*!
 * @brief 歌の開始を処理する / Start singing if the player is a Bard

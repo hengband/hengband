@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 #include "realm/realm.h"
-#include "player-race.h"
+#include "player/player-race.h"
 #include "player/race-info-table.h"
-#include "player-class.h"
+#include "player/player-class.h"
 
 #define MAX_BLDG 32 /*!< 施設の種類最大数 / Number of buildings */
 

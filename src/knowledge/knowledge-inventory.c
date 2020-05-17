@@ -4,14 +4,14 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "knowledge/knowledge-inventory.h"
 #include "cmd/dump-util.h"
 #include "core/show-file.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 #include "market/store-util.h"
-#include "floor-town.h"
-#include "object-hook.h"
+#include "floor/floor-town.h"
+#include "object/object-hook.h"
 #include "object/object-kind.h"
 
 static concptr inven_res_label = _(

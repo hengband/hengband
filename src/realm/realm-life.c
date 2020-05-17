@@ -1,15 +1,16 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "cmd-spell.h"
-#include "spells-status.h"
-#include "spells-floor.h"
+#include "spell/spells-status.h"
+#include "spell/spells-floor.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
-#include "player-status.h"
-#include "player-effects.h"
-#include "floor.h"
-#include "targeting.h"
+#include "player/player-status.h"
+#include "player/player-effects.h"
+#include "floor/floor.h"
+#include "io/targeting.h"
 #include "realm/realm-life.h"
 #include "spell/spells-type.h"
+#include "spell/spells-detection.h"
 
 /*!
 * @brief 生命領域魔法の各処理を行う

@@ -4,18 +4,18 @@
  * @author Hourier
  */
  
-#include "angband.h"
+#include "system/angband.h"
 #include "autopick/autopick-registry.h"
 #include "autopick/autopick-util.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-finder.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object-flavor.h"
-#include "util.h"
-#include "files.h"
+#include "object/object-flavor.h"
+#include "util/util.h"
+#include "io/files.h"
 
 static const char autoregister_header[] = "?:$AUTOREGISTER";
 

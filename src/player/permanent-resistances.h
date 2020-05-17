@@ -1,5 +1,5 @@
 ﻿#pragma once
 
-#include "angband.h"
+#include "system/angband.h"
 
 void player_flags(player_type *creature_ptr, BIT_FLAGS *flags);

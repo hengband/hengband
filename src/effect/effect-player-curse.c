@@ -1,11 +1,11 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "effect/effect-player-util.h"
 #include "effect/effect-player-curse.h"
-#include "player-damage.h"
+#include "player/player-damage.h"
 #include "world/world.h"
-#include "monster-spell.h"
-#include "object-curse.h"
-#include "player-effects.h"
+#include "mspell/monster-spell.h"
+#include "object/object-curse.h"
+#include "player/player-effects.h"
 
 void effect_player_curse_1(player_type *target_ptr,
                            effect_player_type *ep_ptr) {

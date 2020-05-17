@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "cmd/cmd-knowledge.h"
 #include "cmd/cmd-draw.h"
 #include "knowledge/knowledge-autopick.h"

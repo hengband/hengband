@@ -5,31 +5,31 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "io/input-key-processor.h"
 #include "world/world.h"
 #include "core/special-internal-keys.h"
 #include "dungeon/dungeon.h"
-#include "snipe.h"
+#include "combat/snipe.h"
 #include "autopick/autopick-pref-processor.h"
 #include "market/store-util.h"
 #include "main/sound-definitions-table.h"
 #include "io/write-diary.h"
-#include "player-inventory.h"
-#include "player-effects.h"
+#include "inventory/player-inventory.h"
+#include "player/player-effects.h"
 #include "market/store.h" // do_cmd_store() がある。後で移設する.
-#include "quest.h" // do_cmd_quest() がある。後で移設する.
-#include "wild.h"
-#include "spells-object.h"
-#include "mind.h" // do_cmd_mind_browse() がある。後で移設する.
-#include "monster-spell.h" // do_cmd_cast_learned() がある。後で移設する.
-#include "racial.h" // do_cmd_racial_power() がある。ファイル名変更？.
+#include "dungeon/quest.h" // do_cmd_quest() がある。後で移設する.
+#include "floor/wild.h"
+#include "spell/spells-object.h"
+#include "mind/mind.h" // do_cmd_mind_browse() がある。後で移設する.
+#include "mspell/monster-spell.h" // do_cmd_cast_learned() がある。後で移設する.
+#include "mind/racial.h" // do_cmd_racial_power() がある。ファイル名変更？.
 #include "view/display-main-window.h"
 #include "knowledge/knowledge-autopick.h"
 #include "knowledge/knowledge-quests.h"
-#include "chuukei.h"
-#include "player-move.h" // do_cmd_travel() がある。後で移設する.
-#include "files.h"
+#include "io/chuukei.h"
+#include "player/player-move.h" // do_cmd_travel() がある。後で移設する.
+#include "io/files.h"
 
 #include "cmd/cmd-activate.h"
 #include "cmd/cmd-autopick.h"

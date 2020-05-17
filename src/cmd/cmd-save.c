@@ -2,12 +2,12 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-save.h"
 #include "cmd/cmd-dump.h"
-#include "player-move.h"
+#include "player/player-move.h"
 #include "core/stuff-handler.h"
-#include "save.h"
+#include "io/save.h"
 #include "world/world.h"
-#include "monster-status.h" // 違和感。要調査.
-#include "gameterm.h"
+#include "monster/monster-status.h" // 違和感。要調査.
+#include "term/gameterm.h"
 
 /*!
  * @brief セーブするコマンドのメインルーチン

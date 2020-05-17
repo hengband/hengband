@@ -10,27 +10,28 @@
  * 2014 Deskull rearranged comment for Doxygen.\n
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "core/stuff-handler.h"
-#include "util.h"
+#include "util/util.h"
 #include "main/sound-definitions-table.h"
 
-#include "floor.h"
-#include "grid.h"
-#include "spells-summon.h"
-#include "spells-status.h"
-#include "monster-status.h"
-#include "monster-spell.h"
-#include "monster-process.h"
+#include "floor/floor.h"
+#include "grid/grid.h"
+#include "spell/spells-summon.h"
+#include "spell/spells-status.h"
+#include "monster/monster-status.h"
+#include "mspell/monster-spell.h"
+#include "monster/monster-process.h"
 #include "cmd-spell.h"
-#include "player-status.h"
-#include "player-effects.h"
+#include "player/player-status.h"
+#include "player/player-effects.h"
 #include "cmd-basic.h"
-#include "targeting.h"
+#include "io/targeting.h"
 #include "view/display-main-window.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
+#include "mspell/mspell-type.h"
 
 static int damage;
 

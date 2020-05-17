@@ -4,18 +4,18 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "knowledge-items.h"
 #include "cmd/dump-util.h"
-#include "artifact.h"
-#include "sort.h"
-#include "object-flavor.h"
-#include "object-hook.h"
+#include "object/artifact.h"
+#include "core/sort.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "core/show-file.h"
 #include "cmd/object-group-table.h"
 #include "world/world.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "core/stuff-handler.h"
 #include "view/display-main-window.h" // 暫定、後で消す.
 

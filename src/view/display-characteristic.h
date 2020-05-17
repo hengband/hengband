@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "angband.h"
+#include "system/angband.h"
 
 /* Mode flags for displaying player flags */
 #define DP_CURSE   0x01

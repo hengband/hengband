@@ -1,15 +1,15 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "floor/pattern-walk.h"
 #include "dungeon/dungeon.h"
 #include "io/write-diary.h"
-#include "player-move.h"
-#include "player-effects.h"
-#include "spells-status.h"
-#include "player-damage.h"
+#include "player/player-move.h"
+#include "player/player-effects.h"
+#include "spell/spells-status.h"
+#include "player/player-damage.h"
 #include "realm/realm-song.h"
 #include "spell/spells3.h"
 #include "cmd/cmd-save.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 
 /*!
  * @brief パターン終点到達時のテレポート処理を行う

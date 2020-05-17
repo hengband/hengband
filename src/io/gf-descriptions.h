@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "angband.h"
+#include "system/angband.h"
 
 #define MAX_NAMED_NUM 99
 

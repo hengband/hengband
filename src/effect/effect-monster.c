@@ -4,17 +4,17 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "effect/effect-monster.h"
 #include "spells-effect-util.h"
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
-#include "player-move.h"
+#include "player/player-move.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-switcher.h"
-#include "monster-status.h"
-#include "avatar.h"
+#include "monster/monster-status.h"
+#include "player/avatar.h"
 #include "spell/spells-type.h"
 #include "effect/effect-characteristics.h"
 #include "spell/spells3.h"

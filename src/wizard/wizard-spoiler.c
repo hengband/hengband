@@ -10,23 +10,23 @@
  * 2013 Deskull rearranged comment for Doxygen.
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "wizard/wizard-spoiler.h"
-#include "util.h"
-#include "gameterm.h"
+#include "util/util.h"
+#include "term/gameterm.h"
 
-#include "core/angband-version.h"
-#include "artifact.h"
-#include "sort.h"
+#include "system/angband-version.h"
+#include "object/artifact.h"
+#include "core/sort.h"
 #include "market/store.h"
 #include "market/store-util.h"
-#include "monster.h"
-#include "object-flavor.h"
-#include "object-hook.h"
-#include "object-ego.h"
+#include "monster/monster.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
+#include "object/object-ego.h"
 #include "object/object-kind.h"
-#include "floor-town.h"
-#include "files.h"
+#include "floor/floor-town.h"
+#include "io/files.h"
 
  /*
   * The spoiler file being created

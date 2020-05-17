@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "effect/spells-effect-util.h"
 
 int rakubadam_m;

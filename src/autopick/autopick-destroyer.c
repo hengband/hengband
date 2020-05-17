@@ -3,15 +3,15 @@
  * @date 2020/04/25
  * @author Hourier
  */
-#include "angband.h"
+#include "system/angband.h"
 #include "autopick/autopick-util.h"
 #include "autopick-methods-table.h"
 #include "autopick/autopick-destroyer.h"
-#include "object-ego.h"
-#include "object-hook.h"
+#include "object/object-ego.h"
+#include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object-flavor.h"
-#include "player-move.h"
+#include "object/object-flavor.h"
+#include "player/player-move.h"
 
 
 /*!

@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "spell/spells-util.h"
 #include "spell/spells-execution.h"
 #include "realm/realm.h"

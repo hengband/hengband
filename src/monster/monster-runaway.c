@@ -5,9 +5,9 @@
  */
 
 #include "monster/monster-runaway.h"
-#include "player-move.h"
+#include "player/player-move.h"
 #include "cmd/cmd-pet.h"
-#include "quest.h"
+#include "dungeon/quest.h"
 
  /*!
   * @brief HPが1/3未満になった有効的なユニークモンスターの逃走処理を行う

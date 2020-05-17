@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 

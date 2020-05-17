@@ -1,14 +1,14 @@
 ﻿#include "view/display-player-middle.h"
 #include "view/status-first-page.h"
 #include "view/display-util.h"
-#include "player-effects.h"
-#include "player-skill.h"
+#include "player/player-effects.h"
+#include "player/player-skill.h"
 #include "realm/realm-song.h"
 #include "world/world.h"
 #include "object/object-kind.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "shoot.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 /*!
  * @brief プレイヤーの打撃能力修正を表示する

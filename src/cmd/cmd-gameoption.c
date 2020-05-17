@@ -1,14 +1,14 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 
 #include "autopick/autopick.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-gameoption.h"
 #include "cmd/cmd-autopick.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "view/display-main-window.h"
 #include "cmd/cmd-dump.h"
 #include "core/show-file.h"
-#include "files.h"
+#include "io/files.h"
 
 #include "world/world.h"
 

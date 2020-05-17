@@ -1,8 +1,8 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "object/lite-processor.h"
-#include "object-ego.h"
-#include "object-hook.h"
-#include "player-move.h"
+#include "object/object-ego.h"
+#include "object/object-hook.h"
+#include "player/player-move.h"
 #include "world/world.h"
 
 /*!

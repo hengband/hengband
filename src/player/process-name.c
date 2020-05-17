@@ -1,9 +1,9 @@
 ﻿#include "player/process-name.h"
 #include "autopick/autopick-reader-writer.h"
-#include "player-personality.h"
-#include "files.h"
+#include "player/player-personality.h"
+#include "io/files.h"
 #include "world/world.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 /*!
  * @brief プレイヤーの名前をチェックして修正する

@@ -1,8 +1,8 @@
-#include "angband.h"
+#include "system/angband.h"
 #include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick-initializer.h"
 #include "autopick/autopick-pref-processor.h"
-#include "files.h"
+#include "io/files.h"
 #include "io/read-pref-file.h"
 
 /*

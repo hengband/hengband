@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "effect/spells-effect-util.h"
 #include "spell/process-effect.h"
 #include "cmd-pet.h" // 暫定、後で消すかも.
@@ -7,7 +7,7 @@
 #include "effect/effect-item.h"
 #include "effect/effect-monster.h"
 #include "effect/effect-player.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "main/sound-definitions-table.h"
 #include "spell/spells-type.h"
 #include "view/display-main-window.h" // 暫定、後で消すかも.

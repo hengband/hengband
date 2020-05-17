@@ -5,7 +5,7 @@
  */
 
 #include "monster/monster-update.h"
-#include "player-move.h"
+#include "player/player-move.h"
 
 /*!
  * @brief 騎乗中のモンスター情報を更新する

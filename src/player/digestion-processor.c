@@ -1,11 +1,11 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "player/digestion-processor.h"
 #include "world/world.h"
 #include "realm/realm-song.h"
-#include "player-damage.h"
-#include "player-effects.h"
-#include "creature.h"
-#include "player-move.h"
+#include "player/player-damage.h"
+#include "player/player-effects.h"
+#include "monster/creature.h"
+#include "player/player-move.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとにプレイヤーの腹を減らす

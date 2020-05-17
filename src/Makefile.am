@@ -5,9 +5,10 @@ AUTOMAKE_OPTIONS = foreign subdir-objects
 bin_PROGRAMS = hengband
 
 hengband_SOURCES = \
-	artifact.c artifact.h \
-	\
-	angband.h\
+	system/angband.h system/h-basic.h system/h-config.h \
+	system/h-define.h system/h-system.h system/h-type.h \
+	system/system-variables.c system/system-variables.h \
+	system/gamevalue.h \
 	\
 	autopick/autopick.c autopick/autopick.h \
 	autopick/autopick-commands-table.h autopick/autopick-dirty-flags.h \
@@ -31,13 +32,16 @@ hengband_SOURCES = \
 	autopick/autopick-editor-util.c autopick/autopick-editor-util.h \
 	autopick/autopick-editor-command.c autopick/autopick-editor-command.h \
 	\
-	avatar.h avatar.c \
-	\
 	birth/bitrh-explanations-table.c birth/bitrh-explanations-table.h \
 	birth/birth.c birth/birth.h \
+	birth/history.c birth/history.h \
+	birth/birth-util.c birth/birth-util.h \
+	birth/birth-select-realm.c birth/birth-select-realm.h \
 	\
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
+	main/init.c main/init.h \
+	\
 	market/arena-info-table.c market/arena-info-table.h \
 	market/building.c market/building.h \
 	market/building-util.c market/building-util.h \
@@ -49,8 +53,7 @@ hengband_SOURCES = \
 	market/say-comments.c market/say-comments.h \
 	market/store-util.c market/store-util.h \
 	market/gold-magnification-table.c market/gold-magnification-table.h \
-	market/store.c market/store.h \
-	chest.c chest.h chuukei.c chuukei.h \
+	market/store.c market/store.h market/rumor.c market/rumor.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \
@@ -61,6 +64,7 @@ hengband_SOURCES = \
 	view/status-first-page.c view/status-first-page.h \
 	view/display-util.c view/display-util.h \
 	\
+	player/avatar.h player/avatar.c \
 	player/mimic-info-table.c player/mimic-info-table.h \
 	player/process-death.c player/process-death.h \
 	player/process-name.c player/process-name.h \
@@ -70,7 +74,9 @@ hengband_SOURCES = \
 	player/temporary-resistances.c player/temporary-resistances.h \
 	player/digestion-processor.c player/digestion-processor.h \
 	\
+	io/character-dump.c io/character-dump.h \
 	io/dump-remover.c io/dump-remover.h \
+	io/files.c io/files.h \
 	io/gf-descriptions.c io/gf-descriptions.h \
 	io/tokenizer.c io/tokenizer.h \
 	io/interpret-pref-file.c io/interpret-pref-file.h \
@@ -80,12 +86,15 @@ hengband_SOURCES = \
 	io/exit-panic.c io/exit-panic.h \
 	io/write-diary.c io/write-diary.h \
 	io/mutations-dump.c io/mutations-dump.h \
+	io/report.c io/report.h \
 	io/signal-handlers.c io/signal-handlers.h \
 	io/uid-checker.c io/uid-checker.h \
 	io/input-key-processor.c io/input-key-processor.h \
+	io/load.c io/load.h \
+	io/save.c io/save.h \
+	io/inet.c io/inet.h \
+	io/chuukei.c io/chuukei.h \
 	\
-	character-dump.c character-dump.h files.c files.h \
-	core/system-variables.c core/system-variables.h \
 	core/game-play.c core/game-play.h \
 	core/show-file.c core/show-file.h \
 	core/stuff-handler.c core/stuff-handler.h \
@@ -97,30 +106,33 @@ hengband_SOURCES = \
 	core/hp-mp-processor.c core/hp-mp-processor.h \
 	core/magic-effects-timeout-reducer.c core/magic-effects-timeout-reducer.h \
 	core/player-processor.c core/player-processor.h \
-	\
+	core/scores.c core/scores.h \
+	core/sort.c core/sort.h \
 	dungeon/dungeon.c dungeon/dungeon.h \
 	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \
 	dungeon/dungeon-file.c dungeon/dungeon-file.h \
 	\
-	floor.c floor.h floor-events.c floor-events.h \
-	floor-generate.c floor-generate.h \
-	floor-save.h floor-save.c floor-town.h floor-town.c \
-	floor-streams.c floor-streams.h \
+	floor/floor.c floor/floor.h floor/floor-events.c floor/floor-events.h \
+	floor/floor-generate.c floor/floor-generate.h \
+	floor/floor-save.h floor/floor-save.c floor/floor-town.h floor/floor-town.c \
+	floor/floor-streams.c floor/floor-streams.h \
 	floor/pattern-walk.c floor/pattern-walk.h \
+	floor/wild.h floor/wild.c \
+	floor/geometry.c floor/geometry.h \
 	\
-	feature.c feature.h \
-	geometry.c geometry.h \
+	locale/japanese.c locale/japanese.h locale/english.c locale/english.h \
 	\
-	gamevalue.h \
-	grid.c grid.h h-basic.h h-config.h h-define.h \
-	history.h history.c \
-	h-system.h h-type.h inet.c inet.h init.c init.h \
-	japanese.c japanese.h english.c english.h \
-	load.c load.h \
+	grid/feature.c grid/feature.h \
+	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
+	\
 	main.c main-x11.c main-gcu.c \
-	mind.c mind.h \
 	\
-	monster.h monsterrace.c monsterrace.h \
+	mind/mind.c mind/mind.h \
+	mind/racial.c mind/racial.h \
+	mind/racial-samurai.c mind/racial-samurai.h \
+	\
+	monster/creature.h monster/creature.c \
+	monster/monster.h monster/monster-race.c monster/monster-race.h \
 	monster/monster-util.c monster/monster-util.h \
 	monster/monster-direction.c monster/monster-direction.h \
 	monster/monster-attack.c monster/monster-attack.h \
@@ -131,41 +143,50 @@ hengband_SOURCES = \
 	monster/monster-sweep-grid.c monster/monster-sweep-grid.h \
 	monster/monster-update.c monster/monster-update.h \
 	monster/quantum-effect.c monster/quantum-effect.h \
-	monsterrace-hook.c monsterrace-hook.h \
-	monster-dist-offsets.c monster-dist-offsets.h \
-	monster-process.c monster-process.h \
-	monster-status.c monster-status.h monster1.c monster2.c \
-	mspells1.c mspells2.c mspells3.c mspells4.c monster-spell.h \
+	monster/monsterrace-hook.c monster/monsterrace-hook.h \
+	monster/monster-dist-offsets.c monster/monster-dist-offsets.h \
+	monster/monster-process.c monster/monster-process.h \
+	monster/monster-status.c monster/monster-status.h \
+	monster/monster1.c monster/monster2.c \
+	monster/horror-descriptions.c monster/horror-descriptions.h \
 	\
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
 	\
-	object-boost.c object-boost.h \
-	object-curse.c object-curse.h object-broken.c object-broken.h \
-	object-hook.c object-hook.h object1.c object2.c object.h \
+	object/artifact.c object/artifact.h \
+	object/object-boost.c object/object-boost.h \
+	object/chest.c object/chest.h \
+	object/object-curse.c object/object-curse.h \
+	object/object-broken.c object/object-broken.h \
+	object/object-hook.c object/object-hook.h \
+	object/object1.c object/object2.c object/object.h \
 	object/object-kind.c object/object-kind.h \
 	object/object-kind-hook.c object/object-kind-hook.h \
 	object/lite-processor.c object/lite-processor.h \
-	object-flavor.c object-flavor.h object-ego.c object-ego.h \
+	object/object-flavor.c object/object-flavor.h \
+	object/object-ego.c object/object-ego.h \
+	object/warning.c object/warning.h \
 	\
 	inventory/simple-appraiser.c inventory/simple-appraiser.h \
 	inventory/inventory-curse.c inventory/inventory-curse.h \
 	inventory/recharge-processor.c inventory/recharge-processor.h \
 	inventory/pack-overflow.c inventory/pack-overflow.h \
+	inventory/player-inventory.c inventory/player-inventory.h \
 	\
 	patron.h patron.c \
 	\
-	creature.h creature.c \
-	player-move.c player-move.h player-damage.c player-damage.h \
-	horror-descriptions.c horror-descriptions.h \
-	player-status.c player-status.h player-effects.c player-effects.h \
-	player-skill.c player-skill.h player-class.c player-class.h \
-	player-race.c player-race.h player-personality.c player-personality.h \
-	player-sex.c player-sex.h player-inventory.c player-inventory.h \
+	player/player-move.c player/player-move.h \
+	player/player-damage.c player/player-damage.h \
+	player/player-status.c player/player-status.h \
+	player/player-effects.c player/player-effects.h \
+	player/player-skill.c player/player-skill.h \
+	player/player-class.c player/player-class.h \
+	player/player-race.c player/player-race.h \
+	player/player-personality.c player/player-personality.h \
+	player/player-sex.c player/player-sex.h player/selfinfo.c player/selfinfo.h \
 	\
 	quest.h quest.c\
 	\
-	racial.c racial.h \
 	realm/realm.c realm/realm.h \
 	realm/realm-arcane.c realm/realm-arcane.h \
 	realm/realm-chaos.c realm/realm-chaos.h \
@@ -180,17 +201,14 @@ hengband_SOURCES = \
 	realm/realm-song.h realm/realm-sorcery.c \
 	realm/realm-sorcery.h realm/realm-trump.c realm/realm-trump.h \
 	\
-	report.c report.h \
-	rooms.c rooms-city.c rooms-city.h rooms-fractal.c rooms-fractal.h \
-	rooms.h rooms-normal.c rooms-normal.h \
-	rooms-special.c rooms-special.h rooms-trap.c rooms-trap.h \
-	rooms-vault.c rooms-vault.h \
+	room/rooms.c room/rooms.h room/rooms-city.c room/rooms-city.h \
+	room/rooms-fractal.c room/rooms-fractal.h \
+	room/rooms-normal.c room/rooms-normal.h \
+	room/rooms-special.c room/rooms-special.h \
+	room/rooms-trap.c room/rooms-trap.h \
+	room/rooms-vault.c room/rooms-vault.h \
 	room/rooms-pit-nest.c room/rooms-pit-nest.h \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
-	save.c save.h scores.c scores.h selfinfo.c selfinfo.h \
-	snipe.c snipe.h \
-	\
-	rumor.h rumor.c \
 	\
 	effect/effect-feature.c effect/effect-feature.h \
 	effect/effect-item.c effect/effect-item.h \
@@ -222,20 +240,32 @@ hengband_SOURCES = \
 	spell/spells1.c spell/spells1.h spell/spells2.c spell/spells2.h \
 	spell/spells3.c spell/spells3.h \
 	spell/music-checker.c spell/music-checker.h \
-	spells-diceroll.c spells-diceroll.h \
-	spells-floor.c spells-floor.h \
-	spells-object.c spells-object.h \
-	spells-status.c spells-status.h \
-	spells-summon.c spells-summon.h \
-	spells-world.c spells-world.h \
+	spells-diceroll.c spell/spells-diceroll.h \
+	spell/spells-floor.c spell/spells-floor.h \
+	spell/spells-object.c spell/spells-object.h \
+	spell/spells-status.c spell/spells-status.h \
+	spell/spells-summon.c spell/spells-summon.h \
+	spell/spells-world.c spell/spells-world.h \
+	spell/spells-detection.c spell/spells-detection.h \
 	\
-	sort.c sort.h gameterm.c gameterm.h trap.c trap.h util.c util.h \
-	wild.h wild.c warning.c warning.h \
+	mspell/monster-spell.h \
+	mspell/mspells1.c mspell/mspells2.c mspell/mspells3.c \
+	mspell/assign-monster-spell.c mspell/assign-monster-spell.h \
+	mspell/mspell-summon.c mspell/mspell-summon.h \
+	mspell/mspell-util.c mspell/mspell-util.h \
+	mspell/mspell-curse.c mspell/mspell-curse.h \
+	mspell/mspell-type.h \
+	mspell/mspell-damage-calculator.c mspell/mspell-damage-calculator.h \
+	mspell/mspell-learn-checker.c mspell/mspell-learn-checker.h \
+	mspell/mspell-breath.c mspell/mspell-breath.h \
+	mspell/mspell-ball.c mspell/mspell-ball.h \
+	mspell/mspell-bolt.c mspell/mspell-bolt.h \
+	mspell/mspell-floor.c mspell/mspell-floor.h \
+	mspell/mspell-status.c mspell/mspell-status.h \
+	mspell/mspell-special.c mspell/mspell-special.h \
+	mspell/mspell-particular.c mspell/mspell-particularity.h \
 	\
 	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
-	\
-	z-form.c z-form.h z-rand.c z-rand.h z-term.c z-term.h z-util.c z-util.h \
-	z-virt.c z-virt.h \
 	\
 	knowledge/knowledge-autopick.c knowledge/knowledge-autopick.h \
 	knowledge/knowledge-experiences.c knowledge/knowledge-experiences.h \
@@ -268,19 +298,29 @@ hengband_SOURCES = \
 	cmd/cmd-spell.c cmd/cmd-spell.h cmd/cmd-visuals.c cmd/cmd-visuals.h \
 	cmd/cmd-usestaff.c cmd/cmd-usestaff.h \
 	cmd/cmd-zaprod.c cmd/cmd-zaprod.h cmd/cmd-zapwand.c cmd/cmd-zapwand.h \
+	cmd/cmd-menu-content-table.c cmd/cmd-menu-content-table.h \
 	\
 	combat/melee.h combat/melee.c combat/shoot.c combat/shoot.h \
+	combat/snipe.c combat/snipe.h \
+	\
+	term/gameterm.c term/gameterm.h \
+	term/z-form.c term/z-form.h term/z-rand.c term/z-rand.h \
+	term/z-term.c term/z-term.h term/z-util.c term/z-util.h \
+	term/z-virt.c term/z-virt.h \
+	\
+	util/util.c util/util.h \
 	\
 	wizard/wizard-spoiler.c wizard/wizard-spoiler.h\
 	wizard/wizard-special-process.c wizard/wizard-special-process.h \
 	\
 	world/world.c world/world.h \
 	world/world-movement-processor.c world/world-movement-processor.h \
-	world/world-turn-processor.c world/world-turn-processor.h \
+	world/world-turn-processor.c world/world-turn-processor.h
 
 EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc maid-x11.c main-win.c \
-	makefile.bcc makefile.std readdib.c readdib.h wall.bmp
+	main/x11-gamma-builder.c main/x11-gamma-builder.h \
+	makefile.bcc makefile.std term/readdib.c term/readdib.h wall.bmp
 
 EXTRA_DIST = \
 	gcc-wrap
@@ -290,8 +330,9 @@ LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icombat -Icore -Idungeon -Ieffect -Ifloor \
-	-Iinventory -Iio -Iknowledge -Imarket -Imonster -Iobject -Iplayer -Irealm \
-	-Iroom -Ispell -Iview -Iwizard -Iworld
+	-Igrid -Iinventory -Iio -Iknowledge -Imarket -Imind -Imonster -Imspell \
+	-Imutation -Iobject -Iplayer -Irealm -Iroom -Ispell -Isystem -Iterm -Iutil \
+	-Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

@@ -1,9 +1,9 @@
-﻿#include "angband.h"
-#include "object-flavor.h"
-#include "player-move.h"
+﻿#include "system/angband.h"
+#include "object/object-flavor.h"
+#include "player/player-move.h"
 #include "core/hp-mp-regenerator.h"
 #include "object/object-kind.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 
 /*!
  * @brief

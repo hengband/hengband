@@ -1,4 +1,4 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "core/stuff-handler.h"
 #include "view/display-main-window.h"
 

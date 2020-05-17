@@ -11,7 +11,7 @@
 #ifdef USE_X11
 
 #include <math.h>
-
+#include "main/x11-gamma-builder.h"
 
 /*
  * This file defines some "XImage" manipulation functions for X11.

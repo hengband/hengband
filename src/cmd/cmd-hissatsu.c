@@ -10,15 +10,15 @@
  * 2014 Deskull rearranged comment for Doxygen.\n
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "core/stuff-handler.h"
-#include "util.h"
+#include "util/util.h"
 #include "main/sound-definitions-table.h"
 
-#include "monsterrace-hook.h"
-#include "player-status.h"
-#include "player-effects.h"
-#include "player-inventory.h"
+#include "monster/monsterrace-hook.h"
+#include "player/player-status.h"
+#include "player/player-effects.h"
+#include "inventory/player-inventory.h"
 #include "spell/technic-info-table.h"
 
 #include "cmd-basic.h"

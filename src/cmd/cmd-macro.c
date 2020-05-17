@@ -1,9 +1,9 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "cmd-macro.h"
 #include "cmd-gameoption.h"
-#include "files.h"
+#include "io/files.h"
 #include "io/read-pref-file.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 /*!
  * @brief マクロ情報をprefファイルに保存する /

@@ -11,16 +11,16 @@
  * </pre>
  */
 
-#include "angband.h"
-#include "core/system-variables.h"
-#include "util.h"
+#include "system/angband.h"
+#include "system/system-variables.h"
+#include "util/util.h"
 #include "main/sound-definitions-table.h"
 #include "cmd/cmd-pet.h"
 #include "cmd/cmd-dump.h"
-#include "player-class.h"
-#include "monster.h"
+#include "player/player-class.h"
+#include "monster/monster.h"
 #include "spell/spells1.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "view/display-main-window.h"
 #include "effect/spells-effect-util.h"
 #include "effect/effect-feature.h"

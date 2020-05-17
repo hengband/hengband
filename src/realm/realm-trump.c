@@ -1,19 +1,20 @@
-﻿#include "angband.h"
-#include "util.h"
+﻿#include "system/angband.h"
+#include "util/util.h"
 
 #include "cmd-spell.h"
 #include "mutation/mutation.h"
-#include "spells-summon.h"
-#include "spells-status.h"
-#include "spells-object.h"
-#include "player-effects.h"
-#include "player-class.h"
-#include "targeting.h"
+#include "spell/spells-summon.h"
+#include "spell/spells-status.h"
+#include "spell/spells-object.h"
+#include "player/player-effects.h"
+#include "player/player-class.h"
+#include "io/targeting.h"
 #include "effect/spells-effect-util.h"
 #include "realm/realm-trump.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
+#include "spell/spells-detection.h"
 
 /*!
 * @brief トランプ領域魔法の各処理を行う

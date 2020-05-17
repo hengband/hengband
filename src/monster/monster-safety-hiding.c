@@ -5,8 +5,8 @@
  */
 
 #include "monster/monster-safety-hiding.h"
-#include "monster-dist-offsets.h"
-#include "monster-spell.h"
+#include "monster/monster-dist-offsets.h"
+#include "mspell/monster-spell.h"
 
  /*!
   * @brief モンスターが逃げ込める地点を走査する

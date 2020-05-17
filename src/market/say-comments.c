@@ -1,10 +1,10 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "say-comments.h"
 #include "main/sound-definitions-table.h"
 #include "market/store-owner-comments.h"
 #include "market/store-util.h"
-#include "avatar.h"
-#include "rumor.h"
+#include "player/avatar.h"
+#include "market/rumor.h"
 
 #define RUMOR_CHANCE 8
 

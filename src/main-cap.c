@@ -2,7 +2,7 @@
 
 /* Purpose: Support for "term.c" using "termcap" calls */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "io/exit-panic.h"
 
 #ifdef USE_CAP

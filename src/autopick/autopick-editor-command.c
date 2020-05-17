@@ -5,7 +5,7 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "autopick/autopick-util.h"
 #include "autopick/autopick-editor-command.h"
 #include "autopick/autopick-editor-util.h"
@@ -18,7 +18,7 @@
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-drawer.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "core/show-file.h"
 
 /*

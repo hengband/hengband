@@ -4,19 +4,19 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "knowledge-quests.h"
 #include "cmd/dump-util.h"
-#include "quest.h"
-#include "core/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
-#include "artifact.h"
-#include "object-flavor.h"
+#include "dungeon/quest.h"
+#include "system/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
+#include "object/artifact.h"
+#include "object/object-flavor.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/dungeon-file.h"
-#include "sort.h"
+#include "core/sort.h"
 #include "world/world.h"
 #include "core/show-file.h"
-#include "english.h"
+#include "locale/english.h"
 
  /*
   * Check on the status of an active quest

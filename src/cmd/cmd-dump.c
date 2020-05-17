@@ -30,25 +30,25 @@
  * </pre>
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/dump-util.h"
-#include "gameterm.h"
-#include "core/angband-version.h"
+#include "term/gameterm.h"
+#include "system/angband-version.h"
 #include "io/dump-remover.h"
 #include "io/read-pref-file.h"
 #include "io/interpret-pref-file.h"
 
 #include "world/world.h"
 #include "view/display-player.h" // 暫定。後で消す.
-#include "player-personality.h"
-#include "quest.h"
-#include "artifact.h"
-#include "floor-town.h"
+#include "player/player-personality.h"
+#include "dungeon/quest.h"
+#include "object/artifact.h"
+#include "floor/floor-town.h"
 #include "cmd/feeling-table.h"
-#include "english.h"
+#include "locale/english.h"
 
-#include "chuukei.h"
+#include "io/chuukei.h"
 
 /*!
  * @brief 画面を再描画するコマンドのメインルーチン

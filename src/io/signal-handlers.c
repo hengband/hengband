@@ -6,14 +6,14 @@
  */
 
 #include "io/signal-handlers.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 #include "core/game-closer.h"
-#include "save.h"
+#include "io/save.h"
 #include "world/world.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "floor-events.h"
+#include "floor/floor-events.h"
 
 s16b signal_count;		/* Hack -- Count interupts */
 

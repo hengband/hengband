@@ -5,7 +5,7 @@
 
 #ifdef USE_XAW
 
-#include "angband.h"
+#include "system/angband.h"
 
 
 #ifndef __MAKEDEPEND__

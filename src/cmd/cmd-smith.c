@@ -1,17 +1,17 @@
-﻿#include "angband.h"
-#include "util.h"
-#include "gameterm.h"
+﻿#include "system/angband.h"
+#include "util/util.h"
+#include "term/gameterm.h"
 
-#include "object-flavor.h"
-#include "object-hook.h"
-#include "object-ego.h"
-#include "player-status.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
+#include "object/object-ego.h"
+#include "player/player-status.h"
 #include "cmd-basic.h"
 #include "cmd-smith.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
 #include "view/display-main-window.h"
-#include "player-inventory.h"
+#include "inventory/player-inventory.h"
 
 
 

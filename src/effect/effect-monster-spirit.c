@@ -1,9 +1,9 @@
-﻿#include "angband.h"
+﻿#include "system/angband.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-spirit.h"
-#include "monster-spell.h"
-#include "monster-status.h"
-#include "player-effects.h"
+#include "mspell/monster-spell.h"
+#include "monster/monster-status.h"
+#include "player/player-effects.h"
 
 gf_switch_result effect_monster_drain_mana(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

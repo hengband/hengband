@@ -4,17 +4,17 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "knowledge-self.h"
 #include "cmd/dump-util.h"
-#include "avatar.h"
+#include "player/avatar.h"
 #include "birth/birth.h"
 #include "core/show-file.h"
 #include "dungeon/dungeon-file.h"
 #include "world/world.h"
 #include "market/store-util.h"
-#include "floor-town.h"
-#include "object-flavor.h"
+#include "floor/floor-town.h"
+#include "object/object-flavor.h"
 
 /*
  * List virtues & status

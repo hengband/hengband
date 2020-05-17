@@ -4,10 +4,10 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "knowledge-items.h"
 #include "cmd/dump-util.h"
-#include "sort.h"
+#include "core/sort.h"
 #include "core/show-file.h"
 
 /*

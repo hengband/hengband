@@ -4,13 +4,13 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "knowledge-experiences.h"
 #include "cmd/dump-util.h"
 #include "core/show-file.h"
-#include "object-flavor.h"
+#include "object/object-flavor.h"
 #include "object/object-kind.h"
-#include "player-skill.h"
+#include "player/player-skill.h"
 #include "spell/technic-info-table.h"
 #include "spell/spells-util.h"
 #include "spell/spells-execution.h"

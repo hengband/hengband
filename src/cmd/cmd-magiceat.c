@@ -52,22 +52,22 @@
  * </pre>
  */
 
-#include "angband.h"
-#include "util.h"
+#include "system/angband.h"
+#include "util/util.h"
 #include "main/sound-definitions-table.h"
-#include "gameterm.h"
+#include "term/gameterm.h"
 
 #include "cmd-basic.h"
 #include "cmd-usestaff.h"
 #include "cmd-zaprod.h"
 #include "cmd-zapwand.h"
 #include "cmd-magiceat.h"
-#include "avatar.h"
-#include "player-status.h"
+#include "player/avatar.h"
+#include "player/player-status.h"
 #include "spell/spells3.h"
-#include "player-class.h"
+#include "player/player-class.h"
 #include "object/object-kind.h"
-#include "targeting.h"
+#include "io/targeting.h"
 
 /*!
  * @brief 魔道具術師の取り込んだ魔力一覧から選択/閲覧する /

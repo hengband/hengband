@@ -6,13 +6,13 @@
  * @author Hourier
  */
 
-#include "angband.h"
+#include "system/angband.h"
 #include "effect-monster-util.h"
 #include "effect/effect-monster-switcher.h"
-#include "player-damage.h"
-#include "avatar.h"
-#include "monster-status.h"
-#include "monsterrace-hook.h"
+#include "player/player-damage.h"
+#include "player/avatar.h"
+#include "monster/monster-status.h"
+#include "monster/monsterrace-hook.h"
 #include "combat/melee.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"

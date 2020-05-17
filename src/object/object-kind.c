@@ -1,5 +1,5 @@
-﻿#include "angband.h"
-#include "util.h"
+﻿#include "system/angband.h"
+#include "util/util.h"
 #include "object-kind.h"
 
 /*

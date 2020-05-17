@@ -5,14 +5,14 @@
  * @author Hourier
  */
 
-#include "angband.h"
-#include "gameterm.h"
+#include "system/angband.h"
+#include "term/gameterm.h"
 #include "status-first-page.h"
 #include "display-util.h"
-#include "artifact.h"
+#include "object/artifact.h"
 #include "combat/melee.h"
 #include "combat/shoot.h"
-#include "object-hook.h"
+#include "object/object-hook.h"
 #include "object/object-kind.h"
 
 static TERM_COLOR likert_color = TERM_WHITE;
