@@ -1029,7 +1029,7 @@ void leave_floor(player_type *creature_ptr)
 		/* Connect from here */
 		if (g_ptr && !feat_uses_special(g_ptr->feat))
 		{
-			g_ptr->special = tmp_floor_idx;
+			g_ptr->special = new_floor_id;
 		}
 	}
 
