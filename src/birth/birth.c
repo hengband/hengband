@@ -13,7 +13,6 @@
 
 #include "system/angband.h"
 #include "system/system-variables.h"
-#include "core/show-file.h"
 #include "term/gameterm.h"
 #include "io/read-pref-file.h"
 #include "main/music-definitions-table.h"
@@ -59,6 +58,7 @@
 #include "view/display-player.h" // 暫定。後で消す.
 #include "floor/wild.h"
 #include "world/world.h"
+#include "birth/birth-util.h"
 
 /*
   * The last character rolled,
@@ -100,28 +100,6 @@ static s32b stat_match[6];
 
 /*! オートローラの試行回数 / Autoroll round */
 static s32b auto_round;
-
-/*!
- * @brief プレイヤー作成を中断して変愚蛮怒を終了する
- * @return なし
- */
-static void birth_quit(void)
-{
-    quit(NULL);
-}
-
-/*!
- * @brief 指定されたヘルプファイルを表示する / Show specific help file
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @param helpfile ファイル名
- * @return なし
- */
-static void show_help(player_type* creature_ptr, concptr helpfile)
-{
-    screen_save();
-    (void)show_file(creature_ptr, TRUE, helpfile, NULL, 0, 0);
-    screen_load();
-}
 
 /*!
  * @brief プレイヤーの魔法領域を選択する / Choose from one of the available magical realms

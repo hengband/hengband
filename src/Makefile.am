@@ -35,6 +35,7 @@ hengband_SOURCES = \
 	birth/bitrh-explanations-table.c birth/bitrh-explanations-table.h \
 	birth/birth.c birth/birth.h \
 	birth/history.c birth/history.h \
+	birth/birth-util.c birth/birth-util.h \
 	\
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
