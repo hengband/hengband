@@ -4,6 +4,8 @@
 #include "birth/birth-explanations-table.h"
 #include "birth/birth-util.h"
 
+static const byte REALM_SELECT_CANCEL = 255;
+
 typedef struct birth_realm_type
 {
     int cs;
@@ -102,7 +104,7 @@ static birth_realm_type* initialize_birth_realm_type(birth_realm_type *birth_rea
 
 static void impose_first_realm(player_type *creature_ptr, s32b choices)
 {
-    if (creature_ptr->realm2 == 255)
+    if (creature_ptr->realm2 == REALM_SELECT_CANCEL)
         return;
 
     if (creature_ptr->pclass != CLASS_PRIEST)
@@ -122,7 +124,7 @@ static void analyze_realms(player_type *creature_ptr, s32b choices, birth_realm_
             continue;
 
         if (creature_ptr->realm1 == i + 1) {
-            if (creature_ptr->realm2 == 255)
+            if (creature_ptr->realm2 == REALM_SELECT_CANCEL)
                 birth_realm_ptr->cs = birth_realm_ptr->n;
             else
                 continue;
@@ -277,7 +279,7 @@ static byte select_realm(player_type* creature_ptr, s32b choices, int* count)
     analyze_realms(creature_ptr, choices, birth_realm_ptr);
     sprintf(birth_realm_ptr->cur, "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
     if (get_a_realm(creature_ptr, birth_realm_ptr))
-        return 255;
+        return REALM_SELECT_CANCEL;
 
     clear_from(10);
     return (byte)(birth_realm_ptr->picks[birth_realm_ptr->k]);
@@ -322,13 +324,13 @@ bool get_player_realms(player_type* creature_ptr)
 
     /* Select the first realm */
     creature_ptr->realm1 = REALM_NONE;
-    creature_ptr->realm2 = 255;
+    creature_ptr->realm2 = REALM_SELECT_CANCEL;
     while (TRUE) {
         char temp[80 * 10];
         int count = 0;
         creature_ptr->realm1 = select_realm(creature_ptr, realm_choices1[creature_ptr->pclass], &count);
 
-        if (creature_ptr->realm1 == 255)
+        if (creature_ptr->realm1 == REALM_SELECT_CANCEL)
             return FALSE;
         if (!creature_ptr->realm1)
             break;
@@ -364,7 +366,7 @@ bool get_player_realms(player_type* creature_ptr)
         int count = 0;
         creature_ptr->realm2 = select_realm(creature_ptr, realm_choices2[creature_ptr->pclass], &count);
 
-        if (creature_ptr->realm2 == 255)
+        if (creature_ptr->realm2 == REALM_SELECT_CANCEL)
             return FALSE;
         if (!creature_ptr->realm2)
             break;
