@@ -285,7 +285,6 @@ bool get_player_realms(player_type* creature_ptr)
     creature_ptr->realm2 = 255;
     while (TRUE) {
         char temp[80 * 10];
-        concptr t;
         int count = 0;
         creature_ptr->realm1 = select_realm(creature_ptr, realm_choices1[creature_ptr->pclass], &count);
 
@@ -301,7 +300,7 @@ bool get_player_realms(player_type* creature_ptr)
         put_str("                                   ", 5, 40);
 
         roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm1) - 1], 74, temp, sizeof(temp));
-        t = temp;
+        concptr t = temp;
         for (int i = 0; i < 10; i++) {
             if (t[0] == 0)
                 break;
@@ -332,8 +331,6 @@ bool get_player_realms(player_type* creature_ptr)
     /* Select the second realm */
     while (TRUE) {
         char temp[80 * 8];
-        concptr t;
-
         int count = 0;
         creature_ptr->realm2 = select_realm(creature_ptr, realm_choices2[creature_ptr->pclass], &count);
 
@@ -349,7 +346,7 @@ bool get_player_realms(player_type* creature_ptr)
         put_str("                                   ", 5, 40);
 
         roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm2) - 1], 74, temp, sizeof(temp));
-        t = temp;
+        concptr t = temp;
         for (int i = 0; i < A_MAX; i++) {
             if (t[0] == 0)
                 break;
