@@ -105,12 +105,8 @@ static s32b auto_round;
  */
 static int adjust_stat(int value, int amount)
 {
-    int i;
-
-    /* Negative amounts */
     if (amount < 0) {
-        /* Apply penalty */
-        for (i = 0; i < (0 - amount); i++) {
+        for (int i = 0; i < (0 - amount); i++) {
             if (value >= 18 + 10) {
                 value -= 10;
             } else if (value > 18) {
@@ -120,11 +116,8 @@ static int adjust_stat(int value, int amount)
             }
         }
     }
-
-    /* Positive amounts */
     else if (amount > 0) {
-        /* Apply reward */
-        for (i = 0; i < amount; i++) {
+        for (int i = 0; i < amount; i++) {
             if (value < 18) {
                 value++;
             } else {
@@ -133,26 +126,22 @@ static int adjust_stat(int value, int amount)
         }
     }
 
-    /* Return the result */
-    return (value);
+    return value;
 }
 
 /*!
  * @brief プレイヤーの能力値を一通りロールする。 / Roll for a characters stats
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return なし
  * @details
  * calc_bonuses()による、独立ステータスからの副次ステータス算出も行っている。
  * For efficiency, we include a chunk of "calc_bonuses()".\n
- * @return なし
  */
 static void get_stats(player_type* creature_ptr)
 {
-    /* Roll and verify some stats */
     while (TRUE) {
-        int i;
         int sum = 0;
-
-        /* Roll some dice */
-        for (i = 0; i < 2; i++) {
+        for (int i = 0; i < 2; i++) {
             s32b tmp = randint0(60 * 60 * 60);
             BASE_STATUS val;
 
@@ -165,7 +154,6 @@ static void get_stats(player_type* creature_ptr)
             val += tmp % 5;
             tmp /= 5;
 
-            /* Save that value */
             sum += val;
             creature_ptr->stat_cur[3 * i] = creature_ptr->stat_max[3 * i] = val;
 
@@ -178,11 +166,9 @@ static void get_stats(player_type* creature_ptr)
             val += tmp % 5;
             tmp /= 5;
 
-            /* Save that value */
             sum += val;
             creature_ptr->stat_cur[3 * i + 1] = creature_ptr->stat_max[3 * i + 1] = val;
 
-            /* Extract 5 + 1d3 + 1d4 + 1d5 */
             val = 5 + 3;
             val += tmp % 3;
             tmp /= 3;
@@ -190,15 +176,12 @@ static void get_stats(player_type* creature_ptr)
             tmp /= 4;
             val += (BASE_STATUS)tmp;
 
-            /* Save that value */
             sum += val;
             creature_ptr->stat_cur[3 * i + 2] = creature_ptr->stat_max[3 * i + 2] = val;
         }
 
-        /* Verify totals */
         if ((sum > 42 + 5 * 6) && (sum < 57 + 5 * 6))
             break;
-        /* 57 was 54... I hate 'magic numbers' :< TY */
     }
 }
 
@@ -208,36 +191,27 @@ static void get_stats(player_type* creature_ptr)
  */
 void get_max_stats(player_type* creature_ptr)
 {
-    int i, j;
     int dice[6];
-
-    /* Roll and verify some stats */
     while (TRUE) {
-        /* Roll some dice */
-        for (j = i = 0; i < A_MAX; i++) {
-            /* Roll the dice */
+        int j = 0;
+        for (int i = 0; i < A_MAX; i++) {
             dice[i] = randint1(7);
-
-            /* Collect the maximum */
             j += dice[i];
         }
 
-        /* Verify totals */
         if (j == 24)
             break;
     }
 
-    /* Acquire the stats */
-    for (i = 0; i < A_MAX; i++) {
+    for (int i = 0; i < A_MAX; i++) {
         BASE_STATUS max_max = 18 + 60 + dice[i] * 10;
-
-        /* Save that value */
         creature_ptr->stat_max_max[i] = max_max;
         if (creature_ptr->stat_max[i] > max_max)
             creature_ptr->stat_max[i] = max_max;
         if (creature_ptr->stat_cur[i] > max_max)
             creature_ptr->stat_cur[i] = max_max;
     }
+
     creature_ptr->knowledge &= ~(KNOW_STAT);
     creature_ptr->redraw |= (PR_STATS);
 }
@@ -248,9 +222,6 @@ void get_max_stats(player_type* creature_ptr)
  */
 static void get_extra(player_type* creature_ptr, bool roll_hitdie)
 {
-    int i, j;
-
-    /* Experience factor */
     if (creature_ptr->prace == RACE_ANDROID)
         creature_ptr->expfact = rp_ptr->r_exp;
     else
@@ -268,7 +239,7 @@ static void get_extra(player_type* creature_ptr, bool roll_hitdie)
     creature_ptr->old_race2 = 0L;
     creature_ptr->old_realm = 0;
 
-    for (i = 0; i < 64; i++) {
+    for (int i = 0; i < 64; i++) {
         if (creature_ptr->pclass == CLASS_SORCERER)
             creature_ptr->spell_exp[i] = SPELL_EXP_MASTER;
         else if (creature_ptr->pclass == CLASS_RED_MAGE)
@@ -277,27 +248,25 @@ static void get_extra(player_type* creature_ptr, bool roll_hitdie)
             creature_ptr->spell_exp[i] = SPELL_EXP_UNSKILLED;
     }
 
-    for (i = 0; i < 5; i++)
-        for (j = 0; j < 64; j++)
+    for (int i = 0; i < 5; i++)
+        for (int j = 0; j < 64; j++)
             creature_ptr->weapon_exp[i][j] = s_info[creature_ptr->pclass].w_start[i][j];
+
     if ((creature_ptr->pseikaku == SEIKAKU_SEXY) && (creature_ptr->weapon_exp[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] < WEAPON_EXP_BEGINNER)) {
         creature_ptr->weapon_exp[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_BEGINNER;
     }
 
-    for (i = 0; i < GINOU_MAX; i++)
+    for (int i = 0; i < GINOU_MAX; i++)
         creature_ptr->skill_exp[i] = s_info[creature_ptr->pclass].s_start[i];
 
-    /* Hitdice */
     if (creature_ptr->pclass == CLASS_SORCERER)
         creature_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
     else
         creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
 
-    /* Roll for hit point unless quick-start */
     if (roll_hitdie)
         roll_hitdice(creature_ptr, SPOP_NO_UPDATE);
 
-    /* Initial hitpoints */
     creature_ptr->mhp = creature_ptr->player_hp[0];
 }
 
