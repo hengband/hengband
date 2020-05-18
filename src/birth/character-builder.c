@@ -14,7 +14,7 @@
 #include "system/angband.h"
 #include "term/gameterm.h"
 #include "main/music-definitions-table.h"
-#include "birth/birth.h"
+#include "birth/character-builder.h"
 #include "birth/birth-explanations-table.h"
 #include "floor/floor-town.h"
 #include "io/write-diary.h"

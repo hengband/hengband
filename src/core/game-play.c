@@ -19,7 +19,7 @@
 #include "io/inet.h"
 #include "term/gameterm.h"
 #include "io/chuukei.h"
-#include "birth/birth.h"
+#include "birth/character-builder.h"
 #include "birth/inventory-initializer.h"
 #include "monster/creature.h"
 #include "grid/feature.h"

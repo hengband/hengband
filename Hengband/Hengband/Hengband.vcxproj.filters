@@ -485,9 +485,6 @@
     <ClCompile Include="..\..\src\birth\birth-explanations-table.c">
       <Filter>birth</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\birth\birth.c">
-      <Filter>birth</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\output-updater.c">
       <Filter>core</Filter>
     </ClCompile>
@@ -930,6 +927,9 @@
       <Filter>birth</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\birth\birth-wizard.c">
+      <Filter>birth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\birth\character-builder.c">
       <Filter>birth</Filter>
     </ClCompile>
   </ItemGroup>
@@ -1453,9 +1453,6 @@
     <ClInclude Include="..\..\src\birth\birth-explanations-table.h">
       <Filter>birth</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\birth\birth.h">
-      <Filter>birth</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\core\output-updater.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -1913,6 +1910,9 @@
       <Filter>birth</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\birth\birth-wizard.h">
+      <Filter>birth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\birth\character-builder.h">
       <Filter>birth</Filter>
     </ClInclude>
   </ItemGroup>

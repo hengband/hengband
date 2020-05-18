@@ -34,7 +34,7 @@ hengband_SOURCES = \
 	autopick/autopick-editor-command.c autopick/autopick-editor-command.h \
 	\
 	birth/birth-explanations-table.c birth/birth-explanations-table.h \
-	birth/birth.c birth/birth.h \
+	birth/character-builder.c birth/character-builder.h \
 	birth/history.c birth/history.h \
 	birth/birth-util.c birth/birth-util.h \
 	birth/birth-select-realm.c birth/birth-select-realm.h \

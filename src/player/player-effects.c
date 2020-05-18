@@ -23,7 +23,7 @@
 #include "cmd-dump.h"
 #include "floor/floor.h"
 #include "market/building.h"
-#include "birth/birth.h"
+#include "birth/character-builder.h"
 #include "grid/grid.h"
 #include "mutation/mutation.h"
 #include "dungeon/quest.h"
