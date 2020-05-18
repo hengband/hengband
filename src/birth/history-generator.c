@@ -97,47 +97,31 @@ void get_history(player_type *creature_ptr)
 
     int social_class = randint1(4);
     int chart = get_history_chart(creature_ptr);
-    /* Process the history */
-    while (chart) {
-        /* Start over */
+    while (chart != 0) {
         int i = 0;
-
-        /* Roll for nobility */
         int roll = randint1(100);
-
-        /* Access the proper entry in the table */
         while ((chart != bg[i].chart) || (roll > bg[i].roll)) {
             i++;
         }
 
-        /* Acquire the textual history */
         (void)strcat(buf, bg[i].info);
-
-        /* Add in the social class */
         social_class += (int)(bg[i].bonus) - 50;
-
-        /* Enter the next chart */
         chart = bg[i].next;
     }
 
-    /* Verify social class */
     if (social_class > 100)
         social_class = 100;
     else if (social_class < 1)
         social_class = 1;
 
-    /* Save the social class */
     creature_ptr->sc = (s16b)social_class;
 
-    /* Skip leading spaces */
+    /* loop */
     char *s;
-    for (s = buf; *s == ' '; s++) /* loop */
+    for (s = buf; *s == ' '; s++)
         ;
 
-    /* Get apparent length */
     int n = strlen(s);
-
-    /* Kill trailing spaces */
     while ((n > 0) && (s[n - 1] == ' '))
         s[--n] = '\0';
 
