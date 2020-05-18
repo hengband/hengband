@@ -35,6 +35,20 @@
  */
 #define AUTOROLLER_STEP 5431L
 
+static void display_initial_birth_message(player_type *creature_ptr)
+{
+    Term_clear();
+    put_str(_("名前  :", "Name  :"), 1, 26);
+    put_str(_("性別        :", "Sex         :"), 3, 1);
+    put_str(_("種族        :", "Race        :"), 4, 1);
+    put_str(_("職業        :", "Class       :"), 5, 1);
+    c_put_str(TERM_L_BLUE, creature_ptr->name, 1, 34);
+    put_str(_("キャラクターを作成します。('S'やり直す, 'Q'終了, '?'ヘルプ)",
+                "Make your charactor. ('S' Restart, 'Q' Quit, '?' Help)"), 8, 10);
+    put_str(_("注意：《性別》の違いはゲーム上ほとんど影響を及ぼしません。",
+                "Note: Your 'sex' does not have any significant gameplay effects."), 23, 5);
+}
+
 /*!
  * @brief プレーヤーキャラ作成ウィザード
  * @details
@@ -45,34 +59,16 @@
  */
 bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
 {
-    BIT_FLAGS mode = 0;
-    bool flag = FALSE;
-    bool prev = FALSE;
-    concptr str;
-    char p2 = ')';
-    char b1 = '[';
-    char b2 = ']';
-    char buf[80], cur[80];
-
-    Term_clear();
-    put_str(_("名前  :", "Name  :"), 1, 26);
-    put_str(_("性別        :", "Sex         :"), 3, 1);
-    put_str(_("種族        :", "Race        :"), 4, 1);
-    put_str(_("職業        :", "Class       :"), 5, 1);
-    c_put_str(TERM_L_BLUE, creature_ptr->name, 1, 34);
-    put_str(_("キャラクターを作成します。('S'やり直す, 'Q'終了, '?'ヘルプ)",
-                "Make your charactor. ('S' Restart, 'Q' Quit, '?' Help)"),
-        8, 10);
-    put_str(_("注意：《性別》の違いはゲーム上ほとんど影響を及ぼしません。",
-                "Note: Your 'sex' does not have any significant gameplay effects."),
-        23, 5);
     int n;
+    const char p2 = ')';
+    char buf[80];
     for (n = 0; n < MAX_SEXES; n++) {
         sp_ptr = &sex_info[n];
         sprintf(buf, _("%c%c%s", "%c%c %s"), I2A(n), p2, sp_ptr->title);
         put_str(buf, 12 + (n / 5), 2 + 15 * (n % 5));
     }
 
+    char cur[80];
     sprintf(cur, _("%c%c%s", "%c%c %s"), '*', p2, _("ランダム", "Random"));
     int k = -1;
     int cs = 0;
@@ -84,7 +80,7 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
                 sprintf(cur, _("%c%c%s", "%c%c %s"), '*', p2, _("ランダム", "Random"));
             else {
                 sp_ptr = &sex_info[cs];
-                str = sp_ptr->title;
+                concptr str = sp_ptr->title;
                 sprintf(cur, _("%c%c%s", "%c%c %s"), I2A(cs), p2, str);
             }
 
@@ -314,7 +310,7 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
                     break;
             }
 
-            flag = (!(auto_round % AUTOROLLER_STEP));
+            bool flag = (!(auto_round % AUTOROLLER_STEP));
             if (flag) {
                 birth_put_stats(creature_ptr);
                 put_str(format("%10ld", auto_round), 10, col + 20);
@@ -333,11 +329,12 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
 
         flush();
 
-        mode = 0;
+        BIT_FLAGS mode = 0;
         get_extra(creature_ptr, TRUE);
         get_money(creature_ptr);
         creature_ptr->chaos_patron = (s16b)randint0(MAX_PATRON);
         char c;
+        bool prev = FALSE;
         while (TRUE) {
             creature_ptr->update |= (PU_BONUS | PU_HP);
             update_creature(creature_ptr);
@@ -345,6 +342,7 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
             creature_ptr->csp = creature_ptr->msp;
             display_player(creature_ptr, mode, map_name);
             Term_gotoxy(2, 23);
+            char b1 = '[';
             Term_addch(TERM_WHITE, b1);
             Term_addstr(-1, TERM_WHITE, _("'r' 次の数値", "'r'eroll"));
             if (prev)
@@ -356,6 +354,7 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
                 Term_addstr(-1, TERM_WHITE, _(", 'h' 生い立ちを表示", ", 'h'istory"));
 
             Term_addstr(-1, TERM_WHITE, _(", Enter この数値に決定", ", or Enter to accept"));
+            char b2 = ']';
             Term_addch(TERM_WHITE, b2);
             c = inkey();
             if (c == 'Q')
