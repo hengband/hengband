@@ -155,6 +155,7 @@
     <ClCompile Include="..\..\src\birth\birth-select-realm.c" />
     <ClCompile Include="..\..\src\birth\birth-stat.c" />
     <ClCompile Include="..\..\src\birth\birth-util.c" />
+    <ClCompile Include="..\..\src\birth\history-generator.c" />
     <ClCompile Include="..\..\src\birth\quick-start.c" />
     <ClCompile Include="..\..\src\cmd\cmd-menu-content-table.c" />
     <ClCompile Include="..\..\src\mind\racial-samurai.c" />
@@ -374,6 +375,7 @@
     <ClInclude Include="..\..\src\birth\birth-select-realm.h" />
     <ClInclude Include="..\..\src\birth\birth-stat.h" />
     <ClInclude Include="..\..\src\birth\birth-util.h" />
+    <ClInclude Include="..\..\src\birth\history-generator.h" />
     <ClInclude Include="..\..\src\birth\quick-start.h" />
     <ClInclude Include="..\..\src\cmd\cmd-menu-content-table.h" />
     <ClInclude Include="..\..\src\mind\racial-samurai.h" />
