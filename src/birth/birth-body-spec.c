@@ -8,20 +8,19 @@
  */
 void get_height_weight(player_type *creature_ptr)
 {
-    int h_percent; /* 身長が平均にくらべてどのくらい違うか. */
-
-    /* Calculate the height/weight for males */
-    if (creature_ptr->psex == SEX_MALE) {
+    int deviation;
+    switch (creature_ptr->psex) {
+    case SEX_MALE:
         creature_ptr->ht = randnor(rp_ptr->m_b_ht, rp_ptr->m_m_ht);
-        h_percent = (int)(creature_ptr->ht) * 100 / (int)(rp_ptr->m_b_ht);
-        creature_ptr->wt = randnor((int)(rp_ptr->m_b_wt) * h_percent / 100, (int)(rp_ptr->m_m_wt) * h_percent / 300);
-    }
-
-    /* Calculate the height/weight for females */
-    else if (creature_ptr->psex == SEX_FEMALE) {
+        deviation = (int)(creature_ptr->ht) * 100 / (int)(rp_ptr->m_b_ht);
+        creature_ptr->wt = randnor((int)(rp_ptr->m_b_wt) * deviation / 100, (int)(rp_ptr->m_m_wt) * deviation / 300);
+        return;
+    case SEX_FEMALE:
         creature_ptr->ht = randnor(rp_ptr->f_b_ht, rp_ptr->f_m_ht);
-        h_percent = (int)(creature_ptr->ht) * 100 / (int)(rp_ptr->f_b_ht);
-        creature_ptr->wt = randnor((int)(rp_ptr->f_b_wt) * h_percent / 100, (int)(rp_ptr->f_m_wt) * h_percent / 300);
+        deviation = (int)(creature_ptr->ht) * 100 / (int)(rp_ptr->f_b_ht);
+        creature_ptr->wt = randnor((int)(rp_ptr->f_b_wt) * deviation / 100, (int)(rp_ptr->f_m_wt) * deviation / 300);
+    default:
+        return;
     }
 }
 
@@ -32,29 +31,22 @@ void get_height_weight(player_type *creature_ptr)
  */
 void get_ahw(player_type *creature_ptr)
 {
-    /* Get character's age */
     creature_ptr->age = rp_ptr->b_age + randint1(rp_ptr->m_age);
-
-    /* Get character's height and weight */
     get_height_weight(creature_ptr);
 }
 
 /*!
  * @brief プレイヤーの初期所持金を決める。 / Get the player's starting money
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
 void get_money(player_type *creature_ptr)
 {
-    int i, gold;
-
-    /* Social Class determines starting gold */
-    gold = (creature_ptr->sc * 6) + randint1(100) + 300;
+    int gold = (creature_ptr->sc * 6) + randint1(100) + 300;
     if (creature_ptr->pclass == CLASS_TOURIST)
         gold += 2000;
 
-    /* Process the stats */
-    for (i = 0; i < A_MAX; i++) {
-        /* Mega-Hack -- reduce gold for high stats */
+    for (int i = 0; i < A_MAX; i++) {
         if (creature_ptr->stat_max[i] >= 18 + 50)
             gold -= 300;
         else if (creature_ptr->stat_max[i] >= 18 + 20)
@@ -65,9 +57,9 @@ void get_money(player_type *creature_ptr)
             gold -= (creature_ptr->stat_max[i] - 8) * 10;
     }
 
-    /* Minimum 100 gold */
-    if (gold < 100)
-        gold = 100;
+    const int minimum_deposit = 100;
+    if (gold < minimum_deposit)
+        gold = minimum_deposit;
 
     if (creature_ptr->pseikaku == SEIKAKU_NAMAKE)
         gold /= 2;
@@ -76,6 +68,5 @@ void get_money(player_type *creature_ptr)
     if (creature_ptr->prace == RACE_ANDROID)
         gold /= 5;
 
-    /* Save the gold */
     creature_ptr->au = gold;
 }
