@@ -902,6 +902,9 @@
     <ClCompile Include="..\..\src\birth\birth-body-spec.c">
       <Filter>birth</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\birth\initial-equipments-table.c">
+      <Filter>birth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1853,6 +1856,9 @@
       <Filter>birth</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\birth\birth-body-spec.h">
+      <Filter>birth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\birth\initial-equipments-table.h">
       <Filter>birth</Filter>
     </ClInclude>
   </ItemGroup>
