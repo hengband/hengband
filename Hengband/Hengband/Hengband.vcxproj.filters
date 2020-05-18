@@ -911,6 +911,9 @@
     <ClCompile Include="..\..\src\birth\inventory-initializer.c">
       <Filter>birth</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\birth\game-play-initializer.c">
+      <Filter>birth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1871,6 +1874,9 @@
       <Filter>view</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\birth\inventory-initializer.h">
+      <Filter>birth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\birth\game-play-initializer.h">
       <Filter>birth</Filter>
     </ClInclude>
   </ItemGroup>

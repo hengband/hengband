@@ -12,24 +12,16 @@
  */
 
 #include "system/angband.h"
-#include "system/system-variables.h"
 #include "term/gameterm.h"
 #include "io/read-pref-file.h"
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "market/building.h"
 #include "util/util.h"
-
-#include "object/artifact.h"
-#include "autopick/autopick.h"
 #include "player/avatar.h"
 #include "birth/birth.h"
 #include "birth/birth-explanations-table.h"
-#include "cmd-pet.h"
-#include "cmd/cmd-dump.h"
 #include "cmd/cmd-help.h"
-#include "dungeon/dungeon-file.h"
-#include "dungeon/dungeon.h"
 #include "floor/floor-town.h"
 #include "floor/floor.h"
 #include "birth/history.h"
@@ -37,17 +29,12 @@
 #include "locale/japanese.h"
 #include "market/store.h"
 #include "monster/monster.h"
-#include "monster/monsterrace-hook.h"
 #include "monster/monster-race.h"
-#include "object/object-ego.h"
-#include "object/object-kind.h"
 #include "player/patron.h"
 #include "player/player-class.h"
 #include "player/player-sex.h"
 #include "player/player-status.h"
 #include "player/process-name.h"
-#include "player/race-info-table.h"
-#include "dungeon/quest.h"
 #include "realm/realm.h"
 #include "io/save.h"
 #include "spell/spells-util.h"
@@ -63,6 +50,7 @@
 #include "birth/birth-body-spec.h"
 #include "view/display-birth.h" // 暫定。後で消す予定。
 #include "birth/inventory-initializer.h"
+#include "birth/game-play-initializer.h"
 
 /*!
  * オートローラーの内容を描画する間隔 /
@@ -98,213 +86,6 @@ s32b stat_match[6];
 
 /*! オートローラの試行回数 / Autoroll round */
 s32b auto_round;
-
-/*!
- * @brief ベースアイテム構造体の鑑定済みフラグをリセットする。
- * @return なし
- */
-static void k_info_reset(void)
-{
-    for (int i = 1; i < max_k_idx; i++) {
-        object_kind* k_ptr = &k_info[i];
-        k_ptr->tried = FALSE;
-        k_ptr->aware = FALSE;
-    }
-}
-
-/*!
- * @brief プレイヤー構造体の内容を初期値で消去する(名前を除く) / Clear all the global "character" data (without name)
- * @return なし
- */
-static void player_wipe_without_name(player_type* creature_ptr)
-{
-    player_type tmp;
-
-    COPY(&tmp, creature_ptr, player_type);
-    if (creature_ptr->last_message)
-        string_free(creature_ptr->last_message);
-
-    if (creature_ptr->inventory_list != NULL)
-        C_WIPE(creature_ptr->inventory_list, INVEN_TOTAL, object_type);
-
-    (void)WIPE(creature_ptr, player_type);
-
-    //TODO: キャラ作成からゲーム開始までに  current_floor_ptr を参照しなければならない処理は今後整理して外す。
-    creature_ptr->current_floor_ptr = &floor_info;
-    C_MAKE(creature_ptr->inventory_list, INVEN_TOTAL, object_type);
-    for (int i = 0; i < 4; i++)
-        strcpy(creature_ptr->history[i], "");
-
-    for (int i = 0; i < max_q_idx; i++) {
-        quest_type* const q_ptr = &quest[i];
-        q_ptr->status = QUEST_STATUS_UNTAKEN;
-        q_ptr->cur_num = 0;
-        q_ptr->max_num = 0;
-        q_ptr->type = 0;
-        q_ptr->level = 0;
-        q_ptr->r_idx = 0;
-        q_ptr->complev = 0;
-        q_ptr->comptime = 0;
-    }
-
-    creature_ptr->total_weight = 0;
-    creature_ptr->inven_cnt = 0;
-    creature_ptr->equip_cnt = 0;
-    for (int i = 0; i < INVEN_TOTAL; i++)
-        object_wipe(&creature_ptr->inventory_list[i]);
-
-    for (int i = 0; i < max_a_idx; i++) {
-        artifact_type* a_ptr = &a_info[i];
-        a_ptr->cur_num = 0;
-    }
-
-    k_info_reset();
-    for (int i = 1; i < max_r_idx; i++) {
-        monster_race* r_ptr = &r_info[i];
-        r_ptr->cur_num = 0;
-        r_ptr->max_num = 100;
-        if (r_ptr->flags1 & RF1_UNIQUE)
-            r_ptr->max_num = 1;
-        else if (r_ptr->flags7 & RF7_NAZGUL)
-            r_ptr->max_num = MAX_NAZGUL_NUM;
-
-        r_ptr->r_pkills = 0;
-        r_ptr->r_akills = 0;
-    }
-
-    creature_ptr->food = PY_FOOD_FULL - 1;
-    if (creature_ptr->pclass == CLASS_SORCERER) {
-        creature_ptr->spell_learned1 = creature_ptr->spell_learned2 = 0xffffffffL;
-        creature_ptr->spell_worked1 = creature_ptr->spell_worked2 = 0xffffffffL;
-    } else {
-        creature_ptr->spell_learned1 = creature_ptr->spell_learned2 = 0L;
-        creature_ptr->spell_worked1 = creature_ptr->spell_worked2 = 0L;
-    }
-
-    creature_ptr->spell_forgotten1 = creature_ptr->spell_forgotten2 = 0L;
-    for (int i = 0; i < 64; i++)
-        creature_ptr->spell_order[i] = 99;
-
-    creature_ptr->learned_spells = 0;
-    creature_ptr->add_spells = 0;
-    creature_ptr->knowledge = 0;
-    creature_ptr->mutant_regenerate_mod = 100;
-
-    cheat_peek = FALSE;
-    cheat_hear = FALSE;
-    cheat_room = FALSE;
-    cheat_xtra = FALSE;
-    cheat_know = FALSE;
-    cheat_live = FALSE;
-    cheat_save = FALSE;
-    cheat_diary_output = FALSE;
-    cheat_turn = FALSE;
-
-    current_world_ptr->total_winner = FALSE;
-    creature_ptr->timewalk = FALSE;
-    creature_ptr->panic_save = 0;
-
-    current_world_ptr->noscore = 0;
-    current_world_ptr->wizard = FALSE;
-    creature_ptr->wait_report_score = FALSE;
-    creature_ptr->pet_follow_distance = PET_FOLLOW_DIST;
-    creature_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
-
-    for (int i = 0; i < current_world_ptr->max_d_idx; i++)
-        max_dlv[i] = 0;
-
-    creature_ptr->visit = 1;
-    creature_ptr->wild_mode = FALSE;
-
-    for (int i = 0; i < 108; i++) {
-        creature_ptr->magic_num1[i] = 0;
-        creature_ptr->magic_num2[i] = 0;
-    }
-
-    creature_ptr->max_plv = creature_ptr->lev = 1;
-    creature_ptr->arena_number = 0;
-    creature_ptr->current_floor_ptr->inside_arena = FALSE;
-    creature_ptr->current_floor_ptr->inside_quest = 0;
-    for (int i = 0; i < MAX_MANE; i++) {
-        creature_ptr->mane_spell[i] = -1;
-        creature_ptr->mane_dam[i] = 0;
-    }
-
-    creature_ptr->mane_num = 0;
-    creature_ptr->exit_bldg = TRUE;
-    creature_ptr->today_mon = 0;
-    update_gambling_monsters(creature_ptr);
-    creature_ptr->muta1 = 0;
-    creature_ptr->muta2 = 0;
-    creature_ptr->muta3 = 0;
-
-    for (int i = 0; i < 8; i++)
-        creature_ptr->virtues[i] = 0;
-
-    creature_ptr->dungeon_idx = 0;
-    if (vanilla_town || ironman_downward) {
-        creature_ptr->recall_dungeon = DUNGEON_ANGBAND;
-    } else {
-        creature_ptr->recall_dungeon = DUNGEON_GALGALS;
-    }
-
-    memcpy(creature_ptr->name, tmp.name, sizeof(tmp.name));
-}
-
-/*!
- * @brief ダンジョン内部のクエストを初期化する / Initialize random quests and final quests
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-static void init_dungeon_quests(player_type* creature_ptr)
-{
-    int number_of_quests = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1;
-    init_flags = INIT_ASSIGN;
-    floor_type* floor_ptr = creature_ptr->current_floor_ptr;
-    floor_ptr->inside_quest = MIN_RANDOM_QUEST;
-    process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
-    floor_ptr->inside_quest = 0;
-    for (int i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--) {
-        quest_type* q_ptr = &quest[i];
-        monster_race* quest_r_ptr;
-        q_ptr->status = QUEST_STATUS_TAKEN;
-        determine_random_questor(creature_ptr, q_ptr);
-        quest_r_ptr = &r_info[q_ptr->r_idx];
-        quest_r_ptr->flags1 |= RF1_QUESTOR;
-        q_ptr->max_num = 1;
-    }
-
-    init_flags = INIT_ASSIGN;
-    floor_ptr->inside_quest = QUEST_OBERON;
-    process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[QUEST_OBERON].status = QUEST_STATUS_TAKEN;
-
-    floor_ptr->inside_quest = QUEST_SERPENT;
-    process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
-    quest[QUEST_SERPENT].status = QUEST_STATUS_TAKEN;
-    floor_ptr->inside_quest = 0;
-}
-
-/*!
- * @brief ゲームターンを初期化する / Reset turn
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
- * @details アンデッド系種族は開始時刻を夜からにする / Undead start just sunset
- * @details        
- */
-static void init_turn(player_type* creature_ptr)
-{
-    if ((creature_ptr->prace == RACE_VAMPIRE) || (creature_ptr->prace == RACE_SKELETON) || (creature_ptr->prace == RACE_ZOMBIE) || (creature_ptr->prace == RACE_SPECTRE)) {
-        current_world_ptr->game_turn = (TURNS_PER_TICK * 3 * TOWN_DAWN) / 4 + 1;
-        current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * MAX_DAYS + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
-    } else {
-        current_world_ptr->game_turn = 1;
-        current_world_ptr->game_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
-    }
-
-    current_world_ptr->dungeon_turn = 1;
-    current_world_ptr->dungeon_turn_limit = TURNS_PER_TICK * TOWN_DAWN * (MAX_DAYS - 1) + TURNS_PER_TICK * TOWN_DAWN * 3 / 4;
-}
 
 /*!
  * @brief プレイヤーの種族選択を行う / Player race
@@ -1933,4 +1714,3 @@ void player_birth(player_type* creature_ptr, void (*process_autopick_file_comman
     if (!window_flag[2])
         window_flag[2] |= PW_INVEN;
 }
-
