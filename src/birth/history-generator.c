@@ -84,17 +84,14 @@ static int get_history_chart(player_type *creature_ptr)
 }
 
 /*!
- * @brief プレイヤーの生い立ちの自動生成を行う。 / Get the racial history, and social class, using the "history charts".
+ * @brief 生い立ちを画面に表示しつつ、種族から社会的地位を決定する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param buf 生い立ち情報のバッファ
  * @return なし
+ * @details 画面表示と社会的地位の決定が密結合していて分離できない
  */
-void get_history(player_type *creature_ptr)
+static void decide_social_class(player_type *creature_ptr, char *buf)
 {
-    for (int i = 0; i < 4; i++)
-        creature_ptr->history[i][0] = '\0';
-
-    char buf[240];
-    buf[0] = '\0';
-
     int social_class = randint1(4);
     int chart = get_history_chart(creature_ptr);
     while (chart != 0) {
@@ -115,6 +112,20 @@ void get_history(player_type *creature_ptr)
         social_class = 1;
 
     creature_ptr->sc = (s16b)social_class;
+}
+
+/*!
+ * @brief プレイヤーの生い立ちの自動生成を行う。 / Get the racial history, and social class, using the "history charts".
+ * @return なし
+ */
+void get_history(player_type *creature_ptr)
+{
+    for (int i = 0; i < 4; i++)
+        creature_ptr->history[i][0] = '\0';
+
+    char buf[240];
+    buf[0] = '\0';
+    decide_social_class(creature_ptr, buf);
 
     /* loop */
     char *s;
