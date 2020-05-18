@@ -920,6 +920,9 @@
     <ClCompile Include="..\..\src\birth\birth-select-race.c">
       <Filter>birth</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\birth\birth-select-class.c">
+      <Filter>birth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1889,6 +1892,9 @@
       <Filter>birth</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\birth\birth-select-race.h">
+      <Filter>birth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\birth\birth-select-class.h">
       <Filter>birth</Filter>
     </ClInclude>
   </ItemGroup>

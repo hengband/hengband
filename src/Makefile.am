@@ -47,6 +47,7 @@ hengband_SOURCES = \
 	birth/game-play-initializer.c birth/game-play-initializer.h \
 	birth/history-editor.c birth/history-editor.h \
 	birth/birth-select-race.c birth/birth-select-race.h \
+	birth/birth-select-class.c birth/birth-select-class.h \
 	\
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
