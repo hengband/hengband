@@ -54,6 +54,7 @@
 #include "io/save.h"
 #include "io/report.h"
 #include "birth/birth-stat.h"
+#include "birth/birth-body-spec.h"
 
 #include "view/display-main-window.h"
 
