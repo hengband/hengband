@@ -6,25 +6,21 @@
  * @brief プレイヤーの生い立ちの自動生成を行う。 / Get the racial history, and social class, using the "history charts".
  * @return なし
  */
-void get_history(player_type* creature_ptr)
+void get_history(player_type *creature_ptr)
 {
-    int i, n, chart, roll, social_class;
-
-    char *s, *t;
-
-    char buf[240];
-
     /* Clear the previous history strings */
-    for (i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
         creature_ptr->history[i][0] = '\0';
 
     /* Clear the history text */
+    char buf[240];
     buf[0] = '\0';
 
     /* Initial social class */
-    social_class = randint1(4);
+    int social_class = randint1(4);
 
     /* Starting place */
+    int chart;
     switch (creature_ptr->prace) {
     case RACE_AMBERITE: {
         chart = 67;
@@ -178,10 +174,10 @@ void get_history(player_type* creature_ptr)
     /* Process the history */
     while (chart) {
         /* Start over */
-        i = 0;
+        int i = 0;
 
         /* Roll for nobility */
-        roll = randint1(100);
+        int roll = randint1(100);
 
         /* Access the proper entry in the table */
         while ((chart != bg[i].chart) || (roll > bg[i].roll)) {
@@ -208,22 +204,23 @@ void get_history(player_type* creature_ptr)
     creature_ptr->sc = (s16b)social_class;
 
     /* Skip leading spaces */
+    char *s;
     for (s = buf; *s == ' '; s++) /* loop */
         ;
 
     /* Get apparent length */
-    n = strlen(s);
+    int n = strlen(s);
 
     /* Kill trailing spaces */
-
     while ((n > 0) && (s[n - 1] == ' '))
         s[--n] = '\0';
 
     {
         char temp[64 * 4];
         roff_to_buf(s, 60, temp, sizeof(temp));
+        char *t;
         t = temp;
-        for (i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             if (t[0] == 0)
                 break;
             else {
