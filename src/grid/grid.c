@@ -1384,6 +1384,17 @@ void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type 
 		add_cave_info(floor_ptr, y, x, CAVE_SOLID);
 		break;
 	}
+	case GB_SOLID_NOPERM:
+	{
+        feature_type *f_ptr = &f_info[feat_wall_solid];
+        if ((floor_ptr->grid_array[y][x].info & CAVE_VAULT) && permanent_wall(f_ptr))
+            set_cave_feat(floor_ptr, y, x, feat_state(player_ptr, feat_wall_solid, FF_UNPERM));
+        else
+            set_cave_feat(floor_ptr, y, x, feat_wall_solid);
+        floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
+        add_cave_info(floor_ptr, y, x, CAVE_SOLID);
+        delete_monster(player_ptr, y, x);
+    }
 	default:
 		return;
 	}
