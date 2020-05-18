@@ -152,6 +152,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\birth\birth-body-spec.c" />
     <ClCompile Include="..\..\src\birth\birth-select-realm.c" />
     <ClCompile Include="..\..\src\birth\birth-stat.c" />
     <ClCompile Include="..\..\src\birth\birth-util.c" />
@@ -372,6 +373,7 @@
     <ClCompile Include="..\..\src\spell\process-effect.c" />
     <ClCompile Include="..\..\src\spell\spells-execution.c" />
     <ClCompile Include="..\..\src\spell\technic-info-table.c" />
+    <ClInclude Include="..\..\src\birth\birth-body-spec.h" />
     <ClInclude Include="..\..\src\birth\birth-select-realm.h" />
     <ClInclude Include="..\..\src\birth\birth-stat.h" />
     <ClInclude Include="..\..\src\birth\birth-util.h" />

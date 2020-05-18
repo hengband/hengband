@@ -41,6 +41,7 @@ hengband_SOURCES = \
 	birth/quick-start.c birth/quick-start.h \
 	birth/stat.c birth/stat.h \
 	birth/history-generator.c birth/history-generator.h \
+	birth/birth-body-spec.c birth/birth-body-spec.h \
 	\
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
