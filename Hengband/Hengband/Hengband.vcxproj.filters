@@ -1771,9 +1771,6 @@
     <ClInclude Include="..\..\src\mind\mind.h">
       <Filter>mind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\birtth\history.h">
-      <Filter>birth</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\player\selfinfo.h">
       <Filter>player</Filter>
     </ClInclude>
@@ -1913,6 +1910,9 @@
       <Filter>birth</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\birth\character-builder.h">
+      <Filter>birth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\birth\history.h">
       <Filter>birth</Filter>
     </ClInclude>
   </ItemGroup>

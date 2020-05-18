@@ -708,7 +708,7 @@
     <ClInclude Include="..\..\src\system\h-define.h" />
     <ClInclude Include="..\..\src\system\h-system.h" />
     <ClInclude Include="..\..\src\system\h-type.h" />
-    <ClInclude Include="..\..\src\birtth\history.h" />
+    <ClInclude Include="..\..\src\birth\history.h" />
     <ClInclude Include="..\..\src\io\inet.h" />
     <ClInclude Include="..\..\src\main\init.h" />
     <ClInclude Include="..\..\src\io\load.h" />
