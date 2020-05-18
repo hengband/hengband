@@ -929,6 +929,9 @@
     <ClCompile Include="..\..\src\birth\auto-roller.c">
       <Filter>birth</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\birth\birth-wizard.c">
+      <Filter>birth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1907,6 +1910,9 @@
       <Filter>birth</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\birth\auto-roller.h">
+      <Filter>birth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\birth\birth-wizard.h">
       <Filter>birth</Filter>
     </ClInclude>
   </ItemGroup>

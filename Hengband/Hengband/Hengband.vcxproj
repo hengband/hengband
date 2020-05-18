@@ -160,6 +160,7 @@
     <ClCompile Include="..\..\src\birth\birth-select-realm.c" />
     <ClCompile Include="..\..\src\birth\birth-stat.c" />
     <ClCompile Include="..\..\src\birth\birth-util.c" />
+    <ClCompile Include="..\..\src\birth\birth-wizard.c" />
     <ClCompile Include="..\..\src\birth\game-play-initializer.c" />
     <ClCompile Include="..\..\src\birth\history-editor.c" />
     <ClCompile Include="..\..\src\birth\history-generator.c" />
@@ -389,6 +390,7 @@
     <ClInclude Include="..\..\src\birth\birth-select-realm.h" />
     <ClInclude Include="..\..\src\birth\birth-stat.h" />
     <ClInclude Include="..\..\src\birth\birth-util.h" />
+    <ClInclude Include="..\..\src\birth\birth-wizard.h" />
     <ClInclude Include="..\..\src\birth\game-play-initializer.h" />
     <ClInclude Include="..\..\src\birth\history-editor.h" />
     <ClInclude Include="..\..\src\birth\history-generator.h" />
