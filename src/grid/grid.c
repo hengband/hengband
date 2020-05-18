@@ -1360,8 +1360,8 @@ void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type 
 	}
 	case GB_OUTER_NOPERM:
 	{
-		feature_type *_f_ptr = &f_info[feat_wall_outer];
-		if (permanent_wall(_f_ptr)) set_cave_feat(floor_ptr, y, x, (s16b)feat_state(player_ptr, feat_wall_outer, FF_UNPERM));
+		feature_type *f_ptr = &f_info[feat_wall_outer];
+		if (permanent_wall(f_ptr)) set_cave_feat(floor_ptr, y, x, (s16b)feat_state(player_ptr, feat_wall_outer, FF_UNPERM));
 		else set_cave_feat(floor_ptr, y, x, feat_wall_outer);
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		add_cave_info(floor_ptr, y, x, (CAVE_OUTER | CAVE_VAULT));
@@ -1369,7 +1369,7 @@ void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type 
 	}
 	case GB_SOLID:
 	{
-		set_cave_feat(floor_ptr, y, x, feat_wall_inner);
+		set_cave_feat(floor_ptr, y, x, feat_wall_solid);
 		floor_ptr->grid_array[y][x].info &= ~(CAVE_MASK);
 		add_cave_info(floor_ptr, y, x, CAVE_SOLID);
 		break;
