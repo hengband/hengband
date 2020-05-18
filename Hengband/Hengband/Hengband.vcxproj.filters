@@ -917,6 +917,9 @@
     <ClCompile Include="..\..\src\birth\history-editor.c">
       <Filter>birth</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\birth\birth-select-race.c">
+      <Filter>birth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1883,6 +1886,9 @@
       <Filter>birth</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\birth\history-editor.h">
+      <Filter>birth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\birth\birth-select-race.h">
       <Filter>birth</Filter>
     </ClInclude>
   </ItemGroup>
