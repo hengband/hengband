@@ -105,8 +105,7 @@ s32b auto_round;
  */
 static void k_info_reset(void)
 {
-    int i;
-    for (i = 1; i < max_k_idx; i++) {
+    for (int i = 1; i < max_k_idx; i++) {
         object_kind* k_ptr = &k_info[i];
         k_ptr->tried = FALSE;
         k_ptr->aware = FALSE;
@@ -119,7 +118,6 @@ static void k_info_reset(void)
  */
 static void player_wipe_without_name(player_type* creature_ptr)
 {
-    int i;
     player_type tmp;
 
     COPY(&tmp, creature_ptr, player_type);
@@ -134,10 +132,10 @@ static void player_wipe_without_name(player_type* creature_ptr)
     //TODO: キャラ作成からゲーム開始までに  current_floor_ptr を参照しなければならない処理は今後整理して外す。
     creature_ptr->current_floor_ptr = &floor_info;
     C_MAKE(creature_ptr->inventory_list, INVEN_TOTAL, object_type);
-    for (i = 0; i < 4; i++)
+    for (int i = 0; i < 4; i++)
         strcpy(creature_ptr->history[i], "");
 
-    for (i = 0; i < max_q_idx; i++) {
+    for (int i = 0; i < max_q_idx; i++) {
         quest_type* const q_ptr = &quest[i];
         q_ptr->status = QUEST_STATUS_UNTAKEN;
         q_ptr->cur_num = 0;
@@ -152,16 +150,16 @@ static void player_wipe_without_name(player_type* creature_ptr)
     creature_ptr->total_weight = 0;
     creature_ptr->inven_cnt = 0;
     creature_ptr->equip_cnt = 0;
-    for (i = 0; i < INVEN_TOTAL; i++)
+    for (int i = 0; i < INVEN_TOTAL; i++)
         object_wipe(&creature_ptr->inventory_list[i]);
 
-    for (i = 0; i < max_a_idx; i++) {
+    for (int i = 0; i < max_a_idx; i++) {
         artifact_type* a_ptr = &a_info[i];
         a_ptr->cur_num = 0;
     }
 
     k_info_reset();
-    for (i = 1; i < max_r_idx; i++) {
+    for (int i = 1; i < max_r_idx; i++) {
         monster_race* r_ptr = &r_info[i];
         r_ptr->cur_num = 0;
         r_ptr->max_num = 100;
@@ -184,7 +182,7 @@ static void player_wipe_without_name(player_type* creature_ptr)
     }
 
     creature_ptr->spell_forgotten1 = creature_ptr->spell_forgotten2 = 0L;
-    for (i = 0; i < 64; i++)
+    for (int i = 0; i < 64; i++)
         creature_ptr->spell_order[i] = 99;
 
     creature_ptr->learned_spells = 0;
@@ -212,13 +210,13 @@ static void player_wipe_without_name(player_type* creature_ptr)
     creature_ptr->pet_follow_distance = PET_FOLLOW_DIST;
     creature_ptr->pet_extra_flags = (PF_TELEPORT | PF_ATTACK_SPELL | PF_SUMMON_SPELL);
 
-    for (i = 0; i < current_world_ptr->max_d_idx; i++)
+    for (int i = 0; i < current_world_ptr->max_d_idx; i++)
         max_dlv[i] = 0;
 
     creature_ptr->visit = 1;
     creature_ptr->wild_mode = FALSE;
 
-    for (i = 0; i < 108; i++) {
+    for (int i = 0; i < 108; i++) {
         creature_ptr->magic_num1[i] = 0;
         creature_ptr->magic_num2[i] = 0;
     }
@@ -227,7 +225,7 @@ static void player_wipe_without_name(player_type* creature_ptr)
     creature_ptr->arena_number = 0;
     creature_ptr->current_floor_ptr->inside_arena = FALSE;
     creature_ptr->current_floor_ptr->inside_quest = 0;
-    for (i = 0; i < MAX_MANE; i++) {
+    for (int i = 0; i < MAX_MANE; i++) {
         creature_ptr->mane_spell[i] = -1;
         creature_ptr->mane_dam[i] = 0;
     }
@@ -240,7 +238,7 @@ static void player_wipe_without_name(player_type* creature_ptr)
     creature_ptr->muta2 = 0;
     creature_ptr->muta3 = 0;
 
-    for (i = 0; i < 8; i++)
+    for (int i = 0; i < 8; i++)
         creature_ptr->virtues[i] = 0;
 
     creature_ptr->dungeon_idx = 0;
@@ -261,14 +259,12 @@ static void player_wipe_without_name(player_type* creature_ptr)
 static void init_dungeon_quests(player_type* creature_ptr)
 {
     int number_of_quests = MAX_RANDOM_QUEST - MIN_RANDOM_QUEST + 1;
-    int i;
-
     init_flags = INIT_ASSIGN;
     floor_type* floor_ptr = creature_ptr->current_floor_ptr;
     floor_ptr->inside_quest = MIN_RANDOM_QUEST;
     process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
     floor_ptr->inside_quest = 0;
-    for (i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--) {
+    for (int i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--) {
         quest_type* q_ptr = &quest[i];
         monster_race* quest_r_ptr;
         q_ptr->status = QUEST_STATUS_TAKEN;
@@ -316,19 +312,14 @@ static void init_turn(player_type* creature_ptr)
  */
 static void wield_all(player_type* creature_ptr)
 {
-    object_type* o_ptr;
-    object_type* i_ptr;
     object_type object_type_body;
-
-    int slot;
-    INVENTORY_IDX item;
-
-    for (item = INVEN_PACK - 1; item >= 0; item--) {
+    for (INVENTORY_IDX item = INVEN_PACK - 1; item >= 0; item--) {
+        object_type *o_ptr;
         o_ptr = &creature_ptr->inventory_list[item];
         if (!o_ptr->k_idx)
             continue;
 
-        slot = wield_slot(creature_ptr, o_ptr);
+        int slot = wield_slot(creature_ptr, o_ptr);
         if (slot < INVEN_RARM)
             continue;
         if (slot == INVEN_LITE)
@@ -336,6 +327,7 @@ static void wield_all(player_type* creature_ptr)
         if (creature_ptr->inventory_list[slot].k_idx)
             continue;
 
+        object_type *i_ptr;
         i_ptr = &object_type_body;
         object_copy(i_ptr, o_ptr);
         i_ptr->number = 1;
@@ -364,11 +356,9 @@ static void wield_all(player_type* creature_ptr)
  */
 static void add_outfit(player_type* creature_ptr, object_type* o_ptr)
 {
-    s16b slot;
-
     object_aware(creature_ptr, o_ptr);
     object_known(o_ptr);
-    slot = inven_carry(creature_ptr, o_ptr);
+    s16b slot = inven_carry(creature_ptr, o_ptr);
     autopick_alter_item(creature_ptr, slot, FALSE);
     wield_all(creature_ptr);
 }
@@ -380,7 +370,6 @@ static void add_outfit(player_type* creature_ptr, object_type* o_ptr)
  */
 void player_outfit(player_type* creature_ptr)
 {
-    int i;
     OBJECT_TYPE_VALUE tv;
     OBJECT_SUBTYPE_VALUE sv;
     object_type forge;
@@ -397,7 +386,7 @@ void player_outfit(player_type* creature_ptr)
         /* Demon can drain vitality from humanoid corpse */
         get_mon_num_prep(creature_ptr, monster_hook_human, NULL);
 
-        for (i = rand_range(3, 4); i > 0; i--) {
+        for (int i = rand_range(3, 4); i > 0; i--) {
             object_prep(q_ptr, lookup_kind(TV_CORPSE, SV_CORPSE));
             q_ptr->pval = get_mon_num(creature_ptr, 2, 0);
             if (q_ptr->pval) {
@@ -539,7 +528,7 @@ void player_outfit(player_type* creature_ptr)
         player_init[creature_ptr->pclass][2][1] = SV_WHIP;
     }
 
-    for (i = 0; i < 3; i++) {
+    for (int i = 0; i < 3; i++) {
         tv = player_init[creature_ptr->pclass][i][0];
         sv = player_init[creature_ptr->pclass][i][1];
         if ((creature_ptr->prace == RACE_ANDROID) && ((tv == TV_SOFT_ARMOR) || (tv == TV_HARD_ARMOR)))
@@ -573,20 +562,18 @@ void player_outfit(player_type* creature_ptr)
  */
 static bool get_player_race(player_type* creature_ptr)
 {
-    int k, n, cs, os;
-    concptr str;
-    char c;
-    char sym[MAX_RACES];
     char p2 = ')';
-    char buf[80], cur[80];
+    char buf[80];
+    char cur[80];
 
     clear_from(10);
     put_str(_("注意：《種族》によってキャラクターの先天的な資質やボーナスが変化します。",
                 "Note: Your 'race' determines various intrinsic factors and bonuses."), 23, 5);
 
-    for (n = 0; n < MAX_RACES; n++) {
+    char sym[MAX_RACES];
+    for (int n = 0; n < MAX_RACES; n++) {
         rp_ptr = &race_info[n];
-        str = rp_ptr->title;
+        concptr str = rp_ptr->title;
         if (n < 26)
             sym[n] = I2A(n);
         else
@@ -597,9 +584,9 @@ static bool get_player_race(player_type* creature_ptr)
     }
 
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
-    k = -1;
-    cs = creature_ptr->prace;
-    os = MAX_RACES;
+    int k = -1;
+    int cs = creature_ptr->prace;
+    int os = MAX_RACES;
     while (TRUE) {
         if (cs != os) {
             c_put_str(TERM_WHITE, cur, 12 + (os / 5), 1 + 16 * (os % 5));
@@ -610,7 +597,7 @@ static bool get_player_race(player_type* creature_ptr)
                 put_str("                                   ", 5, 40);
             } else {
                 rp_ptr = &race_info[cs];
-                str = rp_ptr->title;
+                concptr str = rp_ptr->title;
                 sprintf(cur, "%c%c%s", sym[cs], p2, str);
                 c_put_str(TERM_L_BLUE, rp_ptr->title, 3, 40);
                 put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
@@ -631,7 +618,7 @@ static bool get_player_race(player_type* creature_ptr)
         sprintf(buf, _("種族を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a race (%c-%c) ('=' for options): "), sym[0], sym[MAX_RACES - 1]);
 
         put_str(buf, 10, 10);
-        c = inkey();
+        char c = inkey();
         if (c == 'Q')
             birth_quit();
         if (c == 'S')
@@ -646,44 +633,48 @@ static bool get_player_race(player_type* creature_ptr)
                 break;
             }
         }
+
         if (c == '*') {
             k = randint0(MAX_RACES);
             cs = k;
             continue;
         }
+
         if (c == '8') {
             if (cs >= 5)
                 cs -= 5;
         }
+
         if (c == '4') {
             if (cs > 0)
                 cs--;
         }
+
         if (c == '6') {
             if (cs < MAX_RACES)
                 cs++;
         }
+
         if (c == '2') {
             if ((cs + 5) <= MAX_RACES)
                 cs += 5;
         }
+
         k = (islower(c) ? A2I(c) : -1);
         if ((k >= 0) && (k < MAX_RACES)) {
             cs = k;
             continue;
         }
+
         k = (isupper(c) ? (26 + c - 'A') : -1);
         if ((k >= 26) && (k < MAX_RACES)) {
             cs = k;
             continue;
         } else
             k = -1;
+
         if (c == '?') {
-#ifdef JP
-            show_help(creature_ptr, "jraceclas.txt#TheRaces");
-#else
-            show_help(creature_ptr, "raceclas.txt#TheRaces");
-#endif
+            show_help(creature_ptr, _("jraceclas.txt#TheRaces", "raceclas.txt#TheRaces"));
         } else if (c == '=') {
             screen_save();
             do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
@@ -704,22 +695,20 @@ static bool get_player_race(player_type* creature_ptr)
  */
 static bool get_player_class(player_type* creature_ptr)
 {
-    int k, n, cs, os;
-    char c;
-    char sym[MAX_CLASS_CHOICE];
-    char p2 = ')';
-    char buf[80], cur[80];
-    concptr str;
+    char buf[80];
+    char cur[80];
     clear_from(10);
     put_str(_("注意：《職業》によってキャラクターの先天的な能力やボーナスが変化します。",
                 "Note: Your 'class' determines various intrinsic abilities and bonuses."), 23, 5);
     put_str(_("()で囲まれた選択肢はこの種族には似合わない職業です。",
                 "Any entries in parentheses should only be used by advanced players."), 11, 5);
 
-    for (n = 0; n < MAX_CLASS_CHOICE; n++) {
+    char sym[MAX_CLASS_CHOICE];
+    char p2 = ')';
+    for (int n = 0; n < MAX_CLASS_CHOICE; n++) {
         cp_ptr = &class_info[n];
         mp_ptr = &m_info[n];
-        str = cp_ptr->title;
+        concptr str = cp_ptr->title;
         if (n < 26)
             sym[n] = I2A(n);
         else
@@ -734,9 +723,9 @@ static bool get_player_class(player_type* creature_ptr)
     }
 
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
-    k = -1;
-    cs = creature_ptr->pclass;
-    os = MAX_CLASS_CHOICE;
+    int k = -1;
+    int cs = creature_ptr->pclass;
+    int os = MAX_CLASS_CHOICE;
     while (TRUE) {
         if (cs != os) {
             c_put_str(TERM_WHITE, cur, 13 + (os / 4), 2 + 19 * (os % 4));
@@ -748,7 +737,7 @@ static bool get_player_class(player_type* creature_ptr)
             } else {
                 cp_ptr = &class_info[cs];
                 mp_ptr = &m_info[cs];
-                str = cp_ptr->title;
+                concptr str = cp_ptr->title;
                 if (!(rp_ptr->choice & (1L << cs)))
                     sprintf(cur, "%c%c(%s)", sym[cs], p2, str);
                 else
@@ -773,7 +762,7 @@ static bool get_player_class(player_type* creature_ptr)
         sprintf(buf, _("職業を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a class (%c-%c) ('=' for options): "), sym[0], sym[MAX_CLASS_CHOICE - 1]);
 
         put_str(buf, 10, 10);
-        c = inkey();
+        char c = inkey();
         if (c == 'Q')
             birth_quit();
         if (c == 'S')
@@ -855,16 +844,13 @@ static bool get_player_class(player_type* creature_ptr)
  */
 static bool get_player_seikaku(player_type* creature_ptr)
 {
-    int k;
-    int n, os, cs;
-    char c;
-    char sym[MAX_SEIKAKU];
-    char p2 = ')';
-    char buf[80], cur[80];
-    char tmp[64];
     concptr str;
     clear_from(10);
     put_str(_("注意：《性格》によってキャラクターの能力やボーナスが変化します。", "Note: Your personality determines various intrinsic abilities and bonuses."), 23, 5);
+    char sym[MAX_SEIKAKU];
+    char buf[80];
+    char p2 = ')';
+    int n;
     for (n = 0; n < MAX_SEIKAKU; n++) {
         if (seikaku_info[n].sex && (seikaku_info[n].sex != (creature_ptr->psex + 1)))
             continue;
@@ -880,10 +866,11 @@ static bool get_player_seikaku(player_type* creature_ptr)
         put_str(buf, 12 + (n / 4), 2 + 18 * (n % 4));
     }
 
+    char cur[80];
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
-    k = -1;
-    cs = creature_ptr->pseikaku;
-    os = MAX_SEIKAKU;
+    int k = -1;
+    int cs = creature_ptr->pseikaku;
+    int os = MAX_SEIKAKU;
     while (TRUE) {
         if (cs != os) {
             c_put_str(TERM_WHITE, cur, 12 + (os / 4), 2 + 18 * (os % 4));
@@ -913,7 +900,7 @@ static bool get_player_seikaku(player_type* creature_ptr)
 
         sprintf(buf, _("性格を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a personality (%c-%c) ('=' for options): "), sym[0], sym[MAX_SEIKAKU - 1]);
         put_str(buf, 10, 10);
-        c = inkey();
+        char c = inkey();
         if (c == 'Q')
             birth_quit();
         if (c == 'S')
@@ -1001,11 +988,7 @@ static bool get_player_seikaku(player_type* creature_ptr)
             k = -1;
 
         if (c == '?') {
-#ifdef JP
-            show_help(creature_ptr, "jraceclas.txt#ThePersonalities");
-#else
-            show_help(creature_ptr, "raceclas.txt#ThePersonalities");
-#endif
+            show_help(creature_ptr, _("jraceclas.txt#ThePersonalities", "raceclas.txt#ThePersonalities"));
         } else if (c == '=') {
             screen_save();
             do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
@@ -1016,6 +999,7 @@ static bool get_player_seikaku(player_type* creature_ptr)
 
     creature_ptr->pseikaku = (CHARACTER_IDX)k;
     ap_ptr = &seikaku_info[creature_ptr->pseikaku];
+    char tmp[64];
 #ifdef JP
     strcpy(tmp, ap_ptr->title);
     if (ap_ptr->no == 1)
@@ -1036,23 +1020,20 @@ static bool get_player_seikaku(player_type* creature_ptr)
  */
 static bool get_stat_limits(player_type* creature_ptr)
 {
-    int i, j, m, cs, os;
-    int cval[6];
-    char c;
-    char buf[80], cur[80];
-    char inp[80];
-
     clear_from(10);
     put_str(_("最低限得たい能力値を設定して下さい。", "Set minimum stats."), 10, 10);
     put_str(_("2/8で項目選択、4/6で値の増減、Enterで次へ", "2/8 for Select, 4/6 for Change value, Enter for Goto next"), 11, 10);
-
     put_str(_("         基本値  種族 職業 性格     合計値  最大値", "           Base   Rac  Cla  Per      Total  Maximum"), 13, 10);
 
-    for (i = 0; i < A_MAX; i++) {
+    int cval[6];
+    char buf[80];
+    char cur[80];
+    char inp[80];
+    for (int i = 0; i < A_MAX; i++) {
         stat_match[i] = 0;
         cval[i] = 3;
-        j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
-        m = adjust_stat(17, j);
+        int j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
+        int m = adjust_stat(17, j);
         if (m > 18)
             sprintf(cur, "18/%02d", (m - 18));
         else
@@ -1070,8 +1051,8 @@ static bool get_stat_limits(player_type* creature_ptr)
         put_str(buf, 14 + i, 10);
     }
 
-    cs = 0;
-    os = 6;
+    int cs = 0;
+    int os = 6;
     while (TRUE) {
         if (cs != os) {
             if (os == 6) {
@@ -1082,8 +1063,8 @@ static bool get_stat_limits(player_type* creature_ptr)
             if (cs == 6) {
                 c_put_str(TERM_YELLOW, _("決定する", "Accept"), 21, 35);
             } else {
-                j = rp_ptr->r_adj[cs] + cp_ptr->c_adj[cs] + ap_ptr->a_adj[cs];
-                m = adjust_stat(cval[cs], j);
+                int j = rp_ptr->r_adj[cs] + cp_ptr->c_adj[cs] + ap_ptr->a_adj[cs];
+                int m = adjust_stat(cval[cs], j);
                 if (m > 18)
                     sprintf(inp, "18/%02d", (m - 18));
                 else
@@ -1098,7 +1079,7 @@ static bool get_stat_limits(player_type* creature_ptr)
             os = cs;
         }
 
-        c = inkey();
+        char c = inkey();
         switch (c) {
         case 'Q':
             birth_quit();
@@ -1193,7 +1174,7 @@ static bool get_stat_limits(player_type* creature_ptr)
             break;
     }
 
-    for (i = 0; i < A_MAX; i++)
+    for (int i = 0; i < A_MAX; i++)
         stat_limit[i] = (s16b)cval[i];
 
     return TRUE;
@@ -1207,10 +1188,6 @@ static bool get_chara_limits(player_type* creature_ptr)
 {
 #define MAXITEMS 8
 
-    int i, j, m, cs, os;
-    int mval[MAXITEMS], cval[MAXITEMS];
-    int max_percent, min_percent;
-    char c;
     char buf[80], cur[80];
     concptr itemname[] = {
         _("年齢", "age"),
@@ -1225,6 +1202,7 @@ static bool get_chara_limits(player_type* creature_ptr)
     put_str(_("注意：身長と体重の最大値/最小値ぎりぎりの値は非常に出現確率が低くなります。",
         "Caution: Values near minimum or maximum are extremely rare."), 23, 2);
 
+    int max_percent, min_percent;
     if (creature_ptr->psex == SEX_MALE) {
         max_percent = (int)(rp_ptr->m_b_ht + rp_ptr->m_m_ht * 4 - 1) * 100 / (int)(rp_ptr->m_b_ht);
         min_percent = (int)(rp_ptr->m_b_ht - rp_ptr->m_m_ht * 4 + 1) * 100 / (int)(rp_ptr->m_b_ht);
@@ -1235,7 +1213,10 @@ static bool get_chara_limits(player_type* creature_ptr)
 
     put_str(_("体格/地位の最小値/最大値を設定して下さい。", "Set minimum/maximum attribute."), 10, 10);
     put_str(_("  項    目                 最小値  最大値", " Parameter                    Min     Max"), 13, 20);
-    for (i = 0; i < MAXITEMS; i++) {
+    int mval[MAXITEMS];
+    int cval[MAXITEMS];
+    for (int i = 0; i < MAXITEMS; i++) {
+        int m;
         switch (i) {
         case 0: /* Minimum age */
             m = rp_ptr->b_age + 1;
@@ -1283,17 +1264,17 @@ static bool get_chara_limits(player_type* creature_ptr)
         cval[i] = m;
     }
 
-    for (i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         sprintf(buf, "%-12s (%3d - %3d)", itemname[i], mval[i * 2], mval[i * 2 + 1]);
         put_str(buf, 14 + i, 20);
-        for (j = 0; j < 2; j++) {
+        for (int j = 0; j < 2; j++) {
             sprintf(buf, "     %3d", cval[i * 2 + j]);
             put_str(buf, 14 + i, 45 + 8 * j);
         }
     }
 
-    cs = 0;
-    os = MAXITEMS;
+    int cs = 0;
+    int os = MAXITEMS;
     while (TRUE) {
         if (cs != os) {
             const char accept[] = _("決定する", "Accept");
@@ -1312,7 +1293,7 @@ static bool get_chara_limits(player_type* creature_ptr)
             os = cs;
         }
 
-        c = inkey();
+        char c = inkey();
         switch (c) {
         case 'Q':
             birth_quit();
@@ -1458,7 +1439,6 @@ static char* histpref_buf = NULL;
  */
 void add_history_from_pref_line(concptr t)
 {
-    /* Do nothing if the buffer is not ready */
     if (!histpref_buf)
         return;
 
@@ -1484,19 +1464,11 @@ static bool do_cmd_histpref(player_type* creature_ptr, void (*process_autopick_f
     histbuf[0] = '\0';
     histpref_buf = histbuf;
 
-#ifdef JP
-    sprintf(buf, "histedit-%s.prf", creature_ptr->base_name);
-#else
-    sprintf(buf, "histpref-%s.prf", creature_ptr->base_name);
-#endif
+    sprintf(buf, _("histedit-%s.prf", "histpref-%s.prf"), creature_ptr->base_name);
     err = process_histpref_file(creature_ptr, buf, process_autopick_file_command);
 
     if (0 > err) {
-#ifdef JP
-        strcpy(buf, "histedit.prf");
-#else
-        strcpy(buf, "histpref.prf");
-#endif
+        strcpy(buf, _("histedit.prf", "histpref.prf"));
         err = process_histpref_file(creature_ptr, buf, process_autopick_file_command);
     }
 
@@ -1555,15 +1527,13 @@ static bool do_cmd_histpref(player_type* creature_ptr, void (*process_autopick_f
 static void edit_history(player_type* creature_ptr, void (*process_autopick_file_command)(char*))
 {
     char old_history[4][60];
-    TERM_LEN y = 0, x = 0;
-    int i, j;
-
-    for (i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         sprintf(old_history[i], "%s", creature_ptr->history[i]);
     }
 
-    for (i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++) {
         /* loop */
+        int j; 
         for (j = 0; creature_ptr->history[i][j]; j++)
             ;
 
@@ -1573,19 +1543,15 @@ static void edit_history(player_type* creature_ptr, void (*process_autopick_file
     }
 
     display_player(creature_ptr, 1, map_name);
-#ifdef JP
-    c_put_str(TERM_L_GREEN, "(キャラクターの生い立ち - 編集モード)", 11, 20);
-    put_str("[ カーソルキーで移動、Enterで終了、Ctrl-Aでファイル読み込み ]", 17, 10);
-#else
-    c_put_str(TERM_L_GREEN, "(Character Background - Edit Mode)", 11, 20);
-    put_str("[ Cursor key for Move, Enter for End, Ctrl-A for Read pref ]", 17, 10);
-#endif
-
+    c_put_str(TERM_L_GREEN, _("(キャラクターの生い立ち - 編集モード)", "(Character Background - Edit Mode)"), 11, 20);
+    put_str(_("[ カーソルキーで移動、Enterで終了、Ctrl-Aでファイル読み込み ]", "[ Cursor key for Move, Enter for End, Ctrl-A for Read pref ]"), 17, 10);
+    TERM_LEN y = 0;
+    TERM_LEN x = 0;
     while (TRUE) {
         int skey;
         char c;
 
-        for (i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++) {
             put_str(creature_ptr->history[i], i + 12, 10);
         }
 #ifdef JP
@@ -1646,24 +1612,16 @@ static void edit_history(player_type* creature_ptr, void (*process_autopick_file
         } else if (c == '\r' || c == '\n') {
             Term_erase(0, 11, 255);
             Term_erase(0, 17, 255);
-#ifdef JP
-            put_str("(キャラクターの生い立ち - 編集済み)", 11, 20);
-#else
-            put_str("(Character Background - Edited)", 11, 20);
-#endif
+            put_str(_("(キャラクターの生い立ち - 編集済み)", "(Character Background - Edited)"), 11, 20);
             break;
         } else if (c == ESCAPE) {
             clear_from(11);
-#ifdef JP
-            put_str("(キャラクターの生い立ち)", 11, 25);
-#else
-            put_str("(Character Background)", 11, 25);
-#endif
-
-            for (i = 0; i < 4; i++) {
+            put_str(_("(キャラクターの生い立ち)", "(Character Background)"), 11, 25);
+            for (int i = 0; i < 4; i++) {
                 sprintf(creature_ptr->history[i], "%s", old_history[i]);
                 put_str(creature_ptr->history[i], i + 12, 10);
             }
+
             break;
         } else if (c == KTRL('A')) {
             if (do_cmd_histpref(creature_ptr, process_autopick_file_command)) {
@@ -1726,7 +1684,7 @@ static void edit_history(player_type* creature_ptr, void (*process_autopick_file
                     y = 0;
             }
         }
-    } /* while (TRUE) */
+    }
 }
 
 /*!
@@ -1739,12 +1697,10 @@ static void edit_history(player_type* creature_ptr, void (*process_autopick_file
  */
 static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_file_command)(char*))
 {
-    int i, k, n, cs, os;
     BIT_FLAGS mode = 0;
     bool flag = FALSE;
     bool prev = FALSE;
     concptr str;
-    char c;
     char p2 = ')';
     char b1 = '[';
     char b2 = ']';
@@ -1760,43 +1716,28 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
         "Make your charactor. ('S' Restart, 'Q' Quit, '?' Help)"), 8, 10);
     put_str(_("注意：《性別》の違いはゲーム上ほとんど影響を及ぼしません。",
         "Note: Your 'sex' does not have any significant gameplay effects."), 23, 5);
+    int n;
     for (n = 0; n < MAX_SEXES; n++) {
         sp_ptr = &sex_info[n];
-#ifdef JP
-        sprintf(buf, "%c%c%s", I2A(n), p2, sp_ptr->title);
-#else
-        sprintf(buf, "%c%c %s", I2A(n), p2, sp_ptr->title);
-#endif
+        sprintf(buf, _("%c%c%s", "%c%c %s"), I2A(n), p2, sp_ptr->title);
         put_str(buf, 12 + (n / 5), 2 + 15 * (n % 5));
     }
 
-#ifdef JP
-    sprintf(cur, "%c%c%s", '*', p2, "ランダム");
-#else
-    sprintf(cur, "%c%c %s", '*', p2, "Random");
-#endif
-
-    k = -1;
-    cs = 0;
-    os = MAX_SEXES;
+    sprintf(cur, _("%c%c%s", "%c%c %s"), '*', p2, _("ランダム", "Random"));
+    int k = -1;
+    int cs = 0;
+    int os = MAX_SEXES;
     while (TRUE) {
         if (cs != os) {
             put_str(cur, 12 + (os / 5), 2 + 15 * (os % 5));
             if (cs == MAX_SEXES)
-#ifdef JP
-                sprintf(cur, "%c%c%s", '*', p2, "ランダム");
-#else
-                sprintf(cur, "%c%c %s", '*', p2, "Random");
-#endif
+                sprintf(cur, _("%c%c%s", "%c%c %s"), '*', p2, _("ランダム", "Random"));
             else {
                 sp_ptr = &sex_info[cs];
                 str = sp_ptr->title;
-#ifdef JP
-                sprintf(cur, "%c%c%s", I2A(cs), p2, str);
-#else
-                sprintf(cur, "%c%c %s", I2A(cs), p2, str);
-#endif
+                sprintf(cur, _("%c%c%s", "%c%c %s"), I2A(cs), p2, str);
             }
+
             c_put_str(TERM_YELLOW, cur, 12 + (cs / 5), 2 + 15 * (cs % 5));
             os = cs;
         }
@@ -1804,53 +1745,45 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
         if (k >= 0)
             break;
 
-#ifdef JP
-        sprintf(buf, "性別を選んで下さい (%c-%c) ('='初期オプション設定): ", I2A(0), I2A(n - 1));
-#else
-        sprintf(buf, "Choose a sex (%c-%c) ('=' for options): ", I2A(0), I2A(n - 1));
-#endif
-
+        sprintf(buf, _("性別を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a sex (%c-%c) ('=' for options): "), I2A(0), I2A(n - 1));
         put_str(buf, 10, 10);
-        c = inkey();
+        char c = inkey();
         if (c == 'Q')
             birth_quit();
         if (c == 'S')
             return FALSE;
         if (c == ' ' || c == '\r' || c == '\n') {
-            if (cs == MAX_SEXES)
-                k = randint0(MAX_SEXES);
-            else
-                k = cs;
+            k = cs == MAX_SEXES ? randint0(MAX_SEXES) : cs;
             break;
         }
+
         if (c == '*') {
             k = randint0(MAX_SEXES);
             break;
         }
+
         if (c == '4') {
             if (cs > 0)
                 cs--;
         }
+
         if (c == '6') {
             if (cs < MAX_SEXES)
                 cs++;
         }
+
         k = (islower(c) ? A2I(c) : -1);
         if ((k >= 0) && (k < MAX_SEXES)) {
             cs = k;
             continue;
         } else
             k = -1;
+
         if (c == '?')
             do_cmd_help(creature_ptr);
         else if (c == '=') {
             screen_save();
-#ifdef JP
-            do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
-#else
-            do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
-#endif
-
+            do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
             screen_load();
         } else if (c != '4' && c != '6')
             bell();
@@ -1870,7 +1803,7 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
         clear_from(10);
         roff_to_buf(race_explanations[creature_ptr->prace], 74, temp, sizeof(temp));
         t = temp;
-        for (i = 0; i < 10; i++) {
+        for (int i = 0; i < 10; i++) {
             if (t[0] == 0)
                 break;
             else {
@@ -1878,13 +1811,9 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
                 t += strlen(t) + 1;
             }
         }
-#ifdef JP
-        if (get_check_strict("よろしいですか？", CHECK_DEFAULT_Y))
+        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
             break;
-#else
-        if (get_check_strict("Are you sure? ", CHECK_DEFAULT_Y))
-            break;
-#endif
+
         clear_from(10);
         c_put_str(TERM_WHITE, "              ", 4, 15);
     }
@@ -1900,7 +1829,7 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
         clear_from(10);
         roff_to_buf(class_explanations[creature_ptr->pclass], 74, temp, sizeof(temp));
         t = temp;
-        for (i = 0; i < 9; i++) {
+        for (int i = 0; i < 9; i++) {
             if (t[0] == 0)
                 break;
             else {
@@ -1909,13 +1838,9 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
             }
         }
 
-#ifdef JP
-        if (get_check_strict("よろしいですか？", CHECK_DEFAULT_Y))
+        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
             break;
-#else
-        if (get_check_strict("Are you sure? ", CHECK_DEFAULT_Y))
-            break;
-#endif
+
         c_put_str(TERM_WHITE, "              ", 5, 15);
     }
 
@@ -1932,7 +1857,7 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
         clear_from(10);
         roff_to_buf(personality_explanations[creature_ptr->pseikaku], 74, temp, sizeof(temp));
         t = temp;
-        for (i = 0; i < A_MAX; i++) {
+        for (int i = 0; i < A_MAX; i++) {
             if (t[0] == 0)
                 break;
             else {
@@ -1940,13 +1865,10 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
                 t += strlen(t) + 1;
             }
         }
-#ifdef JP
-        if (get_check_strict("よろしいですか？", CHECK_DEFAULT_Y))
+
+        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
             break;
-#else
-        if (get_check_strict("Are you sure? ", CHECK_DEFAULT_Y))
-            break;
-#endif
+
         c_put_str(TERM_L_BLUE, creature_ptr->name, 1, 34);
         prt("", 1, 34 + strlen(creature_ptr->name));
     }
@@ -1957,12 +1879,7 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
     put_str("                                   ", 5, 40);
 
     screen_save();
-#ifdef JP
-    do_cmd_options_aux(OPT_PAGE_BIRTH, "初期オプション((*)はスコアに影響)");
-#else
-    do_cmd_options_aux(OPT_PAGE_BIRTH, "Birth Option((*)s effect score)");
-#endif
-
+    do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
     screen_load();
     if (autoroller || autochara)
         auto_round = 0L;
@@ -1982,44 +1899,19 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
         col = 42;
         if (autoroller || autochara) {
             Term_clear();
-#ifdef JP
-            put_str("回数 :", 10, col + 13);
-#else
-            put_str("Round:", 10, col + 13);
-#endif
-
-#ifdef JP
-            put_str("(ESCで停止)", 12, col + 13);
-#else
-            put_str("(Hit ESC to stop)", 12, col + 13);
-#endif
-        }
-        else {
+            put_str(_("回数 :", "Round:"), 10, col + 13);
+            put_str(_("(ESCで停止)", "(Hit ESC to stop)"), 12, col + 13);
+        } else {
             get_stats(creature_ptr);
             get_ahw(creature_ptr);
             get_history(creature_ptr);
         }
 
         if (autoroller) {
-#ifdef JP
-            put_str("最小値", 2, col + 5);
-#else
-            put_str(" Limit", 2, col + 5);
-#endif
-
-#ifdef JP
-            put_str("成功率", 2, col + 13);
-#else
-            put_str("  Freq", 2, col + 13);
-#endif
-
-#ifdef JP
-            put_str("現在値", 2, col + 24);
-#else
-            put_str("  Roll", 2, col + 24);
-#endif
-
-            for (i = 0; i < A_MAX; i++) {
+            put_str(_("最小値", " Limit"), 2, col + 5);
+            put_str(_("成功率", "  Freq"), 2, col + 13);
+            put_str(_("現在値", "  Roll"), 2, col + 24);
+            for (int i = 0; i < A_MAX; i++) {
                 int j, m;
                 put_str(stat_names[i], 3 + i, col);
                 j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
@@ -2035,16 +1927,15 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
             auto_round++;
             if (auto_round >= 1000000000L) {
                 auto_round = 1;
-
                 if (autoroller) {
-                    for (i = 0; i < A_MAX; i++) {
+                    for (int i = 0; i < A_MAX; i++) {
                         stat_match[i] = 0;
                     }
                 }
             }
 
             if (autoroller) {
-                for (i = 0; i < A_MAX; i++) {
+                for (int i = 0; i < A_MAX; i++) {
                     if (creature_ptr->stat_max[i] >= stat_limit[i])
                         stat_match[i]++;
                     else
@@ -2066,6 +1957,7 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
                     if ((creature_ptr->sc < chara_limit.scmin) || (creature_ptr->sc > chara_limit.scmax))
                         accept = FALSE;
                 }
+
                 if (accept)
                     break;
             }
@@ -2093,6 +1985,7 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
         get_extra(creature_ptr, TRUE);
         get_money(creature_ptr);
         creature_ptr->chaos_patron = (s16b)randint0(MAX_PATRON);
+        char c;
         while (TRUE) {
             creature_ptr->update |= (PU_BONUS | PU_HP);
             update_creature(creature_ptr);
@@ -2134,11 +2027,7 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
             }
 
             if (c == '?') {
-#ifdef JP
-                show_help(creature_ptr, "jbirth.txt#AutoRoller");
-#else
-                show_help(creature_ptr, "birth.txt#AutoRoller");
-#endif
+                show_help(creature_ptr, _("jbirth.txt#AutoRoller", "birth.txt#AutoRoller"));
                 continue;
             } else if (c == '=') {
                 screen_save();
@@ -2164,13 +2053,9 @@ static bool player_birth_aux(player_type* creature_ptr, void (*process_autopick_
     edit_history(creature_ptr, process_autopick_file_command);
     get_max_stats(creature_ptr);
     get_virtues(creature_ptr);
-#ifdef JP
-    prt("[ 'Q' 中断, 'S' 初めから, Enter ゲーム開始 ]", 23, 14);
-#else
-    prt("['Q'uit, 'S'tart over, or Enter to continue]", 23, 10);
-#endif
+    prt(_("[ 'Q' 中断, 'S' 初めから, Enter ゲーム開始 ]", "['Q'uit, 'S'tart over, or Enter to continue]"), 23, _(14, 10));
 
-    c = inkey();
+    char c = inkey();
     if (c == 'Q')
         birth_quit();
 
@@ -2203,17 +2088,12 @@ static bool ask_quick_start(player_type* creature_ptr)
             quit(NULL);
         else if (c == 'S')
             return FALSE;
-        else if (c == '?') {
-#ifdef JP
-            show_help(creature_ptr, "jbirth.txt#QuickStart");
-#else
-            show_help(creature_ptr, "birth.txt#QuickStart");
-#endif
-        } else if ((c == 'y') || (c == 'Y')) {
+        else if (c == '?')
+            show_help(creature_ptr, _("jbirth.txt#QuickStart", "birth.txt#QuickStart"));
+        else if ((c == 'y') || (c == 'Y'))
             break;
-        } else {
+        else
             return FALSE;
-        }
     }
 
     load_prev_data(creature_ptr, FALSE);
@@ -2244,8 +2124,6 @@ static bool ask_quick_start(player_type* creature_ptr)
  */
 void player_birth(player_type* creature_ptr, void (*process_autopick_file_command)(char*))
 {
-    int i, j;
-    char buf[80];
     current_world_ptr->play_time = 0;
     wipe_monsters_list(creature_ptr);
     player_wipe_without_name(creature_ptr);
@@ -2267,6 +2145,7 @@ void player_birth(player_type* creature_ptr, void (*process_autopick_file_comman
 
     exe_write_diary(creature_ptr, DIARY_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "------- Started New Game -------"));
     exe_write_diary(creature_ptr, DIARY_DIALY, 0, NULL);
+    char buf[80];
     sprintf(buf, _("                            性別に%sを選択した。", "                            chose %s gender."),
         sex_info[creature_ptr->psex].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
@@ -2286,8 +2165,8 @@ void player_birth(player_type* creature_ptr, void (*process_autopick_file_comman
         seikaku_info[creature_ptr->pseikaku].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
 
-    for (i = 1; i < max_towns; i++) {
-        for (j = 0; j < MAX_STORES; j++) {
+    for (int i = 1; i < max_towns; i++) {
+        for (int j = 0; j < MAX_STORES; j++) {
             store_init(i, j);
         }
     }
@@ -2312,18 +2191,16 @@ void player_birth(player_type* creature_ptr, void (*process_autopick_file_comman
  */
 void dump_yourself(player_type* creature_ptr, FILE* fff)
 {
-    char temp[80 * 10];
-    int i;
-    concptr t;
     if (!fff)
         return;
 
+    char temp[80 * 10];
     roff_to_buf(race_explanations[creature_ptr->prace], 78, temp, sizeof(temp));
     fprintf(fff, "\n\n");
     fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[creature_ptr->prace].title);
-    t = temp;
+    concptr t = temp;
 
-    for (i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++) {
         if (t[0] == 0)
             break;
         fprintf(fff, "%s\n", t);
@@ -2335,7 +2212,7 @@ void dump_yourself(player_type* creature_ptr, FILE* fff)
     fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info[creature_ptr->pclass].title);
 
     t = temp;
-    for (i = 0; i < 10; i++) {
+    for (int i = 0; i < 10; i++) {
         if (t[0] == 0)
             break;
         fprintf(fff, "%s\n", t);
@@ -2347,7 +2224,7 @@ void dump_yourself(player_type* creature_ptr, FILE* fff)
     fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), seikaku_info[creature_ptr->pseikaku].title);
 
     t = temp;
-    for (i = 0; i < A_MAX; i++) {
+    for (int i = 0; i < A_MAX; i++) {
         if (t[0] == 0)
             break;
         fprintf(fff, "%s\n", t);
@@ -2360,7 +2237,7 @@ void dump_yourself(player_type* creature_ptr, FILE* fff)
         fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm1]);
 
         t = temp;
-        for (i = 0; i < A_MAX; i++) {
+        for (int i = 0; i < A_MAX; i++) {
             if (t[0] == 0)
                 break;
 
@@ -2375,7 +2252,7 @@ void dump_yourself(player_type* creature_ptr, FILE* fff)
         fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm2]);
 
         t = temp;
-        for (i = 0; i < A_MAX; i++) {
+        for (int i = 0; i < A_MAX; i++) {
             if (t[0] == 0)
                 break;
 
