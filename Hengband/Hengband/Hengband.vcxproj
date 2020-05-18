@@ -157,6 +157,7 @@
     <ClCompile Include="..\..\src\birth\birth-stat.c" />
     <ClCompile Include="..\..\src\birth\birth-util.c" />
     <ClCompile Include="..\..\src\birth\game-play-initializer.c" />
+    <ClCompile Include="..\..\src\birth\history-editor.c" />
     <ClCompile Include="..\..\src\birth\history-generator.c" />
     <ClCompile Include="..\..\src\birth\initial-equipments-table.c" />
     <ClCompile Include="..\..\src\birth\inventory-initializer.c" />
@@ -381,6 +382,7 @@
     <ClInclude Include="..\..\src\birth\birth-stat.h" />
     <ClInclude Include="..\..\src\birth\birth-util.h" />
     <ClInclude Include="..\..\src\birth\game-play-initializer.h" />
+    <ClInclude Include="..\..\src\birth\history-editor.h" />
     <ClInclude Include="..\..\src\birth\history-generator.h" />
     <ClInclude Include="..\..\src\birth\initial-equipments-table.h" />
     <ClInclude Include="..\..\src\birth\inventory-initializer.h" />

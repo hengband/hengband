@@ -301,3 +301,78 @@ void load_all_pref_files(player_type* player_ptr)
 
     autopick_load_pref(player_ptr, FALSE);
 }
+
+/*!
+ * @brief 生い立ちメッセージをファイルからロードする。
+ * @return なし
+ */
+bool read_histpref(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
+{
+    char buf[80];
+    errr err;
+    int i, j, n;
+    char *s, *t;
+    char temp[64 * 4];
+    char histbuf[HISTPREF_LIMIT];
+
+    if (!get_check(_("生い立ち設定ファイルをロードしますか? ", "Load background history preference file? ")))
+        return FALSE;
+
+    histbuf[0] = '\0';
+    histpref_buf = histbuf;
+
+    sprintf(buf, _("histedit-%s.prf", "histpref-%s.prf"), creature_ptr->base_name);
+    err = process_histpref_file(creature_ptr, buf, process_autopick_file_command);
+
+    if (0 > err) {
+        strcpy(buf, _("histedit.prf", "histpref.prf"));
+        err = process_histpref_file(creature_ptr, buf, process_autopick_file_command);
+    }
+
+    if (err) {
+        msg_print(_("生い立ち設定ファイルの読み込みに失敗しました。", "Failed to load background history preference."));
+        msg_print(NULL);
+        histpref_buf = NULL;
+        return FALSE;
+    } else if (!histpref_buf[0]) {
+        msg_print(_("有効な生い立ち設定はこのファイルにありません。", "There does not exist valid background history preference."));
+        msg_print(NULL);
+        histpref_buf = NULL;
+        return FALSE;
+    }
+
+    for (i = 0; i < 4; i++)
+        creature_ptr->history[i][0] = '\0';
+
+    /* loop */
+    for (s = histpref_buf; *s == ' '; s++)
+        ;
+
+    n = strlen(s);
+    while ((n > 0) && (s[n - 1] == ' '))
+        s[--n] = '\0';
+
+    roff_to_buf(s, 60, temp, sizeof(temp));
+    t = temp;
+    for (i = 0; i < 4; i++) {
+        if (t[0] == 0)
+            break;
+        else {
+            strcpy(creature_ptr->history[i], t);
+            t += strlen(t) + 1;
+        }
+    }
+
+    for (i = 0; i < 4; i++) {
+        /* loop */
+        for (j = 0; creature_ptr->history[i][j]; j++)
+            ;
+
+        for (; j < 59; j++)
+            creature_ptr->history[i][j] = ' ';
+        creature_ptr->history[i][59] = '\0';
+    }
+
+    histpref_buf = NULL;
+    return TRUE;
+}
