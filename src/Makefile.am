@@ -49,6 +49,7 @@ hengband_SOURCES = \
 	birth/birth-select-race.c birth/birth-select-race.h \
 	birth/birth-select-class.c birth/birth-select-class.h \
 	birth/birth-select-personality.c birth/birth-select-personality.h \
+	birth/auto-roller.c birth/auto-roller.h \
 	\
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
