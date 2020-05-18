@@ -11,8 +11,8 @@
  *      r_dis, r_dev, r_sav, r_stl, r_srh, r_fos, r_thn, r_thb,
  *      hitdie, exp base,
  *      Age (Base, Mod),
- *      Male (Hgt, Wgt),
- *      Female (Hgt, Wgt)
+ *      Male (Average height in inch, Max height deviation in percent, Average weight in pound, Max weight deviation in percent),
+ *      Female (Same as above)
  *      infra,
  *      class-choices
  * </pre>
