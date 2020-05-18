@@ -27,27 +27,12 @@
 #include "birth/birth-wizard.h"
 
 /*!
- * @brief プレイヤー作成処理のメインルーチン/ Create a new character.
- * @details
- * Note that we may be called with "junk" leftover in the various
- * fields, so we must be sure to clear them first.
+ * @brief プレーヤーキャラの作成結果を日記に書く
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-void player_birth(player_type* creature_ptr, void (*process_autopick_file_command)(char*))
+static void write_birth_diary(player_type *creature_ptr)
 {
-    current_world_ptr->play_time = 0;
-    wipe_monsters_list(creature_ptr);
-    player_wipe_without_name(creature_ptr);
-    if (!ask_quick_start(creature_ptr)) {
-        play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DEFAULT);
-        while (TRUE) {
-            if (player_birth_wizard(creature_ptr, process_autopick_file_command))
-                break;
-
-            player_wipe_without_name(creature_ptr);
-        }
-    }
-
     message_add(" ");
     message_add("  ");
     message_add("====================");
@@ -75,7 +60,31 @@ void player_birth(player_type* creature_ptr, void (*process_autopick_file_comman
     sprintf(buf, _("                            性格に%sを選択した。", "                            chose %s personality."),
         seikaku_info[creature_ptr->pseikaku].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
+}
 
+/*!
+ * @brief プレイヤー作成処理のメインルーチン/ Create a new character.
+ * @details
+ * Note that we may be called with "junk" leftover in the various
+ * fields, so we must be sure to clear them first.
+ * @return なし
+ */
+void player_birth(player_type* creature_ptr, void (*process_autopick_file_command)(char*))
+{
+    current_world_ptr->play_time = 0;
+    wipe_monsters_list(creature_ptr);
+    player_wipe_without_name(creature_ptr);
+    if (!ask_quick_start(creature_ptr)) {
+        play_music(TERM_XTRA_MUSIC_BASIC, MUSIC_BASIC_DEFAULT);
+        while (TRUE) {
+            if (player_birth_wizard(creature_ptr, process_autopick_file_command))
+                break;
+
+            player_wipe_without_name(creature_ptr);
+        }
+    }
+
+    write_birth_diary(creature_ptr);
     for (int i = 1; i < max_towns; i++) {
         for (int j = 0; j < MAX_STORES; j++) {
             store_init(i, j);
