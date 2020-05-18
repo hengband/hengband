@@ -8,13 +8,13 @@
 #include "knowledge-self.h"
 #include "cmd/dump-util.h"
 #include "player/avatar.h"
-#include "birth/birth.h"
 #include "core/show-file.h"
 #include "dungeon/dungeon-file.h"
 #include "world/world.h"
 #include "market/store-util.h"
 #include "floor/floor-town.h"
 #include "object/object-flavor.h"
+#include "birth/birth-explanations-table.h"
 
 /*
  * List virtues & status
@@ -32,6 +32,85 @@ void do_cmd_knowledge_virtues(player_type *creature_ptr)
 	fd_kill(file_name);
 }
 
+
+/*!
+ * @brief 自分に関する情報を画面に表示する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param fff ファイルポインタ
+ * @return なし
+ */
+static void dump_yourself(player_type *creature_ptr, FILE *fff)
+{
+    if (!fff)
+        return;
+
+    char temp[80 * 10];
+    roff_to_buf(race_explanations[creature_ptr->prace], 78, temp, sizeof(temp));
+    fprintf(fff, "\n\n");
+    fprintf(fff, _("種族: %s\n", "Race: %s\n"), race_info[creature_ptr->prace].title);
+    concptr t = temp;
+
+    for (int i = 0; i < 10; i++) {
+        if (t[0] == 0)
+            break;
+        fprintf(fff, "%s\n", t);
+        t += strlen(t) + 1;
+    }
+
+    roff_to_buf(class_explanations[creature_ptr->pclass], 78, temp, sizeof(temp));
+    fprintf(fff, "\n");
+    fprintf(fff, _("職業: %s\n", "Class: %s\n"), class_info[creature_ptr->pclass].title);
+
+    t = temp;
+    for (int i = 0; i < 10; i++) {
+        if (t[0] == 0)
+            break;
+        fprintf(fff, "%s\n", t);
+        t += strlen(t) + 1;
+    }
+
+    roff_to_buf(personality_explanations[creature_ptr->pseikaku], 78, temp, sizeof(temp));
+    fprintf(fff, "\n");
+    fprintf(fff, _("性格: %s\n", "Pesonality: %s\n"), seikaku_info[creature_ptr->pseikaku].title);
+
+    t = temp;
+    for (int i = 0; i < A_MAX; i++) {
+        if (t[0] == 0)
+            break;
+        fprintf(fff, "%s\n", t);
+        t += strlen(t) + 1;
+    }
+
+    fprintf(fff, "\n");
+    if (creature_ptr->realm1) {
+        roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm1) - 1], 78, temp, sizeof(temp));
+        fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm1]);
+
+        t = temp;
+        for (int i = 0; i < A_MAX; i++) {
+            if (t[0] == 0)
+                break;
+
+            fprintf(fff, "%s\n", t);
+            t += strlen(t) + 1;
+        }
+    }
+
+    fprintf(fff, "\n");
+    if (creature_ptr->realm2) {
+        roff_to_buf(realm_explanations[technic2magic(creature_ptr->realm2) - 1], 78, temp, sizeof(temp));
+        fprintf(fff, _("魔法: %s\n", "Realm: %s\n"), realm_names[creature_ptr->realm2]);
+
+        t = temp;
+        for (int i = 0; i < A_MAX; i++) {
+            if (t[0] == 0)
+                break;
+
+            fprintf(fff, "%s\n", t);
+            t += strlen(t) + 1;
+        }
+    }
+}
 
 /*
 * List virtues & status
