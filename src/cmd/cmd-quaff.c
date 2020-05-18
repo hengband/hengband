@@ -10,7 +10,6 @@
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 
-#include "birth/birth.h"
 #include "player/selfinfo.h"
 #include "object/object-hook.h"
 #include "mutation/mutation.h"
@@ -31,6 +30,7 @@
 #include "view/display-main-window.h"
 #include "player/player-class.h"
 #include "spell/spells-detection.h"
+#include "birth/birth-stat.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /

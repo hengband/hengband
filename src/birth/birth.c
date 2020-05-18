@@ -43,9 +43,7 @@
 #include "object/object-kind.h"
 #include "player/patron.h"
 #include "player/player-class.h"
-#include "player/player-personality.h"
 #include "player/player-sex.h"
-#include "player/player-skill.h"
 #include "player/player-status.h"
 #include "player/process-name.h"
 #include "player/race-info-table.h"
@@ -53,7 +51,6 @@
 #include "realm/realm.h"
 #include "io/save.h"
 #include "spell/spells-util.h"
-#include "spell/spells-status.h"
 #include "view/display-main-window.h" // 暫定。後で消す.
 #include "view/display-player.h" // 暫定。後で消す.
 #include "floor/wild.h"
@@ -61,6 +58,7 @@
 #include "birth/birth-util.h"
 #include "birth/birth-select-realm.h"
 #include "birth/quick-start.h"
+#include "birth/birth-stat.h"
 
 /*!
  * オートローラーの内容を描画する間隔 /
@@ -96,179 +94,6 @@ static s32b stat_match[6];
 
 /*! オートローラの試行回数 / Autoroll round */
 static s32b auto_round;
-
-/*!
- * @brief プレイヤーの能力値表現に基づいて加減算を行う。
- * @param value 現在の能力値
- * @param amount 加減算する値
- * @return 加減算の結果
- */
-static int adjust_stat(int value, int amount)
-{
-    if (amount < 0) {
-        for (int i = 0; i < (0 - amount); i++) {
-            if (value >= 18 + 10) {
-                value -= 10;
-            } else if (value > 18) {
-                value = 18;
-            } else if (value > 3) {
-                value--;
-            }
-        }
-    }
-    else if (amount > 0) {
-        for (int i = 0; i < amount; i++) {
-            if (value < 18) {
-                value++;
-            } else {
-                value += 10;
-            }
-        }
-    }
-
-    return value;
-}
-
-/*!
- * @brief プレイヤーの能力値を一通りロールする。 / Roll for a characters stats
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return なし
- * @details
- * calc_bonuses()による、独立ステータスからの副次ステータス算出も行っている。
- * For efficiency, we include a chunk of "calc_bonuses()".\n
- */
-static void get_stats(player_type* creature_ptr)
-{
-    while (TRUE) {
-        int sum = 0;
-        for (int i = 0; i < 2; i++) {
-            s32b tmp = randint0(60 * 60 * 60);
-            BASE_STATUS val;
-
-            /* Extract 5 + 1d3 + 1d4 + 1d5 */
-            val = 5 + 3;
-            val += tmp % 3;
-            tmp /= 3;
-            val += tmp % 4;
-            tmp /= 4;
-            val += tmp % 5;
-            tmp /= 5;
-
-            sum += val;
-            creature_ptr->stat_cur[3 * i] = creature_ptr->stat_max[3 * i] = val;
-
-            /* Extract 5 + 1d3 + 1d4 + 1d5 */
-            val = 5 + 3;
-            val += tmp % 3;
-            tmp /= 3;
-            val += tmp % 4;
-            tmp /= 4;
-            val += tmp % 5;
-            tmp /= 5;
-
-            sum += val;
-            creature_ptr->stat_cur[3 * i + 1] = creature_ptr->stat_max[3 * i + 1] = val;
-
-            val = 5 + 3;
-            val += tmp % 3;
-            tmp /= 3;
-            val += tmp % 4;
-            tmp /= 4;
-            val += (BASE_STATUS)tmp;
-
-            sum += val;
-            creature_ptr->stat_cur[3 * i + 2] = creature_ptr->stat_max[3 * i + 2] = val;
-        }
-
-        if ((sum > 42 + 5 * 6) && (sum < 57 + 5 * 6))
-            break;
-    }
-}
-
-/*!
- * @brief プレイヤーの限界ステータスを決める。
- * @return なし
- */
-void get_max_stats(player_type* creature_ptr)
-{
-    int dice[6];
-    while (TRUE) {
-        int j = 0;
-        for (int i = 0; i < A_MAX; i++) {
-            dice[i] = randint1(7);
-            j += dice[i];
-        }
-
-        if (j == 24)
-            break;
-    }
-
-    for (int i = 0; i < A_MAX; i++) {
-        BASE_STATUS max_max = 18 + 60 + dice[i] * 10;
-        creature_ptr->stat_max_max[i] = max_max;
-        if (creature_ptr->stat_max[i] > max_max)
-            creature_ptr->stat_max[i] = max_max;
-        if (creature_ptr->stat_cur[i] > max_max)
-            creature_ptr->stat_cur[i] = max_max;
-    }
-
-    creature_ptr->knowledge &= ~(KNOW_STAT);
-    creature_ptr->redraw |= (PR_STATS);
-}
-
-/*!
- * @brief その他「オートローラ中は算出の対象にしない」副次ステータスを処理する / Roll for some info that the auto-roller ignores
- * @return なし
- */
-static void get_extra(player_type* creature_ptr, bool roll_hitdie)
-{
-    if (creature_ptr->prace == RACE_ANDROID)
-        creature_ptr->expfact = rp_ptr->r_exp;
-    else
-        creature_ptr->expfact = rp_ptr->r_exp + cp_ptr->c_exp;
-
-    if (((creature_ptr->pclass == CLASS_MONK) ||
-        (creature_ptr->pclass == CLASS_FORCETRAINER) ||
-        (creature_ptr->pclass == CLASS_NINJA)) && ((creature_ptr->prace == RACE_KLACKON) ||
-            (creature_ptr->prace == RACE_SPRITE)))
-        creature_ptr->expfact -= 15;
-
-    /* Reset record of race/realm changes */
-    creature_ptr->start_race = creature_ptr->prace;
-    creature_ptr->old_race1 = 0L;
-    creature_ptr->old_race2 = 0L;
-    creature_ptr->old_realm = 0;
-
-    for (int i = 0; i < 64; i++) {
-        if (creature_ptr->pclass == CLASS_SORCERER)
-            creature_ptr->spell_exp[i] = SPELL_EXP_MASTER;
-        else if (creature_ptr->pclass == CLASS_RED_MAGE)
-            creature_ptr->spell_exp[i] = SPELL_EXP_SKILLED;
-        else
-            creature_ptr->spell_exp[i] = SPELL_EXP_UNSKILLED;
-    }
-
-    for (int i = 0; i < 5; i++)
-        for (int j = 0; j < 64; j++)
-            creature_ptr->weapon_exp[i][j] = s_info[creature_ptr->pclass].w_start[i][j];
-
-    if ((creature_ptr->pseikaku == SEIKAKU_SEXY) && (creature_ptr->weapon_exp[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] < WEAPON_EXP_BEGINNER)) {
-        creature_ptr->weapon_exp[TV_HAFTED - TV_WEAPON_BEGIN][SV_WHIP] = WEAPON_EXP_BEGINNER;
-    }
-
-    for (int i = 0; i < GINOU_MAX; i++)
-        creature_ptr->skill_exp[i] = s_info[creature_ptr->pclass].s_start[i];
-
-    if (creature_ptr->pclass == CLASS_SORCERER)
-        creature_ptr->hitdie = rp_ptr->r_mhp / 2 + cp_ptr->c_mhp + ap_ptr->a_mhp;
-    else
-        creature_ptr->hitdie = rp_ptr->r_mhp + cp_ptr->c_mhp + ap_ptr->a_mhp;
-
-    if (roll_hitdie)
-        roll_hitdice(creature_ptr, SPOP_NO_UPDATE);
-
-    creature_ptr->mhp = creature_ptr->player_hp[0];
-}
 
 /*!
  * @brief プレイヤーの生い立ちの自動生成を行う。 / Get the racial history, and social class, using the "history charts".

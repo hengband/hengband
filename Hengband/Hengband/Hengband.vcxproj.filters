@@ -893,6 +893,9 @@
     <ClCompile Include="..\..\src\birth\quick-start.c">
       <Filter>birth</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\birth\birth-stat.c">
+      <Filter>birth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1835,6 +1838,9 @@
       <Filter>birth</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\birth\quick-start.h">
+      <Filter>birth</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\birth\birth-stat.h">
       <Filter>birth</Filter>
     </ClInclude>
   </ItemGroup>

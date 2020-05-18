@@ -53,6 +53,7 @@
 #include "autopick/autopick-reader-writer.h"
 #include "io/save.h"
 #include "io/report.h"
+#include "birth/birth-stat.h"
 
 #include "view/display-main-window.h"
 
