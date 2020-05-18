@@ -2,175 +2,101 @@
 #include "birth/history-generator.h"
 #include "birth/history.h"
 
+static int get_history_chart(player_type *creature_ptr)
+{
+    switch (creature_ptr->prace) {
+    case RACE_AMBERITE:
+        return 67;
+    case RACE_HUMAN:
+    case RACE_BARBARIAN:
+    case RACE_DUNADAN:
+        return 1;
+    case RACE_HALF_ELF:
+        return 4;
+    case RACE_ELF:
+    case RACE_HIGH_ELF:
+        return 7;
+    case RACE_HOBBIT:
+        return 10;
+    case RACE_GNOME:
+        return 13;
+    case RACE_DWARF:
+        return 16;
+    case RACE_HALF_ORC:
+        return 19;
+    case RACE_HALF_TROLL:
+        return 22;
+    case RACE_DARK_ELF:
+        return 69;
+    case RACE_HALF_OGRE:
+        return 74;
+    case RACE_HALF_GIANT:
+        return 75;
+    case RACE_HALF_TITAN:
+        return 76;
+    case RACE_CYCLOPS:
+        return 77;
+    case RACE_YEEK:
+        return 78;
+    case RACE_KOBOLD:
+        return 82;
+    case RACE_KLACKON:
+        return 84;
+    case RACE_NIBELUNG:
+        return 87;
+    case RACE_DRACONIAN:
+        return 89;
+    case RACE_MIND_FLAYER:
+        return 92;
+    case RACE_IMP:
+        return 94;
+    case RACE_GOLEM:
+        return 98;
+    case RACE_SKELETON:
+        return 102;
+    case RACE_ZOMBIE:
+        return 107;
+    case RACE_VAMPIRE:
+        return 113;
+    case RACE_SPECTRE:
+        return 118;
+    case RACE_SPRITE:
+        return 124;
+    case RACE_BEASTMAN:
+        return 129;
+    case RACE_ENT:
+        return 137;
+    case RACE_ANGEL:
+        return 142;
+    case RACE_DEMON:
+        return 145;
+    case RACE_S_FAIRY:
+        return 148;
+    case RACE_KUTAR:
+        return 154;
+    case RACE_ANDROID:
+        return 155;
+    case RACE_MERFOLK:
+        return 170;
+    default:
+        return 0;
+    }
+}
+
 /*!
  * @brief プレイヤーの生い立ちの自動生成を行う。 / Get the racial history, and social class, using the "history charts".
  * @return なし
  */
 void get_history(player_type *creature_ptr)
 {
-    /* Clear the previous history strings */
     for (int i = 0; i < 4; i++)
         creature_ptr->history[i][0] = '\0';
 
-    /* Clear the history text */
     char buf[240];
     buf[0] = '\0';
 
-    /* Initial social class */
     int social_class = randint1(4);
-
-    /* Starting place */
-    int chart;
-    switch (creature_ptr->prace) {
-    case RACE_AMBERITE: {
-        chart = 67;
-        break;
-    }
-    case RACE_HUMAN:
-    case RACE_BARBARIAN:
-    case RACE_DUNADAN: {
-        chart = 1;
-        break;
-    }
-    case RACE_HALF_ELF: {
-        chart = 4;
-        break;
-    }
-    case RACE_ELF:
-    case RACE_HIGH_ELF: {
-        chart = 7;
-        break;
-    }
-    case RACE_HOBBIT: {
-        chart = 10;
-        break;
-    }
-    case RACE_GNOME: {
-        chart = 13;
-        break;
-    }
-    case RACE_DWARF: {
-        chart = 16;
-        break;
-    }
-    case RACE_HALF_ORC: {
-        chart = 19;
-        break;
-    }
-    case RACE_HALF_TROLL: {
-        chart = 22;
-        break;
-    }
-    case RACE_DARK_ELF: {
-        chart = 69;
-        break;
-    }
-    case RACE_HALF_OGRE: {
-        chart = 74;
-        break;
-    }
-    case RACE_HALF_GIANT: {
-        chart = 75;
-        break;
-    }
-    case RACE_HALF_TITAN: {
-        chart = 76;
-        break;
-    }
-    case RACE_CYCLOPS: {
-        chart = 77;
-        break;
-    }
-    case RACE_YEEK: {
-        chart = 78;
-        break;
-    }
-    case RACE_KOBOLD: {
-        chart = 82;
-        break;
-    }
-    case RACE_KLACKON: {
-        chart = 84;
-        break;
-    }
-    case RACE_NIBELUNG: {
-        chart = 87;
-        break;
-    }
-    case RACE_DRACONIAN: {
-        chart = 89;
-        break;
-    }
-    case RACE_MIND_FLAYER: {
-        chart = 92;
-        break;
-    }
-    case RACE_IMP: {
-        chart = 94;
-        break;
-    }
-    case RACE_GOLEM: {
-        chart = 98;
-        break;
-    }
-    case RACE_SKELETON: {
-        chart = 102;
-        break;
-    }
-    case RACE_ZOMBIE: {
-        chart = 107;
-        break;
-    }
-    case RACE_VAMPIRE: {
-        chart = 113;
-        break;
-    }
-    case RACE_SPECTRE: {
-        chart = 118;
-        break;
-    }
-    case RACE_SPRITE: {
-        chart = 124;
-        break;
-    }
-    case RACE_BEASTMAN: {
-        chart = 129;
-        break;
-    }
-    case RACE_ENT: {
-        chart = 137;
-        break;
-    }
-    case RACE_ANGEL: {
-        chart = 142;
-        break;
-    }
-    case RACE_DEMON: {
-        chart = 145;
-        break;
-    }
-    case RACE_S_FAIRY: {
-        chart = 148;
-        break;
-    }
-    case RACE_KUTAR: {
-        chart = 154;
-        break;
-    }
-    case RACE_ANDROID: {
-        chart = 155;
-        break;
-    }
-    case RACE_MERFOLK: {
-        chart = 170;
-        break;
-    }
-    default: {
-        chart = 0;
-        break;
-    }
-    }
-
+    int chart = get_history_chart(creature_ptr);
     /* Process the history */
     while (chart) {
         /* Start over */
