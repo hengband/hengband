@@ -5,7 +5,8 @@ AUTOMAKE_OPTIONS = foreign subdir-objects
 bin_PROGRAMS = hengband
 
 hengband_SOURCES = \
-	system/angband.h system/h-basic.h system/h-config.h \
+	system/angband.h system/angband-version.h \
+	system/h-basic.h system/h-config.h \
 	system/h-define.h system/h-system.h system/h-type.h \
 	system/system-variables.c system/system-variables.h \
 	system/gamevalue.h \
@@ -32,7 +33,7 @@ hengband_SOURCES = \
 	autopick/autopick-editor-util.c autopick/autopick-editor-util.h \
 	autopick/autopick-editor-command.c autopick/autopick-editor-command.h \
 	\
-	birth/bitrh-explanations-table.c birth/bitrh-explanations-table.h \
+	birth/birth-explanations-table.c birth/birth-explanations-table.h \
 	birth/birth.c birth/birth.h \
 	birth/history.c birth/history.h \
 	birth/birth-util.c birth/birth-util.h \
@@ -41,6 +42,7 @@ hengband_SOURCES = \
 	\
 	main/music-definitions-table.c main/music-definitions-table.h \
 	main/sound-definitions-table.c main/sound-definitions-table.h \
+	main/x11-gamma-builder.c main/x11-gamma-builder.h \
 	main/init.c main/init.h \
 	\
 	market/arena-info-table.c market/arena-info-table.h \
@@ -79,6 +81,7 @@ hengband_SOURCES = \
 	io/dump-remover.c io/dump-remover.h \
 	io/files.c io/files.h \
 	io/gf-descriptions.c io/gf-descriptions.h \
+	io/targeting.c io/targeting.h \
 	io/tokenizer.c io/tokenizer.h \
 	io/interpret-pref-file.c io/interpret-pref-file.h \
 	io/player-status-dump.c io/player-status-dump.h \
@@ -99,11 +102,11 @@ hengband_SOURCES = \
 	core/game-play.c core/game-play.h \
 	core/show-file.c core/show-file.h \
 	core/stuff-handler.c core/stuff-handler.h \
-	core/angband-version.h core/special-internal-keys.h \
+	core/special-internal-keys.h \
 	core/output-updater.c core/output-updater.h \
 	core/game-closer.c core/game-closer.h \
 	core/turn-compensator.c core/turn-compensator.h \
-	core/hp-mp-generator.c core/hp-mp-generator.h \
+	core/hp-mp-regenerator.c core/hp-mp-regenerator.h \
 	core/hp-mp-processor.c core/hp-mp-processor.h \
 	core/magic-effects-timeout-reducer.c core/magic-effects-timeout-reducer.h \
 	core/player-processor.c core/player-processor.h \
@@ -112,6 +115,7 @@ hengband_SOURCES = \
 	dungeon/dungeon.c dungeon/dungeon.h \
 	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \
 	dungeon/dungeon-file.c dungeon/dungeon-file.h \
+	dungeon/quest.h dungeon/quest.c \
 	\
 	floor/floor.c floor/floor.h floor/floor-events.c floor/floor-events.h \
 	floor/floor-generate.c floor/floor-generate.h \
@@ -174,8 +178,6 @@ hengband_SOURCES = \
 	inventory/pack-overflow.c inventory/pack-overflow.h \
 	inventory/player-inventory.c inventory/player-inventory.h \
 	\
-	patron.h patron.c \
-	\
 	player/player-move.c player/player-move.h \
 	player/player-damage.c player/player-damage.h \
 	player/player-status.c player/player-status.h \
@@ -183,10 +185,9 @@ hengband_SOURCES = \
 	player/player-skill.c player/player-skill.h \
 	player/player-class.c player/player-class.h \
 	player/player-race.c player/player-race.h \
+	player/patron.h player/patron.c \
 	player/player-personality.c player/player-personality.h \
 	player/player-sex.c player/player-sex.h player/selfinfo.c player/selfinfo.h \
-	\
-	quest.h quest.c\
 	\
 	realm/realm.c realm/realm.h \
 	realm/realm-arcane.c realm/realm-arcane.h \
@@ -237,11 +238,11 @@ hengband_SOURCES = \
 	spell/technic-info-table.c spell/technic-info-table.h \
 	spell/spells-execution.c spell/spells-execution.h \
 	spell/spells-util.h spell/spells-type.h \
-	spell/process-effect.h spell/process-effect.h \
+	spell/process-effect.c spell/process-effect.h \
 	spell/spells1.c spell/spells1.h spell/spells2.c spell/spells2.h \
 	spell/spells3.c spell/spells3.h \
 	spell/music-checker.c spell/music-checker.h \
-	spells-diceroll.c spell/spells-diceroll.h \
+	spell/spells-diceroll.c spell/spells-diceroll.h \
 	spell/spells-floor.c spell/spells-floor.h \
 	spell/spells-object.c spell/spells-object.h \
 	spell/spells-status.c spell/spells-status.h \
@@ -264,9 +265,7 @@ hengband_SOURCES = \
 	mspell/mspell-floor.c mspell/mspell-floor.h \
 	mspell/mspell-status.c mspell/mspell-status.h \
 	mspell/mspell-special.c mspell/mspell-special.h \
-	mspell/mspell-particular.c mspell/mspell-particularity.h \
-	\
-	view-mainwindow.c view-mainwindow.h targeting.c targeting.h \
+	mspell/mspell-particularity.c mspell/mspell-particularity.h \
 	\
 	knowledge/knowledge-autopick.c knowledge/knowledge-autopick.h \
 	knowledge/knowledge-experiences.c knowledge/knowledge-experiences.h \
@@ -320,7 +319,6 @@ hengband_SOURCES = \
 
 EXTRA_hengband_SOURCES = \
 	angband.ico angband.rc ang_eng.rc maid-x11.c main-win.c \
-	main/x11-gamma-builder.c main/x11-gamma-builder.h \
 	makefile.bcc makefile.std term/readdib.c term/readdib.h wall.bmp
 
 EXTRA_DIST = \

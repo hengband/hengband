@@ -94,7 +94,7 @@
 
 #include "system/angband.h"
 #include "main/sound-definitions-table.h"
-#include "core/system-variables.h"
+#include "system/system-variables.h"
 #include "io/files.h"
 #include "term/gameterm.h"
 
