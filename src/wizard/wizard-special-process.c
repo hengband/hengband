@@ -24,7 +24,7 @@
 #include "cmd/cmd-help.h"
 #include "cmd/cmd-save.h"
 #include "util/util.h"
-#include "birth/birth.h"
+#include "birth/inventory-initializer.h"
 #include "player/selfinfo.h"
 #include "player/patron.h"
 #include "mutation/mutation.h"

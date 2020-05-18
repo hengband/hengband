@@ -908,6 +908,9 @@
     <ClCompile Include="..\..\src\view\display-birth.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\birth\inventory-initializer.c">
+      <Filter>birth</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1866,6 +1869,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\display-birth.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\birth\inventory-initializer.h">
+      <Filter>birth</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

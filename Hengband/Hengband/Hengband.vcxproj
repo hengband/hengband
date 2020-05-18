@@ -158,6 +158,7 @@
     <ClCompile Include="..\..\src\birth\birth-util.c" />
     <ClCompile Include="..\..\src\birth\history-generator.c" />
     <ClCompile Include="..\..\src\birth\initial-equipments-table.c" />
+    <ClCompile Include="..\..\src\birth\inventory-initializer.c" />
     <ClCompile Include="..\..\src\birth\quick-start.c" />
     <ClCompile Include="..\..\src\cmd\cmd-menu-content-table.c" />
     <ClCompile Include="..\..\src\mind\racial-samurai.c" />
@@ -380,6 +381,7 @@
     <ClInclude Include="..\..\src\birth\birth-util.h" />
     <ClInclude Include="..\..\src\birth\history-generator.h" />
     <ClInclude Include="..\..\src\birth\initial-equipments-table.h" />
+    <ClInclude Include="..\..\src\birth\inventory-initializer.h" />
     <ClInclude Include="..\..\src\birth\quick-start.h" />
     <ClInclude Include="..\..\src\cmd\cmd-menu-content-table.h" />
     <ClInclude Include="..\..\src\mind\racial-samurai.h" />
