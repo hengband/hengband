@@ -70,6 +70,7 @@ hengband_SOURCES = \
 	view/display-player.c view/display-player.h \
 	view/status-first-page.c view/status-first-page.h \
 	view/display-util.c view/display-util.h \
+	view/display-birth.c view/display-birth.h \
 	\
 	player/avatar.h player/avatar.c \
 	player/mimic-info-table.c player/mimic-info-table.h \

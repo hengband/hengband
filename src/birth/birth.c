@@ -62,6 +62,7 @@
 #include "birth/history-generator.h"
 #include "birth/birth-body-spec.h"
 #include "birth/initial-equipments-table.h"
+#include "view/display-birth.h" // 暫定。後で消す予定。
 
 /*!
  * オートローラーの内容を描画する間隔 /
@@ -93,58 +94,10 @@ static struct {
 } chara_limit;
 
 /*! オートローラ中、各能力値が水準を超えた回数 / Autoroll matches */
-static s32b stat_match[6];
+s32b stat_match[6];
 
 /*! オートローラの試行回数 / Autoroll round */
-static s32b auto_round;
-
-/*!
- * @brief put_stats()のサブルーチンとして、オートロール中のステータスを表示する / Display stat values, subset of "put_stats()"
- * @details See 'display_player(p_ptr, )' for screen layout constraints.
- * @return なし
- */
-static void birth_put_stats(player_type* creature_ptr)
-{
-    int i, j, m, p;
-    int col;
-    TERM_COLOR attr;
-    char buf[80];
-
-    if (autoroller) {
-        col = 42;
-        /* Put the stats (and percents) */
-        for (i = 0; i < A_MAX; i++) {
-            /* Race/Class bonus */
-            j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
-
-            /* Obtain the current stat */
-            m = adjust_stat(creature_ptr->stat_max[i], j);
-
-            /* Put the stat */
-            cnv_stat(m, buf);
-            c_put_str(TERM_L_GREEN, buf, 3 + i, col + 24);
-
-            /* Put the percent */
-            if (stat_match[i]) {
-                if (stat_match[i] > 1000000L) {
-                    /* Prevent overflow */
-                    p = stat_match[i] / (auto_round / 1000L);
-                } else {
-                    p = 1000L * stat_match[i] / auto_round;
-                }
-
-                attr = (p < 100) ? TERM_YELLOW : TERM_L_GREEN;
-                sprintf(buf, "%3d.%d%%", p / 10, p % 10);
-                c_put_str(attr, buf, 3 + i, col + 13);
-            }
-
-            /* Never happened */
-            else {
-                c_put_str(TERM_RED, _("(なし)", "(NONE)"), 3 + i, col + 13);
-            }
-        }
-    }
-}
+s32b auto_round;
 
 /*!
  * @brief ベースアイテム構造体の鑑定済みフラグをリセットする。
