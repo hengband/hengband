@@ -31,6 +31,9 @@ void birth_help_option(player_type *creature_ptr, char c, birth_kind bk)
     case BK_RACE:
         help_file = _("jraceclas.txt#TheRaces", "raceclas.txt#TheRaces");
         break;
+    case BK_CLASS:
+        help_file = _("jraceclas.txt#TheClasses", "raceclas.txt#TheClasses");
+        break;
     case BK_REALM:
         help_file = _("jmagic.txt#MagicRealms", "magic.txt#MagicRealms");
         break;
