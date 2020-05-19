@@ -141,6 +141,7 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
  */
 bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
 {
+    display_initial_birth_message(creature_ptr);
     int n;
     const char p2 = ')';
     char buf[80];
