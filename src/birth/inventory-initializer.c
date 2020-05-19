@@ -63,29 +63,16 @@ void add_outfit(player_type *creature_ptr, object_type *o_ptr)
     wield_all(creature_ptr);
 }
 
-/*!
- * @brief 種族/職業/性格などに基づき初期所持アイテムを設定するメインセット関数。 / Init players with some belongings
- * @details Having an item makes the player "aware" of its purpose.
- * @return なし
- */
-void player_outfit(player_type *creature_ptr)
+static void decide_initial_items(player_type *creature_ptr, object_type *q_ptr)
 {
-    OBJECT_TYPE_VALUE tv;
-    OBJECT_SUBTYPE_VALUE sv;
-    object_type forge;
-    object_type *q_ptr;
-    q_ptr = &forge;
-
     switch (creature_ptr->prace) {
     case RACE_VAMPIRE:
         /* Nothing! */
         /* Vampires can drain blood of creatures */
         break;
-
     case RACE_DEMON:
         /* Demon can drain vitality from humanoid corpse */
         get_mon_num_prep(creature_ptr, monster_hook_human, NULL);
-
         for (int i = rand_range(3, 4); i > 0; i--) {
             object_prep(q_ptr, lookup_kind(TV_CORPSE, SV_CORPSE));
             q_ptr->pval = get_mon_num(creature_ptr, 2, 0);
@@ -96,7 +83,6 @@ void player_outfit(player_type *creature_ptr)
         }
 
         break;
-
     case RACE_SKELETON:
     case RACE_GOLEM:
     case RACE_ZOMBIE:
@@ -104,38 +90,41 @@ void player_outfit(player_type *creature_ptr)
         /* Staff (of Nothing) */
         object_prep(q_ptr, lookup_kind(TV_STAFF, SV_STAFF_NOTHING));
         q_ptr->number = 1;
-
         add_outfit(creature_ptr, q_ptr);
         break;
-
     case RACE_ENT:
         /* Potions of Water */
         object_prep(q_ptr, lookup_kind(TV_POTION, SV_POTION_WATER));
         q_ptr->number = (ITEM_NUMBER)rand_range(15, 23);
         add_outfit(creature_ptr, q_ptr);
-
         break;
-
     case RACE_ANDROID:
         /* Flasks of oil */
         object_prep(q_ptr, lookup_kind(TV_FLASK, SV_ANY));
-
-        /* Fuel with oil (move pval to xtra4) */
         apply_magic(creature_ptr, q_ptr, 1, AM_NO_FIXED_ART);
-
         q_ptr->number = (ITEM_NUMBER)rand_range(7, 12);
         add_outfit(creature_ptr, q_ptr);
-
         break;
-
     default:
         /* Food rations */
         object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
         q_ptr->number = (ITEM_NUMBER)rand_range(3, 7);
-
         add_outfit(creature_ptr, q_ptr);
     }
+}
 
+/*!
+ * @brief 種族/職業/性格などに基づき初期所持アイテムを設定するメインセット関数。 / Init players with some belongings
+ * @details Having an item makes the player "aware" of its purpose.
+ * @return なし
+ */
+void player_outfit(player_type *creature_ptr)
+{
+    object_type *q_ptr;
+    object_type forge;
+    q_ptr = &forge;
+
+    decide_initial_items(creature_ptr, q_ptr);
     q_ptr = &forge;
 
     if ((creature_ptr->prace == RACE_VAMPIRE) && (creature_ptr->pclass != CLASS_NINJA)) {
@@ -229,8 +218,8 @@ void player_outfit(player_type *creature_ptr)
     }
 
     for (int i = 0; i < 3; i++) {
-        tv = player_init[creature_ptr->pclass][i][0];
-        sv = player_init[creature_ptr->pclass][i][1];
+        OBJECT_TYPE_VALUE tv = player_init[creature_ptr->pclass][i][0];
+        OBJECT_SUBTYPE_VALUE sv = player_init[creature_ptr->pclass][i][1];
         if ((creature_ptr->prace == RACE_ANDROID) && ((tv == TV_SOFT_ARMOR) || (tv == TV_HARD_ARMOR)))
             continue;
 
