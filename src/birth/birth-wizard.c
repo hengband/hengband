@@ -142,10 +142,9 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
 bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
 {
     display_initial_birth_message(creature_ptr);
-    int n;
     const char p2 = ')';
     char buf[80];
-    for (n = 0; n < MAX_SEXES; n++) {
+    for (int n = 0; n < MAX_SEXES; n++) {
         sp_ptr = &sex_info[n];
         sprintf(buf, _("%c%c%s", "%c%c %s"), I2A(n), p2, sp_ptr->title);
         put_str(buf, 12 + (n / 5), 2 + 15 * (n % 5));
@@ -158,13 +157,12 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
     creature_ptr->prace = 0;
     while (TRUE) {
         char temp[80 * 10];
-        concptr t;
         if (!get_player_race(creature_ptr))
             return FALSE;
 
         clear_from(10);
         roff_to_buf(race_explanations[creature_ptr->prace], 74, temp, sizeof(temp));
-        t = temp;
+        concptr t = temp;
         for (int i = 0; i < 10; i++) {
             if (t[0] == 0)
                 break;
@@ -184,13 +182,12 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
     creature_ptr->pclass = 0;
     while (TRUE) {
         char temp[80 * 9];
-        concptr t;
         if (!get_player_class(creature_ptr))
             return FALSE;
 
         clear_from(10);
         roff_to_buf(class_explanations[creature_ptr->pclass], 74, temp, sizeof(temp));
-        t = temp;
+        concptr t = temp;
         for (int i = 0; i < 9; i++) {
             if (t[0] == 0)
                 break;
@@ -212,13 +209,12 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
     creature_ptr->pseikaku = 0;
     while (TRUE) {
         char temp[80 * 8];
-        concptr t;
         if (!get_player_personality(creature_ptr))
             return FALSE;
 
         clear_from(10);
         roff_to_buf(personality_explanations[creature_ptr->pseikaku], 74, temp, sizeof(temp));
-        t = temp;
+        concptr t = temp;
         for (int i = 0; i < A_MAX; i++) {
             if (t[0] == 0)
                 break;
