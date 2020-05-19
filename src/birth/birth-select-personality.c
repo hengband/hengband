@@ -25,6 +25,35 @@ static void enumerate_personality_list(player_type *creature_ptr, concptr *str, 
     }
 }
 
+static void display_personality_stat(int cs, int *os, concptr *str, char *cur, char *sym)
+{
+    char buf[80];
+    if (cs == *os)
+        return;
+
+    c_put_str(TERM_WHITE, cur, 12 + (*os / 4), 2 + 18 * (*os % 4));
+    put_str("                                   ", 3, 40);
+    if (cs == MAX_SEIKAKU) {
+        sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
+        put_str("                                   ", 4, 40);
+        put_str("                                   ", 5, 40);
+    } else {
+        ap_ptr = &seikaku_info[cs];
+        *str = ap_ptr->title;
+        sprintf(cur, "%c%c%s", sym[cs], p2, *str);
+        c_put_str(TERM_L_BLUE, ap_ptr->title, 3, 40);
+        put_str(_("の性格修正", ": Personality modification"), 3, 40 + strlen(ap_ptr->title));
+        put_str(_("腕力 知能 賢さ 器用 耐久 魅力      ", "Str  Int  Wis  Dex  Con  Chr       "), 4, 40);
+        sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d       ",
+            ap_ptr->a_adj[0], ap_ptr->a_adj[1], ap_ptr->a_adj[2], ap_ptr->a_adj[3],
+            ap_ptr->a_adj[4], ap_ptr->a_adj[5]);
+        c_put_str(TERM_L_BLUE, buf, 5, 40);
+    }
+
+    c_put_str(TERM_YELLOW, cur, 12 + (cs / 4), 2 + 18 * (cs % 4));
+    *os = cs;
+}
+
 static void interpret_personality_select_key_move(player_type *creature_ptr, char c, int *cs)
 {
     if (c == '8') {
@@ -72,51 +101,18 @@ static void interpret_personality_select_key_move(player_type *creature_ptr, cha
     }
 }
 
-/*!
- * @brief プレイヤーの性格選択を行う / Player Player seikaku
- * @return なし
- */
-bool get_player_personality(player_type *creature_ptr)
+static bool select_personality(player_type *creature_ptr, int *k, concptr *str, char *sym)
 {
-    clear_from(10);
-    put_str(_("注意：《性格》によってキャラクターの能力やボーナスが変化します。", "Note: Your personality determines various intrinsic abilities and bonuses."), 23, 5);
-    concptr str;
-    char sym[MAX_SEIKAKU];
-    enumerate_personality_list(creature_ptr, &str, sym);
-
     char cur[80];
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
-    int k = -1;
     int cs = creature_ptr->pseikaku;
     int os = MAX_SEIKAKU;
     while (TRUE) {
-        char buf[80];
-        if (cs != os) {
-            c_put_str(TERM_WHITE, cur, 12 + (os / 4), 2 + 18 * (os % 4));
-            put_str("                                   ", 3, 40);
-            if (cs == MAX_SEIKAKU) {
-                sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
-                put_str("                                   ", 4, 40);
-                put_str("                                   ", 5, 40);
-            } else {
-                ap_ptr = &seikaku_info[cs];
-                str = ap_ptr->title;
-                sprintf(cur, "%c%c%s", sym[cs], p2, str);
-                c_put_str(TERM_L_BLUE, ap_ptr->title, 3, 40);
-                put_str(_("の性格修正", ": Personality modification"), 3, 40 + strlen(ap_ptr->title));
-                put_str(_("腕力 知能 賢さ 器用 耐久 魅力      ", "Str  Int  Wis  Dex  Con  Chr       "), 4, 40);
-                sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d       ",
-                    ap_ptr->a_adj[0], ap_ptr->a_adj[1], ap_ptr->a_adj[2], ap_ptr->a_adj[3],
-                    ap_ptr->a_adj[4], ap_ptr->a_adj[5]);
-                c_put_str(TERM_L_BLUE, buf, 5, 40);
-            }
-            c_put_str(TERM_YELLOW, cur, 12 + (cs / 4), 2 + 18 * (cs % 4));
-            os = cs;
-        }
-
-        if (k >= 0)
+        display_personality_stat(cs, &os, str, cur, sym);
+        if (*k >= 0)
             break;
 
+        char buf[80];
         sprintf(buf, _("性格を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a personality (%c-%c) ('=' for options): "), sym[0], sym[MAX_SEIKAKU - 1]);
         put_str(buf, 10, 10);
         char c = inkey();
@@ -129,13 +125,13 @@ bool get_player_personality(player_type *creature_ptr)
         if (c == ' ' || c == '\r' || c == '\n') {
             if (cs == MAX_SEIKAKU) {
                 do {
-                    k = randint0(MAX_SEIKAKU);
-                } while (seikaku_info[k].sex && (seikaku_info[k].sex != (creature_ptr->psex + 1)));
+                    *k = randint0(MAX_SEIKAKU);
+                } while (seikaku_info[*k].sex && (seikaku_info[*k].sex != (creature_ptr->psex + 1)));
 
-                cs = k;
+                cs = *k;
                 continue;
             } else {
-                k = cs;
+                *k = cs;
                 break;
             }
         }
@@ -143,32 +139,50 @@ bool get_player_personality(player_type *creature_ptr)
         interpret_personality_select_key_move(creature_ptr, c, &cs);
         if (c == '*') {
             do {
-                k = randint0(MAX_SEIKAKU);
-            } while (seikaku_info[k].sex && (seikaku_info[k].sex != (creature_ptr->psex + 1)));
+                *k = randint0(MAX_SEIKAKU);
+            } while (seikaku_info[*k].sex && (seikaku_info[*k].sex != (creature_ptr->psex + 1)));
 
-            cs = k;
+            cs = *k;
             continue;
         }
 
-        k = (islower(c) ? A2I(c) : -1);
-        if ((k >= 0) && (k < MAX_SEIKAKU)) {
-            if ((seikaku_info[k].sex == 0) || (seikaku_info[k].sex == (creature_ptr->psex + 1))) {
-                cs = k;
+        *k = (islower(c) ? A2I(c) : -1);
+        if ((*k >= 0) && (*k < MAX_SEIKAKU)) {
+            if ((seikaku_info[*k].sex == 0) || (seikaku_info[*k].sex == (creature_ptr->psex + 1))) {
+                cs = *k;
                 continue;
             }
         }
 
-        k = (isupper(c) ? (26 + c - 'A') : -1);
-        if ((k >= 26) && (k < MAX_SEIKAKU)) {
-            if ((seikaku_info[k].sex == 0) || (seikaku_info[k].sex == (creature_ptr->psex + 1))) {
-                cs = k;
+        *k = (isupper(c) ? (26 + c - 'A') : -1);
+        if ((*k >= 26) && (*k < MAX_SEIKAKU)) {
+            if ((seikaku_info[*k].sex == 0) || (seikaku_info[*k].sex == (creature_ptr->psex + 1))) {
+                cs = *k;
                 continue;
             }
         } else
-            k = -1;
+            *k = -1;
 
         birth_help_option(creature_ptr, c, BK_PERSONALITY);
     }
+
+    return TRUE;
+}
+
+/*!
+ * @brief プレイヤーの性格選択を行う / Player Player seikaku
+ * @return なし
+ */
+bool get_player_personality(player_type *creature_ptr)
+{
+    clear_from(10);
+    put_str(_("注意：《性格》によってキャラクターの能力やボーナスが変化します。", "Note: Your personality determines various intrinsic abilities and bonuses."), 23, 5);
+    concptr str;
+    char sym[MAX_SEIKAKU];
+    enumerate_personality_list(creature_ptr, &str, sym);
+    int k = -1;
+    if (!select_personality(creature_ptr, &k, &str, sym))
+        return FALSE;
 
     creature_ptr->pseikaku = (CHARACTER_IDX)k;
     ap_ptr = &seikaku_info[creature_ptr->pseikaku];
