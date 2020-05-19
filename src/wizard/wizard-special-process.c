@@ -61,6 +61,7 @@
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "spell/spells-detection.h"
+#include "player/player-races-table.h"
 
 #define NUM_O_SET 8
 #define NUM_O_BIT 32

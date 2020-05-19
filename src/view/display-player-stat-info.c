@@ -12,6 +12,7 @@
 #include "term/gameterm.h"
 #include "player/player-personality.h"
 #include "player/permanent-resistances.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief プレーヤーのパラメータ基礎値 (腕力等)を18以下になるようにして返す

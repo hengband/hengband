@@ -2,7 +2,6 @@
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 
-#include "player/player-race.h"
 #include "spell/spells-summon.h"
 #include "player/avatar.h"
 #include "player/player-status.h"
@@ -19,6 +18,7 @@
 #include "object/object-kind.h"
 #include "view/display-main-window.h"
 #include "spell/spells-detection.h"
+#include "player/player-races-table.h"
 
 /*!
 * @brief 杖の効果を発動する

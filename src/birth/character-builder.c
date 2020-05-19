@@ -25,6 +25,7 @@
 #include "birth/quick-start.h"
 #include "birth/game-play-initializer.h"
 #include "birth/birth-wizard.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief プレーヤーキャラの作成結果を日記に書く

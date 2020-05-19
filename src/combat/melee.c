@@ -48,6 +48,7 @@
 #include "spell/spells-floor.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
+#include "player/player-races-table.h"
 
 #define BLOW_EFFECT_TYPE_NONE  0
 #define BLOW_EFFECT_TYPE_FEAR  1

@@ -31,6 +31,7 @@
 #include "player/player-class.h"
 #include "spell/spells-detection.h"
 #include "birth/birth-stat.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief 薬を飲むコマンドのサブルーチン /

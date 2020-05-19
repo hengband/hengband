@@ -28,7 +28,7 @@
 #include "view/display-player.h"
 #include "player/player-status.h"
 #include "player/player-class.h"
-#include "player/player-race.h"
+#include "player/player-races-table.h"
 #include "player/mimic-info-table.h"
 #include "player/player-effects.h"
 #include "inventory/player-inventory.h"

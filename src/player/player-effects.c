@@ -55,6 +55,7 @@
 #include "io/report.h"
 #include "birth/birth-stat.h"
 #include "birth/birth-body-spec.h"
+#include "player/player-races-table.h"
 
 #include "view/display-main-window.h"
 

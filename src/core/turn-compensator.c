@@ -5,6 +5,7 @@
 #include "market/store-owners.h"
 #include "market/store-util.h"
 #include "market/store.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief ゲームターンからの実時間換算を行うための補正をかける

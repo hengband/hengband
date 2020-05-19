@@ -10,6 +10,7 @@
 #include "spell/spells3.h"
 #include "cmd/cmd-save.h"
 #include "dungeon/quest.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief パターン終点到達時のテレポート処理を行う

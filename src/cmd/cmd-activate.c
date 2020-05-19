@@ -37,6 +37,7 @@
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "spell/spells-detection.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief 装備耐性に準じたブレス効果の選択テーブル /

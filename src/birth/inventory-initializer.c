@@ -6,6 +6,7 @@
 #include "object/object-ego.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief 所持状態にあるアイテムの中から一部枠の装備可能なものを装備させる。

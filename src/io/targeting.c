@@ -41,6 +41,7 @@
 #include "dungeon/dungeon.h"
 #include "world/world.h"
 #include "effect/spells-effect-util.h"
+#include "player/player-races-table.h"
 
  /*!
   * @brief コンソール上におけるマップ表示の左上位置を返す /

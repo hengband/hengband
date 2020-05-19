@@ -7,6 +7,7 @@
 #include "player/player-effects.h"
 #include "view/display-player.h" // 暫定。後で消す.
 #include "player/process-name.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief 画面を再描画するコマンドのメインルーチン

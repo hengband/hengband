@@ -1915,6 +1915,9 @@
     <ClInclude Include="..\..\src\birth\history.h">
       <Filter>birth</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player\player-races-table.h">
+      <Filter>player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

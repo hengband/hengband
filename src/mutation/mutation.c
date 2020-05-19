@@ -35,7 +35,7 @@
 #include "io/files.h"
 #include "floor/floor.h"
 #include "io/targeting.h"
-#include "player/player-race.h"
+#include "player/player-races-table.h"
 #include "effect/spells-effect-util.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"

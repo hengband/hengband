@@ -1,5 +1,6 @@
 ﻿#include "system/angband.h"
 #include "store-owners.h"
+#include "player/player-races-table.h"
 
 /*!
  * todo _() でまとめる

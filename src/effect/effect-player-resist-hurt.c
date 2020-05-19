@@ -10,6 +10,7 @@
 #include "mspell/monster-spell.h"
 #include "spell/spells-status.h"
 #include "spell/spells3.h"
+#include "player/player-races-table.h"
 
 // 毒を除く4元素.
 void effect_player_elements(player_type *target_ptr, effect_player_type *ep_ptr,

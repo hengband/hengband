@@ -9,6 +9,7 @@
 #include "object/object-hook.h"
 #include "shoot.h"
 #include "term/gameterm.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief プレイヤーの打撃能力修正を表示する

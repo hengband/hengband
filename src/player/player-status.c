@@ -50,6 +50,7 @@
 #include "market/arena-info-table.h"
 #include "spell/spells-util.h"
 #include "spell/spells-execution.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats

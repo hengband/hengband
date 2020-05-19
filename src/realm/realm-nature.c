@@ -8,7 +8,7 @@
 #include "spell/spells-diceroll.h"
 #include "player/avatar.h"
 #include "spell/spells-floor.h"
-#include "player/player-race.h"
+#include "player/player-races-table.h"
 #include "player/player-effects.h"
 #include "player/player-damage.h"
 #include "io/targeting.h"

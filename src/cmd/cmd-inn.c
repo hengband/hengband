@@ -6,6 +6,7 @@
 #include "player/player-effects.h"
 #include "core/turn-compensator.h"
 #include "market/rumor.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief 宿屋で食事を摂る

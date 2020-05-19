@@ -12,6 +12,7 @@
 #include "object/object-hook.h"
 #include "player/player-effects.h"
 #include "object/object-kind.h"
+#include "player/player-races-table.h"
 
 static bool is_specific_curse(BIT_FLAGS flag)
 {

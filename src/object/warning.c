@@ -18,6 +18,7 @@
 #include "melee.h"
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-damage-calculator.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /

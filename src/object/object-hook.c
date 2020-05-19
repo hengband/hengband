@@ -1,5 +1,4 @@
-﻿
-#include "system/angband.h"
+﻿#include "system/angband.h"
 #include "util/util.h"
 
 #include "object/object-hook.h"
@@ -12,6 +11,7 @@
 #include "world/world.h"
 #include "object/object-kind.h"
 #include "view/display-main-window.h"
+#include "player/player-races-table.h"
 
 /*!
 * @brief 対象のアイテムが矢やクロスボウの矢の材料になるかを返す。/

@@ -25,6 +25,7 @@
 #include "floor/floor.h"
 #include "object/object-kind.h"
 #include "view/display-main-window.h"
+#include "player/player-races-table.h"
 
  /*!
   * @brief 食料を食べるコマンドのサブルーチン

@@ -8,6 +8,7 @@
 #include "object/artifact.h"
 #include "cmd/cmd-pet.h"
 #include "system/system-variables.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief ベースアイテム構造体の鑑定済みフラグをリセットする。

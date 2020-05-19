@@ -12,7 +12,7 @@
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
 #include "player/player-move.h"
-
+#include "player/player-races-table.h"
 
 /*!
  * @brief クラス依存のアイテム破壊を調べる

@@ -13,7 +13,7 @@
 #include "object/artifact.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"
-#include "player/player-race.h"
+#include "player/player-races-table.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 

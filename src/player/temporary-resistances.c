@@ -1,6 +1,7 @@
 ﻿#include "temporary-resistances.h"
 #include "realm/realm-hex.h"
 #include "realm/realm-song.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief プレイヤーの一時的魔法効果による耐性を返す

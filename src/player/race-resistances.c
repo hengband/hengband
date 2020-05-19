@@ -1,4 +1,5 @@
 ﻿#include "race-resistances.h"
+#include "player/player-races-table.h"
 
 /*!
  * @brief プレイヤーの種族による免疫フラグを返す

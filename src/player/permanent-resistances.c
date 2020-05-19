@@ -1,6 +1,6 @@
 ﻿#include "permanent-resistances.h"
 #include "player/player-personality.h"
-
+#include "player/player-races-table.h"
 
 /*!
  * @brief プレーヤーの職業による耐性フラグを返す
