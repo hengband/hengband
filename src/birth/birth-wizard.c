@@ -235,6 +235,17 @@ static bool let_player_select_personality(player_type *creature_ptr)
     return TRUE;
 }
 
+static void display_initial_options(void)
+{
+    clear_from(10);
+    put_str("                                   ", 3, 40);
+    put_str("                                   ", 4, 40);
+    put_str("                                   ", 5, 40);
+    screen_save();
+    do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
+    screen_load();
+}
+
 static void display_auto_roller_success_rate(const int col)
 {
     if (!autoroller)
@@ -465,14 +476,7 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
     if (!let_player_select_personality(creature_ptr))
         return FALSE;
 
-    clear_from(10);
-    put_str("                                   ", 3, 40);
-    put_str("                                   ", 4, 40);
-    put_str("                                   ", 5, 40);
-
-    screen_save();
-    do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
-    screen_load();
+    display_initial_options();
     if (autoroller || autochara)
         auto_round = 0L;
 
