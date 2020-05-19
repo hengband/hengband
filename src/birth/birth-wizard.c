@@ -160,6 +160,28 @@ static bool decide_initial_stat(player_type *creature_ptr)
     return TRUE;
 }
 
+static bool decide_body_spec(player_type *creature_ptr, chara_limit_type chara_limit, bool *accept)
+{
+    if (!*accept)
+        return FALSE;
+
+    get_ahw(creature_ptr);
+    get_history(creature_ptr);
+
+    if (autochara) {
+        if ((creature_ptr->age < chara_limit.agemin) || (creature_ptr->age > chara_limit.agemax))
+            *accept = FALSE;
+        if ((creature_ptr->ht < chara_limit.htmin) || (creature_ptr->ht > chara_limit.htmax))
+            *accept = FALSE;
+        if ((creature_ptr->wt < chara_limit.wtmin) || (creature_ptr->wt > chara_limit.wtmax))
+            *accept = FALSE;
+        if ((creature_ptr->sc < chara_limit.scmin) || (creature_ptr->sc > chara_limit.scmax))
+            *accept = FALSE;
+    }
+
+    return *accept;
+}
+
 static void exe_auto_roller(player_type *creature_ptr, chara_limit_type chara_limit, const int col)
 {
     while (autoroller || autochara) {
@@ -167,24 +189,8 @@ static void exe_auto_roller(player_type *creature_ptr, chara_limit_type chara_li
         auto_round++;
         auto_roller_count();
         bool accept = decide_initial_stat(creature_ptr);
-        if (accept) {
-            get_ahw(creature_ptr);
-            get_history(creature_ptr);
-
-            if (autochara) {
-                if ((creature_ptr->age < chara_limit.agemin) || (creature_ptr->age > chara_limit.agemax))
-                    accept = FALSE;
-                if ((creature_ptr->ht < chara_limit.htmin) || (creature_ptr->ht > chara_limit.htmax))
-                    accept = FALSE;
-                if ((creature_ptr->wt < chara_limit.wtmin) || (creature_ptr->wt > chara_limit.wtmax))
-                    accept = FALSE;
-                if ((creature_ptr->sc < chara_limit.scmin) || (creature_ptr->sc > chara_limit.scmax))
-                    accept = FALSE;
-            }
-
-            if (accept)
-                break;
-        }
+        if (decide_body_spec(creature_ptr, chara_limit, &accept))
+            return;
 
         bool flag = (!(auto_round % AUTOROLLER_STEP));
         if (flag) {
