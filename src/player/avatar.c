@@ -336,7 +336,7 @@ void get_virtues(player_type *creature_ptr)
 	case RACE_HIGH_ELF: case RACE_KUTAR:
 		creature_ptr->vir_types[i++] = V_VITALITY;
 		break;
-	case RACE_HALF_GIANT: case RACE_GOLEM: case RACE_ANGEL: case RACE_DEMON:
+	case RACE_HALF_GIANT: case RACE_GOLEM: case RACE_ARCHON: case RACE_BALROG:
 		creature_ptr->vir_types[i++] = V_JUSTICE;
 		break;
 	case RACE_HALF_TITAN:

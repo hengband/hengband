@@ -907,7 +907,7 @@ bool dispel_check(player_type *creature_ptr, MONSTER_IDX m_idx)
 
 	if (r_ptr->flags4 & RF4_BR_FIRE)
 	{
-		if (!((creature_ptr->prace == RACE_DEMON) && creature_ptr->lev > 44))
+		if (!((creature_ptr->prace == RACE_BALROG) && creature_ptr->lev > 44))
 		{
 			if (!creature_ptr->immune_fire && (creature_ptr->oppose_fire || music_singing(creature_ptr, MUSIC_RESIST))) return TRUE;
 			if (creature_ptr->special_defense & DEFENSE_FIRE) return TRUE;

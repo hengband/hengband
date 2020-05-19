@@ -71,7 +71,7 @@ static void decide_initial_items(player_type *creature_ptr, object_type *q_ptr)
         /* Nothing! */
         /* Vampires can drain blood of creatures */
         break;
-    case RACE_DEMON:
+    case RACE_BALROG:
         /* Demon can drain vitality from humanoid corpse */
         get_mon_num_prep(creature_ptr, monster_hook_human, NULL);
         for (int i = rand_range(3, 4); i > 0; i--) {

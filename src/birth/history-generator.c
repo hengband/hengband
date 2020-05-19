@@ -67,9 +67,9 @@ static int get_history_chart(player_type *creature_ptr)
         return 129;
     case RACE_ENT:
         return 137;
-    case RACE_ANGEL:
+    case RACE_ARCHON:
         return 142;
-    case RACE_DEMON:
+    case RACE_BALROG:
         return 145;
     case RACE_S_FAIRY:
         return 148;

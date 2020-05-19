@@ -1492,7 +1492,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 						case RACE_ZOMBIE:
 						case RACE_VAMPIRE:
 						case RACE_SPECTRE:
-						case RACE_DEMON:
+						case RACE_BALROG:
 						case RACE_DRACONIAN:
 							mult = 30; break;
 						default:
@@ -3565,7 +3565,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 						case RACE_VAMPIRE:
 						case RACE_SPECTRE:
 						case RACE_SKELETON:
-						case RACE_DEMON:
+						case RACE_BALROG:
 						case RACE_GOLEM:
 						case RACE_ANDROID:
 							resist_drain = TRUE;

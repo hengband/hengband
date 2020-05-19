@@ -132,7 +132,7 @@ bool item_tester_hook_eatable(object_type *o_ptr)
 		if (o_ptr->tval == TV_STAFF || o_ptr->tval == TV_WAND)
 			return TRUE;
 	}
-	else if (PRACE_IS_(p_ptr, RACE_DEMON) || (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON))
+	else if (PRACE_IS_(p_ptr, RACE_BALROG) || (mimic_info[p_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON))
 	{
 		if (o_ptr->tval == TV_CORPSE &&
 			o_ptr->sval == SV_CORPSE &&

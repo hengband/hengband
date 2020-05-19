@@ -91,7 +91,7 @@ void effect_player_death_ray(player_type *target_ptr,
   case RACE_SKELETON:
   case RACE_ZOMBIE:
   case RACE_VAMPIRE:
-  case RACE_DEMON:
+  case RACE_BALROG:
   case RACE_SPECTRE: {
     ep_ptr->dam = 0;
     break;

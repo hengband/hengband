@@ -24,7 +24,7 @@ static bool is_leave_special_item(player_type *player_ptr, object_type *o_ptr)
 {
 	if (!leave_special) return TRUE;
 
-	if (player_ptr->prace == RACE_DEMON)
+	if (player_ptr->prace == RACE_BALROG)
 	{
 		if (o_ptr->tval == TV_CORPSE &&
 			o_ptr->sval == SV_CORPSE &&

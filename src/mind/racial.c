@@ -702,7 +702,7 @@ static bool exe_racial_power(player_type *creature_ptr, s32b command)
 			else (void)sleep_monsters(creature_ptr, plev);
 			break;
 
-		case RACE_DEMON:
+		case RACE_BALROG:
 			return demonic_breath(creature_ptr); 
 			break;
 
@@ -1324,7 +1324,7 @@ void do_cmd_racial_power(player_type *creature_ptr)
 			power_desc[num].fail = 15;
 			power_desc[num++].number = -1;
 			break;
-		case RACE_DEMON:
+		case RACE_BALROG:
 			sprintf(power_desc[num].name, _("地獄/火炎のブレス (ダメージ %d)", "Nether or Fire Breath (dam %d)"), lvl * 3);
 			power_desc[num].level = 15;
 			power_desc[num].cost = 10 + lvl / 3;

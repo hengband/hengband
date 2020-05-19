@@ -335,7 +335,7 @@ void self_knowledge(player_type *creature_ptr)
 				info[i++] = _("あなたは敵を眠らせる魔法の粉を投げることができる。(12 MP)", "You can throw magical dust which induces sleep (cost 12).");
 			}
 			break;
-		case RACE_DEMON:
+		case RACE_BALROG:
 			sprintf(Dummy, _("あなたは %d ダメージの地獄か火炎のブレスを吐くことができる。(%d MP)",
 				"You can breathe nether, dam. %d (cost %d)."), 3 * plev, 10 + plev / 3);
 

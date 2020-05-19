@@ -1733,11 +1733,11 @@ void calc_bonuses(player_type *creature_ptr)
 			if (creature_ptr->lev > 40) creature_ptr->stat_add[A_CON]++;
 			if (creature_ptr->lev > 45) creature_ptr->stat_add[A_CON]++;
 			break;
-		case RACE_ANGEL:
+		case RACE_ARCHON:
 			creature_ptr->levitation = TRUE;
 			creature_ptr->see_inv = TRUE;
 			break;
-		case RACE_DEMON:
+		case RACE_BALROG:
 			creature_ptr->resist_fire = TRUE;
 			creature_ptr->resist_neth = TRUE;
 			creature_ptr->hold_exp = TRUE;
@@ -3498,10 +3498,10 @@ static void calc_alignment(player_type *creature_ptr)
 	{
 		switch (creature_ptr->prace)
 		{
-		case RACE_ANGEL:
+		case RACE_ARCHON:
 			creature_ptr->align += 200;
 			break;
-		case RACE_DEMON:
+		case RACE_BALROG:
 			creature_ptr->align -= 200;
 			break;
 		}
@@ -4634,7 +4634,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 
 		see_eldritch_horror(m_name, r_ptr);
 		if (PRACE_IS_(creature_ptr, RACE_IMP) ||
-			PRACE_IS_(creature_ptr, RACE_DEMON) ||
+			PRACE_IS_(creature_ptr, RACE_BALROG) ||
 			(mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON) ||
 			current_world_ptr->wizard)
 			return;
@@ -4697,7 +4697,7 @@ void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
 			switch (creature_ptr->prace)
 			{
 			case RACE_IMP:
-			case RACE_DEMON:
+			case RACE_BALROG:
 				if (saving_throw(20 + creature_ptr->lev)) return;
 				break;
 			case RACE_SKELETON:

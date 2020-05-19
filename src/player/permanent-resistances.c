@@ -409,13 +409,13 @@ static void add_race_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 		add_flag(flags, TR_RES_CONF);
 		break;
 	}
-	case RACE_ANGEL:
+	case RACE_ARCHON:
 	{
 		add_flag(flags, TR_LEVITATION);
 		add_flag(flags, TR_SEE_INVIS);
 		break;
 	}
-	case RACE_DEMON:
+	case RACE_BALROG:
 	{
 		add_flag(flags, TR_RES_FIRE);
 		add_flag(flags, TR_RES_NETHER);

@@ -115,7 +115,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 
 			if (!(PRACE_IS_(creature_ptr, RACE_GOLEM) ||
 			      PRACE_IS_(creature_ptr, RACE_ZOMBIE) ||
-			      PRACE_IS_(creature_ptr, RACE_DEMON) ||
+			      PRACE_IS_(creature_ptr, RACE_BALROG) ||
 			      PRACE_IS_(creature_ptr, RACE_ANDROID) ||
 			      PRACE_IS_(creature_ptr, RACE_SPECTRE) ||
 			      (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING)))
@@ -531,7 +531,7 @@ void exe_quaff_potion(player_type *creature_ptr, INVENTORY_IDX item)
 				break;
 			case RACE_GOLEM:
 			case RACE_ZOMBIE:
-			case RACE_DEMON:
+			case RACE_BALROG:
 			case RACE_SPECTRE:
 				set_food(creature_ptr, creature_ptr->food + ((q_ptr->pval) / 20));
 				break;

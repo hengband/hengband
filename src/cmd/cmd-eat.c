@@ -411,7 +411,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 		return;
 	}
 
-	if ((PRACE_IS_(creature_ptr, RACE_DEMON) ||
+	if ((PRACE_IS_(creature_ptr, RACE_BALROG) ||
 		(mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)) &&
 		(o_ptr->tval == TV_CORPSE && o_ptr->sval == SV_CORPSE &&
 			my_strchr("pht", r_info[o_ptr->pval].d_char)))
@@ -444,7 +444,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 	else if (PRACE_IS_(creature_ptr, RACE_GOLEM) ||
 		PRACE_IS_(creature_ptr, RACE_ZOMBIE) ||
 		PRACE_IS_(creature_ptr, RACE_ENT) ||
-		PRACE_IS_(creature_ptr, RACE_DEMON) ||
+		PRACE_IS_(creature_ptr, RACE_BALROG) ||
 		PRACE_IS_(creature_ptr, RACE_ANDROID) ||
 		PRACE_IS_(creature_ptr, RACE_SPECTRE) ||
 		(mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING))

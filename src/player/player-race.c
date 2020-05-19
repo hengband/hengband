@@ -85,10 +85,10 @@ SYMBOL_CODE get_summon_symbol_from_player(player_type *creature_ptr)
 		case RACE_ENT:
 			symbol = '#';
 			break;
-		case RACE_ANGEL:
+		case RACE_ARCHON:
 			symbol = 'A';
 			break;
-		case RACE_DEMON:
+		case RACE_BALROG:
 			symbol = 'U';
 			break;
 		default:
