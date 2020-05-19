@@ -4,6 +4,27 @@
 #include "term/gameterm.h"
 #include "birth/birth-util.h"
 
+static const char p2 = ')';
+
+static void enumerate_personality_list(player_type *creature_ptr, concptr *str, char *sym)
+{
+    char buf[80];
+    for (int n = 0; n < MAX_SEIKAKU; n++) {
+        if (seikaku_info[n].sex && (seikaku_info[n].sex != (creature_ptr->psex + 1)))
+            continue;
+
+        ap_ptr = &seikaku_info[n];
+        *str = ap_ptr->title;
+        if (n < 26)
+            sym[n] = I2A(n);
+        else
+            sym[n] = ('A' + n - 26);
+
+        sprintf(buf, "%c%c%s", I2A(n), p2, *str);
+        put_str(buf, 12 + (n / 4), 2 + 18 * (n % 4));
+    }
+}
+
 static void interpret_personality_select_key_move(player_type *creature_ptr, char c, int *cs)
 {
     if (c == '8') {
@@ -57,27 +78,11 @@ static void interpret_personality_select_key_move(player_type *creature_ptr, cha
  */
 bool get_player_personality(player_type *creature_ptr)
 {
-    concptr str;
     clear_from(10);
     put_str(_("注意：《性格》によってキャラクターの能力やボーナスが変化します。", "Note: Your personality determines various intrinsic abilities and bonuses."), 23, 5);
+    concptr str;
     char sym[MAX_SEIKAKU];
-    char buf[80];
-    char p2 = ')';
-    int n;
-    for (n = 0; n < MAX_SEIKAKU; n++) {
-        if (seikaku_info[n].sex && (seikaku_info[n].sex != (creature_ptr->psex + 1)))
-            continue;
-
-        ap_ptr = &seikaku_info[n];
-        str = ap_ptr->title;
-        if (n < 26)
-            sym[n] = I2A(n);
-        else
-            sym[n] = ('A' + n - 26);
-
-        sprintf(buf, "%c%c%s", I2A(n), p2, str);
-        put_str(buf, 12 + (n / 4), 2 + 18 * (n % 4));
-    }
+    enumerate_personality_list(creature_ptr, &str, sym);
 
     char cur[80];
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
@@ -85,6 +90,7 @@ bool get_player_personality(player_type *creature_ptr)
     int cs = creature_ptr->pseikaku;
     int os = MAX_SEIKAKU;
     while (TRUE) {
+        char buf[80];
         if (cs != os) {
             c_put_str(TERM_WHITE, cur, 12 + (os / 4), 2 + 18 * (os % 4));
             put_str("                                   ", 3, 40);
