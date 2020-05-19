@@ -37,8 +37,12 @@ void birth_help_option(player_type *creature_ptr, char c, birth_kind bk)
     case BK_REALM:
         help_file = _("jmagic.txt#MagicRealms", "magic.txt#MagicRealms");
         break;
+    case BK_PERSONALITY:
+        help_file = _("jraceclas.txt#ThePersonalities", "raceclas.txt#ThePersonalities");
+        break;
     case BK_AUTO_ROLLER:
         help_file = _("jbirth.txt#AutoRoller", "birth.txt#AutoRoller");
+        break;
     default:
         help_file = "";
         break;

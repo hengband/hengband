@@ -153,14 +153,7 @@ bool get_player_personality(player_type *creature_ptr)
         } else
             k = -1;
 
-        if (c == '?') {
-            show_help(creature_ptr, _("jraceclas.txt#ThePersonalities", "raceclas.txt#ThePersonalities"));
-        } else if (c == '=') {
-            screen_save();
-            do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
-            screen_load();
-        } else if (c != '2' && c != '4' && c != '6' && c != '8')
-            bell();
+        birth_help_option(creature_ptr, c, BK_PERSONALITY);
     }
 
     creature_ptr->pseikaku = (CHARACTER_IDX)k;
