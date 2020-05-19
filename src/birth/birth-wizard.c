@@ -168,14 +168,15 @@ static bool decide_initial_stat(player_type *creature_ptr)
     if (!autoroller)
         return TRUE;
 
+    bool accept = TRUE;
     for (int i = 0; i < A_MAX; i++) {
         if (creature_ptr->stat_max[i] >= stat_limit[i])
             stat_match[i]++;
         else
-            return FALSE;
+            accept = FALSE;
     }
 
-    return TRUE;
+    return accept;
 }
 
 static bool decide_body_spec(player_type *creature_ptr, chara_limit_type chara_limit, bool *accept)
