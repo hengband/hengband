@@ -131,6 +131,64 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
     return TRUE;
 }
 
+static void exe_auto_roller(player_type *creature_ptr, chara_limit_type chara_limit, const int col)
+{
+    while (autoroller || autochara) {
+        bool accept = TRUE;
+        get_stats(creature_ptr);
+        auto_round++;
+        if (auto_round >= 1000000000L) {
+            auto_round = 1;
+            if (autoroller) {
+                for (int i = 0; i < A_MAX; i++) {
+                    stat_match[i] = 0;
+                }
+            }
+        }
+
+        if (autoroller) {
+            for (int i = 0; i < A_MAX; i++) {
+                if (creature_ptr->stat_max[i] >= stat_limit[i])
+                    stat_match[i]++;
+                else
+                    accept = FALSE;
+            }
+        }
+
+        if (accept) {
+            get_ahw(creature_ptr);
+            get_history(creature_ptr);
+
+            if (autochara) {
+                if ((creature_ptr->age < chara_limit.agemin) || (creature_ptr->age > chara_limit.agemax))
+                    accept = FALSE;
+                if ((creature_ptr->ht < chara_limit.htmin) || (creature_ptr->ht > chara_limit.htmax))
+                    accept = FALSE;
+                if ((creature_ptr->wt < chara_limit.wtmin) || (creature_ptr->wt > chara_limit.wtmax))
+                    accept = FALSE;
+                if ((creature_ptr->sc < chara_limit.scmin) || (creature_ptr->sc > chara_limit.scmax))
+                    accept = FALSE;
+            }
+
+            if (accept)
+                break;
+        }
+
+        bool flag = (!(auto_round % AUTOROLLER_STEP));
+        if (flag) {
+            birth_put_stats(creature_ptr);
+            put_str(format("%10ld", auto_round), 10, col + 20);
+            Term_fresh();
+            inkey_scan = TRUE;
+            if (inkey()) {
+                get_ahw(creature_ptr);
+                get_history(creature_ptr);
+                break;
+            }
+        }
+    }
+}
+
 static bool display_auto_roller(player_type *creature_ptr, chara_limit_type chara_limit)
 {
     while (TRUE) {
@@ -160,61 +218,7 @@ static bool display_auto_roller(player_type *creature_ptr, chara_limit_type char
             }
         }
 
-        while (autoroller || autochara) {
-            bool accept = TRUE;
-            get_stats(creature_ptr);
-            auto_round++;
-            if (auto_round >= 1000000000L) {
-                auto_round = 1;
-                if (autoroller) {
-                    for (int i = 0; i < A_MAX; i++) {
-                        stat_match[i] = 0;
-                    }
-                }
-            }
-
-            if (autoroller) {
-                for (int i = 0; i < A_MAX; i++) {
-                    if (creature_ptr->stat_max[i] >= stat_limit[i])
-                        stat_match[i]++;
-                    else
-                        accept = FALSE;
-                }
-            }
-
-            if (accept) {
-                get_ahw(creature_ptr);
-                get_history(creature_ptr);
-
-                if (autochara) {
-                    if ((creature_ptr->age < chara_limit.agemin) || (creature_ptr->age > chara_limit.agemax))
-                        accept = FALSE;
-                    if ((creature_ptr->ht < chara_limit.htmin) || (creature_ptr->ht > chara_limit.htmax))
-                        accept = FALSE;
-                    if ((creature_ptr->wt < chara_limit.wtmin) || (creature_ptr->wt > chara_limit.wtmax))
-                        accept = FALSE;
-                    if ((creature_ptr->sc < chara_limit.scmin) || (creature_ptr->sc > chara_limit.scmax))
-                        accept = FALSE;
-                }
-
-                if (accept)
-                    break;
-            }
-
-            bool flag = (!(auto_round % AUTOROLLER_STEP));
-            if (flag) {
-                birth_put_stats(creature_ptr);
-                put_str(format("%10ld", auto_round), 10, col + 20);
-                Term_fresh();
-                inkey_scan = TRUE;
-                if (inkey()) {
-                    get_ahw(creature_ptr);
-                    get_history(creature_ptr);
-                    break;
-                }
-            }
-        }
-
+        exe_auto_roller(creature_ptr, chara_limit, col);
         if (autoroller || autochara)
             sound(SOUND_LEVEL);
 
