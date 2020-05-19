@@ -2979,7 +2979,7 @@ static errr parse_line_building(char *buf)
 		n = tokenize(s + 2, MAX_CLASS, zz, 0);
 		for (int i = 0; i < MAX_CLASS; i++)
 		{
-			building[index].member_class[i] = ((i < n) ? (CLASS_IDX)atoi(zz[i]) : 1);
+			building[index].member_class[i] = ((i < n) ? (player_class_type)atoi(zz[i]) : 1);
 		}
 
 		break;

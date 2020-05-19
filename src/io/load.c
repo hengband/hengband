@@ -1568,7 +1568,7 @@ static void load_quick_start(void)
 	rd_byte(&tmp8u);
 	previous_char.prace = (player_race_table)tmp8u;
 	rd_byte(&tmp8u);
-	previous_char.pclass = (CLASS_IDX)tmp8u;
+	previous_char.pclass = (player_class_type)tmp8u;
 	rd_byte(&tmp8u);
 	previous_char.pseikaku = (CHARACTER_IDX)tmp8u;
 	rd_byte(&tmp8u);
@@ -1630,7 +1630,7 @@ static void rd_extra(player_type *creature_ptr)
 	creature_ptr->prace = (player_race_table)tmp8u;
 
 	rd_byte(&tmp8u);
-	creature_ptr->pclass = (CLASS_IDX)tmp8u;
+	creature_ptr->pclass = (player_class_type)tmp8u;
 
 	rd_byte(&tmp8u);
 	creature_ptr->pseikaku = (CHARACTER_IDX)tmp8u;

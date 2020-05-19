@@ -1,0 +1,33 @@
+﻿#pragma once
+
+typedef enum player_class_type {
+	CLASS_WARRIOR = 0,
+    CLASS_MAGE = 1,
+    CLASS_PRIEST = 2,
+    CLASS_ROGUE = 3,
+    CLASS_RANGER = 4,
+    CLASS_PALADIN = 5,
+    CLASS_WARRIOR_MAGE = 6,
+    CLASS_CHAOS_WARRIOR = 7,
+    CLASS_MONK = 8,
+    CLASS_MINDCRAFTER = 9,
+    CLASS_HIGH_MAGE = 10,
+    CLASS_TOURIST = 11,
+    CLASS_IMITATOR = 12,
+    CLASS_BEASTMASTER = 13,
+    CLASS_SORCERER = 14,
+    CLASS_ARCHER = 15,
+    CLASS_MAGIC_EATER = 16,
+    CLASS_BARD = 17,
+    CLASS_RED_MAGE = 18,
+    CLASS_SAMURAI = 19,
+    CLASS_FORCETRAINER = 20,
+    CLASS_BLUE_MAGE = 21,
+    CLASS_CAVALRY = 22,
+    CLASS_BERSERKER = 23,
+    CLASS_SMITH = 24,
+    CLASS_MIRROR_MASTER = 25,
+    CLASS_NINJA = 26,
+    CLASS_SNIPER = 27,
+    MAX_CLASS = 28, /*!< 職業の最大定義数 Maximum number of player "class" types (see "table.c", etc) */
+} player_class_type;

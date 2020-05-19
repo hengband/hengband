@@ -2,6 +2,7 @@
 #include "spell/spells1.h"
 #include "spell/technic-info-table.h"
 #include "player/player-status.h"
+#include "player/player-classes-table.h"
 
 /*
  * 職業ごとの選択可能な魔法領域現在の所 bitrh.c でのみ使用。
@@ -22,39 +23,6 @@
 #define CH_MUSIC        0x08000	/* This is 16th bit */
 #define CH_HISSATSU     0x10000
 #define CH_HEX          0x20000
-
- /*
-  * Player class constants (hard-coded by save-files, arrays, etc)
-  */
-#define CLASS_WARRIOR            0
-#define CLASS_MAGE               1
-#define CLASS_PRIEST             2
-#define CLASS_ROGUE              3
-#define CLASS_RANGER             4
-#define CLASS_PALADIN            5
-#define CLASS_WARRIOR_MAGE       6
-#define CLASS_CHAOS_WARRIOR      7
-#define CLASS_MONK               8
-#define CLASS_MINDCRAFTER        9
-#define CLASS_HIGH_MAGE         10
-#define CLASS_TOURIST           11
-#define CLASS_IMITATOR          12
-#define CLASS_BEASTMASTER       13
-#define CLASS_SORCERER          14
-#define CLASS_ARCHER            15
-#define CLASS_MAGIC_EATER       16
-#define CLASS_BARD              17
-#define CLASS_RED_MAGE          18
-#define CLASS_SAMURAI           19
-#define CLASS_FORCETRAINER      20
-#define CLASS_BLUE_MAGE         21
-#define CLASS_CAVALRY           22
-#define CLASS_BERSERKER         23
-#define CLASS_SMITH             24
-#define CLASS_MIRROR_MASTER     25
-#define CLASS_NINJA             26
-#define CLASS_SNIPER            27
-#define MAX_CLASS       28 /*!< 職業の最大定義数 Maximum number of player "class" types (see "table.c", etc) */
 
 #define IS_WIZARD_CLASS(C) \
 	((C)->pclass == CLASS_MAGE || (C)->pclass == CLASS_HIGH_MAGE || (C)->pclass == CLASS_SORCERER || \

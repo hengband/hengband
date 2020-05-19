@@ -198,7 +198,8 @@ hengband_SOURCES = \
 	player/player-skill.c player/player-skill.h \
 	player/player-class.c player/player-class.h \
 	player/player-race.c player/player-race.h \
-	player/player-races-table.h
+	player/player-races-table.h \
+	player/player-classes-table.h \
 	player/patron.h player/patron.c \
 	player/player-personality.c player/player-personality.h \
 	player/player-sex.c player/player-sex.h player/selfinfo.c player/selfinfo.h \
