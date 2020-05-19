@@ -509,7 +509,7 @@
     <ClInclude Include="..\..\src\object\chest.h" />
     <ClInclude Include="..\..\src\io\chuukei.h" />
     <ClCompile Include="..\..\src\player\player-move.c" />
-    <ClCompile Include="..\..\src\io\files.c" />
+    <ClCompile Include="..\..\src\io\files-util.c" />
     <ClCompile Include="..\..\src\grid\grid.c" />
     <ClCompile Include="..\..\src\io\inet.c" />
     <ClCompile Include="..\..\src\locale\japanese.c" />
@@ -697,7 +697,7 @@
     <ClInclude Include="..\..\src\dungeon\dungeon-file.h" />
     <ClInclude Include="..\..\src\dungeon\dungeon.h" />
     <ClInclude Include="..\..\src\grid\feature.h" />
-    <ClInclude Include="..\..\src\io\files.h" />
+    <ClInclude Include="..\..\src\io\files-util.h" />
     <ClInclude Include="..\..\src\floor\floor-events.h" />
     <ClInclude Include="..\..\src\floor\floor-generate.h" />
     <ClInclude Include="..\..\src\floor\floor-save.h" />

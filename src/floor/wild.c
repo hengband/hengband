@@ -27,7 +27,7 @@
 #include "dungeon/quest.h"
 #include "dungeon/dungeon-file.h"
 #include "io/tokenizer.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "grid/feature.h"
 #include "floor/floor-town.h"
 #include "realm/realm.h"

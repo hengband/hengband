@@ -34,7 +34,7 @@
 #include "cmd-pet.h"
 #include "cmd-basic.h"
 #include "io/uid-checker.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "player/player-effects.h"
 #include "player/player-class.h"
 #include "player/player-personalities-table.h"

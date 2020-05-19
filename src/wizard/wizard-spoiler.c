@@ -26,7 +26,7 @@
 #include "object/object-ego.h"
 #include "object/object-kind.h"
 #include "floor/floor-town.h"
-#include "io/files.h"
+#include "io/files-util.h"
 
  /*
   * The spoiler file being created

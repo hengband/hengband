@@ -50,7 +50,7 @@
 #include "object/object-hook.h"
 #include "floor/floor-events.h"
 #include "combat/snipe.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "player/player-effects.h"
 #include "player/race-info-table.h"
 #include "mind/mind.h"

@@ -3,7 +3,7 @@
 #include "util/util.h"
 
 #include "io/tokenizer.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "object/object-flavor.h"
 #include "object/artifact.h"
 #include "dungeon/dungeon.h"

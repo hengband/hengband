@@ -15,7 +15,7 @@
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
 #include "util/util.h"
-#include "io/files.h"
+#include "io/files-util.h"
 
 static const char autoregister_header[] = "?:$AUTOREGISTER";
 

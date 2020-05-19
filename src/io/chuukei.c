@@ -9,7 +9,7 @@
 #include "system/angband.h"
 
 #include "io/signal-handlers.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "util/util.h"
 #include "term/gameterm.h"
 #include "cmd/cmd-dump.h"

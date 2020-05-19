@@ -32,7 +32,7 @@
 #include "spell/spells-floor.h"
 #include "object/object-hook.h"
 #include "cmd-basic.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "floor/floor.h"
 #include "io/targeting.h"
 #include "player/player-races-table.h"

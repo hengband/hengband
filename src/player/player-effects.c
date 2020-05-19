@@ -47,7 +47,7 @@
 #include "player/player-damage.h"
 #include "monster/monster-status.h"
 #include "combat/snipe.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "mspell/monster-spell.h"
 #include "world/world.h"
 #include "object/object-kind.h"

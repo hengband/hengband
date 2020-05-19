@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "io/player-status-dump.h"
 
 

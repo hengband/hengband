@@ -29,7 +29,7 @@
 
 #include "cmd/cmd-basic.h"
 #include "core/show-file.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "floor/floor.h"
 #include "object/object-kind.h"
 #include "view/display-main-window.h"

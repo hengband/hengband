@@ -17,7 +17,7 @@
 #include "core/stuff-handler.h"
 #include "term/gameterm.h"
 #include "util/util.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "monster/monsterrace-hook.h"
 #include "view/display-main-window.h"
 #include "dungeon/quest.h"

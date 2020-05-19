@@ -30,7 +30,7 @@
 #include "floor/floor-save.h"
 #include "floor/floor-town.h"
 #include "io/uid-checker.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "world/world.h"
 #include "object/object-kind.h"
 #include "monster/monster-race.h"

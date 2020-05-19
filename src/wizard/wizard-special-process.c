@@ -51,7 +51,7 @@
 #include "floor/floor-save.h"
 #include "grid/grid.h"
 #include "dungeon/dungeon-file.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "mspell/monster-spell.h"
 #include "market/building.h"
 #include "object/object-kind.h"

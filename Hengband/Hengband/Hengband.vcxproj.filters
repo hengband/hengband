@@ -737,9 +737,6 @@
     <ClCompile Include="..\..\src\inventory\player-inventory.c">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\files.c">
-      <Filter>io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\term\gameterm.c">
       <Filter>term</Filter>
     </ClCompile>
@@ -931,6 +928,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\birth\character-builder.c">
       <Filter>birth</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io\files-util.c">
+      <Filter>io</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1717,9 +1717,6 @@
     <ClInclude Include="..\..\src\inventory\player-inventory.h">
       <Filter>inventory</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\io\files.h">
-      <Filter>io</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\term\gameterm.h">
       <Filter>term</Filter>
     </ClInclude>
@@ -1923,6 +1920,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\player-personalities-table.h">
       <Filter>player</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\files-util.h">
+      <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

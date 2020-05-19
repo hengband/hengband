@@ -34,7 +34,7 @@
 #include "dungeon/dungeon.h"
 #include "spell/process-effect.h"
 #include "spell/spells-type.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "player/player-move.h"
 #include "player/player-effects.h"
 #include "player/player-skill.h"

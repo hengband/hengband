@@ -21,7 +21,7 @@
 #include "effect/effect-characteristics.h"
 #include "floor/floor-save.h"
 #include "main/init.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "dungeon/dungeon.h"
 #include "world/world.h"
 #include "spell/process-effect.h"

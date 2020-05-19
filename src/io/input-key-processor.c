@@ -29,7 +29,7 @@
 #include "knowledge/knowledge-quests.h"
 #include "io/chuukei.h"
 #include "player/player-move.h" // do_cmd_travel() がある。後で移設する.
-#include "io/files.h"
+#include "io/files-util.h"
 
 #include "cmd/cmd-activate.h"
 #include "cmd/cmd-autopick.h"

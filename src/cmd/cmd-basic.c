@@ -46,7 +46,7 @@
 
 #include "cmd-basic.h"
 #include "dungeon/dungeon-file.h"
-#include "io/files.h"
+#include "io/files-util.h"
 
 #include "view/display-main-window.h"
 #include "io/targeting.h"

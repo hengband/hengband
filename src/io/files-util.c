@@ -1,5 +1,4 @@
 ﻿/*!
- * @file files.c
  * @brief ファイル入出力管理 / Purpose: code dealing with files (and death)
  * @date 2014/01/28
  * @author
@@ -14,7 +13,7 @@
 
 #include "system/angband.h"
 #include "io/uid-checker.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "system/system-variables.h" // 暫定。後で消す.
 #include "io/character-dump.h"
 

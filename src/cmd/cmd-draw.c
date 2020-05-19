@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "core/stuff-handler.h"
 #include "cmd/cmd-draw.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "term/gameterm.h"
 #include "view/display-main-window.h" // 暫定。後で消す.
 #include "player/player-effects.h"

@@ -8,7 +8,7 @@
 #include "view/display-main-window.h"
 #include "cmd/cmd-dump.h"
 #include "core/show-file.h"
-#include "io/files.h"
+#include "io/files-util.h"
 
 #include "world/world.h"
 
