@@ -714,7 +714,7 @@ void do_cmd_browse(player_type *caster_ptr)
  * @param next_realm 変更先の魔法領域ID
  * @return なし
  */
-static void change_realm2(player_type *caster_ptr, CHARACTER_IDX next_realm)
+static void change_realm2(player_type *caster_ptr, player_personality_type next_realm)
 {
 	int i, j = 0;
 	char tmp[80];

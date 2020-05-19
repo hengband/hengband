@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-typedef enum player_personality_table {
+typedef enum player_personality_type {
 	SEIKAKU_FUTUU = 0,
     SEIKAKU_CHIKARA = 1,
     SEIKAKU_KIREMONO = 2,
@@ -14,4 +14,4 @@ typedef enum player_personality_table {
     SEIKAKU_GAMAN = 10,
     SEIKAKU_MUNCHKIN = 11,
     SEIKAKU_CHARGEMAN = 12,
-} player_personality_table;
+} player_personality_type;

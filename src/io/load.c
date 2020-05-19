@@ -1570,7 +1570,7 @@ static void load_quick_start(void)
 	rd_byte(&tmp8u);
 	previous_char.pclass = (player_class_type)tmp8u;
 	rd_byte(&tmp8u);
-	previous_char.pseikaku = (CHARACTER_IDX)tmp8u;
+	previous_char.pseikaku = (player_personality_type)tmp8u;
 	rd_byte(&tmp8u);
 	previous_char.realm1 = (REALM_IDX)tmp8u;
 	rd_byte(&tmp8u);
@@ -1633,7 +1633,7 @@ static void rd_extra(player_type *creature_ptr)
 	creature_ptr->pclass = (player_class_type)tmp8u;
 
 	rd_byte(&tmp8u);
-	creature_ptr->pseikaku = (CHARACTER_IDX)tmp8u;
+	creature_ptr->pseikaku = (player_personality_type)tmp8u;
 
 	rd_byte(&creature_ptr->psex);
 	rd_byte(&tmp8u);

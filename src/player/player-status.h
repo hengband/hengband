@@ -1,5 +1,7 @@
 ﻿#pragma once 
 #include "market/building.h"
+#include "player/player-personalities-table.h"
+
 struct floor_type;
 typedef struct floor_type floor_type;
 
@@ -98,10 +100,10 @@ typedef struct player_type
 	SEX_IDX psex;		/* Sex index */
 	player_race_table prace;		/* Race index */
 	player_class_type pclass;	/* Class index */
-	CHARACTER_IDX pseikaku;	/* Seikaku index */
+	player_personality_type pseikaku;	/* Seikaku index */
 	REALM_IDX realm1;		/* First magic realm */
 	REALM_IDX realm2;		/* Second magic realm */
-	CHARACTER_IDX oops;		/* Unused */
+	player_personality_type oops;		/* Unused */
 
 	DICE_SID hitdie;	/* Hit dice (sides) */
 	u16b expfact;	/* Experience factor

@@ -184,7 +184,7 @@ bool get_player_personality(player_type *creature_ptr)
     if (!select_personality(creature_ptr, &k, &str, sym))
         return FALSE;
 
-    creature_ptr->pseikaku = (CHARACTER_IDX)k;
+    creature_ptr->pseikaku = (player_personality_type)k;
     ap_ptr = &seikaku_info[creature_ptr->pseikaku];
     char tmp[64];
 #ifdef JP
