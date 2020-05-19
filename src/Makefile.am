@@ -111,6 +111,7 @@ hengband_SOURCES = \
 	io/save.c io/save.h \
 	io/inet.c io/inet.h \
 	io/chuukei.c io/chuukei.h \
+	io/pref-file-expressor.c io/pref-file-expressor.h \
 	\
 	core/game-play.c core/game-play.h \
 	core/show-file.c core/show-file.h \

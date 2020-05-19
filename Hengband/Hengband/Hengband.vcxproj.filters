@@ -932,6 +932,9 @@
     <ClCompile Include="..\..\src\io\files-util.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io\pref-file-expressor.c">
+      <Filter>io</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1922,6 +1925,9 @@
       <Filter>player</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io\files-util.h">
+      <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io\pref-file-expressor.h">
       <Filter>io</Filter>
     </ClInclude>
   </ItemGroup>
