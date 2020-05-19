@@ -131,30 +131,42 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
     return TRUE;
 }
 
+static void auto_roller_count(void)
+{
+    if (auto_round < 1000000000L)
+        return;
+
+    auto_round = 1;
+    if (!autoroller)
+        return;
+
+    for (int i = 0; i < A_MAX; i++) {
+        stat_match[i] = 0;
+    }
+}
+
+static bool decide_initial_stat(player_type *creature_ptr)
+{
+    if (!autoroller)
+        return TRUE;
+
+    for (int i = 0; i < A_MAX; i++) {
+        if (creature_ptr->stat_max[i] >= stat_limit[i])
+            stat_match[i]++;
+        else
+            return FALSE;
+    }
+
+    return TRUE;
+}
+
 static void exe_auto_roller(player_type *creature_ptr, chara_limit_type chara_limit, const int col)
 {
     while (autoroller || autochara) {
-        bool accept = TRUE;
         get_stats(creature_ptr);
         auto_round++;
-        if (auto_round >= 1000000000L) {
-            auto_round = 1;
-            if (autoroller) {
-                for (int i = 0; i < A_MAX; i++) {
-                    stat_match[i] = 0;
-                }
-            }
-        }
-
-        if (autoroller) {
-            for (int i = 0; i < A_MAX; i++) {
-                if (creature_ptr->stat_max[i] >= stat_limit[i])
-                    stat_match[i]++;
-                else
-                    accept = FALSE;
-            }
-        }
-
+        auto_roller_count();
+        bool accept = decide_initial_stat(creature_ptr);
         if (accept) {
             get_ahw(creature_ptr);
             get_history(creature_ptr);
