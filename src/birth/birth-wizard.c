@@ -201,7 +201,7 @@ static bool decide_body_spec(player_type *creature_ptr, chara_limit_type chara_l
     return *accept;
 }
 
-static bool display_auto_roller_result(player_type *creature_ptr, const int col)
+static bool display_auto_roller_count(player_type *creature_ptr, const int col)
 {
     if ((auto_round % AUTOROLLER_STEP) != 0)
         return FALSE;
@@ -229,7 +229,7 @@ static void exe_auto_roller(player_type *creature_ptr, chara_limit_type chara_li
         if (decide_body_spec(creature_ptr, chara_limit, &accept))
             return;
 
-        if (display_auto_roller_result(creature_ptr, col))
+        if (display_auto_roller_count(creature_ptr, col))
             return;
     }
 }
@@ -280,16 +280,7 @@ static bool display_auto_roller_result(player_type *creature_ptr, bool prev, cha
             continue;
         }
 
-        if (*c == '?') {
-            show_help(creature_ptr, _("jbirth.txt#AutoRoller", "birth.txt#AutoRoller"));
-            continue;
-        } else if (*c == '=') {
-            screen_save();
-            do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
-            screen_load();
-            continue;
-        }
-
+        birth_help_option(creature_ptr, *c, BK_AUTO_ROLLER);
         bell();
     }
 
