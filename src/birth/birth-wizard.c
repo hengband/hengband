@@ -131,132 +131,10 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
     return TRUE;
 }
 
-/*!
- * @brief プレーヤーキャラ作成ウィザード
- * @details
- * The delay may be reduced, but is recommended to keep players
- * from continuously rolling up characters, which can be VERY
- * expensive CPU wise.  And it cuts down on player stupidity.
- * @return なし
- */
-bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
+static bool display_auto_roller(player_type *creature_ptr, chara_limit_type chara_limit)
 {
-    display_initial_birth_message(creature_ptr);
-    const char p2 = ')';
-    char buf[80];
-    for (int n = 0; n < MAX_SEXES; n++) {
-        sp_ptr = &sex_info[n];
-        sprintf(buf, _("%c%c%s", "%c%c %s"), I2A(n), p2, sp_ptr->title);
-        put_str(buf, 12 + (n / 5), 2 + 15 * (n % 5));
-    }
-
-    if(!get_player_sex(creature_ptr, buf))
-        return FALSE;
-
-    clear_from(10);
-    creature_ptr->prace = 0;
     while (TRUE) {
-        char temp[80 * 10];
-        if (!get_player_race(creature_ptr))
-            return FALSE;
-
-        clear_from(10);
-        roff_to_buf(race_explanations[creature_ptr->prace], 74, temp, sizeof(temp));
-        concptr t = temp;
-        for (int i = 0; i < 10; i++) {
-            if (t[0] == 0)
-                break;
-            else {
-                prt(t, 12 + i, 3);
-                t += strlen(t) + 1;
-            }
-        }
-        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
-            break;
-
-        clear_from(10);
-        c_put_str(TERM_WHITE, "              ", 4, 15);
-    }
-
-    clear_from(10);
-    creature_ptr->pclass = 0;
-    while (TRUE) {
-        char temp[80 * 9];
-        if (!get_player_class(creature_ptr))
-            return FALSE;
-
-        clear_from(10);
-        roff_to_buf(class_explanations[creature_ptr->pclass], 74, temp, sizeof(temp));
-        concptr t = temp;
-        for (int i = 0; i < 9; i++) {
-            if (t[0] == 0)
-                break;
-            else {
-                prt(t, 12 + i, 3);
-                t += strlen(t) + 1;
-            }
-        }
-
-        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
-            break;
-
-        c_put_str(TERM_WHITE, "              ", 5, 15);
-    }
-
-    if (!get_player_realms(creature_ptr))
-        return FALSE;
-
-    creature_ptr->pseikaku = 0;
-    while (TRUE) {
-        char temp[80 * 8];
-        if (!get_player_personality(creature_ptr))
-            return FALSE;
-
-        clear_from(10);
-        roff_to_buf(personality_explanations[creature_ptr->pseikaku], 74, temp, sizeof(temp));
-        concptr t = temp;
-        for (int i = 0; i < A_MAX; i++) {
-            if (t[0] == 0)
-                break;
-            else {
-                prt(t, 12 + i, 3);
-                t += strlen(t) + 1;
-            }
-        }
-
-        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
-            break;
-
-        c_put_str(TERM_L_BLUE, creature_ptr->name, 1, 34);
-        prt("", 1, 34 + strlen(creature_ptr->name));
-    }
-
-    clear_from(10);
-    put_str("                                   ", 3, 40);
-    put_str("                                   ", 4, 40);
-    put_str("                                   ", 5, 40);
-
-    screen_save();
-    do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
-    screen_load();
-    if (autoroller || autochara)
-        auto_round = 0L;
-
-    if (autoroller)
-        if (!get_stat_limits(creature_ptr))
-            return FALSE;
-
-    chara_limit_type chara_limit;
-    initialize_chara_limit(&chara_limit);
-    if (autochara)
-        if (!get_chara_limits(creature_ptr, &chara_limit))
-            return FALSE;
-
-    clear_from(10);
-    init_turn(creature_ptr);
-    while (TRUE) {
-        int col;
-        col = 42;
+        int col = 42;
         if (autoroller || autochara) {
             Term_clear();
             put_str(_("回数 :", "Round:"), 10, col + 13);
@@ -276,6 +154,7 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
                 put_str(stat_names[i], 3 + i, col);
                 j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
                 m = adjust_stat(stat_limit[i], j);
+                char buf[32];
                 cnv_stat(m, buf);
                 c_put_str(TERM_L_BLUE, buf, 3 + i, col + 5);
             }
@@ -409,6 +288,135 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
         previous_char.quick_ok = FALSE;
         prev = TRUE;
     }
+
+    return TRUE;
+}
+
+/*!
+ * @brief プレーヤーキャラ作成ウィザード
+ * @details
+ * The delay may be reduced, but is recommended to keep players
+ * from continuously rolling up characters, which can be VERY
+ * expensive CPU wise.  And it cuts down on player stupidity.
+ * @return なし
+ */
+bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
+{
+    display_initial_birth_message(creature_ptr);
+    const char p2 = ')';
+    char buf[80];
+    for (int n = 0; n < MAX_SEXES; n++) {
+        sp_ptr = &sex_info[n];
+        sprintf(buf, _("%c%c%s", "%c%c %s"), I2A(n), p2, sp_ptr->title);
+        put_str(buf, 12 + (n / 5), 2 + 15 * (n % 5));
+    }
+
+    if(!get_player_sex(creature_ptr, buf))
+        return FALSE;
+
+    clear_from(10);
+    creature_ptr->prace = 0;
+    while (TRUE) {
+        char temp[80 * 10];
+        if (!get_player_race(creature_ptr))
+            return FALSE;
+
+        clear_from(10);
+        roff_to_buf(race_explanations[creature_ptr->prace], 74, temp, sizeof(temp));
+        concptr t = temp;
+        for (int i = 0; i < 10; i++) {
+            if (t[0] == 0)
+                break;
+            else {
+                prt(t, 12 + i, 3);
+                t += strlen(t) + 1;
+            }
+        }
+        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+            break;
+
+        clear_from(10);
+        c_put_str(TERM_WHITE, "              ", 4, 15);
+    }
+
+    clear_from(10);
+    creature_ptr->pclass = 0;
+    while (TRUE) {
+        char temp[80 * 9];
+        if (!get_player_class(creature_ptr))
+            return FALSE;
+
+        clear_from(10);
+        roff_to_buf(class_explanations[creature_ptr->pclass], 74, temp, sizeof(temp));
+        concptr t = temp;
+        for (int i = 0; i < 9; i++) {
+            if (t[0] == 0)
+                break;
+            else {
+                prt(t, 12 + i, 3);
+                t += strlen(t) + 1;
+            }
+        }
+
+        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+            break;
+
+        c_put_str(TERM_WHITE, "              ", 5, 15);
+    }
+
+    if (!get_player_realms(creature_ptr))
+        return FALSE;
+
+    creature_ptr->pseikaku = 0;
+    while (TRUE) {
+        char temp[80 * 8];
+        if (!get_player_personality(creature_ptr))
+            return FALSE;
+
+        clear_from(10);
+        roff_to_buf(personality_explanations[creature_ptr->pseikaku], 74, temp, sizeof(temp));
+        concptr t = temp;
+        for (int i = 0; i < A_MAX; i++) {
+            if (t[0] == 0)
+                break;
+            else {
+                prt(t, 12 + i, 3);
+                t += strlen(t) + 1;
+            }
+        }
+
+        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+            break;
+
+        c_put_str(TERM_L_BLUE, creature_ptr->name, 1, 34);
+        prt("", 1, 34 + strlen(creature_ptr->name));
+    }
+
+    clear_from(10);
+    put_str("                                   ", 3, 40);
+    put_str("                                   ", 4, 40);
+    put_str("                                   ", 5, 40);
+
+    screen_save();
+    do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
+    screen_load();
+    if (autoroller || autochara)
+        auto_round = 0L;
+
+    if (autoroller)
+        if (!get_stat_limits(creature_ptr))
+            return FALSE;
+
+    chara_limit_type chara_limit;
+    initialize_chara_limit(&chara_limit);
+    if (autochara)
+        if (!get_chara_limits(creature_ptr, &chara_limit))
+            return FALSE;
+
+    clear_from(10);
+    init_turn(creature_ptr);
+    if (!display_auto_roller(creature_ptr, chara_limit))
+        return FALSE;
 
     clear_from(23);
     get_name(creature_ptr);
