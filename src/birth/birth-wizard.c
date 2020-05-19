@@ -50,24 +50,14 @@ static void display_initial_birth_message(player_type *creature_ptr)
 }
 
 /*!
- * @brief プレーヤーキャラ作成ウィザード
- * @details
- * The delay may be reduced, but is recommended to keep players
- * from continuously rolling up characters, which can be VERY
- * expensive CPU wise.  And it cuts down on player stupidity.
- * @return なし
+ * @brief プレイヤーの性別選択を行う / Player sex
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @buf 表示用バッファ
+ * @return やり直すならFALSE、それ以外はTRUE
  */
-bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
+static bool get_player_sex(player_type *creature_ptr, char *buf)
 {
-    int n;
     const char p2 = ')';
-    char buf[80];
-    for (n = 0; n < MAX_SEXES; n++) {
-        sp_ptr = &sex_info[n];
-        sprintf(buf, _("%c%c%s", "%c%c %s"), I2A(n), p2, sp_ptr->title);
-        put_str(buf, 12 + (n / 5), 2 + 15 * (n % 5));
-    }
-
     char cur[80];
     sprintf(cur, _("%c%c%s", "%c%c %s"), '*', p2, _("ランダム", "Random"));
     int k = -1;
@@ -91,7 +81,7 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
         if (k >= 0)
             break;
 
-        sprintf(buf, _("性別を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a sex (%c-%c) ('=' for options): "), I2A(0), I2A(n - 1));
+        sprintf(buf, _("性別を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a sex (%c-%c) ('=' for options): "), I2A(0), I2A(1));
         put_str(buf, 10, 10);
         char c = inkey();
         if (c == 'Q')
@@ -138,6 +128,31 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
     creature_ptr->psex = (byte)k;
     sp_ptr = &sex_info[creature_ptr->psex];
     c_put_str(TERM_L_BLUE, sp_ptr->title, 3, 15);
+    return TRUE;
+}
+
+/*!
+ * @brief プレーヤーキャラ作成ウィザード
+ * @details
+ * The delay may be reduced, but is recommended to keep players
+ * from continuously rolling up characters, which can be VERY
+ * expensive CPU wise.  And it cuts down on player stupidity.
+ * @return なし
+ */
+bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
+{
+    int n;
+    const char p2 = ')';
+    char buf[80];
+    for (n = 0; n < MAX_SEXES; n++) {
+        sp_ptr = &sex_info[n];
+        sprintf(buf, _("%c%c%s", "%c%c %s"), I2A(n), p2, sp_ptr->title);
+        put_str(buf, 12 + (n / 5), 2 + 15 * (n % 5));
+    }
+
+    if(!get_player_sex(creature_ptr, buf))
+        return FALSE;
+
     clear_from(10);
     creature_ptr->prace = 0;
     while (TRUE) {
