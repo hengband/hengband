@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+/*!
+ * @details 既にplayer_raceが存在するので_tableと付けた
+ */
 typedef enum player_race_table {
     RACE_HUMAN = 0,
     RACE_HALF_ELF = 1,

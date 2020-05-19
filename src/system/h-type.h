@@ -95,7 +95,6 @@ typedef s16b FEAT_IDX;			/*!< ゲーム中の地形ID型を定義 */
 typedef s16b FLOOR_IDX;			/*!< ゲーム中のフロアID型を定義 */
 
 typedef byte SEX_IDX;			/*!< ゲーム中のプレイヤー性別ID型を定義 */
-typedef s16b RACE_IDX;			/*!< ゲーム中のプレイヤー種族ID型を定義 */
 typedef s16b CLASS_IDX;			/*!< ゲーム中のプレイヤー職業ID型を定義 */
 typedef s16b CHARACTER_IDX;		/*!< ゲーム中のプレイヤー性格ID型を定義 */
 typedef s16b MIMIC_RACE_IDX;	/*!< ゲーム中のプレイヤー変身種族ID型を定義 */

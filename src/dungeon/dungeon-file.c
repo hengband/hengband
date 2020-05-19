@@ -2990,7 +2990,7 @@ static errr parse_line_building(char *buf)
 		n = tokenize(s + 2, MAX_RACES, zz, 0);
 		for (int i = 0; i < MAX_RACES; i++)
 		{
-			building[index].member_race[i] = ((i < n) ? (RACE_IDX)atoi(zz[i]) : 1);
+			building[index].member_race[i] = ((i < n) ? (player_race_table)atoi(zz[i]) : 1);
 		}
 
 		break;
@@ -3378,7 +3378,7 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 			}
 			else if (zz[0][0] == 'R')
 			{
-				max_r_idx = (RACE_IDX)atoi(zz[1]);
+				max_r_idx = (player_race_table)atoi(zz[1]);
 			}
 			else if (zz[0][0] == 'K')
 			{

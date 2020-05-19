@@ -1566,7 +1566,7 @@ static void load_quick_start(void)
 	rd_byte(&previous_char.psex);
 	byte tmp8u;
 	rd_byte(&tmp8u);
-	previous_char.prace = (RACE_IDX)tmp8u;
+	previous_char.prace = (player_race_table)tmp8u;
 	rd_byte(&tmp8u);
 	previous_char.pclass = (CLASS_IDX)tmp8u;
 	rd_byte(&tmp8u);
@@ -1627,7 +1627,7 @@ static void rd_extra(player_type *creature_ptr)
 
 	byte tmp8u;
 	rd_byte(&tmp8u);
-	creature_ptr->prace = (RACE_IDX)tmp8u;
+	creature_ptr->prace = (player_race_table)tmp8u;
 
 	rd_byte(&tmp8u);
 	creature_ptr->pclass = (CLASS_IDX)tmp8u;
@@ -1734,7 +1734,7 @@ static void rd_extra(player_type *creature_ptr)
 	else
 	{
 		rd_byte(&tmp8u);
-		creature_ptr->start_race = (RACE_IDX)tmp8u;
+		creature_ptr->start_race = (player_race_table)tmp8u;
 		s32b tmp32s;
 		rd_s32b(&tmp32s);
 		creature_ptr->old_race1 = (BIT_FLAGS)tmp32s;

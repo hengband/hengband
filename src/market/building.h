@@ -4,6 +4,7 @@
 #include "player/player-race.h"
 #include "player/race-info-table.h"
 #include "player/player-class.h"
+#include "player/player-races-table.h"
 
 #define MAX_BLDG 32 /*!< 施設の種類最大数 / Number of buildings */
 
@@ -36,7 +37,7 @@ struct building_type
 	BACT_RESTRICT_IDX action_restr[8];           /* action restrictions */
 
 	CLASS_IDX member_class[MAX_CLASS];   /* which classes are part of guild */
-	RACE_IDX member_race[MAX_RACES];    /* which classes are part of guild */
+	player_race_table member_race[MAX_RACES];    /* which classes are part of guild */
 	REALM_IDX member_realm[MAX_MAGIC + 1]; /* which realms are part of guild */
 };
 
