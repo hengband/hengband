@@ -50,6 +50,25 @@ static void display_initial_birth_message(player_type *creature_ptr)
 }
 
 /*!
+ * @prief 性別選択画面でヘルプを表示させる
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param c 入力したコマンド
+ * @return なし
+ * @details 他の関数名と被りそうだったので少し眺め
+ */
+static void display_help_on_sex_select(player_type *creature_ptr, char c)
+{
+    if (c == '?')
+        do_cmd_help(creature_ptr);
+    else if (c == '=') {
+        screen_save();
+        do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
+        screen_load();
+    } else if (c != '4' && c != '6')
+        bell();
+}
+
+/*!
  * @brief プレイヤーの性別選択を行う / Player sex
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @buf 表示用バッファ
@@ -86,8 +105,10 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
         char c = inkey();
         if (c == 'Q')
             birth_quit();
+
         if (c == 'S')
             return FALSE;
+
         if (c == ' ' || c == '\r' || c == '\n') {
             k = cs == MAX_SEXES ? randint0(MAX_SEXES) : cs;
             break;
@@ -115,14 +136,7 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
         } else
             k = -1;
 
-        if (c == '?')
-            do_cmd_help(creature_ptr);
-        else if (c == '=') {
-            screen_save();
-            do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
-            screen_load();
-        } else if (c != '4' && c != '6')
-            bell();
+        display_help_on_sex_select(creature_ptr, c);
     }
 
     creature_ptr->psex = (byte)k;
