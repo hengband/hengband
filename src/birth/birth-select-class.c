@@ -69,18 +69,75 @@ static void interpret_class_select_key_move(char c, int *cs)
 
     if (c == '4') {
         if (*cs > 0)
-            *(cs)--;
+            (*cs)--;
     }
 
     if (c == '6') {
         if (*cs < MAX_CLASS)
-            *(cs)++;
+            (*cs)++;
     }
 
     if (c == '2') {
         if ((*cs + 4) <= MAX_CLASS)
             *cs += 4;
     }
+}
+
+static bool select_class(player_type *creature_ptr, char *cur, char *sym, int *k)
+{
+    int cs = creature_ptr->pclass;
+    int os = MAX_CLASS;
+    while (TRUE) {
+        display_class_stat(cs, &os, cur, sym);
+        if (*k >= 0)
+            break;
+
+        char buf[80];
+        sprintf(buf, _("職業を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a class (%c-%c) ('=' for options): "), sym[0], sym[MAX_CLASS - 1]);
+
+        put_str(buf, 10, 10);
+        char c = inkey();
+        if (c == 'Q')
+            birth_quit();
+
+        if (c == 'S')
+            return FALSE;
+
+        if (c == ' ' || c == '\r' || c == '\n') {
+            if (cs == MAX_CLASS) {
+                *k = randint0(MAX_CLASS);
+                cs = *k;
+                continue;
+            } else {
+                *k = cs;
+                break;
+            }
+        }
+
+        interpret_class_select_key_move(c, &cs);
+        if (c == '*') {
+            *k = randint0(MAX_CLASS);
+            cs = *k;
+            continue;
+        }
+
+        *k = (islower(c) ? A2I(c) : -1);
+        if ((*k >= 0) && (*k < MAX_CLASS)) {
+            cs = *k;
+            continue;
+        }
+
+        *k = (isupper(c) ? (26 + c - 'A') : -1);
+        if ((*k >= 26) && (*k < MAX_CLASS)) {
+            cs = *k;
+            continue;
+        } else
+            *k = -1;
+
+        birth_help_option(creature_ptr, c, BK_CLASS);
+    }
+
+    return TRUE;
 }
 
 /*!
@@ -103,57 +160,8 @@ bool get_player_class(player_type *creature_ptr)
     char cur[80];
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
     int k = -1;
-    int cs = creature_ptr->pclass;
-    int os = MAX_CLASS;
-    while (TRUE) {
-        display_class_stat(cs, &os, cur, sym);
-        if (k >= 0)
-            break;
-
-        char buf[80];
-        sprintf(buf, _("職業を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a class (%c-%c) ('=' for options): "), sym[0], sym[MAX_CLASS - 1]);
-
-        put_str(buf, 10, 10);
-        char c = inkey();
-        if (c == 'Q')
-            birth_quit();
-
-        if (c == 'S')
-            return FALSE;
-
-        if (c == ' ' || c == '\r' || c == '\n') {
-            if (cs == MAX_CLASS) {
-                k = randint0(MAX_CLASS);
-                cs = k;
-                continue;
-            } else {
-                k = cs;
-                break;
-            }
-        }
-
-        interpret_class_select_key_move(c, &cs);
-        if (c == '*') {
-            k = randint0(MAX_CLASS);
-            cs = k;
-            continue;
-        }
-
-        k = (islower(c) ? A2I(c) : -1);
-        if ((k >= 0) && (k < MAX_CLASS)) {
-            cs = k;
-            continue;
-        }
-
-        k = (isupper(c) ? (26 + c - 'A') : -1);
-        if ((k >= 26) && (k < MAX_CLASS)) {
-            cs = k;
-            continue;
-        } else
-            k = -1;
-
-        birth_help_option(creature_ptr, c, BK_CLASS);
-    }
+    if (!select_class(creature_ptr, cur, sym, &k))
+        return FALSE;
 
     creature_ptr->pclass = (byte)k;
     cp_ptr = &class_info[creature_ptr->pclass];

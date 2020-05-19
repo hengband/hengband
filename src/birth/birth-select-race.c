@@ -55,7 +55,7 @@ static void interpret_race_select_key_move(char c, int *cs)
 {
     if (c == '8') {
         if (*cs >= 5)
-            cs -= 5;
+            *cs -= 5;
     }
 
     if (c == '4') {
