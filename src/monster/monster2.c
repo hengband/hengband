@@ -32,7 +32,7 @@
 #include "player/player-status.h"
 #include "player/player-race.h"
 #include "player/player-class.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "floor/wild.h"
 #include "object/warning.h"
 #include "mspell/monster-spell.h"

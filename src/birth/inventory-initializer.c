@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "birth/inventory-initializer.h"
 #include "monster/monsterrace-hook.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "birth/initial-equipments-table.h"
 #include "object/object-ego.h"
 #include "object/object-kind.h"

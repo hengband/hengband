@@ -12,7 +12,7 @@
 #include "player/player-status.h"
 #include "player/player-skill.h"
 #include "player/player-class.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "object/object-hook.h"
 #include "object/object-broken.h"
 #include "effect/effect-characteristics.h"

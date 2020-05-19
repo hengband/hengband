@@ -1,5 +1,5 @@
 ﻿#include "permanent-resistances.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "player/player-races-table.h"
 
 /*!

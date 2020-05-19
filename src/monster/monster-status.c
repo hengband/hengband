@@ -23,7 +23,7 @@
 #include "player/avatar.h"
 #include "io/files.h"
 #include "player/player-effects.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 #include "io/report.h"

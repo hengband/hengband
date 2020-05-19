@@ -37,7 +37,7 @@
 #include "player/player-status.h"
 #include "player/player-effects.h"
 #include "player/player-class.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "monster/monster.h"
 #include "view/display-main-window.h"
 #include "spell/spells3.h"

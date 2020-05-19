@@ -458,6 +458,7 @@
     <ClInclude Include="..\..\src\mspell\mspell-type.h" />
     <ClInclude Include="..\..\src\mspell\mspell-util.h" />
     <ClInclude Include="..\..\src\mspell\mspell-ball.h" />
+    <ClInclude Include="..\..\src\player\player-personalities-table.h" />
     <ClInclude Include="..\..\src\player\player-races-table.h" />
     <ClInclude Include="..\..\src\player\player-classes-table.h" />
     <ClInclude Include="..\..\src\spell\spells-detection.h" />

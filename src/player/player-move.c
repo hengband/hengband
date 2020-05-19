@@ -160,7 +160,7 @@
 #include "player/player-races-table.h"
 #include "player/player-class.h"
 #include "inventory/player-inventory.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "spell/spells-floor.h"
 #include "grid/feature.h"
 #include "object/warning.h"

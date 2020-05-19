@@ -32,7 +32,7 @@
 #include "monster/monster.h"
 #include "view/display-main-window.h"
 #include "player/player-class.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "world/world.h"
 
  /*

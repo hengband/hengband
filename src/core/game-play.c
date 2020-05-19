@@ -35,7 +35,7 @@
 #include "object/object-flavor.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "player/player-races-table.h"
 #include "player/player-skill.h"
 #include "player/process-name.h"

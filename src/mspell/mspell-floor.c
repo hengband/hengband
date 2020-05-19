@@ -10,7 +10,7 @@
 #include "spell/spells2.h"
 #include "monster/monster-status.h"
 #include "player/player-move.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "object/artifact.h"
 #include "spell/spells-type.h"
 #include "mspell/mspell-util.h"

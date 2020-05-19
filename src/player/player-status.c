@@ -13,6 +13,7 @@
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "player/player-damage.h"
 #include "floor/floor.h"
 #include "floor/floor-events.h"

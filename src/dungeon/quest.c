@@ -12,7 +12,7 @@
 #include "monster/monsterrace-hook.h"
 #include "monster/monster.h"
 #include "player/player-status.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "object/artifact.h"
 #include "grid/feature.h"
 #include "world/world.h"

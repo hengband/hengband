@@ -19,7 +19,7 @@
 #include "object/object-broken.h"
 #include "player/player-move.h"
 #include "player/player-damage.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"
 #include "player/player-class.h"

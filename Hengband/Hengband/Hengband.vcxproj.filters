@@ -1921,6 +1921,9 @@
     <ClInclude Include="..\..\src\player\player-classes-table.h">
       <Filter>player</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player\player-personalities-table.h">
+      <Filter>player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

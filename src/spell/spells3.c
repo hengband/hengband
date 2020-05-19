@@ -55,7 +55,7 @@
 #include "io/files.h"
 #include "player/player-effects.h"
 #include "player/player-skill.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "view/display-main-window.h"
 #include "mind/mind.h"
 #include "floor/wild.h"

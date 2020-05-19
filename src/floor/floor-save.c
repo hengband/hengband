@@ -37,7 +37,7 @@
 #include "io/files.h"
 #include "player/player-effects.h"
 #include "player/player-class.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "world/world.h"
 #include "spell/spells2.h"
 #include "io/write-diary.h"

@@ -12,7 +12,7 @@
 #include "player/player-move.h"
 #include "monster/monster-status.h"
 #include "spell/spells-type.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "object/artifact.h"
 #include "player/player-effects.h"
 #include "mspell/mspell-damage-calculator.h"

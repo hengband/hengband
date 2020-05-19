@@ -21,7 +21,7 @@
 #include "cmd-pet.h"
 #include "effect/effect-characteristics.h"
 #include "object/object-kind-hook.h"
-#include "player/player-personality.h"
+#include "player/player-personalities-table.h"
 #include "monster/monster.h"
 #include "mspell/monster-spell.h"
 #include "monster/monsterrace-hook.h"
