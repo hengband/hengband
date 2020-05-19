@@ -3,24 +3,10 @@
 #include "term/gameterm.h"
 #include "birth/birth-util.h"
 
-/*!
- * @brief プレイヤーの職業選択を行う / Player class
- * @return なし
- */
-bool get_player_class(player_type *creature_ptr)
-{
-    char buf[80];
-    char cur[80];
-    clear_from(10);
-    put_str(_("注意：《職業》によってキャラクターの先天的な能力やボーナスが変化します。",
-                "Note: Your 'class' determines various intrinsic abilities and bonuses."),
-        23, 5);
-    put_str(_("()で囲まれた選択肢はこの種族には似合わない職業です。",
-                "Any entries in parentheses should only be used by advanced players."),
-        11, 5);
+static const char p2 = ')';
 
-    char sym[MAX_CLASS];
-    char p2 = ')';
+static void enumerate_class_list(char *sym)
+{
     for (int n = 0; n < MAX_CLASS; n++) {
         cp_ptr = &class_info[n];
         mp_ptr = &m_info[n];
@@ -30,6 +16,7 @@ bool get_player_class(player_type *creature_ptr)
         else
             sym[n] = ('A' + n - 26);
 
+        char buf[80];
         if (!(rp_ptr->choice & (1L << n)))
             sprintf(buf, "%c%c(%s)", sym[n], p2, str);
         else
@@ -37,7 +24,25 @@ bool get_player_class(player_type *creature_ptr)
 
         put_str(buf, 13 + (n / 4), 2 + 19 * (n % 4));
     }
+}
 
+/*!
+ * @brief プレイヤーの職業選択を行う / Player class
+ * @return なし
+ */
+bool get_player_class(player_type *creature_ptr)
+{
+    clear_from(10);
+    put_str(_("注意：《職業》によってキャラクターの先天的な能力やボーナスが変化します。",
+                "Note: Your 'class' determines various intrinsic abilities and bonuses."),
+        23, 5);
+    put_str(_("()で囲まれた選択肢はこの種族には似合わない職業です。",
+                "Any entries in parentheses should only be used by advanced players."),
+        11, 5);
+
+    char sym[MAX_CLASS];
+    enumerate_class_list(sym);
+    char cur[80];
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
     int k = -1;
     int cs = creature_ptr->pclass;
@@ -62,6 +67,7 @@ bool get_player_class(player_type *creature_ptr)
                 c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
                 put_str(_("の職業修正", ": Class modification"), 3, 40 + strlen(cp_ptr->title));
                 put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
+                char buf[80];
                 sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ",
                     cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3],
                     cp_ptr->c_adj[4], cp_ptr->c_adj[5], cp_ptr->c_exp);
@@ -75,6 +81,7 @@ bool get_player_class(player_type *creature_ptr)
         if (k >= 0)
             break;
 
+        char buf[80];
         sprintf(buf, _("職業を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a class (%c-%c) ('=' for options): "), sym[0], sym[MAX_CLASS - 1]);
 
         put_str(buf, 10, 10);
