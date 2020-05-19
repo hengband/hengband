@@ -182,6 +182,24 @@ static bool decide_body_spec(player_type *creature_ptr, chara_limit_type chara_l
     return *accept;
 }
 
+static bool display_auto_roller_result(player_type *creature_ptr, const int col)
+{
+    if ((auto_round % AUTOROLLER_STEP) != 0)
+        return FALSE;
+
+    birth_put_stats(creature_ptr);
+    put_str(format("%10ld", auto_round), 10, col + 20);
+    Term_fresh();
+    inkey_scan = TRUE;
+    if (inkey()) {
+        get_ahw(creature_ptr);
+        get_history(creature_ptr);
+        return TRUE;
+    }
+
+    return FALSE;
+}
+
 static void exe_auto_roller(player_type *creature_ptr, chara_limit_type chara_limit, const int col)
 {
     while (autoroller || autochara) {
@@ -192,18 +210,8 @@ static void exe_auto_roller(player_type *creature_ptr, chara_limit_type chara_li
         if (decide_body_spec(creature_ptr, chara_limit, &accept))
             return;
 
-        bool flag = (!(auto_round % AUTOROLLER_STEP));
-        if (flag) {
-            birth_put_stats(creature_ptr);
-            put_str(format("%10ld", auto_round), 10, col + 20);
-            Term_fresh();
-            inkey_scan = TRUE;
-            if (inkey()) {
-                get_ahw(creature_ptr);
-                get_history(creature_ptr);
-                break;
-            }
-        }
+        if (display_auto_roller_result(creature_ptr, col))
+            return;
     }
 }
 
