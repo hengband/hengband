@@ -26,6 +26,40 @@ static void enumerate_class_list(char *sym)
     }
 }
 
+static void display_class_stat(int cs, int *os, char *cur, char *sym)
+{
+    if (cs == *os)
+        return;
+
+    c_put_str(TERM_WHITE, cur, 13 + (*os / 4), 2 + 19 * (*os % 4));
+    put_str("                                   ", 3, 40);
+    if (cs == MAX_CLASS) {
+        sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
+        put_str("                                   ", 4, 40);
+        put_str("                                   ", 5, 40);
+    } else {
+        cp_ptr = &class_info[cs];
+        mp_ptr = &m_info[cs];
+        concptr str = cp_ptr->title;
+        if (!(rp_ptr->choice & (1L << cs)))
+            sprintf(cur, "%c%c(%s)", sym[cs], p2, str);
+        else
+            sprintf(cur, "%c%c%s", sym[cs], p2, str);
+
+        c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
+        put_str(_("の職業修正", ": Class modification"), 3, 40 + strlen(cp_ptr->title));
+        put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
+        char buf[80];
+        sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ",
+            cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3],
+            cp_ptr->c_adj[4], cp_ptr->c_adj[5], cp_ptr->c_exp);
+        c_put_str(TERM_L_BLUE, buf, 5, 40);
+    }
+
+    c_put_str(TERM_YELLOW, cur, 13 + (cs / 4), 2 + 19 * (cs % 4));
+    *os = cs;
+}
+
 /*!
  * @brief プレイヤーの職業選択を行う / Player class
  * @return なし
@@ -42,42 +76,14 @@ bool get_player_class(player_type *creature_ptr)
 
     char sym[MAX_CLASS];
     enumerate_class_list(sym);
+
     char cur[80];
     sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
     int k = -1;
     int cs = creature_ptr->pclass;
     int os = MAX_CLASS;
     while (TRUE) {
-        if (cs != os) {
-            c_put_str(TERM_WHITE, cur, 13 + (os / 4), 2 + 19 * (os % 4));
-            put_str("                                   ", 3, 40);
-            if (cs == MAX_CLASS) {
-                sprintf(cur, "%c%c%s", '*', p2, _("ランダム", "Random"));
-                put_str("                                   ", 4, 40);
-                put_str("                                   ", 5, 40);
-            } else {
-                cp_ptr = &class_info[cs];
-                mp_ptr = &m_info[cs];
-                concptr str = cp_ptr->title;
-                if (!(rp_ptr->choice & (1L << cs)))
-                    sprintf(cur, "%c%c(%s)", sym[cs], p2, str);
-                else
-                    sprintf(cur, "%c%c%s", sym[cs], p2, str);
-
-                c_put_str(TERM_L_BLUE, cp_ptr->title, 3, 40);
-                put_str(_("の職業修正", ": Class modification"), 3, 40 + strlen(cp_ptr->title));
-                put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
-                char buf[80];
-                sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ",
-                    cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3],
-                    cp_ptr->c_adj[4], cp_ptr->c_adj[5], cp_ptr->c_exp);
-                c_put_str(TERM_L_BLUE, buf, 5, 40);
-            }
-
-            c_put_str(TERM_YELLOW, cur, 13 + (cs / 4), 2 + 19 * (cs % 4));
-            os = cs;
-        }
-
+        display_class_stat(cs, &os, cur, sym);
         if (k >= 0)
             break;
 
