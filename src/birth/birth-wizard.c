@@ -403,6 +403,7 @@ static bool display_auto_roller_result(player_type *creature_ptr, bool prev, cha
 
         if (*c == '\r' || *c == '\n' || *c == ESCAPE)
             break;
+
         if ((*c == ' ') || (*c == 'r'))
             break;
 
@@ -464,6 +465,24 @@ static bool display_auto_roller(player_type *creature_ptr, chara_limit_type char
 }
 
 /*!
+ * @brief 名前と生い立ちを設定する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param process_autopick_file_command 自動拾いコマンドへの関数ポインタ
+ * @return なし
+ * @details ついでにステータス限界もここで決めている
+ */
+static void set_name_history(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
+{
+    clear_from(23);
+    get_name(creature_ptr);
+    process_player_name(creature_ptr, current_world_ptr->creating_savefile);
+    edit_history(creature_ptr, process_autopick_file_command);
+    get_max_stats(creature_ptr);
+    get_virtues(creature_ptr);
+    prt(_("[ 'Q' 中断, 'S' 初めから, Enter ゲーム開始 ]", "['Q'uit, 'S'tart over, or Enter to continue]"), 23, _(14, 10));
+}
+
+/*!
  * @brief プレーヤーキャラ作成ウィザード
  * @details
  * The delay may be reduced, but is recommended to keep players
@@ -504,14 +523,7 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
     if (!display_auto_roller(creature_ptr, chara_limit))
         return FALSE;
 
-    clear_from(23);
-    get_name(creature_ptr);
-    process_player_name(creature_ptr, current_world_ptr->creating_savefile);
-    edit_history(creature_ptr, process_autopick_file_command);
-    get_max_stats(creature_ptr);
-    get_virtues(creature_ptr);
-    prt(_("[ 'Q' 中断, 'S' 初めから, Enter ゲーム開始 ]", "['Q'uit, 'S'tart over, or Enter to continue]"), 23, _(14, 10));
-
+    set_name_history(creature_ptr, process_autopick_file_command);
     char c = inkey();
     if (c == 'Q')
         birth_quit();
