@@ -9,7 +9,7 @@ static void interpret_personality_select_key_move(player_type *creature_ptr, cha
     if (c == '8') {
         if (*cs >= 4)
             *cs -= 4;
-        if (*cs != MAX_SEIKAKU && seikaku_info[*cs].sex && (seikaku_info[*cs].sex != (creature_ptr->psex + 1))) {
+        if ((*cs != MAX_SEIKAKU) && seikaku_info[*cs].sex && (seikaku_info[*cs].sex != (creature_ptr->psex + 1))) {
             if ((*cs - 4) > 0)
                 *cs -= 4;
             else
@@ -19,8 +19,8 @@ static void interpret_personality_select_key_move(player_type *creature_ptr, cha
 
     if (c == '4') {
         if (*cs > 0)
-            *cs--;
-        if (*cs != MAX_SEIKAKU && seikaku_info[*cs].sex && (seikaku_info[*cs].sex != (creature_ptr->psex + 1))) {
+            (*cs)--;
+        if ((*cs != MAX_SEIKAKU) && seikaku_info[*cs].sex && (seikaku_info[*cs].sex != (creature_ptr->psex + 1))) {
             if ((*cs - 1) > 0)
                 (*cs)--;
             else
@@ -30,8 +30,8 @@ static void interpret_personality_select_key_move(player_type *creature_ptr, cha
 
     if (c == '6') {
         if (*cs < MAX_SEIKAKU)
-            *cs++;
-        if (*cs != MAX_SEIKAKU && seikaku_info[*cs].sex && (seikaku_info[*cs].sex != (creature_ptr->psex + 1))) {
+            (*cs)++;
+        if ((*cs != MAX_SEIKAKU) && seikaku_info[*cs].sex && (seikaku_info[*cs].sex != (creature_ptr->psex + 1))) {
             if ((*cs + 1) <= MAX_SEIKAKU)
                 (*cs)++;
             else
@@ -42,7 +42,7 @@ static void interpret_personality_select_key_move(player_type *creature_ptr, cha
     if (c == '2') {
         if ((*cs + 4) <= MAX_SEIKAKU)
             *cs += 4;
-        if (*cs != MAX_SEIKAKU && seikaku_info[*cs].sex && (seikaku_info[*cs].sex != (creature_ptr->psex + 1))) {
+        if ((*cs != MAX_SEIKAKU) && seikaku_info[*cs].sex && (seikaku_info[*cs].sex != (creature_ptr->psex + 1))) {
             if ((*cs + 4) <= MAX_SEIKAKU)
                 *cs += 4;
             else

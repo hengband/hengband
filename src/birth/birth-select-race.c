@@ -3,6 +3,29 @@
 #include "term/gameterm.h"
 #include "birth/birth-util.h"
 
+static void interpret_race_select_key_move(char c, int *cs)
+{
+    if (c == '8') {
+        if (*cs >= 5)
+            cs -= 5;
+    }
+
+    if (c == '4') {
+        if (*cs > 0)
+            (*cs)--;
+    }
+
+    if (c == '6') {
+        if (*cs < MAX_RACES)
+            (*cs)++;
+    }
+
+    if (c == '2') {
+        if ((*cs + 5) <= MAX_RACES)
+            *cs += 5;
+    }
+}
+
 /*!
  * @brief プレイヤーの種族選択を行う / Player race
  * @return なし
@@ -56,6 +79,7 @@ bool get_player_race(player_type *creature_ptr)
                     rp_ptr->r_adj[4], rp_ptr->r_adj[5], (rp_ptr->r_exp - 100));
                 c_put_str(TERM_L_BLUE, buf, 5, 40);
             }
+
             c_put_str(TERM_YELLOW, cur, 12 + (cs / 5), 1 + 16 * (cs % 5));
             os = cs;
         }
@@ -88,26 +112,7 @@ bool get_player_race(player_type *creature_ptr)
             continue;
         }
 
-        if (c == '8') {
-            if (cs >= 5)
-                cs -= 5;
-        }
-
-        if (c == '4') {
-            if (cs > 0)
-                cs--;
-        }
-
-        if (c == '6') {
-            if (cs < MAX_RACES)
-                cs++;
-        }
-
-        if (c == '2') {
-            if ((cs + 5) <= MAX_RACES)
-                cs += 5;
-        }
-
+        interpret_race_select_key_move(c, &cs);
         k = (islower(c) ? A2I(c) : -1);
         if ((k >= 0) && (k < MAX_RACES)) {
             cs = k;
