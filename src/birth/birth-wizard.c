@@ -145,6 +145,96 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
     return TRUE;
 }
 
+static bool let_player_select_race(player_type *creature_ptr)
+{
+    clear_from(10);
+    creature_ptr->prace = 0;
+    while (TRUE) {
+        char temp[80 * 10];
+        if (!get_player_race(creature_ptr))
+            return FALSE;
+
+        clear_from(10);
+        roff_to_buf(race_explanations[creature_ptr->prace], 74, temp, sizeof(temp));
+        concptr t = temp;
+        for (int i = 0; i < 10; i++) {
+            if (t[0] == 0)
+                break;
+            else {
+                prt(t, 12 + i, 3);
+                t += strlen(t) + 1;
+            }
+        }
+        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+            break;
+
+        clear_from(10);
+        c_put_str(TERM_WHITE, "              ", 4, 15);
+    }
+
+    return TRUE;
+}
+
+static bool let_player_select_class(player_type *creature_ptr)
+{
+    clear_from(10);
+    creature_ptr->pclass = 0;
+    while (TRUE) {
+        char temp[80 * 9];
+        if (!get_player_class(creature_ptr))
+            return FALSE;
+
+        clear_from(10);
+        roff_to_buf(class_explanations[creature_ptr->pclass], 74, temp, sizeof(temp));
+        concptr t = temp;
+        for (int i = 0; i < 9; i++) {
+            if (t[0] == 0)
+                break;
+            else {
+                prt(t, 12 + i, 3);
+                t += strlen(t) + 1;
+            }
+        }
+
+        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+            break;
+
+        c_put_str(TERM_WHITE, "              ", 5, 15);
+    }
+
+    return TRUE;
+}
+
+static bool let_player_select_personality(player_type *creature_ptr)
+{
+    creature_ptr->pseikaku = 0;
+    while (TRUE) {
+        char temp[80 * 8];
+        if (!get_player_personality(creature_ptr))
+            return FALSE;
+
+        clear_from(10);
+        roff_to_buf(personality_explanations[creature_ptr->pseikaku], 74, temp, sizeof(temp));
+        concptr t = temp;
+        for (int i = 0; i < A_MAX; i++) {
+            if (t[0] == 0)
+                break;
+            else {
+                prt(t, 12 + i, 3);
+                t += strlen(t) + 1;
+            }
+        }
+
+        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
+            break;
+
+        c_put_str(TERM_L_BLUE, creature_ptr->name, 1, 34);
+        prt("", 1, 34 + strlen(creature_ptr->name));
+    }
+
+    return TRUE;
+}
+
 static void display_auto_roller_success_rate(const int col)
 {
     if (!autoroller)
@@ -363,83 +453,17 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
     if(!get_player_sex(creature_ptr, buf))
         return FALSE;
 
-    clear_from(10);
-    creature_ptr->prace = 0;
-    while (TRUE) {
-        char temp[80 * 10];
-        if (!get_player_race(creature_ptr))
-            return FALSE;
+    if (!let_player_select_race(creature_ptr))
+        return FALSE;
 
-        clear_from(10);
-        roff_to_buf(race_explanations[creature_ptr->prace], 74, temp, sizeof(temp));
-        concptr t = temp;
-        for (int i = 0; i < 10; i++) {
-            if (t[0] == 0)
-                break;
-            else {
-                prt(t, 12 + i, 3);
-                t += strlen(t) + 1;
-            }
-        }
-        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
-            break;
-
-        clear_from(10);
-        c_put_str(TERM_WHITE, "              ", 4, 15);
-    }
-
-    clear_from(10);
-    creature_ptr->pclass = 0;
-    while (TRUE) {
-        char temp[80 * 9];
-        if (!get_player_class(creature_ptr))
-            return FALSE;
-
-        clear_from(10);
-        roff_to_buf(class_explanations[creature_ptr->pclass], 74, temp, sizeof(temp));
-        concptr t = temp;
-        for (int i = 0; i < 9; i++) {
-            if (t[0] == 0)
-                break;
-            else {
-                prt(t, 12 + i, 3);
-                t += strlen(t) + 1;
-            }
-        }
-
-        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
-            break;
-
-        c_put_str(TERM_WHITE, "              ", 5, 15);
-    }
+    if (!let_player_select_class(creature_ptr))
+        return FALSE;
 
     if (!get_player_realms(creature_ptr))
         return FALSE;
 
-    creature_ptr->pseikaku = 0;
-    while (TRUE) {
-        char temp[80 * 8];
-        if (!get_player_personality(creature_ptr))
-            return FALSE;
-
-        clear_from(10);
-        roff_to_buf(personality_explanations[creature_ptr->pseikaku], 74, temp, sizeof(temp));
-        concptr t = temp;
-        for (int i = 0; i < A_MAX; i++) {
-            if (t[0] == 0)
-                break;
-            else {
-                prt(t, 12 + i, 3);
-                t += strlen(t) + 1;
-            }
-        }
-
-        if (get_check_strict(_("よろしいですか？", "Are you sure? "), CHECK_DEFAULT_Y))
-            break;
-
-        c_put_str(TERM_L_BLUE, creature_ptr->name, 1, 34);
-        prt("", 1, 34 + strlen(creature_ptr->name));
-    }
+    if (!let_player_select_personality(creature_ptr))
+        return FALSE;
 
     clear_from(10);
     put_str("                                   ", 3, 40);
