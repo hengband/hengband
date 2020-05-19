@@ -38,7 +38,7 @@ struct building_type
 	BACT_RESTRICT_IDX action_restr[8];           /* action restrictions */
 
 	player_class_type member_class[MAX_CLASS];   /* which classes are part of guild */
-	player_race_table member_race[MAX_RACES];    /* which classes are part of guild */
+	player_race_type member_race[MAX_RACES];    /* which classes are part of guild */
 	REALM_IDX member_realm[MAX_MAGIC + 1]; /* which realms are part of guild */
 };
 

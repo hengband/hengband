@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 /*!
- * @details 既にplayer_raceが存在するので_tableと付けた
+ * @details 既にplayer_raceが存在するので_typeと付けた
  */
-typedef enum player_race_table {
+typedef enum player_race_type {
     RACE_HUMAN = 0,
     RACE_HALF_ELF = 1,
     RACE_ELF = 2,
@@ -42,4 +42,4 @@ typedef enum player_race_table {
     RACE_KUTAR = 35,
     RACE_ANDROID = 36,
     RACE_MERFOLK = 37,
-} player_race_table;
+} player_race_type;

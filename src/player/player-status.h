@@ -98,7 +98,7 @@ typedef struct player_type
 	POSITION oldpx;		/* Previous player location -KMW- */
 
 	SEX_IDX psex;		/* Sex index */
-	player_race_table prace;		/* Race index */
+	player_race_type prace;		/* Race index */
 	player_class_type pclass;	/* Class index */
 	player_personality_type pseikaku;	/* Seikaku index */
 	REALM_IDX realm1;		/* First magic realm */
@@ -440,7 +440,7 @@ typedef struct player_type
 	BIT_FLAGS8 knowledge;           /* Knowledge about yourself */
 	BIT_FLAGS visit;               /* Visited towns */
 
-	player_race_table start_race;          /* Race at birth */
+	player_race_type start_race;          /* Race at birth */
 	BIT_FLAGS old_race1;           /* Record of race changes */
 	BIT_FLAGS old_race2;           /* Record of race changes */
 	s16b old_realm;           /* Record of realm changes */

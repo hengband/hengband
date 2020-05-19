@@ -5,7 +5,7 @@
  */
 typedef struct birther {
     SEX_IDX psex; /* Sex index */
-    player_race_table prace; /* Race index */
+    player_race_type prace; /* Race index */
     player_class_type pclass; /* Class index */
     player_personality_type pseikaku; /* Seikaku index */
     REALM_IDX realm1; /* First magic realm */
