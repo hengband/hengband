@@ -297,7 +297,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 
 	delete_object_idx(owner_ptr, o_idx);
 
-	if (owner_ptr->pseikaku == SEIKAKU_MUNCHKIN)
+	if (owner_ptr->pseikaku == PERSONALITY_MUNCHKIN)
 	{
 		bool old_known = identify_item(owner_ptr, o_ptr);
 
@@ -311,7 +311,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 	object_desc(owner_ptr, o_name, o_ptr, 0);
 
 #ifdef JP
-	if ((o_ptr->name1 == ART_CRIMSON) && (owner_ptr->pseikaku == SEIKAKU_COMBAT))
+	if ((o_ptr->name1 == ART_CRIMSON) && (owner_ptr->pseikaku == PERSONALITY_COMBAT))
 	{
 		msg_format("こうして、%sは『クリムゾン』を手に入れた。", owner_ptr->name);
 		msg_print("しかし今、『混沌のサーペント』の放ったモンスターが、");

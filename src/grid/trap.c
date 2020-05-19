@@ -252,7 +252,7 @@ static int check_hit(player_type *target_ptr, int power)
 	/* Hack -- 5% hit, 5% miss */
 	if (k < 10) return (k < 5);
 
-	if (target_ptr->pseikaku == SEIKAKU_NAMAKE)
+	if (target_ptr->pseikaku == PERSONALITY_LAZY)
 		if (one_in_(20)) return TRUE;
 
 	/* Paranoia -- No power */
@@ -434,7 +434,7 @@ void hit_trap(player_type *trapped_ptr, bool break_trap)
 			msg_print(_("落とし戸に落ちた！", "You have fallen through a trap door!"));
 			if (IS_ECHIZEN(trapped_ptr))
 				msg_print(_("くっそ～！", ""));
-			else if((trapped_ptr->pseikaku == SEIKAKU_CHARGEMAN))
+			else if((trapped_ptr->pseikaku == PERSONALITY_CHARGEMAN))
 				msg_print(_("ジュラル星人の仕業に違いない！", ""));
 
 

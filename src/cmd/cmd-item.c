@@ -320,7 +320,7 @@ void do_cmd_wield(player_type *creature_ptr)
 
 	check_find_art_quest_completion(creature_ptr, o_ptr);
 
-	if (creature_ptr->pseikaku == SEIKAKU_MUNCHKIN)
+	if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)
 	{
 		identify_item(creature_ptr, o_ptr);
 

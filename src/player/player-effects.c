@@ -699,7 +699,7 @@ bool set_image(player_type *creature_ptr, TIME_EFFECT v)
 	v = (v > 10000) ? 10000 : (v < 0) ? 0 : v;
 
 	if (creature_ptr->is_dead) return FALSE;
-	if (creature_ptr->pseikaku == SEIKAKU_CHARGEMAN) v = 0;
+	if (creature_ptr->pseikaku == PERSONALITY_CHARGEMAN) v = 0;
 
 	if (v)
 	{
@@ -3508,7 +3508,7 @@ void calc_android_exp(player_type *creature_ptr)
 
 		value = object_value_real(q_ptr);
 		if (value <= 0) continue;
-		if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (creature_ptr->pseikaku != SEIKAKU_SEXY)) value /= 32;
+		if ((o_ptr->tval == TV_SOFT_ARMOR) && (o_ptr->sval == SV_ABUNAI_MIZUGI) && (creature_ptr->pseikaku != PERSONALITY_SEXY)) value /= 32;
 		if (value > 5000000L) value = 5000000L;
 		if ((o_ptr->tval == TV_DRAG_ARMOR) || (o_ptr->tval == TV_CARD)) level /= 2;
 

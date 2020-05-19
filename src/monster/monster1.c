@@ -2461,7 +2461,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 	case MON_MORGOTH:
 	case MON_ONE_RING:
 	{
-		if (player_ptr->pseikaku != SEIKAKU_NAMAKE) break;
+		if (player_ptr->pseikaku != PERSONALITY_LAZY) break;
 		if (!drop_chosen_item) break;
 
 		ARTIFACT_IDX a_idx = 0;

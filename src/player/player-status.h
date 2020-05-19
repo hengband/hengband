@@ -803,7 +803,7 @@ extern const s32b player_exp_a[PY_MAX_LEVEL];
 #define IS_INVULN(C) (C->invuln || music_singing(C, MUSIC_INVULN))
 #define IS_HERO(C) (C->hero || music_singing(C, MUSIC_HERO) || music_singing(C, MUSIC_SHERO))
 
-#define IS_ECHIZEN(C) (((C)->pseikaku == SEIKAKU_COMBAT) || ((C)->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
+#define IS_ECHIZEN(C) (((C)->pseikaku == PERSONALITY_COMBAT) || ((C)->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 
 #define P_PTR_KI (p_ptr->magic_num1[0])
 

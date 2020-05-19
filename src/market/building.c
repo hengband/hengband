@@ -2543,7 +2543,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 
 	case BACT_LOSE_MUTATION:
 		if (player_ptr->muta1 || player_ptr->muta2 || (player_ptr->muta3 & ~MUT3_GOOD_LUCK) ||
-			(player_ptr->pseikaku != SEIKAKU_LUCKY && (player_ptr->muta3 & MUT3_GOOD_LUCK)))
+			(player_ptr->pseikaku != PERSONALITY_LUCKY && (player_ptr->muta3 & MUT3_GOOD_LUCK)))
 		{
 			while (!lose_mutation(player_ptr, 0));
 			paid = TRUE;

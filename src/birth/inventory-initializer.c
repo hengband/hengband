@@ -173,7 +173,7 @@ void player_outfit(player_type *creature_ptr)
             add_outfit(creature_ptr, q_ptr);
         }
     } else if (creature_ptr->pclass == CLASS_TOURIST) {
-        if (creature_ptr->pseikaku != SEIKAKU_SEXY) {
+        if (creature_ptr->pseikaku != PERSONALITY_SEXY) {
             object_prep(q_ptr, lookup_kind(TV_SHOT, SV_AMMO_LIGHT));
             q_ptr->number = rand_range(15, 20);
             add_outfit(creature_ptr, q_ptr);
@@ -213,7 +213,7 @@ void player_outfit(player_type *creature_ptr)
         add_outfit(creature_ptr, q_ptr);
     }
 
-    if (creature_ptr->pseikaku == SEIKAKU_SEXY) {
+    if (creature_ptr->pseikaku == PERSONALITY_SEXY) {
         player_init[creature_ptr->pclass][2][0] = TV_HAFTED;
         player_init[creature_ptr->pclass][2][1] = SV_WHIP;
     }

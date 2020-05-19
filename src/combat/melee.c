@@ -525,7 +525,7 @@ PERCENTAGE hit_chance(player_type *attacker_ptr, HIT_RELIABILITY reli, ARMOUR_CL
 {
 	PERCENTAGE chance = 5, chance_left = 90;
 	if(reli <= 0) return 5;
-	if(attacker_ptr->pseikaku == SEIKAKU_NAMAKE) chance_left = (chance_left * 19 + 9) / 20;
+	if(attacker_ptr->pseikaku == PERSONALITY_LAZY) chance_left = (chance_left * 19 + 9) / 20;
 	chance += (100 - ((ac * 75) / reli)) * chance_left / 100;
 	if (chance < 5) chance = 5;
 	return chance;

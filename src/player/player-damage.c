@@ -89,7 +89,7 @@ void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
 #ifdef JP
 		if (IS_ECHIZEN(player_ptr))
 			msg_print("やりやがったな！");
-		else if ((player_ptr->pseikaku == SEIKAKU_CHARGEMAN))
+		else if ((player_ptr->pseikaku == PERSONALITY_CHARGEMAN))
 		{
 			if (randint0(2) == 0) msg_print(_("ジュラル星人め！", ""));
 			else msg_print(_("弱い者いじめは止めるんだ！", ""));

@@ -2093,7 +2093,7 @@ void random_artifact_resistance(player_type *player_ptr, object_type *o_ptr, art
 
 	if (o_ptr->name1 == ART_MILIM)
 	{
-		if (player_ptr->pseikaku == SEIKAKU_SEXY)
+		if (player_ptr->pseikaku == PERSONALITY_SEXY)
 		{
 			o_ptr->pval = 3;
 			add_flag(o_ptr->art_flags, TR_STR);

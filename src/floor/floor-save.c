@@ -1376,7 +1376,7 @@ void change_floor(player_type *creature_ptr)
 	current_world_ptr->character_dungeon = TRUE;
 
 	/* Hack -- Munchkin characters always get whole map */
-	if (creature_ptr->pseikaku == SEIKAKU_MUNCHKIN)
+	if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)
 		wiz_lite(creature_ptr, (bool)(creature_ptr->pclass == CLASS_NINJA));
 
 	/* Remember when this level was "created" */

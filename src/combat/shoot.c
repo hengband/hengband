@@ -908,7 +908,7 @@ bool test_hit_fire(player_type *shooter_ptr, int chance, monster_type *m_ptr, in
 	if (k <= 5) return FALSE;
 	if (k > 95) return TRUE;
 
-	if (shooter_ptr->pseikaku == SEIKAKU_NAMAKE)
+	if (shooter_ptr->pseikaku == PERSONALITY_LAZY)
 		if (one_in_(20)) return FALSE;
 
 	/* Never hit */

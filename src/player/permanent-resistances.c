@@ -499,12 +499,12 @@ static void add_mutation_flags(player_type *creature_ptr, BIT_FLAGS *flags)
  */
 static void add_personality_flags(player_type *creature_ptr, BIT_FLAGS *flags)
 {
-	if (creature_ptr->pseikaku == SEIKAKU_SEXY)
+	if (creature_ptr->pseikaku == PERSONALITY_SEXY)
 		add_flag(flags, TR_AGGRAVATE);
-	if (creature_ptr->pseikaku == SEIKAKU_CHARGEMAN)
+	if (creature_ptr->pseikaku == PERSONALITY_CHARGEMAN)
 		add_flag(flags, TR_RES_CONF);
 
-	if (creature_ptr->pseikaku != SEIKAKU_MUNCHKIN) return;
+	if (creature_ptr->pseikaku != PERSONALITY_MUNCHKIN) return;
 
 	add_flag(flags, TR_RES_BLIND);
 	add_flag(flags, TR_RES_CONF);

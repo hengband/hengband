@@ -527,7 +527,7 @@ void do_cmd_quest(player_type *player_ptr)
 	if (!get_check(_("クエストに入りますか？", "Do you enter? "))) return;
 	if (IS_ECHIZEN(player_ptr))
 		msg_print(_("『とにかく入ってみようぜぇ。』", ""));
-	else if (player_ptr->pseikaku == SEIKAKU_CHARGEMAN) msg_print("『全滅してやるぞ！』");
+	else if (player_ptr->pseikaku == PERSONALITY_CHARGEMAN) msg_print("『全滅してやるぞ！』");
 
 	/* Player enters a new quest */
 	player_ptr->oldpy = 0;

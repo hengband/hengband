@@ -617,7 +617,7 @@ bool gain_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 
 			break;
 		case 188:
-			if (creature_ptr->pseikaku == SEIKAKU_LUCKY) break;
+			if (creature_ptr->pseikaku == PERSONALITY_LUCKY) break;
 			muta_class = &(creature_ptr->muta3);
 			muta_which = MUT3_BAD_LUCK;
 			muta_desc = _( "悪意に満ちた黒いオーラがあなたをとりまいた...",  "There is a malignant black aura surrounding you...");
@@ -1469,7 +1469,7 @@ bool lose_mutation(player_type *creature_ptr, MUTATION_IDX choose_mut)
 
 			break;
 		case 193:
-			if (creature_ptr->pseikaku == SEIKAKU_LUCKY) break;
+			if (creature_ptr->pseikaku == PERSONALITY_LUCKY) break;
 			muta_class = &(creature_ptr->muta3);
 			muta_which = MUT3_GOOD_LUCK;
 			muta_desc = _( "白いオーラは輝いて消えた。",  "Your white aura shimmers and fades.");
@@ -1547,7 +1547,7 @@ int calc_mutant_regenerate_mod(player_type *creature_ptr)
 	 * only 5% decrease per additional mutation
 	 */
 
-	if (creature_ptr->pseikaku == SEIKAKU_LUCKY) count--;
+	if (creature_ptr->pseikaku == PERSONALITY_LUCKY) count--;
 	if (creature_ptr->prace == RACE_BEASTMAN)
 	{
 		count -= 10;

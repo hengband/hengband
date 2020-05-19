@@ -1434,7 +1434,7 @@ void calc_bonuses(player_type *creature_ptr)
 		{
 			if (!(PRACE_IS_(creature_ptr, RACE_KLACKON) ||
 				PRACE_IS_(creature_ptr, RACE_SPRITE) ||
-				(creature_ptr->pseikaku == SEIKAKU_MUNCHKIN)))
+				(creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
 				new_speed += (creature_ptr->lev) / 10;
 
 			if (creature_ptr->lev > 24)
@@ -1485,7 +1485,7 @@ void calc_bonuses(player_type *creature_ptr)
 			new_speed += 3;
 			if (!(PRACE_IS_(creature_ptr, RACE_KLACKON) ||
 				PRACE_IS_(creature_ptr, RACE_SPRITE) ||
-				(creature_ptr->pseikaku == SEIKAKU_MUNCHKIN)))
+				(creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)))
 				new_speed += (creature_ptr->lev) / 10;
 			creature_ptr->skill_stl += (creature_ptr->lev) / 10;
 			if (creature_ptr->lev > 24)
@@ -1833,18 +1833,18 @@ void calc_bonuses(player_type *creature_ptr)
 		creature_ptr->resist_time = TRUE;
 	}
 
-	if (creature_ptr->pseikaku == SEIKAKU_SEXY) creature_ptr->cursed |= (TRC_AGGRAVATE);
-	if (creature_ptr->pseikaku == SEIKAKU_NAMAKE) creature_ptr->to_m_chance += 10;
-	if (creature_ptr->pseikaku == SEIKAKU_KIREMONO) creature_ptr->to_m_chance -= 3;
-	if ((creature_ptr->pseikaku == SEIKAKU_GAMAN) || (creature_ptr->pseikaku == SEIKAKU_CHIKARA)) creature_ptr->to_m_chance++;
-	if (creature_ptr->pseikaku == SEIKAKU_CHARGEMAN)
+	if (creature_ptr->pseikaku == PERSONALITY_SEXY) creature_ptr->cursed |= (TRC_AGGRAVATE);
+	if (creature_ptr->pseikaku == PERSONALITY_LAZY) creature_ptr->to_m_chance += 10;
+	if (creature_ptr->pseikaku == PERSONALITY_SHREWD) creature_ptr->to_m_chance -= 3;
+	if ((creature_ptr->pseikaku == PERSONALITY_PATIENT) || (creature_ptr->pseikaku == PERSONALITY_MIGHTY)) creature_ptr->to_m_chance++;
+	if (creature_ptr->pseikaku == PERSONALITY_CHARGEMAN)
 	{
 		creature_ptr->to_m_chance += 5;
 		creature_ptr->resist_conf = TRUE;
 	}
 
-	if (creature_ptr->pseikaku == SEIKAKU_LUCKY) creature_ptr->muta3 |= MUT3_GOOD_LUCK;
-	if (creature_ptr->pseikaku == SEIKAKU_MUNCHKIN)
+	if (creature_ptr->pseikaku == PERSONALITY_LUCKY) creature_ptr->muta3 |= MUT3_GOOD_LUCK;
+	if (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)
 	{
 		creature_ptr->resist_blind = TRUE;
 		creature_ptr->resist_conf = TRUE;
@@ -3287,7 +3287,7 @@ void calc_bonuses(player_type *creature_ptr)
 	creature_ptr->skill_thb += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
 	creature_ptr->skill_tht += ((cp_ptr->x_thb * creature_ptr->lev / 10) + (ap_ptr->a_thb * creature_ptr->lev / 50));
 
-	if ((PRACE_IS_(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != SEIKAKU_SEXY) && (creature_ptr->cursed & TRC_AGGRAVATE))
+	if ((PRACE_IS_(creature_ptr, RACE_S_FAIRY)) && (creature_ptr->pseikaku != PERSONALITY_SEXY) && (creature_ptr->cursed & TRC_AGGRAVATE))
 	{
 		creature_ptr->cursed &= ~(TRC_AGGRAVATE);
 		creature_ptr->skill_stl = MIN(creature_ptr->skill_stl - 3, (creature_ptr->skill_stl + 2) / 2);
@@ -3999,7 +3999,7 @@ static void calc_mana(player_type *creature_ptr)
 		msp = adj_mag_mana[creature_ptr->stat_ind[mp_ptr->spell_stat]] * (levels + 3) / 4;
 		if (msp) msp++;
 		if (msp) msp += (msp * rp_ptr->r_adj[mp_ptr->spell_stat] / 20);
-		if (msp && (creature_ptr->pseikaku == SEIKAKU_MUNCHKIN)) msp += msp / 2;
+		if (msp && (creature_ptr->pseikaku == PERSONALITY_MUNCHKIN)) msp += msp / 2;
 		if (msp && (creature_ptr->pclass == CLASS_HIGH_MAGE)) msp += msp / 4;
 		if (msp && (creature_ptr->pclass == CLASS_SORCERER)) msp += msp * (25 + creature_ptr->lev) / 100;
 	}
@@ -5135,7 +5135,7 @@ long calc_score(player_type *creature_ptr)
 			point = point / 5;
 	}
 
-	if ((creature_ptr->pseikaku == SEIKAKU_MUNCHKIN) && point)
+	if ((creature_ptr->pseikaku == PERSONALITY_MUNCHKIN) && point)
 	{
 		point = 1;
 		if (current_world_ptr->total_winner) point = 2;
