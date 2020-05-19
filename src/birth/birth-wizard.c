@@ -235,6 +235,27 @@ static bool let_player_select_personality(player_type *creature_ptr)
     return TRUE;
 }
 
+static bool let_player_build_character(player_type *creature_ptr)
+{
+    char buf[80];
+    if (!get_player_sex(creature_ptr, buf))
+        return FALSE;
+
+    if (!let_player_select_race(creature_ptr))
+        return FALSE;
+
+    if (!let_player_select_class(creature_ptr))
+        return FALSE;
+
+    if (!get_player_realms(creature_ptr))
+        return FALSE;
+
+    if (!let_player_select_personality(creature_ptr))
+        return FALSE;
+
+    return TRUE;
+}
+
 static void display_initial_options(void)
 {
     clear_from(10);
@@ -461,19 +482,7 @@ bool player_birth_wizard(player_type *creature_ptr, void (*process_autopick_file
         put_str(buf, 12 + (n / 5), 2 + 15 * (n % 5));
     }
 
-    if(!get_player_sex(creature_ptr, buf))
-        return FALSE;
-
-    if (!let_player_select_race(creature_ptr))
-        return FALSE;
-
-    if (!let_player_select_class(creature_ptr))
-        return FALSE;
-
-    if (!get_player_realms(creature_ptr))
-        return FALSE;
-
-    if (!let_player_select_personality(creature_ptr))
+    if (!let_player_build_character(creature_ptr))
         return FALSE;
 
     display_initial_options();
