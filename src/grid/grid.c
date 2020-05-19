@@ -1401,3 +1401,16 @@ void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type 
 
 	delete_monster(player_ptr, y, x);
 }
+
+void set_cave_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feature_idx)
+{
+    floor_ptr->grid_array[y][x].feat = feature_idx;
+}
+
+/*!
+ * todo intをenumに変更する
+ */
+void add_cave_info(floor_type *floor_ptr, POSITION y, POSITION x, int cave_mask)
+{
+    floor_ptr->grid_array[y][x].info |= cave_mask;
+}

@@ -86,10 +86,6 @@ typedef struct
 	(feat_door[(DOOR_TYPE)].num_jammed ? \
 	 feat_door[(DOOR_TYPE)].jammed[randint0(feat_door[(DOOR_TYPE)].num_jammed)] : feat_none)
 
-/* Macros */
-#define set_cave_feat(FL,Y,X,F)    ((FL)->grid_array[(Y)][(X)].feat = (F))
-#define add_cave_info(FL,Y,X,I)    ((FL)->grid_array[(Y)][(X)].info |= (I))
-
 /*!
  * @brief 指定座標に瓦礫を配置する
  * @param Y 指定Y座標
@@ -185,7 +181,6 @@ extern bool player_can_enter(player_type *creature_ptr, FEAT_IDX feature, BIT_FL
 
 /*!
  * grids.c
- * ここにfloor_type を引数として加えるとコンパイルエラー
  */
 extern POSITION distance(POSITION y1, POSITION x1, POSITION y2, POSITION x2);
 extern void update_local_illumination(player_type *creature_ptr, POSITION y, POSITION x);
@@ -203,7 +198,7 @@ extern bool check_local_illumination(player_type *creature_ptr, POSITION y, POSI
 extern bool cave_monster_teleportable_bold(player_type *player_ptr, MONSTER_IDX m_idx, POSITION y, POSITION x, teleport_flags mode);
 extern bool cave_player_teleportable_bold(player_type *player_ptr, POSITION y, POSITION x, teleport_flags mode);
 
-typedef enum
+typedef enum grid_bold_type
 {
 	GB_FLOOR,
 	GB_EXTRA,
@@ -217,10 +212,12 @@ typedef enum
 	GB_SOLID_NOPERM
 } grid_bold_type;
 
-extern void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type pg_type);
-extern bool darkened_grid(player_type *player_ptr, grid_type *g_ptr);
-extern void delete_monster(player_type *player_ptr, POSITION y, POSITION x);
-extern void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type gh_type);
+void place_grid(player_type *player_ptr, grid_type *g_ptr, grid_bold_type pg_type);
+bool darkened_grid(player_type *player_ptr, grid_type *g_ptr);
+void delete_monster(player_type *player_ptr, POSITION y, POSITION x);
+void place_bold(player_type *player_ptr, POSITION y, POSITION x, grid_bold_type gh_type);
+void set_cave_feat(floor_type *floor_ptr, POSITION y, POSITION x, FEAT_IDX feature_idx);
+void add_cave_info(floor_type *floor_ptr, POSITION y, POSITION x, int cave_mask);
 
 /*
  * Get feature mimic from f_info[] (applying "mimic" field)
