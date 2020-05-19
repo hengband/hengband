@@ -81,7 +81,7 @@ extern bool set_wraith_form(player_type *creature_ptr, TIME_EFFECT v, bool do_de
 extern bool set_tim_esp(player_type *creature_ptr, TIME_EFFECT v, bool do_dec);
 extern bool set_superstealth(player_type *creature_ptr, bool set);
 extern void do_poly_wounds(player_type *creature_ptr);
-extern void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effect_msg);
+extern void change_race(player_type *creature_ptr, player_race_table new_race, concptr effect_msg);
 extern bool drop_weapons(player_type *creature_ptr);
 
 extern const kamae kamae_shurui[MAX_KAMAE];

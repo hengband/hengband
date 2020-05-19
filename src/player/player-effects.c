@@ -3252,7 +3252,7 @@ void do_poly_wounds(player_type *creature_ptr)
 /*
  * Change player race
  */
-void change_race(player_type *creature_ptr, CHARACTER_IDX new_race, concptr effect_msg)
+void change_race(player_type *creature_ptr, player_race_table new_race, concptr effect_msg)
 {
 	concptr title = race_info[new_race].title;
 	int  old_race = creature_ptr->prace;
@@ -3313,7 +3313,7 @@ void do_poly_self(player_type *creature_ptr)
 	if ((power > randint0(20)) && one_in_(3) && (creature_ptr->prace != RACE_ANDROID))
 	{
 		char effect_msg[80] = "";
-		CHARACTER_IDX new_race;
+        player_race_table new_race;
 
 		power -= 10;
 		if ((power > randint0(5)) && one_in_(4))
@@ -3371,7 +3371,7 @@ void do_poly_self(player_type *creature_ptr)
 
 		do
 		{
-			new_race = (CHARACTER_IDX)randint0(MAX_RACES);
+			new_race = (player_race_table)randint0(MAX_RACES);
 		}
 		while ((new_race == creature_ptr->prace) || (new_race == RACE_ANDROID));
 
