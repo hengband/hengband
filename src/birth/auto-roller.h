@@ -9,6 +9,9 @@ typedef struct {
 } chara_limit_type;
 
 extern s16b stat_limit[6];
+extern s32b stat_match[6];
+extern s32b auto_round;
+
 bool get_stat_limits(player_type *creature_ptr);
 void initialize_chara_limit(chara_limit_type *chara_limit_ptr);
 bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_ptr);

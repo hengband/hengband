@@ -2,7 +2,7 @@
 #include "view/display-birth.h"
 #include "player/player-personality.h"
 #include "term/gameterm.h"
-#include "birth/birth-wizard.h"
+#include "birth/auto-roller.h"
 #include "birth/birth-stat.h"
 
 /*!
