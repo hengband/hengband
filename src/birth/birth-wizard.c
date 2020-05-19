@@ -131,6 +131,24 @@ static bool get_player_sex(player_type *creature_ptr, char *buf)
     return TRUE;
 }
 
+static void display_auto_roller_success_rate(const int col)
+{
+    if (!autoroller)
+        return;
+
+    put_str(_("最小値", " Limit"), 2, col + 5);
+    put_str(_("成功率", "  Freq"), 2, col + 13);
+    put_str(_("現在値", "  Roll"), 2, col + 24);
+    for (int i = 0; i < A_MAX; i++) {
+        put_str(stat_names[i], 3 + i, col);
+        int j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
+        int m = adjust_stat(stat_limit[i], j);
+        char buf[32];
+        cnv_stat(m, buf);
+        c_put_str(TERM_L_BLUE, buf, 3 + i, col + 5);
+    }
+}
+
 static void auto_roller_count(void)
 {
     if (auto_round < 1000000000L)
@@ -229,21 +247,7 @@ static bool display_auto_roller(player_type *creature_ptr, chara_limit_type char
             get_history(creature_ptr);
         }
 
-        if (autoroller) {
-            put_str(_("最小値", " Limit"), 2, col + 5);
-            put_str(_("成功率", "  Freq"), 2, col + 13);
-            put_str(_("現在値", "  Roll"), 2, col + 24);
-            for (int i = 0; i < A_MAX; i++) {
-                int j, m;
-                put_str(stat_names[i], 3 + i, col);
-                j = rp_ptr->r_adj[i] + cp_ptr->c_adj[i] + ap_ptr->a_adj[i];
-                m = adjust_stat(stat_limit[i], j);
-                char buf[32];
-                cnv_stat(m, buf);
-                c_put_str(TERM_L_BLUE, buf, 3 + i, col + 5);
-            }
-        }
-
+        display_auto_roller_success_rate(col);
         exe_auto_roller(creature_ptr, chara_limit, col);
         if (autoroller || autochara)
             sound(SOUND_LEVEL);
