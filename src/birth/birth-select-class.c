@@ -60,6 +60,29 @@ static void display_class_stat(int cs, int *os, char *cur, char *sym)
     *os = cs;
 }
 
+static void interpret_class_select_key_move(char c, int *cs)
+{
+    if (c == '8') {
+        if (*cs >= 4)
+            *cs -= 4;
+    }
+
+    if (c == '4') {
+        if (*cs > 0)
+            *(cs)--;
+    }
+
+    if (c == '6') {
+        if (*cs < MAX_CLASS)
+            *(cs)++;
+    }
+
+    if (c == '2') {
+        if ((*cs + 4) <= MAX_CLASS)
+            *cs += 4;
+    }
+}
+
 /*!
  * @brief プレイヤーの職業選択を行う / Player class
  * @return なし
@@ -94,8 +117,10 @@ bool get_player_class(player_type *creature_ptr)
         char c = inkey();
         if (c == 'Q')
             birth_quit();
+
         if (c == 'S')
             return FALSE;
+
         if (c == ' ' || c == '\r' || c == '\n') {
             if (cs == MAX_CLASS) {
                 k = randint0(MAX_CLASS);
@@ -107,30 +132,11 @@ bool get_player_class(player_type *creature_ptr)
             }
         }
 
+        interpret_class_select_key_move(c, &cs);
         if (c == '*') {
             k = randint0(MAX_CLASS);
             cs = k;
             continue;
-        }
-
-        if (c == '8') {
-            if (cs >= 4)
-                cs -= 4;
-        }
-
-        if (c == '4') {
-            if (cs > 0)
-                cs--;
-        }
-
-        if (c == '6') {
-            if (cs < MAX_CLASS)
-                cs++;
-        }
-
-        if (c == '2') {
-            if ((cs + 4) <= MAX_CLASS)
-                cs += 4;
         }
 
         k = (islower(c) ? A2I(c) : -1);
