@@ -234,6 +234,68 @@ static void exe_auto_roller(player_type *creature_ptr, chara_limit_type chara_li
     }
 }
 
+static bool display_auto_roller_result(player_type *creature_ptr, bool prev, char *c)
+{
+    BIT_FLAGS mode = 0;
+    while (TRUE) {
+        creature_ptr->update |= (PU_BONUS | PU_HP);
+        update_creature(creature_ptr);
+        creature_ptr->chp = creature_ptr->mhp;
+        creature_ptr->csp = creature_ptr->msp;
+        display_player(creature_ptr, mode, map_name);
+        Term_gotoxy(2, 23);
+        const char b1 = '[';
+        Term_addch(TERM_WHITE, b1);
+        Term_addstr(-1, TERM_WHITE, _("'r' 次の数値", "'r'eroll"));
+        if (prev)
+            Term_addstr(-1, TERM_WHITE, _(", 'p' 前の数値", "'p'previous"));
+
+        if (mode)
+            Term_addstr(-1, TERM_WHITE, _(", 'h' その他の情報", ", 'h' Misc."));
+        else
+            Term_addstr(-1, TERM_WHITE, _(", 'h' 生い立ちを表示", ", 'h'istory"));
+
+        Term_addstr(-1, TERM_WHITE, _(", Enter この数値に決定", ", or Enter to accept"));
+        const char b2 = ']';
+        Term_addch(TERM_WHITE, b2);
+        *c = inkey();
+        if (*c == 'Q')
+            birth_quit();
+
+        if (*c == 'S')
+            return FALSE;
+
+        if (*c == '\r' || *c == '\n' || *c == ESCAPE)
+            break;
+        if ((*c == ' ') || (*c == 'r'))
+            break;
+
+        if (prev && (*c == 'p')) {
+            load_prev_data(creature_ptr, TRUE);
+            continue;
+        }
+
+        if ((*c == 'H') || (*c == 'h')) {
+            mode = ((mode != 0) ? 0 : 1);
+            continue;
+        }
+
+        if (*c == '?') {
+            show_help(creature_ptr, _("jbirth.txt#AutoRoller", "birth.txt#AutoRoller"));
+            continue;
+        } else if (*c == '=') {
+            screen_save();
+            do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
+            screen_load();
+            continue;
+        }
+
+        bell();
+    }
+
+    return TRUE;
+}
+
 static bool display_auto_roller(player_type *creature_ptr, chara_limit_type chara_limit)
 {
     while (TRUE) {
@@ -255,66 +317,13 @@ static bool display_auto_roller(player_type *creature_ptr, chara_limit_type char
 
         flush();
 
-        BIT_FLAGS mode = 0;
         get_extra(creature_ptr, TRUE);
         get_money(creature_ptr);
         creature_ptr->chaos_patron = (s16b)randint0(MAX_PATRON);
-        char c;
         bool prev = FALSE;
-        while (TRUE) {
-            creature_ptr->update |= (PU_BONUS | PU_HP);
-            update_creature(creature_ptr);
-            creature_ptr->chp = creature_ptr->mhp;
-            creature_ptr->csp = creature_ptr->msp;
-            display_player(creature_ptr, mode, map_name);
-            Term_gotoxy(2, 23);
-            char b1 = '[';
-            Term_addch(TERM_WHITE, b1);
-            Term_addstr(-1, TERM_WHITE, _("'r' 次の数値", "'r'eroll"));
-            if (prev)
-                Term_addstr(-1, TERM_WHITE, _(", 'p' 前の数値", "'p'previous"));
-
-            if (mode)
-                Term_addstr(-1, TERM_WHITE, _(", 'h' その他の情報", ", 'h' Misc."));
-            else
-                Term_addstr(-1, TERM_WHITE, _(", 'h' 生い立ちを表示", ", 'h'istory"));
-
-            Term_addstr(-1, TERM_WHITE, _(", Enter この数値に決定", ", or Enter to accept"));
-            char b2 = ']';
-            Term_addch(TERM_WHITE, b2);
-            c = inkey();
-            if (c == 'Q')
-                birth_quit();
-            if (c == 'S')
-                return FALSE;
-
-            if (c == '\r' || c == '\n' || c == ESCAPE)
-                break;
-            if ((c == ' ') || (c == 'r'))
-                break;
-
-            if (prev && (c == 'p')) {
-                load_prev_data(creature_ptr, TRUE);
-                continue;
-            }
-
-            if ((c == 'H') || (c == 'h')) {
-                mode = ((mode != 0) ? 0 : 1);
-                continue;
-            }
-
-            if (c == '?') {
-                show_help(creature_ptr, _("jbirth.txt#AutoRoller", "birth.txt#AutoRoller"));
-                continue;
-            } else if (c == '=') {
-                screen_save();
-                do_cmd_options_aux(OPT_PAGE_BIRTH, _("初期オプション((*)はスコアに影響)", "Birth Option((*)s effect score)"));
-                screen_load();
-                continue;
-            }
-
-            bell();
-        }
+        char c;
+        if (!display_auto_roller_result(creature_ptr, prev, &c))
+            return FALSE;
 
         if (c == '\r' || c == '\n' || c == ESCAPE)
             break;
