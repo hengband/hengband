@@ -13,7 +13,7 @@
 #include "term/gameterm.h"
 #include "view/display-main-window.h" // 暫定。apply_default_feat_lighting()。後で消す.
 
-#define MAX_MACRO_CHARS 65536 // 1つのマクロキー押下で実行可能なコマンド最大数 (エスケープシーケンス含む).
+#define MAX_MACRO_CHARS 16128 // 1つのマクロキー押下で実行可能なコマンド最大数 (エスケープシーケンス含む).
 
 char *histpref_buf = NULL;
 
