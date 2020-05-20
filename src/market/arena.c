@@ -93,6 +93,29 @@ static void go_to_arena(player_type *player_ptr)
     player_ptr->leave_bldg = TRUE;
 }
 
+static void see_arena_poster(player_type *player_ptr)
+{
+    if (player_ptr->arena_number == MAX_ARENA_MONS) {
+        msg_print(_("あなたは勝利者だ。 アリーナでのセレモニーに参加しなさい。",
+            "You are victorious. Enter the arena for the ceremony."));
+        return;
+    }
+
+    if (player_ptr->arena_number > MAX_ARENA_MONS) {
+        msg_print(_("あなたはすべての敵に勝利した。", "You have won against all foes."));
+        return;
+    }
+
+    monster_race *r_ptr;
+    r_ptr = &r_info[arena_info[player_ptr->arena_number].r_idx];
+    concptr name = (r_name + r_ptr->name);
+    msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), name);
+
+    player_ptr->monster_race_idx = arena_info[player_ptr->arena_number].r_idx;
+    player_ptr->window |= (PW_MONSTER);
+    handle_stuff(player_ptr);
+}
+
 /*!
  * @brief 闘技場に入るコマンドの処理 / arena commands
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -105,28 +128,9 @@ void arena_comm(player_type *player_ptr, int cmd)
     case BACT_ARENA:
         go_to_arena(player_ptr);
         return;
-    case BACT_POSTER: {
-        if (player_ptr->arena_number == MAX_ARENA_MONS) {
-            msg_print(_("あなたは勝利者だ。 アリーナでのセレモニーに参加しなさい。",
-                "You are victorious. Enter the arena for the ceremony."));
-            break;
-        }
-
-        if (player_ptr->arena_number > MAX_ARENA_MONS) {
-            msg_print(_("あなたはすべての敵に勝利した。", "You have won against all foes."));
-            break;
-        }
-
-        monster_race *r_ptr;
-        r_ptr = &r_info[arena_info[player_ptr->arena_number].r_idx];
-        concptr name = (r_name + r_ptr->name);
-        msg_format(_("%s に挑戦するものはいないか？", "Do I hear any challenges against: %s"), name);
-
-        player_ptr->monster_race_idx = arena_info[player_ptr->arena_number].r_idx;
-        player_ptr->window |= (PW_MONSTER);
-        handle_stuff(player_ptr);
-        break;
-    }
+    case BACT_POSTER:
+        see_arena_poster(player_ptr);
+        return;
     case BACT_ARENA_RULES:
         screen_save();
 
