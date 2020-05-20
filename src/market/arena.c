@@ -8,6 +8,7 @@
 #include "monster/monsterrace-hook.h"
 #include "world/world.h"
 #include "dungeon/dungeon.h"
+#include "market/building-actions-table.h"
 
 /*!
  * @brief 優勝時のメッセージを表示し、賞金を与える

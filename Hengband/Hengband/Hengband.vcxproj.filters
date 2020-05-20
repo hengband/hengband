@@ -1996,6 +1996,9 @@
     <ClInclude Include="..\..\src\cmd\cmd-building.h">
       <Filter>cmd</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\market\building-actions-table.h">
+      <Filter>market</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

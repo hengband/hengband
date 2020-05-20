@@ -7,6 +7,7 @@
 #include "core/turn-compensator.h"
 #include "market/rumor.h"
 #include "player/player-races-table.h"
+#include "market/building-actions-table.h"
 
 /*!
  * @brief 宿屋で食事を摂る

@@ -51,6 +51,7 @@
 #include "market/building-craft-fix.h"
 #include "market/building-monster.h"
 #include "market/building-enchanter.h"
+#include "market/building-actions-table.h"
 
 building_type building[MAX_BLDG];
 

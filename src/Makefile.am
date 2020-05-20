@@ -79,6 +79,7 @@ hengband_SOURCES = \
 	market/building-craft-fix.c market/building-craft-fix.h \
 	market/building-monster.c market/building-monster.h \
 	market/building-enchanter.c market/building-enchanter.h \
+	market/building-actions-table.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \

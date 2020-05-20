@@ -414,6 +414,7 @@
     <ClInclude Include="..\..\src\market\arena.h" />
     <ClInclude Include="..\..\src\market\bounty-prize-table.h" />
     <ClInclude Include="..\..\src\market\bounty.h" />
+    <ClInclude Include="..\..\src\market\building-actions-table.h" />
     <ClInclude Include="..\..\src\market\building-craft-armor.h" />
     <ClInclude Include="..\..\src\market\building-craft-fix.h" />
     <ClInclude Include="..\..\src\market\building-craft-weapon.h" />

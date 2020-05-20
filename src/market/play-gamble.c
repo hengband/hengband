@@ -6,6 +6,7 @@
 #include "market/building-util.h"
 #include "market/poker.h"
 #include "view/display-fruit.h"
+#include "market/building-actions-table.h"
 
 /*!
  * @brief カジノ1プレイごとのメインルーチン / gamble_comm
