@@ -19,7 +19,7 @@
 #include "player/player-class.h"
 #include "player/player-effects.h"
 #include "inventory/player-inventory.h"
-#include "market/rumor.h"
+#include "store/rumor.h"
 #include "realm/realm-hex.h"
 
 #include "spell/spells-object.h"

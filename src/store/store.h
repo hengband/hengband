@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "market/store-owners.h"
+#include "store/store-owners.h"
 
  /*
   * Store constants

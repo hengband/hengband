@@ -12,12 +12,12 @@
 #include "dungeon/dungeon.h"
 #include "combat/snipe.h"
 #include "autopick/autopick-pref-processor.h"
-#include "market/store-util.h"
+#include "store/store-util.h"
 #include "main/sound-definitions-table.h"
 #include "io/write-diary.h"
 #include "inventory/player-inventory.h"
 #include "player/player-effects.h"
-#include "market/store.h" // do_cmd_store() がある。後で移設する.
+#include "store/store.h" // do_cmd_store() がある。後で移設する.
 #include "dungeon/quest.h" // do_cmd_quest() がある。後で移設する.
 #include "floor/wild.h"
 #include "spell/spells-object.h"

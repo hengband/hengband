@@ -3,7 +3,7 @@
 #include "world/world.h"
 #include "floor/floor-town.h"
 #include "dungeon/dungeon.h"
-#include "market/store.h"
+#include "store/store.h"
 #include "cmd/cmd-pet.h"
 #include "monster/monster-status.h"
 #include "core/sort.h"
@@ -16,7 +16,7 @@
 #include "io/player-status-dump.h"
 #include "io/write-diary.h"
 #include "player/avatar.h"
-#include "market/store-util.h"
+#include "store/store-util.h"
 #include "market/arena-info-table.h"
 #include "player/race-info-table.h"
 

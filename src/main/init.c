@@ -45,7 +45,7 @@
 #include "dungeon/quest.h"
 #include "grid/trap.h"
 #include "room/rooms.h"
-#include "market/store.h"
+#include "store/store.h"
 #include "floor/wild.h"
 #include "dungeon/dungeon-file.h"
 #include "io/files-util.h"
@@ -61,7 +61,7 @@
 #include "room/rooms-vault.h"
 #include "world/world.h"
 #include "market/articles-on-sale.h"
-#include "market/store-util.h"
+#include "store/store-util.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>

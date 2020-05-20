@@ -5,7 +5,7 @@
 #include "world/world.h"
 #include "player/player-effects.h"
 #include "core/turn-compensator.h"
-#include "market/rumor.h"
+#include "store/rumor.h"
 #include "player/player-races-table.h"
 #include "market/building-actions-table.h"
 

@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "market/store-util.h"
+#include "store/store-util.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 

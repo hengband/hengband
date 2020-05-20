@@ -1,9 +1,9 @@
 ﻿#include "system/angband.h"
 #include "floor/floor-town.h"
 #include "object/object-hook.h"
-#include "market/black-market.h"
-#include "market/store-owners.h"
-#include "market/store-util.h"
+#include "store/black-market.h"
+#include "store/store-owners.h"
+#include "store/store-util.h"
 
 /*!
  * @brief ブラックマーケット用の無価値品の排除判定 /

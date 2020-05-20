@@ -9,7 +9,7 @@
 #include "cmd/dump-util.h"
 #include "core/show-file.h"
 #include "object/object-flavor.h"
-#include "market/store-util.h"
+#include "store/store-util.h"
 #include "floor/floor-town.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"

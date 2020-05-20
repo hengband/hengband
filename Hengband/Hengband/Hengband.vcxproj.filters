@@ -182,25 +182,10 @@
     <ClCompile Include="..\..\src\market\poker.c">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\store-owners.c">
-      <Filter>market</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\market\store-owner-comments.c">
-      <Filter>market</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\market\articles-on-sale.c">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\say-comments.c">
-      <Filter>market</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\market\store-util.c">
-      <Filter>market</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\market\gold-magnification-table.c">
-      <Filter>market</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\market\black-market.c">
       <Filter>market</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\market\building-util.c">
@@ -223,9 +208,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\cmd\cmd-inn.c">
       <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\market\store.c">
-      <Filter>market</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\main\sound-definitions-table.c">
       <Filter>main</Filter>
@@ -761,9 +743,6 @@
     <ClCompile Include="..\..\src\monster\monster-race.c">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\rumor.c">
-      <Filter>market</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\io\report.c">
       <Filter>io</Filter>
     </ClCompile>
@@ -968,6 +947,27 @@
     <ClCompile Include="..\..\src\cmd\cmd-building.c">
       <Filter>cmd</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\store\rumor.c">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\say-comments.c">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\store.c">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\store-owner-comments.c">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\store-owners.c">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\store-util.c">
+      <Filter>store</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\store\black-market.c">
+      <Filter>store</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1153,25 +1153,10 @@
     <ClInclude Include="..\..\src\market\poker.h">
       <Filter>market</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\market\store-owners.h">
-      <Filter>market</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\market\store-owner-comments.h">
-      <Filter>market</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\market\articles-on-sale.h">
       <Filter>market</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\market\say-comments.h">
-      <Filter>market</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\market\store-util.h">
-      <Filter>market</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\market\gold-magnification-table.h">
-      <Filter>market</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\market\black-market.h">
       <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\market\building-util.h">
@@ -1194,9 +1179,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-inn.h">
       <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\market\store.h">
-      <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main\sound-definitions-table.h">
       <Filter>main</Filter>
@@ -1777,9 +1759,6 @@
     <ClInclude Include="..\..\src\monster\monster-race.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\market\umor.h">
-      <Filter>market</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\io\report.h">
       <Filter>io</Filter>
     </ClInclude>
@@ -1999,6 +1978,27 @@
     <ClInclude Include="..\..\src\market\building-actions-table.h">
       <Filter>market</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\store\say-comments.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\store.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\store-owner-comments.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\store-owners.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\rumor.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\store-util.h">
+      <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\store\black-market.h">
+      <Filter>store</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2091,6 +2091,9 @@
     </Filter>
     <Filter Include="mspell">
       <UniqueIdentifier>{738b47ea-2ba6-49a3-9bf8-a833ef46e218}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="store">
+      <UniqueIdentifier>{be097f30-d18c-4e9a-a13f-eac4ee7a9d9a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

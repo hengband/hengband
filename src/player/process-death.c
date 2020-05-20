@@ -11,8 +11,8 @@
 #include "floor/floor-town.h"
 #include "inventory/player-inventory.h"
 #include "object/object-flavor.h"
-#include "market/store-util.h"
-#include "market/store.h"
+#include "store/store-util.h"
+#include "store/store.h"
 #include "term/gameterm.h"
 #include "core/stuff-handler.h"
 

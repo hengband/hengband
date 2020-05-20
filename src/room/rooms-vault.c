@@ -5,7 +5,7 @@
 #include "floor/floor-generate.h"
 #include "grid/grid.h"
 #include "room/rooms.h"
-#include "market/store.h"
+#include "store/store.h"
 #include "grid/trap.h"
 #include "monster/monster.h"
 #include "grid/feature.h"
@@ -13,7 +13,7 @@
 #include "dungeon/dungeon.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"
-#include "market/store-util.h"
+#include "store/store-util.h"
 
 /*
  * The vault generation arrays

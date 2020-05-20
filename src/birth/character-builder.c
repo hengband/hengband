@@ -18,7 +18,7 @@
 #include "birth/birth-explanations-table.h"
 #include "floor/floor-town.h"
 #include "io/write-diary.h"
-#include "market/store.h"
+#include "store/store.h"
 #include "player/player-sex.h"
 #include "floor/wild.h"
 #include "world/world.h"

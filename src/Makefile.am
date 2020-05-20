@@ -60,14 +60,9 @@ hengband_SOURCES = \
 	market/arena-info-table.c market/arena-info-table.h \
 	market/building-util.c market/building-util.h \
 	market/play-gamble.c market/play-gamble.h \
-	market/poker.c market/poker.h market/store-owners.c market/store-owners.h \
-	market/store-owner-comments.c market/store-owner-comments.h \
+	market/poker.c market/poker.h \
 	market/articles-on-sale.c market/articles-on-sale.h \
-	market/black-market.c market/black-market.h \
-	market/say-comments.c market/say-comments.h \
-	market/store-util.c market/store-util.h \
 	market/gold-magnification-table.c market/gold-magnification-table.h \
-	market/store.c market/store.h market/rumor.c market/rumor.h \
 	market/arena.c market/arena.h \
 	market/bounty-prize-table.c market/bounty-prize-table.h \
 	market/bounty.c market/bounty.h \
@@ -80,6 +75,14 @@ hengband_SOURCES = \
 	market/building-monster.c market/building-monster.h \
 	market/building-enchanter.c market/building-enchanter.h \
 	market/building-actions-table.h \
+	\
+	store/store.c store/store.h \
+	store/black-market.c store/black-market.h \
+	store/rumor.c store/rumor.h \
+	store/say-comments.c store/say-comments.h \
+	store/store-util.c store/store-util.h \
+	store/store-owners.c store/store-owners.h \
+	store/store-owner-comments.c store/store-owner-comments.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \

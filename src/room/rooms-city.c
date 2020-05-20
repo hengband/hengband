@@ -6,9 +6,9 @@
 #include "floor/floor-generate.h"
 #include "room/rooms.h"
 #include "room/rooms-city.h"
-#include "market/store.h"
+#include "store/store.h"
 #include "floor/wild.h"
-#include "market/store-util.h"
+#include "store/store-util.h"
 
 /*
 * Precalculate buildings' location of underground arcade
