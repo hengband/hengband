@@ -287,7 +287,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
  * @param プレーヤーへの参照ポインタ
  * @return なし
  */
-void do_cmd_bldg(player_type *player_ptr)
+void do_cmd_building(player_type *player_ptr)
 {
 	if (player_ptr->wild_mode) return;
 

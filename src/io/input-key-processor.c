@@ -255,7 +255,7 @@ void process_command(player_type* creature_ptr)
         break;
     }
     case SPECIAL_KEY_BUILDING: {
-        do_cmd_bldg(creature_ptr);
+        do_cmd_building(creature_ptr);
         break;
     }
     case SPECIAL_KEY_QUEST: {
