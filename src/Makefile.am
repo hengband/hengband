@@ -72,6 +72,7 @@ hengband_SOURCES = \
 	market/arena.c market/arena.h \
 	market/bounty-prize-table.c market/bounty-prize-table.h \
 	market/bounty.c market/bounty.h \
+	market/building-recharger.c market/building-recharger.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \

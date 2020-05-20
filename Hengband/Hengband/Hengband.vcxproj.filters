@@ -944,6 +944,9 @@
     <ClCompile Include="..\..\src\market\bounty-prize-table.c">
       <Filter>market</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\market\building-recharger.c">
+      <Filter>market</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1946,6 +1949,9 @@
       <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\market\bounty-prize-table.h">
+      <Filter>market</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\building-recharger.h">
       <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>
