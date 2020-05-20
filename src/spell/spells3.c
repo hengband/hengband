@@ -12,7 +12,7 @@
  */
 
 #include "system/angband.h"
-#include "market/building.h"
+#include "cmd/cmd-building.h"
 #include "core/stuff-handler.h"
 #include "term/gameterm.h"
 #include "util/util.h"

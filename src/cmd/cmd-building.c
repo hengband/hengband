@@ -28,7 +28,7 @@
 #include "floor/wild.h"
 #include "world/world.h"
 #include "player/avatar.h"
-#include "market/building.h"
+#include "cmd/cmd-building.h"
 #include "mutation/mutation.h"
 #include "cmd-spell.h"
 #include "spell/spells3.h"

@@ -261,7 +261,7 @@
     <ClCompile Include="..\..\src\knowledge\knowledge-uniques.c" />
     <ClCompile Include="..\..\src\main\music-definitions-table.c" />
     <ClCompile Include="..\..\src\main\sound-definitions-table.c" />
-    <ClCompile Include="..\..\src\market\building.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-building.c" />
     <ClCompile Include="..\..\src\io\character-dump.c" />
     <ClCompile Include="..\..\src\object\chest.c" />
     <ClCompile Include="..\..\src\io\chuukei.c" />
@@ -528,7 +528,7 @@
     <ClInclude Include="..\..\src\knowledge\knowledge-uniques.h" />
     <ClInclude Include="..\..\src\main\music-definitions-table.h" />
     <ClInclude Include="..\..\src\main\sound-definitions-table.h" />
-    <ClInclude Include="..\..\src\market\building.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-building.h" />
     <ClInclude Include="..\..\src\io\character-dump.h" />
     <ClInclude Include="..\..\src\object\chest.h" />
     <ClInclude Include="..\..\src\io\chuukei.h" />

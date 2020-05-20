@@ -11,7 +11,7 @@
  */
 
 #include "system/angband.h"
-#include "market/building.h"
+#include "cmd/cmd-building.h"
 #include "system/system-variables.h"
 #include "io/load.h"
 #include "util/util.h"

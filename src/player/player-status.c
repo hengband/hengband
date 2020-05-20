@@ -3,7 +3,7 @@
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 
-#include "market/building.h"
+#include "cmd/cmd-building.h"
 #include "dungeon/quest.h"
 #include "player/player-move.h"
 #include "player/player-status.h"

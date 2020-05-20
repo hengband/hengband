@@ -58,7 +58,6 @@ hengband_SOURCES = \
 	main/init.c main/init.h \
 	\
 	market/arena-info-table.c market/arena-info-table.h \
-	market/building.c market/building.h \
 	market/building-util.c market/building-util.h \
 	market/play-gamble.c market/play-gamble.h \
 	market/poker.c market/poker.h market/store-owners.c market/store-owners.h \
@@ -307,6 +306,7 @@ hengband_SOURCES = \
 	knowledge/knowledge-quests.c knowledge/knowledge-quests.h \
 	\
 	cmd/cmd-autopick.c cmd/cmd-autopick.c \
+	cmd/cmd-building.c cmd/cmd-building.h \
 	cmd/dump-util.c cmd/dump-util.h cmd/feeling-table.c cmd/feeling-table.h \
 	cmd/monster-group-table.c cmd/monster-group-table.h \
 	cmd/diary-subtitle-table.c cmd/diary-subtitle-table.h \

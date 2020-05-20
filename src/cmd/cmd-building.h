@@ -116,4 +116,4 @@ typedef struct
 	OBJECT_SUBTYPE_VALUE sval;  /*!< モンスター打倒後に得られるアイテムの小カテゴリID / sval of prize */
 } arena_type;
 
-extern void do_cmd_bldg(player_type *player_ptr);
+extern void do_cmd_building(player_type *player_ptr);

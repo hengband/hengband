@@ -40,7 +40,7 @@
 #include "term/gameterm.h"
 
 #include "object/artifact.h"
-#include "market/building.h"
+#include "cmd/cmd-building.h"
 #include "main/init.h"
 #include "dungeon/quest.h"
 #include "grid/trap.h"

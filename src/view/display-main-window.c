@@ -17,7 +17,7 @@
 #include "autopick/autopick-util.h"
 #include "term/gameterm.h"
 
-#include "market/building.h"
+#include "cmd/cmd-building.h"
 #include "system/system-variables.h"
 #include "core/stuff-handler.h"
 #include "io/files-util.h"

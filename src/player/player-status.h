@@ -1,5 +1,5 @@
 ﻿#pragma once 
-#include "market/building.h"
+#include "cmd/cmd-building.h"
 #include "player/player-personalities-table.h"
 
 struct floor_type;

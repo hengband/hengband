@@ -224,9 +224,6 @@
     <ClCompile Include="..\..\src\cmd\cmd-inn.c">
       <Filter>cmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\market\building.c">
-      <Filter>market</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\market\store.c">
       <Filter>market</Filter>
     </ClCompile>
@@ -968,6 +965,9 @@
     <ClCompile Include="..\..\src\market\building-enchanter.c">
       <Filter>market</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-building.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1194,9 +1194,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-inn.h">
       <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\market\building.h">
-      <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\market\store.h">
       <Filter>market</Filter>
@@ -1995,6 +1992,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\market\building-enchanter.h">
       <Filter>market</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-building.h">
+      <Filter>cmd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
