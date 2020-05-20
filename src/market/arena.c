@@ -7,6 +7,30 @@
 #include "core/show-file.h"
 
 /*!
+ * @brief 優勝時のメッセージを表示し、賞金を与える
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @return まだ優勝していないか、挑戦者モンスターとの戦いではFALSE
+ */
+static bool process_ostensible_arena_victory(player_type *player_ptr)
+{
+    if (player_ptr->arena_number != MAX_ARENA_MONS)
+        return FALSE;
+
+    clear_bldg(5, 19);
+    prt(_("アリーナの優勝者！", "               Arena Victor!"), 5, 0);
+    prt(_("おめでとう！あなたは全ての敵を倒しました。", "Congratulations!  You have defeated all before you."), 7, 0);
+    prt(_("賞金として $1,000,000 が与えられます。", "For that, receive the prize: 1,000,000 gold pieces"), 8, 0);
+
+    prt("", 10, 0);
+    prt("", 11, 0);
+    player_ptr->au += 1000000L;
+    msg_print(_("スペースキーで続行", "Press the space bar to continue"));
+    msg_print(NULL);
+    player_ptr->arena_number++;
+    return TRUE;
+}
+
+/*!
  * @brief 闘技場に入るコマンドの処理 / arena commands
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param cmd 闘技場処理のID
@@ -16,20 +40,8 @@ void arena_comm(player_type *player_ptr, int cmd)
 {
     switch (cmd) {
     case BACT_ARENA:
-        if (player_ptr->arena_number == MAX_ARENA_MONS) {
-            clear_bldg(5, 19);
-            prt(_("アリーナの優勝者！", "               Arena Victor!"), 5, 0);
-            prt(_("おめでとう！あなたは全ての敵を倒しました。", "Congratulations!  You have defeated all before you."), 7, 0);
-            prt(_("賞金として $1,000,000 が与えられます。", "For that, receive the prize: 1,000,000 gold pieces"), 8, 0);
-
-            prt("", 10, 0);
-            prt("", 11, 0);
-            player_ptr->au += 1000000L;
-            msg_print(_("スペースキーで続行", "Press the space bar to continue"));
-            msg_print(NULL);
-            player_ptr->arena_number++;
-            break;
-        }
+        if (process_ostensible_arena_victory(player_ptr))
+            return;
 
         if (player_ptr->arena_number > MAX_ARENA_MONS) {
             if (player_ptr->arena_number < MAX_ARENA_MONS + 2) {
