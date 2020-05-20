@@ -69,6 +69,30 @@ static bool battle_metal_babble(player_type *player_ptr)
     return TRUE;
 }
 
+static void go_to_arena(player_type *player_ptr)
+{
+    if (process_ostensible_arena_victory(player_ptr))
+        return;
+
+    if (battle_metal_babble(player_ptr))
+        return;
+
+    if (player_ptr->riding && (player_ptr->pclass != CLASS_BEASTMASTER) && (player_ptr->pclass != CLASS_CAVALRY)) {
+        msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。",
+            "You don't have permission to enter with pet."));
+        msg_print(NULL);
+        return;
+    }
+
+    player_ptr->exit_bldg = FALSE;
+    reset_tim_flags(player_ptr);
+    prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
+
+    player_ptr->current_floor_ptr->inside_arena = TRUE;
+    player_ptr->leaving = TRUE;
+    player_ptr->leave_bldg = TRUE;
+}
+
 /*!
  * @brief 闘技場に入るコマンドの処理 / arena commands
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -79,27 +103,8 @@ void arena_comm(player_type *player_ptr, int cmd)
 {
     switch (cmd) {
     case BACT_ARENA:
-        if (process_ostensible_arena_victory(player_ptr))
-            return;
-
-        if (battle_metal_babble(player_ptr))
-            return;
-
-        if (player_ptr->riding && (player_ptr->pclass != CLASS_BEASTMASTER) && (player_ptr->pclass != CLASS_CAVALRY)) {
-            msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。",
-                "You don't have permission to enter with pet."));
-            msg_print(NULL);
-            break;
-        }
-
-        player_ptr->exit_bldg = FALSE;
-        reset_tim_flags(player_ptr);
-        prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
-
-        player_ptr->current_floor_ptr->inside_arena = TRUE;
-        player_ptr->leaving = TRUE;
-        player_ptr->leave_bldg = TRUE;
-        break;
+        go_to_arena(player_ptr);
+        return;
     case BACT_POSTER: {
         if (player_ptr->arena_number == MAX_ARENA_MONS) {
             msg_print(_("あなたは勝利者だ。 アリーナでのセレモニーに参加しなさい。",
