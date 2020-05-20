@@ -1,14 +1,6 @@
 ﻿
 typedef int COMBAT_OPTION_IDX; // py_attack()用コンバットオプション型定義
 
-
-#ifdef JP
-#define MAX_SILLY_ATTACK 41 /*!< 幻覚時のジョークメッセージ最大数 */
-#else
-#define MAX_SILLY_ATTACK 29 /*!< Hallucination stuff */
-#endif
-
-
 /*** Monster blow constants ***/
 
 /*!
@@ -117,11 +109,6 @@ typedef int COMBAT_OPTION_IDX; // py_attack()用コンバットオプション�
 #define HISSATSU_3DAN   29
 #define HISSATSU_100NIN 30
 #define HISSATSU_IAI    100
-
-extern const concptr silly_attacks[MAX_SILLY_ATTACK];
-#ifdef JP
-extern const concptr silly_attacks2[MAX_SILLY_ATTACK];
-#endif
 
 /* For Monk martial arts */
 typedef struct martial_arts

@@ -971,6 +971,9 @@
     <ClCompile Include="..\..\src\combat\attack-power-table.c">
       <Filter>combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\combat\hallucination-attacks-table.c">
+      <Filter>combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2003,6 +2006,9 @@
       <Filter>store</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\attack-power-table.h">
+      <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\hallucination-attacks-table.h">
       <Filter>combat</Filter>
     </ClInclude>
   </ItemGroup>
