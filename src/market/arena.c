@@ -252,3 +252,123 @@ void update_gambling_monsters(player_type *player_ptr)
             break;
     }
 }
+
+/*!
+ * @brief モンスター闘技場のメインルーチン
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @return 賭けを開始したか否か
+ */
+bool monster_arena_comm(player_type *player_ptr)
+{
+    PRICE maxbet;
+    PRICE wager;
+    char out_val[160], tmp_str[80];
+    concptr p;
+
+    if ((current_world_ptr->game_turn - current_world_ptr->arena_start_turn) > TURNS_PER_TICK * 250) {
+        update_gambling_monsters(player_ptr);
+        current_world_ptr->arena_start_turn = current_world_ptr->game_turn;
+    }
+
+    screen_save();
+
+    /* No money */
+    if (player_ptr->au <= 1) {
+        msg_print(_("おい！おまえ一文なしじゃないか！こっから出ていけ！", "Hey! You don't have gold - get out of here!"));
+        msg_print(NULL);
+        screen_load();
+        return FALSE;
+    }
+
+    clear_bldg(4, 10);
+
+    prt(_("モンスター                                                     倍率",
+            "Monsters                                                       Odds"),
+        4, 4);
+    for (int i = 0; i < 4; i++) {
+        char buf[80];
+        monster_race *r_ptr = &r_info[battle_mon[i]];
+
+        sprintf(buf, _("%d) %-58s  %4ld.%02ld倍", "%d) %-58s  %4ld.%02ld"), i + 1,
+            _(format("%s%s", r_name + r_ptr->name, (r_ptr->flags1 & RF1_UNIQUE) ? "もどき" : "      "),
+                format("%s%s", (r_ptr->flags1 & RF1_UNIQUE) ? "Fake " : "", r_name + r_ptr->name)),
+            (long int)mon_odds[i] / 100, (long int)mon_odds[i] % 100);
+        prt(buf, 5 + i, 1);
+    }
+
+    prt(_("どれに賭けますか:", "Which monster: "), 0, 0);
+    while (TRUE) {
+        int i = inkey();
+
+        if (i == ESCAPE) {
+            screen_load();
+            return FALSE;
+        }
+
+        if (i >= '1' && i <= '4') {
+            sel_monster = i - '1';
+            battle_odds = mon_odds[sel_monster];
+            break;
+        }
+
+        else
+            bell();
+    }
+
+    clear_bldg(4, 4);
+    for (int i = 0; i < 4; i++)
+        if (i != sel_monster)
+            clear_bldg(i + 5, i + 5);
+
+    maxbet = player_ptr->lev * 200;
+
+    /* We can't bet more than we have */
+    maxbet = MIN(maxbet, player_ptr->au);
+
+    /* Get the wager */
+    strcpy(out_val, "");
+    sprintf(tmp_str, _("賭け金 (1-%ld)？", "Your wager (1-%ld) ? "), (long int)maxbet);
+
+    /*
+	 * Use get_string() because we may need more than
+	 * the s16b value returned by get_quantity().
+	 */
+    if (!get_string(tmp_str, out_val, 32)) {
+        screen_load();
+        return FALSE;
+    }
+
+    for (p = out_val; *p == ' '; p++)
+        ;
+
+    wager = atol(p);
+    if (wager > player_ptr->au) {
+        msg_print(_("おい！金が足りないじゃないか！出ていけ！", "Hey! You don't have the gold - get out of here!"));
+
+        msg_print(NULL);
+        screen_load();
+        return FALSE;
+    } else if (wager > maxbet) {
+        msg_format(_("%ldゴールドだけ受けよう。残りは取っときな。", "I'll take %ld gold of that. Keep the rest."), (long int)maxbet);
+
+        wager = maxbet;
+    } else if (wager < 1) {
+        msg_print(_("ＯＫ、１ゴールドでいこう。", "Ok, we'll start with 1 gold."));
+        wager = 1;
+    }
+
+    msg_print(NULL);
+    battle_odds = MAX(wager + 1, wager * battle_odds / 100);
+    kakekin = wager;
+    player_ptr->au -= wager;
+    reset_tim_flags(player_ptr);
+
+    prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
+
+    player_ptr->phase_out = TRUE;
+    player_ptr->leaving = TRUE;
+    player_ptr->leave_bldg = TRUE;
+
+    screen_load();
+    return TRUE;
+}
