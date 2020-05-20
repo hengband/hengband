@@ -117,6 +117,3 @@ typedef struct
 } arena_type;
 
 extern void do_cmd_bldg(player_type *player_ptr);
-
-extern void determine_daily_bounty(player_type *player_ptr, bool conv_old);
-extern void determine_bounty_uniques(player_type *player_ptr);

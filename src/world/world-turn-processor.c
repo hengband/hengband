@@ -21,6 +21,7 @@
 #include "inventory/simple-appraiser.h"
 #include "world/world-movement-processor.h"
 #include "market/arena.h"
+#include "market/bounty.h"
 
 /*!
  * @brief 10ゲームターンが進行する毎にゲーム世界全体の処理を行う。

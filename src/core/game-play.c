@@ -29,7 +29,7 @@
 #include "grid/grid.h"
 #include "io/write-diary.h"
 #include "market/arena-info-table.h"
-#include "market/building.h"
+#include "market/bounty.h"
 #include "market/store-util.h"
 #include "market/store.h"
 #include "object/object-flavor.h"
