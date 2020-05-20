@@ -935,6 +935,9 @@
     <ClCompile Include="..\..\src\io\pref-file-expressor.c">
       <Filter>io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\market\arena.c">
+      <Filter>market</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1929,6 +1932,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\pref-file-expressor.h">
       <Filter>io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\arena.h">
+      <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

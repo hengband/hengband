@@ -69,6 +69,7 @@ hengband_SOURCES = \
 	market/store-util.c market/store-util.h \
 	market/gold-magnification-table.c market/gold-magnification-table.h \
 	market/store.c market/store.h market/rumor.c market/rumor.h \
+	market/arena.c market/arena.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \
