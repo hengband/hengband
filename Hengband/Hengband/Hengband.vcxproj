@@ -175,6 +175,7 @@
     <ClCompile Include="..\..\src\market\building-craft-armor.c" />
     <ClCompile Include="..\..\src\market\building-craft-fix.c" />
     <ClCompile Include="..\..\src\market\building-craft-weapon.c" />
+    <ClCompile Include="..\..\src\market\building-monster.c" />
     <ClCompile Include="..\..\src\market\building-quest.c" />
     <ClCompile Include="..\..\src\market\building-recharger.c" />
     <ClCompile Include="..\..\src\market\building-service.c" />
@@ -415,6 +416,7 @@
     <ClInclude Include="..\..\src\market\building-craft-armor.h" />
     <ClInclude Include="..\..\src\market\building-craft-fix.h" />
     <ClInclude Include="..\..\src\market\building-craft-weapon.h" />
+    <ClInclude Include="..\..\src\market\building-monster.h" />
     <ClInclude Include="..\..\src\market\building-quest.h" />
     <ClInclude Include="..\..\src\market\building-recharger.h" />
     <ClInclude Include="..\..\src\market\building-service.h" />
