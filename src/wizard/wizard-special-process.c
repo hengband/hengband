@@ -53,7 +53,7 @@
 #include "dungeon/dungeon-file.h"
 #include "io/files-util.h"
 #include "mspell/monster-spell.h"
-#include "market/building.h"
+#include "market/arena.h"
 #include "object/object-kind.h"
 #include "io/targeting.h"
 #include "view/display-main-window.h"

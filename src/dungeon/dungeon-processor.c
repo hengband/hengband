@@ -17,6 +17,7 @@
 #include "monster/monster-status.h"
 #include "world/world-turn-processor.h"
 #include "core/turn-compensator.h"
+#include "market/arena.h"
 
 /*!
  * process_player()、process_world() をcore.c から移設するのが先.

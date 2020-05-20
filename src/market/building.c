@@ -265,117 +265,11 @@ static void show_building(player_type *player_ptr, building_type* bldg)
 
 
 /*!
- * @brief モンスター闘技場に参加するモンスターを更新する。
- * @param player_ptr プレーヤーへの参照ポインタ
- * @return なし
- */
-void update_gambling_monsters(player_type *player_ptr)
-{
-	int total, i;
-	int max_dl = 0;
-	int mon_level;
-	int power[4];
-	bool tekitou;
-
-	for (i = 0; i < current_world_ptr->max_d_idx; i++)
-	{
-		if (max_dl < max_dlv[i]) max_dl = max_dlv[i];
-	}
-
-	mon_level = randint1(MIN(max_dl, 122)) + 5;
-	if (randint0(100) < 60)
-	{
-		i = randint1(MIN(max_dl, 122)) + 5;
-		mon_level = MAX(i, mon_level);
-	}
-
-	if (randint0(100) < 30)
-	{
-		i = randint1(MIN(max_dl, 122)) + 5;
-		mon_level = MAX(i, mon_level);
-	}
-
-	while (TRUE)
-	{
-		total = 0;
-		tekitou = FALSE;
-		for (i = 0; i < 4; i++)
-		{
-			MONRACE_IDX r_idx;
-			int j;
-			while (TRUE)
-			{
-				get_mon_num_prep(player_ptr, monster_can_entry_arena, NULL);
-				r_idx = get_mon_num(player_ptr, mon_level, GMN_ARENA);
-				if (!r_idx) continue;
-
-				if ((r_info[r_idx].flags1 & RF1_UNIQUE) || (r_info[r_idx].flags7 & RF7_UNIQUE2))
-				{
-					if ((r_info[r_idx].level + 10) > mon_level) continue;
-				}
-
-				for (j = 0; j < i; j++)
-					if (r_idx == battle_mon[j]) break;
-				if (j < i) continue;
-
-				break;
-			}
-			battle_mon[i] = r_idx;
-			if (r_info[r_idx].level < 45) tekitou = TRUE;
-		}
-
-		for (i = 0; i < 4; i++)
-		{
-			monster_race *r_ptr = &r_info[battle_mon[i]];
-			int num_taisei = count_bits(r_ptr->flagsr & (RFR_IM_ACID | RFR_IM_ELEC | RFR_IM_FIRE | RFR_IM_COLD | RFR_IM_POIS));
-
-			if (r_ptr->flags1 & RF1_FORCE_MAXHP)
-				power[i] = r_ptr->hdice * r_ptr->hside * 2;
-			else
-				power[i] = r_ptr->hdice * (r_ptr->hside + 1);
-			power[i] = power[i] * (100 + r_ptr->level) / 100;
-			if (r_ptr->speed > 110)
-				power[i] = power[i] * (r_ptr->speed * 2 - 110) / 100;
-			if (r_ptr->speed < 110)
-				power[i] = power[i] * (r_ptr->speed - 20) / 100;
-			if (num_taisei > 2)
-				power[i] = power[i] * (num_taisei * 2 + 5) / 10;
-			else if (r_ptr->a_ability_flags2 & RF6_INVULNER)
-				power[i] = power[i] * 4 / 3;
-			else if (r_ptr->a_ability_flags2 & RF6_HEAL)
-				power[i] = power[i] * 4 / 3;
-			else if (r_ptr->a_ability_flags1 & RF5_DRAIN_MANA)
-				power[i] = power[i] * 11 / 10;
-			if (r_ptr->flags1 & RF1_RAND_25)
-				power[i] = power[i] * 9 / 10;
-			if (r_ptr->flags1 & RF1_RAND_50)
-				power[i] = power[i] * 9 / 10;
-			if (r_ptr->flagsr & RFR_RES_ALL) power[i] *= 100000;
-			if (r_ptr->arena_ratio) power[i] = power[i] * r_ptr->arena_ratio / 100;
-			total += power[i];
-		}
-
-		for (i = 0; i < 4; i++)
-		{
-			if (power[i] <= 0) break;
-			power[i] = total * 60 / power[i];
-			if (tekitou && ((power[i] < 160) || power[i] > 1500)) break;
-			if ((power[i] < 160) && randint0(20)) break;
-			if (power[i] < 101) power[i] = 100 + randint1(5);
-			mon_odds[i] = power[i];
-		}
-
-		if (i == 4) break;
-	}
-}
-
-
-/*!
  * @brief モンスター闘技場のメインルーチン
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return 賭けを開始したか否か
  */
-static bool kakutoujou(player_type *player_ptr)
+static bool monster_arena_comm(player_type *player_ptr)
 {
 	PRICE maxbet;
 	PRICE wager;
@@ -2440,7 +2334,7 @@ static void bldg_process_command(player_type *player_ptr, building_type *bldg, i
 		break;
 
 	case BACT_BATTLE:
-		kakutoujou(player_ptr);
+		monster_arena_comm(player_ptr);
 		break;
 
 	case BACT_TSUCHINOKO:

@@ -46,7 +46,7 @@
 #include "system/angband-version.h"
 
 #include "io/load.h"
-#include "market/building.h"
+#include "market/arena.h"
 #include "io/report.h"
 
 #include "dungeon/dungeon.h"

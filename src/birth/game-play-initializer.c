@@ -9,6 +9,7 @@
 #include "cmd/cmd-pet.h"
 #include "system/system-variables.h"
 #include "player/player-races-table.h"
+#include "market/arena.h"
 
 /*!
  * @brief ベースアイテム構造体の鑑定済みフラグをリセットする。
