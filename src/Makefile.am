@@ -76,6 +76,7 @@ hengband_SOURCES = \
 	market/building-quest.c market/building-quest.h \
 	market/building-service.c market/building-service.h \
 	market/building-craft-weapon.c market/building-craft-weapon.h \
+	market/building-craft-armor.c market/building-craft-armor.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \

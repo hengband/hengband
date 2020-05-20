@@ -956,6 +956,9 @@
     <ClCompile Include="..\..\src\market\building-craft-weapon.c">
       <Filter>market</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\market\building-craft-armor.c">
+      <Filter>market</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1970,6 +1973,9 @@
       <Filter>market</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\market\building-craft-weapon.h">
+      <Filter>market</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\building-craft-armor.h">
       <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>
