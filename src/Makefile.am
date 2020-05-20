@@ -332,7 +332,9 @@ hengband_SOURCES = \
 	cmd/cmd-zaprod.c cmd/cmd-zaprod.h cmd/cmd-zapwand.c cmd/cmd-zapwand.h \
 	cmd/cmd-menu-content-table.c cmd/cmd-menu-content-table.h \
 	\
-	combat/melee.h combat/melee.c combat/shoot.c combat/shoot.h \
+	combat/melee.h combat/melee.c \
+	combat/attack-power-table.c combat/attack-power-table.h \
+	combat/shoot.c combat/shoot.h \
 	combat/snipe.c combat/snipe.h \
 	\
 	term/gameterm.c term/gameterm.h \

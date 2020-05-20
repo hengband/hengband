@@ -968,6 +968,9 @@
     <ClCompile Include="..\..\src\store\black-market.c">
       <Filter>store</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\combat\attack-power-table.c">
+      <Filter>combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1998,6 +2001,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\store\black-market.h">
       <Filter>store</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\attack-power-table.h">
+      <Filter>combat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

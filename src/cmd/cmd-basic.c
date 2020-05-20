@@ -24,6 +24,7 @@
 #include "grid/trap.h"
 #include "dungeon/dungeon.h"
 #include "melee.h"
+#include "combat/attack-power-table.h"
 #include "object/object-hook.h"
 #include "monster/monster-status.h"
 #include "dungeon/quest.h"

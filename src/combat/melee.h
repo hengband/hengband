@@ -123,10 +123,6 @@ extern const concptr silly_attacks[MAX_SILLY_ATTACK];
 extern const concptr silly_attacks2[MAX_SILLY_ATTACK];
 #endif
 
-extern const byte adj_str_blow[];
-extern const byte adj_dex_blow[];
-extern const byte blows_table[12][12];
-
 /* For Monk martial arts */
 typedef struct martial_arts
 {
@@ -145,7 +141,6 @@ typedef struct mbe_info_type
 } mbe_info_type;
 
 extern const martial_arts ma_blows[MAX_MA];
-extern const int monk_ave_damage[PY_MAX_LEVEL + 1][3];
 
 extern bool test_hit_norm(player_type *attacker_ptr, HIT_RELIABILITY chance, ARMOUR_CLASS ac, bool visible);
 extern PERCENTAGE hit_chance(player_type *attacker_ptr, HIT_RELIABILITY chance, ARMOUR_CLASS ac);

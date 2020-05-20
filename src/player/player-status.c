@@ -41,7 +41,6 @@
 #include "autopick/autopick-reader-writer.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "melee.h"
 #include "world/world.h"
 #include "view/display-main-window.h"
 #include "io/files-util.h"
@@ -52,6 +51,7 @@
 #include "spell/spells-util.h"
 #include "spell/spells-execution.h"
 #include "player/player-races-table.h"
+#include "combat/attack-power-table.h"
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
