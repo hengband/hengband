@@ -172,6 +172,7 @@
     <ClCompile Include="..\..\src\market\arena.c" />
     <ClCompile Include="..\..\src\market\bounty-prize-table.c" />
     <ClCompile Include="..\..\src\market\bounty.c" />
+    <ClCompile Include="..\..\src\market\building-craft-weapon.c" />
     <ClCompile Include="..\..\src\market\building-quest.c" />
     <ClCompile Include="..\..\src\market\building-recharger.c" />
     <ClCompile Include="..\..\src\market\building-service.c" />
@@ -409,6 +410,7 @@
     <ClInclude Include="..\..\src\market\arena.h" />
     <ClInclude Include="..\..\src\market\bounty-prize-table.h" />
     <ClInclude Include="..\..\src\market\bounty.h" />
+    <ClInclude Include="..\..\src\market\building-craft-weapon.h" />
     <ClInclude Include="..\..\src\market\building-quest.h" />
     <ClInclude Include="..\..\src\market\building-recharger.h" />
     <ClInclude Include="..\..\src\market\building-service.h" />
