@@ -31,6 +31,45 @@ static bool process_ostensible_arena_victory(player_type *player_ptr)
 }
 
 /*!
+ * @brief はぐれメタルとの対戦
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @return まだパワー・ワイアーム以下を倒していないならFALSE、倒していたらTRUE
+ */
+static bool battle_metal_babble(player_type *player_ptr)
+{
+    if (player_ptr->arena_number <= MAX_ARENA_MONS)
+        return FALSE;
+
+    if (player_ptr->arena_number >= MAX_ARENA_MONS + 2) {
+        msg_print(_("あなたはアリーナに入り、しばらくの間栄光にひたった。",
+            "You enter the arena briefly and bask in your glory."));
+        msg_print(NULL);
+        return TRUE;
+    }
+
+    msg_print(_("君のために最強の挑戦者を用意しておいた。", "The strongest challenger is waiting for you."));
+    msg_print(NULL);
+    if (!get_check(_("挑戦するかね？", "Do you fight? "))) {
+        msg_print(_("残念だ。", "We are disappointed."));
+        return TRUE;
+    }
+
+    msg_print(_("死ぬがよい。", "Die, maggots."));
+    msg_print(NULL);
+
+    player_ptr->exit_bldg = FALSE;
+    reset_tim_flags(player_ptr);
+
+    /* Save the surface floor as saved floor */
+    prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
+
+    player_ptr->current_floor_ptr->inside_arena = TRUE;
+    player_ptr->leaving = TRUE;
+    player_ptr->leave_bldg = TRUE;
+    return TRUE;
+}
+
+/*!
  * @brief 闘技場に入るコマンドの処理 / arena commands
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param cmd 闘技場処理のID
@@ -43,34 +82,8 @@ void arena_comm(player_type *player_ptr, int cmd)
         if (process_ostensible_arena_victory(player_ptr))
             return;
 
-        if (player_ptr->arena_number > MAX_ARENA_MONS) {
-            if (player_ptr->arena_number < MAX_ARENA_MONS + 2) {
-                msg_print(_("君のために最強の挑戦者を用意しておいた。", "The strongest challenger is waiting for you."));
-                msg_print(NULL);
-                if (get_check(_("挑戦するかね？", "Do you fight? "))) {
-                    msg_print(_("死ぬがよい。", "Die, maggots."));
-                    msg_print(NULL);
-
-                    player_ptr->exit_bldg = FALSE;
-                    reset_tim_flags(player_ptr);
-
-                    /* Save the surface floor as saved floor */
-                    prepare_change_floor_mode(player_ptr, CFM_SAVE_FLOORS);
-
-                    player_ptr->current_floor_ptr->inside_arena = TRUE;
-                    player_ptr->leaving = TRUE;
-                    player_ptr->leave_bldg = TRUE;
-                } else {
-                    msg_print(_("残念だ。", "We are disappointed."));
-                }
-            } else {
-                msg_print(_("あなたはアリーナに入り、しばらくの間栄光にひたった。",
-                    "You enter the arena briefly and bask in your glory."));
-                msg_print(NULL);
-            }
-
-            break;
-        }
+        if (battle_metal_babble(player_ptr))
+            return;
 
         if (player_ptr->riding && (player_ptr->pclass != CLASS_BEASTMASTER) && (player_ptr->pclass != CLASS_CAVALRY)) {
             msg_print(_("ペットに乗ったままではアリーナへ入れさせてもらえなかった。",
