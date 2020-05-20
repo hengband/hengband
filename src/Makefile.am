@@ -70,6 +70,8 @@ hengband_SOURCES = \
 	market/gold-magnification-table.c market/gold-magnification-table.h \
 	market/store.c market/store.h market/rumor.c market/rumor.h \
 	market/arena.c market/arena.h \
+	market/bounty-prize-table.c market/bounty-prize-table.h \
+	market/bounty.c market/bounty.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \

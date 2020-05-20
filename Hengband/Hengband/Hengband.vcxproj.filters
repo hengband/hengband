@@ -938,6 +938,12 @@
     <ClCompile Include="..\..\src\market\arena.c">
       <Filter>market</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\market\bounty.c">
+      <Filter>market</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\market\bounty-prize-table.c">
+      <Filter>market</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1934,6 +1940,12 @@
       <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\market\arena.h">
+      <Filter>market</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\bounty.h">
+      <Filter>market</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\market\bounty-prize-table.h">
       <Filter>market</Filter>
     </ClInclude>
   </ItemGroup>
