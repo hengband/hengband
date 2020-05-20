@@ -174,6 +174,7 @@
     <ClCompile Include="..\..\src\market\bounty.c" />
     <ClCompile Include="..\..\src\market\building-quest.c" />
     <ClCompile Include="..\..\src\market\building-recharger.c" />
+    <ClCompile Include="..\..\src\market\building-service.c" />
     <ClCompile Include="..\..\src\mind\racial-samurai.c" />
     <ClCompile Include="..\..\src\mspell\mspell-floor.c" />
     <ClCompile Include="..\..\src\mspell\mspell-particularity.c" />
@@ -410,6 +411,7 @@
     <ClInclude Include="..\..\src\market\bounty.h" />
     <ClInclude Include="..\..\src\market\building-quest.h" />
     <ClInclude Include="..\..\src\market\building-recharger.h" />
+    <ClInclude Include="..\..\src\market\building-service.h" />
     <ClInclude Include="..\..\src\mind\racial-samurai.h" />
     <ClInclude Include="..\..\src\mspell\assign-monster-spell.h" />
     <ClInclude Include="..\..\src\mspell\mspell-floor.h" />
