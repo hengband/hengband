@@ -185,6 +185,36 @@ static void hissatsu_midare_setsugetsuka(player_type *attacker_ptr, samurai_slay
 }
 
 /*!
+ * @brief 雷撃鷲爪斬
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
+ * @return なし
+ */
+static void hissatsu_lightning_eagle(player_type *attacker_ptr, samurai_slaying_type *samurai_slaying_ptr)
+{
+    if (samurai_slaying_ptr->mode != HISSATSU_ELEC)
+        return;
+
+    /* Notice immunity */
+    if (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK) {
+        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
+            samurai_slaying_ptr->r_ptr->r_flagsr |= (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
+        }
+
+        return;
+    }
+
+    /* Otherwise, take the damage */
+    if (have_flag(samurai_slaying_ptr->flags, TR_BRAND_ELEC)) {
+        if (samurai_slaying_ptr->mult < 70)
+            samurai_slaying_ptr->mult = 70;
+    } else {
+        if (samurai_slaying_ptr->mult < 50)
+            samurai_slaying_ptr->mult = 50;
+    }
+}
+
+/*!
  * @brief 剣術のスレイ倍率計算を行う /
  * Calcurate magnification of hissatsu technics
  * @param mult 剣術のスレイ効果以前に算出している多要素の倍率(/10倍)
@@ -203,25 +233,7 @@ MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAGS *flag
     hissatsu_zanma_ken(samurai_slaying_ptr);
     hissatsu_rock_smash(attacker_ptr, samurai_slaying_ptr);
     hissatsu_midare_setsugetsuka(attacker_ptr, samurai_slaying_ptr);
-
-    /* Lightning Eagle (Elec) */
-    if (mode == HISSATSU_ELEC) {
-        /* Notice immunity */
-        if (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK) {
-            if (is_original_ap_and_seen(attacker_ptr, m_ptr)) {
-                r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
-            }
-        }
-
-        /* Otherwise, take the damage */
-        else if (have_flag(flags, TR_BRAND_ELEC)) {
-            if (mult < 70)
-                mult = 70;
-        } else {
-            if (mult < 50)
-                mult = 50;
-        }
-    }
+    hissatsu_lightning_eagle(attacker_ptr, samurai_slaying_ptr);
 
     /* Bloody Maelstrom */
     if ((mode == HISSATSU_SEKIRYUKA) && attacker_ptr->cut && monster_living(m_ptr->r_idx)) {
