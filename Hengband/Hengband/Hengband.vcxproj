@@ -420,6 +420,7 @@
     <ClInclude Include="..\..\src\combat\hallucination-attacks-table.h" />
     <ClInclude Include="..\..\src\combat\insults-moans.h" />
     <ClInclude Include="..\..\src\combat\martial-arts-table.h" />
+    <ClInclude Include="..\..\src\combat\monster-attack-effect.h" />
     <ClInclude Include="..\..\src\combat\monster-attack-types.h" />
     <ClInclude Include="..\..\src\io\pref-file-expressor.h" />
     <ClInclude Include="..\..\src\market\arena.h" />

@@ -53,6 +53,7 @@
 #include "combat/monster-attack-types.h"
 #include "combat/martial-arts-table.h"
 #include "combat/insults-moans.h"
+#include "combat/monster-attack-effect.h"
 
 #define BLOW_EFFECT_TYPE_NONE  0
 #define BLOW_EFFECT_TYPE_FEAR  1

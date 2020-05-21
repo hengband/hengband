@@ -43,6 +43,7 @@
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "combat/monster-attack-types.h"
+#include "combat/monster-attack-effect.h"
 
  /*
   * Pronoun arrays, by gender.

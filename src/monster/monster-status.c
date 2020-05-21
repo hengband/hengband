@@ -27,7 +27,7 @@
 #include "view/display-main-window.h"
 #include "world/world.h"
 #include "io/report.h"
-#include "melee.h"
+#include "combat/monster-attack-effect.h"
 #include "combat/monster-attack-types.h"
 
 /*!
