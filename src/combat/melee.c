@@ -53,7 +53,6 @@
 #include "combat/monster-attack-types.h"
 #include "combat/martial-arts-table.h"
 #include "combat/insults-moans.h"
-#include "combat/combat-options-type.h"
 
 #define BLOW_EFFECT_TYPE_NONE  0
 #define BLOW_EFFECT_TYPE_FEAR  1
@@ -223,7 +222,7 @@ static MULTIPLY mult_brand(player_type *player_ptr, MULTIPLY mult, const BIT_FLA
  * @param mode 剣術のスレイ型ID
  * @return スレイの倍率(/10倍)
  */
-static MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, BIT_FLAGS mode)
+static MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, combat_options mode)
 {
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 
@@ -418,7 +417,7 @@ static MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAG
  * Note that most brands and slays are x3, except Slay Animal (x2),\n
  * Slay Evil (x2), and Kill dragon (x5).\n
  */
-HIT_POINT tot_dam_aux(player_type *attacker_ptr, object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, BIT_FLAGS mode, bool thrown)
+HIT_POINT tot_dam_aux(player_type *attacker_ptr, object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, combat_options mode, bool thrown)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
@@ -483,7 +482,7 @@ HIT_POINT tot_dam_aux(player_type *attacker_ptr, object_type *o_ptr, HIT_POINT t
 * @param mode オプションフラグ
 * @return クリティカル修正が入ったダメージ値
 */
-HIT_POINT critical_norm(player_type *attacker_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, BIT_FLAGS mode)
+HIT_POINT critical_norm(player_type *attacker_ptr, WEIGHT weight, int plus, HIT_POINT dam, s16b meichuu, combat_options mode)
 {
 	/* Extract "blow" power */
 	int i = (weight + (meichuu * 3 + plus * 5) + attacker_ptr->skill_thn);
@@ -802,7 +801,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
 * @details
 * If no "weapon" is available, then "punch" the monster one time.
 */
-static void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, COMBAT_OPTION_IDX mode)
+static void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, combat_options mode)
 {
 	int num = 0, bonus, chance, vir;
 	HIT_POINT k;
@@ -1691,7 +1690,7 @@ static void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, 
 * @details
 * If no "weapon" is available, then "punch" the monster one time.
 */
-bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
+bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_options mode)
 {
 	grid_type       *g_ptr = &attacker_ptr->current_floor_ptr->grid_array[y][x];
 	monster_type    *m_ptr = &attacker_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
