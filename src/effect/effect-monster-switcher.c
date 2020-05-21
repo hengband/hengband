@@ -433,7 +433,7 @@ gf_switch_result switch_effects_monster(player_type *caster_ptr, effect_monster_
 	case GF_CAPTURE:
 		return effect_monster_capture(caster_ptr, em_ptr);
 	case GF_ATTACK:
-		return (gf_switch_result)py_attack(caster_ptr, em_ptr->y, em_ptr->x, em_ptr->dam);
+		return (gf_switch_result)do_cmd_attack(caster_ptr, em_ptr->y, em_ptr->x, em_ptr->dam);
 	case GF_ENGETSU:
 		return effect_monster_engetsu(caster_ptr, em_ptr);
 	case GF_GENOCIDE:

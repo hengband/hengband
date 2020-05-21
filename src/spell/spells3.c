@@ -2771,7 +2771,7 @@ void massacre(player_type *caster_ptr)
 		g_ptr = &caster_ptr->current_floor_ptr->grid_array[y][x];
 		m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 		if (g_ptr->m_idx && (m_ptr->ml || cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT)))
-			py_attack(caster_ptr, y, x, 0);
+			do_cmd_attack(caster_ptr, y, x, 0);
 	}
 }
 
@@ -2807,7 +2807,7 @@ bool eat_rock(player_type *caster_ptr)
 		monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
 		msg_print(_("何かが邪魔しています！", "There's something in the way!"));
 
-		if (!m_ptr->ml || !is_pet(m_ptr)) py_attack(caster_ptr, y, x, 0);
+		if (!m_ptr->ml || !is_pet(m_ptr)) do_cmd_attack(caster_ptr, y, x, 0);
 	}
 	else if (have_flag(f_ptr->flags, FF_TREE))
 	{

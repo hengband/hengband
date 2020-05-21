@@ -1690,7 +1690,7 @@ static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, boo
 * @details
 * If no "weapon" is available, then "punch" the monster one time.
 */
-bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
+bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPTION_IDX mode)
 {
 	grid_type       *g_ptr = &attacker_ptr->current_floor_ptr->grid_array[y][x];
 	monster_type    *m_ptr = &attacker_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
@@ -1919,7 +1919,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 	if (target_ptr->special_defense & KATA_IAI)
 	{
 		msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, drew and cut in one motion before %s moved."), m_name);
-		if (py_attack(target_ptr, m_ptr->fy, m_ptr->fx, HISSATSU_IAI)) return TRUE;
+		if (do_cmd_attack(target_ptr, m_ptr->fy, m_ptr->fx, HISSATSU_IAI)) return TRUE;
 	}
 
 	if ((target_ptr->special_defense & NINJA_KAWARIMI) && (randint0(55) < (target_ptr->lev*3/5+20)))
@@ -3589,7 +3589,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 		target_ptr->csp -= 7;
 		msg_format(_("%^sに反撃した！", "You counterattacked %s!"), m_target_name);
-		py_attack(target_ptr, m_ptr->fy, m_ptr->fx, HISSATSU_COUNTER);
+		do_cmd_attack(target_ptr, m_ptr->fy, m_ptr->fx, HISSATSU_COUNTER);
 		fear = FALSE;
 		target_ptr->redraw |= (PR_MANA);
 	}
