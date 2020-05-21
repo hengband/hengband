@@ -974,6 +974,9 @@
     <ClCompile Include="..\..\src\combat\hallucination-attacks-table.c">
       <Filter>combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\combat\monster-attack-types.c">
+      <Filter>combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2009,6 +2012,9 @@
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\hallucination-attacks-table.h">
+      <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\monster-attack-types.h">
       <Filter>combat</Filter>
     </ClInclude>
   </ItemGroup>

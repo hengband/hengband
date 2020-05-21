@@ -121,12 +121,6 @@ typedef struct martial_arts
 	int effect;     /* Special effects */
 } martial_arts;
 
-typedef struct mbe_info_type
-{
-	int power;        /* The attack "power" */
-	int explode_type; /* Explosion effect */
-} mbe_info_type;
-
 extern const martial_arts ma_blows[MAX_MA];
 
 extern bool test_hit_norm(player_type *attacker_ptr, HIT_RELIABILITY chance, ARMOUR_CLASS ac, bool visible);
@@ -137,5 +131,3 @@ extern bool py_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_
 extern bool make_attack_normal(player_type *targer_ptr, MONSTER_IDX m_idx);
 extern void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who);
 extern bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx);
-
-extern const mbe_info_type mbe_info[];

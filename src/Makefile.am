@@ -335,6 +335,7 @@ hengband_SOURCES = \
 	combat/melee.h combat/melee.c \
 	combat/attack-power-table.c combat/attack-power-table.h \
 	combat/hallucination-attacks-table.c combat/hallucination-attacks-table.h \
+	combat/monster-attack-types.c combat/monster-attack-types.h \
 	combat/shoot.c combat/shoot.h \
 	combat/snipe.c combat/snipe.h \
 	\

@@ -42,6 +42,7 @@
 #include "spell/process-effect.h"
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-damage-calculator.h"
+#include "combat/monster-attack-types.h"
 
  /*
   * Pronoun arrays, by gender.

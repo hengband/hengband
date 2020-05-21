@@ -170,6 +170,7 @@
     <ClCompile Include="..\..\src\cmd\cmd-menu-content-table.c" />
     <ClCompile Include="..\..\src\combat\attack-power-table.c" />
     <ClCompile Include="..\..\src\combat\hallucination-attacks-table.c" />
+    <ClCompile Include="..\..\src\combat\monster-attack-types.c" />
     <ClCompile Include="..\..\src\io\pref-file-expressor.c" />
     <ClCompile Include="..\..\src\market\arena.c" />
     <ClCompile Include="..\..\src\market\bounty-prize-table.c" />
@@ -414,6 +415,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-menu-content-table.h" />
     <ClInclude Include="..\..\src\combat\attack-power-table.h" />
     <ClInclude Include="..\..\src\combat\hallucination-attacks-table.h" />
+    <ClInclude Include="..\..\src\combat\monster-attack-types.h" />
     <ClInclude Include="..\..\src\io\pref-file-expressor.h" />
     <ClInclude Include="..\..\src\market\arena.h" />
     <ClInclude Include="..\..\src\market\bounty-prize-table.h" />
