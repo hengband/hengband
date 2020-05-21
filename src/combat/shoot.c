@@ -327,7 +327,7 @@ static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type 
 	}
 
 	/* Sniper */
-	if (snipe_type) mult = tot_dam_aux_snipe(sniper_ptr, mult, m_ptr, snipe_type);
+	if (snipe_type) mult = calc_snipe_damage_with_slay(sniper_ptr, mult, m_ptr, snipe_type);
 
 	/* Return the total damage */
 	return (tdam * mult / 10);
