@@ -73,10 +73,6 @@ typedef int COMBAT_OPTION_IDX; // py_attack()用コンバットオプション�
 #define RBE_INERTIA     34 /*!< モンスターの攻撃効果: 減速させる*/
 #define RBE_STUN        35 /*!< モンスターの攻撃効果: 朦朧とさせる*/
 
-#define MAX_MA 17 /*!< 修行僧マーシャルアーツの技数 / Monk martial arts... */
-#define MA_KNEE 1 /*!< 金的効果ID */
-#define MA_SLOW 2 /*!< 膝蹴り効果ID */
-
 #define HISSATSU_NONE   0
 #define HISSATSU_2      1
 #define HISSATSU_3WAY   2
@@ -109,19 +105,6 @@ typedef int COMBAT_OPTION_IDX; // py_attack()用コンバットオプション�
 #define HISSATSU_3DAN   29
 #define HISSATSU_100NIN 30
 #define HISSATSU_IAI    100
-
-/* For Monk martial arts */
-typedef struct martial_arts
-{
-	concptr desc;       /* A verbose attack description */
-	PLAYER_LEVEL min_level;  /* Minimum level to use */
-	int chance;     /* Chance of 'success' */
-	int dd;         /* Damage dice */
-	int ds;         /* Damage sides */
-	int effect;     /* Special effects */
-} martial_arts;
-
-extern const martial_arts ma_blows[MAX_MA];
 
 extern bool test_hit_norm(player_type *attacker_ptr, HIT_RELIABILITY chance, ARMOUR_CLASS ac, bool visible);
 extern PERCENTAGE hit_chance(player_type *attacker_ptr, HIT_RELIABILITY chance, ARMOUR_CLASS ac);
