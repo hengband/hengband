@@ -2,6 +2,23 @@
 #include "mind/samurai-slaying.h"
 #include "monster/monsterrace-hook.h"
 
+typedef struct samurai_slaying_type {
+    MULTIPLY mult;
+    BIT_FLAGS *flags;
+    monster_type *m_ptr;
+    combat_options mode;
+    monster_race *r_ptr;
+} samurai_slaying_type;
+
+static samurai_slaying_type *initialize_samurai_slaying_type(samurai_slaying_type *samurai_slaying_ptr, MULTIPLY mult, BIT_FLAGS *flags, monster_type *m_ptr, combat_options mode, monster_race *r_ptr)
+{
+    samurai_slaying_ptr->mult = mult;
+    samurai_slaying_ptr->flags = flags;
+    samurai_slaying_ptr->m_ptr = m_ptr;
+    samurai_slaying_ptr->mode = mode;
+    samurai_slaying_ptr->r_ptr = r_ptr;
+}
+
 /*!
  * @brief 剣術のスレイ倍率計算を行う /
  * Calcurate magnification of hissatsu technics
