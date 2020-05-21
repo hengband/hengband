@@ -35,7 +35,7 @@
  * @param m_ptr 目標モンスターの構造体参照ポインタ
  * @return スレイ倍率をかけたダメージ量
  */
-static MULTIPLY tot_dam_aux_shot(player_type *sniper_ptr, object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, SPELL_IDX snipe_type)
+static MULTIPLY calc_shot_damage_with_slay(player_type *sniper_ptr, object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, SPELL_IDX snipe_type)
 {
 	MULTIPLY mult = 10;
 
@@ -697,7 +697,7 @@ void exe_fire(player_type *shooter_ptr, INVENTORY_IDX item, object_type *j_ptr, 
 					else
 					{
 						/* Apply special damage */
-						tdam = tot_dam_aux_shot(shooter_ptr, q_ptr, tdam, m_ptr, snipe_type);
+						tdam = calc_shot_damage_with_slay(shooter_ptr, q_ptr, tdam, m_ptr, snipe_type);
 						tdam = critical_shot(shooter_ptr, q_ptr->weight, q_ptr->to_h, j_ptr->to_h, tdam);
 
 						/* No negative damage */
