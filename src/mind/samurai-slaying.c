@@ -84,10 +84,12 @@ static void hissatsu_serpent_tongue(player_type *attacker_ptr, samurai_slaying_t
         if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
             samurai_slaying_ptr->r_ptr->r_flagsr |= (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_POIS_MASK);
         }
+
+        return;
     }
 
     /* Otherwise, take the damage */
-    else if (have_flag(samurai_slaying_ptr->flags, TR_BRAND_POIS)) {
+    if (have_flag(samurai_slaying_ptr->flags, TR_BRAND_POIS)) {
         if (samurai_slaying_ptr->mult < 35)
             samurai_slaying_ptr->mult = 35;
     } else {
@@ -115,6 +117,28 @@ static void hissatsu_zanma_ken(samurai_slaying_type *samurai_slaying_ptr)
 }
 
 /*!
+ * @brief 破岩斬 (岩石スレイ)
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
+ * @return なし
+ */
+static void hissatsu_rock_smash(player_type *attacker_ptr, samurai_slaying_type *samurai_slaying_ptr)
+{
+    if (samurai_slaying_ptr->mode != HISSATSU_HAGAN)
+        return;
+
+    if (samurai_slaying_ptr->r_ptr->flags3 & RF3_HURT_ROCK) {
+        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
+            samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_HURT_ROCK;
+        }
+        if (samurai_slaying_ptr->mult == 10)
+            samurai_slaying_ptr->mult = 40;
+        else if (samurai_slaying_ptr->mult < 60)
+            samurai_slaying_ptr->mult = 60;
+    }
+}
+
+/*!
  * @brief 剣術のスレイ倍率計算を行う /
  * Calcurate magnification of hissatsu technics
  * @param mult 剣術のスレイ効果以前に算出している多要素の倍率(/10倍)
@@ -131,19 +155,7 @@ MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAGS *flag
     hissatsu_burning_strike(attacker_ptr, samurai_slaying_ptr);
     hissatsu_serpent_tongue(attacker_ptr, samurai_slaying_ptr);
     hissatsu_zanma_ken(samurai_slaying_ptr);
-
-    /* Rock Smash (Hurt Rock) */
-    if (mode == HISSATSU_HAGAN) {
-        if (r_ptr->flags3 & RF3_HURT_ROCK) {
-            if (is_original_ap_and_seen(attacker_ptr, m_ptr)) {
-                r_ptr->r_flags3 |= RF3_HURT_ROCK;
-            }
-            if (mult == 10)
-                mult = 40;
-            else if (mult < 60)
-                mult = 60;
-        }
-    }
+    hissatsu_rock_smash(attacker_ptr, samurai_slaying_ptr);
 
     /* Midare-Setsugekka (Cold) */
     if (mode == HISSATSU_COLD) {
