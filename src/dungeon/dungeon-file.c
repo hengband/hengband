@@ -64,6 +64,7 @@
 #include "floor/wild.h"
 #include "view/display-main-window.h"
 #include "player/player-class.h"
+#include "combat/monster-attack-types.h"
 
 #include "main/init.h"
 
@@ -2395,7 +2396,7 @@ errr parse_r_info(char *buf, header *head)
 
 		if (*t == 'd') *t++ = '\0';
 
-		r_ptr->blow[i].method = (BLOW_METHOD)n1;
+		r_ptr->blow[i].method = (rbm_type)n1;
 		r_ptr->blow[i].effect = (BLOW_EFFECT)n2;
 		r_ptr->blow[i].d_dice = atoi(s);
 		r_ptr->blow[i].d_side = atoi(t);

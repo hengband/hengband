@@ -1612,7 +1612,7 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 		if (r_ptr->blow[m].method == RBM_SHOOT) continue;
 		if (!r_ptr->r_blows[m] && !know_everything) continue;
 
-		int method = r_ptr->blow[m].method;
+		rbm_type method = r_ptr->blow[m].method;
 		int effect = r_ptr->blow[m].effect;
 		int d1 = r_ptr->blow[m].d_dice;
 		int d2 = r_ptr->blow[m].d_side;

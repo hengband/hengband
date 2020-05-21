@@ -4,7 +4,7 @@
  * @note モンスターの打撃方法 / New monster blow methods
  * 打撃の種別に応じて傷と朦朧が発生するかがコメントの通りに決まる
  */
-typedef enum mbm_type {
+typedef enum rbm_type {
     RBM_HIT = 1, /*!< モンスターの攻撃種別:殴る(傷/朦朧が半々) */
     RBM_TOUCH = 2, /*!< モンスターの攻撃種別:触る */
     RBM_PUNCH = 3, /*!< モンスターの攻撃種別:パンチする(朦朧) */
@@ -30,7 +30,7 @@ typedef enum mbm_type {
     RBM_MOAN = 23, /*!< モンスターの攻撃種別:うめく */
     RBM_SHOW = 24, /*!< モンスターの攻撃種別:歌う */
     RBM_SHOOT = 25, /*!< モンスターの攻撃種別:射撃(非打撃) */
-} mbm_type;
+} rbm_type;
 
 #define MAX_MBE 34
 
