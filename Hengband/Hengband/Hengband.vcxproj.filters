@@ -986,6 +986,9 @@
     <ClCompile Include="..\..\src\combat\attack-accuracy.c">
       <Filter>combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\combat\slaying.c">
+      <Filter>combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2039,6 +2042,9 @@
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\attack-accuracy.h">
+      <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\slaying.h">
       <Filter>combat</Filter>
     </ClInclude>
   </ItemGroup>
