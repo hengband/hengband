@@ -39,9 +39,8 @@ static void hissatsu_burning_strike(player_type *attacker_ptr, samurai_slaying_t
 
     /* Notice immunity */
     if (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) {
-        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr))
             samurai_slaying_ptr->r_ptr->r_flagsr |= (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
-        }
 
         return;
     }
@@ -51,9 +50,10 @@ static void hissatsu_burning_strike(player_type *attacker_ptr, samurai_slaying_t
         if (samurai_slaying_ptr->r_ptr->flags3 & RF3_HURT_FIRE) {
             if (samurai_slaying_ptr->mult < 70)
                 samurai_slaying_ptr->mult = 70;
-            if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
+
+            if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr))
                 samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_HURT_FIRE;
-            }
+
         } else if (samurai_slaying_ptr->mult < 35)
             samurai_slaying_ptr->mult = 35;
 
@@ -63,9 +63,9 @@ static void hissatsu_burning_strike(player_type *attacker_ptr, samurai_slaying_t
     if (samurai_slaying_ptr->r_ptr->flags3 & RF3_HURT_FIRE) {
         if (samurai_slaying_ptr->mult < 50)
             samurai_slaying_ptr->mult = 50;
-        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
+
+        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr))
             samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_HURT_FIRE;
-        }
     } else if (samurai_slaying_ptr->mult < 25)
         samurai_slaying_ptr->mult = 25;
 }
@@ -83,9 +83,8 @@ static void hissatsu_serpent_tongue(player_type *attacker_ptr, samurai_slaying_t
 
     /* Notice immunity */
     if (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_POIS_MASK) {
-        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr))
             samurai_slaying_ptr->r_ptr->r_flagsr |= (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_POIS_MASK);
-        }
 
         return;
     }
@@ -94,10 +93,8 @@ static void hissatsu_serpent_tongue(player_type *attacker_ptr, samurai_slaying_t
     if (have_flag(samurai_slaying_ptr->flags, TR_BRAND_POIS)) {
         if (samurai_slaying_ptr->mult < 35)
             samurai_slaying_ptr->mult = 35;
-    } else {
-        if (samurai_slaying_ptr->mult < 25)
+    } else if (samurai_slaying_ptr->mult < 25)
             samurai_slaying_ptr->mult = 25;
-    }
 }
 
 /*!
@@ -130,9 +127,9 @@ static void hissatsu_rock_smash(player_type *attacker_ptr, samurai_slaying_type 
         return;
 
     if (samurai_slaying_ptr->r_ptr->flags3 & RF3_HURT_ROCK) {
-        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr))
             samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_HURT_ROCK;
-        }
+
         if (samurai_slaying_ptr->mult == 10)
             samurai_slaying_ptr->mult = 40;
         else if (samurai_slaying_ptr->mult < 60)
@@ -153,9 +150,8 @@ static void hissatsu_midare_setsugetsuka(player_type *attacker_ptr, samurai_slay
 
     /* Notice immunity */
     if (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_COLD_MASK) {
-        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr))
             samurai_slaying_ptr->r_ptr->r_flagsr |= (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
-        }
 
         return;
     }
@@ -165,9 +161,9 @@ static void hissatsu_midare_setsugetsuka(player_type *attacker_ptr, samurai_slay
         if (samurai_slaying_ptr->r_ptr->flags3 & RF3_HURT_COLD) {
             if (samurai_slaying_ptr->mult < 70)
                 samurai_slaying_ptr->mult = 70;
-            if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
+
+            if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr))
                 samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_HURT_COLD;
-            }
         } else if (samurai_slaying_ptr->mult < 35)
             samurai_slaying_ptr->mult = 35;
 
@@ -177,9 +173,9 @@ static void hissatsu_midare_setsugetsuka(player_type *attacker_ptr, samurai_slay
     if (samurai_slaying_ptr->r_ptr->flags3 & RF3_HURT_COLD) {
         if (samurai_slaying_ptr->mult < 50)
             samurai_slaying_ptr->mult = 50;
-        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
+
+        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr))
             samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_HURT_COLD;
-        }
     } else if (samurai_slaying_ptr->mult < 25)
         samurai_slaying_ptr->mult = 25;
 }
@@ -197,9 +193,8 @@ static void hissatsu_lightning_eagle(player_type *attacker_ptr, samurai_slaying_
 
     /* Notice immunity */
     if (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK) {
-        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
+        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr))
             samurai_slaying_ptr->r_ptr->r_flagsr |= (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
-        }
 
         return;
     }
@@ -208,10 +203,8 @@ static void hissatsu_lightning_eagle(player_type *attacker_ptr, samurai_slaying_
     if (have_flag(samurai_slaying_ptr->flags, TR_BRAND_ELEC)) {
         if (samurai_slaying_ptr->mult < 70)
             samurai_slaying_ptr->mult = 70;
-    } else {
-        if (samurai_slaying_ptr->mult < 50)
-            samurai_slaying_ptr->mult = 50;
-    }
+    } else if (samurai_slaying_ptr->mult < 50)
+        samurai_slaying_ptr->mult = 50;
 }
 
 /*!
@@ -240,10 +233,10 @@ static void hissatsu_keiun_kininken(player_type *attacker_ptr, samurai_slaying_t
     if (samurai_slaying_ptr->mode != HISSATSU_UNDEAD)
         return;
 
-    if (samurai_slaying_ptr->r_ptr->flags3 & RF3_UNDEAD) {
+    if (samurai_slaying_ptr->r_ptr->flags3 & RF3_UNDEAD)
         if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
             samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_UNDEAD;
-        }
+
         if (samurai_slaying_ptr->mult == 10)
             samurai_slaying_ptr->mult = 70;
         else if (samurai_slaying_ptr->mult < 140)
