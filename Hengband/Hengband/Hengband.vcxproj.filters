@@ -2029,6 +2029,9 @@
     <ClInclude Include="..\..\src\combat\insults-moans.h">
       <Filter>combat</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\combat\combat-options-type.h">
+      <Filter>combat</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

@@ -61,6 +61,7 @@
 #include "effect/spells-effect-util.h"
 #include "spell/spells-type.h"
 #include "spell/process-effect.h"
+#include "combat/combat-options-type.h"
 
 /*!
  * @brief 視界内モンスターに魔法効果を与える / Apply a "project()" directly to all viewable monsters

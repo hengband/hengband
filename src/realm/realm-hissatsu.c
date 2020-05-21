@@ -28,6 +28,7 @@
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "spell/spells-detection.h"
+#include "combat/combat-options-type.h"
 
 /*!
 * @brief 剣術の各処理を行う

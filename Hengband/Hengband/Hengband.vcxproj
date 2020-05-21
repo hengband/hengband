@@ -416,6 +416,7 @@
     <ClInclude Include="..\..\src\birth\quick-start.h" />
     <ClInclude Include="..\..\src\cmd\cmd-menu-content-table.h" />
     <ClInclude Include="..\..\src\combat\attack-power-table.h" />
+    <ClInclude Include="..\..\src\combat\combat-options-type.h" />
     <ClInclude Include="..\..\src\combat\hallucination-attacks-table.h" />
     <ClInclude Include="..\..\src\combat\insults-moans.h" />
     <ClInclude Include="..\..\src\combat\martial-arts-table.h" />
