@@ -215,7 +215,7 @@ static void hissatsu_lightning_eagle(player_type *attacker_ptr, samurai_slaying_
 }
 
 /*!
- * @brief 赤流渦
+ * @brief 赤流渦 (ペインバッカー)
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
  * @return なし
@@ -227,6 +227,33 @@ static void hissatsu_bloody_maelstroem(player_type *attacker_ptr, samurai_slayin
         if (samurai_slaying_ptr->mult < tmp)
             samurai_slaying_ptr->mult = tmp;
     }
+}
+
+/*!
+ * @brief 慶雲鬼忍剣 (アンデッドスレイ)
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
+ * @return なし
+ */
+static void hissatsu_keiun_kininken(player_type *attacker_ptr, samurai_slaying_type *samurai_slaying_ptr)
+{
+    if (samurai_slaying_ptr->mode != HISSATSU_UNDEAD)
+        return;
+
+    if (samurai_slaying_ptr->r_ptr->flags3 & RF3_UNDEAD) {
+        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
+            samurai_slaying_ptr->r_ptr->r_flags3 |= RF3_UNDEAD;
+        }
+        if (samurai_slaying_ptr->mult == 10)
+            samurai_slaying_ptr->mult = 70;
+        else if (samurai_slaying_ptr->mult < 140)
+            samurai_slaying_ptr->mult = MIN(140, samurai_slaying_ptr->mult + 60);
+    }
+
+    if (samurai_slaying_ptr->mult == 10)
+        samurai_slaying_ptr->mult = 40;
+    else if (samurai_slaying_ptr->mult < 60)
+        samurai_slaying_ptr->mult = MIN(60, samurai_slaying_ptr->mult + 30);
 }
 
 /*!
@@ -250,25 +277,9 @@ MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAGS *flag
     hissatsu_midare_setsugetsuka(attacker_ptr, samurai_slaying_ptr);
     hissatsu_lightning_eagle(attacker_ptr, samurai_slaying_ptr);
     hissatsu_bloody_maelstroem(attacker_ptr, samurai_slaying_ptr);
-
-    /* Keiun-Kininken */
-    if (mode == HISSATSU_UNDEAD) {
-        if (r_ptr->flags3 & RF3_UNDEAD) {
-            if (is_original_ap_and_seen(attacker_ptr, m_ptr)) {
-                r_ptr->r_flags3 |= RF3_UNDEAD;
-            }
-            if (mult == 10)
-                mult = 70;
-            else if (mult < 140)
-                mult = MIN(140, mult + 60);
-        }
-        if (mult == 10)
-            mult = 40;
-        else if (mult < 60)
-            mult = MIN(60, mult + 30);
-    }
-
+    hissatsu_keiun_kininken(attacker_ptr, samurai_slaying_ptr);
     if (mult > 150)
         mult = 150;
+
     return mult;
 }
