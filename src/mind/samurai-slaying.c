@@ -69,6 +69,34 @@ static void hissatsu_burning_strike(player_type *attacker_ptr, samurai_slaying_t
 }
 
 /*!
+ * @brief サーペンツタン (毒殺スレイ)
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
+ * @return なし
+ */
+static void hissatsu_serpent_tongue(player_type *attacker_ptr, samurai_slaying_type *samurai_slaying_ptr)
+{
+    if (samurai_slaying_ptr->mode != HISSATSU_POISON)
+        return;
+
+    /* Notice immunity */
+    if (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_POIS_MASK) {
+        if (is_original_ap_and_seen(attacker_ptr, samurai_slaying_ptr->m_ptr)) {
+            samurai_slaying_ptr->r_ptr->r_flagsr |= (samurai_slaying_ptr->r_ptr->flagsr & RFR_EFF_IM_POIS_MASK);
+        }
+    }
+
+    /* Otherwise, take the damage */
+    else if (have_flag(samurai_slaying_ptr->flags, TR_BRAND_POIS)) {
+        if (samurai_slaying_ptr->mult < 35)
+            samurai_slaying_ptr->mult = 35;
+    } else {
+        if (samurai_slaying_ptr->mult < 25)
+            samurai_slaying_ptr->mult = 25;
+    }
+}
+
+/*!
  * @brief 剣術のスレイ倍率計算を行う /
  * Calcurate magnification of hissatsu technics
  * @param mult 剣術のスレイ効果以前に算出している多要素の倍率(/10倍)
@@ -83,25 +111,7 @@ MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAGS *flag
     samurai_slaying_type tmp_slaying;
     samurai_slaying_type *samurai_slaying_ptr = initialize_samurai_slaying_type(&tmp_slaying, mult, flags, m_ptr, mode, r_ptr);
     hissatsu_burning_strike(attacker_ptr, samurai_slaying_ptr);
-
-    /* Serpent's Tongue (Poison) */
-    if (mode == HISSATSU_POISON) {
-        /* Notice immunity */
-        if (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK) {
-            if (is_original_ap_and_seen(attacker_ptr, m_ptr)) {
-                r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_POIS_MASK);
-            }
-        }
-
-        /* Otherwise, take the damage */
-        else if (have_flag(flags, TR_BRAND_POIS)) {
-            if (mult < 35)
-                mult = 35;
-        } else {
-            if (mult < 25)
-                mult = 25;
-        }
-    }
+    hissatsu_serpent_tongue(attacker_ptr, samurai_slaying_ptr);
 
     /* Zammaken (Nonliving Evil) */
     if (mode == HISSATSU_ZANMA) {
