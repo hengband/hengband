@@ -215,6 +215,21 @@ static void hissatsu_lightning_eagle(player_type *attacker_ptr, samurai_slaying_
 }
 
 /*!
+ * @brief 赤流渦
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
+ * @return なし
+ */
+static void hissatsu_bloody_maelstroem(player_type *attacker_ptr, samurai_slaying_type *samurai_slaying_ptr)
+{
+    if ((samurai_slaying_ptr->mode == HISSATSU_SEKIRYUKA) && attacker_ptr->cut && monster_living(samurai_slaying_ptr->m_ptr->r_idx)) {
+        MULTIPLY tmp = MIN(100, MAX(10, attacker_ptr->cut / 10));
+        if (samurai_slaying_ptr->mult < tmp)
+            samurai_slaying_ptr->mult = tmp;
+    }
+}
+
+/*!
  * @brief 剣術のスレイ倍率計算を行う /
  * Calcurate magnification of hissatsu technics
  * @param mult 剣術のスレイ効果以前に算出している多要素の倍率(/10倍)
@@ -234,13 +249,7 @@ MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAGS *flag
     hissatsu_rock_smash(attacker_ptr, samurai_slaying_ptr);
     hissatsu_midare_setsugetsuka(attacker_ptr, samurai_slaying_ptr);
     hissatsu_lightning_eagle(attacker_ptr, samurai_slaying_ptr);
-
-    /* Bloody Maelstrom */
-    if ((mode == HISSATSU_SEKIRYUKA) && attacker_ptr->cut && monster_living(m_ptr->r_idx)) {
-        MULTIPLY tmp = MIN(100, MAX(10, attacker_ptr->cut / 10));
-        if (mult < tmp)
-            mult = tmp;
-    }
+    hissatsu_bloody_maelstroem(attacker_ptr, samurai_slaying_ptr);
 
     /* Keiun-Kininken */
     if (mode == HISSATSU_UNDEAD) {
