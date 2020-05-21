@@ -801,7 +801,7 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
 * @details
 * If no "weapon" is available, then "punch" the monster one time.
 */
-static void py_attack_aux(player_type *attacker_ptr, POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, COMBAT_OPTION_IDX mode)
+static void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, COMBAT_OPTION_IDX mode)
 {
 	int num = 0, bonus, chance, vir;
 	HIT_POINT k;
@@ -1836,8 +1836,8 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, COMBAT_OPT
 	attacker_ptr->riding_t_m_idx = g_ptr->m_idx;
 	bool fear = FALSE;
 	bool mdeath = FALSE;
-	if (attacker_ptr->migite) py_attack_aux(attacker_ptr, y, x, &fear, &mdeath, 0, mode);
-	if (attacker_ptr->hidarite && !mdeath) py_attack_aux(attacker_ptr, y, x, &fear, &mdeath, 1, mode);
+	if (attacker_ptr->migite) exe_player_attack_to_monster(attacker_ptr, y, x, &fear, &mdeath, 0, mode);
+	if (attacker_ptr->hidarite && !mdeath) exe_player_attack_to_monster(attacker_ptr, y, x, &fear, &mdeath, 1, mode);
 
 	/* Mutations which yield extra 'natural' attacks */
 	if (!mdeath)
