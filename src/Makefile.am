@@ -339,6 +339,7 @@ hengband_SOURCES = \
 	combat/martial-arts-table.c combat/martial-arts-table.h \
 	combat/insults-moans.c combat/insults-moans.h \
 	combat/monster-attack-effects.h \
+	combat/attack-accuracy.c combat/attack-accuracy.h \
 	combat/combat-options-type.h \
 	combat/shoot.c combat/shoot.h \
 	combat/snipe.c combat/snipe.h \

@@ -8,7 +8,7 @@
 #include "object/object-hook.h"
 #include "combat/shoot.h"
 #include "inventory/player-inventory.h"
-#include "combat/melee.h"
+#include "combat/attack-accuracy.h"
 #include "market/building-util.h"
 #include "core/stuff-handler.h"
 

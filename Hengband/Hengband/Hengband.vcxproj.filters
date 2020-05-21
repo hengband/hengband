@@ -983,6 +983,9 @@
     <ClCompile Include="..\..\src\combat\insults-moans.c">
       <Filter>combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\combat\attack-accuracy.c">
+      <Filter>combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2033,6 +2036,9 @@
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\monster-attack-effect.h">
+      <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\attack-accuracy.h">
       <Filter>combat</Filter>
     </ClInclude>
   </ItemGroup>
