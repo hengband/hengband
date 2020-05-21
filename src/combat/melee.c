@@ -79,7 +79,7 @@
  * Note that most brands and slays are x3, except Slay Animal (x2),\n
  * Slay Evil (x2), and Kill dragon (x5).\n
  */
-HIT_POINT tot_dam_aux(player_type *attacker_ptr, object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, combat_options mode, bool thrown)
+HIT_POINT calc_attack_damage_with_slay(player_type *attacker_ptr, object_type *o_ptr, HIT_POINT tdam, monster_type *m_ptr, combat_options mode, bool thrown)
 {
 	BIT_FLAGS flgs[TR_FLAG_SIZE];
 	object_flags(o_ptr, flgs);
@@ -929,7 +929,7 @@ static void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, 
 		else if (o_ptr->k_idx)
 		{
 			k = damroll(o_ptr->dd + attacker_ptr->to_dd[hand], o_ptr->ds + attacker_ptr->to_ds[hand]);
-			k = tot_dam_aux(attacker_ptr, o_ptr, k, m_ptr, mode, FALSE);
+			k = calc_attack_damage_with_slay(attacker_ptr, o_ptr, k, m_ptr, mode, FALSE);
 
 			if (backstab)
 			{
