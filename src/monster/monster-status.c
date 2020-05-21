@@ -28,7 +28,7 @@
 #include "world/world.h"
 #include "io/report.h"
 #include "melee.h"
-
+#include "combat/monster-attack-types.h"
 
 /*!
 * @brief モンスターIDからPOWERFULフラグの有無を取得する /
