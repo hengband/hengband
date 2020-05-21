@@ -97,6 +97,24 @@ static void hissatsu_serpent_tongue(player_type *attacker_ptr, samurai_slaying_t
 }
 
 /*!
+ * @brief 二重の極み^h^h^h^h^h 斬魔剣弐の太刀 (邪悪無生命スレイ)
+ * @param samurai_slaying_ptr スレイ計算に必要なパラメータ群への参照ポインタ
+ * @return なし
+ */
+static void hissatsu_zanma_ken(samurai_slaying_type *samurai_slaying_ptr)
+{
+    if (samurai_slaying_ptr->mode == HISSATSU_ZANMA)
+        return;
+
+    if (!monster_living(samurai_slaying_ptr->m_ptr->r_idx) && (samurai_slaying_ptr->r_ptr->flags3 & RF3_EVIL)) {
+        if (samurai_slaying_ptr->mult < 15)
+            samurai_slaying_ptr->mult = 25;
+        else if (samurai_slaying_ptr->mult < 50)
+            samurai_slaying_ptr->mult = MIN(50, samurai_slaying_ptr->mult + 20);
+    }
+}
+
+/*!
  * @brief 剣術のスレイ倍率計算を行う /
  * Calcurate magnification of hissatsu technics
  * @param mult 剣術のスレイ効果以前に算出している多要素の倍率(/10倍)
@@ -112,16 +130,7 @@ MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAGS *flag
     samurai_slaying_type *samurai_slaying_ptr = initialize_samurai_slaying_type(&tmp_slaying, mult, flags, m_ptr, mode, r_ptr);
     hissatsu_burning_strike(attacker_ptr, samurai_slaying_ptr);
     hissatsu_serpent_tongue(attacker_ptr, samurai_slaying_ptr);
-
-    /* Zammaken (Nonliving Evil) */
-    if (mode == HISSATSU_ZANMA) {
-        if (!monster_living(m_ptr->r_idx) && (r_ptr->flags3 & RF3_EVIL)) {
-            if (mult < 15)
-                mult = 25;
-            else if (mult < 50)
-                mult = MIN(50, mult + 20);
-        }
-    }
+    hissatsu_zanma_ken(samurai_slaying_ptr);
 
     /* Rock Smash (Hurt Rock) */
     if (mode == HISSATSU_HAGAN) {
