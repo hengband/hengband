@@ -640,8 +640,8 @@ static void roff_aux(player_type *player_ptr, MONRACE_IDX r_idx, BIT_FLAGS mode)
 			for (int n = 0; n < A_MAX; n++)
 			{
 				bool is_reinforced = r_ptr->reinforce_id[n] > 0;
-				is_reinforced &= r_ptr->reinforce_dd[n];
-				is_reinforced &= r_ptr->reinforce_ds[n];
+				is_reinforced &= r_ptr->reinforce_dd[n] > 0;
+				is_reinforced &= r_ptr->reinforce_ds[n] > 0;
 				if (!is_reinforced) continue;
 
 				monster_race *rf_ptr = &r_info[r_ptr->reinforce_id[n]];
