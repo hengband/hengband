@@ -176,6 +176,7 @@
     <ClCompile Include="..\..\src\combat\monster-attack-types.c" />
     <ClCompile Include="..\..\src\combat\attack-accuracy.c" />
     <ClCompile Include="..\..\src\combat\slaying.c" />
+    <ClCompile Include="..\..\src\inventory\inventory-damage.c" />
     <ClCompile Include="..\..\src\io\pref-file-expressor.c" />
     <ClCompile Include="..\..\src\market\arena.c" />
     <ClCompile Include="..\..\src\market\bounty-prize-table.c" />
@@ -429,6 +430,7 @@
     <ClInclude Include="..\..\src\combat\monster-attack-types.h" />
     <ClInclude Include="..\..\src\combat\attack-accuracy.h" />
     <ClInclude Include="..\..\src\combat\slaying.h" />
+    <ClInclude Include="..\..\src\inventory\inventory-damage.h" />
     <ClInclude Include="..\..\src\io\pref-file-expressor.h" />
     <ClInclude Include="..\..\src\market\arena.h" />
     <ClInclude Include="..\..\src\market\bounty-prize-table.h" />

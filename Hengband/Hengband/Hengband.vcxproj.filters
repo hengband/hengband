@@ -995,6 +995,9 @@
     <ClCompile Include="..\..\src\combat\attack-criticality.c">
       <Filter>combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\inventory\inventory-damage.c">
+      <Filter>inventory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2058,6 +2061,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\combat\attack-criticality.h">
       <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\inventory\inventory-damage.h">
+      <Filter>inventory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

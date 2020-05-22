@@ -9,6 +9,7 @@
 #include "object/object-broken.h"
 #include "object/object-curse.h"
 #include "player/player-damage.h"
+#include "inventory/inventory-damage.h"
 #include "player/player-effects.h"
 #include "player/mimic-info-table.h"
 #include "spell/spells-type.h"
