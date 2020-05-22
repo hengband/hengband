@@ -19,7 +19,6 @@
 #include "monster/monster-status.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
-#include "core/stuff-handler.h"
 #include "monster/monsterrace-hook.h"
 #include "combat/slaying.h"
 #include "io/files-util.h"
@@ -27,6 +26,7 @@
 #include "spell/spells3.h"
 #include "spell/spells-floor.h"
 #include "combat/player-attack-util.h"
+#include "object/death-scythe.h"
 
 static player_attack_type *initialize_player_attack_type(player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr)
 {
@@ -242,142 +242,6 @@ static bool decide_attack_hit(player_type *attacker_ptr, player_attack_type *pa_
         success_hit = FALSE;
 
     return success_hit;
-}
-
-/*!
- * @brief 死の大鎌ダメージが跳ね返ってきた時の、種族ごとのダメージ倍率を返す
- * @param attacker_ptr プレーヤーへの参照ポインタ
- * @return 倍率 (実際は1/10になる)
- */
-static int calc_death_scythe_reflection_magnificant_mimic_none(player_type *attacker_ptr)
-{
-    switch (attacker_ptr->prace) {
-    case RACE_YEEK:
-    case RACE_KLACKON:
-    case RACE_HUMAN:
-    case RACE_AMBERITE:
-    case RACE_DUNADAN:
-    case RACE_BARBARIAN:
-    case RACE_BEASTMAN:
-        return 25;
-    case RACE_HALF_ORC:
-    case RACE_HALF_TROLL:
-    case RACE_HALF_OGRE:
-    case RACE_HALF_GIANT:
-    case RACE_HALF_TITAN:
-    case RACE_CYCLOPS:
-    case RACE_IMP:
-    case RACE_SKELETON:
-    case RACE_ZOMBIE:
-    case RACE_VAMPIRE:
-    case RACE_SPECTRE:
-    case RACE_BALROG:
-    case RACE_DRACONIAN:
-        return 30;
-    default:
-        return 10;
-    }
-}
-
-/*!
- * @brief 死の大鎌ダメージが跳ね返ってきた時の、変身中の種族も考慮したダメージ倍率を返す
- * @param attacker_ptr プレーヤーへの参照ポインタ
- * @return 倍率 (実際は1/10になる)
- */
-static int calc_death_scythe_reflection_magnificant(player_type *attacker_ptr)
-{
-    switch (attacker_ptr->mimic_form) {
-    case MIMIC_NONE:
-        return calc_death_scythe_reflection_magnificant_mimic_none(attacker_ptr);
-    case MIMIC_DEMON:
-    case MIMIC_DEMON_LORD:
-    case MIMIC_VAMPIRE:
-        return 30;
-    default:
-        return 10;
-    }
-}
-
-/*!
- * @brief 耐性等に応じて死の大鎌による反射ダメージ倍率を補正する
- * @param attacker_ptr プレーヤーへの参照ポインタ
- * @param magnificant ダメージ倍率
- * @param death_scythe_flags 死の大鎌に関するオブジェクトフラグ配列
- * @return なし
- */
-static void compensate_death_scythe_reflection_magnificant(player_type *attacker_ptr, int *magnificant, BIT_FLAGS *death_scythe_flags)
-{
-    if ((attacker_ptr->align < 0) && (*magnificant < 20))
-        *magnificant = 20;
-
-    if (!(attacker_ptr->resist_acid || is_oppose_acid(attacker_ptr) || attacker_ptr->immune_acid) && (*magnificant < 25))
-        *magnificant = 25;
-
-    if (!(attacker_ptr->resist_elec || is_oppose_elec(attacker_ptr) || attacker_ptr->immune_elec) && (*magnificant < 25))
-        *magnificant = 25;
-
-    if (!(attacker_ptr->resist_fire || is_oppose_fire(attacker_ptr) || attacker_ptr->immune_fire) && (*magnificant < 25))
-        *magnificant = 25;
-
-    if (!(attacker_ptr->resist_cold || is_oppose_cold(attacker_ptr) || attacker_ptr->immune_cold) && (*magnificant < 25))
-        *magnificant = 25;
-
-    if (!(attacker_ptr->resist_pois || is_oppose_pois(attacker_ptr)) && (*magnificant < 25))
-        *magnificant = 25;
-
-    if ((attacker_ptr->pclass != CLASS_SAMURAI) && (have_flag(death_scythe_flags, TR_FORCE_WEAPON)) && (attacker_ptr->csp > (attacker_ptr->msp / 30))) {
-        attacker_ptr->csp -= (1 + (attacker_ptr->msp / 30));
-        attacker_ptr->redraw |= (PR_MANA);
-        *magnificant = *magnificant * 3 / 2 + 20;
-    }
-}
-
-/*!
- * @brief 死の大鎌による反射ダメージ倍率を更に上げる
- * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
- */
-static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
-{
-    if (!one_in_(6))
-        return;
-
-    int more_magnificant = 2;
-    msg_format(_("グッサリ切り裂かれた！", "Your weapon cuts deep into yourself!"));
-    while (one_in_(4))
-        more_magnificant++;
-
-    pa_ptr->attack_damage *= (HIT_POINT)more_magnificant;
-}
-
-/*!
- * @brief 死の大鎌によるダメージ反射のメインルーチン
- * @param attacker_ptr プレーヤーへの参照ポインタ
- * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
- */
-static void process_death_scythe_reflection(player_type *attacker_ptr, player_attack_type *pa_ptr)
-{
-    BIT_FLAGS death_scythe_flags[TR_FLAG_SIZE];
-    sound(SOUND_HIT);
-    msg_format(_("ミス！ %sにかわされた。", "You miss %s."), pa_ptr->m_name);
-    msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));
-
-    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
-    object_flags(o_ptr, death_scythe_flags);
-    pa_ptr->attack_damage = damroll(o_ptr->dd + attacker_ptr->to_dd[pa_ptr->hand], o_ptr->ds + attacker_ptr->to_ds[pa_ptr->hand]);
-    int magnificant = calc_death_scythe_reflection_magnificant(attacker_ptr);
-    compensate_death_scythe_reflection_magnificant(attacker_ptr, &magnificant, death_scythe_flags);
-    pa_ptr->attack_damage *= (HIT_POINT)magnificant;
-    pa_ptr->attack_damage /= 10;
-    pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[pa_ptr->hand], pa_ptr->mode);
-    death_scythe_reflection_critial_hit(pa_ptr);
-    pa_ptr->attack_damage += (attacker_ptr->to_d[pa_ptr->hand] + o_ptr->to_d);
-    if (pa_ptr->attack_damage < 0)
-        pa_ptr->attack_damage = 0;
-
-    take_hit(attacker_ptr, DAMAGE_FORCE, pa_ptr->attack_damage, _("死の大鎌", "Death scythe"), -1);
-    handle_stuff(attacker_ptr);
 }
 
 /*!

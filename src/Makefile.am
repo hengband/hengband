@@ -200,6 +200,7 @@ hengband_SOURCES = \
 	object/object-flavor.c object/object-flavor.h \
 	object/object-ego.c object/object-ego.h \
 	object/warning.c object/warning.h \
+	object/death-scythe.c object/death-scythe.h \
 	\
 	inventory/simple-appraiser.c inventory/simple-appraiser.h \
 	inventory/inventory-curse.c inventory/inventory-curse.h \

@@ -1004,6 +1004,9 @@
     <ClCompile Include="..\..\src\combat\player-attack.c">
       <Filter>combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\death-scythe.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2079,6 +2082,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\combat\player-attack-util.h">
       <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\death-scythe.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
