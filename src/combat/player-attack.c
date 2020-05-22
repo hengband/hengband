@@ -362,6 +362,37 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
 }
 
 /*!
+ * @brief 死の大鎌によるダメージ反射のメインルーチン
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param m_name 攻撃を試みたモンスター名
+ * @return なし
+ */
+static void process_death_scythe_reflection(player_type *attacker_ptr, player_attack_type *pa_ptr, GAME_TEXT *m_name)
+{
+    BIT_FLAGS death_scythe_flags[TR_FLAG_SIZE];
+    sound(SOUND_HIT);
+    msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name);
+    msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));
+
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    object_flags(o_ptr, death_scythe_flags);
+    pa_ptr->attack_damage = damroll(o_ptr->dd + attacker_ptr->to_dd[pa_ptr->hand], o_ptr->ds + attacker_ptr->to_ds[pa_ptr->hand]);
+    int magnificant = calc_death_scythe_reflection_magnificant(attacker_ptr);
+    compensate_death_scythe_reflection_magnificant(attacker_ptr, &magnificant, death_scythe_flags);
+    pa_ptr->attack_damage *= (HIT_POINT)magnificant;
+    pa_ptr->attack_damage /= 10;
+    pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[pa_ptr->hand], pa_ptr->mode);
+    death_scythe_reflection_critial_hit(pa_ptr);
+    pa_ptr->attack_damage += (attacker_ptr->to_d[pa_ptr->hand] + o_ptr->to_d);
+    if (pa_ptr->attack_damage < 0)
+        pa_ptr->attack_damage = 0;
+
+    take_hit(attacker_ptr, DAMAGE_FORCE, pa_ptr->attack_damage, _("死の大鎌", "Death scythe"), -1);
+    handle_stuff(attacker_ptr);
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -376,7 +407,6 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
  */
 void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, combat_options mode)
 {
-    GAME_TEXT m_name[MAX_NLEN];
     bool vorpal_cut = FALSE;
     int chaos_effect = 0;
     bool do_quake = FALSE;
@@ -402,6 +432,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
     /* Disturb the monster */
     (void)set_monster_csleep(attacker_ptr, g_ptr->m_idx, 0);
+    GAME_TEXT m_name[MAX_NLEN];
     monster_desc(attacker_ptr, m_name, m_ptr, 0);
 
     int chance = calc_attack_quality(attacker_ptr, pa_ptr);
@@ -419,24 +450,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             pa_ptr->suprise_attack = FALSE; /* Clumsy! */
 
             if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3)) {
-                BIT_FLAGS death_scythe_flags[TR_FLAG_SIZE];
-                sound(SOUND_HIT);
-                msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name);
-                msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));
-                object_flags(o_ptr, death_scythe_flags);
-                pa_ptr->attack_damage = damroll(o_ptr->dd + attacker_ptr->to_dd[hand], o_ptr->ds + attacker_ptr->to_ds[hand]);
-                int magnificant = calc_death_scythe_reflection_magnificant(attacker_ptr);
-                compensate_death_scythe_reflection_magnificant(attacker_ptr, &magnificant, death_scythe_flags);
-                pa_ptr->attack_damage *= (HIT_POINT)magnificant;
-                pa_ptr->attack_damage /= 10;
-                pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[hand], mode);
-                death_scythe_reflection_critial_hit(pa_ptr);
-                pa_ptr->attack_damage += (attacker_ptr->to_d[hand] + o_ptr->to_d);
-                if (pa_ptr->attack_damage < 0)
-                    pa_ptr->attack_damage = 0;
-
-                take_hit(attacker_ptr, DAMAGE_FORCE, pa_ptr->attack_damage, _("死の大鎌", "Death scythe"), -1);
-                handle_stuff(attacker_ptr);
+                process_death_scythe_reflection(attacker_ptr, pa_ptr, m_name);
             } else {
                 sound(SOUND_MISS);
                 msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name);
