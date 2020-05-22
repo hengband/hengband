@@ -291,6 +291,25 @@ static int calc_death_scythe_reflection_magnificant_mimic_none(player_type *atta
 }
 
 /*!
+ * @brief 死の大鎌ダメージが跳ね返ってきた時の、変身中の種族も考慮したダメージ倍率を返す
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @return 倍率 (実際は1/10になる)
+ */
+static int calc_death_scythe_reflection_magnificant(player_type *attacker_ptr)
+{
+    switch (attacker_ptr->mimic_form) {
+    case MIMIC_NONE:
+        return calc_death_scythe_reflection_magnificant_mimic_none(attacker_ptr);
+    case MIMIC_DEMON:
+    case MIMIC_DEMON_LORD:
+    case MIMIC_VAMPIRE:
+        return 30;
+    default:
+        return 10;
+    }
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -354,21 +373,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));
                 object_flags(o_ptr, flgs_aux);
                 pa_ptr->attack_damage = damroll(o_ptr->dd + attacker_ptr->to_dd[hand], o_ptr->ds + attacker_ptr->to_ds[hand]);
-                int magnificant;
-                switch (attacker_ptr->mimic_form) {
-                case MIMIC_NONE:
-                    magnificant = calc_death_scythe_reflection_magnificant_mimic_none(attacker_ptr);
-                    break;
-                case MIMIC_DEMON:
-                case MIMIC_DEMON_LORD:
-                case MIMIC_VAMPIRE:
-                    magnificant = 30;
-                    break;
-                default:
-                    magnificant = 10;
-                    break;
-                }
-
+                int magnificant = calc_death_scythe_reflection_magnificant(attacker_ptr);
                 if (attacker_ptr->align < 0 && magnificant < 20)
                     magnificant = 20;
                 if (!(attacker_ptr->resist_acid || is_oppose_acid(attacker_ptr) || attacker_ptr->immune_acid) && (magnificant < 25))
