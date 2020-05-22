@@ -200,6 +200,27 @@ static int calc_attack_quality(player_type *attacker_ptr, player_attack_type *pa
 }
 
 /*!
+ * @brief 攻撃回数を決定する
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
+ * @details 毒針は確定で1回
+ */
+static void calc_num_blow(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    if ((pa_ptr->mode == HISSATSU_KYUSHO) || (pa_ptr->mode == HISSATSU_MINEUCHI) || (pa_ptr->mode == HISSATSU_3DAN) || (pa_ptr->mode == HISSATSU_IAI))
+        pa_ptr->num_blow = 1;
+    else if (pa_ptr->mode == HISSATSU_COLD)
+        pa_ptr->num_blow = attacker_ptr->num_blow[pa_ptr->hand] + 2;
+    else
+        pa_ptr->num_blow = attacker_ptr->num_blow[pa_ptr->hand];
+
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
+        pa_ptr->num_blow = 1;
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -214,20 +235,8 @@ static int calc_attack_quality(player_type *attacker_ptr, player_attack_type *pa
  */
 void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, combat_options mode)
 {
-    int num = 0;
     HIT_POINT k;
-
-    floor_type *floor_ptr = attacker_ptr->current_floor_ptr;
-    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
-
-    monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
-
-    /* Access the weapon */
-    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + hand];
-
     GAME_TEXT m_name[MAX_NLEN];
-
     bool success_hit = FALSE;
     bool vorpal_cut = FALSE;
     int chaos_effect = 0;
@@ -239,6 +248,11 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     bool can_drain = FALSE;
     int drain_left = MAX_VAMPIRIC_DRAIN;
     BIT_FLAGS flgs[TR_FLAG_SIZE]; /* A massive hack -- life-draining weapons */
+
+    floor_type *floor_ptr = attacker_ptr->current_floor_ptr;
+    grid_type *g_ptr = &floor_ptr->grid_array[y][x];
+    monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
+    monster_race *r_ptr = &r_info[m_ptr->r_idx];
     bool is_human = (r_ptr->d_char == 'p');
     bool is_lowlevel = (r_ptr->level < (attacker_ptr->lev - 15));
 
@@ -252,21 +266,13 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     monster_desc(attacker_ptr, m_name, m_ptr, 0);
 
     int chance = calc_attack_quality(attacker_ptr, pa_ptr);
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
     bool is_zantetsu_nullified = ((o_ptr->name1 == ART_ZANTETSU) && (r_ptr->d_char == 'j'));
     bool is_ej_nullified = ((o_ptr->name1 == ART_EXCALIBUR_J) && (r_ptr->d_char == 'S'));
-
-    if ((mode == HISSATSU_KYUSHO) || (mode == HISSATSU_MINEUCHI) || (mode == HISSATSU_3DAN) || (mode == HISSATSU_IAI))
-        pa_ptr->num_blow = 1;
-    else if (mode == HISSATSU_COLD)
-        pa_ptr->num_blow = attacker_ptr->num_blow[hand] + 2;
-    else
-        pa_ptr->num_blow = attacker_ptr->num_blow[hand];
-
-    /* Hack -- DOKUBARI always hit once */
-    if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
-        pa_ptr->num_blow = 1;
+    calc_num_blow(attacker_ptr, pa_ptr);
 
     /* Attack once for each legal blow */
+    int num = 0;
     while ((num++ < pa_ptr->num_blow) && !attacker_ptr->is_dead) {
         if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (mode == HISSATSU_KYUSHO)) {
             int n = 1;
