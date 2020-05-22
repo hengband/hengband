@@ -103,6 +103,32 @@ static void attack_classify(player_type *attacker_ptr, player_attack_type *pa_pt
 }
 
 /*!
+ * @brief マーシャルアーツの技能値を増加させる
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void get_bare_knuckle_exp(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    if ((r_ptr->level + 10) <= attacker_ptr->lev ||
+        (attacker_ptr->skill_exp[GINOU_SUDE] >= s_info[attacker_ptr->pclass].s_max[GINOU_SUDE]))
+        return;
+
+    if (attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_BEGINNER)
+        attacker_ptr->skill_exp[GINOU_SUDE] += 40;
+    else if ((attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_SKILLED))
+        attacker_ptr->skill_exp[GINOU_SUDE] += 5;
+    else if ((attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_EXPERT) && (attacker_ptr->lev > 19))
+        attacker_ptr->skill_exp[GINOU_SUDE] += 1;
+    else if ((attacker_ptr->lev > 34))
+        if (one_in_(3))
+            attacker_ptr->skill_exp[GINOU_SUDE] += 1;
+
+    attacker_ptr->update |= (PU_BONUS);
+}
+
+/*!
  * @brief 素手の時と武器を持っている時で処理を分ける
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
@@ -112,23 +138,9 @@ static void attack_check_bare_knuckle(player_type *attacker_ptr, player_attack_t
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
-    if (!o_ptr->k_idx) /* Empty hand */
+    if (!o_ptr->k_idx == 0)
     {
-        if ((r_ptr->level + 10) > attacker_ptr->lev) {
-            if (attacker_ptr->skill_exp[GINOU_SUDE] < s_info[attacker_ptr->pclass].s_max[GINOU_SUDE]) {
-                if (attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_BEGINNER)
-                    attacker_ptr->skill_exp[GINOU_SUDE] += 40;
-                else if ((attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_SKILLED))
-                    attacker_ptr->skill_exp[GINOU_SUDE] += 5;
-                else if ((attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_EXPERT) && (attacker_ptr->lev > 19))
-                    attacker_ptr->skill_exp[GINOU_SUDE] += 1;
-                else if ((attacker_ptr->lev > 34))
-                    if (one_in_(3))
-                        attacker_ptr->skill_exp[GINOU_SUDE] += 1;
-                attacker_ptr->update |= (PU_BONUS);
-            }
-        }
-
+        get_bare_knuckle_exp(attacker_ptr, pa_ptr);
         return;
     }
 
@@ -150,6 +162,7 @@ static void attack_check_bare_knuckle(player_type *attacker_ptr, player_attack_t
         amount = 1;
     else if ((attacker_ptr->lev > 34) && one_in_(2))
         amount = 1;
+
     attacker_ptr->weapon_exp[tval][sval] += amount;
     attacker_ptr->update |= (PU_BONUS);
 }
