@@ -173,51 +173,6 @@ static int monster_critical(DICE_NUMBER dice, DICE_SID sides, HIT_POINT dam)
 	return (1 + max);
 }
 
-
-/*!
- * @brief モンスター打撃の命中を判定する /
- * Determine if a monster attack against the player succeeds.
- * @param power 打撃属性毎の基本命中値
- * @param level モンスターのレベル
- * @param stun モンスターの朦朧値
- * @return TRUEならば命中判定
- * @details
- * Always miss 5% of the time, Always hit 5% of the time.
- * Otherwise, match monster power against player armor.
- */
-static int check_hit(player_type *target_ptr, int power, DEPTH level, int stun)
-{
-	int k = randint0(100);
-	if (stun && one_in_(2)) return FALSE;
-	if (k < 10) return (k < 5);
-	int i = (power + (level * 3));
-
-	int ac = target_ptr->ac + target_ptr->to_a;
-	if (target_ptr->special_attack & ATTACK_SUIKEN) ac += (target_ptr->lev * 2);
-
-	if ((i > 0) && (randint1(i) > ((ac * 3) / 4))) return TRUE;
-	return FALSE;
-}
-
-/*!
- * @brief モンスターから敵モンスターへの命中判定
- * @param power 打撃属性による基本命中値
- * @param level 攻撃側モンスターのレベル
- * @param ac 目標モンスターのAC
- * @param stun 攻撃側モンスターが朦朧状態ならTRUEを返す
- * @return 命中ならばTRUEを返す
- */
-static int check_hit2(int power, DEPTH level, ARMOUR_CLASS ac, int stun)
-{
-	int k = randint0(100);
-	if (stun && one_in_(2)) return FALSE;
-	if (k < 10) return (k < 5);
-	int i = (power + (level * 3));
-
-	if ((i > 0) && (randint1(i) > ((ac * 3) / 4))) return TRUE;
-	return FALSE;
-}
-
 /*!
 * @brief 敵オーラによるプレイヤーのダメージ処理（補助）
 * @param m_ptr オーラを持つモンスターの構造体参照ポインタ
