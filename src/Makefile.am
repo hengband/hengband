@@ -334,6 +334,7 @@ hengband_SOURCES = \
 	cmd/cmd-zaprod.c cmd/cmd-zaprod.h cmd/cmd-zapwand.c cmd/cmd-zapwand.h \
 	cmd/cmd-menu-content-table.c cmd/cmd-menu-content-table.h \
 	\
+	combat/player-attack-util.h \
 	combat/melee.h combat/melee.c \
 	combat/attack-power-table.c combat/attack-power-table.h \
 	combat/hallucination-attacks-table.c combat/hallucination-attacks-table.h \

@@ -431,6 +431,7 @@
     <ClInclude Include="..\..\src\combat\monster-attack-effect.h" />
     <ClInclude Include="..\..\src\combat\monster-attack-types.h" />
     <ClInclude Include="..\..\src\combat\attack-accuracy.h" />
+    <ClInclude Include="..\..\src\combat\player-attack-util.h" />
     <ClInclude Include="..\..\src\combat\player-attack.h" />
     <ClInclude Include="..\..\src\combat\slaying.h" />
     <ClInclude Include="..\..\src\inventory\inventory-damage.h" />

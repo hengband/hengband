@@ -2077,6 +2077,9 @@
     <ClInclude Include="..\..\src\combat\player-attack.h">
       <Filter>combat</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\combat\player-attack-util.h">
+      <Filter>combat</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

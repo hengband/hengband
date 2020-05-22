@@ -26,19 +26,7 @@
 #include "player/player-effects.h"
 #include "spell/spells3.h"
 #include "spell/spells-floor.h"
-
-typedef struct player_attack_type {
-    s16b hand;
-    combat_options mode;
-    monster_type *m_ptr;
-    bool backstab;
-    bool suprise_attack;
-    bool stab_fleeing;
-    bool monk_attack;
-    int num_blow;
-    HIT_POINT attack_damage;
-    GAME_TEXT m_name[MAX_NLEN];
-} player_attack_type;
+#include "combat/player-attack-util.h"
 
 static player_attack_type *initialize_player_attack_type(player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr)
 {
@@ -449,7 +437,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             pa_ptr->suprise_attack = FALSE; /* Clumsy! */
 
             if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3)) {
-                process_death_scythe_reflection(attacker_ptr, pa_ptr, pa_ptr->m_name);
+                process_death_scythe_reflection(attacker_ptr, pa_ptr);
             } else {
                 sound(SOUND_MISS);
                 msg_format(_("ミス！ %sにかわされた。", "You miss %s."), pa_ptr->m_name);
