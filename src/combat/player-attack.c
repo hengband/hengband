@@ -129,24 +129,13 @@ static void get_bare_knuckle_exp(player_type *attacker_ptr, player_attack_type *
 }
 
 /*!
- * @brief 素手の時と武器を持っている時で処理を分ける
+ * @brief 装備している武器の技能値を増加させる
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @return なし
  */
-static void attack_check_bare_knuckle(player_type *attacker_ptr, player_attack_type *pa_ptr)
+static void get_weapon_exp(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
-    if (!o_ptr->k_idx == 0)
-    {
-        get_bare_knuckle_exp(attacker_ptr, pa_ptr);
-        return;
-    }
-
-    if (!object_is_melee_weapon(o_ptr) || ((r_ptr->level + 10) <= attacker_ptr->lev))
-        return;
-
     OBJECT_TYPE_VALUE tval = attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand].tval - TV_WEAPON_BEGIN;
     OBJECT_SUBTYPE_VALUE sval = attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand].sval;
     int now_exp = attacker_ptr->weapon_exp[tval][sval];
@@ -165,6 +154,28 @@ static void attack_check_bare_knuckle(player_type *attacker_ptr, player_attack_t
 
     attacker_ptr->weapon_exp[tval][sval] += amount;
     attacker_ptr->update |= (PU_BONUS);
+}
+
+/*!
+ * @brief 直接攻撃に伴う技能値の上昇処理
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void get_attack_exp(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    if (!o_ptr->k_idx == 0)
+    {
+        get_bare_knuckle_exp(attacker_ptr, pa_ptr);
+        return;
+    }
+
+    if (!object_is_melee_weapon(o_ptr) || ((r_ptr->level + 10) <= attacker_ptr->lev))
+        return;
+
+    get_weapon_exp(attacker_ptr, pa_ptr);
 }
 
 /*!
@@ -215,7 +226,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     player_attack_type tmp_attack;
     player_attack_type *pa_ptr = initialize_player_attack_type(&tmp_attack, hand, mode, m_ptr);
     attack_classify(attacker_ptr, pa_ptr);
-    attack_check_bare_knuckle(attacker_ptr, pa_ptr);
+    get_attack_exp(attacker_ptr, pa_ptr);
 
     /* Disturb the monster */
     (void)set_monster_csleep(attacker_ptr, g_ptr->m_idx, 0);
