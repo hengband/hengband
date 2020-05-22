@@ -37,6 +37,7 @@ typedef struct player_attack_type {
     bool monk_attack;
     int num_blow;
     HIT_POINT attack_damage;
+    GAME_TEXT m_name[MAX_NLEN];
 } player_attack_type;
 
 static player_attack_type *initialize_player_attack_type(player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr)
@@ -365,14 +366,13 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
  * @brief 死の大鎌によるダメージ反射のメインルーチン
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @param m_name 攻撃を試みたモンスター名
  * @return なし
  */
-static void process_death_scythe_reflection(player_type *attacker_ptr, player_attack_type *pa_ptr, GAME_TEXT *m_name)
+static void process_death_scythe_reflection(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
     BIT_FLAGS death_scythe_flags[TR_FLAG_SIZE];
     sound(SOUND_HIT);
-    msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name);
+    msg_format(_("ミス！ %sにかわされた。", "You miss %s."), pa_ptr->m_name);
     msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));
 
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
@@ -432,8 +432,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
     /* Disturb the monster */
     (void)set_monster_csleep(attacker_ptr, g_ptr->m_idx, 0);
-    GAME_TEXT m_name[MAX_NLEN];
-    monster_desc(attacker_ptr, m_name, m_ptr, 0);
+    monster_desc(attacker_ptr, pa_ptr->m_name, m_ptr, 0);
 
     int chance = calc_attack_quality(attacker_ptr, pa_ptr);
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
@@ -450,10 +449,10 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             pa_ptr->suprise_attack = FALSE; /* Clumsy! */
 
             if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3)) {
-                process_death_scythe_reflection(attacker_ptr, pa_ptr, m_name);
+                process_death_scythe_reflection(attacker_ptr, pa_ptr, pa_ptr->m_name);
             } else {
                 sound(SOUND_MISS);
-                msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name);
+                msg_format(_("ミス！ %sにかわされた。", "You miss %s."), pa_ptr->m_name);
             }
 
             continue;
@@ -464,13 +463,13 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         sound(SOUND_HIT);
 
         if (pa_ptr->backstab)
-            msg_format(_("あなたは冷酷にも眠っている無力な%sを突き刺した！", "You cruelly stab the helpless, sleeping %s!"), m_name);
+            msg_format(_("あなたは冷酷にも眠っている無力な%sを突き刺した！", "You cruelly stab the helpless, sleeping %s!"), pa_ptr->m_name);
         else if (pa_ptr->suprise_attack)
-            msg_format(_("不意を突いて%sに強烈な一撃を喰らわせた！", "You make surprise attack, and hit %s with a powerful blow!"), m_name);
+            msg_format(_("不意を突いて%sに強烈な一撃を喰らわせた！", "You make surprise attack, and hit %s with a powerful blow!"), pa_ptr->m_name);
         else if (pa_ptr->stab_fleeing)
-            msg_format(_("逃げる%sを背中から突き刺した！", "You backstab the fleeing %s!"), m_name);
+            msg_format(_("逃げる%sを背中から突き刺した！", "You backstab the fleeing %s!"), pa_ptr->m_name);
         else if (!pa_ptr->monk_attack)
-            msg_format(_("%sを攻撃した。", "You hit %s."), m_name);
+            msg_format(_("%sを攻撃した。", "You hit %s."), pa_ptr->m_name);
 
         /* Hack -- bare hands do one damage */
         pa_ptr->attack_damage = 1;
@@ -572,25 +571,25 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
             if (ma_ptr->effect == MA_KNEE) {
                 if (r_ptr->flags1 & RF1_MALE) {
-                    msg_format(_("%sに金的膝蹴りをくらわした！", "You hit %s in the groin with your knee!"), m_name);
+                    msg_format(_("%sに金的膝蹴りをくらわした！", "You hit %s in the groin with your knee!"), pa_ptr->m_name);
                     sound(SOUND_PAIN);
                     special_effect = MA_KNEE;
                 } else
-                    msg_format(ma_ptr->desc, m_name);
+                    msg_format(ma_ptr->desc, pa_ptr->m_name);
             }
 
             else if (ma_ptr->effect == MA_SLOW) {
                 if (!((r_ptr->flags1 & RF1_NEVER_MOVE) || my_strchr("~#{}.UjmeEv$,DdsbBFIJQSXclnw!=?", r_ptr->d_char))) {
-                    msg_format(_("%sの足首に関節蹴りをくらわした！", "You kick %s in the ankle."), m_name);
+                    msg_format(_("%sの足首に関節蹴りをくらわした！", "You kick %s in the ankle."), pa_ptr->m_name);
                     special_effect = MA_SLOW;
                 } else
-                    msg_format(ma_ptr->desc, m_name);
+                    msg_format(ma_ptr->desc, pa_ptr->m_name);
             } else {
                 if (ma_ptr->effect) {
                     stun_effect = (ma_ptr->effect / 2) + randint1(ma_ptr->effect / 2);
                 }
 
-                msg_format(ma_ptr->desc, m_name);
+                msg_format(ma_ptr->desc, pa_ptr->m_name);
             }
 
             if (attacker_ptr->special_defense & KAMAE_SUZAKU)
@@ -604,14 +603,14 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             pa_ptr->attack_damage = critical_norm(attacker_ptr, attacker_ptr->lev * weight, min_level, pa_ptr->attack_damage, attacker_ptr->to_h[0], 0);
 
             if ((special_effect == MA_KNEE) && ((pa_ptr->attack_damage + attacker_ptr->to_d[hand]) < m_ptr->hp)) {
-                msg_format(_("%^sは苦痛にうめいている！", "%^s moans in agony!"), m_name);
+                msg_format(_("%^sは苦痛にうめいている！", "%^s moans in agony!"), pa_ptr->m_name);
                 stun_effect = 7 + randint1(13);
                 resist_stun /= 3;
             }
 
             else if ((special_effect == MA_SLOW) && ((pa_ptr->attack_damage + attacker_ptr->to_d[hand]) < m_ptr->hp)) {
                 if (!(r_ptr->flags1 & RF1_UNIQUE) && (randint1(attacker_ptr->lev) > r_ptr->level) && m_ptr->mspeed > 60) {
-                    msg_format(_("%^sは足をひきずり始めた。", "%^s starts limping slower."), m_name);
+                    msg_format(_("%^sは足をひきずり始めた。", "%^s starts limping slower."), pa_ptr->m_name);
                     m_ptr->mspeed -= 10;
                 }
             }
@@ -619,9 +618,9 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             if (stun_effect && ((pa_ptr->attack_damage + attacker_ptr->to_d[hand]) < m_ptr->hp)) {
                 if (attacker_ptr->lev > randint1(r_ptr->level + resist_stun + 10)) {
                     if (set_monster_stunned(attacker_ptr, g_ptr->m_idx, stun_effect + MON_STUNNED(m_ptr))) {
-                        msg_format(_("%^sはフラフラになった。", "%^s is stunned."), m_name);
+                        msg_format(_("%^sはフラフラになった。", "%^s is stunned."), pa_ptr->m_name);
                     } else {
-                        msg_format(_("%^sはさらにフラフラになった。", "%^s is more stunned."), m_name);
+                        msg_format(_("%^sはさらにフラフラになった。", "%^s is more stunned."), pa_ptr->m_name);
                     }
                 }
             }
@@ -662,7 +661,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 if (o_ptr->name1 == ART_VORPAL_BLADE) {
                     msg_print(_("目にも止まらぬヴォーパルブレード、手錬の早業！", "Your Vorpal Blade goes snicker-snack!"));
                 } else {
-                    msg_format(_("%sをグッサリ切り裂いた！", "Your weapon cuts deep into %s!"), m_name);
+                    msg_format(_("%sをグッサリ切り裂いた！", "Your weapon cuts deep into %s!"), pa_ptr->m_name);
                 }
 
                 /* Try to increase the damage */
@@ -674,29 +673,29 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
                 /* Ouch! */
                 if (((r_ptr->flagsr & RFR_RES_ALL) ? pa_ptr->attack_damage / 100 : pa_ptr->attack_damage) > m_ptr->hp) {
-                    msg_format(_("%sを真っ二つにした！", "You cut %s in half!"), m_name);
+                    msg_format(_("%sを真っ二つにした！", "You cut %s in half!"), pa_ptr->m_name);
                 } else {
                     switch (mult) {
                     case 2:
-                        msg_format(_("%sを斬った！", "You gouge %s!"), m_name);
+                        msg_format(_("%sを斬った！", "You gouge %s!"), pa_ptr->m_name);
                         break;
                     case 3:
-                        msg_format(_("%sをぶった斬った！", "You maim %s!"), m_name);
+                        msg_format(_("%sをぶった斬った！", "You maim %s!"), pa_ptr->m_name);
                         break;
                     case 4:
-                        msg_format(_("%sをメッタ斬りにした！", "You carve %s!"), m_name);
+                        msg_format(_("%sをメッタ斬りにした！", "You carve %s!"), pa_ptr->m_name);
                         break;
                     case 5:
-                        msg_format(_("%sをメッタメタに斬った！", "You cleave %s!"), m_name);
+                        msg_format(_("%sをメッタメタに斬った！", "You cleave %s!"), pa_ptr->m_name);
                         break;
                     case 6:
-                        msg_format(_("%sを刺身にした！", "You smite %s!"), m_name);
+                        msg_format(_("%sを刺身にした！", "You smite %s!"), pa_ptr->m_name);
                         break;
                     case 7:
-                        msg_format(_("%sを斬って斬って斬りまくった！", "You eviscerate %s!"), m_name);
+                        msg_format(_("%sを斬って斬って斬りまくった！", "You eviscerate %s!"), pa_ptr->m_name);
                         break;
                     default:
-                        msg_format(_("%sを細切れにした！", "You shred %s!"), m_name);
+                        msg_format(_("%sを細切れにした！", "You shred %s!"), pa_ptr->m_name);
                         break;
                     }
                 }
@@ -745,16 +744,16 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             if (!(r_ptr->flags3 & (RF3_NO_STUN))) {
                 /* Get stunned */
                 if (MON_STUNNED(m_ptr)) {
-                    msg_format(_("%sはひどくもうろうとした。", "%s is more dazed."), m_name);
+                    msg_format(_("%sはひどくもうろうとした。", "%s is more dazed."), pa_ptr->m_name);
                     tmp /= 2;
                 } else {
-                    msg_format(_("%s はもうろうとした。", "%s is dazed."), m_name);
+                    msg_format(_("%s はもうろうとした。", "%s is dazed."), pa_ptr->m_name);
                 }
 
                 /* Apply stun */
                 (void)set_monster_stunned(attacker_ptr, g_ptr->m_idx, MON_STUNNED(m_ptr) + tmp);
             } else {
-                msg_format(_("%s には効果がなかった。", "%s is not effected."), m_name);
+                msg_format(_("%s には効果がなかった。", "%s is not effected."), pa_ptr->m_name);
             }
         }
 
@@ -763,7 +762,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (mode == HISSATSU_KYUSHO)) {
             if ((randint1(randint1(r_ptr->level / 7) + 5) == 1) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2)) {
                 pa_ptr->attack_damage = m_ptr->hp + 1;
-                msg_format(_("%sの急所を突き刺した！", "You hit %s on a fatal spot!"), m_name);
+                msg_format(_("%sの急所を突き刺した！", "You hit %s on a fatal spot!"), pa_ptr->m_name);
             } else
                 pa_ptr->attack_damage = 1;
         } else if ((attacker_ptr->pclass == CLASS_NINJA) && has_melee_weapon(attacker_ptr, INVEN_RARM + hand) && !attacker_ptr->icky_wield[hand] && ((attacker_ptr->cur_lite <= 0) || one_in_(7))) {
@@ -771,15 +770,15 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             if (one_in_(pa_ptr->backstab ? 13 : (pa_ptr->stab_fleeing || pa_ptr->suprise_attack) ? 15 : 27)) {
                 pa_ptr->attack_damage *= 5;
                 drain_result *= 2;
-                msg_format(_("刃が%sに深々と突き刺さった！", "You critically injured %s!"), m_name);
+                msg_format(_("刃が%sに深々と突き刺さった！", "You critically injured %s!"), pa_ptr->m_name);
             } else if (((m_ptr->hp < maxhp / 2) && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10)) || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->suprise_attack) && one_in_(11))) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))) {
                 if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE2) || (m_ptr->hp >= maxhp / 2)) {
                     pa_ptr->attack_damage = MAX(pa_ptr->attack_damage * 5, m_ptr->hp / 2);
                     drain_result *= 2;
-                    msg_format(_("%sに致命傷を負わせた！", "You fatally injured %s!"), m_name);
+                    msg_format(_("%sに致命傷を負わせた！", "You fatally injured %s!"), pa_ptr->m_name);
                 } else {
                     pa_ptr->attack_damage = m_ptr->hp + 1;
-                    msg_format(_("刃が%sの急所を貫いた！", "You hit %s on a fatal spot!"), m_name);
+                    msg_format(_("刃が%sの急所を貫いた！", "You hit %s on a fatal spot!"), pa_ptr->m_name);
                 }
             }
         }
@@ -869,7 +868,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                         }
 
                         if (drain_msg) {
-                            msg_format(_("刃が%sから生命力を吸い取った！", "Your weapon drains life from %s!"), m_name);
+                            msg_format(_("刃が%sから生命力を吸い取った！", "Your weapon drains life from %s!"), pa_ptr->m_name);
                             drain_msg = FALSE;
                         }
 
@@ -905,12 +904,12 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             if (r_ptr->flags3 & RF3_NO_CONF) {
                 if (is_original_ap_and_seen(attacker_ptr, m_ptr))
                     r_ptr->r_flags3 |= RF3_NO_CONF;
-                msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), m_name);
+                msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
 
             } else if (randint0(100) < r_ptr->level) {
-                msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), m_name);
+                msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
             } else {
-                msg_format(_("%^sは混乱したようだ。", "%^s appears confused."), m_name);
+                msg_format(_("%^sは混乱したようだ。", "%^s appears confused."), pa_ptr->m_name);
                 (void)set_monster_confused(attacker_ptr, g_ptr->m_idx, MON_CONFUSED(m_ptr) + 10 + randint0(attacker_ptr->lev) / 5);
             }
         }
@@ -922,18 +921,18 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 if (r_ptr->flags1 & RF1_UNIQUE) {
                     if (is_original_ap_and_seen(attacker_ptr, m_ptr))
                         r_ptr->r_flagsr |= RFR_RES_TELE;
-                    msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), m_name);
+                    msg_format(_("%^sには効果がなかった。", "%^s is unaffected!"), pa_ptr->m_name);
                     resists_tele = TRUE;
                 } else if (r_ptr->level > randint1(100)) {
                     if (is_original_ap_and_seen(attacker_ptr, m_ptr))
                         r_ptr->r_flagsr |= RFR_RES_TELE;
-                    msg_format(_("%^sは抵抗力を持っている！", "%^s resists!"), m_name);
+                    msg_format(_("%^sは抵抗力を持っている！", "%^s resists!"), pa_ptr->m_name);
                     resists_tele = TRUE;
                 }
             }
 
             if (!resists_tele) {
-                msg_format(_("%^sは消えた！", "%^s disappears!"), m_name);
+                msg_format(_("%^sは消えた！", "%^s disappears!"), pa_ptr->m_name);
                 teleport_away(attacker_ptr, g_ptr->m_idx, 50, TELEPORT_PASSIVE);
                 num = pa_ptr->num_blow + 1; /* Can't hit it anymore! */
                 *mdeath = TRUE;
@@ -943,18 +942,18 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         else if ((chaos_effect == 5) && (randint1(90) > r_ptr->level)) {
             if (!(r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) && !(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK)) {
                 if (polymorph_monster(attacker_ptr, y, x)) {
-                    msg_format(_("%^sは変化した！", "%^s changes!"), m_name);
+                    msg_format(_("%^sは変化した！", "%^s changes!"), pa_ptr->m_name);
                     *fear = FALSE;
                     weak = FALSE;
                 } else {
-                    msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), m_name);
+                    msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
                 }
 
                 /* Hack -- Get new monster */
                 m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
                 /* Oops, we need a different name... */
-                monster_desc(attacker_ptr, m_name, m_ptr, 0);
+                monster_desc(attacker_ptr, pa_ptr->m_name, m_ptr, 0);
 
                 /* Hack -- Get new race */
                 r_ptr = &r_info[m_ptr->r_idx];
@@ -981,7 +980,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     }
 
     if (weak && !(*mdeath)) {
-        msg_format(_("%sは弱くなったようだ。", "%^s seems weakened."), m_name);
+        msg_format(_("%sは弱くなったようだ。", "%^s seems weakened."), pa_ptr->m_name);
     }
 
     if ((drain_left != MAX_VAMPIRIC_DRAIN) && one_in_(4)) {
