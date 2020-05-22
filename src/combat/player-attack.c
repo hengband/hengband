@@ -50,6 +50,47 @@ static player_attack_type *initialize_player_attack_type(player_attack_type *pa_
 }
 
 /*!
+ * @brief 一部職業で攻撃に倍率がかかったりすることの処理
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ */
+static void attack_classify(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    switch (attacker_ptr->pclass) {
+    case CLASS_ROGUE:
+    case CLASS_NINJA:
+        if (has_melee_weapon(attacker_ptr, INVEN_RARM + pa_ptr->hand) && !attacker_ptr->icky_wield[pa_ptr->hand]) {
+            int tmp = attacker_ptr->lev * 6 + (attacker_ptr->skill_stl + 10) * 4;
+            if (attacker_ptr->monlite && (pa_ptr->mode != HISSATSU_NYUSIN))
+                tmp /= 3;
+            if (attacker_ptr->cursed & TRC_AGGRAVATE)
+                tmp /= 2;
+            if (r_ptr->level > (attacker_ptr->lev * attacker_ptr->lev / 20 + 10))
+                tmp /= 3;
+            if (MON_CSLEEP(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
+                /* Can't backstab creatures that we can't see, right? */
+                pa_ptr->backstab = TRUE;
+            } else if ((attacker_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level + 20)) && pa_ptr->m_ptr->ml && !(r_ptr->flagsr & RFR_RES_ALL)) {
+                pa_ptr->suprise_attack = TRUE;
+            } else if (MON_MONFEAR(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
+                pa_ptr->stab_fleeing = TRUE;
+            }
+        }
+
+        return;
+    case CLASS_MONK:
+    case CLASS_FORCETRAINER:
+    case CLASS_BERSERKER:
+        if ((empty_hands(attacker_ptr, TRUE) & EMPTY_HAND_RARM) && !attacker_ptr->riding)
+            pa_ptr->monk_attack = TRUE;
+        return;
+    default:
+        return;
+    }
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -96,36 +137,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
     player_attack_type tmp_attack;
     player_attack_type *pa_ptr = initialize_player_attack_type(&tmp_attack, hand, mode, m_ptr);
-    switch (attacker_ptr->pclass) {
-    case CLASS_ROGUE:
-    case CLASS_NINJA:
-        if (has_melee_weapon(attacker_ptr, INVEN_RARM + hand) && !attacker_ptr->icky_wield[hand]) {
-            int tmp = attacker_ptr->lev * 6 + (attacker_ptr->skill_stl + 10) * 4;
-            if (attacker_ptr->monlite && (mode != HISSATSU_NYUSIN))
-                tmp /= 3;
-            if (attacker_ptr->cursed & TRC_AGGRAVATE)
-                tmp /= 2;
-            if (r_ptr->level > (attacker_ptr->lev * attacker_ptr->lev / 20 + 10))
-                tmp /= 3;
-            if (MON_CSLEEP(m_ptr) && m_ptr->ml) {
-                /* Can't backstab creatures that we can't see, right? */
-                pa_ptr->backstab = TRUE;
-            } else if ((attacker_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level + 20)) && m_ptr->ml && !(r_ptr->flagsr & RFR_RES_ALL)) {
-                pa_ptr->suprise_attack = TRUE;
-            } else if (MON_MONFEAR(m_ptr) && m_ptr->ml) {
-                pa_ptr->stab_fleeing = TRUE;
-            }
-        }
-
-        break;
-
-    case CLASS_MONK:
-    case CLASS_FORCETRAINER:
-    case CLASS_BERSERKER:
-        if ((empty_hands(attacker_ptr, TRUE) & EMPTY_HAND_RARM) && !attacker_ptr->riding)
-            pa_ptr->monk_attack = TRUE;
-        break;
-    }
+    attack_classify(attacker_ptr, pa_ptr);
 
     if (!o_ptr->k_idx) /* Empty hand */
     {
@@ -211,7 +223,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             }
 
             success_hit = one_in_(n);
-        } else if ((attacker_ptr->pclass == CLASS_NINJA) && ((pa_ptr->backstab || suprise_attack) && !(r_ptr->flagsr & RFR_RES_ALL)))
+        } else if ((attacker_ptr->pclass == CLASS_NINJA) && ((pa_ptr->backstab || pa_ptr->suprise_attack) && !(r_ptr->flagsr & RFR_RES_ALL)))
             success_hit = TRUE;
         else
             success_hit = test_hit_norm(attacker_ptr, chance, r_ptr->ac, m_ptr->ml);
@@ -223,7 +235,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
         if (!success_hit) {
             pa_ptr->backstab = FALSE; /* Clumsy! */
-            suprise_attack = FALSE; /* Clumsy! */
+            pa_ptr->suprise_attack = FALSE; /* Clumsy! */
 
             if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3)) {
                 BIT_FLAGS flgs_aux[TR_FLAG_SIZE];
@@ -332,7 +344,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
         if (pa_ptr->backstab)
             msg_format(_("あなたは冷酷にも眠っている無力な%sを突き刺した！", "You cruelly stab the helpless, sleeping %s!"), m_name);
-        else if (suprise_attack)
+        else if (pa_ptr->suprise_attack)
             msg_format(_("不意を突いて%sに強烈な一撃を喰らわせた！", "You make surprise attack, and hit %s with a powerful blow!"), m_name);
         else if (pa_ptr->stab_fleeing)
             msg_format(_("逃げる%sを背中から突き刺した！", "You backstab the fleeing %s!"), m_name);
@@ -501,7 +513,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
             if (pa_ptr->backstab) {
                 k *= (3 + (attacker_ptr->lev / 20));
-            } else if (suprise_attack) {
+            } else if (pa_ptr->suprise_attack) {
                 k = k * (5 + (attacker_ptr->lev * 2 / 25)) / 2;
             } else if (pa_ptr->stab_fleeing) {
                 k = (3 * k) / 2;
@@ -639,7 +651,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 k *= 5;
                 drain_result *= 2;
                 msg_format(_("刃が%sに深々と突き刺さった！", "You critically injured %s!"), m_name);
-            } else if (((m_ptr->hp < maxhp / 2) && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10)) || ((one_in_(666) || ((pa_ptr->backstab || suprise_attack) && one_in_(11))) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))) {
+            } else if (((m_ptr->hp < maxhp / 2) && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10)) || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->suprise_attack) && one_in_(11))) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))) {
                 if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE2) || (m_ptr->hp >= maxhp / 2)) {
                     k = MAX(k * 5, m_ptr->hp / 2);
                     drain_result *= 2;
@@ -844,7 +856,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         }
 
         pa_ptr->backstab = FALSE;
-        suprise_attack = FALSE;
+        pa_ptr->suprise_attack = FALSE;
     }
 
     if (weak && !(*mdeath)) {
