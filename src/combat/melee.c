@@ -136,56 +136,6 @@ HIT_POINT calc_attack_damage_with_slay(player_type *attacker_ptr, object_type *o
 }
 
 /*!
-* @brief 敵オーラによるプレイヤーのダメージ処理（補助）
-* @param m_ptr オーラを持つモンスターの構造体参照ポインタ
-* @param immune ダメージを回避できる免疫フラグ
-* @param flags_offset オーラフラグ配列の参照オフセット
-* @param r_flags_offset モンスターの耐性配列の参照オフセット
-* @param aura_flag オーラフラグ配列
-* @param dam_func ダメージ処理を行う関数の参照ポインタ
-* @param message オーラダメージを受けた際のメッセージ
-* @return なし
-*/
-static void touch_zap_player_aux(monster_type *m_ptr, player_type *touched_ptr, bool immune, int flags_offset, int r_flags_offset, u32b aura_flag,
-	HIT_POINT(*dam_func)(player_type *creature_type, HIT_POINT dam, concptr kb_str, int monspell, bool aura), concptr message)
-{
-	monster_race *r_ptr = &r_info[m_ptr->r_idx];
-	if (!(atoffset(BIT_FLAGS, r_ptr, flags_offset) & aura_flag) || immune) return;
-	
-	GAME_TEXT mon_name[MAX_NLEN];
-	int aura_damage = damroll(1 + (r_ptr->level / 26), 1 + (r_ptr->level / 17));
-
-	monster_desc(touched_ptr, mon_name, m_ptr, MD_WRONGDOER_NAME);
-	msg_print(message);
-	dam_func(touched_ptr, aura_damage, mon_name, -1, TRUE);
-
-	if (is_original_ap_and_seen(touched_ptr, m_ptr))
-	{
-		atoffset(BIT_FLAGS, r_ptr, r_flags_offset) |= aura_flag;
-	}
-
-	handle_stuff(touched_ptr);
-}
-
-
-/*!
-* @brief 敵オーラによるプレイヤーのダメージ処理（メイン）
-* @param m_ptr オーラを持つモンスターの構造体参照ポインタ
-* @param touched_ptr オーラを持つ相手に振れたクリーチャーの参照ポインタ
-* @return なし
-*/
-static void touch_zap_player(monster_type *m_ptr, player_type *touched_ptr)
-{
-	touch_zap_player_aux(m_ptr, touched_ptr, touched_ptr->immune_fire, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_FIRE,
-		fire_dam, _("突然とても熱くなった！", "You are suddenly very hot!"));
-	touch_zap_player_aux(m_ptr, touched_ptr, touched_ptr->immune_cold, offsetof(monster_race, flags3), offsetof(monster_race, r_flags3), RF3_AURA_COLD,
-		cold_dam, _("突然とても寒くなった！", "You are suddenly very cold!"));
-	touch_zap_player_aux(m_ptr, touched_ptr, touched_ptr->immune_elec, offsetof(monster_race, flags2), offsetof(monster_race, r_flags2), RF2_AURA_ELEC,
-		elec_dam, _("電撃をくらった！", "You get zapped!"));
-}
-
-
-/*!
 * @brief プレイヤーの変異要素による打撃処理
 * @param attacker_ptr プレーヤーへの参照ポインタ
 * @param m_idx 攻撃目標となったモンスターの参照ID
