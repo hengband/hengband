@@ -241,7 +241,7 @@ void place_trap(player_type *trapped_ptr, POSITION y, POSITION x)
 * Always miss 5% of the time, Always hit 5% of the time.
 * Otherwise, match trap power against player armor.
 */
-static int check_hit(player_type *target_ptr, int power)
+static int check_hit_from_monster_to_player(player_type *target_ptr, int power)
 {
 	int k;
 	ARMOUR_CLASS ac;
@@ -342,7 +342,7 @@ static bool hit_trap_dart(player_type *target_ptr)
 {
 	bool hit = FALSE;
 
-	if (check_hit(target_ptr, 125))
+	if (check_hit_from_monster_to_player(target_ptr, 125))
 	{
 		msg_print(_("小さなダーツが飛んできて刺さった！", "A small dart hits you!"));
 		take_hit(target_ptr, DAMAGE_ATTACK, damroll(1, 4), _("ダーツの罠", "a dart trap"), -1);

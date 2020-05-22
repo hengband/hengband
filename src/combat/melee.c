@@ -1533,7 +1533,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 		ac = target_ptr->ac + target_ptr->to_a;
 
 		/* Monster hits player */
-		if (!effect || check_hit(target_ptr, power, rlev, MON_STUNNED(m_ptr)))
+		if (!effect || check_hit_from_monster_to_player(target_ptr, power, rlev, MON_STUNNED(m_ptr)))
 		{
 			/* Always disturbing */
 			disturb(target_ptr, TRUE, TRUE);
@@ -3273,7 +3273,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 		power = mbe_info[effect].power;
 
 		/* Monster hits */
-		if (!effect || check_hit2(power, rlev, ac, MON_STUNNED(m_ptr)))
+		if (!effect || check_hit_from_monster_to_monster(power, rlev, ac, MON_STUNNED(m_ptr)))
 		{
 			(void)set_monster_csleep(subject_ptr, t_idx, 0);
 
