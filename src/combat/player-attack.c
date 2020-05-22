@@ -50,34 +50,46 @@ static player_attack_type *initialize_player_attack_type(player_attack_type *pa_
 }
 
 /*!
+ * @brief 盗賊と忍者における不意打ち
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void process_suprise_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    if (!has_melee_weapon(attacker_ptr, INVEN_RARM + pa_ptr->hand) || attacker_ptr->icky_wield[pa_ptr->hand])
+        return;
+
+    int tmp = attacker_ptr->lev * 6 + (attacker_ptr->skill_stl + 10) * 4;
+    if (attacker_ptr->monlite && (pa_ptr->mode != HISSATSU_NYUSIN))
+        tmp /= 3;
+    if (attacker_ptr->cursed & TRC_AGGRAVATE)
+        tmp /= 2;
+    if (r_ptr->level > (attacker_ptr->lev * attacker_ptr->lev / 20 + 10))
+        tmp /= 3;
+    if (MON_CSLEEP(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
+        /* Can't backstab creatures that we can't see, right? */
+        pa_ptr->backstab = TRUE;
+    } else if ((attacker_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level + 20)) && pa_ptr->m_ptr->ml && !(r_ptr->flagsr & RFR_RES_ALL)) {
+        pa_ptr->suprise_attack = TRUE;
+    } else if (MON_MONFEAR(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
+        pa_ptr->stab_fleeing = TRUE;
+    }
+}
+
+/*!
  * @brief 一部職業で攻撃に倍率がかかったりすることの処理
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
  */
 static void attack_classify(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     switch (attacker_ptr->pclass) {
     case CLASS_ROGUE:
     case CLASS_NINJA:
-        if (has_melee_weapon(attacker_ptr, INVEN_RARM + pa_ptr->hand) && !attacker_ptr->icky_wield[pa_ptr->hand]) {
-            int tmp = attacker_ptr->lev * 6 + (attacker_ptr->skill_stl + 10) * 4;
-            if (attacker_ptr->monlite && (pa_ptr->mode != HISSATSU_NYUSIN))
-                tmp /= 3;
-            if (attacker_ptr->cursed & TRC_AGGRAVATE)
-                tmp /= 2;
-            if (r_ptr->level > (attacker_ptr->lev * attacker_ptr->lev / 20 + 10))
-                tmp /= 3;
-            if (MON_CSLEEP(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
-                /* Can't backstab creatures that we can't see, right? */
-                pa_ptr->backstab = TRUE;
-            } else if ((attacker_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level + 20)) && pa_ptr->m_ptr->ml && !(r_ptr->flagsr & RFR_RES_ALL)) {
-                pa_ptr->suprise_attack = TRUE;
-            } else if (MON_MONFEAR(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
-                pa_ptr->stab_fleeing = TRUE;
-            }
-        }
-
+        process_suprise_attack(attacker_ptr, pa_ptr);
         return;
     case CLASS_MONK:
     case CLASS_FORCETRAINER:
