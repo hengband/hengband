@@ -344,6 +344,24 @@ static void compensate_death_scythe_reflection_magnificant(player_type *attacker
 }
 
 /*!
+ * @brief 死の大鎌による反射ダメージ倍率を更に上げる
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
+{
+    if (!one_in_(6))
+        return;
+
+    int more_magnificant = 2;
+    msg_format(_("グッサリ切り裂かれた！", "Your weapon cuts deep into yourself!"));
+    while (one_in_(4))
+        more_magnificant++;
+
+    pa_ptr->attack_damage *= (HIT_POINT)more_magnificant;
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -412,17 +430,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 pa_ptr->attack_damage *= (HIT_POINT)magnificant;
                 pa_ptr->attack_damage /= 10;
                 pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[hand], mode);
-                if (one_in_(6)) {
-                    int more_magnificant = 2;
-                    msg_format(_("グッサリ切り裂かれた！", "Your weapon cuts deep into yourself!"));
-                    /* Try to increase the damage */
-                    while (one_in_(4)) {
-                        more_magnificant++;
-                    }
-
-                    pa_ptr->attack_damage *= (HIT_POINT)more_magnificant;
-                }
-
+                death_scythe_reflection_critial_hit(pa_ptr);
                 pa_ptr->attack_damage += (attacker_ptr->to_d[hand] + o_ptr->to_d);
                 if (pa_ptr->attack_damage < 0)
                     pa_ptr->attack_damage = 0;
