@@ -35,6 +35,7 @@ typedef struct player_attack_type {
     bool suprise_attack;
     bool stab_fleeing;
     bool monk_attack;
+    int num_blow;
 } player_attack_type;
 
 static player_attack_type *initialize_player_attack_type(player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr)
@@ -46,6 +47,7 @@ static player_attack_type *initialize_player_attack_type(player_attack_type *pa_
     pa_ptr->suprise_attack = FALSE;
     pa_ptr->stab_fleeing = FALSE;
     pa_ptr->monk_attack = FALSE;
+    pa_ptr->num_blow = 0;
     return pa_ptr;
 }
 
@@ -235,12 +237,10 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     int drain_result = 0;
     int drain_heal = 0;
     bool can_drain = FALSE;
-    int num_blow;
     int drain_left = MAX_VAMPIRIC_DRAIN;
     BIT_FLAGS flgs[TR_FLAG_SIZE]; /* A massive hack -- life-draining weapons */
     bool is_human = (r_ptr->d_char == 'p');
     bool is_lowlevel = (r_ptr->level < (attacker_ptr->lev - 15));
-    bool zantetsu_mukou, e_j_mukou;
 
     player_attack_type tmp_attack;
     player_attack_type *pa_ptr = initialize_player_attack_type(&tmp_attack, hand, mode, m_ptr);
@@ -252,22 +252,22 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     monster_desc(attacker_ptr, m_name, m_ptr, 0);
 
     int chance = calc_attack_quality(attacker_ptr, pa_ptr);
-    zantetsu_mukou = ((o_ptr->name1 == ART_ZANTETSU) && (r_ptr->d_char == 'j'));
-    e_j_mukou = ((o_ptr->name1 == ART_EXCALIBUR_J) && (r_ptr->d_char == 'S'));
+    bool is_zantetsu_nullified = ((o_ptr->name1 == ART_ZANTETSU) && (r_ptr->d_char == 'j'));
+    bool is_ej_nullified = ((o_ptr->name1 == ART_EXCALIBUR_J) && (r_ptr->d_char == 'S'));
 
     if ((mode == HISSATSU_KYUSHO) || (mode == HISSATSU_MINEUCHI) || (mode == HISSATSU_3DAN) || (mode == HISSATSU_IAI))
-        num_blow = 1;
+        pa_ptr->num_blow = 1;
     else if (mode == HISSATSU_COLD)
-        num_blow = attacker_ptr->num_blow[hand] + 2;
+        pa_ptr->num_blow = attacker_ptr->num_blow[hand] + 2;
     else
-        num_blow = attacker_ptr->num_blow[hand];
+        pa_ptr->num_blow = attacker_ptr->num_blow[hand];
 
     /* Hack -- DOKUBARI always hit once */
     if ((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE))
-        num_blow = 1;
+        pa_ptr->num_blow = 1;
 
     /* Attack once for each legal blow */
-    while ((num++ < num_blow) && !attacker_ptr->is_dead) {
+    while ((num++ < pa_ptr->num_blow) && !attacker_ptr->is_dead) {
         if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (mode == HISSATSU_KYUSHO)) {
             int n = 1;
 
@@ -444,7 +444,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 can_drain = FALSE;
         }
 
-        if ((have_flag(flgs, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !zantetsu_mukou)
+        if ((have_flag(flgs, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified)
             vorpal_cut = TRUE;
         else
             vorpal_cut = FALSE;
@@ -661,12 +661,12 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             k = 0;
         }
 
-        if (zantetsu_mukou) {
+        if (is_zantetsu_nullified) {
             msg_print(_("こんな軟らかいものは切れん！", "You cannot cut such a elastic thing!"));
             k = 0;
         }
 
-        if (e_j_mukou) {
+        if (is_ej_nullified) {
             msg_print(_("蜘蛛は苦手だ！", "Spiders are difficult for you to deal with!"));
             k /= 2;
         }
@@ -870,7 +870,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             if (!resists_tele) {
                 msg_format(_("%^sは消えた！", "%^s disappears!"), m_name);
                 teleport_away(attacker_ptr, g_ptr->m_idx, 50, TELEPORT_PASSIVE);
-                num = num_blow + 1; /* Can't hit it anymore! */
+                num = pa_ptr->num_blow + 1; /* Can't hit it anymore! */
                 *mdeath = TRUE;
             }
         }
