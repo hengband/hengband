@@ -1,4 +1,10 @@
-﻿#include "system/angband.h"
+﻿/*!
+ * @brief プレーヤーからモンスターへの打撃処理
+ * @date 2020/05/22
+ * @author Hourier
+ */
+
+#include "system/angband.h"
 #include "combat/player-attack.h"
 #include "player/player-skill.h"
 #include "player/avatar.h"
@@ -20,6 +26,28 @@
 #include "player/player-effects.h"
 #include "spell/spells3.h"
 #include "spell/spells-floor.h"
+
+typedef struct player_attack_type {
+    s16b hand;
+    combat_options mode;
+    monster_type *m_ptr;
+    bool backstab;
+    bool suprise_attack;
+    bool stab_fleeing;
+    bool monk_attack;
+} player_attack_type;
+
+static player_attack_type *initialize_player_attack_type(player_attack_type *player_attack_ptr, s16b hand, combat_options mode, monster_type *m_ptr)
+{
+    player_attack_ptr->hand = hand;
+    player_attack_ptr->mode = mode;
+    player_attack_ptr->m_ptr = m_ptr;
+    player_attack_ptr->backstab = FALSE;
+    player_attack_ptr->suprise_attack = FALSE;
+    player_attack_ptr->stab_fleeing = FALSE;
+    player_attack_ptr->monk_attack = FALSE;
+    return player_attack_ptr;
+}
 
 /*!
  * @brief プレイヤーの打撃処理サブルーチン /
@@ -55,7 +83,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     bool vorpal_cut = FALSE;
     int chaos_effect = 0;
     bool stab_fleeing = FALSE;
-    bool fuiuchi = FALSE;
+    bool suprise_attack = FALSE;
     bool monk_attack = FALSE;
     bool do_quake = FALSE;
     bool weak = FALSE;
@@ -84,7 +112,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 /* Can't backstab creatures that we can't see, right? */
                 backstab = TRUE;
             } else if ((attacker_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level + 20)) && m_ptr->ml && !(r_ptr->flagsr & RFR_RES_ALL)) {
-                fuiuchi = TRUE;
+                suprise_attack = TRUE;
             } else if (MON_MONFEAR(m_ptr) && m_ptr->ml) {
                 stab_fleeing = TRUE;
             }
@@ -184,7 +212,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             }
 
             success_hit = one_in_(n);
-        } else if ((attacker_ptr->pclass == CLASS_NINJA) && ((backstab || fuiuchi) && !(r_ptr->flagsr & RFR_RES_ALL)))
+        } else if ((attacker_ptr->pclass == CLASS_NINJA) && ((backstab || suprise_attack) && !(r_ptr->flagsr & RFR_RES_ALL)))
             success_hit = TRUE;
         else
             success_hit = test_hit_norm(attacker_ptr, chance, r_ptr->ac, m_ptr->ml);
@@ -196,7 +224,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
         if (!success_hit) {
             backstab = FALSE; /* Clumsy! */
-            fuiuchi = FALSE; /* Clumsy! */
+            suprise_attack = FALSE; /* Clumsy! */
 
             if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3)) {
                 BIT_FLAGS flgs_aux[TR_FLAG_SIZE];
@@ -305,7 +333,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
         if (backstab)
             msg_format(_("あなたは冷酷にも眠っている無力な%sを突き刺した！", "You cruelly stab the helpless, sleeping %s!"), m_name);
-        else if (fuiuchi)
+        else if (suprise_attack)
             msg_format(_("不意を突いて%sに強烈な一撃を喰らわせた！", "You make surprise attack, and hit %s with a powerful blow!"), m_name);
         else if (stab_fleeing)
             msg_format(_("逃げる%sを背中から突き刺した！", "You backstab the fleeing %s!"), m_name);
@@ -474,7 +502,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
             if (backstab) {
                 k *= (3 + (attacker_ptr->lev / 20));
-            } else if (fuiuchi) {
+            } else if (suprise_attack) {
                 k = k * (5 + (attacker_ptr->lev * 2 / 25)) / 2;
             } else if (stab_fleeing) {
                 k = (3 * k) / 2;
@@ -608,11 +636,11 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 k = 1;
         } else if ((attacker_ptr->pclass == CLASS_NINJA) && has_melee_weapon(attacker_ptr, INVEN_RARM + hand) && !attacker_ptr->icky_wield[hand] && ((attacker_ptr->cur_lite <= 0) || one_in_(7))) {
             int maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
-            if (one_in_(backstab ? 13 : (stab_fleeing || fuiuchi) ? 15 : 27)) {
+            if (one_in_(backstab ? 13 : (stab_fleeing || suprise_attack) ? 15 : 27)) {
                 k *= 5;
                 drain_result *= 2;
                 msg_format(_("刃が%sに深々と突き刺さった！", "You critically injured %s!"), m_name);
-            } else if (((m_ptr->hp < maxhp / 2) && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10)) || ((one_in_(666) || ((backstab || fuiuchi) && one_in_(11))) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))) {
+            } else if (((m_ptr->hp < maxhp / 2) && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10)) || ((one_in_(666) || ((backstab || suprise_attack) && one_in_(11))) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))) {
                 if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE2) || (m_ptr->hp >= maxhp / 2)) {
                     k = MAX(k * 5, m_ptr->hp / 2);
                     drain_result *= 2;
@@ -817,7 +845,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         }
 
         backstab = FALSE;
-        fuiuchi = FALSE;
+        suprise_attack = FALSE;
     }
 
     if (weak && !(*mdeath)) {
