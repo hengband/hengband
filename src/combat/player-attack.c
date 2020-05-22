@@ -103,6 +103,54 @@ static void attack_classify(player_type *attacker_ptr, player_attack_type *pa_pt
 }
 
 /*!
+ * @brief 素手の時と武器を持っている時で処理を分ける
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void attack_check_bare_knuckle(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    if (!o_ptr->k_idx) /* Empty hand */
+    {
+        if ((r_ptr->level + 10) > attacker_ptr->lev) {
+            if (attacker_ptr->skill_exp[GINOU_SUDE] < s_info[attacker_ptr->pclass].s_max[GINOU_SUDE]) {
+                if (attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_BEGINNER)
+                    attacker_ptr->skill_exp[GINOU_SUDE] += 40;
+                else if ((attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_SKILLED))
+                    attacker_ptr->skill_exp[GINOU_SUDE] += 5;
+                else if ((attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_EXPERT) && (attacker_ptr->lev > 19))
+                    attacker_ptr->skill_exp[GINOU_SUDE] += 1;
+                else if ((attacker_ptr->lev > 34))
+                    if (one_in_(3))
+                        attacker_ptr->skill_exp[GINOU_SUDE] += 1;
+                attacker_ptr->update |= (PU_BONUS);
+            }
+        }
+    } else if (object_is_melee_weapon(o_ptr)) {
+        if ((r_ptr->level + 10) > attacker_ptr->lev) {
+            OBJECT_TYPE_VALUE tval = attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand].tval - TV_WEAPON_BEGIN;
+            OBJECT_SUBTYPE_VALUE sval = attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand].sval;
+            int now_exp = attacker_ptr->weapon_exp[tval][sval];
+            if (now_exp < s_info[attacker_ptr->pclass].w_max[tval][sval]) {
+                SUB_EXP amount = 0;
+                if (now_exp < WEAPON_EXP_BEGINNER)
+                    amount = 80;
+                else if (now_exp < WEAPON_EXP_SKILLED)
+                    amount = 10;
+                else if ((now_exp < WEAPON_EXP_EXPERT) && (attacker_ptr->lev > 19))
+                    amount = 1;
+                else if ((attacker_ptr->lev > 34) && one_in_(2))
+                    amount = 1;
+                attacker_ptr->weapon_exp[tval][sval] += amount;
+                attacker_ptr->update |= (PU_BONUS);
+            }
+        }
+    }
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -150,43 +198,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     player_attack_type tmp_attack;
     player_attack_type *pa_ptr = initialize_player_attack_type(&tmp_attack, hand, mode, m_ptr);
     attack_classify(attacker_ptr, pa_ptr);
-
-    if (!o_ptr->k_idx) /* Empty hand */
-    {
-        if ((r_ptr->level + 10) > attacker_ptr->lev) {
-            if (attacker_ptr->skill_exp[GINOU_SUDE] < s_info[attacker_ptr->pclass].s_max[GINOU_SUDE]) {
-                if (attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_BEGINNER)
-                    attacker_ptr->skill_exp[GINOU_SUDE] += 40;
-                else if ((attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_SKILLED))
-                    attacker_ptr->skill_exp[GINOU_SUDE] += 5;
-                else if ((attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_EXPERT) && (attacker_ptr->lev > 19))
-                    attacker_ptr->skill_exp[GINOU_SUDE] += 1;
-                else if ((attacker_ptr->lev > 34))
-                    if (one_in_(3))
-                        attacker_ptr->skill_exp[GINOU_SUDE] += 1;
-                attacker_ptr->update |= (PU_BONUS);
-            }
-        }
-    } else if (object_is_melee_weapon(o_ptr)) {
-        if ((r_ptr->level + 10) > attacker_ptr->lev) {
-            OBJECT_TYPE_VALUE tval = attacker_ptr->inventory_list[INVEN_RARM + hand].tval - TV_WEAPON_BEGIN;
-            OBJECT_SUBTYPE_VALUE sval = attacker_ptr->inventory_list[INVEN_RARM + hand].sval;
-            int now_exp = attacker_ptr->weapon_exp[tval][sval];
-            if (now_exp < s_info[attacker_ptr->pclass].w_max[tval][sval]) {
-                SUB_EXP amount = 0;
-                if (now_exp < WEAPON_EXP_BEGINNER)
-                    amount = 80;
-                else if (now_exp < WEAPON_EXP_SKILLED)
-                    amount = 10;
-                else if ((now_exp < WEAPON_EXP_EXPERT) && (attacker_ptr->lev > 19))
-                    amount = 1;
-                else if ((attacker_ptr->lev > 34) && one_in_(2))
-                    amount = 1;
-                attacker_ptr->weapon_exp[tval][sval] += amount;
-                attacker_ptr->update |= (PU_BONUS);
-            }
-        }
-    }
+    attack_check_bare_knuckle(attacker_ptr, pa_ptr);
 
     /* Disturb the monster */
     (void)set_monster_csleep(attacker_ptr, g_ptr->m_idx, 0);
