@@ -354,45 +354,42 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));
                 object_flags(o_ptr, flgs_aux);
                 pa_ptr->attack_damage = damroll(o_ptr->dd + attacker_ptr->to_dd[hand], o_ptr->ds + attacker_ptr->to_ds[hand]);
-                {
-                    int magnificant;
-                    switch (attacker_ptr->mimic_form) {
-                    case MIMIC_NONE:
-                        magnificant = calc_death_scythe_reflection_magnificant_mimic_none(attacker_ptr);
-                        break;
-                    case MIMIC_DEMON:
-                    case MIMIC_DEMON_LORD:
-                    case MIMIC_VAMPIRE:
-                        magnificant = 30;
-                        break;
-                    default:
-                        magnificant = 10;
-                        break;
-                    }
-
-                    if (attacker_ptr->align < 0 && magnificant < 20)
-                        magnificant = 20;
-                    if (!(attacker_ptr->resist_acid || is_oppose_acid(attacker_ptr) || attacker_ptr->immune_acid) && (magnificant < 25))
-                        magnificant = 25;
-                    if (!(attacker_ptr->resist_elec || is_oppose_elec(attacker_ptr) || attacker_ptr->immune_elec) && (magnificant < 25))
-                        magnificant = 25;
-                    if (!(attacker_ptr->resist_fire || is_oppose_fire(attacker_ptr) || attacker_ptr->immune_fire) && (magnificant < 25))
-                        magnificant = 25;
-                    if (!(attacker_ptr->resist_cold || is_oppose_cold(attacker_ptr) || attacker_ptr->immune_cold) && (magnificant < 25))
-                        magnificant = 25;
-                    if (!(attacker_ptr->resist_pois || is_oppose_pois(attacker_ptr)) && (magnificant < 25))
-                        magnificant = 25;
-
-                    if ((attacker_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs_aux, TR_FORCE_WEAPON)) && (attacker_ptr->csp > (attacker_ptr->msp / 30))) {
-                        attacker_ptr->csp -= (1 + (attacker_ptr->msp / 30));
-                        attacker_ptr->redraw |= (PR_MANA);
-                        magnificant = magnificant * 3 / 2 + 20;
-                    }
-
-                    pa_ptr->attack_damage *= (HIT_POINT)magnificant;
-                    pa_ptr->attack_damage /= 10;
+                int magnificant;
+                switch (attacker_ptr->mimic_form) {
+                case MIMIC_NONE:
+                    magnificant = calc_death_scythe_reflection_magnificant_mimic_none(attacker_ptr);
+                    break;
+                case MIMIC_DEMON:
+                case MIMIC_DEMON_LORD:
+                case MIMIC_VAMPIRE:
+                    magnificant = 30;
+                    break;
+                default:
+                    magnificant = 10;
+                    break;
                 }
 
+                if (attacker_ptr->align < 0 && magnificant < 20)
+                    magnificant = 20;
+                if (!(attacker_ptr->resist_acid || is_oppose_acid(attacker_ptr) || attacker_ptr->immune_acid) && (magnificant < 25))
+                    magnificant = 25;
+                if (!(attacker_ptr->resist_elec || is_oppose_elec(attacker_ptr) || attacker_ptr->immune_elec) && (magnificant < 25))
+                    magnificant = 25;
+                if (!(attacker_ptr->resist_fire || is_oppose_fire(attacker_ptr) || attacker_ptr->immune_fire) && (magnificant < 25))
+                    magnificant = 25;
+                if (!(attacker_ptr->resist_cold || is_oppose_cold(attacker_ptr) || attacker_ptr->immune_cold) && (magnificant < 25))
+                    magnificant = 25;
+                if (!(attacker_ptr->resist_pois || is_oppose_pois(attacker_ptr)) && (magnificant < 25))
+                    magnificant = 25;
+
+                if ((attacker_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs_aux, TR_FORCE_WEAPON)) && (attacker_ptr->csp > (attacker_ptr->msp / 30))) {
+                    attacker_ptr->csp -= (1 + (attacker_ptr->msp / 30));
+                    attacker_ptr->redraw |= (PR_MANA);
+                    magnificant = magnificant * 3 / 2 + 20;
+                }
+
+                pa_ptr->attack_damage *= (HIT_POINT)magnificant;
+                pa_ptr->attack_damage /= 10;
                 pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[hand], mode);
                 if (one_in_(6)) {
                     int more_magnificant = 2;
@@ -404,6 +401,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
                     pa_ptr->attack_damage *= (HIT_POINT)more_magnificant;
                 }
+
                 pa_ptr->attack_damage += (attacker_ptr->to_d[hand] + o_ptr->to_d);
                 if (pa_ptr->attack_damage < 0)
                     pa_ptr->attack_damage = 0;
