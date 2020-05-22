@@ -223,6 +223,39 @@ static void calc_num_blow(player_type *attacker_ptr, player_attack_type *pa_ptr)
 }
 
 /*!
+ * @brief 攻撃が当たるかどうかを判定する
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param chance 基本命中値
+ * @return なし
+ */
+static bool decide_attack_hit(player_type *attacker_ptr, player_attack_type *pa_ptr, int chance)
+{
+    bool success_hit = FALSE;
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
+        int n = 1;
+
+        if (attacker_ptr->migite && attacker_ptr->hidarite)
+            n *= 2;
+
+        if (pa_ptr->mode == HISSATSU_3DAN)
+            n *= 2;
+
+        success_hit = one_in_(n);
+    } else if ((attacker_ptr->pclass == CLASS_NINJA) && ((pa_ptr->backstab || pa_ptr->suprise_attack) && !(r_ptr->flagsr & RFR_RES_ALL)))
+        success_hit = TRUE;
+    else
+        success_hit = test_hit_norm(attacker_ptr, chance, r_ptr->ac, pa_ptr->m_ptr->ml);
+
+    if ((pa_ptr->mode == HISSATSU_MAJIN) && one_in_(2))
+        success_hit = FALSE;
+
+    return success_hit;
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -238,7 +271,6 @@ static void calc_num_blow(player_type *attacker_ptr, player_attack_type *pa_ptr)
 void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, combat_options mode)
 {
     GAME_TEXT m_name[MAX_NLEN];
-    bool success_hit = FALSE;
     bool vorpal_cut = FALSE;
     int chaos_effect = 0;
     bool do_quake = FALSE;
@@ -253,12 +285,12 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     floor_type *floor_ptr = attacker_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    player_attack_type tmp_attack;
+    player_attack_type *pa_ptr = initialize_player_attack_type(&tmp_attack, hand, mode, m_ptr);
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     bool is_human = (r_ptr->d_char == 'p');
     bool is_lowlevel = (r_ptr->level < (attacker_ptr->lev - 15));
 
-    player_attack_type tmp_attack;
-    player_attack_type *pa_ptr = initialize_player_attack_type(&tmp_attack, hand, mode, m_ptr);
     attack_classify(attacker_ptr, pa_ptr);
     get_attack_exp(attacker_ptr, pa_ptr);
 
@@ -275,27 +307,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     /* Attack once for each legal blow */
     int num = 0;
     while ((num++ < pa_ptr->num_blow) && !attacker_ptr->is_dead) {
-        if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (mode == HISSATSU_KYUSHO)) {
-            int n = 1;
-
-            if (attacker_ptr->migite && attacker_ptr->hidarite) {
-                n *= 2;
-            }
-            if (mode == HISSATSU_3DAN) {
-                n *= 2;
-            }
-
-            success_hit = one_in_(n);
-        } else if ((attacker_ptr->pclass == CLASS_NINJA) && ((pa_ptr->backstab || pa_ptr->suprise_attack) && !(r_ptr->flagsr & RFR_RES_ALL)))
-            success_hit = TRUE;
-        else
-            success_hit = test_hit_norm(attacker_ptr, chance, r_ptr->ac, m_ptr->ml);
-
-        if (mode == HISSATSU_MAJIN) {
-            if (one_in_(2))
-                success_hit = FALSE;
-        }
-
+        bool success_hit = decide_attack_hit(attacker_ptr, pa_ptr, chance);
         if (!success_hit) {
             pa_ptr->backstab = FALSE; /* Clumsy! */
             pa_ptr->suprise_attack = FALSE; /* Clumsy! */
