@@ -3,12 +3,13 @@
 #include "effect/effect-player-spirit.h"
 #include "mspell/monster-spell.h"
 #include "player/player-damage.h"
+#include "mind/racial-mirror-master.h"
 #include "player/player-effects.h"
 #include "world/world.h"
 
 void effect_player_drain_mana(player_type *target_ptr,
                               effect_player_type *ep_ptr) {
-  if (CHECK_MULTISHADOW(target_ptr)) {
+  if (check_multishadow(target_ptr)) {
     msg_print(_("攻撃は幻影に命中し、あなたには届かなかった。",
                 "The attack hits Shadow, but you are unharmed!"));
     ep_ptr->dam = 0;
@@ -65,13 +66,13 @@ void effect_player_drain_mana(player_type *target_ptr,
 void effect_player_mind_blast(player_type *target_ptr,
                               effect_player_type *ep_ptr) {
   if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, target_ptr->skill_sav)) &&
-      !CHECK_MULTISHADOW(target_ptr)) {
+      !check_multishadow(target_ptr)) {
     msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
     learn_spell(target_ptr, ep_ptr->monspell);
     return;
   }
 
-  if (CHECK_MULTISHADOW(target_ptr)) {
+  if (check_multishadow(target_ptr)) {
     ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam,
                                   ep_ptr->killer, ep_ptr->monspell);
     return;
@@ -101,13 +102,13 @@ void effect_player_mind_blast(player_type *target_ptr,
 void effect_player_brain_smash(player_type *target_ptr,
                                effect_player_type *ep_ptr) {
   if ((randint0(100 + ep_ptr->rlev / 2) < MAX(5, target_ptr->skill_sav)) &&
-      !CHECK_MULTISHADOW(target_ptr)) {
+      !check_multishadow(target_ptr)) {
     msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
     learn_spell(target_ptr, ep_ptr->monspell);
     return;
   }
 
-  if (!CHECK_MULTISHADOW(target_ptr)) {
+  if (!check_multishadow(target_ptr)) {
     msg_print(_("霊的エネルギーで精神が攻撃された。",
                 "Your mind is blasted by psionic energy."));
 
@@ -121,7 +122,7 @@ void effect_player_brain_smash(player_type *target_ptr,
 
   ep_ptr->get_damage = take_hit(target_ptr, DAMAGE_ATTACK, ep_ptr->dam,
                                 ep_ptr->killer, ep_ptr->monspell);
-  if (CHECK_MULTISHADOW(target_ptr))
+  if (check_multishadow(target_ptr))
     return;
 
   if (!target_ptr->resist_blind) {

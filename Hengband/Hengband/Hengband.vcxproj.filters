@@ -998,6 +998,9 @@
     <ClCompile Include="..\..\src\inventory\inventory-damage.c">
       <Filter>inventory</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\racial-mirror-master.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2064,6 +2067,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\inventory\inventory-damage.h">
       <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\racial-mirror-master.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

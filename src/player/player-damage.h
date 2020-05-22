@@ -1,8 +1,5 @@
 ﻿#pragma once
 
-/* Multishadow effects is determined by turn */
-#define CHECK_MULTISHADOW(CRE_PTR) ((CRE_PTR)->multishadow && (current_world_ptr->game_turn & 1))
-
 #define DAMAGE_FORCE    1
 #define DAMAGE_GENO     2
 #define DAMAGE_LOSELIFE 3

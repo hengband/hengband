@@ -4,7 +4,7 @@
 #include "object/artifact.h"
 #include "object/object-hook.h"
 #include "object/object-broken.h"
-#include "player/player-effects.h" // 暫定、後で消す.
+#include "mind/racial-mirror-master.h"
 
 /*!
  * @brief アイテムを指定確率で破損させる /
@@ -25,7 +25,7 @@ void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
     object_type *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
 
-    if (CHECK_MULTISHADOW(player_ptr) || player_ptr->current_floor_ptr->inside_arena)
+    if (check_multishadow(player_ptr) || player_ptr->current_floor_ptr->inside_arena)
         return;
 
     /* Scan through the slots backwards */

@@ -33,6 +33,7 @@
 #include "io/save.h"
 #include "io/files-util.h"
 #include "inventory/inventory-damage.h"
+#include "mind/racial-mirror-master.h"
 
 /*!
 * @brief 酸攻撃による装備のAC劣化処理 /
@@ -127,7 +128,7 @@ HIT_POINT acid_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 	if (creature_ptr->resist_acid) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if (aura || !CHECK_MULTISHADOW(creature_ptr))
+	if (aura || !check_multishadow(creature_ptr))
 	{
 		if ((!(double_resist || creature_ptr->resist_acid)) &&
 			one_in_(HURT_CHANCE))
@@ -178,7 +179,7 @@ HIT_POINT elec_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 	if (creature_ptr->resist_elec) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if (aura || !CHECK_MULTISHADOW(creature_ptr))
+	if (aura || !check_multishadow(creature_ptr))
 	{
 		if ((!(double_resist || creature_ptr->resist_elec)) &&
 			one_in_(HURT_CHANCE))
@@ -227,7 +228,7 @@ HIT_POINT fire_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 	if (creature_ptr->resist_fire) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if (aura || !CHECK_MULTISHADOW(creature_ptr))
+	if (aura || !check_multishadow(creature_ptr))
 	{
 		if ((!(double_resist || creature_ptr->resist_fire)) &&
 			one_in_(HURT_CHANCE))
@@ -275,7 +276,7 @@ HIT_POINT cold_dam(player_type *creature_ptr, HIT_POINT dam, concptr kb_str, int
 	if (creature_ptr->resist_cold) dam = (dam + 2) / 3;
 	if (double_resist) dam = (dam + 2) / 3;
 
-	if (aura || !CHECK_MULTISHADOW(creature_ptr))
+	if (aura || !check_multishadow(creature_ptr))
 	{
 		if ((!(double_resist || creature_ptr->resist_cold)) &&
 			one_in_(HURT_CHANCE))
@@ -346,7 +347,7 @@ int take_hit(player_type *creature_ptr, int damage_type, HIT_POINT damage, concp
 			}
 		}
 
-		if (CHECK_MULTISHADOW(creature_ptr))
+		if (check_multishadow(creature_ptr))
 		{
 			if (damage_type == DAMAGE_FORCE)
 			{

@@ -2,6 +2,7 @@
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-psi.h"
 #include "player/player-damage.h"
+#include "mind/racial-mirror-master.h"
 #include "world/world.h"
 #include "player/player-effects.h"
 
@@ -81,7 +82,7 @@ static void effect_monster_psi_resist(player_type *caster_ptr, effect_monster_ty
 	if (effect_monster_psi_weird_mind(em_ptr)) return;
 	if (!effect_monster_psi_corrupted(caster_ptr, em_ptr)) return;
 
-	if ((randint0(100 + em_ptr->r_ptr->level / 2) < caster_ptr->skill_sav) && !CHECK_MULTISHADOW(caster_ptr))
+	if ((randint0(100 + em_ptr->r_ptr->level / 2) < caster_ptr->skill_sav) && !check_multishadow(caster_ptr))
 	{
 		msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
 		em_ptr->dam = 0;
@@ -91,7 +92,7 @@ static void effect_monster_psi_resist(player_type *caster_ptr, effect_monster_ty
 	/* Injure +/- confusion */
 	monster_desc(caster_ptr, em_ptr->killer, em_ptr->m_ptr, MD_WRONGDOER_NAME);
 	take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer, -1);
-	if (!one_in_(4) || CHECK_MULTISHADOW(caster_ptr))
+	if (!one_in_(4) || check_multishadow(caster_ptr))
 	{
 		em_ptr->dam = 0;
 		return;
@@ -166,7 +167,7 @@ static void effect_monster_psi_drain_resist(player_type *caster_ptr, effect_mons
 	em_ptr->dam /= 3;
 	if (effect_monster_psi_drain_corrupted(caster_ptr, em_ptr)) return;
 
-	if ((randint0(100 + em_ptr->r_ptr->level / 2) < caster_ptr->skill_sav) && !CHECK_MULTISHADOW(caster_ptr))
+	if ((randint0(100 + em_ptr->r_ptr->level / 2) < caster_ptr->skill_sav) && !check_multishadow(caster_ptr))
 	{
 		msg_print(_("あなたは効力を跳ね返した！", "You resist the effects!"));
 		em_ptr->dam = 0;
@@ -174,7 +175,7 @@ static void effect_monster_psi_drain_resist(player_type *caster_ptr, effect_mons
 	}
 
 	monster_desc(caster_ptr, em_ptr->killer, em_ptr->m_ptr, MD_WRONGDOER_NAME);
-	if (CHECK_MULTISHADOW(caster_ptr))
+	if (check_multishadow(caster_ptr))
 	{
 		take_hit(caster_ptr, DAMAGE_ATTACK, em_ptr->dam, em_ptr->killer, -1);
 		em_ptr->dam = 0;

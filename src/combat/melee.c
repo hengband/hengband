@@ -39,6 +39,7 @@
 #include "player/player-effects.h"
 #include "player/player-skill.h"
 #include "player/player-damage.h"
+#include "mind/racial-mirror-master.h"
 #include "player/player-status.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
@@ -1781,7 +1782,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 				case RBE_SUPERHURT:	/* AC軽減あり / Player armor reduces total damage */
 				{
-					if (((randint1(rlev*2+300) > (ac+200)) || one_in_(13)) && !CHECK_MULTISHADOW(target_ptr))
+					if (((randint1(rlev*2+300) > (ac+200)) || one_in_(13)) && !check_multishadow(target_ptr))
 					{
 						int tmp_damage = damage - (damage * ((ac < 150) ? ac : 150) / 250);
 						msg_print(_("痛恨の一撃！", "It was a critical hit!"));
@@ -1805,7 +1806,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (explode) break;
 
 					/* Take "poison" effect */
-					if (!(target_ptr->resist_pois || is_oppose_pois(target_ptr)) && !CHECK_MULTISHADOW(target_ptr))
+					if (!(target_ptr->resist_pois || is_oppose_pois(target_ptr)) && !check_multishadow(target_ptr))
 					{
 						if (set_poisoned(target_ptr, target_ptr->poisoned + randint1(rlev) + 5))
 						{
@@ -1826,7 +1827,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (explode) break;
 
 					/* Allow complete resist */
-					if (!target_ptr->resist_disen && !CHECK_MULTISHADOW(target_ptr))
+					if (!target_ptr->resist_disen && !check_multishadow(target_ptr))
 					{
 						/* Apply disenchantment */
 						if (apply_disenchant(target_ptr, 0))
@@ -1849,7 +1850,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				{
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 
 					/* Find an item */
 					for (k = 0; k < 10; k++)
@@ -1906,7 +1907,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					/* Confused monsters cannot steal successfully. -LM-*/
 					if (MON_CONFUSED(m_ptr)) break;
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 
 					obvious = TRUE;
 
@@ -1966,7 +1967,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					/* Confused monsters cannot steal successfully. -LM-*/
 					if (MON_CONFUSED(m_ptr)) break;
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 
 					/* Saving throw (unless paralyzed) based on dex and level */
 					if (!target_ptr->paralyzed && (randint0(100) < (adj_dex_safe[target_ptr->stat_ind[A_DEX]] + target_ptr->lev)))
@@ -2057,7 +2058,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				{
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 
 					/* Steal some food */
 					for (k = 0; k < 10; k++)
@@ -2097,7 +2098,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					o_ptr = &target_ptr->inventory_list[INVEN_LITE];
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 
 					/* Drain fuel */
 					if ((o_ptr->xtra4 > 0) && (!object_is_fixed_artifact(o_ptr)))
@@ -2165,7 +2166,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (target_ptr->is_dead) break;
 
 					/* Increase "blind" */
-					if (!target_ptr->resist_blind && !CHECK_MULTISHADOW(target_ptr))
+					if (!target_ptr->resist_blind && !check_multishadow(target_ptr))
 					{
 						if (set_blind(target_ptr, target_ptr->blind + 10 + randint1(rlev)))
 						{
@@ -2192,7 +2193,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (target_ptr->is_dead) break;
 
 					/* Increase "confused" */
-					if (!target_ptr->resist_conf && !CHECK_MULTISHADOW(target_ptr))
+					if (!target_ptr->resist_conf && !check_multishadow(target_ptr))
 					{
 						if (set_confused(target_ptr, target_ptr->confused + 3 + randint1(rlev)))
 						{
@@ -2213,7 +2214,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (target_ptr->is_dead) break;
 
 					/* Increase "afraid" */
-					if (CHECK_MULTISHADOW(target_ptr))
+					if (check_multishadow(target_ptr))
 					{
 						/* Do nothing */
 					}
@@ -2248,7 +2249,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (target_ptr->is_dead) break;
 
 					/* Increase "paralyzed" */
-					if (CHECK_MULTISHADOW(target_ptr))
+					if (check_multishadow(target_ptr))
 					{
 						/* Do nothing */
 					}
@@ -2283,7 +2284,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				{
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 					if (do_dec_stat(target_ptr, A_STR)) obvious = TRUE;
 
 					break;
@@ -2293,7 +2294,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				{
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 					if (do_dec_stat(target_ptr, A_INT)) obvious = TRUE;
 
 					break;
@@ -2303,7 +2304,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				{
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 					if (do_dec_stat(target_ptr, A_WIS)) obvious = TRUE;
 
 					break;
@@ -2313,7 +2314,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				{
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 					if (do_dec_stat(target_ptr, A_DEX)) obvious = TRUE;
 
 					break;
@@ -2323,7 +2324,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				{
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 					if (do_dec_stat(target_ptr, A_CON)) obvious = TRUE;
 
 					break;
@@ -2333,7 +2334,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				{
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 					if (do_dec_stat(target_ptr, A_CHR)) obvious = TRUE;
 
 					break;
@@ -2343,7 +2344,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				{
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 
 					/* Damage (stats) */
 					if (do_dec_stat(target_ptr, A_STR)) obvious = TRUE;
@@ -2382,7 +2383,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 
 					(void)drain_exp(target_ptr, d, d / 10, 95);
 					break;
@@ -2396,7 +2397,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 
 					(void)drain_exp(target_ptr, d, d / 10, 90);
 					break;
@@ -2410,7 +2411,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 
 					(void)drain_exp(target_ptr, d, d / 10, 75);
 					break;
@@ -2424,7 +2425,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 
 					(void)drain_exp(target_ptr, d, d / 10, 50);
 					break;
@@ -2434,7 +2435,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				{
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 
 					/* Take "poison" effect */
 					if (!(target_ptr->resist_pois || is_oppose_pois(target_ptr)))
@@ -2462,7 +2463,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				case RBE_TIME:
 				{
 					if (explode) break;
-					if (!target_ptr->resist_time && !CHECK_MULTISHADOW(target_ptr))
+					if (!target_ptr->resist_time && !check_multishadow(target_ptr))
 					{
 						switch (randint1(10))
 						{
@@ -2532,7 +2533,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
 					get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
 
-					if (target_ptr->is_dead || CHECK_MULTISHADOW(target_ptr)) break;
+					if (target_ptr->is_dead || check_multishadow(target_ptr)) break;
 
 					resist_drain = !drain_exp(target_ptr, d, d / 10, 50);
 
@@ -2585,7 +2586,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				{
 					obvious = TRUE;
 
-					if (CHECK_MULTISHADOW(target_ptr))
+					if (check_multishadow(target_ptr))
 					{
 						msg_print(_("攻撃は幻影に命中し、あなたには届かなかった。", "The attack hits Shadow, but you are unharmed!"));
 					}
@@ -2615,7 +2616,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (target_ptr->is_dead) break;
 
 					/* Decrease speed */
-					if (CHECK_MULTISHADOW(target_ptr))
+					if (check_multishadow(target_ptr))
 					{
 						/* Do nothing */
 					}
@@ -2636,7 +2637,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 					if (target_ptr->is_dead) break;
 
 					/* Decrease speed */
-					if (target_ptr->resist_sound || CHECK_MULTISHADOW(target_ptr))
+					if (target_ptr->resist_sound || check_multishadow(target_ptr))
 					{
 						/* Do nothing */
 					}

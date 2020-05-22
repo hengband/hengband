@@ -163,6 +163,7 @@ hengband_SOURCES = \
 	mind/mind.c mind/mind.h \
 	mind/racial.c mind/racial.h \
 	mind/racial-samurai.c mind/racial-samurai.h \
+	mind/racial-mirror-master.c mind/racial-mirror-master.h \
 	\
 	monster/creature.h monster/creature.c \
 	monster/monster.h monster/monster-race.c monster/monster-race.h \
@@ -205,6 +206,7 @@ hengband_SOURCES = \
 	inventory/recharge-processor.c inventory/recharge-processor.h \
 	inventory/pack-overflow.c inventory/pack-overflow.h \
 	inventory/player-inventory.c inventory/player-inventory.h \
+	inventory/inventory-damage.c inventory/inventory-damage.h \
 	\
 	player/player-move.c player/player-move.h \
 	player/player-damage.c player/player-damage.h \
