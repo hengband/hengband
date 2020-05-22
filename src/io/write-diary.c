@@ -70,7 +70,7 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return クエストID
  */
-static QUEST_IDX write_floor(player_type *creature_ptr, concptr *note_level)
+static QUEST_IDX write_floor(player_type *creature_ptr, concptr *note_level, char *note_level_buf)
 {
 	floor_type *floor_ptr = creature_ptr->current_floor_ptr;
 	QUEST_IDX q_idx = quest_number(creature_ptr, floor_ptr->dun_level);
@@ -84,7 +84,6 @@ static QUEST_IDX write_floor(player_type *creature_ptr, concptr *note_level)
 		*note_level = _("クエスト:", "Quest:");
 	else
 	{
-		char note_level_buf[40];
 #ifdef JP
 		sprintf(note_level_buf, "%d階(%s):", (int)floor_ptr->dun_level, d_name + d_info[creature_ptr->dungeon_idx].name);
 #else
@@ -194,7 +193,8 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 	if (!open_diary_file(&fff, &disable_diary)) return -1;
 
 	concptr note_level = "";
-	QUEST_IDX q_idx = write_floor(creature_ptr, &note_level);
+    char note_level_buf[40];
+	QUEST_IDX q_idx = write_floor(creature_ptr, &note_level, note_level_buf);
 
 	bool do_level = TRUE;
 	switch (type)
