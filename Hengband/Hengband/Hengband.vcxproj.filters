@@ -1001,6 +1001,9 @@
     <ClCompile Include="..\..\src\mind\racial-mirror-master.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\combat\player-attack.c">
+      <Filter>combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2070,6 +2073,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\racial-mirror-master.h">
       <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\player-attack.h">
+      <Filter>combat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
