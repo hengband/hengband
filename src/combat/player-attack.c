@@ -128,26 +128,30 @@ static void attack_check_bare_knuckle(player_type *attacker_ptr, player_attack_t
                 attacker_ptr->update |= (PU_BONUS);
             }
         }
-    } else if (object_is_melee_weapon(o_ptr)) {
-        if ((r_ptr->level + 10) > attacker_ptr->lev) {
-            OBJECT_TYPE_VALUE tval = attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand].tval - TV_WEAPON_BEGIN;
-            OBJECT_SUBTYPE_VALUE sval = attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand].sval;
-            int now_exp = attacker_ptr->weapon_exp[tval][sval];
-            if (now_exp < s_info[attacker_ptr->pclass].w_max[tval][sval]) {
-                SUB_EXP amount = 0;
-                if (now_exp < WEAPON_EXP_BEGINNER)
-                    amount = 80;
-                else if (now_exp < WEAPON_EXP_SKILLED)
-                    amount = 10;
-                else if ((now_exp < WEAPON_EXP_EXPERT) && (attacker_ptr->lev > 19))
-                    amount = 1;
-                else if ((attacker_ptr->lev > 34) && one_in_(2))
-                    amount = 1;
-                attacker_ptr->weapon_exp[tval][sval] += amount;
-                attacker_ptr->update |= (PU_BONUS);
-            }
-        }
+
+        return;
     }
+
+    if (!object_is_melee_weapon(o_ptr) || ((r_ptr->level + 10) <= attacker_ptr->lev))
+        return;
+
+    OBJECT_TYPE_VALUE tval = attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand].tval - TV_WEAPON_BEGIN;
+    OBJECT_SUBTYPE_VALUE sval = attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand].sval;
+    int now_exp = attacker_ptr->weapon_exp[tval][sval];
+    if (now_exp >= s_info[attacker_ptr->pclass].w_max[tval][sval])
+        return;
+
+    SUB_EXP amount = 0;
+    if (now_exp < WEAPON_EXP_BEGINNER)
+        amount = 80;
+    else if (now_exp < WEAPON_EXP_SKILLED)
+        amount = 10;
+    else if ((now_exp < WEAPON_EXP_EXPERT) && (attacker_ptr->lev > 19))
+        amount = 1;
+    else if ((attacker_ptr->lev > 34) && one_in_(2))
+        amount = 1;
+    attacker_ptr->weapon_exp[tval][sval] += amount;
+    attacker_ptr->update |= (PU_BONUS);
 }
 
 /*!
