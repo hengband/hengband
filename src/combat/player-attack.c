@@ -245,6 +245,32 @@ static bool decide_attack_hit(player_type *attacker_ptr, player_attack_type *pa_
 }
 
 /*!
+ * @brief 直接攻撃の命中を処理するメインルーチン
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param chance 基本命中値
+ * @return 当たればTRUE、外れればFALSE
+ */
+static bool process_attack_hit(player_type *attacker_ptr, player_attack_type *pa_ptr, int chance)
+{
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    if (decide_attack_hit(attacker_ptr, pa_ptr, chance))
+        return TRUE;
+
+    pa_ptr->backstab = FALSE; /* Clumsy! */
+    pa_ptr->suprise_attack = FALSE; /* Clumsy! */
+
+    if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3)) {
+        process_death_scythe_reflection(attacker_ptr, pa_ptr);
+    } else {
+        sound(SOUND_MISS);
+        msg_format(_("ミス！ %sにかわされた。", "You miss %s."), pa_ptr->m_name);
+    }
+
+    return FALSE;
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -295,20 +321,8 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     /* Attack once for each legal blow */
     int num = 0;
     while ((num++ < pa_ptr->num_blow) && !attacker_ptr->is_dead) {
-        bool success_hit = decide_attack_hit(attacker_ptr, pa_ptr, chance);
-        if (!success_hit) {
-            pa_ptr->backstab = FALSE; /* Clumsy! */
-            pa_ptr->suprise_attack = FALSE; /* Clumsy! */
-
-            if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3)) {
-                process_death_scythe_reflection(attacker_ptr, pa_ptr);
-            } else {
-                sound(SOUND_MISS);
-                msg_format(_("ミス！ %sにかわされた。", "You miss %s."), pa_ptr->m_name);
-            }
-
+        if (!process_attack_hit(attacker_ptr, pa_ptr, chance))
             continue;
-        }
 
         int vorpal_chance = ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) ? 2 : 4;
 
