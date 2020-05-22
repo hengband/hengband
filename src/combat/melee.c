@@ -136,44 +136,6 @@ HIT_POINT calc_attack_damage_with_slay(player_type *attacker_ptr, object_type *o
 }
 
 /*!
- * @brief モンスター打撃のクリティカルランクを返す /
- * Critical blow. All hits that do 95% of total possible damage,
- * @param dice モンスター打撃のダイス数
- * @param sides モンスター打撃の最大ダイス目
- * @param dam プレイヤーに与えたダメージ
- * @details
- * and which also do at least 20 damage, or, sometimes, N damage.
- * This is used only to determine "cuts" and "stuns".
- */
-static int monster_critical(DICE_NUMBER dice, DICE_SID sides, HIT_POINT dam)
-{
-	/* Must do at least 95% of perfect */
-	int total = dice * sides;
-	if (dam < total * 19 / 20) return 0;
-
-	/* Weak blows rarely work */
-	if ((dam < 20) && (randint0(100) >= dam)) return 0;
-
-	/* Perfect damage */
-	int max = 0;
-	if ((dam >= total) && (dam >= 40)) max++;
-
-	/* Super-charge */
-	if (dam >= 20)
-	{
-		while (randint0(100) < 2) max++;
-	}
-
-	/* Critical damage */
-	if (dam > 45) return (6 + max);
-	if (dam > 33) return (5 + max);
-	if (dam > 25) return (4 + max);
-	if (dam > 18) return (3 + max);
-	if (dam > 11) return (2 + max);
-	return (1 + max);
-}
-
-/*!
 * @brief 敵オーラによるプレイヤーのダメージ処理（補助）
 * @param m_ptr オーラを持つモンスターの構造体参照ポインタ
 * @param immune ダメージを回避できる免疫フラグ
@@ -2762,7 +2724,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				int cut_plus = 0;
 
 				/* Critical hit (zero if non-critical) */
-				tmp = monster_critical(d_dice, d_side, damage);
+				tmp = calc_monster_critical(d_dice, d_side, damage);
 
 				/* Roll for damage */
 				switch (tmp)
@@ -2787,7 +2749,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 				int stun_plus = 0;
 
 				/* Critical hit (zero if non-critical) */
-				tmp = monster_critical(d_dice, d_side, damage);
+				tmp = calc_monster_critical(d_dice, d_side, damage);
 
 				/* Roll for damage */
 				switch (tmp)
