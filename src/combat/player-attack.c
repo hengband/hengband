@@ -310,6 +310,40 @@ static int calc_death_scythe_reflection_magnificant(player_type *attacker_ptr)
 }
 
 /*!
+ * @brief 耐性等に応じて死の大鎌による反射ダメージ倍率を補正する
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param magnificant ダメージ倍率
+ * @param death_scythe_flags 死の大鎌に関するオブジェクトフラグ配列
+ * @return なし
+ */
+static void compensate_death_scythe_reflection_magnificant(player_type *attacker_ptr, int *magnificant, BIT_FLAGS *death_scythe_flags)
+{
+    if ((attacker_ptr->align < 0) && (*magnificant < 20))
+        *magnificant = 20;
+
+    if (!(attacker_ptr->resist_acid || is_oppose_acid(attacker_ptr) || attacker_ptr->immune_acid) && (*magnificant < 25))
+        *magnificant = 25;
+
+    if (!(attacker_ptr->resist_elec || is_oppose_elec(attacker_ptr) || attacker_ptr->immune_elec) && (*magnificant < 25))
+        *magnificant = 25;
+
+    if (!(attacker_ptr->resist_fire || is_oppose_fire(attacker_ptr) || attacker_ptr->immune_fire) && (*magnificant < 25))
+        *magnificant = 25;
+
+    if (!(attacker_ptr->resist_cold || is_oppose_cold(attacker_ptr) || attacker_ptr->immune_cold) && (*magnificant < 25))
+        *magnificant = 25;
+
+    if (!(attacker_ptr->resist_pois || is_oppose_pois(attacker_ptr)) && (*magnificant < 25))
+        *magnificant = 25;
+
+    if ((attacker_ptr->pclass != CLASS_SAMURAI) && (have_flag(death_scythe_flags, TR_FORCE_WEAPON)) && (attacker_ptr->csp > (attacker_ptr->msp / 30))) {
+        attacker_ptr->csp -= (1 + (attacker_ptr->msp / 30));
+        attacker_ptr->redraw |= (PR_MANA);
+        *magnificant = *magnificant * 3 / 2 + 20;
+    }
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -367,32 +401,14 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             pa_ptr->suprise_attack = FALSE; /* Clumsy! */
 
             if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3)) {
-                BIT_FLAGS flgs_aux[TR_FLAG_SIZE];
+                BIT_FLAGS death_scythe_flags[TR_FLAG_SIZE];
                 sound(SOUND_HIT);
                 msg_format(_("ミス！ %sにかわされた。", "You miss %s."), m_name);
                 msg_print(_("振り回した大鎌が自分自身に返ってきた！", "Your scythe returns to you!"));
-                object_flags(o_ptr, flgs_aux);
+                object_flags(o_ptr, death_scythe_flags);
                 pa_ptr->attack_damage = damroll(o_ptr->dd + attacker_ptr->to_dd[hand], o_ptr->ds + attacker_ptr->to_ds[hand]);
                 int magnificant = calc_death_scythe_reflection_magnificant(attacker_ptr);
-                if (attacker_ptr->align < 0 && magnificant < 20)
-                    magnificant = 20;
-                if (!(attacker_ptr->resist_acid || is_oppose_acid(attacker_ptr) || attacker_ptr->immune_acid) && (magnificant < 25))
-                    magnificant = 25;
-                if (!(attacker_ptr->resist_elec || is_oppose_elec(attacker_ptr) || attacker_ptr->immune_elec) && (magnificant < 25))
-                    magnificant = 25;
-                if (!(attacker_ptr->resist_fire || is_oppose_fire(attacker_ptr) || attacker_ptr->immune_fire) && (magnificant < 25))
-                    magnificant = 25;
-                if (!(attacker_ptr->resist_cold || is_oppose_cold(attacker_ptr) || attacker_ptr->immune_cold) && (magnificant < 25))
-                    magnificant = 25;
-                if (!(attacker_ptr->resist_pois || is_oppose_pois(attacker_ptr)) && (magnificant < 25))
-                    magnificant = 25;
-
-                if ((attacker_ptr->pclass != CLASS_SAMURAI) && (have_flag(flgs_aux, TR_FORCE_WEAPON)) && (attacker_ptr->csp > (attacker_ptr->msp / 30))) {
-                    attacker_ptr->csp -= (1 + (attacker_ptr->msp / 30));
-                    attacker_ptr->redraw |= (PR_MANA);
-                    magnificant = magnificant * 3 / 2 + 20;
-                }
-
+                compensate_death_scythe_reflection_magnificant(attacker_ptr, &magnificant, death_scythe_flags);
                 pa_ptr->attack_damage *= (HIT_POINT)magnificant;
                 pa_ptr->attack_damage /= 10;
                 pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[hand], mode);
