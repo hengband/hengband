@@ -178,6 +178,25 @@ static void get_attack_exp(player_type *attacker_ptr, player_attack_type *pa_ptr
     get_weapon_exp(attacker_ptr, pa_ptr);
 }
 
+static int calc_attack_quality(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    int bonus = attacker_ptr->to_h[pa_ptr->hand] + o_ptr->to_h;
+    int chance = (attacker_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
+    if (pa_ptr->mode == HISSATSU_IAI)
+        chance += 60;
+    if (attacker_ptr->special_defense & KATA_KOUKIJIN)
+        chance += 150;
+    if (attacker_ptr->sutemi)
+        chance = MAX(chance * 3 / 2, chance + 60);
+
+    int vir = virtue_number(attacker_ptr, V_VALOUR);
+    if (vir != 0)
+        chance += (attacker_ptr->virtues[vir - 1] / 10);
+
+    return chance;
+}
+
 /*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
@@ -193,7 +212,7 @@ static void get_attack_exp(player_type *attacker_ptr, player_attack_type *pa_ptr
  */
 void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, combat_options mode)
 {
-    int num = 0, bonus, chance, vir;
+    int num = 0;
     HIT_POINT k;
 
     floor_type *floor_ptr = attacker_ptr->current_floor_ptr;
@@ -230,24 +249,9 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
     /* Disturb the monster */
     (void)set_monster_csleep(attacker_ptr, g_ptr->m_idx, 0);
-
     monster_desc(attacker_ptr, m_name, m_ptr, 0);
 
-    /* Calculate the "attack quality" */
-    bonus = attacker_ptr->to_h[hand] + o_ptr->to_h;
-    chance = (attacker_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
-    if (mode == HISSATSU_IAI)
-        chance += 60;
-    if (attacker_ptr->special_defense & KATA_KOUKIJIN)
-        chance += 150;
-    if (attacker_ptr->sutemi)
-        chance = MAX(chance * 3 / 2, chance + 60);
-
-    vir = virtue_number(attacker_ptr, V_VALOUR);
-    if (vir) {
-        chance += (attacker_ptr->virtues[vir - 1] / 10);
-    }
-
+    int chance = calc_attack_quality(attacker_ptr, pa_ptr);
     zantetsu_mukou = ((o_ptr->name1 == ART_ZANTETSU) && (r_ptr->d_char == 'j'));
     e_j_mukou = ((o_ptr->name1 == ART_EXCALIBUR_J) && (r_ptr->d_char == 'S'));
 
