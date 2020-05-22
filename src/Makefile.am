@@ -343,6 +343,7 @@ hengband_SOURCES = \
 	combat/slaying.c combat/slaying.h \
 	combat/samurai-slaying.c combat/samurai-slaying.h \
 	combat/combat-options-type.h \
+	combat/attack-criticality.c combat/attack-criticality.h \
 	combat/shoot.c combat/shoot.h \
 	combat/snipe.c combat/snipe.h \
 	\

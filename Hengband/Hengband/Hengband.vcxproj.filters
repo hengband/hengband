@@ -992,6 +992,9 @@
     <ClCompile Include="..\..\src\mind\samurai-slaying.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\combat\attack-criticality.c">
+      <Filter>combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2052,6 +2055,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\samurai-slaying.h">
       <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\attack-criticality.h">
+      <Filter>combat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
