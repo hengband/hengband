@@ -788,9 +788,6 @@
     <ClCompile Include="..\..\src\core\sort.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\util\util.c">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spell\spells-detection.c">
       <Filter>spell</Filter>
     </ClCompile>
@@ -1033,6 +1030,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-race-hook.c">
       <Filter>monster</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\util.c">
+      <Filter>util</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1873,9 +1873,6 @@
     <ClInclude Include="..\..\src\core\sort.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\util\util.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-detection.h">
       <Filter>spell</Filter>
     </ClInclude>
@@ -2140,6 +2137,9 @@
     <ClInclude Include="..\..\src\monster\monster-race-hook.h">
       <Filter>monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\util\util.h">
+      <Filter>util</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2235,6 +2235,9 @@
     </Filter>
     <Filter Include="store">
       <UniqueIdentifier>{be097f30-d18c-4e9a-a13f-eac4ee7a9d9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="util">
+      <UniqueIdentifier>{d9907626-9c01-48b8-89da-065f7b8540b5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
