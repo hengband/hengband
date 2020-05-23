@@ -29,7 +29,7 @@
 #include "spell/spells3.h"
 #include "world/world.h"
 
-static player_attack_type *initialize_player_attack_type(player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr)
+static player_attack_type *initialize_player_attack_type(player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr, grid_type *g_ptr)
 {
     pa_ptr->hand = hand;
     pa_ptr->mode = mode;
@@ -43,6 +43,7 @@ static player_attack_type *initialize_player_attack_type(player_attack_type *pa_
     pa_ptr->can_drain = FALSE;
     pa_ptr->ma_ptr = &ma_blows[0];
     pa_ptr->drain_result = 0;
+    pa_ptr->g_ptr = g_ptr;
     return pa_ptr;
 }
 
@@ -334,12 +335,12 @@ static void process_weapon_attack(player_type *attacker_ptr, player_attack_type 
  * @details 取り敢えず素手と仮定し1とする.
  */
 static void calc_attack_damage(
-    player_type *attacker_ptr, player_attack_type *pa_ptr, grid_type *g_ptr, bool *do_quake, const bool vorpal_cut, const int vorpal_chance)
+    player_type *attacker_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool vorpal_cut, const int vorpal_chance)
 {
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
     pa_ptr->attack_damage = 1;
     if (pa_ptr->monk_attack) {
-        process_monk_attack(attacker_ptr, pa_ptr, g_ptr);
+        process_monk_attack(attacker_ptr, pa_ptr);
         return;
     }
 
@@ -380,7 +381,7 @@ static void apply_damage_bonus(player_type *attacker_ptr, player_attack_type *pa
  * @param is_ej_nullified 蜘蛛相手ならばTRUE
  * @details ダメージが0未満なら0に補正する
  */
-static void apply_damage_negative_effect(player_type *attacker_ptr, player_attack_type *pa_ptr, bool is_zantetsu_nullified, bool is_ej_nullified)
+static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zantetsu_nullified, bool is_ej_nullified)
 {
     if (pa_ptr->attack_damage < 0)
         pa_ptr->attack_damage = 0;
@@ -408,7 +409,7 @@ static void apply_damage_negative_effect(player_type *attacker_ptr, player_attac
  * @param g_ptr グリッドへの参照ポインタ
  * @return なし
  */
-static void mineuchi(player_type *attacker_ptr, player_attack_type *pa_ptr, grid_type *g_ptr)
+static void mineuchi(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
     if (pa_ptr->mode != HISSATSU_MINEUCHI)
         return;
@@ -429,7 +430,7 @@ static void mineuchi(player_type *attacker_ptr, player_attack_type *pa_ptr, grid
     } else
         msg_format(_("%s はもうろうとした。", "%s is dazed."), pa_ptr->m_name);
 
-    (void)set_monster_stunned(attacker_ptr, g_ptr->m_idx, MON_STUNNED(pa_ptr->m_ptr) + tmp);
+    (void)set_monster_stunned(attacker_ptr, pa_ptr->g_ptr->m_idx, MON_STUNNED(pa_ptr->m_ptr) + tmp);
 }
 
 /*!
@@ -457,7 +458,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     player_attack_type tmp_attack;
-    player_attack_type *pa_ptr = initialize_player_attack_type(&tmp_attack, hand, mode, m_ptr);
+    player_attack_type *pa_ptr = initialize_player_attack_type(&tmp_attack, hand, mode, m_ptr, g_ptr);
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     bool is_human = (r_ptr->d_char == 'p');
     bool is_lowlevel = (r_ptr->level < (attacker_ptr->lev - 15));
@@ -494,12 +495,10 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         bool vorpal_cut = (have_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1)
             && !is_zantetsu_nullified;
 
-        calc_attack_damage(attacker_ptr, pa_ptr, g_ptr, &do_quake, vorpal_cut, vorpal_chance);
+        calc_attack_damage(attacker_ptr, pa_ptr, &do_quake, vorpal_cut, vorpal_chance);
         apply_damage_bonus(attacker_ptr, pa_ptr);
-        apply_damage_negative_effect(attacker_ptr, pa_ptr, is_zantetsu_nullified, is_ej_nullified);
-        mineuchi(attacker_ptr, pa_ptr, g_ptr);
-
-        /* Modify the damage */
+        apply_damage_negative_effect(pa_ptr, is_zantetsu_nullified, is_ej_nullified);
+        mineuchi(attacker_ptr, pa_ptr);
         pa_ptr->attack_damage = mon_damage_mod(attacker_ptr, m_ptr, pa_ptr->attack_damage,
             (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((attacker_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
         if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (mode == HISSATSU_KYUSHO)) {

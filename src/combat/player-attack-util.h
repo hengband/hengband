@@ -29,4 +29,5 @@ typedef struct player_attack_type {
     bool can_drain;
     const martial_arts *ma_ptr;
     int drain_result;
+    grid_type *g_ptr;
 } player_attack_type;
