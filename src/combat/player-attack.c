@@ -310,6 +310,29 @@ static void print_vorpal_message(player_attack_type *pa_ptr, const int magnifica
     }
 }
 
+/*!
+ * @brief チェンソーのノイズ音を表示する
+ * @param o_ptr チェンソーへの参照ポインタ
+ * @return なし
+ */
+static void print_chainsword_noise(object_type *o_ptr)
+{
+    if ((o_ptr->name1 != ART_CHAINSWORD) || one_in_(2))
+        return;
+
+    char chainsword_noise[1024];
+    if (!get_rnd_line(_("chainswd_j.txt", "chainswd.txt"), 0, chainsword_noise))
+        msg_print(chainsword_noise);
+}
+
+/*!
+ * @brief ヴォーパル武器利用時の処理メインルーチン
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param vorpal_cut メッタ斬りにできるかどうか
+ * @param vorpal_chance
+ * @return なし
+ */
 static void process_vorpal_attack(player_type *attacker_ptr, player_attack_type *pa_ptr, const bool vorpal_cut, const int vorpal_chance)
 {
     if (!vorpal_cut)
@@ -317,13 +340,7 @@ static void process_vorpal_attack(player_type *attacker_ptr, player_attack_type 
 
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
     int vorpal_magnification = 2;
-    if ((o_ptr->name1 == ART_CHAINSWORD) && !one_in_(2)) {
-        char chainsword_noise[1024];
-        if (!get_rnd_line(_("chainswd_j.txt", "chainswd.txt"), 0, chainsword_noise)) {
-            msg_print(chainsword_noise);
-        }
-    }
-
+    print_chainsword_noise(o_ptr);
     if (o_ptr->name1 == ART_VORPAL_BLADE)
         msg_print(_("目にも止まらぬヴォーパルブレード、手錬の早業！", "Your Vorpal Blade goes snicker-snack!"));
     else
