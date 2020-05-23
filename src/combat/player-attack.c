@@ -279,6 +279,18 @@ static bool process_attack_hit(player_type *attacker_ptr, player_attack_type *pa
     return FALSE;
 }
 
+static void print_suprise_attack(player_attack_type *pa_ptr)
+{
+    if (pa_ptr->backstab)
+        msg_format(_("あなたは冷酷にも眠っている無力な%sを突き刺した！", "You cruelly stab the helpless, sleeping %s!"), pa_ptr->m_name);
+    else if (pa_ptr->suprise_attack)
+        msg_format(_("不意を突いて%sに強烈な一撃を喰らわせた！", "You make surprise attack, and hit %s with a powerful blow!"), pa_ptr->m_name);
+    else if (pa_ptr->stab_fleeing)
+        msg_format(_("逃げる%sを背中から突き刺した！", "You backstab the fleeing %s!"), pa_ptr->m_name);
+    else if (!pa_ptr->monk_attack)
+        msg_format(_("%sを攻撃した。", "You hit %s."), pa_ptr->m_name);
+}
+
 /*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
@@ -303,7 +315,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     int drain_heal = 0;
     bool can_drain = FALSE;
     int drain_left = MAX_VAMPIRIC_DRAIN;
-    BIT_FLAGS flgs[TR_FLAG_SIZE]; /* A massive hack -- life-draining weapons */
+    BIT_FLAGS flags[TR_FLAG_SIZE]; /* A massive hack -- life-draining weapons */
 
     floor_type *floor_ptr = attacker_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -336,23 +348,15 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         int vorpal_chance = ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) ? 2 : 4;
 
         sound(SOUND_HIT);
+        print_suprise_attack(pa_ptr);
 
-        if (pa_ptr->backstab)
-            msg_format(_("あなたは冷酷にも眠っている無力な%sを突き刺した！", "You cruelly stab the helpless, sleeping %s!"), pa_ptr->m_name);
-        else if (pa_ptr->suprise_attack)
-            msg_format(_("不意を突いて%sに強烈な一撃を喰らわせた！", "You make surprise attack, and hit %s with a powerful blow!"), pa_ptr->m_name);
-        else if (pa_ptr->stab_fleeing)
-            msg_format(_("逃げる%sを背中から突き刺した！", "You backstab the fleeing %s!"), pa_ptr->m_name);
-        else if (!pa_ptr->monk_attack)
-            msg_format(_("%sを攻撃した。", "You hit %s."), pa_ptr->m_name);
-
-        /* Hack -- bare hands do one damage */
+        // ダメージ計算を開始、取り敢えず素手と仮定し1とする.
         pa_ptr->attack_damage = 1;
 
-        object_flags(o_ptr, flgs);
+        object_flags(o_ptr, flags);
 
         /* Select a chaotic effect (50% chance) */
-        if ((have_flag(flgs, TR_CHAOTIC)) && one_in_(2)) {
+        if ((have_flag(flags, TR_CHAOTIC)) && one_in_(2)) {
             if (one_in_(10))
                 chg_virtue(attacker_ptr, V_CHANCE, 1);
 
@@ -375,7 +379,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         }
 
         /* Vampiric drain */
-        if ((have_flag(flgs, TR_VAMPIRIC)) || (chaos_effect == 1) || (mode == HISSATSU_DRAIN) || hex_spelling(attacker_ptr, HEX_VAMP_BLADE)) {
+        if ((have_flag(flags, TR_VAMPIRIC)) || (chaos_effect == 1) || (mode == HISSATSU_DRAIN) || hex_spelling(attacker_ptr, HEX_VAMP_BLADE)) {
             /* Only drain "living" monsters */
             if (monster_living(m_ptr->r_idx))
                 can_drain = TRUE;
@@ -383,7 +387,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 can_drain = FALSE;
         }
 
-        if ((have_flag(flgs, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified)
+        if ((have_flag(flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified)
             vorpal_cut = TRUE;
         else
             vorpal_cut = FALSE;
