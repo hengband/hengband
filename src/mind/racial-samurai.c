@@ -7,6 +7,7 @@
 #include "system/angband.h"
 #include "racial-samurai.h"
 #include "cmd/cmd-pet.h"
+#include "monster/monster-status.h"
 #include "player/player-effects.h"
 #include "cmd/cmd-basic.h"
 #include "player/avatar.h"
@@ -140,4 +141,34 @@ int calc_attack_quality(player_type *attacker_ptr, player_attack_type *pa_ptr)
         chance += (attacker_ptr->virtues[vir - 1] / 10);
 
     return chance;
+}
+
+/*!
+ * @brief 峰打ちの効果処理
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+void mineuchi(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    if (pa_ptr->mode != HISSATSU_MINEUCHI)
+        return;
+
+    pa_ptr->attack_damage = 0;
+    anger_monster(attacker_ptr, pa_ptr->m_ptr);
+
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    if ((r_ptr->flags3 & (RF3_NO_STUN))) {
+        msg_format(_("%s には効果がなかった。", "%s is not effected."), pa_ptr->m_name);
+        return;
+    }
+
+    int tmp = (10 + randint1(15) + attacker_ptr->lev / 5);
+    if (MON_STUNNED(pa_ptr->m_ptr)) {
+        msg_format(_("%sはひどくもうろうとした。", "%s is more dazed."), pa_ptr->m_name);
+        tmp /= 2;
+    } else
+        msg_format(_("%s はもうろうとした。", "%s is dazed."), pa_ptr->m_name);
+
+    (void)set_monster_stunned(attacker_ptr, pa_ptr->g_ptr->m_idx, MON_STUNNED(pa_ptr->m_ptr) + tmp);
 }
