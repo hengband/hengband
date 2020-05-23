@@ -278,6 +278,39 @@ static void calc_surprise_attack_damage(player_type *attacker_ptr, player_attack
 }
 
 /*!
+ * @brief ヴォーパル武器で攻撃した時のメッセージ表示
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param int 倍率
+ * @return なし
+ */
+static void print_vorpal_message(player_attack_type *pa_ptr, const int magnification)
+{
+    switch (magnification) {
+    case 2:
+        msg_format(_("%sを斬った！", "You gouge %s!"), pa_ptr->m_name);
+        break;
+    case 3:
+        msg_format(_("%sをぶった斬った！", "You maim %s!"), pa_ptr->m_name);
+        break;
+    case 4:
+        msg_format(_("%sをメッタ斬りにした！", "You carve %s!"), pa_ptr->m_name);
+        break;
+    case 5:
+        msg_format(_("%sをメッタメタに斬った！", "You cleave %s!"), pa_ptr->m_name);
+        break;
+    case 6:
+        msg_format(_("%sを刺身にした！", "You smite %s!"), pa_ptr->m_name);
+        break;
+    case 7:
+        msg_format(_("%sを斬って斬って斬りまくった！", "You eviscerate %s!"), pa_ptr->m_name);
+        break;
+    default:
+        msg_format(_("%sを細切れにした！", "You shred %s!"), pa_ptr->m_name);
+        break;
+    }
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -359,7 +392,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             pa_ptr->drain_result = pa_ptr->attack_damage;
 
             if (vorpal_cut) {
-                int mult = 2;
+                int vorpal_magnification = 2;
 
                 if ((o_ptr->name1 == ART_CHAINSWORD) && !one_in_(2)) {
                     char chainsword_noise[1024];
@@ -376,39 +409,15 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
                 /* Try to increase the damage */
                 while (one_in_(vorpal_chance)) {
-                    mult++;
+                    vorpal_magnification++;
                 }
 
-                pa_ptr->attack_damage *= (HIT_POINT)mult;
-
-                /* Ouch! */
-                if (((r_ptr->flagsr & RFR_RES_ALL) ? pa_ptr->attack_damage / 100 : pa_ptr->attack_damage) > m_ptr->hp) {
+                pa_ptr->attack_damage *= (HIT_POINT)vorpal_magnification;
+                if (((r_ptr->flagsr & RFR_RES_ALL) ? pa_ptr->attack_damage / 100 : pa_ptr->attack_damage) > m_ptr->hp)
                     msg_format(_("%sを真っ二つにした！", "You cut %s in half!"), pa_ptr->m_name);
-                } else {
-                    switch (mult) {
-                    case 2:
-                        msg_format(_("%sを斬った！", "You gouge %s!"), pa_ptr->m_name);
-                        break;
-                    case 3:
-                        msg_format(_("%sをぶった斬った！", "You maim %s!"), pa_ptr->m_name);
-                        break;
-                    case 4:
-                        msg_format(_("%sをメッタ斬りにした！", "You carve %s!"), pa_ptr->m_name);
-                        break;
-                    case 5:
-                        msg_format(_("%sをメッタメタに斬った！", "You cleave %s!"), pa_ptr->m_name);
-                        break;
-                    case 6:
-                        msg_format(_("%sを刺身にした！", "You smite %s!"), pa_ptr->m_name);
-                        break;
-                    case 7:
-                        msg_format(_("%sを斬って斬って斬りまくった！", "You eviscerate %s!"), pa_ptr->m_name);
-                        break;
-                    default:
-                        msg_format(_("%sを細切れにした！", "You shred %s!"), pa_ptr->m_name);
-                        break;
-                    }
-                }
+                else
+                    print_vorpal_message(pa_ptr, vorpal_magnification);
+                
                 pa_ptr->drain_result = pa_ptr->drain_result * 3 / 2;
             }
 
