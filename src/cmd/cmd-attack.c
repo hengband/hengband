@@ -45,35 +45,30 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
         dice_side = 7;
         n_weight = 5;
         atk_desc = _("尻尾", "tail");
-
         break;
     case MUT2_HORNS:
         dice_num = 2;
         dice_side = 6;
         n_weight = 15;
         atk_desc = _("角", "horns");
-
         break;
     case MUT2_BEAK:
         dice_num = 2;
         dice_side = 4;
         n_weight = 5;
         atk_desc = _("クチバシ", "beak");
-
         break;
     case MUT2_TRUNK:
         dice_num = 1;
         dice_side = 4;
         n_weight = 35;
         atk_desc = _("象の鼻", "trunk");
-
         break;
     case MUT2_TENTACLES:
         dice_num = 2;
         dice_side = 5;
         n_weight = 5;
         atk_desc = _("触手", "tentacles");
-
         break;
     default:
         dice_num = dice_side = n_weight = 1;
@@ -83,7 +78,6 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
     GAME_TEXT m_name[MAX_NLEN];
     monster_desc(attacker_ptr, m_name, m_ptr, 0);
 
-    /* Calculate the "attack quality" */
     int bonus = attacker_ptr->to_h_m + (attacker_ptr->lev * 6 / 5);
     int chance = (attacker_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
 
@@ -100,26 +94,16 @@ static void natural_attack(player_type *attacker_ptr, MONSTER_IDX m_idx, int att
 
     HIT_POINT k = damroll(dice_num, dice_side);
     k = critical_norm(attacker_ptr, n_weight, bonus, k, (s16b)bonus, 0);
-
-    /* Apply the player damage bonuses */
     k += attacker_ptr->to_d_m;
-
-    /* No negative damage */
     if (k < 0)
         k = 0;
 
-    /* Modify the damage */
     k = mon_damage_mod(attacker_ptr, m_ptr, k, FALSE);
-
-    /* Complex message */
     msg_format_wizard(CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), k, m_ptr->hp - k, m_ptr->maxhp,
         m_ptr->max_maxhp);
-
-    /* Anger the monster */
     if (k > 0)
         anger_monster(attacker_ptr, m_ptr);
 
-    /* Damage, check for fear and mdeath */
     switch (attack) {
     case MUT2_SCOR_TAIL:
         project(attacker_ptr, 0, 0, m_ptr->fy, m_ptr->fx, k, GF_POIS, PROJECT_KILL, -1);
@@ -172,7 +156,6 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
     monster_desc(attacker_ptr, m_name, m_ptr, 0);
 
     if (m_ptr->ml) {
-        /* Auto-Recall if possible and visible */
         if (!attacker_ptr->image)
             monster_race_track(attacker_ptr, m_ptr->ap_r_idx);
 
@@ -191,7 +174,6 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
         return FALSE;
     }
 
-    /* Stop if friendly */
     bool stormbringer = FALSE;
     if (!is_hostile(m_ptr) && !(attacker_ptr->stun || attacker_ptr->confused || attacker_ptr->image || attacker_ptr->shero || !m_ptr->ml)) {
         if (attacker_ptr->inventory_list[INVEN_RARM].name1 == ART_STORMBRINGER)
@@ -217,20 +199,17 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
         }
     }
 
-    /* Handle player fear */
     if (attacker_ptr->afraid) {
         if (m_ptr->ml)
             msg_format(_("恐くて%sを攻撃できない！", "You are too afraid to attack %s!"), m_name);
         else
             msg_format(_("そっちには何か恐いものがいる！", "There is something scary in your way!"));
 
-        /* Disturb the monster */
         (void)set_monster_csleep(attacker_ptr, g_ptr->m_idx, 0);
-
         return FALSE;
     }
 
-    if (MON_CSLEEP(m_ptr)) /* It is not honorable etc to attack helpless victims */
+    if (MON_CSLEEP(m_ptr))
     {
         if (!(r_ptr->flags3 & RF3_EVIL) || one_in_(5))
             chg_virtue(attacker_ptr, V_COMPASSION, -1);
@@ -254,7 +233,6 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
         }
     }
 
-    /* Gain riding experience */
     if (attacker_ptr->riding) {
         int cur = attacker_ptr->skill_exp[GINOU_RIDING];
         int max = s_info[attacker_ptr->pclass].s_max[GINOU_RIDING];
@@ -267,7 +245,6 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
             if ((cur / 200 - 5) < targetlevel)
                 inc += 1;
 
-            /* Extra experience */
             if ((cur / 100) < ridinglevel) {
                 if ((cur / 100 + 15) < ridinglevel)
                     inc += 1 + (ridinglevel - (cur / 100 + 15));
@@ -288,7 +265,6 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
     if (attacker_ptr->hidarite && !mdeath)
         exe_player_attack_to_monster(attacker_ptr, y, x, &fear, &mdeath, 1, mode);
 
-    /* Mutations which yield extra 'natural' attacks */
     if (!mdeath) {
         if ((attacker_ptr->muta2 & MUT2_HORNS) && !mdeath)
             natural_attack(attacker_ptr, g_ptr->m_idx, MUT2_HORNS, &fear, &mdeath);
@@ -302,10 +278,8 @@ bool do_cmd_attack(player_type *attacker_ptr, POSITION y, POSITION x, combat_opt
             natural_attack(attacker_ptr, g_ptr->m_idx, MUT2_TENTACLES, &fear, &mdeath);
     }
 
-    /* Hack -- delay fear messages */
     if (fear && m_ptr->ml && !mdeath) {
         sound(SOUND_FLEE);
-
         msg_format(_("%^sは恐怖して逃げ出した！", "%^s flees in terror!"), m_name);
     }
 
