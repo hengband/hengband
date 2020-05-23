@@ -478,6 +478,45 @@ static void calc_drain(player_attack_type *pa_ptr)
 }
 
 /*!
+ * @brief 村正による吸血処理
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param is_human モンスターが人間かどうか
+ * @return なし
+ */
+static void drain_muramasa(player_type *attacker_ptr, player_attack_type *pa_ptr, const bool is_human)
+{
+    if (!is_human)
+        return;
+
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    HIT_PROB to_h = o_ptr->to_h;
+    HIT_POINT to_d = o_ptr->to_d;
+    bool flag = TRUE;
+    for (int i = 0; i < to_h + 3; i++)
+        if (one_in_(4))
+            flag = FALSE;
+
+    if (flag)
+        to_h++;
+
+    flag = TRUE;
+    for (int i = 0; i < to_d + 3; i++)
+        if (one_in_(4))
+            flag = FALSE;
+
+    if (flag)
+        to_d++;
+
+    if ((o_ptr->to_h == to_h) && (o_ptr->to_d == to_d))
+        return;
+
+    msg_print(_("妖刀は血を吸って強くなった！", "Muramasa sucked blood, and became more powerful!"));
+    o_ptr->to_h = to_h;
+    o_ptr->to_d = to_d;
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -561,33 +600,9 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
         // 死んだら吸血できない. / If monster is dead, then the player can't suck it's blood.
         if (pa_ptr->can_drain && (pa_ptr->drain_result > 0)) {
-            if (o_ptr->name1 == ART_MURAMASA) {
-                if (is_human) {
-                    HIT_PROB to_h = o_ptr->to_h;
-                    HIT_POINT to_d = o_ptr->to_d;
-                    int i, flag;
-
-                    flag = 1;
-                    for (i = 0; i < to_h + 3; i++)
-                        if (one_in_(4))
-                            flag = 0;
-                    if (flag)
-                        to_h++;
-
-                    flag = 1;
-                    for (i = 0; i < to_d + 3; i++)
-                        if (one_in_(4))
-                            flag = 0;
-                    if (flag)
-                        to_d++;
-
-                    if (o_ptr->to_h != to_h || o_ptr->to_d != to_d) {
-                        msg_print(_("妖刀は血を吸って強くなった！", "Muramasa sucked blood, and became more powerful!"));
-                        o_ptr->to_h = to_h;
-                        o_ptr->to_d = to_d;
-                    }
-                }
-            } else {
+            if (o_ptr->name1 == ART_MURAMASA)
+                drain_muramasa(attacker_ptr, pa_ptr, is_human);
+            else {
                 if (pa_ptr->drain_result > 5) /* Did we really hurt it? */
                 {
                     drain_heal = damroll(2, pa_ptr->drain_result / 6);
