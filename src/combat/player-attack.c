@@ -134,7 +134,7 @@ static void get_attack_exp(player_type *attacker_ptr, player_attack_type *pa_ptr
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
-    if (!o_ptr->k_idx == 0) {
+    if (o_ptr->k_idx == 0) {
         get_bare_knuckle_exp(attacker_ptr, pa_ptr);
         return;
     }
