@@ -29,6 +29,15 @@
 #include "object/death-scythe.h"
 #include "mind/racial-samurai.h"
 
+typedef enum chaotic_effect {
+    CE_NONE = 0,
+    CE_VAMPIRIC = 1,
+    CE_QUAKE = 2,
+    CE_CONFUSION = 3,
+    CE_TELE_AWAY = 4,
+    CE_POLYMORPH = 5,
+} chaotic_effect;
+
 static player_attack_type *initialize_player_attack_type(player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr)
 {
     pa_ptr->hand = hand;
@@ -215,27 +224,24 @@ static void print_suprise_attack(player_attack_type *pa_ptr)
  * 吸血20%、地震0.12%、混乱26.892%、テレポート・アウェイ1.494%、変身1.494% /
  * Vampiric 20%, Quake 0.12%, Confusion 26.892%, Teleport away 1.494% and Polymorph 1.494%
  */
-static int select_chaotic_effect(player_type *attacker_ptr, player_attack_type *pa_ptr)
+static chaotic_effect select_chaotic_effect(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
-    int chaos_effect = 0;
-    if ((have_flag(pa_ptr->flags, TR_CHAOTIC)) && one_in_(2)) {
-        if (one_in_(10))
-            chg_virtue(attacker_ptr, V_CHANCE, 1);
+    if (!(have_flag(pa_ptr->flags, TR_CHAOTIC)) || one_in_(2))
+        return CE_NONE;
 
-        if (randint1(5) < 3) {
-            chaos_effect = 1;
-        } else if (one_in_(250)) {
-            chaos_effect = 2;
-        } else if (!one_in_(10)) {
-            chaos_effect = 3;
-        } else if (one_in_(2)) {
-            chaos_effect = 4;
-        } else {
-            chaos_effect = 5;
-        }
-    }
+    if (one_in_(10))
+        chg_virtue(attacker_ptr, V_CHANCE, 1);
 
-    return chaos_effect;
+    if (randint1(5) < 3)
+        return CE_VAMPIRIC;
+    
+    if (one_in_(250))
+        return CE_CONFUSION;
+
+    if (!one_in_(10))
+        return CE_QUAKE;
+
+    return one_in_(2) ? CE_TELE_AWAY : CE_POLYMORPH;
 }
 
 /*!
@@ -296,10 +302,9 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         print_suprise_attack(pa_ptr);
 
         object_flags(o_ptr, pa_ptr->flags);
-        int chaos_effect = select_chaotic_effect(attacker_ptr, pa_ptr);
+        chaotic_effect chaos_effect = select_chaotic_effect(attacker_ptr, pa_ptr);
 
-        /* Vampiric drain */
-        if ((have_flag(pa_ptr->flags, TR_VAMPIRIC)) || (chaos_effect == 1) || (mode == HISSATSU_DRAIN) || hex_spelling(attacker_ptr, HEX_VAMP_BLADE)) {
+        if ((have_flag(pa_ptr->flags, TR_VAMPIRIC)) || (chaos_effect == CE_VAMPIRIC) || (mode == HISSATSU_DRAIN) || hex_spelling(attacker_ptr, HEX_VAMP_BLADE)) {
             /* Only drain "living" monsters */
             if (monster_living(m_ptr->r_idx))
                 can_drain = TRUE;
@@ -440,7 +445,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 pa_ptr->attack_damage = (3 * pa_ptr->attack_damage) / 2;
             }
 
-            if ((attacker_ptr->impact[hand] && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (chaos_effect == 2) || (mode == HISSATSU_QUAKE)) {
+            if ((attacker_ptr->impact[hand] && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (chaos_effect == CE_QUAKE) || (mode == HISSATSU_QUAKE)) {
                 do_quake = TRUE;
             }
 
@@ -693,7 +698,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         drain_result = 0;
 
         /* Confusion attack */
-        if ((attacker_ptr->special_attack & ATTACK_CONFUSE) || (chaos_effect == 3) || (mode == HISSATSU_CONF) || hex_spelling(attacker_ptr, HEX_CONFUSION)) {
+        if ((attacker_ptr->special_attack & ATTACK_CONFUSE) || (chaos_effect == CE_CONFUSION) || (mode == HISSATSU_CONF) || hex_spelling(attacker_ptr, HEX_CONFUSION)) {
             /* Cancel glowing hands */
             if (attacker_ptr->special_attack & ATTACK_CONFUSE) {
                 attacker_ptr->special_attack &= ~(ATTACK_CONFUSE);
@@ -715,7 +720,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             }
         }
 
-        else if (chaos_effect == 4) {
+        else if (chaos_effect == CE_TELE_AWAY) {
             bool resists_tele = FALSE;
 
             if (r_ptr->flagsr & RFR_RES_TELE) {
@@ -740,7 +745,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             }
         }
 
-        else if ((chaos_effect == 5) && (randint1(90) > r_ptr->level)) {
+        else if ((chaos_effect == CE_POLYMORPH) && (randint1(90) > r_ptr->level)) {
             if (!(r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) && !(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK)) {
                 if (polymorph_monster(attacker_ptr, y, x)) {
                     msg_format(_("%^sは変化した！", "%^s changes!"), pa_ptr->m_name);
