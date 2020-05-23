@@ -396,6 +396,24 @@ static bool judge_tereprt_resistance(player_type *attacker_ptr, player_attack_ty
 }
 
 /*!
+ * @brief カオス武器でのテレポート・アウェイを実行する
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param num 現在の攻撃回数 (テレポートしてしまったら追加攻撃できないのでその補正)
+ * @return なし
+ */
+static void attack_teleport_away(player_type *attacker_ptr, player_attack_type *pa_ptr, int *num)
+{
+    if (judge_tereprt_resistance(attacker_ptr, pa_ptr))
+        return;
+
+    msg_format(_("%^sは消えた！", "%^s disappears!"), pa_ptr->m_name);
+    teleport_away(attacker_ptr, pa_ptr->g_ptr->m_idx, 50, TELEPORT_PASSIVE);
+    *num = pa_ptr->num_blow + 1;
+    *(pa_ptr->mdeath) = TRUE;
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -478,19 +496,10 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         pa_ptr->drain_result = 0;
 
         if ((attacker_ptr->special_attack & ATTACK_CONFUSE) || (pa_ptr->chaos_effect == CE_CONFUSION) || (mode == HISSATSU_CONF)
-            || hex_spelling(attacker_ptr, HEX_CONFUSION)) {
-            attack_confuse(attacker_ptr, m_ptr);
-        }
-        else if (pa_ptr->chaos_effect == CE_TELE_AWAY) {
-            bool resists_tele = judge_tereprt_resistance(attacker_ptr, pa_ptr);
-            if (!resists_tele) {
-                msg_format(_("%^sは消えた！", "%^s disappears!"), pa_ptr->m_name);
-                teleport_away(attacker_ptr, g_ptr->m_idx, 50, TELEPORT_PASSIVE);
-                num = pa_ptr->num_blow + 1; /* Can't hit it anymore! */
-                *mdeath = TRUE;
-            }
-        }
-
+            || hex_spelling(attacker_ptr, HEX_CONFUSION))
+            attack_confuse(attacker_ptr, pa_ptr);
+        else if (pa_ptr->chaos_effect == CE_TELE_AWAY)
+            attack_teleport_away(attacker_ptr, pa_ptr, &num);
         else if ((pa_ptr->chaos_effect == CE_POLYMORPH) && (randint1(90) > r_ptr->level)) {
             if (!(r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) && !(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK)) {
                 if (polymorph_monster(attacker_ptr, y, x)) {
