@@ -402,6 +402,37 @@ static void apply_damage_negative_effect(player_type *attacker_ptr, player_attac
 }
 
 /*!
+ * @brief 峰打ちの効果処理
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param g_ptr グリッドへの参照ポインタ
+ * @return なし
+ */
+static void mineuchi(player_type *attacker_ptr, player_attack_type *pa_ptr, grid_type *g_ptr)
+{
+    if (pa_ptr->mode != HISSATSU_MINEUCHI)
+        return;
+
+    pa_ptr->attack_damage = 0;
+    anger_monster(attacker_ptr, pa_ptr->m_ptr);
+
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    if ((r_ptr->flags3 & (RF3_NO_STUN))) {
+        msg_format(_("%s には効果がなかった。", "%s is not effected."), pa_ptr->m_name);
+        return;
+    }
+
+    int tmp = (10 + randint1(15) + attacker_ptr->lev / 5);
+    if (MON_STUNNED(pa_ptr->m_ptr)) {
+        msg_format(_("%sはひどくもうろうとした。", "%s is more dazed."), pa_ptr->m_name);
+        tmp /= 2;
+    } else
+        msg_format(_("%s はもうろうとした。", "%s is dazed."), pa_ptr->m_name);
+
+    (void)set_monster_stunned(attacker_ptr, g_ptr->m_idx, MON_STUNNED(pa_ptr->m_ptr) + tmp);
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -466,28 +497,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         calc_attack_damage(attacker_ptr, pa_ptr, g_ptr, &do_quake, vorpal_cut, vorpal_chance);
         apply_damage_bonus(attacker_ptr, pa_ptr);
         apply_damage_negative_effect(attacker_ptr, pa_ptr, is_zantetsu_nullified, is_ej_nullified);
-
-        if (mode == HISSATSU_MINEUCHI) {
-            int tmp = (10 + randint1(15) + attacker_ptr->lev / 5);
-
-            pa_ptr->attack_damage = 0;
-            anger_monster(attacker_ptr, m_ptr);
-
-            if (!(r_ptr->flags3 & (RF3_NO_STUN))) {
-                /* Get stunned */
-                if (MON_STUNNED(m_ptr)) {
-                    msg_format(_("%sはひどくもうろうとした。", "%s is more dazed."), pa_ptr->m_name);
-                    tmp /= 2;
-                } else {
-                    msg_format(_("%s はもうろうとした。", "%s is dazed."), pa_ptr->m_name);
-                }
-
-                /* Apply stun */
-                (void)set_monster_stunned(attacker_ptr, g_ptr->m_idx, MON_STUNNED(m_ptr) + tmp);
-            } else {
-                msg_format(_("%s には効果がなかった。", "%s is not effected."), pa_ptr->m_name);
-            }
-        }
+        mineuchi(attacker_ptr, pa_ptr, g_ptr);
 
         /* Modify the damage */
         pa_ptr->attack_damage = mon_damage_mod(attacker_ptr, m_ptr, pa_ptr->attack_damage,
