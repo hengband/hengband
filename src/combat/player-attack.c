@@ -487,6 +487,42 @@ static void change_monster_stat(player_type *attacker_ptr, player_attack_type *p
 }
 
 /*!
+ * @brief 直接攻撃が当たった時の処理
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param do_quake 攻撃後に地震を起こすかどうか
+ * @param is_zantetsu_nullified 斬鉄剣で切れないならばTRUE
+ * @param is_ej_nullified 蜘蛛相手ならばTRUE
+ * @return なし
+ */
+static void apply_actual_attack(player_type *attacker_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool is_zantetsu_nullified, const bool is_ej_nullified)
+{
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    int vorpal_chance = ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) ? 2 : 4;
+
+    sound(SOUND_HIT);
+    print_surprise_attack(pa_ptr);
+
+    object_flags(o_ptr, pa_ptr->flags);
+    pa_ptr->chaos_effect = select_chaotic_effect(attacker_ptr, pa_ptr);
+    decide_blood_sucking(attacker_ptr, pa_ptr);
+
+    // process_monk_attackの中でplayer_type->magic_num1[0] を書き換えているので、ここでhex_spelling() の判定をしないとダメ.
+    bool vorpal_cut = (have_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1)
+        && !is_zantetsu_nullified;
+
+    calc_attack_damage(attacker_ptr, pa_ptr, do_quake, vorpal_cut, vorpal_chance);
+    apply_damage_bonus(attacker_ptr, pa_ptr);
+    apply_damage_negative_effect(pa_ptr, is_zantetsu_nullified, is_ej_nullified);
+    mineuchi(attacker_ptr, pa_ptr);
+    pa_ptr->attack_damage = mon_damage_mod(attacker_ptr, pa_ptr->m_ptr, pa_ptr->attack_damage,
+        (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((attacker_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
+    critical_attack(attacker_ptr, pa_ptr);
+    msg_format_wizard(CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), pa_ptr->attack_damage,
+        pa_ptr->m_ptr->hp - pa_ptr->attack_damage, pa_ptr->m_ptr->maxhp, pa_ptr->m_ptr->max_maxhp);
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -532,29 +568,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         if (!process_attack_hit(attacker_ptr, pa_ptr, chance))
             continue;
 
-        int vorpal_chance = ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) ? 2 : 4;
-
-        sound(SOUND_HIT);
-        print_surprise_attack(pa_ptr);
-
-        object_flags(o_ptr, pa_ptr->flags);
-        pa_ptr->chaos_effect = select_chaotic_effect(attacker_ptr, pa_ptr);
-        decide_blood_sucking(attacker_ptr, pa_ptr);
-
-        // process_monk_attackの中でplayer_type->magic_num1[0] を書き換えているので、ここでhex_spelling() の判定をしないとダメ.
-        bool vorpal_cut = (have_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1)
-            && !is_zantetsu_nullified;
-
-        calc_attack_damage(attacker_ptr, pa_ptr, &do_quake, vorpal_cut, vorpal_chance);
-        apply_damage_bonus(attacker_ptr, pa_ptr);
-        apply_damage_negative_effect(pa_ptr, is_zantetsu_nullified, is_ej_nullified);
-        mineuchi(attacker_ptr, pa_ptr);
-        pa_ptr->attack_damage = mon_damage_mod(attacker_ptr, m_ptr, pa_ptr->attack_damage,
-            (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((attacker_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
-        critical_attack(attacker_ptr, pa_ptr);
-        msg_format_wizard(CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), pa_ptr->attack_damage,
-            m_ptr->hp - pa_ptr->attack_damage, m_ptr->maxhp, m_ptr->max_maxhp);
-
+        apply_actual_attack(attacker_ptr, pa_ptr, &do_quake, is_zantetsu_nullified, is_ej_nullified);
         calc_drain(pa_ptr);
         if (check_fear_death(attacker_ptr, pa_ptr, num, is_lowlevel))
             break;
@@ -580,8 +594,6 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         chg_virtue(attacker_ptr, V_UNLIFE, 1);
     }
 
-    /* Mega-Hac
-        attack_damage -- apply earthquake brand */
     if (do_quake) {
         earthquake(attacker_ptr, attacker_ptr->y, attacker_ptr->x, 10, 0);
         if (!floor_ptr->grid_array[y][x].m_idx)
