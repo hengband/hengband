@@ -357,6 +357,7 @@ hengband_SOURCES = \
 	combat/vorpal-weapon.c combat/vorpal-weapon.h \
 	combat/attack-chaos-effect.c combat/attack-chaos-effect.h \
 	combat/monster-attack-player.c combat/monster-attack-player.h \
+	combat/monster-attack-monster.c combat/monster-attack-monster.h \
 	combat/shoot.c combat/shoot.h \
 	combat/snipe.c combat/snipe.h \
 	\

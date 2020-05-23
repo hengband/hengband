@@ -1028,6 +1028,9 @@
     <ClCompile Include="..\..\src\cmd\cmd-attack.c">
       <Filter>cmd</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\combat\monster-attack-player.c">
+      <Filter>combat</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\src\combat\monster-attack-monster.c">
       <Filter>combat</Filter>
     </ClCompile>
@@ -2130,6 +2133,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-attack.h">
       <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\monster-attack-player.h">
+      <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\monster-attack-monster.h">
       <Filter>combat</Filter>

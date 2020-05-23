@@ -7,8 +7,8 @@
 #include "monster/monster-attack.h"
 #include "monster/monster-status.h"
 #include "dungeon/dungeon.h"
-#include "combat/melee.h" // 暫定。後で引っ越し.
 #include "combat/monster-attack-player.h"
+#include "combat/monster-attack-monster.h"
 
  /*!
   * @brief モンスターが移動した結果、そこにプレーヤーがいたら直接攻撃を行う
