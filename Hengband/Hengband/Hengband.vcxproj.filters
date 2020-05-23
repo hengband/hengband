@@ -1016,6 +1016,9 @@
     <ClCompile Include="..\..\src\mind\monk-attack.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\combat\blood-sucking-processor.c">
+      <Filter>combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2103,6 +2106,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\monk-attack.h">
       <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\blood-sucking-processor.h">
+      <Filter>combat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
