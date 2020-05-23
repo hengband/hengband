@@ -27,6 +27,7 @@
 #include "spell/process-effect.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
+#include "mind/racial-mirror-master.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];
 
