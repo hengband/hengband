@@ -4,31 +4,31 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
 #include "combat/player-attack.h"
-#include "player/player-skill.h"
-#include "player/avatar.h"
-#include "object/artifact.h"
-#include "main/sound-definitions-table.h"
-#include "player/player-damage.h"
-#include "realm/realm-hex.h"
-#include "combat/martial-arts-table.h"
-#include "world/world.h"
-#include "object/object-flavor.h"
-#include "object/object-hook.h"
-#include "monster/monster-status.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
-#include "monster/monsterrace-hook.h"
+#include "combat/martial-arts-table.h"
+#include "combat/player-attack-util.h"
 #include "combat/slaying.h"
 #include "io/files-util.h"
-#include "player/player-effects.h"
-#include "spell/spells3.h"
-#include "spell/spells-floor.h"
-#include "combat/player-attack-util.h"
-#include "mind/racial-samurai.h"
+#include "main/sound-definitions-table.h"
 #include "mind/monk-attack.h"
+#include "mind/racial-samurai.h"
 #include "mind/surprise-attack.h"
+#include "monster/monster-status.h"
+#include "monster/monsterrace-hook.h"
+#include "object/artifact.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
+#include "player/avatar.h"
+#include "player/player-damage.h"
+#include "player/player-effects.h"
+#include "player/player-skill.h"
+#include "realm/realm-hex.h"
+#include "spell/spells-floor.h"
+#include "spell/spells3.h"
+#include "system/angband.h"
+#include "world/world.h"
 
 static player_attack_type *initialize_player_attack_type(player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr)
 {
@@ -80,8 +80,7 @@ static void attack_classify(player_type *attacker_ptr, player_attack_type *pa_pt
 static void get_bare_knuckle_exp(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if ((r_ptr->level + 10) <= attacker_ptr->lev ||
-        (attacker_ptr->skill_exp[GINOU_SUDE] >= s_info[attacker_ptr->pclass].s_max[GINOU_SUDE]))
+    if ((r_ptr->level + 10) <= attacker_ptr->lev || (attacker_ptr->skill_exp[GINOU_SUDE] >= s_info[attacker_ptr->pclass].s_max[GINOU_SUDE]))
         return;
 
     if (attacker_ptr->skill_exp[GINOU_SUDE] < WEAPON_EXP_BEGINNER)
@@ -135,8 +134,7 @@ static void get_attack_exp(player_type *attacker_ptr, player_attack_type *pa_ptr
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
-    if (!o_ptr->k_idx == 0)
-    {
+    if (!o_ptr->k_idx == 0) {
         get_bare_knuckle_exp(attacker_ptr, pa_ptr);
         return;
     }
@@ -187,7 +185,7 @@ static chaotic_effect select_chaotic_effect(player_type *attacker_ptr, player_at
 
     if (randint1(5) < 3)
         return CE_VAMPIRIC;
-    
+
     if (one_in_(250))
         return CE_CONFUSION;
 
@@ -312,7 +310,8 @@ static bool process_weapon_attack(player_type *attacker_ptr, player_attack_type 
     pa_ptr->attack_damage = calc_attack_damage_with_slay(attacker_ptr, o_ptr, pa_ptr->attack_damage, pa_ptr->m_ptr, pa_ptr->mode, FALSE);
     calc_surprise_attack_damage(attacker_ptr, pa_ptr);
 
-    bool do_quake = ((attacker_ptr->impact[pa_ptr->hand] && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE) || (pa_ptr->mode == HISSATSU_QUAKE));
+    bool do_quake = ((attacker_ptr->impact[pa_ptr->hand] && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE)
+        || (pa_ptr->mode == HISSATSU_QUAKE));
     if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(pa_ptr->mode == HISSATSU_KYUSHO))
         pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[pa_ptr->hand], pa_ptr->mode);
 
@@ -382,7 +381,8 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         decide_blood_sucking(attacker_ptr, pa_ptr);
 
         // process_monk_attackの中でplayer_type->magic_num1[0] を書き換えているので、ここでhex_spelling() の判定をしないとダメ.
-        bool vorpal_cut = (have_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified;
+        bool vorpal_cut = (have_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1)
+            && !is_zantetsu_nullified;
 
         // ダメージ計算を開始、取り敢えず素手と仮定し1とする.
         pa_ptr->attack_damage = 1;
@@ -447,20 +447,24 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         }
 
         /* Modify the damage */
-        pa_ptr->attack_damage = mon_damage_mod(attacker_ptr, m_ptr, pa_ptr->attack_damage, (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((attacker_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
+        pa_ptr->attack_damage = mon_damage_mod(attacker_ptr, m_ptr, pa_ptr->attack_damage,
+            (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((attacker_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
         if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (mode == HISSATSU_KYUSHO)) {
             if ((randint1(randint1(r_ptr->level / 7) + 5) == 1) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2)) {
                 pa_ptr->attack_damage = m_ptr->hp + 1;
                 msg_format(_("%sの急所を突き刺した！", "You hit %s on a fatal spot!"), pa_ptr->m_name);
             } else
                 pa_ptr->attack_damage = 1;
-        } else if ((attacker_ptr->pclass == CLASS_NINJA) && has_melee_weapon(attacker_ptr, INVEN_RARM + hand) && !attacker_ptr->icky_wield[hand] && ((attacker_ptr->cur_lite <= 0) || one_in_(7))) {
+        } else if ((attacker_ptr->pclass == CLASS_NINJA) && has_melee_weapon(attacker_ptr, INVEN_RARM + hand) && !attacker_ptr->icky_wield[hand]
+            && ((attacker_ptr->cur_lite <= 0) || one_in_(7))) {
             int maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
             if (one_in_(pa_ptr->backstab ? 13 : (pa_ptr->stab_fleeing || pa_ptr->surprise_attack) ? 15 : 27)) {
                 pa_ptr->attack_damage *= 5;
                 pa_ptr->drain_result *= 2;
                 msg_format(_("刃が%sに深々と突き刺さった！", "You critically injured %s!"), pa_ptr->m_name);
-            } else if (((m_ptr->hp < maxhp / 2) && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10)) || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->surprise_attack) && one_in_(11))) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))) {
+            } else if (((m_ptr->hp < maxhp / 2) && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10))
+                || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->surprise_attack) && one_in_(11))) && !(r_ptr->flags1 & RF1_UNIQUE)
+                    && !(r_ptr->flags7 & RF7_UNIQUE2))) {
                 if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE2) || (m_ptr->hp >= maxhp / 2)) {
                     pa_ptr->attack_damage = MAX(pa_ptr->attack_damage * 5, m_ptr->hp / 2);
                     pa_ptr->drain_result *= 2;
@@ -472,8 +476,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             }
         }
 
-        msg_format_wizard(CHEAT_MONSTER,
-            _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), pa_ptr->attack_damage,
+        msg_format_wizard(CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), pa_ptr->attack_damage,
             m_ptr->hp - pa_ptr->attack_damage, m_ptr->maxhp, m_ptr->max_maxhp);
 
         if (pa_ptr->attack_damage <= 0)
@@ -507,7 +510,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         touch_zap_player(m_ptr, attacker_ptr);
 
         /* Are we draining it?  A little note: If the monster is
-		dead, the drain does not work... */
+                dead, the drain does not work... */
 
         if (pa_ptr->can_drain && (pa_ptr->drain_result > 0)) {
             if (o_ptr->name1 == ART_MURAMASA) {
@@ -581,7 +584,8 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         pa_ptr->drain_result = 0;
 
         /* Confusion attack */
-        if ((attacker_ptr->special_attack & ATTACK_CONFUSE) || (pa_ptr->chaos_effect == CE_CONFUSION) || (mode == HISSATSU_CONF) || hex_spelling(attacker_ptr, HEX_CONFUSION)) {
+        if ((attacker_ptr->special_attack & ATTACK_CONFUSE) || (pa_ptr->chaos_effect == CE_CONFUSION) || (mode == HISSATSU_CONF)
+            || hex_spelling(attacker_ptr, HEX_CONFUSION)) {
             /* Cancel glowing hands */
             if (attacker_ptr->special_attack & ATTACK_CONFUSE) {
                 attacker_ptr->special_attack &= ~(ATTACK_CONFUSE);
@@ -677,7 +681,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     }
 
     /* Mega-Hac
-	attack_damage -- apply earthquake brand */
+        attack_damage -- apply earthquake brand */
     if (do_quake) {
         earthquake(attacker_ptr, attacker_ptr->y, attacker_ptr->x, 10, 0);
         if (!floor_ptr->grid_array[y][x].m_idx)
