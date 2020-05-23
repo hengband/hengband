@@ -29,7 +29,8 @@
 #include "spell/spells3.h"
 #include "world/world.h"
 
-static player_attack_type *initialize_player_attack_type(player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr, grid_type *g_ptr)
+static player_attack_type *initialize_player_attack_type(
+    player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr, grid_type *g_ptr, bool *fear, bool *mdeath)
 {
     pa_ptr->hand = hand;
     pa_ptr->mode = mode;
@@ -44,6 +45,8 @@ static player_attack_type *initialize_player_attack_type(player_attack_type *pa_
     pa_ptr->ma_ptr = &ma_blows[0];
     pa_ptr->drain_result = 0;
     pa_ptr->g_ptr = g_ptr;
+    pa_ptr->fear = fear;
+    pa_ptr->mdeath = mdeath;
     return pa_ptr;
 }
 
@@ -333,8 +336,7 @@ static void process_weapon_attack(player_type *attacker_ptr, player_attack_type 
  * @return なし
  * @details 取り敢えず素手と仮定し1とする.
  */
-static void calc_attack_damage(
-    player_type *attacker_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool vorpal_cut, const int vorpal_chance)
+static void calc_attack_damage(player_type *attacker_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool vorpal_cut, const int vorpal_chance)
 {
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
     pa_ptr->attack_damage = 1;
@@ -456,7 +458,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
     monster_type *m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
     player_attack_type tmp_attack;
-    player_attack_type *pa_ptr = initialize_player_attack_type(&tmp_attack, hand, mode, m_ptr, g_ptr);
+    player_attack_type *pa_ptr = initialize_player_attack_type(&tmp_attack, hand, mode, m_ptr, g_ptr, fear, mdeath);
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     bool is_human = (r_ptr->d_char == 'p');
     bool is_lowlevel = (r_ptr->level < (attacker_ptr->lev - 15));
@@ -500,7 +502,6 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         pa_ptr->attack_damage = mon_damage_mod(attacker_ptr, m_ptr, pa_ptr->attack_damage,
             (bool)(((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE)) || ((attacker_ptr->pclass == CLASS_BERSERKER) && one_in_(2))));
         critical_attack(attacker_ptr, pa_ptr);
-
         msg_format_wizard(CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), pa_ptr->attack_damage,
             m_ptr->hp - pa_ptr->attack_damage, m_ptr->maxhp, m_ptr->max_maxhp);
 

@@ -30,4 +30,6 @@ typedef struct player_attack_type {
     const martial_arts *ma_ptr;
     int drain_result;
     grid_type *g_ptr;
+    bool *fear;
+    bool *mdeath;
 } player_attack_type;
