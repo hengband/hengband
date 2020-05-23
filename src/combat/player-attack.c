@@ -327,7 +327,6 @@ static void process_weapon_attack(player_type *attacker_ptr, player_attack_type 
  * @brief 武器または素手による攻撃ダメージを計算する
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @param g_ptr グリッドへの参照ポインタ
  * @param do_quake 攻撃の結果、地震を起こすことになったらTRUE、それ以外はFALSE
  * @param vorpal_cut メッタ斬りにできるかどうか
  * @param vorpal_change ヴォーパル倍率上昇の機会値
@@ -406,7 +405,6 @@ static void apply_damage_negative_effect(player_attack_type *pa_ptr, bool is_zan
  * @brief 峰打ちの効果処理
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @param g_ptr グリッドへの参照ポインタ
  * @return なし
  */
 static void mineuchi(player_type *attacker_ptr, player_attack_type *pa_ptr)
@@ -431,6 +429,39 @@ static void mineuchi(player_type *attacker_ptr, player_attack_type *pa_ptr)
         msg_format(_("%s はもうろうとした。", "%s is dazed."), pa_ptr->m_name);
 
     (void)set_monster_stunned(attacker_ptr, pa_ptr->g_ptr->m_idx, MON_STUNNED(pa_ptr->m_ptr) + tmp);
+}
+
+/*!
+ * @brief 忍者ヒットで急所を突く
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void ninja_critical(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    int maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
+    if (one_in_(pa_ptr->backstab ? 13 : (pa_ptr->stab_fleeing || pa_ptr->surprise_attack) ? 15 : 27)) {
+        pa_ptr->attack_damage *= 5;
+        pa_ptr->drain_result *= 2;
+        msg_format(_("刃が%sに深々と突き刺さった！", "You critically injured %s!"), pa_ptr->m_name);
+        return;
+    }
+    
+    bool is_critical = ((pa_ptr->m_ptr->hp < maxhp / 2) && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10))
+        || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->surprise_attack) && one_in_(11))) && ((r_ptr->flags1 & RF1_UNIQUE) == 0)
+            && ((r_ptr->flags7 & RF7_UNIQUE2) == 0));
+    if (!is_critical)
+        return;
+
+    if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE2) || (pa_ptr->m_ptr->hp >= maxhp / 2)) {
+        pa_ptr->attack_damage = MAX(pa_ptr->attack_damage * 5, pa_ptr->m_ptr->hp / 2);
+        pa_ptr->drain_result *= 2;
+        msg_format(_("%sに致命傷を負わせた！", "You fatally injured %s!"), pa_ptr->m_name);
+    } else {
+        pa_ptr->attack_damage = pa_ptr->m_ptr->hp + 1;
+        msg_format(_("刃が%sの急所を貫いた！", "You hit %s on a fatal spot!"), pa_ptr->m_name);
+    }
 }
 
 /*!
@@ -509,23 +540,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 pa_ptr->attack_damage = 1;
         } else if ((attacker_ptr->pclass == CLASS_NINJA) && has_melee_weapon(attacker_ptr, INVEN_RARM + hand) && !attacker_ptr->icky_wield[hand]
             && ((attacker_ptr->cur_lite <= 0) || one_in_(7))) {
-            int maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
-            if (one_in_(pa_ptr->backstab ? 13 : (pa_ptr->stab_fleeing || pa_ptr->surprise_attack) ? 15 : 27)) {
-                pa_ptr->attack_damage *= 5;
-                pa_ptr->drain_result *= 2;
-                msg_format(_("刃が%sに深々と突き刺さった！", "You critically injured %s!"), pa_ptr->m_name);
-            } else if (((m_ptr->hp < maxhp / 2) && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10))
-                || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->surprise_attack) && one_in_(11))) && !(r_ptr->flags1 & RF1_UNIQUE)
-                    && !(r_ptr->flags7 & RF7_UNIQUE2))) {
-                if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE2) || (m_ptr->hp >= maxhp / 2)) {
-                    pa_ptr->attack_damage = MAX(pa_ptr->attack_damage * 5, m_ptr->hp / 2);
-                    pa_ptr->drain_result *= 2;
-                    msg_format(_("%sに致命傷を負わせた！", "You fatally injured %s!"), pa_ptr->m_name);
-                } else {
-                    pa_ptr->attack_damage = m_ptr->hp + 1;
-                    msg_format(_("刃が%sの急所を貫いた！", "You hit %s on a fatal spot!"), pa_ptr->m_name);
-                }
-            }
+            ninja_critical(attacker_ptr, pa_ptr);
         }
 
         msg_format_wizard(CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), pa_ptr->attack_damage,
