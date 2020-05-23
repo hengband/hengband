@@ -13,7 +13,7 @@
 #include "spell/process-effect.h"
 #include "monster/monsterrace-hook.h"
 #include "realm/realm-hex.h"
-#include "combat/melee.h"
+#include "combat/melee-postprocess.h"
 
 #define BLOW_EFFECT_TYPE_NONE 0
 #define BLOW_EFFECT_TYPE_FEAR 1

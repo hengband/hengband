@@ -16,7 +16,7 @@
 #include "spell/spells3.h"
 #include "spell/process-effect.h"
 #include "player/player-effects.h"
-#include "combat/melee.h"
+#include "combat/melee-postprocess.h"
 
 /*!
  * @brief バーノール・ルパートのRF6_SPECIALの処理。分裂・合体。 /

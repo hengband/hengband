@@ -19,7 +19,7 @@
 #include "cmd-magiceat.h"
 #include "cmd-mane.h"
 #include "cmd-zapwand.h"
-#include "melee.h"
+#include "combat/melee-postprocess.h"
 #include "object/object-hook.h"
 
 #include "mutation/mutation.h"

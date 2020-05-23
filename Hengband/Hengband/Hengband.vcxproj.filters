@@ -263,9 +263,6 @@
     <ClCompile Include="..\..\src\knowledge\knowledge-mutations.c">
       <Filter>knowledge</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\melee.c">
-      <Filter>combat</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\autopick\autopick.c">
       <Filter>autopick</Filter>
     </ClCompile>
@@ -1034,6 +1031,9 @@
     <ClCompile Include="..\..\src\combat\monster-attack-monster.c">
       <Filter>combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\combat\melee-postprocess.c">
+      <Filter>combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1086,9 +1086,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-zapwand.h">
       <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\melee.h">
-      <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\shoot.h">
       <Filter>combat</Filter>
@@ -2138,6 +2135,9 @@
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\monster-attack-monster.h">
+      <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\melee-postprocess.h">
       <Filter>combat</Filter>
     </ClInclude>
   </ItemGroup>

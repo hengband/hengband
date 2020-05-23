@@ -1,6 +1,5 @@
 ﻿/*!
- * @file melee1.c
- * @brief 打撃処理 / Melee process.
+ * @brief モンスター同士の打撃後処理 / Melee post-process.
  * @date 2014/01/17
  * @author
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
@@ -16,7 +15,7 @@
 #include "main/sound-definitions-table.h"
 #include "cmd-pet.h"
 #include "monster/monsterrace-hook.h"
-#include "melee.h"
+#include "combat/melee-postprocess.h"
 #include "monster/monster.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"
@@ -27,7 +26,6 @@
 #include "player/player-personalities-table.h"
 #include "player/player-races-table.h"
 #include "combat/monster-attack-types.h"
-#include "mind/samurai-slaying.h"
 
 /*!
  * todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり

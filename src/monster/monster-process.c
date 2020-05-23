@@ -26,7 +26,7 @@
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-pet.h"
 #include "monster/creature.h"
-#include "melee.h"
+#include "combat/melee-postprocess.h"
 #include "spell/spells-summon.h"
 #include "player/avatar.h"
 #include "realm/realm-hex.h"

@@ -340,7 +340,6 @@ hengband_SOURCES = \
 	cmd/cmd-attack.c cmd/cmd-attack.h \
 	\
 	combat/player-attack-util.h \
-	combat/melee.h combat/melee.c \
 	combat/attack-power-table.c combat/attack-power-table.h \
 	combat/hallucination-attacks-table.c combat/hallucination-attacks-table.h \
 	combat/monster-attack-types.c combat/monster-attack-types.h \
@@ -358,6 +357,7 @@ hengband_SOURCES = \
 	combat/attack-chaos-effect.c combat/attack-chaos-effect.h \
 	combat/monster-attack-player.c combat/monster-attack-player.h \
 	combat/monster-attack-monster.c combat/monster-attack-monster.h \
+	combat/melee-postprocess.c combat/melee-postprocess.h \
 	combat/shoot.c combat/shoot.h \
 	combat/snipe.c combat/snipe.h \
 	\

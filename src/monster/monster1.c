@@ -33,7 +33,7 @@
 #include "floor/wild.h"
 #include "dungeon/dungeon.h"
 #include "world/world.h"
-#include "melee.h"
+#include "combat/melee-postprocess.h"
 #include "locale/japanese.h"
 #include "view/display-main-window.h"
 #include "player/player-class.h"
