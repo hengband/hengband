@@ -112,7 +112,7 @@ static bool decide_attack_hit(player_type *attacker_ptr, player_attack_type *pa_
             n *= 2;
 
         success_hit = one_in_(n);
-    } else if ((attacker_ptr->pclass == CLASS_NINJA) && ((pa_ptr->backstab || pa_ptr->suprise_attack) && !(r_ptr->flagsr & RFR_RES_ALL)))
+    } else if ((attacker_ptr->pclass == CLASS_NINJA) && ((pa_ptr->backstab || pa_ptr->surprise_attack) && !(r_ptr->flagsr & RFR_RES_ALL)))
         success_hit = TRUE;
     else
         success_hit = test_hit_norm(attacker_ptr, chance, r_ptr->ac, pa_ptr->m_ptr->ml);
@@ -137,7 +137,7 @@ bool process_attack_hit(player_type *attacker_ptr, player_attack_type *pa_ptr, i
         return TRUE;
 
     pa_ptr->backstab = FALSE; /* Clumsy! */
-    pa_ptr->suprise_attack = FALSE; /* Clumsy! */
+    pa_ptr->surprise_attack = FALSE; /* Clumsy! */
 
     if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3)) {
         process_death_scythe_reflection(attacker_ptr, pa_ptr);

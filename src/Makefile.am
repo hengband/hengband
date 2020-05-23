@@ -166,6 +166,7 @@ hengband_SOURCES = \
 	mind/racial-mirror-master.c mind/racial-mirror-master.h \
 	mind/racial-force-trainer.c mind/racial-force-trainer.h \
 	mind/racial-monk-attack.c mind/racial-monk-attack.h \
+	mind/surprise-attack.c mind/surprise-attack.h \
 	\
 	monster/creature.h monster/creature.c \
 	monster/monster.h monster/monster-race.c monster/monster-race.h \
