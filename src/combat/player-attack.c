@@ -35,7 +35,7 @@ static player_attack_type *initialize_player_attack_type(player_attack_type *pa_
     pa_ptr->mode = mode;
     pa_ptr->m_ptr = m_ptr;
     pa_ptr->backstab = FALSE;
-    pa_ptr->suprise_attack = FALSE;
+    pa_ptr->surprise_attack = FALSE;
     pa_ptr->stab_fleeing = FALSE;
     pa_ptr->monk_attack = FALSE;
     pa_ptr->num_blow = 0;
@@ -52,7 +52,7 @@ static player_attack_type *initialize_player_attack_type(player_attack_type *pa_
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @return なし
  */
-static void process_suprise_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
+static void process_surprise_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
     if (!has_melee_weapon(attacker_ptr, INVEN_RARM + pa_ptr->hand) || attacker_ptr->icky_wield[pa_ptr->hand])
@@ -69,7 +69,7 @@ static void process_suprise_attack(player_type *attacker_ptr, player_attack_type
         /* Can't backstab creatures that we can't see, right? */
         pa_ptr->backstab = TRUE;
     } else if ((attacker_ptr->special_defense & NINJA_S_STEALTH) && (randint0(tmp) > (r_ptr->level + 20)) && pa_ptr->m_ptr->ml && !(r_ptr->flagsr & RFR_RES_ALL)) {
-        pa_ptr->suprise_attack = TRUE;
+        pa_ptr->surprise_attack = TRUE;
     } else if (MON_MONFEAR(pa_ptr->m_ptr) && pa_ptr->m_ptr->ml) {
         pa_ptr->stab_fleeing = TRUE;
     }
@@ -86,7 +86,7 @@ static void attack_classify(player_type *attacker_ptr, player_attack_type *pa_pt
     switch (attacker_ptr->pclass) {
     case CLASS_ROGUE:
     case CLASS_NINJA:
-        process_suprise_attack(attacker_ptr, pa_ptr);
+        process_surprise_attack(attacker_ptr, pa_ptr);
         return;
     case CLASS_MONK:
     case CLASS_FORCETRAINER:
@@ -196,11 +196,11 @@ static void calc_num_blow(player_type *attacker_ptr, player_attack_type *pa_ptr)
         pa_ptr->num_blow = 1;
 }
 
-static void print_suprise_attack(player_attack_type *pa_ptr)
+static void print_surprise_attack(player_attack_type *pa_ptr)
 {
     if (pa_ptr->backstab)
         msg_format(_("あなたは冷酷にも眠っている無力な%sを突き刺した！", "You cruelly stab the helpless, sleeping %s!"), pa_ptr->m_name);
-    else if (pa_ptr->suprise_attack)
+    else if (pa_ptr->surprise_attack)
         msg_format(_("不意を突いて%sに強烈な一撃を喰らわせた！", "You make surprise attack, and hit %s with a powerful blow!"), pa_ptr->m_name);
     else if (pa_ptr->stab_fleeing)
         msg_format(_("逃げる%sを背中から突き刺した！", "You backstab the fleeing %s!"), pa_ptr->m_name);
@@ -209,7 +209,6 @@ static void print_suprise_attack(player_attack_type *pa_ptr)
 }
 
 /*!
- * todo 実質enumなので後で型を変更する
  * @brief 混沌属性の武器におけるカオス効果を決定する
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
@@ -254,6 +253,28 @@ static void decide_blood_sucking(player_type *attacker_ptr, player_attack_type *
         return;
 
     pa_ptr->can_drain = monster_living(pa_ptr->m_ptr->r_idx);
+}
+
+/*!
+ * @brief 盗賊と忍者における不意打ちのダメージ計算
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_surprise_attack_damage(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    if (pa_ptr->backstab) {
+        pa_ptr->attack_damage *= (3 + (attacker_ptr->lev / 20));
+        return;
+    }
+    
+    if (pa_ptr->surprise_attack) {
+        pa_ptr->attack_damage = pa_ptr->attack_damage * (5 + (attacker_ptr->lev * 2 / 25)) / 2;
+        return;
+    }
+    
+    if (pa_ptr->stab_fleeing)
+        pa_ptr->attack_damage = (3 * pa_ptr->attack_damage) / 2;
 }
 
 /*!
@@ -309,12 +330,13 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         int vorpal_chance = ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) ? 2 : 4;
 
         sound(SOUND_HIT);
-        print_suprise_attack(pa_ptr);
+        print_surprise_attack(pa_ptr);
 
         object_flags(o_ptr, pa_ptr->flags);
         pa_ptr->chaos_effect = select_chaotic_effect(attacker_ptr, pa_ptr);
         decide_blood_sucking(attacker_ptr, pa_ptr);
 
+        // process_monk_attackの中でplayer_type->magic_num1[0] を書き換えているので、ここでhex_spelling() の判定をしないとダメ.
         if ((have_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified)
             vorpal_cut = TRUE;
         else
@@ -330,14 +352,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         else if (o_ptr->k_idx) {
             pa_ptr->attack_damage = damroll(o_ptr->dd + attacker_ptr->to_dd[hand], o_ptr->ds + attacker_ptr->to_ds[hand]);
             pa_ptr->attack_damage = calc_attack_damage_with_slay(attacker_ptr, o_ptr, pa_ptr->attack_damage, m_ptr, mode, FALSE);
-
-            if (pa_ptr->backstab) {
-                pa_ptr->attack_damage *= (3 + (attacker_ptr->lev / 20));
-            } else if (pa_ptr->suprise_attack) {
-                pa_ptr->attack_damage = pa_ptr->attack_damage * (5 + (attacker_ptr->lev * 2 / 25)) / 2;
-            } else if (pa_ptr->stab_fleeing) {
-                pa_ptr->attack_damage = (3 * pa_ptr->attack_damage) / 2;
-            }
+            calc_surprise_attack_damage(attacker_ptr, pa_ptr);
 
             if ((attacker_ptr->impact[hand] && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE) || (mode == HISSATSU_QUAKE)) {
                 do_quake = TRUE;
@@ -467,11 +482,11 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 pa_ptr->attack_damage = 1;
         } else if ((attacker_ptr->pclass == CLASS_NINJA) && has_melee_weapon(attacker_ptr, INVEN_RARM + hand) && !attacker_ptr->icky_wield[hand] && ((attacker_ptr->cur_lite <= 0) || one_in_(7))) {
             int maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
-            if (one_in_(pa_ptr->backstab ? 13 : (pa_ptr->stab_fleeing || pa_ptr->suprise_attack) ? 15 : 27)) {
+            if (one_in_(pa_ptr->backstab ? 13 : (pa_ptr->stab_fleeing || pa_ptr->surprise_attack) ? 15 : 27)) {
                 pa_ptr->attack_damage *= 5;
                 pa_ptr->drain_result *= 2;
                 msg_format(_("刃が%sに深々と突き刺さった！", "You critically injured %s!"), pa_ptr->m_name);
-            } else if (((m_ptr->hp < maxhp / 2) && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10)) || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->suprise_attack) && one_in_(11))) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))) {
+            } else if (((m_ptr->hp < maxhp / 2) && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10)) || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->surprise_attack) && one_in_(11))) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))) {
                 if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE2) || (m_ptr->hp >= maxhp / 2)) {
                     pa_ptr->attack_damage = MAX(pa_ptr->attack_damage * 5, m_ptr->hp / 2);
                     pa_ptr->drain_result *= 2;
@@ -676,7 +691,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         }
 
         pa_ptr->backstab = FALSE;
-        pa_ptr->suprise_attack = FALSE;
+        pa_ptr->surprise_attack = FALSE;
     }
 
     if (weak && !(*mdeath)) {

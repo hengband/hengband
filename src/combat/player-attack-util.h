@@ -18,7 +18,7 @@ typedef struct player_attack_type {
     combat_options mode;
     monster_type *m_ptr;
     bool backstab;
-    bool suprise_attack;
+    bool surprise_attack;
     bool stab_fleeing;
     bool monk_attack;
     int num_blow;
