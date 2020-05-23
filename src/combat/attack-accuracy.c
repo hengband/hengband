@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "combat/attack-accuracy.h"
 #include "main/sound-definitions-table.h"
+#include "object/death-scythe.h"
 
 /*!
  * @brief プレイヤーからモンスターへの打撃命中判定 /
