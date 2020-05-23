@@ -13,7 +13,7 @@
 #include "player/avatar.h"
 #include "monster/monster-status.h"
 #include "monster/monsterrace-hook.h"
-#include "combat/melee.h"
+#include "cmd/cmd-attack.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
 #include "effect/effect-monster-resist-hurt.h"
