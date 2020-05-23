@@ -26,4 +26,5 @@ typedef struct player_attack_type {
     BIT_FLAGS flags[TR_FLAG_SIZE];
     chaotic_effect chaos_effect;
     bool can_drain;
+    martial_arts *ma_ptr;
 } player_attack_type;

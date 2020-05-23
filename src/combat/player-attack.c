@@ -40,6 +40,7 @@ static player_attack_type *initialize_player_attack_type(player_attack_type *pa_
     pa_ptr->num_blow = 0;
     pa_ptr->attack_damage = 0;
     pa_ptr->can_drain = FALSE;
+    pa_ptr->ma_ptr = &ma_blows[0];
     return pa_ptr;
 }
 
@@ -301,6 +302,42 @@ static int calc_max_blow_selection_times(player_type *attacker_ptr)
 }
 
 /*!
+ * @brief プレーヤーのレベルと技の難度を加味しつつ、確率で一番強い技を選ぶ
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @return 技のランダム選択回数
+ * @return 技の行使に必要な最低レベル
+ */
+static int select_blow(player_type *attacker_ptr, player_attack_type *pa_ptr, int max_blow_selection_times)
+{
+    int min_level = 1;
+    martial_arts *old_ptr = &ma_blows[0];
+    for (int times = 0; times < max_blow_selection_times; times++) {
+        do {
+            pa_ptr->ma_ptr = &ma_blows[randint0(MAX_MA)];
+            if ((attacker_ptr->pclass == CLASS_FORCETRAINER) && (pa_ptr->ma_ptr->min_level > 1))
+                min_level = pa_ptr->ma_ptr->min_level + 3;
+            else
+                min_level = pa_ptr->ma_ptr->min_level;
+        } while ((min_level > attacker_ptr->lev) || (randint1(attacker_ptr->lev) < pa_ptr->ma_ptr->chance));
+
+        if ((pa_ptr->ma_ptr->min_level > old_ptr->min_level) && !attacker_ptr->stun && !attacker_ptr->confused) {
+            old_ptr = pa_ptr->ma_ptr;
+
+            if (current_world_ptr->wizard && cheat_xtra) {
+                msg_print(_("攻撃を再選択しました。", "Attack re-selected."));
+            }
+        } else {
+            pa_ptr->ma_ptr = old_ptr;
+        }
+    }
+
+    if (attacker_ptr->pclass == CLASS_FORCETRAINER)
+        min_level = MAX(1, pa_ptr->ma_ptr->min_level - 3);
+    else
+        min_level = pa_ptr->ma_ptr->min_level;
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -369,64 +406,37 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         pa_ptr->attack_damage = 1;
         if (pa_ptr->monk_attack) {
             int special_effect = 0;
-            int stun_effect = 0; 
-            int min_level = 1;
-            const martial_arts *ma_ptr = &ma_blows[0], *old_ptr = &ma_blows[0];
+            int stun_effect = 0;
             WEIGHT weight = 8;
             int resist_stun = calc_stun_resistance(pa_ptr);
             int max_blow_selection_times = calc_max_blow_selection_times(attacker_ptr);
+            int min_level = select_blow(attacker_ptr, pa_ptr, max_blow_selection_times);
 
-            /* Attempt 'times' */
-            for (int times = 0; times < max_blow_selection_times; times++) {
-                do {
-                    ma_ptr = &ma_blows[randint0(MAX_MA)];
-                    if ((attacker_ptr->pclass == CLASS_FORCETRAINER) && (ma_ptr->min_level > 1))
-                        min_level = ma_ptr->min_level + 3;
-                    else
-                        min_level = ma_ptr->min_level;
-                } while ((min_level > attacker_ptr->lev) || (randint1(attacker_ptr->lev) < ma_ptr->chance));
-
-                /* keep the highest level attack available we found */
-                if ((ma_ptr->min_level > old_ptr->min_level) && !attacker_ptr->stun && !attacker_ptr->confused) {
-                    old_ptr = ma_ptr;
-
-                    if (current_world_ptr->wizard && cheat_xtra) {
-                        msg_print(_("攻撃を再選択しました。", "Attack re-selected."));
-                    }
-                } else {
-                    ma_ptr = old_ptr;
-                }
-            }
-
-            if (attacker_ptr->pclass == CLASS_FORCETRAINER)
-                min_level = MAX(1, ma_ptr->min_level - 3);
-            else
-                min_level = ma_ptr->min_level;
-            pa_ptr->attack_damage = damroll(ma_ptr->dd + attacker_ptr->to_dd[hand], ma_ptr->ds + attacker_ptr->to_ds[hand]);
+            pa_ptr->attack_damage = damroll(pa_ptr->ma_ptr->dd + attacker_ptr->to_dd[hand], pa_ptr->ma_ptr->ds + attacker_ptr->to_ds[hand]);
             if (attacker_ptr->special_attack & ATTACK_SUIKEN)
                 pa_ptr->attack_damage *= 2;
 
-            if (ma_ptr->effect == MA_KNEE) {
+            if (pa_ptr->ma_ptr->effect == MA_KNEE) {
                 if (r_ptr->flags1 & RF1_MALE) {
                     msg_format(_("%sに金的膝蹴りをくらわした！", "You hit %s in the groin with your knee!"), pa_ptr->m_name);
                     sound(SOUND_PAIN);
                     special_effect = MA_KNEE;
                 } else
-                    msg_format(ma_ptr->desc, pa_ptr->m_name);
+                    msg_format(pa_ptr->ma_ptr->desc, pa_ptr->m_name);
             }
 
-            else if (ma_ptr->effect == MA_SLOW) {
+            else if (pa_ptr->ma_ptr->effect == MA_SLOW) {
                 if (!((r_ptr->flags1 & RF1_NEVER_MOVE) || my_strchr("~#{}.UjmeEv$,DdsbBFIJQSXclnw!=?", r_ptr->d_char))) {
                     msg_format(_("%sの足首に関節蹴りをくらわした！", "You kick %s in the ankle."), pa_ptr->m_name);
                     special_effect = MA_SLOW;
                 } else
-                    msg_format(ma_ptr->desc, pa_ptr->m_name);
+                    msg_format(pa_ptr->ma_ptr->desc, pa_ptr->m_name);
             } else {
-                if (ma_ptr->effect) {
-                    stun_effect = (ma_ptr->effect / 2) + randint1(ma_ptr->effect / 2);
+                if (pa_ptr->ma_ptr->effect) {
+                    stun_effect = (pa_ptr->ma_ptr->effect / 2) + randint1(pa_ptr->ma_ptr->effect / 2);
                 }
 
-                msg_format(ma_ptr->desc, pa_ptr->m_name);
+                msg_format(pa_ptr->ma_ptr->desc, pa_ptr->m_name);
             }
 
             if (attacker_ptr->special_defense & KAMAE_SUZAKU)
