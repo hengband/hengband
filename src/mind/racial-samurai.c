@@ -9,6 +9,7 @@
 #include "cmd/cmd-pet.h"
 #include "player/player-effects.h"
 #include "cmd/cmd-basic.h"
+#include "player/avatar.h"
 
 void concentration(player_type* creature_ptr)
 {
@@ -112,4 +113,31 @@ bool choose_kata(player_type* creature_ptr)
     creature_ptr->redraw |= (PR_STATE | PR_STATUS);
     screen_load();
     return TRUE;
+}
+
+/*!
+ * @brief 剣術家限定で、型等に応じて命中率を高める
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return 上昇後の命中率
+ */
+int calc_attack_quality(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    int bonus = attacker_ptr->to_h[pa_ptr->hand] + o_ptr->to_h;
+    int chance = (attacker_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
+    if (pa_ptr->mode == HISSATSU_IAI)
+        chance += 60;
+
+    if (attacker_ptr->special_defense & KATA_KOUKIJIN)
+        chance += 150;
+
+    if (attacker_ptr->sutemi)
+        chance = MAX(chance * 3 / 2, chance + 60);
+
+    int vir = virtue_number(attacker_ptr, V_VALOUR);
+    if (vir != 0)
+        chance += (attacker_ptr->virtues[vir - 1] / 10);
+
+    return chance;
 }

@@ -27,6 +27,7 @@
 #include "spell/spells-floor.h"
 #include "combat/player-attack-util.h"
 #include "object/death-scythe.h"
+#include "mind/racial-samurai.h"
 
 static player_attack_type *initialize_player_attack_type(player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr)
 {
@@ -169,34 +170,6 @@ static void get_attack_exp(player_type *attacker_ptr, player_attack_type *pa_ptr
         return;
 
     get_weapon_exp(attacker_ptr, pa_ptr);
-}
-
-/*!
- * todo mind/racial-samurai.c/h に移す
- * @brief 剣術家限定で、型等に応じて命中率を高める
- * @param attacker_ptr プレーヤーへの参照ポインタ
- * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return 上昇後の命中率
- */
-static int calc_attack_quality(player_type *attacker_ptr, player_attack_type *pa_ptr)
-{
-    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
-    int bonus = attacker_ptr->to_h[pa_ptr->hand] + o_ptr->to_h;
-    int chance = (attacker_ptr->skill_thn + (bonus * BTH_PLUS_ADJ));
-    if (pa_ptr->mode == HISSATSU_IAI)
-        chance += 60;
-
-    if (attacker_ptr->special_defense & KATA_KOUKIJIN)
-        chance += 150;
-
-    if (attacker_ptr->sutemi)
-        chance = MAX(chance * 3 / 2, chance + 60);
-
-    int vir = virtue_number(attacker_ptr, V_VALOUR);
-    if (vir != 0)
-        chance += (attacker_ptr->virtues[vir - 1] / 10);
-
-    return chance;
 }
 
 /*!
