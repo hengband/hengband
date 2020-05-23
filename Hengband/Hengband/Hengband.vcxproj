@@ -175,6 +175,7 @@
     <ClCompile Include="..\..\src\combat\hallucination-attacks-table.c" />
     <ClCompile Include="..\..\src\combat\insults-moans.c" />
     <ClCompile Include="..\..\src\combat\martial-arts-table.c" />
+    <ClCompile Include="..\..\src\combat\monster-attack-monster.c" />
     <ClCompile Include="..\..\src\combat\monster-attack-types.c" />
     <ClCompile Include="..\..\src\combat\attack-accuracy.c" />
     <ClCompile Include="..\..\src\combat\player-attack.c" />
@@ -440,6 +441,7 @@
     <ClInclude Include="..\..\src\combat\insults-moans.h" />
     <ClInclude Include="..\..\src\combat\martial-arts-table.h" />
     <ClInclude Include="..\..\src\combat\monster-attack-effect.h" />
+    <ClInclude Include="..\..\src\combat\monster-attack-monster.h" />
     <ClInclude Include="..\..\src\combat\monster-attack-types.h" />
     <ClInclude Include="..\..\src\combat\attack-accuracy.h" />
     <ClInclude Include="..\..\src\combat\player-attack-util.h" />
