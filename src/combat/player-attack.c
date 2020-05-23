@@ -440,6 +440,31 @@ static void print_stun_effect(player_type *attacker_ptr, player_attack_type *pa_
 }
 
 /*!
+ * @brief 強力な素手攻撃ができる職業 (修行僧、狂戦士、練気術師)の素手攻撃処理メインルーチン
+ * @param attacker_ptr プレーヤーの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param g_ptr グリッドへの参照ポインタ
+ * @return なし
+ */
+void process_monk_attack(player_type *attacker_ptr, player_attack_type *pa_ptr, grid_type *g_ptr)
+{
+    int resist_stun = calc_stun_resistance(pa_ptr);
+    int max_blow_selection_times = calc_max_blow_selection_times(attacker_ptr);
+    int min_level = select_blow(attacker_ptr, pa_ptr, max_blow_selection_times);
+
+    pa_ptr->attack_damage = damroll(pa_ptr->ma_ptr->dd + attacker_ptr->to_dd[pa_ptr->hand], pa_ptr->ma_ptr->ds + attacker_ptr->to_ds[pa_ptr->hand]);
+    if (attacker_ptr->special_attack & ATTACK_SUIKEN)
+        pa_ptr->attack_damage *= 2;
+
+    int stun_effect = 0;
+    int special_effect = process_monk_additional_effect(pa_ptr, &stun_effect);
+    WEIGHT weight = calc_monk_attack_weight(attacker_ptr);
+    pa_ptr->attack_damage = critical_norm(attacker_ptr, attacker_ptr->lev * weight, min_level, pa_ptr->attack_damage, attacker_ptr->to_h[0], 0);
+    process_attack_vital_spot(attacker_ptr, pa_ptr, &stun_effect, &resist_stun, special_effect);
+    print_stun_effect(attacker_ptr, pa_ptr, g_ptr, stun_effect, resist_stun);
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -507,20 +532,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         // ダメージ計算を開始、取り敢えず素手と仮定し1とする.
         pa_ptr->attack_damage = 1;
         if (pa_ptr->monk_attack) {
-            int resist_stun = calc_stun_resistance(pa_ptr);
-            int max_blow_selection_times = calc_max_blow_selection_times(attacker_ptr);
-            int min_level = select_blow(attacker_ptr, pa_ptr, max_blow_selection_times);
-
-            pa_ptr->attack_damage = damroll(pa_ptr->ma_ptr->dd + attacker_ptr->to_dd[hand], pa_ptr->ma_ptr->ds + attacker_ptr->to_ds[hand]);
-            if (attacker_ptr->special_attack & ATTACK_SUIKEN)
-                pa_ptr->attack_damage *= 2;
-
-            int stun_effect = 0;
-            int special_effect = process_monk_additional_effect(pa_ptr, &stun_effect);
-            WEIGHT weight = calc_monk_attack_weight(attacker_ptr);
-            pa_ptr->attack_damage = critical_norm(attacker_ptr, attacker_ptr->lev * weight, min_level, pa_ptr->attack_damage, attacker_ptr->to_h[0], 0);
-            process_attack_vital_spot(attacker_ptr, pa_ptr, &stun_effect, &resist_stun, special_effect);
-            print_stun_effect(attacker_ptr, pa_ptr, g_ptr, stun_effect, resist_stun);
+            process_monk_attack(attacker_ptr, pa_ptr, g_ptr);
         }
 
         /* Handle normal weapon */
