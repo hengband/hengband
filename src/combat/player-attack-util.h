@@ -2,6 +2,7 @@
 
 #include "system/angband.h"
 #include "combat/combat-options-type.h"
+#include "combat/martial-arts-table.h"
 
 typedef enum chaotic_effect {
     CE_NONE = 0,
@@ -26,5 +27,5 @@ typedef struct player_attack_type {
     BIT_FLAGS flags[TR_FLAG_SIZE];
     chaotic_effect chaos_effect;
     bool can_drain;
-    martial_arts *ma_ptr;
+    const martial_arts *ma_ptr;
 } player_attack_type;

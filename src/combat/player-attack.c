@@ -310,7 +310,7 @@ static int calc_max_blow_selection_times(player_type *attacker_ptr)
 static int select_blow(player_type *attacker_ptr, player_attack_type *pa_ptr, int max_blow_selection_times)
 {
     int min_level = 1;
-    martial_arts *old_ptr = &ma_blows[0];
+    const martial_arts *old_ptr = &ma_blows[0];
     for (int times = 0; times < max_blow_selection_times; times++) {
         do {
             pa_ptr->ma_ptr = &ma_blows[randint0(MAX_MA)];
@@ -320,21 +320,22 @@ static int select_blow(player_type *attacker_ptr, player_attack_type *pa_ptr, in
                 min_level = pa_ptr->ma_ptr->min_level;
         } while ((min_level > attacker_ptr->lev) || (randint1(attacker_ptr->lev) < pa_ptr->ma_ptr->chance));
 
-        if ((pa_ptr->ma_ptr->min_level > old_ptr->min_level) && !attacker_ptr->stun && !attacker_ptr->confused) {
-            old_ptr = pa_ptr->ma_ptr;
-
-            if (current_world_ptr->wizard && cheat_xtra) {
-                msg_print(_("攻撃を再選択しました。", "Attack re-selected."));
-            }
-        } else {
+        if ((pa_ptr->ma_ptr->min_level <= old_ptr->min_level) || attacker_ptr->stun || attacker_ptr->confused) {
             pa_ptr->ma_ptr = old_ptr;
+            continue;
         }
+
+        old_ptr = pa_ptr->ma_ptr;
+        if (current_world_ptr->wizard && cheat_xtra)
+            msg_print(_("攻撃を再選択しました。", "Attack re-selected."));
     }
 
     if (attacker_ptr->pclass == CLASS_FORCETRAINER)
         min_level = MAX(1, pa_ptr->ma_ptr->min_level - 3);
     else
         min_level = pa_ptr->ma_ptr->min_level;
+
+    return min_level;
 }
 
 /*!
