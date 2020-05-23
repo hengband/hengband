@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 typedef struct player_type player_type;
 
 extern const POSITION ddd[9];

@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 /*
  * Number of feats we change to (Excluding default). Used in f_info.txt.
  */
