@@ -463,6 +463,30 @@ static void attack_golden_hammer(player_type *attacker_ptr, player_attack_type *
 }
 
 /*!
+ * @brief カオス武器その他でモンスターのステータスを変化させる
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param y モンスターのY座標
+ * @param x モンスターのX座標
+ * @param num 現在の攻撃回数
+ * @return なし
+ */
+static void change_monster_stat(player_type *attacker_ptr, player_attack_type *pa_ptr, const POSITION y, const POSITION x, int *num)
+{
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    if ((attacker_ptr->special_attack & ATTACK_CONFUSE) || (pa_ptr->chaos_effect == CE_CONFUSION) || (pa_ptr->mode == HISSATSU_CONF)
+        || hex_spelling(attacker_ptr, HEX_CONFUSION))
+        attack_confuse(attacker_ptr, pa_ptr);
+    else if (pa_ptr->chaos_effect == CE_TELE_AWAY)
+        attack_teleport_away(attacker_ptr, pa_ptr, num);
+    else if ((pa_ptr->chaos_effect == CE_POLYMORPH) && (randint1(90) > r_ptr->level))
+        attack_polymorph(attacker_ptr, pa_ptr, y, x);
+    else if (o_ptr->name1 == ART_G_HAMMER)
+        attack_golden_hammer(attacker_ptr, pa_ptr);
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -543,17 +567,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         process_drain(attacker_ptr, pa_ptr, is_human, &drain_msg);
         pa_ptr->can_drain = FALSE;
         pa_ptr->drain_result = 0;
-
-        if ((attacker_ptr->special_attack & ATTACK_CONFUSE) || (pa_ptr->chaos_effect == CE_CONFUSION) || (mode == HISSATSU_CONF)
-            || hex_spelling(attacker_ptr, HEX_CONFUSION))
-            attack_confuse(attacker_ptr, pa_ptr);
-        else if (pa_ptr->chaos_effect == CE_TELE_AWAY)
-            attack_teleport_away(attacker_ptr, pa_ptr, &num);
-        else if ((pa_ptr->chaos_effect == CE_POLYMORPH) && (randint1(90) > r_ptr->level))
-            attack_polymorph(attacker_ptr, pa_ptr, y, x);
-        else if (o_ptr->name1 == ART_G_HAMMER)
-            attack_golden_hammer(attacker_ptr, pa_ptr);
-
+        change_monster_stat(attacker_ptr, pa_ptr, y, x, &num);
         pa_ptr->backstab = FALSE;
         pa_ptr->surprise_attack = FALSE;
     }
