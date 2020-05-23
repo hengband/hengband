@@ -6,8 +6,27 @@
 
 #include "combat/blood-sucking-processor.h"
 #include "object/artifact.h"
+#include "monster/monsterrace-hook.h"
 #include "player/player-effects.h"
 #include "realm/realm-hex.h"
+
+/*!
+ * @brief 生命のあるモンスターから吸血できるか判定する
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+void decide_blood_sucking(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    bool is_blood_sucker = have_flag(pa_ptr->flags, TR_VAMPIRIC);
+    is_blood_sucker |= pa_ptr->chaos_effect == CE_VAMPIRIC;
+    is_blood_sucker |= pa_ptr->mode == HISSATSU_DRAIN;
+    is_blood_sucker |= hex_spelling(attacker_ptr, HEX_VAMP_BLADE);
+    if (!is_blood_sucker)
+        return;
+
+    pa_ptr->can_drain = monster_living(pa_ptr->m_ptr->r_idx);
+}
 
 /*!
  * @brief 吸血量を計算する

@@ -201,24 +201,6 @@ static chaotic_effect select_chaotic_effect(player_type *attacker_ptr, player_at
 }
 
 /*!
- * @brief 生命のあるモンスターから吸血できるか判定する
- * @param attacker_ptr プレーヤーへの参照ポインタ
- * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @return なし
- */
-static void decide_blood_sucking(player_type *attacker_ptr, player_attack_type *pa_ptr)
-{
-    bool is_blood_sucker = have_flag(pa_ptr->flags, TR_VAMPIRIC);
-    is_blood_sucker |= pa_ptr->chaos_effect == CE_VAMPIRIC;
-    is_blood_sucker |= pa_ptr->mode == HISSATSU_DRAIN;
-    is_blood_sucker |= hex_spelling(attacker_ptr, HEX_VAMP_BLADE);
-    if (!is_blood_sucker)
-        return;
-
-    pa_ptr->can_drain = monster_living(pa_ptr->m_ptr->r_idx);
-}
-
-/*!
  * @brief ヴォーパル武器で攻撃した時のメッセージ表示
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param int 倍率
