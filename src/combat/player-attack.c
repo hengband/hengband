@@ -338,6 +338,36 @@ static int select_blow(player_type *attacker_ptr, player_attack_type *pa_ptr, in
     return min_level;
 }
 
+static int process_monk_additional_effect(player_type *attacker_ptr, player_attack_type *pa_ptr, int *stun_effect)
+{
+    int special_effect = 0;
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    if (pa_ptr->ma_ptr->effect == MA_KNEE) {
+        if (r_ptr->flags1 & RF1_MALE) {
+            msg_format(_("%sに金的膝蹴りをくらわした！", "You hit %s in the groin with your knee!"), pa_ptr->m_name);
+            sound(SOUND_PAIN);
+            special_effect = MA_KNEE;
+        } else
+            msg_format(pa_ptr->ma_ptr->desc, pa_ptr->m_name);
+    }
+
+    else if (pa_ptr->ma_ptr->effect == MA_SLOW) {
+        if (!((r_ptr->flags1 & RF1_NEVER_MOVE) || my_strchr("~#{}.UjmeEv$,DdsbBFIJQSXclnw!=?", r_ptr->d_char))) {
+            msg_format(_("%sの足首に関節蹴りをくらわした！", "You kick %s in the ankle."), pa_ptr->m_name);
+            special_effect = MA_SLOW;
+        } else
+            msg_format(pa_ptr->ma_ptr->desc, pa_ptr->m_name);
+    } else {
+        if (pa_ptr->ma_ptr->effect) {
+            *stun_effect = (pa_ptr->ma_ptr->effect / 2) + randint1(pa_ptr->ma_ptr->effect / 2);
+        }
+
+        msg_format(pa_ptr->ma_ptr->desc, pa_ptr->m_name);
+    }
+
+    return special_effect;
+}
+
 /*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
@@ -406,8 +436,6 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         // ダメージ計算を開始、取り敢えず素手と仮定し1とする.
         pa_ptr->attack_damage = 1;
         if (pa_ptr->monk_attack) {
-            int special_effect = 0;
-            int stun_effect = 0;
             WEIGHT weight = 8;
             int resist_stun = calc_stun_resistance(pa_ptr);
             int max_blow_selection_times = calc_max_blow_selection_times(attacker_ptr);
@@ -417,29 +445,8 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             if (attacker_ptr->special_attack & ATTACK_SUIKEN)
                 pa_ptr->attack_damage *= 2;
 
-            if (pa_ptr->ma_ptr->effect == MA_KNEE) {
-                if (r_ptr->flags1 & RF1_MALE) {
-                    msg_format(_("%sに金的膝蹴りをくらわした！", "You hit %s in the groin with your knee!"), pa_ptr->m_name);
-                    sound(SOUND_PAIN);
-                    special_effect = MA_KNEE;
-                } else
-                    msg_format(pa_ptr->ma_ptr->desc, pa_ptr->m_name);
-            }
-
-            else if (pa_ptr->ma_ptr->effect == MA_SLOW) {
-                if (!((r_ptr->flags1 & RF1_NEVER_MOVE) || my_strchr("~#{}.UjmeEv$,DdsbBFIJQSXclnw!=?", r_ptr->d_char))) {
-                    msg_format(_("%sの足首に関節蹴りをくらわした！", "You kick %s in the ankle."), pa_ptr->m_name);
-                    special_effect = MA_SLOW;
-                } else
-                    msg_format(pa_ptr->ma_ptr->desc, pa_ptr->m_name);
-            } else {
-                if (pa_ptr->ma_ptr->effect) {
-                    stun_effect = (pa_ptr->ma_ptr->effect / 2) + randint1(pa_ptr->ma_ptr->effect / 2);
-                }
-
-                msg_format(pa_ptr->ma_ptr->desc, pa_ptr->m_name);
-            }
-
+            int stun_effect = 0;
+            int special_effect = process_monk_additional_effect(attacker_ptr, pa_ptr, &stun_effect);
             if (attacker_ptr->special_defense & KAMAE_SUZAKU)
                 weight = 4;
             if ((attacker_ptr->pclass == CLASS_FORCETRAINER) && P_PTR_KI) {
