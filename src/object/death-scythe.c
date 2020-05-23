@@ -18,7 +18,7 @@
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @return 倍率 (実際は1/10になる)
  */
-static int calc_death_scythe_reflection_magnificant_mimic_none(player_type *attacker_ptr)
+static int calc_death_scythe_reflection_magnification_mimic_none(player_type *attacker_ptr)
 {
     switch (attacker_ptr->prace) {
     case RACE_YEEK:
@@ -53,11 +53,11 @@ static int calc_death_scythe_reflection_magnificant_mimic_none(player_type *atta
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @return 倍率 (実際は1/10になる)
  */
-static int calc_death_scythe_reflection_magnificant(player_type *attacker_ptr)
+static int calc_death_scythe_reflection_magnification(player_type *attacker_ptr)
 {
     switch (attacker_ptr->mimic_form) {
     case MIMIC_NONE:
-        return calc_death_scythe_reflection_magnificant_mimic_none(attacker_ptr);
+        return calc_death_scythe_reflection_magnification_mimic_none(attacker_ptr);
     case MIMIC_DEMON:
     case MIMIC_DEMON_LORD:
     case MIMIC_VAMPIRE:
@@ -70,34 +70,34 @@ static int calc_death_scythe_reflection_magnificant(player_type *attacker_ptr)
 /*!
  * @brief 耐性等に応じて死の大鎌による反射ダメージ倍率を補正する
  * @param attacker_ptr プレーヤーへの参照ポインタ
- * @param magnificant ダメージ倍率
+ * @param magnification ダメージ倍率
  * @param death_scythe_flags 死の大鎌に関するオブジェクトフラグ配列
  * @return なし
  */
-static void compensate_death_scythe_reflection_magnificant(player_type *attacker_ptr, int *magnificant, BIT_FLAGS *death_scythe_flags)
+static void compensate_death_scythe_reflection_magnification(player_type *attacker_ptr, int *magnification, BIT_FLAGS *death_scythe_flags)
 {
-    if ((attacker_ptr->align < 0) && (*magnificant < 20))
-        *magnificant = 20;
+    if ((attacker_ptr->align < 0) && (*magnification < 20))
+        *magnification = 20;
 
-    if (!(attacker_ptr->resist_acid || is_oppose_acid(attacker_ptr) || attacker_ptr->immune_acid) && (*magnificant < 25))
-        *magnificant = 25;
+    if (!(attacker_ptr->resist_acid || is_oppose_acid(attacker_ptr) || attacker_ptr->immune_acid) && (*magnification < 25))
+        *magnification = 25;
 
-    if (!(attacker_ptr->resist_elec || is_oppose_elec(attacker_ptr) || attacker_ptr->immune_elec) && (*magnificant < 25))
-        *magnificant = 25;
+    if (!(attacker_ptr->resist_elec || is_oppose_elec(attacker_ptr) || attacker_ptr->immune_elec) && (*magnification < 25))
+        *magnification = 25;
 
-    if (!(attacker_ptr->resist_fire || is_oppose_fire(attacker_ptr) || attacker_ptr->immune_fire) && (*magnificant < 25))
-        *magnificant = 25;
+    if (!(attacker_ptr->resist_fire || is_oppose_fire(attacker_ptr) || attacker_ptr->immune_fire) && (*magnification < 25))
+        *magnification = 25;
 
-    if (!(attacker_ptr->resist_cold || is_oppose_cold(attacker_ptr) || attacker_ptr->immune_cold) && (*magnificant < 25))
-        *magnificant = 25;
+    if (!(attacker_ptr->resist_cold || is_oppose_cold(attacker_ptr) || attacker_ptr->immune_cold) && (*magnification < 25))
+        *magnification = 25;
 
-    if (!(attacker_ptr->resist_pois || is_oppose_pois(attacker_ptr)) && (*magnificant < 25))
-        *magnificant = 25;
+    if (!(attacker_ptr->resist_pois || is_oppose_pois(attacker_ptr)) && (*magnification < 25))
+        *magnification = 25;
 
     if ((attacker_ptr->pclass != CLASS_SAMURAI) && (have_flag(death_scythe_flags, TR_FORCE_WEAPON)) && (attacker_ptr->csp > (attacker_ptr->msp / 30))) {
         attacker_ptr->csp -= (1 + (attacker_ptr->msp / 30));
         attacker_ptr->redraw |= (PR_MANA);
-        *magnificant = *magnificant * 3 / 2 + 20;
+        *magnification = *magnification * 3 / 2 + 20;
     }
 }
 
@@ -111,12 +111,12 @@ static void death_scythe_reflection_critial_hit(player_attack_type *pa_ptr)
     if (!one_in_(6))
         return;
 
-    int more_magnificant = 2;
+    int more_magnification = 2;
     msg_format(_("グッサリ切り裂かれた！", "Your weapon cuts deep into yourself!"));
     while (one_in_(4))
-        more_magnificant++;
+        more_magnification++;
 
-    pa_ptr->attack_damage *= (HIT_POINT)more_magnificant;
+    pa_ptr->attack_damage *= (HIT_POINT)more_magnification;
 }
 
 /*!
@@ -135,9 +135,9 @@ void process_death_scythe_reflection(player_type *attacker_ptr, player_attack_ty
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
     object_flags(o_ptr, death_scythe_flags);
     pa_ptr->attack_damage = damroll(o_ptr->dd + attacker_ptr->to_dd[pa_ptr->hand], o_ptr->ds + attacker_ptr->to_ds[pa_ptr->hand]);
-    int magnificant = calc_death_scythe_reflection_magnificant(attacker_ptr);
-    compensate_death_scythe_reflection_magnificant(attacker_ptr, &magnificant, death_scythe_flags);
-    pa_ptr->attack_damage *= (HIT_POINT)magnificant;
+    int magnification = calc_death_scythe_reflection_magnification(attacker_ptr);
+    compensate_death_scythe_reflection_magnification(attacker_ptr, &magnification, death_scythe_flags);
+    pa_ptr->attack_damage *= (HIT_POINT)magnification;
     pa_ptr->attack_damage /= 10;
     pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[pa_ptr->hand], pa_ptr->mode);
     death_scythe_reflection_critial_hit(pa_ptr);
