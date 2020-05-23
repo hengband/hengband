@@ -39,6 +39,7 @@ static player_attack_type *initialize_player_attack_type(player_attack_type *pa_
     pa_ptr->monk_attack = FALSE;
     pa_ptr->num_blow = 0;
     pa_ptr->attack_damage = 0;
+    pa_ptr->can_drain = FALSE;
     return pa_ptr;
 }
 
@@ -235,6 +236,24 @@ static chaotic_effect select_chaotic_effect(player_type *attacker_ptr, player_at
 }
 
 /*!
+ * @brief 生命のあるモンスターから吸血できるか判定する
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @なし
+ */
+static void decide_blood_sucking(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    bool is_blood_sucker = have_flag(pa_ptr->flags, TR_VAMPIRIC);
+    is_blood_sucker |= pa_ptr->chaos_effect == CE_VAMPIRIC;
+    is_blood_sucker |= pa_ptr->mode == HISSATSU_DRAIN;
+    is_blood_sucker |= hex_spelling(attacker_ptr, HEX_VAMP_BLADE);
+    if (!is_blood_sucker)
+        return;
+
+    pa_ptr->can_drain = monster_living(pa_ptr->m_ptr->r_idx);
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -255,7 +274,6 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     bool drain_msg = TRUE;
     int drain_result = 0;
     int drain_heal = 0;
-    bool can_drain = FALSE;
     int drain_left = MAX_VAMPIRIC_DRAIN;
 
     floor_type *floor_ptr = attacker_ptr->current_floor_ptr;
@@ -293,14 +311,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
         object_flags(o_ptr, pa_ptr->flags);
         pa_ptr->chaos_effect = select_chaotic_effect(attacker_ptr, pa_ptr);
-
-        if ((have_flag(pa_ptr->flags, TR_VAMPIRIC)) || (pa_ptr->chaos_effect == CE_VAMPIRIC) || (mode == HISSATSU_DRAIN) || hex_spelling(attacker_ptr, HEX_VAMP_BLADE)) {
-            /* Only drain "living" monsters */
-            if (monster_living(m_ptr->r_idx))
-                can_drain = TRUE;
-            else
-                can_drain = FALSE;
-        }
+        decide_blood_sucking(attacker_ptr, pa_ptr);
 
         if ((have_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified)
             vorpal_cut = TRUE;
@@ -584,7 +595,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             m_ptr->hp - pa_ptr->attack_damage, m_ptr->maxhp, m_ptr->max_maxhp);
 
         if (pa_ptr->attack_damage <= 0)
-            can_drain = FALSE;
+            pa_ptr->can_drain = FALSE;
 
         if (drain_result > m_ptr->hp)
             drain_result = m_ptr->hp;
@@ -616,7 +627,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         /* Are we draining it?  A little note: If the monster is
 		dead, the drain does not work... */
 
-        if (can_drain && (drain_result > 0)) {
+        if (pa_ptr->can_drain && (drain_result > 0)) {
             if (o_ptr->name1 == ART_MURAMASA) {
                 if (is_human) {
                     HIT_PROB to_h = o_ptr->to_h;
@@ -684,7 +695,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             weak = TRUE;
         }
 
-        can_drain = FALSE;
+        pa_ptr->can_drain = FALSE;
         drain_result = 0;
 
         /* Confusion attack */

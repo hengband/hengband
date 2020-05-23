@@ -25,4 +25,5 @@ typedef struct player_attack_type {
     GAME_TEXT m_name[MAX_NLEN];
     BIT_FLAGS flags[TR_FLAG_SIZE];
     chaotic_effect chaos_effect;
+    bool can_drain;
 } player_attack_type;
