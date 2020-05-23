@@ -193,65 +193,6 @@ static void calc_num_blow(player_type *attacker_ptr, player_attack_type *pa_ptr)
         pa_ptr->num_blow = 1;
 }
 
-/*!
- * @brief 攻撃が当たるかどうかを判定する
- * @param attacker_ptr プレーヤーへの参照ポインタ
- * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @param chance 基本命中値
- * @return なし
- */
-static bool decide_attack_hit(player_type *attacker_ptr, player_attack_type *pa_ptr, int chance)
-{
-    bool success_hit = FALSE;
-    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
-    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
-    if (((o_ptr->tval == TV_SWORD) && (o_ptr->sval == SV_POISON_NEEDLE)) || (pa_ptr->mode == HISSATSU_KYUSHO)) {
-        int n = 1;
-
-        if (attacker_ptr->migite && attacker_ptr->hidarite)
-            n *= 2;
-
-        if (pa_ptr->mode == HISSATSU_3DAN)
-            n *= 2;
-
-        success_hit = one_in_(n);
-    } else if ((attacker_ptr->pclass == CLASS_NINJA) && ((pa_ptr->backstab || pa_ptr->suprise_attack) && !(r_ptr->flagsr & RFR_RES_ALL)))
-        success_hit = TRUE;
-    else
-        success_hit = test_hit_norm(attacker_ptr, chance, r_ptr->ac, pa_ptr->m_ptr->ml);
-
-    if ((pa_ptr->mode == HISSATSU_MAJIN) && one_in_(2))
-        success_hit = FALSE;
-
-    return success_hit;
-}
-
-/*!
- * @brief 直接攻撃の命中を処理するメインルーチン
- * @param attacker_ptr プレーヤーへの参照ポインタ
- * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @param chance 基本命中値
- * @return 当たればTRUE、外れればFALSE
- */
-static bool process_attack_hit(player_type *attacker_ptr, player_attack_type *pa_ptr, int chance)
-{
-    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
-    if (decide_attack_hit(attacker_ptr, pa_ptr, chance))
-        return TRUE;
-
-    pa_ptr->backstab = FALSE; /* Clumsy! */
-    pa_ptr->suprise_attack = FALSE; /* Clumsy! */
-
-    if ((o_ptr->tval == TV_POLEARM) && (o_ptr->sval == SV_DEATH_SCYTHE) && one_in_(3)) {
-        process_death_scythe_reflection(attacker_ptr, pa_ptr);
-    } else {
-        sound(SOUND_MISS);
-        msg_format(_("ミス！ %sにかわされた。", "You miss %s."), pa_ptr->m_name);
-    }
-
-    return FALSE;
-}
-
 static void print_suprise_attack(player_attack_type *pa_ptr)
 {
     if (pa_ptr->backstab)
