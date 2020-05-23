@@ -241,7 +241,7 @@ static chaotic_effect select_chaotic_effect(player_type *attacker_ptr, player_at
  * @brief 生命のあるモンスターから吸血できるか判定する
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
- * @なし
+ * @return なし
  */
 static void decide_blood_sucking(player_type *attacker_ptr, player_attack_type *pa_ptr)
 {
@@ -390,6 +390,33 @@ static WEIGHT calc_monk_attack_weight(player_type *attacker_ptr)
 }
 
 /*!
+ * @brief 急所攻撃による追加効果を与える
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param stun_effect 朦朧の残りターン
+ * @param resist_stun 朦朧への抵抗値
+ * @param special_effect
+ * @return なし
+ */
+static void process_attack_vital_spot(player_type *attacker_ptr, player_attack_type *pa_ptr, int *stun_effect, int *resist_stun, const int special_effect)
+{
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    if ((special_effect == MA_KNEE) && ((pa_ptr->attack_damage + attacker_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
+        msg_format(_("%^sは苦痛にうめいている！", "%^s moans in agony!"), pa_ptr->m_name);
+        *stun_effect = 7 + randint1(13);
+        *resist_stun /= 3;
+        return;
+    }
+
+    if ((special_effect == MA_SLOW) && ((pa_ptr->attack_damage + attacker_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
+        if (!(r_ptr->flags1 & RF1_UNIQUE) && (randint1(attacker_ptr->lev) > r_ptr->level) && pa_ptr->m_ptr->mspeed > 60) {
+            msg_format(_("%^sは足をひきずり始めた。", "%^s starts limping slower."), pa_ptr->m_name);
+            pa_ptr->m_ptr->mspeed -= 10;
+        }
+    }
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -469,20 +496,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             int special_effect = process_monk_additional_effect(pa_ptr, &stun_effect);
             WEIGHT weight = calc_monk_attack_weight(attacker_ptr);
             pa_ptr->attack_damage = critical_norm(attacker_ptr, attacker_ptr->lev * weight, min_level, pa_ptr->attack_damage, attacker_ptr->to_h[0], 0);
-
-            if ((special_effect == MA_KNEE) && ((pa_ptr->attack_damage + attacker_ptr->to_d[hand]) < m_ptr->hp)) {
-                msg_format(_("%^sは苦痛にうめいている！", "%^s moans in agony!"), pa_ptr->m_name);
-                stun_effect = 7 + randint1(13);
-                resist_stun /= 3;
-            }
-
-            else if ((special_effect == MA_SLOW) && ((pa_ptr->attack_damage + attacker_ptr->to_d[hand]) < m_ptr->hp)) {
-                if (!(r_ptr->flags1 & RF1_UNIQUE) && (randint1(attacker_ptr->lev) > r_ptr->level) && m_ptr->mspeed > 60) {
-                    msg_format(_("%^sは足をひきずり始めた。", "%^s starts limping slower."), pa_ptr->m_name);
-                    m_ptr->mspeed -= 10;
-                }
-            }
-
+            process_attack_vital_spot(attacker_ptr, pa_ptr, &stun_effect, &resist_stun, special_effect);
             if (stun_effect && ((pa_ptr->attack_damage + attacker_ptr->to_d[hand]) < m_ptr->hp)) {
                 if (attacker_ptr->lev > randint1(r_ptr->level + resist_stun + 10)) {
                     if (set_monster_stunned(attacker_ptr, g_ptr->m_idx, stun_effect + MON_STUNNED(m_ptr))) {
