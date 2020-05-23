@@ -268,7 +268,7 @@ static void print_chainsword_noise(object_type *o_ptr)
  * @param attacker_ptr プレーヤーへの参照ポインタ
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param vorpal_cut メッタ斬りにできるかどうか
- * @param vorpal_chance
+ * @param vorpal_chance ヴォーパル倍率上昇の機会値
  * @return なし
  */
 static void process_vorpal_attack(player_type *attacker_ptr, player_attack_type *pa_ptr, const bool vorpal_cut, const int vorpal_chance)
@@ -295,6 +295,32 @@ static void process_vorpal_attack(player_type *attacker_ptr, player_attack_type 
         print_vorpal_message(pa_ptr, vorpal_magnification);
 
     pa_ptr->drain_result = pa_ptr->drain_result * 3 / 2;
+}
+
+/*!
+ * @brief 武器による直接攻撃メインルーチン
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param vorpal_cut メッタ斬りにできるかどうか
+ * @param vorpal_chance ヴォーパル倍率上昇の機会値
+ * @return 攻撃の結果、地震を起こすことになったらTRUE、それ以外はFALSE
+ */
+static bool process_weapon_attack(player_type *attacker_ptr, player_attack_type *pa_ptr, const bool vorpal_cut, const int vorpal_chance)
+{
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    pa_ptr->attack_damage = damroll(o_ptr->dd + attacker_ptr->to_dd[pa_ptr->hand], o_ptr->ds + attacker_ptr->to_ds[pa_ptr->hand]);
+    pa_ptr->attack_damage = calc_attack_damage_with_slay(attacker_ptr, o_ptr, pa_ptr->attack_damage, pa_ptr->m_ptr, pa_ptr->mode, FALSE);
+    calc_surprise_attack_damage(attacker_ptr, pa_ptr);
+
+    bool do_quake = ((attacker_ptr->impact[pa_ptr->hand] && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE) || (pa_ptr->mode == HISSATSU_QUAKE));
+    if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(pa_ptr->mode == HISSATSU_KYUSHO))
+        pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[pa_ptr->hand], pa_ptr->mode);
+
+    pa_ptr->drain_result = pa_ptr->attack_damage;
+    process_vorpal_attack(attacker_ptr, pa_ptr, vorpal_cut, vorpal_chance);
+    pa_ptr->attack_damage += o_ptr->to_d;
+    pa_ptr->drain_result += o_ptr->to_d;
+    return do_quake;
 }
 
 /*!
@@ -366,20 +392,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
         /* Handle normal weapon */
         else if (o_ptr->k_idx) {
-            pa_ptr->attack_damage = damroll(o_ptr->dd + attacker_ptr->to_dd[hand], o_ptr->ds + attacker_ptr->to_ds[hand]);
-            pa_ptr->attack_damage = calc_attack_damage_with_slay(attacker_ptr, o_ptr, pa_ptr->attack_damage, m_ptr, mode, FALSE);
-            calc_surprise_attack_damage(attacker_ptr, pa_ptr);
-
-            if ((attacker_ptr->impact[hand] && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE) || (mode == HISSATSU_QUAKE))
-                do_quake = TRUE;
-
-            if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(mode == HISSATSU_KYUSHO))
-                pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[hand], mode);
-
-            pa_ptr->drain_result = pa_ptr->attack_damage;
-            process_vorpal_attack(attacker_ptr, pa_ptr, vorpal_cut, vorpal_chance);
-            pa_ptr->attack_damage += o_ptr->to_d;
-            pa_ptr->drain_result += o_ptr->to_d;
+            do_quake = process_weapon_attack(attacker_ptr, pa_ptr, vorpal_cut, vorpal_chance);
         }
 
         /* Apply the player damage bonuses */
