@@ -336,6 +336,35 @@ static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_p
 }
 
 /*!
+ * @brief カオス武器か混乱の手でモンスターを混乱させる処理
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return 死んだらTRUE、生きていたらFALSE
+ * @return なし
+ */
+static void attack_confuse(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    if (attacker_ptr->special_attack & ATTACK_CONFUSE) {
+        attacker_ptr->special_attack &= ~(ATTACK_CONFUSE);
+        msg_print(_("手の輝きがなくなった。", "Your hands stop glowing."));
+        attacker_ptr->redraw |= (PR_STATUS);
+    }
+
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    if (r_ptr->flags3 & RF3_NO_CONF) {
+        if (is_original_ap_and_seen(attacker_ptr, pa_ptr->m_ptr))
+            r_ptr->r_flags3 |= RF3_NO_CONF;
+        msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
+
+    } else if (randint0(100) < r_ptr->level) {
+        msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
+    } else {
+        msg_format(_("%^sは混乱したようだ。", "%^s appears confused."), pa_ptr->m_name);
+        (void)set_monster_confused(attacker_ptr, pa_ptr->g_ptr->m_idx, MON_CONFUSED(pa_ptr->m_ptr) + 10 + randint0(attacker_ptr->lev) / 5);
+    }
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -417,30 +446,10 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         pa_ptr->can_drain = FALSE;
         pa_ptr->drain_result = 0;
 
-        /* Confusion attack */
         if ((attacker_ptr->special_attack & ATTACK_CONFUSE) || (pa_ptr->chaos_effect == CE_CONFUSION) || (mode == HISSATSU_CONF)
             || hex_spelling(attacker_ptr, HEX_CONFUSION)) {
-            /* Cancel glowing hands */
-            if (attacker_ptr->special_attack & ATTACK_CONFUSE) {
-                attacker_ptr->special_attack &= ~(ATTACK_CONFUSE);
-                msg_print(_("手の輝きがなくなった。", "Your hands stop glowing."));
-                attacker_ptr->redraw |= (PR_STATUS);
-            }
-
-            /* Confuse the monster */
-            if (r_ptr->flags3 & RF3_NO_CONF) {
-                if (is_original_ap_and_seen(attacker_ptr, m_ptr))
-                    r_ptr->r_flags3 |= RF3_NO_CONF;
-                msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
-
-            } else if (randint0(100) < r_ptr->level) {
-                msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
-            } else {
-                msg_format(_("%^sは混乱したようだ。", "%^s appears confused."), pa_ptr->m_name);
-                (void)set_monster_confused(attacker_ptr, g_ptr->m_idx, MON_CONFUSED(m_ptr) + 10 + randint0(attacker_ptr->lev) / 5);
-            }
+            attack_confuse(attacker_ptr, m_ptr);
         }
-
         else if (pa_ptr->chaos_effect == CE_TELE_AWAY) {
             bool resists_tele = FALSE;
 
