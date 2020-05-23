@@ -27,7 +27,6 @@
 #include "realm/realm-hex.h"
 #include "spell/spells-floor.h"
 #include "spell/spells3.h"
-#include "system/angband.h"
 #include "world/world.h"
 
 static player_attack_type *initialize_player_attack_type(player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr)
@@ -303,15 +302,17 @@ static void process_vorpal_attack(player_type *attacker_ptr, player_attack_type 
  * @param vorpal_chance ヴォーパル倍率上昇の機会値
  * @return 攻撃の結果、地震を起こすことになったらTRUE、それ以外はFALSE
  */
-static bool process_weapon_attack(player_type *attacker_ptr, player_attack_type *pa_ptr, const bool vorpal_cut, const int vorpal_chance)
+static void process_weapon_attack(player_type *attacker_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool vorpal_cut, const int vorpal_chance)
 {
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
     pa_ptr->attack_damage = damroll(o_ptr->dd + attacker_ptr->to_dd[pa_ptr->hand], o_ptr->ds + attacker_ptr->to_ds[pa_ptr->hand]);
     pa_ptr->attack_damage = calc_attack_damage_with_slay(attacker_ptr, o_ptr, pa_ptr->attack_damage, pa_ptr->m_ptr, pa_ptr->mode, FALSE);
     calc_surprise_attack_damage(attacker_ptr, pa_ptr);
 
-    bool do_quake = ((attacker_ptr->impact[pa_ptr->hand] && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE)
-        || (pa_ptr->mode == HISSATSU_QUAKE));
+    if ((attacker_ptr->impact[pa_ptr->hand] && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE)
+        || (pa_ptr->mode == HISSATSU_QUAKE))
+        *do_quake = TRUE;
+
     if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(pa_ptr->mode == HISSATSU_KYUSHO))
         pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[pa_ptr->hand], pa_ptr->mode);
 
@@ -319,7 +320,25 @@ static bool process_weapon_attack(player_type *attacker_ptr, player_attack_type 
     process_vorpal_attack(attacker_ptr, pa_ptr, vorpal_cut, vorpal_chance);
     pa_ptr->attack_damage += o_ptr->to_d;
     pa_ptr->drain_result += o_ptr->to_d;
-    return do_quake;
+}
+
+/*!
+ * @brief 武器または素手による攻撃ダメージを計算する
+ * @details 取り敢えず素手と仮定し1とする.
+ */
+static void calc_attack_damage(
+    player_type *attacker_ptr, player_attack_type *pa_ptr, grid_type *g_ptr, bool *do_quake, const bool vorpal_cut, const int vorpal_chance)
+{
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    pa_ptr->attack_damage = 1;
+    if (pa_ptr->monk_attack) {
+        process_monk_attack(attacker_ptr, pa_ptr, g_ptr);
+        return;
+    }
+
+    if (o_ptr->k_idx) {
+        process_weapon_attack(attacker_ptr, pa_ptr, do_quake, vorpal_cut, vorpal_chance);
+    }
 }
 
 /*!
@@ -384,16 +403,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         bool vorpal_cut = (have_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1)
             && !is_zantetsu_nullified;
 
-        // ダメージ計算を開始、取り敢えず素手と仮定し1とする.
-        pa_ptr->attack_damage = 1;
-        if (pa_ptr->monk_attack) {
-            process_monk_attack(attacker_ptr, pa_ptr, g_ptr);
-        }
-
-        /* Handle normal weapon */
-        else if (o_ptr->k_idx) {
-            do_quake = process_weapon_attack(attacker_ptr, pa_ptr, vorpal_cut, vorpal_chance);
-        }
+        calc_attack_damage(attacker_ptr, pa_ptr, g_ptr, &do_quake, vorpal_cut, vorpal_chance);
 
         /* Apply the player damage bonuses */
         pa_ptr->attack_damage += attacker_ptr->to_d[hand];
