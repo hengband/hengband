@@ -395,7 +395,7 @@ static WEIGHT calc_monk_attack_weight(player_type *attacker_ptr)
  * @param pa_ptr 直接攻撃構造体への参照ポインタ
  * @param stun_effect 朦朧の残りターン
  * @param resist_stun 朦朧への抵抗値
- * @param special_effect
+ * @param special_effect 技を繰り出した時の追加効果
  * @return なし
  */
 static void process_attack_vital_spot(player_type *attacker_ptr, player_attack_type *pa_ptr, int *stun_effect, int *resist_stun, const int special_effect)
@@ -412,6 +412,29 @@ static void process_attack_vital_spot(player_type *attacker_ptr, player_attack_t
         if (!(r_ptr->flags1 & RF1_UNIQUE) && (randint1(attacker_ptr->lev) > r_ptr->level) && pa_ptr->m_ptr->mspeed > 60) {
             msg_format(_("%^sは足をひきずり始めた。", "%^s starts limping slower."), pa_ptr->m_name);
             pa_ptr->m_ptr->mspeed -= 10;
+        }
+    }
+}
+
+/*!
+ * @brief 朦朧効果を受けたモンスターのステータス表示
+ * @param attacker_ptr プレーヤーの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param g_ptr グリッドへの参照ポインタ
+ * @param stun_effect 朦朧の残りターン
+ * @param resist_stun 朦朧への抵抗値
+ * @return なし
+ */
+static void print_stun_effect(player_type *attacker_ptr, player_attack_type *pa_ptr, grid_type *g_ptr, const int stun_effect, const int resist_stun)
+{
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    if (stun_effect && ((pa_ptr->attack_damage + attacker_ptr->to_d[pa_ptr->hand]) < pa_ptr->m_ptr->hp)) {
+        if (attacker_ptr->lev > randint1(r_ptr->level + resist_stun + 10)) {
+            if (set_monster_stunned(attacker_ptr, g_ptr->m_idx, stun_effect + MON_STUNNED(pa_ptr->m_ptr))) {
+                msg_format(_("%^sはフラフラになった。", "%^s is stunned."), pa_ptr->m_name);
+            } else {
+                msg_format(_("%^sはさらにフラフラになった。", "%^s is more stunned."), pa_ptr->m_name);
+            }
         }
     }
 }
@@ -497,15 +520,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             WEIGHT weight = calc_monk_attack_weight(attacker_ptr);
             pa_ptr->attack_damage = critical_norm(attacker_ptr, attacker_ptr->lev * weight, min_level, pa_ptr->attack_damage, attacker_ptr->to_h[0], 0);
             process_attack_vital_spot(attacker_ptr, pa_ptr, &stun_effect, &resist_stun, special_effect);
-            if (stun_effect && ((pa_ptr->attack_damage + attacker_ptr->to_d[hand]) < m_ptr->hp)) {
-                if (attacker_ptr->lev > randint1(r_ptr->level + resist_stun + 10)) {
-                    if (set_monster_stunned(attacker_ptr, g_ptr->m_idx, stun_effect + MON_STUNNED(m_ptr))) {
-                        msg_format(_("%^sはフラフラになった。", "%^s is stunned."), pa_ptr->m_name);
-                    } else {
-                        msg_format(_("%^sはさらにフラフラになった。", "%^s is more stunned."), pa_ptr->m_name);
-                    }
-                }
-            }
+            print_stun_effect(attacker_ptr, pa_ptr, g_ptr, stun_effect, resist_stun);
         }
 
         /* Handle normal weapon */
