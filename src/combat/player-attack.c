@@ -324,6 +324,13 @@ static void process_weapon_attack(player_type *attacker_ptr, player_attack_type 
 
 /*!
  * @brief 武器または素手による攻撃ダメージを計算する
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param g_ptr グリッドへの参照ポインタ
+ * @param do_quake 攻撃の結果、地震を起こすことになったらTRUE、それ以外はFALSE
+ * @param vorpal_cut メッタ斬りにできるかどうか
+ * @param vorpal_change ヴォーパル倍率上昇の機会値
+ * @return なし
  * @details 取り敢えず素手と仮定し1とする.
  */
 static void calc_attack_damage(
@@ -339,6 +346,27 @@ static void calc_attack_damage(
     if (o_ptr->k_idx) {
         process_weapon_attack(attacker_ptr, pa_ptr, do_quake, vorpal_cut, vorpal_chance);
     }
+}
+
+/*!
+ * @brief 武器のダメージボーナスや剣術家の技によってダメージにボーナスを与える
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void apply_damage_bonus(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    pa_ptr->attack_damage += attacker_ptr->to_d[pa_ptr->hand];
+    pa_ptr->drain_result += attacker_ptr->to_d[pa_ptr->hand];
+
+    if ((pa_ptr->mode == HISSATSU_SUTEMI) || (pa_ptr->mode == HISSATSU_3DAN))
+        pa_ptr->attack_damage *= 2;
+
+    if ((pa_ptr->mode == HISSATSU_SEKIRYUKA) && !monster_living(pa_ptr->m_ptr->r_idx))
+        pa_ptr->attack_damage = 0;
+
+    if ((pa_ptr->mode == HISSATSU_SEKIRYUKA) && !attacker_ptr->cut)
+        pa_ptr->attack_damage /= 2;
 }
 
 /*!
@@ -404,17 +432,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             && !is_zantetsu_nullified;
 
         calc_attack_damage(attacker_ptr, pa_ptr, g_ptr, &do_quake, vorpal_cut, vorpal_chance);
-
-        /* Apply the player damage bonuses */
-        pa_ptr->attack_damage += attacker_ptr->to_d[hand];
-        pa_ptr->drain_result += attacker_ptr->to_d[hand];
-
-        if ((mode == HISSATSU_SUTEMI) || (mode == HISSATSU_3DAN))
-            pa_ptr->attack_damage *= 2;
-        if ((mode == HISSATSU_SEKIRYUKA) && !monster_living(m_ptr->r_idx))
-            pa_ptr->attack_damage = 0;
-        if ((mode == HISSATSU_SEKIRYUKA) && !attacker_ptr->cut)
-            pa_ptr->attack_damage /= 2;
+        apply_damage_bonus(attacker_ptr, pa_ptr);
 
         /* No negative damage */
         if (pa_ptr->attack_damage < 0)
