@@ -32,4 +32,5 @@ typedef struct player_attack_type {
     grid_type *g_ptr;
     bool *fear;
     bool *mdeath;
+    int drain_left;
 } player_attack_type;

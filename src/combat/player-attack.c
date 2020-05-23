@@ -47,6 +47,7 @@ static player_attack_type *initialize_player_attack_type(
     pa_ptr->g_ptr = g_ptr;
     pa_ptr->fear = fear;
     pa_ptr->mdeath = mdeath;
+    pa_ptr->drain_left = MAX_VAMPIRIC_DRAIN;
     return pa_ptr;
 }
 
@@ -517,6 +518,48 @@ static void drain_muramasa(player_type *attacker_ptr, player_attack_type *pa_ptr
 }
 
 /*!
+ * @brief 吸血武器による吸血処理
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param drain_msg 吸血をした旨のメッセージを表示するかどうか
+ * @return なし
+ * @details 1行目の5がマジックナンバーで良く分からなかったので、取り敢えず元々あったコメントをベースに定数宣言しておいた
+ */
+static void drain_result(player_type *attacker_ptr, player_attack_type *pa_ptr, bool *drain_msg)
+{
+    const int real_drain = 5;
+    if (pa_ptr->drain_result <= real_drain)
+        return;
+
+    int drain_heal = damroll(2, pa_ptr->drain_result / 6);
+
+    if (hex_spelling(attacker_ptr, HEX_VAMP_BLADE))
+        drain_heal *= 2;
+
+    if (cheat_xtra) {
+        msg_format(_("Draining left: %d", "Draining left: %d"), pa_ptr->drain_left);
+    }
+
+    if (pa_ptr->drain_left == 0)
+        return;
+
+    if (drain_heal < pa_ptr->drain_left) {
+        pa_ptr->drain_left -= drain_heal;
+    } else {
+        drain_heal = pa_ptr->drain_left;
+        pa_ptr->drain_left = 0;
+    }
+
+    if (*drain_msg) {
+        msg_format(_("刃が%sから生命力を吸い取った！", "Your weapon drains life from %s!"), pa_ptr->m_name);
+        *drain_msg = FALSE;
+    }
+
+    drain_heal = (drain_heal * attacker_ptr->mutant_regenerate_mod) / 100;
+    hp_player(attacker_ptr, drain_heal);
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -534,8 +577,6 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     bool do_quake = FALSE;
     bool weak = FALSE;
     bool drain_msg = TRUE;
-    int drain_heal = 0;
-    int drain_left = MAX_VAMPIRIC_DRAIN;
 
     floor_type *floor_ptr = attacker_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -602,38 +643,8 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         if (pa_ptr->can_drain && (pa_ptr->drain_result > 0)) {
             if (o_ptr->name1 == ART_MURAMASA)
                 drain_muramasa(attacker_ptr, pa_ptr, is_human);
-            else {
-                if (pa_ptr->drain_result > 5) /* Did we really hurt it? */
-                {
-                    drain_heal = damroll(2, pa_ptr->drain_result / 6);
-
-                    if (hex_spelling(attacker_ptr, HEX_VAMP_BLADE))
-                        drain_heal *= 2;
-
-                    if (cheat_xtra) {
-                        msg_format(_("Draining left: %d", "Draining left: %d"), drain_left);
-                    }
-
-                    if (drain_left) {
-                        if (drain_heal < drain_left) {
-                            drain_left -= drain_heal;
-                        } else {
-                            drain_heal = drain_left;
-                            drain_left = 0;
-                        }
-
-                        if (drain_msg) {
-                            msg_format(_("刃が%sから生命力を吸い取った！", "Your weapon drains life from %s!"), pa_ptr->m_name);
-                            drain_msg = FALSE;
-                        }
-
-                        drain_heal = (drain_heal * attacker_ptr->mutant_regenerate_mod) / 100;
-
-                        hp_player(attacker_ptr, drain_heal);
-                        /* We get to keep some of it! */
-                    }
-                }
-            }
+            else
+                drain_result(attacker_ptr, pa_ptr, &drain_msg);
 
             m_ptr->maxhp -= (pa_ptr->attack_damage + 7) / 8;
             if (m_ptr->hp > m_ptr->maxhp)
@@ -739,7 +750,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         msg_format(_("%sは弱くなったようだ。", "%^s seems weakened."), pa_ptr->m_name);
     }
 
-    if ((drain_left != MAX_VAMPIRIC_DRAIN) && one_in_(4)) {
+    if ((pa_ptr->drain_left != MAX_VAMPIRIC_DRAIN) && one_in_(4)) {
         chg_virtue(attacker_ptr, V_UNLIFE, 1);
     }
 
