@@ -292,6 +292,39 @@ static void print_suprise_attack(player_attack_type *pa_ptr)
 }
 
 /*!
+ * todo 実質enumなので後で型を変更する
+ * @brief 混沌属性の武器におけるカオス効果を決定する
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return カオス効果
+ * @details
+ * 吸血20%、地震0.12%、混乱26.892%、テレポート・アウェイ1.494%、変身1.494% /
+ * Vampiric 20%, Quake 0.12%, Confusion 26.892%, Teleport away 1.494% and Polymorph 1.494%
+ */
+static int select_chaotic_effect(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    int chaos_effect = 0;
+    if ((have_flag(pa_ptr->flags, TR_CHAOTIC)) && one_in_(2)) {
+        if (one_in_(10))
+            chg_virtue(attacker_ptr, V_CHANCE, 1);
+
+        if (randint1(5) < 3) {
+            chaos_effect = 1;
+        } else if (one_in_(250)) {
+            chaos_effect = 2;
+        } else if (!one_in_(10)) {
+            chaos_effect = 3;
+        } else if (one_in_(2)) {
+            chaos_effect = 4;
+        } else {
+            chaos_effect = 5;
+        }
+    }
+
+    return chaos_effect;
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -307,7 +340,6 @@ static void print_suprise_attack(player_attack_type *pa_ptr)
 void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, combat_options mode)
 {
     bool vorpal_cut = FALSE;
-    int chaos_effect = 0;
     bool do_quake = FALSE;
     bool weak = FALSE;
     bool drain_msg = TRUE;
@@ -315,7 +347,6 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     int drain_heal = 0;
     bool can_drain = FALSE;
     int drain_left = MAX_VAMPIRIC_DRAIN;
-    BIT_FLAGS flags[TR_FLAG_SIZE]; /* A massive hack -- life-draining weapons */
 
     floor_type *floor_ptr = attacker_ptr->current_floor_ptr;
     grid_type *g_ptr = &floor_ptr->grid_array[y][x];
@@ -350,36 +381,11 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         sound(SOUND_HIT);
         print_suprise_attack(pa_ptr);
 
-        // ダメージ計算を開始、取り敢えず素手と仮定し1とする.
-        pa_ptr->attack_damage = 1;
-
-        object_flags(o_ptr, flags);
-
-        /* Select a chaotic effect (50% chance) */
-        if ((have_flag(flags, TR_CHAOTIC)) && one_in_(2)) {
-            if (one_in_(10))
-                chg_virtue(attacker_ptr, V_CHANCE, 1);
-
-            if (randint1(5) < 3) {
-                /* Vampiric (20%) */
-                chaos_effect = 1;
-            } else if (one_in_(250)) {
-                /* Quake (0.12%) */
-                chaos_effect = 2;
-            } else if (!one_in_(10)) {
-                /* Confusion (26.892%) */
-                chaos_effect = 3;
-            } else if (one_in_(2)) {
-                /* Teleport away (1.494%) */
-                chaos_effect = 4;
-            } else {
-                /* Polymorph (1.494%) */
-                chaos_effect = 5;
-            }
-        }
+        object_flags(o_ptr, pa_ptr->flags);
+        int chaos_effect = select_chaotic_effect(attacker_ptr, pa_ptr);
 
         /* Vampiric drain */
-        if ((have_flag(flags, TR_VAMPIRIC)) || (chaos_effect == 1) || (mode == HISSATSU_DRAIN) || hex_spelling(attacker_ptr, HEX_VAMP_BLADE)) {
+        if ((have_flag(pa_ptr->flags, TR_VAMPIRIC)) || (chaos_effect == 1) || (mode == HISSATSU_DRAIN) || hex_spelling(attacker_ptr, HEX_VAMP_BLADE)) {
             /* Only drain "living" monsters */
             if (monster_living(m_ptr->r_idx))
                 can_drain = TRUE;
@@ -387,11 +393,13 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 can_drain = FALSE;
         }
 
-        if ((have_flag(flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified)
+        if ((have_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified)
             vorpal_cut = TRUE;
         else
             vorpal_cut = FALSE;
 
+        // ダメージ計算を開始、取り敢えず素手と仮定し1とする.
+        pa_ptr->attack_damage = 1;
         if (pa_ptr->monk_attack) {
             int special_effect = 0, stun_effect = 0, times = 0, max_times;
             int min_level = 1;

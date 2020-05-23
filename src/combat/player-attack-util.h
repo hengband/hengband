@@ -14,4 +14,5 @@ typedef struct player_attack_type {
     int num_blow;
     HIT_POINT attack_damage;
     GAME_TEXT m_name[MAX_NLEN];
+    BIT_FLAGS flags[TR_FLAG_SIZE];
 } player_attack_type;
