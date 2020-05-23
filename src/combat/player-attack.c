@@ -27,7 +27,7 @@
 #include "spell/spells-floor.h"
 #include "combat/player-attack-util.h"
 #include "mind/racial-samurai.h"
-#include "mind/racial-monk-attack.h"
+#include "mind/monk-attack.h"
 #include "mind/surprise-attack.h"
 
 static player_attack_type *initialize_player_attack_type(player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr)

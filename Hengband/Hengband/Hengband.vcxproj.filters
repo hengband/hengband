@@ -1010,10 +1010,10 @@
     <ClCompile Include="..\..\src\mind\racial-force-trainer.c">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-monk-attack.c">
+    <ClCompile Include="..\..\src\mind\surprise-attack.c">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\surprise-attack.c">
+    <ClCompile Include="..\..\src\mind\monk-attack.c">
       <Filter>mind</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2098,10 +2098,10 @@
     <ClInclude Include="..\..\src\mind\racial-force-trainer.h">
       <Filter>mind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-monk-attack.h">
+    <ClInclude Include="..\..\src\mind\surprise-attack.h">
       <Filter>mind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\surprise-attack.h">
+    <ClInclude Include="..\..\src\mind\monk-attack.h">
       <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>

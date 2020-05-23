@@ -192,7 +192,7 @@
     <ClCompile Include="..\..\src\market\building-service.c" />
     <ClCompile Include="..\..\src\mind\racial-force-trainer.c" />
     <ClCompile Include="..\..\src\mind\racial-mirror-master.c" />
-    <ClCompile Include="..\..\src\mind\racial-monk-attack.c" />
+    <ClCompile Include="..\..\src\mind\monk-attack.c" />
     <ClCompile Include="..\..\src\mind\racial-samurai.c" />
     <ClCompile Include="..\..\src\mind\samurai-slaying.c" />
     <ClCompile Include="..\..\src\mind\surprise-attack.c" />
@@ -454,7 +454,7 @@
     <ClInclude Include="..\..\src\market\building-service.h" />
     <ClInclude Include="..\..\src\mind\racial-force-trainer.h" />
     <ClInclude Include="..\..\src\mind\racial-mirror-master.h" />
-    <ClInclude Include="..\..\src\mind\racial-monk-attack.h" />
+    <ClInclude Include="..\..\src\mind\monk-attack.h" />
     <ClInclude Include="..\..\src\mind\racial-samurai.h" />
     <ClInclude Include="..\..\src\mind\samurai-slaying.h" />
     <ClInclude Include="..\..\src\mind\surprise-attack.h" />

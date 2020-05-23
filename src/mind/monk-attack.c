@@ -6,7 +6,7 @@
  */
 
 #include "system/angband.h"
-#include "mind/racial-monk-attack.h"
+#include "mind/monk-attack.h"
 #include "world/world.h"
 #include "main/sound-definitions-table.h"
 #include "mind/racial-force-trainer.h"
