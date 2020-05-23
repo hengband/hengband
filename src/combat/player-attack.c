@@ -439,6 +439,30 @@ static void attack_polymorph(player_type *attacker_ptr, player_attack_type *pa_p
 }
 
 /*!
+ * @brief ゴールデンハンマーによるアイテム奪取処理
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void attack_golden_hammer(player_type *attacker_ptr, player_attack_type *pa_ptr)
+{
+    floor_type *floor_ptr = attacker_ptr->current_floor_ptr;
+    monster_type *target_ptr = &floor_ptr->m_list[pa_ptr->g_ptr->m_idx];
+    if (target_ptr->hold_o_idx == 0)
+        return;
+
+    object_type *q_ptr = &floor_ptr->o_list[target_ptr->hold_o_idx];
+    GAME_TEXT o_name[MAX_NLEN];
+    object_desc(attacker_ptr, o_name, q_ptr, OD_NAME_ONLY);
+    q_ptr->held_m_idx = 0;
+    q_ptr->marked = OM_TOUCHED;
+    target_ptr->hold_o_idx = q_ptr->next_o_idx;
+    q_ptr->next_o_idx = 0;
+    msg_format(_("%sを奪った。", "You snatched %s."), o_name);
+    inven_carry(attacker_ptr, q_ptr);
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -525,24 +549,10 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             attack_confuse(attacker_ptr, pa_ptr);
         else if (pa_ptr->chaos_effect == CE_TELE_AWAY)
             attack_teleport_away(attacker_ptr, pa_ptr, &num);
-        else if ((pa_ptr->chaos_effect == CE_POLYMORPH) && (randint1(90) > r_ptr->level)) {
+        else if ((pa_ptr->chaos_effect == CE_POLYMORPH) && (randint1(90) > r_ptr->level))
             attack_polymorph(attacker_ptr, pa_ptr, y, x);
-        } else if (o_ptr->name1 == ART_G_HAMMER) {
-            monster_type *target_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-
-            if (target_ptr->hold_o_idx) {
-                object_type *q_ptr = &floor_ptr->o_list[target_ptr->hold_o_idx];
-                GAME_TEXT o_name[MAX_NLEN];
-
-                object_desc(attacker_ptr, o_name, q_ptr, OD_NAME_ONLY);
-                q_ptr->held_m_idx = 0;
-                q_ptr->marked = OM_TOUCHED;
-                target_ptr->hold_o_idx = q_ptr->next_o_idx;
-                q_ptr->next_o_idx = 0;
-                msg_format(_("%sを奪った。", "You snatched %s."), o_name);
-                inven_carry(attacker_ptr, q_ptr);
-            }
-        }
+        else if (o_ptr->name1 == ART_G_HAMMER)
+            attack_golden_hammer(attacker_ptr, pa_ptr);
 
         pa_ptr->backstab = FALSE;
         pa_ptr->surprise_attack = FALSE;
