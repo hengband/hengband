@@ -28,4 +28,5 @@ typedef struct player_attack_type {
     chaotic_effect chaos_effect;
     bool can_drain;
     const martial_arts *ma_ptr;
+    int drain_result;
 } player_attack_type;

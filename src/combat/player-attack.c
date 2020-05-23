@@ -42,6 +42,7 @@ static player_attack_type *initialize_player_attack_type(player_attack_type *pa_
     pa_ptr->attack_damage = 0;
     pa_ptr->can_drain = FALSE;
     pa_ptr->ma_ptr = &ma_blows[0];
+    pa_ptr->drain_result = 0;
     return pa_ptr;
 }
 
@@ -274,7 +275,6 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
     bool do_quake = FALSE;
     bool weak = FALSE;
     bool drain_msg = TRUE;
-    int drain_result = 0;
     int drain_heal = 0;
     int drain_left = MAX_VAMPIRIC_DRAIN;
 
@@ -346,7 +346,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(mode == HISSATSU_KYUSHO))
                 pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[hand], mode);
 
-            drain_result = pa_ptr->attack_damage;
+            pa_ptr->drain_result = pa_ptr->attack_damage;
 
             if (vorpal_cut) {
                 int mult = 2;
@@ -399,16 +399,16 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                         break;
                     }
                 }
-                drain_result = drain_result * 3 / 2;
+                pa_ptr->drain_result = pa_ptr->drain_result * 3 / 2;
             }
 
             pa_ptr->attack_damage += o_ptr->to_d;
-            drain_result += o_ptr->to_d;
+            pa_ptr->drain_result += o_ptr->to_d;
         }
 
         /* Apply the player damage bonuses */
         pa_ptr->attack_damage += attacker_ptr->to_d[hand];
-        drain_result += attacker_ptr->to_d[hand];
+        pa_ptr->drain_result += attacker_ptr->to_d[hand];
 
         if ((mode == HISSATSU_SUTEMI) || (mode == HISSATSU_3DAN))
             pa_ptr->attack_damage *= 2;
@@ -469,12 +469,12 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             int maxhp = maxroll(r_ptr->hdice, r_ptr->hside);
             if (one_in_(pa_ptr->backstab ? 13 : (pa_ptr->stab_fleeing || pa_ptr->suprise_attack) ? 15 : 27)) {
                 pa_ptr->attack_damage *= 5;
-                drain_result *= 2;
+                pa_ptr->drain_result *= 2;
                 msg_format(_("刃が%sに深々と突き刺さった！", "You critically injured %s!"), pa_ptr->m_name);
             } else if (((m_ptr->hp < maxhp / 2) && one_in_((attacker_ptr->num_blow[0] + attacker_ptr->num_blow[1] + 1) * 10)) || ((one_in_(666) || ((pa_ptr->backstab || pa_ptr->suprise_attack) && one_in_(11))) && !(r_ptr->flags1 & RF1_UNIQUE) && !(r_ptr->flags7 & RF7_UNIQUE2))) {
                 if ((r_ptr->flags1 & RF1_UNIQUE) || (r_ptr->flags7 & RF7_UNIQUE2) || (m_ptr->hp >= maxhp / 2)) {
                     pa_ptr->attack_damage = MAX(pa_ptr->attack_damage * 5, m_ptr->hp / 2);
-                    drain_result *= 2;
+                    pa_ptr->drain_result *= 2;
                     msg_format(_("%sに致命傷を負わせた！", "You fatally injured %s!"), pa_ptr->m_name);
                 } else {
                     pa_ptr->attack_damage = m_ptr->hp + 1;
@@ -490,8 +490,8 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         if (pa_ptr->attack_damage <= 0)
             pa_ptr->can_drain = FALSE;
 
-        if (drain_result > m_ptr->hp)
-            drain_result = m_ptr->hp;
+        if (pa_ptr->drain_result > m_ptr->hp)
+            pa_ptr->drain_result = m_ptr->hp;
 
         /* Damage, check for fear and death */
         if (mon_take_hit(attacker_ptr, g_ptr->m_idx, pa_ptr->attack_damage, fear, NULL)) {
@@ -520,7 +520,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         /* Are we draining it?  A little note: If the monster is
 		dead, the drain does not work... */
 
-        if (pa_ptr->can_drain && (drain_result > 0)) {
+        if (pa_ptr->can_drain && (pa_ptr->drain_result > 0)) {
             if (o_ptr->name1 == ART_MURAMASA) {
                 if (is_human) {
                     HIT_PROB to_h = o_ptr->to_h;
@@ -548,9 +548,9 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                     }
                 }
             } else {
-                if (drain_result > 5) /* Did we really hurt it? */
+                if (pa_ptr->drain_result > 5) /* Did we really hurt it? */
                 {
-                    drain_heal = damroll(2, drain_result / 6);
+                    drain_heal = damroll(2, pa_ptr->drain_result / 6);
 
                     if (hex_spelling(attacker_ptr, HEX_VAMP_BLADE))
                         drain_heal *= 2;
@@ -589,7 +589,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         }
 
         pa_ptr->can_drain = FALSE;
-        drain_result = 0;
+        pa_ptr->drain_result = 0;
 
         /* Confusion attack */
         if ((attacker_ptr->special_attack & ATTACK_CONFUSE) || (pa_ptr->chaos_effect == CE_CONFUSION) || (mode == HISSATSU_CONF) || hex_spelling(attacker_ptr, HEX_CONFUSION)) {
