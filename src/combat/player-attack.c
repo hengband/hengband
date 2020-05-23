@@ -523,6 +523,25 @@ static void apply_actual_attack(player_type *attacker_ptr, player_attack_type *p
 }
 
 /*!
+ * @brief 地震を起こす
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param do_quake 攻撃後に地震を起こすかどうか
+ * @param y モンスターのY座標
+ * @param x モンスターのX座標
+ * @return なし
+ */
+static void cause_earthquake(player_type *attacker_ptr, player_attack_type *pa_ptr, const bool do_quake, const POSITION y, const POSITION x)
+{
+    if (!do_quake)
+        return;
+
+    earthquake(attacker_ptr, attacker_ptr->y, attacker_ptr->x, 10, 0);
+    if (attacker_ptr->current_floor_ptr->grid_array[y][x].m_idx == 0)
+        *(pa_ptr->mdeath) = TRUE;
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -586,17 +605,11 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         pa_ptr->surprise_attack = FALSE;
     }
 
-    if (pa_ptr->weak && !(*mdeath)) {
+    if (pa_ptr->weak && !(*mdeath))
         msg_format(_("%sは弱くなったようだ。", "%^s seems weakened."), pa_ptr->m_name);
-    }
 
-    if ((pa_ptr->drain_left != MAX_VAMPIRIC_DRAIN) && one_in_(4)) {
+    if ((pa_ptr->drain_left != MAX_VAMPIRIC_DRAIN) && one_in_(4))
         chg_virtue(attacker_ptr, V_UNLIFE, 1);
-    }
 
-    if (do_quake) {
-        earthquake(attacker_ptr, attacker_ptr->y, attacker_ptr->x, 10, 0);
-        if (!floor_ptr->grid_array[y][x].m_idx)
-            *mdeath = TRUE;
-    }
+    cause_earthquake(attacker_ptr, pa_ptr, do_quake, y, x);
 }
