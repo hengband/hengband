@@ -48,6 +48,7 @@ static player_attack_type *initialize_player_attack_type(
     pa_ptr->fear = fear;
     pa_ptr->mdeath = mdeath;
     pa_ptr->drain_left = MAX_VAMPIRIC_DRAIN;
+    pa_ptr->weak = FALSE;
     return pa_ptr;
 }
 
@@ -560,6 +561,36 @@ static void drain_result(player_type *attacker_ptr, player_attack_type *pa_ptr, 
 }
 
 /*!
+ * @brief 吸血処理のメインルーチン
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param is_human 人間かどうか(村正用フラグ)
+ * @param drain_msg 吸血をした旨のメッセージを表示するかどうか
+ * @return なし
+ * @details モンスターが死んだ場合、(ゲームのフレーバー的に)吸血しない
+ */
+static void process_drain(player_type *attacker_ptr, player_attack_type *pa_ptr, const bool is_human, bool *drain_msg)
+{
+    if (!pa_ptr->can_drain || (pa_ptr->drain_result <= 0))
+        return;
+
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    if (o_ptr->name1 == ART_MURAMASA)
+        drain_muramasa(attacker_ptr, pa_ptr, is_human);
+    else
+        drain_result(attacker_ptr, pa_ptr, drain_msg);
+
+    pa_ptr->m_ptr->maxhp -= (pa_ptr->attack_damage + 7) / 8;
+    if (pa_ptr->m_ptr->hp > pa_ptr->m_ptr->maxhp)
+        pa_ptr->m_ptr->hp = pa_ptr->m_ptr->maxhp;
+
+    if (pa_ptr->m_ptr->maxhp < 1)
+        pa_ptr->m_ptr->maxhp = 1;
+
+    pa_ptr->weak = TRUE;
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -575,7 +606,6 @@ static void drain_result(player_type *attacker_ptr, player_attack_type *pa_ptr, 
 void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, combat_options mode)
 {
     bool do_quake = FALSE;
-    bool weak = FALSE;
     bool drain_msg = TRUE;
 
     floor_type *floor_ptr = attacker_ptr->current_floor_ptr;
@@ -638,22 +668,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             anger_monster(attacker_ptr, m_ptr);
 
         touch_zap_player(m_ptr, attacker_ptr);
-
-        // 死んだら吸血できない. / If monster is dead, then the player can't suck it's blood.
-        if (pa_ptr->can_drain && (pa_ptr->drain_result > 0)) {
-            if (o_ptr->name1 == ART_MURAMASA)
-                drain_muramasa(attacker_ptr, pa_ptr, is_human);
-            else
-                drain_result(attacker_ptr, pa_ptr, &drain_msg);
-
-            m_ptr->maxhp -= (pa_ptr->attack_damage + 7) / 8;
-            if (m_ptr->hp > m_ptr->maxhp)
-                m_ptr->hp = m_ptr->maxhp;
-            if (m_ptr->maxhp < 1)
-                m_ptr->maxhp = 1;
-            weak = TRUE;
-        }
-
+        process_drain(attacker_ptr, pa_ptr, is_human, &drain_msg);
         pa_ptr->can_drain = FALSE;
         pa_ptr->drain_result = 0;
 
@@ -711,7 +726,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 if (polymorph_monster(attacker_ptr, y, x)) {
                     msg_format(_("%^sは変化した！", "%^s changes!"), pa_ptr->m_name);
                     *fear = FALSE;
-                    weak = FALSE;
+                    pa_ptr->weak = FALSE;
                 } else {
                     msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
                 }
@@ -746,7 +761,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         pa_ptr->surprise_attack = FALSE;
     }
 
-    if (weak && !(*mdeath)) {
+    if (pa_ptr->weak && !(*mdeath)) {
         msg_format(_("%sは弱くなったようだ。", "%^s seems weakened."), pa_ptr->m_name);
     }
 

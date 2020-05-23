@@ -33,4 +33,5 @@ typedef struct player_attack_type {
     bool *fear;
     bool *mdeath;
     int drain_left;
+    bool weak;
 } player_attack_type;
