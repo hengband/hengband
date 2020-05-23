@@ -370,6 +370,38 @@ static void apply_damage_bonus(player_type *attacker_ptr, player_attack_type *pa
 }
 
 /*!
+ * todo かなりのレアケースだが、右手に混沌属性の武器を持ち、左手にエクスカリバー・ジュニアを持ち、
+ * 右手の最終打撃で蜘蛛に変身したとしても、左手の攻撃でダメージが減らない気がする
+ * モンスターへの参照ポインタは変身時に変わるのにis_ej_nullifiedはその前に代入されて参照されるだけであるため
+ * @brief 特殊な条件でダメージが減ったり0になったりする処理
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param is_zantetsu_nullified 斬鉄剣で切れないならばTRUE
+ * @param is_ej_nullified 蜘蛛相手ならばTRUE
+ * @details ダメージが0未満なら0に補正する
+ */
+static void apply_damage_negative_effect(player_type *attacker_ptr, player_attack_type *pa_ptr, bool is_zantetsu_nullified, bool is_ej_nullified)
+{
+    if (pa_ptr->attack_damage < 0)
+        pa_ptr->attack_damage = 0;
+
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    if ((pa_ptr->mode == HISSATSU_ZANMA) && !(!monster_living(pa_ptr->m_ptr->r_idx) && (r_ptr->flags3 & RF3_EVIL))) {
+        pa_ptr->attack_damage = 0;
+    }
+
+    if (is_zantetsu_nullified) {
+        msg_print(_("こんな軟らかいものは切れん！", "You cannot cut such a elastic thing!"));
+        pa_ptr->attack_damage = 0;
+    }
+
+    if (is_ej_nullified) {
+        msg_print(_("蜘蛛は苦手だ！", "Spiders are difficult for you to deal with!"));
+        pa_ptr->attack_damage /= 2;
+    }
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -433,24 +465,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
         calc_attack_damage(attacker_ptr, pa_ptr, g_ptr, &do_quake, vorpal_cut, vorpal_chance);
         apply_damage_bonus(attacker_ptr, pa_ptr);
-
-        /* No negative damage */
-        if (pa_ptr->attack_damage < 0)
-            pa_ptr->attack_damage = 0;
-
-        if ((mode == HISSATSU_ZANMA) && !(!monster_living(m_ptr->r_idx) && (r_ptr->flags3 & RF3_EVIL))) {
-            pa_ptr->attack_damage = 0;
-        }
-
-        if (is_zantetsu_nullified) {
-            msg_print(_("こんな軟らかいものは切れん！", "You cannot cut such a elastic thing!"));
-            pa_ptr->attack_damage = 0;
-        }
-
-        if (is_ej_nullified) {
-            msg_print(_("蜘蛛は苦手だ！", "Spiders are difficult for you to deal with!"));
-            pa_ptr->attack_damage /= 2;
-        }
+        apply_damage_negative_effect(attacker_ptr, pa_ptr, is_zantetsu_nullified, is_ej_nullified);
 
         if (mode == HISSATSU_MINEUCHI) {
             int tmp = (10 + randint1(15) + attacker_ptr->lev / 5);
