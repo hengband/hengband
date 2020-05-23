@@ -1007,6 +1007,9 @@
     <ClCompile Include="..\..\src\object\death-scythe.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\racial-force-trainer.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2085,6 +2088,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object\death-scythe.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\racial-force-trainer.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

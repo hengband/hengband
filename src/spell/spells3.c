@@ -67,6 +67,7 @@
 #include "spell/spells-util.h"
 #include "spell/spells-execution.h"
 #include "spell/process-effect.h"
+#include "mind/racial-force-trainer.h"
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */
 #define MAX_TRIES 100
@@ -2839,7 +2840,7 @@ bool eat_rock(player_type *caster_ptr)
 
 bool shock_power(player_type *caster_ptr)
 {
-	int boost = P_PTR_KI;
+    int boost = get_current_ki(caster_ptr);
 	if (heavy_armor(caster_ptr)) boost /= 2;
 
 	project_length = 1;

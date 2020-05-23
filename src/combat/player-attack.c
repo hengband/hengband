@@ -27,6 +27,7 @@
 #include "spell/spells-floor.h"
 #include "combat/player-attack-util.h"
 #include "mind/racial-samurai.h"
+#include "mind/racial-force-trainer.h"
 
 static player_attack_type *initialize_player_attack_type(player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr)
 {
@@ -338,7 +339,7 @@ static int select_blow(player_type *attacker_ptr, player_attack_type *pa_ptr, in
     return min_level;
 }
 
-static int process_monk_additional_effect(player_type *attacker_ptr, player_attack_type *pa_ptr, int *stun_effect)
+static int process_monk_additional_effect(player_attack_type *pa_ptr, int *stun_effect)
 {
     int special_effect = 0;
     monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
@@ -446,11 +447,11 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
                 pa_ptr->attack_damage *= 2;
 
             int stun_effect = 0;
-            int special_effect = process_monk_additional_effect(attacker_ptr, pa_ptr, &stun_effect);
+            int special_effect = process_monk_additional_effect(pa_ptr, &stun_effect);
             if (attacker_ptr->special_defense & KAMAE_SUZAKU)
                 weight = 4;
-            if ((attacker_ptr->pclass == CLASS_FORCETRAINER) && P_PTR_KI) {
-                weight += (P_PTR_KI / 30);
+            if ((attacker_ptr->pclass == CLASS_FORCETRAINER) && get_current_ki(attacker_ptr)) {
+                weight += (get_current_ki(attacker_ptr) / 30);
                 if (weight > 20)
                     weight = 20;
             }

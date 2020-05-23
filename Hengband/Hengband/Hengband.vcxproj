@@ -190,6 +190,7 @@
     <ClCompile Include="..\..\src\market\building-quest.c" />
     <ClCompile Include="..\..\src\market\building-recharger.c" />
     <ClCompile Include="..\..\src\market\building-service.c" />
+    <ClCompile Include="..\..\src\mind\racial-force-trainer.c" />
     <ClCompile Include="..\..\src\mind\racial-mirror-master.c" />
     <ClCompile Include="..\..\src\mind\racial-samurai.c" />
     <ClCompile Include="..\..\src\mind\samurai-slaying.c" />
@@ -449,6 +450,7 @@
     <ClInclude Include="..\..\src\market\building-quest.h" />
     <ClInclude Include="..\..\src\market\building-recharger.h" />
     <ClInclude Include="..\..\src\market\building-service.h" />
+    <ClInclude Include="..\..\src\mind\racial-force-trainer.h" />
     <ClInclude Include="..\..\src\mind\racial-mirror-master.h" />
     <ClInclude Include="..\..\src\mind\racial-samurai.h" />
     <ClInclude Include="..\..\src\mind\samurai-slaying.h" />

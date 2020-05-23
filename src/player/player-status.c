@@ -52,6 +52,7 @@
 #include "spell/spells-execution.h"
 #include "player/player-races-table.h"
 #include "combat/attack-power-table.h"
+#include "mind/racial-force-trainer.h"
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats
@@ -3106,10 +3107,12 @@ void calc_bonuses(player_type *creature_ptr)
 			if (blow_base > 31) creature_ptr->num_blow[0]++;
 			if (blow_base > 44) creature_ptr->num_blow[0]++;
 			if (blow_base > 58) creature_ptr->num_blow[0]++;
-			if (P_PTR_KI)
+
+			MAGIC_NUM1 current_ki = get_current_ki(creature_ptr);
+			if (current_ki != 0)
 			{
-				creature_ptr->to_d[0] += P_PTR_KI / 5;
-				creature_ptr->dis_to_d[0] += P_PTR_KI / 5;
+				creature_ptr->to_d[0] += current_ki / 5;
+				creature_ptr->dis_to_d[0] += current_ki / 5;
 			}
 		}
 		else

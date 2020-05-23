@@ -805,8 +805,6 @@ extern const s32b player_exp_a[PY_MAX_LEVEL];
 
 #define IS_ECHIZEN(C) (((C)->pseikaku == PERSONALITY_COMBAT) || ((C)->inventory_list[INVEN_BOW].name1 == ART_CRIMSON))
 
-#define P_PTR_KI (p_ptr->magic_num1[0])
-
 extern bool is_blessed(player_type *creature_ptr);
 extern bool is_oppose_acid(player_type *creature_ptr);
 extern bool is_oppose_elec(player_type *creature_ptr);
