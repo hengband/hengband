@@ -353,6 +353,7 @@ hengband_SOURCES = \
 	combat/attack-criticality.c combat/attack-criticality.h \
 	combat/player-attack.c combat/player-attack.h \
 	combat/blood-sucking-processor.c combat/blood-sucking-processor.h \
+	combat/vorpal-weapon.c combat/vorpal-weapon.h \
 	combat/shoot.c combat/shoot.h \
 	combat/snipe.c combat/snipe.h \
 	\
