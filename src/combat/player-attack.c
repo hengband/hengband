@@ -254,6 +254,53 @@ static void decide_blood_sucking(player_type *attacker_ptr, player_attack_type *
 }
 
 /*!
+ * @brief 朦朧への抵抗値を計算する
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return 朦朧への抵抗値
+ */
+static int calc_stun_resistance(player_attack_type *pa_ptr)
+{
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    int resist_stun = 0;
+    if (r_ptr->flags1 & RF1_UNIQUE)
+        resist_stun += 88;
+
+    if (r_ptr->flags3 & RF3_NO_STUN)
+        resist_stun += 66;
+
+    if (r_ptr->flags3 & RF3_NO_CONF)
+        resist_stun += 33;
+
+    if (r_ptr->flags3 & RF3_NO_SLEEP)
+        resist_stun += 33;
+
+    if ((r_ptr->flags3 & RF3_UNDEAD) || (r_ptr->flags3 & RF3_NONLIVING))
+        resist_stun += 66;
+
+    return resist_stun;
+}
+
+/*!
+ * @brief 技のランダム選択回数を決定する
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @return 技のランダム選択回数
+ * @details ランダム選択は一番強い技が最終的に選択されるので、回数が多いほど有利
+ */
+static int calc_max_blow_selection_times(player_type *attacker_ptr)
+{
+    if (attacker_ptr->special_defense & KAMAE_BYAKKO)
+        return (attacker_ptr->lev < 3 ? 1 : attacker_ptr->lev / 3);
+    
+    if (attacker_ptr->special_defense & KAMAE_SUZAKU)
+        return 1;
+    
+    if (attacker_ptr->special_defense & KAMAE_GENBU)
+        return 1;
+    
+    return attacker_ptr->lev < 7 ? 1 : attacker_ptr->lev / 7;
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -321,33 +368,16 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         // ダメージ計算を開始、取り敢えず素手と仮定し1とする.
         pa_ptr->attack_damage = 1;
         if (pa_ptr->monk_attack) {
-            int special_effect = 0, stun_effect = 0, times = 0, max_times;
+            int special_effect = 0;
+            int stun_effect = 0; 
             int min_level = 1;
             const martial_arts *ma_ptr = &ma_blows[0], *old_ptr = &ma_blows[0];
-            int resist_stun = 0;
             WEIGHT weight = 8;
+            int resist_stun = calc_stun_resistance(pa_ptr);
+            int max_blow_selection_times = calc_max_blow_selection_times(attacker_ptr);
 
-            if (r_ptr->flags1 & RF1_UNIQUE)
-                resist_stun += 88;
-            if (r_ptr->flags3 & RF3_NO_STUN)
-                resist_stun += 66;
-            if (r_ptr->flags3 & RF3_NO_CONF)
-                resist_stun += 33;
-            if (r_ptr->flags3 & RF3_NO_SLEEP)
-                resist_stun += 33;
-            if ((r_ptr->flags3 & RF3_UNDEAD) || (r_ptr->flags3 & RF3_NONLIVING))
-                resist_stun += 66;
-
-            if (attacker_ptr->special_defense & KAMAE_BYAKKO)
-                max_times = (attacker_ptr->lev < 3 ? 1 : attacker_ptr->lev / 3);
-            else if (attacker_ptr->special_defense & KAMAE_SUZAKU)
-                max_times = 1;
-            else if (attacker_ptr->special_defense & KAMAE_GENBU)
-                max_times = 1;
-            else
-                max_times = (attacker_ptr->lev < 7 ? 1 : attacker_ptr->lev / 7);
             /* Attempt 'times' */
-            for (times = 0; times < max_times; times++) {
+            for (int times = 0; times < max_blow_selection_times; times++) {
                 do {
                     ma_ptr = &ma_blows[randint0(MAX_MA)];
                     if ((attacker_ptr->pclass == CLASS_FORCETRAINER) && (ma_ptr->min_level > 1))
