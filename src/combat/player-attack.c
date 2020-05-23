@@ -292,7 +292,6 @@ static void calc_surprise_attack_damage(player_type *attacker_ptr, player_attack
  */
 void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITION x, bool *fear, bool *mdeath, s16b hand, combat_options mode)
 {
-    bool vorpal_cut = FALSE;
     bool do_quake = FALSE;
     bool weak = FALSE;
     bool drain_msg = TRUE;
@@ -337,10 +336,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         decide_blood_sucking(attacker_ptr, pa_ptr);
 
         // process_monk_attackの中でplayer_type->magic_num1[0] を書き換えているので、ここでhex_spelling() の判定をしないとダメ.
-        if ((have_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified)
-            vorpal_cut = TRUE;
-        else
-            vorpal_cut = FALSE;
+        bool vorpal_cut = (have_flag(pa_ptr->flags, TR_VORPAL) || hex_spelling(attacker_ptr, HEX_RUNESWORD)) && (randint1(vorpal_chance * 3 / 2) == 1) && !is_zantetsu_nullified;
 
         // ダメージ計算を開始、取り敢えず素手と仮定し1とする.
         pa_ptr->attack_damage = 1;
@@ -354,9 +350,8 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
             pa_ptr->attack_damage = calc_attack_damage_with_slay(attacker_ptr, o_ptr, pa_ptr->attack_damage, m_ptr, mode, FALSE);
             calc_surprise_attack_damage(attacker_ptr, pa_ptr);
 
-            if ((attacker_ptr->impact[hand] && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE) || (mode == HISSATSU_QUAKE)) {
+            if ((attacker_ptr->impact[hand] && ((pa_ptr->attack_damage > 50) || one_in_(7))) || (pa_ptr->chaos_effect == CE_QUAKE) || (mode == HISSATSU_QUAKE))
                 do_quake = TRUE;
-            }
 
             if ((!(o_ptr->tval == TV_SWORD) || !(o_ptr->sval == SV_POISON_NEEDLE)) && !(mode == HISSATSU_KYUSHO))
                 pa_ptr->attack_damage = critical_norm(attacker_ptr, o_ptr->weight, o_ptr->to_h, pa_ptr->attack_damage, attacker_ptr->to_h[hand], mode);
