@@ -41,7 +41,7 @@
 #include "player/player-class.h"
 #include "player/player-personalities-table.h"
 #include "monster/monster.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "object/object-ego.h"
 #include "view/display-main-window.h"
 

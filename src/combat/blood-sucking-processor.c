@@ -6,7 +6,7 @@
 
 #include "combat/blood-sucking-processor.h"
 #include "object/artifact.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "player/player-effects.h"
 #include "realm/realm-hex.h"
 

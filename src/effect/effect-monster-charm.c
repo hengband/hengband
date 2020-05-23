@@ -3,7 +3,7 @@
 #include "effect/effect-monster-charm.h"
 #include "player/avatar.h"
 #include "spell/spells-diceroll.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 
 static void effect_monster_charm_resist(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

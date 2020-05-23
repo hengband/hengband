@@ -24,7 +24,7 @@
 #include "player/player-personalities-table.h"
 #include "monster/monster.h"
 #include "mspell/monster-spell.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "spell/spells-summon.h"
 #include "player/patron.h"
 #include "dungeon/quest.h"

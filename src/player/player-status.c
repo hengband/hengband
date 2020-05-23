@@ -27,7 +27,7 @@
 #include "object/object-ego.h"
 #include "monster/monster.h"
 #include "monster/monster-status.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "mutation/mutation.h"
 #include "player/patron.h"
 #include "realm/realm-hex.h"

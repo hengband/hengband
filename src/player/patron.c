@@ -7,7 +7,7 @@
 #include "cmd-pet.h"
 #include "object/object-curse.h"
 #include "object/object-flavor.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "object/object-kind-hook.h"
 #include "mutation/mutation.h"
 #include "object/artifact.h"

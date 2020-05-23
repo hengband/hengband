@@ -9,7 +9,7 @@
 #include "floor/floor-events.h"
 #include "grid/grid.h"
 #include "dungeon/quest.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "monster/monster.h"
 #include "player/player-status.h"
 #include "player/player-personalities-table.h"

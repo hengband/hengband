@@ -6,7 +6,7 @@
 #include "cmd-basic.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "object/artifact.h"
 #include "monster/monster.h"
 #include "player/player-move.h"

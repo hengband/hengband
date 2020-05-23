@@ -14,7 +14,7 @@
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 #include "cmd-pet.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "combat/melee-postprocess.h"
 #include "monster/monster.h"
 #include "monster/monster-status.h"

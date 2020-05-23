@@ -15,7 +15,7 @@
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"
 #include "inventory/player-inventory.h"

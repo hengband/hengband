@@ -15,7 +15,7 @@
 #include "combat/snipe.h"
 #include "realm/realm-hex.h"
 #include "spell/music-checker.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "floor/wild.h"
 #include "mind/racial-force-trainer.h"
 

@@ -11,7 +11,7 @@
 #include "spell/spells3.h"
 #include "spell/spells-floor.h"
 #include "spell/process-effect.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "realm/realm-hex.h"
 #include "combat/melee-postprocess.h"
 

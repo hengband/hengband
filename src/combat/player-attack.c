@@ -18,7 +18,7 @@
 #include "mind/racial-samurai.h"
 #include "mind/surprise-attack.h"
 #include "monster/monster-status.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "object/artifact.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

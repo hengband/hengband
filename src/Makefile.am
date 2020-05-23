@@ -180,7 +180,7 @@ hengband_SOURCES = \
 	monster/monster-sweep-grid.c monster/monster-sweep-grid.h \
 	monster/monster-update.c monster/monster-update.h \
 	monster/quantum-effect.c monster/quantum-effect.h \
-	monster/monsterrace-hook.c monster/monsterrace-hook.h \
+	monster/monster-race-hook.c monster/monster-race-hook.h \
 	monster/monster-dist-offsets.c monster/monster-dist-offsets.h \
 	monster/monster-process.c monster/monster-process.h \
 	monster/monster-status.c monster/monster-status.h \

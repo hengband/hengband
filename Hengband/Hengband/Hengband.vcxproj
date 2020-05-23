@@ -365,7 +365,7 @@
     <ClCompile Include="..\..\src\monster\monster-dist-offsets.c" />
     <ClCompile Include="..\..\src\monster\monster-process.c" />
     <ClCompile Include="..\..\src\monster\monster-status.c" />
-    <ClCompile Include="..\..\src\monster\monsterrace-hook.c" />
+    <ClCompile Include="..\..\src\monster\monster-race-hook.c" />
     <ClCompile Include="..\..\src\monster\monster-race.c" />
     <ClCompile Include="..\..\src\monster\monster-attack.c" />
     <ClCompile Include="..\..\src\monster\monster-direction.c" />
@@ -792,7 +792,7 @@
     <ClInclude Include="..\..\src\mspell\monster-spell.h" />
     <ClInclude Include="..\..\src\monster\monster-status.h" />
     <ClInclude Include="..\..\src\monster\monster.h" />
-    <ClInclude Include="..\..\src\monster\monsterrace-hook.h" />
+    <ClInclude Include="..\..\src\monster\monster-race-hook.h" />
     <ClInclude Include="..\..\src\monster\monster-race.h" />
     <ClInclude Include="..\..\src\mutation\mutation.h" />
     <ClInclude Include="..\..\src\object\object-boost.h" />

@@ -21,7 +21,7 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "object/object-flavor.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "monster/monster-status.h"
 #include "monster/monster.h"
 #include "spell/spells-type.h"

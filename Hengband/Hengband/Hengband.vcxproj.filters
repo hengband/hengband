@@ -647,9 +647,6 @@
     <ClCompile Include="..\..\src\monster\monster-process.c">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\monster\monsterrace-hook.c">
-      <Filter>monster</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-status.c">
       <Filter>monster</Filter>
     </ClCompile>
@@ -1033,6 +1030,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\combat\melee-postprocess.c">
       <Filter>combat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster\monster-race-hook.c">
+      <Filter>monster</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1711,9 +1711,6 @@
     <ClInclude Include="..\..\src\monster\monster-process.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\monster\monsterrace-hook.h">
-      <Filter>monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-status.h">
       <Filter>monster</Filter>
     </ClInclude>
@@ -2139,6 +2136,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\combat\melee-postprocess.h">
       <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-race-hook.h">
+      <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

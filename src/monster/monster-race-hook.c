@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "util/util.h"
 
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "monster/monster.h"
 #include "mspell/monster-spell.h"
 #include "floor/floor.h"

@@ -6,7 +6,7 @@
 #include "grid/trap.h"
 #include "object/object-hook.h"
 #include "monster/monster-status.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 
 /*!
   * @brief プレイヤー周辺の地形を感知する

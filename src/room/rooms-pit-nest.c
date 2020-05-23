@@ -6,7 +6,7 @@
 #include "rooms.h"
 #include "room/rooms-pit-nest.h"
 #include "monster/monster.h"
-#include "monster/monsterrace-hook.h"
+#include "monster/monster-race-hook.h"
 #include "core/sort.h"
 #include "floor/floor.h"
 #include "grid/feature.h"
