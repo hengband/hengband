@@ -25,7 +25,6 @@
 #include "cmd/cmd-dump.h"
 #include "effect/effect-characteristics.h"
 #include "grid/grid.h"
-#include "melee.h"
 #include "world/world.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
@@ -62,6 +61,7 @@
 #include "spell/spells-type.h"
 #include "spell/process-effect.h"
 #include "combat/combat-options-type.h"
+#include "cmd/cmd-attack.h"
 
 /*!
  * @brief 視界内モンスターに魔法効果を与える / Apply a "project()" directly to all viewable monsters

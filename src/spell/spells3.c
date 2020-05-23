@@ -27,7 +27,6 @@
 #include "object/object-boost.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "melee.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "player/player-class.h"
@@ -68,6 +67,7 @@
 #include "spell/spells-execution.h"
 #include "spell/process-effect.h"
 #include "mind/racial-force-trainer.h"
+#include "cmd/cmd-attack.h"
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */
 #define MAX_TRIES 100

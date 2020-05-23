@@ -167,6 +167,7 @@
     <ClCompile Include="..\..\src\birth\initial-equipments-table.c" />
     <ClCompile Include="..\..\src\birth\inventory-initializer.c" />
     <ClCompile Include="..\..\src\birth\quick-start.c" />
+    <ClCompile Include="..\..\src\cmd\cmd-attack.c" />
     <ClCompile Include="..\..\src\cmd\cmd-menu-content-table.c" />
     <ClCompile Include="..\..\src\combat\attack-chaos-effect.c" />
     <ClCompile Include="..\..\src\combat\attack-criticality.c" />
@@ -428,6 +429,7 @@
     <ClInclude Include="..\..\src\birth\initial-equipments-table.h" />
     <ClInclude Include="..\..\src\birth\inventory-initializer.h" />
     <ClInclude Include="..\..\src\birth\quick-start.h" />
+    <ClInclude Include="..\..\src\cmd\cmd-attack.h" />
     <ClInclude Include="..\..\src\cmd\cmd-menu-content-table.h" />
     <ClInclude Include="..\..\src\combat\attack-chaos-effect.h" />
     <ClInclude Include="..\..\src\combat\attack-criticality.h" />

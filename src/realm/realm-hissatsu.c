@@ -6,7 +6,6 @@
 #include "cmd-basic.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
-#include "melee.h"
 #include "monster/monsterrace-hook.h"
 #include "object/artifact.h"
 #include "monster/monster.h"
@@ -29,6 +28,7 @@
 #include "spell/spells3.h"
 #include "spell/spells-detection.h"
 #include "combat/combat-options-type.h"
+#include "cmd/cmd-attack.h"
 
 /*!
 * @brief 剣術の各処理を行う

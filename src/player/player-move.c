@@ -149,7 +149,6 @@
 #include "autopick/autopick.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
-#include "melee.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "dungeon/quest.h"
@@ -178,6 +177,7 @@
 #include "io/targeting.h"
 #include "spell/process-effect.h"
 #include "spell/spells3.h"
+#include "cmd/cmd-attack.h"
 
 travel_type travel;
 

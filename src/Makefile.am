@@ -337,6 +337,7 @@ hengband_SOURCES = \
 	cmd/cmd-usestaff.c cmd/cmd-usestaff.h \
 	cmd/cmd-zaprod.c cmd/cmd-zaprod.h cmd/cmd-zapwand.c cmd/cmd-zapwand.h \
 	cmd/cmd-menu-content-table.c cmd/cmd-menu-content-table.h \
+	cmd/cmd-attack.c cmd/cmd-attack.h \
 	\
 	combat/player-attack-util.h \
 	combat/melee.h combat/melee.c \

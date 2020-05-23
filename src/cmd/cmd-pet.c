@@ -6,7 +6,6 @@
 #include "cmd/cmd-dump.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
-#include "melee.h"
 #include "core/sort.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
@@ -23,6 +22,7 @@
 #include "io/targeting.h"
 #include "world/world.h"
 #include "effect/spells-effect-util.h"
+#include "cmd/cmd-attack.h"
 
 int total_friends = 0;
 

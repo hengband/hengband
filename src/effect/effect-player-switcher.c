@@ -16,6 +16,7 @@
 #include "spell/spells-type.h"
 #include "world/world.h"
 #include "player/player-races-table.h"
+#include "cmd/cmd-attack.h"
 
 void effect_player_mana(player_type *target_ptr, effect_player_type *ep_ptr) {
   if (target_ptr->blind)

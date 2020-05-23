@@ -23,7 +23,6 @@
 #include "object/chest.h"
 #include "grid/trap.h"
 #include "dungeon/dungeon.h"
-#include "melee.h"
 #include "combat/slaying.h"
 #include "combat/attack-power-table.h"
 #include "object/object-hook.h"
@@ -56,6 +55,7 @@
 #include "effect/spells-effect-util.h"
 #include "spell/spells3.h"
 #include "core/output-updater.h"
+#include "cmd/cmd-attack.h"
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理

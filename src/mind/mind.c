@@ -22,7 +22,6 @@
 #include "mind/mind.h"
 
 #include "effect/effect-characteristics.h"
-#include "melee.h"
 #include "spell/spells-summon.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
@@ -47,6 +46,7 @@
 #include "spell/spells3.h"
 #include "spell/spells-detection.h"
 #include "mind/racial-force-trainer.h"
+#include "cmd/cmd-attack.h"
 
 /*! 特殊技能の一覧テーブル */
 mind_power const mind_powers[5] =

@@ -1025,6 +1025,9 @@
     <ClCompile Include="..\..\src\combat\attack-chaos-effect.c">
       <Filter>combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-attack.c">
+      <Filter>cmd</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2121,6 +2124,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\combat\attack-chaos-effect.h">
       <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-attack.h">
+      <Filter>cmd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
