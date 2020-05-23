@@ -434,6 +434,50 @@ static void mineuchi(player_type *attacker_ptr, player_attack_type *pa_ptr)
 }
 
 /*!
+ * @brief モンスターのHPを減らした後、恐怖させるか死なす (フロアから消滅させる)
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return 死んだらTRUE、生きていたらFALSE
+ */
+static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_ptr, const int num, const bool is_lowlevel)
+{
+    if (!mon_take_hit(attacker_ptr, pa_ptr->g_ptr->m_idx, pa_ptr->attack_damage, pa_ptr->fear, NULL))
+        return FALSE;
+
+    *(pa_ptr->mdeath) = TRUE;
+    if ((attacker_ptr->pclass == CLASS_BERSERKER) && attacker_ptr->energy_use) {
+        if (attacker_ptr->migite && attacker_ptr->hidarite) {
+            if (pa_ptr->hand)
+                attacker_ptr->energy_use = attacker_ptr->energy_use * 3 / 5 + attacker_ptr->energy_use * num * 2 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
+            else
+                attacker_ptr->energy_use = attacker_ptr->energy_use * num * 3 / (attacker_ptr->num_blow[pa_ptr->hand] * 5);
+        } else {
+            attacker_ptr->energy_use = attacker_ptr->energy_use * num / attacker_ptr->num_blow[pa_ptr->hand];
+        }
+    }
+
+    object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
+    if ((o_ptr->name1 == ART_ZANTETSU) && is_lowlevel)
+        msg_print(_("またつまらぬものを斬ってしまった．．．", "Sigh... Another trifling thing I've cut...."));
+
+    return TRUE;
+}
+
+/*!
+ * @brief 吸血量を計算する
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void calc_drain(player_attack_type *pa_ptr)
+{
+    if (pa_ptr->attack_damage <= 0)
+        pa_ptr->can_drain = FALSE;
+
+    if (pa_ptr->drain_result > pa_ptr->m_ptr->hp)
+        pa_ptr->drain_result = pa_ptr->m_ptr->hp;
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -505,29 +549,9 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         msg_format_wizard(CHEAT_MONSTER, _("%dのダメージを与えた。(残りHP %d/%d(%d))", "You do %d damage. (left HP %d/%d(%d))"), pa_ptr->attack_damage,
             m_ptr->hp - pa_ptr->attack_damage, m_ptr->maxhp, m_ptr->max_maxhp);
 
-        if (pa_ptr->attack_damage <= 0)
-            pa_ptr->can_drain = FALSE;
-
-        if (pa_ptr->drain_result > m_ptr->hp)
-            pa_ptr->drain_result = m_ptr->hp;
-
-        /* Damage, check for fear and death */
-        if (mon_take_hit(attacker_ptr, g_ptr->m_idx, pa_ptr->attack_damage, fear, NULL)) {
-            *mdeath = TRUE;
-            if ((attacker_ptr->pclass == CLASS_BERSERKER) && attacker_ptr->energy_use) {
-                if (attacker_ptr->migite && attacker_ptr->hidarite) {
-                    if (hand)
-                        attacker_ptr->energy_use = attacker_ptr->energy_use * 3 / 5 + attacker_ptr->energy_use * num * 2 / (attacker_ptr->num_blow[hand] * 5);
-                    else
-                        attacker_ptr->energy_use = attacker_ptr->energy_use * num * 3 / (attacker_ptr->num_blow[hand] * 5);
-                } else {
-                    attacker_ptr->energy_use = attacker_ptr->energy_use * num / attacker_ptr->num_blow[hand];
-                }
-            }
-            if ((o_ptr->name1 == ART_ZANTETSU) && is_lowlevel)
-                msg_print(_("またつまらぬものを斬ってしまった．．．", "Sigh... Another trifling thing I've cut...."));
+        calc_drain(pa_ptr);
+        if (check_fear_death(attacker_ptr, pa_ptr, num, is_lowlevel))
             break;
-        }
 
         /* Anger the monster */
         if (pa_ptr->attack_damage > 0)
@@ -535,9 +559,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
 
         touch_zap_player(m_ptr, attacker_ptr);
 
-        /* Are we draining it?  A little note: If the monster is
-                dead, the drain does not work... */
-
+        // 死んだら吸血できない. / If monster is dead, then the player can't suck it's blood.
         if (pa_ptr->can_drain && (pa_ptr->drain_result > 0)) {
             if (o_ptr->name1 == ART_MURAMASA) {
                 if (is_human) {
