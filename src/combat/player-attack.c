@@ -414,6 +414,31 @@ static void attack_teleport_away(player_type *attacker_ptr, player_attack_type *
 }
 
 /*!
+ * @brief カオス武器でのテレポート・アウェイを実行する
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @param y モンスターのY座標
+ * @param x モンスターのX座標
+ * @return なし
+ */
+static void attack_polymorph(player_type *attacker_ptr, player_attack_type *pa_ptr, POSITION y, POSITION x)
+{
+    monster_race *r_ptr = &r_info[pa_ptr->m_ptr->r_idx];
+    if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) != 0) || ((r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK) != 0))
+        return;
+
+    if (polymorph_monster(attacker_ptr, y, x)) {
+        msg_format(_("%^sは変化した！", "%^s changes!"), pa_ptr->m_name);
+        *(pa_ptr->fear) = FALSE;
+        pa_ptr->weak = FALSE;
+    } else
+        msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
+
+    pa_ptr->m_ptr = &attacker_ptr->current_floor_ptr->m_list[pa_ptr->g_ptr->m_idx];
+    monster_desc(attacker_ptr, pa_ptr->m_name, pa_ptr->m_ptr, 0);
+}
+
+/*!
  * @brief プレイヤーの打撃処理サブルーチン /
  * Player attacks a (poor, defenseless) creature        -RAK-
  * @param y 攻撃目標のY座標
@@ -501,24 +526,7 @@ void exe_player_attack_to_monster(player_type *attacker_ptr, POSITION y, POSITIO
         else if (pa_ptr->chaos_effect == CE_TELE_AWAY)
             attack_teleport_away(attacker_ptr, pa_ptr, &num);
         else if ((pa_ptr->chaos_effect == CE_POLYMORPH) && (randint1(90) > r_ptr->level)) {
-            if (!(r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) && !(r_ptr->flagsr & RFR_EFF_RES_CHAO_MASK)) {
-                if (polymorph_monster(attacker_ptr, y, x)) {
-                    msg_format(_("%^sは変化した！", "%^s changes!"), pa_ptr->m_name);
-                    *fear = FALSE;
-                    pa_ptr->weak = FALSE;
-                } else {
-                    msg_format(_("%^sには効果がなかった。", "%^s is unaffected."), pa_ptr->m_name);
-                }
-
-                /* Hack -- Get new monster */
-                m_ptr = &floor_ptr->m_list[g_ptr->m_idx];
-
-                /* Oops, we need a different name... */
-                monster_desc(attacker_ptr, pa_ptr->m_name, m_ptr, 0);
-
-                /* Hack -- Get new race */
-                r_ptr = &r_info[m_ptr->r_idx];
-            }
+            attack_polymorph(attacker_ptr, pa_ptr, y, x);
         } else if (o_ptr->name1 == ART_G_HAMMER) {
             monster_type *target_ptr = &floor_ptr->m_list[g_ptr->m_idx];
 
