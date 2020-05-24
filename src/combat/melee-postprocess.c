@@ -46,6 +46,18 @@ mam_pp_type *initialize_mam_pp_type(player_type *player_ptr, mam_pp_type *mam_pp
     return mam_pp_ptr;
 }
 
+static void prepare_redraw(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
+{
+    if (!mam_pp_ptr->m_ptr->ml)
+        return;
+
+    if (player_ptr->health_who == mam_pp_ptr->m_idx)
+        player_ptr->redraw |= (PR_HEALTH);
+
+    if (player_ptr->riding == mam_pp_ptr->m_idx)
+        player_ptr->redraw |= (PR_UHEALTH);
+}
+
 /*!
  * @brief モンスターが無敵だった場合の処理
  * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
@@ -108,15 +120,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     mam_pp_type tmp_mam_pp;
     mam_pp_type *mam_pp_ptr = initialize_mam_pp_type(player_ptr, &tmp_mam_pp, m_idx, dam);
     monster_desc(player_ptr, mam_pp_ptr->m_name, m_ptr, 0);
-
-    /* Redraw (later) if needed */
-    if (m_ptr->ml) {
-        if (player_ptr->health_who == m_idx)
-            player_ptr->redraw |= (PR_HEALTH);
-        if (player_ptr->riding == m_idx)
-            player_ptr->redraw |= (PR_UHEALTH);
-    }
-
+    prepare_redraw(player_ptr, mam_pp_ptr);
     (void)set_monster_csleep(player_ptr, m_idx, 0);
 
     if (player_ptr->riding && (m_idx == player_ptr->riding))
