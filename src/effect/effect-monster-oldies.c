@@ -197,6 +197,10 @@ gf_switch_result effect_monster_old_slow(player_type *caster_ptr, effect_monster
 }
 
 
+/*!
+ * todo 「ユニークは (魔法では)常に眠らない」はr_infoの趣旨に反すると思われる
+ * 眠る確率を半分にするとかしておいた方が良さそう
+ */
 gf_switch_result effect_monster_old_sleep(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
@@ -224,6 +228,10 @@ gf_switch_result effect_monster_old_sleep(player_type *caster_ptr, effect_monste
 }
 
 
+/*!
+ * todo 「ユニークは (魔法では)常に混乱しない」はr_infoの趣旨に反すると思われる
+ * 眠る確率を半分にするとかしておいた方が良さそう
+ */
 gf_switch_result effect_monster_old_conf(player_type *caster_ptr, effect_monster_type *em_ptr)
 {
 	if (em_ptr->seen) em_ptr->obvious = TRUE;
