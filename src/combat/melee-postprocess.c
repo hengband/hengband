@@ -41,6 +41,22 @@ mam_pp_type *initialize_mam_pp_type(mam_pp_type *mam_pp_ptr, monster_type *m_ptr
 }
 
 /*!
+ * @brief モンスターが無敵だった場合の処理
+ * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
+ * @return 無敵ノーダメならTRUE、無敵でないか無敵を貫通したらFALSE
+ */
+static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
+{
+    if (MON_INVULNER(mam_pp_ptr->m_ptr) && randint0(PENETRATE_INVULNERABILITY))
+        return FALSE;
+
+    if (mam_pp_ptr->seen)
+        msg_format(_("%^sはダメージを受けない。", "%^s is unharmed."), mam_pp_ptr->m_name);
+
+    return TRUE;
+}
+
+/*!
  * todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり
  * @brief モンスターが敵モンスターに行う打撃処理 /
  * Hack, based on mon_take_hit... perhaps all monster attacks on other monsters should use this?
@@ -78,12 +94,8 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     if (player_ptr->riding && (m_idx == player_ptr->riding))
         disturb(player_ptr, TRUE, TRUE);
 
-    if (MON_INVULNER(mam_pp_ptr->m_ptr) && randint0(PENETRATE_INVULNERABILITY)) {
-        if (mam_pp_ptr->seen) {
-            msg_format(_("%^sはダメージを受けない。", "%^s is unharmed."), mam_pp_ptr->m_name);
-        }
+    if(process_invulnerability(mam_pp_ptr))
         return;
-    }
 
     if (r_ptr->flagsr & RFR_RES_ALL) {
         if (dam > 0) {
