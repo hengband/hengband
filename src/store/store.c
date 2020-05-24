@@ -222,7 +222,9 @@ static int store_check_num(object_type *o_ptr)
  */
 bool combine_and_reorder_home(int store_num)
 {
-	store_type *old_st_ptr = st_ptr;
+    bool old_stack_force_notes = stack_force_notes;
+    bool old_stack_force_costs = stack_force_costs;
+    store_type *old_st_ptr = st_ptr;
 	st_ptr = &town_info[1].store[store_num];
 	bool flag = FALSE;
 	if (store_num != STORE_HOME)
@@ -319,8 +321,6 @@ bool combine_and_reorder_home(int store_num)
 	}
 
 	st_ptr = old_st_ptr;
-	bool old_stack_force_notes = stack_force_notes;
-	bool old_stack_force_costs = stack_force_costs;
 	if (store_num != STORE_HOME)
 	{
 		stack_force_notes = old_stack_force_notes;
