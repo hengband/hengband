@@ -26,6 +26,20 @@
 #include "realm/realm-song.h"
 #include "util/util.h"
 
+// Melee-post-process-type
+typedef struct mam_pp_type {
+    monster_type *m_ptr;
+    bool seen;
+    GAME_TEXT m_name[160];
+} mam_pp_type;
+
+mam_pp_type *initialize_mam_pp_type(mam_pp_type *mam_pp_ptr, monster_type *m_ptr)
+{
+    mam_pp_ptr->m_ptr = m_ptr;
+    mam_pp_ptr->seen = is_seen(m_ptr);
+    return mam_pp_ptr;
+}
+
 /*!
  * todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり
  * @brief モンスターが敵モンスターに行う打撃処理 /
@@ -43,13 +57,13 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    GAME_TEXT m_name[160];
-    bool seen = is_seen(m_ptr);
+    mam_pp_type tmp_mam_pp;
+    mam_pp_type *mam_pp_ptr = initialize_mam_pp_type(&tmp_mam_pp, m_ptr);
 
     /* Can the player be aware of this attack? */
     bool known = (m_ptr->cdis <= MAX_SIGHT);
 
-    monster_desc(player_ptr, m_name, m_ptr, 0);
+    monster_desc(player_ptr, mam_pp_ptr->m_name, m_ptr, 0);
 
     /* Redraw (later) if needed */
     if (m_ptr->ml) {
@@ -64,9 +78,9 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     if (player_ptr->riding && (m_idx == player_ptr->riding))
         disturb(player_ptr, TRUE, TRUE);
 
-    if (MON_INVULNER(m_ptr) && randint0(PENETRATE_INVULNERABILITY)) {
-        if (seen) {
-            msg_format(_("%^sはダメージを受けない。", "%^s is unharmed."), m_name);
+    if (MON_INVULNER(mam_pp_ptr->m_ptr) && randint0(PENETRATE_INVULNERABILITY)) {
+        if (mam_pp_ptr->seen) {
+            msg_format(_("%^sはダメージを受けない。", "%^s is unharmed."), mam_pp_ptr->m_name);
         }
         return;
     }
@@ -78,8 +92,8 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
                 dam = 1;
         }
         if (dam == 0) {
-            if (seen) {
-                msg_format(_("%^sはダメージを受けない。", "%^s is unharmed."), m_name);
+            if (mam_pp_ptr->seen) {
+                msg_format(_("%^sはダメージを受けない。", "%^s is unharmed."), mam_pp_ptr->m_name);
             }
             return;
         }
@@ -103,22 +117,22 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
             *dead = TRUE;
 
             if (known) {
-                monster_desc(player_ptr, m_name, m_ptr, MD_TRUE_NAME);
+                monster_desc(player_ptr, mam_pp_ptr->m_name, m_ptr, MD_TRUE_NAME);
                 /* Unseen death by normal attack */
-                if (!seen) {
+                if (!mam_pp_ptr->seen) {
                     floor_ptr->monster_noise = TRUE;
                 }
                 /* Death by special attack */
                 else if (note) {
-                    msg_format(_("%^s%s", "%^s%s"), m_name, note);
+                    msg_format(_("%^s%s", "%^s%s"), mam_pp_ptr->m_name, note);
                 }
                 /* Death by normal attack -- nonliving monster */
                 else if (!monster_living(m_ptr->r_idx)) {
-                    msg_format(_("%^sは破壊された。", "%^s is destroyed."), m_name);
+                    msg_format(_("%^sは破壊された。", "%^s is destroyed."), mam_pp_ptr->m_name);
                 }
                 /* Death by normal attack -- living monster */
                 else {
-                    msg_format(_("%^sは殺された。", "%^s is killed."), m_name);
+                    msg_format(_("%^sは殺された。", "%^s is killed."), mam_pp_ptr->m_name);
                 }
             }
 
@@ -170,12 +184,12 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     }
 
     if (player_ptr->riding && (player_ptr->riding == m_idx) && (dam > 0)) {
-        monster_desc(player_ptr, m_name, m_ptr, 0);
+        monster_desc(player_ptr, mam_pp_ptr->m_name, m_ptr, 0);
 
         if (m_ptr->hp > m_ptr->maxhp / 3)
             dam = (dam + 1) / 2;
         if (rakuba(player_ptr, (dam > 200) ? 200 : dam, FALSE)) {
-            msg_format(_("%^sに振り落とされた！", "You have been thrown off from %s!"), m_name);
+            msg_format(_("%^sに振り落とされた！", "You have been thrown off from %s!"), mam_pp_ptr->m_name);
         }
     }
 }
