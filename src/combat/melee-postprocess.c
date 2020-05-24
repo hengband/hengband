@@ -34,15 +34,17 @@ typedef struct mam_pp_type {
     GAME_TEXT m_name[160];
     HIT_POINT dam;
     bool known; /* Can the player be aware of this attack? */
+    concptr note;
 } mam_pp_type;
 
-mam_pp_type *initialize_mam_pp_type(player_type *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
+mam_pp_type *initialize_mam_pp_type(player_type *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, HIT_POINT dam, concptr note)
 {
     mam_pp_ptr->m_idx = m_idx;
     mam_pp_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     mam_pp_ptr->seen = is_seen(mam_pp_ptr->m_ptr);
     mam_pp_ptr->dam = dam;
     mam_pp_ptr->known = mam_pp_ptr->m_ptr->cdis <= MAX_SIGHT;
+    mam_pp_ptr->note = note;
     return mam_pp_ptr;
 }
 
@@ -101,6 +103,39 @@ static bool process_all_resistances(mam_pp_type *mam_pp_ptr)
 }
 
 /*!
+ * @brief モンスター死亡時のメッセージ表示
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
+ * @return なし
+ * @details
+ * 見えない位置で死んだら何も表示しない
+ * 爆発して粉々になった等ならその旨を、残りは生命か無生命かで分岐
+ */
+static void print_monster_dead_by_monster(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
+{
+    if (!mam_pp_ptr->known)
+        return;
+
+    monster_desc(player_ptr, mam_pp_ptr->m_name, mam_pp_ptr->m_ptr, MD_TRUE_NAME);
+    if (!mam_pp_ptr->seen) {
+        player_ptr->current_floor_ptr->monster_noise = TRUE;
+        return;
+    }
+    
+    if (mam_pp_ptr->note) {
+        msg_format(_("%^s%s", "%^s%s"), mam_pp_ptr->m_name, mam_pp_ptr->note);
+        return;
+    }
+    
+    if (!monster_living(mam_pp_ptr->m_ptr->r_idx)) {
+        msg_format(_("%^sは破壊された。", "%^s is destroyed."), mam_pp_ptr->m_name);
+        return;
+    }
+    
+    msg_format(_("%^sは殺された。", "%^s is killed."), mam_pp_ptr->m_name);
+}
+
+/*!
  * todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり
  * @brief モンスターが敵モンスターに行う打撃処理 /
  * Hack, based on mon_take_hit... perhaps all monster attacks on other monsters should use this?
@@ -118,7 +153,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     mam_pp_type tmp_mam_pp;
-    mam_pp_type *mam_pp_ptr = initialize_mam_pp_type(player_ptr, &tmp_mam_pp, m_idx, dam);
+    mam_pp_type *mam_pp_ptr = initialize_mam_pp_type(player_ptr, &tmp_mam_pp, m_idx, dam, note);
     monster_desc(player_ptr, mam_pp_ptr->m_name, m_ptr, 0);
     prepare_redraw(player_ptr, mam_pp_ptr);
     (void)set_monster_csleep(player_ptr, m_idx, 0);
@@ -132,7 +167,6 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     if (process_all_resistances(mam_pp_ptr))
         return;
 
-    /* Hurt it */
     m_ptr->hp -= dam;
 
     /* It is dead now... or is it? */
@@ -140,7 +174,6 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
         if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out) {
             m_ptr->hp = 1;
         } else {
-            /* Make a sound */
             if (!monster_living(m_ptr->r_idx)) {
                 sound(SOUND_N_KILL);
             } else {
@@ -148,35 +181,11 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
             }
 
             *dead = TRUE;
-
-            if (mam_pp_ptr->known) {
-                monster_desc(player_ptr, mam_pp_ptr->m_name, m_ptr, MD_TRUE_NAME);
-                /* Unseen death by normal attack */
-                if (!mam_pp_ptr->seen) {
-                    floor_ptr->monster_noise = TRUE;
-                }
-                /* Death by special attack */
-                else if (note) {
-                    msg_format(_("%^s%s", "%^s%s"), mam_pp_ptr->m_name, note);
-                }
-                /* Death by normal attack -- nonliving monster */
-                else if (!monster_living(m_ptr->r_idx)) {
-                    msg_format(_("%^sは破壊された。", "%^s is destroyed."), mam_pp_ptr->m_name);
-                }
-                /* Death by normal attack -- living monster */
-                else {
-                    msg_format(_("%^sは殺された。", "%^s is killed."), mam_pp_ptr->m_name);
-                }
-            }
-
+            print_monster_dead_by_monster(player_ptr, mam_pp_ptr);
             monster_gain_exp(player_ptr, who, m_ptr->r_idx);
             monster_death(player_ptr, m_idx, FALSE);
             delete_monster_idx(player_ptr, m_idx);
-
-            /* Not afraid */
-            (*fear) = FALSE;
-
-            /* Monster is dead */
+            *fear = FALSE;
             return;
         }
     }
