@@ -28,15 +28,19 @@
 
 // Melee-post-process-type
 typedef struct mam_pp_type {
+    MONSTER_IDX m_idx;
     monster_type *m_ptr;
     bool seen;
     GAME_TEXT m_name[160];
+    HIT_POINT dam;
 } mam_pp_type;
 
-mam_pp_type *initialize_mam_pp_type(mam_pp_type *mam_pp_ptr, monster_type *m_ptr)
+mam_pp_type *initialize_mam_pp_type(player_type *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
 {
-    mam_pp_ptr->m_ptr = m_ptr;
-    mam_pp_ptr->seen = is_seen(m_ptr);
+    mam_pp_ptr->m_idx = m_idx;
+    mam_pp_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
+    mam_pp_ptr->seen = is_seen(mam_pp_ptr->m_ptr);
+    mam_pp_ptr->dam = dam;
     return mam_pp_ptr;
 }
 
@@ -48,6 +52,32 @@ mam_pp_type *initialize_mam_pp_type(mam_pp_type *mam_pp_ptr, monster_type *m_ptr
 static bool process_invulnerability(mam_pp_type *mam_pp_ptr)
 {
     if (MON_INVULNER(mam_pp_ptr->m_ptr) && randint0(PENETRATE_INVULNERABILITY))
+        return FALSE;
+
+    if (mam_pp_ptr->seen)
+        msg_format(_("%^sはダメージを受けない。", "%^s is unharmed."), mam_pp_ptr->m_name);
+
+    return TRUE;
+}
+
+/*!
+ * @brief 魔法完全防御持ちの処理
+ * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
+ * @return ノーダメならTRUE、 そうでないならFALSE
+ */
+static bool process_all_resistances(mam_pp_type *mam_pp_ptr)
+{
+    monster_race *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
+    if ((r_ptr->flagsr & RFR_RES_ALL) == 0)
+        return FALSE;
+
+    if (mam_pp_ptr->dam > 0) {
+        mam_pp_ptr->dam /= 100;
+        if ((mam_pp_ptr->dam == 0) && one_in_(3))
+            mam_pp_ptr->dam = 1;
+    }
+
+    if (mam_pp_ptr->dam != 0)
         return FALSE;
 
     if (mam_pp_ptr->seen)
@@ -74,7 +104,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     mam_pp_type tmp_mam_pp;
-    mam_pp_type *mam_pp_ptr = initialize_mam_pp_type(&tmp_mam_pp, m_ptr);
+    mam_pp_type *mam_pp_ptr = initialize_mam_pp_type(player_ptr, &tmp_mam_pp, m_idx, dam);
 
     /* Can the player be aware of this attack? */
     bool known = (m_ptr->cdis <= MAX_SIGHT);
@@ -94,22 +124,11 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     if (player_ptr->riding && (m_idx == player_ptr->riding))
         disturb(player_ptr, TRUE, TRUE);
 
-    if(process_invulnerability(mam_pp_ptr))
+    if (process_invulnerability(mam_pp_ptr))
         return;
 
-    if (r_ptr->flagsr & RFR_RES_ALL) {
-        if (dam > 0) {
-            dam /= 100;
-            if ((dam == 0) && one_in_(3))
-                dam = 1;
-        }
-        if (dam == 0) {
-            if (mam_pp_ptr->seen) {
-                msg_format(_("%^sはダメージを受けない。", "%^s is unharmed."), mam_pp_ptr->m_name);
-            }
-            return;
-        }
-    }
+    if (process_all_resistances(mam_pp_ptr))
+        return;
 
     /* Hurt it */
     m_ptr->hp -= dam;
