@@ -35,16 +35,22 @@ typedef struct mam_pp_type {
     HIT_POINT dam;
     bool known; /* Can the player be aware of this attack? */
     concptr note;
+    bool *dead;
+    bool *fear;
+    MONSTER_IDX who;
 } mam_pp_type;
 
-mam_pp_type *initialize_mam_pp_type(player_type *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, HIT_POINT dam, concptr note)
+mam_pp_type *initialize_mam_pp_type(player_type *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
 {
     mam_pp_ptr->m_idx = m_idx;
     mam_pp_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     mam_pp_ptr->seen = is_seen(mam_pp_ptr->m_ptr);
     mam_pp_ptr->dam = dam;
     mam_pp_ptr->known = mam_pp_ptr->m_ptr->cdis <= MAX_SIGHT;
+    mam_pp_ptr->dead = dead;
+    mam_pp_ptr->fear = fear;
     mam_pp_ptr->note = note;
+    mam_pp_ptr->who = who;
     return mam_pp_ptr;
 }
 
@@ -136,6 +142,34 @@ static void print_monster_dead_by_monster(player_type *player_ptr, mam_pp_type *
 }
 
 /*!
+ * @brief ダメージを受けたモンスターのHPが0未満になった際の処理
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
+ * @return 生きていたらTRUE、それ以外 (ユニークは＠以外の攻撃では死なない)はFALSE
+ */
+static bool check_monster_hp(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
+{
+    monster_race *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
+    if (mam_pp_ptr->m_ptr->hp < 0)
+        return FALSE;
+
+    if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out) {
+        mam_pp_ptr->m_ptr->hp = 1;
+        return FALSE;
+    }
+
+    sound_type kill_sound = monster_living(mam_pp_ptr->m_ptr->r_idx) ? SOUND_KILL : SOUND_N_KILL;
+    sound(kill_sound);
+    *(mam_pp_ptr->dead) = TRUE;
+    print_monster_dead_by_monster(player_ptr, mam_pp_ptr);
+    monster_gain_exp(player_ptr, mam_pp_ptr->who, mam_pp_ptr->m_ptr->r_idx);
+    monster_death(player_ptr, mam_pp_ptr->m_idx, FALSE);
+    delete_monster_idx(player_ptr, mam_pp_ptr->m_idx);
+    *(mam_pp_ptr->fear) = FALSE;
+    return TRUE;
+}
+
+/*!
  * todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり
  * @brief モンスターが敵モンスターに行う打撃処理 /
  * Hack, based on mon_take_hit... perhaps all monster attacks on other monsters should use this?
@@ -153,7 +187,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     mam_pp_type tmp_mam_pp;
-    mam_pp_type *mam_pp_ptr = initialize_mam_pp_type(player_ptr, &tmp_mam_pp, m_idx, dam, note);
+    mam_pp_type *mam_pp_ptr = initialize_mam_pp_type(player_ptr, &tmp_mam_pp, m_idx, dam, dead, fear, note, who);
     monster_desc(player_ptr, mam_pp_ptr->m_name, m_ptr, 0);
     prepare_redraw(player_ptr, mam_pp_ptr);
     (void)set_monster_csleep(player_ptr, m_idx, 0);
@@ -168,23 +202,8 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
         return;
 
     m_ptr->hp -= dam;
-
-    /* It is dead now... or is it? */
-    if (m_ptr->hp < 0) {
-        if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out) {
-            m_ptr->hp = 1;
-        } else {
-            sound_type kill_sound = monster_living(m_ptr->r_idx) ? SOUND_KILL : SOUND_N_KILL;
-            sound(kill_sound);
-            *dead = TRUE;
-            print_monster_dead_by_monster(player_ptr, mam_pp_ptr);
-            monster_gain_exp(player_ptr, who, m_ptr->r_idx);
-            monster_death(player_ptr, m_idx, FALSE);
-            delete_monster_idx(player_ptr, m_idx);
-            *fear = FALSE;
-            return;
-        }
-    }
+    if (check_monster_hp(player_ptr, mam_pp_ptr))
+        return;
 
     *dead = FALSE;
 
@@ -215,9 +234,9 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
         }
     }
 
-    if ((dam > 0) && !is_pet(m_ptr) && !is_friendly(m_ptr) && (who != m_idx)) {
-        if (is_pet(&floor_ptr->m_list[who]) && !player_bold(player_ptr, m_ptr->target_y, m_ptr->target_x)) {
-            set_target(m_ptr, floor_ptr->m_list[who].fy, floor_ptr->m_list[who].fx);
+    if ((dam > 0) && !is_pet(m_ptr) && !is_friendly(m_ptr) && (mam_pp_ptr->who != m_idx)) {
+        if (is_pet(&floor_ptr->m_list[mam_pp_ptr->who]) && !player_bold(player_ptr, m_ptr->target_y, m_ptr->target_x)) {
+            set_target(m_ptr, floor_ptr->m_list[mam_pp_ptr->who].fy, floor_ptr->m_list[mam_pp_ptr->who].fx);
         }
     }
 
