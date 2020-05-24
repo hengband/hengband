@@ -1367,7 +1367,8 @@ void bell(void)
 
 
 /*
- * Hack -- Make a (relevant?) sound
+ * todo intをsound_typeに差し替える
+ * @brief 音を鳴らす
  */
 void sound(int val)
 {

@@ -174,12 +174,8 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
         if (((r_ptr->flags1 & (RF1_UNIQUE | RF1_QUESTOR)) || (r_ptr->flags7 & RF7_NAZGUL)) && !player_ptr->phase_out) {
             m_ptr->hp = 1;
         } else {
-            if (!monster_living(m_ptr->r_idx)) {
-                sound(SOUND_N_KILL);
-            } else {
-                sound(SOUND_KILL);
-            }
-
+            sound_type kill_sound = monster_living(m_ptr->r_idx) ? SOUND_KILL : SOUND_N_KILL;
+            sound(kill_sound);
             *dead = TRUE;
             print_monster_dead_by_monster(player_ptr, mam_pp_ptr);
             monster_gain_exp(player_ptr, who, m_ptr->r_idx);
