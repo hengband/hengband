@@ -851,6 +851,7 @@ static int get_haggle(concptr pmt, s32b *poffer, PRICE price, int final)
 
 			msg_print(_("値がおかしいです。", "Invalid response."));
 			msg_print(NULL);
+			continue;
 		}
 
 		s32b i = atol(p);
@@ -1021,6 +1022,8 @@ static bool purchase_haggle(player_type *player_ptr, object_type *o_ptr, s32b *p
 			flag = TRUE;
 			*price = offer;
 		}
+
+		if (flag) continue;
 
 		last_offer = offer;
 		allow_inc = TRUE;
