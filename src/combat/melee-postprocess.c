@@ -33,6 +33,7 @@ typedef struct mam_pp_type {
     bool seen;
     GAME_TEXT m_name[160];
     HIT_POINT dam;
+    bool known; /* Can the player be aware of this attack? */
 } mam_pp_type;
 
 mam_pp_type *initialize_mam_pp_type(player_type *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, HIT_POINT dam)
@@ -41,6 +42,7 @@ mam_pp_type *initialize_mam_pp_type(player_type *player_ptr, mam_pp_type *mam_pp
     mam_pp_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
     mam_pp_ptr->seen = is_seen(mam_pp_ptr->m_ptr);
     mam_pp_ptr->dam = dam;
+    mam_pp_ptr->known = mam_pp_ptr->m_ptr->cdis <= MAX_SIGHT;
     return mam_pp_ptr;
 }
 
@@ -105,10 +107,6 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     mam_pp_type tmp_mam_pp;
     mam_pp_type *mam_pp_ptr = initialize_mam_pp_type(player_ptr, &tmp_mam_pp, m_idx, dam);
-
-    /* Can the player be aware of this attack? */
-    bool known = (m_ptr->cdis <= MAX_SIGHT);
-
     monster_desc(player_ptr, mam_pp_ptr->m_name, m_ptr, 0);
 
     /* Redraw (later) if needed */
@@ -147,7 +145,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
 
             *dead = TRUE;
 
-            if (known) {
+            if (mam_pp_ptr->known) {
                 monster_desc(player_ptr, mam_pp_ptr->m_name, m_ptr, MD_TRUE_NAME);
                 /* Unseen death by normal attack */
                 if (!mam_pp_ptr->seen) {
