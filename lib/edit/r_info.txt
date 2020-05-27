@@ -22457,7 +22457,7 @@ D:自分を含めた全ての人々に及ぶことを常に望んでいる。
 N:1111:ファイア・コボルド
 E:Fire kobold
 G:k:R
-I:110:11d9:20:35:25
+I:110:12d10:20:35:25
 W:12:1:0:42:800:1116
 B:HIT:FIRE:4d5
 F:DROP_90
@@ -22470,7 +22470,7 @@ D:それは単なる赤いコボルドに見えるが、火の使い方を覚え
 N:1112:アイス・コボルド
 E:Ice kobold
 G:k:W
-I:110:11d9:20:35:25
+I:110:12d10:20:35:25
 W:12:1:0:42:800:1117
 B:HIT:COLD:4d5
 F:DROP_90
@@ -22484,7 +22484,7 @@ D:それは単なる白いコボルドに見えるが、冷気の浴びせ方を
 N:1113:サンダー・コボルド
 E:Electric kobold
 G:k:B
-I:110:11d9:20:35:25
+I:110:12d10:20:35:25
 W:12:1:0:42:800:1118
 B:HIT:ELEC:4d5
 F:DROP_90
@@ -22497,7 +22497,7 @@ D:それは単なる青いコボルドに見えるが、電撃の浴びせ方を
 N:1114:アシッド・コボルド
 E:Acid kobold
 G:k:s
-I:110:11d9:20:35:25
+I:110:12d10:20:35:25
 W:12:1:0:42:800:1119
 B:HIT:ACID:4d5
 F:DROP_90
@@ -22510,7 +22510,7 @@ D:それは単なる黒いコボルドに見えるが、酸の浴びせ方を覚
 N:1115:ポイズン・コボルド
 E:Poison kobold
 G:k:G
-I:115:12d10:25:45:20
+I:115:13d11:25:45:20
 W:14:1:0:55:1100:1120
 B:HIT:POISON:4d6
 F:DROP_90
@@ -22890,7 +22890,7 @@ F:IM_FIRE | IM_COLD | IM_ELEC | IM_ACID | IM_POIS
 F:NO_FEAR | NO_CONF | NO_SLEEP
 S:1_IN_2 | BA_NETH | BA_WATE | BA_DARK | BA_NUKE | BA_CHAO
 S:S_HI_UNDEAD | S_DEMON | DISPEL
-D:$Undoubtedly, it was this man who unleashed the cursed artifacts
+D:$Undoubtedly, it was this man who released the cursed artifacts
 D:$ and called upon the great old ones who came from the outside world
 D:$ and settled in Llouis.
 D:$  It is told that his book, Necronomicon, namely stargate to the abyss,
@@ -22903,13 +22903,13 @@ D:彼の著した深淵の書『ネクロノミコン』は、今もこの地の
 N:1136:スケイヴン・ウォーリア
 E:Skaven warriar
 G:r:u
-I:110:10d10:20:10:25
+I:110:11d11:20:10:25
 W:12:1:0:48:0:0
-B:BITE:HURT:6d2
-B:BITE:HURT:6d2
+B:BITE:HURT:6d3
+B:BITE:HURT:6d3
 F:MALE | WILD_SWAMP | WILD_WASTE
 F:OPEN_DOOR | BASH_DOOR | DROP_CORPSE | DROP_SKELETON
-F:ANIMAL | EVIL | DROP_90
+F:ANIMAL | EVIL | DROP_60 | FRIENDS
 D:$A warrior of skaven mess around with the power of chaos
 D:$ and slaughter their prey from one end.
 D:スケイヴン族の戦士は混沌の力をいたずらに振り回し、
@@ -22936,7 +22936,7 @@ W:16:2:0:220:0:0
 B:BITE:HURT:7d3
 B:CRUSH:HURT:7d3
 F:ANIMAL | EVIL | ESCORT | ESCORTS | MALE | UNIQUE | FORCE_MAXHP
-F:DROP_GOOD | DROP_60 | ONLY_ITEM | DROP_CORPSE | DROP_SKELETON
+F:DROP_GOOD | DROP_60 | DROP_90 | ONLY_ITEM | DROP_CORPSE | DROP_SKELETON
 S:1_IN_8 | CAUSE_2 | MISSILE | SCARE | S_KIN
 D:$It is the head of weasel who works with wisdom.
 D:$  He is obeying not only the weasels,
