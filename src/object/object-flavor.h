@@ -27,4 +27,5 @@ extern const concptr game_inscriptions[];
 #define OD_NO_FLAVOR        0x00000040  /* Allow to hidden flavor */
 #define OD_FORCE_FLAVOR     0x00000080  /* Get un-shuffled flavor name */
 
-
+bool has_lite_flag(BIT_FLAGS *flags);
+bool has_dark_flag(BIT_FLAGS *flags);

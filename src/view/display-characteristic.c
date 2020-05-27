@@ -10,6 +10,7 @@
 #include "player/temporary-resistances.h"
 #include "player/race-resistances.h"
 #include "object/tr-types.h"
+#include "object/object-flavor.h"
 
 typedef struct {
 	BIT_FLAGS player_flags[TR_FLAG_SIZE];
@@ -71,12 +72,12 @@ static bool decide_light_equipment_color(TERM_LEN row, TERM_LEN *col, int flag1,
 {
 	if (flag1 != TR_LITE_1) return FALSE;
 
-	if (HAVE_DARK_FLAG(flags))
+	if (has_dark_flag(flags))
 	{
 		c_put_str(TERM_L_DARK, "+", row, *col);
 		*header_color = TERM_WHITE;
 	}
-	else if (HAVE_LITE_FLAG(flags))
+	else if (has_lite_flag(flags))
 	{
 		c_put_str(TERM_WHITE, "+", row, *col);
 		*header_color = TERM_WHITE;

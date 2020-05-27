@@ -1092,13 +1092,13 @@ static char *get_ability_abbreviation(char *ptr, object_type *o_ptr, bool kanji,
 	}
 
 	/* Remove lite flags when this is a dark lite object */
-	if (HAVE_DARK_FLAG(flgs))
+	if (has_dark_flag(flgs))
 	{
 		if (have_flag(flgs, TR_LITE_1)) remove_flag(flgs, TR_LITE_1);
 		if (have_flag(flgs, TR_LITE_2)) remove_flag(flgs, TR_LITE_2);
 		if (have_flag(flgs, TR_LITE_3)) remove_flag(flgs, TR_LITE_3);
 	}
-	else if (HAVE_LITE_FLAG(flgs))
+	else if (has_lite_flag(flgs))
 	{
 		add_flag(flgs, TR_LITE_1);
 		if (have_flag(flgs, TR_LITE_2)) remove_flag(flgs, TR_LITE_2);
@@ -2880,4 +2880,12 @@ void strip_name(char *buf, KIND_OBJECT_IDX k_idx)
 	*t = '\0';
 }
 
+bool has_lite_flag(BIT_FLAGS *flags)
+{
+	return have_flag(flags, TR_LITE_1) || have_flag(flags, TR_LITE_2) || have_flag(flags, TR_LITE_3);
+}
 
+bool has_dark_flag(BIT_FLAGS *flags)
+{
+	 return have_flag(flags, TR_LITE_M1) || have_flag(flags, TR_LITE_M2) || have_flag(flags, TR_LITE_M3);
+}
