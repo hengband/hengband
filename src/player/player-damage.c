@@ -34,6 +34,7 @@
 #include "io/files-util.h"
 #include "inventory/inventory-damage.h"
 #include "mind/racial-mirror-master.h"
+#include "object/tr-types.h"
 
 /*!
 * @brief 酸攻撃による装備のAC劣化処理 /

@@ -9,6 +9,7 @@
 #include "object/object-boost.h"
 #include "player/player-effects.h"
 #include "core/stuff-handler.h"
+#include "object/tr-types.h"
 
 /*!
  * @brief 修復材料のオブジェクトから修復対象に特性を移植する。
@@ -25,7 +26,7 @@ static void give_one_ability_of_object(object_type *to_ptr, object_type *from_pt
 
     int n = 0;
     int cand[TR_FLAG_MAX];
-    for (int i = 0; i < TR_FLAG_MAX; i++) {
+    for (tr_type i = 0; i < TR_FLAG_MAX; i++) {
         switch (i) {
         case TR_IGNORE_ACID:
         case TR_IGNORE_ELEC:

@@ -32,6 +32,7 @@
 #include "cmd-smith.h"
 #include "combat/snipe.h"
 #include "view/display-main-window.h"
+#include "object/tr-types.h"
 
 #if defined(MACH_O_CARBON)
 #ifdef verify

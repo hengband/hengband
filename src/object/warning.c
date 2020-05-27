@@ -20,6 +20,7 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "player/player-races-table.h"
 #include "combat/monster-attack-types.h"
+#include "object/tr-types.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /

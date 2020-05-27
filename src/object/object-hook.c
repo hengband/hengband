@@ -12,6 +12,7 @@
 #include "object/object-kind.h"
 #include "view/display-main-window.h"
 #include "player/player-races-table.h"
+#include "object/tr-types.h"
 
 /*!
 * @brief 対象のアイテムが矢やクロスボウの矢の材料になるかを返す。/

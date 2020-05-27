@@ -13,6 +13,7 @@
 #include "floor/floor-town.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
+#include "object/tr-types.h"
 
 static concptr inven_res_label = _(
 	"                               酸電火冷毒光闇破轟獄因沌劣 盲怖乱痺透命感消復浮",

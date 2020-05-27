@@ -27,6 +27,7 @@
 #include "object/object-kind.h"
 #include "floor/floor-town.h"
 #include "io/files-util.h"
+#include "object/tr-types.h"
 
  /*
   * The spoiler file being created
@@ -491,7 +492,7 @@ static grouper group_artifact[] =
  */
 typedef struct flag_desc
 {
-	const int flag;
+	const tr_type flag;
 	concptr const desc;
 } flag_desc;
 

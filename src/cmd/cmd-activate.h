@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "object/tr-types.h"
+
 extern void do_cmd_activate(player_type *user_ptr);
 extern void exe_activate(player_type *user_ptr, INVENTORY_IDX item);
 extern bool activate_artifact(player_type *user_ptr, object_type *o_ptr);
@@ -19,7 +21,7 @@ typedef struct {
 extern const activation_type activation_info[];
 
 typedef struct {
-	int flag;
+	tr_type flag;
 	int type;
 	concptr name;
 } dragonbreath_type;

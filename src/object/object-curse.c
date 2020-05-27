@@ -3,6 +3,7 @@
 
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
+#include "object/tr-types.h"
 
 /*!
  * @brief アイテムに付加される可能性のある呪いを指定する。

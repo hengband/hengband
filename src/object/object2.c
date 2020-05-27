@@ -44,6 +44,7 @@
 #include "monster/monster-race-hook.h"
 #include "object/object-ego.h"
 #include "view/display-main-window.h"
+#include "object/tr-types.h"
 
  /*
   * todo この説明長すぎ。何とかしたい

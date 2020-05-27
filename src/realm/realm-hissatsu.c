@@ -29,6 +29,7 @@
 #include "spell/spells-detection.h"
 #include "combat/combat-options-type.h"
 #include "cmd/cmd-attack.h"
+#include "object/tr-types.h"
 
 /*!
 * @brief 剣術の各処理を行う

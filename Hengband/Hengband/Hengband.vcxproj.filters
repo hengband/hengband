@@ -2140,6 +2140,9 @@
     <ClInclude Include="..\..\src\util\util.h">
       <Filter>util</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object\tr-types.h">
+      <Filter>object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

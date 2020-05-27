@@ -25,6 +25,7 @@
 #include "realm/realm.h"
 #include "realm/realm-hex.h"
 #include "realm/realm-song.h"
+#include "object/tr-types.h"
 
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.

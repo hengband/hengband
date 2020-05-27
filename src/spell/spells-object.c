@@ -22,7 +22,7 @@
 #include "autopick/autopick.h"
 #include "io/targeting.h"
 #include "view/display-main-window.h"
-
+#include "object/tr-types.h"
 
 typedef struct
 {

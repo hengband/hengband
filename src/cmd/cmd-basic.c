@@ -56,6 +56,7 @@
 #include "spell/spells3.h"
 #include "core/output-updater.h"
 #include "cmd/cmd-attack.h"
+#include "object/tr-types.h"
 
 /*!
  * @brief フロア脱出時に出戻りが不可能だった場合に警告を加える処理

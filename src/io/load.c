@@ -88,6 +88,7 @@
 #include "birth/quick-start.h"
 #include "player/player-races-table.h"
 #include "market/bounty.h"
+#include "object/tr-types.h"
 
  /*
   * Maximum number of tries for selection of a proper quest monster

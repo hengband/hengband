@@ -28,6 +28,7 @@
 #include "monster/monster-race.h"
 #include "object/object-ego.h"
 #include "locale/japanese.h"
+#include "object/tr-types.h"
 
  /*!
   * @brief アイテムの価値記述テーブル

@@ -67,6 +67,7 @@
 #include "combat/monster-attack-types.h"
 
 #include "main/init.h"
+#include "object/tr-types.h"
 
 dungeon_grid letter[255];
 

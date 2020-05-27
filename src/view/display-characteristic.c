@@ -9,6 +9,7 @@
 #include "player/permanent-resistances.h"
 #include "player/temporary-resistances.h"
 #include "player/race-resistances.h"
+#include "object/tr-types.h"
 
 typedef struct {
 	BIT_FLAGS player_flags[TR_FLAG_SIZE];

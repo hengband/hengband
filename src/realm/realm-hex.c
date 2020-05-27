@@ -43,6 +43,7 @@
 #include "spell/process-effect.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
+#include "object/tr-types.h"
 
 #define MAX_KEEP 4 /*!<呪術の最大詠唱数 */
 

@@ -13,6 +13,7 @@
 #include "player/player-effects.h"
 #include "object/object-kind.h"
 #include "player/player-races-table.h"
+#include "object/tr-types.h"
 
 static bool is_specific_curse(BIT_FLAGS flag)
 {
@@ -37,7 +38,7 @@ static void choise_cursed_item(BIT_FLAGS flag, object_type *o_ptr, int *choices,
     if (!is_specific_curse(flag))
         return;
 
-    u32b cf = 0L;
+    tr_type cf = 0;
     BIT_FLAGS flgs[TR_FLAG_SIZE];
     object_flags(o_ptr, flgs);
     switch (flag) {
@@ -87,7 +88,7 @@ static void choise_cursed_item(BIT_FLAGS flag, object_type *o_ptr, int *choices,
         break;
     }
 
-    if (!have_flag(flgs, cf))
+    if (!have_flag(flgs, (long)cf))
         return;
 
     choices[*number] = item_num;
