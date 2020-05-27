@@ -1640,7 +1640,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         if (target_ptr->riding && damage) {
             char m_steed_name[MAX_NLEN];
             monster_desc(target_ptr, m_steed_name, &floor_ptr->m_list[target_ptr->riding], 0);
-            if (rakuba(target_ptr, (damage > 200) ? 200 : damage, FALSE)) {
+            if (process_fall_off_horse(target_ptr, (damage > 200) ? 200 : damage, FALSE)) {
                 msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);
             }
         }

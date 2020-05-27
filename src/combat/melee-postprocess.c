@@ -221,7 +221,7 @@ static void fall_off_horse_by_melee(player_type *player_ptr, mam_pp_type *mam_pp
     if (mam_pp_ptr->m_ptr->hp > mam_pp_ptr->m_ptr->maxhp / 3)
         mam_pp_ptr->dam = (mam_pp_ptr->dam + 1) / 2;
 
-    if (rakuba(player_ptr, (mam_pp_ptr->dam > 200) ? 200 : mam_pp_ptr->dam, FALSE))
+    if (process_fall_off_horse(player_ptr, (mam_pp_ptr->dam > 200) ? 200 : mam_pp_ptr->dam, FALSE))
         msg_format(_("%^sに振り落とされた！", "You have been thrown off from %s!"), mam_pp_ptr->m_name);
 }
 
@@ -241,7 +241,6 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
 {
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
     mam_pp_type tmp_mam_pp;
     mam_pp_type *mam_pp_ptr = initialize_mam_pp_type(player_ptr, &tmp_mam_pp, m_idx, dam, dead, fear, note, who);
     monster_desc(player_ptr, mam_pp_ptr->m_name, m_ptr, 0);
@@ -251,10 +250,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
     if (player_ptr->riding && (m_idx == player_ptr->riding))
         disturb(player_ptr, TRUE, TRUE);
 
-    if (process_invulnerability(mam_pp_ptr))
-        return;
-
-    if (process_all_resistances(mam_pp_ptr))
+    if (process_invulnerability(mam_pp_ptr) || process_all_resistances(mam_pp_ptr))
         return;
 
     m_ptr->hp -= dam;
@@ -270,5 +266,5 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
         }
     }
 
-    fall_off_horse();
+    fall_off_horse_by_melee(player_ptr, mam_pp_ptr);
 }
