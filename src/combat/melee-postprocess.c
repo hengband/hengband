@@ -170,6 +170,21 @@ static bool check_monster_hp(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
 }
 
 /*!
+ * @brief 死亡等で恐慌状態をキャンセルする
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
+ * @return なし
+ */
+static void cancel_fear_by_pain(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
+{
+    if (!MON_MONFEAR(mam_pp_ptr->m_ptr) || (mam_pp_ptr->dam <= 0)
+        || !set_monster_monfear(player_ptr, mam_pp_ptr->m_idx, MON_MONFEAR(mam_pp_ptr->m_ptr) - randint1(mam_pp_ptr->dam / 4)))
+        return;
+
+    *(mam_pp_ptr->fear) = FALSE;
+}
+
+/*!
  * @biref HP残量などに応じてモンスターを恐慌状態にする
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
@@ -228,16 +243,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
         return;
 
     *dead = FALSE;
-
-    /* Mega-Hack -- Pain cancels fear */
-    if (MON_MONFEAR(m_ptr) && (dam > 0)) {
-        /* Cure fear */
-        if (set_monster_monfear(player_ptr, m_idx, MON_MONFEAR(m_ptr) - randint1(dam / 4))) {
-            /* No more fear */
-            (*fear) = FALSE;
-        }
-    }
-
+    cancel_fear_by_pain(player_ptr, mam_pp_ptr);
     make_monster_fear(player_ptr, mam_pp_ptr);
     if ((dam > 0) && !is_pet(m_ptr) && !is_friendly(m_ptr) && (mam_pp_ptr->who != m_idx)) {
         if (is_pet(&floor_ptr->m_list[mam_pp_ptr->who]) && !player_bold(player_ptr, m_ptr->target_y, m_ptr->target_x)) {
