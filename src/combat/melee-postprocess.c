@@ -207,6 +207,25 @@ static void make_monster_fear(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
 }
 
 /*!
+ * @brief モンスター同士の乱闘による落馬処理
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
+ * @return なし
+ */
+static void fall_off_horse_by_melee(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
+{
+    if (!player_ptr->riding || (player_ptr->riding != mam_pp_ptr->m_idx) || (mam_pp_ptr->dam <= 0))
+        return;
+
+    monster_desc(player_ptr, mam_pp_ptr->m_name, mam_pp_ptr->m_ptr, 0);
+    if (mam_pp_ptr->m_ptr->hp > mam_pp_ptr->m_ptr->maxhp / 3)
+        mam_pp_ptr->dam = (mam_pp_ptr->dam + 1) / 2;
+
+    if (rakuba(player_ptr, (mam_pp_ptr->dam > 200) ? 200 : mam_pp_ptr->dam, FALSE))
+        msg_format(_("%^sに振り落とされた！", "You have been thrown off from %s!"), mam_pp_ptr->m_name);
+}
+
+/*!
  * todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり
  * @brief モンスターが敵モンスターに行う打撃処理 /
  * Hack, based on mon_take_hit... perhaps all monster attacks on other monsters should use this?
@@ -251,13 +270,5 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
         }
     }
 
-    if (player_ptr->riding && (player_ptr->riding == m_idx) && (dam > 0)) {
-        monster_desc(player_ptr, mam_pp_ptr->m_name, m_ptr, 0);
-
-        if (m_ptr->hp > m_ptr->maxhp / 3)
-            dam = (dam + 1) / 2;
-        if (rakuba(player_ptr, (dam > 200) ? 200 : dam, FALSE)) {
-            msg_format(_("%^sに振り落とされた！", "You have been thrown off from %s!"), mam_pp_ptr->m_name);
-        }
-    }
+    fall_off_horse();
 }
