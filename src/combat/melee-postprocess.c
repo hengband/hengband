@@ -170,6 +170,28 @@ static bool check_monster_hp(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
 }
 
 /*!
+ * @biref HP残量などに応じてモンスターを恐慌状態にする
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param mam_pp_ptr 標的モンスター構造体への参照ポインタ
+ * @return なし
+ */
+static void make_monster_fear(player_type *player_ptr, mam_pp_type *mam_pp_ptr)
+{
+    monster_race *r_ptr = &r_info[mam_pp_ptr->m_ptr->r_idx];
+    if (MON_MONFEAR(mam_pp_ptr->m_ptr) || ((r_ptr->flags3 & RF3_NO_FEAR) == 0))
+        return;
+
+    int percentage = (100L * mam_pp_ptr->m_ptr->hp) / mam_pp_ptr->m_ptr->maxhp;
+    bool can_make_fear = ((percentage <= 10) && (randint0(10) < percentage)) || ((mam_pp_ptr->dam >= mam_pp_ptr->m_ptr->hp) && (randint0(100) < 80));
+    if (!can_make_fear)
+        return;
+
+    *(mam_pp_ptr->fear) = TRUE;
+    (void)set_monster_monfear(
+        player_ptr, mam_pp_ptr->m_idx, (randint1(10) + (((mam_pp_ptr->dam >= mam_pp_ptr->m_ptr->hp) && (percentage > 7)) ? 20 : ((11 - percentage) * 5))));
+}
+
+/*!
  * todo 打撃が当たった時の後処理 (爆発持ちのモンスターを爆発させる等)なので、関数名を変更する必要あり
  * @brief モンスターが敵モンスターに行う打撃処理 /
  * Hack, based on mon_take_hit... perhaps all monster attacks on other monsters should use this?
@@ -216,24 +238,7 @@ void mon_take_hit_mon(player_type *player_ptr, MONSTER_IDX m_idx, HIT_POINT dam,
         }
     }
 
-    /* Sometimes a monster gets scared by damage */
-    if (!MON_MONFEAR(m_ptr) && !(r_ptr->flags3 & RF3_NO_FEAR)) {
-        /* Percentage of fully healthy */
-        int percentage = (100L * m_ptr->hp) / m_ptr->maxhp;
-
-        /*
-         * Run (sometimes) if at 10% or less of max hit points,
-         * or (usually) when hit for half its current hit points
-         */
-        if (((percentage <= 10) && (randint0(10) < percentage)) || ((dam >= m_ptr->hp) && (randint0(100) < 80))) {
-            /* Hack -- note fear */
-            (*fear) = TRUE;
-
-            /* Hack -- Add some timed fear */
-            (void)set_monster_monfear(player_ptr, m_idx, (randint1(10) + (((dam >= m_ptr->hp) && (percentage > 7)) ? 20 : ((11 - percentage) * 5))));
-        }
-    }
-
+    make_monster_fear(player_ptr, mam_pp_ptr);
     if ((dam > 0) && !is_pet(m_ptr) && !is_friendly(m_ptr) && (mam_pp_ptr->who != m_idx)) {
         if (is_pet(&floor_ptr->m_list[mam_pp_ptr->who]) && !player_bold(player_ptr, m_ptr->target_y, m_ptr->target_x)) {
             set_target(m_ptr, floor_ptr->m_list[mam_pp_ptr->who].fy, floor_ptr->m_list[mam_pp_ptr->who].fx);
