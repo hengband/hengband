@@ -2330,7 +2330,7 @@ void monster_death(player_type *player_ptr, MONSTER_IDX m_idx, bool drop_item)
 		}
 	}
 	
-	if (m_idx == player_ptr->riding && rakuba(player_ptr, -1, FALSE))
+	if (m_idx == player_ptr->riding && process_fall_off_horse(player_ptr, -1, FALSE))
 	{
 			msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
 	}

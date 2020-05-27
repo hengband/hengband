@@ -911,7 +911,7 @@ void do_cmd_pet(player_type *creature_ptr)
 * @param force TRUEならば強制的に落馬する
 * @return 実際に落馬したらTRUEを返す
 */
-bool rakuba(player_type *creature_ptr, HIT_POINT dam, bool force)
+bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force)
 {
 	DIRECTION i;
 	POSITION y, x, oy, ox, sy = 0, sx = 0;

@@ -24,7 +24,7 @@ static void escape_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, 
 	if (turn_flags_ptr->is_riding_mon)
 	{
 		msg_format(_("%sはあなたの束縛から脱出した。", "%^s succeeded to escape from your restriction!"), m_name);
-		if (rakuba(target_ptr, -1, FALSE))
+		if (process_fall_off_horse(target_ptr, -1, FALSE))
 		{
 			msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
 		}
@@ -42,7 +42,7 @@ static void escape_monster(player_type *target_ptr, turn_flags *turn_flags_ptr, 
 		msg_format(_("%^sが消え去った。", "%^s disappears."), m_name);
 	}
 
-	if (turn_flags_ptr->is_riding_mon && rakuba(target_ptr, -1, FALSE))
+	if (turn_flags_ptr->is_riding_mon && process_fall_off_horse(target_ptr, -1, FALSE))
 	{
 		msg_print(_("地面に落とされた。", "You have fallen from the pet you were riding."));
 	}

@@ -793,14 +793,14 @@ bool project(player_type* caster_ptr, MONSTER_IDX who, POSITION rad, POSITION y,
         monster_desc(caster_ptr, m_name,
             &caster_ptr->current_floor_ptr->m_list[caster_ptr->riding], 0);
         if (rakubadam_m > 0) {
-            if (rakuba(caster_ptr, rakubadam_m, FALSE)) {
+            if (process_fall_off_horse(caster_ptr, rakubadam_m, FALSE)) {
                 msg_format(_("%^sに振り落とされた！", "%^s has thrown you off!"),
                     m_name);
             }
         }
 
         if (caster_ptr->riding && rakubadam_p > 0) {
-            if (rakuba(caster_ptr, rakubadam_p, FALSE)) {
+            if (process_fall_off_horse(caster_ptr, rakubadam_p, FALSE)) {
                 msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."),
                     m_name);
             }

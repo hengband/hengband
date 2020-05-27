@@ -190,7 +190,7 @@ void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool i
 	monster_race *r_ptr = &r_info[m_ptr->r_idx];
 	if (!is_riding_mon || ((r_ptr->flags7 & RF7_RIDING) != 0)) return;
 
-	if (rakuba(target_ptr, 0, TRUE))
+	if (process_fall_off_horse(target_ptr, 0, TRUE))
 	{
 #ifdef JP
 		msg_print("地面に落とされた。");

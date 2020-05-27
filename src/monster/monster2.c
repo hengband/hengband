@@ -2064,7 +2064,7 @@ void choose_new_monster(player_type *player_ptr, MONSTER_IDX m_idx, bool born, M
 		monster_desc(player_ptr, m_name, m_ptr, 0);
 		msg_format(_("突然%sが変身した。", "Suddenly, %s transforms!"), old_m_name);
 		if (!(r_ptr->flags7 & RF7_RIDING))
-			if (rakuba(player_ptr, 0, TRUE)) msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
+			if (process_fall_off_horse(player_ptr, 0, TRUE)) msg_format(_("地面に落とされた。", "You have fallen from %s."), m_name);
 	}
 
 	m_ptr->mspeed = get_mspeed(player_ptr, r_ptr);
