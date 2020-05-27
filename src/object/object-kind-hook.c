@@ -2,6 +2,11 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 
+/*
+ * Special "sval" limit -- first "good" magic/prayer book
+ */
+static const int SV_BOOK_MIN_GOOD = 2;
+
 /*!
  * @brief オブジェクトがクロークかどうかを判定する /
  * Hack -- determine if a template is Cloak
