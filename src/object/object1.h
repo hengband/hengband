@@ -670,9 +670,3 @@ extern s32b flag_cost(object_type *o_ptr, int plusses);
 #define SV_FOOD_WAYBREAD                37
 #define SV_FOOD_PINT_OF_ALE             38
 #define SV_FOOD_PINT_OF_WINE            39
-
-
-#define SV_ROD_MIN_DIRECTION    12 /*!< この値以降の小項目IDを持ったロッドは使用時にターゲットを要求する / Special "sval" limit -- first "aimed" rod */
-
-#define SV_CHEST_MIN_LARGE      4  /*!< この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */
-#define SV_CHEST_KANDUME        50 /*!< 箱アイテムの小項目ID: おもちゃのカンヅメ */

@@ -67,6 +67,7 @@
 #include "spell/spells3.h"
 #include "player/player-class.h"
 #include "object/object-kind.h"
+#include "object/sv-other-types.h"
 #include "io/targeting.h"
 
 /*!

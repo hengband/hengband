@@ -11,6 +11,7 @@
 #include "object/object-kind.h"
 #include "object/object-hook.h"
 #include "object/special-object-flags.h"
+#include "object/sv-other-types.h"
 #include "spell/spells-type.h"
 #include "spell/spells-status.h"
 #include "spell/spells-floor.h"
