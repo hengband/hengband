@@ -25,6 +25,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/special-object-flags.h"
+#include "object/sv-lite-types.h"
 #include "object/sv-other-types.h"
 #include "object/sv-ring-types.h"
 #include "object/sv-weapon-types.h"

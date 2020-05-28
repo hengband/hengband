@@ -113,18 +113,6 @@ extern void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs);
 extern void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds);
 extern void torch_lost_fuel(object_type *o_ptr);
 
-/* The sval codes for TV_LITE */
-#define SV_LITE_TORCH                    0
-#define SV_LITE_LANTERN                  1
-#define SV_LITE_FEANOR                   2
-#define SV_LITE_EDISON                   3
-#define SV_LITE_GALADRIEL                4
-#define SV_LITE_ELENDIL                  5
-#define SV_LITE_JUDGE                    6
-#define SV_LITE_LORE                     7
-#define SV_LITE_PALANTIR                 8
-#define SV_LITE_FLY_STONE                9
-
 /* The "sval" codes for TV_AMULET */
 #define SV_AMULET_DOOM                   0
 #define SV_AMULET_TELEPORT               1

@@ -208,10 +208,11 @@ hengband_SOURCES = \
 	object/old-ego-extra-values.h object/special-object-flags.h \
 	object/object-mark-types.h object/object-util.h \
 	object/item-apply-magic.h \
-	object/sv-bow-types.h object/sv-digging-types.h object/sv-other-types.h \
+	object/sv-bow-types.h object/sv-digging-types.h \
 	object/sv-weapon-types.h object/sv-protector-types.h object/sv-armor-types.h \
-	object/sv-potion-types.h object/sv-ring-types.h \
-	object/item-feeling.h object/item-use-flags.h \
+	object/sv-lite-types.h object/sv-potion-types.h object/sv-ring-types.h \
+	 object/sv-other-types.h \
+	 object/item-feeling.h object/item-use-flags.h \
 	\
 	inventory/simple-appraiser.c inventory/simple-appraiser.h \
 	inventory/inventory-curse.c inventory/inventory-curse.h \

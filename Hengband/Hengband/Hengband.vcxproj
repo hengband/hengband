@@ -511,6 +511,7 @@
     <ClInclude Include="..\..\src\object\sv-armor-types.h" />
     <ClInclude Include="..\..\src\object\sv-bow-types.h" />
     <ClInclude Include="..\..\src\object\sv-digging-types.h" />
+    <ClInclude Include="..\..\src\object\sv-lite-types.h" />
     <ClInclude Include="..\..\src\object\sv-other-types.h" />
     <ClInclude Include="..\..\src\object\sv-potion-types.h" />
     <ClInclude Include="..\..\src\object\sv-protector-types.h" />

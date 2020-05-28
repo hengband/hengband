@@ -37,6 +37,7 @@
 #include "dungeon/quest.h"
 #include "object/artifact.h"
 #include "object/special-object-flags.h"
+#include "object/sv-lite-types.h"
 #include "object/trc-types.h"
 #include "player/avatar.h"
 #include "player/player-status.h"
