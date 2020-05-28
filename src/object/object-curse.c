@@ -5,6 +5,9 @@
 #include "object/object-hook.h"
 #include "object/tr-types.h"
 
+#define TRC_SPECIAL_MASK (TRC_TY_CURSE | TRC_AGGRAVATE)
+#define TRC_HEAVY_MASK (TRC_TY_CURSE | TRC_AGGRAVATE | TRC_DRAIN_EXP | TRC_ADD_H_CURSE | TRC_CALL_DEMON | TRC_CALL_DRAGON | TRC_CALL_UNDEAD | TRC_TELEPORT)
+
 /*!
  * @brief アイテムに付加される可能性のある呪いを指定する。
  * @param power 呪いの段階

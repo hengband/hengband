@@ -16,6 +16,10 @@
 #include "player/player-races-table.h"
 #include "object/tr-types.h"
 
+#define TRC_P_FLAG_MASK \
+    (TRC_TELEPORT_SELF | TRC_CHAINSWORD | TRC_TY_CURSE | TRC_DRAIN_EXP | TRC_ADD_L_CURSE | TRC_ADD_H_CURSE | TRC_CALL_ANIMAL | TRC_CALL_DEMON \
+        | TRC_CALL_DRAGON | TRC_COWARDICE | TRC_TELEPORT | TRC_DRAIN_HP | TRC_DRAIN_MANA | TRC_CALL_UNDEAD)
+
 static bool is_specific_curse(BIT_FLAGS flag)
 {
     return (flag == TRC_ADD_L_CURSE) ||
