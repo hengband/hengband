@@ -29,6 +29,7 @@
 #include "io/files-util.h"
 #include "object/object-kind.h"
 #include "object/object-ego.h"
+#include "object/sv-ring-types.h"
 #include "io/targeting.h"
 #include "world/world.h"
 #include "effect/spells-effect-util.h"

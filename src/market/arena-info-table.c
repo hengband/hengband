@@ -1,5 +1,6 @@
 ﻿#include "system/angband.h"
 #include "arena-info-table.h"
+#include "object/sv-ring-types.h"
 
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル

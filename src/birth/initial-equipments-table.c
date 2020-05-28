@@ -2,6 +2,7 @@
 #include "birth/initial-equipments-table.h"
 #include "object/sv-armor-types.h"
 #include "object/sv-bow-types.h"
+#include "object/sv-ring-types.h"
 #include "object/sv-weapon-types.h"
 
 /*!

@@ -11,6 +11,7 @@
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
 #include "object/special-object-flags.h"
+#include "object/sv-ring-types.h"
 #include "player/player-move.h"
 #include "world/world.h"
 #include "player/player-effects.h"

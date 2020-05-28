@@ -10,6 +10,7 @@
 #include "core/show-file.h"
 #include "object/object-flavor.h"
 #include "object/special-object-flags.h"
+#include "object/sv-ring-types.h"
 #include "store/store-util.h"
 #include "floor/floor-town.h"
 #include "object/object-hook.h"

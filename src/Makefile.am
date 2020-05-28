@@ -210,6 +210,7 @@ hengband_SOURCES = \
 	object/item-apply-magic.h \
 	object/sv-bow-types.h object/sv-digging-types.h object/sv-other-types.h \
 	object/sv-weapon-types.h object/sv-protector-types.h object/sv-armor-types.h \
+	object/sv-ring-types.h \
 	object/item-feeling.h object/item-use-flags.h \
 	\
 	inventory/simple-appraiser.c inventory/simple-appraiser.h \
