@@ -62,6 +62,7 @@
 #include "spell/process-effect.h"
 #include "combat/combat-options-type.h"
 #include "cmd/cmd-attack.h"
+#include "object/special-object-flags.h"
 
 /*!
  * @brief 視界内モンスターに魔法効果を与える / Apply a "project()" directly to all viewable monsters

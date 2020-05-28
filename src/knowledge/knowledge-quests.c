@@ -11,6 +11,7 @@
 #include "system/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
 #include "object/artifact.h"
 #include "object/object-flavor.h"
+#include "object/special-object-flags.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/dungeon-file.h"
 #include "core/sort.h"

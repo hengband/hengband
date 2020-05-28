@@ -9,6 +9,7 @@
 #include "monster/monster-status.h"
 #include "dungeon/quest.h"
 #include "object/object-hook.h"
+#include "object/special-object-flags.h"
 #include "player/player-move.h"
 #include "world/world.h"
 #include "player/player-effects.h"

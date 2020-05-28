@@ -11,6 +11,7 @@
 #include "inventory/player-inventory.h"
 #include "object/object-kind.h"
 #include "object/object-hook.h"
+#include "object/special-object-flags.h"
 #include "cmd-basic.h"
 #include "floor/floor.h"
 #include "io/targeting.h"

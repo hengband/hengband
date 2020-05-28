@@ -3,6 +3,7 @@
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
+#include "object/special-object-flags.h"
 #include "market/building-util.h"
 #include "inventory/player-inventory.h"
 #include "spell/spells3.h"

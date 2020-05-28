@@ -28,6 +28,7 @@
 #include "floor/floor-town.h"
 #include "io/files-util.h"
 #include "object/tr-types.h"
+#include "object/special-object-flags.h"
 
  /*
   * The spoiler file being created

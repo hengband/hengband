@@ -62,6 +62,7 @@
 #include "locale/japanese.h"
 #include "view/display-main-window.h"
 #include "floor/wild.h"
+#include "object/special-object-flags.h"
 
 #define MIN_STOCK 12
 

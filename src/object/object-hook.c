@@ -10,6 +10,7 @@
 #include "dungeon/quest.h"
 #include "world/world.h"
 #include "object/object-kind.h"
+#include "object/special-object-flags.h"
 #include "view/display-main-window.h"
 #include "player/player-races-table.h"
 #include "object/tr-types.h"

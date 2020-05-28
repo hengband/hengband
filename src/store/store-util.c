@@ -3,6 +3,7 @@
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/tr-types.h"
+#include "object/special-object-flags.h"
 
 int cur_store_num = 0;
 store_type *st_ptr = NULL;

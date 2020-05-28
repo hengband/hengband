@@ -9,6 +9,7 @@
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
+#include "object/special-object-flags.h"
 
 #include "io/write-diary.h"
 #include "cmd/cmd-basic.h"

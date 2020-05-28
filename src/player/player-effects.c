@@ -33,6 +33,7 @@
 #include "realm/realm-hex.h"
 #include "object/object-ego.h"
 #include "object/object-hook.h"
+#include "object/special-object-flags.h"
 #include "floor/wild.h"
 #include "spell/spells-floor.h"
 #include "player/player-status.h"

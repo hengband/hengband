@@ -12,6 +12,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
+#include "object/special-object-flags.h"
 #include "core/show-file.h"
 #include "cmd/object-group-table.h"
 #include "world/world.h"

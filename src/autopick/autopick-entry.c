@@ -9,6 +9,7 @@
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
+#include "object/special-object-flags.h"
 #include "inventory/player-inventory.h"
 
 #ifdef JP

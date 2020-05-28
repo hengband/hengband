@@ -4,6 +4,7 @@
 #include "object/object-flavor.h"
 #include "object/object-kind.h"
 #include "object/artifact.h"
+#include "object/special-object-flags.h"
 #include "market/building-util.h"
 #include "inventory/player-inventory.h"
 #include "object/object-boost.h"

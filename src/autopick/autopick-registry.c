@@ -14,6 +14,7 @@
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
+#include "object/special-object-flags.h"
 #include "util/util.h"
 #include "io/files-util.h"
 

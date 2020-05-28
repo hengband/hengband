@@ -11,6 +11,7 @@
 #include "autopick/autopick-matcher.h"
 #include "object/object-kind.h"
 #include "object/object-hook.h"
+#include "object/special-object-flags.h"
 
 /*
  * A function for Auto-picker/destroyer

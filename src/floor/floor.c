@@ -12,6 +12,7 @@
 #include "object/object.h"
 #include "object/artifact.h"
 #include "object/object-kind.h"
+#include "object/special-object-flags.h"
 #include "grid/trap.h"
 #include "effect/spells-effect-util.h"
 #include "effect/effect-characteristics.h"

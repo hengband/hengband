@@ -42,6 +42,7 @@
 #include "object/object-kind.h"
 #include "object/object-broken.h"
 #include "object/object-flavor.h"
+#include "object/special-object-flags.h"
 #include "shoot.h"
 #include "combat/snipe.h"
 

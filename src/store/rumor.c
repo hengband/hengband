@@ -6,6 +6,7 @@
 #include "io/files-util.h"
 #include "object/object-flavor.h"
 #include "object/artifact.h"
+#include "object/special-object-flags.h"
 #include "dungeon/dungeon.h"
 #include "monster/monster-race.h"
 #include "floor/floor-town.h"

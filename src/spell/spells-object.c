@@ -12,6 +12,7 @@
 #include "object/object-hook.h"
 #include "object/object-flavor.h"
 #include "object/object-ego.h"
+#include "object/special-object-flags.h"
 #include "player/player-damage.h"
 #include "player/player-status.h"
 #include "player/avatar.h"

@@ -34,6 +34,7 @@
 #include "object/object-curse.h"
 #include "object/object-kind-hook.h"
 #include "object/artifact.h"
+#include "object/special-object-flags.h"
 #include "grid/feature.h"
 #include "player/player-status.h"
 #include "player/player-move.h"

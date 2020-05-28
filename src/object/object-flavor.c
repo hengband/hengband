@@ -21,6 +21,7 @@
 #include "object/object-kind.h"
 #include "object/object-hook.h"
 #include "object/object-flavor.h"
+#include "object/special-object-flags.h"
 #include "grid/trap.h"
 #include "combat/snipe.h"
 #include "io/files-util.h"

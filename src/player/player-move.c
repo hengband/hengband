@@ -163,6 +163,7 @@
 #include "spell/spells-floor.h"
 #include "grid/feature.h"
 #include "object/warning.h"
+#include "object/special-object-flags.h"
 #include "monster/monster.h"
 #include "mspell/monster-spell.h"
 #include "monster/monster-status.h"

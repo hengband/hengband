@@ -15,6 +15,7 @@
 #include "object/object-kind.h"
 #include "combat/attack-power-table.h"
 #include "object/tr-types.h"
+#include "object/special-object-flags.h"
 
 static TERM_COLOR likert_color = TERM_WHITE;
 

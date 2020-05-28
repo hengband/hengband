@@ -10,6 +10,7 @@
 #include "object/object-curse.h"
 #include "object/artifact.h"
 #include "object/object-hook.h"
+#include "object/special-object-flags.h"
 #include "player/player-effects.h"
 #include "object/object-kind.h"
 #include "player/player-races-table.h"
