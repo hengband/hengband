@@ -125,37 +125,17 @@ extern s32b flag_cost(object_type *o_ptr, int plusses);
 	  (k_info[(T)->k_idx].x_attr) : (r_info[(T)->pval].x_attr)))
 
 
- /*** Object "sval" codes ***/
-
- /* Any subvalue */
-#define SV_ANY 					255
-
-/* The "sval" codes for TV_FIGURINE */
-#define SV_FIGURINE_NORMAL		0
-
-#define SV_CAPTURE_NONE		0
-
-/* The "sval" codes for TV_STATUE */
-#define SV_WOODEN_STATUE		0
-#define SV_CLAY_STATUE			1
-#define SV_STONE_STATUE			2
-#define SV_IRON_STATUE			3
-#define SV_COPPER_STATUE		4
-#define SV_SILVER_STATUE		5
-#define SV_GOLDEN_STATUE		6
-#define SV_IVORY_STATUE			7
-#define SV_MITHRIL_STATUE		8
-#define SV_ORNATE_STATUE		9
-#define SV_PHOTO			50
+/*** Object "sval" codes ***/
+#define SV_ANY 255
+#define SV_PHOTO 50
 
 /* The "sval" codes for TV_CORPSE */
-#define SV_SKELETON 			0
-#define SV_CORPSE			1
+#define SV_SKELETON 0
+#define SV_CORPSE 1
 
 /* The "sval" codes for TV_SHOT/TV_ARROW/TV_BOLT */
-#define SV_AMMO_LIGHT                    0	/* pebbles */
-#define SV_AMMO_NORMAL                   1	/* shots, arrows, bolts */
-#define SV_AMMO_HEAVY                    2	/* seeker arrows and bolts, mithril shots */
+#define SV_AMMO_LIGHT 0	/* pebbles */
+#define SV_AMMO_NORMAL 1	/* shots, arrows, bolts */
 
 /* The "sval" codes for TV_BOW (note information in "sval") */
 #define SV_SLING                         2	/* (x2) */

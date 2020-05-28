@@ -66,6 +66,8 @@
 #include "cmd/cmd-attack.h"
 #include "object/special-object-flags.h"
 
+#define SV_WOODEN_STATUE 0
+
 /*!
  * @brief 視界内モンスターに魔法効果を与える / Apply a "project()" directly to all viewable monsters
  * @param typ 属性効果
