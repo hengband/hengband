@@ -545,9 +545,6 @@ extern void torch_lost_fuel(object_type *o_ptr);
 #define SV_POTION_TSUYOSHI              65
 #define SV_POTION_POLYMORPH             66
 
-/* The "sval" codes for TV_FLASK */
-#define SV_FLASK_OIL                   0
-
 /* The "sval" codes for TV_FOOD */
 #define SV_FOOD_POISON                   0
 #define SV_FOOD_BLINDNESS                1
