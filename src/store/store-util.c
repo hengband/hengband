@@ -6,6 +6,7 @@
 #include "object/object-kind.h"
 #include "object/tr-types.h"
 #include "object/special-object-flags.h"
+#include "object/sv-potion-types.h"
 #include "object/sv-weapon-types.h"
 
 int cur_store_num = 0;

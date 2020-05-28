@@ -4,6 +4,7 @@
 #include "spell/spells-type.h"
 #include "spell/process-effect.h"
 #include "effect/effect-characteristics.h"
+#include "object/sv-potion-types.h"
 #include "object/tr-types.h"
 
 /*!
