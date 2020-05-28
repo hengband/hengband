@@ -109,7 +109,7 @@ struct object_type
 #define TRC_DRAIN_HP            0x00080000L
 #define TRC_DRAIN_MANA          0x00100000L
 #define TRC_CALL_UNDEAD         0x00200000L
-#define MAX_CURSE 18
+
 #define TRC_TELEPORT_SELF       0x00000001L
 #define TRC_CHAINSWORD          0x00000002L
 	BIT_FLAGS curse_flags;        /* Flags for curse */
