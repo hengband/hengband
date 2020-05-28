@@ -10,6 +10,7 @@
 #include "core/show-file.h"
 #include "object/object-flavor.h"
 #include "object/object-kind.h"
+#include "object/sv-bow-types.h"
 #include "player/player-skill.h"
 #include "spell/technic-info-table.h"
 #include "spell/spells-util.h"

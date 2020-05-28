@@ -8,6 +8,7 @@
 #include "object/object-kind.h"
 #include "object/object-hook.h"
 #include "object/special-object-flags.h"
+#include "object/sv-bow-types.h"
 #include "shoot.h"
 #include "term/gameterm.h"
 #include "player/player-races-table.h"

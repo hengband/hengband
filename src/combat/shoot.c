@@ -27,6 +27,7 @@
 #include "io/targeting.h"
 #include "effect/spells-effect-util.h"
 #include "spell/process-effect.h"
+#include "object/sv-bow-types.h"
 #include "object/tr-types.h"
 
 /*!

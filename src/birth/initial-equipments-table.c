@@ -1,5 +1,6 @@
 ﻿#include "system/angband.h"
 #include "birth/initial-equipments-table.h"
+#include "object/sv-bow-types.h"
 
 /*!
  * プレイヤーの職業毎の初期装備テーブル。/\n

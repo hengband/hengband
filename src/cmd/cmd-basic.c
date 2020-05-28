@@ -44,6 +44,7 @@
 #include "object/object-broken.h"
 #include "object/object-flavor.h"
 #include "object/special-object-flags.h"
+#include "object/sv-bow-types.h"
 #include "shoot.h"
 #include "combat/snipe.h"
 

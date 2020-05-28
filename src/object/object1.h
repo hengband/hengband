@@ -113,16 +113,6 @@ extern concptr essence_name[];
 
 extern s32b flag_cost(object_type *o_ptr, int plusses);
 
-/* The "sval" codes for TV_BOW (note information in "sval") */
-#define SV_SLING                         2	/* (x2) */
-#define SV_SHORT_BOW                    12	/* (x2) */
-#define SV_LONG_BOW                     13	/* (x3) */
-#define SV_LIGHT_XBOW                   23	/* (x3) */
-#define SV_HEAVY_XBOW                   24	/* (x4) */
-#define SV_CRIMSON                      50	/* (x0) */
-#define SV_HARP                         51	/* (x0) */
-#define SV_NAMAKE_BOW                   63	/* (x3) */
-
 /* The "sval" codes for TV_DIGGING */
 #define SV_SHOVEL                        1
 #define SV_GNOMISH_SHOVEL                2
