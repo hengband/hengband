@@ -62,6 +62,7 @@
 #include "spell/spells3.h"
 #include "spell/spells-detection.h"
 #include "player/player-races-table.h"
+#include "object/item-use-flags.h"
 #include "object/trc-types.h"
 
 #define NUM_O_SET 8

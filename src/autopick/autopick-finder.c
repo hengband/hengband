@@ -10,6 +10,7 @@
 #include "autopick/autopick-dirty-flags.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-matcher.h"
+#include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "term/gameterm.h"
 #include "inventory/player-inventory.h"

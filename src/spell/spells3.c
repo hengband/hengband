@@ -25,6 +25,7 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor-town.h"
+#include "object/item-use-flags.h"
 #include "object/object-boost.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

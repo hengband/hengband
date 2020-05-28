@@ -23,6 +23,7 @@
 #include "inventory/player-inventory.h"
 #include "realm/realm-hex.h"
 #include "spell/spells-floor.h"
+#include "object/item-use-flags.h"
 #include "object/object-broken.h"
 #include "cmd-basic.h"
 #include "floor/floor.h"

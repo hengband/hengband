@@ -1,5 +1,6 @@
 ﻿#include "system/angband.h"
 #include "market/building-enchanter.h"
+#include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "spell/spells-object.h"
 #include "market/building-util.h"

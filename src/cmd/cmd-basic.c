@@ -39,6 +39,7 @@
 #include "player/player-effects.h"
 #include "player/player-personalities-table.h"
 #include "inventory/player-inventory.h"
+#include "object/item-use-flags.h"
 #include "object/object-kind.h"
 #include "object/object-broken.h"
 #include "object/object-flavor.h"

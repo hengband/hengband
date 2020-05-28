@@ -10,6 +10,7 @@
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 
+#include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/artifact.h"

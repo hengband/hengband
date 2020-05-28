@@ -13,6 +13,7 @@
 #include "main/sound-definitions-table.h"
 #include "monster/monster-status.h"
 #include "object/artifact.h"
+#include "object/item-use-flags.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

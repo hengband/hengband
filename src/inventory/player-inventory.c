@@ -4,6 +4,7 @@
 #include "inventory/player-inventory.h"
 
 #include "term/gameterm.h"
+#include "object/item-use-flags.h"
 #include "object/object1.h"
 #include "object/object-kind.h"
 #include "object/object-flavor.h"

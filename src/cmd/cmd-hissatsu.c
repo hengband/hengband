@@ -20,6 +20,7 @@
 #include "player/player-effects.h"
 #include "inventory/player-inventory.h"
 #include "spell/technic-info-table.h"
+#include "object/item-use-flags.h"
 
 #include "cmd-basic.h"
 #include "cmd-spell.h"

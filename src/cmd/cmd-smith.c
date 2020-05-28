@@ -2,6 +2,7 @@
 #include "util/util.h"
 #include "term/gameterm.h"
 
+#include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-ego.h"

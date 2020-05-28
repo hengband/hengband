@@ -1,5 +1,6 @@
 ﻿#include "system/angband.h"
 #include "market/building-recharger.h"
+#include "object/item-use-flags.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-flavor.h"

@@ -501,6 +501,7 @@
     <ClInclude Include="..\..\src\autopick\autopick-util.h" />
     <ClInclude Include="..\..\src\autopick\autopick.h" />
     <ClInclude Include="..\..\src\object\death-scythe.h" />
+    <ClInclude Include="..\..\src\object\item-use-flags.h" />
     <ClInclude Include="..\..\src\object\object-mark-types.h" />
     <ClInclude Include="..\..\src\object\object-util.h" />
     <ClInclude Include="..\..\src\object\old-ego-extra-values.h" />

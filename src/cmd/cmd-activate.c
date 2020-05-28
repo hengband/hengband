@@ -15,6 +15,7 @@
 #include "object/object-hook.h"
 #include "core/sort.h"
 #include "object/artifact.h"
+#include "object/item-use-flags.h"
 #include "player/avatar.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-status.h"

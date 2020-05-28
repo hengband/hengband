@@ -12,6 +12,7 @@
 #include "market/building-util.h"
 #include "core/stuff-handler.h"
 #include "object/tr-types.h"
+#include "object/item-use-flags.h"
 
 /*!
  * @brief 攻撃時スレイによるダメージ期待値修正計算 / critical happens at i / 10000

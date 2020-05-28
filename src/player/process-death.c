@@ -10,6 +10,7 @@
 #include "world/world.h"
 #include "floor/floor-town.h"
 #include "inventory/player-inventory.h"
+#include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "store/store-util.h"
 #include "store/store.h"

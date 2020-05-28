@@ -7,6 +7,7 @@
 #include "player/player-effects.h"
 #include "player/player-class.h"
 #include "inventory/player-inventory.h"
+#include "object/item-use-flags.h"
 #include "object/object-kind.h"
 #include "object/object-hook.h"
 #include "object/special-object-flags.h"

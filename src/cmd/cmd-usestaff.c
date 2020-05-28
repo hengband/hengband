@@ -15,6 +15,7 @@
 #include "object/object-hook.h"
 #include "cmd-basic.h"
 #include "floor/floor.h"
+#include "object/item-use-flags.h"
 #include "object/object-kind.h"
 #include "object/special-object-flags.h"
 #include "view/display-main-window.h"

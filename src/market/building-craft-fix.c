@@ -11,6 +11,7 @@
 #include "player/player-effects.h"
 #include "core/stuff-handler.h"
 #include "object/tr-types.h"
+#include "object/item-use-flags.h"
 
 /*!
  * @brief 修復材料のオブジェクトから修復対象に特性を移植する。

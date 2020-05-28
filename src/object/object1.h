@@ -50,16 +50,6 @@ extern s16b wield_slot(player_type *owner_ptr, object_type *o_ptr);
 
 extern bool check_book_realm(player_type *owner_ptr, const tval_type book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
 
-/*
- * get_item()関数でアイテムの選択を行うフラグ / Bit flags for the "get_item" function
- */
-#define USE_EQUIP 0x01 /*!< アイテム表示/選択範囲: 装備品からの選択を許可する / Allow equip items */
-#define USE_INVEN 0x02 /*!< アイテム表示/選択範囲: 所持品からの選択を許可する /  Allow inven items */
-#define USE_FLOOR 0x04 /*!< アイテム表示/選択範囲: 床下のアイテムからの選択を許可する /  Allow floor items */
-#define USE_FORCE 0x08 /*!< 特殊: wキーで錬気術への切り替えを許可する */
-#define IGNORE_BOTHHAND_SLOT 0x10 /*!< アイテム表示/選択範囲: 両手持ちスロットを選択に含めない */
-#define USE_FULL  0x20 /*!< アイテム表示/選択範囲: 空欄まですべて表示する*/
-
 #define REF_ITEM(P_PTR, FLOOR_PTR, ID) ((ID >= 0 ? &(P_PTR)->inventory_list[ID] : &(FLOOR_PTR)->o_list[0 - item]))
 
 extern int bow_tval_ammo(object_type *o_ptr);
