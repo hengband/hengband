@@ -1,4 +1,7 @@
-﻿
+﻿#pragma once
+
+extern bool (*item_tester_hook)(object_type *o_ptr);
+
 extern bool item_tester_hook_convertible(object_type *o_ptr);
 extern bool item_tester_hook_recharge(object_type *o_ptr);
 extern bool item_tester_hook_orthodox_melee_weapons(object_type *o_ptr);

@@ -33,7 +33,6 @@
 
 #include "object/object-util.h"
 
-extern bool(*item_tester_hook)(object_type *o_ptr);
 extern bool(*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
 /* object1.c */
