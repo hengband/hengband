@@ -113,63 +113,6 @@ extern void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs);
 extern void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds);
 extern void torch_lost_fuel(object_type *o_ptr);
 
-/* The "sval" codes for TV_SOFT_ARMOR */
-#define SV_T_SHIRT                       0
-#define SV_FILTHY_RAG                    1
-#define SV_ROBE                          2
-#define SV_PAPER_ARMOR                   3  /* 4 */
-#define SV_SOFT_LEATHER_ARMOR            4
-#define SV_SOFT_STUDDED_LEATHER          5
-#define SV_HARD_LEATHER_ARMOR            6
-#define SV_HARD_STUDDED_LEATHER          7
-#define SV_RHINO_HIDE_ARMOR              8
-#define SV_CORD_ARMOR                    9  /*  6 */
-#define SV_PADDED_ARMOR                 10  /*  4 */
-#define SV_LEATHER_SCALE_MAIL           11
-#define SV_LEATHER_JACK                 12
-#define SV_KUROSHOUZOKU                 13
-#define SV_STONE_AND_HIDE_ARMOR         15  /* 15 */
-#define SV_ABUNAI_MIZUGI                50
-#define SV_YOIYAMI_ROBE                 60
-#define SV_NAMAKE_ARMOR                 63
-
-/* The "sval" codes for TV_HARD_ARMOR */
-#define SV_RUSTY_CHAIN_MAIL              1  /* 14- */
-#define SV_RING_MAIL                     2  /* 12  */
-#define SV_METAL_SCALE_MAIL              3  /* 13  */
-#define SV_CHAIN_MAIL                    4  /* 14  */
-#define SV_DOUBLE_RING_MAIL              5  /* 15  */
-#define SV_AUGMENTED_CHAIN_MAIL          6  /* 16  */
-#define SV_DOUBLE_CHAIN_MAIL             7  /* 16  */
-#define SV_BAR_CHAIN_MAIL                8  /* 18  */
-#define SV_METAL_BRIGANDINE_ARMOUR       9  /* 19  */
-#define SV_SPLINT_MAIL                  10  /* 19  */
-#define SV_DO_MARU                      11  /* 20  */
-#define SV_PARTIAL_PLATE_ARMOUR         12  /* 22  */
-#define SV_METAL_LAMELLAR_ARMOUR        13  /* 23  */
-#define SV_HARAMAKIDO                   14  /* 17  */
-#define SV_FULL_PLATE_ARMOUR            15  /* 25  */
-#define SV_O_YOROI                      16  /* 24  */
-#define SV_RIBBED_PLATE_ARMOUR          18  /* 28  */
-#define SV_MITHRIL_CHAIN_MAIL           20  /* 28+ */
-#define SV_MITHRIL_PLATE_MAIL           25  /* 35+ */
-#define SV_ADAMANTITE_PLATE_MAIL        30  /* 40+ */
-
-/* The "sval" codes for TV_DRAG_ARMOR */
-#define SV_DRAGON_BLACK                  1
-#define SV_DRAGON_BLUE                   2
-#define SV_DRAGON_WHITE                  3
-#define SV_DRAGON_RED                    4
-#define SV_DRAGON_GREEN                  5
-#define SV_DRAGON_MULTIHUED              6
-#define SV_DRAGON_SHINING               10
-#define SV_DRAGON_LAW                   12
-#define SV_DRAGON_BRONZE                14
-#define SV_DRAGON_GOLD                  16
-#define SV_DRAGON_CHAOS                 18
-#define SV_DRAGON_BALANCE               20
-#define SV_DRAGON_POWER                 30
-
 /* The sval codes for TV_LITE */
 #define SV_LITE_TORCH                    0
 #define SV_LITE_LANTERN                  1

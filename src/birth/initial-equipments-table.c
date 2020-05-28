@@ -1,5 +1,6 @@
 ﻿#include "system/angband.h"
 #include "birth/initial-equipments-table.h"
+#include "object/sv-armor-types.h"
 #include "object/sv-bow-types.h"
 #include "object/sv-weapon-types.h"
 

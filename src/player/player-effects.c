@@ -35,6 +35,7 @@
 #include "object/object-ego.h"
 #include "object/object-hook.h"
 #include "object/special-object-flags.h"
+#include "object/sv-armor-types.h"
 #include "object/sv-protector-types.h"
 #include "object/sv-weapon-types.h"
 #include "floor/wild.h"
