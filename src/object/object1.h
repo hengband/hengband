@@ -50,6 +50,7 @@ extern s16b wield_slot(player_type *owner_ptr, object_type *o_ptr);
 extern bool check_book_realm(player_type *owner_ptr, const tval_type book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
 extern object_type *ref_item(player_type *owner_ptr, INVENTORY_IDX item);
 extern int bow_tval_ammo(object_type *o_ptr);
+extern TERM_COLOR object_attr(object_type *o_ptr);
 
 /*!
 * todo ここに置くとコンパイルは通る (このファイルの冒頭やobject2.cでincludeするとコンパイルエラー)、しかし圧倒的にダメなので要調整
@@ -111,19 +112,6 @@ extern void torch_lost_fuel(object_type *o_ptr);
 extern concptr essence_name[];
 
 extern s32b flag_cost(object_type *o_ptr, int plusses);
-
-/*
- * Return the "attr" for a given item.
- * Use "flavor" if available.
- * Default to user definitions.
- */
-#define object_attr(T) \
-	((k_info[(T)->k_idx].flavor) ? \
-	 (k_info[k_info[(T)->k_idx].flavor].x_attr) : \
-	 ((!(T)->k_idx || ((T)->tval != TV_CORPSE) || ((T)->sval != SV_CORPSE) || \
-	   (k_info[(T)->k_idx].x_attr != TERM_DARK)) ? \
-	  (k_info[(T)->k_idx].x_attr) : (r_info[(T)->pval].x_attr)))
-
 
 /*** Object "sval" codes ***/
 #define SV_ANY 255

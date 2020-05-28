@@ -1444,3 +1444,16 @@ object_type *ref_item(player_type *owner_ptr, INVENTORY_IDX item)
     floor_type *floor_ptr = owner_ptr->current_floor_ptr;
 	return item >= 0 ? &owner_ptr->inventory_list[item] : &(floor_ptr->o_list[0 - item]);
 }
+
+/*
+ * Return the "attr" for a given item.
+ * Use "flavor" if available.
+ * Default to user definitions.
+ */
+TERM_COLOR object_attr(object_type *o_ptr)
+{
+    return((k_info[o_ptr->k_idx].flavor) ? (k_info[k_info[o_ptr->k_idx].flavor].x_attr)
+                                   : ((!o_ptr->k_idx || (o_ptr->tval != TV_CORPSE) || (o_ptr->sval != SV_CORPSE) || (k_info[o_ptr->k_idx].x_attr != TERM_DARK))
+                                           ? (k_info[o_ptr->k_idx].x_attr)
+                                           : (r_info[o_ptr->pval].x_attr)));
+}
