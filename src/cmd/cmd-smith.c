@@ -14,6 +14,7 @@
 #include "view/display-main-window.h"
 #include "inventory/player-inventory.h"
 #include "object/tr-types.h"
+#include "object/trc-types.h"
 
 /*!
  * エッセンス情報の構造体 / A structure for smithing

@@ -34,6 +34,7 @@
 #include "combat/snipe.h"
 #include "view/display-main-window.h"
 #include "object/tr-types.h"
+#include "object/trc-types.h"
 
 #if defined(MACH_O_CARBON)
 #ifdef verify

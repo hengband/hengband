@@ -10,6 +10,7 @@
 #include "core/hp-mp-regenerator.h"
 #include "cmd/cmd-pet.h"
 #include "player/player-races-table.h"
+#include "object/trc-types.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとにプレイヤーのHPとMPの増減処理を行う。

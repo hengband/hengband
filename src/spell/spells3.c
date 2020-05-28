@@ -70,6 +70,7 @@
 #include "mind/racial-force-trainer.h"
 #include "cmd/cmd-attack.h"
 #include "object/tr-types.h"
+#include "object/trc-types.h"
 #include "object/special-object-flags.h"
 
 /*! テレポート先探索の試行数 / Maximum number of tries for teleporting */

@@ -15,6 +15,7 @@
 #include "object/object-kind.h"
 #include "player/player-races-table.h"
 #include "object/tr-types.h"
+#include "object/trc-types.h"
 
 #define TRC_P_FLAG_MASK \
     (TRC_TELEPORT_SELF | TRC_CHAINSWORD | TRC_TY_CURSE | TRC_DRAIN_EXP | TRC_ADD_L_CURSE | TRC_ADD_H_CURSE | TRC_CALL_ANIMAL | TRC_CALL_DEMON \

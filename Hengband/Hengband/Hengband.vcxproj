@@ -505,6 +505,7 @@
     <ClInclude Include="..\..\src\object\old-ego-extra-values.h" />
     <ClInclude Include="..\..\src\object\special-object-flags.h" />
     <ClInclude Include="..\..\src\object\tr-types.h" />
+    <ClInclude Include="..\..\src\object\trc-types.h" />
     <ClInclude Include="..\..\src\object\tval-types.h" />
     <ClInclude Include="..\..\src\player\avatar.h" />
     <ClInclude Include="..\..\src\birth\character-builder.h" />

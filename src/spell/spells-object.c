@@ -24,6 +24,7 @@
 #include "io/targeting.h"
 #include "view/display-main-window.h"
 #include "object/tr-types.h"
+#include "object/trc-types.h"
 
 typedef struct
 {

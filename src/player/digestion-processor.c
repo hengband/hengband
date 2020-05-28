@@ -6,6 +6,7 @@
 #include "player/player-effects.h"
 #include "monster/creature.h"
 #include "player/player-move.h"
+#include "object/trc-types.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとにプレイヤーの腹を減らす

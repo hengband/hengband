@@ -90,6 +90,7 @@
 #include "market/bounty.h"
 #include "object/tr-types.h"
 #include "object/object-mark-types.h"
+#include "object/trc-types.h"
 #include "object/old-ego-extra-values.h" // TODO v1.5.0以前のセーブファイルをロードする処理を分離する.
 
  /*

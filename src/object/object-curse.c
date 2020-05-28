@@ -4,6 +4,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/tr-types.h"
+#include "object/trc-types.h"
 
 #define MAX_CURSE 18
 #define TRC_SPECIAL_MASK (TRC_TY_CURSE | TRC_AGGRAVATE)

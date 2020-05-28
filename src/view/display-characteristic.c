@@ -11,6 +11,7 @@
 #include "player/race-resistances.h"
 #include "object/tr-types.h"
 #include "object/object-flavor.h"
+#include "object/trc-types.h"
 
 typedef struct {
 	BIT_FLAGS player_flags[TR_FLAG_SIZE];

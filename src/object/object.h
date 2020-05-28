@@ -86,32 +86,6 @@ struct object_type
 	byte feeling;          /* Game generated inscription number (eg, pseudo-id) */
 
 	BIT_FLAGS art_flags[TR_FLAG_SIZE];        /* Extra Flags for ego and artifacts */
-
-#define TRC_CURSED              0x00000001L
-#define TRC_HEAVY_CURSE         0x00000002L
-#define TRC_PERMA_CURSE         0x00000004L
-#define TRC_XXX1                0x00000008L
-#define TRC_TY_CURSE            0x00000010L
-#define TRC_AGGRAVATE           0x00000020L
-#define TRC_DRAIN_EXP           0x00000040L
-#define TRC_SLOW_REGEN          0x00000080L
-#define TRC_ADD_L_CURSE         0x00000100L
-#define TRC_ADD_H_CURSE         0x00000200L
-#define TRC_CALL_ANIMAL         0x00000400L
-#define TRC_CALL_DEMON          0x00000800L
-#define TRC_CALL_DRAGON         0x00001000L
-#define TRC_COWARDICE           0x00002000L
-#define TRC_TELEPORT            0x00004000L
-#define TRC_LOW_MELEE           0x00008000L
-#define TRC_LOW_AC              0x00010000L
-#define TRC_LOW_MAGIC           0x00020000L
-#define TRC_FAST_DIGEST         0x00040000L
-#define TRC_DRAIN_HP            0x00080000L
-#define TRC_DRAIN_MANA          0x00100000L
-#define TRC_CALL_UNDEAD         0x00200000L
-
-#define TRC_TELEPORT_SELF       0x00000001L
-#define TRC_CHAINSWORD          0x00000002L
 	BIT_FLAGS curse_flags;        /* Flags for curse */
 
 	OBJECT_IDX next_o_idx;	/* Next object in stack (if any) */

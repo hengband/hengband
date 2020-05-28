@@ -36,6 +36,7 @@
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"
 #include "monster/monster-process.h"
+#include "object/trc-types.h"
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);

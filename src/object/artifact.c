@@ -36,6 +36,7 @@
 #include "player/player-personalities-table.h"
 #include "world/world.h"
 #include "object/tr-types.h"
+#include "object/trc-types.h"
 
  /*
   * The artifact arrays

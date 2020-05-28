@@ -47,6 +47,7 @@
 #include "object/object-ego.h"
 #include "view/display-main-window.h"
 #include "object/tr-types.h"
+#include "object/trc-types.h"
 
  /*
   * todo この説明長すぎ。何とかしたい
