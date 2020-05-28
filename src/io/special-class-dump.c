@@ -29,7 +29,7 @@ static void dump_magic_eater(player_type *creature_ptr, FILE *fff)
 
 	for (int ext = 0; ext < 3; ext++)
 	{
-		OBJECT_TYPE_VALUE tval = 0;
+		tval_type tval = 0;
 		switch (ext)
 		{
 		case 0:

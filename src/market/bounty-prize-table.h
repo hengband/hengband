@@ -7,7 +7,7 @@
  * 賞金首の報酬テーブル / List of prize object
  */
 typedef struct bounty_prize_type {
-    OBJECT_TYPE_VALUE tval; /*!< ベースアイテムのメイン種別ID */
+    tval_type tval; /*!< ベースアイテムのメイン種別ID */
     OBJECT_SUBTYPE_VALUE sval; /*!< ベースアイテムのサブ種別ID */
 } bounty_prize_type;
 

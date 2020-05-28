@@ -166,7 +166,7 @@ void player_outfit(player_type *creature_ptr)
         q_ptr->pval = (PARAMETER_VALUE)rand_range(25, 30);
         add_outfit(creature_ptr, q_ptr);
     } else if (creature_ptr->pclass == CLASS_SORCERER) {
-        OBJECT_TYPE_VALUE book_tval;
+        tval_type book_tval;
         for (book_tval = TV_LIFE_BOOK; book_tval <= TV_LIFE_BOOK + MAX_MAGIC - 1; book_tval++) {
             object_prep(q_ptr, lookup_kind(book_tval, 0));
             q_ptr->number = 1;
@@ -219,7 +219,7 @@ void player_outfit(player_type *creature_ptr)
     }
 
     for (int i = 0; i < 3; i++) {
-        OBJECT_TYPE_VALUE tv = player_init[creature_ptr->pclass][i][0];
+        tval_type tv = player_init[creature_ptr->pclass][i][0];
         OBJECT_SUBTYPE_VALUE sv = player_init[creature_ptr->pclass][i][1];
         if ((creature_ptr->prace == RACE_ANDROID) && ((tv == TV_SOFT_ARMOR) || (tv == TV_HARD_ARMOR)))
             continue;

@@ -219,7 +219,7 @@ static void prt_binary(BIT_FLAGS flags, int row, int col)
  * @param col 表示行
  * @return なし
  */
-static void prt_alloc(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
+static void prt_alloc(tval_type tval, OBJECT_SUBTYPE_VALUE sval, TERM_LEN row, TERM_LEN col)
 {
 	u32b rarity[K_MAX_DEPTH];
 	(void)C_WIPE(rarity, K_MAX_DEPTH, u32b);
@@ -704,7 +704,7 @@ static KIND_OBJECT_IDX wiz_create_itemtype(void)
 	KIND_OBJECT_IDX i;
 	int num, max_num;
 	TERM_LEN col, row;
-	OBJECT_TYPE_VALUE tval;
+	tval_type tval;
 
 	concptr tval_desc;
 	char ch;

@@ -15,7 +15,7 @@
 
 bool select_ring_slot;
 
-void prepare_label_string(player_type *creature_ptr, char *label, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval);
+void prepare_label_string(player_type *creature_ptr, char *label, BIT_FLAGS mode, tval_type tval);
 
 /*!
  * @brief プレイヤーの所持/装備オブジェクトIDが指輪枠かを返す /
@@ -120,7 +120,7 @@ static concptr mention_use(player_type *owner_ptr, int i)
  * Choice window "shadow" of the "show_equip()" function
  * @return なし
  */
-void display_equipment(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
+void display_equipment(player_type *owner_ptr, tval_type tval)
 {
 	if (!owner_ptr || !owner_ptr->inventory_list) return;
 
@@ -227,7 +227,7 @@ void toggle_inventory_equipment(player_type *owner_ptr)
  * @param i 選択アイテムID
  * @return 正規のIDならばTRUEを返す。
  */
-bool get_item_okay(player_type *owner_ptr, OBJECT_IDX i, OBJECT_TYPE_VALUE item_tester_tval)
+bool get_item_okay(player_type *owner_ptr, OBJECT_IDX i, tval_type item_tester_tval)
 {
 	/* Illegal items */
 	if ((i < 0) || (i >= INVEN_TOTAL)) return FALSE;
@@ -249,7 +249,7 @@ bool get_item_okay(player_type *owner_ptr, OBJECT_IDX i, OBJECT_TYPE_VALUE item_
  * @return アイテムを拾えるならばTRUEを返す。
  * @details assuming mode = (USE_EQUIP | USE_INVEN | USE_FLOOR).
  */
-bool can_get_item(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
+bool can_get_item(player_type *owner_ptr, tval_type tval)
 {
 	for (int j = 0; j < INVEN_TOTAL; j++)
 		if (item_tester_okay(owner_ptr, &owner_ptr->inventory_list[j], tval))
@@ -369,7 +369,7 @@ static bool get_tag_floor(floor_type *floor_ptr, COMMAND_CODE *cp, char tag, FLO
  * Also, the tag "@xn" will work as well, where "n" is a any tag-char,\n
  * and "x" is the "current" command_cmd code.\n
  */
-static bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+static bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAGS mode, tval_type tval)
 {
 	/* Extract index from mode */
 	COMMAND_CODE start, end;
@@ -476,7 +476,7 @@ static bool get_tag(player_type *owner_ptr, COMMAND_CODE *cp, char tag, BIT_FLAG
  * @param mode 所持品リストか装備品リストかの切り替え
  * @return なし
  */
-void prepare_label_string(player_type *owner_ptr, char *label, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+void prepare_label_string(player_type *owner_ptr, char *label, BIT_FLAGS mode, tval_type tval)
 {
 	concptr alphabet_chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	int  offset = (mode == USE_EQUIP) ? INVEN_RARM : 0;
@@ -544,7 +544,7 @@ static void prepare_label_string_floor(floor_type *floor_ptr, char *label, FLOOR
  * @details
  * Hack -- do not display "trailing" empty slots
  */
-COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+COMMAND_CODE show_inventory(player_type *owner_ptr, int target_item, BIT_FLAGS mode, tval_type tval)
 {
 	COMMAND_CODE i;
 	int k, l, z = 0;
@@ -839,7 +839,7 @@ static bool get_item_allow(player_type *owner_ptr, INVENTORY_IDX item)
  * We always erase the prompt when we are done, leaving a blank line,\n
  * or a warning message, if appropriate, if no items are available.\n
  */
-bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, BIT_FLAGS mode, tval_type tval)
 {
 	OBJECT_IDX this_o_idx, next_o_idx = 0;
 
@@ -1552,7 +1552,7 @@ bool get_item(player_type *owner_ptr, OBJECT_IDX *cp, concptr pmt, concptr str, 
 /*
  * Choose an item and get auto-picker entry from it.
  */
-object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, OBJECT_TYPE_VALUE tval)
+object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, concptr s, BIT_FLAGS option, tval_type tval)
 {
 	OBJECT_IDX item;
 	if (!get_item(owner_ptr, &item, q, s, option, tval)) return NULL;
@@ -1578,7 +1578,7 @@ object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, c
  *		mode & 0x02 -- Marked items only
  *		mode & 0x04 -- Stop after first
  */
-ITEM_NUMBER scan_floor(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, OBJECT_TYPE_VALUE item_tester_tval)
+ITEM_NUMBER scan_floor(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, POSITION x, BIT_FLAGS mode, tval_type item_tester_tval)
 {
 	/* Sanity */
 	floor_type *floor_ptr = owner_ptr->current_floor_ptr;
@@ -1623,7 +1623,7 @@ ITEM_NUMBER scan_floor(player_type *owner_ptr, OBJECT_IDX *items, POSITION y, PO
  * @return 選択したアイテムの添え字
  * @details
  */
-COMMAND_CODE show_floor(player_type *owner_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, OBJECT_TYPE_VALUE item_tester_tval)
+COMMAND_CODE show_floor(player_type *owner_ptr, int target_item, POSITION y, POSITION x, TERM_LEN *min_width, tval_type item_tester_tval)
 {
 	COMMAND_CODE i, m;
 	int j, k, l;
@@ -1753,7 +1753,7 @@ COMMAND_CODE show_floor(player_type *owner_ptr, int target_item, POSITION y, POS
  * @param mode オプションフラグ
  * @return プレイヤーによりアイテムが選択されたならTRUEを返す。/
  */
-bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+bool get_item_floor(player_type *owner_ptr, COMMAND_CODE *cp, concptr pmt, concptr str, BIT_FLAGS mode, tval_type tval)
 {
 	char n1 = ' ', n2 = ' ', which = ' ';
 
@@ -3013,7 +3013,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
  * Choice window "shadow" of the "show_inven()" function
  * @return なし
  */
-void display_inventory(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
+void display_inventory(player_type *owner_ptr, tval_type tval)
 {
 	register int i, n, z = 0;
 	object_type *o_ptr;
@@ -3080,7 +3080,7 @@ void display_inventory(player_type *owner_ptr, OBJECT_TYPE_VALUE tval)
  * @param target_item アイテムの選択処理を行うか否か。
  * @return 選択したアイテムのタグ
  */
-COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS mode, OBJECT_TYPE_VALUE tval)
+COMMAND_CODE show_equipment(player_type *owner_ptr, int target_item, BIT_FLAGS mode, tval_type tval)
 {
 	COMMAND_CODE i;
 	int j, k, l;

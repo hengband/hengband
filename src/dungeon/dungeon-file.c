@@ -1783,7 +1783,7 @@ errr parse_k_info(char *buf, header *head)
 		if (3 != sscanf(buf + 2, "%d:%d:%d",
 			&tval, &sval, &pval)) return 1;
 
-		k_ptr->tval = (OBJECT_TYPE_VALUE)tval;
+		k_ptr->tval = (tval_type)tval;
 		k_ptr->sval = (OBJECT_SUBTYPE_VALUE)sval;
 		k_ptr->pval = (PARAMETER_VALUE)pval;
 	}
@@ -1964,7 +1964,7 @@ errr parse_a_info(char *buf, header *head)
 		if (3 != sscanf(buf + 2, "%d:%d:%d",
 			&tval, &sval, &pval)) return 1;
 
-		a_ptr->tval = (OBJECT_TYPE_VALUE)tval;
+		a_ptr->tval = (tval_type)tval;
 		a_ptr->sval = (OBJECT_SUBTYPE_VALUE)sval;
 		a_ptr->pval = (PARAMETER_VALUE)pval;
 	}

@@ -1224,7 +1224,7 @@ void object_absorb(object_type *o_ptr, object_type *j_ptr)
  * @param sval 検索したいベースアイテムのsval
  * @return なし
  */
-KIND_OBJECT_IDX lookup_kind(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval)
+KIND_OBJECT_IDX lookup_kind(tval_type tval, OBJECT_SUBTYPE_VALUE sval)
 {
 	int num = 0;
 	KIND_OBJECT_IDX bk = 0;

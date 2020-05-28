@@ -26,7 +26,7 @@
 
 typedef struct
 {
-	OBJECT_TYPE_VALUE tval;
+	tval_type tval;
 	OBJECT_SUBTYPE_VALUE sval;
 	PERCENTAGE prob;
 	byte flag;
@@ -464,7 +464,7 @@ void acquire_chaos_weapon(player_type *creature_ptr)
 {
 	object_type forge;
 	object_type *q_ptr = &forge;
-	OBJECT_TYPE_VALUE dummy = TV_SWORD;
+	tval_type dummy = TV_SWORD;
 	OBJECT_SUBTYPE_VALUE dummy2;
 	switch (randint1(creature_ptr->lev))
 	{

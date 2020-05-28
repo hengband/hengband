@@ -16,7 +16,7 @@ struct artifact_type
 	STR_OFFSET name;			/*!< アーティファクト名(headerオフセット参照) / Name (offset) */
 	STR_OFFSET text;			/*!< アーティファクト解説(headerオフセット参照) / Text (offset) */
 
-	OBJECT_TYPE_VALUE tval;		/*!< ベースアイテム大項目ID / Artifact type */
+	tval_type tval;		/*!< ベースアイテム大項目ID / Artifact type */
 	OBJECT_SUBTYPE_VALUE sval;	/*!< ベースアイテム小項目ID / Artifact sub type */
 
 	PARAMETER_VALUE pval;	/*!< pval修正値 / Artifact extra info */

@@ -601,7 +601,7 @@ void do_cmd_browse(player_type *caster_ptr)
 	object_type *o_ptr;
 
 	concptr q, s;
-	OBJECT_TYPE_VALUE tval = 0;
+	tval_type tval = 0;
 
 	/* Warriors are illiterate */
 	if (!(caster_ptr->realm1 || caster_ptr->realm2) && (caster_ptr->pclass != CLASS_SORCERER) && (caster_ptr->pclass != CLASS_RED_MAGE))
@@ -767,7 +767,7 @@ void do_cmd_study(player_type *caster_ptr)
 	concptr p = spell_category_name(mp_ptr->spell_book);
 	object_type *o_ptr;
 	concptr q, s;
-	OBJECT_TYPE_VALUE tval = 0;
+	tval_type tval = 0;
 
 
 	if (!caster_ptr->realm1)

@@ -58,7 +58,7 @@ static void print_flag(int tr, BIT_FLAGS *flags, FILE *fff)
  * @param tval アイテム主分類番号
  * @return 特殊なアイテムならTRUE
  */
-static bool determine_spcial_item_type(object_type *o_ptr, OBJECT_TYPE_VALUE tval)
+static bool determine_spcial_item_type(object_type *o_ptr, tval_type tval)
 {
 	bool is_special_item_type = (object_is_wearable(o_ptr) && object_is_ego(o_ptr))
 		|| ((tval == TV_AMULET) && (o_ptr->sval == SV_AMULET_RESISTANCE))
@@ -79,7 +79,7 @@ static bool determine_spcial_item_type(object_type *o_ptr, OBJECT_TYPE_VALUE tva
  * @param tval アイテム主分類番号
  * @return 必要があるならTRUE
  */
-static bool check_item_knowledge(object_type *o_ptr, OBJECT_TYPE_VALUE tval)
+static bool check_item_knowledge(object_type *o_ptr, tval_type tval)
 {
 	if (o_ptr->k_idx == 0) return FALSE;
 	if (o_ptr->tval != tval) return FALSE;
@@ -222,7 +222,7 @@ static void reset_label_number(int *label_number, FILE *fff)
  * @param fff ファイルへの参照ポインタ
  * @return なし
  */
-static void show_wearing_equipment_resistances(player_type *creature_ptr, OBJECT_TYPE_VALUE tval, int *label_number, FILE *fff)
+static void show_wearing_equipment_resistances(player_type *creature_ptr, tval_type tval, int *label_number, FILE *fff)
 {
 	char where[32];
 	strcpy(where, _("装", "E "));
@@ -246,7 +246,7 @@ static void show_wearing_equipment_resistances(player_type *creature_ptr, OBJECT
  * @param fff ファイルへの参照ポインタ
  * @return なし
  */
-static void show_holding_equipment_resistances(player_type *creature_ptr, OBJECT_TYPE_VALUE tval, int *label_number, FILE *fff)
+static void show_holding_equipment_resistances(player_type *creature_ptr, tval_type tval, int *label_number, FILE *fff)
 {
 	char where[32];
 	strcpy(where, _("持", "I "));
@@ -270,7 +270,7 @@ static void show_holding_equipment_resistances(player_type *creature_ptr, OBJECT
  * @param fff ファイルへの参照ポインタ
  * @return なし
  */
-static void show_home_equipment_resistances(player_type *creature_ptr, OBJECT_TYPE_VALUE tval, int *label_number, FILE *fff)
+static void show_home_equipment_resistances(player_type *creature_ptr, tval_type tval, int *label_number, FILE *fff)
 {
 	store_type *store_ptr;
 	store_ptr = &town_info[1].store[STORE_HOME];
@@ -301,7 +301,7 @@ void do_cmd_knowledge_inventory(player_type *creature_ptr)
 
 	fprintf(fff, "%s\n", inven_res_label);
 	int label_number = 0;
-	for (OBJECT_TYPE_VALUE tval = TV_WEARABLE_BEGIN; tval <= TV_WEARABLE_END; tval++)
+	for (tval_type tval = TV_WEARABLE_BEGIN; tval <= TV_WEARABLE_END; tval++)
 	{
 		reset_label_number(&label_number, fff);
 		show_wearing_equipment_resistances(creature_ptr, tval, &label_number, fff);

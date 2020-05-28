@@ -246,7 +246,7 @@ bool detect_objects_magic(player_type* caster_ptr, POSITION range)
     if (d_info[caster_ptr->dungeon_idx].flags1 & DF1_DARKNESS)
         range /= 3;
 
-    OBJECT_TYPE_VALUE tv;
+    tval_type tv;
     bool detect = FALSE;
     for (OBJECT_IDX i = 1; i < caster_ptr->current_floor_ptr->o_max; i++) {
         object_type* o_ptr = &caster_ptr->current_floor_ptr->o_list[i];

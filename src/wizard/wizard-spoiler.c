@@ -76,7 +76,7 @@ static concptr attr_to_text(monster_race *r_ptr)
  */
 typedef struct
 {
-	OBJECT_TYPE_VALUE tval;
+	tval_type tval;
 	concptr name;
 } grouper;
 

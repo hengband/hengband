@@ -866,7 +866,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
 	int use_essence;
 	essence_type *es_ptr;
 	bool able[22] = { 0 };
-	OBJECT_TYPE_VALUE tval = 0;
+	tval_type tval = 0;
 	int menu_line = (use_menu ? 1 : 0);
 
 	for (i = 0; essence_info[i].add_name; i++)

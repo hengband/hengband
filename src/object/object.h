@@ -33,6 +33,8 @@
 #define OBJ_GOLD_LIST   480     /* First "gold" entry */
 #define MAX_GOLD        18      /* Number of "gold" entries */
 
+#include "object/tval-types.h"
+
 typedef struct object_type object_type;
 
 struct object_type
@@ -42,86 +44,7 @@ struct object_type
 	POSITION iy;			/* Y-position on map, or zero */
 	POSITION ix;			/* X-position on map, or zero */
 
-	/*
-	 * The values for the "tval" field of various objects.
-	 *
-	 * This value is the primary means by which items are sorted in the
-	 * player inventory_list, followed by "sval" and "cost".
-	 *
-	 * Note that a "BOW" with tval = 19 and sval S = 10*N+P takes a missile
-	 * weapon with tval = 16+N, and does (xP) damage when so combined.  This
-	 * fact is not actually used in the source, but it kind of interesting.
-	 *
-	 * Note that as of 2.7.8, the "item flags" apply to all items, though
-	 * only armor and weapons and a few other items use any of these flags.
-	 */
-
-#define TV_SKELETON      1      /* Skeletons ('s'), not specified */
-#define TV_BOTTLE        2      /* Empty bottles ('!') */
-#define TV_JUNK          3      /* Sticks, Pottery, etc ('~') */
-#define TV_WHISTLE       4      /* Whistle ('~') */
-#define TV_SPIKE         5      /* Spikes ('~') */
-#define TV_CHEST         7      /* Chests ('&') */
-#define TV_FIGURINE      8      /* Magical figurines */
-#define TV_STATUE        9      /* Statue, what a silly object... */
-#define TV_CORPSE       10      /* Corpses and Skeletons, specific */
-#define TV_CAPTURE      11      /* Monster ball */
-#define TV_NO_AMMO      15      /* Ammo for crimson */
-#define TV_SHOT         16      /* Ammo for slings */
-#define TV_ARROW        17      /* Ammo for bows */
-#define TV_BOLT         18      /* Ammo for x-bows */
-#define TV_BOW          19      /* Slings/Bows/Xbows */
-#define TV_DIGGING      20      /* Shovels/Picks */
-#define TV_HAFTED       21      /* Priest Weapons */
-#define TV_POLEARM      22      /* Axes and Pikes */
-#define TV_SWORD        23      /* Edged Weapons */
-#define TV_BOOTS        30      /* Boots */
-#define TV_GLOVES       31      /* Gloves */
-#define TV_HELM         32      /* Helms */
-#define TV_CROWN        33      /* Crowns */
-#define TV_SHIELD       34      /* Shields */
-#define TV_CLOAK        35      /* Cloaks */
-#define TV_SOFT_ARMOR   36      /* Soft Armor */
-#define TV_HARD_ARMOR   37      /* Hard Armor */
-#define TV_DRAG_ARMOR   38      /* Dragon Scale Mail */
-#define TV_LITE         39      /* Lites (including Specials) */
-#define TV_AMULET       40      /* Amulets (including Specials) */
-#define TV_RING         45      /* Rings (including Specials) */
-#define TV_CARD         50
-#define TV_STAFF        55
-#define TV_WAND         65
-#define TV_ROD          66
-#define TV_PARCHMENT    69
-#define TV_SCROLL       70
-#define TV_POTION       75
-#define TV_FLASK        77
-#define TV_FOOD         80
-#define TV_LIFE_BOOK    90
-#define TV_SORCERY_BOOK 91
-#define TV_NATURE_BOOK  92
-#define TV_CHAOS_BOOK   93
-#define TV_DEATH_BOOK   94
-#define TV_TRUMP_BOOK   95
-#define TV_ARCANE_BOOK  96
-#define TV_CRAFT_BOOK 97
-#define TV_DAEMON_BOOK  98
-#define TV_CRUSADE_BOOK 99
-#define TV_MUSIC_BOOK   105
-#define TV_HISSATSU_BOOK 106
-#define TV_HEX_BOOK     107
-#define TV_GOLD         127     /* Gold can only be picked up by players */
-
-#define TV_EQUIP_BEGIN    TV_SHOT
-#define TV_EQUIP_END      TV_CARD
-#define TV_MISSILE_BEGIN  TV_SHOT
-#define TV_MISSILE_END    TV_BOLT
-#define TV_WEARABLE_BEGIN TV_BOW
-#define TV_WEARABLE_END   TV_CARD
-#define TV_WEAPON_BEGIN   TV_BOW
-#define TV_WEAPON_END     TV_SWORD
-#define TV_ARMOR_BEGIN    TV_BOOTS
-#define TV_ARMOR_END      TV_DRAG_ARMOR
-	OBJECT_TYPE_VALUE tval;			/* Item type (from kind) */
+	tval_type tval; /* Item type (from kind) */
 
 	OBJECT_SUBTYPE_VALUE sval;			/* Item sub-type (from kind) */
 
@@ -252,7 +175,7 @@ extern bool screen_object(player_type *player_ptr, object_type *o_ptr, BIT_FLAGS
 extern char index_to_label(int i);
 extern s16b wield_slot(player_type *owner_ptr, object_type *o_ptr);
 
-extern bool check_book_realm(player_type *owner_ptr, const OBJECT_TYPE_VALUE book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
+extern bool check_book_realm(player_type *owner_ptr, const tval_type book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
 
 /*
  * get_item()関数でアイテムの選択を行うフラグ / Bit flags for the "get_item" function
@@ -309,7 +232,7 @@ extern void reduce_charges(object_type *o_ptr, int amt);
 extern int object_similar_part(object_type *o_ptr, object_type *j_ptr);
 extern bool object_similar(object_type *o_ptr, object_type *j_ptr);
 extern void object_absorb(object_type *o_ptr, object_type *j_ptr);
-extern IDX lookup_kind(OBJECT_TYPE_VALUE tval, OBJECT_SUBTYPE_VALUE sval);
+extern IDX lookup_kind(tval_type tval, OBJECT_SUBTYPE_VALUE sval);
 extern void object_wipe(object_type *o_ptr);
 extern void object_prep(object_type *o_ptr, KIND_OBJECT_IDX k_idx);
 extern void object_copy(object_type *o_ptr, object_type *j_ptr);

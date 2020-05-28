@@ -79,7 +79,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 	OBJECT_SUBTYPE_VALUE ext = 0;
 	char choice;
 	bool flag, request_list;
-	OBJECT_TYPE_VALUE tval = 0;
+	tval_type tval = 0;
 	int             ask = TRUE;
 	OBJECT_SUBTYPE_VALUE i = 0;
 	char            out_val[160];
@@ -516,7 +516,7 @@ bool do_cmd_magic_eater(player_type *creature_ptr, bool only_browse, bool powerf
 	PERCENTAGE chance;
 	DEPTH level;
 	KIND_OBJECT_IDX k_idx;
-	OBJECT_TYPE_VALUE tval;
+	tval_type tval;
 	OBJECT_SUBTYPE_VALUE sval;
 	bool use_charge = TRUE;
 

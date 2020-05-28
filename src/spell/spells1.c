@@ -488,7 +488,7 @@ void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam)
  * @param tval 魔法書のtval
  * @return 領域魔法の技能名称を保管した文字列ポインタ
  */
-concptr spell_category_name(OBJECT_TYPE_VALUE tval)
+concptr spell_category_name(tval_type tval)
 {
 	switch (tval)
 	{

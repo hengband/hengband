@@ -502,6 +502,7 @@
     <ClInclude Include="..\..\src\autopick\autopick.h" />
     <ClInclude Include="..\..\src\object\death-scythe.h" />
     <ClInclude Include="..\..\src\object\tr-types.h" />
+    <ClInclude Include="..\..\src\object\tval-types.h" />
     <ClInclude Include="..\..\src\player\avatar.h" />
     <ClInclude Include="..\..\src\birth\character-builder.h" />
     <ClInclude Include="..\..\src\birth\birth-explanations-table.h" />

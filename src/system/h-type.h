@@ -174,7 +174,6 @@ typedef int DIRECTION;			/*!< ゲーム中の方角の型定義 */
 typedef s32b EXP;				/*!< ゲーム中の主経験値の型定義 */
 typedef s16b SUB_EXP;			/*!< ゲーム中の副経験値の型定義 */
 
-typedef s32b OBJECT_TYPE_VALUE;    /*!< ゲーム中のアイテム主分類の型定義 */
 typedef s32b OBJECT_SUBTYPE_VALUE; /*!< ゲーム中のアイテム副分類の型定義 */
 typedef s16b PARAMETER_VALUE;      /*!< ゲーム中のアイテム能力値の型定義 */
 typedef s32b WEIGHT;               /*!< ゲーム中の重量の型定義(ポンド) */

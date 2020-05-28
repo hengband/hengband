@@ -3194,7 +3194,7 @@ void calc_bonuses(player_type *creature_ptr)
 	{
 		if (!has_melee_weapon(creature_ptr, INVEN_RARM + i)) continue;
 
-		OBJECT_TYPE_VALUE tval = creature_ptr->inventory_list[INVEN_RARM + i].tval - TV_WEAPON_BEGIN;
+		tval_type tval = creature_ptr->inventory_list[INVEN_RARM + i].tval - TV_WEAPON_BEGIN;
 		OBJECT_SUBTYPE_VALUE sval = creature_ptr->inventory_list[INVEN_RARM + i].sval;
 
 		creature_ptr->to_h[i] += (creature_ptr->weapon_exp[tval][sval] - WEAPON_EXP_BEGINNER) / 200;
@@ -4222,7 +4222,7 @@ s16b calc_num_fire(player_type *creature_ptr, object_type *o_ptr)
 	num = 100;
 	num += (extra_shots * 100);
 
-	OBJECT_TYPE_VALUE tval_ammo = bow_tval_ammo(o_ptr);
+	tval_type tval_ammo = bow_tval_ammo(o_ptr);
 	if ((creature_ptr->pclass == CLASS_RANGER) &&
 		(tval_ammo == TV_ARROW))
 	{

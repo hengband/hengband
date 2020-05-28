@@ -1577,7 +1577,7 @@ static void print_frame_extra(player_type *player_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void fix_inventory(player_type *player_ptr, OBJECT_TYPE_VALUE item_tester_tval)
+static void fix_inventory(player_type *player_ptr, tval_type item_tester_tval)
 {
 	/* Scan windows */
 	for (int j = 0; j < 8; j++)
@@ -1764,7 +1764,7 @@ static void fix_monster_list(player_type *player_ptr)
  * @param player_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void fix_equip(player_type *player_ptr, OBJECT_TYPE_VALUE item_tester_tval)
+static void fix_equip(player_type *player_ptr, tval_type item_tester_tval)
 {
 	/* Scan windows */
 	for (int j = 0; j < 8; j++)
