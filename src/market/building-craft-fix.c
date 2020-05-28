@@ -12,6 +12,7 @@
 #include "core/stuff-handler.h"
 #include "object/tr-types.h"
 #include "object/item-use-flags.h"
+#include "object/sv-other-types.h"
 
 /*!
  * @brief 修復材料のオブジェクトから修復対象に特性を移植する。

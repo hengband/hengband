@@ -26,6 +26,7 @@
 #include "autopick/autopick.h"
 #include "io/targeting.h"
 #include "view/display-main-window.h"
+#include "object/sv-other-types.h"
 #include "object/tr-types.h"
 #include "object/trc-types.h"
 

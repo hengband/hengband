@@ -3,6 +3,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-broken.h"
+#include "object/sv-other-types.h"
 #include "autopick/autopick.h"
 #include "spell/spells-type.h"
 #include "spell/spells3.h"

@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "store/store-owners.h"
 #include "articles-on-sale.h"
+#include "object/sv-other-types.h"
 
 /*!
  * 店舗で販売するオブジェクトを定義する / Hack -- Objects sold in the stores -- by tval/sval pair.

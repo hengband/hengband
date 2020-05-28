@@ -9,6 +9,7 @@
 #include "spell/spells2.h"
 #include "object/item-use-flags.h"
 #include "object/object-hook.h"
+#include "object/sv-other-types.h"
 
 /*!
 * @brief トランプ魔法独自の召喚処理を行う / Handle summoning and failure of trump spells

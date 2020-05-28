@@ -11,6 +11,7 @@
 #include "market/building-util.h"
 #include "dungeon/dungeon.h"
 #include "monster/monster-race-hook.h"
+#include "object/sv-other-types.h"
 
 /*!
  * @brief 賞金首の引き換え処理 / Get prize
