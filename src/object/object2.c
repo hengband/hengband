@@ -36,6 +36,7 @@
 #include "object/special-object-flags.h"
 #include "object/sv-bow-types.h"
 #include "object/sv-other-types.h"
+#include "object/sv-weapon-types.h"
 #include "object/item-feeling.h"
 #include "grid/feature.h"
 #include "player/player-status.h"

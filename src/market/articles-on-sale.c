@@ -4,6 +4,7 @@
 #include "object/sv-bow-types.h"
 #include "object/sv-digging-types.h"
 #include "object/sv-other-types.h"
+#include "object/sv-weapon-types.h"
 
 /*!
  * 店舗で販売するオブジェクトを定義する / Hack -- Objects sold in the stores -- by tval/sval pair.

@@ -13,6 +13,7 @@
 #include "combat/shoot.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
+#include "object/sv-weapon-types.h"
 #include "combat/attack-power-table.h"
 #include "object/tr-types.h"
 #include "object/special-object-flags.h"

@@ -2179,6 +2179,9 @@
     <ClInclude Include="..\..\src\object\sv-digging-types.h">
       <Filter>object</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-weapon-types.h">
+      <Filter>object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

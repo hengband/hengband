@@ -33,6 +33,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "object/object-flavor.h"
+#include "object/sv-weapon-types.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
 #include "player/player-personalities-table.h"

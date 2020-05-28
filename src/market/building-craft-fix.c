@@ -13,6 +13,7 @@
 #include "object/tr-types.h"
 #include "object/item-use-flags.h"
 #include "object/sv-other-types.h"
+#include "object/sv-weapon-types.h"
 
 /*!
  * @brief 修復材料のオブジェクトから修復対象に特性を移植する。

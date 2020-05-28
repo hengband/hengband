@@ -27,6 +27,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/special-object-flags.h"
+#include "object/sv-weapon-types.h"
 #include "spell/spells-object.h"
 #include "io/files-util.h"
 #include "grid/grid.h"

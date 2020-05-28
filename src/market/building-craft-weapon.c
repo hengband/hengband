@@ -13,6 +13,7 @@
 #include "core/stuff-handler.h"
 #include "object/tr-types.h"
 #include "object/item-use-flags.h"
+#include "object/sv-weapon-types.h"
 
 /*!
  * @brief 攻撃時スレイによるダメージ期待値修正計算 / critical happens at i / 10000

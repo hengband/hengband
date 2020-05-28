@@ -8,6 +8,7 @@
 #include "object/object-kind.h"
 #include "object/sv-bow-types.h"
 #include "object/sv-other-types.h"
+#include "object/sv-weapon-types.h"
 #include "autopick/autopick.h"
 #include "player/player-races-table.h"
 

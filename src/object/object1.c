@@ -26,6 +26,7 @@
 #include "object/object-hook.h"
 #include "object/special-object-flags.h"
 #include "object/sv-other-types.h"
+#include "object/sv-weapon-types.h"
 #include "player/player-move.h"
 #include "player/player-class.h"
 #include "inventory/player-inventory.h"

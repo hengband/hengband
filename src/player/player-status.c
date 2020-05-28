@@ -26,6 +26,7 @@
 #include "object/object-hook.h"
 #include "object/object-ego.h"
 #include "object/special-object-flags.h"
+#include "object/sv-weapon-types.h"
 #include "monster/monster.h"
 #include "monster/monster-status.h"
 #include "monster/monster-race-hook.h"
