@@ -82,15 +82,6 @@ extern void object_wipe(object_type *o_ptr);
 extern void object_prep(object_type *o_ptr, KIND_OBJECT_IDX k_idx);
 extern void object_copy(object_type *o_ptr, object_type *j_ptr);
 
-/*
- * Bit flags for apply_magic() (etc)
- */
-#define AM_NO_FIXED_ART 0x00000001 /*!< Don't allow roll for fixed artifacts */
-#define AM_GOOD         0x00000002 /*!< Generate good items */
-#define AM_GREAT        0x00000004 /*!< Generate great items */
-#define AM_SPECIAL      0x00000008 /*!< Generate artifacts (for debug mode only) */
-#define AM_CURSED       0x00000010 /*!< Generate cursed/worthless items */
-#define AM_FORBID_CHEST 0x00000020 /*!< 箱からさらに箱が出現することを抑止する */
 extern void apply_magic(player_type *owner_type, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
 
 extern OBJECT_SUBTYPE_VALUE coin_type;

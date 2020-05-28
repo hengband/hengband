@@ -2167,6 +2167,9 @@
     <ClInclude Include="..\..\src\object\item-feeling.h">
       <Filter>object</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object\item-apply-magic.h">
+      <Filter>object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

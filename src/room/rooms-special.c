@@ -6,6 +6,7 @@
 #include "room/rooms.h"
 #include "monster/monster.h"
 #include "monster/monster-race-hook.h"
+#include "object/item-apply-magic.h"
 #include "object/object-kind-hook.h"
 #include "grid/feature.h"
 #include "floor/floor.h"

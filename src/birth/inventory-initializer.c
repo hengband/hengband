@@ -3,6 +3,7 @@
 #include "monster/monster-race-hook.h"
 #include "player/player-personalities-table.h"
 #include "birth/initial-equipments-table.h"
+#include "object/item-apply-magic.h"
 #include "object/object-ego.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"

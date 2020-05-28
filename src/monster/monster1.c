@@ -29,6 +29,7 @@
 #include "player/patron.h"
 #include "dungeon/quest.h"
 #include "object/artifact.h"
+#include "object/item-apply-magic.h"
 #include "player/avatar.h"
 #include "floor/wild.h"
 #include "dungeon/dungeon.h"

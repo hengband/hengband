@@ -57,7 +57,7 @@
 #include "grid/trap.h"
 
 #include "monster/monster.h"
-
+#include "object/item-apply-magic.h"
 
  /*!
   * 各部屋タイプの生成比定義

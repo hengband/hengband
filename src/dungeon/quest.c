@@ -14,6 +14,7 @@
 #include "player/player-status.h"
 #include "player/player-personalities-table.h"
 #include "object/artifact.h"
+#include "object/item-apply-magic.h"
 #include "grid/feature.h"
 #include "world/world.h"
 #include "io/write-diary.h"

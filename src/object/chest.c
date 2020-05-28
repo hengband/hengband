@@ -14,6 +14,7 @@
 #include "grid/grid.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
+#include "object/item-apply-magic.h"
 
 /*!
 * @brief 箱からアイテムを引き出す /

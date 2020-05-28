@@ -207,6 +207,7 @@ hengband_SOURCES = \
 	object/tr-types.h object/trc-types.h object/tval-type.h \
 	object/old-ego-extra-values.h object/special-object-flags.h \
 	object/object-mark-types.h object/object-util.h \
+	object/item-apply-magic.h \
 	object/item-feeling.h object/item-use-flags.h \
 	\
 	inventory/simple-appraiser.c inventory/simple-appraiser.h \

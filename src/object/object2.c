@@ -26,6 +26,7 @@
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
+#include "object/item-apply-magic.h"
 #include "object/object-kind.h"
 #include "object/object-boost.h"
 #include "object/object-ego.h"

@@ -51,6 +51,7 @@
 #include "cmd/cmd-building.h"
 #include "world/world.h"
 #include "room/rooms-vault.h"
+#include "object/item-apply-magic.h"
 #include "object/object-kind.h"
 #include "object/object-ego.h"
 #include "monster/monster-race.h"

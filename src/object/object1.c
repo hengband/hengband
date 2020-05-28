@@ -19,6 +19,7 @@
 #include "object/artifact.h"
 #include "floor/floor.h"
 #include "cmd-activate.h"
+#include "object/item-apply-magic.h"
 #include "object/object-kind.h"
 #include "object/object-ego.h"
 #include "object/object-flavor.h"
