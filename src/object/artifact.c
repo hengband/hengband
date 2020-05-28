@@ -19,7 +19,7 @@
 #include "player/avatar.h"
 #include "floor/floor.h"
 #include "cmd-activate.h"
-#include "object/object.h"
+#include "object/object1.h"
 #include "object/object-kind.h"
 #include "object/object-boost.h"
 #include "object/object-curse.h"

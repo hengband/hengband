@@ -41,7 +41,7 @@
 
 #include "monster/monster.h"
 #include "monster/monster-race.h"
-#include "object/object.h"
+#include "object/object1.h"
 #include "player/player-status.h"
 
 

@@ -4,7 +4,7 @@
 #include "inventory/player-inventory.h"
 
 #include "term/gameterm.h"
-#include "object/object.h"
+#include "object/object1.h"
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

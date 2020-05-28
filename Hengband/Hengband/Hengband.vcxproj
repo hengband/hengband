@@ -807,7 +807,7 @@
     <ClInclude Include="..\..\src\object\object-ego.h" />
     <ClInclude Include="..\..\src\object\object-hook.h" />
     <ClInclude Include="..\..\src\object\object-broken.h" />
-    <ClInclude Include="..\..\src\object\object.h" />
+    <ClInclude Include="..\..\src\object\object1.h" />
     <ClInclude Include="..\..\src\object\object-kind-hook.h" />
     <ClInclude Include="..\..\src\object\object-kind.h" />
     <ClInclude Include="..\..\src\player\patron.h" />

@@ -196,7 +196,7 @@ hengband_SOURCES = \
 	object/object-curse.c object/object-curse.h \
 	object/object-broken.c object/object-broken.h \
 	object/object-hook.c object/object-hook.h \
-	object/object1.c object/object2.c object/object.h \
+	object/object1.c object/object.1h object/object2.c \
 	object/object-kind.c object/object-kind.h \
 	object/object-kind-hook.c object/object-kind-hook.h \
 	object/lite-processor.c object/lite-processor.h \

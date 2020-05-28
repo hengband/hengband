@@ -9,7 +9,7 @@
 #include "object/object-hook.h"
 #include "world/world.h"
 #include "player/player-effects.h"
-#include "object/object.h"
+#include "object/object1.h"
 #include "object/artifact.h"
 #include "object/object-kind.h"
 #include "object/special-object-flags.h"

@@ -2,7 +2,7 @@
 
 #include "grid/feature.h"
 #include "grid/grid.h"
-#include "object/object.h"
+#include "object/object1.h"
 #include "floor/floor-save.h"
 
 

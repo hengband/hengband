@@ -17,7 +17,7 @@
 #include "world/world.h"
 #include "term/gameterm.h"
 
-#include "object/object.h"
+#include "object/object1.h"
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
