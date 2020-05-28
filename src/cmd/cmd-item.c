@@ -30,6 +30,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-ego.h"
+#include "object/object-mark-types.h"
 #include "core/sort.h"
 #include "dungeon/quest.h"
 #include "object/artifact.h"

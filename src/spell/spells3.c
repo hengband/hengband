@@ -18,6 +18,7 @@
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 #include "object/object-ego.h"
+#include "object/object-mark-types.h"
 
 #include "monster/creature.h"
 

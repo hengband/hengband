@@ -169,6 +169,7 @@
 #include "monster/monster-status.h"
 #include "object/object-hook.h"
 #include "object/object-flavor.h"
+#include "object/object-mark-types.h"
 #include "spell/spells-type.h"
 #include "cmd-basic.h"
 #include "view/display-main-window.h"

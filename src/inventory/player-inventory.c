@@ -8,6 +8,7 @@
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
+#include "object/object-mark-types.h"
 #include "floor/floor.h"
 #include "player/player-move.h"
 

@@ -5,6 +5,7 @@
 #include "core/player-processor.h"
 #include "grid/trap.h"
 #include "object/object-hook.h"
+#include "object/object-mark-types.h"
 #include "monster/monster-status.h"
 #include "monster/monster-race-hook.h"
 

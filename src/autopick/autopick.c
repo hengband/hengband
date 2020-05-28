@@ -20,6 +20,7 @@
 #include "autopick/autopick.h"
 #include "player/player-move.h"
 #include "object/object-flavor.h"
+#include "object/object-mark-types.h"
 
 /*
  *  Auto-destroy marked item

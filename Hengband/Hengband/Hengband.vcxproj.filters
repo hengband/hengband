@@ -2152,6 +2152,9 @@
     <ClInclude Include="..\..\src\object\special-object-flags.h">
       <Filter>object</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object\object-mark-types.h">
+      <Filter>object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

@@ -9,6 +9,7 @@
 #include "monster/monster-status.h"
 #include "object/artifact.h"
 #include "object/object-flavor.h"
+#include "object/object-mark-types.h"
 #include "realm/realm-hex.h"
 #include "spell/spells3.h"
 

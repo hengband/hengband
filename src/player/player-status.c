@@ -55,6 +55,7 @@
 #include "combat/attack-power-table.h"
 #include "mind/racial-force-trainer.h"
 #include "object/tr-types.h"
+#include "object/object-mark-types.h"
 
 /*!
  * @brief 能力値テーブル / Abbreviations of healthy stats

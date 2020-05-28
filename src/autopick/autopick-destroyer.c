@@ -11,6 +11,7 @@
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
+#include "object/object-mark-types.h"
 #include "object/special-object-flags.h"
 #include "player/player-move.h"
 #include "player/player-races-table.h"

@@ -22,6 +22,7 @@
 #include "world/world.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
+#include "object/object-mark-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor-generate.h"
 #include "grid/grid.h"

@@ -40,6 +40,7 @@
 #include "autopick/autopick.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
+#include "object/object-mark-types.h"
 #include "monster/monster-status.h"
 #include "player/player-move.h"
 #include "player/player-status.h"

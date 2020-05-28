@@ -15,6 +15,7 @@
 #include "player/player-personalities-table.h"
 #include "object/object-hook.h"
 #include "object/object-broken.h"
+#include "object/object-mark-types.h"
 #include "effect/effect-characteristics.h"
 #include "grid/grid.h"
 #include "object/object-flavor.h"

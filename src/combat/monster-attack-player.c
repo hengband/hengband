@@ -20,6 +20,7 @@
 #include "monster/monster-status.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
+#include "object/object-mark-types.h"
 #include "player/avatar.h"
 #include "player/mimic-info-table.h"
 #include "player/player-damage.h"

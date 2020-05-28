@@ -33,6 +33,7 @@
 #include "object/object-hook.h"
 #include "object/object-curse.h"
 #include "object/object-kind-hook.h"
+#include "object/object-mark-types.h"
 #include "object/artifact.h"
 #include "object/special-object-flags.h"
 #include "grid/feature.h"

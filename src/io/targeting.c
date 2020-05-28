@@ -22,6 +22,7 @@
 #include "dungeon/dungeon-file.h"
 #include "object/object-curse.h"
 #include "object/object-flavor.h"
+#include "object/object-mark-types.h"
 #include "monster/monster.h"
 #include "monster/monster-race-hook.h"
 #include "object/object-kind-hook.h"
