@@ -16,6 +16,7 @@
 #include "object/object-flavor.h"
 #include "object/object-ego.h"
 #include "object/special-object-flags.h"
+#include "object/sv-protector-types.h"
 #include "object/sv-weapon-types.h"
 #include "player/player-damage.h"
 #include "player/player-status.h"

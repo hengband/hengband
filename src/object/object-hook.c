@@ -6,6 +6,7 @@
 #include "object/object-kind.h"
 #include "object/special-object-flags.h"
 #include "object/sv-other-types.h"
+#include "object/sv-protector-types.h"
 #include "object/sv-weapon-types.h"
 #include "object/tr-types.h"
 #include "monster/monster.h"

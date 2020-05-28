@@ -4,6 +4,7 @@
 #include "object/sv-bow-types.h"
 #include "object/sv-digging-types.h"
 #include "object/sv-other-types.h"
+#include "object/sv-protector-types.h"
 #include "object/sv-weapon-types.h"
 
 /*!

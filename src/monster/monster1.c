@@ -46,6 +46,7 @@
 #include "combat/monster-attack-types.h"
 #include "combat/monster-attack-effect.h"
 #include "object/sv-other-types.h"
+#include "object/sv-protector-types.h"
 #include "object/sv-weapon-types.h"
 
  /*

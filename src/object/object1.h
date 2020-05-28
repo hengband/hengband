@@ -113,50 +113,6 @@ extern void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs);
 extern void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds);
 extern void torch_lost_fuel(object_type *o_ptr);
 
-/* The "sval" codes for TV_SHIELD */
-#define SV_SMALL_LEATHER_SHIELD          2
-#define SV_SMALL_METAL_SHIELD            3
-#define SV_LARGE_LEATHER_SHIELD          4
-#define SV_LARGE_METAL_SHIELD            5
-#define SV_DRAGON_SHIELD                 6
-#define SV_KNIGHT_SHIELD                 7
-#define SV_MIRROR_SHIELD                10
-#define SV_YATA_MIRROR                  50
-
-/* The "sval" codes for TV_HELM */
-#define SV_HARD_LEATHER_CAP              2
-#define SV_METAL_CAP                     3
-#define SV_JINGASA                       4  /* 4 */
-#define SV_IRON_HELM                     5
-#define SV_STEEL_HELM                    6
-#define SV_DRAGON_HELM                   7
-#define SV_KABUTO                        8  /* 7 */
-
-/* The "sval" codes for TV_CROWN */
-#define SV_IRON_CROWN                   10
-#define SV_GOLDEN_CROWN                 11
-#define SV_JEWELED_CROWN                12
-#define SV_CHAOS                        50
-
-/* The "sval" codes for TV_BOOTS */
-#define SV_PAIR_OF_SOFT_LEATHER_BOOTS    2
-#define SV_PAIR_OF_HARD_LEATHER_BOOTS    3
-#define SV_PAIR_OF_DRAGON_GREAVE         4
-#define SV_PAIR_OF_METAL_SHOD_BOOTS      6
-
-/* The "sval" codes for TV_CLOAK */
-#define SV_CLOAK                         1
-#define SV_ELVEN_CLOAK                   2
-#define SV_FUR_CLOAK                     3
-#define SV_ETHEREAL_CLOAK                5
-#define SV_SHADOW_CLOAK                  6
-
-/* The "sval" codes for TV_GLOVES */
-#define SV_SET_OF_LEATHER_GLOVES         1
-#define SV_SET_OF_GAUNTLETS              2
-#define SV_SET_OF_DRAGON_GLOVES          3
-#define SV_SET_OF_CESTI                  5
-
 /* The "sval" codes for TV_SOFT_ARMOR */
 #define SV_T_SHIRT                       0
 #define SV_FILTHY_RAG                    1
