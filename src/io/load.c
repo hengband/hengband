@@ -89,6 +89,7 @@
 #include "player/player-races-table.h"
 #include "market/bounty.h"
 #include "object/tr-types.h"
+#include "object/old-ego-extra-values.h" // TODO v1.5.0以前のセーブファイルをロードする処理を分離する.
 
  /*
   * Maximum number of tries for selection of a proper quest monster

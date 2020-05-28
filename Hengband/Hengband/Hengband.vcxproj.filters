@@ -2146,6 +2146,9 @@
     <ClInclude Include="..\..\src\object\tval-types.h">
       <Filter>monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object\old-ego-extra-values.h">
+      <Filter>object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
