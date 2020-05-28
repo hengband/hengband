@@ -206,7 +206,7 @@ hengband_SOURCES = \
 	object/death-scythe.c object/death-scythe.h \
 	object/tr-types.h object/trc-types.h object/tval-type.h \
 	object/old-ego-extra-values.h object/special-object-flags.h \
-	object/object-mark-types.h \
+	object/object-mark-types.h object/object-util.h \
 	\
 	inventory/simple-appraiser.c inventory/simple-appraiser.h \
 	inventory/inventory-curse.c inventory/inventory-curse.h \
