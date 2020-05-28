@@ -357,7 +357,7 @@ void exe_activate(player_type *user_ptr, INVENTORY_IDX item)
 	object_type *o_ptr;
 	bool success;
 
-	o_ptr = REF_ITEM(user_ptr, user_ptr->current_floor_ptr, item);
+	o_ptr = ref_item(user_ptr, item);
 	take_turn(user_ptr, 100);
 	lev = k_info[o_ptr->k_idx].level;
 

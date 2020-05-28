@@ -1437,3 +1437,9 @@ bool check_book_realm(player_type *owner_ptr, const tval_type book_tval, const O
 
 	return (REALM1_BOOK == book_tval || REALM2_BOOK == book_tval);
 }
+
+object_type *ref_item(player_type *owner_ptr, INVENTORY_IDX item)
+{
+    floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+	return item >= 0 ? &owner_ptr->inventory_list[item] : &(floor_ptr->o_list[0 - item]);
+}

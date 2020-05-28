@@ -341,7 +341,7 @@ void exe_aim_wand(player_type *creature_ptr, INVENTORY_IDX item)
 	object_type *o_ptr;
 	bool old_target_pet = target_pet;
 
-	o_ptr = REF_ITEM(creature_ptr, creature_ptr->current_floor_ptr, item);
+	o_ptr = ref_item(creature_ptr, item);
 
 	/* Mega-Hack -- refuse to aim a pile from the ground */
 	if ((item < 0) && (o_ptr->number > 1))

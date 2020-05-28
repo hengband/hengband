@@ -48,9 +48,7 @@ extern char index_to_label(int i);
 extern s16b wield_slot(player_type *owner_ptr, object_type *o_ptr);
 
 extern bool check_book_realm(player_type *owner_ptr, const tval_type book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
-
-#define REF_ITEM(P_PTR, FLOOR_PTR, ID) ((ID >= 0 ? &(P_PTR)->inventory_list[ID] : &(FLOOR_PTR)->o_list[0 - item]))
-
+extern object_type *ref_item(player_type *owner_ptr, INVENTORY_IDX item);
 extern int bow_tval_ammo(object_type *o_ptr);
 
 /*!

@@ -58,7 +58,7 @@ void exe_read(player_type *creature_ptr, INVENTORY_IDX item, bool known)
 	int k, used_up, ident, lev;
 	object_type *o_ptr;
 
-	o_ptr = REF_ITEM(creature_ptr, creature_ptr->current_floor_ptr, item);
+	o_ptr = ref_item(creature_ptr, item);
 
 	take_turn(creature_ptr, 100);
 	if (cmd_limit_time_walk(creature_ptr)) return;

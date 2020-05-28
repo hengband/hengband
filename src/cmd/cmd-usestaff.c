@@ -294,7 +294,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 		/* Hack -- let staffs of identify get aborted */
 	bool use_charge = TRUE;
 
-	o_ptr = REF_ITEM(creature_ptr, creature_ptr->current_floor_ptr, item);
+	o_ptr = ref_item(creature_ptr, item);
 
 	/* Mega-Hack -- refuse to use a pile from the ground */
 	if ((item < 0) && (o_ptr->number > 1))

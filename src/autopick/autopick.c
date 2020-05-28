@@ -28,7 +28,7 @@
 static void autopick_delayed_alter_aux(player_type *player_ptr, INVENTORY_IDX item)
 {
 	object_type *o_ptr;
-	o_ptr = REF_ITEM(player_ptr, player_ptr->current_floor_ptr, item);
+	o_ptr = ref_item(player_ptr, item);
 
 	if (o_ptr->k_idx == 0 || !(o_ptr->marked & OM_AUTODESTROY)) return;
 
@@ -82,7 +82,7 @@ void autopick_delayed_alter(player_type *owner_ptr)
 void autopick_alter_item(player_type *player_ptr, INVENTORY_IDX item, bool destroy)
 {
 	object_type *o_ptr;
-	o_ptr = REF_ITEM(player_ptr, player_ptr->current_floor_ptr, item);
+	o_ptr = ref_item(player_ptr, item);
 	int idx = find_autopick_list(player_ptr, o_ptr);
 	auto_inscribe_item(player_ptr, o_ptr, idx);
 	if (destroy && item <= INVEN_PACK)

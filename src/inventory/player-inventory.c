@@ -1560,7 +1560,7 @@ object_type *choose_object(player_type *owner_ptr, OBJECT_IDX *idx, concptr q, c
 	if (!get_item(owner_ptr, &item, q, s, option, tval)) return NULL;
 	if (idx) *idx = item;
 	if (item == INVEN_FORCE) return NULL;
-	return REF_ITEM(owner_ptr, owner_ptr->current_floor_ptr, item);
+	return ref_item(owner_ptr, item);
 }
 
 
