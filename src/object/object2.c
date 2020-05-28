@@ -1,24 +1,21 @@
 ﻿/*!
- * @file object2.c
  * @brief オブジェクトの実装 / Object code, part 2
  * @date 2014/01/11
  * @author
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke\n
- *\n
- * This software may be copied and distributed for educational, research,\n
- * and not for profit purposes provided that this copyright and statement\n
- * are included in all such copies.  Other copyrights may also apply.\n
- * 2014 Deskull rearranged comment for Doxygen.\n
+ * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
+ * 
+ * This software may be copied and distributed for educational, research,
+ * and not for profit purposes provided that this copyright and statement
+ * are included in all such copies.  Other copyrights may also apply.
+ * 2014 Deskull rearranged comment for Doxygen.
  */
 
 #include "system/angband.h"
+#include "object/object1.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 #include "world/world.h"
 #include "term/gameterm.h"
-
-#include "object/object1.h"
-
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-spell.h"
@@ -77,20 +74,17 @@
   * Chests, and activatable items, never stack (for various reasons).
   */
 
-  /*
-   * A "stack" of items is limited to less than or equal to 99 items (hard-coded).
-   */
+ /*
+  * A "stack" of items is limited to less than or equal to 99 items (hard-coded).
+  */
 #define MAX_STACK_SIZE 99
 
-   /*!
-	* todo この関数ポインタは何とかならんのか？
-	* Hack -- function hook to restrict "get_obj_num_prep()" function
-	*/
+/*!
+ * todo この関数ポインタは何とかならんのか？
+ * Hack -- function hook to restrict "get_obj_num_prep()" function
+ */
 bool(*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
-/*!
-* todo これを消すとコンパイルは通るがリンカがエラーを吐く、何とか既存の構造に押し込みたい
-*/
 OBJECT_SUBTYPE_VALUE coin_type;	/* Hack -- force coin type */
 
 void floor_item_describe(player_type *player_ptr, INVENTORY_IDX item);

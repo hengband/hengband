@@ -7,6 +7,7 @@
 #include "system/angband.h"
 #include "special-class-dump.h"
 #include "cmd/cmd-magiceat.h"
+#include "cmd/cmd-smith.h"
 #include "object/object-kind.h"
 #include "mspell/monster-spell.h"
 

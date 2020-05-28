@@ -32,8 +32,6 @@
 
 #include "object/object-util.h"
 
-extern bool(*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
-
 /* object1.c */
 extern void reset_visuals(player_type *owner_ptr, void(*process_autopick_file_command)(char*));
 extern void object_flags(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE]);
@@ -49,7 +47,6 @@ extern s16b wield_slot(player_type *owner_ptr, object_type *o_ptr);
 
 extern bool check_book_realm(player_type *owner_ptr, const tval_type book_tval, const OBJECT_SUBTYPE_VALUE book_sval);
 extern object_type *ref_item(player_type *owner_ptr, INVENTORY_IDX item);
-extern int bow_tval_ammo(object_type *o_ptr);
 extern TERM_COLOR object_attr(object_type *o_ptr);
 
 /*!
@@ -58,6 +55,14 @@ extern TERM_COLOR object_attr(object_type *o_ptr);
 #include "floor/floor.h"
 
 /* object2.c */
+
+extern OBJECT_SUBTYPE_VALUE coin_type;
+extern s32b flag_cost(object_type *o_ptr, int plusses);
+
+extern bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
+
+extern int bow_tval_ammo(object_type *o_ptr);
+
 extern void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx);
 extern void delete_object_idx(player_type *owner_ptr, OBJECT_IDX o_idx);
 extern void delete_object(player_type *owner_ptr, POSITION y, POSITION x);
@@ -80,12 +85,10 @@ extern bool object_similar(object_type *o_ptr, object_type *j_ptr);
 extern void object_absorb(object_type *o_ptr, object_type *j_ptr);
 extern IDX lookup_kind(tval_type tval, OBJECT_SUBTYPE_VALUE sval);
 extern void object_wipe(object_type *o_ptr);
-extern void object_prep(object_type *o_ptr, KIND_OBJECT_IDX k_idx);
 extern void object_copy(object_type *o_ptr, object_type *j_ptr);
+extern void object_prep(object_type *o_ptr, KIND_OBJECT_IDX k_idx);
 
 extern void apply_magic(player_type *owner_type, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
-
-extern OBJECT_SUBTYPE_VALUE coin_type;
 
 extern bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode);
 extern bool make_gold(floor_type *floor_ptr, object_type *j_ptr);
@@ -109,9 +112,6 @@ extern void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx);
 extern void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs);
 extern void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds);
 extern void torch_lost_fuel(object_type *o_ptr);
-extern concptr essence_name[];
-
-extern s32b flag_cost(object_type *o_ptr, int plusses);
 
 /* The "sval" codes for TV_DIGGING */
 #define SV_SHOVEL                        1
