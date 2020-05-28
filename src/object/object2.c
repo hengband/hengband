@@ -49,7 +49,9 @@
 #include "object/tr-types.h"
 #include "object/trc-types.h"
 
- /*
+#define MAX_GOLD 18 /* Number of "gold" entries */
+
+/*
   * todo この説明長すぎ。何とかしたい
   * Determine if an item can "absorb" a second item
   *
