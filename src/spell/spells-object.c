@@ -8,6 +8,7 @@
 #include "grid/grid.h"
 #include "spell/spells3.h"
 #include "spell/spells-object.h"
+#include "object/item-feeling.h"
 #include "object/item-use-flags.h"
 #include "object/object-boost.h"
 #include "object/object-hook.h"

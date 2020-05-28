@@ -31,6 +31,7 @@
 #include "spell/spells-status.h"
 #include "realm/realm-song.h"
 #include "realm/realm-hex.h"
+#include "object/item-feeling.h"
 #include "object/object-ego.h"
 #include "object/object-hook.h"
 #include "object/special-object-flags.h"

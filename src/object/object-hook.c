@@ -1,19 +1,19 @@
 ﻿#include "system/angband.h"
 #include "util/util.h"
-
-#include "object/object-hook.h"
-#include "monster/monster.h"
 #include "object/artifact.h"
+#include "object/item-feeling.h"
+#include "object/object-hook.h"
+#include "object/object-kind.h"
+#include "object/special-object-flags.h"
+#include "object/tr-types.h"
+#include "monster/monster.h"
 #include "player/player-class.h"
 #include "player/player-skill.h"
 #include "player/mimic-info-table.h"
 #include "dungeon/quest.h"
 #include "world/world.h"
-#include "object/object-kind.h"
-#include "object/special-object-flags.h"
 #include "view/display-main-window.h"
 #include "player/player-races-table.h"
-#include "object/tr-types.h"
 
 /*!
 * @brief 対象のアイテムが矢やクロスボウの矢の材料になるかを返す。/

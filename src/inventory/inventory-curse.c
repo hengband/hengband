@@ -7,6 +7,7 @@
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "io/files-util.h"
+#include "object/item-feeling.h"
 #include "object/object-curse.h"
 #include "object/artifact.h"
 #include "object/object-hook.h"

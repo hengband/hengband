@@ -9,6 +9,7 @@
 #include "autopick/autopick-key-flag-process.h"
 #include "autopick/autopick-flags-table.h"
 #include "autopick/autopick-matcher.h"
+#include "object/item-feeling.h"
 #include "object/object-kind.h"
 #include "object/object-hook.h"
 #include "object/special-object-flags.h"

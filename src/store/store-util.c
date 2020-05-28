@@ -1,5 +1,6 @@
 ﻿#include "system/angband.h"
 #include "store/store-util.h"
+#include "object/item-feeling.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/tr-types.h"

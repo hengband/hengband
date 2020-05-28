@@ -46,6 +46,7 @@
 #include "player/player-status.h"
 #include "player/player-class.h"
 #include "inventory/player-inventory.h"
+#include "object/item-feeling.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

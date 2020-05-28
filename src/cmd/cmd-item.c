@@ -27,6 +27,7 @@
 #include "cmd-pet.h"
 #include "cmd-basic.h"
 
+#include "object/item-feeling.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

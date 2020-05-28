@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "util/util.h"
-
+#include "object/item-feeling.h"
+#include "object/object-curse.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/tr-types.h"

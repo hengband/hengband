@@ -17,6 +17,7 @@
 #include "term/gameterm.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
+#include "object/item-feeling.h"
 #include "object/object-ego.h"
 #include "object/object-mark-types.h"
 

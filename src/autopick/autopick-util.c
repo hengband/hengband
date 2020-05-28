@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "autopick/autopick-util.h"
 #include "autopick/autopick-menu-data-table.h"
+#include "object/item-feeling.h"
 
 /*
  * 自動拾い/破壊設定のリストに関する変数 / List for auto-picker/destroyer entries
