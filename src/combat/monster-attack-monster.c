@@ -24,8 +24,8 @@
 /* monster-attack-monster type*/
 typedef struct mam_type {
     int effect_type;
-    int m_idx;
-    int t_idx;
+    MONRACE_IDX m_idx;
+    MONRACE_IDX t_idx;
     monster_type *m_ptr;
     monster_type *t_ptr;
     GAME_TEXT m_name[MAX_NLEN];
@@ -36,7 +36,7 @@ typedef struct mam_type {
     bool see_either;
 } mam_type;
 
-mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, int m_idx, int t_idx, monster_type *m_ptr, monster_type *t_ptr) 
+mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx, monster_type *m_ptr, monster_type *t_ptr)
 {
     mam_ptr->effect_type = 0;
     mam_ptr->m_idx = m_idx;
@@ -50,6 +50,26 @@ mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, int m
     return mam_ptr;
 }
 
+static void heal_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
+{
+    if (!monster_living(mam_ptr->m_idx) || (mam_ptr->damage <= 2))
+        return;
+
+    bool did_heal = mam_ptr->m_ptr->hp < mam_ptr->m_ptr->maxhp;
+    mam_ptr->m_ptr->hp += damroll(4, mam_ptr->damage / 6);
+    if (mam_ptr->m_ptr->hp > mam_ptr->m_ptr->maxhp)
+        mam_ptr->m_ptr->hp = mam_ptr->m_ptr->maxhp;
+
+    if (subject_ptr->health_who == mam_ptr->m_idx)
+        subject_ptr->redraw |= (PR_HEALTH);
+
+    if (subject_ptr->riding == mam_ptr->m_idx)
+        subject_ptr->redraw |= (PR_UHEALTH);
+
+    if (mam_ptr->see_m && did_heal)
+        msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), mam_ptr->m_name);
+}
+
 static void process_blow_effect(player_type *subject_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
@@ -58,36 +78,13 @@ static void process_blow_effect(player_type *subject_ptr, mam_type *mam_ptr)
         project(subject_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, mam_ptr->damage, GF_TURN_ALL,
             PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
         break;
-
     case BLOW_EFFECT_TYPE_SLEEP:
         project(subject_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, r_ptr->level, GF_OLD_SLEEP,
             PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED,
             -1);
         break;
-
     case BLOW_EFFECT_TYPE_HEAL:
-        if ((monster_living(mam_ptr->m_idx)) && (mam_ptr->damage > 2)) {
-            bool did_heal = FALSE;
-
-            if (mam_ptr->m_ptr->hp < mam_ptr->m_ptr->maxhp)
-                did_heal = TRUE;
-
-            /* Heal */
-            mam_ptr->m_ptr->hp += damroll(4, mam_ptr->damage / 6);
-            if (mam_ptr->m_ptr->hp > mam_ptr->m_ptr->maxhp)
-                mam_ptr->m_ptr->hp = mam_ptr->m_ptr->maxhp;
-
-            /* Redraw (later) if needed */
-            if (subject_ptr->health_who == mam_ptr->m_idx)
-                subject_ptr->redraw |= (PR_HEALTH);
-            if (subject_ptr->riding == mam_ptr->m_idx)
-                subject_ptr->redraw |= (PR_UHEALTH);
-
-            /* Special message */
-            if (mam_ptr->see_m && did_heal) {
-                msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), mam_ptr->m_name);
-            }
-        }
+        heal_monster_by_melee(subject_ptr, mam_ptr);
         break;
     }
 }
@@ -103,7 +100,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     monster_type *m_ptr = &subject_ptr->current_floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &subject_ptr->current_floor_ptr->m_list[t_idx];
     mam_type tmp_mam;
-    mam_type *mam_ptr = initialize_mam_type(subject_ptr, mam_ptr, m_idx, t_idx, m_ptr, t_ptr);
+    mam_type *mam_ptr = initialize_mam_type(subject_ptr, &tmp_mam, m_idx, t_idx, m_ptr, t_ptr);
 
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
