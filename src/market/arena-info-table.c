@@ -4,6 +4,7 @@
 #include "object/sv-potion-types.h"
 #include "object/sv-ring-types.h"
 #include "object/sv-rod-types.h"
+#include "object/sv-scroll-types.h"
 #include "object/sv-staff-types.h"
 #include "object/sv-wand-types.h"
 

@@ -60,6 +60,7 @@
 
 #include "grid/trap.h"
 #include "object/artifact.h"
+#include "object/sv-scroll-types.h"
 #include "cmd-activate.h"
 #include "term/gameterm.h"
 #include "floor/wild.h"

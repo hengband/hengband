@@ -113,66 +113,6 @@ extern void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs);
 extern void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds);
 extern void torch_lost_fuel(object_type *o_ptr);
 
-/* The "sval" codes for TV_SCROLL */
-
-#define SV_SCROLL_DARKNESS               0
-#define SV_SCROLL_AGGRAVATE_MONSTER      1
-#define SV_SCROLL_CURSE_ARMOR            2
-#define SV_SCROLL_CURSE_WEAPON           3
-#define SV_SCROLL_SUMMON_MONSTER         4
-#define SV_SCROLL_SUMMON_UNDEAD          5
-#define SV_SCROLL_SUMMON_PET             6
-#define SV_SCROLL_TRAP_CREATION          7
-#define SV_SCROLL_PHASE_DOOR             8
-#define SV_SCROLL_TELEPORT               9
-#define SV_SCROLL_TELEPORT_LEVEL        10
-#define SV_SCROLL_WORD_OF_RECALL        11
-#define SV_SCROLL_IDENTIFY              12
-#define SV_SCROLL_STAR_IDENTIFY         13
-#define SV_SCROLL_REMOVE_CURSE          14
-#define SV_SCROLL_STAR_REMOVE_CURSE     15
-#define SV_SCROLL_ENCHANT_ARMOR         16
-#define SV_SCROLL_ENCHANT_WEAPON_TO_HIT 17
-#define SV_SCROLL_ENCHANT_WEAPON_TO_DAM 18
-/* xxx enchant missile? */
-#define SV_SCROLL_STAR_ENCHANT_ARMOR    20
-#define SV_SCROLL_STAR_ENCHANT_WEAPON   21
-#define SV_SCROLL_RECHARGING            22
-#define SV_SCROLL_MUNDANITY             23
-#define SV_SCROLL_LIGHT                 24
-#define SV_SCROLL_MAPPING               25
-#define SV_SCROLL_DETECT_GOLD           26
-#define SV_SCROLL_DETECT_ITEM           27
-#define SV_SCROLL_DETECT_TRAP           28
-#define SV_SCROLL_DETECT_DOOR           29
-#define SV_SCROLL_DETECT_INVIS          30
-/* xxx (detect evil?) */
-#define SV_SCROLL_SATISFY_HUNGER        32
-#define SV_SCROLL_BLESSING              33
-#define SV_SCROLL_HOLY_CHANT            34
-#define SV_SCROLL_HOLY_PRAYER           35
-#define SV_SCROLL_MONSTER_CONFUSION     36
-#define SV_SCROLL_PROTECTION_FROM_EVIL  37
-#define SV_SCROLL_RUNE_OF_PROTECTION    38
-#define SV_SCROLL_TRAP_DOOR_DESTRUCTION 39
-/* xxx */
-#define SV_SCROLL_STAR_DESTRUCTION      41
-#define SV_SCROLL_DISPEL_UNDEAD         42
-#define SV_SCROLL_SPELL                 43
-#define SV_SCROLL_GENOCIDE              44
-#define SV_SCROLL_MASS_GENOCIDE         45
-#define SV_SCROLL_ACQUIREMENT           46
-#define SV_SCROLL_STAR_ACQUIREMENT      47
-#define SV_SCROLL_FIRE                  48
-#define SV_SCROLL_ICE                   49
-#define SV_SCROLL_CHAOS                 50
-#define SV_SCROLL_RUMOR                 51
-#define SV_SCROLL_ARTIFACT              52
-#define SV_SCROLL_RESET_RECALL          53
-#define SV_SCROLL_SUMMON_KIN            54
-#define SV_SCROLL_AMUSEMENT             55
-#define SV_SCROLL_STAR_AMUSEMENT        56
-
 /* The "sval" codes for TV_FOOD */
 #define SV_FOOD_POISON                   0
 #define SV_FOOD_BLINDNESS                1

@@ -33,6 +33,7 @@
 #include "io/files-util.h"
 #include "floor/floor.h"
 #include "object/object-kind.h"
+#include "object/sv-scroll-types.h"
 #include "view/display-main-window.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
