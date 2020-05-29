@@ -15,6 +15,7 @@
 #include "floor/floor-town.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
+#include "object/sv-amulet-types.h"
 #include "object/sv-protector-types.h"
 #include "object/tr-types.h"
 

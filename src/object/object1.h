@@ -113,33 +113,6 @@ extern void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs);
 extern void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds);
 extern void torch_lost_fuel(object_type *o_ptr);
 
-/* The "sval" codes for TV_AMULET */
-#define SV_AMULET_DOOM                   0
-#define SV_AMULET_TELEPORT               1
-#define SV_AMULET_ADORNMENT              2
-#define SV_AMULET_SLOW_DIGEST            3
-#define SV_AMULET_RESIST_ACID            4
-#define SV_AMULET_SEARCHING              5
-#define SV_AMULET_BRILLIANCE             6
-#define SV_AMULET_CHARISMA               7
-#define SV_AMULET_THE_MAGI               8
-#define SV_AMULET_REFLECTION             9
-#define SV_AMULET_CARLAMMAS             10
-#define SV_AMULET_INGWE                 11
-#define SV_AMULET_DWARVES               12
-#define SV_AMULET_NO_MAGIC              13
-#define SV_AMULET_NO_TELE               14
-#define SV_AMULET_RESISTANCE            15
-#define SV_AMULET_TELEPATHY             16
-#define SV_AMULET_FARAMIR               17
-#define SV_AMULET_BOROMIR               18
-#define SV_AMULET_MAGATAMA              19
-#define SV_AMULET_INROU                 20
-#define SV_AMULET_INTELLIGENCE          21
-#define SV_AMULET_WISDOM                22
-#define SV_AMULET_MAGIC_MASTERY         23
-#define SV_AMULET_NIGHT                 24
-
 /* The "sval" codes for TV_STAFF */
 #define SV_STAFF_DARKNESS                0
 #define SV_STAFF_SLOWNESS                1

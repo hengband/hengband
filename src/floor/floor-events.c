@@ -17,6 +17,7 @@
 #include "player/player-effects.h"
 #include "object/object-kind.h"
 #include "object/object-ego.h"
+#include "object/sv-amulet-types.h"
 #include "object/sv-protector-types.h"
 #include "cmd-dump.h"
 #include "view/display-main-window.h"

@@ -508,6 +508,7 @@
     <ClInclude Include="..\..\src\object\object-util.h" />
     <ClInclude Include="..\..\src\object\old-ego-extra-values.h" />
     <ClInclude Include="..\..\src\object\special-object-flags.h" />
+    <ClInclude Include="..\..\src\object\sv-amulet-types.h" />
     <ClInclude Include="..\..\src\object\sv-armor-types.h" />
     <ClInclude Include="..\..\src\object\sv-bow-types.h" />
     <ClInclude Include="..\..\src\object\sv-digging-types.h" />

@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "store/store-owners.h"
 #include "articles-on-sale.h"
+#include "object/sv-amulet-types.h"
 #include "object/sv-armor-types.h"
 #include "object/sv-bow-types.h"
 #include "object/sv-digging-types.h"
