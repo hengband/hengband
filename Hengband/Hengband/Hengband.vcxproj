@@ -225,6 +225,7 @@
     <ClCompile Include="..\..\src\autopick\autopick-util.c" />
     <ClCompile Include="..\..\src\autopick\autopick.c" />
     <ClCompile Include="..\..\src\object\death-scythe.c" />
+    <ClCompile Include="..\..\src\object\torch.c" />
     <ClCompile Include="..\..\src\player\avatar.c" />
     <ClCompile Include="..\..\src\birth\character-builder.c" />
     <ClCompile Include="..\..\src\birth\birth-explanations-table.c" />
@@ -524,6 +525,7 @@
     <ClInclude Include="..\..\src\object\sv-staff-types.h" />
     <ClInclude Include="..\..\src\object\sv-wand-types.h" />
     <ClInclude Include="..\..\src\object\sv-weapon-types.h" />
+    <ClInclude Include="..\..\src\object\torch.h" />
     <ClInclude Include="..\..\src\object\tr-types.h" />
     <ClInclude Include="..\..\src\object\trc-types.h" />
     <ClInclude Include="..\..\src\object\tval-types.h" />

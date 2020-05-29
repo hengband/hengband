@@ -1034,6 +1034,9 @@
     <ClCompile Include="..\..\src\util\util.c">
       <Filter>util</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\torch.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2216,6 +2219,9 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object2.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\torch.h">
       <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>

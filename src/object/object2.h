@@ -53,6 +53,3 @@ void drop_from_inventory(player_type *owner_type, INVENTORY_IDX item, ITEM_NUMBE
 void combine_pack(player_type *owner_ptr);
 void reorder_pack(player_type *owner_ptr);
 void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx);
-void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs);
-void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds);
-void torch_lost_fuel(object_type *o_ptr);

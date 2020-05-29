@@ -215,6 +215,7 @@ hengband_SOURCES = \
 	object/sv-rod-types.h object/sv-scroll-types.h \
 	object/sv-staff-types.h object/sv-wand-types.h object/sv-other-types.h \
 	object/item-feeling.h object/item-use-flags.h \
+	object/torch.c object/torch.h \
 	\
 	inventory/simple-appraiser.c inventory/simple-appraiser.h \
 	inventory/inventory-curse.c inventory/inventory-curse.h \

@@ -30,6 +30,7 @@
 #include "dungeon/quest.h"
 #include "object/artifact.h"
 #include "object/object2.h"
+#include "object/torch.h"
 #include "player/avatar.h"
 #include "player/player-status.h"
 #include "realm/realm-hex.h"

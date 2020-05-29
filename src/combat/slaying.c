@@ -4,6 +4,7 @@
 #include "realm/realm-hex.h"
 #include "mind/samurai-slaying.h"
 #include "object/object2.h"
+#include "object/torch.h"
 #include "object/tr-types.h"
 
 /*!
