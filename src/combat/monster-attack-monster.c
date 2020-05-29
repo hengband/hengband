@@ -21,6 +21,77 @@
 #define BLOW_EFFECT_TYPE_SLEEP 2
 #define BLOW_EFFECT_TYPE_HEAL 3
 
+/* monster-attack-monster type*/
+typedef struct mam_type {
+    int effect_type;
+    int m_idx;
+    int t_idx;
+    monster_type *m_ptr;
+    monster_type *t_ptr;
+    GAME_TEXT m_name[MAX_NLEN];
+    GAME_TEXT t_name[MAX_NLEN];
+    HIT_POINT damage;
+    bool see_m;
+    bool see_t;
+    bool see_either;
+} mam_type;
+
+mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, int m_idx, int t_idx, monster_type *m_ptr, monster_type *t_ptr) 
+{
+    mam_ptr->effect_type = 0;
+    mam_ptr->m_idx = m_idx;
+    mam_ptr->t_idx = t_idx;
+    mam_ptr->m_ptr = &subject_ptr->current_floor_ptr->m_list[m_idx];
+    mam_ptr->t_ptr = &subject_ptr->current_floor_ptr->m_list[t_idx];
+    mam_ptr->damage = 0;
+    mam_ptr->see_m = is_seen(m_ptr);
+    mam_ptr->see_t = is_seen(t_ptr);
+    mam_ptr->see_either = mam_ptr->see_m || mam_ptr->see_t;
+    return mam_ptr;
+}
+
+static void process_blow_effect(player_type *subject_ptr, mam_type *mam_ptr)
+{
+    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    switch (mam_ptr->effect_type) {
+    case BLOW_EFFECT_TYPE_FEAR:
+        project(subject_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, mam_ptr->damage, GF_TURN_ALL,
+            PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+        break;
+
+    case BLOW_EFFECT_TYPE_SLEEP:
+        project(subject_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, r_ptr->level, GF_OLD_SLEEP,
+            PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED,
+            -1);
+        break;
+
+    case BLOW_EFFECT_TYPE_HEAL:
+        if ((monster_living(mam_ptr->m_idx)) && (mam_ptr->damage > 2)) {
+            bool did_heal = FALSE;
+
+            if (mam_ptr->m_ptr->hp < mam_ptr->m_ptr->maxhp)
+                did_heal = TRUE;
+
+            /* Heal */
+            mam_ptr->m_ptr->hp += damroll(4, mam_ptr->damage / 6);
+            if (mam_ptr->m_ptr->hp > mam_ptr->m_ptr->maxhp)
+                mam_ptr->m_ptr->hp = mam_ptr->m_ptr->maxhp;
+
+            /* Redraw (later) if needed */
+            if (subject_ptr->health_who == mam_ptr->m_idx)
+                subject_ptr->redraw |= (PR_HEALTH);
+            if (subject_ptr->riding == mam_ptr->m_idx)
+                subject_ptr->redraw |= (PR_UHEALTH);
+
+            /* Special message */
+            if (mam_ptr->see_m && did_heal) {
+                msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), mam_ptr->m_name);
+            }
+        }
+        break;
+    }
+}
+
 /*!
  * @brief モンスターから敵モンスターへの打撃攻撃処理
  * @param m_idx 攻撃側モンスターの参照ID
@@ -31,21 +102,19 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 {
     monster_type *m_ptr = &subject_ptr->current_floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &subject_ptr->current_floor_ptr->m_list[t_idx];
+    mam_type tmp_mam;
+    mam_type *mam_ptr = initialize_mam_type(subject_ptr, mam_ptr, m_idx, t_idx, m_ptr, t_ptr);
 
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
 
     int pt;
-    GAME_TEXT m_name[MAX_NLEN], t_name[MAX_NLEN];
     char temp[MAX_NLEN];
     bool explode = FALSE, touched = FALSE, fear = FALSE, dead = FALSE;
     POSITION y_saver = t_ptr->fy;
     POSITION x_saver = t_ptr->fx;
     int effect_type;
 
-    bool see_m = is_seen(m_ptr);
-    bool see_t = is_seen(t_ptr);
-    bool see_either = see_m || see_t;
 
     /* Can the player be aware of this attack? */
     bool known = (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
@@ -64,13 +133,13 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     /* Extract the effective monster level */
     DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
-    monster_desc(subject_ptr, m_name, m_ptr, 0);
-    monster_desc(subject_ptr, t_name, t_ptr, 0);
+    monster_desc(subject_ptr, mam_ptr->m_name, m_ptr, 0);
+    monster_desc(subject_ptr, mam_ptr->t_name, t_ptr, 0);
 
     /* Assume no blink */
     bool blinked = FALSE;
 
-    if (!see_either && known) {
+    if (!mam_ptr->see_either && known) {
         subject_ptr->current_floor_ptr->monster_noise = TRUE;
     }
 
@@ -82,7 +151,6 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         bool obvious = FALSE;
 
         HIT_POINT power = 0;
-        HIT_POINT damage = 0;
 
         concptr act = NULL;
 
@@ -213,7 +281,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
             }
 
             case RBM_EXPLODE: {
-                if (see_either)
+                if (mam_ptr->see_either)
                     disturb(subject_ptr, TRUE, TRUE);
                 act = _("爆発した。", "explodes.");
                 explode = TRUE;
@@ -270,12 +338,12 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
             }
             }
 
-            if (act && see_either) {
+            if (act && mam_ptr->see_either) {
 #ifdef JP
                 if (do_silly_attack)
                     act = silly_attacks2[randint0(MAX_SILLY_ATTACK)];
-                strfmt(temp, act, t_name);
-                msg_format("%^sは%s", m_name, temp);
+                strfmt(temp, act, mam_ptr->t_name);
+                msg_format("%^sは%s", mam_ptr->m_name, temp);
 #else
                 if (do_silly_attack) {
                     act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
@@ -290,7 +358,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
             obvious = TRUE;
 
             /* Roll out the damage */
-            damage = damroll(d_dice, d_side);
+            mam_ptr->damage = damroll(d_dice, d_side);
 
             /* Assume no effect */
             effect_type = BLOW_EFFECT_TYPE_NONE;
@@ -301,20 +369,20 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
             switch (effect) {
             case 0:
             case RBE_DR_MANA:
-                damage = pt = 0;
+                mam_ptr->damage = pt = 0;
                 break;
 
             case RBE_SUPERHURT:
                 if ((randint1(rlev * 2 + 250) > (ac + 200)) || one_in_(13)) {
-                    int tmp_damage = damage - (damage * ((ac < 150) ? ac : 150) / 250);
-                    damage = MAX(damage, tmp_damage * 2);
+                    int tmp_damage = mam_ptr->damage - (mam_ptr->damage * ((ac < 150) ? ac : 150) / 250);
+                    mam_ptr->damage = MAX(mam_ptr->damage, tmp_damage * 2);
                     break;
                 }
 
                 /* Fall through */
 
             case RBE_HURT:
-                damage -= (damage * ((ac < 150) ? ac : 150) / 250);
+                mam_ptr->damage -= (mam_ptr->damage * ((ac < 150) ? ac : 150) / 250);
                 break;
 
             case RBE_POISON:
@@ -374,8 +442,8 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
                 break;
 
             case RBE_SHATTER:
-                damage -= (damage * ((ac < 150) ? ac : 150) / 250);
-                if (damage > 23)
+                mam_ptr->damage -= (mam_ptr->damage * ((ac < 150) ? ac : 150) / 250);
+                if (mam_ptr->damage > 23)
                     earthquake(subject_ptr, m_ptr->fy, m_ptr->fx, 8, m_idx);
                 break;
 
@@ -411,50 +479,16 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
             if (pt) {
                 /* Do damage if not exploding */
                 if (!explode) {
-                    project(subject_ptr, m_idx, 0, t_ptr->fy, t_ptr->fx, damage, pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+                    project(subject_ptr, m_idx, 0, t_ptr->fy, t_ptr->fx, mam_ptr->damage, pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
                 }
 
-                switch (effect_type) {
-                case BLOW_EFFECT_TYPE_FEAR:
-                    project(subject_ptr, m_idx, 0, t_ptr->fy, t_ptr->fx, damage, GF_TURN_ALL, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
-                    break;
-
-                case BLOW_EFFECT_TYPE_SLEEP:
-                    project(subject_ptr, m_idx, 0, t_ptr->fy, t_ptr->fx, r_ptr->level, GF_OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
-                    break;
-
-                case BLOW_EFFECT_TYPE_HEAL:
-                    if ((monster_living(m_idx)) && (damage > 2)) {
-                        bool did_heal = FALSE;
-
-                        if (m_ptr->hp < m_ptr->maxhp)
-                            did_heal = TRUE;
-
-                        /* Heal */
-                        m_ptr->hp += damroll(4, damage / 6);
-                        if (m_ptr->hp > m_ptr->maxhp)
-                            m_ptr->hp = m_ptr->maxhp;
-
-                        /* Redraw (later) if needed */
-                        if (subject_ptr->health_who == m_idx)
-                            subject_ptr->redraw |= (PR_HEALTH);
-                        if (subject_ptr->riding == m_idx)
-                            subject_ptr->redraw |= (PR_UHEALTH);
-
-                        /* Special message */
-                        if (see_m && did_heal) {
-                            msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), m_name);
-                        }
-                    }
-                    break;
-                }
-
+                process_blow_effect(subject_ptr, mam_ptr);
                 if (touched) {
                     /* Aura fire */
                     if ((tr_ptr->flags2 & RF2_AURA_FIRE) && m_ptr->r_idx) {
                         if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
-                            if (see_either) {
-                                msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), m_name);
+                            if (mam_ptr->see_either) {
+                                msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), mam_ptr->m_name);
                             }
                             if (m_ptr->ml && is_original_ap_and_seen(subject_ptr, t_ptr))
                                 tr_ptr->r_flags2 |= RF2_AURA_FIRE;
@@ -469,8 +503,8 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
                     /* Aura cold */
                     if ((tr_ptr->flags3 & RF3_AURA_COLD) && m_ptr->r_idx) {
                         if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)) {
-                            if (see_either) {
-                                msg_format(_("%^sは突然寒くなった！", "%^s is suddenly very cold!"), m_name);
+                            if (mam_ptr->see_either) {
+                                msg_format(_("%^sは突然寒くなった！", "%^s is suddenly very cold!"), mam_ptr->m_name);
                             }
                             if (m_ptr->ml && is_original_ap_and_seen(subject_ptr, t_ptr))
                                 tr_ptr->r_flags3 |= RF3_AURA_COLD;
@@ -485,8 +519,8 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
                     /* Aura elec */
                     if ((tr_ptr->flags2 & RF2_AURA_ELEC) && m_ptr->r_idx) {
                         if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)) {
-                            if (see_either) {
-                                msg_format(_("%^sは電撃を食らった！", "%^s gets zapped!"), m_name);
+                            if (mam_ptr->see_either) {
+                                msg_format(_("%^sは電撃を食らった！", "%^s gets zapped!"), mam_ptr->m_name);
                             }
                             if (m_ptr->ml && is_original_ap_and_seen(subject_ptr, t_ptr))
                                 tr_ptr->r_flags2 |= RF2_AURA_ELEC;
@@ -520,9 +554,9 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
                 (void)set_monster_csleep(subject_ptr, t_idx, 0);
 
                 /* Visible monsters */
-                if (see_m) {
+                if (mam_ptr->see_m) {
 #ifdef JP
-                    msg_format("%sは%^sの攻撃をかわした。", t_name, m_name);
+                    msg_format("%sは%^sの攻撃をかわした。", mam_ptr->t_name, mam_ptr->m_name);
 #else
                     msg_format("%^s misses %s.", m_name, t_name);
 #endif
@@ -536,7 +570,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         /* Analyze "visible" monsters only */
         if (is_original_ap_and_seen(subject_ptr, m_ptr) && !do_silly_attack) {
             /* Count "obvious" attacks (and ones that cause damage) */
-            if (obvious || damage || (r_ptr->r_blows[ap_cnt] > 10)) {
+            if (obvious || mam_ptr->damage || (r_ptr->r_blows[ap_cnt] > 10)) {
                 /* Count attacks of this type */
                 if (r_ptr->r_blows[ap_cnt] < MAX_UCHAR) {
                     r_ptr->r_blows[ap_cnt]++;
@@ -558,13 +592,13 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         return TRUE;
 
     if (teleport_barrier(subject_ptr, m_idx)) {
-        if (see_m) {
+        if (mam_ptr->see_m) {
             msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
         } else if (known) {
             subject_ptr->current_floor_ptr->monster_noise = TRUE;
         }
     } else {
-        if (see_m) {
+        if (mam_ptr->see_m) {
             msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
         } else if (known) {
             subject_ptr->current_floor_ptr->monster_noise = TRUE;
