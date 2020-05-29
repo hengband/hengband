@@ -23,6 +23,7 @@
 #include "spell/technic-info-table.h"
 #include "spell/spells-status.h"
 #include "object/object1.h"
+#include "object/object2.h"
 #include "object/object-hook.h"
 #include "object/object-ego.h"
 #include "object/special-object-flags.h"

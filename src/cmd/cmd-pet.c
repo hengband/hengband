@@ -5,7 +5,6 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "floor/floor.h"
-#include "grid/grid.h"
 #include "core/sort.h"
 #include "player/player-move.h"
 #include "player/player-status.h"

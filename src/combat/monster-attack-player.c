@@ -18,6 +18,7 @@
 #include "main/sound-definitions-table.h"
 #include "mind/racial-mirror-master.h"
 #include "monster/monster-status.h"
+#include "object/object2.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"

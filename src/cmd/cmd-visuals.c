@@ -5,6 +5,7 @@
 #include "knowledge/knowledge-items.h"
 #include "knowledge/knowledge-monsters.h"
 #include "io/files-util.h"
+#include "object/object2.h"
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
 #include "term/gameterm.h"

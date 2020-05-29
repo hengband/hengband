@@ -11,6 +11,7 @@
 #include "combat/attack-accuracy.h"
 #include "market/building-util.h"
 #include "core/stuff-handler.h"
+#include "object/object2.h"
 #include "object/tr-types.h"
 #include "object/item-use-flags.h"
 #include "object/sv-weapon-types.h"

@@ -6,6 +6,7 @@
  */
 
 #include "system/angband.h"
+#include "floor/floor.h"
 #include "knowledge/knowledge-monsters.h"
 #include "cmd/dump-util.h"
 #include "core/sort.h"

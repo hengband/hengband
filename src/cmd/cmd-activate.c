@@ -8,12 +8,12 @@
 
 #include "system/angband.h"
 #include "main/sound-definitions-table.h"
-
 #include "cmd/cmd-activate.h"
 #include "cmd/cmd-basic.h"
 #include "cmd/cmd-save.h"
 #include "object/object-hook.h"
 #include "core/sort.h"
+#include "floor/floor.h"
 #include "object/artifact.h"
 #include "object/item-use-flags.h"
 #include "player/avatar.h"

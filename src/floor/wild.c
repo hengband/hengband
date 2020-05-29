@@ -15,7 +15,6 @@
 #include "system/system-variables.h"
 
 #include "dungeon/dungeon.h"
-#include "floor/floor.h"
 #include "floor/wild.h"
 #include "world/world.h"
 #include "monster/monster.h"

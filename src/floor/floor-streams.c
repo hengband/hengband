@@ -26,12 +26,12 @@
 #include "grid/grid.h"
 #include "monster/monster.h"
 #include "grid/feature.h"
+#include "object/object2.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "spell/spells1.h"
 #include "spell/spells-floor.h"
 #include "room/rooms.h"
-
 
 /*!
  * @brief 再帰フラクタルアルゴリズムによりダンジョン内に川を配置する /

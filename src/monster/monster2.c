@@ -20,6 +20,7 @@
 #include "cmd-pet.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
+#include "object/object2.h"
 #include "object/object-flavor.h"
 #include "monster/monster-race-hook.h"
 #include "monster/monster-status.h"

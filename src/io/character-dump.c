@@ -1,5 +1,6 @@
 ﻿#include "io/character-dump.h"
 #include "system/angband-version.h"
+#include "floor/floor.h"
 #include "world/world.h"
 #include "floor/floor-town.h"
 #include "dungeon/dungeon.h"

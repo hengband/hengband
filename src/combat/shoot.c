@@ -13,6 +13,7 @@
 #include "player/player-skill.h"
 #include "player/player-class.h"
 #include "player/player-personalities-table.h"
+#include "object/object2.h"
 #include "object/object-hook.h"
 #include "object/object-broken.h"
 #include "object/object-mark-types.h"

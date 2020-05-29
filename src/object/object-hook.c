@@ -1,4 +1,5 @@
 ﻿#include "system/angband.h"
+#include "floor/floor.h"
 #include "util/util.h"
 #include "object/artifact.h"
 #include "object/item-feeling.h"

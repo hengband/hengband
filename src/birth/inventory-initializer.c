@@ -4,6 +4,7 @@
 #include "player/player-personalities-table.h"
 #include "birth/initial-equipments-table.h"
 #include "object/item-apply-magic.h"
+#include "object/object2.h"
 #include "object/object-ego.h"
 #include "object/object-kind.h"
 #include "object/sv-bow-types.h"

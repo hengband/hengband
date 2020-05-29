@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "combat/attack-accuracy.h"
+﻿#include "combat/attack-accuracy.h"
 #include "main/sound-definitions-table.h"
 #include "object/death-scythe.h"
 #include "object/sv-weapon-types.h"

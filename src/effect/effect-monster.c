@@ -18,6 +18,7 @@
 #include "spell/spells-type.h"
 #include "effect/effect-characteristics.h"
 #include "spell/spells3.h"
+#include "object/object2.h"
 #include "object/special-object-flags.h"
 #include "object/sv-other-types.h"
 

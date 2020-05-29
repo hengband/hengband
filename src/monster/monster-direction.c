@@ -5,6 +5,7 @@
  */
 
 #include "monster/monster-direction.h"
+#include "floor/floor.h"
 #include "monster/monster-sweep-grid.h"
 #include "monster/monster-util.h"
 #include "monster/monster-status.h"

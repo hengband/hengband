@@ -1,7 +1,6 @@
 ﻿#include "system/angband.h"
-
 #include "spell/spells-diceroll.h"
-
+#include "floor/floor.h"
 #include "monster/monster.h"
 #include "monster/monster-race-hook.h"
 #include "player/player-class.h"

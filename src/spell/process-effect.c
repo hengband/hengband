@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "effect/spells-effect-util.h"
 #include "spell/process-effect.h"
+#include "floor/floor.h"
 #include "cmd-pet.h" // 暫定、後で消すかも.
 #include "core/stuff-handler.h"
 #include "effect/effect-feature.h"

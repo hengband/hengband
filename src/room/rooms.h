@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include "grid/grid.h"
+
 #define ALLOW_CAVERNS_AND_LAKES
 
 #define DUN_ROOMS_MAX	40 /*!< 部屋生成処理の最大試行数 / Number of rooms to attempt (was 50) */

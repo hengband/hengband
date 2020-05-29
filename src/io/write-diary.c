@@ -5,6 +5,7 @@
  */
 
 #include "io/write-diary.h"
+#include "floor/floor.h"
 #include "system/system-variables.h"
 #include "dungeon/quest.h"
 #include "io/files-util.h"

@@ -6,6 +6,7 @@
 
 #include "system/angband.h"
 #include "effect/effect-monster-util.h"
+#include "floor/floor.h"
 
 /*!
  * @brief affect_monster() に亘ってきた引数をeffect_monster_type構造体に代入する

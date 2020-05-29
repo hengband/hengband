@@ -8,6 +8,7 @@
 #include "combat/attack-chaos-effect.h"
 #include "monster/monster-status.h"
 #include "object/artifact.h"
+#include "object/object2.h"
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
 #include "realm/realm-hex.h"

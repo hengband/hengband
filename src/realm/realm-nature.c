@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "util/util.h"
 
-#include "cmd-spell.h"
+#include "cmd/cmd-spell.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-status.h"
 #include "spell/spells-object.h"
@@ -20,6 +20,7 @@
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "spell/spells-detection.h"
+#include "object/object2.h"
 #include "object/sv-food-types.h"
 
 /*!

@@ -15,6 +15,7 @@
 #include "player/player-status.h"
 #include "cmd-basic.h"
 #include "combat/snipe.h"
+#include "floor/floor.h"
 #include "monster/monster-race.h"
 #include "view/display-main-window.h"
 

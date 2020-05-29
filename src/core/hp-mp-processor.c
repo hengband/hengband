@@ -1,5 +1,7 @@
 ﻿#include "system/angband.h"
 #include "core/hp-mp-processor.h"
+#include "floor/floor.h"
+#include "grid/feature.h"
 #include "realm/realm-song.h"
 #include "player/player-damage.h"
 #include "object/object-flavor.h"

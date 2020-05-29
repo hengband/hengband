@@ -15,6 +15,7 @@
 #include "player/player-move.h"
 #include "world/world.h"
 #include "player/player-effects.h"
+#include "object/object2.h"
 #include "object/object-kind.h"
 #include "object/object-ego.h"
 #include "object/sv-amulet-types.h"

@@ -39,6 +39,7 @@
 #include "realm/realm-hex.h"
 #include "autopick/autopick.h"
 #include "object/item-use-flags.h"
+#include "object/object2.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"

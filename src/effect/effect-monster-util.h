@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "grid/grid.h"
+
 typedef struct effect_monster_type {
 	grid_type *g_ptr;
 	monster_type *m_ptr;

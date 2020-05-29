@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "floor/floor-save.h"
+
 /*
  * Flags for wr_item()/rd_item()
  */

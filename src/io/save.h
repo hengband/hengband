@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "floor/floor-save.h"
+
 /*
  * Flags for save/load temporary saved floor file
  */

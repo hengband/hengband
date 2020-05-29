@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "grid/grid.h"
 #include "combat/combat-options-type.h"
 #include "combat/martial-arts-table.h"
 

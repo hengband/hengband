@@ -49,6 +49,7 @@
 #include "object/sv-protector-types.h"
 #include "object/sv-scroll-types.h"
 #include "object/sv-weapon-types.h"
+#include "object/object2.h"
 
  /*
   * Pronoun arrays, by gender.

@@ -19,6 +19,7 @@
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick.h"
 #include "player/player-move.h"
+#include "object/object2.h"
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
 

@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "core/turn-compensator.h"
 #include "world/world.h"
+#include "floor/floor.h"
 #include "floor/floor-town.h"
 #include "store/store-owners.h"
 #include "store/store-util.h"

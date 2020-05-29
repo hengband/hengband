@@ -33,6 +33,7 @@
 #include "system/angband.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/dump-util.h"
+#include "floor/floor.h"
 #include "term/gameterm.h"
 #include "system/angband-version.h"
 #include "io/dump-remover.h"

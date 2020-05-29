@@ -8,10 +8,10 @@
 #include "monster/monster-race-hook.h"
 #include "object/item-apply-magic.h"
 #include "object/object-kind-hook.h"
+#include "object/object2.h"
 #include "grid/feature.h"
 #include "floor/floor.h"
 #include "dungeon/dungeon.h"
-
 
 /*!
 * @brief タイプ15の部屋…ガラス部屋の生成 / Type 15 -- glass rooms

@@ -4,6 +4,7 @@
 
 #include "io/tokenizer.h"
 #include "io/files-util.h"
+#include "object/object2.h"
 #include "object/object-flavor.h"
 #include "object/artifact.h"
 #include "object/special-object-flags.h"

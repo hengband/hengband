@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "grid/feature.h"
+
 #define FILE_NAME_SIZE 1024
 
 // Clipboard variables for copy&paste in visual mode

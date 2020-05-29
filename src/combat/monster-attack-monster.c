@@ -2,6 +2,7 @@
 #include "dungeon/dungeon.h"
 #include "combat/monster-attack-effect.h"
 #include "combat/hallucination-attacks-table.h"
+#include "floor/floor.h"
 #include "spell/spells-type.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"

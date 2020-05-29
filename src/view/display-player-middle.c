@@ -1,4 +1,5 @@
-﻿#include "view/display-player-middle.h"
+﻿#include "floor/floor.h"
+#include "view/display-player-middle.h"
 #include "view/status-first-page.h"
 #include "view/display-util.h"
 #include "player/player-effects.h"

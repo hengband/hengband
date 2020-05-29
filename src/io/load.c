@@ -80,6 +80,7 @@
 #include "player/player-personality.h"
 #include "player/player-sex.h"
 #include "world/world.h"
+#include "object/object2.h"
 #include "object/object-kind.h"
 #include "object/object-ego.h"
 #include "io/save.h"

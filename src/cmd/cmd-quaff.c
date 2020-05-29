@@ -24,6 +24,7 @@
 #include "realm/realm-hex.h"
 #include "spell/spells-floor.h"
 #include "object/item-use-flags.h"
+#include "object/object2.h"
 #include "object/object-broken.h"
 #include "object/sv-potion-types.h"
 #include "cmd-basic.h"

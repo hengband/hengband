@@ -7,6 +7,7 @@
 #include "object/sv-other-types.h"
 #include "object/item-use-flags.h"
 #include "object/object1.h"
+#include "object/object2.h"
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

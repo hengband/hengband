@@ -1,4 +1,6 @@
 ﻿#include "system/angband.h"
+#include "floor/floor.h"
+#include "grid/grid.h"
 #include "spell/spells-detection.h"
 #include "dungeon/dungeon.h"
 #include "realm/realm-song.h"

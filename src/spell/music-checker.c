@@ -1,4 +1,5 @@
 ﻿#include "system/angband.h"
+#include "floor/floor.h"
 #include "spell/music-checker.h"
 #include "realm/realm-song.h"
 #include "spell/spells3.h"

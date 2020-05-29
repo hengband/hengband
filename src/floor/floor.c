@@ -10,6 +10,7 @@
 #include "world/world.h"
 #include "player/player-effects.h"
 #include "object/object1.h"
+#include "object/object2.h"
 #include "object/artifact.h"
 #include "object/object-kind.h"
 #include "object/special-object-flags.h"

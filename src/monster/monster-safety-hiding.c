@@ -5,6 +5,7 @@
  */
 
 #include "monster/monster-safety-hiding.h"
+#include "floor/floor.h"
 #include "monster/monster-dist-offsets.h"
 #include "mspell/monster-spell.h"
 

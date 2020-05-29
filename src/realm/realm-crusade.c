@@ -14,6 +14,7 @@
 #include "player/player-effects.h"
 #include "io/targeting.h"
 #include "realm/realm-crusade.h"
+#include "floor/floor.h"
 #include "spell/process-effect.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"

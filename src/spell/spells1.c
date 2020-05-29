@@ -12,6 +12,7 @@
  */
 
 #include "system/angband.h"
+#include "floor/floor.h"
 #include "system/system-variables.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"

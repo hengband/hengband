@@ -1,5 +1,4 @@
 ﻿#include "system/angband.h"
-#include "grid/feature.h"
 #include "dump-util.h"
 #include "term/gameterm.h"
 

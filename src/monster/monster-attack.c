@@ -5,6 +5,7 @@
  */
 
 #include "monster/monster-attack.h"
+#include "floor/floor.h"
 #include "monster/monster-status.h"
 #include "dungeon/dungeon.h"
 #include "combat/monster-attack-player.h"

@@ -1,4 +1,5 @@
 ﻿#include "system/angband.h"
+#include "object/object2.h"
 #include "object/object-kind.h"
 #include "combat/snipe.h"
 #include "spell/spells-type.h"

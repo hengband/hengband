@@ -4,6 +4,7 @@
 #include "player/avatar.h"
 #include "market/bounty-prize-table.h"
 #include "object/item-apply-magic.h"
+#include "object/object2.h"
 #include "object/object-flavor.h"
 #include "autopick/autopick.h"
 #include "core/stuff-handler.h"

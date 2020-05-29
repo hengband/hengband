@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "floor/floor.h"
+
 #define NO_TOWN 6
 #define SECRET_TOWN 5
 

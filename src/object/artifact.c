@@ -39,6 +39,7 @@
 #include "world/world.h"
 #include "object/tr-types.h"
 #include "object/trc-types.h"
+#include "object/object2.h"
 
  /*
   * The artifact arrays

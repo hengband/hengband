@@ -43,7 +43,6 @@
 #include "floor/floor.h"
 #include "floor/floor-generate.h"
 #include "dungeon/dungeon.h"
-#include "grid/grid.h"
 #include "room/rooms.h"
 
 #include "room/rooms-city.h"

@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-psi.h"
+#include "floor/floor.h"
 #include "player/player-damage.h"
 #include "mind/racial-mirror-master.h"
 #include "world/world.h"

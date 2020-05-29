@@ -10,6 +10,7 @@
 #include "object/item-apply-magic.h"
 #include "object/item-feeling.h"
 #include "object/item-use-flags.h"
+#include "object/object2.h"
 #include "object/object-boost.h"
 #include "object/object-hook.h"
 #include "object/object-flavor.h"

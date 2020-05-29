@@ -31,6 +31,7 @@
 #include "player/player-skill.h"
 #include "inventory/player-inventory.h"
 #include "realm/realm-hex.h"
+#include "floor/floor.h"
 #include "grid/grid.h"
 #include "monster/monster-race.h"
 #include "io/targeting.h"

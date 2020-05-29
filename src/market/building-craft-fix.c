@@ -1,5 +1,6 @@
 ﻿#include "system/angband.h"
 #include "market/building-craft-fix.h"
+#include "object/object2.h"
 #include "object/object-hook.h"
 #include "object/object-flavor.h"
 #include "object/object-kind.h"

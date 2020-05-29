@@ -2,7 +2,6 @@
 #include "object/chest.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
-
 #include "spell/spells-type.h"
 #include "spell/spells-summon.h"
 #include "floor/floor.h"
@@ -15,6 +14,7 @@
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "object/item-apply-magic.h"
+#include "object/object2.h"
 #include "object/sv-other-types.h"
 
 /*!< この値以降の小項目IDを持った箱は大型の箱としてドロップ数を増やす / Special "sval" limit -- first "large" chest */

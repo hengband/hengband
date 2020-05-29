@@ -44,6 +44,7 @@
 #include "spell/spells-floor.h"
 
 #include "object/item-apply-magic.h"
+#include "object/object2.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "monster/monster-status.h"

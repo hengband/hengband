@@ -6,6 +6,7 @@
 #include "grid/grid.h"
 #include "dungeon/quest.h"
 #include "object/artifact.h"
+#include "object/object2.h"
 #include "object/object-kind.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

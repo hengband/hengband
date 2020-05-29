@@ -7,6 +7,7 @@
  */
 
 #include "display-player.h"
+#include "floor/floor.h"
 #include "player/mimic-info-table.h"
 #include "player/player-personality.h"
 #include "term/gameterm.h"

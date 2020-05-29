@@ -1,4 +1,5 @@
 ﻿#include "system/angband.h"
+#include "floor/floor.h"
 #include "market/arena.h"
 #include "market/arena-info-table.h"
 #include "market/building-util.h"

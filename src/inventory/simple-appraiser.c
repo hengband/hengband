@@ -3,6 +3,7 @@
 #include "object/object-flavor.h"
 #include "player/avatar.h"
 #include "object/item-feeling.h"
+#include "object/object2.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/special-object-flags.h"

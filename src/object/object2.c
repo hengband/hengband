@@ -11,7 +11,7 @@
  */
 
 #include "system/angband.h"
-#include "object/object1.h"
+#include "object/object2.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 #include "world/world.h"

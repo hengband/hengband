@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+#include "grid/feature.h"
+
 #define DUNGEON_FEAT_PROB_NUM 3
 
 #define DUNGEON_ANGBAND  1

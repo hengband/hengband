@@ -1,4 +1,5 @@
 ﻿#include "system/angband.h"
+#include "floor/floor.h"
 #include "market/building-quest.h"
 #include "dungeon/quest.h"
 #include "system/system-variables.h"

@@ -1,5 +1,6 @@
 ﻿#include "system/angband.h"
 #include "birth/game-play-initializer.h"
+#include "object/object2.h"
 #include "object/object-kind.h"
 #include "world/world.h"
 #include "dungeon/quest.h"

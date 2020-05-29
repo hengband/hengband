@@ -70,6 +70,7 @@
 
 #include "main/init.h"
 #include "object/tr-types.h"
+#include "object/object2.h"
 
 dungeon_grid letter[255];
 

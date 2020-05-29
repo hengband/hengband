@@ -27,7 +27,6 @@
 #include "floor/wild.h"
 #include "floor/floor.h"
 #include "floor/floor-events.h"
-#include "floor/floor-save.h"
 #include "floor/floor-town.h"
 #include "io/uid-checker.h"
 #include "io/files-util.h"

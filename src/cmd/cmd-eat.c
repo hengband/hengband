@@ -10,7 +10,7 @@
 #include "system/angband.h"
 #include "main/sound-definitions-table.h"
 #include "util/util.h"
-
+#include "object/object2.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "player/avatar.h"

@@ -24,6 +24,7 @@
 #include "world/world.h"
 #include "dungeon/quest.h"
 #include "object/artifact.h"
+#include "object/object2.h"
 #include "object/object-mark-types.h"
 #include "player/avatar.h"
 #include "view/display-player.h"

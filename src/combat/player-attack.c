@@ -13,6 +13,7 @@
 #include "combat/player-attack-util.h"
 #include "combat/slaying.h"
 #include "combat/vorpal-weapon.h"
+#include "floor/floor.h"
 #include "main/sound-definitions-table.h"
 #include "mind/monk-attack.h"
 #include "mind/racial-samurai.h"
