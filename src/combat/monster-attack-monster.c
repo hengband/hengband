@@ -70,7 +70,7 @@ static void heal_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
         msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), mam_ptr->m_name);
 }
 
-static void process_blow_effect(player_type *subject_ptr, mam_type *mam_ptr)
+void process_blow_effect(player_type *subject_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     switch (mam_ptr->effect_type) {
@@ -87,6 +87,72 @@ static void process_blow_effect(player_type *subject_ptr, mam_type *mam_ptr)
         heal_monster_by_melee(subject_ptr, mam_ptr);
         break;
     }
+}
+
+void aura_fire_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
+{
+    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
+    if (((tr_ptr->flags2 & RF2_AURA_FIRE) == 0) || (mam_ptr->m_ptr->r_idx == 0))
+        return;
+
+    if (((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) != 0) && is_original_ap_and_seen(subject_ptr, mam_ptr->m_ptr)) {
+        r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
+        return;
+    }
+
+    if (mam_ptr->see_either)
+        msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), mam_ptr->m_name);
+
+    if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(subject_ptr, mam_ptr->t_ptr))
+        tr_ptr->r_flags2 |= RF2_AURA_FIRE;
+
+    project(subject_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_FIRE,
+        PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+}
+
+void aura_cold_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
+{
+    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
+    if (((tr_ptr->flags3 & RF3_AURA_COLD) == 0) || (mam_ptr->m_ptr->r_idx == 0))
+        return;
+
+    if (((r_ptr->flagsr & RFR_EFF_IM_COLD_MASK) != 0) && is_original_ap_and_seen(subject_ptr, mam_ptr->m_ptr)) {
+        r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
+        return;
+    }
+
+    if (mam_ptr->see_either)
+        msg_format(_("%^sは突然寒くなった！", "%^s is suddenly very cold!"), mam_ptr->m_name);
+
+    if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(subject_ptr, mam_ptr->t_ptr))
+        tr_ptr->r_flags3 |= RF3_AURA_COLD;
+
+    project(subject_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_COLD,
+        PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+}
+
+void aura_elec_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
+{
+    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
+    if (((tr_ptr->flags2 & RF2_AURA_ELEC) == 0) || (mam_ptr->m_ptr->r_idx == 0))
+        return;
+
+    if (((r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK) != 0) && is_original_ap_and_seen(subject_ptr, mam_ptr->m_ptr)) {
+        r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
+        return;
+    }
+
+    if (mam_ptr->see_either)
+        msg_format(_("%^sは電撃を食らった！", "%^s gets zapped!"), mam_ptr->m_name);
+
+    if (mam_ptr->m_ptr->ml && is_original_ap_and_seen(subject_ptr, mam_ptr->t_ptr))
+        tr_ptr->r_flags2 |= RF2_AURA_ELEC;
+
+    project(subject_ptr, mam_ptr->t_idx, 0, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_ELEC,
+        PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 }
 
 /*!
@@ -481,53 +547,9 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
                 process_blow_effect(subject_ptr, mam_ptr);
                 if (touched) {
-                    /* Aura fire */
-                    if ((tr_ptr->flags2 & RF2_AURA_FIRE) && m_ptr->r_idx) {
-                        if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
-                            if (mam_ptr->see_either) {
-                                msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), mam_ptr->m_name);
-                            }
-                            if (m_ptr->ml && is_original_ap_and_seen(subject_ptr, t_ptr))
-                                tr_ptr->r_flags2 |= RF2_AURA_FIRE;
-                            project(subject_ptr, t_idx, 0, m_ptr->fy, m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_FIRE,
-                                PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
-                        } else {
-                            if (is_original_ap_and_seen(subject_ptr, m_ptr))
-                                r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
-                        }
-                    }
-
-                    /* Aura cold */
-                    if ((tr_ptr->flags3 & RF3_AURA_COLD) && m_ptr->r_idx) {
-                        if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)) {
-                            if (mam_ptr->see_either) {
-                                msg_format(_("%^sは突然寒くなった！", "%^s is suddenly very cold!"), mam_ptr->m_name);
-                            }
-                            if (m_ptr->ml && is_original_ap_and_seen(subject_ptr, t_ptr))
-                                tr_ptr->r_flags3 |= RF3_AURA_COLD;
-                            project(subject_ptr, t_idx, 0, m_ptr->fy, m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_COLD,
-                                PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
-                        } else {
-                            if (is_original_ap_and_seen(subject_ptr, m_ptr))
-                                r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
-                        }
-                    }
-
-                    /* Aura elec */
-                    if ((tr_ptr->flags2 & RF2_AURA_ELEC) && m_ptr->r_idx) {
-                        if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)) {
-                            if (mam_ptr->see_either) {
-                                msg_format(_("%^sは電撃を食らった！", "%^s gets zapped!"), mam_ptr->m_name);
-                            }
-                            if (m_ptr->ml && is_original_ap_and_seen(subject_ptr, t_ptr))
-                                tr_ptr->r_flags2 |= RF2_AURA_ELEC;
-                            project(subject_ptr, t_idx, 0, m_ptr->fy, m_ptr->fx, damroll(1 + ((tr_ptr->level) / 26), 1 + ((tr_ptr->level) / 17)), GF_ELEC,
-                                PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
-                        } else {
-                            if (is_original_ap_and_seen(subject_ptr, m_ptr))
-                                r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
-                        }
-                    }
+                    aura_fire_by_melee(subject_ptr, mam_ptr);
+                    aura_cold_by_melee(subject_ptr, mam_ptr);
+                    aura_elec_by_melee(subject_ptr, mam_ptr);
                 }
             }
         }
