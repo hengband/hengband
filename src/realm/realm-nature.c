@@ -20,6 +20,7 @@
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "spell/spells-detection.h"
+#include "object/sv-food-types.h"
 
 /*!
 * @brief 自然領域魔法の各処理を行う

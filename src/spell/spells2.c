@@ -65,6 +65,7 @@
 #include "combat/combat-options-type.h"
 #include "cmd/cmd-attack.h"
 #include "object/special-object-flags.h"
+#include "object/sv-food-types.h"
 
 #define SV_WOODEN_STATUE 0
 

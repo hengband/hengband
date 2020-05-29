@@ -7,6 +7,7 @@
 #include "object/object-ego.h"
 #include "object/object-kind.h"
 #include "object/sv-bow-types.h"
+#include "object/sv-food-types.h"
 #include "object/sv-lite-types.h"
 #include "object/sv-other-types.h"
 #include "object/sv-potion-types.h"

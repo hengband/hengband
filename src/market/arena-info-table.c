@@ -1,6 +1,7 @@
 ﻿#include "system/angband.h"
 #include "arena-info-table.h"
 #include "object/sv-amulet-types.h"
+#include "object/sv-food-types.h"
 #include "object/sv-potion-types.h"
 #include "object/sv-ring-types.h"
 #include "object/sv-rod-types.h"

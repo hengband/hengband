@@ -2212,6 +2212,9 @@
     <ClInclude Include="..\..\src\object\sv-scroll-types.h">
       <Filter>object</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-food-types.h">
+      <Filter>object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

@@ -26,6 +26,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-kind.h"
 #include "object/special-object-flags.h"
+#include "object/sv-food-types.h"
 #include "object/sv-other-types.h"
 #include "view/display-main-window.h"
 #include "player/player-races-table.h"

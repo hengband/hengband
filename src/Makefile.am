@@ -209,10 +209,10 @@ hengband_SOURCES = \
 	object/object-mark-types.h object/object-util.h \
 	object/item-apply-magic.h \
 	object/sv-amulet-types.h object/sv-bow-types.h \
-	object/sv-digging-types.h \
+	object/sv-digging-types.h object/sv-food-types.h \
 	object/sv-weapon-types.h object/sv-protector-types.h object/sv-armor-types.h \
 	object/sv-lite-types.h object/sv-potion-types.h object/sv-ring-types.h \
-	object/sv-rod-types.h \
+	object/sv-rod-types.h object/sv-scroll-types.h \
 	object/sv-staff-types.h object/sv-wand-types.h object/sv-other-types.h \
 	object/item-feeling.h object/item-use-flags.h \
 	\

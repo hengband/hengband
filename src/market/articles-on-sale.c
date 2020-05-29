@@ -5,6 +5,7 @@
 #include "object/sv-armor-types.h"
 #include "object/sv-bow-types.h"
 #include "object/sv-digging-types.h"
+#include "object/sv-food-types.h"
 #include "object/sv-other-types.h"
 #include "object/sv-lite-types.h"
 #include "object/sv-potion-types.h"

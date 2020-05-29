@@ -112,33 +112,3 @@ extern void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx);
 extern void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs);
 extern void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds);
 extern void torch_lost_fuel(object_type *o_ptr);
-
-/* The "sval" codes for TV_FOOD */
-#define SV_FOOD_POISON                   0
-#define SV_FOOD_BLINDNESS                1
-#define SV_FOOD_PARANOIA                 2
-#define SV_FOOD_CONFUSION                3
-#define SV_FOOD_HALLUCINATION            4
-#define SV_FOOD_PARALYSIS                5
-#define SV_FOOD_WEAKNESS                 6
-#define SV_FOOD_SICKNESS                 7
-#define SV_FOOD_STUPIDITY                8
-#define SV_FOOD_NAIVETY                  9
-#define SV_FOOD_UNHEALTH                10
-#define SV_FOOD_DISEASE                 11
-#define SV_FOOD_CURE_POISON             12
-#define SV_FOOD_CURE_BLINDNESS          13
-#define SV_FOOD_CURE_PARANOIA           14
-#define SV_FOOD_CURE_CONFUSION          15
-#define SV_FOOD_CURE_SERIOUS            16
-#define SV_FOOD_RESTORE_STR             17
-#define SV_FOOD_RESTORE_CON             18
-#define SV_FOOD_RESTORING               19
-/* many missing mushrooms */
-#define SV_FOOD_BISCUIT                 32
-#define SV_FOOD_JERKY                   33
-#define SV_FOOD_RATION                  35
-#define SV_FOOD_SLIME_MOLD              36
-#define SV_FOOD_WAYBREAD                37
-#define SV_FOOD_PINT_OF_ALE             38
-#define SV_FOOD_PINT_OF_WINE            39
