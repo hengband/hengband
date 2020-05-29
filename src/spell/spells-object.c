@@ -1,5 +1,4 @@
-﻿
-#include "system/angband.h"
+﻿#include "system/angband.h"
 #include "util/util.h"
 
 #include "cmd-basic.h"
@@ -30,6 +29,7 @@
 #include "io/targeting.h"
 #include "view/display-main-window.h"
 #include "object/sv-other-types.h"
+#include "object/sv-staff-types.h"
 #include "object/tr-types.h"
 #include "object/trc-types.h"
 

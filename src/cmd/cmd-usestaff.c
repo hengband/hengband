@@ -18,6 +18,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-kind.h"
 #include "object/special-object-flags.h"
+#include "object/sv-staff-types.h"
 #include "view/display-main-window.h"
 #include "spell/spells-detection.h"
 #include "player/player-races-table.h"

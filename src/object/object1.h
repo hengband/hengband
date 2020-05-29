@@ -113,42 +113,6 @@ extern void torch_flags(object_type *o_ptr, BIT_FLAGS *flgs);
 extern void torch_dice(object_type *o_ptr, DICE_NUMBER *dd, DICE_SID *ds);
 extern void torch_lost_fuel(object_type *o_ptr);
 
-/* The "sval" codes for TV_STAFF */
-#define SV_STAFF_DARKNESS                0
-#define SV_STAFF_SLOWNESS                1
-#define SV_STAFF_HASTE_MONSTERS          2
-#define SV_STAFF_SUMMONING               3
-#define SV_STAFF_TELEPORTATION           4
-#define SV_STAFF_IDENTIFY                5
-#define SV_STAFF_REMOVE_CURSE            6
-#define SV_STAFF_STARLITE                7
-#define SV_STAFF_LITE                    8
-#define SV_STAFF_MAPPING                 9
-#define SV_STAFF_DETECT_GOLD            10
-#define SV_STAFF_DETECT_ITEM            11
-#define SV_STAFF_DETECT_TRAP            12
-#define SV_STAFF_DETECT_DOOR            13
-#define SV_STAFF_DETECT_INVIS           14
-#define SV_STAFF_DETECT_EVIL            15
-#define SV_STAFF_CURE_LIGHT             16
-#define SV_STAFF_CURING                 17
-#define SV_STAFF_HEALING                18
-#define SV_STAFF_THE_MAGI               19
-#define SV_STAFF_SLEEP_MONSTERS         20
-#define SV_STAFF_SLOW_MONSTERS          21
-#define SV_STAFF_SPEED                  22
-#define SV_STAFF_PROBING                23
-#define SV_STAFF_DISPEL_EVIL            24
-#define SV_STAFF_POWER                  25
-#define SV_STAFF_HOLINESS               26
-#define SV_STAFF_GENOCIDE               27
-#define SV_STAFF_EARTHQUAKES            28
-#define SV_STAFF_DESTRUCTION            29
-#define SV_STAFF_ANIMATE_DEAD           30
-#define SV_STAFF_MSTORM                 31
-#define SV_STAFF_NOTHING                32
-
-
 /* The "sval" codes for TV_WAND */
 #define SV_WAND_HEAL_MONSTER             0
 #define SV_WAND_HASTE_MONSTER            1
