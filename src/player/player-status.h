@@ -1,5 +1,7 @@
 ﻿#pragma once 
+
 #include "cmd/cmd-building.h"
+#include "object/object-util.h"
 #include "player/player-personalities-table.h"
 
 struct floor_type;
