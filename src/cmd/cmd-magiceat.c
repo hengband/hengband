@@ -68,6 +68,7 @@
 #include "player/player-class.h"
 #include "object/object-kind.h"
 #include "object/sv-other-types.h"
+#include "object/sv-rod-types.h"
 #include "io/targeting.h"
 
 /*!
