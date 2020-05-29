@@ -14,6 +14,7 @@
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
 #include "object/special-object-flags.h"
+#include "object/sv-wand-types.h"
 #include "player/player-move.h"
 #include "player/player-races-table.h"
 

@@ -4,6 +4,7 @@
 #include "object/sv-potion-types.h"
 #include "object/sv-ring-types.h"
 #include "object/sv-staff-types.h"
+#include "object/sv-wand-types.h"
 
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル

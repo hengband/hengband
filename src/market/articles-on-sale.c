@@ -11,6 +11,7 @@
 #include "object/sv-protector-types.h"
 #include "object/sv-ring-types.h"
 #include "object/sv-staff-types.h"
+#include "object/sv-wand-types.h"
 #include "object/sv-weapon-types.h"
 
 /*!
