@@ -506,6 +506,7 @@
     <ClInclude Include="..\..\src\object\item-use-flags.h" />
     <ClInclude Include="..\..\src\object\object-mark-types.h" />
     <ClInclude Include="..\..\src\object\object-util.h" />
+    <ClInclude Include="..\..\src\object\object2.h" />
     <ClInclude Include="..\..\src\object\old-ego-extra-values.h" />
     <ClInclude Include="..\..\src\object\special-object-flags.h" />
     <ClInclude Include="..\..\src\object\sv-amulet-types.h" />
