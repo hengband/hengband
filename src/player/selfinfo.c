@@ -17,7 +17,6 @@
 #include "system/angband.h"
 #include "player/selfinfo.h"
 #include "util/util.h"
-
 #include "player/player-status.h"
 #include "player/player-races-table.h"
 #include "player/player-class.h"
@@ -25,6 +24,7 @@
 #include "realm/realm.h"
 #include "realm/realm-hex.h"
 #include "realm/realm-song.h"
+#include "object/object1.h"
 #include "object/tr-types.h"
 #include "object/trc-types.h"
 

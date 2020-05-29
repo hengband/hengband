@@ -6,11 +6,12 @@
  */
 
 #include "system/angband.h"
+#include "combat/shoot.h"
 #include "term/gameterm.h"
 #include "status-first-page.h"
 #include "display-util.h"
 #include "object/artifact.h"
-#include "combat/shoot.h"
+#include "object/object1.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/sv-weapon-types.h"

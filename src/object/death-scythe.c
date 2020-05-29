@@ -12,6 +12,7 @@
 #include "player/player-damage.h"
 #include "core/stuff-handler.h"
 #include "combat/attack-criticality.h"
+#include "object/object1.h"
 #include "object/tr-types.h"
 
 /*!
