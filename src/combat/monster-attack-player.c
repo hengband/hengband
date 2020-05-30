@@ -36,6 +36,74 @@
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 
+static void show_jaian_song(monap_type *monap_ptr)
+{
+#ifdef JP
+    switch (randint1(15)) {
+    case 1:
+    case 6:
+    case 11:
+        monap_ptr->act = "「♪お～れはジャイアン～～ガ～キだいしょう～」";
+        break;
+    case 2:
+        monap_ptr->act = "「♪て～んかむ～てきのお～とこだぜ～～」";
+        break;
+    case 3:
+        monap_ptr->act = "「♪の～び太スネ夫はメじゃないよ～～」";
+        break;
+    case 4:
+        monap_ptr->act = "「♪け～んかスポ～ツ～どんとこい～」";
+        break;
+    case 5:
+        monap_ptr->act = "「♪うた～も～～う～まいぜ～まかしとけ～」";
+        break;
+    case 7:
+        monap_ptr->act = "「♪ま～ちいちば～んのに～んきもの～～」";
+        break;
+    case 8:
+        monap_ptr->act = "「♪べんきょうしゅくだいメじゃないよ～～」";
+        break;
+    case 9:
+        monap_ptr->act = "「♪きはやさし～くて～ち～からもち～」";
+        break;
+    case 10:
+        monap_ptr->act = "「♪かお～も～～スタイルも～バツグンさ～」";
+        break;
+    case 12:
+        monap_ptr->act = "「♪がっこうい～ちの～あ～ばれんぼう～～」";
+        break;
+    case 13:
+        monap_ptr->act = "「♪ド～ラもドラミもメじゃないよ～～」";
+        break;
+    case 14:
+        monap_ptr->act = "「♪よじげんぽけっと～な～くたって～」";
+        break;
+    case 15:
+        monap_ptr->act = "「♪あし～の～～ながさ～は～まけないぜ～」";
+        break;
+    }
+#else
+    monap_ptr->act = "horribly sings 'I AM GIAAAAAN. THE BOOOSS OF THE KIIIIDS.'";
+#endif
+}
+
+static void monster_attack_show(monap_type *monap_ptr)
+{
+#ifdef JP
+    monap_ptr->abbreviate = -1;
+#endif
+    if (monap_ptr->m_ptr->r_idx == MON_JAIAN) {
+        show_jaian_song(monap_ptr);
+    } else {
+        if (one_in_(3))
+            monap_ptr->act = _("は♪僕らは楽しい家族♪と歌っている。", "sings 'We are a happy family.'");
+        else
+            monap_ptr->act = _("は♪アイ ラブ ユー、ユー ラブ ミー♪と歌っている。", "sings 'I love you, you love me.'");
+    }
+
+    sound(SOUND_SHOW);
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -62,8 +130,6 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     bool explode = FALSE;
     bool do_silly_attack = (one_in_(2) && target_ptr->image);
     HIT_POINT get_damage = 0;
-    int abbreviate = 0; // 2回目以降の省略表現フラグ.
-
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (r_ptr->flags1 & (RF1_NEVER_BLOW))
         return FALSE;
@@ -131,12 +197,12 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     r_ptr->r_flags3 |= RF3_EVIL;
 
 #ifdef JP
-                if (abbreviate)
+                if (monap_ptr->abbreviate)
                     msg_format("撃退した。");
                 else
                     msg_format("%^sは撃退された。", m_name);
 
-                abbreviate = 1; /*２回目以降は省略 */
+                monap_ptr->abbreviate = 1; /*２回目以降は省略 */
 #else
                 msg_format("%^s is repelled.", m_name);
 #endif
@@ -221,7 +287,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBM_CHARGE: {
-                abbreviate = -1;
+                monap_ptr->abbreviate = -1;
                 monap_ptr->act = _("は請求書をよこした。", "charges you.");
                 touched = TRUE;
 
@@ -230,7 +296,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBM_CRAWL: {
-                abbreviate = -1;
+                monap_ptr->abbreviate = -1;
                 monap_ptr->act = _("が体の上を這い回った。", "crawls on you.");
                 touched = TRUE;
                 sound(SOUND_SLIME);
@@ -247,7 +313,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBM_EXPLODE: {
-                abbreviate = -1;
+                monap_ptr->abbreviate = -1;
                 monap_ptr->act = _("は爆発した。", "explodes.");
                 explode = TRUE;
                 break;
@@ -267,7 +333,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBM_XXX4: {
-                abbreviate = -1;
+                monap_ptr->abbreviate = -1;
                 monap_ptr->act = _("が XXX4 を発射した。", "projects XXX4's at you.");
                 break;
             }
@@ -278,7 +344,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             }
             case RBM_INSULT: {
 #ifdef JP
-                abbreviate = -1;
+                monap_ptr->abbreviate = -1;
 #endif
                 monap_ptr->act = desc_insult[randint0(monap_ptr->m_ptr->r_idx == MON_DEBBY ? 10 : 8)];
                 sound(SOUND_MOAN);
@@ -286,72 +352,14 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             }
             case RBM_MOAN: {
 #ifdef JP
-                abbreviate = -1;
+                monap_ptr->abbreviate = -1;
 #endif
                 monap_ptr->act = desc_moan[randint0(4)];
                 sound(SOUND_MOAN);
                 break;
             }
             case RBM_SHOW: {
-#ifdef JP
-                abbreviate = -1;
-#endif
-                if (monap_ptr->m_ptr->r_idx == MON_JAIAN) {
-#ifdef JP
-                    switch (randint1(15)) {
-                    case 1:
-                    case 6:
-                    case 11:
-                        monap_ptr->act = "「♪お～れはジャイアン～～ガ～キだいしょう～」";
-                        break;
-                    case 2:
-                        monap_ptr->act = "「♪て～んかむ～てきのお～とこだぜ～～」";
-                        break;
-                    case 3:
-                        monap_ptr->act = "「♪の～び太スネ夫はメじゃないよ～～」";
-                        break;
-                    case 4:
-                        monap_ptr->act = "「♪け～んかスポ～ツ～どんとこい～」";
-                        break;
-                    case 5:
-                        monap_ptr->act = "「♪うた～も～～う～まいぜ～まかしとけ～」";
-                        break;
-                    case 7:
-                        monap_ptr->act = "「♪ま～ちいちば～んのに～んきもの～～」";
-                        break;
-                    case 8:
-                        monap_ptr->act = "「♪べんきょうしゅくだいメじゃないよ～～」";
-                        break;
-                    case 9:
-                        monap_ptr->act = "「♪きはやさし～くて～ち～からもち～」";
-                        break;
-                    case 10:
-                        monap_ptr->act = "「♪かお～も～～スタイルも～バツグンさ～」";
-                        break;
-                    case 12:
-                        monap_ptr->act = "「♪がっこうい～ちの～あ～ばれんぼう～～」";
-                        break;
-                    case 13:
-                        monap_ptr->act = "「♪ド～ラもドラミもメじゃないよ～～」";
-                        break;
-                    case 14:
-                        monap_ptr->act = "「♪よじげんぽけっと～な～くたって～」";
-                        break;
-                    case 15:
-                        monap_ptr->act = "「♪あし～の～～ながさ～は～まけないぜ～」";
-                        break;
-                    }
-#else
-                    monap_ptr->act = "horribly sings 'I AM GIAAAAAN. THE BOOOSS OF THE KIIIIDS.'";
-#endif
-                } else {
-                    if (one_in_(3))
-                        monap_ptr->act = _("は♪僕らは楽しい家族♪と歌っている。", "sings 'We are a happy family.'");
-                    else
-                        monap_ptr->act = _("は♪アイ ラブ ユー、ユー ラブ ミー♪と歌っている。", "sings 'I love you, you love me.'");
-                }
-
-                sound(SOUND_SHOW);
+                monster_attack_show(monap_ptr);
                 break;
             }
             }
@@ -359,18 +367,18 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             if (monap_ptr->act) {
                 if (do_silly_attack) {
 #ifdef JP
-                    abbreviate = -1;
+                    monap_ptr->abbreviate = -1;
 #endif
                     monap_ptr->act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
                 }
 #ifdef JP
-                if (abbreviate == 0)
+                if (monap_ptr->abbreviate == 0)
                     msg_format("%^sに%s", m_name, monap_ptr->act);
-                else if (abbreviate == 1)
+                else if (monap_ptr->abbreviate == 1)
                     msg_format("%s", monap_ptr->act);
-                else /* if (abbreviate == -1) */
+                else /* if (monap_ptr->abbreviate == -1) */
                     msg_format("%^s%s", m_name, monap_ptr->act);
-                abbreviate = 1; /*2回目以降は省略 */
+                monap_ptr->abbreviate = 1; /*2回目以降は省略 */
 #else
                 msg_format("%^s %s%s", m_name, monap_ptr->act, do_silly_attack ? " you." : "");
 #endif
@@ -1326,12 +1334,12 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (monap_ptr->m_ptr->ml) {
                     disturb(target_ptr, TRUE, TRUE);
 #ifdef JP
-                    if (abbreviate)
+                    if (monap_ptr->abbreviate)
                         msg_format("%sかわした。", (target_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "");
                     else
                         msg_format("%s%^sの攻撃をかわした。", (target_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "", m_name);
 
-                    abbreviate = 1; /*2回目以降は省略 */
+                    monap_ptr->abbreviate = 1; /*2回目以降は省略 */
 #else
                     msg_format("%^s misses you.", m_name);
 #endif

@@ -13,5 +13,6 @@ monap_type *initialize_monap_type(player_type *target_ptr, monap_type *monap_ptr
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     monap_ptr->m_ptr = &floor_ptr->m_list[m_idx];
     monap_ptr->act = NULL;
+    monap_ptr->abbreviate = 0;
     return monap_ptr;
 }

@@ -5,7 +5,7 @@
 /* MONster-Attack-Player、地図のMAPと紛らわしいのでmonapとした */
 typedef struct monap_type {
 #ifdef JP
-    int abbreviate;
+    int abbreviate; // 2回目以降の省略表現フラグ.
 #endif
     MONSTER_IDX m_idx;
     monster_type *m_ptr;
