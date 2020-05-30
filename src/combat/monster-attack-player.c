@@ -336,6 +336,35 @@ static void process_monster_attack_time(player_type *target_ptr, monap_type *mon
 }
 
 /*!
+ * @brief 対邪悪結界が効いている状態で邪悪なモンスターから直接攻撃を受けた時の処理
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @return briefに書いた条件＋確率が満たされたらTRUE、それ以外はFALSE
+ */
+static bool effect_protecion_from_evil(player_type *target_ptr, monap_type *monap_ptr)
+{
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if ((target_ptr->protevil <= 0) || ((r_ptr->flags3 & RF3_EVIL) == 0) || (target_ptr->lev < monap_ptr->rlev) || ((randint0(100) + target_ptr->lev) <= 50))
+        return FALSE;
+
+    if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+        r_ptr->r_flags3 |= RF3_EVIL;
+
+#ifdef JP
+    if (monap_ptr->abbreviate)
+        msg_format("撃退した。");
+    else
+        msg_format("%^sは撃退された。", monap_ptr->m_name);
+
+    monap_ptr->abbreviate = 1; /* 2回目以降は省略 */
+#else
+    msg_format("%^s is repelled.", monap_ptr->m_name);
+#endif
+
+    return TRUE;
+}
+
+/*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
  * @return 実際に攻撃処理を行った場合TRUEを返す
@@ -347,12 +376,9 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
     int k, tmp;
     ARMOUR_CLASS ac;
-    DEPTH rlev;
-
     PRICE gold;
     object_type *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
-    GAME_TEXT m_name[MAX_NLEN];
     GAME_TEXT ddesc[80];
 
     bool blinked;
@@ -370,11 +396,11 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     if (!is_hostile(monap_ptr->m_ptr))
         return FALSE;
 
-    rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-    monster_desc(target_ptr, m_name, monap_ptr->m_ptr, 0);
+    monap_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+    monster_desc(target_ptr, monap_ptr->m_name, monap_ptr->m_ptr, 0);
     monster_desc(target_ptr, ddesc, monap_ptr->m_ptr, MD_WRONGDOER_NAME);
     if (target_ptr->special_defense & KATA_IAI) {
-        msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, drew and cut in one motion before %s moved."), m_name);
+        msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, drew and cut in one motion before %s moved."), monap_ptr->m_name);
         if (do_cmd_attack(target_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_IAI))
             return TRUE;
     }
@@ -415,25 +441,10 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
         power = mbe_info[effect].power;
         ac = target_ptr->ac + target_ptr->to_a;
-        if (!effect || check_hit_from_monster_to_player(target_ptr, power, rlev, MON_STUNNED(monap_ptr->m_ptr))) {
+        if (!effect || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, MON_STUNNED(monap_ptr->m_ptr))) {
             disturb(target_ptr, TRUE, TRUE);
-            if ((target_ptr->protevil > 0) && (r_ptr->flags3 & RF3_EVIL) && (target_ptr->lev >= rlev) && ((randint0(100) + target_ptr->lev) > 50)) {
-                if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
-                    r_ptr->r_flags3 |= RF3_EVIL;
-
-#ifdef JP
-                if (monap_ptr->abbreviate)
-                    msg_format("撃退した。");
-                else
-                    msg_format("%^sは撃退された。", m_name);
-
-                monap_ptr->abbreviate = 1; /*２回目以降は省略 */
-#else
-                msg_format("%^s is repelled.", m_name);
-#endif
-
+            if (effect_protecion_from_evil(target_ptr, monap_ptr))
                 continue;
-            }
 
             monap_ptr->do_cut = 0;
             monap_ptr->do_stun = 0;
@@ -447,14 +458,14 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 }
 #ifdef JP
                 if (monap_ptr->abbreviate == 0)
-                    msg_format("%^sに%s", m_name, monap_ptr->act);
+                    msg_format("%^sに%s", monap_ptr->m_name, monap_ptr->act);
                 else if (monap_ptr->abbreviate == 1)
                     msg_format("%s", monap_ptr->act);
                 else /* if (monap_ptr->abbreviate == -1) */
-                    msg_format("%^s%s", m_name, monap_ptr->act);
+                    msg_format("%^s%s", monap_ptr->m_name, monap_ptr->act);
                 monap_ptr->abbreviate = 1; /*2回目以降は省略 */
 #else
-                msg_format("%^s %s%s", m_name, monap_ptr->act, do_silly_attack ? " you." : "");
+                msg_format("%^s %s%s", monap_ptr->m_name, monap_ptr->act, do_silly_attack ? " you." : "");
 #endif
             }
 
@@ -471,7 +482,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             }
             case RBE_SUPERHURT: /* AC軽減あり / Player armor reduces total damage */
             {
-                if (((randint1(rlev * 2 + 300) > (ac + 200)) || one_in_(13)) && !check_multishadow(target_ptr)) {
+                if (((randint1(monap_ptr->rlev * 2 + 300) > (ac + 200)) || one_in_(13)) && !check_multishadow(target_ptr)) {
                     int tmp_damage = damage - (damage * ((ac < 150) ? ac : 150) / 250);
                     msg_print(_("痛恨の一撃！", "It was a critical hit!"));
                     tmp_damage = MAX(damage, tmp_damage * 2);
@@ -492,7 +503,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     break;
 
                 if (!(target_ptr->resist_pois || is_oppose_pois(target_ptr)) && !check_multishadow(target_ptr)) {
-                    if (set_poisoned(target_ptr, target_ptr->poisoned + randint1(rlev) + 5)) {
+                    if (set_poisoned(target_ptr, target_ptr->poisoned + randint1(monap_ptr->rlev) + 5)) {
                         obvious = TRUE;
                     }
                 }
@@ -528,7 +539,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         continue;
 
                     if (((o_ptr->tval == TV_STAFF) || (o_ptr->tval == TV_WAND)) && (o_ptr->pval)) {
-                        int heal = rlev * o_ptr->pval;
+                        int heal = monap_ptr->rlev * o_ptr->pval;
                         if (o_ptr->tval == TV_STAFF)
                             heal *= o_ptr->number;
 
@@ -745,7 +756,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     break;
 
                 if (!target_ptr->resist_blind && !check_multishadow(target_ptr)) {
-                    if (set_blind(target_ptr, target_ptr->blind + 10 + randint1(rlev))) {
+                    if (set_blind(target_ptr, target_ptr->blind + 10 + randint1(monap_ptr->rlev))) {
 #ifdef JP
                         if (monap_ptr->m_ptr->r_idx == MON_DIO)
                             msg_print("どうだッ！この血の目潰しはッ！");
@@ -768,7 +779,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     break;
 
                 if (!target_ptr->resist_conf && !check_multishadow(target_ptr)) {
-                    if (set_confused(target_ptr, target_ptr->confused + 3 + randint1(rlev))) {
+                    if (set_confused(target_ptr, target_ptr->confused + 3 + randint1(monap_ptr->rlev))) {
                         obvious = TRUE;
                     }
                 }
@@ -790,7 +801,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     msg_print(_("しかし恐怖に侵されなかった！", "You stand your ground!"));
                     obvious = TRUE;
                 } else {
-                    if (set_afraid(target_ptr, target_ptr->afraid + 3 + randint1(rlev))) {
+                    if (set_afraid(target_ptr, target_ptr->afraid + 3 + randint1(monap_ptr->rlev))) {
                         obvious = TRUE;
                     }
                 }
@@ -814,7 +825,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     obvious = TRUE;
                 } else {
                     if (!target_ptr->paralyzed) {
-                        if (set_paralyzed(target_ptr, 3 + randint1(rlev))) {
+                        if (set_paralyzed(target_ptr, 3 + randint1(monap_ptr->rlev))) {
                             obvious = TRUE;
                         }
                     }
@@ -963,7 +974,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     break;
 
                 if (!(target_ptr->resist_pois || is_oppose_pois(target_ptr))) {
-                    if (set_poisoned(target_ptr, target_ptr->poisoned + randint1(rlev) + 5)) {
+                    if (set_poisoned(target_ptr, target_ptr->poisoned + randint1(monap_ptr->rlev) + 5)) {
                         obvious = TRUE;
                     }
                 }
@@ -1028,7 +1039,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         target_ptr->redraw |= (PR_UHEALTH);
 
                     if (monap_ptr->m_ptr->ml && did_heal) {
-                        msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), m_name);
+                        msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), monap_ptr->m_name);
                     }
                 }
 
@@ -1060,7 +1071,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (check_multishadow(target_ptr)) {
                     /* Do nothing */
                 } else {
-                    if (set_slow(target_ptr, (target_ptr->slow + 4 + randint0(rlev / 10)), FALSE)) {
+                    if (set_slow(target_ptr, (target_ptr->slow + 4 + randint0(monap_ptr->rlev / 10)), FALSE)) {
                         obvious = TRUE;
                     }
                 }
@@ -1176,7 +1187,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
                         HIT_POINT dam = damroll(2, 6);
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
-                        msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), m_name);
+                        msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は灰の山になった。", " turns into a pile of ash."))) {
                             blinked = FALSE;
                             alive = FALSE;
@@ -1192,7 +1203,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)) {
                         HIT_POINT dam = damroll(2, 6);
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
-                        msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), m_name);
+                        msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は燃え殻の山になった。", " turns into a pile of cinder."))) {
                             blinked = FALSE;
                             alive = FALSE;
@@ -1207,7 +1218,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)) {
                         HIT_POINT dam = damroll(2, 6);
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
-                        msg_format(_("%^sは冷気をくらった！", "%^s is very cold!"), m_name);
+                        msg_format(_("%^sは冷気をくらった！", "%^s is very cold!"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は凍りついた。", " was frozen."))) {
                             blinked = FALSE;
                             alive = FALSE;
@@ -1222,7 +1233,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     if (!(r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK)) {
                         HIT_POINT dam = damroll(2, 6);
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
-                        msg_format(_("%^sは鏡の破片をくらった！", "%^s gets zapped!"), m_name);
+                        msg_format(_("%^sは鏡の破片をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("はズタズタになった。", " had torn to pieces."))) {
                             blinked = FALSE;
                             alive = FALSE;
@@ -1242,7 +1253,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         if (!(r_ptr->flagsr & RFR_RES_ALL)) {
                             HIT_POINT dam = damroll(2, 6);
                             dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
-                            msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), m_name);
+                            msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), monap_ptr->m_name);
                             if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
                                 blinked = FALSE;
                                 alive = FALSE;
@@ -1260,7 +1271,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     if (!(r_ptr->flagsr & RFR_RES_ALL)) {
                         HIT_POINT dam = damroll(2, 6);
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
-                        msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), m_name);
+                        msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
                             blinked = FALSE;
                             alive = FALSE;
@@ -1285,7 +1296,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                             dam *= 2;
 
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
-                        msg_format(_("影のオーラが%^sに反撃した！", "Enveloping shadows attack %^s."), m_name);
+                        msg_format(_("影のオーラが%^sに反撃した！", "Enveloping shadows attack %^s."), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
                             blinked = FALSE;
                             alive = FALSE;
@@ -1330,11 +1341,11 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     if (monap_ptr->abbreviate)
                         msg_format("%sかわした。", (target_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "");
                     else
-                        msg_format("%s%^sの攻撃をかわした。", (target_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "", m_name);
+                        msg_format("%s%^sの攻撃をかわした。", (target_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "", monap_ptr->m_name);
 
                     monap_ptr->abbreviate = 1; /*2回目以降は省略 */
 #else
-                    msg_format("%^s misses you.", m_name);
+                    msg_format("%^s misses you.", monap_ptr->m_name);
 #endif
                 }
 
@@ -1386,11 +1397,11 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     revenge_store(target_ptr, get_damage);
     if ((target_ptr->tim_eyeeye || hex_spelling(target_ptr, HEX_EYE_FOR_EYE)) && get_damage > 0 && !target_ptr->is_dead) {
 #ifdef JP
-        msg_format("攻撃が%s自身を傷つけた！", m_name);
+        msg_format("攻撃が%s自身を傷つけた！", monap_ptr->m_name);
 #else
         GAME_TEXT m_name_self[80];
         monster_desc(target_ptr, m_name_self, monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-        msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
+        msg_format("The attack of %s has wounded %s!", monap_ptr->m_name, m_name_self);
 #endif
         project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
         if (target_ptr->tim_eyeeye)
@@ -1421,7 +1432,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
     if (monap_ptr->m_ptr->ml && fear && alive && !target_ptr->is_dead) {
         sound(SOUND_FLEE);
-        msg_format(_("%^sは恐怖で逃げ出した！", "%^s flees in terror!"), m_name);
+        msg_format(_("%^sは恐怖で逃げ出した！", "%^s flees in terror!"), monap_ptr->m_name);
     }
 
     if (target_ptr->special_defense & KATA_IAI) {

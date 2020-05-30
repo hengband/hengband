@@ -15,6 +15,8 @@ typedef struct monap_type {
     bool touched;
     rbm_type method;
     bool explode;
+    DEPTH rlev;
+    GAME_TEXT m_name[MAX_NLEN];
 } monap_type;
 
 monap_type *initialize_monap_type(player_type *target_ptr, monap_type *monap_ptr, MONSTER_IDX m_idx);
