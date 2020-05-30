@@ -39,7 +39,7 @@ hengband_SOURCES = \
 	birth/birth-util.c birth/birth-util.h \
 	birth/birth-select-realm.c birth/birth-select-realm.h \
 	birth/quick-start.c birth/quick-start.h \
-	birth/stat.c birth/stat.h \
+	birth/birth-stat.c birth/birth-stat.h \
 	birth/history-generator.c birth/history-generator.h \
 	birth/birth-body-spec.c birth/birth-body-spec.h \
 	birth/initial-equipments-table.c birth/initial-equipments-table.h \
