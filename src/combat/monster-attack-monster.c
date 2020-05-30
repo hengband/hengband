@@ -193,6 +193,18 @@ bool check_same_monster(player_type *subject_ptr, mam_type *mam_ptr)
     return TRUE;
 }
 
+void redraw_health_bar(player_type *subject_ptr, mam_type *mam_ptr)
+{
+    if (!mam_ptr->t_ptr->ml)
+        return;
+
+    if (subject_ptr->health_who == mam_ptr->t_idx)
+        subject_ptr->redraw |= (PR_HEALTH);
+
+    if (subject_ptr->riding == mam_ptr->t_idx)
+        subject_ptr->redraw |= (PR_UHEALTH);
+}
+
 void describe_attack_method(player_type *subject_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->method) {
@@ -524,15 +536,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         power = mbe_info[mam_ptr->effect].power;
         if (!mam_ptr->effect || check_hit_from_monster_to_monster(power, mam_ptr->rlev, mam_ptr->ac, MON_STUNNED(m_ptr))) {
             (void)set_monster_csleep(subject_ptr, t_idx, 0);
-
-            if (t_ptr->ml) {
-                /* Redraw the health bar */
-                if (subject_ptr->health_who == t_idx)
-                    subject_ptr->redraw |= (PR_HEALTH);
-                if (subject_ptr->riding == t_idx)
-                    subject_ptr->redraw |= (PR_UHEALTH);
-            }
-
+            redraw_health_bar();
             describe_attack_method(subject_ptr, mam_ptr);
             describe_silly_melee(subject_ptr, mam_ptr);
             obvious = TRUE;
