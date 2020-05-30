@@ -400,7 +400,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     monap_type tmp_monap;
     monap_type *monap_ptr = initialize_monap_type(target_ptr, &tmp_monap, m_idx);
 
-    int k, tmp;
+    int tmp;
     ARMOUR_CLASS ac;
     PRICE gold;
     object_type *o_ptr;
@@ -538,7 +538,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
-                for (k = 0; k < 10; k++) {
+                for (int k = 0; k < 10; k++) {
                     INVENTORY_IDX i = (INVENTORY_IDX)randint0(INVEN_PACK);
                     o_ptr = &target_ptr->inventory_list[i];
                     if (!o_ptr->k_idx)
@@ -625,7 +625,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     break;
                 }
 
-                for (k = 0; k < 10; k++) {
+                for (int i = 0; i < 10; i++) {
                     OBJECT_IDX o_idx;
                     INVENTORY_IDX i = (INVENTORY_IDX)randint0(INVEN_PACK);
                     o_ptr = &target_ptr->inventory_list[i];
@@ -674,7 +674,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
-                for (k = 0; k < 10; k++) {
+                for (int i = 0; i < 10; i++) {
                     INVENTORY_IDX i = (INVENTORY_IDX)randint0(INVEN_PACK);
                     o_ptr = &target_ptr->inventory_list[i];
                     if (!o_ptr->k_idx)
