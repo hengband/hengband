@@ -555,42 +555,34 @@ void thief_runaway_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
     }
 }
 
-/*!
- * @brief モンスターから敵モンスターへの打撃攻撃処理
- * @param m_idx 攻撃側モンスターの参照ID
- * @param t_idx 目標側モンスターの参照ID
- * @return 実際に打撃処理が行われた場合TRUEを返す
- */
-bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
+void explode_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {
-    mam_type tmp_mam;
-    mam_type *mam_ptr = initialize_mam_type(subject_ptr, &tmp_mam, m_idx, t_idx);
+    if (!mam_ptr->explode)
+        return;
 
+    sound(SOUND_EXPLODE);
+    (void)set_monster_invulner(subject_ptr, mam_ptr->m_idx, 0, FALSE);
+    mon_take_hit_mon(subject_ptr, mam_ptr->m_idx, mam_ptr->m_ptr->hp + 1, &mam_ptr->dead, &mam_ptr->fear,
+        _("は爆発して粉々になった。", " explodes into tiny shreds."), mam_ptr->m_idx);
+    mam_ptr->blinked = FALSE;
+}
+
+/*!
+ * @brief r_infoで定義した攻撃回数の分だけ、モンスターからモンスターへの直接攻撃処理を繰り返す
+ * @param subject_ptr プレーヤーへの参照ポインタ
+ * @param mam_ptr モンスター乱闘構造体への参照ポインタ
+ * @return なし
+ */
+void repeat_melee(player_type *subject_ptr, mam_type *mam_ptr)
+{
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
-    if (!check_same_monster(subject_ptr, mam_ptr))
-        return FALSE;
-
-    monster_desc(subject_ptr, mam_ptr->m_name, mam_ptr->m_ptr, 0);
-    monster_desc(subject_ptr, mam_ptr->t_name, mam_ptr->t_ptr, 0);
-    if (!mam_ptr->see_either && mam_ptr->known)
-        subject_ptr->current_floor_ptr->monster_noise = TRUE;
-
-    if (subject_ptr->riding && (m_idx == subject_ptr->riding))
-        disturb(subject_ptr, TRUE, TRUE);
-
     for (mam_ptr->ap_cnt = 0; mam_ptr->ap_cnt < MAX_BLOW; mam_ptr->ap_cnt++) {
         mam_ptr->effect = r_ptr->blow[mam_ptr->ap_cnt].effect;
         mam_ptr->method = r_ptr->blow[mam_ptr->ap_cnt].method;
         mam_ptr->d_dice = r_ptr->blow[mam_ptr->ap_cnt].d_dice;
         mam_ptr->d_side = r_ptr->blow[mam_ptr->ap_cnt].d_side;
 
-        if (!monster_is_valid(mam_ptr->m_ptr))
-            break;
-
-        if (mam_ptr->t_ptr->fx != mam_ptr->x_saver || mam_ptr->t_ptr->fy != mam_ptr->y_saver)
-            break;
-
-        if (!mam_ptr->method)
+        if (!monster_is_valid(mam_ptr->m_ptr) || (mam_ptr->t_ptr->fx != mam_ptr->x_saver) || (mam_ptr->t_ptr->fy != mam_ptr->y_saver) || !mam_ptr->method)
             break;
 
         if (mam_ptr->method == RBM_SHOOT)
@@ -607,15 +599,32 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         if (r_ptr->r_blows[mam_ptr->ap_cnt] < MAX_UCHAR)
             r_ptr->r_blows[mam_ptr->ap_cnt]++;
     }
+}
 
-    if (mam_ptr->explode) {
-        sound(SOUND_EXPLODE);
-        (void)set_monster_invulner(subject_ptr, m_idx, 0, FALSE);
-        mon_take_hit_mon(
-            subject_ptr, m_idx, mam_ptr->m_ptr->hp + 1, &mam_ptr->dead, &mam_ptr->fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
-        mam_ptr->blinked = FALSE;
-    }
+/*!
+ * @brief モンスターから敵モンスターへの打撃攻撃処理
+ * @param m_idx 攻撃側モンスターの参照ID
+ * @param t_idx 目標側モンスターの参照ID
+ * @return 実際に打撃処理が行われた場合TRUEを返す
+ */
+bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
+{
+    mam_type tmp_mam;
+    mam_type *mam_ptr = initialize_mam_type(subject_ptr, &tmp_mam, m_idx, t_idx);
 
+    if (!check_same_monster(subject_ptr, mam_ptr))
+        return FALSE;
+
+    monster_desc(subject_ptr, mam_ptr->m_name, mam_ptr->m_ptr, 0);
+    monster_desc(subject_ptr, mam_ptr->t_name, mam_ptr->t_ptr, 0);
+    if (!mam_ptr->see_either && mam_ptr->known)
+        subject_ptr->current_floor_ptr->monster_noise = TRUE;
+
+    if (subject_ptr->riding && (m_idx == subject_ptr->riding))
+        disturb(subject_ptr, TRUE, TRUE);
+
+    repeat_melee(subject_ptr, mam_ptr);
+    explode_monster_by_melee(subject_ptr, mam_ptr);
     if (!mam_ptr->blinked || mam_ptr->m_ptr->r_idx == 0)
         return TRUE;
 
