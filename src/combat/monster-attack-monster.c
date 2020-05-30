@@ -46,6 +46,11 @@ typedef struct mam_type {
     DEPTH rlev;
     bool blinked;
     bool do_silly_attack;
+    ARMOUR_CLASS ap_cnt;
+    HIT_POINT power;
+    bool obvious;
+    int d_dice;
+    int d_side;
 } mam_type;
 
 mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx)
@@ -70,6 +75,8 @@ mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRA
     mam_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
     mam_ptr->blinked = FALSE;
     mam_ptr->do_silly_attack = (one_in_(2) && subject_ptr->image);
+    mam_ptr->power = 0;
+    mam_ptr->obvious = FALSE;
     return mam_ptr;
 }
 
@@ -501,6 +508,25 @@ void describe_monster_missed_monster(player_type *subject_ptr, mam_type *mam_ptr
     }
 }
 
+void process_melee(player_type *subject_ptr, mam_type *mam_ptr)
+{
+    if (mam_ptr->effect && !check_hit_from_monster_to_monster(mam_ptr->power, mam_ptr->rlev, mam_ptr->ac, MON_STUNNED(mam_ptr->m_ptr))) {
+        describe_monster_missed_monster(subject_ptr, mam_ptr);
+        return;
+    }
+        
+    (void)set_monster_csleep(subject_ptr, mam_ptr->t_idx, 0);
+    redraw_health_bar(subject_ptr, mam_ptr);
+    describe_attack_method(subject_ptr, mam_ptr);
+    describe_silly_melee(mam_ptr);
+    mam_ptr->obvious = TRUE;
+    mam_ptr->damage = damroll(mam_ptr->d_dice, mam_ptr->d_side);
+    mam_ptr->effect_type = BLOW_EFFECT_TYPE_NONE;
+    mam_ptr->pt = GF_MISSILE;
+    decide_monster_attack_effect(subject_ptr, mam_ptr);
+    process_monster_attack_effect(subject_ptr, mam_ptr);
+}
+
 /*!
  * @brief モンスターから敵モンスターへの打撃攻撃処理
  * @param m_idx 攻撃側モンスターの参照ID
@@ -528,14 +554,11 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     if (subject_ptr->riding && (m_idx == subject_ptr->riding))
         disturb(subject_ptr, TRUE, TRUE);
 
-    for (ARMOUR_CLASS ap_cnt = 0; ap_cnt < 4; ap_cnt++) {
-        bool obvious = FALSE;
-        HIT_POINT power = 0;
-
-        mam_ptr->effect = r_ptr->blow[ap_cnt].effect;
-        mam_ptr->method = r_ptr->blow[ap_cnt].method;
-        int d_dice = r_ptr->blow[ap_cnt].d_dice;
-        int d_side = r_ptr->blow[ap_cnt].d_side;
+    for (mam_ptr->ap_cnt = 0; mam_ptr->ap_cnt < 4; mam_ptr->ap_cnt++) {
+        mam_ptr->effect = r_ptr->blow[mam_ptr->ap_cnt].effect;
+        mam_ptr->method = r_ptr->blow[mam_ptr->ap_cnt].method;
+        mam_ptr->d_dice = r_ptr->blow[mam_ptr->ap_cnt].d_dice;
+        mam_ptr->d_side = r_ptr->blow[mam_ptr->ap_cnt].d_side;
 
         if (!monster_is_valid(m_ptr))
             break;
@@ -549,25 +572,12 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         if (mam_ptr->method == RBM_SHOOT)
             continue;
 
-        power = mbe_info[mam_ptr->effect].power;
-        if (!mam_ptr->effect || check_hit_from_monster_to_monster(power, mam_ptr->rlev, mam_ptr->ac, MON_STUNNED(m_ptr))) {
-            (void)set_monster_csleep(subject_ptr, t_idx, 0);
-            redraw_health_bar(subject_ptr, mam_ptr);
-            describe_attack_method(subject_ptr, mam_ptr);
-            describe_silly_melee(subject_ptr, mam_ptr);
-            obvious = TRUE;
-            mam_ptr->damage = damroll(d_dice, d_side);
-            mam_ptr->effect_type = BLOW_EFFECT_TYPE_NONE;
-            mam_ptr->pt = GF_MISSILE;
-            decide_monster_attack_effect(subject_ptr, mam_ptr);
-            process_monster_attack_effect(subject_ptr, mam_ptr);
-        } else
-            describe_monster_missed_monster(subject_ptr, mam_ptr);
-
+        mam_ptr->power = mbe_info[mam_ptr->effect].power;
+        process_melee(subject_ptr, mam_ptr);
         if (is_original_ap_and_seen(subject_ptr, m_ptr) && !mam_ptr->do_silly_attack) {
-            if (obvious || mam_ptr->damage || (r_ptr->r_blows[ap_cnt] > 10)) {
-                if (r_ptr->r_blows[ap_cnt] < MAX_UCHAR) {
-                    r_ptr->r_blows[ap_cnt]++;
+            if (mam_ptr->obvious || mam_ptr->damage || (r_ptr->r_blows[mam_ptr->ap_cnt] > 10)) {
+                if (r_ptr->r_blows[mam_ptr->ap_cnt] < MAX_UCHAR) {
+                    r_ptr->r_blows[mam_ptr->ap_cnt]++;
                 }
             }
         }
