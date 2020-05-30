@@ -445,7 +445,6 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     int tmp;
     ARMOUR_CLASS ac;
     PRICE gold;
-    object_type *o_ptr;
     GAME_TEXT o_name[MAX_NLEN];
     GAME_TEXT ddesc[80];
 
@@ -560,16 +559,16 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
-                for (int k = 0; k < 10; k++) {
-                    INVENTORY_IDX i = (INVENTORY_IDX)randint0(INVEN_PACK);
-                    o_ptr = &target_ptr->inventory_list[i];
-                    if (!o_ptr->k_idx)
+                for (int i = 0; i < 10; i++) {
+                    INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
+                    monap_ptr->o_ptr = &target_ptr->inventory_list[i_idx];
+                    if (monap_ptr->o_ptr->k_idx == 0)
                         continue;
 
-                    if (((o_ptr->tval == TV_STAFF) || (o_ptr->tval == TV_WAND)) && (o_ptr->pval)) {
-                        int heal = monap_ptr->rlev * o_ptr->pval;
-                        if (o_ptr->tval == TV_STAFF)
-                            heal *= o_ptr->number;
+                    if (((monap_ptr->o_ptr->tval == TV_STAFF) || (monap_ptr->o_ptr->tval == TV_WAND)) && (monap_ptr->o_ptr->pval)) {
+                        int heal = monap_ptr->rlev * monap_ptr->o_ptr->pval;
+                        if (monap_ptr->o_ptr->tval == TV_STAFF)
+                            heal *= monap_ptr->o_ptr->number;
 
                         heal = MIN(heal, monap_ptr->m_ptr->maxhp - monap_ptr->m_ptr->hp);
                         msg_print(_("ザックからエネルギーが吸い取られた！", "Energy drains from your pack!"));
@@ -581,7 +580,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         if (target_ptr->riding == m_idx)
                             target_ptr->redraw |= (PR_UHEALTH);
 
-                        o_ptr->pval = 0;
+                        monap_ptr->o_ptr->pval = 0;
                         target_ptr->update |= (PU_COMBINE | PU_REORDER);
                         target_ptr->window |= (PW_INVEN);
                         break;
@@ -650,16 +649,16 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 for (int i = 0; i < 10; i++) {
                     OBJECT_IDX o_idx;
                     INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
-                    o_ptr = &target_ptr->inventory_list[i_idx];
-                    if (!o_ptr->k_idx)
+                    monap_ptr->o_ptr = &target_ptr->inventory_list[i_idx];
+                    if (!monap_ptr->o_ptr->k_idx)
                         continue;
 
-                    if (object_is_artifact(o_ptr))
+                    if (object_is_artifact(monap_ptr->o_ptr))
                         continue;
 
-                    object_desc(target_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
+                    object_desc(target_ptr, o_name, monap_ptr->o_ptr, OD_OMIT_PREFIX);
 #ifdef JP
-                    msg_format("%s(%c)を%s盗まれた！", o_name, index_to_label(i_idx), ((o_ptr->number > 1) ? "一つ" : ""));
+                    msg_format("%s(%c)を%s盗まれた！", o_name, index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
 #else
                     msg_format("%sour %s (%c) was stolen!", ((o_ptr->number > 1) ? "One of y" : "Y"), o_name, index_to_label(i_idx));
 #endif
@@ -668,11 +667,11 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     if (o_idx) {
                         object_type *j_ptr;
                         j_ptr = &floor_ptr->o_list[o_idx];
-                        object_copy(j_ptr, o_ptr);
+                        object_copy(j_ptr, monap_ptr->o_ptr);
                         j_ptr->number = 1;
-                        if ((o_ptr->tval == TV_ROD) || (o_ptr->tval == TV_WAND)) {
-                            j_ptr->pval = o_ptr->pval / o_ptr->number;
-                            o_ptr->pval -= j_ptr->pval;
+                        if ((monap_ptr->o_ptr->tval == TV_ROD) || (monap_ptr->o_ptr->tval == TV_WAND)) {
+                            j_ptr->pval = monap_ptr->o_ptr->pval / monap_ptr->o_ptr->number;
+                            monap_ptr->o_ptr->pval -= j_ptr->pval;
                         }
 
                         j_ptr->marked = OM_TOUCHED;
@@ -698,16 +697,16 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
                 for (int i = 0; i < 10; i++) {
                     INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
-                    o_ptr = &target_ptr->inventory_list[i_idx];
-                    if (!o_ptr->k_idx)
+                    monap_ptr->o_ptr = &target_ptr->inventory_list[i_idx];
+                    if (!monap_ptr->o_ptr->k_idx)
                         continue;
 
-                    if ((o_ptr->tval != TV_FOOD) && !((o_ptr->tval == TV_CORPSE) && (o_ptr->sval)))
+                    if ((monap_ptr->o_ptr->tval != TV_FOOD) && !((monap_ptr->o_ptr->tval == TV_CORPSE) && (monap_ptr->o_ptr->sval)))
                         continue;
 
-                    object_desc(target_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+                    object_desc(target_ptr, o_name, monap_ptr->o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-                    msg_format("%s(%c)を%s食べられてしまった！", o_name, index_to_label(i_idx), ((o_ptr->number > 1) ? "一つ" : ""));
+                    msg_format("%s(%c)を%s食べられてしまった！", o_name, index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
 #else
                     msg_format("%sour %s (%c) was eaten!", ((o_ptr->number > 1) ? "One of y" : "Y"), o_name, index_to_label(i_idx));
 #endif
@@ -720,15 +719,15 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_EAT_LITE: {
-                o_ptr = &target_ptr->inventory_list[INVEN_LITE];
+                monap_ptr->o_ptr = &target_ptr->inventory_list[INVEN_LITE];
                 get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
-                if ((o_ptr->xtra4 > 0) && (!object_is_fixed_artifact(o_ptr))) {
-                    o_ptr->xtra4 -= (s16b)(250 + randint1(250));
-                    if (o_ptr->xtra4 < 1)
-                        o_ptr->xtra4 = 1;
+                if ((monap_ptr->o_ptr->xtra4 > 0) && (!object_is_fixed_artifact(monap_ptr->o_ptr))) {
+                    monap_ptr->o_ptr->xtra4 -= (s16b)(250 + randint1(250));
+                    if (monap_ptr->o_ptr->xtra4 < 1)
+                        monap_ptr->o_ptr->xtra4 = 1;
 
                     if (!target_ptr->blind) {
                         msg_print(_("明かりが暗くなってしまった。", "Your light dims."));
