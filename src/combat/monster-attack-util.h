@@ -10,6 +10,10 @@ typedef struct monap_type {
     MONSTER_IDX m_idx;
     monster_type *m_ptr;
     concptr act;
+    int do_cut;
+    int do_stun;
+    bool touched;
+    rbm_type method;
 } monap_type;
 
 monap_type *initialize_monap_type(player_type *target_ptr, monap_type *monap_ptr, MONSTER_IDX m_idx);
