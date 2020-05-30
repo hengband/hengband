@@ -329,7 +329,6 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     bool fear = FALSE, dead = FALSE;
     int effect_type;
 
-    /* Can the player be aware of this attack? */
     bool known = (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
     bool do_silly_attack = (one_in_(2) && subject_ptr->image);
 
@@ -337,28 +336,22 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         return FALSE;
 
     ARMOUR_CLASS ac = tr_ptr->ac;
-
-    /* Extract the effective monster level */
     DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
 
     monster_desc(subject_ptr, mam_ptr->m_name, m_ptr, 0);
     monster_desc(subject_ptr, mam_ptr->t_name, t_ptr, 0);
 
-    /* Assume no blink */
     bool blinked = FALSE;
-
     if (!mam_ptr->see_either && known)
         subject_ptr->current_floor_ptr->monster_noise = TRUE;
 
     if (subject_ptr->riding && (m_idx == subject_ptr->riding))
         disturb(subject_ptr, TRUE, TRUE);
 
-    /* Scan through all four blows */
     for (ARMOUR_CLASS ap_cnt = 0; ap_cnt < 4; ap_cnt++) {
         bool obvious = FALSE;
         HIT_POINT power = 0;
 
-        /* Extract the attack infomation */
         int effect = r_ptr->blow[ap_cnt].effect;
         mam_ptr->method = r_ptr->blow[ap_cnt].method;
         int d_dice = r_ptr->blow[ap_cnt].d_dice;
@@ -376,10 +369,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         if (mam_ptr->method == RBM_SHOOT)
             continue;
 
-        /* Extract the attack "power" */
         power = mbe_info[effect].power;
-
-        /* Monster hits */
         if (!effect || check_hit_from_monster_to_monster(power, rlev, ac, MON_STUNNED(m_ptr))) {
             (void)set_monster_csleep(subject_ptr, t_idx, 0);
 
@@ -408,18 +398,10 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 #endif
             }
 
-            /* Hack -- assume all attacks are obvious */
             obvious = TRUE;
-
-            /* Roll out the damage */
             mam_ptr->damage = damroll(d_dice, d_side);
-
-            /* Assume no effect */
             effect_type = BLOW_EFFECT_TYPE_NONE;
-
             mam_ptr->pt = GF_MISSILE;
-
-            /* Apply appropriate damage */
             switch (effect) {
             case 0:
             case RBE_DR_MANA:
@@ -531,10 +513,8 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
             }
 
             if (mam_ptr->pt) {
-                /* Do damage if not exploding */
-                if (!mam_ptr->explode) {
+                if (!mam_ptr->explode)
                     project(subject_ptr, m_idx, 0, t_ptr->fy, t_ptr->fx, mam_ptr->damage, mam_ptr->pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
-                }
 
                 process_blow_effect(subject_ptr, mam_ptr);
                 if (mam_ptr->touched) {
@@ -544,10 +524,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
                 }
             }
         }
-
-        /* Monster missed player */
         else {
-            /* Analyze failed attacks */
             switch (mam_ptr->method) {
             case RBM_HIT:
             case RBM_TOUCH:
@@ -562,13 +539,11 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
             case RBM_ENGULF:
             case RBM_CHARGE: {
                 (void)set_monster_csleep(subject_ptr, t_idx, 0);
-
-                /* Visible monsters */
                 if (mam_ptr->see_m) {
 #ifdef JP
                     msg_format("%sは%^sの攻撃をかわした。", mam_ptr->t_name, mam_ptr->m_name);
 #else
-                    msg_format("%^s misses %s.", m_name, t_name);
+                    msg_format("%^s misses %s.", mam_ptr->m_name, mam_ptr->t_name);
 #endif
                 }
 
@@ -577,11 +552,8 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
             }
         }
 
-        /* Analyze "visible" monsters only */
         if (is_original_ap_and_seen(subject_ptr, m_ptr) && !do_silly_attack) {
-            /* Count "obvious" attacks (and ones that cause damage) */
             if (obvious || mam_ptr->damage || (r_ptr->r_blows[ap_cnt] > 10)) {
-                /* Count attacks of this type */
                 if (r_ptr->r_blows[ap_cnt] < MAX_UCHAR) {
                     r_ptr->r_blows[ap_cnt]++;
                 }
@@ -591,8 +563,6 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
     if (mam_ptr->explode) {
         sound(SOUND_EXPLODE);
-
-        /* Cancel Invulnerability */
         (void)set_monster_invulner(subject_ptr, m_idx, 0, FALSE);
         mon_take_hit_mon(subject_ptr, m_idx, m_ptr->hp + 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
         blinked = FALSE;
