@@ -40,6 +40,7 @@ typedef struct mam_type {
     bool explode;
     bool touched;
     concptr act;
+    spells_type pt;
 } mam_type;
 
 mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx)
@@ -324,8 +325,6 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
-
-    int pt;
     char temp[MAX_NLEN];
     bool fear = FALSE, dead = FALSE;
     int effect_type;
@@ -418,13 +417,13 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
             /* Assume no effect */
             effect_type = BLOW_EFFECT_TYPE_NONE;
 
-            pt = GF_MISSILE;
+            mam_ptr->pt = GF_MISSILE;
 
             /* Apply appropriate damage */
             switch (effect) {
             case 0:
             case RBE_DR_MANA:
-                mam_ptr->damage = pt = 0;
+                mam_ptr->damage = mam_ptr->pt = 0;
                 break;
 
             case RBE_SUPERHURT:
@@ -442,12 +441,12 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
             case RBE_POISON:
             case RBE_DISEASE:
-                pt = GF_POIS;
+                mam_ptr->pt = GF_POIS;
                 break;
 
             case RBE_UN_BONUS:
             case RBE_UN_POWER:
-                pt = GF_DISENCHANT;
+                mam_ptr->pt = GF_DISENCHANT;
                 break;
 
             case RBE_EAT_ITEM:
@@ -469,23 +468,23 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
                 break;
 
             case RBE_ACID:
-                pt = GF_ACID;
+                mam_ptr->pt = GF_ACID;
                 break;
 
             case RBE_ELEC:
-                pt = GF_ELEC;
+                mam_ptr->pt = GF_ELEC;
                 break;
 
             case RBE_FIRE:
-                pt = GF_FIRE;
+                mam_ptr->pt = GF_FIRE;
                 break;
 
             case RBE_COLD:
-                pt = GF_COLD;
+                mam_ptr->pt = GF_COLD;
                 break;
 
             case RBE_CONFUSE:
-                pt = GF_CONFUSION;
+                mam_ptr->pt = GF_CONFUSION;
                 break;
 
             case RBE_TERRIFY:
@@ -506,35 +505,35 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
             case RBE_EXP_20:
             case RBE_EXP_40:
             case RBE_EXP_80:
-                pt = GF_NETHER;
+                mam_ptr->pt = GF_NETHER;
                 break;
 
             case RBE_TIME:
-                pt = GF_TIME;
+                mam_ptr->pt = GF_TIME;
                 break;
 
             case RBE_DR_LIFE:
-                pt = GF_HYPODYNAMIA;
+                mam_ptr->pt = GF_HYPODYNAMIA;
                 effect_type = BLOW_EFFECT_TYPE_HEAL;
                 break;
 
             case RBE_INERTIA:
-                pt = GF_INERTIAL;
+                mam_ptr->pt = GF_INERTIAL;
                 break;
 
             case RBE_STUN:
-                pt = GF_SOUND;
+                mam_ptr->pt = GF_SOUND;
                 break;
 
             default:
-                pt = 0;
+                mam_ptr->pt = 0;
                 break;
             }
 
-            if (pt) {
+            if (mam_ptr->pt) {
                 /* Do damage if not exploding */
                 if (!mam_ptr->explode) {
-                    project(subject_ptr, m_idx, 0, t_ptr->fy, t_ptr->fx, mam_ptr->damage, pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+                    project(subject_ptr, m_idx, 0, t_ptr->fy, t_ptr->fx, mam_ptr->damage, mam_ptr->pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
                 }
 
                 process_blow_effect(subject_ptr, mam_ptr);
