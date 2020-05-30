@@ -10,7 +10,7 @@
 #include "player/player-move.h"
 #include "spell/spells-floor.h"
 
-void describe_attack_method(player_type *subject_ptr, mam_type *mam_ptr)
+void describe_melee_method(player_type *subject_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->method) {
     case RBM_HIT: {

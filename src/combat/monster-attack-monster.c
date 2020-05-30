@@ -206,7 +206,7 @@ static void process_melee(player_type *subject_ptr, mam_type *mam_ptr)
 
     (void)set_monster_csleep(subject_ptr, mam_ptr->t_idx, 0);
     redraw_health_bar(subject_ptr, mam_ptr);
-    describe_attack_method(subject_ptr, mam_ptr);
+    describe_melee_method(subject_ptr, mam_ptr);
     describe_silly_melee(mam_ptr);
     mam_ptr->obvious = TRUE;
     mam_ptr->damage = damroll(mam_ptr->d_dice, mam_ptr->d_side);
