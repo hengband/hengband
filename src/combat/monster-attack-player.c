@@ -104,6 +104,162 @@ static void monster_attack_show(monap_type *monap_ptr)
     sound(SOUND_SHOW);
 }
 
+static void describe_monster_attack_method(monap_type *monap_ptr)
+{
+    switch (monap_ptr->method) {
+    case RBM_HIT: {
+        monap_ptr->act = _("殴られた。", "hits you.");
+        monap_ptr->do_cut = monap_ptr->do_stun = 1;
+        monap_ptr->touched = TRUE;
+        sound(SOUND_HIT);
+        break;
+    }
+    case RBM_TOUCH: {
+        monap_ptr->act = _("触られた。", "touches you.");
+        monap_ptr->touched = TRUE;
+        sound(SOUND_TOUCH);
+        break;
+    }
+    case RBM_PUNCH: {
+        monap_ptr->act = _("パンチされた。", "punches you.");
+        monap_ptr->touched = TRUE;
+        monap_ptr->do_stun = 1;
+        sound(SOUND_HIT);
+        break;
+    }
+    case RBM_KICK: {
+        monap_ptr->act = _("蹴られた。", "kicks you.");
+        monap_ptr->touched = TRUE;
+        monap_ptr->do_stun = 1;
+        sound(SOUND_HIT);
+        break;
+    }
+    case RBM_CLAW: {
+        monap_ptr->act = _("ひっかかれた。", "claws you.");
+        monap_ptr->touched = TRUE;
+        monap_ptr->do_cut = 1;
+        sound(SOUND_CLAW);
+        break;
+    }
+    case RBM_BITE: {
+        monap_ptr->act = _("噛まれた。", "bites you.");
+        monap_ptr->do_cut = 1;
+        monap_ptr->touched = TRUE;
+        sound(SOUND_BITE);
+        break;
+    }
+    case RBM_STING: {
+        monap_ptr->act = _("刺された。", "stings you.");
+        monap_ptr->touched = TRUE;
+        sound(SOUND_STING);
+        break;
+    }
+    case RBM_SLASH: {
+        monap_ptr->act = _("斬られた。", "slashes you.");
+        monap_ptr->touched = TRUE;
+        monap_ptr->do_cut = 1;
+        sound(SOUND_CLAW);
+        break;
+    }
+    case RBM_BUTT: {
+        monap_ptr->act = _("角で突かれた。", "butts you.");
+        monap_ptr->do_stun = 1;
+        monap_ptr->touched = TRUE;
+        sound(SOUND_HIT);
+        break;
+    }
+    case RBM_CRUSH: {
+        monap_ptr->act = _("体当たりされた。", "crushes you.");
+        monap_ptr->do_stun = 1;
+        monap_ptr->touched = TRUE;
+        sound(SOUND_CRUSH);
+        break;
+    }
+    case RBM_ENGULF: {
+        monap_ptr->act = _("飲み込まれた。", "engulfs you.");
+        monap_ptr->touched = TRUE;
+        sound(SOUND_CRUSH);
+        break;
+    }
+    case RBM_CHARGE: {
+        monap_ptr->abbreviate = -1;
+        monap_ptr->act = _("は請求書をよこした。", "charges you.");
+        monap_ptr->touched = TRUE;
+
+        /* このコメントはジョークが効いているので残しておく / Note! This is "charges", not "charges at". */
+        sound(SOUND_BUY);
+        break;
+    }
+    case RBM_CRAWL: {
+        monap_ptr->abbreviate = -1;
+        monap_ptr->act = _("が体の上を這い回った。", "crawls on you.");
+        monap_ptr->touched = TRUE;
+        sound(SOUND_SLIME);
+        break;
+    }
+    case RBM_DROOL: {
+        monap_ptr->act = _("よだれをたらされた。", "drools on you.");
+        sound(SOUND_SLIME);
+        break;
+    }
+    case RBM_SPIT: {
+        monap_ptr->act = _("唾を吐かれた。", "spits on you.");
+        sound(SOUND_SLIME);
+        break;
+    }
+    case RBM_EXPLODE: {
+        monap_ptr->abbreviate = -1;
+        monap_ptr->act = _("は爆発した。", "explodes.");
+        monap_ptr->explode = TRUE;
+        break;
+    }
+    case RBM_GAZE: {
+        monap_ptr->act = _("にらまれた。", "gazes at you.");
+        break;
+    }
+    case RBM_WAIL: {
+        monap_ptr->act = _("泣き叫ばれた。", "wails at you.");
+        sound(SOUND_WAIL);
+        break;
+    }
+    case RBM_SPORE: {
+        monap_ptr->act = _("胞子を飛ばされた。", "releases spores at you.");
+        sound(SOUND_SLIME);
+        break;
+    }
+    case RBM_XXX4: {
+        monap_ptr->abbreviate = -1;
+        monap_ptr->act = _("が XXX4 を発射した。", "projects XXX4's at you.");
+        break;
+    }
+    case RBM_BEG: {
+        monap_ptr->act = _("金をせがまれた。", "begs you for money.");
+        sound(SOUND_MOAN);
+        break;
+    }
+    case RBM_INSULT: {
+#ifdef JP
+        monap_ptr->abbreviate = -1;
+#endif
+        monap_ptr->act = desc_insult[randint0(monap_ptr->m_ptr->r_idx == MON_DEBBY ? 10 : 8)];
+        sound(SOUND_MOAN);
+        break;
+    }
+    case RBM_MOAN: {
+#ifdef JP
+        monap_ptr->abbreviate = -1;
+#endif
+        monap_ptr->act = desc_moan[randint0(4)];
+        sound(SOUND_MOAN);
+        break;
+    }
+    case RBM_SHOW: {
+        monster_attack_show(monap_ptr);
+        break;
+    }
+    }
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -127,7 +283,6 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     bool blinked;
     bool fear = FALSE;
     bool alive = TRUE;
-    bool explode = FALSE;
     bool do_silly_attack = (one_in_(2) && target_ptr->image);
     HIT_POINT get_damage = 0;
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
@@ -212,159 +367,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
             monap_ptr->do_cut = 0;
             monap_ptr->do_stun = 0;
-            switch (monap_ptr->method) {
-            case RBM_HIT: {
-                monap_ptr->act = _("殴られた。", "hits you.");
-                monap_ptr->do_cut = monap_ptr->do_stun = 1;
-                monap_ptr->touched = TRUE;
-                sound(SOUND_HIT);
-                break;
-            }
-            case RBM_TOUCH: {
-                monap_ptr->act = _("触られた。", "touches you.");
-                monap_ptr->touched = TRUE;
-                sound(SOUND_TOUCH);
-                break;
-            }
-            case RBM_PUNCH: {
-                monap_ptr->act = _("パンチされた。", "punches you.");
-                monap_ptr->touched = TRUE;
-                monap_ptr->do_stun = 1;
-                sound(SOUND_HIT);
-                break;
-            }
-            case RBM_KICK: {
-                monap_ptr->act = _("蹴られた。", "kicks you.");
-                monap_ptr->touched = TRUE;
-                monap_ptr->do_stun = 1;
-                sound(SOUND_HIT);
-                break;
-            }
-            case RBM_CLAW: {
-                monap_ptr->act = _("ひっかかれた。", "claws you.");
-                monap_ptr->touched = TRUE;
-                monap_ptr->do_cut = 1;
-                sound(SOUND_CLAW);
-                break;
-            }
-            case RBM_BITE: {
-                monap_ptr->act = _("噛まれた。", "bites you.");
-                monap_ptr->do_cut = 1;
-                monap_ptr->touched = TRUE;
-                sound(SOUND_BITE);
-                break;
-            }
-            case RBM_STING: {
-                monap_ptr->act = _("刺された。", "stings you.");
-                monap_ptr->touched = TRUE;
-                sound(SOUND_STING);
-                break;
-            }
-            case RBM_SLASH: {
-                monap_ptr->act = _("斬られた。", "slashes you.");
-                monap_ptr->touched = TRUE;
-                monap_ptr->do_cut = 1;
-                sound(SOUND_CLAW);
-                break;
-            }
-            case RBM_BUTT: {
-                monap_ptr->act = _("角で突かれた。", "butts you.");
-                monap_ptr->do_stun = 1;
-                monap_ptr->touched = TRUE;
-                sound(SOUND_HIT);
-                break;
-            }
-            case RBM_CRUSH: {
-                monap_ptr->act = _("体当たりされた。", "crushes you.");
-                monap_ptr->do_stun = 1;
-                monap_ptr->touched = TRUE;
-                sound(SOUND_CRUSH);
-                break;
-            }
-            case RBM_ENGULF: {
-                monap_ptr->act = _("飲み込まれた。", "engulfs you.");
-                monap_ptr->touched = TRUE;
-                sound(SOUND_CRUSH);
-                break;
-            }
-            case RBM_CHARGE: {
-                monap_ptr->abbreviate = -1;
-                monap_ptr->act = _("は請求書をよこした。", "charges you.");
-                monap_ptr->touched = TRUE;
-
-                /* このコメントはジョークが効いているので残しておく / Note! This is "charges", not "charges at". */
-                sound(SOUND_BUY);
-                break;
-            }
-            case RBM_CRAWL: {
-                monap_ptr->abbreviate = -1;
-                monap_ptr->act = _("が体の上を這い回った。", "crawls on you.");
-                monap_ptr->touched = TRUE;
-                sound(SOUND_SLIME);
-                break;
-            }
-            case RBM_DROOL: {
-                monap_ptr->act = _("よだれをたらされた。", "drools on you.");
-                sound(SOUND_SLIME);
-                break;
-            }
-            case RBM_SPIT: {
-                monap_ptr->act = _("唾を吐かれた。", "spits on you.");
-                sound(SOUND_SLIME);
-                break;
-            }
-            case RBM_EXPLODE: {
-                monap_ptr->abbreviate = -1;
-                monap_ptr->act = _("は爆発した。", "explodes.");
-                explode = TRUE;
-                break;
-            }
-            case RBM_GAZE: {
-                monap_ptr->act = _("にらまれた。", "gazes at you.");
-                break;
-            }
-            case RBM_WAIL: {
-                monap_ptr->act = _("泣き叫ばれた。", "wails at you.");
-                sound(SOUND_WAIL);
-                break;
-            }
-            case RBM_SPORE: {
-                monap_ptr->act = _("胞子を飛ばされた。", "releases spores at you.");
-                sound(SOUND_SLIME);
-                break;
-            }
-            case RBM_XXX4: {
-                monap_ptr->abbreviate = -1;
-                monap_ptr->act = _("が XXX4 を発射した。", "projects XXX4's at you.");
-                break;
-            }
-            case RBM_BEG: {
-                monap_ptr->act = _("金をせがまれた。", "begs you for money.");
-                sound(SOUND_MOAN);
-                break;
-            }
-            case RBM_INSULT: {
-#ifdef JP
-                monap_ptr->abbreviate = -1;
-#endif
-                monap_ptr->act = desc_insult[randint0(monap_ptr->m_ptr->r_idx == MON_DEBBY ? 10 : 8)];
-                sound(SOUND_MOAN);
-                break;
-            }
-            case RBM_MOAN: {
-#ifdef JP
-                monap_ptr->abbreviate = -1;
-#endif
-                monap_ptr->act = desc_moan[randint0(4)];
-                sound(SOUND_MOAN);
-                break;
-            }
-            case RBM_SHOW: {
-                monster_attack_show(monap_ptr);
-                break;
-            }
-            }
-
+            describe_monster_attack_method(monap_ptr);
             if (monap_ptr->act) {
                 if (do_silly_attack) {
 #ifdef JP
@@ -387,7 +390,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
             obvious = TRUE;
             damage = damroll(d_dice, d_side);
-            if (explode)
+            if (monap_ptr->explode)
                 damage = 0;
 
             switch (effect) {
@@ -415,7 +418,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_POISON: {
-                if (explode)
+                if (monap_ptr->explode)
                     break;
 
                 if (!(target_ptr->resist_pois || is_oppose_pois(target_ptr)) && !check_multishadow(target_ptr)) {
@@ -429,7 +432,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_UN_BONUS: {
-                if (explode)
+                if (monap_ptr->explode)
                     break;
 
                 if (!target_ptr->resist_disen && !check_multishadow(target_ptr)) {
@@ -629,7 +632,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_ACID: {
-                if (explode)
+                if (monap_ptr->explode)
                     break;
 
                 obvious = TRUE;
@@ -640,7 +643,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_ELEC: {
-                if (explode)
+                if (monap_ptr->explode)
                     break;
                 obvious = TRUE;
                 msg_print(_("電撃を浴びせられた！", "You are struck by electricity!"));
@@ -649,7 +652,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_FIRE: {
-                if (explode)
+                if (monap_ptr->explode)
                     break;
                 obvious = TRUE;
                 msg_print(_("全身が炎に包まれた！", "You are enveloped in flames!"));
@@ -658,7 +661,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_COLD: {
-                if (explode)
+                if (monap_ptr->explode)
                     break;
                 obvious = TRUE;
                 msg_print(_("全身が冷気で覆われた！", "You are covered with frost!"));
@@ -687,7 +690,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_CONFUSE: {
-                if (explode)
+                if (monap_ptr->explode)
                     break;
 
                 get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
@@ -839,7 +842,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 obvious = TRUE;
                 damage -= (damage * ((ac < 150) ? ac : 150) / 250);
                 get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
-                if (damage > 23 || explode)
+                if (damage > 23 || monap_ptr->explode)
                     earthquake(target_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, 8, m_idx);
 
                 break;
@@ -906,7 +909,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_TIME: {
-                if (explode)
+                if (monap_ptr->explode)
                     break;
 
                 if (!target_ptr->resist_time && !check_multishadow(target_ptr)) {
@@ -1170,7 +1173,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     (void)set_stun(target_ptr, target_ptr->stun + stun_plus);
             }
 
-            if (explode) {
+            if (monap_ptr->explode) {
                 sound(SOUND_EXPLODE);
 
                 if (mon_take_hit(target_ptr, m_idx, monap_ptr->m_ptr->hp + 1, &fear, NULL)) {
