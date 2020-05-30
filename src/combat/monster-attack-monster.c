@@ -45,6 +45,7 @@ typedef struct mam_type {
     ARMOUR_CLASS ac;
     DEPTH rlev;
     bool blinked;
+    bool do_silly_attack;
 } mam_type;
 
 mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx)
@@ -68,6 +69,7 @@ mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRA
     mam_ptr->ac = tr_ptr->ac;
     mam_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
     mam_ptr->blinked = FALSE;
+    mam_ptr->do_silly_attack = (one_in_(2) && subject_ptr->image);
     return mam_ptr;
 }
 
@@ -415,6 +417,37 @@ void process_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
     }
 }
 
+void describe_monster_missed_monster(player_type *subject_ptr, mam_type *mam_ptr)
+{
+    switch (mam_ptr->method) {
+    case RBM_HIT:
+    case RBM_TOUCH:
+    case RBM_PUNCH:
+    case RBM_KICK:
+    case RBM_CLAW:
+    case RBM_BITE:
+    case RBM_STING:
+    case RBM_SLASH:
+    case RBM_BUTT:
+    case RBM_CRUSH:
+    case RBM_ENGULF:
+    case RBM_CHARGE: {
+        (void)set_monster_csleep(subject_ptr, mam_ptr->t_idx, 0);
+        if (mam_ptr->see_m) {
+#ifdef JP
+            msg_format("%sは%^sの攻撃をかわした。", mam_ptr->t_name, mam_ptr->m_name);
+#else
+            msg_format("%^s misses %s.", mam_ptr->m_name, mam_ptr->t_name);
+#endif
+        }
+
+        return;
+    }
+    default:
+        return;
+    }
+}
+
 /*!
  * @brief モンスターから敵モンスターへの打撃攻撃処理
  * @param m_idx 攻撃側モンスターの参照ID
@@ -434,8 +467,6 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     int effect_type;
 
     bool known = (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
-    bool do_silly_attack = (one_in_(2) && subject_ptr->image);
-
     if (!check_same_monster(subject_ptr, mam_ptr))
         return FALSE;
 
@@ -483,8 +514,9 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
             describe_attack_method(subject_ptr, mam_ptr);
             if (mam_ptr->act && mam_ptr->see_either) {
 #ifdef JP
-                if (do_silly_attack)
+                if (mam_ptr->do_silly_attack)
                     mam_ptr->act = silly_attacks2[randint0(MAX_SILLY_ATTACK)];
+
                 strfmt(temp, mam_ptr->act, mam_ptr->t_name);
                 msg_format("%^sは%s", mam_ptr->m_name, temp);
 #else
@@ -513,36 +545,10 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
                     aura_elec_by_melee(subject_ptr, mam_ptr);
                 }
             }
-        }
-        else {
-            switch (mam_ptr->method) {
-            case RBM_HIT:
-            case RBM_TOUCH:
-            case RBM_PUNCH:
-            case RBM_KICK:
-            case RBM_CLAW:
-            case RBM_BITE:
-            case RBM_STING:
-            case RBM_SLASH:
-            case RBM_BUTT:
-            case RBM_CRUSH:
-            case RBM_ENGULF:
-            case RBM_CHARGE: {
-                (void)set_monster_csleep(subject_ptr, t_idx, 0);
-                if (mam_ptr->see_m) {
-#ifdef JP
-                    msg_format("%sは%^sの攻撃をかわした。", mam_ptr->t_name, mam_ptr->m_name);
-#else
-                    msg_format("%^s misses %s.", mam_ptr->m_name, mam_ptr->t_name);
-#endif
-                }
+        } else
+            describe_monster_missed_monster(subject_ptr, mam_ptr);
 
-                break;
-            }
-            }
-        }
-
-        if (is_original_ap_and_seen(subject_ptr, m_ptr) && !do_silly_attack) {
+        if (is_original_ap_and_seen(subject_ptr, m_ptr) && !mam_ptr->do_silly_attack) {
             if (obvious || mam_ptr->damage || (r_ptr->r_blows[ap_cnt] > 10)) {
                 if (r_ptr->r_blows[ap_cnt] < MAX_UCHAR) {
                     r_ptr->r_blows[ap_cnt]++;
