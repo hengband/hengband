@@ -322,6 +322,29 @@ void describe_attack_method(player_type *subject_ptr, mam_type *mam_ptr)
     }
 }
 
+void describe_silly_melee(mam_type *mam_ptr)
+{
+    char temp[MAX_NLEN];
+    if ((mam_ptr->act == NULL) || !mam_ptr->see_either)
+        return;
+
+#ifdef JP
+    if (mam_ptr->do_silly_attack)
+        mam_ptr->act = silly_attacks2[randint0(MAX_SILLY_ATTACK)];
+
+    strfmt(temp, mam_ptr->act, mam_ptr->t_name);
+    msg_format("%^sは%s", mam_ptr->m_name, temp);
+#else
+    if (do_silly_attack) {
+        mam_ptr->act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
+        strfmt(temp, "%s %s.", mam_ptr->act, t_name);
+    } else
+        strfmt(temp, mam_ptr->act, t_name);
+
+    msg_format("%^s %s", m_name, temp);
+#endif
+}
+
 void process_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->effect) {
@@ -462,7 +485,6 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     mam_type *mam_ptr = initialize_mam_type(subject_ptr, &tmp_mam, m_idx, t_idx);
 
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    char temp[MAX_NLEN];
     bool fear = FALSE, dead = FALSE;
     int effect_type;
 
@@ -512,23 +534,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
             }
 
             describe_attack_method(subject_ptr, mam_ptr);
-            if (mam_ptr->act && mam_ptr->see_either) {
-#ifdef JP
-                if (mam_ptr->do_silly_attack)
-                    mam_ptr->act = silly_attacks2[randint0(MAX_SILLY_ATTACK)];
-
-                strfmt(temp, mam_ptr->act, mam_ptr->t_name);
-                msg_format("%^sは%s", mam_ptr->m_name, temp);
-#else
-                if (do_silly_attack) {
-                    mam_ptr->act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
-                    strfmt(temp, "%s %s.", mam_ptr->act, t_name);
-                } else
-                    strfmt(temp, mam_ptr->act, t_name);
-                msg_format("%^s %s", m_name, temp);
-#endif
-            }
-
+            describe_silly_melee(subject_ptr, mam_ptr);
             obvious = TRUE;
             mam_ptr->damage = damroll(d_dice, d_side);
             effect_type = BLOW_EFFECT_TYPE_NONE;
