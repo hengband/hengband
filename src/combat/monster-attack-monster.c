@@ -41,6 +41,10 @@ typedef struct mam_type {
     bool touched;
     concptr act;
     spells_type pt;
+    BLOW_EFFECT effect;
+    ARMOUR_CLASS ac;
+    DEPTH rlev;
+    bool blinked;
 } mam_type;
 
 mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx)
@@ -58,6 +62,12 @@ mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRA
     mam_ptr->x_saver = mam_ptr->t_ptr->fx;
     mam_ptr->explode = FALSE;
     mam_ptr->touched = FALSE;
+
+    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
+    mam_ptr->ac = tr_ptr->ac;
+    mam_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
+    mam_ptr->blinked = FALSE;
     return mam_ptr;
 }
 
@@ -310,6 +320,101 @@ void describe_attack_method(player_type *subject_ptr, mam_type *mam_ptr)
     }
 }
 
+void process_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
+{
+    switch (mam_ptr->effect) {
+    case 0:
+    case RBE_DR_MANA:
+        mam_ptr->damage = mam_ptr->pt = 0;
+        break;
+    case RBE_SUPERHURT:
+        if ((randint1(mam_ptr->rlev * 2 + 250) > (mam_ptr->ac + 200)) || one_in_(13)) {
+            int tmp_damage = mam_ptr->damage - (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
+            mam_ptr->damage = MAX(mam_ptr->damage, tmp_damage * 2);
+            break;
+        }
+
+        /* Fall through */
+    case RBE_HURT:
+        mam_ptr->damage -= (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
+        break;
+    case RBE_POISON:
+    case RBE_DISEASE:
+        mam_ptr->pt = GF_POIS;
+        break;
+    case RBE_UN_BONUS:
+    case RBE_UN_POWER:
+        mam_ptr->pt = GF_DISENCHANT;
+        break;
+    case RBE_EAT_ITEM:
+    case RBE_EAT_GOLD:
+        if ((subject_ptr->riding != mam_ptr->m_idx) && one_in_(2))
+            mam_ptr->blinked = TRUE;
+
+        break;
+    case RBE_EAT_FOOD:
+    case RBE_EAT_LITE:
+    case RBE_BLIND:
+    case RBE_LOSE_STR:
+    case RBE_LOSE_INT:
+    case RBE_LOSE_WIS:
+    case RBE_LOSE_DEX:
+    case RBE_LOSE_CON:
+    case RBE_LOSE_CHR:
+    case RBE_LOSE_ALL:
+        break;
+    case RBE_ACID:
+        mam_ptr->pt = GF_ACID;
+        break;
+    case RBE_ELEC:
+        mam_ptr->pt = GF_ELEC;
+        break;
+    case RBE_FIRE:
+        mam_ptr->pt = GF_FIRE;
+        break;
+    case RBE_COLD:
+        mam_ptr->pt = GF_COLD;
+        break;
+    case RBE_CONFUSE:
+        mam_ptr->pt = GF_CONFUSION;
+        break;
+    case RBE_TERRIFY:
+        mam_ptr->effect_type = BLOW_EFFECT_TYPE_FEAR;
+        break;
+    case RBE_PARALYZE:
+        mam_ptr->effect_type = BLOW_EFFECT_TYPE_SLEEP;
+        break;
+    case RBE_SHATTER:
+        mam_ptr->damage -= (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
+        if (mam_ptr->damage > 23)
+            earthquake(subject_ptr, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, 8, mam_ptr->m_idx);
+
+        break;
+    case RBE_EXP_10:
+    case RBE_EXP_20:
+    case RBE_EXP_40:
+    case RBE_EXP_80:
+        mam_ptr->pt = GF_NETHER;
+        break;
+    case RBE_TIME:
+        mam_ptr->pt = GF_TIME;
+        break;
+    case RBE_DR_LIFE:
+        mam_ptr->pt = GF_HYPODYNAMIA;
+        mam_ptr->effect_type = BLOW_EFFECT_TYPE_HEAL;
+        break;
+    case RBE_INERTIA:
+        mam_ptr->pt = GF_INERTIAL;
+        break;
+    case RBE_STUN:
+        mam_ptr->pt = GF_SOUND;
+        break;
+    default:
+        mam_ptr->pt = 0;
+        break;
+    }
+}
+
 /*!
  * @brief モンスターから敵モンスターへの打撃攻撃処理
  * @param m_idx 攻撃側モンスターの参照ID
@@ -324,7 +429,6 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     mam_type *mam_ptr = initialize_mam_type(subject_ptr, &tmp_mam, m_idx, t_idx);
 
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    monster_race *tr_ptr = &r_info[t_ptr->r_idx];
     char temp[MAX_NLEN];
     bool fear = FALSE, dead = FALSE;
     int effect_type;
@@ -335,13 +439,8 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     if (!check_same_monster(subject_ptr, mam_ptr))
         return FALSE;
 
-    ARMOUR_CLASS ac = tr_ptr->ac;
-    DEPTH rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-
     monster_desc(subject_ptr, mam_ptr->m_name, m_ptr, 0);
     monster_desc(subject_ptr, mam_ptr->t_name, t_ptr, 0);
-
-    bool blinked = FALSE;
     if (!mam_ptr->see_either && known)
         subject_ptr->current_floor_ptr->monster_noise = TRUE;
 
@@ -352,7 +451,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         bool obvious = FALSE;
         HIT_POINT power = 0;
 
-        int effect = r_ptr->blow[ap_cnt].effect;
+        mam_ptr->effect = r_ptr->blow[ap_cnt].effect;
         mam_ptr->method = r_ptr->blow[ap_cnt].method;
         int d_dice = r_ptr->blow[ap_cnt].d_dice;
         int d_side = r_ptr->blow[ap_cnt].d_side;
@@ -369,8 +468,8 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         if (mam_ptr->method == RBM_SHOOT)
             continue;
 
-        power = mbe_info[effect].power;
-        if (!effect || check_hit_from_monster_to_monster(power, rlev, ac, MON_STUNNED(m_ptr))) {
+        power = mbe_info[mam_ptr->effect].power;
+        if (!mam_ptr->effect || check_hit_from_monster_to_monster(power, mam_ptr->rlev, mam_ptr->ac, MON_STUNNED(m_ptr))) {
             (void)set_monster_csleep(subject_ptr, t_idx, 0);
 
             if (t_ptr->ml) {
@@ -402,116 +501,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
             mam_ptr->damage = damroll(d_dice, d_side);
             effect_type = BLOW_EFFECT_TYPE_NONE;
             mam_ptr->pt = GF_MISSILE;
-            switch (effect) {
-            case 0:
-            case RBE_DR_MANA:
-                mam_ptr->damage = mam_ptr->pt = 0;
-                break;
-
-            case RBE_SUPERHURT:
-                if ((randint1(rlev * 2 + 250) > (ac + 200)) || one_in_(13)) {
-                    int tmp_damage = mam_ptr->damage - (mam_ptr->damage * ((ac < 150) ? ac : 150) / 250);
-                    mam_ptr->damage = MAX(mam_ptr->damage, tmp_damage * 2);
-                    break;
-                }
-
-                /* Fall through */
-
-            case RBE_HURT:
-                mam_ptr->damage -= (mam_ptr->damage * ((ac < 150) ? ac : 150) / 250);
-                break;
-
-            case RBE_POISON:
-            case RBE_DISEASE:
-                mam_ptr->pt = GF_POIS;
-                break;
-
-            case RBE_UN_BONUS:
-            case RBE_UN_POWER:
-                mam_ptr->pt = GF_DISENCHANT;
-                break;
-
-            case RBE_EAT_ITEM:
-            case RBE_EAT_GOLD:
-                if ((subject_ptr->riding != m_idx) && one_in_(2))
-                    blinked = TRUE;
-                break;
-
-            case RBE_EAT_FOOD:
-            case RBE_EAT_LITE:
-            case RBE_BLIND:
-            case RBE_LOSE_STR:
-            case RBE_LOSE_INT:
-            case RBE_LOSE_WIS:
-            case RBE_LOSE_DEX:
-            case RBE_LOSE_CON:
-            case RBE_LOSE_CHR:
-            case RBE_LOSE_ALL:
-                break;
-
-            case RBE_ACID:
-                mam_ptr->pt = GF_ACID;
-                break;
-
-            case RBE_ELEC:
-                mam_ptr->pt = GF_ELEC;
-                break;
-
-            case RBE_FIRE:
-                mam_ptr->pt = GF_FIRE;
-                break;
-
-            case RBE_COLD:
-                mam_ptr->pt = GF_COLD;
-                break;
-
-            case RBE_CONFUSE:
-                mam_ptr->pt = GF_CONFUSION;
-                break;
-
-            case RBE_TERRIFY:
-                effect_type = BLOW_EFFECT_TYPE_FEAR;
-                break;
-
-            case RBE_PARALYZE:
-                effect_type = BLOW_EFFECT_TYPE_SLEEP;
-                break;
-
-            case RBE_SHATTER:
-                mam_ptr->damage -= (mam_ptr->damage * ((ac < 150) ? ac : 150) / 250);
-                if (mam_ptr->damage > 23)
-                    earthquake(subject_ptr, m_ptr->fy, m_ptr->fx, 8, m_idx);
-                break;
-
-            case RBE_EXP_10:
-            case RBE_EXP_20:
-            case RBE_EXP_40:
-            case RBE_EXP_80:
-                mam_ptr->pt = GF_NETHER;
-                break;
-
-            case RBE_TIME:
-                mam_ptr->pt = GF_TIME;
-                break;
-
-            case RBE_DR_LIFE:
-                mam_ptr->pt = GF_HYPODYNAMIA;
-                effect_type = BLOW_EFFECT_TYPE_HEAL;
-                break;
-
-            case RBE_INERTIA:
-                mam_ptr->pt = GF_INERTIAL;
-                break;
-
-            case RBE_STUN:
-                mam_ptr->pt = GF_SOUND;
-                break;
-
-            default:
-                mam_ptr->pt = 0;
-                break;
-            }
-
+            process_monster_attack_effect(subject_ptr, mam_ptr);
             if (mam_ptr->pt) {
                 if (!mam_ptr->explode)
                     project(subject_ptr, m_idx, 0, t_ptr->fy, t_ptr->fx, mam_ptr->damage, mam_ptr->pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
@@ -565,10 +555,10 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         sound(SOUND_EXPLODE);
         (void)set_monster_invulner(subject_ptr, m_idx, 0, FALSE);
         mon_take_hit_mon(subject_ptr, m_idx, m_ptr->hp + 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
-        blinked = FALSE;
+        mam_ptr->blinked = FALSE;
     }
 
-    if (!blinked || m_ptr->r_idx == 0)
+    if (!mam_ptr->blinked || m_ptr->r_idx == 0)
         return TRUE;
 
     if (teleport_barrier(subject_ptr, m_idx)) {
