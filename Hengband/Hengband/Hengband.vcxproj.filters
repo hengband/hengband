@@ -1043,6 +1043,9 @@
     <ClCompile Include="..\..\src\combat\melee-util.c">
       <Filter>combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\combat\monster-attack-util.c">
+      <Filter>combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2234,6 +2237,9 @@
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\melee-util.h">
+      <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\monster-attack-util.h">
       <Filter>combat</Filter>
     </ClInclude>
   </ItemGroup>

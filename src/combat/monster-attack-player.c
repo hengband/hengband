@@ -13,6 +13,7 @@
 #include "combat/hallucination-attacks-table.h"
 #include "combat/insults-moans.h"
 #include "combat/monster-attack-effect.h"
+#include "combat/monster-attack-util.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
@@ -42,9 +43,8 @@
  */
 bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 {
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    monster_type *m_ptr = &floor_ptr->m_list[m_idx];
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    monap_type tmp_monap;
+    monap_type *monap_ptr = initialize_monap_type(target_ptr, &tmp_monap, m_idx);
 
     int k, tmp;
     ARMOUR_CLASS ac;
@@ -64,21 +64,22 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     HIT_POINT get_damage = 0;
     int abbreviate = 0; // 2回目以降の省略表現フラグ.
 
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (r_ptr->flags1 & (RF1_NEVER_BLOW))
         return FALSE;
 
     if (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
         return FALSE;
 
-    if (!is_hostile(m_ptr))
+    if (!is_hostile(monap_ptr->m_ptr))
         return FALSE;
 
     rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-    monster_desc(target_ptr, m_name, m_ptr, 0);
-    monster_desc(target_ptr, ddesc, m_ptr, MD_WRONGDOER_NAME);
+    monster_desc(target_ptr, m_name, monap_ptr->m_ptr, 0);
+    monster_desc(target_ptr, ddesc, monap_ptr->m_ptr, MD_WRONGDOER_NAME);
     if (target_ptr->special_defense & KATA_IAI) {
         msg_format(_("相手が襲いかかる前に素早く武器を振るった。", "You took sen, drew and cut in one motion before %s moved."), m_name);
-        if (do_cmd_attack(target_ptr, m_ptr->fy, m_ptr->fx, HISSATSU_IAI))
+        if (do_cmd_attack(target_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_IAI))
             return TRUE;
     }
 
@@ -88,24 +89,23 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     }
 
     blinked = FALSE;
+    floor_type *floor_ptr = target_ptr->current_floor_ptr;
     for (int ap_cnt = 0; ap_cnt < 4; ap_cnt++) {
         bool obvious = FALSE;
         HIT_POINT power = 0;
         HIT_POINT damage = 0;
-        concptr act = NULL;
-
         int effect = r_ptr->blow[ap_cnt].effect;
         rbm_type method = r_ptr->blow[ap_cnt].method;
         int d_dice = r_ptr->blow[ap_cnt].d_dice;
         int d_side = r_ptr->blow[ap_cnt].d_side;
 
-        if (!monster_is_valid(m_ptr))
+        if (!monster_is_valid(monap_ptr->m_ptr))
             break;
 
         if (!method)
             break;
 
-        if (is_pet(m_ptr) && (r_ptr->flags1 & RF1_UNIQUE) && (method == RBM_EXPLODE)) {
+        if (is_pet(monap_ptr->m_ptr) && (r_ptr->flags1 & RF1_UNIQUE) && (method == RBM_EXPLODE)) {
             method = RBM_HIT;
             d_dice /= 10;
         }
@@ -113,7 +113,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         if (!target_ptr->playing || target_ptr->is_dead)
             break;
 
-        if (distance(target_ptr->y, target_ptr->x, m_ptr->fy, m_ptr->fx) > 1)
+        if (distance(target_ptr->y, target_ptr->x, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx) > 1)
             break;
 
         if (target_ptr->leaving)
@@ -124,10 +124,10 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
         power = mbe_info[effect].power;
         ac = target_ptr->ac + target_ptr->to_a;
-        if (!effect || check_hit_from_monster_to_player(target_ptr, power, rlev, MON_STUNNED(m_ptr))) {
+        if (!effect || check_hit_from_monster_to_player(target_ptr, power, rlev, MON_STUNNED(monap_ptr->m_ptr))) {
             disturb(target_ptr, TRUE, TRUE);
             if ((target_ptr->protevil > 0) && (r_ptr->flags3 & RF3_EVIL) && (target_ptr->lev >= rlev) && ((randint0(100) + target_ptr->lev) > 50)) {
-                if (is_original_ap_and_seen(target_ptr, m_ptr))
+                if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
                     r_ptr->r_flags3 |= RF3_EVIL;
 
 #ifdef JP
@@ -147,82 +147,82 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             do_cut = do_stun = 0;
             switch (method) {
             case RBM_HIT: {
-                act = _("殴られた。", "hits you.");
+                monap_ptr->act = _("殴られた。", "hits you.");
                 do_cut = do_stun = 1;
                 touched = TRUE;
                 sound(SOUND_HIT);
                 break;
             }
             case RBM_TOUCH: {
-                act = _("触られた。", "touches you.");
+                monap_ptr->act = _("触られた。", "touches you.");
                 touched = TRUE;
                 sound(SOUND_TOUCH);
                 break;
             }
             case RBM_PUNCH: {
-                act = _("パンチされた。", "punches you.");
+                monap_ptr->act = _("パンチされた。", "punches you.");
                 touched = TRUE;
                 do_stun = 1;
                 sound(SOUND_HIT);
                 break;
             }
             case RBM_KICK: {
-                act = _("蹴られた。", "kicks you.");
+                monap_ptr->act = _("蹴られた。", "kicks you.");
                 touched = TRUE;
                 do_stun = 1;
                 sound(SOUND_HIT);
                 break;
             }
             case RBM_CLAW: {
-                act = _("ひっかかれた。", "claws you.");
+                monap_ptr->act = _("ひっかかれた。", "claws you.");
                 touched = TRUE;
                 do_cut = 1;
                 sound(SOUND_CLAW);
                 break;
             }
             case RBM_BITE: {
-                act = _("噛まれた。", "bites you.");
+                monap_ptr->act = _("噛まれた。", "bites you.");
                 do_cut = 1;
                 touched = TRUE;
                 sound(SOUND_BITE);
                 break;
             }
             case RBM_STING: {
-                act = _("刺された。", "stings you.");
+                monap_ptr->act = _("刺された。", "stings you.");
                 touched = TRUE;
                 sound(SOUND_STING);
                 break;
             }
             case RBM_SLASH: {
-                act = _("斬られた。", "slashes you.");
+                monap_ptr->act = _("斬られた。", "slashes you.");
                 touched = TRUE;
                 do_cut = 1;
                 sound(SOUND_CLAW);
                 break;
             }
             case RBM_BUTT: {
-                act = _("角で突かれた。", "butts you.");
+                monap_ptr->act = _("角で突かれた。", "butts you.");
                 do_stun = 1;
                 touched = TRUE;
                 sound(SOUND_HIT);
                 break;
             }
             case RBM_CRUSH: {
-                act = _("体当たりされた。", "crushes you.");
+                monap_ptr->act = _("体当たりされた。", "crushes you.");
                 do_stun = 1;
                 touched = TRUE;
                 sound(SOUND_CRUSH);
                 break;
             }
             case RBM_ENGULF: {
-                act = _("飲み込まれた。", "engulfs you.");
+                monap_ptr->act = _("飲み込まれた。", "engulfs you.");
                 touched = TRUE;
                 sound(SOUND_CRUSH);
                 break;
             }
             case RBM_CHARGE: {
                 abbreviate = -1;
-                act = _("は請求書をよこした。", "charges you.");
+                monap_ptr->act = _("は請求書をよこした。", "charges you.");
                 touched = TRUE;
 
                 /* このコメントはジョークが効いているので残しておく / Note! This is "charges", not "charges at". */
@@ -231,48 +231,48 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             }
             case RBM_CRAWL: {
                 abbreviate = -1;
-                act = _("が体の上を這い回った。", "crawls on you.");
+                monap_ptr->act = _("が体の上を這い回った。", "crawls on you.");
                 touched = TRUE;
                 sound(SOUND_SLIME);
                 break;
             }
             case RBM_DROOL: {
-                act = _("よだれをたらされた。", "drools on you.");
+                monap_ptr->act = _("よだれをたらされた。", "drools on you.");
                 sound(SOUND_SLIME);
                 break;
             }
             case RBM_SPIT: {
-                act = _("唾を吐かれた。", "spits on you.");
+                monap_ptr->act = _("唾を吐かれた。", "spits on you.");
                 sound(SOUND_SLIME);
                 break;
             }
             case RBM_EXPLODE: {
                 abbreviate = -1;
-                act = _("は爆発した。", "explodes.");
+                monap_ptr->act = _("は爆発した。", "explodes.");
                 explode = TRUE;
                 break;
             }
             case RBM_GAZE: {
-                act = _("にらまれた。", "gazes at you.");
+                monap_ptr->act = _("にらまれた。", "gazes at you.");
                 break;
             }
             case RBM_WAIL: {
-                act = _("泣き叫ばれた。", "wails at you.");
+                monap_ptr->act = _("泣き叫ばれた。", "wails at you.");
                 sound(SOUND_WAIL);
                 break;
             }
             case RBM_SPORE: {
-                act = _("胞子を飛ばされた。", "releases spores at you.");
+                monap_ptr->act = _("胞子を飛ばされた。", "releases spores at you.");
                 sound(SOUND_SLIME);
                 break;
             }
             case RBM_XXX4: {
                 abbreviate = -1;
-                act = _("が XXX4 を発射した。", "projects XXX4's at you.");
+                monap_ptr->act = _("が XXX4 を発射した。", "projects XXX4's at you.");
                 break;
             }
             case RBM_BEG: {
-                act = _("金をせがまれた。", "begs you for money.");
+                monap_ptr->act = _("金をせがまれた。", "begs you for money.");
                 sound(SOUND_MOAN);
                 break;
             }
@@ -280,7 +280,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 #ifdef JP
                 abbreviate = -1;
 #endif
-                act = desc_insult[randint0(m_ptr->r_idx == MON_DEBBY ? 10 : 8)];
+                monap_ptr->act = desc_insult[randint0(monap_ptr->m_ptr->r_idx == MON_DEBBY ? 10 : 8)];
                 sound(SOUND_MOAN);
                 break;
             }
@@ -288,7 +288,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 #ifdef JP
                 abbreviate = -1;
 #endif
-                act = desc_moan[randint0(4)];
+                monap_ptr->act = desc_moan[randint0(4)];
                 sound(SOUND_MOAN);
                 break;
             }
@@ -296,59 +296,59 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 #ifdef JP
                 abbreviate = -1;
 #endif
-                if (m_ptr->r_idx == MON_JAIAN) {
+                if (monap_ptr->m_ptr->r_idx == MON_JAIAN) {
 #ifdef JP
                     switch (randint1(15)) {
                     case 1:
                     case 6:
                     case 11:
-                        act = "「♪お～れはジャイアン～～ガ～キだいしょう～」";
+                        monap_ptr->act = "「♪お～れはジャイアン～～ガ～キだいしょう～」";
                         break;
                     case 2:
-                        act = "「♪て～んかむ～てきのお～とこだぜ～～」";
+                        monap_ptr->act = "「♪て～んかむ～てきのお～とこだぜ～～」";
                         break;
                     case 3:
-                        act = "「♪の～び太スネ夫はメじゃないよ～～」";
+                        monap_ptr->act = "「♪の～び太スネ夫はメじゃないよ～～」";
                         break;
                     case 4:
-                        act = "「♪け～んかスポ～ツ～どんとこい～」";
+                        monap_ptr->act = "「♪け～んかスポ～ツ～どんとこい～」";
                         break;
                     case 5:
-                        act = "「♪うた～も～～う～まいぜ～まかしとけ～」";
+                        monap_ptr->act = "「♪うた～も～～う～まいぜ～まかしとけ～」";
                         break;
                     case 7:
-                        act = "「♪ま～ちいちば～んのに～んきもの～～」";
+                        monap_ptr->act = "「♪ま～ちいちば～んのに～んきもの～～」";
                         break;
                     case 8:
-                        act = "「♪べんきょうしゅくだいメじゃないよ～～」";
+                        monap_ptr->act = "「♪べんきょうしゅくだいメじゃないよ～～」";
                         break;
                     case 9:
-                        act = "「♪きはやさし～くて～ち～からもち～」";
+                        monap_ptr->act = "「♪きはやさし～くて～ち～からもち～」";
                         break;
                     case 10:
-                        act = "「♪かお～も～～スタイルも～バツグンさ～」";
+                        monap_ptr->act = "「♪かお～も～～スタイルも～バツグンさ～」";
                         break;
                     case 12:
-                        act = "「♪がっこうい～ちの～あ～ばれんぼう～～」";
+                        monap_ptr->act = "「♪がっこうい～ちの～あ～ばれんぼう～～」";
                         break;
                     case 13:
-                        act = "「♪ド～ラもドラミもメじゃないよ～～」";
+                        monap_ptr->act = "「♪ド～ラもドラミもメじゃないよ～～」";
                         break;
                     case 14:
-                        act = "「♪よじげんぽけっと～な～くたって～」";
+                        monap_ptr->act = "「♪よじげんぽけっと～な～くたって～」";
                         break;
                     case 15:
-                        act = "「♪あし～の～～ながさ～は～まけないぜ～」";
+                        monap_ptr->act = "「♪あし～の～～ながさ～は～まけないぜ～」";
                         break;
                     }
 #else
-                    act = "horribly sings 'I AM GIAAAAAN. THE BOOOSS OF THE KIIIIDS.'";
+                    monap_ptr->act = "horribly sings 'I AM GIAAAAAN. THE BOOOSS OF THE KIIIIDS.'";
 #endif
                 } else {
                     if (one_in_(3))
-                        act = _("は♪僕らは楽しい家族♪と歌っている。", "sings 'We are a happy family.'");
+                        monap_ptr->act = _("は♪僕らは楽しい家族♪と歌っている。", "sings 'We are a happy family.'");
                     else
-                        act = _("は♪アイ ラブ ユー、ユー ラブ ミー♪と歌っている。", "sings 'I love you, you love me.'");
+                        monap_ptr->act = _("は♪アイ ラブ ユー、ユー ラブ ミー♪と歌っている。", "sings 'I love you, you love me.'");
                 }
 
                 sound(SOUND_SHOW);
@@ -356,23 +356,23 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             }
             }
 
-            if (act) {
+            if (monap_ptr->act) {
                 if (do_silly_attack) {
 #ifdef JP
                     abbreviate = -1;
 #endif
-                    act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
+                    monap_ptr->act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
                 }
 #ifdef JP
                 if (abbreviate == 0)
-                    msg_format("%^sに%s", m_name, act);
+                    msg_format("%^sに%s", m_name, monap_ptr->act);
                 else if (abbreviate == 1)
-                    msg_format("%s", act);
+                    msg_format("%s", monap_ptr->act);
                 else /* if (abbreviate == -1) */
-                    msg_format("%^s%s", m_name, act);
+                    msg_format("%^s%s", m_name, monap_ptr->act);
                 abbreviate = 1; /*2回目以降は省略 */
 #else
-                msg_format("%^s %s%s", m_name, act, do_silly_attack ? " you." : "");
+                msg_format("%^s %s%s", m_name, monap_ptr->act, do_silly_attack ? " you." : "");
 #endif
             }
 
@@ -450,10 +450,10 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         if (o_ptr->tval == TV_STAFF)
                             heal *= o_ptr->number;
 
-                        heal = MIN(heal, m_ptr->maxhp - m_ptr->hp);
+                        heal = MIN(heal, monap_ptr->m_ptr->maxhp - monap_ptr->m_ptr->hp);
                         msg_print(_("ザックからエネルギーが吸い取られた！", "Energy drains from your pack!"));
                         obvious = TRUE;
-                        m_ptr->hp += (HIT_POINT)heal;
+                        monap_ptr->m_ptr->hp += (HIT_POINT)heal;
                         if (target_ptr->health_who == m_idx)
                             target_ptr->redraw |= (PR_HEALTH);
 
@@ -471,7 +471,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             }
             case RBE_EAT_GOLD: {
                 get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
-                if (MON_CONFUSED(m_ptr))
+                if (MON_CONFUSED(monap_ptr->m_ptr))
                     break;
 
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
@@ -513,7 +513,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             }
             case RBE_EAT_ITEM: {
                 get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
-                if (MON_CONFUSED(m_ptr))
+                if (MON_CONFUSED(monap_ptr->m_ptr))
                     break;
 
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
@@ -556,8 +556,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
                         j_ptr->marked = OM_TOUCHED;
                         j_ptr->held_m_idx = m_idx;
-                        j_ptr->next_o_idx = m_ptr->hold_o_idx;
-                        m_ptr->hold_o_idx = o_idx;
+                        j_ptr->next_o_idx = monap_ptr->m_ptr->hold_o_idx;
+                        monap_ptr->m_ptr->hold_o_idx = o_idx;
                     }
 
                     inven_item_increase(target_ptr, i, -1);
@@ -665,7 +665,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (!target_ptr->resist_blind && !check_multishadow(target_ptr)) {
                     if (set_blind(target_ptr, target_ptr->blind + 10 + randint1(rlev))) {
 #ifdef JP
-                        if (m_ptr->r_idx == MON_DIO)
+                        if (monap_ptr->m_ptr->r_idx == MON_DIO)
                             msg_print("どうだッ！この血の目潰しはッ！");
 #else
                         /* nanka */
@@ -831,7 +831,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 damage -= (damage * ((ac < 150) ? ac : 150) / 250);
                 get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
                 if (damage > 23 || explode)
-                    earthquake(target_ptr, m_ptr->fy, m_ptr->fx, 8, m_idx);
+                    earthquake(target_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, 8, m_idx);
 
                 break;
             }
@@ -921,46 +921,46 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         switch (stat) {
 #ifdef JP
                         case A_STR:
-                            act = "強く";
+                            monap_ptr->act = "強く";
                             break;
                         case A_INT:
-                            act = "聡明で";
+                            monap_ptr->act = "聡明で";
                             break;
                         case A_WIS:
-                            act = "賢明で";
+                            monap_ptr->act = "賢明で";
                             break;
                         case A_DEX:
-                            act = "器用で";
+                            monap_ptr->act = "器用で";
                             break;
                         case A_CON:
-                            act = "健康で";
+                            monap_ptr->act = "健康で";
                             break;
                         case A_CHR:
-                            act = "美しく";
+                            monap_ptr->act = "美しく";
                             break;
 #else
                         case A_STR:
-                            act = "strong";
+                            monap_ptr->act = "strong";
                             break;
                         case A_INT:
-                            act = "bright";
+                            monap_ptr->act = "bright";
                             break;
                         case A_WIS:
-                            act = "wise";
+                            monap_ptr->act = "wise";
                             break;
                         case A_DEX:
-                            act = "agile";
+                            monap_ptr->act = "agile";
                             break;
                         case A_CON:
-                            act = "hale";
+                            monap_ptr->act = "hale";
                             break;
                         case A_CHR:
-                            act = "beautiful";
+                            monap_ptr->act = "beautiful";
                             break;
 #endif
                         }
 
-                        msg_format(_("あなたは以前ほど%sなくなってしまった...。", "You're not as %s as you used to be..."), act);
+                        msg_format(_("あなたは以前ほど%sなくなってしまった...。", "You're not as %s as you used to be..."), monap_ptr->act);
                         target_ptr->stat_cur[stat] = (target_ptr->stat_cur[stat] * 3) / 4;
                         if (target_ptr->stat_cur[stat] < 3)
                             target_ptr->stat_cur[stat] = 3;
@@ -1013,12 +1013,12 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
                 if ((damage > 5) && !resist_drain) {
                     bool did_heal = FALSE;
-                    if (m_ptr->hp < m_ptr->maxhp)
+                    if (monap_ptr->m_ptr->hp < monap_ptr->m_ptr->maxhp)
                         did_heal = TRUE;
 
-                    m_ptr->hp += damroll(4, damage / 6);
-                    if (m_ptr->hp > m_ptr->maxhp)
-                        m_ptr->hp = m_ptr->maxhp;
+                    monap_ptr->m_ptr->hp += damroll(4, damage / 6);
+                    if (monap_ptr->m_ptr->hp > monap_ptr->m_ptr->maxhp)
+                        monap_ptr->m_ptr->hp = monap_ptr->m_ptr->maxhp;
 
                     if (target_ptr->health_who == m_idx)
                         target_ptr->redraw |= (PR_HEALTH);
@@ -1026,7 +1026,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     if (target_ptr->riding == m_idx)
                         target_ptr->redraw |= (PR_UHEALTH);
 
-                    if (m_ptr->ml && did_heal) {
+                    if (monap_ptr->m_ptr->ml && did_heal) {
                         msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), m_name);
                     }
                 }
@@ -1164,7 +1164,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             if (explode) {
                 sound(SOUND_EXPLODE);
 
-                if (mon_take_hit(target_ptr, m_idx, m_ptr->hp + 1, &fear, NULL)) {
+                if (mon_take_hit(target_ptr, m_idx, monap_ptr->m_ptr->hp + 1, &fear, NULL)) {
                     blinked = FALSE;
                     alive = FALSE;
                 }
@@ -1174,7 +1174,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->sh_fire && alive && !target_ptr->is_dead) {
                     if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
                         HIT_POINT dam = damroll(2, 6);
-                        dam = mon_damage_mod(target_ptr, m_ptr, dam, FALSE);
+                        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は灰の山になった。", " turns into a pile of ash."))) {
                             blinked = FALSE;
@@ -1182,7 +1182,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         }
 
                     } else {
-                        if (is_original_ap_and_seen(target_ptr, m_ptr))
+                        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
                             r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
                     }
                 }
@@ -1190,14 +1190,14 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->sh_elec && alive && !target_ptr->is_dead) {
                     if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)) {
                         HIT_POINT dam = damroll(2, 6);
-                        dam = mon_damage_mod(target_ptr, m_ptr, dam, FALSE);
+                        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は燃え殻の山になった。", " turns into a pile of cinder."))) {
                             blinked = FALSE;
                             alive = FALSE;
                         }
                     } else {
-                        if (is_original_ap_and_seen(target_ptr, m_ptr))
+                        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
                             r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
                     }
                 }
@@ -1205,14 +1205,14 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->sh_cold && alive && !target_ptr->is_dead) {
                     if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)) {
                         HIT_POINT dam = damroll(2, 6);
-                        dam = mon_damage_mod(target_ptr, m_ptr, dam, FALSE);
+                        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sは冷気をくらった！", "%^s is very cold!"), m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は凍りついた。", " was frozen."))) {
                             blinked = FALSE;
                             alive = FALSE;
                         }
                     } else {
-                        if (is_original_ap_and_seen(target_ptr, m_ptr))
+                        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
                             r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
                     }
                 }
@@ -1220,14 +1220,14 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->dustrobe && alive && !target_ptr->is_dead) {
                     if (!(r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK)) {
                         HIT_POINT dam = damroll(2, 6);
-                        dam = mon_damage_mod(target_ptr, m_ptr, dam, FALSE);
+                        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sは鏡の破片をくらった！", "%^s gets zapped!"), m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("はズタズタになった。", " had torn to pieces."))) {
                             blinked = FALSE;
                             alive = FALSE;
                         }
                     } else {
-                        if (is_original_ap_and_seen(target_ptr, m_ptr))
+                        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
                             r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
                     }
 
@@ -1240,16 +1240,16 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     if (r_ptr->flags3 & RF3_EVIL) {
                         if (!(r_ptr->flagsr & RFR_RES_ALL)) {
                             HIT_POINT dam = damroll(2, 6);
-                            dam = mon_damage_mod(target_ptr, m_ptr, dam, FALSE);
+                            dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                             msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), m_name);
                             if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
                                 blinked = FALSE;
                                 alive = FALSE;
                             }
-                            if (is_original_ap_and_seen(target_ptr, m_ptr))
+                            if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
                                 r_ptr->r_flags3 |= RF3_EVIL;
                         } else {
-                            if (is_original_ap_and_seen(target_ptr, m_ptr))
+                            if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
                                 r_ptr->r_flagsr |= RFR_RES_ALL;
                         }
                     }
@@ -1258,14 +1258,14 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->tim_sh_touki && alive && !target_ptr->is_dead) {
                     if (!(r_ptr->flagsr & RFR_RES_ALL)) {
                         HIT_POINT dam = damroll(2, 6);
-                        dam = mon_damage_mod(target_ptr, m_ptr, dam, FALSE);
+                        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
                             blinked = FALSE;
                             alive = FALSE;
                         }
                     } else {
-                        if (is_original_ap_and_seen(target_ptr, m_ptr))
+                        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
                             r_ptr->r_flagsr |= RFR_RES_ALL;
                     }
                 }
@@ -1283,7 +1283,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr))
                             dam *= 2;
 
-                        dam = mon_damage_mod(target_ptr, m_ptr, dam, FALSE);
+                        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("影のオーラが%^sに反撃した！", "Enveloping shadows attack %^s."), m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
                             blinked = FALSE;
@@ -1299,11 +1299,11 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                             for (j = 0; j < 4; j++) {
                                 o_armed_ptr = &target_ptr->inventory_list[typ[j][0]];
                                 if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr) && object_is_armour(o_armed_ptr))
-                                    project(target_ptr, 0, 0, m_ptr->fy, m_ptr->fx, (target_ptr->lev * 2), typ[j][1], flg, -1);
+                                    project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, (target_ptr->lev * 2), typ[j][1], flg, -1);
                             }
                         }
                     } else {
-                        if (is_original_ap_and_seen(target_ptr, m_ptr))
+                        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
                             r_ptr->r_flagsr |= (RFR_RES_ALL | RFR_RES_DARK);
                     }
                 }
@@ -1323,7 +1323,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             case RBM_CRUSH:
             case RBM_ENGULF:
             case RBM_CHARGE:
-                if (m_ptr->ml) {
+                if (monap_ptr->m_ptr->ml) {
                     disturb(target_ptr, TRUE, TRUE);
 #ifdef JP
                     if (abbreviate)
@@ -1360,7 +1360,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             }
         }
 
-        if (is_original_ap_and_seen(target_ptr, m_ptr) && !do_silly_attack) {
+        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr) && !do_silly_attack) {
             if (obvious || damage || (r_ptr->r_blows[ap_cnt] > 10)) {
                 if (r_ptr->r_blows[ap_cnt] < MAX_UCHAR) {
                     r_ptr->r_blows[ap_cnt]++;
@@ -1388,20 +1388,20 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         msg_format("攻撃が%s自身を傷つけた！", m_name);
 #else
         GAME_TEXT m_name_self[80];
-        monster_desc(target_ptr, m_name_self, m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+        monster_desc(target_ptr, m_name_self, monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
         msg_format("The attack of %s has wounded %s!", m_name, m_name_self);
 #endif
-        project(target_ptr, 0, 0, m_ptr->fy, m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
+        project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
         if (target_ptr->tim_eyeeye)
             set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
     }
 
-    if ((target_ptr->counter || (target_ptr->special_defense & KATA_MUSOU)) && alive && !target_ptr->is_dead && m_ptr->ml && (target_ptr->csp > 7)) {
+    if ((target_ptr->counter || (target_ptr->special_defense & KATA_MUSOU)) && alive && !target_ptr->is_dead && monap_ptr->m_ptr->ml && (target_ptr->csp > 7)) {
         char m_target_name[MAX_NLEN];
-        monster_desc(target_ptr, m_target_name, m_ptr, 0);
+        monster_desc(target_ptr, m_target_name, monap_ptr->m_ptr, 0);
         target_ptr->csp -= 7;
         msg_format(_("%^sに反撃した！", "You counterattacked %s!"), m_target_name);
-        do_cmd_attack(target_ptr, m_ptr->fy, m_ptr->fx, HISSATSU_COUNTER);
+        do_cmd_attack(target_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_COUNTER);
         fear = FALSE;
         target_ptr->redraw |= (PR_MANA);
     }
@@ -1418,7 +1418,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !floor_ptr->inside_arena)
         r_ptr->r_deaths++;
 
-    if (m_ptr->ml && fear && alive && !target_ptr->is_dead) {
+    if (monap_ptr->m_ptr->ml && fear && alive && !target_ptr->is_dead) {
         sound(SOUND_FLEE);
         msg_format(_("%^sは恐怖で逃げ出した！", "%^s flees in terror!"), m_name);
     }
