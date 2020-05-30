@@ -535,19 +535,17 @@ void process_melee(player_type *subject_ptr, mam_type *mam_ptr)
  */
 bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX t_idx)
 {
-    monster_type *m_ptr = &subject_ptr->current_floor_ptr->m_list[m_idx];
-    monster_type *t_ptr = &subject_ptr->current_floor_ptr->m_list[t_idx];
     mam_type tmp_mam;
     mam_type *mam_ptr = initialize_mam_type(subject_ptr, &tmp_mam, m_idx, t_idx);
 
-    monster_race *r_ptr = &r_info[m_ptr->r_idx];
+    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     bool fear = FALSE, dead = FALSE;
-    bool known = (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
+    bool known = (mam_ptr->m_ptr->cdis <= MAX_SIGHT) || (mam_ptr->t_ptr->cdis <= MAX_SIGHT);
     if (!check_same_monster(subject_ptr, mam_ptr))
         return FALSE;
 
-    monster_desc(subject_ptr, mam_ptr->m_name, m_ptr, 0);
-    monster_desc(subject_ptr, mam_ptr->t_name, t_ptr, 0);
+    monster_desc(subject_ptr, mam_ptr->m_name, mam_ptr->m_ptr, 0);
+    monster_desc(subject_ptr, mam_ptr->t_name, mam_ptr->t_ptr, 0);
     if (!mam_ptr->see_either && known)
         subject_ptr->current_floor_ptr->monster_noise = TRUE;
 
@@ -560,10 +558,10 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         mam_ptr->d_dice = r_ptr->blow[mam_ptr->ap_cnt].d_dice;
         mam_ptr->d_side = r_ptr->blow[mam_ptr->ap_cnt].d_side;
 
-        if (!monster_is_valid(m_ptr))
+        if (!monster_is_valid(mam_ptr->m_ptr))
             break;
 
-        if (t_ptr->fx != mam_ptr->x_saver || t_ptr->fy != mam_ptr->y_saver)
+        if (mam_ptr->t_ptr->fx != mam_ptr->x_saver || mam_ptr->t_ptr->fy != mam_ptr->y_saver)
             break;
 
         if (!mam_ptr->method)
@@ -574,23 +572,24 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
         mam_ptr->power = mbe_info[mam_ptr->effect].power;
         process_melee(subject_ptr, mam_ptr);
-        if (is_original_ap_and_seen(subject_ptr, m_ptr) && !mam_ptr->do_silly_attack) {
-            if (mam_ptr->obvious || mam_ptr->damage || (r_ptr->r_blows[mam_ptr->ap_cnt] > 10)) {
-                if (r_ptr->r_blows[mam_ptr->ap_cnt] < MAX_UCHAR) {
-                    r_ptr->r_blows[mam_ptr->ap_cnt]++;
-                }
-            }
-        }
+        if (!is_original_ap_and_seen(subject_ptr, mam_ptr->m_ptr) || mam_ptr->do_silly_attack)
+            continue;
+
+        if (!mam_ptr->obvious && !mam_ptr->damage && (r_ptr->r_blows[mam_ptr->ap_cnt] <= 10))
+            continue;
+
+        if (r_ptr->r_blows[mam_ptr->ap_cnt] < MAX_UCHAR)
+            r_ptr->r_blows[mam_ptr->ap_cnt]++;
     }
 
     if (mam_ptr->explode) {
         sound(SOUND_EXPLODE);
         (void)set_monster_invulner(subject_ptr, m_idx, 0, FALSE);
-        mon_take_hit_mon(subject_ptr, m_idx, m_ptr->hp + 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
+        mon_take_hit_mon(subject_ptr, m_idx, mam_ptr->m_ptr->hp + 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
         mam_ptr->blinked = FALSE;
     }
 
-    if (!mam_ptr->blinked || m_ptr->r_idx == 0)
+    if (!mam_ptr->blinked || mam_ptr->m_ptr->r_idx == 0)
         return TRUE;
 
     if (teleport_barrier(subject_ptr, m_idx)) {
