@@ -931,45 +931,24 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     case 9: {
                         int stat = randint0(6);
                         switch (stat) {
-#ifdef JP
                         case A_STR:
-                            monap_ptr->act = "強く";
+                            monap_ptr->act = _("強く", "strong");
                             break;
                         case A_INT:
-                            monap_ptr->act = "聡明で";
+                            monap_ptr->act = _("聡明で", "bright");
                             break;
                         case A_WIS:
-                            monap_ptr->act = "賢明で";
+                            monap_ptr->act = _("賢明で", "wise");
                             break;
                         case A_DEX:
-                            monap_ptr->act = "器用で";
+                            monap_ptr->act = _("器用で", "agile");
                             break;
                         case A_CON:
-                            monap_ptr->act = "健康で";
+                            monap_ptr->act = _("健康で", "hale");
                             break;
                         case A_CHR:
-                            monap_ptr->act = "美しく";
+                            monap_ptr->act = _("美しく", "beautiful");
                             break;
-#else
-                        case A_STR:
-                            monap_ptr->act = "strong";
-                            break;
-                        case A_INT:
-                            monap_ptr->act = "bright";
-                            break;
-                        case A_WIS:
-                            monap_ptr->act = "wise";
-                            break;
-                        case A_DEX:
-                            monap_ptr->act = "agile";
-                            break;
-                        case A_CON:
-                            monap_ptr->act = "hale";
-                            break;
-                        case A_CHR:
-                            monap_ptr->act = "beautiful";
-                            break;
-#endif
                         }
 
                         msg_format(_("あなたは以前ほど%sなくなってしまった...。", "You're not as %s as you used to be..."), monap_ptr->act);
