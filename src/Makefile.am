@@ -166,6 +166,7 @@ hengband_SOURCES = \
 	mind/racial-mirror-master.c mind/racial-mirror-master.h \
 	mind/racial-force-trainer.c mind/racial-force-trainer.h \
 	mind/monk-attack.c mind/monk-attack.h \
+	mind/samurai-slaying.c mind/samurai-slaying.h \
 	mind/surprise-attack.c mind/surprise-attack.h \
 	\
 	monster/creature.h monster/creature.c \
@@ -364,7 +365,6 @@ hengband_SOURCES = \
 	combat/monster-attack-effects.h \
 	combat/attack-accuracy.c combat/attack-accuracy.h \
 	combat/slaying.c combat/slaying.h \
-	combat/samurai-slaying.c combat/samurai-slaying.h \
 	combat/combat-options-type.h \
 	combat/attack-criticality.c combat/attack-criticality.h \
 	combat/player-attack.c combat/player-attack.h \
