@@ -370,6 +370,8 @@ hengband_SOURCES = \
 	combat/monster-attack-player.c combat/monster-attack-player.h \
 	combat/monster-attack-monster.c combat/monster-attack-monster.h \
 	combat/melee-postprocess.c combat/melee-postprocess.h \
+	combat/melee-switcher.c combat/melee-switcher.h \
+	combat/melee-util.c combat/melee-util.h \
 	combat/shoot.c combat/shoot.h \
 	combat/snipe.c combat/snipe.h \
 	\

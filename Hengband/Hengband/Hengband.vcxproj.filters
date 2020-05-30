@@ -1037,6 +1037,12 @@
     <ClCompile Include="..\..\src\object\torch.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\combat\melee-switcher.c">
+      <Filter>combat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\combat\melee-util.c">
+      <Filter>combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2223,6 +2229,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object\torch.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\melee-switcher.h">
+      <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\melee-util.h">
+      <Filter>combat</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

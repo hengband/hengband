@@ -1,8 +1,13 @@
-﻿#include "combat/monster-attack-monster.h"
+﻿/*!
+ * @brief モンスター同士が乱闘する処理
+ * @date 2020/05/23
+ * @author Hourier
+ */
+
+#include "combat/monster-attack-monster.h"
 #include "dungeon/dungeon.h"
 #include "combat/monster-attack-effect.h"
 #include "combat/hallucination-attacks-table.h"
-#include "floor/floor.h"
 #include "spell/spells-type.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
@@ -10,84 +15,15 @@
 #include "monster/monster-status.h"
 #include "combat/attack-accuracy.h"
 #include "spell/spells3.h"
-#include "spell/spells-floor.h"
 #include "spell/process-effect.h"
 #include "monster/monster-race-hook.h"
 #include "realm/realm-hex.h"
 #include "combat/melee-postprocess.h"
+#include "combat/melee-util.h"
+#include "combat/melee-switcher.h"
 
-#define BLOW_EFFECT_TYPE_NONE 0
-#define BLOW_EFFECT_TYPE_FEAR 1
-#define BLOW_EFFECT_TYPE_SLEEP 2
-#define BLOW_EFFECT_TYPE_HEAL 3
-
-/* モンスター共通なので、monster-attack-player.cでも使うはず */
+/* todo モンスター共通なので、monster-attack-player.cでも使うはず */
 const int MAX_BLOW = 4;
-
-/* monster-attack-monster type*/
-typedef struct mam_type {
-    int effect_type;
-    MONRACE_IDX m_idx;
-    MONRACE_IDX t_idx;
-    monster_type *m_ptr;
-    monster_type *t_ptr;
-    GAME_TEXT m_name[MAX_NLEN];
-    GAME_TEXT t_name[MAX_NLEN];
-    HIT_POINT damage;
-    bool see_m;
-    bool see_t;
-    bool see_either;
-    POSITION y_saver;
-    POSITION x_saver;
-    rbm_type method;
-    bool explode;
-    bool touched;
-    concptr act;
-    spells_type pt;
-    BLOW_EFFECT effect;
-    ARMOUR_CLASS ac;
-    DEPTH rlev;
-    bool blinked;
-    bool do_silly_attack;
-    ARMOUR_CLASS ap_cnt;
-    HIT_POINT power;
-    bool obvious;
-    int d_dice;
-    int d_side;
-    bool known;
-    bool fear;
-    bool dead;
-} mam_type;
-
-mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx)
-{
-    mam_ptr->effect_type = 0;
-    mam_ptr->m_idx = m_idx;
-    mam_ptr->t_idx = t_idx;
-    mam_ptr->m_ptr = &subject_ptr->current_floor_ptr->m_list[m_idx];
-    mam_ptr->t_ptr = &subject_ptr->current_floor_ptr->m_list[t_idx];
-    mam_ptr->damage = 0;
-    mam_ptr->see_m = is_seen(mam_ptr->m_ptr);
-    mam_ptr->see_t = is_seen(mam_ptr->t_ptr);
-    mam_ptr->see_either = mam_ptr->see_m || mam_ptr->see_t;
-    mam_ptr->y_saver = mam_ptr->t_ptr->fy;
-    mam_ptr->x_saver = mam_ptr->t_ptr->fx;
-    mam_ptr->explode = FALSE;
-    mam_ptr->touched = FALSE;
-
-    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
-    monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
-    mam_ptr->ac = tr_ptr->ac;
-    mam_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
-    mam_ptr->blinked = FALSE;
-    mam_ptr->do_silly_attack = (one_in_(2) && subject_ptr->image);
-    mam_ptr->power = 0;
-    mam_ptr->obvious = FALSE;
-    mam_ptr->known = (mam_ptr->m_ptr->cdis <= MAX_SIGHT) || (mam_ptr->t_ptr->cdis <= MAX_SIGHT);
-    mam_ptr->fear = FALSE;
-    mam_ptr->dead = FALSE;
-    return mam_ptr;
-}
 
 static void heal_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {
@@ -221,135 +157,6 @@ void redraw_health_bar(player_type *subject_ptr, mam_type *mam_ptr)
         subject_ptr->redraw |= (PR_UHEALTH);
 }
 
-void describe_attack_method(player_type *subject_ptr, mam_type *mam_ptr)
-{
-    switch (mam_ptr->method) {
-    case RBM_HIT: {
-        mam_ptr->act = _("%sを殴った。", "hits %s.");
-        mam_ptr->touched = TRUE;
-        break;
-    }
-    case RBM_TOUCH: {
-        mam_ptr->act = _("%sを触った。", "touches %s.");
-        mam_ptr->touched = TRUE;
-        break;
-    }
-    case RBM_PUNCH: {
-        mam_ptr->act = _("%sをパンチした。", "punches %s.");
-        mam_ptr->touched = TRUE;
-        break;
-    }
-    case RBM_KICK: {
-        mam_ptr->act = _("%sを蹴った。", "kicks %s.");
-        mam_ptr->touched = TRUE;
-        break;
-    }
-    case RBM_CLAW: {
-        mam_ptr->act = _("%sをひっかいた。", "claws %s.");
-        mam_ptr->touched = TRUE;
-        break;
-    }
-    case RBM_BITE: {
-        mam_ptr->act = _("%sを噛んだ。", "bites %s.");
-        mam_ptr->touched = TRUE;
-        break;
-    }
-    case RBM_STING: {
-        mam_ptr->act = _("%sを刺した。", "stings %s.");
-        mam_ptr->touched = TRUE;
-        break;
-    }
-    case RBM_SLASH: {
-        mam_ptr->act = _("%sを斬った。", "slashes %s.");
-        break;
-    }
-    case RBM_BUTT: {
-        mam_ptr->act = _("%sを角で突いた。", "butts %s.");
-        mam_ptr->touched = TRUE;
-        break;
-    }
-    case RBM_CRUSH: {
-        mam_ptr->act = _("%sに体当りした。", "crushes %s.");
-        mam_ptr->touched = TRUE;
-        break;
-    }
-    case RBM_ENGULF: {
-        mam_ptr->act = _("%sを飲み込んだ。", "engulfs %s.");
-        mam_ptr->touched = TRUE;
-        break;
-    }
-    case RBM_CHARGE: {
-        mam_ptr->act = _("%sに請求書をよこした。", "charges %s.");
-        mam_ptr->touched = TRUE;
-        break;
-    }
-    case RBM_CRAWL: {
-        mam_ptr->act = _("%sの体の上を這い回った。", "crawls on %s.");
-        mam_ptr->touched = TRUE;
-        break;
-    }
-    case RBM_DROOL: {
-        mam_ptr->act = _("%sによだれをたらした。", "drools on %s.");
-        mam_ptr->touched = FALSE;
-        break;
-    }
-    case RBM_SPIT: {
-        mam_ptr->act = _("%sに唾を吐いた。", "spits on %s.");
-        mam_ptr->touched = FALSE;
-        break;
-    }
-    case RBM_EXPLODE: {
-        if (mam_ptr->see_either)
-            disturb(subject_ptr, TRUE, TRUE);
-
-        mam_ptr->act = _("爆発した。", "explodes.");
-        mam_ptr->explode = TRUE;
-        mam_ptr->touched = FALSE;
-        break;
-    }
-    case RBM_GAZE: {
-        mam_ptr->act = _("%sをにらんだ。", "gazes at %s.");
-        mam_ptr->touched = FALSE;
-        break;
-    }
-    case RBM_WAIL: {
-        mam_ptr->act = _("%sに泣きついた。", "wails at %s.");
-        mam_ptr->touched = FALSE;
-        break;
-    }
-    case RBM_SPORE: {
-        mam_ptr->act = _("%sに胞子を飛ばした。", "releases spores at %s.");
-        mam_ptr->touched = FALSE;
-        break;
-    }
-    case RBM_XXX4: {
-        mam_ptr->act = _("%sにXXX4を飛ばした。", "projects XXX4's at %s.");
-        mam_ptr->touched = FALSE;
-        break;
-    }
-    case RBM_BEG: {
-        mam_ptr->act = _("%sに金をせがんだ。", "begs %s for money.");
-        mam_ptr->touched = FALSE;
-        break;
-    }
-    case RBM_INSULT: {
-        mam_ptr->act = _("%sを侮辱した。", "insults %s.");
-        mam_ptr->touched = FALSE;
-        break;
-    }
-    case RBM_MOAN: {
-        mam_ptr->act = _("%sにむかってうめいた。", "moans at %s.");
-        mam_ptr->touched = FALSE;
-        break;
-    }
-    case RBM_SHOW: {
-        mam_ptr->act = _("%sにむかって歌った。", "sings to %s.");
-        mam_ptr->touched = FALSE;
-        break;
-    }
-    }
-}
-
 void describe_silly_melee(mam_type *mam_ptr)
 {
     char temp[MAX_NLEN];
@@ -371,101 +178,6 @@ void describe_silly_melee(mam_type *mam_ptr)
 
     msg_format("%^s %s", m_name, temp);
 #endif
-}
-
-void decide_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
-{
-    switch (mam_ptr->effect) {
-    case 0:
-    case RBE_DR_MANA:
-        mam_ptr->damage = mam_ptr->pt = 0;
-        break;
-    case RBE_SUPERHURT:
-        if ((randint1(mam_ptr->rlev * 2 + 250) > (mam_ptr->ac + 200)) || one_in_(13)) {
-            int tmp_damage = mam_ptr->damage - (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
-            mam_ptr->damage = MAX(mam_ptr->damage, tmp_damage * 2);
-            break;
-        }
-
-        /* Fall through */
-    case RBE_HURT:
-        mam_ptr->damage -= (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
-        break;
-    case RBE_POISON:
-    case RBE_DISEASE:
-        mam_ptr->pt = GF_POIS;
-        break;
-    case RBE_UN_BONUS:
-    case RBE_UN_POWER:
-        mam_ptr->pt = GF_DISENCHANT;
-        break;
-    case RBE_EAT_ITEM:
-    case RBE_EAT_GOLD:
-        if ((subject_ptr->riding != mam_ptr->m_idx) && one_in_(2))
-            mam_ptr->blinked = TRUE;
-
-        break;
-    case RBE_EAT_FOOD:
-    case RBE_EAT_LITE:
-    case RBE_BLIND:
-    case RBE_LOSE_STR:
-    case RBE_LOSE_INT:
-    case RBE_LOSE_WIS:
-    case RBE_LOSE_DEX:
-    case RBE_LOSE_CON:
-    case RBE_LOSE_CHR:
-    case RBE_LOSE_ALL:
-        break;
-    case RBE_ACID:
-        mam_ptr->pt = GF_ACID;
-        break;
-    case RBE_ELEC:
-        mam_ptr->pt = GF_ELEC;
-        break;
-    case RBE_FIRE:
-        mam_ptr->pt = GF_FIRE;
-        break;
-    case RBE_COLD:
-        mam_ptr->pt = GF_COLD;
-        break;
-    case RBE_CONFUSE:
-        mam_ptr->pt = GF_CONFUSION;
-        break;
-    case RBE_TERRIFY:
-        mam_ptr->effect_type = BLOW_EFFECT_TYPE_FEAR;
-        break;
-    case RBE_PARALYZE:
-        mam_ptr->effect_type = BLOW_EFFECT_TYPE_SLEEP;
-        break;
-    case RBE_SHATTER:
-        mam_ptr->damage -= (mam_ptr->damage * ((mam_ptr->ac < 150) ? mam_ptr->ac : 150) / 250);
-        if (mam_ptr->damage > 23)
-            earthquake(subject_ptr, mam_ptr->m_ptr->fy, mam_ptr->m_ptr->fx, 8, mam_ptr->m_idx);
-
-        break;
-    case RBE_EXP_10:
-    case RBE_EXP_20:
-    case RBE_EXP_40:
-    case RBE_EXP_80:
-        mam_ptr->pt = GF_NETHER;
-        break;
-    case RBE_TIME:
-        mam_ptr->pt = GF_TIME;
-        break;
-    case RBE_DR_LIFE:
-        mam_ptr->pt = GF_HYPODYNAMIA;
-        mam_ptr->effect_type = BLOW_EFFECT_TYPE_HEAL;
-        break;
-    case RBE_INERTIA:
-        mam_ptr->pt = GF_INERTIAL;
-        break;
-    case RBE_STUN:
-        mam_ptr->pt = GF_SOUND;
-        break;
-    default:
-        mam_ptr->pt = GF_NONE;
-        break;
-    }
 }
 
 void process_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
