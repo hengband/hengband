@@ -18,6 +18,8 @@ typedef struct monap_type {
     DEPTH rlev;
     GAME_TEXT m_name[MAX_NLEN];
     bool do_silly_attack;
+    int d_dice;
+    int d_side;
 } monap_type;
 
 monap_type *initialize_monap_type(player_type *target_ptr, monap_type *monap_ptr, MONSTER_IDX m_idx);

@@ -351,6 +351,33 @@ static void process_monster_attack_time(player_type *target_ptr, monap_type *mon
 }
 
 /*!
+ * @brief プレーヤー死亡等でモンスターからプレーヤーへの直接攻撃処理を途中で打ち切るかどうかを判定する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @return 攻撃続行ならばTRUE、打ち切りになったらFALSE
+ */
+static bool check_monster_attack_terminated(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!monster_is_valid(monap_ptr->m_ptr))
+        return FALSE;
+
+    if (monap_ptr->method == RBM_NONE)
+        return FALSE;
+
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if (is_pet(monap_ptr->m_ptr) && (r_ptr->flags1 & RF1_UNIQUE) && (monap_ptr->method == RBM_EXPLODE)) {
+        monap_ptr->method = RBM_HIT;
+        monap_ptr->d_dice /= 10;
+    }
+
+    if (!target_ptr->playing || target_ptr->is_dead || (distance(target_ptr->y, target_ptr->x, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx) > 1)
+        || target_ptr->leaving)
+        return FALSE;
+
+    return TRUE;
+}
+
+/*!
  * @brief 対邪悪結界が効いている状態で邪悪なモンスターから直接攻撃を受けた時の処理
  * @param target_ptr プレーヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
@@ -450,22 +477,10 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         HIT_POINT damage = 0;
         int effect = r_ptr->blow[ap_cnt].effect;
         monap_ptr->method = r_ptr->blow[ap_cnt].method;
-        int d_dice = r_ptr->blow[ap_cnt].d_dice;
-        int d_side = r_ptr->blow[ap_cnt].d_side;
+        monap_ptr->d_dice = r_ptr->blow[ap_cnt].d_dice;
+        monap_ptr->d_side = r_ptr->blow[ap_cnt].d_side;
 
-        if (!monster_is_valid(monap_ptr->m_ptr))
-            break;
-
-        if (!monap_ptr->method)
-            break;
-
-        if (is_pet(monap_ptr->m_ptr) && (r_ptr->flags1 & RF1_UNIQUE) && (monap_ptr->method == RBM_EXPLODE)) {
-            monap_ptr->method = RBM_HIT;
-            d_dice /= 10;
-        }
-
-        if (!target_ptr->playing || target_ptr->is_dead || (distance(target_ptr->y, target_ptr->x, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx) > 1)
-            || target_ptr->leaving)
+        if (!check_monster_attack_terminated(target_ptr, monap_ptr))
             break;
 
         if (monap_ptr->method == RBM_SHOOT)
@@ -483,7 +498,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             describe_monster_attack_method(monap_ptr);
             describe_silly_attacks(monap_ptr);
             obvious = TRUE;
-            damage = damroll(d_dice, d_side);
+            damage = damroll(monap_ptr->d_dice, monap_ptr->d_side);
             if (monap_ptr->explode)
                 damage = 0;
 
@@ -634,8 +649,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
                 for (int i = 0; i < 10; i++) {
                     OBJECT_IDX o_idx;
-                    INVENTORY_IDX i = (INVENTORY_IDX)randint0(INVEN_PACK);
-                    o_ptr = &target_ptr->inventory_list[i];
+                    INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
+                    o_ptr = &target_ptr->inventory_list[i_idx];
                     if (!o_ptr->k_idx)
                         continue;
 
@@ -644,9 +659,9 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
                     object_desc(target_ptr, o_name, o_ptr, OD_OMIT_PREFIX);
 #ifdef JP
-                    msg_format("%s(%c)を%s盗まれた！", o_name, index_to_label(i), ((o_ptr->number > 1) ? "一つ" : ""));
+                    msg_format("%s(%c)を%s盗まれた！", o_name, index_to_label(i_idx), ((o_ptr->number > 1) ? "一つ" : ""));
 #else
-                    msg_format("%sour %s (%c) was stolen!", ((o_ptr->number > 1) ? "One of y" : "Y"), o_name, index_to_label(i));
+                    msg_format("%sour %s (%c) was stolen!", ((o_ptr->number > 1) ? "One of y" : "Y"), o_name, index_to_label(i_idx));
 #endif
                     chg_virtue(target_ptr, V_SACRIFICE, 1);
                     o_idx = o_pop(floor_ptr);
@@ -666,8 +681,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         monap_ptr->m_ptr->hold_o_idx = o_idx;
                     }
 
-                    inven_item_increase(target_ptr, i, -1);
-                    inven_item_optimize(target_ptr, i);
+                    inven_item_increase(target_ptr, i_idx, -1);
+                    inven_item_optimize(target_ptr, i_idx);
                     obvious = TRUE;
                     blinked = TRUE;
                     break;
@@ -682,8 +697,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     break;
 
                 for (int i = 0; i < 10; i++) {
-                    INVENTORY_IDX i = (INVENTORY_IDX)randint0(INVEN_PACK);
-                    o_ptr = &target_ptr->inventory_list[i];
+                    INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
+                    o_ptr = &target_ptr->inventory_list[i_idx];
                     if (!o_ptr->k_idx)
                         continue;
 
@@ -692,12 +707,12 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
                     object_desc(target_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-                    msg_format("%s(%c)を%s食べられてしまった！", o_name, index_to_label(i), ((o_ptr->number > 1) ? "一つ" : ""));
+                    msg_format("%s(%c)を%s食べられてしまった！", o_name, index_to_label(i_idx), ((o_ptr->number > 1) ? "一つ" : ""));
 #else
-                    msg_format("%sour %s (%c) was eaten!", ((o_ptr->number > 1) ? "One of y" : "Y"), o_name, index_to_label(i));
+                    msg_format("%sour %s (%c) was eaten!", ((o_ptr->number > 1) ? "One of y" : "Y"), o_name, index_to_label(i_idx));
 #endif
-                    inven_item_increase(target_ptr, i, -1);
-                    inven_item_optimize(target_ptr, i);
+                    inven_item_increase(target_ptr, i_idx, -1);
+                    inven_item_optimize(target_ptr, i_idx);
                     obvious = TRUE;
                     break;
                 }
@@ -1120,7 +1135,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
             if (monap_ptr->do_cut) {
                 int cut_plus = 0;
-                tmp = calc_monster_critical(d_dice, d_side, damage);
+                tmp = calc_monster_critical(monap_ptr->d_dice, monap_ptr->d_side, damage);
                 switch (tmp) {
                 case 0:
                     cut_plus = 0;
@@ -1154,7 +1169,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
             if (monap_ptr->do_stun) {
                 int stun_plus = 0;
-                tmp = calc_monster_critical(d_dice, d_side, damage);
+                tmp = calc_monster_critical(monap_ptr->d_dice, monap_ptr->d_side, damage);
                 switch (tmp) {
                 case 0:
                     stun_plus = 0;
