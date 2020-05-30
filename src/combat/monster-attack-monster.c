@@ -45,7 +45,7 @@ static void heal_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
         msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), mam_ptr->m_name);
 }
 
-void process_blow_effect(player_type *subject_ptr, mam_type *mam_ptr)
+static void process_blow_effect(player_type *subject_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     switch (mam_ptr->effect_type) {
@@ -64,7 +64,7 @@ void process_blow_effect(player_type *subject_ptr, mam_type *mam_ptr)
     }
 }
 
-void aura_fire_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
+static void aura_fire_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
@@ -86,7 +86,7 @@ void aura_fire_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
         PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 }
 
-void aura_cold_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
+static void aura_cold_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
@@ -108,7 +108,7 @@ void aura_cold_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
         PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 }
 
-void aura_elec_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
+static void aura_elec_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[mam_ptr->t_ptr->r_idx];
@@ -130,7 +130,7 @@ void aura_elec_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
         PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 }
 
-bool check_same_monster(player_type *subject_ptr, mam_type *mam_ptr)
+static bool check_same_monster(player_type *subject_ptr, mam_type *mam_ptr)
 {
     if (mam_ptr->m_idx == mam_ptr->t_idx)
         return FALSE;
@@ -145,7 +145,7 @@ bool check_same_monster(player_type *subject_ptr, mam_type *mam_ptr)
     return TRUE;
 }
 
-void redraw_health_bar(player_type *subject_ptr, mam_type *mam_ptr)
+static void redraw_health_bar(player_type *subject_ptr, mam_type *mam_ptr)
 {
     if (!mam_ptr->t_ptr->ml)
         return;
@@ -157,7 +157,7 @@ void redraw_health_bar(player_type *subject_ptr, mam_type *mam_ptr)
         subject_ptr->redraw |= (PR_UHEALTH);
 }
 
-void describe_silly_melee(mam_type *mam_ptr)
+static void describe_silly_melee(mam_type *mam_ptr)
 {
     char temp[MAX_NLEN];
     if ((mam_ptr->act == NULL) || !mam_ptr->see_either)
@@ -180,7 +180,7 @@ void describe_silly_melee(mam_type *mam_ptr)
 #endif
 }
 
-void process_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
+static void process_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
 {
     if (mam_ptr->pt == GF_NONE)
         return;
@@ -198,38 +198,7 @@ void process_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
     aura_elec_by_melee(subject_ptr, mam_ptr);
 }
 
-void describe_monster_missed_monster(player_type *subject_ptr, mam_type *mam_ptr)
-{
-    switch (mam_ptr->method) {
-    case RBM_HIT:
-    case RBM_TOUCH:
-    case RBM_PUNCH:
-    case RBM_KICK:
-    case RBM_CLAW:
-    case RBM_BITE:
-    case RBM_STING:
-    case RBM_SLASH:
-    case RBM_BUTT:
-    case RBM_CRUSH:
-    case RBM_ENGULF:
-    case RBM_CHARGE: {
-        (void)set_monster_csleep(subject_ptr, mam_ptr->t_idx, 0);
-        if (mam_ptr->see_m) {
-#ifdef JP
-            msg_format("%sは%^sの攻撃をかわした。", mam_ptr->t_name, mam_ptr->m_name);
-#else
-            msg_format("%^s misses %s.", mam_ptr->m_name, mam_ptr->t_name);
-#endif
-        }
-
-        return;
-    }
-    default:
-        return;
-    }
-}
-
-void process_melee(player_type *subject_ptr, mam_type *mam_ptr)
+static void process_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {
     if (mam_ptr->effect && !check_hit_from_monster_to_monster(mam_ptr->power, mam_ptr->rlev, mam_ptr->ac, MON_STUNNED(mam_ptr->m_ptr))) {
         describe_monster_missed_monster(subject_ptr, mam_ptr);
@@ -248,7 +217,7 @@ void process_melee(player_type *subject_ptr, mam_type *mam_ptr)
     process_monster_attack_effect(subject_ptr, mam_ptr);
 }
 
-void thief_runaway_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
+static void thief_runaway_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {
     if (teleport_barrier(subject_ptr, mam_ptr->m_idx)) {
         if (mam_ptr->see_m) {
@@ -267,7 +236,7 @@ void thief_runaway_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
     }
 }
 
-void explode_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
+static void explode_monster_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
 {
     if (!mam_ptr->explode)
         return;

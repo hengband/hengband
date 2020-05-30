@@ -232,3 +232,34 @@ void decide_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
         break;
     }
 }
+
+void describe_monster_missed_monster(player_type *subject_ptr, mam_type *mam_ptr)
+{
+    switch (mam_ptr->method) {
+    case RBM_HIT:
+    case RBM_TOUCH:
+    case RBM_PUNCH:
+    case RBM_KICK:
+    case RBM_CLAW:
+    case RBM_BITE:
+    case RBM_STING:
+    case RBM_SLASH:
+    case RBM_BUTT:
+    case RBM_CRUSH:
+    case RBM_ENGULF:
+    case RBM_CHARGE: {
+        (void)set_monster_csleep(subject_ptr, mam_ptr->t_idx, 0);
+        if (mam_ptr->see_m) {
+#ifdef JP
+            msg_format("%sは%^sの攻撃をかわした。", mam_ptr->t_name, mam_ptr->m_name);
+#else
+            msg_format("%^s misses %s.", mam_ptr->m_name, mam_ptr->t_name);
+#endif
+        }
+
+        return;
+    }
+    default:
+        return;
+    }
+}
