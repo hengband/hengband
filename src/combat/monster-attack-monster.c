@@ -34,9 +34,15 @@ typedef struct mam_type {
     bool see_m;
     bool see_t;
     bool see_either;
+    POSITION y_saver;
+    POSITION x_saver;
+    rbm_type method;
+    bool explode;
+    bool touched;
+    concptr act;
 } mam_type;
 
-mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx, monster_type *m_ptr, monster_type *t_ptr)
+mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx)
 {
     mam_ptr->effect_type = 0;
     mam_ptr->m_idx = m_idx;
@@ -44,9 +50,13 @@ mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRA
     mam_ptr->m_ptr = &subject_ptr->current_floor_ptr->m_list[m_idx];
     mam_ptr->t_ptr = &subject_ptr->current_floor_ptr->m_list[t_idx];
     mam_ptr->damage = 0;
-    mam_ptr->see_m = is_seen(m_ptr);
-    mam_ptr->see_t = is_seen(t_ptr);
+    mam_ptr->see_m = is_seen(mam_ptr->m_ptr);
+    mam_ptr->see_t = is_seen(mam_ptr->t_ptr);
     mam_ptr->see_either = mam_ptr->see_m || mam_ptr->see_t;
+    mam_ptr->y_saver = mam_ptr->t_ptr->fy;
+    mam_ptr->x_saver = mam_ptr->t_ptr->fx;
+    mam_ptr->explode = FALSE;
+    mam_ptr->touched = FALSE;
     return mam_ptr;
 }
 
@@ -170,6 +180,135 @@ bool check_same_monster(player_type *subject_ptr, mam_type *mam_ptr)
     return TRUE;
 }
 
+void describe_attack_method(player_type *subject_ptr, mam_type *mam_ptr)
+{
+    switch (mam_ptr->method) {
+    case RBM_HIT: {
+        mam_ptr->act = _("%sを殴った。", "hits %s.");
+        mam_ptr->touched = TRUE;
+        break;
+    }
+    case RBM_TOUCH: {
+        mam_ptr->act = _("%sを触った。", "touches %s.");
+        mam_ptr->touched = TRUE;
+        break;
+    }
+    case RBM_PUNCH: {
+        mam_ptr->act = _("%sをパンチした。", "punches %s.");
+        mam_ptr->touched = TRUE;
+        break;
+    }
+    case RBM_KICK: {
+        mam_ptr->act = _("%sを蹴った。", "kicks %s.");
+        mam_ptr->touched = TRUE;
+        break;
+    }
+    case RBM_CLAW: {
+        mam_ptr->act = _("%sをひっかいた。", "claws %s.");
+        mam_ptr->touched = TRUE;
+        break;
+    }
+    case RBM_BITE: {
+        mam_ptr->act = _("%sを噛んだ。", "bites %s.");
+        mam_ptr->touched = TRUE;
+        break;
+    }
+    case RBM_STING: {
+        mam_ptr->act = _("%sを刺した。", "stings %s.");
+        mam_ptr->touched = TRUE;
+        break;
+    }
+    case RBM_SLASH: {
+        mam_ptr->act = _("%sを斬った。", "slashes %s.");
+        break;
+    }
+    case RBM_BUTT: {
+        mam_ptr->act = _("%sを角で突いた。", "butts %s.");
+        mam_ptr->touched = TRUE;
+        break;
+    }
+    case RBM_CRUSH: {
+        mam_ptr->act = _("%sに体当りした。", "crushes %s.");
+        mam_ptr->touched = TRUE;
+        break;
+    }
+    case RBM_ENGULF: {
+        mam_ptr->act = _("%sを飲み込んだ。", "engulfs %s.");
+        mam_ptr->touched = TRUE;
+        break;
+    }
+    case RBM_CHARGE: {
+        mam_ptr->act = _("%sに請求書をよこした。", "charges %s.");
+        mam_ptr->touched = TRUE;
+        break;
+    }
+    case RBM_CRAWL: {
+        mam_ptr->act = _("%sの体の上を這い回った。", "crawls on %s.");
+        mam_ptr->touched = TRUE;
+        break;
+    }
+    case RBM_DROOL: {
+        mam_ptr->act = _("%sによだれをたらした。", "drools on %s.");
+        mam_ptr->touched = FALSE;
+        break;
+    }
+    case RBM_SPIT: {
+        mam_ptr->act = _("%sに唾を吐いた。", "spits on %s.");
+        mam_ptr->touched = FALSE;
+        break;
+    }
+    case RBM_EXPLODE: {
+        if (mam_ptr->see_either)
+            disturb(subject_ptr, TRUE, TRUE);
+
+        mam_ptr->act = _("爆発した。", "explodes.");
+        mam_ptr->explode = TRUE;
+        mam_ptr->touched = FALSE;
+        break;
+    }
+    case RBM_GAZE: {
+        mam_ptr->act = _("%sをにらんだ。", "gazes at %s.");
+        mam_ptr->touched = FALSE;
+        break;
+    }
+    case RBM_WAIL: {
+        mam_ptr->act = _("%sに泣きついた。", "wails at %s.");
+        mam_ptr->touched = FALSE;
+        break;
+    }
+    case RBM_SPORE: {
+        mam_ptr->act = _("%sに胞子を飛ばした。", "releases spores at %s.");
+        mam_ptr->touched = FALSE;
+        break;
+    }
+    case RBM_XXX4: {
+        mam_ptr->act = _("%sにXXX4を飛ばした。", "projects XXX4's at %s.");
+        mam_ptr->touched = FALSE;
+        break;
+    }
+    case RBM_BEG: {
+        mam_ptr->act = _("%sに金をせがんだ。", "begs %s for money.");
+        mam_ptr->touched = FALSE;
+        break;
+    }
+    case RBM_INSULT: {
+        mam_ptr->act = _("%sを侮辱した。", "insults %s.");
+        mam_ptr->touched = FALSE;
+        break;
+    }
+    case RBM_MOAN: {
+        mam_ptr->act = _("%sにむかってうめいた。", "moans at %s.");
+        mam_ptr->touched = FALSE;
+        break;
+    }
+    case RBM_SHOW: {
+        mam_ptr->act = _("%sにむかって歌った。", "sings to %s.");
+        mam_ptr->touched = FALSE;
+        break;
+    }
+    }
+}
+
 /*!
  * @brief モンスターから敵モンスターへの打撃攻撃処理
  * @param m_idx 攻撃側モンスターの参照ID
@@ -181,18 +320,15 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     monster_type *m_ptr = &subject_ptr->current_floor_ptr->m_list[m_idx];
     monster_type *t_ptr = &subject_ptr->current_floor_ptr->m_list[t_idx];
     mam_type tmp_mam;
-    mam_type *mam_ptr = initialize_mam_type(subject_ptr, &tmp_mam, m_idx, t_idx, m_ptr, t_ptr);
+    mam_type *mam_ptr = initialize_mam_type(subject_ptr, &tmp_mam, m_idx, t_idx);
 
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     monster_race *tr_ptr = &r_info[t_ptr->r_idx];
 
     int pt;
     char temp[MAX_NLEN];
-    bool explode = FALSE, touched = FALSE, fear = FALSE, dead = FALSE;
-    POSITION y_saver = t_ptr->fy;
-    POSITION x_saver = t_ptr->fx;
+    bool fear = FALSE, dead = FALSE;
     int effect_type;
-
 
     /* Can the player be aware of this attack? */
     bool known = (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
@@ -212,9 +348,8 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     /* Assume no blink */
     bool blinked = FALSE;
 
-    if (!mam_ptr->see_either && known) {
+    if (!mam_ptr->see_either && known)
         subject_ptr->current_floor_ptr->monster_noise = TRUE;
-    }
 
     if (subject_ptr->riding && (m_idx == subject_ptr->riding))
         disturb(subject_ptr, TRUE, TRUE);
@@ -222,29 +357,24 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     /* Scan through all four blows */
     for (ARMOUR_CLASS ap_cnt = 0; ap_cnt < 4; ap_cnt++) {
         bool obvious = FALSE;
-
         HIT_POINT power = 0;
-
-        concptr act = NULL;
 
         /* Extract the attack infomation */
         int effect = r_ptr->blow[ap_cnt].effect;
-        rbm_type method = r_ptr->blow[ap_cnt].method;
+        mam_ptr->method = r_ptr->blow[ap_cnt].method;
         int d_dice = r_ptr->blow[ap_cnt].d_dice;
         int d_side = r_ptr->blow[ap_cnt].d_side;
 
         if (!monster_is_valid(m_ptr))
             break;
 
-        /* Stop attacking if the target dies! */
-        if (t_ptr->fx != x_saver || t_ptr->fy != y_saver)
+        if (t_ptr->fx != mam_ptr->x_saver || t_ptr->fy != mam_ptr->y_saver)
             break;
 
-        /* Hack -- no more attacks */
-        if (!method)
+        if (!mam_ptr->method)
             break;
 
-        if (method == RBM_SHOOT)
+        if (mam_ptr->method == RBM_SHOOT)
             continue;
 
         /* Extract the attack "power" */
@@ -262,167 +392,19 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
                     subject_ptr->redraw |= (PR_UHEALTH);
             }
 
-            /* Describe the attack method */
-            switch (method) {
-            case RBM_HIT: {
-                act = _("%sを殴った。", "hits %s.");
-                touched = TRUE;
-                break;
-            }
-
-            case RBM_TOUCH: {
-                act = _("%sを触った。", "touches %s.");
-                touched = TRUE;
-                break;
-            }
-
-            case RBM_PUNCH: {
-                act = _("%sをパンチした。", "punches %s.");
-                touched = TRUE;
-                break;
-            }
-
-            case RBM_KICK: {
-                act = _("%sを蹴った。", "kicks %s.");
-                touched = TRUE;
-                break;
-            }
-
-            case RBM_CLAW: {
-                act = _("%sをひっかいた。", "claws %s.");
-                touched = TRUE;
-                break;
-            }
-
-            case RBM_BITE: {
-                act = _("%sを噛んだ。", "bites %s.");
-                touched = TRUE;
-                break;
-            }
-
-            case RBM_STING: {
-                act = _("%sを刺した。", "stings %s.");
-                touched = TRUE;
-                break;
-            }
-
-            case RBM_SLASH: {
-                act = _("%sを斬った。", "slashes %s.");
-                break;
-            }
-
-            case RBM_BUTT: {
-                act = _("%sを角で突いた。", "butts %s.");
-                touched = TRUE;
-                break;
-            }
-
-            case RBM_CRUSH: {
-                act = _("%sに体当りした。", "crushes %s.");
-                touched = TRUE;
-                break;
-            }
-
-            case RBM_ENGULF: {
-                act = _("%sを飲み込んだ。", "engulfs %s.");
-                touched = TRUE;
-                break;
-            }
-
-            case RBM_CHARGE: {
-                act = _("%sに請求書をよこした。", "charges %s.");
-                touched = TRUE;
-                break;
-            }
-
-            case RBM_CRAWL: {
-                act = _("%sの体の上を這い回った。", "crawls on %s.");
-                touched = TRUE;
-                break;
-            }
-
-            case RBM_DROOL: {
-                act = _("%sによだれをたらした。", "drools on %s.");
-                touched = FALSE;
-                break;
-            }
-
-            case RBM_SPIT: {
-                act = _("%sに唾を吐いた。", "spits on %s.");
-                touched = FALSE;
-                break;
-            }
-
-            case RBM_EXPLODE: {
-                if (mam_ptr->see_either)
-                    disturb(subject_ptr, TRUE, TRUE);
-                act = _("爆発した。", "explodes.");
-                explode = TRUE;
-                touched = FALSE;
-                break;
-            }
-
-            case RBM_GAZE: {
-                act = _("%sをにらんだ。", "gazes at %s.");
-                touched = FALSE;
-                break;
-            }
-
-            case RBM_WAIL: {
-                act = _("%sに泣きついた。", "wails at %s.");
-                touched = FALSE;
-                break;
-            }
-
-            case RBM_SPORE: {
-                act = _("%sに胞子を飛ばした。", "releases spores at %s.");
-                touched = FALSE;
-                break;
-            }
-
-            case RBM_XXX4: {
-                act = _("%sにXXX4を飛ばした。", "projects XXX4's at %s.");
-                touched = FALSE;
-                break;
-            }
-
-            case RBM_BEG: {
-                act = _("%sに金をせがんだ。", "begs %s for money.");
-                touched = FALSE;
-                break;
-            }
-
-            case RBM_INSULT: {
-                act = _("%sを侮辱した。", "insults %s.");
-                touched = FALSE;
-                break;
-            }
-
-            case RBM_MOAN: {
-                act = _("%sにむかってうめいた。", "moans at %s.");
-                touched = FALSE;
-                break;
-            }
-
-            case RBM_SHOW: {
-                act = _("%sにむかって歌った。", "sings to %s.");
-                touched = FALSE;
-                break;
-            }
-            }
-
-            if (act && mam_ptr->see_either) {
+            describe_attack_method(subject_ptr, mam_ptr);
+            if (mam_ptr->act && mam_ptr->see_either) {
 #ifdef JP
                 if (do_silly_attack)
-                    act = silly_attacks2[randint0(MAX_SILLY_ATTACK)];
-                strfmt(temp, act, mam_ptr->t_name);
+                    mam_ptr->act = silly_attacks2[randint0(MAX_SILLY_ATTACK)];
+                strfmt(temp, mam_ptr->act, mam_ptr->t_name);
                 msg_format("%^sは%s", mam_ptr->m_name, temp);
 #else
                 if (do_silly_attack) {
-                    act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
-                    strfmt(temp, "%s %s.", act, t_name);
+                    mam_ptr->act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
+                    strfmt(temp, "%s %s.", mam_ptr->act, t_name);
                 } else
-                    strfmt(temp, act, t_name);
+                    strfmt(temp, mam_ptr->act, t_name);
                 msg_format("%^s %s", m_name, temp);
 #endif
             }
@@ -551,12 +533,12 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
             if (pt) {
                 /* Do damage if not exploding */
-                if (!explode) {
+                if (!mam_ptr->explode) {
                     project(subject_ptr, m_idx, 0, t_ptr->fy, t_ptr->fx, mam_ptr->damage, pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
                 }
 
                 process_blow_effect(subject_ptr, mam_ptr);
-                if (touched) {
+                if (mam_ptr->touched) {
                     aura_fire_by_melee(subject_ptr, mam_ptr);
                     aura_cold_by_melee(subject_ptr, mam_ptr);
                     aura_elec_by_melee(subject_ptr, mam_ptr);
@@ -567,7 +549,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         /* Monster missed player */
         else {
             /* Analyze failed attacks */
-            switch (method) {
+            switch (mam_ptr->method) {
             case RBM_HIT:
             case RBM_TOUCH:
             case RBM_PUNCH:
@@ -608,7 +590,7 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         }
     }
 
-    if (explode) {
+    if (mam_ptr->explode) {
         sound(SOUND_EXPLODE);
 
         /* Cancel Invulnerability */
