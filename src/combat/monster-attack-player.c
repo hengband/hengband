@@ -36,6 +36,21 @@
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 
+static bool check_no_blow(player_type *target_ptr, monap_type *monap_ptr)
+{
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if (r_ptr->flags1 & (RF1_NEVER_BLOW))
+        return FALSE;
+
+    if (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
+        return FALSE;
+
+    if (!is_hostile(monap_ptr->m_ptr))
+        return FALSE;
+
+    return TRUE;
+}
+
 static void show_jaian_song(monap_type *monap_ptr)
 {
 #ifdef JP
@@ -411,16 +426,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     bool fear = FALSE;
     bool alive = TRUE;
     HIT_POINT get_damage = 0;
+    check_no_blow(target_ptr, monap_ptr);
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
-    if (r_ptr->flags1 & (RF1_NEVER_BLOW))
-        return FALSE;
-
-    if (d_info[target_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
-        return FALSE;
-
-    if (!is_hostile(monap_ptr->m_ptr))
-        return FALSE;
-
     monap_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
     monster_desc(target_ptr, monap_ptr->m_name, monap_ptr->m_ptr, 0);
     monster_desc(target_ptr, ddesc, monap_ptr->m_ptr, MD_WRONGDOER_NAME);
