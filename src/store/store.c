@@ -350,14 +350,14 @@ bool combine_and_reorder_home(int store_num)
  */
 static int home_carry(player_type *player_ptr, object_type *o_ptr)
 {
-	if (cur_store_num != STORE_HOME)
+    bool old_stack_force_notes = stack_force_notes;
+    bool old_stack_force_costs = stack_force_costs;
+    if (cur_store_num != STORE_HOME)
 	{
 		stack_force_notes = FALSE;
 		stack_force_costs = FALSE;
 	}
 
-	bool old_stack_force_notes = stack_force_notes;
-	bool old_stack_force_costs = stack_force_costs;
 	for (int slot = 0; slot < st_ptr->stock_num; slot++)
 	{
 		object_type *j_ptr;
