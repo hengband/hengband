@@ -5,22 +5,22 @@
  */
 
 #include "combat/monster-attack-monster.h"
-#include "dungeon/dungeon.h"
-#include "combat/monster-attack-effect.h"
+#include "combat/attack-accuracy.h"
 #include "combat/hallucination-attacks-table.h"
-#include "spell/spells-type.h"
+#include "combat/melee-postprocess.h"
+#include "combat/melee-switcher.h"
+#include "combat/melee-util.h"
+#include "combat/monster-attack-effect.h"
+#include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
-#include "player/player-move.h"
-#include "monster/monster-status.h"
-#include "combat/attack-accuracy.h"
-#include "spell/spells3.h"
-#include "spell/process-effect.h"
 #include "monster/monster-race-hook.h"
+#include "monster/monster-status.h"
+#include "player/player-move.h"
 #include "realm/realm-hex.h"
-#include "combat/melee-postprocess.h"
-#include "combat/melee-util.h"
-#include "combat/melee-switcher.h"
+#include "spell/process-effect.h"
+#include "spell/spells-type.h"
+#include "spell/spells3.h"
 
 /* todo モンスター共通なので、monster-attack-player.cでも使うはず */
 const int MAX_BLOW = 4;
@@ -54,8 +54,7 @@ static void process_blow_effect(player_type *subject_ptr, mam_type *mam_ptr)
             PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
         break;
     case BLOW_EFFECT_TYPE_SLEEP:
-        project(subject_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, r_ptr->level, GF_OLD_SLEEP,
-            PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED,
+        project(subject_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, r_ptr->level, GF_OLD_SLEEP, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED,
             -1);
         break;
     case BLOW_EFFECT_TYPE_HEAL:
@@ -204,7 +203,7 @@ static void process_melee(player_type *subject_ptr, mam_type *mam_ptr)
         describe_monster_missed_monster(subject_ptr, mam_ptr);
         return;
     }
-        
+
     (void)set_monster_csleep(subject_ptr, mam_ptr->t_idx, 0);
     redraw_health_bar(subject_ptr, mam_ptr);
     describe_attack_method(subject_ptr, mam_ptr);
