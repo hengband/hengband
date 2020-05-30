@@ -463,6 +463,26 @@ static bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
     return TRUE;
 }
 
+static bool check_drain_hp(player_type *target_ptr, const s32b d)
+{
+    bool resist_drain = !drain_exp(target_ptr, d, d / 10, 50);
+    if (target_ptr->mimic_form)
+        return (mimic_info[target_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING) != 0 ? TRUE : resist_drain;
+
+    switch (target_ptr->prace) {
+    case RACE_ZOMBIE:
+    case RACE_VAMPIRE:
+    case RACE_SPECTRE:
+    case RACE_SKELETON:
+    case RACE_BALROG:
+    case RACE_GOLEM:
+    case RACE_ANDROID:
+        return TRUE;
+    default:
+        return resist_drain;
+    }
+}
+
 static void process_drain_life(player_type *target_ptr, monap_type *monap_ptr, const bool resist_drain)
 {
     if ((monap_ptr->damage > 5) && !resist_drain) {
@@ -620,7 +640,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     if (monap_ptr->o_ptr->k_idx == 0)
                         continue;
 
-                    if (process_un_power(target_ptr, monap_ptr, i_idx))
+                    if (process_un_power(target_ptr, monap_ptr))
                         break;
                 }
 
@@ -1068,24 +1088,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
-                bool resist_drain = !drain_exp(target_ptr, d, d / 10, 50);
-                if (target_ptr->mimic_form) {
-                    if (mimic_info[target_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING)
-                        resist_drain = TRUE;
-                } else {
-                    switch (target_ptr->prace) {
-                    case RACE_ZOMBIE:
-                    case RACE_VAMPIRE:
-                    case RACE_SPECTRE:
-                    case RACE_SKELETON:
-                    case RACE_BALROG:
-                    case RACE_GOLEM:
-                    case RACE_ANDROID:
-                        resist_drain = TRUE;
-                        break;
-                    }
-                }
-
+                bool resist_drain = check_drain_hp(target_ptr, d);
                 process_drain_life(target_ptr, monap_ptr, resist_drain);
                 break;
             }
