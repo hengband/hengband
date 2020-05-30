@@ -155,6 +155,21 @@ void aura_elec_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
         PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
 }
 
+bool check_same_monster(player_type *subject_ptr, mam_type *mam_ptr)
+{
+    if (mam_ptr->m_idx == mam_ptr->t_idx)
+        return FALSE;
+
+    monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
+    if (r_ptr->flags1 & RF1_NEVER_BLOW)
+        return FALSE;
+
+    if (d_info[subject_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
+        return FALSE;
+
+    return TRUE;
+}
+
 /*!
  * @brief モンスターから敵モンスターへの打撃攻撃処理
  * @param m_idx 攻撃側モンスターの参照ID
@@ -183,14 +198,9 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     bool known = (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
     bool do_silly_attack = (one_in_(2) && subject_ptr->image);
 
-    if (m_idx == t_idx)
-        return FALSE;
-    if (r_ptr->flags1 & RF1_NEVER_BLOW)
-        return FALSE;
-    if (d_info[subject_ptr->dungeon_idx].flags1 & DF1_NO_MELEE)
+    if (!check_same_monster(subject_ptr, mam_ptr))
         return FALSE;
 
-    /* Total armor */
     ARMOUR_CLASS ac = tr_ptr->ac;
 
     /* Extract the effective monster level */
