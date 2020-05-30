@@ -261,6 +261,42 @@ static void describe_monster_attack_method(monap_type *monap_ptr)
 }
 
 /*!
+ * @brief 時間逆転攻撃による能力低下
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void describe_disability(player_type *target_ptr, monap_type *monap_ptr)
+{
+    int stat = randint0(6);
+    switch (stat) {
+    case A_STR:
+        monap_ptr->act = _("強く", "strong");
+        break;
+    case A_INT:
+        monap_ptr->act = _("聡明で", "bright");
+        break;
+    case A_WIS:
+        monap_ptr->act = _("賢明で", "wise");
+        break;
+    case A_DEX:
+        monap_ptr->act = _("器用で", "agile");
+        break;
+    case A_CON:
+        monap_ptr->act = _("健康で", "hale");
+        break;
+    case A_CHR:
+        monap_ptr->act = _("美しく", "beautiful");
+        break;
+    }
+
+    msg_format(_("あなたは以前ほど%sなくなってしまった...。", "You're not as %s as you used to be..."), monap_ptr->act);
+    target_ptr->stat_cur[stat] = (target_ptr->stat_cur[stat] * 3) / 4;
+    if (target_ptr->stat_cur[stat] < 3)
+        target_ptr->stat_cur[stat] = 3;
+}
+
+/*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
  * @return 実際に攻撃処理を行った場合TRUEを返す
@@ -929,33 +965,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     case 7:
                     case 8:
                     case 9: {
-                        int stat = randint0(6);
-                        switch (stat) {
-                        case A_STR:
-                            monap_ptr->act = _("強く", "strong");
-                            break;
-                        case A_INT:
-                            monap_ptr->act = _("聡明で", "bright");
-                            break;
-                        case A_WIS:
-                            monap_ptr->act = _("賢明で", "wise");
-                            break;
-                        case A_DEX:
-                            monap_ptr->act = _("器用で", "agile");
-                            break;
-                        case A_CON:
-                            monap_ptr->act = _("健康で", "hale");
-                            break;
-                        case A_CHR:
-                            monap_ptr->act = _("美しく", "beautiful");
-                            break;
-                        }
-
-                        msg_format(_("あなたは以前ほど%sなくなってしまった...。", "You're not as %s as you used to be..."), monap_ptr->act);
-                        target_ptr->stat_cur[stat] = (target_ptr->stat_cur[stat] * 3) / 4;
-                        if (target_ptr->stat_cur[stat] < 3)
-                            target_ptr->stat_cur[stat] = 3;
-
+                        describe_disability(target_ptr, monap_ptr);
                         target_ptr->update |= (PU_BONUS);
                         break;
                     }
