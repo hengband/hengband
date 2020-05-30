@@ -21,6 +21,9 @@
 #define BLOW_EFFECT_TYPE_SLEEP 2
 #define BLOW_EFFECT_TYPE_HEAL 3
 
+/* モンスター共通なので、monster-attack-player.cでも使うはず */
+const int MAX_BLOW = 4;
+
 /* monster-attack-monster type*/
 typedef struct mam_type {
     int effect_type;
@@ -51,6 +54,9 @@ typedef struct mam_type {
     bool obvious;
     int d_dice;
     int d_side;
+    bool known;
+    bool fear;
+    bool dead;
 } mam_type;
 
 mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx)
@@ -77,6 +83,9 @@ mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRA
     mam_ptr->do_silly_attack = (one_in_(2) && subject_ptr->image);
     mam_ptr->power = 0;
     mam_ptr->obvious = FALSE;
+    mam_ptr->known = (mam_ptr->m_ptr->cdis <= MAX_SIGHT) || (mam_ptr->t_ptr->cdis <= MAX_SIGHT);
+    mam_ptr->fear = FALSE;
+    mam_ptr->dead = FALSE;
     return mam_ptr;
 }
 
@@ -527,6 +536,25 @@ void process_melee(player_type *subject_ptr, mam_type *mam_ptr)
     process_monster_attack_effect(subject_ptr, mam_ptr);
 }
 
+void thief_runaway_by_melee(player_type *subject_ptr, mam_type *mam_ptr)
+{
+    if (teleport_barrier(subject_ptr, mam_ptr->m_idx)) {
+        if (mam_ptr->see_m) {
+            msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
+        } else if (mam_ptr->known) {
+            subject_ptr->current_floor_ptr->monster_noise = TRUE;
+        }
+    } else {
+        if (mam_ptr->see_m) {
+            msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
+        } else if (mam_ptr->known) {
+            subject_ptr->current_floor_ptr->monster_noise = TRUE;
+        }
+
+        teleport_away(subject_ptr, mam_ptr->m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
+    }
+}
+
 /*!
  * @brief モンスターから敵モンスターへの打撃攻撃処理
  * @param m_idx 攻撃側モンスターの参照ID
@@ -539,20 +567,18 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     mam_type *mam_ptr = initialize_mam_type(subject_ptr, &tmp_mam, m_idx, t_idx);
 
     monster_race *r_ptr = &r_info[mam_ptr->m_ptr->r_idx];
-    bool fear = FALSE, dead = FALSE;
-    bool known = (mam_ptr->m_ptr->cdis <= MAX_SIGHT) || (mam_ptr->t_ptr->cdis <= MAX_SIGHT);
     if (!check_same_monster(subject_ptr, mam_ptr))
         return FALSE;
 
     monster_desc(subject_ptr, mam_ptr->m_name, mam_ptr->m_ptr, 0);
     monster_desc(subject_ptr, mam_ptr->t_name, mam_ptr->t_ptr, 0);
-    if (!mam_ptr->see_either && known)
+    if (!mam_ptr->see_either && mam_ptr->known)
         subject_ptr->current_floor_ptr->monster_noise = TRUE;
 
     if (subject_ptr->riding && (m_idx == subject_ptr->riding))
         disturb(subject_ptr, TRUE, TRUE);
 
-    for (mam_ptr->ap_cnt = 0; mam_ptr->ap_cnt < 4; mam_ptr->ap_cnt++) {
+    for (mam_ptr->ap_cnt = 0; mam_ptr->ap_cnt < MAX_BLOW; mam_ptr->ap_cnt++) {
         mam_ptr->effect = r_ptr->blow[mam_ptr->ap_cnt].effect;
         mam_ptr->method = r_ptr->blow[mam_ptr->ap_cnt].method;
         mam_ptr->d_dice = r_ptr->blow[mam_ptr->ap_cnt].d_dice;
@@ -585,28 +611,14 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
     if (mam_ptr->explode) {
         sound(SOUND_EXPLODE);
         (void)set_monster_invulner(subject_ptr, m_idx, 0, FALSE);
-        mon_take_hit_mon(subject_ptr, m_idx, mam_ptr->m_ptr->hp + 1, &dead, &fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
+        mon_take_hit_mon(
+            subject_ptr, m_idx, mam_ptr->m_ptr->hp + 1, &mam_ptr->dead, &mam_ptr->fear, _("は爆発して粉々になった。", " explodes into tiny shreds."), m_idx);
         mam_ptr->blinked = FALSE;
     }
 
     if (!mam_ptr->blinked || mam_ptr->m_ptr->r_idx == 0)
         return TRUE;
 
-    if (teleport_barrier(subject_ptr, m_idx)) {
-        if (mam_ptr->see_m) {
-            msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
-        } else if (known) {
-            subject_ptr->current_floor_ptr->monster_noise = TRUE;
-        }
-    } else {
-        if (mam_ptr->see_m) {
-            msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
-        } else if (known) {
-            subject_ptr->current_floor_ptr->monster_noise = TRUE;
-        }
-
-        teleport_away(subject_ptr, m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
-    }
-
+    thief_runaway_by_melee(subject_ptr, mam_ptr);
     return TRUE;
 }
