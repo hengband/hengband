@@ -17,5 +17,6 @@ monap_type *initialize_monap_type(player_type *target_ptr, monap_type *monap_ptr
     monap_ptr->touched = FALSE;
     monap_ptr->explode = FALSE;
     monap_ptr->do_silly_attack = one_in_(2) && target_ptr->image;
+    monap_ptr->obvious = FALSE;
     return monap_ptr;
 }
