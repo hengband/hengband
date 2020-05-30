@@ -406,13 +406,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             d_dice /= 10;
         }
 
-        if (!target_ptr->playing || target_ptr->is_dead)
-            break;
-
-        if (distance(target_ptr->y, target_ptr->x, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx) > 1)
-            break;
-
-        if (target_ptr->leaving)
+        if (!target_ptr->playing || target_ptr->is_dead || (distance(target_ptr->y, target_ptr->x, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx) > 1)
+            || target_ptr->leaving)
             break;
 
         if (monap_ptr->method == RBM_SHOOT)
