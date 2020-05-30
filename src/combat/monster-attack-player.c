@@ -364,6 +364,32 @@ static bool effect_protecion_from_evil(player_type *target_ptr, monap_type *mona
     return TRUE;
 }
 
+static void describe_silly_attacks(monap_type *monap_ptr)
+{
+    if (monap_ptr->act == NULL)
+        return;
+
+    if (monap_ptr->do_silly_attack) {
+#ifdef JP
+        monap_ptr->abbreviate = -1;
+#endif
+        monap_ptr->act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
+    }
+
+#ifdef JP
+    if (monap_ptr->abbreviate == 0)
+        msg_format("%^sに%s", monap_ptr->m_name, monap_ptr->act);
+    else if (monap_ptr->abbreviate == 1)
+        msg_format("%s", monap_ptr->act);
+    else /* if (monap_ptr->abbreviate == -1) */
+        msg_format("%^s%s", monap_ptr->m_name, monap_ptr->act);
+
+    monap_ptr->abbreviate = 1; /*2回目以降は省略 */
+#else
+    msg_format("%^s %s%s", monap_ptr->m_name, monap_ptr->act, monap_ptr->do_silly_attack ? " you." : "");
+#endif
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -384,7 +410,6 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     bool blinked;
     bool fear = FALSE;
     bool alive = TRUE;
-    bool do_silly_attack = (one_in_(2) && target_ptr->image);
     HIT_POINT get_damage = 0;
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     if (r_ptr->flags1 & (RF1_NEVER_BLOW))
@@ -449,26 +474,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             monap_ptr->do_cut = 0;
             monap_ptr->do_stun = 0;
             describe_monster_attack_method(monap_ptr);
-            if (monap_ptr->act) {
-                if (do_silly_attack) {
-#ifdef JP
-                    monap_ptr->abbreviate = -1;
-#endif
-                    monap_ptr->act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
-                }
-#ifdef JP
-                if (monap_ptr->abbreviate == 0)
-                    msg_format("%^sに%s", monap_ptr->m_name, monap_ptr->act);
-                else if (monap_ptr->abbreviate == 1)
-                    msg_format("%s", monap_ptr->act);
-                else /* if (monap_ptr->abbreviate == -1) */
-                    msg_format("%^s%s", monap_ptr->m_name, monap_ptr->act);
-                monap_ptr->abbreviate = 1; /*2回目以降は省略 */
-#else
-                msg_format("%^s %s%s", monap_ptr->m_name, monap_ptr->act, do_silly_attack ? " you." : "");
-#endif
-            }
-
+            describe_silly_attacks(monap_ptr);
             obvious = TRUE;
             damage = damroll(d_dice, d_side);
             if (monap_ptr->explode)
@@ -1372,7 +1378,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             }
         }
 
-        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr) && !do_silly_attack) {
+        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr) && !monap_ptr->do_silly_attack) {
             if (obvious || damage || (r_ptr->r_blows[ap_cnt] > 10)) {
                 if (r_ptr->r_blows[ap_cnt] < MAX_UCHAR) {
                     r_ptr->r_blows[ap_cnt]++;
