@@ -2,6 +2,7 @@
 
 typedef enum spells_type
 {
+	GF_NONE = 0,
 	GF_ELEC = 1,				/*!< 魔法効果: 電撃*/
 	GF_POIS = 2,				/*!< 魔法効果: 毒*/
 	GF_ACID = 3,				/*!< 魔法効果: 酸*/

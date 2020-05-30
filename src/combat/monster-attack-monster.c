@@ -357,7 +357,7 @@ void describe_silly_melee(mam_type *mam_ptr)
 #endif
 }
 
-void process_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
+void decide_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
 {
     switch (mam_ptr->effect) {
     case 0:
@@ -447,9 +447,27 @@ void process_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
         mam_ptr->pt = GF_SOUND;
         break;
     default:
-        mam_ptr->pt = 0;
+        mam_ptr->pt = GF_NONE;
         break;
     }
+}
+
+void process_monster_attack_effect(player_type *subject_ptr, mam_type *mam_ptr)
+{
+    if (mam_ptr->pt == GF_NONE)
+        return;
+
+    if (!mam_ptr->explode)
+        project(subject_ptr, mam_ptr->m_idx, 0, mam_ptr->t_ptr->fy, mam_ptr->t_ptr->fx, mam_ptr->damage, mam_ptr->pt,
+            PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
+
+    process_blow_effect(subject_ptr, mam_ptr);
+    if (!mam_ptr->touched)
+        return;
+
+    aura_fire_by_melee(subject_ptr, mam_ptr);
+    aura_cold_by_melee(subject_ptr, mam_ptr);
+    aura_elec_by_melee(subject_ptr, mam_ptr);
 }
 
 void describe_monster_missed_monster(player_type *subject_ptr, mam_type *mam_ptr)
@@ -498,8 +516,6 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
 
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
     bool fear = FALSE, dead = FALSE;
-    int effect_type;
-
     bool known = (m_ptr->cdis <= MAX_SIGHT) || (t_ptr->cdis <= MAX_SIGHT);
     if (!check_same_monster(subject_ptr, mam_ptr))
         return FALSE;
@@ -536,25 +552,15 @@ bool monst_attack_monst(player_type *subject_ptr, MONSTER_IDX m_idx, MONSTER_IDX
         power = mbe_info[mam_ptr->effect].power;
         if (!mam_ptr->effect || check_hit_from_monster_to_monster(power, mam_ptr->rlev, mam_ptr->ac, MON_STUNNED(m_ptr))) {
             (void)set_monster_csleep(subject_ptr, t_idx, 0);
-            redraw_health_bar();
+            redraw_health_bar(subject_ptr, mam_ptr);
             describe_attack_method(subject_ptr, mam_ptr);
             describe_silly_melee(subject_ptr, mam_ptr);
             obvious = TRUE;
             mam_ptr->damage = damroll(d_dice, d_side);
-            effect_type = BLOW_EFFECT_TYPE_NONE;
+            mam_ptr->effect_type = BLOW_EFFECT_TYPE_NONE;
             mam_ptr->pt = GF_MISSILE;
+            decide_monster_attack_effect(subject_ptr, mam_ptr);
             process_monster_attack_effect(subject_ptr, mam_ptr);
-            if (mam_ptr->pt) {
-                if (!mam_ptr->explode)
-                    project(subject_ptr, m_idx, 0, t_ptr->fy, t_ptr->fx, mam_ptr->damage, mam_ptr->pt, PROJECT_KILL | PROJECT_STOP | PROJECT_AIMED, -1);
-
-                process_blow_effect(subject_ptr, mam_ptr);
-                if (mam_ptr->touched) {
-                    aura_fire_by_melee(subject_ptr, mam_ptr);
-                    aura_cold_by_melee(subject_ptr, mam_ptr);
-                    aura_elec_by_melee(subject_ptr, mam_ptr);
-                }
-            }
         } else
             describe_monster_missed_monster(subject_ptr, mam_ptr);
 
