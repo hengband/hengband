@@ -296,6 +296,45 @@ static void describe_disability(player_type *target_ptr, monap_type *monap_ptr)
         target_ptr->stat_cur[stat] = 3;
 }
 
+static void process_monster_attack_time(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (target_ptr->resist_time || check_multishadow(target_ptr))
+        return;
+
+    switch (randint1(10)) {
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5: {
+        if (target_ptr->prace == RACE_ANDROID)
+            break;
+        msg_print(_("人生が逆戻りした気がする。", "You feel like a chunk of the past has been ripped away."));
+        lose_exp(target_ptr, 100 + (target_ptr->exp / 100) * MON_DRAIN_LIFE);
+        break;
+    }
+    case 6:
+    case 7:
+    case 8:
+    case 9: {
+        describe_disability(target_ptr, monap_ptr);
+        target_ptr->update |= (PU_BONUS);
+        break;
+    }
+    case 10: {
+        msg_print(_("あなたは以前ほど力強くなくなってしまった...。", "You're not as powerful as you used to be..."));
+        for (int i = 0; i < A_MAX; i++) {
+            target_ptr->stat_cur[i] = (target_ptr->stat_cur[i] * 7) / 8;
+            if (target_ptr->stat_cur[i] < 3)
+                target_ptr->stat_cur[i] = 3;
+        }
+
+        target_ptr->update |= (PU_BONUS);
+        break;
+    }
+    }
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -948,41 +987,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (monap_ptr->explode)
                     break;
 
-                if (!target_ptr->resist_time && !check_multishadow(target_ptr)) {
-                    switch (randint1(10)) {
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5: {
-                        if (target_ptr->prace == RACE_ANDROID)
-                            break;
-                        msg_print(_("人生が逆戻りした気がする。", "You feel like a chunk of the past has been ripped away."));
-                        lose_exp(target_ptr, 100 + (target_ptr->exp / 100) * MON_DRAIN_LIFE);
-                        break;
-                    }
-                    case 6:
-                    case 7:
-                    case 8:
-                    case 9: {
-                        describe_disability(target_ptr, monap_ptr);
-                        target_ptr->update |= (PU_BONUS);
-                        break;
-                    }
-                    case 10: {
-                        msg_print(_("あなたは以前ほど力強くなくなってしまった...。", "You're not as powerful as you used to be..."));
-                        for (k = 0; k < A_MAX; k++) {
-                            target_ptr->stat_cur[k] = (target_ptr->stat_cur[k] * 7) / 8;
-                            if (target_ptr->stat_cur[k] < 3)
-                                target_ptr->stat_cur[k] = 3;
-                        }
-
-                        target_ptr->update |= (PU_BONUS);
-                        break;
-                    }
-                    }
-                }
-
+                process_monster_attack_time(target_ptr, monap_ptr);
                 get_damage += take_hit(target_ptr, DAMAGE_ATTACK, damage, ddesc, -1);
                 break;
             }
