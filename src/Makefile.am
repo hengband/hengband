@@ -106,7 +106,7 @@ hengband_SOURCES = \
 	\
 	io/character-dump.c io/character-dump.h \
 	io/dump-remover.c io/dump-remover.h \
-	io/files.c io/files.h \
+	io/files-util.c io/files-util.h \
 	io/gf-descriptions.c io/gf-descriptions.h \
 	io/targeting.c io/targeting.h \
 	io/tokenizer.c io/tokenizer.h \

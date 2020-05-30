@@ -12,7 +12,7 @@
 #include "system/system-variables.h"
 #include "io/uid-checker.h"
 #include "io/signal-handlers.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "io/inet.h"
 #include "main/init.h"
 #include "core/scores.h"

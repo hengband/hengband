@@ -159,7 +159,7 @@
 #include "system/angband.h"
 #include "main/sound-definitions-table.h"
 #include "io/exit-panic.h"
-#include "io/files.h"
+#include "io/files-util.h"
 #include "term/gameterm.h"
 
 #ifdef USE_GCU
