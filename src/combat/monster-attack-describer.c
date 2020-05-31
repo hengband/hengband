@@ -154,7 +154,9 @@ void describe_monster_attack_method(monap_type *monap_ptr)
         break;
     }
     case RBM_CHARGE: {
+#ifdef JP
         monap_ptr->abbreviate = -1;
+#endif
         monap_ptr->act = _("は請求書をよこした。", "charges you.");
         monap_ptr->touched = TRUE;
 
@@ -163,7 +165,9 @@ void describe_monster_attack_method(monap_type *monap_ptr)
         break;
     }
     case RBM_CRAWL: {
+#ifdef JP
         monap_ptr->abbreviate = -1;
+#endif
         monap_ptr->act = _("が体の上を這い回った。", "crawls on you.");
         monap_ptr->touched = TRUE;
         sound(SOUND_SLIME);
@@ -180,7 +184,9 @@ void describe_monster_attack_method(monap_type *monap_ptr)
         break;
     }
     case RBM_EXPLODE: {
+#ifdef JP
         monap_ptr->abbreviate = -1;
+#endif
         monap_ptr->act = _("は爆発した。", "explodes.");
         monap_ptr->explode = TRUE;
         break;
@@ -200,7 +206,9 @@ void describe_monster_attack_method(monap_type *monap_ptr)
         break;
     }
     case RBM_XXX4: {
+#ifdef JP
         monap_ptr->abbreviate = -1;
+#endif
         monap_ptr->act = _("が XXX4 を発射した。", "projects XXX4's at you.");
         break;
     }

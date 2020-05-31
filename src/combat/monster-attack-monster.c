@@ -169,13 +169,13 @@ static void describe_silly_melee(mam_type *mam_ptr)
     strfmt(temp, mam_ptr->act, mam_ptr->t_name);
     msg_format("%^sは%s", mam_ptr->m_name, temp);
 #else
-    if (do_silly_attack) {
+    if (mam_ptr->do_silly_attack) {
         mam_ptr->act = silly_attacks[randint0(MAX_SILLY_ATTACK)];
-        strfmt(temp, "%s %s.", mam_ptr->act, t_name);
+        strfmt(temp, "%s %s.", mam_ptr->act, mam_ptr->t_name);
     } else
-        strfmt(temp, mam_ptr->act, t_name);
+        strfmt(temp, mam_ptr->act, mam_ptr->t_name);
 
-    msg_format("%^s %s", m_name, temp);
+    msg_format("%^s %s", mam_ptr->m_name, temp);
 #endif
 }
 

@@ -126,7 +126,7 @@ void process_eat_item(player_type *target_ptr, monap_type *monap_ptr)
 #ifdef JP
         msg_format("%s(%c)を%s盗まれた！", monap_ptr->o_name, index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
 #else
-        msg_format("%sour %s (%c) was stolen!", ((o_ptr->number > 1) ? "One of y" : "Y"), monap_ptr->o_name, index_to_label(i_idx));
+        msg_format("%sour %s (%c) was stolen!", ((monap_ptr->o_ptr->number > 1) ? "One of y" : "Y"), monap_ptr->o_name, index_to_label(i_idx));
 #endif
         chg_virtue(target_ptr, V_SACRIFICE, 1);
         o_idx = o_pop(target_ptr->current_floor_ptr);
@@ -154,7 +154,7 @@ void process_eat_food(player_type *target_ptr, monap_type *monap_ptr)
 #ifdef JP
         msg_format("%s(%c)を%s食べられてしまった！", monap_ptr->o_name, index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
 #else
-        msg_format("%sour %s (%c) was eaten!", ((o_ptr->number > 1) ? "One of y" : "Y"), monap_ptr->o_name, index_to_label(i_idx));
+        msg_format("%sour %s (%c) was eaten!", ((monap_ptr->o_ptr->number > 1) ? "One of y" : "Y"), monap_ptr->o_name, index_to_label(i_idx));
 #endif
         inven_item_increase(target_ptr, i_idx, -1);
         inven_item_optimize(target_ptr, i_idx);
