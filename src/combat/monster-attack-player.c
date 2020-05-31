@@ -19,6 +19,7 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
+#include "mind/racial-samurai.h"
 #include "monster/monster-status.h"
 #include "object/object-hook.h"
 #include "player/player-damage.h"
@@ -49,7 +50,7 @@ static bool check_no_blow(player_type *target_ptr, monap_type *monap_ptr)
 /*!
  * @brief プレーヤー死亡等でモンスターからプレーヤーへの直接攻撃処理を途中で打ち切るかどうかを判定する
  * @param target_ptr プレーヤーへの参照ポインタ
- * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
  * @return 攻撃続行ならばTRUE、打ち切りになったらFALSE
  */
 static bool check_monster_attack_terminated(player_type *target_ptr, monap_type *monap_ptr)
@@ -76,7 +77,7 @@ static bool check_monster_attack_terminated(player_type *target_ptr, monap_type 
 /*!
  * @brief 対邪悪結界が効いている状態で邪悪なモンスターから直接攻撃を受けた時の処理
  * @param target_ptr プレーヤーへの参照ポインタ
- * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
  * @return briefに書いた条件＋確率が満たされたらTRUE、それ以外はFALSE
  */
 static bool effect_protecion_from_evil(player_type *target_ptr, monap_type *monap_ptr)
@@ -130,7 +131,7 @@ static void describe_silly_attacks(monap_type *monap_ptr)
 
 /*!
  * @brief 切り傷と朦朧が同時に発生した時、片方を無効にする
- * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
  * @return なし
  */
 static void select_cut_stun(monap_type *monap_ptr)
@@ -278,7 +279,7 @@ static void gain_armor_exp(player_type *target_ptr, monap_type *monap_ptr)
  * @brief モンスターから直接攻撃を1回受けた時の処理
  * @return 対邪悪結界により攻撃が当たらなかったらFALSE、それ以外はTRUE
  * @param target_ptr プレーヤーへの参照ポインタ
- * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
  * @details 最大4 回/モンスター/ターン、このルーチンを通る
  */
 static bool process_monster_attack_hit(player_type *target_ptr, monap_type *monap_ptr)
@@ -308,7 +309,7 @@ static bool process_monster_attack_hit(player_type *target_ptr, monap_type *mona
 /*!
  * @brief 一部の打撃種別の場合のみ、避けた旨のメッセージ表示と盾技能スキル向上を行う
  * @param target_ptr プレーヤーへの参照ポインタ
- * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
  * @return なし
  */
 static void process_monster_attack_evasion(player_type *target_ptr, monap_type *monap_ptr)
@@ -351,7 +352,7 @@ static void increase_blow_type_seen(player_type *target_ptr, monap_type *monap_p
 /*!
  * @brief モンスターから直接攻撃を受けた時に落馬するかどうかを判定し、判定アウトならば落馬させる
  * @param target_ptr プレーヤーへの参照ポインタ
- * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
  * @return なし
  */
 static void check_fall_off_horse(player_type *target_ptr, monap_type *monap_ptr)
@@ -406,7 +407,7 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
 /*!
  * @brief 呪術「目には目を」の効果処理
  * @param target_ptr プレーヤーへの参照ポインタ
- * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
  * @return なし
  */
 static void eyes_on_eyes(player_type *target_ptr, monap_type *monap_ptr)
@@ -457,16 +458,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
     revenge_store(target_ptr, monap_ptr->get_damage);
     eyes_on_eyes(target_ptr, monap_ptr);
-    if ((target_ptr->counter || (target_ptr->special_defense & KATA_MUSOU)) && monap_ptr->alive && !target_ptr->is_dead && monap_ptr->m_ptr->ml && (target_ptr->csp > 7)) {
-        char m_target_name[MAX_NLEN];
-        monster_desc(target_ptr, m_target_name, monap_ptr->m_ptr, 0);
-        target_ptr->csp -= 7;
-        msg_format(_("%^sに反撃した！", "You counterattacked %s!"), m_target_name);
-        do_cmd_attack(target_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_COUNTER);
-        monap_ptr->fear = FALSE;
-        target_ptr->redraw |= (PR_MANA);
-    }
-
+    musou_counterattack(target_ptr, monap_ptr);
     if (monap_ptr->blinked && monap_ptr->alive && !target_ptr->is_dead) {
         if (teleport_barrier(target_ptr, m_idx)) {
             msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));

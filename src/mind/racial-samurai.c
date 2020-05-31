@@ -4,12 +4,12 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
 #include "racial-samurai.h"
+#include "cmd/cmd-attack.h"
+#include "cmd/cmd-basic.h"
 #include "cmd/cmd-pet.h"
 #include "monster/monster-status.h"
 #include "player/player-effects.h"
-#include "cmd/cmd-basic.h"
 #include "player/avatar.h"
 
 void concentration(player_type* creature_ptr)
@@ -171,4 +171,25 @@ void mineuchi(player_type *attacker_ptr, player_attack_type *pa_ptr)
         msg_format(_("%s はもうろうとした。", "%s is dazed."), pa_ptr->m_name);
 
     (void)set_monster_stunned(attacker_ptr, pa_ptr->g_ptr->m_idx, MON_STUNNED(pa_ptr->m_ptr) + tmp);
+}
+
+/*!
+ * @brief 無想による反撃処理
+ * @param attacker_ptr プレーヤーへの参照ポインタ
+ * @param pa_ptr 直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+void musou_counterattack(player_type *attacker_ptr, monap_type *monap_ptr)
+{
+    if ((!attacker_ptr->counter && ((attacker_ptr->special_defense & KATA_MUSOU) == 0)) || !monap_ptr->alive || attacker_ptr->is_dead || !monap_ptr->m_ptr->ml
+        || (attacker_ptr->csp <= 7))
+        return;
+
+    char m_target_name[MAX_NLEN];
+    monster_desc(attacker_ptr, m_target_name, monap_ptr->m_ptr, 0);
+    attacker_ptr->csp -= 7;
+    msg_format(_("%^sに反撃した！", "You counterattacked %s!"), m_target_name);
+    do_cmd_attack(attacker_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_COUNTER);
+    monap_ptr->fear = FALSE;
+    attacker_ptr->redraw |= (PR_MANA);
 }
