@@ -365,6 +365,44 @@ static void check_fall_off_horse(player_type *target_ptr, monap_type *monap_ptr)
         msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);
 }
 
+static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr)
+{
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    for (monap_ptr->ap_cnt = 0; monap_ptr->ap_cnt < 4; monap_ptr->ap_cnt++) {
+        monap_ptr->obvious = FALSE;
+        HIT_POINT power = 0;
+        monap_ptr->damage = 0;
+        monap_ptr->act = NULL;
+        monap_ptr->effect = r_ptr->blow[monap_ptr->ap_cnt].effect;
+        monap_ptr->method = r_ptr->blow[monap_ptr->ap_cnt].method;
+        monap_ptr->d_dice = r_ptr->blow[monap_ptr->ap_cnt].d_dice;
+        monap_ptr->d_side = r_ptr->blow[monap_ptr->ap_cnt].d_side;
+
+        if (!check_monster_attack_terminated(target_ptr, monap_ptr))
+            break;
+
+        if (monap_ptr->method == RBM_SHOOT)
+            continue;
+
+        power = mbe_info[monap_ptr->effect].power;
+        monap_ptr->ac = target_ptr->ac + target_ptr->to_a;
+        if ((monap_ptr->effect == RBE_NONE) || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, MON_STUNNED(monap_ptr->m_ptr)))
+            if (!process_monster_attack_hit(target_ptr, monap_ptr))
+                continue;
+            else
+                process_monster_attack_evasion(target_ptr, monap_ptr);
+
+        increase_blow_type_seen(target_ptr, monap_ptr);
+        check_fall_off_horse(target_ptr, monap_ptr);
+        if (target_ptr->special_defense & NINJA_KAWARIMI) {
+            if (kawarimi(target_ptr, FALSE))
+                return TRUE;
+        }
+    }
+
+    return FALSE;
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -391,37 +429,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     }
 
     monap_ptr->blinked = FALSE;
-    for (monap_ptr->ap_cnt = 0; monap_ptr->ap_cnt < 4; monap_ptr->ap_cnt++) {
-        monap_ptr->obvious = FALSE;
-        HIT_POINT power = 0;
-        monap_ptr->damage = 0;
-        monap_ptr->act = NULL;
-        monap_ptr->effect = r_ptr->blow[monap_ptr->ap_cnt].effect;
-        monap_ptr->method = r_ptr->blow[monap_ptr->ap_cnt].method;
-        monap_ptr->d_dice = r_ptr->blow[monap_ptr->ap_cnt].d_dice;
-        monap_ptr->d_side = r_ptr->blow[monap_ptr->ap_cnt].d_side;
-
-        if (!check_monster_attack_terminated(target_ptr, monap_ptr))
-            break;
-
-        if (monap_ptr->method == RBM_SHOOT)
-            continue;
-
-        power = mbe_info[monap_ptr->effect].power;
-        monap_ptr->ac = target_ptr->ac + target_ptr->to_a;
-        if ((monap_ptr->effect == RBE_NONE) || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, MON_STUNNED(monap_ptr->m_ptr)))
-            if (!process_monster_attack_hit(target_ptr, monap_ptr))
-                continue;
-        else
-            process_monster_attack_evasion(target_ptr, monap_ptr);
-
-        increase_blow_type_seen(target_ptr, monap_ptr);
-        check_fall_off_horse(target_ptr, monap_ptr);
-        if (target_ptr->special_defense & NINJA_KAWARIMI) {
-            if (kawarimi(target_ptr, FALSE))
-                return TRUE;
-        }
-    }
+    if (process_monster_blows(target_ptr, monap_ptr))
+        return TRUE;
 
     revenge_store(target_ptr, monap_ptr->get_damage);
     if ((target_ptr->tim_eyeeye || hex_spelling(target_ptr, HEX_EYE_FOR_EYE)) && monap_ptr->get_damage > 0 && !target_ptr->is_dead) {
