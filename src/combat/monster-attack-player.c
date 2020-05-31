@@ -334,6 +334,19 @@ static void process_monster_attack_evasion(player_type *target_ptr, monap_type *
     }
 }
 
+static void increase_blow_type_seen(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr) || monap_ptr->do_silly_attack)
+        return;
+
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if (!monap_ptr->obvious && (monap_ptr->damage == 0) && (r_ptr->r_blows[monap_ptr->ap_cnt] <= 10))
+        return;
+
+    if (r_ptr->r_blows[monap_ptr->ap_cnt] < MAX_UCHAR)
+        r_ptr->r_blows[monap_ptr->ap_cnt]++;
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -361,15 +374,15 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
     monap_ptr->blinked = FALSE;
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
-    for (int ap_cnt = 0; ap_cnt < 4; ap_cnt++) {
+    for (monap_ptr->ap_cnt = 0; monap_ptr->ap_cnt < 4; monap_ptr->ap_cnt++) {
         monap_ptr->obvious = FALSE;
         HIT_POINT power = 0;
         monap_ptr->damage = 0;
         monap_ptr->act = NULL;
-        monap_ptr->effect = r_ptr->blow[ap_cnt].effect;
-        monap_ptr->method = r_ptr->blow[ap_cnt].method;
-        monap_ptr->d_dice = r_ptr->blow[ap_cnt].d_dice;
-        monap_ptr->d_side = r_ptr->blow[ap_cnt].d_side;
+        monap_ptr->effect = r_ptr->blow[monap_ptr->ap_cnt].effect;
+        monap_ptr->method = r_ptr->blow[monap_ptr->ap_cnt].method;
+        monap_ptr->d_dice = r_ptr->blow[monap_ptr->ap_cnt].d_dice;
+        monap_ptr->d_side = r_ptr->blow[monap_ptr->ap_cnt].d_side;
 
         if (!check_monster_attack_terminated(target_ptr, monap_ptr))
             break;
@@ -385,14 +398,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         else
             process_monster_attack_evasion(target_ptr, monap_ptr);
 
-        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr) && !monap_ptr->do_silly_attack) {
-            if (monap_ptr->obvious || monap_ptr->damage || (r_ptr->r_blows[ap_cnt] > 10)) {
-                if (r_ptr->r_blows[ap_cnt] < MAX_UCHAR) {
-                    r_ptr->r_blows[ap_cnt]++;
-                }
-            }
-        }
-
+        increase_blow_type_seen(target_ptr, monap_ptr);
         if (target_ptr->riding && monap_ptr->damage) {
             char m_steed_name[MAX_NLEN];
             monster_desc(target_ptr, m_steed_name, &floor_ptr->m_list[target_ptr->riding], 0);

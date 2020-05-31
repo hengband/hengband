@@ -31,6 +31,7 @@ typedef struct monap_type {
     ARMOUR_CLASS ac;
     bool alive;
     bool fear;
+    int ap_cnt;
 } monap_type;
 
 monap_type *initialize_monap_type(player_type *target_ptr, monap_type *monap_ptr, MONSTER_IDX m_idx);
