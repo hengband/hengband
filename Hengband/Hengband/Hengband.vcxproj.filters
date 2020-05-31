@@ -1052,6 +1052,12 @@
     <ClCompile Include="..\..\src\combat\monster-eating.c">
       <Filter>combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\combat\monster-attack-switcher.c">
+      <Filter>combat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\combat\monster-attack-status.c">
+      <Filter>combat</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2252,6 +2258,12 @@
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\monster-eating.h">
+      <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\monster-attack-switcher.h">
+      <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\combat\monster-attack-status.h">
       <Filter>combat</Filter>
     </ClInclude>
   </ItemGroup>
