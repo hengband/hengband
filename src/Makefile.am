@@ -353,6 +353,7 @@ hengband_SOURCES = \
 	\
 	combat/player-attack-util.h \
 	combat/attack-power-table.c combat/attack-power-table.h \
+	combat/aura-counterattack.c combat/aura-counterattack.h \
 	combat/hallucination-attacks-table.c combat/hallucination-attacks-table.h \
 	combat/monster-attack-types.c combat/monster-attack-types.h \
 	combat/martial-arts-table.c combat/martial-arts-table.h \
