@@ -307,6 +307,7 @@ static bool process_monster_attack_hit(player_type *target_ptr, monap_type *mona
 
 /*!
  * @brief 一部の打撃種別の場合のみ、避けた旨のメッセージ表示と盾技能スキル向上を行う
+ * @param target_ptr プレーヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
  * @return なし
  */
@@ -348,6 +349,23 @@ static void increase_blow_type_seen(player_type *target_ptr, monap_type *monap_p
 }
 
 /*!
+ * @brief モンスターから直接攻撃を受けた時に落馬するかどうかを判定し、判定アウトならば落馬させる
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void check_fall_off_horse(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if ((target_ptr->riding == 0) || (monap_ptr->damage == 0))
+        return;
+
+    char m_steed_name[MAX_NLEN];
+    monster_desc(target_ptr, m_steed_name, &target_ptr->current_floor_ptr->m_list[target_ptr->riding], 0);
+    if (process_fall_off_horse(target_ptr, (monap_ptr->damage > 200) ? 200 : monap_ptr->damage, FALSE))
+        msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);
+}
+
+/*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
  * @return 実際に攻撃処理を行った場合TRUEを返す
@@ -373,7 +391,6 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     }
 
     monap_ptr->blinked = FALSE;
-    floor_type *floor_ptr = target_ptr->current_floor_ptr;
     for (monap_ptr->ap_cnt = 0; monap_ptr->ap_cnt < 4; monap_ptr->ap_cnt++) {
         monap_ptr->obvious = FALSE;
         HIT_POINT power = 0;
@@ -399,14 +416,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             process_monster_attack_evasion(target_ptr, monap_ptr);
 
         increase_blow_type_seen(target_ptr, monap_ptr);
-        if (target_ptr->riding && monap_ptr->damage) {
-            char m_steed_name[MAX_NLEN];
-            monster_desc(target_ptr, m_steed_name, &floor_ptr->m_list[target_ptr->riding], 0);
-            if (process_fall_off_horse(target_ptr, (monap_ptr->damage > 200) ? 200 : monap_ptr->damage, FALSE)) {
-                msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);
-            }
-        }
-
+        check_fall_off_horse(target_ptr, monap_ptr);
         if (target_ptr->special_defense & NINJA_KAWARIMI) {
             if (kawarimi(target_ptr, FALSE))
                 return TRUE;
@@ -446,7 +456,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !floor_ptr->inside_arena)
+    if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
         r_ptr->r_deaths++;
 
     if (monap_ptr->m_ptr->ml && monap_ptr->fear && monap_ptr->alive && !target_ptr->is_dead) {
