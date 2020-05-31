@@ -357,6 +357,23 @@ static void process_eat_food(player_type *target_ptr, monap_type *monap_ptr)
     }
 }
 
+static void process_eat_lite(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if ((monap_ptr->o_ptr->xtra4 <= 0) || object_is_fixed_artifact(monap_ptr->o_ptr))
+        return;
+
+    monap_ptr->o_ptr->xtra4 -= (s16b)(250 + randint1(250));
+    if (monap_ptr->o_ptr->xtra4 < 1)
+        monap_ptr->o_ptr->xtra4 = 1;
+
+    if (!target_ptr->blind) {
+        msg_print(_("明かりが暗くなってしまった。", "Your light dims."));
+        monap_ptr->obvious = TRUE;
+    }
+
+    target_ptr->window |= (PW_EQUIP);
+}
+
 /*!
  * @brief モンスターからの攻撃による充填魔力吸収処理
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -599,19 +616,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
-                if ((monap_ptr->o_ptr->xtra4 > 0) && (!object_is_fixed_artifact(monap_ptr->o_ptr))) {
-                    monap_ptr->o_ptr->xtra4 -= (s16b)(250 + randint1(250));
-                    if (monap_ptr->o_ptr->xtra4 < 1)
-                        monap_ptr->o_ptr->xtra4 = 1;
-
-                    if (!target_ptr->blind) {
-                        msg_print(_("明かりが暗くなってしまった。", "Your light dims."));
-                        monap_ptr->obvious = TRUE;
-                    }
-
-                    target_ptr->window |= (PW_EQUIP);
-                }
-
+                process_eat_lite(target_ptr, monap_ptr);
                 break;
             }
             case RBE_ACID: {
