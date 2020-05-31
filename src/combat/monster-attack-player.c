@@ -241,6 +241,28 @@ static void process_terrify_attack(player_type *target_ptr, monap_type *monap_pt
         monap_ptr->obvious = TRUE;
 }
 
+static void process_paralyze_attack(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (check_multishadow(target_ptr))
+        return;
+    
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if (target_ptr->free_act) {
+        msg_print(_("しかし効果がなかった！", "You are unaffected!"));
+        monap_ptr->obvious = TRUE;
+        return;
+    }
+
+    if (randint0(100 + r_ptr->level / 2) < target_ptr->skill_sav) {
+        msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
+        monap_ptr->obvious = TRUE;
+        return;
+    }
+
+    if (!target_ptr->paralyzed && set_paralyzed(target_ptr, 3 + randint1(monap_ptr->rlev)))
+        monap_ptr->obvious = TRUE;
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -489,22 +511,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->is_dead)
                     break;
 
-                if (check_multishadow(target_ptr)) {
-                    /* Do nothing */
-                } else if (target_ptr->free_act) {
-                    msg_print(_("しかし効果がなかった！", "You are unaffected!"));
-                    monap_ptr->obvious = TRUE;
-                } else if (randint0(100 + r_ptr->level / 2) < target_ptr->skill_sav) {
-                    msg_print(_("しかし効力を跳ね返した！", "You resist the effects!"));
-                    monap_ptr->obvious = TRUE;
-                } else {
-                    if (!target_ptr->paralyzed) {
-                        if (set_paralyzed(target_ptr, 3 + randint1(monap_ptr->rlev))) {
-                            monap_ptr->obvious = TRUE;
-                        }
-                    }
-                }
-
+                process_paralyze_attack(target_ptr, monap_ptr);
                 update_smart_learn(target_ptr, m_idx, DRS_FREE);
                 break;
             }
