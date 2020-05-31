@@ -100,6 +100,7 @@ static void process_monster_attack_time(player_type *target_ptr, monap_type *mon
     case 5: {
         if (target_ptr->prace == RACE_ANDROID)
             break;
+
         msg_print(_("人生が逆戻りした気がする。", "You feel like a chunk of the past has been ripped away."));
         lose_exp(target_ptr, 100 + (target_ptr->exp / 100) * MON_DRAIN_LIFE);
         break;
@@ -261,25 +262,22 @@ static bool check_drain_hp(player_type *target_ptr, const s32b d)
 
 static void process_drain_life(player_type *target_ptr, monap_type *monap_ptr, const bool resist_drain)
 {
-    if ((monap_ptr->damage > 5) && !resist_drain) {
-        bool did_heal = FALSE;
-        if (monap_ptr->m_ptr->hp < monap_ptr->m_ptr->maxhp)
-            did_heal = TRUE;
+    if ((monap_ptr->damage <= 5) || resist_drain)
+        return;
 
-        monap_ptr->m_ptr->hp += damroll(4, monap_ptr->damage / 6);
-        if (monap_ptr->m_ptr->hp > monap_ptr->m_ptr->maxhp)
-            monap_ptr->m_ptr->hp = monap_ptr->m_ptr->maxhp;
+    bool did_heal = monap_ptr->m_ptr->hp < monap_ptr->m_ptr->maxhp;
+    monap_ptr->m_ptr->hp += damroll(4, monap_ptr->damage / 6);
+    if (monap_ptr->m_ptr->hp > monap_ptr->m_ptr->maxhp)
+        monap_ptr->m_ptr->hp = monap_ptr->m_ptr->maxhp;
 
-        if (target_ptr->health_who == monap_ptr->m_idx)
-            target_ptr->redraw |= (PR_HEALTH);
+    if (target_ptr->health_who == monap_ptr->m_idx)
+        target_ptr->redraw |= (PR_HEALTH);
 
-        if (target_ptr->riding == monap_ptr->m_idx)
-            target_ptr->redraw |= (PR_UHEALTH);
+    if (target_ptr->riding == monap_ptr->m_idx)
+        target_ptr->redraw |= (PR_UHEALTH);
 
-        if (monap_ptr->m_ptr->ml && did_heal) {
-            msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), monap_ptr->m_name);
-        }
-    }
+    if (monap_ptr->m_ptr->ml && did_heal)
+        msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), monap_ptr->m_name);
 }
 
 /*!
