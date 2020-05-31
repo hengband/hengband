@@ -427,6 +427,19 @@ static void eyes_on_eyes(player_type *target_ptr, monap_type *monap_ptr)
         set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
 }
 
+static void thief_teleport(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!monap_ptr->blinked || !monap_ptr->alive || target_ptr->is_dead)
+        return;
+
+    if (teleport_barrier(target_ptr, monap_ptr->m_idx)) {
+        msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
+    } else {
+        msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
+        teleport_away(target_ptr, monap_ptr->m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
+    }
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -459,15 +472,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     revenge_store(target_ptr, monap_ptr->get_damage);
     eyes_on_eyes(target_ptr, monap_ptr);
     musou_counterattack(target_ptr, monap_ptr);
-    if (monap_ptr->blinked && monap_ptr->alive && !target_ptr->is_dead) {
-        if (teleport_barrier(target_ptr, m_idx)) {
-            msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
-        } else {
-            msg_print(_("泥棒は笑って逃げた！", "The thief flees laughing!"));
-            teleport_away(target_ptr, m_idx, MAX_SIGHT * 2 + 5, TELEPORT_SPONTANEOUS);
-        }
-    }
-
+    thief_teleport(target_ptr, monap_ptr);
     if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
         r_ptr->r_deaths++;
 
@@ -476,9 +481,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         msg_format(_("%^sは恐怖で逃げ出した！", "%^s flees in terror!"), monap_ptr->m_name);
     }
 
-    if (target_ptr->special_defense & KATA_IAI) {
+    if (target_ptr->special_defense & KATA_IAI)
         set_action(target_ptr, ACTION_NONE);
-    }
 
     return TRUE;
 }
