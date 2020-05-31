@@ -25,6 +25,7 @@ typedef struct monap_type {
     HIT_POINT damage;
     rbe_type effect;
     bool blinked;
+    GAME_TEXT o_name[MAX_NLEN];
 } monap_type;
 
 monap_type *initialize_monap_type(player_type *target_ptr, monap_type *monap_ptr, MONSTER_IDX m_idx);

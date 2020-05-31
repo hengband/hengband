@@ -298,6 +298,42 @@ static void move_item_to_monster(player_type *target_ptr, monap_type *monap_ptr,
 }
 
 /*!
+ * @brief アイテム盗み処理
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ * @details eatとあるがお金や食べ物と違ってなくならない、盗んだモンスターを倒せば取り戻せる
+ */
+static void process_eat_item(player_type *target_ptr, monap_type *monap_ptr)
+{
+    for (int i = 0; i < 10; i++) {
+        OBJECT_IDX o_idx;
+        INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
+        monap_ptr->o_ptr = &target_ptr->inventory_list[i_idx];
+        if (!monap_ptr->o_ptr->k_idx)
+            continue;
+
+        if (object_is_artifact(monap_ptr->o_ptr))
+            continue;
+
+        object_desc(target_ptr, monap_ptr->o_name, monap_ptr->o_ptr, OD_OMIT_PREFIX);
+#ifdef JP
+        msg_format("%s(%c)を%s盗まれた！", monap_ptr->o_name, index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
+#else
+        msg_format("%sour %s (%c) was stolen!", ((o_ptr->number > 1) ? "One of y" : "Y"), monap_ptr->o_name, index_to_label(i_idx));
+#endif
+        chg_virtue(target_ptr, V_SACRIFICE, 1);
+        o_idx = o_pop(target_ptr->current_floor_ptr);
+        move_item_to_monster(target_ptr, monap_ptr, o_idx);
+        inven_item_increase(target_ptr, i_idx, -1);
+        inven_item_optimize(target_ptr, i_idx);
+        monap_ptr->obvious = TRUE;
+        monap_ptr->blinked = TRUE;
+        break;
+    }
+}
+
+/*!
  * @brief モンスターからの攻撃による充填魔力吸収処理
  * @param target_ptr プレーヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
@@ -380,7 +416,6 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
     int tmp;
     ARMOUR_CLASS ac;
-    GAME_TEXT o_name[MAX_NLEN];
     GAME_TEXT ddesc[80];
     bool fear = FALSE;
     bool alive = TRUE;
@@ -522,32 +557,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (!check_eat_item(target_ptr, monap_ptr))
                     break;
 
-                for (int i = 0; i < 10; i++) {
-                    OBJECT_IDX o_idx;
-                    INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
-                    monap_ptr->o_ptr = &target_ptr->inventory_list[i_idx];
-                    if (!monap_ptr->o_ptr->k_idx)
-                        continue;
-
-                    if (object_is_artifact(monap_ptr->o_ptr))
-                        continue;
-
-                    object_desc(target_ptr, o_name, monap_ptr->o_ptr, OD_OMIT_PREFIX);
-#ifdef JP
-                    msg_format("%s(%c)を%s盗まれた！", o_name, index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
-#else
-                    msg_format("%sour %s (%c) was stolen!", ((o_ptr->number > 1) ? "One of y" : "Y"), o_name, index_to_label(i_idx));
-#endif
-                    chg_virtue(target_ptr, V_SACRIFICE, 1);
-                    o_idx = o_pop(floor_ptr);
-                    move_item_to_monster(target_ptr, monap_ptr, o_idx);
-                    inven_item_increase(target_ptr, i_idx, -1);
-                    inven_item_optimize(target_ptr, i_idx);
-                    monap_ptr->obvious = TRUE;
-                    monap_ptr->blinked = TRUE;
-                    break;
-                }
-
+                process_eat_item(target_ptr, monap_ptr);
                 break;
             }
 
@@ -565,11 +575,11 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     if ((monap_ptr->o_ptr->tval != TV_FOOD) && !((monap_ptr->o_ptr->tval == TV_CORPSE) && (monap_ptr->o_ptr->sval)))
                         continue;
 
-                    object_desc(target_ptr, o_name, monap_ptr->o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+                    object_desc(target_ptr, monap_ptr->o_name, monap_ptr->o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 #ifdef JP
-                    msg_format("%s(%c)を%s食べられてしまった！", o_name, index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
+                    msg_format("%s(%c)を%s食べられてしまった！", monap_ptr->o_name, index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
 #else
-                    msg_format("%sour %s (%c) was eaten!", ((o_ptr->number > 1) ? "One of y" : "Y"), o_name, index_to_label(i_idx));
+                    msg_format("%sour %s (%c) was eaten!", ((o_ptr->number > 1) ? "One of y" : "Y"), monap_ptr->o_name, index_to_label(i_idx));
 #endif
                     inven_item_increase(target_ptr, i_idx, -1);
                     inven_item_optimize(target_ptr, i_idx);
