@@ -308,6 +308,34 @@ static void mirror_shards_by_monster_attack(player_type *target_ptr, monap_type 
         teleport_player(target_ptr, 10, TELEPORT_SPONTANEOUS);
 }
 
+static void aura_holy_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!target_ptr->tim_sh_holy || !monap_ptr->alive || target_ptr->is_dead)
+        return;
+
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if ((r_ptr->flags3 & RF3_EVIL) == 0)
+        return;
+
+    if ((r_ptr->flagsr & RFR_RES_ALL) != 0) {
+        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+            r_ptr->r_flagsr |= RFR_RES_ALL;
+
+        return;
+    }
+
+    HIT_POINT dam = damroll(2, 6);
+    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
+    msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), monap_ptr->m_name);
+    if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("は倒れた。", " is destroyed."))) {
+        monap_ptr->blinked = FALSE;
+        monap_ptr->alive = FALSE;
+    }
+
+    if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+        r_ptr->r_flags3 |= RF3_EVIL;
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -385,26 +413,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 aura_elec_by_monster_attack(target_ptr, monap_ptr);
                 aura_cold_by_monster_attack(target_ptr, monap_ptr);
                 mirror_shards_by_monster_attack(target_ptr, monap_ptr);
-
-                if (target_ptr->tim_sh_holy && monap_ptr->alive && !target_ptr->is_dead) {
-                    if (r_ptr->flags3 & RF3_EVIL) {
-                        if (!(r_ptr->flagsr & RFR_RES_ALL)) {
-                            HIT_POINT dam = damroll(2, 6);
-                            dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
-                            msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), monap_ptr->m_name);
-                            if (mon_take_hit(target_ptr, m_idx, dam, &monap_ptr->fear, _("は倒れた。", " is destroyed."))) {
-                                monap_ptr->blinked = FALSE;
-                                monap_ptr->alive = FALSE;
-                            }
-                            if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
-                                r_ptr->r_flags3 |= RF3_EVIL;
-                        } else {
-                            if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
-                                r_ptr->r_flagsr |= RFR_RES_ALL;
-                        }
-                    }
-                }
-
+                aura_holy_by_monster_attack(target_ptr, monap_ptr);
                 if (target_ptr->tim_sh_touki && monap_ptr->alive && !target_ptr->is_dead) {
                     if (!(r_ptr->flagsr & RFR_RES_ALL)) {
                         HIT_POINT dam = damroll(2, 6);
