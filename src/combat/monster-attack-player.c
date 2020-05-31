@@ -445,6 +445,20 @@ static void process_drain_life(player_type *target_ptr, monap_type *monap_ptr, c
         msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), monap_ptr->m_name);
 }
 
+static void process_blind_attack(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (target_ptr->resist_blind || check_multishadow(target_ptr))
+        return;
+
+    if (!set_blind(target_ptr, target_ptr->blind + 10 + randint1(monap_ptr->rlev)))
+        return;
+
+    if (monap_ptr->m_ptr->r_idx == MON_DIO)
+        msg_print(_("どうだッ！この血の目潰しはッ！", "How is it! This blood-blinding!"));
+
+    monap_ptr->obvious = TRUE;
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -517,8 +531,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 monap_ptr->damage = 0;
                 break;
             }
-            case RBE_SUPERHURT: /* AC軽減あり / Player armor reduces total damage */
-            {
+            case RBE_SUPERHURT: { /* AC軽減あり / Player armor reduces total damage */
                 if (((randint1(monap_ptr->rlev * 2 + 300) > (ac + 200)) || one_in_(13)) && !check_multishadow(target_ptr)) {
                     int tmp_damage = monap_ptr->damage - (monap_ptr->damage * ((ac < 150) ? ac : 150) / 250);
                     msg_print(_("痛恨の一撃！", "It was a critical hit!"));
@@ -528,8 +541,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 }
             }
                 /* Fall through */
-            case RBE_HURT: /* AC軽減あり / Player armor reduces total damage */
-            {
+            case RBE_HURT: {/* AC軽減あり / Player armor reduces total damage */
                 monap_ptr->obvious = TRUE;
                 monap_ptr->damage -= (monap_ptr->damage * ((ac < 150) ? ac : 150) / 250);
                 get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
@@ -662,18 +674,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->is_dead)
                     break;
 
-                if (!target_ptr->resist_blind && !check_multishadow(target_ptr)) {
-                    if (set_blind(target_ptr, target_ptr->blind + 10 + randint1(monap_ptr->rlev))) {
-#ifdef JP
-                        if (monap_ptr->m_ptr->r_idx == MON_DIO)
-                            msg_print("どうだッ！この血の目潰しはッ！");
-#else
-                        /* nanka */
-#endif
-                        monap_ptr->obvious = TRUE;
-                    }
-                }
-
+                process_blind_attack(target_ptr, monap_ptr);
                 update_smart_learn(target_ptr, m_idx, DRS_BLIND);
                 break;
             }
