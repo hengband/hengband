@@ -128,6 +128,98 @@ static void describe_silly_attacks(monap_type *monap_ptr)
 }
 
 /*!
+ * @brief 切り傷と朦朧が同時に発生した時、片方を無効にする
+ * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void select_cut_stun(monap_type *monap_ptr)
+{
+    if ((monap_ptr->do_cut == 0) || (monap_ptr->do_stun == 0))
+        return;
+
+    if (randint0(100) < 50)
+        monap_ptr->do_cut = 0;
+    else
+        monap_ptr->do_stun = 0;
+}
+
+static void calc_player_cut(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (monap_ptr->do_cut == 0)
+        return;
+
+    int cut_plus = 0;
+    int criticality = calc_monster_critical(monap_ptr->d_dice, monap_ptr->d_side, monap_ptr->damage);
+    switch (criticality) {
+    case 0:
+        cut_plus = 0;
+        break;
+    case 1:
+        cut_plus = randint1(5);
+        break;
+    case 2:
+        cut_plus = randint1(5) + 5;
+        break;
+    case 3:
+        cut_plus = randint1(20) + 20;
+        break;
+    case 4:
+        cut_plus = randint1(50) + 50;
+        break;
+    case 5:
+        cut_plus = randint1(100) + 100;
+        break;
+    case 6:
+        cut_plus = 300;
+        break;
+    default:
+        cut_plus = 500;
+        break;
+    }
+
+    if (cut_plus > 0)
+        (void)set_cut(target_ptr, target_ptr->cut + cut_plus);
+}
+
+static void calc_player_stun(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (monap_ptr->do_stun == 0)
+        return;
+
+    int stun_plus = 0;
+    int criticality = calc_monster_critical(monap_ptr->d_dice, monap_ptr->d_side, monap_ptr->damage);
+    switch (criticality) {
+    case 0:
+        stun_plus = 0;
+        break;
+    case 1:
+        stun_plus = randint1(5);
+        break;
+    case 2:
+        stun_plus = randint1(5) + 10;
+        break;
+    case 3:
+        stun_plus = randint1(10) + 20;
+        break;
+    case 4:
+        stun_plus = randint1(15) + 30;
+        break;
+    case 5:
+        stun_plus = randint1(20) + 40;
+        break;
+    case 6:
+        stun_plus = 80;
+        break;
+    default:
+        stun_plus = 150;
+        break;
+    }
+
+    if (stun_plus > 0)
+        (void)set_stun(target_ptr, target_ptr->stun + stun_plus);
+}
+
+/*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
  * @return 実際に攻撃処理を行った場合TRUEを返す
@@ -137,7 +229,6 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     monap_type tmp_monap;
     monap_type *monap_ptr = initialize_monap_type(target_ptr, &tmp_monap, m_idx);
 
-    int tmp;
     bool fear = FALSE;
     bool alive = TRUE;
     check_no_blow(target_ptr, monap_ptr);
@@ -191,85 +282,9 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 monap_ptr->damage = 0;
 
             switch_monster_blow_to_player(target_ptr, monap_ptr);
-
-            // TODO 三項演算子に差し替え.
-            if (monap_ptr->do_cut && monap_ptr->do_stun) {
-                if (randint0(100) < 50) {
-                    monap_ptr->do_cut = 0;
-                }
-                else {
-                    monap_ptr->do_stun = 0;
-                }
-            }
-
-            if (monap_ptr->do_cut) {
-                int cut_plus = 0;
-                tmp = calc_monster_critical(monap_ptr->d_dice, monap_ptr->d_side, monap_ptr->damage);
-                switch (tmp) {
-                case 0:
-                    cut_plus = 0;
-                    break;
-                case 1:
-                    cut_plus = randint1(5);
-                    break;
-                case 2:
-                    cut_plus = randint1(5) + 5;
-                    break;
-                case 3:
-                    cut_plus = randint1(20) + 20;
-                    break;
-                case 4:
-                    cut_plus = randint1(50) + 50;
-                    break;
-                case 5:
-                    cut_plus = randint1(100) + 100;
-                    break;
-                case 6:
-                    cut_plus = 300;
-                    break;
-                default:
-                    cut_plus = 500;
-                    break;
-                }
-
-                if (cut_plus)
-                    (void)set_cut(target_ptr, target_ptr->cut + cut_plus);
-            }
-
-            if (monap_ptr->do_stun) {
-                int stun_plus = 0;
-                tmp = calc_monster_critical(monap_ptr->d_dice, monap_ptr->d_side, monap_ptr->damage);
-                switch (tmp) {
-                case 0:
-                    stun_plus = 0;
-                    break;
-                case 1:
-                    stun_plus = randint1(5);
-                    break;
-                case 2:
-                    stun_plus = randint1(5) + 10;
-                    break;
-                case 3:
-                    stun_plus = randint1(10) + 20;
-                    break;
-                case 4:
-                    stun_plus = randint1(15) + 30;
-                    break;
-                case 5:
-                    stun_plus = randint1(20) + 40;
-                    break;
-                case 6:
-                    stun_plus = 80;
-                    break;
-                default:
-                    stun_plus = 150;
-                    break;
-                }
-
-                if (stun_plus)
-                    (void)set_stun(target_ptr, target_ptr->stun + stun_plus);
-            }
-
+            select_cut_stun(monap_ptr);
+            calc_player_cut(target_ptr, monap_ptr);
+            calc_player_stun(target_ptr, monap_ptr);
             if (monap_ptr->explode) {
                 sound(SOUND_EXPLODE);
 
