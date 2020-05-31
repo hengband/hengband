@@ -250,6 +250,30 @@ static void describe_attack_evasion(player_type *target_ptr, monap_type *monap_p
 #endif
 }
 
+static void gain_armor_exp(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!object_is_armour(&target_ptr->inventory_list[INVEN_RARM]) && !object_is_armour(&target_ptr->inventory_list[INVEN_LARM]))
+        return;
+
+    int cur = target_ptr->skill_exp[GINOU_SHIELD];
+    int max = s_info[target_ptr->pclass].s_max[GINOU_SHIELD];
+    if (cur >= max)
+        return;
+
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    DEPTH targetlevel = r_ptr->level;
+    int inc = 0;
+    if ((cur / 100) < targetlevel) {
+        if ((cur / 100 + 15) < targetlevel)
+            inc += 1 + (targetlevel - (cur / 100 + 15));
+        else
+            inc += 1;
+    }
+
+    target_ptr->skill_exp[GINOU_SHIELD] = MIN(max, cur + inc);
+    target_ptr->update |= (PU_BONUS);
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -331,24 +355,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             case RBM_ENGULF:
             case RBM_CHARGE:
                 describe_attack_evasion(target_ptr, monap_ptr);
-                if (object_is_armour(&target_ptr->inventory_list[INVEN_RARM]) || object_is_armour(&target_ptr->inventory_list[INVEN_LARM])) {
-                    int cur = target_ptr->skill_exp[GINOU_SHIELD];
-                    int max = s_info[target_ptr->pclass].s_max[GINOU_SHIELD];
-                    if (cur < max) {
-                        DEPTH targetlevel = r_ptr->level;
-                        int inc = 0;
-                        if ((cur / 100) < targetlevel) {
-                            if ((cur / 100 + 15) < targetlevel)
-                                inc += 1 + (targetlevel - (cur / 100 + 15));
-                            else
-                                inc += 1;
-                        }
-
-                        target_ptr->skill_exp[GINOU_SHIELD] = MIN(max, cur + inc);
-                        target_ptr->update |= (PU_BONUS);
-                    }
-                }
-
+                gain_armor_exp(target_ptr, monap_ptr);
                 monap_ptr->damage = 0;
                 break;
             }
