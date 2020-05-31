@@ -232,6 +232,24 @@ static void monster_explode(player_type *target_ptr, monap_type *monap_ptr)
     }
 }
 
+static void describe_attack_evasion(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!monap_ptr->m_ptr->ml)
+        return;
+
+    disturb(target_ptr, TRUE, TRUE);
+#ifdef JP
+    if (monap_ptr->abbreviate)
+        msg_format("%sかわした。", (target_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "");
+    else
+        msg_format("%s%^sの攻撃をかわした。", (target_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "", monap_ptr->m_name);
+
+    monap_ptr->abbreviate = 1; /* 2回目以降は省略 */
+#else
+    msg_format("%^s misses you.", monap_ptr->m_name);
+#endif
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -277,7 +295,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
         power = mbe_info[monap_ptr->effect].power;
         monap_ptr->ac = target_ptr->ac + target_ptr->to_a;
-        if (!monap_ptr->effect || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, MON_STUNNED(monap_ptr->m_ptr))) {
+        if ((monap_ptr->effect == RBE_NONE) || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, MON_STUNNED(monap_ptr->m_ptr))) {
             disturb(target_ptr, TRUE, TRUE);
             if (effect_protecion_from_evil(target_ptr, monap_ptr))
                 continue;
@@ -312,20 +330,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             case RBM_CRUSH:
             case RBM_ENGULF:
             case RBM_CHARGE:
-                if (monap_ptr->m_ptr->ml) {
-                    disturb(target_ptr, TRUE, TRUE);
-#ifdef JP
-                    if (monap_ptr->abbreviate)
-                        msg_format("%sかわした。", (target_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "");
-                    else
-                        msg_format("%s%^sの攻撃をかわした。", (target_ptr->special_attack & ATTACK_SUIKEN) ? "奇妙な動きで" : "", monap_ptr->m_name);
-
-                    monap_ptr->abbreviate = 1; /*2回目以降は省略 */
-#else
-                    msg_format("%^s misses you.", monap_ptr->m_name);
-#endif
-                }
-
+                describe_attack_evasion(target_ptr, monap_ptr);
                 if (object_is_armour(&target_ptr->inventory_list[INVEN_RARM]) || object_is_armour(&target_ptr->inventory_list[INVEN_LARM])) {
                     int cur = target_ptr->skill_exp[GINOU_SHIELD];
                     int max = s_info[target_ptr->pclass].s_max[GINOU_SHIELD];
