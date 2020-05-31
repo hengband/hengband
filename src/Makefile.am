@@ -188,7 +188,7 @@ hengband_SOURCES = \
 	monster/horror-descriptions.c monster/horror-descriptions.h \
 	\
 	pet/pet-fall-off.c pet/pet-fall-off.h \
-	pet/pet-util.h \
+	pet/pet-util.c pet/pet-util.h \
 	\
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \

@@ -37,3 +37,8 @@ typedef enum pet_permission {
     PF_BALL_SPELL = 0x0020, /*!< ペットの行動許可…ボール魔法でプレイヤーを巻き込んでよい */
     PF_TWO_HANDS = 0x0040, /*!< プレイヤーの騎乗フラグ…武器を片手で持つ */
 } pet_permission;
+
+#include "system/angband.h"
+#include "grid/grid.h"
+
+bool can_player_ride_pet(player_type *creature_ptr, grid_type *g_ptr, bool now_riding);

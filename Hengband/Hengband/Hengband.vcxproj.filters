@@ -1064,6 +1064,9 @@
     <ClCompile Include="..\..\src\pet\pet-fall-off.c">
       <Filter>pet</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\pet\pet-util.c">
+      <Filter>pet</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
