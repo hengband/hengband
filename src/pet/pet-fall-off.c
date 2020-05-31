@@ -103,7 +103,7 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
 
             /* Skip non-empty grids */
             if (!cave_have_flag_grid(g_ptr, FF_MOVE) && !cave_have_flag_grid(g_ptr, FF_CAN_FLY)) {
-                if (!player_can_ride_aux(creature_ptr, g_ptr, FALSE))
+                if (!can_player_ride_pet(creature_ptr, g_ptr, FALSE))
                     continue;
             }
 
