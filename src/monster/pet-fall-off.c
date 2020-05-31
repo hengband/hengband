@@ -1,4 +1,5 @@
 ﻿#include "monster/pet-fall-off.h"
+#include "core/stuff-handler.h"
 #include "cmd/cmd-pet.h" // 暫定、定数を見ているだけなのでutilへの分離を検討する.
 #include "floor/floor.h"
 #include "io/targeting.h"
@@ -8,19 +9,62 @@
 
 /*!
  * @brief モンスターから直接攻撃を受けた時に落馬するかどうかを判定し、判定アウトならば落馬させる
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param creature_ptr プレーヤーへの参照ポインタ
  * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
  * @return なし
  */
-void check_fall_off_horse(player_type *target_ptr, monap_type *monap_ptr)
+void check_fall_off_horse(player_type *creature_ptr, monap_type *monap_ptr)
 {
-    if ((target_ptr->riding == 0) || (monap_ptr->damage == 0))
+    if ((creature_ptr->riding == 0) || (monap_ptr->damage == 0))
         return;
 
     char m_steed_name[MAX_NLEN];
-    monster_desc(target_ptr, m_steed_name, &target_ptr->current_floor_ptr->m_list[target_ptr->riding], 0);
-    if (process_fall_off_horse(target_ptr, (monap_ptr->damage > 200) ? 200 : monap_ptr->damage, FALSE))
+    monster_desc(creature_ptr, m_steed_name, &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding], 0);
+    if (process_fall_off_horse(creature_ptr, (monap_ptr->damage > 200) ? 200 : monap_ptr->damage, FALSE))
         msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);
+}
+
+/*!
+ * @brief 落馬する可能性を計算する
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param dam 落馬判定を発した際に受けたダメージ量
+ * @param force TRUEならば強制的に落馬する
+ * @param 乗馬中のモンスターのレベル
+ * @return FALSEなら落馬しないことで確定、TRUEなら処理続行
+ * @details レベルの低い乗馬からは落馬しにくい
+ */
+static bool calc_fall_off_possibility(player_type *creature_ptr, const HIT_POINT dam, const bool force, monster_race *r_ptr)
+{
+    if (force)
+        return TRUE;
+
+    int cur = creature_ptr->skill_exp[GINOU_RIDING];
+    int max = s_info[creature_ptr->pclass].s_max[GINOU_RIDING];
+    int ridinglevel = r_ptr->level;
+
+    int fall_off_level = r_ptr->level;
+    if (creature_ptr->riding_ryoute)
+        fall_off_level += 20;
+
+    if ((cur < max) && (max > 1000) && (dam / 2 + ridinglevel) > (cur / 30 + 10)) {
+        int inc = 0;
+        if (ridinglevel > (cur / 100 + 15))
+            inc += 1 + (ridinglevel - cur / 100 - 15);
+        else
+            inc += 1;
+
+        creature_ptr->skill_exp[GINOU_RIDING] = MIN(max, cur + inc);
+    }
+
+    if (randint0(dam / 2 + fall_off_level * 2) >= cur / 30 + 10)
+        return TRUE;
+
+    if ((((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) && !creature_ptr->riding_ryoute)
+        || !one_in_(creature_ptr->lev * (creature_ptr->riding_ryoute ? 2 : 3) + 30)) {
+        return FALSE;
+    }
+
+    return TRUE;
 }
 
 /*!
@@ -43,35 +87,8 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
         return FALSE;
 
     if (dam >= 0 || force) {
-        if (!force) {
-            int cur = creature_ptr->skill_exp[GINOU_RIDING];
-            int max = s_info[creature_ptr->pclass].s_max[GINOU_RIDING];
-            int ridinglevel = r_ptr->level;
-
-            /* 落馬のしやすさ */
-            int fall_off_level = r_ptr->level;
-            if (creature_ptr->riding_ryoute)
-                fall_off_level += 20;
-
-            if ((cur < max) && (max > 1000) && (dam / 2 + ridinglevel) > (cur / 30 + 10)) {
-                int inc = 0;
-                if (ridinglevel > (cur / 100 + 15))
-                    inc += 1 + (ridinglevel - cur / 100 - 15);
-                else
-                    inc += 1;
-
-                creature_ptr->skill_exp[GINOU_RIDING] = MIN(max, cur + inc);
-            }
-
-            /* レベルの低い乗馬からは落馬しにくい */
-            if (randint0(dam / 2 + fall_off_level * 2) < cur / 30 + 10) {
-                if ((((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) && !creature_ptr->riding_ryoute)
-                    || !one_in_(creature_ptr->lev * (creature_ptr->riding_ryoute ? 2 : 3) + 30)) {
-                    return FALSE;
-                }
-            }
-        }
-
+        calc_fall_off_possibility(creature_ptr, dam, force, r_ptr);
+        
         /* Check around the player */
         for (DIRECTION i = 0; i < 8; i++) {
             POSITION y = creature_ptr->y + ddy_ddd[i];
