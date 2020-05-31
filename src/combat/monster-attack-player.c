@@ -285,6 +285,29 @@ static void aura_cold_by_monster_attack(player_type *target_ptr, monap_type *mon
     }
 }
 
+static void mirror_shards_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!target_ptr->dustrobe || !monap_ptr->alive || target_ptr->is_dead)
+        return;
+
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if ((r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK) != 0) {
+        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+            r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
+    } else {
+        HIT_POINT dam = damroll(2, 6);
+        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
+        msg_format(_("%^sは鏡の破片をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
+        if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("はズタズタになった。", " had torn to pieces."))) {
+            monap_ptr->blinked = FALSE;
+            monap_ptr->alive = FALSE;
+        }
+    }
+
+    if (is_mirror_grid(&target_ptr->current_floor_ptr->grid_array[target_ptr->y][target_ptr->x]))
+        teleport_player(target_ptr, 10, TELEPORT_SPONTANEOUS);
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -361,24 +384,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 aura_fire_by_monster_attack(target_ptr, monap_ptr);
                 aura_elec_by_monster_attack(target_ptr, monap_ptr);
                 aura_cold_by_monster_attack(target_ptr, monap_ptr);
-                if (target_ptr->dustrobe && monap_ptr->alive && !target_ptr->is_dead) {
-                    if (!(r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK)) {
-                        HIT_POINT dam = damroll(2, 6);
-                        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
-                        msg_format(_("%^sは鏡の破片をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
-                        if (mon_take_hit(target_ptr, m_idx, dam, &monap_ptr->fear, _("はズタズタになった。", " had torn to pieces."))) {
-                            monap_ptr->blinked = FALSE;
-                            monap_ptr->alive = FALSE;
-                        }
-                    } else {
-                        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
-                            r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK);
-                    }
-
-                    if (is_mirror_grid(&floor_ptr->grid_array[target_ptr->y][target_ptr->x])) {
-                        teleport_player(target_ptr, 10, TELEPORT_SPONTANEOUS);
-                    }
-                }
+                mirror_shards_by_monster_attack(target_ptr, monap_ptr);
 
                 if (target_ptr->tim_sh_holy && monap_ptr->alive && !target_ptr->is_dead) {
                     if (r_ptr->flags3 & RF3_EVIL) {
