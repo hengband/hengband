@@ -275,6 +275,37 @@ static void gain_armor_exp(player_type *target_ptr, monap_type *monap_ptr)
 }
 
 /*!
+ * @brief モンスターから直接攻撃を1回受けた時の処理
+ * @return 対邪悪結界により攻撃が当たらなかったらFALSE、それ以外はTRUE
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @details 最大4 回/モンスター/ターン、このルーチンを通る
+ */
+static bool process_monster_attack_hit(player_type *target_ptr, monap_type *monap_ptr)
+{
+    disturb(target_ptr, TRUE, TRUE);
+    if (effect_protecion_from_evil(target_ptr, monap_ptr))
+        return FALSE;
+
+    monap_ptr->do_cut = 0;
+    monap_ptr->do_stun = 0;
+    describe_monster_attack_method(monap_ptr);
+    describe_silly_attacks(monap_ptr);
+    monap_ptr->obvious = TRUE;
+    monap_ptr->damage = damroll(monap_ptr->d_dice, monap_ptr->d_side);
+    if (monap_ptr->explode)
+        monap_ptr->damage = 0;
+
+    switch_monster_blow_to_player(target_ptr, monap_ptr);
+    select_cut_stun(monap_ptr);
+    calc_player_cut(target_ptr, monap_ptr);
+    calc_player_stun(target_ptr, monap_ptr);
+    monster_explode(target_ptr, monap_ptr);
+    process_aura_counterattack(target_ptr, monap_ptr);
+    return TRUE;
+}
+
+/*!
  * @brief 一部の打撃種別の場合のみ、避けた旨のメッセージ表示と盾技能スキル向上を行う
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
  * @return なし
@@ -348,27 +379,10 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
         power = mbe_info[monap_ptr->effect].power;
         monap_ptr->ac = target_ptr->ac + target_ptr->to_a;
-        if ((monap_ptr->effect == RBE_NONE) || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, MON_STUNNED(monap_ptr->m_ptr))) {
-            disturb(target_ptr, TRUE, TRUE);
-            if (effect_protecion_from_evil(target_ptr, monap_ptr))
+        if ((monap_ptr->effect == RBE_NONE) || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, MON_STUNNED(monap_ptr->m_ptr)))
+            if (!process_monster_attack_hit(target_ptr, monap_ptr))
                 continue;
-
-            monap_ptr->do_cut = 0;
-            monap_ptr->do_stun = 0;
-            describe_monster_attack_method(monap_ptr);
-            describe_silly_attacks(monap_ptr);
-            monap_ptr->obvious = TRUE;
-            monap_ptr->damage = damroll(monap_ptr->d_dice, monap_ptr->d_side);
-            if (monap_ptr->explode)
-                monap_ptr->damage = 0;
-
-            switch_monster_blow_to_player(target_ptr, monap_ptr);
-            select_cut_stun(monap_ptr);
-            calc_player_cut(target_ptr, monap_ptr);
-            calc_player_stun(target_ptr, monap_ptr);
-            monster_explode(target_ptr, monap_ptr);
-            process_aura_counterattack(target_ptr, monap_ptr);
-        } else
+        else
             process_monster_attack_evasion(target_ptr, monap_ptr);
 
         if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr) && !monap_ptr->do_silly_attack) {
