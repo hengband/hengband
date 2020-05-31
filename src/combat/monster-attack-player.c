@@ -234,7 +234,6 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     GAME_TEXT ddesc[80];
     bool fear = FALSE;
     bool alive = TRUE;
-    HIT_POINT get_damage = 0;
     check_no_blow(target_ptr, monap_ptr);
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     monap_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
@@ -296,7 +295,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     int tmp_damage = monap_ptr->damage - (monap_ptr->damage * ((ac < 150) ? ac : 150) / 250);
                     msg_print(_("痛恨の一撃！", "It was a critical hit!"));
                     tmp_damage = MAX(monap_ptr->damage, tmp_damage * 2);
-                    get_damage += take_hit(target_ptr, DAMAGE_ATTACK, tmp_damage, ddesc, -1);
+                    monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, tmp_damage, ddesc, -1);
                     break;
                 }
             }
@@ -304,7 +303,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             case RBE_HURT: {/* AC軽減あり / Player armor reduces total damage */
                 monap_ptr->obvious = TRUE;
                 monap_ptr->damage -= (monap_ptr->damage * ((ac < 150) ? ac : 150) / 250);
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 break;
             }
             case RBE_POISON: {
@@ -317,7 +316,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     }
                 }
 
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 update_smart_learn(target_ptr, m_idx, DRS_POIS);
                 break;
             }
@@ -332,12 +331,12 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     }
                 }
 
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 update_smart_learn(target_ptr, m_idx, DRS_DISEN);
                 break;
             }
             case RBE_UN_POWER: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -354,7 +353,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_EAT_GOLD: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (MON_CONFUSED(monap_ptr->m_ptr))
                     break;
 
@@ -366,7 +365,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_EAT_ITEM: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (!check_eat_item(target_ptr, monap_ptr))
                     break;
 
@@ -375,7 +374,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             }
 
             case RBE_EAT_FOOD: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -384,7 +383,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             }
             case RBE_EAT_LITE: {
                 monap_ptr->o_ptr = &target_ptr->inventory_list[INVEN_LITE];
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -397,7 +396,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
                 monap_ptr->obvious = TRUE;
                 msg_print(_("酸を浴びせられた！", "You are covered in acid!"));
-                get_damage += acid_dam(target_ptr, monap_ptr->damage, ddesc, -1, FALSE);
+                monap_ptr->get_damage += acid_dam(target_ptr, monap_ptr->damage, ddesc, -1, FALSE);
                 update_creature(target_ptr);
                 update_smart_learn(target_ptr, m_idx, DRS_ACID);
                 break;
@@ -407,7 +406,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     break;
                 monap_ptr->obvious = TRUE;
                 msg_print(_("電撃を浴びせられた！", "You are struck by electricity!"));
-                get_damage += elec_dam(target_ptr, monap_ptr->damage, ddesc, -1, FALSE);
+                monap_ptr->get_damage += elec_dam(target_ptr, monap_ptr->damage, ddesc, -1, FALSE);
                 update_smart_learn(target_ptr, m_idx, DRS_ELEC);
                 break;
             }
@@ -416,7 +415,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     break;
                 monap_ptr->obvious = TRUE;
                 msg_print(_("全身が炎に包まれた！", "You are enveloped in flames!"));
-                get_damage += fire_dam(target_ptr, monap_ptr->damage, ddesc, -1, FALSE);
+                monap_ptr->get_damage += fire_dam(target_ptr, monap_ptr->damage, ddesc, -1, FALSE);
                 update_smart_learn(target_ptr, m_idx, DRS_FIRE);
                 break;
             }
@@ -425,12 +424,12 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     break;
                 monap_ptr->obvious = TRUE;
                 msg_print(_("全身が冷気で覆われた！", "You are covered with frost!"));
-                get_damage += cold_dam(target_ptr, monap_ptr->damage, ddesc, -1, FALSE);
+                monap_ptr->get_damage += cold_dam(target_ptr, monap_ptr->damage, ddesc, -1, FALSE);
                 update_smart_learn(target_ptr, m_idx, DRS_COLD);
                 break;
             }
             case RBE_BLIND: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead)
                     break;
 
@@ -442,7 +441,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (monap_ptr->explode)
                     break;
 
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead)
                     break;
 
@@ -456,7 +455,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_TERRIFY: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead)
                     break;
 
@@ -478,7 +477,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_PARALYZE: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
 
                 if (target_ptr->is_dead)
                     break;
@@ -503,7 +502,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_LOSE_STR: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -513,7 +512,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_LOSE_INT: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -523,7 +522,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_LOSE_WIS: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -533,7 +532,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_LOSE_DEX: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -543,7 +542,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_LOSE_CON: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -553,7 +552,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_LOSE_CHR: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -563,7 +562,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_LOSE_ALL: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -587,10 +586,10 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
                 break;
             }
-            case RBE_SHATTER: {
+            case RBE_SHATTER: { /* AC軽減あり / Player armor reduces total damage */
                 monap_ptr->obvious = TRUE;
                 monap_ptr->damage -= (monap_ptr->damage * ((ac < 150) ? ac : 150) / 250);
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (monap_ptr->damage > 23 || monap_ptr->explode)
                     earthquake(target_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, 8, m_idx);
 
@@ -599,7 +598,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             case RBE_EXP_10: {
                 s32b d = damroll(10, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
                 monap_ptr->obvious = TRUE;
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -609,7 +608,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             case RBE_EXP_20: {
                 s32b d = damroll(20, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
                 monap_ptr->obvious = TRUE;
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -619,7 +618,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             case RBE_EXP_40: {
                 s32b d = damroll(40, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
                 monap_ptr->obvious = TRUE;
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -629,7 +628,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             case RBE_EXP_80: {
                 s32b d = damroll(80, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
                 monap_ptr->obvious = TRUE;
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -637,7 +636,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_DISEASE: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -662,13 +661,13 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     break;
 
                 process_monster_attack_time(target_ptr, monap_ptr);
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 break;
             }
             case RBE_DR_LIFE: {
                 s32b d = damroll(60, 6) + (target_ptr->exp / 100) * MON_DRAIN_LIFE;
                 monap_ptr->obvious = TRUE;
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
@@ -695,7 +694,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_INERTIA: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead)
                     break;
 
@@ -710,7 +709,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 break;
             }
             case RBE_STUN: {
-                get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
+                monap_ptr->get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
                 if (target_ptr->is_dead)
                     break;
 
@@ -1025,8 +1024,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         }
     }
 
-    revenge_store(target_ptr, get_damage);
-    if ((target_ptr->tim_eyeeye || hex_spelling(target_ptr, HEX_EYE_FOR_EYE)) && get_damage > 0 && !target_ptr->is_dead) {
+    revenge_store(target_ptr, monap_ptr->get_damage);
+    if ((target_ptr->tim_eyeeye || hex_spelling(target_ptr, HEX_EYE_FOR_EYE)) && monap_ptr->get_damage > 0 && !target_ptr->is_dead) {
 #ifdef JP
         msg_format("攻撃が%s自身を傷つけた！", monap_ptr->m_name);
 #else
@@ -1034,7 +1033,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         monster_desc(target_ptr, m_name_self, monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
         msg_format("The attack of %s has wounded %s!", monap_ptr->m_name, m_name_self);
 #endif
-        project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, get_damage, GF_MISSILE, PROJECT_KILL, -1);
+        project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, monap_ptr->get_damage, GF_MISSILE, PROJECT_KILL, -1);
         if (target_ptr->tim_eyeeye)
             set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
     }
