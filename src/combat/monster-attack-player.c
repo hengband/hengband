@@ -404,6 +404,29 @@ static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr
 }
 
 /*!
+ * @brief 呪術「目には目を」の効果処理
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void eyes_on_eyes(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (((target_ptr->tim_eyeeye == 0) && !hex_spelling(target_ptr, HEX_EYE_FOR_EYE)) || (monap_ptr->get_damage == 0) || target_ptr->is_dead)
+        return;
+
+#ifdef JP
+    msg_format("攻撃が%s自身を傷つけた！", monap_ptr->m_name);
+#else
+    GAME_TEXT m_name_self[80];
+    monster_desc(target_ptr, m_name_self, monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
+    msg_format("The attack of %s has wounded %s!", monap_ptr->m_name, m_name_self);
+#endif
+    project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, monap_ptr->get_damage, GF_MISSILE, PROJECT_KILL, -1);
+    if (target_ptr->tim_eyeeye)
+        set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
+}
+
+/*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
  * @return 実際に攻撃処理を行った場合TRUEを返す
@@ -433,19 +456,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         return TRUE;
 
     revenge_store(target_ptr, monap_ptr->get_damage);
-    if ((target_ptr->tim_eyeeye || hex_spelling(target_ptr, HEX_EYE_FOR_EYE)) && monap_ptr->get_damage > 0 && !target_ptr->is_dead) {
-#ifdef JP
-        msg_format("攻撃が%s自身を傷つけた！", monap_ptr->m_name);
-#else
-        GAME_TEXT m_name_self[80];
-        monster_desc(target_ptr, m_name_self, monap_ptr->m_ptr, MD_PRON_VISIBLE | MD_POSSESSIVE | MD_OBJECTIVE);
-        msg_format("The attack of %s has wounded %s!", monap_ptr->m_name, m_name_self);
-#endif
-        project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, monap_ptr->get_damage, GF_MISSILE, PROJECT_KILL, -1);
-        if (target_ptr->tim_eyeeye)
-            set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
-    }
-
+    eyes_on_eyes(target_ptr, monap_ptr);
     if ((target_ptr->counter || (target_ptr->special_defense & KATA_MUSOU)) && monap_ptr->alive && !target_ptr->is_dead && monap_ptr->m_ptr->ml && (target_ptr->csp > 7)) {
         char m_target_name[MAX_NLEN];
         monster_desc(target_ptr, m_target_name, monap_ptr->m_ptr, 0);
