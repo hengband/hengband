@@ -1,4 +1,10 @@
-﻿#include "pet/pet-fall-off.h"
+﻿/*!
+ * @brief 落馬処理
+ * @date 2020/05/31
+ * @author Hourier
+ */
+
+#include "pet/pet-fall-off.h"
 #include "core/stuff-handler.h"
 #include "floor/floor.h"
 #include "io/targeting.h"
