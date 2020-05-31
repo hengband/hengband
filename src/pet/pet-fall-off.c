@@ -1,4 +1,4 @@
-﻿#include "monster/pet-fall-off.h"
+﻿#include "pet/pet-fall-off.h"
 #include "cmd/cmd-pet.h" // 暫定、player_can_ride_aux() を移動する
 #include "core/stuff-handler.h"
 #include "floor/floor.h"

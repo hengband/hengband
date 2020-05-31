@@ -21,7 +21,7 @@
 #include "main/sound-definitions-table.h"
 #include "mind/racial-samurai.h"
 #include "monster/monster-status.h"
-#include "monster/pet-fall-off.h"
+#include "pet/pet-fall-off.h"
 #include "object/object-hook.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

@@ -4,7 +4,7 @@
 #include "floor/floor.h"
 #include "monster/monster-race-hook.h"
 #include "monster/monster-status.h"
-#include "monster/pet-fall-off.h"
+#include "pet/pet-fall-off.h"
 #include "object/trc-types.h"
 #include "player/player-effects.h"
 #include "spell/spells-diceroll.h"

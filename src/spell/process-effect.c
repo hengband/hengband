@@ -2,7 +2,7 @@
 #include "effect/spells-effect-util.h"
 #include "spell/process-effect.h"
 #include "floor/floor.h"
-#include "monster/pet-fall-off.h"
+#include "pet/pet-fall-off.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-feature.h"
 #include "effect/effect-item.h"

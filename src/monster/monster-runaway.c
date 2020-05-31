@@ -6,7 +6,7 @@
 
 #include "monster/monster-runaway.h"
 #include "dungeon/quest.h"
-#include "monster/pet-fall-off.h"
+#include "pet/pet-fall-off.h"
 #include "player/player-move.h"
 
  /*!

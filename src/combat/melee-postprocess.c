@@ -17,7 +17,7 @@
 #include "monster/monster-race-hook.h"
 #include "monster/monster-status.h"
 #include "monster/monster.h"
-#include "monster/pet-fall-off.h"
+#include "pet/pet-fall-off.h"
 #include "mspell/monster-spell.h"
 #include "player/player-class.h"
 #include "player/player-move.h"

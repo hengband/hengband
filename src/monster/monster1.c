@@ -18,7 +18,7 @@
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
 #include "cmd/cmd-building.h"
-#include "monster/pet-fall-off.h"
+#include "pet/pet-fall-off.h"
 #include "effect/effect-characteristics.h"
 #include "object/object-kind-hook.h"
 #include "player/player-personalities-table.h"
