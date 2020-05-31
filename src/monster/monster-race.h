@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "util/util.h"
 #include "combat/monster-attack-types.h"
+#include "combat/monster-attack-effect.h"
 
 /*
  * Monster blow structure

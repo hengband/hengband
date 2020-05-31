@@ -333,6 +333,30 @@ static void process_eat_item(player_type *target_ptr, monap_type *monap_ptr)
     }
 }
 
+static void process_eat_food(player_type *target_ptr, monap_type *monap_ptr)
+{
+    for (int i = 0; i < 10; i++) {
+        INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
+        monap_ptr->o_ptr = &target_ptr->inventory_list[i_idx];
+        if (!monap_ptr->o_ptr->k_idx)
+            continue;
+
+        if ((monap_ptr->o_ptr->tval != TV_FOOD) && !((monap_ptr->o_ptr->tval == TV_CORPSE) && (monap_ptr->o_ptr->sval)))
+            continue;
+
+        object_desc(target_ptr, monap_ptr->o_name, monap_ptr->o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+#ifdef JP
+        msg_format("%s(%c)を%s食べられてしまった！", monap_ptr->o_name, index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
+#else
+        msg_format("%sour %s (%c) was eaten!", ((o_ptr->number > 1) ? "One of y" : "Y"), monap_ptr->o_name, index_to_label(i_idx));
+#endif
+        inven_item_increase(target_ptr, i_idx, -1);
+        inven_item_optimize(target_ptr, i_idx);
+        monap_ptr->obvious = TRUE;
+        break;
+    }
+}
+
 /*!
  * @brief モンスターからの攻撃による充填魔力吸収処理
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -566,27 +590,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
-                for (int i = 0; i < 10; i++) {
-                    INVENTORY_IDX i_idx = (INVENTORY_IDX)randint0(INVEN_PACK);
-                    monap_ptr->o_ptr = &target_ptr->inventory_list[i_idx];
-                    if (!monap_ptr->o_ptr->k_idx)
-                        continue;
-
-                    if ((monap_ptr->o_ptr->tval != TV_FOOD) && !((monap_ptr->o_ptr->tval == TV_CORPSE) && (monap_ptr->o_ptr->sval)))
-                        continue;
-
-                    object_desc(target_ptr, monap_ptr->o_name, monap_ptr->o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
-#ifdef JP
-                    msg_format("%s(%c)を%s食べられてしまった！", monap_ptr->o_name, index_to_label(i_idx), ((monap_ptr->o_ptr->number > 1) ? "一つ" : ""));
-#else
-                    msg_format("%sour %s (%c) was eaten!", ((o_ptr->number > 1) ? "One of y" : "Y"), monap_ptr->o_name, index_to_label(i_idx));
-#endif
-                    inven_item_increase(target_ptr, i_idx, -1);
-                    inven_item_optimize(target_ptr, i_idx);
-                    monap_ptr->obvious = TRUE;
-                    break;
-                }
-
+                process_eat_food(target_ptr, monap_ptr);
                 break;
             }
             case RBE_EAT_LITE: {
