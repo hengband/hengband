@@ -323,7 +323,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         HIT_POINT power = 0;
         monap_ptr->damage = 0;
         monap_ptr->act = NULL;
-        int effect = r_ptr->blow[ap_cnt].effect;
+        monap_ptr->effect = r_ptr->blow[ap_cnt].effect;
         monap_ptr->method = r_ptr->blow[ap_cnt].method;
         monap_ptr->d_dice = r_ptr->blow[ap_cnt].d_dice;
         monap_ptr->d_side = r_ptr->blow[ap_cnt].d_side;
@@ -334,9 +334,9 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         if (monap_ptr->method == RBM_SHOOT)
             continue;
 
-        power = mbe_info[effect].power;
+        power = mbe_info[monap_ptr->effect].power;
         ac = target_ptr->ac + target_ptr->to_a;
-        if (!effect || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, MON_STUNNED(monap_ptr->m_ptr))) {
+        if (!monap_ptr->effect || check_hit_from_monster_to_player(target_ptr, power, monap_ptr->rlev, MON_STUNNED(monap_ptr->m_ptr))) {
             disturb(target_ptr, TRUE, TRUE);
             if (effect_protecion_from_evil(target_ptr, monap_ptr))
                 continue;
@@ -350,8 +350,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             if (monap_ptr->explode)
                 monap_ptr->damage = 0;
 
-            switch (effect) {
-            case 0: {
+            switch (monap_ptr->effect) {
+            case RBE_NONE: {
                 monap_ptr->obvious = TRUE;
                 monap_ptr->damage = 0;
                 break;

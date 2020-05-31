@@ -4,6 +4,7 @@
  * @note モンスターの攻撃効果 / New monster blow effects
  */
 typedef enum rbe_type {
+    RBE_NONE = 0,
     RBE_HURT = 1, /*!< モンスターの攻撃効果: 攻撃する*/
     RBE_POISON = 2, /*!< モンスターの攻撃効果: 毒をくらわす*/
     RBE_UN_BONUS = 3, /*!< モンスターの攻撃効果: 劣化させる*/

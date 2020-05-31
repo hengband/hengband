@@ -23,7 +23,7 @@ typedef struct mam_type {
     bool touched;
     concptr act;
     spells_type pt;
-    BLOW_EFFECT effect;
+    rbe_type effect;
     ARMOUR_CLASS ac;
     DEPTH rlev;
     bool blinked;
