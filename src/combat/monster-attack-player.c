@@ -21,7 +21,6 @@
 #include "mind/racial-mirror-master.h"
 #include "monster/monster-status.h"
 #include "object/object-hook.h"
-#include "player/mimic-info-table.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
@@ -204,77 +203,6 @@ static void describe_silly_attacks(monap_type *monap_ptr)
 #else
     msg_format("%^s %s%s", monap_ptr->m_name, monap_ptr->act, monap_ptr->do_silly_attack ? " you." : "");
 #endif
-}
-
-/*!
- * @brief モンスターからの攻撃による充填魔力吸収処理
- * @param target_ptr プレーヤーへの参照ポインタ
- * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
- * @return 吸収されたらTRUE、されなかったらFALSE
- */
-static bool process_un_power(player_type *target_ptr, monap_type *monap_ptr)
-{
-    if (((monap_ptr->o_ptr->tval != TV_STAFF) && (monap_ptr->o_ptr->tval != TV_WAND)) || (monap_ptr->o_ptr->pval == 0))
-        return FALSE;
-
-    int heal = monap_ptr->rlev * monap_ptr->o_ptr->pval;
-    if (monap_ptr->o_ptr->tval == TV_STAFF)
-        heal *= monap_ptr->o_ptr->number;
-
-    heal = MIN(heal, monap_ptr->m_ptr->maxhp - monap_ptr->m_ptr->hp);
-    msg_print(_("ザックからエネルギーが吸い取られた！", "Energy drains from your pack!"));
-    monap_ptr->obvious = TRUE;
-    monap_ptr->m_ptr->hp += (HIT_POINT)heal;
-    if (target_ptr->health_who == monap_ptr->m_idx)
-        target_ptr->redraw |= (PR_HEALTH);
-
-    if (target_ptr->riding == monap_ptr->m_idx)
-        target_ptr->redraw |= (PR_UHEALTH);
-
-    monap_ptr->o_ptr->pval = 0;
-    target_ptr->update |= (PU_COMBINE | PU_REORDER);
-    target_ptr->window |= (PW_INVEN);
-    return TRUE;
-}
-
-static bool check_drain_hp(player_type *target_ptr, const s32b d)
-{
-    bool resist_drain = !drain_exp(target_ptr, d, d / 10, 50);
-    if (target_ptr->mimic_form)
-        return (mimic_info[target_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_NONLIVING) != 0 ? TRUE : resist_drain;
-
-    switch (target_ptr->prace) {
-    case RACE_ZOMBIE:
-    case RACE_VAMPIRE:
-    case RACE_SPECTRE:
-    case RACE_SKELETON:
-    case RACE_BALROG:
-    case RACE_GOLEM:
-    case RACE_ANDROID:
-        return TRUE;
-    default:
-        return resist_drain;
-    }
-}
-
-static void process_drain_life(player_type *target_ptr, monap_type *monap_ptr, const bool resist_drain)
-{
-    if ((monap_ptr->damage <= 5) || resist_drain)
-        return;
-
-    bool did_heal = monap_ptr->m_ptr->hp < monap_ptr->m_ptr->maxhp;
-    monap_ptr->m_ptr->hp += damroll(4, monap_ptr->damage / 6);
-    if (monap_ptr->m_ptr->hp > monap_ptr->m_ptr->maxhp)
-        monap_ptr->m_ptr->hp = monap_ptr->m_ptr->maxhp;
-
-    if (target_ptr->health_who == monap_ptr->m_idx)
-        target_ptr->redraw |= (PR_HEALTH);
-
-    if (target_ptr->riding == monap_ptr->m_idx)
-        target_ptr->redraw |= (PR_UHEALTH);
-
-    if (monap_ptr->m_ptr->ml && did_heal)
-        msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), monap_ptr->m_name);
 }
 
 static void process_blind_attack(player_type *target_ptr, monap_type *monap_ptr)
