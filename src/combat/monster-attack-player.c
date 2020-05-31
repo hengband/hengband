@@ -285,7 +285,7 @@ static void aura_cold_by_monster_attack(player_type *target_ptr, monap_type *mon
     }
 }
 
-static void mirror_shards_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+static void aura_shards_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
 {
     if (!target_ptr->dustrobe || !monap_ptr->alive || target_ptr->is_dead)
         return;
@@ -477,7 +477,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 aura_fire_by_monster_attack(target_ptr, monap_ptr);
                 aura_elec_by_monster_attack(target_ptr, monap_ptr);
                 aura_cold_by_monster_attack(target_ptr, monap_ptr);
-                mirror_shards_by_monster_attack(target_ptr, monap_ptr);
+                aura_shards_by_monster_attack(target_ptr, monap_ptr);
                 aura_holy_by_monster_attack(target_ptr, monap_ptr);
                 aura_force_by_monster_attack(target_ptr, monap_ptr);
                 aura_shadow_by_monster_attack(target_ptr, monap_ptr);
