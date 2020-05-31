@@ -219,6 +219,72 @@ static void calc_player_stun(player_type *target_ptr, monap_type *monap_ptr)
         (void)set_stun(target_ptr, target_ptr->stun + stun_plus);
 }
 
+static void aura_fire_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!target_ptr->sh_fire || !monap_ptr->alive || target_ptr->is_dead)
+        return;
+
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if ((r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK) != 0) {
+        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+            r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
+
+        return;
+    }
+
+    HIT_POINT dam = damroll(2, 6);
+    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
+    msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), monap_ptr->m_name);
+    if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("は灰の山になった。", " turns into a pile of ash."))) {
+        monap_ptr->blinked = FALSE;
+        monap_ptr->alive = FALSE;
+    }
+}
+
+static void aura_elec_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!target_ptr->sh_elec || !monap_ptr->alive || target_ptr->is_dead)
+        return;
+
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if ((r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK) != 0) {
+        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+            r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
+
+        return;
+    }
+
+    HIT_POINT dam = damroll(2, 6);
+    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
+    msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
+    if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("は燃え殻の山になった。", " turns into a pile of cinder."))) {
+        monap_ptr->blinked = FALSE;
+        monap_ptr->alive = FALSE;
+    }
+}
+
+static void aura_cold_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!target_ptr->sh_cold || !monap_ptr->alive || target_ptr->is_dead)
+        return;
+
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if ((r_ptr->flagsr & RFR_EFF_IM_COLD_MASK) != 0) {
+        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+            r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
+        
+        return;
+    }
+
+    HIT_POINT dam = damroll(2, 6);
+    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
+    msg_format(_("%^sは冷気をくらった！", "%^s is very cold!"), monap_ptr->m_name);
+    if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("は凍りついた。", " was frozen."))) {
+        monap_ptr->blinked = FALSE;
+        monap_ptr->alive = FALSE;
+    }
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -228,8 +294,6 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 {
     monap_type tmp_monap;
     monap_type *monap_ptr = initialize_monap_type(target_ptr, &tmp_monap, m_idx);
-
-    bool fear = FALSE;
     check_no_blow(target_ptr, monap_ptr);
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     monap_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
@@ -287,65 +351,22 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             if (monap_ptr->explode) {
                 sound(SOUND_EXPLODE);
 
-                if (mon_take_hit(target_ptr, m_idx, monap_ptr->m_ptr->hp + 1, &fear, NULL)) {
+                if (mon_take_hit(target_ptr, m_idx, monap_ptr->m_ptr->hp + 1, &monap_ptr->fear, NULL)) {
                     monap_ptr->blinked = FALSE;
                     monap_ptr->alive = FALSE;
                 }
             }
 
             if (monap_ptr->touched) {
-                if (target_ptr->sh_fire && monap_ptr->alive && !target_ptr->is_dead) {
-                    if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
-                        HIT_POINT dam = damroll(2, 6);
-                        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
-                        msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), monap_ptr->m_name);
-                        if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は灰の山になった。", " turns into a pile of ash."))) {
-                            monap_ptr->blinked = FALSE;
-                            monap_ptr->alive = FALSE;
-                        }
-
-                    } else {
-                        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
-                            r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK);
-                    }
-                }
-
-                if (target_ptr->sh_elec && monap_ptr->alive && !target_ptr->is_dead) {
-                    if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)) {
-                        HIT_POINT dam = damroll(2, 6);
-                        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
-                        msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
-                        if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は燃え殻の山になった。", " turns into a pile of cinder."))) {
-                            monap_ptr->blinked = FALSE;
-                            monap_ptr->alive = FALSE;
-                        }
-                    } else {
-                        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
-                            r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK);
-                    }
-                }
-
-                if (target_ptr->sh_cold && monap_ptr->alive && !target_ptr->is_dead) {
-                    if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)) {
-                        HIT_POINT dam = damroll(2, 6);
-                        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
-                        msg_format(_("%^sは冷気をくらった！", "%^s is very cold!"), monap_ptr->m_name);
-                        if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は凍りついた。", " was frozen."))) {
-                            monap_ptr->blinked = FALSE;
-                            monap_ptr->alive = FALSE;
-                        }
-                    } else {
-                        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
-                            r_ptr->r_flagsr |= (r_ptr->flagsr & RFR_EFF_IM_COLD_MASK);
-                    }
-                }
-
+                aura_fire_by_monster_attack(target_ptr, monap_ptr);
+                aura_elec_by_monster_attack(target_ptr, monap_ptr);
+                aura_cold_by_monster_attack(target_ptr, monap_ptr);
                 if (target_ptr->dustrobe && monap_ptr->alive && !target_ptr->is_dead) {
                     if (!(r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK)) {
                         HIT_POINT dam = damroll(2, 6);
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sは鏡の破片をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
-                        if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("はズタズタになった。", " had torn to pieces."))) {
+                        if (mon_take_hit(target_ptr, m_idx, dam, &monap_ptr->fear, _("はズタズタになった。", " had torn to pieces."))) {
                             monap_ptr->blinked = FALSE;
                             monap_ptr->alive = FALSE;
                         }
@@ -365,7 +386,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                             HIT_POINT dam = damroll(2, 6);
                             dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                             msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), monap_ptr->m_name);
-                            if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
+                            if (mon_take_hit(target_ptr, m_idx, dam, &monap_ptr->fear, _("は倒れた。", " is destroyed."))) {
                                 monap_ptr->blinked = FALSE;
                                 monap_ptr->alive = FALSE;
                             }
@@ -383,7 +404,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         HIT_POINT dam = damroll(2, 6);
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), monap_ptr->m_name);
-                        if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
+                        if (mon_take_hit(target_ptr, m_idx, dam, &monap_ptr->fear, _("は倒れた。", " is destroyed."))) {
                             monap_ptr->blinked = FALSE;
                             monap_ptr->alive = FALSE;
                         }
@@ -408,7 +429,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("影のオーラが%^sに反撃した！", "Enveloping shadows attack %^s."), monap_ptr->m_name);
-                        if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
+                        if (mon_take_hit(target_ptr, m_idx, dam, &monap_ptr->fear, _("は倒れた。", " is destroyed."))) {
                             monap_ptr->blinked = FALSE;
                             monap_ptr->alive = FALSE;
                         } else /* monster does not dead */
@@ -525,7 +546,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         target_ptr->csp -= 7;
         msg_format(_("%^sに反撃した！", "You counterattacked %s!"), m_target_name);
         do_cmd_attack(target_ptr, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, HISSATSU_COUNTER);
-        fear = FALSE;
+        monap_ptr->fear = FALSE;
         target_ptr->redraw |= (PR_MANA);
     }
 
@@ -541,7 +562,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !floor_ptr->inside_arena)
         r_ptr->r_deaths++;
 
-    if (monap_ptr->m_ptr->ml && fear && monap_ptr->alive && !target_ptr->is_dead) {
+    if (monap_ptr->m_ptr->ml && monap_ptr->fear && monap_ptr->alive && !target_ptr->is_dead) {
         sound(SOUND_FLEE);
         msg_format(_("%^sは恐怖で逃げ出した！", "%^s flees in terror!"), monap_ptr->m_name);
     }
