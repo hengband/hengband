@@ -336,6 +336,28 @@ static void aura_holy_by_monster_attack(player_type *target_ptr, monap_type *mon
         r_ptr->r_flags3 |= RF3_EVIL;
 }
 
+static void aura_force_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!target_ptr->tim_sh_touki || !monap_ptr->alive || target_ptr->is_dead)
+        return;
+
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if ((r_ptr->flagsr & RFR_RES_ALL) != 0) {
+        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+            r_ptr->r_flagsr |= RFR_RES_ALL;
+
+        return;
+    }
+
+    HIT_POINT dam = damroll(2, 6);
+    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
+    msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), monap_ptr->m_name);
+    if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("は倒れた。", " is destroyed."))) {
+        monap_ptr->blinked = FALSE;
+        monap_ptr->alive = FALSE;
+    }
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -414,21 +436,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 aura_cold_by_monster_attack(target_ptr, monap_ptr);
                 mirror_shards_by_monster_attack(target_ptr, monap_ptr);
                 aura_holy_by_monster_attack(target_ptr, monap_ptr);
-                if (target_ptr->tim_sh_touki && monap_ptr->alive && !target_ptr->is_dead) {
-                    if (!(r_ptr->flagsr & RFR_RES_ALL)) {
-                        HIT_POINT dam = damroll(2, 6);
-                        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
-                        msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), monap_ptr->m_name);
-                        if (mon_take_hit(target_ptr, m_idx, dam, &monap_ptr->fear, _("は倒れた。", " is destroyed."))) {
-                            monap_ptr->blinked = FALSE;
-                            monap_ptr->alive = FALSE;
-                        }
-                    } else {
-                        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
-                            r_ptr->r_flagsr |= RFR_RES_ALL;
-                    }
-                }
-
+                aura_force_by_monster_attack(target_ptr, monap_ptr);
                 if (hex_spelling(target_ptr, HEX_SHADOW_CLOAK) && monap_ptr->alive && !target_ptr->is_dead) {
                     HIT_POINT dam = 1;
                     object_type *o_armed_ptr = &target_ptr->inventory_list[INVEN_RARM];
