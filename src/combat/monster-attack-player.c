@@ -220,6 +220,18 @@ static void calc_player_stun(player_type *target_ptr, monap_type *monap_ptr)
         (void)set_stun(target_ptr, target_ptr->stun + stun_plus);
 }
 
+static void monster_explode(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!monap_ptr->explode)
+        return;
+
+    sound(SOUND_EXPLODE);
+    if (mon_take_hit(target_ptr, monap_ptr->m_idx, monap_ptr->m_ptr->hp + 1, &monap_ptr->fear, NULL)) {
+        monap_ptr->blinked = FALSE;
+        monap_ptr->alive = FALSE;
+    }
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -283,15 +295,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             select_cut_stun(monap_ptr);
             calc_player_cut(target_ptr, monap_ptr);
             calc_player_stun(target_ptr, monap_ptr);
-            if (monap_ptr->explode) {
-                sound(SOUND_EXPLODE);
-
-                if (mon_take_hit(target_ptr, m_idx, monap_ptr->m_ptr->hp + 1, &monap_ptr->fear, NULL)) {
-                    monap_ptr->blinked = FALSE;
-                    monap_ptr->alive = FALSE;
-                }
-            }
-
+            monster_explode(target_ptr, monap_ptr);
             process_aura_counterattack(target_ptr, monap_ptr);
         }
         else {
