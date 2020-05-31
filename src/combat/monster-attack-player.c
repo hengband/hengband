@@ -248,6 +248,30 @@ static void process_eat_gold(player_type *target_ptr, monap_type *monap_ptr)
 }
 
 /*!
+ * @brief 盗み打撃の時にアイテムが盗まれるかどうかを判定する
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @return 盗まれたらTRUE、何も盗まれなかったらFALSE
+ */
+static bool check_eat_item(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (MON_CONFUSED(monap_ptr->m_ptr))
+        return FALSE;
+
+    if (target_ptr->is_dead || check_multishadow(target_ptr))
+        return FALSE;
+
+    if (!target_ptr->paralyzed && (randint0(100) < (adj_dex_safe[target_ptr->stat_ind[A_DEX]] + target_ptr->lev))) {
+        msg_print(_("しかしあわててザックを取り返した！", "You grab hold of your backpack!"));
+        monap_ptr->blinked = TRUE;
+        monap_ptr->obvious = TRUE;
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+/*!
  * @brief モンスターからの攻撃による充填魔力吸収処理
  * @param target_ptr プレーヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
@@ -469,18 +493,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             }
             case RBE_EAT_ITEM: {
                 get_damage += take_hit(target_ptr, DAMAGE_ATTACK, monap_ptr->damage, ddesc, -1);
-                if (MON_CONFUSED(monap_ptr->m_ptr))
+                if (!check_eat_item(target_ptr, monap_ptr))
                     break;
-
-                if (target_ptr->is_dead || check_multishadow(target_ptr))
-                    break;
-
-                if (!target_ptr->paralyzed && (randint0(100) < (adj_dex_safe[target_ptr->stat_ind[A_DEX]] + target_ptr->lev))) {
-                    msg_print(_("しかしあわててザックを取り返した！", "You grab hold of your backpack!"));
-                    monap_ptr->blinked = TRUE;
-                    monap_ptr->obvious = TRUE;
-                    break;
-                }
 
                 for (int i = 0; i < 10; i++) {
                     OBJECT_IDX o_idx;
