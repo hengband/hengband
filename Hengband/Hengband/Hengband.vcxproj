@@ -177,6 +177,7 @@
     <ClCompile Include="..\..\src\combat\martial-arts-table.c" />
     <ClCompile Include="..\..\src\combat\melee-switcher.c" />
     <ClCompile Include="..\..\src\combat\melee-util.c" />
+    <ClCompile Include="..\..\src\combat\monster-attack-describer.c" />
     <ClCompile Include="..\..\src\combat\monster-attack-monster.c" />
     <ClCompile Include="..\..\src\combat\monster-attack-player.c" />
     <ClCompile Include="..\..\src\combat\monster-attack-types.c" />
@@ -447,6 +448,7 @@
     <ClInclude Include="..\..\src\combat\martial-arts-table.h" />
     <ClInclude Include="..\..\src\combat\melee-switcher.h" />
     <ClInclude Include="..\..\src\combat\melee-util.h" />
+    <ClInclude Include="..\..\src\combat\monster-attack-describer.h" />
     <ClInclude Include="..\..\src\combat\monster-attack-effect.h" />
     <ClInclude Include="..\..\src\combat\monster-attack-monster.h" />
     <ClInclude Include="..\..\src\combat\monster-attack-player.h" />
