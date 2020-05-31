@@ -1,5 +1,5 @@
 ﻿/*!
- * @brief プレーヤーのHP、アイテム、お金・明かりの残りターン、充填魔力を盗んだり減少させたりする処理
+ * @brief プレーヤーのHP/MP、アイテム、お金・明かりの残りターン、充填魔力を盗んだり減少させたりする処理
  * @date 2020/05/31
  * @author Hourier
  */
@@ -249,4 +249,21 @@ void process_drain_life(player_type *target_ptr, monap_type *monap_ptr, const bo
 
     if (monap_ptr->m_ptr->ml && did_heal)
         msg_format(_("%sは体力を回復したようだ。", "%^s appears healthier."), monap_ptr->m_name);
+}
+
+void process_drain_mana(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (check_multishadow(target_ptr)) {
+        msg_print(_("攻撃は幻影に命中し、あなたには届かなかった。", "The attack hits Shadow, but you are unharmed!"));
+        return;
+    }
+
+    monap_ptr->do_cut = 0;
+    target_ptr->csp -= monap_ptr->damage;
+    if (target_ptr->csp < 0) {
+        target_ptr->csp = 0;
+        target_ptr->csp_frac = 0;
+    }
+
+    target_ptr->redraw |= (PR_MANA);
 }

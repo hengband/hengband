@@ -284,6 +284,16 @@ static void process_lose_all_attack(player_type *target_ptr, monap_type *monap_p
         monap_ptr->obvious = TRUE;
 }
 
+static void process_stun_attack(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (target_ptr->resist_sound || check_multishadow(target_ptr))
+        return;
+
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if (set_stun(target_ptr, target_ptr->stun + 10 + randint1(r_ptr->level / 4)))
+        monap_ptr->obvious = TRUE;
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -695,19 +705,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             }
             case RBE_DR_MANA: {
                 monap_ptr->obvious = TRUE;
-                if (check_multishadow(target_ptr)) {
-                    msg_print(_("攻撃は幻影に命中し、あなたには届かなかった。", "The attack hits Shadow, but you are unharmed!"));
-                } else {
-                    monap_ptr->do_cut = 0;
-                    target_ptr->csp -= monap_ptr->damage;
-                    if (target_ptr->csp < 0) {
-                        target_ptr->csp = 0;
-                        target_ptr->csp_frac = 0;
-                    }
-
-                    target_ptr->redraw |= (PR_MANA);
-                }
-
+                process_drain_mana(target_ptr, monap_ptr);
                 update_smart_learn(target_ptr, m_idx, DRS_MANA);
                 break;
             }
@@ -731,14 +729,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->is_dead)
                     break;
 
-                if (target_ptr->resist_sound || check_multishadow(target_ptr)) {
-                    /* Do nothing */
-                } else {
-                    if (set_stun(target_ptr, target_ptr->stun + 10 + randint1(r_ptr->level / 4))) {
-                        monap_ptr->obvious = TRUE;
-                    }
-                }
-
+                process_stun_attack(target_ptr, monap_ptr);
                 break;
             }
             }
