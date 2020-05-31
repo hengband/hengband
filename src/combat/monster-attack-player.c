@@ -263,6 +263,27 @@ static void process_paralyze_attack(player_type *target_ptr, monap_type *monap_p
         monap_ptr->obvious = TRUE;
 }
 
+static void process_lose_all_attack(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (do_dec_stat(target_ptr, A_STR))
+        monap_ptr->obvious = TRUE;
+
+    if (do_dec_stat(target_ptr, A_DEX))
+        monap_ptr->obvious = TRUE;
+
+    if (do_dec_stat(target_ptr, A_CON))
+        monap_ptr->obvious = TRUE;
+
+    if (do_dec_stat(target_ptr, A_INT))
+        monap_ptr->obvious = TRUE;
+
+    if (do_dec_stat(target_ptr, A_WIS))
+        monap_ptr->obvious = TRUE;
+
+    if (do_dec_stat(target_ptr, A_CHR))
+        monap_ptr->obvious = TRUE;
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -580,24 +601,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 if (target_ptr->is_dead || check_multishadow(target_ptr))
                     break;
 
-                if (do_dec_stat(target_ptr, A_STR))
-                    monap_ptr->obvious = TRUE;
-
-                if (do_dec_stat(target_ptr, A_DEX))
-                    monap_ptr->obvious = TRUE;
-
-                if (do_dec_stat(target_ptr, A_CON))
-                    monap_ptr->obvious = TRUE;
-
-                if (do_dec_stat(target_ptr, A_INT))
-                    monap_ptr->obvious = TRUE;
-
-                if (do_dec_stat(target_ptr, A_WIS))
-                    monap_ptr->obvious = TRUE;
-
-                if (do_dec_stat(target_ptr, A_CHR))
-                    monap_ptr->obvious = TRUE;
-
+                process_lose_all_attack(target_ptr, monap_ptr);
                 break;
             }
             case RBE_SHATTER: { /* AC軽減あり / Player armor reduces total damage */
