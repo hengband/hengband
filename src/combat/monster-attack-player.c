@@ -272,6 +272,32 @@ static bool check_eat_item(player_type *target_ptr, monap_type *monap_ptr)
 }
 
 /*!
+ * @brief プレーヤーが持っているアイテムをモンスターに移す
+ * @param target_ptr プレーヤーへの参照ポインタ
+ * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void move_item_to_monster(player_type *target_ptr, monap_type *monap_ptr, const OBJECT_IDX o_idx)
+{
+    if (o_idx == 0)
+        return;
+
+    object_type *j_ptr;
+    j_ptr = &target_ptr->current_floor_ptr->o_list[o_idx];
+    object_copy(j_ptr, monap_ptr->o_ptr);
+    j_ptr->number = 1;
+    if ((monap_ptr->o_ptr->tval == TV_ROD) || (monap_ptr->o_ptr->tval == TV_WAND)) {
+        j_ptr->pval = monap_ptr->o_ptr->pval / monap_ptr->o_ptr->number;
+        monap_ptr->o_ptr->pval -= j_ptr->pval;
+    }
+
+    j_ptr->marked = OM_TOUCHED;
+    j_ptr->held_m_idx = monap_ptr->m_idx;
+    j_ptr->next_o_idx = monap_ptr->m_ptr->hold_o_idx;
+    monap_ptr->m_ptr->hold_o_idx = o_idx;
+}
+
+/*!
  * @brief モンスターからの攻撃による充填魔力吸収処理
  * @param target_ptr プレーヤーへの参照ポインタ
  * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
@@ -514,22 +540,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 #endif
                     chg_virtue(target_ptr, V_SACRIFICE, 1);
                     o_idx = o_pop(floor_ptr);
-                    if (o_idx) {
-                        object_type *j_ptr;
-                        j_ptr = &floor_ptr->o_list[o_idx];
-                        object_copy(j_ptr, monap_ptr->o_ptr);
-                        j_ptr->number = 1;
-                        if ((monap_ptr->o_ptr->tval == TV_ROD) || (monap_ptr->o_ptr->tval == TV_WAND)) {
-                            j_ptr->pval = monap_ptr->o_ptr->pval / monap_ptr->o_ptr->number;
-                            monap_ptr->o_ptr->pval -= j_ptr->pval;
-                        }
-
-                        j_ptr->marked = OM_TOUCHED;
-                        j_ptr->held_m_idx = m_idx;
-                        j_ptr->next_o_idx = monap_ptr->m_ptr->hold_o_idx;
-                        monap_ptr->m_ptr->hold_o_idx = o_idx;
-                    }
-
+                    move_item_to_monster(target_ptr, monap_ptr, o_idx);
                     inven_item_increase(target_ptr, i_idx, -1);
                     inven_item_optimize(target_ptr, i_idx);
                     monap_ptr->obvious = TRUE;
