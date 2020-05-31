@@ -275,6 +275,35 @@ static void gain_armor_exp(player_type *target_ptr, monap_type *monap_ptr)
 }
 
 /*!
+ * @brief 一部の打撃種別の場合のみ、避けた旨のメッセージ表示と盾技能スキル向上を行う
+ * @monap_ptr モンスターからモンスターへの直接攻撃構造体への参照ポインタ
+ * @return なし
+ */
+static void process_monster_attack_evasion(player_type *target_ptr, monap_type *monap_ptr)
+{
+    switch (monap_ptr->method) {
+    case RBM_HIT:
+    case RBM_TOUCH:
+    case RBM_PUNCH:
+    case RBM_KICK:
+    case RBM_CLAW:
+    case RBM_BITE:
+    case RBM_STING:
+    case RBM_SLASH:
+    case RBM_BUTT:
+    case RBM_CRUSH:
+    case RBM_ENGULF:
+    case RBM_CHARGE:
+        describe_attack_evasion(target_ptr, monap_ptr);
+        gain_armor_exp(target_ptr, monap_ptr);
+        monap_ptr->damage = 0;
+        return;
+    default:
+        return;
+    }
+}
+
+/*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
  * @return 実際に攻撃処理を行った場合TRUEを返す
@@ -339,27 +368,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             calc_player_stun(target_ptr, monap_ptr);
             monster_explode(target_ptr, monap_ptr);
             process_aura_counterattack(target_ptr, monap_ptr);
-        }
-        else {
-            switch (monap_ptr->method) {
-            case RBM_HIT:
-            case RBM_TOUCH:
-            case RBM_PUNCH:
-            case RBM_KICK:
-            case RBM_CLAW:
-            case RBM_BITE:
-            case RBM_STING:
-            case RBM_SLASH:
-            case RBM_BUTT:
-            case RBM_CRUSH:
-            case RBM_ENGULF:
-            case RBM_CHARGE:
-                describe_attack_evasion(target_ptr, monap_ptr);
-                gain_armor_exp(target_ptr, monap_ptr);
-                monap_ptr->damage = 0;
-                break;
-            }
-        }
+        } else
+            process_monster_attack_evasion(target_ptr, monap_ptr);
 
         if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr) && !monap_ptr->do_silly_attack) {
             if (monap_ptr->obvious || monap_ptr->damage || (r_ptr->r_blows[ap_cnt] > 10)) {
