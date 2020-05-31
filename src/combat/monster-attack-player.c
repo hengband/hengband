@@ -209,6 +209,44 @@ static void describe_silly_attacks(monap_type *monap_ptr)
 #endif
 }
 
+static void process_eat_gold(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!target_ptr->paralyzed && (randint0(100) < (adj_dex_safe[target_ptr->stat_ind[A_DEX]] + target_ptr->lev))) {
+        msg_print(_("しかし素早く財布を守った！", "You quickly protect your money pouch!"));
+        if (randint0(3))
+            monap_ptr->blinked = TRUE;
+
+        return;
+    }
+
+    PRICE gold = (target_ptr->au / 10) + randint1(25);
+    if (gold < 2)
+        gold = 2;
+
+    if (gold > 5000)
+        gold = (target_ptr->au / 20) + randint1(3000);
+
+    if (gold > target_ptr->au)
+        gold = target_ptr->au;
+
+    target_ptr->au -= gold;
+    if (gold <= 0) {
+        msg_print(_("しかし何も盗まれなかった。", "Nothing was stolen."));
+    } else if (target_ptr->au > 0) {
+        msg_print(_("財布が軽くなった気がする。", "Your purse feels lighter."));
+        msg_format(_("$%ld のお金が盗まれた！", "%ld coins were stolen!"), (long)gold);
+        chg_virtue(target_ptr, V_SACRIFICE, 1);
+    } else {
+        msg_print(_("財布が軽くなった気がする。", "Your purse feels lighter."));
+        msg_print(_("お金が全部盗まれた！", "All of your coins were stolen!"));
+        chg_virtue(target_ptr, V_SACRIFICE, 2);
+    }
+
+    target_ptr->redraw |= (PR_GOLD);
+    target_ptr->window |= (PW_PLAYER);
+    monap_ptr->blinked = TRUE;
+}
+
 /*!
  * @brief モンスターからの攻撃による充填魔力吸収処理
  * @param target_ptr プレーヤーへの参照ポインタ
@@ -292,11 +330,8 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
     int tmp;
     ARMOUR_CLASS ac;
-    PRICE gold;
     GAME_TEXT o_name[MAX_NLEN];
     GAME_TEXT ddesc[80];
-
-    bool blinked;
     bool fear = FALSE;
     bool alive = TRUE;
     HIT_POINT get_damage = 0;
@@ -316,7 +351,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             return TRUE;
     }
 
-    blinked = FALSE;
+    monap_ptr->blinked = FALSE;
     floor_type *floor_ptr = target_ptr->current_floor_ptr;
     for (int ap_cnt = 0; ap_cnt < 4; ap_cnt++) {
         monap_ptr->obvious = FALSE;
@@ -429,37 +464,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     break;
 
                 monap_ptr->obvious = TRUE;
-                if (!target_ptr->paralyzed && (randint0(100) < (adj_dex_safe[target_ptr->stat_ind[A_DEX]] + target_ptr->lev))) {
-                    msg_print(_("しかし素早く財布を守った！", "You quickly protect your money pouch!"));
-                    if (randint0(3))
-                        blinked = TRUE;
-                }
-                else {
-                    gold = (target_ptr->au / 10) + randint1(25);
-                    if (gold < 2)
-                        gold = 2;
-                    if (gold > 5000)
-                        gold = (target_ptr->au / 20) + randint1(3000);
-                    if (gold > target_ptr->au)
-                        gold = target_ptr->au;
-                    target_ptr->au -= gold;
-                    if (gold <= 0) {
-                        msg_print(_("しかし何も盗まれなかった。", "Nothing was stolen."));
-                    } else if (target_ptr->au) {
-                        msg_print(_("財布が軽くなった気がする。", "Your purse feels lighter."));
-                        msg_format(_("$%ld のお金が盗まれた！", "%ld coins were stolen!"), (long)gold);
-                        chg_virtue(target_ptr, V_SACRIFICE, 1);
-                    } else {
-                        msg_print(_("財布が軽くなった気がする。", "Your purse feels lighter."));
-                        msg_print(_("お金が全部盗まれた！", "All of your coins were stolen!"));
-                        chg_virtue(target_ptr, V_SACRIFICE, 2);
-                    }
-
-                    target_ptr->redraw |= (PR_GOLD);
-                    target_ptr->window |= (PW_PLAYER);
-                    blinked = TRUE;
-                }
-
+                process_eat_gold(target_ptr, monap_ptr);
                 break;
             }
             case RBE_EAT_ITEM: {
@@ -472,7 +477,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
                 if (!target_ptr->paralyzed && (randint0(100) < (adj_dex_safe[target_ptr->stat_ind[A_DEX]] + target_ptr->lev))) {
                     msg_print(_("しかしあわててザックを取り返した！", "You grab hold of your backpack!"));
-                    blinked = TRUE;
+                    monap_ptr->blinked = TRUE;
                     monap_ptr->obvious = TRUE;
                     break;
                 }
@@ -514,7 +519,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     inven_item_increase(target_ptr, i_idx, -1);
                     inven_item_optimize(target_ptr, i_idx);
                     monap_ptr->obvious = TRUE;
-                    blinked = TRUE;
+                    monap_ptr->blinked = TRUE;
                     break;
                 }
 
@@ -998,7 +1003,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 sound(SOUND_EXPLODE);
 
                 if (mon_take_hit(target_ptr, m_idx, monap_ptr->m_ptr->hp + 1, &fear, NULL)) {
-                    blinked = FALSE;
+                    monap_ptr->blinked = FALSE;
                     alive = FALSE;
                 }
             }
@@ -1010,7 +1015,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は灰の山になった。", " turns into a pile of ash."))) {
-                            blinked = FALSE;
+                            monap_ptr->blinked = FALSE;
                             alive = FALSE;
                         }
 
@@ -1026,7 +1031,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は燃え殻の山になった。", " turns into a pile of cinder."))) {
-                            blinked = FALSE;
+                            monap_ptr->blinked = FALSE;
                             alive = FALSE;
                         }
                     } else {
@@ -1041,7 +1046,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sは冷気をくらった！", "%^s is very cold!"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は凍りついた。", " was frozen."))) {
-                            blinked = FALSE;
+                            monap_ptr->blinked = FALSE;
                             alive = FALSE;
                         }
                     } else {
@@ -1056,7 +1061,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sは鏡の破片をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("はズタズタになった。", " had torn to pieces."))) {
-                            blinked = FALSE;
+                            monap_ptr->blinked = FALSE;
                             alive = FALSE;
                         }
                     } else {
@@ -1076,7 +1081,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                             dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                             msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), monap_ptr->m_name);
                             if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
-                                blinked = FALSE;
+                                monap_ptr->blinked = FALSE;
                                 alive = FALSE;
                             }
                             if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
@@ -1094,7 +1099,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
-                            blinked = FALSE;
+                            monap_ptr->blinked = FALSE;
                             alive = FALSE;
                         }
                     } else {
@@ -1119,7 +1124,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("影のオーラが%^sに反撃した！", "Enveloping shadows attack %^s."), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
-                            blinked = FALSE;
+                            monap_ptr->blinked = FALSE;
                             alive = FALSE;
                         } else /* monster does not dead */
                         {
@@ -1239,7 +1244,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         target_ptr->redraw |= (PR_MANA);
     }
 
-    if (blinked && alive && !target_ptr->is_dead) {
+    if (monap_ptr->blinked && alive && !target_ptr->is_dead) {
         if (teleport_barrier(target_ptr, m_idx)) {
             msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
         } else {
