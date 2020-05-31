@@ -15,7 +15,7 @@
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 
-#include "cmd-pet.h"
+#include "pet/pet-util.h"
 #include "effect/effect-characteristics.h"
 #include "grid/grid.h"
 #include "dungeon/quest.h"

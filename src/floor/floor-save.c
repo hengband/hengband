@@ -32,7 +32,7 @@
 #include "monster/monster-status.h"
 #include "object/object2.h"
 #include "object/object-hook.h"
-#include "cmd-pet.h"
+#include "pet/pet-util.h"
 #include "cmd-basic.h"
 #include "io/uid-checker.h"
 #include "io/files-util.h"

@@ -37,6 +37,7 @@
 #include "realm/realm-hex.h"
 #include "realm/realm-song.h"
 #include "cmd/cmd-pet.h"
+#include "pet/pet-util.h"
 #include "cmd/cmd-spell.h"
 #include "dungeon/dungeon.h"
 #include "object/object-kind.h"

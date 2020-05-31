@@ -8,7 +8,7 @@
 #include "monster/monster-attack.h"
 #include "monster/monster-object.h"
 #include "monster/monster-update.h"
-#include "cmd/cmd-pet.h"
+#include "pet/pet-util.h"
 #include "monster/creature.h"
 #include "io/files-util.h"
 #include "monster/monster-status.h"

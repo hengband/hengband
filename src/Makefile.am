@@ -188,6 +188,8 @@ hengband_SOURCES = \
 	monster/horror-descriptions.c monster/horror-descriptions.h \
 	monster/pet-fall-off.c monster/pet-fall-off.h \
 	\
+	pet/pet-util.h \
+	\
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
 	\
@@ -409,8 +411,8 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icombat -Icore -Idungeon -Ieffect -Ifloor \
 	-Igrid -Iinventory -Iio -Iknowledge -Imarket -Imind -Imonster -Imspell \
-	-Imutation -Iobject -Iplayer -Irealm -Iroom -Ispell -Isystem -Iterm -Iutil \
-	-Iview -Iwizard -Iworld
+	-Imutation -Iobject -Ipet -Iplayer -Irealm -Iroom -Ispell -Isystem -Iterm \
+	-Iutil -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

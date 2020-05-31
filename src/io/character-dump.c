@@ -5,7 +5,7 @@
 #include "floor/floor-town.h"
 #include "dungeon/dungeon.h"
 #include "store/store.h"
-#include "cmd/cmd-pet.h"
+#include "pet/pet-util.h"
 #include "monster/monster-status.h"
 #include "core/sort.h"
 #include "dungeon/quest.h"

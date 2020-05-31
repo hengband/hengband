@@ -1,8 +1,9 @@
 ﻿#include "monster/pet-fall-off.h"
+#include "cmd/cmd-pet.h" // 暫定、player_can_ride_aux() を移動する
 #include "core/stuff-handler.h"
-#include "cmd/cmd-pet.h" // 暫定、定数を見ているだけなのでutilへの分離を検討する.
 #include "floor/floor.h"
 #include "io/targeting.h"
+#include "pet/pet-util.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"

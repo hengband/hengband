@@ -70,7 +70,7 @@
 #include "floor/floor-town.h"
 #include "grid/grid.h"
 
-#include "cmd-pet.h"
+#include "pet/pet-util.h"
 #include "dungeon/dungeon-file.h"
 #include "io/uid-checker.h"
 #include "io/files-util.h"

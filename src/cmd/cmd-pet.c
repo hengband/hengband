@@ -22,6 +22,7 @@
 #include "world/world.h"
 #include "effect/spells-effect-util.h"
 #include "cmd/cmd-attack.h"
+#include "pet/pet-util.h"
 
 int total_friends = 0;
 

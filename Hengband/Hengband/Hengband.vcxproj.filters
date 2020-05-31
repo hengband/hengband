@@ -2278,6 +2278,9 @@
     <ClInclude Include="..\..\src\monster\pet-fall-off.h">
       <Filter>monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\pet\pet-util.h">
+      <Filter>pet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2376,6 +2379,9 @@
     </Filter>
     <Filter Include="util">
       <UniqueIdentifier>{d9907626-9c01-48b8-89da-065f7b8540b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pet">
+      <UniqueIdentifier>{7c81caa7-dbd8-43f3-8481-9a2ae3967776}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

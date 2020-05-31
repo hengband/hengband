@@ -488,6 +488,7 @@
     <ClInclude Include="..\..\src\mind\samurai-slaying.h" />
     <ClInclude Include="..\..\src\mind\surprise-attack.h" />
     <ClInclude Include="..\..\src\monster\pet-fall-off.h" />
+    <ClInclude Include="..\..\src\pet\pet-util.h" />
     <ClInclude Include="..\..\src\mspell\assign-monster-spell.h" />
     <ClInclude Include="..\..\src\mspell\mspell-floor.h" />
     <ClInclude Include="..\..\src\mspell\mspell-particularity.h" />

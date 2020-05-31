@@ -7,7 +7,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/dungeon-file.h"
 #include "object/artifact.h"
-#include "cmd/cmd-pet.h"
+#include "pet/pet-util.h"
 #include "system/system-variables.h"
 #include "player/player-races-table.h"
 #include "market/arena.h"
