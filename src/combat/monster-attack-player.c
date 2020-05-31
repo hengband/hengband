@@ -358,6 +358,49 @@ static void aura_force_by_monster_attack(player_type *target_ptr, monap_type *mo
     }
 }
 
+static void aura_shadow_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!hex_spelling(target_ptr, HEX_SHADOW_CLOAK) || !monap_ptr->alive || target_ptr->is_dead)
+        return;
+
+    HIT_POINT dam = 1;
+    object_type *o_armed_ptr = &target_ptr->inventory_list[INVEN_RARM];
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if (((r_ptr->flagsr & RFR_RES_ALL) != 0) || ((r_ptr->flagsr & RFR_RES_DARK) != 0)) {
+        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
+            r_ptr->r_flagsr |= (RFR_RES_ALL | RFR_RES_DARK);
+
+        return;
+    }
+
+    if (o_armed_ptr->k_idx) {
+        int basedam = ((o_armed_ptr->dd + target_ptr->to_dd[0]) * (o_armed_ptr->ds + target_ptr->to_ds[0] + 1));
+        dam = basedam / 2 + o_armed_ptr->to_d + target_ptr->to_d[0];
+    }
+
+    o_armed_ptr = &target_ptr->inventory_list[INVEN_BODY];
+    if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr))
+        dam *= 2;
+
+    dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
+    msg_format(_("影のオーラが%^sに反撃した！", "Enveloping shadows attack %^s."), monap_ptr->m_name);
+    if (mon_take_hit(target_ptr, monap_ptr->m_idx, dam, &monap_ptr->fear, _("は倒れた。", " is destroyed."))) {
+        monap_ptr->blinked = FALSE;
+        monap_ptr->alive = FALSE;
+        return;
+    }
+
+    BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
+    EFFECT_ID typ[4][2] = { { INVEN_HEAD, GF_OLD_CONF }, { INVEN_LARM, GF_OLD_SLEEP }, { INVEN_HANDS, GF_TURN_ALL }, { INVEN_FEET, GF_OLD_SLOW } };
+
+    /* Some cursed armours gives an extra effect */
+    for (int j = 0; j < 4; j++) {
+        o_armed_ptr = &target_ptr->inventory_list[typ[j][0]];
+        if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr) && object_is_armour(o_armed_ptr))
+            project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, (target_ptr->lev * 2), typ[j][1], flg, -1);
+    }
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -437,43 +480,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 mirror_shards_by_monster_attack(target_ptr, monap_ptr);
                 aura_holy_by_monster_attack(target_ptr, monap_ptr);
                 aura_force_by_monster_attack(target_ptr, monap_ptr);
-                if (hex_spelling(target_ptr, HEX_SHADOW_CLOAK) && monap_ptr->alive && !target_ptr->is_dead) {
-                    HIT_POINT dam = 1;
-                    object_type *o_armed_ptr = &target_ptr->inventory_list[INVEN_RARM];
-                    if (!(r_ptr->flagsr & RFR_RES_ALL || r_ptr->flagsr & RFR_RES_DARK)) {
-                        if (o_armed_ptr->k_idx) {
-                            int basedam = ((o_armed_ptr->dd + target_ptr->to_dd[0]) * (o_armed_ptr->ds + target_ptr->to_ds[0] + 1));
-                            dam = basedam / 2 + o_armed_ptr->to_d + target_ptr->to_d[0];
-                        }
-
-                        o_armed_ptr = &target_ptr->inventory_list[INVEN_BODY];
-                        if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr))
-                            dam *= 2;
-
-                        dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
-                        msg_format(_("影のオーラが%^sに反撃した！", "Enveloping shadows attack %^s."), monap_ptr->m_name);
-                        if (mon_take_hit(target_ptr, m_idx, dam, &monap_ptr->fear, _("は倒れた。", " is destroyed."))) {
-                            monap_ptr->blinked = FALSE;
-                            monap_ptr->alive = FALSE;
-                        } else /* monster does not dead */
-                        {
-                            int j;
-                            BIT_FLAGS flg = PROJECT_STOP | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL;
-                            EFFECT_ID typ[4][2]
-                                = { { INVEN_HEAD, GF_OLD_CONF }, { INVEN_LARM, GF_OLD_SLEEP }, { INVEN_HANDS, GF_TURN_ALL }, { INVEN_FEET, GF_OLD_SLOW } };
-
-                            /* Some cursed armours gives an extra effect */
-                            for (j = 0; j < 4; j++) {
-                                o_armed_ptr = &target_ptr->inventory_list[typ[j][0]];
-                                if ((o_armed_ptr->k_idx) && object_is_cursed(o_armed_ptr) && object_is_armour(o_armed_ptr))
-                                    project(target_ptr, 0, 0, monap_ptr->m_ptr->fy, monap_ptr->m_ptr->fx, (target_ptr->lev * 2), typ[j][1], flg, -1);
-                            }
-                        }
-                    } else {
-                        if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
-                            r_ptr->r_flagsr |= (RFR_RES_ALL | RFR_RES_DARK);
-                    }
-                }
+                aura_shadow_by_monster_attack(target_ptr, monap_ptr);
             }
         }
         else {
