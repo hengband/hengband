@@ -440,6 +440,25 @@ static void thief_teleport(player_type *target_ptr, monap_type *monap_ptr)
     }
 }
 
+static void postprocess_monster_blows(player_type *target_ptr, monap_type *monap_ptr)
+{
+    revenge_store(target_ptr, monap_ptr->get_damage);
+    eyes_on_eyes(target_ptr, monap_ptr);
+    musou_counterattack(target_ptr, monap_ptr);
+    thief_teleport(target_ptr, monap_ptr);
+    monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
+    if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
+        r_ptr->r_deaths++;
+
+    if (monap_ptr->m_ptr->ml && monap_ptr->fear && monap_ptr->alive && !target_ptr->is_dead) {
+        sound(SOUND_FLEE);
+        msg_format(_("%^sは恐怖で逃げ出した！", "%^s flees in terror!"), monap_ptr->m_name);
+    }
+
+    if (target_ptr->special_defense & KATA_IAI)
+        set_action(target_ptr, ACTION_NONE);
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -450,6 +469,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     monap_type tmp_monap;
     monap_type *monap_ptr = initialize_monap_type(target_ptr, &tmp_monap, m_idx);
     check_no_blow(target_ptr, monap_ptr);
+
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     monap_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
     monster_desc(target_ptr, monap_ptr->m_name, monap_ptr->m_ptr, 0);
@@ -469,20 +489,6 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     if (process_monster_blows(target_ptr, monap_ptr))
         return TRUE;
 
-    revenge_store(target_ptr, monap_ptr->get_damage);
-    eyes_on_eyes(target_ptr, monap_ptr);
-    musou_counterattack(target_ptr, monap_ptr);
-    thief_teleport(target_ptr, monap_ptr);
-    if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !target_ptr->current_floor_ptr->inside_arena)
-        r_ptr->r_deaths++;
-
-    if (monap_ptr->m_ptr->ml && monap_ptr->fear && monap_ptr->alive && !target_ptr->is_dead) {
-        sound(SOUND_FLEE);
-        msg_format(_("%^sは恐怖で逃げ出した！", "%^s flees in terror!"), monap_ptr->m_name);
-    }
-
-    if (target_ptr->special_defense & KATA_IAI)
-        set_action(target_ptr, ACTION_NONE);
-
+    postprocess_monster_blows(target_ptr, monap_ptr);
     return TRUE;
 }
