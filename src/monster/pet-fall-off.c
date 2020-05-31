@@ -31,13 +31,11 @@ void check_fall_off_horse(player_type *target_ptr, monap_type *monap_ptr)
  */
 bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force)
 {
-    DIRECTION i;
-    POSITION y, x, oy, ox, sy = 0, sx = 0;
+    POSITION sy = 0, sx = 0;
     int sn = 0;
     GAME_TEXT m_name[MAX_NLEN];
     monster_type *m_ptr = &creature_ptr->current_floor_ptr->m_list[creature_ptr->riding];
     monster_race *r_ptr = &r_info[m_ptr->r_idx];
-    bool fall_dam = FALSE;
 
     if (!creature_ptr->riding)
         return FALSE;
@@ -51,13 +49,12 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
             int ridinglevel = r_ptr->level;
 
             /* 落馬のしやすさ */
-            int rakubalevel = r_ptr->level;
+            int fall_off_level = r_ptr->level;
             if (creature_ptr->riding_ryoute)
-                rakubalevel += 20;
+                fall_off_level += 20;
 
             if ((cur < max) && (max > 1000) && (dam / 2 + ridinglevel) > (cur / 30 + 10)) {
                 int inc = 0;
-
                 if (ridinglevel > (cur / 100 + 15))
                     inc += 1 + (ridinglevel - cur / 100 - 15);
                 else
@@ -67,7 +64,7 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
             }
 
             /* レベルの低い乗馬からは落馬しにくい */
-            if (randint0(dam / 2 + rakubalevel * 2) < cur / 30 + 10) {
+            if (randint0(dam / 2 + fall_off_level * 2) < cur / 30 + 10) {
                 if ((((creature_ptr->pclass == CLASS_BEASTMASTER) || (creature_ptr->pclass == CLASS_CAVALRY)) && !creature_ptr->riding_ryoute)
                     || !one_in_(creature_ptr->lev * (creature_ptr->riding_ryoute ? 2 : 3) + 30)) {
                     return FALSE;
@@ -76,12 +73,11 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
         }
 
         /* Check around the player */
-        for (i = 0; i < 8; i++) {
+        for (DIRECTION i = 0; i < 8; i++) {
+            POSITION y = creature_ptr->y + ddy_ddd[i];
+            POSITION x = creature_ptr->x + ddx_ddd[i];
+
             grid_type *g_ptr;
-
-            y = creature_ptr->y + ddy_ddd[i];
-            x = creature_ptr->x + ddx_ddd[i];
-
             g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
 
             if (g_ptr->m_idx)
@@ -107,6 +103,7 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
             sy = y;
             sx = x;
         }
+
         if (!sn) {
             monster_desc(creature_ptr, m_name, m_ptr, 0);
             msg_format(_("%sから振り落とされそうになって、壁にぶつかった。", "You have nearly fallen from %s, but bumped into wall."), m_name);
@@ -114,19 +111,12 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
             return FALSE;
         }
 
-        oy = creature_ptr->y;
-        ox = creature_ptr->x;
-
+        POSITION old_y = creature_ptr->y;
+        POSITION old_x = creature_ptr->x;
         creature_ptr->y = sy;
         creature_ptr->x = sx;
-
-        /* Redraw the old spot */
-        lite_spot(creature_ptr, oy, ox);
-
-        /* Redraw the new spot */
+        lite_spot(creature_ptr, old_y, old_x);
         lite_spot(creature_ptr, creature_ptr->y, creature_ptr->x);
-
-        /* Check for new panel */
         verify_panel(creature_ptr);
     }
 
@@ -143,6 +133,7 @@ bool process_fall_off_horse(player_type *creature_ptr, HIT_POINT dam, bool force
     /* Update health track of mount */
     creature_ptr->redraw |= (PR_UHEALTH);
 
+    bool fall_dam = FALSE;
     if (creature_ptr->levitation && !force) {
         monster_desc(creature_ptr, m_name, m_ptr, 0);
         msg_format(_("%sから落ちたが、空中でうまく体勢を立て直して着地した。", "You are thrown from %s, but make a good landing."), m_name);
