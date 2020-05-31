@@ -19,5 +19,6 @@ monap_type *initialize_monap_type(player_type *target_ptr, monap_type *monap_ptr
     monap_ptr->do_silly_attack = one_in_(2) && target_ptr->image;
     monap_ptr->obvious = FALSE;
     monap_ptr->get_damage = 0;
+    monap_ptr->alive = FALSE;
     return monap_ptr;
 }

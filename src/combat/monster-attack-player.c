@@ -230,7 +230,6 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     monap_type *monap_ptr = initialize_monap_type(target_ptr, &tmp_monap, m_idx);
 
     bool fear = FALSE;
-    bool alive = TRUE;
     check_no_blow(target_ptr, monap_ptr);
     monster_race *r_ptr = &r_info[monap_ptr->m_ptr->r_idx];
     monap_ptr->rlev = ((r_ptr->level >= 1) ? r_ptr->level : 1);
@@ -290,19 +289,19 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
 
                 if (mon_take_hit(target_ptr, m_idx, monap_ptr->m_ptr->hp + 1, &fear, NULL)) {
                     monap_ptr->blinked = FALSE;
-                    alive = FALSE;
+                    monap_ptr->alive = FALSE;
                 }
             }
 
             if (monap_ptr->touched) {
-                if (target_ptr->sh_fire && alive && !target_ptr->is_dead) {
+                if (target_ptr->sh_fire && monap_ptr->alive && !target_ptr->is_dead) {
                     if (!(r_ptr->flagsr & RFR_EFF_IM_FIRE_MASK)) {
                         HIT_POINT dam = damroll(2, 6);
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sは突然熱くなった！", "%^s is suddenly very hot!"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は灰の山になった。", " turns into a pile of ash."))) {
                             monap_ptr->blinked = FALSE;
-                            alive = FALSE;
+                            monap_ptr->alive = FALSE;
                         }
 
                     } else {
@@ -311,14 +310,14 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     }
                 }
 
-                if (target_ptr->sh_elec && alive && !target_ptr->is_dead) {
+                if (target_ptr->sh_elec && monap_ptr->alive && !target_ptr->is_dead) {
                     if (!(r_ptr->flagsr & RFR_EFF_IM_ELEC_MASK)) {
                         HIT_POINT dam = damroll(2, 6);
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sは電撃をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は燃え殻の山になった。", " turns into a pile of cinder."))) {
                             monap_ptr->blinked = FALSE;
-                            alive = FALSE;
+                            monap_ptr->alive = FALSE;
                         }
                     } else {
                         if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
@@ -326,14 +325,14 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     }
                 }
 
-                if (target_ptr->sh_cold && alive && !target_ptr->is_dead) {
+                if (target_ptr->sh_cold && monap_ptr->alive && !target_ptr->is_dead) {
                     if (!(r_ptr->flagsr & RFR_EFF_IM_COLD_MASK)) {
                         HIT_POINT dam = damroll(2, 6);
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sは冷気をくらった！", "%^s is very cold!"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は凍りついた。", " was frozen."))) {
                             monap_ptr->blinked = FALSE;
-                            alive = FALSE;
+                            monap_ptr->alive = FALSE;
                         }
                     } else {
                         if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
@@ -341,14 +340,14 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     }
                 }
 
-                if (target_ptr->dustrobe && alive && !target_ptr->is_dead) {
+                if (target_ptr->dustrobe && monap_ptr->alive && !target_ptr->is_dead) {
                     if (!(r_ptr->flagsr & RFR_EFF_RES_SHAR_MASK)) {
                         HIT_POINT dam = damroll(2, 6);
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sは鏡の破片をくらった！", "%^s gets zapped!"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("はズタズタになった。", " had torn to pieces."))) {
                             monap_ptr->blinked = FALSE;
-                            alive = FALSE;
+                            monap_ptr->alive = FALSE;
                         }
                     } else {
                         if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
@@ -360,7 +359,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     }
                 }
 
-                if (target_ptr->tim_sh_holy && alive && !target_ptr->is_dead) {
+                if (target_ptr->tim_sh_holy && monap_ptr->alive && !target_ptr->is_dead) {
                     if (r_ptr->flags3 & RF3_EVIL) {
                         if (!(r_ptr->flagsr & RFR_RES_ALL)) {
                             HIT_POINT dam = damroll(2, 6);
@@ -368,7 +367,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                             msg_format(_("%^sは聖なるオーラで傷ついた！", "%^s is injured by holy power!"), monap_ptr->m_name);
                             if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
                                 monap_ptr->blinked = FALSE;
-                                alive = FALSE;
+                                monap_ptr->alive = FALSE;
                             }
                             if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
                                 r_ptr->r_flags3 |= RF3_EVIL;
@@ -379,14 +378,14 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     }
                 }
 
-                if (target_ptr->tim_sh_touki && alive && !target_ptr->is_dead) {
+                if (target_ptr->tim_sh_touki && monap_ptr->alive && !target_ptr->is_dead) {
                     if (!(r_ptr->flagsr & RFR_RES_ALL)) {
                         HIT_POINT dam = damroll(2, 6);
                         dam = mon_damage_mod(target_ptr, monap_ptr->m_ptr, dam, FALSE);
                         msg_format(_("%^sが鋭い闘気のオーラで傷ついた！", "%^s is injured by the Force"), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
                             monap_ptr->blinked = FALSE;
-                            alive = FALSE;
+                            monap_ptr->alive = FALSE;
                         }
                     } else {
                         if (is_original_ap_and_seen(target_ptr, monap_ptr->m_ptr))
@@ -394,7 +393,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                     }
                 }
 
-                if (hex_spelling(target_ptr, HEX_SHADOW_CLOAK) && alive && !target_ptr->is_dead) {
+                if (hex_spelling(target_ptr, HEX_SHADOW_CLOAK) && monap_ptr->alive && !target_ptr->is_dead) {
                     HIT_POINT dam = 1;
                     object_type *o_armed_ptr = &target_ptr->inventory_list[INVEN_RARM];
                     if (!(r_ptr->flagsr & RFR_RES_ALL || r_ptr->flagsr & RFR_RES_DARK)) {
@@ -411,7 +410,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                         msg_format(_("影のオーラが%^sに反撃した！", "Enveloping shadows attack %^s."), monap_ptr->m_name);
                         if (mon_take_hit(target_ptr, m_idx, dam, &fear, _("は倒れた。", " is destroyed."))) {
                             monap_ptr->blinked = FALSE;
-                            alive = FALSE;
+                            monap_ptr->alive = FALSE;
                         } else /* monster does not dead */
                         {
                             int j;
@@ -520,7 +519,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
             set_tim_eyeeye(target_ptr, target_ptr->tim_eyeeye - 5, TRUE);
     }
 
-    if ((target_ptr->counter || (target_ptr->special_defense & KATA_MUSOU)) && alive && !target_ptr->is_dead && monap_ptr->m_ptr->ml && (target_ptr->csp > 7)) {
+    if ((target_ptr->counter || (target_ptr->special_defense & KATA_MUSOU)) && monap_ptr->alive && !target_ptr->is_dead && monap_ptr->m_ptr->ml && (target_ptr->csp > 7)) {
         char m_target_name[MAX_NLEN];
         monster_desc(target_ptr, m_target_name, monap_ptr->m_ptr, 0);
         target_ptr->csp -= 7;
@@ -530,7 +529,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
         target_ptr->redraw |= (PR_MANA);
     }
 
-    if (monap_ptr->blinked && alive && !target_ptr->is_dead) {
+    if (monap_ptr->blinked && monap_ptr->alive && !target_ptr->is_dead) {
         if (teleport_barrier(target_ptr, m_idx)) {
             msg_print(_("泥棒は笑って逃げ...ようとしたがバリアに防がれた。", "The thief flees laughing...? But a magic barrier obstructs it."));
         } else {
@@ -542,7 +541,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
     if (target_ptr->is_dead && (r_ptr->r_deaths < MAX_SHORT) && !floor_ptr->inside_arena)
         r_ptr->r_deaths++;
 
-    if (monap_ptr->m_ptr->ml && fear && alive && !target_ptr->is_dead) {
+    if (monap_ptr->m_ptr->ml && fear && monap_ptr->alive && !target_ptr->is_dead) {
         sound(SOUND_FLEE);
         msg_format(_("%^sは恐怖で逃げ出した！", "%^s flees in terror!"), monap_ptr->m_name);
     }

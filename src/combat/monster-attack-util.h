@@ -29,6 +29,7 @@ typedef struct monap_type {
     HIT_POINT get_damage;
     GAME_TEXT ddesc[80];
     ARMOUR_CLASS ac;
+    bool alive;
 } monap_type;
 
 monap_type *initialize_monap_type(player_type *target_ptr, monap_type *monap_ptr, MONSTER_IDX m_idx);
