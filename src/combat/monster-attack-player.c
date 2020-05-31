@@ -21,6 +21,7 @@
 #include "main/sound-definitions-table.h"
 #include "mind/racial-samurai.h"
 #include "monster/monster-status.h"
+#include "monster/pet-fall-off.h"
 #include "object/object-hook.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
@@ -347,23 +348,6 @@ static void increase_blow_type_seen(player_type *target_ptr, monap_type *monap_p
 
     if (r_ptr->r_blows[monap_ptr->ap_cnt] < MAX_UCHAR)
         r_ptr->r_blows[monap_ptr->ap_cnt]++;
-}
-
-/*!
- * @brief モンスターから直接攻撃を受けた時に落馬するかどうかを判定し、判定アウトならば落馬させる
- * @param target_ptr プレーヤーへの参照ポインタ
- * @param monap_ptr モンスターからプレーヤーへの直接攻撃構造体への参照ポインタ
- * @return なし
- */
-static void check_fall_off_horse(player_type *target_ptr, monap_type *monap_ptr)
-{
-    if ((target_ptr->riding == 0) || (monap_ptr->damage == 0))
-        return;
-
-    char m_steed_name[MAX_NLEN];
-    monster_desc(target_ptr, m_steed_name, &target_ptr->current_floor_ptr->m_list[target_ptr->riding], 0);
-    if (process_fall_off_horse(target_ptr, (monap_ptr->damage > 200) ? 200 : monap_ptr->damage, FALSE))
-        msg_format(_("%^sから落ちてしまった！", "You have fallen from %s."), m_steed_name);
 }
 
 static bool process_monster_blows(player_type *target_ptr, monap_type *monap_ptr)

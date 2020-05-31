@@ -24,7 +24,7 @@
 
 #include "io/write-diary.h"
 #include "cmd/cmd-dump.h"
-#include "cmd/cmd-pet.h"
+#include "monster/pet-fall-off.h"
 #include "monster/creature.h"
 #include "combat/melee-postprocess.h"
 #include "spell/spells-summon.h"

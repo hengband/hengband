@@ -209,6 +209,7 @@
     <ClCompile Include="..\..\src\mind\racial-samurai.c" />
     <ClCompile Include="..\..\src\mind\samurai-slaying.c" />
     <ClCompile Include="..\..\src\mind\surprise-attack.c" />
+    <ClCompile Include="..\..\src\monster\pet-fall-off.c" />
     <ClCompile Include="..\..\src\mspell\mspell-floor.c" />
     <ClCompile Include="..\..\src\mspell\mspell-particularity.c" />
     <ClCompile Include="..\..\src\mspell\mspell-special.c" />
@@ -486,6 +487,7 @@
     <ClInclude Include="..\..\src\mind\racial-samurai.h" />
     <ClInclude Include="..\..\src\mind\samurai-slaying.h" />
     <ClInclude Include="..\..\src\mind\surprise-attack.h" />
+    <ClInclude Include="..\..\src\monster\pet-fall-off.h" />
     <ClInclude Include="..\..\src\mspell\assign-monster-spell.h" />
     <ClInclude Include="..\..\src\mspell\mspell-floor.h" />
     <ClInclude Include="..\..\src\mspell\mspell-particularity.h" />

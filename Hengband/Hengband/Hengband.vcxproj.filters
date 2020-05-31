@@ -1061,6 +1061,9 @@
     <ClCompile Include="..\..\src\combat\aura-counterattack.c">
       <Filter>combat</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\monster\pet-fall-off.c">
+      <Filter>monster</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -2271,6 +2274,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\combat\aura-counterattack.h">
       <Filter>combat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\pet-fall-off.h">
+      <Filter>monster</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

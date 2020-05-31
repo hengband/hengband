@@ -1,15 +1,13 @@
-﻿#include "system/angband.h"
-#include "effect/effect-monster-util.h"
-#include "effect/effect-monster-domination.h"
+﻿#include "effect/effect-monster-domination.h"
+#include "dungeon/quest.h"
+#include "effect/spells-effect-util.h"
 #include "floor/floor.h"
+#include "monster/monster-race-hook.h"
+#include "monster/monster-status.h"
+#include "monster/pet-fall-off.h"
+#include "object/trc-types.h"
 #include "player/player-effects.h"
 #include "spell/spells-diceroll.h"
-#include "monster/monster-status.h"
-#include "effect/spells-effect-util.h"
-#include "cmd/cmd-pet.h" // 暫定、後で消すかも.
-#include "dungeon/quest.h"
-#include "monster/monster-race-hook.h"
-#include "object/trc-types.h"
 
 static void effect_monster_domination_corrupted_addition(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

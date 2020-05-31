@@ -186,6 +186,7 @@ hengband_SOURCES = \
 	monster/monster-status.c monster/monster-status.h \
 	monster/monster1.c monster/monster2.c \
 	monster/horror-descriptions.c monster/horror-descriptions.h \
+	monster/pet-fall-off.c monster/pet-fall-off.h \
 	\
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \

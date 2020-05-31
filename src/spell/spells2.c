@@ -22,6 +22,7 @@
 #include "object/artifact.h"
 #include "io/write-diary.h"
 #include "cmd/cmd-pet.h"
+#include "monster/pet-fall-off.h"
 #include "cmd/cmd-dump.h"
 #include "effect/effect-characteristics.h"
 #include "grid/grid.h"
