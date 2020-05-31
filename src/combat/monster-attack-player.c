@@ -401,6 +401,20 @@ static void aura_shadow_by_monster_attack(player_type *target_ptr, monap_type *m
     }
 }
 
+void process_aura_counterattack(player_type *target_ptr, monap_type *monap_ptr)
+{
+    if (!monap_ptr->touched)
+        return;
+
+    aura_fire_by_monster_attack(target_ptr, monap_ptr);
+    aura_elec_by_monster_attack(target_ptr, monap_ptr);
+    aura_cold_by_monster_attack(target_ptr, monap_ptr);
+    aura_shards_by_monster_attack(target_ptr, monap_ptr);
+    aura_holy_by_monster_attack(target_ptr, monap_ptr);
+    aura_force_by_monster_attack(target_ptr, monap_ptr);
+    aura_shadow_by_monster_attack(target_ptr, monap_ptr);
+}
+
 /*!
  * @brief モンスターからプレイヤーへの打撃処理 / Attack the player via physical attacks.
  * @param m_idx 打撃を行うモンスターのID
@@ -473,15 +487,7 @@ bool make_attack_normal(player_type *target_ptr, MONSTER_IDX m_idx)
                 }
             }
 
-            if (monap_ptr->touched) {
-                aura_fire_by_monster_attack(target_ptr, monap_ptr);
-                aura_elec_by_monster_attack(target_ptr, monap_ptr);
-                aura_cold_by_monster_attack(target_ptr, monap_ptr);
-                aura_shards_by_monster_attack(target_ptr, monap_ptr);
-                aura_holy_by_monster_attack(target_ptr, monap_ptr);
-                aura_force_by_monster_attack(target_ptr, monap_ptr);
-                aura_shadow_by_monster_attack(target_ptr, monap_ptr);
-            }
+            process_aura_counterattack(target_ptr, monap_ptr);
         }
         else {
             switch (monap_ptr->method) {
