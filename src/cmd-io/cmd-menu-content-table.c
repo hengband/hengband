@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "cmd-io/cmd-menu-content-table.h"
+﻿#include "cmd-io/cmd-menu-content-table.h"
 
 special_menu_content special_menu_info[MAX_SPECIAL_MENU_NUM] = {
     { _("超能力/特殊能力", "MindCraft/Special"), 0, 0, MENU_CLASS, CLASS_MINDCRAFTER },

@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 /*** Option Definitions ***/
 
 #define OPT_PAGE_INPUT          1

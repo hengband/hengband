@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "cmd-io/cmd-diary.h"
+﻿#include "cmd-io/cmd-diary.h"
 #include "io/chuukei.h"
 #include "core/show-file.h"
 #include "io/files-util.h"

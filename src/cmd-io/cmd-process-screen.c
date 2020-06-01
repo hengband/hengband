@@ -5,7 +5,6 @@
 * @Author Hourier
 */
 
-#include "system/angband.h"
 #include "cmd-io/cmd-process-screen.h"
 #include "cmd/cmd-draw.h"
 #include "io/files-util.h"

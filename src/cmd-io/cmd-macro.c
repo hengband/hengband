@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "cmd-io/cmd-macro.h"
+﻿#include "cmd-io/cmd-macro.h"
 #include "cmd-io/cmd-gameoption.h"
 #include "io/files-util.h"
 #include "io/read-pref-file.h"

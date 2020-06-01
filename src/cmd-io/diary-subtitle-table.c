@@ -5,7 +5,7 @@
  */
 
 #include "system/angband.h"
-#include "diary-subtitle-table.h"
+#include "cmd-io/diary-subtitle-table.h"
 
 concptr subtitle[MAX_SUBTITLE] = {
 #ifdef JP

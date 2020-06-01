@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 typedef struct menu_content {
     concptr name;
     byte cmd;

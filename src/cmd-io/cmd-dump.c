@@ -30,7 +30,6 @@
  * </pre>
  */
 
-#include "system/angband.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd/dump-util.h"
 #include "floor/floor.h"
