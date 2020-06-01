@@ -35,6 +35,5 @@ void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER 
 void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item);
 bool inven_carry_okay(object_type *o_ptr);
 bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr);
-s16b inven_carry(player_type *owner_ptr, object_type *o_ptr);
 INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER amt);
 void floor_item_describe(player_type *player_ptr, INVENTORY_IDX item); // 暫定、元々object2.c の内部からのみ呼ばれていた.

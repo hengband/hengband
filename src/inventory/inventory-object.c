@@ -1,5 +1,6 @@
 ﻿#include "inventory/inventory-object.h"
 #include "object/object-flavor.h"
+#include "object/object-mark-types.h"
 #include "object/object-value.h"
 #include "object/object2.h" // 暫定、相互参照している.
 #include "player/player-effects.h" // 暫定、相互参照している.
@@ -255,4 +256,86 @@ void reorder_pack(player_type *owner_ptr)
 
     if (flag)
         msg_print(_("ザックの中のアイテムを並べ直した。", "You reorder some items in your pack."));
+}
+
+/*!
+ * @brief オブジェクトをプレイヤーが拾って所持スロットに納めるメインルーチン /
+ * Add an item to the players inventory, and return the slot used.
+ * @param o_ptr 拾うオブジェクトの構造体参照ポインタ
+ * @return 収められた所持スロットのID、拾うことができなかった場合-1を返す。
+ * @details
+ * If the new item can combine with an existing item in the inventory,\n
+ * it will do so, using "object_similar()" and "object_absorb()", else,\n
+ * the item will be placed into the "proper" location in the inventory.\n
+ *\n
+ * This function can be used to "over-fill" the player's pack, but only\n
+ * once, and such an action must trigger the "overflow" code immediately.\n
+ * Note that when the pack is being "over-filled", the new item must be\n
+ * placed into the "overflow" slot, and the "overflow" must take place\n
+ * before the pack is reordered, but (optionally) after the pack is\n
+ * combined.  This may be tricky.  See "dungeon.c" for info.\n
+ *\n
+ * Note that this code must remove any location/stack information\n
+ * from the object once it is placed into the inventory.\n
+ */
+s16b inven_carry(player_type *owner_ptr, object_type *o_ptr)
+{
+    INVENTORY_IDX i, j, k;
+    INVENTORY_IDX n = -1;
+
+    object_type *j_ptr;
+    for (j = 0; j < INVEN_PACK; j++) {
+        j_ptr = &owner_ptr->inventory_list[j];
+        if (!j_ptr->k_idx)
+            continue;
+
+        n = j;
+        if (object_similar(j_ptr, o_ptr)) {
+            object_absorb(j_ptr, o_ptr);
+
+            owner_ptr->total_weight += (o_ptr->number * o_ptr->weight);
+            owner_ptr->update |= (PU_BONUS);
+            owner_ptr->window |= (PW_INVEN);
+            return (j);
+        }
+    }
+
+    if (owner_ptr->inven_cnt > INVEN_PACK)
+        return -1;
+
+    for (j = 0; j <= INVEN_PACK; j++) {
+        j_ptr = &owner_ptr->inventory_list[j];
+        if (!j_ptr->k_idx)
+            break;
+    }
+
+    i = j;
+    if (i < INVEN_PACK) {
+        s32b o_value = object_value(o_ptr);
+        for (j = 0; j < INVEN_PACK; j++) {
+            if (object_sort_comp(o_ptr, o_value, &owner_ptr->inventory_list[j]))
+                break;
+        }
+
+        i = j;
+        for (k = n; k >= i; k--) {
+            object_copy(&owner_ptr->inventory_list[k + 1], &owner_ptr->inventory_list[k]);
+        }
+
+        object_wipe(&owner_ptr->inventory_list[i]);
+    }
+
+    object_copy(&owner_ptr->inventory_list[i], o_ptr);
+    j_ptr = &owner_ptr->inventory_list[i];
+    j_ptr->next_o_idx = 0;
+    j_ptr->held_m_idx = 0;
+    j_ptr->iy = j_ptr->ix = 0;
+    j_ptr->marked = OM_TOUCHED;
+
+    owner_ptr->total_weight += (j_ptr->number * j_ptr->weight);
+    owner_ptr->inven_cnt++;
+    owner_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
+    owner_ptr->window |= (PW_INVEN);
+
+    return i;
 }

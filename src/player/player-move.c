@@ -151,6 +151,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
+#include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
