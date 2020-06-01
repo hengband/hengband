@@ -1,6 +1,5 @@
-﻿#include "system/angband.h"
+﻿#include "io-dump/dump-remover.h"
 #include "io-dump/dump-util.h"
-#include "io/dump-remover.h"
 #include "io/read-pref-file.h"
 
 /*!

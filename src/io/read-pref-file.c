@@ -15,7 +15,7 @@
  */
 
 #include "system/angband.h"
-#include "io/dump-remover.h"
+#include "io-dump/dump-remover.h"
 #include "io/read-pref-file.h"
 #include "io/interpret-pref-file.h"
 #include "autopick/autopick-pref-processor.h"

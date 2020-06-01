@@ -104,15 +104,11 @@ hengband_SOURCES = \
 	player/temporary-resistances.c player/temporary-resistances.h \
 	player/digestion-processor.c player/digestion-processor.h \
 	\
-	io/character-dump.c io/character-dump.h \
-	io/dump-remover.c io/dump-remover.h \
 	io/files-util.c io/files-util.h \
 	io/gf-descriptions.c io/gf-descriptions.h \
 	io/targeting.c io/targeting.h \
 	io/tokenizer.c io/tokenizer.h \
 	io/interpret-pref-file.c io/interpret-pref-file.h \
-	io/player-status-dump.c io/player-status-dump.h \
-	io/special-class-dump.c io/special-class-dump.h \
 	io/read-pref-file.c io/read-pref-file.h \
 	io/exit-panic.c io/exit-panic.h \
 	io/write-diary.c io/write-diary.h \
@@ -127,6 +123,12 @@ hengband_SOURCES = \
 	io/chuukei.c io/chuukei.h \
 	io/pref-file-expressor.c io/pref-file-expressor.h \
 	\
+	io-dump/character-dump.c io-dump/character-dump.h \
+	io-dump/dump-remover.c io-dump/dump-remover.h \
+	io-dump/dump-util.c io-dump/dump-util.h \
+	io-dump/player-status-dump.c io-dump/player-status-dump.h \
+	io-dump/special-class-dump.c io-dump/special-class-dump.h \
+	\
 	core/game-play.c core/game-play.h \
 	core/show-file.c core/show-file.h \
 	core/stuff-handler.c core/stuff-handler.h \
@@ -140,6 +142,7 @@ hengband_SOURCES = \
 	core/player-processor.c core/player-processor.h \
 	core/scores.c core/scores.h \
 	core/sort.c core/sort.h \
+	\
 	dungeon/dungeon.c dungeon/dungeon.h \
 	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \
 	dungeon/dungeon-file.c dungeon/dungeon-file.h \
@@ -399,8 +402,6 @@ hengband_SOURCES = \
 	combat/shoot.c combat/shoot.h \
 	combat/snipe.c combat/snipe.h \
 	\
-	io-dump/dump-util.c io-dump/dump-util.h \
-	\
 	term/gameterm.c term/gameterm.h \
 	term/z-form.c term/z-form.h term/z-rand.c term/z-rand.h \
 	term/z-term.c term/z-term.h term/z-util.c term/z-util.h \
@@ -427,9 +428,9 @@ LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat -Icore -Idungeon \
-	-Ieffect -Ifloor -Igrid -Iinventory -Iio -Iknowledge -Imarket -Imind \
-	-Imonster -Imspell -Imutation -Iobject -Ipet -Iplayer -Irealm -Iroom \
-	-Ispell -Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
+	-Ieffect -Ifloor -Igrid -Iinventory -Iio -Iio-dump -Iknowledge -Imarket \
+	-Imind -Imonster -Imspell -Imutation -Iobject -Ipet -Iplayer -Irealm \
+	-Iroom -Ispell -Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

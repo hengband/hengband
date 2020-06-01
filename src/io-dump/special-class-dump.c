@@ -4,8 +4,7 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
-#include "special-class-dump.h"
+#include "io-dump/special-class-dump.h"
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-item/cmd-smith.h"
 #include "object/object2.h"

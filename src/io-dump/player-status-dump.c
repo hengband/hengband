@@ -1,7 +1,4 @@
-﻿#include "system/angband.h"
-#include "io/files-util.h"
-#include "io/player-status-dump.h"
-
+﻿#include "io-dump/player-status-dump.h"
 
 /*!
  * @brief 画面番号を指定してダンプする
