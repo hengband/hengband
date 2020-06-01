@@ -17,6 +17,7 @@
 #include "grid/grid.h"
 #include "io/files-util.h"
 #include "monster/monster.h"
+#include "object/object-appraiser.h"
 #include "object/object-boost.h"
 #include "object/object-curse.h"
 #include "object/object-ego.h"

@@ -1073,6 +1073,9 @@
     <ClCompile Include="..\..\src\view\object-describer.c">
       <Filter>view</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\object-appraiser.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2295,6 +2298,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\view\object-describer.h">
       <Filter>view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-appraiser.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

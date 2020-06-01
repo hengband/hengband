@@ -3,6 +3,7 @@
 #include "birth/initial-equipments-table.h"
 #include "monster/monster-race-hook.h"
 #include "object/item-apply-magic.h"
+#include "object/object-appraiser.h"
 #include "object/object-ego.h"
 #include "object/object-kind.h"
 #include "object/object2.h"

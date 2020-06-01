@@ -42,6 +42,7 @@
 #include "object/artifact.h"
 #include "object/item-feeling.h"
 #include "object/item-use-flags.h"
+#include "object/object-appraiser.h"
 #include "object/object-boost.h"
 #include "object/object-ego.h"
 #include "object/object-flavor.h"

@@ -5,6 +5,7 @@
 #include "grid/trap.h"
 #include "main/sound-definitions-table.h"
 #include "object/item-apply-magic.h"
+#include "object/object-appraiser.h"
 #include "object/object2.h"
 #include "object/sv-other-types.h"
 #include "player/player-class.h"

@@ -7,6 +7,7 @@
 #include "store/store-util.h"
 #include "object/item-apply-magic.h"
 #include "object/item-feeling.h"
+#include "object/object-appraiser.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object2.h"

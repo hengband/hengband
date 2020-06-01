@@ -294,6 +294,7 @@ hengband_SOURCES = \
 	object/death-scythe.c object/death-scythe.h \
 	object/object1.c object/object1.h \
 	object/object2.c object/object2.h \
+	object/object-appraiser.c object/object-appraiser.h \
 	object/object-boost.c object/object-boost.h \
 	object/object-broken.c object/object-broken.h \
 	object/object-curse.c object/object-curse.h \

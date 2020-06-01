@@ -12,6 +12,7 @@
 #include "main/sound-definitions-table.h"
 #include "mutation/mutation.h"
 #include "object/item-use-flags.h"
+#include "object/object-appraiser.h"
 #include "object/object-broken.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"

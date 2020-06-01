@@ -14,9 +14,6 @@ void delete_object(player_type *owner_ptr, POSITION y, POSITION x);
 
 OBJECT_IDX o_pop(floor_type *floor_ptr);
 OBJECT_IDX get_obj_num(player_type *o_ptr, DEPTH level, BIT_FLAGS mode);
-void object_known(object_type *o_ptr);
-void object_aware(player_type *owner_ptr, object_type *o_ptr);
-void object_tried(object_type *o_ptr);
 
 byte value_check_aux1(object_type *o_ptr);
 byte value_check_aux2(object_type *o_ptr);

@@ -8,6 +8,7 @@
 #include "floor/floor.h"
 #include "object/artifact.h"
 #include "object/item-apply-magic.h"
+#include "object/object-appraiser.h"
 #include "object/object-flavor.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"

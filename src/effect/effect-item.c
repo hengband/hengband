@@ -1,16 +1,16 @@
-﻿#include "system/angband.h"
-#include "effect-item.h"
-#include "object/object2.h"
+﻿#include "effect-item.h"
+#include "autopick/autopick.h"
+#include "object/object-appraiser.h"
+#include "object/object-broken.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "object/object-broken.h"
+#include "object/object-mark-types.h"
+#include "object/object2.h"
 #include "object/sv-other-types.h"
 #include "object/sv-scroll-types.h"
-#include "autopick/autopick.h"
+#include "object/tr-types.h"
 #include "spell/spells-type.h"
 #include "spell/spells3.h"
-#include "object/tr-types.h"
-#include "object/object-mark-types.h"
 
 /*!
  * @brief 汎用的なビーム/ボルト/ボール系によるアイテムオブジェクトへの効果処理 / Handle a beam/bolt/ball causing damage to a monster.

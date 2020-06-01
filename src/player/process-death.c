@@ -7,16 +7,17 @@
  */
 
 #include "process-death.h"
-#include "world/world.h"
+#include "core/stuff-handler.h"
 #include "floor/floor-town.h"
 #include "inventory/player-inventory.h"
 #include "object/item-use-flags.h"
-#include "object/object2.h"
+#include "object/object-appraiser.h"
 #include "object/object-flavor.h"
+#include "object/object2.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "term/gameterm.h"
-#include "core/stuff-handler.h"
+#include "world/world.h"
 
 #define GRAVE_LINE_WIDTH 31
 
