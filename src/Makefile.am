@@ -348,7 +348,6 @@ hengband_SOURCES = \
 	pet/pet-fall-off.c pet/pet-fall-off.h \
 	pet/pet-util.c pet/pet-util.h \
 	\
-	realm/realm.c realm/realm.h \
 	realm/realm-arcane.c realm/realm-arcane.h \
 	realm/realm-chaos.c realm/realm-chaos.h \
 	realm/realm-craft.c realm/realm-craft.h \
@@ -358,9 +357,11 @@ hengband_SOURCES = \
 	realm/realm-hex.c realm/realm-hex.h 
 	realm/realm-hissatsu.c realm/realm-hissatsu.h \
 	realm/realm-life.c realm/realm-life.h 
-	realm/realm-nature.c realm/realm-nature.h realm/realm-song.c \
-	realm/realm-song.h realm/realm-sorcery.c \
-	realm/realm-sorcery.h realm/realm-trump.c realm/realm-trump.h \
+	realm/realm-names-table.c realm/realm-names-table.h \
+	realm/realm-nature.c realm/realm-nature.h \
+	realm/realm-song.c realm/realm-song.h \
+	realm/realm-sorcery.c realm/realm-sorcery.h \
+	realm/realm-trump.c realm/realm-trump.h \
 	\
 	room/rooms.c room/rooms.h room/rooms-city.c room/rooms-city.h \
 	room/rooms-fractal.c room/rooms-fractal.h \

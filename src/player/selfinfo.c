@@ -21,7 +21,7 @@
 #include "player/player-races-table.h"
 #include "player/player-class.h"
 #include "player/avatar.h"
-#include "realm/realm.h"
+#include "realm/realm-names-table.h"
 #include "realm/realm-hex.h"
 #include "realm/realm-song.h"
 #include "object/object1.h"

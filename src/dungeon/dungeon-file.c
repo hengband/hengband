@@ -60,7 +60,7 @@
 #include "player/player-class.h"
 #include "player/player-race.h"
 #include "player/player-skill.h"
-#include "realm/realm.h"
+#include "realm/realm-names-table.h"
 #include "room/rooms-vault.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"

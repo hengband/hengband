@@ -29,7 +29,7 @@
 #include "io/files-util.h"
 #include "grid/feature.h"
 #include "floor/floor-town.h"
-#include "realm/realm.h"
+#include "realm/realm-names-table.h"
 
 #include "view/display-main-window.h"
 

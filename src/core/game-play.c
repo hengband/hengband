@@ -53,7 +53,7 @@
 #include "dungeon/dungeon-processor.h"
 #include "io/input-key-processor.h"
 #include "io/read-pref-file.h"
-#include "realm/realm.h"
+#include "realm/realm-names-table.h"
 #include "io/save.h"
 #include "core/scores.h"
 #include "io/targeting.h"

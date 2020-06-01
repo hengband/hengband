@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "realm/realm.h"
+#include "realm/realm-names-table.h"
 
 #ifdef JP
 /*!
