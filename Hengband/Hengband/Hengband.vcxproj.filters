@@ -62,12 +62,6 @@
     <ClCompile Include="..\..\src\monster\quantum-effect.c">
       <Filter>monster</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\io\special-class-dump.c">
-      <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\io\player-status-dump.c">
-      <Filter>io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-util.c">
       <Filter>monster</Filter>
     </ClCompile>
@@ -187,9 +181,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\autopick\autopick-entry.c">
       <Filter>autopick</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\io\dump-remover.c">
-      <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\autopick\autopick-initializer.c">
       <Filter>autopick</Filter>
@@ -613,9 +604,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\player\avatar.c">
       <Filter>player</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\io\character-dump.c">
-      <Filter>io</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\monster\horror-descriptions.c">
       <Filter>monster</Filter>
@@ -1067,6 +1055,18 @@
     <ClCompile Include="..\..\src\io-dump\dump-util.c">
       <Filter>io-dump</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\io-dump\character-dump.c">
+      <Filter>io-dump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io-dump\dump-remover.c">
+      <Filter>io-dump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io-dump\player-status-dump.c">
+      <Filter>io-dump</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io-dump\special-class-dump.c">
+      <Filter>io-dump</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1128,12 +1128,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster\quantum-effect.h">
       <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\io\special-class-dump.h">
-      <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\io\player-status-dump.h">
-      <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-util.h">
       <Filter>monster</Filter>
@@ -1281,9 +1275,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\autopick\autopick-entry.h">
       <Filter>autopick</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\io\dump-remover.h">
-      <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\autopick\autopick-initializer.h">
       <Filter>autopick</Filter>
@@ -1728,9 +1719,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\avatar.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\io\character-dump.h">
-      <Filter>io</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\horror-descriptions.h">
       <Filter>monster</Filter>
@@ -2282,6 +2270,18 @@
       <Filter>knowledge</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\io-dump\dump-util.h">
+      <Filter>io-dump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io-dump\character-dump.h">
+      <Filter>io-dump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io-dump\dump-remover.h">
+      <Filter>io-dump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io-dump\player-status-dump.h">
+      <Filter>io-dump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io-dump\special-class-dump.h">
       <Filter>io-dump</Filter>
     </ClInclude>
   </ItemGroup>

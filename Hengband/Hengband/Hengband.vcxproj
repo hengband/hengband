@@ -280,7 +280,7 @@
     <ClCompile Include="..\..\src\inventory\inventory-curse.c" />
     <ClCompile Include="..\..\src\inventory\recharge-processor.c" />
     <ClCompile Include="..\..\src\inventory\simple-appraiser.c" />
-    <ClCompile Include="..\..\src\io\dump-remover.c" />
+    <ClCompile Include="..\..\src\io-dump\dump-remover.c" />
     <ClCompile Include="..\..\src\io\mutations-dump.c" />
     <ClCompile Include="..\..\src\knowledge\knowledge-autopick.c" />
     <ClCompile Include="..\..\src\knowledge\knowledge-features.c" />
@@ -294,7 +294,7 @@
     <ClCompile Include="..\..\src\main\music-definitions-table.c" />
     <ClCompile Include="..\..\src\main\sound-definitions-table.c" />
     <ClCompile Include="..\..\src\cmd\cmd-building.c" />
-    <ClCompile Include="..\..\src\io\character-dump.c" />
+    <ClCompile Include="..\..\src\io-dump\character-dump.c" />
     <ClCompile Include="..\..\src\object\chest.c" />
     <ClCompile Include="..\..\src\io\chuukei.c" />
     <ClCompile Include="..\..\src\cmd-item\cmd-activate.c" />
@@ -356,9 +356,9 @@
     <ClCompile Include="..\..\src\main\init.c" />
     <ClCompile Include="..\..\src\io\gf-descriptions.c" />
     <ClCompile Include="..\..\src\io\interpret-pref-file.c" />
-    <ClCompile Include="..\..\src\io\player-status-dump.c" />
+    <ClCompile Include="..\..\src\io-dump\player-status-dump.c" />
     <ClCompile Include="..\..\src\io\read-pref-file.c" />
-    <ClCompile Include="..\..\src\io\special-class-dump.c" />
+    <ClCompile Include="..\..\src\io-dump\special-class-dump.c" />
     <ClCompile Include="..\..\src\io\tokenizer.c" />
     <ClCompile Include="..\..\src\io\write-diary.c" />
     <ClCompile Include="..\..\src\market\arena-info-table.c" />
@@ -610,7 +610,7 @@
     <ClInclude Include="..\..\src\inventory\inventory-curse.h" />
     <ClInclude Include="..\..\src\inventory\recharge-processor.h" />
     <ClInclude Include="..\..\src\inventory\simple-appraiser.h" />
-    <ClInclude Include="..\..\src\io\dump-remover.h" />
+    <ClInclude Include="..\..\src\io-dump\dump-remover.h" />
     <ClInclude Include="..\..\src\io\mutations-dump.h" />
     <ClInclude Include="..\..\src\knowledge\knowledge-autopick.h" />
     <ClInclude Include="..\..\src\knowledge\knowledge-features.h" />
@@ -624,7 +624,7 @@
     <ClInclude Include="..\..\src\main\music-definitions-table.h" />
     <ClInclude Include="..\..\src\main\sound-definitions-table.h" />
     <ClInclude Include="..\..\src\cmd\cmd-building.h" />
-    <ClInclude Include="..\..\src\io\character-dump.h" />
+    <ClInclude Include="..\..\src\io-dump\character-dump.h" />
     <ClInclude Include="..\..\src\object\chest.h" />
     <ClInclude Include="..\..\src\io\chuukei.h" />
     <ClCompile Include="..\..\src\player\player-move.c" />
@@ -746,9 +746,9 @@
     <ClInclude Include="..\..\src\monster\horror-descriptions.h" />
     <ClInclude Include="..\..\src\io\gf-descriptions.h" />
     <ClInclude Include="..\..\src\io\interpret-pref-file.h" />
-    <ClInclude Include="..\..\src\io\player-status-dump.h" />
+    <ClInclude Include="..\..\src\io-dump\player-status-dump.h" />
     <ClInclude Include="..\..\src\io\read-pref-file.h" />
-    <ClInclude Include="..\..\src\io\special-class-dump.h" />
+    <ClInclude Include="..\..\src\io-dump\special-class-dump.h" />
     <ClInclude Include="..\..\src\io\tokenizer.h" />
     <ClInclude Include="..\..\src\io\write-diary.h" />
     <ClInclude Include="..\..\src\market\arena-info-table.h" />
