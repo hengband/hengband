@@ -309,7 +309,7 @@ hengband_SOURCES = \
 	object/object-value.c object/object-value.h \
 	object/lite-processor.c object/lite-processor.h \
 	object/torch.c object/torch.h \
-	object/tr-types.h object/trc-types.h object/tval-type.h \
+	object/tr-types.h object/trc-types.h object/tval-types.h \
 	object/warning.c object/warning.h \
 	object/item-apply-magic.h \
 	object/object-mark-types.h \
