@@ -24,6 +24,7 @@
 #include "floor/floor-save.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
+#include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/files-util.h"
 #include "io/targeting.h"

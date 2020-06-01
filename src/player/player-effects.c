@@ -25,6 +25,7 @@
 #include "floor/floor.h"
 #include "floor/wild.h"
 #include "grid/grid.h"
+#include "inventory/inventory-object.h"
 #include "io/files-util.h"
 #include "io/report.h"
 #include "io/save.h"

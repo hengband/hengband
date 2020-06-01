@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 /*
  * This seems like a pretty standard "typedef"
  */

@@ -1,11 +1,11 @@
-﻿#include "system/angband.h"
-#include "inventory/inventory-damage.h"
-#include "object/object2.h"
-#include "object/object-flavor.h"
-#include "object/artifact.h"
-#include "object/object-hook.h"
-#include "object/object-broken.h"
+﻿#include "inventory/inventory-damage.h"
+#include "inventory/inventory-object.h"
 #include "mind/racial-mirror-master.h"
+#include "object/artifact.h"
+#include "object/object-broken.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
+#include "object/object2.h"
 
 /*!
  * @brief アイテムを指定確率で破損させる /
@@ -59,7 +59,8 @@ void inventory_damage(player_type *player_ptr, inven_func typ, int perc)
 #ifdef JP
             o_name, index_to_label(i), ((o_ptr->number > 1) ? ((amt == o_ptr->number) ? "全部" : (amt > 1 ? "何個か" : "一個")) : ""));
 #else
-            ((o_ptr->number > 1) ? ((amt == o_ptr->number) ? "All of y" : (amt > 1 ? "Some of y" : "One of y")) : "Y"), o_name, index_to_label(i), ((amt > 1) ? "were" : "was"));
+            ((o_ptr->number > 1) ? ((amt == o_ptr->number) ? "All of y" : (amt > 1 ? "Some of y" : "One of y")) : "Y"), o_name, index_to_label(i),
+            ((amt > 1) ? "were" : "was"));
 #endif
 
 #ifdef JP
