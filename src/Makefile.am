@@ -357,7 +357,7 @@ hengband_SOURCES = \
 	realm/realm-death.c realm/realm-death.h \
 	realm/realm-hex.c realm/realm-hex.h 
 	realm/realm-hissatsu.c realm/realm-hissatsu.h \
-	realm/realm-life.c realm/realm-life.h 
+	realm/realm-life.c realm/realm-life.h \
 	realm/realm-names-table.c realm/realm-names-table.h \
 	realm/realm-nature.c realm/realm-nature.h \
 	realm/realm-song.c realm/realm-song.h \
