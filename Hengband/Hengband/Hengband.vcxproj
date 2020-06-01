@@ -238,7 +238,7 @@
     <ClCompile Include="..\..\src\player\avatar.c" />
     <ClCompile Include="..\..\src\birth\character-builder.c" />
     <ClCompile Include="..\..\src\birth\birth-explanations-table.c" />
-    <ClCompile Include="..\..\src\cmd\cmd-autopick.c" />
+    <ClCompile Include="..\..\src\cmd-io\cmd-autopick.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-knowledge.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-process-screen.c" />
     <ClCompile Include="..\..\src\cmd\dump-util.c" />
@@ -551,7 +551,7 @@
     <ClInclude Include="..\..\src\player\avatar.h" />
     <ClInclude Include="..\..\src\birth\character-builder.h" />
     <ClInclude Include="..\..\src\birth\birth-explanations-table.h" />
-    <ClInclude Include="..\..\src\cmd\cmd-autopick.h" />
+    <ClInclude Include="..\..\src\cmd-io\cmd-autopick.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-knowledge.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-process-screen.h" />
     <ClInclude Include="..\..\src\cmd\dump-util.h" />
