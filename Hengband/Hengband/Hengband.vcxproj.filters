@@ -92,9 +92,6 @@
     <ClCompile Include="..\..\src\io\write-diary.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\object-group-table.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd\cmd-visuals.c">
       <Filter>cmd</Filter>
     </ClCompile>
@@ -1067,6 +1064,9 @@
     <ClCompile Include="..\..\src\io-dump\special-class-dump.c">
       <Filter>io-dump</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\knowledge\object-group-table.c">
+      <Filter>knowledge</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1158,9 +1158,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\write-diary.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\object-group-table.h">
-      <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-draw.h">
       <Filter>cmd</Filter>
@@ -2283,6 +2280,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io-dump\special-class-dump.h">
       <Filter>io-dump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\knowledge\object-group-table.h">
+      <Filter>knowledge</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
