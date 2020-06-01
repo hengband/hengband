@@ -11,17 +11,16 @@
  * 2014 Deskull rearranged comment for Doxygen.\n
  */
 
-#include "system/angband.h"
-#include "util/util.h"
-#include "autopick/autopick-menu-data-table.h"
-#include "autopick/autopick-methods-table.h"
+#include "autopick/autopick.h"
 #include "autopick/autopick-destroyer.h"
 #include "autopick/autopick-finder.h"
-#include "autopick/autopick.h"
-#include "player/player-move.h"
-#include "object/object2.h"
+#include "autopick/autopick-menu-data-table.h"
+#include "autopick/autopick-methods-table.h"
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
+#include "object/object2.h"
+#include "player/player-move.h"
+#include "util/util.h"
 
 /*
  *  Auto-destroy marked item

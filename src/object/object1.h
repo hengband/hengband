@@ -30,6 +30,7 @@
 
 #define OBJ_GOLD_LIST   480     /* First "gold" entry */
 
+#include "system/angband.h"
 #include "object/object-util.h"
 
 void reset_visuals(player_type *owner_ptr, void(*process_autopick_file_command)(char*));

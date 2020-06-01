@@ -40,7 +40,6 @@
 #include "pet/pet-util.h"
 #include "cmd-action/cmd-spell.h"
 #include "dungeon/dungeon.h"
-#include "object/object-kind.h"
 #include "monster/monster-race.h"
 #include "autopick/autopick.h"
 #include "autopick/autopick-reader-writer.h"

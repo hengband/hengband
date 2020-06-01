@@ -1,26 +1,30 @@
-﻿#include "system/angband.h"
-#include "core/stuff-handler.h"
-#include "util/util.h"
+﻿/*!
+ * @brief スピード等のステータスに影響のある魔法の処理
+ * @date 2019/01/22
+ * @author deskull
+ */
 
-#include "cmd-item/cmd-magiceat.h"
-#include "player/avatar.h"
-#include "effect/effect-characteristics.h"
-#include "object/object-flavor.h"
-#include "player/player-status.h"
-#include "player/player-class.h"
 #include "spell/spells-status.h"
-#include "spell/spells-type.h"
-#include "monster/monster.h"
 #include "cmd-action/cmd-spell.h"
-#include "player/player-effects.h"
-#include "object/object2.h"
-#include "object/object-kind.h"
+#include "cmd-item/cmd-magiceat.h"
+#include "core/stuff-handler.h"
+#include "effect/effect-characteristics.h"
 #include "io/targeting.h"
+#include "mind/racial-force-trainer.h"
+#include "monster/monster.h"
+#include "object/object-flavor.h"
+#include "object/object-kind.h"
+#include "object/object2.h"
+#include "player/avatar.h"
+#include "player/player-class.h"
+#include "player/player-effects.h"
+#include "player/player-status.h"
 #include "realm/realm-song.h"
-#include "view/display-main-window.h"
+#include "spell/spells-type.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
-#include "mind/racial-force-trainer.h"
+#include "util/util.h"
+#include "view/display-main-window.h"
 
 /*!
  * @brief モンスター回復処理

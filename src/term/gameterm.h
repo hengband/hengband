@@ -1,6 +1,8 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "spell/spells-type.h"
+
 /*
  * Angband "attributes" (with symbols, and base (R,G,B) codes)
  *

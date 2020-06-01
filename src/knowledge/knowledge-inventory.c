@@ -4,20 +4,18 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
 #include "knowledge/knowledge-inventory.h"
-#include "io-dump/dump-util.h"
 #include "core/show-file.h"
-#include "object/object-flavor.h"
-#include "object/special-object-flags.h"
-#include "object/sv-ring-types.h"
-#include "store/store-util.h"
 #include "floor/floor-town.h"
+#include "io-dump/dump-util.h"
+#include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "object/object-kind.h"
+#include "object/special-object-flags.h"
 #include "object/sv-amulet-types.h"
 #include "object/sv-protector-types.h"
+#include "object/sv-ring-types.h"
 #include "object/tr-types.h"
+#include "store/store-util.h"
 
 static concptr inven_res_label = _(
 	"                               酸電火冷毒光闇破轟獄因沌劣 盲怖乱痺透命感消復浮",

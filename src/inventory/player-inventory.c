@@ -1,20 +1,17 @@
-﻿#include "system/angband.h"
+﻿#include "inventory/player-inventory.h"
 #include "core/stuff-handler.h"
-#include "util/util.h"
-#include "inventory/player-inventory.h"
-
-#include "term/gameterm.h"
-#include "object/sv-other-types.h"
+#include "floor/floor.h"
 #include "object/item-use-flags.h"
-#include "object/object1.h"
-#include "object/object2.h"
-#include "object/object-kind.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
+#include "object/object-kind.h"
 #include "object/object-mark-types.h"
-#include "floor/floor.h"
+#include "object/object1.h"
+#include "object/object2.h"
+#include "object/sv-other-types.h"
 #include "player/player-move.h"
-
+#include "term/gameterm.h"
+#include "util/util.h"
 #include "view/display-main-window.h"
 
 bool select_ring_slot;

@@ -1,6 +1,8 @@
 ﻿#pragma once
 
-bool wall_stone(player_type* caster_ptr);
+#include "system/angband.h"
+
+bool wall_stone(player_type *caster_ptr);
 bool speed_monsters(player_type* caster_ptr);
 bool slow_monsters(player_type* caster_ptr, int power);
 bool sleep_monsters(player_type* caster_ptr, int power);

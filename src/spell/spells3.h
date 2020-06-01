@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "spell/spells-util.h"
 
 bool teleport_away(player_type* caster_ptr, MONSTER_IDX m_idx, POSITION dis, teleport_flags mode);

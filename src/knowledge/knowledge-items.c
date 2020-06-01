@@ -4,22 +4,21 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
-#include "knowledge-items.h"
-#include "io-dump/dump-util.h"
-#include "object/artifact.h"
+#include "knowledge/knowledge-items.h"
+#include "core/show-file.h"
 #include "core/sort.h"
-#include "object/object2.h"
+#include "core/stuff-handler.h"
+#include "io-dump/dump-util.h"
+#include "knowledge/object-group-table.h"
+#include "object/artifact.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
+#include "object/object2.h"
 #include "object/special-object-flags.h"
-#include "core/show-file.h"
-#include "knowledge/object-group-table.h"
-#include "world/world.h"
 #include "term/gameterm.h"
-#include "core/stuff-handler.h"
 #include "view/display-main-window.h" // 暫定、後で消す.
+#include "world/world.h"
 
 /*
  * todo okay = 既知のアーティファクト？ と思われるが確証がない

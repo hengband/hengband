@@ -1,20 +1,19 @@
-﻿#include "system/angband.h"
-#include "market/building-craft-fix.h"
-#include "object/object2.h"
-#include "object/object-hook.h"
-#include "object/object-flavor.h"
-#include "object/object-kind.h"
-#include "object/artifact.h"
-#include "object/special-object-flags.h"
-#include "market/building-util.h"
-#include "inventory/player-inventory.h"
-#include "object/object-boost.h"
-#include "player/player-effects.h"
+﻿#include "market/building-craft-fix.h"
 #include "core/stuff-handler.h"
-#include "object/tr-types.h"
+#include "inventory/player-inventory.h"
+#include "market/building-util.h"
+#include "object/artifact.h"
 #include "object/item-use-flags.h"
+#include "object/object-boost.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
+#include "object/object-kind.h"
+#include "object/object2.h"
+#include "object/special-object-flags.h"
 #include "object/sv-other-types.h"
 #include "object/sv-weapon-types.h"
+#include "object/tr-types.h"
+#include "player/player-effects.h"
 
 /*!
  * @brief 修復材料のオブジェクトから修復対象に特性を移植する。
@@ -161,7 +160,8 @@ static PRICE repair_broken_weapon_aux(player_type *player_ptr, PRICE bcost)
             ck_ptr = &k_info[k_idx];
 
             if (tval == TV_SWORD) {
-                if ((ck_ptr->sval == SV_BROKEN_DAGGER) || (ck_ptr->sval == SV_BROKEN_SWORD) || (ck_ptr->sval == SV_DIAMOND_EDGE) || (ck_ptr->sval == SV_POISON_NEEDLE))
+                if ((ck_ptr->sval == SV_BROKEN_DAGGER) || (ck_ptr->sval == SV_BROKEN_SWORD) || (ck_ptr->sval == SV_DIAMOND_EDGE)
+                    || (ck_ptr->sval == SV_POISON_NEEDLE))
                     continue;
             }
             if (tval == TV_POLEARM) {

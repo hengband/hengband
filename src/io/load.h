@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "floor/floor-save.h"
 
 /*

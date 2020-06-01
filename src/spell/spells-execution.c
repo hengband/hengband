@@ -1,6 +1,4 @@
-﻿#include "system/angband.h"
-#include "spell/spells-util.h"
-#include "spell/spells-execution.h"
+﻿#include "spell/spells-execution.h"
 #include "realm/realm.h"
 #include "realm/realm-arcane.h"
 #include "realm/realm-chaos.h"

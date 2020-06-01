@@ -1,4 +1,9 @@
-﻿#include "system/angband.h"
+﻿/*!
+ * @brief アイテムが特定種別のものであるかどうかの判定関数群
+ * @date 2018/12/15
+ * @author deskull
+ */
+
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/sv-amulet-types.h"

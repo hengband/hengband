@@ -1,5 +1,6 @@
 ﻿#pragma once
-#include "util/util.h"
+
+#include "system/angband.h"
 
 /*!
  * @struct object_kind

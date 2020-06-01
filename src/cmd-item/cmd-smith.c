@@ -15,12 +15,11 @@
 #include "object/special-object-flags.h"
 #include "player/player-status.h"
 #include "cmd/cmd-basic.h"
-#include "object/object-kind.h"
 #include "autopick/autopick.h"
-#include "view/display-main-window.h"
 #include "inventory/player-inventory.h"
 #include "object/tr-types.h"
 #include "object/trc-types.h"
+#include "view/display-main-window.h"
 
 /*!
  * エッセンス情報の構造体 / A structure for smithing

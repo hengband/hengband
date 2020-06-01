@@ -6,25 +6,25 @@
  * ここにこれ以上関数を引っ越してくるのは禁止
  */
 
-#include "display-player.h"
-#include "floor/floor.h"
-#include "player/mimic-info-table.h"
-#include "player/player-personality.h"
-#include "term/gameterm.h"
-#include "status-first-page.h"
-#include "player/player-sex.h"
-#include "player/patron.h"
-#include "world/world.h"
-#include "dungeon/quest.h"
-#include "system/system-variables.h" // 暫定。後で消す
-#include "knowledge/knowledge-mutations.h"
+#include "view/display-player.h"
 #include "dungeon/dungeon-file.h"
+#include "dungeon/quest.h"
+#include "floor/floor.h"
+#include "knowledge/knowledge-mutations.h"
 #include "object/object-kind.h"
-#include "view/display-util.h"
+#include "player/mimic-info-table.h"
+#include "player/patron.h"
+#include "player/player-personality.h"
+#include "player/player-sex.h"
+#include "status-first-page.h"
+#include "system/system-variables.h" // 暫定。後で消す
+#include "term/gameterm.h"
 #include "view/display-characteristic.h"
-#include "view/display-player-stat-info.h"
-#include "view/display-player-misc-info.h"
 #include "view/display-player-middle.h"
+#include "view/display-player-misc-info.h"
+#include "view/display-player-stat-info.h"
+#include "view/display-util.h"
+#include "world/world.h"
 
 /*!
  * @brief

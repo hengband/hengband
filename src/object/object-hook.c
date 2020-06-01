@@ -1,9 +1,15 @@
-﻿#include "system/angband.h"
+﻿/*!
+ * @brief オブジェクトに関する汎用判定処理
+ * @date 2018/09/24
+ * @author deskull
+ */
+
+#include "object/object-hook.h"
+#include "dungeon/quest.h"
 #include "floor/floor.h"
-#include "util/util.h"
+#include "monster/monster.h"
 #include "object/artifact.h"
 #include "object/item-feeling.h"
-#include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/special-object-flags.h"
 #include "object/sv-armor-types.h"
@@ -12,14 +18,13 @@
 #include "object/sv-protector-types.h"
 #include "object/sv-weapon-types.h"
 #include "object/tr-types.h"
-#include "monster/monster.h"
-#include "player/player-class.h"
-#include "player/player-skill.h"
 #include "player/mimic-info-table.h"
-#include "dungeon/quest.h"
-#include "world/world.h"
-#include "view/display-main-window.h"
+#include "player/player-class.h"
 #include "player/player-races-table.h"
+#include "player/player-skill.h"
+#include "util/util.h"
+#include "view/display-main-window.h"
+#include "world/world.h"
 
 /*!
 * @brief 対象のアイテムが矢やクロスボウの矢の材料になるかを返す。/
@@ -1013,4 +1018,30 @@ bool item_tester_okay(player_type *player_ptr, object_type *o_ptr, tval_type tva
 
 	/* Assume okay */
 	return TRUE;
+}
+
+/*
+ * Determine if a given inventory item is "aware"
+ */
+bool object_is_aware(object_type *o_ptr)
+{
+    return k_info[(o_ptr)->k_idx].aware;
+}
+
+/*
+ * Determine if a given inventory item is "tried"
+ */
+bool object_is_tried(object_type *o_ptr)
+{
+	return k_info[(o_ptr)->k_idx].tried;
+}
+
+/*
+ * Determine if a given inventory item is "known"
+ * Test One -- Check for special "known" tag
+ * Test Two -- Check for "Easy Know" + "Aware"
+ */
+bool object_is_known(object_type *o_ptr)
+{
+	return ((o_ptr->ident & IDENT_KNOWN) != 0) || (k_info[(o_ptr)->k_idx].easy_know && k_info[(o_ptr)->k_idx].aware);
 }

@@ -1,4 +1,10 @@
-﻿#include "spell/spells-object.h"
+﻿/*!
+ * @brief アイテムに影響のある魔法の処理
+ * @date 2019/01/22
+ * @deskull
+ */
+
+#include "spell/spells-object.h"
 #include "autopick/autopick.h"
 #include "cmd/cmd-basic.h"
 #include "floor/floor-object.h"

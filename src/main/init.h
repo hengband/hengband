@@ -13,7 +13,7 @@
 #ifndef INCLUDED_INIT_H
 #define INCLUDED_INIT_H
 
-#include "system/h-basic.h"
+#include "system/angband.h"
 
 typedef struct header header;
 

@@ -1,14 +1,13 @@
-﻿#include "system/angband.h"
-#include "market/building-recharger.h"
+﻿#include "market/building-recharger.h"
+#include "autopick/autopick.h"
+#include "inventory/player-inventory.h"
+#include "market/building-util.h"
 #include "object/item-use-flags.h"
+#include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object/object-flavor.h"
 #include "object/special-object-flags.h"
-#include "market/building-util.h"
-#include "inventory/player-inventory.h"
 #include "spell/spells3.h"
-#include "autopick/autopick.h"
 
 /*!
  * @brief 魔道具の使用回数を回復させる施設のメインルーチン / Recharge rods, wands and staffs
@@ -42,9 +41,9 @@ void building_recharge(player_type *player_ptr)
     k_ptr = &k_info[o_ptr->k_idx];
 
     /*
-	 * We don't want to give the player free info about
-	 * the level of the item or the number of charges.
-	 */
+     * We don't want to give the player free info about
+     * the level of the item or the number of charges.
+     */
     /* The item must be "known" */
     char tmp_str[MAX_NLEN];
     if (!object_is_known(o_ptr)) {
@@ -84,8 +83,7 @@ void building_recharge(player_type *player_ptr)
         price = MAX(10, price);
     }
 
-    if (o_ptr->tval == TV_WAND
-        && (o_ptr->pval / o_ptr->number >= k_ptr->pval)) {
+    if (o_ptr->tval == TV_WAND && (o_ptr->pval / o_ptr->number >= k_ptr->pval)) {
         if (o_ptr->number > 1) {
             msg_print(_("この魔法棒はもう充分に充填されています。", "These wands are already fully charged."));
         } else {
@@ -118,8 +116,7 @@ void building_recharge(player_type *player_ptr)
 #ifdef JP
         if (get_check(format("そのロッドを＄%d で再充填しますか？", price)))
 #else
-        if (get_check(format("Recharge the %s for %d gold? ",
-                ((o_ptr->number > 1) ? "rods" : "rod"), price)))
+        if (get_check(format("Recharge the %s for %d gold? ", ((o_ptr->number > 1) ? "rods" : "rod"), price)))
 #endif
 
         {
@@ -134,8 +131,8 @@ void building_recharge(player_type *player_ptr)
         else
             max_charges = o_ptr->number * k_ptr->pval - o_ptr->pval;
 
-        charges = (PARAMETER_VALUE)get_quantity(format(_("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold? "), price),
-            MIN(player_ptr->au / price, max_charges));
+        charges = (PARAMETER_VALUE)get_quantity(
+            format(_("一回分＄%d で何回分充填しますか？", "Add how many charges for %d gold? "), price), MIN(player_ptr->au / price, max_charges));
 
         if (charges < 1)
             return;

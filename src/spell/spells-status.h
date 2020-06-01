@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "spell/spells-util.h"
 
 bool heal_monster(player_type *caster_ptr, DIRECTION dir, HIT_POINT dam);

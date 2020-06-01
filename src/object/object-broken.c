@@ -1,12 +1,17 @@
-﻿#include "system/angband.h"
-#include "object/object2.h"
-#include "object/object-kind.h"
+﻿/*!
+ * @brief アイテム破壊処理
+ * @date 2019/03/06
+ * @author deskull
+ */
+#include "object/object-broken.h"
 #include "combat/snipe.h"
-#include "spell/spells-type.h"
-#include "spell/process-effect.h"
 #include "effect/effect-characteristics.h"
+#include "object/object-kind.h"
+#include "object/object2.h"
 #include "object/sv-potion-types.h"
 #include "object/tr-types.h"
+#include "spell/process-effect.h"
+#include "spell/spells-type.h"
 
 /*!
 * @brief アイテムが酸で破損するかどうかを判定する

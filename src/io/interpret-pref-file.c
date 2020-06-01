@@ -5,13 +5,13 @@
  */
 
 #include "io/interpret-pref-file.h"
+#include "birth/character-builder.h"
 #include "io/gf-descriptions.h"
 #include "io/tokenizer.h"
 #include "object/object-kind.h"
-#include "birth/character-builder.h"
-#include "world/world.h"
 #include "term/gameterm.h"
 #include "view/display-main-window.h" // 暫定。apply_default_feat_lighting()。後で消す.
+#include "world/world.h"
 
 #define MAX_MACRO_CHARS 16128 // 1つのマクロキー押下で実行可能なコマンド最大数 (エスケープシーケンス含む).
 

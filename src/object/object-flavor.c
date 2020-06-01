@@ -1,5 +1,4 @@
 ﻿/*!
- *  @file object-flavor.c
  *  @brief オブジェクトの記述処理 / Mbject flavor code
  *  @date 2014/01/03
  *  @author
@@ -10,28 +9,26 @@
  * are included in all such copies.  Other copyrights may also apply.\n
  */
 
-#include "system/angband.h"
-#include "util/util.h"
-
-#include "cmd-item/cmd-smith.h"
-#include "object/artifact.h"
-#include "player/player-status.h"
-#include "player/player-class.h"
-#include "shoot.h"
-#include "object/object-kind.h"
-#include "object/object-hook.h"
 #include "object/object-flavor.h"
+#include "cmd-item/cmd-smith.h"
+#include "combat/snipe.h"
+#include "grid/trap.h"
+#include "io/files-util.h"
+#include "locale/japanese.h"
+#include "monster/monster-race.h"
+#include "object/artifact.h"
+#include "object/object-ego.h"
+#include "object/object-hook.h"
+#include "object/object-kind.h"
 #include "object/special-object-flags.h"
 #include "object/sv-food-types.h"
 #include "object/sv-lite-types.h"
-#include "grid/trap.h"
-#include "combat/snipe.h"
-#include "io/files-util.h"
-#include "world/world.h"
-#include "monster/monster-race.h"
-#include "object/object-ego.h"
-#include "locale/japanese.h"
 #include "object/tr-types.h"
+#include "player/player-class.h"
+#include "player/player-status.h"
+#include "shoot.h"
+#include "util/util.h"
+#include "world/world.h"
 
  /*!
   * @brief アイテムの価値記述テーブル

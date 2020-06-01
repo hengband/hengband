@@ -1,4 +1,6 @@
 ﻿#pragma once
+
+#include "system/angband.h"
 #include "cmd-item/cmd-activate.h"
 
 typedef struct artifact_type artifact_type;

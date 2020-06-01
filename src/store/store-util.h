@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #define STORE_OBJ_LEVEL 5 /* Magic Level for normal stores */
 
 #define STORE_GENERAL   0 /*!< 店舗の種類: 雑貨屋 */

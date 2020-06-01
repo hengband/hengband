@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "autopick/autopick-util.h"
 #include "grid/grid.h"
 

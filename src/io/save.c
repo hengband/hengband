@@ -16,7 +16,6 @@
 #include "io/save.h"
 #include "io/load.h"
 #include "io/report.h"
-
 #include "system/angband-version.h"
 #include "object/artifact.h"
 #include "core/sort.h"

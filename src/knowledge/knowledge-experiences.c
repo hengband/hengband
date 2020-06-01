@@ -4,17 +4,16 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
-#include "knowledge-experiences.h"
-#include "io-dump/dump-util.h"
+#include "knowledge/knowledge-experiences.h"
 #include "core/show-file.h"
+#include "io-dump/dump-util.h"
 #include "object/object-flavor.h"
 #include "object/object-kind.h"
 #include "object/sv-bow-types.h"
 #include "player/player-skill.h"
-#include "spell/technic-info-table.h"
-#include "spell/spells-util.h"
 #include "spell/spells-execution.h"
+#include "spell/spells-util.h"
+#include "spell/technic-info-table.h"
 
 /*
  * Display weapon-exp

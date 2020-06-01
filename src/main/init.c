@@ -1,5 +1,4 @@
 ﻿/*!
- * @file init2.c
  * @brief ゲームデータ初期化2 / Initialization (part 2) -BEN-
  * @date 2014/01/28
  * @author
@@ -30,41 +29,37 @@
  * </pre>
  */
 
-#include "system/angband.h"
-#include "util/util.h"
-#include "io/uid-checker.h"
-#include "io/files-util.h"
-#include "system/system-variables.h"
-#include "system/angband-version.h"
-#include "io/read-pref-file.h"
-#include "term/gameterm.h"
-
-#include "object/artifact.h"
-#include "cmd/cmd-building.h"
 #include "main/init.h"
-#include "dungeon/quest.h"
-#include "grid/trap.h"
-#include "room/rooms.h"
-#include "store/store.h"
-#include "floor/wild.h"
+#include "cmd/cmd-building.h"
 #include "dungeon/dungeon-file.h"
-#include "io/files-util.h"
-#include "grid/feature.h"
-#include "floor/floor.h"
-#include "floor/floor-town.h"
 #include "dungeon/dungeon.h"
-#include "room/rooms-vault.h"
-#include "player/player-skill.h"
-#include "player/player-class.h"
-#include "object/object-kind.h"
-#include "object/object-ego.h"
-#include "room/rooms-vault.h"
-#include "world/world.h"
+#include "dungeon/quest.h"
+#include "floor/floor-town.h"
+#include "floor/floor.h"
+#include "floor/wild.h"
+#include "grid/feature.h"
+#include "grid/trap.h"
+#include "io/files-util.h"
+#include "io/read-pref-file.h"
+#include "io/uid-checker.h"
 #include "market/articles-on-sale.h"
+#include "object/artifact.h"
+#include "object/object-ego.h"
+#include "object/object-kind.h"
+#include "player/player-class.h"
+#include "player/player-skill.h"
+#include "room/rooms-vault.h"
+#include "room/rooms.h"
 #include "store/store-util.h"
+#include "store/store.h"
+#include "system/angband-version.h"
+#include "system/system-variables.h"
+#include "term/gameterm.h"
+#include "util/util.h"
+#include "world/world.h"
 
-#include <sys/types.h>
 #include <sys/stat.h>
+#include <sys/types.h>
 
 static void put_title(void);
 

@@ -1,15 +1,13 @@
-﻿#include "system/angband.h"
-#include "inventory/simple-appraiser.h"
-#include "object/object-flavor.h"
-#include "player/avatar.h"
-#include "object/item-feeling.h"
-#include "object/object2.h"
-#include "object/object-hook.h"
-#include "object/object-kind.h"
-#include "object/special-object-flags.h"
-#include "player/player-move.h"
-#include "inventory/player-inventory.h"
+﻿#include "inventory/simple-appraiser.h"
 #include "autopick/autopick.h"
+#include "inventory/player-inventory.h"
+#include "object/item-feeling.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
+#include "object/object2.h"
+#include "object/special-object-flags.h"
+#include "player/avatar.h"
+#include "player/player-move.h"
 
 /*!
  * @brief 擬似鑑定を実際に行い判定を反映する
@@ -18,10 +16,10 @@
  * @param heavy 重度の擬似鑑定を行うならばTRUE
  * @return なし
  */
-static void sense_inventory_aux(player_type* creature_ptr, INVENTORY_IDX slot, bool heavy)
+static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, bool heavy)
 {
     byte feel;
-    object_type* o_ptr = &creature_ptr->inventory_list[slot];
+    object_type *o_ptr = &creature_ptr->inventory_list[slot];
     GAME_TEXT o_name[MAX_NLEN];
     if (o_ptr->ident & (IDENT_SENSE))
         return;
@@ -77,24 +75,17 @@ static void sense_inventory_aux(player_type* creature_ptr, INVENTORY_IDX slot, b
     object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
     if (slot >= INVEN_RARM) {
 #ifdef JP
-        msg_format("%s%s(%c)は%sという感じがする...",
-            describe_use(creature_ptr, slot), o_name, index_to_label(slot), game_inscriptions[feel]);
+        msg_format("%s%s(%c)は%sという感じがする...", describe_use(creature_ptr, slot), o_name, index_to_label(slot), game_inscriptions[feel]);
 #else
-        msg_format("You feel the %s (%c) you are %s %s %s...",
-            o_name, index_to_label(slot), describe_use(creature_ptr, slot),
-            ((o_ptr->number == 1) ? "is" : "are"),
-            game_inscriptions[feel]);
+        msg_format("You feel the %s (%c) you are %s %s %s...", o_name, index_to_label(slot), describe_use(creature_ptr, slot),
+            ((o_ptr->number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
 
     } else {
 #ifdef JP
-        msg_format("ザックの中の%s(%c)は%sという感じがする...",
-            o_name, index_to_label(slot), game_inscriptions[feel]);
+        msg_format("ザックの中の%s(%c)は%sという感じがする...", o_name, index_to_label(slot), game_inscriptions[feel]);
 #else
-        msg_format("You feel the %s (%c) in your pack %s %s...",
-            o_name, index_to_label(slot),
-            ((o_ptr->number == 1) ? "is" : "are"),
-            game_inscriptions[feel]);
+        msg_format("You feel the %s (%c) in your pack %s %s...", o_name, index_to_label(slot), ((o_ptr->number == 1) ? "is" : "are"), game_inscriptions[feel]);
 #endif
     }
 
@@ -119,11 +110,11 @@ static void sense_inventory_aux(player_type* creature_ptr, INVENTORY_IDX slot, b
  *   Class 4 = Ranger  --> slow but heavy  (changed!)\n
  *   Class 5 = Paladin --> slow but heavy\n
  */
-void sense_inventory1(player_type* creature_ptr)
+void sense_inventory1(player_type *creature_ptr)
 {
     PLAYER_LEVEL plev = creature_ptr->lev;
     bool heavy = FALSE;
-    object_type* o_ptr;
+    object_type *o_ptr;
     if (creature_ptr->confused)
         return;
 
@@ -285,10 +276,10 @@ void sense_inventory1(player_type* creature_ptr)
  * @brief 1プレイヤーターン毎に武器、防具以外の擬似鑑定が行われるかを判定する。
  * @return なし
  */
-void sense_inventory2(player_type* creature_ptr)
+void sense_inventory2(player_type *creature_ptr)
 {
     PLAYER_LEVEL plev = creature_ptr->lev;
-    object_type* o_ptr;
+    object_type *o_ptr;
 
     if (creature_ptr->confused)
         return;

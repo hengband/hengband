@@ -1,46 +1,43 @@
 ﻿/*!
-* @file cmd-activate.c
-* @brief プレイヤーの発動コマンド実装
-* @date 2018/09/07
-* @details
-* cmd6.cより分離。
-*/
+ * @brief プレイヤーの発動コマンド実装
+ * @date 2018/09/07
+ * @author deskull
+ */
 
-#include "system/angband.h"
-#include "main/sound-definitions-table.h"
 #include "cmd-item/cmd-activate.h"
-#include "cmd/cmd-basic.h"
 #include "cmd-io/cmd-save.h"
-#include "object/object-hook.h"
+#include "cmd/cmd-basic.h"
 #include "core/sort.h"
+#include "effect/effect-characteristics.h"
+#include "effect/spells-effect-util.h"
 #include "floor/floor.h"
+#include "inventory/player-inventory.h"
+#include "io/files-util.h"
+#include "io/targeting.h"
+#include "main/sound-definitions-table.h"
+#include "monster/monster-status.h"
 #include "object/artifact.h"
 #include "object/item-use-flags.h"
-#include "player/avatar.h"
-#include "spell/spells-summon.h"
-#include "spell/spells-status.h"
-#include "spell/spells-object.h"
-#include "spell/spells-floor.h"
-#include "player/player-effects.h"
-#include "realm/realm-hex.h"
-#include "player/player-damage.h"
-#include "inventory/player-inventory.h"
-#include "monster/monster-status.h"
-#include "io/files-util.h"
-#include "object/object-kind.h"
 #include "object/object-ego.h"
+#include "object/object-hook.h"
+#include "object/object-kind.h"
 #include "object/sv-lite-types.h"
 #include "object/sv-ring-types.h"
-#include "io/targeting.h"
-#include "world/world.h"
-#include "effect/spells-effect-util.h"
-#include "spell/spells-type.h"
+#include "player/avatar.h"
+#include "player/player-damage.h"
+#include "player/player-effects.h"
+#include "player/player-races-table.h"
+#include "realm/realm-hex.h"
 #include "spell/process-effect.h"
-#include "effect/effect-characteristics.h"
+#include "spell/spells-detection.h"
+#include "spell/spells-floor.h"
+#include "spell/spells-object.h"
+#include "spell/spells-status.h"
+#include "spell/spells-summon.h"
+#include "spell/spells-type.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
-#include "spell/spells-detection.h"
-#include "player/player-races-table.h"
+#include "world/world.h"
 
 /*!
  * @brief 装備耐性に準じたブレス効果の選択テーブル /

@@ -1,9 +1,9 @@
-﻿#include "system/angband.h"
-#include "object/object-flavor.h"
-#include "player/player-move.h"
+﻿#include "inventory/recharge-processor.h"
 #include "core/hp-mp-regenerator.h"
-#include "object/object-kind.h"
+#include "object/object-flavor.h"
 #include "object/object-hook.h"
+#include "object/object-kind.h"
+#include "player/player-move.h"
 
 /*!
  * @brief
@@ -12,7 +12,7 @@
  * @param o_ptr 対象オブジェクトの構造体参照ポインタ
  * @return なし
  */
-static void recharged_notice(player_type* owner_ptr, object_type* o_ptr)
+static void recharged_notice(player_type *owner_ptr, object_type *o_ptr)
 {
     if (!o_ptr->inscription)
         return;
@@ -43,13 +43,13 @@ static void recharged_notice(player_type* owner_ptr, object_type* o_ptr)
  * / Handle recharging objects once every 10 game turns
  * @return なし
  */
-void recharge_magic_items(player_type* creature_ptr)
+void recharge_magic_items(player_type *creature_ptr)
 {
     int i;
     bool changed;
 
     for (changed = FALSE, i = INVEN_RARM; i < INVEN_TOTAL; i++) {
-        object_type* o_ptr = &creature_ptr->inventory_list[i];
+        object_type *o_ptr = &creature_ptr->inventory_list[i];
         if (!o_ptr->k_idx)
             continue;
 
@@ -68,13 +68,13 @@ void recharge_magic_items(player_type* creature_ptr)
     }
 
     /*
-	 * Recharge rods.  Rods now use timeout to control charging status,
-	 * and each charging rod in a stack decreases the stack's timeout by
-	 * one per turn. -LM-
-	 */
+     * Recharge rods.  Rods now use timeout to control charging status,
+     * and each charging rod in a stack decreases the stack's timeout by
+     * one per turn. -LM-
+     */
     for (changed = FALSE, i = 0; i < INVEN_PACK; i++) {
-        object_type* o_ptr = &creature_ptr->inventory_list[i];
-        object_kind* k_ptr = &k_info[o_ptr->k_idx];
+        object_type *o_ptr = &creature_ptr->inventory_list[i];
+        object_kind *k_ptr = &k_info[o_ptr->k_idx];
         if (!o_ptr->k_idx)
             continue;
 
@@ -102,7 +102,7 @@ void recharge_magic_items(player_type* creature_ptr)
     }
 
     for (i = 1; i < creature_ptr->current_floor_ptr->o_max; i++) {
-        object_type* o_ptr = &creature_ptr->current_floor_ptr->o_list[i];
+        object_type *o_ptr = &creature_ptr->current_floor_ptr->o_list[i];
         if (!OBJECT_IS_VALID(o_ptr))
             continue;
 

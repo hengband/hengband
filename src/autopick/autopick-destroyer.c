@@ -3,18 +3,17 @@
  * @date 2020/04/25
  * @author Hourier
  */
-#include "system/angband.h"
-#include "autopick/autopick-util.h"
-#include "autopick-methods-table.h"
+
 #include "autopick/autopick-destroyer.h"
-#include "object/sv-other-types.h"
-#include "object/object2.h"
+#include "autopick-methods-table.h"
+#include "autopick/autopick-util.h"
 #include "object/object-ego.h"
-#include "object/object-hook.h"
-#include "object/object-kind.h"
 #include "object/object-flavor.h"
+#include "object/object-hook.h"
 #include "object/object-mark-types.h"
+#include "object/object2.h"
 #include "object/special-object-flags.h"
+#include "object/sv-other-types.h"
 #include "object/sv-wand-types.h"
 #include "player/player-move.h"
 #include "player/player-races-table.h"

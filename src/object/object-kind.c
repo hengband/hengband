@@ -1,6 +1,5 @@
-﻿#include "system/angband.h"
+﻿#include "object-kind.h"
 #include "util/util.h"
-#include "object-kind.h"
 
 /*
  * The object kind arrays

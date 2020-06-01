@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "grid/feature.h"
 
 extern void get_screen_size(TERM_LEN *wid_p, TERM_LEN *hgt_p);

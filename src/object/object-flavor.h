@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "system/h-type.h"
+#include "system/angband.h"
 #include "object/object1.h"
 
 /* flavor.c */

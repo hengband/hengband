@@ -1,34 +1,33 @@
-﻿#include "system/angband.h"
-#include "util/util.h"
+﻿/*!
+ * @brief フロアに影響のある魔法の処理
+ * @date 2019/02/21
+ * @author deskull
+ */
 
+#include "spell/spells-floor.h"
+#include "cmd-io/cmd-dump.h"
+#include "cmd/cmd-basic.h"
 #include "dungeon/dungeon.h"
-#include "floor/floor.h"
-#include "grid/grid.h"
 #include "dungeon/quest.h"
+#include "floor/floor-events.h"
+#include "floor/floor-save.h"
+#include "floor/floor.h"
+#include "grid/feature.h"
+#include "grid/grid.h"
+#include "io/write-diary.h"
+#include "monster/monster-status.h"
 #include "object/artifact.h"
-#include "object/object2.h"
-#include "object/object-kind.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
+#include "object/object2.h"
 #include "object/special-object-flags.h"
-
-#include "io/write-diary.h"
-#include "cmd/cmd-basic.h"
-#include "cmd-io/cmd-dump.h"
-
-#include "floor/floor-events.h"
-#include "floor/floor-save.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
-#include "grid/feature.h"
-#include "view/display-main-window.h"
-
-#include "monster/monster-status.h"
-
 #include "spell/spells3.h"
-#include "spell/spells-floor.h"
+#include "util/util.h"
+#include "view/display-main-window.h"
 
 /*
  * Light up the dungeon using "clairvoyance"

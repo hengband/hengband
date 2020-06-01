@@ -1,16 +1,15 @@
-﻿#include "system/angband.h"
-#include "cmd/cmd-visuals.h"
+﻿#include "cmd/cmd-visuals.h"
 #include "cmd/cmd-draw.h"
+#include "io/files-util.h"
+#include "io/read-pref-file.h"
 #include "knowledge/knowledge-features.h"
 #include "knowledge/knowledge-items.h"
 #include "knowledge/knowledge-monsters.h"
-#include "io/files-util.h"
-#include "object/object2.h"
-#include "object/object-kind.h"
-#include "object/object-flavor.h"
-#include "term/gameterm.h"
 #include "knowledge/lighting-level-table.h"
-#include "io/read-pref-file.h"
+#include "object/object-flavor.h"
+#include "object/object-kind.h"
+#include "object/object2.h"
+#include "term/gameterm.h"
 #include "view/display-main-window.h" // 暫定。後で消す.
 
 /*!

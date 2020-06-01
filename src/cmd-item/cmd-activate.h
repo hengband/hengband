@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "object/tr-types.h"
 
 extern void do_cmd_activate(player_type *user_ptr);

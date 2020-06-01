@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #define ENTRY_BARE_HAND 0
 #define ENTRY_TWO_HANDS 1
 #define ENTRY_RIGHT_HAND1 2

@@ -1,16 +1,21 @@
-﻿#include "system/angband.h"
+﻿/*!
+ * @brief 店舗処理関係のユーティリティ
+ * @date 2020/03/20
+ * @author Hourier
+ */
+
 #include "store/store-util.h"
 #include "object/item-apply-magic.h"
 #include "object/item-feeling.h"
-#include "object/object2.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object/tr-types.h"
+#include "object/object2.h"
 #include "object/special-object-flags.h"
 #include "object/sv-lite-types.h"
 #include "object/sv-potion-types.h"
 #include "object/sv-scroll-types.h"
 #include "object/sv-weapon-types.h"
+#include "object/tr-types.h"
 
 int cur_store_num = 0;
 store_type *st_ptr = NULL;
