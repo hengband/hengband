@@ -291,7 +291,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 #endif
 
 	/* Carry the object */
-	INVENTORY_IDX slot = inven_carry(owner_ptr, o_ptr);
+	INVENTORY_IDX slot = store_item_to_inventory(owner_ptr, o_ptr);
 
 	/* Get the object again */
 	o_ptr = &owner_ptr->inventory_list[slot];

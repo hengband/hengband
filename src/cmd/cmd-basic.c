@@ -2787,7 +2787,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 		}
 		else
 		{
-			inven_carry(creature_ptr, q_ptr);
+			store_item_to_inventory(creature_ptr, q_ptr);
 		}
 		do_drop = FALSE;
 	}

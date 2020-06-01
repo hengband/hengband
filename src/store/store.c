@@ -345,7 +345,7 @@ bool combine_and_reorder_home(int store_num)
  * @details
  * <pre>
  * In all cases, return the slot (or -1) where the object was placed
- * Note that this is a hacked up version of "inven_carry()".
+ * Note that this is a hacked up version of "store_item_to_inventory()".
  * Also note that it may not correctly "adapt" to "knowledge" bacoming
  * known, the player may have to pick stuff up and drop it again.
  * </pre>
@@ -1313,7 +1313,7 @@ static void store_purchase(player_type *player_ptr)
 	{
 		bool combined_or_reordered;
 		distribute_charges(o_ptr, j_ptr, amt);
-		item_new = inven_carry(player_ptr, j_ptr);
+		item_new = store_item_to_inventory(player_ptr, j_ptr);
 		GAME_TEXT o_name[MAX_NLEN];
 		object_desc(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
 
@@ -1392,7 +1392,7 @@ static void store_purchase(player_type *player_ptr)
 	j_ptr->inscription = 0;
 	j_ptr->feeling = FEEL_NONE;
 	j_ptr->ident &= ~(IDENT_STORE);
-	item_new = inven_carry(player_ptr, j_ptr);
+	item_new = store_item_to_inventory(player_ptr, j_ptr);
 
 	object_desc(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
 	msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), o_name, index_to_label(item_new));

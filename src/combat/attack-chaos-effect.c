@@ -139,7 +139,7 @@ static void attack_golden_hammer(player_type *attacker_ptr, player_attack_type *
     target_ptr->hold_o_idx = q_ptr->next_o_idx;
     q_ptr->next_o_idx = 0;
     msg_format(_("%sを奪った。", "You snatched %s."), o_name);
-    inven_carry(attacker_ptr, q_ptr);
+    store_item_to_inventory(attacker_ptr, q_ptr);
 }
 
 /*!

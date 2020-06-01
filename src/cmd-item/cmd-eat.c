@@ -391,7 +391,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 			/* Unstack the used item */
 			o_ptr->number--;
 			creature_ptr->total_weight -= q_ptr->weight;
-			item = inven_carry(creature_ptr, q_ptr);
+			item = store_item_to_inventory(creature_ptr, q_ptr);
 
 			msg_format(_("杖をまとめなおした。", "You unstack your staff."));
 		}

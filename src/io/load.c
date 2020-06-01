@@ -1293,7 +1293,7 @@ static void rd_lore(MONRACE_IDX r_idx)
  * @details
  * In all cases, return the slot (or -1) where the object was placed
  *
- * Note that this is a hacked up version of "inven_carry()".
+ * Note that this is a hacked up version of "store_item_to_inventory()".
  *
  * Also note that it may not correctly "adapt" to "knowledge" bacoming
  * known, the player may have to pick stuff up and drop it again.

@@ -3392,7 +3392,7 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
 	inven_item_increase(owner_ptr, item, -amt);
 	inven_item_optimize(owner_ptr, item);
 
-	slot = inven_carry(owner_ptr, q_ptr);
+	slot = store_item_to_inventory(owner_ptr, q_ptr);
 #ifdef JP
 	msg_format("%s(%c)%s。", o_name, index_to_label(slot), act);
 #else

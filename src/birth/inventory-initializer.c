@@ -73,7 +73,7 @@ void add_outfit(player_type *creature_ptr, object_type *o_ptr)
 {
     object_aware(creature_ptr, o_ptr);
     object_known(o_ptr);
-    s16b slot = inven_carry(creature_ptr, o_ptr);
+    s16b slot = store_item_to_inventory(creature_ptr, o_ptr);
     autopick_alter_item(creature_ptr, slot, FALSE);
     wield_all(creature_ptr);
 }

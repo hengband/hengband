@@ -181,7 +181,7 @@ bool create_ammo(player_type *creature_ptr)
 		apply_magic(creature_ptr, q_ptr, creature_ptr->lev, AM_NO_FIXED_ART);
 		q_ptr->discount = 99;
 
-		slot = inven_carry(creature_ptr, q_ptr);
+		slot = store_item_to_inventory(creature_ptr, q_ptr);
 
 		object_desc(creature_ptr, o_name, q_ptr, 0);
 		msg_format(_("%sを作った。", "You make some ammo."), o_name);
@@ -225,7 +225,7 @@ bool create_ammo(player_type *creature_ptr)
 		msg_format(_("%sを作った。", "You make some ammo."), o_name);
 
 		vary_item(creature_ptr, item, -1);
-		slot = inven_carry(creature_ptr, q_ptr);
+		slot = store_item_to_inventory(creature_ptr, q_ptr);
 
 		/* Auto-inscription */
 		if (slot >= 0) autopick_alter_item(creature_ptr, slot, FALSE);
@@ -263,7 +263,7 @@ bool create_ammo(player_type *creature_ptr)
 
 		vary_item(creature_ptr, item, -1);
 
-		slot = inven_carry(creature_ptr, q_ptr);
+		slot = store_item_to_inventory(creature_ptr, q_ptr);
 
 		/* Auto-inscription */
 		if (slot >= 0) autopick_alter_item(creature_ptr, slot, FALSE);

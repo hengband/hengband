@@ -278,7 +278,7 @@ void reorder_pack(player_type *owner_ptr)
  * Note that this code must remove any location/stack information\n
  * from the object once it is placed into the inventory.\n
  */
-s16b inven_carry(player_type *owner_ptr, object_type *o_ptr)
+s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
 {
     INVENTORY_IDX i, j, k;
     INVENTORY_IDX n = -1;
