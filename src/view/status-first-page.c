@@ -261,7 +261,7 @@ static void calc_two_hands(player_type *creature_ptr, int *damage, int *to_h)
 		}
 
 		o_ptr = &creature_ptr->inventory_list[INVEN_RARM + i];
-		if (calc_weapon_one_hand(o_ptr, i, damage, &basedam)) continue;
+		if (!calc_weapon_one_hand(o_ptr, i, damage, &basedam)) continue;
 
 		to_h[i] = 0;
 		bool poison_needle = FALSE;
