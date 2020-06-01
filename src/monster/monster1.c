@@ -14,7 +14,6 @@
 #include "util/util.h"
 #include "main/music-definitions-table.h"
 #include "term/gameterm.h"
-
 #include "io/write-diary.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd/cmd-building.h"
@@ -31,6 +30,7 @@
 #include "object/artifact.h"
 #include "object/item-apply-magic.h"
 #include "player/avatar.h"
+#include "floor/floor-object.h"
 #include "floor/wild.h"
 #include "dungeon/dungeon.h"
 #include "world/world.h"

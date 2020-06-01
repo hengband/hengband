@@ -153,13 +153,16 @@ hengband_SOURCES = \
 	effect/effect-player-switcher.c effect/effect-player-switcher.h \
 	effect/effect-characteristics.h \
 	\
-	floor/floor.c floor/floor.h floor/floor-events.c floor/floor-events.h \
+	floor/floor.c floor/floor.h \
+	floor/floor-events.c floor/floor-events.h \
 	floor/floor-generate.c floor/floor-generate.h \
-	floor/floor-save.h floor/floor-save.c floor/floor-town.h floor/floor-town.c \
-	floor/floor-streams.c floor/floor-streams.h \
-	floor/pattern-walk.c floor/pattern-walk.h \
-	floor/wild.h floor/wild.c \
+	floor/floor-object.c floor/floor-object.h \
 	floor/geometry.c floor/geometry.h \
+	floor/pattern-walk.c floor/pattern-walk.h \
+	floor/floor-save.h floor/floor-save.c \
+	floor/floor-streams.c floor/floor-streams.h \
+	floor/floor-town.h floor/floor-town.c \
+	floor/wild.h floor/wild.c \
 	\
 	grid/feature.c grid/feature.h \
 	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \

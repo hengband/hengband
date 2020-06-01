@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 /*
  * Quest constants
  */

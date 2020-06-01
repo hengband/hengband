@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 typedef struct dungeon_grid dungeon_grid;
 
 struct dungeon_grid
@@ -39,9 +41,9 @@ struct dungeon_grid
 #define PARSE_ERROR_UNDEFINED_TERRAIN_TAG   10
 #define PARSE_ERROR_MAX                     11
 
-extern concptr err_str[PARSE_ERROR_MAX];
-extern errr process_dungeon_file(player_type *player_ptr, concptr name, int ymin, int xmin, int ymax, int xmax);
-extern errr init_v_info(void);
-extern errr init_buildings(void);
-
 extern dungeon_grid letter[255];
+extern concptr err_str[PARSE_ERROR_MAX];
+
+errr process_dungeon_file(player_type *player_ptr, concptr name, int ymin, int xmin, int ymax, int xmax);
+errr init_v_info(void);
+errr init_buildings(void);

@@ -1067,6 +1067,9 @@
     <ClCompile Include="..\..\src\knowledge\object-group-table.c">
       <Filter>knowledge</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor\floor-object.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2283,6 +2286,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\knowledge\object-group-table.h">
       <Filter>knowledge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\floor-object.h">
+      <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

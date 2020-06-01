@@ -34,8 +34,6 @@ void object_prep(object_type *o_ptr, KIND_OBJECT_IDX k_idx);
 
 void apply_magic(player_type *owner_type, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
 
-bool make_object(player_type *owner_ptr, object_type *j_ptr, BIT_FLAGS mode);
-bool make_gold(floor_type *floor_ptr, object_type *j_ptr);
 OBJECT_IDX drop_near(player_type *owner_type, object_type *o_ptr, PERCENTAGE chance, POSITION y, POSITION x);
 void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num);
 void inven_item_charges(player_type *owner_ptr, INVENTORY_IDX item);

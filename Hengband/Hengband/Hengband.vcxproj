@@ -190,6 +190,7 @@
     <ClCompile Include="..\..\src\combat\slaying.c" />
     <ClCompile Include="..\..\src\combat\blood-sucking-processor.c" />
     <ClCompile Include="..\..\src\combat\vorpal-weapon.c" />
+    <ClCompile Include="..\..\src\floor\floor-object.c" />
     <ClCompile Include="..\..\src\inventory\inventory-damage.c" />
     <ClCompile Include="..\..\src\io\pref-file-expressor.c" />
     <ClCompile Include="..\..\src\market\arena.c" />
@@ -468,6 +469,7 @@
     <ClInclude Include="..\..\src\combat\player-attack.h" />
     <ClInclude Include="..\..\src\combat\slaying.h" />
     <ClInclude Include="..\..\src\combat\vorpal-weapon.h" />
+    <ClInclude Include="..\..\src\floor\floor-object.h" />
     <ClInclude Include="..\..\src\inventory\inventory-damage.h" />
     <ClInclude Include="..\..\src\io\pref-file-expressor.h" />
     <ClInclude Include="..\..\src\market\arena.h" />
