@@ -48,6 +48,7 @@
 #include "term/gameterm.h"
 #include "util/util.h"
 #include "view/display-player.h"
+#include "view/object-describer.h"
 #include "world/world.h"
 
  /*

@@ -11,7 +11,6 @@
  */
 
 #include "object/object2.h"
-#include "cmd-action/cmd-spell.h"
 #include "cmd-io/cmd-dump.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
@@ -49,8 +48,6 @@
 #include "player/player-move.h"
 #include "player/player-personalities-table.h"
 #include "player/player-status.h"
-#include "spell/spells3.h"
-#include "term/gameterm.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
@@ -3518,63 +3515,6 @@ INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUM
 #endif
 
 	return slot;
-}
-
-
-/*!
- * @brief 現在アクティブになっているウィンドウにオブジェクトの詳細を表示する /
- * Hack -- display an object kind in the current window
- * @param owner_ptr プレーヤーへの参照ポインタ
- * @param k_idx ベースアイテムの参照ID
- * @return なし
- * @details
- * Include list of usable spells for readible books
- */
-void display_koff(player_type *owner_ptr, KIND_OBJECT_IDX k_idx)
-{
-	object_type forge;
-	object_type *q_ptr;
-	int sval;
-	REALM_IDX   use_realm;
-	GAME_TEXT o_name[MAX_NLEN];
-	for (int y = 0; y < Term->hgt; y++)
-	{
-		Term_erase(0, y, 255);
-	}
-
-	if (!k_idx) return;
-	q_ptr = &forge;
-
-	object_prep(q_ptr, k_idx);
-	object_desc(owner_ptr, o_name, q_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY | OD_STORE));
-
-	Term_putstr(0, 0, -1, TERM_WHITE, o_name);
-	sval = q_ptr->sval;
-	use_realm = tval2realm(q_ptr->tval);
-
-	if (owner_ptr->realm1 || owner_ptr->realm2)
-	{
-		if ((use_realm != owner_ptr->realm1) && (use_realm != owner_ptr->realm2)) return;
-	}
-	else
-	{
-		if ((owner_ptr->pclass != CLASS_SORCERER) && (owner_ptr->pclass != CLASS_RED_MAGE)) return;
-		if (!is_magic(use_realm)) return;
-		if ((owner_ptr->pclass == CLASS_RED_MAGE) && (use_realm != REALM_ARCANE) && (sval > 1)) return;
-	}
-
-	int num = 0;
-	SPELL_IDX spells[64];
-
-	for (int spell = 0; spell < 32; spell++)
-	{
-		if (fake_spell_flags[sval] & (1L << spell))
-		{
-			spells[num++] = spell;
-		}
-	}
-
-	print_spells(owner_ptr, 0, spells, num, 2, 0, use_realm);
 }
 
 
