@@ -8,18 +8,6 @@
     <ClCompile Include="..\..\src\cmd\cmd-basic.c">
       <Filter>cmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-hissatsu.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-mane.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-pet.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-spell.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\combat\shoot.c">
       <Filter>combat</Filter>
     </ClCompile>
@@ -950,9 +938,6 @@
     <ClCompile Include="..\..\src\combat\attack-chaos-effect.c">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-attack.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\combat\monster-attack-player.c">
       <Filter>combat</Filter>
     </ClCompile>
@@ -1067,24 +1052,27 @@
     <ClCompile Include="..\..\src\cmd-io\feeling-table.c">
       <Filter>cmd-io</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-attack.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-hissatsu.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-mane.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-pet.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd\cmd-spell.c">
+      <Filter>cmd-action</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-hissatsu.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-mane.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-pet.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-spell.h">
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2089,9 +2077,6 @@
     <ClInclude Include="..\..\src\combat\attack-chaos-effect.h">
       <Filter>combat</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-attack.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\combat\monster-attack-player.h">
       <Filter>combat</Filter>
     </ClInclude>
@@ -2284,6 +2269,21 @@
     <ClInclude Include="..\..\src\cmd-io\feeling-table.h">
       <Filter>cmd-io</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-attack.h">
+      <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-hissatsu.h">
+      <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-mane.h">
+      <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-pet.h">
+      <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd\cmd-spell.h">
+      <Filter>cmd-action</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2391,6 +2391,9 @@
     </Filter>
     <Filter Include="cmd-io">
       <UniqueIdentifier>{cefa5b29-56a9-41dc-a32e-8b9568821503}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cmd-action">
+      <UniqueIdentifier>{f578e89d-2670-4f24-8028-61896d5b733e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
