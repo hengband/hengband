@@ -194,36 +194,6 @@ void delete_object_idx(player_type *player_ptr, OBJECT_IDX o_idx)
 
 
 /*!
- * @brief フロアにマスに落ちているオブジェクトを全て削除する / Deletes all objects at given location
- * Delete a dungeon object
- * @param player_ptr プレーヤーへの参照ポインタ
- * @param y 削除したフロアマスのY座標
- * @param x 削除したフロアマスのX座標
- * @return なし
- */
-void delete_object(player_type *player_ptr, POSITION y, POSITION x)
-{
-	grid_type *g_ptr;
-	OBJECT_IDX this_o_idx, next_o_idx = 0;
-	floor_type *floor_ptr = player_ptr->current_floor_ptr;
-	if (!in_bounds(floor_ptr, y, x)) return;
-
-	g_ptr = &floor_ptr->grid_array[y][x];
-	for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx)
-	{
-		object_type *o_ptr;
-		o_ptr = &floor_ptr->o_list[this_o_idx];
-		next_o_idx = o_ptr->next_o_idx;
-		object_wipe(o_ptr);
-		floor_ptr->o_cnt--;
-	}
-
-	g_ptr->o_idx = 0;
-	lite_spot(player_ptr, y, x);
-}
-
-
-/*!
  * @brief グローバルオブジェクト配列から空きを取得する /
  * Acquires and returns the index of a "free" object.
  * @param floo_ptr 現在フロアへの参照ポインタ

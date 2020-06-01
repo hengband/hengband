@@ -23,6 +23,7 @@
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor-events.h"
+#include "floor/floor-object.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "inventory/player-inventory.h"
