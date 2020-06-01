@@ -135,6 +135,7 @@ hengband_SOURCES = \
 	effect/spells-effect-util.c effect/spells-effect-util.h \
 	effect/effect-player.c effect/effect-player.h \
 	effect/effect-monster.c effect/effect-monster.h \
+	effect/effect-monster-curse.c effect/effect-monster-curse.h \
 	effect/effect-monster-util.c effect/effect-monster-util.h \
 	effect/effect-monster-resist-hurt.c effect/effect-monster-resist-hurt.h \
 	effect/effect-monster-psi.c effect/effect-monster-psi.h \
