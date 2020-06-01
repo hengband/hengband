@@ -6,7 +6,7 @@
 
 #include "system/angband.h"
 #include "knowledge-self.h"
-#include "cmd/dump-util.h"
+#include "io-dump/dump-util.h"
 #include "player/avatar.h"
 #include "core/show-file.h"
 #include "dungeon/dungeon-file.h"

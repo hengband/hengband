@@ -6,7 +6,7 @@
 
 #include "system/angband.h"
 #include "knowledge/knowledge-autopick.h"
-#include "cmd/dump-util.h"
+#include "io-dump/dump-util.h"
 #include "core/show-file.h"
 #include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick-entry.h"

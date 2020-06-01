@@ -325,16 +325,15 @@ hengband_SOURCES = \
 	knowledge/knowledge-features.c knowledge/knowledge-features.h \
 	knowledge/knowledge-inventory.c knowledge/knowledge-inventory.h \
 	knowledge/knowledge-items.c knowledge/knowledge-items.h \
-	knowledge/lighting-level-table.c knowledge/lighting-level-table.h \
 	knowledge/knowledge-monsters.c knowledge/knowledge-monsters.h \
 	knowledge/knowledge-mutations.c knowledge/knowledge-mutations.h \
 	knowledge/knowledge-uniques.c knowledge/knowledge-uniques.h \
 	knowledge/knowledge-self.c knowledge/knowledge-self.h \
 	knowledge/knowledge-quests.c knowledge/knowledge-quests.h \
+	knowledge/lighting-level-table.c knowledge/lighting-level-table.h \
+	knowledge/monster-group-table.c knowledge/monster-group-table.h \
 	\
 	cmd/cmd-building.c cmd/cmd-building.h \
-	cmd/dump-util.c cmd/dump-util.h \
-	cmd/monster-group-table.c cmd/monster-group-table.h \
 	cmd/object-group-table.c cmd/object-group-table.h \
 	cmd/cmd-basic.c cmd/cmd-basic.h \
 	cmd/cmd-draw.c cmd/cmd-draw.h \
@@ -399,6 +398,8 @@ hengband_SOURCES = \
 	combat/monster-attack-switcher.c combat/monster-attack-switcher.h \
 	combat/shoot.c combat/shoot.h \
 	combat/snipe.c combat/snipe.h \
+	\
+	io-dump/dump-util.c io-dump/dump-util.h \
 	\
 	term/gameterm.c term/gameterm.h \
 	term/z-form.c term/z-form.h term/z-rand.c term/z-rand.h \

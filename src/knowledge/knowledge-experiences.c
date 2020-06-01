@@ -6,7 +6,7 @@
 
 #include "system/angband.h"
 #include "knowledge-experiences.h"
-#include "cmd/dump-util.h"
+#include "io-dump/dump-util.h"
 #include "core/show-file.h"
 #include "object/object-flavor.h"
 #include "object/object-kind.h"

@@ -6,7 +6,7 @@
 
 #include "system/angband.h"
 #include "knowledge/knowledge-mutations.h"
-#include "cmd/dump-util.h"
+#include "io-dump/dump-util.h"
 #include "core/show-file.h"
 #include "io/mutations-dump.h"
 

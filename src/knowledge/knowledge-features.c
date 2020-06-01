@@ -6,7 +6,7 @@
 
 #include "system/angband.h"
 #include "knowledge/knowledge-features.h"
-#include "cmd/dump-util.h"
+#include "io-dump/dump-util.h"
 #include "core/show-file.h"
 #include "term/gameterm.h"
 #include "world/world.h"

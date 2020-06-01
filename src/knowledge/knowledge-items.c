@@ -6,7 +6,7 @@
 
 #include "system/angband.h"
 #include "knowledge-items.h"
-#include "cmd/dump-util.h"
+#include "io-dump/dump-util.h"
 #include "object/artifact.h"
 #include "core/sort.h"
 #include "object/object2.h"

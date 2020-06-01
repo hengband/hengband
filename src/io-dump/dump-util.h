@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "grid/feature.h"
 
 #define FILE_NAME_SIZE 1024

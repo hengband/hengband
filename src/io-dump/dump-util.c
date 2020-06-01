@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "dump-util.h"
+﻿#include "io-dump/dump-util.h"
 #include "term/gameterm.h"
 
 TERM_COLOR attr_idx = 0;
