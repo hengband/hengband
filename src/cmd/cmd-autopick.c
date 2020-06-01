@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "cmd/cmd-autopick.h"
-#include "cmd/cmd-save.h"
+#include "cmd-io/cmd-save.h"
 #include "autopick/autopick-util.h"
 #include "autopick/autopick-commands-table.h"
 #include "autopick/autopick-dirty-flags.h"

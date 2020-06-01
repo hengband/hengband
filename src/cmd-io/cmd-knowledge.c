@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "cmd/cmd-knowledge.h"
+#include "cmd-io/cmd-knowledge.h"
 #include "cmd/cmd-draw.h"
 #include "grid/feature.h"
 #include "knowledge/knowledge-autopick.h"

@@ -20,7 +20,7 @@
 #include "object/object-ego.h"
 #include "object/sv-amulet-types.h"
 #include "object/sv-protector-types.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "view/display-main-window.h"
 
 static bool mon_invis;

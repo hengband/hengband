@@ -3,7 +3,7 @@
 #include "util/util.h"
 
 #include "io/write-diary.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "floor/floor.h"
 #include "core/sort.h"
 #include "player/player-move.h"

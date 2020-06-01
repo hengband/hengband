@@ -31,7 +31,7 @@
  */
 
 #include "system/angband.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "cmd/dump-util.h"
 #include "floor/floor.h"
 #include "term/gameterm.h"
@@ -46,7 +46,7 @@
 #include "dungeon/quest.h"
 #include "object/artifact.h"
 #include "floor/floor-town.h"
-#include "cmd/feeling-table.h"
+#include "cmd-io/feeling-table.h"
 #include "locale/english.h"
 
 #include "io/chuukei.h"

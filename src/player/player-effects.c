@@ -20,7 +20,7 @@
 #include "monster/creature.h"
 
 #include "object/artifact.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "floor/floor.h"
 #include "cmd/cmd-building.h"
 #include "birth/character-builder.h"

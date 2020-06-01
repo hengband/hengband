@@ -5,7 +5,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "world/world.h"
-#include "cmd/cmd-save.h"
+#include "cmd-io/cmd-save.h"
 #include "player/player-move.h"
 #include "view/display-main-window.h"
 

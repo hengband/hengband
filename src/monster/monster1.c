@@ -16,7 +16,7 @@
 #include "term/gameterm.h"
 
 #include "io/write-diary.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "cmd/cmd-building.h"
 #include "pet/pet-fall-off.h"
 #include "effect/effect-characteristics.h"

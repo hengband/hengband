@@ -45,7 +45,7 @@
 #include "autopick/autopick.h"
 #include "autopick/autopick-reader-writer.h"
 #include "io/write-diary.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "world/world.h"
 #include "view/display-main-window.h"
 #include "io/files-util.h"

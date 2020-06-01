@@ -333,24 +333,29 @@ hengband_SOURCES = \
 	\
 	cmd/cmd-autopick.c cmd/cmd-autopick.c \
 	cmd/cmd-building.c cmd/cmd-building.h \
-	cmd/dump-util.c cmd/dump-util.h cmd/feeling-table.c cmd/feeling-table.h \
+	cmd/dump-util.c cmd/dump-util.h \
 	cmd/monster-group-table.c cmd/monster-group-table.h \
-	cmd/diary-subtitle-table.c cmd/diary-subtitle-table.h \
 	cmd/object-group-table.c cmd/object-group-table.h \
 	cmd/cmd-activate.c cmd/cmd-activate.h cmd/cmd-basic.c cmd/cmd-basic.h \
-	cmd/cmd-diary.c cmd/cmd-diary.h cmd/cmd-dump.c cmd/cmd-dump.h \
 	cmd/cmd-draw.c cmd/cmd-draw.h \
-	cmd/cmd-gameoption.c cmd/cmd-gameoption.h cmd/cmd-help.c cmd/cmd-help.h \
 	cmd/cmd-hissatsu.c cmd/cmd-hissatsu.h cmd/cmd-inn.c cmd/cmd-inn.h \
-	cmd/cmd-knowledge.c cmd/cmd-knowledge.h \
 	cmd/lighting-level-table.c cmd/lighting-level-table.h \
 	cmd/cmd-mane.c cmd/cmd-mane.h \
-	cmd/cmd-macro.c cmd/cmd-macro.h cmd/cmd-pet.c cmd/cmd-pet.h \
-	cmd/cmd-process-screen.c cmd/cmd-process-screen.h \
-	cmd/cmd-save.c cmd/cmd-save.h \
+	cmd/cmd-pet.c cmd/cmd-pet.h \
 	cmd/cmd-spell.c cmd/cmd-spell.h cmd/cmd-visuals.c cmd/cmd-visuals.h \
-	cmd/cmd-menu-content-table.c cmd/cmd-menu-content-table.h \
 	cmd/cmd-attack.c cmd/cmd-attack.h \
+	\
+	cmd-io/cmd-diary.c cmd/-iocmd-diary.h \
+	cmd-io/cmd-dump.c cmd-io/cmd-dump.h \
+	cmd-io/cmd-gameoption.c cmd-io/cmd-gameoption.h \
+	cmd-io/cmd-help.c cmd-io/cmd-help.h \
+	cmd-io/cmd-knowledge.c cmd-io/cmd-knowledge.h \
+	cmd-io/cmd-macro.c cmd-io/cmd-macro.h \
+	cmd-io/cmd-menu-content-table.c cmd-io/cmd-menu-content-table.h \
+	cmd-io/cmd-process-screen.c cmd-io/cmd-process-screen.h \
+	cmd-io/cmd-save.c cmd-io/cmd-save.h \
+	cmd-io/diary-subtitle-table.c cmd-io/diary-subtitle-table.h \
+	cmd-io/feeling-table.c cmd-io/feeling-table.h \
 	\
 	cmd-item/cmd-eat.c cmd-item/cmd-eat.h \
 	cmd-item/cmd-item.c cmd-item/cmd-item.h \
@@ -416,10 +421,10 @@ CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-	-Iautopick -Ibirth -Icmd -Icmd-item -Icombat -Icore -Idungeon -Ieffect \
-	-Ifloor -Igrid -Iinventory -Iio -Iknowledge -Imarket -Imind -Imonster \
-	-Imspell -Imutation -Iobject -Ipet -Iplayer -Irealm -Iroom -Ispell -Isystem \
-	-Iterm -Iutil -Iview -Iwizard -Iworld
+	-Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat -Icore -Idungeon \
+	-Ieffect -Ifloor -Igrid -Iinventory -Iio -Iknowledge -Imarket -Imind \
+	-Imonster -Imspell -Imutation -Iobject -Ipet -Iplayer -Irealm -Iroom \
+	-Ispell -Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

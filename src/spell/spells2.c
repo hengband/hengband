@@ -24,7 +24,7 @@
 #include "cmd/cmd-pet.h"
 #include "pet/pet-util.h"
 #include "pet/pet-fall-off.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "effect/effect-characteristics.h"
 #include "grid/grid.h"
 #include "world/world.h"

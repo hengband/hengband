@@ -18,8 +18,8 @@
 #include "term/gameterm.h"
 
 #include "io/write-diary.h"
-#include "cmd/cmd-dump.h"
-#include "cmd/cmd-save.h"
+#include "cmd-io/cmd-dump.h"
+#include "cmd-io/cmd-save.h"
 #include "object/chest.h"
 #include "grid/trap.h"
 #include "dungeon/dungeon.h"

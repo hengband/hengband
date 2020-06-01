@@ -29,7 +29,7 @@
 #include "floor/floor.h"
 #include "world/world.h"
 #include "io/write-diary.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "io/report.h"
 #include "locale/japanese.h"
 

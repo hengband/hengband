@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "core/game-closer.h"
-#include "cmd/cmd-save.h"
+#include "cmd-io/cmd-save.h"
 #include "core/stuff-handler.h"
 #include "io/signal-handlers.h"
 #include "io/uid-checker.h"

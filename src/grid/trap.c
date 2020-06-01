@@ -3,8 +3,8 @@
 #include "main/sound-definitions-table.h"
 
 #include "io/write-diary.h"
-#include "cmd/cmd-dump.h"
-#include "cmd/cmd-save.h"
+#include "cmd-io/cmd-dump.h"
+#include "cmd-io/cmd-save.h"
 #include "grid/trap.h"
 #include "player/player-damage.h"
 #include "player/player-move.h"

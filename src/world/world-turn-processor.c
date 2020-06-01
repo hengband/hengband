@@ -7,7 +7,7 @@
 #include "io/write-diary.h"
 #include "floor/floor-events.h"
 #include "core/hp-mp-regenerator.h"
-#include "cmd/cmd-save.h"
+#include "cmd-io/cmd-save.h"
 #include "monster/monster-status.h"
 #include "player/player-move.h"
 #include "floor/wild.h"

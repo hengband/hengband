@@ -24,12 +24,12 @@
 #include "floor/floor.h"
 #include "world/world.h"
 #include "io/write-diary.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "locale/japanese.h"
 #include "player/player-class.h"
 #include "core/output-updater.h"
 #include "io/input-key-processor.h"
-#include "cmd/cmd-menu-content-table.h"
+#include "cmd-io/cmd-menu-content-table.h"
 
 /*!
  * 10進数から16進数への変換テーブル /

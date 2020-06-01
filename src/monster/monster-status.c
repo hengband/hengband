@@ -7,7 +7,7 @@
 #include "io/write-diary.h"
 #include "autopick/autopick-pref-processor.h"
 #include "cmd/cmd-draw.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "grid/grid.h"

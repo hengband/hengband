@@ -17,7 +17,7 @@
 #include "util/util.h"
 
 #include "io/write-diary.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "mutation/mutation.h"
 
 #include "player/selfinfo.h"

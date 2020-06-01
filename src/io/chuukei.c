@@ -12,7 +12,7 @@
 #include "io/files-util.h"
 #include "util/util.h"
 #include "term/gameterm.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "cmd/cmd-draw.h"
 #include "io/inet.h"
 #include "locale/japanese.h"

@@ -15,7 +15,7 @@
 
 #include "io/write-diary.h"
 #include "cmd/cmd-basic.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 
 #include "floor/floor-events.h"
 #include "floor/floor-save.h"

@@ -102,7 +102,7 @@
 #include "cmd/cmd-building.h"
 
 #include "io/write-diary.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "grid/grid.h"
 #include "market/arena-info-table.h"
 #include "room/rooms.h"

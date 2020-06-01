@@ -23,7 +23,7 @@
 #include "monster/quantum-effect.h"
 
 #include "io/write-diary.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "pet/pet-fall-off.h"
 #include "monster/creature.h"
 #include "combat/melee-postprocess.h"

@@ -9,7 +9,7 @@
 #include "world/world.h"
 #include "birth/quick-start.h"
 #include "birth/birth-util.h"
-#include "cmd/cmd-help.h"
+#include "cmd-io/cmd-help.h"
 #include "birth/birth-select-race.h"
 #include "birth/birth-select-class.h"
 #include "birth/birth-select-personality.h"

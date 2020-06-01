@@ -17,7 +17,7 @@
 #include "core/stuff-handler.h"
 #include "core/show-file.h"
 #include "core/special-internal-keys.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "cmd/cmd-inn.h"
 #include "floor/floor.h"
 #include "floor/floor-events.h"

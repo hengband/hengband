@@ -13,7 +13,7 @@
 #include "cmd/cmd-spell.h"
 
 #include "io/write-diary.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "player/selfinfo.h"
 #include "spell/technic-info-table.h"
 #include "spell/spells2.h"

@@ -17,7 +17,7 @@
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 #include "cmd/cmd-pet.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "player/player-class.h"
 #include "monster/monster.h"
 #include "spell/spells1.h"

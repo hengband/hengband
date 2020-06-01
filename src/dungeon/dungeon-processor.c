@@ -11,7 +11,7 @@
 #include "player/player-move.h"
 #include "view/display-main-window.h"
 #include "core/stuff-handler.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "player/player-effects.h"
 #include "monster/monster-process.h"
 #include "monster/monster-status.h"

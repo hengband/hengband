@@ -2,11 +2,11 @@
 
 #include "autopick/autopick.h"
 #include "io/write-diary.h"
-#include "cmd/cmd-gameoption.h"
+#include "cmd-io/cmd-gameoption.h"
 #include "cmd/cmd-autopick.h"
 #include "term/gameterm.h"
 #include "view/display-main-window.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "core/show-file.h"
 #include "io/files-util.h"
 

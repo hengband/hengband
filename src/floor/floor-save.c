@@ -42,7 +42,7 @@
 #include "world/world.h"
 #include "spell/spells2.h"
 #include "io/write-diary.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "io/save.h"
 #include "core/player-processor.h"
 

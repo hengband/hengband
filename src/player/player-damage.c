@@ -9,7 +9,7 @@
 #include "cmd/cmd-building.h"
 #include "io/write-diary.h"
 #include "autopick/autopick-pref-processor.h"
-#include "cmd/cmd-process-screen.h"
+#include "cmd-io/cmd-process-screen.h"
 #include "market/arena-info-table.h"
 #include "realm/realm-song.h"
 #include "floor/floor.h"

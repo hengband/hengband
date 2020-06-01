@@ -16,7 +16,7 @@
 #include "system/system-variables.h"
 
 #include "io/write-diary.h"
-#include "cmd/cmd-dump.h"
+#include "cmd-io/cmd-dump.h"
 #include "pet/pet-fall-off.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"

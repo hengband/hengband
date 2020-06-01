@@ -8,7 +8,7 @@
 #include "player/player-damage.h"
 #include "realm/realm-song.h"
 #include "spell/spells3.h"
-#include "cmd/cmd-save.h"
+#include "cmd-io/cmd-save.h"
 #include "dungeon/quest.h"
 #include "player/player-races-table.h"
 

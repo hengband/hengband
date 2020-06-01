@@ -99,8 +99,8 @@
 
 #include "io/write-diary.h"
 #include "autopick/autopick-pref-processor.h"
-#include "cmd/cmd-process-screen.h"
-#include "cmd/cmd-save.h"
+#include "cmd-io/cmd-process-screen.h"
+#include "cmd-io/cmd-save.h"
 #include "view/display-main-window.h"
 #include "floor/floor.h"
 #include "floor/floor-events.h"

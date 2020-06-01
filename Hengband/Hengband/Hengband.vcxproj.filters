@@ -1028,44 +1028,44 @@
     <ClCompile Include="..\..\src\cmd-item\cmd-zapwand.c">
       <Filter>cmd-item</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-diary.c">
-      <Filter>cmd-io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-dump.c">
-      <Filter>cmd-io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-gameoption.c">
-      <Filter>cmd-io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-help.c">
-      <Filter>cmd-io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-knowledge.c">
-      <Filter>cmd-io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-macro.c">
-      <Filter>cmd-io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-menu-content-table.c">
-      <Filter>cmd-io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-process-screen.c">
-      <Filter>cmd-io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-save.c">
-      <Filter>cmd-io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\diary-subtitle-table.c">
-      <Filter>cmd-io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\feeling-table.c">
-      <Filter>cmd-io</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd\cmd-draw.c">
       <Filter>cmd</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\cmd\dump-util.c">
       <Filter>cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-io\cmd-diary.c">
+      <Filter>cmd-io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-io\cmd-dump.c">
+      <Filter>cmd-io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-io\cmd-gameoption.c">
+      <Filter>cmd-io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-io\cmd-help.c">
+      <Filter>cmd-io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-io\cmd-knowledge.c">
+      <Filter>cmd-io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-io\cmd-macro.c">
+      <Filter>cmd-io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-io\cmd-menu-content-table.c">
+      <Filter>cmd-io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-io\cmd-process-screen.c">
+      <Filter>cmd-io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-io\cmd-save.c">
+      <Filter>cmd-io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-io\diary-subtitle-table.c">
+      <Filter>cmd-io</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-io\feeling-table.c">
+      <Filter>cmd-io</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2248,41 +2248,41 @@
     <ClInclude Include="..\..\src\cmd-item\cmd-zapwand.h">
       <Filter>cmd-item</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-diary.h">
-      <Filter>cmd-io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-gameoption.h">
-      <Filter>cmd-io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-help.h">
-      <Filter>cmd-io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-knowledge.h">
-      <Filter>cmd-io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-macro.h">
-      <Filter>cmd-io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-menu-content-table.h">
-      <Filter>cmd-io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-process-screen.h">
-      <Filter>cmd-io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-save.h">
-      <Filter>cmd-io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\diary-subtitle-table.h">
-      <Filter>cmd-io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\feeling-table.h">
-      <Filter>cmd-io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-dump.h">
-      <Filter>cmd-io</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\cmd\dump-util.h">
       <Filter>cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-io\cmd-diary.h">
+      <Filter>cmd-io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-io\cmd-dump.h">
+      <Filter>cmd-io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-io\cmd-gameoption.h">
+      <Filter>cmd-io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-io\cmd-help.h">
+      <Filter>cmd-io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-io\cmd-knowledge.h">
+      <Filter>cmd-io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-io\cmd-macro.h">
+      <Filter>cmd-io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-io\cmd-menu-content-table.h">
+      <Filter>cmd-io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-io\cmd-process-screen.h">
+      <Filter>cmd-io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-io\cmd-save.h">
+      <Filter>cmd-io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-io\diary-subtitle-table.h">
+      <Filter>cmd-io</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-io\feeling-table.h">
+      <Filter>cmd-io</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿#include "cmd/cmd-help.h"
+﻿#include "cmd-io/cmd-help.h"
 #include "core/show-file.h"
 
 /*!
