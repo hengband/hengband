@@ -58,7 +58,7 @@ hengband_SOURCES = \
 	cmd-action/cmd-pet.c cmd-action/cmd-pet.h \
 	cmd-action/cmd-spell.c cmd-action/cmd-spell.h \
 	\
-	cmd-io/cmd-autopick.c cmd-io/cmd-autopick.c \
+	cmd-io/cmd-autopick.c cmd-io/cmd-autopick.h \
 	cmd-io/cmd-diary.c cmd/-io/cmd-diary.h \
 	cmd-io/cmd-dump.c cmd-io/cmd-dump.h \
 	cmd-io/cmd-gameoption.c cmd-io/cmd-gameoption.h \
