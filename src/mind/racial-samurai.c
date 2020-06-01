@@ -5,9 +5,9 @@
  */
 
 #include "racial-samurai.h"
-#include "cmd/cmd-attack.h"
+#include "cmd-action/cmd-attack.h"
 #include "cmd/cmd-basic.h"
-#include "cmd/cmd-pet.h"
+#include "cmd-action/cmd-pet.h"
 #include "monster/monster-status.h"
 #include "player/player-effects.h"
 #include "player/avatar.h"

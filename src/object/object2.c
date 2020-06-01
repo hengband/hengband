@@ -18,7 +18,7 @@
 #include "term/gameterm.h"
 #include "io/write-diary.h"
 #include "cmd-io/cmd-dump.h"
-#include "cmd/cmd-spell.h"
+#include "cmd-action/cmd-spell.h"
 #include "spell/spells3.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"

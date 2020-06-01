@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "util/util.h"
 
-#include "cmd/cmd-spell.h"
+#include "cmd-action/cmd-spell.h"
 #include "player/avatar.h"
 
 #include "spell/spells2.h"

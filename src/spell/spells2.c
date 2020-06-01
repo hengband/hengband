@@ -21,7 +21,7 @@
 
 #include "object/artifact.h"
 #include "io/write-diary.h"
-#include "cmd/cmd-pet.h"
+#include "cmd-action/cmd-pet.h"
 #include "pet/pet-util.h"
 #include "pet/pet-fall-off.h"
 #include "cmd-io/cmd-dump.h"
@@ -66,7 +66,7 @@
 #include "spell/spells-type.h"
 #include "spell/process-effect.h"
 #include "combat/combat-options-type.h"
-#include "cmd/cmd-attack.h"
+#include "cmd-action/cmd-attack.h"
 #include "object/special-object-flags.h"
 #include "object/sv-food-types.h"
 

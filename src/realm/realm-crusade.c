@@ -2,7 +2,7 @@
 #include "util/util.h"
 
 #include "world/world.h"
-#include "cmd/cmd-spell.h"
+#include "cmd-action/cmd-spell.h"
 #include "effect/effect-characteristics.h"
 #include "spell/spells-type.h"
 #include "spell/spells-object.h"

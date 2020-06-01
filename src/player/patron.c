@@ -4,7 +4,7 @@
 #include "io/write-diary.h"
 #include "cmd-io/cmd-dump.h"
 #include "player/patron.h"
-#include "cmd/cmd-pet.h"
+#include "cmd-action/cmd-pet.h"
 #include "object/object-curse.h"
 #include "object/object-flavor.h"
 #include "monster/monster-race-hook.h"

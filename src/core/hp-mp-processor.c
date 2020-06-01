@@ -10,7 +10,7 @@
 #include "player/player-effects.h"
 #include "floor/pattern-walk.h"
 #include "core/hp-mp-regenerator.h"
-#include "cmd/cmd-pet.h"
+#include "cmd-action/cmd-pet.h"
 #include "player/player-races-table.h"
 #include "object/trc-types.h"
 

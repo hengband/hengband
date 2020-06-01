@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "cmd/cmd-spell.h"
+#include "cmd-action/cmd-spell.h"
 #include "spell/spells-type.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-status.h"

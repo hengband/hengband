@@ -20,7 +20,7 @@
 #include "spell/spells-summon.h"
 #include "player/avatar.h"
 #include "spell/spells-status.h"
-#include "cmd/cmd-spell.h"
+#include "cmd-action/cmd-spell.h"
 #include "player/player-status.h"
 #include "mspell/monster-spell.h"
 #include "monster/monster-status.h"

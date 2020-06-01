@@ -23,7 +23,7 @@
 #include "cmd-item/cmd-usestaff.h"
 #include "cmd-item/cmd-zaprod.h"
 #include "cmd-item/cmd-zapwand.h"
-#include "cmd/cmd-pet.h"
+#include "cmd-action/cmd-pet.h"
 #include "cmd/cmd-basic.h"
 #include "object/object2.h"
 #include "object/item-feeling.h"

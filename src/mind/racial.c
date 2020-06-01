@@ -17,7 +17,7 @@
 
 #include "cmd/cmd-basic.h"
 #include "cmd-item/cmd-magiceat.h"
-#include "cmd/cmd-mane.h"
+#include "cmd-action/cmd-mane.h"
 #include "cmd-item/cmd-zapwand.h"
 #include "combat/melee-postprocess.h"
 #include "object/object-hook.h"
@@ -30,7 +30,7 @@
 #include "spell/spells-status.h"
 #include "spell/spells-object.h"
 #include "spell/spells-floor.h"
-#include "cmd/cmd-spell.h"
+#include "cmd-action/cmd-spell.h"
 #include "realm/realm-hex.h"
 #include "io/targeting.h"
 #include "view/display-main-window.h"

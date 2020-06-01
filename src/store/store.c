@@ -41,7 +41,7 @@
 #include "spell/spells3.h"
 #include "store/store.h"
 #include "player/avatar.h"
-#include "cmd/cmd-spell.h"
+#include "cmd-action/cmd-spell.h"
 #include "store/rumor.h"
 #include "player/player-status.h"
 #include "player/player-class.h"

@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "cmd/cmd-attack.h"
+#include "cmd-action/cmd-attack.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
 #include "combat/player-attack.h"

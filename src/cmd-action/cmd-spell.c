@@ -10,7 +10,7 @@
 #include "core/stuff-handler.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
-#include "cmd/cmd-spell.h"
+#include "cmd-action/cmd-spell.h"
 
 #include "io/write-diary.h"
 #include "cmd-io/cmd-dump.h"

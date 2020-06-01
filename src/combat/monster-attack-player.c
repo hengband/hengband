@@ -5,8 +5,8 @@
  */
 
 #include "combat/monster-attack-player.h"
-#include "cmd/cmd-attack.h"
-#include "cmd/cmd-pet.h"
+#include "cmd-action/cmd-attack.h"
+#include "cmd-action/cmd-pet.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
 #include "combat/combat-options-type.h"

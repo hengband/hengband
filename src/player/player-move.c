@@ -180,7 +180,7 @@
 #include "io/targeting.h"
 #include "spell/process-effect.h"
 #include "spell/spells3.h"
-#include "cmd/cmd-attack.h"
+#include "cmd-action/cmd-attack.h"
 
 travel_type travel;
 

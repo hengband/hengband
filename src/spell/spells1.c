@@ -16,7 +16,7 @@
 #include "system/system-variables.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
-#include "cmd/cmd-pet.h"
+#include "cmd-action/cmd-pet.h"
 #include "cmd-io/cmd-dump.h"
 #include "player/player-class.h"
 #include "monster/monster.h"

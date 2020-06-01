@@ -23,7 +23,7 @@
 #include "object/item-use-flags.h"
 
 #include "cmd/cmd-basic.h"
-#include "cmd/cmd-spell.h"
+#include "cmd-action/cmd-spell.h"
 #include "view/display-main-window.h"
 #include "spell/spells-util.h"
 #include "spell/spells-execution.h"

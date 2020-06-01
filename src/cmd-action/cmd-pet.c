@@ -15,13 +15,13 @@
 #include "object/object-hook.h"
 #include "monster/monster.h"
 #include "monster/monster-status.h"
-#include "cmd/cmd-pet.h"
+#include "cmd-action/cmd-pet.h"
 #include "cmd/cmd-basic.h"
 #include "view/display-main-window.h"
 #include "io/targeting.h"
 #include "world/world.h"
 #include "effect/spells-effect-util.h"
-#include "cmd/cmd-attack.h"
+#include "cmd-action/cmd-attack.h"
 #include "pet/pet-util.h"
 
 int total_friends = 0;

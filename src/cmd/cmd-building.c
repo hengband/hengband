@@ -30,7 +30,7 @@
 #include "player/avatar.h"
 #include "cmd/cmd-building.h"
 #include "mutation/mutation.h"
-#include "cmd/cmd-spell.h"
+#include "cmd-action/cmd-spell.h"
 #include "spell/spells3.h"
 #include "spell/spells-status.h"
 #include "io/files-util.h"

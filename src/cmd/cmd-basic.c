@@ -60,7 +60,7 @@
 #include "effect/spells-effect-util.h"
 #include "spell/spells3.h"
 #include "core/output-updater.h"
-#include "cmd/cmd-attack.h"
+#include "cmd-action/cmd-attack.h"
 #include "object/tr-types.h"
 
 /*!

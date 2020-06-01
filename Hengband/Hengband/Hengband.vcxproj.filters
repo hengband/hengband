@@ -1052,19 +1052,19 @@
     <ClCompile Include="..\..\src\cmd-io\feeling-table.c">
       <Filter>cmd-io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-attack.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-attack.c">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-hissatsu.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-hissatsu.c">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-mane.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-mane.c">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-pet.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-pet.c">
       <Filter>cmd-action</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-spell.c">
+    <ClCompile Include="..\..\src\cmd-action\cmd-spell.c">
       <Filter>cmd-action</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2269,19 +2269,19 @@
     <ClInclude Include="..\..\src\cmd-io\feeling-table.h">
       <Filter>cmd-io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-attack.h">
+    <ClInclude Include="..\..\src\cmd-action\cmd-attack.h">
       <Filter>cmd-action</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-hissatsu.h">
+    <ClInclude Include="..\..\src\cmd-action\cmd-hissatsu.h">
       <Filter>cmd-action</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-mane.h">
+    <ClInclude Include="..\..\src\cmd-action\cmd-mane.h">
       <Filter>cmd-action</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-pet.h">
+    <ClInclude Include="..\..\src\cmd-action\cmd-pet.h">
       <Filter>cmd-action</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-spell.h">
+    <ClInclude Include="..\..\src\cmd-action\cmd-spell.h">
       <Filter>cmd-action</Filter>
     </ClInclude>
   </ItemGroup>

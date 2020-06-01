@@ -338,12 +338,15 @@ hengband_SOURCES = \
 	cmd/object-group-table.c cmd/object-group-table.h \
 	cmd/cmd-activate.c cmd/cmd-activate.h cmd/cmd-basic.c cmd/cmd-basic.h \
 	cmd/cmd-draw.c cmd/cmd-draw.h \
-	cmd/cmd-hissatsu.c cmd/cmd-hissatsu.h cmd/cmd-inn.c cmd/cmd-inn.h \
+	cmd/cmd-inn.c cmd/cmd-inn.h \
 	cmd/lighting-level-table.c cmd/lighting-level-table.h \
-	cmd/cmd-mane.c cmd/cmd-mane.h \
-	cmd/cmd-pet.c cmd/cmd-pet.h \
-	cmd/cmd-spell.c cmd/cmd-spell.h cmd/cmd-visuals.c cmd/cmd-visuals.h \
-	cmd/cmd-attack.c cmd/cmd-attack.h \
+	cmd/cmd-visuals.c cmd/cmd-visuals.h \
+	\
+	cmd-action/cmd-attack.c cmd-action/cmd-attack.h \
+	cmd-action/cmd-hissatsu.c cmd-action/cmd-hissatsu.h \
+	cmd-action/cmd-mane.c cmd-action/cmd-mane.h \
+	cmd-action/cmd-pet.c cmd-action/cmd-pet.h \
+	cmd-action/cmd-spell.c cmd-action/cmd-spell.h \
 	\
 	cmd-io/cmd-diary.c cmd/-iocmd-diary.h \
 	cmd-io/cmd-dump.c cmd-io/cmd-dump.h \

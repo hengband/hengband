@@ -11,7 +11,7 @@
 #include "spell/spells-status.h"
 #include "spell/spells-type.h"
 #include "monster/monster.h"
-#include "cmd/cmd-spell.h"
+#include "cmd-action/cmd-spell.h"
 #include "player/player-effects.h"
 #include "object/object2.h"
 #include "object/object-kind.h"
