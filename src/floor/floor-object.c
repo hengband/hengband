@@ -139,14 +139,14 @@ bool make_gold(floor_type *floor_ptr, object_type *j_ptr)
 }
 
 /*!
- * @brief フロアにマスに落ちているオブジェクトを全て削除する / Deletes all objects at given location
+ * @brief フロア中のアイテムを全て削除する / Deletes all objects at given location
  * Delete a dungeon object
  * @param player_ptr プレーヤーへの参照ポインタ
  * @param y 削除したフロアマスのY座標
  * @param x 削除したフロアマスのX座標
  * @return なし
  */
-void delete_object(player_type *player_ptr, POSITION y, POSITION x)
+void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x)
 {
     grid_type *g_ptr;
     OBJECT_IDX this_o_idx, next_o_idx = 0;

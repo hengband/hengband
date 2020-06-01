@@ -388,7 +388,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
 					}
 				}
 
-				delete_object(player_ptr, ty, tx);
+				delete_all_items_from_floor(player_ptr, ty, tx);
 			}
 
 			/* Clear previous contents, add proper vein type */
