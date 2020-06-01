@@ -4,8 +4,7 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
-#include "cmd/monster-group-table.h"
+#include "knowledge/monster-group-table.h"
 
 /*
  * todo 元々t (町人)がいなかったが、問題ないのか？

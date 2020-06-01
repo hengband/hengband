@@ -10,7 +10,7 @@
 #include "knowledge/knowledge-monsters.h"
 #include "cmd/dump-util.h"
 #include "core/sort.h"
-#include "cmd/monster-group-table.h"
+#include "knowledge/monster-group-table.h"
 #include "monster/monster-status.h"
 #include "world/world.h"
 #include "core/show-file.h"
