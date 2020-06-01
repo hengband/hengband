@@ -13,7 +13,7 @@
 #include "system/angband.h"
 #include "util/util.h"
 
-#include "cmd-smith.h"
+#include "cmd-item/cmd-smith.h"
 #include "object/artifact.h"
 #include "player/player-status.h"
 #include "player/player-class.h"

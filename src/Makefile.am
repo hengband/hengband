@@ -339,21 +339,28 @@ hengband_SOURCES = \
 	cmd/object-group-table.c cmd/object-group-table.h \
 	cmd/cmd-activate.c cmd/cmd-activate.h cmd/cmd-basic.c cmd/cmd-basic.h \
 	cmd/cmd-diary.c cmd/cmd-diary.h cmd/cmd-dump.c cmd/cmd-dump.h \
-	cmd/cmd-draw.c cmd/cmd-draw.h cmd/cmd-eat.c cmd/cmd-eat.h \
+	cmd/cmd-draw.c cmd/cmd-draw.h \
 	cmd/cmd-gameoption.c cmd/cmd-gameoption.h cmd/cmd-help.c cmd/cmd-help.h \
 	cmd/cmd-hissatsu.c cmd/cmd-hissatsu.h cmd/cmd-inn.c cmd/cmd-inn.h \
-	cmd/cmd-item.c cmd/cmd-item.h cmd/cmd-knowledge.c cmd/cmd-knowledge.h \
+	cmd/cmd-knowledge.c cmd/cmd-knowledge.h \
 	cmd/lighting-level-table.c cmd/lighting-level-table.h \
-	cmd/cmd-magiceat.c cmd/cmd-magiceat.h cmd/cmd-mane.c cmd/cmd-mane.h \
+	cmd/cmd-mane.c cmd/cmd-mane.h \
 	cmd/cmd-macro.c cmd/cmd-macro.h cmd/cmd-pet.c cmd/cmd-pet.h \
-	cmd/cmd-quaff.c cmd/cmd-quaff.h cmd/cmd-read.c cmd/cmd-read.h \
 	cmd/cmd-process-screen.c cmd/cmd-process-screen.h \
-	cmd/cmd-save.c cmd/cmd-save.h cmd/cmd-smith.c cmd/cmd-smith.h \
+	cmd/cmd-save.c cmd/cmd-save.h \
 	cmd/cmd-spell.c cmd/cmd-spell.h cmd/cmd-visuals.c cmd/cmd-visuals.h \
-	cmd/cmd-usestaff.c cmd/cmd-usestaff.h \
-	cmd/cmd-zaprod.c cmd/cmd-zaprod.h cmd/cmd-zapwand.c cmd/cmd-zapwand.h \
 	cmd/cmd-menu-content-table.c cmd/cmd-menu-content-table.h \
 	cmd/cmd-attack.c cmd/cmd-attack.h \
+	\
+	cmd-item/cmd-eat.c cmd-item/cmd-eat.h \
+	cmd-item/cmd-item.c cmd-item/cmd-item.h \
+	cmd-item/cmd-magiceat.c cmd-item/cmd-magiceat.h \
+	cmd-item/cmd-quaff.c cmd-item/cmd-quaff.h \
+	cmd-item/cmd-read.c cmd-item/cmd-read.h \
+	cmd-item/cmd-smith.c cmd-item/cmd-smith.h \
+	cmd-item/cmd-usestaff.c cmd-item/cmd-usestaff.h \
+	cmd-item/cmd-zaprod.c cmd-item/cmd-zaprod.h \
+	cmd-item/cmd-zapwand.c cmd-item/cmd-zapwand.h \
 	\
 	combat/player-attack-util.h \
 	combat/attack-power-table.c combat/attack-power-table.h \
@@ -409,10 +416,10 @@ CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-	-Iautopick -Ibirth -Icmd -Icombat -Icore -Idungeon -Ieffect -Ifloor \
-	-Igrid -Iinventory -Iio -Iknowledge -Imarket -Imind -Imonster -Imspell \
-	-Imutation -Iobject -Ipet -Iplayer -Irealm -Iroom -Ispell -Isystem -Iterm \
-	-Iutil -Iview -Iwizard -Iworld
+	-Iautopick -Ibirth -Icmd -Icmd-item -Icombat -Icore -Idungeon -Ieffect \
+	-Ifloor -Igrid -Iinventory -Iio -Iknowledge -Imarket -Imind -Imonster \
+	-Imspell -Imutation -Iobject -Ipet -Iplayer -Irealm -Iroom -Ispell -Isystem \
+	-Iterm -Iutil -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

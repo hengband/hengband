@@ -13,7 +13,7 @@
 #include "term/gameterm.h"
 
 #include "player/player-status.h"
-#include "cmd-basic.h"
+#include "cmd/cmd-basic.h"
 #include "combat/snipe.h"
 #include "floor/floor.h"
 #include "monster/monster-race.h"

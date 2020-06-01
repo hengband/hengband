@@ -2,7 +2,7 @@
 #include "floor/floor.h"
 #include "object/object-boost.h"
 #include "object/object-boost.h"
-#include "cmd-activate.h"
+#include "cmd/cmd-activate.h"
 #include "object/tr-types.h"
 
 /*!

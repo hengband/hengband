@@ -19,8 +19,8 @@
 #include "util/util.h"
 
 #include "effect/effect-characteristics.h"
-#include "cmd-spell.h"
-#include "cmd-quaff.h"
+#include "cmd/cmd-spell.h"
+#include "cmd-item/cmd-quaff.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-curse.h"

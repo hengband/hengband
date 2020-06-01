@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "util/util.h"
 
-#include "cmd-spell.h"
+#include "cmd/cmd-spell.h"
 #include "spell/spells-type.h"
 #include "spell/spells-status.h"
 #include "spell/spells-floor.h"

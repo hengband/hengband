@@ -1,5 +1,4 @@
 ﻿/*!
- *  @file cmd-item.c
  *  @brief プレイヤーのアイテムに関するコマンドの実装1 / Inventory and equipment commands
  *  @date 2014/01/02
  *  @author
@@ -10,7 +9,7 @@
  * are included in all such copies.  Other copyrights may also apply.
  */
 
-#include "system/angband.h"
+#include "cmd-item/cmd-item.h"
 #include "core/stuff-handler.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
@@ -18,12 +17,12 @@
 
 #include "player/selfinfo.h"
 #include "cmd/cmd-activate.h"
-#include "cmd/cmd-eat.h"
-#include "cmd/cmd-quaff.h"
-#include "cmd/cmd-read.h"
-#include "cmd/cmd-usestaff.h"
-#include "cmd/cmd-zaprod.h"
-#include "cmd/cmd-zapwand.h"
+#include "cmd-item/cmd-eat.h"
+#include "cmd-item/cmd-quaff.h"
+#include "cmd-item/cmd-read.h"
+#include "cmd-item/cmd-usestaff.h"
+#include "cmd-item/cmd-zaprod.h"
+#include "cmd-item/cmd-zapwand.h"
 #include "cmd/cmd-pet.h"
 #include "cmd/cmd-basic.h"
 #include "object/object2.h"

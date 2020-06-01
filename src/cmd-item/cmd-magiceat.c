@@ -1,5 +1,4 @@
 ﻿/*!
- * @file cmd6.c
  * @brief プレイヤーのアイテムに関するコマンドの実装2 / Spell/Prayer commands
  * @date 2014/01/27
  * @author
@@ -58,10 +57,10 @@
 #include "term/gameterm.h"
 
 #include "cmd/cmd-basic.h"
-#include "cmd/cmd-usestaff.h"
-#include "cmd/cmd-zaprod.h"
-#include "cmd/cmd-zapwand.h"
-#include "cmd/cmd-magiceat.h"
+#include "cmd-item/cmd-usestaff.h"
+#include "cmd-item/cmd-zaprod.h"
+#include "cmd-item/cmd-zapwand.h"
+#include "cmd-item/cmd-magiceat.h"
 #include "player/avatar.h"
 #include "player/player-status.h"
 #include "spell/spells3.h"

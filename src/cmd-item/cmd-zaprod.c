@@ -1,4 +1,4 @@
-﻿#include "system/angband.h"
+﻿#include "cmd-item/cmd-zaprod.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 
@@ -17,7 +17,7 @@
 #include "spell/spells-type.h"
 #include "spell/spells-status.h"
 #include "spell/spells-floor.h"
-#include "cmd-basic.h"
+#include "cmd/cmd-basic.h"
 #include "floor/floor.h"
 #include "io/targeting.h"
 #include "view/display-main-window.h"

@@ -1,12 +1,10 @@
 ﻿/*!
- * @file cmd-read.c
  * @brief プレイヤーの読むコマンド実装
  * @date 2018/09/07
- * @details
- * cmd6.cより分離。
+ * @author deskull
  */
 
-#include "system/angband.h"
+#include "cmd-item/cmd-read.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 

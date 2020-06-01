@@ -1,7 +1,7 @@
 ﻿#include "system/angband.h"
 #include "util/util.h"
 
-#include "cmd-basic.h"
+#include "cmd/cmd-basic.h"
 #include "object/artifact.h"
 #include "floor/floor.h"
 #include "grid/grid.h"

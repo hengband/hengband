@@ -1,12 +1,10 @@
 ﻿/*!
- * @file cmd-quaff.c
  * @brief プレイヤーの飲むコマンド実装
  * @date 2018/09/07
- * @details
- * cmd6.cより分離。
+ * @author deskull
  */
 
-#include "system/angband.h"
+#include "cmd-item/cmd-quaff.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 
@@ -27,7 +25,7 @@
 #include "object/object2.h"
 #include "object/object-broken.h"
 #include "object/sv-potion-types.h"
-#include "cmd-basic.h"
+#include "cmd/cmd-basic.h"
 #include "floor/floor.h"
 #include "object/object-kind.h"
 #include "view/display-main-window.h"

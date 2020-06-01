@@ -11,19 +11,10 @@
     <ClCompile Include="..\..\src\cmd\cmd-dump.c">
       <Filter>cmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-eat.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd\cmd-gameoption.c">
       <Filter>cmd</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\cmd\cmd-hissatsu.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-item.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-magiceat.c">
       <Filter>cmd</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\cmd\cmd-mane.c">
@@ -32,25 +23,7 @@
     <ClCompile Include="..\..\src\cmd\cmd-pet.c">
       <Filter>cmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-quaff.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-read.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-smith.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd\cmd-spell.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-usestaff.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-zaprod.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-zapwand.c">
       <Filter>cmd</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\combat\shoot.c">
@@ -1067,6 +1040,33 @@
     <ClCompile Include="..\..\src\pet\pet-util.c">
       <Filter>pet</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item\cmd-eat.c">
+      <Filter>cmd-item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item\cmd-item.c">
+      <Filter>cmd-item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item\cmd-magiceat.c">
+      <Filter>cmd-item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item\cmd-quaff.c">
+      <Filter>cmd-item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item\cmd-read.c">
+      <Filter>cmd-item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item\cmd-smith.c">
+      <Filter>cmd-item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item\cmd-usestaff.c">
+      <Filter>cmd-item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item\cmd-zaprod.c">
+      <Filter>cmd-item</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item\cmd-zapwand.c">
+      <Filter>cmd-item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-activate.h">
@@ -1078,19 +1078,10 @@
     <ClInclude Include="..\..\src\cmd\cmd-dump.h">
       <Filter>cmd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-eat.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-gameoption.h">
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-hissatsu.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-item.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-magiceat.h">
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-mane.h">
@@ -1099,25 +1090,7 @@
     <ClInclude Include="..\..\src\cmd\cmd-pet.h">
       <Filter>cmd</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-quaff.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-read.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-smith.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-spell.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-usestaff.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-zaprod.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-zapwand.h">
       <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\shoot.h">
@@ -2284,6 +2257,33 @@
     <ClInclude Include="..\..\src\pet\pet-fall-off.h">
       <Filter>pet</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item\cmd-eat.h">
+      <Filter>cmd-item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item\cmd-item.h">
+      <Filter>cmd-item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item\cmd-magiceat.h">
+      <Filter>cmd-item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item\cmd-quaff.h">
+      <Filter>cmd-item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item\cmd-read.h">
+      <Filter>cmd-item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item\cmd-smith.h">
+      <Filter>cmd-item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item\cmd-usestaff.h">
+      <Filter>cmd-item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item\cmd-zaprod.h">
+      <Filter>cmd-item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item\cmd-zapwand.h">
+      <Filter>cmd-item</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2385,6 +2385,9 @@
     </Filter>
     <Filter Include="pet">
       <UniqueIdentifier>{7c81caa7-dbd8-43f3-8481-9a2ae3967776}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cmd-item">
+      <UniqueIdentifier>{7af80633-259f-406b-a33d-23f6a83013d7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

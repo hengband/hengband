@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "cmd/cmd-inn.h"
-#include "cmd/cmd-magiceat.h"
+#include "cmd-item/cmd-magiceat.h"
 #include "io/write-diary.h"
 #include "world/world.h"
 #include "player/player-effects.h"

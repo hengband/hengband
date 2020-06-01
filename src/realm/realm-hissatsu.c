@@ -2,8 +2,8 @@
 #include "core/stuff-handler.h"
 #include "util/util.h"
 
-#include "cmd-spell.h"
-#include "cmd-basic.h"
+#include "cmd/cmd-spell.h"
+#include "cmd/cmd-basic.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "monster/monster-race-hook.h"

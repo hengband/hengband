@@ -172,7 +172,7 @@
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
 #include "spell/spells-type.h"
-#include "cmd-basic.h"
+#include "cmd/cmd-basic.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 #include "object/object-kind.h"

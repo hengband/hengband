@@ -14,11 +14,11 @@
 #include "util/util.h"
 
 #include "object/artifact.h"
-#include "cmd-smith.h"
+#include "cmd-item/cmd-smith.h"
 
 #include "player/avatar.h"
 #include "floor/floor.h"
-#include "cmd-activate.h"
+#include "cmd/cmd-activate.h"
 #include "object/object1.h"
 #include "object/object-kind.h"
 #include "object/object-boost.h"

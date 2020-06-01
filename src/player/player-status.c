@@ -49,7 +49,7 @@
 #include "world/world.h"
 #include "view/display-main-window.h"
 #include "io/files-util.h"
-#include "cmd-magiceat.h"
+#include "cmd-item/cmd-magiceat.h"
 
 #include "monster/horror-descriptions.h"
 #include "market/arena-info-table.h"

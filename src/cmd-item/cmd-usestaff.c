@@ -1,4 +1,4 @@
-﻿#include "system/angband.h"
+﻿#include "cmd-item/cmd-usestaff.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 
@@ -14,7 +14,7 @@
 #include "spell/spells-floor.h"
 #include "object/object2.h"
 #include "object/object-hook.h"
-#include "cmd-basic.h"
+#include "cmd/cmd-basic.h"
 #include "floor/floor.h"
 #include "object/item-use-flags.h"
 #include "object/object-kind.h"

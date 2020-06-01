@@ -2,7 +2,7 @@
 #include "core/stuff-handler.h"
 #include "util/util.h"
 
-#include "cmd-magiceat.h"
+#include "cmd-item/cmd-magiceat.h"
 #include "player/avatar.h"
 #include "effect/effect-characteristics.h"
 #include "object/object-flavor.h"

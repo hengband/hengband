@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "core/hp-mp-regenerator.h"
-#include "cmd/cmd-magiceat.h"
+#include "cmd-item/cmd-magiceat.h"
 #include "floor/floor.h"
 #include "monster/monster-status.h"
 

@@ -32,7 +32,7 @@
 #include "spell/spells-floor.h"
 #include "object/item-feeling.h"
 #include "object/object-hook.h"
-#include "cmd-basic.h"
+#include "cmd/cmd-basic.h"
 #include "io/files-util.h"
 #include "floor/floor.h"
 #include "io/targeting.h"

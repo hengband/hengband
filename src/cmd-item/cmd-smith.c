@@ -1,4 +1,10 @@
-﻿#include "system/angband.h"
+﻿/*!
+ * @brief プレイヤーの鍛冶コマンド実装
+ * @date 2019/03/11
+ * @author deskull
+ */
+
+#include "cmd-item/cmd-smith.h"
 #include "util/util.h"
 #include "term/gameterm.h"
 #include "object/item-use-flags.h"
@@ -8,8 +14,7 @@
 #include "object/object-ego.h"
 #include "object/special-object-flags.h"
 #include "player/player-status.h"
-#include "cmd-basic.h"
-#include "cmd-smith.h"
+#include "cmd/cmd-basic.h"
 #include "object/object-kind.h"
 #include "autopick/autopick.h"
 #include "view/display-main-window.h"

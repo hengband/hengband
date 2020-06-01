@@ -85,7 +85,7 @@
 #include "object/object-ego.h"
 #include "io/save.h"
 #include "locale/japanese.h"
-#include "cmd-smith.h"
+#include "cmd-item/cmd-smith.h"
 #include "birth/quick-start.h"
 #include "player/player-races-table.h"
 #include "market/bounty.h"

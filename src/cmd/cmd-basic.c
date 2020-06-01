@@ -50,7 +50,7 @@
 #include "shoot.h"
 #include "combat/snipe.h"
 
-#include "cmd-basic.h"
+#include "cmd/cmd-basic.h"
 #include "dungeon/dungeon-file.h"
 #include "io/files-util.h"
 

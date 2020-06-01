@@ -1,13 +1,10 @@
 ﻿/*!
- * @file cmd-eat.c
  * @brief プレイヤーの食べるコマンド実装
  * @date 2018/09/07
- * @details
- * cmd6.cより分離。
+ @ @author deskull
  */
 
-
-#include "system/angband.h"
+#include "cmd-item/cmd-eat.h"
 #include "main/sound-definitions-table.h"
 #include "util/util.h"
 #include "object/object2.h"

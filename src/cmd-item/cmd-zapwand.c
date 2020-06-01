@@ -1,4 +1,4 @@
-﻿#include "system/angband.h"
+﻿#include "cmd-item/cmd-zapwand.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 
@@ -15,7 +15,7 @@
 #include "object/object-hook.h"
 #include "object/special-object-flags.h"
 #include "object/sv-wand-types.h"
-#include "cmd-basic.h"
+#include "cmd/cmd-basic.h"
 #include "floor/floor.h"
 #include "io/targeting.h"
 #include "view/display-main-window.h"

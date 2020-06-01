@@ -29,7 +29,7 @@
 #include "player/player-class.h"
 #include "inventory/player-inventory.h"
 #include "object/object-hook.h"
-#include "cmd-basic.h"
+#include "cmd/cmd-basic.h"
 #include "view/display-main-window.h"
 #include "floor/floor.h"
 #include "autopick/autopick-reader-writer.h"
