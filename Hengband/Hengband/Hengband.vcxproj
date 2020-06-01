@@ -325,7 +325,7 @@
     <ClCompile Include="..\..\src\cmd-io\diary-subtitle-table.c" />
     <ClCompile Include="..\..\src\cmd-io\feeling-table.c" />
     <ClCompile Include="..\..\src\knowledge\lighting-level-table.c" />
-    <ClCompile Include="..\..\src\cmd\monster-group-table.c" />
+    <ClCompile Include="..\..\src\knowledge\monster-group-table.c" />
     <ClCompile Include="..\..\src\cmd\object-group-table.c" />
     <ClCompile Include="..\..\src\combat\melee-postprocess.c" />
     <ClCompile Include="..\..\src\combat\shoot.c" />
@@ -736,7 +736,7 @@
     <ClInclude Include="..\..\src\cmd-io\diary-subtitle-table.h" />
     <ClInclude Include="..\..\src\cmd-io\feeling-table.h" />
     <ClInclude Include="..\..\src\knowledge\lighting-level-table.h" />
-    <ClInclude Include="..\..\src\cmd\monster-group-table.h" />
+    <ClInclude Include="..\..\src\knowledge\monster-group-table.h" />
     <ClInclude Include="..\..\src\cmd\object-group-table.h" />
     <ClInclude Include="..\..\src\combat\melee-postprocess.h" />
     <ClInclude Include="..\..\src\combat\shoot.h" />
