@@ -241,7 +241,7 @@
     <ClCompile Include="..\..\src\cmd-io\cmd-autopick.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-knowledge.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-process-screen.c" />
-    <ClCompile Include="..\..\src\cmd\dump-util.c" />
+    <ClCompile Include="..\..\src\io-dump\dump-util.c" />
     <ClCompile Include="..\..\src\core\game-play.c" />
     <ClCompile Include="..\..\src\dungeon\dungeon-processor.c" />
     <ClCompile Include="..\..\src\player\digestion-processor.c" />
@@ -554,7 +554,7 @@
     <ClInclude Include="..\..\src\cmd-io\cmd-autopick.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-knowledge.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-process-screen.h" />
-    <ClInclude Include="..\..\src\cmd\dump-util.h" />
+    <ClInclude Include="..\..\src\io-dump\dump-util.h" />
     <ClInclude Include="..\..\src\core\game-play.h" />
     <ClInclude Include="..\..\src\dungeon\dungeon-processor.h" />
     <ClInclude Include="..\..\src\player\digestion-processor.h" />

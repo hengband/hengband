@@ -1004,9 +1004,6 @@
     <ClCompile Include="..\..\src\cmd\cmd-draw.c">
       <Filter>cmd</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\dump-util.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd-io\cmd-diary.c">
       <Filter>cmd-io</Filter>
     </ClCompile>
@@ -1066,6 +1063,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\knowledge\monster-group-table.c">
       <Filter>knowledge</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\io-dump\dump-util.c">
+      <Filter>io-dump</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2221,9 +2221,6 @@
     <ClInclude Include="..\..\src\cmd-item\cmd-zapwand.h">
       <Filter>cmd-item</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd\dump-util.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\cmd-io\cmd-diary.h">
       <Filter>cmd-io</Filter>
     </ClInclude>
@@ -2283,6 +2280,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\knowledge\monster-group-table.h">
       <Filter>knowledge</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\io-dump\dump-util.h">
+      <Filter>io-dump</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2394,6 +2394,9 @@
     </Filter>
     <Filter Include="cmd-action">
       <UniqueIdentifier>{f578e89d-2670-4f24-8028-61896d5b733e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="io-dump">
+      <UniqueIdentifier>{739c9774-e51a-46eb-87c1-cd7cd332e97c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
