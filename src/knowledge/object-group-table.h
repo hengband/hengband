@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #define MAX_OBJECT_GROUP_TEXT 43
 #define MAX_OBJECT_GROUP_TVAL 43
 

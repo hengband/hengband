@@ -47,7 +47,6 @@ hengband_SOURCES = \
 	birth/birth-wizard.c birth/birth-wizard.h \
 	\
 	cmd/cmd-building.c cmd/cmd-building.h \
-	cmd/object-group-table.c cmd/object-group-table.h \
 	cmd/cmd-basic.c cmd/cmd-basic.h \
 	cmd/cmd-draw.c cmd/cmd-draw.h \
 	cmd/cmd-inn.c cmd/cmd-inn.h \
@@ -60,7 +59,7 @@ hengband_SOURCES = \
 	cmd-action/cmd-spell.c cmd-action/cmd-spell.h \
 	\
 	cmd-io/cmd-autopick.c cmd-io/cmd-autopick.c \
-	cmd-io/cmd-diary.c cmd/-iocmd-diary.h \
+	cmd-io/cmd-diary.c cmd/-io/cmd-diary.h \
 	cmd-io/cmd-dump.c cmd-io/cmd-dump.h \
 	cmd-io/cmd-gameoption.c cmd-io/cmd-gameoption.h \
 	cmd-io/cmd-help.c cmd-io/cmd-help.h \
@@ -209,6 +208,7 @@ hengband_SOURCES = \
 	knowledge/knowledge-quests.c knowledge/knowledge-quests.h \
 	knowledge/lighting-level-table.c knowledge/lighting-level-table.h \
 	knowledge/monster-group-table.c knowledge/monster-group-table.h \
+	knowledge/object-group-table.c knowledge/object-group-table.h \
 	\
 	locale/japanese.c locale/japanese.h locale/english.c locale/english.h \
 	\

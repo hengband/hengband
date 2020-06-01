@@ -4,8 +4,7 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
-#include "object-group-table.h"
+#include "knowledge/object-group-table.h"
 #include "object/tval-types.h"
 
 /*

@@ -15,7 +15,7 @@
 #include "object/object-kind.h"
 #include "object/special-object-flags.h"
 #include "core/show-file.h"
-#include "cmd/object-group-table.h"
+#include "knowledge/object-group-table.h"
 #include "world/world.h"
 #include "term/gameterm.h"
 #include "core/stuff-handler.h"
