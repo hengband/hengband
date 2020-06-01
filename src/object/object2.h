@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "floor/floor.h"
 
 extern OBJECT_SUBTYPE_VALUE coin_type;
@@ -36,8 +37,6 @@ void apply_magic(player_type *owner_type, object_type *o_ptr, DEPTH lev, BIT_FLA
 
 OBJECT_IDX drop_near(player_type *owner_type, object_type *o_ptr, PERCENTAGE chance, POSITION y, POSITION x);
 void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num);
-void inven_item_charges(player_type *owner_ptr, INVENTORY_IDX item);
-void inven_item_describe(player_type *owner_ptr, INVENTORY_IDX item);
 void inven_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num);
 void inven_item_optimize(player_type *owner_ptr, INVENTORY_IDX item);
 void floor_item_charges(floor_type *owner_ptr, INVENTORY_IDX item);

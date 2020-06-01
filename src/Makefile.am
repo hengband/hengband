@@ -290,31 +290,34 @@ hengband_SOURCES = \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
 	\
 	object/artifact.c object/artifact.h \
-	object/object-boost.c object/object-boost.h \
 	object/chest.c object/chest.h \
-	object/object-curse.c object/object-curse.h \
+	object/death-scythe.c object/death-scythe.h \
+	object/object1.c object/object1.h \
+	object/object2.c object/object2.h \
+	object/object-boost.c object/object-boost.h \
 	object/object-broken.c object/object-broken.h \
+	object/object-curse.c object/object-curse.h \
+	object/object-ego.c object/object-ego.h \
+	object/object-flavor.c object/object-flavor.h \
 	object/object-hook.c object/object-hook.h \
-	object/object1.c object/object1.h object/object2.c object/object2.h \
 	object/object-kind.c object/object-kind.h \
 	object/object-kind-hook.c object/object-kind-hook.h \
 	object/lite-processor.c object/lite-processor.h \
-	object/object-flavor.c object/object-flavor.h \
-	object/object-ego.c object/object-ego.h \
-	object/warning.c object/warning.h \
-	object/death-scythe.c object/death-scythe.h \
+	object/torch.c object/torch.h \
 	object/tr-types.h object/trc-types.h object/tval-type.h \
-	object/old-ego-extra-values.h object/special-object-flags.h \
-	object/object-mark-types.h object/object-util.h \
+	object/warning.c object/warning.h \
 	object/item-apply-magic.h \
-	object/sv-amulet-types.h object/sv-bow-types.h \
+	object/object-mark-types.h \
+	object/object-util.h \
+	object/old-ego-extra-values.h \
+	object/special-object-flags.h \
+	object/sv-amulet-types.h \object/sv-bow-types.h \
 	object/sv-digging-types.h object/sv-food-types.h \
 	object/sv-weapon-types.h object/sv-protector-types.h object/sv-armor-types.h \
 	object/sv-lite-types.h object/sv-potion-types.h object/sv-ring-types.h \
 	object/sv-rod-types.h object/sv-scroll-types.h \
 	object/sv-staff-types.h object/sv-wand-types.h object/sv-other-types.h \
 	object/item-feeling.h object/item-use-flags.h \
-	object/torch.c object/torch.h \
 	\
 	player/avatar.h player/avatar.c \
 	player/mimic-info-table.c player/mimic-info-table.h \
@@ -407,6 +410,7 @@ hengband_SOURCES = \
 	view/display-player-misc-info.c view/display-player-misc-info.h \
 	view/display-player-middle.c view/display-player-middle.h \
 	view/display-player.c view/display-player.h \
+	view/object-describer.c view/object-describer.h \
 	view/status-first-page.c view/status-first-page.h \
 	view/display-util.c view/display-util.h \
 	view/display-birth.c view/display-birth.h \

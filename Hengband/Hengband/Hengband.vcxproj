@@ -690,6 +690,7 @@
     <ClCompile Include="..\..\src\view\display-util.c" />
     <ClCompile Include="..\..\src\player\process-death.c" />
     <ClCompile Include="..\..\src\view\display-player-misc-info.c" />
+    <ClCompile Include="..\..\src\view\object-describer.c" />
     <ClCompile Include="..\..\src\view\status-first-page.c" />
     <ClCompile Include="..\..\src\store\store.c" />
     <ClCompile Include="..\..\src\floor\floor-streams.c" />
@@ -744,6 +745,7 @@
     <ClInclude Include="..\..\src\combat\shoot.h" />
     <ClInclude Include="..\..\src\core\show-file.h" />
     <ClInclude Include="..\..\src\view\display-birth.h" />
+    <ClInclude Include="..\..\src\view\object-describer.h" />
     <ClInclude Include="..\src\locele\english.h" />
     <ClInclude Include="..\..\src\monster\horror-descriptions.h" />
     <ClInclude Include="..\..\src\io\gf-descriptions.h" />

@@ -13,6 +13,7 @@
 #include "object/object-kind.h"
 #include "object/object2.h"
 #include "object/special-object-flags.h"
+#include "view/object-describer.h"
 
 #define MAX_GOLD 18 /* Number of "gold" entries */
 

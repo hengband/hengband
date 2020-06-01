@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "autopick/autopick-util.h"
+﻿#include "autopick/autopick-util.h"
 #include "autopick/autopick-menu-data-table.h"
 #include "object/item-feeling.h"
 
