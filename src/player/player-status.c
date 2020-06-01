@@ -27,6 +27,7 @@
 #include "monster/monster.h"
 #include "mutation/mutation.h"
 #include "object/artifact.h"
+#include "object/bow.h"
 #include "object/object-appraiser.h"
 #include "object/object-ego.h"
 #include "object/object-hook.h"

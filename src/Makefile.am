@@ -291,6 +291,7 @@ hengband_SOURCES = \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
 	\
 	object/artifact.c object/artifact.h \
+	object/bow.c object/bow.h \
 	object/chest.c object/chest.h \
 	object/death-scythe.c object/death-scythe.h \
 	object/object1.c object/object1.h \

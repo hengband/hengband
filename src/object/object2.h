@@ -6,7 +6,6 @@
 extern OBJECT_SUBTYPE_VALUE coin_type;
 extern bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
-int bow_tval_ammo(object_type *o_ptr);
 s32b flag_cost(object_type *o_ptr, int plusses);
 void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx);
 void delete_object_idx(player_type *owner_ptr, OBJECT_IDX o_idx);

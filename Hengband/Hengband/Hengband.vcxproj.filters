@@ -1082,6 +1082,9 @@
     <ClCompile Include="..\..\src\realm\realm-names-table.c">
       <Filter>realm</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\bow.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2313,6 +2316,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-names-table.h">
       <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\bow.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

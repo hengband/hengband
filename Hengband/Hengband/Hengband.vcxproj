@@ -211,6 +211,7 @@
     <ClCompile Include="..\..\src\mind\racial-samurai.c" />
     <ClCompile Include="..\..\src\mind\samurai-slaying.c" />
     <ClCompile Include="..\..\src\mind\surprise-attack.c" />
+    <ClCompile Include="..\..\src\object\bow.c" />
     <ClCompile Include="..\..\src\object\object-appraiser.c" />
     <ClCompile Include="..\..\src\object\object-value.c" />
     <ClCompile Include="..\..\src\pet\pet-fall-off.c" />
@@ -494,6 +495,7 @@
     <ClInclude Include="..\..\src\mind\racial-samurai.h" />
     <ClInclude Include="..\..\src\mind\samurai-slaying.h" />
     <ClInclude Include="..\..\src\mind\surprise-attack.h" />
+    <ClInclude Include="..\..\src\object\bow.h" />
     <ClInclude Include="..\..\src\object\object-appraiser.h" />
     <ClInclude Include="..\..\src\object\object-value.h" />
     <ClInclude Include="..\..\src\pet\pet-fall-off.h" />

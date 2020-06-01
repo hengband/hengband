@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "object/object-util.h"
+#include "object/tval-types.h"
 #include "realm/realm-names-table.h"
 
 bool in_disintegration_range(floor_type *floor_ptr, POSITION y1, POSITION x1, POSITION y2, POSITION x2);
