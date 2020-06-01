@@ -316,7 +316,7 @@ hengband_SOURCES = \
 	object/object-util.h \
 	object/old-ego-extra-values.h \
 	object/special-object-flags.h \
-	object/sv-amulet-types.h \object/sv-bow-types.h \
+	object/sv-amulet-types.h object/sv-bow-types.h \
 	object/sv-digging-types.h object/sv-food-types.h \
 	object/sv-weapon-types.h object/sv-protector-types.h object/sv-armor-types.h \
 	object/sv-lite-types.h object/sv-potion-types.h object/sv-ring-types.h \
