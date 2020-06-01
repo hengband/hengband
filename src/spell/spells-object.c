@@ -1,7 +1,7 @@
 ﻿/*!
  * @brief アイテムに影響のある魔法の処理
  * @date 2019/01/22
- * @deskull
+ * @author deskull
  */
 
 #include "spell/spells-object.h"
@@ -10,6 +10,7 @@
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
+#include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/targeting.h"
 #include "object/artifact.h"

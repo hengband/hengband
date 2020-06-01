@@ -192,6 +192,7 @@
     <ClCompile Include="..\..\src\combat\vorpal-weapon.c" />
     <ClCompile Include="..\..\src\floor\floor-object.c" />
     <ClCompile Include="..\..\src\inventory\inventory-damage.c" />
+    <ClCompile Include="..\..\src\inventory\inventory-object.c" />
     <ClCompile Include="..\..\src\io\pref-file-expressor.c" />
     <ClCompile Include="..\..\src\market\arena.c" />
     <ClCompile Include="..\..\src\market\bounty-prize-table.c" />
@@ -472,6 +473,7 @@
     <ClInclude Include="..\..\src\combat\vorpal-weapon.h" />
     <ClInclude Include="..\..\src\floor\floor-object.h" />
     <ClInclude Include="..\..\src\inventory\inventory-damage.h" />
+    <ClInclude Include="..\..\src\inventory\inventory-object.h" />
     <ClInclude Include="..\..\src\io\pref-file-expressor.h" />
     <ClInclude Include="..\..\src\market\arena.h" />
     <ClInclude Include="..\..\src\market\bounty-prize-table.h" />

@@ -6,6 +6,7 @@
 
 #include "cmd-item/cmd-eat.h"
 #include "floor/floor.h"
+#include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "main/sound-definitions-table.h"
 #include "object/item-use-flags.h"

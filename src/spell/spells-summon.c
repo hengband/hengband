@@ -1,16 +1,13 @@
-﻿#include "system/angband.h"
-#include "util/util.h"
-
-#include "spell/spells-summon.h"
+﻿#include "spell/spells-summon.h"
+#include "effect/spells-effect-util.h"
+#include "floor/floor.h"
+#include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "monster/monster-status.h"
-#include "floor/floor.h"
-#include "effect/spells-effect-util.h"
-#include "spell/spells2.h"
 #include "object/item-use-flags.h"
-#include "object/object2.h"
 #include "object/object-hook.h"
 #include "object/sv-other-types.h"
+#include "spell/spells2.h"
 
 /*!
 * @brief トランプ魔法独自の召喚処理を行う / Handle summoning and failure of trump spells

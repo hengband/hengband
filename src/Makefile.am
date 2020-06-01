@@ -167,12 +167,13 @@ hengband_SOURCES = \
 	grid/feature.c grid/feature.h \
 	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
 	\
-	inventory/simple-appraiser.c inventory/simple-appraiser.h \
 	inventory/inventory-curse.c inventory/inventory-curse.h \
-	inventory/recharge-processor.c inventory/recharge-processor.h \
+	inventory/inventory-damage.c inventory/inventory-damage.h \
+	inventory/inventory-object.c inventory/inventory-object.h \
 	inventory/pack-overflow.c inventory/pack-overflow.h \
 	inventory/player-inventory.c inventory/player-inventory.h \
-	inventory/inventory-damage.c inventory/inventory-damage.h \
+	inventory/recharge-processor.c inventory/recharge-processor.h \
+	inventory/simple-appraiser.c inventory/simple-appraiser.h \
 	\
 	io/files-util.c io/files-util.h \
 	io/gf-descriptions.c io/gf-descriptions.h \

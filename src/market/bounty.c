@@ -2,6 +2,7 @@
 #include "autopick/autopick.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
+#include "inventory/inventory-object.h"
 #include "market/bounty-prize-table.h"
 #include "market/building-util.h"
 #include "monster/monster-race-hook.h"

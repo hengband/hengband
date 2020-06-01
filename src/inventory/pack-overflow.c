@@ -1,4 +1,5 @@
 ﻿#include "system/angband.h"
+#include "inventory/inventory-object.h"
 #include "inventory/pack-overflow.h"
 #include "player/player-move.h"
 #include "object/object2.h"

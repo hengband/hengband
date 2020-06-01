@@ -8,6 +8,7 @@
 #include "birth/birth-stat.h"
 #include "cmd/cmd-basic.h"
 #include "floor/floor.h"
+#include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "main/sound-definitions-table.h"
 #include "mutation/mutation.h"

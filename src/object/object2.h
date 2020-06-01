@@ -33,9 +33,6 @@ void object_prep(object_type *o_ptr, KIND_OBJECT_IDX k_idx);
 void apply_magic(player_type *owner_type, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
 
 OBJECT_IDX drop_near(player_type *owner_type, object_type *o_ptr, PERCENTAGE chance, POSITION y, POSITION x);
-void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num);
-void inven_item_increase(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num);
-void inven_item_optimize(player_type *owner_ptr, INVENTORY_IDX item);
 void floor_item_charges(floor_type *owner_ptr, INVENTORY_IDX item);
 void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER num);
 void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item);

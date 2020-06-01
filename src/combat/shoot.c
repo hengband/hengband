@@ -4,6 +4,7 @@
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
 #include "grid/grid.h"
+#include "inventory/inventory-object.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "monster/monster-status.h"
