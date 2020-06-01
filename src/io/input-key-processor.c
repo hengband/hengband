@@ -32,7 +32,7 @@
 #include "io/files-util.h"
 
 #include "cmd-item/cmd-activate.h"
-#include "cmd/cmd-autopick.h"
+#include "cmd-io/cmd-autopick.h"
 #include "cmd/cmd-building.h"
 #include "cmd-io/cmd-diary.h"
 #include "cmd/cmd-draw.h"

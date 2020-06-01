@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "cmd/cmd-autopick.h"
+﻿#include "cmd-io/cmd-autopick.h"
 #include "cmd-io/cmd-save.h"
 #include "autopick/autopick-util.h"
 #include "autopick/autopick-commands-table.h"
