@@ -1,5 +1,6 @@
 ﻿#include "inventory/inventory-object.h"
 #include "object/object-flavor.h"
+#include "object/object-value.h"
 #include "object/object2.h" // 暫定、相互参照している.
 #include "player/player-effects.h" // 暫定、相互参照している.
 #include "view/object-describer.h"

@@ -12,7 +12,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
-#include "object/object2.h"
+#include "object/object-value.h"
 #include "object/special-object-flags.h"
 #include "object/sv-other-types.h"
 #include "object/sv-wand-types.h"

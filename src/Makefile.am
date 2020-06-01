@@ -304,6 +304,7 @@ hengband_SOURCES = \
 	object/object-hook.c object/object-hook.h \
 	object/object-kind.c object/object-kind.h \
 	object/object-kind-hook.c object/object-kind-hook.h \
+	object/object-value.c object/object-value.h \
 	object/lite-processor.c object/lite-processor.h \
 	object/torch.c object/torch.h \
 	object/tr-types.h object/trc-types.h object/tval-type.h \

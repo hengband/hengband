@@ -42,6 +42,7 @@
 #include "object/special-object-flags.h"
 #include "object/sv-lite-types.h"
 #include "object/trc-types.h"
+#include "object/object-value.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"

@@ -40,6 +40,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
+#include "object/object-value.h"
 #include "object/object2.h"
 #include "object/trc-types.h"
 #include "player/patron.h"

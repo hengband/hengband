@@ -1079,6 +1079,9 @@
     <ClCompile Include="..\..\src\inventory\inventory-object.c">
       <Filter>inventory</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\object-value.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2307,6 +2310,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\inventory\inventory-object.h">
       <Filter>inventory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-value.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

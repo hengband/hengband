@@ -39,6 +39,7 @@
 #include "object/object-ego.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
+#include "object/object-value.h"
 #include "object/object2.h"
 #include "object/special-object-flags.h"
 #include "object/sv-armor-types.h"

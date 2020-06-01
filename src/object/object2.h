@@ -18,8 +18,6 @@ OBJECT_IDX get_obj_num(player_type *o_ptr, DEPTH level, BIT_FLAGS mode);
 byte value_check_aux1(object_type *o_ptr);
 byte value_check_aux2(object_type *o_ptr);
 
-PRICE object_value(object_type *o_ptr);
-PRICE object_value_real(object_type *o_ptr);
 void distribute_charges(object_type *o_ptr, object_type *q_ptr, int amt);
 void reduce_charges(object_type *o_ptr, int amt);
 int object_similar_part(object_type *o_ptr, object_type *j_ptr);
