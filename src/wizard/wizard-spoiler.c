@@ -16,9 +16,9 @@
 #include "io/files-util.h"
 #include "monster/monster.h"
 #include "object/artifact.h"
+#include "object/object-appraiser.h"
 #include "object/object-ego.h"
 #include "object/object-flavor.h"
-#include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object2.h"
 #include "object/special-object-flags.h"
@@ -2411,7 +2411,7 @@ static void spoiler_print_randart(object_type *o_ptr, obj_desc_list *art_ptr)
 	fprintf(fff, "%s\n", art_ptr->description);
 
 	/* unidentified */
-	if (!OBJECT_IS_FULL_KNOWN(o_ptr))
+	if (!object_is_fully_known(o_ptr))
 	{
 		fprintf(fff, _("%s不明\n", "%sUnknown\n"), INDENT1);
 	}

@@ -1,6 +1,6 @@
 ﻿#include "view/object-describer.h"
+#include "object/object-appraiser.h"
 #include "object/object-flavor.h"
-#include "object/object-hook.h"
 #include "object/special-object-flags.h"
 
 /*!

@@ -71,3 +71,22 @@ void object_aware(player_type *owner_ptr, object_type *o_ptr)
  * @return なし
  */
 void object_tried(object_type *o_ptr) { k_info[o_ptr->k_idx].tried = TRUE; }
+
+/*
+ * Determine if a given inventory item is "aware"
+ */
+bool object_is_aware(object_type *o_ptr) { return k_info[(o_ptr)->k_idx].aware; }
+
+/*
+ * Determine if a given inventory item is "tried"
+ */
+bool object_is_tried(object_type *o_ptr) { return k_info[(o_ptr)->k_idx].tried; }
+
+/*
+ * Determine if a given inventory item is "known"
+ * Test One -- Check for special "known" tag
+ * Test Two -- Check for "Easy Know" + "Aware"
+ */
+bool object_is_known(object_type *o_ptr) { return ((o_ptr->ident & IDENT_KNOWN) != 0) || (k_info[(o_ptr)->k_idx].easy_know && k_info[(o_ptr)->k_idx].aware); }
+
+bool object_is_fully_known(object_type *o_ptr) { return (o_ptr->ident & IDENT_FULL_KNOWN) != 0; }

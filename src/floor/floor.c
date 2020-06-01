@@ -8,6 +8,7 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "object/artifact.h"
+#include "object/object-appraiser.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object1.h"

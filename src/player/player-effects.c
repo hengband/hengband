@@ -34,6 +34,7 @@
 #include "mutation/mutation.h"
 #include "object/artifact.h"
 #include "object/item-feeling.h"
+#include "object/object-appraiser.h"
 #include "object/object-ego.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
@@ -3211,7 +3212,7 @@ bool lose_all_info(player_type *creature_ptr)
 	{
 		object_type *o_ptr = &creature_ptr->inventory_list[i];
 		if (!o_ptr->k_idx) continue;
-		if (OBJECT_IS_FULL_KNOWN(o_ptr)) continue;
+		if (object_is_fully_known(o_ptr)) continue;
 
 		o_ptr->feeling = FEEL_NONE;
 		o_ptr->ident &= ~(IDENT_EMPTY);

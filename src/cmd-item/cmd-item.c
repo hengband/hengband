@@ -32,6 +32,7 @@
 #include "object/artifact.h"
 #include "object/item-feeling.h"
 #include "object/item-use-flags.h"
+#include "object/object-appraiser.h"
 #include "object/object-ego.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
@@ -809,7 +810,7 @@ void do_cmd_observe(player_type *creature_ptr)
 	if (!o_ptr) return;
 
 	/* Require full knowledge */
-	if (!OBJECT_IS_FULL_KNOWN(o_ptr))
+	if (!object_is_fully_known(o_ptr))
 	{
 		msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));
 		return;

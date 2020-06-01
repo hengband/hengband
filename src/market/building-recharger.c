@@ -3,6 +3,7 @@
 #include "inventory/player-inventory.h"
 #include "market/building-util.h"
 #include "object/item-use-flags.h"
+#include "object/object-appraiser.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"

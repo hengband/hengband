@@ -2,7 +2,6 @@
 #include "core/stuff-handler.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
-
 #include "cmd/cmd-building.h"
 #include "dungeon/quest.h"
 #include "player/player-move.h"
@@ -24,6 +23,7 @@
 #include "spell/spells-status.h"
 #include "object/object1.h"
 #include "object/object2.h"
+#include "object/object-appraiser.h"
 #include "object/object-hook.h"
 #include "object/object-ego.h"
 #include "object/special-object-flags.h"
@@ -49,7 +49,6 @@
 #include "view/display-main-window.h"
 #include "io/files-util.h"
 #include "cmd-item/cmd-magiceat.h"
-
 #include "monster/horror-descriptions.h"
 #include "market/arena-info-table.h"
 #include "spell/spells-util.h"
@@ -2207,12 +2206,12 @@ void calc_bonuses(player_type *creature_ptr)
 				if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
 				{
 					creature_ptr->to_h[slot] -= 15;
-					if (OBJECT_IS_FULL_KNOWN(o_ptr)) creature_ptr->dis_to_h[slot] -= 15;
+					if (object_is_fully_known(o_ptr)) creature_ptr->dis_to_h[slot] -= 15;
 				}
 				else
 				{
 					creature_ptr->to_h[slot] -= 5;
-					if (OBJECT_IS_FULL_KNOWN(o_ptr)) creature_ptr->dis_to_h[slot] -= 5;
+					if (object_is_fully_known(o_ptr)) creature_ptr->dis_to_h[slot] -= 5;
 				}
 			}
 			else
@@ -2220,12 +2219,12 @@ void calc_bonuses(player_type *creature_ptr)
 				if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
 				{
 					creature_ptr->to_h_b -= 15;
-					if (OBJECT_IS_FULL_KNOWN(o_ptr)) creature_ptr->dis_to_h_b -= 15;
+					if (object_is_fully_known(o_ptr)) creature_ptr->dis_to_h_b -= 15;
 				}
 				else
 				{
 					creature_ptr->to_h_b -= 5;
-					if (OBJECT_IS_FULL_KNOWN(o_ptr)) creature_ptr->dis_to_h_b -= 5;
+					if (object_is_fully_known(o_ptr)) creature_ptr->dis_to_h_b -= 5;
 				}
 			}
 		}
@@ -2235,12 +2234,12 @@ void calc_bonuses(player_type *creature_ptr)
 			if (o_ptr->curse_flags & TRC_HEAVY_CURSE)
 			{
 				creature_ptr->to_a -= 30;
-				if (OBJECT_IS_FULL_KNOWN(o_ptr)) creature_ptr->dis_to_a -= 30;
+				if (object_is_fully_known(o_ptr)) creature_ptr->dis_to_a -= 30;
 			}
 			else
 			{
 				creature_ptr->to_a -= 10;
-				if (OBJECT_IS_FULL_KNOWN(o_ptr)) creature_ptr->dis_to_a -= 10;
+				if (object_is_fully_known(o_ptr)) creature_ptr->dis_to_a -= 10;
 			}
 		}
 

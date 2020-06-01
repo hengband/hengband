@@ -10,6 +10,7 @@
 #include "monster/monster.h"
 #include "object/artifact.h"
 #include "object/item-feeling.h"
+#include "object/object-appraiser.h"
 #include "object/object-kind.h"
 #include "object/special-object-flags.h"
 #include "object/sv-armor-types.h"
@@ -399,7 +400,7 @@ bool item_tester_hook_identify_weapon_armour(object_type *o_ptr)
 */
 bool item_tester_hook_identify_fully(object_type *o_ptr)
 {
-	return (bool)(!object_is_known(o_ptr) || !OBJECT_IS_FULL_KNOWN(o_ptr));
+	return (bool)(!object_is_known(o_ptr) || !object_is_fully_known(o_ptr));
 }
 
 /*!
@@ -1018,30 +1019,4 @@ bool item_tester_okay(player_type *player_ptr, object_type *o_ptr, tval_type tva
 
 	/* Assume okay */
 	return TRUE;
-}
-
-/*
- * Determine if a given inventory item is "aware"
- */
-bool object_is_aware(object_type *o_ptr)
-{
-    return k_info[(o_ptr)->k_idx].aware;
-}
-
-/*
- * Determine if a given inventory item is "tried"
- */
-bool object_is_tried(object_type *o_ptr)
-{
-	return k_info[(o_ptr)->k_idx].tried;
-}
-
-/*
- * Determine if a given inventory item is "known"
- * Test One -- Check for special "known" tag
- * Test Two -- Check for "Easy Know" + "Aware"
- */
-bool object_is_known(object_type *o_ptr)
-{
-	return ((o_ptr->ident & IDENT_KNOWN) != 0) || (k_info[(o_ptr)->k_idx].easy_know && k_info[(o_ptr)->k_idx].aware);
 }

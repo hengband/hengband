@@ -9,6 +9,7 @@
 #include "autopick/autopick-flags-table.h"
 #include "autopick/autopick-key-flag-process.h"
 #include "object/item-feeling.h"
+#include "object/object-appraiser.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object2.h"
@@ -32,7 +33,7 @@ bool is_autopick_match(player_type *player_ptr, object_type *o_ptr, autopick_typ
 		return FALSE;
 
 	if (IS_FLG(FLG_STAR_IDENTIFIED) &&
-		(!object_is_known(o_ptr) || !OBJECT_IS_FULL_KNOWN(o_ptr)))
+		(!object_is_known(o_ptr) || !object_is_fully_known(o_ptr)))
 		return FALSE;
 
 	if (IS_FLG(FLG_BOOSTED))

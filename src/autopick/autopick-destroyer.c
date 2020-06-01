@@ -7,6 +7,7 @@
 #include "autopick/autopick-destroyer.h"
 #include "autopick-methods-table.h"
 #include "autopick/autopick-util.h"
+#include "object/object-appraiser.h"
 #include "object/object-ego.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

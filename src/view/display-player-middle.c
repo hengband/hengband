@@ -1,6 +1,6 @@
 ﻿#include "view/display-player-middle.h"
 #include "floor/floor.h"
-#include "object/object-hook.h"
+#include "object/object-appraiser.h"
 #include "object/special-object-flags.h"
 #include "object/sv-bow-types.h"
 #include "player/player-effects.h"

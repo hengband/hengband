@@ -1693,7 +1693,7 @@ static void store_examine(player_type *player_ptr)
 	item = item + store_top;
 	object_type *o_ptr;
 	o_ptr = &st_ptr->stock[item];
-	if (!OBJECT_IS_FULL_KNOWN(o_ptr))
+	if (!object_is_fully_known(o_ptr))
 	{
 		msg_print(_("このアイテムについて特に知っていることはない。", "You have no special knowledge about that item."));
 		return;

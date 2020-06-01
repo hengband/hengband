@@ -8,6 +8,7 @@
 #include "core/show-file.h"
 #include "floor/floor-town.h"
 #include "io-dump/dump-util.h"
+#include "object/object-appraiser.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/special-object-flags.h"
@@ -168,7 +169,7 @@ static void do_cmd_knowledge_inventory_aux(player_type *creature_ptr, FILE *fff,
 
 	fprintf(fff, "%s %s", where, o_name);
 
-	if (!OBJECT_IS_FULL_KNOWN(o_ptr))
+	if (!object_is_fully_known(o_ptr))
 	{
 		fputs(_("-------不明--------------- -------不明---------\n",
 			"-------unknown------------ -------unknown------\n"), fff);

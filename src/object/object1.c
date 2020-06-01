@@ -22,6 +22,7 @@
 #include "monster/monster.h"
 #include "object/artifact.h"
 #include "object/item-apply-magic.h"
+#include "object/object-appraiser.h"
 #include "object/object-ego.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
@@ -257,7 +258,7 @@ void object_flags_known(object_type *o_ptr, BIT_FLAGS flgs[TR_FLAG_SIZE])
 		}
 	}
 
-	if (spoil || OBJECT_IS_FULL_KNOWN(o_ptr))
+	if (spoil || object_is_fully_known(o_ptr))
 	{
 		if (object_is_fixed_artifact(o_ptr))
 		{

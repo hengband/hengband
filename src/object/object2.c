@@ -1111,7 +1111,7 @@ void object_absorb(object_type *o_ptr, object_type *j_ptr)
 		if (o_ptr->ident & IDENT_STORE) o_ptr->ident &= 0xEF;
 	}
 
-	if (OBJECT_IS_FULL_KNOWN(j_ptr)) o_ptr->ident |= (IDENT_FULL_KNOWN);
+	if (object_is_fully_known(j_ptr)) o_ptr->ident |= (IDENT_FULL_KNOWN);
 	if (j_ptr->inscription) o_ptr->inscription = j_ptr->inscription;
 	if (j_ptr->feeling) o_ptr->feeling = j_ptr->feeling;
 	if (o_ptr->discount < j_ptr->discount) o_ptr->discount = j_ptr->discount;

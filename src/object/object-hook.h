@@ -55,11 +55,6 @@ bool object_allow_two_hands_wielding(object_type *o_ptr);
 bool object_can_refill_torch(object_type *o_ptr);
 bool can_player_destroy_object(object_type *o_ptr);
 bool object_is_quest_target(object_type *o_ptr);
-bool object_is_aware(object_type *o_ptr);
-bool object_is_tried(object_type *o_ptr);
-bool object_is_known(object_type *o_ptr);
-
-#define OBJECT_IS_FULL_KNOWN(T) ((T)->ident & IDENT_FULL_KNOWN)
 
 #define OBJECT_IS_VALID(T) ((T)->k_idx != 0)
 

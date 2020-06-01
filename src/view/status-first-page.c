@@ -10,7 +10,7 @@
 #include "combat/shoot.h"
 #include "display-util.h"
 #include "object/artifact.h"
-#include "object/object-hook.h"
+#include "object/object-appraiser.h"
 #include "object/object1.h"
 #include "object/special-object-flags.h"
 #include "object/sv-weapon-types.h"
@@ -115,7 +115,7 @@ static bool calc_weapon_one_hand(object_type *o_ptr, int hand, int *damage, int 
  */
 static int strengthen_basedam(player_type *creature_ptr, object_type *o_ptr, int basedam, BIT_FLAGS *flgs)
 {
-	if (OBJECT_IS_FULL_KNOWN(o_ptr) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
+	if (object_is_fully_known(o_ptr) && ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)))
 	{
 		/* vorpal blade */
 		basedam *= 5;

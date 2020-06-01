@@ -17,6 +17,7 @@
 #include "locale/japanese.h"
 #include "monster/monster-race.h"
 #include "object/artifact.h"
+#include "object/object-appraiser.h"
 #include "object/object-ego.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
@@ -1215,7 +1216,7 @@ static void get_inscription(char *buff, object_type *o_ptr)
 	char *ptr = buff;
 
 	/* Not fully identified */
-	if (!OBJECT_IS_FULL_KNOWN(o_ptr))
+	if (!object_is_fully_known(o_ptr))
 	{
 		/* Copy until end of line or '#' */
 		while (*insc)
@@ -2735,7 +2736,7 @@ void object_desc(player_type *player_ptr, char *buf, object_type *o_ptr, BIT_FLA
 	tmp_val2[0] = '\0';
 
 	/* Auto abbreviation inscribe */
-	if ((abbrev_extra || abbrev_all) && OBJECT_IS_FULL_KNOWN(o_ptr))
+	if ((abbrev_extra || abbrev_all) && object_is_fully_known(o_ptr))
 	{
 		if (!o_ptr->inscription || !my_strchr(quark_str(o_ptr->inscription), '%'))
 		{
