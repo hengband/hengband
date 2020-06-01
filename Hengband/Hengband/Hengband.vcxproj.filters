@@ -239,9 +239,6 @@
     <ClCompile Include="..\..\src\effect\effect-item.c">
       <Filter>effect</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\realm\realm.c">
-      <Filter>realm</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\realm\realm-arcane.c">
       <Filter>realm</Filter>
     </ClCompile>
@@ -1082,6 +1079,9 @@
     <ClCompile Include="..\..\src\object\object-value.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\realm\realm-names-table.c">
+      <Filter>realm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1344,9 +1344,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\effect\effect-item.h">
       <Filter>effect</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\realm\realm.h">
-      <Filter>realm</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-arcane.h">
       <Filter>realm</Filter>
@@ -2313,6 +2310,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-value.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-names-table.h">
+      <Filter>realm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

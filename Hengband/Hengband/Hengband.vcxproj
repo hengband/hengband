@@ -659,7 +659,7 @@
     <ClCompile Include="..\..\src\realm\realm-hex.c" />
     <ClCompile Include="..\..\src\realm\realm-life.c" />
     <ClCompile Include="..\..\src\realm\realm-trump.c" />
-    <ClCompile Include="..\..\src\realm\realm.c" />
+    <ClCompile Include="..\..\src\realm\realm-names-table.c" />
     <ClCompile Include="..\..\src\io\report.c" />
     <ClCompile Include="..\..\src\room\rooms-city.c" />
     <ClCompile Include="..\..\src\room\rooms-fractal.c" />
@@ -887,7 +887,7 @@
     <ClInclude Include="..\..\src\realm\realm-song.h" />
     <ClInclude Include="..\..\src\realm\realm-sorcery.h" />
     <ClInclude Include="..\..\src\realm\realm-trump.h" />
-    <ClInclude Include="..\..\src\realm\realm.h" />
+    <ClInclude Include="..\..\src\realm\realm-names-table.h" />
     <ClInclude Include="..\..\src\io\report.h" />
     <ClInclude Include="..\..\src\room\rooms-city.h" />
     <ClInclude Include="..\..\src\room\rooms-fractal.h" />
