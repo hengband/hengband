@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="..\..\src\main-win.c" />
-    <ClCompile Include="..\..\src\cmd\cmd-activate.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd\cmd-basic.c">
       <Filter>cmd</Filter>
     </ClCompile>
@@ -1067,11 +1064,11 @@
     <ClCompile Include="..\..\src\cmd-action\cmd-spell.c">
       <Filter>cmd-action</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-item\cmd-activate.c">
+      <Filter>cmd-item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\cmd\cmd-activate.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
       <Filter>cmd</Filter>
     </ClInclude>
@@ -2283,6 +2280,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-action\cmd-spell.h">
       <Filter>cmd-action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-item\cmd-activate.h">
+      <Filter>cmd-item</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
