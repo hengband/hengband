@@ -61,7 +61,7 @@
 #include "grid/trap.h"
 #include "object/artifact.h"
 #include "object/sv-scroll-types.h"
-#include "cmd/cmd-activate.h"
+#include "cmd-item/cmd-activate.h"
 #include "term/gameterm.h"
 #include "floor/wild.h"
 #include "view/display-main-window.h"

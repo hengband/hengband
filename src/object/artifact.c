@@ -18,7 +18,7 @@
 
 #include "player/avatar.h"
 #include "floor/floor.h"
-#include "cmd/cmd-activate.h"
+#include "cmd-item/cmd-activate.h"
 #include "object/object1.h"
 #include "object/object-kind.h"
 #include "object/object-boost.h"

@@ -336,7 +336,7 @@ hengband_SOURCES = \
 	cmd/dump-util.c cmd/dump-util.h \
 	cmd/monster-group-table.c cmd/monster-group-table.h \
 	cmd/object-group-table.c cmd/object-group-table.h \
-	cmd/cmd-activate.c cmd/cmd-activate.h cmd/cmd-basic.c cmd/cmd-basic.h \
+	cmd/cmd-basic.c cmd/cmd-basic.h \
 	cmd/cmd-draw.c cmd/cmd-draw.h \
 	cmd/cmd-inn.c cmd/cmd-inn.h \
 	cmd/lighting-level-table.c cmd/lighting-level-table.h \
@@ -360,6 +360,7 @@ hengband_SOURCES = \
 	cmd-io/diary-subtitle-table.c cmd-io/diary-subtitle-table.h \
 	cmd-io/feeling-table.c cmd-io/feeling-table.h \
 	\
+	cmd-item/cmd-activate.c cmd-item/cmd-activate.h \
 	cmd-item/cmd-eat.c cmd-item/cmd-eat.h \
 	cmd-item/cmd-item.c cmd-item/cmd-item.h \
 	cmd-item/cmd-magiceat.c cmd-item/cmd-magiceat.h \

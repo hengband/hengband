@@ -16,7 +16,7 @@
 #include "term/gameterm.h"
 
 #include "player/selfinfo.h"
-#include "cmd/cmd-activate.h"
+#include "cmd-item/cmd-activate.h"
 #include "cmd-item/cmd-eat.h"
 #include "cmd-item/cmd-quaff.h"
 #include "cmd-item/cmd-read.h"

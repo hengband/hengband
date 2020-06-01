@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "cmd/cmd-activate.h"
+#include "cmd-item/cmd-activate.h"
 
 typedef struct artifact_type artifact_type;
 

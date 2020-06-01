@@ -31,7 +31,7 @@
 #include "player/player-move.h" // do_cmd_travel() がある。後で移設する.
 #include "io/files-util.h"
 
-#include "cmd/cmd-activate.h"
+#include "cmd-item/cmd-activate.h"
 #include "cmd/cmd-autopick.h"
 #include "cmd/cmd-building.h"
 #include "cmd-io/cmd-diary.h"
