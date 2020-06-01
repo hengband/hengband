@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "cmd/lighting-level-table.h"
+﻿#include "knowledge/lighting-level-table.h"
 
 /*!
  * @brief キャラクタ色の明暗表現

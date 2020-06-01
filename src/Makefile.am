@@ -325,6 +325,7 @@ hengband_SOURCES = \
 	knowledge/knowledge-features.c knowledge/knowledge-features.h \
 	knowledge/knowledge-inventory.c knowledge/knowledge-inventory.h \
 	knowledge/knowledge-items.c knowledge/knowledge-items.h \
+	knowledge/lighting-level-table.c knowledge/lighting-level-table.h \
 	knowledge/knowledge-monsters.c knowledge/knowledge-monsters.h \
 	knowledge/knowledge-mutations.c knowledge/knowledge-mutations.h \
 	knowledge/knowledge-uniques.c knowledge/knowledge-uniques.h \
@@ -338,7 +339,6 @@ hengband_SOURCES = \
 	cmd/cmd-basic.c cmd/cmd-basic.h \
 	cmd/cmd-draw.c cmd/cmd-draw.h \
 	cmd/cmd-inn.c cmd/cmd-inn.h \
-	cmd/lighting-level-table.c cmd/lighting-level-table.h \
 	cmd/cmd-visuals.c cmd/cmd-visuals.h \
 	\
 	cmd-action/cmd-attack.c cmd-action/cmd-attack.h \
