@@ -1,6 +1,7 @@
 ﻿#include "inventory/inventory-object.h"
 #include "floor/floor-object.h"
 #include "object/object-flavor.h"
+#include "object/object-hook.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
 #include "object/object2.h" // 暫定、相互参照している.
@@ -364,4 +365,58 @@ bool check_store_item_to_inventory(object_type *o_ptr)
     }
 
     return FALSE;
+}
+
+/*!
+ * @brief 装備スロットからオブジェクトを外すメインルーチン /
+ * Take off (some of) a non-cursed equipment item
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param item オブジェクトを外したい所持テーブルのID
+ * @param amt 外したい個数
+ * @return 収められた所持スロットのID、拾うことができなかった場合-1を返す。
+ * @details
+ * Note that only one item at a time can be wielded per slot.\n
+ * Note that taking off an item when "full" may cause that item\n
+ * to fall to the ground.\n
+ * Return the inventory slot into which the item is placed.\n
+ */
+INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
+{
+    INVENTORY_IDX slot;
+    object_type forge;
+    object_type *q_ptr;
+    object_type *o_ptr;
+    concptr act;
+    GAME_TEXT o_name[MAX_NLEN];
+    o_ptr = &owner_ptr->inventory_list[item];
+    if (amt <= 0)
+        return -1;
+
+    if (amt > o_ptr->number)
+        amt = o_ptr->number;
+    q_ptr = &forge;
+    object_copy(q_ptr, o_ptr);
+    q_ptr->number = amt;
+    object_desc(owner_ptr, o_name, q_ptr, 0);
+    if (((item == INVEN_RARM) || (item == INVEN_LARM)) && object_is_melee_weapon(o_ptr)) {
+        act = _("を装備からはずした", "You were wielding");
+    } else if (item == INVEN_BOW) {
+        act = _("を装備からはずした", "You were holding");
+    } else if (item == INVEN_LITE) {
+        act = _("を光源からはずした", "You were holding");
+    } else {
+        act = _("を装備からはずした", "You were wearing");
+    }
+
+    inven_item_increase(owner_ptr, item, -amt);
+    inven_item_optimize(owner_ptr, item);
+
+    slot = store_item_to_inventory(owner_ptr, q_ptr);
+#ifdef JP
+    msg_format("%s(%c)%s。", o_name, index_to_label(slot), act);
+#else
+    msg_format("%s %s (%c).", act, o_name, index_to_label(slot));
+#endif
+
+    return slot;
 }
