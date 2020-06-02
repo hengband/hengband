@@ -6,7 +6,6 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
-#include "object/object2.h"
 #include "object/sv-other-types.h"
 #include "object/sv-scroll-types.h"
 #include "object/tr-types.h"

@@ -2,6 +2,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
+#include "floor/floor-object.h"
 #include "io/targeting.h"
 #include "object/object-generator.h"
 #include "object/object2.h"

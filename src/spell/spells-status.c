@@ -9,6 +9,7 @@
 #include "cmd-item/cmd-magiceat.h"
 #include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
+#include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "io/targeting.h"
 #include "mind/racial-force-trainer.h"

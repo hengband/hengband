@@ -33,7 +33,6 @@
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
 #include "object/object1.h"
-#include "object/object2.h"
 #include "object/special-object-flags.h"
 #include "object/sv-lite-types.h"
 #include "object/sv-weapon-types.h"

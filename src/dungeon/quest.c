@@ -15,7 +15,6 @@
 #include "object/artifact.h"
 #include "object/item-apply-magic.h"
 #include "object/object-generator.h"
-#include "object/object2.h"
 #include "player/player-personalities-table.h"
 #include "player/player-status.h"
 #include "system/system-variables.h"

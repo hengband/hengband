@@ -1,4 +1,5 @@
 ﻿#include "inventory/inventory-damage.h"
+#include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "mind/racial-mirror-master.h"
 #include "object/artifact.h"

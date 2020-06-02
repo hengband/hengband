@@ -14,7 +14,6 @@
 #include "monster/monster-status.h"
 #include "object/artifact.h"
 #include "object/item-use-flags.h"
-#include "object/object2.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

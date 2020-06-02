@@ -10,3 +10,5 @@ void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER 
 void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item);
 void delete_object_idx(player_type *owner_ptr, OBJECT_IDX o_idx);
 void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx);
+OBJECT_IDX drop_near(player_type *owner_type, object_type *o_ptr, PERCENTAGE chance, POSITION y, POSITION x);
+void floor_item_charges(floor_type *owner_ptr, INVENTORY_IDX item);

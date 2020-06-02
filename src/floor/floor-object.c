@@ -5,6 +5,7 @@
  */
 
 #include "floor/floor-object.h"
+#include "main/sound-definitions-table.h"
 #include "object/artifact.h"
 #include "object/item-apply-magic.h"
 #include "object/object-appraiser.h"
@@ -16,6 +17,8 @@
 #include "object/object2.h"
 #include "object/special-object-flags.h"
 #include "view/object-describer.h"
+#include "world/world-object.h"
+#include "world/world.h"
 
 #define MAX_GOLD 18 /* Number of "gold" entries */
 
@@ -297,4 +300,271 @@ void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
         o_ptr->next_o_idx = 0;
         break;
     }
+}
+
+/*!
+ * @brief 生成済のオブジェクトをフロアの所定の位置に落とす。
+ * Let an object fall to the ground at or near a location.
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param j_ptr 落としたいオブジェクト構造体の参照ポインタ
+ * @param chance ドロップの消滅率(%)
+ * @param y 配置したいフロアのY座標
+ * @param x 配置したいフロアのX座標
+ * @return 生成に成功したらオブジェクトのIDを返す。
+ * @details
+ * The initial location is assumed to be "in_bounds(floor_ptr, )".\n
+ *\n
+ * This function takes a parameter "chance".  This is the percentage\n
+ * chance that the item will "disappear" instead of drop.  If the object\n
+ * has been thrown, then this is the chance of disappearance on contact.\n
+ *\n
+ * Hack -- this function uses "chance" to determine if it should produce\n
+ * some form of "description" of the drop event (under the player).\n
+ *\n
+ * We check several locations to see if we can find a location at which\n
+ * the object can combine, stack, or be placed.  Artifacts will try very\n
+ * hard to be placed, including "teleporting" to a useful grid if needed.\n
+ */
+OBJECT_IDX drop_near(player_type *owner_ptr, object_type *j_ptr, PERCENTAGE chance, POSITION y, POSITION x)
+{
+    int i, k, d, s;
+    POSITION dy, dx;
+    POSITION ty, tx = 0;
+    OBJECT_IDX o_idx = 0;
+    OBJECT_IDX this_o_idx, next_o_idx = 0;
+    grid_type *g_ptr;
+    GAME_TEXT o_name[MAX_NLEN];
+    bool flag = FALSE;
+    bool done = FALSE;
+#ifdef JP
+#else
+    bool plural = (j_ptr->number != 1);
+#endif
+    object_desc(owner_ptr, o_name, j_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
+    if (!object_is_artifact(j_ptr) && (randint0(100) < chance)) {
+#ifdef JP
+        msg_format("%sは消えた。", o_name);
+#else
+        msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
+#endif
+        if (current_world_ptr->wizard)
+            msg_print(_("(破損)", "(breakage)"));
+
+        return 0;
+    }
+
+    int bs = -1;
+    int bn = 0;
+
+    POSITION by = y;
+    POSITION bx = x;
+    floor_type *floor_ptr = owner_ptr->current_floor_ptr;
+    for (dy = -3; dy <= 3; dy++) {
+        for (dx = -3; dx <= 3; dx++) {
+            bool comb = FALSE;
+            d = (dy * dy) + (dx * dx);
+            if (d > 10)
+                continue;
+
+            ty = y + dy;
+            tx = x + dx;
+            if (!in_bounds(floor_ptr, ty, tx))
+                continue;
+            if (!projectable(owner_ptr, y, x, ty, tx))
+                continue;
+
+            g_ptr = &floor_ptr->grid_array[ty][tx];
+            if (!cave_drop_bold(floor_ptr, ty, tx))
+                continue;
+
+            k = 0;
+            for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+                object_type *o_ptr;
+                o_ptr = &floor_ptr->o_list[this_o_idx];
+                next_o_idx = o_ptr->next_o_idx;
+                if (object_similar(o_ptr, j_ptr))
+                    comb = TRUE;
+
+                k++;
+            }
+
+            if (!comb)
+                k++;
+            if (k > 99)
+                continue;
+
+            s = 1000 - (d + k * 5);
+            if (s < bs)
+                continue;
+
+            if (s > bs)
+                bn = 0;
+
+            if ((++bn >= 2) && !one_in_(bn))
+                continue;
+
+            bs = s;
+            by = ty;
+            bx = tx;
+
+            flag = TRUE;
+        }
+    }
+
+    if (!flag && !object_is_artifact(j_ptr)) {
+#ifdef JP
+        msg_format("%sは消えた。", o_name);
+#else
+        msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
+#endif
+        if (current_world_ptr->wizard)
+            msg_print(_("(床スペースがない)", "(no floor space)"));
+
+        return 0;
+    }
+
+    for (i = 0; !flag && (i < 1000); i++) {
+        ty = rand_spread(by, 1);
+        tx = rand_spread(bx, 1);
+
+        if (!in_bounds(floor_ptr, ty, tx))
+            continue;
+
+        by = ty;
+        bx = tx;
+
+        if (!cave_drop_bold(floor_ptr, by, bx))
+            continue;
+
+        flag = TRUE;
+    }
+
+    if (!flag) {
+        int candidates = 0, pick;
+        for (ty = 1; ty < floor_ptr->height - 1; ty++) {
+            for (tx = 1; tx < floor_ptr->width - 1; tx++) {
+                if (cave_drop_bold(floor_ptr, ty, tx))
+                    candidates++;
+            }
+        }
+
+        if (!candidates) {
+#ifdef JP
+            msg_format("%sは消えた。", o_name);
+#else
+            msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
+#endif
+
+            if (current_world_ptr->wizard)
+                msg_print(_("(床スペースがない)", "(no floor space)"));
+
+            if (preserve_mode) {
+                if (object_is_fixed_artifact(j_ptr) && !object_is_known(j_ptr)) {
+                    a_info[j_ptr->name1].cur_num = 0;
+                }
+            }
+
+            return 0;
+        }
+
+        pick = randint1(candidates);
+        for (ty = 1; ty < floor_ptr->height - 1; ty++) {
+            for (tx = 1; tx < floor_ptr->width - 1; tx++) {
+                if (cave_drop_bold(floor_ptr, ty, tx)) {
+                    pick--;
+                    if (!pick)
+                        break;
+                }
+            }
+
+            if (!pick)
+                break;
+        }
+
+        by = ty;
+        bx = tx;
+    }
+
+    g_ptr = &floor_ptr->grid_array[by][bx];
+    for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+        object_type *o_ptr;
+        o_ptr = &floor_ptr->o_list[this_o_idx];
+        next_o_idx = o_ptr->next_o_idx;
+        if (object_similar(o_ptr, j_ptr)) {
+            object_absorb(o_ptr, j_ptr);
+            done = TRUE;
+            break;
+        }
+    }
+
+    if (!done)
+        o_idx = o_pop(floor_ptr);
+
+    if (!done && !o_idx) {
+#ifdef JP
+        msg_format("%sは消えた。", o_name);
+#else
+        msg_format("The %s disappear%s.", o_name, (plural ? "" : "s"));
+#endif
+        if (current_world_ptr->wizard)
+            msg_print(_("(アイテムが多過ぎる)", "(too many objects)"));
+
+        if (object_is_fixed_artifact(j_ptr)) {
+            a_info[j_ptr->name1].cur_num = 0;
+        }
+
+        return 0;
+    }
+
+    if (!done) {
+        object_copy(&floor_ptr->o_list[o_idx], j_ptr);
+        j_ptr = &floor_ptr->o_list[o_idx];
+        j_ptr->iy = by;
+        j_ptr->ix = bx;
+        j_ptr->held_m_idx = 0;
+        j_ptr->next_o_idx = g_ptr->o_idx;
+
+        g_ptr->o_idx = o_idx;
+        done = TRUE;
+    }
+
+    note_spot(owner_ptr, by, bx);
+    lite_spot(owner_ptr, by, bx);
+    sound(SOUND_DROP);
+
+    if (chance && player_bold(owner_ptr, by, bx)) {
+        msg_print(_("何かが足下に転がってきた。", "You feel something roll beneath your feet."));
+    }
+
+    return o_idx;
+}
+
+/*!
+ * @brief 床上の魔道具の残り残量メッセージを表示する /
+ * Describe the charges on an item on the floor.
+ * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param item メッセージの対象にしたいアイテム所持スロット
+ * @return なし
+ */
+void floor_item_charges(floor_type *floor_ptr, INVENTORY_IDX item)
+{
+    object_type *o_ptr = &floor_ptr->o_list[item];
+    if ((o_ptr->tval != TV_STAFF) && (o_ptr->tval != TV_WAND))
+        return;
+    if (!object_is_known(o_ptr))
+        return;
+
+#ifdef JP
+    if (o_ptr->pval <= 0) {
+        msg_print("この床上のアイテムは、もう魔力が残っていない。");
+    } else {
+        msg_format("この床上のアイテムは、あと %d 回分の魔力が残っている。", o_ptr->pval);
+    }
+#else
+    if (o_ptr->pval != 1) {
+        msg_format("There are %d charges remaining.", o_ptr->pval);
+    } else {
+        msg_format("There is %d charge remaining.", o_ptr->pval);
+    }
+#endif
 }

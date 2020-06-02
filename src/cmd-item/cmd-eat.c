@@ -5,6 +5,7 @@
  */
 
 #include "cmd-item/cmd-eat.h"
+#include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"

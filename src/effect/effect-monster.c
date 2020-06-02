@@ -13,6 +13,7 @@
 #include "core/stuff-handler.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-switcher.h"
+#include "floor/floor-object.h"
 #include "monster/monster-status.h"
 #include "player/avatar.h"
 #include "spell/spells-type.h"

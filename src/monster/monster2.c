@@ -21,7 +21,6 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor-object.h"
-#include "object/object2.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "monster/monster-race-hook.h"

@@ -13,6 +13,7 @@
 #include "object/artifact.h"
 #include "cmd-item/cmd-activate.h"
 #include "cmd-item/cmd-smith.h"
+#include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "io/files-util.h"
