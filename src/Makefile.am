@@ -313,6 +313,7 @@ hengband_SOURCES = \
 	object/object-util.h \
 	object/item-use-flags.h \
 	\
+	object-enchant/apply-magic-weapon.c object-enchant/apply-magic-weapon.h \
 	object-enchant/artifact.c object-enchant/artifact.h \
 	object-enchant/object-boost.c object-enchant/object-boost.h \
 	object-enchant/object-curse.c object-enchant/object-curse.h \

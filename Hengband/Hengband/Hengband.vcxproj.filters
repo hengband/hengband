@@ -1091,6 +1091,9 @@
     <ClCompile Include="..\..\src\object-enchant\object-ego.c">
       <Filter>object-enchant</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-weapon.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2331,6 +2334,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object\tval-types.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-weapon.h">
+      <Filter>object-enchant</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
