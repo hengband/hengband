@@ -692,7 +692,7 @@ void object_absorb(object_type *o_ptr, object_type *j_ptr)
  * Hack -- note special "pval boost" code for ring of speed\n
  * Hack -- note that some items must be cursed (or blessed)\n
  */
-static void apply_magic_equipment(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
+void apply_magic_accessary(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
 {
 	switch (o_ptr->tval)
 	{
@@ -1711,7 +1711,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
 	case TV_AMULET:
 	{
 		if (!power && (randint0(100) < 50)) power = -1;
-		apply_magic_equipment(owner_ptr, o_ptr, lev, power);
+		apply_magic_accessary(owner_ptr, o_ptr, lev, power);
 		break;
 	}
 	default:
