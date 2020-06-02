@@ -18,7 +18,7 @@
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object/sv-potion-types.h"
+#include "sv-definition/sv-potion-types.h"
 #include "player/avatar.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"

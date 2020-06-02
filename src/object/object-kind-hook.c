@@ -6,9 +6,9 @@
 
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "object/sv-amulet-types.h"
-#include "object/sv-other-types.h"
-#include "object/sv-ring-types.h"
+#include "sv-definition/sv-amulet-types.h"
+#include "sv-definition/sv-other-types.h"
+#include "sv-definition/sv-ring-types.h"
 
 /*
  * Special "sval" limit -- first "good" magic/prayer book

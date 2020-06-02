@@ -14,8 +14,8 @@
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
 #include "object/special-object-flags.h"
-#include "object/sv-other-types.h"
-#include "object/sv-wand-types.h"
+#include "sv-definition/sv-other-types.h"
+#include "sv-definition/sv-wand-types.h"
 #include "player/player-move.h"
 #include "player/player-races-table.h"
 

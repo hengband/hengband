@@ -57,7 +57,7 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object2.h"
-#include "object/sv-scroll-types.h"
+#include "sv-definition/sv-scroll-types.h"
 #include "object/tr-types.h"
 #include "player/player-class.h"
 #include "player/player-race.h"

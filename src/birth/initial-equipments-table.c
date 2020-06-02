@@ -1,13 +1,13 @@
 ﻿#include "system/angband.h"
 #include "birth/initial-equipments-table.h"
-#include "object/sv-armor-types.h"
-#include "object/sv-bow-types.h"
-#include "object/sv-food-types.h"
-#include "object/sv-potion-types.h"
-#include "object/sv-ring-types.h"
-#include "object/sv-scroll-types.h"
-#include "object/sv-wand-types.h"
-#include "object/sv-weapon-types.h"
+#include "sv-definition/sv-armor-types.h"
+#include "sv-definition/sv-bow-types.h"
+#include "sv-definition/sv-food-types.h"
+#include "sv-definition/sv-potion-types.h"
+#include "sv-definition/sv-ring-types.h"
+#include "sv-definition/sv-scroll-types.h"
+#include "sv-definition/sv-wand-types.h"
+#include "sv-definition/sv-weapon-types.h"
 
 /*!
  * プレイヤーの職業毎の初期装備テーブル。/\n

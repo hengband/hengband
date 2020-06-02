@@ -46,7 +46,7 @@
 #include "object/object-kind.h"
 #include "object/object2.h"
 #include "object/special-object-flags.h"
-#include "object/sv-bow-types.h"
+#include "sv-definition/sv-bow-types.h"
 #include "object/torch.h"
 #include "object/tr-types.h"
 #include "player/avatar.h"

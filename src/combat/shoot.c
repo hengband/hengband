@@ -18,7 +18,7 @@
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
-#include "object/sv-bow-types.h"
+#include "sv-definition/sv-bow-types.h"
 #include "object/tr-types.h"
 #include "player/avatar.h"
 #include "player/player-class.h"

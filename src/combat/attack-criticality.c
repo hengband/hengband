@@ -1,6 +1,6 @@
 ﻿#include "combat/combat-options-type.h"
 #include "combat/attack-criticality.h"
-#include "object/sv-weapon-types.h"
+#include "sv-definition/sv-weapon-types.h"
 
 /*!
 * @brief プレイヤーからモンスターへの打撃クリティカル判定 /

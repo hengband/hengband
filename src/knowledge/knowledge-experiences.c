@@ -9,7 +9,7 @@
 #include "io-dump/dump-util.h"
 #include "object/object-flavor.h"
 #include "object/object-kind.h"
-#include "object/sv-bow-types.h"
+#include "sv-definition/sv-bow-types.h"
 #include "player/player-skill.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-util.h"

@@ -1,5 +1,5 @@
 ﻿#include "object/bow.h"
-#include "object/sv-bow-types.h"
+#include "sv-definition/sv-bow-types.h"
 
 /*!
  * @brief 射撃武器に対応する矢/弾薬のベースアイテムIDを返す /

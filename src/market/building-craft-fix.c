@@ -12,8 +12,8 @@
 #include "object/object-kind.h"
 #include "object/object-value.h"
 #include "object/special-object-flags.h"
-#include "object/sv-other-types.h"
-#include "object/sv-weapon-types.h"
+#include "sv-definition/sv-other-types.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "object/tr-types.h"
 #include "player/player-effects.h"
 

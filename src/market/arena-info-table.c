@@ -1,13 +1,13 @@
 ﻿#include "system/angband.h"
 #include "arena-info-table.h"
-#include "object/sv-amulet-types.h"
-#include "object/sv-food-types.h"
-#include "object/sv-potion-types.h"
-#include "object/sv-ring-types.h"
-#include "object/sv-rod-types.h"
-#include "object/sv-scroll-types.h"
-#include "object/sv-staff-types.h"
-#include "object/sv-wand-types.h"
+#include "sv-definition/sv-amulet-types.h"
+#include "sv-definition/sv-food-types.h"
+#include "sv-definition/sv-potion-types.h"
+#include "sv-definition/sv-ring-types.h"
+#include "sv-definition/sv-rod-types.h"
+#include "sv-definition/sv-scroll-types.h"
+#include "sv-definition/sv-staff-types.h"
+#include "sv-definition/sv-wand-types.h"
 
 /*!
  * @brief 闘技場のモンスターID及び報酬アイテムテーブル

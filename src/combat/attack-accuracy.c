@@ -1,7 +1,7 @@
 ﻿#include "combat/attack-accuracy.h"
 #include "main/sound-definitions-table.h"
 #include "object/death-scythe.h"
-#include "object/sv-weapon-types.h"
+#include "sv-definition/sv-weapon-types.h"
 
 /*!
  * @brief プレイヤーからモンスターへの打撃命中判定 /

@@ -44,7 +44,7 @@
 #include "object/object-mark-types.h"
 #include "object/object2.h"
 #include "object/special-object-flags.h"
-#include "object/sv-food-types.h"
+#include "sv-definition/sv-food-types.h"
 #include "pet/pet-fall-off.h"
 #include "pet/pet-util.h"
 #include "player/avatar.h"

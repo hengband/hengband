@@ -13,7 +13,7 @@
 #include "object/object-kind-hook.h"
 #include "object/object-generator.h"
 #include "object/object2.h"
-#include "object/sv-other-types.h"
+#include "sv-definition/sv-other-types.h"
 #include "player/avatar.h"
 #include "term/gameterm.h"
 #include "world/world.h"

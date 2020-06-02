@@ -12,9 +12,9 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/special-object-flags.h"
-#include "object/sv-amulet-types.h"
-#include "object/sv-protector-types.h"
-#include "object/sv-ring-types.h"
+#include "sv-definition/sv-amulet-types.h"
+#include "sv-definition/sv-protector-types.h"
+#include "sv-definition/sv-ring-types.h"
 #include "object/tr-types.h"
 #include "store/store-util.h"
 

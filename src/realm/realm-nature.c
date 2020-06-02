@@ -6,7 +6,7 @@
 #include "io/targeting.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
-#include "object/sv-food-types.h"
+#include "sv-definition/sv-food-types.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

@@ -2,7 +2,7 @@
 #include "floor/floor.h"
 #include "object/object-appraiser.h"
 #include "object/special-object-flags.h"
-#include "object/sv-bow-types.h"
+#include "sv-definition/sv-bow-types.h"
 #include "player/player-effects.h"
 #include "player/player-races-table.h"
 #include "player/player-skill.h"

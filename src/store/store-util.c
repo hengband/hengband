@@ -14,10 +14,10 @@
 #include "object/object-value.h"
 #include "object/object2.h"
 #include "object/special-object-flags.h"
-#include "object/sv-lite-types.h"
-#include "object/sv-potion-types.h"
-#include "object/sv-scroll-types.h"
-#include "object/sv-weapon-types.h"
+#include "sv-definition/sv-lite-types.h"
+#include "sv-definition/sv-potion-types.h"
+#include "sv-definition/sv-scroll-types.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "object/tr-types.h"
 
 int cur_store_num = 0;

@@ -9,7 +9,7 @@
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
-#include "object/sv-weapon-types.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "object/tr-types.h"
 #include "realm/realm-hex.h"
 #include "term/gameterm.h"

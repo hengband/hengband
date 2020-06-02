@@ -1,5 +1,5 @@
 ﻿#include "object/torch.h"
-#include "object/sv-lite-types.h"
+#include "sv-definition/sv-lite-types.h"
 #include "object/tr-types.h"
 
 /*!

@@ -13,7 +13,7 @@
 #include "object/object-appraiser.h"
 #include "object/object1.h"
 #include "object/special-object-flags.h"
-#include "object/sv-weapon-types.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "object/tr-types.h"
 #include "term/gameterm.h"
 

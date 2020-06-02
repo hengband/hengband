@@ -318,12 +318,6 @@ hengband_SOURCES = \
 	object/object-util.h \
 	object/old-ego-extra-values.h \
 	object/special-object-flags.h \
-	object/sv-amulet-types.h object/sv-bow-types.h \
-	object/sv-digging-types.h object/sv-food-types.h \
-	object/sv-weapon-types.h object/sv-protector-types.h object/sv-armor-types.h \
-	object/sv-lite-types.h object/sv-potion-types.h object/sv-ring-types.h \
-	object/sv-rod-types.h object/sv-scroll-types.h \
-	object/sv-staff-types.h object/sv-wand-types.h object/sv-other-types.h \
 	object/item-feeling.h object/item-use-flags.h \
 	\
 	player/avatar.h player/avatar.c \
@@ -399,6 +393,15 @@ hengband_SOURCES = \
 	store/store-owners.c store/store-owners.h \
 	store/store-owner-comments.c store/store-owner-comments.h \
 	\
+	sv-definition/sv-amulet-types.h sv-definition/sv-armor-types.h \
+	sv-definition/sv-bow-types.h sv-definition/sv-digging-types.h \
+	sv-definition/sv-food-types.h sv-definition/sv-lite-types.h \
+	sv-definition/sv-potion-types.h sv-definition/sv-protector-types.h \
+	sv-definition/sv-ring-types.h sv-definition/sv-rod-types.h \
+	sv-definition/sv-scroll-types.h sv-definition/sv-staff-types.h \
+	sv-definition/sv-wand-types.h sv-definition/sv-weapon-types.h \
+	sv-definition/sv-other-types.h \
+	\
 	system/angband.h system/angband-version.h \
 	system/h-basic.h system/h-config.h \
 	system/h-define.h system/h-system.h system/h-type.h \
@@ -446,7 +449,8 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat -Icore -Idungeon \
 	-Ieffect -Ifloor -Igrid -Iinventory -Iio -Iio-dump -Iknowledge -Imarket \
 	-Imind -Imonster -Imspell -Imutation -Iobject -Ipet -Iplayer -Irealm \
-	-Iroom -Ispell -Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
+	-Iroom -Ispell -Isv-definition -Isystem -Iterm -Iutil -Iview -Iwizard \
+	-Iworld
 
 install-exec-hook:
 if SET_GID

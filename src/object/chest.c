@@ -7,7 +7,7 @@
 #include "object/item-apply-magic.h"
 #include "object/object-appraiser.h"
 #include "object/object-generator.h"
-#include "object/sv-other-types.h"
+#include "sv-definition/sv-other-types.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

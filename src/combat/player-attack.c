@@ -23,7 +23,7 @@
 #include "object/artifact.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "object/sv-weapon-types.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-skill.h"

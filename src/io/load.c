@@ -73,8 +73,8 @@
 #include "object/object2.h"
 #include "object/old-ego-extra-values.h" // TODO v1.5.0以前のセーブファイルをロードする処理を分離する.
 #include "object/object-value.h"
-#include "object/sv-armor-types.h"
-#include "object/sv-lite-types.h"
+#include "sv-definition/sv-armor-types.h"
+#include "sv-definition/sv-lite-types.h"
 #include "object/tr-types.h"
 #include "object/trc-types.h"
 #include "pet/pet-util.h"
