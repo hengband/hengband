@@ -977,7 +977,7 @@ void apply_magic_weapon(player_type *owner_ptr, object_type *o_ptr, DEPTH level,
  * Hack -- note special processing for crown/helm\n
  * Hack -- note special processing for robe of permanence\n
  */
-static void a_m_aux_2(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
+static void apply_magic_armor(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
 {
 	ARMOUR_CLASS toac1 = (ARMOUR_CLASS)randint1(5) + m_bonus(5, level);
 	ARMOUR_CLASS toac2 = (ARMOUR_CLASS)m_bonus(10, level);
@@ -1433,7 +1433,7 @@ static void a_m_aux_2(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
  * Hack -- note special "pval boost" code for ring of speed\n
  * Hack -- note that some items must be cursed (or blessed)\n
  */
-static void a_m_aux_3(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
+static void apply_magic_equipment(player_type *owner_ptr, object_type *o_ptr, DEPTH level, int power)
 {
 	switch (o_ptr->tval)
 	{
@@ -2061,7 +2061,7 @@ static void a_m_aux_3(player_type *owner_ptr, object_type *o_ptr, DEPTH level, i
  * @details
  * Hack -- note the special code for various items
  */
-static void a_m_aux_4(player_type *owner_ptr, object_type *o_ptr, int power)
+static void apply_magic_others(player_type *owner_ptr, object_type *o_ptr, int power)
 {
 	object_kind *k_ptr = &k_info[o_ptr->k_idx];
 
@@ -2444,7 +2444,7 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
 			((o_ptr->tval == TV_SHIELD) && (o_ptr->sval == SV_DRAGON_SHIELD)) ||
 			((o_ptr->tval == TV_GLOVES) && (o_ptr->sval == SV_SET_OF_DRAGON_GLOVES)) ||
 			((o_ptr->tval == TV_BOOTS) && (o_ptr->sval == SV_PAIR_OF_DRAGON_GREAVE)))
-			a_m_aux_2(owner_ptr, o_ptr, lev, power);
+			apply_magic_armor(owner_ptr, o_ptr, lev, power);
 
 		break;
 	}
@@ -2452,12 +2452,12 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
 	case TV_AMULET:
 	{
 		if (!power && (randint0(100) < 50)) power = -1;
-		a_m_aux_3(owner_ptr, o_ptr, lev, power);
+		apply_magic_equipment(owner_ptr, o_ptr, lev, power);
 		break;
 	}
 	default:
 	{
-		a_m_aux_4(owner_ptr, o_ptr, power);
+		apply_magic_others(owner_ptr, o_ptr, power);
 		break;
 	}
 	}
