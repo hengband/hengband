@@ -13,14 +13,16 @@
 #include "core/stuff-handler.h"
 #include "effect/effect-monster-util.h"
 #include "effect/effect-monster-switcher.h"
+#include "floor/floor-object.h"
+#include "object/object-kind-hook.h"
 #include "monster/monster-status.h"
 #include "player/avatar.h"
 #include "spell/spells-type.h"
 #include "effect/effect-characteristics.h"
 #include "spell/spells3.h"
-#include "object/object2.h"
-#include "object/special-object-flags.h"
-#include "object/sv-other-types.h"
+#include "object/object-generator.h"
+#include "object-enchant/special-object-flags.h"
+#include "sv-definition/sv-other-types.h"
 
 /*!
  * @brief ビーム/ボルト/ボール系魔法によるモンスターへの効果があるかないかを判定する

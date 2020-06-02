@@ -17,7 +17,7 @@
 #include "io/load.h"
 #include "io/report.h"
 #include "system/angband-version.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "core/sort.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -32,7 +32,7 @@
 #include "world/world.h"
 #include "object/object-kind.h"
 #include "monster/monster-race.h"
-#include "cmd/cmd-building.h"
+#include "cmd-building/cmd-building.h"
 #include "view/display-main-window.h"
 #include "birth/quick-start.h"
 

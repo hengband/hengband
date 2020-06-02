@@ -1,5 +1,4 @@
 ﻿/*!
- *  @file cmd1.c
  *  @brief プレイヤーのコマンド処理1 / Movement commands (part 1)
  *  @date 2014/01/02
  *  @author
@@ -148,22 +147,23 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "floor/floor-object.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
+#include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "monster/monster-status.h"
 #include "monster/monster.h"
 #include "mspell/monster-spell.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "object/object-appraiser.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
-#include "object/object2.h"
-#include "object/special-object-flags.h"
+#include "object-enchant/special-object-flags.h"
 #include "object/warning.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
@@ -290,7 +290,7 @@ void py_pickup_aux(player_type *owner_ptr, OBJECT_IDX o_idx)
 #endif
 
 	/* Carry the object */
-	INVENTORY_IDX slot = inven_carry(owner_ptr, o_ptr);
+	INVENTORY_IDX slot = store_item_to_inventory(owner_ptr, o_ptr);
 
 	/* Get the object again */
 	o_ptr = &owner_ptr->inventory_list[slot];
@@ -414,7 +414,7 @@ void carry(player_type *creature_ptr, bool pickup)
 			continue;
 		}
 		
-		if (!inven_carry_okay(o_ptr))
+		if (!check_store_item_to_inventory(o_ptr))
 		{
 			msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
 			continue;

@@ -33,7 +33,7 @@
 
 #include "cmd-item/cmd-activate.h"
 #include "cmd-io/cmd-autopick.h"
-#include "cmd/cmd-building.h"
+#include "cmd-building/cmd-building.h"
 #include "cmd-io/cmd-diary.h"
 #include "cmd/cmd-draw.h"
 #include "cmd-io/cmd-dump.h"

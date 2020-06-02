@@ -6,7 +6,7 @@
 #include "monster/monster-status.h"
 #include "object/item-use-flags.h"
 #include "object/object-hook.h"
-#include "object/sv-other-types.h"
+#include "sv-definition/sv-other-types.h"
 #include "spell/spells2.h"
 
 /*!

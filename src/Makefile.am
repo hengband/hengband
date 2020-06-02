@@ -46,10 +46,8 @@ hengband_SOURCES = \
 	birth/auto-roller.c birth/auto-roller.h \
 	birth/birth-wizard.c birth/birth-wizard.h \
 	\
-	cmd/cmd-building.c cmd/cmd-building.h \
 	cmd/cmd-basic.c cmd/cmd-basic.h \
 	cmd/cmd-draw.c cmd/cmd-draw.h \
-	cmd/cmd-inn.c cmd/cmd-inn.h \
 	cmd/cmd-visuals.c cmd/cmd-visuals.h \
 	\
 	cmd-action/cmd-attack.c cmd-action/cmd-attack.h \
@@ -58,8 +56,11 @@ hengband_SOURCES = \
 	cmd-action/cmd-pet.c cmd-action/cmd-pet.h \
 	cmd-action/cmd-spell.c cmd-action/cmd-spell.h \
 	\
-	cmd-io/cmd-autopick.c cmd-io/cmd-autopick.c \
-	cmd-io/cmd-diary.c cmd/-io/cmd-diary.h \
+	cmd-building/cmd-building.c cmd-building/cmd-building.h \
+	cmd-building/cmd-inn.c cmd-building/cmd-inn.h \
+	\
+	cmd-io/cmd-autopick.c cmd-io/cmd-autopick.h \
+	cmd-io/cmd-diary.c cmd-io/cmd-diary.h \
 	cmd-io/cmd-dump.c cmd-io/cmd-dump.h \
 	cmd-io/cmd-gameoption.c cmd-io/cmd-gameoption.h \
 	cmd-io/cmd-help.c cmd-io/cmd-help.h \
@@ -89,7 +90,7 @@ hengband_SOURCES = \
 	combat/monster-attack-types.c combat/monster-attack-types.h \
 	combat/martial-arts-table.c combat/martial-arts-table.h \
 	combat/insults-moans.c combat/insults-moans.h \
-	combat/monster-attack-effects.h \
+	combat/monster-attack-effect.h \
 	combat/attack-accuracy.c combat/attack-accuracy.h \
 	combat/slaying.c combat/slaying.h \
 	combat/combat-options-type.h \
@@ -135,6 +136,7 @@ hengband_SOURCES = \
 	effect/spells-effect-util.c effect/spells-effect-util.h \
 	effect/effect-player.c effect/effect-player.h \
 	effect/effect-monster.c effect/effect-monster.h \
+	effect/effect-monster-curse.c effect/effect-monster-curse.h \
 	effect/effect-monster-util.c effect/effect-monster-util.h \
 	effect/effect-monster-resist-hurt.c effect/effect-monster-resist-hurt.h \
 	effect/effect-monster-psi.c effect/effect-monster-psi.h \
@@ -290,37 +292,41 @@ hengband_SOURCES = \
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
 	\
-	object/artifact.c object/artifact.h \
+	object/bow.c object/bow.h \
 	object/chest.c object/chest.h \
 	object/death-scythe.c object/death-scythe.h \
 	object/object1.c object/object1.h \
 	object/object2.c object/object2.h \
 	object/object-appraiser.c object/object-appraiser.h \
-	object/object-boost.c object/object-boost.h \
 	object/object-broken.c object/object-broken.h \
-	object/object-curse.c object/object-curse.h \
-	object/object-ego.c object/object-ego.h \
 	object/object-flavor.c object/object-flavor.h \
+	object/object-generator.c object/object-generator.h \
 	object/object-hook.c object/object-hook.h \
 	object/object-kind.c object/object-kind.h \
 	object/object-kind-hook.c object/object-kind-hook.h \
 	object/object-value.c object/object-value.h \
 	object/lite-processor.c object/lite-processor.h \
 	object/torch.c object/torch.h \
-	object/tr-types.h object/trc-types.h object/tval-type.h \
+	object/tval-types.h \
 	object/warning.c object/warning.h \
-	object/item-apply-magic.h \
 	object/object-mark-types.h \
 	object/object-util.h \
-	object/old-ego-extra-values.h \
-	object/special-object-flags.h \
-	object/sv-amulet-types.h \object/sv-bow-types.h \
-	object/sv-digging-types.h object/sv-food-types.h \
-	object/sv-weapon-types.h object/sv-protector-types.h object/sv-armor-types.h \
-	object/sv-lite-types.h object/sv-potion-types.h object/sv-ring-types.h \
-	object/sv-rod-types.h object/sv-scroll-types.h \
-	object/sv-staff-types.h object/sv-wand-types.h object/sv-other-types.h \
-	object/item-feeling.h object/item-use-flags.h \
+	object/item-use-flags.h \
+	\
+	object-enchant/apply-magic-accessory.c object-enchant/apply-magic-accessory.h \
+	object-enchant/apply-magic-armor.c object-enchant/apply-magic-armor.h \
+	object-enchant/apply-magic-others.c object-enchant/apply-magic-others.h \
+	object-enchant/apply-magic-weapon.c object-enchant/apply-magic-weapon.h \
+	object-enchant/artifact.c object-enchant/artifact.h \
+	object-enchant/object-boost.c object-enchant/object-boost.h \
+	object-enchant/object-curse.c object-enchant/object-curse.h \
+	object-enchant/object-ego.c object-enchant/object-ego.h \
+	object-enchant/tr-types.h object-enchant/trc-types.h \
+	object-enchant/item-apply-magic.h object-enchant/item-feeling.h \
+	object-enchant/old-ego-extra-values.h object-enchant/special-object-flags.h \
+	\
+	pet/pet-fall-off.c pet/pet-fall-off.h \
+	pet/pet-util.c pet/pet-util.h \
 	\
 	player/avatar.h player/avatar.c \
 	player/mimic-info-table.c player/mimic-info-table.h \
@@ -345,9 +351,6 @@ hengband_SOURCES = \
 	player/player-personality.c player/player-personality.h \
 	player/player-sex.c player/player-sex.h player/selfinfo.c player/selfinfo.h \
 	\
-	pet/pet-fall-off.c pet/pet-fall-off.h \
-	pet/pet-util.c pet/pet-util.h \
-	\
 	realm/realm-arcane.c realm/realm-arcane.h \
 	realm/realm-chaos.c realm/realm-chaos.h \
 	realm/realm-craft.c realm/realm-craft.h \
@@ -356,7 +359,7 @@ hengband_SOURCES = \
 	realm/realm-death.c realm/realm-death.h \
 	realm/realm-hex.c realm/realm-hex.h 
 	realm/realm-hissatsu.c realm/realm-hissatsu.h \
-	realm/realm-life.c realm/realm-life.h 
+	realm/realm-life.c realm/realm-life.h \
 	realm/realm-names-table.c realm/realm-names-table.h \
 	realm/realm-nature.c realm/realm-nature.h \
 	realm/realm-song.c realm/realm-song.h \
@@ -376,7 +379,8 @@ hengband_SOURCES = \
 	spell/spells-execution.c spell/spells-execution.h \
 	spell/spells-util.h spell/spells-type.h \
 	spell/process-effect.c spell/process-effect.h \
-	spell/spells1.c spell/spells1.h spell/spells2.c spell/spells2.h \
+	spell/spells1.c spell/spells1.h \
+	spell/spells2.c spell/spells2.h \
 	spell/spells3.c spell/spells3.h \
 	spell/music-checker.c spell/music-checker.h \
 	spell/spells-diceroll.c spell/spells-diceroll.h \
@@ -395,6 +399,15 @@ hengband_SOURCES = \
 	store/store-owners.c store/store-owners.h \
 	store/store-owner-comments.c store/store-owner-comments.h \
 	\
+	sv-definition/sv-amulet-types.h sv-definition/sv-armor-types.h \
+	sv-definition/sv-bow-types.h sv-definition/sv-digging-types.h \
+	sv-definition/sv-food-types.h sv-definition/sv-lite-types.h \
+	sv-definition/sv-potion-types.h sv-definition/sv-protector-types.h \
+	sv-definition/sv-ring-types.h sv-definition/sv-rod-types.h \
+	sv-definition/sv-scroll-types.h sv-definition/sv-staff-types.h \
+	sv-definition/sv-wand-types.h sv-definition/sv-weapon-types.h \
+	sv-definition/sv-other-types.h \
+	\
 	system/angband.h system/angband-version.h \
 	system/h-basic.h system/h-config.h \
 	system/h-define.h system/h-system.h system/h-type.h \
@@ -410,6 +423,7 @@ hengband_SOURCES = \
 	\
 	view/display-characteristic.c view/display-characteristic.h \
 	view/display-fruit.c view/display-fruit.h \
+	view/display-main-window.c view/display-main-window.h \
 	view/display-player-stat-info.c view/display-player-stat-info.h \
 	view/display-player-misc-info.c view/display-player-misc-info.h \
 	view/display-player-middle.c view/display-player-middle.h \
@@ -423,6 +437,7 @@ hengband_SOURCES = \
 	wizard/wizard-special-process.c wizard/wizard-special-process.h \
 	\
 	world/world.c world/world.h \
+	world/world-object.c world/world-object.h \
 	world/world-movement-processor.c world/world-movement-processor.h \
 	world/world-turn-processor.c world/world-turn-processor.h
 
@@ -439,8 +454,9 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat -Icore -Idungeon \
 	-Ieffect -Ifloor -Igrid -Iinventory -Iio -Iio-dump -Iknowledge -Imarket \
-	-Imind -Imonster -Imspell -Imutation -Iobject -Ipet -Iplayer -Irealm \
-	-Iroom -Ispell -Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
+	-Imind -Imonster -Imspell -Imutation -Iobject -Iobject-enchant -Ipet \
+	-Iplayer -Irealm -Iroom -Ispell -Isv-definition -Isystem -Iterm -Iutil \
+	-Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

@@ -14,7 +14,7 @@
 #include "floor/geometry.h"
 #include "floor/wild.h"
 #include "store/store-util.h"
-#include "object/item-apply-magic.h"
+#include "object-enchant/item-apply-magic.h"
 
 /*
  * The vault generation arrays

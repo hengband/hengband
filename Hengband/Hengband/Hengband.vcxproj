@@ -97,7 +97,7 @@
       <WarningLevel>EnableAllWarnings</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4127;4244;4255;4668;4710;4820;4996;4774;5045;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4061;4062;4127;4244;4255;4668;4710;4820;4996;4774;5045;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -211,14 +211,20 @@
     <ClCompile Include="..\..\src\mind\racial-samurai.c" />
     <ClCompile Include="..\..\src\mind\samurai-slaying.c" />
     <ClCompile Include="..\..\src\mind\surprise-attack.c" />
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-accessory.c" />
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-armor.c" />
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-others.c" />
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-weapon.c" />
+    <ClCompile Include="..\..\src\object\bow.c" />
     <ClCompile Include="..\..\src\object\object-appraiser.c" />
+    <ClCompile Include="..\..\src\object\object-generator.c" />
     <ClCompile Include="..\..\src\object\object-value.c" />
     <ClCompile Include="..\..\src\pet\pet-fall-off.c" />
     <ClCompile Include="..\..\src\mspell\mspell-floor.c" />
     <ClCompile Include="..\..\src\mspell\mspell-particularity.c" />
     <ClCompile Include="..\..\src\mspell\mspell-special.c" />
     <ClCompile Include="..\..\src\mspell\mspell-status.c" />
-    <ClCompile Include="..\..\src\object\artifact.c" />
+    <ClCompile Include="..\..\src\object-enchant\artifact.c" />
     <ClCompile Include="..\..\src\autopick\autopick-command-menu.c" />
     <ClCompile Include="..\..\src\autopick\autopick-describer.c" />
     <ClCompile Include="..\..\src\autopick\autopick-destroyer.c" />
@@ -297,7 +303,7 @@
     <ClCompile Include="..\..\src\knowledge\knowledge-uniques.c" />
     <ClCompile Include="..\..\src\main\music-definitions-table.c" />
     <ClCompile Include="..\..\src\main\sound-definitions-table.c" />
-    <ClCompile Include="..\..\src\cmd\cmd-building.c" />
+    <ClCompile Include="..\..\src\cmd-building\cmd-building.c" />
     <ClCompile Include="..\..\src\io-dump\character-dump.c" />
     <ClCompile Include="..\..\src\object\chest.c" />
     <ClCompile Include="..\..\src\io\chuukei.c" />
@@ -310,7 +316,7 @@
     <ClCompile Include="..\..\src\cmd-io\cmd-gameoption.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-help.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-hissatsu.c" />
-    <ClCompile Include="..\..\src\cmd\cmd-inn.c" />
+    <ClCompile Include="..\..\src\cmd-building\cmd-inn.c" />
     <ClCompile Include="..\..\src\knowledge\knowledge-inventory.c" />
     <ClCompile Include="..\..\src\cmd-item\cmd-item.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-macro.c" />
@@ -392,9 +398,9 @@
     <ClCompile Include="..\..\src\monster\monster-util.c" />
     <ClCompile Include="..\..\src\monster\quantum-effect.c" />
     <ClCompile Include="..\..\src\mutation\mutation-processor.c" />
-    <ClCompile Include="..\..\src\object\object-boost.c" />
-    <ClCompile Include="..\..\src\object\object-curse.c" />
-    <ClCompile Include="..\..\src\object\object-ego.c" />
+    <ClCompile Include="..\..\src\object-enchant\object-boost.c" />
+    <ClCompile Include="..\..\src\object-enchant\object-curse.c" />
+    <ClCompile Include="..\..\src\object-enchant\object-ego.c" />
     <ClCompile Include="..\..\src\object\object-flavor.c" />
     <ClCompile Include="..\..\src\object\object-hook.c" />
     <ClCompile Include="..\..\src\object\object-kind.c" />
@@ -494,7 +500,13 @@
     <ClInclude Include="..\..\src\mind\racial-samurai.h" />
     <ClInclude Include="..\..\src\mind\samurai-slaying.h" />
     <ClInclude Include="..\..\src\mind\surprise-attack.h" />
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-accessory.h" />
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-armor.h" />
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-others.h" />
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-weapon.h" />
+    <ClInclude Include="..\..\src\object\bow.h" />
     <ClInclude Include="..\..\src\object\object-appraiser.h" />
+    <ClInclude Include="..\..\src\object\object-generator.h" />
     <ClInclude Include="..\..\src\object\object-value.h" />
     <ClInclude Include="..\..\src\pet\pet-fall-off.h" />
     <ClInclude Include="..\..\src\pet\pet-util.h" />
@@ -503,7 +515,7 @@
     <ClInclude Include="..\..\src\mspell\mspell-particularity.h" />
     <ClInclude Include="..\..\src\mspell\mspell-special.h" />
     <ClInclude Include="..\..\src\mspell\mspell-status.h" />
-    <ClInclude Include="..\..\src\object\artifact.h" />
+    <ClInclude Include="..\..\src\object-enchant\artifact.h" />
     <ClInclude Include="..\..\src\autopick\autopick-command-menu.h" />
     <ClInclude Include="..\..\src\autopick\autopick-commands-table.h" />
     <ClInclude Include="..\..\src\autopick\autopick-describer.h" />
@@ -529,32 +541,32 @@
     <ClInclude Include="..\..\src\autopick\autopick-util.h" />
     <ClInclude Include="..\..\src\autopick\autopick.h" />
     <ClInclude Include="..\..\src\object\death-scythe.h" />
-    <ClInclude Include="..\..\src\object\item-apply-magic.h" />
-    <ClInclude Include="..\..\src\object\item-feeling.h" />
+    <ClInclude Include="..\..\src\object-enchant\item-apply-magic.h" />
+    <ClInclude Include="..\..\src\object-enchant\item-feeling.h" />
     <ClInclude Include="..\..\src\object\item-use-flags.h" />
     <ClInclude Include="..\..\src\object\object-mark-types.h" />
     <ClInclude Include="..\..\src\object\object-util.h" />
     <ClInclude Include="..\..\src\object\object2.h" />
-    <ClInclude Include="..\..\src\object\old-ego-extra-values.h" />
-    <ClInclude Include="..\..\src\object\special-object-flags.h" />
-    <ClInclude Include="..\..\src\object\sv-amulet-types.h" />
-    <ClInclude Include="..\..\src\object\sv-armor-types.h" />
-    <ClInclude Include="..\..\src\object\sv-bow-types.h" />
-    <ClInclude Include="..\..\src\object\sv-digging-types.h" />
-    <ClInclude Include="..\..\src\object\sv-food-types.h" />
-    <ClInclude Include="..\..\src\object\sv-lite-types.h" />
-    <ClInclude Include="..\..\src\object\sv-other-types.h" />
-    <ClInclude Include="..\..\src\object\sv-potion-types.h" />
-    <ClInclude Include="..\..\src\object\sv-protector-types.h" />
-    <ClInclude Include="..\..\src\object\sv-ring-types.h" />
-    <ClInclude Include="..\..\src\object\sv-rod-types.h" />
-    <ClInclude Include="..\..\src\object\sv-scroll-types.h" />
-    <ClInclude Include="..\..\src\object\sv-staff-types.h" />
-    <ClInclude Include="..\..\src\object\sv-wand-types.h" />
-    <ClInclude Include="..\..\src\object\sv-weapon-types.h" />
+    <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />
+    <ClInclude Include="..\..\src\object-enchant\special-object-flags.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-amulet-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-armor-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-bow-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-digging-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-food-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-lite-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-other-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-potion-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-protector-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-ring-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-rod-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-scroll-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-staff-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-wand-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-weapon-types.h" />
     <ClInclude Include="..\..\src\object\torch.h" />
-    <ClInclude Include="..\..\src\object\tr-types.h" />
-    <ClInclude Include="..\..\src\object\trc-types.h" />
+    <ClInclude Include="..\..\src\object-enchant\tr-types.h" />
+    <ClInclude Include="..\..\src\object-enchant\trc-types.h" />
     <ClInclude Include="..\..\src\object\tval-types.h" />
     <ClInclude Include="..\..\src\player\avatar.h" />
     <ClInclude Include="..\..\src\birth\character-builder.h" />
@@ -631,7 +643,7 @@
     <ClInclude Include="..\..\src\knowledge\knowledge-uniques.h" />
     <ClInclude Include="..\..\src\main\music-definitions-table.h" />
     <ClInclude Include="..\..\src\main\sound-definitions-table.h" />
-    <ClInclude Include="..\..\src\cmd\cmd-building.h" />
+    <ClInclude Include="..\..\src\cmd-building\cmd-building.h" />
     <ClInclude Include="..\..\src\io-dump\character-dump.h" />
     <ClInclude Include="..\..\src\object\chest.h" />
     <ClInclude Include="..\..\src\io\chuukei.h" />
@@ -709,6 +721,7 @@
     <ClCompile Include="..\..\src\floor\wild.c" />
     <ClCompile Include="..\..\src\wizard\wizard-spoiler.c" />
     <ClCompile Include="..\..\src\wizard\wizard-special-process.c" />
+    <ClCompile Include="..\..\src\world\world-object.c" />
     <ClCompile Include="..\..\src\world\world.c" />
     <ClCompile Include="..\..\src\world\world-movement-processor.c" />
     <ClCompile Include="..\..\src\world\world-turn-processor.c" />
@@ -726,7 +739,7 @@
     <ClInclude Include="..\..\src\cmd-io\cmd-gameoption.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-help.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-hissatsu.h" />
-    <ClInclude Include="..\..\src\cmd\cmd-inn.h" />
+    <ClInclude Include="..\..\src\cmd-building\cmd-inn.h" />
     <ClInclude Include="..\..\src\knowledge\knowledge-inventory.h" />
     <ClInclude Include="..\..\src\cmd-item\cmd-item.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-macro.h" />
@@ -752,6 +765,7 @@
     <ClInclude Include="..\..\src\core\show-file.h" />
     <ClInclude Include="..\..\src\view\display-birth.h" />
     <ClInclude Include="..\..\src\view\object-describer.h" />
+    <ClInclude Include="..\..\src\world\world-object.h" />
     <ClInclude Include="..\src\locele\english.h" />
     <ClInclude Include="..\..\src\monster\horror-descriptions.h" />
     <ClInclude Include="..\..\src\io\gf-descriptions.h" />
@@ -853,9 +867,9 @@
     <ClInclude Include="..\..\src\monster\monster-race-hook.h" />
     <ClInclude Include="..\..\src\monster\monster-race.h" />
     <ClInclude Include="..\..\src\mutation\mutation.h" />
-    <ClInclude Include="..\..\src\object\object-boost.h" />
-    <ClInclude Include="..\..\src\object\object-curse.h" />
-    <ClInclude Include="..\..\src\object\object-ego.h" />
+    <ClInclude Include="..\..\src\object-enchant\object-boost.h" />
+    <ClInclude Include="..\..\src\object-enchant\object-curse.h" />
+    <ClInclude Include="..\..\src\object-enchant\object-ego.h" />
     <ClInclude Include="..\..\src\object\object-hook.h" />
     <ClInclude Include="..\..\src\object\object-broken.h" />
     <ClInclude Include="..\..\src\object\object1.h" />

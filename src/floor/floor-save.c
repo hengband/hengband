@@ -11,14 +11,15 @@
  */
 
 #include "system/angband.h"
-#include "cmd/cmd-building.h"
+#include "cmd-building/cmd-building.h"
 #include "system/system-variables.h"
 #include "io/load.h"
 #include "util/util.h"
 
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
+#include "floor/floor-object.h"
 #include "floor/floor-save.h"
 #include "floor/floor-events.h"
 #include "floor/floor-generate.h"
@@ -30,7 +31,6 @@
 #include "floor/wild.h"
 #include "spell/spells-floor.h"
 #include "monster/monster-status.h"
-#include "object/object2.h"
 #include "object/object-hook.h"
 #include "pet/pet-util.h"
 #include "cmd/cmd-basic.h"

@@ -42,15 +42,16 @@
 #include "main/sound-definitions-table.h"
 #include "market/gold-magnification-table.h"
 #include "mind/mind.h"
-#include "object/item-feeling.h"
+#include "object-enchant/item-feeling.h"
 #include "object/item-use-flags.h"
 #include "object/object-appraiser.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
 #include "object/object2.h"
-#include "object/special-object-flags.h"
+#include "object-enchant/special-object-flags.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
@@ -345,7 +346,7 @@ bool combine_and_reorder_home(int store_num)
  * @details
  * <pre>
  * In all cases, return the slot (or -1) where the object was placed
- * Note that this is a hacked up version of "inven_carry()".
+ * Note that this is a hacked up version of "store_item_to_inventory()".
  * Also note that it may not correctly "adapt" to "knowledge" bacoming
  * known, the player may have to pick stuff up and drop it again.
  * </pre>
@@ -1272,7 +1273,7 @@ static void store_purchase(player_type *player_ptr)
 	 */
 	reduce_charges(j_ptr, o_ptr->number - amt);
 	j_ptr->number = amt;
-	if (!inven_carry_okay(j_ptr))
+	if (!check_store_item_to_inventory(j_ptr))
 	{
 		msg_print(_("そんなにアイテムを持てない。", "You cannot carry that many different items."));
 		return;
@@ -1300,7 +1301,7 @@ static void store_purchase(player_type *player_ptr)
 	 */
 	reduce_charges(j_ptr, o_ptr->number - amt);
 	j_ptr->number = amt;
-	if (!inven_carry_okay(j_ptr))
+	if (!check_store_item_to_inventory(j_ptr))
 	{
 		msg_print(_("ザックにそのアイテムを入れる隙間がない。", "You cannot carry that many items."));
 		return;
@@ -1313,7 +1314,7 @@ static void store_purchase(player_type *player_ptr)
 	{
 		bool combined_or_reordered;
 		distribute_charges(o_ptr, j_ptr, amt);
-		item_new = inven_carry(player_ptr, j_ptr);
+		item_new = store_item_to_inventory(player_ptr, j_ptr);
 		GAME_TEXT o_name[MAX_NLEN];
 		object_desc(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
 
@@ -1392,7 +1393,7 @@ static void store_purchase(player_type *player_ptr)
 	j_ptr->inscription = 0;
 	j_ptr->feeling = FEEL_NONE;
 	j_ptr->ident &= ~(IDENT_STORE);
-	item_new = inven_carry(player_ptr, j_ptr);
+	item_new = store_item_to_inventory(player_ptr, j_ptr);
 
 	object_desc(player_ptr, o_name, &player_ptr->inventory_list[item_new], 0);
 	msg_format(_("%s(%c)を手に入れた。", "You have %s (%c)."), o_name, index_to_label(item_new));

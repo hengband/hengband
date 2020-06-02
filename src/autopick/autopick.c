@@ -16,10 +16,10 @@
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-menu-data-table.h"
 #include "autopick/autopick-methods-table.h"
+#include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
-#include "object/object2.h"
 #include "player/player-move.h"
 #include "util/util.h"
 
@@ -112,7 +112,7 @@ void autopick_pickup_items(player_type* player_ptr, grid_type *g_ptr)
 		}
 
 		disturb(player_ptr, FALSE, FALSE);
-		if (!inven_carry_okay(o_ptr))
+		if (!check_store_item_to_inventory(o_ptr))
 		{
 			GAME_TEXT o_name[MAX_NLEN];
 			object_desc(player_ptr, o_name, o_ptr, 0);

@@ -22,6 +22,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/spells-effect-util.h"
+#include "floor/floor-object.h"
 #include "floor/geometry.h"
 #include "floor/wild.h"
 #include "grid/grid.h"
@@ -34,19 +35,20 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "monster/monster-status.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "object/chest.h"
 #include "object/item-use-flags.h"
 #include "object/object-appraiser.h"
 #include "object/object-broken.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object2.h"
-#include "object/special-object-flags.h"
-#include "object/sv-bow-types.h"
+#include "object-enchant/special-object-flags.h"
+#include "sv-definition/sv-bow-types.h"
 #include "object/torch.h"
-#include "object/tr-types.h"
+#include "object-enchant/tr-types.h"
 #include "player/avatar.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
@@ -2787,7 +2789,7 @@ bool do_cmd_throw(player_type *creature_ptr, int mult, bool boomerang, OBJECT_ID
 		}
 		else
 		{
-			inven_carry(creature_ptr, q_ptr);
+			store_item_to_inventory(creature_ptr, q_ptr);
 		}
 		do_drop = FALSE;
 	}

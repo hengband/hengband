@@ -1,14 +1,14 @@
 ﻿#include "object/object-value.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "object/object-appraiser.h"
 #include "object/object-broken.h"
-#include "object/object-curse.h"
-#include "object/object-ego.h"
+#include "object-enchant/object-curse.h"
+#include "object-enchant/object-ego.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object1.h"
 #include "object/object2.h" // 暫定、相互参照している.
-#include "object/special-object-flags.h"
+#include "object-enchant/special-object-flags.h"
 
 /*!
  * @brief 未鑑定なベースアイテムの基本価格を返す /

@@ -10,19 +10,19 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-events.h"
+#include "floor/floor-object.h"
 #include "floor/floor-save.h"
 #include "floor/floor.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/write-diary.h"
 #include "monster/monster-status.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "object/object-appraiser.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
-#include "object/object2.h"
-#include "object/special-object-flags.h"
+#include "object-enchant/special-object-flags.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
@@ -292,7 +292,7 @@ void stair_creation(player_type *caster_ptr)
 	}
 
 	/* Destroy all objects in the grid */
-	delete_object(caster_ptr, caster_ptr->y, caster_ptr->x);
+	delete_all_items_from_floor(caster_ptr, caster_ptr->y, caster_ptr->x);
 
 	/* Extract current floor data */
 	saved_floor_type *sf_ptr;
@@ -572,7 +572,7 @@ bool destroy_area(player_type *caster_ptr, POSITION y1, POSITION x1, POSITION r,
 				}
 			}
 
-			delete_object(caster_ptr, y, x);
+			delete_all_items_from_floor(caster_ptr, y, x);
 
 			/* Destroy "non-permanent" grids */
 			if (cave_perma_grid(g_ptr)) continue;
@@ -1053,7 +1053,7 @@ bool earthquake(player_type *caster_ptr, POSITION cy, POSITION cx, POSITION r, M
 			/* Destroy location (if valid) */
 			if (!cave_valid_bold(floor_ptr, yy, xx)) continue;
 
-			delete_object(caster_ptr, yy, xx);
+			delete_all_items_from_floor(caster_ptr, yy, xx);
 
 			/* Wall (or floor) type */
 			int t = cave_have_flag_bold(floor_ptr, yy, xx, FF_PROJECT) ? randint0(100) : 200;

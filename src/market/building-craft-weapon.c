@@ -1,20 +1,19 @@
-﻿#include "system/angband.h"
-#include "market/building-craft-weapon.h"
-#include "term/gameterm.h"
-#include "object/artifact.h"
-#include "realm/realm-hex.h"
-#include "object/object-flavor.h"
-#include "world/world.h"
-#include "object/object-hook.h"
-#include "combat/shoot.h"
-#include "inventory/player-inventory.h"
+﻿#include "market/building-craft-weapon.h"
 #include "combat/attack-accuracy.h"
-#include "market/building-util.h"
+#include "combat/shoot.h"
 #include "core/stuff-handler.h"
-#include "object/object2.h"
-#include "object/tr-types.h"
+#include "inventory/player-inventory.h"
+#include "market/building-util.h"
+#include "object-enchant/artifact.h"
 #include "object/item-use-flags.h"
-#include "object/sv-weapon-types.h"
+#include "object/object-flavor.h"
+#include "object/object-generator.h"
+#include "object/object-hook.h"
+#include "sv-definition/sv-weapon-types.h"
+#include "object-enchant/tr-types.h"
+#include "realm/realm-hex.h"
+#include "term/gameterm.h"
+#include "world/world.h"
 
 /*!
  * @brief 攻撃時スレイによるダメージ期待値修正計算 / critical happens at i / 10000
@@ -58,7 +57,8 @@ static HIT_POINT calc_slaydam(HIT_POINT dam, int mult, int div, bool force)
  * @param vorpal_div 切れ味倍率（割り算部分）
  * @return ダメージ期待値
  */
-static u32b calc_expect_dice(player_type *owner_ptr, u32b dam, int mult, int div, bool force, WEIGHT weight, int plus, s16b meichuu, bool dokubari, int vorpal_mult, int vorpal_div)
+static u32b calc_expect_dice(
+    player_type *owner_ptr, u32b dam, int mult, int div, bool force, WEIGHT weight, int plus, s16b meichuu, bool dokubari, int vorpal_mult, int vorpal_div)
 {
     dam = calc_slaydam(dam, mult, div, force);
     dam = calc_expect_crit(owner_ptr, weight, plus, dam, meichuu, dokubari);
@@ -303,22 +303,16 @@ static void list_weapon(player_type *player_ptr, object_type *o_ptr, TERM_LEN ro
 
     sprintf(tmp_str, _("命中率:  0  50 100 150 200 (敵のAC)", "To Hit:  0  50 100 150 200 (AC)"));
     put_str(tmp_str, row + 2, col);
-    sprintf(tmp_str, "        %2d  %2d  %2d  %2d  %2d (%%)",
-        (int)hit_chance(player_ptr, reli, 0),
-        (int)hit_chance(player_ptr, reli, 50),
-        (int)hit_chance(player_ptr, reli, 100),
-        (int)hit_chance(player_ptr, reli, 150),
-        (int)hit_chance(player_ptr, reli, 200));
+    sprintf(tmp_str, "        %2d  %2d  %2d  %2d  %2d (%%)", (int)hit_chance(player_ptr, reli, 0), (int)hit_chance(player_ptr, reli, 50),
+        (int)hit_chance(player_ptr, reli, 100), (int)hit_chance(player_ptr, reli, 150), (int)hit_chance(player_ptr, reli, 200));
     put_str(tmp_str, row + 3, col);
     c_put_str(TERM_YELLOW, _("可能なダメージ:", "Possible Damage:"), row + 5, col);
 
-    sprintf(tmp_str, _("攻撃一回につき %d-%d", "One Strike: %d-%d damage"),
-        (int)(eff_dd + o_ptr->to_d + player_ptr->to_d[0]),
+    sprintf(tmp_str, _("攻撃一回につき %d-%d", "One Strike: %d-%d damage"), (int)(eff_dd + o_ptr->to_d + player_ptr->to_d[0]),
         (int)(eff_ds * eff_dd + o_ptr->to_d + player_ptr->to_d[0]));
     put_str(tmp_str, row + 6, col + 1);
 
-    sprintf(tmp_str, _("１ターンにつき %d-%d", "One Attack: %d-%d damage"),
-        (int)(player_ptr->num_blow[0] * (eff_dd + o_ptr->to_d + player_ptr->to_d[0])),
+    sprintf(tmp_str, _("１ターンにつき %d-%d", "One Attack: %d-%d damage"), (int)(player_ptr->num_blow[0] * (eff_dd + o_ptr->to_d + player_ptr->to_d[0])),
         (int)(player_ptr->num_blow[0] * (eff_ds * eff_dd + o_ptr->to_d + player_ptr->to_d[0])));
     put_str(tmp_str, row + 7, col + 1);
 }

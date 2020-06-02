@@ -1,24 +1,27 @@
 ﻿#include "birth/inventory-initializer.h"
 #include "autopick/autopick.h"
 #include "birth/initial-equipments-table.h"
+#include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "monster/monster-race-hook.h"
-#include "object/item-apply-magic.h"
+#include "object-enchant/item-apply-magic.h"
 #include "object/object-appraiser.h"
-#include "object/object-ego.h"
+#include "object-enchant/object-ego.h"
+#include "object/object-generator.h"
+#include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object1.h"
 #include "object/object2.h"
-#include "object/sv-bow-types.h"
-#include "object/sv-food-types.h"
-#include "object/sv-lite-types.h"
-#include "object/sv-other-types.h"
-#include "object/sv-potion-types.h"
-#include "object/sv-ring-types.h"
-#include "object/sv-scroll-types.h"
-#include "object/sv-staff-types.h"
-#include "object/sv-wand-types.h"
-#include "object/sv-weapon-types.h"
+#include "sv-definition/sv-bow-types.h"
+#include "sv-definition/sv-food-types.h"
+#include "sv-definition/sv-lite-types.h"
+#include "sv-definition/sv-other-types.h"
+#include "sv-definition/sv-potion-types.h"
+#include "sv-definition/sv-ring-types.h"
+#include "sv-definition/sv-scroll-types.h"
+#include "sv-definition/sv-staff-types.h"
+#include "sv-definition/sv-wand-types.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "player/player-personalities-table.h"
 #include "player/player-races-table.h"
 
@@ -73,7 +76,7 @@ void add_outfit(player_type *creature_ptr, object_type *o_ptr)
 {
     object_aware(creature_ptr, o_ptr);
     object_known(o_ptr);
-    s16b slot = inven_carry(creature_ptr, o_ptr);
+    s16b slot = store_item_to_inventory(creature_ptr, o_ptr);
     autopick_alter_item(creature_ptr, slot, FALSE);
     wield_all(creature_ptr);
 }

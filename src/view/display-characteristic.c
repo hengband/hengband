@@ -9,9 +9,9 @@
 #include "player/permanent-resistances.h"
 #include "player/temporary-resistances.h"
 #include "player/race-resistances.h"
-#include "object/tr-types.h"
+#include "object-enchant/tr-types.h"
 #include "object/object-flavor.h"
-#include "object/trc-types.h"
+#include "object-enchant/trc-types.h"
 
 typedef struct {
 	BIT_FLAGS player_flags[TR_FLAG_SIZE];

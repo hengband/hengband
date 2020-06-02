@@ -16,13 +16,14 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-io/cmd-save.h"
-#include "cmd/cmd-building.h"
+#include "cmd-building/cmd-building.h"
 #include "combat/snipe.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
+#include "floor/floor-object.h"
 #include "floor/floor-save.h"
 #include "floor/floor-town.h"
 #include "floor/wild.h"
@@ -40,21 +41,21 @@
 #include "monster/monster-process.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"
-#include "object/artifact.h"
-#include "object/item-feeling.h"
+#include "object-enchant/artifact.h"
+#include "object-enchant/item-feeling.h"
 #include "object/item-use-flags.h"
 #include "object/object-appraiser.h"
-#include "object/object-boost.h"
-#include "object/object-ego.h"
+#include "object-enchant/object-boost.h"
+#include "object-enchant/object-ego.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
-#include "object/object2.h"
-#include "object/special-object-flags.h"
-#include "object/tr-types.h"
-#include "object/trc-types.h"
+#include "object-enchant/special-object-flags.h"
+#include "object-enchant/tr-types.h"
+#include "object-enchant/trc-types.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
@@ -2637,7 +2638,7 @@ bool eat_magic(player_type *caster_ptr, int power)
 					o_ptr->pval++;
 					o_ptr->number--;
 					caster_ptr->total_weight -= q_ptr->weight;
-					item = inven_carry(caster_ptr, q_ptr);
+					item = store_item_to_inventory(caster_ptr, q_ptr);
 
 					msg_print(_("杖をまとめなおした。", "You unstack your staff."));
 				}

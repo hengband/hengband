@@ -30,7 +30,7 @@
  */
 
 #include "main/init.h"
-#include "cmd/cmd-building.h"
+#include "cmd-building/cmd-building.h"
 #include "dungeon/dungeon-file.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -43,8 +43,8 @@
 #include "io/read-pref-file.h"
 #include "io/uid-checker.h"
 #include "market/articles-on-sale.h"
-#include "object/artifact.h"
-#include "object/object-ego.h"
+#include "object-enchant/artifact.h"
+#include "object-enchant/object-ego.h"
 #include "object/object-kind.h"
 #include "player/player-class.h"
 #include "player/player-skill.h"

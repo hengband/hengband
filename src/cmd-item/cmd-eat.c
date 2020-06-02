@@ -5,6 +5,7 @@
  */
 
 #include "cmd-item/cmd-eat.h"
+#include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
@@ -12,12 +13,13 @@
 #include "object/item-use-flags.h"
 #include "object/object-appraiser.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
+#include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "object/object2.h"
-#include "object/special-object-flags.h"
-#include "object/sv-food-types.h"
-#include "object/sv-other-types.h"
+#include "object-enchant/special-object-flags.h"
+#include "sv-definition/sv-food-types.h"
+#include "sv-definition/sv-other-types.h"
 #include "player/avatar.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
@@ -391,7 +393,7 @@ void exe_eat_food(player_type *creature_ptr, INVENTORY_IDX item)
 			/* Unstack the used item */
 			o_ptr->number--;
 			creature_ptr->total_weight -= q_ptr->weight;
-			item = inven_carry(creature_ptr, q_ptr);
+			item = store_item_to_inventory(creature_ptr, q_ptr);
 
 			msg_format(_("杖をまとめなおした。", "You unstack your staff."));
 		}

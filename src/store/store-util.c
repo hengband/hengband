@@ -5,19 +5,20 @@
  */
 
 #include "store/store-util.h"
-#include "object/item-apply-magic.h"
-#include "object/item-feeling.h"
+#include "object-enchant/item-apply-magic.h"
+#include "object-enchant/item-feeling.h"
 #include "object/object-appraiser.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
 #include "object/object2.h"
-#include "object/special-object-flags.h"
-#include "object/sv-lite-types.h"
-#include "object/sv-potion-types.h"
-#include "object/sv-scroll-types.h"
-#include "object/sv-weapon-types.h"
-#include "object/tr-types.h"
+#include "object-enchant/special-object-flags.h"
+#include "sv-definition/sv-lite-types.h"
+#include "sv-definition/sv-potion-types.h"
+#include "sv-definition/sv-scroll-types.h"
+#include "sv-definition/sv-weapon-types.h"
+#include "object-enchant/tr-types.h"
 
 int cur_store_num = 0;
 store_type *st_ptr = NULL;
@@ -607,7 +608,7 @@ static void store_object_absorb(object_type *o_ptr, object_type *j_ptr)
  * @details
  * <pre>
  * In all cases, return the slot (or -1) where the object was placed
- * Note that this is a hacked up version of "inven_carry()".
+ * Note that this is a hacked up version of "store_item_to_inventory()".
  * Also note that it may not correctly "adapt" to "knowledge" bacoming
  * known, the player may have to pick stuff up and drop it again.
  * </pre>

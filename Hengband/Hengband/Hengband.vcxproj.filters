@@ -122,9 +122,6 @@
     <ClCompile Include="..\..\src\player\mimic-info-table.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-inn.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\main\sound-definitions-table.c">
       <Filter>main</Filter>
     </ClCompile>
@@ -464,16 +461,7 @@
     <ClCompile Include="..\..\src\object\object2.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-boost.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object\object-broken.c">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object\object-curse.c">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object\object-ego.c">
       <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\object\object-flavor.c">
@@ -580,9 +568,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\io\load.c">
       <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object\artifact.c">
-      <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\object\chest.c">
       <Filter>object</Filter>
@@ -826,9 +811,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\market\building-enchanter.c">
       <Filter>market</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-building.c">
-      <Filter>cmd</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\store\rumor.c">
       <Filter>store</Filter>
@@ -1082,6 +1064,45 @@
     <ClCompile Include="..\..\src\realm\realm-names-table.c">
       <Filter>realm</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\bow.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-building\cmd-building.c">
+      <Filter>cmd-building</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-building\cmd-inn.c">
+      <Filter>cmd-building</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\world\world-object.c">
+      <Filter>world</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\object-generator.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\artifact.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\object-boost.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\object-curse.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\object-ego.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-weapon.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-armor.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-accessory.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-others.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1206,9 +1227,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\mimic-info-table.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-inn.h">
-      <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main\sound-definitions-table.h">
       <Filter>main</Filter>
@@ -1579,16 +1597,7 @@
     <ClInclude Include="..\..\src\floor\floor-town.h">
       <Filter>floor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\object-boost.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object\object-broken.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\object-curse.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\object-ego.h">
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-flavor.h">
@@ -1710,9 +1719,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\load.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\artifact.h">
-      <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\chest.h">
       <Filter>object</Filter>
@@ -1969,9 +1975,6 @@
     <ClInclude Include="..\..\src\market\building-enchanter.h">
       <Filter>market</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-building.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\market\building-actions-table.h">
       <Filter>market</Filter>
     </ClInclude>
@@ -2077,22 +2080,7 @@
     <ClInclude Include="..\..\src\util\util.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\tr-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\tval-types.h">
-      <Filter>monster</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\old-ego-extra-values.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\special-object-flags.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object\object-mark-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\trc-types.h">
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-util.h">
@@ -2102,57 +2090,6 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\item-use-flags.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\item-feeling.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\item-apply-magic.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-other-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-bow-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-digging-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-weapon-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-protector-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-armor-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-ring-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-potion-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-lite-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-amulet-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-staff-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-wand-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-rod-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-scroll-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-food-types.h">
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object2.h">
@@ -2314,6 +2251,111 @@
     <ClInclude Include="..\..\src\realm\realm-names-table.h">
       <Filter>realm</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object\bow.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-building\cmd-building.h">
+      <Filter>cmd-building</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-building\cmd-inn.h">
+      <Filter>cmd-building</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\world\world-object.h">
+      <Filter>world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-generator.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-armor-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-bow-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-digging-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-food-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-lite-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-other-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-potion-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-ring-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-protector-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-rod-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-scroll-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-staff-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-wand-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-weapon-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\artifact.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\item-apply-magic.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\item-feeling.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\object-boost.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\object-curse.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\object-ego.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\special-object-flags.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\trc-types.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\tr-types.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\sv-definition\sv-amulet-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\tval-types.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-weapon.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-armor.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-accessory.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-others.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2427,6 +2469,15 @@
     </Filter>
     <Filter Include="io-dump">
       <UniqueIdentifier>{739c9774-e51a-46eb-87c1-cd7cd332e97c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cmd-building">
+      <UniqueIdentifier>{6982e0e0-d2db-422e-8e92-77b1276e4030}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sv-definition">
+      <UniqueIdentifier>{9e020507-fdf0-4cfb-9d60-d9c26cbcf325}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object-enchant">
+      <UniqueIdentifier>{c7db74bd-7f58-4044-96c8-c5916d0ebaf1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

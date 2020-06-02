@@ -6,14 +6,14 @@
 #include "term/gameterm.h"
 
 #include "player/avatar.h"
-#include "cmd/cmd-building.h"
+#include "cmd-building/cmd-building.h"
 #include "io/write-diary.h"
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-io/cmd-process-screen.h"
 #include "market/arena-info-table.h"
 #include "realm/realm-song.h"
 #include "floor/floor.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-broken.h"
@@ -34,7 +34,7 @@
 #include "io/files-util.h"
 #include "inventory/inventory-damage.h"
 #include "mind/racial-mirror-master.h"
-#include "object/tr-types.h"
+#include "object-enchant/tr-types.h"
 
 /*!
 * @brief 酸攻撃による装備のAC劣化処理 /

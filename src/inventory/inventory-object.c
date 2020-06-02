@@ -1,7 +1,11 @@
 ﻿#include "inventory/inventory-object.h"
+#include "floor/floor-object.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
+#include "object/object-hook.h"
+#include "object/object-mark-types.h"
 #include "object/object-value.h"
-#include "object/object2.h" // 暫定、相互参照している.
+#include "object/object2.h"
 #include "player/player-effects.h" // 暫定、相互参照している.
 #include "view/object-describer.h"
 
@@ -255,4 +259,165 @@ void reorder_pack(player_type *owner_ptr)
 
     if (flag)
         msg_print(_("ザックの中のアイテムを並べ直した。", "You reorder some items in your pack."));
+}
+
+/*!
+ * @brief オブジェクトをプレイヤーが拾って所持スロットに納めるメインルーチン /
+ * Add an item to the players inventory, and return the slot used.
+ * @param o_ptr 拾うオブジェクトの構造体参照ポインタ
+ * @return 収められた所持スロットのID、拾うことができなかった場合-1を返す。
+ * @details
+ * If the new item can combine with an existing item in the inventory,\n
+ * it will do so, using "object_similar()" and "object_absorb()", else,\n
+ * the item will be placed into the "proper" location in the inventory.\n
+ *\n
+ * This function can be used to "over-fill" the player's pack, but only\n
+ * once, and such an action must trigger the "overflow" code immediately.\n
+ * Note that when the pack is being "over-filled", the new item must be\n
+ * placed into the "overflow" slot, and the "overflow" must take place\n
+ * before the pack is reordered, but (optionally) after the pack is\n
+ * combined.  This may be tricky.  See "dungeon.c" for info.\n
+ *\n
+ * Note that this code must remove any location/stack information\n
+ * from the object once it is placed into the inventory.\n
+ */
+s16b store_item_to_inventory(player_type *owner_ptr, object_type *o_ptr)
+{
+    INVENTORY_IDX i, j, k;
+    INVENTORY_IDX n = -1;
+
+    object_type *j_ptr;
+    for (j = 0; j < INVEN_PACK; j++) {
+        j_ptr = &owner_ptr->inventory_list[j];
+        if (!j_ptr->k_idx)
+            continue;
+
+        n = j;
+        if (object_similar(j_ptr, o_ptr)) {
+            object_absorb(j_ptr, o_ptr);
+
+            owner_ptr->total_weight += (o_ptr->number * o_ptr->weight);
+            owner_ptr->update |= (PU_BONUS);
+            owner_ptr->window |= (PW_INVEN);
+            return (j);
+        }
+    }
+
+    if (owner_ptr->inven_cnt > INVEN_PACK)
+        return -1;
+
+    for (j = 0; j <= INVEN_PACK; j++) {
+        j_ptr = &owner_ptr->inventory_list[j];
+        if (!j_ptr->k_idx)
+            break;
+    }
+
+    i = j;
+    if (i < INVEN_PACK) {
+        s32b o_value = object_value(o_ptr);
+        for (j = 0; j < INVEN_PACK; j++) {
+            if (object_sort_comp(o_ptr, o_value, &owner_ptr->inventory_list[j]))
+                break;
+        }
+
+        i = j;
+        for (k = n; k >= i; k--) {
+            object_copy(&owner_ptr->inventory_list[k + 1], &owner_ptr->inventory_list[k]);
+        }
+
+        object_wipe(&owner_ptr->inventory_list[i]);
+    }
+
+    object_copy(&owner_ptr->inventory_list[i], o_ptr);
+    j_ptr = &owner_ptr->inventory_list[i];
+    j_ptr->next_o_idx = 0;
+    j_ptr->held_m_idx = 0;
+    j_ptr->iy = j_ptr->ix = 0;
+    j_ptr->marked = OM_TOUCHED;
+
+    owner_ptr->total_weight += (j_ptr->number * j_ptr->weight);
+    owner_ptr->inven_cnt++;
+    owner_ptr->update |= (PU_BONUS | PU_COMBINE | PU_REORDER);
+    owner_ptr->window |= (PW_INVEN);
+
+    return i;
+}
+
+/*!
+ * todo ここのp_ptrだけは抜けない……関数ポインタの嵐でにっちもさっちもいかない
+ * @brief アイテムを拾う際にザックから溢れずに済むかを判定する /
+ * Check if we have space for an item in the pack without overflow
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param o_ptr 拾いたいオブジェクトの構造体参照ポインタ
+ * @return 溢れずに済むならTRUEを返す
+ */
+bool check_store_item_to_inventory(object_type *o_ptr)
+{
+    if (p_ptr->inven_cnt < INVEN_PACK)
+        return TRUE;
+
+    for (int j = 0; j < INVEN_PACK; j++) {
+        object_type *j_ptr = &p_ptr->inventory_list[j];
+        if (!j_ptr->k_idx)
+            continue;
+
+        if (object_similar(j_ptr, o_ptr))
+            return TRUE;
+    }
+
+    return FALSE;
+}
+
+/*!
+ * @brief 装備スロットからオブジェクトを外すメインルーチン /
+ * Take off (some of) a non-cursed equipment item
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param item オブジェクトを外したい所持テーブルのID
+ * @param amt 外したい個数
+ * @return 収められた所持スロットのID、拾うことができなかった場合-1を返す。
+ * @details
+ * Note that only one item at a time can be wielded per slot.\n
+ * Note that taking off an item when "full" may cause that item\n
+ * to fall to the ground.\n
+ * Return the inventory slot into which the item is placed.\n
+ */
+INVENTORY_IDX inven_takeoff(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER amt)
+{
+    INVENTORY_IDX slot;
+    object_type forge;
+    object_type *q_ptr;
+    object_type *o_ptr;
+    concptr act;
+    GAME_TEXT o_name[MAX_NLEN];
+    o_ptr = &owner_ptr->inventory_list[item];
+    if (amt <= 0)
+        return -1;
+
+    if (amt > o_ptr->number)
+        amt = o_ptr->number;
+    q_ptr = &forge;
+    object_copy(q_ptr, o_ptr);
+    q_ptr->number = amt;
+    object_desc(owner_ptr, o_name, q_ptr, 0);
+    if (((item == INVEN_RARM) || (item == INVEN_LARM)) && object_is_melee_weapon(o_ptr)) {
+        act = _("を装備からはずした", "You were wielding");
+    } else if (item == INVEN_BOW) {
+        act = _("を装備からはずした", "You were holding");
+    } else if (item == INVEN_LITE) {
+        act = _("を光源からはずした", "You were holding");
+    } else {
+        act = _("を装備からはずした", "You were wearing");
+    }
+
+    inven_item_increase(owner_ptr, item, -amt);
+    inven_item_optimize(owner_ptr, item);
+
+    slot = store_item_to_inventory(owner_ptr, q_ptr);
+#ifdef JP
+    msg_format("%s(%c)%s。", o_name, index_to_label(slot), act);
+#else
+    msg_format("%s %s (%c).", act, o_name, index_to_label(slot));
+#endif
+
+    return slot;
 }

@@ -30,7 +30,7 @@
 #include "player/player-damage.h"
 #include "spell/spells-status.h"
 #include "spell/spells-floor.h"
-#include "object/item-feeling.h"
+#include "object-enchant/item-feeling.h"
 #include "object/object-hook.h"
 #include "cmd/cmd-basic.h"
 #include "io/files-util.h"

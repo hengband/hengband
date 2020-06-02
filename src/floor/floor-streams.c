@@ -3,35 +3,31 @@
  * @brief ダンジョン生成に利用する関数群 / Used by dungeon generation.
  * @date 2014/07/15
  * @author
- * <pre>
  * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
  * are included in all such copies.  Other copyrights may also apply.
- * </pre>
  * @details
  * Purpose:  This file holds all the
  * functions that are applied to a level after the rest has been
  * generated, ie streams and level destruction.
  */
 
-#include "system/angband.h"
-#include "util/util.h"
-
-#include "object/artifact.h"
-#include "floor/floor-generate.h"
-#include "dungeon/dungeon.h"
-#include "floor/floor.h"
 #include "floor/floor-streams.h"
+#include "dungeon/dungeon.h"
+#include "floor/floor-generate.h"
+#include "floor/floor-object.h"
+#include "floor/floor.h"
+#include "grid/feature.h"
 #include "grid/grid.h"
 #include "monster/monster.h"
-#include "grid/feature.h"
-#include "object/object2.h"
+#include "object-enchant/artifact.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "spell/spells1.h"
-#include "spell/spells-floor.h"
 #include "room/rooms.h"
+#include "spell/spells-floor.h"
+#include "spell/spells1.h"
+#include "util/util.h"
 
 /*!
  * @brief 再帰フラクタルアルゴリズムによりダンジョン内に川を配置する /
@@ -392,7 +388,7 @@ void build_streamer(player_type *player_ptr, FEAT_IDX feat, int chance)
 					}
 				}
 
-				delete_object(player_ptr, ty, tx);
+				delete_all_items_from_floor(player_ptr, ty, tx);
 			}
 
 			/* Clear previous contents, add proper vein type */

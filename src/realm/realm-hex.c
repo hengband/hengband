@@ -23,7 +23,7 @@
 #include "cmd-item/cmd-quaff.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "object/object-curse.h"
+#include "object-enchant/object-curse.h"
 #include "spell/spells-status.h"
 #include "spell/technic-info-table.h"
 #include "player/player-status.h"
@@ -44,8 +44,8 @@
 #include "spell/process-effect.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
-#include "object/tr-types.h"
-#include "object/trc-types.h"
+#include "object-enchant/tr-types.h"
+#include "object-enchant/trc-types.h"
 #include "object/item-use-flags.h"
 
 #define MAX_KEEP 4 /*!<呪術の最大詠唱数 */

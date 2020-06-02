@@ -8,8 +8,8 @@
 #include "effect/effect-characteristics.h"
 #include "object/object-kind.h"
 #include "object/object2.h"
-#include "object/sv-potion-types.h"
-#include "object/tr-types.h"
+#include "sv-definition/sv-potion-types.h"
+#include "object-enchant/tr-types.h"
 #include "spell/process-effect.h"
 #include "spell/spells-type.h"
 

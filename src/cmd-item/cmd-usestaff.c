@@ -1,15 +1,17 @@
 ﻿#include "cmd-item/cmd-usestaff.h"
 #include "cmd/cmd-basic.h"
+#include "floor/floor-object.h"
 #include "floor/floor.h"
+#include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "main/sound-definitions-table.h"
 #include "object/item-use-flags.h"
 #include "object/object-appraiser.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object/object2.h"
-#include "object/special-object-flags.h"
-#include "object/sv-staff-types.h"
+#include "object-enchant/special-object-flags.h"
+#include "sv-definition/sv-staff-types.h"
 #include "player/avatar.h"
 #include "player/player-class.h"
 #include "player/player-effects.h"
@@ -405,7 +407,7 @@ void exe_use_staff(player_type *creature_ptr, INVENTORY_IDX item)
 		/* Unstack the used item */
 		o_ptr->number--;
 		creature_ptr->total_weight -= q_ptr->weight;
-		item = inven_carry(creature_ptr, q_ptr);
+		item = store_item_to_inventory(creature_ptr, q_ptr);
 
 		msg_print(_("杖をまとめなおした。", "You unstack your staff."));
 	}

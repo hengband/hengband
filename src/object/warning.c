@@ -2,7 +2,7 @@
 #include "system/angband.h"
 #include "util/util.h"
 
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "player/player-move.h"
 #include "grid/feature.h"
 #include "floor/floor.h"
@@ -20,7 +20,7 @@
 #include "mspell/mspell-damage-calculator.h"
 #include "player/player-races-table.h"
 #include "combat/monster-attack-types.h"
-#include "object/tr-types.h"
+#include "object-enchant/tr-types.h"
 
 /*!
  * @brief 警告を放つアイテムを選択する /

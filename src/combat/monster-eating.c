@@ -8,13 +8,14 @@
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "mind/racial-mirror-master.h"
-#include "object/object2.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
 #include "player/avatar.h"
 #include "player/mimic-info-table.h"
 #include "player/player-effects.h"
+#include "world/world-object.h"
 
 void process_eat_gold(player_type *target_ptr, monap_type *monap_ptr)
 {

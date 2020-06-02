@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "birth/birth-stat.h"
-#include "object/sv-weapon-types.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "player/player-personality.h"
 #include "player/player-personalities-table.h"
 #include "player/player-skill.h"

@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include "market/bounty-prize-table.h"
-#include "object/sv-potion-types.h"
-#include "object/sv-scroll-types.h"
+#include "sv-definition/sv-potion-types.h"
+#include "sv-definition/sv-scroll-types.h"
 
 bounty_prize_type prize_list[MAX_BOUNTY] = {
     { TV_POTION, SV_POTION_CURING },

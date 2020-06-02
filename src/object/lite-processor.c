@@ -1,8 +1,8 @@
 ﻿#include "system/angband.h"
 #include "object/lite-processor.h"
-#include "object/object-ego.h"
+#include "object-enchant/object-ego.h"
 #include "object/object-hook.h"
-#include "object/sv-lite-types.h"
+#include "sv-definition/sv-lite-types.h"
 #include "player/player-move.h"
 #include "world/world.h"
 

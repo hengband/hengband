@@ -13,7 +13,7 @@
 #include "player/player-personalities-table.h"
 #include "spell/spells-summon.h"
 #include "dungeon/quest.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "grid/feature.h"
 #include "player/player-status.h"
 #include "grid/grid.h"

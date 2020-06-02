@@ -63,18 +63,20 @@
 #include "market/bounty.h"
 #include "monster/monster.h"
 #include "mutation/mutation.h"
-#include "object/artifact.h"
-#include "object/object-ego.h"
+#include "object-enchant/artifact.h"
+#include "object-enchant/object-ego.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
+#include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "object/object2.h"
-#include "object/old-ego-extra-values.h" // TODO v1.5.0以前のセーブファイルをロードする処理を分離する.
+#include "object-enchant/old-ego-extra-values.h" // TODO v1.5.0以前のセーブファイルをロードする処理を分離する.
 #include "object/object-value.h"
-#include "object/sv-armor-types.h"
-#include "object/sv-lite-types.h"
-#include "object/tr-types.h"
-#include "object/trc-types.h"
+#include "sv-definition/sv-armor-types.h"
+#include "sv-definition/sv-lite-types.h"
+#include "object-enchant/tr-types.h"
+#include "object-enchant/trc-types.h"
 #include "pet/pet-util.h"
 #include "player/avatar.h"
 #include "player/patron.h"
@@ -90,6 +92,7 @@
 #include "system/angband-version.h"
 #include "system/system-variables.h" // 暫定、init_flags の扱いを決めた上で消す.
 #include "util/util.h"
+#include "world/world-object.h"
 #include "world/world.h"
 
  /*
@@ -1293,7 +1296,7 @@ static void rd_lore(MONRACE_IDX r_idx)
  * @details
  * In all cases, return the slot (or -1) where the object was placed
  *
- * Note that this is a hacked up version of "inven_carry()".
+ * Note that this is a hacked up version of "store_item_to_inventory()".
  *
  * Also note that it may not correctly "adapt" to "knowledge" bacoming
  * known, the player may have to pick stuff up and drop it again.

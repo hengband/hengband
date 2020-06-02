@@ -2,15 +2,18 @@
 #include "autopick/autopick.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"
+#include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "market/bounty-prize-table.h"
 #include "market/building-util.h"
 #include "monster/monster-race-hook.h"
-#include "object/item-apply-magic.h"
+#include "object-enchant/item-apply-magic.h"
 #include "object/object-appraiser.h"
 #include "object/object-flavor.h"
+#include "object/object-kind-hook.h"
+#include "object/object-generator.h"
 #include "object/object2.h"
-#include "object/sv-other-types.h"
+#include "sv-definition/sv-other-types.h"
 #include "player/avatar.h"
 #include "term/gameterm.h"
 #include "world/world.h"
@@ -150,7 +153,7 @@ bool exchange_cash(player_type *player_ptr)
 			 * Since a corpse is handed at first,
 			 * there is at least one empty slot.
 			 */
-            item_new = inven_carry(player_ptr, &forge);
+            item_new = store_item_to_inventory(player_ptr, &forge);
             object_desc(player_ptr, o_name, &forge, 0);
             msg_format(_("%s(%c)を貰った。", "You get %s (%c). "), o_name, index_to_label(item_new));
 

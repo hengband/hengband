@@ -1,8 +1,8 @@
 ﻿#include "system/angband.h"
+#include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "inventory/pack-overflow.h"
 #include "player/player-move.h"
-#include "object/object2.h"
 #include "object/object-flavor.h"
 #include "core/stuff-handler.h"
 
