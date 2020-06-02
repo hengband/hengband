@@ -213,6 +213,7 @@
     <ClCompile Include="..\..\src\mind\surprise-attack.c" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-accessory.c" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-armor.c" />
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-others.c" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-weapon.c" />
     <ClCompile Include="..\..\src\object\bow.c" />
     <ClCompile Include="..\..\src\object\object-appraiser.c" />
@@ -501,6 +502,7 @@
     <ClInclude Include="..\..\src\mind\surprise-attack.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-accessory.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-armor.h" />
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-others.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-weapon.h" />
     <ClInclude Include="..\..\src\object\bow.h" />
     <ClInclude Include="..\..\src\object\object-appraiser.h" />
