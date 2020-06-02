@@ -325,6 +325,9 @@ hengband_SOURCES = \
 	object-enchant/item-apply-magic.h object-enchant/item-feeling.h \
 	object-enchant/old-ego-extra-values.h object-enchant/special-object-flags.h \
 	\
+	pet/pet-fall-off.c pet/pet-fall-off.h \
+	pet/pet-util.c pet/pet-util.h \
+	\
 	player/avatar.h player/avatar.c \
 	player/mimic-info-table.c player/mimic-info-table.h \
 	player/process-death.c player/process-death.h \
@@ -347,9 +350,6 @@ hengband_SOURCES = \
 	player/patron.h player/patron.c \
 	player/player-personality.c player/player-personality.h \
 	player/player-sex.c player/player-sex.h player/selfinfo.c player/selfinfo.h \
-	\
-	pet/pet-fall-off.c pet/pet-fall-off.h \
-	pet/pet-util.c pet/pet-util.h \
 	\
 	realm/realm-arcane.c realm/realm-arcane.h \
 	realm/realm-chaos.c realm/realm-chaos.h \
@@ -379,7 +379,8 @@ hengband_SOURCES = \
 	spell/spells-execution.c spell/spells-execution.h \
 	spell/spells-util.h spell/spells-type.h \
 	spell/process-effect.c spell/process-effect.h \
-	spell/spells1.c spell/spells1.h spell/spells2.c spell/spells2.h \
+	spell/spells1.c spell/spells1.h \
+	spell/spells2.c spell/spells2.h \
 	spell/spells3.c spell/spells3.h \
 	spell/music-checker.c spell/music-checker.h \
 	spell/spells-diceroll.c spell/spells-diceroll.h \
@@ -453,9 +454,9 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat -Icore -Idungeon \
 	-Ieffect -Ifloor -Igrid -Iinventory -Iio -Iio-dump -Iknowledge -Imarket \
-	-Imind -Imonster -Imspell -Imutation -Iobject -Ipet -Iplayer -Irealm \
-	-Iroom -Ispell -Isv-definition -Isystem -Iterm -Iutil -Iview -Iwizard \
-	-Iworld
+	-Imind -Imonster -Imspell -Imutation -Iobject -Iobject-enchant -Ipet \
+	-Iplayer -Irealm -Iroom -Ispell -Isv-definition -Isystem -Iterm -Iutil \
+	-Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID
