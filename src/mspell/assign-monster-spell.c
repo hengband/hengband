@@ -22,13 +22,13 @@
 
 /*!
  * @brief モンスターからプレイヤーへの呪文の振り分け関数。 /
- * @param SPELL_NUM モンスター魔法ID
+ * @param SPELL_NUM モンスター魔法ID (monster_spell_typeのenum値とは異なる)
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
  * @param m_idx 呪文を唱えるモンスターID
  * @return 攻撃呪文のダメージ、または召喚したモンスターの数を返す。その他の場合0。以降の処理を中断するなら-1を返す。
  */
-HIT_POINT monspell_to_player(player_type* target_ptr, monster_spell_type ms_type, POSITION y, POSITION x, MONSTER_IDX m_idx)
+HIT_POINT monspell_to_player(player_type *target_ptr, SPELL_IDX ms_type, POSITION y, POSITION x, MONSTER_IDX m_idx)
 {
     switch (ms_type)
 	{
@@ -137,7 +137,7 @@ HIT_POINT monspell_to_player(player_type* target_ptr, monster_spell_type ms_type
 /*!
  * todo モンスターからモンスターへの呪文なのにplayer_typeが引数になり得るのは間違っている……
  * @brief モンスターからモンスターへの呪文の振り分け関数。 /
- * @param target_ptr プレーヤーへの参照ポインタ
+ * @param target_ptr プレーヤーへの参照ポインタ (monster_spell_typeのenum値とは異なる)
  * @param SPELL_NUM モンスター魔法ID
  * @param y 対象の地点のy座標
  * @param x 対象の地点のx座標
@@ -146,7 +146,7 @@ HIT_POINT monspell_to_player(player_type* target_ptr, monster_spell_type ms_type
  * @param is_special_spell 特殊な行動である時TRUE
  * @return 攻撃呪文のダメージ、または召喚したモンスターの数を返す。その他の場合0。以降の処理を中断するなら-1を返す。
  */
-HIT_POINT monspell_to_monster(player_type* target_ptr, monster_spell_type ms_type, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, bool is_special_spell)
+HIT_POINT monspell_to_monster(player_type *target_ptr, SPELL_IDX ms_type, POSITION y, POSITION x, MONSTER_IDX m_idx, MONSTER_IDX t_idx, bool is_special_spell)
 {
     switch (ms_type)
 	{
