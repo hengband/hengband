@@ -461,16 +461,7 @@
     <ClCompile Include="..\..\src\object\object2.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-boost.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object\object-broken.c">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object\object-curse.c">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object\object-ego.c">
       <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\object\object-flavor.c">
@@ -577,9 +568,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\io\load.c">
       <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object\artifact.c">
-      <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\object\chest.c">
       <Filter>object</Filter>
@@ -1091,6 +1079,18 @@
     <ClCompile Include="..\..\src\object\object-generator.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\artifact.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\object-boost.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\object-curse.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\object-ego.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1585,16 +1585,7 @@
     <ClInclude Include="..\..\src\floor\floor-town.h">
       <Filter>floor</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\object-boost.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object\object-broken.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\object-curse.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\object-ego.h">
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-flavor.h">
@@ -1716,9 +1707,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\load.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\artifact.h">
-      <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\chest.h">
       <Filter>object</Filter>
@@ -2080,22 +2068,10 @@
     <ClInclude Include="..\..\src\util\util.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\tr-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object\tval-types.h">
       <Filter>monster</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\old-ego-extra-values.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\special-object-flags.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object\object-mark-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\trc-types.h">
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-util.h">
@@ -2105,12 +2081,6 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\item-use-flags.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\item-feeling.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\item-apply-magic.h">
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\object2.h">
@@ -2287,9 +2257,6 @@
     <ClInclude Include="..\..\src\object\object-generator.h">
       <Filter>object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-amulet-types.h">
-      <Filter>sv-definition</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object\sv-armor-types.h">
       <Filter>sv-definition</Filter>
     </ClInclude>
@@ -2330,6 +2297,39 @@
       <Filter>sv-definition</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\sv-weapon-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\artifact.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\item-apply-magic.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\item-feeling.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\object-boost.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\object-curse.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\object-ego.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\special-object-flags.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\trc-types.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\tr-types.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\objectt\sv-amulet-types.h">
       <Filter>sv-definition</Filter>
     </ClInclude>
   </ItemGroup>
@@ -2451,6 +2451,9 @@
     </Filter>
     <Filter Include="sv-definition">
       <UniqueIdentifier>{9e020507-fdf0-4cfb-9d60-d9c26cbcf325}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="object-enchant">
+      <UniqueIdentifier>{c7db74bd-7f58-4044-96c8-c5916d0ebaf1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
