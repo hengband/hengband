@@ -1,5 +1,4 @@
 ﻿/*!
- *  @file cmd1.c
  *  @brief プレイヤーのコマンド処理1 / Movement commands (part 1)
  *  @date 2014/01/02
  *  @author
@@ -148,6 +147,7 @@
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
+#include "floor/floor-object.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"

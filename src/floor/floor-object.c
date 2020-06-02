@@ -5,11 +5,11 @@
  */
 
 #include "floor/floor-object.h"
-#include "floor/floor.h"
 #include "object/artifact.h"
 #include "object/item-apply-magic.h"
 #include "object/object-appraiser.h"
 #include "object/object-flavor.h"
+#include "object/object-hook.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object2.h"
@@ -204,4 +204,96 @@ void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
         return;
 
     delete_object_idx(owner_ptr, item);
+}
+
+/*!
+ * @brief オブジェクトを削除する /
+ * Delete a dungeon object
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param o_idx 削除対象のオブジェクト構造体ポインタ
+ * @return なし
+ * @details
+ * Handle "stacks" of objects correctly.
+ */
+void delete_object_idx(player_type *player_ptr, OBJECT_IDX o_idx)
+{
+    object_type *j_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    excise_object_idx(floor_ptr, o_idx);
+    j_ptr = &floor_ptr->o_list[o_idx];
+    if (!OBJECT_IS_HELD_MONSTER(j_ptr)) {
+        POSITION y, x;
+        y = j_ptr->iy;
+        x = j_ptr->ix;
+        lite_spot(player_ptr, y, x);
+    }
+
+    object_wipe(j_ptr);
+    floor_ptr->o_cnt--;
+}
+
+/*!
+ * @brief 床上、モンスター所持でスタックされたアイテムを削除しスタックを補完する / Excise a dungeon object from any stacks
+ * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param o_idx 削除対象のオブジェクト構造体ポインタ
+ * @return なし
+ */
+void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx)
+{
+    OBJECT_IDX this_o_idx, next_o_idx = 0;
+    OBJECT_IDX prev_o_idx = 0;
+    object_type *j_ptr;
+    j_ptr = &floor_ptr->o_list[o_idx];
+
+    if (OBJECT_IS_HELD_MONSTER(j_ptr)) {
+        monster_type *m_ptr;
+        m_ptr = &floor_ptr->m_list[j_ptr->held_m_idx];
+        for (this_o_idx = m_ptr->hold_o_idx; this_o_idx; this_o_idx = next_o_idx) {
+            object_type *o_ptr;
+            o_ptr = &floor_ptr->o_list[this_o_idx];
+            next_o_idx = o_ptr->next_o_idx;
+            if (this_o_idx != o_idx) {
+                prev_o_idx = this_o_idx;
+                continue;
+            }
+
+            if (prev_o_idx == 0) {
+                m_ptr->hold_o_idx = next_o_idx;
+            } else {
+                object_type *k_ptr;
+                k_ptr = &floor_ptr->o_list[prev_o_idx];
+                k_ptr->next_o_idx = next_o_idx;
+            }
+
+            o_ptr->next_o_idx = 0;
+            break;
+        }
+
+        return;
+    }
+
+    grid_type *g_ptr;
+    POSITION y = j_ptr->iy;
+    POSITION x = j_ptr->ix;
+    g_ptr = &floor_ptr->grid_array[y][x];
+    for (this_o_idx = g_ptr->o_idx; this_o_idx; this_o_idx = next_o_idx) {
+        object_type *o_ptr;
+        o_ptr = &floor_ptr->o_list[this_o_idx];
+        next_o_idx = o_ptr->next_o_idx;
+        if (this_o_idx != o_idx) {
+            prev_o_idx = this_o_idx;
+            continue;
+        }
+
+        if (prev_o_idx == 0) {
+            g_ptr->o_idx = next_o_idx;
+        } else {
+            object_type *k_ptr;
+            k_ptr = &floor_ptr->o_list[prev_o_idx];
+            k_ptr->next_o_idx = next_o_idx;
+        }
+
+        o_ptr->next_o_idx = 0;
+        break;
+    }
 }

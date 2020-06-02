@@ -1,5 +1,6 @@
-﻿#include "effect-item.h"
+﻿#include "effect/effect-item.h"
 #include "autopick/autopick.h"
+#include "floor/floor-object.h"
 #include "object/object-appraiser.h"
 #include "object/object-broken.h"
 #include "object/object-flavor.h"

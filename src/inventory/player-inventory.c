@@ -1,5 +1,6 @@
 ﻿#include "inventory/player-inventory.h"
 #include "core/stuff-handler.h"
+#include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"

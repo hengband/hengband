@@ -5,6 +5,7 @@
  */
 
 #include "monster/monster-object.h"
+#include "floor/floor-object.h"
 #include "object/object2.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

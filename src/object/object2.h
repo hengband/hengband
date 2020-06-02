@@ -7,9 +7,6 @@ extern OBJECT_SUBTYPE_VALUE coin_type;
 extern bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
 s32b flag_cost(object_type *o_ptr, int plusses);
-void excise_object_idx(floor_type *floor_ptr, OBJECT_IDX o_idx);
-void delete_object_idx(player_type *owner_ptr, OBJECT_IDX o_idx);
-
 OBJECT_IDX get_obj_num(player_type *o_ptr, DEPTH level, BIT_FLAGS mode);
 
 byte value_check_aux1(object_type *o_ptr);
