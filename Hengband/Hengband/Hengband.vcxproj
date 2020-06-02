@@ -711,6 +711,7 @@
     <ClCompile Include="..\..\src\floor\wild.c" />
     <ClCompile Include="..\..\src\wizard\wizard-spoiler.c" />
     <ClCompile Include="..\..\src\wizard\wizard-special-process.c" />
+    <ClCompile Include="..\..\src\world\world-object.c" />
     <ClCompile Include="..\..\src\world\world.c" />
     <ClCompile Include="..\..\src\world\world-movement-processor.c" />
     <ClCompile Include="..\..\src\world\world-turn-processor.c" />
@@ -754,6 +755,7 @@
     <ClInclude Include="..\..\src\core\show-file.h" />
     <ClInclude Include="..\..\src\view\display-birth.h" />
     <ClInclude Include="..\..\src\view\object-describer.h" />
+    <ClInclude Include="..\..\src\world\world-object.h" />
     <ClInclude Include="..\src\locele\english.h" />
     <ClInclude Include="..\..\src\monster\horror-descriptions.h" />
     <ClInclude Include="..\..\src\io\gf-descriptions.h" />

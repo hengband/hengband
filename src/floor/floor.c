@@ -16,6 +16,7 @@
 #include "object/special-object-flags.h"
 #include "player/player-effects.h"
 #include "room/rooms.h"
+#include "world/world-object.h"
 #include "world/world.h"
 
 /*

@@ -66,6 +66,7 @@
 #include "term/gameterm.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
+#include "world/world-object.h"
 #include "world/world.h"
 
 dungeon_grid letter[255];

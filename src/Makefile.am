@@ -427,6 +427,7 @@ hengband_SOURCES = \
 	wizard/wizard-special-process.c wizard/wizard-special-process.h \
 	\
 	world/world.c world/world.h \
+	world/world-object.c world/world-object.h \
 	world/world-movement-processor.c world/world-movement-processor.h \
 	world/world-turn-processor.c world/world-turn-processor.h
 

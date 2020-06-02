@@ -28,6 +28,7 @@
 #include "term/gameterm.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
+#include "world/world-object.h"
 
 /*!
  * @brief 矢弾を射撃した際のスレイ倍率をかけた結果を返す /

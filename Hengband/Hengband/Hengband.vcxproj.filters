@@ -1085,6 +1085,9 @@
     <ClCompile Include="..\..\src\cmd-building\cmd-inn.c">
       <Filter>cmd-building</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\world\world-object.c">
+      <Filter>world</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2319,6 +2322,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-building\cmd-inn.h">
       <Filter>cmd-building</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\world\world-object.h">
+      <Filter>world</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
