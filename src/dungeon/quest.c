@@ -14,6 +14,7 @@
 #include "monster/monster.h"
 #include "object/artifact.h"
 #include "object/item-apply-magic.h"
+#include "object/object-generator.h"
 #include "object/object2.h"
 #include "player/player-personalities-table.h"
 #include "player/player-status.h"

@@ -213,6 +213,7 @@
     <ClCompile Include="..\..\src\mind\surprise-attack.c" />
     <ClCompile Include="..\..\src\object\bow.c" />
     <ClCompile Include="..\..\src\object\object-appraiser.c" />
+    <ClCompile Include="..\..\src\object\object-generator.c" />
     <ClCompile Include="..\..\src\object\object-value.c" />
     <ClCompile Include="..\..\src\pet\pet-fall-off.c" />
     <ClCompile Include="..\..\src\mspell\mspell-floor.c" />
@@ -497,6 +498,7 @@
     <ClInclude Include="..\..\src\mind\surprise-attack.h" />
     <ClInclude Include="..\..\src\object\bow.h" />
     <ClInclude Include="..\..\src\object\object-appraiser.h" />
+    <ClInclude Include="..\..\src\object\object-generator.h" />
     <ClInclude Include="..\..\src\object\object-value.h" />
     <ClInclude Include="..\..\src\pet\pet-fall-off.h" />
     <ClInclude Include="..\..\src\pet\pet-util.h" />

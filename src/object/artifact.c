@@ -22,6 +22,7 @@
 #include "object/object-curse.h"
 #include "object/object-ego.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object1.h"

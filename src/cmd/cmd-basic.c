@@ -41,6 +41,7 @@
 #include "object/object-appraiser.h"
 #include "object/object-broken.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object2.h"

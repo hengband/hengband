@@ -6,6 +6,7 @@
 #include "main/sound-definitions-table.h"
 #include "object/item-use-flags.h"
 #include "object/object-appraiser.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object2.h"

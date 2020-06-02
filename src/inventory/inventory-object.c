@@ -1,10 +1,11 @@
 ﻿#include "inventory/inventory-object.h"
 #include "floor/floor-object.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h"
-#include "object/object2.h" // 暫定、相互参照している.
+#include "object/object2.h"
 #include "player/player-effects.h" // 暫定、相互参照している.
 #include "view/object-describer.h"
 

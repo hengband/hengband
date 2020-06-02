@@ -7,7 +7,7 @@
  */
 
 #include "system/angband.h"
-#include "effect-monster-util.h"
+#include "effect/effect-monster-util.h"
 #include "effect/effect-monster-switcher.h"
 #include "player/player-damage.h"
 #include "player/avatar.h"

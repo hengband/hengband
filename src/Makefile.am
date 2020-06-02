@@ -304,6 +304,7 @@ hengband_SOURCES = \
 	object/object-curse.c object/object-curse.h \
 	object/object-ego.c object/object-ego.h \
 	object/object-flavor.c object/object-flavor.h \
+	object/object-generator.c object/object-generator.h \
 	object/object-hook.c object/object-hook.h \
 	object/object-kind.c object/object-kind.h \
 	object/object-kind-hook.c object/object-kind-hook.h \

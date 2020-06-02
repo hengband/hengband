@@ -1088,6 +1088,9 @@
     <ClCompile Include="..\..\src\world\world-object.c">
       <Filter>world</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\object-generator.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2325,6 +2328,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\world\world-object.h">
       <Filter>world</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-generator.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

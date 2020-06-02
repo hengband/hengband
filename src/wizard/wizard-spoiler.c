@@ -19,6 +19,7 @@
 #include "object/object-appraiser.h"
 #include "object/object-ego.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
 #include "object/object2.h"

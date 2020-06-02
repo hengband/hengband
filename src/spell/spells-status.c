@@ -14,6 +14,7 @@
 #include "mind/racial-force-trainer.h"
 #include "monster/monster.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "object/object-kind.h"
 #include "object/object2.h"
 #include "player/avatar.h"

@@ -23,6 +23,7 @@
 #include "floor/floor-object.h"
 #include "object/object2.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "monster/monster-race-hook.h"
 #include "monster/monster-status.h"
 #include "monster/monster.h"

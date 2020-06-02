@@ -39,6 +39,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-appraiser.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "object/object-mark-types.h"
 #include "object/object2.h"
 #include "object/special-object-flags.h"

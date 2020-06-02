@@ -37,6 +37,7 @@
 #include "object/item-feeling.h"
 #include "object/object-appraiser.h"
 #include "object/object-ego.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"

@@ -3,9 +3,9 @@
 #include "object/artifact.h"
 #include "object/item-feeling.h"
 #include "object/object-flavor.h"
+#include "object/object-generator.h"
 #include "object/object-hook.h" // 暫定、このファイルへ引っ越す.
 #include "object/object-kind.h"
-#include "object/object2.h" // 暫定、相互参照している.
 #include "object/special-object-flags.h"
 
 /*!
