@@ -211,6 +211,7 @@
     <ClCompile Include="..\..\src\mind\racial-samurai.c" />
     <ClCompile Include="..\..\src\mind\samurai-slaying.c" />
     <ClCompile Include="..\..\src\mind\surprise-attack.c" />
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-armor.c" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-weapon.c" />
     <ClCompile Include="..\..\src\object\bow.c" />
     <ClCompile Include="..\..\src\object\object-appraiser.c" />
@@ -497,6 +498,7 @@
     <ClInclude Include="..\..\src\mind\racial-samurai.h" />
     <ClInclude Include="..\..\src\mind\samurai-slaying.h" />
     <ClInclude Include="..\..\src\mind\surprise-attack.h" />
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-armor.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-weapon.h" />
     <ClInclude Include="..\..\src\object\bow.h" />
     <ClInclude Include="..\..\src\object\object-appraiser.h" />

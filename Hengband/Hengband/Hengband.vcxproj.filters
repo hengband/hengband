@@ -1094,6 +1094,9 @@
     <ClCompile Include="..\..\src\object-enchant\apply-magic-weapon.c">
       <Filter>object-enchant</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\apply-magic-armor.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2336,6 +2339,9 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\apply-magic-weapon.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\apply-magic-armor.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
   </ItemGroup>
