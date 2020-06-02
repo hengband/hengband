@@ -2113,51 +2113,6 @@
     <ClInclude Include="..\..\src\object\item-apply-magic.h">
       <Filter>object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-other-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-bow-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-digging-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-weapon-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-protector-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-armor-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-ring-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-potion-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-lite-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-amulet-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-staff-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-wand-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-rod-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-scroll-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\sv-food-types.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object\object2.h">
       <Filter>object</Filter>
     </ClInclude>
@@ -2332,6 +2287,51 @@
     <ClInclude Include="..\..\src\object\object-generator.h">
       <Filter>object</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-amulet-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-armor-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-bow-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-digging-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-food-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-lite-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-other-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-potion-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-ring-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-protector-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-rod-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-scroll-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-staff-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-wand-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\sv-weapon-types.h">
+      <Filter>sv-definition</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2448,6 +2448,9 @@
     </Filter>
     <Filter Include="cmd-building">
       <UniqueIdentifier>{6982e0e0-d2db-422e-8e92-77b1276e4030}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="sv-definition">
+      <UniqueIdentifier>{9e020507-fdf0-4cfb-9d60-d9c26cbcf325}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
