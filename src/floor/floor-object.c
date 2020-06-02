@@ -166,3 +166,42 @@ void delete_all_items_from_floor(player_type *player_ptr, POSITION y, POSITION x
     g_ptr->o_idx = 0;
     lite_spot(player_ptr, y, x);
 }
+
+/*!
+ * @brief 床上のアイテムの数を増やす /
+ * Increase the "number" of an item on the floor
+ * @param floo_ptr 現在フロアへの参照ポインタ
+ * @param item 増やしたいアイテムの所持スロット
+ * @param num 増やしたいアイテムの数
+ * @return なし
+ */
+void floor_item_increase(floor_type *floor_ptr, INVENTORY_IDX item, ITEM_NUMBER num)
+{
+    object_type *o_ptr = &floor_ptr->o_list[item];
+    num += o_ptr->number;
+    if (num > 255)
+        num = 255;
+    else if (num < 0)
+        num = 0;
+
+    num -= o_ptr->number;
+    o_ptr->number += num;
+}
+
+/*!
+ * @brief 床上の数の無くなったアイテムスロットを消去する /
+ * Optimize an item on the floor (destroy "empty" items)
+ * @param player_ptr プレーヤーへの参照ポインタ
+ * @param item 消去したいアイテムの所持スロット
+ * @return なし
+ */
+void floor_item_optimize(player_type *owner_ptr, INVENTORY_IDX item)
+{
+    object_type *o_ptr = &owner_ptr->current_floor_ptr->o_list[item];
+    if (!o_ptr->k_idx)
+        return;
+    if (o_ptr->number)
+        return;
+
+    delete_object_idx(owner_ptr, item);
+}

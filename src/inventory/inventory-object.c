@@ -1,4 +1,5 @@
 ﻿#include "inventory/inventory-object.h"
+#include "floor/floor-object.h"
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h"

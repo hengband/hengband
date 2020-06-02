@@ -25,6 +25,7 @@
 #include "core/sort.h"
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
+#include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/targeting.h"

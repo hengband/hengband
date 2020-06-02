@@ -1,6 +1,7 @@
 ﻿#include "birth/inventory-initializer.h"
 #include "autopick/autopick.h"
 #include "birth/initial-equipments-table.h"
+#include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "monster/monster-race-hook.h"
 #include "object/item-apply-magic.h"

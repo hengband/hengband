@@ -23,6 +23,7 @@
 #include "dungeon/quest.h"
 #include "effect/effect-characteristics.h"
 #include "effect/spells-effect-util.h"
+#include "floor/floor-object.h"
 #include "floor/floor-save.h"
 #include "floor/floor-town.h"
 #include "floor/wild.h"
