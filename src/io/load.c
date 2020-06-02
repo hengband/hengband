@@ -67,6 +67,7 @@
 #include "object/object-ego.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
+#include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "object/object2.h"

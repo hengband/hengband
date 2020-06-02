@@ -30,6 +30,7 @@
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
+#include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "object/object-value.h" // 暫定、相互参照している.
@@ -674,38 +675,6 @@ void object_absorb(object_type *o_ptr, object_type *j_ptr)
 	{
 		o_ptr->pval += j_ptr->pval * (j_ptr->number - diff) / j_ptr->number;
 	}
-}
-
-
-/*!
- * @brief tvalとsvalに対応するベースアイテムのIDを返す。
- * Find the index of the object_kind with the given tval and sval
- * @param tval 検索したいベースアイテムのtval
- * @param sval 検索したいベースアイテムのsval
- * @return なし
- */
-KIND_OBJECT_IDX lookup_kind(tval_type tval, OBJECT_SUBTYPE_VALUE sval)
-{
-	int num = 0;
-	KIND_OBJECT_IDX bk = 0;
-
-	for (KIND_OBJECT_IDX k = 1; k < max_k_idx; k++)
-	{
-		object_kind *k_ptr = &k_info[k];
-		if (k_ptr->tval != tval) continue;
-		if (k_ptr->sval == sval) return (k);
-		if (sval != SV_ANY) continue;
-		if (!one_in_(++num)) continue;
-
-		bk = k;
-	}
-
-	if (sval == SV_ANY)
-	{
-		return bk;
-	}
-
-	return 0;
 }
 
 

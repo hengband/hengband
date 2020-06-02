@@ -15,7 +15,6 @@ void reduce_charges(object_type *o_ptr, int amt);
 int object_similar_part(object_type *o_ptr, object_type *j_ptr);
 bool object_similar(object_type *o_ptr, object_type *j_ptr);
 void object_absorb(object_type *o_ptr, object_type *j_ptr);
-IDX lookup_kind(tval_type tval, OBJECT_SUBTYPE_VALUE sval);
 void apply_magic(player_type *owner_type, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
 bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr);
 void floor_item_describe(player_type *player_ptr, INVENTORY_IDX item); // 暫定、元々object2.c の内部からのみ呼ばれていた.

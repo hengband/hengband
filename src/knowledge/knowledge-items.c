@@ -8,6 +8,7 @@
 #include "core/show-file.h"
 #include "core/sort.h"
 #include "core/stuff-handler.h"
+#include "floor/floor.h"
 #include "io-dump/dump-util.h"
 #include "knowledge/object-group-table.h"
 #include "object/artifact.h"
@@ -15,8 +16,8 @@
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
+#include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "object/object2.h"
 #include "object/special-object-flags.h"
 #include "term/gameterm.h"
 #include "view/display-main-window.h" // 暫定、後で消す.

@@ -54,6 +54,7 @@
 #include "object/item-apply-magic.h"
 #include "object/object-ego.h"
 #include "object/object-generator.h"
+#include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object2.h"
 #include "object/sv-scroll-types.h"

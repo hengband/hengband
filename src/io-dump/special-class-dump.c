@@ -8,8 +8,8 @@
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-item/cmd-smith.h"
 #include "mspell/monster-spell.h"
+#include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "object/object2.h"
 
 typedef struct {
 	BIT_FLAGS f4;

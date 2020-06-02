@@ -5,7 +5,7 @@
 #include "floor/floor-object.h"
 #include "io/targeting.h"
 #include "object/object-generator.h"
-#include "object/object2.h"
+#include "object/object-kind-hook.h"
 #include "object/sv-food-types.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"

@@ -8,7 +8,7 @@
 #include "object/artifact.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
-#include "object/object2.h"
+#include "object/object-kind-hook.h"
 #include "object/special-object-flags.h"
 #include "util/util.h"
 #include "world/world.h"
