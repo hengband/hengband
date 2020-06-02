@@ -6,7 +6,7 @@
 #include "term/gameterm.h"
 
 #include "player/avatar.h"
-#include "cmd/cmd-building.h"
+#include "cmd-building/cmd-building.h"
 #include "io/write-diary.h"
 #include "autopick/autopick-pref-processor.h"
 #include "cmd-io/cmd-process-screen.h"

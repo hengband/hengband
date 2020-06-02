@@ -11,7 +11,6 @@
  * </pre>
  */
 
-#include "system/angband.h"
 #include "io/uid-checker.h"
 #include "io/files-util.h"
 #include "io-dump/character-dump.h"

@@ -14,7 +14,7 @@
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-util.h"
-#include "cmd/cmd-building.h"
+#include "cmd-building/cmd-building.h"
 #include "core/player-processor.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"

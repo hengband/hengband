@@ -17,7 +17,7 @@
 #include "term/gameterm.h"
 #include "io/targeting.h"
 
-#include "cmd/cmd-building.h"
+#include "cmd-building/cmd-building.h"
 #include "cmd-action/cmd-pet.h"
 #include "dungeon/dungeon-file.h"
 #include "object/object2.h"

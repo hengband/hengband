@@ -10,28 +10,25 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "system/angband.h"
-#include "io/signal-handlers.h"
-#include "term/gameterm.h"
-#include "util/util.h"
+#include "core/scores.h"
+#include "cmd-io/cmd-dump.h"
 #include "core/turn-compensator.h"
-#include "system/angband-version.h"
-
 #include "dungeon/dungeon.h"
-#include "player/race-info-table.h"
-#include "player/player-status.h"
+#include "floor/floor.h"
+#include "io/report.h"
+#include "io/signal-handlers.h"
+#include "io/uid-checker.h"
+#include "io/write-diary.h"
+#include "locale/japanese.h"
 #include "player/player-class.h"
 #include "player/player-personality.h"
 #include "player/player-sex.h"
-#include "io/uid-checker.h"
-#include "io/files-util.h"
-#include "core/scores.h"
-#include "floor/floor.h"
+#include "player/player-status.h"
+#include "player/race-info-table.h"
+#include "system/angband-version.h"
+#include "term/gameterm.h"
+#include "util/util.h"
 #include "world/world.h"
-#include "io/write-diary.h"
-#include "cmd-io/cmd-dump.h"
-#include "io/report.h"
-#include "locale/japanese.h"
 
  /*
   * The "highscore" file descriptor, if available.

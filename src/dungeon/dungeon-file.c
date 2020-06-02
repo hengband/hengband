@@ -33,7 +33,7 @@
 
 #include "dungeon/dungeon-file.h"
 #include "cmd-item/cmd-activate.h"
-#include "cmd/cmd-building.h"
+#include "cmd-building/cmd-building.h"
 #include "combat/monster-attack-effect.h"
 #include "combat/monster-attack-types.h"
 #include "dungeon/dungeon.h"

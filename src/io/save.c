@@ -32,7 +32,7 @@
 #include "world/world.h"
 #include "object/object-kind.h"
 #include "monster/monster-race.h"
-#include "cmd/cmd-building.h"
+#include "cmd-building/cmd-building.h"
 #include "view/display-main-window.h"
 #include "birth/quick-start.h"
 

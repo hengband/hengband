@@ -46,10 +46,8 @@ hengband_SOURCES = \
 	birth/auto-roller.c birth/auto-roller.h \
 	birth/birth-wizard.c birth/birth-wizard.h \
 	\
-	cmd/cmd-building.c cmd/cmd-building.h \
 	cmd/cmd-basic.c cmd/cmd-basic.h \
 	cmd/cmd-draw.c cmd/cmd-draw.h \
-	cmd/cmd-inn.c cmd/cmd-inn.h \
 	cmd/cmd-visuals.c cmd/cmd-visuals.h \
 	\
 	cmd-action/cmd-attack.c cmd-action/cmd-attack.h \
@@ -57,6 +55,9 @@ hengband_SOURCES = \
 	cmd-action/cmd-mane.c cmd-action/cmd-mane.h \
 	cmd-action/cmd-pet.c cmd-action/cmd-pet.h \
 	cmd-action/cmd-spell.c cmd-action/cmd-spell.h \
+	\
+	cmd-building/cmd-building.c cmd-building/cmd-building.h \
+	cmd-building/cmd-inn.c cmd-building/cmd-inn.h \
 	\
 	cmd-io/cmd-autopick.c cmd-io/cmd-autopick.h \
 	cmd-io/cmd-diary.c cmd-io/cmd-diary.h \

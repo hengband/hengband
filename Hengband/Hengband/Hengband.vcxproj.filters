@@ -122,9 +122,6 @@
     <ClCompile Include="..\..\src\player\mimic-info-table.c">
       <Filter>player</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-inn.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\main\sound-definitions-table.c">
       <Filter>main</Filter>
     </ClCompile>
@@ -827,9 +824,6 @@
     <ClCompile Include="..\..\src\market\building-enchanter.c">
       <Filter>market</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\cmd\cmd-building.c">
-      <Filter>cmd</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\store\rumor.c">
       <Filter>store</Filter>
     </ClCompile>
@@ -1085,6 +1079,12 @@
     <ClCompile Include="..\..\src\object\bow.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\cmd-building\cmd-building.c">
+      <Filter>cmd-building</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\cmd-building\cmd-inn.c">
+      <Filter>cmd-building</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1209,9 +1209,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\player\mimic-info-table.h">
       <Filter>player</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-inn.h">
-      <Filter>cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\main\sound-definitions-table.h">
       <Filter>main</Filter>
@@ -1972,9 +1969,6 @@
     <ClInclude Include="..\..\src\market\building-enchanter.h">
       <Filter>market</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\cmd\cmd-building.h">
-      <Filter>cmd</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\market\building-actions-table.h">
       <Filter>market</Filter>
     </ClInclude>
@@ -2320,6 +2314,12 @@
     <ClInclude Include="..\..\src\object\bow.h">
       <Filter>object</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\cmd-building\cmd-building.h">
+      <Filter>cmd-building</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\cmd-building\cmd-inn.h">
+      <Filter>cmd-building</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2433,6 +2433,9 @@
     </Filter>
     <Filter Include="io-dump">
       <UniqueIdentifier>{739c9774-e51a-46eb-87c1-cd7cd332e97c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="cmd-building">
+      <UniqueIdentifier>{6982e0e0-d2db-422e-8e92-77b1276e4030}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

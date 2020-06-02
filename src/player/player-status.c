@@ -6,7 +6,7 @@
 #include "cmd-action/cmd-spell.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-item/cmd-magiceat.h"
-#include "cmd/cmd-building.h"
+#include "cmd-building/cmd-building.h"
 #include "combat/attack-power-table.h"
 #include "core/stuff-handler.h"
 #include "dungeon/dungeon.h"

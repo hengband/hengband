@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include "io/files-util.h"
+#include "system/angband.h"
+
 /*
  * Semi-Portable High Score List Entry (128 bytes) -- BEN
  *
@@ -36,14 +39,13 @@ typedef struct high_score
 
 extern int highscore_fd;
 
-/* scores.c */
-extern void display_scores_aux(int from, int to, int note, high_score *score);
-extern void display_scores(int from, int to);
-extern void kingly(player_type *winner_ptr);
-extern bool send_world_score(player_type *current_player_ptr, bool do_send, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name);
-extern errr top_twenty(player_type *current_player_ptr);
-extern errr predict_score(player_type *current_player_ptr);
-extern void race_legends(player_type *current_player_ptr);
-extern void race_score(player_type *current_player_ptr, int race_num);
-extern void show_highclass(player_type *current_player_ptr);
-extern bool check_score(player_type *current_player_ptr);
+void display_scores_aux(int from, int to, int note, high_score *score);
+void display_scores(int from, int to);
+void kingly(player_type *winner_ptr);
+bool send_world_score(player_type *current_player_ptr, bool do_send, void(*update_playtime)(void), display_player_pf display_player, map_name_pf map_name);
+errr top_twenty(player_type *current_player_ptr);
+errr predict_score(player_type *current_player_ptr);
+void race_legends(player_type *current_player_ptr);
+void race_score(player_type *current_player_ptr, int race_num);
+void show_highclass(player_type *current_player_ptr);
+bool check_score(player_type *current_player_ptr);

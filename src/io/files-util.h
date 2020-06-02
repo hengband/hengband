@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 extern char savefile[1024];
 extern char savefile_base[40];
 

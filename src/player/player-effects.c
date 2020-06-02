@@ -18,7 +18,7 @@
 #include "birth/birth-stat.h"
 #include "birth/character-builder.h"
 #include "cmd-io/cmd-dump.h"
-#include "cmd/cmd-building.h"
+#include "cmd-building/cmd-building.h"
 #include "combat/snipe.h"
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"

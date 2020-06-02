@@ -99,7 +99,7 @@
 #include "system/angband.h"
 #include "util/util.h"
 #include "system/system-variables.h"
-#include "cmd/cmd-building.h"
+#include "cmd-building/cmd-building.h"
 
 #include "io/write-diary.h"
 #include "cmd-io/cmd-dump.h"

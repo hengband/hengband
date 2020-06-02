@@ -4,54 +4,54 @@
  * @author
  * Created by Ken Wigle for Kangband - a variant of Angband 2.8.3
  * -KMW-
- * 
+ *
  * Rewritten for Kangband 2.8.3i using Kamband's version of
  * building.c as written by Ivan Tkatchev
- * 
+ *
  * Changed for ZAngband by Robert Ruehlmann
-*/
+ */
 
 #include "system/angband.h"
-#include "util/util.h"
-#include "main/music-definitions-table.h"
-#include "core/stuff-handler.h"
+#include "cmd-building/cmd-building.h"
+#include "cmd-action/cmd-spell.h"
+#include "cmd-io/cmd-dump.h"
+#include "cmd-building/cmd-inn.h"
+#include "core/scores.h"
 #include "core/show-file.h"
 #include "core/special-internal-keys.h"
-#include "cmd-io/cmd-dump.h"
-#include "cmd/cmd-inn.h"
-#include "floor/floor.h"
+#include "core/stuff-handler.h"
 #include "floor/floor-events.h"
 #include "floor/floor-save.h"
-#include "object/object-flavor.h"
-#include "object/object-hook.h"
-#include "monster/monster.h"
+#include "floor/floor.h"
 #include "floor/wild.h"
-#include "world/world.h"
-#include "player/avatar.h"
-#include "cmd/cmd-building.h"
-#include "mutation/mutation.h"
-#include "cmd-action/cmd-spell.h"
-#include "spell/spells3.h"
-#include "spell/spells-status.h"
 #include "io/files-util.h"
-#include "player/player-status.h"
-#include "player/player-personalities-table.h"
-#include "core/scores.h"
-#include "monster/monster-race.h"
-#include "market/poker.h"
-#include "market/building-util.h"
-#include "market/play-gamble.h"
+#include "main/music-definitions-table.h"
 #include "market/arena.h"
 #include "market/bounty.h"
-#include "market/building-recharger.h"
-#include "market/building-quest.h"
-#include "market/building-service.h"
-#include "market/building-craft-weapon.h"
+#include "market/building-actions-table.h"
 #include "market/building-craft-armor.h"
 #include "market/building-craft-fix.h"
-#include "market/building-monster.h"
+#include "market/building-craft-weapon.h"
 #include "market/building-enchanter.h"
-#include "market/building-actions-table.h"
+#include "market/building-monster.h"
+#include "market/building-quest.h"
+#include "market/building-recharger.h"
+#include "market/building-service.h"
+#include "market/building-util.h"
+#include "market/play-gamble.h"
+#include "market/poker.h"
+#include "monster/monster-race.h"
+#include "monster/monster.h"
+#include "mutation/mutation.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
+#include "player/avatar.h"
+#include "player/player-personalities-table.h"
+#include "player/player-status.h"
+#include "spell/spells-status.h"
+#include "spell/spells3.h"
+#include "util/util.h"
+#include "world/world.h"
 
 building_type building[MAX_BLDG];
 
