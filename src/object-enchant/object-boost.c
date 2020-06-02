@@ -1,9 +1,9 @@
 ﻿#include "system/angband.h"
 #include "floor/floor.h"
-#include "object/object-boost.h"
-#include "object/object-boost.h"
+#include "object-enchant/object-boost.h"
+#include "object-enchant/object-boost.h"
 #include "cmd-item/cmd-activate.h"
-#include "object/tr-types.h"
+#include "object-enchant/tr-types.h"
 
 /*!
  * @brief 上質以上のオブジェクトに与えるための各種ボーナスを正規乱数も加えて算出する。

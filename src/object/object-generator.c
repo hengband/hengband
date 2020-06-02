@@ -1,9 +1,9 @@
 ﻿#include "object/object-generator.h"
-#include "object/artifact.h"
-#include "object/object-curse.h"
+#include "object-enchant/artifact.h"
+#include "object-enchant/object-curse.h"
 #include "object/object-kind.h"
-#include "object/special-object-flags.h"
-#include "object/trc-types.h"
+#include "object-enchant/special-object-flags.h"
+#include "object-enchant/trc-types.h"
 
 /*!
  * @brief オブジェクトを初期化する

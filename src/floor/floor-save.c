@@ -16,7 +16,7 @@
 #include "io/load.h"
 #include "util/util.h"
 
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "floor/floor-object.h"

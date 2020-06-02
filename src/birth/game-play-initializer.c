@@ -4,7 +4,7 @@
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "market/arena.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "object/object-generator.h"
 #include "object/object-kind.h"
 #include "pet/pet-util.h"

@@ -1,6 +1,6 @@
 ﻿#include "system/angband.h"
 #include "mind/surprise-attack.h"
-#include "object/trc-types.h"
+#include "object-enchant/trc-types.h"
 
 /*!
  * @brief 盗賊と忍者における不意打ち

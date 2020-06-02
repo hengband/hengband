@@ -5,11 +5,11 @@
 #include "io/files-util.h"
 #include "io/tokenizer.h"
 #include "monster/monster-race.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
-#include "object/special-object-flags.h"
+#include "object-enchant/special-object-flags.h"
 #include "util/util.h"
 #include "world/world.h"
 

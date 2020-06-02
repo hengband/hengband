@@ -1,11 +1,11 @@
 ﻿#include "inventory/simple-appraiser.h"
 #include "autopick/autopick.h"
 #include "inventory/player-inventory.h"
-#include "object/item-feeling.h"
+#include "object-enchant/item-feeling.h"
 #include "object/object-appraiser.h"
 #include "object/object-flavor.h"
 #include "object/object2.h"
-#include "object/special-object-flags.h"
+#include "object-enchant/special-object-flags.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
 

@@ -541,7 +541,7 @@
     <ClInclude Include="..\..\src\object\object2.h" />
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />
     <ClInclude Include="..\..\src\object-enchant\special-object-flags.h" />
-    <ClInclude Include="..\..\src\objectt\sv-amulet-types.h" />
+    <ClInclude Include="..\..\src\sv-definition\sv-amulet-types.h" />
     <ClInclude Include="..\..\src\sv-definition\sv-armor-types.h" />
     <ClInclude Include="..\..\src\sv-definition\sv-bow-types.h" />
     <ClInclude Include="..\..\src\sv-definition\sv-digging-types.h" />

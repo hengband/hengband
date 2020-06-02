@@ -3,7 +3,7 @@
 #include "object/object-appraiser.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
-#include "object/special-object-flags.h"
+#include "object-enchant/special-object-flags.h"
 #include "spell/spells3.h"
 #include "term/gameterm.h"
 

@@ -9,7 +9,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
-#include "object/tr-types.h"
+#include "object-enchant/tr-types.h"
 
  /*!
   * @brief オブジェクトのフラグを更新する

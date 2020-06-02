@@ -11,11 +11,11 @@
 #include "object/object-appraiser.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "object/special-object-flags.h"
+#include "object-enchant/special-object-flags.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-ring-types.h"
-#include "object/tr-types.h"
+#include "object-enchant/tr-types.h"
 #include "store/store-util.h"
 
 static concptr inven_res_label = _(

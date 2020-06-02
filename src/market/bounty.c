@@ -7,7 +7,7 @@
 #include "market/bounty-prize-table.h"
 #include "market/building-util.h"
 #include "monster/monster-race-hook.h"
-#include "object/item-apply-magic.h"
+#include "object-enchant/item-apply-magic.h"
 #include "object/object-appraiser.h"
 #include "object/object-flavor.h"
 #include "object/object-kind-hook.h"

@@ -2068,9 +2068,6 @@
     <ClInclude Include="..\..\src\util\util.h">
       <Filter>util</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\tval-types.h">
-      <Filter>monster</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\object\object-mark-types.h">
       <Filter>object</Filter>
     </ClInclude>
@@ -2329,8 +2326,11 @@
     <ClInclude Include="..\..\src\object-enchant\tr-types.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\objectt\sv-amulet-types.h">
+    <ClInclude Include="..\..\src\sv-definition\sv-amulet-types.h">
       <Filter>sv-definition</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\tval-types.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

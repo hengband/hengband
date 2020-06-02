@@ -2,7 +2,7 @@
 #include "core/sort.h"
 #include "floor/floor.h"
 #include "dungeon/quest.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "monster/monster-race.h"
 
 /*

@@ -4,7 +4,7 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "main/sound-definitions-table.h"
-#include "object/item-apply-magic.h"
+#include "object-enchant/item-apply-magic.h"
 #include "object/object-appraiser.h"
 #include "object/object-generator.h"
 #include "sv-definition/sv-other-types.h"

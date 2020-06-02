@@ -5,7 +5,7 @@
 #include "monster/monster-race-hook.h"
 #include "monster/monster-status.h"
 #include "pet/pet-fall-off.h"
-#include "object/trc-types.h"
+#include "object-enchant/trc-types.h"
 #include "player/player-effects.h"
 #include "spell/spells-diceroll.h"
 

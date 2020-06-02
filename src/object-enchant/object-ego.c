@@ -4,7 +4,7 @@
  * @author deskull
  * @details Ego-Item indexes (see "lib/edit/e_info.txt")
  */
-#include "object/object-ego.h"
+#include "object-enchant/object-ego.h"
 
 /*
  * The ego-item arrays

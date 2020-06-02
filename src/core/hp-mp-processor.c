@@ -5,14 +5,14 @@
 #include "realm/realm-song.h"
 #include "player/player-damage.h"
 #include "object/object-flavor.h"
-#include "object/object-ego.h"
+#include "object-enchant/object-ego.h"
 #include "world/world.h"
 #include "player/player-effects.h"
 #include "floor/pattern-walk.h"
 #include "core/hp-mp-regenerator.h"
 #include "cmd-action/cmd-pet.h"
 #include "player/player-races-table.h"
-#include "object/trc-types.h"
+#include "object-enchant/trc-types.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとにプレイヤーのHPとMPの増減処理を行う。

@@ -13,7 +13,7 @@
 #include "core/stuff-handler.h"
 #include "combat/attack-criticality.h"
 #include "object/object1.h"
-#include "object/tr-types.h"
+#include "object-enchant/tr-types.h"
 
 /*!
  * @brief 死の大鎌ダメージが跳ね返ってきた時の、種族ごとのダメージ倍率を返す

@@ -43,7 +43,7 @@
 #include "view/display-player.h" // 暫定。後で消す.
 #include "player/player-personalities-table.h"
 #include "dungeon/quest.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "floor/floor-town.h"
 #include "cmd-io/feeling-table.h"
 #include "locale/english.h"

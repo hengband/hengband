@@ -21,7 +21,7 @@
 #include "cmd-action/cmd-pet.h"
 #include "dungeon/dungeon-file.h"
 #include "floor/floor-object.h"
-#include "object/object-curse.h"
+#include "object-enchant/object-curse.h"
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
 #include "monster/monster.h"

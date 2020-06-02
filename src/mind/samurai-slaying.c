@@ -7,7 +7,7 @@
 #include "system/angband.h"
 #include "mind/samurai-slaying.h"
 #include "monster/monster-race-hook.h"
-#include "object/tr-types.h"
+#include "object-enchant/tr-types.h"
 
 typedef struct samurai_slaying_type {
     MULTIPLY mult;

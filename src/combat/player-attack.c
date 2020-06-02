@@ -20,7 +20,7 @@
 #include "mind/surprise-attack.h"
 #include "monster/monster-status.h"
 #include "monster/monster-race-hook.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "sv-definition/sv-weapon-types.h"
@@ -30,7 +30,7 @@
 #include "realm/realm-hex.h"
 #include "spell/spells-floor.h"
 #include "world/world.h"
-#include "object/tr-types.h"
+#include "object-enchant/tr-types.h"
 
 static player_attack_type *initialize_player_attack_type(
     player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr, grid_type *g_ptr, bool *fear, bool *mdeath)

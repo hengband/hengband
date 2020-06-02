@@ -292,17 +292,13 @@ hengband_SOURCES = \
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
 	\
-	object/artifact.c object/artifact.h \
 	object/bow.c object/bow.h \
 	object/chest.c object/chest.h \
 	object/death-scythe.c object/death-scythe.h \
 	object/object1.c object/object1.h \
 	object/object2.c object/object2.h \
 	object/object-appraiser.c object/object-appraiser.h \
-	object/object-boost.c object/object-boost.h \
 	object/object-broken.c object/object-broken.h \
-	object/object-curse.c object/object-curse.h \
-	object/object-ego.c object/object-ego.h \
 	object/object-flavor.c object/object-flavor.h \
 	object/object-generator.c object/object-generator.h \
 	object/object-hook.c object/object-hook.h \
@@ -311,14 +307,19 @@ hengband_SOURCES = \
 	object/object-value.c object/object-value.h \
 	object/lite-processor.c object/lite-processor.h \
 	object/torch.c object/torch.h \
-	object/tr-types.h object/trc-types.h object/tval-types.h \
+	object/tval-types.h \
 	object/warning.c object/warning.h \
-	object/item-apply-magic.h \
 	object/object-mark-types.h \
 	object/object-util.h \
-	object/old-ego-extra-values.h \
-	object/special-object-flags.h \
-	object/item-feeling.h object/item-use-flags.h \
+	object/item-use-flags.h \
+	\
+	object-enchant/artifact.c object-enchant/artifact.h \
+	object-enchant/object-boost.c object-enchant/object-boost.h \
+	object-enchant/object-curse.c object-enchant/object-curse.h \
+	object-enchant/object-ego.c object-enchant/object-ego.h \
+	object-enchant/tr-types.h object-enchant/trc-types.h \
+	object-enchant/item-apply-magic.h object-enchant/item-feeling.h \
+	object-enchant/old-ego-extra-values.h object-enchant/special-object-flags.h \
 	\
 	player/avatar.h player/avatar.c \
 	player/mimic-info-table.c player/mimic-info-table.h \

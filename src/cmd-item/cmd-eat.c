@@ -17,7 +17,7 @@
 #include "object/object-hook.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "object/special-object-flags.h"
+#include "object-enchant/special-object-flags.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "player/avatar.h"

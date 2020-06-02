@@ -21,7 +21,7 @@
 #include "effect/effect-characteristics.h"
 #include "spell/spells3.h"
 #include "object/object-generator.h"
-#include "object/special-object-flags.h"
+#include "object-enchant/special-object-flags.h"
 #include "sv-definition/sv-other-types.h"
 
 /*!

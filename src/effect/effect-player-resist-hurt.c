@@ -6,7 +6,7 @@
 #include "mind/racial-mirror-master.h"
 #include "world/world.h"
 #include "object/object-broken.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "player/player-effects.h"
 #include "mutation/mutation.h"
 #include "mspell/monster-spell.h"

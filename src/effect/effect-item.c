@@ -8,7 +8,7 @@
 #include "object/object-mark-types.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-scroll-types.h"
-#include "object/tr-types.h"
+#include "object-enchant/tr-types.h"
 #include "spell/spells-type.h"
 #include "spell/spells3.h"
 

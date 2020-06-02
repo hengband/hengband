@@ -1,7 +1,7 @@
 ﻿#include "view/display-player-middle.h"
 #include "floor/floor.h"
 #include "object/object-appraiser.h"
-#include "object/special-object-flags.h"
+#include "object-enchant/special-object-flags.h"
 #include "sv-definition/sv-bow-types.h"
 #include "player/player-effects.h"
 #include "player/player-races-table.h"

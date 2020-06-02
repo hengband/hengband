@@ -8,7 +8,7 @@
 #include "object/object-appraiser.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object/special-object-flags.h"
+#include "object-enchant/special-object-flags.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-rod-types.h"
 #include "player/avatar.h"

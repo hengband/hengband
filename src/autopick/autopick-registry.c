@@ -10,11 +10,11 @@
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-reader-writer.h"
 #include "io/files-util.h"
-#include "object/item-feeling.h"
+#include "object-enchant/item-feeling.h"
 #include "object/object-appraiser.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "object/special-object-flags.h"
+#include "object-enchant/special-object-flags.h"
 #include "util/util.h"
 
 static const char autoregister_header[] = "?:$AUTOREGISTER";

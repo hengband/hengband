@@ -9,7 +9,7 @@
 #include "floor/floor.h"
 #include "monster/monster-status.h"
 #include "inventory/inventory-object.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
 #include "realm/realm-hex.h"

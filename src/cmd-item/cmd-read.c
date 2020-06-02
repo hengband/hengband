@@ -12,7 +12,7 @@
 #include "inventory/player-inventory.h"
 #include "io/files-util.h"
 #include "main/sound-definitions-table.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "object/item-use-flags.h"
 #include "object/object-appraiser.h"
 #include "object/object-flavor.h"

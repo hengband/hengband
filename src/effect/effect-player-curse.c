@@ -5,7 +5,7 @@
 #include "mind/racial-mirror-master.h"
 #include "world/world.h"
 #include "mspell/monster-spell.h"
-#include "object/object-curse.h"
+#include "object-enchant/object-curse.h"
 #include "player/player-effects.h"
 
 void effect_player_curse_1(player_type *target_ptr,

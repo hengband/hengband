@@ -7,7 +7,7 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "monster/monster-race-hook.h"
-#include "object/artifact.h"
+#include "object-enchant/artifact.h"
 #include "monster/monster.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
@@ -29,7 +29,7 @@
 #include "spell/spells-detection.h"
 #include "combat/combat-options-type.h"
 #include "cmd-action/cmd-attack.h"
-#include "object/tr-types.h"
+#include "object-enchant/tr-types.h"
 
 /*!
 * @brief 剣術の各処理を行う
