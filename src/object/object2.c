@@ -3064,30 +3064,6 @@ void floor_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
 
 
 /*!
- * todo ここのp_ptrだけは抜けない……関数ポインタの嵐でにっちもさっちもいかない
- * @brief アイテムを拾う際にザックから溢れずに済むかを判定する /
- * Check if we have space for an item in the pack without overflow
- * @param owner_ptr プレーヤーへの参照ポインタ
- * @param o_ptr 拾いたいオブジェクトの構造体参照ポインタ
- * @return 溢れずに済むならTRUEを返す
- */
-bool inven_carry_okay(object_type *o_ptr)
-{
-	if (p_ptr->inven_cnt < INVEN_PACK) return TRUE;
-
-	for (int j = 0; j < INVEN_PACK; j++)
-	{
-		object_type *j_ptr = &p_ptr->inventory_list[j];
-		if (!j_ptr->k_idx) continue;
-
-		if (object_similar(j_ptr, o_ptr)) return TRUE;
-	}
-
-	return FALSE;
-}
-
-
-/*!
  * @brief オブジェクトを定義された基準に従いソートするための関数 /
  * Check if we have space for an item in the pack without overflow
  * @param o_ptr 比較対象オブジェクトの構造体参照ポインタ1

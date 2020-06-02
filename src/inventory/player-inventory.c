@@ -2,13 +2,13 @@
 #include "core/stuff-handler.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
+#include "inventory/inventory-object.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
 #include "object/object1.h"
-#include "object/object2.h"
 #include "object/sv-other-types.h"
 #include "player/player-move.h"
 #include "term/gameterm.h"
@@ -2826,7 +2826,7 @@ static bool py_pickup_floor_aux(player_type *owner_ptr)
 	OBJECT_IDX item;
 
 	/* Restrict the choices */
-	item_tester_hook = inven_carry_okay;
+	item_tester_hook = check_store_item_to_inventory;
 
 	/* Get an object */
 	q = _("どれを拾いますか？", "Get which item? ");
@@ -2913,7 +2913,7 @@ void py_pickup_floor(player_type *owner_ptr, bool pickup)
 		}
 
 		/* Count non-gold objects that can be picked up. */
-		if (inven_carry_okay(o_ptr))
+		if (check_store_item_to_inventory(o_ptr))
 		{
 			can_pickup++;
 		}

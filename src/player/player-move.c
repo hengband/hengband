@@ -163,7 +163,6 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
-#include "object/object2.h"
 #include "object/special-object-flags.h"
 #include "object/warning.h"
 #include "player/player-class.h"
@@ -415,7 +414,7 @@ void carry(player_type *creature_ptr, bool pickup)
 			continue;
 		}
 		
-		if (!inven_carry_okay(o_ptr))
+		if (!check_store_item_to_inventory(o_ptr))
 		{
 			msg_format(_("ザックには%sを入れる隙間がない。", "You have no room for %s."), o_name);
 			continue;
