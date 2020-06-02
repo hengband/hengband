@@ -17,4 +17,3 @@ bool object_similar(object_type *o_ptr, object_type *j_ptr);
 void object_absorb(object_type *o_ptr, object_type *j_ptr);
 void apply_magic(player_type *owner_type, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
 bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr);
-void floor_item_describe(player_type *player_ptr, INVENTORY_IDX item); // 暫定、元々object2.c の内部からのみ呼ばれていた.

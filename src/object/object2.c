@@ -1046,33 +1046,6 @@ void apply_magic(player_type *owner_ptr, object_type *o_ptr, DEPTH lev, BIT_FLAG
 
 
 /*!
- * @brief 床上のアイテムの残り数メッセージを表示する /
- * Describe the charges on an item on the floor.
- * @param floo_ptr 現在フロアへの参照ポインタ
- * @param item メッセージの対象にしたいアイテム所持スロット
- * @return なし
- */
-void floor_item_describe(player_type *owner_ptr, INVENTORY_IDX item)
-{
-	object_type *o_ptr = &owner_ptr->current_floor_ptr->o_list[item];
-	GAME_TEXT o_name[MAX_NLEN];
-	object_desc(owner_ptr, o_name, o_ptr, 0);
-#ifdef JP
-	if (o_ptr->number <= 0)
-	{
-		msg_format("床上には、もう%sはない。", o_name);
-	}
-	else
-	{
-		msg_format("床上には、まだ %sがある。", o_name);
-	}
-#else
-	msg_format("You see %s.", o_name);
-#endif
-}
-
-
-/*!
  * @brief オブジェクトを定義された基準に従いソートするための関数 /
  * Check if we have space for an item in the pack without overflow
  * @param o_ptr 比較対象オブジェクトの構造体参照ポインタ1
