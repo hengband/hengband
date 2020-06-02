@@ -1,13 +1,6 @@
 ﻿#pragma once
 
-
-/*** Ego-Item indexes (see "lib/edit/e_info.txt") ***/
-
-
-/* Nothing */
-/* xxx */
-/* xxx */
-/* xxx */
+#include "system/angband.h"
 
 /* Body Armor */
 #define EGO_A_MORGUL            4
@@ -269,3 +262,4 @@ extern ego_item_type *e_info;
 extern char *e_name;
 extern char *e_text;
 
+byte get_random_ego(byte slot, bool good);
