@@ -368,9 +368,6 @@
     <ClCompile Include="..\..\src\core\turn-compensator.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\inventory\simple-appraiser.c">
-      <Filter>inventory</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\hp-mp-regenerator.c">
       <Filter>core</Filter>
     </ClCompile>
@@ -1052,9 +1049,6 @@
     <ClCompile Include="..\..\src\view\object-describer.c">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-appraiser.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\inventory\inventory-object.c">
       <Filter>inventory</Filter>
     </ClCompile>
@@ -1105,6 +1099,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\object-enchant\apply-magic.c">
       <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\perception\object-perception.c">
+      <Filter>perception</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\perception\simple-perception.c">
+      <Filter>perception</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1512,9 +1512,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\turn-compensator.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\inventory\simple-appraiser.h">
-      <Filter>inventory</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\hp-mp-regenerator.h">
       <Filter>core</Filter>
@@ -2242,9 +2239,6 @@
     <ClInclude Include="..\..\src\view\object-describer.h">
       <Filter>view</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\object-appraiser.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\inventory\inventory-object.h">
       <Filter>inventory</Filter>
     </ClInclude>
@@ -2361,6 +2355,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\apply-magic.h">
       <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\perception\object-perception.h">
+      <Filter>perception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\perception\simple-perception.h">
+      <Filter>perception</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2484,6 +2484,9 @@
     </Filter>
     <Filter Include="object-enchant">
       <UniqueIdentifier>{c7db74bd-7f58-4044-96c8-c5916d0ebaf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="perception">
+      <UniqueIdentifier>{e42f1944-e95c-42a8-97bf-9f959b313142}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

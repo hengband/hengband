@@ -175,7 +175,6 @@ hengband_SOURCES = \
 	inventory/pack-overflow.c inventory/pack-overflow.h \
 	inventory/player-inventory.c inventory/player-inventory.h \
 	inventory/recharge-processor.c inventory/recharge-processor.h \
-	inventory/simple-appraiser.c inventory/simple-appraiser.h \
 	\
 	io/files-util.c io/files-util.h \
 	io/gf-descriptions.c io/gf-descriptions.h \
@@ -297,7 +296,6 @@ hengband_SOURCES = \
 	object/death-scythe.c object/death-scythe.h \
 	object/object1.c object/object1.h \
 	object/object2.c object/object2.h \
-	object/object-appraiser.c object/object-appraiser.h \
 	object/object-broken.c object/object-broken.h \
 	object/object-flavor.c object/object-flavor.h \
 	object/object-generator.c object/object-generator.h \
@@ -325,6 +323,9 @@ hengband_SOURCES = \
 	object-enchant/tr-types.h object-enchant/trc-types.h \
 	object-enchant/item-apply-magic.h object-enchant/item-feeling.h \
 	object-enchant/old-ego-extra-values.h object-enchant/special-object-flags.h \
+	\
+	perception/object-perception.c perception/object-perception.h \
+	perception/simple-perception.c perception/simple-perception.h \
 	\
 	pet/pet-fall-off.c pet/pet-fall-off.h \
 	pet/pet-util.c pet/pet-util.h \
