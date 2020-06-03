@@ -18,7 +18,6 @@
  */
 static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, bool heavy)
 {
-    byte feel;
     object_type *o_ptr = &creature_ptr->inventory_list[slot];
     GAME_TEXT o_name[MAX_NLEN];
     if (o_ptr->ident & (IDENT_SENSE))
@@ -26,7 +25,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
     if (object_is_known(o_ptr))
         return;
 
-    feel = (heavy ? value_check_aux1(o_ptr) : value_check_aux2(o_ptr));
+    item_feel_type feel = (heavy ? value_check_aux1(o_ptr) : value_check_aux2(o_ptr));
     if (!feel)
         return;
 

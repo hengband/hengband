@@ -36,6 +36,7 @@
 #include "monster/monster-status.h"
 #include "mutation/mutation.h"
 #include "object-enchant/artifact.h"
+#include "object-enchant/item-feeling.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
 #include "object/object-flavor.h"
@@ -3302,7 +3303,7 @@ bool psychometry(player_type *caster_ptr)
 		return TRUE;
 	}
 
-	byte feel = value_check_aux1(o_ptr);
+	item_feel_type feel = value_check_aux1(o_ptr);
 	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 

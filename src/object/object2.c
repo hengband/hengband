@@ -12,7 +12,6 @@
 
 #include "object/object2.h"
 #include "object-enchant/artifact.h"
-#include "object-enchant/item-feeling.h"
 #include "perception/object-perception.h" // 暫定、相互参照している.
 #include "object-enchant/object-ego.h"
 #include "object/object-hook.h"
@@ -57,11 +56,11 @@ bool(*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 OBJECT_SUBTYPE_VALUE coin_type;	/* Hack -- force coin type */
 
 /*!
-* @brief 重度擬似鑑定の判断処理 / Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
-* @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
-* @return 擬似鑑定結果のIDを返す。
-*/
-byte value_check_aux1(object_type *o_ptr)
+ * @brief 重度擬似鑑定の判断処理 / Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
+ * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
+ * @return 擬似鑑定結果のIDを返す。
+ */
+item_feel_type value_check_aux1(object_type *o_ptr)
 {
 	if (object_is_artifact(o_ptr))
 	{
@@ -88,11 +87,11 @@ byte value_check_aux1(object_type *o_ptr)
 
 
 /*!
-* @brief 軽度擬似鑑定の判断処理 / Return a "feeling" (or NULL) about an item.  Method 2 (Light).
-* @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
-* @return 擬似鑑定結果のIDを返す。
-*/
-byte value_check_aux2(object_type *o_ptr)
+ * @brief 軽度擬似鑑定の判断処理 / Return a "feeling" (or NULL) about an item.  Method 2 (Light).
+ * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
+ * @return 擬似鑑定結果のIDを返す。
+ */
+item_feel_type value_check_aux2(object_type *o_ptr)
 {
 	if (object_is_cursed(o_ptr)) return FEEL_CURSED;
 	if (object_is_broken(o_ptr)) return FEEL_BROKEN;
