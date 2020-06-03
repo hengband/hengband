@@ -50,6 +50,7 @@
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/system-variables.h"
 #include "object/object2.h"
 #include "object/object-generator.h"
 

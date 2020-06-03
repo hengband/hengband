@@ -1,17 +1,17 @@
-﻿#include "system/angband.h"
-#include "util/util.h"
-
-#include "grid/grid.h"
+﻿#include "room/rooms-special.h"
+#include "dungeon/dungeon.h"
 #include "floor/floor-generate.h"
-#include "room/rooms.h"
-#include "monster/monster.h"
+#include "floor/floor.h"
+#include "grid/feature.h"
+#include "grid/grid.h"
 #include "monster/monster-race-hook.h"
+#include "monster/monster.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object/object-kind-hook.h"
 #include "object/object2.h"
-#include "grid/feature.h"
-#include "floor/floor.h"
-#include "dungeon/dungeon.h"
+#include "room/rooms.h"
+#include "system/system-variables.h"
+#include "util/util.h"
 
 /*!
 * @brief タイプ15の部屋…ガラス部屋の生成 / Type 15 -- glass rooms

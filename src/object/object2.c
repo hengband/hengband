@@ -34,9 +34,3 @@
  * Chests, and activatable items, never stack (for various reasons).
  */
 
-/*!
- * Function hook to restrict "get_obj_num_prep()" function
- */
-bool(*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
-
-OBJECT_SUBTYPE_VALUE coin_type;	/* Hack -- force coin type */

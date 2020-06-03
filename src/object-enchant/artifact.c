@@ -33,6 +33,7 @@
 #include "object-enchant/special-object-flags.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-weapon-types.h"
+#include "system/system-variables.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "player/avatar.h"
