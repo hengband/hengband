@@ -1,16 +1,10 @@
 ﻿/*!
- * @brief 魔法による遠隔処理の実装 / Spell projection
+ * @brief 魔法による距離やエリアの計算
  * @date 2014/07/10
- * @author
- * <pre>
- * Copyright (c) 1997 Ben Harrison, James E. Wilson, Robert A. Koeneke
- * This software may be copied and distributed for educational, research,
- * and not for profit purposes provided that this copyright and statement
- * are included in all such copies.  Other copyrights may also apply.
- * </pre>
+ * @author Ben Harrison, James E. Wilson, Robert A. Koeneke, deskull and Hourier
  */
 
-#include "spell/spells1.h"
+#include "spell/range-calc.h"
 #include "term/gameterm.h"
 
 /*

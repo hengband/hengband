@@ -11,7 +11,7 @@
 #include "main/sound-definitions-table.h"
 #include "pet/pet-fall-off.h"
 #include "spell/spells-type.h"
-#include "spell/spells1.h"
+#include "spell/range-calc.h"
 #include "term/gameterm.h"
 #include "view/display-main-window.h" // 暫定、後で消すかも.
 

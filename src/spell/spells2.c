@@ -61,7 +61,7 @@
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-type.h"
-#include "spell/spells1.h"
+#include "spell/range-calc.h"
 #include "spell/spells3.h"
 #include "sv-definition/sv-food-types.h"
 #include "system/system-variables.h"

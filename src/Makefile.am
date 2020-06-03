@@ -383,7 +383,7 @@ hengband_SOURCES = \
 	spell/spells-execution.c spell/spells-execution.h \
 	spell/spells-util.h spell/spells-type.h \
 	spell/process-effect.c spell/process-effect.h \
-	spell/spells1.c spell/spells1.h \
+	spell/range-calc.c spell/range-calc.h \
 	spell/spells2.c spell/spells2.h \
 	spell/spells3.c spell/spells3.h \
 	spell/music-checker.c spell/music-checker.h \

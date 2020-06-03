@@ -25,7 +25,7 @@
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"
 #include "spell/spells-type.h"
-#include "spell/spells1.h"
+#include "spell/range-calc.h"
 #include "dungeon/dungeon.h"
 #include "world/world.h"
 #include "view/display-main-window.h"

@@ -350,9 +350,6 @@
     <ClCompile Include="..\..\src\spell\spells3.c">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells1.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\birth\birth-explanations-table.c">
       <Filter>birth</Filter>
     </ClCompile>
@@ -1118,6 +1115,9 @@
     <ClCompile Include="..\..\src\spell\spells-describer.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\range-calc.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1500,9 +1500,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\special-internal-keys.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells1.h">
-      <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spells2.h">
       <Filter>spell</Filter>
@@ -2384,6 +2381,9 @@
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-describer.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\range-calc.h">
       <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>
