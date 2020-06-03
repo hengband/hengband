@@ -2392,7 +2392,7 @@ void calc_bonuses(player_type *creature_ptr)
 
 	if (creature_ptr->realm1 == REALM_HEX)
 	{
-		if (hex_spelling_any(creature_ptr)) creature_ptr->skill_stl -= (1 + CASTING_HEX_NUM(creature_ptr));
+		if (hex_spelling_any(creature_ptr)) creature_ptr->skill_stl -= (1 + casting_hex_num(creature_ptr));
 		if (hex_spelling(creature_ptr, HEX_DETECT_EVIL)) creature_ptr->esp_evil = TRUE;
 		if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT)) creature_ptr->stat_add[A_STR] += 4;
 		if (hex_spelling(creature_ptr, HEX_BUILDING))

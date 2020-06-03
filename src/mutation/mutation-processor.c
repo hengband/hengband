@@ -14,7 +14,6 @@
 #include "store/store.h"
 #include "object/object-hook.h"
 #include "mutation/mutation.h"
-#include "realm/realm-hex.h"
 #include "monster/monster-status.h"
 #include "object/lite-processor.h"
 #include "spell/spells-hex.h"

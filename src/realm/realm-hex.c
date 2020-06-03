@@ -33,11 +33,11 @@
 #include "player/player-effects.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
-#include "realm/realm-hex.h"
 #include "realm/realm-song.h"
 #include "spell/process-effect.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-status.h"
+#include "spell/spells-hex.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
@@ -224,22 +224,22 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 		if (name) return _("我慢", "Patience");
 		if (desc) return _("数ターン攻撃を耐えた後、受けたダメージを地獄の業火として周囲に放出する。",
 		"Bursts hell fire strongly after enduring damage for a few turns.");
-		power = MIN(200, (HEX_REVENGE_POWER(caster_ptr) * 2));
+		power = MIN(200, (hex_revenge_power(caster_ptr) * 2));
 		if (info) return info_damage(0, 0, power);
 		if (cast)
 		{
 			int a = 3 - (caster_ptr->pspeed - 100) / 10;
 			MAGIC_NUM2 r = 3 + randint1(3) + MAX(0, MIN(3, a));
 
-			if (HEX_REVENGE_TURN(caster_ptr) > 0)
+			if (hex_revenge_turn(caster_ptr) > 0)
 			{
 				msg_print(_("すでに我慢をしている。", "You are already biding your time for vengeance."));
 				return NULL;
 			}
 
-			HEX_REVENGE_TYPE(caster_ptr) = 1;
-			HEX_REVENGE_TURN(caster_ptr) = r;
-			HEX_REVENGE_POWER(caster_ptr) = 0;
+			hex_revenge_type(caster_ptr) = 1;
+			hex_revenge_turn(caster_ptr) = r;
+			hex_revenge_power(caster_ptr) = 0;
 			msg_print(_("じっと耐えることにした。", "You decide to endure damage for future retribution."));
 			add = FALSE;
 		}
@@ -247,9 +247,9 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 		{
 			POSITION rad = 2 + (power / 50);
 
-			HEX_REVENGE_TURN(caster_ptr)--;
+			hex_revenge_turn(caster_ptr)--;
 
-			if ((HEX_REVENGE_TURN(caster_ptr) <= 0) || (power >= 200))
+			if ((hex_revenge_turn(caster_ptr) <= 0) || (power >= 200))
 			{
 				msg_print(_("我慢が解かれた！", "My patience is at an end!"));
 				if (power)
@@ -263,9 +263,9 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 				}
 
 				/* Reset */
-				HEX_REVENGE_TYPE(caster_ptr) = 0;
-				HEX_REVENGE_TURN(caster_ptr) = 0;
-				HEX_REVENGE_POWER(caster_ptr) = 0;
+				hex_revenge_type(caster_ptr) = 0;
+				hex_revenge_turn(caster_ptr) = 0;
+				hex_revenge_power(caster_ptr) = 0;
 			}
 		}
 		break;
@@ -300,9 +300,9 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 		if (desc) return _("呪文詠唱を中止することなく、薬の効果を得ることができる。", "Quaffs a potion without canceling spell casting.");
 		if (cast)
 		{
-			CASTING_HEX_FLAGS(caster_ptr) |= (1L << HEX_INHAIL);
+			casting_hex_flags(caster_ptr) |= (1L << HEX_INHAIL);
 			do_cmd_quaff_potion(caster_ptr);
-			CASTING_HEX_FLAGS(caster_ptr) &= ~(1L << HEX_INHAIL);
+			casting_hex_flags(caster_ptr) &= ~(1L << HEX_INHAIL);
 			add = FALSE;
 		}
 		break;
@@ -537,8 +537,8 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 			if ((!o_ptr->k_idx) || (!object_is_cursed(o_ptr)))
 			{
 				exe_spell(caster_ptr, REALM_HEX, spell, SPELL_STOP);
-				CASTING_HEX_FLAGS(caster_ptr) &= ~(1L << spell);
-				CASTING_HEX_NUM(caster_ptr)--;
+				casting_hex_flags(caster_ptr) &= ~(1L << spell);
+				casting_hex_num(caster_ptr)--;
 				if (!SINGING_SONG_ID(caster_ptr)) set_action(caster_ptr, ACTION_NONE);
 			}
 		}
@@ -624,9 +624,9 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 			if (!flag)
 			{
 				msg_format(_("%sの呪文の詠唱をやめた。", "Finish casting '%^s'."), exe_spell(caster_ptr, REALM_HEX, HEX_RESTORE, SPELL_NAME));
-				CASTING_HEX_FLAGS(caster_ptr) &= ~(1L << HEX_RESTORE);
-				if (cont) CASTING_HEX_NUM(caster_ptr)--;
-				if (CASTING_HEX_NUM(caster_ptr)) caster_ptr->action = ACTION_NONE;
+				casting_hex_flags(caster_ptr) &= ~(1L << HEX_RESTORE);
+				if (cont) casting_hex_num(caster_ptr)--;
+				if (casting_hex_num(caster_ptr)) caster_ptr->action = ACTION_NONE;
 
 				caster_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
 				caster_ptr->redraw |= (PR_EXTRA);
@@ -777,7 +777,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 		if (name) return _("復讐の宣告", "Revenge sentence");
 		if (desc) return _("数ターン後にそれまで受けたダメージに応じた威力の地獄の劫火の弾を放つ。",
 			"Fires a ball of hell fire to try avenging damage from a few turns.");
-		power = HEX_REVENGE_POWER(caster_ptr);
+		power = hex_revenge_power(caster_ptr);
 		if (info) return info_damage(0, 0, power);
 		if (cast)
 		{
@@ -785,22 +785,22 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 			int a = 3 - (caster_ptr->pspeed - 100) / 10;
 			r = 1 + randint1(2) + MAX(0, MIN(3, a));
 
-			if (HEX_REVENGE_TURN(caster_ptr) > 0)
+			if (hex_revenge_turn(caster_ptr) > 0)
 			{
 				msg_print(_("すでに復讐は宣告済みだ。", "You've already declared your revenge."));
 				return NULL;
 			}
 
-			HEX_REVENGE_TYPE(caster_ptr) = 2;
-			HEX_REVENGE_TURN(caster_ptr) = r;
+			hex_revenge_type(caster_ptr) = 2;
+			hex_revenge_turn(caster_ptr) = r;
 			msg_format(_("あなたは復讐を宣告した。あと %d ターン。", "You declare your revenge. %d turns left."), r);
 			add = FALSE;
 		}
 		if (cont)
 		{
-			HEX_REVENGE_TURN(caster_ptr)--;
+			hex_revenge_turn(caster_ptr)--;
 
-			if (HEX_REVENGE_TURN(caster_ptr) <= 0)
+			if (hex_revenge_turn(caster_ptr) <= 0)
 			{
 				DIRECTION dir;
 
@@ -824,7 +824,7 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 				{
 					msg_print(_("復讐する気が失せた。", "You are not in the mood for revenge."));
 				}
-				HEX_REVENGE_POWER(caster_ptr) = 0;
+				hex_revenge_power(caster_ptr) = 0;
 			}
 		}
 		break;
@@ -834,8 +834,8 @@ concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode)
 	if ((cast) && (add))
 	{
 		/* add spell */
-		CASTING_HEX_FLAGS(caster_ptr) |= 1L << (spell);
-		CASTING_HEX_NUM(caster_ptr)++;
+		casting_hex_flags(caster_ptr) |= 1L << (spell);
+		casting_hex_num(caster_ptr)++;
 
 		if (caster_ptr->action != ACTION_SPELL) set_action(caster_ptr, ACTION_SPELL);
 	}

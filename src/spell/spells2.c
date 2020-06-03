@@ -54,7 +54,6 @@
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
-#include "realm/realm-hex.h"
 #include "spell/process-effect.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-floor.h"

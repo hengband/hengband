@@ -3,14 +3,6 @@
 #include "system/angband.h"
 #include "spell/spells-util.h"
 
-#define hex_spelling_any(CREATURE_PTR) \
-	(((CREATURE_PTR)->realm1 == REALM_HEX) && ((CREATURE_PTR)->magic_num1[0]))
-#define CASTING_HEX_FLAGS(P_PTR) ((P_PTR)->magic_num1[0])
-#define CASTING_HEX_NUM(P_PTR) ((P_PTR)->magic_num2[0])
-#define HEX_REVENGE_POWER(P_PTR) ((P_PTR)->magic_num1[2])
-#define HEX_REVENGE_TURN(P_PTR) ((P_PTR)->magic_num2[2])
-#define HEX_REVENGE_TYPE(P_PTR) ((P_PTR)->magic_num2[1])
-
 /* 1st book */
 #define HEX_BLESS             0
 #define HEX_CURE_LIGHT        1

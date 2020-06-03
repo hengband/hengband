@@ -683,10 +683,10 @@ static void print_status(player_type *creature_ptr)
 			hex_spelling(creature_ptr, HEX_CURE_SERIOUS) ||
 			hex_spelling(creature_ptr, HEX_CURE_CRITICAL)) ADD_FLG(BAR_CURE);
 
-		if (HEX_REVENGE_TURN(creature_ptr))
+		if (hex_revenge_turn(creature_ptr))
 		{
-			if (HEX_REVENGE_TYPE(creature_ptr) == 1) ADD_FLG(BAR_PATIENCE);
-			if (HEX_REVENGE_TYPE(creature_ptr) == 2) ADD_FLG(BAR_REVENGE);
+			if (hex_revenge_type(creature_ptr) == 1) ADD_FLG(BAR_PATIENCE);
+			if (hex_revenge_type(creature_ptr) == 2) ADD_FLG(BAR_REVENGE);
 		}
 	}
 

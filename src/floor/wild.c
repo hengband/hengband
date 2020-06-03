@@ -23,7 +23,6 @@
 #include "monster/monster.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
-#include "realm/realm-hex.h"
 #include "realm/realm-names-table.h"
 #include "spell/spells-hex.h"
 #include "system/system-variables.h"

@@ -54,7 +54,6 @@
 #include "player/player-move.h"
 #include "player/player-personalities-table.h"
 #include "player/player-status.h"
-#include "realm/realm-hex.h"
 #include "shoot.h"
 #include "spell/spells-hex.h"
 #include "spell/spells3.h"

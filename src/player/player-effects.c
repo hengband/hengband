@@ -56,7 +56,6 @@
 #include "player/player-sex.h"
 #include "player/player-status.h"
 #include "player/race-info-table.h"
-#include "realm/realm-hex.h"
 #include "realm/realm-song.h"
 #include "spell/spells-floor.h"
 #include "spell/spells-hex.h"

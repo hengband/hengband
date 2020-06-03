@@ -1,7 +1,7 @@
 ﻿#include "spell/spells-hex.h"
 #include "player/player-effects.h" // todo 相互参照している.
 #include "player/player-skill.h"
-#include "realm/realm-hex.h" // 関数マクロへの依存。後でここへ移設して消す.
+#include "realm/realm-hex.h" // 定数マクロへの依存。後でここへ移設して消す.
 #include "spell/spells3.h"
 #include "spell/spells-execution.h"
 
@@ -20,8 +20,8 @@ bool stop_hex_spell_all(player_type *caster_ptr)
             exe_spell(caster_ptr, REALM_HEX, i, SPELL_STOP);
     }
 
-    CASTING_HEX_FLAGS(caster_ptr) = 0;
-    CASTING_HEX_NUM(caster_ptr) = 0;
+    casting_hex_flags(caster_ptr) = 0;
+    casting_hex_num(caster_ptr) = 0;
 
     if (caster_ptr->action == ACTION_SPELL)
         set_action(caster_ptr, ACTION_NONE);
@@ -52,11 +52,11 @@ bool stop_hex_spell(player_type *caster_ptr)
     }
 
     /* Stop all spells */
-    else if ((CASTING_HEX_NUM(caster_ptr) == 1) || (caster_ptr->lev < 35)) {
+    else if ((casting_hex_num(caster_ptr) == 1) || (caster_ptr->lev < 35)) {
         return stop_hex_spell_all(caster_ptr);
     } else {
         strnfmt(out_val, 78, _("どの呪文の詠唱を中断しますか？(呪文 %c-%c, 'l'全て, ESC)", "Which spell do you stop casting? (Spell %c-%c, 'l' to all, ESC)"),
-            I2A(0), I2A(CASTING_HEX_NUM(caster_ptr) - 1));
+            I2A(0), I2A(casting_hex_num(caster_ptr) - 1));
 
         screen_save();
 
@@ -82,7 +82,7 @@ bool stop_hex_spell(player_type *caster_ptr)
                 screen_load();
                 return stop_hex_spell_all(caster_ptr);
             }
-            if ((choice < I2A(0)) || (choice > I2A(CASTING_HEX_NUM(caster_ptr) - 1)))
+            if ((choice < I2A(0)) || (choice > I2A(casting_hex_num(caster_ptr) - 1)))
                 continue;
             flag = TRUE;
         }
@@ -94,8 +94,8 @@ bool stop_hex_spell(player_type *caster_ptr)
         int n = sp[A2I(choice)];
 
         exe_spell(caster_ptr, REALM_HEX, n, SPELL_STOP);
-        CASTING_HEX_FLAGS(caster_ptr) &= ~(1L << n);
-        CASTING_HEX_NUM(caster_ptr)--;
+        casting_hex_flags(caster_ptr) &= ~(1L << n);
+        casting_hex_num(caster_ptr)--;
     }
 
     caster_ptr->update |= (PU_BONUS | PU_HP | PU_MANA | PU_SPELLS);
@@ -119,7 +119,7 @@ void check_hex(player_type *caster_ptr)
     /* Spells spelled by player */
     if (caster_ptr->realm1 != REALM_HEX)
         return;
-    if (!CASTING_HEX_FLAGS(caster_ptr) && !caster_ptr->magic_num1[1])
+    if (!casting_hex_flags(caster_ptr) && !caster_ptr->magic_num1[1])
         return;
 
     if (caster_ptr->magic_num1[1]) {
@@ -146,7 +146,7 @@ void check_hex(player_type *caster_ptr)
     /* Culcurates final mana cost */
     need_mana_frac = 0;
     s64b_div(&need_mana, &need_mana_frac, 0, 3); /* Divide by 3 */
-    need_mana += (CASTING_HEX_NUM(caster_ptr) - 1);
+    need_mana += (casting_hex_num(caster_ptr) - 1);
 
     /* Not enough mana */
     if (s64b_cmp(caster_ptr->csp, caster_ptr->csp_frac, need_mana, need_mana_frac) < 0) {
@@ -212,7 +212,7 @@ bool hex_spell_fully(player_type *caster_ptr)
     int k_max = 0;
     k_max = (caster_ptr->lev / 15) + 1;
     k_max = MIN(k_max, MAX_KEEP);
-    if (CASTING_HEX_NUM(caster_ptr) < k_max)
+    if (casting_hex_num(caster_ptr) < k_max)
         return FALSE;
     return TRUE;
 }
@@ -225,10 +225,10 @@ void revenge_spell(player_type *caster_ptr)
 {
     if (caster_ptr->realm1 != REALM_HEX)
         return;
-    if (HEX_REVENGE_TURN(caster_ptr) <= 0)
+    if (hex_revenge_turn(caster_ptr) <= 0)
         return;
 
-    switch (HEX_REVENGE_TYPE(caster_ptr)) {
+    switch (hex_revenge_type(caster_ptr)) {
     case 1:
         exe_spell(caster_ptr, REALM_HEX, HEX_PATIENCE, SPELL_CONT);
         break;
@@ -247,10 +247,10 @@ void revenge_store(player_type *caster_ptr, HIT_POINT dam)
 {
     if (caster_ptr->realm1 != REALM_HEX)
         return;
-    if (HEX_REVENGE_TURN(caster_ptr) <= 0)
+    if (hex_revenge_turn(caster_ptr) <= 0)
         return;
 
-    HEX_REVENGE_POWER(caster_ptr) += dam;
+    hex_revenge_power(caster_ptr) += dam;
 }
 
 /*!
