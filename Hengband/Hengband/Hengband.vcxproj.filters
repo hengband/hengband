@@ -1112,6 +1112,9 @@
     <ClCompile Include="..\..\src\object\object-stack.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-mirror.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2373,6 +2376,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-stack.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-mirror.h">
+      <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
