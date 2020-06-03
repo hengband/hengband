@@ -4,14 +4,16 @@
 #include "floor/floor-object.h"
 #include "inventory/inventory-object.h"
 #include "monster/monster-race-hook.h"
+#include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
-#include "object/object-appraiser.h"
 #include "object-enchant/object-ego.h"
+#include "object/object-appraiser.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object1.h"
-#include "object/object2.h"
+#include "player/player-personalities-table.h"
+#include "player/player-races-table.h"
 #include "sv-definition/sv-bow-types.h"
 #include "sv-definition/sv-food-types.h"
 #include "sv-definition/sv-lite-types.h"
@@ -22,8 +24,6 @@
 #include "sv-definition/sv-staff-types.h"
 #include "sv-definition/sv-wand-types.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "player/player-personalities-table.h"
-#include "player/player-races-table.h"
 
 /*!
  * @brief 所持状態にあるアイテムの中から一部枠の装備可能なものを装備させる。
@@ -254,7 +254,8 @@ void player_outfit(player_type *creature_ptr)
 
         q_ptr = &forge;
         object_prep(q_ptr, lookup_kind(tv, sv));
-        if ((tv == TV_SWORD || tv == TV_HAFTED) && (creature_ptr->pclass == CLASS_ROGUE && creature_ptr->realm1 == REALM_DEATH)) /* Only assassins get a poisoned weapon */
+        if ((tv == TV_SWORD || tv == TV_HAFTED)
+            && (creature_ptr->pclass == CLASS_ROGUE && creature_ptr->realm1 == REALM_DEATH)) /* Only assassins get a poisoned weapon */
             q_ptr->name2 = EGO_BRAND_POIS;
 
         add_outfit(creature_ptr, q_ptr);

@@ -5,6 +5,7 @@
  */
 
 #include "store/store-util.h"
+#include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
@@ -14,7 +15,6 @@
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
-#include "object/object2.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-potion-types.h"
 #include "sv-definition/sv-scroll-types.h"

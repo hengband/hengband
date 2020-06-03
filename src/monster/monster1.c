@@ -19,6 +19,7 @@
 #include "cmd-building/cmd-building.h"
 #include "pet/pet-fall-off.h"
 #include "effect/effect-characteristics.h"
+#include "object-enchant/apply-magic.h"
 #include "object/object-kind-hook.h"
 #include "player/player-personalities-table.h"
 #include "monster/monster.h"

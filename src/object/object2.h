@@ -14,5 +14,4 @@ void reduce_charges(object_type *o_ptr, int amt);
 int object_similar_part(object_type *o_ptr, object_type *j_ptr);
 bool object_similar(object_type *o_ptr, object_type *j_ptr);
 void object_absorb(object_type *o_ptr, object_type *j_ptr);
-void apply_magic(player_type *owner_type, object_type *o_ptr, DEPTH lev, BIT_FLAGS mode);
 bool object_sort_comp(object_type *o_ptr, s32b o_value, object_type *j_ptr);
