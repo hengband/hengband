@@ -53,6 +53,7 @@
 #include "player/race-info-table.h"
 #include "realm/realm-hex.h"
 #include "realm/realm-song.h"
+#include "spell/spells-describer.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-status.h"
 #include "spell/spells-util.h"

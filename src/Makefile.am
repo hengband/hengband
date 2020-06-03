@@ -379,6 +379,7 @@ hengband_SOURCES = \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
 	\
 	spell/technic-info-table.c spell/technic-info-table.h \
+	spell/spells-describer.c spell/spells-describer.h \
 	spell/spells-execution.c spell/spells-execution.h \
 	spell/spells-util.h spell/spells-type.h \
 	spell/process-effect.c spell/process-effect.h \

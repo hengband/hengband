@@ -1115,6 +1115,9 @@
     <ClCompile Include="..\..\src\spell\spells-mirror.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-describer.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2378,6 +2381,9 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-mirror.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-describer.h">
       <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>

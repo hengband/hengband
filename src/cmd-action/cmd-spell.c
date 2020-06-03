@@ -1,9 +1,8 @@
 ﻿/*!
-    @file cmd-spell.c
-    @brief 魔法のインターフェイスと発動 / Purpose: Do everything for each spell
-    @date 2013/12/31
-    @author
-    2013 Deskull rearranged comment for Doxygen.
+ * @brief 魔法のインターフェイスと発動 / Purpose: Do everything for each spell
+ * @date 2013/12/31
+ * @author
+ * 2013 Deskull rearranged comment for Doxygen.
  */
 
 #include "system/angband.h"
@@ -11,7 +10,6 @@
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
 #include "cmd-action/cmd-spell.h"
-
 #include "io/write-diary.h"
 #include "cmd-io/cmd-dump.h"
 #include "player/selfinfo.h"
@@ -35,6 +33,7 @@
 #include "floor/floor.h"
 #include "autopick/autopick-reader-writer.h"
 #include "locale/japanese.h"
+#include "spell/spells-describer.h"
 #include "spell/spells-util.h"
 #include "spell/spells-execution.h"
 #include "object/item-use-flags.h"
