@@ -52,7 +52,7 @@
 #include "player/player-skill.h"
 #include "player/race-info-table.h"
 #include "realm/realm-hex-numbers.h"
-#include "realm/realm-song.h"
+#include "realm/realm-song-numbers.h"
 #include "spell/spells-describer.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-hex.h"

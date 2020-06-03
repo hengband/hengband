@@ -1,27 +1,26 @@
-﻿#include "system/angband.h"
-#include "core/hp-mp-processor.h"
-#include "floor/floor.h"
-#include "grid/feature.h"
-#include "realm/realm-song.h"
-#include "player/player-damage.h"
-#include "object/object-flavor.h"
-#include "object-enchant/object-ego.h"
-#include "world/world.h"
-#include "player/player-effects.h"
-#include "floor/pattern-walk.h"
-#include "core/hp-mp-regenerator.h"
+﻿#include "core/hp-mp-processor.h"
 #include "cmd-action/cmd-pet.h"
-#include "player/player-races-table.h"
+#include "core/hp-mp-regenerator.h"
+#include "floor/floor.h"
+#include "floor/pattern-walk.h"
+#include "grid/feature.h"
+#include "object-enchant/object-ego.h"
 #include "object-enchant/trc-types.h"
+#include "object/object-flavor.h"
+#include "player/player-damage.h"
+#include "player/player-effects.h"
+#include "player/player-races-table.h"
+#include "realm/realm-song-numbers.h"
+#include "world/world.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとにプレイヤーのHPとMPの増減処理を行う。
  *  / Handle timed damage and regeneration every 10 game turns
  * @return なし
  */
-void process_player_hp_mp(player_type* creature_ptr)
+void process_player_hp_mp(player_type *creature_ptr)
 {
-    feature_type* f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
+    feature_type *f_ptr = &f_info[creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x].feat];
     bool cave_no_regen = FALSE;
     int upkeep_factor = 0;
     int regen_amount = PY_REGEN_NORMAL;
@@ -59,8 +58,9 @@ void process_player_hp_mp(player_type* creature_ptr)
             }
         }
 
-        if (creature_ptr->inventory_list[INVEN_LITE].tval && (creature_ptr->inventory_list[INVEN_LITE].name2 != EGO_LITE_DARKNESS) && !creature_ptr->resist_lite) {
-            object_type* o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
+        if (creature_ptr->inventory_list[INVEN_LITE].tval && (creature_ptr->inventory_list[INVEN_LITE].name2 != EGO_LITE_DARKNESS)
+            && !creature_ptr->resist_lite) {
+            object_type *o_ptr = &creature_ptr->inventory_list[INVEN_LITE];
             GAME_TEXT o_name[MAX_NLEN];
             char ouch[MAX_NLEN + 40];
             object_desc(creature_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
@@ -98,7 +98,10 @@ void process_player_hp_mp(player_type* creature_ptr)
 
             if (creature_ptr->levitation) {
                 msg_print(_("熱で火傷した！", "The heat burns you!"));
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
+                    format(_("%sの上に浮遊したダメージ", "flying over %s"),
+                        f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name),
+                    -1);
             } else {
                 concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
                 msg_format(_("%sで火傷した！", "The %s burns you!"), name);
@@ -130,7 +133,10 @@ void process_player_hp_mp(player_type* creature_ptr)
 
             if (creature_ptr->levitation) {
                 msg_print(_("冷気に覆われた！", "The cold engulfs you!"));
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
+                    format(_("%sの上に浮遊したダメージ", "flying over %s"),
+                        f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name),
+                    -1);
             } else {
                 concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
                 msg_format(_("%sに凍えた！", "The %s frostbites you!"), name);
@@ -162,7 +168,10 @@ void process_player_hp_mp(player_type* creature_ptr)
 
             if (creature_ptr->levitation) {
                 msg_print(_("電撃を受けた！", "The electricity shocks you!"));
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
+                    format(_("%sの上に浮遊したダメージ", "flying over %s"),
+                        f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name),
+                    -1);
             } else {
                 concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
                 msg_format(_("%sに感電した！", "The %s shocks you!"), name);
@@ -194,7 +203,10 @@ void process_player_hp_mp(player_type* creature_ptr)
 
             if (creature_ptr->levitation) {
                 msg_print(_("酸が飛び散った！", "The acid melts you!"));
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
+                    format(_("%sの上に浮遊したダメージ", "flying over %s"),
+                        f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name),
+                    -1);
             } else {
                 concptr name = f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name;
                 msg_format(_("%sに溶かされた！", "The %s melts you!"), name);
@@ -226,7 +238,10 @@ void process_player_hp_mp(player_type* creature_ptr)
 
             if (creature_ptr->levitation) {
                 msg_print(_("毒気を吸い込んだ！", "The gas poisons you!"));
-                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage, format(_("%sの上に浮遊したダメージ", "flying over %s"), f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name), -1);
+                take_hit(creature_ptr, DAMAGE_NOESCAPE, damage,
+                    format(_("%sの上に浮遊したダメージ", "flying over %s"),
+                        f_name + f_info[get_feat_mimic(&creature_ptr->current_floor_ptr->grid_array[creature_ptr->y][creature_ptr->x])].name),
+                    -1);
                 if (creature_ptr->resist_pois)
                     (void)set_poisoned(creature_ptr, creature_ptr->poisoned + 1);
             } else {
@@ -241,7 +256,8 @@ void process_player_hp_mp(player_type* creature_ptr)
         }
     }
 
-    if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) && !creature_ptr->levitation && !creature_ptr->can_swim && !creature_ptr->resist_water) {
+    if (have_flag(f_ptr->flags, FF_WATER) && have_flag(f_ptr->flags, FF_DEEP) && !creature_ptr->levitation && !creature_ptr->can_swim
+        && !creature_ptr->resist_water) {
         if (creature_ptr->total_weight > weight_limit(creature_ptr)) {
             msg_print(_("溺れている！", "You are drowning!"));
             take_hit(creature_ptr, DAMAGE_NOESCAPE, randint1(creature_ptr->lev), _("溺れ", "drowning"), -1);
@@ -286,13 +302,14 @@ void process_player_hp_mp(player_type* creature_ptr)
 
     /* Spectres -- take damage when moving through walls */
     /*
-	 * Added: ANYBODY takes damage if inside through walls
-	 * without wraith form -- NOTE: Spectres will never be
-	 * reduced below 0 hp by being inside a stone wall; others
-	 * WILL BE!
-	 */
+     * Added: ANYBODY takes damage if inside through walls
+     * without wraith form -- NOTE: Spectres will never be
+     * reduced below 0 hp by being inside a stone wall; others
+     * WILL BE!
+     */
     if (!have_flag(f_ptr->flags, FF_MOVE) && !have_flag(f_ptr->flags, FF_CAN_FLY)) {
-        if (!IS_INVULN(creature_ptr) && !creature_ptr->wraith_form && !creature_ptr->kabenuke && ((creature_ptr->chp > (creature_ptr->lev / 5)) || !creature_ptr->pass_wall)) {
+        if (!IS_INVULN(creature_ptr) && !creature_ptr->wraith_form && !creature_ptr->kabenuke
+            && ((creature_ptr->chp > (creature_ptr->lev / 5)) || !creature_ptr->pass_wall)) {
             concptr dam_desc;
             cave_no_regen = TRUE;
 

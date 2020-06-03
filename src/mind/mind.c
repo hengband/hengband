@@ -14,7 +14,6 @@
  * 特殊技能を揃えて実装している。
  */
 
-#include "system/angband.h"
 #include "mind/mind.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-spell.h"
@@ -34,7 +33,7 @@
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
-#include "realm/realm-song.h"
+#include "realm/realm-song-numbers.h"
 #include "spell/process-effect.h"
 #include "spell/spells-detection.h"
 #include "spell/spells-floor.h"

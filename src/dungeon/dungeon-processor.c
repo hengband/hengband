@@ -1,23 +1,23 @@
-﻿#include "system/angband.h"
-#include "dungeon/dungeon-processor.h"
-#include "world/world.h"
-#include "io/targeting.h"
-#include "core/player-processor.h"
-#include "dungeon/quest.h"
-#include "dungeon/dungeon.h"
-#include "io/write-diary.h"
-#include "realm/realm-song.h"
-#include "core/hp-mp-regenerator.h"
-#include "player/player-move.h"
-#include "view/display-main-window.h"
-#include "core/stuff-handler.h"
+﻿#include "dungeon/dungeon-processor.h"
 #include "cmd-io/cmd-dump.h"
-#include "player/player-effects.h"
+#include "core/hp-mp-regenerator.h"
+#include "core/player-processor.h"
+#include "core/stuff-handler.h"
+#include "core/turn-compensator.h"
+#include "dungeon/dungeon.h"
+#include "dungeon/quest.h"
+#include "io/targeting.h"
+#include "io/write-diary.h"
+#include "market/arena.h"
 #include "monster/monster-process.h"
 #include "monster/monster-status.h"
+#include "player/player-effects.h"
+#include "player/player-move.h"
+#include "realm/realm-song-numbers.h"
+#include "realm/realm-song.h"
+#include "view/display-main-window.h"
 #include "world/world-turn-processor.h"
-#include "core/turn-compensator.h"
-#include "market/arena.h"
+#include "world/world.h"
 
 /*!
  * process_player()、process_world() をcore.c から移設するのが先.
@@ -34,9 +34,9 @@
  * the user dies, or the game is terminated.\n
  * </p>
  */
-void process_dungeon(player_type* player_ptr, bool load_game)
+void process_dungeon(player_type *player_ptr, bool load_game)
 {
-    floor_type* floor_ptr = player_ptr->current_floor_ptr;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     floor_ptr->base_level = floor_ptr->dun_level;
     current_world_ptr->is_loading_now = FALSE;
     player_ptr->leaving = FALSE;
@@ -86,7 +86,8 @@ void process_dungeon(player_type* player_ptr, bool load_game)
     handle_stuff(player_ptr);
     Term_fresh();
 
-    if (quest_num && (is_fixed_quest_idx(quest_num) && !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) || !(quest[quest_num].flags & QUEST_FLAG_PRESET))))
+    if (quest_num
+        && (is_fixed_quest_idx(quest_num) && !((quest_num == QUEST_OBERON) || (quest_num == QUEST_SERPENT) || !(quest[quest_num].flags & QUEST_FLAG_PRESET))))
         do_cmd_feeling(player_ptr);
 
     if (player_ptr->phase_out) {
@@ -112,12 +113,10 @@ void process_dungeon(player_type* player_ptr, bool load_game)
     if ((floor_ptr->dun_level == d_info[player_ptr->dungeon_idx].maxdepth) && d_info[player_ptr->dungeon_idx].final_guardian) {
         if (r_info[d_info[player_ptr->dungeon_idx].final_guardian].max_num)
 #ifdef JP
-            msg_format("この階には%sの主である%sが棲んでいる。",
-                d_name + d_info[player_ptr->dungeon_idx].name,
+            msg_format("この階には%sの主である%sが棲んでいる。", d_name + d_info[player_ptr->dungeon_idx].name,
                 r_name + r_info[d_info[player_ptr->dungeon_idx].final_guardian].name);
 #else
-            msg_format("%^s lives in this level as the keeper of %s.",
-                r_name + r_info[d_info[player_ptr->dungeon_idx].final_guardian].name,
+            msg_format("%^s lives in this level as the keeper of %s.", r_name + r_info[d_info[player_ptr->dungeon_idx].final_guardian].name,
                 d_name + d_info[player_ptr->dungeon_idx].name);
 #endif
     }
@@ -201,9 +200,9 @@ void process_dungeon(player_type* player_ptr, bool load_game)
 
     if (player_ptr->playing && !player_ptr->is_dead) {
         /*
-		 * Maintain Unique monsters and artifact, save current
-		 * floor, then prepare next floor
-		 */
+         * Maintain Unique monsters and artifact, save current
+         * floor, then prepare next floor
+         */
         leave_floor(player_ptr);
         reinit_wilderness = FALSE;
     }

@@ -17,13 +17,12 @@
 #include "monster/monster-race-hook.h"
 #include "monster/monster-status.h"
 #include "monster/monster.h"
-#include "pet/pet-fall-off.h"
 #include "mspell/monster-spell.h"
+#include "pet/pet-fall-off.h"
 #include "player/player-class.h"
 #include "player/player-move.h"
 #include "player/player-personalities-table.h"
 #include "player/player-races-table.h"
-#include "realm/realm-song.h"
 #include "util/util.h"
 
 // Melee-post-process-type
@@ -40,7 +39,8 @@ typedef struct mam_pp_type {
     MONSTER_IDX who;
 } mam_pp_type;
 
-mam_pp_type *initialize_mam_pp_type(player_type *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
+mam_pp_type *initialize_mam_pp_type(
+    player_type *player_ptr, mam_pp_type *mam_pp_ptr, MONSTER_IDX m_idx, HIT_POINT dam, bool *dead, bool *fear, concptr note, MONSTER_IDX who)
 {
     mam_pp_ptr->m_idx = m_idx;
     mam_pp_ptr->m_ptr = &player_ptr->current_floor_ptr->m_list[m_idx];
@@ -127,17 +127,17 @@ static void print_monster_dead_by_monster(player_type *player_ptr, mam_pp_type *
         player_ptr->current_floor_ptr->monster_noise = TRUE;
         return;
     }
-    
+
     if (mam_pp_ptr->note) {
         msg_format(_("%^s%s", "%^s%s"), mam_pp_ptr->m_name, mam_pp_ptr->note);
         return;
     }
-    
+
     if (!monster_living(mam_pp_ptr->m_ptr->r_idx)) {
         msg_format(_("%^sは破壊された。", "%^s is destroyed."), mam_pp_ptr->m_name);
         return;
     }
-    
+
     msg_format(_("%^sは殺された。", "%^s is killed."), mam_pp_ptr->m_name);
 }
 

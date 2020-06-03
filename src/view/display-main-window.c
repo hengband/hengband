@@ -42,7 +42,7 @@
 #include "player/player-races-table.h"
 #include "player/player-status.h"
 #include "realm/realm-hex-numbers.h"
-#include "realm/realm-song.h"
+#include "realm/realm-song-numbers.h"
 #include "spell/spells-hex.h"
 #include "spell/spells3.h"
 #include "system/system-variables.h"

@@ -34,7 +34,6 @@
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "realm/realm-hex-numbers.h"
-#include "realm/realm-song.h"
 #include "spell/process-effect.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-status.h"

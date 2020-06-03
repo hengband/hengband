@@ -22,7 +22,6 @@
 #include "player/player-class.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
-#include "realm/realm-song.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"

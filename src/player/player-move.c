@@ -170,7 +170,7 @@
 #include "player/player-personalities-table.h"
 #include "player/player-races-table.h"
 #include "player/player-status.h"
-#include "realm/realm-song.h"
+#include "realm/realm-song-numbers.h"
 #include "spell/process-effect.h"
 #include "spell/spells-floor.h"
 #include "spell/spells-type.h"

@@ -2395,6 +2395,9 @@
     <ClInclude Include="..\..\src\realm\realm-hex-numbers.h">
       <Filter>realm</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-song-numbers.h">
+      <Filter>realm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

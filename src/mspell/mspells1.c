@@ -51,7 +51,7 @@
 #include "mspell/monster-spell.h"
 #include "spell/spells-type.h"
 #include "world/world.h"
-#include "realm/realm-song.h"
+#include "realm/realm-song-numbers.h"
 #include "view/display-main-window.h"
 #include "player/player-races-table.h"
 #include "player/player-class.h"

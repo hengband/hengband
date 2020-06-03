@@ -1,23 +1,22 @@
-﻿#include "system/angband.h"
-#include "floor/pattern-walk.h"
-#include "dungeon/dungeon.h"
-#include "io/write-diary.h"
-#include "player/player-move.h"
-#include "player/player-effects.h"
-#include "spell/spells-status.h"
-#include "player/player-damage.h"
-#include "realm/realm-song.h"
-#include "spell/spells3.h"
+﻿#include "floor/pattern-walk.h"
 #include "cmd-io/cmd-save.h"
+#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
+#include "io/write-diary.h"
+#include "player/player-damage.h"
+#include "player/player-effects.h"
+#include "player/player-move.h"
 #include "player/player-races-table.h"
+#include "realm/realm-song-numbers.h"
+#include "spell/spells-status.h"
+#include "spell/spells3.h"
 
 /*!
  * @brief パターン終点到達時のテレポート処理を行う
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @return なし
  */
-static void pattern_teleport(player_type* creature_ptr)
+static void pattern_teleport(player_type *creature_ptr)
 {
     DEPTH min_level = 0;
     DEPTH max_level = 99;
@@ -70,9 +69,9 @@ static void pattern_teleport(player_type* creature_ptr)
     free_turn(creature_ptr);
 
     /*
-	 * Clear all saved floors
-	 * and create a first saved floor
-	 */
+     * Clear all saved floors
+     * and create a first saved floor
+     */
     prepare_change_floor_mode(creature_ptr, CFM_FIRST_FLOOR);
     creature_ptr->leaving = TRUE;
 }
@@ -81,9 +80,9 @@ static void pattern_teleport(player_type* creature_ptr)
  * @brief 各種パターン地形上の特別な処理 / Returns TRUE if we are on the Pattern...
  * @return 実際にパターン地形上にプレイヤーが居た場合はTRUEを返す。
  */
-bool pattern_effect(player_type* creature_ptr)
+bool pattern_effect(player_type *creature_ptr)
 {
-    floor_type* floor_ptr = creature_ptr->current_floor_ptr;
+    floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     if (!pattern_tile(floor_ptr, creature_ptr->y, creature_ptr->x))
         return FALSE;
 
@@ -103,11 +102,11 @@ bool pattern_effect(player_type* creature_ptr)
         msg_print(_("「パターン」のこの部分は他の部分より強力でないようだ。", "This section of the Pattern looks less powerful."));
 
         /*
-		 * We could make the healing effect of the
-		 * Pattern center one-time only to avoid various kinds
-		 * of abuse, like luring the win monster into fighting you
-		 * in the middle of the pattern...
-		 */
+         * We could make the healing effect of the
+         * Pattern center one-time only to avoid various kinds
+         * of abuse, like luring the win monster into fighting you
+         * in the middle of the pattern...
+         */
         break;
 
     case PATTERN_TILE_OLD:

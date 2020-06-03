@@ -14,18 +14,17 @@
  * spell2s.cから分離
  */
 
-#include "system/angband.h"
 #include "player/selfinfo.h"
-#include "util/util.h"
-#include "player/player-status.h"
-#include "player/player-races-table.h"
-#include "player/player-class.h"
-#include "player/avatar.h"
-#include "realm/realm-names-table.h"
-#include "realm/realm-song.h"
-#include "object/object1.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
+#include "object/object1.h"
+#include "player/avatar.h"
+#include "player/player-class.h"
+#include "player/player-races-table.h"
+#include "player/player-status.h"
+#include "realm/realm-names-table.h"
+#include "realm/realm-song-numbers.h"
+#include "util/util.h"
 
 /*!
  * @brief 自己分析処理(Nethackからのアイデア) / self-knowledge... idea from nethack.
