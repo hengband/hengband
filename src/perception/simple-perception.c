@@ -1,11 +1,16 @@
-﻿#include "perception/simple-perception.h"
+﻿/*!
+ * @brief 疑似鑑定処理
+ * @date 2020/05/15
+ * @author Hourier
+ */
+
+#include "perception/simple-perception.h"
 #include "autopick/autopick.h"
 #include "inventory/player-inventory.h"
-#include "object-enchant/item-feeling.h"
-#include "perception/object-perception.h"
-#include "object/object-flavor.h"
-#include "object/object2.h"
 #include "object-enchant/special-object-flags.h"
+#include "object/object-flavor.h"
+#include "object/object-hook.h"
+#include "perception/object-perception.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
 
@@ -364,4 +369,62 @@ void sense_inventory2(player_type *creature_ptr)
 
         sense_inventory_aux(creature_ptr, i, TRUE);
     }
+}
+
+/*!
+ * @brief 重度擬似鑑定の判断処理 / Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
+ * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
+ * @return 擬似鑑定結果のIDを返す。
+ */
+item_feel_type pseudo_value_check_heavy(object_type *o_ptr)
+{
+    if (object_is_artifact(o_ptr)) {
+        if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))
+            return FEEL_TERRIBLE;
+
+        return FEEL_SPECIAL;
+    }
+
+    if (object_is_ego(o_ptr)) {
+        if (object_is_cursed(o_ptr) || object_is_broken(o_ptr))
+            return FEEL_WORTHLESS;
+
+        return FEEL_EXCELLENT;
+    }
+
+    if (object_is_cursed(o_ptr))
+        return FEEL_CURSED;
+    if (object_is_broken(o_ptr))
+        return FEEL_BROKEN;
+    if ((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET))
+        return FEEL_AVERAGE;
+    if (o_ptr->to_a > 0)
+        return FEEL_GOOD;
+    if (o_ptr->to_h + o_ptr->to_d > 0)
+        return FEEL_GOOD;
+
+    return FEEL_AVERAGE;
+}
+
+/*!
+ * @brief 軽度擬似鑑定の判断処理 / Return a "feeling" (or NULL) about an item.  Method 2 (Light).
+ * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
+ * @return 擬似鑑定結果のIDを返す。
+ */
+item_feel_type pseudo_value_check_light(object_type *o_ptr)
+{
+    if (object_is_cursed(o_ptr))
+        return FEEL_CURSED;
+    if (object_is_broken(o_ptr))
+        return FEEL_BROKEN;
+    if (object_is_artifact(o_ptr))
+        return FEEL_UNCURSED;
+    if (object_is_ego(o_ptr))
+        return FEEL_UNCURSED;
+    if (o_ptr->to_a > 0)
+        return FEEL_UNCURSED;
+    if (o_ptr->to_h + o_ptr->to_d > 0)
+        return FEEL_UNCURSED;
+
+    return FEEL_NONE;
 }

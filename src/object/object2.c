@@ -56,55 +56,6 @@ bool(*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 OBJECT_SUBTYPE_VALUE coin_type;	/* Hack -- force coin type */
 
 /*!
- * @brief 重度擬似鑑定の判断処理 / Return a "feeling" (or NULL) about an item.  Method 1 (Heavy).
- * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
- * @return 擬似鑑定結果のIDを返す。
- */
-item_feel_type pseudo_value_check_heavy(object_type *o_ptr)
-{
-	if (object_is_artifact(o_ptr))
-	{
-		if (object_is_cursed(o_ptr) || object_is_broken(o_ptr)) return FEEL_TERRIBLE;
-
-		return FEEL_SPECIAL;
-	}
-
-	if (object_is_ego(o_ptr))
-	{
-		if (object_is_cursed(o_ptr) || object_is_broken(o_ptr)) return FEEL_WORTHLESS;
-
-		return FEEL_EXCELLENT;
-	}
-
-	if (object_is_cursed(o_ptr)) return FEEL_CURSED;
-	if (object_is_broken(o_ptr)) return FEEL_BROKEN;
-	if ((o_ptr->tval == TV_RING) || (o_ptr->tval == TV_AMULET)) return FEEL_AVERAGE;
-	if (o_ptr->to_a > 0) return FEEL_GOOD;
-	if (o_ptr->to_h + o_ptr->to_d > 0) return FEEL_GOOD;
-
-	return FEEL_AVERAGE;
-}
-
-
-/*!
- * @brief 軽度擬似鑑定の判断処理 / Return a "feeling" (or NULL) about an item.  Method 2 (Light).
- * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
- * @return 擬似鑑定結果のIDを返す。
- */
-item_feel_type pseudo_value_check_light(object_type *o_ptr)
-{
-	if (object_is_cursed(o_ptr)) return FEEL_CURSED;
-	if (object_is_broken(o_ptr)) return FEEL_BROKEN;
-	if (object_is_artifact(o_ptr)) return FEEL_UNCURSED;
-	if (object_is_ego(o_ptr)) return FEEL_UNCURSED;
-	if (o_ptr->to_a > 0) return FEEL_UNCURSED;
-	if (o_ptr->to_h + o_ptr->to_d > 0) return FEEL_UNCURSED;
-
-	return FEEL_NONE;
-}
-
-
-/*!
  * @brief オブジェクトのフラグ類から価格を算出する /
  * Return the value of the flags the object has...
  * @param o_ptr フラグ価格を確認したいオブジェクトの構造体参照ポインタ
