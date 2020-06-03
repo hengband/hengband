@@ -422,6 +422,7 @@ hengband_SOURCES = \
 	term/z-term.c term/z-term.h term/z-util.c term/z-util.h \
 	term/z-virt.c term/z-virt.h \
 	\
+	util/object-sort.c util/object-sort.h \
 	util/util.c util/util.h \
 	\
 	view/display-characteristic.c view/display-characteristic.h \

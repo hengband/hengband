@@ -1109,6 +1109,9 @@
     <ClCompile Include="..\..\src\object\object-value-calc.c">
       <Filter>object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\util\object-sort.c">
+      <Filter>util</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2367,6 +2370,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object\object-value-calc.h">
       <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\object-sort.h">
+      <Filter>util</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

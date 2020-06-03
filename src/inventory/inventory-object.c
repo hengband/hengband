@@ -7,6 +7,7 @@
 #include "object/object-value.h"
 #include "object/object2.h"
 #include "player/player-effects.h" // 暫定、相互参照している.
+#include "util/object-sort.h"
 #include "view/object-describer.h"
 
 void vary_item(player_type *owner_ptr, INVENTORY_IDX item, ITEM_NUMBER num)

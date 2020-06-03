@@ -91,6 +91,7 @@
 #include "store/store.h"
 #include "system/angband-version.h"
 #include "system/system-variables.h" // 暫定、init_flags の扱いを決めた上で消す.
+#include "util/object-sort.h"
 #include "util/util.h"
 #include "world/world-object.h"
 #include "world/world.h"

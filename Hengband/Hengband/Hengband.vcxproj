@@ -703,6 +703,7 @@
     <ClCompile Include="..\..\src\spell\spells2.c" />
     <ClCompile Include="..\..\src\spell\spells3.c" />
     <ClCompile Include="..\..\src\io\uid-checker.c" />
+    <ClCompile Include="..\..\src\util\object-sort.c" />
     <ClCompile Include="..\..\src\view\display-birth.c" />
     <ClCompile Include="..\..\src\view\display-characteristic.c" />
     <ClCompile Include="..\..\src\view\display-fruit.c" />
@@ -767,6 +768,7 @@
     <ClInclude Include="..\..\src\combat\melee-postprocess.h" />
     <ClInclude Include="..\..\src\combat\shoot.h" />
     <ClInclude Include="..\..\src\core\show-file.h" />
+    <ClInclude Include="..\..\src\util\object-sort.h" />
     <ClInclude Include="..\..\src\view\display-birth.h" />
     <ClInclude Include="..\..\src\view\object-describer.h" />
     <ClInclude Include="..\..\src\world\world-object.h" />
