@@ -30,6 +30,7 @@
 #include "realm/realm-hex.h"
 #include "spell/spells-detection.h"
 #include "spell/spells-floor.h"
+#include "spell/spells-hex.h"
 #include "spell/spells-status.h"
 #include "spell/spells3.h"
 #include "util/util.h"

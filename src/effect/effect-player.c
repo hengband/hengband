@@ -13,6 +13,7 @@
 #include "realm/realm-hex.h"
 #include "effect/spells-effect-util.h"
 #include "player/player-move.h"
+#include "spell/spells-hex.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
 #include "player/player-effects.h"

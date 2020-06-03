@@ -1,11 +1,11 @@
-﻿#include "system/angband.h"
-#include "combat/slaying.h"
-#include "object-enchant/artifact.h"
-#include "realm/realm-hex.h"
+﻿#include "combat/slaying.h"
 #include "mind/samurai-slaying.h"
+#include "object-enchant/artifact.h"
+#include "object-enchant/tr-types.h"
 #include "object/object1.h"
 #include "object/torch.h"
-#include "object-enchant/tr-types.h"
+#include "realm/realm-hex.h"
+#include "spell/spells-hex.h"
 
 /*!
  * @brief プレイヤー攻撃の種族スレイング倍率計算

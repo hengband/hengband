@@ -14,7 +14,6 @@
 #include "core/stuff-handler.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
-
 #include "floor/floor.h"
 #include "grid/grid.h"
 #include "spell/spells-summon.h"

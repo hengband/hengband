@@ -352,6 +352,7 @@
     <ClCompile Include="..\..\src\mspell\mspell-ball.c" />
     <ClCompile Include="..\..\src\spell\spells-describer.c" />
     <ClCompile Include="..\..\src\spell\spells-detection.c" />
+    <ClCompile Include="..\..\src\spell\spells-hex.c" />
     <ClCompile Include="..\..\src\spell\spells-mirror.c" />
     <ClCompile Include="..\..\src\system\system-variables.c" />
     <ClCompile Include="..\..\src\core\show-file.c" />
@@ -557,6 +558,7 @@
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />
     <ClInclude Include="..\..\src\object-enchant\special-object-flags.h" />
     <ClInclude Include="..\..\src\spell\spells-describer.h" />
+    <ClInclude Include="..\..\src\spell\spells-hex.h" />
     <ClInclude Include="..\..\src\spell\spells-mirror.h" />
     <ClInclude Include="..\..\src\sv-definition\sv-amulet-types.h" />
     <ClInclude Include="..\..\src\sv-definition\sv-armor-types.h" />

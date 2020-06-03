@@ -55,6 +55,7 @@
 #include "realm/realm-song.h"
 #include "spell/spells-describer.h"
 #include "spell/spells-execution.h"
+#include "spell/spells-hex.h"
 #include "spell/spells-status.h"
 #include "spell/spells-util.h"
 #include "spell/range-calc.h"

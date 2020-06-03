@@ -59,6 +59,7 @@
 #include "realm/realm-hex.h"
 #include "realm/realm-song.h"
 #include "spell/spells-floor.h"
+#include "spell/spells-hex.h"
 #include "spell/spells-status.h"
 #include "term/gameterm.h"
 #include "util/util.h"

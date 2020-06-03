@@ -10,28 +10,26 @@
  * 2013 Deskull rearranged comment for Doxygen.
  */
 
-#include "system/angband.h"
-#include "util/util.h"
-#include "system/system-variables.h"
-
-#include "dungeon/dungeon.h"
 #include "floor/wild.h"
-#include "world/world.h"
-#include "monster/monster.h"
-#include "realm/realm-hex.h"
-#include "player/player-status.h"
-#include "player/player-effects.h"
-#include "grid/grid.h"
-#include "monster/monster-status.h"
-#include "dungeon/quest.h"
 #include "dungeon/dungeon-file.h"
-#include "io/tokenizer.h"
-#include "io/files-util.h"
-#include "grid/feature.h"
+#include "dungeon/dungeon.h"
+#include "dungeon/quest.h"
 #include "floor/floor-town.h"
+#include "grid/feature.h"
+#include "grid/grid.h"
+#include "io/files-util.h"
+#include "io/tokenizer.h"
+#include "monster/monster-status.h"
+#include "monster/monster.h"
+#include "player/player-effects.h"
+#include "player/player-status.h"
+#include "realm/realm-hex.h"
 #include "realm/realm-names-table.h"
-
+#include "spell/spells-hex.h"
+#include "system/system-variables.h"
+#include "util/util.h"
 #include "view/display-main-window.h"
+#include "world/world.h"
 
 #define MAX_FEAT_IN_TERRAIN 18
 

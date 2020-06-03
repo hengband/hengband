@@ -18,7 +18,6 @@
 #include "effect/effect-characteristics.h"
 #include "grid/grid.h"
 #include "dungeon/quest.h"
-#include "realm/realm-hex.h"
 #include "player/player-move.h"
 #include "player/player-class.h"
 #include "monster/monster.h"
@@ -31,6 +30,7 @@
 #include "view/display-main-window.h"
 #include "spell/spells3.h"
 #include "mspell/assign-monster-spell.h"
+#include "spell/spells-hex.h"
 
  /*!
   * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /

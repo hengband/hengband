@@ -28,6 +28,7 @@
 #include "player/player-races-table.h"
 #include "player/player-status.h"
 #include "realm/realm-hex.h"
+#include "spell/spells-hex.h"
 #include "spell/spells-status.h"
 #include "util/util.h"
 #include "view/display-main-window.h"

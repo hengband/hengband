@@ -34,6 +34,7 @@
 #include "autopick/autopick-reader-writer.h"
 #include "locale/japanese.h"
 #include "spell/spells-describer.h"
+#include "spell/spells-hex.h"
 #include "spell/spells-util.h"
 #include "spell/spells-execution.h"
 #include "object/item-use-flags.h"

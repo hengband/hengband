@@ -12,6 +12,7 @@
 #include "object/object-kind.h"
 #include "object/object-value.h"
 #include "object-enchant/special-object-flags.h"
+#include "spell/spells-hex.h"
 #include "sv-definition/sv-other-types.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "object-enchant/tr-types.h"

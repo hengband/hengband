@@ -29,6 +29,7 @@
 #include "player/player-skill.h"
 #include "realm/realm-hex.h"
 #include "spell/process-effect.h"
+#include "spell/spells-hex.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"

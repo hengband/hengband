@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "spell/spells-util.h"
 
 #define hex_spelling_any(CREATURE_PTR) \
@@ -47,14 +48,4 @@
 #define HEX_ANTI_MAGIC       30
 #define HEX_REVENGE          31
 
-extern bool stop_hex_spell_all(player_type *caster_ptr);
-extern bool stop_hex_spell(player_type *caster_ptr);
-extern void check_hex(player_type *caster_ptr);
-extern bool hex_spell_fully(player_type *caster_ptr);
-extern void revenge_spell(player_type *caster_ptr);
-extern void revenge_store(player_type *caster_ptr, HIT_POINT dam);
-extern bool teleport_barrier(player_type *caster_ptr, MONSTER_IDX m_idx);
-extern bool magic_barrier(player_type *target_ptr, MONSTER_IDX m_idx);
-extern bool multiply_barrier(player_type *caster_ptr, MONSTER_IDX m_idx);
 concptr do_hex_spell(player_type *caster_ptr, SPELL_IDX spell, spell_type mode);
-extern bool hex_spelling(player_type *caster_type, int hex);

@@ -389,6 +389,7 @@ hengband_SOURCES = \
 	spell/music-checker.c spell/music-checker.h \
 	spell/spells-diceroll.c spell/spells-diceroll.h \
 	spell/spells-floor.c spell/spells-floor.h \
+	spell/spells-hex.c spell/spells-hex.h \
 	spell/spells-mirror.c spell/spells-mirror.h \
 	spell/spells-object.c spell/spells-object.h \
 	spell/spells-status.c spell/spells-status.h \

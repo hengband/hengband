@@ -18,19 +18,20 @@
 #include "mind/monk-attack.h"
 #include "mind/racial-samurai.h"
 #include "mind/surprise-attack.h"
-#include "monster/monster-status.h"
 #include "monster/monster-race-hook.h"
+#include "monster/monster-status.h"
 #include "object-enchant/artifact.h"
+#include "object-enchant/tr-types.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "sv-definition/sv-weapon-types.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "player/player-skill.h"
 #include "realm/realm-hex.h"
 #include "spell/spells-floor.h"
+#include "spell/spells-hex.h"
+#include "sv-definition/sv-weapon-types.h"
 #include "world/world.h"
-#include "object-enchant/tr-types.h"
 
 static player_attack_type *initialize_player_attack_type(
     player_attack_type *pa_ptr, s16b hand, combat_options mode, monster_type *m_ptr, grid_type *g_ptr, bool *fear, bool *mdeath)
@@ -347,7 +348,8 @@ static bool check_fear_death(player_type *attacker_ptr, player_attack_type *pa_p
  * @param is_ej_nullified 蜘蛛相手ならばTRUE
  * @return なし
  */
-static void apply_actual_attack(player_type *attacker_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool is_zantetsu_nullified, const bool is_ej_nullified)
+static void apply_actual_attack(
+    player_type *attacker_ptr, player_attack_type *pa_ptr, bool *do_quake, const bool is_zantetsu_nullified, const bool is_ej_nullified)
 {
     object_type *o_ptr = &attacker_ptr->inventory_list[INVEN_RARM + pa_ptr->hand];
     int vorpal_chance = ((o_ptr->name1 == ART_VORPAL_BLADE) || (o_ptr->name1 == ART_CHAINSWORD)) ? 2 : 4;

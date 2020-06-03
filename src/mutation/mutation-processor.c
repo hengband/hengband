@@ -17,6 +17,7 @@
 #include "realm/realm-hex.h"
 #include "monster/monster-status.h"
 #include "object/lite-processor.h"
+#include "spell/spells-hex.h"
 
 /*!
  * @brief 10ゲームターンが進行するごとに突然変異の発動判定を行う処理

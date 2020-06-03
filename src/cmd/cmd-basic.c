@@ -56,6 +56,7 @@
 #include "player/player-status.h"
 #include "realm/realm-hex.h"
 #include "shoot.h"
+#include "spell/spells-hex.h"
 #include "spell/spells3.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"

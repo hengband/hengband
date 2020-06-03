@@ -17,8 +17,8 @@
 #include "monster/monster-race-hook.h"
 #include "monster/monster-status.h"
 #include "player/player-move.h"
-#include "realm/realm-hex.h"
 #include "spell/process-effect.h"
+#include "spell/spells-hex.h"
 #include "spell/spells-type.h"
 #include "spell/spells3.h"
 
