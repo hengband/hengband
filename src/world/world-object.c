@@ -1,4 +1,7 @@
 ﻿#include "world/world-object.h"
+#include "dungeon/dungeon.h"
+#include "object-enchant/item-apply-magic.h"
+#include "object/object-kind.h"
 #include "world/world.h"
 
 /*!
@@ -33,4 +36,99 @@ OBJECT_IDX o_pop(floor_type *floor_ptr)
         msg_print(_("アイテムが多すぎる！", "Too many objects!"));
 
     return 0;
+}
+
+/*!
+ * @brief オブジェクト生成テーブルからアイテムを取得する /
+ * Choose an object kind that seems "appropriate" to the given level
+ * @param owner_ptr プレーヤーへの参照ポインタ
+ * @param level 生成階
+ * @return 選ばれたオブジェクトベースID
+ * @details
+ * This function uses the "prob2" field of the "object allocation table",\n
+ * and various local information, to calculate the "prob3" field of the\n
+ * same table, which is then used to choose an "appropriate" object, in\n
+ * a relatively efficient manner.\n
+ *\n
+ * It is (slightly) more likely to acquire an object of the given level\n
+ * than one of a lower level.  This is done by choosing several objects\n
+ * appropriate to the given level and keeping the "hardest" one.\n
+ *\n
+ * Note that if no objects are "appropriate", then this function will\n
+ * fail, and return zero, but this should *almost* never happen.\n
+ */
+OBJECT_IDX get_obj_num(player_type *owner_ptr, DEPTH level, BIT_FLAGS mode)
+{
+    int i, j, p;
+    KIND_OBJECT_IDX k_idx;
+    long value, total;
+    object_kind *k_ptr;
+    alloc_entry *table = alloc_kind_table;
+
+    if (level > MAX_DEPTH - 1)
+        level = MAX_DEPTH - 1;
+
+    if ((level > 0) && !(d_info[owner_ptr->dungeon_idx].flags1 & DF1_BEGINNER)) {
+        if (one_in_(GREAT_OBJ)) {
+            level = 1 + (level * MAX_DEPTH / randint1(MAX_DEPTH));
+        }
+    }
+
+    total = 0L;
+    for (i = 0; i < alloc_kind_size; i++) {
+        if (table[i].level > level)
+            break;
+
+        table[i].prob3 = 0;
+        k_idx = table[i].index;
+        k_ptr = &k_info[k_idx];
+
+        if ((mode & AM_FORBID_CHEST) && (k_ptr->tval == TV_CHEST))
+            continue;
+
+        table[i].prob3 = table[i].prob2;
+        total += table[i].prob3;
+    }
+
+    if (total <= 0)
+        return 0;
+
+    value = randint0(total);
+    for (i = 0; i < alloc_kind_size; i++) {
+        if (value < table[i].prob3)
+            break;
+
+        value = value - table[i].prob3;
+    }
+
+    p = randint0(100);
+    if (p < 60) {
+        j = i;
+        value = randint0(total);
+        for (i = 0; i < alloc_kind_size; i++) {
+            if (value < table[i].prob3)
+                break;
+
+            value = value - table[i].prob3;
+        }
+
+        if (table[i].level < table[j].level)
+            i = j;
+    }
+
+    if (p >= 10)
+        return (table[i].index);
+
+    j = i;
+    value = randint0(total);
+    for (i = 0; i < alloc_kind_size; i++) {
+        if (value < table[i].prob3)
+            break;
+
+        value = value - table[i].prob3;
+    }
+
+    if (table[i].level < table[j].level)
+        i = j;
+    return (table[i].index);
 }

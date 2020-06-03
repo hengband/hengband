@@ -7,7 +7,6 @@ extern OBJECT_SUBTYPE_VALUE coin_type;
 extern bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
 
 s32b flag_cost(object_type *o_ptr, int plusses);
-OBJECT_IDX get_obj_num(player_type *o_ptr, DEPTH level, BIT_FLAGS mode);
 byte value_check_aux1(object_type *o_ptr);
 byte value_check_aux2(object_type *o_ptr);
 void distribute_charges(object_type *o_ptr, object_type *q_ptr, int amt);
