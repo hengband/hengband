@@ -4,7 +4,7 @@
 #include "object-enchant/tr-types.h"
 #include "object/object1.h"
 #include "object/torch.h"
-#include "realm/realm-hex.h"
+#include "realm/realm-hex-numbers.h"
 #include "spell/spells-hex.h"
 
 /*!

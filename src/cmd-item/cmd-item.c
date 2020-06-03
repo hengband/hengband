@@ -52,6 +52,7 @@
 #include "player/player-races-table.h"
 #include "player/player-status.h"
 #include "player/selfinfo.h"
+#include "realm/realm-hex-numbers.h"
 #include "spell/spells3.h"
 #include "term/gameterm.h"
 #include "util/util.h"

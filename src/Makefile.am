@@ -360,7 +360,8 @@ hengband_SOURCES = \
 	realm/realm-crusade.c realm/realm-crusade.h \
 	realm/realm-daemon.c realm/realm-daemon.h \
 	realm/realm-death.c realm/realm-death.h \
-	realm/realm-hex.c realm/realm-hex.h 
+	realm/realm-hex.c realm/realm-hex.h \
+	realm/realm-hex-numbers.h \
 	realm/realm-hissatsu.c realm/realm-hissatsu.h \
 	realm/realm-life.c realm/realm-life.h \
 	realm/realm-names-table.c realm/realm-names-table.h \

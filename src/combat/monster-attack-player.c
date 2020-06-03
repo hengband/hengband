@@ -27,7 +27,7 @@
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-skill.h"
-#include "realm/realm-hex.h"
+#include "realm/realm-hex-numbers.h"
 #include "spell/process-effect.h"
 #include "spell/spells-hex.h"
 #include "spell/spells-type.h"

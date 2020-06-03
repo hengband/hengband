@@ -1,5 +1,4 @@
 ﻿/*!
- * todo 単体で1000行を超えている。要分割
  * @brief 魔法によるプレーヤーへの効果まとめ
  * @date 2020/04/29
  * @author Hourier
@@ -10,7 +9,7 @@
 #include "effect/effect-player.h"
 #include "effect/effect-player-switcher.h"
 #include "main/sound-definitions-table.h"
-#include "realm/realm-hex.h"
+#include "realm/realm-hex-numbers.h"
 #include "effect/spells-effect-util.h"
 #include "player/player-move.h"
 #include "spell/spells-hex.h"

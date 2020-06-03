@@ -9,7 +9,7 @@
 #include "floor/floor.h"
 #include "monster/monster-status.h"
 #include "object/object-hook.h"
-#include "realm/realm-hex.h"
+#include "realm/realm-hex-numbers.h"
 #include "spell/process-effect.h"
 #include "spell/spells-hex.h"
 #include "spell/spells-type.h"

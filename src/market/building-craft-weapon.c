@@ -10,7 +10,7 @@
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
-#include "realm/realm-hex.h"
+#include "realm/realm-hex-numbers.h"
 #include "spell/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "term/gameterm.h"

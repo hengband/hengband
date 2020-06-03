@@ -27,7 +27,7 @@
 #include "player/player-races-table.h"
 #include "player/player-status.h"
 #include "player/selfinfo.h"
-#include "realm/realm-hex.h"
+#include "realm/realm-hex-numbers.h"
 #include "spell/spells-detection.h"
 #include "spell/spells-floor.h"
 #include "spell/spells-hex.h"

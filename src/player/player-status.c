@@ -51,7 +51,7 @@
 #include "player/player-races-table.h"
 #include "player/player-skill.h"
 #include "player/race-info-table.h"
-#include "realm/realm-hex.h"
+#include "realm/realm-hex-numbers.h"
 #include "realm/realm-song.h"
 #include "spell/spells-describer.h"
 #include "spell/spells-execution.h"

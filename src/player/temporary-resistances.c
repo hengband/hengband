@@ -1,5 +1,5 @@
 ﻿#include "temporary-resistances.h"
-#include "realm/realm-hex.h"
+#include "realm/realm-hex-numbers.h"
 #include "realm/realm-song.h"
 #include "player/player-races-table.h"
 #include "object-enchant/tr-types.h"

@@ -12,7 +12,7 @@
 #include "object-enchant/artifact.h"
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
-#include "realm/realm-hex.h"
+#include "realm/realm-hex-numbers.h"
 #include "spell/spells-hex.h"
 #include "spell/spells3.h"
 

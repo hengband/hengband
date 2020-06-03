@@ -1,7 +1,7 @@
 ﻿#include "spell/spells-hex.h"
 #include "player/player-effects.h" // todo 相互参照している.
 #include "player/player-skill.h"
-#include "realm/realm-hex.h" // 定数マクロへの依存。後でここへ移設して消す.
+#include "realm/realm-hex-numbers.h"
 #include "spell/spells3.h"
 #include "spell/spells-execution.h"
 

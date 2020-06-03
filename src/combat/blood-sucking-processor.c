@@ -8,7 +8,7 @@
 #include "object-enchant/artifact.h"
 #include "monster/monster-race-hook.h"
 #include "player/player-effects.h"
-#include "realm/realm-hex.h"
+#include "realm/realm-hex-numbers.h"
 #include "spell/spells-hex.h"
 
 /*!
