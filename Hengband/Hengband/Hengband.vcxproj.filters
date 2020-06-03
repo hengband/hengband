@@ -1106,6 +1106,9 @@
     <ClCompile Include="..\..\src\perception\simple-perception.c">
       <Filter>perception</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\object\object-value-calc.c">
+      <Filter>object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2361,6 +2364,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\perception\simple-perception.h">
       <Filter>perception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-value-calc.h">
+      <Filter>object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

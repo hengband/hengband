@@ -6,8 +6,8 @@
 #include "object-enchant/object-ego.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
+#include "object/object-value-calc.h"
 #include "object/object1.h"
-#include "object/object2.h" // 暫定、相互参照している.
 #include "object-enchant/special-object-flags.h"
 
 /*!
