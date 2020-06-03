@@ -1121,6 +1121,9 @@
     <ClCompile Include="..\..\src\spell\spells-hex.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\racial-cavalry.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2397,6 +2400,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-song-numbers.h">
       <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\racial-cavalry.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,6 +20,7 @@
 #include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"
 #include "io/targeting.h"
+#include "mind/racial-cavalry.h"
 #include "mind/racial-samurai.h"
 #include "mutation/mutation.h"
 #include "object/object-hook.h"

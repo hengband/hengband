@@ -100,6 +100,5 @@ bool demonic_breath(player_type* creature_ptr);
 bool mirror_concentration(player_type* creature_ptr);
 bool sword_dancing(player_type* creature_ptr);
 bool confusing_light(player_type* creature_ptr);
-bool rodeo(player_type* creature_ptr);
 bool clear_mind(player_type* creature_ptr);
 bool vanish_dungeon(player_type* caster_ptr);
