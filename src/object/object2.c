@@ -60,7 +60,7 @@ OBJECT_SUBTYPE_VALUE coin_type;	/* Hack -- force coin type */
  * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
  * @return 擬似鑑定結果のIDを返す。
  */
-item_feel_type value_check_aux1(object_type *o_ptr)
+item_feel_type pseudo_value_check_heavy(object_type *o_ptr)
 {
 	if (object_is_artifact(o_ptr))
 	{
@@ -91,7 +91,7 @@ item_feel_type value_check_aux1(object_type *o_ptr)
  * @param o_ptr 擬似鑑定を行うオブジェクトの参照ポインタ。
  * @return 擬似鑑定結果のIDを返す。
  */
-item_feel_type value_check_aux2(object_type *o_ptr)
+item_feel_type pseudo_value_check_light(object_type *o_ptr)
 {
 	if (object_is_cursed(o_ptr)) return FEEL_CURSED;
 	if (object_is_broken(o_ptr)) return FEEL_BROKEN;

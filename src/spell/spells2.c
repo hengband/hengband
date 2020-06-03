@@ -3303,7 +3303,7 @@ bool psychometry(player_type *caster_ptr)
 		return TRUE;
 	}
 
-	item_feel_type feel = value_check_aux1(o_ptr);
+	item_feel_type feel = pseudo_value_check_heavy(o_ptr);
 	GAME_TEXT o_name[MAX_NLEN];
 	object_desc(caster_ptr, o_name, o_ptr, (OD_OMIT_PREFIX | OD_NAME_ONLY));
 

@@ -25,7 +25,7 @@ static void sense_inventory_aux(player_type *creature_ptr, INVENTORY_IDX slot, b
     if (object_is_known(o_ptr))
         return;
 
-    item_feel_type feel = (heavy ? value_check_aux1(o_ptr) : value_check_aux2(o_ptr));
+    item_feel_type feel = (heavy ? pseudo_value_check_heavy(o_ptr) : pseudo_value_check_light(o_ptr));
     if (!feel)
         return;
 
