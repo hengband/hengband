@@ -1,5 +1,4 @@
 ﻿/*!
- * @file spells1.c
  * @brief 魔法による遠隔処理の実装 / Spell projection
  * @date 2014/07/10
  * @author
@@ -11,23 +10,8 @@
  * </pre>
  */
 
-#include "system/angband.h"
-#include "floor/floor.h"
-#include "system/system-variables.h"
-#include "util/util.h"
-#include "main/sound-definitions-table.h"
-#include "cmd-action/cmd-pet.h"
-#include "cmd-io/cmd-dump.h"
-#include "player/player-class.h"
-#include "monster/monster.h"
 #include "spell/spells1.h"
 #include "term/gameterm.h"
-#include "view/display-main-window.h"
-#include "effect/spells-effect-util.h"
-#include "effect/effect-feature.h"
-#include "effect/effect-item.h"
-#include "effect/effect-monster.h"
-#include "effect/effect-characteristics.h"
 
 /*
  * Find the distance from (x, y) to a line.
@@ -292,168 +276,6 @@ void breath_shape(player_type *caster_ptr, u16b *path_g, int dist, int *pgrids, 
 	}
 
 	*pgm_rad = bdis;
-}
-
-
-/*!
- * @brief 鏡魔法「封魔結界」の効果処理
- * @param dam ダメージ量
- * @return 効果があったらTRUEを返す
- */
-bool binding_field(player_type *caster_ptr, HIT_POINT dam)
-{
-	POSITION mirror_x[10], mirror_y[10]; /* 鏡はもっと少ない */
-	int mirror_num = 0;	/* 鏡の数 */
-	int msec = delay_factor * delay_factor*delay_factor;
-
-	/* 三角形の頂点 */
-	POSITION point_x[3];
-	POSITION point_y[3];
-
-	/* Default target of monsterspell is player */
-	monster_target_y = caster_ptr->y;
-	monster_target_x = caster_ptr->x;
-
-	for (POSITION x = 0; x < caster_ptr->current_floor_ptr->width; x++)
-	{
-		for (POSITION y = 0; y < caster_ptr->current_floor_ptr->height; y++)
-		{
-			if (is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]) &&
-				distance(caster_ptr->y, caster_ptr->x, y, x) <= MAX_RANGE &&
-				distance(caster_ptr->y, caster_ptr->x, y, x) != 0 &&
-				player_has_los_bold(caster_ptr, y, x) &&
-				projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
-			{
-				mirror_y[mirror_num] = y;
-				mirror_x[mirror_num] = x;
-				mirror_num++;
-			}
-		}
-	}
-
-	if (mirror_num < 2)return FALSE;
-
-	point_x[0] = randint0(mirror_num);
-	do {
-		point_x[1] = randint0(mirror_num);
-	} while (point_x[0] == point_x[1]);
-
-	point_y[0] = mirror_y[point_x[0]];
-	point_x[0] = mirror_x[point_x[0]];
-	point_y[1] = mirror_y[point_x[1]];
-	point_x[1] = mirror_x[point_x[1]];
-	point_y[2] = caster_ptr->y;
-	point_x[2] = caster_ptr->x;
-
-	POSITION x = point_x[0] + point_x[1] + point_x[2];
-	POSITION y = point_y[0] + point_y[1] + point_y[2];
-
-	POSITION centersign = (point_x[0] * 3 - x)*(point_y[1] * 3 - y)
-		- (point_y[0] * 3 - y)*(point_x[1] * 3 - x);
-	if (centersign == 0)return FALSE;
-
-	POSITION x1 = point_x[0] < point_x[1] ? point_x[0] : point_x[1];
-	x1 = x1 < point_x[2] ? x1 : point_x[2];
-	POSITION y1 = point_y[0] < point_y[1] ? point_y[0] : point_y[1];
-	y1 = y1 < point_y[2] ? y1 : point_y[2];
-
-	POSITION x2 = point_x[0] > point_x[1] ? point_x[0] : point_x[1];
-	x2 = x2 > point_x[2] ? x2 : point_x[2];
-	POSITION y2 = point_y[0] > point_y[1] ? point_y[0] : point_y[1];
-	y2 = y2 > point_y[2] ? y2 : point_y[2];
-
-	for (y = y1; y <= y2; y++)
-	{
-		for (x = x1; x <= x2; x++)
-		{
-			if (centersign*((point_x[0] - x)*(point_y[1] - y)
-				- (point_y[0] - y)*(point_x[1] - x)) >= 0 &&
-				centersign*((point_x[1] - x)*(point_y[2] - y)
-					- (point_y[1] - y)*(point_x[2] - x)) >= 0 &&
-				centersign*((point_x[2] - x)*(point_y[0] - y)
-					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
-			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
-				{
-					if (!(caster_ptr->blind)
-						&& panel_contains(y, x))
-					{
-						u16b p = bolt_pict(y, x, y, x, GF_MANA);
-						print_rel(caster_ptr, PICT_C(p), PICT_A(p), y, x);
-						move_cursor_relative(y, x);
-						Term_fresh();
-						Term_xtra(TERM_XTRA_DELAY, msec);
-					}
-				}
-			}
-		}
-	}
-
-	for (y = y1; y <= y2; y++)
-	{
-		for (x = x1; x <= x2; x++)
-		{
-			if (centersign*((point_x[0] - x)*(point_y[1] - y)
-				- (point_y[0] - y)*(point_x[1] - x)) >= 0 &&
-				centersign*((point_x[1] - x)*(point_y[2] - y)
-					- (point_y[1] - y)*(point_x[2] - x)) >= 0 &&
-				centersign*((point_x[2] - x)*(point_y[0] - y)
-					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
-			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
-				{
-					(void)affect_feature(caster_ptr, 0, 0, y, x, dam, GF_MANA);
-				}
-			}
-		}
-	}
-
-	for (y = y1; y <= y2; y++)
-	{
-		for (x = x1; x <= x2; x++)
-		{
-			if (centersign*((point_x[0] - x)*(point_y[1] - y)
-				- (point_y[0] - y)*(point_x[1] - x)) >= 0 &&
-				centersign*((point_x[1] - x)*(point_y[2] - y)
-					- (point_y[1] - y)*(point_x[2] - x)) >= 0 &&
-				centersign*((point_x[2] - x)*(point_y[0] - y)
-					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
-			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
-				{
-					(void)affect_item(caster_ptr, 0, 0, y, x, dam, GF_MANA);
-				}
-			}
-		}
-	}
-
-	for (y = y1; y <= y2; y++)
-	{
-		for (x = x1; x <= x2; x++)
-		{
-			if (centersign*((point_x[0] - x)*(point_y[1] - y)
-				- (point_y[0] - y)*(point_x[1] - x)) >= 0 &&
-				centersign*((point_x[1] - x)*(point_y[2] - y)
-					- (point_y[1] - y)*(point_x[2] - x)) >= 0 &&
-				centersign*((point_x[2] - x)*(point_y[0] - y)
-					- (point_y[2] - y)*(point_x[0] - x)) >= 0)
-			{
-				if (player_has_los_bold(caster_ptr, y, x) && projectable(caster_ptr, caster_ptr->y, caster_ptr->x, y, x))
-				{
-					(void)affect_monster(caster_ptr, 0, 0, y, x, dam, GF_MANA,
-						(PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP), TRUE);
-				}
-			}
-		}
-	}
-
-	if (one_in_(7))
-	{
-		msg_print(_("鏡が結界に耐えきれず、壊れてしまった。", "The field broke a mirror"));
-		remove_mirror(caster_ptr, point_y[0], point_x[0]);
-	}
-
-	return TRUE;
 }
 
 

@@ -40,7 +40,6 @@
 
 #include "system/angband.h"
 #include "util/util.h"
-
 #include "effect/effect-characteristics.h"
 #include "dungeon/dungeon.h"
 #include "grid/grid.h"
@@ -58,6 +57,7 @@
 #include "player/player-races-table.h"
 #include "player/player-class.h"
 #include "spell/process-effect.h"
+#include "spell/spells1.h"
 #include "spell/spells3.h"
 #include "mspell/mspell-learn-checker.h"
 #include "mspell/assign-monster-spell.h"

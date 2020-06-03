@@ -123,8 +123,6 @@
 #include "dungeon/dungeon-file.h"
 #include "main/init.h"
 #include "grid/feature.h"
-#include "spell/spells1.h"
-
 #include "world/world.h"
 #include "view/display-main-window.h"
 

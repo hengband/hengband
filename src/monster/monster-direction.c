@@ -10,6 +10,7 @@
 #include "monster/monster-util.h"
 #include "monster/monster-status.h"
 #include "pet/pet-util.h"
+#include "spell/spells1.h"
 
 /*!
  * @brief ペットが敵に接近するための方向を決定する

@@ -16,6 +16,7 @@
 #include "cmd-io/cmd-dump.h"
 #include "player/selfinfo.h"
 #include "spell/technic-info-table.h"
+#include "spell/spells1.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "spell/spells-summon.h"

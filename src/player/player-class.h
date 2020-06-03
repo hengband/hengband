@@ -1,4 +1,6 @@
 ﻿#pragma once
+
+#include "object/tval-types.h"
 #include "spell/spells1.h"
 #include "spell/technic-info-table.h"
 #include "player/player-status.h"

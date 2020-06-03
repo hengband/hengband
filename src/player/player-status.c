@@ -56,6 +56,7 @@
 #include "spell/spells-execution.h"
 #include "spell/spells-status.h"
 #include "spell/spells-util.h"
+#include "spell/spells1.h"
 #include "spell/technic-info-table.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
