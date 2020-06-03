@@ -10,7 +10,7 @@
 #include "object-enchant/item-feeling.h"
 #include "object-enchant/special-object-flags.h"
 #include "object-enchant/tr-types.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"

@@ -35,7 +35,7 @@
 #include "mutation/mutation.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"

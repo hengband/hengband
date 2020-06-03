@@ -1,4 +1,4 @@
-﻿#include "object/object-appraiser.h"
+﻿#include "perception/object-perception.h"
 #include "io/write-diary.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"

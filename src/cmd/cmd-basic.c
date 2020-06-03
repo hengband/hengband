@@ -38,7 +38,7 @@
 #include "object-enchant/artifact.h"
 #include "object/chest.h"
 #include "object/item-use-flags.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-broken.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"

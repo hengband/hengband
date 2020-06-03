@@ -11,7 +11,7 @@
 #include "object-enchant/artifact.h"
 #include "object-enchant/object-ego.h"
 #include "object-enchant/trc-types.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-kind.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"

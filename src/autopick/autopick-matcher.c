@@ -9,7 +9,7 @@
 #include "autopick/autopick-flags-table.h"
 #include "autopick/autopick-key-flag-process.h"
 #include "object-enchant/item-feeling.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"

@@ -16,7 +16,7 @@
 #include "io/files-util.h"
 #include "monster/monster.h"
 #include "object-enchant/artifact.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"

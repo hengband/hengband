@@ -10,7 +10,7 @@
 #include "combat/shoot.h"
 #include "display-util.h"
 #include "object-enchant/artifact.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object1.h"
 #include "object-enchant/special-object-flags.h"
 #include "sv-definition/sv-weapon-types.h"

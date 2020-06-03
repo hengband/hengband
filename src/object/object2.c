@@ -13,7 +13,7 @@
 #include "object/object2.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"
-#include "object/object-appraiser.h" // 暫定、相互参照している.
+#include "perception/object-perception.h" // 暫定、相互参照している.
 #include "object-enchant/object-ego.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"

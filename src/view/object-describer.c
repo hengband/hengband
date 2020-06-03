@@ -1,6 +1,6 @@
 ﻿#include "view/object-describer.h"
 #include "cmd-action/cmd-spell.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object-enchant/special-object-flags.h"

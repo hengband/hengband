@@ -44,7 +44,7 @@
 #include "mind/mind.h"
 #include "object-enchant/item-feeling.h"
 #include "object/item-use-flags.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"

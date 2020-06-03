@@ -8,7 +8,7 @@
 #include "grid/grid.h"
 #include "grid/trap.h"
 #include "object-enchant/artifact.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"

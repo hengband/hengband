@@ -159,7 +159,7 @@
 #include "monster/monster.h"
 #include "mspell/monster-spell.h"
 #include "object-enchant/artifact.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"

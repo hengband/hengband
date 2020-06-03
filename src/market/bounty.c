@@ -9,7 +9,7 @@
 #include "monster/monster-race-hook.h"
 #include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-kind-hook.h"
 #include "object/object-generator.h"

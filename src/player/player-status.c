@@ -28,7 +28,7 @@
 #include "mutation/mutation.h"
 #include "object-enchant/artifact.h"
 #include "object/bow.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"

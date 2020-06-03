@@ -2,7 +2,7 @@
 #include "io/files-util.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-flavor.h"
 #include "object-enchant/special-object-flags.h"

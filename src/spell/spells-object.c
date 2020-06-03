@@ -18,7 +18,7 @@
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-feeling.h"
 #include "object/item-use-flags.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-flavor.h"
