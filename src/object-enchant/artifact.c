@@ -29,7 +29,6 @@
 #include "object/object-kind.h"
 #include "object/object-value-calc.h"
 #include "object/object1.h"
-#include "object/object2.h"
 #include "object-enchant/special-object-flags.h"
 #include "sv-definition/sv-armor-types.h"
 #include "sv-definition/sv-weapon-types.h"

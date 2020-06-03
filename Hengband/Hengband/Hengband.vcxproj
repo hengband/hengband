@@ -552,7 +552,6 @@
     <ClInclude Include="..\..\src\object\item-use-flags.h" />
     <ClInclude Include="..\..\src\object\object-mark-types.h" />
     <ClInclude Include="..\..\src\object\object-util.h" />
-    <ClInclude Include="..\..\src\object\object2.h" />
     <ClInclude Include="..\..\src\object-enchant\old-ego-extra-values.h" />
     <ClInclude Include="..\..\src\object-enchant\special-object-flags.h" />
     <ClInclude Include="..\..\src\sv-definition\sv-amulet-types.h" />
@@ -669,7 +668,6 @@
     <ClCompile Include="..\..\src\mspell\assign-monster-spell.c" />
     <ClCompile Include="..\..\src\mutation\mutation.c" />
     <ClCompile Include="..\..\src\object\object1.c" />
-    <ClCompile Include="..\..\src\object\object2.c" />
     <ClCompile Include="..\..\src\mind\racial.c" />
     <ClCompile Include="..\..\src\term\readdib.c" />
     <ClCompile Include="..\..\src\realm\realm-arcane.c" />

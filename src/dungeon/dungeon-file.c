@@ -57,7 +57,6 @@
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "object/object2.h"
 #include "sv-definition/sv-scroll-types.h"
 #include "object-enchant/tr-types.h"
 #include "player/player-class.h"

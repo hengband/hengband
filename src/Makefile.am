@@ -295,7 +295,6 @@ hengband_SOURCES = \
 	object/chest.c object/chest.h \
 	object/death-scythe.c object/death-scythe.h \
 	object/object1.c object/object1.h \
-	object/object2.c object/object2.h \
 	object/object-broken.c object/object-broken.h \
 	object/object-flavor.c object/object-flavor.h \
 	object/object-generator.c object/object-generator.h \

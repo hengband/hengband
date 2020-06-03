@@ -455,9 +455,6 @@
     <ClCompile Include="..\..\src\object\object1.c">
       <Filter>object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object2.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\object\object-broken.c">
       <Filter>object</Filter>
     </ClCompile>
@@ -2099,9 +2096,6 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\item-use-flags.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\object2.h">
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\torch.h">

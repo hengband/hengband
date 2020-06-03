@@ -8,7 +8,6 @@
 #include "monster/monster.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object/object-kind-hook.h"
-#include "object/object2.h"
 #include "room/rooms.h"
 #include "system/system-variables.h"
 #include "util/util.h"

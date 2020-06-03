@@ -17,7 +17,6 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object-stack.h"
-#include "object/object2.h"
 #include "object-enchant/special-object-flags.h"
 #include "system/system-variables.h"
 #include "view/object-describer.h"
