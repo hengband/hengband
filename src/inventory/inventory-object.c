@@ -4,8 +4,8 @@
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
+#include "object/object-stack.h"
 #include "object/object-value.h"
-#include "object/object2.h"
 #include "player/player-effects.h" // 暫定、相互参照している.
 #include "util/object-sort.h"
 #include "view/object-describer.h"

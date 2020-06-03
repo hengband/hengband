@@ -40,7 +40,7 @@
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
-#include "object/object2.h"
+#include "object/object-stack.h"
 #include "object-enchant/special-object-flags.h"
 #include "sv-definition/sv-lite-types.h"
 #include "object-enchant/trc-types.h"

@@ -70,7 +70,7 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
-#include "object/object2.h"
+#include "object/object-stack.h"
 #include "object-enchant/old-ego-extra-values.h" // TODO v1.5.0以前のセーブファイルをロードする処理を分離する.
 #include "object/object-value.h"
 #include "sv-definition/sv-armor-types.h"

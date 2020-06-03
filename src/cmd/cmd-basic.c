@@ -44,7 +44,7 @@
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object/object2.h"
+#include "object/object-stack.h"
 #include "object-enchant/special-object-flags.h"
 #include "sv-definition/sv-bow-types.h"
 #include "object/torch.h"

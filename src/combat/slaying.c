@@ -3,7 +3,7 @@
 #include "object-enchant/artifact.h"
 #include "realm/realm-hex.h"
 #include "mind/samurai-slaying.h"
-#include "object/object2.h"
+#include "object/object1.h"
 #include "object/torch.h"
 #include "object-enchant/tr-types.h"
 
