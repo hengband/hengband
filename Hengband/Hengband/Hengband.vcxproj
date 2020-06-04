@@ -354,6 +354,7 @@
     <ClCompile Include="..\..\src\mspell\mspell-ball.c" />
     <ClCompile Include="..\..\src\spell\spells-describer.c" />
     <ClCompile Include="..\..\src\spell\spells-detection.c" />
+    <ClCompile Include="..\..\src\spell\spells-genocide.c" />
     <ClCompile Include="..\..\src\spell\spells-hex.c" />
     <ClCompile Include="..\..\src\spell\spells-launcher.c" />
     <ClCompile Include="..\..\src\spell\spells-sight.c" />
@@ -566,6 +567,7 @@
     <ClInclude Include="..\..\src\realm\realm-hex-numbers.h" />
     <ClInclude Include="..\..\src\realm\realm-song-numbers.h" />
     <ClInclude Include="..\..\src\spell\spells-describer.h" />
+    <ClInclude Include="..\..\src\spell\spells-genocide.h" />
     <ClInclude Include="..\..\src\spell\spells-hex.h" />
     <ClInclude Include="..\..\src\spell\spells-launcher.h" />
     <ClInclude Include="..\..\src\spell\spells-sight.h" />

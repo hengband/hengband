@@ -30,6 +30,7 @@
 #include "spell/process-effect.h"
 #include "spell/spells-detection.h"
 #include "spell/spells-floor.h"
+#include "spell/spells-genocide.h"
 #include "spell/spells-hex.h"
 #include "spell/spells-launcher.h"
 #include "spell/spells-object.h"

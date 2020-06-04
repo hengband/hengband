@@ -16,6 +16,7 @@
 #include "player/player-races-table.h"
 #include "player/player-status.h"
 #include "spell/spells-floor.h"
+#include "spell/spells-genocide.h"
 #include "spell/spells-launcher.h"
 #include "spell/spells-object.h"
 #include "spell/spells-sight.h"

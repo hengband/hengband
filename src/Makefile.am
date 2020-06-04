@@ -392,6 +392,7 @@ hengband_SOURCES = \
 	spell/spells-diceroll.c spell/spells-diceroll.h \
 	spell/spells-execution.c spell/spells-execution.h \
 	spell/spells-floor.c spell/spells-floor.h \
+	spell/spells-genocide.c spell/spells-genocide.h \
 	spell/spells-hex.c spell/spells-hex.h \
 	spell/spells-launcher.c spell/spells-launcher.h \
 	spell/spells-object.c spell/spells-object.h \

@@ -11,6 +11,7 @@
 #include "spell/process-effect.h"
 #include "spell/spells-detection.h"
 #include "spell/spells-diceroll.h"
+#include "spell/spells-genocide.h"
 #include "spell/spells-launcher.h"
 #include "spell/spells-object.h"
 #include "spell/spells-sight.h"

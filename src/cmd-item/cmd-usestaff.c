@@ -19,6 +19,7 @@
 #include "player/player-status.h"
 #include "spell/spells-detection.h"
 #include "spell/spells-floor.h"
+#include "spell/spells-genocide.h"
 #include "spell/spells-sight.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
