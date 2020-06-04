@@ -7,6 +7,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"
 #include "spell/process-effect.h"
+#include "spell/spells-sight.h"
 #include "spell/spells-type.h"
 #include "term/gameterm.h"
 #include "view/display-main-window.h"
@@ -214,4 +215,20 @@ void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam)
             }
         }
     }
+}
+
+/*!
+ * 幻惑の光 @ 鏡使いだけでなく混沌の戦士も使える
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @return 常にTRUE
+ */
+bool confusing_light(player_type *creature_ptr)
+{
+    msg_print(_("辺りを睨んだ...", "You glare nearby monsters..."));
+    slow_monsters(creature_ptr, creature_ptr->lev);
+    stun_monsters(creature_ptr, creature_ptr->lev * 4);
+    confuse_monsters(creature_ptr, creature_ptr->lev * 4);
+    turn_monsters(creature_ptr, creature_ptr->lev * 4);
+    stasis_monsters(creature_ptr, creature_ptr->lev * 4);
+    return TRUE;
 }
