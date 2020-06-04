@@ -1,4 +1,5 @@
 ﻿#include "spell/spells-hex.h"
+#include "floor/floor.h"
 #include "player/player-effects.h" // todo 相互参照している.
 #include "player/player-skill.h"
 #include "realm/realm-hex-numbers.h"

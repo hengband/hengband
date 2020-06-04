@@ -1,7 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
 #include "object/tval-types.h"
-#include "spell/range-calc.h"
 #include "spell/technic-info-table.h"
 #include "player/player-status.h"
 #include "player/player-classes-table.h"

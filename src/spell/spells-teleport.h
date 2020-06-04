@@ -1,10 +1,10 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "spell/spells-util.h"
 
 bool teleport_monster(player_type *caster_ptr, DIRECTION dir, int distance);
 bool teleport_swap(player_type *caster_ptr, DIRECTION dir);
-
 bool teleport_away(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION dis, teleport_flags mode);
 void teleport_monster_to(player_type *caster_ptr, MONSTER_IDX m_idx, POSITION ty, POSITION tx, int power, teleport_flags mode);
 bool teleport_player_aux(player_type *creature_ptr, POSITION dis, bool is_quantum_effect, teleport_flags mode);

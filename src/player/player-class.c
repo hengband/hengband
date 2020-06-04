@@ -1,5 +1,9 @@
-﻿
-#include "system/angband.h"
+﻿/*!
+ * @brief プレーヤーの職業に関する諸テーブル定義
+ * @date 2019/04/30
+ * @author deskull
+ */
+
 #include "player/player-class.h"
 
 /*

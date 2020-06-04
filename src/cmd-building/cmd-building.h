@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "object/tval-types.h"
 #include "realm/realm-names-table.h"
 #include "player/player-race.h"
 #include "player/race-info-table.h"

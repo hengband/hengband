@@ -5,6 +5,7 @@
 #include "effect/effect-item.h"
 #include "effect/effect-monster.h"
 #include "effect/spells-effect-util.h"
+#include "floor/floor.h"
 #include "spell/process-effect.h"
 #include "spell/spells-type.h"
 #include "term/gameterm.h"
