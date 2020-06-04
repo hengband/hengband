@@ -151,28 +151,7 @@ static int buf_sprintf(BUF *buf, concptr fmt, ...)
 
 	if (ret < 0) return -1;
 
-#if ('\r' == 0x0a && '\n' == 0x0d)
-	{
-		/*
-		 * Originally '\r'= CR (= 0x0d) and '\n'= LF (= 0x0a)
-		 * But for MPW (Macintosh Programers Workbench), these
-		 * are reversed so that '\r'=LF and '\n'=CR unless the
-		 * -noMapCR option is not defined.
-		 *
-		 * We need to swap back these here since the score
-		 * dump text should be written using LF as the end of
-		 * line.
-		 */
-		char *ptr;
-		for (ptr = tmpbuf; *ptr; ptr++)
-		{
-			if (0x0d == *ptr) *ptr = 0x0a;
-		}
-	}
-#endif
-
 	ret = buf_append(buf, tmpbuf, strlen(tmpbuf));
-
 	return ret;
 }
 
