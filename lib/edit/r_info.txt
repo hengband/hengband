@@ -22692,16 +22692,16 @@ D:あなたの死体は蘇ることなく灰になるだろう。
 N:1125:赤鬼
 E:Red ogre
 G:O:R
-I:115:35d10:20:65:15
-W:36:1:0:580:0:0
+I:110:20d18:20:65:15
+W:36:1:0:800:0:0
 B:CRUSH:HURT:10d4
 B:CRUSH:HURT:10d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
 F:DROP_CORPSE | DROP_SKELETON
 F:IM_FIRE | RES_NETH | NO_FEAR | HURT_COLD | DROP_60
-S:1_IN_10
+S:1_IN_9
 S:SCARE | BLIND | CONF | HOLD
-S:BA_FIRE | BO_NETH | BO_PLAS | S_DEMON
+S:BA_FIRE | BO_NETH | BO_PLAS
 D:$This ogre is the one of the weakest resitents in the hell.
 D:$  It hits sinners and gives punishment to them in the blood pond.
 D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
@@ -22710,16 +22710,16 @@ D:それは罪人を殴りつけ、血の池で劫罰を与え続ける。
 N:1126:青鬼
 E:Blue ogre
 G:O:b
-I:115:35d10:20:65:15
-W:36:1:0:580:0:0
+I:110:20d18:20:65:15
+W:36:1:0:800:0:0
 B:SLASH:HURT:10d4
 B:SLASH:HURT:10d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
 F:DROP_CORPSE | DROP_SKELETON
 F:IM_COLD | RES_NETH | NO_FEAR | HURT_FIRE | DROP_60
-S:1_IN_10
+S:1_IN_9
 S:SCARE | BLIND | CONF | HOLD
-S:BA_COLD | BO_NETH | BO_ICEE | S_DEMON
+S:BA_COLD | BO_NETH | BO_ICEE
 D:$This ogre is the one of the weakest resitents in the hell.
 D:$  It hashes sinners and gives punishment to them on the mountain of needles.
 D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
@@ -22728,16 +22728,16 @@ D:それは罪人を斬りつけ、針の山で劫罰を与え続ける。
 N:1127:緑鬼
 E:Green ogre
 G:O:G
-I:115:35d10:20:65:15
-W:36:1:0:580:0:0
+I:110:20d18:20:65:15
+W:36:1:0:800:0:0
 B:SLASH:HURT:10d4
 B:SLASH:HURT:10d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
 F:DROP_CORPSE | DROP_SKELETON
 F:IM_FIRE | IM_COLD | RES_NETH | NO_FEAR | DROP_60
-S:1_IN_10
+S:1_IN_9
 S:SCARE | BLIND | CONF | HOLD
-S:BO_PLAS | BO_ICEE | BO_NETH | S_DEMON
+S:BO_PLAS | BO_ICEE | BO_NETH
 D:$This ogre is the one of the weakest resitents in the hell.
 D:$  It slahes sinners and gives punishment to them by its heated axe.
 D:地獄に住む鬼達の中では、最も力のない者どもの一人だ。
@@ -22746,50 +22746,49 @@ D:それは罪人を斬りつけ、灼けた斧で劫罰を与え続ける。
 N:1128:首なし鬼
 E:Headless ogre
 G:O:U
-I:120:21d19:20:70:15
-W:38:1:0:660:0:0
+I:115:21d19:20:70:15
+W:38:1:0:900:0:0
 B:SLASH:HURT:11d4
 B:CRUSH:HURT:11d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | UNDEAD | INVISIBLE
 F:DROP_CORPSE | DROP_SKELETON | HURT_LITE
 F:IM_POIS | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP
-S:1_IN_10
+S:1_IN_9
 S:SCARE | BLIND | CONF | HOLD
-S:BA_FIRE | BA_COLD | BO_NETH | S_DEMON
+S:BA_FIRE | BA_COLD | BO_NETH
 D:$Considering its position as hell guard, this ogre has gone to Asura realm.
 D:$  It attacks whoever is innocent or guilty.
 D:鬼とあろうものが罪を犯して修羅の道へ堕ちた姿だ。
 D:それは罪人でも天上人でもなりふり構わず攻撃する。
 
+# 流石にAC777は攻撃が通らないので控えめに
 N:1129:金銀パールプレゼントの鬼
 E:Ogre gifting gold, silver and pearl
 G:O:y
-I:120:50d20:20:120:15
-W:40:10:0:700:0:0
-B:CRUSH:HURT:11d4
-B:SLASH:HURT:11d4
+I:120:37d21:20:177:15
+W:40:77:0:7777:0:0
+B:CRUSH:HURT:14d10
+B:SLASH:HURT:14d10
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL
 F:ONLY_GOLD | DROP_60 | DROP_90 | DROP_1D2 | DROP_2D2 | DROP_3D2 | DROP_4D2
 F:RES_LITE | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP | HURT_ROCK
-S:1_IN_8
-S:SCARE | BLIND | CONF | HOLD
-S:BR_LITE | BA_LITE | S_DEMON | CAUSE_2
+S:1_IN_7
+S:SCARE | BLIND | CONF | HOLD | BR_LITE | BA_LITE | CAUSE_2
 D:$Hmmm, you may have seen this ogre a long time ago.
 D:おや、どこかで見たことがあるぞ？
 
 N:1130:冥界オーガ
 E:Styx ogre
 G:O:s
-I:120:35d20:20:75:15
-W:44:1:0:800:0:0
+I:115:35d20:20:75:15
+W:44:1:0:1000:0:0
 B:CRUSH:SUPERHURT:10d4
 B:SLASH:SUPERHURT:10d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
 F:DROP_CORPSE | DROP_SKELETON | HURT_LITE
 F:IM_FIRE | RES_DARK | RES_NETH | NO_FEAR | NO_CONF | NO_SLEEP
 S:1_IN_8
-S:SCARE | BLIND | CONF | HOLD
-S:BO_NETH | BR_NETH
+S:SCARE | BLIND | CONF | HOLD | BO_NETH | BR_NETH
 D:$It is a ogre who guards Styx following its masters.
 D:$  It destroys cairn piled up by children having died before parents.
 D:奪衣婆と懸衣翁に仕え、三途の川に佇む鬼だ。
@@ -22798,8 +22797,8 @@ D:それは時々賽の河原を見回って、積石塚を破壊して回る。
 N:1131:土の鬼
 E:Earth ogre
 G:O:u
-I:120:40d20:25:80:10
-W:45:2:0:900:0:0
+I:115:40d20:25:80:10
+W:45:2:0:1100:0:0
 B:CRUSH:SUPERHURT:10d4
 B:CRUSH:SUPERHURT:10d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
@@ -22809,7 +22808,7 @@ F:NO_FEAR | NO_CONF | NO_SLEEP | DROP_90
 S:1_IN_7
 S:SCARE | BLIND | CONF | HOLD
 S:BR_WALL | BA_NETH | BR_PLAS | S_DEMON
-R:1125:4d3
+R:1125:5d3
 D:$This ogre has earthy colored skin.
 D:$  It doesn't only punish sinners but also leads lower-class ogres.
 D:土気色の肌をした鬼だ。
@@ -22818,8 +22817,8 @@ D:それは罪人を処罰すると同時に、下級の鬼達を統率してい
 N:1132:水の鬼
 E:Water ogre
 G:O:B
-I:120:40d20:25:80:10
-W:45:2:0:900:0:0
+I:115:40d20:25:80:10
+W:45:2:0:1100:0:0
 B:SLASH:SUPERHURT:10d4
 B:SLASH:SUPERHURT:10d4
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
@@ -22829,7 +22828,7 @@ F:NO_FEAR | NO_CONF | NO_SLEEP | DROP_90 | CAN_SWIM
 S:1_IN_7
 S:SCARE | BLIND | CONF | HOLD
 S:BO_WATE | BA_WATE | BA_NETH | S_DEMON
-R:1126:4d3
+R:1126:5d3
 D:$This ogre has stagnant river colored skin.
 D:$  It doesn't only punish sinners but also leads lower-class ogres.
 D:淀んだ川の色の肌をした鬼だ。
@@ -22840,8 +22839,8 @@ D:それは罪人を処罰すると同時に、下級の鬼達を統率してい
 N:1133:羅生門の鬼
 E:Ogre in Rajoumon
 G:O:v
-I:120:90d10:25:85:10
-W:46:2:0:1000:0:0
+I:115:90d10:25:85:10
+W:46:2:0:1400:0:0
 B:SLASH:SUPERHURT:10d5
 B:SLASH:SUPERHURT:10d5
 F:FORCE_MAXHP | BASH_DOOR | MOVE_BODY | EVIL | INVISIBLE
@@ -22850,7 +22849,7 @@ F:IM_FIRE | IM_COLD | RES_DARK | RES_NETH | NO_FEAR | NO_CONF
 S:1_IN_6
 S:SCARE | BLIND | CONF | HOLD
 S:BA_NUKE | BA_NETH | BR_GRAV | S_DEMON
-R:1127:4d3
+R:1127:5d3
 D:$It lives in Rajoumon.
 D:$  It doesn't only punish sinners but also leads lower-class ogres.
 D:羅生門に巣食う鬼だ。
