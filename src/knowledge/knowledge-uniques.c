@@ -11,7 +11,42 @@
 #include "system/angband.h"
 
 /*!
+ * @brief モンスターリストを走査し、生きているか死んでいるユニークだけを抽出する
+ * @param r_ptr モンスター種別への参照ポインタ
  * @param is_alive 生きているユニークのリストならばTRUE、撃破したユニークのリストならばFALSE
+ * @return is_aliveの条件に見合うユニークがいたらTRUE、それ以外はFALSE
+ */
+static bool sweep_uniques(monster_race *r_ptr, bool is_alive)
+{
+    if (!r_ptr->name)
+        return FALSE;
+
+    if (!(r_ptr->flags1 & RF1_UNIQUE))
+
+        return FALSE;
+
+    if (!cheat_know && !r_ptr->r_sights)
+        return FALSE;
+
+    if (!r_ptr->rarity || ((r_ptr->rarity > 100) && !(r_ptr->flags1 & RF1_QUESTOR)))
+        return FALSE;
+
+    if (is_alive) {
+        if (r_ptr->max_num == 0)
+            return FALSE;
+    } else {
+        if (r_ptr->max_num > 0)
+            return FALSE;
+    }
+
+    return TRUE;
+}
+
+/*!
+ * @brief 既知の生きているユニークまたは撃破済ユニークの一覧を表示させる
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param is_alive 生きているユニークのリストならばTRUE、撃破したユニークのリストならばFALSE
+ * @return なし
  */
 void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
 {
@@ -34,21 +69,8 @@ void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
     int n = 0;
     for (IDX i = 1; i < max_r_idx; i++) {
         monster_race *r_ptr = &r_info[i];
-        if (!r_ptr->name)
+        if (!sweep_uniques(r_ptr, is_alive))
             continue;
-        if (!(r_ptr->flags1 & RF1_UNIQUE))
-            continue;
-        if (!cheat_know && !r_ptr->r_sights)
-            continue;
-        if (!r_ptr->rarity || ((r_ptr->rarity > 100) && !(r_ptr->flags1 & RF1_QUESTOR)))
-            continue;
-        if (is_alive) {
-            if (r_ptr->max_num == 0)
-                continue;
-        } else {
-            if (r_ptr->max_num > 0)
-                continue;
-        }
 
         if (r_ptr->level) {
             int lev = (r_ptr->level - 1) / 10;
