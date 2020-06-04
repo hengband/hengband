@@ -10,6 +10,31 @@
 #include "knowledge-items.h"
 #include "system/angband.h"
 
+typedef struct unique_list_type {
+    bool is_alive;
+    u16b why;
+    IDX *who;
+    int num_uniques[10];
+    int num_uniques_surface;
+    int num_uniques_over100;
+    int num_uniques_total;
+    int max_lev;
+} unique_list_type;
+
+unique_list_type *initialize_unique_lsit_type(unique_list_type *unique_list_ptr, bool is_alive)
+{
+    unique_list_ptr->is_alive = is_alive;
+    unique_list_ptr->why = 2;
+    unique_list_ptr->num_uniques_surface = 0;
+    unique_list_ptr->num_uniques_over100 = 0;
+    unique_list_ptr->num_uniques_total = 0;
+    unique_list_ptr->max_lev = -1;
+    for (IDX i = 0; i < 10; i++)
+        unique_list_ptr->num_uniques[i] = 0;
+
+    return unique_list_ptr;
+}
+
 /*!
  * @brief モンスターリストを走査し、生きているか死んでいるユニークだけを抽出する
  * @param r_ptr モンスター種別への参照ポインタ
@@ -50,83 +75,76 @@ static bool sweep_uniques(monster_race *r_ptr, bool is_alive)
  */
 void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
 {
-    u16b why = 2;
-    IDX *who;
-    int num_uniques[10];
-    int num_uniques_surface = 0;
-    int num_uniques_over100 = 0;
-    int num_uniques_total = 0;
-    int max_lev = -1;
-    for (IDX i = 0; i < 10; i++)
-        num_uniques[i] = 0;
-
+    unique_list_type tmp_list;
+    unique_list_type *unique_list_ptr = initialize_unique_lsit_type(&tmp_list, is_alive);
     FILE *fff = NULL;
     GAME_TEXT file_name[FILE_NAME_SIZE];
     if (!open_temporary_file(&fff, file_name))
         return;
 
-    C_MAKE(who, max_r_idx, MONRACE_IDX);
+    C_MAKE(unique_list_ptr->who, max_r_idx, MONRACE_IDX);
     int n = 0;
     for (IDX i = 1; i < max_r_idx; i++) {
         monster_race *r_ptr = &r_info[i];
-        if (!sweep_uniques(r_ptr, is_alive))
+        if (!sweep_uniques(r_ptr, unique_list_ptr->is_alive))
             continue;
 
         if (r_ptr->level) {
             int lev = (r_ptr->level - 1) / 10;
             if (lev < 10) {
-                num_uniques[lev]++;
-                if (max_lev < lev)
-                    max_lev = lev;
+                unique_list_ptr->num_uniques[lev]++;
+                if (unique_list_ptr->max_lev < lev)
+                    unique_list_ptr->max_lev = lev;
             } else
-                num_uniques_over100++;
+                unique_list_ptr->num_uniques_over100++;
         } else
-            num_uniques_surface++;
+            unique_list_ptr->num_uniques_surface++;
 
-        who[n++] = i;
+        unique_list_ptr->who[n++] = i;
     }
 
-    ang_sort(who, &why, n, ang_sort_comp_hook, ang_sort_swap_hook);
-    if (num_uniques_surface) {
-        concptr surface_desc
-            = is_alive ? _("     地上  生存: %3d体\n", "      Surface  alive: %3d\n") : _("     地上  死亡: %3d体\n", "      Surface  dead: %3d\n");
-        fprintf(fff, surface_desc, num_uniques_surface);
-        num_uniques_total += num_uniques_surface;
+    ang_sort(unique_list_ptr->who, &unique_list_ptr->why, n, ang_sort_comp_hook, ang_sort_swap_hook);
+    if (unique_list_ptr->num_uniques_surface) {
+        concptr surface_desc = unique_list_ptr->is_alive ? _("     地上  生存: %3d体\n", "      Surface  alive: %3d\n")
+                                                         : _("     地上  死亡: %3d体\n", "      Surface  dead: %3d\n");
+        fprintf(fff, surface_desc, unique_list_ptr->num_uniques_surface);
+        unique_list_ptr->num_uniques_total += unique_list_ptr->num_uniques_surface;
     }
 
-    for (IDX i = 0; i <= max_lev; i++) {
-        concptr dungeon_desc
-            = is_alive ? _("%3d-%3d階  生存: %3d体\n", "Level %3d-%3d  alive: %3d\n") : _("%3d-%3d階  死亡: %3d体\n", "Level %3d-%3d  dead: %3d\n");
-        fprintf(fff, dungeon_desc, 1 + i * 10, 10 + i * 10, num_uniques[i]);
-        num_uniques_total += num_uniques[i];
+    for (IDX i = 0; i <= unique_list_ptr->max_lev; i++) {
+        concptr dungeon_desc = unique_list_ptr->is_alive ? _("%3d-%3d階  生存: %3d体\n", "Level %3d-%3d  alive: %3d\n")
+                                                         : _("%3d-%3d階  死亡: %3d体\n", "Level %3d-%3d  dead: %3d\n");
+        fprintf(fff, dungeon_desc, 1 + i * 10, 10 + i * 10, unique_list_ptr->num_uniques[i]);
+        unique_list_ptr->num_uniques_total += unique_list_ptr->num_uniques[i];
     }
 
-    if (num_uniques_over100) {
-        concptr deep_desc
-            = is_alive ? _("101-   階  生存: %3d体\n", "Level 101-     alive: %3d\n") : _("101-   階  死亡: %3d体\n", "Level 101-     dead: %3d\n");
-        fprintf(fff, deep_desc, num_uniques_over100);
-        num_uniques_total += num_uniques_over100;
+    if (unique_list_ptr->num_uniques_over100) {
+        concptr deep_desc = unique_list_ptr->is_alive ? _("101-   階  生存: %3d体\n", "Level 101-     alive: %3d\n")
+                                                      : _("101-   階  死亡: %3d体\n", "Level 101-     dead: %3d\n");
+        fprintf(fff, deep_desc, unique_list_ptr->num_uniques_over100);
+        unique_list_ptr->num_uniques_total += unique_list_ptr->num_uniques_over100;
     }
 
-    if (num_uniques_total) {
+    if (unique_list_ptr->num_uniques_total) {
         fputs(_("---------  -----------\n", "-------------  ----------\n"), fff);
-        concptr total_desc
-            = is_alive ? _("     合計  生存: %3d体\n\n", "        Total  alive: %3d\n\n") : _("     合計  死亡: %3d体\n\n", "        Total  dead: %3d\n\n");
-        fprintf(fff, total_desc, num_uniques_total);
+        concptr total_desc = unique_list_ptr->is_alive ? _("     合計  生存: %3d体\n\n", "        Total  alive: %3d\n\n")
+                                                       : _("     合計  死亡: %3d体\n\n", "        Total  dead: %3d\n\n");
+        fprintf(fff, total_desc, unique_list_ptr->num_uniques_total);
     } else {
-        concptr no_unique_desc = is_alive ? _("現在は既知の生存ユニークはいません。\n", "No known uniques alive.\n")
+        concptr no_unique_desc = unique_list_ptr->is_alive ? _("現在は既知の生存ユニークはいません。\n", "No known uniques alive.\n")
                                           : _("現在は既知の撃破ユニークはいません。\n", "No known uniques dead.\n");
         fputs(no_unique_desc, fff);
     }
 
     for (int k = 0; k < n; k++) {
-        monster_race *r_ptr = &r_info[who[k]];
+        monster_race *r_ptr = &r_info[unique_list_ptr->who[k]];
         fprintf(fff, _("     %s (レベル%d)\n", "     %s (level %d)\n"), r_name + r_ptr->name, (int)r_ptr->level);
     }
 
-    C_KILL(who, max_r_idx, s16b);
+    C_KILL(unique_list_ptr->who, max_r_idx, s16b);
     my_fclose(fff);
-    concptr title_desc = is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");
+    concptr title_desc
+        = unique_list_ptr->is_alive ? _("まだ生きているユニーク・モンスター", "Alive Uniques") : _("もう撃破したユニーク・モンスター", "Dead Uniques");
     (void)show_file(creature_ptr, TRUE, file_name, title_desc, 0, 0);
     fd_kill(file_name);
 }
