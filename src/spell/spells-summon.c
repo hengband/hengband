@@ -6,8 +6,8 @@
 #include "monster/monster-status.h"
 #include "object/item-use-flags.h"
 #include "object/object-hook.h"
+#include "spell/spells-sight.h"
 #include "sv-definition/sv-other-types.h"
-#include "spell/spells2.h"
 
 /*!
 * @brief トランプ魔法独自の召喚処理を行う / Handle summoning and failure of trump spells

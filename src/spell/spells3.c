@@ -66,6 +66,7 @@
 #include "spell/spells-execution.h"
 #include "spell/spells-floor.h"
 #include "spell/spells-launcher.h"
+#include "spell/spells-sight.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-teleport.h"
 #include "spell/spells2.h"
