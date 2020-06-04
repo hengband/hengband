@@ -249,6 +249,7 @@ hengband_SOURCES = \
 	mind/racial-cavalry.c mind/racial-cavalry.h \
 	mind/racial-draconian.c mind/racial-draconian.h \
 	mind/racial-force-trainer.c mind/racial-force-trainer.h \
+	mind/racial-mindcrafter.c mind/racial-mindcrafter.h \
 	mind/racial-mirror-master.c mind/racial-mirror-master.h \
 	mind/racial-ninja.c mind/racial-ninja.h \
 	mind/racial-samurai.c mind/racial-samurai.h \

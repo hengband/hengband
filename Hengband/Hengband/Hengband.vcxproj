@@ -208,6 +208,7 @@
     <ClCompile Include="..\..\src\mind\racial-cavalry.c" />
     <ClCompile Include="..\..\src\mind\racial-draconian.c" />
     <ClCompile Include="..\..\src\mind\racial-force-trainer.c" />
+    <ClCompile Include="..\..\src\mind\racial-mindcrafter.c" />
     <ClCompile Include="..\..\src\mind\racial-mirror-master.c" />
     <ClCompile Include="..\..\src\mind\monk-attack.c" />
     <ClCompile Include="..\..\src\mind\racial-ninja.c" />
@@ -510,6 +511,7 @@
     <ClInclude Include="..\..\src\mind\racial-cavalry.h" />
     <ClInclude Include="..\..\src\mind\racial-draconian.h" />
     <ClInclude Include="..\..\src\mind\racial-force-trainer.h" />
+    <ClInclude Include="..\..\src\mind\racial-mindcrafter.h" />
     <ClInclude Include="..\..\src\mind\racial-mirror-master.h" />
     <ClInclude Include="..\..\src\mind\monk-attack.h" />
     <ClInclude Include="..\..\src\mind\racial-ninja.h" />

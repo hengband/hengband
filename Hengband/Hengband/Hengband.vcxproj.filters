@@ -1142,6 +1142,9 @@
     <ClCompile Include="..\..\src\mind\racial-draconian.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\racial-mindcrafter.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2438,6 +2441,9 @@
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\racial-draconian.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\racial-mindcrafter.h">
       <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
