@@ -40,7 +40,6 @@ void cast_shuffle(player_type* caster_ptr);
 bool vampirism(player_type* caster_ptr);
 bool hit_and_away(player_type* caster_ptr);
 bool psychometry(player_type* caster_ptr);
-bool draconian_breath(player_type* creature_ptr);
 bool android_inside_weapon(player_type* creature_ptr);
 bool create_ration(player_type* crature_ptr);
 void hayagake(player_type* creature_ptr);
