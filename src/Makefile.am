@@ -473,8 +473,8 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat -Icore -Idungeon \
 	-Ieffect -Ifloor -Igrid -Iinventory -Iio -Iio-dump -Iknowledge -Imarket \
 	-Imind -Imonster -Imspell -Imutation -Iobject -Iobject-enchant -Ipet \
-	-Iplayer -Irealm -Iroom -Ispell -Isv-definition -Isystem -Iterm -Iutil \
-	-Iview -Iwizard -Iworld
+	-Iplayer -Irealm -Iroom -Ispecific-object -Ispell -Isv-definition -Isystem \
+	-Iterm -Iutil -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID
