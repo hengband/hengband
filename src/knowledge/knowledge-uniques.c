@@ -42,6 +42,7 @@ unique_list_type *initialize_unique_lsit_type(unique_list_type *unique_list_ptr,
  * @param r_ptr モンスター種別への参照ポインタ
  * @param is_alive 生きているユニークのリストならばTRUE、撃破したユニークのリストならばFALSE
  * @return is_aliveの条件に見合うユニークがいたらTRUE、それ以外はFALSE
+ * @details 闘技場のモンスターとは再戦できないので、生きているなら表示から外す
  */
 static bool sweep_uniques(monster_race *r_ptr, bool is_alive)
 {
@@ -55,7 +56,8 @@ static bool sweep_uniques(monster_race *r_ptr, bool is_alive)
     if (!cheat_know && !r_ptr->r_sights)
         return FALSE;
 
-    if (!r_ptr->rarity || ((r_ptr->rarity > 100) && !(r_ptr->flags1 & RF1_QUESTOR)))
+    bool is_except_arena = is_alive ? (r_ptr->rarity > 100) && ((r_ptr->flags1 & RF1_QUESTOR) == 0) : FALSE;
+    if (!r_ptr->rarity || is_except_arena)
         return FALSE;
 
     if (is_alive) {
