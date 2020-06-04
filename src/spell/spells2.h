@@ -76,7 +76,6 @@ bool project_hook(player_type* caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POI
 bool project_all_los(player_type* caster_ptr, EFFECT_ID typ, HIT_POINT dam);
 bool eat_magic(player_type* caster_ptr, int power);
 void discharge_minion(player_type* caster_ptr);
-void remove_all_mirrors(player_type* caster_ptr, bool explode);
 void ring_of_power(player_type* caster_ptr, DIRECTION dir);
 void wild_magic(player_type* caster_ptr, int spell);
 void cast_meteor(player_type* caster_ptr, HIT_POINT dam, POSITION rad);

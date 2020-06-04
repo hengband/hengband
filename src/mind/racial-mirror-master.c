@@ -1,6 +1,9 @@
 ﻿#include "system/angband.h"
 #include "cmd-action/cmd-pet.h"
+#include "effect/effect-characteristics.h"
 #include "mind/racial-mirror-master.h"
+#include "spell/process-effect.h"
+#include "spell/spells-type.h"
 #include "world/world.h"
 
 /*
@@ -38,4 +41,27 @@ bool mirror_concentration(player_type *creature_ptr)
 
     creature_ptr->redraw |= PR_MANA;
     return TRUE;
+}
+
+/*!
+ * @brief 全鏡の消去 / Remove all mirrors in this floor
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @param explode 爆発処理を伴うならばTRUE
+ * @return なし
+ */
+void remove_all_mirrors(player_type *caster_ptr, bool explode)
+{
+    for (POSITION x = 0; x < caster_ptr->current_floor_ptr->width; x++) {
+        for (POSITION y = 0; y < caster_ptr->current_floor_ptr->height; y++) {
+            if (!is_mirror_grid(&caster_ptr->current_floor_ptr->grid_array[y][x]))
+                continue;
+
+            remove_mirror(caster_ptr, y, x);
+            if (!explode)
+                continue;
+
+            project(caster_ptr, 0, 2, y, x, caster_ptr->lev / 2 + 5, GF_SHARDS,
+                (PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL | PROJECT_JUMP | PROJECT_NO_HANGEKI), -1);
+        }
+    }
 }
