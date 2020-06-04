@@ -560,9 +560,6 @@
     <ClCompile Include="..\..\src\io\load.c">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\chest.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\grid\grid.c">
       <Filter>grid</Filter>
     </ClCompile>
@@ -860,9 +857,6 @@
     <ClCompile Include="..\..\src\combat\player-attack.c">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\death-scythe.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mind\racial-force-trainer.c">
       <Filter>mind</Filter>
     </ClCompile>
@@ -895,9 +889,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\util\util.c">
       <Filter>util</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object\torch.c">
-      <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\combat\melee-switcher.c">
       <Filter>combat</Filter>
@@ -1052,9 +1043,6 @@
     <ClCompile Include="..\..\src\realm\realm-names-table.c">
       <Filter>realm</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\bow.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\cmd-building\cmd-building.c">
       <Filter>cmd-building</Filter>
     </ClCompile>
@@ -1123,6 +1111,18 @@
     </ClCompile>
     <ClCompile Include="..\..\src\mind\racial-cavalry.c">
       <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\bow.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\chest.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\torch.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\death-scythe.c">
+      <Filter>specific-object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1735,9 +1735,6 @@
     <ClInclude Include="..\..\src\io\load.h">
       <Filter>io</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\chest.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\grid\feature.h">
       <Filter>grid</Filter>
     </ClInclude>
@@ -2059,9 +2056,6 @@
     <ClInclude Include="..\..\src\combat\player-attack-util.h">
       <Filter>combat</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\death-scythe.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mind\racial-force-trainer.h">
       <Filter>mind</Filter>
     </ClInclude>
@@ -2105,9 +2099,6 @@
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\object\item-use-flags.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\torch.h">
       <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\melee-switcher.h">
@@ -2260,9 +2251,6 @@
     <ClInclude Include="..\..\src\realm\realm-names-table.h">
       <Filter>realm</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\bow.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\cmd-building\cmd-building.h">
       <Filter>cmd-building</Filter>
     </ClInclude>
@@ -2404,6 +2392,18 @@
     <ClInclude Include="..\..\src\mind\racial-cavalry.h">
       <Filter>mind</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\object\bow.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\chest.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\torch.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\death-scythe.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2529,6 +2529,9 @@
     </Filter>
     <Filter Include="perception">
       <UniqueIdentifier>{e42f1944-e95c-42a8-97bf-9f959b313142}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="specific-object">
+      <UniqueIdentifier>{d12d97f4-76e6-4f8e-9f45-9905cf3863f9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
