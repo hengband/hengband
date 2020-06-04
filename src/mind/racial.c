@@ -20,6 +20,7 @@
 #include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"
 #include "io/targeting.h"
+#include "mind/racial-balrog.h"
 #include "mind/racial-cavalry.h"
 #include "mind/racial-draconian.h"
 #include "mind/racial-mirror-master.h"

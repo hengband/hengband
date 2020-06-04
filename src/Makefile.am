@@ -246,6 +246,7 @@ hengband_SOURCES = \
 	mind/mind.c mind/mind.h \
 	mind/monk-attack.c mind/monk-attack.h \
 	mind/racial.c mind/racial.h \
+	mind/racial-balrog.c mind/racial-balrog.h \
 	mind/racial-cavalry.c mind/racial-cavalry.h \
 	mind/racial-draconian.c mind/racial-draconian.h \
 	mind/racial-force-trainer.c mind/racial-force-trainer.h \
