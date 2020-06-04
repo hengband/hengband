@@ -24,6 +24,7 @@
 #include "player/player-effects.h"
 #include "player/player-status.h"
 #include "spell/spells-launcher.h"
+#include "spell/spells-lite.h"
 #include "spell/spells-sight.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"

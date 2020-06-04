@@ -29,6 +29,7 @@
 #include "io/targeting.h"
 #include "view/display-main-window.h"
 #include "spell/spells-launcher.h"
+#include "spell/spells-lite.h"
 #include "spell/spells-sight.h"
 #include "spell/spells-teleport.h"
 #include "spell/spells2.h"

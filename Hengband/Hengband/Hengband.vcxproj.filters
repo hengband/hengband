@@ -1136,6 +1136,9 @@
     <ClCompile Include="..\..\src\spell\spells-genocide.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-lite.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2426,6 +2429,9 @@
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-genocide.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-lite.h">
       <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>

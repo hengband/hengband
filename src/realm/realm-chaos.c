@@ -8,6 +8,7 @@
 #include "spell/spells-diceroll.h"
 #include "spell/spells-floor.h"
 #include "spell/spells-launcher.h"
+#include "spell/spells-lite.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"

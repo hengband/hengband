@@ -7,6 +7,7 @@
 #include "spell/spells-detection.h"
 #include "spell/spells-floor.h"
 #include "spell/spells-launcher.h"
+#include "spell/spells-lite.h"
 #include "spell/spells-sight.h"
 #include "spell/spells-status.h"
 #include "spell/spells-teleport.h"

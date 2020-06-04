@@ -395,6 +395,7 @@ hengband_SOURCES = \
 	spell/spells-genocide.c spell/spells-genocide.h \
 	spell/spells-hex.c spell/spells-hex.h \
 	spell/spells-launcher.c spell/spells-launcher.h \
+	spell/spells-lite.c spell/spells-lite.h \
 	spell/spells-object.c spell/spells-object.h \
 	spell/spells-sight.c spell/spells-sight.h \
 	spell/spells-summon.c spell/spells-summon.h \
