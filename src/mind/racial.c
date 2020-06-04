@@ -34,6 +34,7 @@
 #include "spell/spells-detection.h"
 #include "spell/spells-floor.h"
 #include "spell/spells-hex.h"
+#include "spell/spells-launcher.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-teleport.h"

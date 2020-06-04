@@ -33,6 +33,7 @@
 #include "player/selfinfo.h"
 #include "spell/spells-detection.h"
 #include "spell/spells-floor.h"
+#include "spell/spells-launcher.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-teleport.h"

@@ -382,24 +382,25 @@ hengband_SOURCES = \
 	specific-object/death-scythe.c specific-object/death-scythe.h \
 	specific-object/torch.c specific-object/torch.h \
 	\
-	spell/technic-info-table.c spell/technic-info-table.h \
-	spell/spells-describer.c spell/spells-describer.h \
-	spell/spells-execution.c spell/spells-execution.h \
-	spell/spells-util.h spell/spells-type.h \
+	spell/music-checker.c spell/music-checker.h \
 	spell/process-effect.c spell/process-effect.h \
 	spell/range-calc.c spell/range-calc.h \
 	spell/spells2.c spell/spells2.h \
 	spell/spells3.c spell/spells3.h \
-	spell/music-checker.c spell/music-checker.h \
+	spell/spells-describer.c spell/spells-describer.h \
+	spell/spells-detection.c spell/spells-detection.h \
 	spell/spells-diceroll.c spell/spells-diceroll.h \
+	spell/spells-execution.c spell/spells-execution.h \
 	spell/spells-floor.c spell/spells-floor.h \
 	spell/spells-hex.c spell/spells-hex.h \
+	spell/spells-launcher.c spell/spells-launcher.h \
 	spell/spells-object.c spell/spells-object.h \
+	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-status.c spell/spells-status.h \
 	spell/spells-teleport.c spell/spells-teleport.h \
-	spell/spells-summon.c spell/spells-summon.h \
+	spell/spells-util.h spell/spells-type.h \
 	spell/spells-world.c spell/spells-world.h \
-	spell/spells-detection.c spell/spells-detection.h \
+	spell/technic-info-table.c spell/technic-info-table.h \
 	\
 	store/store.c store/store.h \
 	store/black-market.c store/black-market.h \

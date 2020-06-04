@@ -9,6 +9,7 @@
 #include "player/player-move.h"
 #include "spell/spells-floor.h"
 #include "spell/spells-hex.h"
+#include "spell/spells-launcher.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-teleport.h"
 #include "spell/spells-type.h"

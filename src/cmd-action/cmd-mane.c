@@ -23,6 +23,7 @@
 #include "mspell/mspell-type.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
+#include "spell/spells-launcher.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-teleport.h"

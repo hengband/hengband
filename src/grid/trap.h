@@ -1,11 +1,4 @@
-﻿
-extern void init_normal_traps(void);
-extern FEAT_IDX choose_random_trap(player_type *trapped_ptr);
-extern void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x);
-extern void place_trap(player_type *trapped_ptr, POSITION y, POSITION x);
-extern void hit_trap(player_type *trapped_ptr, bool break_trap);
-
-extern const int chest_traps[64];
+﻿#pragma once
 
 /*!
  * 箱のトラップ定義 Chest trap flags
@@ -47,12 +40,15 @@ extern const int chest_traps[64];
 
 #define MAX_NORMAL_TRAPS 18
 
-
 /* Types of special traps */
 #define TRAP_OPEN       18
 #define TRAP_ARMAGEDDON 19
 #define TRAP_PIRANHA    20
 
+extern const int chest_traps[64];
 
-
-/* See init_feat_variables() in init2.c */
+void init_normal_traps(void);
+FEAT_IDX choose_random_trap(player_type *trapped_ptr);
+void disclose_grid(player_type *trapped_ptr, POSITION y, POSITION x);
+void place_trap(player_type *trapped_ptr, POSITION y, POSITION x);
+void hit_trap(player_type *trapped_ptr, bool break_trap);

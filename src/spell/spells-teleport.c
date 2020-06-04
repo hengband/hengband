@@ -19,8 +19,8 @@
 #include "object/object-hook.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
+#include "spell/spells-launcher.h"
 #include "spell/spells-type.h"
-#include "spell/spells2.h" // 相互参照している.
 #include "world/world.h"
 
 /*!

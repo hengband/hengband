@@ -22,9 +22,9 @@
 #include "player/player-class.h"
 #include "player/player-effects.h"
 #include "player/player-status.h"
+#include "spell/spells-launcher.h"
 #include "spell/spells-teleport.h"
 #include "spell/spells-type.h"
-#include "spell/spells2.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 

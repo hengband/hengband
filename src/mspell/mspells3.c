@@ -28,6 +28,7 @@
 #include "player/player-effects.h"
 #include "io/targeting.h"
 #include "view/display-main-window.h"
+#include "spell/spells-launcher.h"
 #include "spell/spells-teleport.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"

@@ -6,6 +6,7 @@
 #include "player/player-class.h"
 #include "player/player-effects.h"
 #include "spell/spells-detection.h"
+#include "spell/spells-launcher.h"
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"

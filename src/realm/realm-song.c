@@ -7,6 +7,7 @@
 #include "spell/process-effect.h"
 #include "spell/spells-detection.h"
 #include "spell/spells-floor.h"
+#include "spell/spells-launcher.h"
 #include "spell/spells-status.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"

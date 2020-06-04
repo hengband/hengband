@@ -37,6 +37,7 @@
 #include "spell/process-effect.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-hex.h"
+#include "spell/spells-launcher.h"
 #include "spell/spells-status.h"
 #include "spell/spells-teleport.h"
 #include "spell/spells-type.h"
