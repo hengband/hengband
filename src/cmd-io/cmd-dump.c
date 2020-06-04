@@ -77,7 +77,6 @@ void do_cmd_colors(player_type *creature_ptr, void(*process_autopick_file_comman
 	char tmp[160];
 	char buf[1024];
 	FILE *auto_dump_stream;
-	FILE_TYPE(FILE_TYPE_TEXT);
 	screen_save();
 	while (TRUE)
 	{

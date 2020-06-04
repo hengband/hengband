@@ -42,12 +42,6 @@
 #include "util/util.h"
 #include "view/display-main-window.h"
 
-#if defined(MACH_O_CARBON)
-#ifdef verify
-#undef verify
-#endif
-#endif
-
 /*!
  * @brief オブジェクト、地形の表示シンボルなど初期化する / Reset the "visual" lists
  * @return なし

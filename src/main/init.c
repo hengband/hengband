@@ -490,8 +490,6 @@ static errr init_info(concptr filename, header *head, void **info, char **name, 
 	}
 
 	/*** Dump the binary image file ***/
-	/* File type is "DATA" */
-	FILE_TYPE(FILE_TYPE_DATA);
 	path_build(buf, sizeof(buf), ANGBAND_DIR_DATA, format(_("%s_j.raw", "%s.raw"), filename));
 
 	/* Grab permissions */
@@ -1484,9 +1482,6 @@ void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(
 	BIT_FLAGS file_permission = 0664;
 	if (fd < 0)
 	{
-		/* File type is "DATA" */
-		FILE_TYPE(FILE_TYPE_DATA);
-
 		/* Grab permissions */
 		safe_setuid_grab();
 

@@ -50,9 +50,6 @@ errr file_character(player_type *creature_ptr, concptr name, update_playtime_pf 
 {
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, name);
-
-	FILE_TYPE(FILE_TYPE_TEXT);
-
 	int	fd = fd_open(buf, O_RDONLY);
 	if (fd >= 0)
 	{
@@ -279,7 +276,6 @@ errr counts_write(player_type *creature_ptr, int where, u32b count)
 	safe_setuid_drop();
 	if (fd < 0)
 	{
-		FILE_TYPE(FILE_TYPE_DATA);
 		safe_setuid_grab();
 		fd = fd_make(buf, 0644);
 		safe_setuid_drop();

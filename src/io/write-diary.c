@@ -55,7 +55,6 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
 	sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
-	FILE_TYPE(FILE_TYPE_TEXT);
 	*fff = my_fopen(buf, "a");
 	if (*fff) return TRUE;
 

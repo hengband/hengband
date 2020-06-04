@@ -109,7 +109,6 @@ static void do_cmd_erase_diary(void)
  */
 void do_cmd_diary(player_type *creature_ptr)
 {
-	FILE_TYPE(FILE_TYPE_TEXT);
 	screen_save();
 	int i;
 	while (TRUE)

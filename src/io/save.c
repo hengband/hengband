@@ -1425,8 +1425,6 @@ static bool wr_savefile_new(player_type *player_ptr)
  */
 static bool save_player_aux(player_type *player_ptr, char *name)
 {
-	FILE_TYPE(FILE_TYPE_SAVE);
-
 	/* Grab permissions */
 	safe_setuid_grab();
 
@@ -1799,9 +1797,6 @@ bool save_floor(player_type *player_ptr, saved_floor_type *sf_ptr, BIT_FLAGS mod
 
 	/* No file yet */
 	fff = NULL;
-
-	/* File type is "SAVE" */
-	FILE_TYPE(FILE_TYPE_SAVE);
 
 	/* Grab permissions */
 	safe_setuid_grab();

@@ -75,7 +75,6 @@ void do_cmd_visuals(player_type *creature_ptr, void(*process_autopick_file_comma
 	concptr empty_symbol = "<< ? >>";
 	if (use_bigtile) empty_symbol = "<< ?? >>";
 
-	FILE_TYPE(FILE_TYPE_TEXT);
 	screen_save();
 	while (TRUE)
 	{

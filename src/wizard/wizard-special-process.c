@@ -1630,9 +1630,7 @@ static void do_cmd_dump_options()
 	char buf[1024];
 	path_build(buf, sizeof buf, ANGBAND_DIR_USER, "opt_info.txt");
 
-	/* File type is "TEXT" */
 	FILE *fff;
-	FILE_TYPE(FILE_TYPE_TEXT);
 	fff = my_fopen(buf, "a");
 
 	if (!fff)

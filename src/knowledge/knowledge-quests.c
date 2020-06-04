@@ -29,7 +29,6 @@
   */
 void do_cmd_checkquest(player_type *creature_ptr)
 {
-	FILE_TYPE(FILE_TYPE_TEXT);
 	screen_save();
 	do_cmd_knowledge_quests(creature_ptr);
 	screen_load();

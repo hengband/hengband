@@ -19,7 +19,6 @@ void do_cmd_knowledge(player_type *creature_ptr)
 {
 	int i, p = 0;
 	bool need_redraw = FALSE;
-	FILE_TYPE(FILE_TYPE_TEXT);
 	screen_save();
 	while (TRUE)
 	{

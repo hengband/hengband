@@ -181,7 +181,6 @@ void do_cmd_save_screen_html_aux(char *filename, int message)
 {
 	TERM_LEN wid, hgt;
 	Term_get_size(&wid, &hgt);
-	FILE_TYPE(FILE_TYPE_TEXT);
 	FILE *fff;
 	fff = my_fopen(filename, "w");
 	if (!check_screen_html_can_open(fff, filename, message)) return;
@@ -287,7 +286,6 @@ static bool do_cmd_save_screen_text(int wid, int hgt)
 	FILE *fff;
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, "dump.txt");
-	FILE_TYPE(FILE_TYPE_TEXT);
 	fff = my_fopen(buf, "w");
 	if (!check_screen_text_can_open(fff, buf)) return FALSE;
 
