@@ -19,6 +19,7 @@ typedef struct unique_list_type {
     int num_uniques_over100;
     int num_uniques_total;
     int max_lev;
+    int n;
 } unique_list_type;
 
 unique_list_type *initialize_unique_lsit_type(unique_list_type *unique_list_ptr, bool is_alive)
@@ -29,6 +30,7 @@ unique_list_type *initialize_unique_lsit_type(unique_list_type *unique_list_ptr,
     unique_list_ptr->num_uniques_over100 = 0;
     unique_list_ptr->num_uniques_total = 0;
     unique_list_ptr->max_lev = -1;
+    unique_list_ptr->n = 0;
     for (IDX i = 0; i < 10; i++)
         unique_list_ptr->num_uniques[i] = 0;
 
@@ -67,43 +69,8 @@ static bool sweep_uniques(monster_race *r_ptr, bool is_alive)
     return TRUE;
 }
 
-/*!
- * @brief 既知の生きているユニークまたは撃破済ユニークの一覧を表示させる
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @param is_alive 生きているユニークのリストならばTRUE、撃破したユニークのリストならばFALSE
- * @return なし
- */
-void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
+static void display_uniques(unique_list_type *unique_list_ptr, FILE *fff)
 {
-    unique_list_type tmp_list;
-    unique_list_type *unique_list_ptr = initialize_unique_lsit_type(&tmp_list, is_alive);
-    FILE *fff = NULL;
-    GAME_TEXT file_name[FILE_NAME_SIZE];
-    if (!open_temporary_file(&fff, file_name))
-        return;
-
-    C_MAKE(unique_list_ptr->who, max_r_idx, MONRACE_IDX);
-    int n = 0;
-    for (IDX i = 1; i < max_r_idx; i++) {
-        monster_race *r_ptr = &r_info[i];
-        if (!sweep_uniques(r_ptr, unique_list_ptr->is_alive))
-            continue;
-
-        if (r_ptr->level) {
-            int lev = (r_ptr->level - 1) / 10;
-            if (lev < 10) {
-                unique_list_ptr->num_uniques[lev]++;
-                if (unique_list_ptr->max_lev < lev)
-                    unique_list_ptr->max_lev = lev;
-            } else
-                unique_list_ptr->num_uniques_over100++;
-        } else
-            unique_list_ptr->num_uniques_surface++;
-
-        unique_list_ptr->who[n++] = i;
-    }
-
-    ang_sort(unique_list_ptr->who, &unique_list_ptr->why, n, ang_sort_comp_hook, ang_sort_swap_hook);
     if (unique_list_ptr->num_uniques_surface) {
         concptr surface_desc = unique_list_ptr->is_alive ? _("     地上  生存: %3d体\n", "      Surface  alive: %3d\n")
                                                          : _("     地上  死亡: %3d体\n", "      Surface  dead: %3d\n");
@@ -132,15 +99,53 @@ void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
         fprintf(fff, total_desc, unique_list_ptr->num_uniques_total);
     } else {
         concptr no_unique_desc = unique_list_ptr->is_alive ? _("現在は既知の生存ユニークはいません。\n", "No known uniques alive.\n")
-                                          : _("現在は既知の撃破ユニークはいません。\n", "No known uniques dead.\n");
+                                                           : _("現在は既知の撃破ユニークはいません。\n", "No known uniques dead.\n");
         fputs(no_unique_desc, fff);
     }
 
-    for (int k = 0; k < n; k++) {
+    for (int k = 0; k < unique_list_ptr->n; k++) {
         monster_race *r_ptr = &r_info[unique_list_ptr->who[k]];
         fprintf(fff, _("     %s (レベル%d)\n", "     %s (level %d)\n"), r_name + r_ptr->name, (int)r_ptr->level);
     }
+}
 
+/*!
+ * @brief 既知の生きているユニークまたは撃破済ユニークの一覧を表示させる
+ * @param creature_ptr プレーヤーへの参照ポインタ
+ * @param is_alive 生きているユニークのリストならばTRUE、撃破したユニークのリストならばFALSE
+ * @return なし
+ */
+void do_cmd_knowledge_uniques(player_type *creature_ptr, bool is_alive)
+{
+    unique_list_type tmp_list;
+    unique_list_type *unique_list_ptr = initialize_unique_lsit_type(&tmp_list, is_alive);
+    FILE *fff = NULL;
+    GAME_TEXT file_name[FILE_NAME_SIZE];
+    if (!open_temporary_file(&fff, file_name))
+        return;
+
+    C_MAKE(unique_list_ptr->who, max_r_idx, MONRACE_IDX);
+    for (IDX i = 1; i < max_r_idx; i++) {
+        monster_race *r_ptr = &r_info[i];
+        if (!sweep_uniques(r_ptr, unique_list_ptr->is_alive))
+            continue;
+
+        if (r_ptr->level) {
+            int lev = (r_ptr->level - 1) / 10;
+            if (lev < 10) {
+                unique_list_ptr->num_uniques[lev]++;
+                if (unique_list_ptr->max_lev < lev)
+                    unique_list_ptr->max_lev = lev;
+            } else
+                unique_list_ptr->num_uniques_over100++;
+        } else
+            unique_list_ptr->num_uniques_surface++;
+
+        unique_list_ptr->who[unique_list_ptr->n++] = i;
+    }
+
+    ang_sort(unique_list_ptr->who, &unique_list_ptr->why, unique_list_ptr->n, ang_sort_comp_hook, ang_sort_swap_hook);
+    display_uniques(unique_list_ptr, fff);
     C_KILL(unique_list_ptr->who, max_r_idx, s16b);
     my_fclose(fff);
     concptr title_desc
