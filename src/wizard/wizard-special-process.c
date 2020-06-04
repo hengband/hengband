@@ -56,6 +56,7 @@
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "spell/spells-teleport.h"
 #include "spell/spells-util.h"
 #include "spell/spells-world.h"
 #include "spell/spells2.h"

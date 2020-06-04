@@ -396,6 +396,7 @@ hengband_SOURCES = \
 	spell/spells-hex.c spell/spells-hex.h \
 	spell/spells-object.c spell/spells-object.h \
 	spell/spells-status.c spell/spells-status.h \
+	spell/spells-teleport.c spell/spells-teleport.h \
 	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-world.c spell/spells-world.h \
 	spell/spells-detection.c spell/spells-detection.h \

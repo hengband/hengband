@@ -355,6 +355,7 @@
     <ClCompile Include="..\..\src\spell\spells-describer.c" />
     <ClCompile Include="..\..\src\spell\spells-detection.c" />
     <ClCompile Include="..\..\src\spell\spells-hex.c" />
+    <ClCompile Include="..\..\src\spell\spells-teleport.c" />
     <ClCompile Include="..\..\src\system\system-variables.c" />
     <ClCompile Include="..\..\src\core\show-file.c" />
     <ClCompile Include="..\..\src\monster\creature.c" />
@@ -564,6 +565,7 @@
     <ClInclude Include="..\..\src\realm\realm-song-numbers.h" />
     <ClInclude Include="..\..\src\spell\spells-describer.h" />
     <ClInclude Include="..\..\src\spell\spells-hex.h" />
+    <ClInclude Include="..\..\src\spell\spells-teleport.h" />
     <ClInclude Include="..\..\src\sv-definition\sv-amulet-types.h" />
     <ClInclude Include="..\..\src\sv-definition\sv-armor-types.h" />
     <ClInclude Include="..\..\src\sv-definition\sv-bow-types.h" />

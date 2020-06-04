@@ -45,7 +45,6 @@ bool wall_to_mud(player_type* caster_ptr, DIRECTION dir, HIT_POINT dam);
 bool destroy_door(player_type* caster_ptr, DIRECTION dir);
 bool disarm_trap(player_type* caster_ptr, DIRECTION dir);
 bool wizard_lock(player_type* caster_ptr, DIRECTION dir);
-bool teleport_monster(player_type* caster_ptr, DIRECTION dir, int distance);
 bool door_creation(player_type* caster_ptr, POSITION y, POSITION x);
 bool trap_creation(player_type* caster_ptr, POSITION y, POSITION x);
 bool tree_creation(player_type* caster_ptr, POSITION y, POSITION x);
@@ -71,7 +70,6 @@ bool control_one_undead(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL ple
 bool control_one_demon(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 bool charm_animal(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 bool mindblast_monsters(player_type* caster_ptr, HIT_POINT dam);
-bool teleport_swap(player_type* caster_ptr, DIRECTION dir);
 bool project_hook(player_type* caster_ptr, EFFECT_ID typ, DIRECTION dir, HIT_POINT dam, BIT_FLAGS flg);
 bool project_all_los(player_type* caster_ptr, EFFECT_ID typ, HIT_POINT dam);
 bool eat_magic(player_type* caster_ptr, int power);

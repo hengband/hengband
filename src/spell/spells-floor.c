@@ -26,7 +26,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
-#include "spell/spells3.h"
+#include "spell/spells-teleport.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 

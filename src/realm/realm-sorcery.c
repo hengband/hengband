@@ -1,19 +1,17 @@
-﻿#include "system/angband.h"
-#include "util/util.h"
-
+﻿#include "realm/realm-sorcery.h"
 #include "cmd-action/cmd-spell.h"
-#include "player/selfinfo.h"
-#include "player/avatar.h"
-
-#include "spell/spells-type.h"
-#include "spell/spells-status.h"
-#include "spell/spells-floor.h"
-#include "player/player-effects.h"
 #include "io/targeting.h"
-#include "realm/realm-sorcery.h"
+#include "player/avatar.h"
+#include "player/player-effects.h"
+#include "player/selfinfo.h"
+#include "spell/spells-detection.h"
+#include "spell/spells-floor.h"
+#include "spell/spells-status.h"
+#include "spell/spells-teleport.h"
+#include "spell/spells-type.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"
-#include "spell/spells-detection.h"
+#include "util/util.h"
 
 /*!
 * @brief 仙術領域魔法の各処理を行う

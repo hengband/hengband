@@ -4,21 +4,20 @@
  * @author Habu
  */
 
-#include "system/angband.h"
-#include "mspell/mspell-util.h"
-#include "mspell/mspell-type.h"
 #include "mspell/assign-monster-spell.h"
 #include "mspell/monster-spell.h"
-#include "spell/spells-type.h"
-#include "mspell/mspell-summon.h"
-#include "mspell/mspell-curse.h"
-#include "mspell/mspell-breath.h"
 #include "mspell/mspell-ball.h"
 #include "mspell/mspell-bolt.h"
+#include "mspell/mspell-breath.h"
+#include "mspell/mspell-curse.h"
 #include "mspell/mspell-floor.h"
-#include "mspell/mspell-status.h"
-#include "mspell/mspell-special.h"
 #include "mspell/mspell-particularity.h"
+#include "mspell/mspell-special.h"
+#include "mspell/mspell-status.h"
+#include "mspell/mspell-summon.h"
+#include "mspell/mspell-type.h"
+#include "mspell/mspell-util.h"
+#include "spell/spells-type.h"
 
 /*!
  * @brief モンスターからプレイヤーへの呪文の振り分け関数。 /

@@ -15,9 +15,9 @@
 #include "player/player-personalities-table.h"
 #include "spell/process-effect.h"
 #include "spell/spells-hex.h"
+#include "spell/spells-teleport.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
-#include "spell/spells3.h"
 
 /*!
  * @brief RF4_SHRIEKの処理。叫び。 /

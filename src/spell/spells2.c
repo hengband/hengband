@@ -35,7 +35,6 @@
 #include "monster/monster-race.h"
 #include "monster/monster-status.h"
 #include "mutation/mutation.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"
 #include "object/item-use-flags.h"
 #include "perception/object-perception.h"
@@ -51,7 +50,6 @@
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
-#include "player/player-move.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "spell/process-effect.h"
@@ -59,6 +57,7 @@
 #include "spell/spells-floor.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "spell/spells-teleport.h"
 #include "spell/spells-type.h"
 #include "spell/range-calc.h"
 #include "spell/spells3.h"
@@ -1322,66 +1321,6 @@ bool fire_blast(player_type *caster_ptr, EFFECT_ID typ, DIRECTION dir, DICE_NUMB
 
 
 /*!
- * @brief モンスターとの位置交換処理 / Switch position with a monster.
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
- * @return 作用が実際にあった場合TRUEを返す
- */
-bool teleport_swap(player_type *caster_ptr, DIRECTION dir)
-{
-	POSITION tx, ty;
-	if ((dir == 5) && target_okay(caster_ptr))
-	{
-		tx = target_col;
-		ty = target_row;
-	}
-	else
-	{
-		tx = caster_ptr->x + ddx[dir];
-		ty = caster_ptr->y + ddy[dir];
-	}
-
-	if (caster_ptr->anti_tele)
-	{
-		msg_print(_("不思議な力がテレポートを防いだ！", "A mysterious force prevents you from teleporting!"));
-		return FALSE;
-	}
-
-	grid_type* g_ptr;
-	g_ptr = &caster_ptr->current_floor_ptr->grid_array[ty][tx];
-	if (!g_ptr->m_idx || (g_ptr->m_idx == caster_ptr->riding))
-	{
-		msg_print(_("それとは場所を交換できません。", "You can't trade places with that!"));
-		return FALSE;
-	}
-
-	if ((g_ptr->info & CAVE_ICKY) || (distance(ty, tx, caster_ptr->y, caster_ptr->x) > caster_ptr->lev * 3 / 2 + 10))
-	{
-		msg_print(_("失敗した。", "Failed to swap."));
-		return FALSE;
-	}
-
-	monster_type* m_ptr;
-	monster_race* r_ptr;
-	m_ptr = &caster_ptr->current_floor_ptr->m_list[g_ptr->m_idx];
-	r_ptr = &r_info[m_ptr->r_idx];
-
-	(void)set_monster_csleep(caster_ptr, g_ptr->m_idx, 0);
-
-	if (r_ptr->flagsr & RFR_RES_TELE)
-	{
-		msg_print(_("テレポートを邪魔された！", "Your teleportation is blocked!"));
-		if (is_original_ap_and_seen(caster_ptr, m_ptr)) r_ptr->r_flagsr |= RFR_RES_TELE;
-		return FALSE;
-	}
-
-	sound(SOUND_TELEPORT);
-	(void)move_player_effect(caster_ptr, ty, tx, MPE_FORGET_FLOW | MPE_HANDLE_STUFF | MPE_DONT_PICKUP);
-	return TRUE;
-}
-
-
-/*!
  * @brief 指定方向に飛び道具を飛ばす（フラグ任意指定） / Hack -- apply a "project()" in a direction (or at the target)
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param typ 効果属性
@@ -1563,20 +1502,6 @@ bool death_ray(player_type *caster_ptr, DIRECTION dir, PLAYER_LEVEL plev)
 {
 	BIT_FLAGS flg = PROJECT_STOP | PROJECT_KILL | PROJECT_REFLECTABLE;
 	return (project_hook(caster_ptr, GF_DEATH_RAY, dir, plev * 200, flg));
-}
-
-
-/*!
- * @brief モンスター用テレポート処理
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @param dir 方向(5ならばグローバル変数 target_col/target_row の座標を目標にする)
- * @param distance 移動距離
- * @return 作用が実際にあった場合TRUEを返す
- */
-bool teleport_monster(player_type *caster_ptr, DIRECTION dir, int distance)
-{
-	BIT_FLAGS flg = PROJECT_BEAM | PROJECT_KILL;
-	return (project_hook(caster_ptr, GF_AWAY_ALL, dir, distance, flg));
 }
 
 

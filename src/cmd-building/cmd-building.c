@@ -49,6 +49,7 @@
 #include "player/player-personalities-table.h"
 #include "player/player-status.h"
 #include "spell/spells-status.h"
+#include "spell/spells-teleport.h"
 #include "spell/spells3.h"
 #include "util/util.h"
 #include "world/world.h"

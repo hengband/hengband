@@ -30,6 +30,7 @@
 #include "spell/spells-object.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "spell/spells-teleport.h"
 #include "spell/spells-type.h"
 #include "spell/spells2.h"
 #include "spell/spells3.h"

@@ -12,8 +12,8 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell/process-effect.h"
 #include "spell/spells-hex.h"
+#include "spell/spells-teleport.h"
 #include "spell/spells-type.h"
-#include "spell/spells3.h"
 
 static void aura_fire_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
 {

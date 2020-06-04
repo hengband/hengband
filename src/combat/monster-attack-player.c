@@ -31,9 +31,8 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell/process-effect.h"
 #include "spell/spells-hex.h"
+#include "spell/spells-teleport.h"
 #include "spell/spells-type.h"
-#include "spell/spells2.h"
-#include "spell/spells3.h"
 
 static bool check_no_blow(player_type *target_ptr, monap_type *monap_ptr)
 {

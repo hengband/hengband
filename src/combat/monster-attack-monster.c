@@ -19,8 +19,8 @@
 #include "player/player-move.h"
 #include "spell/process-effect.h"
 #include "spell/spells-hex.h"
+#include "spell/spells-teleport.h"
 #include "spell/spells-type.h"
-#include "spell/spells3.h"
 
 /* todo モンスター共通なので、monster-attack-player.cでも使うはず */
 const int MAX_BLOW = 4;

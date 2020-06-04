@@ -1,7 +1,6 @@
 ﻿#include "system/angband.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
-
 #include "io/write-diary.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-io/cmd-save.h"
@@ -25,8 +24,8 @@
 #include "dungeon/dungeon.h"
 #include "world/world.h"
 #include "spell/process-effect.h"
+#include "spell/spells-teleport.h"
 #include "spell/spells2.h"
-#include "spell/spells3.h"
 #include "mind/racial-mirror-master.h"
 
 static s16b normal_traps[MAX_NORMAL_TRAPS];

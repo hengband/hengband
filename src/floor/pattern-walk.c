@@ -9,7 +9,7 @@
 #include "player/player-races-table.h"
 #include "realm/realm-song-numbers.h"
 #include "spell/spells-status.h"
-#include "spell/spells3.h"
+#include "spell/spells-teleport.h"
 
 /*!
  * @brief パターン終点到達時のテレポート処理を行う

@@ -7,7 +7,7 @@
 #include "effect/spells-effect-util.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
-#include "spell/spells3.h"
+#include "spell/spells-teleport.h"
 
 /*!
  * @brief 変わり身処理

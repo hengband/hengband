@@ -58,7 +58,7 @@
 #include "spell/process-effect.h"
 #include "spell/range-calc.h"
 #include "spell/spells-hex.h"
-#include "spell/spells3.h"
+#include "spell/spells-teleport.h"
 #include "mspell/mspell-learn-checker.h"
 #include "mspell/assign-monster-spell.h"
 

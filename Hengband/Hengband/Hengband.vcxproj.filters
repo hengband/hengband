@@ -1124,6 +1124,9 @@
     <ClCompile Include="..\..\src\mind\racial-ninja.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-teleport.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2403,6 +2406,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\racial-ninja.h">
       <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-teleport.h">
+      <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
