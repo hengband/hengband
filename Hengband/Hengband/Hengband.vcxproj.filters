@@ -1124,6 +1124,9 @@
     <ClCompile Include="..\..\src\specific-object\torch.c">
       <Filter>specific-object</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\racial-ninja.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2403,6 +2406,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\specific-object\torch.h">
       <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\racial-ninja.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

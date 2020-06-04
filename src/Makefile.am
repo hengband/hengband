@@ -244,12 +244,13 @@ hengband_SOURCES = \
 	market/building-actions-table.h \
 	\
 	mind/mind.c mind/mind.h \
+	mind/monk-attack.c mind/monk-attack.h \
 	mind/racial.c mind/racial.h \
 	mind/racial-cavalry.c mind/racial-cavalry.h \
-	mind/racial-samurai.c mind/racial-samurai.h \
-	mind/racial-mirror-master.c mind/racial-mirror-master.h \
 	mind/racial-force-trainer.c mind/racial-force-trainer.h \
-	mind/monk-attack.c mind/monk-attack.h \
+	mind/racial-mirror-master.c mind/racial-mirror-master.h \
+	mind/racial-ninja.c mind/racial-ninja.h \
+	mind/racial-samurai.c mind/racial-samurai.h \
 	mind/samurai-slaying.c mind/samurai-slaying.h \
 	mind/surprise-attack.c mind/surprise-attack.h \
 	\

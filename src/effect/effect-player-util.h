@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 typedef struct effect_player_type
 {
 	DEPTH rlev; // モンスターのレベル (但し0のモンスターは1になる).

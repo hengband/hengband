@@ -26,6 +26,7 @@
 #include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "mind/racial-force-trainer.h"
+#include "mind/racial-ninja.h"
 #include "monster/monster-status.h"
 #include "player/avatar.h"
 #include "player/player-class.h"

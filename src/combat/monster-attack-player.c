@@ -19,6 +19,7 @@
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
+#include "mind/racial-ninja.h"
 #include "mind/racial-samurai.h"
 #include "monster/monster-status.h"
 #include "pet/pet-fall-off.h"
