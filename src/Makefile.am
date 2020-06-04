@@ -292,9 +292,6 @@ hengband_SOURCES = \
 	mutation/mutation.c mutation/mutation.h \
 	mutation/mutation-processor.c mutation/mutation-processor.h \
 	\
-	object/bow.c object/bow.h \
-	object/chest.c object/chest.h \
-	object/death-scythe.c object/death-scythe.h \
 	object/object1.c object/object1.h \
 	object/object-broken.c object/object-broken.h \
 	object/object-flavor.c object/object-flavor.h \
@@ -306,7 +303,6 @@ hengband_SOURCES = \
 	object/object-value.c object/object-value.h \
 	object/object-value-calc.c object/object-value-calc.h \
 	object/lite-processor.c object/lite-processor.h \
-	object/torch.c object/torch.h \
 	object/tval-types.h \
 	object/warning.c object/warning.h \
 	object/object-mark-types.h \
@@ -379,6 +375,11 @@ hengband_SOURCES = \
 	room/rooms-vault.c room/rooms-vault.h \
 	room/rooms-pit-nest.c room/rooms-pit-nest.h \
 	room/pit-nest-kinds-table.c room/pit-nest-kinds-table.h \
+	\
+	specific-object/bow.c specific-object/bow.h \
+	specific-object/chest.c specific-object/chest.h \
+	specific-object/death-scythe.c specific-object/death-scythe.h \
+	specific-object/torch.c specific-object/torch.h \
 	\
 	spell/technic-info-table.c spell/technic-info-table.h \
 	spell/spells-describer.c spell/spells-describer.h \

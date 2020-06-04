@@ -1,4 +1,4 @@
-﻿#include "object/torch.h"
+﻿#include "specific-object/torch.h"
 #include "sv-definition/sv-lite-types.h"
 #include "object-enchant/tr-types.h"
 

@@ -3,7 +3,7 @@
 #include "object-enchant/artifact.h"
 #include "object-enchant/tr-types.h"
 #include "object/object1.h"
-#include "object/torch.h"
+#include "specific-object/torch.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell/spells-hex.h"
 

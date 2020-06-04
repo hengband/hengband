@@ -1112,16 +1112,16 @@
     <ClCompile Include="..\..\src\mind\racial-cavalry.c">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\bow.c">
+    <ClCompile Include="..\..\src\specific-object\bow.c">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\chest.c">
+    <ClCompile Include="..\..\src\specific-object\chest.c">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\torch.c">
+    <ClCompile Include="..\..\src\specific-object\death-scythe.c">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\death-scythe.c">
+    <ClCompile Include="..\..\src\specific-object\torch.c">
       <Filter>specific-object</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2392,16 +2392,16 @@
     <ClInclude Include="..\..\src\mind\racial-cavalry.h">
       <Filter>mind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\bow.h">
+    <ClInclude Include="..\..\src\specific-object\bow.h">
       <Filter>specific-object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\chest.h">
+    <ClInclude Include="..\..\src\specific-object\chest.h">
       <Filter>specific-object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\torch.h">
+    <ClInclude Include="..\..\src\specific-object\death-scythe.h">
       <Filter>specific-object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\death-scythe.h">
+    <ClInclude Include="..\..\src\specific-object\torch.h">
       <Filter>specific-object</Filter>
     </ClInclude>
   </ItemGroup>

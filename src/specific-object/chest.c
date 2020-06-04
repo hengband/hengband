@@ -1,4 +1,4 @@
-﻿#include "object/chest.h"
+﻿#include "specific-object/chest.h"
 #include "floor/floor-object.h"
 #include "floor/floor.h"
 #include "grid/grid.h"

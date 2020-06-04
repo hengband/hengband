@@ -5,15 +5,13 @@
  * @details 現時点ではダメージ反射のみ。行数に注意して関数を追加しても良い.
  */
 
-#include "system/angband.h"
-#include "combat/player-attack-util.h"
-#include "object/death-scythe.h"
-#include "main/sound-definitions-table.h"
-#include "player/player-damage.h"
-#include "core/stuff-handler.h"
+#include "specific-object/death-scythe.h"
 #include "combat/attack-criticality.h"
-#include "object/object1.h"
+#include "core/stuff-handler.h"
+#include "main/sound-definitions-table.h"
 #include "object-enchant/tr-types.h"
+#include "object/object1.h"
+#include "player/player-damage.h"
 
 /*!
  * @brief 死の大鎌ダメージが跳ね返ってきた時の、種族ごとのダメージ倍率を返す

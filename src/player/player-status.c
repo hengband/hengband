@@ -27,7 +27,7 @@
 #include "monster/monster.h"
 #include "mutation/mutation.h"
 #include "object-enchant/artifact.h"
-#include "object/bow.h"
+#include "specific-object/bow.h"
 #include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-hook.h"
