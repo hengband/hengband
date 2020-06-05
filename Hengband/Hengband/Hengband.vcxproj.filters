@@ -1160,6 +1160,9 @@
     <ClCompile Include="..\..\src\spell\spells-neighbor.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-specific-bolt.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2474,6 +2477,9 @@
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-neighbor.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-specific-bolt.h">
       <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>

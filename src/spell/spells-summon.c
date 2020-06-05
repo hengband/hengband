@@ -14,7 +14,7 @@
 #include "spell/spells-launcher.h"
 #include "spell/spells-lite.h"
 #include "spell/spells-sight.h"
-#include "spell/spells2.h" // todo 後で消す.
+#include "spell/spells-specific-bolt.h"
 #include "spell/spells-status.h"
 #include "spell/spells-type.h"
 #include "sv-definition/sv-other-types.h"

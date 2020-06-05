@@ -22,6 +22,7 @@
 #include "spell/spells-lite.h"
 #include "spell/spells-neighbor.h"
 #include "spell/spells-sight.h"
+#include "spell/spells-specific-bolt.h"
 #include "spell/spells-status.h"
 #include "spell/spells-teleport.h"
 #include "spell/spells-type.h"

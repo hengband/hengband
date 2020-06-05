@@ -365,6 +365,7 @@
     <ClCompile Include="..\..\src\spell\spells-neighbor.c" />
     <ClCompile Include="..\..\src\spell\spells-pet.c" />
     <ClCompile Include="..\..\src\spell\spells-sight.c" />
+    <ClCompile Include="..\..\src\spell\spells-specific-bolt.c" />
     <ClCompile Include="..\..\src\spell\spells-staff-only.c" />
     <ClCompile Include="..\..\src\spell\spells-teleport.c" />
     <ClCompile Include="..\..\src\system\system-variables.c" />
@@ -586,6 +587,7 @@
     <ClInclude Include="..\..\src\spell\spells-neighbor.h" />
     <ClInclude Include="..\..\src\spell\spells-pet.h" />
     <ClInclude Include="..\..\src\spell\spells-sight.h" />
+    <ClInclude Include="..\..\src\spell\spells-specific-bolt.h" />
     <ClInclude Include="..\..\src\spell\spells-staff-only.h" />
     <ClInclude Include="..\..\src\spell\spells-teleport.h" />
     <ClInclude Include="..\..\src\sv-definition\sv-amulet-types.h" />
