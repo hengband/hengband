@@ -26,3 +26,4 @@ bool banish_monsters(player_type *caster_ptr, int dist);
 bool turn_evil(player_type *caster_ptr, HIT_POINT dam);
 bool turn_monsters(player_type *caster_ptr, HIT_POINT dam);
 bool deathray_monsters(player_type *caster_ptr);
+bool probing(player_type *caster_ptr);

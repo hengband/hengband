@@ -1,10 +1,12 @@
 ﻿#include "spell/spells-sight.h"
+#include "core/stuff-handler.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "monster/monster-status.h"
 #include "player/avatar.h"
 #include "spell/process-effect.h"
 #include "spell/spells-type.h"
+#include "view/display-main-window.h"
 
 /*!
  * @brief 視界内モンスターに魔法効果を与える / Apply a "project()" directly to all viewable monsters
@@ -268,3 +270,119 @@ bool turn_monsters(player_type *caster_ptr, HIT_POINT dam) { return (project_all
  * @return 作用が実際にあった場合TRUEを返す
  */
 bool deathray_monsters(player_type *caster_ptr) { return (project_all_los(caster_ptr, GF_DEATH_RAY, caster_ptr->lev * 200)); }
+
+/*!
+ * @brief 周辺モンスターを調査する / Probe nearby monsters
+ * @return 効力があった場合TRUEを返す
+ */
+bool probing(player_type *caster_ptr)
+{
+    bool cu = Term->scr->cu;
+    bool cv = Term->scr->cv;
+    Term->scr->cu = 0;
+    Term->scr->cv = 1;
+
+    bool probe = FALSE;
+    int speed;
+    char buf[256];
+    concptr align;
+    for (int i = 1; i < caster_ptr->current_floor_ptr->m_max; i++) {
+        monster_type *m_ptr = &caster_ptr->current_floor_ptr->m_list[i];
+        monster_race *r_ptr = &r_info[m_ptr->r_idx];
+        if (!monster_is_valid(m_ptr))
+            continue;
+        if (!player_has_los_bold(caster_ptr, m_ptr->fy, m_ptr->fx))
+            continue;
+        if (!m_ptr->ml)
+            continue;
+
+        GAME_TEXT m_name[MAX_NLEN];
+        if (!probe)
+            msg_print(_("調査中...", "Probing..."));
+        msg_print(NULL);
+
+        if (!is_original_ap(m_ptr)) {
+            if (m_ptr->mflag2 & MFLAG2_KAGE)
+                m_ptr->mflag2 &= ~(MFLAG2_KAGE);
+
+            m_ptr->ap_r_idx = m_ptr->r_idx;
+            lite_spot(caster_ptr, m_ptr->fy, m_ptr->fx);
+        }
+
+        monster_desc(caster_ptr, m_name, m_ptr, MD_IGNORE_HALLU | MD_INDEF_HIDDEN);
+        speed = m_ptr->mspeed - 110;
+        if (MON_FAST(m_ptr))
+            speed += 10;
+        if (MON_SLOW(m_ptr))
+            speed -= 10;
+        if (ironman_nightmare)
+            speed += 5;
+
+        if ((r_ptr->flags3 & (RF3_EVIL | RF3_GOOD)) == (RF3_EVIL | RF3_GOOD))
+            align = _("善悪", "good&evil");
+        else if (r_ptr->flags3 & RF3_EVIL)
+            align = _("邪悪", "evil");
+        else if (r_ptr->flags3 & RF3_GOOD)
+            align = _("善良", "good");
+        else if ((m_ptr->sub_align & (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD)) == (SUB_ALIGN_EVIL | SUB_ALIGN_GOOD))
+            align = _("中立(善悪)", "neutral(good&evil)");
+        else if (m_ptr->sub_align & SUB_ALIGN_EVIL)
+            align = _("中立(邪悪)", "neutral(evil)");
+        else if (m_ptr->sub_align & SUB_ALIGN_GOOD)
+            align = _("中立(善良)", "neutral(good)");
+        else
+            align = _("中立", "neutral");
+
+        sprintf(buf, _("%s ... 属性:%s HP:%d/%d AC:%d 速度:%s%d 経験:", "%s ... align:%s HP:%d/%d AC:%d speed:%s%d exp:"), m_name, align, (int)m_ptr->hp,
+            (int)m_ptr->maxhp, r_ptr->ac, (speed > 0) ? "+" : "", speed);
+
+        if (r_ptr->next_r_idx) {
+            strcat(buf, format("%d/%d ", m_ptr->exp, r_ptr->next_exp));
+        } else {
+            strcat(buf, "xxx ");
+        }
+
+        if (MON_CSLEEP(m_ptr))
+            strcat(buf, _("睡眠 ", "sleeping "));
+        if (MON_STUNNED(m_ptr))
+            strcat(buf, _("朦朧 ", "stunned "));
+        if (MON_MONFEAR(m_ptr))
+            strcat(buf, _("恐怖 ", "scared "));
+        if (MON_CONFUSED(m_ptr))
+            strcat(buf, _("混乱 ", "confused "));
+        if (MON_INVULNER(m_ptr))
+            strcat(buf, _("無敵 ", "invulnerable "));
+        buf[strlen(buf) - 1] = '\0';
+        prt(buf, 0, 0);
+
+        message_add(buf);
+        caster_ptr->window |= (PW_MESSAGE);
+        handle_stuff(caster_ptr);
+        move_cursor_relative(m_ptr->fy, m_ptr->fx);
+        inkey();
+        Term_erase(0, 0, 255);
+        if (lore_do_probe(caster_ptr, m_ptr->r_idx)) {
+            strcpy(buf, (r_name + r_ptr->name));
+#ifdef JP
+            msg_format("%sについてさらに詳しくなった気がする。", buf);
+#else
+            plural_aux(buf);
+            msg_format("You now know more about %s.", buf);
+#endif
+            msg_print(NULL);
+        }
+
+        probe = TRUE;
+    }
+
+    Term->scr->cu = cu;
+    Term->scr->cv = cv;
+    Term_fresh();
+
+    if (probe) {
+        chg_virtue(caster_ptr, V_KNOWLEDGE, 1);
+        msg_print(_("これで全部です。", "That's all."));
+    }
+
+    return (probe);
+}
