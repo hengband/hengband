@@ -152,6 +152,7 @@ hengband_SOURCES = \
 	grid/feature.c grid/feature.h \
 	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
 	\
+	info-reader/kind-info-tokens-table.c info-reader/kind-info-tokens-table.h \
 	info-reader/race-info-tokens-table.c info-reader/race-info-tokens-table.h \
 	\
 	inventory/inventory-curse.c inventory/inventory-curse.h \
