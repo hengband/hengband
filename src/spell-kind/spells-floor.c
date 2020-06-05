@@ -225,33 +225,6 @@ bool explosive_rune(player_type *caster_ptr, POSITION y, POSITION x)
 
 
 /*!
- * @brief 鏡設置処理
- * @return 実際に設置が行われた場合TRUEを返す
- */
-bool place_mirror(player_type *caster_ptr)
-{
-	if (!cave_clean_bold(caster_ptr->current_floor_ptr, caster_ptr->y, caster_ptr->x))
-	{
-		msg_print(_("床上のアイテムが呪文を跳ね返した。", "The object resists the spell."));
-		return FALSE;
-	}
-
-	/* Create a mirror */
-	caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info |= CAVE_OBJECT;
-	caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].mimic = feat_mirror;
-
-	/* Turn on the light */
-	caster_ptr->current_floor_ptr->grid_array[caster_ptr->y][caster_ptr->x].info |= CAVE_GLOW;
-
-	note_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
-	lite_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
-	update_local_illumination(caster_ptr, caster_ptr->y, caster_ptr->x);
-
-	return TRUE;
-}
-
-
-/*!
  * @brief プレイヤーの手による能動的な階段生成処理 /
  * Create stairs at or move previously created stairs into the player location.
  * @return なし
