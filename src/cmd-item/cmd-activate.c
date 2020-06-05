@@ -35,6 +35,7 @@
 #include "spell/spells-hex.h"
 #include "spell/spells-launcher.h"
 #include "spell/spells-lite.h"
+#include "spell/spells-neighbor.h"
 #include "spell/spells-object.h"
 #include "spell/spells-sight.h"
 #include "spell/spells-status.h"

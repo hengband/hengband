@@ -400,6 +400,7 @@ hengband_SOURCES = \
 	spell/spells-hex.c spell/spells-hex.h \
 	spell/spells-launcher.c spell/spells-launcher.h \
 	spell/spells-lite.c spell/spells-lite.h \
+	spell/spells-neighbor.c spell/spells-neighbor.h \
 	spell/spells-object.c spell/spells-object.h \
 	spell/spells-pet.c spell/spells-pet.h \
 	spell/spells-sight.c spell/spells-sight.h \

@@ -13,6 +13,7 @@
 #include "spell/spells-diceroll.h"
 #include "spell/spells-genocide.h"
 #include "spell/spells-launcher.h"
+#include "spell/spells-neighbor.h"
 #include "spell/spells-object.h"
 #include "spell/spells-sight.h"
 #include "spell/spells-status.h"

@@ -16,10 +16,10 @@
 #include "spell/process-effect.h"
 #include "spell/spells-hex.h"
 #include "spell/spells-lite.h"
+#include "spell/spells-neighbor.h"
 #include "spell/spells-sight.h"
 #include "spell/spells-teleport.h"
 #include "spell/spells-type.h"
-#include "spell/spells2.h"
 
 /*!
  * @brief RF4_SHRIEKの処理。叫び。 /

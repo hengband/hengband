@@ -2,18 +2,9 @@
 
 #include "system/angband.h"
 
-bool wall_stone(player_type *caster_ptr);
 void call_chaos(player_type* caster_ptr);
 bool hypodynamic_bolt(player_type* caster_ptr, DIRECTION dir, HIT_POINT dam);
 bool death_ray(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
-bool door_creation(player_type *caster_ptr, POSITION y, POSITION x);
-bool trap_creation(player_type* caster_ptr, POSITION y, POSITION x);
-bool tree_creation(player_type* caster_ptr, POSITION y, POSITION x);
-bool glyph_creation(player_type* caster_ptr, POSITION y, POSITION x);
-bool destroy_doors_touch(player_type* caster_ptr);
-bool disarm_traps_touch(player_type* caster_ptr);
-bool animate_dead(player_type* caster_ptr, MONSTER_IDX who, POSITION y, POSITION x);
-bool sleep_monsters_touch(player_type* caster_ptr);
 bool activate_ty_curse(player_type* target_ptr, bool stop_ty, int* count);
 int activate_hi_summon(player_type* caster_ptr, POSITION y, POSITION x, bool can_pet);
 void wall_breaker(player_type* caster_ptr);
