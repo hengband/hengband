@@ -4,7 +4,6 @@
 
 bool eat_magic(player_type* caster_ptr, int power);
 void wild_magic(player_type* caster_ptr, int spell);
-void cast_meteor(player_type* caster_ptr, HIT_POINT dam, POSITION rad);
 bool cast_wrath_of_the_god(player_type* caster_ptr, HIT_POINT dam, POSITION rad);
 void cast_wonder(player_type* caster_ptr, DIRECTION dir);
 bool vampirism(player_type* caster_ptr);
