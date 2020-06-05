@@ -21,7 +21,7 @@
 #include "player/player-personalities-table.h"
 #include "player/player-status.h"
 #include "spell/process-effect.h"
-#include "spell-kind/spells-chaos.h"
+#include "spell-kind/spells-random.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-sight.h"
 #include "spell/spells-summon.h"

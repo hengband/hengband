@@ -1,10 +1,10 @@
 ﻿/*!
- * @brief ダイス目により様々な効果を及ぼす魔法の処理 (カオス属とは限らない！)
+ * @brief ダイス目により様々な効果を及ぼす魔法の処理
  * @date 2020/06/05
  * @author Hourier
  */
 
-#include "spell-kind/spells-chaos.h"
+#include "spell-kind/spells-random.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "io/targeting.h"

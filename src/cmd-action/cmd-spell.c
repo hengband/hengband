@@ -25,7 +25,7 @@
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "player/selfinfo.h"
-#include "spell-kind/spells-chaos.h"
+#include "spell-kind/spells-random.h"
 #include "spell-kind/spells-sight.h"
 #include "spell/range-calc.h"
 #include "spell/spells-describer.h"

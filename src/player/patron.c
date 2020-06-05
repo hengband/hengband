@@ -19,7 +19,7 @@
 #include "spell-kind/spells-genocide.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell/spells-object.h"
-#include "spell-kind/spells-chaos.h"
+#include "spell-kind/spells-random.h"
 #include "spell-kind/spells-sight.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"

@@ -16,7 +16,7 @@
 #include "player/player-effects.h"
 #include "player/player-status.h"
 #include "spell-kind/spells-beam.h"
-#include "spell-kind/spells-chaos.h"
+#include "spell-kind/spells-random.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-launcher.h"

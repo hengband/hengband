@@ -14,7 +14,7 @@
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "spell/music-checker.h"
-#include "spell-kind/spells-chaos.h"
+#include "spell-kind/spells-random.h"
 #include "spell-realm/spells-hex.h"
 #include "view/display-main-window.h"
 

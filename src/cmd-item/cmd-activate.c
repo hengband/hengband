@@ -29,7 +29,7 @@
 #include "player/player-races-table.h"
 #include "spell/process-effect.h"
 #include "spell-kind/spells-beam.h"
-#include "spell-kind/spells-chaos.h"
+#include "spell-kind/spells-random.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"

@@ -4,7 +4,7 @@
 #include "mutation/mutation.h"
 #include "player/avatar.h"
 #include "player/player-effects.h"
-#include "spell-kind/spells-chaos.h"
+#include "spell-kind/spells-random.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-lite.h"

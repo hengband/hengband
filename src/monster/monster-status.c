@@ -22,7 +22,7 @@
 #include "player/avatar.h"
 #include "player/player-effects.h"
 #include "player/player-personalities-table.h"
-#include "spell-kind/spells-chaos.h"
+#include "spell-kind/spells-random.h"
 #include "spell/spells-summon.h"
 #include "util/util.h"
 #include "view/display-main-window.h"

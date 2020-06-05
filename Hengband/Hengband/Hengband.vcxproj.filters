@@ -1133,9 +1133,6 @@
     <ClCompile Include="..\..\src\spell-kind\spells-world.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-chaos.c">
-      <Filter>spell-kind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spell-kind\spells-charm.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
@@ -1177,6 +1174,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\spell-realm\spells-hex.c">
       <Filter>spell-realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-random.c">
+      <Filter>spell-kind</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2467,9 +2467,6 @@
     <ClInclude Include="..\..\src\spell-kind\spells-world.h">
       <Filter>spell-kind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell-kind\spells-chaos.h">
-      <Filter>spell-kind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\spell-kind\spells-charm.h">
       <Filter>spell-kind</Filter>
     </ClInclude>
@@ -2511,6 +2508,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell-realm\spells-hex.h">
       <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-random.h">
+      <Filter>spell-kind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
