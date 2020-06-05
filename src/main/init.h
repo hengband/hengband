@@ -89,9 +89,6 @@ struct header
 	void(*retouch)(header *head);
 };
 
-extern errr init_info_txt(FILE *fp, char *buf, header *head,
-	parse_info_txt_func parse_info_txt_line);
-
 extern errr parse_v_info(char *buf, header *head);
 extern errr parse_f_info(char *buf, header *head);
 extern void retouch_f_info(header *head);

@@ -50,7 +50,6 @@
 #include "info-reader/race-info-tokens-table.h"
 #include "io/files-util.h"
 #include "io/tokenizer.h"
-#include "main/init.h"
 #include "monster/monster-race.h"
 #include "monster/monster.h"
 #include "object-enchant/apply-magic.h"

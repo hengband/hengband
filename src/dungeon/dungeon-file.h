@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
+#include "main/init.h" // 相互参照、後で何とかする.
 
 typedef struct dungeon_grid dungeon_grid;
 
@@ -47,3 +48,4 @@ extern concptr err_str[PARSE_ERROR_MAX];
 errr process_dungeon_file(player_type *player_ptr, concptr name, int ymin, int xmin, int ymax, int xmax);
 errr init_v_info(void);
 errr init_buildings(void);
+errr init_info_txt(FILE *fp, char *buf, header *head, parse_info_txt_func parse_info_txt_line);
