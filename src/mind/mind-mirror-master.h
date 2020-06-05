@@ -9,3 +9,4 @@ bool binding_field(player_type *caster_ptr, HIT_POINT dam);
 void seal_of_mirror(player_type *caster_ptr, HIT_POINT dam);
 bool confusing_light(player_type *creature_ptr);
 bool place_mirror(player_type *caster_ptr);
+bool mirror_tunnel(player_type *caster_ptr);

@@ -1872,68 +1872,6 @@ bool polymorph_monster(player_type *caster_ptr, POSITION y, POSITION x)
 
 
 /*!
- * @brief 次元の扉処理 /
- * Dimension Door
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @param x テレポート先のX座標
- * @param y テレポート先のY座標
- * @return 目標に指定通りテレポートできたならばTRUEを返す
- */
-static bool dimension_door_aux(player_type *caster_ptr, POSITION x, POSITION y)
-{
-	PLAYER_LEVEL plev = caster_ptr->lev;
-
-	caster_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
-
-	if (!cave_player_teleportable_bold(caster_ptr, y, x, TELEPORT_SPONTANEOUS) ||
-	    (distance(y, x, caster_ptr->y, caster_ptr->x) > plev / 2 + 10) ||
-	    (!randint0(plev / 10 + 10)))
-	{
-		caster_ptr->energy_need += (s16b)((s32b)(60 - plev) * ENERGY_NEED() / 100L);
-		teleport_player(caster_ptr, (plev + 2) * 2, TELEPORT_PASSIVE);
-		return FALSE;
-	}
-
-	teleport_player_to(caster_ptr, y, x, TELEPORT_SPONTANEOUS);
-	return TRUE;
-}
-
-
-/*!
- * @brief 次元の扉処理のメインルーチン /
- * @param caster_ptr プレーヤーへの参照ポインタ
- * Dimension Door
- * @return ターンを消費した場合TRUEを返す
- */
-bool dimension_door(player_type *caster_ptr)
-{
-	DEPTH x = 0, y = 0;
-	if (!tgt_pt(caster_ptr, &x, &y)) return FALSE;
-	if (dimension_door_aux(caster_ptr, x, y)) return TRUE;
-
-	msg_print(_("精霊界から物質界に戻る時うまくいかなかった！", "You fail to exit the astral plane correctly!"));
-	return TRUE;
-}
-
-
-/*!
- * @brief 鏡抜け処理のメインルーチン /
- * Mirror Master's Dimension Door
- * @param caster_ptr プレーヤーへの参照ポインタ
- * @return ターンを消費した場合TRUEを返す
- */
-bool mirror_tunnel(player_type *caster_ptr)
-{
-	POSITION x = 0, y = 0;
-	if (!tgt_pt(caster_ptr, &x, &y)) return FALSE;
-	if (dimension_door_aux(caster_ptr, x, y)) return TRUE;
-
-	msg_print(_("鏡の世界をうまく通れなかった！", "You fail to pass the mirror plane correctly!"));
-	return TRUE;
-}
-
-
-/*!
  * @brief 魔力食い処理
  * @param caster_ptr プレーヤーへの参照ポインタ
  * @param power 基本効力

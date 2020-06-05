@@ -3,6 +3,8 @@
 #include "system/angband.h"
 #include "spell/spells-util.h"
 
+bool eat_magic(player_type *caster_ptr, int power);
+
 bool recall_player(player_type* creature_ptr, TIME_EFFECT turns);
 bool free_level_recall(player_type* creature_ptr);
 bool reset_recall(player_type* caster_ptr);
@@ -29,8 +31,6 @@ PERCENTAGE mod_spell_chance_2(player_type* caster_ptr, PERCENTAGE chance);
 PERCENTAGE spell_chance(player_type* caster_ptr, SPELL_IDX spell, REALM_IDX realm);
 void print_spells(player_type* caster_ptr, SPELL_IDX target_spell, SPELL_IDX* spells, int num, TERM_LEN y, TERM_LEN x, REALM_IDX realm);
 bool polymorph_monster(player_type* caster_ptr, POSITION y, POSITION x);
-bool dimension_door(player_type* caster_ptr);
-bool mirror_tunnel(player_type* caster_ptr);
 void massacre(player_type* caster_ptr);
 bool eat_rock(player_type* caster_ptr);
 bool shock_power(player_type* caster_ptr);

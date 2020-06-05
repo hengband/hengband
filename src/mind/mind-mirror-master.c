@@ -6,8 +6,10 @@
 #include "effect/effect-monster.h"
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"
-#include "spell/process-effect.h"
+#include "io/targeting.h"
 #include "spell-kind/spells-sight.h"
+#include "spell-kind/spells-teleport.h"
+#include "spell/process-effect.h"
 #include "spell/spells-type.h"
 #include "term/gameterm.h"
 #include "view/display-main-window.h"
@@ -255,5 +257,23 @@ bool place_mirror(player_type *caster_ptr)
     lite_spot(caster_ptr, caster_ptr->y, caster_ptr->x);
     update_local_illumination(caster_ptr, caster_ptr->y, caster_ptr->x);
 
+    return TRUE;
+}
+
+/*!
+ * @brief 鏡抜け処理のメインルーチン /
+ * Mirror Master's Dimension Door
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @return ターンを消費した場合TRUEを返す
+ */
+bool mirror_tunnel(player_type *caster_ptr)
+{
+    POSITION x = 0, y = 0;
+    if (!tgt_pt(caster_ptr, &x, &y))
+        return FALSE;
+    if (exe_dimension_door(caster_ptr, x, y))
+        return TRUE;
+
+    msg_print(_("鏡の世界をうまく通れなかった！", "You fail to pass the mirror plane correctly!"));
     return TRUE;
 }

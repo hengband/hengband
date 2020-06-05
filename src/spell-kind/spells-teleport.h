@@ -16,3 +16,5 @@ bool teleport_level_other(player_type *caster_ptr);
 void teleport_level(player_type *creature_ptr, MONSTER_IDX m_idx);
 bool tele_town(player_type *caster_ptr);
 bool is_teleport_level_ineffective(player_type *caster_ptr, MONSTER_IDX idx);
+bool dimension_door(player_type *caster_ptr);
+bool exe_dimension_door(player_type *caster_ptr, POSITION x, POSITION y);
