@@ -1,5 +1,5 @@
 ﻿#include "combat/slaying.h"
-#include "mind/samurai-slaying.h"
+#include "mind/mind-samurai.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/tr-types.h"
 #include "object/object1.h"
