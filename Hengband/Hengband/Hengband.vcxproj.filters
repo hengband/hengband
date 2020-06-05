@@ -1175,6 +1175,9 @@
     <ClCompile Include="..\..\src\mind\racial-vampire.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\mind\racial-android.c">
+      <Filter>mind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2504,6 +2507,9 @@
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\racial-vampire.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\racial-android.h">
       <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>

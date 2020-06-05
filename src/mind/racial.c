@@ -29,6 +29,7 @@
 #include "mind/mind-warrior.h"
 #include "mind/mind-warrior-mage.h"
 #include "mind/monk-attack.h"
+#include "mind/racial-android.h"
 #include "mind/racial-vampire.h"
 #include "mutation/mutation.h"
 #include "object/object-hook.h"

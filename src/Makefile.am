@@ -254,6 +254,7 @@ hengband_SOURCES = \
 	mind/mind-warrior.c mind/mind-warrior.h \
 	mind/mind-warrior-mage.c mind/mind-warrior-mage.h \
 	mind/racial.c mind/racial.h \
+	mind/racial-android.c mind/racial-android.h \
 	mind/racial-balrog.c mind/racial-balrog.h \
 	mind/racial-draconian.c mind/racial-draconian.h \
 	mind/racial-vampire.c mind/racial-vampire.h \
