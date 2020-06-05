@@ -12,5 +12,4 @@ void hayagake(player_type* creature_ptr);
 bool double_attack(player_type* creature_ptr);
 bool comvert_hp_to_mp(player_type* creature_ptr);
 bool comvert_mp_to_hp(player_type* creature_ptr);
-bool clear_mind(player_type* creature_ptr);
 bool vanish_dungeon(player_type* caster_ptr);

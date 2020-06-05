@@ -23,6 +23,7 @@
 #include "mind/racial-balrog.h"
 #include "mind/mind-cavalry.h"
 #include "mind/racial-draconian.h"
+#include "mind/mind-force-trainer.h"
 #include "mind/mind-mirror-master.h"
 #include "mind/mind-samurai.h"
 #include "mind/mind-warrior.h"
