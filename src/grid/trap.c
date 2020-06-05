@@ -27,7 +27,6 @@
 #include "spell/spells-summon.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-type.h"
-#include "spell/spells2.h"
 #include "util/util.h"
 #include "world/world.h"
 

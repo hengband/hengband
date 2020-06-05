@@ -30,6 +30,7 @@
 #include "spell/process-effect.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-chaos.h"
+#include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"
@@ -44,7 +45,6 @@
 #include "spell/spells-summon.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-type.h"
-#include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "world/world.h"
 

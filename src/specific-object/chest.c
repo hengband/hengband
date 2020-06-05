@@ -16,7 +16,6 @@
 #include "spell-kind/spells-sight.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-type.h"
-#include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "util/util.h"
 

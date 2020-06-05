@@ -1,5 +1,4 @@
 ﻿/*!
- * @file mspells2.c
  * @brief モンスター魔法の実装(対モンスター処理) / Monster spells (attack monster)
  * @date 2014/01/17
  * @author

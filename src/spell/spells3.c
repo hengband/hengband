@@ -69,7 +69,6 @@
 #include "spell-kind/spells-sight.h"
 #include "spell/spells-summon.h"
 #include "spell-kind/spells-teleport.h"
-#include "spell/spells2.h"
 #include "spell/technic-info-table.h"
 #include "term/gameterm.h"
 #include "util/util.h"
