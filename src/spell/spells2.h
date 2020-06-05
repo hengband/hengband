@@ -4,7 +4,6 @@
 
 void call_chaos(player_type* caster_ptr);
 bool activate_ty_curse(player_type* target_ptr, bool stop_ty, int* count);
-void wall_breaker(player_type* caster_ptr);
 bool charm_monster(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 bool control_one_undead(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 bool control_one_demon(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);

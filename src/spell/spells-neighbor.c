@@ -1,6 +1,9 @@
 #include "spell/spells-neighbor.h"
 #include "effect/effect-characteristics.h"
+#include "floor/floor.h"
+#include "grid/feature.h"
 #include "spell/process-effect.h"
+#include "spell/spells-floor.h"
 #include "spell/spells-type.h"
 
 /*!
@@ -108,4 +111,46 @@ bool animate_dead(player_type *caster_ptr, MONSTER_IDX who, POSITION y, POSITION
 {
     BIT_FLAGS flg = PROJECT_ITEM | PROJECT_HIDE;
     return (project(caster_ptr, who, 5, y, x, 0, GF_ANIM_DEAD, flg, -1));
+}
+
+/*!
+ * @brief 周辺破壊効果(プレイヤー中心)
+ * @param caster_ptr プレーヤーへの参照ポインタ
+ * @return 作用が実際にあった場合TRUEを返す
+ */
+void wall_breaker(player_type *caster_ptr)
+{
+    POSITION y = 0, x = 0;
+    int attempts = 1000;
+    if (randint1(80 + caster_ptr->lev) < 70) {
+        while (attempts--) {
+            scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 4, 0);
+
+            if (!cave_have_flag_bold(caster_ptr->current_floor_ptr, y, x, FF_PROJECT))
+                continue;
+
+            if (!player_bold(caster_ptr, y, x))
+                break;
+        }
+
+        project(caster_ptr, 0, 0, y, x, 20 + randint1(30), GF_KILL_WALL, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+        return;
+    }
+
+    if (randint1(100) > 30) {
+        earthquake(caster_ptr, caster_ptr->y, caster_ptr->x, 1, 0);
+        return;
+    }
+
+    int num = damroll(5, 3);
+    for (int i = 0; i < num; i++) {
+        while (TRUE) {
+            scatter(caster_ptr, &y, &x, caster_ptr->y, caster_ptr->x, 10, 0);
+
+            if (!player_bold(caster_ptr, y, x))
+                break;
+        }
+
+        project(caster_ptr, 0, 0, y, x, 20 + randint1(30), GF_KILL_WALL, (PROJECT_BEAM | PROJECT_THRU | PROJECT_GRID | PROJECT_ITEM | PROJECT_KILL), -1);
+    }
 }

@@ -11,3 +11,4 @@ bool destroy_doors_touch(player_type *caster_ptr);
 bool disarm_traps_touch(player_type *caster_ptr);
 bool sleep_monsters_touch(player_type *caster_ptr);
 bool animate_dead(player_type *caster_ptr, MONSTER_IDX who, POSITION y, POSITION x);
+void wall_breaker(player_type *caster_ptr);
