@@ -4,12 +4,12 @@
  * @author Hourier
  */
 
-#include "combat/monster-attack-monster.h"
+#include "melee/monster-attack-monster.h"
 #include "combat/attack-accuracy.h"
 #include "combat/hallucination-attacks-table.h"
-#include "combat/melee-postprocess.h"
-#include "combat/melee-switcher.h"
-#include "combat/melee-util.h"
+#include "melee/melee-postprocess.h"
+#include "melee/melee-switcher.h"
+#include "melee/melee-util.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"

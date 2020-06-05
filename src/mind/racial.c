@@ -16,7 +16,7 @@
 #include "cmd-item/cmd-magiceat.h"
 #include "cmd-item/cmd-zapwand.h"
 #include "cmd/cmd-basic.h"
-#include "combat/melee-postprocess.h"
+#include "melee/melee-postprocess.h"
 #include "core/stuff-handler.h"
 #include "effect/spells-effect-util.h"
 #include "io/targeting.h"

@@ -5,7 +5,7 @@
  */
 
 #include "mspell/mspell-special.h"
-#include "combat/melee-postprocess.h"
+#include "melee/melee-postprocess.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
 #include "mspell/monster-spell.h"

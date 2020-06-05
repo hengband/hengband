@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "combat/melee-switcher.h"
+#include "melee/melee-switcher.h"
 #include "monster-attack/monster-attack-effect.h"
 #include "monster/monster-status.h"
 #include "player/player-move.h"

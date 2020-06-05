@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "combat/melee-util.h"
+#include "melee/melee-util.h"
 
 typedef enum be_type {
 	BLOW_EFFECT_TYPE_NONE = 0,

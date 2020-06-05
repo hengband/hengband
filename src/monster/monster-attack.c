@@ -9,7 +9,7 @@
 #include "monster/monster-status.h"
 #include "dungeon/dungeon.h"
 #include "monster-attack/monster-attack-player.h"
-#include "combat/monster-attack-monster.h"
+#include "melee/monster-attack-monster.h"
 
  /*!
   * @brief モンスターが移動した結果、そこにプレーヤーがいたら直接攻撃を行う

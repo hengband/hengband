@@ -25,7 +25,7 @@
 #include "cmd-io/cmd-dump.h"
 #include "pet/pet-fall-off.h"
 #include "monster/creature.h"
-#include "combat/melee-postprocess.h"
+#include "melee/melee-postprocess.h"
 #include "spell/spells-summon.h"
 #include "player/avatar.h"
 #include "grid/feature.h"

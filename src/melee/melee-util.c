@@ -1,4 +1,4 @@
-﻿#include "combat/melee-util.h"
+﻿#include "melee/melee-util.h"
 #include "floor/floor.h"
 
 mam_type *initialize_mam_type(player_type *subject_ptr, mam_type *mam_ptr, MONRACE_IDX m_idx, MONRACE_IDX t_idx)

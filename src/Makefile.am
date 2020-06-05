@@ -92,10 +92,6 @@ hengband_SOURCES = \
 	combat/combat-options-type.h \
 	combat/attack-criticality.c combat/attack-criticality.h \
 	combat/vorpal-weapon.c combat/vorpal-weapon.h \
-	combat/monster-attack-monster.c combat/monster-attack-monster.h \
-	combat/melee-postprocess.c combat/melee-postprocess.h \
-	combat/melee-switcher.c combat/melee-switcher.h \
-	combat/melee-util.c combat/melee-util.h \
 	combat/shoot.c combat/shoot.h \
 	combat/snipe.c combat/snipe.h \
 	\
@@ -229,6 +225,11 @@ hengband_SOURCES = \
 	market/building-monster.c market/building-monster.h \
 	market/building-enchanter.c market/building-enchanter.h \
 	market/building-actions-table.h \
+	\
+	melee/monster-attack-monster.c melee/monster-attack-monster.h \
+	melee/melee-postprocess.c melee/melee-postprocess.h \
+	melee/melee-switcher.c melee/melee-switcher.h \
+	melee/melee-util.c melee/melee-util.h \
 	\
 	mind/mind.c mind/mind.h \
 	mind/mind-cavalry.c mind/mind-cavalry.h \
@@ -488,7 +489,7 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat -Icore -Idungeon \
 	-Ieffect -Ifloor -Igrid -Iinventory -Iio -Iio-dump -Iknowledge -Imarket \
-	-Imind -Imonster -Imonster-attack -Imspell -Imutation -Iobject \
+	-Imelee -Imind -Imonster -Imonster-attack -Imspell -Imutation -Iobject \
 	-Iobject-enchant -Ipet -Iplayer -Iplayer-attack -Irealm -Iroom \
 	-Ispecific-object -Ispell -Ispell-kind -Ispell-realm -Isv-definition \
 	-Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
