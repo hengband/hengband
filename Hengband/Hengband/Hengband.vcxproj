@@ -189,7 +189,7 @@
     <ClCompile Include="..\..\src\player-attack\player-attack.c" />
     <ClCompile Include="..\..\src\combat\slaying.c" />
     <ClCompile Include="..\..\src\player-attack\blood-sucking-processor.c" />
-    <ClCompile Include="..\..\src\combat\vorpal-weapon.c" />
+    <ClCompile Include="..\..\src\object-enchant\vorpal-weapon.c" />
     <ClCompile Include="..\..\src\floor\floor-object.c" />
     <ClCompile Include="..\..\src\inventory\inventory-damage.c" />
     <ClCompile Include="..\..\src\inventory\inventory-object.c" />
@@ -504,7 +504,7 @@
     <ClInclude Include="..\..\src\player-attack\player-attack-util.h" />
     <ClInclude Include="..\..\src\player-attack\player-attack.h" />
     <ClInclude Include="..\..\src\combat\slaying.h" />
-    <ClInclude Include="..\..\src\combat\vorpal-weapon.h" />
+    <ClInclude Include="..\..\src\object-enchant\vorpal-weapon.h" />
     <ClInclude Include="..\..\src\floor\floor-object.h" />
     <ClInclude Include="..\..\src\inventory\inventory-damage.h" />
     <ClInclude Include="..\..\src\inventory\inventory-object.h" />

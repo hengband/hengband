@@ -830,9 +830,6 @@
     <ClCompile Include="..\..\src\mind\monk-attack.c">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\vorpal-weapon.c">
-      <Filter>combat</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-race-hook.c">
       <Filter>monster</Filter>
     </ClCompile>
@@ -1183,6 +1180,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\melee\monster-attack-monster.c">
       <Filter>melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\vorpal-weapon.c">
+      <Filter>object-enchant</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2083,9 +2083,6 @@
     <ClInclude Include="..\..\src\mind\monk-attack.h">
       <Filter>mind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\combat\vorpal-weapon.h">
-      <Filter>combat</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-race-hook.h">
       <Filter>monster</Filter>
     </ClInclude>
@@ -2523,6 +2520,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\melee\monster-attack-monster.h">
       <Filter>melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\vorpal-weapon.h">
+      <Filter>object-enchant</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

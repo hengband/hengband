@@ -1,4 +1,4 @@
-﻿#include "combat/vorpal-weapon.h"
+﻿#include "object-enchant/vorpal-weapon.h"
 #include "io/files-util.h"
 #include "object-enchant/artifact.h"
 
