@@ -7,7 +7,6 @@ void wild_magic(player_type* caster_ptr, int spell);
 void cast_meteor(player_type* caster_ptr, HIT_POINT dam, POSITION rad);
 bool cast_wrath_of_the_god(player_type* caster_ptr, HIT_POINT dam, POSITION rad);
 void cast_wonder(player_type* caster_ptr, DIRECTION dir);
-void cast_shuffle(player_type* caster_ptr);
 bool vampirism(player_type* caster_ptr);
 bool android_inside_weapon(player_type* creature_ptr);
 bool create_ration(player_type* crature_ptr);

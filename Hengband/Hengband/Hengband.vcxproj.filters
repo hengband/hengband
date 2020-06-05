@@ -1172,6 +1172,9 @@
     <ClCompile Include="..\..\src\mind\racial-warrior.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-shuffle.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2499,6 +2502,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\racial-warrior.h">
       <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-shuffle.h">
+      <Filter>spell-kind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
