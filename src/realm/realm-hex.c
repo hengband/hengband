@@ -36,7 +36,7 @@
 #include "realm/realm-hex-numbers.h"
 #include "spell/process-effect.h"
 #include "spell/spells-execution.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-neighbor.h"
 #include "spell-kind/spells-sight.h"

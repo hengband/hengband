@@ -18,7 +18,7 @@
 #include "monster/monster-status.h"
 #include "player/player-move.h"
 #include "spell/process-effect.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-type.h"
 

@@ -35,7 +35,7 @@
 #include "mspell/monster-spell.h"
 #include "monster/monster-process.h"
 #include "object-enchant/trc-types.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 
 void decide_drop_from_monster(player_type *target_ptr, MONSTER_IDX m_idx, bool is_riding_mon);
 bool process_stealth(player_type *target_ptr, MONSTER_IDX m_idx);

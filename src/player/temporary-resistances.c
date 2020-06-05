@@ -3,7 +3,7 @@
 #include "player/player-races-table.h"
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-song-numbers.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 
 /*!
  * @brief プレイヤーの一時的魔法効果による耐性を返す

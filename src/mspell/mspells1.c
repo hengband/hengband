@@ -57,7 +57,7 @@
 #include "player/player-class.h"
 #include "spell/process-effect.h"
 #include "spell/range-calc.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-teleport.h"
 #include "mspell/mspell-learn-checker.h"
 #include "mspell/assign-monster-spell.h"

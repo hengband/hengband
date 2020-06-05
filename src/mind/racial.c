@@ -43,7 +43,7 @@
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-neighbor.h"
 #include "spell/spells-object.h"

@@ -11,7 +11,7 @@
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "realm/realm-hex-numbers.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "term/gameterm.h"
 #include "world/world.h"

@@ -394,7 +394,6 @@ hengband_SOURCES = \
 	spell/spells-describer.c spell/spells-describer.h \
 	spell/spells-diceroll.c spell/spells-diceroll.h \
 	spell/spells-execution.c spell/spells-execution.h \
-	spell/spells-hex.c spell/spells-hex.h \
 	spell/spells-object.c spell/spells-object.h \
 	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-staff-only.c spell/spells-staff-only.h \
@@ -419,6 +418,7 @@ hengband_SOURCES = \
 	spell-kind/spells-world.c spell-kind/spells-world.h \
 	\
 	spell-realm/spells-crusade.c spell-realm/spells-crusade.h \
+	spell-realm/spells-hex.c spell-realm/spells-hex.h \
 	\
 	store/store.c store/store.h \
 	store/black-market.c store/black-market.h \

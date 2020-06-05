@@ -30,7 +30,7 @@
 #include "spell/range-calc.h"
 #include "spell/spells-describer.h"
 #include "spell/spells-execution.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-util.h"
 #include "spell/spells3.h"

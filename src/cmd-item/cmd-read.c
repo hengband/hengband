@@ -27,7 +27,7 @@
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-neighbor.h"

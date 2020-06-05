@@ -8,7 +8,7 @@
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "spell-kind/spells-floor.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-sight.h"

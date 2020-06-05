@@ -14,7 +14,7 @@
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "realm/realm-hex-numbers.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "spell/spells-type.h"
 
 typedef enum effect_player_check_result

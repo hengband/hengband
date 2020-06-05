@@ -15,7 +15,7 @@
 #include "player/player-skill.h"
 #include "spell/music-checker.h"
 #include "spell-kind/spells-chaos.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "view/display-main-window.h"
 
 bool load = TRUE;

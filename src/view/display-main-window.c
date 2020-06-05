@@ -43,7 +43,7 @@
 #include "player/player-status.h"
 #include "realm/realm-hex-numbers.h"
 #include "realm/realm-song-numbers.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "spell/spells3.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"

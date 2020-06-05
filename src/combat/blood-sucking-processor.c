@@ -9,7 +9,7 @@
 #include "monster/monster-race-hook.h"
 #include "player/player-effects.h"
 #include "realm/realm-hex-numbers.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 
 /*!
  * @brief 生命のあるモンスターから吸血できるか判定する

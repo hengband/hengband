@@ -24,7 +24,7 @@
 #include "player/player-effects.h"
 #include "player/player-status.h"
 #include "realm/realm-names-table.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "system/system-variables.h"
 #include "util/util.h"
 #include "view/display-main-window.h"

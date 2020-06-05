@@ -29,7 +29,7 @@
 #include "world/world.h"
 #include "view/display-main-window.h"
 #include "mspell/assign-monster-spell.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 
  /*!
   * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /

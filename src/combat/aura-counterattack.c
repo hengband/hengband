@@ -11,7 +11,7 @@
 #include "object/object-hook.h"
 #include "realm/realm-hex-numbers.h"
 #include "spell/process-effect.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-type.h"
 

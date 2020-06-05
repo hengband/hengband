@@ -55,7 +55,7 @@
 #include "player/player-move.h"
 #include "player/player-personalities-table.h"
 #include "player/player-status.h"
-#include "spell/spells-hex.h"
+#include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-teleport.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
