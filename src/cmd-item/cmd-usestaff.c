@@ -26,6 +26,7 @@
 #include "spell/spells-staff-only.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "spell-kind/earthquake.h"
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells3.h"
 #include "util/util.h"

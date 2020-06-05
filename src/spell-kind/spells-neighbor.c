@@ -3,7 +3,7 @@
 #include "floor/floor.h"
 #include "grid/feature.h"
 #include "spell/process-effect.h"
-#include "spell-kind/spells-floor.h"
+#include "spell-kind/earthquake.h"
 #include "spell/spells-type.h"
 
 /*!

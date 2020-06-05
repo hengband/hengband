@@ -14,6 +14,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "spell/spells-type.h"
+#include "spell-kind/earthquake.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-genocide.h"
 #include "spell-kind/spells-launcher.h"

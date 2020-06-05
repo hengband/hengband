@@ -357,6 +357,7 @@
     <ClCompile Include="..\..\src\mspell\mspell-summon.c" />
     <ClCompile Include="..\..\src\mspell\mspell-util.c" />
     <ClCompile Include="..\..\src\mspell\mspell-ball.c" />
+    <ClCompile Include="..\..\src\spell-kind\earthquake.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-beam.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-grid.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-random.c" />
@@ -586,6 +587,7 @@
     <ClInclude Include="..\..\src\object-enchant\special-object-flags.h" />
     <ClInclude Include="..\..\src\realm\realm-hex-numbers.h" />
     <ClInclude Include="..\..\src\realm\realm-song-numbers.h" />
+    <ClInclude Include="..\..\src\spell-kind\earthquake.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-beam.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-grid.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-random.h" />

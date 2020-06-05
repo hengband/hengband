@@ -39,6 +39,7 @@
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell/process-effect.h"
+#include "spell-kind/earthquake.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
 #include "spell-kind/spells-grid.h"

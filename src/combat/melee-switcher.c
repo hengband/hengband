@@ -8,7 +8,7 @@
 #include "combat/monster-attack-effect.h"
 #include "monster/monster-status.h"
 #include "player/player-move.h"
-#include "spell-kind/spells-floor.h"
+#include "spell-kind/earthquake.h"
 
 void describe_melee_method(player_type *subject_ptr, mam_type *mam_ptr)
 {

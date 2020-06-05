@@ -10,6 +10,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-races-table.h"
+#include "spell-kind/earthquake.h"
 #include "spell-kind/spells-beam.h"
 #include "spell-kind/spells-charm.h"
 #include "spell-kind/spells-detection.h"

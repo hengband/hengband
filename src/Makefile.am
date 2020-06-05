@@ -401,6 +401,7 @@ hengband_SOURCES = \
 	spell/spells-util.h spell/spells-type.h \
 	spell/technic-info-table.c spell/technic-info-table.h \
 	\
+	spell-kind/earthquake.c spell-kind/earthquake.h \
 	spell-kind/spells-beam.c spell-kind/spells-beam.h \
 	spell-kind/spells-chaos.c spell-kind/spells-chaos.h \
 	spell-kind/spells-charm.c spell-kind/spells-charm.h \
