@@ -4,13 +4,13 @@
  * @author Hourier
  */
 
-#include "combat/player-attack.h"
+#include "player-attack/player-attack.h"
 #include "combat/attack-accuracy.h"
-#include "combat/attack-chaos-effect.h"
+#include "player-attack/attack-chaos-effect.h"
 #include "combat/attack-criticality.h"
-#include "combat/blood-sucking-processor.h"
+#include "player-attack/blood-sucking-processor.h"
 #include "combat/martial-arts-table.h"
-#include "combat/player-attack-util.h"
+#include "player-attack/player-attack-util.h"
 #include "combat/slaying.h"
 #include "combat/vorpal-weapon.h"
 #include "floor/floor.h"

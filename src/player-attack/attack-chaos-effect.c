@@ -5,7 +5,7 @@
  * @details 不可分な処理であるゴールデンハンマーによるアイテム奪取処理も入っている
  */
 
-#include "combat/attack-chaos-effect.h"
+#include "player-attack/attack-chaos-effect.h"
 #include "floor/floor.h"
 #include "monster/monster-status.h"
 #include "inventory/inventory-object.h"

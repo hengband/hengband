@@ -3,7 +3,7 @@
 #include "system/angband.h"
 #include "combat/combat-options-type.h"
 #include "combat/monster-attack-util.h"
-#include "combat/player-attack-util.h"
+#include "player-attack/player-attack-util.h"
 
 MULTIPLY mult_hissatsu(player_type *attacker_ptr, MULTIPLY mult, BIT_FLAGS *flgs, monster_type *m_ptr, combat_options mode);
 void concentration(player_type *creature_ptr);

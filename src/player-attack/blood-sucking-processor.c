@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "combat/blood-sucking-processor.h"
+#include "player-attack/blood-sucking-processor.h"
 #include "object-enchant/artifact.h"
 #include "monster/monster-race-hook.h"
 #include "player/player-effects.h"

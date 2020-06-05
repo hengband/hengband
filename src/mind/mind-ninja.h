@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "combat/player-attack-util.h"
+#include "player-attack/player-attack-util.h"
 
 bool kawarimi(player_type *caster_ptr, bool success);
 bool rush_attack(player_type *attacker_ptr, bool *mdeath);

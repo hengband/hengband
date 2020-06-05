@@ -83,7 +83,6 @@ hengband_SOURCES = \
 	cmd-item/cmd-zaprod.c cmd-item/cmd-zaprod.h \
 	cmd-item/cmd-zapwand.c cmd-item/cmd-zapwand.h \
 	\
-	combat/player-attack-util.h \
 	combat/attack-power-table.c combat/attack-power-table.h \
 	combat/aura-counterattack.c combat/aura-counterattack.h \
 	combat/hallucination-attacks-table.c combat/hallucination-attacks-table.h \
@@ -95,10 +94,7 @@ hengband_SOURCES = \
 	combat/slaying.c combat/slaying.h \
 	combat/combat-options-type.h \
 	combat/attack-criticality.c combat/attack-criticality.h \
-	combat/player-attack.c combat/player-attack.h \
-	combat/blood-sucking-processor.c combat/blood-sucking-processor.h \
 	combat/vorpal-weapon.c combat/vorpal-weapon.h \
-	combat/attack-chaos-effect.c combat/attack-chaos-effect.h \
 	combat/monster-attack-player.c combat/monster-attack-player.h \
 	combat/monster-attack-monster.c combat/monster-attack-monster.h \
 	combat/melee-postprocess.c combat/melee-postprocess.h \
@@ -357,6 +353,11 @@ hengband_SOURCES = \
 	player/player-personality.c player/player-personality.h \
 	player/player-sex.c player/player-sex.h player/selfinfo.c player/selfinfo.h \
 	\
+	player-attack/player-attack-util.h \
+	player-attack/attack-chaos-effect.c player-attack/attack-chaos-effect.h \
+	player-attack/blood-sucking-processor.c player-attack/blood-sucking-processor.h \
+	player-attack/player-attack.c player-attack/player-attack.h \
+	\
 	realm/realm-arcane.c realm/realm-arcane.h \
 	realm/realm-chaos.c realm/realm-chaos.h \
 	realm/realm-craft.c realm/realm-craft.h \
@@ -487,8 +488,9 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat -Icore -Idungeon \
 	-Ieffect -Ifloor -Igrid -Iinventory -Iio -Iio-dump -Iknowledge -Imarket \
 	-Imind -Imonster -Imspell -Imutation -Iobject -Iobject-enchant -Ipet \
-	-Iplayer -Irealm -Iroom -Ispecific-object -Ispell -Ispell-kind -Ispell-realm \
-	-Isv-definition -Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
+	-Iplayer -Iplayer-attack -Irealm -Iroom -Ispecific-object -Ispell \
+	-Ispell-kind -Ispell-realm -Isv-definition -Isystem -Iterm -Iutil -Iview \
+	-Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

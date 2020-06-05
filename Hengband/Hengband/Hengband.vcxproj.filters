@@ -833,19 +833,10 @@
     <ClCompile Include="..\..\src\inventory\inventory-damage.c">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\player-attack.c">
-      <Filter>combat</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mind\monk-attack.c">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\blood-sucking-processor.c">
-      <Filter>combat</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\combat\vorpal-weapon.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\attack-chaos-effect.c">
       <Filter>combat</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\combat\monster-attack-player.c">
@@ -1183,6 +1174,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\spell-realm\spells-trump.c">
       <Filter>spell-realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-attack\attack-chaos-effect.c">
+      <Filter>player-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-attack\blood-sucking-processor.c">
+      <Filter>player-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-attack\player-attack.c">
+      <Filter>player-attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2089,22 +2089,10 @@
     <ClInclude Include="..\..\src\inventory\inventory-damage.h">
       <Filter>inventory</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\combat\player-attack.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\player-attack-util.h">
-      <Filter>combat</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mind\monk-attack.h">
       <Filter>mind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\combat\blood-sucking-processor.h">
-      <Filter>combat</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\combat\vorpal-weapon.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\attack-chaos-effect.h">
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\monster-attack-player.h">
@@ -2524,6 +2512,18 @@
     <ClInclude Include="..\..\src\spell-realm\spells-trump.h">
       <Filter>spell-realm</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\player-attack\attack-chaos-effect.h">
+      <Filter>player-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-attack\blood-sucking-processor.h">
+      <Filter>player-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-attack\player-attack.h">
+      <Filter>player-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-attack\player-attack-util.h">
+      <Filter>player-attack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2658,6 +2658,9 @@
     </Filter>
     <Filter Include="spell-realm">
       <UniqueIdentifier>{1ce2167d-011b-47b5-8934-24c6d4d036e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player-attack">
+      <UniqueIdentifier>{cc3a34dc-4ff0-473f-afa5-3b5ec0da5aaf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

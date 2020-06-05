@@ -1,7 +1,7 @@
 #pragma once
 
 #include "system/angband.h"
-#include "combat/player-attack-util.h"
+#include "player-attack/player-attack-util.h"
 
 void decide_blood_sucking(player_type *attacker_ptr, player_attack_type *pa_ptr);
 void calc_drain(player_attack_type *pa_ptr);
