@@ -333,36 +333,6 @@ bool comvert_mp_to_hp(player_type *creature_ptr)
 }
 
 
-/*!
- * 剣の舞い
- * @param creature_ptr プレーヤーへの参照ポインタ
- * @return 常にTRUE
-*/
-bool sword_dancing(player_type *creature_ptr)
-{
-	DIRECTION dir;
-	POSITION y = 0, x = 0;
-	grid_type *g_ptr;
-	for (int i = 0; i < 6; i++)
-	{
-		dir = randint0(8);
-		y = creature_ptr->y + ddy_ddd[dir];
-		x = creature_ptr->x + ddx_ddd[dir];
-		g_ptr = &creature_ptr->current_floor_ptr->grid_array[y][x];
-
-		/* Hack -- attack monsters */
-		if (g_ptr->m_idx)
-			do_cmd_attack(creature_ptr, y, x, 0);
-		else
-		{
-			msg_print(_("攻撃が空をきった。", "You attack the empty air."));
-		}
-	}
-
-	return TRUE;
-}
-
-
 bool clear_mind(player_type *creature_ptr)
 {
 	if (total_friends)
