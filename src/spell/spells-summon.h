@@ -54,15 +54,16 @@
 #define SUMMON_ARMAGE_GOOD          66 /*!< 召喚タイプ: ハルマゲドン・トラップ用天使陣営 */
 #define SUMMON_ARMAGE_EVIL          67 /*!< 召喚タイプ: ハルマゲドン・トラップ用悪魔陣営 */
 
-extern bool trump_summoning(player_type *caster_ptr, int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode);
-extern bool cast_summon_demon(player_type *creature_ptr, int power);
-extern bool cast_summon_undead(player_type *creature_ptr, int power);
-extern bool cast_summon_hound(player_type *creature_ptr, int power);
-extern bool cast_summon_elemental(player_type *creature_ptr, int power);
-extern bool cast_summon_octopus(player_type *creature_ptr);
-extern bool item_tester_offer(object_type *o_ptr);
-extern bool cast_summon_greater_demon(player_type *caster_ptr);
-extern bool summon_kin_player(player_type *creature_ptr, DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode);
-extern int summon_cyber(player_type *creature_ptr, MONSTER_IDX who, POSITION y, POSITION x);
-
-extern void mitokohmon(player_type *kohmon_ptr);
+bool trump_summoning(player_type *caster_ptr, int num, bool pet, POSITION y, POSITION x, DEPTH lev, int type, BIT_FLAGS mode);
+bool cast_summon_demon(player_type *creature_ptr, int power);
+bool cast_summon_undead(player_type *creature_ptr, int power);
+bool cast_summon_hound(player_type *creature_ptr, int power);
+bool cast_summon_elemental(player_type *creature_ptr, int power);
+bool cast_summon_octopus(player_type *creature_ptr);
+bool item_tester_offer(object_type *o_ptr);
+bool cast_summon_greater_demon(player_type *caster_ptr);
+bool summon_kin_player(player_type *creature_ptr, DEPTH level, POSITION y, POSITION x, BIT_FLAGS mode);
+void mitokohmon(player_type *kohmon_ptr);
+int summon_cyber(player_type *creature_ptr, MONSTER_IDX who, POSITION y, POSITION x);
+int activate_hi_summon(player_type *caster_ptr, POSITION y, POSITION x, bool can_pet);
+void cast_invoke_spirits(player_type *caster_ptr, DIRECTION dir);
