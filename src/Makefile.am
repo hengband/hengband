@@ -256,7 +256,6 @@ hengband_SOURCES = \
 	mind/racial-samurai.c mind/racial-samurai.h \
 	mind/racial-warrior.c mind/racial-warrior.h \
 	mind/samurai-slaying.c mind/samurai-slaying.h \
-	mind/surprise-attack.c mind/surprise-attack.h \
 	\
 	monster/creature.h monster/creature.c \
 	monster/monster.h monster/monster-race.c monster/monster-race.h \

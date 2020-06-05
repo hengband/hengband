@@ -851,9 +851,6 @@
     <ClCompile Include="..\..\src\mind\racial-force-trainer.c">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\surprise-attack.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mind\monk-attack.c">
       <Filter>mind</Filter>
     </ClCompile>
@@ -2099,9 +2096,6 @@
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\racial-force-trainer.h">
-      <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\surprise-attack.h">
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\monk-attack.h">
