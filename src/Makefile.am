@@ -256,6 +256,7 @@ hengband_SOURCES = \
 	mind/racial.c mind/racial.h \
 	mind/racial-balrog.c mind/racial-balrog.h \
 	mind/racial-draconian.c mind/racial-draconian.h \
+	mind/racial-vampire.c mind/racial-vampire.h \
 	\
 	monster/creature.h monster/creature.c \
 	monster/monster.h monster/monster-race.c monster/monster-race.h \
