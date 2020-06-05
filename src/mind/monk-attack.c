@@ -5,13 +5,17 @@
  * @details 練気術師は騎乗していない時
  */
 
-#include "system/angband.h"
 #include "mind/monk-attack.h"
-#include "world/world.h"
+#include "cmd-action/cmd-attack.h"
+#include "combat/attack-criticality.h"
+#include "core/stuff-handler.h"
+#include "floor/floor.h"
+#include "io/targeting.h"
 #include "main/sound-definitions-table.h"
 #include "mind/mind-force-trainer.h"
+#include "monster/creature.h"
 #include "monster/monster-status.h"
-#include "combat/attack-criticality.h"
+#include "world/world.h"
 
 /*!
  * @brief 朦朧への抵抗値を計算する
@@ -220,4 +224,34 @@ void process_monk_attack(player_type *attacker_ptr, player_attack_type *pa_ptr)
     pa_ptr->attack_damage = critical_norm(attacker_ptr, attacker_ptr->lev * weight, min_level, pa_ptr->attack_damage, attacker_ptr->to_h[0], 0);
     process_attack_vital_spot(attacker_ptr, pa_ptr, &stun_effect, &resist_stun, special_effect);
     print_stun_effect(attacker_ptr, pa_ptr, stun_effect, resist_stun);
+}
+
+bool double_attack(player_type *creature_ptr)
+{
+    DIRECTION dir;
+    if (!get_rep_dir(creature_ptr, &dir, FALSE))
+        return FALSE;
+    POSITION y = creature_ptr->y + ddy[dir];
+    POSITION x = creature_ptr->x + ddx[dir];
+    if (!creature_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+        msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
+        msg_print(NULL);
+        return TRUE;
+    }
+
+    if (one_in_(3))
+        msg_print(_("あーたたたたたたたたたたたたたたたたたたたたたた！！！", "Ahhhtatatatatatatatatatatatatatataatatatatattaaaaa!!!!"));
+    else if (one_in_(2))
+        msg_print(_("無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄！！！", "Mudamudamudamudamudamudamudamudamudamudamudamudamuda!!!!"));
+    else
+        msg_print(_("オラオラオラオラオラオラオラオラオラオラオラオラ！！！", "Oraoraoraoraoraoraoraoraoraoraoraoraoraoraoraoraora!!!!"));
+
+    do_cmd_attack(creature_ptr, y, x, 0);
+    if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx) {
+        handle_stuff(creature_ptr);
+        do_cmd_attack(creature_ptr, y, x, 0);
+    }
+
+    creature_ptr->energy_need += ENERGY_NEED();
+    return TRUE;
 }

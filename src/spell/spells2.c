@@ -257,38 +257,3 @@ void hayagake(player_type *creature_ptr)
 
 	creature_ptr->energy_use = 0;
 }
-
-
-bool double_attack(player_type *creature_ptr)
-{
-	DIRECTION dir;
-	if (!get_rep_dir(creature_ptr, &dir, FALSE)) return FALSE;
-	POSITION y = creature_ptr->y + ddy[dir];
-	POSITION x = creature_ptr->x + ddx[dir];
-	if (!creature_ptr->current_floor_ptr->grid_array[y][x].m_idx)
-	{
-		msg_print(_("その方向にはモンスターはいません。", "You don't see any monster in this direction"));
-		msg_print(NULL);
-		return TRUE;
-	}
-
-	if (one_in_(3))
-		msg_print(_("あーたたたたたたたたたたたたたたたたたたたたたた！！！",
-			"Ahhhtatatatatatatatatatatatatatataatatatatattaaaaa!!!!"));
-	else if (one_in_(2))
-		msg_print(_("無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄無駄！！！",
-			"Mudamudamudamudamudamudamudamudamudamudamudamudamuda!!!!"));
-	else
-		msg_print(_("オラオラオラオラオラオラオラオラオラオラオラオラ！！！",
-			"Oraoraoraoraoraoraoraoraoraoraoraoraoraoraoraoraora!!!!"));
-
-	do_cmd_attack(creature_ptr, y, x, 0);
-	if (creature_ptr->current_floor_ptr->grid_array[y][x].m_idx)
-	{
-		handle_stuff(creature_ptr);
-		do_cmd_attack(creature_ptr, y, x, 0);
-	}
-
-	creature_ptr->energy_need += ENERGY_NEED();
-	return TRUE;
-}
