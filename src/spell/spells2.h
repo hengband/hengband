@@ -10,6 +10,4 @@ bool vampirism(player_type* caster_ptr);
 bool android_inside_weapon(player_type* creature_ptr);
 void hayagake(player_type* creature_ptr);
 bool double_attack(player_type* creature_ptr);
-bool comvert_hp_to_mp(player_type* creature_ptr);
-bool comvert_mp_to_hp(player_type* creature_ptr);
 bool vanish_dungeon(player_type* caster_ptr);

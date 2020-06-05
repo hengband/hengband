@@ -27,6 +27,7 @@
 #include "mind/mind-mirror-master.h"
 #include "mind/mind-samurai.h"
 #include "mind/mind-warrior.h"
+#include "mind/mind-warrior-mage.h"
 #include "mutation/mutation.h"
 #include "object/object-hook.h"
 #include "player/player-class.h"

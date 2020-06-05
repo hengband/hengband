@@ -245,16 +245,17 @@ hengband_SOURCES = \
 	\
 	mind/mind.c mind/mind.h \
 	mind/monk-attack.c mind/monk-attack.h \
+	mind/mind-cavalry.c mind/mind-cavalry.h \
+	mind/mind-force-trainer.c mind/mind-force-trainer.h \
+	mind/mind-mindcrafter.c mind/mind-mindcrafter.h \
+	mind/mind-mirror-master.c mind/mind-mirror-master.h \
+	mind/mind-ninja.c mind/mind-ninja.h \
+	mind/mind-samurai.c mind/mind-samurai.h \
+	mind/mind-warrior.c mind/mind-warrior.h \
+	mind/mind-warrior-mage.c mind/mind-warrior-mage.h \
 	mind/racial.c mind/racial.h \
 	mind/racial-balrog.c mind/racial-balrog.h \
-	mind/racial-cavalry.c mind/racial-cavalry.h \
 	mind/racial-draconian.c mind/racial-draconian.h \
-	mind/racial-force-trainer.c mind/racial-force-trainer.h \
-	mind/racial-mindcrafter.c mind/racial-mindcrafter.h \
-	mind/racial-mirror-master.c mind/racial-mirror-master.h \
-	mind/racial-ninja.c mind/racial-ninja.h \
-	mind/racial-samurai.c mind/racial-samurai.h \
-	mind/racial-warrior.c mind/racial-warrior.h \
 	mind/samurai-slaying.c mind/samurai-slaying.h \
 	\
 	monster/creature.h monster/creature.c \
