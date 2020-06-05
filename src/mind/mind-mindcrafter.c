@@ -1,4 +1,4 @@
-﻿#include "mind/racial-mindcrafter.h"
+﻿#include "mind/mind-mindcrafter.h"
 #include "autopick/autopick.h"
 #include "inventory/player-inventory.h"
 #include "object-enchant/item-feeling.h"

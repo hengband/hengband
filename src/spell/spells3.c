@@ -34,7 +34,7 @@
 #include "io/write-diary.h"
 #include "market/building-util.h"
 #include "mind/mind.h"
-#include "mind/racial-force-trainer.h"
+#include "mind/mind-force-trainer.h"
 #include "monster/creature.h"
 #include "monster/monster-process.h"
 #include "monster/monster-status.h"

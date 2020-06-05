@@ -3,7 +3,7 @@
 #include "effect/effect-monster-psi.h"
 #include "floor/floor.h"
 #include "player/player-damage.h"
-#include "mind/racial-mirror-master.h"
+#include "mind/mind-mirror-master.h"
 #include "world/world.h"
 #include "player/player-effects.h"
 

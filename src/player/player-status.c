@@ -19,7 +19,7 @@
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
 #include "market/arena-info-table.h"
-#include "mind/racial-force-trainer.h"
+#include "mind/mind-force-trainer.h"
 #include "monster/horror-descriptions.h"
 #include "monster/monster-race-hook.h"
 #include "monster/monster-race.h"

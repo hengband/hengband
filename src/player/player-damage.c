@@ -14,7 +14,7 @@
 #include "main/music-definitions-table.h"
 #include "main/sound-definitions-table.h"
 #include "market/arena-info-table.h"
-#include "mind/racial-mirror-master.h"
+#include "mind/mind-mirror-master.h"
 #include "mspell/monster-spell.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/tr-types.h"

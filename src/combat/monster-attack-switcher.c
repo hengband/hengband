@@ -8,7 +8,7 @@
 #include "combat/monster-attack-switcher.h"
 #include "combat/monster-attack-status.h"
 #include "combat/monster-eating.h"
-#include "mind/racial-mirror-master.h"
+#include "mind/mind-mirror-master.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "spell/spells3.h"

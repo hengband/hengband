@@ -1,4 +1,4 @@
-﻿#include "mind/racial-warrior.h"
+﻿#include "mind/mind-warrior.h"
 #include "cmd-action/cmd-attack.h"
 #include "floor/floor.h"
 #include "io/targeting.h"

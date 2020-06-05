@@ -10,7 +10,7 @@
 #include "effect/effect-player-util.h"
 #include "effect/spells-effect-util.h"
 #include "main/sound-definitions-table.h"
-#include "mind/racial-ninja.h"
+#include "mind/mind-ninja.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "realm/realm-hex-numbers.h"

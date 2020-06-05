@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "racial-samurai.h"
+#include "mind/mind-samurai.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd/cmd-basic.h"
 #include "cmd-action/cmd-pet.h"

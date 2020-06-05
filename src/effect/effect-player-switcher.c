@@ -5,7 +5,7 @@
 #include "effect/effect-player-resist-hurt.h"
 #include "effect/effect-player-spirit.h"
 #include "inventory/inventory-damage.h"
-#include "mind/racial-mirror-master.h"
+#include "mind/mind-mirror-master.h"
 #include "mspell/monster-spell.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-broken.h"

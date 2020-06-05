@@ -1,7 +1,7 @@
 ﻿#include "inventory/inventory-damage.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
-#include "mind/racial-mirror-master.h"
+#include "mind/mind-mirror-master.h"
 #include "object-enchant/artifact.h"
 #include "object/object-broken.h"
 #include "object/object-flavor.h"

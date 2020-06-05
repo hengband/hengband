@@ -1,4 +1,4 @@
-﻿#include "mind/racial-ninja.h"
+﻿#include "mind/mind-ninja.h"
 #include "cmd-action/cmd-attack.h"
 #include "combat/combat-options-type.h"
 #include "effect/effect-characteristics.h"

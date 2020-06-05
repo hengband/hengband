@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "mind/racial-cavalry.h"
+#include "mind/mind-cavalry.h"
 #include "cmd-action/cmd-pet.h"
 #include "floor/floor.h"
 #include "pet/pet-fall-off.h"

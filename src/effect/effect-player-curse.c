@@ -2,7 +2,7 @@
 #include "effect/effect-player-util.h"
 #include "effect/effect-player-curse.h"
 #include "player/player-damage.h"
-#include "mind/racial-mirror-master.h"
+#include "mind/mind-mirror-master.h"
 #include "world/world.h"
 #include "mspell/monster-spell.h"
 #include "object-enchant/object-curse.h"

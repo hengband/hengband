@@ -44,7 +44,7 @@
 #include "io/save.h"
 #include "core/player-processor.h"
 #include "view/display-main-window.h"
-#include "mind/racial-mirror-master.h"
+#include "mind/mind-mirror-master.h"
 
 static FLOOR_IDX new_floor_id;  /*!<次のフロアのID / floor_id of the destination */
 static u32b latest_visit_mark;  /*!<フロアを渡った回数？(確認中) / Max number of visit_mark */

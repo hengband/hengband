@@ -10,7 +10,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "io/targeting.h"
-#include "mind/racial-ninja.h"
+#include "mind/mind-ninja.h"
 #include "monster/monster-race-hook.h"
 #include "monster/monster.h"
 #include "object-enchant/artifact.h"

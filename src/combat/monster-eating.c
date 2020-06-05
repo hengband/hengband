@@ -7,7 +7,7 @@
 #include "combat/monster-eating.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
-#include "mind/racial-mirror-master.h"
+#include "mind/mind-mirror-master.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"

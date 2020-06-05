@@ -1,4 +1,4 @@
-﻿#include "racial-force-trainer.h"
+﻿#include "mind/mind-force-trainer.h"
 
 /*!
  * @brief 練気術師が「練気」で溜めた気の量を返す

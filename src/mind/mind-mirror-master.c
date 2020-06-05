@@ -1,4 +1,4 @@
-﻿#include "mind/racial-mirror-master.h"
+﻿#include "mind/mind-mirror-master.h"
 #include "cmd-action/cmd-pet.h"
 #include "effect/effect-characteristics.h"
 #include "effect/effect-feature.h"

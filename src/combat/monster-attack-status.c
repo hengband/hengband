@@ -5,7 +5,7 @@
  */
 
 #include "combat/monster-attack-status.h"
-#include "mind/racial-mirror-master.h"
+#include "mind/mind-mirror-master.h"
 #include "player/player-effects.h"
 
 void process_blind_attack(player_type *target_ptr, monap_type *monap_ptr)

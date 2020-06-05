@@ -12,7 +12,7 @@
 #include "io/write-diary.h"
 #include "main/init.h"
 #include "main/sound-definitions-table.h"
-#include "mind/racial-mirror-master.h"
+#include "mind/mind-mirror-master.h"
 #include "object-enchant/artifact.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"

@@ -1,6 +1,6 @@
 ﻿#include "effect/effect-player-resist-hurt.h"
 #include "inventory/inventory-damage.h"
-#include "mind/racial-mirror-master.h"
+#include "mind/mind-mirror-master.h"
 #include "mspell/monster-spell.h"
 #include "mutation/mutation.h"
 #include "object-enchant/artifact.h"

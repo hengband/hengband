@@ -5,7 +5,7 @@
 #include "floor/wild.h"
 #include "inventory/pack-overflow.h"
 #include "io/input-key-processor.h"
-#include "mind/racial-force-trainer.h"
+#include "mind/mind-force-trainer.h"
 #include "monster/creature.h"
 #include "monster/monster-race-hook.h"
 #include "monster/monster-status.h"

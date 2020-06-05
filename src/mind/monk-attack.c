@@ -9,7 +9,7 @@
 #include "mind/monk-attack.h"
 #include "world/world.h"
 #include "main/sound-definitions-table.h"
-#include "mind/racial-force-trainer.h"
+#include "mind/mind-force-trainer.h"
 #include "monster/monster-status.h"
 #include "combat/attack-criticality.h"
 
