@@ -21,7 +21,7 @@
 #include "monster/monster-status.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
-#include "spell/spells-genocide.h"
+#include "spell-kind/spells-genocide.h"
 #include "spell/spells-type.h"
 
 gf_switch_result effect_monster_hypodynamia(player_type *caster_ptr, effect_monster_type *em_ptr)

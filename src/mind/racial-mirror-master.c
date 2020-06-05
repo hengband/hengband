@@ -7,7 +7,7 @@
 #include "effect/spells-effect-util.h"
 #include "floor/floor.h"
 #include "spell/process-effect.h"
-#include "spell/spells-sight.h"
+#include "spell-kind/spells-sight.h"
 #include "spell/spells-type.h"
 #include "term/gameterm.h"
 #include "view/display-main-window.h"

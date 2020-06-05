@@ -4,7 +4,7 @@
  * @author deskull
  */
 
-#include "spell/spells-floor.h"
+#include "spell-kind/spells-floor.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd/cmd-basic.h"
 #include "dungeon/dungeon.h"
@@ -26,7 +26,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
-#include "spell/spells-teleport.h"
+#include "spell-kind/spells-teleport.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 

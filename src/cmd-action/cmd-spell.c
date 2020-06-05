@@ -29,7 +29,7 @@
 #include "spell/spells-describer.h"
 #include "spell/spells-execution.h"
 #include "spell/spells-hex.h"
-#include "spell/spells-sight.h"
+#include "spell-kind/spells-sight.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-util.h"
 #include "spell/spells2.h"

@@ -1,4 +1,4 @@
-﻿#include "spell/spells-pet.h"
+﻿#include "spell-kind/spells-pet.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "io/write-diary.h"

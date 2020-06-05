@@ -172,7 +172,7 @@
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
 #include "spell/process-effect.h"
-#include "spell/spells-floor.h"
+#include "spell-kind/spells-floor.h"
 #include "spell/spells-type.h"
 #include "spell/spells3.h"
 #include "util/util.h"

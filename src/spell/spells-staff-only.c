@@ -3,7 +3,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "spell/process-effect.h"
-#include "spell/spells-sight.h"
+#include "spell-kind/spells-sight.h"
 #include "spell/spells-type.h"
 
 /*!

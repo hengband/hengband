@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "spell/spells-world.h"
+#include "spell-kind/spells-world.h"
 #include "util/util.h"
 #include "world/world.h"
 

@@ -17,7 +17,7 @@
 #include "object/object-kind-hook.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
-#include "spell/spells-teleport.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell/spells-type.h"
 #include "spell/spells3.h"
 #include "spells-effect-util.h"

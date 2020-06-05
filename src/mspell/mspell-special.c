@@ -14,7 +14,7 @@
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "spell/process-effect.h"
-#include "spell/spells-teleport.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell/spells-type.h"
 
 /*!

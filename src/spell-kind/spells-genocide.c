@@ -1,4 +1,4 @@
-﻿#include "spell/spells-genocide.h"
+﻿#include "spell-kind/spells-genocide.h"
 #include "core/stuff-handler.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"

@@ -13,7 +13,7 @@
 #include "player/player-move.h"
 #include "player/player-races-table.h"
 #include "spell/spells-summon.h"
-#include "spell/spells-teleport.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell/spells2.h"
 
 #define TRC_P_FLAG_MASK \

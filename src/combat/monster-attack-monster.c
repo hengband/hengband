@@ -19,7 +19,7 @@
 #include "player/player-move.h"
 #include "spell/process-effect.h"
 #include "spell/spells-hex.h"
-#include "spell/spells-teleport.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell/spells-type.h"
 
 /* todo モンスター共通なので、monster-attack-player.cでも使うはず */

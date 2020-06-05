@@ -5,7 +5,7 @@
 #include "mspell/mspell-util.h"
 #include "player/player-move.h"
 #include "spell/process-effect.h"
-#include "spell/spells-launcher.h"
+#include "spell-kind/spells-launcher.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-type.h"
 

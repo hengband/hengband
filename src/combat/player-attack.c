@@ -28,7 +28,7 @@
 #include "player/player-damage.h"
 #include "player/player-skill.h"
 #include "realm/realm-hex-numbers.h"
-#include "spell/spells-floor.h"
+#include "spell-kind/spells-floor.h"
 #include "spell/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
 #include "world/world.h"

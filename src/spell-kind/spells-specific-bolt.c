@@ -1,6 +1,6 @@
-﻿#include "spell/spells-specific-bolt.h"
+﻿#include "spell-kind/spells-specific-bolt.h"
 #include "effect/effect-characteristics.h"
-#include "spell/spells-launcher.h"
+#include "spell-kind/spells-launcher.h"
 #include "spell/spells-type.h"
 
 /*!

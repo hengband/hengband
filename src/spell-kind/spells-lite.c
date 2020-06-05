@@ -1,4 +1,4 @@
-﻿#include "spell/spells-lite.h"
+﻿#include "spell-kind/spells-lite.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
@@ -6,7 +6,7 @@
 #include "monster/monster-status.h"
 #include "player/player-effects.h"
 #include "spell/process-effect.h"
-#include "spell/spells-launcher.h"
+#include "spell-kind/spells-launcher.h"
 #include "spell/spells-type.h"
 #include "world/world.h"
 

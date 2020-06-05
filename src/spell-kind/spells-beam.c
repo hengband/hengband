@@ -1,7 +1,7 @@
-﻿#include "spell/spells-beam.h"
+﻿#include "spell-kind/spells-beam.h"
 #include "effect/effect-characteristics.h"
 #include "spell/spells-type.h"
-#include "spell/spells-launcher.h"
+#include "spell-kind/spells-launcher.h"
 
 /*!
  * @brief 岩石溶解処理

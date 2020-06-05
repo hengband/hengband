@@ -23,7 +23,7 @@
 #include "monster/monster.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"
-#include "spell/spells-teleport.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell/spells-type.h"
 #include "spell/range-calc.h"
 #include "dungeon/dungeon.h"

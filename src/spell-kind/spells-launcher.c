@@ -1,4 +1,4 @@
-﻿#include "spell/spells-launcher.h"
+﻿#include "spell-kind/spells-launcher.h"
 #include "effect/effect-characteristics.h"
 #include "io/targeting.h"
 #include "spell/process-effect.h"

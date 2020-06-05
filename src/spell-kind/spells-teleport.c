@@ -5,7 +5,7 @@
  * @author Hourier
  */
 
-#include "spell/spells-teleport.h"
+#include "spell-kind/spells-teleport.h"
 #include "cmd-io/cmd-save.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
@@ -19,7 +19,7 @@
 #include "object/object-hook.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
-#include "spell/spells-launcher.h"
+#include "spell-kind/spells-launcher.h"
 #include "spell/spells-type.h"
 #include "world/world.h"
 

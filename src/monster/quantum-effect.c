@@ -2,7 +2,7 @@
 #include "floor/floor.h"
 #include "mspell/assign-monster-spell.h"
 #include "mspell/monster-spell.h"
-#include "spell/spells-teleport.h"
+#include "spell-kind/spells-teleport.h"
 
 /*!
  * @brief ユニークでない量子生物を消滅させる

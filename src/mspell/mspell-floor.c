@@ -15,10 +15,10 @@
 #include "player/player-personalities-table.h"
 #include "spell/process-effect.h"
 #include "spell/spells-hex.h"
-#include "spell/spells-lite.h"
-#include "spell/spells-neighbor.h"
-#include "spell/spells-sight.h"
-#include "spell/spells-teleport.h"
+#include "spell-kind/spells-lite.h"
+#include "spell-kind/spells-neighbor.h"
+#include "spell-kind/spells-sight.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell/spells-type.h"
 
 /*!

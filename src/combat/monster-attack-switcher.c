@@ -12,7 +12,7 @@
 #include "player/player-damage.h"
 #include "player/player-effects.h"
 #include "spell/spells3.h"
-#include "spell/spells-floor.h"
+#include "spell-kind/spells-floor.h"
 
 void switch_monster_blow_to_player(player_type *target_ptr, monap_type *monap_ptr)
 {

@@ -1,4 +1,4 @@
-﻿#include "spell/spells-detection.h"
+﻿#include "spell-kind/spells-detection.h"
 #include "core/player-processor.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"

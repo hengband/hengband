@@ -1,9 +1,9 @@
-#include "spell/spells-neighbor.h"
+#include "spell-kind/spells-neighbor.h"
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "grid/feature.h"
 #include "spell/process-effect.h"
-#include "spell/spells-floor.h"
+#include "spell-kind/spells-floor.h"
 #include "spell/spells-type.h"
 
 /*!
