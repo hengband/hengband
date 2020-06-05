@@ -390,6 +390,7 @@ hengband_SOURCES = \
 	spell/range-calc.c spell/range-calc.h \
 	spell/spells2.c spell/spells2.h \
 	spell/spells3.c spell/spells3.h \
+	spell/spells-beam.c spell/spells-beam.h \
 	spell/spells-describer.c spell/spells-describer.h \
 	spell/spells-detection.c spell/spells-detection.h \
 	spell/spells-diceroll.c spell/spells-diceroll.h \

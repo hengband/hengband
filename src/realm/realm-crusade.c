@@ -6,6 +6,7 @@
 #include "player/player-class.h"
 #include "player/player-effects.h"
 #include "spell/process-effect.h"
+#include "spell/spells-beam.h"
 #include "spell/spells-detection.h"
 #include "spell/spells-diceroll.h"
 #include "spell/spells-floor.h"

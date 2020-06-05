@@ -33,6 +33,7 @@
 #include "player/player-races-table.h"
 #include "player/player-status.h"
 #include "mind/racial-mirror-master.h"
+#include "spell/spells-beam.h"
 #include "spell/spells-detection.h"
 #include "spell/spells-floor.h"
 #include "spell/spells-hex.h"
