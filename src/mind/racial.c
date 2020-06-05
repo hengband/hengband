@@ -25,6 +25,7 @@
 #include "mind/racial-draconian.h"
 #include "mind/racial-mirror-master.h"
 #include "mind/racial-samurai.h"
+#include "mind/racial-warrior.h"
 #include "mutation/mutation.h"
 #include "object/object-hook.h"
 #include "player/player-class.h"

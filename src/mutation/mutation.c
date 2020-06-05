@@ -21,6 +21,7 @@
 #include "io/files-util.h"
 #include "io/targeting.h"
 #include "io/write-diary.h"
+#include "mind/racial-warrior.h"
 #include "object-enchant/item-feeling.h"
 #include "object/object-hook.h"
 #include "player/avatar.h"
