@@ -413,7 +413,6 @@ hengband_SOURCES = \
 	spell-kind/spells-lite.c spell-kind/spells-lite.h \
 	spell-kind/spells-neighbor.c spell-kind/spells-neighbor.h \
 	spell-kind/spells-pet.c spell-kind/spells-pet.h \
-	spell-kind/spells-shuffle.c spell-kind/spells-shuffle.h \
 	spell-kind/spells-sight.c spell-kind/spells-sight.h \
 	spell-kind/spells-specific-bolt.c spell-kind/spells-specific-bolt.h \
 	spell-kind/spells-teleport.c spell-kind/spells-teleport.h \
@@ -421,6 +420,7 @@ hengband_SOURCES = \
 	\
 	spell-realm/spells-crusade.c spell-realm/spells-crusade.h \
 	spell-realm/spells-hex.c spell-realm/spells-hex.h \
+	spell-realm/spells-trump.c spell-realm/spells-trump.h \
 	\
 	store/store.c store/store.h \
 	store/black-market.c store/black-market.h \

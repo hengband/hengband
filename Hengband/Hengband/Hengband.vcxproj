@@ -362,7 +362,7 @@
     <ClCompile Include="..\..\src\spell-kind\spells-grid.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-random.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-charm.c" />
-    <ClCompile Include="..\..\src\spell-kind\spells-shuffle.c" />
+    <ClCompile Include="..\..\src\spell-realm\spells-trump.c" />
     <ClCompile Include="..\..\src\spell\spells-describer.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-detection.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-genocide.c" />
@@ -592,7 +592,7 @@
     <ClInclude Include="..\..\src\spell-kind\spells-grid.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-random.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-charm.h" />
-    <ClInclude Include="..\..\src\spell-kind\spells-shuffle.h" />
+    <ClInclude Include="..\..\src\spell-realm\spells-trump.h" />
     <ClInclude Include="..\..\src\spell\spells-describer.h" />
     <ClInclude Include="..\..\src\spell-kind\spells-genocide.h" />
     <ClInclude Include="..\..\src\spell-realm\spells-hex.h" />

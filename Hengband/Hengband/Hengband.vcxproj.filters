@@ -1136,9 +1136,6 @@
     <ClCompile Include="..\..\src\spell-kind\spells-charm.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell-kind\spells-shuffle.c">
-      <Filter>spell-kind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mind\mind-cavalry.c">
       <Filter>mind</Filter>
     </ClCompile>
@@ -1183,6 +1180,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\spell-kind\earthquake.c">
       <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-trump.c">
+      <Filter>spell-realm</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2476,9 +2476,6 @@
     <ClInclude Include="..\..\src\spell-kind\spells-charm.h">
       <Filter>spell-kind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell-kind\spells-shuffle.h">
-      <Filter>spell-kind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mind\mind-cavalry.h">
       <Filter>mind</Filter>
     </ClInclude>
@@ -2523,6 +2520,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\spell-kind\earthquake.h">
       <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-trump.h">
+      <Filter>spell-realm</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

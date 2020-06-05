@@ -1,4 +1,4 @@
-﻿#include "spell-kind/spells-shuffle.h"
+﻿#include "spell-realm/spells-trump.h"
 #include "floor/floor.h"
 #include "io/targeting.h"
 #include "mutation/mutation.h"
