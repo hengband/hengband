@@ -1076,9 +1076,6 @@
     <ClCompile Include="..\..\src\spell\range-calc.c">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-hex.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\specific-object\bow.c">
       <Filter>specific-object</Filter>
     </ClCompile>
@@ -1176,6 +1173,9 @@
       <Filter>mind</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\spell-realm\spells-crusade.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-hex.c">
       <Filter>spell-realm</Filter>
     </ClCompile>
   </ItemGroup>
@@ -2404,9 +2404,6 @@
     <ClInclude Include="..\..\src\spell\range-calc.h">
       <Filter>spell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-hex.h">
-      <Filter>spell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-hex-numbers.h">
       <Filter>realm</Filter>
     </ClInclude>
@@ -2510,6 +2507,9 @@
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell-realm\spells-crusade.h">
+      <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-hex.h">
       <Filter>spell-realm</Filter>
     </ClInclude>
   </ItemGroup>
