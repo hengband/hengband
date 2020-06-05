@@ -390,28 +390,29 @@ hengband_SOURCES = \
 	spell/range-calc.c spell/range-calc.h \
 	spell/spells2.c spell/spells2.h \
 	spell/spells3.c spell/spells3.h \
-	spell/spells-beam.c spell/spells-beam.h \
 	spell/spells-describer.c spell/spells-describer.h \
-	spell/spells-detection.c spell/spells-detection.h \
 	spell/spells-diceroll.c spell/spells-diceroll.h \
 	spell/spells-execution.c spell/spells-execution.h \
-	spell/spells-floor.c spell/spells-floor.h \
-	spell/spells-genocide.c spell/spells-genocide.h \
 	spell/spells-hex.c spell/spells-hex.h \
-	spell/spells-launcher.c spell/spells-launcher.h \
-	spell/spells-lite.c spell/spells-lite.h \
-	spell/spells-neighbor.c spell/spells-neighbor.h \
 	spell/spells-object.c spell/spells-object.h \
-	spell/spells-pet.c spell/spells-pet.h \
-	spell/spells-sight.c spell/spells-sight.h \
-	spell/spells-specific-bolt.c spell/spells-specific-bolt.h \
 	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-staff-only.c spell/spells-staff-only.h \
 	spell/spells-status.c spell/spells-status.h \
-	spell/spells-teleport.c spell/spells-teleport.h \
 	spell/spells-util.h spell/spells-type.h \
-	spell/spells-world.c spell/spells-world.h \
 	spell/technic-info-table.c spell/technic-info-table.h \
+	\
+	spell-kind/spells-beam.c spell-kind/spells-beam.h \
+	spell-kind/spells-detection.c spell-kind/spells-detection.h \
+	spell-kind/spells-floor.c spell-kind/spells-floor.h \
+	spell-kind/spells-genocide.c spell-kind/spells-genocide.h \
+	spell-kind/spells-launcher.c spell-kind/spells-launcher.h \
+	spell-kind/spells-lite.c spell-kind/spells-lite.h \
+	spell-kind/spells-neighbor.c spell-kind/spells-neighbor.h \
+	spell-kind/spells-pet.c spell-kind/spells-pet.h \
+	spell-kind/spells-sight.c spell-kind/spells-sight.h \
+	spell-kind/spells-specific-bolt.c spell-kind/spells-specific-bolt.h \
+	spell-kind/spells-teleport.c spell-kind/spells-teleport.h \
+	spell-kind/spells-world.c spell-kind/spells-world.h \
 	\
 	store/store.c store/store.h \
 	store/black-market.c store/black-market.h \

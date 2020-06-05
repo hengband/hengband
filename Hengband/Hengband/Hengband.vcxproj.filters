@@ -533,9 +533,6 @@
     <ClCompile Include="..\..\src\spell\spells-diceroll.c">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-floor.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spell\spells-object.c">
       <Filter>spell</Filter>
     </ClCompile>
@@ -543,9 +540,6 @@
       <Filter>spell</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\spell\spells-summon.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-world.c">
       <Filter>spell</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\locale\english.c">
@@ -655,9 +649,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\core\sort.c">
       <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-detection.c">
-      <Filter>spell</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mind\racial-samurai.c">
       <Filter>mind</Filter>
@@ -1124,21 +1115,6 @@
     <ClCompile Include="..\..\src\mind\racial-ninja.c">
       <Filter>mind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-teleport.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-launcher.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-sight.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-genocide.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-lite.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mind\racial-draconian.c">
       <Filter>mind</Filter>
     </ClCompile>
@@ -1151,17 +1127,41 @@
     <ClCompile Include="..\..\src\spell\spells-staff-only.c">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-pet.c">
-      <Filter>spell</Filter>
+    <ClCompile Include="..\..\src\spell-kind\spells-beam.c">
+      <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-beam.c">
-      <Filter>spell</Filter>
+    <ClCompile Include="..\..\src\spell-kind\spells-detection.c">
+      <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-neighbor.c">
-      <Filter>spell</Filter>
+    <ClCompile Include="..\..\src\spell-kind\spells-floor.c">
+      <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-specific-bolt.c">
-      <Filter>spell</Filter>
+    <ClCompile Include="..\..\src\spell-kind\spells-genocide.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-launcher.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-lite.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-neighbor.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-pet.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-sight.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-specific-bolt.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-teleport.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-world.c">
+      <Filter>spell-kind</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1747,9 +1747,6 @@
     <ClInclude Include="..\..\src\spell\spells-diceroll.h">
       <Filter>spell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-floor.h">
-      <Filter>spell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-object.h">
       <Filter>spell</Filter>
     </ClInclude>
@@ -1757,9 +1754,6 @@
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-summon.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-world.h">
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\src\locele\japanese.h">
@@ -1872,9 +1866,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\sort.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-detection.h">
-      <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\racial-samurai.h">
       <Filter>mind</Filter>
@@ -2443,21 +2434,6 @@
     <ClInclude Include="..\..\src\mind\racial-ninja.h">
       <Filter>mind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-teleport.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-launcher.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-sight.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-genocide.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-lite.h">
-      <Filter>spell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mind\racial-draconian.h">
       <Filter>mind</Filter>
     </ClInclude>
@@ -2470,17 +2446,41 @@
     <ClInclude Include="..\..\src\spell\spells-staff-only.h">
       <Filter>spell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-pet.h">
-      <Filter>spell</Filter>
+    <ClInclude Include="..\..\src\spell-kind\spells-beam.h">
+      <Filter>spell-kind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-beam.h">
-      <Filter>spell</Filter>
+    <ClInclude Include="..\..\src\spell-kind\spells-detection.h">
+      <Filter>spell-kind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-neighbor.h">
-      <Filter>spell</Filter>
+    <ClInclude Include="..\..\src\spell-kind\spells-floor.h">
+      <Filter>spell-kind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-specific-bolt.h">
-      <Filter>spell</Filter>
+    <ClInclude Include="..\..\src\spell-kind\spells-genocide.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-launcher.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-lite.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-neighbor.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-pet.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-sight.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-specific-bolt.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-teleport.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-world.h">
+      <Filter>spell-kind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2610,6 +2610,9 @@
     </Filter>
     <Filter Include="specific-object">
       <UniqueIdentifier>{d12d97f4-76e6-4f8e-9f45-9905cf3863f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="spell-kind">
+      <UniqueIdentifier>{2ed79129-9b65-4718-b9c4-ce4ef793c81f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
