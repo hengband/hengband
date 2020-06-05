@@ -650,9 +650,6 @@
     <ClCompile Include="..\..\src\core\sort.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-samurai.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mspell\mspell-bolt.c">
       <Filter>mspell</Filter>
     </ClCompile>
@@ -842,14 +839,8 @@
     <ClCompile Include="..\..\src\inventory\inventory-damage.c">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-mirror-master.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\combat\player-attack.c">
       <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-force-trainer.c">
-      <Filter>mind</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mind\monk-attack.c">
       <Filter>mind</Filter>
@@ -1094,9 +1085,6 @@
     <ClCompile Include="..\..\src\spell\spells-hex.c">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-cavalry.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\specific-object\bow.c">
       <Filter>specific-object</Filter>
     </ClCompile>
@@ -1109,13 +1097,7 @@
     <ClCompile Include="..\..\src\specific-object\torch.c">
       <Filter>specific-object</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-ninja.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mind\racial-draconian.c">
-      <Filter>mind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-mindcrafter.c">
       <Filter>mind</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mind\racial-balrog.c">
@@ -1166,11 +1148,29 @@
     <ClCompile Include="..\..\src\spell-kind\spells-charm.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-warrior.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spell-kind\spells-shuffle.c">
       <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-cavalry.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-force-trainer.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-mindcrafter.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-mirror-master.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-ninja.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-samurai.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-warrior.c">
+      <Filter>mind</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1876,9 +1876,6 @@
     <ClInclude Include="..\..\src\core\sort.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-samurai.h">
-      <Filter>mind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mspell\monster-spell.h">
       <Filter>mspell</Filter>
     </ClInclude>
@@ -2086,17 +2083,11 @@
     <ClInclude Include="..\..\src\inventory\inventory-damage.h">
       <Filter>inventory</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-mirror-master.h">
-      <Filter>mind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\combat\player-attack.h">
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\player-attack-util.h">
       <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-force-trainer.h">
-      <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\monk-attack.h">
       <Filter>mind</Filter>
@@ -2422,9 +2413,6 @@
     <ClInclude Include="..\..\src\realm\realm-song-numbers.h">
       <Filter>realm</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-cavalry.h">
-      <Filter>mind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\specific-object\bow.h">
       <Filter>specific-object</Filter>
     </ClInclude>
@@ -2437,13 +2425,7 @@
     <ClInclude Include="..\..\src\specific-object\torch.h">
       <Filter>specific-object</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-ninja.h">
-      <Filter>mind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mind\racial-draconian.h">
-      <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-mindcrafter.h">
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mind\racial-balrog.h">
@@ -2494,11 +2476,29 @@
     <ClInclude Include="..\..\src\spell-kind\spells-charm.h">
       <Filter>spell-kind</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-warrior.h">
-      <Filter>mind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\spell-kind\spells-shuffle.h">
       <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-cavalry.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-force-trainer.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-mindcrafter.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-mirror-master.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-ninja.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-samurai.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-warrior.h">
+      <Filter>mind</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
