@@ -60,7 +60,6 @@
 #include "spell-kind/spells-teleport.h"
 #include "spell/spells-util.h"
 #include "spell-kind/spells-world.h"
-#include "spell/spells2.h"
 #include "spell/spells3.h"
 #include "system/angband-version.h"
 #include "term/gameterm.h"
