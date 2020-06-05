@@ -233,22 +233,6 @@ bool android_inside_weapon(player_type *creature_ptr)
 }
 
 
-bool create_ration(player_type *creature_ptr)
-{
-	object_type *q_ptr;
-	object_type forge;
-	q_ptr = &forge;
-
-	/* Create the food ration */
-	object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
-
-	/* Drop the object from heaven */
-	(void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
-	msg_print(_("食事を料理して作った。", "You cook some food."));
-	return TRUE;
-}
-
-
 void hayagake(player_type *creature_ptr)
 {
 	if (creature_ptr->action == ACTION_HAYAGAKE)
