@@ -152,6 +152,8 @@ hengband_SOURCES = \
 	grid/feature.c grid/feature.h \
 	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
 	\
+	info-reader/race-info-tokens-table.c info-reader/race-info-tokens-table.h \
+	\
 	inventory/inventory-curse.c inventory/inventory-curse.h \
 	inventory/inventory-damage.c inventory/inventory-damage.h \
 	inventory/inventory-object.c inventory/inventory-object.h \
@@ -488,10 +490,10 @@ LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat -Icore -Idungeon \
-	-Ieffect -Ifloor -Igrid -Iinventory -Iio -Iio-dump -Iknowledge -Imarket \
-	-Imelee -Imind -Imonster -Imonster-attack -Imspell -Imutation -Iobject \
-	-Iobject-enchant -Ipet -Iplayer -Iplayer-attack -Irealm -Iroom \
-	-Ispecific-object -Ispell -Ispell-kind -Ispell-realm -Isv-definition \
+	-Ieffect -Ifloor -Igrid -Iinfo-reader -Iinventory -Iio -Iio-dump \
+	-Iknowledge -Imarket -Imelee -Imind -Imonster -Imonster-attack -Imspell \
+	-Imutation -Iobject -Iobject-enchant -Ipet -Iplayer -Iplayer-attack -Irealm \
+	-Iroom -Ispecific-object -Ispell -Ispell-kind -Ispell-realm -Isv-definition \
 	-Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
 
 install-exec-hook:

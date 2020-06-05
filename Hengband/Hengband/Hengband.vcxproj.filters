@@ -1184,6 +1184,9 @@
     <ClCompile Include="..\..\src\object-enchant\vorpal-weapon.c">
       <Filter>object-enchant</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\race-info-tokens-table.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2524,6 +2527,9 @@
     <ClInclude Include="..\..\src\object-enchant\vorpal-weapon.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\race-info-tokens-table.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2667,6 +2673,9 @@
     </Filter>
     <Filter Include="melee">
       <UniqueIdentifier>{642ec95b-f054-4958-a614-49ccf88cfc25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="info-reader">
+      <UniqueIdentifier>{149ff96c-b8c9-4df9-845d-d0618427d100}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
