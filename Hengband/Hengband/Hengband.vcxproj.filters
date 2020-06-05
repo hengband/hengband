@@ -1151,6 +1151,9 @@
     <ClCompile Include="..\..\src\spell\spells-staff-only.c">
       <Filter>spell</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-pet.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2456,6 +2459,9 @@
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-staff-only.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-pet.h">
       <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>

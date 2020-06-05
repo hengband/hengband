@@ -26,7 +26,6 @@ bool control_one_undead(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL ple
 bool control_one_demon(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 bool charm_animal(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 bool eat_magic(player_type* caster_ptr, int power);
-void discharge_minion(player_type* caster_ptr);
 void ring_of_power(player_type* caster_ptr, DIRECTION dir);
 void wild_magic(player_type* caster_ptr, int spell);
 void cast_meteor(player_type* caster_ptr, HIT_POINT dam, POSITION rad);

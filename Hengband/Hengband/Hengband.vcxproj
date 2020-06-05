@@ -361,6 +361,7 @@
     <ClCompile Include="..\..\src\spell\spells-hex.c" />
     <ClCompile Include="..\..\src\spell\spells-launcher.c" />
     <ClCompile Include="..\..\src\spell\spells-lite.c" />
+    <ClCompile Include="..\..\src\spell\spells-pet.c" />
     <ClCompile Include="..\..\src\spell\spells-sight.c" />
     <ClCompile Include="..\..\src\spell\spells-staff-only.c" />
     <ClCompile Include="..\..\src\spell\spells-teleport.c" />
@@ -579,6 +580,7 @@
     <ClInclude Include="..\..\src\spell\spells-hex.h" />
     <ClInclude Include="..\..\src\spell\spells-launcher.h" />
     <ClInclude Include="..\..\src\spell\spells-lite.h" />
+    <ClInclude Include="..\..\src\spell\spells-pet.h" />
     <ClInclude Include="..\..\src\spell\spells-sight.h" />
     <ClInclude Include="..\..\src\spell\spells-staff-only.h" />
     <ClInclude Include="..\..\src\spell\spells-teleport.h" />
