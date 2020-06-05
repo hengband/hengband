@@ -175,10 +175,10 @@
     <ClCompile Include="..\..\src\combat\hallucination-attacks-table.c" />
     <ClCompile Include="..\..\src\monster-attack\insults-moans.c" />
     <ClCompile Include="..\..\src\combat\martial-arts-table.c" />
-    <ClCompile Include="..\..\src\combat\melee-switcher.c" />
-    <ClCompile Include="..\..\src\combat\melee-util.c" />
+    <ClCompile Include="..\..\src\melee\melee-switcher.c" />
+    <ClCompile Include="..\..\src\melee\melee-util.c" />
     <ClCompile Include="..\..\src\monster-attack\monster-attack-describer.c" />
-    <ClCompile Include="..\..\src\combat\monster-attack-monster.c" />
+    <ClCompile Include="..\..\src\melee\monster-attack-monster.c" />
     <ClCompile Include="..\..\src\monster-attack\monster-attack-player.c" />
     <ClCompile Include="..\..\src\monster-attack\monster-attack-status.c" />
     <ClCompile Include="..\..\src\monster-attack\monster-attack-switcher.c" />
@@ -347,7 +347,7 @@
     <ClCompile Include="..\..\src\knowledge\lighting-level-table.c" />
     <ClCompile Include="..\..\src\knowledge\monster-group-table.c" />
     <ClCompile Include="..\..\src\knowledge\object-group-table.c" />
-    <ClCompile Include="..\..\src\combat\melee-postprocess.c" />
+    <ClCompile Include="..\..\src\melee\melee-postprocess.c" />
     <ClCompile Include="..\..\src\combat\shoot.c" />
     <ClCompile Include="..\..\src\mspell\mspell-bolt.c" />
     <ClCompile Include="..\..\src\mspell\mspell-breath.c" />
@@ -489,11 +489,11 @@
     <ClInclude Include="..\..\src\combat\hallucination-attacks-table.h" />
     <ClInclude Include="..\..\src\monster-attack\insults-moans.h" />
     <ClInclude Include="..\..\src\combat\martial-arts-table.h" />
-    <ClInclude Include="..\..\src\combat\melee-switcher.h" />
-    <ClInclude Include="..\..\src\combat\melee-util.h" />
+    <ClInclude Include="..\..\src\melee\melee-switcher.h" />
+    <ClInclude Include="..\..\src\melee\melee-util.h" />
     <ClInclude Include="..\..\src\monster-attack\monster-attack-describer.h" />
     <ClInclude Include="..\..\src\monster-attack\monster-attack-effect.h" />
-    <ClInclude Include="..\..\src\combat\monster-attack-monster.h" />
+    <ClInclude Include="..\..\src\melee\monster-attack-monster.h" />
     <ClInclude Include="..\..\src\monster-attack\monster-attack-player.h" />
     <ClInclude Include="..\..\src\monster-attack\monster-attack-status.h" />
     <ClInclude Include="..\..\src\monster-attack\monster-attack-switcher.h" />
@@ -815,7 +815,7 @@
     <ClInclude Include="..\..\src\knowledge\lighting-level-table.h" />
     <ClInclude Include="..\..\src\knowledge\monster-group-table.h" />
     <ClInclude Include="..\..\src\knowledge\object-group-table.h" />
-    <ClInclude Include="..\..\src\combat\melee-postprocess.h" />
+    <ClInclude Include="..\..\src\melee\melee-postprocess.h" />
     <ClInclude Include="..\..\src\combat\shoot.h" />
     <ClInclude Include="..\..\src\core\show-file.h" />
     <ClInclude Include="..\..\src\util\object-sort.h" />

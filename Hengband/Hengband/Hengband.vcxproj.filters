@@ -833,23 +833,11 @@
     <ClCompile Include="..\..\src\combat\vorpal-weapon.c">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-attack-monster.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\melee-postprocess.c">
-      <Filter>combat</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-race-hook.c">
       <Filter>monster</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\util\util.c">
       <Filter>util</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\melee-switcher.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\melee-util.c">
-      <Filter>combat</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\combat\aura-counterattack.c">
       <Filter>combat</Filter>
@@ -1183,6 +1171,18 @@
     </ClCompile>
     <ClCompile Include="..\..\src\monster-attack\monster-eating.c">
       <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\melee\melee-postprocess.c">
+      <Filter>melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\melee\melee-switcher.c">
+      <Filter>melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\melee\melee-util.c">
+      <Filter>melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\melee\monster-attack-monster.c">
+      <Filter>melee</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2086,12 +2086,6 @@
     <ClInclude Include="..\..\src\combat\vorpal-weapon.h">
       <Filter>combat</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-monster.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\melee-postprocess.h">
-      <Filter>combat</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-race-hook.h">
       <Filter>monster</Filter>
     </ClInclude>
@@ -2109,12 +2103,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object\item-use-flags.h">
       <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\melee-switcher.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\melee-util.h">
-      <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\aura-counterattack.h">
       <Filter>combat</Filter>
@@ -2524,6 +2512,18 @@
     <ClInclude Include="..\..\src\monster-attack\monster-eating.h">
       <Filter>monster-attack</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\melee\melee-postprocess.h">
+      <Filter>melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\melee\melee-switcher.h">
+      <Filter>melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\melee\melee-util.h">
+      <Filter>melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\melee\monster-attack-monster.h">
+      <Filter>melee</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2664,6 +2664,9 @@
     </Filter>
     <Filter Include="monster-attack">
       <UniqueIdentifier>{f197a2c1-d277-4d4d-b08b-586cf1f4f8f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="melee">
+      <UniqueIdentifier>{642ec95b-f054-4958-a614-49ccf88cfc25}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
