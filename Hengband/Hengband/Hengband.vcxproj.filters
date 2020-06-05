@@ -1178,6 +1178,9 @@
     <ClCompile Include="..\..\src\spell-kind\spells-random.c">
       <Filter>spell-kind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-grid.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2510,6 +2513,9 @@
       <Filter>spell-realm</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell-kind\spells-random.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-grid.h">
       <Filter>spell-kind</Filter>
     </ClInclude>
   </ItemGroup>

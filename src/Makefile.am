@@ -407,6 +407,7 @@ hengband_SOURCES = \
 	spell-kind/spells-detection.c spell-kind/spells-detection.h \
 	spell-kind/spells-floor.c spell-kind/spells-floor.h \
 	spell-kind/spells-genocide.c spell-kind/spells-genocide.h \
+	spell-kind/spells-grid.c spell-kind/spells-grid.h \
 	spell-kind/spells-launcher.c spell-kind/spells-launcher.h \
 	spell-kind/spells-lite.c spell-kind/spells-lite.h \
 	spell-kind/spells-neighbor.c spell-kind/spells-neighbor.h \

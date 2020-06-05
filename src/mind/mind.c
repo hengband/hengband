@@ -41,6 +41,7 @@
 #include "spell/process-effect.h"
 #include "spell-kind/spells-detection.h"
 #include "spell-kind/spells-floor.h"
+#include "spell-kind/spells-grid.h"
 #include "spell-kind/spells-launcher.h"
 #include "spell-kind/spells-lite.h"
 #include "spell-kind/spells-sight.h"
