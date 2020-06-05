@@ -11,7 +11,7 @@
  */
 
 #include "combat/melee-postprocess.h"
-#include "combat/monster-attack-types.h"
+#include "monster-attack/monster-attack-types.h"
 #include "grid/grid.h"
 #include "main/sound-definitions-table.h"
 #include "monster/monster-race-hook.h"

@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "combat/monster-attack-status.h"
+#include "monster-attack/monster-attack-status.h"
 #include "mind/mind-mirror-master.h"
 #include "player/player-effects.h"
 

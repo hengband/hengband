@@ -1,5 +1,5 @@
 ﻿#include "system/angband.h"
-#include "combat/monster-attack-types.h"
+#include "monster-attack/monster-attack-types.h"
 #include "spell/spells-type.h"
 
 /*!

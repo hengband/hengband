@@ -44,7 +44,7 @@
 #include "monster/monster-race.h"
 #include "monster/creature.h"
 #include "io/targeting.h"
-#include "combat/monster-attack-types.h"
+#include "monster-attack/monster-attack-types.h"
 #include "spell/process-effect.h"
 #include "core/player-processor.h"
 

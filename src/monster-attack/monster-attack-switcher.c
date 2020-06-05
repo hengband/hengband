@@ -5,9 +5,9 @@
  * @details 長い処理はインクルード先の別ファイルにて行っている
  */
 
-#include "combat/monster-attack-switcher.h"
-#include "combat/monster-attack-status.h"
-#include "combat/monster-eating.h"
+#include "monster-attack/monster-attack-switcher.h"
+#include "monster-attack/monster-attack-status.h"
+#include "monster-attack/monster-eating.h"
 #include "mind/mind-mirror-master.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

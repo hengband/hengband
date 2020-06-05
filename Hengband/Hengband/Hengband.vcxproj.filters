@@ -812,13 +812,7 @@
     <ClCompile Include="..\..\src\combat\hallucination-attacks-table.c">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-attack-types.c">
-      <Filter>combat</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\combat\martial-arts-table.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\insults-moans.c">
       <Filter>combat</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\combat\attack-accuracy.c">
@@ -839,9 +833,6 @@
     <ClCompile Include="..\..\src\combat\vorpal-weapon.c">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-attack-player.c">
-      <Filter>combat</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\combat\monster-attack-monster.c">
       <Filter>combat</Filter>
     </ClCompile>
@@ -858,21 +849,6 @@
       <Filter>combat</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\combat\melee-util.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-attack-util.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-attack-describer.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-eating.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-attack-switcher.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-attack-status.c">
       <Filter>combat</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\combat\aura-counterattack.c">
@@ -1183,6 +1159,30 @@
     </ClCompile>
     <ClCompile Include="..\..\src\player-attack\player-attack.c">
       <Filter>player-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\insults-moans.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-describer.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-player.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-status.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-switcher.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-types.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-util.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-eating.c">
+      <Filter>monster-attack</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -2062,19 +2062,10 @@
     <ClInclude Include="..\..\src\combat\hallucination-attacks-table.h">
       <Filter>combat</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-types.h">
-      <Filter>combat</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\combat\martial-arts-table.h">
       <Filter>combat</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\combat\insults-moans.h">
-      <Filter>combat</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\combat\combat-options-type.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-effect.h">
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\attack-accuracy.h">
@@ -2093,9 +2084,6 @@
       <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\vorpal-weapon.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-player.h">
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\monster-attack-monster.h">
@@ -2126,21 +2114,6 @@
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\melee-util.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-util.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-describer.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-eating.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-switcher.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-status.h">
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\aura-counterattack.h">
@@ -2524,6 +2497,33 @@
     <ClInclude Include="..\..\src\player-attack\player-attack-util.h">
       <Filter>player-attack</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\insults-moans.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-describer.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-effect.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-player.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-status.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-switcher.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-types.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-util.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-eating.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2661,6 +2661,9 @@
     </Filter>
     <Filter Include="player-attack">
       <UniqueIdentifier>{cc3a34dc-4ff0-473f-afa5-3b5ec0da5aaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="monster-attack">
+      <UniqueIdentifier>{f197a2c1-d277-4d4d-b08b-586cf1f4f8f5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

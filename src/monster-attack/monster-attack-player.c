@@ -4,17 +4,17 @@
  * @author Hourier
  */
 
-#include "combat/monster-attack-player.h"
+#include "monster-attack/monster-attack-player.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-pet.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
 #include "combat/combat-options-type.h"
 #include "combat/hallucination-attacks-table.h"
-#include "combat/monster-attack-describer.h"
-#include "combat/monster-attack-effect.h"
-#include "combat/monster-attack-switcher.h"
-#include "combat/monster-attack-util.h"
+#include "monster-attack/monster-attack-describer.h"
+#include "monster-attack/monster-attack-effect.h"
+#include "monster-attack/monster-attack-switcher.h"
+#include "monster-attack/monster-attack-util.h"
 #include "combat/aura-counterattack.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"

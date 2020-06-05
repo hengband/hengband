@@ -86,25 +86,16 @@ hengband_SOURCES = \
 	combat/attack-power-table.c combat/attack-power-table.h \
 	combat/aura-counterattack.c combat/aura-counterattack.h \
 	combat/hallucination-attacks-table.c combat/hallucination-attacks-table.h \
-	combat/monster-attack-types.c combat/monster-attack-types.h \
 	combat/martial-arts-table.c combat/martial-arts-table.h \
-	combat/insults-moans.c combat/insults-moans.h \
-	combat/monster-attack-effect.h \
 	combat/attack-accuracy.c combat/attack-accuracy.h \
 	combat/slaying.c combat/slaying.h \
 	combat/combat-options-type.h \
 	combat/attack-criticality.c combat/attack-criticality.h \
 	combat/vorpal-weapon.c combat/vorpal-weapon.h \
-	combat/monster-attack-player.c combat/monster-attack-player.h \
 	combat/monster-attack-monster.c combat/monster-attack-monster.h \
 	combat/melee-postprocess.c combat/melee-postprocess.h \
 	combat/melee-switcher.c combat/melee-switcher.h \
 	combat/melee-util.c combat/melee-util.h \
-	combat/monster-attack-util.c combat/monster-attack-util.h \
-	combat/monster-attack-describer.c combat/monster-attack-describer.h \
-	combat/monster-eating.c combat/monster-eating.h \
-	combat/monster-attack-status.c combat/monster-attack-status.h \
-	combat/monster-attack-switcher.c combat/monster-attack-switcher.h \
 	combat/shoot.c combat/shoot.h \
 	combat/snipe.c combat/snipe.h \
 	\
@@ -273,6 +264,16 @@ hengband_SOURCES = \
 	monster/monster-status.c monster/monster-status.h \
 	monster/monster1.c monster/monster2.c \
 	monster/horror-descriptions.c monster/horror-descriptions.h \
+	\
+	monster-attack/insults-moans.c monster-attack/insults-moans.h \
+	monster-attack/monster-attack-describer.c monster-attack/monster-attack-describer.h \
+	monster-attack/monster-attack-effect.h \
+	monster-attack/monster-attack-player.c monster-attack/monster-attack-player.h \
+	monster-attack/monster-attack-status.c monster-attack/monster-attack-status.h \
+	monster-attack/monster-attack-switcher.c monster-attack/monster-attack-switcher.h \
+	monster-attack/monster-attack-types.c monster-attack/monster-attack-types.h \
+	monster-attack/monster-attack-util.c monster-attack/monster-attack-util.h \
+	monster-attack/monster-eating.c monster-attack/monster-eating.h \
 	\
 	mspell/monster-spell.h \
 	mspell/mspells1.c mspell/mspells2.c mspell/mspells3.c \
@@ -487,10 +488,10 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
 	-Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat -Icore -Idungeon \
 	-Ieffect -Ifloor -Igrid -Iinventory -Iio -Iio-dump -Iknowledge -Imarket \
-	-Imind -Imonster -Imspell -Imutation -Iobject -Iobject-enchant -Ipet \
-	-Iplayer -Iplayer-attack -Irealm -Iroom -Ispecific-object -Ispell \
-	-Ispell-kind -Ispell-realm -Isv-definition -Isystem -Iterm -Iutil -Iview \
-	-Iwizard -Iworld
+	-Imind -Imonster -Imonster-attack -Imspell -Imutation -Iobject \
+	-Iobject-enchant -Ipet -Iplayer -Iplayer-attack -Irealm -Iroom \
+	-Ispecific-object -Ispell -Ispell-kind -Ispell-realm -Isv-definition \
+	-Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

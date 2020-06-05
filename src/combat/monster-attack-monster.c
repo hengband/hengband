@@ -10,7 +10,7 @@
 #include "combat/melee-postprocess.h"
 #include "combat/melee-switcher.h"
 #include "combat/melee-util.h"
-#include "combat/monster-attack-effect.h"
+#include "monster-attack/monster-attack-effect.h"
 #include "dungeon/dungeon.h"
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"

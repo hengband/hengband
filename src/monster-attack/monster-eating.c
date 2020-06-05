@@ -4,7 +4,7 @@
  * @author Hourier
  */
 
-#include "combat/monster-eating.h"
+#include "monster-attack/monster-eating.h"
 #include "floor/floor.h"
 #include "inventory/inventory-object.h"
 #include "mind/mind-mirror-master.h"

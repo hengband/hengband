@@ -5,7 +5,7 @@
  */
 
 #include "combat/melee-switcher.h"
-#include "combat/monster-attack-effect.h"
+#include "monster-attack/monster-attack-effect.h"
 #include "monster/monster-status.h"
 #include "player/player-move.h"
 #include "spell-kind/earthquake.h"
