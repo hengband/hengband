@@ -3,21 +3,6 @@
 #include "system/angband.h"
 #include "main/init.h" // 相互参照、後で何とかする.
 
-typedef struct dungeon_grid dungeon_grid;
-
-struct dungeon_grid
-{
-	FEAT_IDX feature;		/* Terrain feature */
-	MONSTER_IDX	monster;		/* Monster */
-	OBJECT_IDX object;			/* Object */
-	EGO_IDX	ego;			/* Ego-Item */
-	ARTIFACT_IDX artifact;		/* Artifact */
-	IDX trap;			/* Trap */
-	BIT_FLAGS cave_info;		/* Flags for CAVE_MARK, CAVE_GLOW, CAVE_ICKY, CAVE_ROOM */
-	s16b special; /* Reserved for special terrain info */
-	int random;			/* Number of the random effect */
-};
-
 /* Random dungeon grid effects */
 #define RANDOM_NONE         0x00000000
 #define RANDOM_FEATURE      0x00000001
@@ -27,13 +12,7 @@ struct dungeon_grid
 #define RANDOM_ARTIFACT     0x00000010
 #define RANDOM_TRAP         0x00000020
 
-/*
- * Parse errors
- */
 #define PARSE_ERROR_GENERIC                  1
-#define PARSE_ERROR_ABSOLETE_FILE            2
-#define PARSE_ERROR_MISSING_RECORD_HEADER    3
-#define PARSE_ERROR_NON_SEQUENTIAL_RECORDS   4
 #define PARSE_ERROR_INVALID_FLAG             5
 #define PARSE_ERROR_UNDEFINED_DIRECTIVE      6
 #define PARSE_ERROR_OUT_OF_MEMORY            7
@@ -42,10 +21,20 @@ struct dungeon_grid
 #define PARSE_ERROR_UNDEFINED_TERRAIN_TAG   10
 #define PARSE_ERROR_MAX                     11
 
-extern dungeon_grid letter[255];
 extern concptr err_str[PARSE_ERROR_MAX];
 
-errr process_dungeon_file(player_type *player_ptr, concptr name, int ymin, int xmin, int ymax, int xmax);
 errr init_v_info(void);
 errr init_buildings(void);
 errr init_info_txt(FILE *fp, char *buf, header *head, parse_info_txt_func parse_info_txt_line);
+errr parse_v_info(char *buf, header *head);
+errr parse_s_info(char *buf, header *head);
+errr parse_m_info(char *buf, header *head);
+errr parse_f_info(char *buf, header *head);
+s16b f_tag_to_index(concptr str);
+void retouch_f_info(header *head);
+errr parse_k_info(char *buf, header *head);
+errr parse_a_info(char *buf, header *head);
+errr parse_e_info(char *buf, header *head);
+errr parse_r_info(char *buf, header *head);
+errr parse_d_info(char *buf, header *head);
+errr process_dungeon_file(player_type *player_ptr, concptr name, int ymin, int xmin, int ymax, int xmax);

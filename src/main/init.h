@@ -89,42 +89,14 @@ struct header
 	void(*retouch)(header *head);
 };
 
-extern errr parse_v_info(char *buf, header *head);
-extern errr parse_f_info(char *buf, header *head);
-extern void retouch_f_info(header *head);
-extern errr parse_k_info(char *buf, header *head);
-extern errr parse_a_info(char *buf, header *head);
-extern errr parse_e_info(char *buf, header *head);
-extern errr parse_r_info(char *buf, header *head);
-extern errr parse_d_info(char *buf, header *head);
-extern errr parse_s_info(char *buf, header *head);
-extern errr parse_m_info(char *buf, header *head);
-
-/*
- * Error tracking
- */
 extern int error_idx;
 extern int error_line;
 
-/*
- * File headers
- */
-extern header z_head;
-extern header v_head;
 extern header f_head;
-extern header k_head;
-extern header a_head;
-extern header e_head;
-extern header r_head;
-extern header p_head;
-extern header h_head;
-extern header b_head;
-extern header g_head;
 
 #endif /* INCLUDED_INIT_H */
 
-extern s16b f_tag_to_index(concptr str);
-extern s16b f_tag_to_index_in_init(concptr str);
-extern void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(char*));
-extern concptr get_check_sum(void);
-extern void init_file_paths(char *path);
+s16b f_tag_to_index_in_init(concptr str);
+void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(char*));
+concptr get_check_sum(void);
+void init_file_paths(char *path);

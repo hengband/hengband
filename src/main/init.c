@@ -235,15 +235,15 @@ concptr err_str[PARSE_ERROR_MAX] =
 /*
  * File headers
  */
-header v_head; /*!< Vault情報のヘッダ構造体 */
+static header v_head; /*!< Vault情報のヘッダ構造体 */
 header f_head; /*!< 地形情報のヘッダ構造体 */
-header k_head; /*!< ペースアイテム情報のヘッダ構造体 */
-header a_head; /*!< 固定アーティファクト情報のヘッダ構造体 */
-header e_head; /*!< アイテムエゴ情報のヘッダ構造体 */
-header r_head; /*!< モンスター種族情報のヘッダ構造体 */
-header d_head; /*!< ダンジョン情報のヘッダ構造体 */
-header s_head; /*!< プレイヤー職業技能情報のヘッダ構造体 */
-header m_head; /*!< プレイヤー職業魔法情報のヘッダ構造体 */
+static header k_head; /*!< ペースアイテム情報のヘッダ構造体 */
+static header a_head; /*!< 固定アーティファクト情報のヘッダ構造体 */
+static header e_head; /*!< アイテムエゴ情報のヘッダ構造体 */
+static header r_head; /*!< モンスター種族情報のヘッダ構造体 */
+static header d_head; /*!< ダンジョン情報のヘッダ構造体 */
+static header s_head; /*!< プレイヤー職業技能情報のヘッダ構造体 */
+static header m_head; /*!< プレイヤー職業魔法情報のヘッダ構造体 */
 
 /*!
  * @brief テキストファイルとrawファイルの更新時刻を比較する
