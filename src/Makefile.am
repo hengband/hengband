@@ -402,6 +402,7 @@ hengband_SOURCES = \
 	spell/spells-object.c spell/spells-object.h \
 	spell/spells-sight.c spell/spells-sight.h \
 	spell/spells-summon.c spell/spells-summon.h \
+	spell/spells-staff-only.c spell/spells-staff-only.h \
 	spell/spells-status.c spell/spells-status.h \
 	spell/spells-teleport.c spell/spells-teleport.h \
 	spell/spells-util.h spell/spells-type.h \

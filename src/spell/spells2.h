@@ -4,8 +4,6 @@
 
 bool wall_stone(player_type *caster_ptr);
 bool probing(player_type* caster_ptr);
-bool cleansing_nova(player_type* creature_ptr, bool magic, bool powerful);
-bool unleash_mana_storm(player_type* creature_ptr, bool powerful);
 void call_chaos(player_type* caster_ptr);
 bool hypodynamic_bolt(player_type* caster_ptr, DIRECTION dir, HIT_POINT dam);
 bool death_ray(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);

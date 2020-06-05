@@ -362,6 +362,7 @@
     <ClCompile Include="..\..\src\spell\spells-launcher.c" />
     <ClCompile Include="..\..\src\spell\spells-lite.c" />
     <ClCompile Include="..\..\src\spell\spells-sight.c" />
+    <ClCompile Include="..\..\src\spell\spells-staff-only.c" />
     <ClCompile Include="..\..\src\spell\spells-teleport.c" />
     <ClCompile Include="..\..\src\system\system-variables.c" />
     <ClCompile Include="..\..\src\core\show-file.c" />
@@ -579,6 +580,7 @@
     <ClInclude Include="..\..\src\spell\spells-launcher.h" />
     <ClInclude Include="..\..\src\spell\spells-lite.h" />
     <ClInclude Include="..\..\src\spell\spells-sight.h" />
+    <ClInclude Include="..\..\src\spell\spells-staff-only.h" />
     <ClInclude Include="..\..\src\spell\spells-teleport.h" />
     <ClInclude Include="..\..\src\sv-definition\sv-amulet-types.h" />
     <ClInclude Include="..\..\src\sv-definition\sv-armor-types.h" />

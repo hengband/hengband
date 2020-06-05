@@ -22,6 +22,7 @@
 #include "spell/spells-genocide.h"
 #include "spell/spells-lite.h"
 #include "spell/spells-sight.h"
+#include "spell/spells-staff-only.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-teleport.h"

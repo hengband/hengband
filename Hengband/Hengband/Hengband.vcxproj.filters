@@ -1148,6 +1148,9 @@
     <ClCompile Include="..\..\src\mind\racial-balrog.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-staff-only.c">
+      <Filter>spell</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2451,6 +2454,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\mind\racial-balrog.h">
       <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-staff-only.h">
+      <Filter>spell</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
