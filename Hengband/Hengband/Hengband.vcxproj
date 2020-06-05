@@ -746,7 +746,7 @@
     <ClCompile Include="..\..\src\spell\spells-summon.c" />
     <ClCompile Include="..\..\src\spell-kind\spells-world.c" />
     <ClCompile Include="..\..\src\spell\range-calc.c" />
-    <ClCompile Include="..\..\src\spell\spells2.c" />
+    <ClCompile Include="..\..\src\spell-realm\spells-crusade.c" />
     <ClCompile Include="..\..\src\spell\spells3.c" />
     <ClCompile Include="..\..\src\io\uid-checker.c" />
     <ClCompile Include="..\..\src\util\object-sort.c" />
@@ -867,7 +867,7 @@
     <ClInclude Include="..\..\src\spell\spells-type.h" />
     <ClInclude Include="..\..\src\spell\spells-util.h" />
     <ClInclude Include="..\..\src\spell\spells-execution.h" />
-    <ClInclude Include="..\..\src\spell\spells2.h" />
+    <ClInclude Include="..\..\src\spell-realm\spells-crusade.h" />
     <ClInclude Include="..\..\src\spell\spells3.h" />
     <ClInclude Include="..\..\src\spell\technic-info-table.h" />
     <ClInclude Include="..\..\src\view\display-characteristic.h" />

@@ -390,7 +390,6 @@ hengband_SOURCES = \
 	spell/music-checker.c spell/music-checker.h \
 	spell/process-effect.c spell/process-effect.h \
 	spell/range-calc.c spell/range-calc.h \
-	spell/spells2.c spell/spells2.h \
 	spell/spells3.c spell/spells3.h \
 	spell/spells-describer.c spell/spells-describer.h \
 	spell/spells-diceroll.c spell/spells-diceroll.h \
@@ -418,6 +417,8 @@ hengband_SOURCES = \
 	spell-kind/spells-specific-bolt.c spell-kind/spells-specific-bolt.h \
 	spell-kind/spells-teleport.c spell-kind/spells-teleport.h \
 	spell-kind/spells-world.c spell-kind/spells-world.h \
+	\
+	spell-realm/spells-crusade.c spell-realm/spells-crusade.h \
 	\
 	store/store.c store/store.h \
 	store/black-market.c store/black-market.h \

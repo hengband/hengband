@@ -344,9 +344,6 @@
     <ClCompile Include="..\..\src\core\stuff-handler.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells2.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spell\spells3.c">
       <Filter>spell</Filter>
     </ClCompile>
@@ -1178,6 +1175,9 @@
     <ClCompile Include="..\..\src\mind\racial-android.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-crusade.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1560,9 +1560,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\special-internal-keys.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells2.h">
-      <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spells3.h">
       <Filter>spell</Filter>
@@ -2512,6 +2509,9 @@
     <ClInclude Include="..\..\src\mind\racial-android.h">
       <Filter>mind</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-crusade.h">
+      <Filter>spell-realm</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2643,6 +2643,9 @@
     </Filter>
     <Filter Include="spell-kind">
       <UniqueIdentifier>{2ed79129-9b65-4718-b9c4-ce4ef793c81f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="spell-realm">
+      <UniqueIdentifier>{1ce2167d-011b-47b5-8934-24c6d4d036e3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
