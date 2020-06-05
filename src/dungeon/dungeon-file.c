@@ -45,6 +45,7 @@
 #include "grid/feature.h"
 #include "grid/grid.h"
 #include "grid/trap.h"
+#include "info-reader/dungeon-info-tokens-table.h"
 #include "info-reader/kind-info-tokens-table.h"
 #include "info-reader/race-info-tokens-table.h"
 #include "io/files-util.h"
@@ -74,48 +75,6 @@
 #include "world/world.h"
 
 dungeon_grid letter[255];
-
-/*** Helper arrays for parsing ascii template files ***/
-
-/*!
- * ダンジョン特性トークンの定義 /
- * Dungeon flags
- */
-static concptr d_info_flags1[] =
-{
-	"WINNER",
-	"MAZE",
-	"SMALLEST",
-	"BEGINNER",
-	"BIG",
-	"NO_DOORS",
-	"WATER_RIVER",
-	"LAVA_RIVER",
-	"CURTAIN",
-	"GLASS_DOOR",
-	"CAVE",
-	"CAVERN",
-	"ARCADE",
-	"LAKE_ACID",
-	"LAKE_POISONOUS",
-	"XXX",
-	"FORGET",
-	"LAKE_WATER",
-	"LAKE_LAVA",
-	"LAKE_RUBBLE",
-	"LAKE_TREE",
-	"NO_VAULT",
-	"ARENA",
-	"DESTROY",
-	"GLASS_ROOM",
-	"NO_CAVE",
-	"NO_MAGIC",
-	"NO_MELEE",
-	"CHAMELEON",
-	"DARKNESS",
-	"ACID_RIVER",
-	"POISONOUS_RIVER"
-};
 
 /*!
  * @brief データの可変文字列情報をテキストとして保管する /
