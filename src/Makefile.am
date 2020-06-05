@@ -244,7 +244,6 @@ hengband_SOURCES = \
 	market/building-actions-table.h \
 	\
 	mind/mind.c mind/mind.h \
-	mind/monk-attack.c mind/monk-attack.h \
 	mind/mind-cavalry.c mind/mind-cavalry.h \
 	mind/mind-force-trainer.c mind/mind-force-trainer.h \
 	mind/mind-mindcrafter.c mind/mind-mindcrafter.h \
@@ -253,6 +252,7 @@ hengband_SOURCES = \
 	mind/mind-samurai.c mind/mind-samurai.h \
 	mind/mind-warrior.c mind/mind-warrior.h \
 	mind/mind-warrior-mage.c mind/mind-warrior-mage.h \
+	mind/monk-attack.c mind/monk-attack.h \
 	mind/racial.c mind/racial.h \
 	mind/racial-android.c mind/racial-android.h \
 	mind/racial-balrog.c mind/racial-balrog.h \
@@ -395,15 +395,14 @@ hengband_SOURCES = \
 	spell/spells-diceroll.c spell/spells-diceroll.h \
 	spell/spells-execution.c spell/spells-execution.h \
 	spell/spells-object.c spell/spells-object.h \
-	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-staff-only.c spell/spells-staff-only.h \
+	spell/spells-summon.c spell/spells-summon.h \
 	spell/spells-status.c spell/spells-status.h \
-	spell/spells-util.h spell/spells-type.h \
+	spell/spells-type.h spell/spells-util.h \
 	spell/technic-info-table.c spell/technic-info-table.h \
 	\
 	spell-kind/earthquake.c spell-kind/earthquake.h \
 	spell-kind/spells-beam.c spell-kind/spells-beam.h \
-	spell-kind/spells-chaos.c spell-kind/spells-chaos.h \
 	spell-kind/spells-charm.c spell-kind/spells-charm.h \
 	spell-kind/spells-detection.c spell-kind/spells-detection.h \
 	spell-kind/spells-floor.c spell-kind/spells-floor.h \
@@ -413,6 +412,7 @@ hengband_SOURCES = \
 	spell-kind/spells-lite.c spell-kind/spells-lite.h \
 	spell-kind/spells-neighbor.c spell-kind/spells-neighbor.h \
 	spell-kind/spells-pet.c spell-kind/spells-pet.h \
+	spell-kind/spells-random.c spell-kind/spells-random.h \
 	spell-kind/spells-sight.c spell-kind/spells-sight.h \
 	spell-kind/spells-specific-bolt.c spell-kind/spells-specific-bolt.h \
 	spell-kind/spells-teleport.c spell-kind/spells-teleport.h \
@@ -487,8 +487,8 @@ COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	-Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat -Icore -Idungeon \
 	-Ieffect -Ifloor -Igrid -Iinventory -Iio -Iio-dump -Iknowledge -Imarket \
 	-Imind -Imonster -Imspell -Imutation -Iobject -Iobject-enchant -Ipet \
-	-Iplayer -Irealm -Iroom -Ispecific-object -Ispell -Isv-definition -Isystem \
-	-Iterm -Iutil -Iview -Iwizard -Iworld
+	-Iplayer -Irealm -Iroom -Ispecific-object -Ispell -Ispell-kind -Ispell-realm \
+	-Isv-definition -Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID
