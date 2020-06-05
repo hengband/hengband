@@ -14,6 +14,7 @@
 #include "player/player-move.h"
 #include "player/player-skill.h"
 #include "spell/music-checker.h"
+#include "spell-kind/spells-chaos.h"
 #include "spell/spells-hex.h"
 #include "spell/spells2.h" // 相互依存している。後でどうするか検討する.
 #include "view/display-main-window.h"

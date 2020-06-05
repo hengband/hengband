@@ -2,14 +2,11 @@
 
 #include "system/angband.h"
 
-void call_chaos(player_type* caster_ptr);
-bool activate_ty_curse(player_type* target_ptr, bool stop_ty, int* count);
 bool charm_monster(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 bool control_one_undead(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 bool control_one_demon(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 bool charm_animal(player_type* caster_ptr, DIRECTION dir, PLAYER_LEVEL plev);
 bool eat_magic(player_type* caster_ptr, int power);
-void ring_of_power(player_type* caster_ptr, DIRECTION dir);
 void wild_magic(player_type* caster_ptr, int spell);
 void cast_meteor(player_type* caster_ptr, HIT_POINT dam, POSITION rad);
 bool cast_wrath_of_the_god(player_type* caster_ptr, HIT_POINT dam, POSITION rad);

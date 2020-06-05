@@ -2,7 +2,6 @@
 #include "core/stuff-handler.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
-
 #include "monster/creature.h"
 #include "io/write-diary.h"
 #include "autopick/autopick-pref-processor.h"
@@ -29,6 +28,7 @@
 #include "io/report.h"
 #include "combat/monster-attack-effect.h"
 #include "combat/monster-attack-types.h"
+#include "spell-kind/spells-chaos.h"
 
 /*!
 * @brief モンスターIDからPOWERFULフラグの有無を取得する /
