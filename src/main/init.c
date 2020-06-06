@@ -41,6 +41,7 @@
 #include "grid/trap.h"
 #include "info-reader/feature-reader.h"
 #include "info-reader/parse-error-types.h"
+#include "info-reader/vault-reader.h"
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
 #include "io/uid-checker.h"

@@ -7,7 +7,6 @@
 extern concptr err_str[PARSE_ERROR_MAX];
 
 errr init_info_txt(FILE *fp, char *buf, angband_header *head, parse_info_txt_func parse_info_txt_line);
-errr parse_v_info(char *buf, angband_header *head);
 errr parse_s_info(char *buf, angband_header *head);
 errr parse_m_info(char *buf, angband_header *head);
 void retouch_f_info(angband_header *head);
