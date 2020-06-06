@@ -6,7 +6,6 @@
 #include "floor/wild.h"
 #include "grid/trap.h"
 #include "info-reader/general-parser.h"
-#include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "io/tokenizer.h"
 #include "object-enchant/apply-magic.h"
@@ -22,6 +21,9 @@
 #include "view/display-main-window.h"
 #include "world/world-object.h"
 #include "world/world.h"
+
+// PARSE_ERROR_MAXが既にあり扱い辛いのでここでconst宣言.
+static const int PARSE_CONTINUE = 255;
 
 qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
@@ -175,7 +177,7 @@ static void parse_qtw_D(player_type *player_ptr, qtwg_type *qtwg_ptr, char *s)
     }
 }
 
-static bool parse_qtw_QQ(char **zz, int num, quest_type *q_ptr)
+static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
 {
     if (zz[1][0] != 'Q')
         return FALSE;
@@ -210,7 +212,7 @@ static bool parse_qtw_QQ(char **zz, int num, quest_type *q_ptr)
     return TRUE;
 }
 
-static bool parse_qtw_QR(char **zz, int num, quest_type *q_ptr)
+static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
 {
     if (zz[1][0] != 'R')
         return FALSE;
@@ -242,6 +244,134 @@ static bool parse_qtw_QR(char **zz, int num, quest_type *q_ptr)
 }
 
 /*!
+ * @brief t_info、q_info、w_infoにおけるQトークンをパースする
+ * @param qtwg_ptr トークンパース構造体への参照ポインタ
+ * @param zz トークン保管文字列
+ * @return エラーコード、但しPARSE_CONTINUEの時は処理続行
+ */
+static int parse_qtw_Q(qtwg_type *qtwg_ptr, char **zz)
+{
+    if (qtwg_ptr->buf[0] != 'Q')
+        return PARSE_CONTINUE;
+
+    if (qtwg_ptr->buf[2] == '$')
+        return PARSE_ERROR_NONE;
+
+    int num = tokenize(qtwg_ptr->buf + _(2, 3), 33, zz, 0);
+    if (num < 3)
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+
+    quest_type *q_ptr;
+    q_ptr = &(quest[atoi(zz[0])]);
+    if (parse_qtw_QQ(q_ptr, zz, num))
+        return PARSE_ERROR_NONE;
+
+    if (parse_qtw_QR(q_ptr, zz, num))
+        return PARSE_ERROR_NONE;
+
+    if (zz[1][0] == 'N') {
+        if (init_flags & (INIT_ASSIGN | INIT_SHOW_TEXT | INIT_NAME_ONLY)) {
+            strcpy(q_ptr->name, zz[2]);
+        }
+
+        return PARSE_ERROR_NONE;
+    }
+
+    if (zz[1][0] == 'T') {
+        if (init_flags & INIT_SHOW_TEXT) {
+            strcpy(quest_text[quest_text_line], zz[2]);
+            quest_text_line++;
+        }
+
+        return PARSE_ERROR_NONE;
+    }
+
+    return PARSE_ERROR_GENERIC;
+}
+
+static bool parse_qtw_P(player_type *player_ptr, qtwg_type *qtwg_ptr, char **zz)
+{
+    if (qtwg_ptr->buf[0] != 'P')
+        return FALSE;
+
+    if ((init_flags & INIT_CREATE_DUNGEON) == 0)
+        return TRUE;
+
+    if (tokenize(qtwg_ptr->buf + 2, 2, zz, 0) != 2)
+        return TRUE;
+
+    int panels_y = (*qtwg_ptr->y / SCREEN_HGT);
+    if (*qtwg_ptr->y % SCREEN_HGT)
+        panels_y++;
+
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    floor_ptr->height = panels_y * SCREEN_HGT;
+    int panels_x = (*qtwg_ptr->x / SCREEN_WID);
+    if (*qtwg_ptr->x % SCREEN_WID)
+        panels_x++;
+
+    floor_ptr->width = panels_x * SCREEN_WID;
+    panel_row_min = floor_ptr->height;
+    panel_col_min = floor_ptr->width;
+    if (floor_ptr->inside_quest) {
+        delete_monster(player_ptr, player_ptr->y, player_ptr->x);
+        POSITION py = atoi(zz[0]);
+        POSITION px = atoi(zz[1]);
+        player_ptr->y = py;
+        player_ptr->x = px;
+        return TRUE;
+    }
+    
+    if (!player_ptr->oldpx && !player_ptr->oldpy) {
+        player_ptr->oldpy = atoi(zz[0]);
+        player_ptr->oldpx = atoi(zz[1]);
+    }
+
+    return TRUE;
+}
+
+static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
+{
+    if (qtwg_ptr->buf[0] != 'M')
+        return FALSE;
+
+    if ((tokenize(qtwg_ptr->buf + 2, 2, zz, 0) == 2) == 0)
+        return TRUE;
+
+    if (zz[0][0] == 'T') {
+        max_towns = (TOWN_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'Q') {
+        max_q_idx = (QUEST_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'R') {
+        max_r_idx = (player_race_type)atoi(zz[1]);
+    } else if (zz[0][0] == 'K') {
+        max_k_idx = (KIND_OBJECT_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'V') {
+        max_v_idx = (VAULT_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'F') {
+        max_f_idx = (FEAT_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'A') {
+        max_a_idx = (ARTIFACT_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'E') {
+        max_e_idx = (EGO_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'D') {
+        current_world_ptr->max_d_idx = (DUNGEON_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'O') {
+        current_world_ptr->max_o_idx = (OBJECT_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'M') {
+        current_world_ptr->max_m_idx = (MONSTER_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'W') {
+        if (zz[0][1] == 'X')
+            current_world_ptr->max_wild_x = (POSITION)atoi(zz[1]);
+
+        if (zz[0][1] == 'Y')
+            current_world_ptr->max_wild_y = (POSITION)atoi(zz[1]);
+    }
+
+    return TRUE;
+}
+
+/*!
  * @brief 固定マップ (クエスト＆街＆広域マップ)をフロアに生成する
  * Parse a sub-file of the "extra info"
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -254,20 +384,20 @@ static bool parse_qtw_QR(char **zz, int num, quest_type *q_ptr)
  * @param x 詳細不明
  * @return エラーコード
  */
-errr generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, process_dungeon_file_pf parse_fixed_map)
+parse_error_type generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, process_dungeon_file_pf parse_fixed_map)
 {
     char *zz[33];
     if (!qtwg_ptr->buf[0])
-        return 0;
+        return PARSE_ERROR_NONE;
 
     if (iswspace(qtwg_ptr->buf[0]))
-        return 0;
+        return PARSE_ERROR_NONE;
 
     if (qtwg_ptr->buf[0] == '#')
-        return 0;
+        return PARSE_ERROR_NONE;
 
     if (qtwg_ptr->buf[1] != ':')
-        return 1;
+        return PARSE_ERROR_GENERIC;
 
     if (qtwg_ptr->buf[0] == '%')
         return (*parse_fixed_map)(player_ptr, qtwg_ptr->buf + 2, qtwg_ptr->ymin, qtwg_ptr->xmin, qtwg_ptr->ymax, qtwg_ptr->xmax);
@@ -279,127 +409,28 @@ errr generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, proc
     if (qtwg_ptr->buf[0] == 'D') {
         char *s = qtwg_ptr->buf + 2;
         if (init_flags & INIT_ONLY_BUILDINGS)
-            return 0;
+            return PARSE_ERROR_NONE;
 
         parse_qtw_D(player_ptr, qtwg_ptr, s);
         (*qtwg_ptr->y)++;
-        return 0;
+        return PARSE_ERROR_NONE;
     }
     
-    if (qtwg_ptr->buf[0] == 'Q') {
-        if (qtwg_ptr->buf[2] == '$')
-            return 0;
+    parse_error_type parse_result_Q = parse_qtw_Q(qtwg_ptr, zz);
+    if (parse_result_Q != PARSE_CONTINUE)
+        return parse_result_Q;
 
-        int num = tokenize(qtwg_ptr->buf + _(2, 3), 33, zz, 0);
-        if (num < 3)
-            return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
-
-        quest_type *q_ptr;
-        q_ptr = &(quest[atoi(zz[0])]);
-        if (parse_qtw_QQ(zz, num, q_ptr))
-            return 0;
-
-        if (parse_qtw_QR(zz, num, q_ptr))
-            return 0;
-
-        if (zz[1][0] == 'N') {
-            if (init_flags & (INIT_ASSIGN | INIT_SHOW_TEXT | INIT_NAME_ONLY)) {
-                strcpy(q_ptr->name, zz[2]);
-            }
-
-            return 0;
-        }
-        
-        if (zz[1][0] == 'T') {
-            if (init_flags & INIT_SHOW_TEXT) {
-                strcpy(quest_text[quest_text_line], zz[2]);
-                quest_text_line++;
-            }
-
-            return 0;
-        }
-
-        return 1;
-    }
-    
     if (qtwg_ptr->buf[0] == 'W')
         return parse_line_wilderness(player_ptr, qtwg_ptr->buf, qtwg_ptr->xmin, qtwg_ptr->xmax, qtwg_ptr->y, qtwg_ptr->x);
     
-    if (qtwg_ptr->buf[0] == 'P') {
-        if (init_flags & INIT_CREATE_DUNGEON) {
-            if (tokenize(qtwg_ptr->buf + 2, 2, zz, 0) == 2) {
-                int panels_x, panels_y;
+    if (parse_qtw_P(player_ptr, qtwg_ptr, zz))
+        return PARSE_ERROR_NONE;
 
-                panels_y = (*qtwg_ptr->y / SCREEN_HGT);
-                if (*qtwg_ptr->y % SCREEN_HGT)
-                    panels_y++;
-
-                floor_type *floor_ptr = player_ptr->current_floor_ptr;
-                floor_ptr->height = panels_y * SCREEN_HGT;
-                panels_x = (*qtwg_ptr->x / SCREEN_WID);
-                if (*qtwg_ptr->x % SCREEN_WID)
-                    panels_x++;
-
-                floor_ptr->width = panels_x * SCREEN_WID;
-                panel_row_min = floor_ptr->height;
-                panel_col_min = floor_ptr->width;
-
-                if (floor_ptr->inside_quest) {
-                    delete_monster(player_ptr, player_ptr->y, player_ptr->x);
-
-                    POSITION py = atoi(zz[0]);
-                    POSITION px = atoi(zz[1]);
-
-                    player_ptr->y = py;
-                    player_ptr->x = px;
-                } else if (!player_ptr->oldpx && !player_ptr->oldpy) {
-                    player_ptr->oldpy = atoi(zz[0]);
-                    player_ptr->oldpx = atoi(zz[1]);
-                }
-            }
-        }
-
-        return 0;
-    }
-    
     if (qtwg_ptr->buf[0] == 'B')
         return parse_line_building(qtwg_ptr->buf);
     
-    if (qtwg_ptr->buf[0] == 'M') {
-        if (tokenize(qtwg_ptr->buf + 2, 2, zz, 0) == 2) {
-            if (zz[0][0] == 'T') {
-                max_towns = (TOWN_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'Q') {
-                max_q_idx = (QUEST_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'R') {
-                max_r_idx = (player_race_type)atoi(zz[1]);
-            } else if (zz[0][0] == 'K') {
-                max_k_idx = (KIND_OBJECT_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'V') {
-                max_v_idx = (VAULT_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'F') {
-                max_f_idx = (FEAT_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'A') {
-                max_a_idx = (ARTIFACT_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'E') {
-                max_e_idx = (EGO_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'D') {
-                current_world_ptr->max_d_idx = (DUNGEON_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'O') {
-                current_world_ptr->max_o_idx = (OBJECT_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'M') {
-                current_world_ptr->max_m_idx = (MONSTER_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'W') {
-                if (zz[0][1] == 'X')
-                    current_world_ptr->max_wild_x = (POSITION)atoi(zz[1]);
+    if (parse_qtw_M(qtwg_ptr, zz))
+        return PARSE_ERROR_NONE;
 
-                if (zz[0][1] == 'Y')
-                    current_world_ptr->max_wild_y = (POSITION)atoi(zz[1]);
-            }
-
-            return 0;
-        }
-    }
-
-    return 1;
+    return PARSE_ERROR_GENERIC;
 }

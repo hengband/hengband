@@ -231,7 +231,7 @@ errr parse_fixed_map(player_type *player_ptr, concptr name, int ymin, int xmin, 
         return -1;
 
     int num = -1;
-    errr err = 0;
+    parse_error_type err = PARSE_ERROR_NONE;
     bool bypass = FALSE;
     int x = xmin, y = ymin;
     qtwg_type tmp_qg;
