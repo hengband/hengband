@@ -77,6 +77,29 @@
 #include "world/world-object.h"
 #include "world/world.h"
 
+// Quest Generator
+typedef struct qg_type {
+    char *buf;
+    int ymin;
+    int xmin;
+    int ymax;
+    int xmax;
+    int *y;
+    int *x;
+} qg_type;
+
+qg_type *initialize_quest_generator_type(qg_type *qg_ptr, char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x) {
+
+	qg_ptr->buf = buf;
+	qg_ptr->ymin = ymin;
+    qg_ptr->xmin = xmin;
+    qg_ptr->ymax = ymax;
+    qg_ptr->xmax = xmax;
+    qg_ptr->y = y;
+    qg_ptr->x = x;
+	return qg_ptr;
+}
+
 /*!
  * @brief フロアの所定のマスにオブジェクトを配置する
  * Place the object j_ptr to a grid
@@ -102,7 +125,6 @@ static void drop_here(floor_type *floor_ptr, object_type *j_ptr, POSITION y, POS
 
 
 /*!
- * todo yminとymaxは本当に使われているのか？
  * @brief クエスト用固定ダンジョンをフロアに生成する
  * Parse a sub-file of the "extra info"
  * @param player_ptr プレーヤーへの参照ポインタ
@@ -115,37 +137,37 @@ static void drop_here(floor_type *floor_ptr, object_type *j_ptr, POSITION y, POS
  * @param x 詳細不明
  * @return エラーコード
  */
-static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
+static errr generate_quest_floor(player_type *player_ptr, qg_type *qg_ptr)
 {
 	char *zz[33];
 
-	if (!buf[0]) return 0;
-	if (iswspace(buf[0])) return 0;
-	if (buf[0] == '#') return 0;
-	if (buf[1] != ':') return 1;
+	if (!qg_ptr->buf[0]) return 0;
+	if (iswspace(qg_ptr->buf[0])) return 0;
+	if (qg_ptr->buf[0] == '#') return 0;
+	if (qg_ptr->buf[1] != ':') return 1;
 
-	if (buf[0] == '%')
+	if (qg_ptr->buf[0] == '%')
 	{
-		return process_dungeon_file(player_ptr, buf + 2, ymin, xmin, ymax, xmax);
+		return process_dungeon_file(player_ptr, qg_ptr->buf + 2, qg_ptr->ymin, qg_ptr->xmin, qg_ptr->ymax, qg_ptr->xmax);
 	}
 
 	floor_type *floor_ptr = player_ptr->current_floor_ptr;
 	/* Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid */
-	if (buf[0] == 'F')
+	if (qg_ptr->buf[0] == 'F')
 	{
-		return parse_line_feature(player_ptr->current_floor_ptr, buf);
+		return parse_line_feature(player_ptr->current_floor_ptr, qg_ptr->buf);
 	}
-	else if (buf[0] == 'D')
+	else if (qg_ptr->buf[0] == 'D')
 	{
 		object_type object_type_body;
-		char *s = buf + 2;
+		char *s = qg_ptr->buf + 2;
 		int len = strlen(s);
 		if (init_flags & INIT_ONLY_BUILDINGS) return 0;
 
-		*x = xmin;
-		for (int i = 0; ((*x < xmax) && (i < len)); (*x)++, s++, i++)
+		*qg_ptr->x = qg_ptr->xmin;
+		for (int i = 0; ((*qg_ptr->x < qg_ptr->xmax) && (i < len)); (*qg_ptr->x)++, s++, i++)
 		{
-			grid_type *g_ptr = &floor_ptr->grid_array[*y][*x];
+			grid_type *g_ptr = &floor_ptr->grid_array[*qg_ptr->y][*qg_ptr->x];
 			int idx = s[0];
 			OBJECT_IDX object_index = letter[idx].object;
 			MONSTER_IDX monster_index = letter[idx].monster;
@@ -159,7 +181,7 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 			{
 				floor_ptr->monster_level = floor_ptr->base_level + monster_index;
 
-				place_monster(player_ptr, *y, *x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+				place_monster(player_ptr, *qg_ptr->y, *qg_ptr->x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 
 				floor_ptr->monster_level = floor_ptr->base_level;
 			}
@@ -190,7 +212,7 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 					}
 				}
 
-				place_monster_aux(player_ptr, 0, *y, *x, monster_index, (PM_ALLOW_SLEEP | PM_NO_KAGE));
+				place_monster_aux(player_ptr, 0, *qg_ptr->y, *qg_ptr->x, monster_index, (PM_ALLOW_SLEEP | PM_NO_KAGE));
 				if (clone)
 				{
 					floor_ptr->m_list[hack_m_idx_ii].smart |= SM_CLONED;
@@ -209,11 +231,11 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 				 */
 				if (randint0(100) < 75)
 				{
-					place_object(player_ptr, *y, *x, 0L);
+					place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, 0L);
 				}
 				else
 				{
-					place_trap(player_ptr, *y, *x);
+					place_trap(player_ptr, *qg_ptr->y, *qg_ptr->x);
 				}
 
 				floor_ptr->object_level = floor_ptr->base_level;
@@ -222,17 +244,17 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 			{
 				floor_ptr->object_level = floor_ptr->base_level + object_index;
 				if (randint0(100) < 75)
-					place_object(player_ptr, *y, *x, 0L);
+					place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, 0L);
 				else if (randint0(100) < 80)
-					place_object(player_ptr, *y, *x, AM_GOOD);
+					place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, AM_GOOD);
 				else
-					place_object(player_ptr, *y, *x, AM_GOOD | AM_GREAT);
+					place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, AM_GOOD | AM_GREAT);
 
 				floor_ptr->object_level = floor_ptr->base_level;
 			}
 			else if (random & RANDOM_TRAP)
 			{
-				place_trap(player_ptr, *y, *x);
+				place_trap(player_ptr, *qg_ptr->y, *qg_ptr->x);
 			}
 			else if (letter[idx].trap)
 			{
@@ -251,7 +273,7 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 				}
 
 				apply_magic(player_ptr, o_ptr, floor_ptr->base_level, AM_NO_FIXED_ART | AM_GOOD);
-				drop_here(floor_ptr, o_ptr, *y, *x);
+				drop_here(floor_ptr, o_ptr, *qg_ptr->y, *qg_ptr->x);
 			}
 
 			if (artifact_index)
@@ -263,11 +285,11 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 					object_type *q_ptr = &forge;
 
 					object_prep(q_ptr, k_idx);
-					drop_here(floor_ptr, q_ptr, *y, *x);
+					drop_here(floor_ptr, q_ptr, *qg_ptr->y, *qg_ptr->x);
 				}
 				else
 				{
-					if (create_named_art(player_ptr, artifact_index, *y, *x))
+					if (create_named_art(player_ptr, artifact_index, *qg_ptr->y, *qg_ptr->x))
 						a_info[artifact_index].cur_num = 1;
 				}
 			}
@@ -275,21 +297,21 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 			g_ptr->special = letter[idx].special;
 		}
 
-		(*y)++;
+		(*qg_ptr->y)++;
 		return 0;
 	}
-	else if (buf[0] == 'Q')
+	else if (qg_ptr->buf[0] == 'Q')
 	{
 		int num;
 		quest_type *q_ptr;
 #ifdef JP
-		if (buf[2] == '$')
+		if (qg_ptr->buf[2] == '$')
 			return 0;
-		num = tokenize(buf + 2, 33, zz, 0);
+		num = tokenize(qg_ptr->buf + 2, 33, zz, 0);
 #else
-		if (buf[2] != '$')
+		if (qg_ptr->buf[2] != '$')
 			return 0;
-		num = tokenize(buf + 3, 33, zz, 0);
+		num = tokenize(qg_ptr->buf + 3, 33, zz, 0);
 #endif
 
 		if (num < 3) return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
@@ -374,24 +396,24 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 			return 0;
 		}
 	}
-	else if (buf[0] == 'W')
+	else if (qg_ptr->buf[0] == 'W')
 	{
-		return parse_line_wilderness(player_ptr, buf, xmin, xmax, y, x);
+		return parse_line_wilderness(player_ptr, qg_ptr->buf, qg_ptr->xmin, qg_ptr->xmax, qg_ptr->y, qg_ptr->x);
 	}
-	else if (buf[0] == 'P')
+	else if (qg_ptr->buf[0] == 'P')
 	{
 		if (init_flags & INIT_CREATE_DUNGEON)
 		{
-			if (tokenize(buf + 2, 2, zz, 0) == 2)
+			if (tokenize(qg_ptr->buf + 2, 2, zz, 0) == 2)
 			{
 				int panels_x, panels_y;
 
-				panels_y = (*y / SCREEN_HGT);
-				if (*y % SCREEN_HGT) panels_y++;
+				panels_y = (*qg_ptr->y / SCREEN_HGT);
+				if (*qg_ptr->y % SCREEN_HGT) panels_y++;
 				floor_ptr->height = panels_y * SCREEN_HGT;
 
-				panels_x = (*x / SCREEN_WID);
-				if (*x % SCREEN_WID) panels_x++;
+				panels_x = (*qg_ptr->x / SCREEN_WID);
+				if (*qg_ptr->x % SCREEN_WID) panels_x++;
 				floor_ptr->width = panels_x * SCREEN_WID;
 
 				panel_row_min = floor_ptr->height;
@@ -417,13 +439,13 @@ static errr process_dungeon_file_aux(player_type *player_ptr, char *buf, int ymi
 
 		return 0;
 	}
-	else if (buf[0] == 'B')
+	else if (qg_ptr->buf[0] == 'B')
 	{
-		return parse_line_building(buf);
+		return parse_line_building(qg_ptr->buf);
 	}
-	else if (buf[0] == 'M')
+	else if (qg_ptr->buf[0] == 'M')
 	{
-		if (tokenize(buf + 2, 2, zz, 0) == 2)
+		if (tokenize(qg_ptr->buf + 2, 2, zz, 0) == 2)
 		{
 			if (zz[0][0] == 'T')
 			{
@@ -751,7 +773,7 @@ static concptr process_dungeon_file_expr(player_type *player_ptr, char **sp, cha
 errr process_dungeon_file(player_type *player_ptr, concptr name, int ymin, int xmin, int ymax, int xmax)
 {
 	char buf[1024];
-	path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, name);
+    path_build(buf, sizeof(buf), ANGBAND_DIR_EDIT, name);
 	FILE *fp;
 	fp = my_fopen(buf, "r");
 
@@ -761,6 +783,8 @@ errr process_dungeon_file(player_type *player_ptr, concptr name, int ymin, int x
 	errr err = 0;
 	bool bypass = FALSE;
 	int x = xmin, y = ymin;
+    qg_type tmp_qg;
+    qg_type *qg_ptr = initialize_quest_generator_type(&tmp_qg, buf, ymin, xmin, ymax, xmax, &y, &x);
 	while (my_fgets(fp, buf, sizeof(buf)) == 0)
 	{
 		num++;
@@ -779,7 +803,7 @@ errr process_dungeon_file(player_type *player_ptr, concptr name, int ymin, int x
 
 		if (bypass) continue;
 
-		err = process_dungeon_file_aux(player_ptr, buf, ymin, xmin, ymax, xmax, &y, &x);
+		err = generate_quest_floor(player_ptr, qg_ptr);
 		if (err) break;
 	}
 
