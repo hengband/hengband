@@ -210,6 +210,37 @@ static bool parse_qtw_QQ(char **zz, int num, quest_type *q_ptr)
     return TRUE;
 }
 
+static bool parse_qtw_QR(char **zz, int num, quest_type *q_ptr)
+{
+    if (zz[1][0] != 'R')
+        return FALSE;
+
+    if ((init_flags & INIT_ASSIGN) == 0)
+        return TRUE;
+
+    int count = 0;
+    IDX idx, reward_idx = 0;
+    for (idx = 2; idx < num; idx++) {
+        IDX a_idx = (IDX)atoi(zz[idx]);
+        if (a_idx < 1)
+            continue;
+        if (a_info[a_idx].cur_num > 0)
+            continue;
+        count++;
+        if (one_in_(count))
+            reward_idx = a_idx;
+    }
+
+    if (reward_idx) {
+        q_ptr->k_idx = reward_idx;
+        a_info[reward_idx].gen_flags |= TRG_QUESTITEM;
+    } else {
+        q_ptr->type = QUEST_TYPE_KILL_ALL;
+    }
+
+    return TRUE;
+}
+
 /*!
  * @brief 固定マップ (クエスト＆街＆広域マップ)をフロアに生成する
  * Parse a sub-file of the "extra info"
@@ -268,33 +299,9 @@ errr generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, proc
         if (parse_qtw_QQ(zz, num, q_ptr))
             return 0;
 
-        if (zz[1][0] == 'R') {
-            if (init_flags & INIT_ASSIGN) {
-                int count = 0;
-                IDX idx, reward_idx = 0;
-
-                for (idx = 2; idx < num; idx++) {
-                    IDX a_idx = (IDX)atoi(zz[idx]);
-                    if (a_idx < 1)
-                        continue;
-                    if (a_info[a_idx].cur_num > 0)
-                        continue;
-                    count++;
-                    if (one_in_(count))
-                        reward_idx = a_idx;
-                }
-
-                if (reward_idx) {
-                    q_ptr->k_idx = reward_idx;
-                    a_info[reward_idx].gen_flags |= TRG_QUESTITEM;
-                } else {
-                    q_ptr->type = QUEST_TYPE_KILL_ALL;
-                }
-            }
-
+        if (parse_qtw_QR(zz, num, q_ptr))
             return 0;
-        }
-        
+
         if (zz[1][0] == 'N') {
             if (init_flags & (INIT_ASSIGN | INIT_SHOW_TEXT | INIT_NAME_ONLY)) {
                 strcpy(q_ptr->name, zz[2]);
