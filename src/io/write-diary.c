@@ -5,14 +5,14 @@
  */
 
 #include "io/write-diary.h"
-#include "floor/floor.h"
-#include "system/system-variables.h"
-#include "dungeon/quest.h"
-#include "io/files-util.h"
 #include "dungeon/dungeon.h"
+#include "dungeon/quest.h"
+#include "floor/floor.h"
 #include "info-reader/fixed-map-parser.h"
-#include "world/world.h"
+#include "io/files-util.h"
 #include "market/arena-info-table.h"
+#include "system/system-variables.h"
+#include "world/world.h"
 
 // todo *抹殺* したい…
 bool write_level;

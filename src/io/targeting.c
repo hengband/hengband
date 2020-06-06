@@ -38,7 +38,6 @@
 #include "spell/spells-summon.h"
 #include "system/system-variables.h"
 #include "term/term-color-types.h"
-#include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"
 

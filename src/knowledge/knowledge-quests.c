@@ -4,23 +4,22 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
 #include "knowledge-quests.h"
-#include "io-dump/dump-util.h"
+#include "core/show-file.h"
+#include "core/sort.h"
+#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
-#include "system/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
+#include "info-reader/fixed-map-parser.h"
+#include "io-dump/dump-util.h"
+#include "locale/english.h"
 #include "object-enchant/artifact.h"
+#include "object-enchant/special-object-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
-#include "object-enchant/special-object-flags.h"
-#include "dungeon/dungeon.h"
-#include "info-reader/fixed-map-parser.h"
-#include "core/sort.h"
+#include "system/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
 #include "world/world.h"
-#include "core/show-file.h"
-#include "locale/english.h"
 
  /*
   * Check on the status of an active quest
