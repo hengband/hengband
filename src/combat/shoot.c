@@ -26,7 +26,7 @@
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "spell/process-effect.h"
-#include "term/gameterm.h"
+#include "spell/spells-type.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world-object.h"

@@ -2,7 +2,7 @@
 #include "cmd-io/cmd-gameoption.h"
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 
 /*!
  * @brief マクロ情報をprefファイルに保存する /

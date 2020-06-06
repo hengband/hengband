@@ -8,7 +8,7 @@
 #include "player/player-skill.h"
 #include "realm/realm-song-numbers.h"
 #include "sv-definition/sv-bow-types.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "view/display-util.h"
 #include "view/status-first-page.h"
 #include "world/world.h"

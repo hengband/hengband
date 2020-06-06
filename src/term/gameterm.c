@@ -1,6 +1,12 @@
 ﻿#include "term/gameterm.h"
 #include "system/system-variables.h"
+#include "term/term-color-types.h"
 #include "util/util.h"
+
+ /*
+ * Convert an "attr"/"char" pair into a "pict" (P)
+ */
+#define PICT(A, C) ((((u16b)(A)) << 8) | ((byte)(C)))
 
 /*
  * Standard window names
@@ -351,7 +357,7 @@ term *angband_term[8];
  * スクリーン表示色キャラクタ /
  * Encode the screen colors
  */
-const concptr color_char = "dwsorgbuDWvyRGBU";
+static const concptr color_char = "dwsorgbuDWvyRGBU";
 
 /*
  * Specify attr/char pairs for visual special effects
@@ -365,7 +371,6 @@ SYMBOL_CODE misc_to_char[256];
  * Be sure to use "index & 0x7F" to avoid illegal access
  */
 TERM_COLOR tval_to_attr[128];
-SYMBOL_CODE tval_to_char[128];
 
 /*
  * Default spell color table (quark index)
@@ -378,7 +383,7 @@ TERM_COLOR gf_color[MAX_GF];
  * @param max 色IDの最大値
  * @return 選択した色ID
  */
-TERM_COLOR mh_attr(int max)
+static TERM_COLOR mh_attr(int max)
 {
 	switch (randint1(max))
 	{
@@ -409,7 +414,7 @@ TERM_COLOR mh_attr(int max)
  * @param type 魔法属性
  * @return 対応する色ID
  */
-TERM_COLOR spell_color(EFFECT_ID type)
+static TERM_COLOR spell_color(EFFECT_ID type)
 {
 	/* Check if A.B.'s new graphics should be used (rr9) */
 	if (streq(ANGBAND_GRAF, "new") || streq(ANGBAND_GRAF, "ne2"))

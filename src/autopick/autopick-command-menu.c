@@ -5,11 +5,11 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
 #include "autopick/autopick-command-menu.h"
-#include "autopick/autopick-util.h"
 #include "autopick/autopick-menu-data-table.h"
-#include "term/gameterm.h"
+#include "autopick/autopick-util.h"
+#include "system/angband.h"
+#include "term/term-color-types.h"
 
 /*!
  * @brief 自動拾いエディタの画面を再描画する

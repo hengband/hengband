@@ -58,7 +58,6 @@
 #include "spell-realm/spells-hex.h"
 #include "spell-kind/spells-teleport.h"
 #include "system/system-variables.h"
-#include "term/gameterm.h"
 #include "view/display-main-window.h"
 #include "view/object-describer.h"
 #include "world/world.h"

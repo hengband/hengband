@@ -1,13 +1,13 @@
 ﻿#include "cmd-io/cmd-gameoption.h"
 #include "autopick/autopick.h"
-#include "io/write-diary.h"
 #include "cmd-io/cmd-autopick.h"
-#include "term/gameterm.h"
-#include "view/display-main-window.h"
 #include "cmd-io/cmd-dump.h"
 #include "core/show-file.h"
 #include "io/files-util.h"
-
+#include "io/write-diary.h"
+#include "term/gameterm.h"
+#include "term/term-color-types.h"
+#include "view/display-main-window.h"
 #include "world/world.h"
 
 /*

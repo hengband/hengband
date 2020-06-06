@@ -11,6 +11,7 @@
 #ifndef INCLUDED_Z_TERM_H
 #define INCLUDED_Z_TERM_H
 
+#include "system/angband.h"
 #include "system/h-basic.h"
 
 typedef struct term_win term_win;

@@ -1,6 +1,4 @@
-﻿#include "system/angband.h"
-#include "player/player-personality.h"
-
+﻿#include "player/player-personality.h"
 
 /*!
  * @brief 性格情報 /

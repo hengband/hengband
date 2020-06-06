@@ -47,6 +47,7 @@
 #include "spell/spells3.h"
 #include "system/system-variables.h"
 #include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "util/util.h"
 #include "view/display-player.h"
 #include "view/object-describer.h"

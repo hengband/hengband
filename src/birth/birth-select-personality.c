@@ -1,8 +1,7 @@
-﻿#include "system/angband.h"
-#include "birth/birth-select-personality.h"
-#include "player/player-personality.h"
-#include "term/gameterm.h"
+﻿#include "birth/birth-select-personality.h"
 #include "birth/birth-util.h"
+#include "player/player-personality.h"
+#include "term/term-color-types.h"
 
 static const char p2 = ')';
 
@@ -44,9 +43,8 @@ static void display_personality_stat(int cs, int *os, concptr *str, char *cur, c
         c_put_str(TERM_L_BLUE, ap_ptr->title, 3, 40);
         put_str(_("の性格修正", ": Personality modification"), 3, 40 + strlen(ap_ptr->title));
         put_str(_("腕力 知能 賢さ 器用 耐久 魅力      ", "Str  Int  Wis  Dex  Con  Chr       "), 4, 40);
-        sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d       ",
-            ap_ptr->a_adj[0], ap_ptr->a_adj[1], ap_ptr->a_adj[2], ap_ptr->a_adj[3],
-            ap_ptr->a_adj[4], ap_ptr->a_adj[5]);
+        sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d       ", ap_ptr->a_adj[0], ap_ptr->a_adj[1], ap_ptr->a_adj[2], ap_ptr->a_adj[3], ap_ptr->a_adj[4],
+            ap_ptr->a_adj[5]);
         c_put_str(TERM_L_BLUE, buf, 5, 40);
     }
 
@@ -113,7 +111,8 @@ static bool select_personality(player_type *creature_ptr, int *k, concptr *str, 
             break;
 
         char buf[80];
-        sprintf(buf, _("性格を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a personality (%c-%c) ('=' for options): "), sym[0], sym[MAX_SEIKAKU - 1]);
+        sprintf(
+            buf, _("性格を選んで下さい (%c-%c) ('='初期オプション設定): ", "Choose a personality (%c-%c) ('=' for options): "), sym[0], sym[MAX_SEIKAKU - 1]);
         put_str(buf, 10, 10);
         char c = inkey();
         if (c == 'Q')
@@ -176,7 +175,8 @@ static bool select_personality(player_type *creature_ptr, int *k, concptr *str, 
 bool get_player_personality(player_type *creature_ptr)
 {
     clear_from(10);
-    put_str(_("注意：《性格》によってキャラクターの能力やボーナスが変化します。", "Note: Your personality determines various intrinsic abilities and bonuses."), 23, 5);
+    put_str(_("注意：《性格》によってキャラクターの能力やボーナスが変化します。", "Note: Your personality determines various intrinsic abilities and bonuses."),
+        23, 5);
     concptr str;
     char sym[MAX_SEIKAKU];
     enumerate_personality_list(creature_ptr, &str, sym);

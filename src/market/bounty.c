@@ -15,7 +15,7 @@
 #include "object/object-generator.h"
 #include "sv-definition/sv-other-types.h"
 #include "player/avatar.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "world/world.h"
 
 /*!

@@ -5,7 +5,7 @@
  */
 
 #include "spell/range-calc.h"
-#include "term/gameterm.h"
+#include "spell/spells-type.h"
 
 /*
  * Find the distance from (x, y) to a line.

@@ -824,6 +824,7 @@
     <ClInclude Include="..\..\src\melee\melee-postprocess.h" />
     <ClInclude Include="..\..\src\combat\shoot.h" />
     <ClInclude Include="..\..\src\core\show-file.h" />
+    <ClInclude Include="..\..\src\term\term-color-types.h" />
     <ClInclude Include="..\..\src\util\object-sort.h" />
     <ClInclude Include="..\..\src\view\display-birth.h" />
     <ClInclude Include="..\..\src\view\object-describer.h" />

@@ -18,7 +18,7 @@
 #include "object-enchant/tr-types.h"
 #include "object-enchant/trc-types.h"
 #include "player/player-status.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 

@@ -18,7 +18,7 @@
 #include "player/player-sex.h"
 #include "status-first-page.h"
 #include "system/system-variables.h" // 暫定。後で消す
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "view/display-characteristic.h"
 #include "view/display-player-middle.h"
 #include "view/display-player-misc-info.h"

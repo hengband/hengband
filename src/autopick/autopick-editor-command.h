@@ -1,8 +1,10 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+#include "autopick/autopick-util.h"
+
 /*! APE means AutoPickEditor*/
-typedef enum
-{
+typedef enum ape_quittance {
 	APE_QUIT = 0,
 	APE_QUIT_WITHOUT_SAVE = 1,
 	APE_QUIT_AND_SAVE = 2

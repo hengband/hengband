@@ -10,6 +10,7 @@
 #include "io/files-util.h"
 #include "object/object1.h"
 #include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "core/stuff-handler.h"
 
 // Encode the screen colors

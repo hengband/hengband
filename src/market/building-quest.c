@@ -1,11 +1,10 @@
-﻿#include "system/angband.h"
-#include "floor/floor.h"
-#include "market/building-quest.h"
-#include "dungeon/quest.h"
-#include "system/system-variables.h"
-#include "term/gameterm.h"
-#include "market/building-util.h"
+﻿#include "market/building-quest.h"
 #include "dungeon/dungeon-file.h"
+#include "dungeon/quest.h"
+#include "floor/floor.h"
+#include "market/building-util.h"
+#include "system/system-variables.h"
+#include "term/term-color-types.h"
 
 /*!
  * @brief クエスト情報を表示しつつ処理する。/ Display quest information

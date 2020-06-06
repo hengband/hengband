@@ -60,7 +60,7 @@
 #include "spell-kind/spells-floor.h"
 #include "spell-realm/spells-hex.h"
 #include "spell/spells-status.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"

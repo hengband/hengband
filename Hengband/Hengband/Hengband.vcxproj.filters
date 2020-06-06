@@ -2542,6 +2542,9 @@
     <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h">
       <Filter>info-reader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\term\term-color-types.h">
+      <Filter>term</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

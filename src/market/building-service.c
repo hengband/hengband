@@ -1,6 +1,5 @@
-﻿#include "system/angband.h"
-#include "market/building-service.h"
-#include "term/gameterm.h"
+﻿#include "market/building-service.h"
+#include "term/term-color-types.h"
 
 /*!
  * @brief 施設毎に設定された種族、職業、魔法領域フラグがプレイヤーと一致するかを判定する。

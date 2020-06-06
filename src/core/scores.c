@@ -26,7 +26,7 @@
 #include "player/player-status.h"
 #include "player/race-info-table.h"
 #include "system/angband-version.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "util/util.h"
 #include "world/world.h"
 

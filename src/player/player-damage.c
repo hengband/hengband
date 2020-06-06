@@ -29,7 +29,7 @@
 #include "player/player-races-table.h"
 #include "player/player-status.h"
 #include "realm/realm-song-numbers.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 #include "world/world.h"

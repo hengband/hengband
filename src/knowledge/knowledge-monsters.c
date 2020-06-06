@@ -5,20 +5,18 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
-#include "floor/floor.h"
 #include "knowledge/knowledge-monsters.h"
-#include "io-dump/dump-util.h"
-#include "core/sort.h"
-#include "knowledge/monster-group-table.h"
-#include "monster/monster-status.h"
-#include "world/world.h"
 #include "core/show-file.h"
-#include "term/gameterm.h"
-#include "locale/english.h"
-
+#include "core/sort.h"
 #include "core/stuff-handler.h"
+#include "floor/floor.h"
+#include "io-dump/dump-util.h"
+#include "knowledge/monster-group-table.h"
+#include "locale/english.h"
+#include "monster/monster-status.h"
+#include "term/term-color-types.h"
 #include "view/display-main-window.h" // 暫定、後で消す.
+#include "world/world.h"
 
  /*
   * todo 引数と戻り値について追記求む

@@ -19,7 +19,7 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object-enchant/special-object-flags.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "view/display-main-window.h" // 暫定、後で消す.
 #include "world/world.h"
 

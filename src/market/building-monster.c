@@ -1,8 +1,8 @@
-﻿#include "system/angband.h"
-#include "market/building-monster.h"
-#include "term/gameterm.h"
+﻿#include "market/building-monster.h"
 #include "core/sort.h"
 #include "core/stuff-handler.h"
+#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "view/display-main-window.h"
 
 /*!
@@ -29,8 +29,8 @@ bool research_mon(player_type *player_ptr)
     screen_save();
 
     char sym;
-    if (!get_com(_("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):",
-                     "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "),
+    if (!get_com(
+            _("モンスターの文字を入力して下さい(記号 or ^A全,^Uユ,^N非ユ,^M名前):", "Enter character to be identified(^A:All,^U:Uniqs,^N:Non uniqs,^M:Name): "),
             &sym, FALSE))
 
     {
