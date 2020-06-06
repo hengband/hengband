@@ -178,6 +178,7 @@
     <ClCompile Include="..\..\src\info-reader\info-reader-util.c" />
     <ClCompile Include="..\..\src\info-reader\kind-info-tokens-table.c" />
     <ClCompile Include="..\..\src\info-reader\kind-reader.c" />
+    <ClCompile Include="..\..\src\info-reader\magic-reader.c" />
     <ClCompile Include="..\..\src\info-reader\race-info-tokens-table.c" />
     <ClCompile Include="..\..\src\info-reader\skill-reader.c" />
     <ClCompile Include="..\..\src\info-reader\vault-reader.c" />
@@ -502,6 +503,7 @@
     <ClInclude Include="..\..\src\info-reader\info-reader-util.h" />
     <ClInclude Include="..\..\src\info-reader\kind-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\kind-reader.h" />
+    <ClInclude Include="..\..\src\info-reader\magic-reader.h" />
     <ClInclude Include="..\..\src\info-reader\parse-error-types.h" />
     <ClInclude Include="..\..\src\info-reader\race-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h" />
