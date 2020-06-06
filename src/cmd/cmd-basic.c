@@ -19,7 +19,7 @@
 #include "combat/snipe.h"
 #include "core/output-updater.h"
 #include "core/stuff-handler.h"
-#include "dungeon/dungeon-file.h"
+#include "info-reader/fixed-map-parser.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/spells-effect-util.h"

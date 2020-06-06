@@ -49,7 +49,7 @@
 #include "core/game-closer.h"
 #include "core/output-updater.h"
 #include "core/player-processor.h"
-#include "dungeon/dungeon-file.h"
+#include "info-reader/fixed-map-parser.h"
 #include "dungeon/dungeon-processor.h"
 #include "io/input-key-processor.h"
 #include "io/read-pref-file.h"

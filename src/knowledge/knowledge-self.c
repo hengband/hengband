@@ -9,7 +9,7 @@
 #include "io-dump/dump-util.h"
 #include "player/avatar.h"
 #include "core/show-file.h"
-#include "dungeon/dungeon-file.h"
+#include "info-reader/fixed-map-parser.h"
 #include "world/world.h"
 #include "store/store-util.h"
 #include "floor/floor-town.h"

@@ -7,7 +7,7 @@
  */
 
 #include "view/display-player.h"
-#include "dungeon/dungeon-file.h"
+#include "info-reader/fixed-map-parser.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "knowledge/knowledge-mutations.h"

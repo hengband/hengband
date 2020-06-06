@@ -31,7 +31,7 @@
 
 #include "main/init.h"
 #include "cmd-building/cmd-building.h"
-#include "dungeon/dungeon-file.h" // 相互参照、後で何とかする.
+#include "info-reader/fixed-map-parser.h" // 相互参照、後で何とかする.
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-town.h"

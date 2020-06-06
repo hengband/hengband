@@ -1,5 +1,5 @@
 ﻿#include "market/building-quest.h"
-#include "dungeon/dungeon-file.h"
+#include "info-reader/fixed-map-parser.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "market/building-util.h"

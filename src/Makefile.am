@@ -111,7 +111,6 @@ hengband_SOURCES = \
 	\
 	dungeon/dungeon.c dungeon/dungeon.h \
 	dungeon/dungeon-processor.c dungeon/dungeon-processor.h \
-	dungeon/dungeon-file.c dungeon/dungeon-file.h \
 	dungeon/quest.h dungeon/quest.c \
 	\
 	effect/effect-feature.c effect/effect-feature.h \
@@ -159,6 +158,7 @@ hengband_SOURCES = \
 	info-reader/ego-reader.c info-reader/ego-reader.h \
 	info-reader/feature-info-tokens-table.c info-reader/feature-info-tokens-table.h \
 	info-reader/feature-reader.c info-reader/feature-reader.h \
+	info-reader/fixed-map-parser.c info-reader/fixed-map-parser.h \
 	info-reader/general-parser.c info-reader/general-parser.h \
 	info-reader/info-reader-util.c info-reader/info-reader-util.h \
 	info-reader/kind-info-tokens-table.c info-reader/kind-info-tokens-table.h \

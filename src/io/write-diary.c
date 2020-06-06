@@ -10,7 +10,7 @@
 #include "dungeon/quest.h"
 #include "io/files-util.h"
 #include "dungeon/dungeon.h"
-#include "dungeon/dungeon-file.h"
+#include "info-reader/fixed-map-parser.h"
 #include "world/world.h"
 #include "market/arena-info-table.h"
 

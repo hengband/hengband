@@ -17,7 +17,7 @@
 #include "cmd-io/cmd-save.h"
 #include "cmd/cmd-draw.h"
 #include "core/stuff-handler.h"
-#include "dungeon/dungeon-file.h"
+#include "info-reader/fixed-map-parser.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"

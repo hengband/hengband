@@ -6,7 +6,7 @@
  * 2014 Deskull rearranged comment for Doxygen
  */
 
-#include "dungeon/dungeon-file.h"
+#include "info-reader/fixed-map-parser.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
 #include "floor/fixed-map-generator.h"

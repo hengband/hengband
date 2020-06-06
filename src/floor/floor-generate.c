@@ -34,7 +34,7 @@
 #include "player/player-status.h"
 #include "floor/wild.h"
 #include "monster/monster-status.h"
-#include "dungeon/dungeon-file.h"
+#include "info-reader/fixed-map-parser.h"
 #include "grid/feature.h"
 #include "world/world.h"
 #include "view/display-main-window.h"

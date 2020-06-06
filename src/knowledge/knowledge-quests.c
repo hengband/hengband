@@ -16,7 +16,7 @@
 #include "object/object-kind-hook.h"
 #include "object-enchant/special-object-flags.h"
 #include "dungeon/dungeon.h"
-#include "dungeon/dungeon-file.h"
+#include "info-reader/fixed-map-parser.h"
 #include "core/sort.h"
 #include "world/world.h"
 #include "core/show-file.h"

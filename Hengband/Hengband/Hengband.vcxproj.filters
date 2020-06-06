@@ -422,9 +422,6 @@
     <ClCompile Include="..\..\src\dungeon\dungeon.c">
       <Filter>dungeon</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\dungeon\dungeon-file.c">
-      <Filter>dungeon</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\game-play.c">
       <Filter>core</Filter>
     </ClCompile>
@@ -1232,6 +1229,9 @@
     <ClCompile Include="..\..\src\floor\fixed-map-generator.c">
       <Filter>floor</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\fixed-map-parser.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -1691,9 +1691,6 @@
       <Filter>dungeon</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\dungeon\dungeon.h">
-      <Filter>dungeon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\dungeon\dungeon-file.h">
       <Filter>dungeon</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\game-play.h">
@@ -2628,6 +2625,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\floor\fixed-map-generator.h">
       <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\fixed-map-parser.h">
+      <Filter>info-reader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

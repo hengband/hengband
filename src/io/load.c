@@ -43,7 +43,7 @@
 #include "io/load.h"
 #include "birth/quick-start.h"
 #include "cmd-item/cmd-smith.h"
-#include "dungeon/dungeon-file.h"
+#include "info-reader/fixed-map-parser.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-generate.h"
