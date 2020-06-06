@@ -234,8 +234,8 @@ errr parse_fixed_map(player_type *player_ptr, concptr name, int ymin, int xmin, 
     errr err = 0;
     bool bypass = FALSE;
     int x = xmin, y = ymin;
-    qg_type tmp_qg;
-    qg_type *qg_ptr = initialize_quest_generator_type(&tmp_qg, buf, ymin, xmin, ymax, xmax, &y, &x);
+    qtwg_type tmp_qg;
+    qtwg_type *qg_ptr = initialize_quest_generator_type(&tmp_qg, buf, ymin, xmin, ymax, xmax, &y, &x);
     while (my_fgets(fp, buf, sizeof(buf)) == 0) {
         num++;
         if (!buf[0])

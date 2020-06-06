@@ -23,16 +23,16 @@
 #include "world/world-object.h"
 #include "world/world.h"
 
-qg_type *initialize_quest_generator_type(qg_type *qg_ptr, char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
+qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
-    qg_ptr->buf = buf;
-    qg_ptr->ymin = ymin;
-    qg_ptr->xmin = xmin;
-    qg_ptr->ymax = ymax;
-    qg_ptr->xmax = xmax;
-    qg_ptr->y = y;
-    qg_ptr->x = x;
-    return qg_ptr;
+    qtwg_ptr->buf = buf;
+    qtwg_ptr->ymin = ymin;
+    qtwg_ptr->xmin = xmin;
+    qtwg_ptr->ymax = ymax;
+    qtwg_ptr->xmax = xmax;
+    qtwg_ptr->y = y;
+    qtwg_ptr->x = x;
+    return qtwg_ptr;
 }
 
 /*!
@@ -58,6 +58,119 @@ static void drop_here(floor_type *floor_ptr, object_type *j_ptr, POSITION y, POS
     g_ptr->o_idx = o_idx;
 }
 
+static void parse_qtw_D(player_type *player_ptr, qtwg_type *qg_ptr, char *s)
+{
+    *qg_ptr->x = qg_ptr->xmin;
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    int len = strlen(s);
+    for (int i = 0; ((*qg_ptr->x < qg_ptr->xmax) && (i < len)); (*qg_ptr->x)++, s++, i++) {
+        grid_type *g_ptr = &floor_ptr->grid_array[*qg_ptr->y][*qg_ptr->x];
+        int idx = s[0];
+        OBJECT_IDX object_index = letter[idx].object;
+        MONSTER_IDX monster_index = letter[idx].monster;
+        int random = letter[idx].random;
+        ARTIFACT_IDX artifact_index = letter[idx].artifact;
+        g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].feature);
+        if (init_flags & INIT_ONLY_FEATURES)
+            continue;
+
+        g_ptr->info = letter[idx].cave_info;
+        if (random & RANDOM_MONSTER) {
+            floor_ptr->monster_level = floor_ptr->base_level + monster_index;
+
+            place_monster(player_ptr, *qg_ptr->y, *qg_ptr->x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+
+            floor_ptr->monster_level = floor_ptr->base_level;
+        } else if (monster_index) {
+            int old_cur_num, old_max_num;
+            bool clone = FALSE;
+
+            if (monster_index < 0) {
+                monster_index = -monster_index;
+                clone = TRUE;
+            }
+
+            old_cur_num = r_info[monster_index].cur_num;
+            old_max_num = r_info[monster_index].max_num;
+
+            if (r_info[monster_index].flags1 & RF1_UNIQUE) {
+                r_info[monster_index].cur_num = 0;
+                r_info[monster_index].max_num = 1;
+            } else if (r_info[monster_index].flags7 & RF7_NAZGUL) {
+                if (r_info[monster_index].cur_num == r_info[monster_index].max_num) {
+                    r_info[monster_index].max_num++;
+                }
+            }
+
+            place_monster_aux(player_ptr, 0, *qg_ptr->y, *qg_ptr->x, monster_index, (PM_ALLOW_SLEEP | PM_NO_KAGE));
+            if (clone) {
+                floor_ptr->m_list[hack_m_idx_ii].smart |= SM_CLONED;
+                r_info[monster_index].cur_num = old_cur_num;
+                r_info[monster_index].max_num = old_max_num;
+            }
+        }
+
+        if ((random & RANDOM_OBJECT) && (random & RANDOM_TRAP)) {
+            floor_ptr->object_level = floor_ptr->base_level + object_index;
+
+            /*
+             * Random trap and random treasure defined
+             * 25% chance for trap and 75% chance for object
+             */
+            if (randint0(100) < 75) {
+                place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, 0L);
+            } else {
+                place_trap(player_ptr, *qg_ptr->y, *qg_ptr->x);
+            }
+
+            floor_ptr->object_level = floor_ptr->base_level;
+        } else if (random & RANDOM_OBJECT) {
+            floor_ptr->object_level = floor_ptr->base_level + object_index;
+            if (randint0(100) < 75)
+                place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, 0L);
+            else if (randint0(100) < 80)
+                place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, AM_GOOD);
+            else
+                place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, AM_GOOD | AM_GREAT);
+
+            floor_ptr->object_level = floor_ptr->base_level;
+        } else if (random & RANDOM_TRAP) {
+            place_trap(player_ptr, *qg_ptr->y, *qg_ptr->x);
+        } else if (letter[idx].trap) {
+            g_ptr->mimic = g_ptr->feat;
+            g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].trap);
+        } else if (object_index) {
+            object_type tmp_object;
+            object_type *o_ptr = &tmp_object;
+            object_prep(o_ptr, object_index);
+            if (o_ptr->tval == TV_GOLD) {
+                coin_type = object_index - OBJ_GOLD_LIST;
+                make_gold(floor_ptr, o_ptr);
+                coin_type = 0;
+            }
+
+            apply_magic(player_ptr, o_ptr, floor_ptr->base_level, AM_NO_FIXED_ART | AM_GOOD);
+            drop_here(floor_ptr, o_ptr, *qg_ptr->y, *qg_ptr->x);
+        }
+
+        if (artifact_index) {
+            if (a_info[artifact_index].cur_num) {
+                KIND_OBJECT_IDX k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
+                object_type forge;
+                object_type *q_ptr = &forge;
+
+                object_prep(q_ptr, k_idx);
+                drop_here(floor_ptr, q_ptr, *qg_ptr->y, *qg_ptr->x);
+            } else {
+                if (create_named_art(player_ptr, artifact_index, *qg_ptr->y, *qg_ptr->x))
+                    a_info[artifact_index].cur_num = 1;
+            }
+        }
+
+        g_ptr->special = letter[idx].special;
+    }
+}
+
 /*!
  * @brief 固定マップ (クエスト＆街＆広域マップ)をフロアに生成する
  * Parse a sub-file of the "extra info"
@@ -71,158 +184,44 @@ static void drop_here(floor_type *floor_ptr, object_type *j_ptr, POSITION y, POS
  * @param x 詳細不明
  * @return エラーコード
  */
-errr generate_fixed_map_floor(player_type *player_ptr, qg_type *qg_ptr, process_dungeon_file_pf parse_fixed_map)
+errr generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, process_dungeon_file_pf parse_fixed_map)
 {
     char *zz[33];
-
-    if (!qg_ptr->buf[0])
+    if (!qtwg_ptr->buf[0])
         return 0;
 
-    if (iswspace(qg_ptr->buf[0]))
+    if (iswspace(qtwg_ptr->buf[0]))
         return 0;
 
-    if (qg_ptr->buf[0] == '#')
+    if (qtwg_ptr->buf[0] == '#')
         return 0;
 
-    if (qg_ptr->buf[1] != ':')
+    if (qtwg_ptr->buf[1] != ':')
         return 1;
 
-    if (qg_ptr->buf[0] == '%')
-        return (*parse_fixed_map)(player_ptr, qg_ptr->buf + 2, qg_ptr->ymin, qg_ptr->xmin, qg_ptr->ymax, qg_ptr->xmax);
+    if (qtwg_ptr->buf[0] == '%')
+        return (*parse_fixed_map)(player_ptr, qtwg_ptr->buf + 2, qtwg_ptr->ymin, qtwg_ptr->xmin, qtwg_ptr->ymax, qtwg_ptr->xmax);
 
-    floor_type *floor_ptr = player_ptr->current_floor_ptr;
     /* Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid */
-    if (qg_ptr->buf[0] == 'F') {
-        return parse_line_feature(player_ptr->current_floor_ptr, qg_ptr->buf);
-    } else if (qg_ptr->buf[0] == 'D') {
-        object_type object_type_body;
-        char *s = qg_ptr->buf + 2;
-        int len = strlen(s);
+    if (qtwg_ptr->buf[0] == 'F')
+        return parse_line_feature(player_ptr->current_floor_ptr, qtwg_ptr->buf);
+    
+    if (qtwg_ptr->buf[0] == 'D') {
+        char *s = qtwg_ptr->buf + 2;
         if (init_flags & INIT_ONLY_BUILDINGS)
             return 0;
 
-        *qg_ptr->x = qg_ptr->xmin;
-        for (int i = 0; ((*qg_ptr->x < qg_ptr->xmax) && (i < len)); (*qg_ptr->x)++, s++, i++) {
-            grid_type *g_ptr = &floor_ptr->grid_array[*qg_ptr->y][*qg_ptr->x];
-            int idx = s[0];
-            OBJECT_IDX object_index = letter[idx].object;
-            MONSTER_IDX monster_index = letter[idx].monster;
-            int random = letter[idx].random;
-            ARTIFACT_IDX artifact_index = letter[idx].artifact;
-            g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].feature);
-            if (init_flags & INIT_ONLY_FEATURES)
-                continue;
-
-            g_ptr->info = letter[idx].cave_info;
-            if (random & RANDOM_MONSTER) {
-                floor_ptr->monster_level = floor_ptr->base_level + monster_index;
-
-                place_monster(player_ptr, *qg_ptr->y, *qg_ptr->x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
-
-                floor_ptr->monster_level = floor_ptr->base_level;
-            } else if (monster_index) {
-                int old_cur_num, old_max_num;
-                bool clone = FALSE;
-
-                if (monster_index < 0) {
-                    monster_index = -monster_index;
-                    clone = TRUE;
-                }
-
-                old_cur_num = r_info[monster_index].cur_num;
-                old_max_num = r_info[monster_index].max_num;
-
-                if (r_info[monster_index].flags1 & RF1_UNIQUE) {
-                    r_info[monster_index].cur_num = 0;
-                    r_info[monster_index].max_num = 1;
-                } else if (r_info[monster_index].flags7 & RF7_NAZGUL) {
-                    if (r_info[monster_index].cur_num == r_info[monster_index].max_num) {
-                        r_info[monster_index].max_num++;
-                    }
-                }
-
-                place_monster_aux(player_ptr, 0, *qg_ptr->y, *qg_ptr->x, monster_index, (PM_ALLOW_SLEEP | PM_NO_KAGE));
-                if (clone) {
-                    floor_ptr->m_list[hack_m_idx_ii].smart |= SM_CLONED;
-                    r_info[monster_index].cur_num = old_cur_num;
-                    r_info[monster_index].max_num = old_max_num;
-                }
-            }
-
-            if ((random & RANDOM_OBJECT) && (random & RANDOM_TRAP)) {
-                floor_ptr->object_level = floor_ptr->base_level + object_index;
-
-                /*
-                 * Random trap and random treasure defined
-                 * 25% chance for trap and 75% chance for object
-                 */
-                if (randint0(100) < 75) {
-                    place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, 0L);
-                } else {
-                    place_trap(player_ptr, *qg_ptr->y, *qg_ptr->x);
-                }
-
-                floor_ptr->object_level = floor_ptr->base_level;
-            } else if (random & RANDOM_OBJECT) {
-                floor_ptr->object_level = floor_ptr->base_level + object_index;
-                if (randint0(100) < 75)
-                    place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, 0L);
-                else if (randint0(100) < 80)
-                    place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, AM_GOOD);
-                else
-                    place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, AM_GOOD | AM_GREAT);
-
-                floor_ptr->object_level = floor_ptr->base_level;
-            } else if (random & RANDOM_TRAP) {
-                place_trap(player_ptr, *qg_ptr->y, *qg_ptr->x);
-            } else if (letter[idx].trap) {
-                g_ptr->mimic = g_ptr->feat;
-                g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].trap);
-            } else if (object_index) {
-                object_type *o_ptr = &object_type_body;
-                object_prep(o_ptr, object_index);
-                if (o_ptr->tval == TV_GOLD) {
-                    coin_type = object_index - OBJ_GOLD_LIST;
-                    make_gold(floor_ptr, o_ptr);
-                    coin_type = 0;
-                }
-
-                apply_magic(player_ptr, o_ptr, floor_ptr->base_level, AM_NO_FIXED_ART | AM_GOOD);
-                drop_here(floor_ptr, o_ptr, *qg_ptr->y, *qg_ptr->x);
-            }
-
-            if (artifact_index) {
-                if (a_info[artifact_index].cur_num) {
-                    KIND_OBJECT_IDX k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
-                    object_type forge;
-                    object_type *q_ptr = &forge;
-
-                    object_prep(q_ptr, k_idx);
-                    drop_here(floor_ptr, q_ptr, *qg_ptr->y, *qg_ptr->x);
-                } else {
-                    if (create_named_art(player_ptr, artifact_index, *qg_ptr->y, *qg_ptr->x))
-                        a_info[artifact_index].cur_num = 1;
-                }
-            }
-
-            g_ptr->special = letter[idx].special;
-        }
-
-        (*qg_ptr->y)++;
+        parse_qtw_D(player_ptr, qtwg_ptr, s);
+        (*qtwg_ptr->y)++;
         return 0;
-    } else if (qg_ptr->buf[0] == 'Q') {
-        int num;
+    }
+    
+    if (qtwg_ptr->buf[0] == 'Q') {
         quest_type *q_ptr;
-#ifdef JP
-        if (qg_ptr->buf[2] == '$')
+        if (qtwg_ptr->buf[2] == '$')
             return 0;
-        num = tokenize(qg_ptr->buf + 2, 33, zz, 0);
-#else
-        if (qg_ptr->buf[2] != '$')
-            return 0;
-        num = tokenize(qg_ptr->buf + 3, 33, zz, 0);
-#endif
 
+        int num = tokenize(qtwg_ptr->buf + _(2, 3), 33, zz, 0);
         if (num < 3)
             return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
 
@@ -295,23 +294,29 @@ errr generate_fixed_map_floor(player_type *player_ptr, qg_type *qg_ptr, process_
 
             return 0;
         }
-    } else if (qg_ptr->buf[0] == 'W') {
-        return parse_line_wilderness(player_ptr, qg_ptr->buf, qg_ptr->xmin, qg_ptr->xmax, qg_ptr->y, qg_ptr->x);
-    } else if (qg_ptr->buf[0] == 'P') {
+
+        return 1;
+    }
+    
+    if (qtwg_ptr->buf[0] == 'W')
+        return parse_line_wilderness(player_ptr, qtwg_ptr->buf, qtwg_ptr->xmin, qtwg_ptr->xmax, qtwg_ptr->y, qtwg_ptr->x);
+    
+    if (qtwg_ptr->buf[0] == 'P') {
         if (init_flags & INIT_CREATE_DUNGEON) {
-            if (tokenize(qg_ptr->buf + 2, 2, zz, 0) == 2) {
+            if (tokenize(qtwg_ptr->buf + 2, 2, zz, 0) == 2) {
                 int panels_x, panels_y;
 
-                panels_y = (*qg_ptr->y / SCREEN_HGT);
-                if (*qg_ptr->y % SCREEN_HGT)
+                panels_y = (*qtwg_ptr->y / SCREEN_HGT);
+                if (*qtwg_ptr->y % SCREEN_HGT)
                     panels_y++;
+
+                floor_type *floor_ptr = player_ptr->current_floor_ptr;
                 floor_ptr->height = panels_y * SCREEN_HGT;
-
-                panels_x = (*qg_ptr->x / SCREEN_WID);
-                if (*qg_ptr->x % SCREEN_WID)
+                panels_x = (*qtwg_ptr->x / SCREEN_WID);
+                if (*qtwg_ptr->x % SCREEN_WID)
                     panels_x++;
-                floor_ptr->width = panels_x * SCREEN_WID;
 
+                floor_ptr->width = panels_x * SCREEN_WID;
                 panel_row_min = floor_ptr->height;
                 panel_col_min = floor_ptr->width;
 
@@ -331,10 +336,13 @@ errr generate_fixed_map_floor(player_type *player_ptr, qg_type *qg_ptr, process_
         }
 
         return 0;
-    } else if (qg_ptr->buf[0] == 'B') {
-        return parse_line_building(qg_ptr->buf);
-    } else if (qg_ptr->buf[0] == 'M') {
-        if (tokenize(qg_ptr->buf + 2, 2, zz, 0) == 2) {
+    }
+    
+    if (qtwg_ptr->buf[0] == 'B')
+        return parse_line_building(qtwg_ptr->buf);
+    
+    if (qtwg_ptr->buf[0] == 'M') {
+        if (tokenize(qtwg_ptr->buf + 2, 2, zz, 0) == 2) {
             if (zz[0][0] == 'T') {
                 max_towns = (TOWN_IDX)atoi(zz[1]);
             } else if (zz[0][0] == 'Q') {
