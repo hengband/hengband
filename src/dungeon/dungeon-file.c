@@ -143,56 +143,6 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, parse_info_txt_fun
 
 
 /*!
- * @brief 地形タグからIDを得る /
- * Search for real index corresponding to this fake tag
- * @param feat タグ文字列のオフセット
- * @return 地形ID。該当がないなら-1
- */
-static FEAT_IDX search_real_feat(STR_OFFSET feat)
-{
-	if (feat <= 0)
-	{
-		return -1;
-	}
-
-	for (FEAT_IDX i = 0; i < f_head.info_num; i++)
-	{
-		if (feat == f_info[i].tag)
-		{
-			return i;
-		}
-	}
-
-	msg_format(_("未定義のタグ '%s'。", "%s is undefined."), f_tag + feat);
-	return -1;
-}
-
-
-/*!
- * @brief 地形情報の各種タグからIDへ変換して結果を収める /
- * Retouch fake tags of f_info
- * @param head ヘッダ構造体
- * @return なし
- */
-void retouch_f_info(angband_header *head)
-{
-	for (int i = 0; i < head->info_num; i++)
-	{
-		feature_type *f_ptr = &f_info[i];
-		FEAT_IDX k = search_real_feat(f_ptr->mimic_tag);
-		f_ptr->mimic = k < 0 ? f_ptr->mimic : k;
-		k = search_real_feat(f_ptr->destroyed_tag);
-		f_ptr->destroyed = k < 0 ? f_ptr->destroyed : k;
-		for (FEAT_IDX j = 0; j < MAX_FEAT_STATES; j++)
-		{
-			k = search_real_feat(f_ptr->state[j].result_tag);
-			f_ptr->state[j].result = k < 0 ? f_ptr->state[j].result : k;
-		}
-	}
-}
-
-
-/*!
  * @brief 地形情報の「F:」情報をパースする
  * Process "F:<letter>:<terrain>:<cave_info>:<monster>:<object>:<ego>:<artifact>:<trap>:<special>" -- info for dungeon grid
  * @param floor_ptr 現在フロアへの参照ポインタ
