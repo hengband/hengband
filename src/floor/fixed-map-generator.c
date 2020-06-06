@@ -22,6 +22,9 @@
 #include "world/world-object.h"
 #include "world/world.h"
 
+// PARSE_ERROR_MAXが既にあり扱い辛いのでここでconst宣言.
+static const int PARSE_CONTINUE = 255;
+
 qtwg_type *initialize_quest_generator_type(qtwg_type *qtwg_ptr, char *buf, int ymin, int xmin, int ymax, int xmax, int *y, int *x)
 {
     qtwg_ptr->buf = buf;
@@ -240,6 +243,52 @@ static bool parse_qtw_QR(char **zz, int num, quest_type *q_ptr)
     return TRUE;
 }
 
+/*!
+ * @brief t_info、q_info、w_infoにおけるQトークンをパースする
+ * @param qtwg_ptr トークンパース構造体への参照ポインタ
+ * @param zz トークン保管文字列
+ * @return エラーコード、但しPARSE_CONTINUEの時は処理続行
+ */
+static int parse_qtw_Q(qtwg_type *qtwg_ptr, char **zz)
+{
+    if (qtwg_ptr->buf[0] != 'Q')
+        return PARSE_CONTINUE;
+
+    if (qtwg_ptr->buf[2] == '$')
+        return PARSE_ERROR_NONE;
+
+    int num = tokenize(qtwg_ptr->buf + _(2, 3), 33, zz, 0);
+    if (num < 3)
+        return PARSE_ERROR_TOO_FEW_ARGUMENTS;
+
+    quest_type *q_ptr;
+    q_ptr = &(quest[atoi(zz[0])]);
+    if (parse_qtw_QQ(zz, num, q_ptr))
+        return PARSE_ERROR_NONE;
+
+    if (parse_qtw_QR(zz, num, q_ptr))
+        return PARSE_ERROR_NONE;
+
+    if (zz[1][0] == 'N') {
+        if (init_flags & (INIT_ASSIGN | INIT_SHOW_TEXT | INIT_NAME_ONLY)) {
+            strcpy(q_ptr->name, zz[2]);
+        }
+
+        return PARSE_ERROR_NONE;
+    }
+
+    if (zz[1][0] == 'T') {
+        if (init_flags & INIT_SHOW_TEXT) {
+            strcpy(quest_text[quest_text_line], zz[2]);
+            quest_text_line++;
+        }
+
+        return PARSE_ERROR_NONE;
+    }
+
+    return PARSE_ERROR_GENERIC;
+}
+
 static bool parse_qtw_P(player_type *player_ptr, qtwg_type *qtwg_ptr, char **zz)
 {
     if (qtwg_ptr->buf[0] != 'P')
@@ -367,42 +416,10 @@ parse_error_type generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qt
         return PARSE_ERROR_NONE;
     }
     
-    if (qtwg_ptr->buf[0] == 'Q') {
-        if (qtwg_ptr->buf[2] == '$')
-            return PARSE_ERROR_NONE;
+    parse_error_type parse_result_Q = parse_qtw_Q(qtwg_ptr, zz);
+    if (parse_result_Q != PARSE_CONTINUE)
+        return parse_result_Q;
 
-        int num = tokenize(qtwg_ptr->buf + _(2, 3), 33, zz, 0);
-        if (num < 3)
-            return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
-
-        quest_type *q_ptr;
-        q_ptr = &(quest[atoi(zz[0])]);
-        if (parse_qtw_QQ(zz, num, q_ptr))
-            return PARSE_ERROR_NONE;
-
-        if (parse_qtw_QR(zz, num, q_ptr))
-            return PARSE_ERROR_NONE;
-
-        if (zz[1][0] == 'N') {
-            if (init_flags & (INIT_ASSIGN | INIT_SHOW_TEXT | INIT_NAME_ONLY)) {
-                strcpy(q_ptr->name, zz[2]);
-            }
-
-            return PARSE_ERROR_NONE;
-        }
-        
-        if (zz[1][0] == 'T') {
-            if (init_flags & INIT_SHOW_TEXT) {
-                strcpy(quest_text[quest_text_line], zz[2]);
-                quest_text_line++;
-            }
-
-            return PARSE_ERROR_NONE;
-        }
-
-        return PARSE_ERROR_GENERIC;
-    }
-    
     if (qtwg_ptr->buf[0] == 'W')
         return parse_line_wilderness(player_ptr, qtwg_ptr->buf, qtwg_ptr->xmin, qtwg_ptr->xmax, qtwg_ptr->y, qtwg_ptr->x);
     
