@@ -1193,6 +1193,9 @@
     <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.c">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\info-reader-util.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2544,6 +2547,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\term\term-color-types.h">
       <Filter>term</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\info-reader-util.h">
+      <Filter>info-reader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
