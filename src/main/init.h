@@ -16,9 +16,6 @@
 #include "system/angband.h"
 #include "info-reader/info-reader-util.h"
 
-extern int error_idx;
-extern int error_line;
-
 extern angband_header f_head;
 
 #endif /* INCLUDED_INIT_H */

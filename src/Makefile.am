@@ -155,7 +155,9 @@ hengband_SOURCES = \
 	info-reader/dungeon-info-tokens-table.c info-reader/dungeon-info-tokens-table.h \
 	info-reader/info-reader-util.c info-reader/info-reader-util.h \
 	info-reader/kind-info-tokens-table.c info-reader/kind-info-tokens-table.h \
+	info-reader/parse-error-types.h \
 	info-reader/race-info-tokens-table.c info-reader/race-info-tokens-table.h \
+	info-reader/random-grid-effect-types.h \
 	\
 	inventory/inventory-curse.c inventory/inventory-curse.h \
 	inventory/inventory-damage.c inventory/inventory-damage.h \

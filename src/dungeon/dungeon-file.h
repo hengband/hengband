@@ -1,25 +1,8 @@
 ﻿#pragma once
 
 #include "system/angband.h"
-#include "main/init.h" // 相互参照、後で何とかする.
-
-/* Random dungeon grid effects */
-#define RANDOM_NONE         0x00000000
-#define RANDOM_FEATURE      0x00000001
-#define RANDOM_MONSTER      0x00000002
-#define RANDOM_OBJECT       0x00000004
-#define RANDOM_EGO          0x00000008
-#define RANDOM_ARTIFACT     0x00000010
-#define RANDOM_TRAP         0x00000020
-
-#define PARSE_ERROR_GENERIC                  1
-#define PARSE_ERROR_INVALID_FLAG             5
-#define PARSE_ERROR_UNDEFINED_DIRECTIVE      6
-#define PARSE_ERROR_OUT_OF_MEMORY            7
-#define PARSE_ERROR_OUT_OF_BOUNDS            8
-#define PARSE_ERROR_TOO_FEW_ARGUMENTS        9
-#define PARSE_ERROR_UNDEFINED_TERRAIN_TAG   10
-#define PARSE_ERROR_MAX                     11
+#include "info-reader/info-reader-util.h"
+#include "info-reader/parse-error-types.h"
 
 extern concptr err_str[PARSE_ERROR_MAX];
 

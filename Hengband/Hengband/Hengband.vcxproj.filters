@@ -2551,6 +2551,12 @@
     <ClInclude Include="..\..\src\info-reader\info-reader-util.h">
       <Filter>info-reader</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h">
+      <Filter>dungeon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\parse-error-types.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

@@ -39,6 +39,7 @@
 #include "floor/wild.h"
 #include "grid/feature.h"
 #include "grid/trap.h"
+#include "info-reader/parse-error-types.h"
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
 #include "io/uid-checker.h"

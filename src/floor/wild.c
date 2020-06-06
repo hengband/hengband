@@ -17,6 +17,7 @@
 #include "floor/floor-town.h"
 #include "grid/feature.h"
 #include "grid/grid.h"
+#include "info-reader/parse-error-types.h"
 #include "io/files-util.h"
 #include "io/tokenizer.h"
 #include "monster/monster-status.h"

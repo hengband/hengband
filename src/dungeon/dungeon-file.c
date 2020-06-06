@@ -49,8 +49,10 @@
 #include "info-reader/info-reader-util.h"
 #include "info-reader/kind-info-tokens-table.h"
 #include "info-reader/race-info-tokens-table.h"
+#include "info-reader/random-grid-effect-types.h"
 #include "io/files-util.h"
 #include "io/tokenizer.h"
+#include "main/init.c" // f_headが依存している。後で何とかする.
 #include "monster/monster-race.h"
 #include "monster/monster.h"
 #include "object-enchant/apply-magic.h"
