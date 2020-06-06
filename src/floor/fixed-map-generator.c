@@ -281,6 +281,47 @@ static bool parse_qtw_P(player_type *player_ptr, qtwg_type *qtwg_ptr, char **zz)
     return TRUE;
 }
 
+static bool parse_qtw_M(qtwg_type *qtwg_ptr, char **zz)
+{
+    if (qtwg_ptr->buf[0] != 'M')
+        return FALSE;
+
+    if ((tokenize(qtwg_ptr->buf + 2, 2, zz, 0) == 2) == 0)
+        return TRUE;
+
+    if (zz[0][0] == 'T') {
+        max_towns = (TOWN_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'Q') {
+        max_q_idx = (QUEST_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'R') {
+        max_r_idx = (player_race_type)atoi(zz[1]);
+    } else if (zz[0][0] == 'K') {
+        max_k_idx = (KIND_OBJECT_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'V') {
+        max_v_idx = (VAULT_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'F') {
+        max_f_idx = (FEAT_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'A') {
+        max_a_idx = (ARTIFACT_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'E') {
+        max_e_idx = (EGO_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'D') {
+        current_world_ptr->max_d_idx = (DUNGEON_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'O') {
+        current_world_ptr->max_o_idx = (OBJECT_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'M') {
+        current_world_ptr->max_m_idx = (MONSTER_IDX)atoi(zz[1]);
+    } else if (zz[0][0] == 'W') {
+        if (zz[0][1] == 'X')
+            current_world_ptr->max_wild_x = (POSITION)atoi(zz[1]);
+
+        if (zz[0][1] == 'Y')
+            current_world_ptr->max_wild_y = (POSITION)atoi(zz[1]);
+    }
+
+    return TRUE;
+}
+
 /*!
  * @brief 固定マップ (クエスト＆街＆広域マップ)をフロアに生成する
  * Parse a sub-file of the "extra info"
@@ -371,41 +412,8 @@ parse_error_type generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qt
     if (qtwg_ptr->buf[0] == 'B')
         return parse_line_building(qtwg_ptr->buf);
     
-    if (qtwg_ptr->buf[0] == 'M') {
-        if (tokenize(qtwg_ptr->buf + 2, 2, zz, 0) == 2) {
-            if (zz[0][0] == 'T') {
-                max_towns = (TOWN_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'Q') {
-                max_q_idx = (QUEST_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'R') {
-                max_r_idx = (player_race_type)atoi(zz[1]);
-            } else if (zz[0][0] == 'K') {
-                max_k_idx = (KIND_OBJECT_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'V') {
-                max_v_idx = (VAULT_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'F') {
-                max_f_idx = (FEAT_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'A') {
-                max_a_idx = (ARTIFACT_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'E') {
-                max_e_idx = (EGO_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'D') {
-                current_world_ptr->max_d_idx = (DUNGEON_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'O') {
-                current_world_ptr->max_o_idx = (OBJECT_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'M') {
-                current_world_ptr->max_m_idx = (MONSTER_IDX)atoi(zz[1]);
-            } else if (zz[0][0] == 'W') {
-                if (zz[0][1] == 'X')
-                    current_world_ptr->max_wild_x = (POSITION)atoi(zz[1]);
-
-                if (zz[0][1] == 'Y')
-                    current_world_ptr->max_wild_y = (POSITION)atoi(zz[1]);
-            }
-
-            return PARSE_ERROR_NONE;
-        }
-    }
+    if (parse_qtw_M(qtwg_ptr, zz))
+        return PARSE_ERROR_NONE;
 
     return PARSE_ERROR_GENERIC;
 }
