@@ -179,6 +179,7 @@
     <ClCompile Include="..\..\src\info-reader\kind-info-tokens-table.c" />
     <ClCompile Include="..\..\src\info-reader\kind-reader.c" />
     <ClCompile Include="..\..\src\info-reader\race-info-tokens-table.c" />
+    <ClCompile Include="..\..\src\info-reader\skill-reader.c" />
     <ClCompile Include="..\..\src\info-reader\vault-reader.c" />
     <ClCompile Include="..\..\src\player-attack\attack-chaos-effect.c" />
     <ClCompile Include="..\..\src\combat\attack-criticality.c" />
@@ -504,6 +505,7 @@
     <ClInclude Include="..\..\src\info-reader\parse-error-types.h" />
     <ClInclude Include="..\..\src\info-reader\race-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h" />
+    <ClInclude Include="..\..\src\info-reader\skill-reader.h" />
     <ClInclude Include="..\..\src\info-reader\vault-reader.h" />
     <ClInclude Include="..\..\src\player-attack\attack-chaos-effect.h" />
     <ClInclude Include="..\..\src\combat\attack-criticality.h" />

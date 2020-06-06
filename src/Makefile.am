@@ -164,6 +164,7 @@ hengband_SOURCES = \
 	info-reader/parse-error-types.h \
 	info-reader/race-info-tokens-table.c info-reader/race-info-tokens-table.h \
 	info-reader/random-grid-effect-types.h \
+	info-reader/skill-reader.c info-reader/skill-reader.h \
 	info-reader/vault-reader.c info-reader/vault-reader.h \
 	\
 	inventory/inventory-curse.c inventory/inventory-curse.h \

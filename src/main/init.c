@@ -44,6 +44,7 @@
 #include "info-reader/ego-reader.h"
 #include "info-reader/feature-reader.h"
 #include "info-reader/kind-reader.h"
+#include "info-reader/skill-reader.h"
 #include "info-reader/parse-error-types.h"
 #include "info-reader/vault-reader.h"
 #include "io/files-util.h"
