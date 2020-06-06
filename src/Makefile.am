@@ -153,6 +153,8 @@ hengband_SOURCES = \
 	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
 	\
 	info-reader/dungeon-info-tokens-table.c info-reader/dungeon-info-tokens-table.h \
+	info-reader/feature-info-tokens-table.c info-reader/feature-info-tokens-table.h \
+	info-reader/feature-reader.c info-reader/feature-reader.h \
 	info-reader/info-reader-util.c info-reader/info-reader-util.h \
 	info-reader/kind-info-tokens-table.c info-reader/kind-info-tokens-table.h \
 	info-reader/parse-error-types.h \

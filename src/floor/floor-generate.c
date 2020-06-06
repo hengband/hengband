@@ -8,99 +8,12 @@
  * and not for profit purposes provided that this copyright and statement\n
  * are included in all such copies.  Other copyrights may also apply.\n
  * 2014 Deskull rearranged comment for Doxygen. \n
- * @details
- * Note that Level generation is *not* an important bottleneck,\n
- * though it can be annoyingly slow on older machines...  Thus\n
- * we emphasize "simplicity" and "correctness" over "speed".\n
- *\n
- * This entire file is only needed for generating levels.\n
- * This may allow smart compilers to only load it when needed.\n
- *\n
- * Consider the "v_info.txt" file for vault generation.\n
- *\n
- * In this file, we use the "special" granite and perma-wall sub-types,\n
- * where "basic" is normal, "inner" is inside a room, "outer" is the\n
- * outer wall of a room, and "solid" is the outer wall of the dungeon\n
- * or any walls that may not be pierced by corridors.  Thus the only\n
- * wall type that may be pierced by a corridor is the "outer granite"\n
- * type.  The "basic granite" type yields the "actual" corridors.\n
- *\n
- * Note that we use the special "solid" granite wall type to prevent\n
- * multiple corridors from piercing a wall in two adjacent locations,\n
- * which would be messy, and we use the special "outer" granite wall\n
- * to indicate which walls "surround" rooms, and may thus be "pierced"\n
- * by corridors entering or leaving the room.\n
- *\n
- * Note that a tunnel which attempts to leave a room near the "edge"\n
- * of the dungeon in a direction toward that edge will cause "silly"\n
- * wall piercings, but will have no permanently incorrect effects,\n
- * as long as the tunnel can *eventually* exit from another side.\n
- * And note that the wall may not come back into the room by the\n
- * hole it left through, so it must bend to the left or right and\n
- * then optionally re-enter the room (at least 2 grids away).  This\n
- * is not a problem since every room that is large enough to block\n
- * the passage of tunnels is also large enough to allow the tunnel\n
- * to pierce the room itself several times.\n
- *\n
- * Note that no two corridors may enter a room through adjacent grids,\n
- * they must either share an entryway or else use entryways at least\n
- * two grids apart.  This prevents "large" (or "silly") doorways.\n
- *\n
- * To create rooms in the dungeon, we first divide the dungeon up\n
- * into "blocks" of 11x11 grids each, and require that all rooms\n
- * occupy a rectangular group of blocks.  As long as each room type\n
- * reserves a sufficient number of blocks, the room building routines\n
- * will not need to check bounds.  Note that most of the normal rooms\n
- * actually only use 23x11 grids, and so reserve 33x11 grids.\n
- *\n
- * Note that the use of 11x11 blocks (instead of the old 33x11 blocks)\n
- * allows more variability in the horizontal placement of rooms, and\n
- * at the same time has the disadvantage that some rooms (two thirds\n
- * of the normal rooms) may be "split" by panel boundaries.  This can\n
- * induce a situation where a player is in a room and part of the room\n
- * is off the screen.  It may be annoying enough to go back to 33x11\n
- * blocks to prevent this visual situation.\n
- *\n
- * Note that the dungeon generation routines are much different (2.7.5)\n
- * and perhaps "DUN_ROOMS" should be less than 50.\n
- *\n
- * Note that it is possible to create a room which is only\n
- * connected to itself, because the "tunnel generation" code allows a\n
- * tunnel to leave a room, wander around, and then re-enter the room.\n
- *\n
- * Note that it is possible to create a set of rooms which\n
- * are only connected to other rooms in that set, since there is nothing\n
- * explicit in the code to prevent this from happening.  But this is less\n
- * likely than the "isolated room" problem, because each room attempts to\n
- * connect to another room, in a giant cycle, thus requiring at least two\n
- * bizarre occurances to create an isolated section of the dungeon.\n
- *\n
- * Note that (2.7.9) monster pits have been split into monster "nests"\n
- * and monster "pits".  The "nests" have a collection of monsters of a\n
- * given type strewn randomly around the room (jelly, animal, or undead),\n
- * while the "pits" have a collection of monsters of a given type placed\n
- * around the room in an organized manner (orc, troll, giant, dragon, or\n
- * demon).  Note that both "nests" and "pits" are now "level dependant",\n
- * and both make 16 "expensive" calls to the "get_mon_num()" function.\n
- *\n
- * Note that the grid flags changed in a rather drastic manner\n
- * for Angband 2.8.0 (and 2.7.9+), in particular, dungeon terrain\n
- * features, such as doors and stairs and traps and rubble and walls,\n
- * are all handled as a set of 64 possible "terrain features", and\n
- * not as "fake" objects (440-479) as in pre-2.8.0 versions.\n
- *\n
- * The 64 new "dungeon features" will also be used for "visual display"\n
- * but we must be careful not to allow, for example, the user to display\n
- * hidden traps in a different way from floors, or secret doors in a way\n
- * different from granite walls, or even permanent granite in a different\n
- * way from granite.  \n
  */
 
 #include "system/angband.h"
 #include "util/util.h"
 #include "system/system-variables.h"
 #include "cmd-building/cmd-building.h"
-
 #include "io/write-diary.h"
 #include "cmd-io/cmd-dump.h"
 #include "grid/grid.h"
@@ -115,13 +28,13 @@
 #include "floor/floor-generate.h"
 #include "grid/feature.h"
 #include "grid/trap.h"
+#include "info-reader/feature-reader.h"
 #include "monster/monster.h"
 #include "dungeon/quest.h"
 #include "player/player-status.h"
 #include "floor/wild.h"
 #include "monster/monster-status.h"
 #include "dungeon/dungeon-file.h"
-#include "main/init.h"
 #include "grid/feature.h"
 #include "world/world.h"
 #include "view/display-main-window.h"

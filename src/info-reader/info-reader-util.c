@@ -99,3 +99,23 @@ bool add_tag(STR_OFFSET *offset, angband_header *head, concptr buf)
     *offset = (s16b)i;
     return TRUE;
 }
+
+/*!
+ * @brief テキストトークンを走査してフラグを一つ得る(汎用) /
+ * Grab one flag from a textual string
+ * @param flags ビットフラグを追加する先の参照ポインタ
+ * @param names トークン定義配列
+ * @param what 参照元の文字列ポインタ
+ * @return エラーコード
+ */
+errr grab_one_flag(u32b *flags, concptr names[], concptr what)
+{
+    for (int i = 0; i < 32; i++) {
+        if (streq(what, names[i])) {
+            *flags |= (1L << i);
+            return 0;
+        }
+    }
+
+    return -1;
+}

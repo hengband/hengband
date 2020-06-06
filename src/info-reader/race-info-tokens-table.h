@@ -4,7 +4,6 @@
 
 #define NUM_R_BLOW_METHOD 27
 #define NUM_R_BLOW_EFFECT 37
-#define NUM_R_FLAGS 113
 #define NUM_R_FLAGS_1 32
 #define NUM_R_FLAGS_2 32
 #define NUM_R_FLAGS_3 32
@@ -18,7 +17,6 @@
 
 extern concptr r_info_blow_method[NUM_R_BLOW_METHOD];
 extern concptr r_info_blow_effect[NUM_R_BLOW_EFFECT];
-extern concptr f_info_flags[NUM_R_FLAGS];
 extern concptr r_info_flags1[NUM_R_FLAGS_1];
 extern concptr r_info_flags2[NUM_R_FLAGS_2];
 extern concptr r_info_flags3[NUM_R_FLAGS_3];

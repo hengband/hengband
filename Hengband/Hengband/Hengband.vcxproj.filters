@@ -1196,6 +1196,12 @@
     <ClCompile Include="..\..\src\info-reader\info-reader-util.c">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\feature-reader.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\feature-info-tokens-table.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2555,6 +2561,12 @@
       <Filter>dungeon</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\parse-error-types.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\feature-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\feature-info-tokens-table.h">
       <Filter>info-reader</Filter>
     </ClInclude>
   </ItemGroup>

@@ -16,11 +16,10 @@
 #include "system/angband.h"
 #include "info-reader/info-reader-util.h"
 
-extern angband_header f_head;
-
 #endif /* INCLUDED_INIT_H */
 
-s16b f_tag_to_index_in_init(concptr str);
 void init_angband(player_type *player_ptr, void(*process_autopick_file_command)(char*));
 concptr get_check_sum(void);
 void init_file_paths(char *path);
+errr init_v_info(void);
+errr init_buildings(void);

@@ -20,6 +20,7 @@
 #include "info-reader/parse-error-types.h"
 #include "io/files-util.h"
 #include "io/tokenizer.h"
+#include "main/init.h"
 #include "monster/monster-status.h"
 #include "monster/monster.h"
 #include "player/player-effects.h"
