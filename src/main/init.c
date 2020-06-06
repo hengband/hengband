@@ -40,6 +40,7 @@
 #include "grid/feature.h"
 #include "grid/trap.h"
 #include "info-reader/artifact-reader.h"
+#include "info-reader/dungeon-reader.h"
 #include "info-reader/ego-reader.h"
 #include "info-reader/feature-reader.h"
 #include "info-reader/kind-reader.h"

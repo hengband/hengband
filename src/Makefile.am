@@ -154,6 +154,7 @@ hengband_SOURCES = \
 	\
 	info-reader/artifact-reader.c info-reader/artifact-reader.h \
 	info-reader/dungeon-info-tokens-table.c info-reader/dungeon-info-tokens-table.h \
+	info-reader/dungeon-reader.c info-reader/dungeon-reader.h \
 	info-reader/ego-reader.c info-reader/ego-reader.h \
 	info-reader/feature-info-tokens-table.c info-reader/feature-info-tokens-table.h \
 	info-reader/feature-reader.c info-reader/feature-reader.h \
