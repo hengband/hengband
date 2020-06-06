@@ -43,6 +43,7 @@
 #include "info-reader/dungeon-reader.h"
 #include "info-reader/ego-reader.h"
 #include "info-reader/feature-reader.h"
+#include "info-reader/general-parser.h"
 #include "info-reader/kind-reader.h"
 #include "info-reader/magic-reader.h"
 #include "info-reader/race-reader.h"

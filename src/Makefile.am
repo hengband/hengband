@@ -158,6 +158,7 @@ hengband_SOURCES = \
 	info-reader/ego-reader.c info-reader/ego-reader.h \
 	info-reader/feature-info-tokens-table.c info-reader/feature-info-tokens-table.h \
 	info-reader/feature-reader.c info-reader/feature-reader.h \
+	info-reader/general-parser.c info-reader/general-parser.h \
 	info-reader/info-reader-util.c info-reader/info-reader-util.h \
 	info-reader/kind-info-tokens-table.c info-reader/kind-info-tokens-table.h \
 	info-reader/kind-reader.c info-reader/kind-reader.h \
