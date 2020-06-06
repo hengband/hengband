@@ -1223,6 +1223,9 @@
     <ClCompile Include="..\..\src\info-reader\magic-reader.c">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\race-reader.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2609,6 +2612,9 @@
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\magic-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\race-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
   </ItemGroup>
