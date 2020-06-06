@@ -171,6 +171,7 @@
     <ClCompile Include="..\..\src\cmd-io\cmd-menu-content-table.c" />
     <ClCompile Include="..\..\src\info-reader\artifact-reader.c" />
     <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.c" />
+    <ClCompile Include="..\..\src\info-reader\ego-reader.c" />
     <ClCompile Include="..\..\src\info-reader\feature-info-tokens-table.c" />
     <ClCompile Include="..\..\src\info-reader\feature-reader.c" />
     <ClCompile Include="..\..\src\info-reader\info-reader-util.c" />
@@ -492,6 +493,7 @@
     <ClInclude Include="..\..\src\cmd-io\cmd-menu-content-table.h" />
     <ClInclude Include="..\..\src\info-reader\artifact-reader.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h" />
+    <ClInclude Include="..\..\src\info-reader\ego-reader.h" />
     <ClInclude Include="..\..\src\info-reader\feature-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\feature-reader.h" />
     <ClInclude Include="..\..\src\info-reader\info-reader-util.h" />
