@@ -2,7 +2,7 @@
 /*!
  * @file angband.h
  * @brief Angband(変愚蛮怒)メインヘッダファイル
- * Main "Angband" header file
+ * Main "Angband" angband_header file
  * @date 2014/08/08
  * @author
  * Copyright (c) 1989 James E. Wilson
@@ -24,7 +24,7 @@
 
 
 /*
- * Then, include the header files for the low-level code
+ * Then, include the angband_header files for the low-level code
  */
 #include "term/z-util.h"
 #include "term/z-virt.h"
@@ -34,7 +34,7 @@
 
 
 /*
- * Include the "Angband" configuration header
+ * Include the "Angband" configuration angband_header
  */
 #include "system/gamevalue.h"
 #include "cmd-io/cmd-gameoption.h"

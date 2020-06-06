@@ -9,7 +9,7 @@
  * auto_dump_printf(fmt, ...)
  *     Dump a formatted string using fprintf().
  * open_auto_dump(buf, mark)
- *     Open a file, remove old dump, and add new header.
+ *     Open a file, remove old dump, and add new angband_header.
  * close_auto_dump(void)
  *     Add a footer, and close the file.
  */

@@ -18,9 +18,9 @@
  * point.
  * These three functions automatically delete old dumped lines
  * before adding new ones.  Since there are various kinds of automatic
- * dumps in a single file, we add a header and a footer with a type
+ * dumps in a single file, we add a angband_header and a footer with a type
  * name for every automatic dump, and kill old lines only when the
- * lines have the correct type of header and footer.
+ * lines have the correct type of angband_header and footer.
  * We need to be quite paranoid about correctness; the user might
  * (mistakenly) edit the file by hand, and see all their work come
  * to nothing on the next auto dump otherwise.  The current code only

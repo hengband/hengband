@@ -15,8 +15,8 @@ typedef struct artifact_type artifact_type;
  */
 struct artifact_type
 {
-	STR_OFFSET name;			/*!< アーティファクト名(headerオフセット参照) / Name (offset) */
-	STR_OFFSET text;			/*!< アーティファクト解説(headerオフセット参照) / Text (offset) */
+	STR_OFFSET name;			/*!< アーティファクト名(angband_headerオフセット参照) / Name (offset) */
+	STR_OFFSET text;			/*!< アーティファクト解説(angband_headerオフセット参照) / Text (offset) */
 
 	tval_type tval;		/*!< ベースアイテム大項目ID / Artifact type */
 	OBJECT_SUBTYPE_VALUE sval;	/*!< ベースアイテム小項目ID / Artifact sub type */

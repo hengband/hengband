@@ -15,9 +15,9 @@
 
 #include "system/angband.h"
 
-typedef struct header header;
+typedef struct angband_header angband_header;
 
-typedef errr(*parse_info_txt_func)(char *buf, header *head);
+typedef errr(*parse_info_txt_func)(char *buf, angband_header *head);
 
 /*
  * Size of memory reserved for initialization of some arrays
@@ -36,7 +36,6 @@ typedef errr(*parse_info_txt_func)(char *buf, header *head);
 
 
   /*!
-   * @struct header
    * @brief 各初期データ用ヘッダ構造体 / Template file header information (see "init.c").  16 bytes.
    * @details
    * Note that the sizes of many of the "arrays" are between 32768 and
@@ -63,7 +62,7 @@ typedef errr(*parse_info_txt_func)(char *buf, header *head);
    * computers) which use 2 byte "int" values, and which use "int" for the
    * arguments to the relevent functions.
    */
-struct header
+struct angband_header
 {
 	byte v_major;		/* Version -- major */
 	byte v_minor;		/* Version -- minor */
@@ -86,13 +85,13 @@ struct header
 
 	parse_info_txt_func parse_info_txt;
 
-	void(*retouch)(header *head);
+	void(*retouch)(angband_header *head);
 };
 
 extern int error_idx;
 extern int error_line;
 
-extern header f_head;
+extern angband_header f_head;
 
 #endif /* INCLUDED_INIT_H */
 

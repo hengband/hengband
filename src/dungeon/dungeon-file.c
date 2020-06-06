@@ -97,7 +97,7 @@ static dungeon_grid letter[255];
  * @param parse_info_txt_line パース関数
  * @return エラーコード
  */
-errr init_info_txt(FILE *fp, char *buf, header *head, parse_info_txt_func parse_info_txt_line)
+errr init_info_txt(FILE *fp, char *buf, angband_header *head, parse_info_txt_func parse_info_txt_line)
 {
 	error_idx = -1;
 	error_line = 0;
@@ -147,7 +147,7 @@ errr init_info_txt(FILE *fp, char *buf, header *head, parse_info_txt_func parse_
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_v_info(char *buf, header *head)
+errr parse_v_info(char *buf, angband_header *head)
 {
 	char *s;
 	static vault_type *v_ptr = NULL;
@@ -199,7 +199,7 @@ errr parse_v_info(char *buf, header *head)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_s_info(char *buf, header *head)
+errr parse_s_info(char *buf, angband_header *head)
 {
 	static skill_table *s_ptr = NULL;
 	if (buf[0] == 'N')
@@ -259,7 +259,7 @@ errr parse_s_info(char *buf, header *head)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_m_info(char *buf, header *head)
+errr parse_m_info(char *buf, angband_header *head)
 {
 	static player_magic *m_ptr = NULL;
 	static int realm, magic_idx = 0, readable = 0;
@@ -426,7 +426,7 @@ static errr grab_one_feat_action(feature_type *f_ptr, concptr what, int count)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_f_info(char *buf, header *head)
+errr parse_f_info(char *buf, angband_header *head)
 {
 	static feature_type *f_ptr = NULL;
 	int i;
@@ -675,7 +675,7 @@ static FEAT_IDX search_real_feat(STR_OFFSET feat)
  * @param head ヘッダ構造体
  * @return なし
  */
-void retouch_f_info(header *head)
+void retouch_f_info(angband_header *head)
 {
 	for (int i = 0; i < head->info_num; i++)
 	{
@@ -755,7 +755,7 @@ static byte grab_one_activation_flag(concptr what)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_k_info(char *buf, header *head)
+errr parse_k_info(char *buf, angband_header *head)
 {
 	static object_kind *k_ptr = NULL;
 
@@ -968,7 +968,7 @@ static errr grab_one_artifact_flag(artifact_type *a_ptr, concptr what)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_a_info(char *buf, header *head)
+errr parse_a_info(char *buf, angband_header *head)
 {
 	static artifact_type *a_ptr = NULL;
 	char *s, *t;
@@ -1134,7 +1134,7 @@ static bool grab_one_ego_item_flag(ego_item_type *e_ptr, concptr what)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_e_info(char *buf, header *head)
+errr parse_e_info(char *buf, angband_header *head)
 {
 	static ego_item_type *e_ptr = NULL;
 	error_idx = -1;
@@ -1315,7 +1315,7 @@ static errr grab_one_spell_flag(monster_race *r_ptr, concptr what)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_r_info(char *buf, header *head)
+errr parse_r_info(char *buf, angband_header *head)
 {
 	static monster_race *r_ptr = NULL;
 	char *s, *t;
@@ -1625,7 +1625,7 @@ static errr grab_one_spell_monster_flag(dungeon_type *d_ptr, concptr what)
  * @param head ヘッダ構造体
  * @return エラーコード
  */
-errr parse_d_info(char *buf, header *head)
+errr parse_d_info(char *buf, angband_header *head)
 {
 	static dungeon_type *d_ptr = NULL;
 	char *s, *t;

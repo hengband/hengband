@@ -1332,7 +1332,7 @@ static void print_header(void)
 /*
  * This is somewhat ugly.
  *
- * Given a header ("Resist", e.g.), a list ("Fire", "Cold", Acid", e.g.),
+ * Given a angband_header ("Resist", e.g.), a list ("Fire", "Cold", Acid", e.g.),
  * and a separator character (',', e.g.), write the list to the spoiler file
  * in a "nice" format, such as:
  *
@@ -1373,12 +1373,12 @@ static void print_header(void)
 
 /*!
  * @brief フラグ名称を出力する汎用関数
- * @param header ヘッダに出力するフラグ群の名前
+ * @param angband_header ヘッダに出力するフラグ群の名前
  * @param list フラグ名リスト
  * @param separator フラグ表示の区切り記号
  * @return なし
  */
-static void spoiler_outlist(concptr header, concptr *list, char separator)
+static void spoiler_outlist(concptr angband_header, concptr *list, char separator)
 {
 	int line_len, buf_len;
 	char line[MAX_LINE_LEN + 1], buf[80];
@@ -1389,10 +1389,10 @@ static void spoiler_outlist(concptr header, concptr *list, char separator)
 	/* This function always indents */
 	strcpy(line, INDENT1);
 
-	/* Create header (if one was given) */
-	if (header && (header[0]))
+	/* Create angband_header (if one was given) */
+	if (angband_header && (angband_header[0]))
 	{
-		strcat(line, header);
+		strcat(line, angband_header);
 		strcat(line, " ");
 	}
 
@@ -1581,7 +1581,7 @@ static void spoil_artifact(player_type *player_ptr, concptr fname)
 		return;
 	}
 
-	/* Dump the header */
+	/* Dump the angband_header */
 	print_header();
 
 	/* List the artifacts by tval */
@@ -1661,12 +1661,12 @@ static void spoil_mon_desc(concptr fname)
 	/* Allocate the "who" array */
 	C_MAKE(who, max_r_idx, MONRACE_IDX);
 
-	/* Dump the header */
+	/* Dump the angband_header */
 	fprintf(fff, "Monster Spoilers for Hengband Version %d.%d.%d\n",
 		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 	fprintf(fff, "------------------------------------------\n\n");
 
-	/* Dump the header */
+	/* Dump the angband_header */
 	fprintf(fff, "    %-38.38s%4s%4s%4s%7s%5s  %11.11s\n",
 		"Name", "Lev", "Rar", "Spd", "Hp", "Ac", "Visual Info");
 	fprintf(fff, "%-42.42s%4s%4s%4s%7s%5s  %11.11s\n",
@@ -1986,7 +1986,7 @@ static void spoil_mon_info(player_type *player_ptr, concptr fname)
 	}
 
 
-	/* Dump the header */
+	/* Dump the angband_header */
 	sprintf(buf, "Monster Spoilers for Hengband Version %d.%d.%d\n",
 		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
@@ -2186,7 +2186,7 @@ static void spoil_mon_evol(concptr fname)
 		return;
 	}
 
-	/* Dump the header */
+	/* Dump the angband_header */
 	sprintf(buf, "Monster Spoilers for Hengband Version %d.%d.%d\n",
 		FAKE_VER_MAJOR - 10, FAKE_VER_MINOR, FAKE_VER_PATCH);
 
@@ -2478,7 +2478,7 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
 		return;
 	}
 
-	/* Dump the header */
+	/* Dump the angband_header */
 	sprintf(buf, "Random artifacts list.\r");
 	spoiler_underline(buf);
 

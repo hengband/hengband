@@ -28,7 +28,7 @@
 * make sure to obtain various extra files as described below.
 *
 * The official compilation uses the CodeWarrior Pro compiler, which
-* includes a special project file and precompilable header file.
+* includes a special project file and precompilable angband_header file.
 * </p>
 *
 * <p>

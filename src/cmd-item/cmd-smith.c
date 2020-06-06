@@ -970,7 +970,7 @@ static void add_essence(player_type *creature_ptr, ESSENCE_IDX mode)
 					for (y = 1; y < 24; y++)
 						prt("", y, x);
 
-					/* Print header(s) */
+					/* Print angband_header(s) */
 #ifdef JP
 					prt(format("   %-43s %6s/%s", "能力(必要エッセンス)", "必要数", "所持数"), 1, x);
 

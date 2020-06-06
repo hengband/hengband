@@ -180,7 +180,7 @@ bool autopick_autoregister(player_type *player_ptr, object_type *o_ptr)
 	else
 	{
 		/*
-		 * File could not be opened for reading.  Assume header not
+		 * File could not be opened for reading.  Assume angband_header not
 		 * present.
 		 */
 		player_ptr->autopick_autoregister = FALSE;

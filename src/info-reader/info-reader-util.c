@@ -12,7 +12,7 @@
  * Returns FALSE when there isn't enough space available to store
  * the text.
  */
-bool add_text(u32b *offset, header *head, concptr buf, bool normal_text)
+bool add_text(u32b *offset, angband_header *head, concptr buf, bool normal_text)
 {
     if (head->text_size + strlen(buf) + 8 > FAKE_TEXT_SIZE)
         return FALSE;
@@ -54,7 +54,7 @@ bool add_text(u32b *offset, header *head, concptr buf, bool normal_text)
  * Returns FALSE when there isn't enough space available to store
  * the text.
  */
-bool add_name(u32b *offset, header *head, concptr buf)
+bool add_name(u32b *offset, angband_header *head, concptr buf)
 {
     if (head->name_size + strlen(buf) + 8 > FAKE_NAME_SIZE)
         return FALSE;
@@ -79,7 +79,7 @@ bool add_name(u32b *offset, header *head, concptr buf)
  * Returns FALSE when there isn't enough space available to store
  * the text.
  */
-bool add_tag(STR_OFFSET *offset, header *head, concptr buf)
+bool add_tag(STR_OFFSET *offset, angband_header *head, concptr buf)
 {
     u32b i;
     for (i = 1; i < head->tag_size; i += strlen(&head->tag_ptr[i]) + 1) {

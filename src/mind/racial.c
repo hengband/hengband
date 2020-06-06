@@ -1807,7 +1807,7 @@ void do_cmd_racial_power(player_type *creature_ptr)
 					redraw = TRUE;
 					if (!use_menu) screen_save();
 
-					/* Print header(s) */
+					/* Print angband_header(s) */
 					if (num < 18)
 						prt(_("                            Lv   MP 失率", "                            Lv Cost Fail"), y++, x);
 					else

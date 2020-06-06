@@ -1,7 +1,7 @@
 ﻿/*!
  * @file h-config.h
  * @brief 主に変愚/Zang時追加された基本事項のヘッダーファイル /
- * The most basic "include" file. This file simply includes other low level header files.
+ * The most basic "include" file. This file simply includes other low level angband_header files.
  * @date 2014/08/15
  * @author
  * 不明(変愚蛮怒スタッフ？)
