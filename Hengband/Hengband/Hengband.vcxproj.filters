@@ -344,13 +344,7 @@
     <ClCompile Include="..\..\src\core\stuff-handler.c">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells2.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spell\spells3.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells1.c">
       <Filter>spell</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\birth\birth-explanations-table.c">
@@ -367,9 +361,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\core\turn-compensator.c">
       <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\inventory\simple-appraiser.c">
-      <Filter>inventory</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\core\hp-mp-regenerator.c">
       <Filter>core</Filter>
@@ -431,9 +422,6 @@
     <ClCompile Include="..\..\src\dungeon\dungeon.c">
       <Filter>dungeon</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\dungeon\dungeon-file.c">
-      <Filter>dungeon</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\core\game-play.c">
       <Filter>core</Filter>
     </ClCompile>
@@ -456,9 +444,6 @@
       <Filter>floor</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\object\object1.c">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object\object2.c">
       <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\object\object-broken.c">
@@ -542,9 +527,6 @@
     <ClCompile Include="..\..\src\spell\spells-diceroll.c">
       <Filter>spell</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-floor.c">
-      <Filter>spell</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\spell\spells-object.c">
       <Filter>spell</Filter>
     </ClCompile>
@@ -552,9 +534,6 @@
       <Filter>spell</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\spell\spells-summon.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-world.c">
       <Filter>spell</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\locale\english.c">
@@ -568,9 +547,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\io\load.c">
       <Filter>io</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object\chest.c">
-      <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\grid\grid.c">
       <Filter>grid</Filter>
@@ -667,12 +643,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\core\sort.c">
       <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\spell\spells-detection.c">
-      <Filter>spell</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-samurai.c">
-      <Filter>mind</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\mspell\mspell-bolt.c">
       <Filter>mspell</Filter>
@@ -839,13 +809,7 @@
     <ClCompile Include="..\..\src\combat\hallucination-attacks-table.c">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-attack-types.c">
-      <Filter>combat</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\combat\martial-arts-table.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\insults-moans.c">
       <Filter>combat</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\combat\attack-accuracy.c">
@@ -854,80 +818,20 @@
     <ClCompile Include="..\..\src\combat\slaying.c">
       <Filter>combat</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\samurai-slaying.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\combat\attack-criticality.c">
       <Filter>combat</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\inventory\inventory-damage.c">
       <Filter>inventory</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-mirror-master.c">
-      <Filter>mind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\player-attack.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object\death-scythe.c">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mind\racial-force-trainer.c">
-      <Filter>mind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\mind\surprise-attack.c">
-      <Filter>mind</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\mind\monk-attack.c">
       <Filter>mind</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\blood-sucking-processor.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\vorpal-weapon.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\attack-chaos-effect.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-attack-player.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-attack-monster.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\melee-postprocess.c">
-      <Filter>combat</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\monster\monster-race-hook.c">
       <Filter>monster</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\util\util.c">
       <Filter>util</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object\torch.c">
-      <Filter>object</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\melee-switcher.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\melee-util.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-attack-util.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-attack-describer.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-eating.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-attack-switcher.c">
-      <Filter>combat</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\combat\monster-attack-status.c">
-      <Filter>combat</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\combat\aura-counterattack.c">
       <Filter>combat</Filter>
@@ -1052,9 +956,6 @@
     <ClCompile Include="..\..\src\view\object-describer.c">
       <Filter>view</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\object\object-appraiser.c">
-      <Filter>object</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\inventory\inventory-object.c">
       <Filter>inventory</Filter>
     </ClCompile>
@@ -1063,9 +964,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\realm\realm-names-table.c">
       <Filter>realm</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\object\bow.c">
-      <Filter>object</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\cmd-building\cmd-building.c">
       <Filter>cmd-building</Filter>
@@ -1102,6 +1000,237 @@
     </ClCompile>
     <ClCompile Include="..\..\src\object-enchant\apply-magic-others.c">
       <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\apply-magic.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\perception\object-perception.c">
+      <Filter>perception</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\perception\simple-perception.c">
+      <Filter>perception</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\object-value-calc.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\util\object-sort.c">
+      <Filter>util</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object\object-stack.c">
+      <Filter>object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-describer.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\range-calc.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\bow.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\chest.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\death-scythe.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\specific-object\torch.c">
+      <Filter>specific-object</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\racial-draconian.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\racial-balrog.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell\spells-staff-only.c">
+      <Filter>spell</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-beam.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-detection.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-floor.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-genocide.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-launcher.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-lite.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-neighbor.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-pet.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-sight.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-specific-bolt.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-teleport.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-world.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-charm.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-cavalry.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-force-trainer.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-mindcrafter.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-mirror-master.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-ninja.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-samurai.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-warrior.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\mind-warrior-mage.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\racial-vampire.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\mind\racial-android.c">
+      <Filter>mind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-crusade.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-hex.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-random.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\spells-grid.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-kind\earthquake.c">
+      <Filter>spell-kind</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\spell-realm\spells-trump.c">
+      <Filter>spell-realm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-attack\attack-chaos-effect.c">
+      <Filter>player-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-attack\blood-sucking-processor.c">
+      <Filter>player-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\player-attack\player-attack.c">
+      <Filter>player-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\insults-moans.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-describer.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-player.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-status.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-switcher.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-types.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-attack-util.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\monster-attack\monster-eating.c">
+      <Filter>monster-attack</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\melee\melee-postprocess.c">
+      <Filter>melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\melee\melee-switcher.c">
+      <Filter>melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\melee\melee-util.c">
+      <Filter>melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\melee\monster-attack-monster.c">
+      <Filter>melee</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\object-enchant\vorpal-weapon.c">
+      <Filter>object-enchant</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\race-info-tokens-table.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\kind-info-tokens-table.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\info-reader-util.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\feature-reader.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\feature-info-tokens-table.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\vault-reader.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\kind-reader.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\artifact-reader.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\ego-reader.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\dungeon-reader.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\skill-reader.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\magic-reader.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\race-reader.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\general-parser.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\floor\fixed-map-generator.c">
+      <Filter>floor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\fixed-map-parser.c">
+      <Filter>info-reader</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1486,12 +1615,6 @@
     <ClInclude Include="..\..\src\core\special-internal-keys.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells1.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells2.h">
-      <Filter>spell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\spell\spells3.h">
       <Filter>spell</Filter>
     </ClInclude>
@@ -1509,9 +1632,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\turn-compensator.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\inventory\simple-appraiser.h">
-      <Filter>inventory</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\hp-mp-regenerator.h">
       <Filter>core</Filter>
@@ -1571,9 +1691,6 @@
       <Filter>dungeon</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\dungeon\dungeon.h">
-      <Filter>dungeon</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\dungeon\dungeon-file.h">
       <Filter>dungeon</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\core\game-play.h">
@@ -1693,9 +1810,6 @@
     <ClInclude Include="..\..\src\spell\spells-diceroll.h">
       <Filter>spell</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-floor.h">
-      <Filter>spell</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-object.h">
       <Filter>spell</Filter>
     </ClInclude>
@@ -1703,9 +1817,6 @@
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\spell\spells-summon.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-world.h">
       <Filter>spell</Filter>
     </ClInclude>
     <ClInclude Include="..\src\locele\japanese.h">
@@ -1719,9 +1830,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\io\load.h">
       <Filter>io</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\chest.h">
-      <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\grid\feature.h">
       <Filter>grid</Filter>
@@ -1821,12 +1929,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\core\sort.h">
       <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\spell\spells-detection.h">
-      <Filter>spell</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-samurai.h">
-      <Filter>mind</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\mspell\monster-spell.h">
       <Filter>mspell</Filter>
@@ -2005,19 +2107,10 @@
     <ClInclude Include="..\..\src\combat\hallucination-attacks-table.h">
       <Filter>combat</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-types.h">
-      <Filter>combat</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\combat\martial-arts-table.h">
       <Filter>combat</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\combat\insults-moans.h">
-      <Filter>combat</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\combat\combat-options-type.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-effect.h">
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\attack-accuracy.h">
@@ -2026,53 +2119,14 @@
     <ClInclude Include="..\..\src\combat\slaying.h">
       <Filter>combat</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\samurai-slaying.h">
-      <Filter>mind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\combat\attack-criticality.h">
       <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\inventory\inventory-damage.h">
       <Filter>inventory</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-mirror-master.h">
-      <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\player-attack.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\player-attack-util.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\death-scythe.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\racial-force-trainer.h">
-      <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\mind\surprise-attack.h">
-      <Filter>mind</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\mind\monk-attack.h">
       <Filter>mind</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\blood-sucking-processor.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\vorpal-weapon.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\attack-chaos-effect.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-player.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-monster.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\melee-postprocess.h">
-      <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-race-hook.h">
       <Filter>monster</Filter>
@@ -2091,33 +2145,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object\item-use-flags.h">
       <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\object2.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\torch.h">
-      <Filter>object</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\melee-switcher.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\melee-util.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-util.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-describer.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-eating.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-switcher.h">
-      <Filter>combat</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\combat\monster-attack-status.h">
-      <Filter>combat</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\combat\aura-counterattack.h">
       <Filter>combat</Filter>
@@ -2239,9 +2266,6 @@
     <ClInclude Include="..\..\src\view\object-describer.h">
       <Filter>view</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\object\object-appraiser.h">
-      <Filter>object</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\inventory\inventory-object.h">
       <Filter>inventory</Filter>
     </ClInclude>
@@ -2250,9 +2274,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\realm\realm-names-table.h">
       <Filter>realm</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\object\bow.h">
-      <Filter>object</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\cmd-building\cmd-building.h">
       <Filter>cmd-building</Filter>
@@ -2355,6 +2376,258 @@
     </ClInclude>
     <ClInclude Include="..\..\src\object-enchant\apply-magic-others.h">
       <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\apply-magic.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\perception\object-perception.h">
+      <Filter>perception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\perception\simple-perception.h">
+      <Filter>perception</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-value-calc.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\util\object-sort.h">
+      <Filter>util</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object\object-stack.h">
+      <Filter>object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-describer.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\range-calc.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-hex-numbers.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\realm\realm-song-numbers.h">
+      <Filter>realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\bow.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\chest.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\death-scythe.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\specific-object\torch.h">
+      <Filter>specific-object</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\racial-draconian.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\racial-balrog.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell\spells-staff-only.h">
+      <Filter>spell</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-beam.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-detection.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-floor.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-genocide.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-launcher.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-lite.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-neighbor.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-pet.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-sight.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-specific-bolt.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-teleport.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-world.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-charm.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-cavalry.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-force-trainer.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-mindcrafter.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-mirror-master.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-ninja.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-samurai.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-warrior.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\mind-warrior-mage.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\racial-vampire.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\mind\racial-android.h">
+      <Filter>mind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-crusade.h">
+      <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-hex.h">
+      <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-random.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\spells-grid.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-kind\earthquake.h">
+      <Filter>spell-kind</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\spell-realm\spells-trump.h">
+      <Filter>spell-realm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-attack\attack-chaos-effect.h">
+      <Filter>player-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-attack\blood-sucking-processor.h">
+      <Filter>player-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-attack\player-attack.h">
+      <Filter>player-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player-attack\player-attack-util.h">
+      <Filter>player-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\insults-moans.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-describer.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-effect.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-player.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-status.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-switcher.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-types.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-attack-util.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster-attack\monster-eating.h">
+      <Filter>monster-attack</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\melee\melee-postprocess.h">
+      <Filter>melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\melee\melee-switcher.h">
+      <Filter>melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\melee\melee-util.h">
+      <Filter>melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\melee\monster-attack-monster.h">
+      <Filter>melee</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\object-enchant\vorpal-weapon.h">
+      <Filter>object-enchant</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\race-info-tokens-table.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\kind-info-tokens-table.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\term\term-color-types.h">
+      <Filter>term</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\info-reader-util.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\parse-error-types.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\feature-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\feature-info-tokens-table.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\vault-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\kind-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\artifact-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\ego-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\dungeon-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\skill-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\magic-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\race-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\general-parser.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\fixed-map-generator.h">
+      <Filter>floor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\fixed-map-parser.h">
+      <Filter>info-reader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -2478,6 +2751,30 @@
     </Filter>
     <Filter Include="object-enchant">
       <UniqueIdentifier>{c7db74bd-7f58-4044-96c8-c5916d0ebaf1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="perception">
+      <UniqueIdentifier>{e42f1944-e95c-42a8-97bf-9f959b313142}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="specific-object">
+      <UniqueIdentifier>{d12d97f4-76e6-4f8e-9f45-9905cf3863f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="spell-kind">
+      <UniqueIdentifier>{2ed79129-9b65-4718-b9c4-ce4ef793c81f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="spell-realm">
+      <UniqueIdentifier>{1ce2167d-011b-47b5-8934-24c6d4d036e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="player-attack">
+      <UniqueIdentifier>{cc3a34dc-4ff0-473f-afa5-3b5ec0da5aaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="monster-attack">
+      <UniqueIdentifier>{f197a2c1-d277-4d4d-b08b-586cf1f4f8f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="melee">
+      <UniqueIdentifier>{642ec95b-f054-4958-a614-49ccf88cfc25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="info-reader">
+      <UniqueIdentifier>{149ff96c-b8c9-4df9-845d-d0618427d100}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #define DAMAGE_FORCE    1
 #define DAMAGE_GENO     2
 #define DAMAGE_LOSELIFE 3

@@ -15,7 +15,6 @@
 #include "system/system-variables.h"
 #include "io/load.h"
 #include "util/util.h"
-
 #include "object-enchant/artifact.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
@@ -29,7 +28,7 @@
 #include "monster/monster.h"
 #include "dungeon/quest.h"
 #include "floor/wild.h"
-#include "spell/spells-floor.h"
+#include "spell-kind/spells-floor.h"
 #include "monster/monster-status.h"
 #include "object/object-hook.h"
 #include "pet/pet-util.h"
@@ -40,13 +39,12 @@
 #include "player/player-class.h"
 #include "player/player-personalities-table.h"
 #include "world/world.h"
-#include "spell/spells2.h"
 #include "io/write-diary.h"
 #include "cmd-io/cmd-dump.h"
 #include "io/save.h"
 #include "core/player-processor.h"
-
 #include "view/display-main-window.h"
+#include "mind/mind-mirror-master.h"
 
 static FLOOR_IDX new_floor_id;  /*!<次のフロアのID / floor_id of the destination */
 static u32b latest_visit_mark;  /*!<フロアを渡った回数？(確認中) / Max number of visit_mark */

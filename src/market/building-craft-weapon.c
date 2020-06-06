@@ -5,14 +5,15 @@
 #include "inventory/player-inventory.h"
 #include "market/building-util.h"
 #include "object-enchant/artifact.h"
+#include "object-enchant/tr-types.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
+#include "realm/realm-hex-numbers.h"
+#include "spell-realm/spells-hex.h"
 #include "sv-definition/sv-weapon-types.h"
-#include "object-enchant/tr-types.h"
-#include "realm/realm-hex.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "world/world.h"
 
 /*!

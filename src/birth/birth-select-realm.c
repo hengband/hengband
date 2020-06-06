@@ -1,13 +1,11 @@
-﻿#include "system/angband.h"
-#include "birth/birth-select-realm.h"
-#include "term/gameterm.h"
+﻿#include "birth/birth-select-realm.h"
 #include "birth/birth-explanations-table.h"
 #include "birth/birth-util.h"
+#include "term/term-color-types.h"
 
 static const byte REALM_SELECT_CANCEL = 255;
 
-typedef struct birth_realm_type
-{
+typedef struct birth_realm_type {
     int cs;
     int n;
     char p2;
@@ -19,7 +17,7 @@ typedef struct birth_realm_type
     int os;
 } birth_realm_type;
 
-static byte count_realm_selection(s32b choices, int* count)
+static byte count_realm_selection(s32b choices, int *count)
 {
     byte auto_select = REALM_NONE;
     if (choices & CH_LIFE) {
@@ -90,7 +88,7 @@ static byte count_realm_selection(s32b choices, int* count)
     return auto_select;
 }
 
-static birth_realm_type* initialize_birth_realm_type(birth_realm_type *birth_realm_ptr)
+static birth_realm_type *initialize_birth_realm_type(birth_realm_type *birth_realm_ptr)
 {
     birth_realm_ptr->cs = 0;
     birth_realm_ptr->n = 0;
@@ -151,9 +149,7 @@ static void move_birth_realm_cursor(birth_realm_type *birth_realm_ptr)
     if (birth_realm_ptr->cs == birth_realm_ptr->n) {
         sprintf(birth_realm_ptr->cur, "%c%c %s", '*', birth_realm_ptr->p2, _("ランダム", "Random"));
     } else {
-        sprintf(birth_realm_ptr->cur, "%c%c %s",
-            birth_realm_ptr->sym[birth_realm_ptr->cs],
-            birth_realm_ptr->p2,
+        sprintf(birth_realm_ptr->cur, "%c%c %s", birth_realm_ptr->sym[birth_realm_ptr->cs], birth_realm_ptr->p2,
             realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
         sprintf(birth_realm_ptr->buf, "%s", realm_names[birth_realm_ptr->picks[birth_realm_ptr->cs]]);
         c_put_str(TERM_L_BLUE, birth_realm_ptr->buf, 3, 40);
@@ -191,7 +187,7 @@ static void interpret_realm_select_key(birth_realm_type *birth_realm_ptr, char c
     }
 }
 
-static bool get_a_realm(player_type* creature_ptr, birth_realm_type* birth_realm_ptr)
+static bool get_a_realm(player_type *creature_ptr, birth_realm_type *birth_realm_ptr)
 {
     birth_realm_ptr->os = birth_realm_ptr->n;
     while (TRUE) {
@@ -199,8 +195,7 @@ static bool get_a_realm(player_type* creature_ptr, birth_realm_type* birth_realm
         if (birth_realm_ptr->k >= 0)
             break;
 
-        sprintf(birth_realm_ptr->buf, _("領域を選んで下さい(%c-%c) ('='初期オプション設定): ",
-            "Choose a realm (%c-%c) ('=' for options): "),
+        sprintf(birth_realm_ptr->buf, _("領域を選んで下さい(%c-%c) ('='初期オプション設定): ", "Choose a realm (%c-%c) ('=' for options): "),
             birth_realm_ptr->sym[0], birth_realm_ptr->sym[birth_realm_ptr->n - 1]);
 
         put_str(birth_realm_ptr->buf, 10, 10);
@@ -250,7 +245,7 @@ static bool get_a_realm(player_type* creature_ptr, birth_realm_type* birth_realm
  * @return 選択した魔法領域のID
  * @details 領域数が0 (戦士等)or 1 (観光客等)なら自動での値を返す
  */
-static byte select_realm(player_type* creature_ptr, s32b choices, int* count)
+static byte select_realm(player_type *creature_ptr, s32b choices, int *count)
 {
     byte auto_select = count_realm_selection(choices, count);
     clear_from(10);
@@ -258,8 +253,8 @@ static byte select_realm(player_type* creature_ptr, s32b choices, int* count)
         return auto_select;
 
     impose_first_realm(creature_ptr, choices);
-    put_str(_("注意：魔法の領域の選択によりあなたが習得する呪文のタイプが決まります。",
-                "Note: The realm of magic will determine which spells you can learn."), 23, 5);
+    put_str(_("注意：魔法の領域の選択によりあなたが習得する呪文のタイプが決まります。", "Note: The realm of magic will determine which spells you can learn."),
+        23, 5);
 
     birth_realm_type tmp_birth_realm;
     birth_realm_type *birth_realm_ptr = initialize_birth_realm_type(&tmp_birth_realm);
@@ -302,7 +297,7 @@ static bool check_realm_selection(int count)
  * @brief 選択した魔法領域の解説を表示する / Choose the magical realms
  * @return ユーザが魔法領域の確定を選んだらTRUEを返す。
  */
-bool get_player_realms(player_type* creature_ptr)
+bool get_player_realms(player_type *creature_ptr)
 {
     /* Clean up infomation of modifications */
     put_str("                                   ", 3, 40);

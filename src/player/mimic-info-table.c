@@ -1,5 +1,4 @@
-﻿#include "system/angband.h"
-#include "mimic-info-table.h"
+﻿#include "mimic-info-table.h"
 
 /*!
  * @brief 変身種族情報

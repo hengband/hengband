@@ -4,23 +4,22 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
 #include "knowledge-quests.h"
-#include "io-dump/dump-util.h"
+#include "core/show-file.h"
+#include "core/sort.h"
+#include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
-#include "system/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
+#include "info-reader/fixed-map-parser.h"
+#include "io-dump/dump-util.h"
+#include "locale/english.h"
 #include "object-enchant/artifact.h"
+#include "object-enchant/special-object-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
-#include "object-enchant/special-object-flags.h"
-#include "dungeon/dungeon.h"
-#include "dungeon/dungeon-file.h"
-#include "core/sort.h"
+#include "system/system-variables.h" // 暫定、init_flagsのため。後で消すかも.
 #include "world/world.h"
-#include "core/show-file.h"
-#include "locale/english.h"
 
  /*
   * Check on the status of an active quest
@@ -29,7 +28,6 @@
   */
 void do_cmd_checkquest(player_type *creature_ptr)
 {
-	FILE_TYPE(FILE_TYPE_TEXT);
 	screen_save();
 	do_cmd_knowledge_quests(creature_ptr);
 	screen_load();
@@ -68,7 +66,7 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
 		quest_text_line = 0;
 		creature_ptr->current_floor_ptr->inside_quest = i;
 		init_flags = INIT_SHOW_TEXT;
-		process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+		parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 		creature_ptr->current_floor_ptr->inside_quest = old_quest;
 		if (quest[i].flags & QUEST_FLAG_SILENT) continue;
 
@@ -201,7 +199,7 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
 		IDX old_quest = floor_ptr->inside_quest;
 		floor_ptr->inside_quest = q_idx;
 		init_flags = INIT_NAME_ONLY;
-		process_dungeon_file(player_ptr, "q_info.txt", 0, 0, 0, 0);
+		parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
 		floor_ptr->inside_quest = old_quest;
 		if (q_ptr->flags & QUEST_FLAG_SILENT) return FALSE;
 	}

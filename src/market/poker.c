@@ -1,6 +1,6 @@
-﻿#include "system/angband.h"
-#include "poker.h"
-#include "term/gameterm.h"
+﻿#include "market/poker.h"
+#include "system/angband.h"
+#include "term/term-color-types.h"
 
 /*!
  * ポーカーの現在の手札ID

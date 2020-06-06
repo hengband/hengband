@@ -1,5 +1,7 @@
 #pragma once
 
+#include "system/angband.h"
+
 /*! オートローラの年齢、身長、体重、社会的地位の要求水準 */
 typedef struct {
     s16b agemin, agemax;

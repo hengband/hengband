@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 #define MIND_MINDCRAFTER    0 /*!< 特殊能力: 超能力 */
 #define MIND_KI             1 /*!< 特殊能力: 練気 */
 #define MIND_BERSERKER      2 /*!< 特殊能力: 怒り */

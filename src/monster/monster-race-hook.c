@@ -7,8 +7,8 @@
 #include "floor/floor.h"
 #include "dungeon/dungeon.h"
 #include "monster/monster-race.h"
-#include "combat/monster-attack-effect.h"
-#include "combat/monster-attack-types.h"
+#include "monster-attack/monster-attack-effect.h"
+#include "monster-attack/monster-attack-types.h"
 
 /*! 通常pit生成時のモンスターの構成条件ID / Race index for "monster pit (clone)" */
 int vault_aux_race;

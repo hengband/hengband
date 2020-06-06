@@ -3,7 +3,7 @@
 
 #include "cmd-action/cmd-spell.h"
 #include "player/selfinfo.h"
-#include "spell/spells1.h"
+#include "spell/range-calc.h"
 #include "spell/spells-object.h"
 #include "spell/spells-summon.h"
 #include "spell/spells-status.h"

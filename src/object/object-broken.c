@@ -7,7 +7,7 @@
 #include "combat/snipe.h"
 #include "effect/effect-characteristics.h"
 #include "object/object-kind.h"
-#include "object/object2.h"
+#include "object/object1.h"
 #include "sv-definition/sv-potion-types.h"
 #include "object-enchant/tr-types.h"
 #include "spell/process-effect.h"

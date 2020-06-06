@@ -2,7 +2,7 @@
 #include "cmd-io/cmd-gameoption.h"
 #include "io/files-util.h"
 #include "io/read-pref-file.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 
 /*!
  * @brief マクロ情報をprefファイルに保存する /
@@ -14,7 +14,6 @@ static void macro_dump(FILE **fpp, concptr fname)
 	static concptr mark = "Macro Dump";
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-	FILE_TYPE(FILE_TYPE_TEXT);
 	if (!open_auto_dump(fpp, buf, mark)) return;
 
 	auto_dump_printf(*fpp, _("\n# 自動マクロセーブ\n\n", "\n# Automatic macro dump\n\n"));
@@ -113,7 +112,6 @@ static errr keymap_dump(concptr fname)
 	}
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
-	FILE_TYPE(FILE_TYPE_TEXT);
 	if (!open_auto_dump(&auto_dump_stream, buf, mark)) return -1;
 
 	auto_dump_printf(auto_dump_stream, _("\n# 自動キー配置セーブ\n\n", "\n# Automatic keymap dump\n\n"));
@@ -153,7 +151,6 @@ void do_cmd_macros(player_type *creature_ptr, void(*process_autopick_file_comman
 	char buf[1024];
 	FILE *auto_dump_stream;
 	BIT_FLAGS mode = rogue_like_commands ? KEYMAP_MODE_ROGUE : KEYMAP_MODE_ORIG;
-	FILE_TYPE(FILE_TYPE_TEXT);
 	screen_save();
 	while (TRUE)
 	{

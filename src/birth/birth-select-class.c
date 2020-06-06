@@ -1,7 +1,6 @@
-﻿#include "system/angband.h"
-#include "birth/birth-select-class.h"
-#include "term/gameterm.h"
+﻿#include "birth/birth-select-class.h"
 #include "birth/birth-util.h"
+#include "term/term-color-types.h"
 
 static const char p2 = ')';
 
@@ -50,9 +49,8 @@ static void display_class_stat(int cs, int *os, char *cur, char *sym)
         put_str(_("の職業修正", ": Class modification"), 3, 40 + strlen(cp_ptr->title));
         put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
         char buf[80];
-        sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ",
-            cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3],
-            cp_ptr->c_adj[4], cp_ptr->c_adj[5], cp_ptr->c_exp);
+        sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", cp_ptr->c_adj[0], cp_ptr->c_adj[1], cp_ptr->c_adj[2], cp_ptr->c_adj[3], cp_ptr->c_adj[4],
+            cp_ptr->c_adj[5], cp_ptr->c_exp);
         c_put_str(TERM_L_BLUE, buf, 5, 40);
     }
 
@@ -147,12 +145,10 @@ static bool select_class(player_type *creature_ptr, char *cur, char *sym, int *k
 bool get_player_class(player_type *creature_ptr)
 {
     clear_from(10);
-    put_str(_("注意：《職業》によってキャラクターの先天的な能力やボーナスが変化します。",
-                "Note: Your 'class' determines various intrinsic abilities and bonuses."),
+    put_str(
+        _("注意：《職業》によってキャラクターの先天的な能力やボーナスが変化します。", "Note: Your 'class' determines various intrinsic abilities and bonuses."),
         23, 5);
-    put_str(_("()で囲まれた選択肢はこの種族には似合わない職業です。",
-                "Any entries in parentheses should only be used by advanced players."),
-        11, 5);
+    put_str(_("()で囲まれた選択肢はこの種族には似合わない職業です。", "Any entries in parentheses should only be used by advanced players."), 11, 5);
 
     char sym[MAX_CLASS];
     enumerate_class_list(sym);

@@ -3,14 +3,13 @@
  * @date 2020/04/26
  * @author Hourier
  */
-#include "system/angband.h"
-#include "autopick/autopick-util.h"
+
 #include "autopick/autopick-drawer.h"
-#include "autopick/autopick-dirty-flags.h"
 #include "autopick/autopick-describer.h"
+#include "autopick/autopick-dirty-flags.h"
 #include "autopick/autopick-entry.h"
-#include "term/gameterm.h"
 #include "io/pref-file-expressor.h"
+#include "term/term-color-types.h"
 
 #define DESCRIPT_HGT 3
 

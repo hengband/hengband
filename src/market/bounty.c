@@ -7,15 +7,15 @@
 #include "market/bounty-prize-table.h"
 #include "market/building-util.h"
 #include "monster/monster-race-hook.h"
+#include "object-enchant/apply-magic.h"
 #include "object-enchant/item-apply-magic.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-kind-hook.h"
 #include "object/object-generator.h"
-#include "object/object2.h"
 #include "sv-definition/sv-other-types.h"
 #include "player/avatar.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "world/world.h"
 
 /*!

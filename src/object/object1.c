@@ -22,7 +22,7 @@
 #include "monster/monster.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-apply-magic.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
@@ -38,15 +38,9 @@
 #include "player/player-class.h"
 #include "player/player-move.h"
 #include "system/system-variables.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
-
-#if defined(MACH_O_CARBON)
-#ifdef verify
-#undef verify
-#endif
-#endif
 
 /*!
  * @brief オブジェクト、地形の表示シンボルなど初期化する / Reset the "visual" lists

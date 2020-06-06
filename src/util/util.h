@@ -77,16 +77,6 @@
 #endif
 
 /*
- * Initialization flags
- */
-#define INIT_NAME_ONLY          0x01
-#define INIT_SHOW_TEXT          0x02
-#define INIT_ASSIGN             0x04
-#define INIT_CREATE_DUNGEON     0x08
-#define INIT_ONLY_FEATURES      0x10
-#define INIT_ONLY_BUILDINGS     0x20
-
-/*
  * Sort-array element
  */
 typedef struct tag_type
@@ -204,16 +194,6 @@ extern void user_name(char *buf, int id);
 extern int usleep(huge usecs);
 #endif
 
-#if defined(MACH_O_CARBON)
-extern void fsetfileinfo(concptr path, u32b fcreator, u32b ftype);
-#endif
-
-#if defined(MACH_O_CARBON)
-/* Globals needed */
-extern  u32b _ftype;
-extern  u32b _fcreator;
-#endif
-
 /*
  * Hack -- force definitions -- see fd_seek()
  */
@@ -242,7 +222,7 @@ extern  u32b _fcreator;
 
 extern const char hexsym[16];
 
-// todo ファイル処理関数・メッセージ処理関数・画面病が関数で最低限分割する.
+// todo ファイル処理関数・メッセージ処理関数・画面描画関数で最低限分割する.
 extern errr path_parse(char *buf, int max, concptr file);
 extern errr path_build(char *buf, int max, concptr path, concptr file);
 extern FILE *my_fopen(concptr file, concptr mode);

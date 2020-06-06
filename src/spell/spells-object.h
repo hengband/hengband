@@ -16,6 +16,7 @@ void get_bloody_moon_flags(object_type *o_ptr);
 void phlogiston(player_type *caster_ptr);
 bool bless_weapon(player_type *caster_ptr);
 bool pulish_shield(player_type *caster_ptr);
+bool create_ration(player_type *crature_ptr);
 
 /*
  * Bit flags for the "enchant()" function

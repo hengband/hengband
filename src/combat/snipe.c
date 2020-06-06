@@ -6,17 +6,15 @@
  * 2014 Deskull rearranged comment for Doxygen.\n
  */
 
-#include "system/angband.h"
-#include "core/stuff-handler.h"
-#include "util/util.h"
-#include "main/sound-definitions-table.h"
-#include "term/gameterm.h"
-
-#include "player/player-status.h"
-#include "cmd/cmd-basic.h"
 #include "combat/snipe.h"
+#include "cmd/cmd-basic.h"
+#include "core/stuff-handler.h"
 #include "floor/floor.h"
+#include "main/sound-definitions-table.h"
 #include "monster/monster-race.h"
+#include "player/player-status.h"
+#include "term/term-color-types.h"
+#include "util/util.h"
 #include "view/display-main-window.h"
 
 #define MAX_SNIPE_POWERS 16

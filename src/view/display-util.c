@@ -1,5 +1,5 @@
 ﻿#include "display-util.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 
 static struct
 {

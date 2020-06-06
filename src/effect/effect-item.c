@@ -1,7 +1,7 @@
 ﻿#include "effect/effect-item.h"
 #include "autopick/autopick.h"
 #include "floor/floor-object.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-broken.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"

@@ -1,5 +1,5 @@
 ﻿#include "io-dump/dump-util.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 
 TERM_COLOR attr_idx = 0;
 SYMBOL_CODE char_idx = 0;

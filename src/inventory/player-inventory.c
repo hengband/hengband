@@ -12,6 +12,7 @@
 #include "sv-definition/sv-other-types.h"
 #include "player/player-move.h"
 #include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 

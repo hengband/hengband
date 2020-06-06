@@ -66,7 +66,7 @@
 #include "player/player-class.h"
 #include "player/player-status.h"
 #include "spell/spells3.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "util/util.h"
 
 /*!

@@ -1,5 +1,4 @@
 ﻿/*!
- * @file xtra2.c
  * @brief 雑多なその他の処理2 / effects of various "objects"
  * @date 2014/02/06
  * @author
@@ -10,40 +9,37 @@
  * 2014 Deskull rearranged comment for Doxygen.
  */
 
-#include "system/angband.h"
-#include "util/util.h"
-#include "system/system-variables.h"
-#include "core/stuff-handler.h"
-#include "term/gameterm.h"
 #include "io/targeting.h"
-
-#include "cmd-building/cmd-building.h"
 #include "cmd-action/cmd-pet.h"
-#include "dungeon/dungeon-file.h"
+#include "cmd-building/cmd-building.h"
+#include "core/sort.h"
+#include "core/stuff-handler.h"
+#include "info-reader/fixed-map-parser.h"
+#include "dungeon/dungeon.h"
+#include "dungeon/quest.h"
+#include "effect/spells-effect-util.h"
+#include "floor/floor-events.h"
 #include "floor/floor-object.h"
+#include "floor/floor-town.h"
+#include "floor/floor.h"
+#include "grid/feature.h"
+#include "grid/grid.h"
+#include "inventory/player-inventory.h"
+#include "monster/monster-race-hook.h"
+#include "monster/monster-status.h"
+#include "monster/monster.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-flavor.h"
-#include "object/object-mark-types.h"
-#include "monster/monster.h"
-#include "monster/monster-race-hook.h"
 #include "object/object-kind-hook.h"
-#include "core/sort.h"
-#include "spell/spells-summon.h"
-#include "grid/grid.h"
-#include "floor/floor.h"
-#include "floor/floor-events.h"
-#include "floor/floor-town.h"
-#include "inventory/player-inventory.h"
+#include "object/object-mark-types.h"
 #include "player/player-move.h"
-#include "player/player-status.h"
-#include "monster/monster-status.h"
-#include "view/display-main-window.h"
-#include "grid/feature.h"
-#include "dungeon/quest.h"
-#include "dungeon/dungeon.h"
-#include "world/world.h"
-#include "effect/spells-effect-util.h"
 #include "player/player-races-table.h"
+#include "player/player-status.h"
+#include "spell/spells-summon.h"
+#include "system/system-variables.h"
+#include "term/term-color-types.h"
+#include "view/display-main-window.h"
+#include "world/world.h"
 
  /*!
   * @brief コンソール上におけるマップ表示の左上位置を返す /
@@ -900,7 +896,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 		/* Get the quest text */
 		init_flags = INIT_NAME_ONLY;
 
-		process_dungeon_file(subject_ptr, "q_info.txt", 0, 0, 0, 0);
+		parse_fixed_map(subject_ptr, "q_info.txt", 0, 0, 0, 0);
 
 		name = format(_("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"),
 			quest[g_ptr->special].name, quest[g_ptr->special].level);

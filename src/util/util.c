@@ -11,25 +11,26 @@
  /* Purpose: Angband utilities -BEN- */
 
 #include "system/angband.h"
-#include "main/music-definitions-table.h"
-#include "io/signal-handlers.h"
-#include "system/system-variables.h"
-#include "core/stuff-handler.h"
-#include "term/gameterm.h"
 #include "util/util.h"
-#include "io/files-util.h"
-#include "monster/monster-race-hook.h"
-#include "view/display-main-window.h"
+#include "cmd-io/cmd-dump.h"
+#include "cmd-io/cmd-menu-content-table.h"
+#include "core/output-updater.h"
+#include "core/stuff-handler.h"
 #include "dungeon/quest.h"
 #include "floor/floor.h"
-#include "world/world.h"
-#include "io/write-diary.h"
-#include "cmd-io/cmd-dump.h"
-#include "locale/japanese.h"
-#include "player/player-class.h"
-#include "core/output-updater.h"
+#include "io/files-util.h"
 #include "io/input-key-processor.h"
-#include "cmd-io/cmd-menu-content-table.h"
+#include "io/signal-handlers.h"
+#include "io/write-diary.h"
+#include "locale/japanese.h"
+#include "main/music-definitions-table.h"
+#include "monster/monster-race-hook.h"
+#include "player/player-class.h"
+#include "system/system-variables.h"
+#include "term/gameterm.h"
+#include "term/term-color-types.h"
+#include "view/display-main-window.h"
+#include "world/world.h"
 
 /*!
  * 10進数から16進数への変換テーブル /
@@ -370,19 +371,8 @@ errr path_build(char *buf, int max, concptr path, concptr file)
  */
 FILE *my_fopen(concptr file, concptr mode)
 {
-#if defined(MACH_O_CARBON)
-	FILE *tempfff;
-#endif
 	char buf[1024];
 	if (path_parse(buf, 1024, file)) return (NULL);
-#if defined(MACH_O_CARBON)
-	if (my_strchr(mode, 'w'))
-	{
-		tempfff = fopen(buf, mode);
-		fsetfileinfo(buf, _fcreator, _ftype);
-		fclose(tempfff);
-	}
-#endif
 
 	return (fopen(buf, mode));
 }
@@ -437,16 +427,6 @@ errr my_fgets(FILE *fff, char *buf, huge n)
 #endif
 		for (s = tmp; *s; s++)
 		{
-#if defined(MACH_O_CARBON)
-
-			/*
-			 * Be nice to the Macintosh, where a file can have Mac or Unix
-			 * end of line, especially since the introduction of OS X.
-			 * MPW tools were also very tolerant to the Unix EOL.
-			 */
-			if (*s == '\r') *s = '\n';
-
-#endif /* MACH_O_CARBON */
 			if (*s == '\n')
 			{
 				buf[i] = '\0';
@@ -592,17 +572,7 @@ int fd_make(concptr file, BIT_FLAGS mode)
 	char buf[1024];
 	if (path_parse(buf, 1024, file)) return -1;
 
-#if defined(MACH_O_CARBON)
-	{
-		int fdes;
-		fdes = open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode);
-		if (fdes >= 0) fsetfileinfo(buf, _fcreator, _ftype);
-		return (fdes);
-	}
-
-#else
 	return (open(buf, O_CREAT | O_EXCL | O_WRONLY | O_BINARY, mode));
-#endif
 }
 
 

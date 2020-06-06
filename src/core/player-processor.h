@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "system/angband.h"
+
 extern bool load; /*!<ロード処理中の分岐フラグ*/
 extern bool can_save;
 extern bool repair_monsters;

@@ -161,6 +161,7 @@
 #include "io/exit-panic.h"
 #include "io/files-util.h"
 #include "term/gameterm.h"
+#include "term/term-color-types.h"
 
 #ifdef USE_GCU
 

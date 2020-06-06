@@ -1,13 +1,13 @@
-﻿#include "system/angband.h"
+﻿#include "cmd/cmd-draw.h"
 #include "core/stuff-handler.h"
-#include "cmd/cmd-draw.h"
 #include "io/files-util.h"
-#include "term/gameterm.h"
-#include "view/display-main-window.h" // 暫定。後で消す.
 #include "player/player-effects.h"
-#include "view/display-player.h" // 暫定。後で消す.
-#include "player/process-name.h"
 #include "player/player-races-table.h"
+#include "player/process-name.h"
+#include "term/gameterm.h"
+#include "term/term-color-types.h"
+#include "view/display-main-window.h" // 暫定。後で消す.
+#include "view/display-player.h" // 暫定。後で消す.
 
 /*!
  * @brief 画面を再描画するコマンドのメインルーチン

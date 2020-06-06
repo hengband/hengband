@@ -1,9 +1,8 @@
-﻿#include "system/angband.h"
-#include "view/display-birth.h"
-#include "player/player-personality.h"
-#include "term/gameterm.h"
+﻿#include "view/display-birth.h"
 #include "birth/auto-roller.h"
 #include "birth/birth-stat.h"
+#include "player/player-personality.h"
+#include "term/term-color-types.h"
 
 /*!
  * @brief オートロール中のステータスを表示する / Display stat values, subset of "put_stats()"

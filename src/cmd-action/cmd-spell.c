@@ -1,42 +1,42 @@
 ﻿/*!
-    @file cmd-spell.c
-    @brief 魔法のインターフェイスと発動 / Purpose: Do everything for each spell
-    @date 2013/12/31
-    @author
-    2013 Deskull rearranged comment for Doxygen.
+ * @brief 魔法のインターフェイスと発動 / Purpose: Do everything for each spell
+ * @date 2013/12/31
+ * @author
+ * 2013 Deskull rearranged comment for Doxygen.
  */
 
-#include "system/angband.h"
-#include "core/stuff-handler.h"
-#include "util/util.h"
-#include "main/sound-definitions-table.h"
 #include "cmd-action/cmd-spell.h"
-
-#include "io/write-diary.h"
+#include "autopick/autopick-reader-writer.h"
 #include "cmd-io/cmd-dump.h"
-#include "player/selfinfo.h"
-#include "spell/technic-info-table.h"
-#include "spell/spells2.h"
-#include "spell/spells3.h"
-#include "spell/spells-summon.h"
-#include "realm/realm-hex.h"
+#include "cmd/cmd-basic.h"
+#include "core/stuff-handler.h"
+#include "floor/floor.h"
+#include "inventory/player-inventory.h"
+#include "io/write-diary.h"
+#include "locale/japanese.h"
+#include "main/sound-definitions-table.h"
 #include "mind/mind.h"
+#include "object/item-use-flags.h"
+#include "object/object-hook.h"
 #include "player/avatar.h"
+#include "player/player-class.h"
 #include "player/player-damage.h"
-#include "player/player-status.h"
 #include "player/player-effects.h"
 #include "player/player-skill.h"
-#include "player/player-class.h"
-#include "inventory/player-inventory.h"
-#include "object/object-hook.h"
-#include "cmd/cmd-basic.h"
-#include "view/display-main-window.h"
-#include "floor/floor.h"
-#include "autopick/autopick-reader-writer.h"
-#include "locale/japanese.h"
-#include "spell/spells-util.h"
+#include "player/player-status.h"
+#include "player/selfinfo.h"
+#include "spell-kind/spells-random.h"
+#include "spell-kind/spells-sight.h"
+#include "spell/range-calc.h"
+#include "spell/spells-describer.h"
 #include "spell/spells-execution.h"
-#include "object/item-use-flags.h"
+#include "spell-realm/spells-hex.h"
+#include "spell/spells-summon.h"
+#include "spell/spells-util.h"
+#include "spell/spells3.h"
+#include "spell/technic-info-table.h"
+#include "util/util.h"
+#include "view/display-main-window.h"
 
  /*!
   * 魔法領域フラグ管理テーブル /

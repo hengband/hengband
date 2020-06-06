@@ -1,6 +1,8 @@
 ﻿#pragma once
 
-#define MAX_SEIKAKU     13 /*!< 性格の最大定義数 */
+#include "system/angband.h"
+
+#define MAX_SEIKAKU 13 /*!< 性格の最大定義数 */
 
 typedef struct player_seikaku player_seikaku;
 struct player_seikaku

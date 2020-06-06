@@ -25,8 +25,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "room/rooms.h"
-#include "spell/spells-floor.h"
-#include "spell/spells1.h"
+#include "spell-kind/spells-floor.h"
 #include "util/util.h"
 
 /*!

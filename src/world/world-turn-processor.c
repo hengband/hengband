@@ -18,7 +18,7 @@
 #include "mutation/mutation-processor.h"
 #include "inventory/inventory-curse.h"
 #include "inventory/recharge-processor.h"
-#include "inventory/simple-appraiser.h"
+#include "perception/simple-perception.h"
 #include "world/world-movement-processor.h"
 #include "market/arena.h"
 #include "market/bounty.h"

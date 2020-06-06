@@ -31,24 +31,23 @@
  */
 
 #include "cmd-io/cmd-dump.h"
-#include "io-dump/dump-util.h"
-#include "floor/floor.h"
-#include "term/gameterm.h"
-#include "system/angband-version.h"
-#include "io-dump/dump-remover.h"
-#include "io/read-pref-file.h"
-#include "io/interpret-pref-file.h"
-
-#include "world/world.h"
-#include "view/display-player.h" // 暫定。後で消す.
-#include "player/player-personalities-table.h"
-#include "dungeon/quest.h"
-#include "object-enchant/artifact.h"
-#include "floor/floor-town.h"
 #include "cmd-io/feeling-table.h"
-#include "locale/english.h"
-
+#include "dungeon/quest.h"
+#include "floor/floor-town.h"
+#include "floor/floor.h"
+#include "io-dump/dump-remover.h"
+#include "io-dump/dump-util.h"
 #include "io/chuukei.h"
+#include "io/interpret-pref-file.h"
+#include "io/read-pref-file.h"
+#include "locale/english.h"
+#include "object-enchant/artifact.h"
+#include "player/player-personalities-table.h"
+#include "system/angband-version.h"
+#include "term/gameterm.h"
+#include "term/term-color-types.h"
+#include "view/display-player.h" // 暫定。後で消す.
+#include "world/world.h"
 
 /*!
  * @brief 画面を再描画するコマンドのメインルーチン
@@ -77,7 +76,6 @@ void do_cmd_colors(player_type *creature_ptr, void(*process_autopick_file_comman
 	char tmp[160];
 	char buf[1024];
 	FILE *auto_dump_stream;
-	FILE_TYPE(FILE_TYPE_TEXT);
 	screen_save();
 	while (TRUE)
 	{

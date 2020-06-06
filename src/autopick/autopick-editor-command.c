@@ -5,21 +5,19 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
-#include "autopick/autopick-util.h"
 #include "autopick/autopick-editor-command.h"
-#include "autopick/autopick-editor-util.h"
 #include "autopick/autopick-commands-table.h"
 #include "autopick/autopick-dirty-flags.h"
+#include "autopick/autopick-drawer.h"
+#include "autopick/autopick-editor-util.h"
+#include "autopick/autopick-entry.h"
+#include "autopick/autopick-finder.h"
 #include "autopick/autopick-flags-table.h"
+#include "autopick/autopick-inserter-killer.h"
 #include "autopick/autopick-methods-table.h"
 #include "autopick/autopick-reader-writer.h"
-#include "autopick/autopick-inserter-killer.h"
-#include "autopick/autopick-finder.h"
-#include "autopick/autopick-entry.h"
-#include "autopick/autopick-drawer.h"
-#include "term/gameterm.h"
 #include "core/show-file.h"
+#include "term/term-color-types.h"
 
 /*
  * @brief

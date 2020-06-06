@@ -9,10 +9,11 @@
 #include "floor/floor.h"
 #include "monster/monster-status.h"
 #include "object/object-hook.h"
-#include "realm/realm-hex.h"
+#include "realm/realm-hex-numbers.h"
 #include "spell/process-effect.h"
+#include "spell-realm/spells-hex.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell/spells-type.h"
-#include "spell/spells3.h"
 
 static void aura_fire_by_monster_attack(player_type *target_ptr, monap_type *monap_ptr)
 {

@@ -1,11 +1,11 @@
 ﻿#include "view/object-describer.h"
 #include "cmd-action/cmd-spell.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object-enchant/special-object-flags.h"
 #include "spell/spells3.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 
 /*!
  * @brief 魔道具の使用回数の残量を示すメッセージを表示する /

@@ -8,7 +8,7 @@
 #include "core/show-file.h"
 #include "floor/floor-town.h"
 #include "io-dump/dump-util.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object-enchant/special-object-flags.h"

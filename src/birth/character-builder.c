@@ -11,21 +11,19 @@
  * 2013 Deskull Doxygen向けのコメント整理\n
  */
 
-#include "system/angband.h"
-#include "term/gameterm.h"
-#include "main/music-definitions-table.h"
 #include "birth/character-builder.h"
 #include "birth/birth-explanations-table.h"
-#include "floor/floor-town.h"
-#include "io/write-diary.h"
-#include "store/store.h"
-#include "player/player-sex.h"
-#include "floor/wild.h"
-#include "world/world.h"
-#include "birth/quick-start.h"
-#include "birth/game-play-initializer.h"
 #include "birth/birth-wizard.h"
+#include "birth/game-play-initializer.h"
+#include "birth/quick-start.h"
+#include "floor/floor-town.h"
+#include "floor/wild.h"
+#include "io/write-diary.h"
+#include "main/music-definitions-table.h"
 #include "player/player-races-table.h"
+#include "player/player-sex.h"
+#include "store/store.h"
+#include "world/world.h"
 
 /*!
  * @brief プレーヤーキャラの作成結果を日記に書く
@@ -43,14 +41,11 @@ static void write_birth_diary(player_type *creature_ptr)
     exe_write_diary(creature_ptr, DIARY_GAMESTART, 1, _("-------- 新規ゲーム開始 --------", "------- Started New Game -------"));
     exe_write_diary(creature_ptr, DIARY_DIALY, 0, NULL);
     char buf[80];
-    sprintf(buf, _("                            性別に%sを選択した。", "                            chose %s gender."),
-        sex_info[creature_ptr->psex].title);
+    sprintf(buf, _("                            性別に%sを選択した。", "                            chose %s gender."), sex_info[creature_ptr->psex].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
-    sprintf(buf, _("                            種族に%sを選択した。", "                            chose %s race."),
-        race_info[creature_ptr->prace].title);
+    sprintf(buf, _("                            種族に%sを選択した。", "                            chose %s race."), race_info[creature_ptr->prace].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
-    sprintf(buf, _("                            職業に%sを選択した。", "                            chose %s class."),
-        class_info[creature_ptr->pclass].title);
+    sprintf(buf, _("                            職業に%sを選択した。", "                            chose %s class."), class_info[creature_ptr->pclass].title);
     exe_write_diary(creature_ptr, DIARY_DESCRIPTION, 1, buf);
     if (creature_ptr->realm1) {
         sprintf(buf, _("                            魔法の領域に%s%sを選択した。", "                            chose %s%s."),
@@ -70,7 +65,7 @@ static void write_birth_diary(player_type *creature_ptr)
  * fields, so we must be sure to clear them first.
  * @return なし
  */
-void player_birth(player_type* creature_ptr, void (*process_autopick_file_command)(char*))
+void player_birth(player_type *creature_ptr, void (*process_autopick_file_command)(char *))
 {
     current_world_ptr->play_time = 0;
     wipe_monsters_list(creature_ptr);

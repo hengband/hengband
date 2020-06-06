@@ -1,29 +1,28 @@
-﻿#include "system/angband.h"
-#include "birth/birth-wizard.h"
-#include "term/gameterm.h"
-#include "player/player-sex.h"
-#include "birth/birth-explanations-table.h"
+﻿#include "birth/birth-wizard.h"
 #include "birth/auto-roller.h"
-#include "main/sound-definitions-table.h"
-#include "player/patron.h"
-#include "world/world.h"
-#include "birth/quick-start.h"
-#include "birth/birth-util.h"
-#include "cmd-io/cmd-help.h"
-#include "birth/birth-select-race.h"
+#include "birth/birth-body-spec.h"
+#include "birth/birth-explanations-table.h"
 #include "birth/birth-select-class.h"
 #include "birth/birth-select-personality.h"
+#include "birth/birth-select-race.h"
 #include "birth/birth-select-realm.h"
-#include "birth/game-play-initializer.h"
 #include "birth/birth-stat.h"
-#include "birth/birth-body-spec.h"
-#include "birth/history-generator.h"
+#include "birth/birth-util.h"
+#include "birth/game-play-initializer.h"
 #include "birth/history-editor.h"
-#include "player/process-name.h"
+#include "birth/history-generator.h"
+#include "birth/quick-start.h"
+#include "cmd-io/cmd-help.h"
+#include "main/sound-definitions-table.h"
 #include "player/avatar.h"
-#include "view/display-main-window.h" // 暫定。後で消す.
+#include "player/patron.h"
+#include "player/player-sex.h"
+#include "player/process-name.h"
+#include "term/term-color-types.h"
 #include "view/display-birth.h" // 暫定。後で消す予定。
+#include "view/display-main-window.h" // 暫定。後で消す.
 #include "view/display-player.h" // 暫定。後で消す.
+#include "world/world.h"
 
 /*!
  * オートローラーの内容を描画する間隔 /
@@ -43,10 +42,8 @@ static void display_initial_birth_message(player_type *creature_ptr)
     put_str(_("種族        :", "Race        :"), 4, 1);
     put_str(_("職業        :", "Class       :"), 5, 1);
     c_put_str(TERM_L_BLUE, creature_ptr->name, 1, 34);
-    put_str(_("キャラクターを作成します。('S'やり直す, 'Q'終了, '?'ヘルプ)",
-                "Make your charactor. ('S' Restart, 'Q' Quit, '?' Help)"), 8, 10);
-    put_str(_("注意：《性別》の違いはゲーム上ほとんど影響を及ぼしません。",
-                "Note: Your 'sex' does not have any significant gameplay effects."), 23, 5);
+    put_str(_("キャラクターを作成します。('S'やり直す, 'Q'終了, '?'ヘルプ)", "Make your charactor. ('S' Restart, 'Q' Quit, '?' Help)"), 8, 10);
+    put_str(_("注意：《性別》の違いはゲーム上ほとんど影響を及ぼしません。", "Note: Your 'sex' does not have any significant gameplay effects."), 23, 5);
 }
 
 /*!

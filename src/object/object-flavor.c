@@ -17,7 +17,7 @@
 #include "locale/japanese.h"
 #include "monster/monster-race.h"
 #include "object-enchant/artifact.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"

@@ -2,7 +2,7 @@
 #include "io/files-util.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object-enchant/object-curse.h"
 #include "object/object-flavor.h"
 #include "object-enchant/special-object-flags.h"
@@ -12,9 +12,9 @@
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-races-table.h"
+#include "spell-kind/spells-random.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell/spells-summon.h"
-#include "spell/spells2.h"
-#include "spell/spells3.h"
 
 #define TRC_P_FLAG_MASK \
     (TRC_TELEPORT_SELF | TRC_CHAINSWORD | TRC_TY_CURSE | TRC_DRAIN_EXP | TRC_ADD_L_CURSE | TRC_ADD_H_CURSE | TRC_CALL_ANIMAL | TRC_CALL_DEMON \

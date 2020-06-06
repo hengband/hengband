@@ -1,5 +1,4 @@
 ﻿/*!
- * @file mspells2.c
  * @brief モンスター魔法の実装(対モンスター処理) / Monster spells (attack monster)
  * @date 2014/01/17
  * @author
@@ -14,23 +13,23 @@
 #include "system/angband.h"
 #include "util/util.h"
 #include "main/sound-definitions-table.h"
-
 #include "pet/pet-util.h"
 #include "effect/effect-characteristics.h"
 #include "grid/grid.h"
 #include "dungeon/quest.h"
-#include "realm/realm-hex.h"
 #include "player/player-move.h"
 #include "player/player-class.h"
 #include "monster/monster.h"
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell/spells-type.h"
+#include "spell/range-calc.h"
 #include "dungeon/dungeon.h"
 #include "world/world.h"
 #include "view/display-main-window.h"
-#include "spell/spells3.h"
 #include "mspell/assign-monster-spell.h"
+#include "spell-realm/spells-hex.h"
 
  /*!
   * @brief モンスターが敵対モンスターにビームを当てること可能かを判定する /

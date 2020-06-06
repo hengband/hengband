@@ -6,25 +6,23 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
-#include "effect/effect-monster-util.h"
 #include "effect/effect-monster-switcher.h"
-#include "player/player-damage.h"
-#include "player/avatar.h"
-#include "monster/monster-status.h"
-#include "monster/monster-race-hook.h"
 #include "cmd-action/cmd-attack.h"
-#include "spell/spells-type.h"
-#include "spell/spells2.h"
-#include "effect/effect-monster-resist-hurt.h"
-#include "effect/effect-monster-psi.h"
-#include "effect/effect-monster-domination.h"
-#include "effect/effect-monster-oldies.h"
 #include "effect/effect-monster-charm.h"
-#include "effect/effect-monster-lite-dark.h"
-#include "effect/effect-monster-evil.h"
-#include "effect/effect-monster-spirit.h"
 #include "effect/effect-monster-curse.h"
+#include "effect/effect-monster-domination.h"
+#include "effect/effect-monster-evil.h"
+#include "effect/effect-monster-lite-dark.h"
+#include "effect/effect-monster-oldies.h"
+#include "effect/effect-monster-psi.h"
+#include "effect/effect-monster-resist-hurt.h"
+#include "effect/effect-monster-spirit.h"
+#include "monster/monster-race-hook.h"
+#include "monster/monster-status.h"
+#include "player/avatar.h"
+#include "player/player-damage.h"
+#include "spell-kind/spells-genocide.h"
+#include "spell/spells-type.h"
 
 gf_switch_result effect_monster_hypodynamia(player_type *caster_ptr, effect_monster_type *em_ptr)
 {

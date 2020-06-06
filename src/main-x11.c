@@ -97,6 +97,7 @@
 #include "system/system-variables.h"
 #include "io/files-util.h"
 #include "term/gameterm.h"
+#include "term/term-color-types.h"
 
 /*
  * Available graphic modes

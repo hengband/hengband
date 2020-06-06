@@ -19,7 +19,7 @@
 #include "io/write-diary.h"
 #include "main/sound-definitions-table.h"
 #include "market/arena-info-table.h"
-#include "mind/racial-force-trainer.h"
+#include "mind/mind-force-trainer.h"
 #include "monster/horror-descriptions.h"
 #include "monster/monster-race-hook.h"
 #include "monster/monster-race.h"
@@ -27,8 +27,8 @@
 #include "monster/monster.h"
 #include "mutation/mutation.h"
 #include "object-enchant/artifact.h"
-#include "object/bow.h"
-#include "object/object-appraiser.h"
+#include "specific-object/bow.h"
+#include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
@@ -51,11 +51,14 @@
 #include "player/player-races-table.h"
 #include "player/player-skill.h"
 #include "player/race-info-table.h"
-#include "realm/realm-hex.h"
-#include "realm/realm-song.h"
+#include "realm/realm-hex-numbers.h"
+#include "realm/realm-song-numbers.h"
+#include "spell/spells-describer.h"
 #include "spell/spells-execution.h"
+#include "spell-realm/spells-hex.h"
 #include "spell/spells-status.h"
 #include "spell/spells-util.h"
+#include "spell/range-calc.h"
 #include "spell/technic-info-table.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
@@ -2389,7 +2392,7 @@ void calc_bonuses(player_type *creature_ptr)
 
 	if (creature_ptr->realm1 == REALM_HEX)
 	{
-		if (hex_spelling_any(creature_ptr)) creature_ptr->skill_stl -= (1 + CASTING_HEX_NUM(creature_ptr));
+		if (hex_spelling_any(creature_ptr)) creature_ptr->skill_stl -= (1 + casting_hex_num(creature_ptr));
 		if (hex_spelling(creature_ptr, HEX_DETECT_EVIL)) creature_ptr->esp_evil = TRUE;
 		if (hex_spelling(creature_ptr, HEX_XTRA_MIGHT)) creature_ptr->stat_add[A_STR] += 4;
 		if (hex_spelling(creature_ptr, HEX_BUILDING))

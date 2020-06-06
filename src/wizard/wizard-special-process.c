@@ -17,7 +17,7 @@
 #include "cmd-io/cmd-save.h"
 #include "cmd/cmd-draw.h"
 #include "core/stuff-handler.h"
-#include "dungeon/dungeon-file.h"
+#include "info-reader/fixed-map-parser.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-object.h"
@@ -33,16 +33,16 @@
 #include "monster/monster-status.h"
 #include "mspell/monster-spell.h"
 #include "mutation/mutation.h"
+#include "object-enchant/apply-magic.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object/item-use-flags.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
-#include "object/object2.h"
 #include "object-enchant/trc-types.h"
 #include "player/patron.h"
 #include "player/player-class.h"
@@ -51,17 +51,18 @@
 #include "player/player-skill.h"
 #include "player/player-status.h"
 #include "player/selfinfo.h"
-#include "spell/spells-detection.h"
-#include "spell/spells-floor.h"
+#include "spell-kind/spells-detection.h"
+#include "spell-kind/spells-floor.h"
 #include "spell/spells-object.h"
+#include "spell-kind/spells-sight.h"
 #include "spell/spells-status.h"
 #include "spell/spells-summon.h"
+#include "spell-kind/spells-teleport.h"
 #include "spell/spells-util.h"
-#include "spell/spells-world.h"
-#include "spell/spells2.h"
+#include "spell-kind/spells-world.h"
 #include "spell/spells3.h"
 #include "system/angband-version.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 #include "wizard/wizard-spoiler.h"
@@ -1630,9 +1631,7 @@ static void do_cmd_dump_options()
 	char buf[1024];
 	path_build(buf, sizeof buf, ANGBAND_DIR_USER, "opt_info.txt");
 
-	/* File type is "TEXT" */
 	FILE *fff;
-	FILE_TYPE(FILE_TYPE_TEXT);
 	fff = my_fopen(buf, "a");
 
 	if (!fff)
@@ -1878,7 +1877,7 @@ void do_cmd_debug(player_type *creature_ptr)
 		if (tmp_int >= max_q_idx) break;
 
 		creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)tmp_int;
-		process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+		parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 		quest[tmp_int].status = QUEST_STATUS_TAKEN;
 		creature_ptr->current_floor_ptr->inside_quest = 0;
 	}

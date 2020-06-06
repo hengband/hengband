@@ -14,11 +14,12 @@
 #include "cmd-io/cmd-dump.h"
 #include "cmd-io/cmd-save.h"
 #include "combat/attack-power-table.h"
+#include "combat/shoot.h"
 #include "combat/slaying.h"
 #include "combat/snipe.h"
 #include "core/output-updater.h"
 #include "core/stuff-handler.h"
-#include "dungeon/dungeon-file.h"
+#include "info-reader/fixed-map-parser.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "effect/spells-effect-util.h"
@@ -36,29 +37,27 @@
 #include "main/sound-definitions-table.h"
 #include "monster/monster-status.h"
 #include "object-enchant/artifact.h"
-#include "object/chest.h"
+#include "specific-object/chest.h"
 #include "object/item-use-flags.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-broken.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object/object2.h"
+#include "object/object-stack.h"
 #include "object-enchant/special-object-flags.h"
 #include "sv-definition/sv-bow-types.h"
-#include "object/torch.h"
+#include "specific-object/torch.h"
 #include "object-enchant/tr-types.h"
 #include "player/avatar.h"
 #include "player/player-effects.h"
 #include "player/player-move.h"
 #include "player/player-personalities-table.h"
 #include "player/player-status.h"
-#include "realm/realm-hex.h"
-#include "shoot.h"
-#include "spell/spells3.h"
+#include "spell-realm/spells-hex.h"
+#include "spell-kind/spells-teleport.h"
 #include "system/system-variables.h"
-#include "term/gameterm.h"
 #include "view/display-main-window.h"
 #include "view/object-describer.h"
 #include "world/world.h"
@@ -232,7 +231,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 			if (quest[creature_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
 			{
 				init_flags = INIT_ASSIGN;
-				process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+				parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 			}
 			quest[creature_ptr->current_floor_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
 		}
@@ -379,7 +378,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 			if (quest[creature_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
 			{
 				init_flags = INIT_ASSIGN;
-				process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+				parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 			}
 			quest[creature_ptr->current_floor_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
 		}

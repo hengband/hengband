@@ -11,7 +11,7 @@
 #include "autopick/autopick-reader-writer.h"
 #include "io/files-util.h"
 #include "object-enchant/item-feeling.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object-enchant/special-object-flags.h"

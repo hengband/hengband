@@ -16,7 +16,7 @@
 #include "io/files-util.h"
 #include "monster/monster.h"
 #include "object-enchant/artifact.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
@@ -29,7 +29,7 @@
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-version.h"
-#include "term/gameterm.h"
+#include "term/term-color-types.h"
 #include "util/util.h"
 
  /*
@@ -285,8 +285,6 @@ static void spoil_obj_desc(player_type *player_ptr, concptr fname)
 
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
-	/* File type is "TEXT" */
-	FILE_TYPE(FILE_TYPE_TEXT);
 	fff = my_fopen(buf, "w");
 
 	if (!fff)
@@ -1575,8 +1573,6 @@ static void spoil_artifact(player_type *player_ptr, concptr fname)
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
-	/* File type is "TEXT" */
-	FILE_TYPE(FILE_TYPE_TEXT);
 	fff = my_fopen(buf, "w");
 
 	if (!fff)
@@ -1655,10 +1651,7 @@ static void spoil_mon_desc(concptr fname)
 	char exp[80];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
-	/* File type is "TEXT" */
-	FILE_TYPE(FILE_TYPE_TEXT);
 	fff = my_fopen(buf, "w");
-
 	if (!fff)
 	{
 		msg_print("Cannot create spoiler file.");
@@ -1985,10 +1978,7 @@ static void spoil_mon_info(player_type *player_ptr, concptr fname)
 	MONRACE_IDX *who;
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
-	/* File type is "TEXT" */
-	FILE_TYPE(FILE_TYPE_TEXT);
 	fff = my_fopen(buf, "w");
-
 	if (!fff)
 	{
 		msg_print("Cannot create spoiler file.");
@@ -2189,10 +2179,7 @@ static void spoil_mon_evol(concptr fname)
 	int *evol_tree_zero; /* For C_KILL() */
 	path_build(buf, sizeof buf, ANGBAND_DIR_USER, fname);
 
-	/* File type is "TEXT" */
-	FILE_TYPE(FILE_TYPE_TEXT);
 	fff = my_fopen(buf, "w");
-
 	if (!fff)
 	{
 		msg_print("Cannot create spoiler file.");
@@ -2484,10 +2471,7 @@ void spoil_random_artifact(player_type *creature_ptr, concptr fname)
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, fname);
 
-	/* File type is "TEXT" */
-	FILE_TYPE(FILE_TYPE_TEXT);
 	fff = my_fopen(buf, "w");
-
 	if (!fff)
 	{
 		msg_print("Cannot create list file.");

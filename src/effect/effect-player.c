@@ -1,22 +1,21 @@
 ﻿/*!
- * todo 単体で1000行を超えている。要分割
  * @brief 魔法によるプレーヤーへの効果まとめ
  * @date 2020/04/29
  * @author Hourier
  */
 
-#include "system/angband.h"
-#include "effect/effect-player-util.h"
 #include "effect/effect-player.h"
-#include "effect/effect-player-switcher.h"
-#include "main/sound-definitions-table.h"
-#include "realm/realm-hex.h"
-#include "effect/spells-effect-util.h"
-#include "player/player-move.h"
-#include "spell/spells-type.h"
-#include "spell/spells2.h"
-#include "player/player-effects.h"
 #include "effect/effect-characteristics.h"
+#include "effect/effect-player-switcher.h"
+#include "effect/effect-player-util.h"
+#include "effect/spells-effect-util.h"
+#include "main/sound-definitions-table.h"
+#include "mind/mind-ninja.h"
+#include "player/player-effects.h"
+#include "player/player-move.h"
+#include "realm/realm-hex-numbers.h"
+#include "spell-realm/spells-hex.h"
+#include "spell/spells-type.h"
 
 typedef enum effect_player_check_result
 {

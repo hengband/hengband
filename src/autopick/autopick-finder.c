@@ -5,15 +5,14 @@
  * @author Hourier
  */
 
-#include "system/angband.h"
 #include "autopick/autopick-finder.h"
 #include "autopick/autopick-dirty-flags.h"
 #include "autopick/autopick-entry.h"
 #include "autopick/autopick-matcher.h"
+#include "inventory/player-inventory.h"
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
-#include "term/gameterm.h"
-#include "inventory/player-inventory.h"
+#include "term/term-color-types.h"
 
  /*
   * @brief —^‚¦‚ç‚ê‚½ƒAƒCƒeƒ€‚ª©“®E‚¢‚ÌƒŠƒXƒg‚É“o˜^‚³‚ê‚Ä‚¢‚é‚©‚Ç‚¤‚©‚ğŒŸõ‚·‚é

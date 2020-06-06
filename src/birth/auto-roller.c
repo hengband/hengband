@@ -1,13 +1,12 @@
-﻿#include "system/angband.h"
-#include "birth/auto-roller.h"
-#include "player/player-personality.h"
-#include "term/gameterm.h"
-#include "birth/birth-util.h"
+﻿#include "birth/auto-roller.h"
 #include "birth/birth-stat.h"
+#include "birth/birth-util.h"
+#include "player/player-personality.h"
+#include "term/term-color-types.h"
 
 /*!
-  * ランダムクエストのモンスターを確定するために試行する回数 / Maximum number of tries for selection of a proper quest monster
-  */
+ * ランダムクエストのモンスターを確定するために試行する回数 / Maximum number of tries for selection of a proper quest monster
+ */
 #define MAX_TRIES 100
 
 /*! オートローラの能力値的要求水準 / Autoroll limit */
@@ -51,9 +50,7 @@ bool get_stat_limits(player_type *creature_ptr)
         else
             sprintf(inp, "%2d", m);
 
-        sprintf(buf, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s  %6s",
-            stat_names[i], cval[i], rp_ptr->r_adj[i], cp_ptr->c_adj[i],
-            ap_ptr->a_adj[i], inp, cur);
+        sprintf(buf, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s  %6s", stat_names[i], cval[i], rp_ptr->r_adj[i], cp_ptr->c_adj[i], ap_ptr->a_adj[i], inp, cur);
         put_str(buf, 14 + i, 10);
     }
 
@@ -76,9 +73,8 @@ bool get_stat_limits(player_type *creature_ptr)
                 else
                     sprintf(inp, "%2d", m);
 
-                sprintf(cur, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s",
-                    stat_names[cs], cval[cs], rp_ptr->r_adj[cs],
-                    cp_ptr->c_adj[cs], ap_ptr->a_adj[cs], inp);
+                sprintf(
+                    cur, "%6s       %2d   %+3d  %+3d  %+3d  =  %6s", stat_names[cs], cval[cs], rp_ptr->r_adj[cs], cp_ptr->c_adj[cs], ap_ptr->a_adj[cs], inp);
                 c_put_str(TERM_YELLOW, cur, 14 + cs, 10);
             }
 
@@ -207,20 +203,12 @@ bool get_chara_limits(player_type *creature_ptr, chara_limit_type *chara_limit_p
 #define MAXITEMS 8
 
     char buf[80], cur[80];
-    concptr itemname[] = {
-        _("年齢", "age"),
-        _("身長(インチ)", "height"),
-        _("体重(ポンド)", "weight"),
-        _("社会的地位", "social class")
-    };
+    concptr itemname[] = { _("年齢", "age"), _("身長(インチ)", "height"), _("体重(ポンド)", "weight"), _("社会的地位", "social class") };
 
     clear_from(10);
-    put_str(_("2/4/6/8で項目選択、+/-で値の増減、Enterで次へ",
-                "2/4/6/8 for Select, +/- for Change value, Enter for Goto next"),
-        11, 10);
-    put_str(_("注意：身長と体重の最大値/最小値ぎりぎりの値は非常に出現確率が低くなります。",
-                "Caution: Values near minimum or maximum are extremely rare."),
-        23, 2);
+    put_str(_("2/4/6/8で項目選択、+/-で値の増減、Enterで次へ", "2/4/6/8 for Select, +/- for Change value, Enter for Goto next"), 11, 10);
+    put_str(
+        _("注意：身長と体重の最大値/最小値ぎりぎりの値は非常に出現確率が低くなります。", "Caution: Values near minimum or maximum are extremely rare."), 23, 2);
 
     int max_percent, min_percent;
     if (creature_ptr->psex == SEX_MALE) {

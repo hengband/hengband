@@ -13,11 +13,12 @@
 #include "inventory/inventory-object.h"
 #include "inventory/player-inventory.h"
 #include "io/targeting.h"
+#include "object-enchant/apply-magic.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object-enchant/item-feeling.h"
 #include "object/item-use-flags.h"
-#include "object/object-appraiser.h"
+#include "perception/object-perception.h"
 #include "object-enchant/object-boost.h"
 #include "object-enchant/object-ego.h"
 #include "object/object-flavor.h"
@@ -25,7 +26,6 @@
 #include "object/object-hook.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
-#include "object/object2.h"
 #include "object-enchant/special-object-flags.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-other-types.h"
@@ -41,6 +41,7 @@
 #include "player/player-effects.h"
 #include "player/player-status.h"
 #include "spell/spells3.h"
+#include "sv-definition/sv-food-types.h"
 #include "util/util.h"
 #include "view/display-main-window.h"
 
@@ -1435,4 +1436,15 @@ void brand_weapon(player_type *caster_ptr, int brand_type)
 	o_ptr->discount = 99;
 	chg_virtue(caster_ptr, V_ENCHANT, 2);
 	calc_android_exp(caster_ptr);
+}
+
+bool create_ration(player_type *creature_ptr)
+{
+	object_type *q_ptr;
+	object_type forge;
+	q_ptr = &forge;
+	object_prep(q_ptr, lookup_kind(TV_FOOD, SV_FOOD_RATION));
+	(void)drop_near(creature_ptr, q_ptr, -1, creature_ptr->y, creature_ptr->x);
+	msg_print(_("食事を料理して作った。", "You cook some food."));
+	return TRUE;
 }

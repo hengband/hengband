@@ -1,7 +1,6 @@
-﻿#include "system/angband.h"
-#include "birth/birth-select-race.h"
-#include "term/gameterm.h"
+﻿#include "birth/birth-select-race.h"
 #include "birth/birth-util.h"
+#include "term/term-color-types.h"
 
 static const char p2 = ')';
 
@@ -41,9 +40,8 @@ static void display_race_stat(int cs, int *os, char *cur, char *sym)
         put_str(_("腕力 知能 賢さ 器用 耐久 魅力 経験 ", "Str  Int  Wis  Dex  Con  Chr   EXP "), 4, 40);
         put_str(_("の種族修正", ": Race modification"), 3, 40 + strlen(rp_ptr->title));
 
-        sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ",
-            rp_ptr->r_adj[0], rp_ptr->r_adj[1], rp_ptr->r_adj[2], rp_ptr->r_adj[3],
-            rp_ptr->r_adj[4], rp_ptr->r_adj[5], (rp_ptr->r_exp - 100));
+        sprintf(buf, "%+3d  %+3d  %+3d  %+3d  %+3d  %+3d %+4d%% ", rp_ptr->r_adj[0], rp_ptr->r_adj[1], rp_ptr->r_adj[2], rp_ptr->r_adj[3], rp_ptr->r_adj[4],
+            rp_ptr->r_adj[5], (rp_ptr->r_exp - 100));
         c_put_str(TERM_L_BLUE, buf, 5, 40);
     }
 
@@ -139,8 +137,8 @@ static bool select_race(player_type *creature_ptr, char *sym, int *k)
 bool get_player_race(player_type *creature_ptr)
 {
     clear_from(10);
-    put_str(_("注意：《種族》によってキャラクターの先天的な資質やボーナスが変化します。",
-                "Note: Your 'race' determines various intrinsic factors and bonuses."),
+    put_str(
+        _("注意：《種族》によってキャラクターの先天的な資質やボーナスが変化します。", "Note: Your 'race' determines various intrinsic factors and bonuses."),
         23, 5);
 
     char sym[MAX_RACES];

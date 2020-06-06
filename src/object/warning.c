@@ -15,11 +15,11 @@
 #include "dungeon/dungeon.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
-#include "combat/monster-attack-effect.h"
+#include "monster-attack/monster-attack-effect.h"
 #include "mspell/mspell-type.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "player/player-races-table.h"
-#include "combat/monster-attack-types.h"
+#include "monster-attack/monster-attack-types.h"
 #include "object-enchant/tr-types.h"
 
 /*!

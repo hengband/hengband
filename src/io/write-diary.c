@@ -5,14 +5,14 @@
  */
 
 #include "io/write-diary.h"
-#include "floor/floor.h"
-#include "system/system-variables.h"
-#include "dungeon/quest.h"
-#include "io/files-util.h"
 #include "dungeon/dungeon.h"
-#include "dungeon/dungeon-file.h"
-#include "world/world.h"
+#include "dungeon/quest.h"
+#include "floor/floor.h"
+#include "info-reader/fixed-map-parser.h"
+#include "io/files-util.h"
 #include "market/arena-info-table.h"
+#include "system/system-variables.h"
+#include "world/world.h"
 
 // todo *抹殺* したい…
 bool write_level;
@@ -55,7 +55,6 @@ static bool open_diary_file(FILE **fff, bool *disable_diary)
 	sprintf(file_name, _("playrecord-%s.txt", "playrec-%s.txt"), savefile_base);
 	char buf[1024];
 	path_build(buf, sizeof(buf), ANGBAND_DIR_USER, file_name);
-	FILE_TYPE(FILE_TYPE_TEXT);
 	*fff = my_fopen(buf, "a");
 	if (*fff) return TRUE;
 
@@ -186,7 +185,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		QUEST_IDX old_quest = creature_ptr->current_floor_ptr->inside_quest;
 		creature_ptr->current_floor_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
 		init_flags = INIT_NAME_ONLY;
-		process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+		parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 		creature_ptr->current_floor_ptr->inside_quest = old_quest;
 	}
 

@@ -6,15 +6,14 @@
  * ここにこれ以上関数を引っ越してくるのは禁止。何ならここから更に分割していく
  */
 
-#include "system/angband.h"
 #include "display-player-stat-info.h"
-#include "player/mimic-info-table.h"
-#include "term/gameterm.h"
-#include "player/player-personality.h"
-#include "player/permanent-resistances.h"
-#include "player/player-races-table.h"
-#include "object/object1.h"
 #include "object-enchant/tr-types.h"
+#include "object/object1.h"
+#include "player/mimic-info-table.h"
+#include "player/permanent-resistances.h"
+#include "player/player-personality.h"
+#include "player/player-races-table.h"
+#include "term/term-color-types.h"
 
 /*!
  * @brief プレーヤーのパラメータ基礎値 (腕力等)を18以下になるようにして返す

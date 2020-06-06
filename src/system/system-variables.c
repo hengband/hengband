@@ -4,7 +4,6 @@
  * @date 2013/12/31
  */
 
-#include "system/angband.h"
 #include "system/system-variables.h"
 
  /*!
@@ -24,3 +23,10 @@ concptr ANGBAND_SYS = "xxx";
 concptr ANGBAND_KEYBOARD = _("JAPAN", "0");
 concptr ANGBAND_GRAF = "ascii";
 int init_flags;
+
+/*!
+ * Function hook to restrict "get_obj_num_prep()" function
+ */
+bool (*get_obj_num_hook)(KIND_OBJECT_IDX k_idx);
+
+OBJECT_SUBTYPE_VALUE coin_type;

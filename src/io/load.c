@@ -43,7 +43,7 @@
 #include "io/load.h"
 #include "birth/quick-start.h"
 #include "cmd-item/cmd-smith.h"
-#include "dungeon/dungeon-file.h"
+#include "info-reader/fixed-map-parser.h"
 #include "dungeon/dungeon.h"
 #include "dungeon/quest.h"
 #include "floor/floor-generate.h"
@@ -70,7 +70,7 @@
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object-mark-types.h"
-#include "object/object2.h"
+#include "object/object-stack.h"
 #include "object-enchant/old-ego-extra-values.h" // TODO v1.5.0以前のセーブファイルをロードする処理を分離する.
 #include "object/object-value.h"
 #include "sv-definition/sv-armor-types.h"
@@ -91,6 +91,7 @@
 #include "store/store.h"
 #include "system/angband-version.h"
 #include "system/system-variables.h" // 暫定、init_flags の扱いを決めた上で消す.
+#include "util/object-sort.h"
 #include "util/util.h"
 #include "world/world-object.h"
 #include "world/world.h"
@@ -3170,7 +3171,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 					init_flags = INIT_ASSIGN;
 					creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)i;
 
-					process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+					parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 					creature_ptr->current_floor_ptr->inside_quest = old_inside_quest;
 				}
 			}
