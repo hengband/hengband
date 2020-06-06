@@ -1208,6 +1208,9 @@
     <ClCompile Include="..\..\src\info-reader\kind-reader.c">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\info-reader\artifact-reader.c">
+      <Filter>info-reader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2579,6 +2582,9 @@
       <Filter>info-reader</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\kind-reader.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\artifact-reader.h">
       <Filter>info-reader</Filter>
     </ClInclude>
   </ItemGroup>

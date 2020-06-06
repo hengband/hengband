@@ -39,6 +39,7 @@
 #include "floor/wild.h"
 #include "grid/feature.h"
 #include "grid/trap.h"
+#include "info-reader/artifact-reader.h"
 #include "info-reader/feature-reader.h"
 #include "info-reader/kind-reader.h"
 #include "info-reader/parse-error-types.h"

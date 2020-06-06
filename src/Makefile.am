@@ -152,6 +152,7 @@ hengband_SOURCES = \
 	grid/feature.c grid/feature.h \
 	grid/grid.c grid/grid.h grid/trap.c grid/trap.h \
 	\
+	info-reader/artifact-reader.c info-reader/artifact-reader.h \
 	info-reader/dungeon-info-tokens-table.c info-reader/dungeon-info-tokens-table.h \
 	info-reader/feature-info-tokens-table.c info-reader/feature-info-tokens-table.h \
 	info-reader/feature-reader.c info-reader/feature-reader.h \
