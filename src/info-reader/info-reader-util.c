@@ -1,4 +1,5 @@
 ﻿#include "info-reader/info-reader-util.h"
+#include "cmd-item/cmd-activate.h"
 
 /*!
  * @brief データの可変文字列情報をテキストとして保管する /
@@ -118,4 +119,30 @@ errr grab_one_flag(u32b *flags, concptr names[], concptr what)
     }
 
     return -1;
+}
+
+/*!
+ * @brief テキストトークンを走査してフラグを一つ得る(発動能力用) /
+ * Grab one activation index flag
+ * @param what 参照元の文字列ポインタ
+ * @return 発動能力ID
+ */
+byte grab_one_activation_flag(concptr what)
+{
+    for (int i = 0;; i++) {
+        if (activation_info[i].flag == NULL)
+            break;
+
+        if (streq(what, activation_info[i].flag)) {
+            return activation_info[i].index;
+        }
+    }
+
+    int j = atoi(what);
+    if (j > 0) {
+        return ((byte)j);
+    }
+
+    msg_format(_("未知の発動・フラグ '%s'。", "Unknown activation flag '%s'."), what);
+    return 0;
 }

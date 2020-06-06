@@ -10,7 +10,6 @@ errr init_info_txt(FILE *fp, char *buf, angband_header *head, parse_info_txt_fun
 errr parse_s_info(char *buf, angband_header *head);
 errr parse_m_info(char *buf, angband_header *head);
 void retouch_f_info(angband_header *head);
-errr parse_k_info(char *buf, angband_header *head);
 errr parse_a_info(char *buf, angband_header *head);
 errr parse_e_info(char *buf, angband_header *head);
 errr parse_r_info(char *buf, angband_header *head);
