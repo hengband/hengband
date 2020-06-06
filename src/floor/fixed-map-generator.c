@@ -177,7 +177,7 @@ static void parse_qtw_D(player_type *player_ptr, qtwg_type *qtwg_ptr, char *s)
     }
 }
 
-static bool parse_qtw_QQ(char **zz, int num, quest_type *q_ptr)
+static bool parse_qtw_QQ(quest_type *q_ptr, char **zz, int num)
 {
     if (zz[1][0] != 'Q')
         return FALSE;
@@ -212,7 +212,7 @@ static bool parse_qtw_QQ(char **zz, int num, quest_type *q_ptr)
     return TRUE;
 }
 
-static bool parse_qtw_QR(char **zz, int num, quest_type *q_ptr)
+static bool parse_qtw_QR(quest_type *q_ptr, char **zz, int num)
 {
     if (zz[1][0] != 'R')
         return FALSE;
@@ -263,10 +263,10 @@ static int parse_qtw_Q(qtwg_type *qtwg_ptr, char **zz)
 
     quest_type *q_ptr;
     q_ptr = &(quest[atoi(zz[0])]);
-    if (parse_qtw_QQ(zz, num, q_ptr))
+    if (parse_qtw_QQ(q_ptr, zz, num))
         return PARSE_ERROR_NONE;
 
-    if (parse_qtw_QR(zz, num, q_ptr))
+    if (parse_qtw_QR(q_ptr, zz, num))
         return PARSE_ERROR_NONE;
 
     if (zz[1][0] == 'N') {
