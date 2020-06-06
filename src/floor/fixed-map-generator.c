@@ -58,13 +58,30 @@ static void drop_here(floor_type *floor_ptr, object_type *j_ptr, POSITION y, POS
     g_ptr->o_idx = o_idx;
 }
 
-static void parse_qtw_D(player_type *player_ptr, qtwg_type *qg_ptr, char *s)
+static void generate_artifact(player_type *player_ptr, qtwg_type *qtwg_ptr, const ARTIFACT_IDX artifact_index)
 {
-    *qg_ptr->x = qg_ptr->xmin;
+    if (artifact_index == 0)
+        return;
+
+    if ((a_info[artifact_index].cur_num == 0) && create_named_art(player_ptr, artifact_index, *qtwg_ptr->y, *qtwg_ptr->x)) {
+        a_info[artifact_index].cur_num = 1;
+        return;
+    }
+
+    KIND_OBJECT_IDX k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
+    object_type forge;
+    object_type *q_ptr = &forge;
+    object_prep(q_ptr, k_idx);
+    drop_here(player_ptr->current_floor_ptr, q_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
+}
+
+static void parse_qtw_D(player_type *player_ptr, qtwg_type *qtwg_ptr, char *s)
+{
+    *qtwg_ptr->x = qtwg_ptr->xmin;
     floor_type *floor_ptr = player_ptr->current_floor_ptr;
     int len = strlen(s);
-    for (int i = 0; ((*qg_ptr->x < qg_ptr->xmax) && (i < len)); (*qg_ptr->x)++, s++, i++) {
-        grid_type *g_ptr = &floor_ptr->grid_array[*qg_ptr->y][*qg_ptr->x];
+    for (int i = 0; ((*qtwg_ptr->x < qtwg_ptr->xmax) && (i < len)); (*qtwg_ptr->x)++, s++, i++) {
+        grid_type *g_ptr = &floor_ptr->grid_array[*qtwg_ptr->y][*qtwg_ptr->x];
         int idx = s[0];
         OBJECT_IDX object_index = letter[idx].object;
         MONSTER_IDX monster_index = letter[idx].monster;
@@ -78,7 +95,7 @@ static void parse_qtw_D(player_type *player_ptr, qtwg_type *qg_ptr, char *s)
         if (random & RANDOM_MONSTER) {
             floor_ptr->monster_level = floor_ptr->base_level + monster_index;
 
-            place_monster(player_ptr, *qg_ptr->y, *qg_ptr->x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
+            place_monster(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, (PM_ALLOW_SLEEP | PM_ALLOW_GROUP));
 
             floor_ptr->monster_level = floor_ptr->base_level;
         } else if (monster_index) {
@@ -102,7 +119,7 @@ static void parse_qtw_D(player_type *player_ptr, qtwg_type *qg_ptr, char *s)
                 }
             }
 
-            place_monster_aux(player_ptr, 0, *qg_ptr->y, *qg_ptr->x, monster_index, (PM_ALLOW_SLEEP | PM_NO_KAGE));
+            place_monster_aux(player_ptr, 0, *qtwg_ptr->y, *qtwg_ptr->x, monster_index, (PM_ALLOW_SLEEP | PM_NO_KAGE));
             if (clone) {
                 floor_ptr->m_list[hack_m_idx_ii].smart |= SM_CLONED;
                 r_info[monster_index].cur_num = old_cur_num;
@@ -118,24 +135,24 @@ static void parse_qtw_D(player_type *player_ptr, qtwg_type *qg_ptr, char *s)
              * 25% chance for trap and 75% chance for object
              */
             if (randint0(100) < 75) {
-                place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, 0L);
+                place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, 0L);
             } else {
-                place_trap(player_ptr, *qg_ptr->y, *qg_ptr->x);
+                place_trap(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
             }
 
             floor_ptr->object_level = floor_ptr->base_level;
         } else if (random & RANDOM_OBJECT) {
             floor_ptr->object_level = floor_ptr->base_level + object_index;
             if (randint0(100) < 75)
-                place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, 0L);
+                place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, 0L);
             else if (randint0(100) < 80)
-                place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, AM_GOOD);
+                place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, AM_GOOD);
             else
-                place_object(player_ptr, *qg_ptr->y, *qg_ptr->x, AM_GOOD | AM_GREAT);
+                place_object(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x, AM_GOOD | AM_GREAT);
 
             floor_ptr->object_level = floor_ptr->base_level;
         } else if (random & RANDOM_TRAP) {
-            place_trap(player_ptr, *qg_ptr->y, *qg_ptr->x);
+            place_trap(player_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
         } else if (letter[idx].trap) {
             g_ptr->mimic = g_ptr->feat;
             g_ptr->feat = conv_dungeon_feat(floor_ptr, letter[idx].trap);
@@ -150,23 +167,10 @@ static void parse_qtw_D(player_type *player_ptr, qtwg_type *qg_ptr, char *s)
             }
 
             apply_magic(player_ptr, o_ptr, floor_ptr->base_level, AM_NO_FIXED_ART | AM_GOOD);
-            drop_here(floor_ptr, o_ptr, *qg_ptr->y, *qg_ptr->x);
+            drop_here(floor_ptr, o_ptr, *qtwg_ptr->y, *qtwg_ptr->x);
         }
 
-        if (artifact_index) {
-            if (a_info[artifact_index].cur_num) {
-                KIND_OBJECT_IDX k_idx = lookup_kind(TV_SCROLL, SV_SCROLL_ACQUIREMENT);
-                object_type forge;
-                object_type *q_ptr = &forge;
-
-                object_prep(q_ptr, k_idx);
-                drop_here(floor_ptr, q_ptr, *qg_ptr->y, *qg_ptr->x);
-            } else {
-                if (create_named_art(player_ptr, artifact_index, *qg_ptr->y, *qg_ptr->x))
-                    a_info[artifact_index].cur_num = 1;
-            }
-        }
-
+        generate_artifact(player_ptr, qtwg_ptr, artifact_index);
         g_ptr->special = letter[idx].special;
     }
 }
