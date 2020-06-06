@@ -62,6 +62,12 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+/*!
+ * @brief マクロ登録の最大数 / Maximum number of macros (see "io.c")
+ * @note Default: assume at most 256 macros are used
+ */
+static const int MACRO_MAX = 256;
+
 static void put_title(void);
 
 /*!
@@ -1625,6 +1631,7 @@ static void put_title(void)
 		IS_STABLE_VERSION ? _("安定版", "Stable") : _("開発版", "Developing"));
 	int col = (80 - strlen(title)) / 2;
 	col = col < 0 ? 0 : col;
+    const int VER_INFO_ROW = 3; //!< タイトル表記(行)
 	prt(title, VER_INFO_ROW, col);
 }
 
