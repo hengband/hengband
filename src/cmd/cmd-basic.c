@@ -231,7 +231,7 @@ void do_cmd_go_up(player_type *creature_ptr)
 			if (quest[creature_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
 			{
 				init_flags = INIT_ASSIGN;
-				process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+				parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 			}
 			quest[creature_ptr->current_floor_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
 		}
@@ -378,7 +378,7 @@ void do_cmd_go_down(player_type *creature_ptr)
 			if (quest[creature_ptr->current_floor_ptr->inside_quest].type != QUEST_TYPE_RANDOM)
 			{
 				init_flags = INIT_ASSIGN;
-				process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+				parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 			}
 			quest[creature_ptr->current_floor_ptr->inside_quest].status = QUEST_STATUS_TAKEN;
 		}

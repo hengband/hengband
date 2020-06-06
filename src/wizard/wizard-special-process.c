@@ -1877,7 +1877,7 @@ void do_cmd_debug(player_type *creature_ptr)
 		if (tmp_int >= max_q_idx) break;
 
 		creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)tmp_int;
-		process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+		parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 		quest[tmp_int].status = QUEST_STATUS_TAKEN;
 		creature_ptr->current_floor_ptr->inside_quest = 0;
 	}

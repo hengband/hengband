@@ -1229,6 +1229,9 @@
     <ClCompile Include="..\..\src\info-reader\general-parser.c">
       <Filter>info-reader</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\floor\fixed-map-generator.c">
+      <Filter>floor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2584,9 +2587,6 @@
     <ClInclude Include="..\..\src\info-reader\info-reader-util.h">
       <Filter>info-reader</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h">
-      <Filter>dungeon</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\info-reader\parse-error-types.h">
       <Filter>info-reader</Filter>
     </ClInclude>
@@ -2622,6 +2622,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\info-reader\general-parser.h">
       <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\info-reader\random-grid-effect-types.h">
+      <Filter>info-reader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\floor\fixed-map-generator.h">
+      <Filter>floor</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

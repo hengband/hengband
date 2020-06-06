@@ -153,7 +153,7 @@ void do_cmd_knowledge_stat(player_type *creature_ptr)
  */
 void do_cmd_knowledge_home(player_type *player_ptr)
 {
-	process_dungeon_file(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+	parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 
 	FILE *fff = NULL;
 	GAME_TEXT file_name[FILE_NAME_SIZE];

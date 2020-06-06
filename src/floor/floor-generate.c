@@ -1153,7 +1153,7 @@ static void generate_fixed_floor(player_type *player_ptr)
 
 	init_flags = INIT_CREATE_DUNGEON;
 
-	process_dungeon_file(player_ptr, "q_info.txt", 0, 0, MAX_HGT, MAX_WID);
+	parse_fixed_map(player_ptr, "q_info.txt", 0, 0, MAX_HGT, MAX_WID);
 }
 
 /*!

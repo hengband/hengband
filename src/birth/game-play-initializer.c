@@ -177,7 +177,7 @@ void init_dungeon_quests(player_type *creature_ptr)
     init_flags = INIT_ASSIGN;
     floor_type *floor_ptr = creature_ptr->current_floor_ptr;
     floor_ptr->inside_quest = MIN_RANDOM_QUEST;
-    process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+    parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
     floor_ptr->inside_quest = 0;
     for (int i = MIN_RANDOM_QUEST + number_of_quests - 1; i >= MIN_RANDOM_QUEST; i--) {
         quest_type *q_ptr = &quest[i];
@@ -191,11 +191,11 @@ void init_dungeon_quests(player_type *creature_ptr)
 
     init_flags = INIT_ASSIGN;
     floor_ptr->inside_quest = QUEST_OBERON;
-    process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+    parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
     quest[QUEST_OBERON].status = QUEST_STATUS_TAKEN;
 
     floor_ptr->inside_quest = QUEST_SERPENT;
-    process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+    parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
     quest[QUEST_SERPENT].status = QUEST_STATUS_TAKEN;
     floor_ptr->inside_quest = 0;
 }

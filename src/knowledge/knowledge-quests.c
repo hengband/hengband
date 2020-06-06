@@ -67,7 +67,7 @@ static void do_cmd_knowledge_quests_current(player_type *creature_ptr, FILE *fff
 		quest_text_line = 0;
 		creature_ptr->current_floor_ptr->inside_quest = i;
 		init_flags = INIT_SHOW_TEXT;
-		process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+		parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 		creature_ptr->current_floor_ptr->inside_quest = old_quest;
 		if (quest[i].flags & QUEST_FLAG_SILENT) continue;
 
@@ -200,7 +200,7 @@ static bool do_cmd_knowledge_quests_aux(player_type *player_ptr, FILE *fff, IDX 
 		IDX old_quest = floor_ptr->inside_quest;
 		floor_ptr->inside_quest = q_idx;
 		init_flags = INIT_NAME_ONLY;
-		process_dungeon_file(player_ptr, "q_info.txt", 0, 0, 0, 0);
+		parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
 		floor_ptr->inside_quest = old_quest;
 		if (q_ptr->flags & QUEST_FLAG_SILENT) return FALSE;
 	}

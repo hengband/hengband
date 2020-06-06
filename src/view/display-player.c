@@ -188,7 +188,7 @@ static bool search_death_cause(player_type *creature_ptr, char *statmsg, map_nam
 		/* Get the quest text */
 		/* Bewere that INIT_ASSIGN resets the cur_num. */
 		init_flags = INIT_NAME_ONLY;
-		process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+		parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 #ifdef JP
 		sprintf(statmsg, "…あなたは、クエスト「%s」で%sに殺された。", quest[floor_ptr->inside_quest].name, creature_ptr->died_from);
 #else
@@ -224,7 +224,7 @@ static bool decide_death_in_quest(player_type *creature_ptr, char *statmsg)
 
 	quest_text_line = 0;
 	init_flags = INIT_NAME_ONLY;
-	process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+	parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 	sprintf(statmsg, _("…あなたは現在、 クエスト「%s」を遂行中だ。", "...Now, you are in the quest '%s'."), quest[floor_ptr->inside_quest].name);
 	return TRUE;
 }

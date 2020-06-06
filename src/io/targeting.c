@@ -897,7 +897,7 @@ static char target_set_aux(player_type *subject_ptr, POSITION y, POSITION x, BIT
 		/* Get the quest text */
 		init_flags = INIT_NAME_ONLY;
 
-		process_dungeon_file(subject_ptr, "q_info.txt", 0, 0, 0, 0);
+		parse_fixed_map(subject_ptr, "q_info.txt", 0, 0, 0, 0);
 
 		name = format(_("クエスト「%s」(%d階相当)", "the entrance to the quest '%s'(level %d)"),
 			quest[g_ptr->special].name, quest[g_ptr->special].level);

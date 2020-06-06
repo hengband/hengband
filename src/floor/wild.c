@@ -362,7 +362,7 @@ static void generate_area(player_type *player_ptr, POSITION y, POSITION x, bool 
 		else
 			init_flags = INIT_CREATE_DUNGEON;
 
-		process_dungeon_file(player_ptr, "t_info.txt", 0, 0, MAX_HGT, MAX_WID);
+		parse_fixed_map(player_ptr, "t_info.txt", 0, 0, MAX_HGT, MAX_WID);
 
 		if (!corner && !border) player_ptr->visit |= (1L << (player_ptr->town_num - 1));
 	}
@@ -478,7 +478,7 @@ void wilderness_gen(player_type *creature_ptr)
 	panel_row_min = floor_ptr->height;
 	panel_col_min = floor_ptr->width;
 
-	process_dungeon_file(creature_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+	parse_fixed_map(creature_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 	POSITION x = creature_ptr->wilderness_x;
 	POSITION y = creature_ptr->wilderness_y;
 	get_mon_num_prep(creature_ptr, get_monster_hook(creature_ptr), NULL);
@@ -716,7 +716,7 @@ void wilderness_gen_small(player_type *creature_ptr)
 		}
 	}
 
-	process_dungeon_file(creature_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+	parse_fixed_map(creature_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
 
 	/* Fill the map */
 	for (int i = 0; i < current_world_ptr->max_wild_x; i++)

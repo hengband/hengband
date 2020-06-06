@@ -3171,7 +3171,7 @@ static errr rd_savefile_new_aux(player_type *creature_ptr)
 					init_flags = INIT_ASSIGN;
 					creature_ptr->current_floor_ptr->inside_quest = (QUEST_IDX)i;
 
-					process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+					parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 					creature_ptr->current_floor_ptr->inside_quest = old_inside_quest;
 				}
 			}

@@ -185,7 +185,7 @@ errr exe_write_diary(player_type *creature_ptr, int type, int num, concptr note)
 		QUEST_IDX old_quest = creature_ptr->current_floor_ptr->inside_quest;
 		creature_ptr->current_floor_ptr->inside_quest = (quest[num].type == QUEST_TYPE_RANDOM) ? 0 : num;
 		init_flags = INIT_NAME_ONLY;
-		process_dungeon_file(creature_ptr, "q_info.txt", 0, 0, 0, 0);
+		parse_fixed_map(creature_ptr, "q_info.txt", 0, 0, 0, 0);
 		creature_ptr->current_floor_ptr->inside_quest = old_quest;
 	}
 

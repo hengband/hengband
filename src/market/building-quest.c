@@ -29,7 +29,7 @@ static void get_questinfo(player_type *player_ptr, IDX questnum, bool do_init)
     if (do_init)
         init_flags |= INIT_ASSIGN;
 
-    process_dungeon_file(player_ptr, "q_info.txt", 0, 0, 0, 0);
+    parse_fixed_map(player_ptr, "q_info.txt", 0, 0, 0, 0);
     floor_ptr->inside_quest = old_quest;
 
     GAME_TEXT tmp_str[80];

@@ -169,6 +169,7 @@
     <ClCompile Include="..\..\src\birth\quick-start.c" />
     <ClCompile Include="..\..\src\cmd-action\cmd-attack.c" />
     <ClCompile Include="..\..\src\cmd-io\cmd-menu-content-table.c" />
+    <ClCompile Include="..\..\src\floor\fixed-map-generator.c" />
     <ClCompile Include="..\..\src\info-reader\artifact-reader.c" />
     <ClCompile Include="..\..\src\info-reader\dungeon-info-tokens-table.c" />
     <ClCompile Include="..\..\src\info-reader\dungeon-reader.c" />
@@ -496,6 +497,7 @@
     <ClInclude Include="..\..\src\birth\quick-start.h" />
     <ClInclude Include="..\..\src\cmd-action\cmd-attack.h" />
     <ClInclude Include="..\..\src\cmd-io\cmd-menu-content-table.h" />
+    <ClInclude Include="..\..\src\floor\fixed-map-generator.h" />
     <ClInclude Include="..\..\src\info-reader\artifact-reader.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-info-tokens-table.h" />
     <ClInclude Include="..\..\src\info-reader\dungeon-reader.h" />

@@ -750,7 +750,7 @@ static errr init_m_info(void)
  */
 static errr init_misc(player_type *player_ptr)
 {
-	return process_dungeon_file(player_ptr, "misc.txt", 0, 0, 0, 0);
+	return parse_fixed_map(player_ptr, "misc.txt", 0, 0, 0, 0);
 }
 
 

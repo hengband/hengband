@@ -124,7 +124,7 @@ void play_game(player_type* player_ptr, bool new_game)
         highscore_fd = fd_open(buf, O_RDWR);
 
         /* 町名消失バグ対策(#38205)のためここで世界マップ情報を読み出す */
-        process_dungeon_file(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+        parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
         success = send_world_score(player_ptr, TRUE, update_playtime, display_player, map_name);
 
         if (!success && !get_check_strict(_("スコア登録を諦めますか？", "Do you give up score registration? "), CHECK_NO_HISTORY)) {
@@ -240,9 +240,9 @@ void play_game(player_type* player_ptr, bool new_game)
     }
 
     if (!floor_ptr->dun_level && !floor_ptr->inside_quest) {
-        process_dungeon_file(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
+        parse_fixed_map(player_ptr, "w_info.txt", 0, 0, current_world_ptr->max_wild_y, current_world_ptr->max_wild_x);
         init_flags = INIT_ONLY_BUILDINGS;
-        process_dungeon_file(player_ptr, "t_info.txt", 0, 0, MAX_HGT, MAX_WID);
+        parse_fixed_map(player_ptr, "t_info.txt", 0, 0, MAX_HGT, MAX_WID);
         select_floor_music(player_ptr);
     }
 
