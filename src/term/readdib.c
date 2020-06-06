@@ -247,7 +247,7 @@ BOOL ReadDIB(HWND hWnd, LPSTR lpFileName, DIBINIT *pInfo)
 	}
 	else
 	{
-		/* get to the start of the angband_header and read INFOHEADER */
+		/* get to the start of the header and read INFOHEADER */
 		_llseek(fh, sizeof(BITMAPFILEHEADER), SEEK_SET);
 		if (sizeof(BITMAPINFOHEADER) != _lread(fh, (LPSTR)lpbi, sizeof(BITMAPINFOHEADER)))
 		{
@@ -280,7 +280,7 @@ BOOL ReadDIB(HWND hWnd, LPSTR lpFileName, DIBINIT *pInfo)
 		lpbi->biSizeImage /= 2;
 	}
 
-	/* get a proper-sized buffer for angband_header, color table and bits */
+	/* get a proper-sized buffer for header, color table and bits */
 	GlobalUnlock(pInfo->hDIB);
 	pInfo->hDIB = GlobalReAlloc(pInfo->hDIB, lpbi->biSize +
 										nNumColors * sizeof(RGBQUAD) +
@@ -319,7 +319,7 @@ BOOL ReadDIB(HWND hWnd, LPSTR lpFileName, DIBINIT *pInfo)
 		}
 	}
 
-	/* offset to the bits from start of DIB angband_header */
+	/* offset to the bits from start of DIB header */
 	offBits = (WORD)lpbi->biSize + nNumColors * sizeof(RGBQUAD);
 
 	if (bf.bfOffBits != 0L)

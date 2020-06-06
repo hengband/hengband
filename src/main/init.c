@@ -237,7 +237,7 @@ concptr err_str[PARSE_ERROR_MAX] =
 #else
 	"parse error",
 	"obsolete file",
-	"missing record angband_header",
+	"missing record header",
 	"non-sequential records",
 	"invalid flag specification",
 	"undefined directive",
@@ -248,7 +248,6 @@ concptr err_str[PARSE_ERROR_MAX] =
 #endif
 
 };
-
 
 /*
  * File headers
@@ -310,7 +309,7 @@ static errr init_info_raw(int fd, angband_header *head)
 {
 	angband_header test;
 
-	/* Read and Verify the angband_header */
+	/* Read and Verify the header */
 	if (fd_read(fd, (char*)(&test), sizeof(angband_header)) ||
 		(test.v_major != head->v_major) ||
 		(test.v_minor != head->v_minor) ||
@@ -324,7 +323,7 @@ static errr init_info_raw(int fd, angband_header *head)
 		return -1;
 	}
 
-	/* Accept the angband_header */
+	/* Accept the header */
 	(*head) = test;
 
 	/* Allocate the "*_info" array */
@@ -367,7 +366,7 @@ static errr init_info_raw(int fd, angband_header *head)
 
 /*!
  * @brief ヘッダ構造体の更新
- * Initialize the angband_header of an *_info.raw file.
+ * Initialize the header of an *_info.raw file.
  * @param head rawファイルのヘッダ
  * @param num データ数
  * @param len データの長さ
@@ -581,7 +580,7 @@ static errr init_info(concptr filename, angband_header *head, void **info, char 
  */
 static errr init_f_info(void)
 {
-	/* Init the angband_header */
+	/* Init the header */
 	init_header(&f_head, max_f_idx, sizeof(feature_type));
 
 	/* Save a pointer to the parsing function */
@@ -602,7 +601,7 @@ static errr init_f_info(void)
  */
 static errr init_k_info(void)
 {
-	/* Init the angband_header */
+	/* Init the header */
 	init_header(&k_head, max_k_idx, sizeof(object_kind));
 
 	/* Save a pointer to the parsing function */
@@ -620,7 +619,7 @@ static errr init_k_info(void)
  */
 static errr init_a_info(void)
 {
-	/* Init the angband_header */
+	/* Init the header */
 	init_header(&a_head, max_a_idx, sizeof(artifact_type));
 
 	/* Save a pointer to the parsing function */
@@ -638,7 +637,7 @@ static errr init_a_info(void)
  */
 static errr init_e_info(void)
 {
-	/* Init the angband_header */
+	/* Init the header */
 	init_header(&e_head, max_e_idx, sizeof(ego_item_type));
 
 	/* Save a pointer to the parsing function */
@@ -656,7 +655,7 @@ static errr init_e_info(void)
  */
 static errr init_r_info(void)
 {
-	/* Init the angband_header */
+	/* Init the header */
 	init_header(&r_head, max_r_idx, sizeof(monster_race));
 
 	/* Save a pointer to the parsing function */
@@ -674,7 +673,7 @@ static errr init_r_info(void)
  */
 static errr init_d_info(void)
 {
-	/* Init the angband_header */
+	/* Init the header */
 	init_header(&d_head, current_world_ptr->max_d_idx, sizeof(dungeon_type));
 
 	/* Save a pointer to the parsing function */
@@ -695,7 +694,7 @@ static errr init_d_info(void)
  */
 errr init_v_info(void)
 {
-	/* Init the angband_header */
+	/* Init the header */
 	init_header(&v_head, max_v_idx, sizeof(vault_type));
 
 	/* Save a pointer to the parsing function */
@@ -713,7 +712,7 @@ errr init_v_info(void)
  */
 static errr init_s_info(void)
 {
-	/* Init the angband_header */
+	/* Init the header */
 	init_header(&s_head, MAX_CLASS, sizeof(skill_table));
 
 	/* Save a pointer to the parsing function */
@@ -731,7 +730,7 @@ static errr init_s_info(void)
  */
 static errr init_m_info(void)
 {
-	/* Init the angband_header */
+	/* Init the header */
 	init_header(&m_head, MAX_CLASS, sizeof(player_magic));
 
 	/* Save a pointer to the parsing function */

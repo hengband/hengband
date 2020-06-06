@@ -150,7 +150,7 @@ static void decide_colors(player_type *creature_ptr, u16b mode, TERM_LEN row, TE
  * @brief プレイヤーの特性フラグ一種を表示する
  * @param row コンソール表示位置の左上行
  * @param col コンソール表示位置の左上列
- * @param angband_header コンソール上で表示する特性名
+ * @param header コンソール上で表示する特性名
  * @param header_color 耐性等のパラメータ名 の色
  * @param header_col 「耐性等のパラメータ名 の色」の元々の位置
  * @param flag1 参照する特性ID
@@ -158,7 +158,7 @@ static void decide_colors(player_type *creature_ptr, u16b mode, TERM_LEN row, TE
  * @param f プレイヤーの特性情報構造体
  * @return なし
  */
-static void display_one_characteristic(TERM_LEN row, TERM_LEN col, concptr angband_header, byte header_color, int header_col, int flag1, bool vuln, all_player_flags *f)
+static void display_one_characteristic(TERM_LEN row, TERM_LEN col, concptr header, byte header_color, int header_col, int flag1, bool vuln, all_player_flags *f)
 {
 	c_put_str((byte)(vuln ? TERM_RED : TERM_SLATE), ".", row, col);
 	if (have_flag(f->player_flags, flag1))
@@ -188,7 +188,7 @@ static void display_one_characteristic(TERM_LEN row, TERM_LEN col, concptr angba
 	if (vuln)
 		c_put_str(TERM_RED, "v", row, col + 1);
 
-	c_put_str(header_color, angband_header, row, header_col);
+	c_put_str(header_color, header, row, header_col);
 }
 
 
@@ -197,13 +197,13 @@ static void display_one_characteristic(TERM_LEN row, TERM_LEN col, concptr angba
  * @param creature_ptr プレーヤーへの参照ポインタ
  * @param row コンソール表示位置の左上行
  * @param col コンソール表示位置の左上列
- * @param angband_header コンソール上で表示する特性名
+ * @param header コンソール上で表示する特性名
  * @param flag1 参照する特性ID
  * @param f プレイヤーの特性情報構造体
  * @param mode 表示オプション
  * @return なし
  */
-static void process_one_characteristic(player_type *creature_ptr, TERM_LEN row, TERM_LEN col, concptr angband_header, int flag1, all_player_flags *f, u16b mode)
+static void process_one_characteristic(player_type *creature_ptr, TERM_LEN row, TERM_LEN col, concptr header, int flag1, all_player_flags *f, u16b mode)
 {
 	byte header_color = TERM_L_DARK;
 	int header_col = col;
@@ -212,19 +212,19 @@ static void process_one_characteristic(player_type *creature_ptr, TERM_LEN row, 
 		!(have_flag(f->known_obj_imm, flag1) || have_flag(f->player_imm, flag1) || have_flag(f->tim_player_imm, flag1)))
 		vuln = TRUE;
 
-	col += strlen(angband_header) + 1;
+	col += strlen(header) + 1;
 	decide_colors(creature_ptr, mode, row, &col, flag1, &header_color, vuln);
 	if (mode & DP_IMM)
 	{
 		if (header_color != TERM_L_DARK)
 		{
-			c_put_str(header_color, angband_header, row, header_col);
+			c_put_str(header_color, header, row, header_col);
 		}
 
 		return;
 	}
 
-	display_one_characteristic(row, col, angband_header, header_color, header_col, flag1, vuln, f);
+	display_one_characteristic(row, col, header, header_color, header_col, flag1, vuln, f);
 }
 
 

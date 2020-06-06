@@ -1162,7 +1162,7 @@ static bool wr_savefile_new(player_type *player_ptr)
 	current_world_ptr->sf_saves++;
 
 	/*** Actually write the file ***/
-	/* Dump the file angband_header */
+	/* Dump the file header */
 	xor_byte = 0;
 	wr_byte(FAKE_VER_MAJOR);
 	xor_byte = 0;

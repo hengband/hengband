@@ -5,7 +5,7 @@
  * @brief ダンジョンの生成処理の基幹部分ヘッダーファイル
  * @date 2014/08/15
  * @details
- * Purpose: angband_header file for grid.c, used only in dungeon generation
+ * Purpose: header file for grid.c, used only in dungeon generation
  * files (generate.c, rooms.c)
  * @author
  * Copyright (c) 1989 James E. Wilson, Robert A. Koeneke

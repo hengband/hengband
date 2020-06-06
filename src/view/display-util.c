@@ -6,7 +6,7 @@ static struct
 	int col;
 	int row;
 	int len;
-	char angband_header[20];
+	char header[20];
 } disp_player_line[]
 #ifdef JP
 = {
@@ -118,7 +118,7 @@ static struct
  */
 void display_player_one_line(int entry, concptr val, TERM_COLOR attr)
 {
-	concptr head = disp_player_line[entry].angband_header;
+	concptr head = disp_player_line[entry].header;
 	int head_len = strlen(head);
 	int row = disp_player_line[entry].row;
 	int col = disp_player_line[entry].col;

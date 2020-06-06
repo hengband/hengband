@@ -230,7 +230,7 @@ static OBJECT_SUBTYPE_VALUE select_magic_eater(player_type *creature_ptr, bool o
 
 			y = 1;
 
-			/* Print angband_header(s) */
+			/* Print header(s) */
 #ifdef JP
 			prt(format("                           %s 失率                           %s 失率", (tval == TV_ROD ? "  状態  " : "使用回数"), (tval == TV_ROD ? "  状態  " : "使用回数")), y++, x);
 #else
