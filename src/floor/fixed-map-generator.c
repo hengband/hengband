@@ -6,7 +6,6 @@
 #include "floor/wild.h"
 #include "grid/trap.h"
 #include "info-reader/general-parser.h"
-#include "info-reader/parse-error-types.h"
 #include "info-reader/random-grid-effect-types.h"
 #include "io/tokenizer.h"
 #include "object-enchant/apply-magic.h"
@@ -241,6 +240,47 @@ static bool parse_qtw_QR(char **zz, int num, quest_type *q_ptr)
     return TRUE;
 }
 
+static bool parse_qtw_P(player_type *player_ptr, qtwg_type *qtwg_ptr, char **zz)
+{
+    if (qtwg_ptr->buf[0] != 'P')
+        return FALSE;
+
+    if ((init_flags & INIT_CREATE_DUNGEON) == 0)
+        return TRUE;
+
+    if (tokenize(qtwg_ptr->buf + 2, 2, zz, 0) != 2)
+        return TRUE;
+
+    int panels_y = (*qtwg_ptr->y / SCREEN_HGT);
+    if (*qtwg_ptr->y % SCREEN_HGT)
+        panels_y++;
+
+    floor_type *floor_ptr = player_ptr->current_floor_ptr;
+    floor_ptr->height = panels_y * SCREEN_HGT;
+    int panels_x = (*qtwg_ptr->x / SCREEN_WID);
+    if (*qtwg_ptr->x % SCREEN_WID)
+        panels_x++;
+
+    floor_ptr->width = panels_x * SCREEN_WID;
+    panel_row_min = floor_ptr->height;
+    panel_col_min = floor_ptr->width;
+    if (floor_ptr->inside_quest) {
+        delete_monster(player_ptr, player_ptr->y, player_ptr->x);
+        POSITION py = atoi(zz[0]);
+        POSITION px = atoi(zz[1]);
+        player_ptr->y = py;
+        player_ptr->x = px;
+        return TRUE;
+    }
+    
+    if (!player_ptr->oldpx && !player_ptr->oldpy) {
+        player_ptr->oldpy = atoi(zz[0]);
+        player_ptr->oldpx = atoi(zz[1]);
+    }
+
+    return TRUE;
+}
+
 /*!
  * @brief 固定マップ (クエスト＆街＆広域マップ)をフロアに生成する
  * Parse a sub-file of the "extra info"
@@ -254,20 +294,20 @@ static bool parse_qtw_QR(char **zz, int num, quest_type *q_ptr)
  * @param x 詳細不明
  * @return エラーコード
  */
-errr generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, process_dungeon_file_pf parse_fixed_map)
+parse_error_type generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, process_dungeon_file_pf parse_fixed_map)
 {
     char *zz[33];
     if (!qtwg_ptr->buf[0])
-        return 0;
+        return PARSE_ERROR_NONE;
 
     if (iswspace(qtwg_ptr->buf[0]))
-        return 0;
+        return PARSE_ERROR_NONE;
 
     if (qtwg_ptr->buf[0] == '#')
-        return 0;
+        return PARSE_ERROR_NONE;
 
     if (qtwg_ptr->buf[1] != ':')
-        return 1;
+        return PARSE_ERROR_GENERIC;
 
     if (qtwg_ptr->buf[0] == '%')
         return (*parse_fixed_map)(player_ptr, qtwg_ptr->buf + 2, qtwg_ptr->ymin, qtwg_ptr->xmin, qtwg_ptr->ymax, qtwg_ptr->xmax);
@@ -279,16 +319,16 @@ errr generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, proc
     if (qtwg_ptr->buf[0] == 'D') {
         char *s = qtwg_ptr->buf + 2;
         if (init_flags & INIT_ONLY_BUILDINGS)
-            return 0;
+            return PARSE_ERROR_NONE;
 
         parse_qtw_D(player_ptr, qtwg_ptr, s);
         (*qtwg_ptr->y)++;
-        return 0;
+        return PARSE_ERROR_NONE;
     }
     
     if (qtwg_ptr->buf[0] == 'Q') {
         if (qtwg_ptr->buf[2] == '$')
-            return 0;
+            return PARSE_ERROR_NONE;
 
         int num = tokenize(qtwg_ptr->buf + _(2, 3), 33, zz, 0);
         if (num < 3)
@@ -297,17 +337,17 @@ errr generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, proc
         quest_type *q_ptr;
         q_ptr = &(quest[atoi(zz[0])]);
         if (parse_qtw_QQ(zz, num, q_ptr))
-            return 0;
+            return PARSE_ERROR_NONE;
 
         if (parse_qtw_QR(zz, num, q_ptr))
-            return 0;
+            return PARSE_ERROR_NONE;
 
         if (zz[1][0] == 'N') {
             if (init_flags & (INIT_ASSIGN | INIT_SHOW_TEXT | INIT_NAME_ONLY)) {
                 strcpy(q_ptr->name, zz[2]);
             }
 
-            return 0;
+            return PARSE_ERROR_NONE;
         }
         
         if (zz[1][0] == 'T') {
@@ -316,52 +356,18 @@ errr generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, proc
                 quest_text_line++;
             }
 
-            return 0;
+            return PARSE_ERROR_NONE;
         }
 
-        return 1;
+        return PARSE_ERROR_GENERIC;
     }
     
     if (qtwg_ptr->buf[0] == 'W')
         return parse_line_wilderness(player_ptr, qtwg_ptr->buf, qtwg_ptr->xmin, qtwg_ptr->xmax, qtwg_ptr->y, qtwg_ptr->x);
     
-    if (qtwg_ptr->buf[0] == 'P') {
-        if (init_flags & INIT_CREATE_DUNGEON) {
-            if (tokenize(qtwg_ptr->buf + 2, 2, zz, 0) == 2) {
-                int panels_x, panels_y;
+    if (parse_qtw_P(player_ptr, qtwg_ptr, zz))
+        return PARSE_ERROR_NONE;
 
-                panels_y = (*qtwg_ptr->y / SCREEN_HGT);
-                if (*qtwg_ptr->y % SCREEN_HGT)
-                    panels_y++;
-
-                floor_type *floor_ptr = player_ptr->current_floor_ptr;
-                floor_ptr->height = panels_y * SCREEN_HGT;
-                panels_x = (*qtwg_ptr->x / SCREEN_WID);
-                if (*qtwg_ptr->x % SCREEN_WID)
-                    panels_x++;
-
-                floor_ptr->width = panels_x * SCREEN_WID;
-                panel_row_min = floor_ptr->height;
-                panel_col_min = floor_ptr->width;
-
-                if (floor_ptr->inside_quest) {
-                    delete_monster(player_ptr, player_ptr->y, player_ptr->x);
-
-                    POSITION py = atoi(zz[0]);
-                    POSITION px = atoi(zz[1]);
-
-                    player_ptr->y = py;
-                    player_ptr->x = px;
-                } else if (!player_ptr->oldpx && !player_ptr->oldpy) {
-                    player_ptr->oldpy = atoi(zz[0]);
-                    player_ptr->oldpx = atoi(zz[1]);
-                }
-            }
-        }
-
-        return 0;
-    }
-    
     if (qtwg_ptr->buf[0] == 'B')
         return parse_line_building(qtwg_ptr->buf);
     
@@ -397,9 +403,9 @@ errr generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, proc
                     current_world_ptr->max_wild_y = (POSITION)atoi(zz[1]);
             }
 
-            return 0;
+            return PARSE_ERROR_NONE;
         }
     }
 
-    return 1;
+    return PARSE_ERROR_GENERIC;
 }

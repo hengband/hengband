@@ -4,6 +4,7 @@
  * @details 2 - 4は使われなくなったので欠番
  */
 typedef enum parse_error_type {
+    PARSE_ERROR_NONE = 0,
 	PARSE_ERROR_GENERIC = 1,
     PARSE_ERROR_INVALID_FLAG = 5,
     PARSE_ERROR_UNDEFINED_DIRECTIVE = 6,
