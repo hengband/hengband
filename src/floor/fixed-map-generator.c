@@ -171,6 +171,41 @@ static void parse_qtw_D(player_type *player_ptr, qtwg_type *qg_ptr, char *s)
     }
 }
 
+static bool parse_qtw_QQ(char **zz, int num, quest_type *q_ptr)
+{
+    if (zz[1][0] != 'Q')
+        return FALSE;
+
+    if ((init_flags & INIT_ASSIGN) == 0)
+        return TRUE;
+
+    monster_race *r_ptr;
+    artifact_type *a_ptr;
+
+    if (num < 9)
+        return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
+
+    q_ptr->type = (QUEST_TYPE)atoi(zz[2]);
+    q_ptr->num_mon = (MONSTER_NUMBER)atoi(zz[3]);
+    q_ptr->cur_num = (MONSTER_NUMBER)atoi(zz[4]);
+    q_ptr->max_num = (MONSTER_NUMBER)atoi(zz[5]);
+    q_ptr->level = (DEPTH)atoi(zz[6]);
+    q_ptr->r_idx = (IDX)atoi(zz[7]);
+    q_ptr->k_idx = (IDX)atoi(zz[8]);
+    q_ptr->dungeon = (DUNGEON_IDX)atoi(zz[9]);
+
+    if (num > 10)
+        q_ptr->flags = atoi(zz[10]);
+
+    r_ptr = &r_info[q_ptr->r_idx];
+    if (r_ptr->flags1 & RF1_UNIQUE)
+        r_ptr->flags1 |= RF1_QUESTOR;
+
+    a_ptr = &a_info[q_ptr->k_idx];
+    a_ptr->gen_flags |= TRG_QUESTITEM;
+    return TRUE;
+}
+
 /*!
  * @brief 固定マップ (クエスト＆街＆広域マップ)をフロアに生成する
  * Parse a sub-file of the "extra info"
@@ -217,7 +252,6 @@ errr generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, proc
     }
     
     if (qtwg_ptr->buf[0] == 'Q') {
-        quest_type *q_ptr;
         if (qtwg_ptr->buf[2] == '$')
             return 0;
 
@@ -225,37 +259,12 @@ errr generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, proc
         if (num < 3)
             return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
 
+        quest_type *q_ptr;
         q_ptr = &(quest[atoi(zz[0])]);
-        if (zz[1][0] == 'Q') {
-            if (init_flags & INIT_ASSIGN) {
-                monster_race *r_ptr;
-                artifact_type *a_ptr;
-
-                if (num < 9)
-                    return (PARSE_ERROR_TOO_FEW_ARGUMENTS);
-
-                q_ptr->type = (QUEST_TYPE)atoi(zz[2]);
-                q_ptr->num_mon = (MONSTER_NUMBER)atoi(zz[3]);
-                q_ptr->cur_num = (MONSTER_NUMBER)atoi(zz[4]);
-                q_ptr->max_num = (MONSTER_NUMBER)atoi(zz[5]);
-                q_ptr->level = (DEPTH)atoi(zz[6]);
-                q_ptr->r_idx = (IDX)atoi(zz[7]);
-                q_ptr->k_idx = (IDX)atoi(zz[8]);
-                q_ptr->dungeon = (DUNGEON_IDX)atoi(zz[9]);
-
-                if (num > 10)
-                    q_ptr->flags = atoi(zz[10]);
-
-                r_ptr = &r_info[q_ptr->r_idx];
-                if (r_ptr->flags1 & RF1_UNIQUE)
-                    r_ptr->flags1 |= RF1_QUESTOR;
-
-                a_ptr = &a_info[q_ptr->k_idx];
-                a_ptr->gen_flags |= TRG_QUESTITEM;
-            }
-
+        if (parse_qtw_QQ(zz, num, q_ptr))
             return 0;
-        } else if (zz[1][0] == 'R') {
+
+        if (zz[1][0] == 'R') {
             if (init_flags & INIT_ASSIGN) {
                 int count = 0;
                 IDX idx, reward_idx = 0;
@@ -280,13 +289,17 @@ errr generate_fixed_map_floor(player_type *player_ptr, qtwg_type *qtwg_ptr, proc
             }
 
             return 0;
-        } else if (zz[1][0] == 'N') {
+        }
+        
+        if (zz[1][0] == 'N') {
             if (init_flags & (INIT_ASSIGN | INIT_SHOW_TEXT | INIT_NAME_ONLY)) {
                 strcpy(q_ptr->name, zz[2]);
             }
 
             return 0;
-        } else if (zz[1][0] == 'T') {
+        }
+        
+        if (zz[1][0] == 'T') {
             if (init_flags & INIT_SHOW_TEXT) {
                 strcpy(quest_text[quest_text_line], zz[2]);
                 quest_text_line++;
