@@ -1,24 +1,12 @@
 ﻿#pragma once
 
+#include "monster/monster-timed-effect-types.h"
 #include "monster-race/monster-race.h"
 
 typedef bool(*monsterrace_hook_type)(MONRACE_IDX r_idx);
 
 extern MONSTER_IDX hack_m_idx;
 extern MONSTER_IDX hack_m_idx_ii;
-
-/* Maximum "Nazguls" number */
-#define MAX_NAZGUL_NUM 5
-
-#define MTIMED_CSLEEP   0 /* Monster is sleeping */
-#define MTIMED_FAST     1 /* Monster is temporarily fast */
-#define MTIMED_SLOW     2 /* Monster is temporarily slow */
-#define MTIMED_STUNNED  3 /* Monster is stunned */
-#define MTIMED_CONFUSED 4 /* Monster is confused */
-#define MTIMED_MONFEAR  5 /* Monster is afraid */
-#define MTIMED_INVULNER 6 /* Monster is temporarily invulnerable */
-
-#define MAX_MTIMED      7
 
 /*
  * Monster information, for a specific monster.

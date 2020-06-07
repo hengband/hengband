@@ -2,6 +2,8 @@
 
 #include "system/angband.h"
 
+#define MAX_NAZGUL_NUM 5
+
 typedef enum init_flags_type {
 	INIT_NAME_ONLY = 0x01,
     INIT_SHOW_TEXT = 0x02,

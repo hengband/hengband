@@ -2701,6 +2701,9 @@
     <ClInclude Include="..\..\src\monster\monster-description-types.h">
       <Filter>monster</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-timed-effect-types.h">
+      <Filter>monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
