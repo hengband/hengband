@@ -3,6 +3,7 @@
 #include "core/turn-compensator.h"
 #include "io/write-diary.h"
 #include "market/building-actions-table.h"
+#include "player/eldritch-horror.h"
 #include "player/player-effects.h"
 #include "player/player-races-table.h"
 #include "store/rumor.h"

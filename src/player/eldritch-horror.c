@@ -1,0 +1,313 @@
+﻿/*!
+ * @brief エルドリッチホラー処理
+ * @date 2020/06/07
+ * @author Hourier
+ */
+
+#include "player/eldritch-horror.h"
+#include "core/stuff-handler.h"
+#include "floor/floor.h"
+#include "monster-race/monster-race-hook.h"
+#include "monster/horror-descriptions.h"
+#include "monster/smart-learn-types.h"
+#include "player/player-effects.h"
+#include "player/player-status.h"
+#include "player/mimic-info-table.h"
+#include "world/world.h"
+
+/*!
+ * @brief エルドリッチホラーの形容詞種別を決める
+ * @param r_ptr モンスター情報への参照ポインタ
+ * @return
+ */
+static concptr decide_horror_message(monster_race *r_ptr)
+{
+    int horror_num = randint0(MAX_SAN_HORROR_SUM);
+    if (horror_num < MAX_SAN_HORROR_COMMON) {
+        return horror_desc_common[horror_num];
+    }
+
+    if ((r_ptr->flags3 & RF3_EVIL) != 0) {
+        return horror_desc_evil[horror_num - MAX_SAN_HORROR_COMMON];
+    }
+
+    return horror_desc_neutral[horror_num - MAX_SAN_HORROR_COMMON];
+}
+
+/*!
+ * todo m_nameとdescで何が違うのかは良く分からない
+ * @brief エルドリッチホラー持ちのモンスターを見た時の反応 (モンスター名版)
+ * @param m_name モンスター名
+ * @param r_ptr モンスター情報への参照ポインタ
+ * @return なし
+ */
+static void see_eldritch_horror(GAME_TEXT *m_name, monster_race *r_ptr)
+{
+    concptr horror_message = decide_horror_message(r_ptr);
+    msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message, m_name);
+    r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
+}
+
+/*!
+ * @brief エルドリッチホラー持ちのモンスターを見た時の反応 (モンスター名版)
+ * @param desc モンスター名 (エルドリッチホラー持ちの全モンスターからランダム…のはず)
+ * @param r_ptr モンスターへの参照ポインタ
+ * @return なし
+ */
+static void feel_eldritch_horror(concptr desc, monster_race *r_ptr)
+{
+    concptr horror_message = decide_horror_message(r_ptr);
+    msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), horror_message, desc);
+    r_ptr->r_flags2 |= RF2_ELDRITCH_HORROR;
+}
+
+/*!
+ * @brief ELDRITCH_HORRORによるプレイヤーの精神破壊処理
+ * @param m_ptr ELDRITCH_HORRORを引き起こしたモンスターの参照ポインタ。薬・罠・魔法の影響ならNULL
+ * @param necro 暗黒領域魔法の詠唱失敗によるものならばTRUEを返す
+ * @return なし
+ */
+void sanity_blast(player_type *creature_ptr, monster_type *m_ptr, bool necro)
+{
+    if (creature_ptr->phase_out || !current_world_ptr->character_dungeon)
+        return;
+
+    int power = 100;
+    if (!necro && m_ptr) {
+        GAME_TEXT m_name[MAX_NLEN];
+        monster_race *r_ptr = &r_info[m_ptr->ap_r_idx];
+        power = r_ptr->level / 2;
+        monster_desc(creature_ptr, m_name, m_ptr, 0);
+        if (!(r_ptr->flags1 & RF1_UNIQUE)) {
+            if (r_ptr->flags1 & RF1_FRIENDS)
+                power /= 2;
+        } else
+            power *= 2;
+
+        if (!current_world_ptr->is_loading_now)
+            return;
+
+        if (!m_ptr->ml)
+            return;
+
+        if (!(r_ptr->flags2 & RF2_ELDRITCH_HORROR))
+            return;
+
+        if (is_pet(m_ptr))
+            return;
+
+        if (randint1(100) > power)
+            return;
+
+        if (saving_throw(creature_ptr->skill_sav - power))
+            return;
+
+        if (creature_ptr->image) {
+            msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
+
+            if (one_in_(3)) {
+                msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
+                creature_ptr->image = creature_ptr->image + randint1(r_ptr->level);
+            }
+
+            return;
+        }
+
+        see_eldritch_horror(m_name, r_ptr);
+        if (PRACE_IS_(creature_ptr, RACE_IMP) || PRACE_IS_(creature_ptr, RACE_BALROG) || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON)
+            || current_world_ptr->wizard)
+            return;
+
+        if (PRACE_IS_(creature_ptr, RACE_SKELETON) || PRACE_IS_(creature_ptr, RACE_ZOMBIE) || PRACE_IS_(creature_ptr, RACE_VAMPIRE)
+            || PRACE_IS_(creature_ptr, RACE_SPECTRE) || (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD)) {
+            if (saving_throw(25 + creature_ptr->lev))
+                return;
+        }
+    } else if (!necro) {
+        monster_race *r_ptr;
+        GAME_TEXT m_name[MAX_NLEN];
+        concptr desc;
+        get_mon_num_prep(creature_ptr, get_nightmare, NULL);
+        r_ptr = &r_info[get_mon_num(creature_ptr, MAX_DEPTH, 0)];
+        power = r_ptr->level + 10;
+        desc = r_name + r_ptr->name;
+        get_mon_num_prep(creature_ptr, NULL, NULL);
+#ifdef JP
+#else
+
+        if (!(r_ptr->flags1 & RF1_UNIQUE))
+            sprintf(m_name, "%s %s", (is_a_vowel(desc[0]) ? "an" : "a"), desc);
+        else
+#endif
+        sprintf(m_name, "%s", desc);
+
+        if (!(r_ptr->flags1 & RF1_UNIQUE)) {
+            if (r_ptr->flags1 & RF1_FRIENDS)
+                power /= 2;
+        } else
+            power *= 2;
+
+        if (saving_throw(creature_ptr->skill_sav * 100 / power)) {
+            msg_format(_("夢の中で%sに追いかけられた。", "%^s chases you through your dreams."), m_name);
+            return;
+        }
+
+        if (creature_ptr->image) {
+            msg_format(_("%s%sの顔を見てしまった！", "You behold the %s visage of %s!"), funny_desc[randint0(MAX_SAN_FUNNY)], m_name);
+
+            if (one_in_(3)) {
+                msg_print(funny_comments[randint0(MAX_SAN_COMMENT)]);
+                creature_ptr->image = creature_ptr->image + randint1(r_ptr->level);
+            }
+
+            return;
+        }
+
+        feel_eldritch_horror(desc, r_ptr);
+        if (!creature_ptr->mimic_form) {
+            switch (creature_ptr->prace) {
+            case RACE_IMP:
+            case RACE_BALROG:
+                if (saving_throw(20 + creature_ptr->lev))
+                    return;
+                break;
+            case RACE_SKELETON:
+            case RACE_ZOMBIE:
+            case RACE_SPECTRE:
+            case RACE_VAMPIRE:
+                if (saving_throw(10 + creature_ptr->lev))
+                    return;
+                break;
+            }
+        } else {
+            if (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_DEMON) {
+                if (saving_throw(20 + creature_ptr->lev))
+                    return;
+            } else if (mimic_info[creature_ptr->mimic_form].MIMIC_FLAGS & MIMIC_IS_UNDEAD) {
+                if (saving_throw(10 + creature_ptr->lev))
+                    return;
+            }
+        }
+    } else {
+        msg_print(_("ネクロノミコンを読んで正気を失った！", "Your sanity is shaken by reading the Necronomicon!"));
+    }
+
+    /* 過去の効果無効率再現のため5回saving_throw 実行 */
+    if (saving_throw(creature_ptr->skill_sav - power) && saving_throw(creature_ptr->skill_sav - power) && saving_throw(creature_ptr->skill_sav - power)
+        && saving_throw(creature_ptr->skill_sav - power) && saving_throw(creature_ptr->skill_sav - power)) {
+        return;
+    }
+
+    switch (randint1(22)) {
+    case 1: {
+        if (!(creature_ptr->muta3 & MUT3_MORONIC)) {
+            if ((creature_ptr->stat_use[A_INT] < 4) && (creature_ptr->stat_use[A_WIS] < 4)) {
+                msg_print(_("あなたは完璧な馬鹿になったような気がした。しかしそれは元々だった。", "You turn into an utter moron!"));
+            } else {
+                msg_print(_("あなたは完璧な馬鹿になった！", "You turn into an utter moron!"));
+            }
+
+            if (creature_ptr->muta3 & MUT3_HYPER_INT) {
+                msg_print(_("あなたの脳は生体コンピュータではなくなった。", "Your brain is no longer a living computer."));
+                creature_ptr->muta3 &= ~(MUT3_HYPER_INT);
+            }
+
+            creature_ptr->muta3 |= MUT3_MORONIC;
+        }
+
+        break;
+    }
+    case 2: {
+        if (!(creature_ptr->muta2 & MUT2_COWARDICE) && !creature_ptr->resist_fear) {
+            msg_print(_("あなたはパラノイアになった！", "You become paranoid!"));
+            if (creature_ptr->muta3 & MUT3_FEARLESS) {
+                msg_print(_("あなたはもう恐れ知らずではなくなった。", "You are no longer fearless."));
+                creature_ptr->muta3 &= ~(MUT3_FEARLESS);
+            }
+
+            creature_ptr->muta2 |= MUT2_COWARDICE;
+        }
+
+        break;
+    }
+    case 3: {
+        if (!(creature_ptr->muta2 & MUT2_HALLU) && !creature_ptr->resist_chaos) {
+            msg_print(_("幻覚をひき起こす精神錯乱に陥った！", "You are afflicted by a hallucinatory insanity!"));
+            creature_ptr->muta2 |= MUT2_HALLU;
+        }
+
+        break;
+    }
+    case 4: {
+        if (!(creature_ptr->muta2 & MUT2_BERS_RAGE) && !creature_ptr->resist_conf) {
+            msg_print(_("激烈な感情の発作におそわれるようになった！", "You become subject to fits of berserk rage!"));
+            creature_ptr->muta2 |= MUT2_BERS_RAGE;
+        }
+
+        break;
+    }
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+    case 11:
+    case 12: {
+        if (!creature_ptr->resist_conf) {
+            (void)set_confused(creature_ptr, creature_ptr->confused + randint0(4) + 4);
+        }
+
+        if (!creature_ptr->resist_chaos && one_in_(3)) {
+            (void)set_image(creature_ptr, creature_ptr->image + randint0(250) + 150);
+        }
+
+        /* todo いつからかは不明だがreturnとbreakが同時に存在している。どちらがデッドコードか不明瞭なので保留 */
+        return;
+        break;
+    }
+    case 13:
+    case 14:
+    case 15: {
+        if (!creature_ptr->resist_conf) {
+            (void)set_confused(creature_ptr, creature_ptr->confused + randint0(4) + 4);
+        }
+        if (!creature_ptr->free_act) {
+            (void)set_paralyzed(creature_ptr, creature_ptr->paralyzed + randint0(4) + 4);
+        }
+        if (!creature_ptr->resist_chaos) {
+            (void)set_image(creature_ptr, creature_ptr->image + randint0(250) + 150);
+        }
+
+        do {
+            (void)do_dec_stat(creature_ptr, A_INT);
+        } while (randint0(100) > creature_ptr->skill_sav && one_in_(2));
+
+        do {
+            (void)do_dec_stat(creature_ptr, A_WIS);
+        } while (randint0(100) > creature_ptr->skill_sav && one_in_(2));
+
+        break;
+    }
+    case 16:
+    case 17: {
+        if (lose_all_info(creature_ptr))
+            msg_print(_("あまりの恐怖に全てのことを忘れてしまった！", "You forget everything in your utmost terror!"));
+        break;
+    }
+    case 18:
+    case 19:
+    case 20:
+    case 21:
+    case 22: {
+        do_dec_stat(creature_ptr, A_INT);
+        do_dec_stat(creature_ptr, A_WIS);
+        break;
+    }
+    default:
+        break;
+    }
+
+    creature_ptr->update |= PU_BONUS;
+    handle_stuff(creature_ptr);
+}

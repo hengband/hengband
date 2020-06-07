@@ -376,6 +376,7 @@ hengband_SOURCES = \
 	pet/pet-util.c pet/pet-util.h \
 	\
 	player/avatar.h player/avatar.c \
+	player/eldritch-horror.c player/eldritch-horror.h \
 	player/mimic-info-table.c player/mimic-info-table.h \
 	player/process-death.c player/process-death.h \
 	player/process-name.c player/process-name.h \

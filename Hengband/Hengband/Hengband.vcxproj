@@ -244,6 +244,7 @@
     <ClCompile Include="..\..\src\object-enchant\apply-magic-others.c" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic-weapon.c" />
     <ClCompile Include="..\..\src\object-enchant\apply-magic.c" />
+    <ClCompile Include="..\..\src\player\eldritch-horror.c" />
     <ClCompile Include="..\..\src\specific-object\bow.c" />
     <ClCompile Include="..\..\src\object\object-stack.c" />
     <ClCompile Include="..\..\src\object\object-value-calc.c" />
@@ -533,6 +534,7 @@
     <ClInclude Include="..\..\src\monster\monster-description-types.h" />
     <ClInclude Include="..\..\src\monster\monster-flag-types.h" />
     <ClInclude Include="..\..\src\monster\monster-timed-effect-types.h" />
+    <ClInclude Include="..\..\src\monster\monster-type-definition.h" />
     <ClInclude Include="..\..\src\monster\place-monster-types.h" />
     <ClInclude Include="..\..\src\monster\smart-learn-types.h" />
     <ClInclude Include="..\..\src\object-enchant\activation-info-table.h" />
@@ -599,6 +601,7 @@
     <ClInclude Include="..\..\src\object-enchant\apply-magic-others.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic-weapon.h" />
     <ClInclude Include="..\..\src\object-enchant\apply-magic.h" />
+    <ClInclude Include="..\..\src\player\eldritch-horror.h" />
     <ClInclude Include="..\..\src\specific-object\bow.h" />
     <ClInclude Include="..\..\src\object\object-stack.h" />
     <ClInclude Include="..\..\src\object\object-value-calc.h" />

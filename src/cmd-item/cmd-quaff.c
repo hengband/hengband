@@ -21,6 +21,7 @@
 #include "object/object-info.h"
 #include "sv-definition/sv-potion-types.h"
 #include "player/avatar.h"
+#include "player/eldritch-horror.h"
 #include "player/mimic-info-table.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"

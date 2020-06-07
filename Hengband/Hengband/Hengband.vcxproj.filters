@@ -1244,6 +1244,9 @@
     <ClCompile Include="..\..\src\mind\mind-sniper.c">
       <Filter>mind</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\player\eldritch-horror.c">
+      <Filter>player</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\cmd\cmd-basic.h">
@@ -2703,6 +2706,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\monster\monster-timed-effect-types.h">
       <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\monster\monster-type-definition.h">
+      <Filter>monster</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\player\eldritch-horror.h">
+      <Filter>player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

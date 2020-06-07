@@ -15,6 +15,7 @@
 #include "main/sound-definitions-table.h"
 #include "mind/mind-mirror-master.h"
 #include "monster/place-monster-types.h"
+#include "player/eldritch-horror.h"
 #include "player/player-class.h"
 #include "player/player-damage.h"
 #include "player/player-effects.h"

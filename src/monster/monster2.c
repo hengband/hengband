@@ -40,6 +40,7 @@
 #include "object/object-generator.h"
 #include "object/warning.h"
 #include "pet/pet-fall-off.h"
+#include "player/eldritch-horror.h"
 #include "player/player-class.h"
 #include "player/player-move.h"
 #include "player/player-personalities-table.h"
