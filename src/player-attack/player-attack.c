@@ -5,6 +5,7 @@
  */
 
 #include "player-attack/player-attack.h"
+#include "art-definition/art-sword-types.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
 #include "combat/martial-arts-table.h"
@@ -16,7 +17,6 @@
 #include "mind/monk-attack.h"
 #include "monster/monster-race-hook.h"
 #include "monster/monster-status.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/tr-types.h"
 #include "object-enchant/vorpal-weapon.h"
 #include "object/object-flavor.h"

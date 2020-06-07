@@ -482,6 +482,7 @@
     <ClCompile Include="..\..\src\spell\spells-execution.c" />
     <ClCompile Include="..\..\src\spell\technic-info-table.c" />
     <ClCompile Include="..\..\src\combat\aura-counterattack.c" />
+    <ClInclude Include="..\..\src\art-definition\art-sword-types.h" />
     <ClInclude Include="..\..\src\birth\auto-roller.h" />
     <ClInclude Include="..\..\src\birth\birth-body-spec.h" />
     <ClInclude Include="..\..\src\birth\birth-select-class.h" />

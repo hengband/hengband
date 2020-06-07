@@ -5,6 +5,8 @@ AUTOMAKE_OPTIONS = foreign subdir-objects
 bin_PROGRAMS = hengband
 
 hengband_SOURCES = \
+	art-definition/art-sword-types.h \
+	\
 	autopick/autopick.c autopick/autopick.h \
 	autopick/autopick-commands-table.h autopick/autopick-dirty-flags.h \
 	autopick/autopick-editor-table.h autopick/autopick-flags-table.h \
@@ -510,12 +512,12 @@ CFLAGS += $(XFT_CFLAGS)
 LIBS += $(XFT_LIBS)
 COMPILE = $(srcdir)/gcc-wrap $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) \
-	-Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat -Icore -Idungeon \
-	-Ieffect -Ifloor -Igrid -Iinfo-reader -Iinventory -Iio -Iio-dump \
-	-Iknowledge -Imarket -Imelee -Imind -Imonster -Imonster-attack -Imspell \
-	-Imutation -Iobject -Iobject-enchant -Ipet -Iplayer -Iplayer-attack -Irealm \
-	-Iroom -Ispecific-object -Ispell -Ispell-kind -Ispell-realm -Isv-definition \
-	-Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
+	-Iart-definition -Iautopick -Ibirth -Icmd -Icmd-io -Icmd-item -Icombat \
+	-Icore -Idungeon -Ieffect -Ifloor -Igrid -Iinfo-reader -Iinventory -Iio \
+	-Iio-dump -Iknowledge -Imarket -Imelee -Imind -Imonster -Imonster-attack \
+	-Imspell -Imutation -Iobject -Iobject-enchant -Ipet -Iplayer -Iplayer-attack \
+	-Irealm -Iroom -Ispecific-object -Ispell -Ispell-kind -Ispell-realm \
+	-Isv-definition -Isystem -Iterm -Iutil -Iview -Iwizard -Iworld
 
 install-exec-hook:
 if SET_GID

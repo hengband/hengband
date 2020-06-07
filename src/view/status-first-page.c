@@ -6,6 +6,7 @@
  */
 
 #include "view/status-first-page.h"
+#include "art-definition/art-sword-types.h"
 #include "combat/attack-power-table.h"
 #include "combat/shoot.h"
 #include "display-util.h"

@@ -1,4 +1,5 @@
 ﻿#include "realm/realm-hissatsu.h"
+#include "art-definition/art-sword-types.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-action/cmd-spell.h"
 #include "cmd/cmd-basic.h"
@@ -13,7 +14,6 @@
 #include "mind/mind-ninja.h"
 #include "monster/monster-race-hook.h"
 #include "monster/monster.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/tr-types.h"
 #include "object/object1.h"
 #include "player/player-damage.h"

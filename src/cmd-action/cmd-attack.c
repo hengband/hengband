@@ -5,6 +5,7 @@
  */
 
 #include "cmd-action/cmd-attack.h"
+#include "art-definition/art-sword-types.h"
 #include "combat/attack-accuracy.h"
 #include "combat/attack-criticality.h"
 #include "player-attack/player-attack.h"
@@ -12,7 +13,6 @@
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
 #include "monster/monster-status.h"
-#include "object-enchant/artifact.h"
 #include "object/item-use-flags.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"

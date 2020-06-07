@@ -2644,6 +2644,9 @@
     <ClInclude Include="..\..\src\object-enchant\trg-types.h">
       <Filter>object-enchant</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\art-definition\art-sword-types.h">
+      <Filter>art-definition</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />
@@ -2790,6 +2793,9 @@
     </Filter>
     <Filter Include="info-reader">
       <UniqueIdentifier>{149ff96c-b8c9-4df9-845d-d0618427d100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="art-definition">
+      <UniqueIdentifier>{fffcb35e-069c-4a97-ab60-0010a4d5d488}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

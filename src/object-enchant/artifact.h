@@ -14,56 +14,39 @@
 typedef struct artifact_type {
 	STR_OFFSET name;			/*!< アーティファクト名(headerオフセット参照) / Name (offset) */
 	STR_OFFSET text;			/*!< アーティファクト解説(headerオフセット参照) / Text (offset) */
-
 	tval_type tval;		/*!< ベースアイテム大項目ID / Artifact type */
 	OBJECT_SUBTYPE_VALUE sval;	/*!< ベースアイテム小項目ID / Artifact sub type */
-
 	PARAMETER_VALUE pval;	/*!< pval修正値 / Artifact extra info */
-
 	HIT_PROB to_h;			/*!< 命中ボーナス値 /  Bonus to hit */
 	HIT_POINT to_d;		/*!< ダメージボーナス値 / Bonus to damage */
 	ARMOUR_CLASS to_a;			/*!< ACボーナス値 / Bonus to armor */
-
 	ARMOUR_CLASS ac;			/*!< 上書きベースAC値 / Base armor */
-
 	DICE_NUMBER dd;
 	DICE_SID ds;	/*!< ダイス値 / Damage when hits */
-
 	WEIGHT weight;		/*!< 重量 / Weight */
-
 	PRICE cost;			/*!< 基本価格 / Artifact "cost" */
-
 	BIT_FLAGS flags[TR_FLAG_SIZE];       /*! アイテムフラグ / Artifact Flags */
-
 	BIT_FLAGS gen_flags;		/*! アイテム生成フラグ / flags for generate */
-
 	DEPTH level;		/*! 基本生成階 / Artifact level */
 	RARITY rarity;		/*! レアリティ / Artifact rarity */
-
 	byte cur_num;		/*! 現在の生成数 / Number created (0 or 1) */
 	byte max_num;		/*! (未使用)最大生成数 / Unused (should be "1") */
-
 	FLOOR_IDX floor_id;      /*! アイテムを落としたフロアのID / Leaved on this location last time */
-
 	byte act_idx;		/*! 発動能力ID / Activative ability index */
 } artifact_type;
 
 extern artifact_type *a_info;
 extern char *a_name;
 extern char *a_text;
-
 extern ARTIFACT_IDX max_a_idx;
 
-/* artifact.c */
-extern bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_scroll);
-extern int activation_index(object_type *o_ptr);
-extern const activation_type* find_activation_info(object_type *o_ptr);
-extern void random_artifact_resistance(player_type *player_ptr, object_type *o_ptr, artifact_type *a_ptr);
-extern bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x);
-extern bool make_artifact(player_type *player_ptr, object_type *o_ptr);
-extern bool make_artifact_special(player_type *player_ptr, object_type *o_ptr);
-
-/*** Artifact indexes (see "lib/edit/a_info.txt") ***/
+bool become_random_artifact(player_type *player_ptr, object_type *o_ptr, bool a_scroll);
+int activation_index(object_type *o_ptr);
+const activation_type* find_activation_info(object_type *o_ptr);
+void random_artifact_resistance(player_type *player_ptr, object_type *o_ptr, artifact_type *a_ptr);
+bool create_named_art(player_type *player_ptr, ARTIFACT_IDX a_idx, POSITION y, POSITION x);
+bool make_artifact(player_type *player_ptr, object_type *o_ptr);
+bool make_artifact_special(player_type *player_ptr, object_type *o_ptr);
 
 /* Lites */
 #define ART_GALADRIEL            1
@@ -183,70 +166,6 @@ extern bool make_artifact_special(player_type *player_ptr, object_type *o_ptr);
 
 /* Digging */
 #define ART_NAIN                211
-
-/* Swords */
-#define ART_MAEDHROS            64
-#define ART_CAINE               65
-#define ART_NARTHANC            66
-#define ART_NIMTHANC            67
-#define ART_DETHANC             68
-#define ART_RILIA               69
-#define ART_FIONA               70
-#define ART_CALRIS              71
-#define ART_GRAYSWANDIR         72
-#define ART_GLAMDRING           73
-#define ART_NOTHUNG             74
-#define ART_ORCRIST             75
-#define ART_GURTHANG            76
-#define ART_ZARCUTHRA           77
-#define ART_TWILIGHT            78
-#define ART_GONDRICAM           79
-#define ART_CRISDURIAN          80
-#define ART_AGLARANG            81
-#define ART_RINGIL              82
-#define ART_ANDURIL             83
-#define ART_WEREWINDLE          84
-#define ART_CHAINSWORD          85
-#define ART_FORASGIL            86
-#define ART_CARETH              87
-#define ART_STING               88
-#define ART_SOULSWORD           89
-#define ART_MERLIN              90
-#define ART_DOOMCALLER          91
-#define ART_VORPAL_BLADE        92
-#define ART_SLAYER              123
-#define ART_KUSANAGI            128
-#define ART_HURIN               133
-#define ART_AZAGHAL             135
-#define ART_NOVA                137
-#define ART_CHARIOT             140
-#define ART_WORPAL_BLADE        142
-#define ART_MURAMASA            144
-#define ART_ZANTETSU            150
-#define ART_SOULCRUSH           154
-#define ART_FALIS               155
-#define ART_HRUNTING            156
-#define ART_ANUBIS              158
-#define ART_GURENKI             160
-#define ART_TAILBITER           167
-#define ART_MUSASI_KATANA       171
-#define ART_MUSASI_WAKIZASI     172
-#define ART_QUICKTHORN          174
-#define ART_TINYTHORN           175
-#define ART_EXCALIBUR           176
-#define ART_EXCALIPUR           177
-#define ART_EXCALIBUR_J         179
-#define ART_ARUNRUTH            184
-#define ART_HAKABUSA            189
-#define ART_STORMBRINGER        190
-#define ART_NARSIL              191
-#define ART_KANNU               193
-#define ART_GRIMTOOTH           196
-#define ART_KAMUI               198
-#define ART_GOURYU              207
-#define ART_EOWYN               216
-#define ART_NANACHO             248
-#define ART_ROBINTON            251
 
 /* Polearms */
 #define ART_THEODEN             93

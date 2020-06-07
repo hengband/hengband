@@ -1,6 +1,6 @@
 ﻿#include "combat/slaying.h"
+#include "art-definition/art-sword-types.h"
 #include "mind/mind-samurai.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/tr-types.h"
 #include "object/object1.h"
 #include "specific-object/torch.h"

@@ -139,6 +139,7 @@
  */
 
 #include "player/player-move.h"
+#include "art-definition/art-sword-types.h"
 #include "autopick/autopick.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd/cmd-basic.h"

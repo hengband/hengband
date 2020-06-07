@@ -1,6 +1,6 @@
 ﻿#include "object-enchant/vorpal-weapon.h"
+#include "art-definition/art-sword-types.h"
 #include "io/files-util.h"
-#include "object-enchant/artifact.h"
 
 /*!
  * @brief ヴォーパル武器で攻撃した時のメッセージ表示

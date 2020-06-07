@@ -1,4 +1,5 @@
 ﻿#include "object/warning.h"
+#include "art-definition/art-sword-types.h"
 #include "dungeon/dungeon.h"
 #include "floor/floor.h"
 #include "grid/feature.h"
@@ -8,7 +9,6 @@
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-type.h"
-#include "object-enchant/artifact.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flavor.h"
 #include "object/object1.h"

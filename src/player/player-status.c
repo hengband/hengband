@@ -1,5 +1,6 @@
 ﻿#include "system/angband.h"
 #include "player/player-status.h"
+#include "art-definition/art-sword-types.h"
 #include "autopick/autopick-reader-writer.h"
 #include "autopick/autopick.h"
 #include "cmd-action/cmd-pet.h"
