@@ -13,6 +13,7 @@
 #include "effect/effect-characteristics.h"
 #include "main/sound-definitions-table.h"
 #include "monster/monster-status.h"
+#include "monster/smart-learn-types.h"
 #include "object/item-use-flags.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"

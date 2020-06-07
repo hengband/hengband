@@ -7,6 +7,7 @@
 #include "mind/mind-cavalry.h"
 #include "cmd-action/cmd-pet.h"
 #include "floor/floor.h"
+#include "monster/smart-learn-types.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-skill.h"
 

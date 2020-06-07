@@ -1,11 +1,11 @@
 ﻿#include "system/angband.h"
 #include "core/stuff-handler.h"
 #include "util/util.h"
-
 #include "io/write-diary.h"
 #include "cmd-io/cmd-dump.h"
 #include "floor/floor.h"
 #include "core/sort.h"
+#include "monster/smart-learn-types.h"
 #include "player/player-move.h"
 #include "player/player-status.h"
 #include "player/player-effects.h"

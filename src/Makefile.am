@@ -289,6 +289,7 @@ hengband_SOURCES = \
 	monster/monster-process.c monster/monster-process.h \
 	monster/monster-runaway.c monster/monster-runaway.h \
 	monster/monster-safety-hiding.c monster/monster-safety-hiding.h \
+	monster/smart-learn-types.h \
 	monster/monster-status.c monster/monster-status.h \
 	monster/monster-sweep-grid.c monster/monster-sweep-grid.h \
 	monster/monster-update.c monster/monster-update.h \

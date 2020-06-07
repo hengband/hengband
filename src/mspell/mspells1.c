@@ -50,6 +50,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster.h"
+#include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 #include "spell/spells-type.h"
 #include "world/world.h"

@@ -1,5 +1,6 @@
 ﻿#include "quantum-effect.h"
 #include "floor/floor.h"
+#include "monster/smart-learn-types.h"
 #include "mspell/assign-monster-spell.h"
 #include "mspell/monster-spell.h"
 #include "spell-kind/spells-teleport.h"

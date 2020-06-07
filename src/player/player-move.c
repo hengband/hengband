@@ -159,6 +159,7 @@
 #include "main/sound-definitions-table.h"
 #include "monster/monster-status.h"
 #include "monster/monster.h"
+#include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 #include "object-enchant/special-object-flags.h"
 #include "object/object-flavor.h"

@@ -2692,6 +2692,9 @@
     <ClInclude Include="..\..\src\mind\snipe-types.h">
       <Filter>mind</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\monster\smart-learn-types.h">
+      <Filter>monster</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

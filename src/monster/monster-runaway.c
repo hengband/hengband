@@ -7,6 +7,7 @@
 #include "monster/monster-runaway.h"
 #include "dungeon/quest.h"
 #include "monster-race/race-indice-types.h"
+#include "monster/smart-learn-types.h"
 #include "pet/pet-fall-off.h"
 #include "player/player-move.h"
 

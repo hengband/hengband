@@ -8,6 +8,7 @@
 #include "floor/floor.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-safety-hiding.h"
+#include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 
  /*!

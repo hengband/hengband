@@ -5,6 +5,7 @@
 #include "io/write-diary.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
+#include "monster/smart-learn-types.h"
 #include "player/avatar.h"
 #include "player/player-damage.h"
 #include "view/display-main-window.h"

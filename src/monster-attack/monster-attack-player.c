@@ -22,6 +22,7 @@
 #include "mind/mind-ninja.h"
 #include "mind/mind-samurai.h"
 #include "monster/monster-status.h"
+#include "monster/smart-learn-types.h"
 #include "pet/pet-fall-off.h"
 #include "object/object-hook.h"
 #include "player/player-damage.h"

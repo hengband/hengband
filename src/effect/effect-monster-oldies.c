@@ -4,6 +4,7 @@
 #include "floor/floor.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
+#include "monster/smart-learn-types.h"
 #include "player/avatar.h"
 
 // Powerful monsters can resist.

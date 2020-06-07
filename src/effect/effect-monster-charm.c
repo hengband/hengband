@@ -6,6 +6,7 @@
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
+#include "monster/smart-learn-types.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"
 #include "player/avatar.h"

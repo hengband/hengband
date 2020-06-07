@@ -5,6 +5,7 @@
 #include "inventory/player-inventory.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster-status.h"
+#include "monster/smart-learn-types.h"
 #include "object/item-use-flags.h"
 #include "object/object-hook.h"
 #include "player/avatar.h"

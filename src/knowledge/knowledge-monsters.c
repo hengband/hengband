@@ -14,6 +14,7 @@
 #include "knowledge/monster-group-table.h"
 #include "locale/english.h"
 #include "monster/monster-status.h"
+#include "monster/smart-learn-types.h"
 #include "term/term-color-types.h"
 #include "view/display-main-window.h" // 暫定、後で消す.
 #include "world/world.h"

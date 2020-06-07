@@ -39,6 +39,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-process.h"
 #include "monster/monster-status.h"
+#include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-feeling.h"

@@ -32,6 +32,7 @@
 #include "monster-race/monster-race.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
+#include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"

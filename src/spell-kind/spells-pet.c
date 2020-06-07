@@ -2,6 +2,7 @@
 #include "effect/effect-characteristics.h"
 #include "floor/floor.h"
 #include "io/write-diary.h"
+#include "monster/smart-learn-types.h"
 #include "spell/process-effect.h"
 #include "spell/spells-type.h"
 

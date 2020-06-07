@@ -29,6 +29,7 @@
 #include "monster/monster-update.h"
 #include "monster/monster-util.h"
 #include "monster/quantum-effect.h"
+#include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 #include "object-enchant/trc-types.h"
 #include "pet/pet-fall-off.h"

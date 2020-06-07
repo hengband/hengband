@@ -31,6 +31,7 @@
 #include "io/write-diary.h"
 #include "market/arena.h"
 #include "monster/monster-status.h"
+#include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 #include "mutation/mutation.h"
 #include "object-enchant/apply-magic.h"

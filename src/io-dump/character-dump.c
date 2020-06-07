@@ -13,6 +13,7 @@
 #include "main/init.h"
 #include "market/arena-info-table.h"
 #include "monster/monster-status.h"
+#include "monster/smart-learn-types.h"
 #include "object/object-flavor.h"
 #include "object/object-info.h"
 #include "pet/pet-util.h"

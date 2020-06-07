@@ -35,6 +35,7 @@
 #include "monster-race/monster-race-hook.h"
 #include "monster/monster-flag-types.h"
 #include "monster/monster.h"
+#include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-type.h"

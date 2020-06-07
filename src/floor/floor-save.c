@@ -35,6 +35,7 @@
 #include "monster/monster-flag-types.h"
 #include "monster/monster-status.h"
 #include "monster/monster.h"
+#include "monster/smart-learn-types.h"
 #include "object-enchant/artifact.h"
 #include "object/object-hook.h"
 #include "pet/pet-util.h"

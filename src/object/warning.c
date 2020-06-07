@@ -7,6 +7,7 @@
 #include "monster-attack/monster-attack-types.h"
 #include "monster-race/race-indice-types.h"
 #include "monster/monster.h"
+#include "monster/smart-learn-types.h"
 #include "mspell/monster-spell.h"
 #include "mspell/mspell-damage-calculator.h"
 #include "mspell/mspell-type.h"

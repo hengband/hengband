@@ -6,6 +6,7 @@
 
 #include "monster/monster-object.h"
 #include "floor/floor-object.h"
+#include "monster/smart-learn-types.h"
 #include "object-enchant/tr-types.h"
 #include "object/object-flags.h"
 #include "object/object-flavor.h"
