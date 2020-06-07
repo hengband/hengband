@@ -5,6 +5,7 @@
  */
 
 #include "spell/spells-object.h"
+#include "art-definition/art-weapon-types.h"
 #include "autopick/autopick.h"
 #include "cmd/cmd-basic.h"
 #include "floor/floor-object.h"

@@ -10,6 +10,7 @@
  */
 
 #include "cmd/cmd-basic.h"
+#include "art-definition/art-weapon-types.h"
 #include "cmd-action/cmd-attack.h"
 #include "cmd-io/cmd-dump.h"
 #include "cmd-io/cmd-save.h"

@@ -11,6 +11,7 @@
  */
 
 #include "object/object1.h"
+#include "art-definition/art-weapon-types.h"
 #include "cmd-item/cmd-activate.h"
 #include "cmd-item/cmd-smith.h"
 #include "combat/snipe.h"

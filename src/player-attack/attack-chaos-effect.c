@@ -6,10 +6,10 @@
  */
 
 #include "player-attack/attack-chaos-effect.h"
+#include "art-definition/art-weapon-types.h"
 #include "floor/floor.h"
 #include "monster/monster-status.h"
 #include "inventory/inventory-object.h"
-#include "object-enchant/artifact.h"
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
 #include "realm/realm-hex-numbers.h"

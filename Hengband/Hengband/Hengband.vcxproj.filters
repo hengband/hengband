@@ -2656,6 +2656,9 @@
     <ClInclude Include="..\..\src\art-definition\art-protector-types.h">
       <Filter>art-definition</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\art-definition\art-weapon-types.h">
+      <Filter>art-definition</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\src\wall.bmp" />

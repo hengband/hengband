@@ -9,6 +9,7 @@ hengband_SOURCES = \
 	art-definition/art-armor-types.h \
 	art-definition/art-protector-types.h \
 	art-definition/art-sword-types.h \
+	art-definition/art-weapon-types.h \
 	\
 	autopick/autopick.c autopick/autopick.h \
 	autopick/autopick-commands-table.h autopick/autopick-dirty-flags.h \

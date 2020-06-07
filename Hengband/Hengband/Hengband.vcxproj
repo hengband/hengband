@@ -486,6 +486,7 @@
     <ClInclude Include="..\..\src\art-definition\art-armor-types.h" />
     <ClInclude Include="..\..\src\art-definition\art-protector-types.h" />
     <ClInclude Include="..\..\src\art-definition\art-sword-types.h" />
+    <ClInclude Include="..\..\src\art-definition\art-weapon-types.h" />
     <ClInclude Include="..\..\src\birth\auto-roller.h" />
     <ClInclude Include="..\..\src\birth\birth-body-spec.h" />
     <ClInclude Include="..\..\src\birth\birth-select-class.h" />
