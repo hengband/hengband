@@ -26,13 +26,8 @@ BIT_FLAGS vault_aux_dragon_mask4;
 */
 void vault_prep_clone(player_type *player_ptr)
 {
-	/* Apply the monster restriction */
 	get_mon_num_prep(player_ptr, vault_aux_simple, NULL);
-
-	/* Pick a race to clone */
 	vault_aux_race = get_mon_num(player_ptr, player_ptr->current_floor_ptr->dun_level + 10, 0);
-
-	/* Remove the monster restriction */
 	get_mon_num_prep(player_ptr, NULL, NULL);
 }
 
@@ -44,18 +39,9 @@ void vault_prep_clone(player_type *player_ptr)
 */
 void vault_prep_symbol(player_type *player_ptr)
 {
-	MONRACE_IDX r_idx;
-
-	/* Apply the monster restriction */
 	get_mon_num_prep(player_ptr, vault_aux_simple, NULL);
-
-	/* Pick a race to clone */
-	r_idx = get_mon_num(player_ptr, player_ptr->current_floor_ptr->dun_level + 10, 0);
-
-	/* Remove the monster restriction */
+	MONRACE_IDX r_idx = get_mon_num(player_ptr, player_ptr->current_floor_ptr->dun_level + 10, 0);
 	get_mon_num_prep(player_ptr, NULL, NULL);
-
-	/* Extract the symbol */
 	vault_aux_char = r_info[r_idx].d_char;
 }
 
@@ -69,7 +55,6 @@ void vault_prep_symbol(player_type *player_ptr)
 void vault_prep_dragon(player_type *player_ptr)
 {
 	(void)player_ptr;
-	/* Pick dragon type */
 	switch (randint0(6))
 	{
 	case 0: /* Black */
@@ -102,17 +87,9 @@ void vault_prep_dragon(player_type *player_ptr)
 bool mon_hook_quest(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Random quests are in the dungeon */
 	if (r_ptr->flags8 & RF8_WILD_ONLY) return FALSE;
-
-	/* No random quests for aquatic monsters */
 	if (r_ptr->flags7 & RF7_AQUATIC) return FALSE;
-
-	/* No random quests for multiplying monsters */
 	if (r_ptr->flags2 & RF2_MULTIPLY) return FALSE;
-
-	/* No quests to kill friendly monsters */
 	if (r_ptr->flags7 & RF7_FRIENDLY) return FALSE;
 
 	return TRUE;
@@ -127,16 +104,11 @@ bool mon_hook_quest(MONRACE_IDX r_idx)
 bool mon_hook_dungeon(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
 	if (!(r_ptr->flags8 & RF8_WILD_ONLY))
 		return TRUE;
-	else
-	{
-		dungeon_type *d_ptr = &d_info[p_ptr->dungeon_idx];
-		if ((d_ptr->mflags8 & RF8_WILD_MOUNTAIN) &&
-			(r_ptr->flags8 & RF8_WILD_MOUNTAIN)) return TRUE;
-		return FALSE;
-	}
+	
+	dungeon_type *d_ptr = &d_info[p_ptr->dungeon_idx];
+    return ((d_ptr->mflags8 & RF8_WILD_MOUNTAIN) != 0) && ((r_ptr->flags8 & RF8_WILD_MOUNTAIN) != 0);
 }
 
 
@@ -148,11 +120,7 @@ bool mon_hook_dungeon(MONRACE_IDX r_idx)
 bool mon_hook_ocean(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	if (r_ptr->flags8 & RF8_WILD_OCEAN)
-		return TRUE;
-	else
-		return FALSE;
+    return (r_ptr->flags8 & RF8_WILD_OCEAN) != 0;
 }
 
 
@@ -164,11 +132,7 @@ bool mon_hook_ocean(MONRACE_IDX r_idx)
 bool mon_hook_shore(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	if (r_ptr->flags8 & RF8_WILD_SHORE)
-		return TRUE;
-	else
-		return FALSE;
+	return (r_ptr->flags8 & RF8_WILD_SHORE) != 0;
 }
 
 
@@ -180,11 +144,7 @@ bool mon_hook_shore(MONRACE_IDX r_idx)
 bool mon_hook_waste(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	if (r_ptr->flags8 & (RF8_WILD_WASTE | RF8_WILD_ALL))
-		return TRUE;
-	else
-		return FALSE;
+	return (r_ptr->flags8 & (RF8_WILD_WASTE | RF8_WILD_ALL)) != 0;
 }
 
 
@@ -197,10 +157,7 @@ bool mon_hook_town(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	if (r_ptr->flags8 & (RF8_WILD_TOWN | RF8_WILD_ALL))
-		return TRUE;
-	else
-		return FALSE;
+	return (r_ptr->flags8 & (RF8_WILD_TOWN | RF8_WILD_ALL)) != 0;
 }
 
 
@@ -213,10 +170,7 @@ bool mon_hook_wood(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
 
-	if (r_ptr->flags8 & (RF8_WILD_WOOD | RF8_WILD_ALL))
-		return TRUE;
-	else
-		return FALSE;
+	return (r_ptr->flags8 & (RF8_WILD_WOOD | RF8_WILD_ALL)) != 0;
 }
 
 
@@ -228,11 +182,7 @@ bool mon_hook_wood(MONRACE_IDX r_idx)
 bool mon_hook_volcano(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	if (r_ptr->flags8 & RF8_WILD_VOLCANO)
-		return TRUE;
-	else
-		return FALSE;
+    return (r_ptr->flags8 & RF8_WILD_VOLCANO) != 0;
 }
 
 
@@ -244,11 +194,7 @@ bool mon_hook_volcano(MONRACE_IDX r_idx)
 bool mon_hook_mountain(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	if (r_ptr->flags8 & RF8_WILD_MOUNTAIN)
-		return TRUE;
-	else
-		return FALSE;
+    return (r_ptr->flags8 & RF8_WILD_MOUNTAIN) != 0;
 }
 
 
@@ -260,11 +206,7 @@ bool mon_hook_mountain(MONRACE_IDX r_idx)
 bool mon_hook_grass(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	if (r_ptr->flags8 & (RF8_WILD_GRASS | RF8_WILD_ALL))
-		return TRUE;
-	else
-		return FALSE;
+    return (r_ptr->flags8 & (RF8_WILD_GRASS | RF8_WILD_ALL)) != 0;
 }
 
 
@@ -276,13 +218,9 @@ bool mon_hook_grass(MONRACE_IDX r_idx)
 bool mon_hook_deep_water(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
 	if (!mon_hook_dungeon(r_idx)) return FALSE;
 
-	if (r_ptr->flags7 & RF7_AQUATIC)
-		return TRUE;
-	else
-		return FALSE;
+	return (r_ptr->flags7 & RF7_AQUATIC) != 0;
 }
 
 
@@ -294,13 +232,9 @@ bool mon_hook_deep_water(MONRACE_IDX r_idx)
 bool mon_hook_shallow_water(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
 	if (!mon_hook_dungeon(r_idx)) return FALSE;
 
-	if (r_ptr->flags2 & RF2_AURA_FIRE)
-		return FALSE;
-	else
-		return TRUE;
+	return (r_ptr->flags2 & RF2_AURA_FIRE) != 0;
 }
 
 
@@ -347,6 +281,7 @@ bool vault_aux_lite(MONRACE_IDX r_idx)
 	if (!(r_ptr->flags4 & RF4_BR_LITE) && !(r_ptr->a_ability_flags1 & RF5_BA_LITE)) return FALSE;
 	if (r_ptr->flags2 & (RF2_PASS_WALL | RF2_KILL_WALL)) return FALSE;
 	if (r_ptr->flags4 & RF4_BR_DISI) return FALSE;
+
 	return TRUE;
 }
 
@@ -359,6 +294,7 @@ bool vault_aux_shards(MONRACE_IDX r_idx)
 	monster_race *r_ptr = &r_info[r_idx];
 	if (!vault_monster_okay(r_idx)) return FALSE;
 	if (!(r_ptr->flags4 & RF4_BR_SHAR)) return FALSE;
+
 	return TRUE;
 }
 
@@ -388,6 +324,7 @@ bool vault_aux_jelly(MONRACE_IDX r_idx)
 	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return FALSE;
 	if (r_ptr->flags3 & (RF3_EVIL)) return FALSE;
 	if (!my_strchr("ijm,", r_ptr->d_char)) return FALSE;
+
 	return TRUE;
 }
 
@@ -403,6 +340,7 @@ bool vault_aux_animal(MONRACE_IDX r_idx)
 	monster_race *r_ptr = &r_info[r_idx];
 	if (!vault_monster_okay(r_idx)) return FALSE;
 	if (!(r_ptr->flags3 & (RF3_ANIMAL))) return FALSE;
+
 	return TRUE;
 }
 
@@ -418,6 +356,7 @@ bool vault_aux_undead(MONRACE_IDX r_idx)
 	monster_race *r_ptr = &r_info[r_idx];
 	if (!vault_monster_okay(r_idx)) return FALSE;
 	if (!(r_ptr->flags3 & (RF3_UNDEAD))) return FALSE;
+
 	return TRUE;
 }
 
@@ -436,14 +375,15 @@ bool vault_aux_chapel_g(MONRACE_IDX r_idx)
 		MON_EBONY_MONK, MON_W_KNIGHT, MON_KNI_TEMPLAR, MON_PALADIN,
 		MON_TOPAZ_MONK, 0 };
 
-	int i;
 	monster_race *r_ptr = &r_info[r_idx];
 	if (!vault_monster_okay(r_idx)) return FALSE;
 	if (r_ptr->flags3 & (RF3_EVIL)) return FALSE;
 	if ((r_idx == MON_A_GOLD) || (r_idx == MON_A_SILVER)) return FALSE;
 	if (r_ptr->d_char == 'A') return TRUE;
-	for (i = 0; chapel_list[i]; i++)
-		if (r_idx == chapel_list[i]) return TRUE;
+        for (int i = 0; chapel_list[i]; i++)
+		if (r_idx == chapel_list[i])
+			return TRUE;
+
 	return FALSE;
 }
 
@@ -459,6 +399,7 @@ bool vault_aux_kennel(MONRACE_IDX r_idx)
 	monster_race *r_ptr = &r_info[r_idx];
 	if (!vault_monster_okay(r_idx)) return FALSE;
 	if (!my_strchr("CZ", r_ptr->d_char)) return FALSE;
+
 	return TRUE;
 }
 
@@ -474,6 +415,7 @@ bool vault_aux_mimic(MONRACE_IDX r_idx)
 	monster_race *r_ptr = &r_info[r_idx];
 	if (!vault_monster_okay(r_idx)) return FALSE;
 	if (!my_strchr("!$&(/=?[\\|", r_ptr->d_char)) return FALSE;
+
 	return TRUE;
 }
 
@@ -487,6 +429,7 @@ bool vault_aux_mimic(MONRACE_IDX r_idx)
 bool vault_aux_clone(MONRACE_IDX r_idx)
 {
 	if (!vault_monster_okay(r_idx)) return FALSE;
+
 	return (r_idx == vault_aux_race);
 }
 
@@ -504,6 +447,7 @@ bool vault_aux_symbol_e(MONRACE_IDX r_idx)
 	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return FALSE;
 	if (r_ptr->flags3 & (RF3_GOOD)) return FALSE;
 	if (r_ptr->d_char != vault_aux_char) return FALSE;
+
 	return TRUE;
 }
 
@@ -521,6 +465,7 @@ bool vault_aux_symbol_g(MONRACE_IDX r_idx)
 	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return FALSE;
 	if (r_ptr->flags3 & (RF3_EVIL)) return FALSE;
 	if (r_ptr->d_char != vault_aux_char) return FALSE;
+
 	return TRUE;
 }
 
@@ -537,6 +482,7 @@ bool vault_aux_orc(MONRACE_IDX r_idx)
 	if (!vault_monster_okay(r_idx)) return FALSE;
 	if (!(r_ptr->flags3 & RF3_ORC)) return FALSE;
 	if (r_ptr->flags3 & RF3_UNDEAD) return FALSE;
+
 	return TRUE;
 }
 
@@ -553,6 +499,7 @@ bool vault_aux_troll(MONRACE_IDX r_idx)
 	if (!vault_monster_okay(r_idx)) return FALSE;
 	if (!(r_ptr->flags3 & RF3_TROLL)) return FALSE;
 	if (r_ptr->flags3 & RF3_UNDEAD) return FALSE;
+
 	return TRUE;
 }
 
@@ -570,6 +517,7 @@ bool vault_aux_giant(MONRACE_IDX r_idx)
 	if (!(r_ptr->flags3 & RF3_GIANT)) return FALSE;
 	if (r_ptr->flags3 & RF3_GOOD) return FALSE;
 	if (r_ptr->flags3 & RF3_UNDEAD) return FALSE;
+
 	return TRUE;
 }
 
@@ -587,6 +535,7 @@ bool vault_aux_dragon(MONRACE_IDX r_idx)
 	if (!(r_ptr->flags3 & RF3_DRAGON)) return FALSE;
 	if (r_ptr->flags4 != vault_aux_dragon_mask4) return FALSE;
 	if (r_ptr->flags3 & RF3_UNDEAD) return FALSE;
+
 	return TRUE;
 }
 
@@ -603,6 +552,7 @@ bool vault_aux_demon(MONRACE_IDX r_idx)
 	if (!vault_monster_okay(r_idx)) return FALSE;
 	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return FALSE;
 	if (!(r_ptr->flags3 & RF3_DEMON)) return FALSE;
+
 	return TRUE;
 }
 
@@ -619,6 +569,7 @@ bool vault_aux_cthulhu(MONRACE_IDX r_idx)
 	if (!vault_monster_okay(r_idx)) return FALSE;
 	if ((r_ptr->flags2 & RF2_KILL_BODY) && !(r_ptr->flags1 & RF1_NEVER_BLOW)) return FALSE;
 	if (!(r_ptr->flags2 & (RF2_ELDRITCH_HORROR))) return FALSE;
+
 	return TRUE;
 }
 
@@ -631,15 +582,18 @@ bool vault_aux_cthulhu(MONRACE_IDX r_idx)
 */
 bool vault_aux_dark_elf(MONRACE_IDX r_idx)
 {
-	int i;
 	static int dark_elf_list[] =
 	{
 		MON_D_ELF, MON_D_ELF_MAGE, MON_D_ELF_WARRIOR, MON_D_ELF_PRIEST,
 		MON_D_ELF_LORD, MON_D_ELF_WARLOCK, MON_D_ELF_DRUID, MON_NIGHTBLADE,
 		MON_D_ELF_SORC, MON_D_ELF_SHADE, 0,
 	};
+
 	if (!vault_monster_okay(r_idx)) return FALSE;
-	for (i = 0; dark_elf_list[i]; i++) if (r_idx == dark_elf_list[i]) return TRUE;
+        for (int i = 0; dark_elf_list[i]; i++)
+		if (r_idx == dark_elf_list[i])
+			return TRUE;
+
 	return FALSE;
 }
 
@@ -656,12 +610,7 @@ bool vault_aux_dark_elf(MONRACE_IDX r_idx)
 bool monster_living(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Non-living, undead, or demon */
-	if (r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING))
-		return FALSE;
-	else
-		return TRUE;
+    return (r_ptr->flags3 & (RF3_DEMON | RF3_UNDEAD | RF3_NONLIVING)) == 0;
 }
 
 
@@ -714,14 +663,9 @@ bool monster_hook_human(MONRACE_IDX r_idx)
 bool get_nightmare(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Require eldritch horrors */
 	if (!(r_ptr->flags2 & (RF2_ELDRITCH_HORROR))) return FALSE;
-
-	/* Require high level */
 	if (r_ptr->level <= p_ptr->lev) return FALSE;
 
-	/* Accept this monster */
 	return TRUE;
 }
 
@@ -734,7 +678,6 @@ bool get_nightmare(MONRACE_IDX r_idx)
 bool monster_is_fishing_target(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
 	if ((r_ptr->flags7 & RF7_AQUATIC) && !(r_ptr->flags1 & RF1_UNIQUE) && my_strchr("Jjlw", r_ptr->d_char))
 		return TRUE;
 	else
@@ -751,29 +694,20 @@ bool monster_is_fishing_target(MONRACE_IDX r_idx)
  */
 bool monster_can_entry_arena(MONRACE_IDX r_idx)
 {
-	int i;
 	HIT_POINT dam = 0;
-
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* Decline town monsters */
-/*	if (!mon_hook_dungeon(r_idx)) return FALSE; */
-
-	/* Decline unique monsters */
-/*	if (r_ptr->flags1 & (RF1_UNIQUE)) return FALSE; */
-/*	if (r_ptr->flags7 & (RF7_NAZGUL)) return FALSE; */
-
 	if (r_ptr->flags1 & (RF1_NEVER_MOVE)) return FALSE;
 	if (r_ptr->flags2 & (RF2_MULTIPLY)) return FALSE;
 	if (r_ptr->flags2 & (RF2_QUANTUM)) return FALSE;
 	if (r_ptr->flags7 & (RF7_AQUATIC)) return FALSE;
 	if (r_ptr->flags7 & (RF7_CHAMELEON)) return FALSE;
 
-	for (i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		if (r_ptr->blow[i].method == RBM_EXPLODE) return FALSE;
 		if (r_ptr->blow[i].effect != RBE_DR_MANA) dam += r_ptr->blow[i].d_dice;
 	}
+
 	if (!dam && !(r_ptr->flags4 & (RF4_BOLT_MASK | RF4_BEAM_MASK | RF4_BALL_MASK | RF4_BREATH_MASK)) && !(r_ptr->a_ability_flags1 & (RF5_BOLT_MASK | RF5_BEAM_MASK | RF5_BALL_MASK | RF5_BREATH_MASK)) && !(r_ptr->a_ability_flags2 & (RF6_BOLT_MASK | RF6_BEAM_MASK | RF6_BALL_MASK | RF6_BREATH_MASK))) return FALSE;
 
 	return TRUE;
@@ -788,8 +722,6 @@ bool monster_can_entry_arena(MONRACE_IDX r_idx)
 bool item_monster_okay(MONRACE_IDX r_idx)
 {
 	monster_race *r_ptr = &r_info[r_idx];
-
-	/* No uniques */
 	if (r_ptr->flags1 & RF1_UNIQUE) return FALSE;
 	if (r_ptr->flags7 & RF7_KAGE) return FALSE;
 	if (r_ptr->flagsr & RFR_RES_ALL) return FALSE;
