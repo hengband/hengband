@@ -7,6 +7,7 @@
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-stack.h"
+#include "object/object1.h"
 
 /*!
  * @brief アイテムを指定確率で破損させる /

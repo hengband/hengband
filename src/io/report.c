@@ -13,11 +13,11 @@
 #include "core/stuff-handler.h"
 #include "io/inet.h"
 #include "dungeon/dungeon.h"
-
 #include "player/player-personality.h"
 #include "io-dump/character-dump.h"
 #include "world/world.h"
 #include "term/gameterm.h"
+#include "object/object1.h"
 
 #ifdef WORLD_SCORE
 

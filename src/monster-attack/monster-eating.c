@@ -12,6 +12,7 @@
 #include "object/object-generator.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
+#include "object/object1.h"
 #include "player/avatar.h"
 #include "player/mimic-info-table.h"
 #include "player/player-effects.h"

@@ -30,6 +30,7 @@
 #include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
+#include "object/object1.h"
 #include "player/player-effects.h"
 #include "player/player-skill.h"
 #include "player/player-status.h"

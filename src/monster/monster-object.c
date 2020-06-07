@@ -6,14 +6,15 @@
 
 #include "monster/monster-object.h"
 #include "floor/floor-object.h"
+#include "object-enchant/tr-types.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-mark-types.h"
-#include "object-enchant/tr-types.h"
+#include "object/object1.h"
 
- /*!
-  * @brief オブジェクトのフラグを更新する
-  */
+/*!
+ * @brief オブジェクトのフラグを更新する
+ */
 static void update_object_flags(BIT_FLAGS *flgs, BIT_FLAGS *flg2, BIT_FLAGS *flg3, BIT_FLAGS *flgr)
 {
 	if (have_flag(flgs, TR_SLAY_DRAGON)) *flg3 |= (RF3_DRAGON);

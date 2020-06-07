@@ -8,15 +8,16 @@
 #include "core/show-file.h"
 #include "floor/floor-town.h"
 #include "io-dump/dump-util.h"
-#include "perception/object-perception.h"
+#include "object-enchant/special-object-flags.h"
+#include "object-enchant/tr-types.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
-#include "object-enchant/special-object-flags.h"
+#include "object/object1.h"
+#include "perception/object-perception.h"
+#include "store/store-util.h"
 #include "sv-definition/sv-amulet-types.h"
 #include "sv-definition/sv-protector-types.h"
 #include "sv-definition/sv-ring-types.h"
-#include "object-enchant/tr-types.h"
-#include "store/store-util.h"
 
 static concptr inven_res_label = _(
 	"                               酸電火冷毒光闇破轟獄因沌劣 盲怖乱痺透命感消復浮",

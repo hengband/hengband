@@ -5,13 +5,14 @@
 #include "autopick/autopick-methods-table.h"
 #include "inventory/player-inventory.h"
 #include "object-enchant/item-feeling.h"
-#include "object/item-use-flags.h"
-#include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/special-object-flags.h"
+#include "object/item-use-flags.h"
 #include "object/object-flavor.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
-#include "object-enchant/special-object-flags.h"
+#include "object/object1.h"
+#include "perception/object-perception.h"
 
 #ifdef JP
 static char kanji_colon[] = "：";

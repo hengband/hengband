@@ -37,6 +37,7 @@
 #include "object-enchant/artifact.h"
 #include "object-enchant/item-apply-magic.h"
 #include "object/item-use-flags.h"
+#include "object/object1.h"
 #include "perception/object-perception.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"

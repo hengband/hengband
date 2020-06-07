@@ -12,6 +12,7 @@
 #include "floor/floor.h"
 #include "knowledge/knowledge-mutations.h"
 #include "object/object-kind.h"
+#include "object/object1.h"
 #include "player/mimic-info-table.h"
 #include "player/patron.h"
 #include "player/player-personality.h"

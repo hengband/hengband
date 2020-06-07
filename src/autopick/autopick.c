@@ -20,6 +20,7 @@
 #include "inventory/inventory-object.h"
 #include "object/object-flavor.h"
 #include "object/object-mark-types.h"
+#include "object/object1.h"
 #include "player/player-move.h"
 #include "util/util.h"
 

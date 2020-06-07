@@ -1,8 +1,8 @@
 ﻿/*!
- *  @file wizard1.c
- *  @brief ウィザードモードの処理(スポイラー出力中心) / Spoiler generation -BEN-
- *  @date 2014/02/17
- *  @author
+ * @file wizard1.c
+ * @brief ウィザードモードの処理(スポイラー出力中心) / Spoiler generation -BEN-
+ * @date 2014/02/17
+ * @author
  * Copyright (c) 1997 Ben Harrison, and others
  * This software may be copied and distributed for educational, research,
  * and not for profit purposes provided that this copyright and statement
@@ -16,16 +16,17 @@
 #include "io/files-util.h"
 #include "monster/monster.h"
 #include "object-enchant/artifact.h"
-#include "perception/object-perception.h"
 #include "object-enchant/object-ego.h"
+#include "object-enchant/special-object-flags.h"
+#include "object-enchant/tr-types.h"
+#include "object-enchant/trc-types.h"
 #include "object/object-flavor.h"
 #include "object/object-generator.h"
 #include "object/object-kind-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
-#include "object-enchant/special-object-flags.h"
-#include "object-enchant/tr-types.h"
-#include "object-enchant/trc-types.h"
+#include "object/object1.h"
+#include "perception/object-perception.h"
 #include "store/store-util.h"
 #include "store/store.h"
 #include "system/angband-version.h"

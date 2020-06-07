@@ -21,6 +21,7 @@
 #include "object-enchant/object-ego.h"
 #include "object/object-hook.h"
 #include "object/object-kind.h"
+#include "object/object1.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-ring-types.h"
 #include "player/avatar.h"

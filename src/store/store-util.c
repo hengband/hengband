@@ -15,6 +15,7 @@
 #include "object/object-hook.h"
 #include "object/object-kind.h"
 #include "object/object-value.h"
+#include "object/object1.h"
 #include "sv-definition/sv-lite-types.h"
 #include "sv-definition/sv-potion-types.h"
 #include "sv-definition/sv-scroll-types.h"

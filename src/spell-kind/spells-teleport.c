@@ -17,6 +17,7 @@
 #include "monster/monster-status.h"
 #include "object-enchant/artifact.h"
 #include "object/object-hook.h"
+#include "object/object1.h"
 #include "player/avatar.h"
 #include "player/player-move.h"
 #include "spell-kind/spells-launcher.h"
